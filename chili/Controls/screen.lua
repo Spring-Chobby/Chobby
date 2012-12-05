@@ -8,6 +8,7 @@ Screen = Object:Inherit{
   preserveChildrenOrder = true,
 
   activeControl = nil,
+  focusedControl = nil,
   hoveredControl = nil,
   currentTooltip = nil,
   _lastHoveredControl = nil,
@@ -45,6 +46,10 @@ function Screen:OnGlobalDispose(obj)
 
   if (UnlinkSafe(self._lastHoveredControl) == obj) then
     self._lastHoveredControl = nil
+  end
+
+  if (UnlinkSafe(self.focusedControl) == obj) then
+    self.focusedControl = nil
   end
 end
 
@@ -113,6 +118,15 @@ function Screen:MouseDown(x,y,...)
   y = select(2,gl.GetViewSizes()) - y
   local activeControl = inherited.MouseDown(self,x,y,...)
   self.activeControl = MakeWeakLink(activeControl)
+  if self.focusedControl then
+    self.focusedControl.focused = false
+    self.focusedControl:Invalidate()
+  end
+  self.focusedControl = nil
+  if self.activeControl then
+    self.focusedControl = MakeWeakLink(activeControl)
+    self.focusedControl.focused = true
+  end
   return (not not activeControl)
 end
 
@@ -188,6 +202,13 @@ function Screen:MouseWheel(x,y,...)
   end
 
   return (not not inherited.MouseWheel(self,x,y,...))
+end
+
+function Screen:KeyPress(...)
+    if self.focusedControl then
+      return (not not self.focusedControl:KeyPress(...))
+    end
+    return (not not inherited:KeyPress(...))
 end
 
 --//=============================================================================

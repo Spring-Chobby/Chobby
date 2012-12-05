@@ -129,6 +129,9 @@ function widget:MouseWheel(up,value)
   return screen0:MouseWheel(x,y,up,value,mods)
 end
 
+function widget:KeyPress(key, mods, isRepeat, label, unicode)
+  return screen0:KeyPress(key, mods, isRepeat, label, unicode)
+end
 
 
 function widget:ViewResize(vsx, vsy) 

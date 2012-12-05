@@ -203,6 +203,65 @@ function DrawButton(obj)
   end
 end
 
+function DrawCursor(x, y, h)
+	gl.Color({1, 1, 1, 1})
+	gl.Vertex(x, y)
+	gl.Vertex(x, y + h)
+end
+
+--same code as in chili/Headers/skinutils.lua
+--should it be different?
+function DrawEditBox(obj)
+  gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawBackground, obj, obj.state)
+  gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawBorder, obj.x, obj.y, obj.width, obj.height, 1, obj.borderColor1, obj.borderColor1)
+
+
+  if (obj.text) then
+    local x = obj.x
+    local y = obj.y
+    local w = obj.width
+    local h = obj.height
+    local bt = obj.borderThickness
+
+    local txt = obj.text
+	local startPos = 1 + obj.offset
+	local newTxt = ""		
+	for i = startPos, #txt do
+		local tmp = string.sub(txt, startPos, i)
+		if obj.font:GetTextWidth(tmp) <= w then
+			newTxt = tmp
+		else
+			break
+		end
+	end
+	if obj.cursor <= obj.offset then		
+		obj.offset = obj.cursor - 1
+	elseif obj.cursor > obj.offset + #newTxt + 1 then		
+		obj.offset = obj.cursor - #newTxt
+	end
+	if #newTxt == 0 and #txt ~= 0 then
+		obj.offset = obj.offset - 1
+	end
+	local startPos = 1 + obj.offset
+	local newTxt = ""		
+	for i = startPos, #txt do
+		local tmp = string.sub(txt, startPos, i)
+		if obj.font:GetTextWidth(tmp) <= w then
+			newTxt = tmp
+		else
+			break
+		end
+	end
+	txt = newTxt
+    obj.font:DrawInBox(txt, x + bt, y, w, h, obj.align, obj.valign)
+	if obj.focused then
+	  local cursorTxt = string.sub(txt, 1, obj.cursor - 1 - obj.offset)
+	  local cursorX = obj.font:GetTextWidth(cursorTxt) + 1
+	  gl.BeginEnd(GL.LINE_STRIP, DrawCursor, x + cursorX, y, h)
+    end
+  end
+end
+
 
 function DrawPanel(obj)
   gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawBackground, obj, obj.state)
@@ -484,6 +543,9 @@ skin.window = {
   DrawResizeGrip = DrawResizeGrip,
 }
 
+skin.editbox = {
+  DrawControl = DrawEditBox,
+}
 
 skin.control = skin.general
 

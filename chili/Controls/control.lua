@@ -44,6 +44,7 @@ Control = Object:Inherit{
 
   skin            = nil,
   skinName        = nil,
+  focused         = false,
 }
 
 local this = Control
