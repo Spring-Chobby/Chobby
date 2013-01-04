@@ -69,7 +69,7 @@ for i,dir in ipairs(skinDirs) do
     setmetatable(senv,{__index = SkinUtilsEnv})
 
     --// load the skin
-    local skinConfig = VFS.Include(skinCfgFile,senv)
+    local skinConfig = VFS.Include(skinCfgFile,senv, VFS.RAW_FIRST)
     if (skinConfig)and(type(skinConfig)=="table")and(type(skinConfig.info)=="table") then
       skinConfig.info.dir = dir
       SkinHandler.knownSkins[n] = skinConfig
