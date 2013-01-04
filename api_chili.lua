@@ -24,6 +24,7 @@ local Chili
 local screen0
 local th
 local tk
+local tf
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -46,6 +47,7 @@ function widget:Initialize()
   screen0 = Chili.Screen:New{}
   th = Chili.TextureHandler
   tk = Chili.TaskHandler
+  tf = Chili.FontHandler
 
   --// Export Widget Globals
   WG.Chili = Chili
@@ -95,6 +97,7 @@ end
 
 function widget:Update()
   tk.Update()
+  tf.Update()
 end
 
 

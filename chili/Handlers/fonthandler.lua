@@ -27,6 +27,26 @@ FontHandler._scream.func = function()
 end
 
 
+local n = 0
+function FontHandler.Update()
+	n = n + 1
+	if (n <= 10) then
+		return
+	end
+
+	for i=1,#loadedFonts do
+		if (refCounts[i] <= 0) then
+			--// the font isn't in use anymore, free it
+			local last_idx = #loadedFonts
+			gl.DeleteFont(loadedFonts[i])
+			loadedFonts[i] = loadedFonts[last_idx]
+			loadedFonts[last_idx] = nil
+			refCounts[i] = refCounts[last_idx]
+			refCounts[last_idx] = nil
+		end
+	end
+end
+
 --//=============================================================================
 --// API
 
@@ -34,18 +54,7 @@ function FontHandler.UnloadFont(font)
   for i=1,#loadedFonts do
     local font2 = loadedFonts[i]
     if (font == font2) then
-      local refCount = refCounts[i]
-      if (refCount <= 1) then
-        --// the font isn't in use anymore, free it
-        local last_idx = #loadedFonts
-        gl.DeleteFont(loadedFonts[i])
-        loadedFonts[i] = loadedFonts[last_idx]
-        loadedFonts[last_idx] = nil
-        refCounts[i] = refCounts[last_idx]
-        refCounts[last_idx] = nil
-      else
-        refCounts[i] = refCount - 1
-      end
+      refCounts[i] = refCounts[i] - 1
       return
     end
   end
