@@ -17,27 +17,6 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
--- chili short cuts
-local Button
-local Control
-local Label
-local Colorbars
-local Checkbox
-local Trackbar
-local Window
-local ScrollPanel
-local StackPanel
-local Grid
-local TextBox
-local Image
-local screen0
-
-local oldPrint = print
-local function print(...)
-  oldPrint(...)
-  io.flush()
-end
-
 -- gui elements
 local window0
 local window01
@@ -47,22 +26,7 @@ local windowImageList
 local window1
 
 function widget:Initialize()
-
   Chili = WG.Chili
-  Button = Chili.Button
-  Control = Chili.Control
-  Label = Chili.Label
-  Colorbars = Chili.Colorbars
-  Checkbox = Chili.Checkbox
-  Trackbar = Chili.Trackbar
-  Window = Chili.Window
-  ScrollPanel = Chili.ScrollPanel
-  StackPanel = Chili.StackPanel
-  Grid = Chili.Grid
-  TextBox = Chili.TextBox
-  Image = Chili.Image
-
-  screen0 = Chili.Screen0
 
 local function ToggleOrientation(self)
   local panel = self:FindParent"layoutpanel"
@@ -73,8 +37,22 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
+local testText = 
+[[Bolivians are voting in a referendum on a new constitution that President Evo Morales says will empower the country's indigenous majority.
+
+The changes also include strengthening state control of Bolivia's natural resources, and no longer recognising Catholicism as the official religion.
+
+The constitution is widely expected to be approved.
+Mr Morales, an Aymara Indian, has pursued political reform but has met fierce resistance from some sectors.
+Opponents concentrated in Bolivia's eastern provinces, which hold rich gas deposits, argue that the new constitution would create two classes of citizenship - putting indigenous people ahead of others.
+
+The wrangling has spilled over into, at times, deadly violence. At least 30 peasant farmers were ambushed and killed on their way home from a pro-government rally in a northern region in September.
+
+President Morales has said the new constitution will pave the way for correcting the historic inequalities of Bolivian society, where the economic elite is largely of European descent.
+]]
+
 local testText2 = 
-[[Bolivians are ]]
+[[Bolivians are voting in a referendum on a new constitut ]]
 
 local testText3 = 
 [[Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod]]
@@ -83,49 +61,49 @@ local testText3 =
 --------------------------------------------------------------------------------
 
 local cs = {
-    Button:New{
+    Chili.Button:New{
       x      = 20,
       y      = 20,
     },
-    Label:New{
+    Chili.Label:New{
       x      = 20,
       y      = 50,
       caption= 'FOOBAR',
     },
-    ScrollPanel:New{
+    Chili.ScrollPanel:New{
       backgroundColor = {0,0,0,0.5},
       children = {
-        Button:New{caption="foo", width = 100, height = 100},
+        Chili.Button:New{caption="foo", width = 100, height = 100},
       }
     },
-    Checkbox:New{
+    Chili.Checkbox:New{
       x     = 20,
       y     = 70,
       caption = 'foo',
     },
-    Trackbar:New{
+    Chili.Trackbar:New{
       x     = 20,
       y     = 90,
     },
-    Colorbars:New{
+    Chili.Colorbars:New{
       x     = 20,
       y     = 120,
     },
 }
 
-window0 = Window:New{
+window0 = Chili.Window:New{
   x = 200,
   y = 450,
   width  = 200,
   height = 200,
-  parent = screen0,
+  parent = Chili.Screen0,
 
   children = {
-    Label:New{caption='This window should be empty!\n(except this text)'},
+    Chili.Label:New{caption='This window should be empty!\n(except this text)'},
   },
 }
 
-local panel0 = StackPanel:New{
+local panel0 = Chili.StackPanel:New{
   width = 200,
   height = 200,
   --resizeItems = false,
@@ -138,16 +116,16 @@ local panel0 = StackPanel:New{
 panel0:Dispose()
 
 -- we need a container that supports margin if the control inside uses margins
-window01 = Window:New{  
+window01 = Chili.Window:New{  
   x = 200,  
   y = 200,  
   clientWidth  = 200,
   clientHeight = 200,
-  parent = screen0,
+  parent = Chili.Screen0,
 
 }
 
-local panel1 = StackPanel:New{
+local panel1 = Chili.StackPanel:New{
   width = 200,
   height = 200,
   --resizeItems = false,
@@ -159,23 +137,23 @@ local panel1 = StackPanel:New{
 }
 
 
-local gridControl = Grid:New{
+local gridControl = Chili.Grid:New{
   name = 'foogrid',
   width = 200,  
   height = 200,  
   children = {
-    Button:New{backgroundColor = {0,0.6,0,1}, textColor = {1,1,1,1}, caption = "Toggle", OnMouseUp = {ToggleOrientation}},
-    Button:New{caption = "2"},
-    Button:New{caption = "3"},
-    Button:New{caption = "4", margin = {10, 10, 10, 10}},
-    Button:New{caption = "5"},
-    Button:New{caption = "6"},
-    Button:New{caption = "7"},
+    Chili.Button:New{backgroundColor = {0,0.6,0,1}, textColor = {1,1,1,1}, caption = "Toggle", OnMouseUp = {ToggleOrientation}},
+    Chili.Button:New{caption = "2"},
+    Chili.Button:New{caption = "3"},
+    Chili.Button:New{caption = "4", margin = {10, 10, 10, 10}},
+    Chili.Button:New{caption = "5"},
+    Chili.Button:New{caption = "6"},
+    Chili.Button:New{caption = "7"},
   }
 }
 
-gridWindow0 = Window:New{  
-  parent = screen0,
+gridWindow0 = Chili.Window:New{  
+  parent = Chili.Screen0,
   x = 450,  
   y = 450,  
   clientWidth = 200,  
@@ -185,20 +163,16 @@ gridWindow0 = Window:New{
   },
 }
 
-gridWindow1 = Window:New{  
-  parent = screen0,
+gridWindow1 = Chili.Window:New{  
+  parent = Chili.Screen0,
   x = 650,  
   y = 750,
   clientWidth = 200,  
   clientHeight = 200,  
   children = {
-
-    Button:New{x=120,y=180, anchors = {bottom=true,right=true}, caption = "2"},
-
-    TextBox:New{width = 200, anchors = {top=true,left=true,bottom=true,right=true}, text = testText2},
-
+    Chili.Button:New{right=0, bottom=0, caption = "2"},
+    Chili.TextBox:New{x=0, right=0, y=0, text = testText2},
     Chili.EditBox:New{width = 200, y = 40, --[[autosize = true,]] anchors = {top=true,left=true,bottom=true,right=true}, text = testText3}
-
   },
 }
 
@@ -213,7 +187,7 @@ local layoutPanel0 = Chili.LayoutPanel:New{
   y = 200,
   width = 200,
   height = 400,
-  parent = screen0,
+  parent = Chili.Screen0,
 
   --columns = 2,
   --minItemWidth = 120,
@@ -231,15 +205,15 @@ local layoutPanel0 = Chili.LayoutPanel:New{
 }
 --]]
 
-windowImageList = Window:New{
+windowImageList = Chili.Window:New{
   x = 700,
   y = 200,
   clientWidth = 410,
   clientHeight = 400,
-  parent = screen0,
+  parent = Chili.Screen0,
 }
 
-local control = ScrollPanel:New{  
+local control = Chili.ScrollPanel:New{  
   clientWidth = 410,
   clientHeight = 400,
   anchors = {top=true,left=true,bottom=true,right=true},
@@ -270,36 +244,22 @@ local control = ScrollPanel:New{
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
-local testText = 
-[[Bolivians are voting in a referendum on a new constitution that President Evo Morales says will empower the country's indigenous majority.
-
-The changes also include strengthening state control of Bolivia's natural resources, and no longer recognising Catholicism as the official religion.
-
-The constitution is widely expected to be approved.
-Mr Morales, an Aymara Indian, has pursued political reform but has met fierce resistance from some sectors.
-Opponents concentrated in Bolivia's eastern provinces, which hold rich gas deposits, argue that the new constitution would create two classes of citizenship - putting indigenous people ahead of others.
-
-The wrangling has spilled over into, at times, deadly violence. At least 30 peasant farmers were ambushed and killed on their way home from a pro-government rally in a northern region in September.
-
-President Morales has said the new constitution will pave the way for correcting the historic inequalities of Bolivian society, where the economic elite is largely of European descent.
-]]
-
-window1 = Window:New{  
+window1 = Chili.Window:New{  
   x = 450,  
   y = 200,  
   clientWidth  = 200,
   clientHeight = 200,
   resizable = true,
   draggable = true,
-  parent = screen0,
+  parent = Chili.Screen0,
   children = {
-    ScrollPanel:New{
+    Chili.ScrollPanel:New{
       width = 200,
       height = 200,
       anchors = {top=true,left=true,bottom=true,right=true},
       horizontalScrollbar = false,
       children = {
-        TextBox:New{width = 200, anchors = {top=true,left=true,bottom=true,right=true}, text = testText}
+        Chili.TextBox:New{width = 200, anchors = {top=true,left=true,bottom=true,right=true}, text = testText}
       },
     },
   }
