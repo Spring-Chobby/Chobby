@@ -547,6 +547,7 @@ function LayoutPanel:_LayoutChildren()
   end
 --]]
 
+--[[FIXME breaks ListImageView!
   if (self.autosize) then
     local maxChildWidth = minItemWidth
     for i=1, cn_count do
@@ -570,7 +571,7 @@ function LayoutPanel:_LayoutChildren()
       clientAreaWidth,clientAreaHeight = self.clientArea[3],self.clientArea[4]
     end
   end
-
+--]]
 
   for i=1, cn_count do
     local child = cn[i]
@@ -589,7 +590,7 @@ function LayoutPanel:_LayoutChildren()
     if (i < cn_count) then --// check for lastLine and not last control!
       totalChildHeight = totalChildHeight + margin[BOTTOM]
     end
-      
+
     cell_top    = cur_y + itemPadding[TOP]
     if (curLine > 1) then
       cell_top = cell_top + margin[TOP]
