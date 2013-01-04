@@ -216,7 +216,8 @@ windowImageList = Chili.Window:New{
 local control = Chili.ScrollPanel:New{  
   clientWidth = 410,
   clientHeight = 400,
-  anchors = {top=true,left=true,bottom=true,right=true},
+  x=0, right=0,
+  y=0, bottom=0,
   parent = windowImageList,  
   children = {    
     --Button:New{width = 410, height = 400, anchors = {top=true,left=true,bottom=true,right=true}},
@@ -224,7 +225,8 @@ local control = Chili.ScrollPanel:New{
       name = "MyImageListView",
       width = 410,
       height = 400,
-      anchors = {top=true,left=true,bottom=true,right=true},
+      x=0, right=0,
+      y=0, bottom=0,
       dir = "LuaUI/Images/",
       OnSelectItem = {
         function(obj,itemIdx,selected)
@@ -256,10 +258,11 @@ window1 = Chili.Window:New{
     Chili.ScrollPanel:New{
       width = 200,
       height = 200,
-      anchors = {top=true,left=true,bottom=true,right=true},
+      x=0, right=0,
+      y=0, bottom=0,
       horizontalScrollbar = false,
       children = {
-        Chili.TextBox:New{width = 200, anchors = {top=true,left=true,bottom=true,right=true}, text = testText}
+        Chili.TextBox:New{width = 200, x=0, right=0, y=0, bottom=0, text = testText}
       },
     },
   }
