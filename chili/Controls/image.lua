@@ -6,6 +6,7 @@ Image = Button:Inherit{
   defaultWidth  = 64,
   defaultHeight = 64,
   padding = {0,0,0,0},
+  color = {1,1,1,1},
 
   file  = nil,
   file2 = nil,
@@ -49,7 +50,7 @@ end
 
 function Image:DrawControl()
   if (not (self.file or self.file2)) then return end
-  gl.Color(1,1,1,1)
+  gl.Color(self.color)
 
   if (self.keepAspect) then
     if (self.file2) then 
