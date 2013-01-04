@@ -7,13 +7,16 @@ EditBox = Control:Inherit{
   defaultWidth = 70,
   defaultHeight = 20,
 
-  padding = {0,0,0,0},
+  padding = {3,3,3,3},
+
+  cursorColor = {1,1,1,0.7},
 
   align    = "left",
-  valign   = "center",
-  text  = "",
+  valign   = "linecenter",
+
+  text   = "",
   cursor = 1,
-  offset = 0,
+  offset = 1,
 }
 
 local this = EditBox
@@ -22,29 +25,31 @@ local inherited = this.inherited
 --//=============================================================================
 
 function EditBox:New(obj)
-  obj = inherited.New(self,obj)
-  obj:SetText(obj.text)
-  return obj
+	obj = inherited.New(self,obj)
+	obj:SetText(obj.text)
+	obj:RequestUpdate()
+	return obj
 end
 
 function EditBox:HitTest(x,y)
-  return self
+	return self
 end
+
 --//=============================================================================
 
 function EditBox:SetText(newtext)
-  if (self.text == newtext) then return end 
-  self.text = newtext
-  self:UpdateLayout()
-  self:Invalidate()
+	if (self.text == newtext) then return end
+	self.text = newtext
+	self:UpdateLayout()
+	self:Invalidate()
 end
 
 
 function EditBox:UpdateLayout()
   local font = self.font
 
+  --FIXME
   if (self.autosize) then
-    self._text  = self.text
     local w = font:GetTextWidth(self.text);
     local h, d, numLines = font:GetTextHeight(self.text);
 
@@ -72,9 +77,10 @@ function EditBox:UpdateLayout()
       x = math.round(x + (self.width - w) * 0.5)
     end
 
+    w = w + self.padding[1] + self.padding[3]
+    h = h + self.padding[2] + self.padding[4]
+
     self:_UpdateConstraints(x,y,w,h)
-  else
-    self._text = font:WrapText(self.text, self.width, self.height)
   end
 
 end
@@ -82,82 +88,89 @@ end
 --//=============================================================================
 
 function EditBox:DrawControl()
-  --// gets overriden by the skin/theme
+	--// gets overriden by the skin/theme
 end
 
-function EditBox:MouseDown(x, y, ...)
-  local found = false
-  for i = 1, #self.text do
-	local tmp = string.sub(self.text, 1, i)
-	if self.font:GetTextWidth(tmp) > x then
-	  self.cursor = i
-	  found = true
-	  break
+
+function EditBox:Update(...)
+	--FIXME add special UpdateFocus event?
+
+	--// redraw every few frames for blinking cursor
+	inherited.Update(self, ...)
+	self:RequestUpdate()
+	if (self.focused and (os.clock() >= (self._nextCursorRedraw or -math.huge))) then
+		self._nextCursorRedraw = os.clock() + 0.1 --10FPS
+		self:Invalidate()
 	end
-  end
-  if not found then
-    self.cursor = #self.text + 1
-  end
-  inherited.MouseDown(self, x, y, ...)
-  self:Invalidate()
-  return self
+end
+
+
+function EditBox:MouseDown(x, y, ...)
+	local clientX = self.clientArea[1]
+	self.cursor = #self.text + 1 -- at end of text
+	for i = self.offset, #self.text do
+		local tmp = self.text:sub(self.offset, i)
+		if self.font:GetTextWidth(tmp) > (x - clientX) then
+			self.cursor = i
+			break
+		end
+	end
+	inherited.MouseDown(self, x, y, ...)
+	self:Invalidate()
+	return self
 end
 
 function EditBox:MouseUp(...)
-  inherited.MouseUp(self, ...)
-  self:Invalidate()
-  return self
+	inherited.MouseUp(self, ...)
+	self:Invalidate()
+	return self
 end
 
-function EditBox:KeyPress(key, mods, isRepeat, label, unicode)
-  local cp = self.cursor
-  local txt = self.text  
-  if key == KEYSYMS.RETURN then
-    return false
-  elseif key == KEYSYMS.BACKSPACE then
-    if #txt > 0 and cp > 1 then
-      self.cursor = cp - 1
-      self.text = string.sub(txt, 1, cp - 2) .. string.sub(txt, cp, #txt)
-    end      
-  elseif key == KEYSYMS.DELETE then
-    if #txt > 0 and cp <= #txt then
-      self.text = string.sub(txt, 1, cp - 1) .. string.sub(txt, cp + 1, #txt)
-    end
-  elseif key == KEYSYMS.LEFT then
-    if cp > 1 then
-      self.cursor = cp - 1
-    end
-  elseif key == KEYSYMS.RIGHT then
-    if cp <= #txt then
-      self.cursor = cp + 1
-    end
-  elseif key == KEYSYMS.RIGHT then
-    if cp <= #txt then
-      self.cursor = cp + 1
-    end
-  elseif key == KEYSYMS.HOME then
-    self.cursor = 1
-  elseif key == KEYSYMS.END then
-    self.cursor = #txt + 1
-  else
-    local char = nil
-    local success, char = pcall(string.char, unicode)   
-	if success then
-		success = not char:find("%c")
-	end
-    if not success then
-      char = nil
-    end
-	if char then
-		self.text = string.sub(txt, 1, cp - 1) .. char .. 
-		  string.sub(txt, cp, #txt)
-		self.cursor = cp + 1
-	else
+function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
+	local cp = self.cursor
+	local txt = self.text
+	if key == KEYSYMS.RETURN then
 		return false
+	elseif key == KEYSYMS.BACKSPACE then
+		if #txt > 0 and cp > 1 then
+			self.cursor = cp - 1
+			self.text = txt:sub(1, cp - 2) .. txt:sub(cp, #txt)
+		end
+	elseif key == KEYSYMS.DELETE then
+		if #txt > 0 and cp <= #txt then
+			self.text = txt:sub(1, cp - 1) .. txt:sub(cp + 1, #txt)
+		end
+	elseif key == KEYSYMS.LEFT then
+		if cp > 1 then
+			self.cursor = cp - 1
+		end
+	elseif key == KEYSYMS.RIGHT then
+		if cp <= #txt then
+			self.cursor = cp + 1
+		end
+	elseif key == KEYSYMS.HOME then
+		self.cursor = 1
+	elseif key == KEYSYMS.END then
+		self.cursor = #txt + 1
+	else
+		local char = nil
+		local success, char = pcall(string.char, unicode)
+		if success then
+			success = not char:find("%c")
+		end
+		if not success then
+			char = nil
+		end
+		if char then
+			self.text = txt:sub(1, cp - 1) .. char .. txt:sub(cp, #txt)
+			self.cursor = cp + 1
+		else
+			return false
+		end
 	end
-  end
-  self:UpdateLayout()
-  self:Invalidate()
-  return self
+	inherited.KeyPress(self, key, mods, isRepeat, label, unicode, ...)
+	self:UpdateLayout()
+	self:Invalidate()
+	return self
 end
 --//=============================================================================

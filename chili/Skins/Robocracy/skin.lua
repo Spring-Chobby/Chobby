@@ -4,7 +4,7 @@
 local skin = {
   info = {
     name    = "Robocracy",
-    version = "0.2",
+    version = "0.3",
     author  = "jK",
   }
 }
@@ -44,6 +44,17 @@ skin.checkbox = {
   boxsize     = 13,
 
   DrawControl = DrawCheckbox,
+}
+
+skin.editbox = {
+  backgroundColor = {0.1, 0.1, 0.1, 0.7},
+  cursorColor     = {1.0, 0.7, 0.1, 0.8},
+
+  TileImageBK = ":cl:panel2_bg.png",
+  TileImageFG = ":cl:panel2_border.png",
+  tiles       = {14,14,14,14},
+
+  DrawControl = DrawEditBox,
 }
 
 skin.imagelistview = {

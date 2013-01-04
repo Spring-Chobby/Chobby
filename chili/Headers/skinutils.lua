@@ -253,6 +253,14 @@ local function _DrawResizeGrip(obj)
   end
 end
 
+local function _DrawCursor(x, y, w, h)
+	gl.Vertex(x, y)
+	gl.Vertex(x, y + h)
+	gl.Vertex(x + w, y)
+	gl.Vertex(x + w, y + h)
+end
+
+
 --//=============================================================================
 --//
 
@@ -322,57 +330,81 @@ function DrawButton(obj)
   end
 end
 
---same code as in chili/Skins/default/skin.lua
---should it be different?
+
 function DrawEditBox(obj)
-  gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawBackground, obj, obj.state)
-  gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawBorder, obj.x, obj.y, obj.width, obj.height, 1, obj.borderColor1, obj.borderColor1)
+	local skLeft,skTop,skRight,skBottom = unpack4(obj.tiles)
 
+	gl.Color(obj.backgroundColor)
+	TextureHandler.LoadTexture(0,obj.TileImageBK,obj)
+	local texInfo = gl.TextureInfo(obj.TileImageBK) or {xsize=1, ysize=1}
+	local tw,th = texInfo.xsize, texInfo.ysize
+	gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, obj.x, obj.y, obj.width, obj.height,  skLeft,skTop,skRight,skBottom, tw,th)
+	--gl.Texture(0,false)
 
-  if (obj.text) then
-    local x = obj.x
-    local y = obj.y
-    local w = obj.width
-    local h = obj.height
-    local bt = obj.borderThickness
-
-    local txt = obj.text
-	local startPos = 1 + obj.offset
-	local newTxt = ""		
-	for i = startPos, #txt do
-		local tmp = string.sub(txt, startPos, i)
-		if obj.font:GetTextWidth(tmp) <= w then
-			newTxt = tmp
-		else
-			break
-		end
-	end
-	if obj.cursor <= obj.offset then		
-		obj.offset = obj.cursor - 1
-	elseif obj.cursor > obj.offset + #newTxt + 1 then		
-		obj.offset = obj.cursor - #newTxt
-	end
-	if #newTxt == 0 and #txt ~= 0 then
-		obj.offset = obj.offset - 1
-	end
-	local startPos = 1 + obj.offset
-	local newTxt = ""		
-	for i = startPos, #txt do
-		local tmp = string.sub(txt, startPos, i)
-		if obj.font:GetTextWidth(tmp) <= w then
-			newTxt = tmp
-		else
-			break
-		end
-	end
-	txt = newTxt
-    obj.font:DrawInBox(txt, x + bt, y, w, h, obj.align, obj.valign)
 	if obj.focused then
-	  local cursorTxt = string.sub(txt, 1, obj.cursor - 1 - obj.offset)
-	  local cursorX = obj.font:GetTextWidth(cursorTxt) + 1
-	  gl.BeginEnd(GL.LINE_STRIP, DrawCursor, x + cursorX, y, h)
-    end
-  end
+		gl.Color(obj.focusColor)
+	else
+		gl.Color(obj.borderColor)
+	end
+	TextureHandler.LoadTexture(0,obj.TileImageFG,obj)
+	local texInfo = gl.TextureInfo(obj.TileImageFG) or {xsize=1, ysize=1}
+	local tw,th = texInfo.xsize, texInfo.ysize
+	gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, obj.x, obj.y, obj.width, obj.height,  skLeft,skTop,skRight,skBottom, tw,th)
+	gl.Texture(0,false)
+
+	if (obj.text) then
+		if (obj.offset > obj.cursor) then
+			obj.offset = obj.cursor
+		end
+
+		local clientX,clientY,clientWidth,clientHeight = unpack4(obj.clientArea)
+
+		--// make cursor pos always visible (when text is longer than editbox!)
+		repeat
+			local txt = obj.text:sub(obj.offset, obj.cursor)
+			local wt = obj.font:GetTextWidth(txt)
+			if (wt <= clientWidth) then
+				break
+			end
+			if (obj.offset >= obj.cursor) then
+				break
+			end
+			obj.offset = obj.offset + 1
+		until (false)
+
+		local txt = obj.text:sub(obj.offset)
+
+		--// strip part at the end that exceeds the editbox
+		local lsize = obj.font:WrapText(txt, clientWidth, clientHeight):len()
+		while (lsize < txt:len()) do
+			local wt = obj.font:GetTextWidth(txt:sub(1, lsize))
+			if (wt > clientWidth) then
+				break
+			end
+			lsize = lsize + 1
+		end
+		txt = txt:sub(1, lsize - 1)
+
+		gl.Color(1,1,1,1)
+		obj.font:DrawInBox(txt, obj.x + clientX, obj.y + clientY, clientWidth, clientHeight, obj.align, obj.valign)
+
+		if obj.focused then
+			local cursorTxt = obj.text:sub(obj.offset, obj.cursor - 1)
+			local cursorX = obj.font:GetTextWidth(cursorTxt)
+
+			local as = math.sin(os.clock() * 4);
+			local ac = math.cos(os.clock() * 4);
+			if (as < 0) then as = 0 end
+			if (ac < 0) then ac = 0 end
+			local alpha = as + ac
+			if (alpha > 1) then alpha = 1 end
+			alpha = 0.8 * alpha
+
+			local cc = obj.cursorColor
+			gl.Color(cc[1], cc[2], cc[3], cc[4] * alpha)
+			gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawCursor, obj.x + cursorX + clientX - 1, obj.y + clientY, 3, clientHeight)
+		end
+	end
 end
 
 --//=============================================================================
