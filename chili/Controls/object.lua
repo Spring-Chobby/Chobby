@@ -6,7 +6,7 @@ Object = {
   --y         = 0,
   --width     = 10,
   --height    = 10,
-  defaultWidth  = 10, --FIXME reall needed?
+  defaultWidth  = 10, --FIXME really needed?
   defaultHeight = 10,
 
   visible = true,

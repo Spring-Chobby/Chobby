@@ -9,7 +9,8 @@ ScrollPanel = Control:Inherit{
   scrollPosY    = 0,
   verticalScrollbar   = true,
   horizontalScrollbar = true,
-  verticalSmartScroll = false, -- if control is crolled to bottom, keep scroll when layout changes
+  verticalSmartScroll = false, -- if control is scrolled to bottom, keep scroll when layout changes
+  ignoreMouseWheel = false,
 }
 
 local this = ScrollPanel
@@ -305,7 +306,7 @@ end
 
 
 function ScrollPanel:MouseWheel(x, y, up, value, ...)
-  if self._vscrollbar then
+  if self._vscrollbar and not self.ignoreMouseWheel then
     self.scrollPosY = self.scrollPosY - value*30
     self.scrollPosY = clamp(0, self.contentArea[4] - self.clientArea[4], self.scrollPosY)
     self:Invalidate()
