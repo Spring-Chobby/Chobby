@@ -603,6 +603,9 @@ end
 
 
 function Object:CallChildrenHT(eventname, x, y, ...)
+  if self.disableChildrenHitTest then
+    return nil
+  end
   local children = self.children
   for i=1,#children do
     local c = children[i]
@@ -620,6 +623,9 @@ end
 
 
 function Object:CallChildrenHTWeak(eventname, x, y, ...)
+  if self.disableChildrenHitTest then
+    return nil
+  end
   local children = self.children
   for i=1,#children do
     local c = children[i]
@@ -805,8 +811,4 @@ function Object:KeyPress(...)
 end
 
 --//=============================================================================
-
-
-
-
 
