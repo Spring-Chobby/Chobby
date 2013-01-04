@@ -124,7 +124,7 @@ function DrawBorder(obj,state)
   local h = obj.height
   local bt = obj.borderThickness
 
-  gl.Color((state=='pressed' and obj.borderColor2) or obj.borderColor1)
+  gl.Color((state=='pressed' and obj.borderColor2) or obj.borderColor)
   gl.Vertex(x,     y+h)
   gl.Vertex(x+bt,  y+h-bt)
   gl.Vertex(x,     y)
@@ -134,7 +134,7 @@ function DrawBorder(obj,state)
   gl.Vertex(x+w,   y)
   gl.Vertex(x+w-bt,y+bt)
 
-  gl.Color((state=='pressed' and obj.borderColor1) or obj.borderColor2)
+  gl.Color((state=='pressed' and obj.borderColor) or obj.borderColor2)
   gl.Vertex(x+w-bt,y+bt)
   gl.Vertex(x+w,   y)
   gl.Vertex(x+w-bt,y+h)
@@ -158,10 +158,10 @@ function _DrawScrollbar(obj, type, x,y,w,h, pos, visiblePercent, state)
 
   if (type=='horizontal') then
     local gripx,gripw = x+w*pos, w*visiblePercent
-    gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawBorder, gripx,y,gripw,h, 1, obj.borderColor1, obj.borderColor2)
+    gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawBorder, gripx,y,gripw,h, 1, obj.borderColor, obj.borderColor2)
   else
     local gripy,griph = y+h*pos, h*visiblePercent
-    gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawBorder, x,gripy,w,griph, 1, obj.borderColor1, obj.borderColor2)
+    gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawBorder, x,gripy,w,griph, 1, obj.borderColor, obj.borderColor2)
   end
 end
 
@@ -289,7 +289,7 @@ function DrawItemBkGnd(obj,x,y,w,h,state)
   end
   gl.Rect(x,y,x+w,y+h)
 
-  gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawBorder, x,y,w,h, 1, obj.borderColor1, obj.borderColor2)
+  gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawBorder, x,y,w,h, 1, obj.borderColor, obj.borderColor2)
 end
 
 
@@ -346,7 +346,7 @@ function DrawCheckbox(obj)
   gl.Color(obj.backgroundColor)
   gl.Rect(rect[1]+1,rect[2]+1,rect[1]+1+rect[3]-2,rect[2]+1+rect[4]-2)
 
-  gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawBorder, rect[1],rect[2],rect[3],rect[4], 1, obj.borderColor1, obj.borderColor2)
+  gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawBorder, rect[1],rect[2],rect[3],rect[4], 1, obj.borderColor, obj.borderColor2)
 
   if (obj.checked) then
     gl.BeginEnd(GL.TRIANGLE_STRIP,_DrawCheck,rect)
@@ -386,7 +386,7 @@ function DrawColorbars(obj)
   gl.Color(color)
   gl.Rect(barswidth + 2,obj.height,obj.width - 2,0)
 
-  gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawBorder, barswidth + 2,0,obj.width - barswidth - 4,obj.height, 1, obj.borderColor1,obj.borderColor2)
+  gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawBorder, barswidth + 2,0,obj.width - barswidth - 4,obj.height, 1, obj.borderColor, obj.borderColor2)
 
   gl.PopMatrix()
 end
@@ -491,7 +491,7 @@ skin.general = {
 
   --padding         = {5, 5, 5, 5}, --// padding: left, top, right, bottom
   borderThickness = 1.5,
-  borderColor1    = {1,1,1,0.6},
+  borderColor     = {1,1,1,0.6},
   borderColor2    = {0,0,0,0.8},
   backgroundColor = {0.8, 0.8, 1, 0.4},
 }
@@ -557,6 +557,7 @@ skin.window = {
 
 skin.editbox = {
   DrawControl = DrawEditBox,
+  backgroundColor = {1, 1, 1, 0.9},
 }
 
 skin.control = skin.general

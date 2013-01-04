@@ -63,7 +63,7 @@ function Colorbars:DrawControl()
   glColor(self.color)
   glRect(barswidth + 2,self.height,self.width - 2,0)
 
-  gl.BeginEnd(GL.TRIANGLE_STRIP, theme.DrawBorder_, barswidth + 2,0,self.width - barswidth - 4,self.height, 1, self.borderColor1,self.borderColor2)
+  gl.BeginEnd(GL.TRIANGLE_STRIP, theme.DrawBorder_, barswidth + 2,0,self.width - barswidth - 4,self.height, 1, self.borderColor, self.borderColor2)
 
   glPopMatrix()
 end

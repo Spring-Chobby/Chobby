@@ -314,9 +314,9 @@ function DrawButton(obj)
   --gl.Texture(0,false)
 
   if (obj.state=="pressed") then
-    gl.Color(0.6,0.6,0.6,1)
+    gl.Color(0.6,0.6,0.6,1) --FIXME
   else
-    gl.Color(1,1,1,1)
+    gl.Color(obj.borderColor)
   end
   TextureHandler.LoadTexture(0,obj.TileImageFG,obj)
     local texInfo = gl.TextureInfo(obj.TileImageFG) or {xsize=1, ysize=1}
@@ -426,7 +426,7 @@ function DrawPanel(obj)
     gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, x,y,w,h, skLeft,skTop,skRight,skBottom, tw,th, 0)
   --gl.Texture(0,false)
 
-  gl.Color(1,1,1,1)
+  gl.Color(obj.borderColor)
   TextureHandler.LoadTexture(0,obj.TileImageFG,obj)
     local texInfo = gl.TextureInfo(obj.TileImageFG) or {xsize=1, ysize=1}
     local tw,th = texInfo.xsize, texInfo.ysize
@@ -441,15 +441,14 @@ end
 function DrawItemBkGnd(obj,x,y,w,h,state)
   local skLeft,skTop,skRight,skBottom = unpack4(obj.tiles)
 
-  local texInfo = gl.TextureInfo(obj.imageFG) or {xsize=1, ysize=1}
-  local tw,th = texInfo.xsize, texInfo.ysize
-
   if (state=="selected") then
     gl.Color(obj.colorBK_selected)
   else
     gl.Color(obj.colorBK)
   end
   TextureHandler.LoadTexture(0,obj.imageBK,obj)
+    local texInfo = gl.TextureInfo(obj.imageBK) or {xsize=1, ysize=1}
+    local tw,th = texInfo.xsize, texInfo.ysize
     gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, x,y,w,h, skLeft,skTop,skRight,skBottom, tw,th, 0)
   --gl.Texture(0,false)
 
@@ -459,6 +458,8 @@ function DrawItemBkGnd(obj,x,y,w,h,state)
     gl.Color(obj.colorFG)
   end
   TextureHandler.LoadTexture(0,obj.imageFG,obj)
+    local texInfo = gl.TextureInfo(obj.imageFG) or {xsize=1, ysize=1}
+    local tw,th = texInfo.xsize, texInfo.ysize
     gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, x,y,w,h, skLeft,skTop,skRight,skBottom, tw,th, 0)
   gl.Texture(0,false)
 end
@@ -470,7 +471,7 @@ function DrawScrollPanelBorder(self)
   local clientX,clientY,clientWidth,clientHeight = unpack4(self.clientArea)
   local contX,contY,contWidth,contHeight = unpack4(self.contentArea)
 
-  gl.Color(1,1,1,1)
+  gl.Color(self.borderColor)
 
   do
       TextureHandler.LoadTexture(0,self.BorderTileImage,self)
@@ -500,7 +501,7 @@ function DrawScrollPanel(obj)
   local clientX,clientY,clientWidth,clientHeight = unpack4(obj.clientArea)
   local contX,contY,contWidth,contHeight = unpack4(obj.contentArea)
 
-  gl.Color(1,1,1,1)
+  gl.Color(obj.backgroundColor)
 
   if (obj.BackgroundTileImage) then
       TextureHandler.LoadTexture(0,obj.BackgroundTileImage,obj)
@@ -521,6 +522,8 @@ function DrawScrollPanel(obj)
       gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, obj.x,obj.y,width,height, skLeft,skTop,skRight,skBottom, tw,th, 0)
       gl.Texture(0,false)
   end
+
+  gl.Color(1,1,1,1)
 
   if obj._vscrollbar then
     local x = obj.x + clientX + clientWidth
@@ -605,11 +608,12 @@ function DrawCheckbox(obj)
 
   local skLeft,skTop,skRight,skBottom = unpack4(obj.tiles)
 
-  local texInfo = gl.TextureInfo(obj.TileImageFG) or {xsize=1, ysize=1}
-  local tw,th = texInfo.xsize, texInfo.ysize
 
   gl.Color(1,1,1,1)
   TextureHandler.LoadTexture(0,obj.TileImageBK,obj)
+
+  local texInfo = gl.TextureInfo(obj.TileImageBK) or {xsize=1, ysize=1}
+  local tw,th = texInfo.xsize, texInfo.ysize
     gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, x,y,w,h, skLeft,skTop,skRight,skBottom, tw,th, 0)
   --gl.Texture(0,false)
 
