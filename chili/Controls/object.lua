@@ -282,16 +282,16 @@ function Object:ClearChildren()
   --FIXME instead of disposing perhaps just unlink from parent?
   --FIXME clear hidden children too!
 
-  --// maske it faster
+  --// make it faster
   local old = self.preserveChildrenOrder
   self.preserveChildrenOrder = false
 
   --// remove all children  
     for i=1,#self.children_hidden do
-      self:ShoweChild(self.children_hidden[i])
+      self:ShowChild(self.children_hidden[i])
     end
 
-    for i=1,#self.children do
+    for i=#self.children,1,-1 do
       self:RemoveChild(self.children[i])
     end
 
@@ -424,7 +424,7 @@ end
 
 function Object:SetLayer(layer)
   if (self.parent) then
-    (self.parent):SetChildLayer(self,layer)
+    (self.parent):SetChildLayer(self, layer)
   end
 end
 
