@@ -27,9 +27,21 @@ local tk
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Chili's location
+
+local function GetDirectory(filepath) 
+    return filepath and filepath:gsub("(.*/)(.*)", "%1") 
+end 
+
+local source = debug and debug.getinfo(1).source
+local DIR = GetDirectory(source) or (LUAUI_DIRNAME.."Widgets/")
+CHILI_DIRNAME = DIR .. "chili/"
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 function widget:Initialize()
-  Chili = VFS.Include(LUAUI_DIRNAME.."Widgets/chili/core.lua")
+  Chili = VFS.Include(CHILI_DIRNAME .. "core.lua", nil, VFS.RAW_FIRST)
 
   screen0 = Chili.Screen:New{}
   th = Chili.TextureHandler

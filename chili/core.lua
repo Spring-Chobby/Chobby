@@ -39,7 +39,7 @@ local includes = {
 
 local Chili = widget
 
-Chili.CHILI_DIRNAME = LUAUI_DIRNAME.."Widgets/chili/"
+Chili.CHILI_DIRNAME = CHILI_DIRNAME or (LUAUI_DIRNAME.."Widgets/chili/")
 
 if (-1>0) then
   Chili = {}
@@ -48,7 +48,7 @@ if (-1>0) then
 end
 
 for _, file in ipairs(includes) do
-  VFS.Include(Chili.CHILI_DIRNAME .. file, Chili)
+  VFS.Include(Chili.CHILI_DIRNAME .. file, Chili, VFS.RAW_FIRST)
 end
 
 
