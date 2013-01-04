@@ -30,9 +30,10 @@ end
 local n = 0
 function FontHandler.Update()
 	n = n + 1
-	if (n <= 10) then
+	if (n <= 100) then
 		return
 	end
+	n = 0
 
 	for i=1,#loadedFonts do
 		if (refCounts[i] <= 0) then
