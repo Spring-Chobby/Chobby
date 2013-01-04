@@ -141,8 +141,18 @@ function widget:MouseWheel(up,value)
   return screen0:MouseWheel(x,y,up,value,mods)
 end
 
+
+local keyPressed = true
 function widget:KeyPress(key, mods, isRepeat, label, unicode)
-  return screen0:KeyPress(key, mods, isRepeat, label, unicode)
+  keyPressed = screen0:KeyPress(key, mods, isRepeat, label, unicode)
+  return keyPressed
+end
+
+
+function widget:KeyRelease()
+  local _keyPressed = keyPressed
+  keyPressed = false
+  return _keyPressed -- block engine actions when we processed it
 end
 
 
