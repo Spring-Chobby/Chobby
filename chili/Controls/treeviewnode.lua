@@ -39,6 +39,7 @@ function TreeViewNode:AddChild(obj, isNode)
   if (isNode~=false) then
     self.nodes[#self.nodes+1] = obj
   end
+  if self.parent and self.parent.RequestRealign then self.parent:RequestRealign() end
   return inherited.AddChild(self,obj)
 end
 
@@ -120,6 +121,40 @@ function TreeViewNode:Collapse()
   self:CallListeners(self.OnCollapse)
   self.expanded = false
   self.treeview:RequestRealign()
+end
+
+--//=============================================================================
+
+function TreeViewNode:GetNodeByCaption(caption)
+  for i=1,#self.nodes do
+    local n = self.nodes[i]
+    if (n.caption == caption) then
+      return n
+    end
+
+    local result = n:GetNodeByCaption(caption)
+    if (result) then
+      return result
+    end
+  end
+end
+
+function TreeViewNode:GetNodeByIndex(index, _i)
+  for i=1,#self.nodes do
+    _i = _i + 1
+    if (_i == index) then
+      return self.nodes[i]
+    end
+
+    local result = self.nodes[i]:GetNodeByIndex(index, _i)
+    if (IsNumber(result)) then
+      _i = result
+    else
+      return result
+    end
+  end
+
+  return _i
 end
 
 --//=============================================================================
