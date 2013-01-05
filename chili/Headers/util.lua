@@ -360,30 +360,20 @@ function mulColor(c,s)
 end
 
 function color2incolor(r,g,b,a)
-	local colortable = {r,g,b,a}
 	if type(r) == 'table' then
-		colortable = r
+		r,g,b,a = unpack4(r)
 	end
-	local r,g,b,a = unpack(colortable)			
-	if r == 0 then r = 0.01 end
-	if g == 0 then g = 0.01 end
-	if b == 0 then b = 0.01 end
-	--if a == 0 then a = 0.01 end --seems transparent is bad in label text
-	a = 1
-	
+
 	local inColor = '\255\255\255\255'
 	if r then
-		inColor = string.char(a*255) .. string.char(r*255) ..  string.char(g*255) .. string.char(b*255)
+		inColor = string.char(255, r*255, g*255, b*255)
 	end
 	return inColor
 end
 
 function incolor2color(inColor)
 	local a = 255
-	local r = inColor:sub(2,2):byte()
-	local g = inColor:sub(3,3):byte()
-	local b = inColor:sub(4,4):byte()
-	
+	local r,g,b = inColor:sub(2,4):byte(1,3)
 	return r/255, g/255, b/255, a/255
 end
 
