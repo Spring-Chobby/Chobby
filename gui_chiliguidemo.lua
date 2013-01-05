@@ -100,7 +100,15 @@ function widget:Initialize()
 		parent = Chili.Screen0,
 
 		children = {
-			Chili.Label:New{caption='This window should be empty!\n(except this text)'},
+			Chili.StackPanel:New{
+				height = "100%";
+				width  = "100%";
+				weightedResize = true;
+				children = {
+					Chili.Button:New{caption="foo", weight = 7; width = "90%"},
+					Chili.Button:New{caption="bar", weight = 3},
+				};
+			}
 		},
 	}
 
