@@ -123,13 +123,13 @@ function Screen:MouseDown(x,y,...)
   local activeControl = inherited.MouseDown(self,x,y,...)
   self.activeControl = MakeWeakLink(activeControl)
   if self.focusedControl then
-    self.focusedControl.focused = false
+    self.focusedControl.state.focused = false
     self.focusedControl:Invalidate()
   end
   self.focusedControl = nil
   if self.activeControl then
     self.focusedControl = MakeWeakLink(activeControl)
-    self.focusedControl.focused = true
+    self.focusedControl.state.focused = true
   end
   return (not not activeControl)
 end

@@ -43,9 +43,17 @@ Control = Object:Inherit{
     autoOutlineColor = true,
   },
 
+  state = {
+    focused  = false,
+    hovered  = false,
+    checked  = false,
+    selected = false, --FIXME implement
+    pressed  = false,
+    enabled  = true, --FIXME implement
+  },
+
   skin            = nil,
   skinName        = nil,
-  focused         = false,
 }
 
 local this = Control

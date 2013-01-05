@@ -124,7 +124,7 @@ function DrawBorder(obj,state)
   local h = obj.height
   local bt = obj.borderThickness
 
-  gl.Color((state=='pressed' and obj.borderColor2) or obj.borderColor)
+  gl.Color((state.pressed and obj.borderColor2) or obj.borderColor)
   gl.Vertex(x,     y+h)
   gl.Vertex(x+bt,  y+h-bt)
   gl.Vertex(x,     y)
@@ -134,7 +134,7 @@ function DrawBorder(obj,state)
   gl.Vertex(x+w,   y)
   gl.Vertex(x+w-bt,y+bt)
 
-  gl.Color((state=='pressed' and obj.borderColor) or obj.borderColor2)
+  gl.Color((state.pressed and obj.borderColor) or obj.borderColor2)
   gl.Vertex(x+w-bt,y+bt)
   gl.Vertex(x+w,   y)
   gl.Vertex(x+w-bt,y+h)
@@ -213,7 +213,7 @@ end
 
 function DrawEditBox(obj)
 	gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawBackground, obj, obj.state)
-	if obj.focused then
+	if obj.state.focused then
 		gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawBorder, obj.x, obj.y, obj.width, obj.height, obj.borderThickness, obj.focusColor, obj.focusColor)
 	else
 		gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawBorder, obj.x, obj.y, obj.width, obj.height, obj.borderThickness, obj.borderColor2, obj.borderColor)
@@ -255,7 +255,7 @@ function DrawEditBox(obj)
 		gl.Color(1,1,1,1)
 		obj.font:DrawInBox(txt, obj.x + clientX, obj.y + clientY, clientWidth, clientHeight, obj.align, obj.valign)
 
-		if obj.focused then
+		if obj.state.focused then
 			local cursorTxt = obj.text:sub(obj.offset, obj.cursor - 1)
 			local cursorX = obj.font:GetTextWidth(cursorTxt)
 
@@ -348,7 +348,7 @@ function DrawCheckbox(obj)
 
   gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawBorder, rect[1],rect[2],rect[3],rect[4], 1, obj.borderColor, obj.borderColor2)
 
-  if (obj.checked) then
+  if (obj.state.checked) then
     gl.BeginEnd(GL.TRIANGLE_STRIP,_DrawCheck,rect)
   end
 

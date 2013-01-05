@@ -98,7 +98,7 @@ function EditBox:Update(...)
 	--// redraw every few frames for blinking cursor
 	inherited.Update(self, ...)
 	self:RequestUpdate()
-	if (self.focused and (os.clock() >= (self._nextCursorRedraw or -math.huge))) then
+	if (self.state.focused and (os.clock() >= (self._nextCursorRedraw or -math.huge))) then
 		self._nextCursorRedraw = os.clock() + 0.1 --10FPS
 		self:Invalidate()
 	end

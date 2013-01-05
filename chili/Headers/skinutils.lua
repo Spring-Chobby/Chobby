@@ -301,8 +301,10 @@ function DrawButton(obj)
 
   local skLeft,skTop,skRight,skBottom = unpack4(obj.tiles)
 
-  if (obj.state=="pressed") then
+  if (obj.state.pressed) then
     gl.Color(mulColor(obj.backgroundColor,0.4))
+  elseif (obj.state.hovered) then
+    gl.Color(obj.focusColor)
   else
     gl.Color(obj.backgroundColor)
   end
@@ -313,8 +315,10 @@ function DrawButton(obj)
     gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, x,y,w,h, skLeft,skTop,skRight,skBottom, tw,th, 0)
   --gl.Texture(0,false)
 
-  if (obj.state=="pressed") then
+  if (obj.state.pressed) then
     gl.Color(0.6,0.6,0.6,1) --FIXME
+  elseif (obj.state.hovered) then
+    gl.Color(obj.focusColor)
   else
     gl.Color(obj.borderColor)
   end
@@ -341,7 +345,7 @@ function DrawEditBox(obj)
 	gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, obj.x, obj.y, obj.width, obj.height,  skLeft,skTop,skRight,skBottom, tw,th)
 	--gl.Texture(0,false)
 
-	if obj.focused then
+	if obj.state.focused or obj.state.hovered then
 		gl.Color(obj.focusColor)
 	else
 		gl.Color(obj.borderColor)
@@ -388,7 +392,7 @@ function DrawEditBox(obj)
 		gl.Color(1,1,1,1)
 		obj.font:DrawInBox(txt, obj.x + clientX, obj.y + clientY, clientWidth, clientHeight, obj.align, obj.valign)
 
-		if obj.focused then
+		if obj.state.focused then
 			local cursorTxt = obj.text:sub(obj.offset, obj.cursor - 1)
 			local cursorX = obj.font:GetTextWidth(cursorTxt)
 
@@ -471,8 +475,6 @@ function DrawScrollPanelBorder(self)
   local clientX,clientY,clientWidth,clientHeight = unpack4(self.clientArea)
   local contX,contY,contWidth,contHeight = unpack4(self.contentArea)
 
-  gl.Color(self.borderColor)
-
   do
       TextureHandler.LoadTexture(0,self.BorderTileImage,self)
       local texInfo = gl.TextureInfo(self.BorderTileImage) or {xsize=1, ysize=1}
@@ -489,6 +491,7 @@ function DrawScrollPanelBorder(self)
         height = clientHeight + self.padding[2] - 1
       end
 
+      gl.Color(self.borderColor)
       gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledBorder, self.x,self.y,width,height, skLeft,skTop,skRight,skBottom, tw,th, 0)
       gl.Texture(0,false)
   end
@@ -500,8 +503,6 @@ end
 function DrawScrollPanel(obj)
   local clientX,clientY,clientWidth,clientHeight = unpack4(obj.clientArea)
   local contX,contY,contWidth,contHeight = unpack4(obj.contentArea)
-
-  gl.Color(obj.backgroundColor)
 
   if (obj.BackgroundTileImage) then
       TextureHandler.LoadTexture(0,obj.BackgroundTileImage,obj)
@@ -519,11 +520,10 @@ function DrawScrollPanel(obj)
         height = clientHeight + obj.padding[2] - 1
       end
 
+      gl.Color(obj.backgroundColor)
       gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, obj.x,obj.y,width,height, skLeft,skTop,skRight,skBottom, tw,th, 0)
       gl.Texture(0,false)
   end
-
-  gl.Color(1,1,1,1)
 
   if obj._vscrollbar then
     local x = obj.x + clientX + clientWidth
@@ -540,8 +540,10 @@ function DrawScrollPanel(obj)
       gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, x,y,w,h, skLeft,skTop,skRight,skBottom, tw,th, 0)
     --gl.Texture(0,false)
 
-    if obj._vscrolling then
+    if obj._vscrolling or obj._vHovered then
       gl.Color(obj.KnobColorSelected)
+    else
+      gl.Color(1,1,1,1)
     end
 
     TextureHandler.LoadTexture(0,obj.KnobTileImage,obj)
@@ -561,6 +563,8 @@ function DrawScrollPanel(obj)
   end
 
   if obj._hscrollbar then
+    gl.Color(1,1,1,1)  
+
     local x = obj.x
     local y = obj.y + clientY + clientHeight
     local w = obj.width
@@ -575,8 +579,10 @@ function DrawScrollPanel(obj)
       gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, x,y,w,h, skLeft,skTop,skRight,skBottom, tw,th, 0)
     --gl.Texture(0,false)
 
-    if obj._hscrolling then
+    if obj._hscrolling or obj._hHovered then
       gl.Color(obj.KnobColorSelected)
+    else
+      gl.Color(1,1,1,1)
     end
 
     TextureHandler.LoadTexture(0,obj.HKnobTileImage,obj)
@@ -609,7 +615,11 @@ function DrawCheckbox(obj)
   local skLeft,skTop,skRight,skBottom = unpack4(obj.tiles)
 
 
-  gl.Color(1,1,1,1)
+  if (obj.state.hovered) then
+    gl.Color(obj.focusColor)
+  else
+    gl.Color(1,1,1,1)
+  end
   TextureHandler.LoadTexture(0,obj.TileImageBK,obj)
 
   local texInfo = gl.TextureInfo(obj.TileImageBK) or {xsize=1, ysize=1}
@@ -617,12 +627,13 @@ function DrawCheckbox(obj)
     gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, x,y,w,h, skLeft,skTop,skRight,skBottom, tw,th, 0)
   --gl.Texture(0,false)
 
-  if (obj.checked) then
+  if (obj.state.checked) then
     TextureHandler.LoadTexture(0,obj.TileImageFG,obj)
       gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, x,y,w,h, skLeft,skTop,skRight,skBottom, tw,th, 0)
   end
   gl.Texture(0,false)
 
+  gl.Color(1,1,1,1)
   if (obj.caption) then
     local vc = obj.height*0.5 --//verticale center
     local tx = 0
@@ -682,6 +693,7 @@ function DrawTrackbar(self)
   local pdLeft,pdTop,pdRight,pdBottom = unpack4(self.hitpadding)
 
   gl.Color(1,1,1,1)
+
   TextureHandler.LoadTexture(0,self.TileImage,self)
     local texInfo = gl.TextureInfo(self.TileImage) or {xsize=1, ysize=1}
     local tw,th = texInfo.xsize, texInfo.ysize
@@ -724,6 +736,12 @@ function DrawTrackbar(self)
         mx = mx+stepWidth
       end
     end
+
+  if (self.state.hovered) then
+    gl.Color(self.focusColor)
+  else
+    gl.Color(1,1,1,1)
+  end
 
   TextureHandler.LoadTexture(0,self.ThumbImage,self)
     local texInfo = gl.TextureInfo(self.ThumbImage) or {xsize=1, ysize=1}
