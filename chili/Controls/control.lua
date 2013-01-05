@@ -1117,8 +1117,23 @@ function Control:MouseWheel(x, y, ...)
   return inherited.MouseWheel(self, cx, cy, ...)
 end
 
+
 function Control:KeyPress(...)
   return inherited.KeyPress(self, ...)
+end
+
+
+function Control:MouseOver(...)
+	inherited.MouseOver(self, ...)
+	self.state.hovered = true
+	self:Invalidate()
+end
+
+
+function Control:MouseOut(...)
+	inherited.MouseOut(self, ...)
+	self.state.hovered = false
+	self:Invalidate()
 end
 
 --//=============================================================================

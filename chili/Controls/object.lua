@@ -24,6 +24,8 @@ Object = {
   OnMouseUp    = {},
   OnMouseMove  = {},
   OnMouseWheel = {},
+  OnMouseOver  = {},
+  OnMouseOut   = {},
   OnKeyPress   = {},
 
   disableChildrenHitTest = false, --// if set childrens are not clickable/draggable etc - their mouse events are not processed
@@ -801,6 +803,21 @@ function Object:MouseWheel(...)
 
   return self:CallChildrenHTWeak('MouseWheel', ...)
 end
+
+
+function Object:MouseOver(...)
+  if (self:CallListeners(self.OnMouseOver, ...)) then
+    return self
+  end
+end
+
+
+function Object:MouseOut(...)
+  if (self:CallListeners(self.OnMouseOut, ...)) then
+    return self
+  end
+end
+
 
 function Object:KeyPress(...)
   if (self:CallListeners(self.OnKeyPress, ...)) then

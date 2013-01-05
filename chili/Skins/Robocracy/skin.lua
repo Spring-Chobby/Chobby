@@ -75,8 +75,6 @@ skin.imagelistview = {
   imageFG  = ":cl:node_selected.png",
   tiles    = {9, 9, 9, 9},
 
-  --tiles = {17,15,17,20},
-
   DrawItemBackground = DrawItemBkGnd,
 }
 --[[
@@ -92,9 +90,6 @@ skin.imagelistviewitem = {
 --]]
 
 skin.panel = {
-  --TileImageFG = ":cl:glassFG.png",
-  --TileImageBK = ":cl:glassBK.png",
-  --tiles = {17,15,17,20},
   TileImageBK = ":cl:tech_button.png",
   TileImageFG = ":cl:empty.png",
   tiles = {22, 22, 22, 22},

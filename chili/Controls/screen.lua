@@ -98,6 +98,13 @@ function Screen:IsAbove(x,y,...)
 
   --// tooltip
   if (UnlinkSafe(hoveredControl) ~= UnlinkSafe(self._lastHoveredControl)) then
+    if self._lastHoveredControl then
+      self._lastHoveredControl:MouseOut()
+    end
+    if hoveredControl then
+      hoveredControl:MouseOver()
+    end
+
     self.hoveredControl = MakeWeakLink(hoveredControl)
     if (hoveredControl) then
       local control = hoveredControl

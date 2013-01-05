@@ -36,7 +36,6 @@ LayoutPanel = Control:Inherit{
        - e.g. "component1.weight = 1, component2.weight = 2" => component2 will be 2 times larger than component1
        - if all components have same weight -> same layout as without weightedResize
        - default value is 1 (nil interpreted as 1)
-       - with manageWeights the weight is automatically set depending on number of children
   ]]
   weightedResize = false,
 
