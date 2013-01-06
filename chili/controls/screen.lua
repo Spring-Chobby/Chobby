@@ -25,12 +25,13 @@ local inherited = this.inherited
 
 function Screen:New(obj)
   local vsx,vsy = gl.GetViewSizes()
-  if (obj.width == 0) then
+  if ((obj.width or -1) <= 0) then
     obj.width = vsx
   end
-  if (obj.height == 0) then
+  if ((obj.height or -1) <= 0) then
     obj.height = vsy
   end
+
   obj = inherited.New(self,obj)
 
   TaskHandler.RequestGlobalDispose(obj)

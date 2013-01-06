@@ -330,7 +330,7 @@ function Object:HideChild(obj)
   local cn = #children
   for i=1,cn do
     if CompareLinks(objDirect,children[i]) then
-      self.children_hidden[objDirect] =  {child, i, children[i-1], children[i+1]}
+      self.children_hidden[objDirect] =  {child, i, children[i-1], children[i+1]} --FIXME use weakLinks!
       break
     end
   end
@@ -368,7 +368,7 @@ function Object:ShowChild(obj)
     for i=1,cn do
       if CompareLinks(params[3],children[i]) then
         self:AddChild(obj)
-	self:SetChildLayer(obj,i+1)
+        self:SetChildLayer(obj,i+1)
         return true
       end
     end
