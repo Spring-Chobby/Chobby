@@ -139,11 +139,8 @@ function Control:Dispose()
     self._own_dlist = nil
   end
 
-  if (not self.disposed) then
-    self.font:Dispose()
-  end
-
   inherited.Dispose(self)
+  self.font:Dispose()
 end
 
 --//=============================================================================
@@ -711,20 +708,20 @@ end
 
 
 function Control:GetChildrenCurrentExtents()
-  local maxRight  = 0
-  local maxBottom = 0
   local minLeft   = 0
   local minTop    = 0
-
+  local maxRight  = 0
+  local maxBottom = 0
+ 
   local cn = self.children
   for i=1,#cn do
     local c = cn[i]
     if (c.GetCurrentExtents) then
       local left, top, right, bottom = c:GetCurrentExtents()
-      maxRight  = math.max(maxRight,  right)
-      maxBottom = math.max(maxBottom, bottom)
       minLeft   = math.min(minLeft,   left)
       minTop    = math.min(minTop,    top)
+      maxRight  = math.max(maxRight,  right)
+      maxBottom = math.max(maxBottom, bottom)
     end
   end
 

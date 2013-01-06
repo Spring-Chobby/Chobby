@@ -87,11 +87,6 @@ end
 
 --//=============================================================================
 
-function EditBox:DrawControl()
-	--// gets overriden by the skin/theme
-end
-
-
 function EditBox:Update(...)
 	--FIXME add special UpdateFocus event?
 
