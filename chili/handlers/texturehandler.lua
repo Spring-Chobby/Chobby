@@ -29,7 +29,7 @@ local loaded = {}
 local requested = {}
 
 local placeholderFilename = theme.skin.icons.imageplaceholder
-local placeholderDL = gl.CreateList(gl.Texture,CHILI_DIRNAME .. "Skins/default/empty.png")
+local placeholderDL = gl.CreateList(gl.Texture,CHILI_DIRNAME .. "skins/default/empty.png")
 --local placeholderDL = gl.CreateList(gl.Texture,placeholderFilename)
 
 local function AddRequest(filename,obj)
