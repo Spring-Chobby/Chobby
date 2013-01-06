@@ -41,16 +41,16 @@ function widget:Initialize()
 	local testText = 
 	[[Bolivians are voting in a referendum on a new constitution that President Evo Morales says will empower the country's indigenous majority.
 
-	The changes also include strengthening state control of Bolivia's natural resources, and no longer recognising Catholicism as the official religion.
+The changes also include strengthening state control of Bolivia's natural resources, and no longer recognising Catholicism as the official religion.
 
-	The constitution is widely expected to be approved.
-	Mr Morales, an Aymara Indian, has pursued political reform but has met fierce resistance from some sectors.
-	Opponents concentrated in Bolivia's eastern provinces, which hold rich gas deposits, argue that the new constitution would create two classes of citizenship - putting indigenous people ahead of others.
+The constitution is widely expected to be approved.
+Mr Morales, an Aymara Indian, has pursued political reform but has met fierce resistance from some sectors.
+Opponents concentrated in Bolivia's eastern provinces, which hold rich gas deposits, argue that the new constitution would create two classes of citizenship - putting indigenous people ahead of others.
 
-	The wrangling has spilled over into, at times, deadly violence. At least 30 peasant farmers were ambushed and killed on their way home from a pro-government rally in a northern region in September.
+The wrangling has spilled over into, at times, deadly violence. At least 30 peasant farmers were ambushed and killed on their way home from a pro-government rally in a northern region in September.
 
-	President Morales has said the new constitution will pave the way for correcting the historic inequalities of Bolivian society, where the economic elite is largely of European descent.
-	]]
+President Morales has said the new constitution will pave the way for correcting the historic inequalities of Bolivian society, where the economic elite is largely of European descent.
+]]
 
 	local testText2 = 
 	"\255\001\255\250Bolivians\b are voting in a referendum on a \255\255\255\000new\b constitution "
@@ -105,8 +105,8 @@ function widget:Initialize()
 				width  = "100%";
 				weightedResize = true;
 				children = {
-					Chili.Button:New{caption="foo", weight = 7; width = "90%"},
-					Chili.Button:New{caption="bar", weight = 3},
+					Chili.Button:New{caption="height: 70%", weight = 7; width = "90%"},
+					Chili.Button:New{caption="height: 30%", weight = 3},
 				};
 			}
 		},
@@ -273,6 +273,8 @@ function widget:Initialize()
 							{ "bar" },
 							"do",
 							{ "re", {"mi"} },
+							"la",
+							{ "le", "lu" },
 						},
 					},
 				},
