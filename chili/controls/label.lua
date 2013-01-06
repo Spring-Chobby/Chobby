@@ -12,7 +12,7 @@ Label = Control:Inherit{
   autoObeyLineHeight = false, --// (needs autosize) if true, autosize will obey the lineHeight (-> texts with the same line count will have the same height) 
 
   align    = "left",
-  valign   = "ascender",
+  valign   = "linecenter", --// usefull too "ascender"
   caption  = "no text",
 }
 
