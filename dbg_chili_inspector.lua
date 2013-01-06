@@ -25,10 +25,11 @@ local Chili
 --------------------------------------------------------------------------------
 
 local function trace(children, node)
+	if not node then return end
 	for i=1,#children do
 		local obj = children[i]
 		if obj.name ~= "wnd_inspector" then
-			local nodec = node:Add(obj.name)
+			local nodec = node:Add(obj.classname .. ": " .. obj.name)
 			trace(obj.children, nodec)
 		end
 	end
@@ -60,9 +61,9 @@ function widget:Initialize()
 				y=20, bottom=20,
 				children = {
 					Chili.TreeView:New{
-						name = "tree_inspector",
-						x=0, right=0,
-						y=0, bottom=0,
+						name = "tree_inspector";
+						width="100%";
+						height="100%";
 					},
 				},
 			},
