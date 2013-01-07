@@ -832,6 +832,8 @@ end
 --]]
 
 function Control:_UpdateAllDList()
+  self._redrawCounter = (self._redrawCounter or 0) + 1
+
   if (self._all_dlist) then
     gl.DeleteList(self._all_dlist)
     self._all_dlist = nil
