@@ -35,6 +35,7 @@ function Screen:New(obj)
   obj = inherited.New(self,obj)
 
   TaskHandler.RequestGlobalDispose(obj)
+  obj:RequestUpdate()
 
   return obj
 end
@@ -93,7 +94,26 @@ end
 
 --//=============================================================================
 
+function Screen:Update(...)
+	--//FIXME create a passive MouseMove event and use it instead?
+	self:RequestUpdate()
+	local hoveredControl = Unlink(self.hoveredControl)
+	local activeControl = Unlink(self.activeControl)
+	if hoveredControl and (not activeControl) then
+		local x, y = Spring.GetMouseState()
+		y = select(2,gl.GetViewSizes()) - y
+		local cx,cy = hoveredControl:ScreenToLocal(x, y)
+		hoveredControl:MouseMove(cx, cy, 0, 0)
+	end
+end
+
+
 function Screen:IsAbove(x,y,...)
+  local activeControl = Unlink(self.activeControl)
+  if activeControl then
+    return true
+  end
+
   y = select(2,gl.GetViewSizes()) - y
   local hoveredControl = inherited.IsAbove(self,x,y,...)
 

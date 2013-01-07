@@ -85,7 +85,7 @@ end
 --//=============================================================================
 
 function ScrollPanel:_DetermineContentArea()
-  local minLeft, minTop, maxRight,maxBottom = self:GetChildrenCurrentExtents()
+  local minLeft, minTop, maxRight, maxBottom = self:GetChildrenCurrentExtents()
 
   self.contentArea = {
     0,
@@ -277,6 +277,14 @@ function ScrollPanel:MouseMove(x, y, dx, dy, ...)
     return self
   end
 
+  local old = (self._hHovered and 1 or 0) + (self._vHovered and 2 or 0)
+  self._hHovered = self:IsAboveHScrollbars(x,y)
+  self._vHovered = self:IsAboveVScrollbars(x,y)
+  local new = (self._hHovered and 1 or 0) + (self._vHovered and 2 or 0)
+  if (new ~= old) then
+    self:Invalidate()
+  end
+
   return inherited.MouseMove(self, x, y, dx, dy, ...)
 end
 
@@ -314,4 +322,12 @@ function ScrollPanel:MouseWheel(x, y, up, value, ...)
   end
 
   return inherited.MouseWheel(self, x, y, up, value, ...)
+end
+
+
+function ScrollPanel:MouseOut(...)
+	inherited.MouseOut(self, ...)
+	self._hHovered = false
+	self._vHovered = false
+	self:Invalidate()
 end
