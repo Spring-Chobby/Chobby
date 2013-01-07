@@ -49,6 +49,32 @@ end
 
 --//=============================================================================
 
+local function NotEqual(v1, v2)
+	local t1 = type(v1)
+	local t2 = type(v2)
+
+	if (t1 ~= t2) then
+		return true
+	end
+
+	local isindexable = (t=="table")or(t=="metatable")or(t=="userdata")
+	if (not isindexable) then
+		return (t1 ~= t2)
+	end
+
+	for i,v in pairs(v1) do
+		if (v ~= v2[i]) then
+			return true
+		end
+	end
+	for i,v in pairs(v2) do
+		if (v ~= v1[i]) then
+			return true
+		end
+	end
+end
+
+
 do
   --// Create some Set... methods (e.g. SetColor, SetSize, SetFont, ...)
 
@@ -71,6 +97,8 @@ do
     Font[funcname] = function(self,value,...)
       local t = type(value)
 
+      local oldValue = self[param]
+
       if (t == "table") then
         self[param] = table.shallowcopy(value)
       else
@@ -92,7 +120,7 @@ do
           p:RequestRealign() 
         end
       else
-        if (p) then
+        if (p)and NotEqual(oldValue, self[param]) then
           p:Invalidate() 
         end
       end

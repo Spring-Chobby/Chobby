@@ -841,7 +841,7 @@ function Control:_UpdateAllDList()
   self._all_dlist = gl.CreateList(self.DrawForList,self)
 
   if (self.parent)and(not self.parent._needRedraw)and(self.parent._UpdateAllDList)and(self.parent.useDList) then
-    (self.parent):_UpdateAllDList()
+    (self.parent):Invalidate()
   end
 end
 
