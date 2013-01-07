@@ -243,7 +243,7 @@ function DrawEditBox(obj)
 
 		--// strip part at the end that exceeds the editbox
 		local lsize = obj.font:WrapText(txt, clientWidth, clientHeight):len()
-		while (lsize < txt:len()) do
+		while (lsize <= txt:len()) do
 			local wt = obj.font:GetTextWidth(txt:sub(1, lsize))
 			if (wt > clientWidth) then
 				break
