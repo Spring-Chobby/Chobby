@@ -62,7 +62,7 @@ function widget:Initialize()
 				x=0, right=0,
 				y=0, bottom=-20,
 				align = "right", valign = "bottom",
-				caption = "Lua MemUsage: 60MB",
+				caption = "Lua MemUsage: 0MB",
 				
 			},
 			Chili.ScrollPanel:New{
