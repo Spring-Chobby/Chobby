@@ -25,7 +25,6 @@ local profiling = false
 
 local profile_tree = {}
 local samples = 0
-local samples2 = 0
 
 local min_usage = 0.03
 
@@ -33,42 +32,51 @@ local min_usage = 0.03
 --------------------------------------------------------------------------------
 
 local n = 0
+local s = 0
 local function trace(event, line)
 	n = n + 1
-	if (n < 50) then
+	if (n < 25) then
 		return
 	end
 	n = 0
 
 	samples = samples + 1
 
-	if (samples % 10 == 0) then
+	s = s + 1
+	if (s > 10) then
 		label0:SetCaption("Samples: " .. samples)
+		s = 0
 	end
 	
 	local j = 2
 	local i = 666
 	local top = true
 
+	local alreadySampled = {}
+	
 	while (i) do
 		repeat 
-			i = debug.getinfo(j)
+			i = debug.getinfo(j, "nS")
 			j = j + 1
 			if (not i) then return end
 		until not(i.source:find("\n") or i.source:find("(tail call)") or (not i.name) or i.what == "C" or i.what == "main")
 		local s = i.source or "???"
 		local n = i.name or "???"
-		--local l = i.linedefined or "???"
+		local l = i.linedefined or "???"
+		n = ("%s (line: %s)"):format(n, l)
 
-		profile_tree[s] = profile_tree[s] or {}
-		profile_tree[s][n] = profile_tree[s][n] or {0,0}
-		profile_tree[s][n][1] = profile_tree[s][n][1] + 1
-		if top then
-			profile_tree[s][n][2] = profile_tree[s][n][2] + 1
-			top = false
+		local sampleName = ("%s%s%s"):format(s, n, l)
+		if not alreadySampled[sampleName] then
+			alreadySampled[sampleName] = true
+
+			profile_tree[s] = profile_tree[s] or {}
+			profile_tree[s][n] = profile_tree[s][n] or {0,0}
+			profile_tree[s][n][1] = profile_tree[s][n][1] + 1
+			if top then
+				profile_tree[s][n][2] = profile_tree[s][n][2] + 1
+				top = false
+			end
 		end
-
-		samples2 = samples2 + 1
 	end
 end
 
@@ -77,8 +85,8 @@ local function rendertree()
 	for s,t in pairs(profile_tree) do
 		local node_file
 		for f,c in pairs(t) do
-			if (c[1]/samples2 > min_usage)or(c[2]/samples > min_usage) then
-				local cap = ("%.1f%% (%.1f%%): %s"):format(100 * (c[1]/samples2), 100 * (c[2]/samples), f)
+			if (c[1]/samples > min_usage)or(c[2]/samples > min_usage) then
+				local cap = ("%.1f%% (%.1f%%): %s"):format(100 * (c[1]/samples), 100 * (c[2]/samples), f)
 				if not(node_file) then node_file = tree0.root:Add(s) end
 				local nf = node_file:Add(cap)
 			end

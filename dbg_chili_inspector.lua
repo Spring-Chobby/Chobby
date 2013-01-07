@@ -49,7 +49,7 @@ function widget:Initialize()
 
 	window0 = Chili.Window:New{
 		name = "wnd_inspector",
-		caption = "Inspector",
+		caption = "Chili Inspector",
 		x = 1200,
 		y = 250,
 		width  = 400,
