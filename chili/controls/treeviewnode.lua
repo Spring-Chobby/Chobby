@@ -61,6 +61,26 @@ function TreeViewNode:RemoveChild(obj)
 end
 
 
+function TreeViewNode:ClearChildren()
+	local caption
+	if not(self.root) then
+		caption = self.children[1]
+		self.children[1] = self.children[#self.children]
+		self.children[#self.children] = nil
+	end
+
+	local collapsed = not self.expanded
+	self:Expand()
+	inherited.ClearChildren(self)
+	if (collapsed) then self:Collapse() end
+
+	if not(self.root) then
+		self.children[1] = caption
+	end
+end
+
+TreeViewNode.Clear = TreeViewNode.ClearChildren
+
 --//=============================================================================
 
 function TreeViewNode:Add(item)

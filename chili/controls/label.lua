@@ -30,7 +30,7 @@ end
 --//=============================================================================
 
 function Label:SetCaption(newcaption)
-  if (self.caption == newcaption) then return end 
+  if (self.caption == newcaption) then return end
   self.caption = newcaption
   self:UpdateLayout()
   self:Invalidate()

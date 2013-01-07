@@ -23,7 +23,7 @@ local label0
 local Chili
 local profiling = false
 
-local profile_tree = {}
+local sample_tree = {}
 local samples = 0
 
 local min_usage = 0.03
@@ -60,6 +60,7 @@ local function trace(event, line)
 			j = j + 1
 			if (not i) then return end
 		until not(i.source:find("\n") or i.source:find("(tail call)") or (not i.name) or i.what == "C" or i.what == "main")
+
 		local s = i.source or "???"
 		local n = i.name or "???"
 		local l = i.linedefined or "???"
@@ -69,11 +70,11 @@ local function trace(event, line)
 		if not alreadySampled[sampleName] then
 			alreadySampled[sampleName] = true
 
-			profile_tree[s] = profile_tree[s] or {}
-			profile_tree[s][n] = profile_tree[s][n] or {0,0}
-			profile_tree[s][n][1] = profile_tree[s][n][1] + 1
+			sample_tree[s] = sample_tree[s] or {}
+			sample_tree[s][n] = sample_tree[s][n] or {0,0}
+			sample_tree[s][n][1] = sample_tree[s][n][1] + 1
 			if top then
-				profile_tree[s][n][2] = profile_tree[s][n][2] + 1
+				sample_tree[s][n][2] = sample_tree[s][n][2] + 1
 				top = false
 			end
 		end
@@ -82,7 +83,7 @@ end
 
 local function rendertree()
 	tree0.root:ClearChildren()
-	for s,t in pairs(profile_tree) do
+	for s,t in pairs(sample_tree) do
 		local node_file
 		for f,c in pairs(t) do
 			if (c[1]/samples > min_usage)or(c[2]/samples > min_usage) then
