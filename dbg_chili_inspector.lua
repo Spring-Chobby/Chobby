@@ -19,6 +19,7 @@ end
 
 local window0
 local tree0
+local label0
 local Chili
 
 --------------------------------------------------------------------------------
@@ -56,6 +57,14 @@ function widget:Initialize()
 		parent = Chili.Screen0,
 
 		children = {
+			Chili.Label:New{
+				name = "lbl_inspector_memusage",
+				x=0, right=0,
+				y=0, bottom=-20,
+				align = "right", valign = "bottom",
+				caption = "Lua MemUsage: 60MB",
+				
+			},
 			Chili.ScrollPanel:New{
 				x=0, right=0,
 				y=20, bottom=20,
@@ -77,10 +86,21 @@ function widget:Initialize()
 	}
 
 	tree0 = window0:GetObjectByName("tree_inspector")
+	label0 = window0:GetObjectByName("lbl_inspector_memusage")
 
 	trace(Chili.Screen0.children, tree0.root)
 end
 
 function widget:Shutdown()
 	window0:Dispose()
+end
+
+local next = -math.huge
+function widget:Update()
+	if (os.clock() <= next) then
+		return
+	end
+	next = os.clock() + 3
+
+	label0:SetCaption("Lua MemUsage: " .. Chili.math.round(gcinfo() / 1024, 2) .. "MB")
 end

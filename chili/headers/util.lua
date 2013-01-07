@@ -344,8 +344,9 @@ function math.round(num,idp)
   if (not idp) then
     return math.floor(num+.5)
   else
-    local mult = 10^(idp or 0)
-    return math.floor(num * mult + 0.5) / mult
+    return ("%." .. idp .. "f"):format(num)
+    --local mult = 10^(idp or 0)
+    --return math.floor(num * mult + 0.5) / mult
   end
 end
 
