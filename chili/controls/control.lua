@@ -794,7 +794,7 @@ function Control:Update()
     self._realignRequested = nil
   end
 
-  if (self._needRedraw) then
+  if (self._needRedraw)and(self:IsInView()) then
     if (self.useDList) then
       --//FIXME don't recreate the own displaylist each time we _move_ a window
       self:_UpdateOwnDList()
@@ -807,14 +807,17 @@ end
 
 
 function Control:InstantUpdate()
-  self:_UpdateAllDList()
+	if (self._needRedraw)and(self:IsInView()) then
+		self:Update()
+	else
+		self:_UpdateAllDList()
+	end
 end
 
 --//=============================================================================
 
 function Control:_UpdateOwnDList()
   if (not self.parent) then return end
-  if (not self:IsInView()) then return end
 
   self:CallChildren('_UpdateOwnDList')
 
@@ -842,7 +845,6 @@ end
 
 function Control:_UpdateAllDList()
   if (not self.parent) then return end
-  if (not self:IsInView()) then return end
 
   self._redrawCounter = (self._redrawCounter or 0) + 1
 
@@ -893,6 +895,10 @@ end
 
 
 function Control:IsRectInView(x,y,w,h)
+	if (not self.parent) then
+		return false
+	end
+
 	local rect1 = {x,y,w,h}
 	local rect2 = {0,0,self.clientArea[3],self.clientArea[4]}
 	local inview = AreRectsOverlapping(rect1,rect2)

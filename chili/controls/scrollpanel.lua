@@ -168,6 +168,10 @@ end
 
 
 function ScrollPanel:IsRectInView(x,y,w,h)
+	if (not self.parent) then
+		return false
+	end
+
 	--//FIXME 1. don't create tables 2. merge somehow into Control:IsRectInView
 	local cx = x - self.scrollPosX
 	local cy = y - self.scrollPosY
