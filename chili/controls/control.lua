@@ -860,24 +860,20 @@ end
 --//=============================================================================
 
 function Control:_DrawInClientArea(fnc,...)
+  local clientX,clientY,clientWidth,clientHeight = unpack4(self.clientArea)
   if (self.safeOpengl) then
-    local clientX,clientY,clientWidth,clientHeight = unpack4(self.clientArea)
     local sx,sy = self:LocalToScreen(clientX,clientY)
-
-    --gl.Color(1,0.1,0,0.2)
-    --gl.Rect(self.x + clientX, self.y + clientY, self.x + clientX + clientWidth, self.y + clientY + clientHeight)
-
     sy = select(2,gl.GetViewSizes()) - (sy + clientHeight)
+
     PushScissor(sx,sy,math.ceil(clientWidth),math.ceil(clientHeight))
   end
 
   gl.PushMatrix()
-  gl.Translate(math.floor(self.x + self.clientArea[1]),math.floor(self.y + self.clientArea[2]),0)
+  gl.Translate(math.floor(self.x + clientX),math.floor(self.y + clientY),0)
   fnc(...)
   gl.PopMatrix()
 
   if (self.safeOpengl) then
-    --gl.Scissor(false)
     PopScissor()
   end
 end

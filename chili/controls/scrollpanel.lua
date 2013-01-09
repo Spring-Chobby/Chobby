@@ -197,18 +197,14 @@ function ScrollPanel:_DrawInClientArea(fnc,...)
 
   if (self.safeOpengl) then
     local sx,sy = self:LocalToScreen(clientX,clientY)
-
-    --gl.Color(1,0.1,0,0.2)
-    --gl.Rect(self.x + clientX, self.y + clientY, self.x + clientX + clientWidth, self.y + clientY + clientHeight)
-
     sy = select(2,gl.GetViewSizes()) - (sy + clientHeight)
+
     PushScissor(sx,sy,clientWidth,clientHeight)
   end
 
   gl.PushMatrix()
   gl.Translate(math.floor(self.x + clientX - self.scrollPosX),math.floor(self.y + clientY - self.scrollPosY),0)
   fnc(...)
-  --self:CallChildrenInverseCheckFunc(self.IsInView,...)
   gl.PopMatrix()
 
   if (self.safeOpengl) then
