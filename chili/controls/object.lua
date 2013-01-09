@@ -117,9 +117,6 @@ function Object:New(obj)
     obj:AddChild(cn[i],true)
   end
 
-  --// link some general events as Update()
-  --TaskHandler.AddObject(obj)
-
   --// sets obj._widget
   DebugHandler:RegisterObject(obj)
 
@@ -648,7 +645,7 @@ end
 function Object:RequestUpdate()
   --// we have something todo in Update
   --// so we register this object in the taskhandler
-  TaskHandler.AddObject(self)
+  TaskHandler.RequestUpdate(self)
 end
 
 

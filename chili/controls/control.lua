@@ -793,15 +793,21 @@ function Control:Update()
     self:Realign(self.__savespace)
     self._realignRequested = nil
   end
+
   if (self._needRedraw) then
     if (self.useDList) then
---//FIXME don't recreate the own displaylist each time we _move_ a window
+      --//FIXME don't recreate the own displaylist each time we _move_ a window
       self:_UpdateOwnDList()
       --self:_UpdateChildrenDList()
       self:_UpdateAllDList()
     end
     self._needRedraw = nil
   end
+end
+
+
+function Control:InstantUpdate()
+  self:_UpdateAllDList()
 end
 
 --//=============================================================================
@@ -841,7 +847,7 @@ function Control:_UpdateAllDList()
   self._all_dlist = gl.CreateList(self.DrawForList,self)
 
   if (self.parent)and(not self.parent._needRedraw)and(self.parent._UpdateAllDList)and(self.parent.useDList) then
-    (self.parent):Invalidate()
+    TaskHandler.RequestInstantUpdate(self.parent)
   end
 end
 
