@@ -26,7 +26,7 @@ local profiling = false
 local sample_tree = {}
 local samples = 0
 
-local min_usage = 0.03
+local min_usage = 0.01
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -59,7 +59,7 @@ local function trace(event, line)
 			i = debug.getinfo(j, "nS")
 			j = j + 1
 			if (not i) then return end
-		until not(i.source:find("\n") or i.source:find("(tail call)") or (not i.name) or i.what == "C" or i.what == "main")
+		until not((not i.name) or i.what == "C" or i.what == "main" or i.source:find("\n") or i.source:find("(tail call)")) 
 
 		local s = i.source or "???"
 		local n = i.name or "???"
@@ -73,7 +73,7 @@ local function trace(event, line)
 			sample_tree[s] = sample_tree[s] or {}
 			sample_tree[s][n] = sample_tree[s][n] or {0,0}
 			sample_tree[s][n][1] = sample_tree[s][n][1] + 1
-			if top then
+			if top and (j - 1 == 2) then
 				sample_tree[s][n][2] = sample_tree[s][n][2] + 1
 				top = false
 			end

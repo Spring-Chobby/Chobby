@@ -17,10 +17,10 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
+local Chili
 local window0
 local tree0
 local label0
-local Chili
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -119,11 +119,11 @@ function widget:Initialize()
 				itemPadding = {0,0,0,0},
 				children = {
 					Chili.Button:New{
-						caption="update",
+						caption="visible objects",
 						OnMouseUp = {function() tree0.root:Clear(); trace(Chili.Screen0.children, tree0.root) end},
 					},
 					Chili.Button:New{
-						caption="lost obj",
+						caption="lost objects",
 						OnMouseUp = {function() tree0.root:Clear(); traceLost(tree0.root) end},
 					},
 					Chili.Button:New{

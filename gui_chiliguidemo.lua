@@ -38,7 +38,7 @@ function widget:Initialize()
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
 
-	local testText = 
+	local testText =
 	[[Bolivians are voting in a referendum on a new constitution that President Evo Morales says will empower the country's indigenous majority.
 
 The changes also include strengthening state control of Bolivia's natural resources, and no longer recognising Catholicism as the official religion.
@@ -112,22 +112,21 @@ President Morales has said the new constitution will pave the way for correcting
 		},
 	}
 
-	local panel0 = Chili.StackPanel:New{
+	local btn0 = Chili.Button:New{
 		width = 200,
 		height = 200,
 		--resizeItems = false,
 		defaultChildMargin = {5, 5, 5, 5},
 		margin = {10, 10, 10, 10},
 		parent = window0,
-		children = cs,
 	}
 
-	panel0:Dispose()
+	btn0:Dispose()
 
 	-- we need a container that supports margin if the control inside uses margins
-	window01 = Chili.Window:New{  
-		x = 200,  
-		y = 200,  
+	window01 = Chili.Window:New{
+		x = 200,
+		y = 200,
 		clientWidth  = 200,
 		clientHeight = 200,
 		parent = Chili.Screen0,
@@ -147,8 +146,8 @@ President Morales has said the new constitution will pave the way for correcting
 
 	local gridControl = Chili.Grid:New{
 		name = 'foogrid',
-		width = 200,  
-		height = 200,  
+		width = 200,
+		height = 200,
 		children = {
 			Chili.Button:New{backgroundColor = {0,0.6,0,1}, textColor = {1,1,1,1}, caption = "Toggle", OnMouseUp = {ToggleOrientation}},
 			Chili.Button:New{caption = "2"},
@@ -160,27 +159,29 @@ President Morales has said the new constitution will pave the way for correcting
 		}
 	}
 
-	gridWindow0 = Chili.Window:New{  
+	gridWindow0 = Chili.Window:New{
 		parent = Chili.Screen0,
-		x = 450,  
-		y = 450,  
-		clientWidth = 200,  
-		clientHeight = 200,  
-		children = { 
+		x = 450,
+		y = 450,
+		clientWidth = 200,
+		clientHeight = 200,
+		children = {
 			gridControl
 		},
 	}
 
-	gridWindow1 = Chili.Window:New{  
+	gridWindow1 = Chili.Window:New{
 		parent = Chili.Screen0,
-		x = 650,  
+		x = 650,
 		y = 750,
-		clientWidth = 200,  
-		clientHeight = 200,  
+		clientWidth = 200,
+		clientHeight = 200,
 		children = {
-			Chili.Button:New{right=0, bottom=0, caption = "2"},
+			Chili.Button:New{right=0, bottom=0, caption = "2", OnClick={function()
+				--gridWindow1:GetObjectByName("tree_inspector")
+			end}},
 			Chili.TextBox:New{x=0, right=0, y=0, text = testText2},
-			Chili.EditBox:New{width = 200, y = 40, --[[autosize = true,]] anchors = {top=true,left=true,bottom=true,right=true}, text = testText3}
+			Chili.EditBox:New{width = 200, y = 40, --[[autosize = true,]] text = testText3}
 		},
 	}
 
@@ -197,13 +198,13 @@ President Morales has said the new constitution will pave the way for correcting
 		parent = Chili.Screen0,
 	}
 
-	local control = Chili.ScrollPanel:New{  
+	local control = Chili.ScrollPanel:New{
 		clientWidth = 410,
 		clientHeight = 400,
 		x=0, right=0,
 		y=0, bottom=0,
-		parent = windowImageList,  
-		children = {    
+		parent = windowImageList,
+		children = {
 			--Button:New{width = 410, height = 400, anchors = {top=true,left=true,bottom=true,right=true}},
 			Chili.ImageListView:New{
 				name = "MyImageListView",
