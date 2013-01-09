@@ -242,7 +242,7 @@ function DrawEditBox(obj)
 		local txt = obj.text:sub(obj.offset)
 
 		--// strip part at the end that exceeds the editbox
-		local lsize = obj.font:WrapText(txt, clientWidth, clientHeight):len()
+		local lsize = math.max(0, obj.font:WrapText(txt, clientWidth, clientHeight):len() - 3) -- find a good start (3 dots at end if stripped)
 		while (lsize <= txt:len()) do
 			local wt = obj.font:GetTextWidth(txt:sub(1, lsize))
 			if (wt > clientWidth) then
@@ -300,11 +300,11 @@ function DrawScrollPanel(obj)
   gl.PushMatrix()
   gl.Translate(math.floor(obj.x + clientX),math.floor(obj.y + clientY),0)
 
-  if obj._vscrollbar then
+  if obj._vscrollbar and (contHeight > 0) then
     _DrawScrollbar(obj, 'vertical', clientWidth,  0, obj.scrollbarSize, clientHeight,
                         obj.scrollPosY/contHeight, clientHeight/contHeight)
   end
-  if obj._hscrollbar then
+  if obj._hscrollbar and (contWidth > 0) then
     _DrawScrollbar(obj, 'horizontal', 0, clientHeight, clientWidth, obj.scrollbarSize, 
                         obj.scrollPosX/contWidth, clientWidth/contWidth)
   end
