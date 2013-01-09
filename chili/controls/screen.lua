@@ -92,6 +92,15 @@ function Screen:ClientToScreen(x,y)
   return x, y
 end
 
+
+function Screen:IsRectInView(x,y,w,h)
+	return
+		(x <= self.width) and
+		(x + w >= 0) and
+		(y <= self.height) and
+		(y + h >= 0)
+end
+
 --//=============================================================================
 
 function Screen:Update(...)

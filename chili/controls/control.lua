@@ -813,6 +813,9 @@ end
 --//=============================================================================
 
 function Control:_UpdateOwnDList()
+  if (not self.parent) then return end
+  if (not self:IsInView()) then return end
+
   self:CallChildren('_UpdateOwnDList')
 
   if (self._needRedraw) then
@@ -838,6 +841,9 @@ end
 --]]
 
 function Control:_UpdateAllDList()
+  if (not self.parent) then return end
+  if (not self:IsInView()) then return end
+
   self._redrawCounter = (self._redrawCounter or 0) + 1
 
   if (self._all_dlist) then
@@ -877,8 +883,35 @@ function Control:_DrawInClientArea(fnc,...)
 end
 
 
+function Control:IsInView()
+	if self.parent then
+		return self.parent:IsRectInView(self.x, self.y, self.width, self.height)
+	end
+	return false
+end
+
+
+function Control:IsChildInView(child)
+	return self:IsRectInView(child.x, child.y, child.width, child.height)
+end
+
+
+function Control:IsRectInView(x,y,w,h)
+	local rect1 = {x,y,w,h}
+	local rect2 = {0,0,self.clientArea[3],self.clientArea[4]}
+	local inview = AreRectsOverlapping(rect1,rect2)
+
+	if not(inview) then
+		return false
+	end
+
+	local px,py = self:ClientToParent(x,y)
+	return (self.parent):IsRectInView(px,py,w,h)
+end
+
+
 function Control:_DrawChildrenInClientArea(event)
-  self:_DrawInClientArea(self.CallChildrenInverse,self, event or 'Draw')
+	self:_DrawInClientArea(self.CallChildrenInverseCheckFunc, self, self.IsChildInView, event or 'Draw')
 end
 
 --//=============================================================================

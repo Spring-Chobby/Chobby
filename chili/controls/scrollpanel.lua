@@ -166,14 +166,24 @@ end
 
 --//=============================================================================
 
-function ScrollPanel:IsInView(child)
-  local clientX,clientY,clientWidth,clientHeight = unpack4(self.clientArea)
 
-  return (child.y - self.scrollPosY <= clientHeight)and
-         (child.y + child.height - self.scrollPosY >= 0)and
-         (child.x - self.scrollPosX <= clientWidth)and
-         (child.x + child.width - self.scrollPosX >= 0);
+function ScrollPanel:IsRectInView(x,y,w,h)
+	--//FIXME 1. don't create tables 2. merge somehow into Control:IsRectInView
+	local cx = x - self.scrollPosX
+	local cy = y - self.scrollPosY
+
+	local rect1 = {cx,cy,w,h}
+	local rect2 = {0,0,self.clientArea[3],self.clientArea[4]}
+	local inview = AreRectsOverlapping(rect1,rect2)
+
+	if not(inview) then
+		return false
+	end
+
+	local px,py = self:ClientToParent(x,y)
+	return (self.parent):IsRectInView(px,py,w,h)
 end
+
 
 --//=============================================================================
 
