@@ -787,28 +787,30 @@ end
 --//=============================================================================
 
 function Control:Update()
-  if (self._realignRequested) then
-    self:Realign(self.__savespace)
-    self._realignRequested = nil
-  end
+	if (self._realignRequested) then
+		self:Realign(self.__savespace)
+		self._realignRequested = nil
+	end
 
-  if (self._needRedraw)and(self:IsInView()) then
-    if (self.useDList) then
-      --//FIXME don't recreate the own displaylist each time we _move_ a window
-      self:_UpdateOwnDList()
-      --self:_UpdateChildrenDList()
-      self:_UpdateAllDList()
-    end
-    self._needRedraw = nil
-  end
+	if (self._needRedraw)and(self:IsInView()) then
+		if (self.useDList) then
+			--//FIXME don't recreate the own displaylist each time we _move_ a window
+			self:_UpdateOwnDList()
+			--self:_UpdateChildrenDList()
+			self:_UpdateAllDList()
+		end
+		self._needRedraw = nil
+	end
 end
 
 
 function Control:InstantUpdate()
-	if (self._needRedraw)and(self:IsInView()) then
-		self:Update()
-	else
-		self:_UpdateAllDList()
+	if self:IsInView() then
+		if self._needRedraw then
+			self:Update()
+		else
+			self:_UpdateAllDList()
+		end
 	end
 end
 
@@ -816,6 +818,7 @@ end
 
 function Control:_UpdateOwnDList()
   if (not self.parent) then return end
+  if self:IsInView() then return end
 
   self:CallChildren('_UpdateOwnDList')
 
@@ -843,6 +846,7 @@ end
 
 function Control:_UpdateAllDList()
   if (not self.parent) then return end
+  if self:IsInView() then return end
 
   self._redrawCounter = (self._redrawCounter or 0) + 1
 
