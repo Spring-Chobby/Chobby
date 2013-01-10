@@ -113,14 +113,9 @@ President Morales has said the new constitution will pave the way for correcting
 	}
 
 	local btn0 = Chili.Button:New{
-		width = 200,
-		height = 200,
-		--resizeItems = false,
-		defaultChildMargin = {5, 5, 5, 5},
-		margin = {10, 10, 10, 10},
-		parent = window0,
+		caption = "Dispose Me",
+		name = "btn_dispose_me1",
 	}
-
 	btn0:Dispose()
 
 	-- we need a container that supports margin if the control inside uses margins
@@ -142,7 +137,6 @@ President Morales has said the new constitution will pave the way for correcting
 		parent = window01,
 		children = cs,
 	}
-
 
 	local gridControl = Chili.Grid:New{
 		name = 'foogrid',
@@ -181,11 +175,28 @@ President Morales has said the new constitution will pave the way for correcting
 				--gridWindow1:GetObjectByName("tree_inspector")
 			end}},
 			Chili.TextBox:New{x=0, right=0, y=0, text = testText2},
-			Chili.EditBox:New{width = 200, y = 40, --[[autosize = true,]] text = testText3}
+			Chili.EditBox:New{width = 200, y = 40, --[[autosize = true,]] text = testText3},
+			Chili.Button:New{
+				caption = "Dispose Me",
+				name = "btn_dispose_me2",
+				x="5%", y=70,
+				width = "90%",
+				OnClick = {function(self) self:Dispose() end},
+			},
+			Chili.Button:New{
+				caption = "Dispose Me",
+				name = "btn_dispose_me3",
+				x="5%", y=90,
+				width = "90%",
+			},
+			Chili.Button:New{
+				caption = "Dispose Me",
+				name = "btn_dispose_me4",
+				x=0, y=120,
+			},
 		},
 	}
-
-
+	gridWindow1:GetObjectByName("btn_dispose_me4"):Dispose()
 
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
@@ -199,8 +210,6 @@ President Morales has said the new constitution will pave the way for correcting
 	}
 
 	local control = Chili.ScrollPanel:New{
-		clientWidth = 410,
-		clientHeight = 400,
 		x=0, right=0,
 		y=0, bottom=0,
 		parent = windowImageList,
@@ -208,8 +217,6 @@ President Morales has said the new constitution will pave the way for correcting
 			--Button:New{width = 410, height = 400, anchors = {top=true,left=true,bottom=true,right=true}},
 			Chili.ImageListView:New{
 				name = "MyImageListView",
-				width = 410,
-				height = 400,
 				x=0, right=0,
 				y=0, bottom=0,
 				dir = "LuaUI/Images/",
@@ -286,6 +293,14 @@ President Morales has said the new constitution will pave the way for correcting
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 end --Initialize
+
+
+function widget:Update()
+	local btn = gridWindow1:GetObjectByName("btn_dispose_me3")
+	btn:Dispose()
+	widgetHandler:RemoveCallIn("Update")
+end
+
 
 function widget:Shutdown()
 	window0:Dispose()
