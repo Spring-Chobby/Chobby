@@ -35,15 +35,12 @@ function FontHandler.Update()
 	end
 	n = 0
 
-	for i=1,#loadedFonts do
+	for i=#loadedFonts, 1, -1 do
 		if (refCounts[i] <= 0) then
 			--// the font isn't in use anymore, free it
-			local last_idx = #loadedFonts
 			gl.DeleteFont(loadedFonts[i])
-			loadedFonts[i] = loadedFonts[last_idx]
-			loadedFonts[last_idx] = nil
-			refCounts[i] = refCounts[last_idx]
-			refCounts[last_idx] = nil
+			loadedFonts[i] = nil
+			refCounts[i] = nil
 		end
 	end
 end
