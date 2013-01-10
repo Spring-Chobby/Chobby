@@ -818,7 +818,7 @@ end
 
 function Control:_UpdateOwnDList()
   if (not self.parent) then return end
-  if self:IsInView() then return end
+  if not self:IsInView() then return end
 
   self:CallChildren('_UpdateOwnDList')
 
@@ -846,7 +846,7 @@ end
 
 function Control:_UpdateAllDList()
   if (not self.parent) then return end
-  if self:IsInView() then return end
+  if not self:IsInView() then return end
 
   self._redrawCounter = (self._redrawCounter or 0) + 1
 
