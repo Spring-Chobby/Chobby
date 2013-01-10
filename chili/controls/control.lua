@@ -147,9 +147,7 @@ end
 
 function Control:SetParent(obj)
   inherited.SetParent(self,obj)
-  if (self:RequestRealign()) then
-    return
-  end
+  self:RequestRealign()
 end
 
 function Control:AddChild(obj, dontUpdate)
