@@ -301,11 +301,13 @@ function DrawScrollPanel(obj)
   gl.Translate(math.floor(obj.x + clientX),math.floor(obj.y + clientY),0)
 
   if obj._vscrollbar and (contHeight > 0) then
-    _DrawScrollbar(obj, 'vertical', clientWidth,  0, obj.scrollbarSize, clientHeight,
+    local height = (not obj._hscrollbar and obj.height) or (obj.height - obj.scrollbarSize)
+    _DrawScrollbar(obj, 'vertical', obj.width - obj.scrollbarSize,  0, obj.scrollbarSize, height,
                         obj.scrollPosY/contHeight, clientHeight/contHeight)
   end
   if obj._hscrollbar and (contWidth > 0) then
-    _DrawScrollbar(obj, 'horizontal', 0, clientHeight, clientWidth, obj.scrollbarSize, 
+    local width = (not obj._vscrollbar and obj.width) or (obj.width - obj.scrollbarSize)
+    _DrawScrollbar(obj, 'horizontal', 0, obj.height - obj.scrollbarSize, width, obj.scrollbarSize,
                         obj.scrollPosX/contWidth, clientWidth/contWidth)
   end
 

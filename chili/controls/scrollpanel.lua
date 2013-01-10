@@ -221,15 +221,13 @@ end
 
 function ScrollPanel:IsAboveHScrollbars(x,y)
   if (not self._hscrollbar) then return false end
-  local clientArea = self.clientArea
-  return x>=clientArea[1] and y>clientArea[2]+clientArea[4] and x<=clientArea[1]+clientArea[3] and y<=clientArea[2]+clientArea[4]+self.scrollbarSize
+  return y >= (self.height - self.scrollbarSize) --FIXME
 end
 
 
 function ScrollPanel:IsAboveVScrollbars(x,y)
   if (not self._vscrollbar) then return false end
-  local clientArea = self.clientArea
-  return y>=clientArea[2] and x>clientArea[1]+clientArea[3] and y<=clientArea[2]+clientArea[4] and x<=clientArea[1]+clientArea[3]+self.scrollbarSize
+  return x >= (self.width - self.scrollbarSize) --FIXME
 end
 
 

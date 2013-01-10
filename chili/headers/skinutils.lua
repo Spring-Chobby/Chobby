@@ -485,10 +485,10 @@ function DrawScrollPanelBorder(self)
       local width = self.width
       local height = self.height
       if (self._vscrollbar) then
-        width = clientWidth + self.padding[1] - 1
+        width = width - self.scrollbarSize - 1
       end
       if (self._hscrollbar) then
-        height = clientHeight + self.padding[2] - 1
+        height = height - self.scrollbarSize - 1
       end
 
       gl.Color(self.borderColor)
@@ -514,10 +514,10 @@ function DrawScrollPanel(obj)
       local width = obj.width
       local height = obj.height
       if (obj._vscrollbar) then
-        width = clientWidth + obj.padding[1] - 1
+        width = width - obj.scrollbarSize - 1
       end
       if (obj._hscrollbar) then
-        height = clientHeight + obj.padding[2] - 1
+        height = height - obj.scrollbarSize - 1
       end
 
       gl.Color(obj.backgroundColor)
@@ -526,10 +526,13 @@ function DrawScrollPanel(obj)
   end
 
   if obj._vscrollbar then
-    local x = obj.x + clientX + clientWidth
-    local y = obj.y --+ clientY
+    local x = obj.x + obj.width - obj.scrollbarSize
+    local y = obj.y
     local w = obj.scrollbarSize
-    local h = obj.height
+    local h = obj.height --FIXME what if hscrollbar is visible
+    if (obj._hscrollbar) then
+      h = h - obj.scrollbarSize
+    end
 
     local skLeft,skTop,skRight,skBottom = unpack4(obj.tiles)
 
@@ -552,10 +555,10 @@ function DrawScrollPanel(obj)
 
       skLeft,skTop,skRight,skBottom = unpack4(obj.KnobTiles)
 
-      local pos = obj.scrollPosY/contHeight
-      local visible = clientHeight/contHeight
-      local gripy = y + clientHeight * pos
-      local griph = clientHeight * visible
+      local pos = obj.scrollPosY / contHeight
+      local visible = clientHeight / contHeight
+      local gripy = y + h * pos
+      local griph = h * visible
       gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, x,gripy,obj.scrollbarSize,griph, skLeft,skTop,skRight,skBottom, tw,th, 0)
     --gl.Texture(0,false)
 
@@ -566,9 +569,12 @@ function DrawScrollPanel(obj)
     gl.Color(1,1,1,1)  
 
     local x = obj.x
-    local y = obj.y + clientY + clientHeight
+    local y = obj.y + obj.height - obj.scrollbarSize
     local w = obj.width
     local h = obj.scrollbarSize
+    if (obj._vscrollbar) then
+      w = w - obj.scrollbarSize
+    end
 
     local skLeft,skTop,skRight,skBottom = unpack4(obj.htiles)
 
@@ -591,10 +597,10 @@ function DrawScrollPanel(obj)
 
       skLeft,skTop,skRight,skBottom = unpack4(obj.HKnobTiles)
 
-      local pos = obj.scrollPosX/contWidth
-      local visible = clientWidth/contWidth
-      local gripx = x + clientWidth * pos
-      local gripw = clientWidth * visible
+      local pos = obj.scrollPosX / contWidth
+      local visible = clientWidth / contWidth
+      local gripx = x + w * pos
+      local gripw = w * visible
       gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, gripx,y,gripw,obj.scrollbarSize, skLeft,skTop,skRight,skBottom, tw,th, 0)
     --gl.Texture(0,false)
   end
