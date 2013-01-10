@@ -230,6 +230,13 @@ President Morales has said the new constitution will pave the way for correcting
 						Spring.Echo("image dblclicked ",itemIdx)
 					end,
 				},
+				OnDirChange = {
+					function(obj,itemIdx)
+						if obj.parent and obj.parent:InheritsFrom("scrollpanel") then
+							obj.parent:SetScrollPos(0,0)
+						end
+					end,
+				}
 			}
 		}
 	}
