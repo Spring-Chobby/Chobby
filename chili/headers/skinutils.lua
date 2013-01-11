@@ -557,8 +557,8 @@ function DrawScrollPanel(obj)
 
       local pos = obj.scrollPosY / contHeight
       local visible = clientHeight / contHeight
-      local gripy = y + h * pos
-      local griph = h * visible
+      local gripy = math.floor(y + h * pos) + 0.5
+      local griph = math.floor(h * visible)
       gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, x,gripy,obj.scrollbarSize,griph, skLeft,skTop,skRight,skBottom, tw,th, 0)
     --gl.Texture(0,false)
 
@@ -599,8 +599,8 @@ function DrawScrollPanel(obj)
 
       local pos = obj.scrollPosX / contWidth
       local visible = clientWidth / contWidth
-      local gripx = x + w * pos
-      local gripw = w * visible
+      local gripx = math.floor(x + w * pos) + 0.5
+      local gripw = math.floor(w * visible)
       gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, gripx,y,gripw,obj.scrollbarSize, skLeft,skTop,skRight,skBottom, tw,th, 0)
     --gl.Texture(0,false)
   end
