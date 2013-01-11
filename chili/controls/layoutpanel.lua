@@ -384,10 +384,10 @@ function LayoutPanel:GetMinimumExtents()
 --[[
   local old = self.autosize
   self.autosize = false
-  local minWidth, minHeight = inherited.GetMinimumExtents(self)
+  local right, bottom = inherited.GetMinimumExtents(self)
   self.autosize = old
 
-  return minWidth, minHeight
+  return right, bottom
 --]]
   if (not self.autosize) then
     local right  = self.x + self.width

@@ -10,6 +10,7 @@ Control = Object:Inherit{
   focusColor      = {0.2, 0.2, 1.0, 0.6},
 
   autosize        = false,
+  savespace       = false, --// iff autosize==true, it shrinks the control to the minimum needed space, if disabled autosize _normally_ only enlarges the control
   resizeGripSize  = {11, 11},
   dragGripSize    = {10, 10},
 
@@ -258,14 +259,19 @@ function Control:DetectRelativeBounds()
 end
 
 
-function Control:GetRelativeBox()
+function Control:GetRelativeBox(savespace)
+  local t = {self.x,self.y,self.width,self.height}
+  if (savespace) then
+    t = {0,0,0,0}
+  end
+
   if (not self._isRelative) then
-    return {self.x,self.y,self.width,self.height}
+    return t
   end
 
   local p = self.parent
   if (not p) then
-    return {self.x,self.y,self.width,self.height}
+    return t
   end
 
   --// FIXME use pl & pt too!!!
@@ -376,11 +382,7 @@ end
 function Control:Realign(savespace)
   if (not self._realignDisabled) then
     if (not self._inRealign) then
-
-if (savespace) then
-  self._savespace = true
-end
-
+      self._savespace = savespace or self.savespace
       self._inRealign = true
       self:AlignControl() --FIXME still needed?
       local childrenAligned = self:UpdateLayout()
@@ -389,9 +391,7 @@ end
         self:RealignChildren()
       end
       self._inRealign = nil
-
-self._savespace = nil
-
+      self._savespace = nil
     end
   else
     self:RequestRealign(savespace)
@@ -401,31 +401,23 @@ end
 
 function Control:UpdateLayout()
   if (self.autosize) then
-    --self:RealignChildren(true)
+    self:RealignChildren(true)
 
-    local neededWidth, neededHeight = 0,0
+    local neededWidth, neededHeight = self:GetChildrenMinimumExtents()
 
-    if (self._savespace) then
-      neededWidth, neededHeight = self:GetMinimumExtents()
-        neededWidth  = neededWidth - self.padding[1] - self.padding[3]
-        neededHeight = neededHeight - self.padding[2] - self.padding[4]
-    else
-      neededWidth, neededHeight = self:GetChildrenMinimumExtents()
-        neededWidth  = neededWidth - self.padding[1] - self.padding[3]
-        neededHeight = neededHeight - self.padding[2] - self.padding[4]
+    local relativeBox = self:GetRelativeBox(self._savespace)
+    neededWidth  = math.max(relativeBox[3], neededWidth)
+    neededHeight = math.max(relativeBox[4], neededHeight)
 
-      local relativeBox = self:GetRelativeBox()
-        --//FIXME modularize it in an own function?
-        relativeBox[3] = relativeBox[3] - self.padding[1] - self.padding[3]
-        relativeBox[4] = relativeBox[4] - self.padding[2] - self.padding[4]
+    neededWidth  = neededWidth  - self.padding[1] - self.padding[3]
+    neededHeight = neededHeight - self.padding[2] - self.padding[4]
 
-        neededWidth  = math.max(relativeBox[3], neededWidth)
-        neededHeight = math.max(relativeBox[4], neededHeight)
+    if (self.debug) then
+      Spring.Echo("Control:UpdateLayout", self.name,
+		      "GetChildrenMinimumExtents", neededWidth, neededHeight,
+		      "GetRelativeBox", relativeBox[3], relativeBox[4],
+		      "savespace", self._savespace)
     end
-
-if (self.debug) then
-  Spring.Echo(self.name, neededWidth, neededHeight, self._savespace)
-end
 
     self:Resize(neededWidth, neededHeight, true, true)
     self:RealignChildren()
@@ -612,18 +604,18 @@ end
 --//=============================================================================
 
 function Control:GetMinimumExtents()
-  local minWidth, minHeight = 0,0
+  local maxRight, maxBottom = 0,0
   if (self.autosize) then
     --// FIXME handle me correctly!!! (:= do the parent offset)
-    minWidth, minHeight = self:GetChildrenMinimumExtents()
+    maxRight, maxBottom = self:GetChildrenMinimumExtents()
   end
 
   if (not self._isRelative) then
     local right  = self.x + self.width
     local bottom = self.y + self.height
 
-    minWidth  = math.max(minWidth,  right)
-    minHeight = math.max(minHeight, bottom)
+    maxRight  = math.max(maxRight,  right)
+    maxBottom = math.max(maxBottom, bottom)
   else
     local cgb = self._givenBounds
     local crb = self._relativeBounds
@@ -654,11 +646,11 @@ function Control:GetMinimumExtents()
     totalWidth  = math.min(totalWidth,  self.maxWidth)
     totalHeight = math.min(totalHeight, self.maxHeight)
 
-    minWidth  = math.max(minWidth,  totalWidth)
-    minHeight = math.max(minHeight, totalHeight)
+    maxRight  = math.max(maxRight,  totalWidth)
+    maxBottom = math.max(maxBottom, totalHeight)
   end
 
-  return minWidth, minHeight
+  return maxRight, maxBottom
 end
 
 
