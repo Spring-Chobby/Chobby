@@ -317,8 +317,8 @@ function DrawButton(obj)
 
   if (obj.state.pressed) then
     gl.Color(0.6,0.6,0.6,1) --FIXME
-  elseif (obj.state.hovered) then
-    gl.Color(obj.focusColor)
+  --elseif (obj.state.hovered) then
+  --  gl.Color(obj.focusColor)
   else
     gl.Color(obj.borderColor)
   end
@@ -754,19 +754,15 @@ function DrawTrackbar(self)
     local tw,th = texInfo.xsize, texInfo.ysize
 
     --// scale the thumb down if we don't have enough space
-    if (th>h) then
-      tw = math.ceil(tw*(h/th))
-      th = h
-    end
-    if (tw>w) then
-      th = math.ceil(th*(w/tw))
-      tw = w
-    end
+    tw = math.ceil(tw * (h / th))
+    th = h
 
     local barWidth = w - (pdLeft + pdRight)
-    local mx = x+pdLeft+barWidth*percent
-    local my = y+h*0.5
-    gl.TexRect(math.ceil(mx-tw*0.5),math.ceil(my-th*0.5),math.ceil(mx+tw*0.5),math.ceil(my+th*0.5),false,true)
+    local mx = x + pdLeft + barWidth * percent
+    local my = y + h * 0.5
+    mx = math.floor(mx - tw * 0.5)
+    my = math.floor(my - th * 0.5)
+    gl.TexRect(mx, my, mx + tw, my + th, false, true)
 
   gl.Texture(0,false)
 end
