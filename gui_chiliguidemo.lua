@@ -25,6 +25,7 @@ local gridWindow1
 local windowImageList
 local window1
 local window2
+local window3
 
 function widget:Initialize()
 	Chili = WG.Chili
@@ -297,6 +298,22 @@ President Morales has said the new constitution will pave the way for correcting
 		},
 	}
 
+
+	window3 = Chili.Window:New{
+		caption = "autosize test",
+		x = 1200,
+		y = 650,
+		width  = 200,
+		height = 200,
+		parent = Chili.Screen0,
+		autosize = true,
+		savespace = true,
+		--debug = true,
+
+		children = {
+			Chili.Button:New{y = 20, width = 120, caption = "autosize", OnClick = {function(self) self.parent:UpdateLayout() end}},
+		},
+	}
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 end --Initialize
@@ -317,5 +334,6 @@ function widget:Shutdown()
 	windowImageList:Dispose()
 	window1:Dispose()
 	window2:Dispose()
+	window3:Dispose()
 end
 
