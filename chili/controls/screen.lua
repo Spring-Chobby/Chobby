@@ -160,14 +160,21 @@ function Screen:MouseDown(x,y,...)
 
   local activeControl = inherited.MouseDown(self,x,y,...)
   self.activeControl = MakeWeakLink(activeControl, self.activeControl)
-  if self.focusedControl then
-    self.focusedControl.state.focused = false
-    self.focusedControl:Invalidate()
-  end
-  self.focusedControl = nil
-  if self.activeControl then
-    self.focusedControl = MakeWeakLink(activeControl, self.focusedControl)
-    self.focusedControl.state.focused = true
+  if not CompareLinks(self.activeControl, self.focusedControl) then
+      if self.focusedControl then
+          self.focusedControl.state.focused = false
+          -- do we need to call invalidate if we're calling FocusUpdate?
+          self.focusedControl:FocusUpdate()
+          self.focusedControl:Invalidate()
+      end
+      self.focusedControl = nil
+      if self.activeControl then
+          self.focusedControl = MakeWeakLink(activeControl, self.focusedControl)
+          self.focusedControl.state.focused = true
+          -- do we need to call invalidate if we're calling FocusUpdate?
+          self.focusedControl:FocusUpdate()
+          self.focusedControl:Invalidate() 
+      end
   end
   return (not not activeControl)
 end

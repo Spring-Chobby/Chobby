@@ -36,6 +36,7 @@ local includes = {
   "controls/treeview.lua",
   "controls/editbox.lua",
   "controls/line.lua",
+  "controls/combobox.lua",
 }
 
 local Chili = widget

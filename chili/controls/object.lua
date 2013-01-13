@@ -17,16 +17,17 @@ Object = {
   children_hidden = {},
   childrenByName = CreateWeakTable(),
 
-  OnDispose    = {},
-  OnClick      = {},
-  OnDblClick   = {},
-  OnMouseDown  = {},
-  OnMouseUp    = {},
-  OnMouseMove  = {},
-  OnMouseWheel = {},
-  OnMouseOver  = {},
-  OnMouseOut   = {},
-  OnKeyPress   = {},
+  OnDispose       = {},
+  OnClick         = {},
+  OnDblClick      = {},
+  OnMouseDown     = {},
+  OnMouseUp       = {},
+  OnMouseMove     = {},
+  OnMouseWheel    = {},
+  OnMouseOver     = {},
+  OnMouseOut      = {},
+  OnKeyPress      = {},
+  OnFocusUpdate   = {},
 
   disableChildrenHitTest = false, --// if set childrens are not clickable/draggable etc - their mouse events are not processed
 }
@@ -848,6 +849,15 @@ end
 
 function Object:KeyPress(...)
   if (self:CallListeners(self.OnKeyPress, ...)) then
+    return self
+  end
+
+  return false
+end
+
+
+function Object:FocusUpdate(...)
+  if (self:CallListeners(self.OnFocusUpdate, ...)) then
     return self
   end
 

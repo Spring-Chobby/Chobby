@@ -1158,6 +1158,11 @@ function Control:KeyPress(...)
 end
 
 
+function Control:FocusUpdate(...)
+  return inherited.FocusUpdate(self, ...)
+end
+
+
 function Control:MouseOver(...)
 	inherited.MouseOver(self, ...)
 	self.state.hovered = true

@@ -177,6 +177,7 @@ President Morales has said the new constitution will pave the way for correcting
 			end}},
 			Chili.TextBox:New{x=0, right=0, y=0, text = testText2},
 			Chili.EditBox:New{width = 200, y = 40, --[[autosize = true,]] text = testText3},
+            Chili.ComboBox:New{width=200, x = 0, y = 90, items = { "opt1", "opt2", "opt3", "opt4", "opt5", "opt6", "opt7", "opt8", "opt9", "opt10", "opt11", "opt12", }},
 			Chili.Button:New{
 				caption = "Dispose Me",
 				name = "btn_dispose_me2",
