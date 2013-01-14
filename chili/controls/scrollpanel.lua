@@ -9,7 +9,9 @@ ScrollPanel = Control:Inherit{
   scrollPosY    = 0,
   verticalScrollbar   = true,
   horizontalScrollbar = true,
-  verticalSmartScroll = false, -- if control is scrolled to bottom, keep scroll when layout changes
+  verticalSmartScroll = false, --// if control is scrolled to bottom, keep scroll when layout changes
+  smoothScroll     = true,
+  smoothScrollTime = 0.7, --// in seconds
   ignoreMouseWheel = false,
 }
 
@@ -18,7 +20,18 @@ local inherited = this.inherited
 
 --//=============================================================================
 
+local function smoothstep(x)
+  return x*x*(3 - 2*x)
+end
+
+--//=============================================================================
+
 function ScrollPanel:SetScrollPos(x,y,inview)
+  if (self.smoothScroll) then
+    self._oldScrollPosX = self.scrollPosX
+    self._oldScrollPosY = self.scrollPosY
+  end
+
   if (x) then
     if (inview) then
       x = x - self.clientArea[3] * 0.5
@@ -37,7 +50,43 @@ function ScrollPanel:SetScrollPos(x,y,inview)
       self.scrollPosY = clamp(0, self.contentArea[4] - self.clientArea[4], self.scrollPosY)
     end
   end
+
+  if (self.smoothScroll) then
+    if (self._oldScrollPosX ~= self.scrollPosX)or(self._oldScrollPosY ~= self.scrollPosY) then
+      self._smoothScrollEnd = Spring.GetTimer()
+      self._newScrollPosX = self.scrollPosX
+      self._newScrollPosY = self.scrollPosY
+      self.scrollPosX = self._oldScrollPosX
+      self.scrollPosY = self._oldScrollPosY
+    end
+  end
+
   self:Invalidate()
+end
+
+
+function ScrollPanel:Update(...)
+	local trans = 1
+	if self.smoothScroll and self._smoothScrollEnd then
+		local trans = Spring.DiffTimers(Spring.GetTimer(), self._smoothScrollEnd)
+		trans = math.min(1, trans / self.smoothScrollTime)
+		for n=1,3 do trans = smoothstep(trans) end
+
+		self.scrollPosX = self._oldScrollPosX * (1 - trans) + self._newScrollPosX * trans
+		self.scrollPosY = self._oldScrollPosY * (1 - trans) + self._newScrollPosY * trans
+
+		if (trans >= 1) then
+			self.scrollPosX = self._newScrollPosX
+			self.scrollPosY = self._newScrollPosY
+			self._smoothScrollEnd = nil
+		end
+	end
+
+	inherited.Update(self, ...)
+
+	if (trans < 1) then
+		self:Invalidate()
+	end
 end
 
 --//=============================================================================
