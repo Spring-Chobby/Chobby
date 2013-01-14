@@ -135,7 +135,7 @@ function Screen:IsAbove(x,y,...)
       hoveredControl:MouseOver()
     end
 
-    self.hoveredControl = MakeWeakLink(hoveredControl)
+    self.hoveredControl = MakeWeakLink(hoveredControl, self.hoveredControl)
     if (hoveredControl) then
       local control = hoveredControl
       --// find tooltip in hovered control or its parents
@@ -157,15 +157,16 @@ end
 
 function Screen:MouseDown(x,y,...)
   y = select(2,gl.GetViewSizes()) - y
+
   local activeControl = inherited.MouseDown(self,x,y,...)
-  self.activeControl = MakeWeakLink(activeControl)
+  self.activeControl = MakeWeakLink(activeControl, self.activeControl)
   if self.focusedControl then
     self.focusedControl.state.focused = false
     self.focusedControl:Invalidate()
   end
   self.focusedControl = nil
   if self.activeControl then
-    self.focusedControl = MakeWeakLink(activeControl)
+    self.focusedControl = MakeWeakLink(activeControl, self.focusedControl)
     self.focusedControl.state.focused = true
   end
   return (not not activeControl)
@@ -174,6 +175,7 @@ end
 
 function Screen:MouseUp(x,y,...)
   y = select(2,gl.GetViewSizes()) - y
+
   local activeControl = UnlinkSafe(self.activeControl)
   if activeControl then
     local cx,cy = activeControl:ScreenToLocal(x,y)
@@ -215,7 +217,7 @@ function Screen:MouseMove(x,y,dx,dy,...)
     if (obj==false) then
       self.activeControl = nil
     elseif (not not obj)and(obj ~= activeControl) then
-      self.activeControl = MakeWeakLink(obj)
+      self.activeControl = MakeWeakLink(obj, self.activeControl)
       return true
     else
       return true
@@ -235,7 +237,7 @@ function Screen:MouseWheel(x,y,...)
     if (obj==false) then
       self.activeControl = nil
     elseif (not not obj)and(obj ~= activeControl) then
-      self.activeControl = MakeWeakLink(obj)
+      self.activeControl = MakeWeakLink(obj, self.activeControl)
       return true
     else
       return true
