@@ -182,8 +182,9 @@ function Screen:MouseUp(x,y,...)
     local now = Spring.GetTimer()
     local obj
 
-    local hoveredControl = UnlinkSafe(self.hoveredControl)
-    if (hoveredControl == activeControl) then
+    local hoveredControl = inherited.IsAbove(self,x,y,...)
+
+    if CompareLinks(hoveredControl, activeControl) then
       --//FIXME send this to controls too, when they didn't `return self` in MouseDown!
       if (math.abs(x - self._lastClickedX)<3) and
          (math.abs(y - self._lastClickedY)<3) and
