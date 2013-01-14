@@ -10,7 +10,7 @@ Control = Object:Inherit{
   focusColor      = {0.2, 0.2, 1.0, 0.6},
 
   autosize        = false,
-  savespace       = false, --// iff autosize==true, it shrinks the control to the minimum needed space, if disabled autosize _normally_ only enlarges the control
+  savespace       = true, --// iff autosize==true, it shrinks the control to the minimum needed space, if disabled autosize _normally_ only enlarges the control
   resizeGripSize  = {11, 11},
   dragGripSize    = {10, 10},
 
