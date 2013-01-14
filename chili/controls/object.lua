@@ -731,6 +731,18 @@ function Object:ScreenToClient(x,y)
   return self:ParentToClient((self.parent):ScreenToClient(x,y))
 end
 
+
+function Object:LocalToObject(x, y, obj)
+  if CompareLinks(self,obj) then
+    return x, y
+  end
+  if (not self.parent) then
+    return -1,-1
+  end
+  x, y = self:LocalToParent(x, y)
+  return self.parent:LocalToObject(x, y, obj)
+end
+
 --//=============================================================================
 
 function Object:_GetMaxChildConstraints(child)
