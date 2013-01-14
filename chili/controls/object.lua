@@ -101,7 +101,8 @@ function Object:New(obj)
   setmetatable(obj,{__index = self})
 
   --// auto dispose remaining Dlists etc. when garbage collector frees this object
-  local hobj = MakeHardLink(obj,function() obj:Dispose(); obj=nil; end)
+  --FIXMElocal hobj = MakeHardLink(obj,function() obj:Dispose(); obj=nil; end)
+  local hobj = obj
 
   --// handle children & parent
   local parent = obj.parent
@@ -205,7 +206,6 @@ function Object:AddChild(obj, dontUpdate)
     Spring.Echo(("Chili: tried to add multiple times \"%s\" to \"%s\"!"):format(obj.name, self.name))
     return
   end
-
 
   if (obj.name) then
     if (self.childrenByName[obj.name]) then
