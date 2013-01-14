@@ -15,7 +15,7 @@ local inherited = this.inherited
 --//=============================================================================
 --[[
 function Window:UpdateClientArea()
-  this.inherited.UpdateClientArea(self)
+  inherited.UpdateClientArea(self)
 
   if (not WG['blur_api']) then return end
 
