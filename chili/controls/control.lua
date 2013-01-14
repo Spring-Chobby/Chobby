@@ -260,9 +260,9 @@ end
 
 
 function Control:GetRelativeBox(savespace)
-  local t = {self.x,self.y,self.width,self.height}
+  local t = {self.x, self.y, self.width, self.height}
   if (savespace) then
-    t = {0,0,0,0}
+    t = {0,0,self.minWidth,self.minHeight}
   end
 
   if (not self._isRelative) then
@@ -281,8 +281,8 @@ function Control:GetRelativeBox(savespace)
   local relBounds = self._relativeBounds
   local left   = self.x
   local top    = self.y
-  local width  = self.width
-  local height = self.height
+  local width  = (savespace and self.minWidth) or self.width
+  local height = (savespace and self.minHeight) or self.height
 
   --// ProcessRelativeCoord is defined in util.lua
   if (relBounds.left) then
@@ -405,7 +405,7 @@ function Control:UpdateLayout()
 
     local neededWidth, neededHeight = self:GetChildrenMinimumExtents()
 
-    local relativeBox = self:GetRelativeBox(self._savespace)
+    local relativeBox = self:GetRelativeBox(self._savespace or self.savespace)
     neededWidth  = math.max(relativeBox[3], neededWidth)
     neededHeight = math.max(relativeBox[4], neededHeight)
 
@@ -413,8 +413,9 @@ function Control:UpdateLayout()
     neededHeight = neededHeight - self.padding[2] - self.padding[4]
 
     if (self.debug) then
+      local cminextW, cminextH = self:GetChildrenMinimumExtents()
       Spring.Echo("Control:UpdateLayout", self.name,
-		      "GetChildrenMinimumExtents", neededWidth, neededHeight,
+		      "GetChildrenMinimumExtents", cminextW, cminextH,
 		      "GetRelativeBox", relativeBox[3], relativeBox[4],
 		      "savespace", self._savespace)
     end
@@ -876,7 +877,7 @@ end
 
 
 function Control:IsInView()
-	if self.parent then
+	if UnlinkSafe(self.parent) then
 		return self.parent:IsRectInView(self.x, self.y, self.width, self.height)
 	end
 	return false
