@@ -69,24 +69,21 @@ function ScrollPanel:Update(...)
 	local trans = 1
 	if self.smoothScroll and self._smoothScrollEnd then
 		local trans = Spring.DiffTimers(Spring.GetTimer(), self._smoothScrollEnd)
-		trans = math.min(1, trans / self.smoothScrollTime)
-		for n=1,3 do trans = smoothstep(trans) end
-
-		self.scrollPosX = self._oldScrollPosX * (1 - trans) + self._newScrollPosX * trans
-		self.scrollPosY = self._oldScrollPosY * (1 - trans) + self._newScrollPosY * trans
+		trans = trans / self.smoothScrollTime
 
 		if (trans >= 1) then
 			self.scrollPosX = self._newScrollPosX
 			self.scrollPosY = self._newScrollPosY
 			self._smoothScrollEnd = nil
+		else
+			for n=1,3 do trans = smoothstep(trans) end
+			self.scrollPosX = self._oldScrollPosX * (1 - trans) + self._newScrollPosX * trans
+			self.scrollPosY = self._oldScrollPosY * (1 - trans) + self._newScrollPosY * trans
+			self:Invalidate()
 		end
 	end
 
 	inherited.Update(self, ...)
-
-	if (trans < 1) then
-		self:Invalidate()
-	end
 end
 
 --//=============================================================================
