@@ -149,7 +149,9 @@ function widget:Initialize()
 end
 
 function widget:Shutdown()
-	window0:Dispose()
+	if (window0) then
+		window0:Dispose()
+	end
 end
 
 local next = -math.huge

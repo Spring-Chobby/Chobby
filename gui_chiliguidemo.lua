@@ -311,9 +311,12 @@ President Morales has said the new constitution will pave the way for correcting
 		--debug = true,
 
 		children = {
-			Chili.Button:New{y = 20, width = 120, caption = "autosize", OnClick = {function(self) self.parent:UpdateLayout() end}},
+			Chili.Button:New{name = "btn_a", y = 20, width = 120, caption = "autosize", OnClick = {function(self) window3:GetObjectByName("btn_a"):ToggleVisibility(); window3:GetObjectByName("btn_b"):ToggleVisibility(); end}},
+			Chili.Button:New{name = "btn_b", y = 50, width = 120, caption = "autosize", OnClick = {function(self) window3:GetObjectByName("btn_a"):ToggleVisibility(); window3:GetObjectByName("btn_b"):ToggleVisibility(); end}},
 		},
 	}
+	
+	window3:GetObjectByName("btn_b"):Hide()
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 end --Initialize
