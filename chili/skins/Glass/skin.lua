@@ -22,13 +22,11 @@ skin.general = {
   --padding         = {5, 5, 5, 5}, --// padding: left, top, right, bottom
   backgroundColor = {0.1, 0.1, 0.1, 0.7},
 
---[[
   font = {
-    outlineColor     = {0,1,0,1},
-    autoOutlineColor = false,
-    shadow           = true,
+    outlineColor     = {0.2,0.2,0.2,0.3},
+    --autoOutlineColor = false,
+    --shadow           = true,
   },
---]]
 }
 
 skin.icons = {
@@ -179,7 +177,14 @@ skin.window = {
   DrawResizeGrip = DrawResizeGrip,
 }
 
-
+skin.line = {
+  TileImage = ":cl:glass_line.png",
+  tiles = {0, 0, 0, 0},
+  TileImageV = ":cl:glass_line_vert.png",
+  tilesV = {0, 0, 0, 0},
+  DrawControl = DrawLine,
+}
+  
 skin.control = skin.general
 
 

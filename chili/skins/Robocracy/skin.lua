@@ -189,6 +189,14 @@ skin.window = {
   DrawResizeGrip = DrawResizeGrip,
 }
 
+skin.line = {
+  TileImage = ":cl:tech_line.png",
+  tiles = {0, 0, 0, 0},
+  TileImageV = ":cl:tech_line_vert.png",
+  tilesV = {0, 0, 0, 0},
+  DrawControl = DrawLine,
+}
+
 
 skin.control = skin.general
 

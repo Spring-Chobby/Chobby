@@ -854,6 +854,30 @@ end
 
 
 --//=============================================================================
+--//
+
+function DrawLine(self)
+  gl.Color(self.borderColor)
+
+    if (self.style:find("^v")) then
+      local skLeft,skTop,skRight,skBottom = unpack4(self.tilesV)
+      TextureHandler.LoadTexture(0,self.TileImageV,self)
+        local texInfo = gl.TextureInfo(self.TileImageV) or {xsize=1, ysize=1}
+        local tw,th = texInfo.xsize, texInfo.ysize
+      gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, self.x + self.width * 0.5 - 2, self.y, 4, self.height, skLeft,skTop,skRight,skBottom, tw,th, 0)
+    else
+      local skLeft,skTop,skRight,skBottom = unpack4(self.tiles)
+      TextureHandler.LoadTexture(0,self.TileImage,self)
+        local texInfo = gl.TextureInfo(self.TileImage) or {xsize=1, ysize=1}
+        local tw,th = texInfo.xsize, texInfo.ysize
+      gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, self.x, self.y + self.height * 0.5 - 2, self.width, 4, skLeft,skTop,skRight,skBottom, tw,th, 0)
+    end
+
+  gl.Texture(0,false)
+
+end
+
+--//=============================================================================
 --// 
 
 function DrawDragGrip(obj)

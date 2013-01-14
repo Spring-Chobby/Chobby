@@ -47,6 +47,35 @@ local function _DrawCheck(rect)
 end
 
 
+local function _DrawHLine(x,y,w,bt,color1,color2)
+  gl.Color(color1)
+  gl.Vertex(x,     y)
+  gl.Vertex(x,     y+bt)
+  gl.Vertex(x+w,   y)
+  gl.Vertex(x+w,   y+bt)
+
+  gl.Color(color2)
+  gl.Vertex(x+w,   y+bt)
+  gl.Vertex(x+w,   y+2*bt)
+  gl.Vertex(x,     y+bt)
+  gl.Vertex(x,     y+2*bt)
+end
+
+
+local function _DrawVLine(x,y,h,bt,color1,color2)
+  gl.Color(color1)
+  gl.Vertex(x,     y)
+  gl.Vertex(x+bt,  y)
+  gl.Vertex(x,     y+h)
+  gl.Vertex(x+bt,  y+h)
+
+  gl.Color(color2)
+  gl.Vertex(x+bt,  y+h)
+  gl.Vertex(x+2*bt,y+h)
+  gl.Vertex(x+bt,  y)
+  gl.Vertex(x+2*bt,y)
+end
+
 
 local function _DrawDragGrip(obj)
   local x = obj.x + obj.borderThickness + 1
@@ -393,6 +422,14 @@ function DrawColorbars(obj)
   gl.PopMatrix()
 end
 
+function DrawLine(self)
+	if (self.style:find("^v")) then
+		gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawVLine, self.x + self.width * 0.5, self.y, self.height, 1, self.borderColor, self.borderColor2)
+	else
+		gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawHLine, self.x, self.y + self.height * 0.5, self.width, 1, self.borderColor, self.borderColor2)
+	end
+end
+
 
 function DrawDragGrip(obj)
   gl.BeginEnd(GL.TRIANGLES, _DrawDragGrip, obj)
@@ -487,9 +524,13 @@ end
 
 skin.general = {
   --font        = "FreeSansBold.ttf",
-  fontOutline = false,
-  fontsize    = 13,
   textColor   = {0,0,0,1},
+
+  font = {
+    outlineColor = {0,0,0,0.5},
+    outline      = false,
+    size         = 13,
+  },
 
   --padding         = {5, 5, 5, 5}, --// padding: left, top, right, bottom
   borderThickness = 1.5,
@@ -560,6 +601,10 @@ skin.window = {
 skin.editbox = {
   DrawControl = DrawEditBox,
   backgroundColor = {1, 1, 1, 0.9},
+}
+
+skin.line = {
+  DrawControl = DrawLine,
 }
 
 skin.control = skin.general
