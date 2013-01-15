@@ -48,6 +48,7 @@ function _DrawTiledTexture(x,y,w,h, skLeft,skTop,skRight,skBottom, texw,texh, te
     --//topleft
     gl.MultiTexCoord(texIndex,0,0)
     gl.Vertex(x,      y)
+
     gl.MultiTexCoord(texIndex,0,txTop)
     gl.Vertex(x,      y+skTop)
     gl.MultiTexCoord(texIndex,txLeft,0)
@@ -332,6 +333,27 @@ function DrawButton(obj)
   if (obj.caption) then
     obj.font:Print(obj.caption, x+w*0.5, y+h*0.5, "center", "center")
   end
+end
+
+function _DrawTriangle(obj)
+  local w = obj.width
+  local x = obj.x
+  local y = obj.y
+  local w = obj.width
+  local h = obj.height
+  local bt = obj.borderThickness
+
+  local tw = 10
+  gl.Color(obj.focusColor)
+  gl.Vertex(x + w - tw*1.5, y + (h - tw) * 0.5)
+  gl.Vertex(x + w - tw*0.5, y + (h - tw) * 0.5)
+  gl.Vertex(x + w - tw, y + tw + (h - tw) * 0.5)
+end
+
+function DrawComboBox(obj)
+    DrawButton(obj)
+    --draw triangle that indicates this is a combobox
+    gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTriangle, obj)
 end
 
 

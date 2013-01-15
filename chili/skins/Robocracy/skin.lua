@@ -39,6 +39,17 @@ skin.button = {
   DrawControl = DrawButton,
 }
 
+skin.combobox = {
+  TileImageBK = ":cl:tech_button.png",
+  TileImageFG = ":cl:empty.png",
+  tiles = {22, 22, 22, 22}, --// tile widths: left,top,right,bottom
+  padding = {10, 10, 10, 10},
+
+  backgroundColor = {1, 1, 1, 0.7},
+
+  DrawControl = DrawComboBox,
+}
+
 skin.checkbox = {
   TileImageFG = ":cl:tech_checkbox_checked.png",
   TileImageBK = ":cl:tech_checkbox_unchecked.png",

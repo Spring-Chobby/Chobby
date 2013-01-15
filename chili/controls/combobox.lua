@@ -1,6 +1,6 @@
 --//=============================================================================
 ComboBox = Button:Inherit {
-  classname = "button",
+  classname = "combobox",
   caption = 'combobox',
   defaultWidth  = 70,
   defaultHeight = 20,
@@ -82,16 +82,19 @@ function ComboBox:MouseDown(...)
       labelHeight = 20
       for i = 1, #self.items do
           largestStr = math.max(largestStr, #self.items[i])
-          table.insert(labels, 
-            Button:New {
-                caption = self.items[i],
-                width = '100%',
-                height = labelHeight,
-                OnMouseUp = { function() 
-                    self:Select(i)
-                    self:Close()
-                end }
-            })
+          local newBtn = Button:New {
+              caption = self.items[i],
+              width = '100%',
+              height = labelHeight,
+              OnMouseUp = { function()
+                  self:Select(i)
+                  self:Close()
+              end }
+          }
+          if i == self.selected then
+              newBtn.backgroundColor = self.focusColor
+          end
+          table.insert(labels, newBtn)
       end
       estimatedWidth = 20 + largestStr * 10
       estimatedWidth = math.min(estimatedWidth, 500)
@@ -112,29 +115,26 @@ function ComboBox:MouseDown(...)
           draggable = false,
           x = sx,
           y = y,
-          backgroundColor = {0.8,0.8,0.8,0.9},
-            children = {
-                ScrollPanel:New {
-                    x = 0,
-                    y = 0,
-                    right = 0,
-                    bottom = 0,
-                    horizontalScrollBar = false,
-                    children = {
-                        StackPanel:New {
-                            orientation = 'horizontal',
-                            width = '100%',
-                            height = labelHeight * #labels,
-                            resizeItems = false,
-                            padding = {0,0,0,0},
-                            itemPadding = {0,0,0,0},
-                            itemMargin = {0,0,0,0},
-                            children = labels,
-                            borderThickness = 0,
-                        },
-                    },
-                }
-            }
+          children = {
+              ScrollPanel:New {
+                  width = "100%",
+                  height = "100%",
+                  horizontalScrollBar = false,
+                  children = {
+                      StackPanel:New {
+                          orientation = 'horizontal',
+                          width = '100%',
+                          height = labelHeight * #labels,
+                          resizeItems = false,
+                          padding = {0,0,0,0},
+                          itemPadding = {0,0,0,0},
+                          itemMargin = {0,0,0,0},
+                          children = labels,
+                          borderThickness = 0,
+                      },
+                  },
+              }
+          }
         }
       self._dropDownWindow = dropDownWindow
   else
@@ -148,5 +148,5 @@ end
 function ComboBox:MouseUp(...)
     self:Invalidate()
     return self
-    -- this exists to override Button:MouseUp
+    -- this exists to override Button:MouseUp so it doesn't modify .state.pressed
 end
