@@ -418,8 +418,9 @@ function DrawEditBox(obj)
 			local cursorTxt = obj.text:sub(obj.offset, obj.cursor - 1)
 			local cursorX = obj.font:GetTextWidth(cursorTxt)
 
-			local as = math.sin(os.clock() * 4);
-			local ac = math.cos(os.clock() * 4);
+            local dt = os.clock() - obj._interactedTime
+			local as = math.sin(dt * 8);
+			local ac = math.cos(dt * 8);
 			if (as < 0) then as = 0 end
 			if (ac < 0) then ac = 0 end
 			local alpha = as + ac

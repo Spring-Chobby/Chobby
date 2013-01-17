@@ -26,6 +26,7 @@ local inherited = this.inherited
 
 function EditBox:New(obj)
 	obj = inherited.New(self,obj)
+    obj._interactedTime = os.clock()
 	obj:SetText(obj.text)
 	obj:RequestUpdate()
 	return obj
@@ -115,6 +116,7 @@ function EditBox:MouseDown(x, y, ...)
 			break
 		end
 	end
+    self._interactedTime = os.clock()
 	inherited.MouseDown(self, x, y, ...)
 	self:Invalidate()
 	return self
@@ -168,6 +170,7 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 			return false
 		end
 	end
+    self._interactedTime = os.clock()
 	inherited.KeyPress(self, key, mods, isRepeat, label, unicode, ...)
 	self:UpdateLayout()
 	self:Invalidate()
