@@ -48,17 +48,37 @@ skin.button = {
 
 
 skin.combobox = {
-  TileImageFG = ":cl:glassFG.png",
-  TileImageBK = ":cl:glassBK.png",
-  tiles       = {17,15,17,20},
+	TileImageFG = ":cl:glassFG.png",
+	TileImageBK = ":cl:glassBK.png",
+	TileImageArrow = ":cl:combobox_ctrl_arrow.png",
+	tiles       = {17,15,17,20},
+	padding     = {10, 10, 26, 10},
 
-  textColor = {1,1,1,1},
+	textColor = {1,1,1,1},
+	backgroundColor = {0.1, 0.1, 0.1, 0.7},
 
-  padding = {12, 12, 12, 12},
-  backgroundColor = {0.1, 0.1, 0.1, 0.7},
-
-  DrawControl = DrawComboBox,
+	DrawControl = DrawComboBox,
 }
+
+
+skin.combobox_window = {
+	clone     = "window";
+	TileImage = ":cl:combobox_wnd.png",
+	padding   = {4, 3, 3, 4};
+}
+
+
+skin.combobox_scrollpanel = {
+	clone       = "scrollpanel";
+	borderColor = {1, 1, 1, 0};
+	padding     = {0, 0, 0, 0};
+}
+
+
+skin.combobox_item = {
+	clone       = "button";
+}
+
 
 skin.editbox = {
   textColor       = {1.0, 1.0, 1.0, 1.0},

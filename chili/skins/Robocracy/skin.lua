@@ -40,15 +40,39 @@ skin.button = {
 }
 
 skin.combobox = {
-  TileImageBK = ":cl:tech_button.png",
-  TileImageFG = ":cl:empty.png",
-  tiles = {22, 22, 22, 22}, --// tile widths: left,top,right,bottom
-  padding = {10, 10, 10, 10},
+	TileImageBK = ":cl:combobox_ctrl.png",
+	TileImageFG = ":cl:combobox_ctrl_fg.png",
+	TileImageArrow = ":cl:combobox_ctrl_arrow.png",
+	tiles   = {22, 22, 48, 22},
+	padding = {10, 10, 24, 10},
 
-  backgroundColor = {1, 1, 1, 0.7},
+	backgroundColor = {1, 1, 1, 0.7},
+	borderColor = {1,1,1,0},
 
-  DrawControl = DrawComboBox,
+	DrawControl = DrawComboBox,
 }
+
+
+skin.combobox_window = {
+	clone     = "window";
+	TileImage = ":cl:combobox_wnd.png";
+	tiles     = {10, 10, 10, 10};
+	padding   = {4, 3, 3, 4};
+}
+
+
+skin.combobox_scrollpanel = {
+	clone       = "scrollpanel";
+	borderColor = {1, 1, 1, 0};
+	padding     = {0, 0, 0, 0};
+}
+
+
+skin.combobox_item = {
+	clone       = "button";
+	borderColor = {1, 1, 1, 0};
+}
+
 
 skin.checkbox = {
   TileImageFG = ":cl:tech_checkbox_checked.png",

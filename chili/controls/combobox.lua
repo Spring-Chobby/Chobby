@@ -1,5 +1,5 @@
 --//=============================================================================
-ComboBox = Button:Inherit {
+ComboBox = Button:Inherit{
   classname = "combobox",
   caption = 'combobox',
   defaultWidth  = 70,
@@ -9,38 +9,35 @@ ComboBox = Button:Inherit {
   OnSelect = {},
 }
 
+local ComboBoxWindow      = Window:Inherit{classname = "combobox_window", resizable = false, draggable = false, }
+local ComboBoxScrollPanel = ScrollPanel:Inherit{classname = "combobox_scrollpanel", horizontalScrollBar = false, }
+local ComboBoxStackPanel  = StackPanel:Inherit{classname = "combobox_stackpanel", autosize = true, resizeItems = false, borderThickness = 0, padding = {0,0,0,0}, itemPadding = {0,0,0,0}, itemMargin = {0,0,0,0}, }
+local ComboBoxItem        = Button:Inherit{classname = "combobox_item"}
 
 local this = ComboBox
 local inherited = this.inherited
 
 function ComboBox:New(obj)
-  if #obj.items > 0 then
-    obj.caption = obj.items[1]
-  end
   obj = inherited.New(self,obj)
-  if obj.selected == nil then
-    obj.selected = 1
-  end
-  if obj.selected > 0 then
-    obj:Select(obj.selected)
-  end
+  obj:Select(obj.selected or 1)
   return obj
 end
 
 function ComboBox:Select(itemIdx)
-  if #self.items == 0 then
-    return
-  end
   if (type(itemIdx)=="number") then
+    if not self.items[itemIdx] then
+       return
+    end
     self.selected = itemIdx
     self.caption = self.items[itemIdx]
     self:CallListeners(self.OnSelect, itemIdx, true)
     self:Invalidate()
   end
+  --FIXME add Select(name)
 end
 
 function ComboBox:_CloseWindow()
-  if self._dropDownWindow ~= nil then
+  if self._dropDownWindow then
     self._dropDownWindow:Dispose()
     self._dropDownWindow = nil
   end
@@ -59,84 +56,52 @@ end
 
 function ComboBox:MouseDown(...)
   self.state.pressed = true
-  if self._dropDownWindow == nil then
-    local screen0 = self
-    --local sx, sy = self:LocalToScreen(self.x, self.y)
-    -- TODO: this should work ^^, but it doesn't; the following gets the component's current absolute screen position
-    local sx = self.x
-    local sy = self.y
-    while screen0.parent ~= nil do
-      screen0 = screen0.parent
-      if screen0.classname == "scrollpanel" then
-        sx = sx - screen0.scrollPosX
-        sy = sy - screen0.scrollPosY
-      end
-      sx = sx + screen0.x
-      sy = sy + screen0.y	  
-    end
-    sy = sy + self.height + 10
-    sx = sx + 10
+  if not self._dropDownWindow then
+    local sx,sy = self:LocalToScreen(0,0)
 
-    labels = {}
-    largestStr = 0
-    labelHeight = 20
+    local labels = {}
+    local labelHeight = 20
     for i = 1, #self.items do
-      largestStr = math.max(largestStr, #self.items[i])
-      local newBtn = Button:New {
+      local newBtn = ComboBoxItem:New {
         caption = self.items[i],
         width = '100%',
         height = labelHeight,
+	state = {focused = (i == self.selected), selected = (i == self.selected)},
         OnMouseUp = { function()
           self:Select(i)
           self:_CloseWindow()
         end }
       }
-      if i == self.selected then
-        newBtn.backgroundColor = self.focusColor
-      end
-      table.insert(labels, newBtn)
+      labels[#labels+1] = newBtn
     end
-    estimatedWidth = 20 + largestStr * 10
-    estimatedWidth = math.min(estimatedWidth, 500)
-    estimatedWidth = math.max(estimatedWidth, self.width)
 
-    local height = math.min(200, labelHeight * #labels) + 10
-    height = math.max(50, height)
-    if sy + height > screen0.height then
-      y = sy - height - 40
-    else
-      y = sy
+    local height = math.min(200, labelHeight * #labels)
+
+    local screen = self:FindParent("screen")
+    local y = sy + self.height
+    if y + height > screen.height then
+      y = sy - height
     end
-    dropDownWindow = Window:New {
-      parent = screen0,
-      clientWidth = estimatedWidth,
-      clientHeight = height,
-      resizable = false,
-      draggable = false,
+
+    self._dropDownWindow = ComboBoxWindow:New{
+      parent = screen,
+      width  = self.width,
+      height = height,
       x = sx,
       y = y,
       children = {
-        ScrollPanel:New {
-          width = "100%",
+        ComboBoxScrollPanel:New{
+          width  = "100%",
           height = "100%",
-          horizontalScrollBar = false,
           children = {
-            StackPanel:New {
-              orientation = 'horizontal',
+            ComboBoxStackPanel:New{
               width = '100%',
-              height = labelHeight * #labels,
-              resizeItems = false,
-              padding = {0,0,0,0},
-              itemPadding = {0,0,0,0},
-              itemMargin = {0,0,0,0},
               children = labels,
-              borderThickness = 0,
             },
           },
         }
       }
     }
-    self._dropDownWindow = dropDownWindow
   else
     self:_CloseWindow()
   end
