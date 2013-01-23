@@ -29,12 +29,13 @@ skin.icons = {
 }
 
 skin.button = {
-  TileImageBK = ":cl:tech_button.png",
-  TileImageFG = ":cl:empty.png",
+  TileImageBK = ":cl:tech_button_bk.png",
+  TileImageFG = ":cl:tech_button_fg.png",
   tiles = {22, 22, 22, 22}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
 
   backgroundColor = {1, 1, 1, 0.7},
+  borderColor = {1,1,1,0},
 
   DrawControl = DrawButton,
 }
