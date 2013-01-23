@@ -570,6 +570,9 @@ skin.icons = {
   imageplaceholder = ":cl:placeholder.png",
 }
 
+skin.image = {
+}
+
 skin.button = {
   DrawControl = DrawButton,
 }

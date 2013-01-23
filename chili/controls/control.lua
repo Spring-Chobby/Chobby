@@ -89,7 +89,7 @@ function Control:New(obj)
   --// load the skin for this control
   obj.classname = self.classname
   theme.LoadThemeDefaults(obj)
-  SkinHandler.LoadSkin(obj)
+  SkinHandler.LoadSkin(obj, self)
 
   --// call it twice, so skins can use old standards, too
   FontBackwardCompa(obj)
