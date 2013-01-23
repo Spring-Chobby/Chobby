@@ -310,7 +310,7 @@ function DrawEditBox(obj)
 			local cursorTxt = obj.text:sub(obj.offset, obj.cursor - 1)
 			local cursorX = obj.font:GetTextWidth(cursorTxt)
 
-            local dt = os.clock() - obj._interactedTime
+			local dt = Spring.DiffTimers(Spring.GetTimer(), obj._interactedTime)
 			local as = math.sin(dt * 8);
 			local ac = math.cos(dt * 8);
 			if (as < 0) then as = 0 end
