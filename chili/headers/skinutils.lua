@@ -302,13 +302,15 @@ function DrawButton(obj)
 
   local skLeft,skTop,skRight,skBottom = unpack4(obj.tiles)
 
+  local bgcolor = obj.backgroundColor
   if (obj.state.pressed) then
-    gl.Color(mulColor(obj.backgroundColor,0.4))
-  elseif (obj.state.hovered) then
-    gl.Color(obj.focusColor)
-  else
-    gl.Color(obj.backgroundColor)
+    bgcolor = mulColor(bgcolor, 0.4)
+  elseif (obj.state.hovered) or (obj.state.focused) then
+    bgcolor = obj.focusColor
+    --bgcolor = mixColors(bgcolor, obj.focusColor, 0.5)
   end
+  gl.Color(bgcolor)
+
   TextureHandler.LoadTexture(0,obj.TileImageBK,obj)
     local texInfo = gl.TextureInfo(obj.TileImageBK) or {xsize=1, ysize=1}
     local tw,th = texInfo.xsize, texInfo.ysize
@@ -316,13 +318,14 @@ function DrawButton(obj)
     gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, x,y,w,h, skLeft,skTop,skRight,skBottom, tw,th, 0)
   --gl.Texture(0,false)
 
+  local fgcolor = obj.borderColor
   if (obj.state.pressed) then
-    gl.Color(0.6,0.6,0.6,1) --FIXME
-  --elseif (obj.state.hovered) then
-  --  gl.Color(obj.focusColor)
-  else
-    gl.Color(obj.borderColor)
+    fgcolor = mulColor(fgcolor, 0.4)
+  elseif (obj.state.hovered) or (obj.state.focused) then
+    fgcolor = obj.focusColor
   end
+  gl.Color(fgcolor)
+
   TextureHandler.LoadTexture(0,obj.TileImageFG,obj)
     local texInfo = gl.TextureInfo(obj.TileImageFG) or {xsize=1, ysize=1}
     local tw,th = texInfo.xsize, texInfo.ysize
@@ -335,25 +338,20 @@ function DrawButton(obj)
   end
 end
 
-function _DrawTriangle(obj)
-  local w = obj.width
-  local x = obj.x
-  local y = obj.y
-  local w = obj.width
-  local h = obj.height
-  local bt = obj.borderThickness
 
-  local tw = 10
-  gl.Color(obj.focusColor)
-  gl.Vertex(x + w - tw*1.5, y + (h - tw) * 0.5)
-  gl.Vertex(x + w - tw*0.5, y + (h - tw) * 0.5)
-  gl.Vertex(x + w - tw, y + tw + (h - tw) * 0.5)
-end
+function DrawComboBox(self)
+	DrawButton(self)
 
-function DrawComboBox(obj)
-    DrawButton(obj)
-    --draw triangle that indicates this is a combobox
-    gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTriangle, obj)
+	if (self.state.pressed) then
+		gl.Color(self.focusColor)
+	else
+		gl.Color(1,1,1,1)
+	end
+	TextureHandler.LoadTexture(0,self.TileImageArrow,self)
+		local texInfo = gl.TextureInfo(self.TileImageArrow) or {xsize=1, ysize=1}
+		local tw,th = texInfo.xsize, texInfo.ysize
+		_DrawTextureAspect(self.x + self.width - self.padding[3], self.y, self.padding[3], self.height, tw,th)
+	gl.Texture(0,false)
 end
 
 
@@ -636,10 +634,19 @@ end
 
 function DrawCheckbox(obj)
   local boxSize = obj.boxsize
+
   local x = obj.x + obj.width      - boxSize
   local y = obj.y + obj.height*0.5 - boxSize*0.5
   local w = boxSize
   local h = boxSize
+
+  local tx = 0
+  local ty = obj.height * 0.5 --// verticale center
+
+  if obj.boxalign == "left" then
+    x  = obj.x
+    tx = boxSize + 2
+  end
 
   local skLeft,skTop,skRight,skBottom = unpack4(obj.tiles)
 
@@ -664,10 +671,6 @@ function DrawCheckbox(obj)
 
   gl.Color(1,1,1,1)
   if (obj.caption) then
-    local vc = obj.height*0.5 --//verticale center
-    local tx = 0
-    local ty = vc
-
     obj.font:Print(obj.caption, obj.x + tx, obj.y + ty, nil, "center")
   end
 end
