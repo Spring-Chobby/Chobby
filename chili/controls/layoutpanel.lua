@@ -16,15 +16,15 @@ LayoutPanel = Control:Inherit{
 
   itemMargin    = {5, 5, 5, 5},
   itemPadding   = {5, 5, 5, 5},
-  minItemWidth  = 0,
+  minItemWidth  = 1,
   maxItemWidth  = 0,
-  minItemHeight = 0,
+  minItemHeight = 1,
   maxItemHeight = 0,
 
   autosize = false,
 
-  rows = nil,
-  columns = nil,
+  rows          = nil,
+  columns       = nil,
   orientation   = "horizontal", --// "horizontal" or "vertical"
   autoArrangeH  = false, --FIXME rename
   autoArrangeV  = false, --FIXME rename
@@ -412,12 +412,12 @@ function LayoutPanel:_LayoutChildrenResizeItems()
   local cn = self.children
   local cn_count = #cn
 
-  local max_ix = math.floor(self.clientArea[3]/self.minItemWidth)
-  local max_iy = math.floor(self.clientArea[4]/self.minItemHeight)
+  local max_ix = math.floor(self.clientArea[3] / self.minItemWidth)
+  local max_iy = math.floor(self.clientArea[4] / self.minItemHeight)
 
-  if (max_ix*max_iy < cn_count)or
-     (max_ix<(self.columns or 0))or
-     (max_iy<(self.rows or 0))
+  if (max_ix * max_iy < cn_count)   or
+     (max_ix < (self.columns or 0)) or
+     (max_iy < (self.rows or 0))
   then
     --FIXME add autoEnlarge/autoAdjustSize?
     --error"LayoutPanel: not enough space"
@@ -600,7 +600,7 @@ function LayoutPanel:_LayoutChildren()
 
     if
       (i>1)and
-      (self.columns and ((i+1)%self.columns < 1))or
+      (self.columns and (((i - 1) % self.columns) < 1))or
       ((not self.columns) and (cur_x > clientAreaWidth))
     then
       lineHeights[curLine] = curLineSize
