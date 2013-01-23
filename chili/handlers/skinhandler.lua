@@ -58,7 +58,7 @@ for i,dir in ipairs(skinDirs) do
   if (VFS.FileExists(skinCfgFile, VFS.RAW_FIRST)) then
 
     --// use a custom enviroment (safety + auto loads skin utils)
-    local senv = {}
+    local senv = {SKINDIR = dir}
     setmetatable(senv,{__index = SkinUtilsEnv})
 
     --// load the skin

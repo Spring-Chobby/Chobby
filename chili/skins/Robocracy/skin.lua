@@ -13,12 +13,16 @@ local skin = {
 --//
 
 skin.general = {
-  --font        = "FreeSansBold.ttf",
-  fontOutline = false,
-  fontsize    = 13,
   textColor   = {1,1,1,1},
   focusColor   = {1.0, 0.7, 0.1, 0.8},
   borderColor  = {1.0, 1.0, 1.0, 1.0},
+
+  font = {
+    font    = SKINDIR .. "/fonts/n019003l.pfb",
+    outline = false,
+    shadow  = true,
+    size    = 14,
+  },
 
   --padding         = {5, 5, 5, 5}, --// padding: left, top, right, bottom
 }
