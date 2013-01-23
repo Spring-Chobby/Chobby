@@ -161,19 +161,16 @@ function Screen:MouseDown(x,y,...)
   local activeControl = inherited.MouseDown(self,x,y,...)
   self.activeControl = MakeWeakLink(activeControl, self.activeControl)
   if not CompareLinks(self.activeControl, self.focusedControl) then
-      if self.focusedControl then
-          self.focusedControl.state.focused = false
-          -- do we need to call invalidate if we're calling FocusUpdate?
-          self.focusedControl:FocusUpdate()
-          self.focusedControl:Invalidate()
+      local focusedControl = UnlinkSafe(self.focusedControl)
+      if focusedControl then
+          focusedControl.state.focused = false
+          focusedControl:FocusUpdate() --rename FocusLost()
       end
       self.focusedControl = nil
       if self.activeControl then
           self.focusedControl = MakeWeakLink(activeControl, self.focusedControl)
           self.focusedControl.state.focused = true
-          -- do we need to call invalidate if we're calling FocusUpdate?
-          self.focusedControl:FocusUpdate()
-          self.focusedControl:Invalidate() 
+          self.focusedControl:FocusUpdate() --rename FocusGain()
       end
   end
   return (not not activeControl)
@@ -256,10 +253,11 @@ function Screen:MouseWheel(x,y,...)
 end
 
 function Screen:KeyPress(...)
-    if self.focusedControl then
-      return (not not self.focusedControl:KeyPress(...))
-    end
-    return (not not inherited:KeyPress(...))
+	local focusedControl = UnlinkSafe(self.focusedControl)
+	if focusedControl then
+		return (not not focusedControl:KeyPress(...))
+	end
+	return (not not inherited:KeyPress(...))
 end
 
 --//=============================================================================
