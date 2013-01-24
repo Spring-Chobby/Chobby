@@ -686,6 +686,15 @@ skin.window = {
   DrawControl = DrawWindow,
   DrawDragGrip = DrawDragGrip,
   DrawResizeGrip = DrawResizeGrip,
+
+  hitpadding = {4, 4, 4, 4},
+  boxes = {
+    resize = {-21, -21, -10, -10},
+    drag = {0, 0, "100%", 10},
+  },
+  NCHitTest = NCHitTestWithPadding,
+  NCMouseDown = WindowNCMouseDown,
+  NCMouseDownPostChildren = WindowNCMouseDownPostChildren,
 }
 
 skin.editbox = {
