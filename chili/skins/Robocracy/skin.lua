@@ -18,7 +18,7 @@ skin.general = {
   borderColor  = {1.0, 1.0, 1.0, 1.0},
 
   font = {
-    font    = SKINDIR .. "/fonts/n019003l.pfb",
+    font    = SKINDIR .. "fonts/n019003l.pfb",
     outline = false,
     shadow  = true,
     size    = 14,
