@@ -8,6 +8,8 @@ TabBar = LayoutPanel:Inherit{
   padding      = {0, 0, 0, 0},
   itemPadding  = {0, 0, 0, 0},
   itemMargin   = {0, 0, 0, 0},
+  minItemWidth  = 70,
+  minItemHeight = 20,
   tabs         = {},
   selected     = nil,
   OnChange     = {},
@@ -23,14 +25,14 @@ function TabBar:New(obj)
 	if (obj.tabs) then
 		for i=1,#obj.tabs do
 			obj:AddChild(
-				TabBarItem:New{caption = obj.tabs[i]} --FIXME inherit font too
+				TabBarItem:New{caption = obj.tabs[i], defaultWidth = obj.minItemWidth, defaultHeight = obj.minItemHeight} --FIXME inherit font too
 			)
 		end
 	end
 
 	if not obj.children[1] then
 		obj:AddChild(
-			TabBarItem:New{caption = "tab1"}
+			TabBarItem:New{caption = "tab"}
 		)
 	end
 

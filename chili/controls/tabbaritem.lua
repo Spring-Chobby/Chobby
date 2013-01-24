@@ -4,8 +4,6 @@ TabBarItem = Button:Inherit{
   classname= "tabbaritem",
   caption  = 'tab',
   height   = "100%",
-  defaultWidth  = 90,
-  defaultHeight = 20,
 }
 
 local this = TabBarItem

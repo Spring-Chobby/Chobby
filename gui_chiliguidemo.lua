@@ -91,6 +91,7 @@ President Morales has said the new constitution will pave the way for correcting
 			x     = 20,
 			y     = 120,
 		},
+		Chili.ComboBox:New{items = { "opt1", "opt2", "opt3", "opt4", "opt5", "opt6", "opt7", "opt8", "opt9", "opt10", "opt11", "opt12", }},
 	}
 
 	window0 = Chili.Window:New{
@@ -177,7 +178,7 @@ President Morales has said the new constitution will pave the way for correcting
 			end}},
 			Chili.TextBox:New{x=0, right=0, y=0, text = testText2},
 			Chili.EditBox:New{width = 200, y = 40, --[[autosize = true,]] text = testText3},
-            Chili.ComboBox:New{width=200, x = 0, y = 90, items = { "opt1", "opt2", "opt3", "opt4", "opt5", "opt6", "opt7", "opt8", "opt9", "opt10", "opt11", "opt12", }},
+			Chili.ComboBox:New{right = 10, x = 0, y = 90, items = { "opt1", "opt2", "opt3", "opt4", "opt5", "opt6", "opt7", "opt8", "opt9", "opt10", "opt11", "opt12", }},
 			Chili.Button:New{
 				caption = "Dispose Me",
 				name = "btn_dispose_me2",
@@ -277,9 +278,15 @@ President Morales has said the new constitution will pave the way for correcting
 		parent = Chili.Screen0,
 
 		children = {
+			Chili.TabBar:New{
+				x=0, right=0,
+				y=0, height=20,
+				minItemWidth = 50,
+				tabs = {"tab1", "tab2", "tab3",},
+			},
 			Chili.ScrollPanel:New{
 				x=0, right=0,
-				y=0, bottom=0,
+				y=30, bottom=0,
 				children = {
 					Chili.TreeView:New{
 						x=0, right=0,
