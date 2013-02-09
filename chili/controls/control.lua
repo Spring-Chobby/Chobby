@@ -55,6 +55,8 @@ Control = Object:Inherit{
 
   skin            = nil,
   skinName        = nil,
+
+  OnResize        = {},
 }
 
 local this = Control
@@ -299,7 +301,7 @@ end
 function Control:UpdateClientArea()
   local padding = self.padding
 
-  self.clientWidth  = self.width - padding[1] - padding[3]
+  self.clientWidth  = self.width  - padding[1] - padding[3]
   self.clientHeight = self.height - padding[2] - padding[4]
 
   self.clientArea = {
@@ -324,6 +326,7 @@ if (self.debug) then
 end
 
   self:Invalidate() --FIXME correct place?
+  self:CallListeners(self.OnResize) --FIXME more arguments and filter unchanged resizes
 end
 
 
@@ -1078,7 +1081,7 @@ function Control:MouseMove(x, y, dx, dy, ...)
       oldState.size[1] + deltaMousePosX
     )
     local h = math.max(
-      self.minHeight, 
+      self.minHeight,
       oldState.size[2] + deltaMousePosY
     )
 
