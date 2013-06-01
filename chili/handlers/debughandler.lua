@@ -86,21 +86,21 @@ local function ChiliErrorHandler(msg,...)
   if (control) then
     local w = control._widget
     if (w) then
-      Spring.Echo(("Chili-Error in `%s`:%s : %s"):format(w.whInfo.name, control.name, msg))
-      Spring.Echo(DebugHandler.Stacktrace())
+      Spring.LOG("Chili", "error", ("in `%s`:%s : %s"):format(w.whInfo.name, control.name, msg))
+      Spring.LOG("Chili", "error", DebugHandler.Stacktrace())
 
       --// this also unloads all owned chili objects
-      Spring.Echo("Removed widget: " .. w.whInfo.name)
+      Spring.LOG("Chili", "error", "Removed widget: " .. w.whInfo.name)
       widgetHandler:RemoveWidget(w)
     else
-      Spring.Echo(("Chili-Error in `%s` (couldn't detect the owner widget): %s"):format(control.name, msg))
-      Spring.Echo(DebugHandler.Stacktrace())
+      Spring.LOG("Chili", "error", ("in `%s` (couldn't detect the owner widget): %s"):format(control.name, msg))
+      Spring.LOG("Chili", "error", DebugHandler.Stacktrace())
       control:Dispose()
     end
   else
     --// error in Chili itself
-    Spring.Echo(("Chili-Error: %s"):format(msg))
-    Spring.Echo(DebugHandler.Stacktrace())
+    Spring.LOG("Chili", "error", ("%s"):format(msg))
+    Spring.LOG("Chili", "error", DebugHandler.Stacktrace())
 
     if (os.clock() - lastError < 5) then
       numChiliErrors = numChiliErrors + 1
@@ -111,7 +111,7 @@ local function ChiliErrorHandler(msg,...)
 
     --// unload Chili to avoid error spam
     if (numChiliErrors>=DebugHandler.maxChiliErrors) then
-      Spring.Echo("Removed widget: " .. widget.whInfo.name)
+      Spring.LOG("Chili", "error", "Removed widget: " .. widget.whInfo.name)
       widgetHandler:RemoveWidget(widget)
     end
   end

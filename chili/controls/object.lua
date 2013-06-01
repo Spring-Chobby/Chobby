@@ -196,6 +196,11 @@ function Object:Inherit(class)
 
   --setmetatable(class,{__index=self})
 
+  --// backward compability with old DrawControl gl state (change was done with v2.1)
+  if DebugHandler.GetWidgetOrigin() ~= Chili then
+	class._hasCustomDrawControl = true
+  end
+
   return class
 end
 

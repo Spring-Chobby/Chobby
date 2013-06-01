@@ -737,7 +737,7 @@ function LayoutPanel:DrawChildren()
   if (not cn[1]) then return end
 
   gl.PushMatrix()
-  gl.Translate(math.floor(self.x + self.clientArea[1]),math.floor(self.y + self.clientArea[2]),0)
+  gl.Translate(self.clientArea[1], self.clientArea[2], 0)
   for i=1,#cn do
     self:DrawItemBkGnd(i)
   end
@@ -762,13 +762,13 @@ function LayoutPanel:DrawChildrenForList()
     gl.Color(0,1,0,0.5)
     gl.PolygonMode(GL.FRONT_AND_BACK,GL.LINE)
     gl.LineWidth(2)
-    gl.Rect(self.x,self.y,self.x+self.width,self.y+self.height)
+    gl.Rect(0, 0, self.width, self.height)
     gl.LineWidth(1)
     gl.PolygonMode(GL.FRONT_AND_BACK,GL.FILL)
   end
 
   gl.PushMatrix()
-  gl.Translate(math.floor(self.x + self.clientArea[1]),math.floor(self.y + self.clientArea[2]),0)
+  gl.Translate(self.clientArea[1], self.clientArea[2], 0)
   for i=1,#cn do
     self:DrawItemBkGnd(i)
   end
