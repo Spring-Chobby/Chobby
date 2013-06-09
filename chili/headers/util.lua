@@ -229,6 +229,10 @@ function LeaveRTT()
 	inRTT = false
 end
 
+function AreInRTT()
+	return inRTT
+end
+
 
 function PushLimitRenderRegion(...)
 	if inRTT then

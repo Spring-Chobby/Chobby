@@ -839,7 +839,11 @@ end
 
 function Control:_CheckIfRTTisAppreciated()
 	if self:InheritsFrom("window") then
-		return (((self._redrawSelfCounter or 1) / (self._redrawCounter or 1)) < 0.1)
+		if self._usingRTT then
+			return (((self._redrawSelfCounter or 1) / (self._redrawCounter or 1)) < 0.2)
+		else
+			return (((self._redrawSelfCounter or 1) / (self._redrawCounter or 1)) < 0.1)
+		end
 	else
 		if (self._redrawCounter or 0) > 300 then
 			return (((self._redrawSelfCounter or 1) / (self._redrawCounter or 1)) < 0.03)
@@ -878,6 +882,7 @@ function Control:_UpdateAllDList()
 	local RTT = self:_CheckIfRTTisAppreciated()
 
 	if RTT then
+		self._usingRTT = true
 		self:CreateViewTexture("all", self.width, self.height, self.DrawForList, self)
 	else
 		local suffix_name = "all"
@@ -894,6 +899,7 @@ function Control:_UpdateAllDList()
 		self[fboName] = nil
 		self[texw] = nil
 		self[texh] = nil
+		self._usingRTT = false
 	end
 
 	--gl.DeleteList(self._all_dlist)
@@ -1113,24 +1119,29 @@ end
 
 function Control:DrawForList()
 	self._redrawCounter = (self._redrawCounter or 0) + 1
-	if (not self._in_update and self:_CheckIfRTTisAppreciated() and not self._fbo_all) then self:InvalidateSelf() end
+	if (not self._in_update and not self._usingRTT and self:_CheckIfRTTisAppreciated()) then self:InvalidateSelf() end
 
-	gl.PushMatrix()
-	gl.Translate(self.x, self.y, 0)
 	if (self._tex_all) then
-		gl.BlendFuncSeparate(GL.ONE, GL.SRC_ALPHA, GL.ZERO, GL.SRC_ALPHA)
-		gl.Color(1,1,1,1)
-		gl.Texture(0, self._tex_all)
-		gl.TexRect(0, 0, self.width, self.height)
-		gl.Texture(0, false)
-		gl.BlendFuncSeparate(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA, GL.ZERO, GL.ONE_MINUS_SRC_ALPHA)
+		gl.PushMatrix()
+		gl.Translate(self.x, self.y, 0)
+			gl.BlendFuncSeparate(GL.ONE, GL.SRC_ALPHA, GL.ZERO, GL.SRC_ALPHA)
+			gl.Color(1,1,1,1)
+			gl.Texture(0, self._tex_all)
+			gl.TexRect(0, 0, self.width, self.height)
+			gl.Texture(0, false)
+			gl.BlendFuncSeparate(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA, GL.ZERO, GL.ONE_MINUS_SRC_ALPHA)
 		gl.PopMatrix()
 		return
 	elseif (self._all_dlist) then
-		gl.CallList(self._all_dlist);
+		gl.PushMatrix()
+		gl.Translate(self.x, self.y, 0)
+			gl.CallList(self._all_dlist);
 		gl.PopMatrix()
 		return
 	end
+
+	gl.PushMatrix()
+	gl.Translate(self.x, self.y, 0)
 
 	if (self._own_dlist) then
 		gl.CallList(self._own_dlist)
@@ -1176,24 +1187,29 @@ end
 
 function Control:Draw()
 	self._redrawCounter = (self._redrawCounter or 0) + 1
-	if (not self._in_update and self:_CheckIfRTTisAppreciated() and not self._fbo_all) then self:InvalidateSelf() end
+	if (not self._in_update and not self._usingRTT and self:_CheckIfRTTisAppreciated()) then self:InvalidateSelf() end
 
-	gl.PushMatrix()
-	gl.Translate(self.x, self.y, 0)
 	if (self._tex_all) then
-		gl.BlendFunc(GL.ONE, GL.SRC_ALPHA)
-		gl.Color(1,1,1,1)
-		gl.Texture(0, self._tex_all)
-		gl.TexRect(0, 0, self.width, self.height)
-		gl.Texture(0, false)
-		gl.Blending("reset")
+		gl.PushMatrix()
+		gl.Translate(self.x, self.y, 0)
+			gl.BlendFunc(GL.ONE, GL.SRC_ALPHA)
+			gl.Color(1,1,1,1)
+			gl.Texture(0, self._tex_all)
+			gl.TexRect(0, 0, self.width, self.height)
+			gl.Texture(0, false)
+			gl.Blending("reset")
 		gl.PopMatrix()
 		return
 	elseif (self._all_dlist) then
-		gl.CallList(self._all_dlist);
+		gl.PushMatrix()
+		gl.Translate(self.x, self.y, 0)
+			gl.CallList(self._all_dlist);
 		gl.PopMatrix()
 		return
 	end
+
+	gl.PushMatrix()
+	gl.Translate(self.x, self.y, 0)
 
 	if (self._own_dlist) then
 		gl.CallList(self._own_dlist)
