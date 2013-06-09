@@ -412,17 +412,6 @@ function LayoutPanel:_LayoutChildrenResizeItems()
   local cn = self.children
   local cn_count = #cn
 
-  local max_ix = math.floor(self.clientArea[3] / self.minItemWidth)
-  local max_iy = math.floor(self.clientArea[4] / self.minItemHeight)
-
-  if (max_ix * max_iy < cn_count)   or
-     (max_ix < (self.columns or 0)) or
-     (max_iy < (self.rows or 0))
-  then
-    --FIXME add autoEnlarge/autoAdjustSize?
-    --error"LayoutPanel: not enough space"
-  end
-
   --FIXME take minWidth/height maxWidth/Height into account! (and try to reach a 1:1 pixel ratio)
   if self.columns and self.rows then
     self._columns = self.columns
