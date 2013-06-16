@@ -934,6 +934,7 @@ function Control:_SetupRTT(fnc, self_, drawInContentRect, ...)
 	end
 
 	gl.Color(1,1,1,1)
+	gl.AlphaTest(false)
 	gl.StencilTest(true)
 	gl.StencilFunc(GL.EQUAL, 0, 0xFF)
 	gl.StencilOp(GL_KEEP, GL_KEEP, GL_KEEP)
@@ -958,6 +959,8 @@ end
 
 function Control:CreateViewTexture(suffix_name, width, height, fnc, ...)
 	if not gl.CreateFBO then
+		self._cantUseRTT = true
+		self._usingRTT = false
 		return
 	end
 
