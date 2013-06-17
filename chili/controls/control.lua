@@ -958,7 +958,7 @@ end
 
 
 function Control:CreateViewTexture(suffix_name, width, height, fnc, ...)
-	if not gl.CreateFBO then
+	if not gl.CreateFBO or not gl.BlendFuncSeparate then
 		self._cantUseRTT = true
 		self._usingRTT = false
 		return
