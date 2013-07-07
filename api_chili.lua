@@ -9,7 +9,7 @@ function widget:GetInfo()
     date      = "WIP",
     license   = "GPLv2",
     version   = "2.1",
-    layer     = 1000,
+    layer     = -1000,
     enabled   = true,  --  loaded by default?
     handler   = true,
     api       = true,
@@ -78,6 +78,21 @@ function widget:DrawScreen()
   if (not screen0:IsEmpty()) then
     gl.PushMatrix()
     local vsx,vsy = gl.GetViewSizes()
+    gl.Translate(0,vsy,0)
+    gl.Scale(1,-1,1)
+    screen0:Draw()
+    gl.PopMatrix()
+  end
+  gl.Color(1,1,1,1)
+end
+
+
+function widget:DrawLoadScreen()
+  gl.Color(1,1,1,1)
+  if (not screen0:IsEmpty()) then
+    gl.PushMatrix()
+    local vsx,vsy = gl.GetViewSizes()
+    gl.Scale(1/vsx,1/vsy,1)
     gl.Translate(0,vsy,0)
     gl.Scale(1,-1,1)
     screen0:Draw()

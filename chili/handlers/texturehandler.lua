@@ -100,45 +100,59 @@ end
 
 local usedTime = 0
 local lastCall = spGetTimer()
+local nullInfo = {xsize=0}
+
 
 function TextureHandler.Update()
-  if (not next(requested)) then return end
+	if (not next(requested)) then return end
 
-  if (usedTime>0) then
-    thisCall = spGetTimer()
+	if (usedTime>0) then
+		thisCall = spGetTimer()
 
-    usedTime = usedTime - spDiffTimers(thisCall,lastCall)
-    lastCall = thisCall
+		usedTime = usedTime - spDiffTimers(thisCall,lastCall)
+		lastCall = thisCall
 
-    if (usedTime<0) then usedTime = 0 end
-  end
+		if (usedTime<0) then usedTime = 0 end
+	end
 
-  local timerStart = spGetTimer()
-  while (usedTime < timeLimit) do
-    local filename,objs = next(requested)
+	local broken = {}
+	local timerStart = spGetTimer()
+	local finished = false
+	while (usedTime < timeLimit)and(not finished) do
+		local filename,objs = next(requested)
 
-    if (not filename) then return end
+		if (filename) then
+			gl.Texture(filename)
+			gl.Texture(false)
 
-    gl.Texture(filename)
-    gl.Texture(false)
+			if (gl.TextureInfo(filename) or nullInfo).xsize > 0 then
+				local texture = {}
+				texture.dl = gl.CreateList(gl.Texture,filename)
+				loaded[filename] = texture
 
-    local texture = {}
-    texture.dl = gl.CreateList(gl.Texture,filename)
-    texture.references = #objs
-    loaded[filename] = texture
+				for obj in pairs(objs) do
+					obj:Invalidate()
+					texture.references = (texture.references or 0) + 1
+				end
+			else
+				broken[filename] = objs
+			end
 
-    for obj in pairs(objs) do
-      obj:Invalidate()
-    end
+			requested[filename] = nil
 
-    requested[filename] = nil
+			local timerEnd = spGetTimer()
+			usedTime = usedTime + spDiffTimers(timerEnd,timerStart)
+			timerStart = timerEnd
+		else
+			finished = true
+		end
+	end
 
-    local timerEnd = spGetTimer()
-    usedTime = usedTime + spDiffTimers(timerEnd,timerStart)
-    timerStart = timerEnd
-  end
+	for i,v in pairs(broken) do
+		requested[i] = v
+	end
 
-  lastCall = spGetTimer()
+	lastCall = spGetTimer()
 end
 
 --//=============================================================================
