@@ -164,6 +164,14 @@ end
 function Font:AdjustPosToAlignment(x, y, width, height, align, valign)
   local extra = ''
 
+  if self.shadow then
+    width  = width  - 1 - self.size * 0.1
+    height = height - 1 - self.size * 0.1
+  elseif self.outline then
+    width  = width  - 1 - self.size * self.outlineWidth
+    height = height - 1 - self.size * self.outlineWidth
+  end
+
   --// vertical alignment
   if valign == "center" then
     y     = y + height/2

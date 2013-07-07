@@ -52,6 +52,14 @@ function Label:UpdateLayout()
       h = math.ceil(h-d)
     end
 
+    if font.shadow then
+      w = w + 2 + font.size * 0.1
+      h = h + 2 + font.size * 0.1
+    elseif font.outline then
+      w = w + 2 + font.size * font.outlineWidth
+      h = h + 2 + font.size * font.outlineWidth
+    end
+
     local x = self.x
     local y = self.y
 
