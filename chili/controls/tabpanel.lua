@@ -22,28 +22,36 @@ function TabPanel:New(obj)
 		tabNames[i] = obj.tabs[i].name
 	end
 	obj:AddChild(
-		TabBar:New{
-			tabs = tabNames, 
-			y = 0, 
-			height = obj.barHeight, 
-			x = 0, 
-			right = 0
+		TabBar:New {
+			tabs = tabNames,
+			x = 0,
+			y = 0,
+			right = 0,
+			height = obj.barHeight,
 		}
 	)
   
-	obj.currentTab = Control:New{
-		y = obj.barHeight,
-		bottom = 0,
+	obj.currentTab = Control:New {
 		x = 0,
+		y = obj.barHeight,
 		right = 0,
+		bottom = 0,
+		--width = "100%",
+		--height = "100%",
+		padding = {0, 0, 0, 0},
 	}
-	obj:AddChild(
-		obj.currentTab
-    )
+	obj:AddChild(obj.currentTab)
 	obj.tabIndexMapping = {}
-	for i=1,#obj.tabs do
+	for i=1, #obj.tabs do
 		local tabName = obj.tabs[i].name	
-		local tabFrame = Control:New{x=0, y=0, bottom=0, right=0, children = obj.tabs[i].children}
+		local tabFrame = Control:New {
+			padding = {0, 0, 0, 0},
+			x = 0,
+			y = 0,
+			right = 0,
+			bottom = 0,
+			children = obj.tabs[i].children
+		}
 		obj.tabIndexMapping[tabName] = tabFrame
 		obj.currentTab:AddChild(tabFrame)
 		if i == 1 then
