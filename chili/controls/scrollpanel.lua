@@ -320,7 +320,7 @@ function ScrollPanel:MouseMove(x, y, dx, dy, ...)
   if self._hscrolling then
     local clientArea = self.clientArea
     local cx = x - clientArea[1]
-    self:SetScrollPos(nil, (cx/clientArea[3])*self.contentArea[3], true, false)
+    self:SetScrollPos((cx/clientArea[3])*self.contentArea[3], nil, true, false)
     return self
   end
 
