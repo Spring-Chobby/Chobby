@@ -40,6 +40,7 @@ local includes = {
   "controls/combobox.lua",
   "controls/tabbaritem.lua",
   "controls/tabbar.lua",
+  "controls/tabpanel.lua",
 }
 
 local Chili = widget
