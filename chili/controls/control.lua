@@ -821,12 +821,14 @@ end
 
 --//=============================================================================
 
+--- Requests a redraw of the control.
 function Control:Invalidate()
 	self._needRedraw = true
 	self._needRedrawSelf = nil
 	self:RequestUpdate()
 end
 
+--- Requests a redraw of the control.
 function Control:InvalidateSelf()
 	self._needRedraw = true
 	self._needRedrawSelf = true
