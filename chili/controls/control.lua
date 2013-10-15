@@ -2,7 +2,7 @@
 
 --- Control constructor.
 -- Inherits from Object.
--- @see Object
+-- @see chili.Object
 -- @class function
 -- @name Control:New
 -- @param padding Table of padding
@@ -130,7 +130,7 @@ function Control:New(obj)
   return obj
 end
 
-
+--- Removes the control.
 function Control:Dispose(...)
   gl.DeleteList(self._all_dlist)
   self._all_dlist = nil
@@ -163,11 +163,16 @@ end
 
 --//=============================================================================
 
+--- Sets the control's parent object.
+-- @param obj parent object
 function Control:SetParent(obj)
   inherited.SetParent(self,obj)
   self:RequestRealign()
 end
 
+--- Adds a child object to the control
+-- @param obj child object
+-- @param dontUpdate if true won't trigger a RequestRealign()
 function Control:AddChild(obj, dontUpdate)
   inherited.AddChild(self,obj)
   if (not dontUpdate) then
@@ -175,6 +180,8 @@ function Control:AddChild(obj, dontUpdate)
   end
 end
 
+--- Removes a child object from the control
+-- @param obj child object
 function Control:RemoveChild(obj)
   local found  = inherited.RemoveChild(self,obj)
   if (found) then
@@ -441,6 +448,13 @@ end
 
 --//=============================================================================
 
+--- Sets the control's position
+-- @param x x-coordinate
+-- @param y y-coordinate
+-- @param w width
+-- @param h height
+-- @param clientArea TODO
+-- @param dontUpdateRelative TODO
 function Control:SetPos(x, y, w, h, clientArea, dontUpdateRelative)
   local changed = false
   local redraw  = false
@@ -522,7 +536,13 @@ function Control:SetPos(x, y, w, h, clientArea, dontUpdateRelative)
   end
 end
 
-
+--- Sets the control's relative position
+-- @param x x-coordinate
+-- @param y y-coordinate
+-- @param w width
+-- @param h height
+-- @param clientArea TODO
+-- @param dontUpdateRelative TODO
 function Control:SetPosRelative(x, y, w, h, clientArea, dontUpdateRelative)
   local changed = false
   local redraw  = false
@@ -608,6 +628,11 @@ function Control:SetPosRelative(x, y, w, h, clientArea, dontUpdateRelative)
   end
 end
 
+--- Resize the control 
+-- @param w width
+-- @param h height
+-- @param clientArea TODO
+-- @param dontUpdateRelative TODO
 function Control:Resize(w, h, clientArea, dontUpdateRelative)
   self:SetPosRelative(nil, nil, w, h, clientArea, dontUpdateRelative)
 end

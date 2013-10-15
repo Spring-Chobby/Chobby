@@ -2,7 +2,8 @@
 
 --- Button constructor.
 -- Inherits from Control.
--- @see Control
+-- @see chili.Control
+-- @see chili.control.lua
 -- @class function
 -- @name Button:New
 -- @param caption caption to appear in the button
