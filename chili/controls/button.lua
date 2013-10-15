@@ -1,5 +1,11 @@
 --//=============================================================================
 
+--- Button constructor.
+-- Inherits from Control.
+-- @see Control
+-- @class function
+-- @name Button:New
+-- @param caption caption to appear in the button
 Button = Control:Inherit{
   classname= "button",
   caption  = 'button',
@@ -12,6 +18,8 @@ local inherited = this.inherited
 
 --//=============================================================================
 
+--- Sets the caption of the button
+-- @param caption new caption of the button
 function Button:SetCaption(caption)
   if (self.caption == caption) then return end
   self.caption = caption

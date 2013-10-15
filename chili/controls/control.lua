@@ -1,5 +1,16 @@
 --//=============================================================================
 
+--- Control constructor.
+-- Inherits from Object.
+-- @see Object
+-- @class function
+-- @name Control:New
+-- @param padding Table of padding
+-- @param borderThickness Border thickness in pixels
+-- @param borderColor
+-- @param borderColor2
+-- @param backgroundColor
+-- @param focusColor
 Control = Object:Inherit{
   classname       = 'control',
   padding         = {5, 5, 5, 5},
