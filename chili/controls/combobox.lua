@@ -1,4 +1,14 @@
 --//=============================================================================
+
+--- ComboBox module
+
+--- ComboBox fields.
+-- Inherits from Control.
+-- @see control.Control:New
+-- @function ComboBox:New
+-- @param items table of items in the ComboBox, default: { "items" }
+-- @bool selected id of the selected item
+-- @param OnSelect listener functions for selected item changes
 ComboBox = Button:Inherit{
   classname = "combobox",
   caption = 'combobox',
@@ -23,6 +33,8 @@ function ComboBox:New(obj)
   return obj
 end
 
+--- Selects an item by id
+-- @int itemIdx id of the item to be selected
 function ComboBox:Select(itemIdx)
   if (type(itemIdx)=="number") then
     if not self.items[itemIdx] then

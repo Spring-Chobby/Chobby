@@ -1,5 +1,13 @@
 --//=============================================================================
 
+--- Colorbars module
+
+--- Colorbar fields.
+-- Inherits from Control.
+-- @see control.Control:New
+-- @function Colorbars:New
+-- @param color color table {r,g,b,a}, default: {1,1,1,1}
+-- @param OnChange listener functions for color changes
 Colorbars = Control:Inherit{
   classname = "colorbars",
   color     = {1,1,1,1},
@@ -15,6 +23,8 @@ local inherited = this.inherited
 
 --//=============================================================================
 
+--- Sets the new color
+-- @param c color table {r,g,b,a}
 function Colorbars:SetColor(c)
   self:CallListeners(self.OnChange,c)
   self.value = c

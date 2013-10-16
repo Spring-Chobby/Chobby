@@ -1,16 +1,25 @@
 --//=============================================================================
 
---- Control constructor.
+--- Control module
+
+--- Control fields.
 -- Inherits from Object.
--- @see chili.Object
--- @class function
--- @name Control:New
--- @param padding Table of padding
--- @param borderThickness Border thickness in pixels
--- @param borderColor
--- @param borderColor2
--- @param backgroundColor
--- @param focusColor
+-- @see object.Object:New
+-- @function Control:New
+-- @param padding table of padding {left,right,top,bottom}, default: {5,5,5,5}
+-- @param borderThickness border thickness in pixels, default: 1.5
+-- @param borderColor border color table {r,g,b,a}, default: {1,1,1,0.6}
+-- @param borderColor2 border color second table {r,g,b,a}, default: {0,0,0,0.8}
+-- @param backgroundColor background color table {r,g,b,a}, default: {0.8,0.8,1,0.4}
+-- @param focusColor focus color table {r,g,b,a}, default: {0.2,0.2,1,0.6}
+-- @bool autosize whether size will be determined automatically, default: false
+-- @bool draggable can control be dragged, default: false
+-- @bool resizable can control be resized, default: false
+-- @int minWidth minimum width, default: 10
+-- @int minHeight minimum height, default: 10
+-- @int maxWidth maximum width, default: 1e9
+-- @int maxHeight maximum height, default: 1e9
+-- @param OnResize table of function listeners for size changes
 Control = Object:Inherit{
   classname       = 'control',
   padding         = {5, 5, 5, 5},
@@ -449,12 +458,12 @@ end
 --//=============================================================================
 
 --- Sets the control's position
--- @param x x-coordinate
--- @param y y-coordinate
--- @param w width
--- @param h height
+-- @int x x-coordinate
+-- @int y y-coordinate
+-- @int w width
+-- @int h height
 -- @param clientArea TODO
--- @param dontUpdateRelative TODO
+-- @bool dontUpdateRelative TODO
 function Control:SetPos(x, y, w, h, clientArea, dontUpdateRelative)
   local changed = false
   local redraw  = false
@@ -537,12 +546,12 @@ function Control:SetPos(x, y, w, h, clientArea, dontUpdateRelative)
 end
 
 --- Sets the control's relative position
--- @param x x-coordinate
--- @param y y-coordinate
--- @param w width
--- @param h height
+-- @int x x-coordinate
+-- @int y y-coordinate
+-- @int w width
+-- @int h height
 -- @param clientArea TODO
--- @param dontUpdateRelative TODO
+-- @bool dontUpdateRelative TODO
 function Control:SetPosRelative(x, y, w, h, clientArea, dontUpdateRelative)
   local changed = false
   local redraw  = false
@@ -629,10 +638,10 @@ function Control:SetPosRelative(x, y, w, h, clientArea, dontUpdateRelative)
 end
 
 --- Resize the control 
--- @param w width
--- @param h height
+-- @int w width
+-- @int h height
 -- @param clientArea TODO
--- @param dontUpdateRelative TODO
+-- @bool dontUpdateRelative TODO
 function Control:Resize(w, h, clientArea, dontUpdateRelative)
   self:SetPosRelative(nil, nil, w, h, clientArea, dontUpdateRelative)
 end

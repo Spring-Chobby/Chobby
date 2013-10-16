@@ -1,15 +1,15 @@
 --//=============================================================================
 
---- Button constructor.
+--- Button module
+
+--- Button fields.
 -- Inherits from Control.
--- @see chili.Control
--- @see chili.control.lua
--- @class function
--- @name Button:New
--- @param caption caption to appear in the button
+-- @see control.Control:New
+-- @function Button:New
+-- @string caption caption to be displayed, default: "text"
 Button = Control:Inherit{
   classname= "button",
-  caption  = 'button',
+  caption  = 'button', 
   defaultWidth  = 70,
   defaultHeight = 20,
 }
@@ -20,7 +20,7 @@ local inherited = this.inherited
 --//=============================================================================
 
 --- Sets the caption of the button
--- @param caption new caption of the button
+-- @string caption new caption of the button
 function Button:SetCaption(caption)
   if (self.caption == caption) then return end
   self.caption = caption
