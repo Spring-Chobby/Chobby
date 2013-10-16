@@ -1,5 +1,9 @@
 --//=============================================================================
 
+--- Object module
+
+--- Object fields.
+-- @table Object
 Object = {
   classname = 'object',
   --x         = 0,

@@ -4,9 +4,9 @@
 
 --- Button fields.
 -- Inherits from Control.
--- @see control.Control:New
--- @function Button:New
--- @string caption caption to be displayed, default: "text"
+-- @see control.Control
+-- @table Button
+-- @string[opt="button"] caption caption to be displayed
 Button = Control:Inherit{
   classname= "button",
   caption  = 'button', 

@@ -4,22 +4,22 @@
 
 --- Control fields.
 -- Inherits from Object.
--- @see object.Object:New
--- @function Control:New
--- @param padding table of padding {left,right,top,bottom}, default: {5,5,5,5}
--- @param borderThickness border thickness in pixels, default: 1.5
--- @param borderColor border color table {r,g,b,a}, default: {1,1,1,0.6}
--- @param borderColor2 border color second table {r,g,b,a}, default: {0,0,0,0.8}
--- @param backgroundColor background color table {r,g,b,a}, default: {0.8,0.8,1,0.4}
--- @param focusColor focus color table {r,g,b,a}, default: {0.2,0.2,1,0.6}
--- @bool autosize whether size will be determined automatically, default: false
--- @bool draggable can control be dragged, default: false
--- @bool resizable can control be resized, default: false
--- @int minWidth minimum width, default: 10
--- @int minHeight minimum height, default: 10
--- @int maxWidth maximum width, default: 1e9
--- @int maxHeight maximum height, default: 1e9
--- @param OnResize table of function listeners for size changes
+-- @see object.Object
+-- @table Control
+-- @tparam {left,right,top,bottom} padding table of padding, (default {5,5,5,5})
+-- @number[opt=1.5] borderThickness border thickness in pixels
+-- @tparam {r,g,b,a} borderColor border color {r,g,b,a}, (default {1,1,1,0.6})
+-- @tparam {r,g,b,a} borderColor2 border color second {r,g,b,a}, (default {0,0,0,0.8})
+-- @tparam {r,g,b,a} backgroundColor background color {r,g,b,a}, (default {0.8,0.8,1,0.4})
+-- @tparam {r,g,b,a} focusColor focus color {r,g,b,a}, (default {0.2,0.2,1,0.6})
+-- @bool[opt=false] autosize whether size will be determined automatically
+-- @bool[opt=false] draggable can control be dragged
+-- @bool[opt=false] resizable can control be resized
+-- @int[opt=10] minWidth minimum width
+-- @int[opt=10] minHeight minimum height
+-- @int[opt=1e9] maxWidth maximum width
+-- @int[opt=1e9] maxHeight maximum height
+-- @tparam {func1,fun2,...} OnResize table of function listeners for size changes, (default {})
 Control = Object:Inherit{
   classname       = 'control',
   padding         = {5, 5, 5, 5},
@@ -173,14 +173,14 @@ end
 --//=============================================================================
 
 --- Sets the control's parent object.
--- @param obj parent object
+-- @tparam object.Object parent object
 function Control:SetParent(obj)
   inherited.SetParent(self,obj)
   self:RequestRealign()
 end
 
 --- Adds a child object to the control
--- @param obj child object
+-- @tparam object.Object obj child object
 -- @param dontUpdate if true won't trigger a RequestRealign()
 function Control:AddChild(obj, dontUpdate)
   inherited.AddChild(self,obj)
@@ -190,7 +190,7 @@ function Control:AddChild(obj, dontUpdate)
 end
 
 --- Removes a child object from the control
--- @param obj child object
+-- @tparam object.Object obj child object
 function Control:RemoveChild(obj)
   local found  = inherited.RemoveChild(self,obj)
   if (found) then

@@ -4,11 +4,11 @@
 
 --- ComboBox fields.
 -- Inherits from Control.
--- @see control.Control:New
--- @function ComboBox:New
--- @param items table of items in the ComboBox, default: { "items" }
--- @bool selected id of the selected item
--- @param OnSelect listener functions for selected item changes
+-- @see control.Control
+-- @table ComboBox
+-- @tparam {"item1","item2",...} items table of items in the ComboBox, (default {"items"})
+-- @int[opt=1] selected id of the selected item
+-- @tparam {func1,func2,...} OnSelect listener functions for selected item changes, (default {})
 ComboBox = Button:Inherit{
   classname = "combobox",
   caption = 'combobox',
