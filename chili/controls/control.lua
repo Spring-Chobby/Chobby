@@ -6,7 +6,7 @@
 -- Inherits from Object.
 -- @see object.Object
 -- @table Control
--- @tparam {left,right,top,bottom} padding table of padding, (default {5,5,5,5})
+-- @tparam {left,top,right,bottom} padding table of padding, (default {5,5,5,5})
 -- @number[opt=1.5] borderThickness border thickness in pixels
 -- @tparam {r,g,b,a} borderColor border color {r,g,b,a}, (default {1,1,1,0.6})
 -- @tparam {r,g,b,a} borderColor2 border color second {r,g,b,a}, (default {0,0,0,0.8})
