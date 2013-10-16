@@ -1,5 +1,18 @@
 --//=============================================================================
 
+--- Font module
+
+--- Font fields
+-- Inherits from Control.
+-- @see control.Control
+-- @table Font
+-- @string[opt="FreeSansBold.otf"] font font name
+-- @int[opt=12] size font size
+-- @bool[opt=false] shadow shadow enabled
+-- @bool[opt=false] outline outline enabled
+-- @tparam {r,g,b,a} color color table (default {1,1,1,1})
+-- @tparam {r,g,b,a} outlineColor outlineColor table (default {0,0,0,1})
+-- @bool[opt=true] autoOutlineColor ??
 Font = Object:Inherit{
   classname     = 'font',
 

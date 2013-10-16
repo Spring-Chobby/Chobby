@@ -1,6 +1,18 @@
 --//=============================================================================
+
+--- EditBox module
+
 include("keysym.h.lua")
 
+--- EditBox fields.
+-- Inherits from Control.
+-- @see control.Control
+-- @table EditBox
+-- @tparam {r,g,b,a} cursorColor cursor color, (default {0,0,1,0.7})
+-- @string[opt="left"] align alignment
+-- @string[opt="linecenter"] valign vertical alignment
+-- @string[opt=""] text text contained in the editbox
+-- @int[opt=1] cursor cursor position
 EditBox = Control:Inherit{
   classname= "editbox",
 
@@ -38,6 +50,8 @@ end
 
 --//=============================================================================
 
+--- Sets the EditBox text
+-- @string newtext text to be set
 function EditBox:SetText(newtext)
 	if (self.text == newtext) then return end
 	self.text = newtext

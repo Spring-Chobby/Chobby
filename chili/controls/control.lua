@@ -173,7 +173,7 @@ end
 --//=============================================================================
 
 --- Sets the control's parent object.
--- @tparam object.Object parent object
+-- @tparam object.Object obj parent object
 function Control:SetParent(obj)
   inherited.SetParent(self,obj)
   self:RequestRealign()
