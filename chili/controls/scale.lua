@@ -1,4 +1,10 @@
 
+--- Scales module
+
+--- Scale fields.
+-- Inherits from Control.
+-- @see control.Control
+-- @table Scales
 Scale = Control:Inherit{
   classname = "scale",
   min = -50,
@@ -9,7 +15,7 @@ Scale = Control:Inherit{
   defaultWidth     = 90,
   defaultHeight    = 12,
   fontsize = 8,
-  scaleFunction = nil,--- function that can be used to rescale graph - takes 0-1 and must return 0-1
+  scaleFunction = nil,-- function that can be used to rescale graph - takes 0-1 and must return 0-1
   color = {0,0,0,1},
 }
 

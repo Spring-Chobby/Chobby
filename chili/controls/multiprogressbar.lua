@@ -25,8 +25,8 @@ Multiprogressbar = Control:Inherit{
 
   scaleFunction = nil, --- function that can be used to rescale graph - takes 0-1 and must return 0-1
 
-
-  bars = {  -- list of bar components to display
+  -- list of bar components to display
+  bars = {  
 	{
 		color1 = {1,0,1,1},
 		color2 = {0.7,0,0.7,1},
