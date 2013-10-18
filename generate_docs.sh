@@ -1,1 +1,1 @@
-luadoc chili -d docs
+ldoc chili

@@ -1,5 +1,16 @@
 --//=============================================================================
 
+--- Multiprogressbar module
+
+--- Multiprogressbar fields.
+-- Inherits from Control.
+-- @see control.Control
+-- @table Multiprogressbar
+-- @bool[opt=false] drawBorder should the border be drawn?
+-- @tparam {r,g,b,a} borderColor specifies the border color (default: {1,0,0,1})
+-- @string[opt="horizontal"] orientation orientation of the progress bar
+-- @bool[opt=false] reverse reverse drawing orientation
+-- @tparam fnc scaleFunction scaling function that takes 0-1 and must return 0-1
 Multiprogressbar = Control:Inherit{
   classname = "multiprogressbar",
 
