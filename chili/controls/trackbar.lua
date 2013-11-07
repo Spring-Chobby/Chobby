@@ -43,7 +43,7 @@ end
 function Trackbar:New(obj)
   obj = inherited.New(self,obj)
 
-  if ((not obj.tooltip) or (obj.tooltip == '')) and (useValueTooltip ~= false) then
+  if ((not obj.tooltip) or (obj.tooltip == '')) and (obj.useValueTooltip ~= false) then
     obj.useValueTooltip = true
   end
 
