@@ -941,16 +941,16 @@ function Control:_SetupRTT(fnc, self_, drawInContentRect, ...)
 
 	gl.BlendFuncSeparate(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA, GL.ZERO, GL.ONE_MINUS_SRC_ALPHA)
 		fnc(self_, ...)
-
--- 		--//Render a red quad to indicate that RTT is used for the respective control
--- 		gl.Color(1,0,0,0.5)
--- 		if not drawInContentRect then
--- 			gl.Rect(self.x,self.y,self.x+50,self.y+50)
--- 		else
--- 			gl.Rect(0,0,50,50)
--- 		end
--- 		gl.Color(1,1,1,1)
-
+--[[
+		--//Render a red quad to indicate that RTT is used for the respective control
+		gl.Color(1,0,0,0.5)
+		if not drawInContentRect then
+			gl.Rect(self.x,self.y,self.x+50,self.y+50)
+		else
+			gl.Rect(0,0,50,50)
+		end
+		gl.Color(1,1,1,1)
+--]]
 	gl.Blending("reset")
 
 	gl.StencilTest(false)
