@@ -1,5 +1,25 @@
 --//=============================================================================
 
+--- Control module
+
+--- Control fields.
+-- Inherits from Object.
+-- @see object.Object
+-- @table Control
+-- @tparam {left,top,right,bottom} padding table of padding, (default {5,5,5,5})
+-- @number[opt=1.5] borderThickness border thickness in pixels
+-- @tparam {r,g,b,a} borderColor border color {r,g,b,a}, (default {1,1,1,0.6})
+-- @tparam {r,g,b,a} borderColor2 border color second {r,g,b,a}, (default {0,0,0,0.8})
+-- @tparam {r,g,b,a} backgroundColor background color {r,g,b,a}, (default {0.8,0.8,1,0.4})
+-- @tparam {r,g,b,a} focusColor focus color {r,g,b,a}, (default {0.2,0.2,1,0.6})
+-- @bool[opt=false] autosize whether size will be determined automatically
+-- @bool[opt=false] draggable can control be dragged
+-- @bool[opt=false] resizable can control be resized
+-- @int[opt=10] minWidth minimum width
+-- @int[opt=10] minHeight minimum height
+-- @int[opt=1e9] maxWidth maximum width
+-- @int[opt=1e9] maxHeight maximum height
+-- @tparam {func1,fun2,...} OnResize table of function listeners for size changes, (default {})
 Control = Object:Inherit{
   classname       = 'control',
   padding         = {5, 5, 5, 5},
@@ -119,7 +139,7 @@ function Control:New(obj)
   return obj
 end
 
-
+--- Removes the control.
 function Control:Dispose(...)
   gl.DeleteList(self._all_dlist)
   self._all_dlist = nil
@@ -152,11 +172,16 @@ end
 
 --//=============================================================================
 
+--- Sets the control's parent object.
+-- @tparam object.Object obj parent object
 function Control:SetParent(obj)
   inherited.SetParent(self,obj)
   self:RequestRealign()
 end
 
+--- Adds a child object to the control
+-- @tparam object.Object obj child object
+-- @param dontUpdate if true won't trigger a RequestRealign()
 function Control:AddChild(obj, dontUpdate)
   inherited.AddChild(self,obj)
   if (not dontUpdate) then
@@ -164,6 +189,8 @@ function Control:AddChild(obj, dontUpdate)
   end
 end
 
+--- Removes a child object from the control
+-- @tparam object.Object obj child object
 function Control:RemoveChild(obj)
   local found  = inherited.RemoveChild(self,obj)
   if (found) then
@@ -430,6 +457,13 @@ end
 
 --//=============================================================================
 
+--- Sets the control's position
+-- @int x x-coordinate
+-- @int y y-coordinate
+-- @int w width
+-- @int h height
+-- @param clientArea TODO
+-- @bool dontUpdateRelative TODO
 function Control:SetPos(x, y, w, h, clientArea, dontUpdateRelative)
   local changed = false
   local redraw  = false
@@ -511,7 +545,13 @@ function Control:SetPos(x, y, w, h, clientArea, dontUpdateRelative)
   end
 end
 
-
+--- Sets the control's relative position
+-- @int x x-coordinate
+-- @int y y-coordinate
+-- @int w width
+-- @int h height
+-- @param clientArea TODO
+-- @bool dontUpdateRelative TODO
 function Control:SetPosRelative(x, y, w, h, clientArea, dontUpdateRelative)
   local changed = false
   local redraw  = false
@@ -597,6 +637,11 @@ function Control:SetPosRelative(x, y, w, h, clientArea, dontUpdateRelative)
   end
 end
 
+--- Resize the control 
+-- @int w width
+-- @int h height
+-- @param clientArea TODO
+-- @bool dontUpdateRelative TODO
 function Control:Resize(w, h, clientArea, dontUpdateRelative)
   self:SetPosRelative(nil, nil, w, h, clientArea, dontUpdateRelative)
 end
@@ -785,12 +830,14 @@ end
 
 --//=============================================================================
 
+--- Requests a redraw of the control.
 function Control:Invalidate()
 	self._needRedraw = true
 	self._needRedrawSelf = nil
 	self:RequestUpdate()
 end
 
+--- Requests a redraw of the control.
 function Control:InvalidateSelf()
 	self._needRedraw = true
 	self._needRedrawSelf = true

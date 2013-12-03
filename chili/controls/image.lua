@@ -1,5 +1,15 @@
 --//=============================================================================
 
+--- Image module
+
+--- Image fields.
+-- Inherits from Control.
+-- @see button.Button
+-- @table Image
+-- @tparam {r,g,b,a} color color, (default {1,1,1,1})
+-- @string[opt=nil] file path
+-- @bool[opt=true] keepAspect aspect should be kept
+-- @tparam {func1,func2} OnClick function listeners to be invoked on click (default {})
 Image = Button:Inherit{
   classname= "image",
 

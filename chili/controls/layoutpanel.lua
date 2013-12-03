@@ -11,6 +11,26 @@
 --// This doesn't affect simple containers like grids & stackcontrols, which
 --// don't create any controls themselves (instead they just align their children).
 
+--- LayoutPanel module
+
+--- LayoutPanel fields.
+-- Inherits from Control.
+-- @see control.Control
+-- @table LayoutPanel
+-- @tparam {left,top,right,bottom} itemPadding table of item padding, (default {5,5,5,5})
+-- @tparam {left,top,right,bottom} itemMargin table of item margin, (default {5,5,5,5})
+-- @int[opt=1] minWidth minimum item width
+-- @int[opt=0] maxWidth maximum item width
+-- @int[opt=1] minHeight minimum item height
+-- @int[opt=0] maxHeight maximum item height
+-- @string[opt="horizontal] orientation orientation of the items
+-- @bool[opt=false] resizeItems items are resized
+-- @bool[opt=true] centerItems items are centered
+-- @bool[opt=false] selectable items can be selected
+-- @bool[multiSelect=true] multiSelect multiple items can be selected
+-- @tparam {func1,func2,...} OnSelectItem function listeners to be called on item selection change (default {})
+-- @tparam {func1,func2,...} OnDrawItem function listeners to be called when an item is drawn (default {})
+-- @tparam (func1,func2,...} OnDblClickItem function listeners to be called on double click (default {})
 LayoutPanel = Control:Inherit{
   classname = "layoutpanel",
 
@@ -67,6 +87,8 @@ end
 
 --//=============================================================================
 
+--- Set the panel's orientation
+-- @string orientation new orientation
 function LayoutPanel:SetOrientation(orientation)
   self.orientation = orientation
   inherited.UpdateClientArea(self)
@@ -845,7 +867,8 @@ function LayoutPanel:MultiRectSelect(item1,item2,append)
   self:Invalidate()
 end
 
-
+--- Toggle item selection
+-- @int itemIdx id of the item for which the selection will be toggled
 function LayoutPanel:ToggleItem(itemIdx)
   local newstate = not self.selectedItems[itemIdx]
   self.selectedItems[itemIdx] = newstate
@@ -854,7 +877,9 @@ function LayoutPanel:ToggleItem(itemIdx)
   self:Invalidate()
 end
 
-
+--- Select the item
+-- @int itemIdx id of the item to be selected
+-- @bool append whether the old selection should be kept
 function LayoutPanel:SelectItem(itemIdx, append)
   if (self.selectedItems[itemIdx]) then
     return
@@ -876,7 +901,8 @@ function LayoutPanel:SelectItem(itemIdx, append)
   self:Invalidate()
 end
 
-
+--- Deselect item
+-- @int itemIdx id of the item to deselect
 function LayoutPanel:DeselectItem(itemIdx)
   if (not self.selectedItems[itemIdx]) then
     return
@@ -888,14 +914,14 @@ function LayoutPanel:DeselectItem(itemIdx)
   self:Invalidate()
 end
 
-
+--- Select all items
 function LayoutPanel:SelectAll()
   for i=1,#self.children do
     self:SelectItem(i, append)
   end
 end
 
-
+--- Deselect all items
 function LayoutPanel:DeselectAll()
   for idx in pairs(self.selectedItems) do
     self:DeselectItem(idx)
