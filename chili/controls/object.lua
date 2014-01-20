@@ -48,6 +48,7 @@ Object = {
   OnMouseOver     = {},
   OnMouseOut      = {},
   OnKeyPress      = {},
+  OnTextInput     = {},
   OnFocusUpdate   = {},
 
   disableChildrenHitTest = false, --// if set childrens are not clickable/draggable etc - their mouse events are not processed
@@ -925,6 +926,15 @@ end
 
 function Object:KeyPress(...)
   if (self:CallListeners(self.OnKeyPress, ...)) then
+    return self
+  end
+
+  return false
+end
+
+
+function Object:TextInput(...)
+  if (self:CallListeners(self.OnTextInput, ...)) then
     return self
   end
 

@@ -276,6 +276,7 @@ function Screen:MouseWheel(x,y,...)
   return (not not inherited.MouseWheel(self,x,y,...))
 end
 
+
 function Screen:KeyPress(...)
 	local focusedControl = UnlinkSafe(self.focusedControl)
 	if focusedControl then
@@ -283,5 +284,15 @@ function Screen:KeyPress(...)
 	end
 	return (not not inherited:KeyPress(...))
 end
+
+
+function Screen:TextInput(...)
+        local focusedControl = UnlinkSafe(self.focusedControl)
+        if focusedControl then
+                return (not not focusedControl:TextInput(...))
+        end
+        return (not not inherited:TextInput(...))
+end
+
 
 --//=============================================================================

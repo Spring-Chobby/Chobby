@@ -150,7 +150,7 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	local txt = self.text
 	if key == KEYSYMS.RETURN then
 		return false
-	elseif key == KEYSYMS.BACKSPACE then
+	elseif key == KEYSYMS.BACKSPACE then --FIXME use Spring.GetKeyCode("backspace")
 		self.text, self.cursor = Utf8BackspaceAt(txt, cp)
 	elseif key == KEYSYMS.DELETE then
 		self.text   = Utf8DeleteAt(txt, cp)
@@ -188,4 +188,35 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	self:Invalidate()
 	return self
 end
+
+
+function EditBox:TextInput(utf8char, ...)
+	local unicode = utf8char
+	if (not self.allowUnicode) then
+		local success
+		success, unicode = pcall(string.char, utf8char)
+		if success then
+			success = not unicode:find("%c")
+		end
+		if (not success) then
+			unicode = nil
+		end
+	end
+
+	if unicode then
+		local cp  = self.cursor
+		local txt = self.text
+		self.text = txt:sub(1, cp - 1) .. unicode .. txt:sub(cp, #txt)
+		self.cursor = cp + unicode:len()
+	--else
+	--	return false
+	end
+
+	self._interactedTime = Spring.GetTimer()
+	inherited.TextInput(utf8char, ...)
+	self:UpdateLayout()
+	self:Invalidate()
+	return self
+end
+
 --//=============================================================================

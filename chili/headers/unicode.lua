@@ -12,6 +12,10 @@ end
 
 
 function UnicodeToUtf8(ch)
+	if (ch == 0) then
+		return nil
+	end
+
 	if     (ch < lsh(1,7)) then
 		return string.char(ch)
 	elseif (ch < lsh(1,11)) then

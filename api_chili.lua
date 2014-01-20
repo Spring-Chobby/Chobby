@@ -177,6 +177,10 @@ function widget:KeyRelease()
   return _keyPressed -- block engine actions when we processed it
 end
 
+function widget:TextInput(utf8, ...)
+  return screen0:TextInput(utf8, ...)
+end
+
 
 function widget:ViewResize(vsx, vsy)
 	screen0:Resize(vsx, vsy)
