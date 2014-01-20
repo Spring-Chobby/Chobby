@@ -266,19 +266,20 @@ end
 
 
 function ScrollPanel:_DrawInClientArea(fnc,...)
-  local clientX,clientY,clientWidth,clientHeight = unpack4(self.clientArea)
+	local clientX,clientY,clientWidth,clientHeight = unpack4(self.clientArea)
 
-  gl.PushMatrix()
-  gl.Translate(clientX - self.scrollPosX, clientY - self.scrollPosY, 0)
+	gl.PushMatrix()
+	gl.Translate(clientX - self.scrollPosX, clientY - self.scrollPosY, 0)
 
-  local sx,sy = self:LocalToScreen(clientX,clientY)
-  sy = select(2,gl.GetViewSizes()) - (sy + clientHeight)
-  PushLimitRenderRegion(self, sx, sy, clientWidth, clientHeight)
+	local sx,sy = self:LocalToScreen(clientX,clientY)
+	sy = select(2,gl.GetViewSizes()) - (sy + clientHeight)
 
-  fnc(...)
+	if PushLimitRenderRegion(self, sx, sy, clientWidth, clientHeight) then
+		fnc(...)
+		PopLimitRenderRegion(self, sx, sy, clientWidth, clientHeight)
+	end
 
-  PopLimitRenderRegion(self, sx, sy, clientWidth, clientHeight)
-  gl.PopMatrix()
+	gl.PopMatrix()
 end
 
 

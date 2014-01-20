@@ -921,6 +921,7 @@ function Control:_UpdateChildrenDList()
 
 	if self:InheritsFrom("scrollpanel") and not self._cantUseRTT then
 		local contentX,contentY,contentWidth,contentHeight = unpack4(self.contentArea)
+		if (contentWidth <= 0)or(contentHeight <= 0) then return end
 		self:CreateViewTexture("children", contentWidth, contentHeight, self.DrawChildrenForList, self, true)
 	end
 end
@@ -929,6 +930,7 @@ end
 function Control:_UpdateAllDList()
 	if not self.parent then return end
 	if not self:IsInView() then return end
+	if (self.width <= 0)or(self.height <= 0) then return end
 
 	local RTT = self:_CheckIfRTTisAppreciated()
 
@@ -1003,6 +1005,16 @@ function Control:_SetupRTT(fnc, self_, drawInContentRect, ...)
 	gl.StencilTest(false)
 end
 
+local staticRttTextureParams = {
+	min_filter = GL.NEAREST,
+	mag_filter = GL.NEAREST,
+	wrap_s     = GL.CLAMP,
+	wrap_t     = GL.CLAMP,
+	border     = false,
+}
+local staticDepthStencilTarget = {
+	format = GL_DEPTH24_STENCIL8,
+}
 
 function Control:CreateViewTexture(suffix_name, width, height, fnc, ...)
 	if not gl.CreateFBO or not gl.BlendFuncSeparate then
@@ -1029,16 +1041,8 @@ function Control:CreateViewTexture(suffix_name, width, height, fnc, ...)
 		gl.DeleteTexture(texColor)
 		gl.DeleteRBO(texStencil)
 
-		texColor = gl.CreateTexture(width, height, {
-			min_filter = GL.NEAREST,
-			mag_filter = GL.NEAREST,
-			wrap_s     = GL.CLAMP,
-			wrap_t     = GL.CLAMP,
-			border     = false,
-		})
-		texStencil = gl.CreateRBO(width, height, {
-			format = GL_DEPTH24_STENCIL8,
-		})
+		texColor   = gl.CreateTexture(width, height, staticRttTextureParams)
+		texStencil = gl.CreateRBO(width, height, staticDepthStencilTarget)
 
 		fbo.color0  = texColor
 		fbo.stencil = texStencil
@@ -1080,11 +1084,12 @@ function Control:_DrawInClientArea(fnc,...)
 
 	local sx,sy = self:LocalToScreen(clientX,clientY)
 	sy = select(2,gl.GetViewSizes()) - (sy + clientHeight)
-	PushLimitRenderRegion(self, sx, sy, clientWidth, clientHeight)
 
-	fnc(...)
+	if PushLimitRenderRegion(self, sx, sy, clientWidth, clientHeight) then
+		fnc(...)
+		PopLimitRenderRegion(self, sx, sy, clientWidth, clientHeight)
+	end
 
-	PopLimitRenderRegion(self, sx, sy, clientWidth, clientHeight)
 	gl.PopMatrix()
 end
 
@@ -1211,29 +1216,30 @@ function Control:DrawForList()
 		end
 	end
 
-	if (self._tex_children) then
-		gl.BlendFuncSeparate(GL.ONE, GL.SRC_ALPHA, GL.ZERO, GL.SRC_ALPHA)
-		gl.Color(1,1,1,1)
-		gl.Texture(0, self._tex_children)
-		local contX,contY,contWidth,contHeight = unpack4(self.contentArea)
-		local clientX,clientY,clientWidth,clientHeight = unpack4(self.clientArea)
-		local x = clientX
-		local y = clientY
-		local s = self.scrollPosX / contWidth
-		local t = 1 - self.scrollPosY / contHeight
-		local u = s + clientWidth / contWidth
-		local v = t - clientHeight / contHeight
-		gl.TexRect(x, y, x + clientWidth, y + clientHeight, s, t, u, v)
-		gl.Texture(0, false)
-		gl.BlendFuncSeparate(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA, GL.ZERO, GL.ONE_MINUS_SRC_ALPHA)
-	elseif (self._children_dlist) then
-		self:_DrawInClientArea(gl.CallList, self._children_dlist)
-	else
-		self:DrawChildrenForList()
-	end
+	local clientX,clientY,clientWidth,clientHeight = unpack4(self.clientArea)
+	if (clientWidth > 0)and(clientHeight > 0) then
+		if (self._tex_children) then
+			gl.BlendFuncSeparate(GL.ONE, GL.SRC_ALPHA, GL.ZERO, GL.SRC_ALPHA)
+			gl.Color(1,1,1,1)
+			gl.Texture(0, self._tex_children)
+			local contX,contY,contWidth,contHeight = unpack4(self.contentArea)
 
-	if (self.DrawControlPostChildren) then
-		self:DrawControlPostChildren()
+			local s = self.scrollPosX / contWidth
+			local t = 1 - self.scrollPosY / contHeight
+			local u = s + clientWidth / contWidth
+			local v = t - clientHeight / contHeight
+			gl.TexRect(clientX, clientY, clientX + clientWidth, clientY + clientHeight, s, t, u, v)
+			gl.Texture(0, false)
+			gl.BlendFuncSeparate(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA, GL.ZERO, GL.ONE_MINUS_SRC_ALPHA)
+		elseif (self._children_dlist) then
+			self:_DrawInClientArea(gl.CallList, self._children_dlist)
+		else
+			self:DrawChildrenForList()
+		end
+
+		if (self.DrawControlPostChildren) then
+			self:DrawControlPostChildren()
+		end
 	end
 
 	self:DrawGrips()
@@ -1244,6 +1250,7 @@ end
 function Control:Draw()
 	self._redrawCounter = (self._redrawCounter or 0) + 1
 	if (not self._in_update and not self._usingRTT and self:_CheckIfRTTisAppreciated()) then self:InvalidateSelf() end
+	if (self.width <= 0)or(self.height <= 0) then return end
 
 	if (self._tex_all) then
 		gl.PushMatrix()
