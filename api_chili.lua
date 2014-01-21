@@ -2,19 +2,19 @@
 --------------------------------------------------------------------------------
 
 function widget:GetInfo()
-  return {
-    name      = "Chili Framework",
-    desc      = "Hot GUI Framework",
-    author    = "jK",
-    date      = "WIP",
-    license   = "GPLv2",
-    version   = "2.1",
-    layer     = -1000,
-    enabled   = true,  --  loaded by default?
-    handler   = true,
-    api       = true,
-    hidden    = true,
-  }
+	return {
+		name      = "Chili Framework",
+		desc      = "Hot GUI Framework",
+		author    = "jK",
+		date      = "WIP",
+		license   = "GPLv2",
+		version   = "2.1",
+		layer     = -1000,
+		enabled   = true,  --  loaded by default?
+		handler   = true,
+		api       = true,
+		hidden    = true,
+	}
 end
 
 
@@ -32,7 +32,7 @@ local tf
 -- Chili's location
 
 local function GetDirectory(filepath)
-    return filepath and filepath:gsub("(.*/)(.*)", "%1")
+	return filepath and filepath:gsub("(.*/)(.*)", "%1")
 end
 
 assert(debug)
@@ -44,141 +44,153 @@ CHILI_DIRNAME = DIR .. "chili/"
 --------------------------------------------------------------------------------
 
 function widget:Initialize()
-  Chili = VFS.Include(CHILI_DIRNAME .. "core.lua", nil, VFS.RAW_FIRST)
+	Chili = VFS.Include(CHILI_DIRNAME .. "core.lua", nil, VFS.RAW_FIRST)
 
-  screen0 = Chili.Screen:New{}
-  th = Chili.TextureHandler
-  tk = Chili.TaskHandler
-  tf = Chili.FontHandler
+	screen0 = Chili.Screen:New{}
+	th = Chili.TextureHandler
+	tk = Chili.TaskHandler
+	tf = Chili.FontHandler
 
-  --// Export Widget Globals
-  WG.Chili = Chili
-  WG.Chili.Screen0 = screen0
+	--// Export Widget Globals
+	WG.Chili = Chili
+	WG.Chili.Screen0 = screen0
 
-  --// do this after the export to the WG table!
-  --// because other widgets use it with `parent=Chili.Screen0`,
-  --// but chili itself doesn't handle wrapped tables correctly (yet)
-  screen0 = Chili.DebugHandler.SafeWrap(screen0)
+	--// do this after the export to the WG table!
+	--// because other widgets use it with `parent=Chili.Screen0`,
+	--// but chili itself doesn't handle wrapped tables correctly (yet)
+	screen0 = Chili.DebugHandler.SafeWrap(screen0)
 end
 
 function widget:Shutdown()
-  --table.clear(Chili) the Chili table also is the global of the widget so it contains a lot more than chili's controls (pairs,select,...)
-  WG.Chili = nil
+	--table.clear(Chili) the Chili table also is the global of the widget so it contains a lot more than chili's controls (pairs,select,...)
+	WG.Chili = nil
 end
 
 function widget:Dispose()
-  screen0:Dispose()
+	screen0:Dispose()
 end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
 function widget:DrawScreen()
-  gl.Color(1,1,1,1)
-  if (not screen0:IsEmpty()) then
-    gl.PushMatrix()
-    local vsx,vsy = gl.GetViewSizes()
-    gl.Translate(0,vsy,0)
-    gl.Scale(1,-1,1)
-    screen0:Draw()
-    gl.PopMatrix()
-  end
-  gl.Color(1,1,1,1)
+	gl.Color(1,1,1,1)
+	if (not screen0:IsEmpty()) then
+		gl.PushMatrix()
+			local vsx,vsy = gl.GetViewSizes()
+			gl.Translate(0,vsy,0)
+			gl.Scale(1,-1,1)
+			screen0:Draw()
+		gl.PopMatrix()
+	end
+	gl.Color(1,1,1,1)
 end
 
 
 function widget:DrawLoadScreen()
-  gl.Color(1,1,1,1)
-  if (not screen0:IsEmpty()) then
-    gl.PushMatrix()
-    local vsx,vsy = gl.GetViewSizes()
-    gl.Scale(1/vsx,1/vsy,1)
-    gl.Translate(0,vsy,0)
-    gl.Scale(1,-1,1)
-    screen0:Draw()
-    gl.PopMatrix()
-  end
-  gl.Color(1,1,1,1)
+	gl.Color(1,1,1,1)
+	if (not screen0:IsEmpty()) then
+		gl.PushMatrix()
+			local vsx,vsy = gl.GetViewSizes()
+			gl.Scale(1/vsx,1/vsy,1)
+			gl.Translate(0,vsy,0)
+			gl.Scale(1,-1,1)
+			screen0:Draw()
+		gl.PopMatrix()
+	end
+	gl.Color(1,1,1,1)
 end
 
 
 function widget:TweakDrawScreen()
-  gl.Color(1,1,1,1)
-  if (not screen0:IsEmpty()) then
-    gl.PushMatrix()
-    local vsx,vsy = gl.GetViewSizes()
-    gl.Translate(0,vsy,0)
-    gl.Scale(1,-1,1)
-    screen0:TweakDraw()
-    gl.PopMatrix()
-  end
-  gl.Color(1,1,1,1)
+	gl.Color(1,1,1,1)
+	if (not screen0:IsEmpty()) then
+		gl.PushMatrix()
+			local vsx,vsy = gl.GetViewSizes()
+			gl.Translate(0,vsy,0)
+			gl.Scale(1,-1,1)
+			screen0:TweakDraw()
+		gl.PopMatrix()
+	end
+	gl.Color(1,1,1,1)
 end
 
 
 function widget:DrawGenesis()
-  gl.Color(1,1,1,1)
-  tf.Update()
-  th.Update()
-  tk.Update()
-  gl.Color(1,1,1,1)
+	gl.Color(1,1,1,1)
+	tf.Update()
+	th.Update()
+	tk.Update()
+	gl.Color(1,1,1,1)
 end
 
 
 function widget:IsAbove(x,y)
-  return screen0:IsAbove(x,y)
+	if Spring.IsGUIHidden() then return false end
+
+	return screen0:IsAbove(x,y)
 end
 
 
 local mods = {}
 function widget:MousePress(x,y,button)
-  local alt, ctrl, meta, shift = Spring.GetModKeyState()
-  mods.alt=alt; mods.ctrl=ctrl; mods.meta=meta; mods.shift=shift;
+	if Spring.IsGUIHidden() then return false end
 
-  return screen0:MouseDown(x,y,button,mods)
+	local alt, ctrl, meta, shift = Spring.GetModKeyState()
+	mods.alt=alt; mods.ctrl=ctrl; mods.meta=meta; mods.shift=shift;
+	return screen0:MouseDown(x,y,button,mods)
 end
 
 
 function widget:MouseRelease(x,y,button)
-  local alt, ctrl, meta, shift = Spring.GetModKeyState()
-  mods.alt=alt; mods.ctrl=ctrl; mods.meta=meta; mods.shift=shift;
+	if Spring.IsGUIHidden() then return false end
 
-  return screen0:MouseUp(x,y,button,mods)
+	local alt, ctrl, meta, shift = Spring.GetModKeyState()
+	mods.alt=alt; mods.ctrl=ctrl; mods.meta=meta; mods.shift=shift;
+	return screen0:MouseUp(x,y,button,mods)
 end
 
 
 function widget:MouseMove(x,y,dx,dy,button)
-  local alt, ctrl, meta, shift = Spring.GetModKeyState()
-  mods.alt=alt; mods.ctrl=ctrl; mods.meta=meta; mods.shift=shift;
+	if Spring.IsGUIHidden() then return false end
 
-  return screen0:MouseMove(x,y,dx,dy,button,mods)
+	local alt, ctrl, meta, shift = Spring.GetModKeyState()
+	mods.alt=alt; mods.ctrl=ctrl; mods.meta=meta; mods.shift=shift;
+	return screen0:MouseMove(x,y,dx,dy,button,mods)
 end
 
 
 function widget:MouseWheel(up,value)
-  local x,y = Spring.GetMouseState()
-  local alt, ctrl, meta, shift = Spring.GetModKeyState()
-  mods.alt=alt; mods.ctrl=ctrl; mods.meta=meta; mods.shift=shift;
+	if Spring.IsGUIHidden() then return false end
 
-  return screen0:MouseWheel(x,y,up,value,mods)
+	local x,y = Spring.GetMouseState()
+	local alt, ctrl, meta, shift = Spring.GetModKeyState()
+	mods.alt=alt; mods.ctrl=ctrl; mods.meta=meta; mods.shift=shift;
+	return screen0:MouseWheel(x,y,up,value,mods)
 end
 
 
 local keyPressed = true
 function widget:KeyPress(key, mods, isRepeat, label, unicode)
-  keyPressed = screen0:KeyPress(key, mods, isRepeat, label, unicode)
-  return keyPressed
+	if Spring.IsGUIHidden() then return false end
+
+	keyPressed = screen0:KeyPress(key, mods, isRepeat, label, unicode)
+	return keyPressed
 end
 
 
 function widget:KeyRelease()
-  local _keyPressed = keyPressed
-  keyPressed = false
-  return _keyPressed -- block engine actions when we processed it
+	if Spring.IsGUIHidden() then return false end
+
+	local _keyPressed = keyPressed
+	keyPressed = false
+	return _keyPressed -- block engine actions when we processed it
 end
 
 function widget:TextInput(utf8, ...)
-  return screen0:TextInput(utf8, ...)
+	if Spring.IsGUIHidden() then return false end
+
+	return screen0:TextInput(utf8, ...)
 end
 
 
