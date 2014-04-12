@@ -2,8 +2,6 @@
 
 --- EditBox module
 
-include("keysym.h.lua")
-
 --- EditBox fields.
 -- Inherits from Control.
 -- @see control.Control
@@ -154,7 +152,7 @@ end
 function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	local cp = self.cursor
 	local txt = self.text
-	if key == KEYSYMS.BACKSPACE then --FIXME use Spring.GetKeyCode("backspace")
+	if key == Spring.GetKeyCode("backspace") then
         if self.selStart == nil then
             self.text, self.cursor = Utf8BackspaceAt(txt, cp)
         else
@@ -168,7 +166,7 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
                 self.text, self.cursor = Utf8BackspaceAt(self.text, self.cursor)
             end
         end
-	elseif key == KEYSYMS.DELETE then
+	elseif key == Spring.GetKeyCode("delete") then
         if self.selStart == nil then
 		    self.text   = Utf8DeleteAt(txt, cp)
         else
@@ -182,15 +180,15 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
                 self.text, self.cursor = Utf8BackspaceAt(self.text, self.cursor)
             end
         end
-	elseif key == KEYSYMS.LEFT then
+	elseif key == Spring.GetKeyCode("left") then
 		self.cursor = Utf8PrevChar(txt, cp)
-	elseif key == KEYSYMS.RIGHT then
+	elseif key == Spring.GetKeyCode("right") then
 		self.cursor = Utf8NextChar(txt, cp)
-	elseif key == KEYSYMS.HOME then
+	elseif key == Spring.GetKeyCode("home") then
 		self.cursor = 1
-	elseif key == KEYSYMS.END then
+	elseif key == Spring.GetKeyCode("end") then
 		self.cursor = #txt + 1
-	elseif key ~= KEYSYMS.RETURN and key ~= KEYSYMS.KP_ENTER then
+	elseif key ~= Spring.GetKeyCode("enter") and key ~= Spring.GetKeyCode("numpad_enter") then
 		local utf8char = UnicodeToUtf8(unicode)
 		if (not self.allowUnicode) then
 			local success
@@ -211,7 +209,7 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 		end
 	end
     if mods.shift and 
-        (key == KEYSYMS.LEFT or key == KEYSYMS.RIGHT or key == KEYSYMS.HOME or key == KEYSYMS.END) then
+        (key == Spring.GetKeyCode("left") or key == Spring.GetKeyCode("right") or key == Spring.GetKeyCode("home") or key == Spring.GetKeyCode("end")) then
         if not self.selStart then
             self.selStart = cp
         end
