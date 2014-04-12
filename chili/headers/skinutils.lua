@@ -262,6 +262,12 @@ local function _DrawCursor(x, y, w, h)
 	gl.Vertex(x + w, y + h)
 end
 
+local function _DrawSelection(x, y, w, h)
+	gl.Vertex(x, y)
+	gl.Vertex(x, y + h)
+	gl.Vertex(x + w, y)
+	gl.Vertex(x + w, y + h)
+end
 
 --//=============================================================================
 --//
@@ -445,7 +451,7 @@ function DrawEditBox(obj)
 			local rightX = obj.font:GetTextWidth(rightTxt)
 
             local w = rightX - leftX
-			gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawCursor, leftX + clientX - 1, clientY, w, clientHeight)
+			gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawSelection, leftX + clientX - 1, clientY, w, clientHeight)
         end
 	end
 end
