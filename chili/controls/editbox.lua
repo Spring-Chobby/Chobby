@@ -1,6 +1,18 @@
 --//=============================================================================
+
+--- EditBox module
+
 include("keysym.h.lua")
 
+--- EditBox fields.
+-- Inherits from Control.
+-- @see control.Control
+-- @table EditBox
+-- @tparam {r,g,b,a} cursorColor cursor color, (default {0,0,1,0.7})
+-- @string[opt="left"] align alignment
+-- @string[opt="linecenter"] valign vertical alignment
+-- @string[opt=""] text text contained in the editbox
+-- @int[opt=1] cursor cursor position
 EditBox = Control:Inherit{
   classname= "editbox",
 
@@ -17,6 +29,8 @@ EditBox = Control:Inherit{
   text   = "",
   cursor = 1,
   offset = 1,
+
+  allowUnicode = true,
 }
 
 local this = EditBox
@@ -38,6 +52,8 @@ end
 
 --//=============================================================================
 
+--- Sets the EditBox text
+-- @string newtext text to be set
 function EditBox:SetText(newtext)
 	if (self.text == newtext) then return end
 	self.text = newtext
@@ -128,46 +144,42 @@ function EditBox:MouseUp(...)
 	return self
 end
 
+
 function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	local cp = self.cursor
 	local txt = self.text
 	if key == KEYSYMS.RETURN then
 		return false
-	elseif key == KEYSYMS.BACKSPACE then
-		if #txt > 0 and cp > 1 then
-			self.cursor = cp - 1
-			self.text = txt:sub(1, cp - 2) .. txt:sub(cp, #txt)
-		end
+	elseif key == KEYSYMS.BACKSPACE then --FIXME use Spring.GetKeyCode("backspace")
+		self.text, self.cursor = Utf8BackspaceAt(txt, cp)
 	elseif key == KEYSYMS.DELETE then
-		if #txt > 0 and cp <= #txt then
-			self.text = txt:sub(1, cp - 1) .. txt:sub(cp + 1, #txt)
-		end
+		self.text   = Utf8DeleteAt(txt, cp)
 	elseif key == KEYSYMS.LEFT then
-		if cp > 1 then
-			self.cursor = cp - 1
-		end
+		self.cursor = Utf8PrevChar(txt, cp)
 	elseif key == KEYSYMS.RIGHT then
-		if cp <= #txt then
-			self.cursor = cp + 1
-		end
+		self.cursor = Utf8NextChar(txt, cp)
 	elseif key == KEYSYMS.HOME then
 		self.cursor = 1
 	elseif key == KEYSYMS.END then
 		self.cursor = #txt + 1
 	else
-		local char = nil
-		local success, char = pcall(string.char, unicode)
-		if success then
-			success = not char:find("%c")
+		local utf8char = UnicodeToUtf8(unicode)
+		if (not self.allowUnicode) then
+			local success
+			success, utf8char = pcall(string.char, unicode)
+			if success then
+				success = not utf8char:find("%c")
+			end
+			if (not success) then
+				utf8char = nil
+			end
 		end
-		if not success then
-			char = nil
-		end
-		if char then
-			self.text = txt:sub(1, cp - 1) .. char .. txt:sub(cp, #txt)
-			self.cursor = cp + 1
-		else
-			return false
+
+		if utf8char then
+			self.text = txt:sub(1, cp - 1) .. utf8char .. txt:sub(cp, #txt)
+			self.cursor = cp + utf8char:len()
+		--else
+		--	return false
 		end
 	end
 	self._interactedTime = Spring.GetTimer()
@@ -176,4 +188,35 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	self:Invalidate()
 	return self
 end
+
+
+function EditBox:TextInput(utf8char, ...)
+	local unicode = utf8char
+	if (not self.allowUnicode) then
+		local success
+		success, unicode = pcall(string.char, utf8char)
+		if success then
+			success = not unicode:find("%c")
+		end
+		if (not success) then
+			unicode = nil
+		end
+	end
+
+	if unicode then
+		local cp  = self.cursor
+		local txt = self.text
+		self.text = txt:sub(1, cp - 1) .. unicode .. txt:sub(cp, #txt)
+		self.cursor = cp + unicode:len()
+	--else
+	--	return false
+	end
+
+	self._interactedTime = Spring.GetTimer()
+	inherited.TextInput(utf8char, ...)
+	self:UpdateLayout()
+	self:Invalidate()
+	return self
+end
+
 --//=============================================================================

@@ -1,5 +1,13 @@
 --//=============================================================================
 
+--- TabPanel module
+
+--- TabPanel fields.
+-- Inherits from LayoutPanel.
+-- @see layoutpanel.LayoutPanel
+-- @table TabPanel
+-- @tparam {tab1,tab2,...} tabs contained in the tab panel, each tab has a .name (string) and a .children field (table of Controls)(default {})
+-- @tparam chili.Control currentTab currently visible tab
 TabPanel = LayoutPanel:Inherit{
   classname = "tabpanel",
   orientation = "vertical",
@@ -7,6 +15,8 @@ TabPanel = LayoutPanel:Inherit{
   itemPadding = {0, 0, 0, 0},
   itemMargin  = {0, 0, 0, 0},
   barHeight = 40,
+  tabs = {},
+  currentTab = {},
 }
 
 local this = TabPanel

@@ -1,3 +1,16 @@
+--- Screen module
+
+--- Screen fields.
+-- Inherits from Object.
+-- @see object.Object
+-- @table Screen
+-- @int[opt=0] x x position
+-- @int[opt=0] y y position
+-- @int[opt=0] width width
+-- @int[opt=0] height height
+-- @tparam control.Control activeControl active control
+-- @tparam control.Control focusedControl focused control
+-- @tparam control.Control hoveredControl hovered control
 Screen = Object:Inherit{
 --Screen = Control:Inherit{
   classname = 'screen',
@@ -263,6 +276,7 @@ function Screen:MouseWheel(x,y,...)
   return (not not inherited.MouseWheel(self,x,y,...))
 end
 
+
 function Screen:KeyPress(...)
 	local focusedControl = UnlinkSafe(self.focusedControl)
 	if focusedControl then
@@ -270,5 +284,15 @@ function Screen:KeyPress(...)
 	end
 	return (not not inherited:KeyPress(...))
 end
+
+
+function Screen:TextInput(...)
+        local focusedControl = UnlinkSafe(self.focusedControl)
+        if focusedControl then
+                return (not not focusedControl:TextInput(...))
+        end
+        return (not not inherited:TextInput(...))
+end
+
 
 --//=============================================================================

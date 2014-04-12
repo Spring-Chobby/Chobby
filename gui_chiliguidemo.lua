@@ -42,21 +42,17 @@ function widget:Initialize()
 	local testText =
 	[[Bolivians are voting in a referendum on a new constitution that President Evo Morales says will empower the country's indigenous majority.
 
-The changes also include strengthening state control of Bolivia's natural resources, and no longer recognising Catholicism as the official religion.
+Около 863 года братья Константин (Кирилл) Философ и Мефодий из Солуни (Салоники) по приказу византийского императора Михаила III упорядочили письменность для старославянского языка и использовали новую азбуку.
 
-The constitution is widely expected to be approved.
-Mr Morales, an Aymara Indian, has pursued political reform but has met fierce resistance from some sectors.
-Opponents concentrated in Bolivia's eastern provinces, which hold rich gas deposits, argue that the new constitution would create two classes of citizenship - putting indigenous people ahead of others.
+日本は集団的自衛被告とする権利を行使することができるように、政府は憲法解釈にのみ「最小」変更を行うことがあります...
 
-The wrangling has spilled over into, at times, deadly violence. At least 30 peasant farmers were ambushed and killed on their way home from a pro-government rally in a northern region in September.
-
-President Morales has said the new constitution will pave the way for correcting the historic inequalities of Bolivian society, where the economic elite is largely of European descent.
+Եբրայերեն (עברית - իվրիտ, իվղիտ)՝ Սեմական լեզվաընտանիքի լեզու։
 ]]
 
-	local testText2 = 
+	local testText2 =
 	"\255\001\255\250Bolivians\b are voting in a referendum on a \255\255\255\000new\b constitution "
 
-	local testText3 = 
+	local testText3 =
 	[[Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod]]
 
 	--------------------------------------------------------------------------------
@@ -179,20 +175,30 @@ President Morales has said the new constitution will pave the way for correcting
 			Chili.TextBox:New{x=0, right=0, y=0, text = testText2},
 			Chili.EditBox:New{width = 200, y = 40, --[[autosize = true,]] text = testText3},
 			Chili.ComboBox:New{right = 10, x = 0, y = 90, items = { "opt1", "opt2", "opt3", "opt4", "opt5", "opt6", "opt7", "opt8", "opt9", "opt10", "opt11", "opt12", }},
+			Chili.Image:New{ x=0, right=0, y=120, file = "#1" },
 			Chili.Button:New{
 				caption = "Dispose Me",
 				name = "btn_dispose_me2",
 				x="5%", y=70,
 				width = "90%",
+				Update = function(self, ...)
+					--NOTE: this is performance-wise the _worst_ possible way to make animation
+					Chili.Button.Update(self, ...)
+					self.backgroundColor = {math.sin(os.clock() * 4) * 0.5 + 0.5, 0, 0, 1}
+					self:Invalidate()
+					self:RequestUpdate()
+				end,
 				OnClick = {function(self) self:Dispose() end},
 			},
 			Chili.Button:New{
-				caption = "Dispose Me",
+				-- gets disposed in widget:Update
+				caption = "Dispose Me 2",
 				name = "btn_dispose_me3",
 				x="5%", y=90,
 				width = "90%",
 			},
 			Chili.Button:New{
+				-- gets disposed below
 				caption = "Dispose Me",
 				name = "btn_dispose_me4",
 				x=0, y=120,
@@ -249,8 +255,8 @@ President Morales has said the new constitution will pave the way for correcting
 	--------------------------------------------------------------------------------
 
 	window1 = Chili.Window:New{
-		x = 450,  
-		y = 200,  
+		x = 450,
+		y = 200,
 		clientWidth  = 200,
 		clientHeight = 200,
 		resizable = true,

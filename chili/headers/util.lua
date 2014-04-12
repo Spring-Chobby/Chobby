@@ -135,41 +135,45 @@ local function FreeVector4(t)
 end
 
 local function PushScissor(_,x,y,w,h)
-  local right = x+w
-  local bottom = y+h
-  if (right > curScissor[3]) then
-    right = curScissor[3]
-  end
-  if (bottom > curScissor[4]) then
-    bottom = curScissor[4]
-  end
-  if (x < curScissor[1]) then
-    x = curScissor[1]
-  end
-  if (y < curScissor[2]) then
-    y = curScissor[2]
-  end
-  curScissor = {x,y,right,bottom}
-  --curScissor = GetVector4()
-  --curScissor[1] = x; curScissor[2] = y; curScissor[3] = right; curScissor[4] = bottom;
-  stackN = stackN + 1
-  stack[stackN] = curScissor
+	local right  = x + w
+	local bottom = y + h
+	if (right  > curScissor[3]) then right  = curScissor[3] end
+	if (bottom > curScissor[4]) then bottom = curScissor[4] end
+	if (x < curScissor[1]) then x = curScissor[1] end
+	if (y < curScissor[2]) then y = curScissor[2] end
 
-  gl.Scissor(x,y,right - x,bottom - y)
+	w = right  - x
+	h = bottom - y
+	if (w < 0) or (h < 0) then
+		--// scissor is null space -> don't render at all
+		return false
+	end
+
+	--curScissor = {x,y,right,bottom}
+	curScissor = GetVector4()
+	curScissor[1] = x; curScissor[2] = y; curScissor[3] = right; curScissor[4] = bottom;
+	stackN = stackN + 1
+	stack[stackN] = curScissor
+
+	gl.Scissor(x,y,w,h)
+	return true
 end
 
 
 local function PopScissor()
-  --FreeVector4(stack[stackN])
-  stack[stackN] = nil
-  stackN = stackN - 1
-  curScissor = stack[stackN]
-  if (stackN == 1) then
-    gl.Scissor(false)
-  else
-    local x,y, right,bottom = unpack4(curScissor)
-    gl.Scissor(x,y,right - x,bottom - y)
-  end
+	FreeVector4(curScissor)
+	stack[stackN] = nil
+	stackN = stackN - 1
+	curScissor = stack[stackN]
+	assert(stackN >= 1)
+	if (stackN == 1) then
+		gl.Scissor(false)
+	else
+		local x,y, right,bottom = unpack4(curScissor)
+		local w = right  - x
+		local h = bottom - y
+		gl.Scissor(x,y,w,h)
+	end
 end
 
 
@@ -195,6 +199,7 @@ local function PushStencilMask(obj, x,y,w,h)
 	gl.ColorMask(true)
 	gl.StencilFunc(GL.EQUAL, obj._stencilMask, 0xFF)
 	gl.StencilOp(GL_KEEP, GL_KEEP, GL_KEEP)
+	return true
 end
 
 local function PopStencilMask(obj, x,y,w,h)
@@ -236,9 +241,9 @@ end
 
 function PushLimitRenderRegion(...)
 	if inRTT then
-		PushStencilMask(...)
+		return PushStencilMask(...)
 	else
-		PushScissor(...)
+		return PushScissor(...)
 	end
 end
 

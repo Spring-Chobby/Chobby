@@ -1,5 +1,20 @@
 --//=============================================================================
 
+--- ScrollPanel module
+
+--- ScrollPanel fields.
+-- Inherits from Control.
+-- @see control.Control
+-- @table ScrollPanel
+-- @int[opt=12] scrollBarSize size of the scrollbar
+-- @int[opt=0] scrollPosX position of the scrollbar
+-- @int[opt=0] scrollPosY position of the scrollbar
+-- @bool[opt=true] verticalScrollbar the vertical scroll bar is enabled
+-- @bool[opt=true] horizontalScrollbar the horizontal scroll bar is enabled
+-- @bool[opt=true] smoothScroll smooth scroll is enabled
+-- @bool[opt=false] verticalSmartScroll if control is scrolled to bottom, keep scroll when layout changes
+-- @number[opt=0.7] smoothScrollTime time of the smooth scroll, in seconds
+-- @bool[opt=false] ignoreMouseWheel mouse wheel scrolling is enabled
 ScrollPanel = Control:Inherit{
   classname     = "scrollpanel",
   padding       = {0,0,0,0},
@@ -9,9 +24,9 @@ ScrollPanel = Control:Inherit{
   scrollPosY    = 0,
   verticalScrollbar   = true,
   horizontalScrollbar = true,
-  verticalSmartScroll = false, --// if control is scrolled to bottom, keep scroll when layout changes
+  verticalSmartScroll = false, 
   smoothScroll     = true,
-  smoothScrollTime = 0.7, --// in seconds
+  smoothScrollTime = 0.7, 
   ignoreMouseWheel = false,
 }
 
@@ -26,6 +41,9 @@ end
 
 --//=============================================================================
 
+--- Sets the scroll position
+-- @int x x position
+-- @int y y position
 function ScrollPanel:SetScrollPos(x,y,inview,smoothscroll)
   local dosmooth = self.smoothScroll and (smoothscroll or (smoothscroll == nil))
   if dosmooth then
@@ -248,19 +266,20 @@ end
 
 
 function ScrollPanel:_DrawInClientArea(fnc,...)
-  local clientX,clientY,clientWidth,clientHeight = unpack4(self.clientArea)
+	local clientX,clientY,clientWidth,clientHeight = unpack4(self.clientArea)
 
-  gl.PushMatrix()
-  gl.Translate(clientX - self.scrollPosX, clientY - self.scrollPosY, 0)
+	gl.PushMatrix()
+	gl.Translate(clientX - self.scrollPosX, clientY - self.scrollPosY, 0)
 
-  local sx,sy = self:LocalToScreen(clientX,clientY)
-  sy = select(2,gl.GetViewSizes()) - (sy + clientHeight)
-  PushLimitRenderRegion(self, sx, sy, clientWidth, clientHeight)
+	local sx,sy = self:LocalToScreen(clientX,clientY)
+	sy = select(2,gl.GetViewSizes()) - (sy + clientHeight)
 
-  fnc(...)
+	if PushLimitRenderRegion(self, sx, sy, clientWidth, clientHeight) then
+		fnc(...)
+		PopLimitRenderRegion(self, sx, sy, clientWidth, clientHeight)
+	end
 
-  PopLimitRenderRegion(self, sx, sy, clientWidth, clientHeight)
-  gl.PopMatrix()
+	gl.PopMatrix()
 end
 
 
@@ -302,7 +321,7 @@ function ScrollPanel:MouseDown(x, y, ...)
     self._hscrolling  = true
     local clientArea = self.clientArea
     local cx = x - clientArea[1]
-    self:SetScrollPos(nil, (cx/clientArea[3])*self.contentArea[3], true, false)
+    self:SetScrollPos((cx/clientArea[3])*self.contentArea[3], nil, true, false)
     return self
   end
 
@@ -320,7 +339,7 @@ function ScrollPanel:MouseMove(x, y, dx, dy, ...)
   if self._hscrolling then
     local clientArea = self.clientArea
     local cx = x - clientArea[1]
-    self:SetScrollPos(nil, (cx/clientArea[3])*self.contentArea[3], true, false)
+    self:SetScrollPos((cx/clientArea[3])*self.contentArea[3], nil, true, false)
     return self
   end
 
@@ -348,7 +367,7 @@ function ScrollPanel:MouseUp(x, y, ...)
     self._hscrolling = nil
     local clientArea = self.clientArea
     local cx = x - clientArea[1]
-    self:SetScrollPos(nil, (cx/clientArea[3])*self.contentArea[3], true, false)
+    self:SetScrollPos((cx/clientArea[3])*self.contentArea[3], nil, true, false)
     return self
   end
 

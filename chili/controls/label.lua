@@ -1,5 +1,14 @@
 --//=============================================================================
 
+--- Label module
+
+--- Label fields.
+-- Inherits from Control.
+-- @see control.Control
+-- @table Label
+-- @string[opt="left"] align alignment
+-- @string[opt="linecenter"] valign vertical alignment
+-- @string[opt="no text"] caption text to be displayed
 Label = Control:Inherit{
   classname= "label",
 
@@ -29,6 +38,8 @@ end
 
 --//=============================================================================
 
+--- Set the label caption
+-- @string newcaption new caption to be set
 function Label:SetCaption(newcaption)
   if (self.caption == newcaption) then return end
   self.caption = newcaption

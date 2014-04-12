@@ -1,5 +1,25 @@
 --//=============================================================================
 
+--- Control module
+
+--- Control fields.
+-- Inherits from Object.
+-- @see object.Object
+-- @table Control
+-- @tparam {left,top,right,bottom} padding table of padding, (default {5,5,5,5})
+-- @number[opt=1.5] borderThickness border thickness in pixels
+-- @tparam {r,g,b,a} borderColor border color {r,g,b,a}, (default {1,1,1,0.6})
+-- @tparam {r,g,b,a} borderColor2 border color second {r,g,b,a}, (default {0,0,0,0.8})
+-- @tparam {r,g,b,a} backgroundColor background color {r,g,b,a}, (default {0.8,0.8,1,0.4})
+-- @tparam {r,g,b,a} focusColor focus color {r,g,b,a}, (default {0.2,0.2,1,0.6})
+-- @bool[opt=false] autosize whether size will be determined automatically
+-- @bool[opt=false] draggable can control be dragged
+-- @bool[opt=false] resizable can control be resized
+-- @int[opt=10] minWidth minimum width
+-- @int[opt=10] minHeight minimum height
+-- @int[opt=1e9] maxWidth maximum width
+-- @int[opt=1e9] maxHeight maximum height
+-- @tparam {func1,fun2,...} OnResize table of function listeners for size changes, (default {})
 Control = Object:Inherit{
   classname       = 'control',
   padding         = {5, 5, 5, 5},
@@ -54,6 +74,9 @@ Control = Object:Inherit{
   skinName        = nil,
 
   drawcontrolv2 = nil, --// disable backward support with old DrawControl gl state (with 2.1 self.xy translation isn't needed anymore)
+
+  useRTT = ((gl.CreateFBO and gl.BlendFuncSeparate) ~= nil),
+  useDLists = (gl.CreateList ~= nil) and false, --FIXME broken in combination with RTT (wrong blending)
 
   OnResize        = {},
 }
@@ -119,7 +142,7 @@ function Control:New(obj)
   return obj
 end
 
-
+--- Removes the control.
 function Control:Dispose(...)
   gl.DeleteList(self._all_dlist)
   self._all_dlist = nil
@@ -152,11 +175,16 @@ end
 
 --//=============================================================================
 
+--- Sets the control's parent object.
+-- @tparam object.Object obj parent object
 function Control:SetParent(obj)
   inherited.SetParent(self,obj)
   self:RequestRealign()
 end
 
+--- Adds a child object to the control
+-- @tparam object.Object obj child object
+-- @param dontUpdate if true won't trigger a RequestRealign()
 function Control:AddChild(obj, dontUpdate)
   inherited.AddChild(self,obj)
   if (not dontUpdate) then
@@ -164,6 +192,8 @@ function Control:AddChild(obj, dontUpdate)
   end
 end
 
+--- Removes a child object from the control
+-- @tparam object.Object obj child object
 function Control:RemoveChild(obj)
   local found  = inherited.RemoveChild(self,obj)
   if (found) then
@@ -430,6 +460,13 @@ end
 
 --//=============================================================================
 
+--- Sets the control's position
+-- @int x x-coordinate
+-- @int y y-coordinate
+-- @int w width
+-- @int h height
+-- @param clientArea TODO
+-- @bool dontUpdateRelative TODO
 function Control:SetPos(x, y, w, h, clientArea, dontUpdateRelative)
   local changed = false
   local redraw  = false
@@ -511,7 +548,13 @@ function Control:SetPos(x, y, w, h, clientArea, dontUpdateRelative)
   end
 end
 
-
+--- Sets the control's relative position
+-- @int x x-coordinate
+-- @int y y-coordinate
+-- @int w width
+-- @int h height
+-- @param clientArea TODO
+-- @bool dontUpdateRelative TODO
 function Control:SetPosRelative(x, y, w, h, clientArea, dontUpdateRelative)
   local changed = false
   local redraw  = false
@@ -597,6 +640,11 @@ function Control:SetPosRelative(x, y, w, h, clientArea, dontUpdateRelative)
   end
 end
 
+--- Resize the control 
+-- @int w width
+-- @int h height
+-- @param clientArea TODO
+-- @bool dontUpdateRelative TODO
 function Control:Resize(w, h, clientArea, dontUpdateRelative)
   self:SetPosRelative(nil, nil, w, h, clientArea, dontUpdateRelative)
 end
@@ -785,12 +833,14 @@ end
 
 --//=============================================================================
 
+--- Requests a redraw of the control.
 function Control:Invalidate()
 	self._needRedraw = true
 	self._needRedrawSelf = nil
 	self:RequestUpdate()
 end
 
+--- Requests a redraw of the control.
 function Control:InvalidateSelf()
 	self._needRedraw = true
 	self._needRedrawSelf = true
@@ -838,7 +888,11 @@ end
 --//=============================================================================
 
 function Control:_CheckIfRTTisAppreciated()
-	if self._cantUseRTT then
+	if (self.width <= 0)or(self.height <= 0) then
+		return false
+	end
+
+	if self._cantUseRTT or not(self.useRTT) then
 		return false
 	end
 
@@ -859,12 +913,10 @@ end
 function Control:_UpdateOwnDList()
 	if not self.parent then return end
 	if not self:IsInView() then return end
-
-	self:CallChildren('_UpdateOwnDList')
+	if not self.useDLists then return end
 
 	gl.DeleteList(self._own_dlist)
-	--self._own_dlist = nil
-	--self._own_dlist = gl.CreateList(self.DrawControl, self)
+	self._own_dlist = gl.CreateList(self.DrawControl, self)
 end
 
 
@@ -874,8 +926,14 @@ function Control:_UpdateChildrenDList()
 
 	if self:InheritsFrom("scrollpanel") and not self._cantUseRTT then
 		local contentX,contentY,contentWidth,contentHeight = unpack4(self.contentArea)
+		if (contentWidth <= 0)or(contentHeight <= 0) then return end
 		self:CreateViewTexture("children", contentWidth, contentHeight, self.DrawChildrenForList, self, true)
 	end
+
+	--FIXME
+	--if self.useDLists then
+	--	self._children_dlist = gl.CreateList(self.DrawChildrenForList, self, true)
+	--end
 end
 
 
@@ -884,6 +942,8 @@ function Control:_UpdateAllDList()
 	if not self:IsInView() then return end
 
 	local RTT = self:_CheckIfRTTisAppreciated()
+
+	gl.DeleteList(self._all_dlist)
 
 	if RTT then
 		self._usingRTT = true
@@ -895,19 +955,23 @@ function Control:_UpdateAllDList()
 		local fboName = "_fbo_" .. suffix_name
 		local texw = "_texw_" .. suffix_name
 		local texh = "_texh_" .. suffix_name
-		gl.DeleteFBO(self[fboName])
-		gl.DeleteTexture(self[texname])
-		gl.DeleteRBO(self[texStencilName])
+		if gl.DeleteFBO then
+			gl.DeleteFBO(self[fboName])
+			gl.DeleteTexture(self[texname])
+			gl.DeleteRBO(self[texStencilName])
+		end
 		self[texStencilName] = nil
 		self[texname] = nil
 		self[fboName] = nil
 		self[texw] = nil
 		self[texh] = nil
 		self._usingRTT = false
-	end
 
-	--gl.DeleteList(self._all_dlist)
-	--self._all_dlist = gl.CreateList(self.DrawForList,self)
+		--FIXME
+		--if self.useDLists then
+		--	self._all_dlist = gl.CreateList(self.DrawForList,self)
+		--end
+	end
 
 	if (self.parent)and(not self.parent._needRedraw)and(self.parent._UpdateAllDList) then
 		TaskHandler.RequestInstantUpdate(self.parent)
@@ -941,21 +1005,31 @@ function Control:_SetupRTT(fnc, self_, drawInContentRect, ...)
 
 	gl.BlendFuncSeparate(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA, GL.ZERO, GL.ONE_MINUS_SRC_ALPHA)
 		fnc(self_, ...)
-
--- 		--//Render a red quad to indicate that RTT is used for the respective control
--- 		gl.Color(1,0,0,0.5)
--- 		if not drawInContentRect then
--- 			gl.Rect(self.x,self.y,self.x+50,self.y+50)
--- 		else
--- 			gl.Rect(0,0,50,50)
--- 		end
--- 		gl.Color(1,1,1,1)
-
+--[[
+		--//Render a red quad to indicate that RTT is used for the respective control
+		gl.Color(1,0,0,0.5)
+		if not drawInContentRect then
+			gl.Rect(self.x,self.y,self.x+50,self.y+50)
+		else
+			gl.Rect(0,0,50,50)
+		end
+		gl.Color(1,1,1,1)
+--]]
 	gl.Blending("reset")
 
 	gl.StencilTest(false)
 end
 
+local staticRttTextureParams = {
+	min_filter = GL.NEAREST,
+	mag_filter = GL.NEAREST,
+	wrap_s     = GL.CLAMP,
+	wrap_t     = GL.CLAMP,
+	border     = false,
+}
+local staticDepthStencilTarget = {
+	format = GL_DEPTH24_STENCIL8,
+}
 
 function Control:CreateViewTexture(suffix_name, width, height, fnc, ...)
 	if not gl.CreateFBO or not gl.BlendFuncSeparate then
@@ -982,16 +1056,8 @@ function Control:CreateViewTexture(suffix_name, width, height, fnc, ...)
 		gl.DeleteTexture(texColor)
 		gl.DeleteRBO(texStencil)
 
-		texColor = gl.CreateTexture(width, height, {
-			min_filter = GL.NEAREST,
-			mag_filter = GL.NEAREST,
-			wrap_s     = GL.CLAMP,
-			wrap_t     = GL.CLAMP,
-			border     = false,
-		})
-		texStencil = gl.CreateRBO(width, height, {
-			format = GL_DEPTH24_STENCIL8,
-		})
+		texColor   = gl.CreateTexture(width, height, staticRttTextureParams)
+		texStencil = gl.CreateRBO(width, height, staticDepthStencilTarget)
 
 		fbo.color0  = texColor
 		fbo.stencil = texStencil
@@ -1033,11 +1099,12 @@ function Control:_DrawInClientArea(fnc,...)
 
 	local sx,sy = self:LocalToScreen(clientX,clientY)
 	sy = select(2,gl.GetViewSizes()) - (sy + clientHeight)
-	PushLimitRenderRegion(self, sx, sy, clientWidth, clientHeight)
 
-	fnc(...)
+	if PushLimitRenderRegion(self, sx, sy, clientWidth, clientHeight) then
+		fnc(...)
+		PopLimitRenderRegion(self, sx, sy, clientWidth, clientHeight)
+	end
 
-	PopLimitRenderRegion(self, sx, sy, clientWidth, clientHeight)
 	gl.PopMatrix()
 end
 
@@ -1164,29 +1231,30 @@ function Control:DrawForList()
 		end
 	end
 
-	if (self._tex_children) then
-		gl.BlendFuncSeparate(GL.ONE, GL.SRC_ALPHA, GL.ZERO, GL.SRC_ALPHA)
-		gl.Color(1,1,1,1)
-		gl.Texture(0, self._tex_children)
-		local contX,contY,contWidth,contHeight = unpack4(self.contentArea)
-		local clientX,clientY,clientWidth,clientHeight = unpack4(self.clientArea)
-		local x = clientX
-		local y = clientY
-		local s = self.scrollPosX / contWidth
-		local t = 1 - self.scrollPosY / contHeight
-		local u = s + clientWidth / contWidth
-		local v = t - clientHeight / contHeight
-		gl.TexRect(x, y, x + clientWidth, y + clientHeight, s, t, u, v)
-		gl.Texture(0, false)
-		gl.BlendFuncSeparate(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA, GL.ZERO, GL.ONE_MINUS_SRC_ALPHA)
-	elseif (self._children_dlist) then
-		self:_DrawInClientArea(gl.CallList, self._children_dlist)
-	else
-		self:DrawChildrenForList()
-	end
+	local clientX,clientY,clientWidth,clientHeight = unpack4(self.clientArea)
+	if (clientWidth > 0)and(clientHeight > 0) then
+		if (self._tex_children) then
+			gl.BlendFuncSeparate(GL.ONE, GL.SRC_ALPHA, GL.ZERO, GL.SRC_ALPHA)
+			gl.Color(1,1,1,1)
+			gl.Texture(0, self._tex_children)
+			local contX,contY,contWidth,contHeight = unpack4(self.contentArea)
 
-	if (self.DrawControlPostChildren) then
-		self:DrawControlPostChildren()
+			local s = self.scrollPosX / contWidth
+			local t = 1 - self.scrollPosY / contHeight
+			local u = s + clientWidth / contWidth
+			local v = t - clientHeight / contHeight
+			gl.TexRect(clientX, clientY, clientX + clientWidth, clientY + clientHeight, s, t, u, v)
+			gl.Texture(0, false)
+			gl.BlendFuncSeparate(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA, GL.ZERO, GL.ONE_MINUS_SRC_ALPHA)
+		elseif (self._children_dlist) then
+			self:_DrawInClientArea(gl.CallList, self._children_dlist)
+		else
+			self:DrawChildrenForList()
+		end
+
+		if (self.DrawControlPostChildren) then
+			self:DrawControlPostChildren()
+		end
 	end
 
 	self:DrawGrips()
@@ -1410,10 +1478,16 @@ function Control:MouseWheel(x, y, ...)
   return inherited.MouseWheel(self, cx, cy, ...)
 end
 
-
+--[[
 function Control:KeyPress(...)
   return inherited.KeyPress(self, ...)
 end
+
+
+function Control:TextInput(...)
+  return inherited.TextInput(self, ...)
+end
+--]]
 
 
 function Control:FocusUpdate(...)
