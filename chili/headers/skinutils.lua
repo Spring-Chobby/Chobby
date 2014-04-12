@@ -428,6 +428,25 @@ function DrawEditBox(obj)
 			gl.Color(cc[1], cc[2], cc[3], cc[4] * alpha)
 			gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawCursor, cursorX + clientX - 1, clientY, 3, clientHeight)
 		end
+        if obj.selStart then
+			local cursorTxt = obj.text:sub(obj.offset, obj.cursor - 1)
+			local cursorX = obj.font:GetTextWidth(cursorTxt)
+			local cc = obj.selectionColor
+			gl.Color(cc[1], cc[2], cc[3], cc[4])
+            
+            local left, right = obj.selStart, obj.selEnd
+            if left > right then
+                left, right = right, left
+            end
+			
+            local leftTxt = obj.text:sub(obj.offset, left - 1)
+			local leftX = obj.font:GetTextWidth(leftTxt)
+            local rightTxt = obj.text:sub(obj.offset, right - 1)
+			local rightX = obj.font:GetTextWidth(rightTxt)
+
+            local w = rightX - leftX
+			gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawCursor, leftX + clientX - 1, clientY, w, clientHeight)
+        end
 	end
 end
 

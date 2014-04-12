@@ -9,6 +9,7 @@ include("keysym.h.lua")
 -- @see control.Control
 -- @table EditBox
 -- @tparam {r,g,b,a} cursorColor cursor color, (default {0,0,1,0.7})
+-- @tparam {r,g,b,a} selectionColor selection color, (default {0,1,1,0.3})
 -- @string[opt="left"] align alignment
 -- @string[opt="linecenter"] valign vertical alignment
 -- @string[opt=""] text text contained in the editbox
@@ -22,6 +23,7 @@ EditBox = Control:Inherit{
   padding = {3,3,3,3},
 
   cursorColor = {0,0,1,0.7},
+  selectionColor = {0,1,1,0.3},
 
   align    = "left",
   valign   = "linecenter",
@@ -29,6 +31,8 @@ EditBox = Control:Inherit{
   text   = "",
   cursor = 1,
   offset = 1,
+  selStart = nil,
+  selEnd = nil,
 
   allowUnicode = true,
 }
@@ -59,6 +63,8 @@ function EditBox:SetText(newtext)
 	self.text = newtext
 	self.cursor = 1
 	self.offset = 1
+ 	self.selStart = nil
+ 	self.selEnd = nil
 	self:UpdateLayout()
 	self:Invalidate()
 end
@@ -149,9 +155,33 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	local cp = self.cursor
 	local txt = self.text
 	if key == KEYSYMS.BACKSPACE then --FIXME use Spring.GetKeyCode("backspace")
-		self.text, self.cursor = Utf8BackspaceAt(txt, cp)
+        if self.selStart == nil then
+            self.text, self.cursor = Utf8BackspaceAt(txt, cp)
+        else
+            local left = self.selStart
+            local right = self.selEnd
+            if left > right then
+                left, right = right, left
+            end
+            self.cursor = right
+            while self.cursor ~= left do
+                self.text, self.cursor = Utf8BackspaceAt(self.text, self.cursor)
+            end
+        end
 	elseif key == KEYSYMS.DELETE then
-		self.text   = Utf8DeleteAt(txt, cp)
+        if self.selStart == nil then
+		    self.text   = Utf8DeleteAt(txt, cp)
+        else
+            local left = self.selStart
+            local right = self.selEnd
+            if left > right then
+                left, right = right, left
+            end
+            self.cursor = right
+            while self.cursor ~= left do
+                self.text, self.cursor = Utf8BackspaceAt(self.text, self.cursor)
+            end
+        end
 	elseif key == KEYSYMS.LEFT then
 		self.cursor = Utf8PrevChar(txt, cp)
 	elseif key == KEYSYMS.RIGHT then
@@ -180,6 +210,17 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 			return false
 		end
 	end
+    if mods.shift and 
+        (key == KEYSYMS.LEFT or key == KEYSYMS.RIGHT or key == KEYSYMS.HOME or key == KEYSYMS.END) then
+        if not self.selStart then
+            self.selStart = cp
+        end
+        self.selEnd = self.cursor
+    end
+    if not mods.shift and self.selStart then
+        self.selStart = nil
+        self.selEnd = nil
+    end
 	self._interactedTime = Spring.GetTimer()
 	inherited.KeyPress(self, key, mods, isRepeat, label, unicode, ...)
 	self:UpdateLayout()
