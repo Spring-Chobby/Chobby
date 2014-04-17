@@ -382,6 +382,11 @@ function DrawEditBox(obj)
 	gl.Texture(0,false)
 
 	if (obj.text) then
+        text = obj.text
+        if obj.passwordInput then
+            text = string.rep("*", #text)
+        end
+            
 		if (obj.offset > obj.cursor) then
 			obj.offset = obj.cursor
 		end
@@ -390,7 +395,7 @@ function DrawEditBox(obj)
 
 		--// make cursor pos always visible (when text is longer than editbox!)
 		repeat
-			local txt = obj.text:sub(obj.offset, obj.cursor)
+			local txt = text:sub(obj.offset, obj.cursor)
 			local wt = obj.font:GetTextWidth(txt)
 			if (wt <= clientWidth) then
 				break
@@ -401,7 +406,7 @@ function DrawEditBox(obj)
 			obj.offset = obj.offset + 1
 		until (false)
 
-		local txt = obj.text:sub(obj.offset)
+		local txt = text:sub(obj.offset)
 
 		--// strip part at the end that exceeds the editbox
 		local lsize = math.max(0, obj.font:WrapText(txt, clientWidth, clientHeight):len() - 3) -- find a good start (3 dots at end if stripped)
@@ -418,7 +423,7 @@ function DrawEditBox(obj)
 		obj.font:DrawInBox(txt, clientX, clientY, clientWidth, clientHeight, obj.align, obj.valign)
 
 		if obj.state.focused then
-			local cursorTxt = obj.text:sub(obj.offset, obj.cursor - 1)
+			local cursorTxt = text:sub(obj.offset, obj.cursor - 1)
 			local cursorX = obj.font:GetTextWidth(cursorTxt)
 
 			local dt = Spring.DiffTimers(Spring.GetTimer(), obj._interactedTime)
@@ -435,7 +440,7 @@ function DrawEditBox(obj)
 			gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawCursor, cursorX + clientX - 1, clientY, 3, clientHeight)
 		end
         if obj.selStart then
-			local cursorTxt = obj.text:sub(obj.offset, obj.cursor - 1)
+			local cursorTxt = text:sub(obj.offset, obj.cursor - 1)
 			local cursorX = obj.font:GetTextWidth(cursorTxt)
 			local cc = obj.selectionColor
 			gl.Color(cc[1], cc[2], cc[3], cc[4])
@@ -445,9 +450,9 @@ function DrawEditBox(obj)
                 left, right = right, left
             end
 			
-            local leftTxt = obj.text:sub(obj.offset, left - 1)
+            local leftTxt = text:sub(obj.offset, left - 1)
 			local leftX = obj.font:GetTextWidth(leftTxt)
-            local rightTxt = obj.text:sub(obj.offset, right - 1)
+            local rightTxt = text:sub(obj.offset, right - 1)
 			local rightX = obj.font:GetTextWidth(rightTxt)
 
             local w = rightX - leftX

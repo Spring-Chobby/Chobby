@@ -12,6 +12,7 @@
 -- @string[opt="linecenter"] valign vertical alignment
 -- @string[opt=""] text text contained in the editbox
 -- @int[opt=1] cursor cursor position
+-- @bool passwordInput specifies whether the text should be treated as a password
 EditBox = Control:Inherit{
   classname= "editbox",
 
@@ -33,6 +34,7 @@ EditBox = Control:Inherit{
   selEnd = nil,
 
   allowUnicode = true,
+  passwordInput = false,
 }
 
 local this = EditBox
