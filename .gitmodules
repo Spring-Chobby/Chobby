@@ -1,0 +1,6 @@
+[submodule "libs/lcs"]
+	path = libs/lcs
+	url = https://github.com/gajop/Lua-Class-System.git
+[submodule "libs/chiliui"]
+	path = libs/chiliui
+	url = https://github.com/gajop/chiliui.git
