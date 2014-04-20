@@ -2,7 +2,7 @@
 -- Authors: gajop
 
 local modinfo = {
-	name			= "IngameLobby example",
+	name			= "IngameLobby",
 	shortName		= "IGL",
 	version			= "v0.1",
 	game			= "IngameLobby",

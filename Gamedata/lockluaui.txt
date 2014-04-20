@@ -1,0 +1,1 @@
+ToolBox loads an updated widget handler using lockluaui.txt, as part of the Chili framework.
