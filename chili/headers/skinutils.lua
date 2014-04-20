@@ -381,9 +381,18 @@ function DrawEditBox(obj)
 	gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, 0, 0, obj.width, obj.height,  skLeft,skTop,skRight,skBottom, tw,th)
 	gl.Texture(0,false)
 
-	if (obj.text) then
-        text = obj.text
-        if obj.passwordInput then
+	local text = obj.text	
+	local font = obj.font
+	local displayHint = false
+	
+	if text == "" and not obj.state.focused then
+		text = obj.hint		
+		displayHint = true
+		font = obj.hintFont
+	end
+	
+	if (text) then        
+        if obj.passwordInput and not displayHint then 
             text = string.rep("*", #text)
         end
             
@@ -396,7 +405,7 @@ function DrawEditBox(obj)
 		--// make cursor pos always visible (when text is longer than editbox!)
 		repeat
 			local txt = text:sub(obj.offset, obj.cursor)
-			local wt = obj.font:GetTextWidth(txt)
+			local wt = font:GetTextWidth(txt)
 			if (wt <= clientWidth) then
 				break
 			end
@@ -409,9 +418,9 @@ function DrawEditBox(obj)
 		local txt = text:sub(obj.offset)
 
 		--// strip part at the end that exceeds the editbox
-		local lsize = math.max(0, obj.font:WrapText(txt, clientWidth, clientHeight):len() - 3) -- find a good start (3 dots at end if stripped)
+		local lsize = math.max(0, font:WrapText(txt, clientWidth, clientHeight):len() - 3) -- find a good start (3 dots at end if stripped)
 		while (lsize <= txt:len()) do
-			local wt = obj.font:GetTextWidth(txt:sub(1, lsize))
+			local wt = font:GetTextWidth(txt:sub(1, lsize))
 			if (wt > clientWidth) then
 				break
 			end
@@ -420,11 +429,11 @@ function DrawEditBox(obj)
 		txt = txt:sub(1, lsize - 1)
 
 		gl.Color(1,1,1,1)
-		obj.font:DrawInBox(txt, clientX, clientY, clientWidth, clientHeight, obj.align, obj.valign)
+		font:DrawInBox(txt, clientX, clientY, clientWidth, clientHeight, obj.align, obj.valign)
 
 		if obj.state.focused then
 			local cursorTxt = text:sub(obj.offset, obj.cursor - 1)
-			local cursorX = obj.font:GetTextWidth(cursorTxt)
+			local cursorX = font:GetTextWidth(cursorTxt)
 
 			local dt = Spring.DiffTimers(Spring.GetTimer(), obj._interactedTime)
 			local as = math.sin(dt * 8);
@@ -441,7 +450,7 @@ function DrawEditBox(obj)
 		end
         if obj.selStart then
 			local cursorTxt = text:sub(obj.offset, obj.cursor - 1)
-			local cursorX = obj.font:GetTextWidth(cursorTxt)
+			local cursorX = font:GetTextWidth(cursorTxt)
 			local cc = obj.selectionColor
 			gl.Color(cc[1], cc[2], cc[3], cc[4])
             
@@ -451,9 +460,9 @@ function DrawEditBox(obj)
             end
 			
             local leftTxt = text:sub(obj.offset, left - 1)
-			local leftX = obj.font:GetTextWidth(leftTxt)
+			local leftX = font:GetTextWidth(leftTxt)
             local rightTxt = text:sub(obj.offset, right - 1)
-			local rightX = obj.font:GetTextWidth(rightTxt)
+			local rightX = font:GetTextWidth(rightTxt)
 
             local w = rightX - leftX
 			gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawSelection, leftX + clientX - 1, clientY, w, clientHeight)

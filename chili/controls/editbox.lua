@@ -11,6 +11,7 @@
 -- @string[opt="left"] align alignment
 -- @string[opt="linecenter"] valign vertical alignment
 -- @string[opt=""] text text contained in the editbox
+-- @string[opt=""] hint hint to be displayed when there is no text and the control isn't focused
 -- @int[opt=1] cursor cursor position
 -- @bool passwordInput specifies whether the text should be treated as a password
 EditBox = Control:Inherit{
@@ -26,8 +27,21 @@ EditBox = Control:Inherit{
 
   align    = "left",
   valign   = "linecenter",
+  
+  hintFont = {
+    font          = "FreeSansBold.otf",
+    size          = 14,
+    shadow        = false,
+    outline       = false,
+    outlineWidth  = 3,
+    outlineWeight = 3,
+    color         = {1,1,1,0.7},
+    outlineColor  = {0,0,0,1},
+    autoOutlineColor = true,
+  },
 
   text   = "",
+  hint   = "",
   cursor = 1,
   offset = 1,
   selStart = nil,
@@ -45,9 +59,17 @@ local inherited = this.inherited
 function EditBox:New(obj)
 	obj = inherited.New(self,obj)
 	obj._interactedTime = Spring.GetTimer()
+	  --// create font
+	obj.hintFont = Font:New(obj.hintFont)
+	obj.hintFont:SetParent(obj)
 	obj:SetText(obj.text)
 	obj:RequestUpdate()
 	return obj
+end
+
+function EditBox:Dispose(...)	
+	Control.Dispose(self)
+	self.hintFont:SetParent()
 end
 
 function EditBox:HitTest(x,y)
