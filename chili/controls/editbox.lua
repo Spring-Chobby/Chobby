@@ -28,17 +28,7 @@ EditBox = Control:Inherit{
   align    = "left",
   valign   = "linecenter",
   
-  hintFont = {
-    font          = "FreeSansBold.otf",
-    size          = 14,
-    shadow        = false,
-    outline       = false,
-    outlineWidth  = 3,
-    outlineWeight = 3,
-    color         = {1,1,1,0.7},
-    outlineColor  = {0,0,0,1},
-    autoOutlineColor = true,
-  },
+  hintFont = table.merge({ color = {1,1,1,0.7} }, Control.font),
 
   text   = "",
   hint   = "",
