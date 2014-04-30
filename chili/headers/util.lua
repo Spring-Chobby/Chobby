@@ -405,6 +405,7 @@ function table:merge(table2)
       self[i] = v
     end
   end
+  return self
 end
 
 function table:iequal(table2)

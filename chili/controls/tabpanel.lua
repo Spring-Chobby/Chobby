@@ -46,8 +46,6 @@ function TabPanel:New(obj)
 		y = obj.barHeight,
 		right = 0,
 		bottom = 0,
-		--width = "100%",
-		--height = "100%",
 		padding = {0, 0, 0, 0},
 	}
 	obj:AddChild(obj.currentTab)
@@ -72,6 +70,24 @@ function TabPanel:New(obj)
 	end
 	obj.children[1].OnChange = { function(tabbar, tabname) obj:ChangeTab(tabname) end }
 	return obj
+end
+
+function TabPanel:AddTab(tab)
+    local tabbar = self.children[1]
+    tabbar:AddChild(
+        TabBarItem:New{caption = tab.name, defaultWidth = tabbar.minItemWidth, defaultHeight = tabbar.minItemHeight} --FIXME: implement an "Add Tab in TabBar too"
+    )
+    local tabFrame = Control:New {
+        padding = {0, 0, 0, 0},
+        x = 0,
+        y = 0,
+        right = 0,
+        bottom = 0,
+        children = tab.children
+    }
+    self.tabIndexMapping[tab.name] = tabFrame
+    self.currentTab:AddChild(tabFrame)
+    tabFrame:SetVisibility(false)
 end
 
 --//=============================================================================

@@ -2,17 +2,18 @@
 
 --- EditBox module
 
-include("keysym.h.lua")
-
 --- EditBox fields.
 -- Inherits from Control.
 -- @see control.Control
 -- @table EditBox
 -- @tparam {r,g,b,a} cursorColor cursor color, (default {0,0,1,0.7})
+-- @tparam {r,g,b,a} selectionColor selection color, (default {0,1,1,0.3})
 -- @string[opt="left"] align alignment
 -- @string[opt="linecenter"] valign vertical alignment
 -- @string[opt=""] text text contained in the editbox
+-- @string[opt=""] hint hint to be displayed when there is no text and the control isn't focused
 -- @int[opt=1] cursor cursor position
+-- @bool passwordInput specifies whether the text should be treated as a password
 EditBox = Control:Inherit{
   classname= "editbox",
 
@@ -22,15 +23,22 @@ EditBox = Control:Inherit{
   padding = {3,3,3,3},
 
   cursorColor = {0,0,1,0.7},
+  selectionColor = {0,1,1,0.3},
 
   align    = "left",
   valign   = "linecenter",
+  
+  hintFont = table.merge({ color = {1,1,1,0.7} }, Control.font),
 
   text   = "",
+  hint   = "",
   cursor = 1,
   offset = 1,
+  selStart = nil,
+  selEnd = nil,
 
   allowUnicode = true,
+  passwordInput = false,
 }
 
 local this = EditBox
@@ -41,9 +49,17 @@ local inherited = this.inherited
 function EditBox:New(obj)
 	obj = inherited.New(self,obj)
 	obj._interactedTime = Spring.GetTimer()
+	  --// create font
+	obj.hintFont = Font:New(obj.hintFont)
+	obj.hintFont:SetParent(obj)
 	obj:SetText(obj.text)
 	obj:RequestUpdate()
 	return obj
+end
+
+function EditBox:Dispose(...)	
+	Control.Dispose(self)
+	self.hintFont:SetParent()
 end
 
 function EditBox:HitTest(x,y)
@@ -59,6 +75,8 @@ function EditBox:SetText(newtext)
 	self.text = newtext
 	self.cursor = 1
 	self.offset = 1
+ 	self.selStart = nil
+ 	self.selEnd = nil
 	self:UpdateLayout()
 	self:Invalidate()
 end
@@ -148,21 +166,43 @@ end
 function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	local cp = self.cursor
 	local txt = self.text
-	if key == KEYSYMS.RETURN then
-		return false
-	elseif key == KEYSYMS.BACKSPACE then --FIXME use Spring.GetKeyCode("backspace")
-		self.text, self.cursor = Utf8BackspaceAt(txt, cp)
-	elseif key == KEYSYMS.DELETE then
-		self.text   = Utf8DeleteAt(txt, cp)
-	elseif key == KEYSYMS.LEFT then
+	if key == Spring.GetKeyCode("backspace") then
+        if self.selStart == nil then
+            self.text, self.cursor = Utf8BackspaceAt(txt, cp)
+        else
+            local left = self.selStart
+            local right = self.selEnd
+            if left > right then
+                left, right = right, left
+            end
+            self.cursor = right
+            while self.cursor ~= left do
+                self.text, self.cursor = Utf8BackspaceAt(self.text, self.cursor)
+            end
+        end
+	elseif key == Spring.GetKeyCode("delete") then
+        if self.selStart == nil then
+		    self.text   = Utf8DeleteAt(txt, cp)
+        else
+            local left = self.selStart
+            local right = self.selEnd
+            if left > right then
+                left, right = right, left
+            end
+            self.cursor = right
+            while self.cursor ~= left do
+                self.text, self.cursor = Utf8BackspaceAt(self.text, self.cursor)
+            end
+        end
+	elseif key == Spring.GetKeyCode("left") then
 		self.cursor = Utf8PrevChar(txt, cp)
-	elseif key == KEYSYMS.RIGHT then
+	elseif key == Spring.GetKeyCode("right") then
 		self.cursor = Utf8NextChar(txt, cp)
-	elseif key == KEYSYMS.HOME then
+	elseif key == Spring.GetKeyCode("home") then
 		self.cursor = 1
-	elseif key == KEYSYMS.END then
+	elseif key == Spring.GetKeyCode("end") then
 		self.cursor = #txt + 1
-	else
+	elseif key ~= Spring.GetKeyCode("enter") and key ~= Spring.GetKeyCode("numpad_enter") then
 		local utf8char = UnicodeToUtf8(unicode)
 		if (not self.allowUnicode) then
 			local success
@@ -178,10 +218,21 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 		if utf8char then
 			self.text = txt:sub(1, cp - 1) .. utf8char .. txt:sub(cp, #txt)
 			self.cursor = cp + utf8char:len()
-		--else
-		--	return false
+		else
+			return false
 		end
 	end
+    if mods.shift and 
+        (key == Spring.GetKeyCode("left") or key == Spring.GetKeyCode("right") or key == Spring.GetKeyCode("home") or key == Spring.GetKeyCode("end")) then
+        if not self.selStart then
+            self.selStart = cp
+        end
+        self.selEnd = self.cursor
+    end
+    if not mods.shift and self.selStart then
+        self.selStart = nil
+        self.selEnd = nil
+    end
 	self._interactedTime = Spring.GetTimer()
 	inherited.KeyPress(self, key, mods, isRepeat, label, unicode, ...)
 	self:UpdateLayout()
