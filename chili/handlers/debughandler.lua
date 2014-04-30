@@ -73,7 +73,10 @@ local function ChiliErrorHandler(msg,...)
       end
       if (name == "self") then
         if (value._widget ~= widget) then --// ignore controls owned by Chili Framework!
-          control = value
+          --// ignore non-chili objects; TODO: implement a better way of checking whether something is a chili object
+          if value.name and value.Dispose then
+            control = value
+          end
         end
       end
 
