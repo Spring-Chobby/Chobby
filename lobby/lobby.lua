@@ -3,14 +3,6 @@ if not Spring.GetConfigInt("LuaSocketEnabled", 0) == 1 then
     return false
 end
 
-local socket = socket
-
-local client
-local set
-
-local host = "localhost"
-local port = 8005
-
 local function dumpConfig()
 	-- dump all luasocket related config settings to console
 	for _, conf in ipairs({"TCPAllowConnect", "TCPAllowListen", "UDPAllowConnect", "UDPAllowListen"  }) do
@@ -38,30 +30,6 @@ local function explode(div,str)
   return arr
 end
 
-local function newset()
-    local reverse = {}
-    local set = {}
-    return setmetatable(set, {__index = {
-        insert = function(set, value)
-            if not reverse[value] then
-                table.insert(set, value)
-                reverse[value] = table.getn(set)
-            end
-        end,
-        remove = function(set, value)
-            local index = reverse[value]
-            if index then
-                reverse[value] = nil
-                local top = table.remove(set)
-                if top ~= value then
-                    reverse[top] = index
-                    set[index] = top
-                end
-            end
-        end
-    }})
-end
-
 local function concat(...)
     return table.concat({...}, " ")
 end
@@ -73,6 +41,7 @@ Lobby.commands = {}
 function Lobby:Initialize()
    -- dumpConfig()
     self.messagesSentCount = 0
+    self.messagesReceivedCount = 0
     self.lastSentSeconds = Spring.GetGameSeconds()
     self.connected = false
     self.listeners = {}
@@ -80,16 +49,13 @@ function Lobby:Initialize()
 end
 
 function Lobby:Connect(host, port)
-    client = socket.tcp()
-	client:settimeout(0)
-	res, err = client:connect(host, port)
-	if not res and not res == "timeout" then
+    self.client = socket.tcp()
+	self.client:settimeout(0)
+	local res, err = self.client:connect(host, port)
+	if res == nil and not res == "timeout" then
 		Spring.Echo("Error in connect: " .. err)
 		return false
 	end
-	set = newset()
-	set:insert(client)
-    self.client = client
     self.connected = true
 	return true
 end
@@ -115,6 +81,8 @@ function Lobby:Login(user, password, cpu, localIP)
     if localIP == nil then
         localIP = "*"
     end
+    -- use HASH command so we can send passwords in plain text
+    self:_SendCommand("HASH")
     self:_SendCommand(concat("LOGIN", user, password, cpu, localIP, "LuaLobby"))
 end
 
@@ -182,7 +150,17 @@ function Lobby:OnEndOfChannels(args)
 end
 Lobby.commands["ENDOFCHANNELS"] = Lobby.OnEndOfChannels
 
+-- has a listener, but isn't a command
+function Lobby:OnConnect(args)
+    self:CallListeners("OnConnect")
+end
+
 function Lobby:CommandReceived(command)
+    -- if it's the first message received, then it's probably the server greeting
+    if self.messagesReceivedCount == 1 then
+        self:CallListeners("OnConnect")
+    end
+
     local args = explode(" ", command)
     if string.starts(args[1], "#") then
         table.remove(args, 1)
@@ -198,11 +176,11 @@ function Lobby:CommandReceived(command)
 end
 
 function Lobby:_SocketUpdate()
-	if set==nil or #set<=0 then
-		return
-	end
+    if self.client == nil then
+        return
+    end
 	-- get sockets ready for read
-	local readable, writeable, err = socket.select(set, set, 0)
+	local readable, writeable, err = socket.select({self.client}, {self.client}, 0)
 	if err~=nil then
 		-- some error happened in select
 		if err=="timeout" then
@@ -213,15 +191,17 @@ function Lobby:_SocketUpdate()
 	end
 	for _, input in ipairs(readable) do
 		local s, status, commandsStr = input:receive('*a') --try to read all data
+        Spring.Echo(commandsStr)
 		if status == "timeout" or status == nil then
-            commands = explode("\n", commandsStr)
-            for i, command in pairs(commands) do
+            local commands = explode("\n", commandsStr)
+            for i = 1, #commands-1 do
+                local command = commands[i]
+                self.messagesReceivedCount = self.messagesReceivedCount + 1
                 self:CommandReceived(command)
             end
 		elseif status == "closed" then
             Spring.Echo("closed connection")
 			input:close()
-			set:remove(input)
             self.connected = false
 		end
 	end

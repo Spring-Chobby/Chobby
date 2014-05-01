@@ -21,6 +21,9 @@ end
 function Listener:OnPong()
 end
 
+function Listener:OnConnect()
+end
+
 function Listener:OnEndOfChannels()
 end
 
