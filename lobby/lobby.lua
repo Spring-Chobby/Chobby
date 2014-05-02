@@ -126,6 +126,10 @@ function Lobby:Say(chanName, message)
     self:_SendCommand(concat("SAY", chanName, message), true)
 end
 
+function Lobby:ConfirmAgreement()
+    self:_SendCommand("CONFIRMAGREEMENT")
+end
+
 function Lobby:Channels()
     self:_SendCommand("CHANNELS", true)
     self.awaitingChannelsList = true
@@ -133,7 +137,7 @@ end
 
 function Lobby:OnChannel(args)
     local chanName = args[2]
-    local userCount = args[3]
+    local userCount = tonumber(args[3]) or args[3]
     local topic = args[4]
     self:CallListeners("OnChannel", chanName, userCount, topic)
 end
@@ -150,7 +154,35 @@ function Lobby:OnEndOfChannels(args)
 end
 Lobby.commands["ENDOFCHANNELS"] = Lobby.OnEndOfChannels
 
--- has a listener, but isn't a command
+function Lobby:OnDenied(args)
+    local reason = table.concat(args, " ", 2, #args)
+    self:CallListeners("OnDenied", reason)
+end
+Lobby.commands["DENIED"] = Lobby.OnDenied
+
+function Lobby:OnAccepted(args)
+    local username = args[2]
+    self:CallListeners("OnAccepted", username)
+end
+Lobby.commands["ACCEPTED"] = Lobby.OnAccepted
+
+function Lobby:OnAgreement(args)
+    local line = table.concat(args, " ", 2, #args)
+    self:CallListeners("OnAgreement", line)
+end
+Lobby.commands["AGREEMENT"] = Lobby.OnAgreement
+
+function Lobby:OnAgreementEnd(args)
+    self:CallListeners("OnAgreementEnd")
+end
+Lobby.commands["AGREEMENTEND"] = Lobby.OnAgreementEnd
+
+function Lobby:OnLoginInfoEnd(args)
+    self:CallListeners("OnLoginInfoEnd")
+end
+Lobby.commands["LOGININFOEND"] = Lobby.OnLoginInfoEnd
+
+-- has a listener, but isn't a real command
 function Lobby:OnConnect(args)
     self:CallListeners("OnConnect")
 end
@@ -159,6 +191,7 @@ function Lobby:CommandReceived(command)
     -- if it's the first message received, then it's probably the server greeting
     if self.messagesReceivedCount == 1 then
         self:CallListeners("OnConnect")
+        return
     end
 
     local args = explode(" ", command)
@@ -196,8 +229,10 @@ function Lobby:_SocketUpdate()
             local commands = explode("\n", commandsStr)
             for i = 1, #commands-1 do
                 local command = commands[i]
-                self.messagesReceivedCount = self.messagesReceivedCount + 1
-                self:CommandReceived(command)
+                if command ~= nil then
+                    self.messagesReceivedCount = self.messagesReceivedCount + 1
+                    self:CommandReceived(command)
+                end
             end
 		elseif status == "closed" then
             Spring.Echo("closed connection")
