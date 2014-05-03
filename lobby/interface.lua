@@ -35,8 +35,11 @@ local function concat(...)
 end
 
 Interface = Observable:extends{}
--- register all lobby commands in a associative map
+
+-- map lobby commands by name
 Interface.commands = {}
+-- define command format with pattern (regex)
+Interface.commandPattern = {}
 
 function Interface:Initialize()
    -- dumpConfig()
@@ -98,29 +101,24 @@ function Interface:Join(chanName, key)
     self:_SendCommand(command, true)
 end
 
-function Interface:OnJoinReceived(args)
-    local chanName = args[2]
-    self:CallListeners("OnJoinReceived", chanName)
+function Interface:OnJoin(chanName)
+    self:CallListeners("OnJoin", chanName)
 end
-Interface.commands["JOIN"] = Interface.OnJoinReceived 
+Interface.commands["JOIN"] = Interface.OnJoin
+Interface.commandPattern["JOIN"] = "(%S+)"
 
-function Interface:OnClients(args)
-    local chanName = args[2]
-    local clients = {}
-    for i = 3, #args do
-        table.insert(clients, args[i])
-    end
+function Interface:OnClients(chanName, clientsStr)
+    local clients = explode(clients, " ")
     self:CallListeners("OnClients", chanName, clients)
 end
 Interface.commands["CLIENTS"] = Interface.OnClients
+Interface.commandPattern["CLIENTS"] = "(%S+)%s+(.+)"
 
-function Interface:OnSaid(args)
-    local chanName = args[2]
-    local userName = args[3]
-    local message = table.concat(args, " ", 4, #args)
+function Interface:OnSaid(chanName, userName, message)
     self:CallListeners("OnSaid", chanName, userName, message)
 end
 Interface.commands["SAID"] = Interface.OnSaid
+Interface.commandPattern["SAID"] = "(%S+)%s+(%S+)%s+(.*)"
 
 function Interface:Say(chanName, message)
     self:_SendCommand(concat("SAY", chanName, message), true)
@@ -131,59 +129,72 @@ function Interface:ConfirmAgreement()
 end
 
 function Interface:Channels()
-    self:_SendCommand("CHANNELS", true)
+    self:_SendCommand("CHANNELS")
     self.awaitingChannelsList = true
 end
 
-function Interface:OnChannel(args)
-    local chanName = args[2]
-    local userCount = tonumber(args[3]) or args[3]
-    local topic = args[4]
+function Interface:OnChannel(chanName, userCount, topic)
+    userCount = tonumber(userCount)
     self:CallListeners("OnChannel", chanName, userCount, topic)
 end
 Interface.commands["CHANNEL"] = Interface.OnChannel
+Interface.commandPattern["CHANNEL"] = "(%S+)%s+(%d+)(.*)"
 
-function Interface:OnPong(args)
+function Interface:OnPong()
     self:CallListeners("OnPong")
 end
 Interface.commands["PONG"] = Interface.OnPong
 
-function Interface:OnEndOfChannels(args)
+function Interface:OnEndOfChannels()
     self:CallListeners("OnEndOfChannels")
     self.awaitingChannelsList = false
 end
 Interface.commands["ENDOFCHANNELS"] = Interface.OnEndOfChannels
 
-function Interface:OnDenied(args)
-    local reason = table.concat(args, " ", 2, #args)
+function Interface:OnDenied(reason)
     self:CallListeners("OnDenied", reason)
 end
 Interface.commands["DENIED"] = Interface.OnDenied
+Interface.commandPattern["DENIED"] = "(.+)"
 
-function Interface:OnAccepted(args)
-    local username = args[2]
+function Interface:OnAccepted(username)
     self:CallListeners("OnAccepted", username)
 end
 Interface.commands["ACCEPTED"] = Interface.OnAccepted
+Interface.commandPattern["DENIED"] = "(%S+)%s+(%S+)"
 
-function Interface:OnAgreement(args)
-    local line = table.concat(args, " ", 2, #args)
+function Interface:OnAgreement(line)
     self:CallListeners("OnAgreement", line)
 end
 Interface.commands["AGREEMENT"] = Interface.OnAgreement
+Interface.commandPattern["DENIED"] = "(.+)"
 
-function Interface:OnAgreementEnd(args)
+function Interface:OnAgreementEnd()
     self:CallListeners("OnAgreementEnd")
 end
 Interface.commands["AGREEMENTEND"] = Interface.OnAgreementEnd
 
-function Interface:OnLoginInfoEnd(args)
+function Interface:OnLoginInfoEnd()
     self:CallListeners("OnLoginInfoEnd")
 end
 Interface.commands["LOGININFOEND"] = Interface.OnLoginInfoEnd
 
+function Interface:OnAddUser(userName, country, cpu, accountID)
+    cpu = tonumber(cpu)
+    accountID = tonumber(accountID)
+    self:CallListeners("OnAddUser", userName, country, cpu, accountID)
+end
+Interface.commands["ADDUSER"] = Interface.OnAddUser
+Interface.commandPattern["ADDUSER"] = "(%S+)%s+(%S%S)%s+(%S+)(.*)"
+
+function Interface:OnClientStatus(userName, status)
+    self:CallListeners("OnClientStatus", userName, status)
+end
+Interface.commands["CLIENTSTATUS"] = Interface.OnClientStatus
+Interface.commandPattern["CLIENTSTATUS"] = "(%S+)%s+(%S+)"
+
 -- has a listener, but isn't a real command
-function Interface:OnConnect(args)
+function Interface:OnConnect()
     self:CallListeners("OnConnect")
 end
 
@@ -198,12 +209,25 @@ function Interface:CommandReceived(command)
     if string.starts(args[1], "#") then
         table.remove(args, 1)
     end
+
+    local arguments = table.concat(args, " ", 2)
     
-    commandFunction = Interface.commands[args[1]]
+    local commandFunction = Interface.commands[args[1]]
     if commandFunction ~= nil then
-        commandFunction(self, args)
+        local pattern = Interface.commandPattern[args[1]]
+        if pattern then
+            local funArgs = {arguments:match(pattern)}
+            if #funArgs ~= 0 then
+                commandFunction(self, unpack(funArgs))
+            else
+                Spring.Echo("Failed to match command: ", args[1], " with pattern: ", pattern)
+            end
+        else
+            --Spring.Echo("No pattern for command: " .. args[1])
+            commandFunction(self)
+        end
     else
-        print("No such function" .. args[1] .. ", for command: " .. command)
+        Spring.Echo("No such function: " .. args[1] .. ", for command: " .. command)
     end
     self:CallListeners("OnCommandReceived", command)
 end
@@ -224,7 +248,7 @@ function Interface:_SocketUpdate()
 	end
 	for _, input in ipairs(readable) do
 		local s, status, commandsStr = input:receive('*a') --try to read all data
-        Spring.Echo(commandsStr)
+        --Spring.Echo(commandsStr)
 		if status == "timeout" or status == nil then
             local commands = explode("\n", commandsStr)
             for i = 1, #commands-1 do
