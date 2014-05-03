@@ -34,11 +34,11 @@ local function concat(...)
     return table.concat({...}, " ")
 end
 
-Lobby = Observable:extends{}
+Interface = Observable:extends{}
 -- register all lobby commands in a associative map
-Lobby.commands = {}
+Interface.commands = {}
 
-function Lobby:Initialize()
+function Interface:Initialize()
    -- dumpConfig()
     self.messagesSentCount = 0
     self.messagesReceivedCount = 0
@@ -48,7 +48,7 @@ function Lobby:Initialize()
     self.awaitingChannelsList = false
 end
 
-function Lobby:Connect(host, port)
+function Interface:Connect(host, port)
     self.client = socket.tcp()
 	self.client:settimeout(0)
 	local res, err = self.client:connect(host, port)
@@ -60,7 +60,7 @@ function Lobby:Connect(host, port)
 	return true
 end
 
-function Lobby:_SendCommand(command, sendMessageCount)
+function Interface:_SendCommand(command, sendMessageCount)
     if sendMessageCount then
         self.messagesSentCount = self.messagesSentCount + 1
         command = "#" .. self.messagesSentCount .. " " .. command
@@ -73,11 +73,11 @@ function Lobby:_SendCommand(command, sendMessageCount)
     self.lastSentSeconds = Spring.GetGameSeconds()
 end
 
-function Lobby:SendCustomCommand(command)
+function Interface:SendCustomCommand(command)
     self:_SendCommand(command, false)
 end
 
-function Lobby:Login(user, password, cpu, localIP)
+function Interface:Login(user, password, cpu, localIP)
     if localIP == nil then
         localIP = "*"
     end
@@ -86,11 +86,11 @@ function Lobby:Login(user, password, cpu, localIP)
     self:_SendCommand(concat("LOGIN", user, password, cpu, localIP, "LuaLobby"))
 end
 
-function Lobby:Ping()
+function Interface:Ping()
     self:_SendCommand("PING", true)
 end
 
-function Lobby:Join(chanName, key)
+function Interface:Join(chanName, key)
     local command = concat("JOIN", chanName)
     if key ~= nil then
         command = concat(command, key)
@@ -98,13 +98,13 @@ function Lobby:Join(chanName, key)
     self:_SendCommand(command, true)
 end
 
-function Lobby:OnJoinReceived(args)
+function Interface:OnJoinReceived(args)
     local chanName = args[2]
     self:CallListeners("OnJoinReceived", chanName)
 end
-Lobby.commands["JOIN"] = Lobby.OnJoinReceived 
+Interface.commands["JOIN"] = Interface.OnJoinReceived 
 
-function Lobby:OnClients(args)
+function Interface:OnClients(args)
     local chanName = args[2]
     local clients = {}
     for i = 3, #args do
@@ -112,82 +112,82 @@ function Lobby:OnClients(args)
     end
     self:CallListeners("OnClients", chanName, clients)
 end
-Lobby.commands["CLIENTS"] = Lobby.OnClients
+Interface.commands["CLIENTS"] = Interface.OnClients
 
-function Lobby:OnSaid(args)
+function Interface:OnSaid(args)
     local chanName = args[2]
     local userName = args[3]
     local message = table.concat(args, " ", 4, #args)
     self:CallListeners("OnSaid", chanName, userName, message)
 end
-Lobby.commands["SAID"] = Lobby.OnSaid
+Interface.commands["SAID"] = Interface.OnSaid
 
-function Lobby:Say(chanName, message)
+function Interface:Say(chanName, message)
     self:_SendCommand(concat("SAY", chanName, message), true)
 end
 
-function Lobby:ConfirmAgreement()
+function Interface:ConfirmAgreement()
     self:_SendCommand("CONFIRMAGREEMENT")
 end
 
-function Lobby:Channels()
+function Interface:Channels()
     self:_SendCommand("CHANNELS", true)
     self.awaitingChannelsList = true
 end
 
-function Lobby:OnChannel(args)
+function Interface:OnChannel(args)
     local chanName = args[2]
     local userCount = tonumber(args[3]) or args[3]
     local topic = args[4]
     self:CallListeners("OnChannel", chanName, userCount, topic)
 end
-Lobby.commands["CHANNEL"] = Lobby.OnChannel
+Interface.commands["CHANNEL"] = Interface.OnChannel
 
-function Lobby:OnPong(args)
+function Interface:OnPong(args)
     self:CallListeners("OnPong")
 end
-Lobby.commands["PONG"] = Lobby.OnPong
+Interface.commands["PONG"] = Interface.OnPong
 
-function Lobby:OnEndOfChannels(args)
+function Interface:OnEndOfChannels(args)
     self:CallListeners("OnEndOfChannels")
     self.awaitingChannelsList = false
 end
-Lobby.commands["ENDOFCHANNELS"] = Lobby.OnEndOfChannels
+Interface.commands["ENDOFCHANNELS"] = Interface.OnEndOfChannels
 
-function Lobby:OnDenied(args)
+function Interface:OnDenied(args)
     local reason = table.concat(args, " ", 2, #args)
     self:CallListeners("OnDenied", reason)
 end
-Lobby.commands["DENIED"] = Lobby.OnDenied
+Interface.commands["DENIED"] = Interface.OnDenied
 
-function Lobby:OnAccepted(args)
+function Interface:OnAccepted(args)
     local username = args[2]
     self:CallListeners("OnAccepted", username)
 end
-Lobby.commands["ACCEPTED"] = Lobby.OnAccepted
+Interface.commands["ACCEPTED"] = Interface.OnAccepted
 
-function Lobby:OnAgreement(args)
+function Interface:OnAgreement(args)
     local line = table.concat(args, " ", 2, #args)
     self:CallListeners("OnAgreement", line)
 end
-Lobby.commands["AGREEMENT"] = Lobby.OnAgreement
+Interface.commands["AGREEMENT"] = Interface.OnAgreement
 
-function Lobby:OnAgreementEnd(args)
+function Interface:OnAgreementEnd(args)
     self:CallListeners("OnAgreementEnd")
 end
-Lobby.commands["AGREEMENTEND"] = Lobby.OnAgreementEnd
+Interface.commands["AGREEMENTEND"] = Interface.OnAgreementEnd
 
-function Lobby:OnLoginInfoEnd(args)
+function Interface:OnLoginInfoEnd(args)
     self:CallListeners("OnLoginInfoEnd")
 end
-Lobby.commands["LOGININFOEND"] = Lobby.OnLoginInfoEnd
+Interface.commands["LOGININFOEND"] = Interface.OnLoginInfoEnd
 
 -- has a listener, but isn't a real command
-function Lobby:OnConnect(args)
+function Interface:OnConnect(args)
     self:CallListeners("OnConnect")
 end
 
-function Lobby:CommandReceived(command)
+function Interface:CommandReceived(command)
     -- if it's the first message received, then it's probably the server greeting
     if self.messagesReceivedCount == 1 then
         self:CallListeners("OnConnect")
@@ -199,7 +199,7 @@ function Lobby:CommandReceived(command)
         table.remove(args, 1)
     end
     
-    commandFunction = Lobby.commands[args[1]]
+    commandFunction = Interface.commands[args[1]]
     if commandFunction ~= nil then
         commandFunction(self, args)
     else
@@ -208,7 +208,7 @@ function Lobby:CommandReceived(command)
     self:CallListeners("OnCommandReceived", command)
 end
 
-function Lobby:_SocketUpdate()
+function Interface:_SocketUpdate()
     if self.client == nil then
         return
     end
@@ -242,7 +242,7 @@ function Lobby:_SocketUpdate()
 	end
 end
 
-function Lobby:Update()
+function Interface:Update()
     self:_SocketUpdate()
     -- prevent timeout with PING
     if self.connected then
@@ -253,4 +253,4 @@ function Lobby:Update()
     end
 end
 
-return Lobby
+return Interface

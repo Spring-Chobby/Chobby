@@ -30,12 +30,12 @@ LIB_LOBBY_DIRNAME = "libs/liblobby/lobby/"
 function widget:Initialize()
   LCS = loadstring(VFS.LoadFile("libs/lcs/LCS.lua"))
   LCS = LCS()
-  -- Lobby extends Observable so include Observable first
-  VFS.Include(LIB_LOBBY_DIRNAME .. "observable.lua", nil, VFS.RAW_FIRST)
-  Lobby = VFS.Include(LIB_LOBBY_DIRNAME .. "lobby.lua", nil, VFS.RAW_FIRST)
-  Listener = VFS.Include(LIB_LOBBY_DIRNAME .. "listener.lua", nil, VFS.RAW_FIRST)
 
-  lobby = Lobby()
+  VFS.Include(LIB_LOBBY_DIRNAME .. "observable.lua", nil, VFS.RAW_FIRST)
+  Interface = VFS.Include(LIB_LOBBY_DIRNAME .. "interface.lua", nil, VFS.RAW_FIRST)
+  Wrapper = VFS.Include(LIB_LOBBY_DIRNAME .. "wrapper.lua", nil, VFS.RAW_FIRST)
+
+  lobby = Wrapper()
 
 
   --// Export Widget Globals
