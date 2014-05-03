@@ -28,7 +28,6 @@ function widget:Initialize()
     VFS.Include(CHILILOBBY_DIR .. "exports.lua")
     VFS.Include(CHILILOBBY_DIR .. "console.lua")
     VFS.Include(CHILILOBBY_DIR .. "login_window.lua")
-    VFS.Include(CHILILOBBY_DIR .. "lobby_listener.lua")
     VFS.Include(CHILILOBBY_DIR .. "chat_windows.lua")
     VFS.Include(CHILILOBBY_DIR .. "play_window.lua")
 
