@@ -44,11 +44,11 @@ Interface.commandPattern = {}
 function Interface:Initialize()
    -- dumpConfig()
     self.messagesSentCount = 0
-    self.messagesReceivedCount = 0
     self.lastSentSeconds = Spring.GetGameSeconds()
     self.connected = false
     self.listeners = {}
     self.awaitingChannelsList = false
+    self.buffer = ""
 end
 
 function Interface:Connect(host, port)
@@ -555,8 +555,8 @@ Interface.commandPattern["SETSCRIPTTAGS"] = "([^\t]+)"
 function Interface:OnTASServer(protocolVersion, springVersion, udpPort, serverMode)
     self:CallListeners("OnTASServer", protocolVersion, springVersion, udpPort, serverMode)
 end
-Interface.commands["TASSERVER"] = Interface.OnTASServer
-Interface.commandPattern["TASSERVER"] = "(%S+)%s+(%S+)%s+(%S+)%s+(%S+)"
+Interface.commands["TASServer"] = Interface.OnTASServer
+Interface.commandPattern["TASServer"] = "(%S+)%s+(%S+)%s+(%S+)%s+(%S+)"
 
 function Interface:OnTestLoginAccept(message)
     self:CallListeners("OnTestLoginAccept", message)
@@ -602,18 +602,7 @@ function Interface:Channels()
     self.awaitingChannelsList = true
 end
 
--- has a listener, but isn't a real command
-function Interface:OnConnect()
-    self:CallListeners("OnConnect")
-end
-
 function Interface:CommandReceived(command)
-    -- if it's the first message received, then it's probably the server greeting
-    if self.messagesReceivedCount == 1 then
-        self:CallListeners("OnConnect")
-        return
-    end
-
     local args = explode(" ", command)
     if string.starts(args[1], "#") then
         table.remove(args, 1)
@@ -660,13 +649,14 @@ function Interface:_SocketUpdate()
         print(commandsStr)
 		if status == "timeout" or status == nil then
             local commands = explode("\n", commandsStr)
+            commands[1] = self.buffer .. commands[1]
             for i = 1, #commands-1 do
                 local command = commands[i]
                 if command ~= nil then
-                    self.messagesReceivedCount = self.messagesReceivedCount + 1
                     self:CommandReceived(command)
                 end
             end
+            self.buffer = commands[#commands]
 		elseif status == "closed" then
             Spring.Echo("closed connection")
 			input:close()
