@@ -33,12 +33,12 @@ function Observable:CallListeners(event, ...)
     for i = 1, #eventListeners do
         local listener = eventListeners[i]
         args = {...}
-        success, message = pcall(function()
-            listener(listener, unpack(args))
-        end)
-        if not success then
-            Spring.Echo("Error invoking listener: ", message)
-        end
+        xpcall(function() listener(listener, unpack(args)) end, 
+            function(err) self:PrintError(err) end )
     end
     return true
+end
+
+function Observable:PrintError(err)
+    Spring.Echo(debug.traceback())
 end
