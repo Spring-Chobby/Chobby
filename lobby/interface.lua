@@ -87,7 +87,7 @@ function Interface:Login(user, password, cpu, localIP)
     end
     -- use HASH command so we can send passwords in plain text
     self:_SendCommand("HASH")
-    self:_SendCommand(concat("LOGIN", user, password, cpu, localIP, "LuaLobby"))
+    self:_SendCommand(concat("LOGIN", user, password, cpu, localIP, "LuaLobby\t", "0\t", "a b m cu sd cl et"))
 end
 
 function Interface:Ping()
@@ -116,7 +116,7 @@ Interface.commands["ACQUIREUSERID"] = Interface.OnAcquireUserID
 
 function Interface:OnAddBot(battleID, name, battleStatus, teamColor, aiDll)
     battleID = tonumber(battleID)
-    local ai, dll = explode(aiDll, "\t")
+    local ai, dll = unpack(explode("\t", aiDll))
     self:CallListeners("OnAddBot", battleID, name, battleStatus, teamColor, ai, dll)
 end
 Interface.commands["ADDBOT"] = Interface.OnAddBot
@@ -162,7 +162,7 @@ function Interface:OnBattleOpened(battleID, type, natType, founder, ip, port, ma
     port = tonumber(port)
     maxPlayers = tonumber(maxPlayers)
     passworded = tonumber(passworded)
-    local engineName, engineVersion, map, title, gameName = explode(other, "\t")
+    local engineName, engineVersion, map, title, gameName = unpack(explode("\t", other))
     self:CallListeners("OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, engineName, engineVersion, map, title, gameName)
 end
 Interface.commands["BATTLEOPENED"] = Interface.OnBattleOpened
@@ -206,7 +206,7 @@ Interface.commands["CLIENTIPPORT"] = Interface.OnClientIpPort
 Interface.commandPattern["CLIENTIPPORT"] = "(%S+)%s+(%S+)%s+(%S+)"
 
 function Interface:OnClients(chanName, clientsStr)
-    local clients = explode(clientsStr, " ")
+    local clients = explode(" ", clientsStr)
     self:CallListeners("OnClients", chanName, clients)
 end
 Interface.commands["CLIENTS"] = Interface.OnClients
@@ -219,7 +219,7 @@ Interface.commands["CLIENTSTATUS"] = Interface.OnClientStatus
 Interface.commandPattern["CLIENTSTATUS"] = "(%S+)%s+(%S+)"
 
 function Interface:OnCompFlags(compFlags)
-    compFlags = explode(compflags, "\t")
+    compFlags = explode("\t", compflags)
     self:CallListeners("OnCompFlags", compFlags)
 end
 Interface.commands["COMPFLAGS"] = Interface.OnCompFlags
@@ -244,7 +244,7 @@ Interface.commands["DENIED"] = Interface.OnDenied
 Interface.commandPattern["DENIED"] = "(.+)"
 
 function Interface:OnDisableUnits(unitNames)
-    unitNames = explode(unitNames, " ")
+    unitNames = explode(" ", unitNames)
     self:CallListeners("OnDisableUnits", unitNames)
 end
 Interface.commands["DISABLEUNITS"] = Interface.OnDisableUnits
@@ -256,7 +256,7 @@ end
 Interface.commands["ENABLEALLUNITS"] = Interface.OnEnableAllUnits
 
 function Interface:OnEnableUnits(unitNames)
-    unitNames = explode(unitNames, " ")
+    unitNames = explode(" ", unitNames)
     self:CallListeners("OnEnableUnits", unitNames)
 end
 Interface.commands["ENABLEUNITS"] = Interface.OnEnableUnits
@@ -433,7 +433,7 @@ Interface.commands["REMOVEBOT"] = Interface.OnRemoveBot
 Interface.commandPattern["REMOVEBOT"] = "(%d+)%s+(%S+)"
 
 function Interface:OnRemoveScriptTags(keys)
-    keys = explode(keys, " ")
+    keys = explode(" ", keys)
     self:CallListeners("OnRemoveScriptTags", keys)
 end
 Interface.commands["REMOVESCRIPTTAGS"] = Interface.OnRemoveScriptTags
@@ -546,7 +546,7 @@ Interface.commands["SERVERMSGBOX"] = Interface.OnServerMSGBox
 Interface.commandPattern["SERVERMSGBOX"] = "([^\t]+)\t+([^\t]+)"
 
 function Interface:OnSetScriptTags(pairs)
-    pairs = explode(pairs, " ")
+    pairs = explode(" ", pairs)
     self:CallListeners("OnSetScriptTags", pairs)
 end
 Interface.commands["SETSCRIPTTAGS"] = Interface.OnSetScriptTags
