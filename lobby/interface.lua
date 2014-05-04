@@ -47,7 +47,8 @@ function Interface:Initialize()
     self.lastSentSeconds = Spring.GetGameSeconds()
     self.connected = false
     self.listeners = {}
-    self.awaitingChannelsList = false
+
+    -- private
     self.buffer = ""
 end
 
@@ -263,7 +264,6 @@ Interface.commandPattern["ENABLEUNITS"] = "(.+)"
 
 function Interface:OnEndOfChannels()
     self:CallListeners("OnEndOfChannels")
-    self.awaitingChannelsList = false
 end
 Interface.commands["ENDOFCHANNELS"] = Interface.OnEndOfChannels
 
@@ -599,7 +599,6 @@ end
 
 function Interface:Channels()
     self:_SendCommand("CHANNELS")
-    self.awaitingChannelsList = true
 end
 
 function Interface:CommandReceived(command)
