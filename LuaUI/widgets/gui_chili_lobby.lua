@@ -30,6 +30,7 @@ function widget:Initialize()
     VFS.Include(CHILILOBBY_DIR .. "login_window.lua")
     VFS.Include(CHILILOBBY_DIR .. "chat_windows.lua")
     VFS.Include(CHILILOBBY_DIR .. "play_window.lua")
+    VFS.Include(CHILILOBBY_DIR .. "battle_list_window.lua")
 
     local loginWindow = LoginWindow()
 end
