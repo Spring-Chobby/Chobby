@@ -26,42 +26,42 @@ function Wrapper:init()
 end
 
 -- override
-function Wrapper:OnAddUser(userName, country, cpu, accountID)
+function Wrapper:_OnAddUser(userName, country, cpu, accountID)
     cpu = tonumber(cpu)
     accountID = tonumber(accountID)
 
     self.users[userName] = {userName=userName, country=country, cpu=cpu, accountID=accountID}
     self.userCount = self.userCount + 1
 
-    self:super("OnAddUser", userName, country, cpu, accountID)
+    self:super("_OnAddUser", userName, country, cpu, accountID)
 end
-Interface.commands["ADDUSER"] = Wrapper.OnAddUser
+Interface.commands["ADDUSER"] = Wrapper._OnAddUser
 
 -- override
-function Wrapper:OnRemoveUser(userName)
+function Wrapper:_OnRemoveUser(userName)
     self.users[userName] = nil
     self.userCount = self.userCount - 1
 
-    self:super("OnRemoveUser", userName)
+    self:super("_OnRemoveUser", userName)
 end
-Interface.commands["REMOVEUSER"] = Wrapper.OnRemoveUser
+Interface.commands["REMOVEUSER"] = Wrapper._OnRemoveUser
 
 -- override
 function Wrapper:Ping()
     self.pingTimer = Spring.GetTimer()
-    self:super("Ping")
+    return self:super("Ping")
 end
 
 -- override
-function Wrapper:OnPong()
+function Wrapper:_OnPong()
     self.pongTimer = Spring.GetTimer()
     self.latency = Spring.DiffTimers(self.pongTimer, self.pingTimer, true)
-    self:super("OnPong")
+    self:super("_OnPong")
 end
-Interface.commands["PONG"] = Wrapper.OnPong
+Interface.commands["PONG"] = Wrapper._OnPong
 
 -- override
-function Wrapper:OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other)
+function Wrapper:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other)
     battleID = tonumber(battleID)
     type = tonumber(type)
     natType = tonumber(natType)
@@ -74,30 +74,30 @@ function Wrapper:OnBattleOpened(battleID, type, natType, founder, ip, port, maxP
     self.battles[battleID] = {battleID=battleID, type=type, natType=natType, port=port, maxPlayers=maxPlayers, passworded=passworded, engineName=engineName, engineVersion=engineVersion, map=map, title=title, gameName=gameName, users={}}
     self.battleCount = self.battleCount + 1
 
-    self:super("OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other)
+    self:super("_OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other)
 end
-Interface.commands["BATTLEOPENED"] = Wrapper.OnBattleOpened
+Interface.commands["BATTLEOPENED"] = Wrapper._OnBattleOpened
 
 -- override
-function Wrapper:OnBattleClosed(battleID)
+function Wrapper:_OnBattleClosed(battleID)
     self.battles[battleID] = nil
     self.battleCount = self.battleCount - 1
 
-    self:super("OnBattleClosed", battleID)
+    self:super("_OnBattleClosed", battleID)
 end
-Interface.commands["BATTLECLOSED"] = Wrapper.OnBattleClosed
+Interface.commands["BATTLECLOSED"] = Wrapper._OnBattleClosed
 
 -- override
-function Wrapper:OnJoinedBattle(battleID, userName, scriptPassword)
+function Wrapper:_OnJoinedBattle(battleID, userName, scriptPassword)
     battleID = tonumber(battleID)
     table.insert(self.battles[battleID].users, userName)
 
-    self:super("OnJoinedBattle", battleID, userName, scriptPassword)
+    self:super("_OnJoinedBattle", battleID, userName, scriptPassword)
 end
-Interface.commands["JOINEDBATTLE"] = Wrapper.OnJoinedBattle
+Interface.commands["JOINEDBATTLE"] = Wrapper._OnJoinedBattle
 
 -- override
-function Wrapper:OnLeftBattle(battleID, userName)
+function Wrapper:_OnLeftBattle(battleID, userName)
     battleID = tonumber(battleID)
 
     local battleUsers = self.battles[battleID].users
@@ -108,9 +108,9 @@ function Wrapper:OnLeftBattle(battleID, userName)
         end
     end
 
-    self:super("OnLeftBattle", battleID, userName)
+    self:super("_OnLeftBattle", battleID, userName)
 end
-Interface.commands["LEFTBATTLE"] = Wrapper.OnLeftBattle
+Interface.commands["LEFTBATTLE"] = Wrapper._OnLeftBattle
 
 function ShallowCopy(orig)
     local orig_type = type(orig)

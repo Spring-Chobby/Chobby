@@ -4,7 +4,7 @@ function Observable:Init()
     self.listeners = {}
 end
 
-function Observable:Register(event, listener)
+function Observable:AddListener(event, listener)
     local eventListeners = self.listeners[event]
     if eventListeners == nil then
         eventListeners = {}
@@ -13,7 +13,7 @@ function Observable:Register(event, listener)
     table.insert(eventListeners, listener)
 end
 
-function Observable:Unregister(event, listener)
+function Observable:RemoveListener(event, listener)
     for k, v in pairs(self.listeners[event]) do
         if v == listener then
             table.remove(self.listeners[event], k)
@@ -25,7 +25,7 @@ function Observable:Unregister(event, listener)
     end
 end
 
-function Observable:CallListeners(event, ...)
+function Observable:_CallListeners(event, ...)
     if self.listeners[event] == nil then
         return nil -- no event listeners
     end
@@ -34,11 +34,11 @@ function Observable:CallListeners(event, ...)
         local listener = eventListeners[i]
         args = {...}
         xpcall(function() listener(listener, unpack(args)) end, 
-            function(err) self:PrintError(err) end )
+            function(err) self:_PrintError(err) end )
     end
     return true
 end
 
-function Observable:PrintError(err)
+function Observable:_PrintError(err)
     Spring.Echo(debug.traceback())
 end

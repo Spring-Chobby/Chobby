@@ -52,5 +52,12 @@ function widget:Shutdown()
 end
 
 function widget:Update()
-  WG.LibLobby.lobby:Update()
+  xpcall(
+    function()
+      WG.LibLobby.lobby:Update()
+    end, 
+    function(err)
+      Spring.Echo(debug.traceback())
+    end
+  )
 end
