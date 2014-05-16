@@ -162,6 +162,24 @@ function EditBox:MouseUp(...)
 	return self
 end
 
+function EditBox:_ClearSelected()
+    local left = self.selStart
+    local right = self.selEnd
+    if left > right then
+        left, right = right, left
+    end
+    self.cursor = right
+    local i = 0
+    while self.cursor ~= left do
+        self.text, self.cursor = Utf8BackspaceAt(self.text, self.cursor)
+        i = i + 1
+        if i > 100 then
+            break
+        end
+    end
+    self.selStart = nil
+    self.selEnd = nil
+end
 
 function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	local cp = self.cursor
@@ -170,29 +188,13 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
         if self.selStart == nil then
             self.text, self.cursor = Utf8BackspaceAt(txt, cp)
         else
-            local left = self.selStart
-            local right = self.selEnd
-            if left > right then
-                left, right = right, left
-            end
-            self.cursor = right
-            while self.cursor ~= left do
-                self.text, self.cursor = Utf8BackspaceAt(self.text, self.cursor)
-            end
+            self:_ClearSelected()
         end
 	elseif key == Spring.GetKeyCode("delete") then
         if self.selStart == nil then
-		    self.text   = Utf8DeleteAt(txt, cp)
+		    self.text = Utf8DeleteAt(txt, cp)
         else
-            local left = self.selStart
-            local right = self.selEnd
-            if left > right then
-                left, right = right, left
-            end
-            self.cursor = right
-            while self.cursor ~= left do
-                self.text, self.cursor = Utf8BackspaceAt(self.text, self.cursor)
-            end
+            self:_ClearSelected()
         end
 	elseif key == Spring.GetKeyCode("left") then
 		self.cursor = Utf8PrevChar(txt, cp)
@@ -216,6 +218,11 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 		end
 
 		if utf8char then
+            if self.selStart ~= nil then
+                self:_ClearSelected()
+                txt = self.text
+                cp = self.cursor
+            end
 			self.text = txt:sub(1, cp - 1) .. utf8char .. txt:sub(cp, #txt)
 			self.cursor = cp + utf8char:len()
 		else
