@@ -271,7 +271,7 @@ function EditBox:TextInput(utf8char, ...)
 	end
 
 	self._interactedTime = Spring.GetTimer()
-	inherited.TextInput(utf8char, ...)
+	inherited.TextInput(self, utf8char, ...)
 	self:UpdateLayout()
 	self:Invalidate()
 	return self
