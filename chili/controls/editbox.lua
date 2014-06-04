@@ -264,6 +264,11 @@ function EditBox:TextInput(utf8char, ...)
 	if unicode then
 		local cp  = self.cursor
 		local txt = self.text
+		if self.selStart ~= nil then
+            self:_ClearSelected()
+            txt = self.text
+            cp = self.cursor
+        end
 		self.text = txt:sub(1, cp - 1) .. unicode .. txt:sub(cp, #txt)
 		self.cursor = cp + unicode:len()
 	--else
