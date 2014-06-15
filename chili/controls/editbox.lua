@@ -139,14 +139,14 @@ function EditBox:Update(...)
 	end
 end
 
-function EditBox:UpdateMouse(x, y, ...)
+function EditBox:_SetCursorByMousePos(x, y)
 	local clientX = self.clientArea[1]
 	if x - clientX < 0 then	
 		self.offset = self.offset - 1
 		self.offset = math.max(0, self.offset)
 		self.cursor = self.offset + 1
 	else
-		self.cursor = #self.text + 1 -- at end of text	
+		self.cursor = #self.text + 1 -- at end of text
 		for i = self.offset, #self.text do
 			local tmp = self.text:sub(self.offset, i)
 			if self.font:GetTextWidth(tmp) > (x - clientX) then
@@ -160,7 +160,7 @@ end
 function EditBox:MouseDown(x, y, ...)
 	local _, _, _, shift = Spring.GetModKeyState()
 	local cp = self.cursor
-	self:UpdateMouse(x, y, ...)
+	self:_SetCursorByMousePos(x, y)
 	if shift then
 		if not self.selStart then
 			self.selStart = cp
@@ -178,20 +178,22 @@ function EditBox:MouseDown(x, y, ...)
 end
 
 function EditBox:MouseMove(x, y, dx, dy, button)
-	if button == 1 then
-		local _, _, _, shift = Spring.GetModKeyState()
-		local cp = self.cursor
-		self:UpdateMouse(x, y, dx, dy, button)
-		if not self.selStart then
-			self.selStart = cp
-		end
-		self.selEnd = self.cursor
-		
-		self._interactedTime = Spring.GetTimer()
-		inherited.MouseMove(self, x, y, dx, dy, button)
-		self:Invalidate()
-		return self
+	if button ~= 1 then
+		return inherited.MouseMove(self, x, y, dx, dy, button)
 	end
+
+	local _, _, _, shift = Spring.GetModKeyState()
+	local cp = self.cursor
+	self:_SetCursorByMousePos(x, y)
+	if not self.selStart then
+		self.selStart = cp
+	end
+	self.selEnd = self.cursor
+
+	self._interactedTime = Spring.GetTimer()
+	inherited.MouseMove(self, x, y, dx, dy, button)
+	self:Invalidate()
+	return self
 end
 
 function EditBox:MouseUp(...)
@@ -225,8 +227,11 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	local cp = self.cursor
 	local txt = self.text
 
+	-- enter & return
 	if key == Spring.GetKeyCode("enter") or key == Spring.GetKeyCode("numpad_enter") then
 		return inherited.KeyPress(self, key, mods, isRepeat, label, unicode, ...) or false
+
+	-- deletions
 	elseif key == Spring.GetKeyCode("backspace") then
 		if self.selStart == nil then
 			self.text, self.cursor = Utf8BackspaceAt(txt, cp)
@@ -239,6 +244,8 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 		else
 			self:ClearSelected()
 		end
+
+	-- cursor movement
 	elseif key == Spring.GetKeyCode("left") then
 		self.cursor = Utf8PrevChar(txt, cp)
 	elseif key == Spring.GetKeyCode("right") then
@@ -247,6 +254,8 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 		self.cursor = 1
 	elseif key == Spring.GetKeyCode("end") then
 		self.cursor = #txt + 1
+
+	-- character input
 	elseif unicode and unicode ~= 0 then
 		-- backward compability with Spring <97
 		self:TextInput(unicode)
