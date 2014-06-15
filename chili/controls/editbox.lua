@@ -141,12 +141,18 @@ end
 
 function EditBox:UpdateMouse(x, y, ...)
 	local clientX = self.clientArea[1]
-	self.cursor = #self.text + 1 -- at end of text	
-	for i = self.offset, #self.text do
-		local tmp = self.text:sub(self.offset, i)
-		if self.font:GetTextWidth(tmp) > (x - clientX) then
-			self.cursor = i
-			break
+	if x - clientX < 0 then	
+		self.offset = self.offset - 1
+		self.offset = math.max(0, self.offset)
+		self.cursor = self.offset + 1
+	else
+		self.cursor = #self.text + 1 -- at end of text	
+		for i = self.offset, #self.text do
+			local tmp = self.text:sub(self.offset, i)
+			if self.font:GetTextWidth(tmp) > (x - clientX) then
+				self.cursor = i
+				break
+			end
 		end
 	end
 end
