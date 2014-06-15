@@ -139,10 +139,9 @@ function EditBox:Update(...)
 	end
 end
 
-
-function EditBox:MouseDown(x, y, ...)
+function EditBox:UpdateMouse(x, y, ...)
 	local clientX = self.clientArea[1]
-	self.cursor = #self.text + 1 -- at end of text
+	self.cursor = #self.text + 1 -- at end of text	
 	for i = self.offset, #self.text do
 		local tmp = self.text:sub(self.offset, i)
 		if self.font:GetTextWidth(tmp) > (x - clientX) then
@@ -150,10 +149,43 @@ function EditBox:MouseDown(x, y, ...)
 			break
 		end
 	end
+end
+
+function EditBox:MouseDown(x, y, ...)
+	local _, _, _, shift = Spring.GetModKeyState()
+	local cp = self.cursor
+	self:UpdateMouse(x, y, ...)
+	if shift then
+		if not self.selStart then
+			self.selStart = cp
+		end
+		self.selEnd = self.cursor
+	elseif self.selStart then
+		self.selStart = nil
+		self.selEnd = nil
+	end
+	
 	self._interactedTime = Spring.GetTimer()
 	inherited.MouseDown(self, x, y, ...)
 	self:Invalidate()
 	return self
+end
+
+function EditBox:MouseMove(x, y, dx, dy, button)
+	if button == 1 then
+		local _, _, _, shift = Spring.GetModKeyState()
+		local cp = self.cursor
+		self:UpdateMouse(x, y, dx, dy, button)
+		if not self.selStart then
+			self.selStart = cp
+		end
+		self.selEnd = self.cursor
+		
+		self._interactedTime = Spring.GetTimer()
+		inherited.MouseMove(self, x, y, dx, dy, button)
+		self:Invalidate()
+		return self
+	end
 end
 
 function EditBox:MouseUp(...)
@@ -213,18 +245,20 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 		-- backward compability with Spring <97
 		self:TextInput(unicode)
 	end
-
+	
 	-- text selection handling
-	if mods.shift then
-		if not self.selStart then
-			self.selStart = cp
+	if key == Spring.GetKeyCode("left") or key == Spring.GetKeyCode("right") or key == Spring.GetKeyCode("home") or key == Spring.GetKeyCode("end") then
+		if mods.shift then
+			if not self.selStart then
+				self.selStart = cp
+			end
+			self.selEnd = self.cursor
+		elseif self.selStart then
+			self.selStart = nil
+			self.selEnd = nil
 		end
-		self.selEnd = self.cursor
-	elseif self.selStart then
-		self.selStart = nil
-		self.selEnd = nil
 	end
-
+	
 	self._interactedTime = Spring.GetTimer()
 	inherited.KeyPress(self, key, mods, isRepeat, label, unicode, ...)
 	self:UpdateLayout()
