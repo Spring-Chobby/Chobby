@@ -255,6 +255,16 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	elseif key == Spring.GetKeyCode("end") then
 		self.cursor = #txt + 1
 
+	-- copy & paste
+	elseif mods.ctrl and key == Spring.GetKeyCode("c") then
+		local s = self.selStart
+		local e = self.selEnd
+		if s and e and (e>s) then
+			Spring.SetClipboard(txt:sub(s,e-1))
+		end
+	elseif mods.ctrl and key == Spring.GetKeyCode("v") then
+		self:TextInput(Spring.GetClipboard())
+
 	-- character input
 	elseif unicode and unicode ~= 0 then
 		-- backward compability with Spring <97
