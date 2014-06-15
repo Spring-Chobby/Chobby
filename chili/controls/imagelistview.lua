@@ -151,6 +151,7 @@ function ImageListView:ScanDir()
     end
   end
 
+
   self._dirsNum = #dirs
   self._dirList = dirs
 
@@ -195,7 +196,6 @@ function ImageListView:SetDir(directory)
   self:DeselectAll()
   self.dir = directory
   self:ScanDir()
-
   self:CallListeners(self.OnDirChange, directory)
 
   if (self.parent) then
@@ -204,6 +204,11 @@ function ImageListView:SetDir(directory)
     self:UpdateLayout()
     self:Invalidate()
   end
+end
+
+
+function ImageListView:GoToParentDir()
+  self:SetDir(GetParentDir(self.dir))
 end
 
 

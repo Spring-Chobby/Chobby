@@ -217,10 +217,33 @@ function widget:Initialize()
 		clientHeight = 400,
 		parent = Chili.Screen0,
 	}
-
+	local eb_path = Chili.EditBox:New{
+		x=0, right=30,
+		y=0, height=28,
+		parent = windowImageList,
+		OnKeyPress = {
+			function(obj, key, mods, isRepeat, label, unicode, ...)
+				if key == KEYSYMS.RETURN then
+					obj.parent:GetObjectByName("MyImageListView"):SetDir( obj.text )
+					return obj
+				end
+			end,
+		}
+	}
+	Chili.Button:New{
+		x=-28, width=28,
+		y=0,   height=28,
+		caption="⬆",
+		parent = windowImageList,
+		OnClick = {
+			function(obj)
+				obj.parent:GetObjectByName("MyImageListView"):GoToParentDir()
+			end,
+		}
+	}
 	local control = Chili.ScrollPanel:New{
 		x=0, right=0,
-		y=0, bottom=0,
+		y=30, bottom=0,
 		parent = windowImageList,
 		children = {
 			--Button:New{width = 410, height = 400, anchors = {top=true,left=true,bottom=true,right=true}},
@@ -228,7 +251,7 @@ function widget:Initialize()
 				name = "MyImageListView",
 				x=0, right=0,
 				y=0, bottom=0,
-				dir = "LuaUI/Images/",
+				dir = "./",
 				OnSelectItem = {
 					function(obj,itemIdx,selected)
 						Spring.Echo("image selected ",itemIdx,selected)
@@ -241,6 +264,7 @@ function widget:Initialize()
 				},
 				OnDirChange = {
 					function(obj,itemIdx)
+						eb_path:SetText( obj.dir )
 						if obj.parent and obj.parent:InheritsFrom("scrollpanel") then
 							obj.parent:SetScrollPos(0,0)
 						end
@@ -249,7 +273,6 @@ function widget:Initialize()
 			}
 		}
 	}
-
 
 	--------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------
