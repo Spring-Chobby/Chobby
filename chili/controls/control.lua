@@ -179,7 +179,7 @@ end
 -- @tparam object.Object obj parent object
 function Control:SetParent(obj)
   inherited.SetParent(self,obj)
-  self:RequestRealign()
+  if obj then self:RequestRealign() end
 end
 
 --- Adds a child object to the control
