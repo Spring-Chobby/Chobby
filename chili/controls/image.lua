@@ -26,6 +26,8 @@ Image = Button:Inherit{
 
   keepAspect = true;
 
+  useRTT = false;
+
   OnClick  = {},
 }
 

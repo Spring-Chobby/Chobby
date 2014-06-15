@@ -29,6 +29,8 @@ ImageListView = LayoutPanel:Inherit{
 
   dir = '',
 
+  useRTT = false;
+
   OnDirChange = {},
 }
 
@@ -116,6 +118,7 @@ function ImageListView:_AddFile(name,imagefile)
     itemMargin = {0,0,0,0},
     rows = 2,
     columns = 1,
+    useRTT = false;
 
     children = {
       Image:New{
