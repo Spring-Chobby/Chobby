@@ -141,7 +141,7 @@ end
 
 function EditBox:_SetCursorByMousePos(x, y)
 	local clientX = self.clientArea[1]
-	if x - clientX < 0 then	
+	if x - clientX < 0 then
 		self.offset = self.offset - 1
 		self.offset = math.max(0, self.offset)
 		self.cursor = self.offset + 1
@@ -256,11 +256,15 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 		self.cursor = #txt + 1
 
 	-- copy & paste
-	elseif mods.ctrl and key == Spring.GetKeyCode("c") then
+	elseif mods.ctrl and (key == Spring.GetKeyCode("c") or key == Spring.GetKeyCode("x")) then
 		local s = self.selStart
 		local e = self.selEnd
-		if s and e and (e>s) then
+		if s and e then
+			s,e = math.min(s,e), math.max(s,e)
 			Spring.SetClipboard(txt:sub(s,e-1))
+		end
+		if key == Spring.GetKeyCode("x") then
+			self:ClearSelected()
 		end
 	elseif mods.ctrl and key == Spring.GetKeyCode("v") then
 		self:TextInput(Spring.GetClipboard())
