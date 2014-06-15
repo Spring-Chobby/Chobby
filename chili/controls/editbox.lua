@@ -27,7 +27,7 @@ EditBox = Control:Inherit{
 
   align    = "left",
   valign   = "linecenter",
-  
+
   hintFont = table.merge({ color = {1,1,1,0.7} }, Control.font),
 
   text   = "",
@@ -162,40 +162,45 @@ function EditBox:MouseUp(...)
 	return self
 end
 
-function EditBox:_ClearSelected()
-    local left = self.selStart
-    local right = self.selEnd
-    if left > right then
-        left, right = right, left
-    end
-    self.cursor = right
-    local i = 0
-    while self.cursor ~= left do
-        self.text, self.cursor = Utf8BackspaceAt(self.text, self.cursor)
-        i = i + 1
-        if i > 100 then
-            break
-        end
-    end
-    self.selStart = nil
-    self.selEnd = nil
+function EditBox:ClearSelected()
+	local left = self.selStart
+	local right = self.selEnd
+	if left > right then
+		left, right = right, left
+	end
+	self.cursor = right
+	local i = 0
+	while self.cursor ~= left do
+		self.text, self.cursor = Utf8BackspaceAt(self.text, self.cursor)
+		i = i + 1
+		if i > 100 then
+			break
+		end
+	end
+	self.selStart = nil
+	self.selEnd = nil
+	self:Invalidate()
 end
+
 
 function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	local cp = self.cursor
 	local txt = self.text
-	if key == Spring.GetKeyCode("backspace") then
-        if self.selStart == nil then
-            self.text, self.cursor = Utf8BackspaceAt(txt, cp)
-        else
-            self:_ClearSelected()
-        end
+
+	if key == Spring.GetKeyCode("enter") or key == Spring.GetKeyCode("numpad_enter") then
+		return inherited.KeyPress(self, key, mods, isRepeat, label, unicode, ...) or false
+	elseif key == Spring.GetKeyCode("backspace") then
+		if self.selStart == nil then
+			self.text, self.cursor = Utf8BackspaceAt(txt, cp)
+		else
+			self:ClearSelected()
+		end
 	elseif key == Spring.GetKeyCode("delete") then
-        if self.selStart == nil then
-		    self.text = Utf8DeleteAt(txt, cp)
-        else
-            self:_ClearSelected()
-        end
+		if self.selStart == nil then
+			self.text = Utf8DeleteAt(txt, cp)
+		else
+			self:ClearSelected()
+		end
 	elseif key == Spring.GetKeyCode("left") then
 		self.cursor = Utf8PrevChar(txt, cp)
 	elseif key == Spring.GetKeyCode("right") then
@@ -204,42 +209,22 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 		self.cursor = 1
 	elseif key == Spring.GetKeyCode("end") then
 		self.cursor = #txt + 1
-	elseif key ~= Spring.GetKeyCode("enter") and key ~= Spring.GetKeyCode("numpad_enter") then
-		local utf8char = UnicodeToUtf8(unicode)
-		if (not self.allowUnicode) then
-			local success
-			success, utf8char = pcall(string.char, unicode)
-			if success then
-				success = not utf8char:find("%c")
-			end
-			if (not success) then
-				utf8char = nil
-			end
-		end
-
-		if utf8char then
-            if self.selStart ~= nil then
-                self:_ClearSelected()
-                txt = self.text
-                cp = self.cursor
-            end
-			self.text = txt:sub(1, cp - 1) .. utf8char .. txt:sub(cp, #txt)
-			self.cursor = cp + utf8char:len()
-		else
-			return false
-		end
+	elseif unicode and unicode ~= 0 then
+		-- backward compability with Spring <97
+		self:TextInput(unicode)
 	end
-    if mods.shift and 
-        (key == Spring.GetKeyCode("left") or key == Spring.GetKeyCode("right") or key == Spring.GetKeyCode("home") or key == Spring.GetKeyCode("end")) then
-        if not self.selStart then
-            self.selStart = cp
-        end
-        self.selEnd = self.cursor
-    end
-    if not mods.shift and self.selStart then
-        self.selStart = nil
-        self.selEnd = nil
-    end
+
+	-- text selection handling
+	if mods.shift then
+		if not self.selStart then
+			self.selStart = cp
+		end
+		self.selEnd = self.cursor
+	elseif self.selStart then
+		self.selStart = nil
+		self.selEnd = nil
+	end
+
 	self._interactedTime = Spring.GetTimer()
 	inherited.KeyPress(self, key, mods, isRepeat, label, unicode, ...)
 	self:UpdateLayout()
@@ -256,7 +241,7 @@ function EditBox:TextInput(utf8char, ...)
 		if success then
 			success = not unicode:find("%c")
 		end
-		if (not success) then
+		if not success then
 			unicode = nil
 		end
 	end
@@ -264,15 +249,13 @@ function EditBox:TextInput(utf8char, ...)
 	if unicode then
 		local cp  = self.cursor
 		local txt = self.text
-		if self.selStart ~= nil then
-            self:_ClearSelected()
-            txt = self.text
-            cp = self.cursor
-        end
+		if self.selStart then
+			self:ClearSelected()
+			txt = self.text
+			cp = self.cursor
+		end
 		self.text = txt:sub(1, cp - 1) .. unicode .. txt:sub(cp, #txt)
 		self.cursor = cp + unicode:len()
-	--else
-	--	return false
 	end
 
 	self._interactedTime = Spring.GetTimer()
