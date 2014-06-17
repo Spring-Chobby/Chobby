@@ -42,7 +42,7 @@ EditBox = Control:Inherit{
 }
 local version = Game.version
 for i = 1, #version do
-    if i == "." then
+    if version:sub(i, i) == "." then
         version = version:sub(1, i - 1)
         break
     end
