@@ -40,15 +40,7 @@ EditBox = Control:Inherit{
   allowUnicode = true,
   passwordInput = false,
 }
-local version = Game.version
-for i = 1, #version do
-    if version:sub(i, i) == "." then
-        version = version:sub(1, i - 1)
-        break
-    end
-end
-version = tonumber(version)
-if version < 97 then
+if Script.IsEngineMinVersion == nil or not Script.IsEngineMinVersion(97) then
     EditBox.allowUnicode = false
 end
 
