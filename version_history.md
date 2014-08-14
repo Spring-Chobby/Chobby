@@ -1,5 +1,13 @@
 #Version history#
 
+##1.2.1 (11/12/12)
+* <tt>is_A</tt> method now follows inheritance scheme (Thanks to Nicolas Carreras)
+
+##1.2 (11/12/12)
+* __tostring for classes/instances
+* Various slight enhancements
+* Bugfix with <tt>is_A</tt>
+
 ##1.1 (05/28/12)
 * Added : Error checking on attributing function as members using class constructor
 * Fixed : Handling of instance of any class as another class attributes
