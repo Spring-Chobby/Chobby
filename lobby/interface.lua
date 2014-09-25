@@ -550,13 +550,13 @@ function Interface:_OnForceJoinBattleFailed(userName, reason)
     self:_CallListeners("OnForceJoinBattleFailed", userName, reason)
 end
 Interface.commands["FORCEJOINBATTLEFAILED"] = Interface._OnForceJoinBattleFailed
-Interface.commandPattern["FORCEJOINBATTLEFAILED"] = "(%S+)%s*(%[^\t]*)"
+Interface.commandPattern["FORCEJOINBATTLEFAILED"] = "(%S+)%s*([^\t]*)"
 
 function Interface:_OnForceLeaveChannel(chanName, userName, reason)
     self:_CallListeners("OnForceLeaveChannel", chanName, userName, reason)
 end
 Interface.commands["FORCELEAVECHANNEL"] = Interface._OnForceLeaveChannel
-Interface.commandPattern["FORCELEAVECHANNEL"] = "(%S+)%s+(%S+)%s*(%[^\t]*)"
+Interface.commandPattern["FORCELEAVECHANNEL"] = "(%S+)%s+(%S+)%s*([^\t]*)"
 
 function Interface:_OnForceQuitBattle()
     self:_CallListeners("OnForceQuitBattle")
@@ -588,7 +588,7 @@ function Interface:_OnJoinBattleFailed(reason)
     self:_CallListeners("OnJoinBattleFailed", reason)
 end
 Interface.commands["JOINBATTLEFAILED"] = Interface._OnJoinBattleFailed
-Interface.commandPattern["JOINBATTLEFAILED"] = "(%[^\t]+)"
+Interface.commandPattern["JOINBATTLEFAILED"] = "([^\t]+)"
 
 function Interface:_OnJoinBattleRequest(userName, ip)
     self:_CallListeners("OnJoinBattleRequest", userName, ip)
