@@ -71,7 +71,11 @@ function Wrapper:_OnBattleOpened(battleID, type, natType, founder, ip, port, max
     
     local engineName, engineVersion, map, title, gameName = unpack(explode("\t", other))
 
-    self.battles[battleID] = {battleID=battleID, type=type, natType=natType, port=port, maxPlayers=maxPlayers, passworded=passworded, engineName=engineName, engineVersion=engineVersion, map=map, title=title, gameName=gameName, users={}}
+    self.battles[battleID] = { 
+		battleID=battleID, type=type, natType=natType, founder=founder, ip=ip, port=port, 
+		maxPlayers=maxPlayers, passworded=passworded, rank=rank, mapHash=mapHash, 
+		engineName=engineName, engineVersion=engineVersion, map=map, title=title, gameName=gameName, users={},
+	}
     self.battleCount = self.battleCount + 1
 
     self:super("_OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other)
