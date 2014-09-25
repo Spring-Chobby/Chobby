@@ -157,8 +157,8 @@ end
 function Wrapper:GetBattleCount()
     return ShallowCopy(self.battleCount)
 end
-function Wrapper:GetBattle(battleName)
-    return self.battles[battleName]
+function Wrapper:GetBattle(battleID)
+    return self.battles[battleID]
 end
 -- returns battles table (not necessarily an array)
 function Wrapper:GetBattles()
