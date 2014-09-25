@@ -23,6 +23,13 @@ function Wrapper:init()
     self.battleCount = 0
 
     self.latency = 0 -- in ms
+	
+	self.myUserName = nil
+end
+
+function Wrapper:Login(user, ...)
+	self.myUserName = user
+	self:super("Login", user, ...)
 end
 
 -- override
@@ -140,6 +147,10 @@ end
 -- returns users table (not necessarily an array)
 function Wrapper:GetUsers()
     return ShallowCopy(self.users)
+end
+-- my user
+function Wrapper:GetMyUserName()
+	return self.myUserName
 end
 
 -- battles
