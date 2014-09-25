@@ -244,7 +244,9 @@ function Interface:MuteList(chanName)
     return self
 end
 
-function Interface:MyBattleStatus(battleStatus, myTeamColor)
+function Interface:MyBattleStatus(ready, team, allyTeam, mode, handicap, sync, side, myTeamColor)
+	local battleStatus = tostring((ready and 2 or 0) + (mode and 2^10 or 0) + (sync and 2^22 or 2^23))
+	myTeamColor = myTeamColor or math.floor(math.random() * 255 * 2^16 + math.random() * 255 * 2^8 + math.random() * 255)
     self:_SendCommand(concat("MYBATTLESTATUS", battleStatus, myTeamColor))
     return self
 end
