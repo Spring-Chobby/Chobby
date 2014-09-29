@@ -74,7 +74,7 @@ function Wrapper:_OnBattleOpened(battleID, type, natType, founder, ip, port, max
     natType = tonumber(natType)
     port = tonumber(port)
     maxPlayers = tonumber(maxPlayers)
-    passworded = tonumber(passworded)
+    passworded = tonumber(passworded) ~= 0
     
     local engineName, engineVersion, map, title, gameName = unpack(explode("\t", other))
 
