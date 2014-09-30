@@ -196,21 +196,17 @@ end
 function Wrapper:GetUsers()
     return ShallowCopy(self.users)
 end
--- my user
-function Wrapper:GetMyUserName()
-	return self.myUserName
-end
 
 -- battles
 function Wrapper:GetBattleCount()
-    return ShallowCopy(self.battleCount)
+    return self.battleCount
 end
 function Wrapper:GetBattle(battleID)
     return self.battles[battleID]
 end
 -- returns battles table (not necessarily an array)
 function Wrapper:GetBattles()
-    return self.battles
+    return ShallowCopy(self.battles)
 end
 
 -- channels
@@ -227,6 +223,12 @@ end
 
 function Wrapper:GetLatency()
     return self.latency
+end
+
+-- My data
+-- My user
+function Wrapper:GetMyUserName()
+	return self.myUserName
 end
 
 return Wrapper
