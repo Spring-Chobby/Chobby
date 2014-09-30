@@ -19,6 +19,9 @@ function Wrapper:init()
     self.users = {}
     self.userCount = 0
 
+    self.channels = {}
+    self.channelCount = 0
+
     self.battles = {}
     self.battleCount = 0
 
@@ -123,6 +126,51 @@ function Wrapper:_OnLeftBattle(battleID, userName)
 end
 Interface.commands["LEFTBATTLE"] = Wrapper._OnLeftBattle
 
+-- will also create a channel if it doesn't already exist
+function Wrapper:_GetChannel(chanName)
+    local channel = self.channels[chanName]
+    if channel == nil then
+        channel = { chanName = chanName }
+        self.channels[chanName] = channel
+    end
+    return channel
+end
+
+-- override
+function Wrapper:_OnChannel(chanName, userCount, topic)
+    local channel = self:_GetChannel(chanName)
+    channel.userCount = userCount
+    channel.topic = topic
+
+    self:super("_OnChannel", chanName, userCount, topic)
+end
+Interface.commands["CHANNEL"] = Wrapper._OnChannel
+
+-- override
+function Wrapper:_OnClients(chanName, clientsStr)
+    local channel = self:_GetChannel(chanName)
+    local users = explode(" ", clientsStr)
+
+    if channel.users ~= nil then
+        for _, user in pairs(users) do
+            local found = false
+            for _, existingUser in pairs(channel.users) do
+                if user == existingUser then
+                    found = true
+                    break
+                end
+            end
+            if not found then
+                table.insert(channel.users, user)
+            end
+        end
+    else
+        channel.users = users
+    end
+    self:super("_OnClients", chanName, clientsStr)
+end
+Interface.commands["CLIENTS"] = Wrapper._OnClients
+
 function ShallowCopy(orig)
     local orig_type = type(orig)
     local copy
@@ -165,6 +213,17 @@ function Wrapper:GetBattles()
     return self.battles
 end
 
+-- channels
+function Wrapper:GetChannelCount()
+    return self.channelCount
+end
+function Wrapper:GetChannel(channelName)
+    return self.channels[channelName]
+end
+-- returns channels table (not necessarily an array)
+function Wrapper:GetChannels()
+    return ShallowCopy(self.channels)
+end
 
 function Wrapper:GetLatency()
     return self.latency
