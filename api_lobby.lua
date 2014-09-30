@@ -8,7 +8,7 @@ function widget:GetInfo()
     author    = "gajop",
     date      = "WIP",
     license   = "GPLv2",
-    version   = "2.0",
+    version   = "0.2",
     layer     = 1000,
     enabled   = true,  --  loaded by default?
     handler   = true,

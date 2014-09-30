@@ -84,7 +84,7 @@ function Wrapper:_OnBattleOpened(battleID, type, natType, founder, ip, port, max
     self.battles[battleID] = { 
 		battleID=battleID, type=type, natType=natType, founder=founder, ip=ip, port=port, 
 		maxPlayers=maxPlayers, passworded=passworded, rank=rank, mapHash=mapHash, 
-		engineName=engineName, engineVersion=engineVersion, map=map, title=title, gameName=gameName, users={},
+		engineName=engineName, engineVersion=engineVersion, map=map, title=title, gameName=gameName, users={founder},
 	}
     self.battleCount = self.battleCount + 1
 
@@ -132,6 +132,7 @@ function Wrapper:_GetChannel(chanName)
     if channel == nil then
         channel = { chanName = chanName }
         self.channels[chanName] = channel
+        self.channelCount = self.channelCount + 1
     end
     return channel
 end
