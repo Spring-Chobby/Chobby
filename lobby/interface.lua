@@ -925,7 +925,7 @@ function Interface:_SocketUpdate()
             end
             self.buffer = commands[#commands]
 		elseif status == "closed" then
-            Spring.Echo("closed connection")
+            Spring.Echo("Disconnected from server.")
 			input:close()
             self.connected = false
             self:_Disconnected()

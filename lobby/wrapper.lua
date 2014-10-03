@@ -30,10 +30,29 @@ function Wrapper:init()
 	self.myUserName = nil
 end
 
-function Wrapper:Login(user, ...)
-	self.myUserName = user
-	self:super("Login", user, ...)
+-- override
+function Wrapper:Connect(host, port)
+    self.host = host
+    self.port = port
+	self:super("Connect", host, port)
 end
+
+-- override
+function Wrapper:Login(user, password, cpu, localIP) 
+	self.myUserName = user
+    self.loginData = { user, password, cpu, localIP }
+	self:super("Login", user, password, cpu, localIP)
+end
+
+-- override
+function Wrapper:_OnTASServer(...)
+    if self.disconnectTime then -- in the process of reconnecting
+        self.disconnectTime = nil
+        self:Login(unpack(self.loginData))
+    end
+    self:super("_OnTASServer", ...)
+end
+Interface.commands["TASServer"] = Wrapper._OnTASServer
 
 -- override
 function Wrapper:_OnAddUser(userName, country, cpu, accountID)
@@ -171,6 +190,29 @@ function Wrapper:_OnClients(chanName, clientsStr)
     self:super("_OnClients", chanName, clientsStr)
 end
 Interface.commands["CLIENTS"] = Wrapper._OnClients
+
+-- override
+function Wrapper:_Disconnected(...)
+    self.disconnectTime = Spring.GetGameSeconds()
+    self:super("_Disconnected", ...)
+end
+
+function Wrapper:Reconnect()
+    self.lastReconnectionAttempt = Spring.GetGameSeconds()
+    self:Connect(self.host, self.port)
+end
+
+-- override
+function Wrapper:Update(...)
+    if not self.connected and self.disconnectTime ~= nil then
+        local nowSeconds = Spring.GetGameSeconds()
+        if self.lastReconnectionAttempt == nil or nowSeconds - self.lastReconnectionAttempt > 5 then
+            self:Reconnect()
+        end
+    end
+    self:super("Update", ...)
+end
+
 
 function ShallowCopy(orig)
     local orig_type = type(orig)
