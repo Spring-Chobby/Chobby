@@ -414,7 +414,7 @@ function Interface:_OnAgreement(line)
     self:_CallListeners("OnAgreement", line)
 end
 Interface.commands["AGREEMENT"] = Interface._OnAgreement
-Interface.commandPattern["DENIED"] = "(.+)"
+Interface.commandPattern["AGREEMENT"] = "(.+)"
 
 function Interface:_OnAgreementEnd()
     self:_CallListeners("OnAgreementEnd")
