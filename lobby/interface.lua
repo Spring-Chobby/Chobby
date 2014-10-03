@@ -865,6 +865,10 @@ end
 Interface.commands["UPDATEBOT"] = Interface._OnUpdateBot
 Interface.commandPattern["UPDATEBOT"] = "(%d+)%s+(%S+)%s+(%S+)%s+(%S+)"
 
+function Interface:_Disconnected()
+    self:_CallListeners("OnDisconnected")
+end
+
 function Interface:CommandReceived(command)
     local args = explode(" ", command)
     if string.starts(args[1], "#") then
@@ -924,6 +928,7 @@ function Interface:_SocketUpdate()
             Spring.Echo("closed connection")
 			input:close()
             self.connected = false
+            self:_Disconnected()
 		end
 	end
 end
