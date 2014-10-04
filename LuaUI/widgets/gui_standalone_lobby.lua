@@ -11,5 +11,12 @@ function widget:GetInfo()
 end
 
 function widget:Initialize()
-    Spring.SendCommands("ResBar 0", "ToolTip 0", "MiniMap 0", "Console 0")
+    Spring.SendCommands("ResBar 0", "ToolTip 0", "Console 0")
+end
+
+function widget:DrawWorld()
+    if not disableMinimap then
+        gl.SlaveMiniMap(true)
+        disableMinimap = true
+    end
 end
