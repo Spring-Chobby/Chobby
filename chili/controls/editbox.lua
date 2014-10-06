@@ -40,6 +40,9 @@ EditBox = Control:Inherit{
   allowUnicode = true,
   passwordInput = false,
 }
+if Script.IsEngineMinVersion == nil or not Script.IsEngineMinVersion(97) then
+    EditBox.allowUnicode = false
+end
 
 local this = EditBox
 local inherited = this.inherited
@@ -229,7 +232,7 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 
 	-- enter & return
 	if key == Spring.GetKeyCode("enter") or key == Spring.GetKeyCode("numpad_enter") then
-		return inherited.KeyPress(self, key, mods, isRepeat, label, unicode, ...) or false
+		return inherited.KeyPress(self, key, mods, isRepeat, label, unicode, ...) or true
 
 	-- deletions
 	elseif key == Spring.GetKeyCode("backspace") then

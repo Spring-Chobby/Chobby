@@ -448,7 +448,7 @@ function DrawEditBox(obj)
 			gl.Color(cc[1], cc[2], cc[3], cc[4] * alpha)
 			gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawCursor, cursorX + clientX - 1, clientY, 3, clientHeight)
 		end
-        if obj.selStart then
+        if obj.selStart and obj.state.focused then
 			local cursorTxt = text:sub(obj.offset, obj.cursor - 1)
 			local cursorX = font:GetTextWidth(cursorTxt)
 			local cc = obj.selectionColor
@@ -465,6 +465,8 @@ function DrawEditBox(obj)
 			local rightX = font:GetTextWidth(rightTxt)
 
             local w = rightX - leftX
+            -- limit the selection to the editbox width
+            w = math.min(w, obj.width - leftX - 3)
 			gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawSelection, leftX + clientX - 1, clientY, w, clientHeight)
         end
 	end
