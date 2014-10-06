@@ -16,6 +16,10 @@ Wrapper = Interface:extends{}
 function Wrapper:init()
 --    self:super("init")
     -- don't use these fields directly, they are subject to change
+    self:_Clean()
+end
+
+function Wrapper:_Clean()
     self.users = {}
     self.userCount = 0
 
@@ -26,8 +30,20 @@ function Wrapper:init()
     self.battleCount = 0
 
     self.latency = 0 -- in ms
-	
+
+    self.loginData = nil
 	self.myUserName = nil
+end
+
+function Wrapper:_PreserveData()
+    self._oldData = {
+        channels = ShallowCopy(self.channels),
+        battles = ShallowCopy(self.battles),
+        loginData = ShallowCopy(self.loginData),
+        myUserName = self.myUserName,
+        host = self.host,
+        port = self.port,
+    }
 end
 
 -- override
@@ -48,7 +64,7 @@ end
 function Wrapper:_OnTASServer(...)
     if self.disconnectTime then -- in the process of reconnecting
         self.disconnectTime = nil
-        self:Login(unpack(self.loginData))
+        self:Login(unpack(self._oldData.loginData))
     end
     self:super("_OnTASServer", ...)
 end
@@ -193,13 +209,17 @@ Interface.commands["CLIENTS"] = Wrapper._OnClients
 
 -- override
 function Wrapper:_Disconnected(...)
+    if self.disconnectTime == nil then
+        self:_PreserveData()
+        self:_Clean()
+    end
     self.disconnectTime = Spring.GetGameSeconds()
     self:super("_Disconnected", ...)
 end
 
 function Wrapper:Reconnect()
     self.lastReconnectionAttempt = Spring.GetGameSeconds()
-    self:Connect(self.host, self.port)
+    self:Connect(self._oldData.host, self._oldData.port)
 end
 
 -- override
