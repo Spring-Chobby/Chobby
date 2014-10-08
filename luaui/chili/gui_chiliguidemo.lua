@@ -26,6 +26,7 @@ local windowImageList
 local window1
 local window2
 local window3
+local window4
 
 function widget:Initialize()
 	Chili = WG.Chili
@@ -62,7 +63,10 @@ function widget:Initialize()
 		Chili.Button:New{
 			x      = 20,
 			y      = 20,
+			caption = "Click to make green",
+			OnClick = {function(self) self.font:SetColor(0,1,0,1); end},
 		},
+		Chili.Button:New{ font = { color = {1,0,0,0.3}, outline = false, shadow = false }, },
 		Chili.Label:New{
 			x      = 20,
 			y      = 50,
@@ -169,7 +173,7 @@ function widget:Initialize()
 		clientWidth = 200,
 		clientHeight = 200,
 		children = {
-			Chili.Button:New{right=0, bottom=0, caption = "2", OnClick={function()
+			Chili.Button:New{right=0, bottom=0, caption = "right aligned", OnClick={function(self)
 				--gridWindow1:GetObjectByName("tree_inspector")
 			end}},
 			Chili.TextBox:New{x=0, right=0, y=0, text = testText2},
@@ -369,6 +373,25 @@ function widget:Initialize()
 	}
 
 	window3:GetObjectByName("btn_b"):Hide()
+
+	window4 = Chili.Window:New{
+		x = 120,
+		y = 650,
+		parent = Chili.Screen0,
+		color = {1,1,1,0.5},
+
+		children = {
+			Chili.Label:New{
+				caption = "Chili " .. Chili.color2incolor(0,1,0) .. "D" .. Chili.color2incolor(0,0,1) .. "emo",
+				font = {
+					color = {1,0,0,0.35},
+					size = 70,
+					outline = false,
+					shadow  = false,
+				},
+			},
+		},
+	}
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 end --Initialize
@@ -390,5 +413,6 @@ function widget:Shutdown()
 	window1:Dispose()
 	window2:Dispose()
 	window3:Dispose()
+	window4:Dispose()
 end
 
