@@ -94,6 +94,7 @@ function Control:New(obj)
     obj._hasCustomDrawControl = true
   end
 
+
   --// load the skin for this control
   obj.classname = self.classname
   theme.LoadThemeDefaults(obj)
