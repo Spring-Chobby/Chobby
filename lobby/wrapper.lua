@@ -14,7 +14,7 @@ end
 Wrapper = Interface:extends{}
 
 function Wrapper:init()
---    self:super("init")
+    self:super("init")
     -- don't use these fields directly, they are subject to change
     self:_Clean()
 end
@@ -22,6 +22,9 @@ end
 function Wrapper:_Clean()
     self.users = {}
     self.userCount = 0
+
+    self.friends = {}
+    self.friendCount = 0
 
     self.channels = {}
     self.channelCount = 0
@@ -208,6 +211,21 @@ end
 Interface.commands["CLIENTS"] = Wrapper._OnClients
 
 -- override
+function Wrapper:_OnFriendListBegin(...)
+    self.friends = {}
+    self.friendCount = 0
+    self:super("_OnFriendListBegin", ...)
+end
+Interface.commands["FRIENDLISTBEGIN"] = Interface._OnFriendListBegin
+
+-- override
+function Wrapper:_OnFriendList(userName, ...)
+    table.insert(self.friends, userName)
+    self.friendCount = self.friendCount + 1
+    self:super("_OnFriendList", userName, ...)
+end
+
+-- override
 function Wrapper:_Disconnected(...)
     if self.disconnectTime == nil then
         self:_PreserveData()
@@ -233,7 +251,6 @@ function Wrapper:Update(...)
     self:super("Update", ...)
 end
 
-
 function ShallowCopy(orig)
     local orig_type = type(orig)
     local copy
@@ -258,6 +275,15 @@ end
 -- returns users table (not necessarily an array)
 function Wrapper:GetUsers()
     return ShallowCopy(self.users)
+end
+
+-- friends
+function Wrapper:GetFriendCount()
+    return self.friendCount
+end
+-- returns friends table (not necessarily an array)
+function Wrapper:GetFriends()
+    return ShallowCopy(self.friends)
 end
 
 -- battles

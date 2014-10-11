@@ -42,6 +42,26 @@ local function concat(...)
     return table.concat(argsClean, " ")
 end
 
+local function parseTags(tags)
+    local tags = explode("\t", tags)
+    local tagsMap = {}
+    for _, tag in pairs(tags) do
+        local indx = string.find(tag, "=")
+        local key = string.sub(tag, 1, indx-1)
+        local value = string.sub(tag, indx+1)
+        tagsMap[key] = value
+    end
+    return tagsMap
+end
+
+local function getTag(tags, tagName, mandatory)
+    local value = tags[tagName]
+    if mandatory and value == nil then
+        error("Missing mandatory parameter: " .. tostring(tagName))
+    end
+    return value
+end
+
 Interface = Observable:extends{}
 
 -- map lobby commands by name
@@ -49,7 +69,7 @@ Interface.commands = {}
 -- define command format with pattern (regex)
 Interface.commandPattern = {}
 
-function Interface:Initialize()
+function Interface:init()
    -- dumpConfig()
     self.messagesSentCount = 0
     self.lastSentSeconds = Spring.GetGameSeconds()
@@ -64,6 +84,7 @@ function Interface:Connect(host, port)
     self.client = socket.tcp()
 	self.client:settimeout(0)
 	local res, err = self.client:connect(host, port)
+    -- FIXME: this error check makes no sense!
 	if res == nil and not res == "timeout" then
 		Spring.Echo("Error in connect: " .. err)
 		return false
@@ -179,6 +200,11 @@ function Interface:ForceTeamNo(userName, teamNo)
     return self
 end
 
+function Interface:FriendList()
+    self:_SendCommand("FRIENDLIST", true)
+    return self
+end
+
 function Interface:GetInGameTime()
     self:_SendCommand("GETINGAMETIME")
     return self
@@ -233,8 +259,6 @@ function Interface:Login(user, password, cpu, localIP)
     if localIP == nil then
         localIP = "*"
     end
-    -- use HASH command so we can send passwords in plain text
-    self:_SendCommand("HASH")
     self:_SendCommand(concat("LOGIN", user, password, cpu, localIP, "LuaLobby\t", "0\t", "a b m cu sd cl et"))
     return self
 end
@@ -829,6 +853,8 @@ Interface.commands["SETSCRIPTTAGS"] = Interface._OnSetScriptTags
 Interface.commandPattern["SETSCRIPTTAGS"] = "([^\t]+)"
 
 function Interface:_OnTASServer(protocolVersion, springVersion, udpPort, serverMode)
+    -- use HASH command so we can send passwords in plain text
+    self:_SendCommand("HASH")
     self:_CallListeners("OnTASServer", protocolVersion, springVersion, udpPort, serverMode)
 end
 Interface.commands["TASServer"] = Interface._OnTASServer
@@ -864,6 +890,51 @@ function Interface:_OnUpdateBot(battleID, name, battleStatus, teamColor)
 end
 Interface.commands["UPDATEBOT"] = Interface._OnUpdateBot
 Interface.commandPattern["UPDATEBOT"] = "(%d+)%s+(%S+)%s+(%S+)%s+(%S+)"
+
+function Interface:_OnIgnoreListParse(tags)
+    local tags = parseTags(tags)
+    local userName = getTag(tags, "userName", true)
+    local reason = getTag(tags, "reason")
+    self:_OnIgnoreList(userName, reason)
+end
+
+function Interface:_OnIgnoreList(userName, reason)
+    self:_CallListeners("OnIgnoreList", userName, reason)
+end
+Interface.commands["IGNORELIST"] = Interface._OnIgnoreListParse
+Interface.commandPattern["IGNORELIST"] = "(.+)"
+
+function Interface:_OnIgnoreListBegin()
+    self:_CallListeners("OnIgnoreListBegin")
+end
+Interface.commands["IGNORELISTBEGIN"] = Interface._OnIgnoreListBegin
+
+function Interface:_OnIgnoreListEnd()
+    self:_CallListeners("OnIgnoreListEnd")
+end
+Interface.commands["IGNORELISTEND"] = Interface._OnIgnoreListEnd
+
+function Interface:_OnFriendListParse(tags)
+    local tags = parseTags(tags)
+    local userName = getTag(tags, "userName", true)
+    self:_OnFriendList(userName)
+end
+
+function Interface:_OnFriendList(userName)
+    self:_CallListeners("OnFriendList", userName)
+end
+Interface.commands["FRIENDLIST"] = Interface._OnFriendListParse
+Interface.commandPattern["FRIENDLIST"] = "(.+)"
+
+function Interface:_OnFriendListBegin()
+    self:_CallListeners("OnFriendListBegin")
+end
+Interface.commands["FRIENDLISTBEGIN"] = Interface._OnFriendListBegin
+
+function Interface:_OnFriendListEnd()
+    self:_CallListeners("OnFriendListEnd")
+end
+Interface.commands["FRIENDLISTEND"] = Interface._OnFriendListEnd
 
 function Interface:_Disconnected()
     self:_CallListeners("OnDisconnected")
@@ -913,8 +984,8 @@ function Interface:_SocketUpdate()
 	end
 	for _, input in ipairs(readable) do
 		local s, status, commandsStr = input:receive('*a') --try to read all data
-        print(commandsStr)
 		if status == "timeout" or status == nil then
+            print(commandsStr)
             local commands = explode("\n", commandsStr)
             commands[1] = self.buffer .. commands[1]
             for i = 1, #commands-1 do
