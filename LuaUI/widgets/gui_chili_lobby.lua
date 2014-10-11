@@ -25,16 +25,12 @@ function widget:Initialize()
         return
     end
 
-    VFS.Include(CHILILOBBY_DIR .. "exports.lua")
-    VFS.Include(CHILILOBBY_DIR .. "console.lua")
-    VFS.Include(CHILILOBBY_DIR .. "login_window.lua")
-    VFS.Include(CHILILOBBY_DIR .. "chat_windows.lua")
-    VFS.Include(CHILILOBBY_DIR .. "play_window.lua")
-    VFS.Include(CHILILOBBY_DIR .. "battle_list_window.lua")
-	VFS.Include(CHILILOBBY_DIR .. "battle_room_window.lua")
-    VFS.Include(CHILILOBBY_DIR .. "user_list_panel.lua")
+    ChiliLobby = VFS.Include(CHILILOBBY_DIR .. "core.lua", nil)
 
-    local loginWindow = LoginWindow()
+    WG.ChiliLobby = ChiliLobby
+    WG.ChiliLobby:initialize()
 end
 
-
+function widget:Shutdown()
+    WG.ChiliLobby = nil
+end
