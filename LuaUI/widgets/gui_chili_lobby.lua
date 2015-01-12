@@ -34,3 +34,7 @@ end
 function widget:Shutdown()
     WG.ChiliLobby = nil
 end
+
+function widget:DrawScreen()
+	WG.ChiliLobby:DrawScreen()
+end
