@@ -278,6 +278,10 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	elseif mods.ctrl and key == Spring.GetKeyCode("v") then
 		self:TextInput(Spring.GetClipboard())
 
+	-- select all
+	elseif mods.ctrl and key == Spring.GetKeyCode("a") then
+		self.selStart = 1
+		self.selEnd = #txt + 1
 	-- character input
 	elseif unicode and unicode ~= 0 then
 		-- backward compability with Spring <97
