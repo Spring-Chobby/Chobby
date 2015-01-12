@@ -272,7 +272,7 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 			s,e = math.min(s,e), math.max(s,e)
 			Spring.SetClipboard(txt:sub(s,e-1))
 		end
-		if key == Spring.GetKeyCode("x") then
+		if key == Spring.GetKeyCode("x") and self.selStart ~= nil then
 			self:ClearSelected()
 		end
 	elseif mods.ctrl and key == Spring.GetKeyCode("v") then
@@ -321,7 +321,7 @@ function EditBox:TextInput(utf8char, ...)
 	if unicode then
 		local cp  = self.cursor
 		local txt = self.text
-		if self.selStart then
+		if self.selStart ~= nil then
 			self:ClearSelected()
 			txt = self.text
 			cp = self.cursor
