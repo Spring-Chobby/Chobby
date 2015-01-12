@@ -149,9 +149,15 @@ function EditBox:_SetCursorByMousePos(x, y)
 		self.offset = math.max(0, self.offset)
 		self.cursor = self.offset + 1
 	else
-		self.cursor = #self.text + 1 -- at end of text
-		for i = self.offset, #self.text do
-			local tmp = self.text:sub(self.offset, i)
+		local text = self.text
+		-- properly accounts for passworded text where characters are represented as "*"
+		-- TODO: what if the passworded text is displayed differently? this is using assumptions about the skin
+		if #text > 0 and self.passwordInput then 
+			text = string.rep("*", #text)
+		end
+		self.cursor = #text + 1 -- at end of text
+		for i = self.offset, #text do
+			local tmp = text:sub(self.offset, i)
 			if self.font:GetTextWidth(tmp) > (x - clientX) then
 				self.cursor = i
 				break
