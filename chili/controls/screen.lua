@@ -178,25 +178,29 @@ function Screen:IsAbove(x,y,...)
   return (not not hoveredControl)
 end
 
-
-function Screen:MouseDown(x,y,...)
-  y = select(2,gl.GetViewSizes()) - y
-
-  local activeControl = inherited.MouseDown(self,x,y,...)
-  self.activeControl = MakeWeakLink(activeControl, self.activeControl)
-  if not CompareLinks(self.activeControl, self.focusedControl) then
+function Screen:FocusControl(control)
+  --UnlinkSafe(self.activeControl)
+  if not CompareLinks(control, self.focusedControl) then
       local focusedControl = UnlinkSafe(self.focusedControl)
       if focusedControl then
           focusedControl.state.focused = false
           focusedControl:FocusUpdate() --rename FocusLost()
       end
       self.focusedControl = nil
-      if self.activeControl then
-          self.focusedControl = MakeWeakLink(activeControl, self.focusedControl)
+      if control then
+          self.focusedControl = MakeWeakLink(control, self.focusedControl)
           self.focusedControl.state.focused = true
           self.focusedControl:FocusUpdate() --rename FocusGain()
       end
   end
+end
+
+function Screen:MouseDown(x,y,...)
+  y = select(2,gl.GetViewSizes()) - y
+
+  local activeControl = inherited.MouseDown(self,x,y,...)
+  self:FocusControl(activeControl)
+  self.activeControl = MakeWeakLink(activeControl, self.activeControl)
   return (not not activeControl)
 end
 
