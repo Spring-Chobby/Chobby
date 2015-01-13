@@ -6,12 +6,12 @@ local pluralizeFunction
 local defaultLocale = 'en'
 local fallbackLocale = defaultLocale
 
-local path = (...):gsub("%.init$","")
+local path = "libs/i18n/i18n/"
 
-local plural      = require(path .. '.plural')
-local interpolate = require(path .. '.interpolate')
-local variants    = require(path .. '.variants')
-local version     = require(path .. '.version')
+local plural      = VFS.Include(path .. 'plural.lua')
+local interpolate = VFS.Include(path .. 'interpolate.lua')
+local variants    = VFS.Include(path .. 'variants.lua')
+local version     = VFS.Include(path .. 'version.lua')
 
 i18n.plural, i18n.interpolate, i18n.variants, i18n.version, i18n._VERSION = plural, interpolate, variants, version, version
 
