@@ -1,7 +1,5 @@
-i18n.lua
+i18n
 ========
-
-[![Build Status](https://travis-ci.org/kikito/i18n.lua.png?branch=master)](https://travis-ci.org/kikito/i18n.lua)
 
 A very complete i18n lib for Lua
 
@@ -9,7 +7,7 @@ Description
 ===========
 
 ``` lua
-i18n = require 'i18n'
+i18n = WG.i18n
 
 -- loading stuff
 i18n.set('en.welcome', 'welcome to this program')
@@ -23,7 +21,7 @@ i18n.load({
     }
   }
 })
-i18n.loadFile('path/to/your/files/en.lua') -- maybe load some more stuff from that file
+i18n.loadFile('path/to/your/files/en.lua') -- maybe load some more stuff from that file (uses Spring's VFS)
 
 -- setting the translation context
 i18n.setLocale('en') -- English is the default locale anyway
@@ -102,9 +100,3 @@ When a value is not found, the lib has several fallback mechanisms:
 * Otherwise the translation will return nil.
 
 The parents of a locale are found by splitting the locale by its hyphens. Other separation characters (spaces, underscores, etc) are not supported.
-
-Specs
-=====
-This project uses [telescope](https://github.com/norman/telescope) for its specs. If you want to run the specs, you will have to install telescope first. Then just execute the following from the root inspect folder:
-
-    tsc -f spec/*
