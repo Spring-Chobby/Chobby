@@ -1,4 +1,3 @@
-
 return {
 	name='i18n',
 	description="Internationalization library for Spring",

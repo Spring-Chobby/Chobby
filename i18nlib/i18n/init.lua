@@ -6,7 +6,7 @@ local pluralizeFunction
 local defaultLocale = 'en'
 local fallbackLocale = defaultLocale
 
-local path = "libs/i18n/i18n/"
+local path = "i18nlib/i18n/"
 
 local plural      = VFS.Include(path .. 'plural.lua')
 local interpolate = VFS.Include(path .. 'interpolate.lua')
