@@ -21,7 +21,9 @@ i18n.load({
     }
   }
 })
-i18n.loadFile('path/to/your/files/en.lua') -- maybe load some more stuff from that file (uses Spring's VFS)
+-- maybe load some more stuff from that file (uses Spring's VFS)
+-- example format of the file: https://github.com/gajop/i18n/blob/master/i18nlib/spec/en.lua
+i18n.loadFile('path/to/your/files/en.lua')
 
 -- setting the translation context
 i18n.setLocale('en') -- English is the default locale anyway
@@ -61,7 +63,7 @@ Pluralization
 This lib implements the [unicode.org plural rules](http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html). Just set the locale you want to use and it will deduce the appropiate pluralization rules:
 
 ``` lua
-i18n = require 'i18n'
+i18n = WG.i18n
 
 i18n.load({
   en = {
