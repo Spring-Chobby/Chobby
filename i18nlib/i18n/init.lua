@@ -176,8 +176,16 @@ function i18n.load(data)
 end
 
 function i18n.loadFile(path)
-  local chunk = assert(loadfile(path))
-  local data = chunk()
+  local success, data = pcall(function() 
+    local chunk = VFS.LoadFile(path, VFS.ZIP_FIRST)
+    x = assert(loadstring(chunk))
+    return x() 
+  end)
+  if not success then
+    Spring.Log("i18n", LOG.ERROR, "Failed to parse file " .. path .. ": ")
+    Spring.Log("i18n", LOG.ERROR, data)
+    return nil
+  end
   i18n.load(data)
 end
 
