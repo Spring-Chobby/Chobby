@@ -1,12 +1,16 @@
+VFS.Include(LIB_LOBBY_DIRNAME .. "json.lua")
+
+local LOG_SECTION = "liblobby"
+
 if not Spring.GetConfigInt("LuaSocketEnabled", 0) == 1 then
-    Spring.Echo("LuaSocketEnabled is disabled")
+    Spring.Log(LOG_SECTION, LOG.ERROR, "LuaSocketEnabled is disabled")
     return false
 end
 
 local function dumpConfig()
 	-- dump all luasocket related config settings to console
 	for _, conf in ipairs({"TCPAllowConnect", "TCPAllowListen", "UDPAllowConnect", "UDPAllowListen"  }) do
-		Spring.Echo(conf .. " = " .. Spring.GetConfigString(conf, ""))
+		Spring.Log(LOG_SECTION, LOG.INFO, conf .. " = " .. Spring.GetConfigString(conf, ""))
 	end
 end
 
@@ -66,6 +70,8 @@ Interface = Observable:extends{}
 
 -- map lobby commands by name
 Interface.commands = {}
+-- map json lobby commands by name
+Interface.jsonCommands = {}
 -- define command format with pattern (regex)
 Interface.commandPattern = {}
 
@@ -86,7 +92,7 @@ function Interface:Connect(host, port)
 	local res, err = self.client:connect(host, port)
     -- FIXME: this error check makes no sense!
 	if res == nil and not res == "timeout" then
-		Spring.Echo("Error in connect: " .. err)
+		Spring.Log(LOG_SECTION, LOG.ERROR, "Error in connect: " .. err)
 		return false
 	end
     self.connected = true
@@ -137,6 +143,11 @@ end
 
 function Interface:ChannelTopic(chanName, topic)
     self:_SendCommand(concat("CHANNELTOPIC", chanName, topic))
+    return self
+end
+
+function Interface:CloseQueue(queueId)
+    self:_SendCommand(concat("CLOSEQUEUE", json.encode(queueId)))
     return self
 end
 
@@ -215,6 +226,21 @@ function Interface:Handicap(userName, value)
     return self
 end
 
+function Interface:InviteTeam(userName)
+    self:_SendCommand(concat("INVITETEAM", json.encode({userName=userName})))
+    return self
+end 
+
+function Interface:InviteTeamAccept(userName)
+    self:_SendCommand(concat("INVITETEAMACCEPT", json.encode({userName=userName})))
+    return self
+end 
+
+function Interface:InviteTeamDecline(userName)
+    self:_SendCommand(concat("INVITETEAMDECLINE", json.encode({userName=userName})))
+    return self
+end 
+
 function Interface:Join(chanName, key)
     self:_SendCommand(concat("JOIN", chanName, key))
     return self
@@ -235,8 +261,32 @@ function Interface:JoinBattleDeny(userName, reason)
     return self
 end
 
+function Interface:JoinQueue(queueId, params)
+    local tbl = {queueId=queueId}
+    if params ~= nil then
+        tbl["params"] = params
+    end
+    self:_SendCommand(concat("JOINQUEUE", json.encode(tbl)))
+    return self
+end
+
+function Interface:JoinQueueAccept(queueId, userNames)
+    self:_SendCommand(concat("JOINQUEUEACCEPT", json.encode({queueId=queueId,userNames=userNames})))
+    return self
+end
+
+function Interface:JoinQueueDeny(queueId, userNames, reason)
+    self:_SendCommand(concat("JOINQUEUEDENY", json.encode({queueId=queueId,userNames=userNames,reason=reason})))
+    return self
+end
+
 function Interface:KickFromBattle(userName)
     self:_SendCommand(concat("KICKFROMBATTLE", userName))
+    return self
+end
+
+function Interface:KickFromTeam(userName)
+    self:_SendCommand(concat("KICKFROMTEAM", json.encode({userName=userName})))
     return self
 end
 
@@ -250,8 +300,23 @@ function Interface:LeaveBattle()
     return self
 end
 
+function Interface:LeaveTeam()
+    self:_SendCommand("LEAVETEAM")
+    return self
+end
+
+function Interface:LeaveQueue(queueId)
+    self:_SendCommand(concat("LEAVEQUEUE", json.encode({queueId=queueId})))
+    return self
+end
+
 function Interface:ListCompFlags()
     self:_SendCommand("LISTCOMPFLAGS")
+    return self
+end
+
+function Interface:ListQueues()
+    self:_SendCommand("LISTQUEUES")
     return self
 end
 
@@ -259,7 +324,7 @@ function Interface:Login(user, password, cpu, localIP)
     if localIP == nil then
         localIP = "*"
     end
-    self:_SendCommand(concat("LOGIN", user, password, cpu, localIP, "LuaLobby\t", "0\t", "a b m cu sd cl et"))
+    self:_SendCommand(concat("LOGIN", user, password, cpu, localIP, "LuaLobby\t", "0\t", "a b m cl et p"))
     return self
 end
 
@@ -285,6 +350,11 @@ function Interface:OpenBattle(type, natType, password, port, maxPlayers, gameHas
     return self
 end
 
+function Interface:OpenQueue(queue)
+    self:_SendCommand(concat("OPENQUEUE", json.encode({queue=queue})))
+    return self
+end
+
 function Interface:Ping()
     self:_SendCommand("PING", true)
     return self
@@ -295,6 +365,20 @@ function Interface:RecoverAccount(email, userName)
     return self
 end
 
+function Interface:ReadyCheck(queueId, userNames, responseTime)
+    self:_SendCommand(concat("READYCHECK", json.encode({queueId=queueId, userNames=userNames, responseTime=responseTime})))
+    return self
+end
+
+function Interface:ReadyCheckResponse(queueId, response, responseTime)
+	local response = {queueId=queueId, response=response}
+	if responseTime ~= nil then
+		response.responseTime = responseTime
+	end
+    self:_SendCommand(concat("READYCHECKRESPONSE", json.encode(response)))
+    return self
+end
+
 function Interface:Register(userName, password, email)
     self:_SendCommand(concat("Register", userName, password, email))
     return self
@@ -302,6 +386,11 @@ end
 
 function Interface:RemoveBot(name)
     self:_SendCommand(concat("REMOVEBOT", name))
+    return self
+end
+
+function Interface:RemoveQueueUser(queueId, userNames)
+    self:_SendCommand(concat("REMOVEQUEUEUSER", {queueId=queueId, userNames=userNames}))
     return self
 end
 
@@ -365,6 +454,16 @@ function Interface:SayPrivate(userName, message)
     return self
 end
 
+function Interface:SayTeam(message)
+    self:_SendCommand(concat("SAYTEAM", json.encode({message=message})))
+    return self
+end
+
+function Interface:SayTeamEx(message)
+    self:_SendCommand(concat("SAYTEAMEX", json.encode({message=message})))
+    return self
+end
+
 function Interface:Script(line)
     self:_SendCommand(concat("SCRIPT", line))
     return self
@@ -382,6 +481,11 @@ end
 
 function Interface:SetScriptTags(...)
     self:_SendCommand(concat("SETSCRIPTTAGS", ...))
+    return self
+end
+
+function Interface:SetTeamLeader(userName)
+    self:_SendCommand(concat("SETTEAMLEADER", json.encode({userName=userName})))
     return self
 end
 
@@ -643,6 +747,48 @@ end
 Interface.commands["JOINFAILED"] = Interface._OnJoinFailed
 Interface.commandPattern["JOINFAILED"] = "(%S+)%s+([^\t]+)"
 
+function Interface:_OnJoinQueue(obj)
+    local queueId = obj.queueId
+    self:_CallListeners("OnJoinQueue", queueId)
+end
+Interface.jsonCommands["JOINQUEUE"] = Interface._OnJoinQueue
+
+function Interface:_OnJoinQueueRequest(obj)
+    local queueId = obj.queueId
+    local userNames = obj.userNames
+    local params = obj.params
+    self:_CallListeners("OnJoinQueueRequest", queueId, userNames, params)
+end
+Interface.jsonCommands["JOINQUEUEREQUEST"] = Interface._OnJoinQueueRequest
+
+function Interface:_OnJoinedQueue(obj)
+    local queueId = obj.queueId
+    local userNames = obj.userNames
+    local params = obj.params
+    self:_CallListeners("OnJoinedQueue", queueId, userNames, params)
+end
+Interface.jsonCommands["JOINEDQUEUE"] = Interface._OnJoinedQueue
+
+function Interface:_OnJoinQueueFailed(obj)
+    local queueId = obj.queueId
+    local reason = obj.reason
+    self:_CallListeners("OnJoinQueueFailed", queueId, reason)
+end
+Interface.jsonCommands["JOINQUEUEFAILED"] = Interface._OnJoinQueueFailed
+
+function Interface:_OnJoinTeam(obj)
+    local userNames = obj.userNames
+    local leader = obj.leader
+    self:_CallListeners("OnJoinedTeam", userNames, leader)
+end
+Interface.jsonCommands["JOINEDTEAM"] = Interface._OnJoinedTeam
+
+function Interface:_OnJoinedTeam(obj)
+    local userName = obj.userName
+    self:_CallListeners("OnJoinTeam", userName)
+end
+Interface.jsonCommands["JOINTEAM"] = Interface._OnJoinTeam
+
 function Interface:_OnLeft(chanName, userName, reason)
     self:_CallListeners("OnLeft", chanName, userName, reason)
 end
@@ -655,6 +801,17 @@ function Interface:_OnLeftBattle(battleID, userName)
 end
 Interface.commands["LEFTBATTLE"] = Interface._OnLeftBattle
 Interface.commandPattern["LEFTBATTLE"] = "(%d+)%s+(%S+)"
+
+function Interface:_OnLeftQueue(obj)
+    self:_CallListeners("OnLeftQueue", obj.queueId, obj.reason)
+end
+Interface.jsonCommands["LEFTQUEUE"] = Interface._OnLeftQueue
+
+function Interface:_OnLeftTeam(obj)
+    local userName = obj.userName
+    self:_CallListeners("OnLeftTeam", userName)
+end
+Interface.jsonCommands["LEFTTEAM"] = Interface._OnLeftTeam
 
 function Interface:_OnLoginInfoEnd()
     self:_CallListeners("OnLoginInfoEnd")
@@ -707,6 +864,36 @@ function Interface:_OnPong()
     self:_CallListeners("OnPong")
 end
 Interface.commands["PONG"] = Interface._OnPong
+
+function Interface:_OnQueueOpened(obj)
+    self:_CallListeners("OnQueueOpened", obj)
+end
+Interface.jsonCommands["QUEUEOPENED"] = Interface._OnQueueOpened
+
+function Interface:_OnQueueClosed(obj)
+    self:_CallListeners("OnQueueClosed", obj.queueId)
+end
+Interface.jsonCommands["QUEUECLOSED"] = Interface._OnQueueClosed
+
+function Interface:_OnQueueLeft(obj)
+    self:_CallListeners("OnQueueLeft", obj.queueId, obj.userNames)
+end
+Interface.jsonCommands["QUEUELEFT"] = Interface._OnQueueLeft
+
+function Interface:_OnReadyCheck(obj)
+    self:_CallListeners("OnReadyCheck", obj.queueId, obj.responseTime)
+end
+Interface.jsonCommands["READYCHECK"] = Interface._OnReadyCheck
+
+function Interface:_OnReadyCheckResult(obj)
+    self:_CallListeners("OnReadyCheckResult", obj.queueId, obj.result)
+end
+Interface.jsonCommands["READYCHECKRESULT"] = Interface._OnReadyCheckResult
+
+function Interface:_OnReadyCheckResponse(obj)
+    self:_CallListeners("OnReadyCheckResponse", obj.queueId, obj.userName, obj.answer, obj.responseTime)
+end
+Interface.jsonCommands["READYCHECKRESPONSE"] = Interface._OnReadyCheckResponse
 
 function Interface:_OnRedirect(ip)
     self:_CallListeners("OnRedirect", ip)
@@ -817,6 +1004,20 @@ end
 Interface.commands["SAYPRIVATE"] = Interface._OnSayPrivate
 Interface.commandPattern["SAYPRIVATE"] = "(%S+)%s+(.*)"
 
+function Interface:_OnSaidTeam(obj)
+    local userName = obj.userName
+    local message = obj.message
+    self:_CallListeners("OnSaidTeam", userName, message)
+end
+Interface.jsonCommands["SAIDTEAM"] = Interface._OnSaidTeam
+
+function Interface:_OnSaidTeamEx(obj)
+    local userName = obj.userName
+    local message = obj.message
+    self:_CallListeners("OnSaidTeamEx", userName, message)
+end
+Interface.jsonCommands["SAIDTEAMEX"] = Interface._OnSaidTeamEx
+
 function Interface:_OnScript(line)
     self:_CallListeners("OnScript", line)
 end
@@ -852,9 +1053,13 @@ end
 Interface.commands["SETSCRIPTTAGS"] = Interface._OnSetScriptTags
 Interface.commandPattern["SETSCRIPTTAGS"] = "([^\t]+)"
 
+function Interface:_OnSetTeamLeader(obj)
+    local userName = obj.userName
+    self:_CallListeners("OnSetTeamLeader", userName)
+end
+Interface.jsonCommands["SETTEAMLEADER"] = Interface._OnSetTeamLeader
+
 function Interface:_OnTASServer(protocolVersion, springVersion, udpPort, serverMode)
-    -- use HASH command so we can send passwords in plain text
-    self:_SendCommand("HASH")
     self:_CallListeners("OnTASServer", protocolVersion, springVersion, udpPort, serverMode)
 end
 Interface.commands["TASServer"] = Interface._OnTASServer
@@ -914,6 +1119,21 @@ function Interface:_OnIgnoreListEnd()
 end
 Interface.commands["IGNORELISTEND"] = Interface._OnIgnoreListEnd
 
+function Interface:_OnInviteTeam(obj)
+    self:_CallListeners("OnInviteTeam", obj.userName)
+end
+Interface.jsonCommands["ONINVITETEAM"] = Interface._OnInviteTeam
+
+function Interface:_OnInviteTeamAccepted(obj)
+    self:_CallListeners("OnInviteTeamAccepted", obj.userName)
+end
+Interface.jsonCommands["ONINVITETEAMACCEPTED"] = Interface._OnInviteTeamAccepted
+
+function Interface:_OnInviteTeamDeclined(obj)
+    self:_CallListeners("OnInviteTeamDeclined", obj.userName, obj.reason)
+end
+Interface.jsonCommands["ONINVITETEAMDECLNED"] = Interface._OnInviteTeamDeclined
+
 function Interface:_OnFriendListParse(tags)
     local tags = parseTags(tags)
     local userName = getTag(tags, "userName", true)
@@ -936,36 +1156,80 @@ function Interface:_OnFriendListEnd()
 end
 Interface.commands["FRIENDLISTEND"] = Interface._OnFriendListEnd
 
+function Interface:_OnListQueues(queues)
+    self:_CallListeners("OnListQueues", queues)
+end
+Interface.jsonCommands["LISTQUEUES"] = Interface._OnListQueues
+
 function Interface:_Disconnected()
     self:_CallListeners("OnDisconnected")
 end
 
 function Interface:CommandReceived(command)
-    local args = explode(" ", command)
-    if string.starts(args[1], "#") then
-        table.remove(args, 1)
-    end
+	local cmdId, cmdName, arguments
+	if command:sub(1,1) == "#" then
+		i = command:find(" ")
+		cmdId = command:sub(2, i - 1)
+		j = command:find(" ", i + 1)
+		if j ~= nil then
+			cmdName = command:sub(i + 1, j - 1)
+			arguments = command:sub(j + 1)
+		else
+			cmdName = command:sub(i + 1)
+		end
+	else
+		i = command:find(" ")
+		if i ~= nil then
+			cmdName = command:sub(1, i - 1)
+			arguments = command:sub(i + 1)
+		else
+			cmdName = command
+		end		
+	end
 
-    local arguments = table.concat(args, " ", 2)
-    
-    local commandFunction = Interface.commands[args[1]]
+	self:_OnCommandReceived(cmdName, arguments, cmdId)
+end
+
+function Interface:_GetCommandPattern(cmdName)
+	return Wrapper.commandPattern[cmdName]
+end
+
+function Interface:_GetCommandFunction(cmdName)
+	return Interface.commands[cmdName], Interface.commandPattern[cmdName]
+end
+
+function Interface:_GetJsonCommandFunction(cmdName)
+	return Interface.jsonCommands[cmdName]
+end
+	
+function Interface:_OnCommandReceived(cmdName, arguments, cmdId)
+    local commandFunction, pattern = self:_GetCommandFunction(cmdName)
     if commandFunction ~= nil then
-        local pattern = Interface.commandPattern[args[1]]
+		local pattern = self:_GetCommandPattern(cmdName)
         if pattern then
             local funArgs = {arguments:match(pattern)}
             if #funArgs ~= 0 then
                 commandFunction(self, unpack(funArgs))
             else
-                Spring.Echo("Failed to match command: ", args[1], ", args: " .. arguments .. " with pattern: ", pattern)
+                Spring.Log(LOG_SECTION, LOG.ERROR, "Failed to match command: ", cmdName, ", args: " .. tostring(arguments) .. " with pattern: ", pattern)
             end
         else
-            --Spring.Echo("No pattern for command: " .. args[1])
+            --Spring.Echo("No pattern for command: " .. cmdName)
             commandFunction(self)
         end
     else
-        Spring.Echo("No such function: " .. args[1] .. ", for command: " .. command)
+        local jsonCommandFunction = self:_GetJsonCommandFunction(cmdName)
+        if jsonCommandFunction ~= nil then
+            local success, obj = pcall(json.decode, arguments)
+            if not success then
+                Spring.Log(LOG_SECTION, LOG.ERROR, "Failed to parse JSON: " .. tostring(arguments))
+            end
+            jsonCommandFunction(self, obj)
+        else
+            Spring.Log(LOG_SECTION, LOG.ERROR, "No such function: " .. cmdName .. ", for command: " .. cmdName .. " " .. tostring(arguments))
+        end
     end
-    self:_CallListeners("OnCommandReceived", command)
+    self:_CallListeners("OnCommandReceived", cmdName .. " " .. tostring(arguments))
 end
 
 function Interface:_SocketUpdate()
@@ -980,12 +1244,12 @@ function Interface:_SocketUpdate()
 			-- nothing to do, return
 			return
 		end
-		Spring.Echo("Error in select: " .. error)
+		Spring.Log(LOG_SECTION, LOG.ERROR, "Error in select: " .. error)
 	end
 	for _, input in ipairs(readable) do
 		local s, status, commandsStr = input:receive('*a') --try to read all data
-		if status == "timeout" or status == nil then
-            print(commandsStr)
+		if (status == "timeout" or status == nil) and commandsStr ~= nil and commandsStr ~= "" then
+            Spring.Log(LOG_SECTION, LOG.DEBUG, commandsStr)
             local commands = explode("\n", commandsStr)
             commands[1] = self.buffer .. commands[1]
             for i = 1, #commands-1 do
@@ -996,7 +1260,7 @@ function Interface:_SocketUpdate()
             end
             self.buffer = commands[#commands]
 		elseif status == "closed" then
-            Spring.Echo("Disconnected from server.")
+            Spring.Log(LOG_SECTION, LOG.INFO, "Disconnected from server.")
 			input:close()
             self.connected = false
             self:_Disconnected()
@@ -1004,7 +1268,7 @@ function Interface:_SocketUpdate()
 	end
 end
 
-function Interface:Update()
+function Interface:SafeUpdate()
     self:_SocketUpdate()
     -- prevent timeout with PING
     if self.connected then
@@ -1013,6 +1277,11 @@ function Interface:Update()
             self:Ping()
         end
     end
+end
+
+function Interface:Update()
+    xpcall(function() self:SafeUpdate() end, 
+        function(err) self:_PrintError(err) end )
 end
 
 return Interface

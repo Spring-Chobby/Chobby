@@ -10,8 +10,13 @@ local function explode(div,str)
   return arr
 end
 
--- WARNING: Don't include this file if you won't use the Wrapper, it overrides the Interface functions
-Wrapper = Interface:extends{}
+-- WARNING: Don't include this file if you won't use the Wrapper, it overrides the Wrapper functions
+Wrapper = Interface:extends()
+
+-- map lobby commands by name
+Wrapper.commands = {}
+-- map json lobby commands by name
+Wrapper.jsonCommands = {}
 
 function Wrapper:init()
     self:super("init")
@@ -31,6 +36,9 @@ function Wrapper:_Clean()
 
     self.battles = {}
     self.battleCount = 0
+
+    self.queues = {}
+    self.queueCount = 0
 
     self.latency = 0 -- in ms
 
@@ -70,8 +78,9 @@ function Wrapper:_OnTASServer(...)
         self:Login(unpack(self._oldData.loginData))
     end
     self:super("_OnTASServer", ...)
+	--self:super("_OnTASServer")
 end
-Interface.commands["TASServer"] = Wrapper._OnTASServer
+Wrapper.commands["TASServer"] = Wrapper._OnTASServer
 
 -- override
 function Wrapper:_OnAddUser(userName, country, cpu, accountID)
@@ -83,7 +92,7 @@ function Wrapper:_OnAddUser(userName, country, cpu, accountID)
 
     self:super("_OnAddUser", userName, country, cpu, accountID)
 end
-Interface.commands["ADDUSER"] = Wrapper._OnAddUser
+Wrapper.commands["ADDUSER"] = Wrapper._OnAddUser
 
 -- override
 function Wrapper:_OnRemoveUser(userName)
@@ -92,7 +101,7 @@ function Wrapper:_OnRemoveUser(userName)
 
     self:super("_OnRemoveUser", userName)
 end
-Interface.commands["REMOVEUSER"] = Wrapper._OnRemoveUser
+Wrapper.commands["REMOVEUSER"] = Wrapper._OnRemoveUser
 
 -- override
 function Wrapper:Ping()
@@ -106,7 +115,7 @@ function Wrapper:_OnPong()
     self.latency = Spring.DiffTimers(self.pongTimer, self.pingTimer, true)
     self:super("_OnPong")
 end
-Interface.commands["PONG"] = Wrapper._OnPong
+Wrapper.commands["PONG"] = Wrapper._OnPong
 
 -- override
 function Wrapper:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other)
@@ -128,16 +137,17 @@ function Wrapper:_OnBattleOpened(battleID, type, natType, founder, ip, port, max
 
     self:super("_OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other)
 end
-Interface.commands["BATTLEOPENED"] = Wrapper._OnBattleOpened
+Wrapper.commands["BATTLEOPENED"] = Wrapper._OnBattleOpened
 
 -- override
 function Wrapper:_OnBattleClosed(battleID)
+    battleID = tonumber(battleID)
     self.battles[battleID] = nil
     self.battleCount = self.battleCount - 1
 
     self:super("_OnBattleClosed", battleID)
 end
-Interface.commands["BATTLECLOSED"] = Wrapper._OnBattleClosed
+Wrapper.commands["BATTLECLOSED"] = Wrapper._OnBattleClosed
 
 -- override
 function Wrapper:_OnJoinedBattle(battleID, userName, scriptPassword)
@@ -146,7 +156,7 @@ function Wrapper:_OnJoinedBattle(battleID, userName, scriptPassword)
 
     self:super("_OnJoinedBattle", battleID, userName, scriptPassword)
 end
-Interface.commands["JOINEDBATTLE"] = Wrapper._OnJoinedBattle
+Wrapper.commands["JOINEDBATTLE"] = Wrapper._OnJoinedBattle
 
 -- override
 function Wrapper:_OnLeftBattle(battleID, userName)
@@ -162,7 +172,7 @@ function Wrapper:_OnLeftBattle(battleID, userName)
 
     self:super("_OnLeftBattle", battleID, userName)
 end
-Interface.commands["LEFTBATTLE"] = Wrapper._OnLeftBattle
+Wrapper.commands["LEFTBATTLE"] = Wrapper._OnLeftBattle
 
 -- will also create a channel if it doesn't already exist
 function Wrapper:_GetChannel(chanName)
@@ -183,7 +193,7 @@ function Wrapper:_OnChannel(chanName, userCount, topic)
 
     self:super("_OnChannel", chanName, userCount, topic)
 end
-Interface.commands["CHANNEL"] = Wrapper._OnChannel
+Wrapper.commands["CHANNEL"] = Wrapper._OnChannel
 
 -- override
 function Wrapper:_OnClients(chanName, clientsStr)
@@ -208,7 +218,7 @@ function Wrapper:_OnClients(chanName, clientsStr)
     end
     self:super("_OnClients", chanName, clientsStr)
 end
-Interface.commands["CLIENTS"] = Wrapper._OnClients
+Wrapper.commands["CLIENTS"] = Wrapper._OnClients
 
 -- override
 function Wrapper:_OnFriendListBegin(...)
@@ -216,7 +226,7 @@ function Wrapper:_OnFriendListBegin(...)
     self.friendCount = 0
     self:super("_OnFriendListBegin", ...)
 end
-Interface.commands["FRIENDLISTBEGIN"] = Interface._OnFriendListBegin
+Wrapper.commands["FRIENDLISTBEGIN"] = Wrapper._OnFriendListBegin
 
 -- override
 function Wrapper:_OnFriendList(userName, ...)
@@ -224,6 +234,34 @@ function Wrapper:_OnFriendList(userName, ...)
     self.friendCount = self.friendCount + 1
     self:super("_OnFriendList", userName, ...)
 end
+
+-- override
+function Wrapper:_OnListQueues(queues, ...)
+    self.queueCount = 0
+    self.queues = {}
+    for _, queue in pairs(queues) do
+        self.queues[queue.queueId] = queue
+        self.queueCount = self.queueCount + 1
+    end
+    self:super("_OnListQueues", queues, ...)
+end
+Wrapper.jsonCommands["LISTQUEUES"] = Wrapper._OnListQueues
+
+-- override
+function Wrapper:_OnQueueOpened(queue)
+    self.queues[queue.queueId] = queue
+    self.queueCount = self.queueCount + 1
+    self:super("_OnQueueOpened", queue)
+end
+Wrapper.jsonCommands["QUEUEOPENED"] = Wrapper._OnQueueOpened
+
+-- override
+function Wrapper:_OnQueueClosed(queue)
+	self.queues[queue.queueId] = nil
+	self.queueCount = self.queueCount - 1
+    self:super("_OnQueueClosed", queue)
+end
+Wrapper.jsonCommands["QUEUECLOSED"] = Wrapper._OnQueueClosed
 
 -- override
 function Wrapper:_Disconnected(...)
@@ -241,14 +279,32 @@ function Wrapper:Reconnect()
 end
 
 -- override
-function Wrapper:Update(...)
+function Wrapper:SafeUpdate(...)
     if not self.connected and self.disconnectTime ~= nil then
         local nowSeconds = Spring.GetGameSeconds()
         if self.lastReconnectionAttempt == nil or nowSeconds - self.lastReconnectionAttempt > 5 then
             self:Reconnect()
         end
     end
-    self:super("Update", ...)
+    self:super("SafeUpdate", ...)
+end
+
+-- override
+function Wrapper:_GetCommandFunction(cmdName)
+	local cmd = Wrapper.commands[cmdName]	
+	if cmd == nil then
+		cmd = self:super("_GetCommandFunction", cmdName)
+	end
+	return cmd
+end
+
+-- override
+function Wrapper:_GetJsonCommandFunction(cmdName)
+	local cmd = Wrapper.jsonCommands[cmdName]
+	if cmd == nil then
+		cmd = self:super("_GetJsonCommandFunction", cmdName)
+	end
+	return cmd
 end
 
 function ShallowCopy(orig)
@@ -296,6 +352,18 @@ end
 -- returns battles table (not necessarily an array)
 function Wrapper:GetBattles()
     return ShallowCopy(self.battles)
+end
+
+-- queues
+function Wrapper:GetQueueCount()
+    return self.queueCount
+end
+function Wrapper:GetQueue(queueID)
+    return self.queues[queueID]
+end
+-- returns queues table (not necessarily an array)
+function Wrapper:GetQueues()
+    return ShallowCopy(self.queues)
 end
 
 -- channels
