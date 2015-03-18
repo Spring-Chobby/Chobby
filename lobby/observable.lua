@@ -1,5 +1,7 @@
 Observable = LCS.class{}
 
+local LOG_SECTION = "liblobby"
+
 local function ShallowCopy(orig)
     local orig_type = type(orig)
     local copy
@@ -19,6 +21,10 @@ function Observable:Init()
 end
 
 function Observable:AddListener(event, listener)
+    if listener == nil then
+        Spring.Log(LOG_SECTION, LOG.ERROR, "Event: " .. tostring(event) .. ", listener cannot be nil")
+        return
+    end
     local eventListeners = self.listeners[event]
     if eventListeners == nil then
         eventListeners = {}
@@ -56,5 +62,5 @@ function Observable:_CallListeners(event, ...)
 end
 
 function Observable:_PrintError(err)
-    Spring.Echo(debug.traceback())
+    Spring.Log(LOG_SECTION, LOG.ERROR, debug.traceback(err))
 end
