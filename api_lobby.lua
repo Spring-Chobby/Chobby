@@ -35,14 +35,12 @@ function widget:Initialize()
   Interface = VFS.Include(LIB_LOBBY_DIRNAME .. "interface.lua", nil, VFS.RAW_FIRST)
   Wrapper = VFS.Include(LIB_LOBBY_DIRNAME .. "wrapper.lua", nil, VFS.RAW_FIRST)
 
-  lobby = Wrapper()
+  self.lobby = Wrapper()
 
 
   --// Export Widget Globals
-  WG.LibLobby = {}
   WG.LibLobby = {
-      lobby = lobby, -- instance (singleton)
-      Listener = Listener
+      lobby = self.lobby -- instance (singleton)
   }
 
 end
@@ -52,12 +50,5 @@ function widget:Shutdown()
 end
 
 function widget:Update()
-  xpcall(
-    function()
-      WG.LibLobby.lobby:Update()
-    end, 
-    function(err)
-      Spring.Echo(debug.traceback())
-    end
-  )
+  WG.LibLobby.lobby:Update()
 end
