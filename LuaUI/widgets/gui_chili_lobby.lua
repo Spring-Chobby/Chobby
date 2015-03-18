@@ -38,3 +38,23 @@ end
 function widget:DrawScreen()
 	WG.ChiliLobby:DrawScreen()
 end
+
+function widget:DownloadStarted(...)
+	WG.ChiliLobby:DownloadStarted(...)
+end
+
+function widget:DownloadFinished(...)
+	WG.ChiliLobby:DownloadFinished(...)
+end
+
+function widget:DownloadFailed(...)
+	WG.ChiliLobby:DownloadFailed(...)
+end
+
+function widget:DownloadProgress(...)
+	WG.ChiliLobby:DownloadProgress(...)
+end
+
+function widget:DownloadQueued(...)
+	WG.ChiliLobby:DownloadQueued(...)
+end
