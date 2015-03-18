@@ -29,7 +29,7 @@ local insert = table.insert
 
 -- Internal register
 local _register = {
-  class  = setmetatable({}, {__mode = 'v'}),
+  class  = setmetatable({}, {__mode = 'k'}),
   object = setmetatable({}, {__mode = 'v'})
 }
 
@@ -161,18 +161,18 @@ local function callFromSuperClass(self,f,...)
   end
 
   -- If the superclass also has a superclass, temporarily set :super to call THAT superclass' methods
-  local supersSuper = _register.class[super].__system.__superClass
-  if supersSuper then
-    _register.class[superClass].__system.__superClass = supersSuper
-  end
+--   local supersSuper = _register.class[super].__system.__superClass
+--   if supersSuper then
+--     _register.class[superClass].__system.__superClass = supersSuper
+--   end
 
   local method = super[f]
   local result = method(self,...)
 
   -- And set the superclass back, if necessary
-  if supersSuper then
-    _register.class[superClass].__system.__superClass = super
-  end
+--   if supersSuper then
+--     _register.class[superClass].__system.__superClass = super
+--   end
   return result
 end
 
