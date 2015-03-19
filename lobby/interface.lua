@@ -156,8 +156,8 @@ function Interface:ConfirmAgreement()
     return self
 end
 
-function Interface:ConnectUser(userName, ipAndPort, scriptPassword)
-    self:_SendCommand(concat("CONNECTUSER", userName, ipAndPort, scriptPassword))
+function Interface:ConnectUser(userName, ip, port, engine, scriptPassword)
+    self:_SendCommand(concat("CONNECTUSER", json.encode({userName=userName, ip=ip, port=port, engine=engine, scriptPassword=scriptPassword})))
     return self
 end
 
@@ -629,17 +629,15 @@ end
 Interface.commands["COMPFLAGS"] = Interface._OnCompFlags
 Interface.commandPattern["COMPFLAGS"] = "(%S+)%s+(%S+)"
 
-function Interface:_OnConnectUser(ip, port, scriptPassword)
-    self:_CallListeners("OnConnectUser", ip, port, scriptPassword)
+function Interface:_OnConnectUser(obj)
+    self:_CallListeners("OnConnectUser", obj.ip, obj.port, obj.engine)
 end
-Interface.commands["CONNECTUSER"] = Interface._OnConnectUser
-Interface.commandPattern["CONNECTUSER"] = "([^:%s]+):([^:%s])%s*(%S*)"
+Interface.jsonCommands["CONNECTUSER"] = Interface._OnConnectUser
 
-function Interface:_OnConnectUserFailed(userName, reason)
-    self:_CallListeners("OnConnectUserFailed", userName, reason)
+function Interface:_OnConnectUserFailed(obj)
+    self:_CallListeners("OnConnectUserFailed", obj.userName, obj.reason)
 end
-Interface.commands["CONNECTUSERFAILED"] = Interface._OnConnectUserFailed
-Interface.commandPattern["CONNECTUSERFAILED"] = "(%S+)%s+([^\t]*)"
+Interface.jsonCommands["CONNECTUSERFAILED"] = Interface._OnConnectUserFailed
 
 function Interface:_OnDenied(reason)
     self:_CallListeners("OnDenied", reason)
