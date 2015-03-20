@@ -1202,6 +1202,13 @@ end
 	
 function Interface:_OnCommandReceived(cmdName, arguments, cmdId)
     local commandFunction, pattern = self:_GetCommandFunction(cmdName)
+    local fullCmd
+    if arguments ~= nil then
+        fullCmd = cmdName .. " " .. arguments
+    else
+        fullCmd = cmdName
+    end
+    
     if commandFunction ~= nil then
 		local pattern = self:_GetCommandPattern(cmdName)
         if pattern then
@@ -1224,10 +1231,10 @@ function Interface:_OnCommandReceived(cmdName, arguments, cmdId)
             end
             jsonCommandFunction(self, obj)
         else
-            Spring.Log(LOG_SECTION, LOG.ERROR, "No such function: " .. cmdName .. ", for command: " .. cmdName .. " " .. tostring(arguments))
+            Spring.Log(LOG_SECTION, LOG.ERROR, "No such function: " .. cmdName .. ", for command: " .. fullCmd)
         end
     end
-    self:_CallListeners("OnCommandReceived", cmdName .. " " .. tostring(arguments))
+    self:_CallListeners("OnCommandReceived", fullCmd)
 end
 
 function Interface:_SocketUpdate()
