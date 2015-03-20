@@ -138,10 +138,14 @@ function i18n.translate(key, data)
   local fallbacks = variants.fallbacks(usedLocale, fallbackLocale)
   for i=1, #fallbacks do
     local value = localizedTranslate(key, fallbacks[i], data)
-    if value then return value end
+    if value then 
+      return value
+    else
+      Spring.Log("i18n", "warning", "\"" .. key .. "\" is not translated in " .. fallbacks[i])
+    end
   end
-
-  return data.default
+  Spring.Log("i18n", "error", "No translation found for \"" .. key .. "\"")
+  return data.default or key
 end
 
 function i18n.setLocale(newLocale, newPluralizeFunction)
