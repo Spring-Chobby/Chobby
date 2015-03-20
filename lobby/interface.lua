@@ -8,10 +8,10 @@ if not Spring.GetConfigInt("LuaSocketEnabled", 0) == 1 then
 end
 
 local function dumpConfig()
-	-- dump all luasocket related config settings to console
-	for _, conf in ipairs({"TCPAllowConnect", "TCPAllowListen", "UDPAllowConnect", "UDPAllowListen"  }) do
-		Spring.Log(LOG_SECTION, LOG.INFO, conf .. " = " .. Spring.GetConfigString(conf, ""))
-	end
+    -- dump all luasocket related config settings to console
+    for _, conf in ipairs({"TCPAllowConnect", "TCPAllowListen", "UDPAllowConnect", "UDPAllowListen"  }) do
+        Spring.Log(LOG_SECTION, LOG.INFO, conf .. " = " .. Spring.GetConfigString(conf, ""))
+    end
 end
 
 function string.starts(String,Start)
@@ -23,15 +23,15 @@ function string.ends(String,End)
 end
 
 local function explode(div,str)
-  if (div=='') then return false end
-  local pos,arr = 0,{}
-  -- for each divider found
-  for st,sp in function() return string.find(str,div,pos,true) end do
+if (div=='') then return false end
+local pos,arr = 0,{}
+-- for each divider found
+for st,sp in function() return string.find(str,div,pos,true) end do
     table.insert(arr,string.sub(str,pos,st-1)) -- Attach chars left of current divider
     pos = sp + 1 -- Jump past current divider
-  end
-  table.insert(arr,string.sub(str,pos)) -- Attach chars right of last divider
-  return arr
+end
+table.insert(arr,string.sub(str,pos)) -- Attach chars right of last divider
+return arr
 end
 
 local function concat(...)
@@ -76,7 +76,7 @@ Interface.jsonCommands = {}
 Interface.commandPattern = {}
 
 function Interface:init()
-   -- dumpConfig()
+-- dumpConfig()
     self.messagesSentCount = 0
     self.lastSentSeconds = Spring.GetGameSeconds()
     self.connected = false
@@ -88,15 +88,15 @@ end
 
 function Interface:Connect(host, port)
     self.client = socket.tcp()
-	self.client:settimeout(0)
-	local res, err = self.client:connect(host, port)
+    self.client:settimeout(0)
+    local res, err = self.client:connect(host, port)
     -- FIXME: this error check makes no sense!
-	if res == nil and not res == "timeout" then
-		Spring.Log(LOG_SECTION, LOG.ERROR, "Error in connect: " .. err)
-		return false
-	end
+    if res == nil and not res == "timeout" then
+        Spring.Log(LOG_SECTION, LOG.ERROR, "Error in connect: " .. err)
+        return false
+    end
     self.connected = true
-	return true
+    return true
 end
 
 function Interface:_SendCommand(command, sendMessageCount)
@@ -334,8 +334,8 @@ function Interface:MuteList(chanName)
 end
 
 function Interface:MyBattleStatus(ready, team, allyTeam, mode, handicap, sync, side, myTeamColor)
-	local battleStatus = tostring((ready and 2 or 0) + (mode and 2^10 or 0) + (sync and 2^22 or 2^23))
-	myTeamColor = myTeamColor or math.floor(math.random() * 255 * 2^16 + math.random() * 255 * 2^8 + math.random() * 255)
+    local battleStatus = tostring((ready and 2 or 0) + (mode and 2^10 or 0) + (sync and 2^22 or 2^23))
+    myTeamColor = myTeamColor or math.floor(math.random() * 255 * 2^16 + math.random() * 255 * 2^8 + math.random() * 255)
     self:_SendCommand(concat("MYBATTLESTATUS", battleStatus, myTeamColor))
     return self
 end
@@ -371,10 +371,10 @@ function Interface:ReadyCheck(queueId, userNames, responseTime)
 end
 
 function Interface:ReadyCheckResponse(queueId, response, responseTime)
-	local response = {queueId=queueId, response=response}
-	if responseTime ~= nil then
-		response.responseTime = responseTime
-	end
+    local response = {queueId=queueId, response=response}
+    if responseTime ~= nil then
+        response.responseTime = responseTime
+    end
     self:_SendCommand(concat("READYCHECKRESPONSE", json.encode(response)))
     return self
 end
@@ -1164,42 +1164,42 @@ function Interface:_Disconnected()
 end
 
 function Interface:CommandReceived(command)
-	local cmdId, cmdName, arguments
-	if command:sub(1,1) == "#" then
-		i = command:find(" ")
-		cmdId = command:sub(2, i - 1)
-		j = command:find(" ", i + 1)
-		if j ~= nil then
-			cmdName = command:sub(i + 1, j - 1)
-			arguments = command:sub(j + 1)
-		else
-			cmdName = command:sub(i + 1)
-		end
-	else
-		i = command:find(" ")
-		if i ~= nil then
-			cmdName = command:sub(1, i - 1)
-			arguments = command:sub(i + 1)
-		else
-			cmdName = command
-		end		
-	end
+    local cmdId, cmdName, arguments
+    if command:sub(1,1) == "#" then
+        i = command:find(" ")
+        cmdId = command:sub(2, i - 1)
+        j = command:find(" ", i + 1)
+        if j ~= nil then
+            cmdName = command:sub(i + 1, j - 1)
+            arguments = command:sub(j + 1)
+        else
+            cmdName = command:sub(i + 1)
+        end
+    else
+        i = command:find(" ")
+        if i ~= nil then
+            cmdName = command:sub(1, i - 1)
+            arguments = command:sub(i + 1)
+        else
+            cmdName = command
+        end
+    end
 
-	self:_OnCommandReceived(cmdName, arguments, cmdId)
+    self:_OnCommandReceived(cmdName, arguments, cmdId)
 end
 
 function Interface:_GetCommandPattern(cmdName)
-	return Wrapper.commandPattern[cmdName]
+    return Wrapper.commandPattern[cmdName]
 end
 
 function Interface:_GetCommandFunction(cmdName)
-	return Interface.commands[cmdName], Interface.commandPattern[cmdName]
+    return Interface.commands[cmdName], Interface.commandPattern[cmdName]
 end
 
 function Interface:_GetJsonCommandFunction(cmdName)
-	return Interface.jsonCommands[cmdName]
+    return Interface.jsonCommands[cmdName]
 end
-	
+    
 function Interface:_OnCommandReceived(cmdName, arguments, cmdId)
     local commandFunction, pattern = self:_GetCommandFunction(cmdName)
     local fullCmd
@@ -1208,9 +1208,9 @@ function Interface:_OnCommandReceived(cmdName, arguments, cmdId)
     else
         fullCmd = cmdName
     end
-    
+
     if commandFunction ~= nil then
-		local pattern = self:_GetCommandPattern(cmdName)
+        local pattern = self:_GetCommandPattern(cmdName)
         if pattern then
             local funArgs = {arguments:match(pattern)}
             if #funArgs ~= 0 then
@@ -1241,19 +1241,19 @@ function Interface:_SocketUpdate()
     if self.client == nil then
         return
     end
-	-- get sockets ready for read
-	local readable, writeable, err = socket.select({self.client}, {self.client}, 0)
-	if err~=nil then
-		-- some error happened in select
-		if err=="timeout" then
-			-- nothing to do, return
-			return
-		end
-		Spring.Log(LOG_SECTION, LOG.ERROR, "Error in select: " .. error)
-	end
-	for _, input in ipairs(readable) do
-		local s, status, commandsStr = input:receive('*a') --try to read all data
-		if (status == "timeout" or status == nil) and commandsStr ~= nil and commandsStr ~= "" then
+    -- get sockets ready for read
+    local readable, writeable, err = socket.select({self.client}, {self.client}, 0)
+    if err~=nil then
+        -- some error happened in select
+        if err=="timeout" then
+            -- nothing to do, return
+            return
+        end
+        Spring.Log(LOG_SECTION, LOG.ERROR, "Error in select: " .. error)
+    end
+    for _, input in ipairs(readable) do
+        local s, status, commandsStr = input:receive('*a') --try to read all data
+        if (status == "timeout" or status == nil) and commandsStr ~= nil and commandsStr ~= "" then
             Spring.Log(LOG_SECTION, LOG.DEBUG, commandsStr)
             local commands = explode("\n", commandsStr)
             commands[1] = self.buffer .. commands[1]
@@ -1264,13 +1264,13 @@ function Interface:_SocketUpdate()
                 end
             end
             self.buffer = commands[#commands]
-		elseif status == "closed" then
+        elseif status == "closed" then
             Spring.Log(LOG_SECTION, LOG.INFO, "Disconnected from server.")
-			input:close()
+            input:close()
             self.connected = false
             self:_Disconnected()
-		end
-	end
+        end
+    end
 end
 
 function Interface:SafeUpdate()

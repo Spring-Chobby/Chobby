@@ -1,13 +1,13 @@
 local function explode(div,str)
-  if (div=='') then return false end
-  local pos,arr = 0,{}
-  -- for each divider found
-  for st,sp in function() return string.find(str,div,pos,true) end do
+if (div=='') then return false end
+local pos,arr = 0,{}
+-- for each divider found
+for st,sp in function() return string.find(str,div,pos,true) end do
     table.insert(arr,string.sub(str,pos,st-1)) -- Attach chars left of current divider
     pos = sp + 1 -- Jump past current divider
-  end
-  table.insert(arr,string.sub(str,pos)) -- Attach chars right of last divider
-  return arr
+end
+table.insert(arr,string.sub(str,pos)) -- Attach chars right of last divider
+return arr
 end
 
 -- WARNING: Don't include this file if you won't use the Wrapper, it overrides the Wrapper functions
@@ -43,7 +43,7 @@ function Wrapper:_Clean()
     self.latency = 0 -- in ms
 
     self.loginData = nil
-	self.myUserName = nil
+    self.myUserName = nil
 end
 
 function Wrapper:_PreserveData()
@@ -61,14 +61,14 @@ end
 function Wrapper:Connect(host, port)
     self.host = host
     self.port = port
-	self:super("Connect", host, port)
+    self:super("Connect", host, port)
 end
 
 -- override
 function Wrapper:Login(user, password, cpu, localIP) 
-	self.myUserName = user
+    self.myUserName = user
     self.loginData = { user, password, cpu, localIP }
-	self:super("Login", user, password, cpu, localIP)
+    self:super("Login", user, password, cpu, localIP)
 end
 
 -- override
@@ -78,7 +78,7 @@ function Wrapper:_OnTASServer(...)
         self:Login(unpack(self._oldData.loginData))
     end
     self:super("_OnTASServer", ...)
-	--self:super("_OnTASServer")
+    --self:super("_OnTASServer")
 end
 Wrapper.commands["TASServer"] = Wrapper._OnTASServer
 
@@ -129,10 +129,10 @@ function Wrapper:_OnBattleOpened(battleID, type, natType, founder, ip, port, max
     local engineName, engineVersion, map, title, gameName = unpack(explode("\t", other))
 
     self.battles[battleID] = { 
-		battleID=battleID, type=type, natType=natType, founder=founder, ip=ip, port=port, 
-		maxPlayers=maxPlayers, passworded=passworded, rank=rank, mapHash=mapHash, 
-		engineName=engineName, engineVersion=engineVersion, map=map, title=title, gameName=gameName, users={founder},
-	}
+        battleID=battleID, type=type, natType=natType, founder=founder, ip=ip, port=port, 
+        maxPlayers=maxPlayers, passworded=passworded, rank=rank, mapHash=mapHash, 
+        engineName=engineName, engineVersion=engineVersion, map=map, title=title, gameName=gameName, users={founder},
+    }
     self.battleCount = self.battleCount + 1
 
     self:super("_OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other)
@@ -257,8 +257,8 @@ Wrapper.jsonCommands["QUEUEOPENED"] = Wrapper._OnQueueOpened
 
 -- override
 function Wrapper:_OnQueueClosed(queue)
-	self.queues[queue.queueId] = nil
-	self.queueCount = self.queueCount - 1
+    self.queues[queue.queueId] = nil
+    self.queueCount = self.queueCount - 1
     self:super("_OnQueueClosed", queue)
 end
 Wrapper.jsonCommands["QUEUECLOSED"] = Wrapper._OnQueueClosed
@@ -291,20 +291,20 @@ end
 
 -- override
 function Wrapper:_GetCommandFunction(cmdName)
-	local cmd = Wrapper.commands[cmdName]	
-	if cmd == nil then
-		cmd = self:super("_GetCommandFunction", cmdName)
-	end
-	return cmd
+    local cmd = Wrapper.commands[cmdName]	
+    if cmd == nil then
+        cmd = self:super("_GetCommandFunction", cmdName)
+    end
+    return cmd
 end
 
 -- override
 function Wrapper:_GetJsonCommandFunction(cmdName)
-	local cmd = Wrapper.jsonCommands[cmdName]
-	if cmd == nil then
-		cmd = self:super("_GetJsonCommandFunction", cmdName)
-	end
-	return cmd
+    local cmd = Wrapper.jsonCommands[cmdName]
+    if cmd == nil then
+        cmd = self:super("_GetJsonCommandFunction", cmdName)
+    end
+    return cmd
 end
 
 function ShallowCopy(orig)
@@ -385,7 +385,7 @@ end
 -- My data
 -- My user
 function Wrapper:GetMyUserName()
-	return self.myUserName
+    return self.myUserName
 end
 
 return Wrapper
