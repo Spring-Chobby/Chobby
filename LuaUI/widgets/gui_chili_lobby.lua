@@ -2,7 +2,7 @@
 include("keysym.h.lua")
 
 function widget:GetInfo()
-  return {
+return {
     name      = "Chili lobby",
     desc      = "Chili example lobby",
     author    = "gajop",
@@ -10,7 +10,7 @@ function widget:GetInfo()
     license   = "GPL-v2",
     layer     = 1001,
     enabled   = true,
-  }
+}
 end
 
 LIBS_DIR = "libs/"
@@ -20,7 +20,13 @@ LCS = LCS()
 CHILILOBBY_DIR = LIBS_DIR .. "chililobby/chililobby/"
 
 function widget:Initialize()
-    if not WG.LibLobby or not WG.Chili then
+    if not WG.LibLobby then
+        Spring.Log("chililobby", LOG.ERROR, "Missing liblobby.")
+        widgetHandler:RemoveWidget(widget)
+        return
+    end
+    if not WG.Chili then
+        Spring.Log("chililobby", LOG.ERROR, "Missing chiliui.")
         widgetHandler:RemoveWidget(widget)
         return
     end
@@ -36,25 +42,25 @@ function widget:Shutdown()
 end
 
 function widget:DrawScreen()
-	WG.ChiliLobby:DrawScreen()
+    WG.ChiliLobby:DrawScreen()
 end
 
 function widget:DownloadStarted(...)
-	WG.ChiliLobby:DownloadStarted(...)
+    WG.ChiliLobby:DownloadStarted(...)
 end
 
 function widget:DownloadFinished(...)
-	WG.ChiliLobby:DownloadFinished(...)
+    WG.ChiliLobby:DownloadFinished(...)
 end
 
 function widget:DownloadFailed(...)
-	WG.ChiliLobby:DownloadFailed(...)
+    WG.ChiliLobby:DownloadFailed(...)
 end
 
 function widget:DownloadProgress(...)
-	WG.ChiliLobby:DownloadProgress(...)
+    WG.ChiliLobby:DownloadProgress(...)
 end
 
 function widget:DownloadQueued(...)
-	WG.ChiliLobby:DownloadQueued(...)
+    WG.ChiliLobby:DownloadQueued(...)
 end
