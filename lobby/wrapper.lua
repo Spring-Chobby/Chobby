@@ -249,7 +249,8 @@ Wrapper.jsonCommands["LISTQUEUES"] = Wrapper._OnListQueues
 
 -- override
 function Wrapper:_OnQueueOpened(queue)
-    self.queues[queue.queueId] = queue
+    local queueId = queue.queueId
+    self.queues[queueId] = queue
     self.queueCount = self.queueCount + 1
     self:super("_OnQueueOpened", queue)
 end
@@ -257,7 +258,8 @@ Wrapper.jsonCommands["QUEUEOPENED"] = Wrapper._OnQueueOpened
 
 -- override
 function Wrapper:_OnQueueClosed(queue)
-    self.queues[queue.queueId] = nil
+    local queueId = queue.queueId
+    self.queues[queueId] = nil
     self.queueCount = self.queueCount - 1
     self:super("_OnQueueClosed", queue)
 end
