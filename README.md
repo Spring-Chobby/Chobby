@@ -26,7 +26,7 @@ ChiliFX:AddFadeEffect({
     obj = myObject, -- chili object
     time = 3, -- time the effect should last
     startValue = 1, -- optional (1 being the default)
-    endValue = 1, -- goal value of the glow before ending
+    endValue = 1, -- goal value of the fade before ending
     after = function()
         -- stuff to do after the effect ends
     end
