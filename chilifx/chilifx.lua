@@ -13,8 +13,8 @@ local shaderDefs = {
     },
 }
 
-function ChiliFX:init()
-    self.enabled = gl.CreateShader ~= nil
+function ChiliFX:init(disable)
+    self.enabled = gl.CreateShader ~= nil and not disable
 
     Spring.Log("ChiliFX", LOG.NOTICE, "Enabled: " .. tostring(self.enabled))
 
@@ -65,9 +65,13 @@ function ChiliFX:AddFadeEffect(effect)
     local endValue = effect.endValue
     local startValue = effect.startValue or 1
 
-    local shaderObj = self.shaders.fade
-    if not (self.enabled and shaderObj) then
+    if not self.enabled then
         if after then after() end
+        return
+    end
+    local shaderObj = self.shaders.fade
+    if shaderObj == nil then
+        if after then after() end 
         return
     end
 
@@ -113,9 +117,13 @@ function ChiliFX:AddGlowEffect(effect)
     local endValue = effect.endValue
     local startValue = effect.startValue or 1
 
-    local shaderObj = self.shaders.glow
-    if not (self.enabled and shaderObj) then
+    if not self.enabled then
         if after then after() end
+        return
+    end
+    local shaderObj = self.shaders.fade
+    if shaderObj == nil then
+        if after then after() end 
         return
     end
 
@@ -164,10 +172,11 @@ function ChiliFX:Enable()
         return
     end
     self.enabled = true
+    if self.shaders == nil then -- we haven't loaded shaders once yet
+        self:LoadShaders()
+    end
 end
 
 function ChiliFX:Disable()
     self.enabled = false
 end
-
-ChiliFX = ChiliFX()
