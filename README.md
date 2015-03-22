@@ -7,7 +7,7 @@ Dependencies:
 
 Usage:
 
-```
+```lua
 ChiliFX = WG.ChiliFX -- do this only once in your project
 
 -- Glow effect multiplies the RGB channels of an object
