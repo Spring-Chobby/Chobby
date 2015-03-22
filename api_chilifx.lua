@@ -5,7 +5,7 @@ return {
     author    = "gajop",
     date      = "in the future",
     license   = "GPL-v2",
-    layer     = -999,
+    layer     = -990,
     enabled   = true,
     api       = true,
     hidden    = true,
@@ -20,7 +20,7 @@ CHILILFX_DIR = LIBS_DIR .. "chilifx/chilifx/"
 
 function widget:Initialize()
     if not WG.Chili then
-        Spring.Log("ChiliFX", LOG.ERROR, "Missing chiliui.")
+        Spring.Log("ChiliFX", LOG.ERROR, "Missing ChiliUI.")
         widgetHandler:RemoveWidget(widget)
         return
     end
