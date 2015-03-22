@@ -8,17 +8,15 @@ function Chotify:init()
     self._idCounter = 0
 end
 
-function Chotify:Update()
-    
+-- this receives the widget:Update callins
+function Chotify:_Update()
 end
 
 function Chotify:CloseNotification(id)
-    Spring.Echo("Close notification called: ", id)
     local notification = self.notifications[id]
     if notification == nil then
         return
     end
-    Spring.Echo("Notification found")
     local window = notification.window
     ChiliFX:AddFadeEffect({
         obj = window, 
@@ -66,6 +64,12 @@ function Chotify:Post(obj)
         draggable = false,
         resizable = false,
     }
+    ChiliFX:AddFadeEffect({
+        obj = window, 
+        time = 0.2,
+        endValue = 1,
+        startValue = 0,
+    })
     local startTime = os.clock()
     local notification = {
         window = window,
@@ -78,6 +82,7 @@ function Chotify:Post(obj)
     return id
 end
 
+-- this modifies the notification
 function Chotify:Update(id, obj)
     local title = obj.title
     local body = obj.body
