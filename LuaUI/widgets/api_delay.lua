@@ -34,4 +34,3 @@ function widget:Update()
 end
 
 WG.Delay = DelayCall
-print(WG.Delay)
