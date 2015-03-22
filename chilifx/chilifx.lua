@@ -60,7 +60,7 @@ end
 -- public functions
 function ChiliFX:AddFadeEffect(effect)
     local obj = effect.obj
-    local fadeTime = effect.fadeTime
+    local time = effect.time
     local callback = effect.callback
     local endValue = effect.endValue
     local startValue = effect.startValue or 1
@@ -78,7 +78,7 @@ function ChiliFX:AddFadeEffect(effect)
     end
 
     obj.DrawControl = function(...)
-        local progress = math.min((os.clock() - start) / fadeTime, 1)
+        local progress = math.min((os.clock() - start) / time, 1)
         local value = startValue + progress * (endValue - startValue)
 
         gl.UseShader(shaderObj.shader)
@@ -108,7 +108,7 @@ end
 
 function ChiliFX:AddGlowEffect(effect)
     local obj = effect.obj
-    local fadeTime = effect.fadeTime
+    local time = effect.time
     local callback = effect.callback
     local endValue = effect.endValue
     local startValue = effect.startValue or 1
@@ -126,7 +126,7 @@ function ChiliFX:AddGlowEffect(effect)
     end
 
     obj.DrawControl = function(...)
-        local progress = math.min((os.clock() - start) / fadeTime, 1)
+        local progress = math.min((os.clock() - start) / time, 1)
         local value = startValue + progress * (endValue - startValue)
 
         gl.UseShader(shaderObj.shader)
