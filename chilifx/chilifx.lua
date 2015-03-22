@@ -61,13 +61,13 @@ end
 function ChiliFX:AddFadeEffect(effect)
     local obj = effect.obj
     local time = effect.time
-    local callback = effect.callback
+    local after = effect.after
     local endValue = effect.endValue
     local startValue = effect.startValue or 1
 
     local shaderObj = self.shaders.fade
     if not (self.enabled and shaderObj) then
-        if callback then callback() end
+        if after then after() end
         return
     end
 
@@ -91,7 +91,7 @@ function ChiliFX:AddFadeEffect(effect)
         WG.Delay(function() obj:Invalidate() end, 0.001)
         if progress == 1 then
             obj.DrawControl = obj._origDraw
-            if callback then callback() end
+            if after then after() end
         end
     end
 
@@ -99,7 +99,7 @@ function ChiliFX:AddFadeEffect(effect)
     for _, child in pairs(obj.children) do
         if type(child) == "table" then
             effect.obj = child
-            effect.callback = nil
+            effect.after = nil
             self:AddFadeEffect(effect)
         end
     end
@@ -109,13 +109,13 @@ end
 function ChiliFX:AddGlowEffect(effect)
     local obj = effect.obj
     local time = effect.time
-    local callback = effect.callback
+    local after = effect.after
     local endValue = effect.endValue
     local startValue = effect.startValue or 1
 
     local shaderObj = self.shaders.glow
     if not (self.enabled and shaderObj) then
-        if callback then callback() end
+        if after then after() end
         return
     end
 
@@ -139,7 +139,7 @@ function ChiliFX:AddGlowEffect(effect)
         WG.Delay(function() obj:Invalidate() end, 0.001)
         if progress == 1 then
             obj.DrawControl = obj._origDraw
-            if callback then callback() end
+            if after then after() end
         end
     end
 
@@ -147,7 +147,7 @@ function ChiliFX:AddGlowEffect(effect)
     for _, child in pairs(obj.children) do
         if type(child) == "table" then
             effect.obj = child
-            effect.callback = nil
+            effect.after = nil
             self:AddGlowEffect(effect)
         end
     end
