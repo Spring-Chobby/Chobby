@@ -10,3 +10,9 @@
 [submodule "libs/chililobby"]
 	path = libs/chililobby
 	url = https://github.com/gajop/chililobby.git
+[submodule "libs/chilifx"]
+	path = libs/chilifx
+	url = git@github.com:gajop/chilifx.git
+[submodule "libs/chotify"]
+	path = libs/chotify
+	url = git@github.com:gajop/chotify.git
