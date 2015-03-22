@@ -33,14 +33,14 @@ function Chotify:CloseNotification(id)
 end
 
 function Chotify:Post(obj)
+    if not self.enabled then
+        return
+    end
+
     local title = obj.title or ""
     local body = obj.body or ""
     local icon = obj.icon or ""
     local time = obj.time or 5
-
-    if not self.enabled then
-        return
-    end
 
     local id = self._idCounter
     self._idCounter = self._idCounter + 1
@@ -55,9 +55,9 @@ function Chotify:Post(obj)
         children = {
             Chili.Label:New {
                 x = 0,
-                right = 0,
+                right = 20,
                 y = 0,
-                bottom = 0,
+                bottom = 10,
                 valign = 'center',
                 align = 'center',
                 caption = body,
