@@ -32,14 +32,14 @@ ChiliFX:AddFadeEffect({
     end
 })
 
--- Disable the library: the Add*Effect calls will still work - they will immediately execute the after effect without using the GLSL
--- This means there is no need for modifications of the code using this library. It's enough to just disable it once.
+-- Disable the library: the Add*Effect calls will still work.
+-- If disabled, the "after" function will be immediately executed without applying the effects
 ChiliFX:Disable() 
 
--- enable the library again
+-- Enable the library again
 ChiliFX:Enable() 
 
--- check if it's enabled
+-- Check if it's enabled
 ChiliFX:IsEnabled() 
 
 ```
