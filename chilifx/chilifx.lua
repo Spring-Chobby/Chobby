@@ -121,7 +121,7 @@ function ChiliFX:AddGlowEffect(effect)
         if after then after() end
         return
     end
-    local shaderObj = self.shaders.fade
+    local shaderObj = self.shaders.glow
     if shaderObj == nil then
         if after then after() end 
         return
