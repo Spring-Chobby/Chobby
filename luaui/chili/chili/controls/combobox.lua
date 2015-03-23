@@ -100,7 +100,7 @@ function ComboBox:MouseDown(...)
           }
           labels[#labels+1] = newBtn
           height = height + labelHeight
-          width = math.max(width, self.font:GetTextWidth(item.width))
+          width = math.max(width, self.font:GetTextWidth(item))
       else
           labels[#labels+1] = item
           item.OnMouseUp = { function()
