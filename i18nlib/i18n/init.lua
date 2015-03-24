@@ -129,6 +129,7 @@ function i18n.set(key, value)
   node[lastKey] = value
 end
 
+local missingTranslations = {}
 function i18n.translate(key, data)
   assertPresent('translate', 'key', key)
 
@@ -137,14 +138,29 @@ function i18n.translate(key, data)
 
   local fallbacks = variants.fallbacks(usedLocale, fallbackLocale)
   for i=1, #fallbacks do
-    local value = localizedTranslate(key, fallbacks[i], data)
+    local fallback = fallbacks[i]
+    local value = localizedTranslate(key, fallback, data)
     if value then 
       return value
     else
-      Spring.Log("i18n", "warning", "\"" .. key .. "\" is not translated in " .. fallbacks[i])
+      if missingTranslations[key] == nil then
+        missingTranslations[key] = { }
+      end
+      local missingTranslation = missingTranslations[key]
+      if not missingTranslation[fallback] then
+        Spring.Log("i18n", "warning", "\"" .. key .. "\" is not translated in " .. fallback)
+        missingTranslation[fallback] = true
+      end
     end
   end
-  Spring.Log("i18n", "error", "No translation found for \"" .. key .. "\"")
+  if missingTranslations[key] == nil then
+    missingTranslations[key] = { }
+  end
+  local missingTranslation = missingTranslations[key]
+  if not missingTranslation["_all"] then
+    Spring.Log("i18n", "error", "No translation found for \"" .. key .. "\"")
+    missingTranslation["_all"] = true
+  end
   return data.default or key
 end
 
