@@ -213,7 +213,7 @@ Class = function(members)
   newClass.getSubClasses = getSubClasses                                             -- gets the subclasses
   newClass.__tostring = __tostring                                                   -- tostring
   newClass.is_A = function(self,aClass,shallow)                                              -- Object's class checking
-    assert(isA(self,'object'),'is_A() must be called from an object')
+    --assert(isA(self,'object'),'is_A() must be called from an object')
     if aClass then
       assert(isA(aClass,'class'),'When given, Argument must be a class')
       local target = self
