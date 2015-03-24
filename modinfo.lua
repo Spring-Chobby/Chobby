@@ -12,7 +12,7 @@ local modinfo = {
 	modtype			= 1,
 	depend = {
 		"Spring Cursors",
-		"i18n 0.1",
+		"i18n 0.2",
 	}
 }
 
