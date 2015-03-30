@@ -1,7 +1,7 @@
 #LCS : Lua Class System#
 *Lua Class System* (LCS) is a small library which offers a clean, minimalistic but powerful API for (Pseudo) Object Oriented programming style using Lua.
 LCS is light-weight, abstract thus can fit in every project where OOP mechanisms are needed.
-
+ 
   
 ##Usage##
 Add [LCS.lua](https://github.com/Yonaba/Lua-Class-System/blob/master/LCS.lua) file inside your project.<br/>
