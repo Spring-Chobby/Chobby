@@ -146,8 +146,8 @@ function Interface:ChannelTopic(chanName, topic)
     return self
 end
 
-function Interface:CloseQueue(queueId)
-    self:_SendCommand(concat("CLOSEQUEUE", json.encode(queueId)))
+function Interface:CloseQueue(name)
+    self:_SendCommand(concat("CLOSEQUEUE", json.encode(name)))
     return self
 end
 
@@ -261,8 +261,8 @@ function Interface:JoinBattleDeny(userName, reason)
     return self
 end
 
-function Interface:JoinQueue(queueId, params)
-    local tbl = {queueId=queueId}
+function Interface:JoinQueue(name, params)
+    local tbl = {name=name}
     if params ~= nil then
         tbl["params"] = params
     end
@@ -270,13 +270,13 @@ function Interface:JoinQueue(queueId, params)
     return self
 end
 
-function Interface:JoinQueueAccept(queueId, userNames)
-    self:_SendCommand(concat("JOINQUEUEACCEPT", json.encode({queueId=queueId,userNames=userNames})))
+function Interface:JoinQueueAccept(name, userNames)
+    self:_SendCommand(concat("JOINQUEUEACCEPT", json.encode({name=name,userNames=userNames})))
     return self
 end
 
-function Interface:JoinQueueDeny(queueId, userNames, reason)
-    self:_SendCommand(concat("JOINQUEUEDENY", json.encode({queueId=queueId,userNames=userNames,reason=reason})))
+function Interface:JoinQueueDeny(name, userNames, reason)
+    self:_SendCommand(concat("JOINQUEUEDENY", json.encode({name=name,userNames=userNames,reason=reason})))
     return self
 end
 
@@ -305,8 +305,8 @@ function Interface:LeaveTeam()
     return self
 end
 
-function Interface:LeaveQueue(queueId)
-    self:_SendCommand(concat("LEAVEQUEUE", json.encode({queueId=queueId})))
+function Interface:LeaveQueue(name)
+    self:_SendCommand(concat("LEAVEQUEUE", json.encode({name=name})))
     return self
 end
 
@@ -365,13 +365,13 @@ function Interface:RecoverAccount(email, userName)
     return self
 end
 
-function Interface:ReadyCheck(queueId, userNames, responseTime)
-    self:_SendCommand(concat("READYCHECK", json.encode({queueId=queueId, userNames=userNames, responseTime=responseTime})))
+function Interface:ReadyCheck(name, userNames, responseTime)
+    self:_SendCommand(concat("READYCHECK", json.encode({name=name, userNames=userNames, responseTime=responseTime})))
     return self
 end
 
-function Interface:ReadyCheckResponse(queueId, response, responseTime)
-    local response = {queueId=queueId, response=response}
+function Interface:ReadyCheckResponse(name, response, responseTime)
+    local response = {name=name, response=response}
     if responseTime ~= nil then
         response.responseTime = responseTime
     end
@@ -389,8 +389,8 @@ function Interface:RemoveBot(name)
     return self
 end
 
-function Interface:RemoveQueueUser(queueId, userNames)
-    self:_SendCommand(concat("REMOVEQUEUEUSER", {queueId=queueId, userNames=userNames}))
+function Interface:RemoveQueueUser(name, userNames)
+    self:_SendCommand(concat("REMOVEQUEUEUSER", {name=name, userNames=userNames}))
     return self
 end
 
@@ -746,31 +746,31 @@ Interface.commands["JOINFAILED"] = Interface._OnJoinFailed
 Interface.commandPattern["JOINFAILED"] = "(%S+)%s+([^\t]+)"
 
 function Interface:_OnJoinQueue(obj)
-    local queueId = obj.queueId
-    self:_CallListeners("OnJoinQueue", queueId)
+    local name = obj.name
+    self:_CallListeners("OnJoinQueue", name)
 end
 Interface.jsonCommands["JOINQUEUE"] = Interface._OnJoinQueue
 
 function Interface:_OnJoinQueueRequest(obj)
-    local queueId = obj.queueId
+    local name = obj.name
     local userNames = obj.userNames
     local params = obj.params
-    self:_CallListeners("OnJoinQueueRequest", queueId, userNames, params)
+    self:_CallListeners("OnJoinQueueRequest", name, userNames, params)
 end
 Interface.jsonCommands["JOINQUEUEREQUEST"] = Interface._OnJoinQueueRequest
 
 function Interface:_OnJoinedQueue(obj)
-    local queueId = obj.queueId
+    local name = obj.name
     local userNames = obj.userNames
     local params = obj.params
-    self:_CallListeners("OnJoinedQueue", queueId, userNames, params)
+    self:_CallListeners("OnJoinedQueue", name, userNames, params)
 end
 Interface.jsonCommands["JOINEDQUEUE"] = Interface._OnJoinedQueue
 
 function Interface:_OnJoinQueueFailed(obj)
-    local queueId = obj.queueId
+    local name = obj.name
     local reason = obj.reason
-    self:_CallListeners("OnJoinQueueFailed", queueId, reason)
+    self:_CallListeners("OnJoinQueueFailed", name, reason)
 end
 Interface.jsonCommands["JOINQUEUEFAILED"] = Interface._OnJoinQueueFailed
 
@@ -801,7 +801,7 @@ Interface.commands["LEFTBATTLE"] = Interface._OnLeftBattle
 Interface.commandPattern["LEFTBATTLE"] = "(%d+)%s+(%S+)"
 
 function Interface:_OnLeftQueue(obj)
-    self:_CallListeners("OnLeftQueue", obj.queueId, obj.reason)
+    self:_CallListeners("OnLeftQueue", obj.name, obj.reason)
 end
 Interface.jsonCommands["LEFTQUEUE"] = Interface._OnLeftQueue
 
@@ -869,27 +869,27 @@ end
 Interface.jsonCommands["QUEUEOPENED"] = Interface._OnQueueOpened
 
 function Interface:_OnQueueClosed(obj)
-    self:_CallListeners("OnQueueClosed", obj.queueId)
+    self:_CallListeners("OnQueueClosed", obj.name)
 end
 Interface.jsonCommands["QUEUECLOSED"] = Interface._OnQueueClosed
 
 function Interface:_OnQueueLeft(obj)
-    self:_CallListeners("OnQueueLeft", obj.queueId, obj.userNames)
+    self:_CallListeners("OnQueueLeft", obj.name, obj.userNames)
 end
 Interface.jsonCommands["QUEUELEFT"] = Interface._OnQueueLeft
 
 function Interface:_OnReadyCheck(obj)
-    self:_CallListeners("OnReadyCheck", obj.queueId, obj.responseTime)
+    self:_CallListeners("OnReadyCheck", obj.name, obj.responseTime)
 end
 Interface.jsonCommands["READYCHECK"] = Interface._OnReadyCheck
 
 function Interface:_OnReadyCheckResult(obj)
-    self:_CallListeners("OnReadyCheckResult", obj.queueId, obj.result)
+    self:_CallListeners("OnReadyCheckResult", obj.name, obj.result)
 end
 Interface.jsonCommands["READYCHECKRESULT"] = Interface._OnReadyCheckResult
 
 function Interface:_OnReadyCheckResponse(obj)
-    self:_CallListeners("OnReadyCheckResponse", obj.queueId, obj.userName, obj.answer, obj.responseTime)
+    self:_CallListeners("OnReadyCheckResponse", obj.name, obj.userName, obj.answer, obj.responseTime)
 end
 Interface.jsonCommands["READYCHECKRESPONSE"] = Interface._OnReadyCheckResponse
 
