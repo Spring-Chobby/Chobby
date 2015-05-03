@@ -807,7 +807,8 @@ Interface.jsonCommands["LEFTQUEUE"] = Interface._OnLeftQueue
 
 function Interface:_OnLeftTeam(obj)
     local userName = obj.userName
-    self:_CallListeners("OnLeftTeam", userName)
+    local reason = obj.reason
+    self:_CallListeners("OnLeftTeam", userName, reason)
 end
 Interface.jsonCommands["LEFTTEAM"] = Interface._OnLeftTeam
 
