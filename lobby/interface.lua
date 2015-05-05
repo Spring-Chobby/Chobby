@@ -380,7 +380,8 @@ function Interface:ReadyCheckResponse(name, response, responseTime)
 end
 
 function Interface:Register(userName, password, email)
-    self:_SendCommand(concat("Register", userName, password, email))
+    -- FIXME: email argument is currently not sent to the server
+    self:_SendCommand(concat("REGISTER", userName, password))
     return self
 end
 
