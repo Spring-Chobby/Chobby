@@ -455,13 +455,13 @@ function Interface:SayPrivate(userName, message)
     return self
 end
 
-function Interface:SayTeam(message)
-    self:_SendCommand(concat("SAYTEAM", json.encode({message=message})))
+function Interface:SayTeam(msg)
+    self:_SendCommand(concat("SAYTEAM", json.encode({msg=msg})))
     return self
 end
 
-function Interface:SayTeamEx(message)
-    self:_SendCommand(concat("SAYTEAMEX", json.encode({message=message})))
+function Interface:SayTeamEx(msg)
+    self:_SendCommand(concat("SAYTEAMEX", json.encode({msg=msg})))
     return self
 end
 
@@ -778,15 +778,15 @@ Interface.jsonCommands["JOINQUEUEFAILED"] = Interface._OnJoinQueueFailed
 function Interface:_OnJoinTeam(obj)
     local userNames = obj.userNames
     local leader = obj.leader
-    self:_CallListeners("OnJoinedTeam", userNames, leader)
+    self:_CallListeners("OnJoinTeam", userNames, leader)
 end
-Interface.jsonCommands["JOINEDTEAM"] = Interface._OnJoinedTeam
+Interface.jsonCommands["JOINTEAM"] = Interface._OnJoinTeam
 
 function Interface:_OnJoinedTeam(obj)
     local userName = obj.userName
-    self:_CallListeners("OnJoinTeam", userName)
+    self:_CallListeners("OnJoinedTeam", userName)
 end
-Interface.jsonCommands["JOINTEAM"] = Interface._OnJoinTeam
+Interface.jsonCommands["JOINEDTEAM"] = Interface._OnJoinedTeam
 
 function Interface:_OnLeft(chanName, userName, reason)
     self:_CallListeners("OnLeft", chanName, userName, reason)
@@ -1006,15 +1006,15 @@ Interface.commandPattern["SAYPRIVATE"] = "(%S+)%s+(.*)"
 
 function Interface:_OnSaidTeam(obj)
     local userName = obj.userName
-    local message = obj.message
-    self:_CallListeners("OnSaidTeam", userName, message)
+    local msg = obj.msg
+    self:_CallListeners("OnSaidTeam", userName, msg)
 end
 Interface.jsonCommands["SAIDTEAM"] = Interface._OnSaidTeam
 
 function Interface:_OnSaidTeamEx(obj)
     local userName = obj.userName
-    local message = obj.message
-    self:_CallListeners("OnSaidTeamEx", userName, message)
+    local msg = obj.msg
+    self:_CallListeners("OnSaidTeamEx", userName, msg)
 end
 Interface.jsonCommands["SAIDTEAMEX"] = Interface._OnSaidTeamEx
 
@@ -1122,17 +1122,17 @@ Interface.commands["IGNORELISTEND"] = Interface._OnIgnoreListEnd
 function Interface:_OnInviteTeam(obj)
     self:_CallListeners("OnInviteTeam", obj.userName)
 end
-Interface.jsonCommands["ONINVITETEAM"] = Interface._OnInviteTeam
+Interface.jsonCommands["INVITETEAM"] = Interface._OnInviteTeam
 
 function Interface:_OnInviteTeamAccepted(obj)
     self:_CallListeners("OnInviteTeamAccepted", obj.userName)
 end
-Interface.jsonCommands["ONINVITETEAMACCEPTED"] = Interface._OnInviteTeamAccepted
+Interface.jsonCommands["INVITETEAMACCEPTED"] = Interface._OnInviteTeamAccepted
 
 function Interface:_OnInviteTeamDeclined(obj)
     self:_CallListeners("OnInviteTeamDeclined", obj.userName, obj.reason)
 end
-Interface.jsonCommands["ONINVITETEAMDECLNED"] = Interface._OnInviteTeamDeclined
+Interface.jsonCommands["INVITETEAMDECLINED"] = Interface._OnInviteTeamDeclined
 
 function Interface:_OnFriendListParse(tags)
     local tags = parseTags(tags)

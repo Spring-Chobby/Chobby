@@ -40,6 +40,8 @@ function Wrapper:_Clean()
     self.queues = {}
     self.queueCount = 0
 
+    self.team = nil
+
     self.latency = 0 -- in ms
 
     self.loginData = nil
@@ -266,6 +268,35 @@ end
 Wrapper.jsonCommands["QUEUECLOSED"] = Wrapper._OnQueueClosed
 
 -- override
+function Wrapper:_OnJoinedTeam(obj)
+    local userName = obj.userName
+    table.insert(self.team.users, userName)
+    self:super("_OnJoinedTeam", obj)
+end
+Wrapper.jsonCommands["JOINEDTEAM"] = Wrapper._OnJoinedTeam
+
+-- override
+function Wrapper:_OnJoinTeam(obj)
+    local userNames = obj.userNames
+    local leader = obj.leader
+    self.team = { users = userNames, leader = leader }
+    self:super("_OnJoinTeam", obj)
+end
+Wrapper.jsonCommands["JOINTEAM"] = Wrapper._OnJoinTeam
+
+function Wrapper:_OnLeftTeam(obj)
+    local userName = obj.userName
+    local reason = obj.reason
+    if userName == self.myUserName then
+        self.team = nil
+    else
+        table.remove(self.team, userName)
+    end
+    self:super("OnLeftTeam", obj)
+end
+Wrapper.jsonCommands["LEFTTEAM"] = Wrapper._OnLeftTeam
+
+-- override
 function Wrapper:_Disconnected(...)
     if self.disconnectTime == nil then
         self:_PreserveData()
@@ -366,6 +397,11 @@ end
 -- returns queues table (not necessarily an array)
 function Wrapper:GetQueues()
     return ShallowCopy(self.queues)
+end
+
+-- team
+function Wrapper:GetTeam()
+    return self.team
 end
 
 -- channels
