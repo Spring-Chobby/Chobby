@@ -290,9 +290,14 @@ function Wrapper:_OnLeftTeam(obj)
     if userName == self.myUserName then
         self.team = nil
     else
-        table.remove(self.team, userName)
+        for i, v in pairs(self.team.users) do
+            if v == userName then
+                table.remove(self.team.users, i)
+                break
+            end
+        end
     end
-    self:super("OnLeftTeam", obj)
+    self:super("_OnLeftTeam", obj)
 end
 Wrapper.jsonCommands["LEFTTEAM"] = Wrapper._OnLeftTeam
 
