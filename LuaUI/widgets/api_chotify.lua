@@ -40,5 +40,5 @@ function widget:Shutdown()
 end
 
 function widget:Update()
-    WG.Chotify:Update()
+    WG.Chotify:_Update()
 end
