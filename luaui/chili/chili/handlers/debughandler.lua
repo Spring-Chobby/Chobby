@@ -27,7 +27,7 @@ setmetatable(DebugHandler.objectsOwnedByWidgets, {
     local st = {};
     setmetatable(st,{__mode="v"});
     if (not i) then
-      Spring.Echo("WAAA",debug.traceback())
+      Spring.Log("Chili", "error", "WAAA",debug.traceback())
     end
     t[i] = st;
     return st;

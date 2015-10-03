@@ -149,9 +149,15 @@ function EditBox:_SetCursorByMousePos(x, y)
 		self.offset = math.max(0, self.offset)
 		self.cursor = self.offset + 1
 	else
-		self.cursor = #self.text + 1 -- at end of text
-		for i = self.offset, #self.text do
-			local tmp = self.text:sub(self.offset, i)
+		local text = self.text
+		-- properly accounts for passworded text where characters are represented as "*"
+		-- TODO: what if the passworded text is displayed differently? this is using assumptions about the skin
+		if #text > 0 and self.passwordInput then 
+			text = string.rep("*", #text)
+		end
+		self.cursor = #text + 1 -- at end of text
+		for i = self.offset, #text do
+			local tmp = text:sub(self.offset, i)
 			if self.font:GetTextWidth(tmp) > (x - clientX) then
 				self.cursor = i
 				break
@@ -237,22 +243,46 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	-- deletions
 	elseif key == Spring.GetKeyCode("backspace") then
 		if self.selStart == nil then
-			self.text, self.cursor = Utf8BackspaceAt(txt, cp)
+			if mods.ctrl then
+				repeat
+					self.text, self.cursor = Utf8BackspaceAt(self.text, self.cursor)
+				until self.cursor == 1 or (self.text:sub(self.cursor-2, self.cursor-2) ~= " " and self.text:sub(self.cursor-1, self.cursor-1) == " ")
+			else
+				self.text, self.cursor = Utf8BackspaceAt(self.text, self.cursor)
+			end
 		else
 			self:ClearSelected()
 		end
 	elseif key == Spring.GetKeyCode("delete") then
 		if self.selStart == nil then
+			if mods.ctrl then
+				repeat
+					self.text = Utf8DeleteAt(self.text, self.cursor)
+				until self.cursor >= #self.text-1 or (self.text:sub(self.cursor, self.cursor) == " " and self.text:sub(self.cursor+1, self.cursor+1) ~= " ")
+			else
 			self.text = Utf8DeleteAt(txt, cp)
+			end
 		else
 			self:ClearSelected()
 		end
 
 	-- cursor movement
 	elseif key == Spring.GetKeyCode("left") then
+		if mods.ctrl then
+			repeat
+				self.cursor = Utf8PrevChar(txt, self.cursor)
+			until self.cursor == 1 or (txt:sub(self.cursor-1, self.cursor-1) ~= " " and txt:sub(self.cursor, self.cursor) == " ")
+		else
 		self.cursor = Utf8PrevChar(txt, cp)
+		end
 	elseif key == Spring.GetKeyCode("right") then
+		if mods.ctrl then
+			repeat
+				self.cursor = Utf8NextChar(txt, self.cursor)
+			until self.cursor >= #txt-1 or (txt:sub(self.cursor-1, self.cursor-1) == " " and txt:sub(self.cursor, self.cursor) ~= " ")
+		else
 		self.cursor = Utf8NextChar(txt, cp)
+		end
 	elseif key == Spring.GetKeyCode("home") then
 		self.cursor = 1
 	elseif key == Spring.GetKeyCode("end") then
@@ -266,12 +296,16 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 			s,e = math.min(s,e), math.max(s,e)
 			Spring.SetClipboard(txt:sub(s,e-1))
 		end
-		if key == Spring.GetKeyCode("x") then
+		if key == Spring.GetKeyCode("x") and self.selStart ~= nil then
 			self:ClearSelected()
 		end
 	elseif mods.ctrl and key == Spring.GetKeyCode("v") then
 		self:TextInput(Spring.GetClipboard())
 
+	-- select all
+	elseif mods.ctrl and key == Spring.GetKeyCode("a") then
+		self.selStart = 1
+		self.selEnd = #txt + 1
 	-- character input
 	elseif unicode and unicode ~= 0 then
 		-- backward compability with Spring <97
@@ -315,7 +349,7 @@ function EditBox:TextInput(utf8char, ...)
 	if unicode then
 		local cp  = self.cursor
 		local txt = self.text
-		if self.selStart then
+		if self.selStart ~= nil then
 			self:ClearSelected()
 			txt = self.text
 			cp = self.cursor

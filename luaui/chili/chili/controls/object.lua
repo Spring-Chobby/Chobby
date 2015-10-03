@@ -50,6 +50,8 @@ Object = {
   OnKeyPress      = {},
   OnTextInput     = {},
   OnFocusUpdate   = {},
+  OnHide          = {},
+  OnShow          = {},
 
   disableChildrenHitTest = false, --// if set childrens are not clickable/draggable etc - their mouse events are not processed
 } 
@@ -110,7 +112,7 @@ function Object:New(obj)
           ot = "table";
         end
         if (ot ~= "table")and(ot ~= "metatable") then
-          Spring.Echo("Chili: " .. obj.name .. ": Wrong param type given to " .. i .. ": got " .. ot .. " expected table.")
+          Spring.Log("Chili", "error", obj.name .. ": Wrong param type given to " .. i .. ": got " .. ot .. " expected table.")
           obj[i] = {}
         end
 
@@ -163,7 +165,7 @@ function Object:Dispose(_internal)
         local hlinks_cnt = table.size(self._hlinks)
         local i,v = next(self._hlinks)
         if hlinks_cnt > 1 or (v ~= self) then --// check if user called Dispose() directly
-          Spring.Echo(("Chili: tried to dispose \"%s\"! It's still referenced %i times!"):format(self.name, hlinks_cnt))
+          Spring.Log("Chili", "error", ("Tried to dispose \"%s\"! It's still referenced %i times!"):format(self.name, hlinks_cnt))
         end
       end
     end
@@ -253,7 +255,7 @@ function Object:AddChild(obj, dontUpdate)
   local objDirect = UnlinkSafe(obj)
 
   if (self.children[objDirect]) then
-    Spring.Echo(("Chili: tried to add multiple times \"%s\" to \"%s\"!"):format(obj.name, self.name))
+    Spring.Log("Chili", "error", ("Tried to add multiple times \"%s\" to \"%s\"!"):format(obj.name, self.name))
     return
   end
 
@@ -373,14 +375,14 @@ function Object:HideChild(obj)
 
   if (not self.children[objDirect]) then
     --if (self.debug) then
-      Spring.Echo("Chili: tried to hide a non-child (".. (obj.name or "") ..")")
+      Spring.Log("Chili", "error", "Tried to hide a non-child (".. (obj.name or "") ..")")
     --end
     return
   end
 
   if (self.children_hidden[objDirect]) then
     --if (self.debug) then
-      Spring.Echo("Chili: tried to hide the same child multiple times (".. (obj.name or "") ..")")
+      Spring.Log("Chili", "error", "Tried to hide the same child multiple times (".. (obj.name or "") ..")")
     --end
     return
   end
@@ -410,14 +412,14 @@ function Object:ShowChild(obj)
 
   if (not self.children_hidden[objDirect]) then
     --if (self.debug) then
-      Spring.Echo("Chili: tried to show a non-child (".. (obj.name or "") ..")")
+      Spring.Log("Chili", "error", "Tried to show a non-child (".. (obj.name or "") ..")")
     --end
     return
   end
 
   if (self.children[objDirect]) then
     --if (self.debug) then
-      Spring.Echo("Chili: tried to show the same child multiple times (".. (obj.name or "") ..")")
+      Spring.Log("Chili", "error", "Tried to show the same child multiple times (".. (obj.name or "") ..")")
     --end
     return
   end
@@ -457,12 +459,20 @@ end
 
 --- Hides the objects
 function Object:Hide()
+  local wasHidden = self.hidden
   self:SetVisibility(false)
+  if not wasHidden then
+    self:CallListeners(self.OnHide, self)
+  end
 end
 
 --- Makes the object visible
 function Object:Show()
+  local wasVisible = self.hidden
   self:SetVisibility(true)
+  if not wasVisible then
+    self:CallListeners(self.OnShow, self)
+  end
 end
 
 --- Toggles object visibility

@@ -120,7 +120,7 @@ end
 -- @int v value of the track abr
 function Trackbar:SetValue(v)
   if type(v) ~= "number" then
-    Spring.Echo("Chili: wrong param to Trackbar:SetValue(number v)")
+    Spring.Log("Chili", "error", "Wrong param to Trackbar:SetValue(number v)")
     return
   end
   local r = v % self.step
