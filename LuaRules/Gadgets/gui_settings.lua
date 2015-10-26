@@ -11,11 +11,11 @@ function gadget:GetInfo()
 	}
 end
 
-if (gadgetHandler:IsSyncedCode()) then
+if gadgetHandler:IsSyncedCode() then
 	return
 end
 
-function gadget:GameSetup(state,ready,playerStates)
+function gadget:GameSetup()
 	return true, true
 end
 
