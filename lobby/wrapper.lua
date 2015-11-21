@@ -46,6 +46,9 @@ function Wrapper:_Clean()
 
     self.loginData = nil
     self.myUserName = nil
+	
+	-- reconnection delay in seconds
+	self.reconnectionDelay = 5
 end
 
 function Wrapper:_PreserveData()
@@ -318,9 +321,9 @@ end
 
 -- override
 function Wrapper:SafeUpdate(...)
-    if not self.connected and self.disconnectTime ~= nil then
+    if self.status == "disconnected" and self.disconnectTime ~= nil then
         local nowSeconds = Spring.GetGameSeconds()
-        if self.lastReconnectionAttempt == nil or nowSeconds - self.lastReconnectionAttempt > 5 then
+        if self.lastReconnectionAttempt == nil or nowSeconds - self.lastReconnectionAttempt > self.reconnectionDelay then
             self:Reconnect()
         end
     end

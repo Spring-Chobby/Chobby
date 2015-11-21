@@ -79,7 +79,7 @@ function Interface:init()
 -- dumpConfig()
     self.messagesSentCount = 0
     self.lastSentSeconds = Spring.GetGameSeconds()
-    self.connected = false
+	self.status = "offline"
     self.listeners = {}
 
     -- private
@@ -95,7 +95,7 @@ function Interface:Connect(host, port)
         Spring.Log(LOG_SECTION, LOG.ERROR, "Error in connect: " .. err)
         return false
     end
-    self.connected = true
+    self.status = "connected"
     return true
 end
 
@@ -177,6 +177,8 @@ function Interface:EnableUnits(...)
 end
 
 function Interface:Exit(reason)
+	-- should this could be set _after_ server has disconnected us?
+	self.status = "offline"
     self:_SendCommand(concat("EXIT", reason))
     return self
 end
@@ -324,6 +326,8 @@ function Interface:Login(user, password, cpu, localIP)
     if localIP == nil then
         localIP = "*"
     end
+    -- calculate MD5 hash
+    password = VFS.CalculateHash(password, 0)
     self:_SendCommand(concat("LOGIN", user, password, cpu, localIP, "LuaLobby\t", "0\t", "a b m cl et p"))
     return self
 end
@@ -1201,7 +1205,12 @@ end
 function Interface:_GetJsonCommandFunction(cmdName)
     return Interface.jsonCommands[cmdName]
 end
-    
+
+-- status can be one of: "offline", "connected" and "disconnected"
+function Interface:GetConnectionStatus()
+	return self.status
+end
+
 function Interface:_OnCommandReceived(cmdName, arguments, cmdId)
     local commandFunction, pattern = self:_GetCommandFunction(cmdName)
     local fullCmd
@@ -1269,7 +1278,10 @@ function Interface:_SocketUpdate()
         elseif status == "closed" then
             Spring.Log(LOG_SECTION, LOG.INFO, "Disconnected from server.")
             input:close()
-            self.connected = false
+			-- if status is "offline", user initiated the disconnection
+			if self.status ~= "offline" then
+				self.status = "disconnected"
+			end
             self:_Disconnected()
         end
     end
@@ -1278,7 +1290,7 @@ end
 function Interface:SafeUpdate()
     self:_SocketUpdate()
     -- prevent timeout with PING
-    if self.connected then
+    if self.status == "connected" then
         local nowSeconds = Spring.GetGameSeconds()
         if nowSeconds - self.lastSentSeconds > 30 then
             self:Ping()
