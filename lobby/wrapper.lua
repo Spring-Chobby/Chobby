@@ -10,7 +10,6 @@ table.insert(arr,string.sub(str,pos)) -- Attach chars right of last divider
 return arr
 end
 
--- WARNING: Don't include this file if you won't use the Wrapper, it overrides the Wrapper functions
 Wrapper = Interface:extends()
 
 -- map lobby commands by name
