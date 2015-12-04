@@ -78,7 +78,7 @@ end
 
 -- override
 function Wrapper:_OnTASServer(...)
-    if self.disconnectTime then -- in the process of reconnecting
+	if self.status == "disconnected" and self.disconnectTime ~= nil then -- in the process of reconnecting
         self.disconnectTime = nil
         self:Login(unpack(self._oldData.loginData))
     end
@@ -305,13 +305,13 @@ end
 Wrapper.jsonCommands["LEFTTEAM"] = Wrapper._OnLeftTeam
 
 -- override
-function Wrapper:_Disconnected(...)
+function Wrapper:_OnDisconnected(...)
     if self.disconnectTime == nil then
         self:_PreserveData()
         self:_Clean()
     end
     self.disconnectTime = Spring.GetGameSeconds()
-    self:super("_Disconnected", ...)
+    self:super("_OnDisconnected", ...)
 end
 
 function Wrapper:Reconnect()

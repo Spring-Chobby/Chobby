@@ -81,6 +81,8 @@ function Interface:init()
     self.lastSentSeconds = Spring.GetGameSeconds()
 	self.status = "offline"
     self.listeners = {}
+	-- timeout (in seconds) until first message is received from server before disconnect is assumed
+	self.connectionTimeout = 50
 
     -- private
     self.buffer = ""
@@ -89,13 +91,17 @@ end
 function Interface:Connect(host, port)
     self.client = socket.tcp()
     self.client:settimeout(0)
+	self._startedConnectingTime = os.clock()
     local res, err = self.client:connect(host, port)
-    -- FIXME: this error check makes no sense!
-    if res == nil and not res == "timeout" then
+	if res == nil and err == "host not found" then
+		self:_OnDisconnected()
+		return false
+		-- The socket is expected to return "timeout" immediately since timeout time is set  to 0
+	elseif not (res == nil and err == "timeout") then 
         Spring.Log(LOG_SECTION, LOG.ERROR, "Error in connect: " .. err)
         return false
     end
-    self.status = "connected"
+    self.status = "connecting"
     return true
 end
 
@@ -326,8 +332,7 @@ function Interface:Login(user, password, cpu, localIP)
     if localIP == nil then
         localIP = "*"
     end
-    -- calculate MD5 hash
-    password = VFS.CalculateHash(password, 0)
+	password = VFS.CalculateHash(password, 0)
     self:_SendCommand(concat("LOGIN", user, password, cpu, localIP, "LuaLobby\t", "0\t", "a b m cl et p"))
     return self
 end
@@ -1165,7 +1170,7 @@ function Interface:_OnListQueues(queues)
 end
 Interface.jsonCommands["LISTQUEUES"] = Interface._OnListQueues
 
-function Interface:_Disconnected()
+function Interface:_OnDisconnected()
     self:_CallListeners("OnDisconnected")
 end
 
@@ -1254,14 +1259,31 @@ function Interface:_SocketUpdate()
     end
     -- get sockets ready for read
     local readable, writeable, err = socket.select({self.client}, {self.client}, 0)
-    if err~=nil then
+	local host, port = self.client:getpeername()
+	if host == nil then
+		self.client:shutdown()
+		self.client = nil
+		self:_OnDisconnected("Cannot resolve host.")
+		return
+	end
+	local brec, bsent, age = self.client:getstats()
+    if err ~= nil then
         -- some error happened in select
-        if err=="timeout" then
+        if err == "timeout" then
+			-- we've received no data after connecting for a while. assume connection cannot be established
+			if brec == 0 and os.clock() - self._startedConnectingTime > self.connectionTimeout then
+				self.client:shutdown()
+				self.client = nil
+				self:_OnDisconnected("No response from host.")
+			end
             -- nothing to do, return
             return
         end
         Spring.Log(LOG_SECTION, LOG.ERROR, "Error in select: " .. error)
     end
+	if self.status == "connecting" then
+		self.status = "connected"
+	end
     for _, input in ipairs(readable) do
         local s, status, commandsStr = input:receive('*a') --try to read all data
         if (status == "timeout" or status == nil) and commandsStr ~= nil and commandsStr ~= "" then
@@ -1282,7 +1304,7 @@ function Interface:_SocketUpdate()
 			if self.status ~= "offline" then
 				self.status = "disconnected"
 			end
-            self:_Disconnected()
+            self:_OnDisconnected()
         end
     end
 end
