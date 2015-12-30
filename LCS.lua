@@ -167,13 +167,13 @@ local function callFromSuperClass(self,f,...)
 --   end
 
   local method = super[f]
-  local result = method(self,...)
+  local result = {method(self,...)}
 
   -- And set the superclass back, if necessary
 --   if supersSuper then
 --     _register.class[superClass].__system.__superClass = super
 --   end
-  return result
+  return unpack(result)
 end
 
 -- Gets the superclass
