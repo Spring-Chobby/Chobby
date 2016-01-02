@@ -21,7 +21,10 @@ Screen = Object:Inherit{
 
   preserveChildrenOrder = true,
 
+  -- The active control is the control currently receiving mouse events
   activeControl = nil,
+  -- we also store the mouse button that was clicked
+  activeControlBtn = nil,
   focusedControl = nil,
   hoveredControl = nil,
   currentTooltip = nil,
@@ -195,12 +198,18 @@ function Screen:FocusControl(control)
   end
 end
 
-function Screen:MouseDown(x,y,...)
+function Screen:MouseDown(x,y,btn,...)
   y = select(2,gl.GetViewSizes()) - y
 
-  local activeControl = inherited.MouseDown(self,x,y,...)
+  local activeControl = inherited.MouseDown(self,x,y,btn,...)
+  local oldActiveControl = UnlinkSafe(self.activeControl)
+  if activeControl ~= oldActiveControl and oldActiveControl ~= nil then
+    -- send the mouse up to controls so they know to release
+    self:MouseUp(x,y,self.activeControlBtn,...)
+  end
   self:FocusControl(activeControl)
   self.activeControl = MakeWeakLink(activeControl, self.activeControl)
+  self.activeControlBtn = btn
   return (not not activeControl)
 end
 
