@@ -276,9 +276,9 @@ function Screen:MouseWheel(x,y,...)
   if activeControl then
     local cx,cy = activeControl:ScreenToLocal(x,y)
     local obj = activeControl:MouseWheel(cx,cy,...)
-    if (obj==false) then
-      self.activeControl = nil
-    elseif (not not obj)and(obj ~= activeControl) then
+    if not obj then
+      return false
+    elseif obj ~= activeControl then
       self.activeControl = MakeWeakLink(obj, self.activeControl)
       return true
     else
