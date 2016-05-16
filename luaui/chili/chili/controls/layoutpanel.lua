@@ -80,7 +80,7 @@ local inherited = this.inherited
 function LayoutPanel:New(obj)
   obj = inherited.New(self,obj)
   if (obj.selectable) then
-    obj.selectedItems = {[1]=true}
+    obj:SelectItem(1)
   end
   return obj
 end
