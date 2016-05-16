@@ -211,6 +211,12 @@ function EditBox:MouseUp(...)
 	return self
 end
 
+function EditBox:Select(startIndex, endIndex)
+	self.selStart = startIndex
+	self.selEnd = endIndex
+	self:Invalidate()
+end
+
 function EditBox:ClearSelected()
 	local left = self.selStart
 	local right = self.selEnd
