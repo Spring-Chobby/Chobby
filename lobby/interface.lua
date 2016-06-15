@@ -94,7 +94,7 @@ function Interface:Connect(host, port)
 	self._startedConnectingTime = os.clock()
     local res, err = self.client:connect(host, port)
 	if res == nil and err == "host not found" then
-		self:_OnDisconnected()
+		self:_OnDisconnected("Host not found")
 		return false
 		-- The socket is expected to return "timeout" immediately since timeout time is set  to 0
 	elseif not (res == nil and err == "timeout") then 
@@ -103,6 +103,11 @@ function Interface:Connect(host, port)
     end
     self.status = "connecting"
     return true
+end
+
+function Interface:Disconnect()
+    self.status = "offline"
+    self.client:close()
 end
 
 function Interface:_SendCommand(command, sendMessageCount)
@@ -332,7 +337,7 @@ function Interface:Login(user, password, cpu, localIP)
     if localIP == nil then
         localIP = "*"
     end
-	password = VFS.CalculateHash(password, 0)
+    password = VFS.CalculateHash(password, 0)
     self:_SendCommand(concat("LOGIN", user, password, cpu, localIP, "LuaLobby\t", "0\t", "a b m cl et p"))
     return self
 end
@@ -390,6 +395,7 @@ end
 
 function Interface:Register(userName, password, email)
     -- FIXME: email argument is currently not sent to the server
+    password = VFS.CalculateHash(password, 0)
     self:_SendCommand(concat("REGISTER", userName, password))
     return self
 end
