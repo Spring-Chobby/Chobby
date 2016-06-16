@@ -225,6 +225,33 @@ end
 Wrapper.commands["CLIENTS"] = Wrapper._OnClients
 
 -- override
+function Wrapper:_OnJoined(chanName, userName)
+    local channel = self:_GetChannel(chanName)
+
+    -- only add users after CLIENTS was received
+    if channel.users ~= nil then
+        table.insert(channel.users, userName)
+    end
+    self:super("_OnJoined", chanName, userName)
+end
+Wrapper.commands["JOINED"] = Wrapper._OnJoined
+
+-- override
+function Wrapper:_OnLeft(chanName, userName)
+    local channel = self:_GetChannel(chanName)
+
+    for i, v in pairs(channel.users) do
+        if v == userName then
+            table.remove(channel.users, i)
+            break
+        end
+    end
+
+    self:super("_OnLeft", chanName, userName)
+end
+Wrapper.commands["LEFT"] = Wrapper._OnLeft
+
+-- override
 function Wrapper:_OnFriendListBegin(...)
     self.friends = {}
     self.friendCount = 0
