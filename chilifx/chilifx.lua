@@ -27,7 +27,7 @@ end
 
 function ChiliFX:LoadShaders()
     self.shaders = {}
-    
+
     for _, shaderDef in pairs(shaderDefs) do
         Spring.Log("ChiliFX", LOG.INFO, "Loading shader " .. shaderDef.name .. ": " .. shaderDef.fragment)
         local shaderObj = {}
@@ -35,10 +35,14 @@ function ChiliFX:LoadShaders()
             fragment = VFS.LoadFile(CHILILFX_DIR .. "shaders/" .. shaderDef.fragment),
         })
         local glslLog = gl.GetShaderLog()
-        if glslLog ~= "" then 
-            Shader.Log("ChiliFX", "Error loading shader: " .. shaderDef.name)
+        if shader == nil then
+            Spring.Log("ChiliFX", LOG.ERROR, "Error loading shader: " .. shaderDef.name)
             Spring.Log("ChiliFX", LOG.ERROR, glslLog)
         else
+            if glslLog ~= "" then
+                Spring.Log("ChiliFX", LOG.WARNING, "Warning loading shader: " .. shaderDef.name)
+                Spring.Log("ChiliFX", LOG.WARNING, glslLog)
+            end
             local fail = false
             shaderObj.shader = shader
             for _, uniform in pairs(shaderDef.uniforms) do
