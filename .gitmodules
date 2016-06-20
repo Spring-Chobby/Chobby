@@ -16,3 +16,6 @@
 [submodule "libs/chotify"]
 	path = libs/chotify
 	url = https://github.com/gajop/chotify.git
+[submodule "libs/i18n"]
+	path = libs/i18n
+	url = https://github.com/gajop/i18n.git
