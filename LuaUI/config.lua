@@ -40,6 +40,12 @@ if LUA_NAME == "LuaUI" then
 		LUA_DIRNAME .. 'SystemWidgets/';
 		LUA_DIRNAME .. 'chili/';
 	}
+	for _, libDir in pairs(VFS.SubDirs("libs/")) do
+		local addonDir = libDir .. "luaui/widgets"
+		if #VFS.DirList(addonDir) > 0 then
+			table.insert(ADDON_DIRS, addonDir)
+		end
+	end
 
 	--// Create the "LuaUI/Config" directory
 	Spring.CreateDir(LUAUI_DIRNAME .. 'Config')
