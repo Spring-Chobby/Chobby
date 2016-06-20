@@ -1,14 +1,14 @@
--- IngameLobby - an in-game lobby example project
+-- Chobby - an in-game lobby project
 -- Authors: gajop
 
 local modinfo = {
-	name			= "IngameLobby",
+	name			= "Chobby",
 	shortName		= "IGL",
 	version			= "v0.1",
-	game			= "IngameLobby",
+	game			= "Chobby",
 	shortGame		= "IGL",
 	mutator			= "Official",
-	description		= "An in-game lobby example",
+	description		= "An in-game lobby",
 	modtype			= 1,
 	depend = {
 		"Spring Cursors",

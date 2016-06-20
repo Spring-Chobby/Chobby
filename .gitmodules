@@ -7,9 +7,6 @@
 [submodule "libs/liblobby"]
 	path = libs/liblobby
 	url = https://github.com/gajop/liblobby.git
-[submodule "libs/chililobby"]
-	path = libs/chililobby
-	url = https://github.com/gajop/chililobby.git
 [submodule "libs/chilifx"]
 	path = libs/chilifx
 	url = https://github.com/gajop/chilifx.git

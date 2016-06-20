@@ -17,7 +17,7 @@ LIBS_DIR = "libs/"
 LCS = loadstring(VFS.LoadFile(LIBS_DIR .. "lcs/LCS.lua"))
 LCS = LCS()
 
-CHILILOBBY_DIR = LIBS_DIR .. "chililobby/chililobby/"
+CHILILOBBY_DIR = "LuaUI/widgets/chobby/"
 
 function widget:Initialize()
     if not WG.LibLobby then
