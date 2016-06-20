@@ -1266,12 +1266,12 @@ function Interface:_SocketUpdate()
     -- get sockets ready for read
     local readable, writeable, err = socket.select({self.client}, {self.client}, 0)
 	local host, port = self.client:getpeername()
-	if host == nil then
-		self.client:shutdown()
-		self.client = nil
-		self:_OnDisconnected("Cannot resolve host.")
-		return
-	end
+--	if host == nil then
+--		self.client:shutdown()
+--		self.client = nil
+--		self:_OnDisconnected("Cannot resolve host.")
+--		return
+--	end
 	local brec, bsent, age = self.client:getstats()
     if err ~= nil then
         -- some error happened in select
