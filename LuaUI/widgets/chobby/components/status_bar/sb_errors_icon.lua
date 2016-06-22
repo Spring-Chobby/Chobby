@@ -47,7 +47,7 @@ function SBErrorsIcon:init()
                 width = self.iconSize,
                 height = self.iconSize,
                 margin = {0, 0, 0, 0},
-                file = CHILI_LOBBY_IMG_DIR .. "warning_off.png",
+                file = CHOBBY_IMG_DIR .. "warning_off.png",
             },
         },
     }

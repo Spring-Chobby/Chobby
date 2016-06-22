@@ -35,7 +35,7 @@ function SBMenuIcon:init()
                 width = self.iconSize,
                 height = self.iconSize,
                 margin = {0, 0, 0, 0},
-                file = CHILI_LOBBY_IMG_DIR .. "menu.png",
+                file = CHOBBY_IMG_DIR .. "menu.png",
             },
         },
         items = {

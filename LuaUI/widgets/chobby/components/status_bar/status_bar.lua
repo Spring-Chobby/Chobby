@@ -81,12 +81,12 @@ function StatusBar:AddItem(item, pos)
         panel._w = ctrl.right + ctrl.width
         ctrl.x = nil
     else
-        Spring.Log("chililobby", LOG.ERROR, "Wrong orientation passed to status bar: " .. tostring(pos))
+        Spring.Log("chobby", LOG.ERROR, "Wrong orientation passed to status bar: " .. tostring(pos))
         return false
     end
 
     panel:AddChild(Control:New(ctrl) )
-    
+
     table.insert(self.items, item)
 end
 

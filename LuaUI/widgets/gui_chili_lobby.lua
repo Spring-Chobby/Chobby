@@ -17,50 +17,50 @@ LIBS_DIR = "libs/"
 LCS = loadstring(VFS.LoadFile(LIBS_DIR .. "lcs/LCS.lua"))
 LCS = LCS()
 
-CHILILOBBY_DIR = "LuaUI/widgets/chobby/"
+CHOBBY_DIR = "LuaUI/widgets/chobby/"
 
 function widget:Initialize()
     if not WG.LibLobby then
-        Spring.Log("chililobby", LOG.ERROR, "Missing liblobby.")
+        Spring.Log("chobby", LOG.ERROR, "Missing liblobby.")
         widgetHandler:RemoveWidget(widget)
         return
     end
     if not WG.Chili then
-        Spring.Log("chililobby", LOG.ERROR, "Missing chiliui.")
+        Spring.Log("chobby", LOG.ERROR, "Missing chiliui.")
         widgetHandler:RemoveWidget(widget)
         return
     end
 
-    ChiliLobby = VFS.Include(CHILILOBBY_DIR .. "core.lua", nil)
+    Chobby = VFS.Include(CHOBBY_DIR .. "core.lua", nil)
 
-    WG.ChiliLobby = ChiliLobby
-    WG.ChiliLobby:initialize()
+    WG.Chobby = Chobby
+    WG.Chobby:_Initialize()
 end
 
 function widget:Shutdown()
-    WG.ChiliLobby = nil
+    WG.Chobby = nil
 end
 
 function widget:DrawScreen()
-    WG.ChiliLobby:DrawScreen()
+    WG.Chobby:_DrawScreen()
 end
 
 function widget:DownloadStarted(...)
-    WG.ChiliLobby:DownloadStarted(...)
+    WG.Chobby:_DownloadStarted(...)
 end
 
 function widget:DownloadFinished(...)
-    WG.ChiliLobby:DownloadFinished(...)
+    WG.Chobby:_DownloadFinished(...)
 end
 
 function widget:DownloadFailed(...)
-    WG.ChiliLobby:DownloadFailed(...)
+    WG.Chobby:_DownloadFailed(...)
 end
 
 function widget:DownloadProgress(...)
-    WG.ChiliLobby:DownloadProgress(...)
+    WG.Chobby:_DownloadProgress(...)
 end
 
 function widget:DownloadQueued(...)
-    WG.ChiliLobby:DownloadQueued(...)
+    WG.Chobby:_DownloadQueued(...)
 end

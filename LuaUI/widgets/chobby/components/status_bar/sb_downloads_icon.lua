@@ -34,7 +34,7 @@ function SBDownloadsIcon:init()
                 width = self.iconSize,
                 height = self.iconSize,
                 margin = {0, 0, 0, 0},
-                file = CHILI_LOBBY_IMG_DIR .. "download_off.png",
+                file = CHOBBY_IMG_DIR .. "download_off.png",
             },
         },
     }
@@ -46,7 +46,7 @@ function SBDownloadsIcon:UpdateDownloadStatus()
     local img = self.btnDownloads.children[2]
     if self.downloads > 0 then
        -- self.btnDownloads.children[1]:SetCaption("\255\120\120\120" .. tostring(self.downloads) .. "\b")
-        img.file = CHILI_LOBBY_IMG_DIR .. "download.png"
+        img.file = CHOBBY_IMG_DIR .. "download.png"
         self.btnDownloads.tooltip = "Downloads left: " .. tostring(self.downloads) .. "\n"
     else
         ChiliFX:AddGlowEffect({
@@ -54,7 +54,7 @@ function SBDownloadsIcon:UpdateDownloadStatus()
             time = 3, 
             endValue = 0.4, 
             after = function()
-                img.file = CHILI_LOBBY_IMG_DIR .. "download_off.png"
+                img.file = CHOBBY_IMG_DIR .. "download_off.png"
             end
         })
         self.btnDownloads.children[1]:SetCaption("")
@@ -76,7 +76,7 @@ function SBDownloadsIcon:DownloadQueued(...)
     self:UpdateDownloadStatus()
 
     local img = self.btnDownloads.children[2]
-    img.file = CHILI_LOBBY_IMG_DIR .. "download.png"
+    img.file = CHOBBY_IMG_DIR .. "download.png"
     ChiliFX:AddGlowEffect({
         obj = img, 
         time = 1,

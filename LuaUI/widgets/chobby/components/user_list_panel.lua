@@ -149,7 +149,7 @@ function UserListPanel:AddUser(userName)
         caption = userName, 
         OnClick = {
             function()
-                CHILI_LOBBY.chatWindows:GetPrivateChatConsole(userName)
+                CHOBBY.chatWindows:GetPrivateChatConsole(userName)
             end
         },
     }

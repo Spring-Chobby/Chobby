@@ -80,7 +80,7 @@ function TeamWindow:init()
         }
     }
 
-    CHILI_LOBBY.teamWindow = self
+    CHOBBY.teamWindow = self
 end
 
 function TeamWindow:CreateInvitePlayerWindow()
@@ -211,12 +211,12 @@ end
 
 function TeamWindow:UpdateTeamLeader()
     if lobby:GetTeam() ~= nil and lobby:GetTeam().leader == lobby:GetMyUserName() then
-        self.btnInviteTeam.children[1].file = CHILI_LOBBY_IMG_DIR .. "add_friend.png"
+        self.btnInviteTeam.children[1].file = CHOBBY_IMG_DIR .. "add_friend.png"
         self.btnInviteTeam.OnClick = { function()
             self:CreateInvitePlayerWindow()
         end}
     else
-        self.btnInviteTeam.children[1].file = CHILI_LOBBY_IMG_DIR .. "add_friend_off.png"
+        self.btnInviteTeam.children[1].file = CHOBBY_IMG_DIR .. "add_friend_off.png"
         self.btnInviteTeam.OnClick = {}
     end
     self.btnInviteTeam:Invalidate()
@@ -271,7 +271,7 @@ function TeamWindow:MakeTeamConsole()
                 width = 28,
                 height = 28,
                 margin = {0, 0, 0, 0},
-                file = CHILI_LOBBY_IMG_DIR .. "download.png"
+                file = CHOBBY_IMG_DIR .. "download.png"
             },
         },
         OnClick = { function()

@@ -40,13 +40,13 @@ local includes = {
     "components/status_bar/sb_server_status.lua",
 }
 
-local ChiliLobby = widget
+Chobby = widget
 
 for _, file in ipairs(includes) do
-    VFS.Include(CHILILOBBY_DIR .. file, ChiliLobby, VFS.RAW_FIRST)
+    VFS.Include(CHOBBY_DIR .. file, Chobby, VFS.RAW_FIRST)
 end
 
-function ChiliLobby:initialize()
+function Chobby:_Initialize()
     self:WrapCall(function()
         local loginWindow = LoginWindow()
         --self.downloader = Downloader()
@@ -61,16 +61,16 @@ function ChiliLobby:initialize()
     end)
 end
 
-function ChiliLobby:DrawScreen()
+function Chobby:GetRegisteredComponents()
+    return Component.registeredComponents
+end
+
+function Chobby:_DrawScreen()
     self:WrapCall(function()
     end)
 end
 
-function ChiliLobby:GetRegisteredComponents()
-    return Component.registeredComponents
-end
-
-function ChiliLobby:DownloadStarted(id)
+function Chobby:_DownloadStarted(id)
     self:WrapCall(function()
         for i, comp in pairs(self:GetRegisteredComponents()) do
             comp:DownloadStarted(id)
@@ -78,7 +78,7 @@ function ChiliLobby:DownloadStarted(id)
     end)
 end
 
-function ChiliLobby:DownloadFinished(id)
+function Chobby:_DownloadFinished(id)
     self:WrapCall(function()
         for i, comp in pairs(self:GetRegisteredComponents()) do
             comp:DownloadFinished(id)
@@ -86,7 +86,7 @@ function ChiliLobby:DownloadFinished(id)
     end)
 end
 
-function ChiliLobby:DownloadFailed(id, errorId)
+function Chobby:_DownloadFailed(id, errorId)
     self:WrapCall(function()
         for i, comp in pairs(self:GetRegisteredComponents()) do
             comp:DownloadFailed(id, errorId)
@@ -94,7 +94,7 @@ function ChiliLobby:DownloadFailed(id, errorId)
     end)
 end
 
-function ChiliLobby:DownloadProgress(id, downloaded, total)
+function Chobby:_DownloadProgress(id, downloaded, total)
     self:WrapCall(function()
         for i, comp in pairs(self:GetRegisteredComponents()) do
             comp:DownloadProgress(id, downloaded, total)
@@ -102,7 +102,7 @@ function ChiliLobby:DownloadProgress(id, downloaded, total)
     end)
 end
 
-function ChiliLobby:DownloadQueued(id, archiveName, archiveType)
+function Chobby:_DownloadQueued(id, archiveName, archiveType)
     self:WrapCall(function()
         for i, comp in pairs(self:GetRegisteredComponents()) do
             comp:DownloadQueued(id, archiveName, archiveType)
@@ -110,14 +110,14 @@ function ChiliLobby:DownloadQueued(id, archiveName, archiveType)
     end)
 end
 
-function ChiliLobby:WrapCall(func)
+function Chobby:WrapCall(func)
     xpcall(function() func() end, 
         function(err) self:_PrintError(err) end )
 end
 
-function ChiliLobby:_PrintError(err)
-    Spring.Log("chiliLobby", LOG.ERROR, err)
-    Spring.Log("chiliLobby", LOG.ERROR, debug.traceback(err))
+function Chobby:_PrintError(err)
+    Spring.Log("Chobby", LOG.ERROR, err)
+    Spring.Log("Chobby", LOG.ERROR, debug.traceback(err))
 end
 
-return ChiliLobby
+return Chobby

@@ -1,6 +1,6 @@
 --chili export
-CHILI_LOBBY = {}
-CHILI_LOBBY_IMG_DIR = CHILILOBBY_DIR .. "images/"
+CHOBBY = {}
+CHOBBY_IMG_DIR = CHOBBY_DIR .. "images/"
 
 if WG and WG.Chili then
     -- setup Chili
@@ -38,7 +38,7 @@ end
 ChiliFX = WG.ChiliFX
 Chotify = WG.Chotify
 
-i18n.loadFile(CHILILOBBY_DIR .. "i18n/chililobby.lua")
+i18n.loadFile(CHOBBY_DIR .. "i18n/chililobby.lua")
 i18n.setLocale('es')
 i18n.setLocale('sr')
 i18n.setLocale('jp')

@@ -70,7 +70,7 @@ function QueueListWindow:AddQueue(queue)
         width = h - 10,
         y = 10,
         height = h - 20,
-        file = CHILI_LOBBY_IMG_DIR .. "games/" .. img,
+        file = CHOBBY_IMG_DIR .. "games/" .. img,
     }
 
     local lblTitle = Label:New {
@@ -128,11 +128,11 @@ function QueueListWindow:AddQueue(queue)
         OnMouseUp = {
             function()
                 for _, game in pairs(missingGames) do
-                    Spring.Log("chililobby", "notice", "Downloading game " .. game)
+                    Spring.Log("chobby", "notice", "Downloading game " .. game)
                     VFS.DownloadArchive(game, "game")
                 end
                 for _, map in pairs(missingMaps) do
-                    Spring.Log("chililobby", "notice", "Downloading map " .. map)
+                    Spring.Log("chobby", "notice", "Downloading map " .. map)
                     VFS.DownloadArchive(map, "map")
                 end
                 -- download game

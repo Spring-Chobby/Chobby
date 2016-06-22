@@ -46,7 +46,7 @@ function SBFriendsIcon:init()
                 width = self.iconSize,
                 height = self.iconSize,
                 margin = {0, 0, 0, 0},
-                file = CHILI_LOBBY_IMG_DIR .. "friends_off.png",
+                file = CHOBBY_IMG_DIR .. "friends_off.png",
             },
         },
     }
@@ -59,7 +59,7 @@ function SBFriendsIcon:init()
         end
         if #onlineFriends > 0 then
             self.btnFriends.children[1]:SetCaption("\255\0\200\0" .. tostring(#onlineFriends) .. "\b")
-            self.btnFriends.children[3].file = CHILI_LOBBY_IMG_DIR .. "friends.png"
+            self.btnFriends.children[3].file = CHOBBY_IMG_DIR .. "friends.png"
         end
     end
     lobby:AddListener("OnFriendListEnd", self.onFriend)

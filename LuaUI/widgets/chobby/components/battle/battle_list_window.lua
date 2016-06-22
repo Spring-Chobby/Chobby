@@ -83,7 +83,7 @@ function BattleListWindow:AddBattle(battle)
 
     if battle.passworded then
         local imgPassworded = Image:New {
-            file = CHILI_LOBBY_IMG_DIR .. "lock.png",
+            file = CHOBBY_IMG_DIR .. "lock.png",
             y = 5,
             height = h - 10,
             width = 20,

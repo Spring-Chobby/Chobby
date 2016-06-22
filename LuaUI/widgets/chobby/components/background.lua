@@ -1,7 +1,7 @@
 Background = LCS.class{}
 
 function Background:init()
-    self.backgroundImage = CHILI_LOBBY_IMG_DIR .. "default_background.png"
+    self.backgroundImage = CHOBBY_IMG_DIR .. "default_background.png"
     self.drawBackground = true
     self:SetEnabled(self.drawBackground)	
 end
