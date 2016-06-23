@@ -33,14 +33,18 @@ function SBConnectionStatus:init()
     end
     lobby:AddListener("OnPong", updateStatus)
 
-    lobby:AddListener("OnAccepted", 
+    lobby:AddListener("OnAccepted",
         function(listener)
             lobby:Ping()
         end
     )
 
-    lobby:AddListener("OnDisconnected", function() 
-        self.lblPing:SetCaption(Configuration:GetErrorColor() .. "D/C\b")
+    lobby:AddListener("OnDisconnected", function()
+        if lobby.status == "offline" then
+            self.lblPing:SetCaption("\255\180\180\180" .. i18n("offline") .. "\b")
+        else
+            self.lblPing:SetCaption(Configuration:GetErrorColor() .. "D/C\b")
+        end
     end)
 
     self:AddControl(self.lblPing)

@@ -48,7 +48,7 @@ function LoginWindow:init()
         width = 120 * self.scale,
         y = 50 * self.scale,
         height = 20 * self.scale,
-        text = "",
+        text = Configuration.userName,
         font = { size = self.scale * self.fontSize},
     }
 
@@ -65,7 +65,7 @@ function LoginWindow:init()
         width = 120 * self.scale,
         y = 75 * self.scale,
         height = 20 * self.scale,
-        text = "",
+        text = Configuration.password,
         passwordInput = true,
         font = { size = self.scale * self.fontSize},
         OnKeyPress = {
@@ -76,6 +76,28 @@ function LoginWindow:init()
                 end
             end
         },
+    }
+
+    self.lblError = Label:New {
+        x = 1,
+        width = 100 * self.scale,
+        y = 100 * self.scale,
+        height = 55 * self.scale,
+        caption = "",
+        font = {
+            color = { 1, 0, 0, 1 },
+            size = self.fontSize * self.scale,
+        },
+    }
+
+    self.cbAutoLogin = Checkbox:New {
+        x = 1,
+        width = 87 * self.scale,
+        y = 125 * self.scale,
+        height = 20 * self.scale,
+        caption = i18n("Auto login"),
+        checked = Configuration.autoLogin,
+        font = { size = self.scale * self.fontSize * 0.8},
     }
 
     self.btnLogin = Button:New {
@@ -106,18 +128,6 @@ function LoginWindow:init()
         },
     }
 
-    self.lblError = Label:New {
-        x = 1,
-        width = 100 * self.scale,
-        y = 100 * self.scale,
-        height = 80 * self.scale,
-        caption = "",
-        font = {
-            color = { 1, 0, 0, 1 },
-            size = self.fontSize * self.scale,
-        },
-    }
-
     local ww, wh = Spring.GetWindowGeometry()
     local w, h = math.floor(265 * self.scale), math.floor(220 * self.scale)
     self.window = Window:New {
@@ -135,6 +145,7 @@ function LoginWindow:init()
             self.ebUsername,
             self.ebPassword,
             self.lblError,
+            self.cbAutoLogin,
             self.btnLogin,
             self.btnRegister
         },
@@ -150,9 +161,7 @@ function LoginWindow:init()
     screen0:FocusControl(self.ebUsername)
     -- FIXME: this should probably be moved to the lobby wrapper
     self.loginAttempts = 0
-    self.ebUsername:SetText(Configuration.userName)
-    self.ebPassword:SetText(Configuration.password)
-    if Configuration.autoLogin then
+    if self.cbAutoLogin.checked then
         self:tryLogin()
     end
 end
@@ -192,8 +201,9 @@ function LoginWindow:tryLogin()
     if username == '' or password == '' then
         return
     end
-    Configuration.userName = username
-    Configuration.password = password
+    Configuration.userName  = username
+    Configuration.password  = password
+    Configuration.autoLogin = self.cbAutoLogin.checked
     --Configuration.autoLogin = true
     Configuration:SaveConfig()
 
@@ -276,9 +286,15 @@ function LoginWindow:OnConnected()
             startValue = 1,
             after = function()
                 self.window:Dispose()
-                local playWindow = PlayWindow()
-                local chatWindows = ChatWindows()
-                local teamWindow = TeamWindow()
+                if not CHOBBY.chatWindows then
+                    ChatWindows()
+                end
+                if not CHOBBY.playWindow then
+                    PlayWindow()
+                end
+                if not CHOBBY.teamWindow then
+                    TeamWindow()
+                end
             end,
         })
     end

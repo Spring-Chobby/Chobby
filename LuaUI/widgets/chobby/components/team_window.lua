@@ -17,37 +17,37 @@ function TeamWindow:init()
             self:OnJoinedTeam(...)
         end
     )
-    
+
     lobby:AddListener("OnJoinTeam",
         function(listner, ...)
             self:OnJoinTeam(...)
         end
     )
-    
+
     lobby:AddListener("OnLeftTeam",
         function(listner, ...)
             self:OnLeftTeam(...)
         end
     )
-    
+
     lobby:AddListener("OnInviteTeamDeclined",
         function(listner, ...)
             self:OnInviteTeamDeclined(...)
         end
     )
-    
+
     lobby:AddListener("OnInviteTeam",
         function(listner, ...)
             self:OnInviteTeam(...)
         end
     )
-    
+
     lobby:AddListener("OnSetTeamLeader",
         function(listner, ...)
             self:OnSetTeamLeader(...)
         end
     )
-    
+
     -- team chat
     lobby:AddListener("OnSaidTeam", 
         function(listener, userName, msg)
@@ -63,7 +63,7 @@ function TeamWindow:init()
             end
         end
     )
-    
+
     self.window = Window:New {
         right = 0,
         width = "39%",
@@ -252,7 +252,7 @@ function TeamWindow:MakeTeamConsole()
             },
         },
     }
-    
+
     self.btnLeaveTeam = Button:New {
         x = 90,
         width = 36,
@@ -278,7 +278,7 @@ function TeamWindow:MakeTeamConsole()
             lobby:LeaveTeam()
         end},
     }
-    
+
     self.teamPanel = {
         Control:New {
             x = 0, y = 40, right = 145, bottom = 10,
@@ -303,7 +303,7 @@ function TeamWindow:ShowTeamConsole()
             child:Show()
         end
     end
-    
+
     self:UpdateTeamLeader()
     for _, child in pairs(self.teamPanel) do
         self.window:AddChild(child)
