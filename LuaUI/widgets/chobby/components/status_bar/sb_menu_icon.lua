@@ -9,8 +9,7 @@ function SBMenuIcon:init()
     }
     self.btnLogout = Button:New {
         width = 100, height = 40,
-        caption = "\255\150\150\150" .. i18n("logout") .. "\b",
-        state = { enabled = false },
+        caption = i18n("login"),
     }
     self.btnQuit = Button:New {
         width = 100, height = 40,
@@ -51,80 +50,112 @@ function SBMenuIcon:init()
         function(obj, itemIdx, selected)
             if selected then
                 if itemIdx == 1 then
-                    Spring.Echo("Settings")
-                    local sw, sh = Spring.GetWindowGeometry()
-                    local w, h = 400, 200
-                    local window
-                    window = Window:New {
-                        caption = i18n("settings"),
-                        x = math.floor((sw - w) / 2),
-                        y = math.floor(math.max(0, (sh) / 2 - h)),
-                        width = w,
-                        height = h,
-                        parent = screen0,
-                        draggable = false,
-                        resizable = false,
-                        children = {
-                            Label:New {
-                                x = 10,
-                                width = 100,
-                                height = 40,
-                                y = 40,
-                                valign = "center",
-                                caption = i18n("language") .. ":",
-                            },
-                            ComboBox:New {
-                                x = 110,
-                                width = 150,
-                                height = 40,
-                                y = 40,
-                                items = { "English", "Japanese", "Serbian", "Spanish" },
-                                OnSelect = {function(obj, indx, changed) 
-                                    if changed then
-                                        local locales = { "en", "jp", "sr", "es" }
-                                        i18n.setLocale(locales[indx])
-                                    end
-                                end},
-                            },
-                            Checkbox:New { 
-                                x = 10,
-                                width = 300,
-                                y = 100,
-                                caption = i18n("Enable GLSL animations (experimental)"),
-                                checked = ChiliFX:IsEnabled(),
-                                OnChange = {function(obj, val) 
-                                    if val then
-                                        ChiliFX:Enable()
-                                        Chotify:Post({
-                                            title = "GLSL is ON!",
-                                            body = "wohoooooo!!",
-                                        })
-                                    else
-                                        ChiliFX:Disable()
-                                    end
-                                end},
-                            },
-                            Button:New {
-                                right = 10,
-                                width = 70,
-                                y = 130,
-                                height = 40,
-                                caption = i18n("close"),
-                                OnClick = { function()
-                                    window:Dispose()
-                                end}
-                            },
-                        }
-                    }
+                    self:Settings()
                 elseif itemIdx == 3 then
-                    Spring.Echo("Logout")
+                    self:Logout()
                 elseif itemIdx == 4 then
-                    Spring.Echo("Quitting...")
-                    Spring.SendCommands("quitforce")
+                    self:Quit()
                 end
             end
         end
     }
 
     self:AddControl(self.btnMenu)
+
+    lobby:AddListener("OnAccepted",
+        function(listener)
+            self.btnLogout:SetCaption(i18n("logout"))
+        end
+    )
+
+    lobby:AddListener("OnDisconnected", function()
+        if lobby.status == "offline" then
+            self.btnLogout:SetCaption(i18n("login"))
+        end
+    end)
+end
+
+function SBMenuIcon:Settings()
+    Spring.Echo("Settings")
+    local sw, sh = Spring.GetWindowGeometry()
+    local w, h = 400, 200
+    local window
+    window = Window:New {
+        caption = i18n("settings"),
+        x = math.floor((sw - w) / 2),
+        y = math.floor(math.max(0, (sh) / 2 - h)),
+        width = w,
+        height = h,
+        parent = screen0,
+        draggable = false,
+        resizable = false,
+        children = {
+            Label:New {
+                x = 10,
+                width = 100,
+                height = 40,
+                y = 40,
+                valign = "center",
+                caption = i18n("language") .. ":",
+            },
+            ComboBox:New {
+                x = 110,
+                width = 150,
+                height = 40,
+                y = 40,
+                items = { "English", "Japanese", "Serbian", "Spanish" },
+                OnSelect = {function(obj, indx, changed) 
+                    if changed then
+                        local locales = { "en", "jp", "sr", "es" }
+                        i18n.setLocale(locales[indx])
+                    end
+                end},
+            },
+            Checkbox:New { 
+                x = 10,
+                width = 300,
+                y = 100,
+                caption = i18n("Enable GLSL animations (experimental)"),
+                checked = ChiliFX:IsEnabled(),
+                OnChange = {function(obj, val) 
+                    if val then
+                        ChiliFX:Enable()
+                        Chotify:Post({
+                            title = "GLSL is ON!",
+                            body = "wohoooooo!!",
+                        })
+                    else
+                        ChiliFX:Disable()
+                    end
+                end},
+            },
+            Button:New {
+                right = 10,
+                width = 70,
+                y = 130,
+                height = 40,
+                caption = i18n("close"),
+                OnClick = { function()
+                    window:Dispose()
+                end}
+            },
+        }
+    }
+end
+
+function SBMenuIcon:Logout()
+    if lobby.status ~= "offline" then
+        Spring.Echo("Logout")
+        lobby:Disconnect()
+        Configuration.autoLogin = false
+        Configuration:SaveConfig()
+    else
+        Spring.Echo("Login")
+        LoginWindow()
+    end
+end
+
+function SBMenuIcon:Quit()
+    Spring.Echo("Quitting...")
+    Spring.SendCommands("quitforce")
 end

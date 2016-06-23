@@ -286,9 +286,15 @@ function LoginWindow:OnConnected()
             startValue = 1,
             after = function()
                 self.window:Dispose()
-                local playWindow = PlayWindow()
-                local chatWindows = ChatWindows()
-                local teamWindow = TeamWindow()
+                if not CHOBBY.chatWindows then
+                    ChatWindows()
+                end
+                if not CHOBBY.playWindow then
+                    PlayWindow()
+                end
+                if not CHOBBY.teamWindow then
+                    TeamWindow()
+                end
             end,
         })
     end
