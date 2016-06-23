@@ -108,6 +108,7 @@ end
 function Interface:Disconnect()
     self.status = "offline"
     self.client:close()
+    self:_OnDisconnected()
 end
 
 function Interface:_SendCommand(command, sendMessageCount)
