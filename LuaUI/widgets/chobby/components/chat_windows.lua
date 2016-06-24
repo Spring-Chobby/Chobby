@@ -114,8 +114,8 @@ function ChatWindows:init()
         end
     )
     
-			
-	
+            
+    
     self.serverPanel = ScrollPanel:New {
         x = 0,
         right = 5,
@@ -156,25 +156,25 @@ function ChatWindows:init()
                 OnClick = { function() self:Minimize() end },
             },
             Button:New {
-				width = 60,
-				y = 10,
-				right = 112,
-				height = 40,
-				caption = i18n("join"),
-				OnClick = { function()
-					if self.joinWindow == nil then
-						self:CreateJoinChannelWindow()
-					end
-				end },
-			},
+                width = 60,
+                y = 10,
+                right = 112,
+                height = 40,
+                caption = i18n("join"),
+                OnClick = { function()
+                    if self.joinWindow == nil then
+                        self:CreateJoinChannelWindow()
+                    end
+                end },
+            },
             Button:New {
-				width = 60,
-				y = 10,
-				right = 52,
-				height = 40,
-				caption = i18n("close"),
-				OnClick = { function() self:CloseChannel() end },
-			},
+                width = 60,
+                y = 10,
+                right = 52,
+                height = 40,
+                caption = i18n("close"),
+                OnClick = { function() self:CloseChannel() end },
+            },
         }
     }
 
@@ -368,12 +368,12 @@ end
 function ChatWindows:CreateJoinChannelWindow()
 
 
-	self.ebChannelName = EditBox:New {
-		bottom = 50,
-		height = 25,
-		right = 50,
-		text = "",
-	}
+    self.ebChannelName = EditBox:New {
+        bottom = 50,
+        height = 25,
+        right = 50,
+        text = "",
+    }
 
     self.joinWindow = Window:New {
         right = 300,
@@ -386,18 +386,18 @@ function ChatWindows:CreateJoinChannelWindow()
         draggable = false,
         padding = {5, 0, 5, 0},
         children = {
-			self.ebChannelName,
+            self.ebChannelName,
             Button:New {
-				width = 60,
+                width = 60,
                 bottom = 4,
-				right = 2,
-				height = 40,
-				caption = i18n("cancel"),
-				OnClick = { function()
-					self.joinWindow:Dispose()
-					self.joinWindow = nil
-				end },
-			},
+                right = 2,
+                height = 40,
+                caption = i18n("cancel"),
+                OnClick = { function()
+                    self.joinWindow:Dispose()
+                    self.joinWindow = nil
+                end },
+            },
             Button:New {
                 caption = i18n("join"),
                 width = 60,
@@ -405,10 +405,10 @@ function ChatWindows:CreateJoinChannelWindow()
                 right = 65,
                 height = 40,
                 OnClick = { function()
-					lobby:Join(self.ebChannelName.text)
-					self.joinWindow:Dispose()
-					self.joinWindow = nil
-				end },
+                    lobby:Join(self.ebChannelName.text)
+                    self.joinWindow:Dispose()
+                    self.joinWindow = nil
+                end },
             },
         }
     }
@@ -418,9 +418,9 @@ function ChatWindows:CreateJoinChannelWindow()
             if key == Spring.GetKeyCode("enter") or 
                 key == Spring.GetKeyCode("numpad_enter") then
                 
-				lobby:Join(self.ebChannelName.text)
-				self.joinWindow:Dispose()
-				self.joinWindow = nil
+                lobby:Join(self.ebChannelName.text)
+                self.joinWindow:Dispose()
+                self.joinWindow = nil
             end
 
         end
@@ -429,5 +429,5 @@ function ChatWindows:CreateJoinChannelWindow()
 end
 
 function ChatWindows:CloseChannel()
-	Spring.Echo("CLOSE")
+    Spring.Echo("CLOSE")
 end
