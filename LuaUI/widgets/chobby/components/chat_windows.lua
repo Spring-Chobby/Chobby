@@ -424,5 +424,4 @@ function ChatWindows:CreateJoinChannelWindow()
 end
 
 function ChatWindows:CloseChannelTab(name)
-    self.tabPanel[name]:Remove()
 end
