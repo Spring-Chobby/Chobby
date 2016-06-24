@@ -163,7 +163,7 @@ function ChatWindows:init()
 				caption = i18n("join"),
 				OnClick = { function()
 					if self.joinWindow == nil then
-						self:JoinChannel()
+						self:CreateJoinChannelWindow()
 					end
 				end },
 			},
@@ -365,10 +365,10 @@ function ChatWindows:GetPrivateChatConsole(userName)
     return privateChatConsole
 end
 
-function ChatWindows:JoinChannel()
+function ChatWindows:CreateJoinChannelWindow()
 
 
-	self.channelName = EditBox:New {
+	self.ebChannelName = EditBox:New {
 		bottom = 50,
 		height = 25,
 		right = 50,
@@ -386,23 +386,11 @@ function ChatWindows:JoinChannel()
         draggable = false,
         padding = {5, 0, 5, 0},
         children = {
-			self.channelName,
-            Button:New {
-                caption = i18n("join"),
-                width = 60,
-                bottom = 4,
-                right = 2,
-                height = 40,
-                OnClick = { function()
-					lobby:Join(self.channelName.text)
-					self.joinWindow:Dispose()
-					self.joinWindow = nil
-				end },
-            },
+			self.ebChannelName,
             Button:New {
 				width = 60,
                 bottom = 4,
-				right = 65,
+				right = 2,
 				height = 40,
 				caption = i18n("cancel"),
 				OnClick = { function()
@@ -410,15 +398,27 @@ function ChatWindows:JoinChannel()
 					self.joinWindow = nil
 				end },
 			},
+            Button:New {
+                caption = i18n("join"),
+                width = 60,
+                bottom = 4,
+                right = 65,
+                height = 40,
+                OnClick = { function()
+					lobby:Join(self.ebChannelName.text)
+					self.joinWindow:Dispose()
+					self.joinWindow = nil
+				end },
+            },
         }
     }
     
-    self.channelName.OnKeyPress = {
+    self.ebChannelName.OnKeyPress = {
         function(obj, key, mods, ...)
             if key == Spring.GetKeyCode("enter") or 
                 key == Spring.GetKeyCode("numpad_enter") then
                 
-				lobby:Join(self.channelName.text)
+				lobby:Join(self.ebChannelName.text)
 				self.joinWindow:Dispose()
 				self.joinWindow = nil
             end
