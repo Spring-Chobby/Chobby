@@ -113,9 +113,7 @@ function ChatWindows:init()
             end
         end
     )
-    
-            
-    
+
     self.serverPanel = ScrollPanel:New {
         x = 0,
         right = 5,
@@ -158,7 +156,7 @@ function ChatWindows:init()
             Button:New {
                 width = 60,
                 y = 10,
-                right = 112,
+                right = 52,
                 height = 40,
                 caption = i18n("join"),
                 OnClick = { function()
@@ -166,14 +164,6 @@ function ChatWindows:init()
                         self:CreateJoinChannelWindow()
                     end
                 end },
-            },
-            Button:New {
-                width = 60,
-                y = 10,
-                right = 52,
-                height = 40,
-                caption = i18n("close"),
-                OnClick = { function() self:CloseChannel() end },
             },
         }
     }
@@ -327,9 +317,14 @@ function ChatWindows:GetChannelConsole(chanName)
                     children = { channelConsole.panel, },
                 },
                 Control:New {
-                    width = 144, y = 0, right = 0, bottom = 0,
+                    width = 144, y = 50, right = 0, bottom = 0,
                     padding={0,0,0,0}, itemPadding={0,0,0,0}, itemMargin={0,0,0,0},
                     children = { userListPanel.panel, },
+                },
+                Button:New {
+                    width = 142, height = 50, y = 0, right = 2,
+                    caption = "x",
+                    OnClick = { function() self:CloseChannelTab(name) end },
                 },
             }
         })
@@ -428,6 +423,6 @@ function ChatWindows:CreateJoinChannelWindow()
 
 end
 
-function ChatWindows:CloseChannel()
-    Spring.Echo("CLOSE")
+function ChatWindows:CloseChannelTab(name)
+    self.tabPanel[name]:Remove()
 end
