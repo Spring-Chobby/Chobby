@@ -396,6 +396,7 @@ function ChatWindows:JoinChannel()
                 OnClick = { function()
 					lobby:Join(self.channelName.text)
 					self.joinWindow:Dispose()
+					self.joinWindow = nil
 				end },
             },
             Button:New {
@@ -406,6 +407,7 @@ function ChatWindows:JoinChannel()
 				caption = i18n("cancel"),
 				OnClick = { function()
 					self.joinWindow:Dispose()
+					self.joinWindow = nil
 				end },
 			},
         }
@@ -418,6 +420,7 @@ function ChatWindows:JoinChannel()
                 
 				lobby:Join(self.channelName.text)
 				self.joinWindow:Dispose()
+				self.joinWindow = nil
             end
 
         end
