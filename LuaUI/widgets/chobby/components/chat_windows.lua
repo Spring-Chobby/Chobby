@@ -113,7 +113,9 @@ function ChatWindows:init()
             end
         end
     )
-
+    
+			
+	
     self.serverPanel = ScrollPanel:New {
         x = 0,
         right = 5,
@@ -153,6 +155,26 @@ function ChatWindows:init()
                 height = 40,
                 OnClick = { function() self:Minimize() end },
             },
+            Button:New {
+				width = 60,
+				y = 10,
+				right = 112,
+				height = 40,
+				caption = i18n("join"),
+				OnClick = { function()
+					if self.joinWindow == nil then
+						self:JoinChannel()
+					end
+				end },
+			},
+            Button:New {
+				width = 60,
+				y = 10,
+				right = 52,
+				height = 40,
+				caption = i18n("close"),
+				OnClick = { function() self:CloseChannel() end },
+			},
         }
     }
 
@@ -341,4 +363,68 @@ function ChatWindows:GetPrivateChatConsole(userName)
     end
 
     return privateChatConsole
+end
+
+function ChatWindows:JoinChannel()
+
+
+	self.channelName = EditBox:New {
+		bottom = 50,
+		height = 25,
+		right = 50,
+		text = "",
+	}
+
+    self.joinWindow = Window:New {
+        right = 300,
+        width = 150,
+        bottom = 200,
+        height = 100,
+        parent = screen0,
+        caption = i18n("channel"),
+        resizable = false,
+        draggable = false,
+        padding = {5, 0, 5, 0},
+        children = {
+			self.channelName,
+            Button:New {
+                caption = i18n("join"),
+                width = 60,
+                bottom = 4,
+                right = 2,
+                height = 40,
+                OnClick = { function()
+					lobby:Join(self.channelName.text)
+					self.joinWindow:Dispose()
+				end },
+            },
+            Button:New {
+				width = 60,
+                bottom = 4,
+				right = 65,
+				height = 40,
+				caption = i18n("cancel"),
+				OnClick = { function()
+					self.joinWindow:Dispose()
+				end },
+			},
+        }
+    }
+    
+    self.channelName.OnKeyPress = {
+        function(obj, key, mods, ...)
+            if key == Spring.GetKeyCode("enter") or 
+                key == Spring.GetKeyCode("numpad_enter") then
+                
+				lobby:Join(self.channelName.text)
+				self.joinWindow:Dispose()
+            end
+
+        end
+    }
+
+end
+
+function ChatWindows:CloseChannel()
+	Spring.Echo("CLOSE")
 end
