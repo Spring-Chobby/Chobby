@@ -4,7 +4,7 @@
 local modinfo = {
 	name			= "Chobby",
 	shortName		= "IGL",
-	version			= "v0.1",
+	version			= "$VERSION",
 	game			= "Chobby",
 	shortGame		= "IGL",
 	mutator			= "Official",

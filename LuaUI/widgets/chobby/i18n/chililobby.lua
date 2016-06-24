@@ -13,6 +13,7 @@ return {
 		menu = "Menu",
 		settings = "Settings",
 		logout = "Logout",
+		login = "Login",
 		quit = "Quit",
 		welcome = "Welcome",
 		singleplayer = "Singleplayer",
