@@ -2,19 +2,19 @@
 --------------------------------------------------------------------------------
 
 function widget:GetInfo()
-  return {
-    name      = "LibLobby API",
-    desc      = "LibLobby GUI Framework",
-    author    = "gajop",
-    date      = "WIP",
-    license   = "GPLv2",
-    version   = "0.2",
-    layer     = -1000,
-    enabled   = true,  --  loaded by default?
-    handler   = true,
-    api       = true,
-    hidden    = true,
-  }
+	return {
+		name      = "LibLobby API",
+		desc      = "LibLobby GUI Framework",
+		author    = "gajop",
+		date      = "WIP",
+		license   = "GPLv2",
+		version   = "0.2",
+		layer     = -1000,
+		enabled   = true,  --  loaded by default?
+		handler   = true,
+		api       = true,
+		hidden    = true,
+	}
 end
 
 
@@ -53,9 +53,9 @@ function widget:Initialize()
 end
 
 function widget:Shutdown()
-  WG.LibLobby = nil
+	WG.LibLobby = nil
 end
 
 function widget:Update()
-  WG.LibLobby.lobby:Update()
+	WG.LibLobby.lobby:Update()
 end
