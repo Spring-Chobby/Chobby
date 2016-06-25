@@ -20,6 +20,8 @@ local includes = {
 
 	-- play
 	"components/play_window.lua",
+	-- skirmish
+	"components/skirmish/skirmish_window.lua",
 	-- battle
 	"components/battle/battle_list_window.lua",
 	"components/battle/battle_room_window.lua",

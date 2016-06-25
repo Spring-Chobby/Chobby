@@ -43,7 +43,8 @@ function PlayWindow:init()
 			outline = true,
 		},
 		OnClick = {
-			function() 
+			function()
+				self:HideWindows()
 			end
 		},
 	}
@@ -81,7 +82,7 @@ function PlayWindow:init()
 		},
 		OnClick = {
 			function()
-				if (self.battleListWindow and self.battleListWindow.window.visible) or (self.queueListWindow and self.queueListWindow.window.visible) then return end
+				self:HideWindows()
 				self:SpawnQueueListWindow()
 			end
 		},
@@ -102,7 +103,7 @@ function PlayWindow:init()
 		},
 		OnClick = {
 			function()
-				if (self.battleListWindow and self.battleListWindow.window.visible) or (self.queueListWindow and self.queueListWindow.window.visible) then return end
+				self:HideWindows()
 				self:SpawnBattleListWindow()
 			end
 		},
@@ -129,10 +130,11 @@ function PlayWindow:init()
 		}
 	}
 	-- caching:
+	self.skirmishWindow = BattleListWindow(self.window)
 	self.queueListWindow = QueueListWindow(self.window)
-	self.queueListWindow.window:Hide()
 	self.battleListWindow = BattleListWindow(self.window)
-	self.battleListWindow.window:Hide()
+	self:HideWindows()
+
 
 -- 	lobby:AddListener("OnCommandReceived",
 --         function(listner, command)
@@ -142,55 +144,30 @@ function PlayWindow:init()
 	lobby:ListQueues()
 end
 
-function PlayWindow:SpawnBattleListWindow()
-	if not self.battleListWindow then
-		self.battleListWindow = BattleListWindow(self.window)
-	else
-		self.battleListWindow.window:Show()
+function PlayWindow:HideWindows()
+	if self.skirmishWindow.window.visible then
+		self.skirmishWindow.window:Hide()
 	end
+	if self.queueListWindow.window.visible then
+		self.queueListWindow.window:Hide()
+	end
+	if self.battleListWindow.window.visible then
+		self.battleListWindow.window:Hide()
+	end
+end
 
-	local oldCaption = self.btnPlayMultiplayerCustom.caption
-	self.btnPlayMultiplayerCustom:SetCaption(Configuration:GetSelectedColor() .. oldCaption .. "\b")	
-	oldFont = self.btnPlayMultiplayerCustom.font
-	self.btnPlayMultiplayerCustom.font = Chili.Font:New(getFont())
-	self.btnPlayMultiplayerCustom.font:SetParent(self.btnPlayMultiplayerCustom)
-	self.btnPlayMultiplayerCustom.backgroundColor = Configuration:GetButtonSelectedColor()
-	self.btnPlayMultiplayerCustom:Invalidate()
-
-	local oldCaptionLbl = self.lblPlayMultiplayer.caption	
-	self.lblPlayMultiplayer:SetCaption(Configuration:GetSelectedColor() .. oldCaptionLbl .. "\b")
-	oldFontLbl = self.lblPlayMultiplayer.font
-	self.lblPlayMultiplayer.font = Chili.Font:New({
-			size = 20,
-			font = fontName,
-		}
-	)
-	self.lblPlayMultiplayer.font:SetParent(self.lblPlayMultiplayer)
-	self.lblPlayMultiplayer:Invalidate()
-
-	self.battleListWindow.window.OnHide = { 
-		function() 
-			--self.battleListWindow = nil
-
-			self.btnPlayMultiplayerCustom.font = oldFont
-			self.btnPlayMultiplayerCustom.font:SetParent(self.btnPlayMultiplayerCustom)
-			self.btnPlayMultiplayerCustom:SetCaption(oldCaption)
-			self.btnPlayMultiplayerCustom.backgroundColor = self.btnPlayMultiplayerNormal.backgroundColor
-			self.btnPlayMultiplayerCustom:Invalidate()
-
-			self.lblPlayMultiplayer.font = oldFontLbl
-			self.lblPlayMultiplayer.font:SetParent(self.lblPlayMultiplayer)
-			self.lblPlayMultiplayer:SetCaption(oldCaptionLbl)
-			self.lblPlayMultiplayer:Invalidate()
-		end 
-	}
+function PlayWindow:SpawnSkirmishWindow()
+	return
 end
 
 function PlayWindow:SpawnQueueListWindow()
 	if not self.queueListWindow then
 		self.queueListWindow = QueueListWindow(self.window)
-	else
+	end
+	if not self.queueListWindow.visible then
 		self.queueListWindow.window:Show()
+	else
+		return
 	end
 
 	local oldCaption = self.btnPlayMultiplayerNormal.caption	
@@ -224,6 +201,53 @@ function PlayWindow:SpawnQueueListWindow()
 
 			--self.lblPlayMultiplayer.font = oldFontLbl
 			--self.lblPlayMultiplayer.font:SetParent(self.lblPlayMultiplayer)
+			self.lblPlayMultiplayer:SetCaption(oldCaptionLbl)
+			self.lblPlayMultiplayer:Invalidate()
+		end 
+	}
+end
+
+function PlayWindow:SpawnBattleListWindow()
+	if not self.battleListWindow then
+		self.battleListWindow = BattleListWindow(self.window)
+	end
+	if not self.battleListWindow.window.visible then
+        self.battleListWindow.window:Show()
+	else
+		return
+	end
+
+	local oldCaption = self.btnPlayMultiplayerCustom.caption
+	self.btnPlayMultiplayerCustom:SetCaption(Configuration:GetSelectedColor() .. oldCaption .. "\b")	
+	oldFont = self.btnPlayMultiplayerCustom.font
+	self.btnPlayMultiplayerCustom.font = Chili.Font:New(getFont())
+	self.btnPlayMultiplayerCustom.font:SetParent(self.btnPlayMultiplayerCustom)
+	self.btnPlayMultiplayerCustom.backgroundColor = Configuration:GetButtonSelectedColor()
+	self.btnPlayMultiplayerCustom:Invalidate()
+
+	local oldCaptionLbl = self.lblPlayMultiplayer.caption	
+	self.lblPlayMultiplayer:SetCaption(Configuration:GetSelectedColor() .. oldCaptionLbl .. "\b")
+	oldFontLbl = self.lblPlayMultiplayer.font
+	self.lblPlayMultiplayer.font = Chili.Font:New({
+			size = 20,
+			font = fontName,
+		}
+	)
+	self.lblPlayMultiplayer.font:SetParent(self.lblPlayMultiplayer)
+	self.lblPlayMultiplayer:Invalidate()
+
+	self.battleListWindow.window.OnHide = { 
+		function() 
+			--self.battleListWindow = nil
+
+			self.btnPlayMultiplayerCustom.font = oldFont
+			self.btnPlayMultiplayerCustom.font:SetParent(self.btnPlayMultiplayerCustom)
+			self.btnPlayMultiplayerCustom:SetCaption(oldCaption)
+			self.btnPlayMultiplayerCustom.backgroundColor = self.btnPlayMultiplayerNormal.backgroundColor
+			self.btnPlayMultiplayerCustom:Invalidate()
+
+			self.lblPlayMultiplayer.font = oldFontLbl
+			self.lblPlayMultiplayer.font:SetParent(self.lblPlayMultiplayer)
 			self.lblPlayMultiplayer:SetCaption(oldCaptionLbl)
 			self.lblPlayMultiplayer:Invalidate()
 		end 
