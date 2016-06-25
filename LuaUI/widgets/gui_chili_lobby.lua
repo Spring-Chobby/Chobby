@@ -32,7 +32,7 @@ function widget:Initialize()
     end
 
     Chobby = VFS.Include(CHOBBY_DIR .. "core.lua", nil)
-
+	
     WG.Chobby = Chobby
     WG.Chobby:_Initialize()
 end
