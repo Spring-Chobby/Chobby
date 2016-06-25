@@ -10,6 +10,7 @@ local modinfo = {
 	mutator			= "Official",
 	description		= "An in-game lobby",
 	modtype			= 1,
+	url				= "https://github.com/Spring-Chobby/Chobby",
 	depend = {
 		"Spring Cursors",
 	}
