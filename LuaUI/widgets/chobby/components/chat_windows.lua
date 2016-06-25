@@ -322,7 +322,7 @@ function ChatWindows:GetChannelConsole(chanName)
                     children = { userListPanel.panel, },
                 },
                 Button:New {
-                    width = 142, height = 50, y = 0, right = 2,
+                    width = 24, height = 24, y = 0, right = 2,
                     caption = "x",
                     OnClick = { function() self:CloseChannelTab(name) end },
                 },
@@ -354,7 +354,18 @@ function ChatWindows:GetPrivateChatConsole(userName)
             lobby:SayPrivate(userName, message)
         end
 
-        self.tabPanel:AddTab({name = "@" .. userName, children = {privateChatConsole.panel}})
+        self.tabPanel:AddTab({
+            name = "@" .. userName,
+            children = {
+                privateChatConsole.panel,
+            
+                Button:New {
+                    width = 24, height = 24, y = 0, right = 2,
+                    caption = "x",
+                    OnClick = { function() self:CloseChannelTab(name) end },
+                }
+            }
+        })
     end
 
     return privateChatConsole
