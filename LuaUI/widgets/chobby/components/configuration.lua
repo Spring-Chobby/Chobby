@@ -36,8 +36,13 @@ end
 function Configuration:SaveConfig()
     local out = {}
     
+    channels = lobby:GetMyChannels()
+    for k,v in pairs(channels) do
+        Spring.Echo(v)
     local channels = {}
     channels = lobby:GetMyChannels()
+    
+    end
     
     out = {
         userName = self.userName,
