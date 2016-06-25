@@ -104,7 +104,7 @@ function TeamWindow:CreateInvitePlayerWindow()
                 children = {
                     ebPlayerName,
                     Button:New {
-                        caption = "OK",
+                        caption = i18n("ok"),
                         OnClick = { function()
                             local playerName = ebPlayerName.text
                             if playerName == "" then
@@ -115,7 +115,7 @@ function TeamWindow:CreateInvitePlayerWindow()
                         end},
                     },
                     Button:New {
-                        caption = "Cancel",
+                        caption = i18n("cancel"),
                         OnClick = { function()
                             window:Dispose()
                         end},
