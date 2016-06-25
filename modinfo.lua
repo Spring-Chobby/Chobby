@@ -10,7 +10,6 @@ local modinfo = {
 	mutator			= "Official",
 	description		= "An in-game lobby",
 	modtype			= 1,
-	description		= "SpringRTS Lobby",
 	url				= "https://github.com/spring-chobby/chobby",
 	depend = {
 		"Spring Cursors",
