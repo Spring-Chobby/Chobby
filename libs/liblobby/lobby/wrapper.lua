@@ -24,6 +24,7 @@ function Wrapper:init()
 end
 
 function Wrapper:_Clean()
+
     self.users = {}
     self.userCount = 0
 
@@ -45,6 +46,7 @@ function Wrapper:_Clean()
 
     self.loginData = nil
     self.myUserName = nil
+    self.myChannels = {}
 	
 	-- reconnection delay in seconds
 	self.reconnectionDelay = 5
@@ -227,6 +229,9 @@ Wrapper.commands["CLIENTS"] = Wrapper._OnClients
 -- override
 function Wrapper:_OnJoined(chanName, userName)
     local channel = self:_GetChannel(chanName)
+    
+	table.insert(self.myChannels, channel)
+	Spring.Echo("LOL")
 
     -- only add users after CLIENTS was received
     if channel.users ~= nil then
@@ -444,6 +449,9 @@ function Wrapper:GetChannelCount()
 end
 function Wrapper:GetChannel(channelName)
     return self.channels[channelName]
+end
+function Wrapper:GetMyChannels()
+    return self.myChannels
 end
 -- returns channels table (not necessarily an array)
 function Wrapper:GetChannels()

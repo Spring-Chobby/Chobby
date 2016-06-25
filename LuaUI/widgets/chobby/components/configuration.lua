@@ -35,6 +35,9 @@ end
 
 function Configuration:SaveConfig()
     local out = {}
+    
+    Spring.Echo(lobby:GetMyChannels())
+    
     out = {
         userName = self.userName,
         password = self.password,
