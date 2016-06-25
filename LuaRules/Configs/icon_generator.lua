@@ -134,190 +134,190 @@ defaults = {border=0.05, angle=45, rot="right", clamp=-10000, scale=1.5, empty=f
 unitConfigs = {
   
   --[[ [UnitDefNames.corrad.id] = {
-    scale = 3,
-    rot   = 200,
-    clamp = 10,
+	scale = 3,
+	rot   = 200,
+	clamp = 10,
   },
   [UnitDefNames.armjamt.id] = {
-    rot = -45,
+	rot = -45,
   },
   [UnitDefNames.corsilo.id] = {
-    clamp = 0,
+	clamp = 0,
   },
   [UnitDefNames.corsh.id] = {
-    clamp = 0,
+	clamp = 0,
   },
   [UnitDefNames.corrl.id] = {
-    clamp = 2,
+	clamp = 2,
   },
   [UnitDefNames.corhlt.id] = {
-    clamp = 2,
+	clamp = 2,
   },
   [UnitDefNames.corfav.id] = {
-    border = 0.156,
+	border = 0.156,
   },
   [UnitDefNames.blastwing.id] = {
-    border = 0.156,
+	border = 0.156,
   },
   [UnitDefNames.bladew.id] = {
-    border = 0.125,
+	border = 0.125,
   },
   [UnitDefNames.corgator.id] = {
-    border = 0.125,
+	border = 0.125,
   },
   [UnitDefNames.armflea.id] = {
-    border = 0.125,
+	border = 0.125,
   },
 
 
   [UnitDefNames.corsumo.id] = {
-    unfold = true,
+	unfold = true,
   },
   [UnitDefNames.corpyro.id] = {
-    unfold = true,
+	unfold = true,
   },
   [UnitDefNames.corstorm.id] = {
-    unfold = true,
+	unfold = true,
   },
   [UnitDefNames.core_spectre.id] = {
-    unfold = true,
+	unfold = true,
   },
   [UnitDefNames.corjamt.id] = {
-    unfold = true,
+	unfold = true,
   },
   	
   [UnitDefNames.cormart.id] = {
-    unfold = true,
-    attack = true,
-    shotangle = 45,
-    wait   = 120,
+	unfold = true,
+	attack = true,
+	shotangle = 45,
+	wait   = 120,
   },
   [UnitDefNames.corak.id] = {
-    unfold = true,
-    attack = true,
-    wait   = 120,
+	unfold = true,
+	attack = true,
+	wait   = 120,
    },  
   [UnitDefNames.armpb.id] = {
-    unfold = true,
-    attack = true,
-    wait   = 50,
+	unfold = true,
+	attack = true,
+	wait   = 50,
   },
   [UnitDefNames.armspy.id] = {
-    unfold = true,
+	unfold = true,
   },
   [UnitDefNames.armanni.id] = {
-    unfold = true,
+	unfold = true,
   },
   [UnitDefNames.armarad.id] = {
-    unfold = true,
-    wait   = 225,
+	unfold = true,
+	wait   = 225,
   },
   [UnitDefNames.armsolar.id] = {
-    unfold = true,
+	unfold = true,
   },
   [UnitDefNames.armsnipe.id] = {
 --    unfold = true,
 --    attack = true,
   },
   [UnitDefNames.armzeus.id] = {
-    unfold = true,
-    attack = true,
+	unfold = true,
+	attack = true,
   },
   [UnitDefNames.cormex.id] = {
-    clamp  = 0,
-    unfold = true,
-    wait   = 600,
+	clamp  = 0,
+	unfold = true,
+	wait   = 600,
   },
   [UnitDefNames.cordoom.id] = {
-    unfold = true,
+	unfold = true,
   },
   [UnitDefNames.corcrw.id] = {
-    unfold = true,
+	unfold = true,
   },
   [UnitDefNames.chickenf.id] = {
-    unfold = true,
-    wait   = 190,
+	unfold = true,
+	wait   = 190,
   },
   [UnitDefNames.chicken_pigeon.id] = {
-    border = 0.11,
+	border = 0.11,
   },
 
   [UnitDefNames.chicken_dodo.id] = {
-    border = defaults.border,
+	border = defaults.border,
   }, 
 
   [UnitDefNames.chickenq.id] = {
-    rot    = 29,
-    angle  = 10,
-    unfold = false,
+	rot    = 29,
+	angle  = 10,
+	unfold = false,
   },
   [UnitDefNames.chickenbroodqueen.id] = {
-    rot    = 29,
-    angle  = 10,
-    unfold = false,
+	rot    = 29,
+	angle  = 10,
+	unfold = false,
   },
   [UnitDefNames.armorco.id] = {
-    rot    = 28,
-    angle  = 10,
+	rot    = 28,
+	angle  = 10,
   },
   [UnitDefNames.armbanth.id] = {
-    rot    = 28,
-    angle  = 10,
-    unfold = true,
+	rot    = 28,
+	angle  = 10,
+	unfold = true,
   },
   [UnitDefNames.armraz.id] = {
-    rot    = 28,
-    angle  = 10,
-    border = 0.09,
+	rot    = 28,
+	angle  = 10,
+	border = 0.09,
   },
   [UnitDefNames.dante.id] = {
-    rot    = 28,
-    angle  = 10,
+	rot    = 28,
+	angle  = 10,
   },
   [UnitDefNames.screamer.id] = {
-    rot    = 30,
-    angle  = 30,
+	rot    = 30,
+	angle  = 30,
   },
   [UnitDefNames.arm_spider.id] = {
-    scale    = 3,
-    attempts = 10,
+	scale    = 3,
+	attempts = 10,
   },
   [UnitDefNames.commrecon1.id] = {
-    unfold = true,
-    --attack = true,
+	unfold = true,
+	--attack = true,
   },
   [UnitDefNames.commsupport1.id] = {
 	unfold = true,
-    --attack = true,
+	--attack = true,
   },
   [UnitDefNames.zenith.id] = {
-    wait   = 50,
+	wait   = 50,
   },  
   [UnitDefNames.fakeunit.id] = {
-    empty  = true,
+	empty  = true,
   },
   [UnitDefNames.fakeunit_aatarget.id] = {
-    empty  = true,
+	empty  = true,
   },]]
 }
 
 for i=1,#UnitDefs do
   if (UnitDefs[i].canFly) then
-    if (unitConfigs[i]) then
-      if (unitConfigs[i].unfold ~= false) then
-        unitConfigs[i].unfold = true
-        unitConfigs[i].move   = true
-      end
-    else
-      unitConfigs[i] = {unfold = true, move = true}
-    end
+	if (unitConfigs[i]) then
+	  if (unitConfigs[i].unfold ~= false) then
+		unitConfigs[i].unfold = true
+		unitConfigs[i].move   = true
+	  end
+	else
+	  unitConfigs[i] = {unfold = true, move = true}
+	end
   elseif (UnitDefs[i].canKamikaze) then
-    if (unitConfigs[i]) then
-      if (not unitConfigs[i].border) then
-        unitConfigs[i].border = 0.156
-      end
-    else
-      unitConfigs[i] = {border = 0.156}
-    end
+	if (unitConfigs[i]) then
+	  if (not unitConfigs[i].border) then
+		unitConfigs[i].border = 0.156
+	  end
+	else
+	  unitConfigs[i] = {border = 0.156}
+	end
   end
 end

@@ -4,14 +4,14 @@
 
 function gadget:GetInfo()
   return {
-    name      = "DualFog",
-    version   = 3,
-    desc      = "Fog Drawing Gadget",
-    author    = "trepan, user, aegis, jK",
-    date      = "2008-2011",
-    license   = "GNU GPL, v2 or later",
-    layer     = 1,
-    enabled   = true
+	name      = "DualFog",
+	version   = 3,
+	desc      = "Fog Drawing Gadget",
+	author    = "trepan, user, aegis, jK",
+	date      = "2008-2011",
+	license   = "GNU GPL, v2 or later",
+	layer     = 1,
+	enabled   = true
   }
 end
 
@@ -132,16 +132,16 @@ local function DrawPlaneModel()
   glBlending(true)
 
   glBeginEnd(GL_QUADS,function()
-    for h = gnd_min+50,fogHeight,50 do
-      local l = -mx*4
-      local r = mx + mx*4
-      local t = -mz*4
-      local b = mz + mz*4
-      glVertex(l, h, t)
-      glVertex(r, h, t)
-      glVertex(r, h, b)
-      glVertex(l, h, b)
-    end
+	for h = gnd_min+50,fogHeight,50 do
+	  local l = -mx*4
+	  local r = mx + mx*4
+	  local t = -mz*4
+	  local b = mz + mz*4
+	  glVertex(l, h, t)
+	  glVertex(r, h, t)
+	  glVertex(r, h, b)
+	  glVertex(l, h, b)
+	end
   end)
 
   glDepthTest(false)
@@ -188,8 +188,8 @@ local vertSrc = [[
 
   void main(void)
   {
-    gl_TexCoord[0] = gl_MultiTexCoord0;
-    gl_Position    = gl_Vertex;
+	gl_TexCoord[0] = gl_MultiTexCoord0;
+	gl_Position    = gl_Vertex;
   }
 ]]
 
@@ -211,43 +211,43 @@ local fragSrc = ([[
   //! source: http://www.ozone3d.net/blogs/lab/20110427/glsl-random-generator/
   float rand(vec2 n)
   {
-    return fract(sin(dot(n.xy, vec2(12.9898, 78.233)))* 43758.5453);
+	return fract(sin(dot(n.xy, vec2(12.9898, 78.233)))* 43758.5453);
   }
 
   void main(void)
   {
-    float z = texture2D(tex0, gl_TexCoord[0].st).x;
+	float z = texture2D(tex0, gl_TexCoord[0].st).x;
 
-    vec4 ppos;
-    ppos.xyz = vec3(gl_TexCoord[0].st, z) * 2. - 1.;
-    ppos.a   = 1.;
+	vec4 ppos;
+	ppos.xyz = vec3(gl_TexCoord[0].st, z) * 2. - 1.;
+	ppos.a   = 1.;
 #ifdef USE_INVERSEMATRIX
-    vec4 worldPos4 = viewProjectionInv * ppos;
+	vec4 worldPos4 = viewProjectionInv * ppos;
 #else
-    vec4 worldPos4 = gl_ModelViewProjectionMatrixInverse * ppos;
+	vec4 worldPos4 = gl_ModelViewProjectionMatrixInverse * ppos;
 #endif
-    vec3 worldPos  = worldPos4.xyz / worldPos4.w;
-    vec3 toPoint   = worldPos - eyePos;
+	vec3 worldPos  = worldPos4.xyz / worldPos4.w;
+	vec3 toPoint   = worldPos - eyePos;
 
 #ifdef DEBUG_GFX // world position debugging
-    const float k  = 100.0;
-    vec3 debugColor = pow(2.0 * abs(0.5 - fract(worldPos / k)), 6.0);
-    gl_FragColor = vec4(debugColor, 1.0);
-    return; // BAIL
+	const float k  = 100.0;
+	vec3 debugColor = pow(2.0 * abs(0.5 - fract(worldPos / k)), 6.0);
+	gl_FragColor = vec4(debugColor, 1.0);
+	return; // BAIL
 #endif
 
-    float h0 = clamp(worldPos.y, 0.0, fogHeight);
-    float h1 = clamp(eyePos.y,   0.0, fogHeight); // FIXME: uniform ...
+	float h0 = clamp(worldPos.y, 0.0, fogHeight);
+	float h1 = clamp(eyePos.y,   0.0, fogHeight); // FIXME: uniform ...
 
-    float len = length(toPoint);
-    float dist = len * abs((h1 - h0) / toPoint.y); // div-by-zero prob?
-    float atten = clamp(1.0 - exp(-dist * fogAtten), 0.0, 1.0);
+	float len = length(toPoint);
+	float dist = len * abs((h1 - h0) / toPoint.y); // div-by-zero prob?
+	float atten = clamp(1.0 - exp(-dist * fogAtten), 0.0, 1.0);
 
-    gl_FragColor = vec4(fogColor, atten);
+	gl_FragColor = vec4(fogColor, atten);
 
-    //! noise
-    vec2 seed = gl_TexCoord[0].st + noise;
-    gl_FragColor.rgb += 0.030 * rand(seed);
+	//! noise
+	vec2 seed = gl_TexCoord[0].st + noise;
+	gl_FragColor.rgb += 0.030 * rand(seed);
   }
 ]])
 
@@ -264,45 +264,45 @@ end
 --------------------------------------------------------------------------------
 
 function gadget:Initialize()
-    if ((not forceNonGLSL) and Spring.GetMiniMapDualScreen()~='left') then --FIXME dualscreen
-        if (not glCreateShader) then
-            spEcho("Shaders not found, reverting to non-GLSL gadget")
-            GLSLRenderer = false
-        else
-            depthShader = glCreateShader({
-                vertex = vertSrc,
-                fragment = fragSrc,
-                uniformInt = {
-                    tex0 = 0,
-                },
-            })
+	if ((not forceNonGLSL) and Spring.GetMiniMapDualScreen()~='left') then --FIXME dualscreen
+		if (not glCreateShader) then
+			spEcho("Shaders not found, reverting to non-GLSL gadget")
+			GLSLRenderer = false
+		else
+			depthShader = glCreateShader({
+				vertex = vertSrc,
+				fragment = fragSrc,
+				uniformInt = {
+					tex0 = 0,
+				},
+			})
 
-            if (not depthShader) then
-                spEcho(glGetShaderLog())
-                spEcho("Bad shader, reverting to non-GLSL gadget.")
-                GLSLRenderer = false
-            else
-                uniformEyePos       = glGetUniformLocation(depthShader, 'eyePos')
-                uniformNoise        = glGetUniformLocation(depthShader, 'noise')
-                uniformViewPrjInv   = glGetUniformLocation(depthShader, 'viewProjectionInv')
-            end
-            Spring.Echo("loaded texture gadget!")
-        end
-    else
-        GLSLRenderer = false
-    end
-    if (not GLSLRenderer) then
-        fog = glCreateList(DrawPlaneModel)
-    end
+			if (not depthShader) then
+				spEcho(glGetShaderLog())
+				spEcho("Bad shader, reverting to non-GLSL gadget.")
+				GLSLRenderer = false
+			else
+				uniformEyePos       = glGetUniformLocation(depthShader, 'eyePos')
+				uniformNoise        = glGetUniformLocation(depthShader, 'noise')
+				uniformViewPrjInv   = glGetUniformLocation(depthShader, 'viewProjectionInv')
+			end
+			Spring.Echo("loaded texture gadget!")
+		end
+	else
+		GLSLRenderer = false
+	end
+	if (not GLSLRenderer) then
+		fog = glCreateList(DrawPlaneModel)
+	end
 end
 
 
 function gadget:Shutdown()
   if (GLSLRenderer) then
-    glDeleteTexture(depthTexture)
-    if (glDeleteShader) then
-      glDeleteShader(depthShader)
-    end
+	glDeleteTexture(depthTexture)
+	if (glDeleteShader) then
+	  glDeleteShader(depthShader)
+	end
   end
 end
 
@@ -315,17 +315,17 @@ end
 
 local function cross(a, b)
   return {
-    (a[2] * b[3]) - (a[3] * b[2]),
-    (a[3] * b[1]) - (a[1] * b[3]),
-    (a[1] * b[2]) - (a[2] * b[1])
+	(a[2] * b[3]) - (a[3] * b[2]),
+	(a[3] * b[1]) - (a[1] * b[3]),
+	(a[1] * b[2]) - (a[2] * b[1])
   }
 end
 
 local function add(a, b)
   return {
-    a[1] * b[1],
-    a[2] * b[2],
-    a[3] * b[3]
+	a[1] * b[1],
+	a[2] * b[2],
+	a[3] * b[3]
   }
 end
 
@@ -337,7 +337,7 @@ end
 local function normalize(a)
   local len = math.sqrt((a[1] * a[1]) + (a[2] * a[2]) + (a[3] * a[3]))
   if (len == 0.0) then
-    return a
+	return a
   end
   a[1] = a[1] / len
   a[2] = a[2] / len
@@ -405,7 +405,7 @@ end
 function gadget:DrawWorld()
 	if (GLSLRenderer) then
 		if (debugGfx) then glBlending(GL_SRC_ALPHA, GL_ONE) end
-        DrawTextures()
+		DrawTextures()
 
 		if (debugGfx) then glBlending(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) end
 	else

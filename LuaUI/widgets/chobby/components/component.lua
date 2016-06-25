@@ -3,15 +3,15 @@ Component = LCS.class{}
 Component.registeredComponents = {}
 
 function Component:init()
-    table.insert(Component.registeredComponents, self)
+	table.insert(Component.registeredComponents, self)
 end
 
 function Component:unregister()
-    for i, comp in pairs(Component.registeredComponents) do
-        if comp == self then
-            table.remove(Component.registeredComponents, i)
-        end
-    end	
+	for i, comp in pairs(Component.registeredComponents) do
+		if comp == self then
+			table.remove(Component.registeredComponents, i)
+		end
+	end	
 end
 
 function Component:ScaleUpdate(scale)

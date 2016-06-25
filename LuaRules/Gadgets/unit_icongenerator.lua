@@ -20,13 +20,13 @@ example usage (need cheats):
 
 function gadget:GetInfo()
   return {
-    name      = "IconGenerator",
-    desc      = "/luarules buildicon(s) [unitdefname|all]",
-    author    = "jK",
-    date      = "Oct 01, 2008",
-    license   = "GNU GPL, v2 or later",
-    layer     = -10,
-    enabled   = true  --  loaded by default?
+	name      = "IconGenerator",
+	desc      = "/luarules buildicon(s) [unitdefname|all]",
+	author    = "jK",
+	date      = "Oct 01, 2008",
+	license   = "GNU GPL, v2 or later",
+	layer     = -10,
+	enabled   = true  --  loaded by default?
   }
 end
 
@@ -44,110 +44,110 @@ if (gadgetHandler:IsSyncedCode()) then
 
 
   local function GameFrame(_,n)
-    local new = {};
-    for i=1,#units do
-      if ((units[i].frame + 30) == n) then
-        Spring.DestroyUnit(units[i].id,false,true);
-      elseif (units[i].frame == n) then
-        SendToUnsynced("buildicon_unitcreated",units[i].id,units[i].defname);
-        new[#new+1] = units[i];
-      else
-        new[#new+1] = units[i];
-      end;
-    end;
-    units = new;
+	local new = {};
+	for i=1,#units do
+	  if ((units[i].frame + 30) == n) then
+		Spring.DestroyUnit(units[i].id,false,true);
+	  elseif (units[i].frame == n) then
+		SendToUnsynced("buildicon_unitcreated",units[i].id,units[i].defname);
+		new[#new+1] = units[i];
+	  else
+		new[#new+1] = units[i];
+	  end;
+	end;
+	units = new;
 
-    if (#units>10) then return end;
-    if (#units==0) then curTeam=nil; end;
+	if (#units>10) then return end;
+	if (#units==0) then curTeam=nil; end;
 
-    local leftunits = {};
-    for i,cunit in ipairs(createunits) do
-      if (#units>10 or ((curTeam) and (cunit.team~=curTeam))) then
-        leftunits[#leftunits+1] = cunit;
-      else
+	local leftunits = {};
+	for i,cunit in ipairs(createunits) do
+	  if (#units>10 or ((curTeam) and (cunit.team~=curTeam))) then
+		leftunits[#leftunits+1] = cunit;
+	  else
 		local lus = false
-        local x,z = nextUnitX,nextUnitZ;
-        nextUnitX = nextUnitX+200;
-        if (nextUnitX>=Game.mapSizeX) then nextUnitX,nextUnitZ = 100,nextUnitZ+200 end;
-        local y   = Spring.GetGroundHeight(0,0);
-        Spring.LevelHeightMap(x-50,z-50,x+50,z+50,y);
+		local x,z = nextUnitX,nextUnitZ;
+		nextUnitX = nextUnitX+200;
+		if (nextUnitX>=Game.mapSizeX) then nextUnitX,nextUnitZ = 100,nextUnitZ+200 end;
+		local y   = Spring.GetGroundHeight(0,0);
+		Spring.LevelHeightMap(x-50,z-50,x+50,z+50,y);
 
-        local uid = Spring.CreateUnit(cunit.defname,x,y,z,"south",cunit.team);
-        units[#units+1] = {id=uid,defname=cunit.defname,frame=n+cunit.time};
-        curTeam = cunit.team;
+		local uid = Spring.CreateUnit(cunit.defname,x,y,z,"south",cunit.team);
+		units[#units+1] = {id=uid,defname=cunit.defname,frame=n+cunit.time};
+		curTeam = cunit.team;
 
-        Spring.SetUnitNeutral(uid,true);
-        Spring.GiveOrderToUnit(uid,CMD.FIRE_STATE,{0},{});
-        Spring.GiveOrderToUnit(uid,CMD.STOP,{},{});
+		Spring.SetUnitNeutral(uid,true);
+		Spring.GiveOrderToUnit(uid,CMD.FIRE_STATE,{0},{});
+		Spring.GiveOrderToUnit(uid,CMD.STOP,{},{});
 
 		local env = Spring.UnitScript.GetScriptEnv(uid)
 		if env then lus = true end
 		
 		if lus then
 			if env.Activate then Spring.UnitScript.CallAsUnit(uid, env.Activate) end
-        else Spring.CallCOBScript(uid,"Activate",0) end
+		else Spring.CallCOBScript(uid,"Activate",0) end
 
-        if (cunit.move) then
+		if (cunit.move) then
 		  if lus then
 			if env.StartMoving then Spring.UnitScript.CallAsUnit(uid, env.StartMoving) end
-          else Spring.CallCOBScript(uid,"StartMoving",0) end
-        end;
+		  else Spring.CallCOBScript(uid,"StartMoving",0) end
+		end;
 
-        if (cunit.attack and not lus) then
-          local angle = (cunit.shotAngle / 180) * 32768
+		if (cunit.attack and not lus) then
+		  local angle = (cunit.shotAngle / 180) * 32768
 
-          Spring.CallCOBScript(uid,"AimPrimary",0,Spring.GetHeadingFromVector(0,1),angle);
-          Spring.CallCOBScript(uid,"AimWeapon1",0,Spring.GetHeadingFromVector(0,1),angle);
+		  Spring.CallCOBScript(uid,"AimPrimary",0,Spring.GetHeadingFromVector(0,1),angle);
+		  Spring.CallCOBScript(uid,"AimWeapon1",0,Spring.GetHeadingFromVector(0,1),angle);
 
-          Spring.CallCOBScript(uid,"AimSecondary",0,Spring.GetHeadingFromVector(0,1),angle);
-          Spring.CallCOBScript(uid,"AimWeapon2",0,Spring.GetHeadingFromVector(0,1),angle);
+		  Spring.CallCOBScript(uid,"AimSecondary",0,Spring.GetHeadingFromVector(0,1),angle);
+		  Spring.CallCOBScript(uid,"AimWeapon2",0,Spring.GetHeadingFromVector(0,1),angle);
 
-          Spring.CallCOBScript(uid,"AimTertiary",0,Spring.GetHeadingFromVector(0,1),angle);
-          Spring.CallCOBScript(uid,"AimWeapon3",0,Spring.GetHeadingFromVector(0,1),angle);
+		  Spring.CallCOBScript(uid,"AimTertiary",0,Spring.GetHeadingFromVector(0,1),angle);
+		  Spring.CallCOBScript(uid,"AimWeapon3",0,Spring.GetHeadingFromVector(0,1),angle);
 
-        end;
-      end;
-    end;
-    createunits = leftunits;
+		end;
+	  end;
+	end;
+	createunits = leftunits;
 
-    if (#units==0 and #createunits==0) then
-      nextUnitX,nextUnitZ = 100,100;
-      gadget.GameFrame = nil
-      gadgetHandler:UpdateCallIn("GameFrame");
-      gadgetHandler:UpdateCallIn("GameFrame");
-    end
+	if (#units==0 and #createunits==0) then
+	  nextUnitX,nextUnitZ = 100,100;
+	  gadget.GameFrame = nil
+	  gadgetHandler:UpdateCallIn("GameFrame");
+	  gadgetHandler:UpdateCallIn("GameFrame");
+	end
   end
 
 
   function gadget:RecvLuaMsg(msg, playerID)
-    if (msg:find("buildicon",1,true)) then
+	if (msg:find("buildicon",1,true)) then
 		Spring.Echo("Creating unit for animation pose...")
-      --[[if (not Spring.IsCheatingEnabled()) then
-        Spring.SendMessageToPlayer(playerID, "Cheating must be enabled");
-        return true;
-      end;]]
+	  --[[if (not Spring.IsCheatingEnabled()) then
+		Spring.SendMessageToPlayer(playerID, "Cheating must be enabled");
+		return true;
+	  end;]]
 
-      local msg     = msg:sub(11,msg:len());
-      local d = msg:find(";",d,true);
-      local defname = msg:sub(1,d-1);
-      local a = msg:find(";",d+1,true);
-      local attack  = (msg:sub(d+1,a-1) == "1");
-      local m = msg:find(";",a+1,true);
-      local move    = (msg:sub(a+1,m-1) == "1");
-      local t = msg:find(";",m+1,true);
-      local teamID  = tonumber(msg:sub(m+1,t-1));
-      local w = msg:find(";",t+1,true);
-      local wait    = tonumber(msg:sub(t+1,w-1));
-      local sa = msg:find(";",w+1,true);
-      local shotAngle = tonumber(msg:sub(w+1,sa-1));
+	  local msg     = msg:sub(11,msg:len());
+	  local d = msg:find(";",d,true);
+	  local defname = msg:sub(1,d-1);
+	  local a = msg:find(";",d+1,true);
+	  local attack  = (msg:sub(d+1,a-1) == "1");
+	  local m = msg:find(";",a+1,true);
+	  local move    = (msg:sub(a+1,m-1) == "1");
+	  local t = msg:find(";",m+1,true);
+	  local teamID  = tonumber(msg:sub(m+1,t-1));
+	  local w = msg:find(";",t+1,true);
+	  local wait    = tonumber(msg:sub(t+1,w-1));
+	  local sa = msg:find(";",w+1,true);
+	  local shotAngle = tonumber(msg:sub(w+1,sa-1));
 
-      createunits[#createunits+1] = {defname=defname,team=teamID,move=move,attack=attack,time=wait,shotAngle=shotAngle};
+	  createunits[#createunits+1] = {defname=defname,team=teamID,move=move,attack=attack,time=wait,shotAngle=shotAngle};
 
-      gadget.GameFrame = GameFrame
-      gadgetHandler:UpdateCallIn("GameFrame");
-      gadgetHandler:UpdateCallIn("GameFrame");
-      return true;
-    end;
+	  gadget.GameFrame = GameFrame
+	  gadgetHandler:UpdateCallIn("GameFrame");
+	  gadgetHandler:UpdateCallIn("GameFrame");
+	  return true;
+	end;
   end
 
 
@@ -196,9 +196,9 @@ scheme = "" --// global var!
 
 local function include(filedir,filename,env)
   if (VFS.FileExists(filename,VFS.RAW_ONLY)) then
-    return VFS.Include(filename,env,VFS.RAW_ONLY)
+	return VFS.Include(filename,env,VFS.RAW_ONLY)
   else
-    return VFS.Include(filedir .. filename,env,VFS.ZIP_ONLY)
+	return VFS.Include(filedir .. filename,env,VFS.ZIP_ONLY)
   end
 end
 
@@ -238,11 +238,11 @@ local function CreateResources()
   renderX,renderY = iconX * renderScale,iconY * renderScale
 
   local texOpt = {
-    border = false,
-    min_filter = GL.LINEAR,
-    mag_filter = GL.LINEAR,
-    wrap_s = GL.CLAMP_TO_EDGE,
-    wrap_t = GL.CLAMP_TO_EDGE,
+	border = false,
+	min_filter = GL.LINEAR,
+	mag_filter = GL.LINEAR,
+	wrap_s = GL.CLAMP_TO_EDGE,
+	wrap_t = GL.CLAMP_TO_EDGE,
   }
 
   texOpt.format = GL_RGBA16F_ARB
@@ -255,10 +255,10 @@ local function CreateResources()
   depth_tex = gl.CreateTexture(renderX,renderY, texOpt)
 
   fbo = gl.CreateFBO({
-    color0 = albedo_tex,
-    color1 = normal_tex,
-    depth  = depth_tex,
-    drawbuffers = {GL_COLOR_ATTACHMENT0_EXT, GL_COLOR_ATTACHMENT1_EXT},
+	color0 = albedo_tex,
+	color1 = normal_tex,
+	depth  = depth_tex,
+	drawbuffers = {GL_COLOR_ATTACHMENT0_EXT, GL_COLOR_ATTACHMENT1_EXT},
   })
 
   texOpt.format = GL_RGBA
@@ -270,230 +270,230 @@ local function CreateResources()
   final_fbo = gl.CreateFBO({color0 = final_tex})
 
   pre_shader = gl.CreateShader({
-    vertex = [[
-      varying vec3 normal;
-      varying vec4 pos;
-      varying float clamp;
+	vertex = [[
+	  varying vec3 normal;
+	  varying vec4 pos;
+	  varying float clamp;
 	  uniform float clampIn;
 
-      void main(void) {
-        gl_FrontColor = gl_Color;
-        gl_TexCoord[0] = gl_MultiTexCoord0;
-        clamp = clampIn;//gl_MultiTexCoord1.x;
-        normal = gl_Normal;
+	  void main(void) {
+		gl_FrontColor = gl_Color;
+		gl_TexCoord[0] = gl_MultiTexCoord0;
+		clamp = clampIn;//gl_MultiTexCoord1.x;
+		normal = gl_Normal;
 
-        pos = gl_ModelViewMatrix * gl_Vertex;
+		pos = gl_ModelViewMatrix * gl_Vertex;
 
-        gl_Position = gl_ProjectionMatrix * (gl_TextureMatrix[0] * pos);
-      }
-    ]],
-    fragment = [[
-      uniform sampler2D unitTex;
+		gl_Position = gl_ProjectionMatrix * (gl_TextureMatrix[0] * pos);
+	  }
+	]],
+	fragment = [[
+	  uniform sampler2D unitTex;
 
-      varying vec3 normal;
-      varying vec4 pos;
-      varying float clamp;
+	  varying vec3 normal;
+	  varying vec4 pos;
+	  varying float clamp;
 
-      void main(void) {
-        if (pos.y<clamp) discard;
+	  void main(void) {
+		if (pos.y<clamp) discard;
 
-        gl_FragData[0]     = texture2D(unitTex,gl_TexCoord[0].st);
-        gl_FragData[0].rgb = mix(gl_FragData[0].rgb, gl_Color.rgb, gl_FragData[0].a);
-        gl_FragData[0].a   = gl_FragCoord.z; //we save and read t from here cuz of the higher precision (the depthtex uses just bytes)
-        gl_FragData[1]     = vec4(normal,1.0);
-      }
-    ]],
-    uniformInt = {
-      unitTex = 0,
-    },
+		gl_FragData[0]     = texture2D(unitTex,gl_TexCoord[0].st);
+		gl_FragData[0].rgb = mix(gl_FragData[0].rgb, gl_Color.rgb, gl_FragData[0].a);
+		gl_FragData[0].a   = gl_FragCoord.z; //we save and read t from here cuz of the higher precision (the depthtex uses just bytes)
+		gl_FragData[1]     = vec4(normal,1.0);
+	  }
+	]],
+	uniformInt = {
+	  unitTex = 0,
+	},
   })
 
   if (not pre_shader) then Spring.Echo(gl.GetShaderLog()) end
 
   post_shader = gl.CreateShader({
-    vertex = [[
-      void main()
-      {
-         gl_TexCoord[0] = gl_Vertex;
-         gl_FrontColor  = gl_Color;
-         gl_Position    = vec4( (gl_Vertex.xy-0.5)*2.0,1.0,1.0);
-      }
-    ]],
-    fragment = [[
-      uniform sampler2D albedoTex;
-      uniform sampler2D normalTex;
+	vertex = [[
+	  void main()
+	  {
+		 gl_TexCoord[0] = gl_Vertex;
+		 gl_FrontColor  = gl_Color;
+		 gl_Position    = vec4( (gl_Vertex.xy-0.5)*2.0,1.0,1.0);
+	  }
+	]],
+	fragment = [[
+	  uniform sampler2D albedoTex;
+	  uniform sampler2D normalTex;
 
-      //////////////////////////////////////////////////
-      // Main
+	  //////////////////////////////////////////////////
+	  // Main
 
-      vec4 GetDepthsAO(vec2 texel,float depth) {
-        vec4 depths = vec4(texture2D(albedoTex, gl_TexCoord[0].st+vec2(texel.x, 0.0) ).a,
-                    texture2D(albedoTex, gl_TexCoord[0].st+vec2(0.0, texel.y) ).a,
-                    texture2D(albedoTex, gl_TexCoord[0].st+vec2(-texel.x,0.0) ).a,
-                    texture2D(albedoTex, gl_TexCoord[0].st+vec2(0.0,-texel.y) ).a);
+	  vec4 GetDepthsAO(vec2 texel,float depth) {
+		vec4 depths = vec4(texture2D(albedoTex, gl_TexCoord[0].st+vec2(texel.x, 0.0) ).a,
+					texture2D(albedoTex, gl_TexCoord[0].st+vec2(0.0, texel.y) ).a,
+					texture2D(albedoTex, gl_TexCoord[0].st+vec2(-texel.x,0.0) ).a,
+					texture2D(albedoTex, gl_TexCoord[0].st+vec2(0.0,-texel.y) ).a);
 
-        depths.r = (depths.r==0.0) ? depth : depths.r;
-        depths.g = (depths.g==0.0) ? depth : depths.g;
-        depths.b = (depths.b==0.0) ? depth : depths.b;
-        depths.a = (depths.a==0.0) ? depth : depths.a;
-        return depths;
-      }
+		depths.r = (depths.r==0.0) ? depth : depths.r;
+		depths.g = (depths.g==0.0) ? depth : depths.g;
+		depths.b = (depths.b==0.0) ? depth : depths.b;
+		depths.a = (depths.a==0.0) ? depth : depths.a;
+		return depths;
+	  }
 
-      vec4 GetDepthsOL(vec2 texel) {
-        return vec4(texture2D(albedoTex, gl_TexCoord[0].st+vec2(texel.x, 0.0) ).a,
-                    texture2D(albedoTex, gl_TexCoord[0].st+vec2(0.0, texel.y) ).a,
-                    texture2D(albedoTex, gl_TexCoord[0].st+vec2(-texel.x,0.0) ).a,
-                    texture2D(albedoTex, gl_TexCoord[0].st+vec2(0.0,-texel.y) ).a);
-      }
+	  vec4 GetDepthsOL(vec2 texel) {
+		return vec4(texture2D(albedoTex, gl_TexCoord[0].st+vec2(texel.x, 0.0) ).a,
+					texture2D(albedoTex, gl_TexCoord[0].st+vec2(0.0, texel.y) ).a,
+					texture2D(albedoTex, gl_TexCoord[0].st+vec2(-texel.x,0.0) ).a,
+					texture2D(albedoTex, gl_TexCoord[0].st+vec2(0.0,-texel.y) ).a);
+	  }
 
-      vec4 GetDepthsOL2(vec2 texel) {
-        return vec4(texture2D(albedoTex, gl_TexCoord[0].st+vec2(texel.x,  texel.y) ).a,
-                    texture2D(albedoTex, gl_TexCoord[0].st+vec2(texel.x, -texel.y) ).a,
-                    texture2D(albedoTex, gl_TexCoord[0].st+vec2(-texel.x, texel.y) ).a,
-                    texture2D(albedoTex, gl_TexCoord[0].st+vec2(-texel.x,-texel.y) ).a);
-      }
+	  vec4 GetDepthsOL2(vec2 texel) {
+		return vec4(texture2D(albedoTex, gl_TexCoord[0].st+vec2(texel.x,  texel.y) ).a,
+					texture2D(albedoTex, gl_TexCoord[0].st+vec2(texel.x, -texel.y) ).a,
+					texture2D(albedoTex, gl_TexCoord[0].st+vec2(-texel.x, texel.y) ).a,
+					texture2D(albedoTex, gl_TexCoord[0].st+vec2(-texel.x,-texel.y) ).a);
+	  }
 
-      void main(void)
-      {
-        vec4 albedo = texture2D(albedoTex, gl_TexCoord[0].st);
-        vec4 normal = texture2D(normalTex, gl_TexCoord[0].st);
-        float depth = albedo.a;
+	  void main(void)
+	  {
+		vec4 albedo = texture2D(albedoTex, gl_TexCoord[0].st);
+		vec4 normal = texture2D(normalTex, gl_TexCoord[0].st);
+		float depth = albedo.a;
 
-        vec2 texel  = vec2(dFdx(gl_TexCoord[0].s),dFdy(gl_TexCoord[0].t));
-        vec4 depths;
+		vec2 texel  = vec2(dFdx(gl_TexCoord[0].s),dFdy(gl_TexCoord[0].t));
+		vec4 depths;
 
-      // ambient occlusion
-        float ao = 0.0;
-        float aoMultiplier = 3.0 * ]].. (aoContrast or 1) ..[[;
-        float aoTolerance = 0.0 + ]].. (aoTolerance or 0) ..[[;
+	  // ambient occlusion
+		float ao = 0.0;
+		float aoMultiplier = 3.0 * ]].. (aoContrast or 1) ..[[;
+		float aoTolerance = 0.0 + ]].. (aoTolerance or 0) ..[[;
 
-        depths = GetDepthsAO(texel,depth);
-        depths = clamp(depth - depths - aoTolerance,0.0,1.0) * aoMultiplier;
-        ao += dot(depths,vec4(1.0));
+		depths = GetDepthsAO(texel,depth);
+		depths = clamp(depth - depths - aoTolerance,0.0,1.0) * aoMultiplier;
+		ao += dot(depths,vec4(1.0));
 
-        depths = GetDepthsAO(texel*2.0,depth);
-        depths = clamp(depth - depths - aoTolerance,0.0,1.0) * aoMultiplier;
-        //depths = clamp(depths,0.0,0.2);
-        ao += dot(depths,vec4(1.0));
+		depths = GetDepthsAO(texel*2.0,depth);
+		depths = clamp(depth - depths - aoTolerance,0.0,1.0) * aoMultiplier;
+		//depths = clamp(depths,0.0,0.2);
+		ao += dot(depths,vec4(1.0));
 
-        depths = GetDepthsAO(texel*3.0,depth);
-        depths = clamp(depth - depths - aoTolerance,0.0,1.0) * aoMultiplier;
-        ao += dot(depths,vec4(1.0));
+		depths = GetDepthsAO(texel*3.0,depth);
+		depths = clamp(depth - depths - aoTolerance,0.0,1.0) * aoMultiplier;
+		ao += dot(depths,vec4(1.0));
 
-        ao = min(pow(ao,float(]] .. (aoPower or 1) .. [[)),1.0);
+		ao = min(pow(ao,float(]] .. (aoPower or 1) .. [[)),1.0);
 
 
-      // outline
-        float ol = 0.0;
-        float olMultiplier = 1.7 * float(]].. (olContrast or 1) ..[[);
-        float olTolerance = 0.0 + float(]].. (olTolerance or 0) ..[[);
+	  // outline
+		float ol = 0.0;
+		float olMultiplier = 1.7 * float(]].. (olContrast or 1) ..[[);
+		float olTolerance = 0.0 + float(]].. (olTolerance or 0) ..[[);
 
-        depths = GetDepthsOL(texel);
-        depths = clamp(depths - vec4(depth) - olTolerance,0.0,0.1);
-        ol += dot(depths,vec4(olMultiplier));
+		depths = GetDepthsOL(texel);
+		depths = clamp(depths - vec4(depth) - olTolerance,0.0,0.1);
+		ol += dot(depths,vec4(olMultiplier));
 
-        depths = GetDepthsOL(texel*2.0);
-        depths = clamp(depths - vec4(depth) - olTolerance,0.0,0.02);
-        ol += dot(depths,vec4(olMultiplier));
+		depths = GetDepthsOL(texel*2.0);
+		depths = clamp(depths - vec4(depth) - olTolerance,0.0,0.02);
+		ol += dot(depths,vec4(olMultiplier));
 
-        depths = GetDepthsOL2(texel*2.5);
-        depths = clamp(depths - vec4(depth) - olTolerance,0.0,0.01);
-        ol += dot(depths,vec4(olMultiplier));
+		depths = GetDepthsOL2(texel*2.5);
+		depths = clamp(depths - vec4(depth) - olTolerance,0.0,0.01);
+		ol += dot(depths,vec4(olMultiplier));
 
-        ol *= smoothstep(0.1,0.0,depth);
+		ol *= smoothstep(0.1,0.0,depth);
 
-      // final composition
-        vec4 color1 = vec4(vec3((1.0 - ao) * normal.w),normal.w); // ambient occlusion
+	  // final composition
+		vec4 color1 = vec4(vec3((1.0 - ao) * normal.w),normal.w); // ambient occlusion
 
-        gl_FragData[0] = color1;
+		gl_FragData[0] = color1;
 
-      ]] .. (((not textured) and '/*' ) or '') .. [[
-        vec3 lightPos     = vec3(]].. (lightPos[1]..','..lightPos[2]..','..lightPos[3]) ..[[);
-        vec3 lightDiffuse = vec3(]].. (lightDiffuse[1]..','..lightDiffuse[2]..','..lightDiffuse[3]) ..[[);
-        vec3 lightAmbient = vec3(]].. (lightAmbient[1]..','..lightAmbient[2]..','..lightAmbient[3]) ..[[);
-        gl_FragData[0].rgb  = albedo.rgb * (max(dot(normal.xyz,lightPos),0.0) * lightDiffuse + lightAmbient);
-        gl_FragData[0].rgb *= min(vec3(1.0),color1.rgb);
-      ]] .. (((not textured) and '*/' ) or '') .. [[
+	  ]] .. (((not textured) and '/*' ) or '') .. [[
+		vec3 lightPos     = vec3(]].. (lightPos[1]..','..lightPos[2]..','..lightPos[3]) ..[[);
+		vec3 lightDiffuse = vec3(]].. (lightDiffuse[1]..','..lightDiffuse[2]..','..lightDiffuse[3]) ..[[);
+		vec3 lightAmbient = vec3(]].. (lightAmbient[1]..','..lightAmbient[2]..','..lightAmbient[3]) ..[[);
+		gl_FragData[0].rgb  = albedo.rgb * (max(dot(normal.xyz,lightPos),0.0) * lightDiffuse + lightAmbient);
+		gl_FragData[0].rgb *= min(vec3(1.0),color1.rgb);
+	  ]] .. (((not textured) and '*/' ) or '') .. [[
 
-        gl_FragData[0] = mix(gl_FragData[0], vec4(0.0,0.0,0.0,1.0), ol);  // outline
-      }
-    ]],
-    uniformInt = {
-      albedoTex = 0,
-      normalTex = 1,
-    },
+		gl_FragData[0] = mix(gl_FragData[0], vec4(0.0,0.0,0.0,1.0), ol);  // outline
+	  }
+	]],
+	uniformInt = {
+	  albedoTex = 0,
+	  normalTex = 1,
+	},
   })
 
   if (not post_shader) then Spring.Echo(gl.GetShaderLog()) end
 
   halo_shader = gl.CreateShader({
-    vertex = [[
-      void main()
-      {
-         gl_TexCoord[0] = gl_MultiTexCoord0;
-         gl_FrontColor  = gl_Color;
-         gl_Position    = vec4( gl_Vertex.xy ,1.0,1.0);
-      }
-    ]],
-    fragment = [[
-      uniform sampler2D albedoTex;
-      uniform sampler2D normalTex;
+	vertex = [[
+	  void main()
+	  {
+		 gl_TexCoord[0] = gl_MultiTexCoord0;
+		 gl_FrontColor  = gl_Color;
+		 gl_Position    = vec4( gl_Vertex.xy ,1.0,1.0);
+	  }
+	]],
+	fragment = [[
+	  uniform sampler2D albedoTex;
+	  uniform sampler2D normalTex;
 
-      //////////////////////////////////////////////////
-      // Main
+	  //////////////////////////////////////////////////
+	  // Main
 
-      vec4 GetDepths(vec2 texel) {
-        return vec4(texture2D(albedoTex, gl_TexCoord[0].st+vec2(texel.x,  0.0) ).a,
-                    texture2D(albedoTex, gl_TexCoord[0].st+vec2(0.0,  texel.y) ).a,
-                    texture2D(albedoTex, gl_TexCoord[0].st+vec2(-texel.x, 0.0) ).a,
-                    texture2D(albedoTex, gl_TexCoord[0].st+vec2(0.0, -texel.y) ).a);
-      }
+	  vec4 GetDepths(vec2 texel) {
+		return vec4(texture2D(albedoTex, gl_TexCoord[0].st+vec2(texel.x,  0.0) ).a,
+					texture2D(albedoTex, gl_TexCoord[0].st+vec2(0.0,  texel.y) ).a,
+					texture2D(albedoTex, gl_TexCoord[0].st+vec2(-texel.x, 0.0) ).a,
+					texture2D(albedoTex, gl_TexCoord[0].st+vec2(0.0, -texel.y) ).a);
+	  }
 
-      vec4 GetDepths2(vec2 texel) {
-        return vec4(texture2D(albedoTex, gl_TexCoord[0].st+vec2(texel.x,  texel.y) ).a,
-                    texture2D(albedoTex, gl_TexCoord[0].st+vec2(texel.x, -texel.y) ).a,
-                    texture2D(albedoTex, gl_TexCoord[0].st+vec2(-texel.x, texel.y) ).a,
-                    texture2D(albedoTex, gl_TexCoord[0].st+vec2(-texel.x,-texel.y) ).a);
-      }
+	  vec4 GetDepths2(vec2 texel) {
+		return vec4(texture2D(albedoTex, gl_TexCoord[0].st+vec2(texel.x,  texel.y) ).a,
+					texture2D(albedoTex, gl_TexCoord[0].st+vec2(texel.x, -texel.y) ).a,
+					texture2D(albedoTex, gl_TexCoord[0].st+vec2(-texel.x, texel.y) ).a,
+					texture2D(albedoTex, gl_TexCoord[0].st+vec2(-texel.x,-texel.y) ).a);
+	  }
 
 
-      void main(void)
-      {
-        vec2 texel  = vec2(dFdx(gl_TexCoord[0].s),dFdy(gl_TexCoord[0].t));
-        vec4 depths;
+	  void main(void)
+	  {
+		vec2 texel  = vec2(dFdx(gl_TexCoord[0].s),dFdy(gl_TexCoord[0].t));
+		vec4 depths;
 
-        // halo
-        float hl = 0.0;
-        float hlMultiplier = 0.017;
+		// halo
+		float hl = 0.0;
+		float hlMultiplier = 0.017;
 
-        float l = length(vec2(7.0,7.0));
-        for (int x=-7; x<=7; x++) {
-          for (int y=-7; y<=7; y++) {
-            vec2 r = vec2(float(x),float(y));
-            float a = smoothstep(0.0,l,l-length(r));
-            float d = 1.0 - texture2D(albedoTex, gl_TexCoord[0].st + vec2(texel.x, texel.y) * r ).a;
-            hl += step(0.001,d) * a * hlMultiplier;
-          }
-        }
+		float l = length(vec2(7.0,7.0));
+		for (int x=-7; x<=7; x++) {
+		  for (int y=-7; y<=7; y++) {
+			vec2 r = vec2(float(x),float(y));
+			float a = smoothstep(0.0,l,l-length(r));
+			float d = 1.0 - texture2D(albedoTex, gl_TexCoord[0].st + vec2(texel.x, texel.y) * r ).a;
+			hl += step(0.001,d) * a * hlMultiplier;
+		  }
+		}
 
-        gl_FragData[0] = vec4(vec3(1.0),min(hl,0.9));
-      }
-    ]],
-    uniformInt = {
-      depthTex  = 2,
-    },
+		gl_FragData[0] = vec4(vec3(1.0),min(hl,0.9));
+	  }
+	]],
+	uniformInt = {
+	  depthTex  = 2,
+	},
   })
 
 
   if (not halo_shader) then Spring.Echo(gl.GetShaderLog()) end
 
   clear_shader = gl.CreateShader({
-    fragment = [[
-      void main(void) {
-        gl_FragData[0] = vec4(0.0);
-        gl_FragData[1] = vec4(0.0);
-      }
-    ]]
+	fragment = [[
+	  void main(void) {
+		gl_FragData[0] = vec4(0.0);
+		gl_FragData[1] = vec4(0.0);
+	  }
+	]]
   })
 
   if (not clear_shader) then Spring.Echo(gl.GetShaderLog()) end
@@ -537,7 +537,7 @@ local function CheckOutsideBoundings(left,bottom,width,height,wantedSpace)
   local lo = math.max(0,wantedSpace-left)
 
   if (to<0 and bo>0)or(ro<0 and lo>0) then
-    return false --zoom out!
+	return false --zoom out!
   end
 
   return ro+lo,to+bo
@@ -547,13 +547,13 @@ end
 local function GetBound1(pixels,start,finish,dirX,dirY,length)
   local bound;
   for i=start, finish, ((start>finish) and -1) or 1 do
-    for n=0, length do
-      if (pixels[1+i*dirY+n*dirX][1+i*dirX+n*dirY][4]>0) then
-        bound=i;
-        break;
-      end;
-    end;
-    if (bound) then break end;
+	for n=0, length do
+	  if (pixels[1+i*dirY+n*dirX][1+i*dirX+n*dirY][4]>0) then
+		bound=i;
+		break;
+	  end;
+	end;
+	if (bound) then break end;
   end;
   return bound;
 end
@@ -561,14 +561,14 @@ end
 local function GetBound2(p,start,finish,dirX,dirY,length)
   local bound;
   for i=start, finish, ((start>finish) and -1) or 1 do
-    local pixels = gl.ReadPixels(i * dirX, i * dirY, (dirY>0 and length) or 1, (dirX>0 and length) or 1);
-    for n=1, length do
-      if (pixels[n][4]>0) then
-        bound=i;
-        break;
-      end;
-    end;
-    if (bound) then break end;
+	local pixels = gl.ReadPixels(i * dirX, i * dirY, (dirY>0 and length) or 1, (dirX>0 and length) or 1);
+	for n=1, length do
+	  if (pixels[n][4]>0) then
+		bound=i;
+		break;
+	  end;
+	end;
+	if (bound) then break end;
   end;
   return bound;
 end
@@ -578,7 +578,7 @@ local function DetectBoundings()
   local GetBound = ((iconX*iconY)<(128*128) and GetBound1) or GetBound2
   local pixels
   if (iconX*iconY)<(128*128) then
-    pixels = gl.ReadPixels(0, 0, renderX, renderY);
+	pixels = gl.ReadPixels(0, 0, renderX, renderY);
   end
   local top    = GetBound(pixels,renderY-1,0,0,1,renderX-1);
   local bottom = GetBound(pixels,0,renderY-1,0,1,renderX-1);
@@ -628,13 +628,13 @@ local function DrawIcon(udid,teamID,uid)
   gl.Rotate(cfg.angle,1,0,0);
 
   if (cfg.rot=="right") then
-    gl.Rotate(45,0,1,0);
+	gl.Rotate(45,0,1,0);
   elseif (cfg.rot=="left") then
-    gl.Rotate(-45,0,1,0);
+	gl.Rotate(-45,0,1,0);
   elseif (type(cfg.rot)=="number") then
-    gl.Rotate(cfg.rot,0,1,0);
+	gl.Rotate(cfg.rot,0,1,0);
   else
-    gl.Rotate(45,0,1,0);
+	gl.Rotate(45,0,1,0);
   end
 
   --gl.Translate((midx+cfg.offset[1]) * cfg.zoom,(midy+cfg.offset[2]) * cfg.zoom,0);--midz+cfg.offset[3]);
@@ -647,13 +647,13 @@ local function DrawIcon(udid,teamID,uid)
   gl.LoadIdentity();
 
   if (uid) then
-    if (UnitDefs[udid].model.type ~= "3do") then
-      gl.Texture(0, "%" .. udid .. ":0");
-    else
-      gl.Texture(0, "$units");
-    end;
-    gl.UnitRaw(uid,true,-1);
-    gl.Texture(0,false);
+	if (UnitDefs[udid].model.type ~= "3do") then
+	  gl.Texture(0, "%" .. udid .. ":0");
+	else
+	  gl.Texture(0, "$units");
+	end;
+	gl.UnitRaw(uid,true,-1);
+	gl.Texture(0,false);
   else
 	gl.Texture(0, "%" .. udid .. ":0");
 	gl.UnitShape(udid, teamID);
@@ -717,50 +717,50 @@ end
 --------------------------------------------------------------------------------
 
   local function DrawBackground(background)
-    if (type(background)=="table") then
-      local cnt = #background
+	if (type(background)=="table") then
+	  local cnt = #background
 
-      local elements = {}
-      for i=1,cnt-1 do
-        for n=1,4 do
-          elements[#elements+1] = {
-            v = {}
-          }
-        end
-      end
+	  local elements = {}
+	  for i=1,cnt-1 do
+		for n=1,4 do
+		  elements[#elements+1] = {
+			v = {}
+		  }
+		end
+	  end
 
-      gl.Shape(GL.QUADS,elements);
-    else
+	  gl.Shape(GL.QUADS,elements);
+	else
 	  gl.Color(bgColor);
-      gl.Texture(background);
-      gl.TexRect(-1,-1,1,1);
-      gl.Texture(false);
+	  gl.Texture(background);
+	  gl.TexRect(-1,-1,1,1);
+	  gl.Texture(false);
 	  gl.Color(1,1,1);
-    end
+	end
   end
 
 
   local function Background(unitdefid)
-    local udef = UnitDefs[unitdefid];
-    for i=1,#backgrounds do
-      local bg = backgrounds[i]
-      if (type(bg.check) == "table") then
-        local fulfill = true
-        for key,value in pairs(bg.check) do
-          if (type(value)=="function") then
-            fulfill = value(udef[key])
-          else
-            fulfill = (udef[key] == value)
-          end
-          if (not fulfill) then break end
-        end
+	local udef = UnitDefs[unitdefid];
+	for i=1,#backgrounds do
+	  local bg = backgrounds[i]
+	  if (type(bg.check) == "table") then
+		local fulfill = true
+		for key,value in pairs(bg.check) do
+		  if (type(value)=="function") then
+			fulfill = value(udef[key])
+		  else
+			fulfill = (udef[key] == value)
+		  end
+		  if (not fulfill) then break end
+		end
 
-        if (fulfill) then
-          DrawBackground(bg.texture)
-          break
-        end
-      end
-    end
+		if (fulfill) then
+		  DrawBackground(bg.texture)
+		  break
+		end
+	  end
+	end
   end
 
 --------------------------------------------------------------------------------
@@ -770,7 +770,7 @@ local function PrepareForScaling(bottom,left,width,height,wantedX,wantedY,border
   local scaleX,scaleY = width/wantedX,height/wantedY;
   local wantX,wantY = wantedX*scaleY+border*scaleY*2,height+border*scaleY*2;
   if (scaleX>scaleY) then
-    wantX,wantY = width+border*scaleX*2,wantedY*scaleX+border*scaleX*2;
+	wantX,wantY = width+border*scaleX*2,wantedY*scaleX+border*scaleX*2;
   end
 
   local marginX,marginY  = wantX - width, wantY - height;
@@ -781,11 +781,11 @@ local function PrepareForScaling(bottom,left,width,height,wantedX,wantedY,border
   local width    = width  + marginX;
 
   if (scaleX>scaleY) then
-    bottom,left  = bottom-border*scaleX,left-border*scaleX
-    width,height = width+border*scaleX*2,height+border*scaleX*2
+	bottom,left  = bottom-border*scaleX,left-border*scaleX
+	width,height = width+border*scaleX*2,height+border*scaleX*2
   else
-    bottom,left  = bottom-border*scaleY,left-border*scaleY
-    width,height = width+border*scaleY*2,height+border*scaleY*2
+	bottom,left  = bottom-border*scaleY,left-border*scaleY
+	width,height = width+border*scaleY*2,height+border*scaleY*2
   end
 
   left,bottom,width,height = round(left),round(bottom),round(width),round(height);
@@ -809,32 +809,32 @@ local function CheckBoundings(udid,top,left,bottom,right,scale,border)
   local left_,bottom_,width_,height_ = PrepareForScaling(bottom,left,width,height,wantedX,wantedY,border);
 
   if (top>=spaceY or right>=spaceX or left<=scaledBorder or bottom<=scaledBorder) then
-    local offX,offY = CheckOutsideBoundings(left,bottom,width,height,wantedSpace);
-    if (offX) then
-      offX,offY = offX*autoConfigs[udid].attempt,offY*autoConfigs[udid].attempt;
-      --Spring.Echo(i,UnitDefs[udid].name .. ": offsetting",offX,offY,"",left,bottom,width,height,renderX,renderY,autoConfigs[udid].zoom);
-      autoConfigs[udid].offset = {autoConfigs[udid].offset[1] + offX, autoConfigs[udid].offset[2] + offY,0};
-      return false, left_,bottom_, width_,height_;
-    else
-      --// zoom out!
-    end;
+	local offX,offY = CheckOutsideBoundings(left,bottom,width,height,wantedSpace);
+	if (offX) then
+	  offX,offY = offX*autoConfigs[udid].attempt,offY*autoConfigs[udid].attempt;
+	  --Spring.Echo(i,UnitDefs[udid].name .. ": offsetting",offX,offY,"",left,bottom,width,height,renderX,renderY,autoConfigs[udid].zoom);
+	  autoConfigs[udid].offset = {autoConfigs[udid].offset[1] + offX, autoConfigs[udid].offset[2] + offY,0};
+	  return false, left_,bottom_, width_,height_;
+	else
+	  --// zoom out!
+	end;
   end;
 
   if (math.abs(math.min(wantedX-width,wantedY-height))>3) then
-    --Spring.Echo(i,UnitDefs[udid].name .. ": zoom (factor:" .. math.max(height/wantedY,width/wantedX) .. ")",width,height,wantedX,wantedY,autoConfigs[udid].zoom);
-    autoConfigs[udid].zoom = blend(autoConfigs[udid].zoom, autoConfigs[udid].zoom * math.max(height/wantedY,width/wantedX), autoConfigs[udid].attempt);
-    return false, left_,bottom_, width_,height_;
+	--Spring.Echo(i,UnitDefs[udid].name .. ": zoom (factor:" .. math.max(height/wantedY,width/wantedX) .. ")",width,height,wantedX,wantedY,autoConfigs[udid].zoom);
+	autoConfigs[udid].zoom = blend(autoConfigs[udid].zoom, autoConfigs[udid].zoom * math.max(height/wantedY,width/wantedX), autoConfigs[udid].attempt);
+	return false, left_,bottom_, width_,height_;
   end;
 
   if ((bottom_+height_)>renderY or left_<0 or bottom_<0 or (left_+width_)>renderX) then
-    local offX,offY = CheckOutsideBoundings(left_,bottom_,width_,height_,wantedSpace);
-    if (offX) then
-      --Spring.Echo(i,UnitDefs[udid].name .. ": Boundings outside of the texture",offX,offY);
-      autoConfigs[udid].offset = {autoConfigs[udid].offset[1] + offX, autoConfigs[udid].offset[2] + offY,0};
-      return false, left_,bottom_, width_,height_;
-    else
-      --Spring.Echo(i,UnitDefs[udid].name .. ": Render Context too small (you have to increase renderX&renderY)");
-    end;
+	local offX,offY = CheckOutsideBoundings(left_,bottom_,width_,height_,wantedSpace);
+	if (offX) then
+	  --Spring.Echo(i,UnitDefs[udid].name .. ": Boundings outside of the texture",offX,offY);
+	  autoConfigs[udid].offset = {autoConfigs[udid].offset[1] + offX, autoConfigs[udid].offset[2] + offY,0};
+	  return false, left_,bottom_, width_,height_;
+	else
+	  --Spring.Echo(i,UnitDefs[udid].name .. ": Render Context too small (you have to increase renderX&renderY)");
+	end;
   end;
 
   return true, left_,bottom_, width_,height_;
@@ -845,9 +845,9 @@ local function CenterIcon(udid)
   local top,left,bottom,right = DetectBoundings();
 
   if (not top) then
-    autoConfigs[udid].offset = {autoConfigs[udid].offset[1], autoConfigs[udid].offset[2] - 10,0};
-    --Spring.Echo(UnitDefs[udid].name .. ": empty model");
-    return false,0,0,1,1;
+	autoConfigs[udid].offset = {autoConfigs[udid].offset[1], autoConfigs[udid].offset[2] - 10,0};
+	--Spring.Echo(UnitDefs[udid].name .. ": empty model");
+	return false,0,0,1,1;
   end
 
   local ac = autoConfigs[udid];
@@ -863,158 +863,158 @@ end
   local jobsInSynced = 0
 
   local function ProcessJobs()
-    --//note: we have a LIFO stack
-    for i=#jobs,1,-1 do
+	--//note: we have a LIFO stack
+	for i=#jobs,1,-1 do
 		--Spring.Echo("Test banana")
-      if (jobs[i]() ~= false) then
+	  if (jobs[i]() ~= false) then
 		--Spring.Echo("Test banana 2")
-        jobs[i] = nil;
-      else
+		jobs[i] = nil;
+	  else
 		--Spring.Echo("Test banana 3")
-        break;
-      end;
-    end;
+		break;
+	  end;
+	end;
 
-    if (#jobs == 0) then
-      --[[gadget.DrawGenesis = nil;
-      gadgetHandler:UpdateCallIn("DrawGenesis");]]
-    end;
+	if (#jobs == 0) then
+	  --[[gadget.DrawGenesis = nil;
+	  gadgetHandler:UpdateCallIn("DrawGenesis");]]
+	end;
   end
 
 
   local function GetFaction(udef_factions)
-    return ((#udef_factions~=1) and 'unknown') or udef_factions[1];
+	return ((#udef_factions~=1) and 'unknown') or udef_factions[1];
   end
 
 
   local function CreateIcon(udid,uid)
-    local faction = GetFaction(UnitDefs[udid].factions or {});
+	local faction = GetFaction(UnitDefs[udid].factions or {});
 
-    local cfg = unitConfigs[udid]
+	local cfg = unitConfigs[udid]
 
-    local attempts = 0;
-    local result;
-    local left,bottom = 0,0;
-    local width,height = 0,0;
+	local attempts = 0;
+	local result;
+	local left,bottom = 0,0;
+	local width,height = 0,0;
 --Spring.Echo("HERE 1")
-    if (not cfg.empty) then
-      repeat
-        myGLClear();
+	if (not cfg.empty) then
+	  repeat
+		myGLClear();
 
-        gl.Color(factionColors[faction]);
+		gl.Color(factionColors[faction]);
 
-        gl.UseShader(pre_shader);
-        gl.ActiveFBO(fbo, DrawIcon, udid, factionTeams[faction], uid);
-        gl.UseShader(post_shader);
-        gl.ActiveFBO(post_fbo, DrawIconPost);
-        gl.UseShader(0);
+		gl.UseShader(pre_shader);
+		gl.ActiveFBO(fbo, DrawIcon, udid, factionTeams[faction], uid);
+		gl.UseShader(post_shader);
+		gl.ActiveFBO(post_fbo, DrawIconPost);
+		gl.UseShader(0);
 
-        gl.Flush();
-        gl.ActiveFBO(post_fbo, GL_READ_FRAMEBUFFER_EXT, function()
-          result,left,bottom,width,height = CenterIcon(udid);
-        end);
+		gl.Flush();
+		gl.ActiveFBO(post_fbo, GL_READ_FRAMEBUFFER_EXT, function()
+		  result,left,bottom,width,height = CenterIcon(udid);
+		end);
 
-        attempts = attempts + 1;
-      until (result or (attempts>=cfg.attempts));
-    else
-      myGLClear();
-    end;
+		attempts = attempts + 1;
+	  until (result or (attempts>=cfg.attempts));
+	else
+	  myGLClear();
+	end;
 
 --Spring.Echo("HERE 2")
-    --// take screenshot
-    gl.ActiveFBO(final_fbo, true, function()
-      local scale = cfg.scale;
+	--// take screenshot
+	gl.ActiveFBO(final_fbo, true, function()
+	  local scale = cfg.scale;
 
-      gl.Clear(GL.COLOR_BUFFER_BIT, 0,0,0,0);
-      gl.Color(1,1,1,1);
-      if (background) then Background(udid); end;
+	  gl.Clear(GL.COLOR_BUFFER_BIT, 0,0,0,0);
+	  gl.Color(1,1,1,1);
+	  if (background) then Background(udid); end;
 
-      if (halo) then
-        gl.UseShader(halo_shader);
-        gl.Blending("add");
-        gl.BlendEquationSeparate(0x8006,0x8008);
-        gl.BlendFuncSeparate(GL.SRC_ALPHA,GL.ONE_MINUS_SRC_ALPHA,GL.ONE,GL.ONE);
-        gl.Texture(2,depth_tex);
-        gl.TexRect(-1,-1,1,1,
-          left/(renderX), bottom/(renderY),
-          (left+width)/(renderX), (bottom+height)/(renderY));
-        gl.Texture(2,false);
-        gl.BlendEquationSeparate(0x8006,0x8006);
-        gl.BlendFuncSeparate(GL.SRC_ALPHA,GL.ONE_MINUS_SRC_ALPHA,GL.ONE,GL.ZERO);
-        gl.UseShader(0);
-      end;
+	  if (halo) then
+		gl.UseShader(halo_shader);
+		gl.Blending("add");
+		gl.BlendEquationSeparate(0x8006,0x8008);
+		gl.BlendFuncSeparate(GL.SRC_ALPHA,GL.ONE_MINUS_SRC_ALPHA,GL.ONE,GL.ONE);
+		gl.Texture(2,depth_tex);
+		gl.TexRect(-1,-1,1,1,
+		  left/(renderX), bottom/(renderY),
+		  (left+width)/(renderX), (bottom+height)/(renderY));
+		gl.Texture(2,false);
+		gl.BlendEquationSeparate(0x8006,0x8006);
+		gl.BlendFuncSeparate(GL.SRC_ALPHA,GL.ONE_MINUS_SRC_ALPHA,GL.ONE,GL.ZERO);
+		gl.UseShader(0);
+	  end;
 
-      gl.Blending("reset");
-      gl.Texture(post_tex);
-      gl.TexRect(-1,-1,1,1,
-        left/(renderX), bottom/(renderY),
-        (left+width)/(renderX), (bottom+height)/(renderY));
-      gl.Blending(false);
-      gl.Texture(false);
+	  gl.Blending("reset");
+	  gl.Texture(post_tex);
+	  gl.TexRect(-1,-1,1,1,
+		left/(renderX), bottom/(renderY),
+		(left+width)/(renderX), (bottom+height)/(renderY));
+	  gl.Blending(false);
+	  gl.Texture(false);
 --Spring.Echo("HERE 3")
 
-      local outfile = (outdir) .."/".. (UnitDefs[udid].name);
+	  local outfile = (outdir) .."/".. (UnitDefs[udid].name);
 	  if VFS.FileExists(outfile .. imageExt, VFS.RAW) then
-	    local count = 1
-	    while VFS.FileExists(outfile .. "_" .. count .. (imageExt), VFS.RAW) do
+		local count = 1
+		while VFS.FileExists(outfile .. "_" .. count .. (imageExt), VFS.RAW) do
 		  count = count + 1
-	    end
-	    outfile = outfile .. "_" .. count
+		end
+		outfile = outfile .. "_" .. count
 	  end
 	  outfile = outfile .. imageExt
 	  Spring.Echo("Saving image to " .. outfile)
-      --if (VFS.FileExists(outfile, VFS.RAW)) then
-      --  os.remove(outfile);
-      --end;
+	  --if (VFS.FileExists(outfile, VFS.RAW)) then
+	  --  os.remove(outfile);
+	  --end;
 
-      gl.SaveImage(0,0,iconX,iconY, outfile,{alpha=true});
-    end);
+	  gl.SaveImage(0,0,iconX,iconY, outfile,{alpha=true});
+	end);
 
-    if (not result and not cfg.empty) then
-      Spring.Echo("icongen: ".. (UnitDefs[udid].name) ..": give up :<");
-    end;
+	if (not result and not cfg.empty) then
+	  Spring.Echo("icongen: ".. (UnitDefs[udid].name) ..": give up :<");
+	end;
   end
 
 
   local function AddUnitJob(udid)
-    --// generate unit icon settings (and merge defaults)
-    local cfg = unitConfigs[udid] or {};
-    autoConfigs[udid] = {};
-    local auto = autoConfigs[udid];
-    setmetatable(auto,{__index=defaults})
-    setmetatable(cfg,{__index=auto});
+	--// generate unit icon settings (and merge defaults)
+	local cfg = unitConfigs[udid] or {};
+	autoConfigs[udid] = {};
+	local auto = autoConfigs[udid];
+	setmetatable(auto,{__index=defaults})
+	setmetatable(cfg,{__index=auto});
 
-    if (cfg.unfold) then
-      --// unit does some unfolding/animation in cob,
-      --// so we need to create it first
+	if (cfg.unfold) then
+	  --// unit does some unfolding/animation in cob,
+	  --// so we need to create it first
 
-      jobsInSynced = jobsInSynced + 1
+	  jobsInSynced = jobsInSynced + 1
 
-      local factionTeam = factionTeams[GetFaction(UnitDefs[udid].factions or {})];
+	  local factionTeam = factionTeams[GetFaction(UnitDefs[udid].factions or {})];
 
-      local msg = "buildicon " ..
-                  UnitDefs[udid].name .. ";" ..
-                  ((cfg.attack and "1") or "0") .. ";" ..
-                  ((cfg.move and "1") or "0") .. ";" ..
-                  factionTeam .. ";" ..
-                  (cfg.wait) .. ";" ..
-                  (cfg.shotangle or "0") .. ";"
+	  local msg = "buildicon " ..
+				  UnitDefs[udid].name .. ";" ..
+				  ((cfg.attack and "1") or "0") .. ";" ..
+				  ((cfg.move and "1") or "0") .. ";" ..
+				  factionTeam .. ";" ..
+				  (cfg.wait) .. ";" ..
+				  (cfg.shotangle or "0") .. ";"
 
-      Spring.SendLuaRulesMsg(msg);
-      return;
-    end;
+	  Spring.SendLuaRulesMsg(msg);
+	  return;
+	end;
 
-    CreateIcon(udid);
+	CreateIcon(udid);
   end
 
 
   local function AddJob(fnc)
-    jobs[#jobs+1] = fnc;
+	jobs[#jobs+1] = fnc;
   end
 
 
   local function WaitForSyncedJobs()
-    return (jobsInSynced == 0);
+	return (jobsInSynced == 0);
   end
 
 ---------------------------------------------------------------------------------
@@ -1023,91 +1023,91 @@ end
 local schemes,resolutions,ratios = {},{},{}
 
   local function BuildIcon(cmd, line, words, playerID)
-    --[[if (not Spring.IsCheatingEnabled()) then
-      Spring.Echo("Cheating must be enabled");
-      return false;
-    end;]]
-    if (not Spring.GetModUICtrl()) then
-      Spring.Echo("ModUICtrl is needed (type /luamoduictrl 1)");
-      return false;
-    end;
-    if (final_tex or #jobs>0) then
-      Spring.Echo("Wait until current process is finished");
-      return false;
-    end;
+	--[[if (not Spring.IsCheatingEnabled()) then
+	  Spring.Echo("Cheating must be enabled");
+	  return false;
+	end;]]
+	if (not Spring.GetModUICtrl()) then
+	  Spring.Echo("ModUICtrl is needed (type /luamoduictrl 1)");
+	  return false;
+	end;
+	if (final_tex or #jobs>0) then
+	  Spring.Echo("Wait until current process is finished");
+	  return false;
+	end;
 
-    if (words[1] and words[1]~="all" and not UnitDefNames[words[1]]) then
-      Spring.Echo("No such unit found");
-      return false;
-    end
+	if (words[1] and words[1]~="all" and not UnitDefNames[words[1]]) then
+	  Spring.Echo("No such unit found");
+	  return false;
+	end
 
 --[[
-    Spring.Echo(words[1])
-    local unitDef = words[1]
-    local def = UnitDefs[UnitDefNames[unitDef].id]
-    for k, v in pairs(def) do
-        Spring.Echo(k, v)
-    end
+	Spring.Echo(words[1])
+	local unitDef = words[1]
+	local def = UnitDefs[UnitDefNames[unitDef].id]
+	for k, v in pairs(def) do
+		Spring.Echo(k, v)
+	end
 --]]
-    --//note: we have a LIFO stack
-    for _,res in pairs(resolutions) do
-      for _,_scheme in pairs(schemes) do
-        for _ratio_name,_ratio in pairs(ratios) do
+	--//note: we have a LIFO stack
+	for _,res in pairs(resolutions) do
+	  for _,_scheme in pairs(schemes) do
+		for _ratio_name,_ratio in pairs(ratios) do
 	--	  Spring.Echo("THIS IS A TEST 1")
-          AddJob( FreeResources );
+		  AddJob( FreeResources );
 --Spring.Echo("THIS IS A TEST 2")
-          AddJob( WaitForSyncedJobs );
+		  AddJob( WaitForSyncedJobs );
 --Spring.Echo("THIS IS A TEST 2")
-          if (words[1] and words[1]~="all") then
-            AddJob( function () AddUnitJob(UnitDefNames[ words[1] ].id); end);
-          else
-            for udid=#UnitDefs,1,-1 do
-              AddJob( function () AddUnitJob(udid); end);
-            end;
-          end;
+		  if (words[1] and words[1]~="all") then
+			AddJob( function () AddUnitJob(UnitDefNames[ words[1] ].id); end);
+		  else
+			for udid=#UnitDefs,1,-1 do
+			  AddJob( function () AddUnitJob(udid); end);
+			end;
+		  end;
 --Spring.Echo("THIS IS A TEST 3")
-          AddJob( CreateResources );
+		  AddJob( CreateResources );
 --Spring.Echo("THIS IS A TEST 4")
-          AddJob( function ()
-            scheme            = _scheme;
-            ratio, ratio_name = _ratio, _ratio_name;
-            iconX, iconY      = res[1], res[2];
+		  AddJob( function ()
+			scheme            = _scheme;
+			ratio, ratio_name = _ratio, _ratio_name;
+			iconX, iconY      = res[1], res[2];
 
-            outdir = "buildicons/".. (scheme) .."_".. (ratio_name) .."_".. (iconX) .."x".. (iconY);
+			outdir = "buildicons/".. (scheme) .."_".. (ratio_name) .."_".. (iconX) .."x".. (iconY);
 			Spring.Echo(outdir)
-            Spring.CreateDir(outdir);
+			Spring.CreateDir(outdir);
 --Spring.Echo("THIS IS A TEST 6")
-            LoadScheme();
-          end );
+			LoadScheme();
+		  end );
 --Spring.Echo("THIS IS A TEST 5")
-        end;
-      end;
-    end;
+		end;
+	  end;
+	end;
 
-    --[[gadget.DrawGenesis = ProcessJobs;
-    gadgetHandler:UpdateCallIn("DrawGenesis");
-    gadgetHandler:UpdateCallIn("DrawGenesis"); --stupid bug]]
+	--[[gadget.DrawGenesis = ProcessJobs;
+	gadgetHandler:UpdateCallIn("DrawGenesis");
+	gadgetHandler:UpdateCallIn("DrawGenesis"); --stupid bug]]
   end
 
 
   local function UnitCreated(_,uid,defname)
-    jobsInSynced = jobsInSynced - 1
+	jobsInSynced = jobsInSynced - 1
 
-    local uid,defname = uid,defname;
-    jobs[#jobs+1] = function() CreateIcon(UnitDefNames[defname].id,uid) end;
+	local uid,defname = uid,defname;
+	jobs[#jobs+1] = function() CreateIcon(UnitDefNames[defname].id,uid) end;
 
-    --[[gadget.DrawGenesis = ProcessJobs;
-    gadgetHandler:UpdateCallIn("DrawGenesis");
-    gadgetHandler:UpdateCallIn("DrawGenesis"); --stupid bug]]
+	--[[gadget.DrawGenesis = ProcessJobs;
+	gadgetHandler:UpdateCallIn("DrawGenesis");
+	gadgetHandler:UpdateCallIn("DrawGenesis"); --stupid bug]]
   end
 
   function gadget:Initialize()
-    --// get all known configurations
-    schemes,resolutions,ratios = include("LuaRules/Configs/","icon_generator.lua",{info=true})
+	--// get all known configurations
+	schemes,resolutions,ratios = include("LuaRules/Configs/","icon_generator.lua",{info=true})
 
-    gadgetHandler:AddChatAction("buildicon", BuildIcon," : auto generates creates buildicons");
-    gadgetHandler:AddChatAction("buildicons", BuildIcon," : auto generates creates buildicons");
-    gadgetHandler:AddSyncAction("buildicon_unitcreated", UnitCreated);
+	gadgetHandler:AddChatAction("buildicon", BuildIcon," : auto generates creates buildicons");
+	gadgetHandler:AddChatAction("buildicons", BuildIcon," : auto generates creates buildicons");
+	gadgetHandler:AddSyncAction("buildicon_unitcreated", UnitCreated);
   end
 
   function gadget:DrawGenesis()
