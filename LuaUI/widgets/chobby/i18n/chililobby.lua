@@ -1,20 +1,29 @@
 return {
+    -- TODO: Should separate keys by files where it gets used
     en = {
+        -- general
+        cancel = "Cancel",
+        close = "Close",
+        yes_caps = "YES",
+        no_caps = "NO",
+        quit = "Quit",
+        -- login_window
         connect_to_spring_server = 'Connect to the Spring lobby server',
         username = 'Username',
         password = 'Password',
         login_noun = 'Login',
         login_verb = 'Login',
         error_log = 'Error log',
+        register_verb = "Register",
+        autologin = "Logic automatically",
+        --
         start_download = 'Start download',
         download_noun = 'Download',
         start_verb = 'Start',
-        register_verb = "Register",
         menu = "Menu",
         settings = "Settings",
         logout = "Logout",
         login = "Login",
-        quit = "Quit",
         welcome = "Welcome",
         singleplayer = "Singleplayer",
         play_singleplayer_game = "Play a singleplayer game",
@@ -25,10 +34,7 @@ return {
         custom_caps = "CUSTOM",
         play_custom_multiplayer_game = "Play a custom multiplayer game",
         queues = "Queues",
-        close = "Close",
         custom_games = "Custom games",
-        chat = "Chat",
-        join = "Join",
         download = "Download",
         downloads = "Downloads",
         friend_list = "Friend list",
@@ -41,8 +47,6 @@ return {
         start = "Start",
         players = "Players",
         submit = "Submit",
-        yes_caps = "YES",
-        no_caps = "NO",
         time_in_queue = "Time in queue",
         leave = "Leave",
         users = "Users",
@@ -59,8 +63,16 @@ return {
             other = "%{count} items to download.",
         },
         downloads_completed = "All downloads completed.",
+
+        -- chat_windows.lua
         server = "Server",
         debug = "Debug",
+        chat = "Chat",
+        join = "Join",
+        channel = "Channel",
+        topic = "Topic",
+        --
+
         language = "Language",
         team = "Team",
         invite_player = "Invite player",
