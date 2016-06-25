@@ -239,62 +239,9 @@ end
 --PwMatchCommand
 
 ----------------------------------------------------------------------------------------------------
--- Other
+-- Commands from spring server.
 ----------------------------------------------------------------------------------------------------
-
-
-function Interface:init()
--- dumpConfig()
-    self.messagesSentCount = 0
-    self.lastSentSeconds = Spring.GetGameSeconds()
-	self.status = "offline"
-    self.listeners = {}
-	-- timeout (in seconds) until first message is received from server before disconnect is assumed
-	self.connectionTimeout = 50
-
-    -- private
-    self.buffer = ""
-end
-
-function Interface:Connect(host, port)
-    self.client = socket.tcp()
-    self.client:settimeout(0)
-	self._startedConnectingTime = os.clock()
-    local res, err = self.client:connect(host, port)
-	if res == nil and err == "host not found" then
-		self:_OnDisconnected("Host not found")
-		return false
-		-- The socket is expected to return "timeout" immediately since timeout time is set  to 0
-	elseif not (res == nil and err == "timeout") then 
-        Spring.Log(LOG_SECTION, LOG.ERROR, "Error in connect: " .. err)
-        return false
-    end
-    self.status = "connecting"
-    return true
-end
-
-function Interface:Disconnect()
-    self.status = "offline"
-    self.client:close()
-    self:_OnDisconnected()
-end
-
-function Interface:_SendCommand(command, sendMessageCount)
-    if sendMessageCount then
-        self.messagesSentCount = self.messagesSentCount + 1
-        command = "#" .. self.messagesSentCount .. " " .. command
-    end
-    if command[#command] ~= "\n" then
-        command = command .. "\n"
-    end
-    self.client:send(command)
-    self:_CallListeners("OnCommandSent", command:sub(1, #command-1))
-    self.lastSentSeconds = Spring.GetGameSeconds()
-end
-
-function Interface:SendCustomCommand(command)
-    self:_SendCommand(command, false)
-end
+-- TODO, cleanup following section
 
 function Interface:AddBot(name, battleStatus, teamColor, aiDll)
     self:_SendCommand(concat("ADDBOT", name, battleStatus, teamColor, aiDll))
@@ -1308,6 +1255,63 @@ function Interface:_OnListQueues(queues)
 end
 Interface.jsonCommands["LISTQUEUES"] = Interface._OnListQueues
 
+----------------------------------------------------------------------------------------------------
+-- Interface support functions
+----------------------------------------------------------------------------------------------------
+
+function Interface:init()
+-- dumpConfig()
+    self.messagesSentCount = 0
+    self.lastSentSeconds = Spring.GetGameSeconds()
+	self.status = "offline"
+    self.listeners = {}
+	-- timeout (in seconds) until first message is received from server before disconnect is assumed
+	self.connectionTimeout = 50
+
+    -- private
+    self.buffer = ""
+end
+
+function Interface:Connect(host, port)
+    self.client = socket.tcp()
+    self.client:settimeout(0)
+	self._startedConnectingTime = os.clock()
+    local res, err = self.client:connect(host, port)
+	if res == nil and err == "host not found" then
+		self:_OnDisconnected("Host not found")
+		return false
+		-- The socket is expected to return "timeout" immediately since timeout time is set  to 0
+	elseif not (res == nil and err == "timeout") then 
+        Spring.Log(LOG_SECTION, LOG.ERROR, "Error in connect: " .. err)
+        return false
+    end
+    self.status = "connecting"
+    return true
+end
+
+function Interface:Disconnect()
+    self.status = "offline"
+    self.client:close()
+    self:_OnDisconnected()
+end
+
+function Interface:_SendCommand(command, sendMessageCount)
+    if sendMessageCount then
+        self.messagesSentCount = self.messagesSentCount + 1
+        command = "#" .. self.messagesSentCount .. " " .. command
+    end
+    if command[#command] ~= "\n" then
+        command = command .. "\n"
+    end
+    self.client:send(command)
+    self:_CallListeners("OnCommandSent", command:sub(1, #command-1))
+    self.lastSentSeconds = Spring.GetGameSeconds()
+end
+
+function Interface:SendCustomCommand(command)
+    self:_SendCommand(command, false)
+end
+
 function Interface:_OnDisconnected()
     self:_CallListeners("OnDisconnected")
 end
@@ -1337,14 +1341,6 @@ function Interface:CommandReceived(command)
     self:_OnCommandReceived(cmdName, arguments, cmdId)
 end
 
-function Interface:_GetCommandPattern(cmdName)
-    return Wrapper.commandPattern[cmdName]
-end
-
-function Interface:_GetCommandFunction(cmdName)
-    return Interface.commands[cmdName], Interface.commandPattern[cmdName]
-end
-
 function Interface:_GetJsonCommandFunction(cmdName)
     return Interface.jsonCommands[cmdName]
 end
@@ -1356,7 +1352,6 @@ end
 
 function Interface:_OnCommandReceived(cmdName, arguments, cmdId)
 	--Spring.Echo("COMMAND NAME", cmdName)
-    local commandFunction, pattern = self:_GetCommandFunction(cmdName)
     local fullCmd
     if arguments ~= nil then
         fullCmd = cmdName .. " " .. arguments
@@ -1364,31 +1359,16 @@ function Interface:_OnCommandReceived(cmdName, arguments, cmdId)
         fullCmd = cmdName
     end
 
-    if commandFunction ~= nil then
-        local pattern = self:_GetCommandPattern(cmdName)
-        if pattern then
-            local funArgs = {arguments:match(pattern)}
-            if #funArgs ~= 0 then
-                commandFunction(self, unpack(funArgs))
-            else
-                Spring.Log(LOG_SECTION, LOG.ERROR, "Failed to match command: ", cmdName, ", args: " .. tostring(arguments) .. " with pattern: ", pattern)
-            end
-        else
-            --Spring.Echo("No pattern for command: " .. cmdName)
-            commandFunction(self)
-        end
-    else
-        local jsonCommandFunction = self:_GetJsonCommandFunction(cmdName)
-        if jsonCommandFunction ~= nil then
-            local success, obj = pcall(json.decode, arguments)
-            if not success then
-                Spring.Log(LOG_SECTION, LOG.ERROR, "Failed to parse JSON: " .. tostring(arguments))
-            end
-            jsonCommandFunction(self, obj)
-        else
-            Spring.Log(LOG_SECTION, LOG.ERROR, "No such function: " .. cmdName .. ", for command: " .. fullCmd)
-        end
-    end
+	local jsonCommandFunction = self:_GetJsonCommandFunction(cmdName)
+	if jsonCommandFunction ~= nil then
+		local success, obj = pcall(json.decode, arguments)
+		if not success then
+			Spring.Log(LOG_SECTION, LOG.ERROR, "Failed to parse JSON: " .. tostring(arguments))
+		end
+		jsonCommandFunction(self, obj)
+	else
+		Spring.Log(LOG_SECTION, LOG.ERROR, "No such function: " .. cmdName .. ", for command: " .. fullCmd)
+	end
     self:_CallListeners("OnCommandReceived", fullCmd)
 end
 
