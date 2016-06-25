@@ -32,6 +32,7 @@ function Wrapper:_Clean()
 
     self.channels = {}
     self.channelCount = 0
+    self.myChannels = {}
 
     self.battles = {}
     self.battleCount = 0
@@ -45,9 +46,9 @@ function Wrapper:_Clean()
 
     self.loginData = nil
     self.myUserName = nil
-	
-	-- reconnection delay in seconds
-	self.reconnectionDelay = 5
+    
+    -- reconnection delay in seconds
+    self.reconnectionDelay = 5
 end
 
 function Wrapper:_PreserveData()
@@ -84,7 +85,7 @@ end
 
 -- override
 function Wrapper:_OnTASServer(...)
-	if self.status == "disconnected" and self.disconnectTime ~= nil then -- in the process of reconnecting
+    if self.status == "disconnected" and self.disconnectTime ~= nil then -- in the process of reconnecting
         self.disconnectTime = nil
         self:Login(unpack(self._oldData.loginData))
     end
@@ -244,9 +245,25 @@ end
 Wrapper.commands["JOINED"] = Wrapper._OnJoined
 
 -- override
+function Wrapper:_OnJoin(chanName)
+
+    table.insert(self.myChannels, chanName)
+    
+    self:super("_OnJoin", chanName)
+end
+Wrapper.commands["JOIN"] = Wrapper._OnJoin
+
+-- override
 function Wrapper:_OnLeft(chanName, userName, reason)
     local channel = self:_GetChannel(chanName)
-
+    
+    for i, v in pairs(self.myChannels) do
+        if v == chanName then
+            table.remove(self.myChannels, i)
+            break
+        end
+    end
+    
     for i, v in pairs(channel.users) do
         if v == userName then
             table.remove(channel.users, i)
@@ -365,7 +382,7 @@ end
 
 -- override
 function Wrapper:_GetCommandFunction(cmdName)
-    local cmd = Wrapper.commands[cmdName]	
+    local cmd = Wrapper.commands[cmdName]   
     if cmd == nil then
         cmd = self:super("_GetCommandFunction", cmdName)
     end
@@ -451,6 +468,9 @@ function Wrapper:GetChannelCount()
 end
 function Wrapper:GetChannel(channelName)
     return self.channels[channelName]
+end
+function Wrapper:GetMyChannels()
+    return self.myChannels
 end
 -- returns channels table (not necessarily an array)
 function Wrapper:GetChannels()
