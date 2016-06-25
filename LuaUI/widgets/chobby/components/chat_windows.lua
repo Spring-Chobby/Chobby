@@ -287,7 +287,7 @@ function ChatWindows:UpdateChannels(channelsArray)
                         function()
                             lobby:Join(channel.chanName)
                             Configuration.channels = lobby:GetMyChannels()
-							Configuration:SaveConfig()
+                            Configuration:SaveConfig()
                         end
                     },
                 },

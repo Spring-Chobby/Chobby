@@ -46,9 +46,9 @@ function Wrapper:_Clean()
 
     self.loginData = nil
     self.myUserName = nil
-	
-	-- reconnection delay in seconds
-	self.reconnectionDelay = 5
+    
+    -- reconnection delay in seconds
+    self.reconnectionDelay = 5
 end
 
 function Wrapper:_PreserveData()
@@ -85,7 +85,7 @@ end
 
 -- override
 function Wrapper:_OnTASServer(...)
-	if self.status == "disconnected" and self.disconnectTime ~= nil then -- in the process of reconnecting
+    if self.status == "disconnected" and self.disconnectTime ~= nil then -- in the process of reconnecting
         self.disconnectTime = nil
         self:Login(unpack(self._oldData.loginData))
     end
@@ -382,7 +382,7 @@ end
 
 -- override
 function Wrapper:_GetCommandFunction(cmdName)
-    local cmd = Wrapper.commands[cmdName]	
+    local cmd = Wrapper.commands[cmdName]   
     if cmd == nil then
         cmd = self:super("_GetCommandFunction", cmdName)
     end

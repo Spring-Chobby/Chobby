@@ -230,9 +230,9 @@ function LoginWindow:tryLogin()
     else
         lobby:Login(username, password, 3)
         for k, v in pairs(self.channels) do
-			Spring.Echo("Join " .. "v")
-			lobby:Join(v)
-		end
+            Spring.Echo("Join " .. "v")
+            lobby:Join(v)
+        end
     end
 
     self.loginAttempts = self.loginAttempts + 1
