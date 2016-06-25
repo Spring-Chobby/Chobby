@@ -51,7 +51,7 @@ function Chobby:_Initialize()
         local loginWindow = LoginWindow()
         --self.downloader = Downloader()
         local statusBar = StatusBar()
-        --local background = Background()
+        local background = Background()
 
         lobby:AddListener("OnJoinBattle", 
             function(listener, battleID)

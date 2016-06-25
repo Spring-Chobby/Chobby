@@ -1,4 +1,4 @@
-local onZKServer = true
+local onZKServer = false
 
 return {
 	serverName = (onZKServer and "zero-k.info") or "springrts.com",
