@@ -1,30 +1,12 @@
 ChatWindows = LCS.class{}
 
 function ChatWindows:init()
-    -- setup debug console to listen to commands
+    self.channelConsoles = {}
+    self.userListPanels = {}
+    self.tabbars = {}
 
-    self.debugConsole = Console()
-    table.insert(self.debugConsole.ebInputText.OnKeyPress,
-        function(obj, key, ...)
-            -- allow tabs for the debug window
-            if key == 9 then
-                obj:TextInput("\t")
-            end
-        end
-    )
-    self.debugConsole.listener = function(message)
-        lobby:SendCustomCommand(message)
-    end
-    lobby:AddListener("OnCommandReceived",
-        function(listner, command)
-            self.debugConsole:AddMessage("<" .. command)
-        end
-    )
-    lobby:AddListener("OnCommandSent",
-        function(listner, command)
-            self.debugConsole:AddMessage(">" .. command)
-        end
-    )
+    -- setup debug console to listen to commands
+    self:CreateDebugConsole()
 
     -- get a list of channels when login is done
     lobby:AddListener("OnLoginInfoEnd",
@@ -64,9 +46,6 @@ function ChatWindows:init()
         end
     )
 
-    self.channelConsoles = {}
-    self.userListPanels = {}
-    self.tabbars = {}
     lobby:AddListener("OnJoin",
         function(listener, chanName)
             local channelConsole = self:GetChannelConsole(chanName)
@@ -131,6 +110,16 @@ function ChatWindows:init()
             { name = i18n("server"), children = {self.serverPanel} },
             { name = i18n("debug"), children = {self.debugConsole.panel} },
         },
+        OnTabChange = {
+            function(obj, name)
+                local console = self.tabbars[name]
+                if console then
+                    WG.Delay(function()
+                        screen0:FocusControl(console.ebInputText)
+                    end, 0.01)
+                end
+            end
+        }
     }
 
     self.window = Window:New {
@@ -170,6 +159,32 @@ function ChatWindows:init()
 
     CHOBBY.chatWindows = self
     self:Minimize()
+end
+
+function ChatWindows:CreateDebugConsole()
+    self.debugConsole = Console()
+    table.insert(self.debugConsole.ebInputText.OnKeyPress,
+        function(obj, key, ...)
+            -- allow tabs for the debug window
+            if key == 9 then
+                obj:TextInput("\t")
+            end
+        end
+    )
+    self.debugConsole.listener = function(message)
+        lobby:SendCustomCommand(message)
+    end
+    lobby:AddListener("OnCommandReceived",
+        function(listner, command)
+            self.debugConsole:AddMessage("<" .. command)
+        end
+    )
+    lobby:AddListener("OnCommandSent",
+        function(listner, command)
+            self.debugConsole:AddMessage(">" .. command)
+        end
+    )
+    self.tabbars["Debug"] = self.debugConsole
 end
 
 function ChatWindows:Minimize()
@@ -335,7 +350,7 @@ function ChatWindows:GetChannelConsole(chanName)
                 },
             }
         })
-        self.tabbars[chanName] = self.tabPanel.children[#self.tabPanel.children]
+        self.tabbars[name] = channelConsole
 
         lobby:AddListener("OnClients",
             function(listener, clientsChanName, clients)
@@ -355,7 +370,6 @@ function ChatWindows:GetPrivateChatConsole(userName)
     if privateChatConsole == nil then
         privateChatConsole = Console()
         self.privateChatConsoles[userName] = privateChatConsole
-        self.tabbars[userName] = self.tabPanel.children[#self.tabPanel.children]
 
         privateChatConsole.listener = function(message)
             lobby:SayPrivate(userName, message)
@@ -379,6 +393,7 @@ function ChatWindows:GetPrivateChatConsole(userName)
                 }
             }
         })
+        self.tabbars[name] = privateChatConsole
     end
 
     return privateChatConsole
@@ -440,14 +455,4 @@ function ChatWindows:CreateJoinChannelWindow()
         end
     }
     screen0:FocusControl(ebChannelName)
-end
-
--- TODO: move this to chili's TabPanel
-function _RemoveTab(tabPanel, name)
-    local self = tabPanel
-
-    local tabbar = self.children[1]
-    tabbar:Remove(name)
-    self.currentTab:RemoveChild(self.tabIndexMapping[name])
-    self.tabIndexMapping[name] = nil
 end
