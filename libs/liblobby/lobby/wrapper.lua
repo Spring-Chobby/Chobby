@@ -258,16 +258,14 @@ Wrapper.commands["JOIN"] = Wrapper._OnJoin
 function Wrapper:_OnLeft(chanName, userName, reason)
     local channel = self:_GetChannel(chanName)
     
-    i = 1
-    
-    for _, v in pairs(self.myChannels) do
+    for i, v in pairs(self.myChannels) do
         if v == chanName then
             table.remove(self.myChannels, i)
 
             Spring.Echo(self.myChannels)
         end
-        i = i + 1
     end
+    
     for i, v in pairs(channel.users) do
         if v == userName then
             table.remove(channel.users, i)
