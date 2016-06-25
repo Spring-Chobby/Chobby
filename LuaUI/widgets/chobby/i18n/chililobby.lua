@@ -2,6 +2,7 @@ return {
     -- TODO: Should separate keys by files where it gets used
     en = {
         -- general
+        ok = "OK",
         cancel = "Cancel",
         close = "Close",
         yes_caps = "YES",
@@ -71,6 +72,7 @@ return {
         join = "Join",
         channel = "Channel",
         topic = "Topic",
+        join_channel = "Join Channel",
         --
 
         language = "Language",
