@@ -206,6 +206,17 @@ function Interface:SayPrivate(userName, message)
     return self
 end
 
+function Interface:Register(userName, password, email)
+    -- FIXME: email argument is currently not sent to the server
+    password = VFS.CalculateHash(password, 0)
+	local sendData = {
+		Name = userName,
+		PasswordHash = password,
+	}
+    self:_SendCommand("Register " .. tableToString(sendData))
+    return self
+end
+
 --Register
 --JoinChannel
 --LeaveChannel
@@ -531,13 +542,6 @@ function Interface:ReadyCheckResponse(name, response, responseTime)
         response.responseTime = responseTime
     end
     self:_SendCommand(concat("READYCHECKRESPONSE", json.encode(response)))
-    return self
-end
-
-function Interface:Register(userName, password, email)
-    -- FIXME: email argument is currently not sent to the server
-    password = VFS.CalculateHash(password, 0)
-    self:_SendCommand(concat("REGISTER", userName, password))
     return self
 end
 
