@@ -153,6 +153,18 @@ function ChatWindows:init()
                 height = 40,
                 OnClick = { function() self:Minimize() end },
             },
+            Button:New {
+                width = 60,
+                y = 10,
+                right = 52,
+                height = 40,
+                caption = i18n("join"),
+                OnClick = { function()
+                    if self.joinWindow == nil then
+                        self:CreateJoinChannelWindow()
+                    end
+                end },
+            },
         }
     }
 
@@ -305,9 +317,14 @@ function ChatWindows:GetChannelConsole(chanName)
                     children = { channelConsole.panel, },
                 },
                 Control:New {
-                    width = 144, y = 0, right = 0, bottom = 0,
+                    width = 144, y = 50, right = 0, bottom = 0,
                     padding={0,0,0,0}, itemPadding={0,0,0,0}, itemMargin={0,0,0,0},
                     children = { userListPanel.panel, },
+                },
+                Button:New {
+                    width = 24, height = 24, y = 0, right = 2,
+                    caption = "x",
+                    OnClick = { function() self:CloseChannelTab(name) end },
                 },
             }
         })
@@ -337,8 +354,85 @@ function ChatWindows:GetPrivateChatConsole(userName)
             lobby:SayPrivate(userName, message)
         end
 
-        self.tabPanel:AddTab({name = "@" .. userName, children = {privateChatConsole.panel}})
+        self.tabPanel:AddTab({
+            name = "@" .. userName,
+            children = {
+                privateChatConsole.panel,
+            
+                Button:New {
+                    width = 24, height = 24, y = 0, right = 2,
+                    caption = "x",
+                    OnClick = { function() self:CloseChannelTab(name) end },
+                }
+            }
+        })
     end
 
     return privateChatConsole
+end
+
+function ChatWindows:CreateJoinChannelWindow()
+
+
+    self.ebChannelName = EditBox:New {
+        bottom = 50,
+        height = 25,
+        right = 50,
+        text = "",
+    }
+
+    self.joinWindow = Window:New {
+        right = 300,
+        width = 150,
+        bottom = 200,
+        height = 100,
+        parent = screen0,
+        caption = i18n("channel"),
+        resizable = false,
+        draggable = false,
+        padding = {5, 0, 5, 0},
+        children = {
+            self.ebChannelName,
+            Button:New {
+                width = 60,
+                bottom = 4,
+                right = 2,
+                height = 40,
+                caption = i18n("cancel"),
+                OnClick = { function()
+                    self.joinWindow:Dispose()
+                    self.joinWindow = nil
+                end },
+            },
+            Button:New {
+                caption = i18n("join"),
+                width = 60,
+                bottom = 4,
+                right = 65,
+                height = 40,
+                OnClick = { function()
+                    lobby:Join(self.ebChannelName.text)
+                    self.joinWindow:Dispose()
+                    self.joinWindow = nil
+                end },
+            },
+        }
+    }
+    
+    self.ebChannelName.OnKeyPress = {
+        function(obj, key, mods, ...)
+            if key == Spring.GetKeyCode("enter") or 
+                key == Spring.GetKeyCode("numpad_enter") then
+                
+                lobby:Join(self.ebChannelName.text)
+                self.joinWindow:Dispose()
+                self.joinWindow = nil
+            end
+
+        end
+    }
+
+end
+
+function ChatWindows:CloseChannelTab(name)
 end
