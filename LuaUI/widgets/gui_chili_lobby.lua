@@ -19,6 +19,7 @@ LCS = LCS()
 
 CHOBBY_DIR = "LuaUI/widgets/chobby/"
 ZEROK_SERVER = true
+WG.ZEROK_SERVER = ZEROK_SERVER
 
 function widget:Initialize()
     if not WG.LibLobby then
@@ -33,7 +34,7 @@ function widget:Initialize()
     end
 
     Chobby = VFS.Include(CHOBBY_DIR .. "core.lua", nil)
-
+	
     WG.Chobby = Chobby
     WG.Chobby:_Initialize()
 end

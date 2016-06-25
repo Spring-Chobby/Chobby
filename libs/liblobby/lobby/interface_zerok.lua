@@ -1,10 +1,7 @@
 VFS.Include(LIB_LOBBY_DIRNAME .. "json.lua")
 VFS.Include(LIB_LOBBY_DIRNAME .. "utilities.lua")
 
-if not Spring.GetConfigInt("LuaSocketEnabled", 0) == 1 then
-    Spring.Log(LOG_SECTION, LOG.ERROR, "LuaSocketEnabled is disabled")
-    return false
-end
+local LOG_SECTION = "liblobby"
 
 Interface = Observable:extends{}
 
@@ -14,6 +11,116 @@ Interface.commands = {}
 Interface.jsonCommands = {}
 -- define command format with pattern (regex)
 Interface.commandPattern = {}
+
+----------------------------------------------------------------------------------------------------
+-- Receive
+----------------------------------------------------------------------------------------------------
+
+function Interface:_Welcome(data)
+	-- Engine
+	-- Game
+	-- Version of Game
+	_OnTASServer(4, 3, 2, 1)
+    Spring.Utilities.TableEcho(data)
+end
+Interface.jsonCommands["Welcome"] = Interface._Welcome
+
+function Interface:_RegisterResponse(data)
+	-- ResultCode: 1 = connected, 2 = name exists, 3 = password wrong, 4 = banned, 5 = bad name characters
+	-- Reason (for ban I presume)
+    Spring.Utilities.TableEcho(data)
+end
+Interface.jsonCommands["RegisterResponse"] = Interface._RegisterResponse
+
+function Interface:_LoginResponse(data)
+	-- ResultCode: 1 = connected, 2 = name exists, 3 = password wrong, 4 = banned
+	-- Reason (for ban I presume)
+    Spring.Utilities.TableEcho(data)
+end
+Interface.jsonCommands["LoginResponse"] = Interface._LoginResponse
+
+function Interface:_ChannelHeader(data)
+	-- List of users
+	-- Channel Name
+	-- Password for channel
+	-- Topic ???
+    Spring.Utilities.TableEcho(data)
+end
+Interface.jsonCommands["ChannelHeader"] = Interface._ChannelHeader
+
+function Interface:_Say(data)
+    Spring.Utilities.TableEcho(data)
+end
+Interface.jsonCommands["Say"] = Interface._Say
+
+function Interface:_Ping(data)
+    Spring.Utilities.TableEcho(data)
+end
+Interface.jsonCommands["Ping"] = Interface._Ping
+
+--ChannelUserAdded
+--ChannelUserRemoved
+--JoinChannelResponse
+--User
+--UserDisconnected
+--BattleAdded
+--BattleUpdate
+--BattleRemoved
+--LeftBattle
+--JoinedBattle
+--UpdateUserBattleStatus
+--UpdateBotStatus
+--RemoveBot
+--SetRectangle
+--SetModOptions
+--SiteToLobbyCommand
+--PwMatchCommand
+--Ping
+
+----------------------------------------------------------------------------------------------------
+-- Send
+----------------------------------------------------------------------------------------------------
+
+--function Interface:Login(name, passwordHash, userID, lobbyVersion, clientType)
+--	-- clientType: 1 = ZKL, 2 = Linux, 4 = SpringieManaged, 8 = Springie
+--end
+--
+--function Interface:Register(name, passwordHash)
+--	-- clientType 1 = ZKL, 2 = Linux, 4 = SpringieManaged, 8 = Springie
+--end
+--
+--function Interface:JoinChannel(channelName)
+--
+--end
+--
+--function Interface:LeaveChannel(channelName)
+--
+--end
+
+--User
+--Say
+--OpenBattle
+--JoinBattle
+--LeaveBattle
+--UpdateUserBattleStatus
+--UpdateBotStatus
+--RemoveBot
+--ChangeUserStatus
+--SetRectangle
+--SetModOptions
+--KickFromBattle
+--KickFromServer
+--KickFromChannel
+--ForceJoinChannel
+--ForceJoinBattle
+--LinkSteam
+--PwMatchCommand
+--Ping
+
+----------------------------------------------------------------------------------------------------
+-- Other
+----------------------------------------------------------------------------------------------------
+
 
 function Interface:init()
 -- dumpConfig()
@@ -1164,6 +1271,7 @@ function Interface:GetConnectionStatus()
 end
 
 function Interface:_OnCommandReceived(cmdName, arguments, cmdId)
+		Spring.Echo("COMMAND NAME", cmdName)
     local commandFunction, pattern = self:_GetCommandFunction(cmdName)
     local fullCmd
     if arguments ~= nil then
