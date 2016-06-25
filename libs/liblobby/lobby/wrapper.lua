@@ -247,7 +247,7 @@ Wrapper.commands["JOINED"] = Wrapper._OnJoined
 -- override
 function Wrapper:_OnJoin(chanName)
 
-	table.insert(self.myChannels, chanName)
+    table.insert(self.myChannels, chanName)
 
     self:super("_OnJoin", chanName)
 end
