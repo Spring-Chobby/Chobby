@@ -249,6 +249,7 @@ function Wrapper:_OnJoin(chanName)
 
     table.insert(self.myChannels, chanName)
 
+    Spring.Echo(self.myChannels)
     self:super("_OnJoin", chanName)
 end
 Wrapper.commands["JOIN"] = Wrapper._OnJoin
@@ -256,7 +257,17 @@ Wrapper.commands["JOIN"] = Wrapper._OnJoin
 -- override
 function Wrapper:_OnLeft(chanName, userName, reason)
     local channel = self:_GetChannel(chanName)
+    
+    i = 1
+    
+    for _, v in pairs(self.myChannels) do
+        if v == chanName then
+            table.remove(self.myChannels, i)
 
+            Spring.Echo(self.myChannels)
+        end
+        i = i + 1
+    end
     for i, v in pairs(channel.users) do
         if v == userName then
             table.remove(channel.users, i)
