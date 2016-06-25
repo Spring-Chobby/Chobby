@@ -198,9 +198,8 @@ end
 Wrapper.commands["CHANNEL"] = Wrapper._OnChannel
 
 -- override
-function Wrapper:_OnClients(chanName, clientsStr)
+function Wrapper:_OnClients(chanName, users)
     local channel = self:_GetChannel(chanName)
-    local users = explode(" ", clientsStr)
 
     if channel.users ~= nil then
         for _, user in pairs(users) do

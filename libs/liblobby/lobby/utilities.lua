@@ -49,6 +49,8 @@ function tableToString(data)
         retString = retString .. "\"" .. key .. "\":" 
 		if type(value) == "table" then
 			tableToString(data)
+		elseif type(value) == "boolean" then
+			retString = retString .. ((value and "true") or "false")
 		elseif type(value) == "string" then
 			retString = retString .. "\"" .. value .. "\""
 		else -- Assume number

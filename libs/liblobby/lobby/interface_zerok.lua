@@ -16,12 +16,19 @@ Interface.commandPattern = {}
 -- Receive
 ----------------------------------------------------------------------------------------------------
 
+local loginOrRegisterResponseCodes = {
+	[1] = "Already connected",
+	[2] = "Name exists",
+	[3] = "Password wrong",
+	[4] = "Banned",
+	[5] = "Bad characters in name",
+}
+
 function Interface:_Welcome(data)
 	-- Engine
 	-- Game
 	-- Version of Game
-	self:_OnTASServer(4, 3, 2, 1)
-	self:_OnAccepted("noname")
+	self:_OnTASServer(4, data.Engine, 2, 1)
 end
 Interface.jsonCommands["Welcome"] = Interface._Welcome
 
@@ -36,11 +43,16 @@ end
 Interface.jsonCommands["LeftBattle"] = Interface._LeftBattle
 
 function Interface:_JoinChannelResponse(data)
-	self:_OnChannel(data.ChannelName, 0, "topic")
+	-- JoinChannelResponse {"ChannelName":"sy","Success":true,"Channel":{"Users":["GoogleFrog","ikinz","DeinFreund","NorthChileanG","hokomoko"],"ChannelName":"sy"}}
+	if data.Success then
+		self:_OnJoin(data.ChannelName)
+		self:_OnClients(data.ChannelName, data.Channel.Users)
+	end
 end
 Interface.jsonCommands["JoinChannelResponse"] = Interface._JoinChannelResponse
 
 function Interface:_Ping(data)
+	self:_OnPong()
     self:Ping()
 end
 Interface.jsonCommands["Ping"] = Interface._Ping
@@ -65,47 +77,62 @@ function Interface:_JoinedBattle(data)
 end
 Interface.jsonCommands["JoinedBattle"] = Interface._JoinedBattle
 
--------------------
--- Unimplemented --
-
+function Interface:_BattleUpdate(data)
+	-- BattleUpdate {"Header":{"BattleID":362,"Map":"Quicksilver 1.1"}
+	local header = data.Header
+	self:_OnUpdateBattleInfo(data.BattleID, 0, 0, 0, data.Map)
+end
+Interface.jsonCommands["BattleUpdate"] = Interface._BattleUpdate
 
 function Interface:_RegisterResponse(data)
 	-- ResultCode: 1 = connected, 2 = name exists, 3 = password wrong, 4 = banned, 5 = bad name characters
 	-- Reason (for ban I presume)
-    Spring.Utilities.TableEcho(data)
+	if data.ResultCode == 0 then
+		self:_OnRegistrationAccepted()
+	else
+		self:_OnRegistrationDenied(loginOrRegisterResponseCodes[data.ResultCode] or "Reason error")
+	end
 end
 Interface.jsonCommands["RegisterResponse"] = Interface._RegisterResponse
 
 function Interface:_LoginResponse(data)
 	-- ResultCode: 1 = connected, 2 = name exists, 3 = password wrong, 4 = banned
 	-- Reason (for ban I presume)
-    Spring.Utilities.TableEcho(data)
+	if data.ResultCode == 0 then
+		self:_OnAccepted()
+	else
+		self:_OnDenied(loginOrRegisterResponseCodes[data.ResultCode] or "Reason error")
+	end
 end
 Interface.jsonCommands["LoginResponse"] = Interface._LoginResponse
+
+function Interface:_Say(data)
+	-- Say {"Place":0,"Target":"zk","User":"GoogleFrog","IsEmote":false,"Text":"bla","Ring":false,"Time":"2016-06-25T07:17:20.7548313Z}"
+	if data.Place == 0 then -- Send to channel?
+		self:_OnSaid(data.Target, data.User, data.Text)
+	elseif data.Place == 2 then -- Send to user?
+		self:_OnSaidPrivate(data.User, data.Text)
+	end
+end
+Interface.jsonCommands["Say"] = Interface._Say
+
+-------------------
+-- Unimplemented --
 
 function Interface:_ChannelHeader(data)
 	-- List of users
 	-- Channel Name
 	-- Password for channel
 	-- Topic ???
+	Spring.Echo("ChannelHeader")
     Spring.Utilities.TableEcho(data)
 end
 Interface.jsonCommands["ChannelHeader"] = Interface._ChannelHeader
 
-function Interface:_Say(data)
-    Spring.Utilities.TableEcho(data)
-end
-Interface.jsonCommands["Say"] = Interface._Say
-
---ChannelUserAdded
 --ChannelUserRemoved
---JoinChannelResponse
 --User
 --UserDisconnected
---BattleAdded
---BattleUpdate
 --BattleRemoved
---LeftBattle
 --JoinedBattle
 --UpdateUserBattleStatus
 --UpdateBotStatus
@@ -114,7 +141,6 @@ Interface.jsonCommands["Say"] = Interface._Say
 --SetModOptions
 --SiteToLobbyCommand
 --PwMatchCommand
---Ping
 
 ----------------------------------------------------------------------------------------------------
 -- Send
@@ -141,7 +167,7 @@ function Interface:Join(chanName, key)
 	local sendData = {
 		ChannelName = chanName
 	}
-    self:_SendCommand("JoinChannel " .. sendData)
+    self:_SendCommand("JoinChannel " .. tableToString(sendData))
     return self
 end
 
@@ -150,21 +176,40 @@ function Interface:Ping()
     return self
 end
 
---
---function Interface:Register(name, passwordHash)
---	-- clientType 1 = ZKL, 2 = Linux, 4 = SpringieManaged, 8 = Springie
---end
---
---function Interface:JoinChannel(channelName)
---
---end
---
---function Interface:LeaveChannel(channelName)
---
---end
+function Interface:Say(chanName, message)
+	-- Say {"Place":0,"Target":"zk","User":"GoogleFrog","IsEmote":false,"Text":"bla","Ring":false,"Time":"2016-06-25T07:17:20.7548313Z"
+	local sendData = {
+		Place = 0, -- Does 0 mean say to a channel???
+		Target = chanName,
+		User = self:GetMyUserName(),
+		IsEmote = false,
+		Text = message,
+		Ring = false,
+		Time = "2016-06-25T07:17:20.7548313Z",
+	}
+    self:_SendCommand("Say " .. tableToString(sendData))
+    return self
+end
 
+function Interface:SayPrivate(userName, message)
+	-- Say {"Place":0,"Target":"zk","User":"GoogleFrog","IsEmote":false,"Text":"bla","Ring":false,"Time":"2016-06-25T07:17:20.7548313Z"
+	local sendData = {
+		Place = 2, -- Does 2 mean say to a player???
+		Target = userName,
+		User = self:GetMyUserName(),
+		IsEmote = false,
+		Text = message,
+		Ring = false,
+		Time = "2016-06-25T07:17:20.7548313Z",
+	}
+    self:_SendCommand("Say " .. tableToString(sendData))
+    return self
+end
+
+--Register
+--JoinChannel
+--LeaveChannel
 --User
---Say
 --OpenBattle
 --JoinBattle
 --LeaveBattle
@@ -181,7 +226,6 @@ end
 --ForceJoinBattle
 --LinkSteam
 --PwMatchCommand
---Ping
 
 ----------------------------------------------------------------------------------------------------
 -- Other
@@ -339,7 +383,8 @@ function Interface:ForceTeamNo(userName, teamNo)
 end
 
 function Interface:FriendList()
-    self:_SendCommand("FRIENDLIST", true)
+    -- Don't friendlist
+	--self:_SendCommand("FRIENDLIST", true)
     return self
 end
 
@@ -526,11 +571,6 @@ function Interface:Ring(userName)
     return self
 end
 
-function Interface:Say(chanName, message)
-    self:_SendCommand(concat("SAY", chanName, message))
-    return self
-end
-
 function Interface:SayBattle(message)
     self:_SendCommand(concat("SAYBATTLE", message))
     return self
@@ -558,11 +598,6 @@ end
 
 function Interface:SayEx(chanName, message)
     self:_SendCommand(concat("SAYEX", chanName, message))
-    return self
-end
-
-function Interface:SayPrivate(userName, message)
-    self:_SendCommand(concat("SAYPRIVATE", userName, message))
     return self
 end
 
@@ -719,8 +754,7 @@ end
 Interface.commands["CLIENTIPPORT"] = Interface._OnClientIpPort
 Interface.commandPattern["CLIENTIPPORT"] = "(%S+)%s+(%S+)%s+(%S+)"
 
-function Interface:_OnClients(chanName, clientsStr)
-    local clients = explode(" ", clientsStr)
+function Interface:_OnClients(chanName, clients)
     self:_CallListeners("OnClients", chanName, clients)
 end
 Interface.commands["CLIENTS"] = Interface._OnClients
@@ -1317,7 +1351,7 @@ function Interface:GetConnectionStatus()
 end
 
 function Interface:_OnCommandReceived(cmdName, arguments, cmdId)
-		Spring.Echo("COMMAND NAME", cmdName)
+	--Spring.Echo("COMMAND NAME", cmdName)
     local commandFunction, pattern = self:_GetCommandFunction(cmdName)
     local fullCmd
     if arguments ~= nil then
