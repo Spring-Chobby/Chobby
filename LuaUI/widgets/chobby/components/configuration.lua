@@ -6,7 +6,7 @@ VFS.Include("libs/liblobby/lobby/json.lua")
 function Configuration:init()
 	self.scale = 1.2
 --     self.serverAddress = "localhost"
-	self.serverAddress = WG.Server.serverName or "springrts.com"
+	self.serverAddress = WG.Server.serverAddress or "springrts.com"
 	self.serverPort = 8200
 
 	self.userName = ""
