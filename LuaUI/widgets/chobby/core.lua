@@ -52,9 +52,6 @@ function Chobby:_Initialize()
         --self.downloader = Downloader()
         local statusBar = StatusBar()
         --local background = Background()
-		if not CHOBBY.chatWindows then
-			ChatWindows()
-		end
 
         lobby:AddListener("OnJoinBattle", 
             function(listener, battleID)
