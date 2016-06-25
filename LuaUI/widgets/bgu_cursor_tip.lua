@@ -93,7 +93,7 @@ local function setTooltipPos(text)
 	x = x + 20
 	y = screenHeight - y -- Spring y is from the bottom, chili is from the top
 
-	-- Making sure the tooltip is within the boundaries of the screen    
+	-- Making sure the tooltip is within the boundaries of the screen
 	y = (y > screenHeight * .75) and (y - height) or (y + 20)
 	x = (x + width > screenWidth) and (screenWidth - width) or x
 

@@ -83,9 +83,9 @@ function QueueListWindow:AddQueue(queue)
 		valign = 'center',
 		tooltip = gameNamesStr, -- TODO: special (?) button for the tooltip
 	}
---     if #queue.title > 15 then
---         lblTitle.tooltip = queue.title
---     end
+--	if #queue.title > 15 then
+--		lblTitle.tooltip = queue.title
+--	end
 	local missingMaps = {}
 	local missingGames = {}
 	for _, map in pairs(queue.mapNames) do
