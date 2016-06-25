@@ -36,8 +36,19 @@ Interface.jsonCommands["Welcome"] = Interface._Welcome
 
 function Interface:_User(data)
 	self:_OnAddUser(data.Name, data.Country, 3, data.AccountID)
+	
+	-- User {"AccountID":212941,"SpringieLevel":1,"Avatar":"corflak","Country":"CZ","EffectiveElo":1100,"Effective1v1Elo":1100,"InGameSince":"2016-06-25T11:36:38.9075025Z","IsAdmin":false,"IsBot":true,"IsInBattleRoom":false,"BanMute":false,"BanSpecChat":false,"Level":0,"ClientType":4,"LobbyVersion":"Springie 1.3.2.116","Name":"Elerium","IsAway":false,"IsInGame":true}
+	if data.IsInGame then
+		self:_OnClientStatus(data.Name, 1)
+	end
 end
 Interface.jsonCommands["User"] = Interface._User
+
+function Interface:_UserDisconnected(data)
+	-- UserDisconnected {"Name":"Springiee81","Reason":"quit"}
+	self:_OnRemoveUser(data.Name)
+end
+Interface.jsonCommands["UserDisconnected"] = Interface._UserDisconnected
 
 function Interface:_LeftBattle(data)
 	self:_OnLeftBattle(data.BattleID, data.User)
@@ -64,6 +75,12 @@ function Interface:_ChannelUserAdded(data)
 end
 Interface.jsonCommands["ChannelUserAdded"] = Interface._ChannelUserAdded
 
+function Interface:_ChannelUserRemoved(data)
+	-- ChannelUserRemoved {"ChannelName":"zk","UserName":"Springiee81"}
+	self:_OnLeft(data.ChannelName, data.UserName, "")
+end
+Interface.jsonCommands["ChannelUserRemoved"] = Interface._ChannelUserRemoved
+
 function Interface:_BattleAdded(data)
 	-- {"Header":{"BattleID":3,"Engine":"100.0","Game":"Zero-K v1.4.6.11","Map":"Zion_v1","MaxPlayers":16,"SpectatorCount":1,"Title":"SERIOUS HOST","Port":8760,"Ip":"158.69.140.0","Founder":"Neptunium"}}
 	local header = data.Header
@@ -73,16 +90,27 @@ function Interface:_BattleAdded(data)
 end
 Interface.jsonCommands["BattleAdded"] = Interface._BattleAdded
 
+function Interface:_BattleRemoved(data)
+	-- BattleRemoved {"BattleID":366}
+	self:_OnBattleClosed(data.BattleID)
+end
+Interface.jsonCommands["BattleRemoved"] = Interface._BattleRemoved
+
 function Interface:_JoinedBattle(data)
 	-- {"BattleID":3,"User":"Neptunium"}
-	self:_OnJoinedBattle(data.BattleID, data.Neptunium, 0)
+	self:_OnJoinedBattle(data.BattleID, data.User, 0)
+	Spring.Echo("data.User", data.User, self:GetMyUserName())
+	if data.User == self:GetMyUserName() then
+		Spring.Echo("JOINED BATTLE")
+		self:_OnJoinBattle(data.BattleID, data.ScriptPassword)
+	end
 end
 Interface.jsonCommands["JoinedBattle"] = Interface._JoinedBattle
 
 function Interface:_BattleUpdate(data)
 	-- BattleUpdate {"Header":{"BattleID":362,"Map":"Quicksilver 1.1"}
 	local header = data.Header
-	self:_OnUpdateBattleInfo(data.BattleID, 0, 0, 0, data.Map)
+	self:_OnUpdateBattleInfo(data.BattleID, header.SpectorCount or 0, 0, 0, header.Map)
 end
 Interface.jsonCommands["BattleUpdate"] = Interface._BattleUpdate
 
@@ -110,8 +138,19 @@ Interface.jsonCommands["LoginResponse"] = Interface._LoginResponse
 
 function Interface:_Say(data)
 	-- Say {"Place":0,"Target":"zk","User":"GoogleFrog","IsEmote":false,"Text":"bla","Ring":false,"Time":"2016-06-25T07:17:20.7548313Z}"
+	local emote = data.IsEmote
 	if data.Place == 0 then -- Send to channel?
+		if emote then
+		self:_OnSaidEx(data.Target, data.User, data.Text)
+		else
 		self:_OnSaid(data.Target, data.User, data.Text)
+		end
+	elseif data.Place == 1 then -- Send to battle?
+		if emote then
+			self:_OnSaidBattleEx(data.User, data.Text)
+		else
+			self:_OnSaidBattle(data.User, data.Text)
+		end
 	elseif data.Place == 2 then -- Send to user?
 		self:_OnSaidPrivate(data.Target, data.Text)
 	end
@@ -120,6 +159,12 @@ Interface.jsonCommands["Say"] = Interface._Say
 
 -------------------
 -- Unimplemented --
+
+function Interface:_UpdateUserBattleStatus(data)
+	-- UpdateUserBattleStatus {"AllyNumber":0,"IsSpectator":true,"Name":"GoogleFrog","Sync":1,"TeamNumber":1}
+	Spring.Utilities.TableEcho(data, "UpdateUserBattleStatus")
+end
+Interface.jsonCommands["UpdateUserBattleStatus"] = Interface._UpdateUserBattleStatus
 
 function Interface:_ChannelHeader(data)
 	-- List of users
@@ -131,15 +176,20 @@ function Interface:_ChannelHeader(data)
 end
 Interface.jsonCommands["ChannelHeader"] = Interface._ChannelHeader
 
---ChannelUserRemoved
---User
---UserDisconnected
---BattleRemoved
---JoinedBattle
---UpdateUserBattleStatus
+function Interface:_SetRectangle(data)
+	-- SetRectangle {"Number":1,"Rectangle":{"Bottom":120,"Left":140,"Right":200,"Top":0}}
+	Spring.Utilities.TableEcho(data, "SetRectangle")
+end
+Interface.jsonCommands["SetRectangle"] = Interface._SetRectangle
+
+function Interface:_SetModOptions(data)
+	-- SetModOptions {"Options":{}}
+	Spring.Utilities.TableEcho(data, "SetModOptions")
+end
+Interface.jsonCommands["SetModOptions"] = Interface._SetModOptions
+
 --UpdateBotStatus
 --RemoveBot
---SetRectangle
 --SetModOptions
 --SiteToLobbyCommand
 --PwMatchCommand
@@ -208,6 +258,19 @@ function Interface:SayPrivate(userName, message)
 	return self
 end
 
+function Interface:SayBattle(message)
+	local sendData = {
+		Place = 1, -- Battle?
+		User = self:GetMyUserName(),
+		IsEmote = false,
+		Text = message,
+		Ring = false,
+		Time = "2016-06-25T07:17:20.7548313Z",
+	}
+	self:_SendCommand("Say " .. tableToString(sendData))
+	return self
+end
+
 function Interface:Register(userName, password, email)
 	-- FIXME: email argument is currently not sent to the server
 	password = VFS.CalculateHash(password, 0)
@@ -219,14 +282,41 @@ function Interface:Register(userName, password, email)
 	return self
 end
 
+function Interface:JoinBattle(battleID, password, scriptPassword)
+	local sendData = {
+		BattleID = battleID,
+		Password = password,
+	}
+	self:_SendCommand("JoinBattle " .. tableToString(sendData))
+	return self
+end
+
+function Interface:MyBattleStatus(ready, team, allyTeam, mode, handicap, sync, side, myTeamColor)
+	local sendData = {
+		AllyNumber = allyTeam,
+        IsSpectator = false,
+        Name = self:GetMyUserName(),
+        Sync = (sync and 1) or 0,
+        TeamNumber = team,
+	}
+	self:_SendCommand("UpdateUserBattleStatus " .. tableToString(sendData))
+	return self
+end
+
+function Interface:LeaveBattle()
+	local sendData = {
+		BattleID = self:GetMyBattleID(),
+	}
+	self:_SendCommand("LeaveBattle " .. tableToString(sendData))
+	return self
+end
+
 --Register
 --JoinChannel
 --LeaveChannel
 --User
 --OpenBattle
---JoinBattle
 --LeaveBattle
---UpdateUserBattleStatus
 --UpdateBotStatus
 --RemoveBot
 --ChangeUserStatus
@@ -373,11 +463,6 @@ function Interface:InviteTeamDecline(userName)
 	return self
 end 
 
-function Interface:JoinBattle(battleID, password, scriptPassword)
-	self:_SendCommand(concat("JOINBATTLE", battleID, password, scriptPassword))
-	return self
-end
-
 function Interface:JoinBattleAccept(userName)
 	self:_SendCommand(concat("JOINBATTLEACCEPT", userName))
 	return self
@@ -422,11 +507,6 @@ function Interface:Leave(chanName)
 	return self
 end
 
-function Interface:LeaveBattle()
-	self:_SendCommand("LEAVEBATTLE")
-	return self
-end
-
 function Interface:LeaveTeam()
 	self:_SendCommand("LEAVETEAM")
 	return self
@@ -450,13 +530,6 @@ end
 
 function Interface:MuteList(chanName)
 	self:_SendCommand(concat("MUTELIST", chanName))
-	return self
-end
-
-function Interface:MyBattleStatus(ready, team, allyTeam, mode, handicap, sync, side, myTeamColor)
-	local battleStatus = tostring((ready and 2 or 0) + (mode and 2^10 or 0) + (sync and 2^22 or 2^23))
-	myTeamColor = myTeamColor or math.floor(math.random() * 255 * 2^16 + math.random() * 255 * 2^8 + math.random() * 255)
-	self:_SendCommand(concat("MYBATTLESTATUS", battleStatus, myTeamColor))
 	return self
 end
 
@@ -521,11 +594,6 @@ end
 
 function Interface:Ring(userName)
 	self:_SendCommand(concat("RING", userName))
-	return self
-end
-
-function Interface:SayBattle(message)
-	self:_SendCommand(concat("SAYBATTLE", message))
 	return self
 end
 

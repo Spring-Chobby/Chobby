@@ -45,6 +45,7 @@ function Wrapper:_Clean()
 
 	self.loginData = nil
 	self.myUserName = nil
+	self.myBattleID = nil
 	
 	-- reconnection delay in seconds
 	self.reconnectionDelay = 5
@@ -155,7 +156,9 @@ Wrapper.commands["BATTLECLOSED"] = Wrapper._OnBattleClosed
 function Wrapper:_OnJoinedBattle(battleID, userName, scriptPassword)
 	battleID = tonumber(battleID)
 	table.insert(self.battles[battleID].users, userName)
-
+	
+	self.myBattleID = battleID
+	
 	self:super("_OnJoinedBattle", battleID, userName, scriptPassword)
 end
 Wrapper.commands["JOINEDBATTLE"] = Wrapper._OnJoinedBattle
@@ -164,6 +167,8 @@ Wrapper.commands["JOINEDBATTLE"] = Wrapper._OnJoinedBattle
 function Wrapper:_OnLeftBattle(battleID, userName)
 	battleID = tonumber(battleID)
 
+	self.myBattleID = nil
+	
 	local battleUsers = self.battles[battleID].users
 	for i, v in pairs(battleUsers) do
 		if v == userName then
@@ -453,6 +458,10 @@ end
 
 -- My data
 -- My user
+function Wrapper:GetMyBattleID()
+	return self.myBattleID
+end
+
 function Wrapper:GetMyUserName()
 	return self.myUserName
 end
