@@ -286,6 +286,8 @@ function ChatWindows:UpdateChannels(channelsArray)
                     OnClick = {
                         function()
                             lobby:Join(channel.chanName)
+                            Configuration.channels = lobby:GetMyChannels()
+                            Configuration:SaveConfig()
                         end
                     },
                 },
@@ -393,6 +395,8 @@ function ChatWindows:CreateJoinChannelWindow()
     local _JoinChannel = function()
         if ebChannelName.text ~= "" then
             lobby:Join(ebChannelName.text)
+            Configuration.channels = lobby:GetMyChannels()
+            Configuration:SaveConfig()
             -- TODO: we should focus the newly opened tab
         end
         self.joinWindow:Dispose()

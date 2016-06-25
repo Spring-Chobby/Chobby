@@ -12,6 +12,7 @@ function Configuration:init()
     self.userName = ""
     self.password = ""
     self.autoLogin = false
+    self.channels = {}
 
     self.errorColor = "\255\255\0\0"
     self.warningColor = "\255\255\255\0"
@@ -35,19 +36,15 @@ end
 
 function Configuration:SaveConfig()
     local out = {}
+    Spring.Echo("SAVE")
     
-    channels = lobby:GetMyChannels()
-    for k,v in pairs(channels) do
-        Spring.Echo(v)
-    local channels = {}
-    channels = lobby:GetMyChannels()
-    
-    end
+    self.channels = lobby:GetMyChannels()
     
     out = {
         userName = self.userName,
         password = self.password,
         autoLogin = self.autoLogin,
+        channels = self.channels,
     }
     Spring.CreateDir(".chobby")
     local f = io.open(self.configFile, "w")
@@ -94,6 +91,10 @@ end
 -- NOTE: this one is in opengl range [0,1]
 function Configuration:GetButtonSelectedColor()
     return self.buttonSelectedColor
+end
+
+function Configuration:GetChannels()
+    return self.channels
 end
 
 -- shadow the Configuration class with a singleton

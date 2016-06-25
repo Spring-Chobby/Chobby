@@ -161,6 +161,9 @@ function LoginWindow:init()
     screen0:FocusControl(self.ebUsername)
     -- FIXME: this should probably be moved to the lobby wrapper
     self.loginAttempts = 0
+    
+    self.channels = Configuration:GetChannels()
+    
     if self.cbAutoLogin.checked then
         self:tryLogin()
     end
@@ -226,6 +229,10 @@ function LoginWindow:tryLogin()
         lobby:Connect(Configuration:GetServerAddress(), Configuration:GetServerPort())
     else
         lobby:Login(username, password, 3)
+        for k, v in pairs(self.channels) do
+            Spring.Echo("Join " .. "v")
+            lobby:Join(v)
+        end
     end
 
     self.loginAttempts = self.loginAttempts + 1
