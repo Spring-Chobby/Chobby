@@ -12,6 +12,7 @@ function Configuration:init()
 	self.userName = ""
 	self.password = ""
 	self.autoLogin = false
+	self.channels = {}
 
 	self.errorColor = "\255\255\0\0"
 	self.warningColor = "\255\255\255\0"
@@ -35,10 +36,13 @@ end
 
 function Configuration:SaveConfig()
 	local out = {}
+	self.channels = lobby:GetMyChannels()
 	out = {
 		userName = self.userName,
 		password = self.password,
 		autoLogin = self.autoLogin,
+        channels = self.channels,
+		
 	}
 	Spring.CreateDir(".chobby")
 	local f = io.open(self.configFile, "w")
@@ -87,5 +91,8 @@ function Configuration:GetButtonSelectedColor()
 	return self.buttonSelectedColor
 end
 
+function Configuration:GetChannels()
+    return self.channels
+end
 -- shadow the Configuration class with a singleton
 Configuration = Configuration()

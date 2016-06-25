@@ -195,7 +195,9 @@ end
 
 function LoginWindow:tryLogin()
 	self.lblError:SetCaption("")
-
+	
+	self.channels = Configuration:GetChannels()
+	
 	username = self.ebUsername.text
 	password = self.ebPassword.text
 	if username == '' or password == '' then
@@ -297,6 +299,10 @@ function LoginWindow:OnConnected()
 				end
 			end,
 		})
+		for k, v in pairs(self.channels) do
+			Spring.Echo("Join " .. "v")
+			lobby:Join(v)
+		end
 	end
 
 	lobby:AddListener("OnAccepted", self.onAccepted)
