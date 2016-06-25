@@ -300,7 +300,6 @@ function LoginWindow:OnConnected()
 			end,
 		})
 		for k, v in pairs(self.channels) do
-			Spring.Echo("Join " .. "v")
 			lobby:Join(v)
 		end
 	end
