@@ -28,20 +28,24 @@ LIB_LOBBY_DIRNAME = "libs/liblobby/lobby/"
 --------------------------------------------------------------------------------
 
 function widget:Initialize()
-  LCS = loadstring(VFS.LoadFile("libs/lcs/LCS.lua"))
-  LCS = LCS()
+	LCS = loadstring(VFS.LoadFile("libs/lcs/LCS.lua"))
+	LCS = LCS()
 
-  VFS.Include(LIB_LOBBY_DIRNAME .. "observable.lua", nil, VFS.RAW_FIRST)
-  Interface = VFS.Include(LIB_LOBBY_DIRNAME .. "interface.lua", nil, VFS.RAW_FIRST)
-  Wrapper = VFS.Include(LIB_LOBBY_DIRNAME .. "wrapper.lua", nil, VFS.RAW_FIRST)
+	VFS.Include(LIB_LOBBY_DIRNAME .. "observable.lua", nil, VFS.RAW_FIRST)
+	if ZEROK_SERVER then
+		Interface = VFS.Include(LIB_LOBBY_DIRNAME .. "interface_zerok.lua", nil, VFS.RAW_FIRST)
+	else
+		Interface = VFS.Include(LIB_LOBBY_DIRNAME .. "interface.lua", nil, VFS.RAW_FIRST)
+	end
+	Wrapper = VFS.Include(LIB_LOBBY_DIRNAME .. "wrapper.lua", nil, VFS.RAW_FIRST)
 
-  self.lobby = Wrapper()
+	self.lobby = Wrapper()
 
 
-  --// Export Widget Globals
-  WG.LibLobby = {
-      lobby = self.lobby -- instance (singleton)
-  }
+	--// Export Widget Globals
+	WG.LibLobby = {
+	lobby = self.lobby -- instance (singleton)
+	}
 
 end
 
