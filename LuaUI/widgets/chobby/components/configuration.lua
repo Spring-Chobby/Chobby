@@ -5,7 +5,7 @@ VFS.Include("libs/liblobby/lobby/json.lua")
 -- all configuration attribute changes should use the :Set*Attribute*() and :Get*Attribute*() methods in order to assure proper functionality
 function Configuration:init()
     self.scale = 1.2
-    --self.serverAddress = "localhost"
+--     self.serverAddress = "localhost"
     self.serverAddress = "springrts.com"
     self.serverPort = 8200
 
@@ -35,6 +35,12 @@ end
 
 function Configuration:SaveConfig()
     local out = {}
+    
+    channels = lobby:GetMyChannels()
+    for k,v in pairs(channels) do
+        Spring.Echo(v)
+    end
+    
     out = {
         userName = self.userName,
         password = self.password,
