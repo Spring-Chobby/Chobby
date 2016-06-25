@@ -36,10 +36,11 @@ function widget:Initialize()
 	Spring.Utilities.TableEcho(WG.Server)
 	if WG.Server.ZKServer then
 		Interface = VFS.Include(LIB_LOBBY_DIRNAME .. "interface_zerok.lua", nil, VFS.RAW_FIRST)
+		Wrapper = VFS.Include(LIB_LOBBY_DIRNAME .. "wrapper_zerok.lua", nil, VFS.RAW_FIRST)
 	else
 		Interface = VFS.Include(LIB_LOBBY_DIRNAME .. "interface.lua", nil, VFS.RAW_FIRST)
+		Wrapper = VFS.Include(LIB_LOBBY_DIRNAME .. "wrapper.lua", nil, VFS.RAW_FIRST)
 	end
-	Wrapper = VFS.Include(LIB_LOBBY_DIRNAME .. "wrapper.lua", nil, VFS.RAW_FIRST)
 
 	self.lobby = Wrapper()
 

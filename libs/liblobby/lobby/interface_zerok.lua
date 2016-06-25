@@ -21,9 +21,53 @@ function Interface:_Welcome(data)
 	-- Game
 	-- Version of Game
 	self:_OnTASServer(4, 3, 2, 1)
-    Spring.Utilities.TableEcho(data)
+	self:_OnAccepted("noname")
 end
 Interface.jsonCommands["Welcome"] = Interface._Welcome
+
+function Interface:_User(data)
+	self:_OnAddUser(data.Name, data.Country, 3, data.AccountID)
+end
+Interface.jsonCommands["User"] = Interface._User
+
+function Interface:_LeftBattle(data)
+	self:_OnLeftBattle(data.BattleID, data.User)
+end
+Interface.jsonCommands["LeftBattle"] = Interface._LeftBattle
+
+function Interface:_JoinChannelResponse(data)
+	self:_OnChannel(data.ChannelName, 0, "topic")
+end
+Interface.jsonCommands["JoinChannelResponse"] = Interface._JoinChannelResponse
+
+function Interface:_Ping(data)
+    self:Ping()
+end
+Interface.jsonCommands["Ping"] = Interface._Ping
+
+function Interface:_ChannelUserAdded(data)
+    self:_OnJoined(data.ChannelName, data.UserName)
+end
+Interface.jsonCommands["ChannelUserAdded"] = Interface._ChannelUserAdded
+
+function Interface:_BattleAdded(data)
+	-- {"Header":{"BattleID":3,"Engine":"100.0","Game":"Zero-K v1.4.6.11","Map":"Zion_v1","MaxPlayers":16,"SpectatorCount":1,"Title":"SERIOUS HOST","Port":8760,"Ip":"158.69.140.0","Founder":"Neptunium"}}
+	local header = data.Header
+	self:_OnBattleOpened(header.BattleID, 0, 0, header.Founder, header.Ip, 
+		header.Port, header.MaxPlayers, 0, 0, 4, "Spring " .. header.Engine, header.Engine, 
+		header.Map, header.Title, header.Game)
+end
+Interface.jsonCommands["BattleAdded"] = Interface._BattleAdded
+
+function Interface:_JoinedBattle(data)
+	-- {"BattleID":3,"User":"Neptunium"}
+	self:_OnJoinedBattle(data.BattleID, data.Neptunium, 0)
+end
+Interface.jsonCommands["JoinedBattle"] = Interface._JoinedBattle
+
+-------------------
+-- Unimplemented --
+
 
 function Interface:_RegisterResponse(data)
 	-- ResultCode: 1 = connected, 2 = name exists, 3 = password wrong, 4 = banned, 5 = bad name characters
@@ -53,11 +97,6 @@ function Interface:_Say(data)
 end
 Interface.jsonCommands["Say"] = Interface._Say
 
-function Interface:_Ping(data)
-    Spring.Utilities.TableEcho(data)
-end
-Interface.jsonCommands["Ping"] = Interface._Ping
-
 --ChannelUserAdded
 --ChannelUserRemoved
 --JoinChannelResponse
@@ -81,9 +120,36 @@ Interface.jsonCommands["Ping"] = Interface._Ping
 -- Send
 ----------------------------------------------------------------------------------------------------
 
---function Interface:Login(name, passwordHash, userID, lobbyVersion, clientType)
---	-- clientType: 1 = ZKL, 2 = Linux, 4 = SpringieManaged, 8 = Springie
---end
+function Interface:Login(user, password, cpu, localIP)
+    if localIP == nil then
+        localIP = "*"
+    end
+    password = VFS.CalculateHash(password, 0)
+	
+	local sendData = {
+		Name = user,
+		PasswordHash = password,
+		UserID = 12,
+		ClientType = 1,
+	}
+	
+    self:_SendCommand("Login " .. tableToString(sendData))
+    return self
+end
+
+function Interface:Join(chanName, key)
+	local sendData = {
+		ChannelName = chanName
+	}
+    self:_SendCommand("JoinChannel " .. sendData)
+    return self
+end
+
+function Interface:Ping()
+    self:_SendCommand("Ping {}")
+    return self
+end
+
 --
 --function Interface:Register(name, passwordHash)
 --	-- clientType 1 = ZKL, 2 = Linux, 4 = SpringieManaged, 8 = Springie
@@ -302,11 +368,6 @@ function Interface:InviteTeamDecline(userName)
     return self
 end 
 
-function Interface:Join(chanName, key)
-    self:_SendCommand(concat("JOIN", chanName, key))
-    return self
-end
-
 function Interface:JoinBattle(battleID, password, scriptPassword)
     self:_SendCommand(concat("JOINBATTLE", battleID, password, scriptPassword))
     return self
@@ -377,16 +438,8 @@ function Interface:ListCompFlags()
 end
 
 function Interface:ListQueues()
-    self:_SendCommand("LISTQUEUES")
-    return self
-end
-
-function Interface:Login(user, password, cpu, localIP)
-    if localIP == nil then
-        localIP = "*"
-    end
-    password = VFS.CalculateHash(password, 0)
-    self:_SendCommand(concat("LOGIN", user, password, cpu, localIP, "LuaLobby\t", "0\t", "a b m cl et p"))
+    -- Don't list queues
+	--self:_SendCommand("LISTQUEUES")
     return self
 end
 
@@ -414,11 +467,6 @@ end
 
 function Interface:OpenQueue(queue)
     self:_SendCommand(concat("OPENQUEUE", json.encode({queue=queue})))
-    return self
-end
-
-function Interface:Ping()
-    self:_SendCommand("PING", true)
     return self
 end
 
@@ -621,15 +669,13 @@ Interface.commands["BATTLECLOSED"] = Interface._OnBattleClosed
 Interface.commandPattern["BATTLECLOSED"] = "(%d+)"
 
 -- mapHash (32bit) will remain a string, since spring lua uses floats (24bit mantissa)
-function Interface:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other)
+function Interface:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, engineName, engineVersion, map, title, gameName)
     battleID = tonumber(battleID)
     type = tonumber(type)
     natType = tonumber(natType)
     port = tonumber(port)
     maxPlayers = tonumber(maxPlayers)
     passworded = tonumber(passworded) ~= 0
-
-    local engineName, engineVersion, map, title, gameName = unpack(explode("\t", other))
 
     self:_CallListeners("OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, engineName, engineVersion, map, title, gameName)
 end
