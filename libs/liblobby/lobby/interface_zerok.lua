@@ -20,7 +20,7 @@ function Interface:_Welcome(data)
 	-- Engine
 	-- Game
 	-- Version of Game
-	_OnTASServer(4, 3, 2, 1)
+	self:_OnTASServer(4, 3, 2, 1)
     Spring.Utilities.TableEcho(data)
 end
 Interface.jsonCommands["Welcome"] = Interface._Welcome

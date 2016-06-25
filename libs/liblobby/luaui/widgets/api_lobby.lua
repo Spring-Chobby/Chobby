@@ -32,7 +32,9 @@ function widget:Initialize()
 	LCS = LCS()
 
 	VFS.Include(LIB_LOBBY_DIRNAME .. "observable.lua", nil, VFS.RAW_FIRST)
-	if WG.ZEROK_SERVER then
+	WG.Server = VFS.Include("luaui/configs/server.lua", nil, VFS.RAW_FIRST)
+	Spring.Utilities.TableEcho(WG.Server)
+	if WG.Server.ZKServer then
 		Interface = VFS.Include(LIB_LOBBY_DIRNAME .. "interface_zerok.lua", nil, VFS.RAW_FIRST)
 	else
 		Interface = VFS.Include(LIB_LOBBY_DIRNAME .. "interface.lua", nil, VFS.RAW_FIRST)

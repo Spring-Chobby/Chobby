@@ -18,8 +18,6 @@ LCS = loadstring(VFS.LoadFile(LIBS_DIR .. "lcs/LCS.lua"))
 LCS = LCS()
 
 CHOBBY_DIR = "LuaUI/widgets/chobby/"
-ZEROK_SERVER = true
-WG.ZEROK_SERVER = ZEROK_SERVER
 
 function widget:Initialize()
     if not WG.LibLobby then
