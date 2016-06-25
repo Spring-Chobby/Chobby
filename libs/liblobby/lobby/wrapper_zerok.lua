@@ -76,13 +76,6 @@ function Wrapper:Login(user, password, cpu, localIP)
 end
 
 -- override
-function Wrapper:Leave(chanName)
-	self:super("Leave", chanName)
-	self:_OnLeft(chanName, self.myUserName, "left")
-	return self
-end
-
--- override
 function Wrapper:_OnTASServer(...)
 	if self.status == "disconnected" and self.disconnectTime ~= nil then -- in the process of reconnecting
 		self.disconnectTime = nil
@@ -129,15 +122,13 @@ end
 Wrapper.commands["PONG"] = Wrapper._OnPong
 
 -- override
-function Wrapper:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other)
+function Wrapper:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, engineName, engineVersion, map, title, gameName)
 	battleID = tonumber(battleID)
 	type = tonumber(type)
 	natType = tonumber(natType)
 	port = tonumber(port)
 	maxPlayers = tonumber(maxPlayers)
 	passworded = tonumber(passworded) ~= 0
-	
-	local engineName, engineVersion, map, title, gameName = unpack(explode("\t", other))
 
 	self.battles[battleID] = { 
 		battleID=battleID, type=type, natType=natType, founder=founder, ip=ip, port=port, 
@@ -146,7 +137,7 @@ function Wrapper:_OnBattleOpened(battleID, type, natType, founder, ip, port, max
 	}
 	self.battleCount = self.battleCount + 1
 
-	self:super("_OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other)
+	self:super("_OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, engineName, engineVersion, map, title, gameName)
 end
 Wrapper.commands["BATTLEOPENED"] = Wrapper._OnBattleOpened
 
@@ -207,9 +198,8 @@ end
 Wrapper.commands["CHANNEL"] = Wrapper._OnChannel
 
 -- override
-function Wrapper:_OnClients(chanName, clientsStr)
+function Wrapper:_OnClients(chanName, users)
 	local channel = self:_GetChannel(chanName)
-	local users = explode(" ", clientsStr)
 
 	if channel.users ~= nil then
 		for _, user in pairs(users) do
@@ -244,7 +234,7 @@ end
 Wrapper.commands["JOINED"] = Wrapper._OnJoined
 
 -- override
-function Wrapper:_OnLeft(chanName, userName, reason)
+function Wrapper:_OnLeft(chanName, userName)
 	local channel = self:_GetChannel(chanName)
 
 	for i, v in pairs(channel.users) do
@@ -254,7 +244,7 @@ function Wrapper:_OnLeft(chanName, userName, reason)
 		end
 	end
 
-	self:super("_OnLeft", chanName, userName, reason)
+	self:super("_OnLeft", chanName, userName)
 end
 Wrapper.commands["LEFT"] = Wrapper._OnLeft
 
