@@ -247,31 +247,31 @@ Wrapper.commands["JOINED"] = Wrapper._OnJoined
 -- override
 function Wrapper:_OnJoin(chanName)
 
-    table.insert(self.myChannels, chanName)
-    
-    self:super("_OnJoin", chanName)
+	table.insert(self.myChannels, chanName)
+	
+	self:super("_OnJoin", chanName)
 end
 Wrapper.commands["JOIN"] = Wrapper._OnJoin
 
 -- override
 function Wrapper:_OnLeft(chanName, userName, reason)
-    local channel = self:_GetChannel(chanName)
-    
-    for i, v in pairs(self.myChannels) do
-        if v == chanName then
-            table.remove(self.myChannels, i)
-            break
-        end
-    end
-    
-    for i, v in pairs(channel.users) do
-        if v == userName then
-            table.remove(channel.users, i)
-            break
-        end
-    end
+	local channel = self:_GetChannel(chanName)
+	
+	for i, v in pairs(self.myChannels) do
+		if v == chanName then
+			table.remove(self.myChannels, i)
+			break
+		end
+	end
+	
+	for i, v in pairs(channel.users) do
+		if v == userName then
+			table.remove(channel.users, i)
+			break
+		end
+	end
 
-    self:super("_OnLeft", chanName, userName, reason)
+	self:super("_OnLeft", chanName, userName, reason)
 end
 Wrapper.commands["LEFT"] = Wrapper._OnLeft
 
@@ -471,7 +471,7 @@ function Wrapper:GetChannel(channelName)
 end
 
 function Wrapper:GetMyChannels()
-    return self.myChannels
+	return self.myChannels
 end
 -- returns channels table (not necessarily an array)
 function Wrapper:GetChannels()

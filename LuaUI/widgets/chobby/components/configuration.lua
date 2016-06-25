@@ -43,7 +43,7 @@ function Configuration:SaveConfig()
 		userName = self.userName,
 		password = self.password,
 		autoLogin = self.autoLogin,
-        channels = self.channels,
+		channels = self.channels,
 		
 	}
 	Spring.CreateDir(".chobby")
@@ -94,7 +94,7 @@ function Configuration:GetButtonSelectedColor()
 end
 
 function Configuration:GetChannels()
-    return self.channels
+	return self.channels
 end
 -- shadow the Configuration class with a singleton
 Configuration = Configuration()
