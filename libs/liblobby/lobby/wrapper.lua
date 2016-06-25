@@ -248,6 +248,8 @@ Wrapper.commands["JOINED"] = Wrapper._OnJoined
 function Wrapper:_OnJoin(chanName)
 
     table.insert(self.myChannels, chanName)
+    Configuration.channels  = self.myChannels
+    Configuration:SaveConfig()
     
     self:super("_OnJoin", chanName)
 end
@@ -260,6 +262,9 @@ function Wrapper:_OnLeft(chanName, userName, reason)
     for i, v in pairs(self.myChannels) do
         if v == chanName then
             table.remove(self.myChannels, i)
+            Configuration.channels  = self.myChannels
+            Configuration:SaveConfig()
+            break
         end
     end
     
