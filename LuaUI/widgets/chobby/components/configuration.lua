@@ -35,6 +35,10 @@ end
 
 function Configuration:SaveConfig()
     local out = {}
+    
+    local channels = {}
+    channels = lobby:GetMyChannels()
+    
     out = {
         userName = self.userName,
         password = self.password,

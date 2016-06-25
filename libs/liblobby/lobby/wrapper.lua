@@ -32,6 +32,7 @@ function Wrapper:_Clean()
 
     self.channels = {}
     self.channelCount = 0
+    self.myChannels = {}
 
     self.battles = {}
     self.battleCount = 0
@@ -244,6 +245,15 @@ end
 Wrapper.commands["JOINED"] = Wrapper._OnJoined
 
 -- override
+function Wrapper:_OnJoin(chanName)
+
+	table.insert(self.myChannels, chanName)
+
+    self:super("_OnJoin", chanName)
+end
+Wrapper.commands["JOIN"] = Wrapper._OnJoin
+
+-- override
 function Wrapper:_OnLeft(chanName, userName, reason)
     local channel = self:_GetChannel(chanName)
 
@@ -451,6 +461,9 @@ function Wrapper:GetChannelCount()
 end
 function Wrapper:GetChannel(channelName)
     return self.channels[channelName]
+end
+function Wrapper:GetMyChannels()
+    return self.myChannels
 end
 -- returns channels table (not necessarily an array)
 function Wrapper:GetChannels()
