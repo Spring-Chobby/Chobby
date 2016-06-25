@@ -1,30 +1,12 @@
 ChatWindows = LCS.class{}
 
 function ChatWindows:init()
-    -- setup debug console to listen to commands
+    self.channelConsoles = {}
+    self.userListPanels = {}
+    self.tabbars = {}
 
-    self.debugConsole = Console()
-    table.insert(self.debugConsole.ebInputText.OnKeyPress,
-        function(obj, key, ...)
-            -- allow tabs for the debug window
-            if key == 9 then
-                obj:TextInput("\t")
-            end
-        end
-    )
-    self.debugConsole.listener = function(message)
-        lobby:SendCustomCommand(message)
-    end
-    lobby:AddListener("OnCommandReceived",
-        function(listner, command)
-            self.debugConsole:AddMessage("<" .. command)
-        end
-    )
-    lobby:AddListener("OnCommandSent",
-        function(listner, command)
-            self.debugConsole:AddMessage(">" .. command)
-        end
-    )
+    -- setup debug console to listen to commands
+    self:CreateDebugConsole()
 
     -- get a list of channels when login is done
     lobby:AddListener("OnLoginInfoEnd",
@@ -64,9 +46,6 @@ function ChatWindows:init()
         end
     )
 
-    self.channelConsoles = {}
-    self.userListPanels = {}
-    self.tabbars = {}
     lobby:AddListener("OnJoin",
         function(listener, chanName)
             local channelConsole = self:GetChannelConsole(chanName)
@@ -131,6 +110,16 @@ function ChatWindows:init()
             { name = i18n("server"), children = {self.serverPanel} },
             { name = i18n("debug"), children = {self.debugConsole.panel} },
         },
+        OnTabChange = {
+            function(obj, name)
+                local console = self.tabbars[name]
+                if console then
+                    WG.Delay(function()
+                        screen0:FocusControl(console.ebInputText)
+                    end, 0.01)
+                end
+            end
+        }
     }
 
     self.window = Window:New {
@@ -172,9 +161,35 @@ function ChatWindows:init()
     self:Minimize()
 end
 
+function ChatWindows:CreateDebugConsole()
+    self.debugConsole = Console()
+    table.insert(self.debugConsole.ebInputText.OnKeyPress,
+        function(obj, key, ...)
+            -- allow tabs for the debug window
+            if key == 9 then
+                obj:TextInput("\t")
+            end
+        end
+    )
+    self.debugConsole.listener = function(message)
+        lobby:SendCustomCommand(message)
+    end
+    lobby:AddListener("OnCommandReceived",
+        function(listner, command)
+            self.debugConsole:AddMessage("<" .. command)
+        end
+    )
+    lobby:AddListener("OnCommandSent",
+        function(listner, command)
+            self.debugConsole:AddMessage(">" .. command)
+        end
+    )
+    self.tabbars["Debug"] = self.debugConsole
+end
+
 function ChatWindows:Minimize()
     ChiliFX:AddFadeEffect({
-        obj = self.window, 
+        obj = self.window,
         time = 0.1,
         endValue = 0,
         startValue = 1,
@@ -307,9 +322,10 @@ function ChatWindows:GetChannelConsole(chanName)
 
         local userListPanel = UserListPanel(chanName)
         self.userListPanels[chanName] = userListPanel
+        local name = "#" .. chanName
 
         self.tabPanel:AddTab({
-            name = "#" .. chanName, 
+            name = name,
             children = {
                 Control:New {
                     x = 0, y = 0, right = 145, bottom = 0,
@@ -317,20 +333,26 @@ function ChatWindows:GetChannelConsole(chanName)
                     children = { channelConsole.panel, },
                 },
                 Control:New {
-                    width = 144, y = 50, right = 0, bottom = 0,
+                    width = 144, y = 0, right = 0, bottom = 0,
                     padding={0,0,0,0}, itemPadding={0,0,0,0}, itemMargin={0,0,0,0},
                     children = { userListPanel.panel, },
                 },
                 Button:New {
-                    width = 24, height = 24, y = 0, right = 2,
+                    width = 24, height = 24, y = 0, right = 146,
                     caption = "x",
-                    OnClick = { function() self:CloseChannelTab(name) end },
+                    OnClick = {
+                        function()
+                            self.channelConsoles[chanName] = nil
+                            lobby:Leave(chanName)
+                            self.tabPanel:RemoveTab(name)
+                        end
+                    },
                 },
             }
         })
-        self.tabbars[chanName] = self.tabPanel.children[#self.tabPanel.children]
+        self.tabbars[name] = channelConsole
 
-        lobby:AddListener("OnClients", 
+        lobby:AddListener("OnClients",
             function(listener, clientsChanName, clients)
                 if chanName == clientsChanName then
                     Spring.Echo("Users in channel: " .. chanName, #lobby:GetChannel(chanName).users)
@@ -348,91 +370,89 @@ function ChatWindows:GetPrivateChatConsole(userName)
     if privateChatConsole == nil then
         privateChatConsole = Console()
         self.privateChatConsoles[userName] = privateChatConsole
-        self.tabbars[userName] = self.tabPanel.children[#self.tabPanel.children]
 
         privateChatConsole.listener = function(message)
             lobby:SayPrivate(userName, message)
         end
+        local name = "@" .. userName
 
         self.tabPanel:AddTab({
-            name = "@" .. userName,
+            name = name,
             children = {
                 privateChatConsole.panel,
-            
+
                 Button:New {
                     width = 24, height = 24, y = 0, right = 2,
                     caption = "x",
-                    OnClick = { function() self:CloseChannelTab(name) end },
+                    OnClick = {
+                        function()
+                            self.privateChatConsoles[userName] = nil
+                            self.tabPanel:RemoveTab(name)
+                        end
+                    },
                 }
             }
         })
+        self.tabbars[name] = privateChatConsole
     end
 
     return privateChatConsole
 end
 
 function ChatWindows:CreateJoinChannelWindow()
-
-
-    self.ebChannelName = EditBox:New {
-        bottom = 50,
-        height = 25,
-        right = 50,
+    local ebChannelName = EditBox:New {
+        hint = "Channel",
         text = "",
     }
 
-    self.joinWindow = Window:New {
-        right = 300,
-        width = 150,
-        bottom = 200,
-        height = 100,
-        parent = screen0,
-        caption = i18n("channel"),
-        resizable = false,
-        draggable = false,
-        padding = {5, 0, 5, 0},
-        children = {
-            self.ebChannelName,
-            Button:New {
-                width = 60,
-                bottom = 4,
-                right = 2,
-                height = 40,
-                caption = i18n("cancel"),
-                OnClick = { function()
-                    self.joinWindow:Dispose()
-                    self.joinWindow = nil
-                end },
-            },
-            Button:New {
-                caption = i18n("join"),
-                width = 60,
-                bottom = 4,
-                right = 65,
-                height = 40,
-                OnClick = { function()
-                    lobby:Join(self.ebChannelName.text)
-                    self.joinWindow:Dispose()
-                    self.joinWindow = nil
-                end },
-            },
-        }
-    }
-    
-    self.ebChannelName.OnKeyPress = {
-        function(obj, key, mods, ...)
-            if key == Spring.GetKeyCode("enter") or 
-                key == Spring.GetKeyCode("numpad_enter") then
-                
-                lobby:Join(self.ebChannelName.text)
-                self.joinWindow:Dispose()
-                self.joinWindow = nil
-            end
+    local _JoinChannel = function()
+        if ebChannelName.text ~= "" then
+            lobby:Join(ebChannelName.text)
+            -- TODO: we should focus the newly opened tab
+        end
+        self.joinWindow:Dispose()
+        self.joinWindow = nil
+    end
 
+    self.joinWindow = Window:New {
+        caption = i18n("join_channel"),
+        parent = screen0,
+        x = "45%",
+        y = "45%",
+        width = 200,
+        height = 180,
+        resizable = false,
+        children = {
+            StackPanel:New {
+                x = 0, y = 0,
+                right = 0, bottom = 0,
+                children = {
+                    ebChannelName,
+                    Button:New {
+                        caption = i18n("ok"),
+                        OnClick = { function()
+                            _JoinChannel()
+                        end},
+                    },
+                    Button:New {
+                        caption = i18n("cancel"),
+                        OnClick = { function()
+                            self.joinWindow:Dispose()
+                            self.joinWindow = nil
+                        end},
+                    },
+                },
+            }
+        },
+    }
+
+    ebChannelName.OnKeyPress = {
+        function(obj, key, mods, ...)
+            if key == Spring.GetKeyCode("enter") or
+                key == Spring.GetKeyCode("numpad_enter") then
+                _JoinChannel()
+            end
         end
     }
-
-end
-
-function ChatWindows:CloseChannelTab(name)
+    screen0:FocusControl(ebChannelName)
 end

@@ -95,7 +95,7 @@ function LoginWindow:init()
         width = 87 * self.scale,
         y = 125 * self.scale,
         height = 20 * self.scale,
-        caption = i18n("Auto login"),
+        caption = i18n("autologin"),
         checked = Configuration.autoLogin,
         font = { size = self.scale * self.fontSize * 0.8},
     }

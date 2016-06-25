@@ -5,7 +5,7 @@ VFS.Include("libs/liblobby/lobby/json.lua")
 -- all configuration attribute changes should use the :Set*Attribute*() and :Get*Attribute*() methods in order to assure proper functionality
 function Configuration:init()
     self.scale = 1.2
-    --self.serverAddress = "localhost"
+--     self.serverAddress = "localhost"
     self.serverAddress = WG.Server.serverName or "springrts.com"
     self.serverPort = 8200
 

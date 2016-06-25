@@ -76,6 +76,13 @@ function Wrapper:Login(user, password, cpu, localIP)
 end
 
 -- override
+function Wrapper:Leave(chanName)
+    self:super("Leave", chanName)
+    self:_OnLeft(chanName, self.myUserName, "left")
+    return self
+end
+
+-- override
 function Wrapper:_OnTASServer(...)
 	if self.status == "disconnected" and self.disconnectTime ~= nil then -- in the process of reconnecting
         self.disconnectTime = nil
@@ -237,7 +244,7 @@ end
 Wrapper.commands["JOINED"] = Wrapper._OnJoined
 
 -- override
-function Wrapper:_OnLeft(chanName, userName)
+function Wrapper:_OnLeft(chanName, userName, reason)
     local channel = self:_GetChannel(chanName)
 
     for i, v in pairs(channel.users) do
@@ -247,7 +254,7 @@ function Wrapper:_OnLeft(chanName, userName)
         end
     end
 
-    self:super("_OnLeft", chanName, userName)
+    self:super("_OnLeft", chanName, userName, reason)
 end
 Wrapper.commands["LEFT"] = Wrapper._OnLeft
 
