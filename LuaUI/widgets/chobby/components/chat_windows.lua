@@ -344,7 +344,7 @@ function ChatWindows:GetChannelConsole(chanName)
                         function()
                             self.channelConsoles[chanName] = nil
                             lobby:Leave(chanName)
-                            _RemoveTab(self.tabPanel, name)
+                            self.tabPanel:RemoveTab(name)
                         end
                     },
                 },
@@ -387,7 +387,7 @@ function ChatWindows:GetPrivateChatConsole(userName)
                     OnClick = {
                         function()
                             self.privateChatConsoles[userName] = nil
-                            _RemoveTab(self.tabPanel, name)
+                            self.tabPanel:RemoveTab(name)
                         end
                     },
                 }
