@@ -45,6 +45,7 @@ function PlayWindow:init()
 		OnClick = {
 			function()
 				self:HideWindows()
+				self:SpawnSkirmishWindow()
 			end
 		},
 	}
@@ -130,7 +131,7 @@ function PlayWindow:init()
 		}
 	}
 	-- caching:
-	self.skirmishWindow = BattleListWindow(self.window)
+	self.skirmishWindow = SkirmishWindow(self.window)
 	self.queueListWindow = QueueListWindow(self.window)
 	self.battleListWindow = BattleListWindow(self.window)
 	self:HideWindows()
@@ -157,7 +158,14 @@ function PlayWindow:HideWindows()
 end
 
 function PlayWindow:SpawnSkirmishWindow()
-	return
+	if not self.skirmishWindow then
+		self.skirmishWindow = SkirmishWindow(self.window)
+	end
+	if not self.skirmishWindow.visible then
+		self.skirmishWindow.window:Show()
+	else
+		return
+	end
 end
 
 function PlayWindow:SpawnQueueListWindow()
