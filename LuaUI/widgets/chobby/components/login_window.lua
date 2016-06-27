@@ -34,11 +34,35 @@ function LoginWindow:init()
 		caption = i18n("connect_to_spring_server"),
 		font = { size = self.scale * self.fontSize},
 	}
+	self.lblServerAddress = Label:New {
+		x = 1,
+		width = 100 * self.scale,
+		y = 50 * self.scale,
+		height = 20 * self.scale,
+		caption = i18n("server") .. ":",
+		font = { size = self.scale * self.fontSize},
+	}
+	self.ebServerAddress = EditBox:New {
+		x = 80 * self.scale,
+		width = 100 * self.scale,
+		y = 50 * self.scale,
+		height = 20 * self.scale,
+		text = Configuration.serverAddress,
+		font = { size = self.scale * self.fontSize},
+	}
+	self.ebServerPort = EditBox:New {
+		x = 185 * self.scale,
+		width = 40 * self.scale,
+		y = 50 * self.scale,
+		height = 20 * self.scale,
+		text = tostring(Configuration.serverPort),
+		font = { size = self.scale * self.fontSize},
+	}
 
 	self.lblUsername = Label:New {
 		x = 1,
 		width = 100 * self.scale,
-		y = 50 * self.scale,
+		y = 75 * self.scale,
 		height = 20 * self.scale,
 		caption = i18n("username") .. ":",
 		font = { size = self.scale * self.fontSize},
@@ -46,7 +70,7 @@ function LoginWindow:init()
 	self.ebUsername = EditBox:New {
 		x = 80 * self.scale,
 		width = 120 * self.scale,
-		y = 50 * self.scale,
+		y = 75 * self.scale,
 		height = 20 * self.scale,
 		text = Configuration.userName,
 		font = { size = self.scale * self.fontSize},
@@ -55,7 +79,7 @@ function LoginWindow:init()
 	self.lblPassword = Label:New {
 		x = 1,
 		width = 100 * self.scale,
-		y = 75 * self.scale,
+		y = 100 * self.scale,
 		height = 20 * self.scale,
 		caption = i18n("password") .. ":",
 		font = { size = self.scale * self.fontSize},
@@ -63,7 +87,7 @@ function LoginWindow:init()
 	self.ebPassword = EditBox:New {
 		x = 80 * self.scale,
 		width = 120 * self.scale,
-		y = 75 * self.scale,
+		y = 100 * self.scale,
 		height = 20 * self.scale,
 		text = Configuration.password,
 		passwordInput = true,
@@ -81,7 +105,7 @@ function LoginWindow:init()
 	self.lblError = Label:New {
 		x = 1,
 		width = 100 * self.scale,
-		y = 100 * self.scale,
+		y = 125 * self.scale,
 		height = 55 * self.scale,
 		caption = "",
 		font = {
@@ -93,7 +117,7 @@ function LoginWindow:init()
 	self.cbAutoLogin = Checkbox:New {
 		x = 1,
 		width = 87 * self.scale,
-		y = 125 * self.scale,
+		y = 150 * self.scale,
 		height = 20 * self.scale,
 		caption = i18n("autologin"),
 		checked = Configuration.autoLogin,
@@ -129,7 +153,7 @@ function LoginWindow:init()
 	}
 
 	local ww, wh = Spring.GetWindowGeometry()
-	local w, h = math.floor(265 * self.scale), math.floor(220 * self.scale)
+	local w, h = math.floor(265 * self.scale), math.floor(250 * self.scale)
 	self.window = Window:New {
 		x = (ww - w) / 2,
 		y = (wh - h) / 2,
@@ -140,8 +164,11 @@ function LoginWindow:init()
 		draggable = false,
 		children = {
 			self.lblInstructions,
+			self.lblServerAddress,
 			self.lblUsername,
 			self.lblPassword,
+			self.ebServerAddress,
+			self.ebServerPort,
 			self.ebUsername,
 			self.ebPassword,
 			self.lblError,
@@ -201,6 +228,8 @@ function LoginWindow:tryLogin()
 	if username == '' or password == '' then
 		return
 	end
+	Configuration.serverAddress = self.ebServerAddress.text
+	Configuration.serverPort = self.ebServerPort.text
 	Configuration.userName  = username
 	Configuration.password  = password
 	Configuration.autoLogin = self.cbAutoLogin.checked
@@ -238,6 +267,8 @@ function LoginWindow:tryRegister()
 	if username == '' or password == '' then
 		return
 	end
+	Configuration.serverAddress = self.ebServerAddress
+	Configuration.serverPort = self.ebServerPort
 
 	if not lobby.connected or self.loginAttempts >= 3 then
 		self.loginAttempts = 0
