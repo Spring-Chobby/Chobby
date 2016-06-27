@@ -296,7 +296,7 @@ function LoginWindow:OnConnected()
 				end
 			end,
 		})
-		for _, v in pairs(Configuration:GetChanenls()) do
+		for _, v in pairs(Configuration:GetChannels()) do
 			lobby:Join(v)
 		end
 	end
