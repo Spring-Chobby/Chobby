@@ -196,8 +196,7 @@ end
 function LoginWindow:tryLogin()
 	self.lblError:SetCaption("")
 	
-	self.channels = Configuration:GetChannels()
-	
+		
 	username = self.ebUsername.text
 	password = self.ebPassword.text
 	if username == '' or password == '' then
@@ -299,7 +298,8 @@ function LoginWindow:OnConnected()
 				end
 			end,
 		})
-		for k, v in pairs(self.channels) do
+		channels = Configuration:GetChannels()
+		for k, v in pairs(channels) do
 			lobby:Join(v)
 		end
 	end
