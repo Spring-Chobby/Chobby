@@ -22,34 +22,29 @@ function Configuration:init()
 	self.buttonSelectedColor = {0.54,0.72,1,0.6}--{1.0, 1.0, 1.0, 1.0}
 
 	self.configFile = ".chobby/config.json"
+	
 	self:LoadConfig()
 end
 
-function Configuration:LoadConfig()
-	if VFS.FileExists(self.configFile, VFS.RAW) then
-		local config = json.decode(VFS.LoadFile(self.configFile))
-		for k, v in pairs(config) do
+function Configuration:LoadConfig(data)
+	if data ~= nil then
+		for k, v in pairs(data) do
 			self[k] = v
 		end
 	end
 end
 
 function Configuration:SaveConfig()
-	local out = {}
-	
+
 	self.channels = lobby:GetMyChannels()
 	
-	out = {
+	return {
 		userName = self.userName,
 		password = self.password,
 		autoLogin = self.autoLogin,
-		channels = self.channels,
-		
+		channels = self.channels,	
 	}
-	Spring.CreateDir(".chobby")
-	local f = io.open(self.configFile, "w")
-	f:write(json.encode(out))
-	f:close()
+	
 end
 
 function Configuration:SetScale(scale)

@@ -207,7 +207,7 @@ function LoginWindow:tryLogin()
 	Configuration.password  = password
 	Configuration.autoLogin = self.cbAutoLogin.checked
 	--Configuration.autoLogin = true
-	Configuration:SaveConfig()
+	--Configuration:SaveConfig()
 
 	if not lobby.connected or self.loginAttempts >= 3 then
 		self.loginAttempts = 0

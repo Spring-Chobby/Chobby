@@ -148,7 +148,7 @@ function SBMenuIcon:Logout()
 		Spring.Echo("Logout")
 		lobby:Disconnect()
 		Configuration.autoLogin = false
-		Configuration:SaveConfig()
+		--Configuration:SaveConfig()
 	else
 		Spring.Echo("Login")
 		LoginWindow()
