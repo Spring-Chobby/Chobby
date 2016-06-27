@@ -35,14 +35,12 @@ function Configuration:LoadConfig(data)
 end
 
 function Configuration:SaveConfig()
-
-	self.channels = lobby:GetMyChannels()
 	
 	return {
 		userName = self.userName,
 		password = self.password,
 		autoLogin = self.autoLogin,
-		channels = self.channels,	
+		channels = lobby:GetMyChannels() ,	
 	}
 	
 end
