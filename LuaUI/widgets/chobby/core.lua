@@ -123,8 +123,7 @@ function Chobby:_PrintError(err)
 end
 
 function Chobby:_GetConfigData()
-	data = Configuration:SaveConfig()
-	return data
+	return Configuration:SaveConfig()
 end
 
 function Chobby:_SetConfigData(data)
