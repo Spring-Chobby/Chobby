@@ -17,7 +17,17 @@ function widget:GetInfo()
 	}
 end
 
-I18N_PATH = "libs/i18n/i18nlib/i18n/"
+local function GetDirectory(filepath)
+	return filepath and filepath:gsub("(.*/)(.*)", "%1")
+end
+
+assert(debug)
+local source = debug and debug.getinfo(1).source
+local DIR = GetDirectory(source)
+
+
+I18N_PATH = DIR .. "i18nlib/i18n/"
+
 function widget:Initialize()
-	WG.i18n = VFS.Include(I18N_PATH .. "init.lua", nil, VFS.DEF_MODE)
+	WG.i18n = VFS.Include(I18N_PATH .. "init.lua", nil, VFS.ZIP)
 end
