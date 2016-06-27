@@ -38,7 +38,7 @@ function Configuration:SaveConfig()
 		userName = self.userName,
 		password = self.password,
 		autoLogin = self.autoLogin,
-		channels = lobby:GetMyChannels() ,	
+		channels = lobby:GetMyChannels(),	
 	}
 	
 end

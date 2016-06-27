@@ -456,4 +456,3 @@ function ChatWindows:CreateJoinChannelWindow()
 	}
 	screen0:FocusControl(ebChannelName)
 end
-
