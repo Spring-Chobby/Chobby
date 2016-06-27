@@ -301,7 +301,7 @@ function ChatWindows:UpdateChannels(channelsArray)
 					OnClick = {
 						function()
 							lobby:Join(channel.chanName)
-                            Configuration:SaveConfig()
+							Configuration:SaveConfig()
 						end
 					},
 				},
@@ -346,7 +346,7 @@ function ChatWindows:GetChannelConsole(chanName)
 							self.channelConsoles[chanName] = nil
 							lobby:Leave(chanName)
 							self.tabPanel:RemoveTab(name)
-                            Configuration:SaveConfig()
+							Configuration:SaveConfig()
 						end
 					},
 				},
@@ -434,7 +434,7 @@ function ChatWindows:CreateJoinChannelWindow()
 						caption = i18n("ok"),
 						OnClick = { function()
 							_JoinChannel()
-                            Configuration:SaveConfig()
+							Configuration:SaveConfig()
 						end},
 					},
 					Button:New {
@@ -454,7 +454,7 @@ function ChatWindows:CreateJoinChannelWindow()
 			if key == Spring.GetKeyCode("enter") or
 				key == Spring.GetKeyCode("numpad_enter") then
 				_JoinChannel()
-                Configuration:SaveConfig()
+				Configuration:SaveConfig()
 			end
 		end
 	}
