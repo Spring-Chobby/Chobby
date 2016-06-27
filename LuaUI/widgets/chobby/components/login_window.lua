@@ -195,7 +195,7 @@ end
 
 function LoginWindow:tryLogin()
 	self.lblError:SetCaption("")
-			
+	
 	username = self.ebUsername.text
 	password = self.ebPassword.text
 	if username == '' or password == '' then

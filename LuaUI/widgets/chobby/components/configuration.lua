@@ -20,11 +20,9 @@ function Configuration:init()
 	self.selectedColor = "\255\99\184\255"
 	self.buttonFocusColor = {0.54,0.72,1,0.3}
 	self.buttonSelectedColor = {0.54,0.72,1,0.6}--{1.0, 1.0, 1.0, 1.0}
-
-	self:LoadConfig()
 end
 
-function Configuration:LoadConfig(data)
+function Configuration:SetConfigData(data)
 	if data ~= nil then
 		for k, v in pairs(data) do
 			self[k] = v
@@ -32,15 +30,13 @@ function Configuration:LoadConfig(data)
 	end
 end
 
-function Configuration:SaveConfig()
-	
+function Configuration:GetConfigData()
 	return {
 		userName = self.userName,
 		password = self.password,
 		autoLogin = self.autoLogin,
 		channels = lobby:GetMyChannels(),	
 	}
-	
 end
 
 function Configuration:SetScale(scale)
