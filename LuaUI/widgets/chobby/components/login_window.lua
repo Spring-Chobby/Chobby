@@ -195,7 +195,7 @@ end
 
 function LoginWindow:tryLogin()
 	self.lblError:SetCaption("")
-
+	
 	username = self.ebUsername.text
 	password = self.ebPassword.text
 	if username == '' or password == '' then
@@ -205,7 +205,6 @@ function LoginWindow:tryLogin()
 	Configuration.password  = password
 	Configuration.autoLogin = self.cbAutoLogin.checked
 	--Configuration.autoLogin = true
-	Configuration:SaveConfig()
 
 	if not lobby.connected or self.loginAttempts >= 3 then
 		self.loginAttempts = 0
@@ -297,6 +296,9 @@ function LoginWindow:OnConnected()
 				end
 			end,
 		})
+		for _, v in pairs(Configuration:GetChannels()) do
+			lobby:Join(v)
+		end
 	end
 
 	lobby:AddListener("OnAccepted", self.onAccepted)

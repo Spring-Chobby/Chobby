@@ -50,16 +50,18 @@ end
 
 function Chobby:_Initialize()
 	self:WrapCall(function()
-		local loginWindow = LoginWindow()
-		--self.downloader = Downloader()
-		local statusBar = StatusBar()
-		--local background = Background()
+		WG.Delay(function()
+			local loginWindow = LoginWindow()
+			--self.downloader = Downloader()
+			local statusBar = StatusBar()
+			--local background = Background()
 
-		lobby:AddListener("OnJoinBattle", 
-			function(listener, battleID)
-				local battleRoom = BattleRoomWindow(battleID)
-			end
-		)
+			lobby:AddListener("OnJoinBattle", 
+				function(listener, battleID)
+					local battleRoom = BattleRoomWindow(battleID)
+				end
+			)
+		end, 0.001)
 	end)
 end
 
@@ -120,6 +122,14 @@ end
 function Chobby:_PrintError(err)
 	Spring.Log("Chobby", LOG.ERROR, err)
 	Spring.Log("Chobby", LOG.ERROR, debug.traceback(err))
+end
+
+function Chobby:_GetConfigData()
+	return Configuration:GetConfigData()
+end
+
+function Chobby:_SetConfigData(data)
+	Configuration:SetConfigData(data)
 end
 
 return Chobby

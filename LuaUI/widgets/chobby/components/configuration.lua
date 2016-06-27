@@ -12,6 +12,7 @@ function Configuration:init()
 	self.userName = ""
 	self.password = ""
 	self.autoLogin = false
+	self.channels = {}
 
 	self.errorColor = "\255\255\0\0"
 	self.warningColor = "\255\255\255\0"
@@ -19,31 +20,23 @@ function Configuration:init()
 	self.selectedColor = "\255\99\184\255"
 	self.buttonFocusColor = {0.54,0.72,1,0.3}
 	self.buttonSelectedColor = {0.54,0.72,1,0.6}--{1.0, 1.0, 1.0, 1.0}
-
-	self.configFile = ".chobby/config.json"
-	self:LoadConfig()
 end
 
-function Configuration:LoadConfig()
-	if VFS.FileExists(self.configFile, VFS.RAW) then
-		local config = json.decode(VFS.LoadFile(self.configFile))
-		for k, v in pairs(config) do
+function Configuration:SetConfigData(data)
+	if data ~= nil then
+		for k, v in pairs(data) do
 			self[k] = v
 		end
 	end
 end
 
-function Configuration:SaveConfig()
-	local out = {}
-	out = {
+function Configuration:GetConfigData()
+	return {
 		userName = self.userName,
 		password = self.password,
 		autoLogin = self.autoLogin,
+		channels = lobby:GetMyChannels(),	
 	}
-	Spring.CreateDir(".chobby")
-	local f = io.open(self.configFile, "w")
-	f:write(json.encode(out))
-	f:close()
 end
 
 function Configuration:SetScale(scale)
@@ -87,5 +80,8 @@ function Configuration:GetButtonSelectedColor()
 	return self.buttonSelectedColor
 end
 
+function Configuration:GetChannels()
+	return self.channels
+end
 -- shadow the Configuration class with a singleton
 Configuration = Configuration()

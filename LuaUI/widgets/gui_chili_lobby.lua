@@ -64,3 +64,11 @@ end
 function widget:DownloadQueued(...)
 	WG.Chobby:_DownloadQueued(...)
 end
+
+function widget:GetConfigData()
+	return WG.Chobby:_GetConfigData()
+end
+
+function widget:SetConfigData(...)
+	WG.Chobby:_SetConfigData(...)
+end
