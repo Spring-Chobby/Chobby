@@ -267,8 +267,8 @@ function LoginWindow:tryRegister()
 	if username == '' or password == '' then
 		return
 	end
-	Configuration.serverAddress = self.ebServerAddress
-	Configuration.serverPort = self.ebServerPort
+	Configuration.serverAddress = self.ebServerAddress.text
+	Configuration.serverPort = self.ebServerPort.text
 
 	if not lobby.connected or self.loginAttempts >= 3 then
 		self.loginAttempts = 0
