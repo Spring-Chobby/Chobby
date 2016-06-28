@@ -87,9 +87,7 @@ function Console:AddMessage(message, userName, date, color)
 	if userName ~= nil then
 		txt = txt .. userName .. ": "
 	end
-	if message ~= nil then
-		txt = txt .. message
-	end
+	txt = txt .. message
 	if color ~= nil then
 		txt = color .. txt .. "\b"
 	end
