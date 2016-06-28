@@ -87,10 +87,12 @@ function Console:AddMessage(message, userName, date, color)
 	if userName ~= nil then
 		txt = txt .. userName .. ": "
 	end
+	if message ~= nil then
+		txt = txt .. message
+	end
 	if color ~= nil then
 		txt = color .. txt .. "\b"
 	end
-	local txt = txt .. message
 	self.tbHistory:SetText(self.tbHistory.text .. "\n" .. txt)
 end
 

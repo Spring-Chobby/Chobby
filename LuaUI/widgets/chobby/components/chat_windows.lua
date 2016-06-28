@@ -96,7 +96,7 @@ function ChatWindows:init()
 		function(listener, userName)
 			local privateChatConsole = self.privateChatConsoles[userName]
 			if privateChatConsole ~= nil then
-				privateChatConsole:AddMessage("Notice: " .. userName .. " just diconnected")
+				privateChatConsole:AddMessage(userName .. " is now offline", nil, nil, "\255\0\139\139")
 			end
 		end
 	)
@@ -104,7 +104,7 @@ function ChatWindows:init()
 		function(listener, userName)
 			local privateChatConsole = self.privateChatConsoles[userName]
 			if privateChatConsole ~= nil then
-				privateChatConsole:AddMessage("Notice: " .. userName .. " just connected")
+				privateChatConsole:AddMessage(userName .. " just got online", nil, nil, "\255\0\139\139")
 			end
 		end
 	)
