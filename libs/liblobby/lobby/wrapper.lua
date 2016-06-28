@@ -47,6 +47,7 @@ function Wrapper:_Clean()
 	self.loginData = nil
 	self.myUserName = nil
 	self.myBattleID = nil
+	self.scriptPassword = nil
 	
 	-- reconnection delay in seconds
 	self.reconnectionDelay = 5
@@ -61,6 +62,11 @@ function Wrapper:_PreserveData()
 		host = self.host,
 		port = self.port,
 	}
+end
+
+-- Interface function
+function Wrapper:_SetScriptPassword(scriptPassword)
+	self.scriptPassword = scriptPassword
 end
 
 -- override
@@ -501,6 +507,10 @@ function Wrapper:GetLatency()
 end
 
 -- My data
+function Wrapper:GetScriptPassword()
+	return self.scriptPassword or 0
+end
+
 -- My user
 function Wrapper:GetMyBattleID()		
 		return self.myBattleID		

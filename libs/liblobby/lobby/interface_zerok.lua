@@ -106,7 +106,8 @@ function Interface:_JoinedBattle(data)
 	Spring.Echo("data.User", data.User, self:GetMyUserName())
 	if data.User == self:GetMyUserName() then
 		Spring.Echo("JOINED BATTLE")
-		self:_OnJoinBattle(data.BattleID, data.ScriptPassword)
+		self:_SetScriptPassword(data.ScriptPassword)
+		self:_OnJoinBattle(data.BattleID, 0)
 	end
 end
 Interface.jsonCommands["JoinedBattle"] = Interface._JoinedBattle
@@ -290,6 +291,7 @@ function Interface:JoinBattle(battleID, password, scriptPassword)
 	local sendData = {
 		BattleID = battleID,
 		Password = password,
+		scriptPassword = scriptPassword
 	}
 	self:_SendCommand("JoinBattle " .. tableToString(sendData))
 	return self

@@ -146,7 +146,7 @@ function BattleRoomWindow:init(battleID)
 		if userName == battle.founder and math.bit_and(1, status) then
 			Spring.Echo("Game starts!")
 			local battle = lobby:GetBattle(self.battleID)
-			local springURL = "spring://" .. lobby:GetMyUserName() .. ":12345@" .. battle.ip .. ":" .. battle.port
+			local springURL = "spring://" .. lobby:GetMyUserName() .. ":" .. lobby:GetScriptPassword() .. "@" .. battle.ip .. ":" .. battle.port
 			Spring.Echo(springURL)
 			Spring.Restart(springURL, "")
 			--[[local scriptFileName = "scriptFile.txt"
@@ -218,6 +218,6 @@ function BattleRoomWindow:GenerateScriptTxt()
 	scriptTxt = scriptTxt:gsub("__IP__", battle.ip)
 						:gsub("__PORT__", battle.port)
 						:gsub("__MY_PLAYER_NAME__", lobby:GetMyUserName())
-						:gsub("__MY_PASSWD__", "12345")
+						:gsub("__MY_PASSWD__", lobby:GetScriptPassword())
 	return scriptTxt
 end
