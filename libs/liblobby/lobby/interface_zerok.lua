@@ -71,7 +71,9 @@ end
 Interface.jsonCommands["Ping"] = Interface._Ping
 
 function Interface:_ChannelUserAdded(data)
-	self:_OnJoined(data.ChannelName, data.UserName)
+	if data.UserName ~= self:GetMyUserName() then
+		self:_OnJoined(data.ChannelName, data.UserName)
+	end
 end
 Interface.jsonCommands["ChannelUserAdded"] = Interface._ChannelUserAdded
 
