@@ -92,6 +92,22 @@ function ChatWindows:init()
 			end
 		end
 	)
+	lobby:AddListener("OnRemoveUser",
+		function(listener, userName)
+			local privateChatConsole = self.privateChatConsoles[userName]
+			if privateChatConsole ~= nil then
+				privateChatConsole:AddMessage(userName .. " is now offline", nil, nil, "\255\0\139\139")
+			end
+		end
+	)
+	lobby:AddListener("OnAddUser",
+		function(listener, userName)
+			local privateChatConsole = self.privateChatConsoles[userName]
+			if privateChatConsole ~= nil then
+				privateChatConsole:AddMessage(userName .. " just got online", nil, nil, "\255\0\139\139")
+			end
+		end
+	)
 
 	self.serverPanel = ScrollPanel:New {
 		x = 0,
