@@ -88,7 +88,7 @@ function Interface:_BattleAdded(data)
 	local header = data.Header
 	self:_OnBattleOpened(header.BattleID, 0, 0, header.Founder, header.Ip, 
 		header.Port, header.MaxPlayers, 0, 0, 4, "Spring " .. header.Engine, header.Engine, 
-		header.Map, header.Title, header.Game)
+		header.Map, header.Title or "no title", header.Game)
 end
 Interface.jsonCommands["BattleAdded"] = Interface._BattleAdded
 
@@ -100,7 +100,9 @@ Interface.jsonCommands["BattleRemoved"] = Interface._BattleRemoved
 
 function Interface:_JoinedBattle(data)
 	-- {"BattleID":3,"User":"Neptunium"}
-	self:_OnJoinedBattle(data.BattleID, data.User, 0)
+	if data.User ~= self:GetBattle(data.BattleID).founder then
+		self:_OnJoinedBattle(data.BattleID, data.User, 0)
+	end
 	Spring.Echo("data.User", data.User, self:GetMyUserName())
 	if data.User == self:GetMyUserName() then
 		Spring.Echo("JOINED BATTLE")

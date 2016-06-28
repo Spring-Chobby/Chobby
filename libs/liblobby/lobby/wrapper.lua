@@ -170,7 +170,9 @@ function Wrapper:_OnJoinedBattle(battleID, userName, scriptPassword)
 	battleID = tonumber(battleID)
 	table.insert(self.battles[battleID].users, userName)
 
-	self.myBattleID = battleID
+	if self:GetMyUserName() == userName then
+		self.myBattleID = battleID
+	end
 	
 	self:super("_OnJoinedBattle", battleID, userName, scriptPassword)
 end
@@ -179,7 +181,10 @@ Wrapper.commands["JOINEDBATTLE"] = Wrapper._OnJoinedBattle
 -- override
 function Wrapper:_OnLeftBattle(battleID, userName)
 	battleID = tonumber(battleID)
-	self.myBattleID = nil
+	
+	if self:GetMyUserName() == userName then
+		self.myBattleID = nil
+	end
 	
 	local battleUsers = self.battles[battleID].users
 	for i, v in pairs(battleUsers) do
