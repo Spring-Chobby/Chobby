@@ -46,6 +46,7 @@ function Wrapper:_Clean()
 
 	self.loginData = nil
 	self.myUserName = nil
+	self.myBattleID = nil
 	
 	-- reconnection delay in seconds
 	self.reconnectionDelay = 5
@@ -130,7 +131,7 @@ end
 Wrapper.commands["PONG"] = Wrapper._OnPong
 
 -- override
-function Wrapper:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other)
+function Wrapper:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other, engineVersion, map, title, gameName)
 	battleID = tonumber(battleID)
 	type = tonumber(type)
 	natType = tonumber(natType)
@@ -138,8 +139,11 @@ function Wrapper:_OnBattleOpened(battleID, type, natType, founder, ip, port, max
 	maxPlayers = tonumber(maxPlayers)
 	passworded = tonumber(passworded) ~= 0
 	
-	local engineName, engineVersion, map, title, gameName = unpack(explode("\t", other))
-
+	if not WG.Server.ZKServer then
+		local engineName
+		engineName, engineVersion, map, title, gameName = unpack(explode("\t", other))
+	end
+	
 	self.battles[battleID] = { 
 		battleID=battleID, type=type, natType=natType, founder=founder, ip=ip, port=port, 
 		maxPlayers=maxPlayers, passworded=passworded, rank=rank, mapHash=mapHash, 
@@ -147,7 +151,7 @@ function Wrapper:_OnBattleOpened(battleID, type, natType, founder, ip, port, max
 	}
 	self.battleCount = self.battleCount + 1
 
-	self:super("_OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other)
+	self:super("_OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other, engineVersion, map, title, gameName)
 end
 Wrapper.commands["BATTLEOPENED"] = Wrapper._OnBattleOpened
 
@@ -166,6 +170,8 @@ function Wrapper:_OnJoinedBattle(battleID, userName, scriptPassword)
 	battleID = tonumber(battleID)
 	table.insert(self.battles[battleID].users, userName)
 
+	self.myBattleID = battleID
+	
 	self:super("_OnJoinedBattle", battleID, userName, scriptPassword)
 end
 Wrapper.commands["JOINEDBATTLE"] = Wrapper._OnJoinedBattle
@@ -173,7 +179,8 @@ Wrapper.commands["JOINEDBATTLE"] = Wrapper._OnJoinedBattle
 -- override
 function Wrapper:_OnLeftBattle(battleID, userName)
 	battleID = tonumber(battleID)
-
+	self.myBattleID = nil
+	
 	local battleUsers = self.battles[battleID].users
 	for i, v in pairs(battleUsers) do
 		if v == userName then
@@ -210,7 +217,12 @@ Wrapper.commands["CHANNEL"] = Wrapper._OnChannel
 -- override
 function Wrapper:_OnClients(chanName, clientsStr)
 	local channel = self:_GetChannel(chanName)
-	local users = explode(" ", clientsStr)
+	local users
+	if WG.Server.ZKServer then
+		users = clientsStr
+	else
+		users = explode(" ", clientsStr)
+	end
 
 	if channel.users ~= nil then
 		for _, user in pairs(users) do
@@ -484,6 +496,10 @@ end
 
 -- My data
 -- My user
+function Wrapper:GetMyBattleID()		
+		return self.myBattleID		
+	end
+
 function Wrapper:GetMyUserName()
 	return self.myUserName
 end
