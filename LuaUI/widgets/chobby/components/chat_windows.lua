@@ -92,6 +92,22 @@ function ChatWindows:init()
 			end
 		end
 	)
+	lobby:AddListener("OnRemoveUser",
+		function(listener, userName)
+			local privateChatConsole = self.privateChatConsoles[userName]
+			if privateChatConsole ~= nil then
+				privateChatConsole:AddMessage("Notice: " .. userName .. " just diconnected")
+			end
+		end
+	)
+	lobby:AddListener("OnAddUser",
+		function(listener, userName)
+			local privateChatConsole = self.privateChatConsoles[userName]
+			if privateChatConsole ~= nil then
+				privateChatConsole:AddMessage("Notice: " .. userName .. " just connected")
+			end
+		end
+	)
 
 	self.serverPanel = ScrollPanel:New {
 		x = 0,
