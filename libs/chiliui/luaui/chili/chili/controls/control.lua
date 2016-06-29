@@ -75,7 +75,7 @@ Control = Object:Inherit{
 
   drawcontrolv2 = nil, --// disable backward support with old DrawControl gl state (with 2.1 self.xy translation isn't needed anymore)
 
-  useRTT = ((gl.CreateFBO and gl.BlendFuncSeparate) ~= nil),
+  useRTT = false, --((gl.CreateFBO and gl.BlendFuncSeparate) ~= nil),
   useDLists = (gl.CreateList ~= nil) and false, --FIXME broken in combination with RTT (wrong blending)
 
   OnResize        = {},
