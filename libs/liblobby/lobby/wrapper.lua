@@ -137,7 +137,7 @@ end
 Wrapper.commands["PONG"] = Wrapper._OnPong
 
 -- override
-function Wrapper:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other, engineVersion, map, title, gameName)
+function Wrapper:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName, title, gameName, spectatorCount)
 	battleID = tonumber(battleID)
 	type = tonumber(type)
 	natType = tonumber(natType)
@@ -147,17 +147,17 @@ function Wrapper:_OnBattleOpened(battleID, type, natType, founder, ip, port, max
 	
 	if not WG.Server.ZKServer then
 		local engineName
-		engineName, engineVersion, map, title, gameName = unpack(explode("\t", other))
+		engineName, engineVersion, mapName, title, gameName = unpack(explode("\t", other))
 	end
 	
 	self.battles[battleID] = { 
 		battleID=battleID, type=type, natType=natType, founder=founder, ip=ip, port=port, 
-		maxPlayers=maxPlayers, passworded=passworded, rank=rank, mapHash=mapHash, 
-		engineName=engineName, engineVersion=engineVersion, map=map, title=title, gameName=gameName, users={founder},
+		maxPlayers=maxPlayers, passworded=passworded, rank=rank, mapHash=mapHash, spectatorCount = spectatorCount or 0,
+		engineName=engineName, engineVersion=engineVersion, mapName=mapName, title=title, gameName=gameName, users={founder},
 	}
 	self.battleCount = self.battleCount + 1
 
-	self:super("_OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other, engineVersion, map, title, gameName)
+	self:super("_OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName, title, gameName, spectatorCount)
 end
 Wrapper.commands["BATTLEOPENED"] = Wrapper._OnBattleOpened
 
@@ -203,6 +203,21 @@ function Wrapper:_OnLeftBattle(battleID, userName)
 	self:super("_OnLeftBattle", battleID, userName)
 end
 Wrapper.commands["LEFTBATTLE"] = Wrapper._OnLeftBattle
+
+-- override
+function Wrapper:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName)
+	battleID = tonumber(battleID)
+	Spring.Utilities.TableEcho(self.battles[battleID], battleID)
+	if self.battles[battleID] then
+		self.battles[battleID].spectatorCount = spectatorCount or self.battles[battleID].spectatorCount
+		self.battles[battleID].locked = locked or self.battles[battleID].locked
+		self.battles[battleID].mapHash = mapHash or self.battles[battleID].mapHash
+		self.battles[battleID].mapName = mapName or self.battles[battleID].mapName
+		Spring.Echo("self.battles[battleID].spectatorCount", self.battles[battleID].spectatorCount)
+	end
+	self:_CallListeners("OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName)
+	self:super("_OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName)
+end
 
 -- will also create a channel if it doesn't already exist
 function Wrapper:_GetChannel(chanName)

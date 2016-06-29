@@ -25,6 +25,10 @@ function BattleListWindow:init(parent)
 	end
 	lobby:AddListener("OnLeftBattle", self.onLeftBattle)
 
+	self.onUpdateBattleInfo = function(listener, battleID)
+		self:OnUpdateBattleInfo(battleID)
+	end
+	lobby:AddListener("OnUpdateBattleInfo", self.onUpdateBattleInfo)
 	update()
 end
 
@@ -33,6 +37,7 @@ function BattleListWindow:RemoveListeners()
 	lobby:RemoveListener("OnBattleClosed", self.onBattleClosed)
 	lobby:RemoveListener("OnJoinedBattle", self.onJoinedBattle)
 	lobby:RemoveListener("OnLeftBattle", self.onLeftBattle)
+	lobby:RemoveListener("OnUpdateBattleInfo", self.onUpdateBattleInfo)
 end
 
 function BattleListWindow:Update()
@@ -66,7 +71,7 @@ function BattleListWindow:AddBattle(battle)
 		y = 5,
 		height = h - 10,
 		valign = 'center',
-		caption = #battle.users .. "/" .. battle.maxPlayers,
+		caption = (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers,
 	}
 	table.insert(children, lblPlayers)
 
@@ -110,8 +115,8 @@ function BattleListWindow:AddBattle(battle)
 		y = 5,
 		height = h - 10,
 		valign = 'center',
-		caption = battle.map:sub(1, 22) .. (VFS.HasArchive(battle.map) and ' [' .. Configuration:GetSuccessColor() .. '✔\b]' or ' [' .. Configuration:GetErrorColor() .. '✘\b]'),
-		tooltip = battle.map, 
+		caption = battle.mapName:sub(1, 22) .. (VFS.HasArchive(battle.mapName) and ' [' .. Configuration:GetSuccessColor() .. '✔\b]' or ' [' .. Configuration:GetErrorColor() .. '✘\b]'),
+		tooltip = battle.mapName, 
 	}
 	table.insert(children, lblMap)
 
@@ -140,7 +145,7 @@ end
 function BattleListWindow:JoinedBattle(battleID)
 	local battle = lobby:GetBattle(battleID)
 	local items = self:GetRowItems(battleID)
-	items[1]:SetCaption(#battle.users .. "/" .. battle.maxPlayers)
+	items[1]:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
 	self:RecalculatePosition(battleID)
 end
 
@@ -148,6 +153,14 @@ function BattleListWindow:LeftBattle(battleID)
 	local battle = lobby:GetBattle(battleID)
 	local items = self:GetRowItems(battleID)
 	items[1]:SetCaption(#battle.users .. "/" .. battle.maxPlayers)
+	self:RecalculatePosition(battleID)
+end
+
+function BattleListWindow:OnUpdateBattleInfo(battleID)
+	local battle = lobby:GetBattle(battleID)
+	local items = self:GetRowItems(battleID)
+	items[1]:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
+	items[4]:SetCaption(battle.mapName)
 	self:RecalculatePosition(battleID)
 end
 

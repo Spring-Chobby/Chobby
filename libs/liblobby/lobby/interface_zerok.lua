@@ -88,7 +88,7 @@ function Interface:_BattleAdded(data)
 	local header = data.Header
 	self:_OnBattleOpened(header.BattleID, 0, 0, header.Founder, header.Ip, 
 		header.Port, header.MaxPlayers, 0, 0, 4, "Spring " .. header.Engine, header.Engine, 
-		header.Map, header.Title or "no title", header.Game)
+		header.Map, header.Title or "no title", header.Game, header.SpectatorCount)
 end
 Interface.jsonCommands["BattleAdded"] = Interface._BattleAdded
 
@@ -115,7 +115,8 @@ Interface.jsonCommands["JoinedBattle"] = Interface._JoinedBattle
 function Interface:_BattleUpdate(data)
 	-- BattleUpdate {"Header":{"BattleID":362,"Map":"Quicksilver 1.1"}
 	local header = data.Header
-	self:_OnUpdateBattleInfo(data.BattleID, header.SpectorCount or 0, 0, 0, header.Map)
+	Spring.Utilities.TableEcho(header, "header")
+	self:_OnUpdateBattleInfo(header.BattleID, header.SpectatorCount, header.Locked, 0, header.Map)
 end
 Interface.jsonCommands["BattleUpdate"] = Interface._BattleUpdate
 
@@ -731,7 +732,7 @@ Interface.commands["BATTLECLOSED"] = Interface._OnBattleClosed
 Interface.commandPattern["BATTLECLOSED"] = "(%d+)"
 
 -- mapHash (32bit) will remain a string, since spring lua uses floats (24bit mantissa)
-function Interface:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, engineName, engineVersion, map, title, gameName)
+function Interface:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, engineName, engineVersion, map, title, gameName, spectatorCount)
 	battleID = tonumber(battleID)
 	type = tonumber(type)
 	natType = tonumber(natType)
@@ -739,7 +740,7 @@ function Interface:_OnBattleOpened(battleID, type, natType, founder, ip, port, m
 	maxPlayers = tonumber(maxPlayers)
 	passworded = tonumber(passworded) ~= 0
 
-	self:_CallListeners("OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, engineName, engineVersion, map, title, gameName)
+	self:_CallListeners("OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, engineName, engineVersion, map, title, gameName, spectatorCount)
 end
 Interface.commands["BATTLEOPENED"] = Interface._OnBattleOpened
 Interface.commandPattern["BATTLEOPENED"] = "(%d+)%s+(%d)%s+(%d)%s+(%S+)%s+(%S+)%s+(%d+)%s+(%d+)%s+(%d+)%s+(%S+)%s+(%S+)%s*(.*)"

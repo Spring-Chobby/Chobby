@@ -58,7 +58,7 @@ function BattleRoomWindow:init(battleID)
 		height = 35,
 		caption = i18n("dont_have_map") .. " [" .. Configuration:GetErrorColor() .. "✘\b]",
 	}
-	if VFS.HasArchive(battle.map) then
+	if VFS.HasArchive(battle.mapName) then
 		self.lblHaveMap.caption = i18n("have_map") .. " [" .. Configuration:GetSuccessColor() .. "✔\b]"
 	end
 
