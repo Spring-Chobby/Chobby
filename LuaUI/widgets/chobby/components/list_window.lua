@@ -181,12 +181,12 @@ end
 function ListWindow:RemoveRow(id)
 	local panel = self.itemPanelMapping[id]
 	local index = panel.index
-
+	
 	-- move elements up
-	while index < #self.listPanel.children - 1 do
+	while index < #self.listPanel.children  do
 		local pnl = self.orderPanelMapping[index + 1]
 		pnl.index = index
-		pnl.h = self:CalculateHeight(pnl.index)
+		pnl.y = self:CalculateHeight(pnl.index)
 		self.orderPanelMapping[index] = pnl
 		pnl:Invalidate()
 
