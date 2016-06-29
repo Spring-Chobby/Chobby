@@ -115,7 +115,7 @@ Interface.jsonCommands["JoinedBattle"] = Interface._JoinedBattle
 function Interface:_BattleUpdate(data)
 	-- BattleUpdate {"Header":{"BattleID":362,"Map":"Quicksilver 1.1"}
 	local header = data.Header
-	Spring.Utilities.TableEcho(header, "header")
+	--Spring.Utilities.TableEcho(header, "header")
 	self:_OnUpdateBattleInfo(header.BattleID, header.SpectatorCount, header.Locked, 0, header.Map)
 end
 Interface.jsonCommands["BattleUpdate"] = Interface._BattleUpdate
@@ -168,7 +168,8 @@ Interface.jsonCommands["Say"] = Interface._Say
 
 function Interface:_UpdateUserBattleStatus(data)
 	-- UpdateUserBattleStatus {"AllyNumber":0,"IsSpectator":true,"Name":"GoogleFrog","Sync":1,"TeamNumber":1}
-	Spring.Utilities.TableEcho(data, "UpdateUserBattleStatus")
+	Spring.Echo("Implement UpdateUserBattleStatus")
+	--Spring.Utilities.TableEcho(data, "UpdateUserBattleStatus")
 end
 Interface.jsonCommands["UpdateUserBattleStatus"] = Interface._UpdateUserBattleStatus
 
@@ -177,20 +178,22 @@ function Interface:_ChannelHeader(data)
 	-- Channel Name
 	-- Password for channel
 	-- Topic ???
-	Spring.Echo("ChannelHeader")
-	Spring.Utilities.TableEcho(data)
+	Spring.Echo("Implement ChannelHeader")
+	--Spring.Utilities.TableEcho(data)
 end
 Interface.jsonCommands["ChannelHeader"] = Interface._ChannelHeader
 
 function Interface:_SetRectangle(data)
 	-- SetRectangle {"Number":1,"Rectangle":{"Bottom":120,"Left":140,"Right":200,"Top":0}}
-	Spring.Utilities.TableEcho(data, "SetRectangle")
+	Spring.Echo("Implement SetRectangle")
+	--Spring.Utilities.TableEcho(data, "SetRectangle")
 end
 Interface.jsonCommands["SetRectangle"] = Interface._SetRectangle
 
 function Interface:_SetModOptions(data)
 	-- SetModOptions {"Options":{}}
-	Spring.Utilities.TableEcho(data, "SetModOptions")
+	Spring.Echo("Implement SetModOptions")
+	--Spring.Utilities.TableEcho(data, "SetModOptions")
 end
 Interface.jsonCommands["SetModOptions"] = Interface._SetModOptions
 

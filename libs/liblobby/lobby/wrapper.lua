@@ -207,13 +207,12 @@ Wrapper.commands["LEFTBATTLE"] = Wrapper._OnLeftBattle
 -- override
 function Wrapper:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName)
 	battleID = tonumber(battleID)
-	Spring.Utilities.TableEcho(self.battles[battleID], battleID)
+	--Spring.Utilities.TableEcho(self.battles[battleID], battleID)
 	if self.battles[battleID] then
 		self.battles[battleID].spectatorCount = spectatorCount or self.battles[battleID].spectatorCount
 		self.battles[battleID].locked = locked or self.battles[battleID].locked
 		self.battles[battleID].mapHash = mapHash or self.battles[battleID].mapHash
 		self.battles[battleID].mapName = mapName or self.battles[battleID].mapName
-		Spring.Echo("self.battles[battleID].spectatorCount", self.battles[battleID].spectatorCount)
 	end
 	self:_CallListeners("OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName)
 	self:super("_OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName)
