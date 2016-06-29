@@ -148,16 +148,15 @@ function BattleRoomWindow:init(battleID)
 			local battle = lobby:GetBattle(self.battleID)
 			local springURL = "spring://" .. lobby:GetMyUserName() .. ":" .. lobby:GetScriptPassword() .. "@" .. battle.ip .. ":" .. battle.port
 			Spring.Echo(springURL)
-			Spring.Restart(springURL, "")
-			--[[local scriptFileName = "scriptFile.txt"
-			local scriptFile = io.open(scriptFileName, "w")
-			local scriptTxt = self:GenerateScriptTxt()
-			Spring.Echo(scriptTxt)
-			scriptFile:write(scriptTxt)
-			scriptFile:close()
-			Spring.Restart(scriptFileName, "")
+			Spring.Start(springURL, "")
+			--local scriptFileName = "scriptFile.txt"
+			--local scriptFile = io.open(scriptFileName, "w")
+			--local scriptTxt = self:GenerateScriptTxt()
+			--Spring.Echo(scriptTxt)
+			--scriptFile:write(scriptTxt)
+			--scriptFile:close()
+			--Spring.Restart(scriptFileName, "")
 			--Spring.Restart("", scriptTxt)
-			--]]
 		end
 	end
 	lobby:AddListener("OnClientStatus", onClientStatus)
