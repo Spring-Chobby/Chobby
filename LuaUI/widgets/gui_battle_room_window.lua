@@ -221,14 +221,12 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 		parent = parentControl,
 	}
 		
-	local mainStackPanel = StackPanel:New {
+	local mainStackPanel = Control:New {
 		x = 0,
 		right = 0,
 		y = 0,
-		bottom = 0,
-		autosize = true,
-		resizeItems = false,
 		parent = mainScrollPanel,
+		preserveChildrenOrder = true,
 	}	
 	
 	local spectatorScrollPanel = ScrollPanel:New {
@@ -239,18 +237,45 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 		parent = parentControl,
 	}
 		
-	local spectatorStackPanel = StackPanel:New {
+	local spectatorStackPanel = Control:New {
 		x = 0,
 		right = 0,
 		y = 0,
-		bottom = 0,
-		autosize = true,
-		resizeItems = false,
 		parent = spectatorScrollPanel,
 	}
+	
 	-- Object handling
 	local player = {}
 	local team = {}
+	
+	local function PositionChildren(panel, minHeight)
+		local children = panel.children
+		
+		minHeight = minHeight - 30
+		
+		local totalHeight = 0
+		for i = 1, #children do
+			local child = children[i]
+			totalHeight = totalHeight + child.height
+		end
+		
+		if totalHeight > minHeight then
+			panel:SetPos(nil, nil, nil, totalHeight)
+			local runningHeight = 0
+			for i = 1, #children do
+				local child = children[i]
+				child:SetPos(nil, runningHeight)
+				runningHeight = runningHeight + child.height
+			end
+		else
+			panel:SetPos(nil, nil, nil, minHeight)
+			for i = 1, #children do
+				local child = children[i]
+				child:SetPos(nil, minHeight * (i-1)/#children)
+			end
+		end
+		panel:Invalidate()
+	end
 	
 	local function GetPlayerData(name)
 		if not player[name] then
@@ -276,13 +301,15 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 				largestTeamIndex = teamIndex
 			end
 		
-			local humanName, parentStack
+			local humanName, parentStack, parentScroll
 			if teamIndex == -1 then
 				humanName = "Spectators"
 				parentStack = spectatorStackPanel
+				parentScroll = spectatorScrollPanel
 			else
 				humanName = "Team " .. teamIndex
 				parentStack = mainStackPanel
+				parentScroll = mainScrollPanel
 			end
 
 			local teamHolder = Control:New {
@@ -344,9 +371,9 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 				teamStack:AddChild(playerControl)
 				playerControl:Invalidate()
 				
-				teamHolder.height = #teamStack.children*SPACING + 40
+				teamHolder:SetPos(nil, nil, nil, #teamStack.children*SPACING + 40)
 				teamHolder:Invalidate()
-				parentStack:UpdateClientArea()
+				PositionChildren(parentStack, parentScroll.height)
 			end
 			
 			function teamData.RemovePlayer(name)
@@ -368,9 +395,9 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 					end
 					index = index + 1
 				end
-				teamHolder.height = #teamStack.children*SPACING + 40
+				teamHolder:SetPos(nil, nil, nil, #teamStack.children*SPACING + 40)
 				teamHolder:Invalidate()
-				parentStack:UpdateClientArea()
+				PositionChildren(parentStack,  parentScroll.height)
 			end
 			
 			team[teamIndex] = teamData
