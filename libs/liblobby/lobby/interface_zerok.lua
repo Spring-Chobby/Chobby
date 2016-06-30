@@ -173,6 +173,18 @@ function Interface:_UpdateUserBattleStatus(data)
 end
 Interface.jsonCommands["UpdateUserBattleStatus"] = Interface._UpdateUserBattleStatus
 
+function Interface:_UpdateBotStatus(data)
+	-- SetModOptions {"Options":{}}
+	self:_UpdateUserBattleStatus(data)
+end
+Interface.jsonCommands["UpdateBotStatus"] = Interface._UpdateBotStatus
+
+function Interface:_RemoveBot(data)
+	-- SetModOptions {"Options":{}}
+	self:_CallListeners("RemoveBot", data)
+end
+Interface.jsonCommands["RemoveBot"] = Interface._RemoveBot
+
 -------------------
 -- Unimplemented --
 
@@ -200,9 +212,6 @@ function Interface:_SetModOptions(data)
 end
 Interface.jsonCommands["SetModOptions"] = Interface._SetModOptions
 
---UpdateBotStatus
---RemoveBot
---SetModOptions
 --SiteToLobbyCommand
 --PwMatchCommand
 

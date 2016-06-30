@@ -22,12 +22,14 @@ local window
 
 -- Listeners, needed here so they can be deregistered
 local onBattleClosed
-local onLeftBattle
+local onLeftBattle_counter
 local onJoinedBattle
 local onSaidBattle
 local onSaidBattleEx
 local onClientStatus
 local updateUserBattleStatus
+local onLeftBattle
+local removeBot
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -191,7 +193,7 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID)
 		lblNumberOfPlayers:SetCaption(i18n("players") .. ": " .. tostring(#battle.users) .. "/" .. tostring(battle.maxPlayers))
 	end
 	
-	onLeftBattle = function(listener, leftBattleID, userName)
+	onLeftBattle_counter = function(listener, leftBattleID, userName)
 		if battleID ~= leftBattleID then
 			return
 		end
@@ -201,7 +203,7 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID)
 			UpdatePlayers(battleID)
 		end
 	end
-	lobby:AddListener("OnLeftBattle", onLeftBattle)
+	lobby:AddListener("OnLeftBattle", onLeftBattle_counter)
 
 	onJoinedBattle = function(listener, joinedBattleId, userName)
 		if battleID ~= joinedBattleId then
@@ -437,11 +439,33 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 		end
 	end
 	lobby:AddListener("UpdateUserBattleStatus", updateUserBattleStatus)
+	
+	onLeftBattle = function(listener, LeftBattleID, UserName)
+		if LeftBattleID == battleID then
+			if UserName then
+				RemovePlayerFromTeam(UserName)
+				GetPlayerData(UserName).control:Dispose()
+			end
+		end
+	end
+	lobby:AddListener("OnLeftBattle", onLeftBattle)
+	
+	removeBot = function(listener, data)
+		if data.Name then
+			RemovePlayerFromTeam(data.Name)
+			GetPlayerData(data.Name).control:Dispose()
+		end
+	end
+	lobby:AddListener("RemoveBot", removeBot)
 end
 
 local function InitializeControls(battleID)
 	local battle = lobby:GetBattle(battleID)
 
+	if window then
+		window:Dispose()
+	end
+	
 	window = Window:New {
 		x = 400,
 		width = 720,
@@ -455,12 +479,14 @@ local function InitializeControls(battleID)
 				largestTeamIndex = -1
 			
 				lobby:RemoveListener("OnBattleClosed", onBattleClosed)
-				lobby:RemoveListener("OnLeftBattle", onLeftBattle)
+				lobby:RemoveListener("OnLeftBattle", onLeftBattle_counter)
 				lobby:RemoveListener("OnJoinedBattle", onJoinedBattle)
 				lobby:RemoveListener("OnSaidBattle", onSaidBattle)
 				lobby:RemoveListener("OnSaidBattleEx", onSaidBattleEx)
 				lobby:RemoveListener("OnClientStatus", onClientStatus)
 				lobby:RemoveListener("UpdateUserBattleStatus", updateUserBattleStatus)
+				lobby:RemoveListener("OnLeftBattle", onLeftBattle)
+				lobby:RemoveListener("RemoveBot", removeBot)
 			end
 		},
 	}
