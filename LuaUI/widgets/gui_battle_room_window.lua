@@ -261,24 +261,30 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 		minHeight = minHeight - 30
 		
 		local totalHeight = 0
+		local maxHeight = 0
 		for i = 1, #children do
 			local child = children[i]
 			totalHeight = totalHeight + child.height
+			if child.height > maxHeight then
+				maxHeight = child.height
+			end
 		end
 		
-		if totalHeight > minHeight then
+		if #children * maxHeight > minHeight then
 			panel:SetPos(nil, nil, nil, totalHeight)
 			local runningHeight = 0
 			for i = 1, #children do
 				local child = children[i]
 				child:SetPos(nil, runningHeight)
+				child:Invalidate()
 				runningHeight = runningHeight + child.height
 			end
 		else
 			panel:SetPos(nil, nil, nil, minHeight)
 			for i = 1, #children do
 				local child = children[i]
-				child:SetPos(nil, minHeight * (i-1)/#children)
+				child:SetPos(nil, minHeight * (i - 1)/#children)
+				child:Invalidate()
 			end
 		end
 		panel:Invalidate()
@@ -374,13 +380,13 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 				end
 				playerData.team = teamIndex
 				local playerControl = playerData.control
-				playerControl.y = #teamStack.children*SPACING
 				teamStack:AddChild(playerControl)
+				playerControl:SetPos(nil, (#teamStack.children - 1)*SPACING)
 				playerControl:Invalidate()
 				
-				teamHolder:SetPos(nil, nil, nil, #teamStack.children*SPACING + 40)
-				teamHolder:Invalidate()
+				teamHolder:SetPos(nil, nil, nil, #teamStack.children*SPACING + 35)
 				PositionChildren(parentStack, parentScroll.height)
+				teamHolder:Invalidate()
 			end
 			
 			function teamData.RemovePlayer(name)
@@ -402,9 +408,9 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 					end
 					index = index + 1
 				end
-				teamHolder:SetPos(nil, nil, nil, #teamStack.children*SPACING + 40)
+				teamHolder:SetPos(nil, nil, nil, #teamStack.children*SPACING + 35)
+				PositionChildren(parentStack, parentScroll.height)
 				teamHolder:Invalidate()
-				PositionChildren(parentStack,  parentScroll.height)
 			end
 			
 			team[teamIndex] = teamData
