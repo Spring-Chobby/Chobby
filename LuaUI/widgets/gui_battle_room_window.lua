@@ -393,7 +393,7 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 				local timeToMove = false
 				while index <= #teamStack.children do
 					if timeToMove then
-						teamStack.children[index].y = index*SPACING
+						teamStack.children[index]:SetPos(nil, (index - 1)*SPACING)
 						teamStack.children[index]:Invalidate()
 					elseif teamStack.children[index].name == name then
 						teamStack:RemoveChild(teamStack.children[index])
