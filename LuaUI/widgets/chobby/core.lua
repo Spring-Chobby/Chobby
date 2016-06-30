@@ -44,6 +44,7 @@ local includes = {
 
 Chobby = widget
 
+CHOBBY = {}
 for _, file in ipairs(includes) do
 	VFS.Include(CHOBBY_DIR .. file, Chobby, VFS.RAW_FIRST)
 end
@@ -58,7 +59,7 @@ function Chobby:_Initialize()
 
 			lobby:AddListener("OnJoinBattle", 
 				function(listener, battleID)
-					local battleRoom = BattleRoomWindow(battleID)
+					WG.BattleRoomWindow.ShowBattleRoom(battleID)
 				end
 			)
 		end, 0.001)

@@ -1,5 +1,4 @@
 --chili export
-CHOBBY = {}
 CHOBBY_IMG_DIR = CHOBBY_DIR .. "images/"
 
 if WG and WG.Chili then
