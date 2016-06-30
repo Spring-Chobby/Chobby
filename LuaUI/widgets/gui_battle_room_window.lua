@@ -18,15 +18,8 @@ end
 -- Local variables
 
 -- Chili controls
-local lblBattleTitle
 local lblNumberOfPlayers
-local line
-local btnQuitBattle
-local lblHaveGame
-local lblHaveMap
-local btnStartBattle
 local window
-local chatPanel
 
 -- Specialized UI objects
 local battleRoomConsole
@@ -69,13 +62,46 @@ end
 local function InitializeControls(battleID)
 	local battle = lobby:GetBattle(battleID)
 
-	lblBattleTitle = Label:New {
+	
+	window = Window:New {
+		x = 600,
+		width = 600,
+		y = 550,
+		height = 450,
+		parent = screen0,
+		resizable = false,
+		padding = {0, 20, 0, 0},
+		children = {
+			lblBattleTitle,
+			lblNumberOfPlayers,
+			btnQuitBattle,
+			lblHaveGame,
+			lblHaveMap,
+			btnStartBattle,
+			btnSpectate,
+			line,
+			chatPanel,
+		},
+		OnDispose = { 
+			function()
+				lobby:RemoveListener("OnBattleClosed", onBattleClosed)
+				lobby:RemoveListener("OnLeftBattle", onLeftBattle)
+				lobby:RemoveListener("OnJoinedBattle", onJoinedBattle)
+				lobby:RemoveListener("OnSaidBattle", onSaidBattle)
+				lobby:RemoveListener("OnSaidBattleEx", onSaidBattleEx)
+				lobby:RemoveListener("OnClientStatus", onClientStatus)
+			end
+		},
+	}
+	
+	local lblBattleTitle = Label:New {
 		x = 15,
 		y = 5,
 		width = 200,
 		height = 30,
 		font = { size = 20 },
 		caption = i18n("battle") .. ": " .. tostring(battle.title),
+		parent = window,
 	}
 
 	lblNumberOfPlayers = Label:New {
@@ -84,15 +110,18 @@ local function InitializeControls(battleID)
 		width = 200,
 		height = 30,
 		caption = "",
+		parent = window,
 	}
+	UpdatePlayers(battleID)
 
-	line = Line:New {
+	local line = Line:New {
 		x = 0,
 		y = 55,
 		width = 300,
+		parent = window,
 	}
 
-	btnQuitBattle = Button:New {
+	local btnQuitBattle = Button:New {
 		right = 10,
 		y = 0,
 		width = 60,
@@ -103,31 +132,34 @@ local function InitializeControls(battleID)
 				lobby:LeaveBattle()
 			end
 		},
+		parent = window,
 	}
 
-	lblHaveGame = Label:New {
+	local lblHaveGame = Label:New {
 		right = 10,
 		y = 45,
 		width = 60,
 		height = 35,
 		caption = i18n("dont_have_game") .. " [" .. WG.Chobby.Configuration:GetErrorColor() .. "?\b]",
+		parent = window,
 	}
 	if VFS.HasArchive(battle.gameName) then
 		lblHaveGame.caption = i18n("have_game") .. " [" .. WG.Chobby.Configuration:GetSuccessColor() .. "?\b]"
 	end
 
-	lblHaveMap = Label:New {
+	local lblHaveMap = Label:New {
 		right = 10,
 		y = 85,
 		width = 60,
 		height = 35,
 		caption = i18n("dont_have_map") .. " [" .. WG.Chobby.Configuration:GetErrorColor() .. "?\b]",
+		parent = window,
 	}
 	if VFS.HasArchive(battle.mapName) then
 		lblHaveMap.caption = i18n("have_map") .. " [" .. WG.Chobby.Configuration:GetSuccessColor() .. "?\b]"
 	end
 
-	btnStartBattle = Button:New {
+	local btnStartBattle = Button:New {
 		x = 10,
 		y = 80,
 		width = 110,
@@ -139,9 +171,10 @@ local function InitializeControls(battleID)
 				lobby:SayBattle("!start")
 			end
 		},
+		parent = window,
 	}
 
-	btnSpectate = Button:New {
+	local btnSpectate = Button:New {
 		x = 160,
 		y = 80,
 		width = 110,
@@ -153,13 +186,14 @@ local function InitializeControls(battleID)
 				lobby:SetBattleStatus({IsSpectator = not lobby:GetMyIsSpectator()})
 			end
 		},
+		parent = window,
 	}
 	
 	battleRoomConsole = WG.Chobby.Console()
 	battleRoomConsole.listener = function(message)
 		lobby:SayBattle(message)
 	end
-	userListPanel = WG.Chobby.UserListPanel(battleID)
+	local userListPanel = WG.Chobby.UserListPanel(battleID)
 	local chatPanel = Control:New {
 		x = 5,
 		y = 140,
@@ -179,7 +213,8 @@ local function InitializeControls(battleID)
 				padding={0,0,0,0}, itemPadding={0,0,0,0}, itemMargin={0,0,0,0},
 				children = { userListPanel.panel, },
 			},
-		}
+		},
+		parent = window,
 	}
 
 	local onSaidBattle = function(listener, userName, message)
@@ -239,38 +274,6 @@ local function InitializeControls(battleID)
 		end
 	end
 	lobby:AddListener("OnClientStatus", onClientStatus)
-
-	UpdatePlayers(battleID)
-	window = Window:New {
-		x = 600,
-		width = 600,
-		y = 550,
-		height = 450,
-		parent = screen0,
-		resizable = false,
-		padding = {0, 20, 0, 0},
-		children = {
-			lblBattleTitle,
-			lblNumberOfPlayers,
-			btnQuitBattle,
-			lblHaveGame,
-			lblHaveMap,
-			btnStartBattle,
-			btnSpectate,
-			line,
-			chatPanel,
-		},
-		OnDispose = { 
-			function()
-				lobby:RemoveListener("OnBattleClosed", onBattleClosed)
-				lobby:RemoveListener("OnLeftBattle", onLeftBattle)
-				lobby:RemoveListener("OnJoinedBattle", onJoinedBattle)
-				lobby:RemoveListener("OnSaidBattle", onSaidBattle)
-				lobby:RemoveListener("OnSaidBattleEx", onSaidBattleEx)
-				lobby:RemoveListener("OnClientStatus", onClientStatus)
-			end
-		},
-	}
 
 	lobby:SetBattleStatus({
 		AllyNumber = 0, 
