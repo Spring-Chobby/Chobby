@@ -1,4 +1,4 @@
-local onZKServer = true
+local onZKServer = false
 
 return {
 	server = {

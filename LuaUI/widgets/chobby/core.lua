@@ -24,7 +24,6 @@ local includes = {
 	"components/skirmish/skirmish_window.lua",
 	-- battle
 	"components/battle/battle_list_window.lua",
-	"components/battle/battle_room_window.lua",
 	-- queue
 	"components/queue/queue_list_window.lua",
 	"components/queue/queue_window.lua",
