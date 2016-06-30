@@ -14,6 +14,7 @@ if WG and WG.Chili then
 	Window = Chili.Window
 	ScrollPanel = Chili.ScrollPanel
 	LayoutPanel = Chili.LayoutPanel
+	Panel = Chili.Panel
 	StackPanel = Chili.StackPanel
 	Grid = Chili.Grid
 	TextBox = Chili.TextBox

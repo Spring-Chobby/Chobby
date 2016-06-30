@@ -47,6 +47,8 @@ return {
 		have_map = "Have map",
 		start = "Start",
 		spectate = "Spectate",
+		pick_map = "Map",
+		new_team = "New Team",
 		players = "Players",
 		submit = "Submit",
 		time_in_queue = "Time in queue",

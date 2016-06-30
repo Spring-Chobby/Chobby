@@ -49,10 +49,7 @@ function Wrapper:_Clean()
 	self.myBattleID = nil
 	self.scriptPassword = nil
 	
-	self.AllyNumber = 0
-	self.TeamNumber = 0
-	self.IsSpectator = false
-	self.Sync = 0
+	self.battlePlayerData = {}
 	
 	-- reconnection delay in seconds
 	self.reconnectionDelay = 5
@@ -227,14 +224,22 @@ Wrapper.jsonCommands["OnUpdateBattleInfo"] = Wrapper._UpdateUserBattleStatus
 -- override
 function Wrapper:_UpdateUserBattleStatus(data)
 	Spring.Echo("compare", data.Name, self:GetMyUserName(), data.Name == self:GetMyUserName())
-	if data.Name == self:GetMyUserName() then
-		self.AllyNumber = data.AllyNumber or self.AllyNumber
-		self.TeamNumber = data.TeamNumber or self.TeamNumber
-		Spring.Echo("data.IsSpectator", data.IsSpectator)
-		if data.IsSpectator ~= nil then
-			self.IsSpectator = data.IsSpectator
+	if data.Name then
+		if not self.battlePlayerData[data.Name] then
+			self.battlePlayerData[data.Name] = {}
 		end
-		self.Sync = data.Sync or self.Sync
+		local userData = self.battlePlayerData[data.Name]
+		userData.AllyNumber = data.AllyNumber or userData.AllyNumber
+		userData.TeamNumber = data.TeamNumber or userData.TeamNumber
+		if data.IsSpectator ~= nil then
+			userData.IsSpectator = data.IsSpectator
+		end
+		userData.Sync = data.Sync or userData.Sync
+		
+		data.AllyNumber = userData.AllyNumber
+		data.TeamNumber = userData.TeamNumber
+		data.IsSpectator = userData.IsSpectator
+		data.Sync = userData.Sync
 	end
 	self:super("_UpdateUserBattleStatus", data)
 end
@@ -548,20 +553,28 @@ function Wrapper:GetScriptPassword()
 end
 
 -- My user       
-function Wrapper:GetMyAllyNumber()		
-	return self.AllyNumber		
+function Wrapper:GetMyAllyNumber()
+	if self.battlePlayerData[self.myUserName] then		
+		return self.battlePlayerData[self.myUserName].AllyNumber
+	end	
 end 
       
-function Wrapper:GetMyTeamNumber()		
-	return self.TeamNumber		
+function Wrapper:GetMyTeamNumber()
+	if self.battlePlayerData[self.myUserName] then		
+		return self.battlePlayerData[self.myUserName].TeamNumber
+	end		
 end   
     
-function Wrapper:GetMyIsSpectator()		
-	return self.IsSpectator		
+function Wrapper:GetMyIsSpectator()
+	if self.battlePlayerData[self.myUserName] then		
+		return self.battlePlayerData[self.myUserName].IsSpectator
+	end	
 end  
      
-function Wrapper:GetMySync()		
-	return self.Sync		
+function Wrapper:GetMySync()
+	if self.battlePlayerData[self.myUserName] then		
+		return self.battlePlayerData[self.myUserName].Sync
+	end
 end
      
 function Wrapper:GetMyBattleID()		
