@@ -326,6 +326,7 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 			end
 
 			local teamHolder = Control:New {
+				name = teamIndex,
 				x = 0,
 				right = 0,
 				y = 0,
@@ -409,8 +410,15 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 					index = index + 1
 				end
 				teamHolder:SetPos(nil, nil, nil, #teamStack.children*SPACING + 35)
+				
+				if teamStack:IsEmpty() then
+					team[teamIndex] = nil
+					parentStack:RemoveChild(parentStack:GetChildByName(teamIndex))
+					teamHolder:Dispose()
+				else
+					teamHolder:Invalidate()
+				end
 				PositionChildren(parentStack, parentScroll.height)
-				teamHolder:Invalidate()
 			end
 			
 			team[teamIndex] = teamData
