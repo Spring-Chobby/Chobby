@@ -452,6 +452,8 @@ local function InitializeControls(battleID)
 		padding = {0, 0, 0, 0},
 		OnDispose = { 
 			function()
+				largestTeamIndex = -1
+			
 				lobby:RemoveListener("OnBattleClosed", onBattleClosed)
 				lobby:RemoveListener("OnLeftBattle", onLeftBattle)
 				lobby:RemoveListener("OnJoinedBattle", onJoinedBattle)
