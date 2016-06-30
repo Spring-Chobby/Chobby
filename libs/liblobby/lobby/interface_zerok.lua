@@ -167,15 +167,14 @@ function Interface:_Say(data)
 end
 Interface.jsonCommands["Say"] = Interface._Say
 
--------------------
--- Unimplemented --
-
 function Interface:_UpdateUserBattleStatus(data)
 	-- UpdateUserBattleStatus {"AllyNumber":0,"IsSpectator":true,"Name":"GoogleFrog","Sync":1,"TeamNumber":1}
-	Spring.Echo("Implement UpdateUserBattleStatus")
-	--Spring.Utilities.TableEcho(data, "UpdateUserBattleStatus")
+	self:_CallListeners("UpdateUserBattleStatus", data)
 end
 Interface.jsonCommands["UpdateUserBattleStatus"] = Interface._UpdateUserBattleStatus
+
+-------------------
+-- Unimplemented --
 
 function Interface:_ChannelHeader(data)
 	-- List of users
@@ -305,15 +304,9 @@ function Interface:JoinBattle(battleID, password, scriptPassword)
 	return self
 end
 
-function Interface:MyBattleStatus(ready, team, allyTeam, mode, handicap, sync, side, myTeamColor)
-	local sendData = {
-		AllyNumber = allyTeam,
-        IsSpectator = false,
-        Name = self:GetMyUserName(),
-        Sync = (sync and 1) or 0,
-        TeamNumber = team,
-	}
-	self:_SendCommand("UpdateUserBattleStatus " .. tableToString(sendData))
+function Interface:SetBattleStatus(battleData)
+	battleData.Name = self:GetMyUserName()
+	self:_SendCommand("UpdateUserBattleStatus " .. tableToString(battleData))
 	return self
 end
 

@@ -141,6 +141,20 @@ local function InitializeControls(battleID)
 		},
 	}
 
+	btnSpectate = Button:New {
+		x = 160,
+		y = 80,
+		width = 110,
+		height = 55,
+		caption = "\255\66\138\201" .. i18n("spectate") ..  "\b",
+		font = { size = 22 },
+		OnClick = {
+			function()
+				lobby:SetBattleStatus({IsSpectator = true})
+			end
+		},
+	}
+	
 	battleRoomConsole = WG.Chobby.Console()
 	battleRoomConsole.listener = function(message)
 		lobby:SayBattle(message)
@@ -242,6 +256,7 @@ local function InitializeControls(battleID)
 			lblHaveGame,
 			lblHaveMap,
 			btnStartBattle,
+			btnSpectate,
 			line,
 			chatPanel,
 		},
@@ -257,7 +272,12 @@ local function InitializeControls(battleID)
 		},
 	}
 
-	lobby:MyBattleStatus(true, 0, 0, true, nil, true, side, nil)
+	lobby:SetBattleStatus({
+		AllyNumber = 0, 
+		TeamNumber = 0,
+		IsSpectator = false,  
+		Sync = 1, -- 0 = unknown, 1 = synced, 2 = unsynced
+	})
 end
 
 --------------------------------------------------------------------------------

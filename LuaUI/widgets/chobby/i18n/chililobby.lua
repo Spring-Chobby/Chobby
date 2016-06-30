@@ -46,6 +46,7 @@ return {
 		have_game = "Have game",
 		have_map = "Have map",
 		start = "Start",
+		spectate = "Spectate",
 		players = "Players",
 		submit = "Submit",
 		time_in_queue = "Time in queue",
