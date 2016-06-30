@@ -20,9 +20,14 @@ end
 -- Chili controls
 local window
 
--- Specialized UI objects
-local battleRoomConsole
-local userListPanel
+-- Listeners, needed here so they can be deregistered
+local onBattleClosed
+local onLeftBattle
+local onJoinedBattle
+local onSaidBattle
+local onSaidBattleEx
+local onClientStatus
+local updateUserBattleStatus
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -172,7 +177,7 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID)
 		parent = parentControl,
 	}
 	
-	local onUpdateBattleInfo = function(listener, updatedBattleID, spectatorCount, locked, mapHash, mapName)
+	onUpdateBattleInfo = function(listener, updatedBattleID, spectatorCount, locked, mapHash, mapName)
 		if battleID ~= updatedBattleID then
 			return
 		end
@@ -186,7 +191,7 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID)
 		lblNumberOfPlayers:SetCaption(i18n("players") .. ": " .. tostring(#battle.users) .. "/" .. tostring(battle.maxPlayers))
 	end
 	
-	local onLeftBattle = function(listener, leftBattleID, userName)
+	onLeftBattle = function(listener, leftBattleID, userName)
 		if battleID ~= leftBattleID then
 			return
 		end
@@ -198,7 +203,7 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID)
 	end
 	lobby:AddListener("OnLeftBattle", onLeftBattle)
 
-	local onJoinedBattle = function(listener, joinedBattleId, userName)
+	onJoinedBattle = function(listener, joinedBattleId, userName)
 		if battleID ~= joinedBattleId then
 			return
 		end
@@ -419,7 +424,7 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 		end
 	end
 	
-	local updateUserBattleStatus = function(listener, data)
+	updateUserBattleStatus = function(listener, data)
 		local name = data.Name
 		local allyTeamID = data.AllyNumber
 		if name then
@@ -453,6 +458,7 @@ local function InitializeControls(battleID)
 				lobby:RemoveListener("OnSaidBattle", onSaidBattle)
 				lobby:RemoveListener("OnSaidBattleEx", onSaidBattleEx)
 				lobby:RemoveListener("OnClientStatus", onClientStatus)
+				lobby:RemoveListener("UpdateUserBattleStatus", updateUserBattleStatus)
 			end
 		},
 	}
@@ -513,11 +519,11 @@ local function InitializeControls(battleID)
 		parent = subPanel,
 	}
 
-	battleRoomConsole = WG.Chobby.Console()
+	local battleRoomConsole = WG.Chobby.Console()
 	battleRoomConsole.listener = function(message)
 		lobby:SayBattle(message)
 	end
-	local userListPanel = WG.Chobby.UserListPanel(battleID)
+	
 	local chatPanel = Control:New {
 		x = "2%",
 		y = "51%",
@@ -536,11 +542,6 @@ local function InitializeControls(battleID)
 		parent = subPanel,
 	}
 
-	--Control:New {
-	--	width = 144, y = 0, right = 0, bottom = 0,
-	--	padding={0,0,0,0}, itemPadding={0,0,0,0}, itemMargin={0,0,0,0},
-	--	children = { userListPanel.panel, },
-	--},
 	local onSaidBattle = function(listener, userName, message)
 		battleRoomConsole:AddMessage(userName .. ": " .. message)
 	end
@@ -551,7 +552,7 @@ local function InitializeControls(battleID)
 	end
 	lobby:AddListener("OnSaidBattleEx", onSaidBattleEx)
 
-	local onBattleClosed = function(listener, closedBattleID, ... )
+	onBattleClosed = function(listener, closedBattleID, ... )
 		if battleID == closedBattleID then
 			window:Dispose()
 		end
@@ -559,7 +560,7 @@ local function InitializeControls(battleID)
 	lobby:AddListener("OnBattleClosed", onBattleClosed)
 	
 	-- TODO: implement this as a part of the lobby protocol
-	local function onClientStatus(listener, userName, status)
+	onClientStatus = function(listener, userName, status)
 		-- game started
 		if userName == battle.founder and math.bit_and(1, status) then
 			Spring.Echo("Game starts!")
