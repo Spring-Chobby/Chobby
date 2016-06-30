@@ -150,7 +150,7 @@ local function InitializeControls(battleID)
 		font = { size = 22 },
 		OnClick = {
 			function()
-				lobby:SetBattleStatus({IsSpectator = true})
+				lobby:SetBattleStatus({IsSpectator = not lobby:GetMyIsSpectator()})
 			end
 		},
 	}

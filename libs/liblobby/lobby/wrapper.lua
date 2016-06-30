@@ -49,6 +49,11 @@ function Wrapper:_Clean()
 	self.myBattleID = nil
 	self.scriptPassword = nil
 	
+	self.AllyNumber = 0
+	self.TeamNumber = 0
+	self.IsSpectator = false
+	self.Sync = 0
+	
 	-- reconnection delay in seconds
 	self.reconnectionDelay = 5
 end
@@ -217,6 +222,23 @@ function Wrapper:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, 
 	self:_CallListeners("OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName)
 	self:super("_OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName)
 end
+Wrapper.jsonCommands["OnUpdateBattleInfo"] = Wrapper._UpdateUserBattleStatus
+
+-- override
+function Wrapper:_UpdateUserBattleStatus(data)
+	Spring.Echo("compare", data.Name, self:GetMyUserName(), data.Name == self:GetMyUserName())
+	if data.Name == self:GetMyUserName() then
+		self.AllyNumber = data.AllyNumber or self.AllyNumber
+		self.TeamNumber = data.TeamNumber or self.TeamNumber
+		Spring.Echo("data.IsSpectator", data.IsSpectator)
+		if data.IsSpectator ~= nil then
+			self.IsSpectator = data.IsSpectator
+		end
+		self.Sync = data.Sync or self.Sync
+	end
+	self:super("_UpdateUserBattleStatus", data)
+end
+Wrapper.jsonCommands["UpdateUserBattleStatus"] = Wrapper._UpdateUserBattleStatus
 
 -- will also create a channel if it doesn't already exist
 function Wrapper:_GetChannel(chanName)
@@ -525,10 +547,26 @@ function Wrapper:GetScriptPassword()
 	return self.scriptPassword or 0
 end
 
--- My user
+-- My user       
+function Wrapper:GetMyAllyNumber()		
+	return self.AllyNumber		
+end 
+      
+function Wrapper:GetMyTeamNumber()		
+	return self.TeamNumber		
+end   
+    
+function Wrapper:GetMyIsSpectator()		
+	return self.IsSpectator		
+end  
+     
+function Wrapper:GetMySync()		
+	return self.Sync		
+end
+     
 function Wrapper:GetMyBattleID()		
-		return self.myBattleID		
-	end
+	return self.myBattleID		
+end
 
 function Wrapper:GetMyUserName()
 	return self.myUserName
