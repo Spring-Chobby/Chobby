@@ -20,6 +20,8 @@ end
 -- Chili controls
 local window
 
+local lblDownload, prDownload
+
 -- Listeners, needed here so they can be deregistered
 local onBattleClosed
 local onLeftBattle_counter
@@ -61,6 +63,87 @@ end
 -- Chili/interface management
 
 local largestTeamIndex = -1
+
+local downloads = {}
+
+local lastUpdate = 0
+function widget:DownloadProgress(downloadID, downloaded, total)
+	if Spring.GetGameSeconds() == lastUpdate or size == 0 then
+		return
+	end
+	lastUpdate = Spring.GetGameSeconds()
+-- 	Spring.Echo("done: " .. tostring(done) .. ", size: " .. tostring(size) .. ", progress: " .. (done/size) .. ", progress%: " .. (100 * done/size))
+	prDownload:SetValue(100 * downloaded / total)
+end
+
+function widget:DownloadStarted(downloadID)
+	if prDownload.hidden then
+		prDownload:Show()
+	end
+	if lblDownload.hidden then
+		lblDownload:Show()
+	end
+	lblDownload:SetCaption(downloads[downloadID].archiveName)
+	Spring.Echo("DownloadStarted", downloadID)
+end
+
+function widget:DownloadFinished(...)
+	prDownload:Hide()
+	lblDownload:Hide()
+	Spring.Echo("DownloadFinished", ...)
+end
+
+function widget:DownloadFailed(...)
+	prDownload:Hide()
+	lblDownload:Hide()
+	Spring.Echo("DownloadFailed", ...)
+end
+
+function widget:DownloadQueued(downloadID, archiveName, archiveType)
+	downloads[downloadID] = { archiveName = archiveName, archiveType = archiveType}
+end
+
+-- function widget:DownloadStarted(...)
+-- 	self.lblDownload:SetCaption("Download started!")
+-- end
+-- 
+-- function Downloader:DownloadFinished(...)
+-- 	self.lblDownload:SetCaption("Download finished!")
+-- end
+-- 
+-- function Downloader:DownloadFailed(x, errorID)
+-- 	self.lblDownload:SetCaption("Download failed: " .. errorID)
+-- end
+-- 
+-- lastUpdate = 0
+-- function Downloader:DownloadProgress(ID, done, size)
+-- 	Spring.Echo("Download progress!")
+-- 	if Spring.GetGameSeconds() == lastUpdate or size == 0 then
+-- 		return
+-- 	end
+-- 	lastUpdate = Spring.GetGameSeconds()
+-- 	--self.lblDownload:SetCaption("Download progress!")
+-- 	Spring.Echo("done: " .. tostring(done) .. ", size: " .. tostring(size) .. ", progress: " .. (done/size) .. ", progress%: " .. (100 * done/size))
+-- 	self.prDownload:SetValue(100 * done / size)
+-- end
+-- 
+-- function Downloader:DownloadQueued(...)
+-- 	self.lblDownload:SetCaption("Download queued!")
+-- end
+
+local function MaybeDownloadArchive(archiveName, archiveType)
+	if not VFS.HasArchive(archiveName) then
+		VFS.DownloadArchive(archiveName, archiveType)
+	end
+end
+
+local function MaybeDownloadGame(battle)
+	MaybeDownloadArchive(battle.gameName, "game")
+end
+
+local function MaybeDownloadMap(battle)
+	MaybeDownloadArchive(battle.mapName, "map")
+end
 
 local function SetupInfoButtonsPanel(parentControl, battle, battleID)
 
@@ -149,6 +232,25 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID)
 		lblHaveMap.caption = i18n("have_map") .. " [" .. WG.Chobby.Configuration:GetSuccessColor() .. "?\b]"
 	end
 
+	lblDownload = Label:New {
+		x = 15,
+		y = 245,
+		parent = parentControl,
+		width = 100,
+		height = 20,
+		caption = "",
+	}
+	lblDownload:Hide()
+	prDownload = Progressbar:New {
+		x = 15,
+		y = 265,
+		parent = parentControl,
+		width = 200,
+		height = 30,
+		value = 0,
+	}
+	prDownload:Hide()
+
 	local btnStartBattle = Button:New {
 		x = 10,
 		bottom = 10,
@@ -214,6 +316,9 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID)
 	lobby:AddListener("OnJoinedBattle", onJoinedBattle)
 	
 	UpdatePlayers(battleID)
+
+	MaybeDownloadGame(battle)
+	MaybeDownloadMap(battle)
 end
 
 local function SetupPlayerPanel(parentControl, battle, battleID)
