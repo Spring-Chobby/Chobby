@@ -108,8 +108,10 @@ function Wrapper:_OnAddUser(userName, country, cpu, accountID)
 	cpu = tonumber(cpu)
 	accountID = tonumber(accountID)
 
+	if self.users[userName] == nil then
+		self.userCount = self.userCount + 1
+	end
 	self.users[userName] = {userName=userName, country=country, cpu=cpu, accountID=accountID}
-	self.userCount = self.userCount + 1
 
 	self:super("_OnAddUser", userName, country, cpu, accountID)
 end
