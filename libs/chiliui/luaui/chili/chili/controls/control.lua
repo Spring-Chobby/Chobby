@@ -487,6 +487,11 @@ function Control:SetPos(x, y, w, h, clientArea, dontUpdateRelative)
         changed = true
       end
     end
+  elseif self._relativeBounds.left and (type(x) == "string") then
+    if (self._relativeBounds.left ~= x) then
+      self._relativeBounds.left = x
+      changed = true
+    end
   end
 
   if (y)and(type(y) == "number") then
@@ -502,6 +507,11 @@ function Control:SetPos(x, y, w, h, clientArea, dontUpdateRelative)
         self._givenBounds.bottom = false
         changed = true
       end
+    end
+  elseif self._relativeBounds.top and (type(y) == "string") then
+    if (self._relativeBounds.top ~= y) then
+      self._relativeBounds.top = y
+      changed = true
     end
   end
 
@@ -523,6 +533,11 @@ function Control:SetPos(x, y, w, h, clientArea, dontUpdateRelative)
 	redraw  = true
       end
     end
+  elseif self._relativeBounds.width and (type(w) == "string") then
+    if (self._relativeBounds.width ~= w) then
+      self._relativeBounds.width = w
+      changed = true
+    end
   end
 
   if (h)and(type(h) == "number") then
@@ -541,6 +556,11 @@ function Control:SetPos(x, y, w, h, clientArea, dontUpdateRelative)
         changed = true
 	redraw  = true
       end
+    end
+  elseif self._relativeBounds.height and (type(h) == "string") then
+    if (self._relativeBounds.height ~= h) then
+      self._relativeBounds.height = h
+      changed = true
     end
   end
 
