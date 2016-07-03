@@ -21,6 +21,7 @@ end
 local window
 
 local lblDownload, prDownload
+local lblHaveMap, lblHaveGame
 
 -- Function which is called to fix scroll panel sizes
 local ViewResizeUpdate
@@ -43,14 +44,45 @@ local largestTeamIndex = -1
 
 local downloads = {}
 
+local function UpdateArchiveStatus()
+	local battle = lobby:GetBattle(lobby:GetMyBattleID())
+	if VFS.HasArchive(battle.gameName) then
+		lblHaveGame:SetCaption(i18n("have_game") .. " [" .. WG.Chobby.Configuration:GetSuccessColor() .. "✔\b]")
+	else
+		lblHaveGame:SetCaption(i18n("dont_have_game") .. " [" .. WG.Chobby.Configuration:GetErrorColor() .. "✘\b]")
+	end
+	if VFS.HasArchive(battle.mapName) then
+		lblHaveMap:SetCaption(i18n("have_map") .. " [" .. WG.Chobby.Configuration:GetSuccessColor() .. "✔\b]")
+	else
+		lblHaveMap:SetCaption(i18n("dont_have_map") .. " [" .. WG.Chobby.Configuration:GetErrorColor() .. "✘\b]")
+	end
+end
+
+local function _CleanupDownload()
+	for _, _ in pairs(downloads) do
+		return -- don't hide progress bar if there are active downloads
+	end
+	if window.disposed then
+		return
+	end
+	prDownload:Hide()
+	lblDownload:Hide()
+end
+
 local lastUpdate = 0
 function widget:DownloadProgress(downloadID, downloaded, total)
 	if Spring.GetGameSeconds() == lastUpdate or size == 0 then
 		return
 	end
 	lastUpdate = Spring.GetGameSeconds()
+
+	local elapsedTime = os.clock() - downloads[downloadID].startTime
+	local doneRatio = downloaded / total
+	local remainingTime = (1 - doneRatio) * elapsedTime / (doneRatio + 0.001)
+
+	prDownload:SetCaption(tostring(math.ceil(remainingTime)) .. "s remaining - " .. tostring(math.floor(downloaded/1024/1024)) .. " of " .. tostring(math.ceil(total/1024/1024)) .. " MB")
 -- 	Spring.Echo("done: " .. tostring(done) .. ", size: " .. tostring(size) .. ", progress: " .. (done/size) .. ", progress%: " .. (100 * done/size))
-	prDownload:SetValue(100 * downloaded / total)
+	prDownload:SetValue(100 * doneRatio)
 end
 
 function widget:DownloadStarted(downloadID)
@@ -64,20 +96,21 @@ function widget:DownloadStarted(downloadID)
 	Spring.Echo("DownloadStarted", downloadID)
 end
 
-function widget:DownloadFinished(...)
-	prDownload:Hide()
-	lblDownload:Hide()
-	Spring.Echo("DownloadFinished", ...)
+function widget:DownloadFinished(downloadID)
+	downloads[downloadID] = nil
+	prDownload:SetCaption("\255\0\255\0Download complete.\b")
+	WG.Delay(_CleanupDownload, 5)
+	UpdateArchiveStatus()
 end
 
-function widget:DownloadFailed(...)
-	prDownload:Hide()
-	lblDownload:Hide()
-	Spring.Echo("DownloadFailed", ...)
+function widget:DownloadFailed(downloadID, errorID)
+	downloads[downloadID] = nil
+	prDownload:SetCaption("\255\255\0\0Download failed [".. errorID .."].\b")
+	WG.Delay(_CleanupDownload, 5)
 end
 
 function widget:DownloadQueued(downloadID, archiveName, archiveType)
-	downloads[downloadID] = { archiveName = archiveName, archiveType = archiveType}
+	downloads[downloadID] = { archiveName = archiveName, archiveType = archiveType, startTime = os.clock() }
 end
 
 -- function widget:DownloadStarted(...)
@@ -189,25 +222,19 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID, tabPanel)
 		parent = parentControl,
 	}
 	
-	local lblHaveGame = Label:New {
+	lblHaveGame = Label:New {
 		x = 15,
 		y = 195,
-		caption = i18n("dont_have_game") .. " [" .. WG.Chobby.Configuration:GetErrorColor() .. "?\b]",
+		caption = "",
 		parent = parentControl,
 	}
-	if VFS.HasArchive(battle.gameName) then
-		lblHaveGame.caption = i18n("have_game") .. " [" .. WG.Chobby.Configuration:GetSuccessColor() .. "?\b]"
-	end
 
-	local lblHaveMap = Label:New {
+	lblHaveMap = Label:New {
 		x = 15,
 		y = 215,
-		caption = i18n("dont_have_map") .. " [" .. WG.Chobby.Configuration:GetErrorColor() .. "?\b]",
+		caption = "",
 		parent = parentControl,
 	}
-	if VFS.HasArchive(battle.mapName) then
-		lblHaveMap.caption = i18n("have_map") .. " [" .. WG.Chobby.Configuration:GetSuccessColor() .. "?\b]"
-	end
 
 	lblDownload = Label:New {
 		x = 15,
@@ -297,6 +324,7 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID, tabPanel)
 
 	MaybeDownloadGame(battle)
 	MaybeDownloadMap(battle)
+	UpdateArchiveStatus()
 end
 
 local function SetupPlayerPanel(parentControl, battle, battleID)

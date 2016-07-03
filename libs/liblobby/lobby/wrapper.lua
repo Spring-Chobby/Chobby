@@ -614,32 +614,32 @@ function Wrapper:GetScriptPassword()
 	return self.scriptPassword or 0
 end
 
--- My user       
+-- My user
 function Wrapper:GetMyAllyNumber()
 	if self.battlePlayerData[self.myUserName] then		
 		return self.battlePlayerData[self.myUserName].AllyNumber
 	end	
 end 
-      
+
 function Wrapper:GetMyTeamNumber()
 	if self.battlePlayerData[self.myUserName] then		
 		return self.battlePlayerData[self.myUserName].TeamNumber
-	end		
-end   
-    
+	end
+end
+
 function Wrapper:GetMyIsSpectator()
 	if self.battlePlayerData[self.myUserName] then		
 		return self.battlePlayerData[self.myUserName].IsSpectator
-	end	
-end  
-     
+	end
+end
+
 function Wrapper:GetMySync()
 	if self.battlePlayerData[self.myUserName] then		
 		return self.battlePlayerData[self.myUserName].Sync
 	end
 end
-     
-function Wrapper:GetMyBattleID()		
+
+function Wrapper:GetMyBattleID()
 	return self.myBattleID
 end
 
