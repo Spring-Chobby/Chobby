@@ -66,6 +66,27 @@ function Wrapper:_PreserveData()
 	}
 end
 
+local function GenerateScriptTxt(battleID)
+	local battle = lobby:GetBattle(battleID)
+	local scriptTxt = 
+[[
+[GAME]
+{
+	HostIP=__IP__;
+	HostPort=__PORT__;
+	IsHost=0;
+	MyPlayerName=__MY_PLAYER_NAME__;
+	MyPasswd=__MY_PASSWD__;
+}
+]]
+
+	scriptTxt = scriptTxt:gsub("__IP__", battle.ip)
+						:gsub("__PORT__", battle.port)
+						:gsub("__MY_PLAYER_NAME__", lobby:GetMyUserName())
+						:gsub("__MY_PASSWD__", lobby:GetScriptPassword())
+	return scriptTxt
+end
+
 -- Interface function
 function Wrapper:_SetScriptPassword(scriptPassword)
 	self.scriptPassword = scriptPassword

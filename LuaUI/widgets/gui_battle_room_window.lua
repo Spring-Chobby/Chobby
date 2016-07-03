@@ -22,6 +22,9 @@ local window
 
 local lblDownload, prDownload
 
+-- Function which is called to fix scroll panel sizes
+local ViewResizeUpdate
+
 -- Listeners, needed here so they can be deregistered
 local onBattleClosed
 local onLeftBattle_counter
@@ -31,31 +34,6 @@ local onSaidBattleEx
 local updateUserBattleStatus
 local onLeftBattle
 local removeBot
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
--- Helper functions
-
-local function GenerateScriptTxt(battleID)
-	local battle = lobby:GetBattle(battleID)
-	local scriptTxt = 
-[[
-[GAME]
-{
-	HostIP=__IP__;
-	HostPort=__PORT__;
-	IsHost=0;
-	MyPlayerName=__MY_PLAYER_NAME__;
-	MyPasswd=__MY_PASSWD__;
-}
-]]
-
-	scriptTxt = scriptTxt:gsub("__IP__", battle.ip)
-						:gsub("__PORT__", battle.port)
-						:gsub("__MY_PLAYER_NAME__", lobby:GetMyUserName())
-						:gsub("__MY_PASSWD__", lobby:GetScriptPassword())
-	return scriptTxt
-end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -545,6 +523,15 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 		end
 	end
 	
+	-- Global function
+	function ViewResizeUpdate()
+		if mainStackPanel and spectatorStackPanel then
+			Spring.Echo("mainScrollPanel.height", mainScrollPanel.height)
+			PositionChildren(mainStackPanel, mainScrollPanel.height)
+			PositionChildren(spectatorStackPanel, spectatorScrollPanel.height)
+		end
+	end
+	
 	updateUserBattleStatus = function(listener, data)
 		local name = data.Name
 		local allyTeamID = data.AllyNumber
@@ -724,6 +711,12 @@ function BattleRoomWindow.ShowBattleRoom(battleID)
 		IsSpectator = false,  
 		Sync = 1, -- 0 = unknown, 1 = synced, 2 = unsynced
 	})
+end
+
+function widget:ViewResize(vsx, vsy, viewGeometry)
+	if ViewResizeUpdate then
+		WG.Delay(ViewResizeUpdate, 0.1)
+	end
 end
 
 function widget:Initialize()
