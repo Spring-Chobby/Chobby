@@ -52,6 +52,7 @@ Object = {
   OnFocusUpdate   = {},
   OnHide          = {},
   OnShow          = {},
+  OnOrphan        = {},
 
   disableChildrenHitTest = false, --// if set childrens are not clickable/draggable etc - their mouse events are not processed
 } 
@@ -241,6 +242,7 @@ function Object:SetParent(obj)
 
   if (typ ~= "table") then
     self.parent = nil
+    self:CallListeners(self.OnOrphan, self)
     return
   end
 
