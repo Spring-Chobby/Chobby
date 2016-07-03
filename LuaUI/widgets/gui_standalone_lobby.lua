@@ -12,6 +12,7 @@ end
 
 function widget:Initialize()
 	Spring.SendCommands("ResBar 0", "ToolTip 0", "Clock 0", "Info 0") --  "Console 0",
+	Spring.SetConfigInt("MouseDragScrollThreshold", 0, true)
 	Spring.LoadCmdColorsConfig("mouseBox 0.0 0.0 0.0 0.0")
 	Spring.SetDrawSky(false)
 	Spring.SetDrawWater(false)
