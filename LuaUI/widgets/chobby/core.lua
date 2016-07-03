@@ -42,9 +42,8 @@ local includes = {
 	
 	-- new stuff
 	"components/interface_root.lua",
-	--"components/main_menu.lua",
-	--"components/singleplayer_window.lua",
-	--"components/multiplayer_window.lua",
+	"components/tab_panel_handler.lua",
+	"components/submenu_handler.lua",
 }
 
 Chobby = widget
@@ -57,7 +56,7 @@ end
 function Chobby:_Initialize()
 	self:WrapCall(function()
 		WG.Delay(function()
-			--local loginWindow = LoginWindow()
+			local loginWindow = LoginWindow()
 			--self.downloader = Downloader()
 			--local statusBar = StatusBar()
 			--local background = Background()

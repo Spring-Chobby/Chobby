@@ -33,10 +33,10 @@ function ListWindow:init(parent, title)
 	}
 
 	self.window = Window:New {
-		x = 250,
-		right = 5,
+		x = 0,
+		right = 0,
 		y = 0,
-		bottom = 5,
+		bottom = 0,
 		parent = parent,
 		resizable = false,
 		draggable = false,

@@ -45,13 +45,15 @@ function widget:Initialize()
 		widgetHandler:RemoveWidget(widget)
 		return
 	end
-
+	
 	Chobby = VFS.Include(CHOBBY_DIR .. "core.lua", nil)
 	
 	WG.Chobby = Chobby
 	WG.Chobby:_Initialize()
 	
 	interfaceRoot = WG.Chobby.GetInterfaceRoot()
+	
+	Chobby.interfaceRoot = interfaceRoot
 end
 
 function widget:Shutdown()

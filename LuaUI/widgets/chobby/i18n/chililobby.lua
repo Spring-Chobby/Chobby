@@ -8,6 +8,7 @@ return {
 		yes_caps = "YES",
 		no_caps = "NO",
 		quit = "Quit",
+		back = "Back",
 		-- login_window
 		connect_to_spring_server = 'Connect to the Spring lobby server',
 		username = 'Username',
@@ -30,6 +31,7 @@ return {
 		play_singleplayer_game = "Play a singleplayer game",
 		skirmish_caps = "SKIRMISH",
 		multiplayer = "Multiplayer",
+		["exit"] = "Exit",
 		matchmaking_caps = "MATCHMAKING",
 		play_normal_multiplayer_game = "Play a normal multiplayer game",
 		custom_caps = "CUSTOM",

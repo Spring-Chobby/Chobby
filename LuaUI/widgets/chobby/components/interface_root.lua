@@ -1,17 +1,26 @@
-
 function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
+	
+	local externalFunctions = {}
 	
 	local titleHeight = 18
 	local titleWidth = 28
 	local panelWidth = 40
 	
-	local panelButtonHeightAbsolute = 60
-	local mainButtonsWidthAbsolute = 240
+	local panelButtonHeightAbsolute = 50
+	local mainButtonsWidthAbsolute = 180
 	
 	local padding = 5
 	
+	-- Switch to single panel mode when below the minimum screen width
+	local minScreenWidth = 1280
+	
+	local fullscreenMode = true
+	
+	-------------------------------------------------------------------
+	-- Window structure
+	-------------------------------------------------------------------
 	local headingWindow = Window:New {
-		x = "0%",
+		x = 0,
 		y = 0,
 		width = titleWidth .. "%",
 		height = titleHeight .. "%",
@@ -106,10 +115,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		children = {}
 	}
 	local panelButtons = Window:New {
-		x = 0,
-		height = 0,
-		right = 0,
-		bottom = 0,
+		x = "0%",
+		y = "0%",
+		width = "100%",
+		height = "100%",
 		name = "panelButtons",
 		caption = "Panel Buttons",
 		parent = panelButtonsHolder,
@@ -131,16 +140,44 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-		
-	-- Switch to single panel mode when below the minimum screen width
-	local minScreenWidth = 1280
+	panelWindow:Hide()
+	-------------------------------------------------------------------
+	-- In-Window Handlers
+	-------------------------------------------------------------------
+	local rightPanelTabs = {
+		{name = "chat", control = ChatWindows().window},
+	}
 	
-	local fullscreenMode = true
+	local submenus = {
+		{name = "singleplayer", tabs = {
+			}
+		},
+		{name = "multiplayer", tabs = {
+				{name = "matchmaking_caps", control = QueueListWindow().window},
+				{name = "custom_caps", control = BattleListWindow().window},
+			}
+		},
+		{name = "exit", exitGame = true},
+	}
 	
-	local function UpdateSizeMode(screenWidth, screenHeight)
+	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons, panelWindow, rightPanelTabs)
+	local mainWindowHandler = GetSubmenuHandler(mainButtons, contentPlace, submenus)
+	
+	local function UpdateChildLayout()
+		if fullscreenMode then
+			rightPanelHandler.UpdateLayout(panelWindow, false)
+		else
+			rightPanelHandler.UpdateLayout(contentPlace, true)
+		end
+	end
+	
+	-------------------------------------------------------------------
+	-- External Functions
+	-------------------------------------------------------------------
+	function externalFunctions.UpdateSizeMode(screenWidth, screenHeight)
 		local newFullscreen = screenWidth > minScreenWidth
 		if newFullscreen == fullscreenMode then
-			return 
+			return false -- no parent updates required.
 		end
 		fullscreenMode = newFullscreen
 		
@@ -176,18 +213,32 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			mainWindow:UpdateClientArea(false)
 			
 			-- Align game title and status.
-			headingWindow:SetPos(nil, nil, mainButtonsWidthAbsolute)
+			headingWindow:SetPos(nil, nil, mainButtonsWidthAbsolute + padding)
 			statusWindow:SetPos(mainButtonsWidthAbsolute)
 			statusWindow:SetPosRelative(nil, nil, "100%")
 		end
+		
+		UpdateChildLayout()
+		return true -- other widgets should update parents.
 	end
 	
-	local screenWidth, screenHeight = Spring.GetWindowGeometry()
-	UpdateSizeMode(screenWidth, screenHeight)
+	function externalFunctions.GetContentPlace()
+		return contentPlace
+	end
 	
-	return {
-		UpdateSizeMode = UpdateSizeMode,
-	}
+	function externalFunctions.GetMainWindowHandler()
+		return mainWindowHandler
+	end
+	
+	-------------------------------------------------------------------
+	-- Initialization
+	-------------------------------------------------------------------
+	local screenWidth, screenHeight = Spring.GetWindowGeometry()
+	
+	externalFunctions.UpdateSizeMode(screenWidth, screenHeight)
+	UpdateChildLayout()
+
+	return externalFunctions
 end
 
 return GetInterfaceRoot

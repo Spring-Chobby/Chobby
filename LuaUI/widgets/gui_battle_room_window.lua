@@ -144,7 +144,7 @@ local function MaybeDownloadMap(battle)
 	MaybeDownloadArchive(battle.mapName, "map")
 end
 
-local function SetupInfoButtonsPanel(parentControl, battle, battleID)
+local function SetupInfoButtonsPanel(parentControl, battle, battleID, tabPanel)
 
 	local lblMapName = Label:New {
 		x = 15,
@@ -274,6 +274,7 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID)
 		caption = WG.Chobby.Configuration:GetErrorColor() .. i18n("quit") .. "\b",
 		OnClick = {
 			function()
+				tabPanel.RemoveTab("myBattle")
 				lobby:LeaveBattle()
 			end
 		},
@@ -577,19 +578,18 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 	lobby:AddListener("RemoveBot", removeBot)
 end
 
-local function InitializeControls(battleID)
+local function InitializeControls(battleID, tabPanel)
 	local battle = lobby:GetBattle(battleID)
 
 	if window then
 		window:Dispose()
 	end
 	
-	window = Window:New {
-		x = 400,
-		width = 720,
-		y = 120,
-		height = 720,
-		parent = screen0,
+	window = Control:New {
+		x = 0,
+		y = 0,
+		width = "100%",
+		height = "100%",
 		resizable = false,
 		padding = {0, 0, 0, 0},
 		OnDispose = { 
@@ -637,7 +637,7 @@ local function InitializeControls(battleID)
 		parent = subPanel,
 	}
 	
-	SetupInfoButtonsPanel(infoButtonsPanel, battle, battleID)
+	SetupInfoButtonsPanel(infoButtonsPanel, battle, battleID, tabPanel)
 	
 	local lblBattleTitle = Label:New {
 		x = 18,
@@ -712,7 +712,12 @@ end
 local BattleRoomWindow = {}
 
 function BattleRoomWindow.ShowBattleRoom(battleID)
-	InitializeControls(battleID)
+	local mainWindowHandler = WG.Chobby.interfaceRoot.GetMainWindowHandler()
+	local tabs = mainWindowHandler.GetTabList("multiplayer")
+	
+	InitializeControls(battleID, tabs)
+	
+	tabs.AddTab("My Battle", false, 3, window, true, "myBattle")
 	
 	lobby:SetBattleStatus({
 		AllyNumber = 0,

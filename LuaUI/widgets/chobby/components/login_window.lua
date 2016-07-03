@@ -184,6 +184,8 @@ function LoginWindow:init()
 			end
 		},
 	}
+	
+	self.window:BringToFront()
 
 	createTabGroup({self.ebUsername, self.ebPassword})
 	screen0:FocusControl(self.ebUsername)
@@ -317,14 +319,11 @@ function LoginWindow:OnConnected()
 			startValue = 1,
 			after = function()
 				self.window:Dispose()
-				if not CHOBBY.chatWindows then
-					ChatWindows()
-				end
 				if not CHOBBY.playWindow then
-					PlayWindow()
+					--PlayWindow()
 				end
 				if not CHOBBY.teamWindow then
-					TeamWindow()
+					--TeamWindow()
 				end
 			end,
 		})

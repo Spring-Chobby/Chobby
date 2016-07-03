@@ -135,7 +135,11 @@ end
 -- override
 function Wrapper:_OnPong()
 	self.pongTimer = Spring.GetTimer()
-	self.latency = Spring.DiffTimers(self.pongTimer, self.pingTimer, true)
+	if self.pingTimer then
+		self.latency = Spring.DiffTimers(self.pongTimer, self.pingTimer, true)
+	else
+		Spring.Echo("missing self.pingTimer")
+	end
 	self:super("_OnPong")
 end
 Wrapper.commands["PONG"] = Wrapper._OnPong

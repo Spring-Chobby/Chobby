@@ -117,8 +117,8 @@ function ChatWindows:init()
 	}
 
 	self.tabPanel = Chili.TabPanel:New {
-		x = 0, 
-		right = 0,
+		x = 10, 
+		right = 10,
 		y = 20, 
 		bottom = 0,
 		padding = {0, 0, 0, 0},
@@ -138,12 +138,11 @@ function ChatWindows:init()
 		}
 	}
 
-	self.window = Window:New {
+	self.window = Control:New {
+		x = 0,
+		y = 0,
 		right = 0,
-		width = "39%",
 		bottom = 0,
-		height = 500,
-		parent = screen0,
 		caption = i18n("chat"),
 		resizable = false,
 		draggable = false,
@@ -156,7 +155,7 @@ function ChatWindows:init()
 				y = 10,
 				right = 2,
 				height = 40,
-				OnClick = { function() self:Minimize() end },
+				OnClick = { function() Spring.Echo("implement minimize") end },
 			},
 			Button:New {
 				width = 60,
@@ -174,7 +173,10 @@ function ChatWindows:init()
 	}
 
 	CHOBBY.chatWindows = self
-	self:Minimize()
+end
+
+function ChatWindows:SetParent(newParent)
+	self.window:SetParent(newParent)
 end
 
 function ChatWindows:CreateDebugConsole()
@@ -201,60 +203,6 @@ function ChatWindows:CreateDebugConsole()
 		end
 	)
 	self.tabbars["Debug"] = self.debugConsole
-end
-
-function ChatWindows:Minimize()
-	ChiliFX:AddFadeEffect({
-		obj = self.window,
-		time = 0.1,
-		endValue = 0,
-		startValue = 1,
-		after = function()
-			self.window:Hide()
-
-			if not self.minimizeWindow then
-			self.minimizedWindow = Window:New {
-				right = 0,
-				width = 120,
-				bottom = 0,
-				height = 60,
-				parent = screen0,
-				caption = "",
-				resizable = false,
-				draggable = false,
-				borderThickness = 0,
-				children = { 
-					Button:New {
-						caption = i18n("chat"),
-						x = 2,
-						right = 2,
-						height = 40,
-						OnClick = { function() self:Maximize() end },
-					},
-				},
-			}
-			else
-				self.minimizedWindow:Show()
-			end
-
-			self.window:Invalidate()
-			self.window:AlignControl()
-		end
-	})
-end
-
-function ChatWindows:Maximize()
-	self.window:Show()
-	ChiliFX:AddFadeEffect({
-		obj = self.window, 
-		time = 0.1,
-		endValue = 1,
-		startValue = 0,
-	})
-
-	if self.minimizedWindow then
-		self.minimizedWindow:Hide()
-	end
 end
 
 function ChatWindows:UpdateChannels(channelsArray)
@@ -432,6 +380,7 @@ function ChatWindows:CreateJoinChannelWindow()
 
 	self.joinWindow = Window:New {
 		caption = i18n("join_channel"),
+		name = "chatWindow",
 		parent = screen0,
 		x = "45%",
 		y = "45%",

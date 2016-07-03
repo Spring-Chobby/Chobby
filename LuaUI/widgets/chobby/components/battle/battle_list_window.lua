@@ -167,7 +167,6 @@ end
 function BattleListWindow:JoinBattle(battle)
 	if not battle.passworded then
 		lobby:JoinBattle(battle.battleID)
-		self:HideWindow()
 	else
 		local tryJoin, passwordWindow
 
