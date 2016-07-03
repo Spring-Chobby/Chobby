@@ -1,23 +1,38 @@
--------------------------
-include("keysym.h.lua")
-
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 function widget:GetInfo()
-return {
-	name      = "Chili lobby",
-	desc      = "Chili example lobby",
-	author    = "gajop",
-	date      = "in the future",
-	license   = "GPL-v2",
-	layer     = 1001,
-	enabled   = true,
-}
+	return {
+		name      = "Chili lobby",
+		desc      = "Chili example lobby",
+		author    = "gajop",
+		date      = "in the future",
+		license   = "GPL-v2",
+		layer     = 1001,
+		enabled   = true,
+	}
 end
+
+include("keysym.h.lua")
 
 LIBS_DIR = "libs/"
 LCS = loadstring(VFS.LoadFile(LIBS_DIR .. "lcs/LCS.lua"))
 LCS = LCS()
 
 CHOBBY_DIR = "LuaUI/widgets/chobby/"
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Callins
+
+local interfaceRoot
+
+function widget:ViewResize(vsx, vsy, viewGeometry)
+	Spring.Echo("ViewResize", vsx, vsy)
+	if interfaceRoot then
+		interfaceRoot.UpdateSizeMode(vsx, vsy)
+	end
+	--Spring.Utilities.TableEcho(viewGeometry, "viewGeometry")
+end
 
 function widget:Initialize()
 	if not WG.LibLobby then
@@ -35,6 +50,8 @@ function widget:Initialize()
 	
 	WG.Chobby = Chobby
 	WG.Chobby:_Initialize()
+	
+	interfaceRoot = WG.Chobby.GetInterfaceRoot()
 end
 
 function widget:Shutdown()

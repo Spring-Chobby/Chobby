@@ -39,6 +39,12 @@ local includes = {
 	"components/status_bar/sb_menu_icon.lua",
 	"components/status_bar/sb_player_welcome.lua",
 	"components/status_bar/sb_server_status.lua",
+	
+	-- new stuff
+	"components/interface_root.lua",
+	--"components/main_menu.lua",
+	--"components/singleplayer_window.lua",
+	--"components/multiplayer_window.lua",
 }
 
 Chobby = widget
@@ -51,9 +57,9 @@ end
 function Chobby:_Initialize()
 	self:WrapCall(function()
 		WG.Delay(function()
-			local loginWindow = LoginWindow()
+			--local loginWindow = LoginWindow()
 			--self.downloader = Downloader()
-			local statusBar = StatusBar()
+			--local statusBar = StatusBar()
 			--local background = Background()
 
 			lobby:AddListener("OnJoinBattle", 
