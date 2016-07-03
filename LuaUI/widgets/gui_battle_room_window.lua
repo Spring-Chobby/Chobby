@@ -28,7 +28,6 @@ local onLeftBattle_counter
 local onJoinedBattle
 local onSaidBattle
 local onSaidBattleEx
-local onClientStatus
 local updateUserBattleStatus
 local onLeftBattle
 local removeBot
@@ -602,7 +601,6 @@ local function InitializeControls(battleID)
 				lobby:RemoveListener("OnJoinedBattle", onJoinedBattle)
 				lobby:RemoveListener("OnSaidBattle", onSaidBattle)
 				lobby:RemoveListener("OnSaidBattleEx", onSaidBattleEx)
-				lobby:RemoveListener("OnClientStatus", onClientStatus)
 				lobby:RemoveListener("UpdateUserBattleStatus", updateUserBattleStatus)
 				lobby:RemoveListener("OnLeftBattle", onLeftBattle)
 				lobby:RemoveListener("RemoveBot", removeBot)
@@ -705,27 +703,6 @@ local function InitializeControls(battleID)
 		end
 	end
 	lobby:AddListener("OnBattleClosed", onBattleClosed)
-	
-	-- TODO: implement this as a part of the lobby protocol
-	onClientStatus = function(listener, userName, status)
-		-- game started
-		if userName == battle.founder and math.bit_and(1, status) then
-			Spring.Echo("Game starts!")
-			local battle = lobby:GetBattle(battleID)
-			local springURL = "spring://" .. lobby:GetMyUserName() .. ":" .. lobby:GetScriptPassword() .. "@" .. battle.ip .. ":" .. battle.port
-			Spring.Echo(springURL)
-			Spring.Start(springURL, "")
-			--local scriptFileName = "scriptFile.txt"
-			--local scriptFile = io.open(scriptFileName, "w")
-			--local scriptTxt = GenerateScriptTxt(battleID)
-			--Spring.Echo(scriptTxt)
-			--scriptFile:write(scriptTxt)
-			--scriptFile:close()
-			--Spring.Restart(scriptFileName, "")
-			--Spring.Restart("", scriptTxt)
-		end
-	end
-	lobby:AddListener("OnClientStatus", onClientStatus)
 end
 
 --------------------------------------------------------------------------------

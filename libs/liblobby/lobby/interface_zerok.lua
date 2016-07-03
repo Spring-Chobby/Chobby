@@ -35,12 +35,10 @@ end
 Interface.jsonCommands["Welcome"] = Interface._Welcome
 
 function Interface:_User(data)
-	self:_OnAddUser(data.Name, data.Country, 3, data.AccountID)
+	self:_OnAddUser(data.Name, data.Country, 3, data.AccountID) -- TODO don't add already present user
+	self:_ProcessClientStatus(data.Name, data.IsInGame, data.IsAway, data.IsAdmin)
 	
 	-- User {"AccountID":212941,"SpringieLevel":1,"Avatar":"corflak","Country":"CZ","EffectiveElo":1100,"Effective1v1Elo":1100,"InGameSince":"2016-06-25T11:36:38.9075025Z","IsAdmin":false,"IsBot":true,"IsInBattleRoom":false,"BanMute":false,"BanSpecChat":false,"Level":0,"ClientType":4,"LobbyVersion":"Springie 1.3.2.116","Name":"Elerium","IsAway":false,"IsInGame":true}
-	if data.IsInGame then
-		self:_OnClientStatus(data.Name, 1)
-	end
 end
 Interface.jsonCommands["User"] = Interface._User
 
@@ -797,11 +795,11 @@ end
 Interface.commands["CLIENTS"] = Interface._OnClients
 Interface.commandPattern["CLIENTS"] = "(%S+)%s+(.+)"
 
-function Interface:_OnClientStatus(userName, status)
-	self:_CallListeners("OnClientStatus", userName, status)
+function Interface:_ProcessClientStatus(userName, inBattle, isAway, isModerator)
+	self:_CallListeners("UserInBattleStatus", userName, inBattle)
+	self:_CallListeners("UserAwayStatus", userName, isAway)
+	self:_CallListeners("UserModeratorStatus", userName, isModerator)
 end
-Interface.commands["CLIENTSTATUS"] = Interface._OnClientStatus
-Interface.commandPattern["CLIENTSTATUS"] = "(%S+)%s+(%S+)"
 
 function Interface:_OnCompFlags(compFlags)
 	compFlags = explode("\t", compflags)

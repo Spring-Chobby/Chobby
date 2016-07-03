@@ -436,6 +436,41 @@ function Wrapper:Reconnect()
 	self:Connect(self._oldData.host, self._oldData.port)
 end
 
+function Wrapper:_ProcessClientStatus(userName, ingame, isAway, isModerator)
+	local function StartBattle(battleID)
+		Spring.Echo("Game starts!")
+		local battle = self:GetBattle(battleID)
+		local springURL = "spring://" .. self:GetMyUserName() .. ":" .. self:GetScriptPassword() .. "@" .. battle.ip .. ":" .. battle.port
+		Spring.Echo(springURL)
+		Spring.Start(springURL, "")
+		--local scriptFileName = "scriptFile.txt"
+		--local scriptFile = io.open(scriptFileName, "w")
+		--local scriptTxt = GenerateScriptTxt(battleID)
+		--Spring.Echo(scriptTxt)
+		--scriptFile:write(scriptTxt)
+		--scriptFile:close()
+		--Spring.Restart(scriptFileName, "")
+		--Spring.Restart("", scriptTxt)
+	end
+	
+	if ingame ~= nil then
+		self:_CallListeners("UserIngameStatus", userName, ingame)
+		if self.myBattleID then
+			local myBattle = self:GetBattle(self.myBattleID)
+			if myBattle and myBattle.founder == userName then
+				self:_CallListeners("BattleAboutToStart")
+				StartBattle(self.myBattleID)
+			end
+		end
+	end
+	if isAway ~= nil then
+		self:_CallListeners("UserAwayStatus", userName, isAway)
+	end
+	if isModerator ~= nil then
+		self:_CallListeners("UserModeratorStatus", userName, isModerator)
+	end
+end
+
 -- override
 function Wrapper:SafeUpdate(...)
 	if self.status == "disconnected" and self.disconnectTime ~= nil then
@@ -580,7 +615,7 @@ function Wrapper:GetMySync()
 end
      
 function Wrapper:GetMyBattleID()		
-	return self.myBattleID		
+	return self.myBattleID
 end
 
 function Wrapper:GetMyUserName()

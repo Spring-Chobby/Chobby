@@ -523,7 +523,7 @@ Interface.commands["CLIENTS"] = Interface._OnClients
 Interface.commandPattern["CLIENTS"] = "(%S+)%s+(.+)"
 
 function Interface:_OnClientStatus(userName, status)
-	self:_CallListeners("OnClientStatus", userName, status)
+	self:_ProcessClientStatus(userName, (status%2 == 1), (status%4 >= 2), (status%64 >= 32))
 end
 Interface.commands["CLIENTSTATUS"] = Interface._OnClientStatus
 Interface.commandPattern["CLIENTSTATUS"] = "(%S+)%s+(%S+)"
