@@ -2,6 +2,14 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 	
 	local externalFunctions = {}
 	
+	-------------------------------------------------------------------
+	-- Local variables
+	-------------------------------------------------------------------
+	local buttonsHolder
+	
+	-------------------------------------------------------------------
+	-- Local functions
+	-------------------------------------------------------------------
 	local function getFont() 
 		return {
 			size = 16,
@@ -14,23 +22,19 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 		}
 	end
 	
-	-------------------------------------------------------------------
-	-- Tabs
-	-------------------------------------------------------------------
-	local buttonsHolder = Control:New {
-		x = 0,
-		y = 0,
-		right = 0,
-		bottom = 0,
-		name = holderName,
-		parent = buttonWindow,
-		padding = {0, 0, 0, 0},
-		children = {}
-	}
-	
-	local buttonSize = 100/#tabs
-	
-	local function ToggleShow(self, control)
+	local function ToggleShow(self, tab)
+		if type(tab.control) == "function" then
+			tab.control = tab.control()
+			tab.control.OnOrphan = {
+				function(self)
+					tab.button:SetCaption(tab.button.oldCaption)
+					tab.button.font = tab.button.oldFont
+					tab.button.backgroundColor = tab.button.oldBackgroundColor
+					tab.button:Invalidate()
+				end
+			}
+		end
+		local control = tab.control
 		
 		if displayPanel.visible then
 			if displayPanel:GetChildByName(control.name) then
@@ -48,36 +52,6 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 		self.font = Chili.Font:New(getFont())
 		self.backgroundColor = Configuration:GetButtonSelectedColor()
 		self:Invalidate()
-	end
-	
-	for i = 1, #tabs do
-		local pos = buttonSize*(i-1) .. "%"
-		
-		local button = Button:New {
-			x = (tabsVertical and 0) or pos,
-			y = (tabsVertical and pos) or 0,
-			width = (tabsVertical and "100%") or buttonSize .. "%",
-			height = (tabsVertical and buttonSize .. "%") or "100%",
-			caption = i18n(tabs[i].name),
-			font = { size = 20},
-			parent = buttonsHolder,
-			OnClick = {function(self) ToggleShow(self, tabs[i].control) end},
-		}
-		
-		button.oldFont = button.font
-		button.oldCaption = button.caption
-		button.oldBackgroundColor = button.backgroundColor
-		
-		tabs[i].button = button
-		tabs[i].rank = i
-		tabs[i].control.OnOrphan = {
-			function(self)
-				button:SetCaption(button.oldCaption)
-				button.font = button.oldFont
-				button.backgroundColor = button.oldBackgroundColor
-				button:Invalidate()
-			end
-		}
 	end
 	
 	local function UpdateButtonLayout(newTabsVertical)
@@ -151,6 +125,7 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 		newTab.name = name
 		newTab.rank = rank
 		newTab.internalName = internalName
+		newTab.control = control
 		local button
 		if control then
 			button = Button:New {
@@ -161,28 +136,28 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 				caption = name,
 				font = {size = 20},
 				parent = buttonsHolder,
-				OnClick = {function(self) ToggleShow(self, control) end},
+				OnClick = {function(self) ToggleShow(self, newTab) end},
 			}
 		
-			newTab.control = control
 			
 			button.oldFont = button.font
 			button.oldCaption = button.caption
 			button.oldBackgroundColor = button.backgroundColor
 			
 			if selected then
-				ToggleShow(button, newTab.control)
+				ToggleShow(button, newTab)
 			end
 			
-			control.OnOrphan = {
-				function(self)
-					button:SetCaption(button.oldCaption)
-					button.font = button.oldFont
-					button.backgroundColor = button.oldBackgroundColor
-					button:Invalidate()
-				end
-			}
-		
+			if type(control) ~= "function" then
+				control.OnOrphan = {
+					function(self)
+						button:SetCaption(button.oldCaption)
+						button.font = button.oldFont
+						button.backgroundColor = button.oldBackgroundColor
+						button:Invalidate()
+					end
+				}
+			end
 		else
 			button = Button:New {
 				x = "0%",
@@ -206,6 +181,54 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 		tabs[index] = newTab
 		
 		UpdateButtonLayout()
+	end
+	
+	-------------------------------------------------------------------
+	-- Initialization
+	-------------------------------------------------------------------
+	buttonsHolder = Control:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		name = holderName,
+		parent = buttonWindow,
+		padding = {0, 0, 0, 0},
+		children = {}
+	}
+	
+	local buttonSize = 100/#tabs
+	
+	for i = 1, #tabs do
+		local pos = buttonSize*(i-1) .. "%"
+		
+		local button = Button:New {
+			x = (tabsVertical and 0) or pos,
+			y = (tabsVertical and pos) or 0,
+			width = (tabsVertical and "100%") or buttonSize .. "%",
+			height = (tabsVertical and buttonSize .. "%") or "100%",
+			caption = i18n(tabs[i].name),
+			font = { size = 20},
+			parent = buttonsHolder,
+			OnClick = {function(self) ToggleShow(self, tabs[i]) end},
+		}
+		
+		button.oldFont = button.font
+		button.oldCaption = button.caption
+		button.oldBackgroundColor = button.backgroundColor
+		
+		tabs[i].button = button
+		tabs[i].rank = i
+		if type(tabs[i].control) ~= "function" then
+			tabs[i].control.OnOrphan = {
+				function(self)
+					button:SetCaption(button.oldCaption)
+					button.font = button.oldFont
+					button.backgroundColor = button.oldBackgroundColor
+					button:Invalidate()
+				end
+			}
+		end
 	end
 	
 	return externalFunctions
