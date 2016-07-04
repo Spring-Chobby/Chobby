@@ -90,10 +90,16 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 		end
 	end
 	
-	function externalFunctions.IsManagedControl(controlName)
+	function externalFunctions.OpenTab(tabIndex)
+		if tabs[tabIndex] then
+			ToggleShow(tabs[tabIndex].button, tabs[tabIndex])
+		end
+	end
+	
+	function externalFunctions.GetManagedControlByName(controlName)
 		for i = 1, #tabs do
 			if tabs[i].control and tabs[i].control.name == controlName then
-				return true
+				return tabs[i].control, i
 			end
 		end
 		return false

@@ -168,8 +168,22 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local function UpdateChildLayout()
 		if fullscreenMode then
 			rightPanelHandler.UpdateLayout(panelWindow, false)
+			if not contentPlace:IsEmpty() then
+				local control, index = rightPanelHandler.GetManagedControlByName(contentPlace.children[1].name)
+				if control then
+					contentPlace:ClearChildren()
+					rightPanelHandler.OpenTab(index)
+				end
+			end
 		else
 			rightPanelHandler.UpdateLayout(contentPlace, true)
+			if contentPlace:IsEmpty() and not panelWindow:IsEmpty() then
+				local panelChild = panelWindow.children[1]
+				local control, index = rightPanelHandler.GetManagedControlByName(panelChild.name)
+				rightPanelHandler.OpenTab(index)
+			else
+				panelWindow:ClearChildren()	
+			end
 		end
 	end
 	

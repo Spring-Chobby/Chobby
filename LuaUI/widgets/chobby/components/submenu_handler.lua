@@ -31,7 +31,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 					buttonsHolder:Show()
 				end
 				
-				if panelWindow.children[1] and panelHandler.IsManagedControl(panelWindow.children[1].name) then
+				if panelWindow.children[1] and panelHandler.GetManagedControlByName(panelWindow.children[1].name) then
 					panelWindow:ClearChildren()
 					if panelWindow.visible then
 						panelWindow:Hide()
