@@ -19,6 +19,8 @@ end
 
 local fullscreen = 0
 
+local battleStartDisplay = 1
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Initialization
@@ -34,26 +36,47 @@ function SettingsWindow.GetControl()
 		height = "100%",
 	}
 	
+	local ingameOffset = 250
+	
 	local freezeSettings = true
 	
-	ComboBox:New {
-		x = 20,
-		y = 20,
+	Label:New {
+		x = 40,
+		y = 40,
 		width = 180,
-		height = 55,
-		items = {"Windowed Fullscreen", "Windowed", "Fullscreen"},
+		height = 30,
+		parent = window,
+		font = {size = 30},
+		caption = "Lobby",
+	}
+	Label:New {
+		x = 40,
+		y = 70,
+		width = 90,
+		height = 45,
+		valign = "center",
+		align = "right",
+		parent = window,
+		font = {size = 20},
+		caption = "Display:",
+	}
+	ComboBox:New {
+		x = 130,
+		y = 70,
+		width = 180,
+		height = 45,
+		parent = window,
+		items = {"Fullscreen Window", "Windowed", "Fullscreen"},
 		selected = 1,
 		OnSelect = {
-			function (self)
+			function (obj)
 				if freezeSettings then
 					return
 				end
 				
 				local screenX, screenY = Spring.GetScreenGeometry()
-				Spring.Echo("screenX, screenY", screenX, screenY)
 			
-				if self.selected == 1 then
-					--Spring.SetConfigInt("Fullscreen", 0, false)
+				if obj.selected == 1 then
 					Spring.SetConfigInt("XResolutionWindowed", screenX, false)
 					Spring.SetConfigInt("YResolutionWindowed", screenY, false)
 					Spring.SetConfigInt("WindowPosX", 0, false)
@@ -61,7 +84,7 @@ function SettingsWindow.GetControl()
 					Spring.SendCommands("fullscreen 0") 
 					Spring.SetConfigInt("WindowBorderless", 1, false)
 					Spring.SetConfigInt("WindowBorderless", 1, false)
-				elseif self.selected == 2 then
+				elseif obj.selected == 2 then
 					Spring.SetConfigInt("WindowPosX", screenX/4, false)
 					Spring.SetConfigInt("WindowPosY", screenY/8, false)
 					Spring.SetConfigInt("XResolutionWindowed", screenX/2, false)
@@ -70,7 +93,7 @@ function SettingsWindow.GetControl()
 					Spring.SetConfigInt("WindowBorderless", 0, false)
 					Spring.SetConfigInt("Fullscreen", 0, false)
 					Spring.SendCommands("fullscreen 0") 
-				elseif self.selected == 3 then
+				elseif obj.selected == 3 then
 					Spring.SetConfigInt("XResolution", screenX, false)
 					Spring.SetConfigInt("YResolution", screenY, false)
 					Spring.SetConfigInt("Fullscreen", 1, false)
@@ -78,7 +101,105 @@ function SettingsWindow.GetControl()
 				end
 			end
 		},
+	}
+	
+	Label:New {
+		x = 40,
+		y = 120,
+		width = 90,
+		height = 45,
+		valign = "center",
+		align = "right",
 		parent = window,
+		font = {size = 20},
+		caption = "Panels:",
+	}
+	ComboBox:New {
+		x = 130,
+		y = 120,
+		width = 180,
+		height = 45,
+		parent = window,
+		items = {"Autodetect", "Always Two", "Always One"},
+		selected = 1,
+		OnSelect = {
+			function (obj)
+				if freezeSettings then
+					return
+				end
+				
+				local screenX, screenY = Spring.GetScreenGeometry()
+				Spring.Echo("screenX, screenY", screenX, screenY)
+			
+				if obj.selected == 1 then
+					WG.Chobby.interfaceRoot.SetPanelDisplayMode(true)
+				elseif obj.selected == 2 then
+					WG.Chobby.interfaceRoot.SetPanelDisplayMode(false, true)
+				elseif obj.selected == 3 then
+					WG.Chobby.interfaceRoot.SetPanelDisplayMode(false, false)
+				end
+			end
+		},
+	}
+	
+	Label:New {
+		x = 40,
+		y = 170,
+		width = 90,
+		height = 45,
+		valign = "center",
+		align = "right",
+		parent = window,
+		font = {size = 20},
+		caption = "Auto Login:",
+	}
+	ComboBox:New {
+		x = 130,
+		y = 170,
+		width = 180,
+		height = 45,
+		parent = window,
+		items = {"Always", "On Multiplayer", "Never"},
+		selected = 1,
+	}
+	
+	Label:New {
+		x = 40,
+		y = 40 + ingameOffset,
+		width = 180,
+		height = 30,
+		parent = window,
+		font = {size = 30},
+		caption = "Game",
+	}
+	Label:New {
+		x = 40,
+		y = 70 + ingameOffset,
+		width = 90,
+		height = 45,
+		valign = "center",
+		align = "right",
+		parent = window,
+		font = {size = 20},
+		caption = "Display:",
+	}
+	ComboBox:New {
+		x = 130,
+		y = 70 + ingameOffset,
+		width = 180,
+		height = 45,
+		parent = window,
+		items = {"Fullscreen Window", "Windowed", "Fullscreen"},
+		selected = battleStartDisplay,
+		OnSelect = {
+			function (obj)
+				if freezeSettings then
+					return
+				end
+				
+				battleStartDisplay = obj.selected
+			end
+		},
 	}
 	
 	freezeSettings = false
@@ -90,13 +211,43 @@ end
 --------------------------------------------------------------------------------
 -- Widget Interface
 
+local onBattleAboutToStart
+
 function widget:Initialize()
 	CHOBBY_DIR = "LuaUI/widgets/chobby/"
 	VFS.Include("LuaUI/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 	
+	onBattleAboutToStart = function(listener)
+		local screenX, screenY = Spring.GetScreenGeometry()
+		
+		if battleStartDisplay == 1 then
+			Spring.SetConfigInt("XResolutionWindowed", screenX, false)
+			Spring.SetConfigInt("YResolutionWindowed", screenY, false)
+			Spring.SetConfigInt("WindowPosX", 0, false)
+			Spring.SetConfigInt("WindowPosY", 0, false)
+			Spring.SetConfigInt("WindowBorderless", 1, false)
+		elseif battleStartDisplay == 2 then
+			Spring.SetConfigInt("WindowPosX", 0, false)
+			Spring.SetConfigInt("WindowPosY", 80, false)
+			Spring.SetConfigInt("XResolutionWindowed", screenX, false)
+			Spring.SetConfigInt("YResolutionWindowed", screenY - 80, false)
+			Spring.SetConfigInt("WindowBorderless", 0, false)
+			Spring.SetConfigInt("WindowBorderless", 0, false)
+			Spring.SetConfigInt("Fullscreen", 0, false)
+		elseif battleStartDisplay == 3 then
+			Spring.SetConfigInt("XResolution", screenX, false)
+			Spring.SetConfigInt("YResolution", screenY, false)
+			Spring.SetConfigInt("Fullscreen", 1, false)
+		end
+	end
+	lobby:AddListener("BattleAboutToStart", onBattleAboutToStart)
+	
 	WG.SettingsWindow = SettingsWindow
 end
 
+function widget:Shutdown()
+	lobby:RemoveListener("BattleAboutToStart", onBattleAboutToStart)
+end
 
 function widget:GetConfigData()
 	--local spacingByName = {}

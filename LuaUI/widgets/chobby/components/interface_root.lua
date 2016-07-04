@@ -15,6 +15,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local minScreenWidth = 1280
 	
 	local fullscreenMode = true
+	local autodetectFullscreen = true
 	
 	-------------------------------------------------------------------
 	-- Window structure
@@ -187,13 +188,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		end
 	end
 	
-	-------------------------------------------------------------------
-	-- External Functions
-	-------------------------------------------------------------------
-	function externalFunctions.UpdateSizeMode(screenWidth, screenHeight)
-		local newFullscreen = screenWidth > minScreenWidth
+	local function UpdatePanelLayout(newFullscreen)
 		if newFullscreen == fullscreenMode then
-			return false -- no parent updates required.
+			return
 		end
 		fullscreenMode = newFullscreen
 		
@@ -209,7 +206,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			panelButtonsHolder:Show()
 			panelWindow:Show()
 			mainWindow._relativeBounds.right = panelWidth .. "%"
-			mainWindow:UpdateClientArea(false)
+			mainWindow:UpdateClientArea()
 			
 			-- Align game title and status.
 			headingWindow:SetPosRelative("0%",nil, titleWidth .. "%")
@@ -227,7 +224,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			panelButtonsHolder:ClearChildren()
 			panelWindow:Hide()
 			mainWindow._relativeBounds.right = 0
-			mainWindow:UpdateClientArea(false)
+			mainWindow:UpdateClientArea()
 			
 			-- Align game title and status.
 			headingWindow:SetPos(nil, nil, mainButtonsWidthAbsolute + padding)
@@ -236,7 +233,26 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		end
 		
 		UpdateChildLayout()
-		return true -- other widgets should update parents.
+	end
+	
+	-------------------------------------------------------------------
+	-- External Functions
+	-------------------------------------------------------------------
+	function externalFunctions.UpdateSizeMode(screenWidth, screenHeight)
+		if autodetectFullscreen then	
+			local newFullscreen = screenWidth > minScreenWidth
+			UpdatePanelLayout(newFullscreen)
+		end
+	end
+	
+	function externalFunctions.SetPanelDisplayMode(newAutodetectFullscreen, newFullscreen)
+		autodetectFullscreen = newAutodetectFullscreen
+		if autodetectFullscreen then
+			local screenWidth, screenHeight = Spring.GetViewGeometry()
+			UpdatePanelLayout(screenWidth > minScreenWidth)
+		else
+			UpdatePanelLayout(newFullscreen)
+		end
 	end
 	
 	function externalFunctions.GetContentPlace()
