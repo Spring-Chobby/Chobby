@@ -36,16 +36,18 @@ local updateUserBattleStatus
 local onLeftBattle
 local removeBot
 
+local battleLobby
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Chili/interface management
+-- Download management
 
 local largestTeamIndex = -1
 
 local downloads = {}
 
 local function UpdateArchiveStatus()
-	local battle = lobby:GetBattle(lobby:GetMyBattleID())
+	local battle = battleLobby:GetBattle(battleLobby:GetMyBattleID())
 	if VFS.HasArchive(battle.gameName) then
 		lblHaveGame:SetCaption(i18n("have_game") .. " [" .. WG.Chobby.Configuration:GetSuccessColor() .. "✔\b]")
 	else
@@ -155,6 +157,10 @@ local function MaybeDownloadMap(battle)
 	MaybeDownloadArchive(battle.mapName, "map")
 end
 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Chili/interface management
+
 local function SetupInfoButtonsPanel(parentControl, battle, battleID, tabPanel)
 
 	local lblMapName = Label:New {
@@ -174,7 +180,7 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID, tabPanel)
 		font = { size = 22 },
 		OnClick = {
 			function()
-				lobby:SetBattleStatus({IsSpectator = not lobby:GetMyIsSpectator()})
+				battleLobby:SetBattleStatus({IsSpectator = not battleLobby:GetMyIsSpectator()})
 			end
 		},
 		parent = parentControl,
@@ -204,7 +210,7 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID, tabPanel)
 		font = { size = 22 },
 		OnClick = {
 			function()
-				lobby:SetBattleStatus({
+				battleLobby:SetBattleStatus({
 					AllyNumber = largestTeamIndex + 1, 
 					IsSpectator = false,
 				})
@@ -264,7 +270,7 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID, tabPanel)
 		font = { size = 22 },
 		OnClick = {
 			function()
-				lobby:SayBattle("!start")
+				battleLobby:SayBattle("!start")
 			end
 		},
 		parent = parentControl,
@@ -279,8 +285,10 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID, tabPanel)
 		caption = WG.Chobby.Configuration:GetErrorColor() .. i18n("quit") .. "\b",
 		OnClick = {
 			function()
-				tabPanel.RemoveTab("myBattle")
-				lobby:LeaveBattle()
+				if tabPanel then
+					tabPanel.RemoveTab("myBattle")
+				end
+				battleLobby:LeaveBattle()
 			end
 		},
 		parent = parentControl,
@@ -294,7 +302,7 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID, tabPanel)
 			lblMapName:SetCaption(mapName)
 		end
 	end
-	lobby:AddListener("OnUpdateBattleInfo", onUpdateBattleInfo)
+	battleLobby:AddListener("OnUpdateBattleInfo", onUpdateBattleInfo)
 	
 	local UpdatePlayers = function(battleID)
 		lblNumberOfPlayers:SetCaption(i18n("players") .. ": " .. tostring(#battle.users) .. "/" .. tostring(battle.maxPlayers))
@@ -304,13 +312,13 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID, tabPanel)
 		if battleID ~= leftBattleID then
 			return
 		end
-		if lobby:GetMyUserName() == userName then
+		if battleLobby:GetMyUserName() == userName then
 			window:Dispose()
 		else
 			UpdatePlayers(battleID)
 		end
 	end
-	lobby:AddListener("OnLeftBattle", onLeftBattle_counter)
+	battleLobby:AddListener("OnLeftBattle", onLeftBattle_counter)
 
 	onJoinedBattle = function(listener, joinedBattleId, userName)
 		if battleID ~= joinedBattleId then
@@ -318,7 +326,7 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID, tabPanel)
 		end
 		UpdatePlayers(battleID)
 	end
-	lobby:AddListener("OnJoinedBattle", onJoinedBattle)
+	battleLobby:AddListener("OnJoinedBattle", onJoinedBattle)
 	
 	UpdatePlayers(battleID)
 
@@ -464,7 +472,7 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 					caption = WG.Chobby.Configuration:GetErrorColor() .. i18n("join") .. "\b",
 					OnClick = {
 						function()
-							lobby:SetBattleStatus({
+							battleLobby:SetBattleStatus({
 								AllyNumber = teamIndex, 
 								IsSpectator = false,
 							})
@@ -572,7 +580,7 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 			end
 		end
 	end
-	lobby:AddListener("UpdateUserBattleStatus", updateUserBattleStatus)
+	battleLobby:AddListener("UpdateUserBattleStatus", updateUserBattleStatus)
 	
 	onLeftBattle = function(listener, LeftBattleID, UserName)
 		if LeftBattleID == battleID then
@@ -582,7 +590,7 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 			end
 		end
 	end
-	lobby:AddListener("OnLeftBattle", onLeftBattle)
+	battleLobby:AddListener("OnLeftBattle", onLeftBattle)
 	
 	removeBot = function(listener, data)
 		if data.Name then
@@ -590,11 +598,11 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 			GetPlayerData(data.Name).control:Dispose()
 		end
 	end
-	lobby:AddListener("RemoveBot", removeBot)
+	battleLobby:AddListener("RemoveBot", removeBot)
 end
 
-local function InitializeControls(battleID, tabPanel)
-	local battle = lobby:GetBattle(battleID)
+local function InitializeControls(battleID, tabPanel, oldLobby)
+	local battle = battleLobby:GetBattle(battleID)
 
 	if window then
 		window:Dispose()
@@ -611,14 +619,14 @@ local function InitializeControls(battleID, tabPanel)
 			function()
 				largestTeamIndex = -1
 			
-				lobby:RemoveListener("OnBattleClosed", onBattleClosed)
-				lobby:RemoveListener("OnLeftBattle", onLeftBattle_counter)
-				lobby:RemoveListener("OnJoinedBattle", onJoinedBattle)
-				lobby:RemoveListener("OnSaidBattle", onSaidBattle)
-				lobby:RemoveListener("OnSaidBattleEx", onSaidBattleEx)
-				lobby:RemoveListener("UpdateUserBattleStatus", updateUserBattleStatus)
-				lobby:RemoveListener("OnLeftBattle", onLeftBattle)
-				lobby:RemoveListener("RemoveBot", removeBot)
+				oldLobby:RemoveListener("OnBattleClosed", onBattleClosed)
+				oldLobby:RemoveListener("OnLeftBattle", onLeftBattle_counter)
+				oldLobby:RemoveListener("OnJoinedBattle", onJoinedBattle)
+				oldLobby:RemoveListener("OnSaidBattle", onSaidBattle)
+				oldLobby:RemoveListener("OnSaidBattleEx", onSaidBattleEx)
+				oldLobby:RemoveListener("UpdateUserBattleStatus", updateUserBattleStatus)
+				oldLobby:RemoveListener("OnLeftBattle", onLeftBattle)
+				oldLobby:RemoveListener("RemoveBot", removeBot)
 			end
 		},
 	}
@@ -681,7 +689,7 @@ local function InitializeControls(battleID, tabPanel)
 
 	local battleRoomConsole = WG.Chobby.Console()
 	battleRoomConsole.listener = function(message)
-		lobby:SayBattle(message)
+		battleLobby:SayBattle(message)
 	end
 	
 	local chatPanel = Control:New {
@@ -705,19 +713,19 @@ local function InitializeControls(battleID, tabPanel)
 	local onSaidBattle = function(listener, userName, message)
 		battleRoomConsole:AddMessage(userName .. ": " .. message)
 	end
-	lobby:AddListener("OnSaidBattle", onSaidBattle)
+	battleLobby:AddListener("OnSaidBattle", onSaidBattle)
 
 	local onSaidBattleEx = function(listener, userName, message)
 		battleRoomConsole:AddMessage("\255\0\139\139" .. userName .. " " .. message .. "\b")		
 	end
-	lobby:AddListener("OnSaidBattleEx", onSaidBattleEx)
+	battleLobby:AddListener("OnSaidBattleEx", onSaidBattleEx)
 
 	onBattleClosed = function(listener, closedBattleID, ... )
 		if battleID == closedBattleID then
 			window:Dispose()
 		end
 	end
-	lobby:AddListener("OnBattleClosed", onBattleClosed)
+	battleLobby:AddListener("OnBattleClosed", onBattleClosed)
 end
 
 --------------------------------------------------------------------------------
@@ -726,19 +734,52 @@ end
 
 local BattleRoomWindow = {}
 
-function BattleRoomWindow.ShowBattleRoom(battleID)
+function BattleRoomWindow.ShowBattleRoom(battleID, newLobby)
 	local mainWindowHandler = WG.Chobby.interfaceRoot.GetMainWindowHandler()
 	local tabs = mainWindowHandler.GetTabList("multiplayer")
 	
-	InitializeControls(battleID, tabs)
+	battleLobby = newLobby
+	
+	InitializeControls(battleID, tabs, battleLobby)
 	
 	tabs.AddTab("My Battle", false, 3, window, true, "myBattle")
 	
-	lobby:SetBattleStatus({
+	battleLobby:SetBattleStatus({
 		AllyNumber = 0,
 		IsSpectator = false,  
 		Sync = 1, -- 0 = unknown, 1 = synced, 2 = unsynced
 	})
+end
+
+function BattleRoomWindow.OpenSingleplayerSkirmish()
+	
+	local wrapperWindow = Control:New {
+		x = 0,
+		y = 0,
+		width = "100%",
+		height = "100%",
+		resizable = false,
+		padding = {0, 0, 0, 0},
+		
+		OnParent = {
+			function(obj)
+				battleLobby = WG.LibLobby.lobbySkirmish
+				battleLobby:SetBattleState(lobby:GetMyUserName() or "Player", Game.gameName, Game.mapName)
+				
+				InitializeControls(1, nil, battleLobby)
+				obj:AddChild(window)
+				
+				battleLobby:SetBattleStatus({
+					AllyNumber = 0,
+					IsSpectator = false,  
+					Sync = 1, -- 0 = unknown, 1 = synced, 2 = unsynced
+				})
+			end
+		},
+	}
+	
+	
+	return wrapperWindow
 end
 
 function widget:ViewResize(vsx, vsy, viewGeometry)

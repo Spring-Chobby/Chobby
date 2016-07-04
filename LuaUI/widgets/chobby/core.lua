@@ -63,7 +63,7 @@ function Chobby:_Initialize()
 
 			lobby:AddListener("OnJoinBattle", 
 				function(listener, battleID)
-					WG.BattleRoomWindow.ShowBattleRoom(battleID)
+					WG.BattleRoomWindow.ShowBattleRoom(battleID, lobby)
 				end
 			)
 		end, 0.001)

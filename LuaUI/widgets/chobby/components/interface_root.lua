@@ -151,6 +151,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	local submenus = {
 		{name = "singleplayer", tabs = {
+				{name = "custom_caps", control = WG.BattleRoomWindow.OpenSingleplayerSkirmish},
 			}
 		},
 		{name = "multiplayer", tabs = {
