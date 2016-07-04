@@ -241,12 +241,14 @@ function widget:Initialize()
 		end
 	end
 	lobby:AddListener("BattleAboutToStart", onBattleAboutToStart)
+	WG.LibLobby.lobbySkirmish:AddListener("BattleAboutToStart", onBattleAboutToStart)
 	
 	WG.SettingsWindow = SettingsWindow
 end
 
 function widget:Shutdown()
 	lobby:RemoveListener("BattleAboutToStart", onBattleAboutToStart)
+	WG.LibLobby.lobbySkirmish:RemoveListener("BattleAboutToStart", onBattleAboutToStart)
 end
 
 function widget:GetConfigData()

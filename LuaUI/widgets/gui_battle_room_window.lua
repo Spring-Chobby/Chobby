@@ -767,7 +767,7 @@ function BattleRoomWindow.OpenSingleplayerSkirmish()
 		OnParent = {
 			function(obj)
 				battleLobby = WG.LibLobby.lobbySkirmish
-				battleLobby:SetBattleState(lobby:GetMyUserName() or "Player", Game.gameName, Game.mapName, "Skirmish Battle")
+				battleLobby:SetBattleState(lobby:GetMyUserName() or "Player", "Chobby $VERSION", Game.mapName, "Skirmish Battle")
 				
 				InitializeControls(1, nil, battleLobby, obj)
 				obj:AddChild(window)

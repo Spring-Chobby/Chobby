@@ -20,6 +20,75 @@ function WrapperSkirmish:_Clean()
 	self.Sync = nil
 end
 
+local function ScriptTXT(script)
+	local string = '[Game]\n{\n\n'
+
+	-- First write Tables
+	for key, value in pairs(script) do
+		if type(value) == 'table' then
+			string = string..'\t['..key..']\n\t{\n'
+			for key, value in pairs(value) do
+				string = string..'\t\t'..key..' = '..value..';\n'
+			end
+			string = string..'\t}\n\n'
+		end
+	end
+
+	-- Then the rest (purely for aesthetics)
+	for key, value in pairs(script) do
+		if type(value) ~= 'table' then
+			string = string..'\t'..key..' = '..value..';\n'
+		end
+	end
+	string = string..'}'
+
+	local txt = io.open('script.txt', 'w+')
+	txt:write(string)
+	txt:close()
+	return string
+end
+
+function WrapperSkirmish:_StartScript(gameName, mapName, playerName)
+	local script = {
+		player0  =  {
+			isfromdemo = 0,
+			name = playerName,
+			rank = 0,
+			spectator = 1,
+			team = 0,
+		},
+
+		team0  =  {
+			allyteam = 0,
+			rgbcolor = '0.99609375 0.546875 0',
+			side = 'CORE',
+			teamleader = 0,
+		},
+
+		allyteam0  =  {
+			numallies = 0,
+		},
+
+		gametype = gameName,
+		hostip = '127.0.0.1',
+		hostport = 8458, -- probably should pick hosts better
+		ishost = 1,
+		mapname = mapName,
+		myplayername = 'Local',
+		nohelperais = 0,
+		numplayers = 1,
+		numusers = 2,
+		startpostype = 2,
+	}
+	
+	local scriptFileName = "scriptFile.txt"
+	local scriptFile = io.open(scriptFileName, "w")
+	local scriptTxt = ScriptTXT(script)
+	scriptFile:write(scriptTxt)
+	scriptFile:close()
+	Spring.Start(scriptFileName, "")
+end
+
 ------------------------------------------------------------------------
 -- Listeners
 ------------------------------------------------------------------------
@@ -94,9 +163,13 @@ end
 ------------------------------------------------------------------------
 -- Setters
 ------------------------------------------------------------------------
+
 function WrapperSkirmish:StartBattle()
-	self:_OnSaidBattleEx("Battle", "about to start (not really, needs implementation).")
-	Spring.Echo("Implement start battle")
+	if self.battle.gameName and self.battle.mapName then
+		self:_CallListeners("BattleAboutToStart")
+		self:_OnSaidBattleEx("Battle", "about to start")
+		WrapperSkirmish:_StartScript(self.battle.gameName, self.battle.mapName, self.myUserName or "noname")
+	end
 	return self
 end
 
