@@ -54,19 +54,13 @@ function SettingsWindow.GetControl()
 			
 				if self.selected == 1 then
 					--Spring.SetConfigInt("Fullscreen", 0, false)
-					Spring.SetConfigInt("XResolution", screenX, false)
-					Spring.SetConfigInt("YResolution", screenY, false)
 					Spring.SetConfigInt("XResolutionWindowed", screenX, false)
 					Spring.SetConfigInt("YResolutionWindowed", screenY, false)
 					Spring.SetConfigInt("WindowPosX", 0, false)
 					Spring.SetConfigInt("WindowPosY", 0, false)
-					Spring.SetConfigInt("XResolution", screenX, false)
-					Spring.SetConfigInt("YResolution", screenY, false)
 					Spring.SendCommands("fullscreen 0") 
 					Spring.SetConfigInt("WindowBorderless", 1, false)
 					Spring.SetConfigInt("WindowBorderless", 1, false)
-					Spring.SetConfigInt("XResolution", screenX, false)
-					Spring.SetConfigInt("YResolution", screenY, false)
 				elseif self.selected == 2 then
 					Spring.SetConfigInt("WindowPosX", screenX/4, false)
 					Spring.SetConfigInt("WindowPosY", screenY/8, false)
@@ -76,16 +70,11 @@ function SettingsWindow.GetControl()
 					Spring.SetConfigInt("WindowBorderless", 0, false)
 					Spring.SetConfigInt("Fullscreen", 0, false)
 					Spring.SendCommands("fullscreen 0") 
-					Spring.SetConfigInt("WindowPosX", screenX/4, false)
-					Spring.SetConfigInt("WindowPosY", screenY/8, false)
-					Spring.SetConfigInt("XResolutionWindowed", screenX/2, false)
-					Spring.SetConfigInt("YResolutionWindowed", screenY*3/4, false)
 				elseif self.selected == 3 then
 					Spring.SetConfigInt("XResolution", screenX, false)
 					Spring.SetConfigInt("YResolution", screenY, false)
 					Spring.SetConfigInt("Fullscreen", 1, false)
-					Spring.SendCommands("fullscreen 1") 
-					Spring.SetConfigInt("WindowBorderless", 0, false)
+					Spring.SendCommands("fullscreen 1")
 				end
 			end
 		},
