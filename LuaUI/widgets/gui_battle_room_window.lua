@@ -270,7 +270,7 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID, tabPanel)
 		font = { size = 22 },
 		OnClick = {
 			function()
-				battleLobby:SayBattle("!start")
+				battleLobby:StartBattle()
 			end
 		},
 		parent = parentControl,
@@ -601,7 +601,7 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 	battleLobby:AddListener("RemoveBot", removeBot)
 end
 
-local function InitializeControls(battleID, tabPanel, oldLobby)
+local function InitializeControls(battleID, tabPanel, oldLobby, wrapperControl)
 	local battle = battleLobby:GetBattle(battleID)
 
 	if window then
@@ -723,6 +723,9 @@ local function InitializeControls(battleID, tabPanel, oldLobby)
 	onBattleClosed = function(listener, closedBattleID, ... )
 		if battleID == closedBattleID then
 			window:Dispose()
+			if wrapperControl then
+				wrapperControl:SetParent(nil)
+			end
 		end
 	end
 	battleLobby:AddListener("OnBattleClosed", onBattleClosed)
@@ -746,7 +749,7 @@ function BattleRoomWindow.ShowBattleRoom(battleID, newLobby)
 	
 	battleLobby:SetBattleStatus({
 		AllyNumber = 0,
-		IsSpectator = false,  
+		IsSpectator = false,
 		Sync = 1, -- 0 = unknown, 1 = synced, 2 = unsynced
 	})
 end
@@ -764,9 +767,9 @@ function BattleRoomWindow.OpenSingleplayerSkirmish()
 		OnParent = {
 			function(obj)
 				battleLobby = WG.LibLobby.lobbySkirmish
-				battleLobby:SetBattleState(lobby:GetMyUserName() or "Player", Game.gameName, Game.mapName)
+				battleLobby:SetBattleState(lobby:GetMyUserName() or "Player", Game.gameName, Game.mapName, "Skirmish Battle")
 				
-				InitializeControls(1, nil, battleLobby)
+				InitializeControls(1, nil, battleLobby, obj)
 				obj:AddChild(window)
 				
 				battleLobby:SetBattleStatus({

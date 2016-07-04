@@ -94,6 +94,12 @@ end
 ------------------------------------------------------------------------
 -- Setters
 ------------------------------------------------------------------------
+function WrapperSkirmish:StartBattle()
+	self:_OnSaidBattleEx("Battle", "about to start (not really, needs implementation).")
+	Spring.Echo("Implement start battle")
+	return self
+end
+
 function WrapperSkirmish:SayBattle(message)
 	self:_OnSaidBattle(self:GetMyUserName(), message)
 	return self
@@ -111,11 +117,12 @@ function WrapperSkirmish:LeaveBattle()
 	return self
 end
 
-function WrapperSkirmish:SetBattleState(myUserName, gameName, mapName)
+function WrapperSkirmish:SetBattleState(myUserName, gameName, mapName, battleName)
 	self.myUserName = myUserName
 	self.battle.gameName = gameName
 	self.battle.mapName = mapName
 	self.battle.users = {myUserName}
+	self.battle.title = battleName
 	self.battleID = 1
 	return self
 end

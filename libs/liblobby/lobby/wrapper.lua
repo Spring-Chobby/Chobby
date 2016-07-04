@@ -113,6 +113,10 @@ function Wrapper:Leave(chanName)
 	return self
 end
 
+function Wrapper:StartBattle()
+	self:SayBattle("!start")
+end
+
 -- override
 function Wrapper:_OnTASServer(...)
 	if self.status == "disconnected" and self.disconnectTime ~= nil then -- in the process of reconnecting
@@ -243,14 +247,13 @@ function Wrapper:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, 
 		self.battles[battleID].mapHash = mapHash or self.battles[battleID].mapHash
 		self.battles[battleID].mapName = mapName or self.battles[battleID].mapName
 	end
-	self:_CallListeners("OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName)
+	
 	self:super("_OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName)
 end
-Wrapper.jsonCommands["OnUpdateBattleInfo"] = Wrapper._UpdateUserBattleStatus
+Wrapper.jsonCommands["OnUpdateBattleInfo"] = Wrapper._OnUpdateBattleInfo
 
 -- override
 function Wrapper:_UpdateUserBattleStatus(data)
-	Spring.Echo("compare", data.Name, self:GetMyUserName(), data.Name == self:GetMyUserName())
 	if data.Name then
 		if not self.battlePlayerData[data.Name] then
 			self.battlePlayerData[data.Name] = {}
