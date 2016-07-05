@@ -150,17 +150,9 @@ function ChatWindows:init()
 		children = {
 			self.tabPanel,
 			Button:New {
-				caption = "-",
-				width = 50,
-				y = 10,
-				right = 2,
-				height = 40,
-				OnClick = { function() Spring.Echo("implement minimize") end },
-			},
-			Button:New {
 				width = 60,
 				y = 10,
-				right = 52,
+				right = 2,
 				height = 40,
 				caption = i18n("join"),
 				OnClick = { function()
