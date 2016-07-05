@@ -1,95 +1,140 @@
 Downloader = Component:extends{}
 
-function Downloader:init()
+function Downloader:init(tbl)
 	self:super("init")
-	self.scale = 1.4 * Configuration:GetScale()
-	self.fontSize = 14
-	self.lblInstructions = Label:New {
-		x = 1,
-		width = 100 * self.scale,
-		y = 20 * self.scale,
-		height = 20 * self.scale,
-		caption = i18n("start_download"),
-		font = { size = self.scale * self.fontSize},
+	self.lblDownload = Label:New {
+		x = 0,
+		y = 0,
+		width = 100,
+		height = 20,
+		caption = "",
 	}
 
-	self.lblDownload = Label:New {
-		x = 1,
-		width = 100 * self.scale,
-		y = 50 * self.scale,
-		height = 20 * self.scale,
-		caption = i18n("download_noun") .. ":",
-		font = { size = self.scale * self.fontSize},
-	}
 	self.prDownload = Progressbar:New {
-		x = 1 * self.scale,
-		width = 200 * self.scale,
-		y = 75 * self.scale,
-		height = 20 * self.scale,
+		x = 0,
+		y = 20,
+		width = 200,
+		height = 30,
 		value = 0,
 	}
 
-	self.btnStart = Button:New {
-		x = 1,
-		width = 80 * self.scale,
-		bottom = 1,
-		height = 40 * self.scale,
-		caption = i18n("start_verb"),
-		font = { size = self.scale * self.fontSize},
-		OnClick = {
-			function()
-		self:startDownload("swiw:stable", "game")
-			end
-		},
-	}
-
-	local ww, wh = Spring.GetWindowGeometry()
-	local w, h = 265 * self.scale, 220 * self.scale
-	self.window = Window:New {
-		x = (ww / 2 - w) / 2,
-		y = (wh - h) / 2,
-		width = w,
-		height = h,
-		caption = i18n("download_noun"),
-		resizable = false,
+	self.ctrl = Control:New(table.merge({
+		width = 200,
+		height = 50,
+		caption = '',
+		padding = {0, 0, 0, 0},
 		children = {
-			self.lblInstructions,
 			self.lblDownload,
 			self.prDownload,
-			self.btnStart,
 		},
-		parent = screen0,
-	}
+	}, tbl))
+
+	self.downloads = {}
+	self._lastUpdate = 0
 end
 
-function Downloader:startDownload(archiveName, archiveType)
-	VFS.DownloadArchive(archiveName, archiveType)
+function Downloader:Hide()
+	self.lblDownload:Hide()
+	self.prDownload:Hide()
 end
 
-function Downloader:DownloadStarted(...)
-	self.lblDownload:SetCaption("Download started!")
+function Downloader:_CleanupDownload()
+	for _, _ in pairs(self.downloads) do
+		return -- don't hide progress bar if there are active downloads
+	end
+-- 	if window.disposed then
+-- 		return
+-- 	end
+	if not self.prDownload.hidden then
+		self.prDownload:Hide()
+	end
+	if not self.lblDownload.hidden then
+		self.lblDownload:Hide()
+	end
 end
 
-function Downloader:DownloadFinished(...)
-	self.lblDownload:SetCaption("Download finished!")
+-- util function to round to decimal spaces
+function round2(num, idp)
+  return string.format("%." .. (idp or 0) .. "f", num)
 end
 
-function Downloader:DownloadFailed(x, errorID)
-	self.lblDownload:SetCaption("Download failed: " .. errorID)
-end
-
-lastUpdate = 0
-function Downloader:DownloadProgress(ID, done, size)
-	Spring.Echo("Download progress!")
-	if Spring.GetGameSeconds() == lastUpdate or size == 0 then
+function Downloader:DownloadProgress(downloadID, downloaded, total)
+	if not self.downloads[downloadID] then
 		return
 	end
-	lastUpdate = Spring.GetGameSeconds()
-	--self.lblDownload:SetCaption("Download progress!")
-	Spring.Echo("done: " .. tostring(done) .. ", size: " .. tostring(size) .. ", progress: " .. (done/size) .. ", progress%: " .. (100 * done/size))
-	self.prDownload:SetValue(100 * done / size)
+	if Spring.GetGameSeconds() == self._lastUpdate or total == 0 then
+		return
+	end
+	self._lastUpdate = Spring.GetGameSeconds()
+
+	local elapsedTime = os.clock() - self.downloads[downloadID].startTime
+	local doneRatio = downloaded / total
+	local remainingSeconds = (1 - doneRatio) * elapsedTime / (doneRatio + 0.001)
+
+	-- calculate suffix
+	local suffix = "B"
+	if total > 1024 then
+		total = total / 1024
+		downloaded = downloaded / 1024
+		suffix = "KB"
+	end
+	if total > 1024 then
+		total = total / 1024
+		downloaded = downloaded / 1024
+		suffix = "MB"
+	end
+	local remainingTimeStr = ""
+	remainingSeconds = math.ceil(remainingSeconds)
+	if remainingSeconds > 60 then
+		local minutes = math.floor(remainingSeconds / 60)
+		remainingSeconds = remainingSeconds - minutes * 60
+		if minutes > 60 then
+			local hours = math.floor(minutes / 60)
+			minutes = minutes - hours * 60
+			remainingTimeStr = remainingTimeStr .. tostring(hours) .. "h"
+		end
+		remainingTimeStr = remainingTimeStr .. tostring(minutes) .. "m"
+	end
+	remainingTimeStr = remainingTimeStr .. tostring(remainingSeconds) .. "s"
+	-- round to one decimal
+	local totalStr = round2(total, 1)
+	local downloadedStr = round2(downloaded, 1)
+
+	self.prDownload:SetCaption(remainingTimeStr .. " left: " .. downloadedStr .. "/" .. totalStr .. " MB")
+	self.prDownload:SetValue(100 * doneRatio)
 end
 
-function Downloader:DownloadQueued(...)
-	self.lblDownload:SetCaption("Download queued!")
+function Downloader:DownloadStarted(downloadID)
+	if not self.downloads[downloadID] then
+		return
+	end
+	if self.prDownload.hidden then
+		self.prDownload:Show()
+	end
+	if self.lblDownload.hidden then
+		self.lblDownload:Show()
+	end
+	self.lblDownload:SetCaption(self.downloads[downloadID].archiveName)
+end
+
+function Downloader:DownloadFinished(downloadID)
+	if not self.downloads[downloadID] then
+		return
+	end
+	self.downloads[downloadID] = nil
+	self.prDownload:SetCaption("\255\0\255\0Download complete.\b")
+	WG.Delay(function() self:_CleanupDownload() end, 5)
+end
+
+function Downloader:DownloadFailed(downloadID, errorID)
+	if not self.downloads[downloadID] then
+		return
+	end
+	self.downloads[downloadID] = nil
+	self.prDownload:SetCaption("\255\255\0\0Download failed [".. errorID .."].\b")
+	WG.Delay(function() self:_CleanupDownload() end, 5)
+end
+
+function Downloader:DownloadQueued(downloadID, archiveName, archiveType)
+	self.downloads[downloadID] = { archiveName = archiveName, archiveType = archiveType, startTime = os.clock() }
 end

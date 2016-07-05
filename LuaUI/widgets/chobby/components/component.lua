@@ -20,17 +20,17 @@ end
 function Component:ViewResize(viewSizeX, viewSizeY)
 end
 
-function Component:DownloadStarted(...)	
+function Component:DownloadStarted(...)
 end
 
 function Component:DownloadFinished(...)
 end
 
-function Component:DownloadFailed(...)	
+function Component:DownloadFailed(...)
 end
 
 function Component:DownloadProgress(id, done, size)
 end
 
-function Component:DownloadQueued(...)	
+function Component:DownloadQueued(...)
 end

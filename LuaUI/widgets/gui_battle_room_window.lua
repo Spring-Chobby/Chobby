@@ -19,8 +19,6 @@ end
 
 -- Chili controls
 local window
-
-local lblDownload, prDownload
 local lblHaveMap, lblHaveGame
 
 -- Function which is called to fix scroll panel sizes
@@ -44,8 +42,6 @@ local battleLobby
 
 local largestTeamIndex = -1
 
-local downloads = {}
-
 local function UpdateArchiveStatus()
 	local battle = battleLobby:GetBattle(battleLobby:GetMyBattleID())
 	if VFS.HasArchive(battle.gameName) then
@@ -60,98 +56,6 @@ local function UpdateArchiveStatus()
 	end
 end
 
-local function _CleanupDownload()
-	for _, _ in pairs(downloads) do
-		return -- don't hide progress bar if there are active downloads
-	end
-	if window.disposed then
-		return
-	end
-	if not prDownload.hidden then
-		prDownload:Hide()
-	end
-	if not lblDownload.hidden then
-		lblDownload:Hide()
-	end
-end
-
--- util function to round to decimal spaces
-function round2(num, idp)
-  return string.format("%." .. (idp or 0) .. "f", num)
-end
-
-local lastUpdate = 0
-function widget:DownloadProgress(downloadID, downloaded, total)
-	if Spring.GetGameSeconds() == lastUpdate or total == 0 then
-		return
-	end
-	lastUpdate = Spring.GetGameSeconds()
-
-	local elapsedTime = os.clock() - downloads[downloadID].startTime
-	local doneRatio = downloaded / total
-	local remainingSeconds = (1 - doneRatio) * elapsedTime / (doneRatio + 0.001)
-
-	-- calculate suffix
-	local suffix = "B"
-	if total > 1024 then
-		total = total / 1024
-		downloaded = downloaded / 1024
-		suffix = "KB"
-	end
-	if total > 1024 then
-		total = total / 1024
-		downloaded = downloaded / 1024
-		suffix = "MB"
-	end
-	local remainingTimeStr = ""
-	remainingSeconds = math.ceil(remainingSeconds)
-	if remainingSeconds > 60 then
-		local minutes = math.floor(remainingSeconds / 60)
-		remainingSeconds = remainingSeconds - minutes * 60
-		if minutes > 60 then
-			local hours = math.floor(minutes / 60)
-			minutes = minutes - hours * 60
-			remainingTimeStr = remainingTimeStr .. tostring(hours) .. "h"
-		end
-		remainingTimeStr = remainingTimeStr .. tostring(minutes) .. "m"
-	end
-	remainingTimeStr = remainingTimeStr .. tostring(remainingSeconds) .. "s"
-	-- round to one decimal
-	local totalStr = round2(total, 1)
-	local downloadedStr = round2(downloaded, 1)
-
-	prDownload:SetCaption(remainingTimeStr .. " left: " .. downloadedStr .. "/" .. totalStr .. " MB")
--- 	Spring.Echo("done: " .. tostring(done) .. ", size: " .. tostring(size) .. ", progress: " .. (done/size) .. ", progress%: " .. (100 * done/size))
-	prDownload:SetValue(100 * doneRatio)
-end
-
-function widget:DownloadStarted(downloadID)
-	if prDownload.hidden then
-		prDownload:Show()
-	end
-	if lblDownload.hidden then
-		lblDownload:Show()
-	end
-	lblDownload:SetCaption(downloads[downloadID].archiveName)
-end
-
-function widget:DownloadFinished(downloadID)
-	downloads[downloadID] = nil
-	prDownload:SetCaption("\255\0\255\0Download complete.\b")
-	WG.Delay(_CleanupDownload, 5)
-	UpdateArchiveStatus()
-end
-
-function widget:DownloadFailed(downloadID, errorID)
-	downloads[downloadID] = nil
-	prDownload:SetCaption("\255\255\0\0Download failed [".. errorID .."].\b")
-	WG.Delay(_CleanupDownload, 5)
-end
-
-function widget:DownloadQueued(downloadID, archiveName, archiveType)
-	downloads[downloadID] = { archiveName = archiveName, archiveType = archiveType, startTime = os.clock() }
-end
-
 local function MaybeDownloadArchive(archiveName, archiveType)
 	if not VFS.HasArchive(archiveName) then
 		VFS.DownloadArchive(archiveName, archiveType)
@@ -164,6 +68,10 @@ end
 
 local function MaybeDownloadMap(battle)
 	MaybeDownloadArchive(battle.mapName, "map")
+end
+
+function widget:DownloadFinished()
+	UpdateArchiveStatus()
 end
 
 --------------------------------------------------------------------------------
@@ -251,24 +159,12 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID, tabPanel)
 		parent = parentControl,
 	}
 
-	lblDownload = Label:New {
+	downloader = WG.Chobby.Downloader({
 		x = 15,
 		y = 245,
 		parent = parentControl,
-		width = 100,
-		height = 20,
-		caption = "",
-	}
-	lblDownload:Hide()
-	prDownload = Progressbar:New {
-		x = 15,
-		y = 265,
-		parent = parentControl,
-		width = 200,
-		height = 30,
-		value = 0,
-	}
-	prDownload:Hide()
+	})
+	downloader:Hide()
 
 	local btnStartBattle = Button:New {
 		x = 10,
