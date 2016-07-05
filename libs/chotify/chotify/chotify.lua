@@ -42,7 +42,7 @@ function Chotify:Post(obj)
     local sound = obj.sound or nil
     
     if sound then
-        Spring.PlaySoundFile("sounds/" .. sound, 1.0)
+        Spring.PlaySoundFile(sound, 1.0)
     end
 
     local id = self._idCounter
