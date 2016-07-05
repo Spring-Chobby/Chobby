@@ -903,6 +903,12 @@ end
 Interface.commands["SAIDPRIVATE"] = Interface._OnSaidPrivate
 Interface.commandPattern["SAIDPRIVATE"] = "(%S+)%s+(.*)"
 
+function Interface:_OnSaidPrivateEx(userName, message)
+	self:_CallListeners("OnSaidPrivateEx", userName, message)
+end
+Interface.commands["SAIDPRIVATEEX"] = Interface._OnSaidPrivateEx
+Interface.commandPattern["SAIDPRIVATEEX"] = "(%S+)%s+(.*)"
+
 function Interface:_OnSayPrivate(userName, message)
 	self:_CallListeners("OnSayPrivate", userName, message)
 end
