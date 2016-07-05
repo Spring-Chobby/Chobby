@@ -141,25 +141,29 @@ function UserListPanel:AddUser(userName)
 	if self.team and lobby:GetTeam() ~= nil and lobby:GetTeam().leader == userName then
 		userName = "♜" .. userName
 	end
-	local btnChat = Button:New {
-		x = 0,
-		width = 100,
-		y = 0,
-		height = 30,
-		caption = userName, 
-		OnClick = {
-			function()
-				CHOBBY.chatWindows:GetPrivateChatConsole(userName)
-			end
-		},
-	}
-	table.insert(children, btnChat)
+	
+	if lobby:GetUser(userName).isBot ~= true then
+		
+		local btnChat = Button:New {
+			x = 0,
+			width = 100,
+			y = 0,
+			height = 30,
+			caption = userName, 
+			OnClick = {
+				function()
+					CHOBBY.chatWindows:GetPrivateChatConsole(userName)
+				end
+			},
+		}
+		table.insert(children, btnChat)
 
-	self.userPanel:AddChild(Control:New {
-		x = 0,
-		width = "100%",
-		y = #(self.userPanel.children) * 42,
-		height = 40,
-		children = children,
-	})
+		self.userPanel:AddChild(Control:New {
+			x = 0,
+			width = "100%",
+			y = #(self.userPanel.children) * 42,
+			height = 40,
+			children = children,
+		})
+	end
 end
