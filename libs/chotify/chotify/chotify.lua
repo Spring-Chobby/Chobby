@@ -39,10 +39,9 @@ function Chotify:Post(obj)
     local body = obj.body or ""
     local icon = obj.icon or ""
     local time = obj.time or 5
-    local sound = obj.sound or nil
     
-    if sound then
-        Spring.PlaySoundFile(sound, 1.0)
+    if obj.sound then
+        Spring.PlaySoundFile(obj.sound, 1.0)
     end
 
     local id = self._idCounter
