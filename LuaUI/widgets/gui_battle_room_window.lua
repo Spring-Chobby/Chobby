@@ -299,7 +299,9 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID, tabPanel)
 			return
 		end
 		if mapName then
-			lblMapName:SetCaption(mapName)
+			-- TODO: Bit lazy here, seeing as we only need to update the map
+			UpdateArchiveStatus()
+			MaybeDownloadMap(battle)
 		end
 	end
 	battleLobby:AddListener("OnUpdateBattleInfo", onUpdateBattleInfo)

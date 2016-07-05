@@ -160,7 +160,8 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 	local battle = lobby:GetBattle(battleID)
 	local items = self:GetRowItems(battleID)
 	items[1]:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
-	items[4]:SetCaption(battle.mapName)
+	items[4]:SetCaption(battle.mapName:sub(1, 22) .. (VFS.HasArchive(battle.mapName) and ' [' .. Configuration:GetSuccessColor() .. '✔\b]' or ' [' .. Configuration:GetErrorColor() .. '✘\b]'))
+	items[4].tooltip = battle.mapName
 	self:RecalculatePosition(battleID)
 end
 
