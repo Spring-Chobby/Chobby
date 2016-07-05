@@ -39,14 +39,18 @@ function Chotify:Post(obj)
     local body = obj.body or ""
     local icon = obj.icon or ""
     local time = obj.time or 5
+    
+    if obj.sound then
+        Spring.PlaySoundFile(obj.sound, 1.0)
+    end
 
     local id = self._idCounter
     self._idCounter = self._idCounter + 1
 
     local window = Chili.Window:New {
-        right = 0,
+        right = 2,
         width = 300,
-        y = 60,
+        y = 2,
         height = 100,
         caption = title,
         parent = Chili.Screen0,
