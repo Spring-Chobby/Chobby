@@ -67,22 +67,60 @@ local function _CleanupDownload()
 	if window.disposed then
 		return
 	end
-	prDownload:Hide()
-	lblDownload:Hide()
+	if not prDownload.hidden then
+		prDownload:Hide()
+	end
+	if not lblDownload.hidden then
+		lblDownload:Hide()
+	end
+end
+
+-- util function to round to decimal spaces
+function round2(num, idp)
+  return string.format("%." .. (idp or 0) .. "f", num)
 end
 
 local lastUpdate = 0
 function widget:DownloadProgress(downloadID, downloaded, total)
-	if Spring.GetGameSeconds() == lastUpdate or size == 0 then
+	if Spring.GetGameSeconds() == lastUpdate or total == 0 then
 		return
 	end
 	lastUpdate = Spring.GetGameSeconds()
 
 	local elapsedTime = os.clock() - downloads[downloadID].startTime
 	local doneRatio = downloaded / total
-	local remainingTime = (1 - doneRatio) * elapsedTime / (doneRatio + 0.001)
+	local remainingSeconds = (1 - doneRatio) * elapsedTime / (doneRatio + 0.001)
 
-	prDownload:SetCaption(tostring(math.ceil(remainingTime)) .. "s remaining - " .. tostring(math.floor(downloaded/1024/1024)) .. " of " .. tostring(math.ceil(total/1024/1024)) .. " MB")
+	-- calculate suffix
+	local suffix = "B"
+	if total > 1024 then
+		total = total / 1024
+		downloaded = downloaded / 1024
+		suffix = "KB"
+	end
+	if total > 1024 then
+		total = total / 1024
+		downloaded = downloaded / 1024
+		suffix = "MB"
+	end
+	local remainingTimeStr = ""
+	remainingSeconds = math.ceil(remainingSeconds)
+	if remainingSeconds > 60 then
+		local minutes = math.floor(remainingSeconds / 60)
+		remainingSeconds = remainingSeconds - minutes * 60
+		if minutes > 60 then
+			local hours = math.floor(minutes / 60)
+			minutes = minutes - hours * 60
+			remainingTimeStr = remainingTimeStr .. tostring(hours) .. "h"
+		end
+		remainingTimeStr = remainingTimeStr .. tostring(minutes) .. "m"
+	end
+	remainingTimeStr = remainingTimeStr .. tostring(remainingSeconds) .. "s"
+	-- round to one decimal
+	local totalStr = round2(total, 1)
+	local downloadedStr = round2(downloaded, 1)
+
+	prDownload:SetCaption(remainingTimeStr .. " left: " .. downloadedStr .. "/" .. totalStr .. " MB")
 -- 	Spring.Echo("done: " .. tostring(done) .. ", size: " .. tostring(size) .. ", progress: " .. (done/size) .. ", progress%: " .. (100 * done/size))
 	prDownload:SetValue(100 * doneRatio)
 end
@@ -95,7 +133,6 @@ function widget:DownloadStarted(downloadID)
 		lblDownload:Show()
 	end
 	lblDownload:SetCaption(downloads[downloadID].archiveName)
-	Spring.Echo("DownloadStarted", downloadID)
 end
 
 function widget:DownloadFinished(downloadID)
@@ -114,34 +151,6 @@ end
 function widget:DownloadQueued(downloadID, archiveName, archiveType)
 	downloads[downloadID] = { archiveName = archiveName, archiveType = archiveType, startTime = os.clock() }
 end
-
--- function widget:DownloadStarted(...)
--- 	self.lblDownload:SetCaption("Download started!")
--- end
--- 
--- function Downloader:DownloadFinished(...)
--- 	self.lblDownload:SetCaption("Download finished!")
--- end
--- 
--- function Downloader:DownloadFailed(x, errorID)
--- 	self.lblDownload:SetCaption("Download failed: " .. errorID)
--- end
--- 
--- lastUpdate = 0
--- function Downloader:DownloadProgress(ID, done, size)
--- 	Spring.Echo("Download progress!")
--- 	if Spring.GetGameSeconds() == lastUpdate or size == 0 then
--- 		return
--- 	end
--- 	lastUpdate = Spring.GetGameSeconds()
--- 	--self.lblDownload:SetCaption("Download progress!")
--- 	Spring.Echo("done: " .. tostring(done) .. ", size: " .. tostring(size) .. ", progress: " .. (done/size) .. ", progress%: " .. (100 * done/size))
--- 	self.prDownload:SetValue(100 * done / size)
--- end
--- 
--- function Downloader:DownloadQueued(...)
--- 	self.lblDownload:SetCaption("Download queued!")
--- end
 
 local function MaybeDownloadArchive(archiveName, archiveType)
 	if not VFS.HasArchive(archiveName) then
