@@ -230,7 +230,7 @@ function Interface:Login(user, password, cpu, localIP)
 		ClientType = 1,
 	}
 	
-	self:_SendCommand("Login " .. tableToString(sendData))
+	self:_SendCommand("Login " .. json.encode(sendData))
 	return self
 end
 
@@ -238,7 +238,7 @@ function Interface:Join(chanName, key)
 	local sendData = {
 		ChannelName = chanName
 	}
-	self:_SendCommand("JoinChannel " .. tableToString(sendData))
+	self:_SendCommand("JoinChannel " .. json.encode(sendData))
 	return self
 end
 
@@ -258,7 +258,7 @@ function Interface:Say(chanName, message)
 		Ring = false,
 		Time = "2016-06-25T07:17:20.7548313Z",
 	}
-	self:_SendCommand("Say " .. tableToString(sendData))
+	self:_SendCommand("Say " .. json.encode(sendData))
 	return self
 end
 
@@ -273,7 +273,7 @@ function Interface:SayPrivate(userName, message)
 		Ring = false,
 		Time = "2016-06-25T07:17:20.7548313Z",
 	}
-	self:_SendCommand("Say " .. tableToString(sendData))
+	self:_SendCommand("Say " .. json.encode(sendData))
 	return self
 end
 
@@ -286,7 +286,7 @@ function Interface:SayBattle(message)
 		Ring = false,
 		Time = "2016-06-25T07:17:20.7548313Z",
 	}
-	self:_SendCommand("Say " .. tableToString(sendData))
+	self:_SendCommand("Say " .. json.encode(sendData))
 	return self
 end
 
@@ -297,7 +297,7 @@ function Interface:Register(userName, password, email)
 		Name = userName,
 		PasswordHash = password,
 	}
-	self:_SendCommand("Register " .. tableToString(sendData))
+	self:_SendCommand("Register " .. json.encode(sendData))
 	return self
 end
 
@@ -307,13 +307,13 @@ function Interface:JoinBattle(battleID, password, scriptPassword)
 		Password = password,
 		scriptPassword = scriptPassword
 	}
-	self:_SendCommand("JoinBattle " .. tableToString(sendData))
+	self:_SendCommand("JoinBattle " .. json.encode(sendData))
 	return self
 end
 
 function Interface:SetBattleStatus(battleData)
 	battleData.Name = self:GetMyUserName()
-	self:_SendCommand("UpdateUserBattleStatus " .. tableToString(battleData))
+	self:_SendCommand("UpdateUserBattleStatus " .. json.encode(battleData))
 	return self
 end
 
@@ -321,7 +321,7 @@ function Interface:LeaveBattle()
 	local sendData = {
 		BattleID = self:GetMyBattleID(),
 	}
-	self:_SendCommand("LeaveBattle " .. tableToString(sendData))
+	self:_SendCommand("LeaveBattle " .. json.encode(sendData))
 	return self
 end
 

@@ -39,29 +39,6 @@ function concat(...)
 	return table.concat(argsClean, " ")
 end
 
-function tableToString(data)
-	local retString = "{"
-	local first = true
-	for key, value in pairs(data) do
-		if not first then
-			retString = retString .. ","
-		end
-		retString = retString .. "\"" .. key .. "\":" 
-		if type(value) == "table" then
-			tableToString(data)
-		elseif type(value) == "boolean" then
-			retString = retString .. ((value and "true") or "false")
-		elseif type(value) == "string" then
-			retString = retString .. "\"" .. value .. "\""
-		else -- Assume number
-			retString = retString .. value
-		end
-		first = false
-	end
-	retString = retString .. "}"
-	return retString
-end
-
 function parseTags(tags)
 	local tags = explode("\t", tags)
 	local tagsMap = {}
