@@ -62,7 +62,7 @@ function ChatWindows:init()
 					channelConsole:AddMessage(message, userName, nil, "\255\255\0\0")
 					if chanName ~= self.currentTab then
 						Chotify:Post{
-							title = "New message for you in channel " .. chanName,
+							title = userName .. " in " .. chanName,
 							body = message,
 							sound = "sounds/beep4.wav",
 							time = 15,
