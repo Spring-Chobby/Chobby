@@ -464,7 +464,7 @@ function Wrapper:Reconnect()
 	self:Connect(self._oldData.host, self._oldData.port)
 end
 
-function Wrapper:_ProcessClientStatus(userName, ingame, isAway, isModerator)
+function Wrapper:_ProcessClientStatus(userName, ingame, isAway, isModerator, isBot)
 	local function StartBattle(battleID)
 		Spring.Echo("Game starts!")
 		local battle = self:GetBattle(battleID)
@@ -492,10 +492,16 @@ function Wrapper:_ProcessClientStatus(userName, ingame, isAway, isModerator)
 		end
 	end
 	if isAway ~= nil then
+		self.users[userName].isAway = isAway
 		self:_CallListeners("UserAwayStatus", userName, isAway)
 	end
 	if isModerator ~= nil then
+		self.users[userName].isModerator = isModerator
 		self:_CallListeners("UserModeratorStatus", userName, isModerator)
+	end
+	if isBot ~= nil then
+		self.users[userName].isBot = isBot
+		self:_CallListeners("UserBotStatus", userName, isBot)
 	end
 end
 

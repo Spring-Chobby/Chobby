@@ -138,9 +138,13 @@ end
 function UserListPanel:AddUser(userName)
 	local children = {}
 
+	
+	if lobby:GetUser(userName).isBot then return end
+	
 	if self.team and lobby:GetTeam() ~= nil and lobby:GetTeam().leader == userName then
 		userName = "♜" .. userName
 	end
+	
 	local btnChat = Button:New {
 		x = 0,
 		width = 100,
