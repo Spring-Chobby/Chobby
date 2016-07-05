@@ -136,6 +136,36 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID, tabPanel)
 		parent = parentControl,
 	}
 	
+	-- TODO: placeholder, needs implementation
+	local btnAddAI = Button:New {
+		x = "50.5%",
+		y = 65,
+		height = 45,
+		right = 10,
+		caption = "\255\66\138\201Add AI\b", -- add proper i18n if needed
+		font = { size = 22 },
+		OnClick = {
+			function()
+				Spring.Echo("Implement me!")
+
+				Spring.Echo("Get generic AIs")
+				local ais = VFS.GetAvailableAIs()
+				for i, ai in pairs(ais) do
+					Spring.Echo(tostring(i) .. ". shortName: " .. ai.shortName .. ", version: " .. ai.version)
+				end
+
+				Spring.Echo("Get AIs for Game")
+				ais = VFS.GetAvailableAIs(battle.gameName)
+				for i, ai in pairs(ais) do
+					Spring.Echo(tostring(i) .. ". shortName: " .. ai.shortName .. ", version: " .. ai.version)
+				end
+-- 				Spring.Echo("Get AIs for Game + Map")
+-- 				local ais = VFS.GetAvailableAIs(battle.gameName, battle.mapName)
+			end
+		},
+		parent = parentControl,
+	}
+	
 	local lblNumberOfPlayers = Label:New {
 		x = 15,
 		y = 175,
