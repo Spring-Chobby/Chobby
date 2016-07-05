@@ -4,6 +4,7 @@ function ChatWindows:init()
 	self.channelConsoles = {}
 	self.userListPanels = {}
 	self.tabbars = {}
+	self.currentTab = ""
 
 	-- setup debug console to listen to commands
 	self:CreateDebugConsole()
@@ -57,7 +58,19 @@ function ChatWindows:init()
 		function(listener, chanName, userName, message)
 			local channelConsole = self.channelConsoles[chanName]
 			if channelConsole ~= nil then
-				channelConsole:AddMessage(message, userName)
+				if string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName() then
+					channelConsole:AddMessage(message, userName, nil, "\255\255\0\0")
+					if chanName ~= self.currentTab then
+						Chotify:Post{
+							title = "New message for you in channel " .. chanName,
+							body = message,
+							sound = "sounds/beep4.wav",
+							time = 15,
+						}
+					end
+				else
+					channelConsole:AddMessage(message, userName)
+				end
 			end
 		end
 	)
@@ -134,6 +147,7 @@ function ChatWindows:init()
 		},
 		OnTabChange = {
 			function(obj, name)
+				self.currentTab = string.sub(name, 2) -- remove the # from name
 				local console = self.tabbars[name]
 				if console then
 					WG.Delay(function()
