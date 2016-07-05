@@ -492,12 +492,15 @@ function Wrapper:_ProcessClientStatus(userName, ingame, isAway, isModerator, isB
 		end
 	end
 	if isAway ~= nil then
+		self.users[userName].isAway = isAway
 		self:_CallListeners("UserAwayStatus", userName, isAway)
 	end
 	if isModerator ~= nil then
+		self.users[userName].isModerator = isModerator
 		self:_CallListeners("UserModeratorStatus", userName, isModerator)
 	end
 	if isBot ~= nil then
+		self.users[userName].isBot = isBot
 		self:_CallListeners("UserBotStatus", userName, isBot)
 	end
 end
