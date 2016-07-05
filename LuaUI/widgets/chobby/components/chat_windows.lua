@@ -94,16 +94,8 @@ function ChatWindows:init()
 	)
 	lobby:AddListener("OnSaidPrivateEx",
 		function(listener, userName, message)
-			if userName == 'Nightwatch' then
-				local chanName, userName, msgDate, message = message:match('.-|(.+)|(.+)|(.+)|(.*)')
-				local channelConsole = self:GetChannelConsole(chanName)
-				if channelConsole ~= nil then
-					channelConsole:AddMessage(message, userName, msgDate, "\255\0\139\139")
-				end
-			else
-				local privateChatConsole = self:GetPrivateChatConsole(userName)
-				privateChatConsole:AddMessage(message, userName, msgDate, "\255\0\139\139")
-			end
+			local privateChatConsole = self:GetPrivateChatConsole(userName)
+			privateChatConsole:AddMessage(message, userName, msgDate, "\255\0\139\139")
 		end
 	)
 	lobby:AddListener("OnRemoveUser",
