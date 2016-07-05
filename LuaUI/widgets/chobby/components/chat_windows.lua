@@ -92,6 +92,12 @@ function ChatWindows:init()
 			end
 		end
 	)
+	lobby:AddListener("OnSaidPrivateEx",
+		function(listener, userName, message)
+			local privateChatConsole = self:GetPrivateChatConsole(userName)
+			privateChatConsole:AddMessage(message, userName, msgDate, "\255\0\139\139")
+		end
+	)
 	lobby:AddListener("OnRemoveUser",
 		function(listener, userName)
 			local privateChatConsole = self.privateChatConsoles[userName]
