@@ -3,6 +3,8 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 	local externalFunctions = {}
 	local submenuPanelNames = {}
 	
+	local BUTTON_HEIGHT = 80
+	
 	-------------------------------------------------------------------
 	-- Submenu Handling
 	-------------------------------------------------------------------
@@ -46,9 +48,9 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 		
 		submenus[i].button = Button:New {
 			x = 0,
-			y = 100*(i - 1)/submenuCount .. "%",
+			y = (i - 1) * BUTTON_HEIGHT,
 			width = "100%",
-			height = buttonHeight,
+			height = BUTTON_HEIGHT,
 			caption = i18n(submenus[i].name),
 			font = { size = 20},
 			parent = buttonsHolder,

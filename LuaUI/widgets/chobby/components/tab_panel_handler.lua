@@ -2,6 +2,8 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 	
 	local externalFunctions = {}
 	
+	local BUTTON_HEIGHT = 80
+	
 	-------------------------------------------------------------------
 	-- Local variables
 	-------------------------------------------------------------------
@@ -54,19 +56,32 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 		self:Invalidate()
 	end
 	
+	local function SetButtonPositionAndSize(index)
+		if tabsVertical then
+			tabs[index].button:SetPos(nil, nil, nil, BUTTON_HEIGHT)
+			tabs[index].button:SetPosRelative(
+				"0%",
+				(index - 1) * BUTTON_HEIGHT,
+				"100%"
+			)
+		else
+			local buttonSize = 100/#tabs
+			local pos = (index - 1)*buttonSize .. "%"
+			tabs[index].button:SetPosRelative(
+				(index - 1)*buttonSize .. "%",
+				0,
+				buttonSize .. "%",
+				"100%"
+			)
+		end
+	end
+	
 	local function UpdateButtonLayout(newTabsVertical)
-		local buttonSize = 100/#tabs
 		if newTabsVertical ~= nil then
 			tabsVertical = newTabsVertical
 		end
 		for i = 1, #tabs do
-			local pos = (i - 1)*buttonSize .. "%"
-			tabs[i].button:SetPosRelative(
-				(tabsVertical and 0) or pos,
-				(tabsVertical and pos) or 0,
-				(tabsVertical and "100%") or buttonSize .. "%",
-				(tabsVertical and buttonSize .. "%") or "100%"
-			)
+			SetButtonPositionAndSize(i)
 		end
 	end
 	
@@ -203,27 +218,24 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 		children = {}
 	}
 	
-	local buttonSize = 100/#tabs
-	
 	for i = 1, #tabs do
-		local pos = buttonSize*(i-1) .. "%"
-		
 		local button = Button:New {
-			x = (tabsVertical and 0) or pos,
-			y = (tabsVertical and pos) or 0,
-			width = (tabsVertical and "100%") or buttonSize .. "%",
-			height = (tabsVertical and buttonSize .. "%") or "100%",
+			x = "0%",
+			y = "0%",
+			width = "100%",
+			height = "100%",
 			caption = i18n(tabs[i].name),
 			font = { size = 20},
 			parent = buttonsHolder,
 			OnClick = {function(self) ToggleShow(self, tabs[i]) end},
 		}
+		tabs[i].button = button
+		SetButtonPositionAndSize(i)
 		
 		button.oldFont = button.font
 		button.oldCaption = button.caption
 		button.oldBackgroundColor = button.backgroundColor
 		
-		tabs[i].button = button
 		tabs[i].rank = i
 		if type(tabs[i].control) ~= "function" then
 			tabs[i].control.OnOrphan = {
