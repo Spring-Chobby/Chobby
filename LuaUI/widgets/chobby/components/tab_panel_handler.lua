@@ -36,19 +36,20 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 				end
 			}
 		end
+		
 		local control = tab.control
 		
 		if displayPanel.visible then
 			if displayPanel:GetChildByName(control.name) then
 				displayPanel:ClearChildren()
-				displayPanel:Hide()
 				return
 			end
-		else
-			displayPanel:Show()
 		end
 		displayPanel:ClearChildren()
 		displayPanel:AddChild(control)
+		if not displayPanel.visible then
+			displayPanel:Show()
+		end
 		
 		self:SetCaption(Configuration:GetSelectedColor() .. self.oldCaption .. "\b")
 		self.font = Chili.Font:New(getFont())
@@ -219,31 +220,37 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 	}
 	
 	for i = 1, #tabs do
+		local thisTab = tabs[i] -- Protect against tab reordering
 		local button = Button:New {
+			name = thisTab.name .. "_button",
 			x = "0%",
 			y = "0%",
 			width = "100%",
 			height = "100%",
-			caption = i18n(tabs[i].name),
+			caption = i18n(thisTab.name),
 			font = { size = 20},
 			parent = buttonsHolder,
-			OnClick = {function(self) ToggleShow(self, tabs[i]) end},
+			OnClick = {function(self) ToggleShow(self, thisTab) end},
 		}
-		tabs[i].button = button
+		thisTab.button = button
 		SetButtonPositionAndSize(i)
 		
 		button.oldFont = button.font
 		button.oldCaption = button.caption
 		button.oldBackgroundColor = button.backgroundColor
 		
-		tabs[i].rank = i
-		if type(tabs[i].control) ~= "function" then
-			tabs[i].control.OnOrphan = {
+		thisTab.rank = i
+		if type(thisTab.control) ~= "function" then
+			thisTab.control.OnOrphan = {
 				function(self)
 					button:SetCaption(button.oldCaption)
 					button.font = button.oldFont
 					button.backgroundColor = button.oldBackgroundColor
 					button:Invalidate()
+					
+					if (displayPanel:IsEmpty() or displayPanel:GetChildByName(thisTab.control.name)) and displayPanel.visible then
+						displayPanel:Hide()
+					end
 				end
 			}
 		end

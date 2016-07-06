@@ -246,7 +246,9 @@ end
 
 function widget:Shutdown()
 	lobby:RemoveListener("BattleAboutToStart", onBattleAboutToStart)
-	WG.LibLobby.lobbySkirmish:RemoveListener("BattleAboutToStart", onBattleAboutToStart)
+	if WG.LibLobby then
+		WG.LibLobby.lobbySkirmish:RemoveListener("BattleAboutToStart", onBattleAboutToStart)
+	end
 end
 
 function widget:GetConfigData()
