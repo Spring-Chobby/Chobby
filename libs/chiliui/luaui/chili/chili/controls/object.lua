@@ -537,14 +537,12 @@ function Object:GetChildByName(name)
   local cn = self.children
   for i=1,#cn do
     if (name == cn[i].name) then
-		Spring.Echo("FOUND CHILD")
       return cn[i]
     end
   end
 
   for c in pairs(self.children_hidden) do
     if (name == c.name) then
-		Spring.Echo("FOUND HIDDEN CHILD")
       return MakeWeakLink(c)
     end
   end
