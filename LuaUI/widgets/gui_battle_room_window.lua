@@ -35,6 +35,10 @@ local onLeftBattle
 local removeBot
 
 local battleLobby
+local wrapperControl
+
+local singleplayerWrapper
+local multiplayerWrapper
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -84,7 +88,7 @@ end
 --------------------------------------------------------------------------------
 -- Chili/interface management
 
-local function SetupInfoButtonsPanel(parentControl, battle, battleID, tabPanel)
+local function SetupInfoButtonsPanel(parentControl, battle, battleID)
 
 	local lblMapName = Label:New {
 		x = 15,
@@ -226,9 +230,6 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID, tabPanel)
 		caption = WG.Chobby.Configuration:GetErrorColor() .. i18n("quit") .. "\b",
 		OnClick = {
 			function()
-				if tabPanel then
-					tabPanel.RemoveTab("myBattle")
-				end
 				battleLobby:LeaveBattle()
 			end
 		},
@@ -256,6 +257,9 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID, tabPanel)
 			return
 		end
 		if battleLobby:GetMyUserName() == userName then
+			if wrapperControl and wrapperControl.visible then
+				wrapperControl:Hide()
+			end
 			window:Dispose()
 		else
 			UpdatePlayers(battleID)
@@ -544,12 +548,8 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 	battleLobby:AddListener("RemoveBot", removeBot)
 end
 
-local function InitializeControls(battleID, tabPanel, oldLobby, wrapperControl)
+local function InitializeControls(battleID, oldLobby)
 	local battle = battleLobby:GetBattle(battleID)
-
-	if window then
-		window:Dispose()
-	end
 	
 	window = Control:New {
 		x = 0,
@@ -603,7 +603,7 @@ local function InitializeControls(battleID, tabPanel, oldLobby, wrapperControl)
 		parent = subPanel,
 	}
 	
-	SetupInfoButtonsPanel(infoButtonsPanel, battle, battleID, tabPanel)
+	SetupInfoButtonsPanel(infoButtonsPanel, battle, battleID)
 	
 	local lblBattleTitle = Label:New {
 		x = 18,
@@ -666,12 +666,14 @@ local function InitializeControls(battleID, tabPanel, oldLobby, wrapperControl)
 	onBattleClosed = function(listener, closedBattleID, ... )
 		if battleID == closedBattleID then
 			window:Dispose()
-			if wrapperControl then
-				wrapperControl:SetParent(nil)
+			if wrapperControl and wrapperControl.visible then
+				wrapperControl:Hide()
 			end
 		end
 	end
 	battleLobby:AddListener("OnBattleClosed", onBattleClosed)
+	
+	return window
 end
 
 --------------------------------------------------------------------------------
@@ -680,26 +682,21 @@ end
 
 local BattleRoomWindow = {}
 
-function BattleRoomWindow.ShowBattleRoom(battleID, newLobby)
+function BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
+	if window then
+		window:Dispose()
+	end
+	
+	if singleplayerWrapper then
+		singleplayerWrapper = nil
+	end
+	
 	local mainWindowHandler = WG.Chobby.interfaceRoot.GetMainWindowHandler()
-	local tabs = mainWindowHandler.GetTabList("multiplayer")
+	local tabPanel = mainWindowHandler.GetTabList("multiplayer")
 	
-	battleLobby = newLobby
-	
-	InitializeControls(battleID, tabs, battleLobby)
-	
-	tabs.AddTab("My Battle", false, 3, window, true, "myBattle")
-	
-	battleLobby:SetBattleStatus({
-		AllyNumber = 0,
-		IsSpectator = false,
-		Sync = 1, -- 0 = unknown, 1 = synced, 2 = unsynced
-	})
-end
-
-function BattleRoomWindow.OpenSingleplayerSkirmish()
-	
-	local wrapperWindow = Control:New {
+	battleLobby = WG.LibLobby.lobby
+				
+	multiplayerWrapper = Control:New {
 		x = 0,
 		y = 0,
 		width = "100%",
@@ -709,11 +706,61 @@ function BattleRoomWindow.OpenSingleplayerSkirmish()
 		
 		OnParent = {
 			function(obj)
+				if obj:IsEmpty() then
+					wrapperControl = obj
+					
+					local battleWindow = InitializeControls(battleID, battleLobby)
+					obj:AddChild(battleWindow)
+				end
+			end
+		},
+		OnHide = {
+			function(obj)
+				tabPanel.RemoveTab("myBattle")
+			end
+		}
+	}
+
+	tabPanel.AddTab("My Battle", false, 3, multiplayerWrapper, true, "myBattle")
+	
+	battleLobby:SetBattleStatus({
+		AllyNumber = 0,
+		IsSpectator = false,
+		Sync = 1, -- 0 = unknown, 1 = synced, 2 = unsynced
+	})
+end
+
+function BattleRoomWindow.GetSingleplayerControl()
+	
+	singleplayerWrapper = Control:New {
+		x = 0,
+		y = 0,
+		width = "100%",
+		height = "100%",
+		resizable = false,
+		padding = {0, 0, 0, 0},
+		
+		OnParent = {
+			function(obj)
+				if window then
+					window:Dispose()
+				end
+				
+				if multiplayerWrapper then
+					local mainWindowHandler = WG.Chobby.interfaceRoot.GetMainWindowHandler()
+					local tabPanel = mainWindowHandler.GetTabList("multiplayer")
+					tabPanel.RemoveTab("myBattle")
+					
+					WG.LibLobby.lobby:LeaveBattle()
+				end
+				
 				battleLobby = WG.LibLobby.lobbySkirmish
 				battleLobby:SetBattleState(lobby:GetMyUserName() or "Player", "Chobby $VERSION", Game.mapName, "Skirmish Battle")
+
+				wrapperControl = obj
 				
-				InitializeControls(1, nil, battleLobby, obj)
-				obj:AddChild(window)
+				local battleWindow = InitializeControls(1, battleLobby)
+				obj:AddChild(battleWindow)
 				
 				battleLobby:SetBattleStatus({
 					AllyNumber = 0,
@@ -724,8 +771,7 @@ function BattleRoomWindow.OpenSingleplayerSkirmish()
 		},
 	}
 	
-	
-	return wrapperWindow
+	return singleplayerWrapper
 end
 
 function widget:ViewResize(vsx, vsy, viewGeometry)

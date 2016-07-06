@@ -27,14 +27,8 @@ local battleStartDisplay = 1
 
 local SettingsWindow = {}
 
-function SettingsWindow.GetControl()
-	
-	local window = Control:New {
-		x = "0%",
-		y = "0%",
-		width = "100%",
-		height = "100%",
-	}
+local function InitializeControls(window)
+	window.OnParent = nil
 	
 	local ingameOffset = 250
 	
@@ -201,7 +195,23 @@ function SettingsWindow.GetControl()
 	}
 	
 	freezeSettings = false
+end
+
+function SettingsWindow.GetControl()
 	
+	local window = Control:New {
+		x = "0%",
+		y = "0%",
+		width = "100%",
+		height = "100%",
+		OnParent = {
+			function(obj)
+				if obj:IsEmpty() then
+					InitializeControls(obj)
+				end
+			end
+		},
+	}
 	return window
 end
 

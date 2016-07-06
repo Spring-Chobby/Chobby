@@ -4,14 +4,6 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 	
 	local BUTTON_HEIGHT = 80
 	
-	-------------------------------------------------------------------
-	-- Local variables
-	-------------------------------------------------------------------
-	local buttonsHolder
-	
-	-------------------------------------------------------------------
-	-- Local functions
-	-------------------------------------------------------------------
 	local function getFont() 
 		return {
 			size = 16,
@@ -23,24 +15,17 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 			font = fontName
 		}
 	end
+
+	-------------------------------------------------------------------
+	-- Local variables
+	-------------------------------------------------------------------
+	local buttonsHolder
 	
-	local function ToggleShow(self, tab)
-		if type(tab.control) == "function" then
-			tab.control = tab.control()
-			tab.control.OnOrphan = {
-				function(self)
-					tab.button:SetCaption(tab.button.oldCaption)
-					tab.button.font = tab.button.oldFont
-					tab.button.backgroundColor = tab.button.oldBackgroundColor
-					tab.button:Invalidate()
-					
-					if (displayPanel:IsEmpty() or displayPanel:GetChildByName(tab.control.name)) and displayPanel.visible then
-						displayPanel:Hide()
-					end
-				end
-			}
-		end
-		
+	-------------------------------------------------------------------
+	-- Local functions
+	-------------------------------------------------------------------
+	
+	local function ToggleShow(obj, tab)
 		local control = tab.control
 		
 		if displayPanel.visible then
@@ -55,10 +40,10 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 			displayPanel:Show()
 		end
 		
-		self:SetCaption(Configuration:GetSelectedColor() .. self.oldCaption .. "\b")
-		self.font = Chili.Font:New(getFont())
-		self.backgroundColor = Configuration:GetButtonSelectedColor()
-		self:Invalidate()
+		obj:SetCaption(Configuration:GetSelectedColor() .. obj.oldCaption .. "\b")
+		obj.font = Chili.Font:New(getFont())
+		obj.backgroundColor = Configuration:GetButtonSelectedColor()
+		obj:Invalidate()
 	end
 	
 	local function SetButtonPositionAndSize(index)
@@ -162,7 +147,7 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 				caption = name,
 				font = {size = 20},
 				parent = buttonsHolder,
-				OnClick = {function(self) ToggleShow(self, newTab) end},
+				OnClick = {function(obj) ToggleShow(obj, newTab) end},
 			}
 		
 			
@@ -174,19 +159,16 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 				ToggleShow(button, newTab)
 			end
 			
-			if type(control) ~= "function" then
-				control.OnOrphan = {
-					function(self)
-						button:SetCaption(button.oldCaption)
-						button.font = button.oldFont
-						button.backgroundColor = button.oldBackgroundColor
-						button:Invalidate()
-					
-						if (displayPanel:IsEmpty() or displayPanel:GetChildByName(control.name)) and displayPanel.visible then
-							displayPanel:Hide()
-						end
-					end
-				}
+			control.OnOrphan = control.OnOrphan or {}
+			control.OnOrphan[#control.OnOrphan + 1] = function(obj)
+				button:SetCaption(button.oldCaption)
+				button.font = button.oldFont
+				button.backgroundColor = button.oldBackgroundColor
+				button:Invalidate()
+			
+				if (displayPanel:IsEmpty() or displayPanel:GetChildByName(control.name)) and displayPanel.visible then
+					displayPanel:Hide()
+				end
 			end
 		else
 			button = Button:New {
@@ -238,7 +220,7 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 			caption = i18n(thisTab.name),
 			font = { size = 20},
 			parent = buttonsHolder,
-			OnClick = {function(self) ToggleShow(self, thisTab) end},
+			OnClick = {function(obj) ToggleShow(obj, thisTab) end},
 		}
 		thisTab.button = button
 		SetButtonPositionAndSize(i)
@@ -248,19 +230,16 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 		button.oldBackgroundColor = button.backgroundColor
 		
 		thisTab.rank = i
-		if type(thisTab.control) ~= "function" then
-			thisTab.control.OnOrphan = {
-				function(self)
-					button:SetCaption(button.oldCaption)
-					button.font = button.oldFont
-					button.backgroundColor = button.oldBackgroundColor
-					button:Invalidate()
-					
-					if (displayPanel:IsEmpty() or displayPanel:GetChildByName(thisTab.control.name)) and displayPanel.visible then
-						displayPanel:Hide()
-					end
-				end
-			}
+		thisTab.control.OnOrphan = thisTab.control.OnOrphan or {}
+		thisTab.control.OnOrphan[#thisTab.control.OnOrphan + 1] = function(obj)
+			button:SetCaption(button.oldCaption)
+			button.font = button.oldFont
+			button.backgroundColor = button.oldBackgroundColor
+			button:Invalidate()
+			
+			if (displayPanel:IsEmpty() or displayPanel:GetChildByName(thisTab.control.name)) and displayPanel.visible then
+				displayPanel:Hide()
+			end
 		end
 	end
 	

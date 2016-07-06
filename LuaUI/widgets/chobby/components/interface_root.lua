@@ -147,12 +147,12 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-------------------------------------------------------------------
 	local rightPanelTabs = {
 		{name = "chat", control = ChatWindows().window},
-		{name = "settings", control = WG.SettingsWindow.GetControl},
+		{name = "settings", control = WG.SettingsWindow.GetControl()},
 	}
 	
 	local submenus = {
 		{name = "singleplayer", tabs = {
-				{name = "custom_caps", control = WG.BattleRoomWindow.OpenSingleplayerSkirmish},
+				{name = "custom_caps", control = WG.BattleRoomWindow.GetSingleplayerControl()},
 			}
 		},
 		{name = "multiplayer", tabs = {

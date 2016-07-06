@@ -156,6 +156,7 @@ function LoginWindow:init()
 	local ww, wh = Spring.GetWindowGeometry()
 	local w, h = math.floor(265 * self.scale), math.floor(250 * self.scale)
 	self.window = Window:New {
+		name = "loginWindow",
 		x = (ww - w) / 2,
 		y = (wh - h) / 2,
 		width = w,
@@ -183,6 +184,11 @@ function LoginWindow:init()
 				self:RemoveListeners()
 			end
 		},
+		OnFocusUpdate = {
+			function(obj)
+				obj:BringToFront()
+			end
+		}
 	}
 	
 	self.window:BringToFront()
