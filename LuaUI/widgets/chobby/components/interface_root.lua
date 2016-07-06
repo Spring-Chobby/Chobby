@@ -222,7 +222,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			-- Make Main Window take up more space
 			panelButtonsHolder:Hide()
 			panelButtonsHolder:ClearChildren()
-			panelWindow:Hide()
+			if panelWindow.visible then
+				panelWindow:Hide()
+			end
 			mainWindow._relativeBounds.right = 0
 			mainWindow:UpdateClientArea()
 			

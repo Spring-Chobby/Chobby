@@ -721,7 +721,7 @@ function BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
 		}
 	}
 
-	tabPanel.AddTab("My Battle", false, 3, multiplayerWrapper, true, "myBattle")
+	tabPanel.AddTab("myBattle", "My Battle", multiplayerWrapper, false, 3, true)
 	
 	battleLobby:SetBattleStatus({
 		AllyNumber = 0,

@@ -22,27 +22,27 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 	local submenuCount = #submenus
 	local buttonHeight = 100/submenuCount .. "%"
 
+	local function BackToMainMenu(panelHandler) 
+		panelHandler.Hide() 
+		if not buttonsHolder.visible then
+			buttonsHolder:Show()
+		end
+		
+		if panelWindow.children[1] and panelHandler.GetManagedControlByName(panelWindow.children[1].name) then
+			panelWindow:ClearChildren()
+			if panelWindow.visible then
+				panelWindow:Hide()
+			end
+		end
+	end
+	
 	for i = 1, #submenus do
 		
 		if not submenus[i].exitGame then
-			local panelHandler = GetTabPanelHandler(submenus[i].name, buttonWindow, panelWindow, submenus[i].tabs, true)
+			local panelHandler = GetTabPanelHandler(submenus[i].name, buttonWindow, panelWindow, submenus[i].tabs, true, BackToMainMenu)
 			panelHandler.Hide()
-			panelHandler.AddTab(i18n("back"), function(self) 
-				panelHandler.Hide() 
-				if not buttonsHolder.visible then
-					buttonsHolder:Show()
-				end
-				
-				if panelWindow.children[1] and panelHandler.GetManagedControlByName(panelWindow.children[1].name) then
-					panelWindow:ClearChildren()
-					if panelWindow.visible then
-						panelWindow:Hide()
-					end
-				end
-			end, 6)
 			
 			submenuPanelNames[submenus[i].name] = panelHandler
-			
 			submenus[i].panelHandler = panelHandler
 		end
 		

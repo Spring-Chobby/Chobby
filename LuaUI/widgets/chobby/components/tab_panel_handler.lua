@@ -1,4 +1,4 @@
-function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVertical)
+function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsVertical, backFunction)
 	
 	local externalFunctions = {}
 	
@@ -20,6 +20,11 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 	-- Local variables
 	-------------------------------------------------------------------
 	local buttonsHolder
+	
+	local titleBackControl
+	local buttonOffset = 0
+	
+	local tabs = {}
 	
 	-------------------------------------------------------------------
 	-- Local functions
@@ -48,10 +53,15 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 	
 	local function SetButtonPositionAndSize(index)
 		if tabsVertical then
-			tabs[index].button:SetPos(nil, nil, nil, BUTTON_HEIGHT)
+			tabs[index].button:SetPos(
+				nil, 
+				(index - 1) * BUTTON_HEIGHT + buttonOffset, 
+				nil, 
+				BUTTON_HEIGHT
+			)
 			tabs[index].button:SetPosRelative(
 				"0%",
-				(index - 1) * BUTTON_HEIGHT,
+				nil,
 				"100%"
 			)
 		else
@@ -129,27 +139,26 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 		end
 	end
 	
-	function externalFunctions.AddTab(name, onClick, rank, control, selected, internalName)
+	function externalFunctions.AddTab(name, humanName, control, onClick, rank, selected)
 		local newTab = {}
-		local rank = rank or (#tabs + 1)
 		
 		newTab.name = name
-		newTab.rank = rank
+		newTab.rank = rank or (#tabs + 1)
 		newTab.internalName = internalName
 		newTab.control = control
 		local button
 		if control then
 			button = Button:New {
+				name = name .. "_button",
 				x = "0%",
 				y = "0%",
 				width = "100%",
 				height = "100%",
-				caption = name,
+				caption = humanName,
 				font = {size = 20},
 				parent = buttonsHolder,
 				OnClick = {function(obj) ToggleShow(obj, newTab) end},
 			}
-		
 			
 			button.oldFont = button.font
 			button.oldCaption = button.caption
@@ -166,7 +175,8 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 				button.backgroundColor = button.oldBackgroundColor
 				button:Invalidate()
 			
-				if (displayPanel:IsEmpty() or displayPanel:GetChildByName(control.name)) and displayPanel.visible then
+				if (displayPanel:IsEmpty() or displayPanel:GetChildByName(control.name))
+						and displayPanel.visible then
 					displayPanel:Hide()
 				end
 			end
@@ -186,7 +196,7 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 		newTab.button = button
 		
 		local index = #tabs + 1
-		while index > 1 and rank < tabs[index - 1].rank do
+		while index > 1 and newTab.rank < tabs[index - 1].rank do
 			tabs[index] = tabs[index - 1]
 			index = index - 1
 		end
@@ -203,44 +213,46 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 		y = 0,
 		right = 0,
 		bottom = 0,
-		name = holderName,
+		name = "buttons_" .. name,
 		parent = buttonWindow,
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
 	
-	for i = 1, #tabs do
-		local thisTab = tabs[i] -- Protect against tab reordering
-		local button = Button:New {
-			name = thisTab.name .. "_button",
-			x = "0%",
-			y = "0%",
-			width = "100%",
-			height = "100%",
-			caption = i18n(thisTab.name),
-			font = { size = 20},
+	if backFunction then
+		buttonOffset = 80
+		
+		Button:New {
+			name = name .. "_back_button",
+			x = 5,
+			y = 15,
+			width = 50,
+			height = 50,
+			caption = "<",
+			font = {size = 40},
 			parent = buttonsHolder,
-			OnClick = {function(obj) ToggleShow(obj, thisTab) end},
+			OnClick = {function (obj) backFunction(externalFunctions) end},
 		}
-		thisTab.button = button
-		SetButtonPositionAndSize(i)
-		
-		button.oldFont = button.font
-		button.oldCaption = button.caption
-		button.oldBackgroundColor = button.backgroundColor
-		
-		thisTab.rank = i
-		thisTab.control.OnOrphan = thisTab.control.OnOrphan or {}
-		thisTab.control.OnOrphan[#thisTab.control.OnOrphan + 1] = function(obj)
-			button:SetCaption(button.oldCaption)
-			button.font = button.oldFont
-			button.backgroundColor = button.oldBackgroundColor
-			button:Invalidate()
-			
-			if (displayPanel:IsEmpty() or displayPanel:GetChildByName(thisTab.control.name)) and displayPanel.visible then
-				displayPanel:Hide()
-			end
-		end
+		Label:New {
+			x = 55,
+			y = 20,
+			right = 0,
+			height = 45,
+			valign = "center",
+			align = "left",
+			parent = buttonsHolder,
+			font = {size = 20},
+			caption = i18n(name),
+		}
+		-- Add heading and back button
+	end
+	
+	for i = 1, #initialTabs do
+		externalFunctions.AddTab(
+			initialTabs[i].name, 
+			i18n(initialTabs[i].name), 
+			initialTabs[i].control
+		)
 	end
 	
 	return externalFunctions
