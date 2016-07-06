@@ -33,6 +33,10 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 					tab.button.font = tab.button.oldFont
 					tab.button.backgroundColor = tab.button.oldBackgroundColor
 					tab.button:Invalidate()
+					
+					if (displayPanel:IsEmpty() or displayPanel:GetChildByName(tab.control.name)) and displayPanel.visible then
+						displayPanel:Hide()
+					end
 				end
 			}
 		end
@@ -177,6 +181,10 @@ function GetTabPanelHandler(holderName, buttonWindow, displayPanel, tabs, tabsVe
 						button.font = button.oldFont
 						button.backgroundColor = button.oldBackgroundColor
 						button:Invalidate()
+					
+						if (displayPanel:IsEmpty() or displayPanel:GetChildByName(control.name)) and displayPanel.visible then
+							displayPanel:Hide()
+						end
 					end
 				}
 			end
