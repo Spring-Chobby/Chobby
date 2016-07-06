@@ -352,8 +352,8 @@ function Object:ClearChildren()
   self.preserveChildrenOrder = false
 
   --// remove all children  
-    for i=1,#self.children_hidden do
-      self:ShowChild(self.children_hidden[i])
+    for c in pairs(self.children_hidden) do
+      self:ShowChild(c)
     end
 
     for i=#self.children,1,-1 do
@@ -537,12 +537,14 @@ function Object:GetChildByName(name)
   local cn = self.children
   for i=1,#cn do
     if (name == cn[i].name) then
+		Spring.Echo("FOUND CHILD")
       return cn[i]
     end
   end
 
   for c in pairs(self.children_hidden) do
     if (name == c.name) then
+		Spring.Echo("FOUND HIDDEN CHILD")
       return MakeWeakLink(c)
     end
   end
