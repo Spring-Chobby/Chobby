@@ -43,7 +43,13 @@ local battleLobby
 local largestTeamIndex = -1
 
 local function UpdateArchiveStatus()
+	if not battleLobby:GetMyBattleID() then
+		return
+	end
 	local battle = battleLobby:GetBattle(battleLobby:GetMyBattleID())
+	if not battle then
+		return
+	end
 	if VFS.HasArchive(battle.gameName) then
 		lblHaveGame:SetCaption(i18n("have_game") .. " [" .. WG.Chobby.Configuration:GetSuccessColor() .. "✔\b]")
 	else
