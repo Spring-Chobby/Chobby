@@ -122,7 +122,7 @@ function ChatWindows:init()
 		height = "100%",
 	}
 
-	self.tabPanel = Chili.TabPanel:New {
+	self.tabPanel = Chili.DetachableTabPanel:New {
 		x = 10, 
 		right = 10,
 		y = 20, 
@@ -143,7 +143,10 @@ function ChatWindows:init()
 			end
 		}
 	}
-
+	self.tabPanel:AddChild(self.tabPanel.tabBar)
+	self.tabPanel.tabBar:BringToFront()
+	self.tabPanel.tabBar:DisableHighlight()
+	
 	self.window = Control:New {
 		x = 0,
 		y = 0,
@@ -167,7 +170,17 @@ function ChatWindows:init()
 					end
 				end },
 			},
-		}
+		},
+		OnOrphan = {
+			function (obj)
+				self.tabPanel.tabBar:DisableHighlight()
+			end
+		},
+		OnParent = {
+			function (obj)
+				self.tabPanel.tabBar:EnableHighlight()
+			end
+		},
 	}
 
 	CHOBBY.chatWindows = self

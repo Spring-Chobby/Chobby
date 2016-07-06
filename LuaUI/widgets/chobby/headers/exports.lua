@@ -21,6 +21,7 @@ if WG and WG.Chili then
 	Image = Chili.Image
 	TreeView = Chili.TreeView
 	Trackbar = Chili.Trackbar
+	DetachableTabPanel = Chili.DetachableTabPanel
 	screen0 = Chili.Screen0
 	Progressbar = Chili.Progressbar
 end

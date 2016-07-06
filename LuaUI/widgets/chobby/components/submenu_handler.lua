@@ -6,7 +6,14 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 	local BUTTON_HEIGHT = 80
 	
 	-------------------------------------------------------------------
-	-- Submenu Handling
+	-- External Functions
+	-------------------------------------------------------------------
+	function externalFunctions.GetTabList(name)
+		return submenuPanelNames[name]
+	end
+	
+	-------------------------------------------------------------------
+	-- Initialization
 	-------------------------------------------------------------------
 	local buttonsHolder = Control:New {
 		x = 0,
@@ -68,13 +75,6 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 				submenus[i].panelHandler.Show()
 			end},
 		}
-	end
-	
-	-------------------------------------------------------------------
-	-- External Functions
-	-------------------------------------------------------------------
-	function externalFunctions.GetTabList(name)
-		return submenuPanelNames[name]
 	end
 	
 	return externalFunctions

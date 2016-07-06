@@ -48,6 +48,20 @@ function TabBar:SetOrientation(orientation)
 end
 
 --//=============================================================================
+function TabBar:DisableHighlight()
+	for i = 1, #self.children do
+		local c = self.children[i]
+		c.state.selected = false
+		c:Invalidate()
+	end
+end
+
+function TabBar:EnableHighlight()
+	if self.selected_obj then
+		self.selected_obj.state.selected = true
+		self.selected_obj:Invalidate()
+	end
+end
 
 function TabBar:Select(tabname)
 	for i=1,#self.children do

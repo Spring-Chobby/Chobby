@@ -30,12 +30,14 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 	-- Local functions
 	-------------------------------------------------------------------
 	
-	local function ToggleShow(obj, tab)
+	local function ToggleShow(obj, tab, openOnly)
 		local control = tab.control
 		
 		if displayPanel.visible then
 			if displayPanel:GetChildByName(control.name) then
-				displayPanel:ClearChildren()
+				if not openOnly then
+					displayPanel:ClearChildren()
+				end
 				return
 			end
 		end
@@ -107,7 +109,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 	
 	function externalFunctions.OpenTab(tabIndex)
 		if tabs[tabIndex] then
-			ToggleShow(tabs[tabIndex].button, tabs[tabIndex])
+			ToggleShow(tabs[tabIndex].button, tabs[tabIndex], true)
 		end
 	end
 	

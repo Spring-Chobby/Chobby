@@ -2,14 +2,15 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	local externalFunctions = {}
 	
-	local titleHeight = 18
-	local titleWidth = 28
-	local panelWidth = 40
+	local titleWidthRel = 28
+	local panelWidthRel = 40
 	
-	local panelButtonHeightAbsolute = 50
-	local mainButtonsWidthAbsolute = 180
+	local titleHeight = 180
+	local titleWidth = 400
+	local panelButtonsHeight = 50
+	local mainButtonsWidth = 180
 	
-	local padding = 5
+	local padding = 0
 	
 	-- Switch to single panel mode when below the minimum screen width
 	local minScreenWidth = 1280
@@ -23,8 +24,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local headingWindow = Window:New {
 		x = 0,
 		y = 0,
-		width = titleWidth .. "%",
-		height = titleHeight .. "%",
+		width = titleWidth,
+		height = titleHeight,
 		name = "headingWindow",
 		caption = "Your Game Here",
 		parent = screen0,
@@ -37,10 +38,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	--headingWindow:SetPosRelative("20%","20%","20%","20%")
 	
 	local statusWindow = Window:New {
-		x = titleWidth .. "%",
+		x = titleWidth,
 		y = 0,
-		width = (100 - titleWidth - panelWidth) .. "%",
-		height = titleHeight .. "%",
+		right = 0,
+		height = titleHeight - panelButtonsHeight,
 		name = "statusWindow",
 		caption = "Status Window",
 		parent = screen0,
@@ -52,8 +53,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	local mainWindow = Window:New {
 		x = 0,
-		y = titleHeight .. "%",
-		width = (100 - panelWidth) .. "%",
+		y = titleHeight,
+		width = (100 - panelWidthRel) .. "%",
 		bottom = 0,
 		name = "mainWindow",
 		caption = "Main Window",
@@ -66,7 +67,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local buttonsPlace = Control:New {
 		x = padding,
 		y = padding,
-		width = mainButtonsWidthAbsolute,
+		width = mainButtonsWidth,
 		bottom = padding,
 		name = "buttonsPlace",
 		parent = mainWindow,
@@ -92,7 +93,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	--buttonsPlace:UpdateClientArea(false)
 	
 	local contentPlace = Window:New {
-		x = mainButtonsWidthAbsolute,
+		x = mainButtonsWidth,
 		y = padding,
 		right = padding,
 		bottom = padding,
@@ -106,10 +107,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	}
 	
 	local panelButtonsHolder = Control:New {
-		x = (100 - panelWidth) .. "%",
-		height = panelButtonHeightAbsolute,
+		x = (100 - panelWidthRel) .. "%",
+		y = titleHeight - panelButtonsHeight,
 		right = 0,
-		bottom = (100 - titleHeight) .. "%",
+		height = panelButtonsHeight,
 		name = "panelButtonsHolder",
 		parent = screen0,
 		padding = {0, 0, 0, 0},
@@ -129,8 +130,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		children = {}
 	}
 	local panelWindow = Window:New {
-		x = (100 - panelWidth) .. "%",
-		y = titleHeight .. "%",
+		x = (100 - panelWidthRel) .. "%",
+		y = titleHeight,
 		right = 0,
 		bottom = 0,
 		name = "panelWindow",
@@ -142,11 +143,14 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		children = {}
 	}
 	panelWindow:Hide()
+	
 	-------------------------------------------------------------------
 	-- In-Window Handlers
 	-------------------------------------------------------------------
+	local chatWindows = ChatWindows()
+	
 	local rightPanelTabs = {
-		{name = "chat", control = ChatWindows().window},
+		{name = "chat", control = chatWindows.window},
 		{name = "settings", control = WG.SettingsWindow.GetControl()},
 	}
 	
@@ -168,6 +172,15 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	local function UpdateChildLayout()
 		if fullscreenMode then
+			local chatTabs = chatWindows.tabPanel
+			local chatTabsName = chatTabs.tabBar.name
+			if not chatTabs:GetChildByName(chatTabsName) then
+				chatTabs:AddChild(chatTabs.tabBar)
+				chatTabs.tabBar:BringToFront()
+				chatTabs.tabBar:UpdateClientArea()
+				chatTabs:Invalidate()
+			end
+			
 			rightPanelHandler.UpdateLayout(panelWindow, false)
 			if not contentPlace:IsEmpty() then
 				local control, index = rightPanelHandler.GetManagedControlByName(contentPlace.children[1].name)
@@ -177,6 +190,23 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				end
 			end
 		else
+			local chatTabs = chatWindows.tabPanel
+			local chatTabsName = chatTabs.tabBar.name
+			if not screen0:GetChildByName(chatTabsName) then
+				screen0:AddChild(chatTabs.tabBar)
+				chatTabs.tabBar:SetPos(titleHeight, titleHeight - panelButtonsHeight + 14)
+				chatTabs.tabBar._relativeBounds.right = 0
+				chatTabs.tabBar:UpdateClientArea()
+				
+				chatTabs.OnTabClick = {
+					function()
+						local control, index = rightPanelHandler.GetManagedControlByName(chatWindows.window.name)
+						rightPanelHandler.OpenTab(index)
+					end
+				}
+			end
+			
+			
 			rightPanelHandler.UpdateLayout(contentPlace, true)
 			if contentPlace:IsEmpty() and not panelWindow:IsEmpty() then
 				local panelChild = panelWindow.children[1]
@@ -205,12 +235,14 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			-- Make Main Window take up more space
 			panelButtonsHolder:Show()
 			panelWindow:Show()
-			mainWindow._relativeBounds.right = panelWidth .. "%"
+			mainWindow._relativeBounds.right = panelWidthRel .. "%"
 			mainWindow:UpdateClientArea()
 			
 			-- Align game title and status.
-			headingWindow:SetPosRelative("0%",nil, titleWidth .. "%")
-			statusWindow:SetPosRelative(titleWidth .. "%", nil, (100 - titleWidth - panelWidth) .. "%")
+			headingWindow:SetPos(0, 0, titleWidth, titleHeight)
+			statusWindow:SetPos(titleWidth)
+			statusWindow._relativeBounds.right = 0
+			statusWindow:UpdateClientArea()
 		else
 			-- Move Panel Buttons
 			panelButtonsHolder:RemoveChild(panelButtons)
@@ -229,9 +261,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			mainWindow:UpdateClientArea()
 			
 			-- Align game title and status.
-			headingWindow:SetPos(nil, nil, mainButtonsWidthAbsolute + padding)
-			statusWindow:SetPos(mainButtonsWidthAbsolute)
-			statusWindow:SetPosRelative(nil, nil, "100%")
+			headingWindow:SetPos(nil, nil, mainButtonsWidth + padding)
+			statusWindow:SetPos(mainButtonsWidth)
+			statusWindow._relativeBounds.right = 0
+			statusWindow:UpdateClientArea()
 		end
 		
 		UpdateChildLayout()
