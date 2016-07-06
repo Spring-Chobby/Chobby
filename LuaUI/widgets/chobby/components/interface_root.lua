@@ -247,12 +247,15 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	function externalFunctions.SetPanelDisplayMode(newAutodetectFullscreen, newFullscreen)
 		autodetectFullscreen = newAutodetectFullscreen
+		local screenWidth, screenHeight = Spring.GetViewGeometry()
 		if autodetectFullscreen then
-			local screenWidth, screenHeight = Spring.GetViewGeometry()
 			UpdatePanelLayout(screenWidth > minScreenWidth)
 		else
 			UpdatePanelLayout(newFullscreen)
 		end
+		
+		-- Make all children request realign.
+		screen0:Resize(screenWidth, screenHeight)
 	end
 	
 	function externalFunctions.GetContentPlace()
