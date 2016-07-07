@@ -3,6 +3,8 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 	local externalFunctions = {}
 	local submenuPanelNames = {}
 	
+	local buttonsHolder
+	
 	local BUTTON_HEIGHT = 70
 	local BUTTON_SPACING = 5
 	local BUTTON_OFFSET = 80
@@ -14,10 +16,28 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 		return submenuPanelNames[name]
 	end
 	
+	function externalFunctions.SetBackAtMainMenu()
+		for i = 1, #submenus do
+			local panelHandler = submenus[i].panelHandler
+			if panelHandler then
+				panelHandler.Hide()
+			end
+		end
+		
+		if not buttonsHolder.visible then
+			buttonsHolder:Show()
+		end
+		
+		panelWindow:ClearChildren()
+		if panelWindow.visible then
+			panelWindow:Hide()
+		end
+	end
+	
 	-------------------------------------------------------------------
 	-- Initialization
 	-------------------------------------------------------------------
-	local buttonsHolder = Control:New {
+	buttonsHolder = Control:New {
 		x = 0,
 		y = 0,
 		right = 0,
@@ -27,8 +47,6 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-	
-	local submenuCount = #submenus
 
 	local function BackToMainMenu(panelHandler) 
 		panelHandler.Hide() 
@@ -74,6 +92,10 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 				end
 				
 				submenus[i].panelHandler.Show()
+				
+				if submenus[i].entryCheck then
+					submenus[i].entryCheck()
+				end
 			end},
 		}
 	end

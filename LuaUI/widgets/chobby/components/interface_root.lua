@@ -162,14 +162,19 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	}
 	
 	local submenus = {
-		{name = "singleplayer", tabs = {
+		{
+			name = "singleplayer", 
+			tabs = {
 				{name = "custom_caps", control = WG.BattleRoomWindow.GetSingleplayerControl()},
 			}
 		},
-		{name = "multiplayer", tabs = {
+		{
+			name = "multiplayer", 
+			entryCheck = WG.MultiplayerEntryPopup,
+			tabs = {
 				{name = "matchmaking_caps", control = QueueListWindow().window},
 				{name = "custom_caps", control = BattleListWindow().window},
-			}
+			},
 		},
 		{name = "exit", exitGame = true},
 	}

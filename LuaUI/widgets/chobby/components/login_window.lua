@@ -23,7 +23,7 @@ function createTabGroup(ctrls)
 	end
 end
 
-function LoginWindow:init()
+function LoginWindow:init(failFunction)
 	self.scale = 1.4 * Configuration:GetScale()
 	self.fontSize = 14
 	self.lblInstructions = Label:New {
@@ -140,7 +140,7 @@ function LoginWindow:init()
 	}
 
 	self.btnRegister = Button:New {
-		right = 1,
+		x = 85 * self.scale,
 		width = 80 * self.scale,
 		bottom = 1,
 		height = 40 * self.scale,
@@ -152,6 +152,24 @@ function LoginWindow:init()
 			end
 		},
 	}
+	
+	self.btnCancel = Button:New {
+		right = 1,
+		width = 80 * self.scale,
+		bottom = 1,
+		height = 40 * self.scale,
+		caption = i18n("cancel"),
+		font = { size = self.scale * self.fontSize},
+		OnClick = {
+			function()
+				self.window:Dispose()
+				if failFunction then
+					failFunction()
+				end
+			end
+		},
+	}
+	
 
 	local ww, wh = Spring.GetWindowGeometry()
 	local w, h = math.floor(265 * self.scale), math.floor(250 * self.scale)
@@ -176,7 +194,8 @@ function LoginWindow:init()
 			self.lblError,
 			self.cbAutoLogin,
 			self.btnLogin,
-			self.btnRegister
+			self.btnRegister,
+			self.btnCancel
 		},
 		parent = screen0,
 		OnDispose = {
