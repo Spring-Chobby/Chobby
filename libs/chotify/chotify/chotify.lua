@@ -39,7 +39,7 @@ function Chotify:Post(obj)
     local body = obj.body or ""
     local icon = obj.icon or ""
     local time = obj.time or 5
-    
+
     if obj.sound then
         Spring.PlaySoundFile(obj.sound, 1.0)
     end

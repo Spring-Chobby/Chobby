@@ -9,15 +9,6 @@ function ChatWindows:init()
 	-- setup debug console to listen to commands
 	self:CreateDebugConsole()
 	
-	local _NotifyTab = function(userName, chanName, message, sound, time)
-		Chotify:Post{
-			title = userName .. " in " .. chanName .. ":",
-			body = message,
-			sound = sound,
-			time = time,
-		}
-	end
-
 	-- get a list of channels when login is done
 	lobby:AddListener("OnLoginInfoEnd",
 		function(listener)
@@ -78,9 +69,7 @@ function ChatWindows:init()
 			if channelConsole ~= nil then
 				if string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName() then
 					channelConsole:AddMessage(message, userName, nil, "\255\255\0\0")
-					if chanName ~= string.sub(self.currentTab, 2) then
-						_NotifyTab(userName, chanName, message, "sounds/beep4", 15)
-					end
+					self:_NotifyTab("#" .. chanName, userName, chanName, message, "sounds/beep4.wav", 15)
 				else
 					channelConsole:AddMessage(message, userName)
 				end
@@ -93,9 +82,7 @@ function ChatWindows:init()
 			if channelConsole ~= nil then
 				if string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName() then
 					channelConsole:AddMessage(message, userName, nil, "\255\255\0\0")
-					if chanName ~= string.sub(self.currentTab, 2) then
-						_NotifyTab(userName, chanName, message, "sounds/beep4", 15)
-					end
+					self:_NotifyTab("#" .. chanName, userName, chanName, message, "sounds/beep4.wav", 15)
 				else
 					channelConsole:AddMessage(message, chanName, userName, nil, "\255\0\139\139")
 				end
@@ -120,22 +107,17 @@ function ChatWindows:init()
 					channelConsole:AddMessage(message, userName, msgDate)
 				end
 			else
-				Spring.Echo(userName)
-				if userName ~= string.sub(self.currentTab, 2) then
-					_NotifyTab(userName, "Private", message, "sounds/beep4", 15)
-				end
 				local privateChatConsole = self:GetPrivateChatConsole(userName)
 				privateChatConsole:AddMessage(message, userName)
+				self:_NotifyTab("@" .. userName, userName, "Private", message, "sounds/beep4.wav", 15)
 			end
 		end
 	)
 	lobby:AddListener("OnSaidPrivateEx",
 		function(listener, userName, message)
-			if userName ~= string.sub(self.currentTab, 2) then
-				_NotifyTab(userName, "Private", message, "sounds/beep4", 15)
-			end
 			local privateChatConsole = self:GetPrivateChatConsole(userName)
 			privateChatConsole:AddMessage(message, userName, msgDate, "\255\0\139\139")
+			self:_NotifyTab("@" .. userName, userName, "Private", message, "sounds/beep4.wav", 15)
 		end
 	)
 	lobby:AddListener("OnRemoveUser",
@@ -177,6 +159,9 @@ function ChatWindows:init()
 				self.currentTab = name
 				local console = self.tabbars[name]
 				if console then
+					console.unreadMessages = 0
+					self:SetTabBadge(name, "")
+					self:SetTabColor(name, {1, 1, 1, 1})
 					WG.Delay(function()
 						screen0:FocusControl(console.ebInputText)
 					end, 0.01)
@@ -225,6 +210,65 @@ function ChatWindows:init()
 	}
 
 	CHOBBY.chatWindows = self
+end
+
+function ChatWindows:_GetTabBarItem(tabName)
+	local tabbar = self.tabPanel.tabBar
+	for i=1,#tabbar.children do
+		local c = tabbar.children[i]
+		if c.caption == tabName then
+			return c
+		end
+	end
+end
+
+function ChatWindows:SetTabColor(tabName, c)
+	local ctrl = self:_GetTabBarItem(tabName)
+
+	ctrl.font.color = c
+	ctrl.font:Invalidate()
+end
+
+function ChatWindows:SetTabBadge(tabName, text)
+	local ctrl = self:_GetTabBarItem(tabName)
+
+	local badge = ctrl._badge
+	if badge == nil then
+		badge = Label:New {
+			right = 2,
+			width = 12,
+			y = 2,
+			height = 10,
+			caption = text,
+			font = { 
+				size = 12,
+				outline = true,
+				autoOutlineColor = false,
+				outlineColor = { 0, 1, 0, 0.6 },
+			},
+		}
+		ctrl._badge = badge
+		ctrl:AddChild(badge)
+	end
+
+	badge:SetCaption(text)
+end
+
+function ChatWindows:_NotifyTab(tabName, userName, chanName, message, sound, time)
+	if tabName ~= self.currentTab then
+		-- TODO: Fix naming of self.tabbars (these are consoles)
+		local console = self.tabbars[tabName]
+		console.unreadMessages = (console.unreadMessages or 0) + 1
+		self:SetTabBadge(tabName, tostring(console.unreadMessages))
+		self:SetTabColor(tabName, {0, 0, 1, 1})
+
+		Chotify:Post({
+			title = userName .. " in " .. chanName .. ":",
+			body = message,
+			sound = sound,
+			time = time,
+		})
+	end
 end
 
 function ChatWindows:SetParent(newParent)
