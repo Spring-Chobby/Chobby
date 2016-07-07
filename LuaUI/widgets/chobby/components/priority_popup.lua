@@ -77,6 +77,12 @@ function PriorityPopup:init(mainWindow)
 		}
 	}
 	
+	self.mainWindow.OnDispose = self.mainWindow.OnDispose or {}
+	self.mainWindow.OnDispose[#self.mainWindow.OnDispose + 1] = function()
+		self:unregister()
+		self.background:Dispose()
+	end
+	
 	local sw, sh = Spring.GetWindowGeometry()
 	self:ViewResize(sw, sh)
 	
@@ -98,7 +104,5 @@ function PriorityPopup:GetWindow()
 end
 
 function PriorityPopup:ClosePopup()
-	--self:unregister() -- Crashes
-
-	self.background:Dispose()
+	self.mainWindow:Dispose()
 end

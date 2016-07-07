@@ -22,13 +22,10 @@ end
 -- Initialization
 
 local function InitializeControls()
-	Spring.Echo("ReadyCheckWindow")
 	
 	local loginWindow = WG.Chobby.LoginWindow()
 	
 	local popup = WG.Chobby.PriorityPopup(loginWindow.window)
-	
-	loginWindow:AddCloseFunction(function() popup:ClosePopup() end)
 	
 	return window
 end
