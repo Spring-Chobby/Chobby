@@ -35,6 +35,21 @@ local function LoginPopup()
 	local popup = WG.Chobby.PriorityPopup(loginWindow.window)
 end
 
+local function InitialWindow()
+	local loginWindow = WG.Chobby.LoginWindow()
+	if WG.Chobby.Configuration.autoLogin then
+		loginWindow.window:Hide()
+		lobby:AddListener("OnDenied", function(listener)
+			loginWindow.window:Show()
+			local popup = WG.Chobby.PriorityPopup(loginWindow.window)
+			lobby:RemoveListener("OnDenied", listener)
+		end)
+		loginWindow:tryLogin()
+	else
+		local popup = WG.Chobby.PriorityPopup(loginWindow.window)
+	end
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface
@@ -45,6 +60,8 @@ function widget:Initialize()
 	
 	WG.MultiplayerEntryPopup = MultiplayerEntryPopup
 	WG.LoginPopup = LoginPopup
+
+	WG.Delay(InitialWindow, 0.001)
 end
 
 function widget:Shutdown()

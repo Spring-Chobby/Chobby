@@ -159,7 +159,7 @@ function LoginWindow:init(failFunction)
 		width = 80 * self.scale,
 		bottom = 1,
 		height = 40 * self.scale,
-		caption = i18n("cancel"),
+		caption = i18n("play_offline"),
 		font = { size = self.scale * self.fontSize},
 		OnClick = {
 			function()
@@ -217,9 +217,6 @@ function LoginWindow:init(failFunction)
 	screen0:FocusControl(self.ebUsername)
 	-- FIXME: this should probably be moved to the lobby wrapper
 	self.loginAttempts = 0
-	if self.cbAutoLogin.checked then
-		self:tryLogin()
-	end
 end
 
 function LoginWindow:RemoveListeners()

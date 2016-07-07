@@ -57,8 +57,6 @@ end
 function Chobby:_Initialize()
 	self:WrapCall(function()
 		WG.Delay(function()
-			local loginWindow = WG.Chobby.LoginWindow()
-			local popup = WG.Chobby.PriorityPopup(loginWindow.window)
 			--self.downloader = Downloader()
 			--local statusBar = StatusBar()
 			--local background = Background()

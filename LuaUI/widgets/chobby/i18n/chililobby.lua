@@ -18,6 +18,7 @@ return {
 		error_log = 'Error log',
 		register_verb = "Register",
 		autologin = "Login automatically",
+		play_offline = "Play offline",
 		--
 		start_download = 'Start download',
 		download_noun = 'Download',
