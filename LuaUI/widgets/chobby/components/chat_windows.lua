@@ -49,6 +49,12 @@ function ChatWindows:init()
 	lobby:AddListener("OnJoin",
 		function(listener, chanName)
 			local channelConsole = self:GetChannelConsole(chanName)
+			if channelConsole ~= nil then
+				WG.Delay(function()
+					channelConsole:AddMessage(lobby:GetChannel(chanName).topic)
+				end, 0.01)
+			end
+			
 		end
 	)
 

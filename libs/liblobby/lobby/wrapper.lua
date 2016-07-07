@@ -297,6 +297,17 @@ end
 Wrapper.commands["CHANNEL"] = Wrapper._OnChannel
 
 -- override
+function Wrapper:_OnChannelTopic(chanName, author, changedTime, topic)
+	local channel = self:_GetChannel(chanName)
+	channel.topic = topic
+
+	self:super("_OnChannelTopic", chanName, author, changedTime, topic)
+end
+Wrapper.commands["CHANNELTOPIC"] = Wrapper._OnChannelTopic
+
+
+
+-- override
 function Wrapper:_OnClients(chanName, clientsStr)
 	local channel = self:_GetChannel(chanName)
 	local users
