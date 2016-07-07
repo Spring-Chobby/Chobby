@@ -25,8 +25,13 @@ local function MultiplayerFailFunction()
 	WG.Chobby.interfaceRoot.GetMainWindowHandler().SetBackAtMainMenu()
 end
 
-local function InitializeControls()
+local function MultiplayerEntryPopup()
 	local loginWindow = WG.Chobby.LoginWindow(MultiplayerFailFunction)
+	local popup = WG.Chobby.PriorityPopup(loginWindow.window)
+end
+
+local function LoginPopup()
+	local loginWindow = WG.Chobby.LoginWindow()
 	local popup = WG.Chobby.PriorityPopup(loginWindow.window)
 end
 
@@ -34,15 +39,12 @@ end
 --------------------------------------------------------------------------------
 -- Widget Interface
 
-local function MultiplayerEntryPopup()
-	InitializeControls()
-end
-
 function widget:Initialize()
 	CHOBBY_DIR = "LuaUI/widgets/chobby/"
 	VFS.Include("LuaUI/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 	
 	WG.MultiplayerEntryPopup = MultiplayerEntryPopup
+	WG.LoginPopup = LoginPopup
 end
 
 function widget:Shutdown()

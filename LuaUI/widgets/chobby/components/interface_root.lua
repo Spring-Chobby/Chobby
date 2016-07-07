@@ -109,7 +109,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	}
 	contentPlace:Hide()
 	
-	local panelButtonsHolder = Control:New {
+	local panelButtonsHolder = Window:New {
 		x = (100 - panelWidthRel) .. "%",
 		y = titleHeight - panelButtonsHeight,
 		right = 0,
@@ -119,7 +119,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-	local panelButtons = Window:New {
+	local panelButtons = Control:New {
 		x = "0%",
 		y = "0%",
 		width = "100%",
@@ -238,11 +238,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		
 		if fullscreenMode then
 			-- Move Panel Buttons
-			buttonsPlace:RemoveChild(panelButtons)
+			mainButtons:RemoveChild(panelButtons)
 			panelButtonsHolder:AddChild(panelButtons)
 			
 			panelButtons:SetPosRelative("0%","0%", "100%","100%")
-			mainButtons:SetPosRelative("0%","0%", nil,"100%")
+			--mainButtons:SetPosRelative("0%","0%", nil,"100%")
 			
 			-- Make Main Window take up more space
 			panelButtonsHolder:Show()
@@ -258,10 +258,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		else
 			-- Move Panel Buttons
 			panelButtonsHolder:RemoveChild(panelButtons)
-			buttonsPlace:AddChild(panelButtons)
+			mainButtons:AddChild(panelButtons)
 			
-			panelButtons:SetPosRelative("0%","50%", "100%","50%")
-			mainButtons:SetPosRelative("0%","0%", nil,"50%")
+			panelButtons:SetPosRelative("0%","40%", "100%","50%")
+			--mainButtons:SetPosRelative("0%","0%", nil,"50%")
 			
 			-- Make Main Window take up more space
 			panelButtonsHolder:Hide()

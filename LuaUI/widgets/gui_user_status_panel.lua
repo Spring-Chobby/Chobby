@@ -40,7 +40,7 @@ local function Logout()
 		WG.Chobby.Configuration.autoLogin = false
 	else
 		Spring.Echo("Login")
-		WG.Chobby.LoginWindow()
+		WG.LoginPopup()
 	end
 end
 
@@ -91,53 +91,14 @@ local function InitializeControls(window)
 	}
 
 	local btnLogout = Button:New {
-		width = 100, height = 40,
+		right = 10,
+		width = 100, 
+		height = 40,
 		caption = i18n("login"),
-	}
-	local btnQuit = Button:New {
-		width = 100, height = 40,
-		caption = i18n("quit"),
-	}
-	local btnMenu = ComboBox:New {
-		x = 160,
-		width = 20,
-		height = 20,
-		y = 0,
-		caption = '',
-		tooltip = i18n("menu"),
-		padding = {0, 0, 0, 0},
-		itemPadding = {0, 0, 0, 0},
-		borderThickness = 0,
-		backgroundColor = {0, 0, 0, 0},
-		focusColor      = {0.4, 0.4, 0.4, 1},
 		parent = window,
-		children = {
-			Image:New {
-				x = 4,
-				y = 4,
-				width = 18,
-				height = 18,
-				margin = {0, 0, 0, 0},
-				file = CHOBBY_IMG_DIR .. "menu.png",
-			},
-		},
-		items = {
-			btnLogout,
-			btnQuit,
-		},
+		OnClick = {Logout}
 	}
-	btnMenu.OnSelect = {
-		function(obj, itemIdx, selected)
-			if selected then
-				if itemIdx == 1 then
-					Logout()
-				elseif itemIdx == 2 then
-					Quit()
-				end
-			end
-		end
-	}
-
+	
 	lblPing = Label:New {
 		x = 0,
 		width = 150,

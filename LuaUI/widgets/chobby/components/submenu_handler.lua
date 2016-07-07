@@ -74,7 +74,8 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 		
 		submenus[i].button = Button:New {
 			x = 0,
-			y = (i - 1) * (BUTTON_HEIGHT + BUTTON_SPACING) + BUTTON_OFFSET,
+			y = (not submenus[i].exitGame) and ((i - 1) * (BUTTON_HEIGHT + BUTTON_SPACING) + BUTTON_OFFSET),
+			bottom = submenus[i].exitGame and 10,
 			width = "100%",
 			height = BUTTON_HEIGHT,
 			caption = i18n(submenus[i].name),
