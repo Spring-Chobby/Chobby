@@ -212,6 +212,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		},
 	}
 	
+	local battleStatusPanelHandler = GetTabPanelHandler("myBattlePanel", battleStatusHolder, contentPlace, {})
 	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons, panelWindow, rightPanelTabs)
 	local mainWindowHandler = GetSubmenuHandler(mainButtons, contentPlace, submenus)
 	
@@ -348,6 +349,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	function externalFunctions.GetMainWindowHandler()
 		return mainWindowHandler
+	end
+	
+	function externalFunctions.GetBattleStatusWindowHandler()
+		return battleStatusPanelHandler
 	end
 	
 	-------------------------------------------------------------------

@@ -257,10 +257,11 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID)
 			return
 		end
 		if battleLobby:GetMyUserName() == userName then
+			window:Dispose()
+			Spring.Echo("wrapperControl.visible", wrapperControl.name, wrapperControl.visible)
 			if wrapperControl and wrapperControl.visible then
 				wrapperControl:Hide()
 			end
-			window:Dispose()
 		else
 			UpdatePlayers(battleID)
 		end
@@ -691,8 +692,7 @@ function BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
 		singleplayerWrapper = nil
 	end
 	
-	local mainWindowHandler = WG.Chobby.interfaceRoot.GetMainWindowHandler()
-	local tabPanel = mainWindowHandler.GetTabList("multiplayer")
+	local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
 	
 	battleLobby = WG.LibLobby.lobby
 				
@@ -732,7 +732,9 @@ end
 
 function BattleRoomWindow.GetSingleplayerControl()
 	
-	singleplayerWrapper = Control:New {
+	singleplayerWrapper = Window:New {
+		name = "singleplayerWrapper",
+		caption = "singleplayerWrapper, singleplayerWrapper, singleplayerWrapper, singleplayerWrapper, singleplayerWrapper, singleplayerWrapper, singleplayerWrapper, singleplayerWrapper, singleplayerWrapper, ",
 		x = 0,
 		y = 0,
 		width = "100%",
