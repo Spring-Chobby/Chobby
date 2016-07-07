@@ -51,7 +51,7 @@ function ChatWindows:init()
 			local channelConsole = self:GetChannelConsole(chanName)
 			if channelConsole ~= nil then
 				WG.Delay(function()
-					channelConsole:AddMessage(lobby:GetChannel(chanName).topic)
+					channelConsole:AddMessage(lobby:GetChannel(chanName).topic, nil, nil, "\255\0\139\139")
 				end, 0.01)
 			end
 			
