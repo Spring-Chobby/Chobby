@@ -171,6 +171,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				{name = "custom_caps", control = BattleListWindow().window},
 			}
 		},
+		{name = "exit", exitGame = true},
 	}
 	
 	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons, panelWindow, rightPanelTabs)
