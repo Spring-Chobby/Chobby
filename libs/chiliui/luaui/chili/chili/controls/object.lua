@@ -248,7 +248,11 @@ function Object:SetParent(obj)
   end
   
   self:CallListeners(self.OnParent, self)
-
+  
+  -- Children always appear to visible when they recieve new parents because they
+  -- are added to the visible child list.
+  self.visible = true
+  
   self.parent = MakeWeakLink(obj, self.parent)
 
   self:Invalidate()

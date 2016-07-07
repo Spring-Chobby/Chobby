@@ -258,7 +258,6 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID)
 		end
 		if battleLobby:GetMyUserName() == userName then
 			window:Dispose()
-			Spring.Echo("wrapperControl.visible", wrapperControl.name, wrapperControl.visible)
 			if wrapperControl and wrapperControl.visible then
 				wrapperControl:Hide()
 			end
@@ -510,7 +509,6 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 	-- Global function
 	function ViewResizeUpdate()
 		if mainStackPanel and spectatorStackPanel then
-			Spring.Echo("mainScrollPanel.height", mainScrollPanel.height)
 			PositionChildren(mainStackPanel, mainScrollPanel.height)
 			PositionChildren(spectatorStackPanel, spectatorScrollPanel.height)
 		end
@@ -732,9 +730,8 @@ end
 
 function BattleRoomWindow.GetSingleplayerControl()
 	
-	singleplayerWrapper = Window:New {
+	singleplayerWrapper = Control:New {
 		name = "singleplayerWrapper",
-		caption = "singleplayerWrapper, singleplayerWrapper, singleplayerWrapper, singleplayerWrapper, singleplayerWrapper, singleplayerWrapper, singleplayerWrapper, singleplayerWrapper, singleplayerWrapper, ",
 		x = 0,
 		y = 0,
 		width = "100%",
@@ -749,8 +746,7 @@ function BattleRoomWindow.GetSingleplayerControl()
 				end
 				
 				if multiplayerWrapper then
-					local mainWindowHandler = WG.Chobby.interfaceRoot.GetMainWindowHandler()
-					local tabPanel = mainWindowHandler.GetTabList("multiplayer")
+					local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
 					tabPanel.RemoveTab("myBattle")
 					
 					WG.LibLobby.lobby:LeaveBattle()

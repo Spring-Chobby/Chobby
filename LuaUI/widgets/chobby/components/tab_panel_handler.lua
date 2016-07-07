@@ -126,11 +126,12 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 	function externalFunctions.RemoveTab(name)
 		local index = 1
 		local found = false
+		Spring.Echo("removing tab", name)
 		while index <= #tabs do
 			if found then
 				tabs[index] = tabs[index + 1]
 				index = index + 1
-			elseif tabs[index].internalName == name then
+			elseif tabs[index].name == name then
 				tabs[index].button:Dispose()
 				found = true
 			else
@@ -147,7 +148,6 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		
 		newTab.name = name
 		newTab.rank = rank or (#tabs + 1)
-		newTab.internalName = internalName
 		newTab.control = control
 		local button
 		if control then
@@ -177,7 +177,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 				button.font = button.oldFont
 				button.backgroundColor = button.oldBackgroundColor
 				button:Invalidate()
-			
+				
 				if (displayPanel:IsEmpty() or displayPanel:GetChildByName(control.name))
 						and displayPanel.visible then
 					displayPanel:Hide()
@@ -189,7 +189,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 				y = "0%",
 				width = "100%",
 				height = "100%",
-				caption = name,
+				caption = humanName,
 				font = {size = 20},
 				parent = buttonsHolder,
 				OnClick = {onClick},
