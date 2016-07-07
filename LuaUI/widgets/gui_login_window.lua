@@ -25,9 +25,17 @@ local function MultiplayerFailFunction()
 	WG.Chobby.interfaceRoot.GetMainWindowHandler().SetBackAtMainMenu()
 end
 
+local wantLoginStatus = {
+	["offline"] = true,
+	["closed"] = true,
+	["disconnected"] = true,
+}
+
 local function MultiplayerEntryPopup()
-	local loginWindow = WG.Chobby.LoginWindow(MultiplayerFailFunction)
-	local popup = WG.Chobby.PriorityPopup(loginWindow.window)
+	if wantLoginStatus[lobby:GetConnectionStatus()] then
+		local loginWindow = WG.Chobby.LoginWindow(MultiplayerFailFunction)
+		local popup = WG.Chobby.PriorityPopup(loginWindow.window)
+	end
 end
 
 local function LoginPopup()
