@@ -116,10 +116,11 @@ function LoginWindow:init(failFunction)
 
 	self.cbAutoLogin = Checkbox:New {
 		x = 1,
-		width = 120 * self.scale,
+		width = 116 * self.scale,
 		y = 150 * self.scale,
 		height = 20 * self.scale,
-		boxalign = "left",
+		boxalign = "right",
+		boxsize = 10 * self.scale,
 		caption = i18n("autologin"),
 		checked = Configuration.autoLogin,
 		font = { size = self.scale * self.fontSize * 0.8},

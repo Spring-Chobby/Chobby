@@ -17,7 +17,7 @@ return {
 		login_verb = 'Login',
 		error_log = 'Error log',
 		register_verb = "Register",
-		autologin = "Login automatically",
+		autologin = "Login automatically?",
 		--
 		start_download = 'Start download',
 		download_noun = 'Download',
