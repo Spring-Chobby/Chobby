@@ -1,6 +1,8 @@
 Chobby, the ingame lobby.
 
-== Launching ==
+Launching
+=========
+
 You can launch Chobby from spring start menu like any other game. 
 
 It is suggested to select "Player Only" script and it's a good idea to "Blank v2" as your map (but other small maps can also work).
