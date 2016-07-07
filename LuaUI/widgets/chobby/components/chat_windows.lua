@@ -56,7 +56,7 @@ function ChatWindows:init()
 		function(listener, chanName, author, changedTime, topic)
 			local channelConsole = self:GetChannelConsole(chanName)
 			if channelConsole ~= nil then
-				channelConsole:AddMessage(lobby:GetChannel(chanName).topic, nil, nil, "\255\0\139\139")
+				channelConsole:AddMessage(topic, nil, nil, "\255\0\139\139")
 			end
 		end
 	)
