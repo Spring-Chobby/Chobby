@@ -48,7 +48,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
-		children = {}
+		children = {
+			WG.UserStatusPanel.GetControl()
+		}
 	}
 	
 	local mainWindow = Window:New {
@@ -152,6 +154,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local rightPanelTabs = {
 		{name = "chat", control = chatWindows.window},
 		{name = "settings", control = WG.SettingsWindow.GetControl()},
+		-- TODO: Implement
+		{name = "downloads", control = WG.SettingsWindow.GetControl()},
+		-- TODO: Implement
+		{name = "friends", control = WG.SettingsWindow.GetControl()},
 	}
 	
 	local submenus = {
@@ -164,7 +170,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				{name = "custom_caps", control = BattleListWindow().window},
 			}
 		},
-		{name = "exit", exitGame = true},
 	}
 	
 	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons, panelWindow, rightPanelTabs)
@@ -295,6 +300,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	function externalFunctions.GetContentPlace()
 		return contentPlace
+	end
+	
+	function externalFunctions.GetStatusWindow()
+		return statusWindow
 	end
 	
 	function externalFunctions.GetMainWindowHandler()
