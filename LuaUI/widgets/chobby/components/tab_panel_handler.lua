@@ -2,7 +2,8 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 	
 	local externalFunctions = {}
 	
-	local BUTTON_HEIGHT = 80
+	local BUTTON_HEIGHT = 70
+	local BUTTON_SPACING = 5
 	
 	local function getFont() 
 		return {
@@ -57,7 +58,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		if tabsVertical then
 			tabs[index].button:SetPos(
 				nil, 
-				(index - 1) * BUTTON_HEIGHT + buttonOffset, 
+				(index - 1) * (BUTTON_HEIGHT + BUTTON_SPACING) + buttonOffset, 
 				nil, 
 				BUTTON_HEIGHT
 			)

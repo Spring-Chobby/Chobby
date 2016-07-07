@@ -202,6 +202,11 @@ function LoginWindow:init()
 	end
 end
 
+function LoginWindow:AddCloseFunction(func)
+	self.window.OnDispose = self.window.OnDispose or {}
+	self.window.OnDispose[#self.window.OnDispose + 1] = func
+end
+
 function LoginWindow:RemoveListeners()
 	if self.onAccepted then
 		lobby:RemoveListener("OnAccepted", self.onAccepted)

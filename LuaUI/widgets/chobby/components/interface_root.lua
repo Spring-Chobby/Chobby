@@ -107,6 +107,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
+	contentPlace:Hide()
 	
 	local panelButtonsHolder = Control:New {
 		x = (100 - panelWidthRel) .. "%",

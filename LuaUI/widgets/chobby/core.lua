@@ -44,6 +44,7 @@ local includes = {
 	"components/interface_root.lua",
 	"components/tab_panel_handler.lua",
 	"components/submenu_handler.lua",
+	"components/priority_popup.lua",
 }
 
 Chobby = widget
@@ -56,7 +57,7 @@ end
 function Chobby:_Initialize()
 	self:WrapCall(function()
 		WG.Delay(function()
-			local loginWindow = LoginWindow()
+			--local loginWindow = LoginWindow()
 			--self.downloader = Downloader()
 			--local statusBar = StatusBar()
 			--local background = Background()
@@ -76,6 +77,14 @@ end
 
 function Chobby:_DrawScreen()
 	self:WrapCall(function()
+	end)
+end
+
+function Chobby:_ViewResize(sw, sh)
+	self:WrapCall(function()
+		for i, comp in pairs(self:GetRegisteredComponents()) do
+			comp:ViewResize(sw, sh)
+		end
 	end)
 end
 

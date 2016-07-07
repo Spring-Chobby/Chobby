@@ -3,7 +3,9 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 	local externalFunctions = {}
 	local submenuPanelNames = {}
 	
-	local BUTTON_HEIGHT = 80
+	local BUTTON_HEIGHT = 70
+	local BUTTON_SPACING = 5
+	local BUTTON_OFFSET = 80
 	
 	-------------------------------------------------------------------
 	-- External Functions
@@ -27,7 +29,6 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 	}
 	
 	local submenuCount = #submenus
-	local buttonHeight = 100/submenuCount .. "%"
 
 	local function BackToMainMenu(panelHandler) 
 		panelHandler.Hide() 
@@ -55,7 +56,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 		
 		submenus[i].button = Button:New {
 			x = 0,
-			y = (i - 1) * BUTTON_HEIGHT,
+			y = (i - 1) * (BUTTON_HEIGHT + BUTTON_SPACING) + BUTTON_OFFSET,
 			width = "100%",
 			height = BUTTON_HEIGHT,
 			caption = i18n(submenus[i].name),

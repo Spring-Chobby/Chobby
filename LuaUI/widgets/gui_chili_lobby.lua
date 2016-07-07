@@ -32,6 +32,7 @@ function widget:ViewResize(vsx, vsy, viewGeometry)
 		interfaceRoot.UpdateSizeMode(vsx, vsy)
 	end
 	--Spring.Utilities.TableEcho(viewGeometry, "viewGeometry")
+	WG.Chobby:_ViewResize(vsx, vsy)
 end
 
 function widget:Initialize()
