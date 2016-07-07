@@ -4,9 +4,19 @@ function ChatWindows:init()
 	self.channelConsoles = {}
 	self.userListPanels = {}
 	self.tabbars = {}
+	self.currentTab = ""
 
 	-- setup debug console to listen to commands
 	self:CreateDebugConsole()
+	
+	local _NotifyTab = function(userName, chanName, message, sound, time)
+		Chotify:Post{
+			title = userName .. " in " .. chanName .. ":",
+			body = message,
+			sound = sound,
+			time = time,
+		}
+	end
 
 	-- get a list of channels when login is done
 	lobby:AddListener("OnLoginInfoEnd",
@@ -66,7 +76,14 @@ function ChatWindows:init()
 		function(listener, chanName, userName, message)
 			local channelConsole = self.channelConsoles[chanName]
 			if channelConsole ~= nil then
-				channelConsole:AddMessage(message, userName)
+				if string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName() then
+					channelConsole:AddMessage(message, userName, nil, "\255\255\0\0")
+					if chanName ~= string.sub(self.currentTab, 2) then
+						_NotifyTab(userName, chanName, message, "sounds/beep4", 15)
+					end
+				else
+					channelConsole:AddMessage(message, userName)
+				end
 			end
 		end
 	)
@@ -74,7 +91,14 @@ function ChatWindows:init()
 		function(listener, chanName, userName, message)
 			local channelConsole = self.channelConsoles[chanName]
 			if channelConsole ~= nil then
-				channelConsole:AddMessage(message, userName, nil, "\255\0\139\139")
+				if string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName() then
+					channelConsole:AddMessage(message, userName, nil, "\255\255\0\0")
+					if chanName ~= string.sub(self.currentTab, 2) then
+						_NotifyTab(userName, chanName, message, "sounds/beep4", 15)
+					end
+				else
+					channelConsole:AddMessage(message, chanName, userName, nil, "\255\0\139\139")
+				end
 			end
 		end
 	)
@@ -96,6 +120,10 @@ function ChatWindows:init()
 					channelConsole:AddMessage(message, userName, msgDate)
 				end
 			else
+				Spring.Echo(userName)
+				if userName ~= string.sub(self.currentTab, 2) then
+					_NotifyTab(userName, "Private", message, "sounds/beep4", 15)
+				end
 				local privateChatConsole = self:GetPrivateChatConsole(userName)
 				privateChatConsole:AddMessage(message, userName)
 			end
@@ -103,6 +131,9 @@ function ChatWindows:init()
 	)
 	lobby:AddListener("OnSaidPrivateEx",
 		function(listener, userName, message)
+			if userName ~= string.sub(self.currentTab, 2) then
+				_NotifyTab(userName, "Private", message, "sounds/beep4", 15)
+			end
 			local privateChatConsole = self:GetPrivateChatConsole(userName)
 			privateChatConsole:AddMessage(message, userName, msgDate, "\255\0\139\139")
 		end
@@ -143,6 +174,7 @@ function ChatWindows:init()
 		},
 		OnTabChange = {
 			function(obj, name)
+				self.currentTab = name
 				local console = self.tabbars[name]
 				if console then
 					WG.Delay(function()
