@@ -52,6 +52,15 @@ function ChatWindows:init()
 		end
 	)
 
+	lobby:AddListener("OnChannelTopic",
+		function(listener, chanName, author, changedTime, topic)
+			local channelConsole = self:GetChannelConsole(chanName)
+			if channelConsole ~= nil then
+				channelConsole:AddMessage(topic, nil, nil, "\255\0\139\139")
+			end
+		end
+	)
+
 	-- channel chat
 	lobby:AddListener("OnSaid", 
 		function(listener, chanName, userName, message)
