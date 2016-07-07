@@ -168,7 +168,7 @@ local function InitializeControls(window)
 		end
 	end
 	onPong = function(listener)
-		UpdateLatency()
+-- 		UpdateLatency()
 	end
 	lobby:AddListener("OnAccepted", onAccepted)
 	lobby:AddListener("OnDisconnected", onDisconnected)
