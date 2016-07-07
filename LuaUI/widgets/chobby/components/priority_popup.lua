@@ -99,7 +99,6 @@ end
 
 function PriorityPopup:ClosePopup()
 	--self:unregister() -- Crashes
-	
-	self.mainWindow:Dispose()
+
 	self.background:Dispose()
 end
