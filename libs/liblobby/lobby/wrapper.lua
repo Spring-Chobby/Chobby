@@ -305,8 +305,6 @@ function Wrapper:_OnChannelTopic(chanName, author, changedTime, topic)
 end
 Wrapper.commands["CHANNELTOPIC"] = Wrapper._OnChannelTopic
 
-
-
 -- override
 function Wrapper:_OnClients(chanName, clientsStr)
 	local channel = self:_GetChannel(chanName)
