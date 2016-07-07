@@ -7,6 +7,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	local titleHeight = 180
 	local titleWidth = 400
+	local battleStatusWidth = 480
 	local panelButtonsHeight = 50
 	local mainButtonsWidth = 180
 	
@@ -51,6 +52,21 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		children = {
 			WG.UserStatusPanel.GetControl()
 		}
+	}
+	
+	local battleStatusHolder = Window:New {
+		x = 0,
+		y = 0,
+		width = battleStatusWidth,
+		bottom = 0,
+		name = "battleStatusHolder",
+		caption = "Battle and MM Status Window",
+		parent = screen0,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		parent = statusWindow,
+		children = {}
 	}
 	
 	local mainWindow = Window:New {
@@ -147,6 +163,24 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	}
 	panelWindow:Hide()
 	
+	-- Exit button
+	local exitButton = Button:New {
+		x = 0,
+		bottom = 10,
+		width = "100%",
+		height = 70,
+		caption = i18n("exit"),
+		font = {size = 20},
+		parent = mainButtons,
+		OnClick = {
+			function(self)
+				-- TODO, add popup window to confirm exit.
+				Spring.Echo("Quitting...")
+				Spring.SendCommands("quitforce")
+			end
+		},
+	}
+	
 	-------------------------------------------------------------------
 	-- In-Window Handlers
 	-------------------------------------------------------------------
@@ -176,7 +210,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				{name = "custom_caps", control = BattleListWindow().window},
 			},
 		},
-		{name = "exit", exitGame = true},
 	}
 	
 	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons, panelWindow, rightPanelTabs)

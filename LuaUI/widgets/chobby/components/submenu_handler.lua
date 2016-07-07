@@ -64,30 +64,21 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 	
 	for i = 1, #submenus do
 		
-		if not submenus[i].exitGame then
-			local panelHandler = GetTabPanelHandler(submenus[i].name, buttonWindow, panelWindow, submenus[i].tabs, true, BackToMainMenu)
-			panelHandler.Hide()
-			
-			submenuPanelNames[submenus[i].name] = panelHandler
-			submenus[i].panelHandler = panelHandler
-		end
+		local panelHandler = GetTabPanelHandler(submenus[i].name, buttonWindow, panelWindow, submenus[i].tabs, true, BackToMainMenu)
+		panelHandler.Hide()
+		
+		submenuPanelNames[submenus[i].name] = panelHandler
+		submenus[i].panelHandler = panelHandler
 		
 		submenus[i].button = Button:New {
 			x = 0,
-			y = (not submenus[i].exitGame) and ((i - 1) * (BUTTON_HEIGHT + BUTTON_SPACING) + BUTTON_OFFSET),
-			bottom = submenus[i].exitGame and 10,
+			y = (i - 1) * (BUTTON_HEIGHT + BUTTON_SPACING) + BUTTON_OFFSET,
 			width = "100%",
 			height = BUTTON_HEIGHT,
 			caption = i18n(submenus[i].name),
 			font = { size = 20},
 			parent = buttonsHolder,
 			OnClick = {function(self) 
-				if submenus[i].exitGame then
-					Spring.Echo("Quitting...")
-					Spring.SendCommands("quitforce")
-					return
-				end
-				
 				if buttonsHolder.visible then
 					buttonsHolder:Hide()
 				end
