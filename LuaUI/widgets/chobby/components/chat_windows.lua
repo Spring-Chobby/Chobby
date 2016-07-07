@@ -49,7 +49,6 @@ function ChatWindows:init()
 	lobby:AddListener("OnJoin",
 		function(listener, chanName)
 			local channelConsole = self:GetChannelConsole(chanName)
-			
 		end
 	)
 
