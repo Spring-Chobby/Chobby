@@ -1,5 +1,9 @@
 Chobby, the ingame lobby.
 
+Installation
+============
+Chobby is on rapid, under the "chobby" tag. The development version can be obtained directly from here.
+
 Launching
 =========
 
