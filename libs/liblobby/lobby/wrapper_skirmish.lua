@@ -125,6 +125,10 @@ function WrapperSkirmish:_UpdateUserBattleStatus(data)
 	self:_CallListeners("UpdateUserBattleStatus", data)
 end
 
+function WrapperSkirmish:_UpdateBotStatus(data)
+	self:_UpdateUserBattleStatus(data) -- TODO, better implementation.
+end
+
 function WrapperSkirmish:_RemoveBot(data)
 	self:_CallListeners("RemoveBot", data)
 end
@@ -163,6 +167,16 @@ end
 ------------------------------------------------------------------------
 -- Setters
 ------------------------------------------------------------------------
+
+function WrapperSkirmish:AddAi(aiName, allyNumber, Name)
+	local botData = {
+		AllyNumber = allyNumber or 0,
+		AiLib = aiName or "NullAI",
+		Name = Name or (aiName .. "_" .. math.floor(math.random()*100)),
+		Owner = self:GetMyUserName()
+	}
+	self:_UpdateBotStatus(botData)
+end
 
 function WrapperSkirmish:StartBattle()
 	if self.battle.gameName and self.battle.mapName then

@@ -248,14 +248,13 @@ function widget:Initialize()
 			Spring.SetConfigInt("Fullscreen", 1, false)
 		end
 	end
-	lobby:AddListener("BattleAboutToStart", onBattleAboutToStart)
+	WG.LibLobby.lobby:AddListener("BattleAboutToStart", onBattleAboutToStart)
 	WG.LibLobby.lobbySkirmish:AddListener("BattleAboutToStart", onBattleAboutToStart)
 	
 	WG.SettingsWindow = SettingsWindow
 end
 
 function widget:Shutdown()
-	lobby:RemoveListener("BattleAboutToStart", onBattleAboutToStart)
 	if WG.LibLobby then
 		WG.LibLobby.lobbySkirmish:RemoveListener("BattleAboutToStart", onBattleAboutToStart)
 	end

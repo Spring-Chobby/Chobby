@@ -77,11 +77,17 @@ function PriorityPopup:init(mainWindow)
 		}
 	}
 	
-	self.mainWindow.OnDispose = self.mainWindow.OnDispose or {}
-	self.mainWindow.OnDispose[#self.mainWindow.OnDispose + 1] = function()
+	local function HideDisposeFunc()
 		self:unregister()
 		self.background:Dispose()
 	end
+	
+	self.mainWindow:BringToFront()
+	
+	self.mainWindow.OnDispose = self.mainWindow.OnDispose or {}
+	self.mainWindow.OnDispose[#self.mainWindow.OnDispose + 1] = HideDisposeFunc
+	self.mainWindow.OnHide = self.mainWindow.OnHide or {}
+	self.mainWindow.OnHide[#self.mainWindow.OnHide + 1] = HideDisposeFunc
 	
 	local sw, sh = Spring.GetWindowGeometry()
 	self:ViewResize(sw, sh)

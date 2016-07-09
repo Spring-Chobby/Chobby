@@ -45,6 +45,7 @@ local includes = {
 	"components/tab_panel_handler.lua",
 	"components/submenu_handler.lua",
 	"components/priority_popup.lua",
+	"components/ai_list_window.lua",
 }
 
 Chobby = widget

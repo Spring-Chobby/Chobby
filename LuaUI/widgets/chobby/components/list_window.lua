@@ -86,7 +86,7 @@ function ListWindow:AddRow(items, id)
 	local padding = 20
 
 	local container = Control:New {
-		width = w,
+		width = "100%",
 		y = 0,
 		height = h,
 		padding = {0, 0, 0, 0},
@@ -103,7 +103,7 @@ function ListWindow:AddRow(items, id)
 	}
 
 	local index = #self.listPanel.children + 1
-	local w = Window:New {
+	local w = Control:New {
 		x = 0,
 		right = 0,
 		y = self:CalculateHeight(index),

@@ -168,9 +168,11 @@ function widget:Initialize()
 end
 
 function widget:Shutdown()
-	lobby:RemoveListener("OnAccepted", onAccepted)
-	lobby:RemoveListener("OnDisconnected", onDisconnected)
-	lobby:RemoveListener("OnPong", onPong)
+	if lobby then
+		lobby:RemoveListener("OnAccepted", onAccepted)
+		lobby:RemoveListener("OnDisconnected", onDisconnected)
+		lobby:RemoveListener("OnPong", onPong)
+	end
 end
 
 
