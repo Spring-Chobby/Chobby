@@ -303,6 +303,45 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 		parent = spectatorScrollPanel,
 	}
 	
+	-- ADD TEAM
+	local newTeamHolder = Control:New {
+		name = "newTeamHolder",
+		x = 0,
+		right = 0,
+		y = 0,
+		height = 50,
+		padding = {0, 0, 0, 0},
+		parent = mainStackPanel,
+		stickToBottom = true, -- not a chili key
+	} 
+	local label = Label:New {
+		x = 5,
+		y = 0,
+		width = 120,
+		height = 30,
+		font = {size = 20},
+		caption = "New Team",
+		parent = newTeamHolder,
+	}
+	local joinNewTeamButton = Button:New {
+		x = 130,
+		y = 0,
+		height = 30,
+		width = 55,
+		font = { size = 20 },
+		caption = WG.Chobby.Configuration:GetErrorColor() .. i18n("join") .. "\b",
+		OnClick = {
+			function()
+				-- Implement
+				--battleLobby:SetBattleStatus({
+				--	AllyNumber = teamIndex, 
+				--	IsSpectator = false,
+				--})
+			end
+		},
+		parent = newTeamHolder,
+	}
+	
 	-- Object handling
 	local player = {}
 	local team = {}
@@ -386,6 +425,7 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 				padding = {0, 0, 0, 0},
 				parent = parentStack,
 			} 
+			
 			local label = Label:New {
 				x = 5,
 				y = 0,
@@ -396,6 +436,10 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 				parent = teamHolder,
 			}
 			if teamIndex ~= -1 then
+				if newTeamHolder.parent then
+					parentStack:RemoveChild(newTeamHolder)
+					parentStack:AddChild(newTeamHolder)
+				end
 				local joinTeamButton = Button:New {
 					x = 130,
 					y = 0,
