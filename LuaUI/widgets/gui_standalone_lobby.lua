@@ -11,7 +11,35 @@ function widget:GetInfo()
 end
 
 function widget:Initialize()
-	Spring.SendCommands("ResBar 0", "ToolTip 0", "Clock 0", "Info 0") --  "Console 0",
+	Spring.SendCommands({
+							"ResBar 0",
+							"ToolTip 0",
+							"Clock 0",
+							"Info 0",
+		--					"Console 0",
+
+							"unbindall",
+							
+							"bind Any+enter chat",
+							"bind Any+enter  edit_return",
+							
+							"bind Any+escape  edit_escape",
+							"bind Any+tab  edit_complete",
+							"bind Any+backspace  edit_backspace",
+							"bind Any+delete  edit_delete",
+							"bind Alt+left  edit_home",
+							"bind Any+home  edit_home",
+							"bind Alt+right  edit_end",
+							"bind Any+end  edit_end",
+							"bind Any+left  edit_prev_char",
+							"bind Any+right  edit_next_char",
+							"bind Ctrl+left  edit_prev_word",
+							"bind Ctrl+right  edit_next_word",
+							"bind Any+up  edit_prev_line",
+							"bind Any+down  edit_next_line",
+
+							"bind Ctrl+v pastetext",
+	})
 	Spring.SetConfigInt("MouseDragScrollThreshold", 0, true)
 	Spring.LoadCmdColorsConfig("mouseBox 0.0 0.0 0.0 0.0")
 	Spring.SetDrawSky(false)
