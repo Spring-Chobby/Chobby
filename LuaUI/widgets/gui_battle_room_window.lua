@@ -44,7 +44,7 @@ local multiplayerWrapper
 --------------------------------------------------------------------------------
 -- Download management
 
-local largestTeamIndex = -1
+local emptyTeamIndex = 0
 
 local function UpdateArchiveStatus()
 	if not battleLobby:GetMyBattleID() then
@@ -127,41 +127,7 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID)
 		},
 		parent = parentControl,
 	}
-	
-	local btnNewTeam = Button:New {
-		x = 10,
-		y = 65,
-		height = 45,
-		right = "50.5%",
-		caption = "\255\66\138\201" .. i18n("new_team") ..  "\b",
-		font = { size = 22 },
-		OnClick = {
-			function()
-				battleLobby:SetBattleStatus({
-					AllyNumber = largestTeamIndex + 1, 
-					IsSpectator = false,
-				})
-			end
-		},
-		parent = parentControl,
-	}
-	
-	-- TODO: placeholder, needs implementation
-	local btnAddAI = Button:New {
-		x = "50.5%",
-		y = 65,
-		height = 45,
-		right = 10,
-		caption = "\255\66\138\201Add AI\b", -- add proper i18n if needed
-		font = { size = 22 },
-		OnClick = {
-			function (obj)
-				WG.Chobby.AiListWindow(battleLobby, battle.gameName)
-			end
-		},
-		parent = parentControl,
-	}
-	
+
 	local lblNumberOfPlayers = Label:New {
 		x = 15,
 		y = 175,
@@ -268,28 +234,52 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID)
 	UpdateArchiveStatus()
 end
 
+local function AddTeamButtons(parent, offset, joinFunc, aiFunc)
+	local joinTeamButton = Button:New {
+		x = offset,
+		y = 0,
+		height = 30,
+		width = 70,
+		font = { size = 20 },
+		caption = i18n("join") .. "\b",
+		OnClick = {joinFunc},
+		parent = parent,
+	}
+	local addAiButton = Button:New {
+		x = offset + 80,
+		y = 0,
+		height = 30,
+		width = 70,
+		font = {size = 20},
+		caption = i18n("add_ai") .. "\b",
+		OnClick = {aiFunc},
+		parent = parent,
+	}
+end
+
 local function SetupPlayerPanel(parentControl, battle, battleID)
 	
 	local SPACING = 22
 		
 	local mainScrollPanel = ScrollPanel:New {
 		x = 0,
-		right = "41%",
+		right = "30.5%",
 		y = 0,
-		bottom = 0,
+		bottom = 30,
 		parent = parentControl,
 	}
-		
+	
 	local mainStackPanel = Control:New {
 		x = 0,
 		right = 0,
 		y = 0,
+		height = 400,
 		parent = mainScrollPanel,
 		preserveChildrenOrder = true,
 	}	
 	
 	local spectatorScrollPanel = ScrollPanel:New {
-		x = "61%",
+		x = "70.5%",
 		right = 0,
 		y = 0,
 		bottom = 0,
@@ -307,40 +297,36 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 	local newTeamHolder = Control:New {
 		name = "newTeamHolder",
 		x = 0,
-		right = 0,
-		y = 0,
-		height = 50,
+		right = "30.5%",
+		bottom = 0,
+		height = 30,
 		padding = {0, 0, 0, 0},
-		parent = mainStackPanel,
-		stickToBottom = true, -- not a chili key
-	} 
+		parent = parentControl,
+	}
+	
 	local label = Label:New {
 		x = 5,
 		y = 0,
 		width = 120,
 		height = 30,
+		valign = "center",
 		font = {size = 20},
 		caption = "New Team",
 		parent = newTeamHolder,
 	}
-	local joinNewTeamButton = Button:New {
-		x = 130,
-		y = 0,
-		height = 30,
-		width = 55,
-		font = { size = 20 },
-		caption = WG.Chobby.Configuration:GetErrorColor() .. i18n("join") .. "\b",
-		OnClick = {
-			function()
-				-- Implement
-				--battleLobby:SetBattleStatus({
-				--	AllyNumber = teamIndex, 
-				--	IsSpectator = false,
-				--})
-			end
-		},
-		parent = newTeamHolder,
-	}
+	AddTeamButtons(
+		newTeamHolder,
+		120,
+		function()
+			battleLobby:SetBattleStatus({
+				AllyNumber = emptyTeamIndex, 
+				IsSpectator = false,
+			})
+		end, 
+		function()
+			WG.Chobby.AiListWindow(battleLobby, battle.gameName, emptyTeamIndex)
+		end
+	)
 	
 	-- Object handling
 	local player = {}
@@ -349,7 +335,10 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 	local function PositionChildren(panel, minHeight)
 		local children = panel.children
 		
-		minHeight = minHeight - 30
+		minHeight = minHeight - 10
+		
+		local childrenCount = #children
+		local bottomBuffer = 0
 		
 		local totalHeight = 0
 		local maxHeight = 0
@@ -361,7 +350,10 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 			end
 		end
 		
-		if #children * maxHeight > minHeight then
+		if childrenCount * maxHeight + bottomBuffer > minHeight then
+			if totalHeight < minHeight then
+				totalHeight = minHeight
+			end
 			panel:SetPos(nil, nil, nil, totalHeight)
 			local runningHeight = 0
 			for i = 1, #children do
@@ -401,8 +393,12 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 	
 	local function GetTeam(teamIndex)
 		if not team[teamIndex] then
-			if teamIndex > largestTeamIndex then
-				largestTeamIndex = teamIndex
+			if teamIndex == emptyTeamIndex then
+				local checkTeam = teamIndex + 1
+				while team[checkTeam] do
+					checkTeam = checkTeam + 1
+				end
+				emptyTeamIndex = checkTeam
 			end
 		
 			local humanName, parentStack, parentScroll
@@ -431,32 +427,25 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 				y = 0,
 				width = 120,
 				height = 30,
+				valign = "center",
 				font = {size = 20},
 				caption = humanName,
 				parent = teamHolder,
 			}
 			if teamIndex ~= -1 then
-				if newTeamHolder.parent then
-					parentStack:RemoveChild(newTeamHolder)
-					parentStack:AddChild(newTeamHolder)
-				end
-				local joinTeamButton = Button:New {
-					x = 130,
-					y = 0,
-					height = 30,
-					width = 55,
-					font = { size = 20 },
-					caption = WG.Chobby.Configuration:GetErrorColor() .. i18n("join") .. "\b",
-					OnClick = {
-						function()
-							battleLobby:SetBattleStatus({
-								AllyNumber = teamIndex, 
-								IsSpectator = false,
-							})
-						end
-					},
-					parent = teamHolder,
-				}
+				AddTeamButtons(
+					teamHolder,
+					90,
+					function()
+						battleLobby:SetBattleStatus({
+							AllyNumber = teamIndex, 
+							IsSpectator = false,
+						})
+					end, 
+					function()
+						WG.Chobby.AiListWindow(battleLobby, battle.gameName, teamIndex)
+					end
+				)
 			end
 			local teamStack = Control:New {
 				x = 0,
@@ -508,6 +497,10 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 				teamHolder:SetPos(nil, nil, nil, #teamStack.children*SPACING + 35)
 				
 				if teamStack:IsEmpty() then
+					if teamIndex < emptyTeamIndex then
+						emptyTeamIndex = teamIndex
+					end
+				
 					team[teamIndex] = nil
 					parentStack:RemoveChild(parentStack:GetChildByName(teamIndex))
 					teamHolder:Dispose()
@@ -589,7 +582,7 @@ local function InitializeControls(battleID, oldLobby)
 		padding = {0, 0, 0, 0},
 		OnDispose = { 
 			function()
-				largestTeamIndex = -1
+				emptyTeamIndex = 0
 			
 				oldLobby:RemoveListener("OnBattleClosed", onBattleClosed)
 				oldLobby:RemoveListener("OnLeftBattle", onLeftBattle_counter)
@@ -613,10 +606,10 @@ local function InitializeControls(battleID, oldLobby)
 	}
 	
 	local playerPanel = Control:New {
-		x = "2%",
-		y = "2%",
+		x = 15,
+		y = 15,
 		right = "33%",
-		bottom = "51%",
+		bottom = "50%",
 		padding = {0, 0, 0, 0},
 		parent = subPanel,
 	}
@@ -626,8 +619,8 @@ local function InitializeControls(battleID, oldLobby)
 	local infoButtonsPanel = Control:New {
 		x = "68%",
 		y = "30.5%",
-		right = "2%",
-		bottom = "2%",
+		right = 5,
+		bottom = 5,
 		padding = {0, 0, 0, 0},
 		parent = subPanel,
 	}
@@ -665,9 +658,9 @@ local function InitializeControls(battleID, oldLobby)
 	end
 	
 	local chatPanel = Control:New {
-		x = "2%",
+		x = 15,
 		y = "51%",
-		bottom = "2%",
+		bottom = 15,
 		right = "33%",
 		padding = {0, 0, 0, 0},
 		itemPadding = {0, 0, 0, 0},
@@ -701,6 +694,8 @@ local function InitializeControls(battleID, oldLobby)
 		end
 	end
 	battleLobby:AddListener("OnBattleClosed", onBattleClosed)
+	
+	WG.Delay(ViewResizeUpdate, 0.1)
 	
 	return window
 end
@@ -805,6 +800,9 @@ end
 function widget:ViewResize(vsx, vsy, viewGeometry)
 	if ViewResizeUpdate then
 		WG.Delay(ViewResizeUpdate, 0.1)
+		WG.Delay(ViewResizeUpdate, 0.2)
+		WG.Delay(ViewResizeUpdate, 0.4)
+		WG.Delay(ViewResizeUpdate, 0.8)
 	end
 end
 

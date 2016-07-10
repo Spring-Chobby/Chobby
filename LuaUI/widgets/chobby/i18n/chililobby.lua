@@ -77,6 +77,7 @@ return {
 		debug = "Debug",
 		chat = "Chat",
 		join = "Join",
+		add_ai = "Add AI",
 		channel = "Channel",
 		topic = "Topic",
 		join_channel = "Join Channel",

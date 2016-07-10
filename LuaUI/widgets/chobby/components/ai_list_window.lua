@@ -1,6 +1,6 @@
 AiListWindow = ListWindow:extends{}
 
-function AiListWindow:init(lobby, gameName)
+function AiListWindow:init(lobby, gameName, allyTeam)
 
 	self:super('init', screen0, "Choose AI")
 	self.window:SetPos(nil, nil, 500, 700)
@@ -16,7 +16,7 @@ function AiListWindow:init(lobby, gameName)
 			font = { size = 22 },
 			OnClick = {
 				function()
-					lobby:AddAi(ai.shortName)
+					lobby:AddAi(ai.shortName, allyTeam)
 					self:HideWindow()
 				end
 			},
