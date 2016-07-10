@@ -72,6 +72,8 @@ function ChatWindows:init()
 					self:_NotifyTab("#" .. chanName, userName, chanName, message, "sounds/beep4.wav", 15)
 				else
 					channelConsole:AddMessage(message, userName)
+					
+					interfaceRoot.GetRightPanelHandler().SetActivity("chat", "(" .. string.len(message) .. ")")
 				end
 			end
 		end

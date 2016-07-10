@@ -132,6 +132,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		height = panelButtonsHeight,
 		name = "panelButtonsHolder",
 		parent = screen0,
+		resizable = false,
+		draggable = false,
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
@@ -353,6 +355,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	function externalFunctions.GetMainWindowHandler()
 		return mainWindowHandler
+	end
+	
+	function externalFunctions.GetRightPanelHandler()
+		return rightPanelHandler
 	end
 	
 	function externalFunctions.GetBattleStatusWindowHandler()

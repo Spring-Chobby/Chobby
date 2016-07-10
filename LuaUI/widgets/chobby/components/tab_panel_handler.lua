@@ -166,6 +166,14 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		end
 	end
 	
+	function externalFunctions.SetActivity(name, activityText)
+		for i = 1, #tabs do
+			if tabs[i].name == name and tabs[i].activityLabel then
+				tabs[i].activityLabel:SetCaption(activityText)
+			end
+		end
+	end
+	
 	function externalFunctions.AddTab(name, humanName, control, onClick, rank, selected, entryCheck)
 		local newTab = {}
 		
@@ -193,6 +201,19 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 						end
 					end
 				},
+			}
+			
+			newTab.activityLabel = Label:New {
+				name = "activity_label",
+				y = 5,
+				right = 5,
+				width = 50,
+				height = 15,
+				valign = "top",
+				align = "right",
+				parent = button,
+				font = {size = 12},
+				caption = "",
 			}
 			
 			button.oldFont = button.font
