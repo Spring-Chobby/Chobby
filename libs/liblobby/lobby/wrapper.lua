@@ -117,6 +117,10 @@ function Wrapper:StartBattle()
 	self:SayBattle("!start")
 end
 
+function Wrapper:SelectMap(mapName)
+	self:SayBattle("!map " .. mapName)
+end
+
 -- override
 function Wrapper:_OnTASServer(...)
 	if self.status == "disconnected" and self.disconnectTime ~= nil then -- in the process of reconnecting

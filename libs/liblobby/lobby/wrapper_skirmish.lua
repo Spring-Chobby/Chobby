@@ -178,6 +178,10 @@ function WrapperSkirmish:AddAi(aiName, allyNumber, Name)
 	self:_UpdateBotStatus(botData)
 end
 
+function WrapperSkirmish:SelectMap(mapName)
+	self:_OnUpdateBattleInfo(0, false, 0, mapName)
+end
+
 function WrapperSkirmish:StartBattle()
 	if self.battle.gameName and self.battle.mapName then
 		self:_CallListeners("BattleAboutToStart")

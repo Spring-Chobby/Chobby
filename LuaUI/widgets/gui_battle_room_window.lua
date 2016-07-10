@@ -122,7 +122,7 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID)
 		font = { size = 22 },
 		OnClick = {
 			function()
-				Spring.Echo("implement map selection")
+				WG.Chobby.MapListWindow(battleLobby)
 			end
 		},
 		parent = parentControl,
@@ -193,6 +193,7 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID)
 			return
 		end
 		if mapName then
+			lblMapName:SetCaption(mapName)
 			-- TODO: Bit lazy here, seeing as we only need to update the map
 			UpdateArchiveStatus()
 			MaybeDownloadMap(battle)
@@ -273,7 +274,6 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 		x = 0,
 		right = 0,
 		y = 0,
-		height = 400,
 		parent = mainScrollPanel,
 		preserveChildrenOrder = true,
 	}	
