@@ -558,6 +558,16 @@ function Wrapper:SelectMap(mapName)
 	self:SayBattle("!map " .. mapName)
 end
 
+function Wrapper:AddAi(aiName, allyNumber, Name)
+	local botData = {
+		AllyNumber = allyNumber or 0,
+		AiLib = aiName or "NullAI",
+		Name = Name or (aiName .. "_" .. math.floor(math.random()*100)),
+		TeamNumber = self:GetUnusedTeamID(allyNumber)
+	}
+	self:UpdateBotStatus(botData)
+end
+
 ----------------------------------------------------------------------------
 -- Getters
 ----------------------------------------------------------------------------
@@ -565,6 +575,21 @@ end
 
 --------------------------------------
 -- Social queue/team handling
+
+function Wrapper:GetUnusedTeamID()
+	local unusedTeamID = 0
+	local takenTeamID = {}
+	for name, data in pairs(self.battlePlayerData) do
+		if data.TeamNumber and not data.IsSpectator then
+			local teamID = data.TeamNumber
+			takenTeamID[teamID] = true
+			while takenTeamID[unusedTeamID] do
+				unusedTeamID = unusedTeamID + 1
+			end
+		end
+	end
+	return unusedTeamID
+end
 
 -- friends
 function Wrapper:GetFriendCount()

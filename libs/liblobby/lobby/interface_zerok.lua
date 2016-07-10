@@ -325,13 +325,16 @@ function Interface:LeaveBattle()
 	return self
 end
 
+function Interface:UpdateBotStatus(data)
+	self:_SendCommand("UpdateBotStatus " .. json.encode(data))
+	return self
+end
+
 --Register
 --JoinChannel
 --LeaveChannel
 --User
 --OpenBattle
---LeaveBattle
---UpdateBotStatus
 --RemoveBot
 --ChangeUserStatus
 --SetRectangle

@@ -17,6 +17,10 @@ Interface.commandPattern = {}
 
 VFS.Include(LIB_LOBBY_DIRNAME .. "interface_shared.lua")
 
+function Interface:UpdateBotStatus(data)
+	Spring.Echo("Implement UpdateBotStatus with ADDBOT etc..")
+end
+
 function Interface:AddBot(name, battleStatus, teamColor, aiDll)
 	self:_SendCommand(concat("ADDBOT", name, battleStatus, teamColor, aiDll))
 	return self
