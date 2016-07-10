@@ -108,6 +108,19 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		end
 	end
 	
+	function externalFunctions.IsVisible()
+		return buttonsHolder.visible
+	end
+	
+	function externalFunctions.IsTabSelected()
+		for i = 1, #tabs do
+			if tabs[i].control and tabs[i].control.parent then
+				return true
+			end
+		end
+		return false
+	end
+	
 	function externalFunctions.OpenTab(tabIndex)
 		if tabs[tabIndex] then
 			ToggleShow(tabs[tabIndex].button, tabs[tabIndex], true)
@@ -143,12 +156,13 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		end
 	end
 	
-	function externalFunctions.AddTab(name, humanName, control, onClick, rank, selected)
+	function externalFunctions.AddTab(name, humanName, control, onClick, rank, selected, entryCheck)
 		local newTab = {}
 		
 		newTab.name = name
 		newTab.rank = rank or (#tabs + 1)
 		newTab.control = control
+		newTab.entryCheck = entryCheck
 		local button
 		if control then
 			button = Button:New {
@@ -160,7 +174,15 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 				caption = humanName,
 				font = {size = 20},
 				parent = buttonsHolder,
-				OnClick = {function(obj) ToggleShow(obj, newTab) end},
+				OnClick = {
+					function(obj) 
+						if newTab.entryCheck then
+							newTab.entryCheck(ToggleShow, obj, newTab)
+						else
+							ToggleShow(obj, newTab)
+						end
+					end
+				},
 			}
 			
 			button.oldFont = button.font
@@ -254,7 +276,9 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		externalFunctions.AddTab(
 			initialTabs[i].name, 
 			i18n(initialTabs[i].name), 
-			initialTabs[i].control
+			initialTabs[i].control,
+			nil, nil, nil,
+			initialTabs[i].entryCheck
 		)
 	end
 	

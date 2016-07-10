@@ -5,7 +5,8 @@ function AiListWindow:init(lobby, gameName, allyTeam)
 	self:super('init', screen0, "Choose AI")
 	self.window:SetPos(nil, nil, 500, 700)
 	
-	ais = VFS.GetAvailableAIs(gameName)
+	local ais = VFS.GetAvailableAIs(gameName)
+	--local ais = {{shortName = "CAI", version = 1}}
 	for i, ai in pairs(ais) do
 		local addAIButton = Button:New {
 			x = 0,

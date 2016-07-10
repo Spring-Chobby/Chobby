@@ -16,9 +16,23 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 		return submenuPanelNames[name]
 	end
 	
-	function externalFunctions.SetBackAtMainMenu()
+	function externalFunctions.GetCurrentSubmenu()
 		for i = 1, #submenus do
 			local panelHandler = submenus[i].panelHandler
+			if panelHandler.IsVisible() then
+				return i
+			end
+		end
+		return false
+	end
+	
+	function externalFunctions.SetBackAtMainMenu()
+		local clearMainWindow = false
+		for i = 1, #submenus do
+			local panelHandler = submenus[i].panelHandler
+			if panelHandler.IsTabSelected() then
+				clearMainWindow = true
+			end
 			if panelHandler then
 				panelHandler.Hide()
 			end
@@ -28,9 +42,11 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 			buttonsHolder:Show()
 		end
 		
-		panelWindow:ClearChildren()
-		if panelWindow.visible then
-			panelWindow:Hide()
+		if clearMainWindow then
+			panelWindow:ClearChildren()
+			if panelWindow.visible then
+				panelWindow:Hide()
+			end
 		end
 	end
 	

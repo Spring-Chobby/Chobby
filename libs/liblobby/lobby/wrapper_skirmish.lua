@@ -14,10 +14,7 @@ function WrapperSkirmish:_Clean()
 	self.myUserName = nil
 	self.scriptPassword = nil
 	
-	self.AllyNumber = nil
-	self.TeamNumber = nil
-	self.IsSpectator = nil
-	self.Sync = nil
+	self.battlePlayerData = {}
 end
 
 local function ScriptTXT(script)
@@ -49,37 +46,85 @@ local function ScriptTXT(script)
 end
 
 function WrapperSkirmish:_StartScript(gameName, mapName, playerName)
+	local allyTeams = {}
+	local allyTeamCount = 0
+	local teams = {}
+	local teamCount = 0
+	local players = {}
+	local playerCount = 0
+	local ais = {}
+	local aiCount = 0
+	
+	local allyTeamMap = {}
+	
+	for userName, data in pairs(self.battlePlayerData) do
+		if data.AllyNumber then
+			if data.AiLib then
+				ais[aiCount] = {
+					Name = userName,
+					Team = teamCount,
+					IsFromDemo = 0,
+					ShortName = data.AiLib,
+					Host = 0,
+				}
+				aiCount = aiCount + 1
+			else
+				players[playerCount] = {
+					Name = userName,
+					Team = teamCount,
+					IsFromDemo = 0,
+					Spectator = (data.IsSpectator and 1) or nil,
+					rank = 0,
+				}
+				playerCount = playerCount + 1
+			end
+			if not data.IsSpectator then
+				teams[teamCount] = {
+					TeamLeader = 0,
+					AllyTeam = data.AllyNumber,
+					rgbcolor = '0.99609375 0.546875 0',
+				}
+				teamCount = teamCount + 1
+			end
+		end
+	end
+	
+	for i, teamData in pairs(teams) do
+		if not allyTeamMap[teamData.AllyTeam] then
+			allyTeamMap[teamData.AllyTeam] = allyTeamCount
+			allyTeams[allyTeamCount] = {
+				numallies = 0,
+			}
+			allyTeamCount = allyTeamCount + 1
+		end
+		teamData.AllyTeam = allyTeamMap[teamData.AllyTeam]
+	end
+	
 	local script = {
-		player0  =  {
-			isfromdemo = 0,
-			name = playerName,
-			rank = 0,
-			spectator = 1,
-			team = 0,
-		},
-
-		team0  =  {
-			allyteam = 0,
-			rgbcolor = '0.99609375 0.546875 0',
-			side = 'CORE',
-			teamleader = 0,
-		},
-
-		allyteam0  =  {
-			numallies = 0,
-		},
-
 		gametype = gameName,
 		hostip = '127.0.0.1',
 		hostport = 8458, -- probably should pick hosts better
 		ishost = 1,
 		mapname = mapName,
-		myplayername = 'Local',
+		myplayername = playerName,
 		nohelperais = 0,
-		numplayers = 1,
-		numusers = 2,
+		numplayers = playerCount,
+		numusers = playerCount + aiCount,
 		startpostype = 2,
 	}
+	
+	for i, ai in pairs(ais) do
+		script["ai" .. i] = ai
+	end
+	for i, player in pairs(players) do
+		script["player" .. i] = player
+	end
+	for i, team in pairs(teams) do
+		script["team" .. i] = team
+	end
+	for i, allyTeam in pairs(allyTeams) do
+		script["allyTeam" .. i] = allyTeam
+	end
 	
 	local scriptFileName = "scriptFile.txt"
 	local scriptFile = io.open(scriptFileName, "w")
@@ -110,17 +155,23 @@ end
 
 function WrapperSkirmish:_UpdateUserBattleStatus(data)
 	if data.Name then
-		self.AllyNumber = data.AllyNumber or self.AllyNumber
-		self.TeamNumber = data.TeamNumber or self.TeamNumber
-		if data.IsSpectator ~= nil then
-			self.IsSpectator = data.IsSpectator
+		if not self.battlePlayerData[data.Name] then
+			self.battlePlayerData[data.Name] = {}
 		end
-		self.Sync = data.Sync or self.Sync
+		local userData = self.battlePlayerData[data.Name]
+		userData.AllyNumber = data.AllyNumber or userData.AllyNumber
+		userData.TeamNumber = data.TeamNumber or userData.TeamNumber
+		if data.IsSpectator ~= nil then
+			userData.IsSpectator = data.IsSpectator
+		end
+		userData.AiLib = data.AiLib or userData.AiLib
+		userData.Sync = data.Sync or userData.Sync
 		
-		data.AllyNumber = self.AllyNumber
-		data.TeamNumber = self.TeamNumber
-		data.IsSpectator = self.IsSpectator
-		data.Sync = self.Sync
+		data.AllyNumber = userData.AllyNumber
+		data.TeamNumber = userData.TeamNumber
+		data.IsSpectator = userData.IsSpectator
+		data.AiLib = userData.AiLib
+		data.Sync = userData.Sync
 	end
 	self:_CallListeners("UpdateUserBattleStatus", data)
 end
@@ -160,8 +211,10 @@ function WrapperSkirmish:GetBattle()
 	return self.battle
 end
 
-function WrapperSkirmish:GetMyIsSpectator()	
-	return self.IsSpectator
+function Wrapper:GetMyIsSpectator()
+	if self.battlePlayerData[self.myUserName] then		
+		return self.battlePlayerData[self.myUserName].IsSpectator
+	end
 end
 
 ------------------------------------------------------------------------
@@ -186,7 +239,7 @@ function WrapperSkirmish:StartBattle()
 	if self.battle.gameName and self.battle.mapName then
 		self:_CallListeners("BattleAboutToStart")
 		self:_OnSaidBattleEx("Battle", "about to start")
-		WrapperSkirmish:_StartScript(self.battle.gameName, self.battle.mapName, self.myUserName or "noname")
+		self:_StartScript(self.battle.gameName, self.battle.mapName, self.myUserName or "noname")
 	end
 	return self
 end

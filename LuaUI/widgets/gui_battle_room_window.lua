@@ -40,6 +40,8 @@ local wrapperControl
 local singleplayerWrapper
 local multiplayerWrapper
 
+local singleplayerGame = "Chobby $VERSION"
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Download management
@@ -240,17 +242,17 @@ local function AddTeamButtons(parent, offset, joinFunc, aiFunc)
 		x = offset,
 		y = 0,
 		height = 30,
-		width = 70,
+		width = 75,
 		font = { size = 20 },
 		caption = i18n("join") .. "\b",
 		OnClick = {joinFunc},
 		parent = parent,
 	}
 	local addAiButton = Button:New {
-		x = offset + 80,
+		x = offset + 85,
 		y = 0,
 		height = 30,
-		width = 70,
+		width = 75,
 		font = {size = 20},
 		caption = i18n("add_ai") .. "\b",
 		OnClick = {aiFunc},
@@ -778,7 +780,7 @@ function BattleRoomWindow.GetSingleplayerControl()
 				end
 				
 				battleLobby = WG.LibLobby.lobbySkirmish
-				battleLobby:SetBattleState(lobby:GetMyUserName() or "Player", "Chobby $VERSION", Game.mapName, "Skirmish Battle")
+				battleLobby:SetBattleState(lobby:GetMyUserName() or "Player", singleplayerGame, Game.mapName, "Skirmish Battle")
 
 				wrapperControl = obj
 				
@@ -796,6 +798,27 @@ function BattleRoomWindow.GetSingleplayerControl()
 	
 	return singleplayerWrapper
 end
+
+function BattleRoomWindow.SetSingleplayerGame(ToggleShowFunc, battleroomObj, tabData)
+	
+	local function SetGameFail()
+		battleLobby:LeaveBattle()
+	end
+
+	local function SetGameSucess(name)
+		singleplayerGame = name
+		ToggleShowFunc(battleroomObj, tabData)
+	end
+	
+	local config = WG.Chobby.Configuration
+	if config.singleplayer_mode == 1 then
+		WG.Chobby.GameListWindow(SetGameFail, SetGameSucess)
+	elseif config.singleplayer_mode == 2 then
+		singleplayerGame = "Zero-K v1.4.7.0"
+		ToggleShowFunc(battleroomObj, tabData)
+	end
+end
+
 
 function widget:ViewResize(vsx, vsy, viewGeometry)
 	if ViewResizeUpdate then

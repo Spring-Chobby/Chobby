@@ -208,6 +208,45 @@ local function InitializeControls(window)
 		},
 	}
 	
+	Label:New {
+		x = 40,
+		y = 120 + ingameOffset,
+		width = 90,
+		height = 45,
+		valign = "center",
+		align = "right",
+		parent = window,
+		font = {size = 20},
+		caption = "Singleplayer:",
+	}
+	ComboBox:New {
+		x = 130,
+		y = 120 + ingameOffset,
+		width = 180,
+		height = 45,
+		parent = window,
+		items = {"Generic", "Zero-K"},
+		selected = Configuration.singleplayer_mode or 2,
+		OnSelect = {
+			function (obj)
+				if freezeSettings then
+					return
+				end
+				
+				-- Leave singleplayer submenu
+				if Configuration.singleplayer_mode ~= obj.selected then
+					local mainMenu = WG.Chobby.interfaceRoot.GetMainWindowHandler()
+					if mainMenu.GetCurrentSubmenu() == 1 then
+						mainMenu.SetBackAtMainMenu()
+					end
+				end
+				
+				-- Set new value
+				Configuration.singleplayer_mode = obj.selected
+			end
+		},
+	}
+	
 	freezeSettings = false
 end
 
@@ -249,7 +288,8 @@ local onBattleAboutToStart
 
 local function DelayedInitialize()
 	local Configuration = WG.Chobby.Configuration
-	battleStartDisplay = Configuration.game_fullscreen
+	battleStartDisplay = Configuration.game_fullscreen or 1
+	lobbyFullscreen = Configuration.lobby_fullscreen or 1
 end
 
 function widget:Initialize()
@@ -260,7 +300,7 @@ function widget:Initialize()
 	
 	onBattleAboutToStart = function(listener)
 		local screenX, screenY = Spring.GetScreenGeometry()
-		
+		Spring.Echo("battleStartDisplay", battleStartDisplay)
 		if battleStartDisplay == 1 then
 			Spring.SetConfigInt("XResolutionWindowed", screenX, false)
 			Spring.SetConfigInt("YResolutionWindowed", screenY, false)

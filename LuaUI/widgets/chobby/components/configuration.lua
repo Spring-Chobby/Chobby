@@ -23,6 +23,8 @@ function Configuration:init()
 	self.selectedColor = "\255\99\184\255"
 	self.buttonFocusColor = {0.54,0.72,1,0.3}
 	self.buttonSelectedColor = {0.54,0.72,1,0.6}--{1.0, 1.0, 1.0, 1.0}
+	
+	self.singleplayer_mode = 2
 end
 
 function Configuration:SetConfigData(data)
@@ -39,6 +41,10 @@ function Configuration:GetConfigData()
 		password = self.password,
 		autoLogin = self.autoLogin,
 		channels = lobby:GetMyChannels(),	
+		singleplayer_mode = self.singleplayer_mode,
+		game_fullscreen = self.game_fullscreen,
+		panel_layout = self.panel_layout,
+		lobby_fullscreen = self.lobby_fullscreen,
 	}
 end
 

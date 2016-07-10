@@ -232,11 +232,13 @@ function Wrapper:_UpdateUserBattleStatus(data)
 		if data.IsSpectator ~= nil then
 			userData.IsSpectator = data.IsSpectator
 		end
+		userData.AiLib = data.AiLib or userData.AiLib
 		userData.Sync = data.Sync or userData.Sync
 		
 		data.AllyNumber = userData.AllyNumber
 		data.TeamNumber = userData.TeamNumber
 		data.IsSpectator = userData.IsSpectator
+		data.AiLib = userData.AiLib
 		data.Sync = userData.Sync
 	end
 	self:super("_UpdateUserBattleStatus", data)

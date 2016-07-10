@@ -199,7 +199,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		{
 			name = "singleplayer", 
 			tabs = {
-				{name = "custom_caps", control = WG.BattleRoomWindow.GetSingleplayerControl()},
+				{
+					name = "custom_caps", 
+					control = WG.BattleRoomWindow.GetSingleplayerControl(),
+					entryCheck = WG.BattleRoomWindow.SetSingleplayerGame,
+				},
 			}
 		},
 		{

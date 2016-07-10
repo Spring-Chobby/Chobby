@@ -101,7 +101,7 @@ function Interface:_JoinedBattle(data)
 	if data.User ~= self:GetBattle(data.BattleID).founder then
 		self:_OnJoinedBattle(data.BattleID, data.User, 0)
 	end
-	Spring.Echo("data.User", data.User, self:GetMyUserName())
+	
 	if data.User == self:GetMyUserName() then
 		Spring.Echo("JOINED BATTLE")
 		self:_SetScriptPassword(data.ScriptPassword)
