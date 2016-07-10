@@ -13,10 +13,13 @@ function Configuration:init()
 	self.password = ""
 	self.autoLogin = false
 	self.channels = {}
+	
+	self.promptNewUsersToLogIn = false
 
 	self.errorColor = "\255\255\0\0"
 	self.warningColor = "\255\255\255\0"
 	self.successColor = "\255\0\255\0"
+	self.partialColor = "\255\190\210\50"
 	self.selectedColor = "\255\99\184\255"
 	self.buttonFocusColor = {0.54,0.72,1,0.3}
 	self.buttonSelectedColor = {0.54,0.72,1,0.6}--{1.0, 1.0, 1.0, 1.0}
@@ -65,6 +68,10 @@ end
 
 function Configuration:GetSuccessColor()
 	return self.successColor
+end
+
+function Configuration:GetPartialColor()
+	return self.partialColor
 end
 
 function Configuration:GetSelectedColor()

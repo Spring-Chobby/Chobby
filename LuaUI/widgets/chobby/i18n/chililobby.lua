@@ -43,6 +43,7 @@ return {
 		downloads = "Downloads",
 		friend_list = "Friend list",
 		offline = "Offline",
+		connecting = "Connecting",
 		battle = "Battle",
 		dont_have_map = "Don't have map",
 		dont_have_game = "Don't have game",

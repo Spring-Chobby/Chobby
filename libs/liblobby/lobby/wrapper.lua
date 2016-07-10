@@ -123,6 +123,7 @@ function Wrapper:_OnTASServer(...)
 		self.disconnectTime = nil
 		self:Login(unpack(self._oldData.loginData))
 	end
+	self.finishedConnecting = true
 	self:super("_OnTASServer", ...)
 	--self:super("_OnTASServer")
 end

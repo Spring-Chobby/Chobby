@@ -4,6 +4,7 @@ function Interface:init()
 	self.messagesSentCount = 0
 	self.lastSentSeconds = Spring.GetGameSeconds()
 	self.status = "offline"
+	self.finishedConnecting = false
 	self.listeners = {}
 	-- timeout (in seconds) until first message is received from server before disconnect is assumed
 	self.connectionTimeout = 50
@@ -31,6 +32,7 @@ end
 
 function Interface:Disconnect()
 	self.status = "offline"
+	self.finishedConnecting = false
 	self.client:close()
 	self:_OnDisconnected()
 end

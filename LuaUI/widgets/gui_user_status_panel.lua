@@ -18,7 +18,6 @@ end
 -- Chili
 local lblPlayerIcon
 local btnLogout
-
 local lblPing
 
 --------------------------------------------------------------------------------
@@ -37,7 +36,6 @@ local function Logout()
 	if lobby.status ~= "offline" then
 		Spring.Echo("Logout")
 		lobby:Disconnect()
-		WG.Chobby.Configuration.autoLogin = false
 	else
 		Spring.Echo("Login")
 		WG.LoginPopup()
@@ -90,7 +88,7 @@ local function InitializeControls(window)
 		},
 	}
 
-	local btnLogout = Button:New {
+	btnLogout = Button:New {
 		right = 10,
 		width = 100, 
 		height = 40,
@@ -156,6 +154,22 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface
+
+local oldStatus
+
+function widget:Update()
+	if lobby.status ~= oldStatus then
+		if oldStatus == "disconnected" then
+			btnLogout:SetCaption(i18n("logout"))
+		else
+			btnLogout:SetCaption(i18n("login"))
+		end
+		if lobby.status == "connected" and not lobby.finishedConnecting then
+			lblPing:SetCaption(WG.Chobby.Configuration:GetPartialColor() .. i18n("connecting") .. "\b")
+		end
+		oldStatus = lobby.status
+	end
+end
 
 function widget:Initialize()
 	

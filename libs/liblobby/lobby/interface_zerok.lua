@@ -412,6 +412,7 @@ end
 function Interface:Exit(reason)
 	-- should this could be set _after_ server has disconnected us?
 	self.status = "offline"
+	self.finishedConnecting = false
 	self:_SendCommand(concat("EXIT", reason))
 	return self
 end

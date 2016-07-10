@@ -45,8 +45,8 @@ local function LoginPopup()
 end
 
 local function InitialWindow()
-	local loginWindow = WG.Chobby.LoginWindow()
 	if WG.Chobby.Configuration.autoLogin then
+		local loginWindow = WG.Chobby.LoginWindow()
 		loginWindow.window:Hide()
 		lobby:AddListener("OnDenied", function(listener)
 			loginWindow.window:Show()
@@ -54,7 +54,8 @@ local function InitialWindow()
 			lobby:RemoveListener("OnDenied", listener)
 		end)
 		loginWindow:tryLogin()
-	else
+	elseif WG.Chobby.Configuration.promptNewUsersToLogIn then
+		local loginWindow = WG.Chobby.LoginWindow(nil, "play_offline")
 		local popup = WG.Chobby.PriorityPopup(loginWindow.window)
 	end
 end

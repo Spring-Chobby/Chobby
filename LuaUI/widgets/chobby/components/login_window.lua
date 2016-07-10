@@ -23,7 +23,7 @@ function createTabGroup(ctrls)
 	end
 end
 
-function LoginWindow:init(failFunction)
+function LoginWindow:init(failFunction, cancelText)
 	self.scale = 1.4 * Configuration:GetScale()
 	self.fontSize = 14
 	self.lblInstructions = Label:New {
@@ -113,7 +113,7 @@ function LoginWindow:init(failFunction)
 			size = self.fontSize * self.scale,
 		},
 	}
-
+	
 	self.cbAutoLogin = Checkbox:New {
 		x = 1,
 		width = 116 * self.scale,
@@ -124,6 +124,9 @@ function LoginWindow:init(failFunction)
 		caption = i18n("autologin"),
 		checked = Configuration.autoLogin,
 		font = { size = self.scale * self.fontSize * 0.8},
+		OnClick = {function (obj)
+			Configuration.autoLogin = obj.checked
+		end},
 	}
 
 	self.btnLogin = Button:New {
@@ -159,7 +162,7 @@ function LoginWindow:init(failFunction)
 		width = 80 * self.scale,
 		bottom = 1,
 		height = 40 * self.scale,
-		caption = i18n("play_offline"),
+		caption = i18n(cancelText or "cancel"),
 		font = { size = self.scale * self.fontSize},
 		OnClick = {
 			function()
@@ -258,8 +261,6 @@ function LoginWindow:tryLogin()
 	Configuration.serverPort = self.ebServerPort.text
 	Configuration.userName  = username
 	Configuration.password  = password
-	Configuration.autoLogin = self.cbAutoLogin.checked
-	--Configuration.autoLogin = true
 
 	if not lobby.connected or self.loginAttempts >= 3 then
 		self.loginAttempts = 0

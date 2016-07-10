@@ -147,7 +147,6 @@ function SBMenuIcon:Logout()
 	if lobby.status ~= "offline" then
 		Spring.Echo("Logout")
 		lobby:Disconnect()
-		Configuration.autoLogin = false
 	else
 		Spring.Echo("Login")
 		LoginWindow()
