@@ -8,7 +8,7 @@ function widget:GetInfo()
 		author    = "GoogleFrog",
 		date      = "4 July 2016",
 		license   = "GNU LGPL, v2.1 or later",
-		layer     = 0,
+		layer     = -100000,
 		enabled   = true  --  loaded by default?
 	}
 end
@@ -17,15 +17,45 @@ end
 --------------------------------------------------------------------------------
 -- Local Variables
 
+local externalSettings = {}
 local fullscreen = 0
 
 local battleStartDisplay = 1
+local lobbyFullscreen = 1
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Utilities
+
+local function SetLobbyFullscreenMode(mode)
+	local screenX, screenY = Spring.GetScreenGeometry()
+	if mode == 1 then
+		Spring.SetConfigInt("XResolutionWindowed", screenX, false)
+		Spring.SetConfigInt("YResolutionWindowed", screenY, false)
+		Spring.SetConfigInt("WindowPosX", 0, false)
+		Spring.SetConfigInt("WindowPosY", 0, false)
+		Spring.SetConfigInt("WindowBorderless", 1, false)
+		Spring.SendCommands("fullscreen 0")
+	elseif mode == 2 then
+		Spring.SetConfigInt("WindowPosX", screenX/4, false)
+		Spring.SetConfigInt("WindowPosY", screenY/8, false)
+		Spring.SetConfigInt("XResolutionWindowed", screenX/2, false)
+		Spring.SetConfigInt("YResolutionWindowed", screenY*3/4, false)
+		Spring.SetConfigInt("WindowBorderless", 0, false)
+		Spring.SetConfigInt("Fullscreen", 0, false)
+		Spring.SendCommands("fullscreen 0") 
+	elseif mode == 3 then
+		Spring.SetConfigInt("XResolution", screenX, false)
+		Spring.SetConfigInt("YResolution", screenY, false)
+		Spring.SetConfigInt("Fullscreen", 1, false)
+		Spring.SendCommands("fullscreen 1")
+	end
+end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Initialization
 
-local SettingsWindow = {}
 
 local function InitializeControls(window)
 	window.OnParent = nil
@@ -33,6 +63,8 @@ local function InitializeControls(window)
 	local ingameOffset = 250
 	
 	local freezeSettings = true
+	
+	local Configuration = WG.Chobby.Configuration
 	
 	Label:New {
 		x = 40,
@@ -61,36 +93,17 @@ local function InitializeControls(window)
 		height = 45,
 		parent = window,
 		items = {"Fullscreen Window", "Windowed", "Fullscreen"},
-		selected = 1,
+		selected = Configuration.lobby_fullscreen or 1,
 		OnSelect = {
 			function (obj)
 				if freezeSettings then
 					return
 				end
-				
-				local screenX, screenY = Spring.GetScreenGeometry()
 			
-				if obj.selected == 1 then
-					Spring.SetConfigInt("XResolutionWindowed", screenX, false)
-					Spring.SetConfigInt("YResolutionWindowed", screenY, false)
-					Spring.SetConfigInt("WindowPosX", 0, false)
-					Spring.SetConfigInt("WindowPosY", 0, false)
-					Spring.SetConfigInt("WindowBorderless", 1, false)
-					Spring.SendCommands("fullscreen 0")
-				elseif obj.selected == 2 then
-					Spring.SetConfigInt("WindowPosX", screenX/4, false)
-					Spring.SetConfigInt("WindowPosY", screenY/8, false)
-					Spring.SetConfigInt("XResolutionWindowed", screenX/2, false)
-					Spring.SetConfigInt("YResolutionWindowed", screenY*3/4, false)
-					Spring.SetConfigInt("WindowBorderless", 0, false)
-					Spring.SetConfigInt("Fullscreen", 0, false)
-					Spring.SendCommands("fullscreen 0") 
-				elseif obj.selected == 3 then
-					Spring.SetConfigInt("XResolution", screenX, false)
-					Spring.SetConfigInt("YResolution", screenY, false)
-					Spring.SetConfigInt("Fullscreen", 1, false)
-					Spring.SendCommands("fullscreen 1")
-				end
+				SetLobbyFullscreenMode(obj.selected)
+				
+				lobbyFullscreen = obj.selected
+				Configuration.lobby_fullscreen = obj.selected
 			end
 		},
 	}
@@ -113,16 +126,13 @@ local function InitializeControls(window)
 		height = 45,
 		parent = window,
 		items = {"Autodetect", "Always Two", "Always One"},
-		selected = 1,
+		selected = Configuration.panel_layout or 1,
 		OnSelect = {
 			function (obj)
 				if freezeSettings then
 					return
 				end
 				
-				local screenX, screenY = Spring.GetScreenGeometry()
-				Spring.Echo("screenX, screenY", screenX, screenY)
-			
 				if obj.selected == 1 then
 					WG.Chobby.interfaceRoot.SetPanelDisplayMode(true)
 				elseif obj.selected == 2 then
@@ -130,29 +140,32 @@ local function InitializeControls(window)
 				elseif obj.selected == 3 then
 					WG.Chobby.interfaceRoot.SetPanelDisplayMode(false, false)
 				end
+				
+				Configuration.panel_layout = obj.selected
 			end
 		},
 	}
 	
-	Label:New {
-		x = 40,
+	local autologin = Checkbox:New {
+		x = 60,
+		width = 200,
 		y = 170,
-		width = 90,
-		height = 45,
-		valign = "center",
-		align = "right",
+		height = 40,
 		parent = window,
-		font = {size = 20},
-		caption = "Auto Login:",
+		boxalign = "right",
+		boxsize = 20,
+		caption = i18n("autologin"),
+		checked = Configuration.autoLogin or false,
+		font = { size = 20},
+		OnClick = {function (obj)
+			Configuration.autoLogin = obj.checked
+		end},
 	}
-	ComboBox:New {
-		x = 130,
-		y = 170,
-		width = 180,
-		height = 45,
-		parent = window,
-		items = {"Always", "On Multiplayer", "Never"},
-		selected = 1,
+	
+	externalSettings.autologin = {
+		SetValue = function(value) 
+			autologin:SetToggle(value)
+		end
 	}
 	
 	Label:New {
@@ -182,7 +195,7 @@ local function InitializeControls(window)
 		height = 45,
 		parent = window,
 		items = {"Fullscreen Window", "Windowed", "Fullscreen"},
-		selected = battleStartDisplay,
+		selected = Configuration.game_fullscreen or battleStartDisplay,
 		OnSelect = {
 			function (obj)
 				if freezeSettings then
@@ -190,11 +203,24 @@ local function InitializeControls(window)
 				end
 				
 				battleStartDisplay = obj.selected
+				Configuration.game_fullscreen = obj.selected
 			end
 		},
 	}
 	
 	freezeSettings = false
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- External Interface
+
+local SettingsWindow = {}
+
+function SettingsWindow.SetConfigValue(key, value)
+	if externalSettings[key] then
+		externalSettings[key].SetValue(value)
+	end
 end
 
 function SettingsWindow.GetControl()
@@ -221,9 +247,16 @@ end
 
 local onBattleAboutToStart
 
+local function DelayedInitialize()
+	local Configuration = WG.Chobby.Configuration
+	battleStartDisplay = Configuration.game_fullscreen
+end
+
 function widget:Initialize()
 	CHOBBY_DIR = "LuaUI/widgets/chobby/"
 	VFS.Include("LuaUI/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
+	
+	WG.Delay(DelayedInitialize, 1)
 	
 	onBattleAboutToStart = function(listener)
 		local screenX, screenY = Spring.GetScreenGeometry()
@@ -255,6 +288,8 @@ function widget:Initialize()
 end
 
 function widget:Shutdown()
+	SetLobbyFullscreenMode(lobbyFullscreen)
+
 	if WG.LibLobby then
 		WG.LibLobby.lobbySkirmish:RemoveListener("BattleAboutToStart", onBattleAboutToStart)
 	end

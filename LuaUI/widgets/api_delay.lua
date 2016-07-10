@@ -7,7 +7,7 @@ function widget:GetInfo()
 		author    = "gajop",
 		date      = "future",
 		license   = "GNU LGPL, v2.1 or later",
-		layer     = -10000,
+		layer     = -1000000,
 		enabled   = true  --  loaded by default?
 	}
 end

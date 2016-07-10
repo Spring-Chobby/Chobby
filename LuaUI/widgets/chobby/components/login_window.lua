@@ -125,7 +125,7 @@ function LoginWindow:init(failFunction, cancelText)
 		checked = Configuration.autoLogin,
 		font = { size = self.scale * self.fontSize * 0.8},
 		OnClick = {function (obj)
-			Configuration.autoLogin = obj.checked
+			WG.SettingsWindow.SetConfigValue("autologin", obj.checked)
 		end},
 	}
 
