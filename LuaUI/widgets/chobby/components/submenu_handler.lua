@@ -10,6 +10,23 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 	local BUTTON_OFFSET = 80
 	
 	-------------------------------------------------------------------
+	-- Local Functions
+	-------------------------------------------------------------------
+	local function BackToMainMenu(panelHandler) 
+		panelHandler.Hide() 
+		if not buttonsHolder.visible then
+			buttonsHolder:Show()
+		end
+		
+		if panelWindow.children[1] and panelHandler.GetManagedControlByName(panelWindow.children[1].name) then
+			panelWindow:ClearChildren()
+			if panelWindow.visible then
+				panelWindow:Hide()
+			end
+		end
+	end
+	
+	-------------------------------------------------------------------
 	-- External Functions
 	-------------------------------------------------------------------
 	function externalFunctions.GetTabList(name)
@@ -50,6 +67,15 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 		end
 	end
 	
+	function externalFunctions.ReplaceSubmenu(index, newTabs)
+		externalFunctions.SetBackAtMainMenu()
+		submenus[index].panelHandler.Destroy()
+		
+		local newPanelHandler = GetTabPanelHandler(submenus[index].name, buttonWindow, panelWindow, newTabs, true, BackToMainMenu)
+		newPanelHandler.Hide()
+		submenus[index].panelHandler = newPanelHandler
+	end
+	
 	-------------------------------------------------------------------
 	-- Initialization
 	-------------------------------------------------------------------
@@ -63,20 +89,6 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-
-	local function BackToMainMenu(panelHandler) 
-		panelHandler.Hide() 
-		if not buttonsHolder.visible then
-			buttonsHolder:Show()
-		end
-		
-		if panelWindow.children[1] and panelHandler.GetManagedControlByName(panelWindow.children[1].name) then
-			panelWindow:ClearChildren()
-			if panelWindow.visible then
-				panelWindow:Hide()
-			end
-		end
-	end
 	
 	for i = 1, #submenus do
 		

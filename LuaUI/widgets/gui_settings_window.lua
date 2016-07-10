@@ -239,6 +239,16 @@ local function InitializeControls(window)
 					if mainMenu.GetCurrentSubmenu() == 1 then
 						mainMenu.SetBackAtMainMenu()
 					end
+					
+					local replacementTabs = {
+						{
+							name = "custom_caps" .. Configuration.singleplayer_mode, 
+							control = WG.BattleRoomWindow.GetSingleplayerControl(),
+							entryCheck = WG.BattleRoomWindow.SetSingleplayerGame,
+						},
+					}
+					
+					mainMenu.ReplaceSubmenu(1, replacementTabs)
 				end
 				
 				-- Set new value

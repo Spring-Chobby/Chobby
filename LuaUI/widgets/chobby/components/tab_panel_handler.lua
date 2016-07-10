@@ -136,6 +136,16 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		return false
 	end
 	
+	function externalFunctions.Destroy()
+		for i = 1, #tabs do
+			if tabs[i].control then
+				tabs[i].control:Dispose()
+			end
+			tabs[i].button:Dispose()
+		end
+		tabs = nil
+	end
+	
 	function externalFunctions.RemoveTab(name)
 		local index = 1
 		local found = false
