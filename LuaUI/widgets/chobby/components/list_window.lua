@@ -129,7 +129,7 @@ end
 
 function ListWindow:CalculateHeight(index)
 	local h = 60
-	local padding = 20
+	local padding = 5
 	return 10 + (index - 1) * (h + padding)
 end
 

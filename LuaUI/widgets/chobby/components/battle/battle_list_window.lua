@@ -66,7 +66,7 @@ function BattleListWindow:AddBattle(battle)
 	local children = {}
 
 	local lblPlayers = Label:New {
-		x = 5,
+		x = 105,
 		width = 50,
 		y = 5,
 		height = h - 10,
@@ -76,12 +76,12 @@ function BattleListWindow:AddBattle(battle)
 	table.insert(children, lblPlayers)
 
 	local lblTitle = Label:New {
-		x = 60,
-		width = 200,
-		y = 5,
+		x = 160,
+		right = 150,
+		y = 0,
 		height = h - 10,
 		valign = 'center',
-		caption = battle.title:sub(1, 22),
+		caption = battle.title:sub(1, 60),
 		tooltip = battle.title, 
 	}
 	table.insert(children, lblTitle)
@@ -99,9 +99,9 @@ function BattleListWindow:AddBattle(battle)
 	end
 
 	local lblGame = Label:New {
-		x = 265,
-		width = 200,
-		y = 5,
+		x = 180,
+		width = 160,
+		y = 20,
 		height = h - 10,
 		valign = 'center',
 		caption = battle.gameName:sub(1, 22) .. (VFS.HasArchive(battle.gameName) and ' [' .. Configuration:GetSuccessColor() .. '✔\b]' or ' [' .. Configuration:GetErrorColor() .. '✘\b]'),
@@ -110,9 +110,9 @@ function BattleListWindow:AddBattle(battle)
 	table.insert(children, lblGame)
 
 	local lblMap = Label:New {
-		x = 470,
+		x = 360,
 		width = 200,
-		y = 5,
+		y = 20,
 		height = h - 10,
 		valign = 'center',
 		caption = battle.mapName:sub(1, 22) .. (VFS.HasArchive(battle.mapName) and ' [' .. Configuration:GetSuccessColor() .. '✔\b]' or ' [' .. Configuration:GetErrorColor() .. '✘\b]'),
@@ -121,8 +121,8 @@ function BattleListWindow:AddBattle(battle)
 	table.insert(children, lblMap)
 
 	local btnJoin = Button:New {
-		x = 675,
-		width = 100,
+		x = 10,
+		width = 90,
 		y = 5,
 		height = h - 10,
 		caption = i18n("join"),
