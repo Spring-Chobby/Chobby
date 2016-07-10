@@ -27,6 +27,20 @@ table.insert(arr,string.sub(str,pos)) -- Attach chars right of last divider
 return arr
 end
 
+function ShallowCopy(orig)
+	local orig_type = type(orig)
+	local copy
+	if orig_type == 'table' then
+		copy = {}
+		for orig_key, orig_value in pairs(orig) do
+			copy[orig_key] = orig_value
+		end
+	else -- number, string, boolean, etc
+		copy = orig
+	end
+	return copy
+end
+
 function concat(...)
 	local args = {...}
 	local argsClean = {}

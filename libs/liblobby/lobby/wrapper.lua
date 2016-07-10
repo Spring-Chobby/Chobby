@@ -1,14 +1,4 @@
-local function explode(div,str)
-if (div=='') then return false end
-local pos,arr = 0,{}
--- for each divider found
-for st,sp in function() return string.find(str,div,pos,true) end do
-	table.insert(arr,string.sub(str,pos,st-1)) -- Attach chars left of current divider
-	pos = sp + 1 -- Jump past current divider
-end
-table.insert(arr,string.sub(str,pos)) -- Attach chars right of last divider
-return arr
-end
+VFS.Include(LIB_LOBBY_DIRNAME .. "utilities.lua")
 
 Wrapper = Interface:extends()
 
@@ -92,34 +82,13 @@ function Wrapper:_SetScriptPassword(scriptPassword)
 	self.scriptPassword = scriptPassword
 end
 
--- override
-function Wrapper:Connect(host, port)
-	self.host = host
-	self.port = port
-	self:super("Connect", host, port)
-end
 
--- override
-function Wrapper:Login(user, password, cpu, localIP) 
-	self.myUserName = user
-	self.loginData = { user, password, cpu, localIP }
-	self:super("Login", user, password, cpu, localIP)
-end
-
--- override
-function Wrapper:Leave(chanName)
-	self:super("Leave", chanName)
-	self:_OnLeft(chanName, self.myUserName, "left")
-	return self
-end
-
-function Wrapper:StartBattle()
-	self:SayBattle("!start")
-end
-
-function Wrapper:SelectMap(mapName)
-	self:SayBattle("!map " .. mapName)
-end
+----------------------------------------------------------------------------
+-- Listeners 
+----------------------------------------------------------------------------
+-- These functions override the interface recieving commands to the server.
+-- Most of the time they just store information then let the command 
+-- through
 
 -- override
 function Wrapper:_OnTASServer(...)
@@ -155,12 +124,6 @@ function Wrapper:_OnRemoveUser(userName)
 	self:super("_OnRemoveUser", userName)
 end
 Wrapper.commands["REMOVEUSER"] = Wrapper._OnRemoveUser
-
--- override
-function Wrapper:Ping()
-	self.pingTimer = Spring.GetTimer()
-	return self:super("Ping")
-end
 
 -- override
 function Wrapper:_OnPong()
@@ -473,11 +436,6 @@ function Wrapper:_OnDisconnected(...)
 	self:super("_OnDisconnected", ...)
 end
 
-function Wrapper:Reconnect()
-	self.lastReconnectionAttempt = Spring.GetGameSeconds()
-	self:Connect(self._oldData.host, self._oldData.port)
-end
-
 function Wrapper:_ProcessClientStatus(userName, ingame, isAway, isModerator, isBot)
 	local function StartBattle(battleID)
 		Spring.Echo("Game starts!")
@@ -519,6 +477,10 @@ function Wrapper:_ProcessClientStatus(userName, ingame, isAway, isModerator, isB
 	end
 end
 
+----------------------------------------------------------------------------
+-- Internals 
+----------------------------------------------------------------------------
+
 -- override
 function Wrapper:SafeUpdate(...)
 	if self.status == "disconnected" and self.disconnectTime ~= nil then
@@ -548,31 +510,61 @@ function Wrapper:_GetJsonCommandFunction(cmdName)
 	return cmd
 end
 
-function ShallowCopy(orig)
-	local orig_type = type(orig)
-	local copy
-	if orig_type == 'table' then
-		copy = {}
-		for orig_key, orig_value in pairs(orig) do
-			copy[orig_key] = orig_value
-		end
-	else -- number, string, boolean, etc
-		copy = orig
-	end
-	return copy
+----------------------------------------------------------------------------
+-- Setters 
+----------------------------------------------------------------------------
+-- Many setters are implemented directly in the interface. This section
+-- contains overrides and abstractions.
+
+--------------------------------------
+-- Overrides
+
+function Wrapper:Ping()
+	self.pingTimer = Spring.GetTimer()
+	return self:super("Ping")
 end
 
--- users
-function Wrapper:GetUserCount()
-	return self.userCount
+function Wrapper:Connect(host, port)
+	self.host = host
+	self.port = port
+	self:super("Connect", host, port)
 end
-function Wrapper:GetUser(userName)
-	return self.users[userName]
+
+function Wrapper:Login(user, password, cpu, localIP) 
+	self.myUserName = user
+	self.loginData = { user, password, cpu, localIP }
+	self:super("Login", user, password, cpu, localIP)
 end
--- returns users table (not necessarily an array)
-function Wrapper:GetUsers()
-	return ShallowCopy(self.users)
+
+function Wrapper:Leave(chanName)
+	self:super("Leave", chanName)
+	self:_OnLeft(chanName, self.myUserName, "left")
+	return self
 end
+
+--------------------------------------
+-- Abstractions
+
+function Wrapper:Reconnect()
+	self.lastReconnectionAttempt = Spring.GetGameSeconds()
+	self:Connect(self._oldData.host, self._oldData.port)
+end
+
+function Wrapper:StartBattle()
+	self:SayBattle("!start")
+end
+
+function Wrapper:SelectMap(mapName)
+	self:SayBattle("!map " .. mapName)
+end
+
+----------------------------------------------------------------------------
+-- Getters
+----------------------------------------------------------------------------
+-- Returns information stored in the wrapper
+
+--------------------------------------
+-- Social queue/team handling
 
 -- friends
 function Wrapper:GetFriendCount()
@@ -581,18 +573,6 @@ end
 -- returns friends table (not necessarily an array)
 function Wrapper:GetFriends()
 	return ShallowCopy(self.friends)
-end
-
--- battles
-function Wrapper:GetBattleCount()
-	return self.battleCount
-end
-function Wrapper:GetBattle(battleID)
-	return self.battles[battleID]
-end
--- returns battles table (not necessarily an array)
-function Wrapper:GetBattles()
-	return ShallowCopy(self.battles)
 end
 
 -- queues
@@ -612,6 +592,21 @@ function Wrapper:GetTeam()
 	return self.team
 end
 
+--------------------------------------
+-- Global list handling: users, queues, rooms, channels
+
+-- users
+-- returns users table (not necessarily an array)
+function Wrapper:GetUsers()
+	return ShallowCopy(self.users)
+end
+function Wrapper:GetUserCount()
+	return self.userCount
+end
+function Wrapper:GetUser(userName)
+	return self.users[userName]
+end
+
 -- channels
 function Wrapper:GetChannelCount()
 	return self.channelCount
@@ -623,21 +618,31 @@ end
 function Wrapper:GetMyChannels()
 	return self.myChannels
 end
+
 -- returns channels table (not necessarily an array)
 function Wrapper:GetChannels()
 	return ShallowCopy(self.channels)
 end
 
-function Wrapper:GetLatency()
-	return self.latency
+-- battles
+function Wrapper:GetBattleCount()
+	return self.battleCount
+end
+function Wrapper:GetBattle(battleID)
+	return self.battles[battleID]
+end
+-- returns battles table (not necessarily an array)
+function Wrapper:GetBattles()
+	return ShallowCopy(self.battles)
 end
 
--- My data
+--------------------------------------
+-- Battle room information
+
 function Wrapper:GetScriptPassword()
 	return self.scriptPassword or 0
 end
 
--- My user
 function Wrapper:GetMyAllyNumber()
 	if self.battlePlayerData[self.myUserName] then		
 		return self.battlePlayerData[self.myUserName].AllyNumber
@@ -662,8 +667,15 @@ function Wrapper:GetMySync()
 	end
 end
 
+--------------------------------------
+-- Global information
+
 function Wrapper:GetMyBattleID()
 	return self.myBattleID
+end
+
+function Wrapper:GetLatency()
+	return self.latency
 end
 
 function Wrapper:GetMyUserName()
