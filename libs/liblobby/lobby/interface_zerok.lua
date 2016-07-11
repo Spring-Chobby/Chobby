@@ -29,7 +29,7 @@ function Interface:Login(user, password, cpu, localIP)
 	local sendData = {
 		Name = user,
 		PasswordHash = password,
-		UserID = 12,
+		UserID = 0,
 		ClientType = 1,
 	}
 	
