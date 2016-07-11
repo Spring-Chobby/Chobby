@@ -564,14 +564,12 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 	onLeftBattle = function(listener, leftBattleID, userName)
 		if leftBattleID == battleID then
 			RemovePlayerFromTeam(userName)
-			GetPlayerData(userName).control:Dispose()
 		end
 	end
 	battleLobby:AddListener("OnLeftBattle", onLeftBattle)
 	
 	onRemoveAi = function(listener, botName)
 		RemovePlayerFromTeam(botName)
-		GetPlayerData(botName).control:Dispose()
 	end
 	battleLobby:AddListener("OnRemoveAi", onRemoveAi)
 end
