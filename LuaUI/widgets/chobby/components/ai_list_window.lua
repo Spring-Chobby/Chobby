@@ -8,7 +8,10 @@ function AiListWindow:init(lobby, gameName, allyTeam)
 	-- Disable game-specific AIs for now since it breaks /luaui reload
 -- 	local ais = VFS.GetAvailableAIs(gameName)
 	local ais = VFS.GetAvailableAIs()
-	--local ais = {{shortName = "CAI", version = 1}}
+	if Configuration.singleplayer_mode == 2 then
+		ais[#ais + 1] = ais[1]
+		ais[1] = {shortName = "CAI", version = 1}
+	end
 	for i, ai in pairs(ais) do
 		local addAIButton = Button:New {
 			x = 0,
