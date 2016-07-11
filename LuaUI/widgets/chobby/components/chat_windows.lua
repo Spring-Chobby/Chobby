@@ -64,14 +64,14 @@ function ChatWindows:init()
 
 	-- channel chat
 	lobby:AddListener("OnSaid", 
-		function(listener, chanName, userName, message)
+		function(listener, chanName, userName, message, msgDate)
 			local channelConsole = self.channelConsoles[chanName]
 			if channelConsole ~= nil then
 				if string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName() then
-					channelConsole:AddMessage(message, userName, nil, "\255\255\0\0")
+					channelConsole:AddMessage(message, userName, msgDate, "\255\255\0\0")
 					self:_NotifyTab("#" .. chanName, userName, chanName, message, "sounds/beep4.wav", 15)
 				else
-					channelConsole:AddMessage(message, userName)
+					channelConsole:AddMessage(message, userName, msgDate)
 					
 					interfaceRoot.GetRightPanelHandler().SetActivity("chat", "(" .. string.len(message) .. ")")
 				end
@@ -79,14 +79,14 @@ function ChatWindows:init()
 		end
 	)
 	lobby:AddListener("OnSaidEx", 
-		function(listener, chanName, userName, message)
+		function(listener, chanName, userName, message, msgDate)
 			local channelConsole = self.channelConsoles[chanName]
 			if channelConsole ~= nil then
 				if string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName() then
-					channelConsole:AddMessage(message, userName, nil, "\255\255\0\0")
+					channelConsole:AddMessage(message, userName, msgDate, "\255\255\0\0")
 					self:_NotifyTab("#" .. chanName, userName, chanName, message, "sounds/beep4.wav", 15)
 				else
-					channelConsole:AddMessage(message, chanName, userName, nil, "\255\0\139\139")
+					channelConsole:AddMessage(message, chanName, userName, msgDate, "\255\0\139\139")
 				end
 			end
 		end
@@ -95,13 +95,13 @@ function ChatWindows:init()
 	-- private chat
 	self.privateChatConsoles = {}
 	lobby:AddListener("OnSayPrivate",
-		function(listener, userName, message)
+		function(listener, userName, message, msgDate)
 			local privateChatConsole = self:GetPrivateChatConsole(userName)
-			privateChatConsole:AddMessage(message, lobby:GetMyUserName())
+			privateChatConsole:AddMessage(message, lobby:GetMyUserName(), msgDate)
 		end
 	)
 	lobby:AddListener("OnSaidPrivate",
-		function(listener, userName, message)
+		function(listener, userName, message, msgDate)
 			if userName == 'Nightwatch' then
 				local chanName, userName, msgDate, message = message:match('.-|(.+)|(.+)|(.+)|(.*)')
 				local channelConsole = self:GetChannelConsole(chanName)
@@ -110,13 +110,13 @@ function ChatWindows:init()
 				end
 			else
 				local privateChatConsole = self:GetPrivateChatConsole(userName)
-				privateChatConsole:AddMessage(message, userName)
+				privateChatConsole:AddMessage(message, userName, msgDate)
 				self:_NotifyTab("@" .. userName, userName, "Private", message, "sounds/beep4.wav", 15)
 			end
 		end
 	)
 	lobby:AddListener("OnSaidPrivateEx",
-		function(listener, userName, message)
+		function(listener, userName, message, msgDate)
 			local privateChatConsole = self:GetPrivateChatConsole(userName)
 			privateChatConsole:AddMessage(message, userName, msgDate, "\255\0\139\139")
 			self:_NotifyTab("@" .. userName, userName, "Private", message, "sounds/beep4.wav", 15)
@@ -210,8 +210,6 @@ function ChatWindows:init()
 			end
 		},
 	}
-
-	CHOBBY.chatWindows = self
 end
 
 function ChatWindows:_GetTabBarItem(tabName)

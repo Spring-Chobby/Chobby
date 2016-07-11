@@ -79,8 +79,6 @@ function TeamWindow:init()
 			self.btnInvitePlayer,
 		}
 	}
-
-	CHOBBY.teamWindow = self
 end
 
 function TeamWindow:CreateInvitePlayerWindow()

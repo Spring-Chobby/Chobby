@@ -343,12 +343,6 @@ function LoginWindow:OnConnected()
 			startValue = 1,
 			after = function()
 				self.window:Dispose()
-				if not CHOBBY.playWindow then
-					--PlayWindow()
-				end
-				if not CHOBBY.teamWindow then
-					--TeamWindow()
-				end
 			end,
 		})
 		for _, v in pairs(Configuration:GetChannels()) do

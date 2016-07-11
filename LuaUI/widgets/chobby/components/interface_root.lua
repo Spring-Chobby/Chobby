@@ -345,6 +345,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		screen0:Resize(screenWidth, screenHeight)
 	end
 	
+	function externalFunctions.GetChatWindow()
+		return chatWindows
+	end
+	
 	function externalFunctions.GetContentPlace()
 		return contentPlace
 	end

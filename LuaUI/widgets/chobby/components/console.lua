@@ -75,14 +75,12 @@ function Console:SendMessage()
 end
 
 -- if date is not passed, current time is assumed
-function Console:AddMessage(message, userName, date, color)
+function Console:AddMessage(message, userName, dateOverride, color)
 	local txt = ""
 	if self.showDate then
 		-- FIXME: the input "date" should ideally be a table so we can coerce the format
-		if date == nil then
-			date = os.date(self.dateFormat)
-		end
-		txt = txt .. "[" .. date .. "] "
+		local currentDate = dateOverride or os.date(self.dateFormat)
+		txt = txt .. "[" .. currentDate .. "] "
 	end
 	if userName ~= nil then
 		txt = txt .. userName .. ": "

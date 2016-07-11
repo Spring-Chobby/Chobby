@@ -327,21 +327,21 @@ function Interface:_Say(data)
 	local emote = data.IsEmote
 	if data.Place == 0 then -- Send to channel?
 		if emote then
-			self:_OnSaidEx(data.Target, data.User, data.Text)
+			self:_OnSaidEx(data.Target, data.User, data.Text, data.Time)
 		else
-			self:_OnSaid(data.Target, data.User, data.Text)
+			self:_OnSaid(data.Target, data.User, data.Text, data.Time)
 		end
 	elseif data.Place == 1 then -- Send to battle?
 		if emote then
-			self:_OnSaidBattleEx(data.User, data.Text)
+			self:_OnSaidBattleEx(data.User, data.Text, data.Time)
 		else
-			self:_OnSaidBattle(data.User, data.Text)
+			self:_OnSaidBattle(data.User, data.Text, data.Time)
 		end
 	elseif data.Place == 2 then -- Send to user?
 		if data.Target == self:GetMyUserName() then
-			self:_OnSaidPrivate(data.User, data.Text)
+			self:_OnSaidPrivate(data.User, data.Text, data.Time)
 		else
-			self:_OnSayPrivate(data.Target, data.Text)
+			self:_OnSayPrivate(data.Target, data.Text, data.Time)
 		end
 	end
 end

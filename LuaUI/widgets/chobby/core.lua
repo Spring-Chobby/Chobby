@@ -52,7 +52,6 @@ local includes = {
 
 Chobby = widget
 
-CHOBBY = {}
 for _, file in ipairs(includes) do
 	VFS.Include(CHOBBY_DIR .. file, Chobby, VFS.RAW_FIRST)
 end

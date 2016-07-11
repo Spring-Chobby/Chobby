@@ -330,12 +330,12 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 		height = 30,
 		valign = "center",
 		font = {size = 20},
-		caption = "New Team",
+		caption = "New Team:",
 		parent = newTeamHolder,
 	}
 	AddTeamButtons(
 		newTeamHolder,
-		120,
+		110,
 		function()
 			battleLobby:SetBattleStatus({
 				allyNumber = emptyTeamIndex,
@@ -396,15 +396,7 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 		if not player[name] then
 			player[name] = {
 				team = false,
-				control = Label:New { -- Replace with generic player control
-					name = name,
-					x = 5,
-					y = 0,
-					width = 200,
-					height = 30,
-					font = {size = 15},
-					caption = name,
-				},
+				control = WG.UserHandler.GetBattleUser(name),
 			}
 		end
 		return player[name]
@@ -454,7 +446,7 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 			if teamIndex ~= -1 then
 				AddTeamButtons(
 					teamHolder,
-					90,
+					100,
 					function()
 						battleLobby:SetBattleStatus({
 								allyNumber = teamIndex,

@@ -136,34 +136,13 @@ function UserListPanel:Update()
 end
 
 function UserListPanel:AddUser(userName)
-	local children = {}
-
-	
 	if lobby:GetUser(userName).isBot then return end
 	
 	if self.team and lobby:GetTeam() ~= nil and lobby:GetTeam().leader == userName then
 		userName = "♜" .. userName
 	end
 	
-	local btnChat = Button:New {
-		x = 0,
-		width = 100,
-		y = 0,
-		height = 30,
-		caption = userName, 
-		OnClick = {
-			function()
-				CHOBBY.chatWindows:GetPrivateChatConsole(userName)
-			end
-		},
-	}
-	table.insert(children, btnChat)
-
-	self.userPanel:AddChild(Control:New {
-		x = 0,
-		width = "100%",
-		y = #(self.userPanel.children) * 42,
-		height = 40,
-		children = children,
-	})
+	local userControl = WG.UserHandler.GetChannelUser(userName)
+	userControl:SetPos(nil, #(self.userPanel.children) * 42)
+	self.userPanel:AddChild(userControl)
 end
