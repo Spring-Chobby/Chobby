@@ -181,7 +181,6 @@ function ChatWindows:init()
 		OnTabChange = {
 			function(obj, name)
 				self.currentTab = name
-				Spring.Echo("name", name)
 				if self.userListPanels[self.currentTab] then
 					self.userListPanels[self.currentTab]:Update()
 				end

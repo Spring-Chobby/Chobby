@@ -66,7 +66,6 @@ end
 function TabBar:Select(tabname)
 	for i=1,#self.children do
 		local c = self.children[i]
-		Spring.Echo("onchange", c.name, tabname)
 		if c.name == tabname then
 			if self.selected_obj then
 				self.selected_obj.state.selected = false

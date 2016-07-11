@@ -17,8 +17,9 @@ end
 --------------------------------------------------------------------------------
 -- Local Variables
 
-local battleControls = {}
-local channelControls = {}
+local battleUsers = {}
+local channelUsers = {}
+local teamUsers = {}
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -38,11 +39,11 @@ end
 local userHandler = {}
 
 function userHandler.GetBattleUser(userName)		
-	if battleControls[userName] then
-		return battleControls[userName]
+	if battleUsers[userName] then
+		return battleUsers[userName]
 	end
 	
-	battleControls[userName] = Label:New { 
+	battleUsers[userName] = Label:New { 
 		name = userName,
 		x = 5,
 		y = 0,
@@ -52,15 +53,15 @@ function userHandler.GetBattleUser(userName)
 		caption = userName,
 	}
 	
-	return battleControls[userName]
+	return battleUsers[userName]
 end
 
 function userHandler.GetChannelUser(userName)		
-	if channelControls[userName] then
-		return channelControls[userName]
+	if channelUsers[userName] then
+		return channelUsers[userName]
 	end
 	
-	channelControls[userName] = Button:New {
+	channelUsers[userName] = Button:New {
 		name = userName,
 		x = 0,
 		width = 100,
@@ -73,7 +74,23 @@ function userHandler.GetChannelUser(userName)
 			end
 		},
 	}
-	return channelControls[userName]
+	return channelUsers[userName]
+end
+
+function userHandler.GetTeamUser(userName)		
+	if teamUsers[userName] then
+		return teamUsers[userName]
+	end
+	
+	teamUsers[userName] = Button:New {
+		name = userName,
+		x = 0,
+		width = 100,
+		y = 0,
+		height = 30,
+		caption = userName,
+	}
+	return teamUsers[userName]
 end
 
 --------------------------------------------------------------------------------

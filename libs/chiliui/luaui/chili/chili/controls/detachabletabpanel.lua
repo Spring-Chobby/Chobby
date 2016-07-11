@@ -69,7 +69,6 @@ end
 
 function DetachableTabPanel:AddTab(tab)
     local tabbar = self.tabBar
-	Spring.Echo("tab.name", tab.name)
     tabbar:AddChild(
         TabBarItem:New{name = tab.name, caption = tab.caption or tab.name, defaultWidth = tabbar.minItemWidth, defaultHeight = tabbar.minItemHeight} --FIXME: implement an "Add Tab in TabBar too"
     )
