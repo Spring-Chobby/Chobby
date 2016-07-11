@@ -92,6 +92,25 @@ function Interface:SetBattleStatus(status)
 	return self
 end
 
+function Interface:AddAi(aiName, aiLib, allyNumber)
+	local sendData = {
+		Name         = aiName,
+		AiLib        = aiLib,
+		AllyNumber   = allyNumber,
+		Owner        = self:GetMyUserName(),
+	}
+	self:_SendCommand("UpdateBotStatus " .. json.encode(sendData))
+	return self
+end
+
+function Interface:RemoveAi(aiName)
+	local sendData = {
+		Name        = aiName,
+	}
+	self:_SendCommand("RemoveBot " .. json.encode(sendData))
+	return self
+end
+
 function Interface:SayBattle(message)
 	local sendData = {
 		Place = 1, -- Battle?
@@ -285,10 +304,10 @@ Interface.jsonCommands["BattleUpdate"] = Interface._BattleUpdate
 function Interface:_UpdateUserBattleStatus(data)
 	-- UpdateUserBattleStatus {"AllyNumber":0,"IsSpectator":true,"Name":"GoogleFrog","Sync":1,"TeamNumber":1}
 	local status = {
-		isSpectator = data.IsSpectator,
-		allyNumber = data.AllyNumber,
-		teamNumber = data.TeamNumber,
-		sync = data.Sync,
+		isSpectator   = data.IsSpectator,
+		allyNumber    = data.AllyNumber,
+		teamNumber    = data.TeamNumber,
+		sync          = data.Sync,
 	}
 	if not data.Name then
 		Spring.Log(LOG_SECTION, LOG.ERROR, "_UpdateUserBattleStatus missing data.Name field")
@@ -297,6 +316,28 @@ function Interface:_UpdateUserBattleStatus(data)
 	self:_OnUpdateUserBattleStatus(data.Name, status)
 end
 Interface.jsonCommands["UpdateUserBattleStatus"] = Interface._UpdateUserBattleStatus
+
+function Interface:_UpdateBotStatus(data)
+	local status = {
+		allyNumber    = data.AllyNumber,
+		teamNumber    = data.TeamNumber,
+		userName      = data.Name,
+		aiLib         = data.aiLib,
+		isSpectator   = false,
+		sync          = true,
+	}
+	if not data.Name then
+		Spring.Log(LOG_SECTION, LOG.ERROR, "_UpdateBotStatus missing data.Name field")
+		return
+	end
+	self:_UpdateUserBattleStatus(data)
+end
+Interface.jsonCommands["UpdateBotStatus"] = Interface._UpdateBotStatus
+
+function Interface:_RemoveBot(data)
+	self:_OnRemoveAi(self:GetMyBattleID(), data.Name)
+end
+Interface.jsonCommands["RemoveBot"] = Interface._RemoveBot
 
 ------------------------
 -- Channel & private chat commands
@@ -349,19 +390,6 @@ function Interface:_Say(data)
 end
 Interface.jsonCommands["Say"] = Interface._Say
 
--- OTHER
-
-function Interface:_UpdateBotStatus(data)
-	-- SetModOptions {"Options":{}}
-	self:_OnUpdateUserBattleStatus(data.Name, data)
-end
-Interface.jsonCommands["UpdateBotStatus"] = Interface._UpdateBotStatus
-
-function Interface:_RemoveBot(data)
-	self:_OnRemoveAi(self:GetMyBattleID(), data.Name)
-end
-Interface.jsonCommands["RemoveBot"] = Interface._RemoveBot
-
 -------------------
 -- Unimplemented --
 
@@ -395,12 +423,6 @@ Interface.jsonCommands["SetModOptions"] = Interface._SetModOptions
 -------------------------------------------------
 -- END Client commands
 -------------------------------------------------
-
-
-function Interface:UpdateBotStatus(data)
-	self:_SendCommand("UpdateBotStatus " .. json.encode(data))
-	return self
-end
 
 --Register
 --JoinChannel

@@ -126,7 +126,7 @@ function Lobby:SetBattleStatus(status)
 	return self
 end
 
-function Lobby:AddAi(aiName, allyNumber, Name)
+function Lobby:AddAi(aiName, allyNumber, allyNumber)
 	return self
 end
 
