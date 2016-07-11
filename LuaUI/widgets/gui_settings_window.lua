@@ -37,10 +37,21 @@ local function SetLobbyFullscreenMode(mode)
 		Spring.SetConfigInt("WindowBorderless", 1, false)
 		Spring.SendCommands("fullscreen 0")
 	elseif mode == 2 then
-		Spring.SetConfigInt("WindowPosX", screenX/4, false)
-		Spring.SetConfigInt("WindowPosY", screenY/8, false)
-		Spring.SetConfigInt("XResolutionWindowed", screenX/2, false)
-		Spring.SetConfigInt("YResolutionWindowed", screenY*3/4, false)
+		local winSizeX, winSizeY, winPosX, winPosY = Spring.GetWindowGeometry()
+		winPosY = screenY - winPosY - winSizeY
+		if winPosY > 10 then
+			-- Window is not stuck at the top of the screen
+			Spring.SetConfigInt("WindowPosX", math.min(winPosX, screenX - 50), false)
+			Spring.SetConfigInt("WindowPosY", math.min(winPosY, screenY - 50), false)
+			Spring.SetConfigInt("XResolutionWindowed",  math.min(winSizeX, screenX), false)
+			Spring.SetConfigInt("YResolutionWindowed",  math.min(winSizeY, screenY - 50), false)
+		else
+			-- Reset window to screen centre
+			Spring.SetConfigInt("WindowPosX", screenX/4, false)
+			Spring.SetConfigInt("WindowPosY", screenY/8, false)
+			Spring.SetConfigInt("XResolutionWindowed", screenX/2, false)
+			Spring.SetConfigInt("YResolutionWindowed", screenY*3/4, false)
+		end
 		Spring.SetConfigInt("WindowBorderless", 0, false)
 		Spring.SetConfigInt("Fullscreen", 0, false)
 		Spring.SendCommands("fullscreen 0") 
