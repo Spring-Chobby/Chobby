@@ -513,12 +513,12 @@ function ChatWindows:GetChannelConsole(chanName)
 					children = { channelConsole.panel, },
 				},
 				Control:New {
-					width = Configuration.userListWidth - 1, y = 0, right = 0, bottom = 0,
+					width = Configuration.userListWidth, y = 0, right = 0, bottom = 0,
 					padding={0,0,0,5}, itemPadding={0,0,0,0}, itemMargin={0,0,0,0},
 					children = { userListPanel.panel, },
 				},
 				Button:New {
-					width = 24, height = 24, y = 1, right = Configuration.userListWidth,
+					width = 24, height = 24, y = 5, right = Configuration.userListWidth + 18,
 					caption = "x",
 					OnClick = {
 						function()
