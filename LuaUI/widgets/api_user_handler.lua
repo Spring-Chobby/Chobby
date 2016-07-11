@@ -44,7 +44,6 @@ function userHandler.GetBattleUser(userName)
 	
 	battleControls[userName] = Label:New { 
 		name = userName,
-		name = name,
 		x = 5,
 		y = 0,
 		width = 200,

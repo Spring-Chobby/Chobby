@@ -32,7 +32,6 @@ local wantLoginStatus = {
 }
 
 local function MultiplayerEntryPopup()
-	Spring.Echo("Connection", lobby:GetConnectionStatus())
 	if wantLoginStatus[lobby:GetConnectionStatus()] then
 		local loginWindow = WG.Chobby.LoginWindow(MultiplayerFailFunction)
 		local popup = WG.Chobby.PriorityPopup(loginWindow.window)

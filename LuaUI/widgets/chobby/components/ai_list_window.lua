@@ -5,7 +5,13 @@ function AiListWindow:init(lobby, gameName, allyTeam)
 	self:super('init', screen0, "Choose AI")
 	self.window:SetPos(nil, nil, 500, 700)
 	
-	local ais = VFS.GetAvailableAIs(gameName)
+	-- Disable game-specific AIs for now since it breaks /luaui reload
+-- 	local ais = VFS.GetAvailableAIs(gameName)
+	local ais = VFS.GetAvailableAIs()
+	if Configuration.singleplayer_mode == 2 then
+		ais[#ais + 1] = ais[1]
+		ais[1] = {shortName = "CAI", version = 1}
+	end
 	for i, ai in pairs(ais) do
 		local addAIButton = Button:New {
 			x = 0,
