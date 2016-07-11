@@ -25,14 +25,14 @@ function TabBar:New(obj)
 	if (obj.tabs) then
 		for i=1,#obj.tabs do
 			obj:AddChild(
-				TabBarItem:New{caption = obj.tabs[i], defaultWidth = obj.minItemWidth, defaultHeight = obj.minItemHeight} --FIXME inherit font too
+				TabBarItem:New{name = obj.tabs[i].name, caption = obj.tabs[i].caption or obj.tabs[i].name, defaultWidth = obj.minItemWidth, defaultHeight = obj.minItemHeight} --FIXME inherit font too
 			)
 		end
 	end
 
 	if not obj.children[1] then
 		obj:AddChild(
-			TabBarItem:New{caption = "tab"}
+			TabBarItem:New{name = "tab", caption = "tab"}
 		)
 	end
 
@@ -66,7 +66,8 @@ end
 function TabBar:Select(tabname)
 	for i=1,#self.children do
 		local c = self.children[i]
-		if c.caption == tabname then
+		Spring.Echo("onchange", c.name, tabname)
+		if c.name == tabname then
 			if self.selected_obj then
 				self.selected_obj.state.selected = false
 				self.selected_obj:Invalidate()
@@ -84,7 +85,7 @@ function TabBar:Select(tabname)
 		c.state.selected = true
 		self.selected_obj = c
 		self.selected_obj:Invalidate()
-		self:CallListeners(self.OnChange, c.caption)
+		self:CallListeners(self.OnChange, c.name)
 	end
 
 	return false
@@ -98,11 +99,11 @@ function TabBar:Remove(tabname)
 
 	for i = 1, #self.children do
 		local c = self.children[i]
-		if c.caption == tabname then
+		if c.name == tabname then
 			c:Dispose()
 			-- selects next tab
 			c = self.children[math.min(i, #self.children)]
-			self:Select(c.caption)
+			self:Select(c.name)
 			return true
 		end
 	end

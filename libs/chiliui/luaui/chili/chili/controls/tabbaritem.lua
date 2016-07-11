@@ -22,7 +22,7 @@ end
 
 function TabBarItem:MouseDown(...)
   if not self.parent then return end
-  self.parent:Select(self.caption)
+  self.parent:Select(self.name)
   inherited.MouseDown(self, ...)
   return self
 end
@@ -31,7 +31,7 @@ end
 
 function TabBarItem:Remove()
   if not self.parent then return end
-  self.parent:Remove(self.caption)
+  self.parent:Remove(self.name)
   return self
 end
 

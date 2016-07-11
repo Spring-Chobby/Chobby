@@ -21,44 +21,16 @@ function UserListPanel:init(chanName)
 		children = {
 			self.userPanel,
 		},
-		OnDispose = { 
-			function()
-				self:RemoveListeners()
-			end
-		},
 	}
-	self:AddListeners()
-	
 	self:Update()
 end
 
-function UserListPanel:AddListeners()
-	self.onClients = function(listener, chanName, clients)
-		if chanName == self.chanName then
-			self:Update()
-		end
-	end
-	lobby:AddListener("OnClients", self.onClients)
-
-	self.onJoined = function(listener, chanName)
-		if chanName == self.chanName then
-			self:Update()
-		end
-	end
-	lobby:AddListener("OnJoined", self.onJoined)
-
-	self.onLeft = function(listener, chanName)
-		if chanName == self.chanName then
-			self:Update()
-		end
-	end
-	lobby:AddListener("OnLeft", self.onLeft)
+function UserListPanel:OnJoined(userName)
+	self:Update()
 end
 
-function UserListPanel:RemoveListeners()
-	lobby:RemoveListener("OnClients", self.onClients)
-	lobby:RemoveListener("OnJoined", self.onJoined)
-	lobby:RemoveListener("OnLeft", self.onLeft)
+function UserListPanel:OnLeft(userName)
+	self:Update()
 end
 
 function UserListPanel:GetUsers()

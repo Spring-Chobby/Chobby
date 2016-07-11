@@ -61,6 +61,28 @@ function ChatWindows:init()
 			end
 		end
 	)
+	
+	self.onJoined = function(listener, chanName, userName)
+		if self.currentTab and self.userListPanels[self.currentTab] then
+			self.userListPanels[self.currentTab]:OnJoined(userName)
+		end
+	end
+	lobby:AddListener("OnJoined", self.onJoined)
+
+	self.onLeft = function(listener, chanName, userName)
+		if self.currentTab and self.userListPanels[self.currentTab] then
+			self.userListPanels[self.currentTab]:OnLeft(userName)
+		end
+	end
+	lobby:AddListener("OnLeft", self.onLeft)
+	
+	
+	self.onClients = function(listener, chanName, clients)
+		if self.currentTab and self.userListPanels[self.currentTab] then
+			self.userListPanels[self.currentTab]:Update()
+		end
+	end
+	lobby:AddListener("OnClients", self.onClients)
 
 	-- channel chat
 	lobby:AddListener("OnSaid", 
@@ -69,7 +91,7 @@ function ChatWindows:init()
 			if channelConsole ~= nil then
 				if string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName() then
 					channelConsole:AddMessage(message, userName, msgDate, "\255\255\0\0")
-					self:_NotifyTab("#" .. chanName, userName, chanName, message, "sounds/beep4.wav", 15)
+					self:_NotifyTab(chanName, userName, chanName, message, "sounds/beep4.wav", 15)
 				else
 					channelConsole:AddMessage(message, userName, msgDate)
 					
@@ -84,7 +106,7 @@ function ChatWindows:init()
 			if channelConsole ~= nil then
 				if string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName() then
 					channelConsole:AddMessage(message, userName, msgDate, "\255\255\0\0")
-					self:_NotifyTab("#" .. chanName, userName, chanName, message, "sounds/beep4.wav", 15)
+					self:_NotifyTab(chanName, userName, chanName, message, "sounds/beep4.wav", 15)
 				else
 					channelConsole:AddMessage(message, chanName, userName, msgDate, "\255\0\139\139")
 				end
@@ -111,7 +133,7 @@ function ChatWindows:init()
 			else
 				local privateChatConsole = self:GetPrivateChatConsole(userName)
 				privateChatConsole:AddMessage(message, userName, msgDate)
-				self:_NotifyTab("@" .. userName, userName, "Private", message, "sounds/beep4.wav", 15)
+				self:_NotifyTab(userName, userName, "Private", message, "sounds/beep4.wav", 15)
 			end
 		end
 	)
@@ -119,7 +141,7 @@ function ChatWindows:init()
 		function(listener, userName, message, msgDate)
 			local privateChatConsole = self:GetPrivateChatConsole(userName)
 			privateChatConsole:AddMessage(message, userName, msgDate, "\255\0\139\139")
-			self:_NotifyTab("@" .. userName, userName, "Private", message, "sounds/beep4.wav", 15)
+			self:_NotifyTab(userName, userName, "Private", message, "sounds/beep4.wav", 15)
 		end
 	)
 	lobby:AddListener("OnRemoveUser",
@@ -153,12 +175,16 @@ function ChatWindows:init()
 		bottom = 10,
 		padding = {0, 0, 0, 0},
 		tabs = {
-			--{ name = i18n("server"), children = {self.serverPanel} },
-			{ name = i18n("debug"), children = {self.debugConsole.panel} },
+			--{ name = "server", caption = i18n("server"), children = {self.serverPanel} },
+			{ name = "debug", caption = i18n("debug"), children = {self.debugConsole.panel} },
 		},
 		OnTabChange = {
 			function(obj, name)
 				self.currentTab = name
+				Spring.Echo("name", name)
+				if self.userListPanels[self.currentTab] then
+					self.userListPanels[self.currentTab]:Update()
+				end
 				local console = self.tabbars[name]
 				if console then
 					console.unreadMessages = 0
@@ -307,7 +333,7 @@ function ChatWindows:_GetTabBarItem(tabName)
 	local tabbar = self.tabPanel.tabBar
 	for i=1,#tabbar.children do
 		local c = tabbar.children[i]
-		if c.caption == tabName then
+		if c.name == tabName then
 			return c
 		end
 	end
@@ -477,10 +503,10 @@ function ChatWindows:GetChannelConsole(chanName)
 
 		local userListPanel = UserListPanel(chanName)
 		self.userListPanels[chanName] = userListPanel
-		local name = "#" .. chanName
-
+		
 		self.tabPanel:AddTab({
-			name = name,
+			name = chanName,
+			caption = "#" .. chanName,
 			children = {
 				Control:New {
 					x = 0, y = 0, right = 145, bottom = 0,
@@ -499,24 +525,16 @@ function ChatWindows:GetChannelConsole(chanName)
 						function()
 							self.channelConsoles[chanName] = nil
 							lobby:Leave(chanName)
-							self.tabPanel:RemoveTab(name)
+							self.tabPanel:RemoveTab(chanName)
 							self:UpdateJoinPosition()
 						end
 					},
 				},
 			}
 		})
-		self.tabbars[name] = channelConsole
+		self.tabbars[chanName] = channelConsole
 		
 		self:UpdateJoinPosition()
-		
-		lobby:AddListener("OnClients",
-			function(listener, clientsChanName, clients)
-				if chanName == clientsChanName then
-					Spring.Echo("Users in channel: " .. chanName, #lobby:GetChannel(chanName).users)
-				end
-			end
-		)
 	end
 
 	return channelConsole
@@ -532,10 +550,10 @@ function ChatWindows:GetPrivateChatConsole(userName)
 		privateChatConsole.listener = function(message)
 			lobby:SayPrivate(userName, message)
 		end
-		local name = "@" .. userName
-
+		
 		self.tabPanel:AddTab({
-			name = name,
+			name = userName,
+			caption = "@" .. userName,
 			children = {
 				privateChatConsole.panel,
 
@@ -545,14 +563,14 @@ function ChatWindows:GetPrivateChatConsole(userName)
 					OnClick = {
 						function()
 							self.privateChatConsoles[userName] = nil
-							self.tabPanel:RemoveTab(name)
+							self.tabPanel:RemoveTab(userName)
 							self:UpdateJoinPosition()
 						end
 					},
 				}
 			}
 		})
-		self.tabbars[name] = privateChatConsole
+		self.tabbars[userName] = privateChatConsole
 		
 		self:UpdateJoinPosition()
 	end
