@@ -29,6 +29,11 @@ function BattleListWindow:init(parent)
 		self:OnUpdateBattleInfo(battleID)
 	end
 	lobby:AddListener("OnUpdateBattleInfo", self.onUpdateBattleInfo)
+	
+	self.onBattleIngameUpdate = function(listener, battleID, isRunning)
+		self:OnBattleIngameUpdate(battleID, isRunning)
+	end
+	lobby:AddListener("OnBattleIngameUpdate", self.onBattleIngameUpdate)
 	update()
 end
 
@@ -66,6 +71,7 @@ function BattleListWindow:AddBattle(battle)
 	local children = {}
 
 	local lblPlayers = Label:New {
+		name = "players",
 		x = 105,
 		width = 50,
 		y = 5,
@@ -76,9 +82,10 @@ function BattleListWindow:AddBattle(battle)
 	table.insert(children, lblPlayers)
 
 	local lblTitle = Label:New {
+		name = "title",
 		x = 160,
-		right = 150,
 		y = 0,
+		width = 400,
 		height = h - 10,
 		valign = 'center',
 		caption = battle.title:sub(1, 60),
@@ -86,8 +93,20 @@ function BattleListWindow:AddBattle(battle)
 	}
 	table.insert(children, lblTitle)
 
+	local lblRunning = Label:New {
+		name = "running",
+		x = 520,
+		y = 0,
+		width = 100,
+		height = h - 10,
+		valign = 'center',
+		caption = (battle.isRunning and "Running") or "", 
+	}
+	table.insert(children, lblRunning)
+	
 	if battle.passworded then
 		local imgPassworded = Image:New {
+			name = "password",
 			file = CHOBBY_IMG_DIR .. "lock.png",
 			y = 5,
 			height = h - 10,
@@ -99,6 +118,7 @@ function BattleListWindow:AddBattle(battle)
 	end
 
 	local lblGame = Label:New {
+		name = "game",
 		x = 180,
 		width = 160,
 		y = 20,
@@ -110,6 +130,7 @@ function BattleListWindow:AddBattle(battle)
 	table.insert(children, lblGame)
 
 	local lblMap = Label:New {
+		name = "map",
 		x = 360,
 		width = 200,
 		y = 20,
@@ -121,6 +142,7 @@ function BattleListWindow:AddBattle(battle)
 	table.insert(children, lblMap)
 
 	local btnJoin = Button:New {
+		name = "join",
 		x = 10,
 		width = 90,
 		y = 5,
@@ -145,23 +167,30 @@ end
 function BattleListWindow:JoinedBattle(battleID)
 	local battle = lobby:GetBattle(battleID)
 	local items = self:GetRowItems(battleID)
-	items[1]:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
+	items.players:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
 	self:RecalculatePosition(battleID)
 end
 
 function BattleListWindow:LeftBattle(battleID)
 	local battle = lobby:GetBattle(battleID)
 	local items = self:GetRowItems(battleID)
-	items[1]:SetCaption(#battle.users .. "/" .. battle.maxPlayers)
+	items.players:SetCaption(#battle.users .. "/" .. battle.maxPlayers)
 	self:RecalculatePosition(battleID)
 end
 
 function BattleListWindow:OnUpdateBattleInfo(battleID)
 	local battle = lobby:GetBattle(battleID)
 	local items = self:GetRowItems(battleID)
-	items[1]:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
-	items[4]:SetCaption(battle.mapName:sub(1, 22) .. (VFS.HasArchive(battle.mapName) and ' [' .. Configuration:GetSuccessColor() .. '✔\b]' or ' [' .. Configuration:GetErrorColor() .. '✘\b]'))
-	items[4].tooltip = battle.mapName
+	items.players:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
+	items.map:SetCaption(battle.mapName:sub(1, 22) .. (VFS.HasArchive(battle.mapName) and ' [' .. Configuration:GetSuccessColor() .. '✔\b]' or ' [' .. Configuration:GetErrorColor() .. '✘\b]'))
+	items.map.tooltip = battle.mapName
+	self:RecalculatePosition(battleID)
+end
+
+function BattleListWindow:OnBattleIngameUpdate(battleID, isRunning)
+	local battle = lobby:GetBattle(battleID)
+	local items = self:GetRowItems(battleID)
+	items.running:SetCaption((isRunning and "Running") or "")
 	self:RecalculatePosition(battleID)
 end
 

@@ -53,6 +53,7 @@ function ListWindow:init(parent, title)
 		},
 	}
 
+	self.itemNames = {}
 	self.itemPanelMapping = {}
 	self.orderPanelMapping = {}
 end
@@ -84,7 +85,14 @@ function ListWindow:AddRow(items, id)
 	local w = items[#items].x + items[#items].width
 	local h = 60
 	local padding = 20
-
+		
+	local itemNames = {}
+	for i = 1, #items do
+		itemNames[items[i].name] = items[i]
+	end
+	
+	self.itemNames[id] = itemNames
+	
 	local container = Control:New {
 		width = "100%",
 		y = 0,
@@ -123,8 +131,7 @@ function ListWindow:AddRow(items, id)
 end
 
 function ListWindow:GetRowItems(id)
-	local panel = self.itemPanelMapping[id]
-	return panel.children[1].children[1].children
+	return self.itemNames[id]
 end
 
 function ListWindow:CalculateHeight(index)
@@ -195,5 +202,6 @@ function ListWindow:RemoveRow(id)
 	self.orderPanelMapping[index] = nil
 
 	self.listPanel:RemoveChild(panel)
+	self.itemNames[id] = nil
 	self.itemPanelMapping[id] = nil
 end

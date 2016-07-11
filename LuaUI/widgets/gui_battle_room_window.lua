@@ -194,6 +194,19 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID)
 		parent = parentControl,
 	}
 	
+	onBattleIngameUpdate = function(listener, updatedBattleID, isRunning)
+		if battleID == updatedBattleID then
+			if isRunning then
+				btnStartBattle:SetCaption("\255\66\138\201" .. i18n("rejoin") ..  "\b")
+			else
+				btnStartBattle:SetCaption("\255\66\138\201" .. i18n("start") ..  "\b")
+			end
+		end
+	end
+	battleLobby:AddListener("OnBattleIngameUpdate", onBattleIngameUpdate)
+	
+	onBattleIngameUpdate(nil, battleID, battle.isRunning)
+	
 	onUpdateBattleInfo = function(listener, updatedBattleID, spectatorCount, locked, mapHash, mapName)
 		if battleID ~= updatedBattleID then
 			return
@@ -591,6 +604,7 @@ local function InitializeControls(battleID, oldLobby)
 				oldLobby:RemoveListener("OnUpdateUserBattleStatus", onUpdateUserBattleStatus)
 				oldLobby:RemoveListener("OnLeftBattle", onLeftBattle)
 				oldLobby:RemoveListener("OnRemoveAi", onRemoveAi)
+				oldLobby:RemoveListener("OnBattleIngameUpdate", onBattleIngameUpdate)
 			end
 		},
 	}

@@ -50,6 +50,7 @@ return {
 		have_game = "Have game",
 		have_map = "Have map",
 		start = "Start",
+		rejoin = "Rejoin",
 		spectate = "Spectate",
 		pick_map = "Map",
 		new_team = "New Team",
