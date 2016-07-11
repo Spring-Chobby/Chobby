@@ -175,6 +175,7 @@ local function InitializeControls(window)
 	
 	externalSettings.autologin = {
 		SetValue = function(value) 
+			Spring.Echo("SetValue")
 			autologin:SetToggle(value)
 		end
 	}
@@ -278,6 +279,7 @@ end
 local SettingsWindow = {}
 
 function SettingsWindow.SetConfigValue(key, value)
+	Spring.Echo("externalSettings", key, value)
 	if externalSettings[key] then
 		externalSettings[key].SetValue(value)
 	end
@@ -318,6 +320,12 @@ function widget:Initialize()
 	VFS.Include("LuaUI/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 	
 	WG.Delay(DelayedInitialize, 1)
+	
+	externalSettings.autologin = {
+		SetValue = function(value)
+			 WG.Chobby.Configuration.autoLogin = value
+		end
+	}
 	
 	onBattleAboutToStart = function(listener)
 		local screenX, screenY = Spring.GetScreenGeometry()

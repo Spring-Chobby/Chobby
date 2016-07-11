@@ -27,6 +27,7 @@ return {
 		settings = "Settings",
 		logout = "Logout",
 		login = "Login",
+		login_to_chat = "Login required for chat",
 		welcome = "Welcome",
 		singleplayer = "Singleplayer",
 		play_singleplayer_game = "Play a singleplayer game",

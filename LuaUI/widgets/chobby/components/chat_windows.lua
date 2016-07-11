@@ -167,7 +167,6 @@ function ChatWindows:init()
 					WG.Delay(function()
 						screen0:FocusControl(console.ebInputText)
 					end, 0.01)
-					Spring.Echo("now on tab", name)
 				end
 			end
 		}
@@ -206,7 +205,7 @@ function ChatWindows:init()
 	
 	self.tabBarHolder:BringToFront()
 	
-	self.window = Control:New {
+	self.chatWindow = Control:New {
 		x = 0,
 		y = 0,
 		right = 0,
@@ -219,6 +218,17 @@ function ChatWindows:init()
 			self.tabPanel,
 			self.tabBarHolder,
 		},
+	}
+
+	
+	self.window = Control:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
 		OnOrphan = {
 			function (obj)
 				self.tabPanel.tabBar:DisableHighlight()
@@ -231,13 +241,40 @@ function ChatWindows:init()
 		},
 	}
 	
+	self.loginButton = Button:New {
+		x = "25%",
+		y = "45%", 
+		width = "50%", 
+		height = "10%",
+		caption = i18n("login_to_chat"),
+		font = {size = 30},
+		parent = self.window,
+		OnClick = {function ()
+				Spring.Echo("Login")
+				WG.LoginPopup()
+			end
+		}
+	}
+	
+	lobby:AddListener("OnDisconnected", function ()
+			self.window:ClearChildren()
+			self.window:AddChild(self.loginButton)
+		end
+	)
+	
+	lobby:AddListener("OnConnect", function ()
+			self.window:ClearChildren()
+			self.window:AddChild(self.chatWindow)
+		end
+	)
+	
 	self:ReattachTabHolder()
 	self:UpdateJoinPosition()
 end
 
 function ChatWindows:ReattachTabHolder()
-	if not self.window:GetChildByName(self.tabBarHolder.name) then
-		self.window:AddChild(self.tabBarHolder)
+	if not self.chatWindow:GetChildByName(self.tabBarHolder.name) then
+		self.chatWindow:AddChild(self.tabBarHolder)
 	end
 	self.tabBarHolder:SetPos(0,0)
 	self.tabBarHolder:BringToFront()
