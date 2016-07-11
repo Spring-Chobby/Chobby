@@ -383,7 +383,8 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	
 	local userData = self.userBattleStatus[userName]
 	
-	local changedAllyTeam = (status.allyNumber ~= userData.allyNumber)
+	-- If userData.allyNumber is present then an update must occur.
+	local changedAllyTeam = userData.allyNumber or (status.allyNumber ~= userData.allyNumber)
 	local changedSpectator = (status.isSpectator ~= userData.isSpectator)
 	
 	userData.allyNumber = status.allyNumber or userData.allyNumber
