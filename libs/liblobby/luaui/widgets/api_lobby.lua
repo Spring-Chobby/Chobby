@@ -37,7 +37,6 @@ function widget:Initialize()
 	LCS = loadstring(VFS.LoadFile("libs/lcs/LCS.lua"))
 	LCS = LCS()
 
-	VFS.Include(LIB_LOBBY_DIRNAME .. "observable.lua", nil, VFS.RAW_FIRST)
 	WG.Server = config.server
 	Spring.Utilities.TableEcho(WG.Server)
 	if WG.Server.ZKServer then
@@ -45,11 +44,10 @@ function widget:Initialize()
 	else
 		Interface = VFS.Include(LIB_LOBBY_DIRNAME .. "interface.lua", nil, VFS.RAW_FIRST)
 	end
-	Wrapper = VFS.Include(LIB_LOBBY_DIRNAME .. "wrapper.lua", nil, VFS.RAW_FIRST)
-	WrapperSkirmish = VFS.Include(LIB_LOBBY_DIRNAME .. "wrapper_skirmish.lua", nil, VFS.RAW_FIRST)
+-- 	WrapperSkirmish = VFS.Include(LIB_LOBBY_DIRNAME .. "wrapper_skirmish.lua", nil, VFS.RAW_FIRST)
+	self.lobby = Interface()
 
-	self.lobby = Wrapper()
-	self.lobbySkirmish = WrapperSkirmish()
+	self.lobbySkirmish = self.lobby--WrapperSkirmish()
 
 	--// Export Widget Globals
 	WG.LibLobby = {

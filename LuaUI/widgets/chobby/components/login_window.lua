@@ -239,9 +239,9 @@ function LoginWindow:RemoveListeners()
 		lobby:RemoveListener("OnAgreement", self.onAgreement)
 		self.onAgreement = nil
 	end
-	if self.onTASServer then
-		lobby:RemoveListener("OnTASServer", self.onTASServer)
-		self.onTASServer = nil
+	if self.onConnect then
+		lobby:RemoveListener("OnConnect", self.onConnect)
+		self.onConnect = nil
 	end
 	if self.onDisconnected then
 		lobby:RemoveListener("OnDisconnected", self.onDisconnected)
@@ -266,11 +266,11 @@ function LoginWindow:tryLogin()
 		self.loginAttempts = 0
 		self:RemoveListeners()
 
-		self.onTASServer = function(listener)
-			lobby:RemoveListener("OnTASServer", self.onTASServer)
+		self.onConnect = function(listener)
+			lobby:RemoveListener("OnConnect", self.onConnect)
 			self:OnConnected(listener)
 		end
-		lobby:AddListener("OnTASServer", self.onTASServer)
+		lobby:AddListener("OnConnect", self.onConnect)
 
 		self.onDisconnected = function(listener)
 			lobby:RemoveListener("OnDisconnected", self.onDisconnected)
@@ -301,11 +301,11 @@ function LoginWindow:tryRegister()
 		self.loginAttempts = 0
 		self:RemoveListeners()
 
-		self.onTASServerRegister = function(listener)
-			lobby:RemoveListener("OnTASServer", self.onTASServerRegister)
+		self.onConnectRegister = function(listener)
+			lobby:RemoveListener("OnConnect", self.onConnectRegister)
 			self:OnRegister(listener)
 		end
-		lobby:AddListener("OnTASServer", self.onTASServerRegister)
+		lobby:AddListener("OnConnect", self.onConnectRegister)
 
 		lobby:Connect(Configuration:GetServerAddress(), Configuration:GetServerPort())
 	else

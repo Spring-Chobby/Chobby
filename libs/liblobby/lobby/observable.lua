@@ -1,26 +1,8 @@
-Observable = LCS.class{}
+Lobby = LCS.class{}
 
 local LOG_SECTION = "liblobby"
 
-local function ShallowCopy(orig)
-	local orig_type = type(orig)
-	local copy
-	if orig_type == 'table' then
-		copy = {}
-		for orig_key, orig_value in pairs(orig) do
-			copy[orig_key] = orig_value
-		end
-	else -- number, string, boolean, etc
-		copy = orig
-	end
-	return copy
-end
-
-function Observable:Init()
-	self.listeners = {}
-end
-
-function Observable:AddListener(event, listener)
+function Lobby:AddListener(event, listener)
 	if listener == nil then
 		Spring.Log(LOG_SECTION, LOG.ERROR, "Event: " .. tostring(event) .. ", listener cannot be nil")
 		return
@@ -33,7 +15,7 @@ function Observable:AddListener(event, listener)
 	table.insert(eventListeners, listener)
 end
 
-function Observable:RemoveListener(event, listener)
+function Lobby:RemoveListener(event, listener)
 	if self.listeners[event] then
 		for k, v in pairs(self.listeners[event]) do
 			if v == listener then
@@ -47,7 +29,7 @@ function Observable:RemoveListener(event, listener)
 	end
 end
 
-function Observable:_CallListeners(event, ...)
+function Lobby:_CallListeners(event, ...)
 	if self.listeners[event] == nil then
 		return nil -- no event listeners
 	end
@@ -61,6 +43,6 @@ function Observable:_CallListeners(event, ...)
 	return true
 end
 
-function Observable:_PrintError(err)
+function Lobby:_PrintError(err)
 	Spring.Log(LOG_SECTION, LOG.ERROR, debug.traceback(err))
 end

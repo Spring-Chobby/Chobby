@@ -109,7 +109,7 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID)
 		font = { size = 22 },
 		OnClick = {
 			function()
-				battleLobby:SetBattleStatus({IsSpectator = not battleLobby:GetMyIsSpectator()})
+				battleLobby:SetBattleStatus({isSpectator = not battleLobby:GetMyIsSpectator()})
 			end
 		},
 		parent = parentControl,
@@ -125,6 +125,24 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID)
 		OnClick = {
 			function()
 				WG.Chobby.MapListWindow(battleLobby)
+			end
+		},
+		parent = parentControl,
+	}
+	
+	local btnNewTeam = Button:New {
+		x = 10,
+		y = 65,
+		height = 45,
+		right = "50.5%",
+		caption = "\255\66\138\201" .. i18n("new_team") ..  "\b",
+		font = { size = 22 },
+		OnClick = {
+			function()
+				battleLobby:SetBattleStatus({
+					allyNumber = largestTeamIndex + 1, 
+					isSpectator = false,
+				})
 			end
 		},
 		parent = parentControl,
@@ -440,9 +458,9 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 					90,
 					function()
 						battleLobby:SetBattleStatus({
-							AllyNumber = teamIndex, 
-							IsSpectator = false,
-						})
+								allyNumber = teamIndex, 
+								isSpectator = false,
+							})
 					end, 
 					function()
 						WG.Chobby.AiListWindow(battleLobby, battle.gameName, teamIndex)
@@ -540,33 +558,38 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 	end
 	
 	updateUserBattleStatus = function(listener, data)
-		local name = data.Name
-		local allyTeamID = data.AllyNumber
-		if name then
-			RemovePlayerFromTeam(name)
-			if data.IsSpectator then
-				AddPlayerToTeam(-1, name)
+	Spring.Echo("UPDATE THING")
+	Spring.Echo(data)
+	for k, v in pairs(data) do
+		Spring.Echo(k, v)
+	end
+		local userName = data.userName
+		local allyTeamID = data.allyNumber
+		if userName then
+			RemovePlayerFromTeam(userName)
+			if data.isSpectator then
+				AddPlayerToTeam(-1, userName)
 			elseif allyTeamID then
-				AddPlayerToTeam(allyTeamID, name)
+				AddPlayerToTeam(allyTeamID, userName)
 			end
 		end
 	end
 	battleLobby:AddListener("UpdateUserBattleStatus", updateUserBattleStatus)
 	
-	onLeftBattle = function(listener, LeftBattleID, UserName)
-		if LeftBattleID == battleID then
-			if UserName then
-				RemovePlayerFromTeam(UserName)
-				GetPlayerData(UserName).control:Dispose()
+	onLeftBattle = function(listener, leftBattleID, userName)
+		if leftBattleID == battleID then
+			if userName then
+				RemovePlayerFromTeam(userName)
+				GetPlayerData(userName).control:Dispose()
 			end
 		end
 	end
 	battleLobby:AddListener("OnLeftBattle", onLeftBattle)
 	
-	removeBot = function(listener, data)
-		if data.Name then
-			RemovePlayerFromTeam(data.Name)
-			GetPlayerData(data.Name).control:Dispose()
+	removeBot = function(listener, botName)
+		if botName then
+			RemovePlayerFromTeam(botName)
+			GetPlayerData(botName).control:Dispose()
 		end
 	end
 	battleLobby:AddListener("RemoveBot", removeBot)
@@ -749,9 +772,9 @@ function BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
 	tabPanel.AddTab("myBattle", "My Battle", multiplayerWrapper, false, 3, true)
 	
 	battleLobby:SetBattleStatus({
-		AllyNumber = 0,
-		IsSpectator = false,
-		Sync = 1, -- 0 = unknown, 1 = synced, 2 = unsynced
+		allyNumber = 0,
+		isSpectator = false,
+		sync = 1, -- 0 = unknown, 1 = synced, 2 = unsynced
 	})
 end
 
@@ -788,9 +811,9 @@ function BattleRoomWindow.GetSingleplayerControl()
 				obj:AddChild(battleWindow)
 				
 				battleLobby:SetBattleStatus({
-					AllyNumber = 0,
-					IsSpectator = false,  
-					Sync = 1, -- 0 = unknown, 1 = synced, 2 = unsynced
+					allyNumber = 0,
+					isSpectator = false,
+					sync = 1, -- 0 = unknown, 1 = synced, 2 = unsynced
 				})
 			end
 		},

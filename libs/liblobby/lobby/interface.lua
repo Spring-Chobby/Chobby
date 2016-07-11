@@ -1,12 +1,8 @@
+-- Official SpringRTS Lobby protocol implementation
+-- http://springrts.com/dl/LobbyProtocol/
+
 VFS.Include(LIB_LOBBY_DIRNAME .. "json.lua")
-VFS.Include(LIB_LOBBY_DIRNAME .. "utilities.lua")
-
-if not Spring.GetConfigInt("LuaSocketEnabled", 0) == 1 then
-	Spring.Log(LOG_SECTION, LOG.ERROR, "LuaSocketEnabled is disabled")
-	return false
-end
-
-Interface = Observable:extends{}
+VFS.Include(LIB_LOBBY_DIRNAME .. "interface_shared.lua")
 
 -- map lobby commands by name
 Interface.commands = {}
@@ -15,7 +11,404 @@ Interface.jsonCommands = {}
 -- define command format with pattern (regex)
 Interface.commandPattern = {}
 
-VFS.Include(LIB_LOBBY_DIRNAME .. "interface_shared.lua")
+-------------------------------------------------
+-- BEGIN Client commands
+-------------------------------------------------
+
+------------------------
+-- Connectivity commands
+------------------------
+
+function Interface:Login(user, password, cpu, localIP)
+	self:super("Login", user, password, cpu, localIP)
+	if localIP == nil then
+		localIP = "*"
+	end
+	password = VFS.CalculateHash(password, 0)
+	self:_SendCommand(concat("LOGIN", user, password, cpu, localIP, "LuaLobby\t", "0\t", "a b m cl et p"))
+	return
+end
+
+function Interface:Ping()
+	self:super("Ping")
+	self:_SendCommand("PING", true)
+	return
+end
+
+-- TODO
+-- function Interface:_OnMOTD(message)
+-- 	self:super("_OnMOTD", message)
+-- end
+-- Interface.commands["MOTD"] = Interface._OnMOTD
+-- Interface.commandPattern["MOTD"] = "([^\t]*)"
+
+------------------------
+-- User commands
+------------------------
+
+------------------------
+-- Battle commands
+------------------------
+
+function Interface:JoinBattle(battleID, password, scriptPassword)
+	self:super("JoinBattle", battleID, password, scriptPassword)
+	self:_SendCommand(concat("JOINBATTLE", battleID, password, scriptPassword))
+	return self
+end
+
+function Interface:LeaveBattle()
+	self:super("LeaveBattle")
+	self:_SendCommand("LEAVEBATTLE")
+	return self
+end
+
+function Interface:SetBattleStatus(status)
+	self:super("SetBattleStatus", status)
+	status.isReady = status.isReady or self:GetMyIsReady()
+	status.teamNumber = status.teamNumber or self:GetMyTeamNumber()
+	status.teamColor = status.teamColor or self:GetMyTeamColor()
+	status.allyNumber = status.allyNumber or self:GetMyAllyNumber()
+	status.isSpectator = status.isSpectator or self:GetMyIsSpectator()
+	status.sync = status.sync or self:GetMySync()
+	status.side = status.side or self:GetMySide()
+
+	local battleStatus = tostring((status.isReady and 2 or 0) + (status.isSpectator and 2^10 or 0) + (status.sync and 2^22 or 2^23))
+	myTeamColor = status.teamColor or math.floor(math.random() * 255 * 2^16 + math.random() * 255 * 2^8 + math.random() * 255)
+	self:_SendCommand(concat("MYBATTLESTATUS", battleStatus, myTeamColor))
+	return self
+end
+
+-- function Interface:JoinBattleAccept(userName)
+-- 	self:super("JoinBattleAccept", userName)
+-- 	self:_SendCommand(concat("JOINBATTLEACCEPT", userName))
+-- 	return self
+-- end
+-- 
+-- function Interface:JoinBattleDeny(userName, reason)
+-- 	self:super("JoinBattleDeny", userName, reason)
+-- 	self:_SendCommand(concat("JOINBATTLEDENY", userName, reason))
+-- 	return self
+-- end
+
+function Interface:SayBattle(message)
+	self:super("SayBattle", message)
+	self:_SendCommand(concat("SAYBATTLE", message))
+	return self
+end
+
+function Interface:SayBattleEx(message)
+	self:super("SayBattleEx", message)
+	self:_SendCommand(concat("SAYBATTLEEX", message))
+	return self
+end
+
+------------------------
+-- Channel & private chat commands
+------------------------
+
+function Interface:Join(chanName, key)
+	self:super("Join", chanName, key)
+	self:_SendCommand(concat("JOIN", chanName, key))
+	return self
+end
+
+function Interface:Leave(chanName)
+	self:super("Leave", chanName)
+	self:_SendCommand(concat("LEAVE", chanName))
+	return
+end
+
+function Interface:Say(chanName, message)
+	self:super("Say", chanName, message)
+	self:_SendCommand(concat("SAY", chanName, message))
+	return self
+end
+
+function Interface:SayEx(chanName, message)
+	self:super("SayEx", chanName, message)
+	self:_SendCommand(concat("SAYEX", chanName, message))
+	return self
+end
+
+function Interface:SayPrivate(userName, message)
+	self:super("SayPrivate", userName, message)
+	self:_SendCommand(concat("SAYPRIVATE", userName, message))
+	return self
+end
+
+-------------------------------------------------
+-- END Client commands
+-------------------------------------------------
+
+-------------------------------------------------
+-- BEGIN Server commands
+-------------------------------------------------
+
+------------------------
+-- Connectivity commands
+------------------------
+
+function Interface:_OnTASServer(protocolVersion, springVersion, udpPort, serverMode)
+	self:_OnConnect(protocolVersion, springVersion, udpPort, serverMode)
+end
+Interface.commands["TASServer"] = Interface._OnTASServer
+Interface.commandPattern["TASServer"] = "(%S+)%s+(%S+)%s+(%S+)%s+(%S+)"
+
+function Interface:_OnAccepted()
+	self:super("_OnAccepted")
+end
+Interface.commands["ACCEPTED"] = Interface._OnAccepted
+Interface.commandPattern["ACCEPTED"] = "(%S+)"
+
+function Interface:_OnDenied(reason)
+	self:super("_OnDenied", reason)
+end
+Interface.commands["DENIED"] = Interface._OnDenied
+Interface.commandPattern["DENIED"] = "(.+)"
+
+function Interface:_OnAgreement(line)
+	self:super("_OnAgreement", line)
+end
+Interface.commands["AGREEMENT"] = Interface._OnAgreement
+Interface.commandPattern["AGREEMENT"] = "(.*)"
+
+function Interface:_OnAgreementEnd()
+	self:super("_OnAgreementEnd")
+end
+Interface.commands["AGREEMENTEND"] = Interface._OnAgreementEnd
+
+function Interface:_OnRegistrationAccepted()
+	self:super("_OnRegistrationAccepted")
+end
+Interface.commands["REGISTRATIONACCEPTED"] = Interface._OnRegistrationAccepted
+
+function Interface:_OnRegistrationDenied(reason)
+	self:super("_OnRegistrationDenied", reason)
+end
+Interface.commands["REGISTRATIONDENIED"] = Interface._OnRegistrationDenied
+Interface.commandPattern["REGISTRATIONDENIED"] = "([^\t]+)"
+
+function Interface:_OnPong()
+	self:super("_OnPong")
+end
+Interface.commands["PONG"] = Interface._OnPong
+
+------------------------
+-- User commands
+------------------------
+
+function Interface:_OnAddUser(userName, country, cpu, accountID)
+	cpu = tonumber(cpu)
+	accountID = tonumber(accountID)
+	self:super("_OnAddUser", userName, country, cpu, accountID)
+end
+Interface.commands["ADDUSER"] = Interface._OnAddUser
+Interface.commandPattern["ADDUSER"] = "(%S+)%s+(%S%S)%s+(%S+)%s*(.*)"
+
+function Interface:_OnRemoveUser(userName)
+	self:super("_OnRemoveUser", userName)
+end
+Interface.commands["REMOVEUSER"] = Interface._OnRemoveUser
+Interface.commandPattern["REMOVEUSER"] = "(%S+)"
+
+function Interface:_OnClientStatus(userName, status)
+	self:_OnUpdateUserStatus(userName, {
+		isInGame = (status%2 == 1),
+		isAway   = (status%4 >= 2),
+		rank     = (status%64 >= 32),
+		isBot    = (status%128 >= 64),
+	})
+end
+Interface.commands["CLIENTSTATUS"] = Interface._OnClientStatus
+Interface.commandPattern["CLIENTSTATUS"] = "(%S+)%s+(%S+)"
+
+------------------------
+-- Battle commands
+------------------------
+
+-- mapHash (32bit) will remain a string, since spring lua uses floats (24bit mantissa)
+function Interface:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other)
+	battleID = tonumber(battleID)
+	type = tonumber(type)
+	natType = tonumber(natType)
+	port = tonumber(port)
+	maxPlayers = tonumber(maxPlayers)
+	passworded = tonumber(passworded) ~= 0
+
+	local engineName, engineVersion, map, title, gameName = unpack(explode("\t", other))
+
+	self:super("_OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, engineName, engineVersion, map, title, gameName)
+end
+Interface.commands["BATTLEOPENED"] = Interface._OnBattleOpened
+Interface.commandPattern["BATTLEOPENED"] = "(%d+)%s+(%d)%s+(%d)%s+(%S+)%s+(%S+)%s+(%d+)%s+(%d+)%s+(%d+)%s+(%S+)%s+(%S+)%s*(.*)"
+
+function Interface:_OnBattleClosed(battleID)
+	battleID = tonumber(battleID)
+	self:super("_OnBattleClosed", battleID)
+end
+Interface.commands["BATTLECLOSED"] = Interface._OnBattleClosed
+Interface.commandPattern["BATTLECLOSED"] = "(%d+)"
+
+-- hashCode will be a string due to lua limitations
+function Interface:_OnJoinBattle(battleID, hashCode)
+	battleID = tonumber(battleID)
+	self:super("_OnJoinBattle", battleID, hashCode)
+end
+Interface.commands["JOINBATTLE"] = Interface._OnJoinBattle
+Interface.commandPattern["JOINBATTLE"] = "(%d+)%s+(%S+)"
+
+function Interface:_OnJoinedBattle(battleID, userName, scriptPassword)
+	battleID = tonumber(battleID)
+	self:super("_OnJoinedBattle", battleID, userName, scriptPassword)
+end
+Interface.commands["JOINEDBATTLE"] = Interface._OnJoinedBattle
+Interface.commandPattern["JOINEDBATTLE"] = "(%d+)%s+(%S+)%s*(%S*)"
+
+-- TODO: Missing _OnBattleScriptPassword
+
+function Interface:_OnLeftBattle(battleID, userName)
+	battleID = tonumber(battleID)
+	self:super("_OnLeftBattle", battleID, userName)
+end
+Interface.commands["LEFTBATTLE"] = Interface._OnLeftBattle
+Interface.commandPattern["LEFTBATTLE"] = "(%d+)%s+(%S+)"
+
+function Interface:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName)
+	battleID = tonumber(battleID)
+	self:super("_OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName)
+end
+Interface.commands["UPDATEBATTLEINFO"] = Interface._OnUpdateBattleInfo
+Interface.commandPattern["UPDATEBATTLEINFO"] = "(%d+)%s+(%S+)%s+(%S+)%s+(%S+)%s+([^\t]+)"
+
+function Interface:_OnClientBattleStatus(userName, battleStatus, teamColor)
+	battleStatus = tonumber(battleStatus)
+	self:_OnUpdateUserBattleStatus(userName, {
+		isReady    = (battleStatus%2 == 1),
+		teamNumber = (battleStatus%4 >= 2),
+		allyNumber = (battleStatus%4 >= 2),
+		mode       = (battleStatus%4 >= 2),
+		handicap   = (battleStatus%4 >= 2),
+		sync       = (battleStatus%4 >= 2),
+		side       = (battleStatus%4 >= 2),
+		-- teamColor
+	})
+-- 	self:_OnUpdateUserBattleStatus(userName, battleStatus, teamColor)
+end
+Interface.commands["CLIENTBATTLESTATUS"] = Interface._OnClientBattleStatus
+Interface.commandPattern["CLIENTBATTLESTATUS"] = "(%S+)%s+(%S+)%s+(%S+)"
+
+function Interface:_OnSaidBattle(userName, message)
+	self:super("_OnSaidBattle", userName, message)
+end
+Interface.commands["SAIDBATTLE"] = Interface._OnSaidBattle
+Interface.commandPattern["SAIDBATTLE"] = "(%S+)%s+(.*)"
+
+function Interface:_OnSaidBattleEx(userName, message)
+	self:super("_OnSaidBattleEx", userName, message)
+end
+Interface.commands["SAIDBATTLEEX"] = Interface._OnSaidBattleEx
+Interface.commandPattern["SAIDBATTLEEX"] = "(%S+)%s+(.*)"
+
+------------------------
+-- Channel & private chat commands
+------------------------
+
+function Interface:_OnJoin(chanName)
+	self:super("_OnJoin", chanName)
+end
+Interface.commands["JOIN"] = Interface._OnJoin
+Interface.commandPattern["JOIN"] = "(%S+)"
+
+function Interface:_OnJoined(chanName, userName)
+	self:super("_OnJoined", chanName, userName)
+end
+Interface.commands["JOINED"] = Interface._OnJoined
+Interface.commandPattern["JOINED"] = "(%S+)%s+(%S+)"
+
+function Interface:_OnJoinFailed(chanName, reason)
+	self:super("_OnJoinFailed", chanName, reason)
+end
+Interface.commands["JOINFAILED"] = Interface._OnJoinFailed
+Interface.commandPattern["JOINFAILED"] = "(%S+)%s+([^\t]+)"
+
+function Interface:_OnLeft(chanName, userName, reason)
+	self:super("_OnLeft", chanName, userName, reason)
+end
+Interface.commands["LEFT"] = Interface._OnLeft
+Interface.commandPattern["LEFT"] = "(%S+)%s+(%S+)%s*([^\t]*)"
+
+function Interface:_OnClients(chanName, clientsStr)
+	local clients = explode(" ", clientsStr)
+	self:super("_OnClients", chanName, clients)
+end
+Interface.commands["CLIENTS"] = Interface._OnClients
+Interface.commandPattern["CLIENTS"] = "(%S+)%s+(.+)"
+
+function Interface:_OnChannel(chanName, userCount, topic)
+	userCount = tonumber(userCount)
+	self:super("_OnChannel", chanName, userCount, topic)
+end
+Interface.commands["CHANNEL"] = Interface._OnChannel
+Interface.commandPattern["CHANNEL"] = "(%S+)%s+(%d+)%s*(.*)"
+
+function Interface:_OnEndOfChannels()
+	self:_CallListeners("OnEndOfChannels")
+end
+Interface.commands["ENDOFCHANNELS"] = Interface._OnEndOfChannels
+
+function Interface:_OnChannelMessage(chanName, message)
+	self:super("_OnChannelMessage", chanName, message)
+end
+Interface.commands["CHANNELMESSAGE"] = Interface._OnChannelMessage
+Interface.commandPattern["CHANNELMESSAGE"] = "(%S+)%s+(%S+)"
+
+function Interface:_OnChannelTopic(chanName, author, changedTime, topic)
+	self:super("_OnChannelTopic", chanName, author, changedTime, topic)
+end
+Interface.commands["CHANNELTOPIC"] = Interface._OnChannelTopic
+Interface.commandPattern["CHANNELTOPIC"] = "(%S+)%s+(%S+)%s+(%S+)%s+([^\t]+)"
+
+function Interface:_OnNoChannelTopic(chanName)
+	self:super("_OnNoChannelTopic", chanName)
+end
+Interface.commands["NOCHANNELTOPIC"] = Interface._OnNoChannelTopic
+Interface.commandPattern["NOCHANNELTOPIC"] = "(%S+)"
+
+function Interface:_OnSaid(chanName, userName, message)
+	self:super("_OnSaid", chanName, userName, message)
+end
+Interface.commands["SAID"] = Interface._OnSaid
+Interface.commandPattern["SAID"] = "(%S+)%s+(%S+)%s+(.*)"
+
+function Interface:_OnSaidEx(chanName, userName, message)
+	self:super("_OnSaidEx", chanName, userName, message)
+end
+Interface.commands["SAIDEX"] = Interface._OnSaidEx
+Interface.commandPattern["SAIDEX"] = "(%S+)%s+(%S+)%s+(.*)"
+
+function Interface:_OnSaidPrivate(userName, message)
+	self:super("_OnSaidPrivate", userName, message)
+end
+Interface.commands["SAIDPRIVATE"] = Interface._OnSaidPrivate
+Interface.commandPattern["SAIDPRIVATE"] = "(%S+)%s+(.*)"
+
+function Interface:_OnSaidPrivateEx(userName, message)
+	self:super("_OnSaidPrivateEx", userName, message)
+end
+Interface.commands["SAIDPRIVATEEX"] = Interface._OnSaidPrivateEx
+Interface.commandPattern["SAIDPRIVATEEX"] = "(%S+)%s+(.*)"
+
+function Interface:_OnSayPrivate(userName, message)
+	self:super("_OnSayPrivate", userName, message)
+end
+Interface.commands["SAYPRIVATE"] = Interface._OnSayPrivate
+Interface.commandPattern["SAYPRIVATE"] = "(%S+)%s+(.*)"
+
+------------
+------------
+-- TODO
+------------
+------------
 
 function Interface:UpdateBotStatus(data)
 	Spring.Echo("Implement UpdateBotStatus with ADDBOT etc..")
@@ -149,26 +542,6 @@ function Interface:InviteTeamDecline(userName)
 	return self
 end 
 
-function Interface:Join(chanName, key)
-	self:_SendCommand(concat("JOIN", chanName, key))
-	return self
-end
-
-function Interface:JoinBattle(battleID, password, scriptPassword)
-	self:_SendCommand(concat("JOINBATTLE", battleID, password, scriptPassword))
-	return self
-end
-
-function Interface:JoinBattleAccept(userName)
-	self:_SendCommand(concat("JOINBATTLEACCEPT", userName))
-	return self
-end
-
-function Interface:JoinBattleDeny(userName, reason)
-	self:_SendCommand(concat("JOINBATTLEDENY", userName, reason))
-	return self
-end
-
 function Interface:JoinQueue(name, params)
 	local tbl = {name=name}
 	if params ~= nil then
@@ -198,16 +571,6 @@ function Interface:KickFromTeam(userName)
 	return self
 end
 
-function Interface:Leave(chanName)
-	self:_SendCommand(concat("LEAVE", chanName))
-	return self
-end
-
-function Interface:LeaveBattle()
-	self:_SendCommand("LEAVEBATTLE")
-	return self
-end
-
 function Interface:LeaveTeam()
 	self:_SendCommand("LEAVETEAM")
 	return self
@@ -228,24 +591,8 @@ function Interface:ListQueues()
 	return self
 end
 
-function Interface:Login(user, password, cpu, localIP)
-	if localIP == nil then
-		localIP = "*"
-	end
-	password = VFS.CalculateHash(password, 0)
-	self:_SendCommand(concat("LOGIN", user, password, cpu, localIP, "LuaLobby\t", "0\t", "a b m cl et p"))
-	return self
-end
-
 function Interface:MuteList(chanName)
 	self:_SendCommand(concat("MUTELIST", chanName))
-	return self
-end
-
-function Interface:MyBattleStatus(ready, team, allyTeam, mode, handicap, sync, side, myTeamColor)
-	local battleStatus = tostring((ready and 2 or 0) + (mode and 2^10 or 0) + (sync and 2^22 or 2^23))
-	myTeamColor = myTeamColor or math.floor(math.random() * 255 * 2^16 + math.random() * 255 * 2^8 + math.random() * 255)
-	self:_SendCommand(concat("MYBATTLESTATUS", battleStatus, myTeamColor))
 	return self
 end
 
@@ -261,11 +608,6 @@ end
 
 function Interface:OpenQueue(queue)
 	self:_SendCommand(concat("OPENQUEUE", json.encode({queue=queue})))
-	return self
-end
-
-function Interface:Ping()
-	self:_SendCommand("PING", true)
 	return self
 end
 
@@ -325,45 +667,20 @@ function Interface:Ring(userName)
 	return self
 end
 
-function Interface:Say(chanName, message)
-	self:_SendCommand(concat("SAY", chanName, message))
-	return self
-end
-
-function Interface:SayBattle(message)
-	self:_SendCommand(concat("SAYBATTLE", message))
-	return self
-end
-
-function Interface:SayBattleEx(message)
-	self:_SendCommand(concat("SAYBATTLEEX", message))
-	return self
-end
-
-function Interface:SayData(chanName, message)
-	self:_SendCommand(concat("SAYDATA", chanName, message))
-	return self
-end
-
-function Interface:SayDataBattle(message)
-	self:_SendCommand(concat("SAYDATABATTLE", message))
-	return self
-end
-
-function Interface:SayDataPrivate(userName, message)
-	self:_SendCommand(concat("SAYDATAPRIVATE", userName, message))
-	return self
-end
-
-function Interface:SayEx(chanName, message)
-	self:_SendCommand(concat("SAYEX", chanName, message))
-	return self
-end
-
-function Interface:SayPrivate(userName, message)
-	self:_SendCommand(concat("SAYPRIVATE", userName, message))
-	return self
-end
+-- function Interface:SayData(chanName, message)
+-- 	self:_SendCommand(concat("SAYDATA", chanName, message))
+-- 	return self
+-- end
+-- 
+-- function Interface:SayDataBattle(message)
+-- 	self:_SendCommand(concat("SAYDATABATTLE", message))
+-- 	return self
+-- end
+-- 
+-- function Interface:SayDataPrivate(userName, message)
+-- 	self:_SendCommand(concat("SAYDATAPRIVATE", userName, message))
+-- 	return self
+-- end
 
 function Interface:SayTeam(msg)
 	self:_SendCommand(concat("SAYTEAM", json.encode({msg=msg})))
@@ -415,12 +732,6 @@ function Interface:UpdateBot(name, battleStatus, teamColor)
 	return self
 end
 
-function Interface:_OnAccepted(username)
-	self:_CallListeners("OnAccepted", username)
-end
-Interface.commands["ACCEPTED"] = Interface._OnAccepted
-Interface.commandPattern["ACCEPTED"] = "(%S+)"
-
 --TODO: should also send a respond with USERID
 function Interface:_OnAcquireUserID()
 	self:_CallListeners("OnAcquireUserID", username)
@@ -441,97 +752,17 @@ end
 Interface.commands["ADDSTARTRECT"] = Interface._OnAddStartRect
 Interface.commandPattern["ADDSTARTRECT"] = "(%S+)%s+(%S+)%s+(%S+)%s+(%S+)%s+(%S+)"
 
-function Interface:_OnAddUser(userName, country, cpu, accountID)
-	cpu = tonumber(cpu)
-	accountID = tonumber(accountID)
-	self:_CallListeners("OnAddUser", userName, country, cpu, accountID)
-end
-Interface.commands["ADDUSER"] = Interface._OnAddUser
-Interface.commandPattern["ADDUSER"] = "(%S+)%s+(%S%S)%s+(%S+)%s*(.*)"
-
-function Interface:_OnAgreement(line)
-	self:_CallListeners("OnAgreement", line)
-end
-Interface.commands["AGREEMENT"] = Interface._OnAgreement
-Interface.commandPattern["AGREEMENT"] = "(.*)"
-
-function Interface:_OnAgreementEnd()
-	self:_CallListeners("OnAgreementEnd")
-end
-Interface.commands["AGREEMENTEND"] = Interface._OnAgreementEnd
-
-function Interface:_OnBattleClosed(battleID)
-	battleID = tonumber(battleID)
-	self:_CallListeners("OnBattleClosed", battleID)
-end
-Interface.commands["BATTLECLOSED"] = Interface._OnBattleClosed
-Interface.commandPattern["BATTLECLOSED"] = "(%d+)"
-
--- mapHash (32bit) will remain a string, since spring lua uses floats (24bit mantissa)
-function Interface:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other)
-	battleID = tonumber(battleID)
-	type = tonumber(type)
-	natType = tonumber(natType)
-	port = tonumber(port)
-	maxPlayers = tonumber(maxPlayers)
-	passworded = tonumber(passworded) ~= 0
-
-	local engineName, engineVersion, map, title, gameName = unpack(explode("\t", other))
-
-	self:_CallListeners("OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, engineName, engineVersion, map, title, gameName)
-end
-Interface.commands["BATTLEOPENED"] = Interface._OnBattleOpened
-Interface.commandPattern["BATTLEOPENED"] = "(%d+)%s+(%d)%s+(%d)%s+(%S+)%s+(%S+)%s+(%d+)%s+(%d+)%s+(%d+)%s+(%S+)%s+(%S+)%s*(.*)"
-
 function Interface:_OnBroadcast(message)
 	self:_CallListeners("OnBroadcast", message)
 end
 Interface.commands["BROADCAST"] = Interface._OnBroadcast
 Interface.commandPattern["BROADCAST"] = "(.+)"
 
-function Interface:_OnChannel(chanName, userCount, topic)
-	userCount = tonumber(userCount)
-	self:_CallListeners("OnChannel", chanName, userCount, topic)
-end
-Interface.commands["CHANNEL"] = Interface._OnChannel
-Interface.commandPattern["CHANNEL"] = "(%S+)%s+(%d+)%s*(.*)"
-
-function Interface:_OnChannelMessage(chanName, message)
-	self:_CallListeners("OnChannelMessage", chanName, message)
-end
-Interface.commands["CHANNELMESSAGE"] = Interface._OnChannelMessage
-Interface.commandPattern["CHANNELMESSAGE"] = "(%S+)%s+(%S+)"
-
-function Interface:_OnChannelTopic(chanName, author, changedTime, topic)
-	self:_CallListeners("OnChannelTopic", chanName, author, changedTime, topic)
-end
-Interface.commands["CHANNELTOPIC"] = Interface._OnChannelTopic
-Interface.commandPattern["CHANNELTOPIC"] = "(%S+)%s+(%S+)%s+(%S+)%s+([^\t]+)"
-
-function Interface:_OnClientBattleStatus(userName, battleStatus, teamColor)
-	self:_CallListeners("OnClientBattleStatus", userName, battleStatus, teamColor)
-end
-Interface.commands["CLIENTBATTLESTATUS"] = Interface._OnClientBattleStatus
-Interface.commandPattern["CLIENTBATTLESTATUS"] = "(%S+)%s+(%S+)%s+(%S+)"
-
 function Interface:_OnClientIpPort(userName, ip, port)
 	self:_CallListeners("OnClientIpPort", userName, ip, port)
 end
 Interface.commands["CLIENTIPPORT"] = Interface._OnClientIpPort
 Interface.commandPattern["CLIENTIPPORT"] = "(%S+)%s+(%S+)%s+(%S+)"
-
-function Interface:_OnClients(chanName, clientsStr)
-	local clients = explode(" ", clientsStr)
-	self:_CallListeners("OnClients", chanName, clients)
-end
-Interface.commands["CLIENTS"] = Interface._OnClients
-Interface.commandPattern["CLIENTS"] = "(%S+)%s+(.+)"
-
-function Interface:_OnClientStatus(userName, status)
-	self:_ProcessClientStatus(userName, (status%2 == 1), (status%4 >= 2), (status%64 >= 32), (status%128 >= 64))
-end
-Interface.commands["CLIENTSTATUS"] = Interface._OnClientStatus
-Interface.commandPattern["CLIENTSTATUS"] = "(%S+)%s+(%S+)"
 
 function Interface:_OnCompFlags(compFlags)
 	compFlags = explode("\t", compflags)
@@ -549,12 +780,6 @@ function Interface:_OnConnectUserFailed(obj)
 	self:_CallListeners("OnConnectUserFailed", obj.userName, obj.reason)
 end
 Interface.jsonCommands["CONNECTUSERFAILED"] = Interface._OnConnectUserFailed
-
-function Interface:_OnDenied(reason)
-	self:_CallListeners("OnDenied", reason)
-end
-Interface.commands["DENIED"] = Interface._OnDenied
-Interface.commandPattern["DENIED"] = "(.+)"
 
 function Interface:_OnDisableUnits(unitNames)
 	unitNames = explode(" ", unitNames)
@@ -574,11 +799,6 @@ function Interface:_OnEnableUnits(unitNames)
 end
 Interface.commands["ENABLEUNITS"] = Interface._OnEnableUnits
 Interface.commandPattern["ENABLEUNITS"] = "(.+)"
-
-function Interface:_OnEndOfChannels()
-	self:_CallListeners("OnEndOfChannels")
-end
-Interface.commands["ENDOFCHANNELS"] = Interface._OnEndOfChannels
 
 function Interface:_OnForceJoinBattle(destinationBattleID, destinationBattlePassword)
 	destinationBattleID = tonumber(destinationBattleID)
@@ -611,20 +831,6 @@ end
 Interface.commands["HOSTPORT"] = Interface._OnHostPort
 Interface.commandPattern["HOSTPORT"] = "(%d+)"
 
-function Interface:_OnJoin(chanName)
-	self:_CallListeners("OnJoin", chanName)
-end
-Interface.commands["JOIN"] = Interface._OnJoin
-Interface.commandPattern["JOIN"] = "(%S+)"
-
--- hashCode will be a string due to lua limitations
-function Interface:_OnJoinBattle(battleID, hashCode)
-	battleID = tonumber(battleID)
-	self:_CallListeners("OnJoinBattle", battleID, hashCode)
-end
-Interface.commands["JOINBATTLE"] = Interface._OnJoinBattle
-Interface.commandPattern["JOINBATTLE"] = "(%d+)%s+(%S+)"
-
 function Interface:_OnJoinBattleFailed(reason)
 	self:_CallListeners("OnJoinBattleFailed", reason)
 end
@@ -636,25 +842,6 @@ function Interface:_OnJoinBattleRequest(userName, ip)
 end
 Interface.commands["JOINBATTLEREQUEST"] = Interface._OnJoinBattleRequest
 Interface.commandPattern["JOINBATTLEREQUEST"] = "(%S+)%s+(%S+)"
-
-function Interface:_OnJoined(chanName, userName)
-	self:_CallListeners("OnJoined", chanName, userName)
-end
-Interface.commands["JOINED"] = Interface._OnJoined
-Interface.commandPattern["JOINED"] = "(%S+)%s+(%S+)"
-
-function Interface:_OnJoinedBattle(battleID, userName, scriptPassword)
-	battleID = tonumber(battleID)
-	self:_CallListeners("OnJoinedBattle", battleID, userName, scriptPassword)
-end
-Interface.commands["JOINEDBATTLE"] = Interface._OnJoinedBattle
-Interface.commandPattern["JOINEDBATTLE"] = "(%d+)%s+(%S+)%s*(%S*)"
-
-function Interface:_OnJoinFailed(chanName, reason)
-	self:_CallListeners("OnJoinFailed", chanName, reason)
-end
-Interface.commands["JOINFAILED"] = Interface._OnJoinFailed
-Interface.commandPattern["JOINFAILED"] = "(%S+)%s+([^\t]+)"
 
 function Interface:_OnJoinQueue(obj)
 	local name = obj.name
@@ -698,19 +885,6 @@ function Interface:_OnJoinedTeam(obj)
 end
 Interface.jsonCommands["JOINEDTEAM"] = Interface._OnJoinedTeam
 
-function Interface:_OnLeft(chanName, userName, reason)
-	self:_CallListeners("OnLeft", chanName, userName, reason)
-end
-Interface.commands["LEFT"] = Interface._OnLeft
-Interface.commandPattern["LEFT"] = "(%S+)%s+(%S+)%s*([^\t]*)"
-
-function Interface:_OnLeftBattle(battleID, userName)
-	battleID = tonumber(battleID)
-	self:_CallListeners("OnLeftBattle", battleID, userName)
-end
-Interface.commands["LEFTBATTLE"] = Interface._OnLeftBattle
-Interface.commandPattern["LEFTBATTLE"] = "(%d+)%s+(%S+)"
-
 function Interface:_OnLeftQueue(obj)
 	self:_CallListeners("OnLeftQueue", obj.name, obj.reason)
 end
@@ -727,12 +901,6 @@ function Interface:_OnLoginInfoEnd()
 	self:_CallListeners("OnLoginInfoEnd")
 end
 Interface.commands["LOGININFOEND"] = Interface._OnLoginInfoEnd
-
-function Interface:_OnMOTD(message)
-	self:_CallListeners("OnMOTD", message)
-end
-Interface.commands["MOTD"] = Interface._OnMOTD
-Interface.commandPattern["MOTD"] = "([^\t]*)"
 
 function Interface:_OnMuteList(muteDescription)
 	self:_CallListeners("OnMuteList", muteDescription)
@@ -751,12 +919,6 @@ function Interface:_OnMuteListEnd()
 end
 Interface.commands["MUTELISTEND"] = Interface._OnMuteListEnd
 
-function Interface:_OnNoChannelTopic(chanName)
-	self:_CallListeners("OnNoChannelTopic", chanName)
-end
-Interface.commands["NOCHANNELTOPIC"] = Interface._OnNoChannelTopic
-Interface.commandPattern["NOCHANNELTOPIC"] = "(%S+)"
-
 function Interface:_OnOpenBattle(battleID)
 	battleID = tonumber(battleID)
 	self:_CallListeners("OnOpenBattle", battleID)
@@ -769,11 +931,6 @@ function Interface:_OnOpenBattleFailed(reason)
 end
 Interface.commands["OPENBATTLEFAILED"] = Interface._OnOpenBattleFailed
 Interface.commandPattern["OPENBATTLEFAILED"] = "([^\t]+)"
-
-function Interface:_OnPong()
-	self:_CallListeners("OnPong")
-end
-Interface.commands["PONG"] = Interface._OnPong
 
 function Interface:_OnQueueOpened(obj)
 	self:_CallListeners("OnQueueOpened", obj)
@@ -811,17 +968,6 @@ end
 Interface.commands["REDIRECT"] = Interface._OnRedirect
 Interface.commandPattern["REDIRECT"] = "(%S+)"
 
-function Interface:_OnRegistrationAccepted()
-	self:_CallListeners("OnRegistrationAccepted")
-end
-Interface.commands["REGISTRATIONACCEPTED"] = Interface._OnRegistrationAccepted
-
-function Interface:_OnRegistrationDenied(reason)
-	self:_CallListeners("OnRegistrationDenied", reason)
-end
-Interface.commands["REGISTRATIONDENIED"] = Interface._OnRegistrationDenied
-Interface.commandPattern["REGISTRATIONDENIED"] = "([^\t]+)"
-
 function Interface:_OnRemoveBot(battleID, name)
 	battleID = tonumber(battleID)
 	self:_CallListeners("OnRemoveBot", battleID, name)
@@ -843,12 +989,6 @@ end
 Interface.commands["REMOVESTARTRECT"] = Interface._OnRemoveStartRect
 Interface.commandPattern["REMOVESTARTRECT"] = "(%d+)"
 
-function Interface:_OnRemoveUser(userName)
-	self:_CallListeners("OnRemoveUser", userName)
-end
-Interface.commands["REMOVEUSER"] = Interface._OnRemoveUser
-Interface.commandPattern["REMOVEUSER"] = "(%S+)"
-
 function Interface:_OnRequestBattleStatus()
 	self:_CallListeners("OnRequestBattleStatus")
 end
@@ -860,65 +1000,23 @@ end
 Interface.commands["RING"] = Interface._OnRing
 Interface.commandPattern["RING"] = "(%S+)"
 
-function Interface:_OnSaid(chanName, userName, message)
-	self:_CallListeners("OnSaid", chanName, userName, message)
-end
-Interface.commands["SAID"] = Interface._OnSaid
-Interface.commandPattern["SAID"] = "(%S+)%s+(%S+)%s+(.*)"
-
-function Interface:_OnSaidBattle(userName, message)
-	self:_CallListeners("OnSaidBattle", userName, message)
-end
-Interface.commands["SAIDBATTLE"] = Interface._OnSaidBattle
-Interface.commandPattern["SAIDBATTLE"] = "(%S+)%s+(.*)"
-
-function Interface:_OnSaidBattleEx(userName, message)
-	self:_CallListeners("OnSaidBattleEx", userName, message)
-end
-Interface.commands["SAIDBATTLEEX"] = Interface._OnSaidBattleEx
-Interface.commandPattern["SAIDBATTLEEX"] = "(%S+)%s+(.*)"
-
-function Interface:_OnSaidData(chanName, userName, message)
-	self:_CallListeners("OnSaidData", chanName, userName, message)
-end
-Interface.commands["SAIDDATA"] = Interface._OnSaidData
-Interface.commandPattern["SAIDDATA"] = "(%S+)%s+(%S+)%s+(.*)"
-
-function Interface:_OnSaidDataBattle(userName, message)
-	self:_CallListeners("OnSaidDataBattle", userName, message)
-end
-Interface.commands["SAIDDATABATTLE"] = Interface._OnSaidDataBattle
-Interface.commandPattern["SAIDDATABATTLE"] = "(%S+)%s+(.*)"
-
-function Interface:_OnSaidDataPrivate(userName, message)
-	self:_CallListeners("OnSaidDataPrivate", userName, message)
-end
-Interface.commands["SAIDDATAPRIVATE"] = Interface._OnSaidDataPrivate
-Interface.commandPattern["SAIDDATAPRIVATE"] = "(%S+)%s+(.*)"
-
-function Interface:_OnSaidEx(chanName, userName, message)
-	self:_CallListeners("OnSaidEx", chanName, userName, message)
-end
-Interface.commands["SAIDEX"] = Interface._OnSaidEx
-Interface.commandPattern["SAIDEX"] = "(%S+)%s+(%S+)%s+(.*)"
-
-function Interface:_OnSaidPrivate(userName, message)
-	self:_CallListeners("OnSaidPrivate", userName, message)
-end
-Interface.commands["SAIDPRIVATE"] = Interface._OnSaidPrivate
-Interface.commandPattern["SAIDPRIVATE"] = "(%S+)%s+(.*)"
-
-function Interface:_OnSaidPrivateEx(userName, message)
-	self:_CallListeners("OnSaidPrivateEx", userName, message)
-end
-Interface.commands["SAIDPRIVATEEX"] = Interface._OnSaidPrivateEx
-Interface.commandPattern["SAIDPRIVATEEX"] = "(%S+)%s+(.*)"
-
-function Interface:_OnSayPrivate(userName, message)
-	self:_CallListeners("OnSayPrivate", userName, message)
-end
-Interface.commands["SAYPRIVATE"] = Interface._OnSayPrivate
-Interface.commandPattern["SAYPRIVATE"] = "(%S+)%s+(.*)"
+-- function Interface:_OnSaidData(chanName, userName, message)
+-- 	self:_CallListeners("OnSaidData", chanName, userName, message)
+-- end
+-- Interface.commands["SAIDDATA"] = Interface._OnSaidData
+-- Interface.commandPattern["SAIDDATA"] = "(%S+)%s+(%S+)%s+(.*)"
+-- 
+-- function Interface:_OnSaidDataBattle(userName, message)
+-- 	self:_CallListeners("OnSaidDataBattle", userName, message)
+-- end
+-- Interface.commands["SAIDDATABATTLE"] = Interface._OnSaidDataBattle
+-- Interface.commandPattern["SAIDDATABATTLE"] = "(%S+)%s+(.*)"
+-- 
+-- function Interface:_OnSaidDataPrivate(userName, message)
+-- 	self:_CallListeners("OnSaidDataPrivate", userName, message)
+-- end
+-- Interface.commands["SAIDDATAPRIVATE"] = Interface._OnSaidDataPrivate
+-- Interface.commandPattern["SAIDDATAPRIVATE"] = "(%S+)%s+(.*)"
 
 function Interface:_OnSaidTeam(obj)
 	local userName = obj.userName
@@ -934,21 +1032,21 @@ function Interface:_OnSaidTeamEx(obj)
 end
 Interface.jsonCommands["SAIDTEAMEX"] = Interface._OnSaidTeamEx
 
-function Interface:_OnScript(line)
-	self:_CallListeners("OnScript", line)
-end
-Interface.commands["SCRIPT"] = Interface._OnScript
-Interface.commandPattern["SCRIPT"] = "([^\t]+)"
-
-function Interface:_OnScriptEnd()
-	self:_CallListeners("OnScriptEnd")
-end
-Interface.commands["SCRIPTEND"] = Interface._OnScriptEnd
-
-function Interface:_OnScriptStart()
-	self:_CallListeners("OnScriptStart")
-end
-Interface.commands["SCRIPTSTART"] = Interface._OnScriptStart
+-- function Interface:_OnScript(line)
+-- 	self:_CallListeners("OnScript", line)
+-- end
+-- Interface.commands["SCRIPT"] = Interface._OnScript
+-- Interface.commandPattern["SCRIPT"] = "([^\t]+)"
+-- 
+-- function Interface:_OnScriptEnd()
+-- 	self:_CallListeners("OnScriptEnd")
+-- end
+-- Interface.commands["SCRIPTEND"] = Interface._OnScriptEnd
+-- 
+-- function Interface:_OnScriptStart()
+-- 	self:_CallListeners("OnScriptStart")
+-- end
+-- Interface.commands["SCRIPTSTART"] = Interface._OnScriptStart
 
 function Interface:_OnServerMSG(message)
 	self:_CallListeners("OnServerMSG", message)
@@ -975,12 +1073,6 @@ function Interface:_OnSetTeamLeader(obj)
 end
 Interface.jsonCommands["SETTEAMLEADER"] = Interface._OnSetTeamLeader
 
-function Interface:_OnTASServer(protocolVersion, springVersion, udpPort, serverMode)
-	self:_CallListeners("OnTASServer", protocolVersion, springVersion, udpPort, serverMode)
-end
-Interface.commands["TASServer"] = Interface._OnTASServer
-Interface.commandPattern["TASServer"] = "(%S+)%s+(%S+)%s+(%S+)%s+(%S+)"
-
 function Interface:_OnTestLoginAccept(message)
 	self:_CallListeners("OnTestLoginAccept", message)
 end
@@ -997,13 +1089,6 @@ function Interface:_OnUDPSourcePort(port)
 end
 Interface.commands["UDPSOURCEPORT"] = Interface._OnUDPSourcePort
 Interface.commandPattern["UDPSOURCEPORT"] = "(%d+)"
-
-function Interface:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName)
-	battleID = tonumber(battleID)
-	self:_CallListeners("OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName)
-end
-Interface.commands["UPDATEBATTLEINFO"] = Interface._OnUpdateBattleInfo
-Interface.commandPattern["UPDATEBATTLEINFO"] = "(%d+)%s+(%S+)%s+(%S+)%s+(%S+)%s+([^\t]+)"
 
 function Interface:_OnUpdateBot(battleID, name, battleStatus, teamColor)
 	battleID = tonumber(battleID)

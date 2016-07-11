@@ -1,12 +1,12 @@
-WrapperSkirmish = Observable:extends()
+InterfaceSkirmish = Lobby:extends()
 
-function WrapperSkirmish:init(myUserName)
+function InterfaceSkirmish:init()
 	self.listeners = {}
 	-- don't use these fields directly, they are subject to change
 	self:_Clean()
 end
 
-function WrapperSkirmish:_Clean()
+function InterfaceSkirmish:_Clean()
 	self.battle = {}
 	self.battleID = nil
 	
@@ -15,6 +15,14 @@ function WrapperSkirmish:_Clean()
 	self.scriptPassword = nil
 	
 	self.battlePlayerData = {}
+
+	self.isReady = nil
+	self.teamNumber = nil
+	self.teamColor = nil
+	self.allyNumber = nil
+	self.isSpectator = nil
+	self.sync = nil
+	self.side = nil
 end
 
 local function ScriptTXT(script)
@@ -45,7 +53,7 @@ local function ScriptTXT(script)
 	return string
 end
 
-function WrapperSkirmish:_StartScript(gameName, mapName, playerName)
+function InterfaceSkirmish:_StartScript(gameName, mapName, playerName)
 	local allyTeams = {}
 	local allyTeamCount = 0
 	local teams = {}
@@ -137,7 +145,7 @@ end
 ------------------------------------------------------------------------
 -- Listeners
 ------------------------------------------------------------------------
-function WrapperSkirmish:_OnUpdateBattleInfo(spectatorCount, locked, mapHash, mapName)
+function InterfaceSkirmish:_OnUpdateBattleInfo(spectatorCount, locked, mapHash, mapName)
 	self.battle.spectatorCount = spectatorCount or self.battle.spectatorCount
 	self.battle.locked = locked or self.battle.locked
 	self.battle.mapHash = mapHash or self.battle.mapHash
@@ -145,16 +153,17 @@ function WrapperSkirmish:_OnUpdateBattleInfo(spectatorCount, locked, mapHash, ma
 	self:_CallListeners("OnUpdateBattleInfo", self:GetMyBattleID(), spectatorCount, locked, mapHash, mapName)
 end
 
-function WrapperSkirmish:_OnLeftBattle()
+function InterfaceSkirmish:_OnLeftBattle()
 	self:_CallListeners("OnLeftBattle", self:GetMyBattleID(), self:GetMyUserName())
 end
 
-function WrapperSkirmish:_OnJoinedBattle()
+function InterfaceSkirmish:_OnJoinedBattle()
 	self:_CallListeners("OnJoinedBattle", self:GetMyBattleID(), self:GetMyUserName())
 end
 
-function WrapperSkirmish:_UpdateUserBattleStatus(data)
-	if data.Name then
+-- TODO: fix and just use lobby!
+function InterfaceSkirmish:_UpdateUserBattleStatus(data)
+	if data.userName then
 		if not self.battlePlayerData[data.Name] then
 			self.battlePlayerData[data.Name] = {}
 		end
@@ -167,11 +176,11 @@ function WrapperSkirmish:_UpdateUserBattleStatus(data)
 		userData.AiLib = data.AiLib or userData.AiLib
 		userData.Sync = data.Sync or userData.Sync
 		
-		data.AllyNumber = userData.AllyNumber
-		data.TeamNumber = userData.TeamNumber
-		data.IsSpectator = userData.IsSpectator
-		data.AiLib = userData.AiLib
-		data.Sync = userData.Sync
+		data.allyNumber = self.allyNumber
+		data.teamNumber = self.teamNumber
+		data.isSpectator = self.isSpectator
+		data.sync = self.sync
+		data.aiLib = userData.aiLib
 	end
 	self:_CallListeners("UpdateUserBattleStatus", data)
 end
@@ -184,34 +193,34 @@ function WrapperSkirmish:_RemoveBot(data)
 	self:_CallListeners("RemoveBot", data)
 end
 
-function WrapperSkirmish:_OnSaidBattle(userName, message)
+function InterfaceSkirmish:_OnSaidBattle(userName, message)
 	self:_CallListeners("OnSaidBattle", userName, message)
 end
 
-function WrapperSkirmish:_OnSaidBattleEx(userName, message)
+function InterfaceSkirmish:_OnSaidBattleEx(userName, message)
 	self:_CallListeners("OnSaidBattleEx", userName, message)
 end
 
-function WrapperSkirmish:_OnBattleClosed()
+function InterfaceSkirmish:_OnBattleClosed()
 	self:_CallListeners("OnBattleClosed", self:GetMyBattleID())
 end
 
 ------------------------------------------------------------------------
 -- Getters
 ------------------------------------------------------------------------
-function WrapperSkirmish:GetMyBattleID()
+function InterfaceSkirmish:GetMyBattleID()
 	return self.battleID
 end
 
-function WrapperSkirmish:GetMyUserName()
+function InterfaceSkirmish:GetMyUserName()
 	return self.myUserName
 end
 
-function WrapperSkirmish:GetBattle()
+function InterfaceSkirmish:GetBattle()
 	return self.battle
 end
 
-function Wrapper:GetMyIsSpectator()
+function InterfaceSkirmish:GetMyIsSpectator()
 	if self.battlePlayerData[self.myUserName] then		
 		return self.battlePlayerData[self.myUserName].IsSpectator
 	end
@@ -221,7 +230,7 @@ end
 -- Setters
 ------------------------------------------------------------------------
 
-function WrapperSkirmish:AddAi(aiName, allyNumber, Name)
+function InterfaceSkirmish:AddAi(aiName, allyNumber, Name)
 	local botData = {
 		AllyNumber = allyNumber or 0,
 		AiLib = aiName or "NullAI",
@@ -231,11 +240,11 @@ function WrapperSkirmish:AddAi(aiName, allyNumber, Name)
 	self:_UpdateBotStatus(botData)
 end
 
-function WrapperSkirmish:SelectMap(mapName)
+function InterfaceSkirmish:SelectMap(mapName)
 	self:_OnUpdateBattleInfo(0, false, 0, mapName)
 end
 
-function WrapperSkirmish:StartBattle()
+function InterfaceSkirmish:StartBattle()
 	if self.battle.gameName and self.battle.mapName then
 		self:_CallListeners("BattleAboutToStart")
 		self:_OnSaidBattleEx("Battle", "about to start")
@@ -244,24 +253,24 @@ function WrapperSkirmish:StartBattle()
 	return self
 end
 
-function WrapperSkirmish:SayBattle(message)
+function InterfaceSkirmish:SayBattle(message)
 	self:_OnSaidBattle(self:GetMyUserName(), message)
 	return self
 end
 
-function WrapperSkirmish:SetBattleStatus(battleData)
-	battleData.Name = self:GetMyUserName()
+function InterfaceSkirmish:SetBattleStatus(battleData)
+	battleData.userName = self:GetMyUserName()
 	self:_UpdateUserBattleStatus(battleData)
 	return self
 end
 
-function WrapperSkirmish:LeaveBattle()
+function InterfaceSkirmish:LeaveBattle()
 	self:_OnLeftBattle()
 	self:_OnBattleClosed()
 	return self
 end
 
-function WrapperSkirmish:SetBattleState(myUserName, gameName, mapName, battleName)
+function InterfaceSkirmish:SetBattleState(myUserName, gameName, mapName, battleName)
 	self.myUserName = myUserName
 	self.battle.gameName = gameName
 	self.battle.mapName = mapName
@@ -271,4 +280,4 @@ function WrapperSkirmish:SetBattleState(myUserName, gameName, mapName, battleNam
 	return self
 end
 
-return WrapperSkirmish
+return InterfaceSkirmish

@@ -1,3 +1,13 @@
+VFS.Include(LIB_LOBBY_DIRNAME .. "lobby.lua")
+
+LOG_SECTION = "liblobby"
+
+if not Spring.GetConfigInt("LuaSocketEnabled", 0) == 1 then
+	Spring.Log(LOG_SECTION, LOG.ERROR, "LuaSocketEnabled is disabled")
+	return false
+end
+
+Interface = Lobby:extends{}
 
 function Interface:init()
 -- dumpConfig()
@@ -11,22 +21,24 @@ function Interface:init()
 
 	-- private
 	self.buffer = ""
+
+	self:super("init")
 end
 
 function Interface:Connect(host, port)
+	self:super("Connect", host, port)
 	self.client = socket.tcp()
 	self.client:settimeout(0)
 	self._startedConnectingTime = os.clock()
 	local res, err = self.client:connect(host, port)
 	if res == nil and err == "host not found" then
 		self:_OnDisconnected("Host not found")
-		return false
 		-- The socket is expected to return "timeout" immediately since timeout time is set  to 0
 	elseif not (res == nil and err == "timeout") then 
 		Spring.Log(LOG_SECTION, LOG.ERROR, "Error in connect: " .. err)
-		return false
-	end
-	self.status = "connecting"
+    else
+        self.status = "connecting"
+    end
 	return true
 end
 
@@ -85,7 +97,7 @@ function Interface:CommandReceived(command)
 end
 
 function Interface:_GetCommandPattern(cmdName)
-	return Wrapper.commandPattern[cmdName]
+	return Interface.commandPattern[cmdName]
 end
 
 function Interface:_GetCommandFunction(cmdName)
@@ -195,6 +207,7 @@ function Interface:_SocketUpdate()
 end
 
 function Interface:SafeUpdate()
+	self:super("SafeUpdate")
 	self:_SocketUpdate()
 	-- prevent timeout with PING
 	if self.status == "connected" then
@@ -206,6 +219,6 @@ function Interface:SafeUpdate()
 end
 
 function Interface:Update()
-	xpcall(function() self:SafeUpdate() end, 
+	xpcall(function() self:SafeUpdate() end,
 		function(err) self:_PrintError(err) end )
 end
