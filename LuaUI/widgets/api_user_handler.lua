@@ -43,6 +43,7 @@ function userHandler.GetBattleUser(userName)
 	end
 	
 	battleControls[userName] = Label:New { 
+		name = userName,
 		name = name,
 		x = 5,
 		y = 0,
@@ -61,6 +62,7 @@ function userHandler.GetChannelUser(userName)
 	end
 	
 	channelControls[userName] = Button:New {
+		name = userName,
 		x = 0,
 		width = 100,
 		y = 0,

@@ -477,13 +477,15 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 				end
 				playerData.team = teamIndex
 				local playerControl = playerData.control
-				teamStack:AddChild(playerControl)
-				playerControl:SetPos(nil, (#teamStack.children - 1)*SPACING)
-				playerControl:Invalidate()
-				
-				teamHolder:SetPos(nil, nil, nil, #teamStack.children*SPACING + 35)
-				PositionChildren(parentStack, parentScroll.height)
-				teamHolder:Invalidate()
+				if not teamStack:GetChildByName(playerControl.name) then
+					teamStack:AddChild(playerControl)
+					playerControl:SetPos(nil, (#teamStack.children - 1)*SPACING)
+					playerControl:Invalidate()
+					
+					teamHolder:SetPos(nil, nil, nil, #teamStack.children*SPACING + 35)
+					PositionChildren(parentStack, parentScroll.height)
+					teamHolder:Invalidate()
+				end
 			end
 			
 			function teamData.RemovePlayer(name)
