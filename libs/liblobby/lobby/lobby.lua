@@ -81,6 +81,11 @@ function Lobby:StartBattle()
 	return self
 end
 
+function Lobby:SelectMap(mapName)
+	self:SayBattle("!map " .. mapName)
+end
+
+
 
 -------------------------------------------------
 -- BEGIN Client commands
