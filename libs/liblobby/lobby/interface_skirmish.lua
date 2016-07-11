@@ -153,8 +153,8 @@ function InterfaceSkirmish:SetBattleStatus(status)
 end
 
 function InterfaceSkirmish:LeaveBattle()
-	self:_CallListeners("OnLeftBattle", self.myBattleID, self.myUserName)
-	self:_CallListeners("OnBattleClosed", self.myBattleID)
+	self:_OnLeftBattle()
+	self:_OnBattleClosed()
 	return self
 end
 
