@@ -14,7 +14,6 @@ DetachableTabPanel = LayoutPanel:Inherit{
   resizeItems   = false,
   itemPadding   = {0, 0, 0, 0},
   itemMargin    = {0, 0, 0, 0},
-  barHeight     = 40,
   tabs          = {},
   currentTab    = {},
   OnTabChange   = {},
@@ -38,12 +37,12 @@ function DetachableTabPanel:New(obj)
 		x = 0,
 		y = 0,
 		right = 0,
-		height = obj.barHeight,
+		bottom = 0,
 	}
   
 	obj.currentTab = Control:New {
 		x = 0,
-		y = obj.barHeight,
+		y = 0,
 		right = 0,
 		bottom = 0,
 		padding = {0, 0, 0, 0},
@@ -111,4 +110,5 @@ function DetachableTabPanel:ChangeTab(tabname)
 	self.currentFrame:SetVisibility(true)
 	self:CallListeners(self.OnTabChange, tabname)
 end
+
 --//=============================================================================

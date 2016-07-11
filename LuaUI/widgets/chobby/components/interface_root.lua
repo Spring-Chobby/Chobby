@@ -224,14 +224,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	local function UpdateChildLayout()
 		if fullscreenMode then
-			local chatTabs = chatWindows.tabPanel
-			local chatTabsName = chatTabs.tabBar.name
-			if not chatTabs:GetChildByName(chatTabsName) then
-				chatTabs:AddChild(chatTabs.tabBar)
-				chatTabs.tabBar:BringToFront()
-				chatTabs.tabBar:UpdateClientArea()
-				chatTabs:Invalidate()
-			end
+			chatWindows:ReattachTabHolder()
 			
 			rightPanelHandler.UpdateLayout(panelWindow, false)
 			if not contentPlace:IsEmpty() then
@@ -242,22 +235,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				end
 			end
 		else
-			local chatTabs = chatWindows.tabPanel
-			local chatTabsName = chatTabs.tabBar.name
-			if not screen0:GetChildByName(chatTabsName) then
-				screen0:AddChild(chatTabs.tabBar)
-				chatTabs.tabBar:SetPos(titleHeight, titleHeight - panelButtonsHeight + 14)
-				chatTabs.tabBar._relativeBounds.right = 0
-				chatTabs.tabBar:UpdateClientArea()
-				
-				chatTabs.OnTabClick = {
-					function()
-						local control, index = rightPanelHandler.GetManagedControlByName(chatWindows.window.name)
-						rightPanelHandler.OpenTab(index)
-					end
-				}
-			end
-			
+			chatWindows:SetTabHolderParent(screen0, titleHeight, titleHeight - panelButtonsHeight + 4)
 			
 			rightPanelHandler.UpdateLayout(contentPlace, true)
 			if contentPlace:IsEmpty() and not panelWindow:IsEmpty() then

@@ -149,11 +149,11 @@ function ChatWindows:init()
 	self.tabPanel = Chili.DetachableTabPanel:New {
 		x = 10, 
 		right = 10,
-		y = 20, 
-		bottom = 0,
+		y = 0, 
+		bottom = 10,
 		padding = {0, 0, 0, 0},
 		tabs = {
-			{ name = i18n("server"), children = {self.serverPanel} },
+			--{ name = i18n("server"), children = {self.serverPanel} },
 			{ name = i18n("debug"), children = {self.debugConsole.panel} },
 		},
 		OnTabChange = {
@@ -167,13 +167,44 @@ function ChatWindows:init()
 					WG.Delay(function()
 						screen0:FocusControl(console.ebInputText)
 					end, 0.01)
+					Spring.Echo("now on tab", name)
 				end
 			end
 		}
 	}
-	self.tabPanel:AddChild(self.tabPanel.tabBar)
-	self.tabPanel.tabBar:BringToFront()
 	self.tabPanel.tabBar:DisableHighlight()
+	
+	self.tabBarHolder = Control:New {
+		name = "tabBarHolder",
+		x = 0,
+		y = 0,
+		width = "100%",
+		height = 50,
+		resizable = false,
+		draggable = false,
+		padding = {10, 10, 0, 0},
+		children = {
+			self.tabPanel.tabBar
+		}
+	}
+	
+	self.joinButton = Button:New {
+		x = 2000,
+		y = 5,
+		width = 30,
+		height = 30,
+		parent = self.tabBarHolder,
+		caption = "+",
+		OnClick = { 
+			function()
+				if self.joinWindow == nil then
+					self:CreateJoinChannelWindow()
+				end
+			end
+		},
+	},
+	
+	self.tabBarHolder:BringToFront()
 	
 	self.window = Control:New {
 		x = 0,
@@ -186,18 +217,7 @@ function ChatWindows:init()
 		padding = {5, 0, 5, 0},
 		children = {
 			self.tabPanel,
-			Button:New {
-				width = 60,
-				y = 10,
-				right = 2,
-				height = 40,
-				caption = i18n("join"),
-				OnClick = { function()
-					if self.joinWindow == nil then
-						self:CreateJoinChannelWindow()
-					end
-				end },
-			},
+			self.tabBarHolder,
 		},
 		OnOrphan = {
 			function (obj)
@@ -209,6 +229,40 @@ function ChatWindows:init()
 				self.tabPanel.tabBar:EnableHighlight()
 			end
 		},
+	}
+	
+	self:ReattachTabHolder()
+	self:UpdateJoinPosition()
+end
+
+function ChatWindows:ReattachTabHolder()
+	if not self.window:GetChildByName(self.tabBarHolder.name) then
+		self.window:AddChild(self.tabBarHolder)
+	end
+	self.tabBarHolder:SetPos(0,0)
+	self.tabBarHolder:BringToFront()
+	self.tabBarHolder:UpdateClientArea(false)
+	
+	self.tabPanel._relativeBounds.top = 50
+	self.tabPanel:UpdateClientArea(false)
+	self.tabPanel:Invalidate()
+end
+
+function ChatWindows:SetTabHolderParent(newParent, newX, newY)
+	if not newParent:GetChildByName(self.tabBarHolder.name) then
+		newParent:AddChild(self.tabBarHolder)
+	end
+	self.tabBarHolder:SetPos(newX, newY)
+	self.tabPanel._relativeBounds.top = 15
+	self.tabPanel:UpdateClientArea(false)
+	self.tabPanel:Invalidate()
+		
+	self.tabPanel.OnTabClick = {
+		function()
+			local rightPanelHandler = interfaceRoot.GetRightPanelHandler()
+			local control, index = rightPanelHandler.GetManagedControlByName(self.window.name)
+			rightPanelHandler.OpenTab(index)
+		end
 	}
 end
 
@@ -369,6 +423,10 @@ function ChatWindows:UpdateChannels(channelsArray)
 	end
 end
 
+function ChatWindows:UpdateJoinPosition()
+	self.joinButton:SetPos(#self.tabPanel.tabBar.children * 70 + 10)
+end
+
 function ChatWindows:GetChannelConsole(chanName)
 	local channelConsole = self.channelConsoles[chanName]
 
@@ -394,7 +452,7 @@ function ChatWindows:GetChannelConsole(chanName)
 				},
 				Control:New {
 					width = 144, y = 0, right = 0, bottom = 0,
-					padding={0,0,0,0}, itemPadding={0,0,0,0}, itemMargin={0,0,0,0},
+					padding={0,0,0,5}, itemPadding={0,0,0,0}, itemMargin={0,0,0,0},
 					children = { userListPanel.panel, },
 				},
 				Button:New {
@@ -405,13 +463,16 @@ function ChatWindows:GetChannelConsole(chanName)
 							self.channelConsoles[chanName] = nil
 							lobby:Leave(chanName)
 							self.tabPanel:RemoveTab(name)
+							self:UpdateJoinPosition()
 						end
 					},
 				},
 			}
 		})
 		self.tabbars[name] = channelConsole
-
+		
+		self:UpdateJoinPosition()
+		
 		lobby:AddListener("OnClients",
 			function(listener, clientsChanName, clients)
 				if chanName == clientsChanName then
@@ -448,12 +509,15 @@ function ChatWindows:GetPrivateChatConsole(userName)
 						function()
 							self.privateChatConsoles[userName] = nil
 							self.tabPanel:RemoveTab(name)
+							self:UpdateJoinPosition()
 						end
 					},
 				}
 			}
 		})
 		self.tabbars[name] = privateChatConsole
+		
+		self:UpdateJoinPosition()
 	end
 
 	return privateChatConsole
