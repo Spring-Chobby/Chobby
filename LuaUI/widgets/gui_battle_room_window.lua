@@ -403,6 +403,7 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 	end
 	
 	local function GetTeam(teamIndex)
+		teamIndex = teamIndex or -1
 		if not team[teamIndex] then
 			if teamIndex == emptyTeamIndex then
 				local checkTeam = teamIndex + 1
