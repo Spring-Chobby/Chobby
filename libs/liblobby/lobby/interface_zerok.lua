@@ -351,16 +351,12 @@ Interface.jsonCommands["Say"] = Interface._Say
 
 function Interface:_UpdateBotStatus(data)
 	-- SetModOptions {"Options":{}}
-	self:_UpdateUserBattleStatus(data)
+	self:_OnUpdateUserBattleStatus(data)
 end
 Interface.jsonCommands["UpdateBotStatus"] = Interface._UpdateBotStatus
 
-function Interface:_PreRemoveBot(data)
-	self:RemoveBot(bot.Name)
-end
-
-function Interface:_RemoveBot(botName)
-	self:_CallListeners("RemoveBot", botName)
+function Interface:_RemoveBot(data)
+	self:_OnRemoveAi(self:GetMyBattleID(), data.Name)
 end
 Interface.jsonCommands["RemoveBot"] = Interface._RemoveBot
 

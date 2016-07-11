@@ -1,3 +1,7 @@
+-- The API is mostly inspired by the official Spring protocol with some major differences such as:
+-- AI is used to denote a game AI, while bot is only used for automated lobby bots
+-- TODO: rest
+
 VFS.Include(LIB_LOBBY_DIRNAME .. "observable.lua")
 VFS.Include(LIB_LOBBY_DIRNAME .. "utilities.lua")
 
@@ -119,6 +123,14 @@ function Lobby:LeaveBattle()
 end
 
 function Lobby:SetBattleStatus(status)
+	return self
+end
+
+function Lobby:AddAi(aiName, allyNumber, Name)
+	return self
+end
+
+function Lobby:RemoveAi(aiName)
 	return self
 end
 
@@ -257,7 +269,7 @@ function Lobby:_OnUpdateUserStatus(userName, status)
 		if self.myBattleID then
 			local myBattle = self:GetBattle(self.myBattleID)
 			if myBattle and myBattle.founder == userName then
-				self:_CallListeners("BattleAboutToStart")
+				self:_CallListeners("OnBattleAboutToStart")
 				StartBattle(self.myBattleID)
 			end
 		end
@@ -307,7 +319,7 @@ function Lobby:_OnLeftBattle(battleID, userName)
 	if self:GetMyUserName() == userName then
 		self.myBattleID = nil
 	end
-	
+
 	local battleUsers = self.battles[battleID].users
 	for i, v in pairs(battleUsers) do
 		if v == userName then
@@ -340,13 +352,32 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	if status.isSpectator ~= nil then
 		userData.isSpectator = status.isSpectator
 	end
-	userData.sync = status.sync or userData.sync
+	userData.sync       = status.sync or userData.sync
+	userData.aiLib      = status.aiLib or userData.aiLib
 	
-	status.allyNumber = userData.allyNumber
-	status.teamNumber = userData.teamNumber
-	status.isSpectator = userData.isSpectator
-	status.sync = userData.sync
-	self:_CallListeners("_OnUpdateUserBattleStatus", userName, status)
+	status.allyNumber   = userData.allyNumber
+	status.teamNumber   = userData.teamNumber
+	status.isSpectator  = userData.isSpectator
+	status.sync         = userData.sync
+	status.aiLib        = userData.aiLib
+	self:_CallListeners("OnUpdateUserBattleStatus", userName, status)
+end
+
+function Lobby:_OnAddAi(battleID, aiName, aiLib, allyNumber, owner)
+	-- TODO: maybe needs proper listeners
+	self:_OnJoinedBattle(battleID, aiName)
+	local status = {
+		allyNumber = allyNumber,
+		aiLib      = aiLib,
+		name       = aiName,
+		owner      = owner,
+	}
+	self:_OnUpdateUserBattleStatus(aiName, status)
+end
+
+function Lobby:_OnRemoveAi(battleID, aiName, aiLib, allyNumber, owner)
+	-- TODO: maybe needs proper listeners
+	self:_OnLeftBattle(battleID, aiName)
 end
 
 function Lobby:_OnSaidBattle(userName, message)
@@ -563,6 +594,21 @@ function Lobby:_GetChannel(chanName)
 		self.channelCount = self.channelCount + 1
 	end
 	return channel
+end
+
+function Lobby:GetUnusedTeamID()
+	local unusedTeamID = 0
+	local takenTeamID = {}
+	for name, data in pairs(self.userBattleStatus) do
+		if data.TeamNumber and not data.isSpectator then
+			local teamID = data.teamNumber
+			takenTeamID[teamID] = true
+			while takenTeamID[unusedTeamID] do
+				unusedTeamID = unusedTeamID + 1
+			end
+		end
+	end
+	return unusedTeamID
 end
 
 -------------------------------------------------

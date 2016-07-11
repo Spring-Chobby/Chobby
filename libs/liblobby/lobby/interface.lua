@@ -297,6 +297,22 @@ end
 Interface.commands["CLIENTBATTLESTATUS"] = Interface._OnClientBattleStatus
 Interface.commandPattern["CLIENTBATTLESTATUS"] = "(%S+)%s+(%S+)%s+(%S+)"
 
+function Interface:_OnAddBot(battleID, name, battleStatus, teamColor, aiDll)
+	battleID = tonumber(battleID)
+	local ai, dll = unpack(explode("\t", aiDll))
+	-- TODO: Fix params
+	self:_OnAddAi(battleID, name, battleStatus, teamColor, ai, dll)
+end
+Interface.commands["ADDBOT"] = Interface._OnAddBot
+Interface.commandPattern["ADDBOT"] = "(%d+)%s+(%S+)%s+(%S+)%s+(%S+)%s+(%S+)%s+(.*)"
+
+function Interface:_OnRemoveBot(battleID, name)
+	battleID = tonumber(battleID)
+	self:_OnRemoveAi(battleID, name)
+end
+Interface.commands["REMOVEBOT"] = Interface._OnRemoveBot
+Interface.commandPattern["REMOVEBOT"] = "(%d+)%s+(%S+)"
+
 function Interface:_OnSaidBattle(userName, message)
 	self:super("_OnSaidBattle", userName, message)
 end
@@ -738,14 +754,6 @@ function Interface:_OnAcquireUserID()
 end
 Interface.commands["ACQUIREUSERID"] = Interface._OnAcquireUserID
 
-function Interface:_OnAddBot(battleID, name, battleStatus, teamColor, aiDll)
-	battleID = tonumber(battleID)
-	local ai, dll = unpack(explode("\t", aiDll))
-	self:_CallListeners("OnAddBot", battleID, name, battleStatus, teamColor, ai, dll)
-end
-Interface.commands["ADDBOT"] = Interface._OnAddBot
-Interface.commandPattern["ADDBOT"] = "(%d+)%s+(%S+)%s+(%S+)%s+(%S+)%s+(%S+)%s+(.*)"
-
 function Interface:_OnAddStartRect(allyNo, left, top, right, bottom)
 	self:_CallListeners("OnAddStartRect", allyNo, left, top, right, bottom)
 end
@@ -967,13 +975,6 @@ function Interface:_OnRedirect(ip)
 end
 Interface.commands["REDIRECT"] = Interface._OnRedirect
 Interface.commandPattern["REDIRECT"] = "(%S+)"
-
-function Interface:_OnRemoveBot(battleID, name)
-	battleID = tonumber(battleID)
-	self:_CallListeners("OnRemoveBot", battleID, name)
-end
-Interface.commands["REMOVEBOT"] = Interface._OnRemoveBot
-Interface.commandPattern["REMOVEBOT"] = "(%d+)%s+(%S+)"
 
 function Interface:_OnRemoveScriptTags(keys)
 	keys = explode(" ", keys)

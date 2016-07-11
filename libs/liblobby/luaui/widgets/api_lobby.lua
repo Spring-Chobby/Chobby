@@ -44,10 +44,10 @@ function widget:Initialize()
 	else
 		Interface = VFS.Include(LIB_LOBBY_DIRNAME .. "interface.lua", nil, VFS.RAW_FIRST)
 	end
--- 	WrapperSkirmish = VFS.Include(LIB_LOBBY_DIRNAME .. "wrapper_skirmish.lua", nil, VFS.RAW_FIRST)
+	InterfaceSkirmish = VFS.Include(LIB_LOBBY_DIRNAME .. "interface_skirmish.lua", nil, VFS.RAW_FIRST)
 	self.lobby = Interface()
 
-	self.lobbySkirmish = self.lobby--WrapperSkirmish()
+	self.lobbySkirmish = InterfaceSkirmish()
 
 	--// Export Widget Globals
 	WG.LibLobby = {

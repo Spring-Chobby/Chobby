@@ -30,9 +30,9 @@ local onLeftBattle_counter
 local onJoinedBattle
 local onSaidBattle
 local onSaidBattleEx
-local updateUserBattleStatus
+local onUpdateUserBattleStatus
 local onLeftBattle
-local removeBot
+local onRemoveAi
 
 local battleLobby
 local wrapperControl
@@ -125,24 +125,6 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID)
 		OnClick = {
 			function()
 				WG.Chobby.MapListWindow(battleLobby)
-			end
-		},
-		parent = parentControl,
-	}
-	
-	local btnNewTeam = Button:New {
-		x = 10,
-		y = 65,
-		height = 45,
-		right = "50.5%",
-		caption = "\255\66\138\201" .. i18n("new_team") ..  "\b",
-		font = { size = 22 },
-		OnClick = {
-			function()
-				battleLobby:SetBattleStatus({
-					allyNumber = largestTeamIndex + 1, 
-					isSpectator = false,
-				})
 			end
 		},
 		parent = parentControl,
@@ -339,8 +321,8 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 		120,
 		function()
 			battleLobby:SetBattleStatus({
-				AllyNumber = emptyTeamIndex, 
-				IsSpectator = false,
+				allyNumber = emptyTeamIndex,
+				isSpectator = false,
 			})
 		end, 
 		function()
@@ -458,7 +440,7 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 					90,
 					function()
 						battleLobby:SetBattleStatus({
-								allyNumber = teamIndex, 
+								allyNumber = teamIndex,
 								isSpectator = false,
 							})
 					end, 
@@ -545,7 +527,7 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 		local playerData = GetPlayerData(name)
 		if playerData.team then
 			local teamObject = GetTeam(playerData.team)
-			teamObject.RemovePlayer(name)	
+			teamObject.RemovePlayer(name)
 		end
 	end
 	
@@ -557,42 +539,30 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 		end
 	end
 	
-	updateUserBattleStatus = function(listener, data)
-	Spring.Echo("UPDATE THING")
-	Spring.Echo(data)
-	for k, v in pairs(data) do
-		Spring.Echo(k, v)
-	end
-		local userName = data.userName
+	onUpdateUserBattleStatus = function(listener, userName, data)
 		local allyTeamID = data.allyNumber
-		if userName then
-			RemovePlayerFromTeam(userName)
-			if data.isSpectator then
-				AddPlayerToTeam(-1, userName)
-			elseif allyTeamID then
-				AddPlayerToTeam(allyTeamID, userName)
-			end
+		RemovePlayerFromTeam(userName)
+		if data.isSpectator then
+			AddPlayerToTeam(-1, userName)
+		elseif allyTeamID then
+			AddPlayerToTeam(allyTeamID, userName)
 		end
 	end
-	battleLobby:AddListener("UpdateUserBattleStatus", updateUserBattleStatus)
+	battleLobby:AddListener("OnUpdateUserBattleStatus", onUpdateUserBattleStatus)
 	
 	onLeftBattle = function(listener, leftBattleID, userName)
 		if leftBattleID == battleID then
-			if userName then
-				RemovePlayerFromTeam(userName)
-				GetPlayerData(userName).control:Dispose()
-			end
+			RemovePlayerFromTeam(userName)
+			GetPlayerData(userName).control:Dispose()
 		end
 	end
 	battleLobby:AddListener("OnLeftBattle", onLeftBattle)
 	
-	removeBot = function(listener, botName)
-		if botName then
-			RemovePlayerFromTeam(botName)
-			GetPlayerData(botName).control:Dispose()
-		end
+	onRemoveAi = function(listener, botName)
+		RemovePlayerFromTeam(botName)
+		GetPlayerData(botName).control:Dispose()
 	end
-	battleLobby:AddListener("RemoveBot", removeBot)
+	battleLobby:AddListener("OnRemoveAi", onRemoveAi)
 end
 
 local function InitializeControls(battleID, oldLobby)
@@ -614,9 +584,9 @@ local function InitializeControls(battleID, oldLobby)
 				oldLobby:RemoveListener("OnJoinedBattle", onJoinedBattle)
 				oldLobby:RemoveListener("OnSaidBattle", onSaidBattle)
 				oldLobby:RemoveListener("OnSaidBattleEx", onSaidBattleEx)
-				oldLobby:RemoveListener("UpdateUserBattleStatus", updateUserBattleStatus)
+				oldLobby:RemoveListener("OnUpdateUserBattleStatus", onUpdateUserBattleStatus)
 				oldLobby:RemoveListener("OnLeftBattle", onLeftBattle)
-				oldLobby:RemoveListener("RemoveBot", removeBot)
+				oldLobby:RemoveListener("OnRemoveAi", onRemoveAi)
 			end
 		},
 	}
@@ -809,7 +779,7 @@ function BattleRoomWindow.GetSingleplayerControl()
 				
 				local battleWindow = InitializeControls(1, battleLobby)
 				obj:AddChild(battleWindow)
-				
+
 				battleLobby:SetBattleStatus({
 					allyNumber = 0,
 					isSpectator = false,

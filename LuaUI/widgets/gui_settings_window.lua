@@ -331,8 +331,8 @@ function widget:Initialize()
 			Spring.SetConfigInt("Fullscreen", 1, false)
 		end
 	end
-	WG.LibLobby.lobby:AddListener("BattleAboutToStart", onBattleAboutToStart)
-	WG.LibLobby.lobbySkirmish:AddListener("BattleAboutToStart", onBattleAboutToStart)
+	WG.LibLobby.lobby:AddListener("OnBattleAboutToStart", onBattleAboutToStart)
+	WG.LibLobby.lobbySkirmish:AddListener("OnBattleAboutToStart", onBattleAboutToStart)
 	
 	WG.SettingsWindow = SettingsWindow
 end
@@ -341,7 +341,8 @@ function widget:Shutdown()
 	SetLobbyFullscreenMode(lobbyFullscreen)
 
 	if WG.LibLobby then
-		WG.LibLobby.lobbySkirmish:RemoveListener("BattleAboutToStart", onBattleAboutToStart)
+		WG.LibLobby.lobby:RemoveListener("OnBattleAboutToStart", onBattleAboutToStart)
+		WG.LibLobby.lobbySkirmish:RemoveListener("OnBattleAboutToStart", onBattleAboutToStart)
 	end
 end
 

@@ -19,7 +19,7 @@ function AiListWindow:init(lobby, gameName, allyTeam)
 			font = { size = 22 },
 			OnClick = {
 				function()
-					lobby:AddAi(ai.shortName, allyTeam)
+					lobby:AddAi(ai.shortName, ai.shortName, allyTeam)
 					self:HideWindow()
 				end
 			},
