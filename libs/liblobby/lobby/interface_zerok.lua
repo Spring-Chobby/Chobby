@@ -1,5 +1,5 @@
 -- Zero-K Server protocol implementation
--- TODO: Add URL for the protocol (There's a CS file?)
+-- https://github.com/ZeroK-RTS/Zero-K-Infrastructure/blob/master/Shared/LobbyClient/Protocol/Messages.cs
 
 VFS.Include(LIB_LOBBY_DIRNAME .. "json.lua")
 VFS.Include(LIB_LOBBY_DIRNAME .. "interface_shared.lua")
@@ -284,6 +284,7 @@ Interface.jsonCommands["BattleUpdate"] = Interface._BattleUpdate
 function Interface:_UpdateUserBattleStatus(data)
 	-- UpdateUserBattleStatus {"AllyNumber":0,"IsSpectator":true,"Name":"GoogleFrog","Sync":1,"TeamNumber":1}
 	local status = {
+		isSpectator = data.IsSpectator,
 		allyNumber = data.AllyNumber,
 		teamNumber = data.TeamNumber,
 		sync = data.Sync,

@@ -188,6 +188,11 @@ end
 Interface.commands["REGISTRATIONDENIED"] = Interface._OnRegistrationDenied
 Interface.commandPattern["REGISTRATIONDENIED"] = "([^\t]+)"
 
+function Interface:_OnLoginInfoEnd()
+	self:super("_OnLoginInfoEnd")
+end
+Interface.commands["LOGININFOEND"] = Interface._OnLoginInfoEnd
+
 function Interface:_OnPong()
 	self:super("_OnPong")
 end
@@ -904,11 +909,6 @@ function Interface:_OnLeftTeam(obj)
 	self:_CallListeners("OnLeftTeam", userName, reason)
 end
 Interface.jsonCommands["LEFTTEAM"] = Interface._OnLeftTeam
-
-function Interface:_OnLoginInfoEnd()
-	self:_CallListeners("OnLoginInfoEnd")
-end
-Interface.commands["LOGININFOEND"] = Interface._OnLoginInfoEnd
 
 function Interface:_OnMuteList(muteDescription)
 	self:_CallListeners("OnMuteList", muteDescription)

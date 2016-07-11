@@ -235,6 +235,10 @@ function Lobby:_OnRegistrationDenied(reason)
 	self:_CallListeners("OnRegistrationDenied", reason)
 end
 
+function Lobby:_OnLoginInfoEnd()
+	self:_CallListeners("OnLoginInfoEnd")
+end
+
 function Lobby:_OnPong()
 	self.pongTimer = Spring.GetTimer()
 	if self.pingTimer then
