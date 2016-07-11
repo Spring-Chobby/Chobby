@@ -81,10 +81,11 @@ end
 
 function Interface:SetBattleStatus(status)
 	local sendData = {
-		Name = self:GetMyUserName(),
-		AllyNumber = status.allyNumber,
-		TeamNumber = status.teamNumber,
-		Sync = status.sync,
+		Name        = self:GetMyUserName(),
+		IsSpectator = status.isSpectator,
+		AllyNumber  = status.allyNumber,
+		TeamNumber  = status.teamNumber,
+		Sync        = status.sync,
 	}
 
 	self:_SendCommand("UpdateUserBattleStatus " .. json.encode(sendData))
