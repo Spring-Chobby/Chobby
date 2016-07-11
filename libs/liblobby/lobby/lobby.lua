@@ -288,7 +288,7 @@ end
 function Lobby:_OnBattleIngameUpdate(userName, isInGame)
 	local battleID = self:GetBattleFoundedBy(userName)
 	if battleID then
-		self.battles.isRunning = isInGame
+		self.battles[battleID].isRunning = isInGame
 		self:_CallListeners("OnBattleIngameUpdate", battleID, isInGame)
 	end
 end
