@@ -21,29 +21,50 @@ local battleUsers = {}
 local channelUsers = {}
 local teamUsers = {}
 
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
--- Listeners
-
-local function AddListeners()
-
-end
-
-local function RemoveListeners()
-
-end
+local userListList = {
+	battleUsers,
+	channelUsers,
+	teamUsers
+}
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
 
-local function GetUserControl(userName)
+local function GetUserActivity(userName)
+	local userInfo = lobby:GetUser(userName) or {}
+	if userInfo.isInGame then
+		return "Ingame"
+	elseif userInfo.isAway then
+		if userInfo.battleID then
+			return "BatAFK"
+		else
+			return "AFK"
+		end
+	elseif userInfo.battleID then
+		return "Battle"
+	end
+	return "Lobby"
+end
 
-	local button = Button:New {
+local function UpdateUserActivity(listener, userName)
+	local activity = GetUserActivity(userName)
+	for i = 1, #userListList do
+		local userList = userListList[i]
+		if userList[userName] then
+			userList[userName].status:SetCaption(activity)
+		end
+	end
+end
+
+local function GetUserControls(userName)
+	local userControls = {}
+	
+	userControls.mainControl = Button:New {
 		name = userName,
 		x = 0,
 		y = 0,
-		width = 150,
+		right = 0,
 		height = 25,
 		caption = "",
 		backgroundColor = {0, 0, 0, 0},
@@ -57,20 +78,33 @@ local function GetUserControl(userName)
 		parent = screen0
 	}
 	
-	local name = Label:New {
-		name = userName,
-		x = 30,
+	userControls.name = Label:New {
+		name = "name",
+		x = 50,
 		y = 0,
 		right = 0,
 		bottom = 4,
 		valign = "center",
 		align = "left",
-		parent = button,
-		font = {size = 17, shadow = false},
+		parent = userControls.mainControl,
+		font = {size = 18, shadow = false},
 		caption = userName,
 	}
 	
-	return button
+	userControls.status = Label:New {
+		name = "status",
+		x = 2,
+		y = 0,
+		right = 0,
+		bottom = 4,
+		valign = "center",
+		align = "left",
+		parent = userControls.mainControl,
+		font = {size = 12, shadow = false},
+		caption = GetUserActivity(userName),
+	}
+	
+	return userControls
 end
 
 --------------------------------------------------------------------------------
@@ -80,45 +114,37 @@ local userHandler = {}
 
 function userHandler.GetBattleUser(userName)		
 	if battleUsers[userName] then
-		return battleUsers[userName]
+		return battleUsers[userName].mainControl
 	end
 	
-	battleUsers[userName] = Label:New { 
-		name = userName,
-		x = 5,
-		y = 0,
-		width = 200,
-		height = 30,
-		font = {size = 15},
-		caption = userName,
-	}
-	
-	return battleUsers[userName]
+	battleUsers[userName] = GetUserControls(userName)
+	return battleUsers[userName].mainControl
 end
 
 function userHandler.GetChannelUser(userName)		
 	if channelUsers[userName] then
-		return channelUsers[userName]
+		return channelUsers[userName].mainControl
 	end
 	
-	channelUsers[userName] = GetUserControl(userName)
-	return channelUsers[userName]
+	channelUsers[userName] = GetUserControls(userName)
+	return channelUsers[userName].mainControl
 end
 
 function userHandler.GetTeamUser(userName)		
 	if teamUsers[userName] then
-		return teamUsers[userName]
+		return teamUsers[userName].mainControl
 	end
 	
-	teamUsers[userName] = Button:New {
-		name = userName,
-		x = 0,
-		width = 100,
-		y = 0,
-		height = 30,
-		caption = userName,
-	}
-	return teamUsers[userName]
+	teamUsers[userName] = GetUserControls(userName)
+	return teamUsers[userName].mainControl
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Listeners
+
+local function AddListeners()
+	lobby:AddListener("OnUpdateUserStatus", UpdateUserActivity)
 end
 
 --------------------------------------------------------------------------------
@@ -132,12 +158,6 @@ function widget:Initialize()
 	AddListeners()
 	
 	WG.UserHandler = userHandler
-end
-
-function widget:Shutdown()
-	if WG.LibLobby then
-		RemoveListeners()
-	end
 end
 
 --------------------------------------------------------------------------------

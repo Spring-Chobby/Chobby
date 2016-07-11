@@ -508,17 +508,17 @@ function ChatWindows:GetChannelConsole(chanName)
 			caption = "#" .. chanName,
 			children = {
 				Control:New {
-					x = 0, y = 0, right = 185, bottom = 0,
+					x = 0, y = 0, right = Configuration.userListWidth, bottom = 0,
 					padding={0,0,0,0}, itemPadding={0,0,0,0}, itemMargin={0,0,0,0},
 					children = { channelConsole.panel, },
 				},
 				Control:New {
-					width = 184, y = 0, right = 0, bottom = 0,
+					width = Configuration.userListWidth - 1, y = 0, right = 0, bottom = 0,
 					padding={0,0,0,5}, itemPadding={0,0,0,0}, itemMargin={0,0,0,0},
 					children = { userListPanel.panel, },
 				},
 				Button:New {
-					width = 24, height = 24, y = 1, right = 185,
+					width = 24, height = 24, y = 1, right = Configuration.userListWidth,
 					caption = "x",
 					OnClick = {
 						function()

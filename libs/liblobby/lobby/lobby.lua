@@ -332,6 +332,10 @@ function Lobby:_OnJoinedBattle(battleID, userName, scriptPassword)
 	if self:GetMyUserName() == userName then
 		self.myBattleID = battleID
 	end
+	
+	self.users[userName].battleID = battleID
+	self:_CallListeners("OnUpdateUserStatus", userName, {battleID = battleID})
+	
 	self:_CallListeners("OnJoinedBattle", battleID, userName, scriptPassword)
 end
 
@@ -352,6 +356,10 @@ function Lobby:_OnLeftBattle(battleID, userName)
 			break
 		end
 	end
+	
+	self.users[userName].battleID = nil
+	self:_CallListeners("OnUpdateUserStatus", userName, {battleID = false})
+	
 	self:_CallListeners("OnLeftBattle", battleID, userName)
 end
 

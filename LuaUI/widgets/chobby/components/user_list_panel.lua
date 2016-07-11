@@ -9,6 +9,7 @@ function UserListPanel:init(userUpdateFunction, spacing)
 		right = 0,
 		y = 0,
 		bottom = 0,
+		horizontalScrollbar = false,
 	}
 
 	self.panel = Control:New {

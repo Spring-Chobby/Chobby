@@ -24,6 +24,8 @@ function Configuration:init()
 	self.buttonFocusColor = {0.54,0.72,1,0.3}
 	self.buttonSelectedColor = {0.54,0.72,1,0.6}--{1.0, 1.0, 1.0, 1.0}
 	
+	self.userListWidth = 200 -- Main user list width. Possibly configurable in the future.
+	
 	self.singleplayer_mode = 2
 end
 
