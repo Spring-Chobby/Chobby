@@ -1,7 +1,7 @@
 UserListPanel = LCS.class{}
 
-function UserListPanel:init(chanName)
-	self.chanName = chanName
+function UserListPanel:init(userUpdateFunction)
+	self.userUpdateFunction = userUpdateFunction
 
 	self.userPanel = ScrollPanel:New {
 		x = 0,
@@ -34,7 +34,7 @@ function UserListPanel:OnLeft(userName)
 end
 
 function UserListPanel:GetUsers()
-	local channel = lobby:GetChannel(self.chanName)
+	local channel = self.userUpdateFunction()
 	return (channel and channel.users) or {}
 end
 
@@ -47,10 +47,8 @@ function UserListPanel:Update()
 end
 
 function UserListPanel:AddUser(userName)
-	if lobby:GetUser(userName).isBot then return end
-	
-	if self.team and lobby:GetTeam() ~= nil and lobby:GetTeam().leader == userName then
-		userName = "♜" .. userName
+	if lobby:GetUser(userName).isBot then 
+		return 
 	end
 	
 	local userControl = WG.UserHandler.GetChannelUser(userName)

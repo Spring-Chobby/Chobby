@@ -501,7 +501,7 @@ function ChatWindows:GetChannelConsole(chanName)
 			lobby:Say(chanName, message)
 		end
 
-		local userListPanel = UserListPanel(chanName)
+		local userListPanel = UserListPanel(function() return lobby:GetChannel(chanName) end)
 		self.userListPanels[chanName] = userListPanel
 		
 		self.tabPanel:AddTab({
