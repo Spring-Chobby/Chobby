@@ -133,7 +133,11 @@ end
 -------------------------------------------------
 
 function InterfaceSkirmish:AddAi(aiName, aiLib, allyNumber)
-	self:_OnAddAi(self:GetMyBattleID(), aiName, aiLib, allyNumber, self:GetMyUserName())
+	self:_OnAddAi(self:GetMyBattleID(), aiName, {
+		aiLib = aiLib,
+		allyNumber = allyNumber,
+		owner = self:GetMyUserName(),
+	})
 end
 
 function InterfaceSkirmish:SayBattle(message)

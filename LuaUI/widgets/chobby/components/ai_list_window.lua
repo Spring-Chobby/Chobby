@@ -22,7 +22,23 @@ function AiListWindow:init(lobby, gameName, allyTeam)
 			font = { size = 22 },
 			OnClick = {
 				function()
-					lobby:AddAi(ai.shortName, ai.shortName, allyTeam)
+					local battle = lobby:GetBattle(lobby:GetMyBattleID())
+
+					local aiName
+					local counter = 1
+					local found = true
+					while found do
+						found = false
+						aiName = ai.shortName .. " (" .. tostring(counter) .. ")"
+						for _, userName in pairs(battle.users) do
+							if aiName == userName then
+								found = true
+								break
+							end
+						end
+						counter = counter + 1
+					end
+					lobby:AddAi(aiName, ai.shortName, allyTeam)
 					self:HideWindow()
 				end
 			},

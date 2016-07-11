@@ -549,12 +549,11 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 	end
 	
 	onUpdateUserBattleStatus = function(listener, userName, data)
-		local allyTeamID = data.allyNumber
 		RemovePlayerFromTeam(userName)
 		if data.isSpectator then
 			AddPlayerToTeam(-1, userName)
-		elseif allyTeamID then
-			AddPlayerToTeam(allyTeamID, userName)
+		else
+			AddPlayerToTeam(data.allyNumber, userName)
 		end
 	end
 	battleLobby:AddListener("OnUpdateUserBattleStatus", onUpdateUserBattleStatus)

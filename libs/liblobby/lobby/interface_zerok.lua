@@ -321,16 +321,14 @@ function Interface:_UpdateBotStatus(data)
 	local status = {
 		allyNumber    = data.AllyNumber,
 		teamNumber    = data.TeamNumber,
-		userName      = data.Name,
-		aiLib         = data.aiLib,
-		isSpectator   = false,
-		sync          = true,
+		aiLib         = data.AiLib,
+		owner         = data.Owner,
 	}
 	if not data.Name then
 		Spring.Log(LOG_SECTION, LOG.ERROR, "_UpdateBotStatus missing data.Name field")
 		return
 	end
-	self:_UpdateUserBattleStatus(data)
+	self:_OnAddAi(self:GetMyBattleID(), data.Name, status)
 end
 Interface.jsonCommands["UpdateBotStatus"] = Interface._UpdateBotStatus
 

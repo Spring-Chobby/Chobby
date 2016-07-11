@@ -360,7 +360,8 @@ function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, ma
 end
 
 -- Updates the specified status keys
--- Status keys can be: isAway, isInGame, isModerator, rank, isBot
+-- Status keys can be: isAway, isInGame, isModerator, rank, isBot, aiLib
+-- Bots have isBot=true, AIs have aiLib~=nil and humans are the remaining
 -- Example: _OnUpdateUserStatus("gajop", {isAway=false, isInGame=true})
 function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	if not self.userBattleStatus[userName] then
@@ -372,27 +373,25 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	if status.isSpectator ~= nil then
 		userData.isSpectator = status.isSpectator
 	end
-	userData.sync       = status.sync or userData.sync
+	userData.sync       = status.sync  or userData.sync
 	userData.aiLib      = status.aiLib or userData.aiLib
+	userData.owner      = status.owner or userData.owner
 	
 	status.allyNumber   = userData.allyNumber
 	status.teamNumber   = userData.teamNumber
 	status.isSpectator  = userData.isSpectator
 	status.sync         = userData.sync
 	status.aiLib        = userData.aiLib
+	status.owner        = userData.owner
 	self:_CallListeners("OnUpdateUserBattleStatus", userName, status)
 end
 
-function Lobby:_OnAddAi(battleID, aiName, aiLib, allyNumber, owner)
-	-- TODO: maybe needs proper listeners
+-- Also calls the OnUpdateUserBattleStatus
+function Lobby:_OnAddAi(battleID, aiName, status)
 	self:_OnJoinedBattle(battleID, aiName)
-	local status = {
-		allyNumber = allyNumber,
-		aiLib      = aiLib,
-		name       = aiName,
-		owner      = owner,
-	}
+	status.isSpectator = false
 	self:_OnUpdateUserBattleStatus(aiName, status)
+	self:_CallListeners("OnAddAi", aiName, status)
 end
 
 function Lobby:_OnRemoveAi(battleID, aiName, aiLib, allyNumber, owner)
