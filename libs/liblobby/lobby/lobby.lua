@@ -380,7 +380,12 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	if not self.userBattleStatus[userName] then
 		self.userBattleStatus[userName] = {}
 	end
+	
 	local userData = self.userBattleStatus[userName]
+	
+	local changedAllyTeam = (status.allyNumber ~= userData.allyNumber)
+	local changedSpectator = (status.isSpectator ~= userData.isSpectator)
+	
 	userData.allyNumber = status.allyNumber or userData.allyNumber
 	userData.teamNumber = status.teamNumber or userData.teamNumber
 	if status.isSpectator ~= nil then
@@ -397,6 +402,11 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	status.aiLib        = userData.aiLib
 	status.owner        = userData.owner
 	self:_CallListeners("OnUpdateUserBattleStatus", userName, status)
+	
+	if changedSpectator or changedAllyTeam then
+		--Spring.Echo("OnUpdateUserTeamStatus", changedAllyTeam, changedSpectator, "spectator", status.isSpectator, userData.isSpectator, "ally Team", status.allyNumber, userData.allyNumber)
+		self:_CallListeners("OnUpdateUserTeamStatus", userName, status.allyNumber, status.isSpectator)
+	end
 end
 
 -- Also calls the OnUpdateUserBattleStatus

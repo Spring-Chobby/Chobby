@@ -30,7 +30,7 @@ local onLeftBattle_counter
 local onJoinedBattle
 local onSaidBattle
 local onSaidBattleEx
-local onUpdateUserBattleStatus
+local onUpdateUserTeamStatus
 local onLeftBattle
 local onRemoveAi
 
@@ -551,15 +551,15 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 		end
 	end
 	
-	onUpdateUserBattleStatus = function(listener, userName, data)
+	onUpdateUserTeamStatus = function(listener, userName, allyNumber, isSpectator)
 		RemovePlayerFromTeam(userName)
-		if data.isSpectator then
+		if isSpectator then
 			AddPlayerToTeam(-1, userName)
 		else
-			AddPlayerToTeam(data.allyNumber, userName)
+			AddPlayerToTeam(allyNumber, userName)
 		end
 	end
-	battleLobby:AddListener("OnUpdateUserBattleStatus", onUpdateUserBattleStatus)
+	battleLobby:AddListener("OnUpdateUserTeamStatus", onUpdateUserTeamStatus)
 	
 	onLeftBattle = function(listener, leftBattleID, userName)
 		if leftBattleID == battleID then
@@ -593,7 +593,7 @@ local function InitializeControls(battleID, oldLobby)
 				oldLobby:RemoveListener("OnJoinedBattle", onJoinedBattle)
 				oldLobby:RemoveListener("OnSaidBattle", onSaidBattle)
 				oldLobby:RemoveListener("OnSaidBattleEx", onSaidBattleEx)
-				oldLobby:RemoveListener("OnUpdateUserBattleStatus", onUpdateUserBattleStatus)
+				oldLobby:RemoveListener("OnUpdateUserTeamStatus", onUpdateUserTeamStatus)
 				oldLobby:RemoveListener("OnLeftBattle", onLeftBattle)
 				oldLobby:RemoveListener("OnRemoveAi", onRemoveAi)
 				oldLobby:RemoveListener("OnBattleIngameUpdate", onBattleIngameUpdate)
