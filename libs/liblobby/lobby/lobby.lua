@@ -142,6 +142,28 @@ function Lobby:SayBattleEx(message)
 	return self
 end
 
+function Lobby:ConnectToBattle()
+	if not self.myBattleID then
+		Spring.Echo("Cannot connect to battle.")
+		return
+	end
+	self:_CallListeners("OnBattleAboutToStart")
+	
+	Spring.Echo("Game starts!")
+	local battle = self:GetBattle(self.myBattleID)
+	local springURL = "spring://" .. self:GetMyUserName() .. ":" .. self:GetScriptPassword() .. "@" .. battle.ip .. ":" .. battle.port
+	Spring.Echo(springURL)
+	Spring.Start(springURL, "")
+	--local scriptFileName = "scriptFile.txt"
+	--local scriptFile = io.open(scriptFileName, "w")
+	--local scriptTxt = GenerateScriptTxt(battleID)
+	--Spring.Echo(scriptTxt)
+	--scriptFile:write(scriptTxt)
+	--scriptFile:close()
+	--Spring.Restart(scriptFileName, "")
+	--Spring.Restart("", scriptTxt)
+end
+
 ------------------------
 -- Channel & private chat commands
 ------------------------
@@ -243,34 +265,17 @@ end
 -- Status keys can be: isAway, isInGame, isModerator, rank, isBot
 -- Example: _OnUpdateUserStatus("gajop", {isAway=false, isInGame=true})
 function Lobby:_OnUpdateUserStatus(userName, status)
-	-- TODO: Cleanup. This should be a separate callin.
-	local function StartBattle(battleID)
-		Spring.Echo("Game starts!")
-		local battle = self:GetBattle(battleID)
-		local springURL = "spring://" .. self:GetMyUserName() .. ":" .. self:GetScriptPassword() .. "@" .. battle.ip .. ":" .. battle.port
-		Spring.Echo(springURL)
-		Spring.Start(springURL, "")
-		--local scriptFileName = "scriptFile.txt"
-		--local scriptFile = io.open(scriptFileName, "w")
-		--local scriptTxt = GenerateScriptTxt(battleID)
-		--Spring.Echo(scriptTxt)
-		--scriptFile:write(scriptTxt)
-		--scriptFile:close()
-		--Spring.Restart(scriptFileName, "")
-		--Spring.Restart("", scriptTxt)
-	end
-
 	for k, v in pairs(status) do
 		self.users[userName][k] = v
 	end
 	self:_CallListeners("OnUpdateUserStatus", userName, status)
 
 	if status.isInGame ~= nil then
-		if self.myBattleID then
+		self:_OnBattleIngameUpdate(userName, status.isInGame)
+		if self.myBattleID and status.isInGame then
 			local myBattle = self:GetBattle(self.myBattleID)
 			if myBattle and myBattle.founder == userName then
-				self:_CallListeners("OnBattleAboutToStart")
-				StartBattle(self.myBattleID)
+				self:ConnectToBattle()
 			end
 		end
 	end
@@ -280,6 +285,14 @@ end
 -- Battle commands
 ------------------------
 
+function Lobby:_OnBattleIngameUpdate(userName, isInGame)
+	local battleID = self:GetBattleFoundedBy(userName)
+	if battleID then
+		self.battles.isRunning = isInGame
+		self:_CallListeners("OnBattleIngameUpdate", battleID, isInGame)
+	end
+end
+
 -- TODO: This function has an awful signature and should be reworked. At least make it use a key/value table.
 function Lobby:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName, title, gameName, spectatorCount)
 	self.battles[battleID] = { 
@@ -288,6 +301,9 @@ function Lobby:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPl
 		engineName=engineName, engineVersion=engineVersion, mapName=mapName, title=title, gameName=gameName, users={founder},
 	}
 	self.battleCount = self.battleCount + 1
+
+	self.battles[battleID].isRunning = self.users[founder].isInGame
+
 	self:_CallListeners("OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, engineName, engineVersion, map, title, gameName)
 end
 
@@ -640,9 +656,21 @@ end
 function Lobby:GetBattleCount()
 	return self.battleCount
 end
+
 function Lobby:GetBattle(battleID)
 	return self.battles[battleID]
 end
+
+function Lobby:GetBattleFoundedBy(userName)
+	-- TODO, improve data structures to make this search nice
+	for battleID, battleData in pairs(self.battles) do
+		if battleData.founder == userName then
+			return battleID
+		end
+	end
+	return false
+end
+
 -- returns battles table (not necessarily an array)
 function Lobby:GetBattles()
 	return ShallowCopy(self.battles)

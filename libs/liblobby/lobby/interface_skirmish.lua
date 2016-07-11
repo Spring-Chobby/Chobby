@@ -180,7 +180,7 @@ end
 -------------------------------------------------
 
 function InterfaceSkirmish:_UpdateBotStatus(data)
-	self:_OnUpdateUserBattleStatus(data) -- TODO, better implementation.
+	self:_OnUpdateUserBattleStatus(data.Name, data) -- TODO, better implementation.
 end
 
 function InterfaceSkirmish:_RemoveBot(data)

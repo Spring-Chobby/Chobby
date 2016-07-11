@@ -351,7 +351,7 @@ Interface.jsonCommands["Say"] = Interface._Say
 
 function Interface:_UpdateBotStatus(data)
 	-- SetModOptions {"Options":{}}
-	self:_OnUpdateUserBattleStatus(data)
+	self:_OnUpdateUserBattleStatus(data.Name, data)
 end
 Interface.jsonCommands["UpdateBotStatus"] = Interface._UpdateBotStatus
 

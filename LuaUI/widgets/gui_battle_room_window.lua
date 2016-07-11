@@ -169,7 +169,11 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID)
 		font = { size = 22 },
 		OnClick = {
 			function()
-				battleLobby:StartBattle()
+				if battle.isRunning then
+					battleLobby:ConnectToBattle()
+				else
+					battleLobby:StartBattle()
+				end
 			end
 		},
 		parent = parentControl,
