@@ -500,7 +500,7 @@ function ChatWindows:GetChannelConsole(chanName)
 			lobby:Say(chanName, message)
 		end
 
-		local userListPanel = UserListPanel(function() return lobby:GetChannel(chanName) end)
+		local userListPanel = UserListPanel(function() return lobby:GetChannel(chanName) end, 23)
 		self.userListPanels[chanName] = userListPanel
 		
 		self.tabPanel:AddTab({
@@ -508,17 +508,17 @@ function ChatWindows:GetChannelConsole(chanName)
 			caption = "#" .. chanName,
 			children = {
 				Control:New {
-					x = 0, y = 0, right = 145, bottom = 0,
+					x = 0, y = 0, right = 185, bottom = 0,
 					padding={0,0,0,0}, itemPadding={0,0,0,0}, itemMargin={0,0,0,0},
 					children = { channelConsole.panel, },
 				},
 				Control:New {
-					width = 144, y = 0, right = 0, bottom = 0,
+					width = 184, y = 0, right = 0, bottom = 0,
 					padding={0,0,0,5}, itemPadding={0,0,0,0}, itemMargin={0,0,0,0},
 					children = { userListPanel.panel, },
 				},
 				Button:New {
-					width = 24, height = 24, y = 0, right = 146,
+					width = 24, height = 24, y = 1, right = 185,
 					caption = "x",
 					OnClick = {
 						function()

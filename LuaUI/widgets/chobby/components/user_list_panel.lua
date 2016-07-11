@@ -1,7 +1,8 @@
 UserListPanel = LCS.class{}
 
-function UserListPanel:init(userUpdateFunction)
+function UserListPanel:init(userUpdateFunction, spacing)
 	self.userUpdateFunction = userUpdateFunction
+	self.spacing = spacing
 
 	self.userPanel = ScrollPanel:New {
 		x = 0,
@@ -52,6 +53,6 @@ function UserListPanel:AddUser(userName)
 	end
 	
 	local userControl = WG.UserHandler.GetChannelUser(userName)
-	userControl:SetPos(nil, #(self.userPanel.children) * 42)
+	userControl:SetPos(nil, #(self.userPanel.children) * self.spacing)
 	self.userPanel:AddChild(userControl)
 end

@@ -35,6 +35,46 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Utilities
+
+local function GetUserControl(userName)
+
+	local button = Button:New {
+		name = userName,
+		x = 0,
+		y = 0,
+		width = 150,
+		height = 25,
+		caption = "",
+		backgroundColor = {0, 0, 0, 0},
+		borderColor = {0, 0, 0, 0},
+		padding = {0, 0, 0, 0},
+		OnClick = {
+			function()
+				WG.Chobby.interfaceRoot.GetChatWindow():GetPrivateChatConsole(userName)
+			end
+		},
+		parent = screen0
+	}
+	
+	local name = Label:New {
+		name = userName,
+		x = 30,
+		y = 0,
+		right = 0,
+		bottom = 4,
+		valign = "center",
+		align = "left",
+		parent = button,
+		font = {size = 17, shadow = false},
+		caption = userName,
+	}
+	
+	return button
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- External Functions
 local userHandler = {}
 
@@ -61,19 +101,7 @@ function userHandler.GetChannelUser(userName)
 		return channelUsers[userName]
 	end
 	
-	channelUsers[userName] = Button:New {
-		name = userName,
-		x = 0,
-		width = 100,
-		y = 0,
-		height = 30,
-		caption = userName, 
-		OnClick = {
-			function()
-				WG.Chobby.interfaceRoot.GetChatWindow():GetPrivateChatConsole(userName)
-			end
-		},
-	}
+	channelUsers[userName] = GetUserControl(userName)
 	return channelUsers[userName]
 end
 
