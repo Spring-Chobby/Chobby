@@ -56,6 +56,7 @@ return {
 		rejoin = "Rejoin",
 		spectate = "Spectate",
 		pick_map = "Map",
+		pick_game = "Game",
 		new_team = "New Team",
 		players = "Players",
 		submit = "Submit",

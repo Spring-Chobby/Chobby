@@ -86,7 +86,10 @@ function Lobby:SelectMap(mapName)
 	self:SayBattle("!map " .. mapName)
 end
 
-
+-- TODO: Provide clean implementation/specification too
+function Lobby:SelectGame(gameName)
+	Spring.Echo("Game " .. gameName .. " Selected")
+end
 
 -------------------------------------------------
 -- BEGIN Client commands

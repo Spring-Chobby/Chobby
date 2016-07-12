@@ -1,6 +1,6 @@
 GameListWindow = ListWindow:extends{}
 
-function GameListWindow:init(failFunction, sucessFunction)
+function GameListWindow:init(lobby)
 
 	self:super('init', screen0, "Select Game")
 	self.window:SetPos(nil, nil, 500, 700)
@@ -8,7 +8,7 @@ function GameListWindow:init(failFunction, sucessFunction)
 	for i, archive in pairs(VFS.GetAllArchives()) do
 		local info = VFS.GetArchiveInfo(archive)
 		if info and info.modtype == 1 then
-			local pickMapButton = Button:New {
+			local pickGameButton = Button:New {
 				x = 0,
 				y = 0,
 				width = "100%",
@@ -17,17 +17,14 @@ function GameListWindow:init(failFunction, sucessFunction)
 				font = { size = 22 },
 				OnClick = {
 					function()
-						sucessFunction(info.name)
+						lobby:SelectGame(info.name)
 						self:HideWindow()
 					end
 				},
 			}
-			self:AddRow({pickMapButton}, info.name)
+			self:AddRow({pickGameButton}, info.name)
 		end
 	end
-	
-	self.window.OnDispose = self.window.OnDispose or {}
-	self.window.OnDispose[#self.window.OnDispose + 1] = failFunction
 	
 	self.popupHolder = PriorityPopup(self.window)
 end

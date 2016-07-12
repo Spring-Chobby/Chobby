@@ -129,6 +129,21 @@ local function SetupInfoButtonsPanel(parentControl, battle, battleID)
 		},
 		parent = parentControl,
 	}
+	
+	local btnPickGame = Button:New {
+		x = 10,
+		y = 75,
+		height = 45,
+		right = "50.5%",
+		caption = "\255\66\138\201" .. i18n("pick_game") ..  "\b",
+		font = { size = 22 },
+		OnClick = {
+			function()
+				WG.Chobby.GameListWindow(battleLobby)
+			end
+		},
+		parent = parentControl,
+	}
 
 	local lblNumberOfPlayers = Label:New {
 		x = 15,
