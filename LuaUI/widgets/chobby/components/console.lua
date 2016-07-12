@@ -26,6 +26,7 @@ function Console:init()
 		height = 25,
 		right = 100,
 		text = "",
+		hint = i18n("type_here_to_chat"),
 	}
 	
 	self.ebInputText.KeyPress = function(something, key, ...)
