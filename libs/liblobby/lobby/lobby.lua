@@ -81,6 +81,7 @@ function Lobby:StartBattle()
 	return self
 end
 
+-- TODO: Provide clean implementation/specification
 function Lobby:SelectMap(mapName)
 	self:SayBattle("!map " .. mapName)
 end
@@ -412,6 +413,7 @@ end
 
 -- Also calls the OnUpdateUserBattleStatus
 function Lobby:_OnAddAi(battleID, aiName, status)
+	self:_OnAddUser(aiName)
 	self:_OnJoinedBattle(battleID, aiName)
 	status.isSpectator = false
 	self:_OnUpdateUserBattleStatus(aiName, status)
@@ -421,6 +423,7 @@ end
 function Lobby:_OnRemoveAi(battleID, aiName, aiLib, allyNumber, owner)
 	-- TODO: maybe needs proper listeners
 	self:_OnLeftBattle(battleID, aiName)
+	self:_RemoveUser(aiName)
 end
 
 function Lobby:_OnSaidBattle(userName, message)

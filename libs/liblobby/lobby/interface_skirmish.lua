@@ -113,7 +113,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName)
 	Spring.Start(scriptFileName, "")
 end
 
--- TODO: These two functions don't have uber/ZK server equivalent functions
+-- TODO: Needs clean implementation in lobby.lua
 function InterfaceSkirmish:StartBattle()
 	local battle = self:GetBattle(self:GetMyBattleID())
 	if battle.gameName and battle.mapName then
@@ -124,8 +124,22 @@ function InterfaceSkirmish:StartBattle()
 	return self
 end
 
+-- TODO: Needs clean implementation in lobby.lua
 function InterfaceSkirmish:SelectMap(mapName)
 	self:_OnUpdateBattleInfo(self:GetMyBattleID(), 0, false, 0, mapName)
+end
+
+-- Skirmish only
+function InterfaceSkirmish:SetBattleState(myUserName, gameName, mapName, title)
+	local myBattleID = 1
+
+	self:_OnAddUser(myUserName)
+	self.myUserName = myUserName
+
+	self:_OnBattleOpened(myBattleID, nil, nil, myUserName, nil, nil, nil, nil, nil, nil, nil, nil, mapName, nil, title, gameName, nil)
+	self:_OnJoinedBattle(myBattleID, myUserName)
+
+	return self
 end
 
 -------------------------------------------------
@@ -133,6 +147,7 @@ end
 -------------------------------------------------
 
 function InterfaceSkirmish:AddAi(aiName, aiLib, allyNumber)
+	self:super("AddAi", aiName, aiLib, allyNumber)
 	self:_OnAddAi(self:GetMyBattleID(), aiName, {
 		aiLib = aiLib,
 		allyNumber = allyNumber,
@@ -153,25 +168,10 @@ function InterfaceSkirmish:SetBattleStatus(status)
 end
 
 function InterfaceSkirmish:LeaveBattle()
-	self:_OnLeftBattle()
-	self:_OnBattleClosed()
-	return self
-end
-
--- TODO: seems like it's a custom skirmish function, rework into the lobby API
-function InterfaceSkirmish:SetBattleState(myUserName, gameName, mapName, battleName)
-	self.myUserName  = myUserName
-	self.myBattleID  = 1
-
-	-- TODO: Use this instead
-	--self:_OnBattleOpened(self.myBattleID, ...)
-	self.battles[self.myBattleID] = {}
-	local battle = self:GetBattle(self.myBattleID)
-
-	battle.gameName  = gameName
-	battle.mapName   = mapName
-	battle.users     = {myUserName}
-	battle.title     = battleName
+	self:super("LeaveBattle")
+	local myBattleID = self:GetMyBattleID()
+	self:_OnLeftBattle(myBattleID, self:GetMyUserName())
+	self:_OnBattleClosed(myBattleID)
 	return self
 end
 
@@ -182,14 +182,6 @@ end
 -------------------------------------------------
 -- BEGIN Server commands
 -------------------------------------------------
-
-function InterfaceSkirmish:_UpdateBotStatus(data)
-	self:_OnUpdateUserBattleStatus(data.Name, data) -- TODO, better implementation.
-end
-
-function InterfaceSkirmish:_RemoveBot(data)
-	self:_CallListeners("RemoveBot", data)
-end
 
 -------------------------------------------------
 -- END Server commands
