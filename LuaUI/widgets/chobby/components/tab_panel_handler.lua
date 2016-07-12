@@ -7,7 +7,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 	
 	local function getFont() 
 		return {
-			size = 16,
+			size = 19,
 			outlineWidth = 6,
 			outlineHeight = 6,
 			outline = true,
