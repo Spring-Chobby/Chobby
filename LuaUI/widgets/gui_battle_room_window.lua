@@ -511,7 +511,7 @@ local function SetupPlayerPanel(parentControl, battle, battleID)
 				teamHolder:SetPos(nil, nil, nil, #teamStack.children*SPACING + 35)
 				
 				if teamStack:IsEmpty() then
-					if teamIndex < emptyTeamIndex then
+					if teamIndex ~= -1 and teamIndex < emptyTeamIndex then
 						emptyTeamIndex = teamIndex
 					end
 				

@@ -135,8 +135,8 @@ function InterfaceSkirmish:SetBattleState(myUserName, gameName, mapName, title)
 
 	self:_OnAddUser(myUserName)
 	self.myUserName = myUserName
-
-	self:_OnBattleOpened(myBattleID, nil, nil, myUserName, nil, nil, nil, nil, nil, nil, nil, nil, mapName, nil, title, gameName, nil)
+						--(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName, title, gameName, spectatorCount)
+	self:_OnBattleOpened(myBattleID, nil,  nil,  myUserName, nil, nil, nil,         nil,       nil,       nil, nil,            nil, mapName, title, gameName, nil)
 	self:_OnJoinedBattle(myBattleID, myUserName)
 
 	return self
