@@ -27,6 +27,8 @@ function Configuration:init()
 	self.userListWidth = 200 -- Main user list width. Possibly configurable in the future.
 	
 	self.singleplayer_mode = 2
+	
+	self.game_settings = VFS.Include("luaui/configs/springsettings/springsettings3.lua")
 end
 
 function Configuration:SetConfigData(data)
@@ -47,6 +49,7 @@ function Configuration:GetConfigData()
 		game_fullscreen = self.game_fullscreen,
 		panel_layout = self.panel_layout,
 		lobby_fullscreen = self.lobby_fullscreen,
+		game_settings = self.game_settings,
 	}
 end
 

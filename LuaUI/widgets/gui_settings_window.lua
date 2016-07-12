@@ -269,6 +269,50 @@ local function InitializeControls(window)
 		},
 	}
 	
+	Label:New {
+		x = 40,
+		y = 170 + ingameOffset,
+		width = 90,
+		height = 45,
+		valign = "center",
+		align = "right",
+		parent = window,
+		font = {size = 20},
+		caption = "Settings:",
+	}
+	
+	local function SettingsButton(pos, caption, settings)
+		return Button:New {
+			x = 80*pos,
+			y = 0, 
+			width = 80, 
+			bottom = 0,
+			caption = caption,
+			font = {size = 16},
+			OnClick = {
+				function ()
+					WG.Chobby.Configuration.game_settings = VFS.Include("luaui/configs/springsettings/" .. settings)
+				end
+			},
+		}
+	end
+	
+	Control:New {
+		x = 130,
+		y = 170 + ingameOffset,
+		width = 540,
+		height = 45,
+		parent = window,
+		children = {
+			SettingsButton(0,   "Minimal", "springsettings0.lua"),
+			SettingsButton(1,  "Low",     "springsettings1.lua"),
+			SettingsButton(2, "Medium",  "springsettings2.lua"),
+			SettingsButton(3, "High",    "springsettings3.lua"),
+			SettingsButton(4, "Ultra",   "springsettings4.lua"),
+			
+		}
+	}
+	
 	freezeSettings = false
 end
 
@@ -329,7 +373,17 @@ function widget:Initialize()
 	
 	onBattleAboutToStart = function(listener)
 		local screenX, screenY = Spring.GetScreenGeometry()
-		Spring.Echo("battleStartDisplay", battleStartDisplay)
+		
+		-- Uncomment when engine works.
+		--local gameSettings = WG.Chobby.Configuration.game_settings
+		--for key, value in pairs(gameSettings) do
+		--	if type(value) == "string" then
+		--		Spring.SetConfigString(key, value, false)
+		--	else
+		--		Spring.SetConfigInt(key, value, false)
+		--	end
+		--end
+		
 		if battleStartDisplay == 1 then
 			Spring.SetConfigInt("XResolutionWindowed", screenX, false)
 			Spring.SetConfigInt("YResolutionWindowed", screenY, false)
