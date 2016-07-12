@@ -415,12 +415,40 @@ function Interface:_SetModOptions(data)
 end
 Interface.jsonCommands["SetModOptions"] = Interface._SetModOptions
 
---SiteToLobbyCommand
 --PwMatchCommand
 
 -------------------------------------------------
 -- END Client commands
 -------------------------------------------------
+
+function Interface:_OnSiteToLobbyCommand(msg)
+	self:_CallListeners("OnSiteToLobbyCommand", msg);
+    --[[ I have no idea where to stick the actual impl, how to download map, mod and engine in chobby
+         so i'll just put swl code for replay handling here for now
+         
+			var springLink = msg.Command;
+			
+			// now onwards to handle something like this:
+			// {"SpringLink\":\"@start_replay:http://zero-k.info/replays/20150625_165819_Sands of War v2_98.0.1-451-g0804ae1 develop.sdf,Zero-K v1.3.6.6,Sands of War v2,98.0.1-451-g0804ae1\"}
+			if(springLink){
+				// i wonder how similar to this are mission urls and if the parsing/handling should be modularized
+				if(springLink.indexOf('@start_replay:') === 0){
+					var repString = springLink.substring(14);
+					var repArray = repString.split(',');
+					
+					var engine = repArray[3];
+					
+					// this is copypasta from MBattle store; maybe should move it to util 
+					if (engine.match(/^[0-9.]+-[0-9]+-g[a-f0-9]+$/)) // no branch suffix, add develop
+						engine += ' develop';
+					
+					Process.launchRemoteReplay(repArray[0],repArray[1],repArray[2],engine);
+				}
+			}
+    ]]
+end
+
+Interface.jsonCommands["SiteToLobbyCommand"] = Interface._OnSiteToLobbyCommand
 
 --Register
 --JoinChannel
