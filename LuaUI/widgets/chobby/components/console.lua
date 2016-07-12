@@ -7,9 +7,9 @@ function Console:init()
 
 	self.spHistory = ScrollPanel:New {
 		x = 0,
-		right = 0,
+		right = 2,
 		y = 0,
-		bottom = 42,
+		bottom = 35,
 		verticalSmartScroll = true,
 	}
 	self.tbHistory = TextBox:New {
@@ -24,7 +24,7 @@ function Console:init()
 		x = 0,
 		bottom = 7,
 		height = 25,
-		right = 100,
+		right = 2,
 		text = "",
 		hint = i18n("type_here_to_chat"),
 	}
@@ -38,19 +38,6 @@ function Console:init()
 			return Chili.EditBox.KeyPress(something, key, ...)
 		end
 	end
-	
-	self.btnSubmit = Button:New {
-		bottom = 0,
-		height = 40,
-		right = 0,
-		width = 90,
-		caption = i18n("submit"),
-		OnClick = { 
-			function(...)
-				self:SendMessage()
-			end
-		}
-	}
 	self.ebInputText.OnKeyPress = {
 		function(obj, key, mods, ...)
 			if key == Spring.GetKeyCode("enter") or 
@@ -60,6 +47,20 @@ function Console:init()
 
 		end
 	}
+
+-- 	self.btnSubmit = Button:New {
+-- 		bottom = 0,
+-- 		height = 40,
+-- 		right = 0,
+-- 		width = 90,
+-- 		caption = i18n("submit"),
+-- 		OnClick = { 
+-- 			function(...)
+-- 				self:SendMessage()
+-- 			end
+-- 		}
+-- 	}
+
 	self.panel = Control:New {
 		x = 0,
 		y = 0,
@@ -71,7 +72,7 @@ function Console:init()
 		children = {
 			self.spHistory,
 			self.ebInputText,
-			self.btnSubmit
+-- 			self.btnSubmit
 		},
 	}
 end
