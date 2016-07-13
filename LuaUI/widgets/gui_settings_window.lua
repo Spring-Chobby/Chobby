@@ -374,16 +374,7 @@ function widget:Initialize()
 	onBattleAboutToStart = function(listener)
 		local screenX, screenY = Spring.GetScreenGeometry()
 		
-		-- Uncomment when engine works.
-		--local gameSettings = WG.Chobby.Configuration.game_settings
-		--for key, value in pairs(gameSettings) do
-		--	if type(value) == "string" then
-		--		Spring.SetConfigString(key, value, false)
-		--	else
-		--		Spring.SetConfigInt(key, value, false)
-		--	end
-		--end
-		
+		-- Stopgap solution, has side effects
 		if battleStartDisplay == 1 then
 			Spring.SetConfigInt("XResolutionWindowed", screenX, false)
 			Spring.SetConfigInt("YResolutionWindowed", screenY, false)
@@ -402,6 +393,36 @@ function widget:Initialize()
 			Spring.SetConfigInt("XResolution", screenX, false)
 			Spring.SetConfigInt("YResolution", screenY, false)
 			Spring.SetConfigInt("Fullscreen", 1, false)
+		end
+		
+		-- Settings which rely on io
+		local gameSettings = WG.Chobby.Configuration.game_settings
+		
+		if battleStartDisplay == 1 then
+			gameSettings.XResolutionWindowed = screenX
+			gameSettings.YResolutionWindowed = screenY
+			gameSettings.WindowPosX = 0
+			gameSettings.WindowPosY = 0
+			gameSettings.WindowBorderless = 1
+		elseif battleStartDisplay == 2 then
+			gameSettings.WindowPosX = 0
+			gameSettings.WindowPosY = 80
+			gameSettings.XResolutionWindowed = screenX
+			gameSettings.YResolutionWindowed = screenY - 80
+			gameSettings.WindowBorderless = 0
+			gameSettings.WindowBorderless = 0
+			gameSettings.Fullscreen = 0
+		elseif battleStartDisplay == 3 then
+			gameSettings.XResolution = screenX
+			gameSettings.YResolution = screenY
+			gameSettings.Fullscreen = 1
+		end
+		
+		local settingsFile, errorMessage = io.open('springsettings.cfg', 'w+')
+		if settingsFile then
+			for key, value in pairs(gameSettings) do
+				settingsFile:write(key .. " = " .. value .. "\n")
+			end
 		end
 	end
 	WG.LibLobby.lobby:AddListener("OnBattleAboutToStart", onBattleAboutToStart)
