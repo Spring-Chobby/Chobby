@@ -114,7 +114,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local IMAGE_TOP_BACKGROUND = "luaui/images/top-background.png"
 	local topPartImage = Image:New {
 		x = 0,
-		y = titleHeightSmall,
+		y = 0,
 		right = 0,
 		height = titleHeight,
 		file = IMAGE_TOP_BACKGROUND,
