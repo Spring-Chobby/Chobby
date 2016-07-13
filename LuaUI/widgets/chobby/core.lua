@@ -18,10 +18,6 @@ local includes = {
 	"components/downloader.lua",
 	"components/background.lua",
 
-	-- play
-	"components/play_window.lua",
-	-- skirmish
-	"components/skirmish/skirmish_window.lua",
 	-- battle
 	"components/battle/battle_list_window.lua",
 	-- queue
