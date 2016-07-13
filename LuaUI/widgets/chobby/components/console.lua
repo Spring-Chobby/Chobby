@@ -5,6 +5,9 @@ function Console:init()
 	self.showDate = true
 	self.dateFormat = "%H:%M:%S"
 
+	-- TODO: currently this is handled by chat windows and battleroom chat separately
+	self.unreadMessages = 0
+
 	self.spHistory = ScrollPanel:New {
 		x = 0,
 		right = 2,

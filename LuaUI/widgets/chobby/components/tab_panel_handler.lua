@@ -151,10 +151,16 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		end
 	end
 	
-	function externalFunctions.SetActivity(name, activityText)
+	function externalFunctions.SetActivity(name, activityCount)
 		for i = 1, #tabs do
 			if tabs[i].name == name and tabs[i].activityLabel then
-				tabs[i].activityLabel:SetCaption(activityText)
+				local activityLabel
+				if activityCount > 0 then
+					activityLabel = "(" .. tostring(activityCount) .. ")"
+				else
+					activityLabel = ""
+				end
+				tabs[i].activityLabel:SetCaption(activityLabel)
 			end
 		end
 	end

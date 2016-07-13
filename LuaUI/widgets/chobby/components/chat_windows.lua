@@ -5,6 +5,7 @@ function ChatWindows:init()
 	self.userListPanels = {}
 	self.tabbars = {}
 	self.currentTab = ""
+	self.totalNewMessages = 0
 
 	-- setup debug console to listen to commands
 	self:CreateDebugConsole()
@@ -94,8 +95,6 @@ function ChatWindows:init()
 					self:_NotifyTab(chanName, userName, chanName, message, "sounds/beep4.wav", 15)
 				else
 					channelConsole:AddMessage(message, userName, msgDate)
-					
-					interfaceRoot.GetRightPanelHandler().SetActivity("chat", "(" .. string.len(message) .. ")")
 				end
 			end
 		end
@@ -186,6 +185,8 @@ function ChatWindows:init()
 				end
 				local console = self.tabbars[name]
 				if console then
+					self.totalNewMessages = self.totalNewMessages - console.unreadMessages
+					interfaceRoot.GetRightPanelHandler().SetActivity("chat", self.totalNewMessages)
 					console.unreadMessages = 0
 					self:SetTabBadge(name, "")
 					self:SetTabColor(name, {1, 1, 1, 1})
@@ -374,9 +375,13 @@ function ChatWindows:_NotifyTab(tabName, userName, chanName, message, sound, tim
 	if tabName ~= self.currentTab then
 		-- TODO: Fix naming of self.tabbars (these are consoles)
 		local console = self.tabbars[tabName]
-		console.unreadMessages = (console.unreadMessages or 0) + 1
+
+		local oldMessages = console.unreadMessages
+		console.unreadMessages = console.unreadMessages + 1
 		self:SetTabBadge(tabName, tostring(console.unreadMessages))
 		self:SetTabColor(tabName, {0, 0, 1, 1})
+		self.totalNewMessages = self.totalNewMessages + (console.unreadMessages - oldMessages)
+		interfaceRoot.GetRightPanelHandler().SetActivity("chat", self.totalNewMessages)
 
 		Chotify:Post({
 			title = userName .. " in " .. chanName .. ":",
