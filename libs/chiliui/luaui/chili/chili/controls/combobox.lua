@@ -136,6 +136,7 @@ function ComboBox:MouseDown(x, y)
       parent = screen,
       width  = width,
       height = height,
+	  minHeight = self.minDropDownHeight,
       x = math.max(sx, math.min(sx + self.width - width, (sx + x - width/2))),
       y = y,
       children = {

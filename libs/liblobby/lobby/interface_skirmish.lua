@@ -180,6 +180,11 @@ function InterfaceSkirmish:LeaveBattle()
 	return self
 end
 
+function InterfaceSkirmish:RemoveAi(aiName)
+	self:_OnRemoveAi(self:GetMyBattleID(), aiName)
+	return self
+end
+
 -------------------------------------------------
 -- END Client commands
 -------------------------------------------------

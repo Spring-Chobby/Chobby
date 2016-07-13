@@ -426,7 +426,6 @@ end
 function Lobby:_OnRemoveAi(battleID, aiName, aiLib, allyNumber, owner)
 	-- TODO: maybe needs proper listeners
 	self:_OnLeftBattle(battleID, aiName)
-	self:_RemoveUser(aiName)
 end
 
 function Lobby:_OnSaidBattle(userName, message)

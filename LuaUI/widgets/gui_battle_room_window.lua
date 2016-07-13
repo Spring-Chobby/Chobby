@@ -430,7 +430,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		if not player[name] then
 			player[name] = {
 				team = false,
-				control = WG.UserHandler.GetBattleUser(name, battleLobby.name == "skirmish"),
+				control = WG.UserHandler.GetBattleUser(name, battleLobby),
 			}
 		end
 		return player[name]
@@ -916,6 +916,12 @@ function BattleRoomWindow.SetSingleplayerGame(ToggleShowFunc, battleroomObj, tab
 	end
 end
 
+function BattleRoomWindow.LeaveBattle()
+	--battleLobby:LeaveBattle()
+	if battleLobby then
+		onBattleClosed(battleLobby:GetMyBattleID())
+	end
+end
 
 function widget:ViewResize(vsx, vsy, viewGeometry)
 	if ViewResizeUpdate then

@@ -38,8 +38,8 @@ local IMAGE_MODERATOR = "luaui/images/ranks/moderator.png"
 --------------------------------------------------------------------------------
 -- Utilities
 
-local function GetUserCountryImage(userName)
-	local userInfo = lobby:GetUser(userName) or {}
+local function GetUserCountryImage(userName, userControl)
+	local userInfo = userControl.lobby:GetUser(userName) or {}
 	if userInfo.country then
 		local fileName = "luaui/images/flags/" .. string.lower(userInfo.country) .. ".png"
 		if VFS.FileExists(fileName) then
@@ -49,10 +49,10 @@ local function GetUserCountryImage(userName)
 	return IMAGE_FLAG_UNKNOWN
 end
 
-local function GetUserComboBoxOptions(userName, isInBattle)
-	local userInfo = lobby:GetUser(userName) or {}
-	local userBattleInfo = lobby:GetUserBattleStatus(userName) or {}
-	local myUserName = lobby:GetMyUserName()
+local function GetUserComboBoxOptions(userName, isInBattle, userControl)
+	local userInfo = userControl.lobby:GetUser(userName) or {}
+	local userBattleInfo = userControl.lobby:GetUserBattleStatus(userName) or {}
+	local myUserName = userControl.lobby:GetMyUserName()
 	local comboOptions = {}
 	if (not userBattleInfo.aiLib) and userName ~= myUserName then
 		comboOptions[#comboOptions + 1] = "Message"
@@ -69,15 +69,26 @@ local function GetUserComboBoxOptions(userName, isInBattle)
 		comboOptions[#comboOptions + 1] = "Report"
 	end
 	
-	if (userBattleInfo.aiLib and userBattleInfo.owner == myUserName) or lobby:GetMyIsAdmin() then
+	if (userBattleInfo.aiLib and userBattleInfo.owner == myUserName) or userControl.lobby:GetMyIsAdmin() then
 		comboOptions[#comboOptions + 1] = "Kick"
+	end
+	
+	if #comboOptions == 0 then
+		comboOptions[1] = Label:New {
+			x = 0,
+			y = 0,
+			width = 100,
+			height = 30,
+			font = WG.Chobby.Configuration:GetFont(1),
+			caption = "No Actions",
+		}
 	end
 	
 	return comboOptions
 end
 
-local function GetUserRankImageName(userName)
-	local userInfo = lobby:GetUser(userName) or {}
+local function GetUserRankImageName(userName, userControl)
+	local userInfo = userControl.lobby:GetUser(userName) or {}
 	if userInfo.isBot or userInfo.aiLib then
 		return IMAGE_AUTOHOST
 	elseif userInfo.isAdmin then
@@ -88,8 +99,8 @@ local function GetUserRankImageName(userName)
 	end
 end
 
-local function GetUserStatusImages(userName, isInBattle)
-	local userInfo = lobby:GetUser(userName) or {}
+local function GetUserStatusImages(userName, isInBattle, userControl)
+	local userInfo = userControl.lobby:GetUser(userName) or {}
 	if userInfo.isInGame or (userInfo.battleID and not isInBattle) then
 		if userInfo.isInGame then
 			return IMAGE_INGAME, (userInfo.isAway and IMAGE_AFK)
@@ -105,8 +116,8 @@ local function UpdateUserActivity(listener, userName)
 	for i = 1, #userListList do
 		local userList = userListList[i]
 		if userList[userName] then
-			local status1, status2 = GetUserStatusImages(userName, userList[userName].isInBattle)
-			userList[userName].mainControl.items = GetUserComboBoxOptions(userName, userList[userName].isInBattle)
+			local status1, status2 = GetUserStatusImages(userName, userList[userName].isInBattle, userList[userName])
+			userList[userName].mainControl.items = GetUserComboBoxOptions(userName, userList[userName].isInBattle, userList[userName])
 			userList[userName].statusFirst.file = status1
 			userList[userName].statusSecond.file = status2
 			userList[userName].statusFirst:Invalidate()
@@ -119,10 +130,11 @@ end
 --------------------------------------------------------------------------------
 -- Control Handling
 
-local function GetUserControls(userName, isInBattle, reinitialize)
+local function GetUserControls(userName, isInBattle, lobbyToUse, reinitialize)
 	local userControls = reinitialize or {}
 	
 	userControls.isInBattle = isInBattle
+	userControls.lobby = lobbyToUse or lobby
 	
 	if reinitialize then
 		userControls.mainControl:ClearChildren()
@@ -144,25 +156,26 @@ local function GetUserControls(userName, isInBattle, reinitialize)
 			selected = 0,
 			maxDropDownWidth = 120,
 			minDropDownHeight = 0,
-			items = GetUserComboBoxOptions(userName, isInBattle),
+			items = GetUserComboBoxOptions(userName, isInBattle, userControls),
 			OnSelectName = {
 			function (obj, selectedName)
 					if selectedName == "Message" then
 						WG.Chobby.interfaceRoot.GetChatWindow():GetPrivateChatConsole(userName)
 					elseif selectedName == "Kick" then
-						local userBattleInfo = lobby:GetUserBattleStatus(userName) or {}
+						local userBattleInfo = userControls.lobby:GetUserBattleStatus(userName) or {}
 						if userBattleInfo and userBattleInfo.aiLib then
-						
+							userControls.lobby:RemoveAi(userName)
 						else
 							Spring.Echo("TODO - Implement player kick.")
 						end
 					elseif selectedName == "Friend" then
 						Spring.Echo("TODO - Be Friends.")
 					elseif selectedName == "Join Battle" then
-						local userInfo = lobby:GetUser(userName) or {}
+						local userInfo = userControls.lobby:GetUser(userName) or {}
 						if userInfo.battleID then
 							-- TODO: Passworded battles
-							lobby:JoinBattle(userInfo.battleID)
+							WG.BattleRoomWindow.LeaveBattle()
+							userControls.lobby:JoinBattle(userInfo.battleID)
 						end
 					elseif selectedName == "Report" then
 						Spring.Echo("TODO - Open the right webpage")
@@ -181,7 +194,7 @@ local function GetUserControls(userName, isInBattle, reinitialize)
 		height = 19,
 		parent = userControls.mainControl,
 		keepAspect = true,
-		file = GetUserCountryImage(userName),
+		file = GetUserCountryImage(userName, userControls),
 	}
 	userControls.level = Image:New {
 		name = "level",
@@ -191,7 +204,7 @@ local function GetUserControls(userName, isInBattle, reinitialize)
 		height = 19,
 		parent = userControls.mainControl,
 		keepAspect = true,
-		file = GetUserRankImageName(userName),
+		file = GetUserRankImageName(userName, userControls),
 	}
 	userControls.name = TextBox:New {
 		name = "name",
@@ -205,7 +218,7 @@ local function GetUserControls(userName, isInBattle, reinitialize)
 		text = userName,
 	}
 	
-	local status1, status2 = GetUserStatusImages(userName, isInBattle)
+	local status1, status2 = GetUserStatusImages(userName, isInBattle, userControls)
 	
 	userControls.statusFirst = Image:New {
 		name = "statusFirst",
@@ -229,6 +242,7 @@ local function GetUserControls(userName, isInBattle, reinitialize)
 		file = status2,
 	}
 	
+	-- This is always checked against main lobby.
 	userControls.needReinitialization = lobby.status ~= "connected"
 	
 	return userControls
@@ -239,22 +253,23 @@ end
 -- External Functions
 local userHandler = {}
 
-function userHandler.GetBattleUser(userName, isSingleplayer)
+function userHandler.GetBattleUser(userName, lobbyToUse)
 	if battleUsers[userName] then
+		battleUsers[userName].lobby = lobbyToUse
 		if battleUsers[userName].needReinitialization then
-			battleUsers[userName] = GetUserControls(userName, true, battleUsers[userName])
+			battleUsers[userName] = GetUserControls(userName, true, lobbyToUse, battleUsers[userName])
 		end
 		return battleUsers[userName].mainControl
 	end
 	
-	battleUsers[userName] = GetUserControls(userName, true)
+	battleUsers[userName] = GetUserControls(userName, true, lobbyToUse)
 	return battleUsers[userName].mainControl
 end
 
 function userHandler.GetChannelUser(userName)		
 	if channelUsers[userName] then
 		if channelUsers[userName].needReinitialization then
-			channelUsers[userName] = GetUserControls(userName, false, channelUsers[userName])
+			channelUsers[userName] = GetUserControls(userName, false, false, channelUsers[userName])
 		end
 		return channelUsers[userName].mainControl
 	end
@@ -266,7 +281,7 @@ end
 function userHandler.GetTeamUser(userName)		
 	if teamUsers[userName] then
 		if teamUsers[userName].needReinitialization then
-			teamUsers[userName] = GetUserControls(userName, false, teamUsers[userName])
+			teamUsers[userName] = GetUserControls(userName, false, false, teamUsers[userName])
 		end
 		return teamUsers[userName].mainControl
 	end

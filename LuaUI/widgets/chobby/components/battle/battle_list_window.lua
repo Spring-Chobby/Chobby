@@ -196,6 +196,7 @@ end
 
 function BattleListWindow:JoinBattle(battle)
 	if not battle.passworded then
+		WG.BattleRoomWindow.LeaveBattle()
 		lobby:JoinBattle(battle.battleID)
 	else
 		local tryJoin, passwordWindow
