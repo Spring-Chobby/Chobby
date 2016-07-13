@@ -27,6 +27,13 @@ local userListList = {
 	teamUsers
 }
 
+local IMAGE_AFK = "luaui/images/away.png"
+local IMAGE_BATTLE = "luaui/images/battle.png"
+local IMAGE_INGAME = "luaui/images/ingame.png"
+local IMAGE_FLAG_UNKNOWN = "luaui/images/flags/unknown.png"
+local IMAGE_AUTOHOST = "luaui/images/ranks/robot.png"
+local IMAGE_MODERATOR = "luaui/images/ranks/moderator.png"
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
@@ -39,43 +46,44 @@ local function GetUserCountryImage(userName)
 			return fileName
 		end
 	end
-	return "luaui/images/flags/unknown.png"
+	return IMAGE_FLAG_UNKNOWN
 end
 
 local function GetUserRankImageName(userName)
 	local userInfo = lobby:GetUser(userName) or {}
 	if userInfo.isBot or userInfo.aiLib then
-		return "luaui/images/ranks/robot.png"
+		return IMAGE_AUTOHOST
 	elseif userInfo.isAdmin then
-		return "luaui/images/ranks/moderator.png"
+		return IMAGE_MODERATOR
 	elseif userInfo.level then
 		local rankBracket = math.min(8, math.floor(userInfo.level/10)) + 1
 		return "luaui/images/ranks/" .. rankBracket .. ".png"
 	end
 end
 
-local function GetUserActivity(userName)
+local function GetUserStatusImages(userName)
 	local userInfo = lobby:GetUser(userName) or {}
-	if userInfo.isInGame then
-		return "Ingame"
-	elseif userInfo.isAway then
-		if userInfo.battleID then
-			return "BatAFK"
+	if userInfo.isInGame or userInfo.battleID then
+		if userInfo.isInGame then
+			return IMAGE_INGAME, (userInfo.isAway and IMAGE_AFK)
 		else
-			return "AFK"
+			return IMAGE_BATTLE, (userInfo.isAway and IMAGE_AFK)
 		end
-	elseif userInfo.battleID then
-		return "Battle"
+	elseif userInfo.isAway then
+		return IMAGE_AFK
 	end
-	return "Lobby"
 end
 
+
 local function UpdateUserActivity(listener, userName)
-	local activity = GetUserActivity(userName)
+	local status1, status2 = GetUserStatusImages(userName)
 	for i = 1, #userListList do
 		local userList = userListList[i]
 		if userList[userName] then
-			--userList[userName].status:SetCaption(activity)
+			userList[userName].statusFirst.file = status1
+			userList[userName].statusSecond.file = status2
+			userList[userName].statusFirst:Invalidate()
+			userList[userName].statusSecond:Invalidate()
 		end
 	end
 end
@@ -104,19 +112,6 @@ local function GetUserControls(userName, reinitialize)
 			parent = screen0
 		}
 	end
-	
-	userControls.status = Label:New {
-		name = "status",
-		x = 2,
-		y = 0,
-		right = 0,
-		bottom = 4,
-		valign = "bottom",
-		align = "left",
-		parent = userControls.mainControl,
-		font = WG.Chobby.Configuration:GetFont(1),
-		caption = "", --GetUserActivity(userName),
-	}
 	
 	userControls.country = Image:New {
 		name = "country",
@@ -148,6 +143,30 @@ local function GetUserControls(userName, reinitialize)
 		parent = userControls.mainControl,
 		fontsize = WG.Chobby.Configuration:GetFont(2).size,
 		text = userName,
+	}
+	
+	local status1, status2 = GetUserStatusImages(userName)
+	
+	userControls.statusFirst = Image:New {
+		name = "statusFirst",
+		x = 50 + userControls.name.font:GetTextWidth(userControls.name.text) + 3,
+		y = 3,
+		width = 19,
+		height = 19,
+		parent = userControls.mainControl,
+		keepAspect = true,
+		file = status1,
+	}
+	
+	userControls.statusSecond = Image:New {
+		name = "statusSecond",
+		x = 50 + userControls.name.font:GetTextWidth(userControls.name.text) + 3 + 21,
+		y = 3,
+		width = 19,
+		height = 19,
+		parent = userControls.mainControl,
+		keepAspect = true,
+		file = status2,
 	}
 	
 	userControls.needReinitialization = lobby.status ~= "connected"
