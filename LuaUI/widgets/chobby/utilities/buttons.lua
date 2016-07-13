@@ -1,0 +1,61 @@
+
+ButtonUtilities = ButtonUtilities or {}
+
+local function GetFont()
+	return {
+		size = 19,
+		outlineWidth = 6,
+		outlineHeight = 6,
+		outline = true,
+		outlineColor = {0.54,0.72,1,0.3},
+		autoOutlineColor = false,
+		font = fontName
+	}
+end
+
+function ButtonUtilities.SetButtonSelected(button)
+	if button.highlighted then
+		return
+	end
+	
+	local Configuration = WG.Chobby.Configuration
+	button.oldCaption = button.oldCaption or button.caption
+	button.oldBackgroundColor = button.oldBackgroundColor or button.backgroundColor
+	button.oldFont = button.oldFont or button.font
+	
+	button.highlighted = true
+	
+	button:SetCaption(Configuration:GetSelectedColor() .. button.oldCaption .. "\b")
+	button.font = Chili.Font:New(GetFont())
+	
+	button.backgroundColor = Configuration:GetButtonSelectedColor()
+	button:Invalidate()
+end
+
+function ButtonUtilities.SetButtonDeselected(button)
+	if not button.highlighted then
+		return
+	end
+
+	button.oldCaption = button.oldCaption or button.caption
+	button.oldBackgroundColor = button.oldBackgroundColor or button.backgroundColor
+	button.oldFont = button.oldFont or button.font
+	
+	button.highlighted = false
+	
+	button:SetCaption(button.oldCaption)
+	button.font = button.oldFont
+	button.backgroundColor = button.oldBackgroundColor
+	button:Invalidate()
+end
+
+function ButtonUtilities.SetCaption(button, newCaption)
+	button:SetCaption(newCaption)
+	button.oldCaption = newCaption
+	if button.highlighted then
+		button.highlighted = false -- force redo
+		ButtonUtilities.SetButtonSelected(button)
+	end
+end
+
+WG.ButtonUtilities = ButtonUtilities

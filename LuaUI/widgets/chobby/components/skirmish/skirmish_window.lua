@@ -3,10 +3,11 @@ SkirmishWindow = LCS.class{}
 function SkirmishWindow:init(parent)
 	self.btnClose = Button:New {
 		right = 10,
-		y = 0,
-		width = 60,
-		height = 35,
+		y = 10,
+		width = 80,
+		height = 45,
 		caption = Configuration:GetErrorColor() .. i18n("close") .. "\b",
+		font = { size = 22 },
 		OnClick = {
 			function()
 				self.window:Hide()
@@ -60,7 +61,7 @@ function SkirmishWindow:init(parent)
 		parent = parent,
 		resizable = false,
 		draggable = false,
-		padding = {0, 20, 0, 0},
+		padding = {0, 0, 0, 0},
 		children = {
 			self.btnClose,
 			ScrollPanel:New {

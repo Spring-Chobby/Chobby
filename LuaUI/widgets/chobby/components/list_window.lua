@@ -4,18 +4,19 @@ function ListWindow:init(parent, title)
 	self.lblTitle = Label:New {
 		x = 20,
 		right = 5,
-		y = 5,
+		y = 18,
 		height = 20,
-		font = { size = 20 },
+		font = { size = 22 },
 		caption = title,
 	}
 
 	self.btnClose = Button:New {
 		right = 10,
-		y = 0,
-		width = 60,
-		height = 35,
+		y = 10,
+		width = 80,
+		height = 45,
 		caption = Configuration:GetErrorColor() .. i18n("close") .. "\b",
+		font = { size = 22 },
 		OnClick = {
 			function()
 				self:HideWindow()
@@ -40,7 +41,7 @@ function ListWindow:init(parent, title)
 		parent = parent,
 		resizable = false,
 		draggable = false,
-		padding = {0, 20, 0, 0},
+		padding = {0, 0, 0, 0},
 		children = {
 			self.lblTitle,
 			self.btnClose,

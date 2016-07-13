@@ -18,11 +18,13 @@ function Downloader:init(tbl)
 		value = 0,
 	}
 
-	self.ctrl = Control:New(table.merge({
+	self.window = Window:New(table.merge({
 		width = 200,
 		height = 50,
 		caption = '',
 		padding = {0, 0, 0, 0},
+		resizable = false,
+		draggable = false,
 		children = {
 			self.lblDownload,
 			self.prDownload,

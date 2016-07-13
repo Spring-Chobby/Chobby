@@ -4,18 +4,6 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 	
 	local BUTTON_HEIGHT = 70
 	local BUTTON_SPACING = 5
-	
-	local function getFont() 
-		return {
-			size = 19,
-			outlineWidth = 6,
-			outlineHeight = 6,
-			outline = true,
-			outlineColor = {0.54,0.72,1,0.3},
-			autoOutlineColor = false,
-			font = fontName
-		}
-	end
 
 	-------------------------------------------------------------------
 	-- Local variables
@@ -48,10 +36,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 			displayPanel:Show()
 		end
 		
-		obj:SetCaption(Configuration:GetSelectedColor() .. obj.oldCaption .. "\b")
-		obj.font = Chili.Font:New(getFont())
-		obj.backgroundColor = Configuration:GetButtonSelectedColor()
-		obj:Invalidate()
+		ButtonUtilities.SetButtonSelected(obj)
 	end
 	
 	local function SetButtonPositionAndSize(index)
@@ -174,6 +159,14 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		end
 	end
 	
+	function externalFunctions.SetTabCaption(name, caption)
+		for i = 1, #tabs do
+			if tabs[i].name == name and tabs[i].activityLabel then
+				ButtonUtilities.SetCaption(tabs[i].button, caption)
+			end
+		end
+	end
+	
 	function externalFunctions.AddTab(name, humanName, control, onClick, rank, selected, entryCheck)
 		local newTab = {}
 		
@@ -216,20 +209,13 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 				caption = "",
 			}
 			
-			button.oldFont = button.font
-			button.oldCaption = button.caption
-			button.oldBackgroundColor = button.backgroundColor
-			
 			if selected then
 				ToggleShow(button, newTab)
 			end
 			
 			control.OnOrphan = control.OnOrphan or {}
 			control.OnOrphan[#control.OnOrphan + 1] = function(obj)
-				button:SetCaption(button.oldCaption)
-				button.font = button.oldFont
-				button.backgroundColor = button.oldBackgroundColor
-				button:Invalidate()
+				ButtonUtilities.SetButtonDeselected(obj)
 				
 				if (displayPanel:IsEmpty() or displayPanel:GetChildByName(control.name))
 						and displayPanel.visible then
