@@ -237,7 +237,7 @@ Interface.commandPattern["ADDUSER"] = "(%S+)%s+(%S%S)%s+(%S+)%s*(.*)"
 
 function Interface:_User(data)
 	-- CHECKME: verify that name, country, cpu and similar info doesn't change
-	if self.users[userName] == nil then
+	if self.users[data.Name] == nil then
 		self:_OnAddUser(data.Name, data.Country, 3, data.AccountID)
 	end
 	self:_OnUpdateUserStatus(data.Name, {isInGame=data.IsInGame, isAway=data.IsAway, isAdmin=data.IsAdmin})
