@@ -630,13 +630,12 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 	battleLobby:AddListener("OnRemoveAi", onRemoveAi)
 end
 
-local function InitializeControls(battleID, oldLobby)
+local function InitializeControls(battleID, oldLobby, topPoportion)
 	local battle = battleLobby:GetBattle(battleID)
 	
 	local EXTERNAL_PAD_VERT = 10
 	local EXTERNAL_PAD_HOR = 15
 	local INTERNAL_PAD = 2
-	local TOP_PROPORTION = 55
 	
 	window = Control:New {
 		x = 0,
@@ -676,14 +675,14 @@ local function InitializeControls(battleID, oldLobby)
 		x = 0,
 		y = 0,
 		right = "50%",
-		bottom = (100 - TOP_PROPORTION) .. "%",
+		bottom = (100 - topPoportion) .. "%",
 		padding = {EXTERNAL_PAD_HOR, EXTERNAL_PAD_VERT, INTERNAL_PAD, INTERNAL_PAD},
 		parent = subPanel,
 	}
 	
 	local spectatorPanel = Control:New {
 		x = "67%",
-		y = TOP_PROPORTION .. "%",
+		y = topPoportion .. "%",
 		right = 0,
 		bottom = 0,
 		-- Add 7 to line up with chat
@@ -697,7 +696,7 @@ local function InitializeControls(battleID, oldLobby)
 		x = "50%",
 		y = 0,
 		right = "33%",
-		bottom = (100 - TOP_PROPORTION) .. "%",
+		bottom = (100 - topPoportion) .. "%",
 		padding = {EXTERNAL_PAD_HOR, EXTERNAL_PAD_VERT, 1, INTERNAL_PAD},
 		parent = subPanel,
 	}
@@ -706,7 +705,7 @@ local function InitializeControls(battleID, oldLobby)
 		x = "67%",
 		y = 0,
 		right = 0,
-		bottom = (100 - TOP_PROPORTION) .. "%",
+		bottom = (100 - topPoportion) .. "%",
 		padding = {1, EXTERNAL_PAD_VERT, EXTERNAL_PAD_HOR, INTERNAL_PAD},
 		parent = subPanel,
 	}
@@ -753,7 +752,7 @@ local function InitializeControls(battleID, oldLobby)
 	
 	local chatPanel = Control:New {
 		x = 0,
-		y = TOP_PROPORTION .. "%",
+		y = topPoportion .. "%",
 		bottom = 0,
 		right = "33%",
 		padding = {EXTERNAL_PAD_HOR, INTERNAL_PAD, INTERNAL_PAD, EXTERNAL_PAD_VERT},
@@ -827,7 +826,7 @@ function BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
 				if obj:IsEmpty() then
 					wrapperControl = obj
 					
-					local battleWindow = InitializeControls(battleID, battleLobby)
+					local battleWindow = InitializeControls(battleID, battleLobby, 55)
 					obj:AddChild(battleWindow)
 				end
 			end
@@ -879,7 +878,7 @@ function BattleRoomWindow.GetSingleplayerControl()
 
 				wrapperControl = obj
 				
-				local battleWindow = InitializeControls(1, battleLobby)
+				local battleWindow = InitializeControls(1, battleLobby, 70)
 				obj:AddChild(battleWindow)
 
 				battleLobby:SetBattleStatus({
