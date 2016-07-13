@@ -671,6 +671,9 @@ end
 function Lobby:GetUser(userName)
 	return self.users[userName]
 end
+function Lobby:GetUserBattleStatus(userName)
+	return self.userBattleStatus[userName]
+end
 -- returns users table (not necessarily an array)
 function Lobby:GetUsers()
 	return ShallowCopy(self.users)
@@ -770,7 +773,6 @@ function Lobby:GetMyTeamColor()
 	end
 end
 
-
 function Lobby:GetMyIsSpectator()
 	if self.userBattleStatus[self.myUserName] then
 		return self.userBattleStatus[self.myUserName].isSpectator
@@ -801,6 +803,13 @@ end
 
 function Lobby:GetMyUserName()
 	return self.myUserName
+end
+
+function Lobby:GetMyIsAdmin()
+	if self.users[self.myUserName] then
+		return self.users[self.myUserName].isAdmin
+	end
+	return false
 end
 
 -------------------------------------------------

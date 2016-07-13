@@ -15,8 +15,10 @@ ComboBox = Button:Inherit{
   defaultWidth  = 70,
   defaultHeight = 20,
   items = { "items" },
+  itemHeight = 20,
   selected = 1,
   OnSelect = {},
+  OnSelectName = {},
   maxDropDownHeight = 200,
   minDropDownHeight = 50,
   maxDropDownWidth = 500,
@@ -48,10 +50,13 @@ function ComboBox:Select(itemIdx)
     self.selected = itemIdx
     self.caption = ""
 
-    if type(item) == "string" then
+    if type(item) == "string" and not self.ignoreItemCaption then
         self.caption = item
     end
     self:CallListeners(self.OnSelect, itemIdx, true)
+    self:Invalidate()
+  elseif (type(itemIdx)=="string") then
+    self:CallListeners(self.OnSelectName, itemIdx, true)
     self:Invalidate()
   end
   --FIXME add Select(name)
@@ -75,13 +80,13 @@ function ComboBox:FocusUpdate()
   end
 end
 
-function ComboBox:MouseDown(...)
+function ComboBox:MouseDown(x, y)
   self.state.pressed = true
   if not self._dropDownWindow then
     local sx,sy = self:LocalToScreen(0,0)
-
+	
+	local selectByName = self.selectByName
     local labels = {}
-    local labelHeight = 20
 
     local width = math.max(self.width, self.minDropDownWidth)
     local height = 10
@@ -91,15 +96,20 @@ function ComboBox:MouseDown(...)
           local newBtn = ComboBoxItem:New {
             caption = item,
             width = '100%',
-            height = labelHeight,
+            height = self.itemHeight,
+			fontsize = self.itemFontSize,
             state = {focused = (i == self.selected), selected = (i == self.selected)},
             OnMouseUp = { function()
-              self:Select(i)
+              if selectByName then
+                self:Select(item)
+			  else
+                self:Select(i)
+              end
               self:_CloseWindow()
             end }
           }
           labels[#labels+1] = newBtn
-          height = height + labelHeight
+          height = height + self.itemHeight
           width = math.max(width, self.font:GetTextWidth(item))
       else
           labels[#labels+1] = item
@@ -126,7 +136,7 @@ function ComboBox:MouseDown(...)
       parent = screen,
       width  = width,
       height = height,
-      x = sx - (width - self.width),
+      x = math.max(sx, math.min(sx + self.width - width, (sx + x - width/2))),
       y = y,
       children = {
         ComboBoxScrollPanel:New{
