@@ -26,13 +26,13 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-------------------------------------------------------------------
 	-- Window structure
 	-------------------------------------------------------------------
-	local headingWindow = Window:New {
+	local headingWindow = Control:New {
 		x = 0,
 		y = 0,
 		width = titleWidth,
 		height = titleHeight,
 		name = "headingWindow",
-		caption = "Your Game Here",
+		caption = "", -- Your Game Here
 		parent = screen0,
 		resizable = false,
 		draggable = false,
@@ -42,29 +42,30 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	--headingWindow:SetPosRelative("20%","20%","20%","20%")
 	
-	local statusWindow = Window:New {
+	local statusWindow = Control:New {
 		x = titleWidth,
 		y = 0,
 		right = 0,
 		height = titleHeight - panelButtonsHeight,
 		name = "statusWindow",
-		--caption = "Status Window",
+		caption = "", -- Status Window
 		parent = screen0,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
 		children = {
-			WG.UserStatusPanel.GetControl()
+			WG.BattleStatusPanel.GetControl(),
+			WG.UserStatusPanel.GetControl(),
 		}
 	}
 	
-	local battleStatusHolder = Window:New {
-		x = 0,
-		y = 0,
-		width = battleStatusWidth,
+	local battleStatusHolder = Control:New {
+		x = 100,
+		y = 50,
+		width = battleStatusWidth - 100,
 		bottom = 0,
 		name = "battleStatusHolder",
-		--caption = "Battle and MM Status Window",
+		caption = "", -- Battle and MM Status Window
 		parent = screen0,
 		resizable = false,
 		draggable = false,
@@ -79,7 +80,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		width = (100 - panelWidthRel) .. "%",
 		bottom = 0,
 		name = "mainWindow",
-		--caption = "Main Window",
+		caption = "", -- Main Window
 		parent = screen0,
 		resizable = false,
 		draggable = false,
@@ -102,21 +103,25 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		width = "100%",
 		height = "100%",
 		name = "mainButtons",
-		--caption = "Main Buttons",
+		caption = "", -- Main Buttons
 		parent = buttonsPlace,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-	
-	local topBottomLine = Line:New {
+
+	local IMAGE_TOP_BACKGROUND = "luaui/images/top-background.png"
+	local topPartImage = Image:New {
 		x = 0,
 		y = titleHeightSmall,
 		right = 0,
+		height = titleHeight,
+		file = IMAGE_TOP_BACKGROUND,
 		parent = screen0,
+		keepAspect = false,
+		color = {1, 1, 1, 0.2},
 	}
-	topBottomLine:SetVisibility(false)
 	
 	--buttonsPlace._relativeBounds.bottom = 150
 	--buttonsPlace._relativeBounds.right = 150
@@ -128,7 +133,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		right = padding,
 		bottom = padding,
 		name = "contentPlace",
-		--caption = "Content Place",
+		caption = "", -- Content Place
 		parent = mainWindow,
 		resizable = false,
 		draggable = false,
@@ -155,7 +160,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		width = "100%",
 		height = "100%",
 		name = "panelButtons",
-		--caption = "Panel Buttons",
+		caption = "", -- Panel Buttons
 		parent = panelButtonsHolder,
 		resizable = false,
 		draggable = false,
@@ -168,7 +173,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		right = 0,
 		bottom = 0,
 		name = "panelWindow",
-		--caption = "Panel Window",
+		caption = "", -- Panel Window
 		parent = screen0,
 		resizable = false,
 		draggable = false,
@@ -312,9 +317,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			statusWindow:SetPos(titleWidth, nil, titleHeight, titleHeight - panelButtonsHeight)
 			statusWindow._relativeBounds.right = 0
 			statusWindow:UpdateClientArea()
-			
-			-- Only show top line in small mode
-			topBottomLine:SetVisibility(false)
 		else
 			rightPanelHandler.Rescale(2, 55)
 			RescaleMainWindow(2, 55)
@@ -349,9 +351,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			statusWindow:SetPos(mainButtonsWidthSmall, nil, titleHeightSmall, titleHeightSmall - statusWindowGapSmall)
 			statusWindow._relativeBounds.right = 0
 			statusWindow:UpdateClientArea()
-			
-			-- Only show top line in small mode
-			topBottomLine:SetVisibility(true)
 		end
 		
 		UpdateChildLayout()

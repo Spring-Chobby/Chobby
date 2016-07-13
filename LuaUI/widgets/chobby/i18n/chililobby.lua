@@ -21,6 +21,9 @@ return {
 		register_verb = "Register",
 		autologin = "Login automatically",
 		play_offline = "Play offline",
+		-- gui_battle_status_panel
+		spectating_game_status = "Spectating",
+		playing_game_status = "Playing",
 		--
 		start_download = 'Start download',
 		download_noun = 'Download',

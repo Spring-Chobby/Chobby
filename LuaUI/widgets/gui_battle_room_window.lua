@@ -153,10 +153,6 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 				battleLobby:SetBattleStatus({isSpectator = true})
 				WG.ButtonUtilities.SetButtonDeselected(btnPlay)
 				WG.ButtonUtilities.SetButtonSelected(obj)
-				
-				if parentTabPanel then
-					parentTabPanel.SetTabCaption("myBattle", "My Battle - Spectator")
-				end
 			end
 		},
 		parent = rightInfo,
@@ -174,10 +170,6 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 				battleLobby:SetBattleStatus({isSpectator = false})
 				WG.ButtonUtilities.SetButtonDeselected(btnSpectate)
 				WG.ButtonUtilities.SetButtonSelected(obj)
-				
-				if parentTabPanel then
-					parentTabPanel.SetTabCaption("myBattle", "My Battle - Player")
-				end
 			end
 		},
 		parent = rightInfo,
@@ -226,15 +218,9 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 			if isSpectator then
 				WG.ButtonUtilities.SetButtonDeselected(btnPlay)
 				WG.ButtonUtilities.SetButtonSelected(btnSpectate)
-				if parentTabPanel then
-					parentTabPanel.SetTabCaption("myBattle", "My Battle - Spectator")
-				end
 			else
 				WG.ButtonUtilities.SetButtonDeselected(btnSpectate)
 				WG.ButtonUtilities.SetButtonSelected(btnPlay)
-				if parentTabPanel then
-					parentTabPanel.SetTabCaption("myBattle", "My Battle - Player")
-				end
 			end
 		end
 	end
