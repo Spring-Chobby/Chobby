@@ -215,7 +215,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 			
 			control.OnOrphan = control.OnOrphan or {}
 			control.OnOrphan[#control.OnOrphan + 1] = function(obj)
-				ButtonUtilities.SetButtonDeselected(obj)
+				ButtonUtilities.SetButtonDeselected(button)
 				
 				if (displayPanel:IsEmpty() or displayPanel:GetChildByName(control.name))
 						and displayPanel.visible then
