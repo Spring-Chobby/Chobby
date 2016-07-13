@@ -99,7 +99,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		x = 15,
 		bottom = 110,
 		height = 20,
-		font = {size = 16},
+		font = WG.Chobby.Configuration:GetFont(2),
 		caption = battle.mapName,
 		parent = rightInfo,
 	}
@@ -127,7 +127,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		right = 0,
 		height = 50,
 		caption = "\255\66\138\201" .. i18n("start") ..  "\b",
-		font = { size = 22 },
+		font =  WG.Chobby.Configuration:GetFont(3),
 		OnClick = {
 			function()
 				if battle.isRunning then
@@ -147,7 +147,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		bottom = 50,
 		height = 50,
 		caption = "\255\66\138\201" .. i18n("watch") ..  "\b",
-		font = { size = 22 },
+		font =  WG.Chobby.Configuration:GetFont(3),
 		OnClick = {
 			function(obj)
 				battleLobby:SetBattleStatus({isSpectator = true})
@@ -168,7 +168,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		bottom = 50,
 		height = 50,
 		caption = "\255\66\138\201" .. i18n("play") ..  "\b",
-		font = { size = 22 },
+		font =  WG.Chobby.Configuration:GetFont(3),
 		OnClick = {
 			function(obj)
 				battleLobby:SetBattleStatus({isSpectator = false})
@@ -189,7 +189,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		height = 45,
 		right = 0,
 		caption = "\255\66\138\201" .. i18n("pick_map") ..  "\b",
-		font = { size = 22 },
+		font =  WG.Chobby.Configuration:GetFont(3),
 		OnClick = {
 			function()
 				WG.Chobby.MapListWindow(battleLobby)
@@ -306,7 +306,7 @@ local function AddTeamButtons(parent, offX, offY, joinFunc, aiFunc)
 		y = offY,
 		height = 30,
 		width = 75,
-		font = { size = 20 },
+		font =  WG.Chobby.Configuration:GetFont(3),
 		caption = i18n("join") .. "\b",
 		OnClick = {joinFunc},
 		parent = parent,
@@ -718,7 +718,7 @@ local function InitializeControls(battleID, oldLobby)
 		y = 10,
 		width = 80,
 		height = 45,
-		font = { size = 22 },
+		font =  WG.Chobby.Configuration:GetFont(3),
 		caption = WG.Chobby.Configuration:GetErrorColor() .. i18n("leave") .. "\b",
 		OnClick = {
 			function()
@@ -734,7 +734,7 @@ local function InitializeControls(battleID, oldLobby)
 		y = 18,
 		width = 200,
 		height = 30,
-		font = { size = 20 },
+		font =  WG.Chobby.Configuration:GetFont(3),
 		caption = i18n("battle") .. ": " .. tostring(battle.title),
 		parent = window,
 	}

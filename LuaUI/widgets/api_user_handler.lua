@@ -87,7 +87,7 @@ local function GetUserControls(userName)
 		valign = "center",
 		align = "left",
 		parent = userControls.mainControl,
-		font = {size = 18, shadow = false},
+		font = WG.Chobby.Configuration:GetFont(2),
 		caption = userName,
 	}
 	
@@ -100,7 +100,7 @@ local function GetUserControls(userName)
 		valign = "center",
 		align = "left",
 		parent = userControls.mainControl,
-		font = {size = 12, shadow = false},
+		font = WG.Chobby.Configuration:GetFont(1),
 		caption = GetUserActivity(userName),
 	}
 	

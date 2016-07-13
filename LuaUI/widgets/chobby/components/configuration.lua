@@ -4,7 +4,6 @@ VFS.Include("libs/liblobby/lobby/json.lua")
 
 -- all configuration attribute changes should use the :Set*Attribute*() and :Get*Attribute*() methods in order to assure proper functionality
 function Configuration:init()
-	self.scale = 1.2
 --     self.serverAddress = "localhost"
 	self.serverAddress = WG.Server.serverAddress or "springrts.com"
 	self.serverPort = 8200
@@ -28,7 +27,22 @@ function Configuration:init()
 	
 	self.singleplayer_mode = 2
 	
+	self.font = {
+		{size = 14, shadow = false},
+		{size = 18, shadow = false},
+		{size = 22, shadow = false},
+		{size = 32, shadow = false},
+		{size = 48, shadow = false},
+	}
+	
 	self.game_settings = VFS.Include("luaui/configs/springsettings/springsettings3.lua")
+end
+
+function Configuration:GetFont(sizeScale)
+	return {
+		size = self.font[sizeScale].size,
+		shadow = self.font[sizeScale].shadow,
+	}
 end
 
 function Configuration:SetConfigData(data)
@@ -51,14 +65,6 @@ function Configuration:GetConfigData()
 		lobby_fullscreen = self.lobby_fullscreen,
 		game_settings = self.game_settings,
 	}
-end
-
-function Configuration:SetScale(scale)
-	self.scale = scale
-end
-
-function Configuration:GetScale()
-	return self.scale
 end
 
 function Configuration:GetServerAddress()

@@ -10,7 +10,7 @@ function QueueWindow:init(queue)
 		width = 100,
 		height = 100,
 		caption = i18n("time_in_queue"),
-		font = { size = 18 },
+		font = Configuration:GetFont(2),
 		Update =
 		function(...)
 			Label.Update(self.lblStatus, ...)

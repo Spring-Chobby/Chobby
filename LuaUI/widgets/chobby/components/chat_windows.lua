@@ -272,7 +272,7 @@ function ChatWindows:init()
 		width = "50%", 
 		height = "10%",
 		caption = i18n("login_to_chat"),
-		font = {size = 30},
+		font = {WG.Chobby.Configuration:GetFont(4)},
 		parent = self.window,
 		OnClick = {function ()
 				Spring.Echo("Login")
@@ -355,9 +355,9 @@ function ChatWindows:SetTabBadge(tabName, text)
 			width = 12,
 			y = 2,
 			height = 10,
-			caption = text,
+			caption = Configuration:GetFont(1),
 			font = { 
-				size = 12,
+				Configuration:GetFont(1).size,
 				outline = true,
 				autoOutlineColor = false,
 				outlineColor = { 0, 1, 0, 0.6 },

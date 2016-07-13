@@ -6,7 +6,7 @@ function ListWindow:init(parent, title)
 		right = 5,
 		y = 18,
 		height = 20,
-		font = { size = 22 },
+		font = Configuration:GetFont(3),
 		caption = title,
 	}
 
@@ -16,7 +16,7 @@ function ListWindow:init(parent, title)
 		width = 80,
 		height = 45,
 		caption = Configuration:GetErrorColor() .. i18n("close") .. "\b",
-		font = { size = 22 },
+		font = Configuration:GetFont(3),
 		OnClick = {
 			function()
 				self:HideWindow()

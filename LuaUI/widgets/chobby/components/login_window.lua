@@ -24,74 +24,72 @@ function createTabGroup(ctrls)
 end
 
 function LoginWindow:init(failFunction, cancelText)
-	self.scale = 1.4 * Configuration:GetScale()
-	self.fontSize = 14
 	self.lblInstructions = Label:New {
 		x = 1,
-		width = 100 * self.scale,
-		y = 20 * self.scale,
-		height = 20 * self.scale,
+		width = 100,
+		y = 20,
+		height = 20,
 		caption = i18n("connect_to_spring_server"),
-		font = { size = self.scale * self.fontSize},
+		font = Configuration:GetFont(3),
 	}
 	self.lblServerAddress = Label:New {
 		x = 1,
-		width = 100 * self.scale,
-		y = 50 * self.scale,
-		height = 20 * self.scale,
+		width = 100,
+		y = 50,
+		height = 20,
 		caption = i18n("server") .. ":",
-		font = { size = self.scale * self.fontSize},
+		font = Configuration:GetFont(3),
 	}
 	self.ebServerAddress = EditBox:New {
-		x = 80 * self.scale,
-		width = 100 * self.scale,
-		y = 50 * self.scale,
-		height = 20 * self.scale,
+		x = 80,
+		width = 100,
+		y = 50,
+		height = 20,
 		text = Configuration.serverAddress,
-		font = { size = self.scale * self.fontSize},
+		font = Configuration:GetFont(3),
 	}
 	self.ebServerPort = EditBox:New {
-		x = 185 * self.scale,
-		width = 40 * self.scale,
-		y = 50 * self.scale,
-		height = 20 * self.scale,
+		x = 185,
+		width = 40,
+		y = 50,
+		height = 20,
 		text = tostring(Configuration.serverPort),
-		font = { size = self.scale * self.fontSize},
+		font = Configuration:GetFont(3),
 	}
 
 	self.lblUsername = Label:New {
 		x = 1,
-		width = 100 * self.scale,
-		y = 75 * self.scale,
-		height = 20 * self.scale,
+		width = 100,
+		y = 75,
+		height = 20,
 		caption = i18n("username") .. ":",
-		font = { size = self.scale * self.fontSize},
+		font = Configuration:GetFont(3),
 	}
 	self.ebUsername = EditBox:New {
-		x = 80 * self.scale,
-		width = 120 * self.scale,
-		y = 75 * self.scale,
-		height = 20 * self.scale,
+		x = 80,
+		width = 120,
+		y = 75,
+		height = 20,
 		text = Configuration.userName,
-		font = { size = self.scale * self.fontSize},
+		font = Configuration:GetFont(3),
 	}
 
 	self.lblPassword = Label:New {
 		x = 1,
-		width = 100 * self.scale,
-		y = 100 * self.scale,
-		height = 20 * self.scale,
+		width = 100,
+		y = 100,
+		height = 20,
 		caption = i18n("password") .. ":",
-		font = { size = self.scale * self.fontSize},
+		font = Configuration:GetFont(3),
 	}
 	self.ebPassword = EditBox:New {
-		x = 80 * self.scale,
-		width = 120 * self.scale,
-		y = 100 * self.scale,
-		height = 20 * self.scale,
+		x = 80,
+		width = 120,
+		y = 100,
+		height = 20,
 		text = Configuration.password,
 		passwordInput = true,
-		font = { size = self.scale * self.fontSize},
+		font = Configuration:GetFont(3),
 		OnKeyPress = {
 			function(obj, key, mods, ...)
 				if key == Spring.GetKeyCode("enter") or 
@@ -104,26 +102,27 @@ function LoginWindow:init(failFunction, cancelText)
 
 	self.lblError = Label:New {
 		x = 1,
-		width = 100 * self.scale,
-		y = 125 * self.scale,
-		height = 55 * self.scale,
+		width = 100,
+		y = 125,
+		height = 55,
 		caption = "",
 		font = {
 			color = { 1, 0, 0, 1 },
-			size = self.fontSize * self.scale,
+			size = Configuration:GetFont(2).size,
+			shadow = Configuration:GetFont(2).shadow
 		},
 	}
 	
 	self.cbAutoLogin = Checkbox:New {
 		x = 1,
-		width = 116 * self.scale,
-		y = 150 * self.scale,
-		height = 20 * self.scale,
+		width = 116,
+		y = 150,
+		height = 20,
 		boxalign = "right",
-		boxsize = 10 * self.scale,
+		boxsize = 10,
 		caption = i18n("autologin"),
 		checked = Configuration.autoLogin,
-		font = { size = self.scale * self.fontSize * 0.8},
+		font = Configuration:GetFont(1),
 		OnClick = {function (obj)
 			WG.SettingsWindow.SetConfigValue("autologin", obj.checked)
 		end},
@@ -131,11 +130,11 @@ function LoginWindow:init(failFunction, cancelText)
 
 	self.btnLogin = Button:New {
 		x = 1,
-		width = 80 * self.scale,
+		width = 80,
 		bottom = 1,
-		height = 40 * self.scale,
+		height = 40,
 		caption = i18n("login_verb"),
-		font = { size = self.scale * self.fontSize},
+		font = Configuration:GetFont(3),
 		OnClick = {
 			function()
 				self:tryLogin()
@@ -144,12 +143,12 @@ function LoginWindow:init(failFunction, cancelText)
 	}
 
 	self.btnRegister = Button:New {
-		x = 85 * self.scale,
-		width = 80 * self.scale,
+		x = 85,
+		width = 80,
 		bottom = 1,
-		height = 40 * self.scale,
+		height = 40,
 		caption = i18n("register_verb"),
-		font = { size = self.scale * self.fontSize},
+		font = Configuration:GetFont(3),
 		OnClick = {
 			function()
 				self:tryRegister()
@@ -159,11 +158,11 @@ function LoginWindow:init(failFunction, cancelText)
 	
 	self.btnCancel = Button:New {
 		right = 1,
-		width = 80 * self.scale,
+		width = 80,
 		bottom = 1,
-		height = 40 * self.scale,
+		height = 40,
 		caption = i18n(cancelText or "cancel"),
-		font = { size = self.scale * self.fontSize},
+		font = Configuration:GetFont(3),
 		OnClick = {
 			function()
 				self.window:Dispose()
@@ -176,7 +175,7 @@ function LoginWindow:init(failFunction, cancelText)
 	
 
 	local ww, wh = Spring.GetWindowGeometry()
-	local w, h = math.floor(265 * self.scale), math.floor(250 * self.scale)
+	local w, h = math.floor(265), math.floor(250)
 	self.window = Window:New {
 		name = "loginWindow",
 		x = (ww - w) / 2,
@@ -378,15 +377,15 @@ function LoginWindow:createAgreementWindow()
 		y = 1,
 		height = "100%",
 		text = self.agreementText,
-		font = { size = self.scale * self.fontSize},
+		font = Configuration:GetFont(3),
 	}
 	self.btnYes = Button:New {
 		x = 1,
-		width = 80 * self.scale,
+		width = 80,
 		bottom = 1,
-		height = 40 * self.scale,
+		height = 40,
 		caption = "Accept",
-		font = { size = self.scale * self.fontSize},
+		font = Configuration:GetFont(3),
 		OnClick = {
 			function()
 				self:acceptAgreement()
@@ -394,12 +393,12 @@ function LoginWindow:createAgreementWindow()
 		},
 	}
 	self.btnNo = Button:New {
-		x = 150 * self.scale,
-		width = 80 * self.scale,
+		x = 150,
+		width = 80,
 		bottom = 1,
-		height = 40 * self.scale,
+		height = 40,
 		caption = "Decline",
-		font = { size = self.scale * self.fontSize},
+		font = Configuration:GetFont(3),
 		OnClick = {
 			function()
 				self:declineAgreement()
@@ -409,8 +408,8 @@ function LoginWindow:createAgreementWindow()
 	self.agreementWindow = Window:New {
 		x = 600,
 		y = 200,
-		width = 350 * self.scale,
-		height = 450 * self.scale,
+		width = 350,
+		height = 450,
 		caption = "Use agreement",
 		resizable = false,
 		draggable = false,
@@ -419,7 +418,7 @@ function LoginWindow:createAgreementWindow()
 				x = 1,
 				right = 7,
 				y = 1,
-				bottom = 42 * self.scale,
+				bottom = 42,
 				children = {
 					self.tbAgreement
 				},

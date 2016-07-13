@@ -172,7 +172,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		width = "100%",
 		height = 70,
 		caption = i18n("exit"),
-		font = {size = 20},
+		font = Configuration:GetFont(3),
 		parent = mainButtons,
 		OnClick = {
 			function(self)

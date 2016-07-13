@@ -76,6 +76,7 @@ local function InitializeControls(window)
 	-- TODO: Representing my user should be done in a uniform way: 
 	-- See: https://github.com/Spring-Chobby/Chobby/issues/49
 	lblPlayerIcon = Label:New {
+		name = "playerIcon",
 		x = 0,
 		width = 150,
 		y = 0,
@@ -83,9 +84,7 @@ local function InitializeControls(window)
 		valign = "center",
 		caption = "",
 		parent = window,
-		font = {
-			size = 16,
-		},
+		font = WG.Chobby.Configuration:GetFont(2)
 	}
 
 	btnLogout = Button:New {
@@ -98,15 +97,14 @@ local function InitializeControls(window)
 	}
 	
 	lblPing = Label:New {
+		name = "ping",
 		x = 0,
 		width = 150,
 		y = 25,
 		height = 20,
 		valign = "center",
 		caption = "\255\180\180\180" .. i18n("offline") .. "\b",
-		font = {
-			size = 20,
-		},
+		font = WG.Chobby.Configuration:GetFont(3),
 		parent = window,
 	}
 
@@ -178,7 +176,7 @@ function widget:Initialize()
 	WG.UserStatusPanel = UserStatusPanel
 
 	-- TODO: This should probably be moved elsewhere
-	UserStatusPanel.GetControl()
+	WG.Delay(UserStatusPanel.GetControl, 0.01)
 end
 
 function widget:Shutdown()

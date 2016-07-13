@@ -183,7 +183,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 				width = "100%",
 				height = "100%",
 				caption = humanName,
-				font = {size = 20},
+				font = Configuration:GetFont(3),
 				parent = buttonsHolder,
 				OnClick = {
 					function(obj) 
@@ -205,7 +205,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 				valign = "top",
 				align = "right",
 				parent = button,
-				font = {size = 12},
+				font = Configuration:GetFont(1),
 				caption = "",
 			}
 			
@@ -229,7 +229,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 				width = "100%",
 				height = "100%",
 				caption = humanName,
-				font = {size = 20},
+				font = Configuration:GetFont(3),
 				parent = buttonsHolder,
 				OnClick = {onClick},
 			}
@@ -283,7 +283,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 			valign = "center",
 			align = "left",
 			parent = buttonsHolder,
-			font = {size = 20},
+			font = Configuration:GetFont(3),
 			caption = i18n(name),
 		}
 		-- Add heading and back button

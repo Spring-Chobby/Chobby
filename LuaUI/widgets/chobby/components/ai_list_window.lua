@@ -19,7 +19,7 @@ function AiListWindow:init(lobby, gameName, allyTeam)
 			width = "100%",
 			height = "100%",
 			caption = "shortName: " .. ai.shortName .. ", version: " .. ai.version,
-			font = { size = 22 },
+			font = Configuration:GetFont(3),
 			OnClick = {
 				function()
 					local battle = lobby:GetBattle(lobby:GetMyBattleID())

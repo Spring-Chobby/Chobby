@@ -10,9 +10,7 @@ function SBConnectionStatus:init()
 		valign = "center",
 		width = 100,
 		caption = "\255\180\180\180" .. i18n("offline") .. "\b",
-		font = {
-			size = 20,
-		},
+		font = Configuration:GetFont(3)
 	}
 
 	local updateStatus = function()

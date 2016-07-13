@@ -79,7 +79,7 @@ function QueueListWindow:AddQueue(queue)
 		y = 0,
 		height = h,
 		caption = queue.title:sub(1, 15),
-		font = { size = 18 },
+		font = Configuration:GetFont(2),
 		valign = 'center',
 		tooltip = gameNamesStr, -- TODO: special (?) button for the tooltip
 	}
@@ -106,7 +106,7 @@ function QueueListWindow:AddQueue(queue)
 		y = 5,
 		height = h - 10,
 		caption = i18n("join"),
-		font = { size = 18 },
+		font = Configuration:GetFont(2),
 		OnMouseUp = {
 			function()
 				if btnJoin.state.pressed then
@@ -124,7 +124,7 @@ function QueueListWindow:AddQueue(queue)
 		y = 5,
 		height = h - 10,
 		caption = i18n("download"),
-		font = { size = 18 },
+		font = Configuration:GetFont(2),
 		OnMouseUp = {
 			function()
 				for _, game in pairs(missingGames) do

@@ -1,9 +1,9 @@
 
 ButtonUtilities = ButtonUtilities or {}
 
-local function GetFont()
+local function GetFont(size)
 	return {
-		size = 19,
+		size = size,
 		outlineWidth = 6,
 		outlineHeight = 6,
 		outline = true,
@@ -26,7 +26,7 @@ function ButtonUtilities.SetButtonSelected(button)
 	button.highlighted = true
 	
 	button:SetCaption(Configuration:GetSelectedColor() .. button.oldCaption .. "\b")
-	button.font = Chili.Font:New(GetFont())
+	button.font = Chili.Font:New(GetFont(button.oldFont.size - 2))
 	
 	button.backgroundColor = Configuration:GetButtonSelectedColor()
 	button:Invalidate()

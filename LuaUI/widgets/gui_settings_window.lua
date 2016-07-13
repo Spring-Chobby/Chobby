@@ -83,7 +83,7 @@ local function InitializeControls(window)
 		width = 180,
 		height = 30,
 		parent = window,
-		font = {size = 30},
+		font = WG.Chobby.Configuration:GetFont(4),
 		caption = "Lobby",
 	}
 	Label:New {
@@ -94,7 +94,7 @@ local function InitializeControls(window)
 		valign = "center",
 		align = "right",
 		parent = window,
-		font = {size = 20},
+		font = WG.Chobby.Configuration:GetFont(3),
 		caption = "Display:",
 	}
 	ComboBox:New {
@@ -127,7 +127,7 @@ local function InitializeControls(window)
 		valign = "center",
 		align = "right",
 		parent = window,
-		font = {size = 20},
+		font =  WG.Chobby.Configuration:GetFont(3),
 		caption = "Panels:",
 	}
 	ComboBox:New {
@@ -197,7 +197,7 @@ local function InitializeControls(window)
 		valign = "center",
 		align = "right",
 		parent = window,
-		font = {size = 20},
+		font =  WG.Chobby.Configuration:GetFont(3),
 		caption = "Display:",
 	}
 	ComboBox:New {
@@ -228,7 +228,7 @@ local function InitializeControls(window)
 		valign = "center",
 		align = "right",
 		parent = window,
-		font = {size = 20},
+		font =  WG.Chobby.Configuration:GetFont(3),
 		caption = "Singleplayer:",
 	}
 	ComboBox:New {
@@ -277,7 +277,7 @@ local function InitializeControls(window)
 		valign = "center",
 		align = "right",
 		parent = window,
-		font = {size = 20},
+		font =  WG.Chobby.Configuration:GetFont(3),
 		caption = "Settings:",
 	}
 	
@@ -288,7 +288,7 @@ local function InitializeControls(window)
 			width = 80, 
 			bottom = 0,
 			caption = caption,
-			font = {size = 16},
+			font =  WG.Chobby.Configuration:GetFont(2),
 			OnClick = {
 				function ()
 					WG.Chobby.Configuration.game_settings = VFS.Include("luaui/configs/springsettings/" .. settings)

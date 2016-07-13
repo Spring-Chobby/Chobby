@@ -45,7 +45,7 @@ local includes = {
 	"components/map_list_window.lua",
 	"components/game_list_window.lua",
 	
-	
+	-- utilities
 	"utilities/buttons.lua",
 }
 

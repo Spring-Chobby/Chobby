@@ -14,7 +14,7 @@ function MapListWindow:init(lobby)
 				width = "100%",
 				height = "100%",
 				caption = info.name,
-				font = { size = 22 },
+				font = Configuration:GetFont(3),
 				OnClick = {
 					function()
 						lobby:SelectMap(info.name)
