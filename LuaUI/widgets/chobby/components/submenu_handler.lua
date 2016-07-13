@@ -5,7 +5,9 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 	
 	local buttonsHolder
 	
-	local BUTTON_HEIGHT = 70
+	local fontSizeScale = 3
+	local buttonHeight = 70
+	
 	local BUTTON_SPACING = 5
 	local BUTTON_OFFSET = 50
 	
@@ -24,6 +26,20 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 				panelWindow:Hide()
 			end
 		end
+	end
+	
+	local function SetButtonPositionAndSize(index)
+		submenus[index].button:SetPos(
+			nil, 
+			(index - 1) * (buttonHeight + BUTTON_SPACING) + BUTTON_OFFSET, 
+			nil, 
+			buttonHeight
+		)
+		submenus[index].button:SetPosRelative(
+			"0%",
+			nil,
+			"100%"
+		)
 	end
 	
 	-------------------------------------------------------------------
@@ -76,6 +92,16 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 		submenus[index].panelHandler = newPanelHandler
 	end
 	
+	function externalFunctions.Rescale(newFontSize, newButtonHeight)
+		fontSizeScale = newFontSize or fontSizeScale
+		buttonHeight = newButtonHeight or buttonHeight
+		for i = 1, #submenus do
+			submenus[i].panelHandler.Rescale(newFontSize, newButtonHeight)
+			ButtonUtilities.SetFontSizeScale(submenus[i].button, fontSizeScale)
+			SetButtonPositionAndSize(i)
+		end
+	end
+	
 	-------------------------------------------------------------------
 	-- Initialization
 	-------------------------------------------------------------------
@@ -92,7 +118,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 	
 	for i = 1, #submenus do
 		
-		local panelHandler = GetTabPanelHandler(submenus[i].name, buttonWindow, panelWindow, submenus[i].tabs, true, BackToMainMenu)
+		local panelHandler = GetTabPanelHandler(submenus[i].name, buttonWindow, panelWindow, submenus[i].tabs, true, BackToMainMenu, fontSizeScale)
 		panelHandler.Hide()
 		
 		submenuPanelNames[submenus[i].name] = panelHandler
@@ -100,9 +126,9 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 		
 		submenus[i].button = Button:New {
 			x = 0,
-			y = (i - 1) * (BUTTON_HEIGHT + BUTTON_SPACING) + BUTTON_OFFSET,
+			y = (i - 1) * (buttonHeight + BUTTON_SPACING) + BUTTON_OFFSET,
 			width = "100%",
-			height = BUTTON_HEIGHT,
+			height = buttonHeight,
 			caption = i18n(submenus[i].name),
 			font = { size = 20},
 			parent = buttonsHolder,

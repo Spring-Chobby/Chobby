@@ -6,10 +6,14 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local panelWidthRel = 40
 	
 	local titleHeight = 180
+	local titleHeightSmall = 140
 	local titleWidth = 400
 	local battleStatusWidth = 480
 	local panelButtonsHeight = 50
+	local statusWindowGapSmall = 30
 	local mainButtonsWidth = 180
+	
+	local mainButtonsWidthSmall = 150
 	
 	local padding = 0
 	
@@ -108,7 +112,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	local topBottomLine = Line:New {
 		x = 0,
-		y = titleHeight,
+		y = titleHeightSmall,
 		right = 0,
 		parent = screen0,
 	}
@@ -230,6 +234,19 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons, panelWindow, rightPanelTabs)
 	local mainWindowHandler = GetSubmenuHandler(mainButtons, contentPlace, submenus)
 	
+	local function RescaleMainWindow(newFontSize, newButtonHeight)
+		mainWindowHandler.Rescale(newFontSize, newButtonHeight)
+		exitButton:SetPos(nil, nil, nil, newButtonHeight)
+		exitButton._relativeBounds.bottom = 0
+		exitButton:UpdateClientArea()
+		
+		ButtonUtilities.SetFontSizeScale(exitButton, newFontSize)
+	end
+	
+	battleStatusPanelHandler.Rescale(4, 70)
+	rightPanelHandler.Rescale(2, 70)
+	RescaleMainWindow(3, 70)
+	
 	local function UpdateChildLayout()
 		if fullscreenMode then
 			chatWindows:ReattachTabHolder()
@@ -244,7 +261,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				end
 			end
 		else
-			chatWindows:SetTabHolderParent(screen0, titleHeight, titleHeight - panelButtonsHeight + 6)
+			chatWindows:SetTabHolderParent(screen0, titleHeightSmall, titleHeightSmall - panelButtonsHeight + 6)
 			
 			rightPanelHandler.UpdateLayout(contentPlace, true)
 			if contentPlace:IsEmpty() and not panelWindow:IsEmpty() then
@@ -264,6 +281,15 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		fullscreenMode = newFullscreen
 		
 		if fullscreenMode then
+			RescaleMainWindow(3, 70)
+		
+			-- Make main buttons wider
+			contentPlace:SetPos(mainButtonsWidth)
+			contentPlace._relativeBounds.right = 0
+			contentPlace:UpdateClientArea()
+			
+			buttonsPlace:SetPos(nil, nil, mainButtonsWidth)
+			
 			-- Move Panel Buttons
 			mainButtons:RemoveChild(panelButtons)
 			panelButtonsHolder:AddChild(panelButtons)
@@ -275,23 +301,36 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			panelButtonsHolder:Show()
 			panelWindow:Show()
 			panelWindow:SetVisibility(false)
+			
+			mainWindow:SetPos(nil, titleHeight)
 			mainWindow._relativeBounds.right = panelWidthRel .. "%"
+			mainWindow._relativeBounds.bottom = 0
 			mainWindow:UpdateClientArea()
 			
 			-- Align game title and status.
 			headingWindow:SetPos(0, 0, titleWidth, titleHeight)
-			statusWindow:SetPos(titleWidth)
+			statusWindow:SetPos(titleWidth, nil, titleHeight, titleHeight - panelButtonsHeight)
 			statusWindow._relativeBounds.right = 0
 			statusWindow:UpdateClientArea()
 			
 			-- Only show top line in small mode
 			topBottomLine:SetVisibility(false)
 		else
+			rightPanelHandler.Rescale(2, 55)
+			RescaleMainWindow(2, 55)
+			
+			-- Make main buttons thinner
+			contentPlace:SetPos(mainButtonsWidthSmall)
+			contentPlace._relativeBounds.right = 0
+			contentPlace:UpdateClientArea()
+			
+			buttonsPlace:SetPos(nil, nil, mainButtonsWidthSmall)
+			
 			-- Move Panel Buttons
 			panelButtonsHolder:RemoveChild(panelButtons)
 			mainButtons:AddChild(panelButtons)
 			
-			panelButtons:SetPosRelative("0%","40%", "100%","50%")
+			panelButtons:SetPosRelative("0%","45%", "100%","50%")
 			--mainButtons:SetPosRelative("0%","0%", nil,"50%")
 			
 			-- Make Main Window take up more space
@@ -300,18 +339,19 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			if panelWindow.visible then
 				panelWindow:Hide()
 			end
+			mainWindow:SetPos(nil, titleHeightSmall)
 			mainWindow._relativeBounds.right = 0
+			mainWindow._relativeBounds.bottom = 0
 			mainWindow:UpdateClientArea()
 			
 			-- Align game title and status.
-			headingWindow:SetPos(nil, nil, mainButtonsWidth + padding)
-			statusWindow:SetPos(mainButtonsWidth)
+			headingWindow:SetPos(nil, nil, mainButtonsWidthSmall + padding, titleHeightSmall)
+			statusWindow:SetPos(mainButtonsWidthSmall, nil, titleHeightSmall, titleHeightSmall - statusWindowGapSmall)
 			statusWindow._relativeBounds.right = 0
 			statusWindow:UpdateClientArea()
 			
 			-- Only show top line in small mode
 			topBottomLine:SetVisibility(true)
-			topBottomLine:BringToFront()
 		end
 		
 		UpdateChildLayout()

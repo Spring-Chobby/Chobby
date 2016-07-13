@@ -2,16 +2,20 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 	
 	local externalFunctions = {}
 	
-	local BUTTON_HEIGHT = 70
 	local BUTTON_SPACING = 5
 
 	-------------------------------------------------------------------
 	-- Local variables
 	-------------------------------------------------------------------
 	local buttonsHolder
-	
 	local titleBackControl
+	
+	local fontSizeScale = 3
 	local buttonOffset = 0
+	local buttonHeight = 70
+	
+	local heading -- has a value if the tab panel has a heading
+	local backButton
 	
 	local tabs = {}
 	
@@ -43,9 +47,9 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		if tabsVertical then
 			tabs[index].button:SetPos(
 				nil, 
-				(index - 1) * (BUTTON_HEIGHT + BUTTON_SPACING) + buttonOffset, 
+				(index - 1) * (buttonHeight + BUTTON_SPACING) + buttonOffset, 
 				nil, 
-				BUTTON_HEIGHT
+				buttonHeight
 			)
 			tabs[index].button:SetPosRelative(
 				"0%",
@@ -104,6 +108,35 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 			end
 		end
 		return false
+	end
+	
+	function externalFunctions.Rescale(newFontSize, newButtonHeight)
+		fontSizeScale = newFontSize or fontSizeScale
+		buttonHeight = newButtonHeight or buttonHeight
+		if heading then
+			heading:Dispose()
+			local size = Configuration:GetFont(fontSizeScale).size
+			heading = TextBox:New {
+				x = 4 + 2*size,
+				y = 40 - size,
+				right = 0,
+				height = 30,
+				valign = "center",
+				align = "center",
+				parent = buttonsHolder,
+				fontsize = size,
+				text = i18n(name),
+			}
+			
+			backButton:SetPos(4, 48 - size*2, size*2, size*2)
+		end
+		
+		for i = 1, #tabs do
+			if tabs[i].button then
+				SetButtonPositionAndSize(i)
+				ButtonUtilities.SetFontSizeScale(tabs[i].button, fontSizeScale)
+			end
+		end
 	end
 	
 	function externalFunctions.OpenTab(tabIndex)
@@ -189,7 +222,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 				width = "100%",
 				height = "100%",
 				caption = humanName,
-				font = Configuration:GetFont(3),
+				font = Configuration:GetFont(fontSizeScale),
 				parent = buttonsHolder,
 				OnClick = {
 					function(obj) 
@@ -235,7 +268,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 				width = "100%",
 				height = "100%",
 				caption = humanName,
-				font = Configuration:GetFont(3),
+				font = Configuration:GetFont(fontSizeScale),
 				parent = buttonsHolder,
 				OnClick = {onClick},
 			}
@@ -268,14 +301,27 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 	}
 	
 	if backFunction then
+		-- Add heading and back button
 		buttonOffset = 50
 		
-		Button:New {
+		local size = Configuration:GetFont(fontSizeScale).size
+		heading = TextBox:New {
+			x = 4 + size*2,
+			y = 40 - size,
+			right = 0,
+			height = 30,
+			valign = "center",
+			align = "center",
+			parent = buttonsHolder,
+			fontsize = size,
+			text = i18n(name),
+		}
+		backButton = Button:New {
 			name = name .. "_back_button",
-			x = 2,
-			y = 5,
-			width = 45,
-			height = 45,
+			x = 4,
+			y = 48 - size*2,
+			width = size*2,
+			height = size*2,
 			caption = "",
 			padding = {2,2,2,2},
 			children = {
@@ -290,18 +336,6 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 			parent = buttonsHolder,
 			OnClick = {function (obj) backFunction(externalFunctions) end},
 		}
-		TextBox:New {
-			x = 50,
-			y = 18,
-			right = 0,
-			height = 30,
-			valign = "center",
-			align = "center",
-			parent = buttonsHolder,
-			fontsize = Configuration:GetFont(3).size,
-			text = i18n(name),
-		}
-		-- Add heading and back button
 	end
 	
 	for i = 1, #initialTabs do

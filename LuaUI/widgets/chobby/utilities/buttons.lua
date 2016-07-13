@@ -58,4 +58,14 @@ function ButtonUtilities.SetCaption(button, newCaption)
 	end
 end
 
+function ButtonUtilities.SetFontSizeScale(button, sizeScale)
+	button.font = Chili.Font:New(WG.Chobby.Configuration:GetFont(sizeScale))
+	button:Invalidate()
+	button.oldFont = button.font
+	if button.highlighted then
+		button.highlighted = false -- force redo
+		ButtonUtilities.SetButtonSelected(button)
+	end
+end
+
 WG.ButtonUtilities = ButtonUtilities
