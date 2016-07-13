@@ -15,6 +15,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	local mainButtonsWidthSmall = 150
 	
+	local imageFudge = 6
+	
 	local padding = 0
 	
 	-- Switch to single panel mode when below the minimum screen width
@@ -317,6 +319,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			statusWindow:SetPos(titleWidth, nil, titleHeight, titleHeight - panelButtonsHeight)
 			statusWindow._relativeBounds.right = 0
 			statusWindow:UpdateClientArea()
+			
+			topPartImage:SetPos(nil, nil, nil, titleHeight + imageFudge)
 		else
 			rightPanelHandler.Rescale(2, 55)
 			RescaleMainWindow(2, 55)
@@ -351,6 +355,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			statusWindow:SetPos(mainButtonsWidthSmall, nil, titleHeightSmall, titleHeightSmall - statusWindowGapSmall)
 			statusWindow._relativeBounds.right = 0
 			statusWindow:UpdateClientArea()
+			
+			topPartImage:SetPos(nil, nil, nil, titleHeightSmall + imageFudge)
 		end
 		
 		UpdateChildLayout()

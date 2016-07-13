@@ -262,7 +262,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		end
 		if battleLobby:GetMyUserName() == userName then
 			window:Dispose()
-			if wrapperControl and wrapperControl.visible then
+			if wrapperControl and wrapperControl.visible and wrapperControl.parent then
 				wrapperControl:Hide()
 			end
 		else
