@@ -519,7 +519,7 @@ function ChatWindows:GetChannelConsole(chanName)
 				},
 				Control:New {
 					width = Configuration.userListWidth, y = 0, right = 0, bottom = 0,
-					padding={0,0,0,5}, itemPadding={0,0,0,0}, itemMargin={0,0,0,0},
+					padding={0,0,0,7}, itemPadding={0,0,0,0}, itemMargin={0,0,0,0},
 					children = { userListPanel.panel, },
 				},
 				Button:New {
