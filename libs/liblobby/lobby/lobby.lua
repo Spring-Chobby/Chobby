@@ -216,6 +216,9 @@ function Lobby:_OnConnect(protocolVersion, springVersion, udpPort, serverMode)
 end
 
 function Lobby:_OnAccepted()
+	if self.status == "connecting" then
+		self.status = "connected"
+	end
 	self:_CallListeners("OnAccepted")
 end
 

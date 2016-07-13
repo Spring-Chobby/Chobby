@@ -178,9 +178,6 @@ function Interface:_SocketUpdate()
 		end
 		Spring.Log(LOG_SECTION, LOG.ERROR, "Error in select: " .. error)
 	end
-	if self.status == "connecting" then
-		self.status = "connected"
-	end
 	for _, input in ipairs(readable) do
 		local s, status, commandsStr = input:receive('*a') --try to read all data
 		if (status == "timeout" or status == nil) and commandsStr ~= nil and commandsStr ~= "" then

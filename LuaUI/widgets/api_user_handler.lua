@@ -31,6 +31,29 @@ local userListList = {
 --------------------------------------------------------------------------------
 -- Utilities
 
+local function GetUserCountryImage(userName)
+	local userInfo = lobby:GetUser(userName) or {}
+	if userInfo.country then
+		local fileName = "luaui/images/flags/" .. string.lower(userInfo.country) .. ".png"
+		if VFS.FileExists(fileName) then
+			return fileName
+		end
+	end
+	return "luaui/images/flags/unknown.png"
+end
+
+local function GetUserRankImageName(userName)
+	local userInfo = lobby:GetUser(userName) or {}
+	if userInfo.isBot or userInfo.aiLib then
+		return "luaui/images/ranks/robot.png"
+	elseif userInfo.isAdmin then
+		return "luaui/images/ranks/moderator.png"
+	elseif userInfo.level then
+		local rankBracket = math.min(8, math.floor(userInfo.level/10)) + 1
+		return "luaui/images/ranks/" .. rankBracket .. ".png"
+	end
+end
+
 local function GetUserActivity(userName)
 	local userInfo = lobby:GetUser(userName) or {}
 	if userInfo.isInGame then
@@ -52,44 +75,35 @@ local function UpdateUserActivity(listener, userName)
 	for i = 1, #userListList do
 		local userList = userListList[i]
 		if userList[userName] then
-			userList[userName].status:SetCaption(activity)
+			--userList[userName].status:SetCaption(activity)
 		end
 	end
 end
 
-local function GetUserControls(userName)
-	local userControls = {}
+local function GetUserControls(userName, reinitialize)
+	local userControls = reinitialize or {}
 	
-	userControls.mainControl = Button:New {
-		name = userName,
-		x = 0,
-		y = 0,
-		right = 0,
-		height = 25,
-		caption = "",
-		backgroundColor = {0, 0, 0, 0},
-		borderColor = {0, 0, 0, 0},
-		padding = {0, 0, 0, 0},
-		OnClick = {
-			function()
-				WG.Chobby.interfaceRoot.GetChatWindow():GetPrivateChatConsole(userName)
-			end
-		},
-		parent = screen0
-	}
-	
-	userControls.name = Label:New {
-		name = "name",
-		x = 50,
-		y = 0,
-		right = 0,
-		bottom = 4,
-		valign = "center",
-		align = "left",
-		parent = userControls.mainControl,
-		font = WG.Chobby.Configuration:GetFont(2),
-		caption = userName,
-	}
+	if reinitialize then
+		userControls.mainControl:ClearChildren()
+	else
+		userControls.mainControl = Button:New {
+			name = userName,
+			x = 0,
+			y = 0,
+			right = 0,
+			height = 23,
+			caption = "",
+			backgroundColor = {0, 0, 0, 0},
+			borderColor = {0, 0, 0, 0},
+			padding = {0, 0, 0, 0},
+			OnClick = {
+				function()
+					WG.Chobby.interfaceRoot.GetChatWindow():GetPrivateChatConsole(userName)
+				end
+			},
+			parent = screen0
+		}
+	end
 	
 	userControls.status = Label:New {
 		name = "status",
@@ -97,12 +111,46 @@ local function GetUserControls(userName)
 		y = 0,
 		right = 0,
 		bottom = 4,
-		valign = "center",
+		valign = "bottom",
 		align = "left",
 		parent = userControls.mainControl,
 		font = WG.Chobby.Configuration:GetFont(1),
-		caption = GetUserActivity(userName),
+		caption = "", --GetUserActivity(userName),
 	}
+	
+	userControls.country = Image:New {
+		name = "country",
+		x = 1,
+		y = 3,
+		width = 21,
+		height = 19,
+		parent = userControls.mainControl,
+		keepAspect = true,
+		file = GetUserCountryImage(userName),
+	}
+	userControls.level = Image:New {
+		name = "level",
+		x = 26,
+		y = 3,
+		width = 19,
+		height = 19,
+		parent = userControls.mainControl,
+		keepAspect = true,
+		file = GetUserRankImageName(userName),
+	}
+	userControls.name = TextBox:New {
+		name = "name",
+		x = 50,
+		y = 6,
+		right = 0,
+		bottom = 2,
+		align = "left",
+		parent = userControls.mainControl,
+		fontsize = WG.Chobby.Configuration:GetFont(2).size,
+		text = userName,
+	}
+	
+	userControls.needReinitialization = lobby.status ~= "connected"
 	
 	return userControls
 end
@@ -112,8 +160,11 @@ end
 -- External Functions
 local userHandler = {}
 
-function userHandler.GetBattleUser(userName)		
+function userHandler.GetBattleUser(userName, isSingleplayer)
 	if battleUsers[userName] then
+		if battleUsers[userName].needReinitialization then
+			battleUsers[userName] = GetUserControls(userName, battleUsers[userName])
+		end
 		return battleUsers[userName].mainControl
 	end
 	
@@ -123,6 +174,9 @@ end
 
 function userHandler.GetChannelUser(userName)		
 	if channelUsers[userName] then
+		if channelUsers[userName].needReinitialization then
+			channelUsers[userName] = GetUserControls(userName, channelUsers[userName])
+		end
 		return channelUsers[userName].mainControl
 	end
 	
@@ -132,12 +186,19 @@ end
 
 function userHandler.GetTeamUser(userName)		
 	if teamUsers[userName] then
+		if teamUsers[userName].needReinitialization then
+			teamUsers[userName] = GetUserControls(userName, teamUsers[userName])
+		end
 		return teamUsers[userName].mainControl
 	end
 	
 	teamUsers[userName] = GetUserControls(userName)
 	return teamUsers[userName].mainControl
 end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Connection
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------

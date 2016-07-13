@@ -1,5 +1,10 @@
 InterfaceSkirmish = Lobby:extends()
 
+function InterfaceSkirmish:init()
+	self:super("init")
+	self.name = "skirmish"
+end
+
 local function ScriptTXT(script)
 	local string = '[Game]\n{\n\n'
 

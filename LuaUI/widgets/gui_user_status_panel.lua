@@ -110,19 +110,19 @@ local function InitializeControls(window)
 
 	onAccepted = function(listener)
 		lblPlayerIcon:SetCaption(lobby:GetMyUserName())
-		btnLogout:SetCaption(i18n("logout"))
+		--btnLogout:SetCaption(i18n("logout"))
 		lobby:Ping()
-		lblPing:SetCaption(WG.Chobby.Configuration:GetSuccessColor() .. i18n("online") .. "\b")
+		--lblPing:SetCaption(WG.Chobby.Configuration:GetSuccessColor() .. i18n("online") .. "\b")
 	end
 	onDisconnected = function(listener)
-		if lobby.status == "offline" then
-			btnLogout:SetCaption(i18n("login"))
-		end
-		if lobby.status == "offline" then
-			lblPing:SetCaption("\255\180\180\180" .. i18n("offline") .. "\b")
-		else
-			lblPing:SetCaption(WG.Chobby.Configuration:GetErrorColor() .. "D/C\b")
-		end
+		--if lobby.status == "offline" then
+		--	btnLogout:SetCaption(i18n("login"))
+		--end
+		--if lobby.status == "offline" then
+		--	lblPing:SetCaption("\255\180\180\180" .. i18n("offline") .. "\b")
+		--else
+		--	lblPing:SetCaption(WG.Chobby.Configuration:GetErrorColor() .. "D/C\b")
+		--end
 	end
 	onPong = function(listener)
 -- 		UpdateLatency()
@@ -162,8 +162,10 @@ function widget:Update()
 		else
 			btnLogout:SetCaption(i18n("login"))
 		end
-		if lobby.status == "connected" and not lobby.finishedConnecting then
+		if lobby.status == "connecting" then
 			lblPing:SetCaption(WG.Chobby.Configuration:GetPartialColor() .. i18n("connecting") .. "\b")
+		elseif lobby.status == "connected" then
+			lblPing:SetCaption(WG.Chobby.Configuration:GetSuccessColor() .. i18n("online") .. "\b")
 		end
 		oldStatus = lobby.status
 	end

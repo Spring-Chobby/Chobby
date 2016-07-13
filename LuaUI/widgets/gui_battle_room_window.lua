@@ -444,7 +444,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		if not player[name] then
 			player[name] = {
 				team = false,
-				control = WG.UserHandler.GetBattleUser(name),
+				control = WG.UserHandler.GetBattleUser(name, battleLobby.name == "skirmish"),
 			}
 		end
 		return player[name]
