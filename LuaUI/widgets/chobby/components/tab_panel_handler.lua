@@ -167,7 +167,6 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 	function externalFunctions.RemoveTab(name)
 		local index = 1
 		local found = false
-		Spring.Echo("removing tab", name)
 		while index <= #tabs do
 			if found then
 				tabs[index] = tabs[index + 1]

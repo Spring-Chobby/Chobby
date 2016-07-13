@@ -917,9 +917,12 @@ function BattleRoomWindow.SetSingleplayerGame(ToggleShowFunc, battleroomObj, tab
 end
 
 function BattleRoomWindow.LeaveBattle()
-	--battleLobby:LeaveBattle()
 	if battleLobby then
-		onBattleClosed(battleLobby:GetMyBattleID())
+		battleLobby:LeaveBattle()
+		onBattleClosed(_, battleLobby:GetMyBattleID())
+		
+		local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
+		tabPanel.RemoveTab("myBattle")
 	end
 end
 
