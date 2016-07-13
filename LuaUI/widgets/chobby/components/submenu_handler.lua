@@ -7,7 +7,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 	
 	local BUTTON_HEIGHT = 70
 	local BUTTON_SPACING = 5
-	local BUTTON_OFFSET = 80
+	local BUTTON_OFFSET = 50
 	
 	-------------------------------------------------------------------
 	-- Local Functions

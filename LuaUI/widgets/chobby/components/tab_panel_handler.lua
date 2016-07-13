@@ -268,29 +268,38 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 	}
 	
 	if backFunction then
-		buttonOffset = 80
+		buttonOffset = 50
 		
 		Button:New {
 			name = name .. "_back_button",
-			x = 5,
-			y = 15,
-			width = 50,
-			height = 50,
-			caption = "<",
-			font = {size = 40},
+			x = 2,
+			y = 5,
+			width = 45,
+			height = 45,
+			caption = "",
+			padding = {2,2,2,2},
+			children = {
+				Image:New {
+					x = 0,
+					y = 0,
+					right = 0,
+					bottom = 0,
+					file = "luaui/widgets/chobby/images/left.png",
+				}
+			},
 			parent = buttonsHolder,
 			OnClick = {function (obj) backFunction(externalFunctions) end},
 		}
-		Label:New {
-			x = 55,
-			y = 20,
+		TextBox:New {
+			x = 50,
+			y = 18,
 			right = 0,
-			height = 45,
+			height = 30,
 			valign = "center",
-			align = "left",
+			align = "center",
 			parent = buttonsHolder,
-			font = Configuration:GetFont(3),
-			caption = i18n(name),
+			fontsize = Configuration:GetFont(3).size,
+			text = i18n(name),
 		}
 		-- Add heading and back button
 	end

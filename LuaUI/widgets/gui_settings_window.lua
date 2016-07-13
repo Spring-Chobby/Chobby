@@ -254,7 +254,7 @@ local function InitializeControls(window)
 					
 					local replacementTabs = {
 						{
-							name = "custom_caps" .. Configuration.singleplayer_mode, 
+							name = "custom" .. Configuration.singleplayer_mode, 
 							control = WG.BattleRoomWindow.GetSingleplayerControl(),
 							entryCheck = WG.BattleRoomWindow.SetSingleplayerGame,
 						},

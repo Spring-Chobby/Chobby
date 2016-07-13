@@ -69,7 +69,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		children = {}
 	}
 	
-	local mainWindow = Window:New {
+	local mainWindow = Control:New {
 		x = 0,
 		y = titleHeight,
 		width = (100 - panelWidthRel) .. "%",
@@ -92,7 +92,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-	local mainButtons = Window:New {
+	local mainButtons = Control:New {
 		x = 0,
 		y = 0,
 		width = "100%",
@@ -105,6 +105,14 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
+	
+	local topBottomLine = Line:New {
+		x = 0,
+		y = titleHeight,
+		right = 0,
+		parent = screen0,
+	}
+	topBottomLine:SetVisibility(false)
 	
 	--buttonsPlace._relativeBounds.bottom = 150
 	--buttonsPlace._relativeBounds.right = 150
@@ -168,7 +176,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-- Exit button
 	local exitButton = Button:New {
 		x = 0,
-		bottom = 10,
+		bottom = 0,
 		width = "100%",
 		height = 70,
 		caption = i18n("exit"),
@@ -202,7 +210,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			name = "singleplayer", 
 			tabs = {
 				{
-					name = "custom_caps", 
+					name = "skirmish", 
 					control = WG.BattleRoomWindow.GetSingleplayerControl(),
 					entryCheck = WG.BattleRoomWindow.SetSingleplayerGame,
 				},
@@ -212,8 +220,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			name = "multiplayer", 
 			entryCheck = WG.MultiplayerEntryPopup,
 			tabs = {
-				{name = "matchmaking_caps", control = QueueListWindow().window},
-				{name = "custom_caps", control = BattleListWindow().window},
+				{name = "matchmaking", control = QueueListWindow().window},
+				{name = "custom", control = BattleListWindow().window},
 			},
 		},
 	}
@@ -231,11 +239,12 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				local control, index = rightPanelHandler.GetManagedControlByName(contentPlace.children[1].name)
 				if control then
 					contentPlace:ClearChildren()
+					contentPlace:SetVisibility(false)
 					rightPanelHandler.OpenTab(index)
 				end
 			end
 		else
-			chatWindows:SetTabHolderParent(screen0, titleHeight, titleHeight - panelButtonsHeight + 4)
+			chatWindows:SetTabHolderParent(screen0, titleHeight, titleHeight - panelButtonsHeight + 6)
 			
 			rightPanelHandler.UpdateLayout(contentPlace, true)
 			if contentPlace:IsEmpty() and not panelWindow:IsEmpty() then
@@ -265,6 +274,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			-- Make Main Window take up more space
 			panelButtonsHolder:Show()
 			panelWindow:Show()
+			panelWindow:SetVisibility(false)
 			mainWindow._relativeBounds.right = panelWidthRel .. "%"
 			mainWindow:UpdateClientArea()
 			
@@ -273,6 +283,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			statusWindow:SetPos(titleWidth)
 			statusWindow._relativeBounds.right = 0
 			statusWindow:UpdateClientArea()
+			
+			-- Only show top line in small mode
+			topBottomLine:SetVisibility(false)
 		else
 			-- Move Panel Buttons
 			panelButtonsHolder:RemoveChild(panelButtons)
@@ -295,6 +308,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			statusWindow:SetPos(mainButtonsWidth)
 			statusWindow._relativeBounds.right = 0
 			statusWindow:UpdateClientArea()
+			
+			-- Only show top line in small mode
+			topBottomLine:SetVisibility(true)
+			topBottomLine:BringToFront()
 		end
 		
 		UpdateChildLayout()
