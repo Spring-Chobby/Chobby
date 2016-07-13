@@ -25,68 +25,68 @@ end
 
 function LoginWindow:init(failFunction, cancelText)
 	self.lblInstructions = Label:New {
-		x = 1,
-		width = 100,
-		y = 20,
-		height = 20,
+		x = 15,
+		width = 170,
+		y = 30,
+		height = 35,
 		caption = i18n("connect_to_spring_server"),
 		font = Configuration:GetFont(3),
 	}
 	self.lblServerAddress = Label:New {
-		x = 1,
-		width = 100,
-		y = 50,
-		height = 20,
+		x = 15,
+		width = 170,
+		y = 90,
+		height = 35,
 		caption = i18n("server") .. ":",
 		font = Configuration:GetFont(3),
 	}
 	self.ebServerAddress = EditBox:New {
-		x = 80,
-		width = 100,
-		y = 50,
-		height = 20,
+		x = 135,
+		width = 125,
+		y = 85,
+		height = 35,
 		text = Configuration.serverAddress,
 		font = Configuration:GetFont(3),
 	}
 	self.ebServerPort = EditBox:New {
-		x = 185,
-		width = 40,
-		y = 50,
-		height = 20,
+		x = 265,
+		width = 70,
+		y = 85,
+		height = 35,
 		text = tostring(Configuration.serverPort),
 		font = Configuration:GetFont(3),
 	}
 
 	self.lblUsername = Label:New {
-		x = 1,
-		width = 100,
-		y = 75,
-		height = 20,
+		x = 15,
+		width = 170,
+		y = 130,
+		height = 35,
 		caption = i18n("username") .. ":",
 		font = Configuration:GetFont(3),
 	}
 	self.ebUsername = EditBox:New {
-		x = 80,
-		width = 120,
-		y = 75,
-		height = 20,
+		x = 135,
+		width = 200,
+		y = 125,
+		height = 35,
 		text = Configuration.userName,
 		font = Configuration:GetFont(3),
 	}
 
 	self.lblPassword = Label:New {
-		x = 1,
-		width = 100,
-		y = 100,
-		height = 20,
+		x = 15,
+		width = 170,
+		y = 175,
+		height = 35,
 		caption = i18n("password") .. ":",
 		font = Configuration:GetFont(3),
 	}
 	self.ebPassword = EditBox:New {
-		x = 80,
-		width = 120,
-		y = 100,
-		height = 20,
+		x = 135,
+		width = 200,
+		y = 170,
+		height = 35,
 		text = Configuration.password,
 		passwordInput = true,
 		font = Configuration:GetFont(3),
@@ -102,9 +102,9 @@ function LoginWindow:init(failFunction, cancelText)
 
 	self.lblError = Label:New {
 		x = 1,
-		width = 100,
-		y = 125,
-		height = 55,
+		width = 170,
+		y = 200,
+		height = 90,
 		caption = "",
 		font = {
 			color = { 1, 0, 0, 1 },
@@ -114,15 +114,15 @@ function LoginWindow:init(failFunction, cancelText)
 	}
 	
 	self.cbAutoLogin = Checkbox:New {
-		x = 1,
-		width = 116,
-		y = 150,
-		height = 20,
+		x = 15,
+		width = 190,
+		y = 240,
+		height = 35,
 		boxalign = "right",
-		boxsize = 10,
+		boxsize = 15,
 		caption = i18n("autologin"),
 		checked = Configuration.autoLogin,
-		font = Configuration:GetFont(1),
+		font = Configuration:GetFont(2),
 		OnClick = {function (obj)
 			WG.SettingsWindow.SetConfigValue("autologin", obj.checked)
 		end},
@@ -130,9 +130,9 @@ function LoginWindow:init(failFunction, cancelText)
 
 	self.btnLogin = Button:New {
 		x = 1,
-		width = 80,
+		width = 135,
 		bottom = 1,
-		height = 40,
+		height = 70,
 		caption = i18n("login_verb"),
 		font = Configuration:GetFont(3),
 		OnClick = {
@@ -143,10 +143,10 @@ function LoginWindow:init(failFunction, cancelText)
 	}
 
 	self.btnRegister = Button:New {
-		x = 85,
-		width = 80,
+		x = 135,
+		width = 135,
 		bottom = 1,
-		height = 40,
+		height = 70,
 		caption = i18n("register_verb"),
 		font = Configuration:GetFont(3),
 		OnClick = {
@@ -158,9 +158,9 @@ function LoginWindow:init(failFunction, cancelText)
 	
 	self.btnCancel = Button:New {
 		right = 1,
-		width = 80,
+		width = 135,
 		bottom = 1,
-		height = 40,
+		height = 70,
 		caption = i18n(cancelText or "cancel"),
 		font = Configuration:GetFont(3),
 		OnClick = {
@@ -175,7 +175,7 @@ function LoginWindow:init(failFunction, cancelText)
 	
 
 	local ww, wh = Spring.GetWindowGeometry()
-	local w, h = math.floor(265), math.floor(250)
+	local w, h = 430, 420
 	self.window = Window:New {
 		name = "loginWindow",
 		x = (ww - w) / 2,
@@ -381,9 +381,9 @@ function LoginWindow:createAgreementWindow()
 	}
 	self.btnYes = Button:New {
 		x = 1,
-		width = 80,
+		width = 135,
 		bottom = 1,
-		height = 40,
+		height = 70,
 		caption = "Accept",
 		font = Configuration:GetFont(3),
 		OnClick = {
@@ -393,10 +393,10 @@ function LoginWindow:createAgreementWindow()
 		},
 	}
 	self.btnNo = Button:New {
-		x = 150,
-		width = 80,
+		x = 240,
+		width = 135,
 		bottom = 1,
-		height = 40,
+		height = 70,
 		caption = "Decline",
 		font = Configuration:GetFont(3),
 		OnClick = {
