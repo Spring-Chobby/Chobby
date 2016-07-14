@@ -17,6 +17,10 @@ local spGetGameFrame            = Spring.GetGameFrame
 local spGetMouseState           = Spring.GetMouseState
 local screenWidth, screenHeight = Spring.GetWindowGeometry()
 
+local USER_TOOLTIP_PREFIX = "user_"
+local USER_SP_TOOLTIP_PREFIX = "user_singleplayer_tooltip_"
+local USER_MP_TOOLTIP_PREFIX = "user_tooltip_"
+
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
 -- Initialization
@@ -64,11 +68,11 @@ local function GetTooltip()
 	end
 end
 
-local function SetTooltipPos(text)
-	local text         = text or tipTextDisplay.text
+local function SetTooltipPos()
+	local text         = tipTextDisplay.text
 	local x,y          = spGetMouseState()
-	local _,_,numLines = tipTextDisplay.font:GetTextHeight(text)
-	local height       = numLines * 14 + 8
+	local height,decender,numLines = tipTextDisplay.font:GetTextHeight(text)
+	local height       = numLines * 14 + 8 + 7
 	local width        = tipTextDisplay.font:GetTextWidth(text) + 10
 	
 	x = x + 20
@@ -84,18 +88,45 @@ local function SetTooltipPos(text)
 	tipWindow:BringToFront()
 end
 
+local function UpdateTooltip(inputText)
+	if inputText:starts(USER_TOOLTIP_PREFIX) then
+		local userName, myLobby 
+		if inputText:starts(USER_MP_TOOLTIP_PREFIX) then
+			userName = string.sub(inputText, 14)
+			myLobby = lobby
+		else
+			userName = string.sub(inputText, 27)
+			myLobby = WG.LibLobby.lobbySkirmish
+		end
+		local userInfo = myLobby:GetUser(userName) or {}
+		local userBattleInfo = myLobby:GetUserBattleStatus(userName) or {}
+	
+		local text = userName
+		for key, value in pairs(userInfo) do
+			text = text .. "\n" .. key .. " = " .. tostring(value)
+		end
+		for key, value in pairs(userBattleInfo) do
+			text = text .. "\n" .. key .. " = " .. tostring(value)
+		end
+	
+		tipTextDisplay:SetText(text)
+		tipTextDisplay:UpdateLayout()
+	else
+		tipTextDisplay:SetText(inputText)
+	end
+end
+
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
 -- Widget callins
 
 function widget:Update()
 	local text = GetTooltip()
-	
 	if text then
 		if tipTextDisplay.text ~= text then
-			tipTextDisplay:SetText(text)
+			UpdateTooltip(text)
 		end
-		SetTooltipPos(text)
+		SetTooltipPos()
 	else
 		if tipWindow.visible then 
 			tipWindow:Hide()

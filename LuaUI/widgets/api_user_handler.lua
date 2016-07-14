@@ -142,16 +142,24 @@ local function UpdateUserActivity(listener, userName)
 		if data then
 			data.mainControl.items = GetUserComboBoxOptions(userName, data.isInBattle, data)
 			
-			if data.syncStatus then
-				data.syncStatus.file = GetUserSyncStatus(userName, data)
-				data.syncStatus:Invalidate()
-			end
-			
 			local status1, status2 = GetUserStatusImages(userName, data.isInBattle, data)
 			data.statusFirst.file = status1
 			data.statusSecond.file = status2
 			data.statusFirst:Invalidate()
 			data.statusSecond:Invalidate()
+		end
+	end
+end
+
+local function UpdateUserBattleStatus(listener, userName)
+	for i = 1, #userListList do
+		local userList = userListList[i]
+		local data = userList[userName]
+		if data then
+			if data.syncStatus then
+				data.syncStatus.file = GetUserSyncStatus(userName, data)
+				data.syncStatus:Invalidate()
+			end
 		end
 	end
 end
@@ -182,6 +190,7 @@ local function GetUserControls(userName, isInBattle, isSingleplayer, reinitializ
 			borderColor = {0, 0, 0, 0},
 			padding = {0, 0, 0, 0},
 			caption = "",
+			tooltip = "user_" .. (isSingleplayer and "singleplayer_" or "").. "tooltip_" .. userName,
 			ignoreItemCaption = true,
 			selectByName = true,
 			itemFontSize = WG.Chobby.Configuration:GetFont(2).size,
@@ -378,6 +387,7 @@ end
 
 local function AddListeners()
 	lobby:AddListener("OnUpdateUserStatus", UpdateUserActivity)
+	lobby:AddListener("OnUpdateUserBattleStatus", UpdateUserBattleStatus)
 end
 
 --------------------------------------------------------------------------------

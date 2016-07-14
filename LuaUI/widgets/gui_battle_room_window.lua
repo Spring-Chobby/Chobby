@@ -342,7 +342,6 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		y = 0,
 		bottom = 0,
 		parent = spectatorParent,
-		tooltip = "spectators",
 		borderColor = {0,0,0,0},
 	}
 		
