@@ -160,6 +160,10 @@ function Console:AddMessage(message, userName, dateOverride, color)
 	if color ~= nil then
 		txt = color .. txt .. "\b"
 	end
-	self.tbHistory:SetText(self.tbHistory.text .. "\n" .. txt)
+	if self.tbHistory.text == "" then
+		self.tbHistory:SetText(txt)
+	else
+		self.tbHistory:SetText(self.tbHistory.text .. "\n" .. txt)
+	end
 end
 
