@@ -486,11 +486,11 @@ function Lobby:_OnJoined(chanName, userName)
 				break
 			end
 		end
-		if isNewChannel then
+		if isNewUser then
 			table.insert(channel.users, userName)
+			self:_CallListeners("OnJoined", chanName, userName)
 		end
 	end
-	self:_CallListeners("OnJoined", chanName, userName)
 end
 
 function Lobby:_OnJoin(chanName)
@@ -504,8 +504,8 @@ function Lobby:_OnJoin(chanName)
 	end
 	if isNewChannel then
 		table.insert(self.myChannels, chanName)
+		self:_CallListeners("OnJoin", chanName)
 	end
-	self:_CallListeners("OnJoin", chanName)
 end
 
 function Lobby:_OnLeft(chanName, userName, reason)
