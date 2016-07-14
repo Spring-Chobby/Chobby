@@ -15,7 +15,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	local mainButtonsWidthSmall = 150
 	
-	local imageFudge = 6
+	local imageFudge = 0
 	
 	local padding = 0
 	
@@ -278,7 +278,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				end
 			end
 		else
-			chatWindows:SetTabHolderParent(screen0, titleHeightSmall, titleHeightSmall - panelButtonsHeight + 6)
+			chatWindows:SetTabHolderParent(screen0, titleHeightSmall, titleHeightSmall - panelButtonsHeight + imageFudge)
 			
 			rightPanelHandler.UpdateLayout(contentPlace, true)
 			if contentPlace:IsEmpty() and not panelWindow:IsEmpty() then
