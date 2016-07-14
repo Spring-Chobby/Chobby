@@ -18,7 +18,7 @@ function Downloader:init(tbl)
 		value = 0,
 	}
 
-	self.window = Window:New(table.merge({
+	self.Control = Control:New(table.merge({
 		width = 200,
 		height = 50,
 		caption = '',

@@ -33,7 +33,8 @@ function ListWindow:init(parent, title)
 		horizontalScrollbar = false,
 	}
 
-	self.window = Window:New {
+	local IMAGE_BLANK = "luaui/images/blank.png"
+	self.window = Panel:New {
 		x = 0,
 		right = 0,
 		y = 0,
@@ -42,6 +43,9 @@ function ListWindow:init(parent, title)
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
+		borderColor = {0,0,0,0},
+		backgroundColor = {0.2, 0.2, 0.2, 0.2},
+		TileImageBK = IMAGE_BLANK,
 		children = {
 			self.lblTitle,
 			self.btnClose,

@@ -320,14 +320,19 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		y = 0,
 		bottom = NEW_TEAM_SPACING,
 		parent = playerParent,
+		borderColor = {0,0,0,0},
 	}
 	
-	local mainStackPanel = Control:New {
+	local IMAGE_BLANK = "luaui/images/blank.png"
+	local mainStackPanel = Panel:New {
 		x = 0,
 		right = 0,
 		y = 0,
 		parent = mainScrollPanel,
 		preserveChildrenOrder = true,
+		borderColor = {0,0,0,0},
+		backgroundColor = {0.2, 0.2, 0.2, 0.2},
+		TileImageBK = IMAGE_BLANK,
 	}	
 	
 	local spectatorScrollPanel = ScrollPanel:New {
@@ -336,13 +341,17 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		y = 0,
 		bottom = 0,
 		parent = spectatorParent,
+		borderColor = {0,0,0,0},
 	}
 		
-	local spectatorStackPanel = Control:New {
+	local spectatorStackPanel = Panel:New {
 		x = 0,
 		right = 0,
 		y = 0,
 		parent = spectatorScrollPanel,
+		borderColor = {0,0,0,0},
+		backgroundColor = {0.2, 0.2, 0.2, 0.2},
+		TileImageBK = IMAGE_BLANK,
 	}
 	
 	-- ADD TEAM

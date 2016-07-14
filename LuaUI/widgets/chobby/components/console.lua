@@ -14,6 +14,7 @@ function Console:init()
 		y = 0,
 		bottom = 35,
 		verticalSmartScroll = true,
+		borderColor = {0,0,0,0},
 	}
 	self.tbHistory = TextBox:New {
 		x = 0,
@@ -25,11 +26,12 @@ function Console:init()
 	}
 	self.ebInputText = EditBox:New {
 		x = 0,
-		bottom = 7,
+		bottom = 0,
 		height = 25,
 		right = 2,
 		text = "",
 		hint = i18n("type_here_to_chat"),
+		borderColor = {0,0,0,0},
 	}
 	
 	self.ebInputText.KeyPress = function(something, key, ...)
@@ -64,7 +66,8 @@ function Console:init()
 -- 		}
 -- 	}
 
-	self.panel = Control:New {
+	local IMAGE_BLANK = "luaui/images/blank.png"
+	self.panel = Panel:New {
 		x = 0,
 		y = 0,
 		right = 0,
@@ -72,6 +75,9 @@ function Console:init()
 		padding      = {0, 0, 0, 0},
 		itemPadding  = {0, 0, 0, 0},
 		itemMargin   = {0, 0, 0, 0},
+		borderColor = {0,0,0,0},
+		backgroundColor = {0.2, 0.2, 0.2, 0.2},
+		TileImageBK = IMAGE_BLANK,
 		children = {
 			self.spHistory,
 			self.ebInputText,
