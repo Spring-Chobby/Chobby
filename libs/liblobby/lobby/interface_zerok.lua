@@ -19,7 +19,7 @@ Interface.commandPattern = {}
 -- Connectivity commands
 ------------------------
 
-function Interface:Login(user, password, cpu, localIP, lobbyVersionString)
+function Interface:Login(user, password, cpu, localIP, lobbyVersion)
 	self:super("Login", user, password, cpu, localIP)
 	if localIP == nil then
 		localIP = "*"
@@ -31,7 +31,7 @@ function Interface:Login(user, password, cpu, localIP, lobbyVersionString)
 		PasswordHash = password,
 		UserID = 0,
 		ClientType = 1,
-		LobbyVersion = lobbyVersionString,
+		LobbyVersion = lobbyVersion,
 	}
 	
 	self:_SendCommand("Login " .. json.encode(sendData))
@@ -119,7 +119,7 @@ function Interface:SayBattle(message)
 		IsEmote = false,
 		Text = message,
 		Ring = false,
-		Time = "2016-06-25T07:17:20.7548313Z",
+		--Time = "2016-06-25T07:17:20.7548313Z",
 	}
 	self:_SendCommand("Say " .. json.encode(sendData))
 	return self
@@ -147,7 +147,7 @@ function Interface:Say(chanName, message)
 		IsEmote = false,
 		Text = message,
 		Ring = false,
-		Time = "2016-06-25T07:17:20.7548313Z",
+		--Time = "2016-06-25T07:17:20.7548313Z",
 	}
 	self:_SendCommand("Say " .. json.encode(sendData))
 	return self
@@ -162,7 +162,7 @@ function Interface:SayPrivate(userName, message)
 		IsEmote = false,
 		Text = message,
 		Ring = false,
-		Time = "2016-06-25T07:17:20.7548313Z",
+		--Time = "2016-06-25T07:17:20.7548313Z",
 	}
 	self:_SendCommand("Say " .. json.encode(sendData))
 	return self
@@ -228,10 +228,10 @@ Interface.jsonCommands["LoginResponse"] = Interface._LoginResponse
 -- User commands
 ------------------------
 
-function Interface:_OnAddUser(userName, country, cpu, accountID)
+function Interface:_OnAddUser(userName, country, cpu, accountID, lobbyVersion)
 	cpu = tonumber(cpu)
 	accountID = tonumber(accountID)
-	self:super("_OnAddUser", userName, country, cpu, accountID)
+	self:super("_OnAddUser", userName, country, cpu, accountID, lobbyVersion)
 end
 Interface.commands["ADDUSER"] = Interface._OnAddUser
 Interface.commandPattern["ADDUSER"] = "(%S+)%s+(%S%S)%s+(%S+)%s*(.*)"
@@ -239,7 +239,7 @@ Interface.commandPattern["ADDUSER"] = "(%S+)%s+(%S%S)%s+(%S+)%s*(.*)"
 function Interface:_User(data)
 	-- CHECKME: verify that name, country, cpu and similar info doesn't change
 	if self.users[data.Name] == nil then
-		self:_OnAddUser(data.Name, data.Country, 3, data.AccountID)
+		self:_OnAddUser(data.Name, data.Country, 3, data.AccountID, data.LobbyVersion)
 	end
 	self:_OnUpdateUserStatus(data.Name, {isInGame=data.IsInGame, isAway=data.IsAway, isAdmin=data.IsAdmin, level = data.Level, isBot = data.IsBot})
 	
@@ -366,6 +366,13 @@ Interface.jsonCommands["ChannelUserRemoved"] = Interface._ChannelUserRemoved
 
 function Interface:_Say(data)
 	-- Say {"Place":0,"Target":"zk","User":"GoogleFrog","IsEmote":false,"Text":"bla","Ring":false,"Time":"2016-06-25T07:17:20.7548313Z}"
+	if data.Time then
+		if self.duplicateMessageTimes[data.Time] then
+			return
+		end
+		self.duplicateMessageTimes[data.Time] = true
+	end
+	
 	local emote = data.IsEmote
 	if data.Place == 0 then -- Send to channel?
 		if emote then

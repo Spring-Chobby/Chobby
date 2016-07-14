@@ -417,7 +417,7 @@ function ChatWindows:CreateDebugConsole()
 	)
 	lobby:AddListener("OnCommandSent",
 		function(listner, command)
-			Spring.Echo("Server", "<" .. command)
+			Spring.Echo("Server", ">" .. command)
 			self.debugConsole:AddMessage(">" .. command)
 		end
 	)

@@ -279,7 +279,7 @@ function LoginWindow:tryLogin()
 
 		lobby:Connect(Configuration:GetServerAddress(), Configuration:GetServerPort())
 	else
-		lobby:Login(username, password, 3, "Chobby SDD")
+		lobby:Login(username, password, 3, nil, "Chobby SDD")
 	end
 
 	self.loginAttempts = self.loginAttempts + 1
@@ -367,7 +367,7 @@ function LoginWindow:OnConnected()
 	end
 	lobby:AddListener("OnAgreementEnd", self.onAgreementEnd)
 
-	lobby:Login(username, password, 3, "Chobby SDD")
+	lobby:Login(username, password, 3, nil, "Chobby SDD")
 end
 
 function LoginWindow:createAgreementWindow()

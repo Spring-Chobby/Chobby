@@ -3,7 +3,7 @@ Console = LCS.class{}
 function Console:init()
 	self.listener = nil
 	self.showDate = true
-	self.dateFormat = "%H:%M:%S"
+	self.dateFormat = "%H:%M"
 
 	-- TODO: currently this is handled by chat windows and battleroom chat separately
 	self.unreadMessages = 0
@@ -149,6 +149,20 @@ end
 function Console:AddMessage(message, userName, dateOverride, color)
 	local txt = ""
 	if self.showDate then
+		if dateOverride then
+			local utcHour = tonumber(os.date("!%H"))
+			local utcMinute = tonumber(os.date("!%M"))
+			local localHour = tonumber(os.date("%H"))
+			local localMinute = tonumber(os.date("%M"))
+		
+			local messageHour = tonumber(string.sub(dateOverride, 12, 13))
+			local messageMinute = tonumber(string.sub(dateOverride, 15, 16))
+			
+			local hour = (localHour - utcHour + messageHour)%24
+			local minute = (localMinute - utcMinute + messageMinute)%60
+			 
+			 dateOverride = hour .. ":" .. minute
+		end
 		-- FIXME: the input "date" should ideally be a table so we can coerce the format
 		local currentDate = dateOverride or os.date(self.dateFormat)
 		txt = txt .. "[" .. currentDate .. "] "

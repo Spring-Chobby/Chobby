@@ -100,9 +100,9 @@ function Lobby:Connect(host, port)
 	return self
 end
 
-function Lobby:Login(user, password, cpu, localIP, lobbyVersionString)
+function Lobby:Login(user, password, cpu, localIP, lobbyVersion)
 	self.myUserName = user
-	self.loginData = { user, password, cpu, localIP, lobbyVersionString }
+	self.loginData = { user, password, cpu, localIP, lobbyVersion}
 	return self
 end
 
@@ -260,9 +260,9 @@ end
 -- User commands
 ------------------------
 
-function Lobby:_OnAddUser(userName, country, cpu, accountID)
+function Lobby:_OnAddUser(userName, country, cpu, accountID, lobbyVersion)
 	self.userCount = self.userCount + 1
-	self.users[userName] = {userName=userName, country=country, cpu=cpu, accountID=accountID}
+	self.users[userName] = {userName=userName, country=country, cpu=cpu, accountID=accountID, lobbyVersion = lobbyVersion}
 	self:_CallListeners("OnAddUser", userName, country, cpu, accountID)
 end
 
@@ -426,12 +426,12 @@ function Lobby:_OnRemoveAi(battleID, aiName, aiLib, allyNumber, owner)
 	self:_OnLeftBattle(battleID, aiName)
 end
 
-function Lobby:_OnSaidBattle(userName, message)
-	self:_CallListeners("OnSaidBattle", userName, message)
+function Lobby:_OnSaidBattle(userName, message, sayTime)
+	self:_CallListeners("OnSaidBattle", userName, message, sayTime)
 end
 
-function Lobby:_OnSaidBattleEx(userName, message)
-	self:_CallListeners("OnSaidBattleEx", userName, message)
+function Lobby:_OnSaidBattleEx(userName, message, sayTime)
+	self:_CallListeners("OnSaidBattleEx", userName, message, sayTime)
 end
 
 ------------------------
@@ -508,24 +508,24 @@ function Lobby:_OnLeft(chanName, userName, reason)
 	self:_CallListeners("OnLeft", chanName, userName, reason)
 end
 
-function Lobby:_OnSaid(chanName, userName, message)
-	self:_CallListeners("OnSaid", chanName, userName, message)
+function Lobby:_OnSaid(chanName, userName, message, sayTime)
+	self:_CallListeners("OnSaid", chanName, userName, message, sayTime)
 end
 
-function Lobby:_OnSaidEx(chanName, userName, message)
-	self:_CallListeners("OnSaidEx", chanName, userName, message)
+function Lobby:_OnSaidEx(chanName, userName, message, sayTime)
+	self:_CallListeners("OnSaidEx", chanName, userName, message, sayTime)
 end
 
-function Lobby:_OnSaidPrivate(userName, message)
-	self:_CallListeners("OnSaidPrivate", userName, message)
+function Lobby:_OnSaidPrivate(userName, message, sayTime)
+	self:_CallListeners("OnSaidPrivate", userName, message, sayTime)
 end
 
-function Lobby:_OnSaidPrivateEx(userName, message)
-	self:_CallListeners("OnSaidPrivateEx", userName, message)
+function Lobby:_OnSaidPrivateEx(userName, message, sayTime)
+	self:_CallListeners("OnSaidPrivateEx", userName, message, sayTime)
 end
 
-function Lobby:_OnSayPrivate(userName, message)
-	self:_CallListeners("OnSayPrivate", userName, message)
+function Lobby:_OnSayPrivate(userName, message, sayTime)
+	self:_CallListeners("OnSayPrivate", userName, message, sayTime)
 end
 
 ------------------------
