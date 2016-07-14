@@ -478,13 +478,33 @@ function Lobby:_OnJoined(chanName, userName)
 
 	-- only add users after CLIENTS was received
 	if channel.users ~= nil then
-		table.insert(channel.users, userName)
+		local isNewUser = true
+		for i, v in pairs(channel.users) do
+			if v == userName then
+				Spring.Echo("Duplicate user added to channel", chanName, userName)
+				isNewUser = false
+				break
+			end
+		end
+		if isNewChannel then
+			table.insert(channel.users, userName)
+		end
 	end
 	self:_CallListeners("OnJoined", chanName, userName)
 end
 
 function Lobby:_OnJoin(chanName)
-	table.insert(self.myChannels, chanName)
+	local isNewChannel = true
+	for i, v in pairs(self.myChannels) do
+		if v == chanName then
+			Spring.Echo("Duplicate uchannel joined", chanName)
+			isNewChannel = false
+			break
+		end
+	end
+	if isNewChannel then
+		table.insert(self.myChannels, chanName)
+	end
 	self:_CallListeners("OnJoin", chanName)
 end
 
