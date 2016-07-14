@@ -62,6 +62,21 @@ end
 -- Battle commands
 ------------------------
 
+function Interface:HostBattle(battleTitle, password)
+	local sendData = {
+		Place = 2, 
+		Target = "Springiee",
+		IsEmote = false,
+		Text = "!spawn mod=zk:stable,title=" .. battleTitle .. ((password and ",password=" .. password .. ",") or ","),
+		Ring = false,
+	}
+	self.springieSpawnTimer = Spring.GetTimer()
+	self.springieSpawnTitle = battleTitle
+	self.springieSpawnPassword = password
+	
+	self:_SendCommand("Say " .. json.encode(sendData))
+end
+
 function Interface:JoinBattle(battleID, password, scriptPassword)
 	local sendData = {
 		BattleID = battleID,
@@ -257,6 +272,7 @@ Interface.jsonCommands["UserDisconnected"] = Interface._UserDisconnected
 -- Battle commands
 ------------------------
 
+
 function Interface:_LeftBattle(data)
 	self:_OnLeftBattle(data.BattleID, data.User)
 end
@@ -265,9 +281,22 @@ Interface.jsonCommands["LeftBattle"] = Interface._LeftBattle
 function Interface:_BattleAdded(data)
 	-- {"Header":{"BattleID":3,"Engine":"100.0","Game":"Zero-K v1.4.6.11","Map":"Zion_v1","MaxPlayers":16,"SpectatorCount":1,"Title":"SERIOUS HOST","Port":8760,"Ip":"158.69.140.0","Founder":"Neptunium"}}
 	local header = data.Header
-	local passworded = false -- TODO: detect pw-protected rooms
+	if self.springieSpawnTimer then
+		local currentTime = Spring.GetTimer()
+		local waitTime = Spring.DiffTimers(currentTime, self.springieSpawnTimer)
+		if waitTime > 10 then -- Only wait 10 seconds
+			self.springieSpawnTimer = nil
+			self.springieSpawnTitle = nil
+			self.springieSpawnPassword = nil
+		elseif self.springieSpawnTitle == header.Title then
+			self:JoinBattle(header.BattleID, self.springieSpawnPassword)
+			self.springieSpawnTimer = nil
+			self.springieSpawnTitle = nil
+			self.springieSpawnPassword = nil
+		end
+	end
 	self:_OnBattleOpened(header.BattleID, 0, 0, header.Founder, header.Ip, 
-		header.Port, header.MaxPlayers, passworded, 0, 4, "Spring " .. header.Engine, header.Engine, 
+		header.Port, header.MaxPlayers, (header.Password and true) or false, 0, 4, "Spring " .. header.Engine, header.Engine, 
 		header.Map, header.Title or "no title", header.Game, header.SpectatorCount)
 end
 Interface.jsonCommands["BattleAdded"] = Interface._BattleAdded
@@ -391,6 +420,10 @@ function Interface:_Say(data)
 			self:_OnSaidPrivate(data.User, data.Text, data.Time)
 		else
 			self:_OnSayPrivate(data.Target, data.Text, data.Time)
+		end
+	elseif data.Place == 5 then -- Protocol etc.. commands?
+		if data.Text == "Invalid password" then
+			self:_CallListeners("OnJoinBattleFailed", data.Text)
 		end
 	end
 end

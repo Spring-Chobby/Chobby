@@ -4,7 +4,7 @@ function ListWindow:init(parent, title)
 	self.lblTitle = Label:New {
 		x = 20,
 		right = 5,
-		y = 18,
+		y = 11,
 		height = 20,
 		font = Configuration:GetFont(3),
 		caption = title,
@@ -12,7 +12,7 @@ function ListWindow:init(parent, title)
 
 	self.btnClose = Button:New {
 		right = 10,
-		y = 10,
+		y = 3,
 		width = 80,
 		height = 45,
 		caption = Configuration:GetErrorColor() .. i18n("close") .. "\b",

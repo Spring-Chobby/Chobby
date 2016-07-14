@@ -118,6 +118,10 @@ end
 -- Battle commands
 ------------------------
 
+function Lobby:HostBattle(battleName, password)
+	return self
+end
+
 function Lobby:JoinBattle(battleID, password, scriptPassword)
 	return self
 end

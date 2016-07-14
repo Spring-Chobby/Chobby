@@ -3,6 +3,22 @@ BattleListWindow = ListWindow:extends{}
 function BattleListWindow:init(parent)
 	self:super("init", parent, i18n("custom_games"))
  
+	self.btnNewBattle = Button:New {
+		x = 190,
+		y = 3,
+		width = 150,
+		height = 45,
+		caption = Configuration:GetErrorColor() .. i18n("open_mp_game") .. "\b",
+		font = Configuration:GetFont(3),
+		parent = self.window,
+		OnClick = {
+			function ()
+				self:OpenHostWindow()
+			end
+		},
+	}
+ 
+ 
 	local update = function() self:Update() end
 
 	self.onBattleOpened = function(listener, battleID)
@@ -194,27 +210,172 @@ function BattleListWindow:OnBattleIngameUpdate(battleID, isRunning)
 	self:RecalculatePosition(battleID)
 end
 
+function BattleListWindow:OpenHostWindow()
+	local hostBattleWindow = Window:New {
+		caption = "",
+		name = "hostBattle",
+		parent = screen0,
+		width = 530,
+		height = 260,
+		resizable = false,
+		draggable = false,
+	}
+	
+	local title = Label:New {
+		x = 15,
+		width = 170,
+		y = 15,
+		height = 35,
+		caption = i18n("open_mp_game"),
+		font = Configuration:GetFont(4),
+		parent = hostBattleWindow,
+	}
+	
+	local gameNameLabel = Label:New {
+		x = 15,
+		width = 200,
+		y = 75,
+		align = "right",
+		height = 35,
+		caption = i18n("game_name") .. ":",
+		font = Configuration:GetFont(3),
+		parent = hostBattleWindow,
+	}
+	local gameNameEdit = EditBox:New {
+		x = 220,
+		width = 260,
+		y = 70,
+		height = 35,
+		text = (lobby:GetMyUserName() or "Player") .. "'s Battle",
+		font = Configuration:GetFont(3),
+		parent = hostBattleWindow,
+	}
+	
+	local passwordLabel = Label:New {
+		x = 15,
+		width = 200,
+		y = 115,
+		align = "right",
+		height = 35,
+		caption = i18n("password_optional") .. ":",
+		font = Configuration:GetFont(3),
+		parent = hostBattleWindow,
+	}
+	local passwordEdit = EditBox:New {
+		x = 220,
+		width = 260,
+		y = 110,
+		height = 35,
+		text = "",
+		font = Configuration:GetFont(3),
+		parent = hostBattleWindow,
+	}
+	
+	local function HostBattle()
+		if string.len(passwordEdit.text) > 0 then
+			lobby:HostBattle(gameNameEdit.text, passwordEdit.text)
+		else
+			lobby:HostBattle(gameNameEdit.text)
+		end
+		hostBattleWindow:Dispose()
+	end
+	
+	local buttonHost = Button:New {
+		right = 150,
+		width = 135,
+		bottom = 1,
+		height = 70,
+		caption = i18n("host"),
+		font = Configuration:GetFont(3),
+		parent = hostBattleWindow,
+		OnClick = {
+			function()
+				HostBattle()
+			end
+		},
+		OnKeyPress = {
+			function(obj, key, mods, ...)
+				if key == Spring.GetKeyCode("enter") or 
+					key == Spring.GetKeyCode("numpad_enter") then
+					HostBattle()
+				end
+			end
+		},
+	}
+	local buttonCancel = Button:New {
+		right = 1,
+		width = 135,
+		bottom = 1,
+		height = 70,
+		caption = i18n("cancel"),
+		font = Configuration:GetFont(3),
+		parent = hostBattleWindow,
+		OnClick = {
+			function()
+				hostBattleWindow:Dispose()
+			end
+		},
+	}
+	
+	local popupHolder = PriorityPopup(hostBattleWindow)
+end
+
 function BattleListWindow:JoinBattle(battle)
 	if not battle.passworded then
 		WG.BattleRoomWindow.LeaveBattle()
 		lobby:JoinBattle(battle.battleID)
 	else
-		local tryJoin, passwordWindow
-
-		local lblPassword = Label:New {
-			x = 1,
-			width = 100,
-			y = 20,
-			height = 20,
-			caption = i18n("password") .. ": ",
+		local tryJoin
+		
+		local passwordWindow = Window:New {
+			x = 700,
+			y = 300,
+			width = 300,
+			height = 240,
+			caption = "",
+			resizable = false,
+			draggable = false,
+			parent = screen0,
+			OnDispose = { 
+				function()
+					lobby:RemoveListener("OnJoinBattleFailed", onJoinBattleFailed)
+					lobby:RemoveListener("OnJoinBattle", onJoinBattle)
+				end
+			},
 		}
+		
+		local lblPassword = Label:New {
+			x = 25,
+			right = 15,
+			y = 15,
+			height = 35,
+			font = Configuration:GetFont(3),
+			caption = i18n("enter_battle_password"),
+			parent = passwordWindow,
+		}
+		
+		local lblError = Label:New {
+			x = 30,
+			width = 100,
+			y = 110,
+			height = 80,
+			caption = "",
+			font = {
+				color = { 1, 0, 0, 1 },
+				size = Configuration:GetFont(2).size,
+				shadow = Configuration:GetFont(2).shadow,
+			},
+			parent = passwordWindow,
+		}
+		
 		local ebPassword = EditBox:New {
-			x = 110,
-			width = 120,
-			y = 20,
-			height = 20,
+			x = 30,
+			right = 30,
+			y = 60,
+			height = 35,
 			text = "",
 			hint = i18n("password"),
+			fontsize = Configuration:GetFont(3).size,
 			passwordInput = true,
 			OnKeyPress = {
 				function(obj, key, mods, ...)
@@ -224,43 +385,42 @@ function BattleListWindow:JoinBattle(battle)
 					end
 				end
 			},
+			parent = passwordWindow,
 		}
+		
+		function tryJoin()
+			lblError:SetCaption("")
+			lobby:JoinBattle(battle.battleID, ebPassword.text)
+		end
+		
 		local btnJoin = Button:New {
 			x = 1,
+			width = 135,
 			bottom = 1,
-			width = 80,
-			height = 40,
-			caption = i18n("Join"),
+			height = 70,
+			caption = i18n("join"),
+			font = Configuration:GetFont(3),
 			OnClick = {
 				function()
 					tryJoin()
 				end
 			},
+			parent = passwordWindow,
 		}
 		local btnClose = Button:New {
-			x = 110,
+			right = 1,
+			width = 135,
 			bottom = 1,
-			width = 80,
-			height = 40,
-			caption = i18n("close"),
+			height = 70,
+			caption = i18n("cancel"),
+			font = Configuration:GetFont(3),
 			OnClick = {
 				function()
 					passwordWindow:Dispose()
 				end
 			},
+			parent = passwordWindow,
 		}
-
-		local lblError = Label:New {
-			x = 1,
-			width = 100,
-			y = 50,
-			height = 80,
-			caption = "",
-			font = {
-				color = { 1, 0, 0, 1 },
-			},
-		}
-
 
 		local onJoinBattleFailed = function(listener, reason)
 			lblError:SetCaption(reason)
@@ -271,33 +431,7 @@ function BattleListWindow:JoinBattle(battle)
 			self.window:Dispose()
 		end
 		lobby:AddListener("OnJoinBattle", onJoinBattle)
-
-		passwordWindow = Window:New {
-			x = 700,
-			y = 300,
-			width = 265,
-			height = 160,
-			caption = "Join passworded battle",
-			resizable = false,
-			parent = screen0,
-			children = {
-				lblPassword,
-				ebPassword,
-				lblError,
-				btnJoin,
-				btnClose,
-			},
-			OnDispose = { 
-				function()
-					lobby:RemoveListener("OnJoinBattleFailed", onJoinBattleFailed)
-					lobby:RemoveListener("OnJoinBattle", onJoinBattle)
-				end
-			},
-		}
-
-		tryJoin = function()
-			lblError:SetCaption("")
-			lobby:JoinBattle(battle.battleID, ebPassword.text)
-		end
+		
+		local popupHolder = PriorityPopup(passwordWindow)
 	end
 end
