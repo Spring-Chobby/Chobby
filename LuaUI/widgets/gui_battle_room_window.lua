@@ -328,13 +328,14 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		x = 0,
 		right = 0,
 		y = 0,
+		bottom = 0,
 		parent = mainScrollPanel,
 		preserveChildrenOrder = true,
 		borderColor = {0,0,0,0},
 		backgroundColor = {0.2, 0.2, 0.2, 0.2},
 		TileImageBK = IMAGE_BLANK,
 	}	
-	
+	mainStackPanel._relativeBounds.bottom = nil
 	local spectatorScrollPanel = ScrollPanel:New {
 		x = 0,
 		right = 0,
@@ -348,11 +349,13 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		x = 0,
 		right = 0,
 		y = 0,
+		bottom = 0,
 		parent = spectatorScrollPanel,
 		borderColor = {0,0,0,0},
 		backgroundColor = {0.2, 0.2, 0.2, 0.2},
 		TileImageBK = IMAGE_BLANK,
 	}
+	spectatorStackPanel._relativeBounds.bottom = nil
 	
 	-- ADD TEAM
 	local newTeamHolder = Control:New {
