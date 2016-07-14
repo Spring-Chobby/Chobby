@@ -2,7 +2,7 @@ InterfaceSkirmish = Lobby:extends()
 
 function InterfaceSkirmish:init()
 	self:super("init")
-	self.name = "skirmish"
+	self.name = "singleplayer"
 end
 
 local function ScriptTXT(script)

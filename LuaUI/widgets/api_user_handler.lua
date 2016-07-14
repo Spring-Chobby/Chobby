@@ -18,11 +18,13 @@ end
 -- Local Variables
 
 local battleUsers = {}
+local singleplayerUsers = {}
 local channelUsers = {}
 local teamUsers = {}
 
 local userListList = {
 	battleUsers,
+	singleplayerUsers,
 	channelUsers,
 	teamUsers
 }
@@ -33,6 +35,9 @@ local IMAGE_INGAME = "luaui/images/ingame.png"
 local IMAGE_FLAG_UNKNOWN = "luaui/images/flags/unknown.png"
 local IMAGE_AUTOHOST = "luaui/images/ranks/robot.png"
 local IMAGE_MODERATOR = "luaui/images/ranks/moderator.png"
+local IMAGE_PLAYER = "luaui/images/ranks/player.png"
+local IMAGE_READY = "luaui/images/ready.png"
+local IMAGE_UNREADY = "luaui/images/unready.png"
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -40,13 +45,28 @@ local IMAGE_MODERATOR = "luaui/images/ranks/moderator.png"
 
 local function GetUserCountryImage(userName, userControl)
 	local userInfo = userControl.lobby:GetUser(userName) or {}
+	local userBattleInfo = userControl.lobby:GetUserBattleStatus(userName) or {}
 	if userInfo.country then
 		local fileName = "luaui/images/flags/" .. string.lower(userInfo.country) .. ".png"
 		if VFS.FileExists(fileName) then
 			return fileName
 		end
 	end
-	return IMAGE_FLAG_UNKNOWN
+	if not userBattleInfo.aiLib then
+		return IMAGE_FLAG_UNKNOWN
+	end
+end
+
+local function GetUserSyncStatus(userName, userControl)
+	local userBattleInfo = userControl.lobby:GetUserBattleStatus(userName) or {}
+	if userBattleInfo.aiLib then
+		return
+	end
+	if userBattleInfo.sync == 1 then
+		return IMAGE_READY
+	else
+		return IMAGE_UNREADY
+	end
 end
 
 local function GetUserComboBoxOptions(userName, isInBattle, userControl)
@@ -89,10 +109,13 @@ end
 
 local function GetUserRankImageName(userName, userControl)
 	local userInfo = userControl.lobby:GetUser(userName) or {}
-	if userInfo.isBot or userInfo.aiLib then
+	local userBattleInfo = userControl.lobby:GetUserBattleStatus(userName) or {}
+	if userInfo.isBot or userBattleInfo.aiLib then
 		return IMAGE_AUTOHOST
 	elseif userInfo.isAdmin then
 		return IMAGE_MODERATOR
+	elseif userControl.isSingleplayer then
+		return IMAGE_PLAYER
 	elseif userInfo.level then
 		local rankBracket = math.min(8, math.floor(userInfo.level/10)) + 1
 		return "luaui/images/ranks/" .. rankBracket .. ".png"
@@ -115,13 +138,20 @@ end
 local function UpdateUserActivity(listener, userName)
 	for i = 1, #userListList do
 		local userList = userListList[i]
-		if userList[userName] then
-			local status1, status2 = GetUserStatusImages(userName, userList[userName].isInBattle, userList[userName])
-			userList[userName].mainControl.items = GetUserComboBoxOptions(userName, userList[userName].isInBattle, userList[userName])
-			userList[userName].statusFirst.file = status1
-			userList[userName].statusSecond.file = status2
-			userList[userName].statusFirst:Invalidate()
-			userList[userName].statusSecond:Invalidate()
+		local data = userList[userName]
+		if data then
+			data.mainControl.items = GetUserComboBoxOptions(userName, data.isInBattle, data)
+			
+			if data.syncStatus then
+				data.syncStatus.file = GetUserSyncStatus(userName, data)
+				data.syncStatus:Invalidate()
+			end
+			
+			local status1, status2 = GetUserStatusImages(userName, data.isInBattle, data)
+			data.statusFirst.file = status1
+			data.statusSecond.file = status2
+			data.statusFirst:Invalidate()
+			data.statusSecond:Invalidate()
 		end
 	end
 end
@@ -130,11 +160,14 @@ end
 --------------------------------------------------------------------------------
 -- Control Handling
 
-local function GetUserControls(userName, isInBattle, lobbyToUse, reinitialize)
+local function GetUserControls(userName, isInBattle, isSingleplayer, reinitialize)
 	local userControls = reinitialize or {}
 	
 	userControls.isInBattle = isInBattle
-	userControls.lobby = lobbyToUse or lobby
+	userControls.lobby = (isSingleplayer and WG.LibLobby.lobbySkirmish) or lobby
+	userControls.isSingleplayer = isSingleplayer 
+	
+	local offset = 0
 	
 	if reinitialize then
 		userControls.mainControl:ClearChildren()
@@ -186,19 +219,41 @@ local function GetUserControls(userName, isInBattle, lobbyToUse, reinitialize)
 		}
 	end
 	
-	userControls.country = Image:New {
-		name = "country",
-		x = 1,
-		y = 3,
-		width = 21,
-		height = 19,
-		parent = userControls.mainControl,
-		keepAspect = true,
-		file = GetUserCountryImage(userName, userControls),
-	}
+	
+	if isInBattle then
+		offset = offset + 1
+		userControls.syncStatus = Image:New {
+			name = "syncStatus",
+			x = offset,
+			y = 3,
+			width = 21,
+			height = 19,
+			parent = userControls.mainControl,
+			keepAspect = true,
+			file = GetUserSyncStatus(userName, userControls),
+		}
+		offset = offset + 23
+	end
+	
+	if not isSingleplayer then
+		offset = offset + 1
+		userControls.country = Image:New {
+			name = "country",
+			x = offset,
+			y = 3,
+			width = 21,
+			height = 19,
+			parent = userControls.mainControl,
+			keepAspect = true,
+			file = GetUserCountryImage(userName, userControls),
+		}
+		offset = offset + 23
+	end
+	
+	offset = offset + 2
 	userControls.level = Image:New {
 		name = "level",
-		x = 26,
+		x = offset,
 		y = 3,
 		width = 19,
 		height = 19,
@@ -206,9 +261,12 @@ local function GetUserControls(userName, isInBattle, lobbyToUse, reinitialize)
 		keepAspect = true,
 		file = GetUserRankImageName(userName, userControls),
 	}
+	offset = offset + 23
+	
+	offset = offset + 1
 	userControls.name = TextBox:New {
 		name = "name",
-		x = 50,
+		x = offset,
 		y = 6,
 		right = 0,
 		bottom = 2,
@@ -217,12 +275,13 @@ local function GetUserControls(userName, isInBattle, lobbyToUse, reinitialize)
 		fontsize = WG.Chobby.Configuration:GetFont(2).size,
 		text = userName,
 	}
+	offset = offset + userControls.name.font:GetTextWidth(userControls.name.text)
 	
 	local status1, status2 = GetUserStatusImages(userName, isInBattle, userControls)
-	
+	offset = offset + 3
 	userControls.statusFirst = Image:New {
 		name = "statusFirst",
-		x = 50 + userControls.name.font:GetTextWidth(userControls.name.text) + 3,
+		x = offset,
 		y = 3,
 		width = 19,
 		height = 19,
@@ -230,10 +289,12 @@ local function GetUserControls(userName, isInBattle, lobbyToUse, reinitialize)
 		keepAspect = true,
 		file = status1,
 	}
+	offset = offset + 20
 	
+	offset = offset + 1
 	userControls.statusSecond = Image:New {
 		name = "statusSecond",
-		x = 50 + userControls.name.font:GetTextWidth(userControls.name.text) + 3 + 21,
+		x = offset,
 		y = 3,
 		width = 19,
 		height = 19,
@@ -241,6 +302,8 @@ local function GetUserControls(userName, isInBattle, lobbyToUse, reinitialize)
 		keepAspect = true,
 		file = status2,
 	}
+	offset = offset + 20
+	
 	
 	-- This is always checked against main lobby.
 	userControls.needReinitialization = lobby.status ~= "connected"
@@ -253,17 +316,32 @@ end
 -- External Functions
 local userHandler = {}
 
-function userHandler.GetBattleUser(userName, lobbyToUse)
+function userHandler.GetBattleUser(userName, isSingleplayer)
+	if isSingleplayer then
+		return userHandler.GetSingleplayerUser(userName)
+	end
+
 	if battleUsers[userName] then
-		battleUsers[userName].lobby = lobbyToUse
 		if battleUsers[userName].needReinitialization then
-			battleUsers[userName] = GetUserControls(userName, true, lobbyToUse, battleUsers[userName])
+			battleUsers[userName] = GetUserControls(userName, true, false, battleUsers[userName])
 		end
 		return battleUsers[userName].mainControl
 	end
 	
-	battleUsers[userName] = GetUserControls(userName, true, lobbyToUse)
+	battleUsers[userName] = GetUserControls(userName, true)
 	return battleUsers[userName].mainControl
+end
+
+function userHandler.GetSingleplayerUser(userName)
+	if singleplayerUsers[userName] then
+		if singleplayerUsers[userName].needReinitialization then
+			singleplayerUsers[userName] = GetUserControls(userName, true, true, singleplayerUsers[userName])
+		end
+		return singleplayerUsers[userName].mainControl
+	end
+	
+	singleplayerUsers[userName] = GetUserControls(userName, true, true)
+	return singleplayerUsers[userName].mainControl
 end
 
 function userHandler.GetChannelUser(userName)		
