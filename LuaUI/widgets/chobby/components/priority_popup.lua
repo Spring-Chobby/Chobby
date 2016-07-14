@@ -74,8 +74,17 @@ function PriorityPopup:init(mainWindow)
 			function ()
 				return true -- Eat all the mouse clicks.
 			end
+		},
+		OnKeyPress = {
+			function (obj, key, mods, isRepeat, label, unicode)
+				if key == Spring.GetKeyCode("esc") then
+					self.mainWindow:Dispose()
+				end
+			end
 		}
 	}
+	
+	screen0:FocusControl(self.background)
 	
 	local function HideDisposeFunc()
 		self:unregister()

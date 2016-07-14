@@ -88,6 +88,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 		submenus[index].panelHandler.Destroy()
 		
 		local newPanelHandler = GetTabPanelHandler(submenus[index].name, buttonWindow, panelWindow, newTabs, true, BackToMainMenu)
+		newPanelHandler.Rescale(fontSizeScale, buttonHeight)
 		newPanelHandler.Hide()
 		submenus[index].panelHandler = newPanelHandler
 	end

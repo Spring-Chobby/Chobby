@@ -911,7 +911,7 @@ end
 function BattleRoomWindow.SetSingleplayerGame(ToggleShowFunc, battleroomObj, tabData)
 	
 	local function SetGameFail()
-		battleLobby:LeaveBattle()
+		WG.LibLobby.lobbySkirmish:LeaveBattle()
 	end
 
 	local function SetGameSucess(name)

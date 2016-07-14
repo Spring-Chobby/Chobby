@@ -175,8 +175,10 @@ end
 function InterfaceSkirmish:LeaveBattle()
 	self:super("LeaveBattle")
 	local myBattleID = self:GetMyBattleID()
-	self:_OnLeftBattle(myBattleID, self:GetMyUserName())
-	self:_OnBattleClosed(myBattleID)
+	if myBattleID then
+		self:_OnLeftBattle(myBattleID, self:GetMyUserName())
+		self:_OnBattleClosed(myBattleID)
+	end
 	return self
 end
 
