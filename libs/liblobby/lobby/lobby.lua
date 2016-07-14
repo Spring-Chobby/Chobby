@@ -621,6 +621,15 @@ function Lobby:_OnLeftTeam(obj)
 	end
 end
 
+------------------------
+-- Misc
+------------------------
+
+function Lobby:_OnLaunchRemoteReplay(url, game, map, engine)
+	self:_CallListeners("OnLaunchRemoteReplay", url, game, map, engine)
+end
+
+
 -------------------------------------------------
 -- END Server commands
 -------------------------------------------------

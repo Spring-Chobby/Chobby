@@ -6,13 +6,13 @@ end
 
 function widget:GetInfo()
 return {
-	name    = "Test-Widget for luasocket",
-	desc    = "a simple test widget to show capabilities of luasocket",
-	author  = "abma",
-	date    = "Feb. 2012",
+	name    = "ZK replay downloader",
+	desc    = "Downloads and launches ZK replays",
+	author  = "Anarchid, abma (http demo)",
+	date    = "July 2016",
 	license = "GNU GPL, v2 or later",
 	layer   = 0,
-	enabled = false,
+	enabled = true,
 }
 end
 
@@ -75,10 +75,21 @@ local function SocketConnect(host, port)
 end
 
 function widget:Initialize()
-	dumpConfig()
-	--Spring.Echo(socket.dns.toip("localhost"))
-	--FIXME dns-request seems to block
-	SocketConnect(host, port)
+	CHOBBY_DIR = "LuaUI/widgets/chobby/"
+	VFS.Include("LuaUI/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
+	lobby:AddListener("OnLaunchRemoteReplay", onLaunchReplay)
+	--SocketConnect(host, port)
+end
+
+function onLaunchReplay(wtf, url, game, map, engine)
+	Spring.Echo("LAUNCHING REPLAY")
+	Spring.Echo("url: ".. url)
+	Spring.Echo("game: ".. game)
+	Spring.Echo('map: '.. map)
+	Spring.Echo('engine: '.. engine)
+
+	-- if needed stuff available: launch the game
+	-- otherwise: start downloads (socket/VFS) and watch for their completion
 end
 
 -- called when data was received through a connection
@@ -105,6 +116,7 @@ local function SocketClosed(sock)
     local f = assert(io.open('test.sdf', 'wb')) -- open in "binary" mode
     f:write(replaydata:sub(body_start));
     f:close()
+	replaydata = "";
     Spring.Echo("saved replay file");
 end
 
