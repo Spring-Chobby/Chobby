@@ -411,11 +411,13 @@ function ChatWindows:CreateDebugConsole()
 	end
 	lobby:AddListener("OnCommandReceived",
 		function(listner, command)
+			Spring.Echo("Server", "<" .. command)
 			self.debugConsole:AddMessage("<" .. command)
 		end
 	)
 	lobby:AddListener("OnCommandSent",
 		function(listner, command)
+			Spring.Echo("Server", "<" .. command)
 			self.debugConsole:AddMessage(">" .. command)
 		end
 	)
