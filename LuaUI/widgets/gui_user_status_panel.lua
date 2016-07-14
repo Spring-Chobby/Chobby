@@ -33,7 +33,7 @@ local onAccepted, onDisconnected, onPong
 local UserStatusPanel = {}
 
 local function Logout()
-	if lobby.status ~= "offline" then
+	if lobby:GetConnectionStatus() ~= "offline" then
 		Spring.Echo("Logout")
 		lobby:Disconnect()
 	else
@@ -156,18 +156,20 @@ end
 local oldStatus
 
 function widget:Update()
-	if lobby.status ~= oldStatus then
-		if oldStatus == "disconnected" then
-			btnLogout:SetCaption(i18n("logout"))
-		else
+	local newStatus = lobby:GetConnectionStatus()
+	if newStatus ~= oldStatus then
+		if newStatus == "disconnected" or newStatus == "offline" then
 			btnLogout:SetCaption(i18n("login"))
+			lblPing:SetCaption("\255\180\180\180" .. i18n("offline") .. "\b")
+		else
+			btnLogout:SetCaption(i18n("logout"))
 		end
-		if lobby.status == "connecting" then
+		if newStatus == "connecting" then
 			lblPing:SetCaption(WG.Chobby.Configuration:GetPartialColor() .. i18n("connecting") .. "\b")
-		elseif lobby.status == "connected" then
+		elseif newStatus == "connected" then
 			lblPing:SetCaption(WG.Chobby.Configuration:GetSuccessColor() .. i18n("online") .. "\b")
 		end
-		oldStatus = lobby.status
+		oldStatus = newStatus
 	end
 end
 

@@ -108,7 +108,7 @@ function Interface:_GetJsonCommandFunction(cmdName)
 	return Interface.jsonCommands[cmdName]
 end
 
--- status can be one of: "offline", "connected" and "disconnected"
+-- status can be one of: "offline", "connected", "connected" and "disconnected"
 function Interface:GetConnectionStatus()
 	return self.status
 end
