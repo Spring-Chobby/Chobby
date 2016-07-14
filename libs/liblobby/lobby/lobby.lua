@@ -86,8 +86,6 @@ function Lobby:SelectMap(mapName)
 	self:SayBattle("!map " .. mapName)
 end
 
-
-
 -------------------------------------------------
 -- BEGIN Client commands
 -------------------------------------------------
@@ -102,9 +100,9 @@ function Lobby:Connect(host, port)
 	return self
 end
 
-function Lobby:Login(user, password, cpu, localIP)
+function Lobby:Login(user, password, cpu, localIP, lobbyVersionString)
 	self.myUserName = user
-	self.loginData = { user, password, cpu, localIP }
+	self.loginData = { user, password, cpu, localIP, lobbyVersionString }
 	return self
 end
 

@@ -19,7 +19,7 @@ Interface.commandPattern = {}
 -- Connectivity commands
 ------------------------
 
-function Interface:Login(user, password, cpu, localIP)
+function Interface:Login(user, password, cpu, localIP, lobbyVersionString)
 	self:super("Login", user, password, cpu, localIP)
 	if localIP == nil then
 		localIP = "*"
@@ -31,6 +31,7 @@ function Interface:Login(user, password, cpu, localIP)
 		PasswordHash = password,
 		UserID = 0,
 		ClientType = 1,
+		LobbyVersion = lobbyVersionString,
 	}
 	
 	self:_SendCommand("Login " .. json.encode(sendData))
