@@ -29,15 +29,22 @@ function Configuration:init()
 	self.singleplayer_mode = 2
 	
 	self.font = {
-		{size = 14, shadow = false},
-		{size = 18, shadow = false},
-		{size = 22, shadow = false},
-		{size = 32, shadow = false},
-		{size = 48, shadow = false},
+		[0] = {size = 10, shadow = false},
+		[1] = {size = 14, shadow = false},
+		[2] = {size = 18, shadow = false},
+		[3] = {size = 22, shadow = false},
+		[4] = {size = 32, shadow = false},
+		[5] = {size = 48, shadow = false},
 	}
 	
 	self.game_settings = VFS.Include("luaui/configs/springsettings/springsettings3.lua")
 end
+
+function Configuration:GetMinimapImage(mapName)
+	Spring.Echo("I can't find the map image for", mapName, "so have this one instead")
+	return "luaui/images/minimaps/minimap" .. math.ceil(math.random()*3) .. ".png"
+end
+
 
 function Configuration:GetGameConfig(gameName, fileName)
 	local gameInfo = VFS.GetArchiveInfo(gameName)

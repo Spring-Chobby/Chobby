@@ -111,6 +111,15 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		bottom = 135,
 		parent = rightInfo,
 	}
+	local minimapImage = Image:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		keepAspect = true,
+		file = WG.Chobby.Configuration:GetMinimapImage(battle.mapName),
+		parent = minimap,
+	}
 	
 	local downloader = WG.Chobby.Downloader({
 		x = 0,
@@ -281,6 +290,8 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		end
 		if mapName then
 			lblMapName:SetCaption(mapName)
+			minimapImage.file = WG.Chobby.Configuration:GetMinimapImage(mapName)
+			minimapImage:Invalidate()
 			-- TODO: Bit lazy here, seeing as we only need to update the map
 			UpdateArchiveStatus()
 			MaybeDownloadMap(battle)
