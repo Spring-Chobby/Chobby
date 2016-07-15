@@ -160,8 +160,11 @@ function Console:AddMessage(message, userName, dateOverride, color)
 			
 			local hour = (localHour - utcHour + messageHour)%24
 			local minute = (localMinute - utcMinute + messageMinute)%60
+			if minute < 10 then
+				minute = "0" .. minute
+			end
 			 
-			 dateOverride = hour .. ":" .. minute
+			dateOverride = hour .. ":" .. minute
 		end
 		-- FIXME: the input "date" should ideally be a table so we can coerce the format
 		local currentDate = dateOverride or os.date(self.dateFormat)
