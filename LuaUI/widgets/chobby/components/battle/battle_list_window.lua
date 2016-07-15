@@ -17,7 +17,11 @@ function BattleListWindow:init(parent)
 			end
 		},
 	}
- 
+	
+	self:SetMinItemWidth(250)
+	self.columns = 3
+	self.itemHeight = 80
+	self.itemPadding = 5
  
 	local update = function() self:Update() end
 
@@ -83,7 +87,7 @@ function BattleListWindow:Update()
 end
 
 function BattleListWindow:AddBattle(battle)
-	local h = 60
+	local h = self.itemHeight
 	local children = {}
 
 	local lblPlayers = Label:New {
@@ -159,10 +163,10 @@ function BattleListWindow:AddBattle(battle)
 
 	local btnJoin = Button:New {
 		name = "join",
-		x = 10,
-		width = 90,
-		y = 5,
-		height = h - 10,
+		x = 0,
+		right = 0,
+		y = 0,
+		height = h,
 		caption = i18n("join"),
 		OnClick = {
 			function()
@@ -190,14 +194,14 @@ function BattleListWindow:JoinedBattle(battleID)
 	local battle = lobby:GetBattle(battleID)
 	local items = self:GetRowItems(battleID)
 	items.players:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
-	self:RecalculatePosition(battleID)
+	self:RecalculateOrder(battleID)
 end
 
 function BattleListWindow:LeftBattle(battleID)
 	local battle = lobby:GetBattle(battleID)
 	local items = self:GetRowItems(battleID)
 	items.players:SetCaption(#battle.users .. "/" .. battle.maxPlayers)
-	self:RecalculatePosition(battleID)
+	self:RecalculateOrder(battleID)
 end
 
 function BattleListWindow:OnUpdateBattleInfo(battleID)
@@ -206,14 +210,14 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 	items.players:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
 	items.map:SetCaption(battle.mapName:sub(1, 22) .. (VFS.HasArchive(battle.mapName) and ' [' .. Configuration:GetSuccessColor() .. '✔\b]' or ' [' .. Configuration:GetErrorColor() .. '✘\b]'))
 	items.map.tooltip = battle.mapName
-	self:RecalculatePosition(battleID)
+	self:RecalculateOrder(battleID)
 end
 
 function BattleListWindow:OnBattleIngameUpdate(battleID, isRunning)
 	local battle = lobby:GetBattle(battleID)
 	local items = self:GetRowItems(battleID)
 	items.running:SetCaption((isRunning and "Running") or "")
-	self:RecalculatePosition(battleID)
+	self:RecalculateOrder(battleID)
 end
 
 function BattleListWindow:OpenHostWindow()

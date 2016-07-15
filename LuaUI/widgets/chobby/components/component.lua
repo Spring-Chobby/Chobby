@@ -2,8 +2,12 @@ Component = LCS.class{}
 
 Component.registeredComponents = {}
 
-function Component:init()
+function Component:DoInit()
 	table.insert(Component.registeredComponents, self)
+end
+
+function Component:init()
+	self:DoInit()
 end
 
 function Component:unregister()

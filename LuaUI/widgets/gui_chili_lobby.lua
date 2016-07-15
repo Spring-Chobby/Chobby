@@ -27,7 +27,6 @@ CHOBBY_DIR = "LuaUI/widgets/chobby/"
 local interfaceRoot
 
 function widget:ViewResize(vsx, vsy, viewGeometry)
-	Spring.Echo("ViewResize", vsx, vsy)
 	if interfaceRoot then
 		interfaceRoot.UpdateSizeMode(vsx, vsy)
 	end

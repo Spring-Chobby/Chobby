@@ -31,6 +31,11 @@ function ListWindow:init(parent, title)
 		bottom = 10,
 		borderColor = {0,0,0,0},
 		horizontalScrollbar = false,
+		OnResize = {
+			function()
+				self:OnResize()
+			end
+		}
 	}
 
 	local IMAGE_BLANK = "luaui/images/blank.png"
@@ -57,10 +62,36 @@ function ListWindow:init(parent, title)
 			end
 		},
 	}
-
+	
+	self.columns = 1
+	self.itemHeight = 60
+	self.itemPadding = 20
 	self.itemNames = {}
 	self.itemPanelMapping = {}
 	self.orderPanelMapping = {}
+end
+
+function ListWindow:OnResize()
+	if self.listPanel and self.listPanel.clientWidth and self.minItemWidth then
+		local myWidth = self.listPanel.clientWidth
+		local widthFactor = math.floor(myWidth/self.minItemWidth)
+		local newColumns = math.max(1, widthFactor)
+		if self.columns ~= newColumns then
+			self.columns = newColumns
+			for i = 1, #self.listPanel.children do
+				self:RecalculatePosition(i)
+			end
+		end
+	end
+end
+
+function ListWindow:SetMinItemWidth(newMinItemWidth)
+	if newMinItemWidth then
+		self.minItemWidth = newMinItemWidth
+		self:OnResize()
+	else
+		self.minItemWidth = false
+	end
 end
 
 function ListWindow:HideWindow()
@@ -87,9 +118,7 @@ function ListWindow:Clear()
 end
 
 function ListWindow:AddRow(items, id)
-	local w = items[#items].x + items[#items].width
-	local h = 60
-	local padding = 20
+	local thisWidth = items[#items].x + items[#items].width
 		
 	local itemNames = {}
 	for i = 1, #items do
@@ -101,30 +130,31 @@ function ListWindow:AddRow(items, id)
 	local container = Control:New {
 		width = "100%",
 		y = 0,
-		height = h,
+		height = self.itemHeight,
 		padding = {0, 0, 0, 0},
 		children = items,
 	}
 	local panel = LayoutPanel:New {
 		x = 0,
 		right = 0,
-		height = h,
+		height = self.itemHeight,
 		padding = {0, 0, 0, 0},
 		itemMargin = {0, 0, 0, 0},
 		itemPadding = {0, 0, 0, 0},
 		children = { container },
 	}
-
+	
 	local index = #self.listPanel.children + 1
+	local x,y,width,height = self:CalulatePosition(index)
 	local w = Control:New {
-		x = 0,
-		right = 0,
-		y = self:CalculateHeight(index),
-		height = h,
+		x = x,
+		width = width,
+		y = y,
+		height = height,
 		children = { panel },
 		resizable = false,
 		draggable = false,
-		padding= {0, 0, 0, 0},
+		 padding = {0, 0, 0, 0},
 		id = id,
 		index = index
 	}
@@ -132,17 +162,33 @@ function ListWindow:AddRow(items, id)
 	self.itemPanelMapping[id] = w
 	self.orderPanelMapping[index] = w
 
-	self:RecalculatePosition(id)
+	self:RecalculateOrder(id)
 end
 
 function ListWindow:GetRowItems(id)
 	return self.itemNames[id]
 end
 
-function ListWindow:CalculateHeight(index)
-	local h = 60
-	local padding = 5
-	return 10 + (index - 1) * (h + padding)
+function ListWindow:CalulatePosition(index)
+	local xAcross = ((index - 1)%self.columns)/self.columns
+	local row = math.floor((index - 1)/self.columns)
+	
+	local x = math.floor(1000*xAcross)/10 .. "%"
+	local y = 10 + row * (self.itemHeight + self.itemPadding)
+	local width = math.floor(1000/self.columns)/10 .. "%"
+	local height = self.itemHeight
+	return x,y,width,height
+end
+
+function ListWindow:RecalculatePosition(index)
+	local x,y,width,height = self:CalulatePosition(index)
+	
+	local child = self.listPanel.children[index]
+	
+	child._relativeBounds.left = x
+	child._relativeBounds.width = width
+	child:SetPos(nil, y, nil, height)
+	child:UpdateClientArea()
 end
 
 -- res >  0: id1 before id2
@@ -154,19 +200,30 @@ end
 
 function ListWindow:SwapPlaces(panel1, panel2)
 	tmp = panel1.index
+	
+	local x1,y1,w1,h1 = panel1._relativeBounds.left, panel1.y, panel1._relativeBounds.width, panel1.height
+	local x2,y2,w2,h2 = panel2._relativeBounds.left, panel2.y, panel2._relativeBounds.width, panel2.height
+	
+	panel1._relativeBounds.left = x2
+	panel1._relativeBounds.width = w2
+	panel1:SetPos(nil, y2, nil, h2)
+	panel1:UpdateClientArea()
 
+	panel2._relativeBounds.left = x1
+	panel2._relativeBounds.width = w1
+	panel2:SetPos(nil, y1, nil, h1)
+	panel2:UpdateClientArea()
+	
+	-- Swap positions in table
 	panel1.index = panel2.index
 	self.orderPanelMapping[panel1.index] = panel1
-	panel1.y = self:CalculateHeight(panel1.index)
-	panel1:Invalidate()
-
+	
 	panel2.index = tmp
 	self.orderPanelMapping[panel2.index] = panel2
-	panel2.y = self:CalculateHeight(panel2.index)
-	panel2:Invalidate()
+	
 end
 
-function ListWindow:RecalculatePosition(id)
+function ListWindow:RecalculateOrder(id)
 	local panel = self.itemPanelMapping[id]
 	local index = panel.index
 
