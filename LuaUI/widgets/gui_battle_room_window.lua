@@ -175,9 +175,41 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		parent = rightInfo,
 	}
 	
+	local leftOffset = 0
+	local newTeam = ComboBox:New {
+		name = "newTeam",
+		x = 0,
+		y = leftOffset,
+		right = 0,
+		height = 45,
+		caption = "\255\66\138\201" .. i18n("add_team") ..  "\b",
+		font = WG.Chobby.Configuration:GetFont(3),
+		ignoreItemCaption = true,
+		itemFontSize = WG.Chobby.Configuration:GetFont(3).size,
+		itemHeight = 30,
+		selected = 0,
+		maxDropDownWidth = 120,
+		minDropDownHeight = 0,
+		items = {"Join", "Add AI"},
+		OnSelect = {
+			function (obj)
+				if obj.selected == 1 then
+					battleLobby:SetBattleStatus({
+						allyNumber = emptyTeamIndex,
+						isSpectator = false,
+					})
+				elseif obj.selected == 2 then
+					WG.Chobby.AiListWindow(battleLobby, battle.gameName, emptyTeamIndex)
+				end
+			end
+		},
+		parent = leftInfo
+	}
+	leftOffset = leftOffset + 50
+	
 	local btnPickMap = Button:New {
 		x = 0,
-		y = 90,
+		y = leftOffset,
 		height = 45,
 		right = 0,
 		caption = "\255\66\138\201" .. i18n("pick_map") ..  "\b",
@@ -189,29 +221,33 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		},
 		parent = leftInfo,
 	}
+	leftOffset = leftOffset + 50
 
 	local lblNumberOfPlayers = Label:New {
 		x = 0,
-		y = 15,
+		y = leftOffset,
 		width = 200,
 		height = 30,
 		caption = "",
 		parent = leftInfo,
 	}
+	leftOffset = leftOffset + 30
 	
 	lblHaveGame = Label:New {
 		x = 0,
-		y = 35,
+		y = leftOffset,
 		caption = "",
 		parent = leftInfo,
 	}
+	leftOffset = leftOffset + 30
 
 	lblHaveMap = Label:New {
 		x = 0,
-		y = 55,
+		y = leftOffset,
 		caption = "",
 		parent = leftInfo,
 	}
+	leftOffset = leftOffset + 30
 	
 	onUpdateUserTeamStatusSelf = function(listener, userName, allyNumber, isSpectator)
 		if userName == myUserName then
@@ -368,30 +404,31 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		parent = playerParent,
 	}
 	
-	local label = Label:New {
-		x = 5,
-		y = 0,
-		width = 120,
-		height = NEW_TEAM_SPACING,
-		valign = "center",
-		font = {size = 20},
-		caption = "New Team:",
-		parent = newTeamHolder,
-	}
-	AddTeamButtons(
-		newTeamHolder,
-		110,
-		(NEW_TEAM_SPACING - 30)/2,
-		function()
-			battleLobby:SetBattleStatus({
-				allyNumber = emptyTeamIndex,
-				isSpectator = false,
-			})
-		end, 
-		function()
-			WG.Chobby.AiListWindow(battleLobby, battle.gameName, emptyTeamIndex)
-		end
-	)
+	-- Join new team or AI in the same format as existing teams.
+	--local label = Label:New {
+	--	x = 5,
+	--	y = 0,
+	--	width = 120,
+	--	height = NEW_TEAM_SPACING,
+	--	valign = "center",
+	--	font = {size = 20},
+	--	caption = "New Team:",
+	--	parent = newTeamHolder,
+	--}
+	--AddTeamButtons(
+	--	newTeamHolder,
+	--	110,
+	--	(NEW_TEAM_SPACING - 30)/2,
+	--	function()
+	--		battleLobby:SetBattleStatus({
+	--			allyNumber = emptyTeamIndex,
+	--			isSpectator = false,
+	--		})
+	--	end, 
+	--	function()
+	--		WG.Chobby.AiListWindow(battleLobby, battle.gameName, emptyTeamIndex)
+	--	end
+	--)
 	
 	-- Object handling
 	local player = {}

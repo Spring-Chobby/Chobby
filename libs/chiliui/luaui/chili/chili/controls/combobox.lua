@@ -48,9 +48,9 @@ function ComboBox:Select(itemIdx)
        return
     end
     self.selected = itemIdx
-    self.caption = ""
 
     if type(item) == "string" and not self.ignoreItemCaption then
+		self.caption = ""
         self.caption = item
     end
     self:CallListeners(self.OnSelect, itemIdx, true)
