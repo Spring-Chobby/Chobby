@@ -63,11 +63,12 @@ end
 ------------------------
 
 function Interface:HostBattle(battleTitle, password)
+	self.springieSpawnText = "!spawn mod=zk:stable,title=" .. battleTitle .. ((password and ",password=" .. password .. ",") or ",")
 	local sendData = {
 		Place = 2, 
 		Target = "Springiee",
 		IsEmote = false,
-		Text = "!spawn mod=zk:stable,title=" .. battleTitle .. ((password and ",password=" .. password .. ",") or ","),
+		Text = self.springieSpawnText,
 		Ring = false,
 	}
 	self.springieSpawnTimer = Spring.GetTimer()
@@ -288,11 +289,15 @@ function Interface:_BattleAdded(data)
 			self.springieSpawnTimer = nil
 			self.springieSpawnTitle = nil
 			self.springieSpawnPassword = nil
+			self.springieSpawnText = nil
 		elseif self.springieSpawnTitle == header.Title then
 			self:JoinBattle(header.BattleID, self.springieSpawnPassword)
-			self.springieSpawnTimer = nil
 			self.springieSpawnTitle = nil
 			self.springieSpawnPassword = nil
+			self.springieSpawnText = nil
+			-- Don't clear spawn timer yet because there are actions that happen after
+			-- the battle opens.
+			--self.springieSpawnTimer = nil 
 		end
 	end
 	self:_OnBattleOpened(header.BattleID, 0, 0, header.Founder, header.Ip, 
@@ -393,6 +398,8 @@ function Interface:_ChannelUserRemoved(data)
 end
 Interface.jsonCommands["ChannelUserRemoved"] = Interface._ChannelUserRemoved
 
+local SPRINGIE_HOST_MESSAGE = "I'm here! Ready to serve you! Join me!"
+
 function Interface:_Say(data)
 	-- Say {"Place":0,"Target":"zk","User":"GoogleFrog","IsEmote":false,"Text":"bla","Ring":false,"Time":"2016-06-25T07:17:20.7548313Z}"
 	if data.Time then
@@ -416,6 +423,9 @@ function Interface:_Say(data)
 			self:_OnSaidBattle(data.User, data.Text, data.Time)
 		end
 	elseif data.Place == 2 then -- Send to user?
+		if self.springieSpawnTimer and (data.Text == SPRINGIE_HOST_MESSAGE or data.Text == self.springieSpawnText) then
+			return
+		end
 		if data.Target == self:GetMyUserName() then
 			self:_OnSaidPrivate(data.User, data.Text, data.Time)
 		else

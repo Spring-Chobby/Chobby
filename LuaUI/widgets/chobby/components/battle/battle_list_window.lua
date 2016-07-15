@@ -272,6 +272,7 @@ function BattleListWindow:OpenHostWindow()
 	}
 	
 	local function HostBattle()
+		WG.BattleRoomWindow.LeaveBattle()
 		if string.len(passwordEdit.text) > 0 then
 			lobby:HostBattle(gameNameEdit.text, passwordEdit.text)
 		else
@@ -390,6 +391,7 @@ function BattleListWindow:JoinBattle(battle)
 		
 		function tryJoin()
 			lblError:SetCaption("")
+			WG.BattleRoomWindow.LeaveBattle()
 			lobby:JoinBattle(battle.battleID, ebPassword.text)
 		end
 		
