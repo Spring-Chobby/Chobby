@@ -185,7 +185,7 @@ local function GetUserControls(userName, isInBattle, isSingleplayer, reinitializ
 			x = 0,
 			y = 0,
 			right = 0,
-			height = 23,
+			height = 25,
 			backgroundColor = {0, 0, 0, 0},
 			borderColor = {0, 0, 0, 0},
 			padding = {0, 0, 0, 0},

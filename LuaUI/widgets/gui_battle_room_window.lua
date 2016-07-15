@@ -600,13 +600,22 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				teamHolder:SetPos(nil, nil, nil, #teamStack.children*SPACING + 35)
 				
 				if teamStack:IsEmpty() and teamIndex ~= -1 then
-					if teamIndex < emptyTeamIndex then
-						emptyTeamIndex = teamIndex
+					local teamCount = 0
+					for _,_ in pairs(team) do
+						teamCount = teamCount + 1
 					end
-				
-					team[teamIndex] = nil
-					parentStack:RemoveChild(parentStack:GetChildByName(teamIndex))
-					teamHolder:Dispose()
+					-- Don't leave us with less than two teams (spectator is a team too)
+					if teamCount > 3 then
+						if teamIndex < emptyTeamIndex then
+							emptyTeamIndex = teamIndex
+						end
+					
+						team[teamIndex] = nil
+						parentStack:RemoveChild(parentStack:GetChildByName(teamIndex))
+						teamHolder:Dispose()
+					else
+						teamHolder:Invalidate()
+					end
 				else
 					teamHolder:Invalidate()
 				end
