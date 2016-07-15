@@ -17,6 +17,7 @@ local spGetGameFrame            = Spring.GetGameFrame
 local spGetMouseState           = Spring.GetMouseState
 local screenWidth, screenHeight = Spring.GetWindowGeometry()
 
+local BATTLE_TOOLTIP_PREFIX = "battle_tooltip_"
 local USER_TOOLTIP_PREFIX = "user_"
 local USER_SP_TOOLTIP_PREFIX = "user_singleplayer_tooltip_"
 local USER_MP_TOOLTIP_PREFIX = "user_tooltip_"
@@ -79,7 +80,7 @@ local function SetTooltipPos()
 	y = screenHeight - y -- Spring y is from the bottom, chili is from the top
 
 	-- Making sure the tooltip is within the boundaries of the screen
-	y = (y > screenHeight * .75) and (y - height) or (y + 20)
+	y = (y + height > screenHeight) and (y - height) or (y + 20)
 	x = (x + width > screenWidth) and (screenWidth - width) or x
 
 	tipWindow:SetPos(x, y, width, height)
@@ -111,8 +112,17 @@ local function UpdateTooltip(inputText)
 	
 		tipTextDisplay:SetText(text)
 		tipTextDisplay:UpdateLayout()
-	else
-		tipTextDisplay:SetText(inputText)
+	elseif inputText:starts(BATTLE_TOOLTIP_PREFIX) then
+		local battleID = tonumber(string.sub(inputText, 16))
+		local battle = lobby:GetBattle(battleID) or {}
+		
+		local text = "Battle " .. battleID
+		for key, value in pairs(battle) do
+			text = text .. "\n" .. key .. " = " .. tostring(value)
+		end
+		
+		tipTextDisplay:SetText(text)
+		tipTextDisplay:UpdateLayout()
 	end
 end
 
