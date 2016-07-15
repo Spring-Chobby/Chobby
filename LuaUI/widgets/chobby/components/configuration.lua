@@ -39,6 +39,17 @@ function Configuration:init()
 	self.game_settings = VFS.Include("luaui/configs/springsettings/springsettings3.lua")
 end
 
+function Configuration:GetGameConfig(gameName, fileName)
+	local gameInfo = VFS.GetArchiveInfo(gameName)
+	if gameInfo and gameInfo.shortname and string.lower(gameInfo.shortname) then
+		local filePath = "luaui/configs/gameConfig/" .. gameInfo.shortname .. "/" .. fileName
+		if VFS.FileExists(filePath) then
+			return VFS.Include(filePath)
+		end
+	end
+	return false
+end
+
 function Configuration:SetSingleplayerMode(mode)
 	self.singleplayer_mode = mode
 	if mode == 1 then

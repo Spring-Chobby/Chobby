@@ -13,14 +13,7 @@ function AiListWindow:init(lobby, gameName, allyTeam)
 		ais[1] = {shortName = "CAI", version = 1}
 	end
 	
-	local gameInfo = VFS.GetArchiveInfo(gameName)
-	local blackList = {}
-	if gameInfo and gameInfo.shortname and string.lower(gameInfo.shortname) then
-		local fileName = "luaui/configs/gameConfig/" .. gameInfo.shortname .. "/aiBlacklist.lua"
-		if VFS.FileExists(fileName) then
-			blackList = VFS.Include(fileName)
-		end
-	end
+	local blackList = Configuration:GetGameConfig(gameName, "aiBlacklist.lua")
 	
 	for i, ai in pairs(ais) do
 		if not blackList[ai.shortName] then

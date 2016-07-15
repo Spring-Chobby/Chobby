@@ -886,10 +886,17 @@ function BattleRoomWindow.GetSingleplayerControl()
 					WG.LibLobby.lobby:LeaveBattle()
 				end
 				
+				local singleplayerDefault = WG.Chobby.Configuration:GetGameConfig(singleplayerGame, "skirmishDefault.lua")
+				
+				local defaultMap = Game.mapName
+				if singleplayerDefault and singleplayerDefault.map then
+					defaultMap = singleplayerDefault.map
+				end
+				
 				parentTabPanel = nil
 				
 				battleLobby = WG.LibLobby.lobbySkirmish
-				battleLobby:SetBattleState(lobby:GetMyUserName() or "Player", singleplayerGame, Game.mapName, "Skirmish Battle")
+				battleLobby:SetBattleState(lobby:GetMyUserName() or "Player", singleplayerGame, defaultMap, "Skirmish Battle")
 
 				wrapperControl = obj
 				
@@ -901,6 +908,10 @@ function BattleRoomWindow.GetSingleplayerControl()
 					isSpectator = false,
 					sync = 1, -- 0 = unknown, 1 = synced, 2 = unsynced
 				})
+				
+				if singleplayerDefault and singleplayerDefault.enemyAI then
+					battleLobby:AddAi(singleplayerDefault.enemyAI .. " (1)", singleplayerDefault.enemyAI, 1)
+				end
 			end
 		},
 	}
