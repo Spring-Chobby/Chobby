@@ -25,6 +25,7 @@ function Configuration:init()
 	
 	self.userListWidth = 220 -- Main user list width. Possibly configurable in the future.
 	
+	self.singleplayer_mode_shortname = "zk"
 	self.singleplayer_mode = 2
 	
 	self.font = {
@@ -36,6 +37,15 @@ function Configuration:init()
 	}
 	
 	self.game_settings = VFS.Include("luaui/configs/springsettings/springsettings3.lua")
+end
+
+function Configuration:SetSingleplayerMode(mode)
+	self.singleplayer_mode = mode
+	if mode == 1 then
+		self.singleplayer_mode_shortname = false
+	elseif mode == 2 then
+		self.singleplayer_mode_shortname = "zk"
+	end
 end
 
 function Configuration:GetFont(sizeScale)

@@ -232,6 +232,7 @@ local function InitializeControls(window)
 		caption = "Singleplayer:",
 	}
 	ComboBox:New {
+		name = "gameSelection",
 		x = 130,
 		y = 120 + ingameOffset,
 		width = 180,
@@ -264,7 +265,7 @@ local function InitializeControls(window)
 				end
 				
 				-- Set new value
-				Configuration.singleplayer_mode = obj.selected
+				Configuration:SetSingleplayerMode(obj.selected)
 			end
 		},
 	}
