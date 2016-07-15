@@ -177,7 +177,13 @@ end
 
 function BattleListWindow:CompareItems(id1, id2)
 	local battle1, battle2 = lobby:GetBattle(id1), lobby:GetBattle(id2)
-	return #battle1.users - #battle2.users
+	if battle1 and battle2 then
+		return #battle1.users - #battle2.users
+	else
+		Spring.Echo("battle1", id1, battle1, battle1 and battle1.users)
+		Spring.Echo("battle2", id2, battle2, battle2 and battle2.users)
+		return 0
+	end
 end
 
 function BattleListWindow:JoinedBattle(battleID)
