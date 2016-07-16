@@ -20,9 +20,11 @@ function Console:init()
 		x = 0,
 		right = 0,
 		y = 0,
+-- 		maxHeight = 500,
 		bottom = 0,
 		text = "",
 		parent = self.spHistory,
+		selectable = true,
 	}
 	self.ebInputText = EditBox:New {
 		x = 0,
@@ -180,7 +182,7 @@ function Console:AddMessage(message, userName, dateOverride, color)
 	if self.tbHistory.text == "" then
 		self.tbHistory:SetText(txt)
 	else
-		self.tbHistory:SetText(self.tbHistory.text .. "\n" .. txt)
+		self.tbHistory:AddLine(txt)
 	end
 end
 
