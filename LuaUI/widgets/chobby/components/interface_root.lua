@@ -4,6 +4,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	local titleWidthRel = 28
 	local panelWidthRel = 40
+	local panelHalfPaddingRel = 0.8
+	local bottomPaddingRel = 1.5
+	local rightPaddingRel = 1
 	
 	local titleHeight = 180
 	local titleHeightSmall = 140
@@ -87,8 +90,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local mainWindow = Control:New {
 		x = 0,
 		y = titleHeight,
-		width = (100 - panelWidthRel) .. "%",
-		bottom = 0,
+		width = (100 - panelWidthRel - panelHalfPaddingRel) .. "%",
+		bottom = bottomPaddingRel .. "%",
 		name = "mainWindow",
 		caption = "", -- Main Window
 		parent = screen0,
@@ -153,9 +156,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	contentPlace:Hide()
 	
 	local panelButtonsHolder = Window:New {
-		x = (100 - panelWidthRel) .. "%",
+		x = (100 - panelWidthRel + panelHalfPaddingRel) .. "%",
 		y = titleHeight - panelButtonsHeight,
-		right = 0,
+		right = rightPaddingRel .. "%",
 		height = panelButtonsHeight,
 		name = "panelButtonsHolder",
 		parent = screen0,
@@ -177,11 +180,13 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
+
 	local panelWindow = Window:New {
 		x = (100 - panelWidthRel) .. "%",
+		x = (100 - panelWidthRel + panelHalfPaddingRel) .. "%",
 		y = titleHeight,
-		right = 0,
-		bottom = 0,
+		right = rightPaddingRel .. "%",
+		bottom = bottomPaddingRel .. "%",
 		name = "panelWindow",
 		caption = "", -- Panel Window
 		parent = screen0,
@@ -318,8 +323,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			panelWindow:SetVisibility(false)
 			
 			mainWindow:SetPos(nil, titleHeight)
-			mainWindow._relativeBounds.right = panelWidthRel .. "%"
-			mainWindow._relativeBounds.bottom = 0
+			mainWindow._relativeBounds.right = (panelWidthRel + panelHalfPaddingRel) .. "%"
+			mainWindow._relativeBounds.bottom = bottomPaddingRel .. "%"
 			mainWindow:UpdateClientArea()
 			
 			-- Align game title and status.
@@ -354,8 +359,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				panelWindow:Hide()
 			end
 			mainWindow:SetPos(nil, titleHeightSmall)
-			mainWindow._relativeBounds.right = 0
-			mainWindow._relativeBounds.bottom = 0
+			mainWindow._relativeBounds.right = rightPaddingRel .. "%"
+			mainWindow._relativeBounds.bottom = bottomPaddingRel .. "%"
 			mainWindow:UpdateClientArea()
 			
 			-- Align game title and status.
