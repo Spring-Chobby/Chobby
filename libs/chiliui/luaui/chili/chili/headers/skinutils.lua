@@ -359,7 +359,6 @@ function DrawComboBox(self)
 	gl.Texture(0,false)
 end
 
-
 function DrawEditBox(obj)
 	local skLeft,skTop,skRight,skBottom = unpack4(obj.tiles)
 
@@ -391,11 +390,11 @@ function DrawEditBox(obj)
 		font = obj.hintFont
 	end
 	
-	if (text) then        
+	if (text) then
         if obj.passwordInput and not displayHint then 
             text = string.rep("*", #text)
         end
-            
+
 		if (obj.offset > obj.cursor) then
 			obj.offset = obj.cursor
 		end
@@ -429,9 +428,15 @@ function DrawEditBox(obj)
 		txt = txt:sub(1, lsize - 1)
 
 		gl.Color(1,1,1,1)
-		font:DrawInBox(txt, clientX, clientY, clientWidth, clientHeight, obj.align, obj.valign)
+		if obj.multiline then
+			for _, line in pairs(obj.lines) do
+				font:Draw(line.text, clientX, clientY + line.y)
+			end
+		else
+			font:DrawInBox(txt, clientX, clientY, clientWidth, clientHeight, obj.align, obj.valign)
+		end
 
-		if obj.state.focused then
+		if obj.state.focused and obj.editable then
 			local cursorTxt = text:sub(obj.offset, obj.cursor - 1)
 			local cursorX = font:GetTextWidth(cursorTxt)
 
@@ -449,25 +454,51 @@ function DrawEditBox(obj)
 			gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawCursor, cursorX + clientX - 1, clientY, 3, clientHeight)
 		end
         if obj.selStart and obj.state.focused then
-			local cursorTxt = text:sub(obj.offset, obj.cursor - 1)
-			local cursorX = font:GetTextWidth(cursorTxt)
 			local cc = obj.selectionColor
 			gl.Color(cc[1], cc[2], cc[3], cc[4])
-            
-            local left, right = obj.selStart, obj.selEnd
-            if left > right then
+
+			local top, bottom = obj.selStartY, obj.selEndY
+			local left, right = obj.selStart, obj.selEnd
+			if obj.multiline and top > bottom then
+                top, bottom = bottom, top
+				left, right = right, left
+            elseif top == bottom and left > right then
                 left, right = right, left
             end
-			
-            local leftTxt = text:sub(obj.offset, left - 1)
-			local leftX = font:GetTextWidth(leftTxt)
-            local rightTxt = text:sub(obj.offset, right - 1)
-			local rightX = font:GetTextWidth(rightTxt)
 
-            local w = rightX - leftX
-            -- limit the selection to the editbox width
-            w = math.min(w, obj.width - leftX - 3)
-			gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawSelection, leftX + clientX - 1, clientY, w, clientHeight)
+			local y = clientY
+			local height = clientHeight
+			if obj.multiline and top == bottom then
+				local line = obj.lines[top]
+				text = line.text
+				y = y + line.y
+				height = line.lh
+			end
+			if not obj.multiline or top == bottom then
+				local leftTxt = text:sub(obj.offset, left - 1)
+				local leftX = font:GetTextWidth(leftTxt)
+				local rightTxt = text:sub(obj.offset, right - 1)
+				local rightX = font:GetTextWidth(rightTxt)
+
+				local w = rightX - leftX
+				-- limit the selection to the editbox width
+				w = math.min(w, obj.width - leftX - 3)
+
+				gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawSelection, leftX + clientX - 1, y, w, height)
+			else
+				local topLine, bottomLine = obj.lines[top], obj.lines[bottom]
+				local leftTxt = topLine.text:sub(obj.offset, left - 1)
+				local leftX = font:GetTextWidth(leftTxt)
+				local rightTxt = bottomLine.text:sub(obj.offset, right - 1)
+				local rightX = font:GetTextWidth(rightTxt)
+
+				gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawSelection, leftX + clientX - 1, clientY + topLine.y, topLine.tw - leftX, topLine.lh)
+				for i = top+1, bottom-1 do
+					local line = obj.lines[i]
+					gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawSelection, clientX - 1, clientY + line.y, line.tw, line.lh)
+				end
+				gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawSelection, clientX - 1, clientY + bottomLine.y, rightX, bottomLine.lh)
+			end
         end
 	end
 end
