@@ -114,7 +114,7 @@ function onLaunchReplay(wtf, replay, game, map, engine)
 	host = parsed.host;
 	path = parsed.path;
 	file = path:match("([^/]*)$");
-	
+
 	replaydata = "";
 
 	Spring.Echo("Download file "..path.." from host "..host.." into demos/"..file);
@@ -136,7 +136,7 @@ local function SocketWriteAble(sock)
 		-- socket is writeable
 		headersent=1
 		Spring.Echo("sending http request")
-		sock:send("GET " .. file .. " HTTP/1.0\r\nHost: " .. host ..  " \r\n\r\n")
+		sock:send("GET " .. path .. " HTTP/1.0\r\nHost: " .. host ..  " \r\n\r\n")
 	end
 end
 
