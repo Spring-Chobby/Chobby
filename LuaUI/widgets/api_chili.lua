@@ -32,6 +32,8 @@ local tf
 -- Chili's location
 
 CHILI_DIRNAME = "libs/chiliui/luaui/chili/chili/"
+SKIN_DIRNAME = "luaui/widgets/chili/skins/"
+THEME_DIRNAME = "luaui/widgets/chili/themes/"
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
