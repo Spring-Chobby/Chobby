@@ -129,8 +129,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	--buttonsPlace._relativeBounds.right = 150
 	--buttonsPlace:UpdateClientArea(false)
 	
-	local IMAGE_BLANK = "luaui/images/blank.png"
-	local contentPlace = Panel:New {
+	local contentPlace = Window:New {
 		x = mainButtonsWidth,
 		y = padding,
 		right = padding,
@@ -141,14 +140,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
-		borderColor = {0,0,0,0},
-		backgroundColor = {0.2, 0.2, 0.2, 0.4},
-		TileImageBK = IMAGE_BLANK,
 		children = {}
 	}
 	contentPlace:Hide()
 	
-	local panelButtonsHolder = Panel:New {
+	local panelButtonsHolder = Window:New {
 		x = (100 - panelWidthRel) .. "%",
 		y = titleHeight - panelButtonsHeight,
 		right = 0,
@@ -158,9 +154,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
-		borderColor = {0,0,0,0},
-		backgroundColor = {0.2, 0.2, 0.2, 0.1},
-		TileImageBK = IMAGE_BLANK,
 		children = {}
 	}
 	local panelButtons = Control:New {
@@ -176,7 +169,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-	local panelWindow = Panel:New {
+	local panelWindow = Window:New {
 		x = (100 - panelWidthRel) .. "%",
 		y = titleHeight,
 		right = 0,
@@ -187,9 +180,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
-		borderColor = {0,0,0,0},
-		backgroundColor = {0.2, 0.2, 0.2, 0.4},
-		TileImageBK = IMAGE_BLANK,
 		children = {}
 	}
 	panelWindow:Hide()

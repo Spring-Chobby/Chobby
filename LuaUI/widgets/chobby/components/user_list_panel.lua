@@ -10,11 +10,9 @@ function UserListPanel:init(userUpdateFunction, spacing)
 		y = 0,
 		bottom = 0,
 		horizontalScrollbar = false,
-		borderColor = {0,0,0,0},
 	}
 
-	local IMAGE_BLANK = "luaui/images/blank.png"
-	self.panel = Panel:New {
+	self.panel = Control:New {
 		x = 0,
 		y = 0,
 		right = 0,
@@ -22,9 +20,6 @@ function UserListPanel:init(userUpdateFunction, spacing)
 		padding      = {0, 0, 0, 0},
 		itemPadding  = {0, 0, 0, 0},
 		itemMargin   = {0, 0, 0, 0},
-		borderColor = {0,0,0,0},
-		backgroundColor = {0.2, 0.2, 0.2, 0.2},
-		TileImageBK = IMAGE_BLANK,
 		children = {
 			self.userPanel,
 		},
