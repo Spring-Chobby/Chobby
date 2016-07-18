@@ -161,6 +161,9 @@ function Console:AddMessage(message, userName, dateOverride, color)
 			local messageMinute = tonumber(string.sub(dateOverride, 15, 16))
 			
 			local hour = (localHour - utcHour + messageHour)%24
+			if hour < 10 then
+				hour = "0" .. hour
+			end
 			local minute = (localMinute - utcMinute + messageMinute)%60
 			if minute < 10 then
 				minute = "0" .. minute
