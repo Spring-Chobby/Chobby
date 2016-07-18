@@ -27,6 +27,7 @@ return {
 		--
 		start_download = 'Start download',
 		download_noun = 'Download',
+		friends = 'Friends',
 		start_verb = 'Start',
 		open_mp_game = "Host Game",
 		host = "Host",

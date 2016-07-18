@@ -1,7 +1,7 @@
 Background = LCS.class{}
 
 function Background:init()
-	self.backgroundImage = CHOBBY_IMG_DIR .. "default_background.png"
+	self.backgroundImage = "luaui/images/chobbyInABox.png"
 	self.drawBackground = true
 	self:SetEnabled(self.drawBackground)	
 end
