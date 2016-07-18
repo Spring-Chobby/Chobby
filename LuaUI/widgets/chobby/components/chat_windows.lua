@@ -316,6 +316,7 @@ function ChatWindows:SetTabHolderParent(newParent, newX, newY)
 		newParent:AddChild(self.tabBarHolder)
 	end
 	self.tabBarHolder:SetPos(newX, newY)
+	self.tabBarHolder:BringToFront()
 	self.tabPanel._relativeBounds.top = 15
 	self.tabPanel:UpdateClientArea(false)
 	self.tabPanel:Invalidate()

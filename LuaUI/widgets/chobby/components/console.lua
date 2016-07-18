@@ -32,7 +32,6 @@ function Console:init()
 		right = 2,
 		text = "",
 		hint = i18n("type_here_to_chat"),
-		borderColor = {0,0,0,0},
 	}
 	
 	self.ebInputText.KeyPress = function(something, key, ...)
