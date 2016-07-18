@@ -24,15 +24,22 @@ local headersent
 
 local host = "zero-k.info"
 local port = 80
-local file = "/replays/20160704_190323_Drab_100.sdf"
+local path = "/replays/20160704_190323_Drab_100.sdf"
+local file = "20160704_190323_Drab_100.sdf";
 local replaydata = "";
+
+local downloads = {};
+local url;
+
+local hasMap = false;
+local hasEngine = false;
+local hasGame = false;
 
 local function dumpConfig()
 	-- dump all luasocket related config settings to console
 	for _, conf in ipairs({"TCPAllowConnect", "TCPAllowListen", "UDPAllowConnect", "UDPAllowListen"  }) do
 		Spring.Echo(conf .. " = " .. Spring.GetConfigString(conf, ""))
 	end
-
 end
 
 local function newset()
@@ -77,19 +84,44 @@ end
 function widget:Initialize()
 	CHOBBY_DIR = "LuaUI/widgets/chobby/"
 	VFS.Include("LuaUI/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
+	url = VFS.Include("libs/neturl/url.lua");
 	lobby:AddListener("OnLaunchRemoteReplay", onLaunchReplay)
-	--SocketConnect(host, port)
 end
 
-function onLaunchReplay(wtf, url, game, map, engine)
+function onLaunchReplay(wtf, replay, game, map, engine)
 	Spring.Echo("LAUNCHING REPLAY")
-	Spring.Echo("url: ".. url)
+	Spring.Echo("url: ".. replay)
 	Spring.Echo("game: ".. game)
 	Spring.Echo('map: '.. map)
 	Spring.Echo('engine: '.. engine)
 
-	-- if needed stuff available: launch the game
-	-- otherwise: start downloads (socket/VFS) and watch for their completion
+	if(VFS.HasArchive(game)) then
+		hasGame = true;
+	else
+		Spring.Echo("need to download game");
+	end
+
+	if(VFS.HasArchive(map)) then
+		hasMap = true;
+	else
+		Spring.Echo("need to download map");
+	end
+
+	hasEngine = true 
+	-- somehow check for engine? or check if current = required, and use that
+
+	local parsed = url.parse(replay);
+	host = parsed.host;
+	path = parsed.path;
+	file = path:match("([^/]*)$");
+	
+	replaydata = "";
+
+	Spring.Echo("Download file "..path.." from host "..host.." into demos/"..file);
+
+	-- if needed stuff available: download replay, launch game
+	-- otherwise: start downloads (socket/VFS) and watch for completion of all (ghetto async)
+	SocketConnect(host, port);
 end
 
 -- called when data was received through a connection
@@ -111,13 +143,15 @@ end
 -- called when a connection is closed
 local function SocketClosed(sock)
 	Spring.Echo("closed connection");
+	local saveFilename = 'demos/'..file;
     
     local body_start = replaydata:find("\r\n\r\n", 1, true) + 4
-    local f = assert(io.open('test.sdf', 'wb')) -- open in "binary" mode
+    local f = assert(io.open(saveFilename, 'wb')) -- open in "binary" mode
     f:write(replaydata:sub(body_start));
     f:close()
 	replaydata = "";
-    Spring.Echo("saved replay file");
+    Spring.Echo("saved replay file, launching game");
+	Spring.Start(saveFilename, "");
 end
 
 function widget:Update()
