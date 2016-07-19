@@ -691,7 +691,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 end
 
 local unreadMessages = 0
-local function _NotifyBattleRoom(userName, message, sound, time)
+local function _NotifyBattleRoom(userName, message, sound, notificationTime)
 	if string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName() then
 		unreadMessages = unreadMessages + 1
 		WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler().SetActivity("myBattle", unreadMessages)
@@ -701,7 +701,7 @@ local function _NotifyBattleRoom(userName, message, sound, time)
 		title = userName .. " in " .. chanName .. ":",
 		body = message,
 		sound = sound,
-		time = time,
+		time = notificationTime,
 	})]]
 end
 
