@@ -74,7 +74,7 @@ function ListWindow:OnResize()
 		local newColumns = math.max(1, widthFactor)
 		if self.columns ~= newColumns then
 			self.columns = newColumns
-			for i = 1, #self.listPanel.children do
+			for i = 1, #self.orderPanelMapping do
 				self:RecalculatePosition(i)
 			end
 		end
@@ -150,7 +150,7 @@ function ListWindow:AddRow(items, id)
 		children = { panel },
 		resizable = false,
 		draggable = false,
-		 padding = {0, 0, 0, 0},
+		padding = {0, 0, 0, 0},
 		id = id,
 		index = index
 	}
@@ -179,7 +179,7 @@ end
 function ListWindow:RecalculatePosition(index)
 	local x,y,width,height = self:CalulatePosition(index)
 	
-	local child = self.listPanel.children[index]
+	local child = self.orderPanelMapping[index]
 	
 	child._relativeBounds.left = x
 	child._relativeBounds.width = width
@@ -247,7 +247,7 @@ function ListWindow:RemoveRow(id)
 	local index = panel.index
 	
 	-- move elements up
-	while index < #self.listPanel.children  do
+	while index < #self.listPanel.children do
 		local panel1 = self.orderPanelMapping[index]
 		local panel2 = self.orderPanelMapping[index + 1]
 		self:SwapPlaces(panel1, panel2)
