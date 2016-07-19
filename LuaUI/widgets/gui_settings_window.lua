@@ -425,12 +425,22 @@ function widget:Initialize()
 		--		settingsFile:write(key .. " = " .. value .. "\n")
 		--	end
 		--end
-		
+
+		local configParamTypes = {}
+		for _, param in pairs(Spring.GetConfigParams()) do
+			configParamTypes[param.name] = param.type
+		end
 		for key, value in pairs(gameSettings) do
-			if type(value) == "number" then
+			local configType = configParamTypes[key]
+			if configType == "int" then
 				Spring.SetConfigInt(key, value)
-			else
+			elseif configType == "bool" or configType == "float" then
 				Spring.SetConfigString(key, value)
+			elseif configType == nil then
+				Spring.Log("Settings", LOG.WARNING, "No such key: " .. tostring(key) .. ", but setting it as string anyway.")
+				Spring.SetConfigString(key, value)
+			else
+				Spring.Echo("Settings", LOG.WARNING, "Unexpected key type: " .. configType .. ", but setting it as string anyway.")
 			end
 		end
 	end
