@@ -168,14 +168,13 @@ local function InitializeControls(window)
 		caption = i18n("autologin"),
 		checked = Configuration.autoLogin or false,
 		font = { size = 20},
-		OnClick = {function (obj)
-			Configuration.autoLogin = obj.checked
+		OnChange = {function (obj, newState)
+			Configuration.autoLogin = newState
 		end},
 	}
 	
 	externalSettings.autologin = {
-		SetValue = function(value) 
-			Spring.Echo("SetValue")
+		SetValue = function(value)
 			autologin:SetToggle(value)
 		end
 	}
@@ -324,7 +323,6 @@ end
 local SettingsWindow = {}
 
 function SettingsWindow.SetConfigValue(key, value)
-	Spring.Echo("externalSettings", key, value)
 	if externalSettings[key] then
 		externalSettings[key].SetValue(value)
 	end
