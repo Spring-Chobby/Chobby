@@ -242,7 +242,6 @@ function EditBox:_SetCursorByMousePos(x, y)
 		if #text > 0 and self.passwordInput then 
 			text = string.rep("*", #text)
 		end
-		self.cursor = #text + 1 -- at end of text
 		self.cursorY = #self.lines
 		for i, line in pairs(self.lines) do
 			if line.y > y - clientY then
@@ -253,7 +252,7 @@ function EditBox:_SetCursorByMousePos(x, y)
 		local selLine = self.lines[self.cursorY]
 		if not selLine then return end
 		selLine = selLine.text
-		self.cursor = #selLine
+		self.cursor = #selLine + 1
 		for i = 1, #selLine do
 			local tmp = selLine:sub(1, i)
 			if self.font:GetTextWidth(tmp) > (x - clientX) then
