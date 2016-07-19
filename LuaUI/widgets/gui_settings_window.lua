@@ -419,10 +419,18 @@ function widget:Initialize()
 			gameSettings.Fullscreen = 1
 		end
 		
-		local settingsFile, errorMessage = io.open('springsettings.cfg', 'w+')
-		if settingsFile then
-			for key, value in pairs(gameSettings) do
-				settingsFile:write(key .. " = " .. value .. "\n")
+		--local settingsFile, errorMessage = io.open('springsettings.cfg', 'w+')
+		--if settingsFile then
+		--	for key, value in pairs(gameSettings) do
+		--		settingsFile:write(key .. " = " .. value .. "\n")
+		--	end
+		--end
+		
+		for key, value in pairs(gameSettings) do
+			if type(value) == "number" then
+				Spring.SetConfigInt(key, value)
+			else
+				Spring.SetConfigString(key, value)
 			end
 		end
 	end
