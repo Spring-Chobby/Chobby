@@ -51,6 +51,12 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		bottom = 0,
 		keepAspect = false,
 		file = "luaui/images/chobby.png",
+		OnClick = { function()
+			Spring.Echo("OpenURL: uncomment me in interface_root.lua")
+			-- Uncomment me to try it!
+-- 			Spring.OpenURL("https://gitter.im/Spring-Chobby/Chobby")
+-- 			Spring.OpenURL("/home/gajop")
+		end},
 	})
 	
 	--headingWindow:SetPosRelative("20%","20%","20%","20%")
