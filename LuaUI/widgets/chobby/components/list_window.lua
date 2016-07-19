@@ -216,7 +216,6 @@ function ListWindow:SwapPlaces(panel1, panel2)
 	
 	panel2.index = tmp
 	self.orderPanelMapping[panel2.index] = panel2
-	
 end
 
 function ListWindow:RecalculateOrder(id)
@@ -249,12 +248,9 @@ function ListWindow:RemoveRow(id)
 	
 	-- move elements up
 	while index < #self.listPanel.children  do
-		local pnl = self.orderPanelMapping[index + 1]
-		pnl.index = index
-		pnl.y = self:CalculateHeight(pnl.index)
-		self.orderPanelMapping[index] = pnl
-		pnl:Invalidate()
-
+		local panel1 = self.orderPanelMapping[index]
+		local panel2 = self.orderPanelMapping[index + 1]
+		self:SwapPlaces(panel1, panel2)
 		index = index + 1
 	end
 	self.orderPanelMapping[index] = nil
