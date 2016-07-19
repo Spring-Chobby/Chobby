@@ -441,6 +441,7 @@ function widget:Initialize()
 				Spring.SetConfigString(key, value)
 			else
 				Spring.Echo("Settings", LOG.WARNING, "Unexpected key type: " .. configType .. ", but setting it as string anyway.")
+				Spring.SetConfigString(key, value)
 			end
 		end
 	end
