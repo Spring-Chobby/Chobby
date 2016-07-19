@@ -335,6 +335,7 @@ end
 
 local function AddTeamButtons(parent, offX, offY, joinFunc, aiFunc)
 	local joinTeamButton = Button:New {
+		name = "joinTeamButton",
 		x = offX,
 		y = offY,
 		height = 30,
@@ -569,6 +570,12 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				end
 				playerData.team = teamIndex
 				local playerControl = playerData.control
+				if name == battleLobby:GetMyUserName() then
+					local joinTeam = teamHolder:GetChildByName("joinTeamButton")
+					if joinTeam then
+						joinTeam:SetVisibility(false)
+					end
+				end
 				if not teamStack:GetChildByName(playerControl.name) then
 					teamStack:AddChild(playerControl)
 					playerControl:SetPos(nil, (#teamStack.children - 1)*SPACING)
@@ -600,6 +607,13 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 					index = index + 1
 				end
 				teamHolder:SetPos(nil, nil, nil, #teamStack.children*SPACING + 35)
+				
+				if name == battleLobby:GetMyUserName() then
+					local joinTeam = teamHolder:GetChildByName("joinTeamButton")
+					if joinTeam then
+						joinTeam:SetVisibility(true)
+					end
+				end
 				
 				if teamStack:IsEmpty() and teamIndex ~= -1 then
 					local teamCount = 0
