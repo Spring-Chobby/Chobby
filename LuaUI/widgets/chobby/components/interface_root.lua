@@ -229,10 +229,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local rightPanelTabs = {
 		{name = "chat", control = chatWindows.window},
 		{name = "settings", control = WG.SettingsWindow.GetControl()},
-		-- TODO: Implement
-		{name = "downloads", control = WG.SettingsWindow.GetControl()},
-		-- TODO: Implement
-		{name = "friends", control = WG.SettingsWindow.GetControl()},
+		{name = "downloads", control = WG.DownloadWindow.GetControl()},
+		{name = "friends", control = WG.FriendWindow.GetControl()},
 	}
 	
 	local submenus = {
