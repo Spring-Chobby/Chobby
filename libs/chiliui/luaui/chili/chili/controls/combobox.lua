@@ -17,6 +17,8 @@ ComboBox = Button:Inherit{
   items = { "items" },
   itemHeight = 20,
   selected = 1,
+  OnOpen = {},
+  OnClose = {},
   OnSelect = {},
   OnSelectName = {},
   maxDropDownHeight = 200,
@@ -64,6 +66,7 @@ end
 
 function ComboBox:_CloseWindow()
   if self._dropDownWindow then
+    self:CallListeners(self.OnClose)
     self._dropDownWindow:Dispose()
     self._dropDownWindow = nil
   end
@@ -152,6 +155,7 @@ function ComboBox:MouseDown(x, y)
         }
       }
     }
+    self:CallListeners(self.OnOpen)
   else
     self:_CloseWindow()
   end

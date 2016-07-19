@@ -180,6 +180,8 @@ local function GetUserControls(userName, isInBattle, isSingleplayer, reinitializ
 	if reinitialize then
 		userControls.mainControl:ClearChildren()
 	else
+		local tooltip = "user_" .. (isSingleplayer and "singleplayer_" or "").. "tooltip_" .. userName
+	
 		userControls.mainControl = ComboBox:New {
 			name = userName,
 			x = 0,
@@ -190,7 +192,7 @@ local function GetUserControls(userName, isInBattle, isSingleplayer, reinitializ
 			borderColor = {0, 0, 0, 0},
 			padding = {0, 0, 0, 0},
 			caption = "",
-			tooltip = "user_" .. (isSingleplayer and "singleplayer_" or "").. "tooltip_" .. userName,
+			tooltip = tooltip,
 			ignoreItemCaption = true,
 			selectByName = true,
 			itemFontSize = WG.Chobby.Configuration:GetFont(2).size,
@@ -199,8 +201,18 @@ local function GetUserControls(userName, isInBattle, isSingleplayer, reinitializ
 			maxDropDownWidth = 120,
 			minDropDownHeight = 0,
 			items = GetUserComboBoxOptions(userName, isInBattle, userControls),
+			OnOpen = {
+				function (obj)
+					obj.tooltip = nil
+				end
+			},
+			OnClose = {
+				function (obj)
+					obj.tooltip = tooltip
+				end
+			},
 			OnSelectName = {
-			function (obj, selectedName)
+				function (obj, selectedName)
 					if selectedName == "Message" then
 						WG.Chobby.interfaceRoot.GetChatWindow():GetPrivateChatConsole(userName)
 					elseif selectedName == "Kick" then
