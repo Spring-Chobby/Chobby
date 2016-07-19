@@ -153,16 +153,20 @@ function Console:AddMessage(message, userName, dateOverride, color)
 			local messageHour = tonumber(string.sub(dateOverride, 12, 13))
 			local messageMinute = tonumber(string.sub(dateOverride, 15, 16))
 			
-			local hour = (localHour - utcHour + messageHour)%24
-			if hour < 10 then
-				hour = "0" .. hour
+			if messageHour and messageMinute then
+				local hour = (localHour - utcHour + messageHour)%24
+				if hour < 10 then
+					hour = "0" .. hour
+				end
+				local minute = (localMinute - utcMinute + messageMinute)%60
+				if minute < 10 then
+					minute = "0" .. minute
+				end
+				 
+				dateOverride = hour .. ":" .. minute
+			else
+				Spring.Echo("Bad dateOverride", dateOverride, messageHour, messageMinute)
 			end
-			local minute = (localMinute - utcMinute + messageMinute)%60
-			if minute < 10 then
-				minute = "0" .. minute
-			end
-			 
-			dateOverride = hour .. ":" .. minute
 		end
 		-- FIXME: the input "date" should ideally be a table so we can coerce the format
 		local currentDate = dateOverride or os.date(self.dateFormat)
