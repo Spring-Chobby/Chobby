@@ -87,7 +87,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName)
 	local script = {
 		gametype = gameName,
 		hostip = '127.0.0.1',
-		hostport = 8458, -- probably should pick hosts better
+		hostport = 0,
 		ishost = 1,
 		mapname = mapName,
 		myplayername = playerName,
