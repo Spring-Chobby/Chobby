@@ -110,6 +110,8 @@ end
 
 local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUserName)
 
+	local minimapBottomClearance = 135
+
 	local lblMapName = Label:New {
 		x = 15,
 		bottom = 110,
@@ -123,14 +125,14 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		x = 0,
 		y = 0,
 		right = 0,
-		bottom = 135,
+		height = 200,
 		parent = rightInfo,
 	}
 	local minimapImage = Image:New {
-		x = 0,
-		y = 0,
-		right = 0,
-		bottom = 0,
+		x = 2,
+		y = 2,
+		right = 2,
+		bottom = 2,
 		keepAspect = true,
 		file = WG.Chobby.Configuration:GetMinimapImage(battle.mapName, battle.gameName),
 		parent = minimap,
@@ -194,6 +196,27 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		parent = rightInfo,
 	}
 	
+	rightInfo.OnResize = {
+		function (obj, xSize, ySize)
+			if xSize + minimapBottomClearance < ySize then
+				minimap._relativeBounds.left = 0
+				minimap._relativeBounds.right = 0
+				minimap:SetPos(nil, nil, nil, xSize)
+				minimap:UpdateClientArea()
+				
+				lblMapName:SetPos(15, xSize + 5)
+			else
+				local horPadding = ((xSize + minimapBottomClearance) - ySize)/2
+				minimap._relativeBounds.left = horPadding
+				minimap._relativeBounds.right = horPadding
+				minimap:SetPos(nil, nil, nil, ySize - minimapBottomClearance)
+				minimap:UpdateClientArea()
+				
+				lblMapName:SetPos(15 + horPadding, ySize - minimapBottomClearance + 5)
+			end
+		end
+	}
+	
 	local leftOffset = 0
 	local newTeam = ComboBox:New {
 		name = "newTeam",
@@ -202,9 +225,9 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		right = 0,
 		height = 45,
 		caption = "\255\66\138\201" .. i18n("add_team") ..  "\b",
-		font = WG.Chobby.Configuration:GetFont(3),
+		font = WG.Chobby.Configuration:GetFont(2),
 		ignoreItemCaption = true,
-		itemFontSize = WG.Chobby.Configuration:GetFont(3).size,
+		itemFontSize = WG.Chobby.Configuration:GetFont(2).size,
 		itemHeight = 30,
 		selected = 0,
 		maxDropDownWidth = 120,
@@ -232,7 +255,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		height = 45,
 		right = 0,
 		caption = "\255\66\138\201" .. i18n("pick_map") ..  "\b",
-		font =  WG.Chobby.Configuration:GetFont(3),
+		font =  WG.Chobby.Configuration:GetFont(2),
 		OnClick = {
 			function()
 				WG.Chobby.MapListWindow(battleLobby)
@@ -248,6 +271,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		width = 200,
 		height = 30,
 		caption = "",
+		font = WG.Chobby.Configuration:GetFont(2),
 		parent = leftInfo,
 	}
 	leftOffset = leftOffset + 30
@@ -256,6 +280,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		x = 0,
 		y = leftOffset,
 		caption = "",
+		font = WG.Chobby.Configuration:GetFont(2),
 		parent = leftInfo,
 	}
 	leftOffset = leftOffset + 30
@@ -264,6 +289,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		x = 0,
 		y = leftOffset,
 		caption = "",
+		font = WG.Chobby.Configuration:GetFont(2),
 		parent = leftInfo,
 	}
 	leftOffset = leftOffset + 30
@@ -398,6 +424,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		y = 0,
 		bottom = NEW_TEAM_SPACING,
 		parent = playerParent,
+		horizontalScrollbar = false,
 	}
 	
 	local mainStackPanel = Control:New {
@@ -415,6 +442,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		y = 0,
 		bottom = 0,
 		parent = spectatorParent,
+		horizontalScrollbar = false,
 	}
 		
 	local spectatorStackPanel = Control:New {
@@ -802,7 +830,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		y = 0,
 		right = "33%",
 		bottom = (100 - topPoportion) .. "%",
-		padding = {EXTERNAL_PAD_HOR, EXTERNAL_PAD_VERT, 1, INTERNAL_PAD},
+		padding = {EXTERNAL_PAD_HOR/2, EXTERNAL_PAD_VERT, 1, INTERNAL_PAD},
 		parent = subPanel,
 	}
 	

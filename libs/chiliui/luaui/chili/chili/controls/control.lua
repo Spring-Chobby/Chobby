@@ -373,7 +373,7 @@ function Control:UpdateClientArea(dontRedraw)
   end
 
   if not dontRedraw then self:Invalidate() end --FIXME only when RTT!
-  self:CallListeners(self.OnResize) --FIXME more arguments and filter unchanged resizes
+  self:CallListeners(self.OnResize, self.clientWidth, self.clientHeight) --FIXME more arguments and filter unchanged resizes
 end
 
 
