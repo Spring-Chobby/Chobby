@@ -37,6 +37,8 @@ function widget:Initialize()
 							"bind Ctrl+right  edit_next_word",
 							"bind Any+up  edit_prev_line",
 							"bind Any+down  edit_next_line",
+							"bind f12 screenshot",
+							"bind Ctrl+f12 screenshot png",
 
 							"bind Ctrl+v pastetext",
 	})
