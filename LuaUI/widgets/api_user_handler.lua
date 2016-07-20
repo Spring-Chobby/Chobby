@@ -400,6 +400,7 @@ end
 local function AddListeners()
 	lobby:AddListener("OnUpdateUserStatus", UpdateUserActivity)
 	lobby:AddListener("OnUpdateUserBattleStatus", UpdateUserBattleStatus)
+	WG.LibLobby.lobbySkirmish:AddListener("OnUpdateUserBattleStatus", UpdateUserBattleStatus)
 end
 
 --------------------------------------------------------------------------------
