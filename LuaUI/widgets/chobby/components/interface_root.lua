@@ -9,14 +9,14 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local rightPaddingRel = 1
 	
 	local titleHeight = 180
-	local titleHeightSmall = 140
+	local titleHeightSmall = 130
 	local titleWidth = 400
 	local battleStatusWidth = 480
 	local panelButtonsHeight = 50
 	local statusWindowGapSmall = 30
 	local mainButtonsWidth = 180
 	
-	local mainButtonsWidthSmall = 150
+	local mainButtonsWidthSmall = 140
 	
 	local imageFudge = 0
 	
