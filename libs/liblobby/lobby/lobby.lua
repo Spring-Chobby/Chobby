@@ -172,6 +172,14 @@ function Lobby:ConnectToBattle()
 	--Spring.Restart("", scriptTxt)
 end
 
+function Lobby:VoteYes()
+	return self
+end
+
+function Lobby:VoteNo()
+	return self
+end
+
 ------------------------
 -- Channel & private chat commands
 ------------------------
@@ -436,6 +444,18 @@ end
 
 function Lobby:_OnSaidBattleEx(userName, message, sayTime)
 	self:_CallListeners("OnSaidBattleEx", userName, message, sayTime)
+end
+
+function Lobby:_OnVoteUpdate(message, yesVotes, noVotes, votesNeeded)
+	self:_CallListeners("OnVoteUpdate", message, yesVotes, noVotes, votesNeeded)
+end
+
+function Lobby:_OnVoteEnd(message, success)
+	self:_CallListeners("OnVoteEnd", message, success)
+end
+
+function Lobby:_OnVoteResponse(isYesVote)
+	self:_CallListeners("OnVoteResponse", isYesVote)
 end
 
 ------------------------

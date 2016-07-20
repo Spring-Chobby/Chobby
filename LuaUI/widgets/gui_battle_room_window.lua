@@ -34,6 +34,8 @@ local onUpdateUserTeamStatus
 local onUpdateUserTeamStatusSelf
 local onLeftBattle
 local onRemoveAi
+local onVoteUpdate
+local onVoteEnd
 
 -- Globals
 local battleLobby
@@ -113,7 +115,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	local minimapBottomClearance = 135
 
 	local lblMapName = Label:New {
-		x = 15,
+		x = 5,
 		bottom = 110,
 		height = 20,
 		font = WG.Chobby.Configuration:GetFont(2),
@@ -204,7 +206,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 				minimap:SetPos(nil, nil, nil, xSize)
 				minimap:UpdateClientArea()
 				
-				lblMapName:SetPos(15, xSize + 5)
+				lblMapName:SetPos(5, xSize + 5)
 			else
 				local horPadding = ((xSize + minimapBottomClearance) - ySize)/2
 				minimap._relativeBounds.left = horPadding
@@ -212,7 +214,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 				minimap:SetPos(nil, nil, nil, ySize - minimapBottomClearance)
 				minimap:UpdateClientArea()
 				
-				lblMapName:SetPos(15 + horPadding, ySize - minimapBottomClearance + 5)
+				lblMapName:SetPos(5, ySize - minimapBottomClearance + 5)
 			end
 		end
 	}
@@ -294,14 +296,17 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	}
 	leftOffset = leftOffset + 25
 	
-	leftOffset = leftOffset + 20	
-	local downloader = WG.Chobby.Downloader({
-		x = 0,
-		height = 200,
-		right = 0,
-		y = leftOffset,
-		parent = leftInfo,
-	}, 8)
+	leftOffset = leftOffset + 15	
+	local downloader = WG.Chobby.Downloader(
+		{
+			x = 0,
+			bottom = 0,
+			right = 0,
+			y = leftOffset,
+			parent = leftInfo,
+		}, 
+		8
+	)
 	downloader:Hide()
 	-- Example downloads
 	--MaybeDownloadArchive("Titan-v2", "map")
@@ -406,7 +411,7 @@ local function AddTeamButtons(parent, offX, offY, joinFunc, aiFunc)
 		y = offY,
 		height = 30,
 		width = 75,
-		font = {size = 20},
+		font = WG.Chobby.Configuration:GetFont(3),
 		caption = i18n("add_ai") .. "\b",
 		OnClick = {aiFunc},
 		parent = parent,
@@ -416,13 +421,12 @@ end
 local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 	
 	local SPACING = 22
-	local NEW_TEAM_SPACING = 50
 		
 	local mainScrollPanel = ScrollPanel:New {
 		x = 0,
 		right = 0,
 		y = 0,
-		bottom = NEW_TEAM_SPACING,
+		bottom = 0,
 		parent = playerParent,
 		horizontalScrollbar = false,
 	}
@@ -453,43 +457,6 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		parent = spectatorScrollPanel,
 	}
 	spectatorStackPanel._relativeBounds.bottom = nil
-	
-	-- ADD TEAM
-	local newTeamHolder = Control:New {
-		name = "newTeamHolder",
-		x = 0,
-		right = 0,
-		bottom = 0,
-		height = NEW_TEAM_SPACING,
-		padding = {0, 2, 0, 0},
-		parent = playerParent,
-	}
-	
-	-- Join new team or AI in the same format as existing teams.
-	--local label = Label:New {
-	--	x = 5,
-	--	y = 0,
-	--	width = 120,
-	--	height = NEW_TEAM_SPACING,
-	--	valign = "center",
-	--	font = {size = 20},
-	--	caption = "New Team:",
-	--	parent = newTeamHolder,
-	--}
-	--AddTeamButtons(
-	--	newTeamHolder,
-	--	110,
-	--	(NEW_TEAM_SPACING - 30)/2,
-	--	function()
-	--		battleLobby:SetBattleStatus({
-	--			allyNumber = emptyTeamIndex,
-	--			isSpectator = false,
-	--		})
-	--	end, 
-	--	function()
-	--		WG.Chobby.AiListWindow(battleLobby, battle.gameName, emptyTeamIndex)
-	--	end
-	--)
 	
 	-- Object handling
 	local player = {}
@@ -584,7 +551,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				width = 120,
 				height = 30,
 				valign = "center",
-				font = {size = 20},
+				font = WG.Chobby.Configuration:GetFont(3),
 				caption = humanName,
 				parent = teamHolder,
 			}
@@ -748,6 +715,162 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 	battleLobby:AddListener("OnRemoveAi", onRemoveAi)
 end
 
+local function SetupVotePanel(votePanel, battle, battleID)
+	local height = votePanel.clientHeight
+	
+	local offset = 0
+	
+	local activePanel = Control:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		padding = {0, 0, 0, 0},
+		parent = votePanel,
+	}
+	
+	local buttonNo
+	local buttonYes = Button:New {
+		x = offset,
+		y = 0,
+		bottom = 0,
+		width = height,
+		caption = "",
+		OnClick = {
+			function (obj)
+				WG.ButtonUtilities.SetButtonSelected(obj)
+				WG.ButtonUtilities.SetButtonDeselected(buttonNo)
+				battleLobby:VoteYes()
+			end
+		},
+		padding = {10,10,10,10},
+		children = {
+			Image:New {
+				x = 0,
+				y = 0,
+				right = 0,
+				bottom = 0,
+				autosize = true,
+				file = "luaui/images/ready.png",
+			}
+		},
+		parent = activePanel,
+	}
+	offset = offset + height
+	
+	buttonNo = Button:New {
+		x = offset,
+		y = 0,
+		bottom = 0,
+		width = height,
+		caption = "",
+		OnClick = {
+			function (obj)
+				WG.ButtonUtilities.SetButtonSelected(obj)
+				WG.ButtonUtilities.SetButtonDeselected(buttonYes)
+				battleLobby:VoteNo()
+			end
+		},
+		padding = {10,10,10,10},
+		children = {
+			Image:New {
+				x = 0,
+				y = 0,
+				right = 0,
+				bottom = 0,
+				file = "luaui/images/unready.png",
+			}
+		},
+		parent = activePanel,
+	}
+	offset = offset + height
+
+	offset = offset + 2
+	
+	local voteName = Label:New {
+		x = offset,
+		y = 4,
+		width = 50,
+		bottom = height * 0.4,
+		font = WG.Chobby.Configuration:GetFont(2),
+		caption = "",
+		parent = activePanel,
+	}
+	
+	local voteProgress = Progressbar:New {
+		x = offset,
+		y = height * 0.5,
+		right = 55,
+		bottom = 0,
+		value = 0,
+		parent = activePanel,
+	}
+	
+	local voteCountLabel = Label:New {
+		right = 5,
+		y = height * 0.5,
+		width = 50,
+		bottom = 0,
+		align = "left",
+		font = WG.Chobby.Configuration:GetFont(2),
+		caption = "20/50",
+		parent = activePanel,
+	}
+	
+	if activePanel.visible then
+		activePanel:Hide()
+	end
+	
+	local voteResultLabel = Label:New {
+		x = 5,
+		y = 4,
+		right = 0,
+		bottom = height * 0.4,
+		align = "left",
+		font = WG.Chobby.Configuration:GetFont(2),
+		caption = "",
+		parent = votePanel,
+	}
+	
+	if voteResultLabel.visible then
+		voteResultLabel:Hide()
+	end
+	
+	local function HideVoteResult()
+		if voteResultLabel.visible then
+			voteResultLabel:Hide()
+		end
+	end
+	
+	onVoteUpdate = function(listener, message, yesVotes, noVotes, votesNeeded)
+		voteName:SetCaption(message)
+		voteCountLabel:SetCaption(yesVotes .. "/" .. votesNeeded)
+		voteProgress:SetValue(100 * yesVotes / votesNeeded)
+		if not activePanel.visible then
+			activePanel:Show()
+		end
+		HideVoteResult()
+	end
+	battleLobby:AddListener("OnVoteUpdate", onVoteUpdate)
+	
+	onVoteEnd = function(listener, message, success)
+		if activePanel.visible then
+			activePanel:Hide()
+		end
+		local text = ((success and WG.Chobby.Configuration:GetSuccessColor()) or WG.Chobby.Configuration:GetErrorColor()) .. message .. ((success and " Passed.") or " Failed.")
+		voteResultLabel:SetCaption(text)
+		if not voteResultLabel.visible then
+			voteResultLabel:Show()
+		end
+		
+		WG.ButtonUtilities.SetButtonDeselected(buttonYes)
+		WG.ButtonUtilities.SetButtonDeselected(buttonNo)
+		
+		WG.Delay(HideVoteResult, 5)
+	end
+	battleLobby:AddListener("OnVoteEnd", onVoteEnd)
+end
+
 local unreadMessages = 0
 local function _NotifyBattleRoom(userName, message, sound, notificationTime)
 	if string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName() then
@@ -770,6 +893,8 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	local EXTERNAL_PAD_HOR = 15
 	local INTERNAL_PAD = 2
 	
+	local BOTTOM_SPACING = 50
+	
 	window = Control:New {
 		x = 0,
 		y = 0,
@@ -791,6 +916,8 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 				oldLobby:RemoveListener("OnLeftBattle", onLeftBattle)
 				oldLobby:RemoveListener("OnRemoveAi", onRemoveAi)
 				oldLobby:RemoveListener("OnBattleIngameUpdate", onBattleIngameUpdate)
+				oldLobby:RemoveListener("OnVoteUpdate", onVoteUpdate)
+				oldLobby:RemoveListener("OnVoteEnd", onVoteEnd)
 			end
 		},
 	}
@@ -804,43 +931,72 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		parent = window,
 	}
 	
+	local topPanel = Control:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = (100 - topPoportion) .. "%",
+		padding = {0, 0, 0, 0},
+		parent = subPanel,
+	}
+	
+	local bottomPanel = Control:New {
+		x = 0,
+		y = topPoportion .. "%",
+		right = 0,
+		bottom = 0,
+		padding = {0, 0, 0, 0},
+		parent = subPanel,
+	}
+	
 	local playerPanel = Control:New {
 		x = 0,
 		y = 0,
 		right = "52%",
-		bottom = (100 - topPoportion) .. "%",
-		padding = {EXTERNAL_PAD_HOR, EXTERNAL_PAD_VERT, INTERNAL_PAD, INTERNAL_PAD},
-		parent = subPanel,
+		bottom = BOTTOM_SPACING,
+		padding = {EXTERNAL_PAD_HOR, EXTERNAL_PAD_VERT, INTERNAL_PAD, 0},
+		parent = topPanel,
 	}
 	
 	local spectatorPanel = Control:New {
 		x = "67%",
-		y = topPoportion .. "%",
+		y = 0,
 		right = 0,
 		bottom = 0,
 		-- Add 7 to line up with chat
 		padding = {INTERNAL_PAD, INTERNAL_PAD, EXTERNAL_PAD_HOR, EXTERNAL_PAD_VERT + 7},
-		parent = subPanel,
+		parent = bottomPanel,
 	}
 	
 	SetupPlayerPanel(playerPanel, spectatorPanel, battle, battleID)
+	
+	local votePanel = Control:New {
+		x = 0,
+		right = "33%",
+		bottom = 0,
+		height = BOTTOM_SPACING,
+		padding = {EXTERNAL_PAD_HOR, INTERNAL_PAD, 1, INTERNAL_PAD},
+		parent = topPanel,
+	}
+	
+	SetupVotePanel(votePanel)
 	
 	local leftInfo = Control:New {
 		x = "48%",
 		y = 0,
 		right = "33%",
-		bottom = (100 - topPoportion) .. "%",
+		bottom = BOTTOM_SPACING,
 		padding = {INTERNAL_PAD, EXTERNAL_PAD_VERT, 1, INTERNAL_PAD},
-		parent = subPanel,
+		parent = topPanel,
 	}
 	
 	local rightInfo = Control:New {
 		x = "67%",
 		y = 0,
 		right = 0,
-		bottom = (100 - topPoportion) .. "%",
+		bottom = 0,
 		padding = {1, EXTERNAL_PAD_VERT, EXTERNAL_PAD_HOR, INTERNAL_PAD},
-		parent = subPanel,
+		parent = topPanel,
 	}
 	
 	SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, battleLobby:GetMyUserName())
@@ -859,7 +1015,6 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		},
 		parent = window,
 	}
-	
 	
 	local lblBattleTitle = Label:New {
 		x = 18,
@@ -885,7 +1040,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	
 	local chatPanel = Control:New {
 		x = 0,
-		y = topPoportion .. "%",
+		y = 0,
 		bottom = 0,
 		right = "33%",
 		padding = {EXTERNAL_PAD_HOR, INTERNAL_PAD, INTERNAL_PAD, EXTERNAL_PAD_VERT},
@@ -898,7 +1053,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 				children = { battleRoomConsole.panel, },
 			},
 		},
-		parent = subPanel,
+		parent = bottomPanel,
 	}
 
 	local onSaidBattle = function(listener, userName, message)

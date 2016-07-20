@@ -141,6 +141,32 @@ function Interface:SayBattle(message)
 	return self
 end
 
+function Interface:VoteYes()
+	local sendData = {
+		Place = 1, -- Battle?
+		User = self:GetMyUserName(),
+		IsEmote = false,
+		Text = "!y",
+		Ring = false,
+		--Time = "2016-06-25T07:17:20.7548313Z",
+	}
+	self:_SendCommand("Say " .. json.encode(sendData))
+	return self
+end
+
+function Interface:VoteNo()
+	local sendData = {
+		Place = 1, -- Battle?
+		User = self:GetMyUserName(),
+		IsEmote = false,
+		Text = "!n",
+		Ring = false,
+		--Time = "2016-06-25T07:17:20.7548313Z",
+	}
+	self:_SendCommand("Say " .. json.encode(sendData))
+	return self
+end
+
 ------------------------
 -- Channel & private chat commands
 ------------------------
@@ -376,6 +402,14 @@ Interface.jsonCommands["RemoveBot"] = Interface._RemoveBot
 -- Channel & private chat commands
 ------------------------
 
+local SPRINGIE_HOST_MESSAGE = "I'm here! Ready to serve you! Join me!"
+local POLL_START_MESSAGE = "Poll:"
+local POLL_END = "END:"
+local POLL_END_SUCCESS = "END:SUCCESS"
+local AUTOHOST_SUPRESSION = {
+	["Sorry, you do not have rights to execute map"] = true,
+}
+
 function Interface:_JoinChannelResponse(data)
 	-- JoinChannelResponse {"ChannelName":"sy","Success":true,"Channel":{"Users":["GoogleFrog","ikinz","DeinFreund","NorthChileanG","hokomoko"],"ChannelName":"sy"}}
 	if data.Success then
@@ -398,15 +432,90 @@ function Interface:_ChannelUserRemoved(data)
 end
 Interface.jsonCommands["ChannelUserRemoved"] = Interface._ChannelUserRemoved
 
-local SPRINGIE_HOST_MESSAGE = "I'm here! Ready to serve you! Join me!"
+local function FindLastOccurence(mainString, subString)
+	local position = string.find(mainString, subString)
+	local nextPosition = position
+	while nextPosition do
+		nextPosition = string.find(mainString, subString, position + 1)
+		if nextPosition then
+			position = nextPosition
+		end
+	end
+	return position
+end
+
+function Interface:ProcessVote(data, battle, duplicateMessageTime)
+	if (not battle) and battle.founder == data.User then
+		return false
+	end
+	local message = data.Text
+	if not message:starts(POLL_START_MESSAGE) then
+		return false
+	end
+	
+	local lastOpen = FindLastOccurence(message, "%[")
+	local lastClose = FindLastOccurence(message, "%]")
+	local lastQuestion = FindLastOccurence(message, "%?")
+	if not (lastOpen and lastClose and lastQuestion) then
+		return false
+	end
+	
+	local voteMessage = string.sub(message, 0, lastQuestion)
+	local lasturl = FindLastOccurence(message, " http")
+	if lasturl then
+		voteMessage = string.sub(voteMessage, 0, lasturl - 1) .. "?"
+	end
+	
+	local voteData = string.sub(message, lastOpen + 1, lastClose - 1)
+	if voteData:starts(POLL_END) then
+		self:_OnVoteEnd(voteMessage, (voteData:starts(POLL_END_SUCCESS) and true) or false)
+		return true
+	end
+	
+	local lastSlash = FindLastOccurence(voteData, "/")
+	if not lastSlash then
+		return false
+	end
+	local votesNeeded = tonumber(string.sub(voteData, lastSlash + 1))
+	
+	local firstNo = string.find(voteData, "!n=")
+	if not firstNo then
+		return false
+	end
+	local noVotes = tonumber(string.sub(voteData, firstNo + 3, lastSlash - 1))
+	
+	local firstSlash = string.find(voteData, "/")
+	if not firstSlash then
+		return false
+	end
+	local yesVotes = tonumber(string.sub(voteData, 4, firstSlash - 1))
+	
+	if duplicateMessageTime and yesVotes == 0 then
+		-- Workaround message ordering ZKLS bug.
+		return true
+	end
+	
+	self:_OnVoteUpdate(voteMessage, yesVotes, noVotes, votesNeeded)
+	return true
+end
 
 function Interface:_Say(data)
 	-- Say {"Place":0,"Target":"zk","User":"GoogleFrog","IsEmote":false,"Text":"bla","Ring":false,"Time":"2016-06-25T07:17:20.7548313Z}"
+	local duplicateMessageTime = false
 	if data.Time then
 		if self.duplicateMessageTimes[data.Time] then
+			duplicateMessageTime = true
+			if self.duplicateMessageTimes[data.Time] == data.Text then
+				return
+			end
+		end
+		self.duplicateMessageTimes[data.Time] = data.Text
+	end
+	
+	if AUTOHOST_SUPRESSION[data.Text] then
+		if data.User and self.users[data.User] and self.users[data.User].isBot then
 			return
 		end
-		self.duplicateMessageTimes[data.Time] = true
 	end
 	
 	local emote = data.IsEmote
@@ -416,7 +525,14 @@ function Interface:_Say(data)
 		else
 			self:_OnSaid(data.Target, data.User, data.Text, data.Time)
 		end
-	elseif data.Place == 1 then -- Send to battle?
+	elseif data.Place == 1 or data.Place == 3 then
+		-- data.Place == 1 -> General battle chat
+		-- data.Place == 3 -> Battle chat directed at user
+		local battleID = self:GetMyBattleID()
+		local battle = battleID and self:GetBattle(battleID)
+		if self:ProcessVote(data, battle, duplicateMessageTime) then
+			return
+		end
 		if emote then
 			self:_OnSaidBattleEx(data.User, data.Text, data.Time)
 		else
