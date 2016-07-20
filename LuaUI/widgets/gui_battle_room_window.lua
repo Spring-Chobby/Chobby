@@ -275,7 +275,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		right = 0,
 		y = leftOffset,
 		parent = leftInfo,
-	})
+	}, 8)
 	downloader:Hide()
 	-- Example downloads
 	--MaybeDownloadArchive("Titan-v2", "map")

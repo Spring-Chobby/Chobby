@@ -22,12 +22,23 @@ end
 --------------------------------------------------------------------------------
 -- Utilities
 
+local function DownloadUpdateFunction(downloadCount, failure)
+	local interfaceRoot = WG.Chobby and WG.Chobby.interfaceRoot
+	if not interfaceRoot then
+		return
+	end
+	interfaceRoot.GetRightPanelHandler().SetActivity("downloads", downloadCount)
+end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Initialization
 
+local initialized = false
+
 local function InitializeControls(window)
+	initialized = true
+
 	Label:New {
 		x = 40,
 		y = 40,
@@ -37,7 +48,6 @@ local function InitializeControls(window)
 		font = WG.Chobby.Configuration:GetFont(4),
 		caption = "Downloads",
 	}
-	
 end
 
 --------------------------------------------------------------------------------
@@ -47,7 +57,6 @@ end
 local DownloadWindow = {}
 
 function DownloadWindow.GetControl()
-	
 	local window = Control:New {
 		x = "0%",
 		y = "0%",
@@ -55,12 +64,25 @@ function DownloadWindow.GetControl()
 		height = "100%",
 		OnParent = {
 			function(obj)
-				if obj:IsEmpty() then
+				if not initialized then
 					InitializeControls(obj)
 				end
 			end
 		},
 	}
+	
+	local downloader = WG.Chobby.Downloader(
+		{
+			x = 40,
+			height = 500,
+			right = 40,
+			y = 100,
+			parent = window,
+		}, 
+		8,
+		DownloadUpdateFunction
+	)
+	
 	return window
 end
 
