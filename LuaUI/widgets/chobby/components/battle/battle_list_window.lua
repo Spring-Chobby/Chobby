@@ -8,7 +8,7 @@ function BattleListWindow:init(parent)
  
 	self.btnNewBattle = Button:New {
 		x = 190,
-		y = 3,
+		y = 10,
 		width = 150,
 		height = 45,
 		caption = Configuration:GetErrorColor() .. i18n("open_mp_game") .. "\b",
@@ -221,7 +221,11 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 	local battle = lobby:GetBattle(battleID)
 	local items = self:GetRowItems(battleID)
 	local mapCaption = items.battleButton:GetChildByName("mapCaption")
+	local minimapImage = items.battleButton:GetChildByName("minimapImage")
 	local playersCaption = items.battleButton:GetChildByName("playersCaption")
+	
+	minimapImage.file = Configuration:GetMinimapImage(battle.mapName, battle.gameName)
+	minimapImage:Invalidate()
 	
 	playersCaption:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
 	mapCaption:SetCaption(battle.mapName:sub(1, 22) .. (VFS.HasArchive(battle.mapName) and ' [' .. Configuration:GetTick() .. '\b]' or ' [' .. Configuration:GetCross() .. '\b]'))

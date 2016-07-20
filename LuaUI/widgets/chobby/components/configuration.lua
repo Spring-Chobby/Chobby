@@ -45,7 +45,7 @@ function Configuration:GetMinimapImage(mapName, gameName)
 	mapName = string.gsub(mapName, " ", "_")
 	local minimapImage = self:GetGameConfigFilePath(gameName, "minimapOverride/" .. mapName .. ".jpg", "zk")
 	if minimapImage then
-		--return minimapImage
+		return minimapImage
 	end
 	Spring.Echo("Missing minimap image for", mapName)
 	return "luaui/images/minimapNotFound.png"
