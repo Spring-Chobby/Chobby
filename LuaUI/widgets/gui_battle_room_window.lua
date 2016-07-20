@@ -132,7 +132,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		right = 0,
 		bottom = 0,
 		keepAspect = true,
-		file = WG.Chobby.Configuration:GetMinimapImage(battle.mapName),
+		file = WG.Chobby.Configuration:GetMinimapImage(battle.mapName, battle.gameName),
 		parent = minimap,
 	}
 
@@ -313,7 +313,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		end
 		if mapName then
 			lblMapName:SetCaption(mapName)
-			minimapImage.file = WG.Chobby.Configuration:GetMinimapImage(mapName)
+			minimapImage.file = WG.Chobby.Configuration:GetMinimapImage(mapName, battle.gameName)
 			minimapImage:Invalidate()
 			
 			-- TODO: Bit lazy here, seeing as we only need to update the map

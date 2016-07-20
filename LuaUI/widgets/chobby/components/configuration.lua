@@ -41,19 +41,32 @@ function Configuration:init()
 	self.game_settings = VFS.Include("luaui/configs/springsettings/springsettings3.lua")
 end
 
-function Configuration:GetMinimapImage(mapName)
-	Spring.Echo("I can't find the map image for", mapName, "so have this one instead")
-	return "luaui/images/minimaps/minimap" .. math.ceil(math.random()*3) .. ".png"
+function Configuration:GetMinimapImage(mapName, gameName)
+	mapName = string.gsub(mapName, " ", "_")
+	local minimapImage = self:GetGameConfigFilePath(gameName, "minimapOverride/" .. mapName .. ".jpg", "zk")
+	if minimapImage then
+		--return minimapImage
+	end
+	Spring.Echo("Missing minimap image for", mapName)
+	return "luaui/images/minimapNotFound.png"
 end
 
+function Configuration:GetGameConfigFilePath(gameName, fileName, shortnameFallback)
+	local gameInfo = VFS.GetArchiveInfo(gameName)
+	local shortname = (gameInfo and gameInfo.shortname and string.lower(gameInfo.shortname)) or shortnameFallback
+	if shortname then
+		local filePath = "luaui/configs/gameConfig/" .. shortname .. "/" .. fileName
+		if VFS.FileExists(filePath) then
+			return filePath
+		end
+	end
+	return false
+end
 
 function Configuration:GetGameConfig(gameName, fileName)
-	local gameInfo = VFS.GetArchiveInfo(gameName)
-	if gameInfo and gameInfo.shortname and string.lower(gameInfo.shortname) then
-		local filePath = "luaui/configs/gameConfig/" .. gameInfo.shortname .. "/" .. fileName
-		if VFS.FileExists(filePath) then
-			return VFS.Include(filePath)
-		end
+	local filePath = self:GetGameConfigFilePath(gameName, fileName)
+	if filePath then
+		return VFS.Include(filePath)
 	end
 	return false
 end
