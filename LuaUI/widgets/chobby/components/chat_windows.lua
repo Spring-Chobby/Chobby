@@ -501,7 +501,7 @@ function ChatWindows:GetChannelConsole(chanName)
 	local channelConsole = self.channelConsoles[chanName]
 
 	if channelConsole == nil then
-		channelConsole = Console()
+		channelConsole = Console(chanName)
 		self.channelConsoles[chanName] = channelConsole
 
 		channelConsole.listener = function(message)
@@ -550,7 +550,7 @@ function ChatWindows:GetPrivateChatConsole(userName)
 	local privateChatConsole = self.privateChatConsoles[userName]
 
 	if privateChatConsole == nil then
-		privateChatConsole = Console()
+		privateChatConsole = Console(userName .. " messages")
 		self.privateChatConsoles[userName] = privateChatConsole
 
 		privateChatConsole.listener = function(message)

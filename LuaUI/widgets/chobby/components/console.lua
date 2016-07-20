@@ -1,9 +1,11 @@
 Console = LCS.class{}
 
-function Console:init()
+function Console:init(channelName)
 	self.listener = nil
 	self.showDate = true
 	self.dateFormat = "%H:%M"
+	
+	self.channelName = channelName
 
 	-- TODO: currently this is handled by chat windows and battleroom chat separately
 	self.unreadMessages = 0
@@ -144,6 +146,7 @@ end
 function Console:AddMessage(message, userName, dateOverride, color)
 	local txt = ""
 	if self.showDate then
+		local timeOverride
 		if dateOverride then
 			local utcHour = tonumber(os.date("!%H"))
 			local utcMinute = tonumber(os.date("!%M"))
@@ -163,13 +166,13 @@ function Console:AddMessage(message, userName, dateOverride, color)
 					minute = "0" .. minute
 				end
 				 
-				dateOverride = hour .. ":" .. minute
+				timeOverride = hour .. ":" .. minute
 			else
 				Spring.Echo("Bad dateOverride", dateOverride, messageHour, messageMinute)
 			end
 		end
 		-- FIXME: the input "date" should ideally be a table so we can coerce the format
-		local currentDate = dateOverride or os.date(self.dateFormat)
+		local currentDate = timeOverride or os.date(self.dateFormat)
 		txt = txt .. "[" .. currentDate .. "] "
 	end
 	if userName ~= nil then
@@ -183,6 +186,13 @@ function Console:AddMessage(message, userName, dateOverride, color)
 		self.tbHistory:SetText(txt)
 	else
 		self.tbHistory:AddLine(txt)
+	end
+	
+	if self.channelName then
+		local logFile, errorMessage = io.open('chatLogs/' .. self.channelName .. ".txt", 'a')
+		if logFile then
+			logFile:write("\n" .. ((dateOverride .. " - ") or "") .. txt)
+		end
 	end
 end
 
