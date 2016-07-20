@@ -223,11 +223,11 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		x = 0,
 		y = leftOffset,
 		right = 0,
-		height = 45,
+		height = 40,
 		caption = "\255\66\138\201" .. i18n("add_team") ..  "\b",
-		font = WG.Chobby.Configuration:GetFont(2),
+		font = WG.Chobby.Configuration:GetFont(1),
 		ignoreItemCaption = true,
-		itemFontSize = WG.Chobby.Configuration:GetFont(2).size,
+		itemFontSize = WG.Chobby.Configuration:GetFont(1).size,
 		itemHeight = 30,
 		selected = 0,
 		maxDropDownWidth = 120,
@@ -247,15 +247,15 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		},
 		parent = leftInfo
 	}
-	leftOffset = leftOffset + 50
+	leftOffset = leftOffset + 45
 	
 	local btnPickMap = Button:New {
 		x = 0,
 		y = leftOffset,
-		height = 45,
+		height = 40,
 		right = 0,
 		caption = "\255\66\138\201" .. i18n("pick_map") ..  "\b",
-		font =  WG.Chobby.Configuration:GetFont(2),
+		font =  WG.Chobby.Configuration:GetFont(1),
 		OnClick = {
 			function()
 				WG.Chobby.MapListWindow(battleLobby)
@@ -263,36 +263,36 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		},
 		parent = leftInfo,
 	}
-	leftOffset = leftOffset + 50
+	leftOffset = leftOffset + 45
 
 	local lblNumberOfPlayers = Label:New {
-		x = 0,
+		x = 8,
 		y = leftOffset,
 		width = 200,
 		height = 30,
 		caption = "",
-		font = WG.Chobby.Configuration:GetFont(2),
+		font = WG.Chobby.Configuration:GetFont(1),
 		parent = leftInfo,
 	}
-	leftOffset = leftOffset + 30
+	leftOffset = leftOffset + 25
 	
 	lblHaveGame = Label:New {
-		x = 0,
+		x = 8,
 		y = leftOffset,
 		caption = "",
-		font = WG.Chobby.Configuration:GetFont(2),
+		font = WG.Chobby.Configuration:GetFont(1),
 		parent = leftInfo,
 	}
-	leftOffset = leftOffset + 30
+	leftOffset = leftOffset + 25
 
 	lblHaveMap = Label:New {
-		x = 0,
+		x = 8,
 		y = leftOffset,
 		caption = "",
-		font = WG.Chobby.Configuration:GetFont(2),
+		font = WG.Chobby.Configuration:GetFont(1),
 		parent = leftInfo,
 	}
-	leftOffset = leftOffset + 30
+	leftOffset = leftOffset + 25
 	
 	leftOffset = leftOffset + 20	
 	local downloader = WG.Chobby.Downloader({
@@ -591,7 +591,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 			if teamIndex ~= -1 then
 				AddTeamButtons(
 					teamHolder,
-					100,
+					82,
 					0,
 					function()
 						battleLobby:SetBattleStatus({
@@ -807,7 +807,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	local playerPanel = Control:New {
 		x = 0,
 		y = 0,
-		right = "50%",
+		right = "52%",
 		bottom = (100 - topPoportion) .. "%",
 		padding = {EXTERNAL_PAD_HOR, EXTERNAL_PAD_VERT, INTERNAL_PAD, INTERNAL_PAD},
 		parent = subPanel,
@@ -826,11 +826,11 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	SetupPlayerPanel(playerPanel, spectatorPanel, battle, battleID)
 	
 	local leftInfo = Control:New {
-		x = "50%",
+		x = "48%",
 		y = 0,
 		right = "33%",
 		bottom = (100 - topPoportion) .. "%",
-		padding = {EXTERNAL_PAD_HOR/2, EXTERNAL_PAD_VERT, 1, INTERNAL_PAD},
+		padding = {INTERNAL_PAD, EXTERNAL_PAD_VERT, 1, INTERNAL_PAD},
 		parent = subPanel,
 	}
 	
