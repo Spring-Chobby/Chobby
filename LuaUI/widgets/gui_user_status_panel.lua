@@ -16,7 +16,6 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Chili
-local lblPlayerIcon
 local btnLogout
 local lblPing
 
@@ -76,24 +75,14 @@ end
 local function InitializeControls(window)
 	-- TODO: Representing my user should be done in a uniform way: 
 	-- See: https://github.com/Spring-Chobby/Chobby/issues/49
-	lblPlayerIcon = Label:New {
-		name = "playerIcon",
-		x = 0,
-		width = 150,
-		y = 0,
-		height = 20,
-		valign = "center",
-		caption = "",
-		parent = window,
-		font = WG.Chobby.Configuration:GetFont(2)
-	}
-
 	btnLogout = Button:New {
+		y = 0,
 		right = 10,
 		width = 100, 
 		height = 40,
 		caption = i18n("login"),
 		parent = window,
+		font = WG.Chobby.Configuration:GetFont(3),
 		OnClick = {Logout}
 	}
 	
@@ -101,7 +90,7 @@ local function InitializeControls(window)
 		name = "ping",
 		x = 0,
 		width = 150,
-		y = 25,
+		y = 10,
 		height = 20,
 		valign = "center",
 		caption = "\255\180\180\180" .. i18n("offline") .. "\b",
@@ -110,26 +99,17 @@ local function InitializeControls(window)
 	}
 
 	onAccepted = function(listener)
-		lblPlayerIcon:SetCaption(lobby:GetMyUserName())
-		--btnLogout:SetCaption(i18n("logout"))
+	Spring.Echo("GetStatusUser", lobby:GetMyUserName())
+		local userControl = WG.UserHandler.GetStatusUser(lobby:GetMyUserName())
+		userControl:SetPos(nil, 35)
+		window:AddChild(userControl)
 		lobby:Ping()
-		--lblPing:SetCaption(WG.Chobby.Configuration:GetSuccessColor() .. i18n("online") .. "\b")
 	end
-	onDisconnected = function(listener)
-		--if lobby.status == "offline" then
-		--	btnLogout:SetCaption(i18n("login"))
-		--end
-		--if lobby.status == "offline" then
-		--	lblPing:SetCaption("\255\180\180\180" .. i18n("offline") .. "\b")
-		--else
-		--	lblPing:SetCaption(WG.Chobby.Configuration:GetErrorColor() .. "D/C\b")
-		--end
-	end
+
 	onPong = function(listener)
--- 		UpdateLatency()
+		--UpdateLatency()
 	end
 	lobby:AddListener("OnAccepted", onAccepted)
-	lobby:AddListener("OnDisconnected", onDisconnected)
 	lobby:AddListener("OnPong", onPong)
 end
 
@@ -137,8 +117,9 @@ function UserStatusPanel.GetControl()
 	local window = Control:New {
 		right = 0,
 		y = 10,
-		width = 200,
+		width = 250,
 		height = "100%",
+		padding = {0, 0, 0, 0},
 		OnParent = {
 			function(obj)
 				if obj:IsEmpty() then
@@ -187,7 +168,6 @@ end
 function widget:Shutdown()
 	if lobby then
 		lobby:RemoveListener("OnAccepted", onAccepted)
-		lobby:RemoveListener("OnDisconnected", onDisconnected)
 		lobby:RemoveListener("OnPong", onPong)
 	end
 end

@@ -21,12 +21,14 @@ local battleUsers = {}
 local singleplayerUsers = {}
 local channelUsers = {}
 local teamUsers = {}
+local statusUsers = {}
 
 local userListList = {
 	battleUsers,
 	singleplayerUsers,
 	channelUsers,
-	teamUsers
+	teamUsers,
+	statusUsers
 }
 
 local IMAGE_AFK = "luaui/images/away.png"
@@ -168,7 +170,7 @@ end
 --------------------------------------------------------------------------------
 -- Control Handling
 
-local function GetUserControls(userName, isInBattle, isSingleplayer, reinitialize)
+local function GetUserControls(userName, isInBattle, isSingleplayer, reinitialize, disableInteraction)
 	local userControls = reinitialize or {}
 	
 	userControls.isInBattle = isInBattle
@@ -182,7 +184,12 @@ local function GetUserControls(userName, isInBattle, isSingleplayer, reinitializ
 	else
 		local tooltip = "user_" .. (isSingleplayer and "singleplayer_" or "").. "tooltip_" .. userName
 	
-		userControls.mainControl = ComboBox:New {
+		local ControlType = ComboBox
+		if disableInteraction then
+			ControlType = Control
+		end
+	
+		userControls.mainControl = ControlType:New {
 			name = userName,
 			x = 0,
 			y = 0,
@@ -192,7 +199,7 @@ local function GetUserControls(userName, isInBattle, isSingleplayer, reinitializ
 			borderColor = {0, 0, 0, 0},
 			padding = {0, 0, 0, 0},
 			caption = "",
-			tooltip = tooltip,
+			tooltip = (not disableInteraction) and tooltip,
 			ignoreItemCaption = true,
 			selectByName = true,
 			itemFontSize = WG.Chobby.Configuration:GetFont(2).size,
@@ -387,6 +394,18 @@ function userHandler.GetTeamUser(userName)
 	
 	teamUsers[userName] = GetUserControls(userName)
 	return teamUsers[userName].mainControl
+end
+
+function userHandler.GetStatusUser(userName)
+	if statusUsers[userName] then
+		if statusUsers[userName].needReinitialization then
+			statusUsers[userName] = GetUserControls(userName, false, false, statusUsers[userName], true)
+		end
+		return statusUsers[userName].mainControl
+	end
+	
+	statusUsers[userName] = GetUserControls(userName, false, false, false, true)
+	return statusUsers[userName].mainControl
 end
 
 --------------------------------------------------------------------------------

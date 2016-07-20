@@ -54,6 +54,7 @@ return {
 		download = "Download",
 		downloads = "Downloads",
 		friend_list = "Friend list",
+		online = "Online",
 		offline = "Offline",
 		connecting = "Connecting",
 		battle = "Battle",
