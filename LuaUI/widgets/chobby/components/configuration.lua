@@ -17,6 +17,7 @@ function Configuration:init()
 
 	self.errorColor = "\255\255\0\0"
 	self.warningColor = "\255\255\255\0"
+	self.normalColor = "\255\255\255\255"
 	self.successColor = "\255\0\255\0"
 	self.partialColor = "\255\190\210\50"
 	self.selectedColor = "\255\99\184\255"
@@ -117,6 +118,10 @@ end
 
 function Configuration:GetWarningColor()
 	return self.warningColor
+end
+
+function Configuration:GetNormalColor()
+	return self.normalColor
 end
 
 function Configuration:GetSuccessColor()

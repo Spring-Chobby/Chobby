@@ -3,24 +3,47 @@ Downloader = Component:extends{}
 function Downloader:init(tbl)
 	self:super("init")
 	self.lblDownload = Label:New {
-		x = 0,
+		x = 20,
 		y = 0,
-		width = 100,
+		right = 0,
+		align = "left",
+		valign = "center",
+		font = Configuration:GetFont(2),
 		height = 20,
 		caption = "",
 	}
 
 	self.prDownload = Progressbar:New {
 		x = 0,
-		y = 20,
-		width = 200,
+		y = 24,
+		right = 0,
 		height = 30,
 		value = 0,
 	}
+	
+	self.queueLabel = Label:New {
+		x = 0,
+		y = 60,
+		right = 0,
+		height = 16,
+		align = "left",
+		valign = "center",
+		font = Configuration:GetFont(1),
+		caption = "Queue:",
+	}
+	
+	self.queueList = Label:New {
+		x = 5,
+		y = 80,
+		right = 0,
+		bottom = 0,
+		align = "left",
+		valign = "top",
+		font = Configuration:GetFont(1),
+		caption = "",
+	}
 
-	self.window = Window:New(table.merge({
-		width = 200,
-		height = 50,
+	self.window = Control:New(table.merge({
 		caption = '',
 		padding = {0, 0, 0, 0},
 		resizable = false,
@@ -28,11 +51,46 @@ function Downloader:init(tbl)
 		children = {
 			self.lblDownload,
 			self.prDownload,
+			self.queueLabel,
+			self.queueList,
 		},
 	}, tbl))
+	
+	self.queueLabel:Hide()
+	self.queueList:Hide()
 
 	self.downloads = {}
 	self._lastUpdate = 0
+	self.delayID = 0
+end
+
+function Downloader:UpdateQueue()
+	local queueText = false
+	for downloadID, data in pairs(self.downloads) do
+		if not data.started and not data.complete then
+			local text = data.archiveName
+			if data.failed then
+				text = Configuration:GetErrorColor() .. "*" .. text .. "*" .. Configuration:GetNormalColor()
+			end
+			if queueText then
+				queueText = queueText .. "\n" .. text
+			else
+				if not self.queueLabel.visible then
+					self.queueLabel:Show()
+					self.queueList:Show()
+				end
+				queueText = text
+			end
+		end
+	end
+	if queueText then
+		self.queueList:SetCaption(queueText)
+	else
+		if self.queueLabel.visible then
+			self.queueLabel:Hide()
+			self.queueList:Hide()
+		end
+	end
 end
 
 function Downloader:Hide()
@@ -40,7 +98,18 @@ function Downloader:Hide()
 	self.prDownload:Hide()
 end
 
-function Downloader:_CleanupDownload()
+function Downloader:_CleanupDownload(myDelayID)
+	if self.delayID ~= myDelayID then
+		return
+	end
+
+	for downloadID, data in pairs(self.downloads) do
+		if data.failed or data.complete then
+			self.downloads[downloadID] = nil
+		end
+	end
+	self:UpdateQueue()
+	
 	for _, _ in pairs(self.downloads) do
 		return -- don't hide progress bar if there are active downloads
 	end
@@ -67,8 +136,10 @@ function Downloader:DownloadProgress(downloadID, downloaded, total)
 	if Spring.GetGameSeconds() == self._lastUpdate or total == 0 then
 		return
 	end
+	
 	self._lastUpdate = Spring.GetGameSeconds()
 
+	
 	local elapsedTime = os.clock() - self.downloads[downloadID].startTime
 	local doneRatio = downloaded / total
 	local remainingSeconds = (1 - doneRatio) * elapsedTime / (doneRatio + 0.001)
@@ -117,26 +188,41 @@ function Downloader:DownloadStarted(downloadID)
 		self.lblDownload:Show()
 	end
 	self.lblDownload:SetCaption(self.downloads[downloadID].archiveName)
+	self.downloads[downloadID].started = true
+	self:UpdateQueue()
 end
 
 function Downloader:DownloadFinished(downloadID)
 	if not self.downloads[downloadID] then
 		return
 	end
-	self.downloads[downloadID] = nil
+	self.downloads[downloadID].complete = true
 	self.prDownload:SetCaption("\255\0\255\0Download complete.\b")
-	WG.Delay(function() self:_CleanupDownload() end, 5)
+	
+	-- Effectively a reimplementation of SignalMask from LUS
+	self.delayID = self.delayID + 1
+	local thisDelayID = self.delayID
+	WG.Delay(function() self:_CleanupDownload(thisDelayID) end, 8)
+	
+	self:UpdateQueue()
 end
 
 function Downloader:DownloadFailed(downloadID, errorID)
 	if not self.downloads[downloadID] then
 		return
 	end
-	self.downloads[downloadID] = nil
+	self.downloads[downloadID].failed = true
 	self.prDownload:SetCaption("\255\255\0\0Download failed [".. errorID .."].\b")
-	WG.Delay(function() self:_CleanupDownload() end, 5)
+	
+	-- Effectively a reimplementation of SignalMask from LUS
+	self.delayID = self.delayID + 1
+	local thisDelayID = self.delayID
+	WG.Delay(function() self:_CleanupDownload(thisDelayID) end, 8)
+	
+	self:UpdateQueue()
 end
 
 function Downloader:DownloadQueued(downloadID, archiveName, archiveType)
 	self.downloads[downloadID] = { archiveName = archiveName, archiveType = archiveType, startTime = os.clock() }
+	self:UpdateQueue()
 end

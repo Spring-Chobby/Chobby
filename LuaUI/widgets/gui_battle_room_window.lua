@@ -120,15 +120,6 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		file = WG.Chobby.Configuration:GetMinimapImage(battle.mapName),
 		parent = minimap,
 	}
-	
-	local downloader = WG.Chobby.Downloader({
-		x = 0,
-		right = 0,
-		bottom = 55,
-		height = 60,
-		parent = leftInfo,
-	})
-	downloader:Hide()
 
 	local btnStartBattle = Button:New {
 		x = 0,
@@ -257,6 +248,19 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		parent = leftInfo,
 	}
 	leftOffset = leftOffset + 30
+	
+	leftOffset = leftOffset + 20	
+	local downloader = WG.Chobby.Downloader({
+		x = 0,
+		height = 200,
+		right = 0,
+		y = leftOffset,
+		parent = leftInfo,
+	})
+	downloader:Hide()
+	-- Example downloads
+	--MaybeDownloadArchive("Titan-v2", "map")
+	--MaybeDownloadArchive("tinyskirmishredux1.1", "map")
 	
 	onUpdateUserTeamStatusSelf = function(listener, userName, allyNumber, isSpectator)
 		if userName == myUserName then
