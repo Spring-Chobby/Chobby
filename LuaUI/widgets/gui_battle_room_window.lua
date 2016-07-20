@@ -60,14 +60,14 @@ local function UpdateArchiveStatus()
 		return
 	end
 	if VFS.HasArchive(battle.gameName) then
-		lblHaveGame:SetCaption(i18n("have_game") .. " [" .. WG.Chobby.Configuration:GetSuccessColor() .. "✔\b]")
+		lblHaveGame:SetCaption(i18n("have_game") .. " [" .. WG.Chobby.WG.Chobby.Configuration:GetTick() .. "\b]")
 	else
-		lblHaveGame:SetCaption(i18n("dont_have_game") .. " [" .. WG.Chobby.Configuration:GetErrorColor() .. "✘\b]")
+		lblHaveGame:SetCaption(i18n("dont_have_game") .. " [" .. WG.Chobby.Configuration:GetCross() .. "\b]")
 	end
 	if VFS.HasArchive(battle.mapName) then
-		lblHaveMap:SetCaption(i18n("have_map") .. " [" .. WG.Chobby.Configuration:GetSuccessColor() .. "✔\b]")
+		lblHaveMap:SetCaption(i18n("have_map") .. " [" .. WG.Chobby.WG.Chobby.Configuration:GetTick() .. "\b]")
 	else
-		lblHaveMap:SetCaption(i18n("dont_have_map") .. " [" .. WG.Chobby.Configuration:GetErrorColor() .. "✘\b]")
+		lblHaveMap:SetCaption(i18n("dont_have_map") .. " [" .. WG.Chobby.Configuration:GetCross() .. "\b]")
 	end
 end
 

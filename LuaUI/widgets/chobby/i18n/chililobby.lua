@@ -64,7 +64,7 @@ return {
 		start = "Start",
 		rejoin = "Rejoin",
 		spectate = "Spectate",
-		pick_map = "Map",
+		pick_map = "Change Map",
 		add_team = "Add Team",
 		players = "Players",
 		submit = "Submit",

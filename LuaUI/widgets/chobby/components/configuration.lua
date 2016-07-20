@@ -66,6 +66,14 @@ function Configuration:SetSingleplayerMode(mode)
 	end
 end
 
+function Configuration:GetCross()
+	return self:GetErrorColor() .. "X"
+end
+
+function Configuration:GetTick()
+	return self:GetSuccessColor() .. "O"
+end
+
 function Configuration:GetFont(sizeScale)
 	return {
 		size = self.font[sizeScale].size,

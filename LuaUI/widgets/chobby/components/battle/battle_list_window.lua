@@ -170,7 +170,7 @@ function BattleListWindow:AddBattle(battleID, battle)
 		y = 20,
 		height = 15,
 		valign = 'center',
-		caption = battle.gameName:sub(1, 22) .. (VFS.HasArchive(battle.gameName) and ' [' .. Configuration:GetSuccessColor() .. '✔\b]' or ' [' .. Configuration:GetErrorColor() .. '✘\b]'),
+		caption = battle.gameName:sub(1, 22) .. (VFS.HasArchive(battle.gameName) and ' [' .. Configuration:GetTick() .. '\b]' or ' [' .. Configuration:GetCross() .. '\b]'),
 		font = Configuration:GetFont(0),
 		parent = parentButton,
 	}
@@ -182,7 +182,7 @@ function BattleListWindow:AddBattle(battleID, battle)
 		y = 35,
 		height = 15,
 		valign = 'center',
-		caption = battle.mapName:sub(1, 22) .. (VFS.HasArchive(battle.mapName) and ' [' .. Configuration:GetSuccessColor() .. '✔\b]' or ' [' .. Configuration:GetErrorColor() .. '✘\b]'),
+		caption = battle.mapName:sub(1, 22) .. (VFS.HasArchive(battle.mapName) and ' [' .. Configuration:GetTick() .. '\b]' or ' [' .. Configuration:GetCross() .. '\b]'),
 		font = Configuration:GetFont(0),
 		parent = parentButton,
 	}
@@ -224,7 +224,7 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 	local playersCaption = items.battleButton:GetChildByName("playersCaption")
 	
 	playersCaption:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
-	mapCaption:SetCaption(battle.mapName:sub(1, 22) .. (VFS.HasArchive(battle.mapName) and ' [' .. Configuration:GetSuccessColor() .. '✔\b]' or ' [' .. Configuration:GetErrorColor() .. '✘\b]'))
+	mapCaption:SetCaption(battle.mapName:sub(1, 22) .. (VFS.HasArchive(battle.mapName) and ' [' .. Configuration:GetTick() .. '\b]' or ' [' .. Configuration:GetCross() .. '\b]'))
 	
 	self:RecalculateOrder(battleID)
 end
