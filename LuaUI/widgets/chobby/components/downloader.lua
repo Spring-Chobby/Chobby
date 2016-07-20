@@ -56,6 +56,8 @@ function Downloader:init(tbl, timeout, updateListener)
 		},
 	}, tbl))
 	
+	self.lblDownload:Hide()
+	self.prDownload:Hide()
 	self.queueLabel:Hide()
 	self.queueList:Hide()
 
@@ -106,8 +108,10 @@ function Downloader:UpdateQueue()
 end
 
 function Downloader:Hide()
-	self.lblDownload:Hide()
-	self.prDownload:Hide()
+	if self.prDownload.visible then
+		self.lblDownload:Hide()
+		self.prDownload:Hide()
+	end
 end
 
 function Downloader:_CleanupDownload(myDelayID)

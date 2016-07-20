@@ -458,26 +458,5 @@ function widget:Shutdown()
 	end
 end
 
-function widget:GetConfigData()
-	--local spacingByName = {}
-	--for unitDefID, spacing in pairs(buildSpacing) do
-	--	local name = UnitDefs[unitDefID] and UnitDefs[unitDefID].name
-	--	if name then
-	--		spacingByName[name] = spacing
-	--	end
-	--end
-	return {} -- { buildSpacing = spacingByName }
-end
-
-function widget:SetConfigData(data)
-    --local spacingByName = data.buildSpacing or {}
-	--for name, spacing in pairs(spacingByName) do
-	--	local unitDefID = UnitDefNames[name] and UnitDefNames[name].id
-	--	if unitDefID then
-	--		buildSpacing[unitDefID] = spacing
-	--	end
-	--end
-end
-
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
