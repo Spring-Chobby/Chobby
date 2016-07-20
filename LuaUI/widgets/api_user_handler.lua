@@ -242,8 +242,7 @@ local function GetUserControls(userName, isInBattle, isSingleplayer, reinitializ
 						Spring.Echo("TODO - Open the right webpage")
 					end
 				end
-			},
-			parent = screen0
+			}
 		}
 	end
 	
