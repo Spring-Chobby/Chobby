@@ -192,6 +192,7 @@ function Console:AddMessage(message, userName, dateOverride, color)
 		local logFile, errorMessage = io.open('chatLogs/' .. self.channelName .. ".txt", 'a')
 		if logFile then
 			logFile:write("\n" .. ((string.sub(dateOverride, 0, 19) .. " - ") or "") .. txt)
+			io.close(logFile)
 		end
 	end
 end
