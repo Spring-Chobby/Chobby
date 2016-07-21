@@ -24,6 +24,7 @@ function Console:init(channelName)
 -- 		maxHeight = 500,
 		bottom = 0,
 		text = "",
+		fontsize = Configuration:GetFont(1).size,
 		parent = self.spHistory,
 		selectable = true,
 	}
@@ -33,6 +34,7 @@ function Console:init(channelName)
 		height = 25,
 		right = 2,
 		text = "",
+		fontsize = Configuration:GetFont(1).size,
 		hint = i18n("type_here_to_chat"),
 	}
 	
