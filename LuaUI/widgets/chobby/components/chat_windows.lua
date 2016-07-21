@@ -4,7 +4,8 @@ function ChatWindows:init()
 	self.channelConsoles = {}
 	self.userListPanels = {}
 	self.tabbars = {}
-	self.currentTab = ""
+	self.currentTab = false
+	self.storedCurrentTab = false
 	self.totalNewMessages = 0
 
 	-- setup debug console to listen to commands
@@ -85,31 +86,19 @@ function ChatWindows:init()
 	end
 	lobby:AddListener("OnClients", self.onClients)
 
+	local CHAT_EX_MENTION = "\255\255\0\0"
+	local CHAT_EX_COLOR ="\255\0\139\139"
+	local CHAT_MENTION ="\255\255\0\0"
+	
 	-- channel chat
 	lobby:AddListener("OnSaid", 
 		function(listener, chanName, userName, message, msgDate)
-			local channelConsole = self.channelConsoles[chanName]
-			if channelConsole ~= nil then
-				if string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName() then
-					channelConsole:AddMessage(message, userName, msgDate, "\255\255\0\0")
-					self:_NotifyTab(chanName, userName, chanName, message, "sounds/beep4.wav", 15)
-				else
-					channelConsole:AddMessage(message, userName, msgDate)
-				end
-			end
+			self:ProcessChat(chanName, userName, message, msgDate, CHAT_MENTION)
 		end
 	)
 	lobby:AddListener("OnSaidEx", 
 		function(listener, chanName, userName, message, msgDate)
-			local channelConsole = self.channelConsoles[chanName]
-			if channelConsole ~= nil then
-				if string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName() then
-					channelConsole:AddMessage(message, userName, msgDate, "\255\255\0\0")
-					self:_NotifyTab(chanName, userName, chanName, message, "sounds/beep4.wav", 15)
-				else
-					channelConsole:AddMessage(message, chanName, userName, msgDate, "\255\0\139\139")
-				end
-			end
+			self:ProcessChat(chanName, userName, message, msgDate, CHAT_EX_MENTION, CHAT_EX_COLOR)
 		end
 	)
 
@@ -189,7 +178,7 @@ function ChatWindows:init()
 					interfaceRoot.GetRightPanelHandler().SetActivity("chat", self.totalNewMessages)
 					console.unreadMessages = 0
 					self:SetTabBadge(name, "")
-					self:SetTabColor(name, {1, 1, 1, 1})
+					self:SetTabActivation(name, false)
 					WG.Delay(function()
 						screen0:FocusControl(console.ebInputText)
 					end, 0.01)
@@ -257,11 +246,16 @@ function ChatWindows:init()
 		padding = {0, 0, 0, 0},
 		OnOrphan = {
 			function (obj)
+				self.storedCurrentTab = self.currentTab
+				self.currentTab = false
 				self.tabPanel.tabBar:DisableHighlight()
 			end
 		},
 		OnParent = {
 			function (obj)
+				if self.storedCurrentTab then
+					self.tabPanel:CallListeners(self.tabPanel.OnTabChange, self.storedCurrentTab)
+				end
 				self.tabPanel.tabBar:EnableHighlight()
 			end
 		},
@@ -296,6 +290,20 @@ function ChatWindows:init()
 	
 	self:ReattachTabHolder()
 	self:UpdateJoinPosition()
+end
+
+function ChatWindows:ProcessChat(chanName, userName, message, msgDate, notifyColor, chatColor)
+	local channelConsole = self.channelConsoles[chanName]
+	if channelConsole ~= nil then
+		local iAmMentioned = (string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName())
+		local chatColour = (iAmMentioned and notifyColor) or chatColor
+		channelConsole:AddMessage(message, userName, msgDate, chatColour)
+		if iAmMentioned then
+			self:_NotifyTab(chanName, userName, chanName, true, message, "sounds/beep4.wav", 15)
+		else
+			self:_NotifyTab(chanName, userName, chanName, false)
+		end
+	end
 end
 
 function ChatWindows:ReattachTabHolder()
@@ -340,10 +348,23 @@ function ChatWindows:_GetTabBarItem(tabName)
 	end
 end
 
-function ChatWindows:SetTabColor(tabName, c)
+function ChatWindows:SetTabActivation(tabName, activationLevel, outlineColor)
 	local ctrl = self:_GetTabBarItem(tabName)
 
-	ctrl.font.color = c
+	if activationLevel then
+		if (ctrl.activationLevel or 0) > activationLevel then
+			return
+		end
+		ctrl.font.outline = true
+		ctrl.font.outlineWidth  = 30
+		ctrl.font.outlineWeight = 30
+		ctrl.font.outlineColor  = outlineColor
+	else
+		ctrl.font.outline = false
+		ctrl.font.outlineColor = {0,0,0,1}
+	end
+	ctrl.activationLevel = activationLevel
+	
 	ctrl.font:Invalidate()
 end
 
@@ -362,7 +383,7 @@ function ChatWindows:SetTabBadge(tabName, text)
 				Configuration:GetFont(1).size,
 				outline = true,
 				autoOutlineColor = false,
-				outlineColor = { 0, 1, 0, 0.6 },
+				outlineColor = { 0, 0, 0, 0.6 },
 			},
 		}
 		ctrl._badge = badge
@@ -372,24 +393,25 @@ function ChatWindows:SetTabBadge(tabName, text)
 	badge:SetCaption(text)
 end
 
-function ChatWindows:_NotifyTab(tabName, userName, chanName, message, sound, time)
+function ChatWindows:_NotifyTab(tabName, userName, chanName, nameMentioned, message, sound, popupDuration)
 	if tabName ~= self.currentTab then
 		-- TODO: Fix naming of self.tabbars (these are consoles)
 		local console = self.tabbars[tabName]
-
 		local oldMessages = console.unreadMessages
 		console.unreadMessages = console.unreadMessages + 1
 		self:SetTabBadge(tabName, tostring(console.unreadMessages))
-		self:SetTabColor(tabName, {0, 0, 1, 1})
+		self:SetTabActivation(tabName, (nameMentioned and 2) or 1, {1, 1, (nameMentioned and 0) or 1, 1})
 		self.totalNewMessages = self.totalNewMessages + (console.unreadMessages - oldMessages)
 		interfaceRoot.GetRightPanelHandler().SetActivity("chat", self.totalNewMessages)
 
-		Chotify:Post({
-			title = userName .. " in " .. chanName .. ":",
-			body = message,
-			sound = sound,
-			time = time,
-		})
+		if nameMentioned then
+			Chotify:Post({
+				title = userName .. " in " .. chanName .. ":",
+				body = message,
+				sound = sound,
+				time = popupDuration,
+			})
+		end
 	end
 end
 
