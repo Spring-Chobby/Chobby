@@ -18,6 +18,7 @@ end
 -- Local Variables
 
 local battleUsers = {}
+local tooltipUsers = {}
 local singleplayerUsers = {}
 local channelUsers = {}
 local teamUsers = {}
@@ -25,6 +26,7 @@ local statusUsers = {}
 
 local userListList = {
 	battleUsers,
+	tooltipUsers,
 	singleplayerUsers,
 	channelUsers,
 	teamUsers,
@@ -188,7 +190,7 @@ end
 --------------------------------------------------------------------------------
 -- Control Handling
 
-local function GetUserControls(userName, isInBattle, isSingleplayer, reinitialize, disableInteraction)
+local function GetUserControls(userName, isInBattle, isSingleplayer, reinitialize, disableInteraction, supressSync)
 	local userControls = reinitialize or {}
 	
 	userControls.isInBattle = isInBattle
@@ -264,8 +266,7 @@ local function GetUserControls(userName, isInBattle, isSingleplayer, reinitializ
 		}
 	end
 	
-	
-	if isInBattle then
+	if isInBattle and not supressSync then
 		offset = offset + 1
 		userControls.syncStatus = Image:New {
 			name = "syncStatus",
@@ -378,6 +379,18 @@ function userHandler.GetBattleUser(userName, isSingleplayer)
 	
 	battleUsers[userName] = GetUserControls(userName, true)
 	return battleUsers[userName].mainControl
+end
+
+function userHandler.GetTooltipUser(userName)
+	if tooltipUsers[userName] then
+		if tooltipUsers[userName].needReinitialization then
+			tooltipUsers[userName] = GetUserControls(userName, true, false, battleUsers[userName], nil, true)
+		end
+		return tooltipUsers[userName].mainControl
+	end
+	
+	tooltipUsers[userName] = GetUserControls(userName, true, nil, nil, nil, true)
+	return tooltipUsers[userName].mainControl
 end
 
 function userHandler.GetSingleplayerUser(userName)
