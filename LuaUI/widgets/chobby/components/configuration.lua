@@ -43,6 +43,8 @@ function Configuration:init()
 		[5] = {size = 48, shadow = false},
 	}
 	
+	self.countryShortnames = VFS.Include("luaui/configs/countryShortname.lua")
+	
 	self.game_settings = VFS.Include("luaui/configs/springsettings/springsettings3.lua")
 end
 
@@ -188,6 +190,13 @@ function Configuration:GetGameConfig(gameName, fileName)
 		return VFS.Include(filePath)
 	end
 	return false
+end
+
+function Configuration:GetCountryLongname(shortname)
+	if shortname and self.countryShortnames[shortname] then
+		return self.countryShortnames[shortname]
+	end
+	return shortname
 end
 
 ---------------------------------------------------------------------------------

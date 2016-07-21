@@ -43,16 +43,35 @@ local IMAGE_UNREADY = "luaui/images/unready.png"
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Utilities
+-- Globally Applicable Utilities
+
+local function CountryShortnameToFlag(shortname)
+	local fileName = "luaui/images/flags/" .. string.lower(shortname) .. ".png"
+	if VFS.FileExists(fileName) then
+		return fileName
+	end
+end
+
+local function UserLevelToImage(level, isBot, isAdmin)
+	if isBot then
+		return IMAGE_AUTOHOST
+	elseif isAdmin then
+		return IMAGE_MODERATOR
+	elseif level then
+		local rankBracket = math.min(8, math.floor(level/10)) + 1
+		return "luaui/images/ranks/" .. rankBracket .. ".png"
+	end
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Utilities that reference controls
 
 local function GetUserCountryImage(userName, userControl)
 	local userInfo = userControl.lobby:GetUser(userName) or {}
 	local userBattleInfo = userControl.lobby:GetUserBattleStatus(userName) or {}
 	if userInfo.country then
-		local fileName = "luaui/images/flags/" .. string.lower(userInfo.country) .. ".png"
-		if VFS.FileExists(fileName) then
-			return fileName
-		end
+		return CountryShortnameToFlag(userInfo.country)
 	end
 	if not userBattleInfo.aiLib then
 		return IMAGE_FLAG_UNKNOWN
@@ -112,16 +131,11 @@ end
 local function GetUserRankImageName(userName, userControl)
 	local userInfo = userControl.lobby:GetUser(userName) or {}
 	local userBattleInfo = userControl.lobby:GetUserBattleStatus(userName) or {}
-	if userInfo.isBot or userBattleInfo.aiLib then
-		return IMAGE_AUTOHOST
-	elseif userInfo.isAdmin then
-		return IMAGE_MODERATOR
-	elseif userControl.isSingleplayer then
+	
+	if userControl.isSingleplayer then
 		return IMAGE_PLAYER
-	elseif userInfo.level then
-		local rankBracket = math.min(8, math.floor(userInfo.level/10)) + 1
-		return "luaui/images/ranks/" .. rankBracket .. ".png"
 	end
+	return UserLevelToImage(userInfo.level, userInfo.isBot or userBattleInfo.aiLib, userInfo.isAdmin)
 end
 
 local function GetUserStatusImages(userName, isInBattle, userControl)
@@ -341,7 +355,10 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- External Functions
-local userHandler = {}
+local userHandler = {
+	CountryShortnameToFlag = CountryShortnameToFlag,
+	UserLevelToImage = UserLevelToImage,
+}
 
 function userHandler.GetBattleUser(userName, isSingleplayer)
 	if isSingleplayer then
