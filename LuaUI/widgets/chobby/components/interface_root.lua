@@ -426,6 +426,18 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		return battleStatusPanelHandler
 	end
 	
+	function externalFunctions.KeyPressed(key, mods, isRepeat, label, unicode)
+		if chatWindows.visible and key == Spring.GetKeyCode("tab") and mods.ctrl then
+			if mods.shift then
+				chatWindows:CycleTab(-1)
+			else
+				chatWindows:CycleTab(1)
+			end
+			return true
+		end
+		return false
+	end
+	
 	-------------------------------------------------------------------
 	-- Initialization
 	-------------------------------------------------------------------

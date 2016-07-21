@@ -32,6 +32,7 @@ function TabBar:New(obj)
 
 	if obj.children[1] then
 		obj:Select(obj.selected)
+		self.selected = 1
 	end
 
 	return obj
@@ -60,7 +61,7 @@ function TabBar:EnableHighlight()
 end
 
 function TabBar:Select(tabname)
-	for i=1,#self.children do
+	for i = 1, #self.children do
 		local c = self.children[i]
 		if c.name == tabname then
 			if self.selected_obj then
@@ -68,6 +69,7 @@ function TabBar:Select(tabname)
 				self.selected_obj:Invalidate()
 			end
 			c.state.selected = true
+			self.selected = i
 			self.selected_obj = c
 			c:Invalidate()
 			self:CallListeners(self.OnChange, tabname)
@@ -78,6 +80,7 @@ function TabBar:Select(tabname)
 	if not self.selected_obj then
 		local c = self.children[1]
 		c.state.selected = true
+		self.selected = 1
 		self.selected_obj = c
 		self.selected_obj:Invalidate()
 		self:CallListeners(self.OnChange, c.name)
@@ -98,6 +101,7 @@ function TabBar:Remove(tabname, updateSelection)
 				self:Select(c.name)
 			else
 				self.selected_obj = nil
+				self.selected = nil
 			end
 			return true
 		end

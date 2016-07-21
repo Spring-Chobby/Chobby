@@ -7,6 +7,8 @@ function ChatWindows:init()
 	self.currentTab = false
 	self.storedCurrentTab = false
 	self.totalNewMessages = 0
+	
+	self.visible = false
 
 	-- setup debug console to listen to commands
 	self:CreateDebugConsole()
@@ -248,6 +250,7 @@ function ChatWindows:init()
 				self.storedCurrentTab = self.currentTab
 				self.currentTab = false
 				self.tabPanel.tabBar:DisableHighlight()
+				self.visible = false
 			end
 		},
 		OnParent = {
@@ -256,6 +259,7 @@ function ChatWindows:init()
 					self.tabPanel:CallListeners(self.tabPanel.OnTabChange, self.storedCurrentTab)
 				end
 				self.tabPanel.tabBar:EnableHighlight()
+				self.visible = true
 			end
 		},
 	}
@@ -307,6 +311,20 @@ function ChatWindows:init()
 	
 	self:ReattachTabHolder()
 	self:UpdateJoinPosition()
+end
+
+function ChatWindows:CycleTab(direction)
+	local selected = self.tabPanel.tabBar.selected
+	local children = self.tabPanel.tabBar.children
+	if not (selected and children) then
+		return
+	end
+	selected = (selected + direction - 1)%(#children) + 1
+	local child = children[selected]
+	if not child then
+		return
+	end
+	self.tabPanel.tabBar:Select(child.name)
 end
 
 function ChatWindows:ProcessChat(chanName, userName, message, msgDate, notifyColor, chatColor)

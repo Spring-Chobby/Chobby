@@ -56,6 +56,12 @@ function widget:Initialize()
 	Chobby.interfaceRoot = interfaceRoot
 end
 
+function widget:KeyPress(key, mods, isRepeat, label, unicode)
+	if interfaceRoot then
+		return interfaceRoot.KeyPressed(key, mods, isRepeat, label, unicode)
+	end
+end
+
 function widget:Shutdown()
 	WG.Chobby = nil
 end
