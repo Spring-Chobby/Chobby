@@ -151,16 +151,7 @@ local function InitializeControls(window)
 				if freezeSettings then
 					return
 				end
-				
-				if obj.selected == 1 then
-					WG.Chobby.interfaceRoot.SetPanelDisplayMode(true)
-				elseif obj.selected == 2 then
-					WG.Chobby.interfaceRoot.SetPanelDisplayMode(false, true)
-				elseif obj.selected == 3 then
-					WG.Chobby.interfaceRoot.SetPanelDisplayMode(false, false)
-				end
-				
-				Configuration.panel_layout = obj.selected
+				Configuration:SetConfigValue("panel_layout", obj.selected)
 			end
 		},
 	}

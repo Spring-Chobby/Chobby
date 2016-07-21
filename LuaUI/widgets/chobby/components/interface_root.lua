@@ -439,6 +439,22 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	end
 	
 	-------------------------------------------------------------------
+	-- Listening
+	-------------------------------------------------------------------
+	local function onConfigurationChange(listener, key, value)
+		if key == "panel_layout" then
+			if value == 1 then
+				externalFunctions.SetPanelDisplayMode(true)
+			elseif value == 2 then
+				externalFunctions.SetPanelDisplayMode(false, true)
+			elseif value == 3 then
+				externalFunctions.SetPanelDisplayMode(false, false)
+			end
+		end
+	end
+	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)		
+	
+	-------------------------------------------------------------------
 	-- Initialization
 	-------------------------------------------------------------------
 	local screenWidth, screenHeight = Spring.GetWindowGeometry()
