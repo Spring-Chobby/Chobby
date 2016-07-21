@@ -521,19 +521,23 @@ function Lobby:_OnJoin(chanName)
 	local isNewChannel = true
 	for i, v in pairs(self.myChannels) do
 		if v == chanName then
-			Spring.Echo("Duplicate uchannel joined", chanName)
+			--Spring.Echo("Duplicate uchannel joined", chanName)
 			isNewChannel = false
 			break
 		end
 	end
 	if isNewChannel then
 		table.insert(self.myChannels, chanName)
-		self:_CallListeners("OnJoin", chanName)
 	end
+	self:_CallListeners("OnJoin", chanName)
 end
 
 function Lobby:_OnLeft(chanName, userName, reason)
 	local channel = self:_GetChannel(chanName)
+	
+	if not (channel and channel.users) then
+		return
+	end
 	
 	if userName == self.myUsername then
 		for i, v in pairs(self.myChannels) do

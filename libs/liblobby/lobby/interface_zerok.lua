@@ -179,6 +179,13 @@ function Interface:Join(chanName, key)
 	return self
 end
 
+function Interface:Leave(chanName)
+	local sendData = {
+		ChannelName = chanName
+	}
+	self:_SendCommand("LeaveChannel " .. json.encode(sendData))
+	return self
+end
 
 function Interface:Say(chanName, message)
 	-- Say {"Place":0,"Target":"zk","User":"GoogleFrog","IsEmote":false,"Text":"bla","Ring":false,"Time":"2016-06-25T07:17:20.7548313Z"

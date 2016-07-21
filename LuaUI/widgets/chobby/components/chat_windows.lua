@@ -367,7 +367,10 @@ end
 
 function ChatWindows:SetTabActivation(tabName, activationLevel, outlineColor)
 	local ctrl = self:_GetTabBarItem(tabName)
-
+	if not ctrl then
+		return
+	end
+	
 	if activationLevel then
 		if (ctrl.activationLevel or 0) > activationLevel then
 			return
@@ -387,7 +390,10 @@ end
 
 function ChatWindows:SetTabBadge(tabName, text)
 	local ctrl = self:_GetTabBarItem(tabName)
-
+	if not ctrl then
+		Spring.Echo("SetTabBadge missing control", tabName, text)
+		return
+	end
 	local badge = ctrl._badge
 	if badge == nil then
 		badge = Label:New {
