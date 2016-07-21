@@ -300,7 +300,7 @@ function ChatWindows:ProcessChat(chanName, userName, message, msgDate, notifyCol
 		channelConsole:AddMessage(message, userName, msgDate, chatColour)
 		if iAmMentioned then
 			self:_NotifyTab(chanName, userName, chanName, true, message, "sounds/beep4.wav", 15)
-		else
+		elseif Configuration.notifyForAllChat then
 			self:_NotifyTab(chanName, userName, chanName, false)
 		end
 	end

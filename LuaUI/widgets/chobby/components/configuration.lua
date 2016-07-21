@@ -29,6 +29,8 @@ function Configuration:init()
 	self.singleplayer_mode_shortname = "zk"
 	self.singleplayer_mode = 2
 	
+	self.notifyForAllChat = true
+	
 	self.font = {
 		[0] = {size = 10, shadow = false},
 		[1] = {size = 14, shadow = false},
@@ -114,6 +116,7 @@ function Configuration:GetConfigData()
 		panel_layout = self.panel_layout,
 		lobby_fullscreen = self.lobby_fullscreen,
 		game_settings = self.game_settings,
+		notifyForAllChat = self.notifyForAllChat,
 	}
 end
 

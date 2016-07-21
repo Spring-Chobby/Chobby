@@ -71,24 +71,27 @@ end
 local function InitializeControls(window)
 	window.OnParent = nil
 	
-	local ingameOffset = 250
-	
 	local freezeSettings = true
 	
 	local Configuration = WG.Chobby.Configuration
 	
+	local offset = 20
+	
 	Label:New {
 		x = 40,
-		y = 40,
+		y = offset,
 		width = 180,
 		height = 30,
 		parent = window,
 		font = WG.Chobby.Configuration:GetFont(4),
 		caption = "Lobby",
 	}
+	offset = offset + 20
+	
+	offset = offset + 10
 	Label:New {
 		x = 40,
-		y = 70,
+		y = offset,
 		width = 90,
 		height = 45,
 		valign = "center",
@@ -99,7 +102,7 @@ local function InitializeControls(window)
 	}
 	ComboBox:New {
 		x = 130,
-		y = 70,
+		y = offset,
 		width = 180,
 		height = 45,
 		parent = window,
@@ -118,10 +121,12 @@ local function InitializeControls(window)
 			end
 		},
 	}
+	offset = offset + 40
 	
+	offset = offset + 10
 	Label:New {
 		x = 40,
-		y = 120,
+		y = offset,
 		width = 90,
 		height = 45,
 		valign = "center",
@@ -132,7 +137,7 @@ local function InitializeControls(window)
 	}
 	ComboBox:New {
 		x = 130,
-		y = 120,
+		y = offset,
 		width = 180,
 		height = 45,
 		parent = window,
@@ -156,11 +161,12 @@ local function InitializeControls(window)
 			end
 		},
 	}
+	offset = offset + 40
 	
 	local autologin = Checkbox:New {
 		x = 60,
 		width = 200,
-		y = 170,
+		y = offset,
 		height = 40,
 		parent = window,
 		boxalign = "right",
@@ -172,25 +178,51 @@ local function InitializeControls(window)
 			Configuration.autoLogin = newState
 		end},
 	}
-	
 	externalSettings.autologin = {
 		SetValue = function(value)
 			autologin:SetToggle(value)
 		end
 	}
+	offset = offset + 30
 	
+	local notifyAllChat = Checkbox:New {
+		x = 60,
+		width = 200,
+		y = 170,
+		height = 40,
+		parent = window,
+		boxalign = "right",
+		boxsize = 20,
+		caption = i18n("notifyForAllChat"),
+		checked = Configuration.notifyForAllChat or false,
+		font = { size = 20},
+		OnChange = {function (obj, newState)
+			Configuration.notifyForAllChat = newState
+		end},
+	}
+	offset = offset + 30
+	
+	
+	------------------------------------------------------------------
+	-- Ingame
+	------------------------------------------------------------------
+	
+	offset = offset + 60
 	Label:New {
 		x = 40,
-		y = 40 + ingameOffset,
+		y = offset,
 		width = 180,
 		height = 30,
 		parent = window,
 		font = {size = 30},
 		caption = "Game",
 	}
+	offset = offset + 20
+	
+	offset = offset + 10
 	Label:New {
 		x = 40,
-		y = 70 + ingameOffset,
+		y = offset,
 		width = 90,
 		height = 45,
 		valign = "center",
@@ -201,7 +233,7 @@ local function InitializeControls(window)
 	}
 	ComboBox:New {
 		x = 130,
-		y = 70 + ingameOffset,
+		y = offset,
 		width = 180,
 		height = 45,
 		parent = window,
@@ -218,10 +250,12 @@ local function InitializeControls(window)
 			end
 		},
 	}
+	offset = offset + 40
 	
+	offset = offset + 10
 	Label:New {
 		x = 40,
-		y = 120 + ingameOffset,
+		y = offset,
 		width = 90,
 		height = 45,
 		valign = "center",
@@ -233,7 +267,7 @@ local function InitializeControls(window)
 	ComboBox:New {
 		name = "gameSelection",
 		x = 130,
-		y = 120 + ingameOffset,
+		y = offset,
 		width = 180,
 		height = 45,
 		parent = window,
@@ -268,10 +302,12 @@ local function InitializeControls(window)
 			end
 		},
 	}
+	offset = offset + 40
 	
+	offset = offset + 10
 	Label:New {
 		x = 40,
-		y = 170 + ingameOffset,
+		y = offset,
 		width = 90,
 		height = 45,
 		valign = "center",
@@ -299,7 +335,7 @@ local function InitializeControls(window)
 	
 	Control:New {
 		x = 130,
-		y = 170 + ingameOffset,
+		y = offset,
 		width = 540,
 		height = 45,
 		parent = window,
