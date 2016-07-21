@@ -163,8 +163,8 @@ function ChatWindows:init()
 		bottom = 10,
 		padding = {0, 0, 0, 0},
 		tabs = {
+			[1] = (Configuration.debugMode and { name = "debug", caption = i18n("debug"), children = {self.debugConsole.panel} }) or nil,
 			--{ name = "server", caption = i18n("server"), children = {self.serverPanel} },
-			{ name = "debug", caption = i18n("debug"), children = {self.debugConsole.panel} },
 		},
 		OnTabChange = {
 			function(obj, name)
@@ -234,7 +234,6 @@ function ChatWindows:init()
 			self.tabBarHolder,
 		},
 	}
-
 	
 	self.window = Control:New {
 		x = 0,
@@ -267,7 +266,7 @@ function ChatWindows:init()
 		width = "50%", 
 		height = "10%",
 		caption = i18n("login_to_chat"),
-		font = {WG.Chobby.Configuration:GetFont(4)},
+		font = Configuration:GetFont(4),
 		parent = self.window,
 		OnClick = {function ()
 				Spring.Echo("Login")
@@ -275,6 +274,24 @@ function ChatWindows:init()
 			end
 		}
 	}
+	
+	local function onConfigurationChange(listener, key, value)
+		if key == "debugMode" then
+			if value and not self.tabPanel:GetTab("debug") then
+				self.tabPanel:AddTab({ 
+					name = "debug", 
+					caption = i18n("debug"), 
+					children = {self.debugConsole.panel}
+				})
+				self:UpdateJoinPosition()
+			end
+			if (not value) and self.tabPanel:GetTab("debug") then
+				self.tabPanel:RemoveTab("debug", false)
+				self:UpdateJoinPosition()
+			end
+		end
+	end
+	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 	
 	lobby:AddListener("OnDisconnected", function ()
 			self.window:ClearChildren()

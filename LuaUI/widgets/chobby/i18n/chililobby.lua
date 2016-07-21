@@ -19,7 +19,7 @@ return {
 		login_verb = 'Login',
 		error_log = 'Error log',
 		register_verb = "Register",
-		autologin = "Login automatically",
+		autoLogin = "Login automatically",
 		play_offline = "Play offline",
 		-- gui_battle_status_panel
 		spectating_game_status = "Spectating",

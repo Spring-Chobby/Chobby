@@ -120,11 +120,11 @@ function LoginWindow:init(failFunction, cancelText)
 		height = 35,
 		boxalign = "right",
 		boxsize = 15,
-		caption = i18n("autologin"),
+		caption = i18n("autoLogin"),
 		checked = Configuration.autoLogin,
 		font = Configuration:GetFont(2),
 		OnClick = {function (obj)
-			WG.SettingsWindow.SetConfigValue("autologin", obj.checked)
+			Configuration:SetConfigValue("autoLogin", obj.checked)
 		end},
 	}
 

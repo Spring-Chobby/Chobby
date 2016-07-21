@@ -34,7 +34,7 @@ local UserStatusPanel = {}
 local function Logout()
 	if lobby:GetConnectionStatus() ~= "offline" then
 		Spring.Echo("Logout")
-		WG.SettingsWindow.SetConfigValue("autologin", false)
+		WG.Chobby.Configuration:SetConfigValue("autoLogin", false)
 		lobby:Disconnect()
 	else
 		Spring.Echo("Login")

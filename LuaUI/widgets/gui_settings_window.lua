@@ -17,7 +17,6 @@ end
 --------------------------------------------------------------------------------
 -- Local Variables
 
-local externalSettings = {}
 local fullscreen = 0
 
 local battleStartDisplay = 1
@@ -83,7 +82,7 @@ local function InitializeControls(window)
 		width = 180,
 		height = 30,
 		parent = window,
-		font = WG.Chobby.Configuration:GetFont(4),
+		font = Configuration:GetFont(4),
 		caption = "Lobby",
 	}
 	offset = offset + 20
@@ -93,11 +92,11 @@ local function InitializeControls(window)
 		x = 40,
 		y = offset,
 		width = 90,
-		height = 45,
+		height = 40,
 		valign = "center",
 		align = "right",
 		parent = window,
-		font = WG.Chobby.Configuration:GetFont(3),
+		font = Configuration:GetFont(2),
 		caption = "Display:",
 	}
 	ComboBox:New {
@@ -107,6 +106,8 @@ local function InitializeControls(window)
 		height = 45,
 		parent = window,
 		items = {"Fullscreen Window", "Windowed", "Fullscreen"},
+		font = Configuration:GetFont(2),
+		itemFontSize = Configuration:GetFont(2).size,
 		selected = Configuration.lobby_fullscreen or 1,
 		OnSelect = {
 			function (obj)
@@ -128,11 +129,11 @@ local function InitializeControls(window)
 		x = 40,
 		y = offset,
 		width = 90,
-		height = 45,
+		height = 40,
 		valign = "center",
 		align = "right",
 		parent = window,
-		font =  WG.Chobby.Configuration:GetFont(3),
+		font = Configuration:GetFont(2),
 		caption = "Panels:",
 	}
 	ComboBox:New {
@@ -142,6 +143,8 @@ local function InitializeControls(window)
 		height = 45,
 		parent = window,
 		items = {"Autodetect", "Always Two", "Always One"},
+		font = Configuration:GetFont(2),
+		itemFontSize = Configuration:GetFont(2).size,
 		selected = Configuration.panel_layout or 1,
 		OnSelect = {
 			function (obj)
@@ -163,7 +166,7 @@ local function InitializeControls(window)
 	}
 	offset = offset + 40
 	
-	local autologin = Checkbox:New {
+	local autoLogin = Checkbox:New {
 		x = 60,
 		width = 200,
 		y = offset,
@@ -171,37 +174,48 @@ local function InitializeControls(window)
 		parent = window,
 		boxalign = "right",
 		boxsize = 20,
-		caption = i18n("autologin"),
+		caption = i18n("autoLogin"),
 		checked = Configuration.autoLogin or false,
-		font = { size = 20},
+		font = Configuration:GetFont(2),
 		OnChange = {function (obj, newState)
-			Configuration.autoLogin = newState
+			Configuration:SetConfigValue("autoLogin", newState)
 		end},
-	}
-	externalSettings.autologin = {
-		SetValue = function(value)
-			autologin:SetToggle(value)
-		end
 	}
 	offset = offset + 30
 	
 	local notifyAllChat = Checkbox:New {
 		x = 60,
 		width = 200,
-		y = 170,
+		y = offset,
 		height = 40,
 		parent = window,
 		boxalign = "right",
 		boxsize = 20,
 		caption = i18n("notifyForAllChat"),
 		checked = Configuration.notifyForAllChat or false,
-		font = { size = 20},
+		font = Configuration:GetFont(2),
 		OnChange = {function (obj, newState)
-			Configuration.notifyForAllChat = newState
+			Configuration:SetConfigValue("notifyForAllChat", newState)
 		end},
 	}
 	offset = offset + 30
 	
+	local debugMode = Checkbox:New {
+		x = 60,
+		width = 200,
+		y = offset,
+		height = 40,
+		parent = window,
+		boxalign = "right",
+		boxsize = 20,
+		caption = i18n("debugMode"),
+		checked = Configuration.debugMode or false,
+		font = Configuration:GetFont(2),
+		OnChange = {function (obj, newState)
+			Configuration:SetConfigValue("debugMode", newState)
+		end},
+	}
+	offset = offset + 30
 	
 	------------------------------------------------------------------
 	-- Ingame
@@ -214,7 +228,7 @@ local function InitializeControls(window)
 		width = 180,
 		height = 30,
 		parent = window,
-		font = {size = 30},
+		font = Configuration:GetFont(4),
 		caption = "Game",
 	}
 	offset = offset + 20
@@ -228,7 +242,7 @@ local function InitializeControls(window)
 		valign = "center",
 		align = "right",
 		parent = window,
-		font =  WG.Chobby.Configuration:GetFont(3),
+		font = Configuration:GetFont(2),
 		caption = "Display:",
 	}
 	ComboBox:New {
@@ -238,6 +252,8 @@ local function InitializeControls(window)
 		height = 45,
 		parent = window,
 		items = {"Fullscreen Window", "Windowed", "Fullscreen"},
+		font = Configuration:GetFont(2),
+		itemFontSize = Configuration:GetFont(2).size,
 		selected = Configuration.game_fullscreen or battleStartDisplay,
 		OnSelect = {
 			function (obj)
@@ -257,11 +273,11 @@ local function InitializeControls(window)
 		x = 40,
 		y = offset,
 		width = 90,
-		height = 45,
+		height = 40,
 		valign = "center",
 		align = "right",
 		parent = window,
-		font =  WG.Chobby.Configuration:GetFont(3),
+		font = Configuration:GetFont(2),
 		caption = "Singleplayer:",
 	}
 	ComboBox:New {
@@ -272,6 +288,8 @@ local function InitializeControls(window)
 		height = 45,
 		parent = window,
 		items = {"Generic", "Zero-K"},
+		font = Configuration:GetFont(2),
+		itemFontSize = Configuration:GetFont(2).size,
 		selected = Configuration.singleplayer_mode or 2,
 		OnSelect = {
 			function (obj)
@@ -309,11 +327,11 @@ local function InitializeControls(window)
 		x = 40,
 		y = offset,
 		width = 90,
-		height = 45,
+		height = 40,
 		valign = "center",
 		align = "right",
 		parent = window,
-		font =  WG.Chobby.Configuration:GetFont(3),
+		font = Configuration:GetFont(2),
 		caption = "Settings:",
 	}
 	
@@ -324,10 +342,10 @@ local function InitializeControls(window)
 			width = 80, 
 			bottom = 0,
 			caption = caption,
-			font =  WG.Chobby.Configuration:GetFont(2),
+			font =  Configuration:GetFont(2),
 			OnClick = {
 				function ()
-					WG.Chobby.Configuration.game_settings = VFS.Include("luaui/configs/springsettings/" .. settings)
+					Configuration.game_settings = VFS.Include("luaui/configs/springsettings/" .. settings)
 				end
 			},
 		}
@@ -345,11 +363,18 @@ local function InitializeControls(window)
 			SettingsButton(2, "Medium",  "springsettings2.lua"),
 			SettingsButton(3, "High",    "springsettings3.lua"),
 			SettingsButton(4, "Ultra",   "springsettings4.lua"),
-			
 		}
 	}
 	
 	freezeSettings = false
+	
+	local function onConfigurationChange(listener, key, value)
+		if key == "autoLogin" then
+			autoLogin:SetToggle(value)
+		end
+	end
+	
+	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 end
 
 --------------------------------------------------------------------------------
@@ -357,12 +382,6 @@ end
 -- External Interface
 
 local SettingsWindow = {}
-
-function SettingsWindow.SetConfigValue(key, value)
-	if externalSettings[key] then
-		externalSettings[key].SetValue(value)
-	end
-end
 
 function SettingsWindow.GetControl()
 	
@@ -399,12 +418,6 @@ function widget:Initialize()
 	VFS.Include("LuaUI/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 	
 	WG.Delay(DelayedInitialize, 1)
-	
-	externalSettings.autologin = {
-		SetValue = function(value)
-			 WG.Chobby.Configuration.autoLogin = value
-		end
-	}
 	
 	onBattleAboutToStart = function(listener)
 		local screenX, screenY = Spring.GetScreenGeometry()

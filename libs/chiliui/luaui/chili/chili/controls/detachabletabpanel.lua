@@ -85,10 +85,20 @@ function DetachableTabPanel:AddTab(tab)
     tabFrame:SetVisibility(false)
 end
 
-function DetachableTabPanel:RemoveTab(name)
-    self.tabBar:Remove(name)
+function DetachableTabPanel:RemoveTab(name, updateSelection)
+    if self.currentFrame == self.tabIndexMapping[name] then
+		self.currentFrame = nil
+	end
+	self.tabBar:Remove(name, updateSelection)
     self.currentTab:RemoveChild(self.tabIndexMapping[name])
     self.tabIndexMapping[name] = nil
+end
+
+function DetachableTabPanel:GetTab(tabname)
+    if not tabname or not self.tabIndexMapping[tabname] then
+		return false
+	end
+	return self.tabIndexMapping[tabname]
 end
 
 --//=============================================================================
@@ -101,7 +111,9 @@ function DetachableTabPanel:ChangeTab(tabname)
 	if self.currentFrame == self.tabIndexMapping[tabname] then
 		return
 	end
-	self.currentFrame:SetVisibility(false)
+	if self.currentFrame then
+		self.currentFrame:SetVisibility(false)
+	end
 	self.currentFrame = self.tabIndexMapping[tabname]
 	self.currentFrame:SetVisibility(true)
 	self:CallListeners(self.OnTabChange, tabname)

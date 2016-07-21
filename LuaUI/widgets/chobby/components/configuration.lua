@@ -4,6 +4,8 @@ VFS.Include("libs/liblobby/lobby/json.lua")
 
 -- all configuration attribute changes should use the :Set*Attribute*() and :Get*Attribute*() methods in order to assure proper functionality
 function Configuration:init()
+	self.listeners = {}
+	
 --     self.serverAddress = "localhost"
 	self.serverAddress = WG.Server.serverAddress or "springrts.com"
 	self.serverPort = 8200
@@ -30,6 +32,7 @@ function Configuration:init()
 	self.singleplayer_mode = 2
 	
 	self.notifyForAllChat = true
+	self.debugMode = false
 	
 	self.font = {
 		[0] = {size = 10, shadow = false},
@@ -43,64 +46,14 @@ function Configuration:init()
 	self.game_settings = VFS.Include("luaui/configs/springsettings/springsettings3.lua")
 end
 
-function Configuration:GetMinimapImage(mapName, gameName)
-	mapName = string.gsub(mapName, " ", "_")
-	local minimapImage = self:GetGameConfigFilePath(gameName, "minimapOverride/" .. mapName .. ".jpg", "zk")
-	if minimapImage then
-		return minimapImage
-	end
-	Spring.Echo("Missing minimap image for", mapName)
-	return "luaui/images/minimapNotFound.png"
-end
-
-function Configuration:GetGameConfigFilePath(gameName, fileName, shortnameFallback)
-	local gameInfo = VFS.GetArchiveInfo(gameName)
-	local shortname = (gameInfo and gameInfo.shortname and string.lower(gameInfo.shortname)) or shortnameFallback
-	if shortname then
-		local filePath = "luaui/configs/gameConfig/" .. shortname .. "/" .. fileName
-		if VFS.FileExists(filePath) then
-			return filePath
-		end
-	end
-	return false
-end
-
-function Configuration:GetGameConfig(gameName, fileName)
-	local filePath = self:GetGameConfigFilePath(gameName, fileName)
-	if filePath then
-		return VFS.Include(filePath)
-	end
-	return false
-end
-
-function Configuration:SetSingleplayerMode(mode)
-	self.singleplayer_mode = mode
-	if mode == 1 then
-		self.singleplayer_mode_shortname = false
-	elseif mode == 2 then
-		self.singleplayer_mode_shortname = "zk"
-	end
-end
-
-function Configuration:GetCross()
-	return self:GetErrorColor() .. "X"
-end
-
-function Configuration:GetTick()
-	return self:GetSuccessColor() .. "O"
-end
-
-function Configuration:GetFont(sizeScale)
-	return {
-		size = self.font[sizeScale].size,
-		shadow = self.font[sizeScale].shadow,
-	}
-end
+---------------------------------------------------------------------------------
+-- Widget interface callins
+---------------------------------------------------------------------------------
 
 function Configuration:SetConfigData(data)
 	if data ~= nil then
 		for k, v in pairs(data) do
-			self[k] = v
+			self:SetConfigValue(k, v)
 		end
 	end
 end
@@ -117,8 +70,35 @@ function Configuration:GetConfigData()
 		lobby_fullscreen = self.lobby_fullscreen,
 		game_settings = self.game_settings,
 		notifyForAllChat = self.notifyForAllChat,
+		debugMode = self.debugMode,
 	}
 end
+
+---------------------------------------------------------------------------------
+-- Setters
+---------------------------------------------------------------------------------
+
+function Configuration:SetConfigValue(key, value)
+	if self[key] == value then
+		return
+	end
+	self[key] = value
+	self:_CallListeners("OnConfigurationChange", key, value)
+end
+
+function Configuration:SetSingleplayerMode(mode)
+	self.singleplayer_mode = mode
+	if mode == 1 then
+		self.singleplayer_mode_shortname = false
+	elseif mode == 2 then
+		self.singleplayer_mode_shortname = "zk"
+	end
+end
+
+
+---------------------------------------------------------------------------------
+-- Getters
+---------------------------------------------------------------------------------
 
 function Configuration:GetServerAddress()
 	return self.serverAddress
@@ -164,5 +144,112 @@ end
 function Configuration:GetChannels()
 	return self.channels
 end
+
+function Configuration:GetCross()
+	return self:GetErrorColor() .. "X"
+end
+
+function Configuration:GetTick()
+	return self:GetSuccessColor() .. "O"
+end
+
+function Configuration:GetFont(sizeScale)
+	return {
+		size = self.font[sizeScale].size,
+		shadow = self.font[sizeScale].shadow,
+	}
+end
+
+function Configuration:GetMinimapImage(mapName, gameName)
+	mapName = string.gsub(mapName, " ", "_")
+	local minimapImage = self:GetGameConfigFilePath(gameName, "minimapOverride/" .. mapName .. ".jpg", "zk")
+	if minimapImage then
+		return minimapImage
+	end
+	Spring.Echo("Missing minimap image for", mapName)
+	return "luaui/images/minimapNotFound.png"
+end
+
+function Configuration:GetGameConfigFilePath(gameName, fileName, shortnameFallback)
+	local gameInfo = VFS.GetArchiveInfo(gameName)
+	local shortname = (gameInfo and gameInfo.shortname and string.lower(gameInfo.shortname)) or shortnameFallback
+	if shortname then
+		local filePath = "luaui/configs/gameConfig/" .. shortname .. "/" .. fileName
+		if VFS.FileExists(filePath) then
+			return filePath
+		end
+	end
+	return false
+end
+
+function Configuration:GetGameConfig(gameName, fileName)
+	local filePath = self:GetGameConfigFilePath(gameName, fileName)
+	if filePath then
+		return VFS.Include(filePath)
+	end
+	return false
+end
+
+---------------------------------------------------------------------------------
+-- Listener handler
+---------------------------------------------------------------------------------
+local function ShallowCopy(orig)
+	local orig_type = type(orig)
+	local copy
+	if orig_type == 'table' then
+		copy = {}
+		for orig_key, orig_value in pairs(orig) do
+			copy[orig_key] = orig_value
+		end
+	else -- number, string, boolean, etc
+		copy = orig
+	end
+	return copy
+end
+
+function Configuration:AddListener(event, listener)
+	if listener == nil then
+		Spring.Log(LOG_SECTION, LOG.ERROR, "Event: " .. tostring(event) .. ", listener cannot be nil")
+		return
+	end
+	local eventListeners = self.listeners[event]
+	if eventListeners == nil then
+		eventListeners = {}
+		self.listeners[event] = eventListeners
+	end
+	table.insert(eventListeners, listener)
+end
+
+function Configuration:RemoveListener(event, listener)
+	if self.listeners[event] then
+		for k, v in pairs(self.listeners[event]) do
+			if v == listener then
+				table.remove(self.listeners[event], k)
+				if #self.listeners[event] == 0 then
+					self.listeners[event] = nil
+				end
+				break
+			end
+		end
+	end
+end
+
+function Configuration:_CallListeners(event, ...)
+	if self.listeners[event] == nil then
+		return nil -- no event listeners
+	end
+	local eventListeners = ShallowCopy(self.listeners[event])
+	for i = 1, #eventListeners do
+		local listener = eventListeners[i]
+		args = {...}
+		xpcall(function() listener(listener, unpack(args)) end, 
+			function(err) self:_PrintError(err) end )
+	end
+	return true
+end
+
+---------------------------------------------------------------------------------
+-- 'Initialization'
+---------------------------------------------------------------------------------
 -- shadow the Configuration class with a singleton
 Configuration = Configuration()

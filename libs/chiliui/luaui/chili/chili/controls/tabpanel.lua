@@ -88,11 +88,22 @@ function TabPanel:AddTab(tab)
 end
 
 function TabPanel:RemoveTab(name)
+    if self.currentFrame == self.tabIndexMapping[name] then
+		self.currentFrame = nil
+	end
     local tabbar = self.children[1]
     tabbar:Remove(name)
     self.currentTab:RemoveChild(self.tabIndexMapping[name])
     self.tabIndexMapping[name] = nil
 end
+
+function TabPanel:GetTab(tabname)
+    if not tabname or not self.tabIndexMapping[tabname] then
+		return false
+	end
+	return self.tabIndexMapping[tabname]
+end
+
 
 --//=============================================================================
 
@@ -103,7 +114,9 @@ function TabPanel:ChangeTab(tabname)
 	if self.currentFrame == self.tabIndexMapping[tabname] then
 		return
 	end
-	self.currentFrame:SetVisibility(false)
+	if self.currentFrame then
+		self.currentFrame:SetVisibility(false)
+	end
 	self.currentFrame = self.tabIndexMapping[tabname]
 	self.currentFrame:SetVisibility(true)
 	self:CallListeners(self.OnTabChange, tabname)

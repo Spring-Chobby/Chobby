@@ -30,13 +30,9 @@ function TabBar:New(obj)
 		end
 	end
 
-	if not obj.children[1] then
-		obj:AddChild(
-			TabBarItem:New{name = "tab", caption = "tab"}
-		)
+	if obj.children[1] then
+		obj:Select(obj.selected)
 	end
-
-	obj:Select(obj.selected)
 
 	return obj
 end
@@ -91,18 +87,18 @@ function TabBar:Select(tabname)
 end
 
 
-function TabBar:Remove(tabname)
-	if #self.children < 2 then
-		return false
-	end
-
+function TabBar:Remove(tabname, updateSelection)
 	for i = 1, #self.children do
 		local c = self.children[i]
 		if c.name == tabname then
 			c:Dispose()
 			-- selects next tab
-			c = self.children[math.min(i, #self.children)]
-			self:Select(c.name)
+			if updateSelection then
+				c = self.children[math.min(i, #self.children)]
+				self:Select(c.name)
+			else
+				self.selected_obj = nil
+			end
 			return true
 		end
 	end
