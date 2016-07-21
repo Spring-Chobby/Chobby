@@ -101,22 +101,18 @@ function LoginWindow:init(failFunction, cancelText)
 	}
 
 	self.lblError = Label:New {
-		x = 1,
-		width = 170,
-		y = 200,
+		x = 15,
+		right = 15,
+		y = 265,
 		height = 90,
 		caption = "",
-		font = {
-			color = { 1, 0, 0, 1 },
-			size = Configuration:GetFont(2).size,
-			shadow = Configuration:GetFont(2).shadow
-		},
+		font = Configuration:GetFont(4),
 	}
 	
 	self.cbAutoLogin = Checkbox:New {
 		x = 15,
 		width = 190,
-		y = 240,
+		y = 220,
 		height = 35,
 		boxalign = "right",
 		boxsize = 15,
@@ -173,7 +169,6 @@ function LoginWindow:init(failFunction, cancelText)
 		},
 	}
 	
-
 	local ww, wh = Spring.GetWindowGeometry()
 	local w, h = 430, 420
 	self.window = Window:New {
@@ -273,7 +268,7 @@ function LoginWindow:tryLogin()
 
 		self.onDisconnected = function(listener)
 			lobby:RemoveListener("OnDisconnected", self.onDisconnected)
-			self.lblError:SetCaption("Cannot reach server:\n" .. tostring(Configuration:GetServerAddress()) .. ":" .. tostring(Configuration:GetServerPort()))
+			self.lblError:SetCaption(Configuration:GetErrorColor() .. "Cannot reach server:\n" .. tostring(Configuration:GetServerAddress()) .. ":" .. tostring(Configuration:GetServerPort()))
 		end
 		lobby:AddListener("OnDisconnected", self.onDisconnected)
 
@@ -317,19 +312,22 @@ end
 function LoginWindow:OnRegister()
 	lobby:Register(username, password, "name@email.com")
 	lobby:AddListener("OnRegistrationAccepted", function(listener)
-		self.lblError:SetCaption("Registered!")
+		self.lblError:SetCaption(Configuration:GetSuccessColor() .. "Registered!")
 		--lobby:RemoveListener("OnRegistrationAccepted", listener)
 	end)
 	lobby:AddListener("OnRegistrationDenied", function(listener, err)
-		self.lblError:SetCaption(err)
+		self.lblError:SetCaption(Configuration:GetErrorColor() .. (err or "Unknown Error"))
 		--lobby:RemoveListener("OnRegistrationDenied", listener)
 	end)
 
 end
 
 function LoginWindow:OnConnected()
+	
+	self.lblError:SetCaption(Configuration:GetPartialColor() .. i18n("connecting"))
+
 	self.onDenied = function(listener, reason)
-		self.lblError:SetCaption(reason)
+		self.lblError:SetCaption(Configuration:GetErrorColor() .. (reason or "Denied, unknown reason"))
 	end
 
 	self.onAccepted = function(listener)
