@@ -49,7 +49,12 @@ function UserListPanel:Update()
 end
 
 function UserListPanel:AddUser(userName)
-	if lobby:GetUser(userName).isBot then 
+	local userData = lobby:GetUser(userName)
+	if not userData then
+		Spring.Echo("User data not found", userName)
+		return
+	end
+	if userData.isBot then 
 		return 
 	end
 	
