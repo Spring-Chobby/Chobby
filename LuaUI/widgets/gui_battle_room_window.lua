@@ -260,7 +260,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		font =  WG.Chobby.Configuration:GetFont(1),
 		OnClick = {
 			function()
-				WG.Chobby.MapListWindow(battleLobby)
+				WG.Chobby.MapListWindow(battleLobby, battle.mapName)
 			end
 		},
 		parent = leftInfo,

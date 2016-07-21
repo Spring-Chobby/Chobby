@@ -161,6 +161,12 @@ function ListWindow:AddRow(items, id)
 	self:RecalculateOrder(id)
 end
 
+function ListWindow:GetRowPosition(id)
+	if id and self.itemPanelMapping[id] then
+		return self.itemPanelMapping[id].y
+	end
+end
+
 function ListWindow:GetRowItems(id)
 	return self.itemNames[id]
 end
