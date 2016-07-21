@@ -41,6 +41,10 @@ local IMAGE_PLAYER = "luaui/images/ranks/player.png"
 local IMAGE_READY = "luaui/images/ready.png"
 local IMAGE_UNREADY = "luaui/images/unready.png"
 
+local USER_SP_TOOLTIP_PREFIX = "user_single_"
+local USER_MP_TOOLTIP_PREFIX = "user_battle_"
+local USER_CH_TOOLTIP_PREFIX = "user_chat_s_"
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Globally Applicable Utilities
@@ -196,7 +200,7 @@ local function GetUserControls(userName, isInBattle, isSingleplayer, reinitializ
 	if reinitialize then
 		userControls.mainControl:ClearChildren()
 	else
-		local tooltip = "user_" .. (isSingleplayer and "singleplayer_" or "").. "tooltip_" .. userName
+		local tooltip = ((isSingleplayer and USER_SP_TOOLTIP_PREFIX) or (isInBattle and USER_MP_TOOLTIP_PREFIX) or USER_CH_TOOLTIP_PREFIX) .. userName
 	
 		local ControlType = ComboBox
 		if disableInteraction then

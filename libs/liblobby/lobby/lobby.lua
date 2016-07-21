@@ -272,10 +272,17 @@ end
 -- User commands
 ------------------------
 
-function Lobby:_OnAddUser(userName, country, cpu, accountID, lobbyVersion)
+function Lobby:_OnAddUser(userName, country, cpu, accountID, lobbyVersion, clan)
 	self.userCount = self.userCount + 1
-	self.users[userName] = {userName=userName, country=country, cpu=cpu, accountID=accountID, lobbyVersion = lobbyVersion}
-	self:_CallListeners("OnAddUser", userName, country, cpu, accountID)
+	self.users[userName] = {
+		userName = userName,
+		country = country,
+		cpu = cpu,
+		accountID = accountID,
+		lobbyVersion = lobbyVersion,
+		clan = clan
+	}
+	self:_CallListeners("OnAddUser", userName, country, cpu, accountID, lobbyVersion, clan)
 end
 
 function Lobby:_OnRemoveUser(userName)

@@ -109,7 +109,7 @@ function BattleListWindow:AddBattle(battleID, battle)
 	local lblTitle = Label:New {
 		name = "title",
 		x = height + 3,
-		y = 1,
+		y = 0,
 		width = 400,
 		height = 20,
 		valign = 'center',
@@ -143,9 +143,10 @@ function BattleListWindow:AddBattle(battleID, battle)
 		name = "playersCaption",
 		x = height + 3,
 		width = 50,
-		y = 15,
+		y = 12,
 		height = height - 10,
 		valign = 'center',
+		font = Configuration:GetFont(2),
 		caption = (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers,
 		parent = parentButton,
 	}
@@ -153,7 +154,7 @@ function BattleListWindow:AddBattle(battleID, battle)
 	if battle.passworded then
 		local imgPassworded = Image:New {
 			name = "password",
-			x = height + 33,
+			x = height + 48,
 			y = 22,
 			height = 30,
 			width = 30,
@@ -165,7 +166,7 @@ function BattleListWindow:AddBattle(battleID, battle)
 
 	local lblGame = Label:New {
 		name = "game",
-		x = height + 70,
+		x = height + 80,
 		width = 160,
 		y = 20,
 		height = 15,
@@ -177,9 +178,9 @@ function BattleListWindow:AddBattle(battleID, battle)
 
 	local lblMap = Label:New {
 		name = "mapCaption",
-		x = height + 70,
+		x = height + 80,
 		width = 200,
-		y = 35,
+		y = 36,
 		height = 15,
 		valign = 'center',
 		caption = battle.mapName:sub(1, 22) .. (VFS.HasArchive(battle.mapName) and ' [' .. Configuration:GetTick() .. '\b]' or ' [' .. Configuration:GetCross() .. '\b]'),

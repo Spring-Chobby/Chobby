@@ -277,10 +277,10 @@ Interface.jsonCommands["LoginResponse"] = Interface._LoginResponse
 -- User commands
 ------------------------
 
-function Interface:_OnAddUser(userName, country, cpu, accountID, lobbyVersion)
+function Interface:_OnAddUser(userName, country, cpu, accountID, lobbyVersion, clan)
 	cpu = tonumber(cpu)
 	accountID = tonumber(accountID)
-	self:super("_OnAddUser", userName, country, cpu, accountID, lobbyVersion)
+	self:super("_OnAddUser", userName, country, cpu, accountID, lobbyVersion, clan)
 end
 Interface.commands["ADDUSER"] = Interface._OnAddUser
 Interface.commandPattern["ADDUSER"] = "(%S+)%s+(%S%S)%s+(%S+)%s*(.*)"
@@ -288,9 +288,17 @@ Interface.commandPattern["ADDUSER"] = "(%S+)%s+(%S%S)%s+(%S+)%s*(.*)"
 function Interface:_User(data)
 	-- CHECKME: verify that name, country, cpu and similar info doesn't change
 	if self.users[data.Name] == nil then
-		self:_OnAddUser(data.Name, data.Country, 3, data.AccountID, data.LobbyVersion)
+		self:_OnAddUser(data.Name, data.Country, 3, data.AccountID, data.LobbyVersion, data.Clan)
 	end
-	self:_OnUpdateUserStatus(data.Name, {isInGame=data.IsInGame, isAway=data.IsAway, isAdmin=data.IsAdmin, level = data.Level, isBot = data.IsBot})
+	self:_OnUpdateUserStatus(data.Name, {
+		isInGame=data.IsInGame,
+		isAway=data.IsAway,
+		isAdmin=data.IsAdmin,
+		level = data.Level,
+		isBot = data.IsBot,
+		awaySince = data.AwaySince,
+		inGameSince = data.InGameSince,
+	})
 	
 	-- User {"AccountID":212941,"SpringieLevel":1,"Avatar":"corflak","Country":"CZ","EffectiveElo":1100,"Effective1v1Elo":1100,"InGameSince":"2016-06-25T11:36:38.9075025Z","IsAdmin":false,"IsBot":true,"IsInBattleRoom":false,"BanMute":false,"BanSpecChat":false,"Level":0,"ClientType":4,"LobbyVersion":"Springie 1.3.2.116","Name":"Elerium","IsAway":false,"IsInGame":true}
 end

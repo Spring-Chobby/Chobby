@@ -19,11 +19,17 @@ local screenWidth, screenHeight = Spring.GetWindowGeometry()
 
 local BATTLE_TOOLTIP_PREFIX = "battle_tooltip_"
 local USER_TOOLTIP_PREFIX = "user_"
-local USER_SP_TOOLTIP_PREFIX = "user_singleplayer_tooltip_"
-local USER_MP_TOOLTIP_PREFIX = "user_battleroom_tooltip_"
-local USER_CHAT_TOOLTIP_PREFIX = "user_tooltip_"
+local USER_SP_TOOLTIP_PREFIX = "user_single_"
+local USER_MP_TOOLTIP_PREFIX = "user_battle_"
+local USER_CH_TOOLTIP_PREFIX = "user_chat_s_"
 
 local TOOLTIP_TEXT_NAME = "tooltipText"
+local IMAGE_AFK = "luaui/images/away.png"
+local IMAGE_BATTLE = "luaui/images/battle.png"
+local IMAGE_INGAME = "luaui/images/ingame.png"
+local IMAGE_LOCK = "LuaUI/widgets/chobby/images/lock.png"
+local BATTLE_RUNNING = "luaui/images/runningBattle.png"
+local BATTLE_NOT_RUNNING = ""
 
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
@@ -66,11 +72,61 @@ end
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
 -- Specific tooltip type utilities
-local battleTooltip = {}
-local userTooltip = {}
 
-local function GetTooltipLine(parent, hasImage)
+local function GetTimeToPast(pastTimeString)
+	-- Example: 2016-07-21T14:49:00.4731696Z
+	local pastTime = {
+		string.sub(pastTimeString, 18, 19),
+		string.sub(pastTimeString, 15, 16),
+		string.sub(pastTimeString, 12, 13),
+		string.sub(pastTimeString, 9, 10),
+		--string.sub(pastTimeString, 6, 7),
+		--string.sub(pastTimeString, 0, 4),
+	}
+	
+	for i = 1, #pastTime do
+		pastTime[i] = tonumber(pastTime[i])
+		if not pastTime[i] then
+			return
+		end
+	end
+	
+	local currentTime = {
+		tonumber(os.date("!%S")),
+		tonumber(os.date("!%M")),
+		tonumber(os.date("!%H")),
+		tonumber(os.date("!%d")),
+		--tonumber(os.date("!%m")),
+		--tonumber(os.date("!%Y")),
+	}
+	
+	local pastSeconds = pastTime[1] + 60*(pastTime[2] + 24*pastTime[3])
+	local currentSeconds = currentTime[1] + 60*(currentTime[2] + 24*currentTime[3])
+	if currentTime[4] ~= pastTime[4] then
+		-- Always assume that the past time is one day behind.
+		currentSeconds = currentSeconds + 86400
+	end
+	
+	local distanceSeconds = currentSeconds - pastSeconds
+	local hours = math.floor(distanceSeconds/3600)
+	local minutes = math.floor(distanceSeconds/60)%60
+	local seconds = math.floor(distanceSeconds)%60
+	
+	local timeText = ""
+	if hours > 0 then
+		timeText = timeText .. hours .. "h "
+	end
+	if hours > 0 or minutes > 0 then
+		timeText = timeText .. minutes .. "m "
+	end
+	
+	return timeText .. seconds .. "s"
+end
+
+local function GetTooltipLine(parent, hasImage, fontSize)
 	local text, image
+	
+	fontSize = fontSize or 2
 	
 	local externalFunctions = {}
 	
@@ -93,7 +149,7 @@ local function GetTooltipLine(parent, hasImage)
 		height = 20,
 		align = "left",
 		parent = parent,
-		fontsize = WG.Chobby.Configuration:GetFont(2).size,
+		fontsize = WG.Chobby.Configuration:GetFont(fontSize).size,
 		text = "",
 	}
 	
@@ -136,23 +192,168 @@ local function GetTooltipLine(parent, hasImage)
 	return externalFunctions
 end
 
+local function GetBattleInfoHolder(parent, offset, battleID)
+	local externalFunctions = {}
+	
+	local battle = lobby:GetBattle(battleID)
+	if not battle then
+		return nil
+	end
+	
+	local Configuration = WG.Chobby.Configuration
+	
+	local mainControl = Control:New {
+		x = 0,
+		y = offset,
+		right = 0,
+		height = 120,
+		padding = {0, 0, 0, 0},
+		parent = parent,
+	}
+	
+	local lblTitle = Label:New {
+		name = "title",
+		x = 80,
+		y = 1,
+		right = 0,
+		height = 20,
+		valign = 'top',
+		font = Configuration:GetFont(1),
+		caption = battle.title:sub(1, 60),
+		parent = mainControl,
+	}
+	local minimapImage = Image:New {
+		name = "minimapImage",
+		x = 6,
+		y = 0,
+		width = 70,
+		height = 70,
+		keepAspect = true,
+		file = Configuration:GetMinimapImage(battle.mapName, battle.gameName),
+		parent = mainControl,
+	}
+	local runningImage = Image:New {
+		name = "runningImage",
+		x = 6,
+		y = 0,
+		width = 70,
+		height = 70,
+		keepAspect = false,
+		file = (battle.isRunning and BATTLE_RUNNING) or BATTLE_NOT_RUNNING,
+		parent = mainControl,
+	}
+	runningImage:BringToFront()
+	
+	local lblPlayers = Label:New {
+		name = "playersCaption",
+		x = 80,
+		y = 22,
+		right = 0,
+		height = 20,
+		valign = 'top',
+		font = Configuration:GetFont(1),
+		caption = (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers,
+		parent = mainControl,
+	}
+	
+	local imgPassworded = Image:New {
+		name = "password",
+		x = 80,
+		y = 36,
+		height = 30,
+		width = 30,
+		margin = {0, 0, 0, 0},
+		file = IMAGE_LOCK,
+		parent = mainControl,
+	}
+	if not battle.passworded then
+		imgPassworded:Hide()
+	end
+	
+	local lblGame = Label:New {
+		name = "game",
+		x = 125,
+		y = 22,
+		right = 0,
+		height = 20,
+		valign = 'top',
+		caption = battle.gameName:sub(1, 22),
+		font = Configuration:GetFont(1),
+		parent = mainControl,
+	}
+
+	local lblMap = Label:New {
+		name = "mapCaption",
+		x = 125,
+		y = 40,
+		right = 0,
+		height = 20,
+		valign = 'center',
+		caption = battle.mapName:sub(1, 22),
+		font = Configuration:GetFont(1),
+		parent = mainControl,
+	}
+	
+	function externalFunctions.Update(offset, battleID)
+		battle = lobby:GetBattle(battleID)
+		if not battle then
+			if mainControl.visible then
+				mainControl:Hide()
+			end
+			return
+		end
+		
+		if not mainControl.visible then
+			mainControl:Show()
+		end
+		mainControl:SetPos(nil, offset)
+		
+		lblTitle:SetCaption(battle.title:sub(1, 60))
+		lblPlayers:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
+		lblGame:SetCaption(battle.gameName:sub(1, 22))
+		lblMap:SetCaption(battle.mapName:sub(1, 22))
+		
+		if battle.passworded and not imgPassworded.visible then
+			imgPassworded:Show()
+		end
+		if not battle.passworded and imgPassworded.visible then
+			imgPassworded:Hide()
+		end
+		
+		minimapImage.file = Configuration:GetMinimapImage(battle.mapName, battle.gameName)
+		minimapImage:Invalidate()
+		
+		runningImage.file = (battle.isRunning and BATTLE_RUNNING) or BATTLE_NOT_RUNNING
+		runningImage:Invalidate()
+	end
+	
+	function externalFunctions.Hide()
+		if mainControl.visible then
+			mainControl:Hide()
+		end
+	end
+	
+	return externalFunctions
+end
+
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
 -- Battle tooltip
+local battleTooltip = {}
+local userTooltip = {}
 
 local function GetBattleTooltip(battleID, battle)
 	local Configuration = WG.Chobby.Configuration
 	
+	local width = 240
 	if not battleTooltip.mainControl then
-		
 		battleTooltip.mainControl = Chili.Control:New {
 			x = 0,
 			y = 0,
-			width = 140,
+			width = width,
 			height = 120,
 			padding = {0, 0, 0, 0},
 		}
-		
 	end
 	
 	--local text = "Battle " .. battleID
@@ -171,31 +372,31 @@ local IMAGE_MODERATOR = "luaui/images/ranks/moderator.png"
 local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 	local Configuration = WG.Chobby.Configuration
 	
+	local width = 240
 	if not userTooltip.mainControl then
 		userTooltip.mainControl = Chili.Control:New {
 			x = 0,
 			y = 0,
-			width = 140,
+			width = width,
 			height = 120,
 			padding = {0, 0, 0, 0},
 		}
 	end
 	local offset = 7
-	local width = 160
 	
 	-- User Name
 	if not userTooltip.name then
-		userTooltip.name = GetTooltipLine(userTooltip.mainControl)
+		userTooltip.name = GetTooltipLine(userTooltip.mainControl, nil, 3)
 	end
 	userTooltip.name.Update(offset, userName)
-	offset = offset + 20
+	offset = offset + 23
 	
 	-- Clan
 	if userInfo.clan then
 		if not userTooltip.clan then
 			userTooltip.clan = GetTooltipLine(userTooltip.mainControl)
 		end
-		userTooltip.clan.Update(offset, userInfo.clan)
+		userTooltip.clan.Update(offset, "Clan: " .. userInfo.clan)
 		offset = offset + 20
 	elseif userTooltip.clan then
 		userTooltip.clan.Hide()
@@ -257,10 +458,51 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 		userTooltip.level:Hide()
 	end
 	
+	-- InGameSince
+	if userInfo.inGameSince then
+		if not userTooltip.inGameSince then
+			userTooltip.inGameSince = GetTooltipLine(userTooltip.mainControl, true)
+		end
+		userTooltip.inGameSince.Update(
+			offset, 
+			"In game for " .. GetTimeToPast(userInfo.inGameSince), 
+			IMAGE_INGAME
+		)
+		offset = offset + 20
+	elseif userTooltip.inGameSince then
+		userTooltip.inGameSince:Hide()
+	end
+	
+	-- Away Since
+	if userInfo.awaySince then
+		if not userTooltip.awaySince then
+			userTooltip.awaySince = GetTooltipLine(userTooltip.mainControl, true)
+		end
+		userTooltip.awaySince.Update(
+			offset, 
+			"Idle for " .. GetTimeToPast(userInfo.awaySince), 
+			IMAGE_AFK
+		)
+		offset = offset + 20
+	elseif userTooltip.awaySince then
+		userTooltip.awaySince:Hide()
+	end
+	
+	-- In Battle
+	if (not inBattleroom) and userInfo.battleID then
+		if not userTooltip.battleInfoHolder then
+			userTooltip.battleInfoHolder = GetBattleInfoHolder(userTooltip.mainControl, offset, userInfo.battleID)
+		else
+			userTooltip.battleInfoHolder.Update(offset, userInfo.battleID)
+		end
+		offset = offset + 75
+	elseif userTooltip.battleInfoHolder then
+		userTooltip.battleInfoHolder:Hide()
+	end
+	
 	-- Debug Mode
 	if Configuration.debugMode then
-		offset = offset + 50
-		width = 250
+		offset = offset + 10
 		
 		if not userTooltip.debugText then
 			userTooltip.debugText = Chili.TextBox:New{
@@ -292,7 +534,7 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 		for key, value in pairs(userBattleInfo) do
 			text = text .. "\n" .. key .. " = " .. tostring(value)
 		end
-		Spring.Echo("set text", text)
+		
 		userTooltip.debugText:SetText(text)
 		userTooltip.debugText:UpdateLayout()
 		local _, _, numLines = userTooltip.debugText.font:GetTextHeight(text)
@@ -358,13 +600,12 @@ end
 
 local function UpdateTooltip(inputText)
 	if inputText:starts(USER_TOOLTIP_PREFIX) then
-		local userName, myLobby, inBattleroom
+		local userName = string.sub(inputText, 13)
+		local myLobby, inBattleroom
 		if inputText:starts(USER_SP_TOOLTIP_PREFIX) then
-			userName = string.sub(inputText, 27)
 			myLobby = WG.LibLobby.lobbySkirmish
 			inBattleroom = true
 		else
-			userName = string.sub(inputText, 14)
 			myLobby = lobby
 			if inputText:starts(USER_MP_TOOLTIP_PREFIX) then
 				inBattleroom = true
@@ -398,17 +639,20 @@ end
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
 -- Widget callins
+local currentTooltipText = false
 
 function widget:Update()
 	local text = GetTooltip()
 	if text then
-		if tipTextDisplay.text ~= text then
+		if currentTooltipText ~= text then
+			currentTooltipText = text
 			UpdateTooltip(text)
 		end
 		SetTooltipPos()
 	else
 		if tipWindow.visible then 
 			tipWindow:Hide()
+			currentTooltipText = false
 		end
 	end
 end
