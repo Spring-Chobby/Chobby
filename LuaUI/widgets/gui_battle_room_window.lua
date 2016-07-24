@@ -106,6 +106,8 @@ function widget:DownloadFinished()
 	end
 end
 
+local OpenNewTeam
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Chili/interface management
@@ -220,7 +222,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	}
 	
 	local leftOffset = 0
-	local newTeam = ComboBox:New {
+	local newTeam = Button:New {
 		name = "newTeam",
 		x = 0,
 		y = leftOffset,
@@ -228,25 +230,33 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		height = 40,
 		caption = "\255\66\138\201" .. i18n("add_team") ..  "\b",
 		font = WG.Chobby.Configuration:GetFont(1),
-		ignoreItemCaption = true,
-		itemFontSize = WG.Chobby.Configuration:GetFont(1).size,
-		itemHeight = 30,
-		selected = 0,
-		maxDropDownWidth = 120,
-		minDropDownHeight = 0,
-		items = {"Join", "Add AI"},
-		OnSelect = {
-			function (obj)
-				if obj.selected == 1 then
-					battleLobby:SetBattleStatus({
-						allyNumber = emptyTeamIndex,
-						isSpectator = false,
-					})
-				elseif obj.selected == 2 then
-					WG.Chobby.AiListWindow(battleLobby, battle.gameName, emptyTeamIndex)
+		OnClick = {
+			function()
+				if OpenNewTeam then
+					OpenNewTeam()
 				end
 			end
 		},
+		-- Combo box settings
+		--ignoreItemCaption = true,
+		--itemFontSize = WG.Chobby.Configuration:GetFont(1).size,
+		--itemHeight = 30,
+		--selected = 0,
+		--maxDropDownWidth = 120,
+		--minDropDownHeight = 0,
+		--items = {"Join", "Add AI"},
+		--OnSelect = {
+		--	function (obj)
+		--		if obj.selected == 1 then
+		--			battleLobby:SetBattleStatus({
+		--				allyNumber = emptyTeamIndex,
+		--				isSpectator = false,
+		--			})
+		--		elseif obj.selected == 2 then
+		--			WG.Chobby.AiListWindow(battleLobby, battle.gameName, emptyTeamIndex)
+		--		end
+		--	end
+		--},
 		parent = leftInfo
 	}
 	leftOffset = leftOffset + 45
@@ -683,6 +693,11 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 	end
 	
 	GetTeam(-1) -- Make Spectator heading appear
+	
+	OpenNewTeam = function ()
+		GetTeam(emptyTeamIndex) 
+		PositionChildren(mainStackPanel, mainScrollPanel.height)
+	end
 	
 	-- Global function
 	function ViewResizeUpdate()
