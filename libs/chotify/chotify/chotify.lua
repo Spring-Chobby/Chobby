@@ -50,7 +50,7 @@ function Chotify:Post(obj)
     local window = Chili.Window:New {
         right = 2,
         width = 300,
-        y = 2,
+        bottom = 2,
         height = 100,
         caption = title,
         parent = Chili.Screen0,
