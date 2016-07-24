@@ -28,7 +28,10 @@ function Configuration:init()
 	
 	self.userListWidth = 220 -- Main user list width. Possibly configurable in the future.
 	
-	self.singleplayer_mode_shortname = "zk"
+	self.shortnameMap = {
+		"chobby",
+		"zk",
+	}
 	self.singleplayer_mode = 2
 	
 	self.notifyForAllChat = true
@@ -87,16 +90,6 @@ function Configuration:SetConfigValue(key, value)
 	self[key] = value
 	self:_CallListeners("OnConfigurationChange", key, value)
 end
-
-function Configuration:SetSingleplayerMode(mode)
-	self.singleplayer_mode = mode
-	if mode == 1 then
-		self.singleplayer_mode_shortname = false
-	elseif mode == 2 then
-		self.singleplayer_mode_shortname = "zk"
-	end
-end
-
 
 ---------------------------------------------------------------------------------
 -- Getters
@@ -173,11 +166,12 @@ function Configuration:GetMinimapImage(mapName, gameName)
 end
 
 function Configuration:GetGameConfigFilePath(gameName, fileName, shortnameFallback)
-	local gameInfo = VFS.GetArchiveInfo(gameName)
+	local gameInfo = gameName and VFS.GetArchiveInfo(gameName)
 	local shortname = (gameInfo and gameInfo.shortname and string.lower(gameInfo.shortname)) or shortnameFallback
 	if shortname then
 		local filePath = "luaui/configs/gameConfig/" .. shortname .. "/" .. fileName
 		if VFS.FileExists(filePath) then
+			Spring.Echo("File exists", filePath)
 			return filePath
 		end
 	end
@@ -197,6 +191,14 @@ function Configuration:GetCountryLongname(shortname)
 		return self.countryShortnames[shortname]
 	end
 	return shortname
+end
+
+function Configuration:GetHeadingImage(fullscreenMode)
+	if fullscreenMode then
+		return self:GetGameConfigFilePath(false, "skinning/headingLarge.png", self.shortnameMap[self.singleplayer_mode])
+	else
+		return self:GetGameConfigFilePath(false, "skinning/headingSmall.png", self.shortnameMap[self.singleplayer_mode])
+	end
 end
 
 ---------------------------------------------------------------------------------

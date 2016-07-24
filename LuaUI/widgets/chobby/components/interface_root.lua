@@ -4,9 +4,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	local titleWidthRel = 28
 	local panelWidthRel = 40
-	local panelHalfPaddingRel = 0.8
-	local bottomPaddingRel = 1.5
-	local rightPaddingRel = 1
 	
 	local userStatusPanelWidth = 250
 	
@@ -52,20 +49,21 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-	headingWindow:AddChild(Image:New {
+	local headingImage = Image:New {
 		y = 0,
 		x = 0,
 		right = 0,
 		bottom = 0,
 		keepAspect = false,
-		file = "luaui/images/chobby.png",
+		file = Configuration:GetHeadingImage(fullscreenMode),
 		OnClick = { function()
 			Spring.Echo("OpenURL: uncomment me in interface_root.lua")
 			-- Uncomment me to try it!
--- 			Spring.OpenURL("https://gitter.im/Spring-Chobby/Chobby")
--- 			Spring.OpenURL("/home/gajop")
+			--Spring.OpenURL("https://gitter.im/Spring-Chobby/Chobby")
+			--Spring.OpenURL("/home/gajop")
 		end},
-	})
+		parent = headingWindow,
+	}
 	
 	--headingWindow:SetPosRelative("20%","20%","20%","20%")
 	
@@ -115,8 +113,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local mainWindow = Control:New {
 		x = 0,
 		y = titleHeight,
-		width = (100 - panelWidthRel - panelHalfPaddingRel) .. "%",
-		bottom = bottomPaddingRel .. "%",
+		width = (100 - panelWidthRel) .. "%",
+		bottom = 0,
 		name = "mainWindow",
 		caption = "", -- Main Window
 		parent = screen0,
@@ -208,10 +206,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local panelWindow = Window:New {
 		x = (100 - panelWidthRel) .. "%",
-		x = (100 - panelWidthRel + panelHalfPaddingRel) .. "%",
+		x = (100 - panelWidthRel) .. "%",
 		y = titleHeight,
-		right = rightPaddingRel .. "%",
-		bottom = bottomPaddingRel .. "%",
+		right = 0,
+		bottom = 0,
 		name = "panelWindow",
 		caption = "", -- Panel Window
 		parent = screen0,
@@ -346,8 +344,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			panelWindow:SetVisibility(false)
 			
 			mainWindow:SetPos(nil, titleHeight)
-			mainWindow._relativeBounds.right = (panelWidthRel + panelHalfPaddingRel) .. "%"
-			mainWindow._relativeBounds.bottom = bottomPaddingRel .. "%"
+			mainWindow._relativeBounds.right = panelWidthRel .. "%"
+			mainWindow._relativeBounds.bottom = 0
 			mainWindow:UpdateClientArea()
 			
 			-- Align game title and status.
@@ -388,8 +386,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				panelWindow:Hide()
 			end
 			mainWindow:SetPos(nil, titleHeightSmall)
-			mainWindow._relativeBounds.right = rightPaddingRel .. "%"
-			mainWindow._relativeBounds.bottom = bottomPaddingRel .. "%"
+			mainWindow._relativeBounds.right = 0
+			mainWindow._relativeBounds.bottom = 0
 			mainWindow:UpdateClientArea()
 			
 			-- Align game title and status.
@@ -406,6 +404,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			
 			topPartImage:SetPos(nil, nil, nil, titleHeightSmall + imageFudge)
 		end
+		
+		headingImage.file = Configuration:GetHeadingImage(fullscreenMode)
+		headingImage:Invalidate()
 		
 		UpdateChildLayout()
 	end
@@ -481,6 +482,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			elseif value == 3 then
 				externalFunctions.SetPanelDisplayMode(false, false)
 			end
+		elseif key == "singleplayer_mode" then
+			headingImage.file = Configuration:GetHeadingImage(fullscreenMode)
+			headingImage:Invalidate()
 		end
 	end
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)		

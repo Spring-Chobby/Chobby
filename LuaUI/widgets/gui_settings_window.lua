@@ -307,7 +307,7 @@ local function InitializeControls(window)
 				end
 				
 				-- Set new value
-				Configuration:SetSingleplayerMode(obj.selected)
+				Configuration:SetConfigValue("singleplayer_mode", obj.selected)
 			end
 		},
 	}
