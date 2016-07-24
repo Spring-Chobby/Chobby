@@ -28,7 +28,7 @@ local interfaceRoot
 
 function widget:ViewResize(vsx, vsy, viewGeometry)
 	if interfaceRoot then
-		interfaceRoot.UpdateSizeMode(vsx, vsy)
+		interfaceRoot.ViewResize(vsx, vsy)
 	end
 	--Spring.Utilities.TableEcho(viewGeometry, "viewGeometry")
 	WG.Chobby:_ViewResize(vsx, vsy)

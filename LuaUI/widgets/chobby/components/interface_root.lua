@@ -30,8 +30,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-- Switch to single panel mode when below the minimum screen width
 	local minScreenWidth = 1280
 	
-	local fullscreenMode = true
-	local autodetectFullscreen = true
+	local doublePanelMode = true
+	local autodetectDoublePanel = true
 	
 	-------------------------------------------------------------------
 	-- Window structure
@@ -55,7 +55,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		right = 0,
 		bottom = 0,
 		keepAspect = false,
-		file = Configuration:GetHeadingImage(fullscreenMode),
+		file = Configuration:GetHeadingImage(doublePanelMode),
 		OnClick = { function()
 			Spring.Echo("OpenURL: uncomment me in interface_root.lua")
 			-- Uncomment me to try it!
@@ -303,18 +303,12 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local function RescaleMainWindow(newFontSize, newButtonHeight)
 		mainWindowHandler.Rescale(newFontSize, newButtonHeight)
 		exitButton:SetPos(nil, nil, nil, newButtonHeight)
-		exitButton._relativeBounds.bottom = 0
-		exitButton:UpdateClientArea()
 		
 		ButtonUtilities.SetFontSizeScale(exitButton, newFontSize)
 	end
 	
-	battleStatusPanelHandler.Rescale(4, 70)
-	rightPanelHandler.Rescale(2, 70)
-	RescaleMainWindow(3, 70)
-	
 	local function UpdateChildLayout()
-		if fullscreenMode then
+		if doublePanelMode then
 			chatWindows:ReattachTabHolder()
 			
 			rightPanelHandler.UpdateLayout(panelWindow, false)
@@ -340,13 +334,63 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		end
 	end
 	
-	local function UpdatePanelLayout(newFullscreen)
-		if newFullscreen == fullscreenMode then
+	local function UpdatePadding(screenWidth, screenHeight)
+		local leftPad, rightPad, bottomPad, middlePad
+		if screenWidth < 1366 or (not doublePanelMode) then
+			leftButtonPad = 0
+			leftPad = 0
+			rightPad = 0
+			bottomPad = 0
+			middlePad = 0
+		elseif screenWidth < 1650 then
+			leftButtonPad = 20
+			leftPad = 5
+			rightPad = 15
+			bottomPad = 20
+			middlePad = 10
+		else
+			leftButtonPad = 30
+			leftPad = 10
+			rightPad = 40
+			bottomPad = 40
+			middlePad = 20
+		end
+		
+		contentPlace:SetPos(leftPad)
+		contentPlace._relativeBounds.right = middlePad
+		contentPlace._relativeBounds.bottom = bottomPad
+		contentPlace:UpdateClientArea()
+		
+		panelWindow:SetPos(middlePad)
+		panelWindow._relativeBounds.right = rightPad
+		panelWindow._relativeBounds.bottom = bottomPad
+		panelWindow:UpdateClientArea()
+		
+		panelButtonsHolder._relativeBounds.right = rightPad
+		panelWindow:UpdateClientArea()
+		
+		exitButton._relativeBounds.bottom = bottomPad
+		exitButton:UpdateClientArea()
+		
+		buttonsPlace:SetPos(leftButtonPad)
+		local contentOffset = leftButtonPad
+		if doublePanelMode then
+			contentOffset = contentOffset + mainButtonsWidth
+		else
+			contentOffset = contentOffset + mainButtonsWidthSmall
+		end
+		contentPlaceHolder:SetPos(contentOffset)
+		contentPlaceHolder._relativeBounds.right = 0
+		contentPlaceHolder:UpdateClientArea()
+	end
+	
+	local function UpdatePanelLayout(newDoublePanel)
+		if newDoublePanel == doublePanelMode then
 			return
 		end
-		fullscreenMode = newFullscreen
+		doublePanelMode = newDoublePanel
 		
-		if fullscreenMode then
+		if doublePanelMode then
 			RescaleMainWindow(3, 70)
 		
 			-- Make main buttons wider
@@ -429,7 +473,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			topPartImage:SetPos(nil, nil, nil, titleHeightSmall + imageFudge)
 		end
 		
-		headingImage.file = Configuration:GetHeadingImage(fullscreenMode)
+		headingImage.file = Configuration:GetHeadingImage(doublePanelMode)
 		headingImage:Invalidate()
 		
 		UpdateChildLayout()
@@ -438,22 +482,23 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-------------------------------------------------------------------
 	-- External Functions
 	-------------------------------------------------------------------
-	function externalFunctions.UpdateSizeMode(screenWidth, screenHeight)
-		if autodetectFullscreen then	
-			local newFullscreen = screenWidth > minScreenWidth
-			UpdatePanelLayout(newFullscreen)
+	function externalFunctions.ViewResize(screenWidth, screenHeight)
+		if autodetectDoublePanel then	
+			local newDoublePanel = minScreenWidth <= screenWidth  
+			UpdatePanelLayout(newDoublePanel)
 		end
+		UpdatePadding(screenWidth, screenHeight)
 	end
 	
-	function externalFunctions.SetPanelDisplayMode(newAutodetectFullscreen, newFullscreen)
-		autodetectFullscreen = newAutodetectFullscreen
+	function externalFunctions.SetPanelDisplayMode(newAutodetectDoublePanel, newDoublePanel)
+		autodetectDoublePanel = newAutodetectDoublePanel
 		local screenWidth, screenHeight = Spring.GetViewGeometry()
-		if autodetectFullscreen then
+		if autodetectDoublePanel then
 			UpdatePanelLayout(screenWidth > minScreenWidth)
 		else
-			UpdatePanelLayout(newFullscreen)
+			UpdatePanelLayout(newDoublePanel)
 		end
-		
+		UpdatePadding(screenWidth, screenHeight)
 		-- Make all children request realign.
 		screen0:Resize(screenWidth, screenHeight)
 	end
@@ -483,7 +528,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	end
 	
 	function externalFunctions.GetDoublePanelMode()
-		return fullscreenMode
+		return doublePanelMode
 	end
 	
 	function externalFunctions.KeyPressed(key, mods, isRepeat, label, unicode)
@@ -511,7 +556,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				externalFunctions.SetPanelDisplayMode(false, false)
 			end
 		elseif key == "singleplayer_mode" then
-			headingImage.file = Configuration:GetHeadingImage(fullscreenMode)
+			headingImage.file = Configuration:GetHeadingImage(doublePanelMode)
 			headingImage:Invalidate()
 		end
 	end
@@ -521,8 +566,13 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-- Initialization
 	-------------------------------------------------------------------
 	local screenWidth, screenHeight = Spring.GetWindowGeometry()
+		
+	battleStatusPanelHandler.Rescale(4, 70)
+	rightPanelHandler.Rescale(2, 70)
+	RescaleMainWindow(3, 70)
 	
-	externalFunctions.UpdateSizeMode(screenWidth, screenHeight)
+	externalFunctions.ViewResize(screenWidth, screenHeight)
+	UpdatePadding(screenWidth, screenHeight)
 	UpdateChildLayout()
 
 	return externalFunctions
