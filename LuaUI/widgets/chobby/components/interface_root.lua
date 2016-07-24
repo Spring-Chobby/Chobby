@@ -289,13 +289,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local submenus = {
 		{
 			name = "singleplayer", 
-			tabs = {
-				{
-					name = "skirmish", 
-					control = WG.BattleRoomWindow.GetSingleplayerControl(),
-					entryCheck = WG.BattleRoomWindow.SetSingleplayerGame,
-				},
-			}
+			tabs = Configuration:GetGameConfig(false, "singleplayerMenu.lua", Configuration.shortnameMap[Configuration.singleplayer_mode]) or {}
 		},
 		{
 			name = "multiplayer", 
@@ -578,6 +572,12 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		elseif key == "singleplayer_mode" then
 			headingImage.file = Configuration:GetHeadingImage(doublePanelMode)
 			headingImage:Invalidate()
+			
+			local newShortname = Configuration.shortnameMap[value]
+			local replacementTabs = Configuration:GetGameConfig(false, "singleplayerMenu.lua", newShortname) or {}
+			
+			mainWindowHandler.SetBackAtMainMenu()
+			mainWindowHandler.ReplaceSubmenu(1, replacementTabs)
 		end
 	end
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)		

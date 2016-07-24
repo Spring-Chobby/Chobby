@@ -47,6 +47,7 @@ return {
 		["exit"] = "Exit",
 		matchmaking = "Matchmaking",
 		play_normal_multiplayer_game = "Play a normal multiplayer game",
+		quick_start = "Quick Start",
 		custom = "Custom",
 		play_custom_multiplayer_game = "Play a custom multiplayer game",
 		queues = "Queues",

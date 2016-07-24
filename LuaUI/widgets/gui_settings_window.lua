@@ -287,26 +287,6 @@ local function InitializeControls(window)
 				if freezeSettings then
 					return
 				end
-				
-				-- Leave singleplayer submenu
-				if Configuration.singleplayer_mode ~= obj.selected then
-					local mainMenu = WG.Chobby.interfaceRoot.GetMainWindowHandler()
-					if mainMenu.GetCurrentSubmenu() == 1 then
-						mainMenu.SetBackAtMainMenu()
-					end
-					
-					local replacementTabs = {
-						{
-							name = "custom" .. Configuration.singleplayer_mode, 
-							control = WG.BattleRoomWindow.GetSingleplayerControl(),
-							entryCheck = WG.BattleRoomWindow.SetSingleplayerGame,
-						},
-					}
-					
-					mainMenu.ReplaceSubmenu(1, replacementTabs)
-				end
-				
-				-- Set new value
 				Configuration:SetConfigValue("singleplayer_mode", obj.selected)
 			end
 		},
