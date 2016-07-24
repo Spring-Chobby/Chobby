@@ -124,7 +124,7 @@ function BattleListWindow:AddBattle(battleID, battle)
 		width = height - 6,
 		height = height - 6,
 		keepAspect = true,
-		file = Configuration:GetMinimapImage(battle.mapName, battle.gameName),
+		file = Configuration:GetMinimapSmallImage(battle.mapName, battle.gameName),
 		parent = parentButton,
 	}
 	local runningImage = Image:New {
