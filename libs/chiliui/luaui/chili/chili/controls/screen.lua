@@ -137,7 +137,7 @@ function Screen:Update(...)
 	local activeControl = UnlinkSafe(self.activeControl)
 	if hoveredControl and (not activeControl) then
 		local x, y = Spring.GetMouseState()
-		if x == math.floor(self.width/2) and y == math.floor(self.height/2) then
+		if math.abs(x - self.width/2) <= 1 and math.abs(y - self.height/2) <= 1 then
 			-- Do not register a hit if the mouse is not hovered over Spring
 			-- See https://springrts.com/mantis/view.php?id=5311
 			if self.currentTooltip then
@@ -161,11 +161,7 @@ end
 
 
 function Screen:IsAbove(x,y,...)
-  local activeControl = UnlinkSafe(self.activeControl)
-  if activeControl then
-    return true
-  end
-  if x == math.floor(self.width/2) and y == math.floor(self.height/2) then
+  if math.abs(x - self.width/2) <= 1 and math.abs(y - self.height/2) <= 1 then
     -- Do not register a hit if the mouse is not hovered over Spring
     -- See https://springrts.com/mantis/view.php?id=5311
     return
