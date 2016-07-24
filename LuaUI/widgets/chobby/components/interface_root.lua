@@ -329,8 +329,13 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 					contentPlace:ClearChildren()
 					contentPlace:SetVisibility(false)
 					rightPanelHandler.OpenTab(index)
+				elseif panelWindow.visible then
+					panelWindow:Hide()
 				end
+			elseif panelWindow.visible then
+				panelWindow:Hide()
 			end
+			
 		else
 			chatWindows:SetTabHolderParent(mainStatusWindow, 0, titleHeightSmall - panelButtonsHeight + imageFudge, chatTabHolderRight)
 			
