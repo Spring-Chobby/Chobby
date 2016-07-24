@@ -137,6 +137,22 @@ function Screen:Update(...)
 	local activeControl = UnlinkSafe(self.activeControl)
 	if hoveredControl and (not activeControl) then
 		local x, y = Spring.GetMouseState()
+		if x == math.floor(self.width/2) and y == math.floor(self.height/2) then
+			-- Do not register a hit if the mouse is not hovered over Spring
+			-- See https://springrts.com/mantis/view.php?id=5311
+			if self.currentTooltip then
+				self.currentTooltip = nil
+			end
+			if self.activeControl then
+				self.activeControl:MouseOut()
+				self.activeControl = nil
+			end
+			if self.hoveredControl then
+				self.hoveredControl:MouseOut()
+				self.hoveredControl = nil
+			end
+			return
+		end
 		y = select(2,gl.GetViewSizes()) - y
 		local cx,cy = hoveredControl:ScreenToLocal(x, y)
 		hoveredControl:MouseMove(cx, cy, 0, 0)
@@ -149,7 +165,11 @@ function Screen:IsAbove(x,y,...)
   if activeControl then
     return true
   end
-
+  if x == math.floor(self.width/2) and y == math.floor(self.height/2) then
+    -- Do not register a hit if the mouse is not hovered over Spring
+    -- See https://springrts.com/mantis/view.php?id=5311
+    return
+  end
   y = select(2,gl.GetViewSizes()) - y
   local hoveredControl = inherited.IsAbove(self,x,y,...)
 
