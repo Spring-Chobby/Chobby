@@ -163,14 +163,27 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	--buttonsPlace._relativeBounds.right = 150
 	--buttonsPlace:UpdateClientArea(false)
 	
-	local contentPlace = Window:New {
+	local contentPlaceHolder = Control:New {
 		x = mainButtonsWidth,
 		y = padding,
 		right = padding,
 		bottom = padding,
-		name = "contentPlace",
+		name = "contentPlaceHolder",
 		caption = "", -- Content Place
 		parent = mainWindow,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		children = {}
+	}
+	local contentPlace = Window:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		name = "contentPlace",
+		caption = "", -- Content Place
+		parent = contentPlaceHolder,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
@@ -203,16 +216,28 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-
-	local panelWindow = Window:New {
-		x = (100 - panelWidthRel) .. "%",
+	
+	local panelWindowHolder = Control:New {
 		x = (100 - panelWidthRel) .. "%",
 		y = titleHeight,
 		right = 0,
 		bottom = 0,
-		name = "panelWindow",
+		name = "panelWindowHolder",
 		caption = "", -- Panel Window
 		parent = screen0,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		children = {}
+	}
+	local panelWindow = Window:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		name = "panelWindow",
+		caption = "", -- Panel Window
+		parent = panelWindowHolder,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
@@ -325,9 +350,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			RescaleMainWindow(3, 70)
 		
 			-- Make main buttons wider
-			contentPlace:SetPos(mainButtonsWidth)
-			contentPlace._relativeBounds.right = 0
-			contentPlace:UpdateClientArea()
+			contentPlaceHolder:SetPos(mainButtonsWidth)
+			contentPlaceHolder._relativeBounds.right = 0
+			contentPlaceHolder:UpdateClientArea()
 			
 			buttonsPlace:SetPos(nil, nil, mainButtonsWidth)
 			
@@ -340,8 +365,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			
 			-- Make Main Window take up more space
 			panelButtonsHolder:Show()
-			panelWindow:Show()
-			panelWindow:SetVisibility(false)
+			panelWindowHolder:Show()
 			
 			mainWindow:SetPos(nil, titleHeight)
 			mainWindow._relativeBounds.right = panelWidthRel .. "%"
@@ -366,9 +390,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			RescaleMainWindow(2, 55)
 			
 			-- Make main buttons thinner
-			contentPlace:SetPos(mainButtonsWidthSmall)
-			contentPlace._relativeBounds.right = 0
-			contentPlace:UpdateClientArea()
+			contentPlaceHolder:SetPos(mainButtonsWidthSmall)
+			contentPlaceHolder._relativeBounds.right = 0
+			contentPlaceHolder:UpdateClientArea()
 			
 			buttonsPlace:SetPos(nil, nil, mainButtonsWidthSmall)
 			
@@ -382,8 +406,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			-- Make Main Window take up more space
 			panelButtonsHolder:Hide()
 			panelButtonsHolder:ClearChildren()
-			if panelWindow.visible then
-				panelWindow:Hide()
+			if panelWindowHolder.visible then
+				panelWindowHolder:Hide()
 			end
 			mainWindow:SetPos(nil, titleHeightSmall)
 			mainWindow._relativeBounds.right = 0
