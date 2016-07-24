@@ -177,8 +177,8 @@ function Configuration:GetGameConfigFilePath(gameName, fileName, shortnameFallba
 	return false
 end
 
-function Configuration:GetGameConfig(gameName, fileName)
-	local filePath = self:GetGameConfigFilePath(gameName, fileName)
+function Configuration:GetGameConfig(gameName, fileName, shortnameFallback)
+	local filePath = self:GetGameConfigFilePath(gameName, fileName, shortnameFallback)
 	if filePath then
 		return VFS.Include(filePath)
 	end
@@ -201,11 +201,19 @@ function Configuration:GetHeadingImage(fullscreenMode)
 end
 
 function Configuration:GetBackgroundImage()
-	local pngImage = self:GetGameConfigFilePath(false, "skinning/background.png", self.shortnameMap[self.singleplayer_mode])
-	if pngImage then
-		return pngImage
+	local shortname = self.shortnameMap[self.singleplayer_mode]
+	
+	local skinConfig = self:GetGameConfig(false, "skinning/skinConfig.lua", shortname)
+	local backgroundFocus
+	if skinConfig then
+		backgroundFocus = skinConfig.backgroundFocus
 	end
-	return self:GetGameConfigFilePath(false, "skinning/background.jpg", self.shortnameMap[self.singleplayer_mode])
+	
+	local pngImage = self:GetGameConfigFilePath(false, "skinning/background.png", shortname)
+	if pngImage then
+		return pngImage, backgroundFocus
+	end
+	return self:GetGameConfigFilePath(false, "skinning/background.jpg", shortname), backgroundFocus
 end
 
 ---------------------------------------------------------------------------------
