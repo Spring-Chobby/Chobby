@@ -33,6 +33,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local doublePanelMode = true
 	local autodetectDoublePanel = true
 	
+	local IMAGE_TOP_BACKGROUND = "luaui/images/top-background.png"
+	
+	local INVISIBLE_COLOR = {0, 0, 0, 0}
+	local VISIBLE_COLOR = {1, 1, 1, 1}
+	
 	-------------------------------------------------------------------
 	-- Window structure
 	-------------------------------------------------------------------
@@ -123,12 +128,12 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-	local buttonsPlace = Control:New {
+	local mainButtonsHolder = Control:New {
 		x = padding,
 		y = padding,
 		width = mainButtonsWidth,
 		bottom = padding,
-		name = "buttonsPlace",
+		name = "mainButtonsHolder",
 		parent = mainWindow,
 		padding = {0, 0, 0, 0},
 		children = {}
@@ -140,14 +145,13 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		height = "100%",
 		name = "mainButtons",
 		caption = "", -- Main Buttons
-		parent = buttonsPlace,
+		parent = mainButtonsHolder,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
 
-	local IMAGE_TOP_BACKGROUND = "luaui/images/top-background.png"
 	local topPartImage = Image:New {
 		x = 0,
 		y = 0,
@@ -156,12 +160,19 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		file = IMAGE_TOP_BACKGROUND,
 		parent = screen0,
 		keepAspect = false,
-		color = {1, 1, 1, 0.2},
+		color = {0.218, 0.23, 0.49, 0.25},
 	}
 	
-	--buttonsPlace._relativeBounds.bottom = 150
-	--buttonsPlace._relativeBounds.right = 150
-	--buttonsPlace:UpdateClientArea(false)
+	local mainButtonsImage = Image:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		file = IMAGE_TOP_BACKGROUND,
+		parent = mainButtonsHolder,
+		keepAspect = false,
+		color = {0.218, 0.23, 0.49, 0.1},
+	}
 	
 	local contentPlaceHolder = Control:New {
 		x = mainButtonsWidth,
@@ -372,7 +383,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		exitButton._relativeBounds.bottom = bottomPad
 		exitButton:UpdateClientArea()
 		
-		buttonsPlace:SetPos(leftButtonPad)
+		mainButtonsHolder:SetPos(leftButtonPad)
 		local contentOffset = leftButtonPad
 		if doublePanelMode then
 			contentOffset = contentOffset + mainButtonsWidth
@@ -398,7 +409,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			contentPlaceHolder._relativeBounds.right = 0
 			contentPlaceHolder:UpdateClientArea()
 			
-			buttonsPlace:SetPos(nil, nil, mainButtonsWidth)
+			--contentPlace.color = VISIBLE_COLOR
+			
+			mainButtonsHolder:SetPos(nil, nil, mainButtonsWidth)
 			
 			-- Move Panel Buttons
 			mainButtons:RemoveChild(panelButtons)
@@ -438,7 +451,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			contentPlaceHolder._relativeBounds.right = 0
 			contentPlaceHolder:UpdateClientArea()
 			
-			buttonsPlace:SetPos(nil, nil, mainButtonsWidthSmall)
+			--contentPlace.color = INVISIBLE_COLOR
+			
+			mainButtonsHolder:SetPos(nil, nil, mainButtonsWidthSmall)
 			
 			-- Move Panel Buttons
 			panelButtonsHolder:RemoveChild(panelButtons)
