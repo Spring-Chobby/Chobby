@@ -347,6 +347,7 @@ function ChatWindows:ReattachTabHolder()
 	end
 	self.tabBarHolder:SetPos(0,0)
 	self.tabBarHolder:BringToFront()
+	self.tabBarHolder._relativeBounds.right = 0
 	self.tabBarHolder:UpdateClientArea(false)
 	
 	self.tabPanel._relativeBounds.top = 50
@@ -354,12 +355,15 @@ function ChatWindows:ReattachTabHolder()
 	self.tabPanel:Invalidate()
 end
 
-function ChatWindows:SetTabHolderParent(newParent, newX, newY)
+function ChatWindows:SetTabHolderParent(newParent, newX, newY, newRight)
 	if not newParent:GetChildByName(self.tabBarHolder.name) then
 		newParent:AddChild(self.tabBarHolder)
 	end
 	self.tabBarHolder:SetPos(newX, newY)
 	self.tabBarHolder:BringToFront()
+	self.tabBarHolder._relativeBounds.right = newRight
+	self.tabBarHolder:UpdateClientArea(false)
+	
 	self.tabPanel._relativeBounds.top = 15
 	self.tabPanel:UpdateClientArea(false)
 	self.tabPanel:Invalidate()

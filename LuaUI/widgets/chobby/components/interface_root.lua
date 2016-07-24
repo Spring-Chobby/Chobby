@@ -8,15 +8,23 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local bottomPaddingRel = 1.5
 	local rightPaddingRel = 1
 	
-	local titleHeight = 180
-	local titleHeightSmall = 130
-	local titleWidth = 400
-	local battleStatusWidth = 480
-	local panelButtonsHeight = 50
-	local statusWindowGapSmall = 30
-	local mainButtonsWidth = 180
+	local userStatusPanelWidth = 250
 	
+	local battleStatusWidth = 480
+	local panelButtonsWidth = 500
+	local panelButtonsHeight = 50
+	local statusWindowGapSmall = 45
+	
+	local chatTabHolderRight = 200
+	
+	local titleHeight = 125
+	local titleHeightSmall = 90
+	local titleWidth = 360
+	
+	local mainButtonsWidth = 180
 	local mainButtonsWidthSmall = 140
+	
+	local userStatusWidth = 225
 	
 	local imageFudge = 0
 	
@@ -61,36 +69,47 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	--headingWindow:SetPosRelative("20%","20%","20%","20%")
 	
-	local statusWindow = Control:New {
+	local mainStatusWindow = Control:New {
 		x = titleWidth,
 		y = 0,
 		right = 0,
-		height = titleHeight - panelButtonsHeight,
-		name = "statusWindow",
+		height = titleHeight,
+		name = "mainStatusWindow",
 		caption = "", -- Status Window
 		parent = screen0,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
+	}
+	
+	local userStatusWindow = Control:New {
+		y = 0,
+		right = 0,
+		bottom = panelButtonsHeight,
+		width = userStatusWidth,
+		height = "100%",
+		padding = {0, 0, 0, 0},
+		parent = mainStatusWindow,
 		children = {
-			WG.BattleStatusPanel.GetControl(),
 			WG.UserStatusPanel.GetControl(),
 		}
 	}
 	
 	local battleStatusHolder = Control:New {
-		x = 100,
-		y = 50,
-		width = battleStatusWidth - 100,
-		bottom = 0,
+		x = 0,
+		y = 0,
+		right = userStatusWidth,
+		bottom = panelButtonsHeight,
 		name = "battleStatusHolder",
 		caption = "", -- Battle and MM Status Window
 		parent = screen0,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
-		parent = statusWindow,
-		children = {}
+		parent = mainStatusWindow,
+		children = {
+			WG.BattleStatusPanel.GetControl(),
+		}
 	}
 	
 	local mainWindow = Control:New {
@@ -161,13 +180,13 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	}
 	contentPlace:Hide()
 	
-	local panelButtonsHolder = Window:New {
-		x = (100 - panelWidthRel + panelHalfPaddingRel) .. "%",
-		y = titleHeight - panelButtonsHeight,
-		right = rightPaddingRel .. "%",
+	local panelButtonsHolder = Control:New {
+		bottom = 0,
+		right = 0,
+		width = panelButtonsWidth,
 		height = panelButtonsHeight,
 		name = "panelButtonsHolder",
-		parent = screen0,
+		parent = mainStatusWindow,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
@@ -285,7 +304,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				end
 			end
 		else
-			chatWindows:SetTabHolderParent(screen0, titleHeightSmall, titleHeightSmall - panelButtonsHeight + imageFudge)
+			chatWindows:SetTabHolderParent(mainStatusWindow, 0, titleHeightSmall - panelButtonsHeight + imageFudge, chatTabHolderRight)
 			
 			rightPanelHandler.UpdateLayout(contentPlace, true)
 			if contentPlace:IsEmpty() and not panelWindow:IsEmpty() then
@@ -333,9 +352,15 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			
 			-- Align game title and status.
 			headingWindow:SetPos(0, 0, titleWidth, titleHeight)
-			statusWindow:SetPos(titleWidth, nil, titleHeight, titleHeight - panelButtonsHeight)
-			statusWindow._relativeBounds.right = 0
-			statusWindow:UpdateClientArea()
+			mainStatusWindow:SetPos(titleWidth, nil, titleHeight, titleHeight)
+			mainStatusWindow._relativeBounds.right = 0
+			mainStatusWindow:UpdateClientArea()
+			
+			userStatusWindow._relativeBounds.bottom = panelButtonsHeight
+			userStatusWindow:UpdateClientArea()
+			
+			battleStatusHolder._relativeBounds.bottom = panelButtonsHeight
+			battleStatusHolder:UpdateClientArea()
 			
 			topPartImage:SetPos(nil, nil, nil, titleHeight + imageFudge)
 		else
@@ -369,9 +394,15 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			
 			-- Align game title and status.
 			headingWindow:SetPos(nil, nil, mainButtonsWidthSmall + padding, titleHeightSmall)
-			statusWindow:SetPos(mainButtonsWidthSmall, nil, titleHeightSmall, titleHeightSmall - statusWindowGapSmall)
-			statusWindow._relativeBounds.right = 0
-			statusWindow:UpdateClientArea()
+			mainStatusWindow:SetPos(mainButtonsWidthSmall, nil, titleHeightSmall, titleHeightSmall)
+			mainStatusWindow._relativeBounds.right = 0
+			mainStatusWindow:UpdateClientArea()
+			
+			userStatusWindow._relativeBounds.bottom = 0
+			userStatusWindow:UpdateClientArea()
+			
+			battleStatusHolder._relativeBounds.bottom = statusWindowGapSmall
+			battleStatusHolder:UpdateClientArea()
 			
 			topPartImage:SetPos(nil, nil, nil, titleHeightSmall + imageFudge)
 		end
@@ -411,7 +442,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	end
 	
 	function externalFunctions.GetStatusWindow()
-		return statusWindow
+		return mainStatusWindow
 	end
 	
 	function externalFunctions.GetMainWindowHandler()

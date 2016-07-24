@@ -76,8 +76,8 @@ local function InitializeControls(window)
 	-- TODO: Representing my user should be done in a uniform way: 
 	-- See: https://github.com/Spring-Chobby/Chobby/issues/49
 	btnLogout = Button:New {
-		y = 0,
-		right = 10,
+		y = 5,
+		right = 5,
 		width = 100, 
 		height = 40,
 		caption = i18n("login"),
@@ -90,7 +90,7 @@ local function InitializeControls(window)
 		name = "ping",
 		x = 0,
 		width = 150,
-		y = 10,
+		y = 15,
 		height = 20,
 		valign = "center",
 		caption = "\255\180\180\180" .. i18n("offline") .. "\b",
@@ -101,7 +101,7 @@ local function InitializeControls(window)
 	onAccepted = function(listener)
 	Spring.Echo("GetStatusUser", lobby:GetMyUserName())
 		local userControl = WG.UserHandler.GetStatusUser(lobby:GetMyUserName())
-		userControl:SetPos(nil, 35)
+		userControl:SetPos(nil, 45)
 		window:AddChild(userControl)
 		lobby:Ping()
 	end
@@ -115,10 +115,10 @@ end
 
 function UserStatusPanel.GetControl()
 	local window = Control:New {
+		x = 0,
+		y = 0,
 		right = 0,
-		y = 10,
-		width = 250,
-		height = "100%",
+		bottom = 0,
 		padding = {0, 0, 0, 0},
 		OnParent = {
 			function(obj)
