@@ -1,13 +1,15 @@
 Background = LCS.class{}
 
-function Background:init()
-	self.backgroundImage = "luaui/images/chobbyInABox.png"
-	self.drawBackground = true
-	self:SetEnabled(self.drawBackground)	
-end
-
-function Background:SetBackgroundImagePath(newImagePath)
-	self.backgroundImage = newImagePath
+function Background:init(startEnabled)
+	self:SetEnabled(startEnabled)
+	
+	local function onConfigurationChange(listener, key, value)
+		if key == "singleplayer_mode" then
+			self.backgroundImage.file = Configuration:GetBackgroundImage()
+			self.backgroundImage:Invalidate()
+		end
+	end
+	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)		
 end
 
 function Background:SetEnabled(enable)
@@ -19,37 +21,33 @@ function Background:SetEnabled(enable)
 end
 
 function Background:Enable()
-	if self.background ~= nil then
-		return
+	if not self.backgroundControl then
+		self.backgroundControl = Control:New {
+			x = 0,
+			y = 0,
+			right = 0,
+			bottom = 0,
+			padding = {0,0,0,0},
+			margin = {0,0,0,0},
+			parent = screen0
+		}
+		self.backgroundImage = Image:New {
+			y = 0,
+			x = 0,
+			right = 0,
+			bottom = 0,
+			keepAspect = false,
+			file = Configuration:GetBackgroundImage(),
+			parent = self.backgroundControl
+		}
 	end
-
-	self.background = Control:New {
-		x = 0,
-		y = 0,
-		right = 0,
-		bottom = 0,
-		padding = {0,0,0,0},
-		margin = {0,0,0,0},
-		parent = screen0
-	}
-	self.background:AddChild(Image:New {
-		y = 0,
-		x = 0,
-		right = 0,
-		bottom = 0,
-		keepAspect = false,
-		file = self.backgroundImage,
-	})
-	self.drawBackground = true
-	self.background = nil
+	if not self.backgroundImage.visible then
+		self.backgroundImage:Show()
+	end
 end
 
 function Background:Disable()
-	if self.background == nil then
-		return
+	if self.backgroundImage and self.backgroundImage.visible then
+		self.backgroundImage:Hide()
 	end
-
-	self.background:Dispose()
-	self.drawBackground = false
-	self.background = true
 end

@@ -171,7 +171,6 @@ function Configuration:GetGameConfigFilePath(gameName, fileName, shortnameFallba
 	if shortname then
 		local filePath = "luaui/configs/gameConfig/" .. shortname .. "/" .. fileName
 		if VFS.FileExists(filePath) then
-			Spring.Echo("File exists", filePath)
 			return filePath
 		end
 	end
@@ -199,6 +198,14 @@ function Configuration:GetHeadingImage(fullscreenMode)
 	else
 		return self:GetGameConfigFilePath(false, "skinning/headingSmall.png", self.shortnameMap[self.singleplayer_mode])
 	end
+end
+
+function Configuration:GetBackgroundImage()
+	local pngImage = self:GetGameConfigFilePath(false, "skinning/background.png", self.shortnameMap[self.singleplayer_mode])
+	if pngImage then
+		return pngImage
+	end
+	return self:GetGameConfigFilePath(false, "skinning/background.jpg", self.shortnameMap[self.singleplayer_mode])
 end
 
 ---------------------------------------------------------------------------------

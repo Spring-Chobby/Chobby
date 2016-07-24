@@ -60,8 +60,8 @@ function Chobby:_Initialize()
 		WG.Delay(function()
 			--self.downloader = Downloader()
 			--local statusBar = StatusBar()
-			--local background = Background()
-
+			local background = Background(true)
+			
 			lobby:AddListener("OnJoinBattle", 
 				function(listener, battleID)
 					WG.BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
