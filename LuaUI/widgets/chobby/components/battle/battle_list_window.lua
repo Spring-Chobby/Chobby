@@ -4,7 +4,7 @@ local BATTLE_RUNNING = "luaui/images/runningBattle.png"
 local BATTLE_NOT_RUNNING = ""
 
 function BattleListWindow:init(parent)
-	self:super("init", parent, i18n("custom_games"))
+	self:super("init", parent, i18n("custom_games"), true)
  
 	self.btnNewBattle = Button:New {
 		x = 190,

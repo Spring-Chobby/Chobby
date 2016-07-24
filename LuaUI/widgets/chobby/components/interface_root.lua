@@ -458,6 +458,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		return battleStatusPanelHandler
 	end
 	
+	function externalFunctions.GetDoublePanelMode()
+		return fullscreenMode
+	end
+	
 	function externalFunctions.KeyPressed(key, mods, isRepeat, label, unicode)
 		if chatWindows.visible and key == Spring.GetKeyCode("tab") and mods.ctrl then
 			if mods.shift then

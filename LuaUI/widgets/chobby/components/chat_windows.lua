@@ -282,11 +282,15 @@ function ChatWindows:init()
 	local function onConfigurationChange(listener, key, value)
 		if key == "debugMode" then
 			if value and not self.tabPanel:GetTab("debug") then
-				self.tabPanel:AddTab({ 
-					name = "debug", 
-					caption = i18n("debug"), 
-					children = {self.debugConsole.panel}
-				})
+				self.ignoreTabClick = true
+				self.tabPanel:AddTab(
+					{ 
+						name = "debug", 
+						caption = i18n("debug"), 
+						children = {self.debugConsole.panel}
+					}
+				)
+				self.ignoreTabClick = false
 				self:UpdateJoinPosition()
 			end
 			if (not value) and self.tabPanel:GetTab("debug") then
@@ -370,6 +374,9 @@ function ChatWindows:SetTabHolderParent(newParent, newX, newY, newRight)
 		
 	self.tabPanel.OnTabClick = {
 		function()
+			if self.ignoreTabClick then
+				return
+			end
 			local rightPanelHandler = interfaceRoot.GetRightPanelHandler()
 			local control, index = rightPanelHandler.GetManagedControlByName(self.window.name)
 			rightPanelHandler.OpenTab(index)
@@ -578,34 +585,38 @@ function ChatWindows:GetChannelConsole(chanName)
 		local userListPanel = UserListPanel(function() return lobby:GetChannel(chanName) end, 22)
 		self.userListPanels[chanName] = userListPanel
 		
-		self.tabPanel:AddTab({
-			name = chanName,
-			caption = "#" .. chanName,
-			children = {
-				Control:New {
-					x = 0, y = 0, right = Configuration.userListWidth, bottom = 0,
-					padding={0,0,0,0}, itemPadding={0,0,0,0}, itemMargin={0,0,0,0},
-					children = { channelConsole.panel, },
-				},
-				Control:New {
-					width = Configuration.userListWidth, y = 0, right = 0, bottom = 0,
-					padding={0,0,0,7}, itemPadding={0,0,0,0}, itemMargin={0,0,0,0},
-					children = { userListPanel.panel, },
-				},
-				Button:New {
-					width = 24, height = 24, y = 5, right = Configuration.userListWidth + 18,
-					caption = "x",
-					OnClick = {
-						function()
-							self.channelConsoles[chanName] = nil
-							lobby:Leave(chanName)
-							self.tabPanel:RemoveTab(chanName)
-							self:UpdateJoinPosition()
-						end
+		self.ignoreTabClick = true
+		self.tabPanel:AddTab(
+			{
+				name = chanName,
+				caption = "#" .. chanName,
+				children = {
+					Control:New {
+						x = 0, y = 0, right = Configuration.userListWidth, bottom = 0,
+						padding={0,0,0,0}, itemPadding={0,0,0,0}, itemMargin={0,0,0,0},
+						children = { channelConsole.panel, },
 					},
-				},
+					Control:New {
+						width = Configuration.userListWidth, y = 0, right = 0, bottom = 0,
+						padding={0,0,0,7}, itemPadding={0,0,0,0}, itemMargin={0,0,0,0},
+						children = { userListPanel.panel, },
+					},
+					Button:New {
+						width = 24, height = 24, y = 5, right = Configuration.userListWidth + 18,
+						caption = "x",
+						OnClick = {
+							function()
+								self.channelConsoles[chanName] = nil
+								lobby:Leave(chanName)
+								self.tabPanel:RemoveTab(chanName)
+								self:UpdateJoinPosition()
+							end
+						},
+					},
+				}
 			}
-		})
+		)
+		self.ignoreTabClick = false
 		self.tabbars[chanName] = channelConsole
 		self:UpdateJoinPosition()
 	end
@@ -624,25 +635,29 @@ function ChatWindows:GetPrivateChatConsole(userName)
 			lobby:SayPrivate(userName, message)
 		end
 		
-		self.tabPanel:AddTab({
-			name = userName,
-			caption = "@" .. userName,
-			children = {
-				privateChatConsole.panel,
+		self.ignoreTabClick = true
+		self.tabPanel:AddTab(
+			{
+				name = userName,
+				caption = "@" .. userName,
+				children = {
+					privateChatConsole.panel,
 
-				Button:New {
-					width = 24, height = 24, y = 0, right = 2,
-					caption = "x",
-					OnClick = {
-						function()
-							self.privateChatConsoles[userName] = nil
-							self.tabPanel:RemoveTab(userName)
-							self:UpdateJoinPosition()
-						end
-					},
+					Button:New {
+						width = 24, height = 24, y = 0, right = 2,
+						caption = "x",
+						OnClick = {
+							function()
+								self.privateChatConsoles[userName] = nil
+								self.tabPanel:RemoveTab(userName)
+								self:UpdateJoinPosition()
+							end
+						},
+					}
 				}
 			}
-		})
+		)
+		self.ignoreTabClick = false
 		self.tabbars[userName] = privateChatConsole
 		
 		self:UpdateJoinPosition()

@@ -1,6 +1,6 @@
 ListWindow = Component:extends{}
 
-function ListWindow:init(parent, title)
+function ListWindow:init(parent, title, noWindow)
 	self.lblTitle = Label:New {
 		x = 20,
 		right = 5,
@@ -37,8 +37,13 @@ function ListWindow:init(parent, title)
 			end
 		}
 	}
+	
+	local ControlType = Window
+	if noWindow then
+		ControlType = Control
+	end
 
-	self.window = Window:New {
+	self.window = ControlType:New {
 		x = 0,
 		right = 0,
 		y = 0,

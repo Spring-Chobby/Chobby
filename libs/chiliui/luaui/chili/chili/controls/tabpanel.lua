@@ -69,8 +69,9 @@ function TabPanel:New(obj)
 	return obj
 end
 
-function TabPanel:AddTab(tab)
+function TabPanel:AddTab(tab, neverSwitchTab)
     local tabbar = self.children[1]
+	local switchToTab = (#tabbar.children == 0) and not neverSwitchTab
     tabbar:AddChild(
         TabBarItem:New{name = tab.name, caption = tab.caption or tab.name, defaultWidth = tabbar.minItemWidth, defaultHeight = tabbar.minItemHeight} --FIXME: implement an "Add Tab in TabBar too"
     )
@@ -85,6 +86,9 @@ function TabPanel:AddTab(tab)
     self.tabIndexMapping[tab.name] = tabFrame
     self.currentTab:AddChild(tabFrame)
     tabFrame:SetVisibility(false)
+	if switchToTab then
+		self:ChangeTab(tab.name)
+	end
 end
 
 function TabPanel:RemoveTab(name)

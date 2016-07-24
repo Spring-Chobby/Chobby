@@ -1,7 +1,7 @@
 QueueListWindow = ListWindow:extends{}
 
 function QueueListWindow:init(parent)
-	self:super("init", parent, i18n("queues"))
+	self:super("init", parent, i18n("queues"), true)
 
 	self.onQueueOpened = function(listener, queue)
 		self:AddQueue(queue)
