@@ -105,7 +105,10 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 		comboOptions[#comboOptions + 1] = "Message"
 		
 		if (not isInBattle) and userInfo.battleID then
-			comboOptions[#comboOptions + 1] = "Join Battle"
+			local battle = lobby:GetBattle(userInfo.battleID)
+			if battle and WG.Chobby.Configuration:IsValidEngineVersion(battle.engineVersion) then
+				comboOptions[#comboOptions + 1] = "Join Battle"
+			end
 		end
 		
 		if userInfo.myFriend then -- TODO: Implement

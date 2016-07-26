@@ -226,6 +226,16 @@ function Configuration:GetBackgroundImage()
 	return self:GetGameConfigFilePath(false, "skinning/background.jpg", shortname), backgroundFocus
 end
 
+function Configuration:IsValidEngineVersion(engineVersion)
+	if tonumber(Game.version) then 
+		-- Master releases lack the '.0' at the end. Who knows what other cases are wrong.
+		-- Add as required.
+		return engineVersion == (Game.version .. ".0")
+	else
+		return engineVersion == Game.version
+	end
+end
+
 ---------------------------------------------------------------------------------
 -- Listener handler
 ---------------------------------------------------------------------------------

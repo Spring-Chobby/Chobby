@@ -90,6 +90,10 @@ function BattleListWindow:Update()
 end
 
 function BattleListWindow:AddBattle(battleID, battle)
+	if not Configuration:IsValidEngineVersion(battle.engineVersion) then
+		return
+	end
+
 	local height = self.itemHeight - 20
 	local parentButton = Button:New {
 		name = "battleButton",
@@ -204,6 +208,9 @@ end
 
 function BattleListWindow:JoinedBattle(battleID)
 	local battle = lobby:GetBattle(battleID)
+	if not Configuration:IsValidEngineVersion(battle.engineVersion) then
+		return
+	end
 	local items = self:GetRowItems(battleID)
 	local playersCaption = items.battleButton:GetChildByName("playersCaption")
 	playersCaption:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
@@ -212,6 +219,9 @@ end
 
 function BattleListWindow:LeftBattle(battleID)
 	local battle = lobby:GetBattle(battleID)
+	if not Configuration:IsValidEngineVersion(battle.engineVersion) then
+		return
+	end
 	local items = self:GetRowItems(battleID)
 	local playersCaption = items.battleButton:GetChildByName("playersCaption")
 	playersCaption:SetCaption(#battle.users .. "/" .. battle.maxPlayers)
@@ -220,6 +230,9 @@ end
 
 function BattleListWindow:OnUpdateBattleInfo(battleID)
 	local battle = lobby:GetBattle(battleID)
+	if not Configuration:IsValidEngineVersion(battle.engineVersion) then
+		return
+	end
 	local items = self:GetRowItems(battleID)
 	local mapCaption = items.battleButton:GetChildByName("mapCaption")
 	local minimapImage = items.battleButton:GetChildByName("minimapImage")
@@ -359,6 +372,8 @@ function BattleListWindow:OpenHostWindow()
 end
 
 function BattleListWindow:JoinBattle(battle)
+	-- We can be force joined to an invalid engine version. This widget is not
+	-- the place to deal with this case.
 	if not battle.passworded then
 		WG.BattleRoomWindow.LeaveBattle()
 		lobby:JoinBattle(battle.battleID)
