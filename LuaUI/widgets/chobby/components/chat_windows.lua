@@ -406,8 +406,6 @@ function ChatWindows:SetTabActivation(tabName, activationLevel, outlineColor)
 			return
 		end
 		ctrl.font.outline = true
-		ctrl.font.outlineWidth  = 30
-		ctrl.font.outlineWeight = 30
 		ctrl.font.outlineColor  = outlineColor
 	else
 		ctrl.font.outline = false
