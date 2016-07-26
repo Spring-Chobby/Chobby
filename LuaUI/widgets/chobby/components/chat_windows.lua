@@ -289,7 +289,9 @@ function ChatWindows:init()
 						caption = i18n("debug"), 
 						font = Configuration:GetFont(1),
 						children = {self.debugConsole.panel}
-					}
+					},
+					false,
+					not self.window.parent
 				)
 				self.ignoreTabClick = false
 				self:UpdateJoinPosition()
@@ -618,7 +620,9 @@ function ChatWindows:GetChannelConsole(chanName)
 						},
 					},
 				}
-			}
+			},
+			false,
+			not self.window.parent
 		)
 		self.ignoreTabClick = false
 		self.tabbars[chanName] = channelConsole
@@ -669,7 +673,9 @@ function ChatWindows:GetPrivateChatConsole(userName)
 						},
 					}
 				}
-			}
+			},
+			false,
+			not self.window.parent
 		)
 		self.ignoreTabClick = false
 		self.tabbars[userName] = privateChatConsole

@@ -61,7 +61,7 @@ function TabBar:EnableHighlight()
 	end
 end
 
-function TabBar:Select(tabname)
+function TabBar:Select(tabname, highlight)
 	for i = 1, #self.children do
 		local c = self.children[i]
 		if c.name == tabname then
@@ -69,7 +69,7 @@ function TabBar:Select(tabname)
 				self.selected_obj.state.selected = false
 				self.selected_obj:Invalidate()
 			end
-			c.state.selected = true
+			c.state.selected = highlight
 			self.selected = i
 			self.selected_obj = c
 			c:Invalidate()
@@ -80,7 +80,7 @@ function TabBar:Select(tabname)
 
 	if not self.selected_obj then
 		local c = self.children[1]
-		c.state.selected = true
+		c.state.selected = highlight
 		self.selected = 1
 		self.selected_obj = c
 		self.selected_obj:Invalidate()
@@ -97,7 +97,7 @@ function TabBar:Remove(tabname, updateSelection)
 		if c.name == tabname then
 			c:Dispose()
 			-- selects next tab
-			if updateSelection then
+			if updateSelection and #self.children > 0 then
 				c = self.children[math.min(i, #self.children)]
 				self:Select(c.name)
 			else

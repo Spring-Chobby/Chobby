@@ -67,9 +67,9 @@ function DetachableTabPanel:New(obj)
 	return obj
 end
 
-function DetachableTabPanel:AddTab(tab, neverSwitchTab)
+function DetachableTabPanel:AddTab(tab, neverSwitchTab, repressHighlight)
     local tabbar = self.tabBar
-	local switchToTab = (#tabbar.children == 0) and not neverSwitchTab
+	local switchTab = (#tabbar.children == 0) or (not neverSwitchTab)
     tabbar:AddChild(
         TabBarItem:New{name = tab.name, caption = tab.caption or tab.name, font = tab.font, defaultWidth = tabbar.minItemWidth, defaultHeight = tabbar.minItemHeight} --FIXME: implement an "Add Tab in TabBar too"
     )
@@ -84,8 +84,8 @@ function DetachableTabPanel:AddTab(tab, neverSwitchTab)
     self.tabIndexMapping[tab.name] = tabFrame
     self.currentTab:AddChild(tabFrame)
     tabFrame:SetVisibility(false)
-	if switchToTab then
-		self:ChangeTab(tab.name)
+	if switchTab then
+		self.tabBar:Select(tab.name, not repressHighlight)
 	end
 end
 
