@@ -48,6 +48,7 @@ local function InitWindow()
 		resizable = false,
 		draggable = false,
 		padding   = {5,4,4,4},
+		classname = "overlay_window",
 	}
 	tipTextDisplay = Chili.TextBox:New{
 		name   = TOOLTIP_TEXT_NAME,
