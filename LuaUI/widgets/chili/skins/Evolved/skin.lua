@@ -13,7 +13,7 @@ local skin = {
 --//
 
 skin.general = {
-  focusColor  = {1.0, 0.7, 0.1, 0.8},
+  focusColor  = {0.94, 0.50, 0.23, 1},
   borderColor = {1.0, 1.0, 1.0, 1.0},
 
   font = {
@@ -39,7 +39,48 @@ skin.button = {
   tiles = {22, 22, 22, 22}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
 
-  backgroundColor = {1, 1, 1, 0.7},
+  backgroundColor = {0, 0, 0, 0.5},
+  focusColor  = {0.94, 0.50, 0.23, 0.5},
+  borderColor = {1,1,1,0},
+
+  DrawControl = DrawButton,
+}
+
+skin.action_button = {
+  TileImageBK = ":cl:tech_button_action_bk.png",
+  TileImageFG = ":cl:tech_button_action_fg.png",
+  tiles = {22, 22, 22, 22}, --// tile widths: left,top,right,bottom
+  padding = {10, 10, 10, 10},
+
+  backgroundColor = {0.94, 0.50, 0.23, 0.75},
+  borderColor = {1,1,1,0},
+
+  DrawControl = DrawButton,
+}
+
+skin.option_button = {
+  TileImageBK = ":cl:tech_button_action_bk.png",
+  TileImageFG = ":cl:tech_button_action_fg.png",
+  tiles = {22, 22, 22, 22}, --// tile widths: left,top,right,bottom
+  padding = {10, 10, 10, 10},
+  
+  focusColor  = {0.21, 0.53, 0.60, 1},
+  
+  backgroundColor = {0.21, 0.53, 0.60, 0.75},
+  borderColor = {1,1,1,0},
+
+  DrawControl = DrawButton,
+}
+
+skin.negative_button = {
+  TileImageBK = ":cl:tech_button_action_bk.png",
+  TileImageFG = ":cl:tech_button_action_fg.png",
+  tiles = {22, 22, 22, 22}, --// tile widths: left,top,right,bottom
+  padding = {10, 10, 10, 10},
+
+  focusColor  = {0.72, 0.05, 0.12, 1},
+  
+  backgroundColor = {0.72, 0.05, 0.12, 0.5},
   borderColor = {1,1,1,0},
 
   DrawControl = DrawButton,

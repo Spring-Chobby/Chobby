@@ -126,11 +126,12 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 
 	self.btnLogin = Button:New {
 		x = 1,
-		width = 135,
+		width = 130,
 		bottom = 1,
 		height = 70,
 		caption = i18n("login_verb"),
 		font = Configuration:GetFont(3),
+		classname = "action_button",
 		OnClick = {
 			function()
 				self:tryLogin()
@@ -139,12 +140,13 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	}
 
 	self.btnRegister = Button:New {
-		x = 135,
-		width = 135,
+		x = 137,
+		width = 130,
 		bottom = 1,
 		height = 70,
 		caption = i18n("register_verb"),
 		font = Configuration:GetFont(3),
+		classname = "option_button",
 		OnClick = {
 			function()
 				self:tryRegister()
@@ -154,11 +156,12 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	
 	self.btnCancel = Button:New {
 		right = 1,
-		width = 135,
+		width = 130,
 		bottom = 1,
 		height = 70,
 		caption = i18n(cancelText or "cancel"),
 		font = Configuration:GetFont(3),
+		classname = "negative_button",
 		OnClick = {
 			function()
 				self.window:Dispose()

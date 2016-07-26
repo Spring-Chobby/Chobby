@@ -26,7 +26,7 @@ function PriorityPopup:init(mainWindow)
 				diff = math.min(0.1, diff) / 0.1
 
 				gl.PushMatrix()
-				gl.Color(0.5, 0.5, 0.5, 0.7 * diff)
+				gl.Color(0, 0, 0, 0.5 * diff)
 
 				gl.BeginEnd(GL.QUADS,
 					function()
