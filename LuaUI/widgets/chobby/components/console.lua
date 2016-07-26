@@ -52,8 +52,8 @@ function Console:init(channelName)
 			if key == Spring.GetKeyCode("enter") or 
 				key == Spring.GetKeyCode("numpad_enter") then
 				self:SendMessage()
+				return true
 			end
-
 		end
 	}
 
