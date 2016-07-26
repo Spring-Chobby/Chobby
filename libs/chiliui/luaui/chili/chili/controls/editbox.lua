@@ -365,7 +365,7 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	local txt = self.text
 
 	-- enter & return
-	if key == Spring.GetKeyCode("enter") or key == Spring.GetKeyCode("numpad_enter") then
+	if (key == Spring.GetKeyCode("enter") or key == Spring.GetKeyCode("numpad_enter")) and self.editable then
 		return inherited.KeyPress(self, key, mods, isRepeat, label, unicode, ...) or true
 
 	-- deletions
@@ -442,7 +442,6 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 				for i = sy+1, ey-1 do
 					table.insert(lines, self.lines[i].text)
 				end
-				Spring.Echo(bottomText, bottomText:sub(1, e))
 				table.insert(lines, bottomText:sub(1, e))
 				txt = table.concat(lines, "\n")
 			end
@@ -458,7 +457,15 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	-- select all
 	elseif mods.ctrl and key == Spring.GetKeyCode("a") then
 		self.selStart = 1
-		self.selEnd = #txt + 1
+		if not self.multiline then
+			self.selEnd = #txt + 1
+		else
+			self.selStartY = 1
+			self.selEndY = #self.lines
+			self.selEnd = #self.lines[self.selEndY].text + 1
+		end
+	elseif not self.editable then
+		return false
 	end
 	
 	-- text selection handling
