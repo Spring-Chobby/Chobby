@@ -11,8 +11,9 @@ function BattleListWindow:init(parent)
 		y = 10,
 		width = 150,
 		height = 45,
-		caption = Configuration:GetErrorColor() .. i18n("open_mp_game") .. "\b",
+		caption = i18n("open_mp_game"),
 		font = Configuration:GetFont(3),
+		classname = "option_button",
 		parent = self.window,
 		OnClick = {
 			function ()

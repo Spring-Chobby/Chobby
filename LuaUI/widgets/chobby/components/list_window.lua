@@ -20,8 +20,9 @@ function ListWindow:init(parent, title, noWindow, windowClassname)
 		y = 10,
 		width = 80,
 		height = 45,
-		caption = Configuration:GetErrorColor() .. i18n("close") .. "\b",
+		caption = i18n("close"),
 		font = Configuration:GetFont(3),
+		classname = "negative_button",
 		OnClick = {
 			function()
 				self.CancelFunc()

@@ -147,8 +147,9 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		bottom = 0,
 		right = 0,
 		height = 50,
-		caption = "\255\66\138\201" .. i18n("start") ..  "\b",
-		font =  WG.Chobby.Configuration:GetFont(3),
+		caption = i18n("start"),
+		classname = "action_button",
+		font = WG.Chobby.Configuration:GetFont(3),
 		OnClick = {
 			function()
 				if haveMapAndGame then
@@ -341,9 +342,9 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	onBattleIngameUpdate = function(listener, updatedBattleID, isRunning)
 		if battleID == updatedBattleID then
 			if isRunning then
-				btnStartBattle:SetCaption("\255\66\138\201" .. i18n("rejoin") ..  "\b")
+				btnStartBattle:SetCaption(i18n("rejoin"))
 			else
-				btnStartBattle:SetCaption("\255\66\138\201" .. i18n("start") ..  "\b")
+				btnStartBattle:SetCaption(i18n("start"))
 			end
 		end
 	end
@@ -1030,7 +1031,8 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		width = 80,
 		height = 45,
 		font =  WG.Chobby.Configuration:GetFont(3),
-		caption = WG.Chobby.Configuration:GetErrorColor() .. i18n("leave") .. "\b",
+		caption = i18n("leave"),
+		classname = "negative_button",
 		OnClick = {
 			function()
 				battleLobby:LeaveBattle()
