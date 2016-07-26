@@ -9,6 +9,8 @@ function Configuration:init()
 --     self.serverAddress = "localhost"
 	self.serverAddress = WG.Server.serverAddress or "springrts.com"
 	self.serverPort = 8200
+	
+	self.chatMaxNameLength = 120 -- Pixels
 
 	self.userName = ""
 	self.password = ""
