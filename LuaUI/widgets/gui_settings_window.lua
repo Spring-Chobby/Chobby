@@ -169,7 +169,9 @@ local function InitializeControls(window)
 		checked = Configuration.autoLogin or false,
 		font = Configuration:GetFont(2),
 		OnChange = {function (obj, newState)
+			freezeSettings = true
 			Configuration:SetConfigValue("autoLogin", newState)
+			freezeSettings = false
 		end},
 	}
 	offset = offset + 30
@@ -340,6 +342,9 @@ local function InitializeControls(window)
 	freezeSettings = false
 	
 	local function onConfigurationChange(listener, key, value)
+		if freezeSettings then
+			return
+		end
 		if key == "autoLogin" then
 			autoLogin:SetToggle(value)
 		end
