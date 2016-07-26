@@ -592,6 +592,19 @@ function ChatWindows:GetChannelConsole(chanName)
 		local myFont = Font:New(Configuration:GetFont(1))
 		caption = StringUtilities.GetTruncatedStringWithDotDot(caption, myFont, 70)
 		
+		local closeChannelButton = Button:New {
+			width = 24, height = 24, y = 5, right = Configuration.userListWidth + 18,
+			caption = "x",
+			OnClick = {
+				function()
+					self.channelConsoles[chanName] = nil
+					lobby:Leave(chanName)
+					self.tabPanel:RemoveTab(chanName, true)
+					self:UpdateJoinPosition()
+				end
+			},
+		}
+		
 		self.ignoreTabClick = true
 		self.tabPanel:AddTab(
 			{
@@ -609,22 +622,14 @@ function ChatWindows:GetChannelConsole(chanName)
 						padding={0,0,0,7}, itemPadding={0,0,0,0}, itemMargin={0,0,0,0},
 						children = { userListPanel.panel, },
 					},
-					Button:New {
-						width = 24, height = 24, y = 5, right = Configuration.userListWidth + 18,
-						caption = "x",
-						OnClick = {
-							function()
-								self.channelConsoles[chanName] = nil
-								lobby:Leave(chanName)
-								self.tabPanel:RemoveTab(chanName, true)
-								self:UpdateJoinPosition()
-							end
-						},
-					},
+					closeChannelButton,
 				}
 			},
 			false
 		)
+		
+		closeChannelButton:BringToFront()
+		
 		if not self.window.parent then
 			self.tabPanel.tabBar:DisableHighlight()
 		end
@@ -656,6 +661,18 @@ function ChatWindows:GetPrivateChatConsole(userName)
 		local myFont = Font:New(Configuration:GetFont(1))
 		caption = StringUtilities.GetTruncatedStringWithDotDot(caption, myFont, 70)
 		
+		local closeChannelButton = Button:New {
+			width = 24, height = 24, y = 5, right = 18,
+			caption = "x",
+			OnClick = {
+				function()
+					self.privateChatConsoles[userName] = nil
+					self.tabPanel:RemoveTab(userName, true)
+					self:UpdateJoinPosition()
+				end
+			},
+		}
+		
 		self.ignoreTabClick = true
 		self.tabPanel:AddTab(
 			{
@@ -664,22 +681,14 @@ function ChatWindows:GetPrivateChatConsole(userName)
 				font = Configuration:GetFont(1),
 				children = {
 					privateChatConsole.panel,
-
-					Button:New {
-						width = 24, height = 24, y = 0, right = 2,
-						caption = "x",
-						OnClick = {
-							function()
-								self.privateChatConsoles[userName] = nil
-								self.tabPanel:RemoveTab(userName, true)
-								self:UpdateJoinPosition()
-							end
-						},
-					}
+					closeChannelButton
 				}
 			},
 			false
 		)
+		
+		closeChannelButton:BringToFront()
+		
 		if not self.window.parent then
 			self.tabPanel.tabBar:DisableHighlight()
 		end
