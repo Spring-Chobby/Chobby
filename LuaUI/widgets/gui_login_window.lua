@@ -33,19 +33,19 @@ local wantLoginStatus = {
 
 local function MultiplayerEntryPopup()
 	if wantLoginStatus[lobby:GetConnectionStatus()] then
-		local loginWindow = WG.Chobby.LoginWindow(MultiplayerFailFunction)
+		local loginWindow = WG.Chobby.LoginWindow(MultiplayerFailFunction, nil, "overlay_window")
 		local popup = WG.Chobby.PriorityPopup(loginWindow.window)
 	end
 end
 
 local function LoginPopup()
-	local loginWindow = WG.Chobby.LoginWindow()
+	local loginWindow = WG.Chobby.LoginWindow(nil, nil, "overlay_window")
 	local popup = WG.Chobby.PriorityPopup(loginWindow.window)
 end
 
 local function InitialWindow()
 	if WG.Chobby.Configuration.autoLogin then
-		local loginWindow = WG.Chobby.LoginWindow()
+		local loginWindow = WG.Chobby.LoginWindow(nil, nil, "overlay_window")
 		loginWindow.window:Hide()
 		lobby:AddListener("OnDenied", function(listener)
 			loginWindow.window:Show()
@@ -54,7 +54,7 @@ local function InitialWindow()
 		end)
 		loginWindow:tryLogin()
 	elseif WG.Chobby.Configuration.promptNewUsersToLogIn then
-		local loginWindow = WG.Chobby.LoginWindow(nil, "play_offline")
+		local loginWindow = WG.Chobby.LoginWindow(nil, "play_offline", "overlay_window")
 		local popup = WG.Chobby.PriorityPopup(loginWindow.window)
 	end
 end

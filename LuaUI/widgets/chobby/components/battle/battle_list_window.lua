@@ -255,6 +255,7 @@ function BattleListWindow:OpenHostWindow()
 		height = 260,
 		resizable = false,
 		draggable = false,
+		classname = "overlay_window",
 	}
 	
 	local title = Label:New {
@@ -373,6 +374,7 @@ function BattleListWindow:JoinBattle(battle)
 			resizable = false,
 			draggable = false,
 			parent = screen0,
+			classname = "overlay_window",
 			OnDispose = { 
 				function()
 					lobby:RemoveListener("OnJoinBattleFailed", onJoinBattleFailed)

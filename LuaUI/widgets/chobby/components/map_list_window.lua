@@ -2,7 +2,7 @@ MapListWindow = ListWindow:extends{}
 
 function MapListWindow:init(lobby, zoomToMap)
 
-	self:super('init', screen0, "Select Map")
+	self:super('init', screen0, "Select Map", false, "overlay_window")
 	self.window:SetPos(nil, nil, 500, 700)
 	
 	local zoomY

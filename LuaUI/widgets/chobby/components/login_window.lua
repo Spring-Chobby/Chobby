@@ -23,7 +23,7 @@ function createTabGroup(ctrls)
 	end
 end
 
-function LoginWindow:init(failFunction, cancelText)
+function LoginWindow:init(failFunction, cancelText, windowClassname)
 	self.lblInstructions = Label:New {
 		x = 15,
 		width = 170,
@@ -180,6 +180,7 @@ function LoginWindow:init(failFunction, cancelText)
 		caption = i18n("login_noun"),
 		resizable = false,
 		draggable = false,
+		classname = windowClassname,
 		children = {
 			self.lblInstructions,
 			self.lblServerAddress,

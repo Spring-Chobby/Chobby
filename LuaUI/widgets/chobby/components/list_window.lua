@@ -1,6 +1,6 @@
 ListWindow = Component:extends{}
 
-function ListWindow:init(parent, title, noWindow)
+function ListWindow:init(parent, title, noWindow, windowClassname)
 	self.lblTitle = Label:New {
 		x = 20,
 		right = 5,
@@ -52,6 +52,7 @@ function ListWindow:init(parent, title, noWindow)
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
+		classname = windowClassname,
 		children = {
 			self.lblTitle,
 			self.btnClose,
