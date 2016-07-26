@@ -176,8 +176,8 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		OnClick = {
 			function(obj)
 				battleLobby:SetBattleStatus({isSpectator = true})
-				WG.ButtonUtilities.SetButtonDeselected(btnPlay)
-				WG.ButtonUtilities.SetButtonSelected(obj)
+				ButtonUtilities.SetButtonDeselected(btnPlay)
+				ButtonUtilities.SetButtonSelected(obj)
 			end
 		},
 		parent = rightInfo,
@@ -193,8 +193,8 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		OnClick = {
 			function(obj)
 				battleLobby:SetBattleStatus({isSpectator = false})
-				WG.ButtonUtilities.SetButtonDeselected(btnSpectate)
-				WG.ButtonUtilities.SetButtonSelected(obj)
+				ButtonUtilities.SetButtonDeselected(btnSpectate)
+				ButtonUtilities.SetButtonSelected(obj)
 			end
 		},
 		parent = rightInfo,
@@ -328,11 +328,11 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	onUpdateUserTeamStatusSelf = function(listener, userName, allyNumber, isSpectator)
 		if userName == myUserName then
 			if isSpectator then
-				WG.ButtonUtilities.SetButtonDeselected(btnPlay)
-				WG.ButtonUtilities.SetButtonSelected(btnSpectate)
+				ButtonUtilities.SetButtonDeselected(btnPlay)
+				ButtonUtilities.SetButtonSelected(btnSpectate)
 			else
-				WG.ButtonUtilities.SetButtonDeselected(btnSpectate)
-				WG.ButtonUtilities.SetButtonSelected(btnPlay)
+				ButtonUtilities.SetButtonDeselected(btnSpectate)
+				ButtonUtilities.SetButtonSelected(btnPlay)
 			end
 		end
 	end
@@ -761,8 +761,8 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		caption = "",
 		OnClick = {
 			function (obj)
-				WG.ButtonUtilities.SetButtonSelected(obj)
-				WG.ButtonUtilities.SetButtonDeselected(buttonNo)
+				ButtonUtilities.SetButtonSelected(obj)
+				ButtonUtilities.SetButtonDeselected(buttonNo)
 				battleLobby:VoteYes()
 			end
 		},
@@ -789,8 +789,8 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		caption = "",
 		OnClick = {
 			function (obj)
-				WG.ButtonUtilities.SetButtonSelected(obj)
-				WG.ButtonUtilities.SetButtonDeselected(buttonYes)
+				ButtonUtilities.SetButtonSelected(obj)
+				ButtonUtilities.SetButtonDeselected(buttonYes)
 				battleLobby:VoteNo()
 			end
 		},
@@ -886,8 +886,8 @@ local function SetupVotePanel(votePanel, battle, battleID)
 			voteResultLabel:Show()
 		end
 		
-		WG.ButtonUtilities.SetButtonDeselected(buttonYes)
-		WG.ButtonUtilities.SetButtonDeselected(buttonNo)
+		ButtonUtilities.SetButtonDeselected(buttonYes)
+		ButtonUtilities.SetButtonDeselected(buttonNo)
 		
 		WG.Delay(HideVoteResult, 5)
 	end

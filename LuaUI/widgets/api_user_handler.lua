@@ -69,21 +69,6 @@ local function UserLevelToImage(level, isBot, isAdmin)
 	end
 end
 
-local function GetTruncatedString(myString, myFont, maxLength)
-	if (not maxLength) or (myFont:GetTextWidth(myString) <= maxLength) then
-		return false
-	end
-	local length = string.len(myString)
-	while myFont:GetTextWidth(myString) > maxLength do
-		length = length - 1
-		myString = string.sub(myString, 0, length)
-		if length < 1 then
-			return ""
-		end
-	end
-	return myString
-end
-
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities that reference controls
@@ -339,10 +324,10 @@ local function GetUserControls(userName, maxNameLength, isInBattle, isSingleplay
 		fontsize = WG.Chobby.Configuration:GetFont(2).size,
 		text = userName,
 	}
-	local truncatedName = GetTruncatedString(userControls.name.text, userControls.name.font, maxNameLength)
+	local truncatedName = StringUtilities.TruncateStringIfRequired(userControls.name.text, userControls.name.font, maxNameLength)
 	if truncatedName then
 		local dotDotWidth = userControls.name.font:GetTextWidth("..")
-		truncatedName = GetTruncatedString(truncatedName, userControls.name.font, maxNameLength - dotDotWidth)
+		truncatedName = StringUtilities.TruncateStringIfRequired(truncatedName, userControls.name.font, maxNameLength - dotDotWidth)
 		userControls.name:SetText(truncatedName .. "..")
 	end
 	

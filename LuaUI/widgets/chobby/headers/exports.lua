@@ -27,6 +27,15 @@ if WG and WG.Chili then
 	Progressbar = Chili.Progressbar
 end
 
+local includes = {
+	"utilities/buttons.lua",
+	"utilities/stringUtilities.lua",
+}
+
+for _, file in ipairs(includes) do
+	VFS.Include(CHOBBY_DIR .. file, Chobby, VFS.RAW_FIRST)
+end
+
 --lobby export
 if WG and WG.LibLobby then
 	LibLobby = WG.LibLobby

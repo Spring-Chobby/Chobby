@@ -67,5 +67,3 @@ function ButtonUtilities.SetFontSizeScale(button, sizeScale)
 		ButtonUtilities.SetButtonSelected(button)
 	end
 end
-
-WG.ButtonUtilities = ButtonUtilities
