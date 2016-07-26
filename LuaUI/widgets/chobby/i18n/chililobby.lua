@@ -89,6 +89,10 @@ return {
 		},
 		downloads_completed = "All downloads completed.",
 
+		-- Settings
+		notifyForAllChat = "All chat notifies",
+		debugMode = "Debug mode",
+		
 		-- chat_windows.lua
 		server = "Server",
 		debug = "Debug",

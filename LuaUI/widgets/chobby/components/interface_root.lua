@@ -274,7 +274,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		parent = mainButtons,
 		OnClick = {
 			function(self)
-				ConfirmationPopup(ExitSpring, "Are you sure you want to quit?", nil, 320, 200)
+				ConfirmationPopup(ExitSpring, "Are you sure you want to quit?", nil, 315, 200)
 			end
 		},
 	}

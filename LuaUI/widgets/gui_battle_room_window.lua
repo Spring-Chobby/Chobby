@@ -146,10 +146,10 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		x = 0,
 		bottom = 0,
 		right = 0,
-		height = 50,
+		height = 48,
 		caption = i18n("start"),
 		classname = "action_button",
-		font = WG.Chobby.Configuration:GetFont(3),
+		font = WG.Chobby.Configuration:GetFont(4),
 		OnClick = {
 			function()
 				if haveMapAndGame then
@@ -170,8 +170,8 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	local btnSpectate = Button:New {
 		x = "50%",
 		right = 0,
-		bottom = 50,
-		height = 50,
+		bottom = 52,
+		height = 48,
 		caption = "\255\66\138\201" .. i18n("watch") ..  "\b",
 		font =  WG.Chobby.Configuration:GetFont(3),
 		OnClick = {
@@ -187,8 +187,8 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	btnPlay = Button:New {
 		x = 0,
 		right = "50%",
-		bottom = 50,
-		height = 50,
+		bottom = 52,
+		height = 48,
 		caption = "\255\66\138\201" .. i18n("play") ..  "\b",
 		font =  WG.Chobby.Configuration:GetFont(3),
 		OnClick = {
@@ -230,7 +230,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		right = 0,
 		height = 40,
 		caption = "\255\66\138\201" .. i18n("add_team") ..  "\b",
-		font = WG.Chobby.Configuration:GetFont(1),
+		font = WG.Chobby.Configuration:GetFont(2),
 		OnClick = {
 			function()
 				if OpenNewTeam then
@@ -268,7 +268,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		height = 40,
 		right = 0,
 		caption = "\255\66\138\201" .. i18n("pick_map") ..  "\b",
-		font =  WG.Chobby.Configuration:GetFont(1),
+		font =  WG.Chobby.Configuration:GetFont(2),
 		OnClick = {
 			function()
 				WG.Chobby.MapListWindow(battleLobby, battle.mapName)

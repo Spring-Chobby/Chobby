@@ -351,6 +351,7 @@ function BattleListWindow:OpenHostWindow()
 		caption = i18n("host"),
 		font = Configuration:GetFont(3),
 		parent = hostBattleWindow,
+		classname = "action_button",
 		OnClick = {
 			function()
 				HostBattle()
@@ -366,6 +367,7 @@ function BattleListWindow:OpenHostWindow()
 		caption = i18n("cancel"),
 		font = Configuration:GetFont(3),
 		parent = hostBattleWindow,
+		classname = "negative_button",
 		OnClick = {
 			function()
 				CancelFunc()
@@ -385,10 +387,17 @@ function BattleListWindow:JoinBattle(battle)
 	else
 		local tryJoin
 		
+		local function onJoinBattleFailed(listener, reason)
+			lblError:SetCaption(reason)
+		end
+		local function onJoinBattle(listener)
+			passwordWindow:Dispose()
+		end
+		
 		local passwordWindow = Window:New {
 			x = 700,
 			y = 300,
-			width = 300,
+			width = 315,
 			height = 240,
 			caption = "",
 			resizable = false,
@@ -456,6 +465,7 @@ function BattleListWindow:JoinBattle(battle)
 			height = 70,
 			caption = i18n("join"),
 			font = Configuration:GetFont(3),
+			classname = "action_button",
 			OnClick = {
 				function()
 					tryJoin()
@@ -470,6 +480,7 @@ function BattleListWindow:JoinBattle(battle)
 			height = 70,
 			caption = i18n("cancel"),
 			font = Configuration:GetFont(3),
+			classname = "negative_button",
 			OnClick = {
 				function()
 					CancelFunc()
@@ -478,14 +489,7 @@ function BattleListWindow:JoinBattle(battle)
 			parent = passwordWindow,
 		}
 
-		local onJoinBattleFailed = function(listener, reason)
-			lblError:SetCaption(reason)
-		end
 		lobby:AddListener("OnJoinBattleFailed", onJoinBattleFailed)
-		local onJoinBattle = function(listener)
-			passwordWindow:Dispose()
-			self.window:Dispose()
-		end
 		lobby:AddListener("OnJoinBattle", onJoinBattle)
 		
 		local popupHolder = PriorityPopup(passwordWindow, CancelFunc, tryJoin)

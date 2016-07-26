@@ -100,7 +100,7 @@ local function InitializeControls(window)
 		caption = "Display:",
 	}
 	ComboBox:New {
-		x = 130,
+		x = 140,
 		y = offset,
 		width = 180,
 		height = 45,
@@ -137,7 +137,7 @@ local function InitializeControls(window)
 		caption = "Panels:",
 	}
 	ComboBox:New {
-		x = 130,
+		x = 140,
 		y = offset,
 		width = 180,
 		height = 45,
@@ -239,7 +239,7 @@ local function InitializeControls(window)
 		caption = "Display:",
 	}
 	ComboBox:New {
-		x = 130,
+		x = 140,
 		y = offset,
 		width = 180,
 		height = 45,
@@ -275,7 +275,7 @@ local function InitializeControls(window)
 	}
 	ComboBox:New {
 		name = "gameSelection",
-		x = 130,
+		x = 140,
 		y = offset,
 		width = 180,
 		height = 45,
@@ -325,7 +325,7 @@ local function InitializeControls(window)
 	end
 	
 	Control:New {
-		x = 130,
+		x = 135,
 		y = offset,
 		width = 540,
 		height = 45,
