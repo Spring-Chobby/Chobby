@@ -290,9 +290,11 @@ function ChatWindows:init()
 						font = Configuration:GetFont(1),
 						children = {self.debugConsole.panel}
 					},
-					false,
-					not self.window.parent
+					false
 				)
+				if not self.window.parent then
+					self.tabPanel.tabBar:DisableHighlight()
+				end
 				self.ignoreTabClick = false
 				self:UpdateJoinPosition()
 			end
@@ -621,9 +623,11 @@ function ChatWindows:GetChannelConsole(chanName)
 					},
 				}
 			},
-			false,
-			not self.window.parent
+			false
 		)
+		if not self.window.parent then
+			self.tabPanel.tabBar:DisableHighlight()
+		end
 		self.ignoreTabClick = false
 		self.tabbars[chanName] = channelConsole
 		self:UpdateJoinPosition()
@@ -674,9 +678,11 @@ function ChatWindows:GetPrivateChatConsole(userName)
 					}
 				}
 			},
-			false,
-			not self.window.parent
+			false
 		)
+		if not self.window.parent then
+			self.tabPanel.tabBar:DisableHighlight()
+		end
 		self.ignoreTabClick = false
 		self.tabbars[userName] = privateChatConsole
 		

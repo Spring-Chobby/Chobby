@@ -67,7 +67,7 @@ function DetachableTabPanel:New(obj)
 	return obj
 end
 
-function DetachableTabPanel:AddTab(tab, neverSwitchTab, repressHighlight)
+function DetachableTabPanel:AddTab(tab, neverSwitchTab)
     local tabbar = self.tabBar
 	local switchTab = (#tabbar.children == 0) or (not neverSwitchTab)
     tabbar:AddChild(
@@ -85,7 +85,7 @@ function DetachableTabPanel:AddTab(tab, neverSwitchTab, repressHighlight)
     self.currentTab:AddChild(tabFrame)
     tabFrame:SetVisibility(false)
 	if switchTab then
-		self.tabBar:Select(tab.name, not repressHighlight)
+		self.tabBar:Select(tab.name)
 	end
 end
 

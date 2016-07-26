@@ -69,7 +69,7 @@ function TabBar:Select(tabname, highlight)
 				self.selected_obj.state.selected = false
 				self.selected_obj:Invalidate()
 			end
-			c.state.selected = highlight
+			c.state.selected = true
 			self.selected = i
 			self.selected_obj = c
 			c:Invalidate()
@@ -80,7 +80,7 @@ function TabBar:Select(tabname, highlight)
 
 	if not self.selected_obj then
 		local c = self.children[1]
-		c.state.selected = highlight
+		c.state.selected = true
 		self.selected = 1
 		self.selected_obj = c
 		self.selected_obj:Invalidate()
