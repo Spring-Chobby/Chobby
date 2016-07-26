@@ -365,8 +365,8 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	local txt = self.text
 
 	-- enter & return
-	if (key == Spring.GetKeyCode("enter") or key == Spring.GetKeyCode("numpad_enter")) and self.editable then
-		return inherited.KeyPress(self, key, mods, isRepeat, label, unicode, ...) or true
+	if (key == Spring.GetKeyCode("esc") or key == Spring.GetKeyCode("enter") or key == Spring.GetKeyCode("numpad_enter")) and self.editable then
+		return inherited.KeyPress(self, key, mods, isRepeat, label, unicode, ...)
 
 	-- deletions
 	elseif key == Spring.GetKeyCode("backspace") and self.editable then

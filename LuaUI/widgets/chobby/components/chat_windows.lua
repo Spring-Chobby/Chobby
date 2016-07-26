@@ -672,7 +672,12 @@ function ChatWindows:CreateJoinChannelWindow()
 		text = "",
 	}
 
-	local _JoinChannel = function()
+	local function CancelFunc()
+		self.joinWindow:Dispose()
+		self.joinWindow = nil
+	end
+	
+	local function JoinChannel()
 		if ebChannelName.text ~= "" then
 			lobby:Join(ebChannelName.text)
 			-- TODO: we should focus the newly opened tab
@@ -698,29 +703,17 @@ function ChatWindows:CreateJoinChannelWindow()
 					ebChannelName,
 					Button:New {
 						caption = i18n("ok"),
-						OnClick = { function()
-							_JoinChannel()
-						end},
+						OnClick = {JoinChannel},
 					},
 					Button:New {
 						caption = i18n("cancel"),
-						OnClick = { function()
-							self.joinWindow:Dispose()
-							self.joinWindow = nil
-						end},
+						OnClick = {CancelFunc},
 					},
 				},
 			}
 		},
 	}
-
-	ebChannelName.OnKeyPress = {
-		function(obj, key, mods, ...)
-			if key == Spring.GetKeyCode("enter") or
-				key == Spring.GetKeyCode("numpad_enter") then
-				_JoinChannel()
-			end
-		end
-	}
+	
+	local popupHolder = PriorityPopup(self.joinWindow, CancelFunc, JoinChannel)
 	screen0:FocusControl(ebChannelName)
 end

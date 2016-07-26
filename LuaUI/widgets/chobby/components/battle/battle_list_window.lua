@@ -481,5 +481,6 @@ function BattleListWindow:JoinBattle(battle)
 		lobby:AddListener("OnJoinBattle", onJoinBattle)
 		
 		local popupHolder = PriorityPopup(passwordWindow, CancelFunc, tryJoin)
+		screen0:FocusControl(ebPassword)
 	end
 end
