@@ -16,9 +16,26 @@ function StringUtilities.GetTruncatedString(myString, myFont, maxLength)
 	return myString
 end
 
+function StringUtilities.GetTruncatedStringWithDotDot(myString, myFont, maxLength)
+	if (not maxLength) or (myFont:GetTextWidth(myString) <= maxLength) then
+		return myString
+	end
+	local truncation = StringUtilities.GetTruncatedString(myString, myFont, maxLength)
+	local dotDotWidth = myFont:GetTextWidth("..")
+	truncation = StringUtilities.GetTruncatedString(truncation, myFont, maxLength - dotDotWidth)
+	return truncation .. ".."
+end
+
 function StringUtilities.TruncateStringIfRequired(myString, myFont, maxLength)
 	if (not maxLength) or (myFont:GetTextWidth(myString) <= maxLength) then
 		return false
 	end
 	return StringUtilities.GetTruncatedString(myString, myFont, maxLength)
+end
+
+function StringUtilities.TruncateStringIfRequiredAndDotDot(myString, myFont, maxLength)
+	if (not maxLength) or (myFont:GetTextWidth(myString) <= maxLength) then
+		return false
+	end
+	return StringUtilities.GetTruncatedStringWithDotDot(myString, myFont, maxLength)
 end

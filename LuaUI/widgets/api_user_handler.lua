@@ -324,11 +324,9 @@ local function GetUserControls(userName, maxNameLength, isInBattle, isSingleplay
 		fontsize = WG.Chobby.Configuration:GetFont(2).size,
 		text = userName,
 	}
-	local truncatedName = StringUtilities.TruncateStringIfRequired(userControls.name.text, userControls.name.font, maxNameLength)
+	local truncatedName = StringUtilities.TruncateStringIfRequiredAndDotDot(userControls.name.text, userControls.name.font, maxNameLength)
 	if truncatedName then
-		local dotDotWidth = userControls.name.font:GetTextWidth("..")
-		truncatedName = StringUtilities.TruncateStringIfRequired(truncatedName, userControls.name.font, maxNameLength - dotDotWidth)
-		userControls.name:SetText(truncatedName .. "..")
+		userControls.name:SetText(truncatedName)
 	end
 	
 	offset = offset + userControls.name.font:GetTextWidth(userControls.name.text)

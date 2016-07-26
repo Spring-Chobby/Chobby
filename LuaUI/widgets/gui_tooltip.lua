@@ -202,6 +202,10 @@ local function GetTooltipLine(parent, hasImage, fontSize, xOffset)
 		return numLines
 	end
 	
+	function externalFunctions.GetFont()
+		return textDisplay.font
+	end
+	
 	return externalFunctions
 end
 
@@ -369,12 +373,13 @@ local function GetBattleTooltip(battleID, battle)
 	end
 	local offset = 7
 	
-	-- Battle Name
+	-- Battle Name]
 	if not battleTooltip.title then
 		battleTooltip.title = GetTooltipLine(battleTooltip.mainControl, nil, 3)
 	end
-	battleTooltip.title.Update(offset, battle.title)
-	offset = offset + 23*battleTooltip.title.GetLines()
+	local truncatedName = StringUtilities.GetTruncatedStringWithDotDot(battle.title, battleTooltip.title.GetFont(), width)
+	battleTooltip.title.Update(offset, truncatedName)
+	offset = offset + 23 -- * battleTooltip.title.GetLines() -- Not required with truncation
 	
 	-- Players and Spectators
 	if battle.spectatorCount and battle.maxPlayers and battle.users then
