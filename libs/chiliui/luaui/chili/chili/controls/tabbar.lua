@@ -12,6 +12,7 @@ TabBar = LayoutPanel:Inherit{
   minItemHeight = 20,
   tabs         = {},
   selected     = nil,
+  preserveChildrenOrder = true,
   OnChange     = {},
 }
 

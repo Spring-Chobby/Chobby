@@ -12,6 +12,7 @@ if WG and WG.Chili then
 	Label = Chili.Label
 	Line = Chili.Line
 	EditBox = Chili.EditBox
+	Font = Chili.Font
 	Window = Chili.Window
 	ScrollPanel = Chili.ScrollPanel
 	LayoutPanel = Chili.LayoutPanel

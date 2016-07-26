@@ -287,6 +287,7 @@ function ChatWindows:init()
 					{ 
 						name = "debug", 
 						caption = i18n("debug"), 
+						font = Configuration:GetFont(1),
 						children = {self.debugConsole.panel}
 					}
 				)
@@ -585,11 +586,16 @@ function ChatWindows:GetChannelConsole(chanName)
 		local userListPanel = UserListPanel(function() return lobby:GetChannel(chanName) end, 22)
 		self.userListPanels[chanName] = userListPanel
 		
+		local caption = "#" .. chanName
+		local myFont = Font:New(Configuration:GetFont(1))
+		caption = StringUtilities.GetTruncatedStringWithDotDot(caption, myFont, 70)
+		
 		self.ignoreTabClick = true
 		self.tabPanel:AddTab(
 			{
 				name = chanName,
-				caption = "#" .. chanName,
+				caption = caption,
+				font = Configuration:GetFont(1),
 				children = {
 					Control:New {
 						x = 0, y = 0, right = Configuration.userListWidth, bottom = 0,
@@ -635,11 +641,16 @@ function ChatWindows:GetPrivateChatConsole(userName)
 			lobby:SayPrivate(userName, message)
 		end
 		
+		local caption = "@" .. userName
+		local myFont = Font:New(Configuration:GetFont(1))
+		caption = StringUtilities.GetTruncatedStringWithDotDot(caption, myFont, 70)
+		
 		self.ignoreTabClick = true
 		self.tabPanel:AddTab(
 			{
 				name = userName,
-				caption = "@" .. userName,
+				caption = caption,
+				font = Configuration:GetFont(1),
 				children = {
 					privateChatConsole.panel,
 

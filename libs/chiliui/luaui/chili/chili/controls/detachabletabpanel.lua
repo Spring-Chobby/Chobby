@@ -71,7 +71,7 @@ function DetachableTabPanel:AddTab(tab, neverSwitchTab)
     local tabbar = self.tabBar
 	local switchToTab = (#tabbar.children == 0) and not neverSwitchTab
     tabbar:AddChild(
-        TabBarItem:New{name = tab.name, caption = tab.caption or tab.name, defaultWidth = tabbar.minItemWidth, defaultHeight = tabbar.minItemHeight} --FIXME: implement an "Add Tab in TabBar too"
+        TabBarItem:New{name = tab.name, caption = tab.caption or tab.name, font = tab.font, defaultWidth = tabbar.minItemWidth, defaultHeight = tabbar.minItemHeight} --FIXME: implement an "Add Tab in TabBar too"
     )
     local tabFrame = Control:New {
         padding = {0, 0, 0, 0},
