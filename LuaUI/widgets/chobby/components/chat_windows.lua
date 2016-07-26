@@ -614,7 +614,7 @@ function ChatWindows:GetChannelConsole(chanName)
 							function()
 								self.channelConsoles[chanName] = nil
 								lobby:Leave(chanName)
-								self.tabPanel:RemoveTab(chanName)
+								self.tabPanel:RemoveTab(chanName, true)
 								self:UpdateJoinPosition()
 							end
 						},
@@ -660,7 +660,7 @@ function ChatWindows:GetPrivateChatConsole(userName)
 						OnClick = {
 							function()
 								self.privateChatConsoles[userName] = nil
-								self.tabPanel:RemoveTab(userName)
+								self.tabPanel:RemoveTab(userName, true)
 								self:UpdateJoinPosition()
 							end
 						},
