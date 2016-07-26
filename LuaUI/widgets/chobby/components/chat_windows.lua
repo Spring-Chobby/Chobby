@@ -415,7 +415,7 @@ function ChatWindows:SetTabActivation(tabName, activationLevel, outlineColor)
 	end
 	ctrl.activationLevel = activationLevel
 	
-	ctrl.font:Invalidate()
+	ctrl:Invalidate()
 end
 
 function ChatWindows:SetTabBadge(tabName, text)
