@@ -546,7 +546,7 @@ function Lobby:_OnLeft(chanName, userName, reason)
 		return
 	end
 	
-	if userName == self.myUsername then
+	if userName == self.myUserName then
 		for i, v in pairs(self.myChannels) do
 			if v == chanName then
 				table.remove(self.myChannels, i)
