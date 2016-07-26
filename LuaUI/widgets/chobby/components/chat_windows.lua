@@ -625,6 +625,11 @@ function ChatWindows:GetChannelConsole(chanName)
 		self.ignoreTabClick = false
 		self.tabbars[chanName] = channelConsole
 		self:UpdateJoinPosition()
+		
+		if self.switchToTab and self.switchToTab == chanName then
+			self.tabPanel.tabBar:Select(chanName)
+			self.switchToTab = false
+		end
 	end
 
 	return channelConsole
@@ -672,6 +677,11 @@ function ChatWindows:GetPrivateChatConsole(userName)
 		self.tabbars[userName] = privateChatConsole
 		
 		self:UpdateJoinPosition()
+		
+		if self.switchToTab and self.switchToTab == userName then
+			self.tabPanel.tabBar:Select(userName)
+			self.switchToTab = false
+		end
 	end
 
 	return privateChatConsole
@@ -691,7 +701,7 @@ function ChatWindows:CreateJoinChannelWindow()
 	local function JoinChannel()
 		if ebChannelName.text ~= "" then
 			lobby:Join(ebChannelName.text)
-			-- TODO: we should focus the newly opened tab
+			self.switchToTab = ebChannelName.text
 		end
 		self.joinWindow:Dispose()
 		self.joinWindow = nil
