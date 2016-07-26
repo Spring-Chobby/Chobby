@@ -321,6 +321,10 @@ function BattleListWindow:OpenHostWindow()
 		parent = hostBattleWindow,
 	}
 	
+	local function CancelFunc()
+		hostBattleWindow:Dispose()
+	end
+	
 	local function HostBattle()
 		WG.BattleRoomWindow.LeaveBattle()
 		if string.len(passwordEdit.text) > 0 then
@@ -344,15 +348,8 @@ function BattleListWindow:OpenHostWindow()
 				HostBattle()
 			end
 		},
-		OnKeyPress = {
-			function(obj, key, mods, ...)
-				if key == Spring.GetKeyCode("enter") or 
-					key == Spring.GetKeyCode("numpad_enter") then
-					HostBattle()
-				end
-			end
-		},
 	}
+	
 	local buttonCancel = Button:New {
 		right = 1,
 		width = 135,
@@ -363,12 +360,12 @@ function BattleListWindow:OpenHostWindow()
 		parent = hostBattleWindow,
 		OnClick = {
 			function()
-				hostBattleWindow:Dispose()
+				CancelFunc()
 			end
 		},
 	}
 	
-	local popupHolder = PriorityPopup(hostBattleWindow)
+	local popupHolder = PriorityPopup(hostBattleWindow, CancelFunc, HostBattle)
 end
 
 function BattleListWindow:JoinBattle(battle)
@@ -431,14 +428,6 @@ function BattleListWindow:JoinBattle(battle)
 			hint = i18n("password"),
 			fontsize = Configuration:GetFont(3).size,
 			passwordInput = true,
-			OnKeyPress = {
-				function(obj, key, mods, ...)
-					if key == Spring.GetKeyCode("enter") or 
-						key == Spring.GetKeyCode("numpad_enter") then
-						tryJoin()
-					end
-				end
-			},
 			parent = passwordWindow,
 		}
 		
@@ -446,6 +435,10 @@ function BattleListWindow:JoinBattle(battle)
 			lblError:SetCaption("")
 			WG.BattleRoomWindow.LeaveBattle()
 			lobby:JoinBattle(battle.battleID, ebPassword.text)
+		end
+		
+		local function CancelFunc()
+			passwordWindow:Dispose()
 		end
 		
 		local btnJoin = Button:New {
@@ -471,7 +464,7 @@ function BattleListWindow:JoinBattle(battle)
 			font = Configuration:GetFont(3),
 			OnClick = {
 				function()
-					passwordWindow:Dispose()
+					CancelFunc()
 				end
 			},
 			parent = passwordWindow,
@@ -487,6 +480,6 @@ function BattleListWindow:JoinBattle(battle)
 		end
 		lobby:AddListener("OnJoinBattle", onJoinBattle)
 		
-		local popupHolder = PriorityPopup(passwordWindow)
+		local popupHolder = PriorityPopup(passwordWindow, CancelFunc, tryJoin)
 	end
 end

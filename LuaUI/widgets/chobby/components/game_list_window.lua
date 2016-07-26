@@ -29,5 +29,5 @@ function GameListWindow:init(failFunction, sucessFunction)
 	self.window.OnDispose = self.window.OnDispose or {}
 	self.window.OnDispose[#self.window.OnDispose + 1] = failFunction
 	
-	self.popupHolder = PriorityPopup(self.window)
+	self.popupHolder = PriorityPopup(self.window, self.CancelFunc)
 end

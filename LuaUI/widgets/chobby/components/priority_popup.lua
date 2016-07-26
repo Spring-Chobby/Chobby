@@ -1,16 +1,22 @@
 PriorityPopup = Component:extends{}
 
-function PriorityPopup:init(mainWindow)
+function PriorityPopup:init(mainWindow, cancelFunction, acceptFunction)
 	local sentTime
 	local startTime = os.clock()
 	
 	self.mainWindow = mainWindow
-	
-	local function DisposeKey(_, key)
-		if key == Spring.GetKeyCode("esc") then
-			self.mainWindow:Dispose()
+
+	local function KeyListener(key)
+		if cancelFunction and key == Spring.GetKeyCode("esc") then
+			cancelFunction()
+			return true
+		elseif acceptFunction and (key == Spring.GetKeyCode("enter") or key == Spring.GetKeyCode("numpad_enter")) then
+			acceptFunction()
+			return true
 		end
 	end
+	
+	interfaceRoot.SetGlobalKeyListener(KeyListener)
 	
 	self.background = Control:New {
 		x = 0,
@@ -81,7 +87,6 @@ function PriorityPopup:init(mainWindow)
 				return true -- Eat all the mouse clicks.
 			end
 		},
-		OnKeyPress = {DisposeKey}
 	}
 	
 	screen0:FocusControl(self.background)
@@ -89,6 +94,7 @@ function PriorityPopup:init(mainWindow)
 	local function HideDisposeFunc()
 		self:unregister()
 		self.background:Dispose()
+		interfaceRoot.SetGlobalKeyListener()
 	end
 	
 	self.mainWindow:BringToFront()
@@ -97,9 +103,6 @@ function PriorityPopup:init(mainWindow)
 	self.mainWindow.OnDispose[#self.mainWindow.OnDispose + 1] = HideDisposeFunc
 	self.mainWindow.OnHide = self.mainWindow.OnHide or {}
 	self.mainWindow.OnHide[#self.mainWindow.OnHide + 1] = HideDisposeFunc
-	
-	self.mainWindow.OnKeyPress = self.mainWindow.OnKeyPress or {}
-	self.mainWindow.OnKeyPress[#self.mainWindow.OnKeyPress + 1] = DisposeKey
 	
 	local sw, sh = Spring.GetWindowGeometry()
 	self:ViewResize(sw, sh)

@@ -24,6 +24,18 @@ function createTabGroup(ctrls)
 end
 
 function LoginWindow:init(failFunction, cancelText, windowClassname)
+	
+	self.CancelFunc = function ()
+		self.window:Dispose()
+		if failFunction then
+			failFunction()
+		end
+	end
+	
+	self.AcceptFunc = function ()
+		self:tryLogin()
+	end
+		
 	self.lblInstructions = Label:New {
 		x = 15,
 		width = 170,
@@ -134,7 +146,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		classname = "action_button",
 		OnClick = {
 			function()
-				self:tryLogin()
+				self.AcceptFunc()
 			end
 		},
 	}
@@ -164,10 +176,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		classname = "negative_button",
 		OnClick = {
 			function()
-				self.window:Dispose()
-				if failFunction then
-					failFunction()
-				end
+				self.CancelFunc()
 			end
 		},
 	}

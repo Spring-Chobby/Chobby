@@ -2,6 +2,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	local externalFunctions = {}
 	
+	local globalKeyListener = false
+	
 	local titleWidthRel = 28
 	local panelWidthRel = 40
 	
@@ -546,6 +548,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	end
 	
 	function externalFunctions.KeyPressed(key, mods, isRepeat, label, unicode)
+		if globalKeyListener then
+			return globalKeyListener(key, mods, isRepeat, label, unicode)
+		end
 		if chatWindows.visible and key == Spring.GetKeyCode("tab") and mods.ctrl then
 			if mods.shift then
 				chatWindows:CycleTab(-1)
@@ -555,6 +560,12 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			return true
 		end
 		return false
+	end
+	
+	function externalFunctions.SetGlobalKeyListener(newListenerFunc)
+		-- This is intentially set up such that there is only one global key 
+		-- listener at a time. This is indended for popups that monopolise input.
+		globalKeyListener = newListenerFunc
 	end
 	
 	-------------------------------------------------------------------

@@ -35,5 +35,5 @@ function MapListWindow:init(lobby, zoomToMap)
 		self.listPanel:SetScrollPos(0, zoomY, true, false)
 	end
 	
-	self.popupHolder = PriorityPopup(self.window)
+	self.popupHolder = PriorityPopup(self.window, self.CancelFunc)
 end

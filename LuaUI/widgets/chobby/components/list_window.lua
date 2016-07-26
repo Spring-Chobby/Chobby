@@ -1,6 +1,11 @@
 ListWindow = Component:extends{}
 
 function ListWindow:init(parent, title, noWindow, windowClassname)
+	
+	self.CancelFunc = function ()
+		self:HideWindow()
+	end
+	
 	self.lblTitle = Label:New {
 		x = 20,
 		right = 5,
@@ -19,7 +24,7 @@ function ListWindow:init(parent, title, noWindow, windowClassname)
 		font = Configuration:GetFont(3),
 		OnClick = {
 			function()
-				self:HideWindow()
+				self.CancelFunc()
 			end
 		},
 	}
