@@ -277,16 +277,19 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	}
 	leftOffset = leftOffset + 45
 
-	local lblNumberOfPlayers = Label:New {
-		x = 8,
-		y = leftOffset,
-		width = 200,
-		height = 30,
-		caption = "",
-		font = WG.Chobby.Configuration:GetFont(1),
-		parent = leftInfo,
-	}
-	leftOffset = leftOffset + 25
+	local lblNumberOfPlayers 
+	if battleLobby.name ~= "singleplayer" then
+		lblNumberOfPlayers = Label:New {
+			x = 8,
+			y = leftOffset,
+			width = 200,
+			height = 30,
+			caption = "",
+			font = WG.Chobby.Configuration:GetFont(1),
+			parent = leftInfo,
+		}
+		leftOffset = leftOffset + 25
+	end
 	
 	lblHaveGame = Label:New {
 		x = 8,
@@ -371,7 +374,9 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	battleLobby:AddListener("OnUpdateBattleInfo", onUpdateBattleInfo)
 	
 	local UpdatePlayers = function(battleID)
-		lblNumberOfPlayers:SetCaption(i18n("players") .. ": " .. tostring(#battle.users) .. "/" .. tostring(battle.maxPlayers))
+		if lblNumberOfPlayers then
+			lblNumberOfPlayers:SetCaption(i18n("players") .. ": " .. tostring(#battle.users) .. "/" .. tostring(battle.maxPlayers))
+		end
 	end
 	
 	onLeftBattle_counter = function(listener, leftBattleID, userName)
