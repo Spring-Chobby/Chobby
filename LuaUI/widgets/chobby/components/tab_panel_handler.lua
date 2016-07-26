@@ -1,4 +1,4 @@
-function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsVertical, backFunction)
+function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsVertical, backFunction, cleanupFunction, fontSizeScale)
 	
 	local externalFunctions = {}
 	
@@ -10,7 +10,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 	local buttonsHolder
 	local titleBackControl
 	
-	local fontSizeScale = 3
+	local fontSizeScale = fontSizeScale or 3
 	local buttonOffset = 0
 	local buttonHeight = 70
 	
@@ -75,6 +75,22 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		for i = 1, #tabs do
 			SetButtonPositionAndSize(i)
 		end
+	end
+	
+		
+	local function OpenConfirmationPopup(sucessFunction)
+		local backConfirm = Configuration.backConfirmation[name]
+		if not backConfirm then
+			return false
+		end
+		for i = 1, #backConfirm do
+			local confirmData = backConfirm[i]
+			if (not Configuration[confirmData.doNotAskAgainKey]) and confirmData.testFunction() then
+				ConfirmationPopup(sucessFunction, confirmData.question, confirmData.doNotAskAgainKey)
+				return true
+			end
+		end
+		return false
 	end
 	
 	-------------------------------------------------------------------
@@ -302,6 +318,13 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 	if backFunction then
 		-- Add heading and back button
 		buttonOffset = 50
+
+		local function SucessFunction()
+			if cleanupFunction then
+				cleanupFunction() -- Cleans up state information created by the submenu
+			end
+			backFunction(externalFunctions) -- Returns UI to main menu
+		end
 		
 		local size = Configuration:GetFont(fontSizeScale).size
 		heading = TextBox:New {
@@ -333,7 +356,14 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 				}
 			},
 			parent = buttonsHolder,
-			OnClick = {function (obj) backFunction(externalFunctions) end},
+			OnClick = {
+				function (obj)
+					if OpenConfirmationPopup(SucessFunction) then
+						return
+					end
+					SucessFunction()
+				end
+			},
 		}
 	end
 	

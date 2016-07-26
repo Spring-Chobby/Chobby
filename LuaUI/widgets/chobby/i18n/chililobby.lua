@@ -5,6 +5,8 @@ return {
 		ok = "OK",
 		cancel = "Cancel",
 		close = "Close",
+		yes = "Yes",
+		do_not_ask_again = "Do not ask again",
 		yes_caps = "YES",
 		no_caps = "NO",
 		quit = "Quit",

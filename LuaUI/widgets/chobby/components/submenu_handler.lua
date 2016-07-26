@@ -83,11 +83,11 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 		end
 	end
 	
-	function externalFunctions.ReplaceSubmenu(index, newTabs)
+	function externalFunctions.ReplaceSubmenu(index, newTabs, newCleanupFunction)
 		externalFunctions.SetBackAtMainMenu()
 		submenus[index].panelHandler.Destroy()
 		
-		local newPanelHandler = GetTabPanelHandler(submenus[index].name, buttonWindow, panelWindow, newTabs, true, BackToMainMenu)
+		local newPanelHandler = GetTabPanelHandler(submenus[index].name, buttonWindow, panelWindow, newTabs, true, BackToMainMenu, newCleanupFunction)
 		newPanelHandler.Rescale(fontSizeScale, buttonHeight)
 		newPanelHandler.Hide()
 		submenus[index].panelHandler = newPanelHandler
@@ -119,7 +119,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 	
 	for i = 1, #submenus do
 		
-		local panelHandler = GetTabPanelHandler(submenus[i].name, buttonWindow, panelWindow, submenus[i].tabs, true, BackToMainMenu, fontSizeScale)
+		local panelHandler = GetTabPanelHandler(submenus[i].name, buttonWindow, panelWindow, submenus[i].tabs, true, BackToMainMenu, submenus[i].cleanupFunction, fontSizeScale)
 		panelHandler.Hide()
 		
 		submenuPanelNames[submenus[i].name] = panelHandler

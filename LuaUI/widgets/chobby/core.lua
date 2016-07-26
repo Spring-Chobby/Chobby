@@ -44,6 +44,7 @@ local includes = {
 	"components/ai_list_window.lua",
 	"components/map_list_window.lua",
 	"components/game_list_window.lua",
+	"components/confirmation_popup.lua",
 }
 
 Chobby = widget

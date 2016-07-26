@@ -258,6 +258,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	}
 	panelWindow:Hide()
 	
+	local function ExitSpring()
+		Spring.Echo("Quitting...")
+		Spring.SendCommands("quitforce")
+	end
+	
 	-- Exit button
 	local exitButton = Button:New {
 		x = 0,
@@ -269,9 +274,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		parent = mainButtons,
 		OnClick = {
 			function(self)
-				-- TODO, add popup window to confirm exit.
-				Spring.Echo("Quitting...")
-				Spring.SendCommands("quitforce")
+				ConfirmationPopup(ExitSpring, "Are you sure you want to quit?", nil, 320, 200)
 			end
 		},
 	}
@@ -300,6 +303,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				{name = "matchmaking", control = QueueListWindow().window},
 				{name = "custom", control = BattleListWindow().window},
 			},
+			cleanupFunction = function ()
+				WG.BattleRoomWindow.LeaveBattle()
+			end
 		},
 	}
 	

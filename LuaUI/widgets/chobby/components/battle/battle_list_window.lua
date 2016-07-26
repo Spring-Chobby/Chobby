@@ -105,6 +105,13 @@ function BattleListWindow:AddBattle(battleID, battle)
 		caption = "",
 		OnClick = {
 			function()
+				if lobby:GetMyBattleID() and not Configuration.confirmation_battleFromBattle then
+					local function Success() 
+						self:JoinBattle(battle)
+					end
+					ConfirmationPopup(Success, "Are you sure you want to leave your current battle and join a new one?", "confirmation_battleFromBattle")
+					return
+				end
 				self:JoinBattle(battle)
 			end
 		},
