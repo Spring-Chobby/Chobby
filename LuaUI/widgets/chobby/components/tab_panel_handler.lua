@@ -240,11 +240,14 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 					tab.activityLabel.font.outline = true
 					tab.activityLabel.font.outlineColor = {1,1,1,1}
 					tab.activityLabel.font.color = {1,1,1,1}
-				else
-					-- Implement more priorities after this if you like
+				elseif tab.priorityLevel == 2 then
 					tab.activityLabel.font.outline = true
 					tab.activityLabel.font.outlineColor = {1,0,0,1}
 					tab.activityLabel.font.color = {1,0,0,1}
+				else
+					tab.activityLabel.font.outline = true
+					tab.activityLabel.font.outlineColor = {0.8,1,0,1}
+					tab.activityLabel.font.color = {0.8,1,0,1}
 				end
 				tab.activityLabel:SetCaption(activityLabel)
 			end
@@ -306,6 +309,8 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 				font = Configuration:GetFont(1),
 				caption = "",
 			}
+			
+			newTab.activityLabel:BringToFront()
 			
 			if selected then
 				ToggleShow(button, newTab)

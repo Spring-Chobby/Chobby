@@ -290,6 +290,7 @@ local function InitializeControls(parentControl)
 	end
 	
 	local unreadMessages = 0
+	local voting = false
 	
 	parentControl.tooltip = "battle_tooltip_" .. (lobby:GetMyBattleID() or 0)
 	
@@ -301,23 +302,39 @@ local function InitializeControls(parentControl)
 		end
 	end
 	
-	local function OnSaidBattle(listeners, userName)
+	local function OnSaidBattle(listeners, userName, message)
 		local userInfo = lobby:GetUser(userName) or {}
 		if userInfo.isBot then
 			return
 		end
+		local iAmMentioned = (string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName())
 		if statusWindowHandler.IsTabSelected("myBattle") then
 			if unreadMessages > 0 then
+				voting = false
 				unreadMessages = 0
 				statusWindowHandler.SetActivity("myBattle", unreadMessages)
 			end
 			return
 		end
 		unreadMessages = unreadMessages + 1
-		statusWindowHandler.SetActivity("myBattle", unreadMessages)
+		statusWindowHandler.SetActivity("myBattle", unreadMessages, iAmMentioned and 2)
 	end
 	lobby:AddListener("OnSaidBattle", OnSaidBattle)
 	lobby:AddListener("OnSaidBattleEx", OnSaidBattle)
+	
+	local function OnVoteUpdate()
+		if not voting then
+			unreadMessages = unreadMessages + 1
+			statusWindowHandler.SetActivity("myBattle", unreadMessages, 3)
+			voting = true
+		end
+	end
+	lobby:AddListener("OnVoteUpdate", OnVoteUpdate)
+	
+	local function OnVoteEnd()
+		voting = false
+	end
+	lobby:AddListener("OnVoteEnd", OnVoteEnd)
 	
 	local function onJoinBattle(listener, battleID)	
 		parentControl.tooltip = "battle_tooltip_" .. battleID
