@@ -235,6 +235,8 @@ local function InitializeControls(parentControl)
 	
 	local unreadMessages = 0
 	
+	parentControl.tooltip = "battle_tooltip_" .. (lobby:GetMyBattleID() or 0)
+	
 	parentControl.OnClick = parentControl.OnClick or {}
 	parentControl.OnClick[#parentControl.OnClick + 1] = function (obj)
 		if unreadMessages > 0 then
@@ -273,6 +275,7 @@ local function InitializeControls(parentControl)
 	lobby:AddListener("OnUpdateUserTeamStatus", onUpdateUserTeamStatus)
 	
 	local function onJoinBattle(listener, battleID)	
+		parentControl.tooltip = "battle_tooltip_" .. battleID
 		battleInfoHolder.Update(battleID)
 	end
 	lobby:AddListener("OnJoinBattle", onJoinBattle)
