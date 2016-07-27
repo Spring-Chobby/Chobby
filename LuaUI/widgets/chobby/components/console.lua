@@ -27,6 +27,20 @@ function Console:init(channelName)
 		fontsize = Configuration:GetFont(1).size,
 		parent = self.spHistory,
 		selectable = true,
+
+		_inmousemove = false,
+		OnClick = { function(obj)
+			if not obj._inmousemove then
+				screen0:FocusControl(self.ebInputText)
+			end
+			obj._inmousemove = false
+		end},
+		OnMouseMove = { function(obj, x, y, dx, dy, button)
+			if button ~= 1 then
+				return
+			end
+			obj._inmousemove = true
+		end},
 	}
 	self.ebInputText = EditBox:New {
 		x = 0,
