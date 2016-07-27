@@ -896,21 +896,6 @@ local function SetupVotePanel(votePanel, battle, battleID)
 	battleLobby:AddListener("OnVoteEnd", onVoteEnd)
 end
 
-local unreadMessages = 0
-local function _NotifyBattleRoom(userName, message, sound, notificationTime)
-	if string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName() then
-		unreadMessages = unreadMessages + 1
-		WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler().SetActivity("myBattle", unreadMessages)
-	end
---[[
-	Chotify:Post({
-		title = userName .. " in " .. chanName .. ":",
-		body = message,
-		sound = sound,
-		time = notificationTime,
-	})]]
-end
-
 local function InitializeControls(battleID, oldLobby, topPoportion)
 	local battle = battleLobby:GetBattle(battleID)
 	
@@ -1084,13 +1069,11 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 
 	local onSaidBattle = function(listener, userName, message)
 		battleRoomConsole:AddMessage(userName .. ": " .. message)
-		_NotifyBattleRoom(userName, message, "sounds/beep4.wav", 15)
 	end
 	battleLobby:AddListener("OnSaidBattle", onSaidBattle)
 
 	local onSaidBattleEx = function(listener, userName, message)
-		battleRoomConsole:AddMessage("\255\0\139\139" .. userName .. " " .. message .. "\b")		
-		_NotifyBattleRoom(userName, message, "sounds/beep4.wav", 15)
+		battleRoomConsole:AddMessage("\255\0\139\139" .. userName .. " " .. message .. "\b")
 	end
 	battleLobby:AddListener("OnSaidBattleEx", onSaidBattleEx)
 

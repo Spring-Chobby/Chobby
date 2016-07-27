@@ -32,19 +32,39 @@ local BattleStatusPanel = {}
 
 local battleStatus = nil
 
-local function InitializeControls(window)
-	local font = WG.Chobby.Configuration:GetFont(2)
+local function InitializeControls(parentControl)
+	local font = WG.Chobby.Configuration:GetFont(3)
 	local lblPlayerStatus = Label:New {
-		x = 100,
-		width = 480-100,
-		y = 0,
-		height = 40,
-		align = "center",
+		x = 15,
+		width = 120,
+		y = 15,
+		height = 20,
+		align = "left",
 		valign = "center",
-		caption = "",
-		parent = window,
+		caption = "Battle",
+		parent = parentControl,
 		font = font,
 	}
+	local infoHolder = Panel:New {
+		x = 85,
+		right = 5,
+		y = 5,
+		bottom = 5,
+		parent = parentControl,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+	}
+	
+	parentControl.OnResize = parentControl.OnResize or {}
+	parentControl.OnResize[#parentControl.OnResize + 1] = function (obj, xSize, ySize)
+		local smallMode = (ySize < 60)
+		if smallMode then
+			lblPlayerStatus:SetPos(nil, 13)
+		else
+			lblPlayerStatus:SetPos(nil, 25)
+		end
+	end
 
 	onUpdateUserTeamStatusSelf = function(listener, userName, allyNumber, isSpectator)
 		if not userName == lobby:GetMyUserName() then
@@ -52,14 +72,6 @@ local function InitializeControls(window)
 		end
 	end
 	lobby:AddListener("OnUpdateUserTeamStatus", onUpdateUserTeamStatusSelf)
-
-	onLeftBattle = function(listener, leftBattleID, userName)
-		if userName == lobby:GetMyUserName() then
-			battleStatus = nil
-			lblPlayerStatus:SetCaption("")
-		end
-	end
-	lobby:AddListener("OnLeftBattle", onLeftBattle)
 end
 
 function BattleStatusPanel.GetControl()
@@ -67,8 +79,9 @@ function BattleStatusPanel.GetControl()
 		x = 0,
 		y = 0,
 		width = 500,
-		height = 50,
+		bottom = 0,
 		padding = {0,0,0,0},
+		caption = "",
 		OnParent = {
 			function(obj)
 				if obj:IsEmpty() then

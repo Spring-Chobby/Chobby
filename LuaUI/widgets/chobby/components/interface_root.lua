@@ -29,6 +29,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	local padding = 0
 	
+	local statusButtonWidth = 310
+	
 	-- Switch to single panel mode when below the minimum screen width
 	local minScreenWidth = 1280
 	
@@ -319,7 +321,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		myBattle = WG.BattleStatusPanel.GetControl
 	}
 	
-	local battleStatusPanelHandler = GetTabPanelHandler("myBattlePanel", battleStatusHolder, contentPlace, {}, nil, nil, nil, nil, 50, battleStatusTabControls)
+	local battleStatusPanelHandler = GetTabPanelHandler("myBattlePanel", battleStatusHolder, contentPlace, {}, nil, nil, nil, nil, statusButtonWidth, battleStatusTabControls)
 	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons, panelWindow, rightPanelTabs)
 	mainWindowHandler = GetSubmenuHandler(mainButtons, contentPlace, submenus)
 	
@@ -420,6 +422,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		doublePanelMode = newDoublePanel
 		
 		if doublePanelMode then
+			--battleStatusPanelHandler.Rescale(3, nil, statusButtonWidth)
 			RescaleMainWindow(3, 70)
 		
 			-- Make main buttons wider
@@ -462,6 +465,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			topPartImage:SetPos(nil, nil, nil, titleHeight + imageFudge)
 		else
 			rightPanelHandler.Rescale(2, 55)
+			--battleStatusPanelHandler.Rescale(3, nil, 2 * statusButtonWidth)
 			RescaleMainWindow(2, 55)
 			
 			-- Make main buttons thinner
