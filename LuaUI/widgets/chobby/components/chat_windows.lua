@@ -258,6 +258,7 @@ function ChatWindows:init()
 				if self.storedCurrentTab then
 					self.tabPanel:CallListeners(self.tabPanel.OnTabChange, self.storedCurrentTab)
 				end
+				interfaceRoot.GetRightPanelHandler().SetActivity("chat")
 				self.tabPanel.tabBar:EnableHighlight()
 				self.visible = true
 			end
@@ -424,10 +425,15 @@ function ChatWindows:SetTabActivation(tabName, activationLevel, outlineColor)
 			return
 		end
 		ctrl.font.outline = true
-		ctrl.font.outlineColor  = outlineColor
+		ctrl._badge.font.outline = true
+		ctrl.font.outlineColor = outlineColor
+		ctrl._badge.font.outlineColor = outlineColor
+		ctrl.font.color = outlineColor
+		ctrl._badge.font.color = outlineColor
 	else
 		ctrl.font.outline = false
 		ctrl.font.outlineColor = {0,0,0,1}
+		ctrl.font.color = {1,1,1,1}
 	end
 	ctrl.activationLevel = activationLevel
 	
@@ -469,10 +475,14 @@ function ChatWindows:_NotifyTab(tabName, userName, chanName, nameMentioned, mess
 		local oldMessages = console.unreadMessages
 		console.unreadMessages = console.unreadMessages + 1
 		self:SetTabBadge(tabName, tostring(console.unreadMessages))
-		self:SetTabActivation(tabName, (nameMentioned and 2) or 1, {1, 1, (nameMentioned and 0) or 1, 1})
+		local mentionNumber = (nameMentioned and 0) or 1
+		self:SetTabActivation(tabName, (nameMentioned and 2) or 1, {1, mentionNumber, mentionNumber, 1})
 		self.totalNewMessages = self.totalNewMessages + (console.unreadMessages - oldMessages)
-		interfaceRoot.GetRightPanelHandler().SetActivity("chat", self.totalNewMessages)
-
+		
+		if not self.window.parent then
+			interfaceRoot.GetRightPanelHandler().SetActivity("chat", self.totalNewMessages, 2 - mentionNumber)
+		end
+		
 		if nameMentioned then
 			Chotify:Post({
 				title = userName .. " in " .. chanName .. ":",

@@ -222,16 +222,31 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		end
 	end
 	
-	function externalFunctions.SetActivity(name, activityCount)
+	function externalFunctions.SetActivity(name, activityCount, priorityLevel)
+		priorityLevel = priorityLevel or 1
+		activityCount = activityCount or 0
 		for i = 1, #tabs do
-			if tabs[i].name == name and tabs[i].activityLabel then
+			local tab = tabs[i]
+			if tab.name == name and tab.activityLabel then
 				local activityLabel
 				if activityCount > 0 then
+					tab.priorityLevel = math.max(priorityLevel, tab.priorityLevel or 1)
 					activityLabel = "(" .. tostring(activityCount) .. ")"
 				else
+					tab.priorityLevel = 1
 					activityLabel = ""
 				end
-				tabs[i].activityLabel:SetCaption(activityLabel)
+				if tab.priorityLevel == 1 then
+					tab.activityLabel.font.outline = true
+					tab.activityLabel.font.outlineColor = {1,1,1,1}
+					tab.activityLabel.font.color = {1,1,1,1}
+				else
+					-- Implement more priorities after this if you like
+					tab.activityLabel.font.outline = true
+					tab.activityLabel.font.outlineColor = {1,0,0,1}
+					tab.activityLabel.font.color = {1,0,0,1}
+				end
+				tab.activityLabel:SetCaption(activityLabel)
 			end
 		end
 	end
