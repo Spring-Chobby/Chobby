@@ -14,6 +14,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local panelButtonsHeight = 50
 	local statusWindowGapSmall = 45
 	
+	local battleStatusTopGap = 50
 	local chatTabHolderRight = 0
 	
 	local titleHeight = 125
@@ -105,7 +106,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	local battleStatusHolder = Control:New {
 		x = 0,
-		y = panelButtonsHeight,
+		y = battleStatusTopGap,
 		right = userStatusWidth,
 		bottom = 0,
 		name = "battleStatusHolder",
@@ -404,6 +405,14 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		exitButton._relativeBounds.bottom = bottomPad
 		exitButton:UpdateClientArea()
 		
+		if doublePanelMode then
+			battleStatusHolder._relativeBounds.right = panelButtonsWidth + rightPad
+			battleStatusHolder:UpdateClientArea()
+		else
+			battleStatusHolder._relativeBounds.right = userStatusWidth
+			battleStatusHolder:UpdateClientArea()
+		end
+		
 		mainButtonsHolder:SetPos(leftButtonPad)
 		local contentOffset = leftButtonPad
 		if doublePanelMode then
@@ -460,7 +469,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			userStatusWindow._relativeBounds.bottom = panelButtonsHeight
 			userStatusWindow:UpdateClientArea()
 			
-			battleStatusHolder:SetPos(nil, panelButtonsHeight, nil, nil)
+			battleStatusHolder:SetPos(nil, battleStatusTopGap)
 			battleStatusHolder._relativeBounds.bottom = 0
 			battleStatusHolder:UpdateClientArea()
 			
@@ -506,7 +515,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			userStatusWindow._relativeBounds.bottom = 0
 			userStatusWindow:UpdateClientArea()
 			
-			battleStatusHolder:SetPos(nil, 0, nil, nil)
+			battleStatusHolder:SetPos(nil, 0)
 			battleStatusHolder._relativeBounds.bottom = statusWindowGapSmall
 			battleStatusHolder:UpdateClientArea()
 			
