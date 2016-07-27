@@ -261,7 +261,7 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 	end
 	local items = self:GetRowItems(battleID)
 	local mapCaption = items.battleButton:GetChildByName("mapCaption")
-	local minimapImage = items.battleButton:GetChildByName("minimapImage")
+	local minimapImage = items.battleButton:GetChildByName("minimap"):GetChildByName("minimapImage")
 	local playersCaption = items.battleButton:GetChildByName("playersCaption")
 	
 	minimapImage.file = Configuration:GetMinimapImage(battle.mapName, battle.gameName)
@@ -279,7 +279,7 @@ function BattleListWindow:OnBattleIngameUpdate(battleID, isRunning)
 		return
 	end
 	local items = self:GetRowItems(battleID)
-	local runningImage = items.battleButton:GetChildByName("runningImage")
+	local runningImage = items.battleButton:GetChildByName("minimap"):GetChildByName("runningImage")
 	if isRunning then
 		runningImage.file = BATTLE_RUNNING
 	else
