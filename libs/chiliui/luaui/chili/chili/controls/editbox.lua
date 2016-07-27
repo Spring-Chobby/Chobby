@@ -112,6 +112,9 @@ function EditBox:SetText(newtext)
 end
 
 function EditBox:_SetSelection(selStart, selStartY, selEnd, selEndY)
+	if #self.lines == 0 then
+		return
+	end
 	self.selStart  = selStart   or self.selStart
 	self.selStartY = selStartY  or self.selStartY
 	self.selEnd    = selEnd     or self.selEnd
@@ -122,7 +125,7 @@ function EditBox:_SetSelection(selStart, selStartY, selEnd, selEndY)
 		for _, plID in pairs(logicalLine.pls) do
 			local pl = self.physicalLines[plID]
 			self.selStartPhysicalY = plID
-			if #pl.text > self.selStartPhysical then
+			if #pl.text > self.selStartPhysical or plID == #logicalLine.pls then
 				break
 			end
 			self.selStartPhysical  = self.selStartPhysical - #pl.text
@@ -135,10 +138,10 @@ function EditBox:_SetSelection(selStart, selStartY, selEnd, selEndY)
 		for _, plID in pairs(logicalLine.pls) do
 			local pl = self.physicalLines[plID]
 			self.selEndPhysicalY = plID
-			if #pl.text > self.selEndPhysical then
+			if #pl.text > self.selEndPhysical or plID == #logicalLine.pls then
 				break
 			end
-			self.selEndPhysical  = self.selEndPhysical - #pl.text
+			self.selEndPhysical = self.selEndPhysical - #pl.text
 		end
 	end
 end
@@ -462,6 +465,20 @@ function EditBox:ClearSelected()
 	self:Invalidate()
 end
 
+-- TODO only works/tested for not multiline things, joy ^_^
+function EditBox:UpdateLine(lineID, text)
+	local logicalLine = self.lines[lineID]
+	self.physicalLines = {} -- TODO
+	if logicalLine == nil and lineID == 1 then
+		self:AddLine(text)
+	else
+		logicalLine.text = text
+		for lineID = 1, #self.lines do
+			self.lines[lineID].pls = {}
+			self:_GeneratePhysicalLines(lineID)
+		end
+	end
+end
 
 function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	local cp = self.cursor
@@ -486,9 +503,11 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 			if mods.ctrl then
 				repeat
 					self.text = Utf8DeleteAt(self.text, self.cursor)
+					self:UpdateLine(1, self.text)
 				until self.cursor >= #self.text-1 or (self.text:sub(self.cursor, self.cursor) == " " and self.text:sub(self.cursor+1, self.cursor+1) ~= " ")
 			else
-			self.text = Utf8DeleteAt(txt, cp)
+				self.text = Utf8DeleteAt(txt, cp)
+				self:UpdateLine(1, self.text)
 			end
 		else
 			self:ClearSelected()
@@ -606,6 +625,7 @@ function EditBox:TextInput(utf8char, ...)
 			cp = self.cursor
 		end
 		self.text = txt:sub(1, cp - 1) .. unicode .. txt:sub(cp, #txt)
+		self:UpdateLine(1, self.text)
 		self.cursor = cp + unicode:len()
 	end
 
