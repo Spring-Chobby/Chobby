@@ -1,4 +1,4 @@
-function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsVertical, backFunction, cleanupFunction, fontSizeScale)
+function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsVertical, backFunction, cleanupFunction, fontSizeScale, tabWidth, tabControlOverride)
 	
 	local externalFunctions = {}
 	
@@ -12,6 +12,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 	
 	local fontSizeScale = fontSizeScale or 3
 	local buttonOffset = 0
+	local buttonWidth = tabWidth
 	local buttonHeight = 70
 	
 	local heading -- has a value if the tab panel has a heading
@@ -52,6 +53,18 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 				buttonHeight
 			)
 			tabs[index].button:SetPosRelative(
+				"0%",
+				nil,
+				"100%"
+			)
+		elseif buttonWidth then
+			tabs[index].button:SetPos(
+				(index - 1) * (buttonWidth + BUTTON_SPACING) + buttonOffset,
+				nil,
+				buttonWidth
+			)
+			tabs[index].button:SetPosRelative(
+				nil,
 				"0%",
 				nil,
 				"100%"
@@ -126,8 +139,9 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		return false
 	end
 	
-	function externalFunctions.Rescale(newFontSize, newButtonHeight)
+	function externalFunctions.Rescale(newFontSize, newButtonHeight, newButtonWidth)
 		fontSizeScale = newFontSize or fontSizeScale
+		buttonWidth = newButtonWidth or buttonWidth
 		buttonHeight = newButtonHeight or buttonHeight
 		if heading then
 			heading:Dispose()
@@ -239,25 +253,30 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		newTab.entryCheck = entryCheck
 		local button
 		if control then
-			button = Button:New {
-				name = name .. "_button",
-				x = "0%",
-				y = "0%",
-				width = "100%",
-				height = "100%",
-				caption = humanName,
-				font = Configuration:GetFont(fontSizeScale),
-				parent = buttonsHolder,
-				OnClick = {
-					function(obj) 
-						if newTab.entryCheck then
-							newTab.entryCheck(ToggleShow, obj, newTab)
-						else
-							ToggleShow(obj, newTab)
-						end
-					end
-				},
-			}
+			if tabControlOverride and tabControlOverride[name] then
+				button = tabControlOverride[name]()
+			else
+				button = Button:New {
+					name = name .. "_button",
+					x = "0%",
+					y = "0%",
+					width = "100%",
+					height = "100%",
+					caption = humanName,
+					font = Configuration:GetFont(fontSizeScale),
+				}
+			end
+			
+			buttonsHolder:AddChild(button)
+			
+			button.OnClick = button.OnClick or {}
+			button.OnClick[#button.OnClick + 1] = function(obj) 
+				if newTab.entryCheck then
+					newTab.entryCheck(ToggleShow, obj, newTab)
+				else
+					ToggleShow(obj, newTab)
+				end
+			end
 			
 			newTab.activityLabel = Label:New {
 				name = "activity_label",

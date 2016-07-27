@@ -101,7 +101,6 @@ local function InitializeControls(window)
 
 	local userControl
 	onAccepted = function(listener)
-		Spring.Echo("onAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAccepted")
 		userControl = WG.UserHandler.GetStatusUser(lobby:GetMyUserName())
 		userControl:SetPos(nil, 45)
 		window:AddChild(userControl)

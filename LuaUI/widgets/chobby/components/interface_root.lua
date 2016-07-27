@@ -112,9 +112,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		draggable = false,
 		padding = {0, 0, 0, 0},
 		parent = mainStatusWindow,
-		children = {
-			WG.BattleStatusPanel.GetControl(),
-		}
 	}
 	
 	local mainWindow = Control:New {
@@ -318,9 +315,14 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		},
 	}
 	
-	local battleStatusPanelHandler = GetTabPanelHandler("myBattlePanel", battleStatusHolder, contentPlace, {})
+	local battleStatusTabControls = {
+		myBattle = WG.BattleStatusPanel.GetControl
+	}
+	
+	local battleStatusPanelHandler = GetTabPanelHandler("myBattlePanel", battleStatusHolder, contentPlace, {}, nil, nil, nil, nil, 50, battleStatusTabControls)
 	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons, panelWindow, rightPanelTabs)
 	mainWindowHandler = GetSubmenuHandler(mainButtons, contentPlace, submenus)
+	
 	
 	local function RescaleMainWindow(newFontSize, newButtonHeight)
 		mainWindowHandler.Rescale(newFontSize, newButtonHeight)
