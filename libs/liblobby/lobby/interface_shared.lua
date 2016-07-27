@@ -58,6 +58,10 @@ function Interface:_SendCommand(command, sendMessageCount)
 	if command[#command] ~= "\n" then
 		command = command .. "\n"
 	end
+	if not self.client then
+		Spring.Echo("Missing self.client!!!")
+		return
+	end
 	self.client:send(command)
 	self:_CallListeners("OnCommandSent", command:sub(1, #command-1))
 	self.lastSentSeconds = Spring.GetGameSeconds()
