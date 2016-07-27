@@ -172,13 +172,15 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		right = 0,
 		bottom = 52,
 		height = 48,
-		caption = "\255\66\138\201" .. i18n("watch") ..  "\b",
+		caption = "\255\66\138\201" .. i18n("spectator") ..  "\b",
 		font =  WG.Chobby.Configuration:GetFont(3),
 		OnClick = {
 			function(obj)
 				battleLobby:SetBattleStatus({isSpectator = true})
 				ButtonUtilities.SetButtonDeselected(btnPlay)
+				ButtonUtilities.SetCaption(btnPlay, i18n("play"))
 				ButtonUtilities.SetButtonSelected(obj)
+				ButtonUtilities.SetCaption(obj, i18n("spectating"))
 			end
 		},
 		parent = rightInfo,
@@ -189,13 +191,15 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		right = "50%",
 		bottom = 52,
 		height = 48,
-		caption = "\255\66\138\201" .. i18n("play") ..  "\b",
+		caption = "\255\66\138\201" .. i18n("player") ..  "\b",
 		font =  WG.Chobby.Configuration:GetFont(3),
 		OnClick = {
 			function(obj)
 				battleLobby:SetBattleStatus({isSpectator = false})
 				ButtonUtilities.SetButtonDeselected(btnSpectate)
+				ButtonUtilities.SetCaption(btnSpectate, i18n("spectate"))
 				ButtonUtilities.SetButtonSelected(obj)
+				ButtonUtilities.SetCaption(obj, i18n("playing"))
 			end
 		},
 		parent = rightInfo,
@@ -323,17 +327,21 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	)
 	downloader:Hide()
 	-- Example downloads
-	--MaybeDownloadArchive("Titan-v2", "map")
-	--MaybeDownloadArchive("tinyskirmishredux1.1", "map")
+	MaybeDownloadArchive("Titan-v2", "map")
+	MaybeDownloadArchive("tinyskirmishredux1.1", "map")
 	
 	onUpdateUserTeamStatusSelf = function(listener, userName, allyNumber, isSpectator)
 		if userName == myUserName then
 			if isSpectator then
 				ButtonUtilities.SetButtonDeselected(btnPlay)
+				ButtonUtilities.SetCaption(btnPlay, i18n("play"))
 				ButtonUtilities.SetButtonSelected(btnSpectate)
+				ButtonUtilities.SetCaption(btnSpectate, i18n("spectating"))
 			else
 				ButtonUtilities.SetButtonDeselected(btnSpectate)
+				ButtonUtilities.SetCaption(btnSpectate, i18n("spectate"))
 				ButtonUtilities.SetButtonSelected(btnPlay)
+				ButtonUtilities.SetCaption(btnPlay, i18n("playing"))
 			end
 		end
 	end
