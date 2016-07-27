@@ -395,24 +395,26 @@ function DrawEditBox(obj)
             text = string.rep("*", #text)
         end
 
-		if (obj.offset > obj.cursor) then
+		if (obj.offset > obj.cursor) and not obj.multiline then
 			obj.offset = obj.cursor
 		end
 
 		local clientX,clientY,clientWidth,clientHeight = unpack4(obj.clientArea)
 
 		--// make cursor pos always visible (when text is longer than editbox!)
-		repeat
-			local txt = text:sub(obj.offset, obj.cursor)
-			local wt = font:GetTextWidth(txt)
-			if (wt <= clientWidth) then
-				break
-			end
-			if (obj.offset >= obj.cursor) then
-				break
-			end
-			obj.offset = obj.offset + 1
-		until (false)
+		if not obj.multiline then
+			repeat
+				local txt = text:sub(obj.offset, obj.cursor)
+				local wt = font:GetTextWidth(txt)
+				if (wt <= clientWidth) then
+					break
+				end
+				if (obj.offset >= obj.cursor) then
+					break
+				end
+				obj.offset = obj.offset + 1
+			until (false)
+		end
 
 		local txt = text:sub(obj.offset)
 
@@ -429,7 +431,7 @@ function DrawEditBox(obj)
 
 		gl.Color(1,1,1,1)
 		if obj.multiline then
-			for _, line in pairs(obj.lines) do
+			for _, line in pairs(obj.physicalLines) do
 				font:Draw(line.text, clientX, clientY + line.y)
 			end
 		else
@@ -457,8 +459,8 @@ function DrawEditBox(obj)
 			local cc = obj.selectionColor
 			gl.Color(cc[1], cc[2], cc[3], cc[4])
 
-			local top, bottom = obj.selStartY, obj.selEndY
-			local left, right = obj.selStart, obj.selEnd
+			local top, bottom = obj.selStartPhysicalY, obj.selEndPhysicalY
+			local left, right = obj.selStartPhysical,  obj.selEndPhysical
 			if obj.multiline and top > bottom then
                 top, bottom = bottom, top
 				left, right = right, left
@@ -469,7 +471,7 @@ function DrawEditBox(obj)
 			local y = clientY
 			local height = clientHeight
 			if obj.multiline and top == bottom then
-				local line = obj.lines[top]
+				local line = obj.physicalLines[top]
 				text = line.text
 				y = y + line.y
 				height = line.lh
@@ -486,7 +488,7 @@ function DrawEditBox(obj)
 
 				gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawSelection, leftX + clientX - 1, y, w, height)
 			else
-				local topLine, bottomLine = obj.lines[top], obj.lines[bottom]
+				local topLine, bottomLine = obj.physicalLines[top], obj.physicalLines[bottom]
 				local leftTxt = topLine.text:sub(obj.offset, left - 1)
 				local leftX = font:GetTextWidth(leftTxt)
 				local rightTxt = bottomLine.text:sub(obj.offset, right - 1)
@@ -494,7 +496,7 @@ function DrawEditBox(obj)
 
 				gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawSelection, leftX + clientX - 1, clientY + topLine.y, topLine.tw - leftX, topLine.lh)
 				for i = top+1, bottom-1 do
-					local line = obj.lines[i]
+					local line = obj.physicalLines[i]
 					gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawSelection, clientX - 1, clientY + line.y, line.tw, line.lh)
 				end
 				gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawSelection, clientX - 1, clientY + bottomLine.y, rightX, bottomLine.lh)
