@@ -17,9 +17,6 @@
 SAFEWRAP = 1
 SAFEDRAW = false  --// requires SAFEWRAP to work
 
---//
-VFSMODE = VFS.RAW_FIRST
-
 --// when false, the handler will `compress` some output (e.g. list of started widgets)
 handler.verbose = false or true
 
@@ -40,6 +37,24 @@ if LUA_NAME == "LuaUI" then
 	CONFIG_FILENAME = LUAUI_DIRNAME .. 'Config/' .. Game.modShortName .. '_data.lua'
 	KNOWN_FILENAME  = LUAUI_DIRNAME .. 'Config/' .. Game.modShortName .. '_known.lua'
 
+	-- VFS.RAW_FIRST loads user widgets first
+	-- VFS.ZIP_FIRST loads game widgets first
+	-- VFS.ZIP only loads game widgets
+	local localWidgets = false
+
+	if VFS.FileExists(CONFIG_FILENAME) then --check config file whether user want to use localWidgetsFirst
+		local configData = VFS.Include(CONFIG_FILENAME)
+		localWidgets = configData and configData["Chili lobby"] and configData["Chili lobby"].loadLocalWidgets
+	end
+	
+	if localWidgets then
+		VFSMODE = VFS.RAW_FIRST
+	else
+		VFSMODE = VFS.ZIP
+	end
+	VFS.DEF_MODE = VFSMODE
+	
+	
 	ADDON_DIRS     = {
 		LUAUI_DIRNAME .. 'Addons/';
 		LUAUI_DIRNAME .. 'Widgets/';
@@ -49,9 +64,10 @@ if LUA_NAME == "LuaUI" then
 	}
 	--// Create the "LuaUI/Config" directory
 	Spring.CreateDir(LUAUI_DIRNAME .. 'Config') --FIXME LuaRules!
-
-	handler:Load(LUAUI_DIRNAME .. "SystemWidgets/BlockUserWidgets.lua" --[[, VFS.ZIP]])
 else
+	--//
+	VFSMODE = VFS.RAW_FIRST
+	
 	AddonNames = handler.AddonName .. "s/"
 
 	ADDON_DIRS     = {

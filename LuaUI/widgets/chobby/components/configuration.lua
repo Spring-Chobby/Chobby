@@ -28,6 +28,8 @@ function Configuration:init()
 	self.buttonFocusColor = {0.54,0.72,1,0.3}
 	self.buttonSelectedColor = {0.54,0.72,1,0.6}--{1.0, 1.0, 1.0, 1.0}
 	
+	self.loadLocalWidgets = false
+	
 	-- Do not ask again tests.
 	self.confirmation_mainMenuFromBattle = false
 	self.confirmation_battleFromBattle = false
@@ -98,6 +100,7 @@ function Configuration:GetConfigData()
 		debugMode = self.debugMode,
 		confirmation_mainMenuFromBattle = self.confirmation_mainMenuFromBattle,
 		confirmation_battleFromBattle = self.confirmation_battleFromBattle,
+		loadLocalWidgets = self.loadLocalWidgets,
 	}
 end
 

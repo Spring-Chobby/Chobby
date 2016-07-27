@@ -18,9 +18,6 @@ LUA_VERSION = Script.GetName() .. " v1.0"
 _G[("%s_DIRNAME"):format(LUA_NAME:upper())] = LUA_DIRNAME -- creates LUAUI_DIRNAME
 _G[("%s_VERSION"):format(LUA_NAME:upper())] = LUA_VERSION -- creates LUAUI_VERSION
 
-VFS.DEF_MODE = VFS.RAW_FIRST
-
-
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 --
