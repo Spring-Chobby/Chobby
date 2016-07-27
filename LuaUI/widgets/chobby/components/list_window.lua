@@ -9,15 +9,15 @@ function ListWindow:init(parent, title, noWindow, windowClassname)
 	self.lblTitle = Label:New {
 		x = 20,
 		right = 5,
-		y = 18,
+		y = 16,
 		height = 20,
 		font = Configuration:GetFont(3),
 		caption = title,
 	}
 
 	self.btnClose = Button:New {
-		right = 10,
-		y = 10,
+		right = 7,
+		y = 5,
 		width = 80,
 		height = 45,
 		caption = i18n("close"),

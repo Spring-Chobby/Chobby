@@ -29,7 +29,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	local padding = 0
 	
-	local statusButtonWidth = 310
+	local statusButtonWidth = 420
+	local statusButtonWidthSmall = 310
 	
 	-- Switch to single panel mode when below the minimum screen width
 	local minScreenWidth = 1280
@@ -422,7 +423,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		doublePanelMode = newDoublePanel
 		
 		if doublePanelMode then
-			--battleStatusPanelHandler.Rescale(3, nil, statusButtonWidth)
+			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidth)
 			RescaleMainWindow(3, 70)
 		
 			-- Make main buttons wider
@@ -465,7 +466,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			topPartImage:SetPos(nil, nil, nil, titleHeight + imageFudge)
 		else
 			rightPanelHandler.Rescale(2, 55)
-			--battleStatusPanelHandler.Rescale(3, nil, 2 * statusButtonWidth)
+			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidthSmall)
 			RescaleMainWindow(2, 55)
 			
 			-- Make main buttons thinner

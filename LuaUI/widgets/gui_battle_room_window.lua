@@ -1012,8 +1012,8 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, battleLobby:GetMyUserName())
 	
 	local btnQuitBattle = Button:New {
-		right = 10,
-		y = 10,
+		right = 7,
+		y = 5,
 		width = 80,
 		height = 45,
 		font =  WG.Chobby.Configuration:GetFont(3),
@@ -1029,7 +1029,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	
 	local lblBattleTitle = Label:New {
 		x = 18,
-		y = 18,
+		y = 16,
 		width = 200,
 		height = 30,
 		font =  WG.Chobby.Configuration:GetFont(3),
