@@ -283,19 +283,19 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	}
 	leftOffset = leftOffset + 45
 
-	local lblNumberOfPlayers 
-	if battleLobby.name ~= "singleplayer" then
-		lblNumberOfPlayers = Label:New {
-			x = 8,
-			y = leftOffset,
-			width = 200,
-			height = 30,
-			caption = "",
-			font = WG.Chobby.Configuration:GetFont(1),
-			parent = leftInfo,
-		}
-		leftOffset = leftOffset + 25
-	end
+	--local lblNumberOfPlayers 
+	--if battleLobby.name ~= "singleplayer" then
+	--	lblNumberOfPlayers = Label:New {
+	--		x = 8,
+	--		y = leftOffset,
+	--		width = 200,
+	--		height = 30,
+	--		caption = "",
+	--		font = WG.Chobby.Configuration:GetFont(1),
+	--		parent = leftInfo,
+	--	}
+	--	leftOffset = leftOffset + 25
+	--end
 	
 	lblHaveGame = Label:New {
 		x = 8,
@@ -383,11 +383,11 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	end
 	battleLobby:AddListener("OnUpdateBattleInfo", onUpdateBattleInfo)
 	
-	local UpdatePlayers = function(battleID)
-		if lblNumberOfPlayers then
-			lblNumberOfPlayers:SetCaption(i18n("players") .. ": " .. tostring(#battle.users) .. "/" .. tostring(battle.maxPlayers))
-		end
-	end
+	--local UpdatePlayers = function(battleID)
+	--	if lblNumberOfPlayers then
+	--		lblNumberOfPlayers:SetCaption(i18n("players") .. ": " .. tostring(#battle.users - battle.spectatorCount) .. "/" .. tostring(battle.maxPlayers))
+	--	end
+	--end
 	
 	onLeftBattle_counter = function(listener, leftBattleID, userName)
 		if battleID ~= leftBattleID then
@@ -400,7 +400,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 				wrapperControl:Hide()
 			end
 		else
-			UpdatePlayers(battleID)
+			--UpdatePlayers(battleID)
 		end
 	end
 	battleLobby:AddListener("OnLeftBattle", onLeftBattle_counter)
@@ -409,11 +409,11 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		if battleID ~= joinedBattleId then
 			return
 		end
-		UpdatePlayers(battleID)
+		--UpdatePlayers(battleID)
 	end
 	battleLobby:AddListener("OnJoinedBattle", onJoinedBattle)
 	
-	UpdatePlayers(battleID)
+	--UpdatePlayers(battleID)
 
 	MaybeDownloadGame(battle)
 	MaybeDownloadMap(battle)
