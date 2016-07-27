@@ -115,13 +115,20 @@ function EditBox:_SetSelection(selStart, selStartY, selEnd, selEndY)
 	if #self.lines == 0 then
 		return
 	end
-	self.selStart  = selStart   or self.selStart
-	self.selStartY = selStartY  or self.selStartY
-	self.selEnd    = selEnd     or self.selEnd
-	self.selEndY   = selEndY    or self.selEndY
+	self.selStart  = selStart        or self.selStart
+	self.selStartY = selStartY       or self.selStartY
+-- 	self.selStartY = self.selStartY  or 1
+	self.selEnd    = selEnd          or self.selEnd
+	self.selEndY   = selEndY         or self.selEndY
+-- 	self.selEndY   = self.selEndY    or 1
 	if selStart or selStartY then
 		self.selStartPhysical  = self.selStart
 		local logicalLine = self.lines[self.selStartY]
+		if logicalLine == nil then
+			-- FIXME: Don't ignore errors
+			Spring.Log("Chobby", LOG.DEBUG, "self.selStartY", self.selStartY, #self.lines)
+			return
+		end
 		for _, plID in pairs(logicalLine.pls) do
 			local pl = self.physicalLines[plID]
 			self.selStartPhysicalY = plID
@@ -135,6 +142,11 @@ function EditBox:_SetSelection(selStart, selStartY, selEnd, selEndY)
 	if selEnd or selEndY then
 		self.selEndPhysical  = self.selEnd
 		local logicalLine = self.lines[self.selEndY]
+		if logicalLine == nil then
+			-- FIXME: Don't ignore errors
+			Spring.Log("Chobby", LOG.DEBUG, "self.selEndY", self.selEndY, #self.lines)
+			return
+		end
 		for _, plID in pairs(logicalLine.pls) do
 			local pl = self.physicalLines[plID]
 			self.selEndPhysicalY = plID
@@ -478,6 +490,7 @@ function EditBox:UpdateLine(lineID, text)
 			self:_GeneratePhysicalLines(lineID)
 		end
 	end
+	self.selStartY = 1
 end
 
 function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
