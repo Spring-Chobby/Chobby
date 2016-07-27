@@ -1243,14 +1243,20 @@ function BattleRoomWindow.SetSingleplayerGame(ToggleShowFunc, battleroomObj, tab
 	end
 end
 
-function BattleRoomWindow.LeaveBattle()
-	if battleLobby then
-		battleLobby:LeaveBattle()
-		onBattleClosed(_, battleLobby:GetMyBattleID())
-		
-		local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
-		tabPanel.RemoveTab("myBattle")
+function BattleRoomWindow.LeaveBattle(onlyMultiplayer, onlySingleplayer)
+	if not battleLobby then
+		return
 	end
+	
+	if onlyMultiplayer and battleLobby.name == "singleplayer" then
+		return
+	end
+	
+	battleLobby:LeaveBattle()
+	onBattleClosed(_, battleLobby:GetMyBattleID())
+	
+	local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
+	tabPanel.RemoveTab("myBattle")
 end
 
 function widget:ViewResize(vsx, vsy, viewGeometry)

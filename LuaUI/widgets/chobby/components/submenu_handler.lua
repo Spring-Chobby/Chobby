@@ -59,7 +59,14 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 		return false
 	end
 	
-	function externalFunctions.SetBackAtMainMenu()
+	function externalFunctions.SetBackAtMainMenu(submenuName)
+		if submenuName then
+			local index = externalFunctions.GetCurrentSubmenu()
+			if index and (submenuName ~= submenus[index].name) then
+				return
+			end
+		end
+	
 		local clearMainWindow = false
 		for i = 1, #submenus do
 			local panelHandler = submenus[i].panelHandler

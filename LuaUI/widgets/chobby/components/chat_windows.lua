@@ -306,17 +306,31 @@ function ChatWindows:init()
 	end
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 	
-	lobby:AddListener("OnDisconnected", function ()
+	lobby:AddListener("OnDisconnected", 
+		function ()
+			if self.tabPanel.tabBar.visible then
+				self.tabPanel.tabBar:Hide()
+				self.joinButton:Hide()
+			end
 			self.window:ClearChildren()
 			self.window:AddChild(self.loginButton)
 		end
 	)
 	
 	lobby:AddListener("OnConnect", function ()
+			if not self.tabPanel.tabBar.visible then
+				self.tabPanel.tabBar:Show()
+				self.joinButton:Show()
+			end
 			self.window:ClearChildren()
 			self.window:AddChild(self.chatWindow)
 		end
 	)
+	
+	if self.tabPanel.tabBar.visible then
+		self.tabPanel.tabBar:Hide()
+		self.joinButton:Hide()
+	end
 	
 	self:ReattachTabHolder()
 	self:UpdateJoinPosition()
@@ -581,6 +595,8 @@ function ChatWindows:GetChannelConsole(chanName)
 		channelConsole = Console(chanName)
 		self.channelConsoles[chanName] = channelConsole
 
+		Configuration.channels[chanName] = true
+		
 		channelConsole.listener = function(message)
 			lobby:Say(chanName, message)
 		end
@@ -599,6 +615,7 @@ function ChatWindows:GetChannelConsole(chanName)
 				function()
 					self.channelConsoles[chanName] = nil
 					lobby:Leave(chanName)
+					Configuration.channels[chanName] = nil
 					self.tabPanel:RemoveTab(chanName, true)
 					self:UpdateJoinPosition()
 				end

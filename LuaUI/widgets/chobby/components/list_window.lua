@@ -126,6 +126,10 @@ function ListWindow:Clear()
 end
 
 function ListWindow:AddRow(items, id)
+	if self.itemPanelMapping[id] then
+		Spring.Echo("Tried to add duplicate list window item", id)
+		return
+	end
 	local thisWidth = items[#items].x + items[#items].width
 		
 	local itemNames = {}
@@ -263,6 +267,9 @@ end
 
 function ListWindow:RemoveRow(id)
 	local panel = self.itemPanelMapping[id]
+	if not panel then
+		return
+	end
 	local index = panel.index
 	
 	-- move elements up

@@ -45,8 +45,8 @@ end
 
 function Lobby:_PreserveData()
 	self._oldData = {
-		channels = ShallowCopy(self.channels),
-		battles = ShallowCopy(self.battles),
+		--channels = ShallowCopy(self.channels),
+		--battles = ShallowCopy(self.battles),
 		loginData = ShallowCopy(self.loginData),
 		myUserName = self.myUserName,
 		host = self.host,
@@ -286,6 +286,10 @@ function Lobby:_OnAddUser(userName, country, cpu, accountID, lobbyVersion, clan)
 end
 
 function Lobby:_OnRemoveUser(userName)
+	if not self.users[userName] then
+		Spring.Echo("Tried to remove missing user", userName)
+		return
+	end
 	self.users[userName] = nil
 	self.userCount = self.userCount - 1
 	self:_CallListeners("OnRemoveUser", userName)
@@ -670,10 +674,21 @@ end
 -------------------------------------------------
 
 function Lobby:_OnDisconnected(...)
-	if self.disconnectTime == nil then
-		self:_PreserveData()
-		self:_Clean()
+	self:_CallListeners("OnDisconnected")
+	
+	for battleID, battle in pairs(self.battles) do
+		for _, useName in pairs(battle.users) do
+			self:_OnLeftBattle(battleID, useName)
+		end
+		self:_OnBattleClosed(battleID)
 	end
+	
+	for userName,_ in pairs(self.users) do
+		self:_OnRemoveUser(userName)
+	end
+	
+	self:_PreserveData()
+	self:_Clean()
 	self.disconnectTime = Spring.GetGameSeconds()
 end
 

@@ -67,11 +67,6 @@ function Interface:SendCustomCommand(command)
 	self:_SendCommand(command, false)
 end
 
-
-function Interface:_OnDisconnected()
-	self:_CallListeners("OnDisconnected")
-end
-
 function Interface:CommandReceived(command)
 	local cmdId, cmdName, arguments
 	if command:sub(1,1) == "#" then

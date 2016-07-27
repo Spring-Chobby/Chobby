@@ -34,6 +34,7 @@ local UserStatusPanel = {}
 local function Logout()
 	if lobby:GetConnectionStatus() ~= "offline" then
 		Spring.Echo("Logout")
+		WG.Chobby.interfaceRoot.CleanMultiplayerState()
 		WG.Chobby.Configuration:SetConfigValue("autoLogin", false)
 		lobby:Disconnect()
 	else
@@ -98,17 +99,25 @@ local function InitializeControls(window)
 		parent = window,
 	}
 
+	local userControl
 	onAccepted = function(listener)
-	Spring.Echo("GetStatusUser", lobby:GetMyUserName())
-		local userControl = WG.UserHandler.GetStatusUser(lobby:GetMyUserName())
+		Spring.Echo("onAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAcceptedonAccepted")
+		userControl = WG.UserHandler.GetStatusUser(lobby:GetMyUserName())
 		userControl:SetPos(nil, 45)
 		window:AddChild(userControl)
 		lobby:Ping()
 	end
 
+	onDisconnected = function(listener)
+		if userControl and userControl.parent then
+			window:RemoveChild(userControl)
+		end
+	end
+	
 	onPong = function(listener)
 		--UpdateLatency()
 	end
+	lobby:AddListener("OnDisconnected", onDisconnected)
 	lobby:AddListener("OnAccepted", onAccepted)
 	lobby:AddListener("OnPong", onPong)
 end

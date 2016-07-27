@@ -284,12 +284,17 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-------------------------------------------------------------------
 	local chatWindows = ChatWindows()
 	
+	local CleanMultiplayerState
+	
 	local rightPanelTabs = {
 		{name = "chat", control = chatWindows.window},
 		{name = "settings", control = WG.SettingsWindow.GetControl()},
 		{name = "downloads", control = WG.DownloadWindow.GetControl()},
 		{name = "friends", control = WG.FriendWindow.GetControl()},
 	}
+	
+	local queueListWindow = QueueListWindow()
+	local battleListWindow = BattleListWindow()
 	
 	local submenus = {
 		{
@@ -300,18 +305,21 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			name = "multiplayer", 
 			entryCheck = WG.MultiplayerEntryPopup,
 			tabs = {
-				{name = "matchmaking", control = QueueListWindow().window},
-				{name = "custom", control = BattleListWindow().window},
+				{name = "matchmaking", control = queueListWindow.window},
+				{name = "custom", control = battleListWindow.window},
 			},
-			cleanupFunction = function ()
-				WG.BattleRoomWindow.LeaveBattle()
-			end
+			cleanupFunction = CleanMultiplayerState
 		},
 	}
 	
 	local battleStatusPanelHandler = GetTabPanelHandler("myBattlePanel", battleStatusHolder, contentPlace, {})
 	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons, panelWindow, rightPanelTabs)
 	local mainWindowHandler = GetSubmenuHandler(mainButtons, contentPlace, submenus)
+	
+	CleanMultiplayerState = function(notFromBackButton)
+		mainWindowHandler.SetBackAtMainMenu("multiplayer")
+		WG.BattleRoomWindow.LeaveBattle(true)
+	end
 	
 	local function RescaleMainWindow(newFontSize, newButtonHeight)
 		mainWindowHandler.Rescale(newFontSize, newButtonHeight)
@@ -551,6 +559,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	function externalFunctions.GetDoublePanelMode()
 		return doublePanelMode
+	end
+	
+	function externalFunctions.CleanMultiplayerState()
+		CleanMultiplayerState(true)
 	end
 	
 	function externalFunctions.KeyPressed(key, mods, isRepeat, label, unicode)

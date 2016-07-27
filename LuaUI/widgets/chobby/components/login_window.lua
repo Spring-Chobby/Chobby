@@ -355,8 +355,8 @@ function LoginWindow:OnConnected()
 				self.window:Dispose()
 			end,
 		})
-		for _, v in pairs(Configuration:GetChannels()) do
-			lobby:Join(v)
+		for channelName, _ in pairs(Configuration:GetChannels()) do
+			lobby:Join(channelName)
 		end
 	end
 

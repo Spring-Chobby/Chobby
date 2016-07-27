@@ -88,7 +88,7 @@ function Configuration:GetConfigData()
 		userName = self.userName,
 		password = self.password,
 		autoLogin = self.autoLogin,
-		channels = lobby:GetMyChannels(),	
+		channels = self.channels,	
 		singleplayer_mode = self.singleplayer_mode,
 		game_fullscreen = self.game_fullscreen,
 		panel_layout = self.panel_layout,
