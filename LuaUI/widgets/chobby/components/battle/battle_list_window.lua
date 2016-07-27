@@ -139,6 +139,7 @@ function BattleListWindow:AddBattle(battleID, battle)
 		parent = parentButton,
 	}
 	local minimap = Panel:New {
+		name = "minimap",
 		x = 3,
 		y = 3,
 		width = height - 6,
@@ -250,7 +251,7 @@ function BattleListWindow:LeftBattle(battleID)
 	end
 	local items = self:GetRowItems(battleID)
 	local playersCaption = items.battleButton:GetChildByName("playersCaption")
-	playersCaption:SetCaption(#battle.users .. "/" .. battle.maxPlayers)
+	playersCaption:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
 	self:RecalculateOrder(battleID)
 end
 
