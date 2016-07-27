@@ -18,12 +18,17 @@ local IMG_BATTLE_NOT_RUNNING = ""
 local IMG_STATUS_SPECTATOR   = "luaui/images/spectating.png"
 local IMG_STATUS_PLAYER      = "luaui/images/playing.png"
 
+local PLAYER_PREFIX_BIG = "Players: "
+local PLAYER_PREFIX_SMALL = ""
+
 ------------------------------------------------------------------
 ------------------------------------------------------------------
 -- Info Handlers
 
 local function GetBattleInfoHolder(parent, battleID)
 	local externalFunctions = {}
+	
+	local playersPrefix = PLAYER_PREFIX_BIG
 	
 	local battle = lobby:GetBattle(battleID)
 	if not battle then
@@ -34,7 +39,7 @@ local function GetBattleInfoHolder(parent, battleID)
 	
 	local mainControl = Control:New {
 		x = 0,
-		y = offset,
+		y = 0,
 		right = 0,
 		height = 120,
 		padding = {0, 0, 0, 0},
@@ -56,9 +61,9 @@ local function GetBattleInfoHolder(parent, battleID)
 
 	local lblPlayerStatus = Label:New {
 		name = "lblPlayerStatus",
-		x = 90,
-		width = 240,
-		y = 28,
+		x = 98,
+		width = 150,
+		y = 30,
 		height = 20,
 		valign = 'top',
 		caption = "Spectator",
@@ -67,9 +72,9 @@ local function GetBattleInfoHolder(parent, battleID)
 	}
 	local imPlayerStatus = Image:New {
 		name = "imPlayerStatus",
-		x = 68,
+		x = 74,
 		width = 20,
-		y = 25,
+		y = 27,
 		height = 20,
 		file = IMG_STATUS_SPECTATOR,
 		parent = mainControl,
@@ -77,55 +82,83 @@ local function GetBattleInfoHolder(parent, battleID)
 	
 	local lblPlayers = Label:New {
 		name = "playersCaption",
-		x = 70,
-		width = 240,
-		y = 50,
+		x = 190,
+		width = 150,
+		y = 30,
 		height = 20,
 		valign = 'top',
-		font = Configuration:GetFont(1),
-		caption = "Players: " .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers,
+		font = Configuration:GetFont(2),
+		caption = playersPrefix .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers,
 		parent = mainControl,
 	}
 	
+	local minimap = Panel:New {
+		x = 2,
+		y = 2,
+		width = 63,
+		height = 63,
+		padding = {1,1,1,1},
+		parent = mainControl,
+	}
 	local minimapImage = Image:New {
 		name = "minimapImage",
-		x = 1,
-		y = 1,
-		width = 33,
-		height = 33,
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
 		keepAspect = true,
 		file = Configuration:GetMinimapImage(battle.mapName, battle.gameName),
-		parent = mainControl,
+		parent = minimap,
 	}
 	local runningImage = Image:New {
 		name = "runningImage",
-		x = 1,
-		y = 1,
-		width = 38,
-		height = 38,
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
 		keepAspect = false,
 		file = (battle.isRunning and IMG_BATTLE_RUNNING) or IMG_BATTLE_NOT_RUNNING,
-		parent = mainControl,
+		parent = minimap,
 	}
 	runningImage:BringToFront()
 	imPlayerStatus:BringToFront()
 	
 	function externalFunctions.Resize(smallMode)
 		if smallMode then
-			minimapImage:SetPos(nil, nil, 33, 33)
-			runningImage:SetPos(nil, nil, 33, 33)
+			minimap:SetPos(nil, nil, 37, 37)
 			
 			lblTitle.font.size = Configuration:GetFont(1).size
-			lblTitle:SetPos(35, 1, 160)
+			lblTitle:SetPos(43, 3, 160)
+			
+			lblPlayerStatus.font.size = Configuration:GetFont(2).size
+			lblPlayerStatus:SetPos(66, 20)
+			
+			imPlayerStatus:SetPos(45, 19, 17, 17)
+			
+			lblPlayers.font.size = Configuration:GetFont(2).size
+			lblPlayers:SetPos(160, 20)
+			
+			playersPrefix = PLAYER_PREFIX_SMALL
 		else
-			minimapImage:SetPos(nil, nil, 63, 63)
-			runningImage:SetPos(nil, nil, 63, 63)
+			minimap:SetPos(nil, nil, 63, 63)
 			
 			lblTitle.font.size = Configuration:GetFont(2).size
 			lblTitle:SetPos(70, 4, 240)
+			
+			lblPlayerStatus.font.size = Configuration:GetFont(2).size
+			lblPlayerStatus:SetPos(98, 30)
+			
+			imPlayerStatus:SetPos(74, 27, 20, 20)
+			
+			lblPlayers.font.size = Configuration:GetFont(2).size
+			lblPlayers:SetPos(190, 30)
+			
+			playersPrefix = PLAYER_PREFIX_BIG
 		end
 		local text = StringUtilities.GetTruncatedStringWithDotDot(battle.title, lblTitle.font, lblTitle.width)
 		lblTitle:SetCaption(text)
+		
+		lblPlayers:SetCaption(playersPrefix .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
 	end
 	
 	function externalFunctions.Update(newBattleID)
@@ -156,7 +189,7 @@ local function GetBattleInfoHolder(parent, battleID)
 		minimapImage.file = Configuration:GetMinimapImage(battle.mapName, battle.gameName)
 		minimapImage:Invalidate()
 		
-		lblPlayers:SetCaption("Players: " .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
+		lblPlayers:SetCaption(playersPrefix .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
 	end
 	lobby:AddListener("OnUpdateBattleInfo", OnUpdateBattleInfo)
 	
@@ -173,13 +206,13 @@ local function GetBattleInfoHolder(parent, battleID)
 		if updatedBattleID ~= battleID then
 			return
 		end
-		lblPlayers:SetCaption("Players: " .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
+		lblPlayers:SetCaption(playersPrefix .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
 	end
 	lobby:AddListener("OnLeftBattle", PlayersUpdate)
 	lobby:AddListener("OnJoinedBattle", PlayersUpdate)
 	
 	local function OnUpdateUserTeamStatus(listeners)
-		lblPlayers:SetCaption("Players: " .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
+		lblPlayers:SetCaption(playersPrefix .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
 	end
 	lobby:AddListener("OnUpdateUserTeamStatus", OnUpdateUserTeamStatus)
 
@@ -211,10 +244,10 @@ local function InitializeControls(parentControl)
 	local statusWindowHandler = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
 
 	local infoHolder = Panel:New {
-		x = 90,
-		width = 310,
-		y = 5,
-		bottom = 5,
+		x = 85,
+		right = 4,
+		y = 4,
+		bottom = 4,
 		parent = parentControl,
 		resizable = false,
 		draggable = false,
@@ -222,9 +255,9 @@ local function InitializeControls(parentControl)
 	}
 	local lblBattle = Label:New {
 		name = "lblBattle",
-		x = 15,
+		x = 14,
 		width = 85,
-		y = 22,
+		y = 23,
 		height = 20,
 		align = "left",
 		valign = "center",
@@ -239,9 +272,19 @@ local function InitializeControls(parentControl)
 	parentControl.OnResize[#parentControl.OnResize + 1] = function (obj, xSize, ySize)
 		local smallMode = (ySize < 60)
 		if smallMode then
-			infoHolder:SetPos(nil, nil, 200)
+			infoHolder:SetPos(nil, 2, 220)
+			infoHolder._relativeBounds.bottom = 2
+			infoHolder._relativeBounds.right = 2
+			infoHolder:UpdateClientArea()
+			
+			lblBattle:SetPos(nil, 9)
 		else
-			infoHolder:SetPos(nil, nil, 310)
+			infoHolder:SetPos(nil, 4, 330)
+			infoHolder._relativeBounds.bottom = 4
+			infoHolder._relativeBounds.right = 4
+			infoHolder:UpdateClientArea()
+			
+			lblBattle:SetPos(nil, 23)
 		end
 		battleInfoHolder.Resize(smallMode)
 	end

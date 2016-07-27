@@ -138,25 +138,33 @@ function BattleListWindow:AddBattle(battleID, battle)
 		caption = battle.title:sub(1, 60),
 		parent = parentButton,
 	}
-	local minimapImage = Image:New {
-		name = "minimapImage",
+	local minimap = Panel:New {
 		x = 3,
 		y = 3,
 		width = height - 6,
 		height = height - 6,
+		padding = {1,1,1,1},
+		parent = parentButton,
+	}
+	local minimapImage = Image:New {
+		name = "minimapImage",
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
 		keepAspect = true,
 		file = Configuration:GetMinimapSmallImage(battle.mapName, battle.gameName),
-		parent = parentButton,
+		parent = minimap,
 	}
 	local runningImage = Image:New {
 		name = "runningImage",
-		x = 3,
-		y = 3,
-		width = height - 6,
-		height = height - 6,
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
 		keepAspect = false,
 		file = (battle.isRunning and BATTLE_RUNNING) or BATTLE_NOT_RUNNING,
-		parent = parentButton,
+		parent = minimap,
 	}
 	runningImage:BringToFront()
 	

@@ -130,13 +130,14 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		y = 0,
 		right = 0,
 		height = 200,
+		padding = {1,1,1,1},
 		parent = rightInfo,
 	}
 	local minimapImage = Image:New {
-		x = 2,
-		y = 2,
-		right = 2,
-		bottom = 2,
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
 		keepAspect = true,
 		file = WG.Chobby.Configuration:GetMinimapImage(battle.mapName, battle.gameName),
 		parent = minimap,
