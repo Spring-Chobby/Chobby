@@ -17,6 +17,14 @@ function createTabGroup(ctrls)
 			function(obj, key, mods, ...)
 				if key == Spring.GetKeyCode("tab") then
 					screen0:FocusControl(ctrl2)
+					if ctrl2.classname == "editbox" then
+-- 						ctrl2:Select(1, #ctrl2.text + 1)
+						-- HACK
+						ctrl2.selStart = 1
+						ctrl2.selStartPhysical = 1
+						ctrl2.selEnd = #ctrl2.text + 1
+						ctrl2.selEndPhysical = #ctrl2.text + 1
+					end
 				end
 			end
 		)
@@ -223,7 +231,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	
 	self.window:BringToFront()
 
-	createTabGroup({self.ebUsername, self.ebPassword})
+	createTabGroup({self.ebServerAddress, self.ebServerPort, self.ebUsername, self.ebPassword})
 	screen0:FocusControl(self.ebUsername)
 	-- FIXME: this should probably be moved to the lobby wrapper
 	self.loginAttempts = 0

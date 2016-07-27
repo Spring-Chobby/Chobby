@@ -452,8 +452,7 @@ function EditBox:MouseUp(...)
 end
 
 function EditBox:Select(startIndex, endIndex)
-	self.selStart = startIndex
-	self.selEnd = endIndex
+	self:_SetSelection(startIndex, endIndex, 1, 1)
 	self:Invalidate()
 end
 
