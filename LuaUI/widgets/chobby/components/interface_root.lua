@@ -14,7 +14,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local panelButtonsHeight = 50
 	local statusWindowGapSmall = 45
 	
-	local battleStatusTopGap = 50
+	local battleStatusTopPadding = 20
+	local battleStatusBottomPadding = 20
+	local battleStatusLeftPadding = 30
+	
 	local chatTabHolderRight = 0
 	
 	local titleHeight = 125
@@ -105,10 +108,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	}
 	
 	local battleStatusHolder = Control:New {
-		x = 0,
-		y = battleStatusTopGap,
+		x = battleStatusLeftPadding,
+		y = battleStatusTopPadding,
 		right = userStatusWidth,
-		bottom = 0,
+		bottom = battleStatusBottomPadding,
 		name = "battleStatusHolder",
 		caption = "", -- Battle and MM Status Window
 		parent = screen0,
@@ -469,8 +472,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			userStatusWindow._relativeBounds.bottom = panelButtonsHeight
 			userStatusWindow:UpdateClientArea()
 			
-			battleStatusHolder:SetPos(nil, battleStatusTopGap)
-			battleStatusHolder._relativeBounds.bottom = 0
+			battleStatusHolder:SetPos(battleStatusLeftPadding, battleStatusTopPadding)
+			battleStatusHolder._relativeBounds.bottom = battleStatusBottomPadding
 			battleStatusHolder:UpdateClientArea()
 			
 			topPartImage:SetPos(nil, nil, nil, titleHeight + imageFudge)
@@ -515,7 +518,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			userStatusWindow._relativeBounds.bottom = 0
 			userStatusWindow:UpdateClientArea()
 			
-			battleStatusHolder:SetPos(nil, 0)
+			battleStatusHolder:SetPos(0, 0)
 			battleStatusHolder._relativeBounds.bottom = statusWindowGapSmall
 			battleStatusHolder:UpdateClientArea()
 			

@@ -61,7 +61,7 @@ local function GetBattleInfoHolder(parent, battleID)
 
 	local lblPlayerStatus = Label:New {
 		name = "lblPlayerStatus",
-		x = 98,
+		x = 108,
 		width = 150,
 		y = 30,
 		height = 20,
@@ -72,7 +72,7 @@ local function GetBattleInfoHolder(parent, battleID)
 	}
 	local imPlayerStatus = Image:New {
 		name = "imPlayerStatus",
-		x = 74,
+		x = 84,
 		width = 20,
 		y = 27,
 		height = 20,
@@ -82,9 +82,9 @@ local function GetBattleInfoHolder(parent, battleID)
 	
 	local lblPlayers = Label:New {
 		name = "playersCaption",
-		x = 190,
+		x = 84,
 		width = 150,
-		y = 30,
+		y = 54,
 		height = 20,
 		valign = 'top',
 		font = Configuration:GetFont(2),
@@ -95,8 +95,8 @@ local function GetBattleInfoHolder(parent, battleID)
 	local minimap = Panel:New {
 		x = 2,
 		y = 2,
-		width = 63,
-		height = 63,
+		width = 73,
+		height = 73,
 		padding = {1,1,1,1},
 		parent = mainControl,
 	}
@@ -140,18 +140,18 @@ local function GetBattleInfoHolder(parent, battleID)
 			
 			playersPrefix = PLAYER_PREFIX_SMALL
 		else
-			minimap:SetPos(nil, nil, 63, 63)
+			minimap:SetPos(nil, nil, 73, 73)
 			
 			lblTitle.font.size = Configuration:GetFont(2).size
-			lblTitle:SetPos(70, 4, 240)
+			lblTitle:SetPos(80, 4, 235)
 			
 			lblPlayerStatus.font.size = Configuration:GetFont(2).size
-			lblPlayerStatus:SetPos(98, 30)
+			lblPlayerStatus:SetPos(108, 31)
 			
-			imPlayerStatus:SetPos(74, 27, 20, 20)
+			imPlayerStatus:SetPos(84, 28, 20, 20)
 			
 			lblPlayers.font.size = Configuration:GetFont(2).size
-			lblPlayers:SetPos(190, 30)
+			lblPlayers:SetPos(84, 55)
 			
 			playersPrefix = PLAYER_PREFIX_BIG
 		end
@@ -257,7 +257,7 @@ local function InitializeControls(parentControl)
 		name = "lblBattle",
 		x = 14,
 		width = 85,
-		y = 23,
+		y = 27,
 		height = 20,
 		align = "left",
 		valign = "center",
@@ -284,7 +284,7 @@ local function InitializeControls(parentControl)
 			infoHolder._relativeBounds.right = 4
 			infoHolder:UpdateClientArea()
 			
-			lblBattle:SetPos(nil, 23)
+			lblBattle:SetPos(nil, 27)
 		end
 		battleInfoHolder.Resize(smallMode)
 	end
