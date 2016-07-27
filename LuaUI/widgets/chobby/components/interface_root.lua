@@ -14,7 +14,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local panelButtonsHeight = 50
 	local statusWindowGapSmall = 45
 	
-	local chatTabHolderRight = 200
+	local chatTabHolderRight = 0
 	
 	local titleHeight = 125
 	local titleHeightSmall = 90
