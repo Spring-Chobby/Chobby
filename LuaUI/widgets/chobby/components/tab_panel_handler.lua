@@ -130,9 +130,9 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		return buttonsHolder.visible
 	end
 	
-	function externalFunctions.IsTabSelected()
+	function externalFunctions.IsTabSelected(tabName)
 		for i = 1, #tabs do
-			if tabs[i].control and tabs[i].control.parent then
+			if tabs[i].control and tabs[i].control.parent and ((not tabName) or tabName == tabs[i].name)then
 				return true
 			end
 		end
@@ -262,6 +262,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 					y = "0%",
 					width = "100%",
 					height = "100%",
+					padding = {0,0,0,0},
 					caption = humanName,
 					font = Configuration:GetFont(fontSizeScale),
 				}
@@ -280,10 +281,10 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 			
 			newTab.activityLabel = Label:New {
 				name = "activity_label",
-				y = 5,
-				right = 5,
+				y = 2,
+				right = 2,
 				width = 50,
-				height = 15,
+				height = 5,
 				valign = "top",
 				align = "right",
 				parent = button,
