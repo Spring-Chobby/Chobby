@@ -327,8 +327,8 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	)
 	downloader:Hide()
 	-- Example downloads
-	MaybeDownloadArchive("Titan-v2", "map")
-	MaybeDownloadArchive("tinyskirmishredux1.1", "map")
+	--MaybeDownloadArchive("Titan-v2", "map")
+	--MaybeDownloadArchive("tinyskirmishredux1.1", "map")
 	
 	onUpdateUserTeamStatusSelf = function(listener, userName, allyNumber, isSpectator)
 		if userName == myUserName then
