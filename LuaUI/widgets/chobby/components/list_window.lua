@@ -136,6 +136,7 @@ function ListWindow:AddRow(items, id)
 	self.itemNames[id] = itemNames
 	
 	local container = Control:New {
+		name = "container",
 		width = "100%",
 		y = 0,
 		height = self.itemHeight,

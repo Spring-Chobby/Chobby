@@ -161,6 +161,15 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		end
 	end
 	
+	function externalFunctions.OpenTabByName(tabName)
+		for i = 1, #tabs do
+			if tabs[i].name == tabName then
+				externalFunctions.OpenTab(i)
+				return
+			end
+		end
+	end
+	
 	function externalFunctions.GetManagedControlByName(controlName)
 		for i = 1, #tabs do
 			if tabs[i].control and tabs[i].control.name == controlName then

@@ -105,12 +105,21 @@ function BattleListWindow:AddBattle(battleID, battle)
 		caption = "",
 		OnClick = {
 			function()
-				if lobby:GetMyBattleID() and not Configuration.confirmation_battleFromBattle then
-					local function Success() 
-						self:JoinBattle(battle)
+				local myBattleID = lobby:GetMyBattleID()
+				if myBattleID then
+					if battleID == myBattleID then
+						-- Do not rejoin current battle
+						local battleTab = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
+						battleTab.OpenTabByName("myBattle")
+						return
 					end
-					ConfirmationPopup(Success, "Are you sure you want to leave your current battle and join a new one?", "confirmation_battleFromBattle")
-					return
+					if not Configuration.confirmation_battleFromBattle then
+						local function Success() 
+							self:JoinBattle(battle)
+						end
+						ConfirmationPopup(Success, "Are you sure you want to leave your current battle and join a new one?", "confirmation_battleFromBattle")
+						return
+					end
 				end
 				self:JoinBattle(battle)
 			end
@@ -216,6 +225,7 @@ end
 
 function BattleListWindow:JoinedBattle(battleID)
 	local battle = lobby:GetBattle(battleID)
+	Spring.Echo("joined battle", Configuration:IsValidEngineVersion(battle.engineVersion))
 	if not Configuration:IsValidEngineVersion(battle.engineVersion) then
 		return
 	end
@@ -256,6 +266,10 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 end
 
 function BattleListWindow:OnBattleIngameUpdate(battleID, isRunning)
+	local battle = lobby:GetBattle(battleID)
+	if not Configuration:IsValidEngineVersion(battle.engineVersion) then
+		return
+	end
 	local items = self:GetRowItems(battleID)
 	local runningImage = items.battleButton:GetChildByName("runningImage")
 	if isRunning then
