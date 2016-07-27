@@ -386,6 +386,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		end
 		if battleLobby:GetMyUserName() == userName then
 			window:Dispose()
+			window = nil
 			if wrapperControl and wrapperControl.visible and wrapperControl.parent then
 				wrapperControl:Hide()
 			end
@@ -1096,6 +1097,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	onBattleClosed = function(listener, closedBattleID, ... )
 		if battleID == closedBattleID then
 			window:Dispose()
+			window = nil
 			if wrapperControl and wrapperControl.visible and wrapperControl.parent then
 				wrapperControl:Hide()
 			end
@@ -1117,6 +1119,7 @@ local BattleRoomWindow = {}
 function BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
 	if window then
 		window:Dispose()
+		window = nil
 	end
 	
 	if singleplayerWrapper then
@@ -1177,15 +1180,18 @@ function BattleRoomWindow.GetSingleplayerControl()
 		
 		OnParent = {
 			function(obj)
-				if window then
-					window:Dispose()
-				end
 				
 				if multiplayerWrapper then
 					local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
 					tabPanel.RemoveTab("myBattle")
 					
+					if window then
+						window:Dispose()
+						window = nil
+					end
 					WG.LibLobby.lobby:LeaveBattle()
+				elseif window then
+					return
 				end
 				
 				local singleplayerDefault = WG.Chobby.Configuration:GetGameConfig(singleplayerGame, "skirmishDefault.lua")

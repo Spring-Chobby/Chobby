@@ -283,8 +283,14 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-- In-Window Handlers
 	-------------------------------------------------------------------
 	local chatWindows = ChatWindows()
+	local mainWindowHandler
 	
-	local CleanMultiplayerState
+	local function CleanMultiplayerState(notFromBackButton)
+		if notFromBackButton then
+			mainWindowHandler.SetBackAtMainMenu("multiplayer")
+		end
+		WG.BattleRoomWindow.LeaveBattle(true)
+	end
 	
 	local rightPanelTabs = {
 		{name = "chat", control = chatWindows.window},
@@ -314,12 +320,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	local battleStatusPanelHandler = GetTabPanelHandler("myBattlePanel", battleStatusHolder, contentPlace, {})
 	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons, panelWindow, rightPanelTabs)
-	local mainWindowHandler = GetSubmenuHandler(mainButtons, contentPlace, submenus)
-	
-	CleanMultiplayerState = function(notFromBackButton)
-		mainWindowHandler.SetBackAtMainMenu("multiplayer")
-		WG.BattleRoomWindow.LeaveBattle(true)
-	end
+	mainWindowHandler = GetSubmenuHandler(mainButtons, contentPlace, submenus)
 	
 	local function RescaleMainWindow(newFontSize, newButtonHeight)
 		mainWindowHandler.Rescale(newFontSize, newButtonHeight)
