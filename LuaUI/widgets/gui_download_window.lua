@@ -17,6 +17,9 @@ end
 --------------------------------------------------------------------------------
 -- Local Variables
 
+local completedDownloadPosition = 400
+local itemSpacing = 28
+local parentWindow 
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -28,6 +31,24 @@ local function DownloadUpdateFunction(downloadCount, failure)
 		return
 	end
 	interfaceRoot.GetRightPanelHandler().SetActivity("downloads", downloadCount)
+end
+
+local function DownloadCompleteFunction(name, success)
+	local text = name
+	if not success then
+		text = text .. WG.Chobby.Configuration:GetErrorColor() .. " Failed"
+	end
+
+	Label:New {
+		x = 70,
+		y = completedDownloadPosition,
+		width = 180,
+		height = 30,
+		parent = parentWindow,
+		font = WG.Chobby.Configuration:GetFont(2),
+		caption = text,
+	}
+	completedDownloadPosition = completedDownloadPosition + itemSpacing
 end
 
 --------------------------------------------------------------------------------
@@ -48,6 +69,17 @@ local function InitializeControls(window)
 		font = WG.Chobby.Configuration:GetFont(4),
 		caption = "Downloads",
 	}
+	
+	Label:New {
+		x = 40,
+		y = 360,
+		width = 180,
+		height = 30,
+		parent = window,
+		font = WG.Chobby.Configuration:GetFont(4),
+		caption = "Complete",
+	}
+	
 end
 
 --------------------------------------------------------------------------------
@@ -79,9 +111,13 @@ function DownloadWindow.GetControl()
 			y = 100,
 			parent = window,
 		}, 
-		8,
-		DownloadUpdateFunction
+		false,
+		DownloadUpdateFunction,
+		DownloadCompleteFunction,
+		2
 	)
+	
+	parentWindow = window
 	
 	return window
 end

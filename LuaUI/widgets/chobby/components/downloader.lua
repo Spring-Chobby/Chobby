@@ -1,7 +1,9 @@
 Downloader = Component:extends{}
 
-function Downloader:init(tbl, timeout, updateListener)
+function Downloader:init(tbl, timeout, updateListener, completeListener, queueFont)
 	self:super("init")
+	
+	queueFont = queueFont or 1
 	self.lblDownload = Label:New {
 		x = 20,
 		y = 0,
@@ -28,7 +30,7 @@ function Downloader:init(tbl, timeout, updateListener)
 		height = 16,
 		align = "left",
 		valign = "center",
-		font = Configuration:GetFont(1),
+		font = Configuration:GetFont(queueFont),
 		caption = "Queue:",
 	}
 	
@@ -39,7 +41,7 @@ function Downloader:init(tbl, timeout, updateListener)
 		bottom = 0,
 		align = "left",
 		valign = "top",
-		font = Configuration:GetFont(1),
+		font = Configuration:GetFont(queueFont),
 		caption = "",
 	}
 
@@ -66,6 +68,7 @@ function Downloader:init(tbl, timeout, updateListener)
 	self.delayID = 0
 	self.timeout = timeout
 	self.updateListener = updateListener
+	self.completeListener = completeListener
 end
 
 function Downloader:UpdateQueue()
@@ -115,7 +118,7 @@ function Downloader:Hide()
 end
 
 function Downloader:_CleanupDownload(myDelayID)
-	if self.delayID ~= myDelayID then
+	if myDelayID and (self.delayID ~= myDelayID) then
 		return
 	end
 
@@ -213,6 +216,10 @@ function Downloader:DownloadFinished(downloadID)
 		return
 	end
 	self.downloads[downloadID].complete = true
+	if self.completeListener then
+		self.completeListener(self.downloads[downloadID].archiveName, true)
+	end
+	
 	self.prDownload:SetCaption("\255\0\255\0Download complete.\b")
 	
 	-- Effectively a reimplementation of SignalMask from LUS
@@ -220,6 +227,8 @@ function Downloader:DownloadFinished(downloadID)
 		self.delayID = self.delayID + 1
 		local thisDelayID = self.delayID
 		WG.Delay(function() self:_CleanupDownload(thisDelayID) end, self.timeout)
+	else
+		self:_CleanupDownload()
 	end
 	self:UpdateQueue()
 end
@@ -229,6 +238,10 @@ function Downloader:DownloadFailed(downloadID, errorID)
 		return
 	end
 	self.downloads[downloadID].failed = true
+	if self.completeListener then
+		self.completeListener(self.downloads[downloadID].archiveName, false)
+	end
+	
 	self.prDownload:SetCaption("\255\255\0\0Download failed [".. errorID .."].\b")
 	
 	-- Effectively a reimplementation of SignalMask from LUS
@@ -236,6 +249,8 @@ function Downloader:DownloadFailed(downloadID, errorID)
 		self.delayID = self.delayID + 1
 		local thisDelayID = self.delayID
 		WG.Delay(function() self:_CleanupDownload(thisDelayID) end, self.timeout)
+	else
+		self:_CleanupDownload()
 	end
 	self:UpdateQueue()
 end
