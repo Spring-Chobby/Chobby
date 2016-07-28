@@ -133,12 +133,12 @@ skin.checkbox = {
 skin.editbox = {
   hintFont = table.merge({color = {1,1,1,0.7}}, skin.general.font),
   
-  backgroundColor = {0.1, 0.1, 0.1, 0.7},
+  backgroundColor = {0.1, 0.1, 0.1, 0},
   cursorColor     = {1.0, 0.7, 0.1, 0.8},
 
   TileImageBK = ":cl:panel2_bg.png",
   TileImageFG = ":cl:panel2_border.png",
-  tiles       = {14,14,14,14},
+  tiles       = {1,1,1,1},
 
   DrawControl = DrawEditBox,
 }
@@ -148,7 +148,7 @@ skin.textbox = {
 
   TileImageBK = ":cl:panel2_bg.png",
   TileImageFG = ":cl:panel2_border.png",
-  tiles       = {14,14,14,14},
+  tiles       = {1,1,1,1},
 
   borderColor     = {0.0, 0.0, 0.0, 0.0},
   focusColor      = {0.0, 0.0, 0.0, 0.0},
@@ -210,7 +210,7 @@ skin.progressbar = {
 
 skin.scrollpanel = {
   BorderTileImage = ":cl:panel2_border.png",
-  bordertiles = {14,14,14,14},
+  bordertiles = {1,1,1,1},
 
   BackgroundTileImage = ":cl:panel2_bg.png",
   bkgndtiles = {14,14,14,14},
@@ -326,11 +326,16 @@ skin.tabbar = {
 }
 
 skin.tabbaritem = {
-  TileImageBK = ":cl:tech_tabbaritem_bk.png",
-  TileImageFG = ":cl:tech_tabbaritem_fg.png",
+  -- yes these are reverted, but also a lie (see images), only one is used
+  TileImageFG = ":cl:tech_tabbaritem_bk.png",
+  TileImageBK = ":cl:tech_tabbaritem_fg.png",
   tiles = {10, 10, 10, 0}, --// tile widths: left,top,right,bottom
   padding = {5, 3, 3, 2},
-  backgroundColor = {1, 1, 1, 1.0},
+  -- since it's color multiplication, it's easier to control white color (1, 1, 1) than black color (0, 0, 0) to get desired results
+  backgroundColor = {0, 0, 0, 1.0},
+  -- actually kill this anyway
+  borderColor     = {0, 0, 0, 0},
+  focusColor      = {0.46, 0.54, 0.68, 1.0},
 
   DrawControl = DrawTabBarItem,
 }

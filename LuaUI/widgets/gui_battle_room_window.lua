@@ -1046,13 +1046,6 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		parent = window,
 	}
 
-	local line = Line:New {
-		x = 0,
-		y = 0,
-		width = 300,
-		parent = subPanel,
-	}
-
 	local battleRoomConsole = WG.Chobby.Console("Battleroom Chat")
 	battleRoomConsole.listener = function(message)
 		battleLobby:SayBattle(message)
