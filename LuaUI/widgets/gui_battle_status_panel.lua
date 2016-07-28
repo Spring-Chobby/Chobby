@@ -323,6 +323,14 @@ local function InitializeControls(parentControl)
 	lobby:AddListener("OnSaidBattleEx", OnSaidBattle)
 	
 	local function OnVoteUpdate()
+		if statusWindowHandler.IsTabSelected("myBattle") then
+			voting = false
+			if unreadMessages > 0 then
+				unreadMessages = 0
+				statusWindowHandler.SetActivity("myBattle", unreadMessages)
+			end
+			return
+		end
 		if not voting then
 			unreadMessages = unreadMessages + 1
 			statusWindowHandler.SetActivity("myBattle", unreadMessages, 3)
