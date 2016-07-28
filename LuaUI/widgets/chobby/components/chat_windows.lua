@@ -455,10 +455,10 @@ function ChatWindows:SetTabBadge(tabName, text)
 	local badge = ctrl._badge
 	if badge == nil then
 		badge = Label:New {
-			right = 2,
-			width = 12,
-			y = 2,
-			height = 10,
+			right = 0,
+			width = 10,
+			y = 0,
+			height = 12,
 			caption = Configuration:GetFont(1),
 			font = { 
 				Configuration:GetFont(1).size,
@@ -466,9 +466,9 @@ function ChatWindows:SetTabBadge(tabName, text)
 				autoOutlineColor = false,
 				outlineColor = { 0, 0, 0, 0.6 },
 			},
+			parent = ctrl
 		}
 		ctrl._badge = badge
-		ctrl:AddChild(badge)
 	end
 
 	badge:SetCaption(text)

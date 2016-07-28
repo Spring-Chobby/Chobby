@@ -333,7 +333,7 @@ skin.tabbaritem = {
   TileImageFG = ":cl:tech_tabbaritem_bk.png",
   TileImageBK = ":cl:tech_tabbaritem_fg.png",
   tiles = {10, 10, 10, 0}, --// tile widths: left,top,right,bottom
-  padding = {5, 3, 3, 2},
+  padding = {1, 1, 1, 2},
   -- since it's color multiplication, it's easier to control white color (1, 1, 1) than black color (0, 0, 0) to get desired results
   backgroundColor = {0, 0, 0, 1.0},
   -- actually kill this anyway
