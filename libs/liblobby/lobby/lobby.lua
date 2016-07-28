@@ -587,6 +587,10 @@ function Lobby:_OnSayPrivate(userName, message, sayTime)
 	self:_CallListeners("OnSayPrivate", userName, message, sayTime)
 end
 
+function Lobby:_OnSayPrivateEx(userName, message, sayTime)
+	self:_CallListeners("OnSayPrivateEx", userName, message, sayTime)
+end
+
 ------------------------
 -- Friend & ignore commands
 ------------------------

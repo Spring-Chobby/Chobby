@@ -565,9 +565,9 @@ function Interface:_Say(data)
 			end
 		else
 			if emote then
-				self:_OnSaidPrivateEx(data.Target, data.Text, data.Time)
+				self:_OnSayPrivateEx(data.Target, data.Text, data.Time)
 			else
-				self:_OnSaidPrivate(data.Target, data.Text, data.Time)
+				self:_OnSayPrivate(data.Target, data.Text, data.Time)
 			end
 		end
 	elseif data.Place == 5 then -- Protocol etc.. commands?

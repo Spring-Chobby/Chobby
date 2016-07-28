@@ -1,7 +1,7 @@
 Console = LCS.class{}
 
-function Console:init(channelName)
-	self.listener = nil
+function Console:init(channelName, sendMessageListener)
+	self.listener = sendMessageListener
 	self.showDate = true
 	self.dateFormat = "%H:%M"
 	

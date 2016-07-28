@@ -112,6 +112,12 @@ function ChatWindows:init()
 			privateChatConsole:AddMessage(message, lobby:GetMyUserName(), msgDate)
 		end
 	)
+	lobby:AddListener("OnSayPrivateEx",
+		function(listener, userName, message, msgDate)
+			local privateChatConsole = self:GetPrivateChatConsole(userName)
+			privateChatConsole:AddMessage(message, lobby:GetMyUserName(), msgDate, true)
+		end
+	)
 	lobby:AddListener("OnSaidPrivate",
 		function(listener, userName, message, msgDate)
 			if userName == 'Nightwatch' then
@@ -499,7 +505,10 @@ function ChatWindows:SetParent(newParent)
 end
 
 function ChatWindows:CreateDebugConsole()
-	self.debugConsole = Console()
+	local function MessageListener(message)
+		lobby:SendCustomCommand(message)
+	end
+	self.debugConsole = Console(nil, MessageListener)
 	table.insert(self.debugConsole.ebInputText.OnKeyPress,
 		function(obj, key, ...)
 			-- allow tabs for the debug window
@@ -508,9 +517,6 @@ function ChatWindows:CreateDebugConsole()
 			end
 		end
 	)
-	self.debugConsole.listener = function(message)
-		lobby:SendCustomCommand(message)
-	end
 	lobby:AddListener("OnCommandReceived",
 		function(listner, command)
 			Spring.Echo("Server", "<" .. command)
@@ -602,14 +608,14 @@ function ChatWindows:GetChannelConsole(chanName)
 	local channelConsole = self.channelConsoles[chanName]
 
 	if channelConsole == nil then
-		channelConsole = Console(chanName)
+		local function MessageListener(message)
+			lobby:Say(chanName, message)
+		end
+		channelConsole = Console(chanName, MessageListener)
 		self.channelConsoles[chanName] = channelConsole
 
 		Configuration.channels[chanName] = true
 		
-		channelConsole.listener = function(message)
-			lobby:Say(chanName, message)
-		end
 
 		local userListPanel = UserListPanel(function() return lobby:GetChannel(chanName) end, 22)
 		self.userListPanels[chanName] = userListPanel
@@ -677,12 +683,11 @@ function ChatWindows:GetPrivateChatConsole(userName)
 	local privateChatConsole = self.privateChatConsoles[userName]
 
 	if privateChatConsole == nil then
-		privateChatConsole = Console(userName .. " messages")
-		self.privateChatConsoles[userName] = privateChatConsole
-
-		privateChatConsole.listener = function(message)
+		local function MessageListener(message)
 			lobby:SayPrivate(userName, message)
 		end
+		privateChatConsole = Console(userName .. " messages", MessageListener)
+		self.privateChatConsoles[userName] = privateChatConsole
 		
 		local caption = "@" .. userName
 		local myFont = Font:New(Configuration:GetFont(1))
@@ -711,7 +716,7 @@ function ChatWindows:GetPrivateChatConsole(userName)
 					closeChannelButton
 				}
 			},
-			false
+			true
 		)
 		
 		closeChannelButton:BringToFront()
