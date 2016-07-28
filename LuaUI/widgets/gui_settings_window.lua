@@ -308,36 +308,64 @@ local function InitializeControls(window)
 		caption = "Settings:",
 	}
 	
-	local function SettingsButton(pos, caption, settings)
-		return Button:New {
-			x = 80*pos,
-			y = 0, 
+	local useCustomSettings = true
+	local settingsPresetControls = {}
+	
+	local function SettingsButton(x, y, caption, settings)
+		local button = Button:New {
+			name = caption,
+			x = 90*x,
+			y = 55*y, 
 			width = 80, 
-			bottom = 0,
+			height = 45,
 			caption = caption,
-			font =  Configuration:GetFont(2),
+			font = Configuration:GetFont(2),
 			OnClick = {
-				function ()
-					Configuration.game_settings = VFS.Include("luaui/configs/springsettings/" .. settings)
+				function (obj)
+					if settings then
+						Configuration.game_settings = VFS.Include("luaui/configs/springsettings/" .. settings)
+					end
+					ButtonUtilities.SetButtonSelected(obj)
+					for i = 1, #settingsPresetControls do
+						local control = settingsPresetControls[i]
+						if control.name ~= obj.name then
+							ButtonUtilities.SetButtonDeselected(control)
+						end
+					end
 				end
 			},
 		}
+		
+		settingsPresetControls[#settingsPresetControls + 1] = button
+		if settings then
+			if Spring.Utilities.TableEqual(VFS.Include("luaui/configs/springsettings/" .. settings), Configuration.game_settings) then
+				useCustomSettings = false
+				ButtonUtilities.SetButtonSelected(button)
+			end
+		elseif useCustomSettings then
+			ButtonUtilities.SetButtonSelected(button)
+		end
+		return button
 	end
 	
-	Control:New {
+	local settingsHolder = Control:New {
 		x = 135,
 		y = offset,
 		width = 540,
-		height = 45,
+		height = 120,
 		parent = window,
+		padding = {0, 0, 0, 0},
 		children = {
-			SettingsButton(0,   "Minimal", "springsettings0.lua"),
-			SettingsButton(1,  "Low",     "springsettings1.lua"),
-			SettingsButton(2, "Medium",  "springsettings2.lua"),
-			SettingsButton(3, "High",    "springsettings3.lua"),
-			SettingsButton(4, "Ultra",   "springsettings4.lua"),
+			SettingsButton(0, 0, "Minimal", "springsettings0.lua"),
+			SettingsButton(1, 0, "Low",     "springsettings1.lua"),
+			SettingsButton(2, 0, "Medium",  "springsettings2.lua"),
+			SettingsButton(0, 1, "High",    "springsettings3.lua"),
+			SettingsButton(1, 1, "Ultra",   "springsettings4.lua"),
 		}
 	}
+	
+	local customSettingsButton = SettingsButton(2, 1,  "Custom")
+	settingsHolder:AddChild(customSettingsButton)
 	
 	freezeSettings = false
 	

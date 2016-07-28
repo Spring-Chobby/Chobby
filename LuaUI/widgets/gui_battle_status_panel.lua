@@ -309,8 +309,8 @@ local function InitializeControls(parentControl)
 		end
 		local iAmMentioned = (string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName())
 		if statusWindowHandler.IsTabSelected("myBattle") then
+			voting = false
 			if unreadMessages > 0 then
-				voting = false
 				unreadMessages = 0
 				statusWindowHandler.SetActivity("myBattle", unreadMessages)
 			end

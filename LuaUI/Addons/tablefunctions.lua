@@ -34,6 +34,26 @@ function Spring.Utilities.MergeTable(primary, secondary, deep)
 	return new
 end
 
+function Spring.Utilities.TableEqual(table1, table2)
+	if not table1 then
+		return not ((table2 and true) or false)
+	end
+	if not table2 then
+		return false
+	end
+	for key, value in pairs(table1) do
+		if table2[key] ~= value then
+			return false
+		end
+	end
+	for key, value in pairs(table2) do
+		if table1[key] ~= value then
+			return false
+		end
+	end
+	return true
+end
+
 function Spring.Utilities.TableToString(data)
 	 local str = ""
 
