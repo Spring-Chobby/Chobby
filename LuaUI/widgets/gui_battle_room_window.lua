@@ -19,6 +19,7 @@ end
 
 -- Chili controls
 local window
+local imHaveMap, imHaveGame
 local lblHaveMap, lblHaveGame
 
 -- Function which is called to fix scroll panel sizes
@@ -47,6 +48,10 @@ local multiplayerWrapper
 
 local singleplayerGame = "Chobby $VERSION"
 
+local IMG_READY    = "luaui/images/ready.png"
+local IMG_UNREADY  = "luaui/images/unready.png"
+
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Download management
@@ -68,16 +73,22 @@ local function UpdateArchiveStatus()
 	local haveMap = VFS.HasArchive(battle.mapName)
 	
 	if haveGame then
-		lblHaveGame:SetCaption(i18n("have_game") .. " [" .. WG.Chobby.WG.Chobby.Configuration:GetTick() .. "\b]")
+		imHaveGame.file = IMG_READY
+		lblHaveGame:SetCaption(i18n("have_game"))
 	else
-		lblHaveGame:SetCaption(i18n("dont_have_game") .. " [" .. WG.Chobby.Configuration:GetCross() .. "\b]")
+		imHaveGame.file = IMG_UNREADY
+		lblHaveGame:SetCaption(i18n("dont_have_game"))
 	end
+	imHaveGame:Invalidate()
 	
 	if haveMap then
-		lblHaveMap:SetCaption(i18n("have_map") .. " [" .. WG.Chobby.WG.Chobby.Configuration:GetTick() .. "\b]")
+		imHaveMap.file = IMG_READY
+		lblHaveMap:SetCaption(i18n("have_map"))
 	else
-		lblHaveMap:SetCaption(i18n("dont_have_map") .. " [" .. WG.Chobby.Configuration:GetCross() .. "\b]")
+		imHaveMap.file = IMG_UNREADY
+		lblHaveMap:SetCaption(i18n("dont_have_map"))
 	end
+	imHaveMap:Invalidate()
 	
 	haveMapAndGame = (haveGame and haveMap)
 end
@@ -297,8 +308,16 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	--	leftOffset = leftOffset + 25
 	--end
 	
-	lblHaveGame = Label:New {
+	imHaveGame = Image:New {
 		x = 8,
+		y = leftOffset,
+		width = 15,
+		height = 15,
+		file = IMG_READY,
+		parent = leftInfo,
+	}
+	lblHaveGame = Label:New {
+		x = 28,
 		y = leftOffset,
 		caption = "",
 		font = WG.Chobby.Configuration:GetFont(1),
@@ -306,8 +325,16 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	}
 	leftOffset = leftOffset + 25
 
-	lblHaveMap = Label:New {
+	imHaveMap = Image:New {
 		x = 8,
+		y = leftOffset,
+		width = 15,
+		height = 15,
+		file = IMG_READY,
+		parent = leftInfo,
+	}
+	lblHaveMap = Label:New {
+		x = 28,
 		y = leftOffset,
 		caption = "",
 		font = WG.Chobby.Configuration:GetFont(1),
@@ -785,7 +812,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 				right = 0,
 				bottom = 0,
 				autosize = true,
-				file = "luaui/images/ready.png",
+				file = IMG_READY,
 			}
 		},
 		parent = activePanel,
@@ -812,7 +839,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 				y = 0,
 				right = 0,
 				bottom = 0,
-				file = "luaui/images/unready.png",
+				file = IMG_UNREADY,
 			}
 		},
 		parent = activePanel,
