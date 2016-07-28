@@ -193,7 +193,7 @@ end
 --------------------------------------------------------------------------------
 -- Control Handling
 
-local function GetUserControls(userName, maxNameLength, isInBattle, isSingleplayer, reinitialize, disableInteraction, supressSync)
+local function GetUserControls(userName, autoResize, maxNameLength, isInBattle, isSingleplayer, reinitialize, disableInteraction, supressSync)
 	local userControls = reinitialize or {}
 	
 	userControls.isInBattle = isInBattle
@@ -326,11 +326,11 @@ local function GetUserControls(userName, maxNameLength, isInBattle, isSingleplay
 		fontsize = WG.Chobby.Configuration:GetFont(2).size,
 		text = userName,
 	}
-	local truncatedName = StringUtilities.TruncateStringIfRequiredAndDotDot(userControls.name.text, userControls.name.font, maxNameLength)
+	local userNameStart = offset
+	local truncatedName = StringUtilities.TruncateStringIfRequiredAndDotDot(userName, userControls.name.font, maxNameLength)
 	if truncatedName then
 		userControls.name:SetText(truncatedName)
 	end
-	
 	offset = offset + userControls.name.font:GetTextWidth(userControls.name.text)
 	
 	local status1, status2 = GetUserStatusImages(userName, isInBattle, userControls)
@@ -360,6 +360,19 @@ local function GetUserControls(userName, maxNameLength, isInBattle, isSingleplay
 	}
 	offset = offset + 20
 	
+	if autoResize then
+		userControls.mainControl.OnResize = userControls.mainControl.OnResize or {}
+		userControls.mainControl.OnResize[#userControls.mainControl.OnResize + 1] = function (obj, sizeX, sizeY)
+			local maxWidth = sizeX - userNameStart - 40
+			local truncatedName = StringUtilities.GetTruncatedStringWithDotDot(userName, userControls.name.font, maxWidth)
+			userControls.name:SetText(truncatedName)
+			
+			offset = userNameStart + userControls.name.font:GetTextWidth(userControls.name.text) + 3
+			userControls.statusFirst:SetPos(offset)
+			offset = offset + 21
+			userControls.statusSecond:SetPos(offset)
+		end
+	end
 	
 	-- This is always checked against main lobby.
 	userControls.needReinitialization = lobby.status ~= "connected"
@@ -382,72 +395,72 @@ function userHandler.GetBattleUser(userName, isSingleplayer)
 
 	if battleUsers[userName] then
 		if battleUsers[userName].needReinitialization then
-			battleUsers[userName] = GetUserControls(userName, false, true, false, battleUsers[userName])
+			battleUsers[userName] = GetUserControls(userName, true, false, true, false, battleUsers[userName])
 		end
 		return battleUsers[userName].mainControl
 	end
 	
-	battleUsers[userName] = GetUserControls(userName, false, true)
+	battleUsers[userName] = GetUserControls(userName, true, false, true)
 	return battleUsers[userName].mainControl
 end
 
 function userHandler.GetTooltipUser(userName)
 	if tooltipUsers[userName] then
 		if tooltipUsers[userName].needReinitialization then
-			tooltipUsers[userName] = GetUserControls(userName, false, true, false, battleUsers[userName], nil, true)
+			tooltipUsers[userName] = GetUserControls(userName, false, false, true, false, battleUsers[userName], nil, true)
 		end
 		return tooltipUsers[userName].mainControl
 	end
 	
-	tooltipUsers[userName] = GetUserControls(userName, false, true, nil, nil, nil, true)
+	tooltipUsers[userName] = GetUserControls(userName, false, false, true, nil, nil, nil, true)
 	return tooltipUsers[userName].mainControl
 end
 
 function userHandler.GetSingleplayerUser(userName)
 	if singleplayerUsers[userName] then
 		if singleplayerUsers[userName].needReinitialization then
-			singleplayerUsers[userName] = GetUserControls(userName, false, true, true, singleplayerUsers[userName])
+			singleplayerUsers[userName] = GetUserControls(userName, true, false, true, true, singleplayerUsers[userName])
 		end
 		return singleplayerUsers[userName].mainControl
 	end
 	
-	singleplayerUsers[userName] = GetUserControls(userName, false, true, true)
+	singleplayerUsers[userName] = GetUserControls(userName, true, false, true, true)
 	return singleplayerUsers[userName].mainControl
 end
 
 function userHandler.GetChannelUser(userName)		
 	if channelUsers[userName] then
 		if channelUsers[userName].needReinitialization then
-			channelUsers[userName] = GetUserControls(userName, WG.Chobby.Configuration.chatMaxNameLength, false, false, channelUsers[userName])
+			channelUsers[userName] = GetUserControls(userName, false, WG.Chobby.Configuration.chatMaxNameLength, false, false, channelUsers[userName])
 		end
 		return channelUsers[userName].mainControl
 	end
 	
-	channelUsers[userName] = GetUserControls(userName, WG.Chobby.Configuration.chatMaxNameLength)
+	channelUsers[userName] = GetUserControls(userName, false, WG.Chobby.Configuration.chatMaxNameLength)
 	return channelUsers[userName].mainControl
 end
 
 function userHandler.GetTeamUser(userName)		
 	if teamUsers[userName] then
 		if teamUsers[userName].needReinitialization then
-			teamUsers[userName] = GetUserControls(userName, false, false, false, teamUsers[userName])
+			teamUsers[userName] = GetUserControls(userName, false, false, false, false, teamUsers[userName])
 		end
 		return teamUsers[userName].mainControl
 	end
 	
-	teamUsers[userName] = GetUserControls(userName)
+	teamUsers[userName] = GetUserControls(userName, false)
 	return teamUsers[userName].mainControl
 end
 
 function userHandler.GetStatusUser(userName)
 	if statusUsers[userName] then
 		if statusUsers[userName].needReinitialization then
-			statusUsers[userName] = GetUserControls(userName, WG.Chobby.Configuration.statusMaxNameLength, false, false, statusUsers[userName], true)
+			statusUsers[userName] = GetUserControls(userName, false, WG.Chobby.Configuration.statusMaxNameLength, false, false, statusUsers[userName], true)
 		end
 		return statusUsers[userName].mainControl
 	end
 	
-	statusUsers[userName] = GetUserControls(userName, WG.Chobby.Configuration.statusMaxNameLength, false, false, false, true)
+	statusUsers[userName] = GetUserControls(userName, false, WG.Chobby.Configuration.statusMaxNameLength, false, false, false, true)
 	return statusUsers[userName].mainControl
 end
 
