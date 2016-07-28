@@ -132,7 +132,7 @@ function EditBox:_SetSelection(selStart, selStartY, selEnd, selEndY)
 		for _, plID in pairs(logicalLine.pls) do
 			local pl = self.physicalLines[plID]
 			self.selStartPhysicalY = plID
-			if #pl.text > self.selStartPhysical or plID == #logicalLine.pls then
+			if #pl.text + 1 >= self.selStartPhysical or plID == #logicalLine.pls then
 				break
 			end
 			self.selStartPhysical  = self.selStartPhysical - #pl.text
@@ -150,7 +150,7 @@ function EditBox:_SetSelection(selStart, selStartY, selEnd, selEndY)
 		for _, plID in pairs(logicalLine.pls) do
 			local pl = self.physicalLines[plID]
 			self.selEndPhysicalY = plID
-			if #pl.text > self.selEndPhysical or plID == #logicalLine.pls then
+			if #pl.text + 1 >= self.selEndPhysical or plID == #logicalLine.pls then
 				break
 			end
 			self.selEndPhysical = self.selEndPhysical - #pl.text
