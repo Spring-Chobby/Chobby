@@ -192,7 +192,8 @@ function Downloader:DownloadProgress(downloadID, downloaded, total)
 	local totalStr = round2(total, 1)
 	local downloadedStr = round2(downloaded, 1)
 
-	self.prDownload:SetCaption(remainingTimeStr .. " left: " .. downloadedStr .. "/" .. totalStr .. " MB")
+	--self.prDownload:SetCaption(remainingTimeStr .. " left: " .. downloadedStr .. "/" .. totalStr .. " MB")
+	self.prDownload:SetCaption(downloadedStr .. "/" .. totalStr .. " MB")
 	self.prDownload:SetValue(100 * doneRatio)
 end
 
