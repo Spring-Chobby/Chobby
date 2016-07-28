@@ -97,7 +97,7 @@ function EditBox:SetText(newtext)
 	self.text = newtext
 	self.cursor = 1
 	self.physicalCursor = 1
-	self.offset = 1
+	self.offset = 0
 	self.selStart = nil
 	self.selStartY = nil
 	self.selEnd = nil
@@ -391,9 +391,12 @@ function EditBox:_SetCursorByMousePos(x, y)
 		local selLine = self.physicalLines[self.cursorY]
 		if not selLine then return end
 		selLine = selLine.text
+		if not self.multiline then
+			selLine = text
+		end
 		self.cursor = #selLine + 1
 		for i = 1, #selLine do
-			local tmp = selLine:sub(1, i)
+			local tmp = selLine:sub(1 + self.offset, i)
 			if self.font:GetTextWidth(tmp) > (x - clientX) then
 				self.cursor = i
 				break
