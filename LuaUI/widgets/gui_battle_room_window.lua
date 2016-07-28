@@ -1063,14 +1063,21 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		parent = window,
 	}
 	
+	local battleTitle = i18n("battle") .. ": " .. tostring(battle.title)
+	
 	local lblBattleTitle = Label:New {
 		x = 18,
 		y = 16,
-		width = 200,
+		right = 100,
 		height = 30,
 		font =  WG.Chobby.Configuration:GetFont(3),
-		caption = i18n("battle") .. ": " .. tostring(battle.title),
+		caption = "",
 		parent = window,
+		OnResize = {
+			function (obj, xSize, ySize)
+				obj:SetCaption(StringUtilities.GetTruncatedStringWithDotDot(battleTitle, obj.font, obj.width))
+			end
+		}
 	}
 
 	local function MessageListener(message)

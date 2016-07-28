@@ -134,12 +134,17 @@ function BattleListWindow:AddBattle(battleID, battle)
 		name = "title",
 		x = height + 3,
 		y = 0,
-		width = 400,
+		right = 0,
 		height = 20,
 		valign = 'center',
 		font = Configuration:GetFont(2),
-		caption = battle.title:sub(1, 60),
+		caption = battle.title,
 		parent = parentButton,
+		OnResize = {
+			function (obj, xSize, ySize)
+				obj:SetCaption(StringUtilities.GetTruncatedStringWithDotDot(battle.title, obj.font, obj.width))
+			end
+		}
 	}
 	local minimap = Panel:New {
 		name = "minimap",
@@ -210,7 +215,7 @@ function BattleListWindow:AddBattle(battleID, battle)
 	local lblGame = Label:New {
 		name = "game",
 		x = height + 100,
-		width = 160,
+		right = 0,
 		y = 20,
 		height = 15,
 		valign = 'center',
@@ -232,7 +237,7 @@ function BattleListWindow:AddBattle(battleID, battle)
 	local lblMap = Label:New {
 		name = "mapCaption",
 		x = height + 100,
-		width = 200,
+		right = 0,
 		y = 36,
 		height = 15,
 		valign = 'center',

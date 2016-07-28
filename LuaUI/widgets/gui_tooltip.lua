@@ -232,12 +232,19 @@ local function GetBattleInfoHolder(parent, offset, battleID)
 		name = "title",
 		x = 80,
 		y = 1,
-		right = 0,
+		right = 5,
 		height = 20,
 		valign = 'top',
 		font = Configuration:GetFont(1),
 		caption = battle.title:sub(1, 60),
 		parent = mainControl,
+		OnResize = {
+			function (obj, xSize, ySize)
+				if battle then
+					obj:SetCaption(StringUtilities.GetTruncatedStringWithDotDot(battle.title, obj.font, obj.width))
+				end
+			end
+		}
 	}
 	local minimapImage = Image:New {
 		name = "minimapImage",
@@ -291,24 +298,38 @@ local function GetBattleInfoHolder(parent, offset, battleID)
 		name = "game",
 		x = 125,
 		y = 22,
-		right = 0,
+		right = 5,
 		height = 20,
 		valign = 'top',
 		caption = battle.gameName:sub(1, 22),
 		font = Configuration:GetFont(1),
 		parent = mainControl,
+		OnResize = {
+			function (obj, xSize, ySize)
+				if battle then
+					obj:SetCaption(StringUtilities.GetTruncatedStringWithDotDot(battle.gameName, obj.font, obj.width))
+				end
+			end
+		}
 	}
 
 	local lblMap = Label:New {
 		name = "mapCaption",
 		x = 125,
 		y = 40,
-		right = 0,
+		right = 5,
 		height = 20,
 		valign = 'center',
 		caption = battle.mapName:sub(1, 22),
 		font = Configuration:GetFont(1),
 		parent = mainControl,
+		OnResize = {
+			function (obj, xSize, ySize)
+				if battle then
+					obj:SetCaption(StringUtilities.GetTruncatedStringWithDotDot(battle.mapName, obj.font, obj.width))
+				end
+			end
+		}
 	}
 	
 	function externalFunctions.Update(offset, battleID)
@@ -325,10 +346,10 @@ local function GetBattleInfoHolder(parent, offset, battleID)
 		end
 		mainControl:SetPos(nil, offset)
 		
-		lblTitle:SetCaption(battle.title:sub(1, 60))
+		lblTitle:SetCaption(StringUtilities.GetTruncatedStringWithDotDot(battle.title, lblTitle.font, lblTitle.width))
 		lblPlayers:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
-		lblGame:SetCaption(battle.gameName:sub(1, 22))
-		lblMap:SetCaption(battle.mapName:sub(1, 22))
+		lblGame:SetCaption(StringUtilities.GetTruncatedStringWithDotDot(battle.gameName, lblTitle.font, lblTitle.width))
+		lblMap:SetCaption(StringUtilities.GetTruncatedStringWithDotDot(battle.mapName, lblTitle.font, lblTitle.width))
 		
 		if battle.passworded and not imgPassworded.visible then
 			imgPassworded:Show()
