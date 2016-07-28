@@ -49,7 +49,7 @@ function Console:init(channelName, sendMessageListener)
 		right = 2,
 		text = "",
 		fontsize = Configuration:GetFont(1).size,
-		hint = i18n("type_here_to_chat"),
+		--hint = i18n("type_here_to_chat"),
 	}
 	
 	self.ebInputText.KeyPress = function(something, key, ...)
