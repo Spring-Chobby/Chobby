@@ -361,7 +361,7 @@ local battleTooltip = {}
 local function GetBattleTooltip(battleID, battle)
 	local Configuration = WG.Chobby.Configuration
 	
-	local width = 400
+	local width = 320
 	if not battleTooltip.mainControl then
 		battleTooltip.mainControl = Chili.Control:New {
 			x = 0,
@@ -377,7 +377,7 @@ local function GetBattleTooltip(battleID, battle)
 	if not battleTooltip.title then
 		battleTooltip.title = GetTooltipLine(battleTooltip.mainControl, nil, 3)
 	end
-	local truncatedName = StringUtilities.GetTruncatedStringWithDotDot(battle.title, battleTooltip.title.GetFont(), width)
+	local truncatedName = StringUtilities.GetTruncatedStringWithDotDot(battle.title, battleTooltip.title.GetFont(), width - 10)
 	battleTooltip.title.Update(offset, truncatedName)
 	offset = offset + 23 -- * battleTooltip.title.GetLines() -- Not required with truncation
 	
@@ -537,7 +537,8 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 	if not userTooltip.name then
 		userTooltip.name = GetTooltipLine(userTooltip.mainControl, nil, 3)
 	end
-	userTooltip.name.Update(offset, userName)
+	local truncatedName = StringUtilities.GetTruncatedStringWithDotDot(userName, userTooltip.name.GetFont(), width - 10)
+	userTooltip.name.Update(offset, truncatedName)
 	offset = offset + 23
 	
 	-- Clan

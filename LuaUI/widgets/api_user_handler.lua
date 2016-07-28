@@ -442,12 +442,12 @@ end
 function userHandler.GetStatusUser(userName)
 	if statusUsers[userName] then
 		if statusUsers[userName].needReinitialization then
-			statusUsers[userName] = GetUserControls(userName, false, false, false, statusUsers[userName], true)
+			statusUsers[userName] = GetUserControls(userName, WG.Chobby.Configuration.statusMaxNameLength, false, false, statusUsers[userName], true)
 		end
 		return statusUsers[userName].mainControl
 	end
 	
-	statusUsers[userName] = GetUserControls(userName, false, false, false, false, true)
+	statusUsers[userName] = GetUserControls(userName, WG.Chobby.Configuration.statusMaxNameLength, false, false, false, true)
 	return statusUsers[userName].mainControl
 end
 

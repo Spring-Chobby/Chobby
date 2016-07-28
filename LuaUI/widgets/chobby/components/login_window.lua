@@ -33,6 +33,11 @@ end
 
 function LoginWindow:init(failFunction, cancelText, windowClassname)
 	
+	if screen0:GetChildByName("loginWindow") then
+		Spring.Echo("Tried to spawn duplicate login window")
+		return
+	end
+	
 	self.CancelFunc = function ()
 		self.window:Dispose()
 		if failFunction then

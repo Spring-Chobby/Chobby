@@ -272,12 +272,19 @@ end
 -- Connectivity commands
 ------------------------
 
-local loginOrRegisterResponseCodes = {
-	[1] = "Already connected",
-	[2] = "Name exists",
-	[3] = "Password wrong",
-	[4] = "Banned",
-	[5] = "Bad characters in name",
+local registerResponseCodes = {
+	[0] = "Ok",
+	[1] = "Name already registered",
+	[2] = "Smurf",
+	[3] = "Invalid name",
+	[4] = "Invalid password",
+}
+
+local loginResponseCodes = {
+	[0] = "Ok",
+	[1] = "Invalid password",
+	[2] = "Invalid login",
+	[3] = "Name not registered",
 }
 
 function Interface:_Welcome(data)
@@ -300,7 +307,7 @@ function Interface:_RegisterResponse(data)
 	if data.ResultCode == 0 then
 		self:_OnRegistrationAccepted()
 	else
-		self:_OnRegistrationDenied(loginOrRegisterResponseCodes[data.ResultCode] or "Reason error")
+		self:_OnRegistrationDenied(registerResponseCodes[data.ResultCode] or "Reason error")
 	end
 end
 Interface.jsonCommands["RegisterResponse"] = Interface._RegisterResponse
@@ -311,7 +318,7 @@ function Interface:_LoginResponse(data)
 	if data.ResultCode == 0 then
 		self:_OnAccepted()
 	else
-		self:_OnDenied(loginOrRegisterResponseCodes[data.ResultCode] or "Reason error")
+		self:_OnDenied(loginResponseCodes[data.ResultCode] or "Reason error")
 	end
 end
 Interface.jsonCommands["LoginResponse"] = Interface._LoginResponse

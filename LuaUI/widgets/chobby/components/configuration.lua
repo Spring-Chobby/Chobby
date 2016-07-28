@@ -11,6 +11,7 @@ function Configuration:init()
 	self.serverPort = 8200
 	
 	self.chatMaxNameLength = 120 -- Pixels
+	self.statusMaxNameLength = 180
 
 	self.userName = ""
 	self.password = ""
