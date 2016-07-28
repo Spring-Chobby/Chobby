@@ -70,19 +70,13 @@ function Console:init(channelName, sendMessageListener)
 			end
 		end
 	}
-
--- 	self.btnSubmit = Button:New {
--- 		bottom = 0,
--- 		height = 40,
--- 		right = 0,
--- 		width = 90,
--- 		caption = i18n("submit"),
--- 		OnClick = { 
--- 			function(...)
--- 				self:SendMessage()
--- 			end
--- 		}
--- 	}
+	self.fakeImage = Image:New {
+		x = 0, y = 0,
+		bottom = 0, right = 0,
+		OnClick = { function()
+			screen0:FocusControl(self.ebInputText)
+		end}
+	}
 
 	self.panel = Control:New {
 		x = 0,
@@ -95,7 +89,7 @@ function Console:init(channelName, sendMessageListener)
 		children = {
 			self.spHistory,
 			self.ebInputText,
--- 			self.btnSubmit
+			self.fakeImage,
 		},
 	}
 end
