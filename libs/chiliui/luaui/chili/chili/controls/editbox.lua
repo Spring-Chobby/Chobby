@@ -162,6 +162,16 @@ function EditBox:_GeneratePhysicalLines(logicalLineID)
 	local line = self.lines[logicalLineID]
 	local text = line.text
 
+	-- find colors
+	local colors = {}
+	local startIndex = 1
+	while true do
+		local cp = string.find(text, "\255", startIndex)
+		if not cp then break end
+		table.insert(colors, cp)
+		startIndex = cp + 4
+	end
+
 	-- calculate size of physical lines
 	local font = self.font
 	local padding = self.padding
@@ -180,11 +190,15 @@ function EditBox:_GeneratePhysicalLines(logicalLineID)
 		y = prevLine.y + fontLineHeight
 	end
 
+	-- the first line's prefix is applied by default
+	local colorPrefix = ""
+	local totalLength = 0
 	-- split the text into physical lines
-	for _, lineText in pairs(explode("\n", wrappedText)) do
+	for lineIndex, lineText in pairs(explode("\n", wrappedText)) do
 	  local th, td = font:GetTextHeight(lineText)
+	  local _txt = colorPrefix .. lineText
 	  table.insert(self.physicalLines, {
-		  text = lineText,
+		  text = _txt,
 		  th   = th,
 		  td   = td,
 		  lh   = fontLineHeight,
@@ -197,6 +211,25 @@ function EditBox:_GeneratePhysicalLines(logicalLineID)
 
 	  -- link to the physical line ID
 	  table.insert(line.pls, #self.physicalLines)
+
+	  -- find color for next line
+	  if #colors > 0 then
+		totalLength = totalLength + #_txt
+		local colorIndex = 1
+		while colorIndex <= #colors do
+			if colors[colorIndex] > totalLength then
+				break
+			end
+			colorIndex = colorIndex + 1
+		end
+		colorIndex = colorIndex - 1
+
+		colorPrefix = ""
+		if colors[colorIndex] ~= nil then
+			local cp = colors[colorIndex]
+			colorPrefix = text:sub(cp, cp+3)
+		end
+	  end
     end
 	
 	if self.autoHeight then
