@@ -59,7 +59,7 @@ function TeamWindow:init()
 	lobby:AddListener("OnSaidTeamEx", 
 		function(listener, userName, msg)
 			if self.teamConsole ~= nil then
-				self.teamConsole:AddMessage(msg, userName, nil, "\255\0\139\139")
+				self.teamConsole:AddMessage(msg, userName, nil, "\255\0\139\139", true)
 			end
 		end
 	)

@@ -159,7 +159,7 @@ function Console:SendMessage()
 end
 
 -- if date is not passed, current time is assumed
-function Console:AddMessage(message, userName, dateOverride, color)
+function Console:AddMessage(message, userName, dateOverride, color, thirdPerson)
 	local txt = ""
 	if self.showDate then
 		local timeOverride
@@ -192,7 +192,11 @@ function Console:AddMessage(message, userName, dateOverride, color)
 		txt = txt .. "[" .. currentDate .. "] "
 	end
 	if userName ~= nil then
-		txt = txt .. userName .. ": "
+		if thirdPerson then
+			txt = txt .. userName .. " "
+		else
+			txt = txt .. userName .. ": "
+		end
 	end
 	txt = txt .. message
 	if color ~= nil then

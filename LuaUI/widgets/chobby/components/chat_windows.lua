@@ -100,7 +100,7 @@ function ChatWindows:init()
 	)
 	lobby:AddListener("OnSaidEx", 
 		function(listener, chanName, userName, message, msgDate)
-			self:ProcessChat(chanName, userName, message, msgDate, CHAT_EX_MENTION, CHAT_EX_COLOR)
+			self:ProcessChat(chanName, userName, message, msgDate, CHAT_EX_MENTION, CHAT_EX_COLOR, true)
 		end
 	)
 
@@ -130,7 +130,7 @@ function ChatWindows:init()
 	lobby:AddListener("OnSaidPrivateEx",
 		function(listener, userName, message, msgDate)
 			local privateChatConsole = self:GetPrivateChatConsole(userName)
-			privateChatConsole:AddMessage(message, userName, msgDate, "\255\0\139\139")
+			privateChatConsole:AddMessage(message, userName, msgDate, "\255\0\139\139", true)
 			self:_NotifyTab(userName, userName, "Private", message, "sounds/beep4.wav", 15)
 		end
 	)
@@ -138,7 +138,7 @@ function ChatWindows:init()
 		function(listener, userName)
 			local privateChatConsole = self.privateChatConsoles[userName]
 			if privateChatConsole ~= nil then
-				privateChatConsole:AddMessage(userName .. " is now offline", nil, nil, "\255\0\139\139")
+				privateChatConsole:AddMessage(userName .. " is now offline", nil, nil, "\255\0\139\139", true)
 			end
 		end
 	)
@@ -146,7 +146,7 @@ function ChatWindows:init()
 		function(listener, userName)
 			local privateChatConsole = self.privateChatConsoles[userName]
 			if privateChatConsole ~= nil then
-				privateChatConsole:AddMessage(userName .. " just got online", nil, nil, "\255\0\139\139")
+				privateChatConsole:AddMessage(userName .. " just got online", nil, nil, "\255\0\139\139", true)
 			end
 		end
 	)
@@ -351,12 +351,12 @@ function ChatWindows:CycleTab(direction)
 	self.tabPanel.tabBar:Select(child.name)
 end
 
-function ChatWindows:ProcessChat(chanName, userName, message, msgDate, notifyColor, chatColor)
+function ChatWindows:ProcessChat(chanName, userName, message, msgDate, notifyColor, chatColor, thirdPerson)
 	local channelConsole = self.channelConsoles[chanName]
 	if channelConsole ~= nil then
 		local iAmMentioned = (string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName())
 		local chatColour = (iAmMentioned and notifyColor) or chatColor
-		channelConsole:AddMessage(message, userName, msgDate, chatColour)
+		channelConsole:AddMessage(message, userName, msgDate, chatColour, thirdPerson)
 		if iAmMentioned then
 			self:_NotifyTab(chanName, userName, chanName, true, message, "sounds/beep4.wav", 15)
 		elseif Configuration.notifyForAllChat then

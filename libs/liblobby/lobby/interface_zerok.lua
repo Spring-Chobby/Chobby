@@ -558,9 +558,17 @@ function Interface:_Say(data)
 			return
 		end
 		if data.Target == self:GetMyUserName() then
-			self:_OnSaidPrivate(data.User, data.Text, data.Time)
+			if emote then
+				self:_OnSaidPrivateEx(data.User, data.Text, data.Time)
+			else
+				self:_OnSaidPrivate(data.User, data.Text, data.Time)
+			end
 		else
-			self:_OnSayPrivate(data.Target, data.Text, data.Time)
+			if emote then
+				self:_OnSaidPrivateEx(data.Target, data.Text, data.Time)
+			else
+				self:_OnSaidPrivate(data.Target, data.Text, data.Time)
+			end
 		end
 	elseif data.Place == 5 then -- Protocol etc.. commands?
 		if data.Text == "Invalid password" then
