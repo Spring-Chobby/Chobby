@@ -1047,7 +1047,11 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	}
 
 	local function MessageListener(message)
-		battleLobby:SayBattle(message)
+		if message:starts("/me ") then
+			lobby:SayBattleEx(message:sub(5))
+		else
+			lobby:SayBattle(message)
+		end
 	end
 	local battleRoomConsole = WG.Chobby.Console("Battleroom Chat", MessageListener)
 	

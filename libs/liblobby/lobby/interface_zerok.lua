@@ -141,6 +141,19 @@ function Interface:SayBattle(message)
 	return self
 end
 
+function Interface:SayBattleEx(message)
+	local sendData = {
+		Place = 1, -- Battle?
+		User = self:GetMyUserName(),
+		IsEmote = true,
+		Text = message,
+		Ring = false,
+		--Time = "2016-06-25T07:17:20.7548313Z",
+	}
+	self:_SendCommand("Say " .. json.encode(sendData))
+	return self
+end
+
 function Interface:VoteYes()
 	local sendData = {
 		Place = 1, -- Battle?
@@ -202,6 +215,21 @@ function Interface:Say(chanName, message)
 	return self
 end
 
+function Interface:SayEx(chanName, message)
+	-- Say {"Place":0,"Target":"zk","User":"GoogleFrog","IsEmote":false,"Text":"bla","Ring":false,"Time":"2016-06-25T07:17:20.7548313Z"
+	local sendData = {
+		Place = 0, -- Does 0 mean say to a channel???
+		Target = chanName,
+		User = self:GetMyUserName(),
+		IsEmote = true,
+		Text = message,
+		Ring = false,
+		--Time = "2016-06-25T07:17:20.7548313Z",
+	}
+	self:_SendCommand("Say " .. json.encode(sendData))
+	return self
+end
+
 function Interface:SayPrivate(userName, message)
 	-- Say {"Place":0,"Target":"zk","User":"GoogleFrog","IsEmote":false,"Text":"bla","Ring":false,"Time":"2016-06-25T07:17:20.7548313Z"
 	local sendData = {
@@ -209,6 +237,21 @@ function Interface:SayPrivate(userName, message)
 		Target = userName,
 		User = self:GetMyUserName(),
 		IsEmote = false,
+		Text = message,
+		Ring = false,
+		--Time = "2016-06-25T07:17:20.7548313Z",
+	}
+	self:_SendCommand("Say " .. json.encode(sendData))
+	return self
+end
+
+function Interface:SayPrivateEx(userName, message)
+	-- Say {"Place":0,"Target":"zk","User":"GoogleFrog","IsEmote":false,"Text":"bla","Ring":false,"Time":"2016-06-25T07:17:20.7548313Z"
+	local sendData = {
+		Place = 2, -- Does 2 mean say to a player???
+		Target = userName,
+		User = self:GetMyUserName(),
+		IsEmote = true,
 		Text = message,
 		Ring = false,
 		--Time = "2016-06-25T07:17:20.7548313Z",

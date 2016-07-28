@@ -609,7 +609,11 @@ function ChatWindows:GetChannelConsole(chanName)
 
 	if channelConsole == nil then
 		local function MessageListener(message)
-			lobby:Say(chanName, message)
+			if message:starts("/me ") then
+				lobby:SayEx(chanName, message:sub(5))
+			else
+				lobby:Say(chanName, message)
+			end
 		end
 		channelConsole = Console(chanName, MessageListener)
 		self.channelConsoles[chanName] = channelConsole
@@ -684,7 +688,11 @@ function ChatWindows:GetPrivateChatConsole(userName)
 
 	if privateChatConsole == nil then
 		local function MessageListener(message)
-			lobby:SayPrivate(userName, message)
+			if message:starts("/me ") then
+				lobby:SayPrivateEx(userName, message:sub(5))
+			else
+				lobby:SayPrivate(userName, message)
+			end
 		end
 		privateChatConsole = Console(userName .. " messages", MessageListener)
 		self.privateChatConsoles[userName] = privateChatConsole
