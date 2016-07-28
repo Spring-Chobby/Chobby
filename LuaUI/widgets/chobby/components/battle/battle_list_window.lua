@@ -260,9 +260,27 @@ function BattleListWindow:CompareItems(id1, id2)
 	end
 end
 
+function BattleListWindow:DownloadFinished(downloadID, bla, moredata, thing)
+	for battleID,_ in pairs(self.itemNames) do
+		self:UpdateSync(battleID)
+	end
+end
+
+function BattleListWindow:UpdateSync(battleID)
+	local battle = lobby:GetBattle(battleID)
+	if not Configuration:IsValidEngineVersion(battle.engineVersion) then
+		return
+	end
+	local items = self:GetRowItems(battleID)
+	local imHaveMap = items.battleButton:GetChildByName("imHaveMap")
+	local imHaveGame = items.battleButton:GetChildByName("imHaveGame")
+	
+	imHaveGame.file = (VFS.HasArchive(battle.gameName) and IMG_READY or IMG_UNREADY)
+	imHaveMap.file = (VFS.HasArchive(battle.mapName) and IMG_READY or IMG_UNREADY)
+end
+
 function BattleListWindow:JoinedBattle(battleID)
 	local battle = lobby:GetBattle(battleID)
-	Spring.Echo("joined battle", Configuration:IsValidEngineVersion(battle.engineVersion))
 	if not Configuration:IsValidEngineVersion(battle.engineVersion) then
 		return
 	end

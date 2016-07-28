@@ -1,6 +1,7 @@
 ListWindow = Component:extends{}
 
 function ListWindow:init(parent, title, noWindow, windowClassname)
+	self:DoInit() -- Lack of inheritance strikes again.
 	
 	self.CancelFunc = function ()
 		self:HideWindow()
