@@ -135,9 +135,12 @@ skin.editbox = {
   
   backgroundColor = {0.1, 0.1, 0.1, 0},
   cursorColor     = {1.0, 0.7, 0.1, 0.8},
+  
+  focusColor  = {1, 1, 1, 1},
+  borderColor = {1, 1, 1, 0.6},
 
   TileImageBK = ":cl:panel2_bg.png",
-  TileImageFG = ":cl:panel2_border.png",
+  TileImageFG = ":cl:editbox_border.png",
   tiles       = {1,1,1,1},
 
   DrawControl = DrawEditBox,
