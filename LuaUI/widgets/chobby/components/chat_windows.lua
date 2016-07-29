@@ -758,8 +758,9 @@ function ChatWindows:CreateJoinChannelWindow()
 	end
 	
 	local function JoinChannel()
-		if ebChannelName.text ~= "" then
-			lobby:Join(ebChannelName.text)
+		local channelName = ebChannelName.text:gsub("#", "")
+		if channelName ~= "" then
+			lobby:Join(channelName)
 			self.switchToTab = ebChannelName.text
 		end
 		self.joinWindow:Dispose()
