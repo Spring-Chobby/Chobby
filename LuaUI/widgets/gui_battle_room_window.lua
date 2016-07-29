@@ -383,8 +383,8 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	}
 	--downloader:Hide()
 	-- Example downloads
-	MaybeDownloadArchive("Titan-v2", "map")
-	MaybeDownloadArchive("tinyskirmishredux1.1", "map")
+	--MaybeDownloadArchive("Titan-v2", "map")
+	--MaybeDownloadArchive("tinyskirmishredux1.1", "map")
 	
 	onUpdateUserTeamStatusSelf = function(listener, userName, allyNumber, isSpectator)
 		if userName == myUserName then
@@ -480,7 +480,7 @@ local function AddTeamButtons(parent, offX, offY, joinFunc, aiFunc)
 		name = "joinTeamButton",
 		x = offX,
 		y = offY,
-		height = 30,
+		height = 20,
 		width = 75,
 		font =  WG.Chobby.Configuration:GetFont(3),
 		caption = i18n("join") .. "\b",
@@ -512,7 +512,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		horizontalScrollbar = false,
 	}
 	
-	local mainStackPanel = Control:New {
+	local mainStackPanel = Panel:New {
 		x = 0,
 		right = 0,
 		y = 0,
@@ -530,7 +530,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		horizontalScrollbar = false,
 	}
 		
-	local spectatorStackPanel = Control:New {
+	local spectatorStackPanel = Panel:New {
 		x = 0,
 		right = 0,
 		y = 0,
@@ -616,7 +616,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				parentScroll = mainScrollPanel
 			end
 
-			local teamHolder = Control:New {
+			local teamHolder = Panel:New {
 				name = teamIndex,
 				x = 0,
 				right = 0,
@@ -652,7 +652,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 					end
 				)
 			end
-			local teamStack = Control:New {
+			local teamStack = Panel:New {
 				x = 0,
 				y = 25,
 				right = 0,
