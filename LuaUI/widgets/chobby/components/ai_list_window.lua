@@ -16,7 +16,7 @@ function AiListWindow:init(lobby, gameName, allyTeam)
 	local blackList = Configuration:GetGameConfig(gameName, "aiBlacklist.lua")
 	
 	for i, ai in pairs(ais) do
-		if not blackList[ai.shortName] then
+		if (not blackList) or (not blackList[ai.shortName]) then
 			local addAIButton = Button:New {
 				x = 0,
 				y = 0,
