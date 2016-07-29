@@ -475,12 +475,12 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	UpdateArchiveStatus()
 end
 
-local function AddTeamButtons(parent, offX, offY, joinFunc, aiFunc)
+local function AddTeamButtons(parent, offX, joinFunc, aiFunc)
 	local joinTeamButton = Button:New {
 		name = "joinTeamButton",
 		x = offX,
-		y = offY,
-		height = 20,
+		y = 4,
+		height = 24,
 		width = 75,
 		font =  WG.Chobby.Configuration:GetFont(3),
 		caption = i18n("join") .. "\b",
@@ -489,8 +489,8 @@ local function AddTeamButtons(parent, offX, offY, joinFunc, aiFunc)
 	}
 	local addAiButton = Button:New {
 		x = offX + 85,
-		y = offY,
-		height = 30,
+		y = 4,
+		height = 24,
 		width = 75,
 		font = WG.Chobby.Configuration:GetFont(3),
 		caption = i18n("add_ai") .. "\b",
@@ -512,7 +512,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		horizontalScrollbar = false,
 	}
 	
-	local mainStackPanel = Panel:New {
+	local mainStackPanel = Control:New {
 		x = 0,
 		right = 0,
 		y = 0,
@@ -530,7 +530,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		horizontalScrollbar = false,
 	}
 		
-	local spectatorStackPanel = Panel:New {
+	local spectatorStackPanel = Control:New {
 		x = 0,
 		right = 0,
 		y = 0,
@@ -577,7 +577,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 			panel:SetPos(nil, nil, nil, minHeight)
 			for i = 1, #children do
 				local child = children[i]
-				child:SetPos(nil, minHeight * (i - 1)/#children)
+				child:SetPos(nil, math.floor(minHeight * (i - 1)/#children))
 				child:Invalidate()
 			end
 		end
@@ -616,7 +616,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				parentScroll = mainScrollPanel
 			end
 
-			local teamHolder = Panel:New {
+			local teamHolder = Control:New {
 				name = teamIndex,
 				x = 0,
 				right = 0,
@@ -624,7 +624,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				height = 50,
 				padding = {0, 0, 0, 0},
 				parent = parentStack,
-			} 
+			}
 			
 			local label = Label:New {
 				x = 5,
@@ -640,7 +640,6 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				AddTeamButtons(
 					teamHolder,
 					82,
-					0,
 					function()
 						battleLobby:SetBattleStatus({
 								allyNumber = teamIndex,
@@ -652,9 +651,9 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 					end
 				)
 			end
-			local teamStack = Panel:New {
+			local teamStack = Control:New {
 				x = 0,
-				y = 25,
+				y = 30,
 				right = 0,
 				bottom = 0,
 				padding = {0, 0, 0, 0},
@@ -764,6 +763,8 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 	end
 	
 	GetTeam(-1) -- Make Spectator heading appear
+	GetTeam(0) -- Always show two teams
+	GetTeam(1)
 	
 	OpenNewTeam = function ()
 		GetTeam(emptyTeamIndex) 
