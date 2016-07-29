@@ -403,6 +403,7 @@ function EditBox:_SetCursorByMousePos(x, y)
 			end
 		end
 		
+		
 		-- convert back to logical line
 		self.physicalCursorY = self.cursorY
 		self.physicalCursor = self.cursor
@@ -411,13 +412,23 @@ function EditBox:_SetCursorByMousePos(x, y)
 		self.cursorY = physicalLine.lineID
 
 		local logicalLine = self.lines[self.cursorY]
-		for _, plID in pairs(logicalLine.pls) do
+		for i, plID in pairs(logicalLine.pls) do
+			-- FIXME when less tired
+-- 			if i > 1 or #physicalLine.text + 1 == self.physicalCursor then
+-- 				self.cursor = self.cursor - 1
+-- 			end
+-- 			if i > 1 then
+-- 				self.cursor = self.cursor - 1
+-- 			end
 			if plID == self.physicalCursorY then
 				break
 			end
 			self.cursor = self.cursor + #self.physicalLines[plID].text
 		end
-
+-- 		if logicalLine.pls[#logicalLine.pls] ~= self.physicalCursorY and  then
+-- 			self.cursor = self.cursor - 1
+-- 		end
+-- 		Spring.Echo(self.cursor)
 --         for i = self.offset, #text do
 --            local tmp = text:sub(self.offset, i)
 --            local h, d = self.font:GetTextHeight(tmp)
@@ -601,6 +612,7 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 				txt = self.lines[sy].text
 			end
 			if not self.multiline or sy == ey then
+-- 				Spring.Echo("SEL", txt:sub(s, e - 1))
 				txt = txt:sub(s, e - 1)
 			else
 				local ls = {}
