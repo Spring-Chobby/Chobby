@@ -60,6 +60,7 @@ function Configuration:init()
 	self.notifyForAllChat = true
 	self.debugMode = false
 	self.onlyShowFeaturedMaps = true
+	self.useSpringRestart = false
 	
 	self.font = {
 		[0] = {size = 10, shadow = false},
@@ -103,6 +104,8 @@ function Configuration:GetConfigData()
 		confirmation_mainMenuFromBattle = self.confirmation_mainMenuFromBattle,
 		confirmation_battleFromBattle = self.confirmation_battleFromBattle,
 		loadLocalWidgets = self.loadLocalWidgets,
+		onlyShowFeaturedMaps = self.onlyShowFeaturedMaps,
+		useSpringRestart = self.useSpringRestart,
 	}
 end
 
@@ -115,6 +118,9 @@ function Configuration:SetConfigValue(key, value)
 		return
 	end
 	self[key] = value
+	if key == "useSpringRestart" then
+		lobby.useSpringRestart = value
+	end
 	self:_CallListeners("OnConfigurationChange", key, value)
 end
 

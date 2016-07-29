@@ -168,7 +168,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 					if battle.isRunning then
 						battleLobby:ConnectToBattle()
 					else
-						battleLobby:StartBattle()
+						battleLobby:StartBattle(WG.Chobby.Configuration.useSpringRestart)
 					end
 				else
 					Spring.Echo("Do something if map or game is missing")

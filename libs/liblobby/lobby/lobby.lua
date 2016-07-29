@@ -151,7 +151,7 @@ function Lobby:SayBattleEx(message)
 	return self
 end
 
-function Lobby:ConnectToBattle()
+function Lobby:ConnectToBattle(useSpringRestart)
 	if not self.myBattleID then
 		Spring.Echo("Cannot connect to battle.")
 		return
@@ -162,7 +162,11 @@ function Lobby:ConnectToBattle()
 	local battle = self:GetBattle(self.myBattleID)
 	local springURL = "spring://" .. self:GetMyUserName() .. ":" .. self:GetScriptPassword() .. "@" .. battle.ip .. ":" .. battle.port
 	Spring.Echo(springURL)
-	Spring.Start(springURL, "")
+	if useSpringRestart then
+		Spring.Restart(springURL, "")
+	else
+		Spring.Start(springURL, "")
+	end
 	--local scriptFileName = "scriptFile.txt"
 	--local scriptFile = io.open(scriptFileName, "w")
 	--local scriptTxt = GenerateScriptTxt(battleID)
@@ -310,7 +314,7 @@ function Lobby:_OnUpdateUserStatus(userName, status)
 		if self.myBattleID and status.isInGame then
 			local myBattle = self:GetBattle(self.myBattleID)
 			if myBattle and myBattle.founder == userName then
-				self:ConnectToBattle()
+				self:ConnectToBattle(self.useSpringRestart)
 			end
 		end
 	end

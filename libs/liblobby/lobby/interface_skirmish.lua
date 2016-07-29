@@ -30,7 +30,7 @@ local function ScriptTXT(script)
 	return string
 end
 
-function InterfaceSkirmish:_StartScript(gameName, mapName, playerName)
+function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, useSpringRestart)
 	local allyTeams = {}
 	local allyTeamCount = 0
 	local teams = {}
@@ -116,16 +116,20 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName)
 	local scriptTxt = ScriptTXT(script)
 	scriptFile:write(scriptTxt)
 	scriptFile:close()
-	Spring.Start(scriptFileName, "")
+	if useSpringRestart then
+		Spring.Restart(scriptFileName, "")
+	else
+		Spring.Start(scriptFileName, "")
+	end
 end
 
 -- TODO: Needs clean implementation in lobby.lua
-function InterfaceSkirmish:StartBattle()
+function InterfaceSkirmish:StartBattle(useSpringRestart)
 	local battle = self:GetBattle(self:GetMyBattleID())
 	if battle.gameName and battle.mapName then
 		self:_CallListeners("OnBattleAboutToStart")
 		self:_OnSaidBattleEx("Battle", "about to start")
-		self:_StartScript(battle.gameName, battle.mapName, self:GetMyUserName() or "noname")
+		self:_StartScript(battle.gameName, battle.mapName, self:GetMyUserName() or "noname", useSpringRestart)
 	end
 	return self
 end
