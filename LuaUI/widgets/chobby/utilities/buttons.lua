@@ -3,11 +3,11 @@ ButtonUtilities = ButtonUtilities or {}
 
 local function GetFont(size)
 	return {
-		size = size,
+		size = size + 2,
 		outlineWidth = 6,
 		outlineHeight = 6,
 		outline = true,
-		outlineColor = {0.54,0.72,1,0.3},
+		outlineColor = {0,0,0,0.8},
 		autoOutlineColor = false,
 		font = fontName
 	}
