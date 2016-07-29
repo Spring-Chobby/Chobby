@@ -206,7 +206,7 @@ skin.progressbar = {
     shadow = true,
   },
 
-  backgroundColor = {1,1,1,1},
+  backgroundColor = {0,0,0,0.5},
 
   DrawControl = DrawProgressbar,
 }
