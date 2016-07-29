@@ -34,6 +34,7 @@ function DetachableTabPanel:New(obj)
 		y = 0,
 		right = 0,
 		bottom = 0,
+		minItemWidth = obj.minTabWidth,
 	}
   
 	obj.currentTab = Control:New {
