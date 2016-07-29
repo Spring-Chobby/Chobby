@@ -132,7 +132,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		bottom = 110,
 		height = 20,
 		font = WG.Chobby.Configuration:GetFont(2),
-		caption = battle.mapName,
+		caption = battle.mapName:gsub("_", " "),
 		parent = rightInfo,
 	}
 
@@ -287,7 +287,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		font =  WG.Chobby.Configuration:GetFont(2),
 		OnClick = {
 			function()
-				WG.Chobby.MapListWindow(battleLobby, battle.mapName)
+				WG.Chobby.MapListWindow(battleLobby, battle.gameName, battle.mapName)
 			end
 		},
 		parent = leftInfo,
@@ -421,7 +421,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 			return
 		end
 		if mapName then
-			lblMapName:SetCaption(mapName)
+			lblMapName:SetCaption(mapName:gsub("_", " "))
 			minimapImage.file = WG.Chobby.Configuration:GetMinimapImage(mapName, battle.gameName)
 			minimapImage:Invalidate()
 			

@@ -26,6 +26,7 @@ return {
 		-- gui_battle_status_panel
 		spectating_game_status = "Spectating",
 		playing_game_status = "Playing",
+		only_featured_maps = "Only featured maps",
 		--
 		start_download = 'Start download',
 		download_noun = 'Download',

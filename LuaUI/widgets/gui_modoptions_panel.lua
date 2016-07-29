@@ -18,7 +18,6 @@ local ModoptionsPanel = {}
 
 function ModoptionsPanel.LoadModotpions(gameName)
 	local success = VFS.MapArchive(gameName)
-	Spring.Echo("successBla", success, gameName)
 	local modoptions = VFS.LoadFile("ModOptions.lua")
 	if modoptions then
 		Spring.Utilities.TableEcho(modoptions)

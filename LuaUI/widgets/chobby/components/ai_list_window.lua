@@ -22,7 +22,7 @@ function AiListWindow:init(lobby, gameName, allyTeam)
 				y = 0,
 				width = "100%",
 				height = "100%",
-				caption = "shortName: " .. ai.shortName .. ", version: " .. ai.version,
+				caption = ai.shortName .. " v" .. ai.version,
 				font = Configuration:GetFont(3),
 				OnClick = {
 					function()

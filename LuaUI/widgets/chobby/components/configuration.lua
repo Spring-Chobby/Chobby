@@ -59,6 +59,7 @@ function Configuration:init()
 	
 	self.notifyForAllChat = true
 	self.debugMode = false
+	self.onlyShowFeaturedMaps = true
 	
 	self.font = {
 		[0] = {size = 10, shadow = false},

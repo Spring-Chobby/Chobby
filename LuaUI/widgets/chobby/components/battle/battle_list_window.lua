@@ -241,7 +241,7 @@ function BattleListWindow:AddBattle(battleID, battle)
 		y = 36,
 		height = 15,
 		valign = 'center',
-		caption = battle.mapName:sub(1, 22),
+		caption = battle.mapName:gsub("_", " "),
 		font = Configuration:GetFont(1),
 		parent = parentButton,
 	}
@@ -316,7 +316,7 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 	minimapImage:Invalidate()
 	
 	playersCaption:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
-	mapCaption:SetCaption(battle.mapName:sub(1, 22))
+	mapCaption:SetCaption(battle.mapName:gsub("_", " "))
 	if VFS.HasArchive(battle.mapName) then
 		imHaveMap.file = IMG_READY
 	else

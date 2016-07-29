@@ -193,6 +193,23 @@ local function InitializeControls(window)
 	}
 	offset = offset + 30
 	
+	local mapWhitelist = Checkbox:New {
+		x = 60,
+		width = 200,
+		y = offset,
+		height = 40,
+		parent = window,
+		boxalign = "right",
+		boxsize = 20,
+		caption = i18n("only_featured_maps"),
+		checked = Configuration.onlyShowFeaturedMaps or false,
+		font = Configuration:GetFont(2),
+		OnChange = {function (obj, newState)
+			Configuration:SetConfigValue("onlyShowFeaturedMaps", newState)
+		end},
+	}
+	offset = offset + 30
+	
 	local debugMode = Checkbox:New {
 		x = 60,
 		width = 200,
