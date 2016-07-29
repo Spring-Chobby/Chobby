@@ -294,6 +294,24 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	}
 	leftOffset = leftOffset + 45
 
+	WG.ModoptionsPanel.LoadModotpions(battle.gameName)
+	
+	local btnModoptions = Button:New {
+		x = 0,
+		y = leftOffset,
+		height = 40,
+		right = 0,
+		caption = "\255\66\138\201" .. "Adv Options" ..  "\b",
+		font =  WG.Chobby.Configuration:GetFont(2),
+		OnClick = {
+			function()
+				WG.ModoptionsPanel.ShowModoptions()
+			end
+		},
+		parent = leftInfo,
+	}
+	leftOffset = leftOffset + 45
+	
 	--local lblNumberOfPlayers 
 	--if battleLobby.name ~= "singleplayer" then
 	--	lblNumberOfPlayers = Label:New {
@@ -342,21 +360,31 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	}
 	leftOffset = leftOffset + 25
 	
-	leftOffset = leftOffset + 15	
 	local downloader = WG.Chobby.Downloader(
 		{
 			x = 0,
-			bottom = 0,
+			height = 120,
 			right = 0,
 			y = leftOffset,
 			parent = leftInfo,
 		}, 
 		8
 	)
-	downloader:Hide()
+	leftOffset = leftOffset + 120
+	
+	local modoptions = Control:New {
+		x = 0,
+		bottom = 0,
+		right = 0,
+		y = leftOffset,
+		autosize = false,
+		resizable = false,
+		parent = leftInfo,
+	}
+	--downloader:Hide()
 	-- Example downloads
-	--MaybeDownloadArchive("Titan-v2", "map")
-	--MaybeDownloadArchive("tinyskirmishredux1.1", "map")
+	MaybeDownloadArchive("Titan-v2", "map")
+	MaybeDownloadArchive("tinyskirmishredux1.1", "map")
 	
 	onUpdateUserTeamStatusSelf = function(listener, userName, allyNumber, isSpectator)
 		if userName == myUserName then
