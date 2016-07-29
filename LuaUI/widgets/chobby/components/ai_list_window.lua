@@ -6,23 +6,27 @@ function AiListWindow:init(lobby, gameName, allyTeam)
 	self.window:SetPos(nil, nil, 500, 700)
 	
 	-- Disable game-specific AIs for now since it breaks /luaui reload
--- 	local ais = VFS.GetAvailableAIs(gameName)
-	local ais = VFS.GetAvailableAIs()
-	if Configuration.singleplayer_mode == 2 then
-		ais[#ais + 1] = ais[1]
-		ais[1] = {shortName = "CAI", version = 1}
-	end
+	local ais = VFS.GetAvailableAIs(gameName)
+	--local ais = VFS.GetAvailableAIs()
+	--if Configuration.singleplayer_mode == 2 then
+	--	ais[#ais + 1] = ais[1]
+	--	ais[1] = {shortName = "CAI", version = 1}
+	--end
 	
 	local blackList = Configuration:GetGameConfig(gameName, "aiBlacklist.lua")
 	
 	for i, ai in pairs(ais) do
 		if (not blackList) or (not blackList[ai.shortName]) then
+			local version = " v" .. ai.version
+			if version == " v<not-versioned>" then
+				version = ""
+			end
 			local addAIButton = Button:New {
 				x = 0,
 				y = 0,
 				width = "100%",
 				height = "100%",
-				caption = ai.shortName .. " v" .. ai.version,
+				caption = ai.shortName .. version,
 				font = Configuration:GetFont(3),
 				OnClick = {
 					function()

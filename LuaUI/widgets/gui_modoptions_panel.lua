@@ -14,6 +14,8 @@ local battleLobby
 local modoptionDefaults = {}
 local modoptionStructure = {}
 
+local modoptionListenerLobby
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Functions
@@ -185,6 +187,7 @@ local function InitializeModoptionsDisplay()
 		parent = mainScrollPanel,
 	}
 	
+	modoptionListenerLobby = battleLobby
 	local function OnSetModOptions(listener, data)
 		local modoptions = battleLobby:GetMyBattleModoptions()
 		local text = ""
@@ -211,6 +214,11 @@ local function InitializeModoptionsDisplay()
 	local externalFunctions = {}
 	
 	function externalFunctions.Update()
+		if modoptionListenerLobby then
+			modoptionListenerLobby:RemoveListener("OnSetModOptions", OnSetModOptions)
+		end
+		battleLobby:AddListener("OnSetModOptions", OnSetModOptions)
+	
 		OnSetModOptions()
 	end
 	

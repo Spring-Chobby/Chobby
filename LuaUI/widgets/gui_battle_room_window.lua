@@ -384,6 +384,9 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		},
 		parent = leftInfo,
 	}
+	if modoptionsHolder.children[1].visible then
+		modoptionsHolder.children[1]:Hide()
+	end
 	
 	downloader.lblDownload.OnHide = downloader.lblDownload.OnHide or {}
 	downloader.lblDownload.OnHide[#downloader.lblDownload.OnHide + 1] = function ()
@@ -1314,7 +1317,7 @@ function BattleRoomWindow.SetSingleplayerGame(ToggleShowFunc, battleroomObj, tab
 	if config.singleplayer_mode == 1 then
 		WG.Chobby.GameListWindow(SetGameFail, SetGameSucess)
 	elseif config.singleplayer_mode == 2 then
-		singleplayerGame = "Zero-K v1.4.7.0"
+		singleplayerGame = "Zero-K v1.4.7.1"
 		ToggleShowFunc(battleroomObj, tabData)
 	end
 end
@@ -1347,6 +1350,8 @@ end
 function widget:Initialize()
 	CHOBBY_DIR = "LuaUI/widgets/chobby/"
 	VFS.Include("LuaUI/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
+	
+	MaybeDownloadArchive("Zero-K v1.4.7.1", "game")
 	
 	WG.BattleRoomWindow = BattleRoomWindow
 end
