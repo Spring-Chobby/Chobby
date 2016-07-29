@@ -141,7 +141,7 @@ local function GetUserRankImageName(userName, userControl)
 	local userInfo = userControl.lobby:GetUser(userName) or {}
 	local userBattleInfo = userControl.lobby:GetUserBattleStatus(userName) or {}
 	
-	if userControl.isSingleplayer then
+	if userControl.isSingleplayer and not userBattleInfo.aiLib then
 		return IMAGE_PLAYER
 	end
 	return UserLevelToImage(userInfo.level, userInfo.isBot or userBattleInfo.aiLib, userInfo.isAdmin)
