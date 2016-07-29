@@ -46,6 +46,8 @@ function widget:Initialize()
 		return
 	end
 	
+	Spring.SetWMCaption("Ingame Lobby")
+	
 	Chobby = VFS.Include(CHOBBY_DIR .. "core.lua", nil)
 	
 	WG.Chobby = Chobby
