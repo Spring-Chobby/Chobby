@@ -241,10 +241,10 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	local leftOffset = 0
 	local newTeam = Button:New {
 		name = "newTeam",
-		x = 0,
+		x = 5,
 		y = leftOffset,
-		right = 0,
-		height = 40,
+		height = 35,
+		right = 5,
 		caption = "\255\66\138\201" .. i18n("add_team") ..  "\b",
 		font = WG.Chobby.Configuration:GetFont(2),
 		OnClick = {
@@ -276,13 +276,13 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		--},
 		parent = leftInfo
 	}
-	leftOffset = leftOffset + 45
+	leftOffset = leftOffset + 38
 	
 	local btnPickMap = Button:New {
-		x = 0,
+		x = 5,
 		y = leftOffset,
-		height = 40,
-		right = 0,
+		height = 35,
+		right = 5,
 		caption = "\255\66\138\201" .. i18n("pick_map") ..  "\b",
 		font =  WG.Chobby.Configuration:GetFont(2),
 		OnClick = {
@@ -292,15 +292,15 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		},
 		parent = leftInfo,
 	}
-	leftOffset = leftOffset + 45
+	leftOffset = leftOffset + 38
 
-	WG.ModoptionsPanel.LoadModotpions(battle.gameName)
+	WG.ModoptionsPanel.LoadModotpions(battle.gameName, battleLobby)
 	
 	local btnModoptions = Button:New {
-		x = 0,
+		x = 5,
 		y = leftOffset,
-		height = 40,
-		right = 0,
+		height = 35,
+		right = 5,
 		caption = "\255\66\138\201" .. "Adv Options" ..  "\b",
 		font =  WG.Chobby.Configuration:GetFont(2),
 		OnClick = {
@@ -310,7 +310,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		},
 		parent = leftInfo,
 	}
-	leftOffset = leftOffset + 45
+	leftOffset = leftOffset + 38
 	
 	--local lblNumberOfPlayers 
 	--if battleLobby.name ~= "singleplayer" then
@@ -370,18 +370,36 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		}, 
 		8
 	)
-	leftOffset = leftOffset + 120
 	
-	local modoptions = Control:New {
+	local modoptionsHolder = Control:New {
 		x = 0,
 		bottom = 0,
 		right = 0,
+		padding = {2, 0, 2, 0},
 		y = leftOffset,
 		autosize = false,
 		resizable = false,
+		children = {
+			WG.ModoptionsPanel.GetModoptionsControl()
+		},
 		parent = leftInfo,
 	}
-	--downloader:Hide()
+	
+	downloader.lblDownload.OnHide = downloader.lblDownload.OnHide or {}
+	downloader.lblDownload.OnHide[#downloader.lblDownload.OnHide + 1] = function ()
+		if not modoptionsHolder.visible then
+			modoptionsHolder:Show()
+		end
+	end
+	
+	downloader.lblDownload.OnShow = downloader.lblDownload.OnShow or {}
+	downloader.lblDownload.OnShow[#downloader.lblDownload.OnShow + 1] = function ()
+		if modoptionsHolder.visible then
+			modoptionsHolder:Hide()
+		end
+	end
+	
+	leftOffset = leftOffset + 120
 	-- Example downloads
 	--MaybeDownloadArchive("Titan-v2", "map")
 	--MaybeDownloadArchive("tinyskirmishredux1.1", "map")
@@ -519,7 +537,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		bottom = 0,
 		parent = mainScrollPanel,
 		preserveChildrenOrder = true,
-	}	
+	}
 	mainStackPanel._relativeBounds.bottom = nil
 	local spectatorScrollPanel = ScrollPanel:New {
 		x = 0,
@@ -1061,7 +1079,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		y = 0,
 		right = "33%",
 		bottom = BOTTOM_SPACING,
-		padding = {INTERNAL_PAD, EXTERNAL_PAD_VERT, 1, INTERNAL_PAD},
+		padding = {INTERNAL_PAD, EXTERNAL_PAD_VERT, 1, 0},
 		parent = topPanel,
 	}
 	

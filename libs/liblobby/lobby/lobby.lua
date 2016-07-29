@@ -23,6 +23,7 @@ function Lobby:_Clean()
 
 	self.battles = {}
 	self.battleCount = 0
+	self.modoptions = {}
 
 	self.userBattleStatus = {}
 
@@ -356,6 +357,7 @@ function Lobby:_OnJoinedBattle(battleID, userName, scriptPassword)
 
 	if self:GetMyUserName() == userName then
 		self.myBattleID = battleID
+		self.modoptions = {}
 	end
 	
 	self.users[userName].battleID = battleID
@@ -372,6 +374,7 @@ end
 function Lobby:_OnLeftBattle(battleID, userName)
 	if self:GetMyUserName() == userName then
 		self.myBattleID = nil
+		self.modoptions = {}
 	end
 
 	local battleUsers = self.battles[battleID].users
@@ -467,6 +470,13 @@ end
 
 function Lobby:_OnVoteResponse(isYesVote)
 	self:_CallListeners("OnVoteResponse", isYesVote)
+end
+
+function Lobby:_OnSetModOptions(data)
+	for key, value in pairs(data) do
+		self.modoptions[key] = value
+	end
+	self:_CallListeners("OnSetModOptions", data)
 end
 
 ------------------------
@@ -879,6 +889,10 @@ end
 
 function Lobby:GetMyBattleID()
 	return self.myBattleID
+end
+
+function Lobby:GetMyBattleModoptions()
+	return self.modoptions
 end
 
 function Lobby:GetMyUserName()

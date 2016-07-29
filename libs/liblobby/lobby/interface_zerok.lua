@@ -649,9 +649,11 @@ end
 Interface.jsonCommands["SetRectangle"] = Interface._SetRectangle
 
 function Interface:_SetModOptions(data)
-	-- SetModOptions {"Options":{}}
-	Spring.Echo("Implement SetModOptions")
-	--Spring.Utilities.TableEcho(data, "SetModOptions")
+	if not data.Options then
+		Spring.Echo("Invalid modoptions format")
+		return
+	end
+	self:_OnSetModOptions(data.Options)
 end
 Interface.jsonCommands["SetModOptions"] = Interface._SetModOptions
 
