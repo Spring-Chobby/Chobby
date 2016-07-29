@@ -31,6 +31,21 @@ function createTabGroup(ctrls)
 	end
 end
 
+local function GetLobbyName()
+	local version = Game.gameVersion
+	-- try to extract version from .git
+	if version == "$VERSION" then
+		version = "git"
+
+		local gitCommit = VFS.LoadFile(".git/refs/heads/master", VFS.MOD)
+		-- FIXME: This will always be nil because Spring prevents us from accessing folders or files starting with a dot
+		if gitCommit then
+			version = version .. " - " .. tostring(gitCommit)
+		end
+	end
+	return Game.gameName .. " " .. version
+end
+
 function LoginWindow:init(failFunction, cancelText, windowClassname)
 	
 	if screen0:GetChildByName("loginWindow") then
@@ -300,7 +315,7 @@ function LoginWindow:tryLogin()
 
 		lobby:Connect(Configuration:GetServerAddress(), Configuration:GetServerPort())
 	else
-		lobby:Login(username, password, 3, nil, "Chobby SDD")
+		lobby:Login(username, password, 3, nil, GetLobbyName())
 	end
 
 	self.loginAttempts = self.loginAttempts + 1
@@ -391,7 +406,7 @@ function LoginWindow:OnConnected()
 	end
 	lobby:AddListener("OnAgreementEnd", self.onAgreementEnd)
 
-	lobby:Login(username, password, 3, nil, "Chobby SDD")
+	lobby:Login(username, password, 3, nil, GetLobbyName())
 end
 
 function LoginWindow:createAgreementWindow()
