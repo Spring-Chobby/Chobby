@@ -113,12 +113,12 @@ local function SetNextMissionScript(script)
 	gamedata.nextMissionScript = script
 end
 
-local function SetVNStory(story)
+local function SetVNStory(story, dir)
 	if (not story) or story == "" then
 		return
 	end
 	gamedata.vnStory = story
-	WG.VisualNovel.LoadStory(story)
+	WG.VisualNovel.LoadStory(story, dir)
 end
 
 local function SetChapterTitle(title)
