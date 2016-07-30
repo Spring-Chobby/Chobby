@@ -1477,7 +1477,7 @@ function widget:Initialize()
     scriptFunctions = scriptFunctions,
   }
   
-  StartStory("test")
+  --StartStory("test")
 end
 
 function widget:Shutdown()

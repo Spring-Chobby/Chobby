@@ -1,4 +1,4 @@
-ALLOW_SAVE_LOAD = true	-- note: only disables the buttons, not the functions
+ALLOW_SAVE_LOAD = false	-- note: only disables the buttons, not the functions
 USE_PORTRAIT = true
 
 WINDOW_WIDTH = 1024
