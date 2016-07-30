@@ -117,6 +117,7 @@ local function SetVNStory(story, dir)
 	if (not story) or story == "" then
 		return
 	end
+	dir = dir or campaignDefsByID[currentCampaignID].vnDir
 	gamedata.vnStory = story
 	WG.VisualNovel.LoadStory(story, dir)
 end
@@ -273,7 +274,7 @@ local function LoadGame(saveData)
 		if saveData.description then
 			saveDescEdit:SetText(saveData.description)
 		end
-		SetVNStory(gamedata.vnStory)
+		SetVNStory(gamedata.vnStory, campaignDefsByID[currentCampaignID].vnDir)
 		--Spring.Log(widget:GetInfo().name, LOG.INFO, "Save file " .. path .. " loaded")
 		SwitchToScreen("intermission")
 	end)
