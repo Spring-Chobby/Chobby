@@ -1,0 +1,4 @@
+eileen happy.png
+eileen concerned.png
+	MIT License (https://www.renpy.org/doc/html/license.html)
+	From Ren'Py SDK tutorial game
