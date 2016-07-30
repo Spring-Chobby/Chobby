@@ -27,6 +27,9 @@ local port = 80
 local path = "/replays/20160704_190323_Drab_100.sdf"
 local file = "20160704_190323_Drab_100.sdf";
 local replaydata = "";
+local saveFilename = "";
+local replayMap = "";
+local replayGame = "";
 
 local downloads = {};
 local url;
@@ -34,6 +37,12 @@ local url;
 local hasMap = false;
 local hasEngine = false;
 local hasGame = false;
+local hasFile = false;
+
+local downloads = {
+	map = false,
+	game = false
+}
 
 local function dumpConfig()
 	-- dump all luasocket related config settings to console
@@ -99,19 +108,36 @@ function onLaunchReplay(wtf, replay, game, map, engine)
 	Echo('map: '.. map)
 	Echo('engine: '.. engine)
 
+	hasGame = false;
+	hasMap = false;
+	hasEngine = false;
+	hasFile = false;
+
+	hasEngine = engine:find(Game.version) == 1
+	
+	if not hasEngine then
+		Echo("Replay engine "..engine.." incompatible with current engine "..Game.version);
+	end
+
+	replayMap = map;
+	replayGame = game;
+
 	if(VFS.HasArchive(game)) then
 		hasGame = true;
 	else
-		Echo("need to download game");
+		Echo("Downloading game...");
+		VFS.DownloadArchive(game, "game")
 	end
 
 	if(VFS.HasArchive(map)) then
 		hasMap = true;
 	else
-		Echo("need to download map");
+		Echo("Downloading map...");
+		VFS.DownloadArchive(map, "map");
 	end
 
-	hasEngine = true 
+
+ 
 	-- somehow check for engine? or check if current = required, and use that
 
 	local parsed = url.parse(replay);
@@ -146,24 +172,82 @@ local function SocketWriteAble(sock)
 	end
 end
 
+local function AttemptStart()
+	Echo("Checking if ready to start");
+
+	if not hasFile then
+		return Echo("Weird attempt to start without demofile")
+	end
+
+	if not hasMap then
+		return Echo("Map not downloaded yet")
+	end
+
+	if not hasGame then
+		return Echo("Game not downloaded yet");
+	end
+
+	Echo("LAUNCH GAME FINAELLYY!!!");
+
+	Spring.Start(saveFilename, "");
+end
+
+
 -- called when a connection is closed
 local function SocketClosed(sock)
 	Echo("closed connection");
-	local saveFilename = 'demos/'..file;
-    
-    local body_start = replaydata:find("\r\n\r\n", 1, true) + 4
+    local body_start = replaydata:find("\r\n\r\n", 1, true);
+
+	if not body_start then
+		Echo("Unable to find http body -- connection fail? Dumping response.");
+		Echo(replaydata)
+		return;
+	end
+
+	body_start = body_start + 4;
 
 	local headers = replaydata:sub(1,body_start-1);
 	if headers:find("200 OK") then
+		saveFilename = 'demos/'..file;
 		local f = assert(io.open(saveFilename, 'wb')) -- open in "binary" mode
 		f:write(replaydata:sub(body_start));
 		f:close()
 		replaydata = "";
-		Echo("saved replay file, launching game");
-		Spring.Start(saveFilename, "");
+		Echo("Saved replay file");
+		hasFile = true;
+		AttemptStart();
 	else
 		Echo("Unable to download file. Response headers: ")
 		Echo(headers);
+	end
+end
+
+function widget:DownloadQueued(downloadID, archiveName, archiveType)
+	Echo("Download "..downloadID.." queued")
+	Echo("name = "..archiveName..", type = "..archiveType)
+	if (archiveName == replayMap and archiveType == "map") then
+		Echo("Queued map donwload");
+		downloads.map = downloadID;
+	end
+
+	if (archiveName == replayGame and archiveType == "game") then
+		Echo("Queued game download");
+		downloads["game"] = downloadID;
+	end
+end
+
+function widget:DownloadFinished(downloadID)
+	Echo("Download "..downloadID.." finished")
+	if(downloads.map == downloadID) then
+		hasMap = true;
+		Echo("Map downloaded");
+		AttemptStart();
+	end
+
+	if(downloads.game == downloadID) then
+		hasGame = true;
+		Echo("Game downloaded");
+		AttemptStart();
 	end
 end
 
