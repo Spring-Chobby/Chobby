@@ -111,9 +111,11 @@ function onLaunchReplay(wtf, replay, game, map, engine)
 	-- somehow check for engine? or check if current = required, and use that
 
 	local parsed = url.parse(replay);
+	local localpath = parsed.path;
+
 	host = parsed.host;
-	path = parsed.path;
-	file = path:match("([^/]*)$");
+	file = localpath:match("([^/]*)$");
+	path = localpath:gsub(" ","%%20");
 
 	replaydata = "";
 
@@ -135,7 +137,7 @@ local function SocketWriteAble(sock)
 	if headersent==nil then
 		-- socket is writeable
 		headersent=1
-		Spring.Echo("sending http request")
+		Spring.Echo("sending http request".." GET " .. path .. " HTTP/1.0\r\nHost: " .. host ..  " \r\n\r\n")
 		sock:send("GET " .. path .. " HTTP/1.0\r\nHost: " .. host ..  " \r\n\r\n")
 	end
 end
@@ -146,12 +148,19 @@ local function SocketClosed(sock)
 	local saveFilename = 'demos/'..file;
     
     local body_start = replaydata:find("\r\n\r\n", 1, true) + 4
-    local f = assert(io.open(saveFilename, 'wb')) -- open in "binary" mode
-    f:write(replaydata:sub(body_start));
-    f:close()
-	replaydata = "";
-    Spring.Echo("saved replay file, launching game");
-	Spring.Start(saveFilename, "");
+
+	local headers = replaydata:sub(1,body_start-1);
+	if headers:find("200 OK") then
+		local f = assert(io.open(saveFilename, 'wb')) -- open in "binary" mode
+		f:write(replaydata:sub(body_start));
+		f:close()
+		replaydata = "";
+		Spring.Echo("saved replay file, launching game");
+		Spring.Start(saveFilename, "");
+	else
+		Spring.Echo("Unable to download file. Response headers: ")
+		Spring.Echo(headers);
+	end
 end
 
 function widget:Update()
