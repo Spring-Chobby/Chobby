@@ -1150,12 +1150,12 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
-local function LoadStory(storyID)
+local function LoadStory(storyID, dir)
   if (data.storyID ~= nil) then
     CloseStory()
   end
   
-  defs.storyDir = config.VN_DIR .. storyID .. "/"
+  defs.storyDir = (dir or config.VN_DIR) .. storyID .. "/"
   local storyPath = defs.storyDir .. "story_info.lua"
   if not VFS.FileExists(storyPath, VFS.RAW_FIRST) then
     Spring.Log(widget:GetInfo().name, LOG.ERROR, "VN story " .. storyID .. " does not exist")
