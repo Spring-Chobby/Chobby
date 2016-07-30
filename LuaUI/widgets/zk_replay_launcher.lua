@@ -1,6 +1,6 @@
 
 if not (Spring.GetConfigInt("LuaSocketEnabled", 0) == 1) then
-	Echo("LuaSocketEnabled is disabled")
+	--Echo("LuaSocketEnabled is disabled")
 	return false
 end
 
@@ -47,7 +47,7 @@ local downloads = {
 local function dumpConfig()
 	-- dump all luasocket related config settings to console
 	for _, conf in ipairs({"TCPAllowConnect", "TCPAllowListen", "UDPAllowConnect", "UDPAllowListen"  }) do
-		Echo(conf .. " = " .. Spring.GetConfigString(conf, ""))
+		Spring.Echo(conf .. " = " .. Spring.GetConfigString(conf, ""))
 	end
 end
 
@@ -76,7 +76,10 @@ local function newset()
 end
 
 local function Echo(stuff)
-	Spring.Echo("<ZKReplayLauncher> "..stuff);
+     Chotify:Post({
+         title = "Launching Replay",
+         body = stuff,
+     })
 end
 
 
@@ -86,7 +89,7 @@ local function SocketConnect(host, port)
 	client:settimeout(0)
 	res, err = client:connect(host, port)
 	if not res and not res=="timeout" then
-		Echo("Error in connect: "..err)
+		--Echo("Error in connect: "..err)
 		return false
 	end
 	set = newset()
@@ -102,11 +105,11 @@ function widget:Initialize()
 end
 
 function onLaunchReplay(wtf, replay, game, map, engine)
-	Echo("LAUNCHING REPLAY")
-	Echo("url: ".. replay)
-	Echo("game: ".. game)
-	Echo('map: '.. map)
-	Echo('engine: '.. engine)
+	Echo("Getting data...")
+	--Echo("url: ".. replay)
+	--Echo("game: ".. game)
+	--Echo('map: '.. map)
+	--Echo('engine: '.. engine)
 
 	hasGame = false;
 	hasMap = false;
@@ -116,7 +119,7 @@ function onLaunchReplay(wtf, replay, game, map, engine)
 	hasEngine = engine:find(Game.version) == 1
 	
 	if not hasEngine then
-		Echo("Replay engine "..engine.." incompatible with current engine "..Game.version);
+		return Abort("Wrong engine "..engine);
 	end
 
 	replayMap = map;
@@ -149,10 +152,7 @@ function onLaunchReplay(wtf, replay, game, map, engine)
 
 	replaydata = "";
 
-	Echo("Download file "..path.." from host "..host.." into demos/"..file);
-
-	-- if needed stuff available: download replay, launch game
-	-- otherwise: start downloads (socket/VFS) and watch for completion of all (ghetto async)
+	Echo("Downloading replay file");
 	SocketConnect(host, port);
 end
 
@@ -167,40 +167,52 @@ local function SocketWriteAble(sock)
 	if headersent==nil then
 		-- socket is writeable
 		headersent=1
-		Echo("sending http request".." GET " .. path .. " HTTP/1.0\r\nHost: " .. host ..  " \r\n\r\n")
+		--Echo("sending http request".." GET " .. path .. " HTTP/1.0\r\nHost: " .. host ..  " \r\n\r\n")
 		sock:send("GET " .. path .. " HTTP/1.0\r\nHost: " .. host ..  " \r\n\r\n")
 	end
 end
 
 local function AttemptStart()
-	Echo("Checking if ready to start");
+	-- Echo("Checking if ready to start");
 
 	if not hasFile then
-		return Echo("Weird attempt to start without demofile")
+		return -- Echo("Weird attempt to start without demofile")
 	end
 
 	if not hasMap then
-		return Echo("Map not downloaded yet")
+		return Echo("Downloading map ...")
 	end
 
 	if not hasGame then
-		return Echo("Game not downloaded yet");
+		return Echo("Downloading game...");
 	end
 
-	Echo("LAUNCH GAME FINAELLYY!!!");
+	Echo("Starting Spring");
 
 	Spring.Start(saveFilename, "");
+end
+
+local function Abort(reason)
+	hasFile = false
+	hasGame = false
+	hasEngine = false
+	hasMap = false
+
+	Chotify:Post({
+		title = "Replay Failed",
+		body = reason
+	});
 end
 
 
 -- called when a connection is closed
 local function SocketClosed(sock)
-	Echo("closed connection");
+	--Echo("closed connection");
     local body_start = replaydata:find("\r\n\r\n", 1, true);
 
 	if not body_start then
-		Echo("Unable to find http body -- connection fail? Dumping response.");
-		Echo(replaydata)
+		Abort("Connection failure");
+		Spring.Echo(replaydata)
 		return;
 	end
 
@@ -213,40 +225,48 @@ local function SocketClosed(sock)
 		f:write(replaydata:sub(body_start));
 		f:close()
 		replaydata = "";
-		Echo("Saved replay file");
 		hasFile = true;
 		AttemptStart();
 	else
-		Echo("Unable to download file. Response headers: ")
-		Echo(headers);
+		Abort("Unable to download replay file");
+		Spring.Echo(headers);
 	end
 end
 
 function widget:DownloadQueued(downloadID, archiveName, archiveType)
-	Echo("Download "..downloadID.." queued")
-	Echo("name = "..archiveName..", type = "..archiveType)
+	--Echo("Download "..downloadID.." queued")
+	--Echo("name = "..archiveName..", type = "..archiveType)
 	if (archiveName == replayMap and archiveType == "map") then
-		Echo("Queued map donwload");
+		--Echo("Queued map donwload");
 		downloads.map = downloadID;
 	end
 
 	if (archiveName == replayGame and archiveType == "game") then
-		Echo("Queued game download");
+		--Echo("Queued game download");
 		downloads["game"] = downloadID;
 	end
 end
 
+function widget:DownloadFailed(downloadID)
+	if(downloads.map == downloadID) then
+		Abort("Map download failed");
+	end
+
+	if(downloads.game == downloadID) then
+		Abort("Game download failed");
+	end	
+end
+
 function widget:DownloadFinished(downloadID)
-	Echo("Download "..downloadID.." finished")
 	if(downloads.map == downloadID) then
 		hasMap = true;
-		Echo("Map downloaded");
+		Echo("Map download complete");
 		AttemptStart();
 	end
 
 	if(downloads.game == downloadID) then
 		hasGame = true;
-		Echo("Game downloaded");
+		Echo("Game download complete");
 		AttemptStart();
 	end
 end
@@ -263,7 +283,7 @@ function widget:Update()
 			-- nothing to do, return
 			return
 		end
-		Echo("Error in select: " .. error)
+		--Echo("Error in select: " .. error)
 	end
 	for _, input in ipairs(readable) do
 		local s, status, partial = input:receive('*a') --try to read all data
