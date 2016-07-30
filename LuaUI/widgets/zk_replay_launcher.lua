@@ -1,6 +1,6 @@
 
 if not (Spring.GetConfigInt("LuaSocketEnabled", 0) == 1) then
-	Spring.Echo("LuaSocketEnabled is disabled")
+	Echo("LuaSocketEnabled is disabled")
 	return false
 end
 
@@ -38,7 +38,7 @@ local hasGame = false;
 local function dumpConfig()
 	-- dump all luasocket related config settings to console
 	for _, conf in ipairs({"TCPAllowConnect", "TCPAllowListen", "UDPAllowConnect", "UDPAllowListen"  }) do
-		Spring.Echo(conf .. " = " .. Spring.GetConfigString(conf, ""))
+		Echo(conf .. " = " .. Spring.GetConfigString(conf, ""))
 	end
 end
 
@@ -66,6 +66,10 @@ local function newset()
     }})
 end
 
+local function Echo(stuff)
+	Spring.Echo("<ZKReplayLauncher> "..stuff);
+end
+
 
 -- initiates a connection to host:port, returns true on success
 local function SocketConnect(host, port)
@@ -73,7 +77,7 @@ local function SocketConnect(host, port)
 	client:settimeout(0)
 	res, err = client:connect(host, port)
 	if not res and not res=="timeout" then
-		Spring.Echo("Error in connect: "..err)
+		Echo("Error in connect: "..err)
 		return false
 	end
 	set = newset()
@@ -89,22 +93,22 @@ function widget:Initialize()
 end
 
 function onLaunchReplay(wtf, replay, game, map, engine)
-	Spring.Echo("LAUNCHING REPLAY")
-	Spring.Echo("url: ".. replay)
-	Spring.Echo("game: ".. game)
-	Spring.Echo('map: '.. map)
-	Spring.Echo('engine: '.. engine)
+	Echo("LAUNCHING REPLAY")
+	Echo("url: ".. replay)
+	Echo("game: ".. game)
+	Echo('map: '.. map)
+	Echo('engine: '.. engine)
 
 	if(VFS.HasArchive(game)) then
 		hasGame = true;
 	else
-		Spring.Echo("need to download game");
+		Echo("need to download game");
 	end
 
 	if(VFS.HasArchive(map)) then
 		hasMap = true;
 	else
-		Spring.Echo("need to download map");
+		Echo("need to download map");
 	end
 
 	hasEngine = true 
@@ -119,7 +123,7 @@ function onLaunchReplay(wtf, replay, game, map, engine)
 
 	replaydata = "";
 
-	Spring.Echo("Download file "..path.." from host "..host.." into demos/"..file);
+	Echo("Download file "..path.." from host "..host.." into demos/"..file);
 
 	-- if needed stuff available: download replay, launch game
 	-- otherwise: start downloads (socket/VFS) and watch for completion of all (ghetto async)
@@ -137,14 +141,14 @@ local function SocketWriteAble(sock)
 	if headersent==nil then
 		-- socket is writeable
 		headersent=1
-		Spring.Echo("sending http request".." GET " .. path .. " HTTP/1.0\r\nHost: " .. host ..  " \r\n\r\n")
+		Echo("sending http request".." GET " .. path .. " HTTP/1.0\r\nHost: " .. host ..  " \r\n\r\n")
 		sock:send("GET " .. path .. " HTTP/1.0\r\nHost: " .. host ..  " \r\n\r\n")
 	end
 end
 
 -- called when a connection is closed
 local function SocketClosed(sock)
-	Spring.Echo("closed connection");
+	Echo("closed connection");
 	local saveFilename = 'demos/'..file;
     
     local body_start = replaydata:find("\r\n\r\n", 1, true) + 4
@@ -155,11 +159,11 @@ local function SocketClosed(sock)
 		f:write(replaydata:sub(body_start));
 		f:close()
 		replaydata = "";
-		Spring.Echo("saved replay file, launching game");
+		Echo("saved replay file, launching game");
 		Spring.Start(saveFilename, "");
 	else
-		Spring.Echo("Unable to download file. Response headers: ")
-		Spring.Echo(headers);
+		Echo("Unable to download file. Response headers: ")
+		Echo(headers);
 	end
 end
 
@@ -175,7 +179,7 @@ function widget:Update()
 			-- nothing to do, return
 			return
 		end
-		Spring.Echo("Error in select: " .. error)
+		Echo("Error in select: " .. error)
 	end
 	for _, input in ipairs(readable) do
 		local s, status, partial = input:receive('*a') --try to read all data
