@@ -13,7 +13,8 @@ local modinfo = {
 	url             = "https://github.com/Spring-Chobby/Chobby",
 	depend = {
 		"Spring Cursors",
-	}
+	},
+	onlyLocal = true
 }
 
 return modinfo
