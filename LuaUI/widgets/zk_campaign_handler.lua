@@ -403,7 +403,7 @@ local function SaveLoadConfirmationDialogPopup(saveID, saveMode)
 				LoadGameByID(saveID)
 			end
 		end
-	WG.Chobby.ConfirmationPopup(yesFunc, text, nil, 315, 200)
+	WG.Chobby.ConfirmationPopup(yesFunc, text, nil, 360, 200)
 end
 
 local function RemoveSaveEntryButtons()
@@ -489,7 +489,7 @@ local function AddSaveEntryButton(saveFile, allowSave, count)
 			caption = i18n("delete"),
 			--backgroundColor = {0.4,0.4,0.4,1},
 			OnClick = { function(self)
-					WG.Chobby.ConfirmationPopup(function(self) DeleteSave(id) end, i18n("delete_confirm"), nil, 315, 200)
+					WG.Chobby.ConfirmationPopup(function(self) DeleteSave(id) end, i18n("delete_confirm"), nil, 360, 200)
 				end
 			}
 		}
@@ -748,7 +748,7 @@ local function InitializeIntermissionControls()
 						height = 48,
 						caption = i18n("quit"),
 						OnClick = { function(self)
-							ChiliFX:AddFadeEffect({
+							WG.Chobby.ConfirmationPopup(function() ChiliFX:AddFadeEffect({
 								obj = screens.intermission, 
 								time = 0.15,
 								endValue = 0,
@@ -757,7 +757,8 @@ local function InitializeIntermissionControls()
 									SwitchToScreen("main")
 									ResetGamedata()
 								end
-							})
+							}) end,
+							i18n("quit_confirm"), nil, 360, 200)
 						end }
 					},
 				}
