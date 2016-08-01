@@ -24,14 +24,12 @@ local scripts = {
 		{"Exit"}
 	},
 	prologue1_outro_win = {
-		{"CustomAction", function() WG.CampaignHandler.SetNextMissionScript("prologue2_intro") end},
-		{"CustomAction", function() WG.CampaignHandler.SetChapterTitle("Chapter 2") end},
+		{"CustomAction", function() WG.CampaignHandler.AdvanceCampaign("prologue1", "prologue2_intro", "Chapter 2") end},
 		{"AddText", {textID = "prologue1_outro1", text = "You've won the first mission. Congratulations!"}},
 		{"Exit"}
 	},
 	prologue1_outro_lose = {
-		{"CustomAction", function() WG.CampaignHandler.SetNextMissionScript("prologue2_intro") end},
-		{"CustomAction", function() WG.CampaignHandler.SetChapterTitle("Chapter 2") end},
+		{"CustomAction", function() WG.CampaignHandler.AdvanceCampaign("prologue1", "prologue2_intro", "Chapter 2") end},
 		{"AddText", {textID = "prologue1_outro1", text = "You've failed to win the first mission. Oh well..."}},
 		{"Exit"}
 	},

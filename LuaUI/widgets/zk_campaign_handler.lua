@@ -44,11 +44,23 @@ local CAMPAIGN_SELECTOR_BUTTON_HEIGHT = 96
 local SAVEGAME_BUTTON_HEIGHT = 128
 local SAVE_DIR = "saves/"
 local MAX_SAVES = 999
+local AUTOSAVE_ID = "auto"
+local AUTOSAVE_FILENAME = "autosave"
 --------------------------------------------------------------------------------
 -- data
 --------------------------------------------------------------------------------
 local gamedata = {
+	chapterTitle = "",
+	--[[
+	campaignID = nil
+	vnStory = nil
+	mapAvailable = false
+	nextMissionScript = nil
 	chapterTitle = ""
+	]]
+	completedMissions = {},
+	unlockedScenes = {},
+	vars = {},
 }
 
 local campaignDefs = {}	-- {name, author, image, definition, starting function call}
@@ -79,14 +91,12 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 local function ResetGamedata()
-	gamedata.campaignID = nil
-	gamedata.vnStory = nil
-	gamedata.mapAvailable = false
-	gamedata.nextMissionScript = nil
-	gamedata.chapterTitle = ""
-	gamedata.unlockedScenes = {}
-	gamedata.campaignID = nil
-	gamedata.vars = {}
+	gamedata = {
+		chapterTitle = "",
+		completedMissions = {},
+		unlockedScenes = {},
+		vars = {},
+	}
 	
 	SetControlGreyout(startButton, true)
 end
@@ -131,12 +141,34 @@ local function SortSavesByDate(a, b)
 		return false
 	end
 	--Spring.Echo(a.id, b.id, a.date.hour, b.date.hour, a.date.hour>b.date.hour)
+	if a.id == AUTOSAVE_ID then
+		return true
+	elseif b.id == AUTOSAVE_ID then
+		return false
+	end
+	
 	if a.date.year > b.date.year then return true end
 	if a.date.yday > b.date.yday then return true end
 	if a.date.hour > b.date.hour then return true end
 	if a.date.min > b.date.min then return true end
 	if a.date.sec > b.date.sec then return true end
 	return false
+end
+
+local function GetSave(filename)
+	local ret = nil
+	local success, err = pcall(function()
+		local saveData = VFS.Include(filename)
+		local campaignDef = campaignDefsByID[saveData.campaignID]
+		--if (campaignDef) then
+			ret = saveData
+		--end
+	end)
+	if (not success) then
+		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error getting saves: " .. err)
+	else
+		return ret
+	end
 end
 
 local function GetSaves()
@@ -146,17 +178,19 @@ local function GetSaves()
 	local savefiles = VFS.DirList(SAVE_DIR, "save*.lua")
 	for i=1,#savefiles do
 		local savefile = savefiles[i]
-		local success, err = pcall(function()
-			local saveData = VFS.Include(savefile)
-			local campaignDef = campaignDefsByID[saveData.campaignID]
-			--if (campaignDef) then
-				saveData.id = saveData.id or i
-				saves[saveData.id] = saveData
-				savesOrdered[#savesOrdered + 1] = saveData
-			--end
-		end)
-		if (not success) then
-			Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error getting saves: " .. err)
+		local saveData = GetSave(savefile)
+		if saveData then
+			saveData.id = saveData.id or i
+			saves[saveData.id] = saveData
+			savesOrdered[#savesOrdered + 1] = saveData
+		end
+	end
+	if VFS.FileExists(SAVE_DIR .. AUTOSAVE_FILENAME .. ".lua") then
+		local saveData = GetSave(SAVE_DIR .. AUTOSAVE_FILENAME .. ".lua")
+		if saveData then
+			saveData.id = AUTOSAVE_ID
+			saves[saveData.id] = saveData
+			savesOrdered[#savesOrdered + 1] = saveData
 		end
 	end
 	--table.sort(savesOrdered, SortSavesByDate)
@@ -250,11 +284,12 @@ local function SaveGame(id)
 	local success, err = pcall(function()
 		Spring.CreateDir(SAVE_DIR)
 		id = id or FindFirstEmptySaveSlot()
-		path = SAVE_DIR .. "save" .. string.format("%03d", id) .. ".lua"
+		local isAutosave = (id == AUTOSAVE_ID)
+		path = SAVE_DIR .. (isAutosave and AUTOSAVE_FILENAME or ("save" .. string.format("%03d", id))) .. ".lua"
 		local saveData = Spring.Utilities.CopyTable(gamedata, true)
 		saveData.date = os.date('*t')
 		saveData.id = id
-		saveData.description = saveDescEdit.text
+		saveData.description = isAutosave and "" or saveDescEdit.text
 		saveData.campaignID = currentCampaignID
 		table.save(saveData, path)
 		--Spring.Log(widget:GetInfo().name, LOG.INFO, "Saved game to " .. path)
@@ -301,7 +336,7 @@ end
 
 local function DeleteSave(id)
 	local success, err = pcall(function()
-		local path = SAVE_DIR .. "save" .. string.format("%03d", id) .. ".lua"
+		local path = SAVE_DIR .. (id == AUTOSAVE_ID and AUTOSAVE_FILENAME or ("save" .. string.format("%03d", id))) .. ".lua"
 		os.remove(path)
 		local num = 0
 		local parent = nil
@@ -350,6 +385,13 @@ end
 
 local function UnlockScene(id)
 	gamedata.unlockedScenes[id] = true
+end
+
+local function AdvanceCampaign(completedMissionID, nextScript, chapterTitle)
+	SetNextMissionScript(nextScript)
+	SetChapterTitle(chapterTitle)
+	gamedata.completedMissions[completedMissionID] = true
+	SaveGame(AUTOSAVE_ID)
 end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -453,9 +495,13 @@ local function AddSaveEntryButton(saveFile, allowSave, count)
 			end
 		}
 	}
+	local caption = saveFile and i18n("save") .. " " .. saveFile.id or i18n("save_new_game")
+	if saveFile and saveFile.id == AUTOSAVE_ID then
+		caption = i18n("autosave")
+	end
 	controlsEntry.titleLabel = Label:New {
 		parent = controlsEntry.button,
-		caption = saveFile and i18n("save") .. " " .. saveFile.id or i18n("save_new_game"),
+		caption = caption,
 		valign = "center",
 		x = 8,
 		y = 8,
@@ -912,6 +958,7 @@ function widget:Initialize()
 		GetWindow = function() return window end,
 		SetVNStory = SetVNStory,
 		SetNextMissionScript = SetNextMissionScript,
+		AdvanceCampaign = AdvanceCampaign,
 		UnlockScene = UnlockScene,
 		SetChapterTitle = SetChapterTitle,
 	}

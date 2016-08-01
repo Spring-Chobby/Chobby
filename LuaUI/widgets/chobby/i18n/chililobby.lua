@@ -128,6 +128,7 @@ return {
 		save_caps = "SAVE",
 		save_new_game = "Save a new game",
 		save_overwrite_confirm = "Are you sure you want to overwrite this save?",
+		autosave = "Autosave",
 		load = "Load",
 		load_caps = "LOAD",
 		load_confirm = "Loading will lose any unsaved progress. Are you sure?",
