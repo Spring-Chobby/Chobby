@@ -200,6 +200,9 @@ function Console:AddMessage(message, userName, dateOverride, color, thirdPerson)
 		else
 			txt = txt .. "\255\50\160\255" .. userName .. ": \255\255\255\255"
 			whiteText = whiteText .. userName .. ": "
+			if color ~= nil then
+				txt = txt .. color
+			end
 		end
 	end
 	txt = txt .. message
