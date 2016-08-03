@@ -1,6 +1,6 @@
 Console = LCS.class{}
 
-function Console:init(channelName, sendMessageListener)
+function Console:init(channelName, sendMessageListener, noHistoryLoad)
 	self.listener = sendMessageListener
 	self.showDate = true
 	self.dateFormat = "%H:%M"
@@ -93,7 +93,9 @@ function Console:init(channelName, sendMessageListener)
 		},
 	}
 	
-	self:LoadHistory(Configuration.lastLoginChatLength)
+	if not noHistoryLoad then
+		self:LoadHistory(Configuration.lastLoginChatLength)
+	end
 end
 
 function Console:Autocomplete(textSoFar)
