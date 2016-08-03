@@ -92,6 +92,8 @@ function Console:init(channelName, sendMessageListener)
 			self.fakeImage,
 		},
 	}
+	
+	self:LoadHistory(Configuration.lastLoginChatLength)
 end
 
 function Console:Autocomplete(textSoFar)
@@ -155,6 +157,7 @@ end
 -- if date is not passed, current time is assumed
 function Console:AddMessage(message, userName, dateOverride, color, thirdPerson)
 	local txt = ""
+	local whiteText = ""
 	if self.showDate then
 		local timeOverride
 		if dateOverride then
@@ -184,6 +187,7 @@ function Console:AddMessage(message, userName, dateOverride, color, thirdPerson)
 		-- FIXME: the input "date" should ideally be a table so we can coerce the format
 		local currentDate = timeOverride or os.date(self.dateFormat)
 		txt = txt .. "\255\128\128\128[" .. currentDate .. "] "
+		whiteText = whiteText .. "[" .. currentDate .. "] "
 		if color ~= nil then
 			txt = txt .. color
 		end
@@ -193,9 +197,11 @@ function Console:AddMessage(message, userName, dateOverride, color, thirdPerson)
 			txt = txt .. userName .. " "
 		else
 			txt = txt .. "\255\50\160\255" .. userName .. ": \255\255\255\255"
+			whiteText = whiteText .. userName .. ": "
 		end
 	end
 	txt = txt .. message
+	whiteText = whiteText .. message
 	if self.tbHistory.text == "" then
 		self.tbHistory:SetText(txt)
 	else
@@ -207,12 +213,46 @@ function Console:AddMessage(message, userName, dateOverride, color, thirdPerson)
 		local logFile, errorMessage = io.open('chatLogs/' .. self.channelName .. ".txt", 'a')
 		if logFile then
 			if dateOverride then
-				logFile:write("\n" .. ((string.sub(dateOverride, 0, 19) .. " - ") or "") .. txt)
+				logFile:write("\n" .. ((string.sub(dateOverride, 0, 19) .. " - ") or "") .. whiteText)
 			else
-				logFile:write("\n" .. txt)
+				logFile:write("\n" .. whiteText)
 			end
 			io.close(logFile)
 		end
 	end
 end
 
+function Console:LoadHistory(numLines)
+	if not self.channelName then
+		return
+	end
+	local path = 'chatLogs/' .. self.channelName .. ".txt"
+	if not VFS.FileExists(path) then
+		return
+	end
+	
+	local lineCount = 0
+	for line in io.lines(path) do
+		lineCount = lineCount + 1
+	end
+	
+	local waitToWrite = lineCount - numLines
+	for line in io.lines(path) do
+		if waitToWrite > 0 then
+			waitToWrite = waitToWrite - 1
+		else
+			local start = string.find(line, "%[")
+			if start then
+				local txt = "\255\128\128\128" .. string.sub(line, start)
+				if self.tbHistory.text == "" then
+					self.tbHistory:SetText(txt)
+				else
+					self.tbHistory:AddLine(txt)
+				end
+			end
+		end
+	end
+	
+	--local logFile, errorMessage = io.open(, 'r')
+
+end

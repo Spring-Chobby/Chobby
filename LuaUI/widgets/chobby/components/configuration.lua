@@ -58,6 +58,7 @@ function Configuration:init()
 	}
 	self.singleplayer_mode = 2
 	
+	self.lastLoginChatLength = 25
 	self.notifyForAllChat = true
 	self.debugMode = false
 	self.onlyShowFeaturedMaps = true
