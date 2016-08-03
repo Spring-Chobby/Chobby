@@ -392,7 +392,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		backButton = Button:New {
 			name = name .. "_back_button",
 			x = 1,
-			y = 48 - size*2,
+			y = 39 - size * 1.5,
 			width = buttonSize,
 			height = buttonSize,
 			caption = "",
