@@ -183,19 +183,19 @@ function Console:AddMessage(message, userName, dateOverride, color, thirdPerson)
 		end
 		-- FIXME: the input "date" should ideally be a table so we can coerce the format
 		local currentDate = timeOverride or os.date(self.dateFormat)
-		txt = txt .. "[" .. currentDate .. "] "
+		txt = txt .. "\255\128\128\128[" .. currentDate .. "] "
+		if color ~= nil then
+			txt = txt .. color
+		end
 	end
 	if userName ~= nil then
 		if thirdPerson then
 			txt = txt .. userName .. " "
 		else
-			txt = txt .. userName .. ": "
+			txt = txt .. "\255\50\160\255" .. userName .. ": \255\255\255\255"
 		end
 	end
 	txt = txt .. message
-	if color ~= nil then
-		txt = color .. txt .. "\b"
-	end
 	if self.tbHistory.text == "" then
 		self.tbHistory:SetText(txt)
 	else

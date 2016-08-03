@@ -61,7 +61,7 @@ function ChatWindows:init()
 		function(listener, chanName, author, changedTime, topic)
 			local channelConsole = self:GetChannelConsole(chanName)
 			if channelConsole ~= nil then
-				channelConsole:AddMessage(topic, nil, nil, "\255\0\139\139")
+				channelConsole:AddMessage(topic, nil, nil, Configuration.meColor)
 			end
 		end
 	)
@@ -89,7 +89,6 @@ function ChatWindows:init()
 	lobby:AddListener("OnClients", self.onClients)
 
 	local CHAT_EX_MENTION = "\255\255\0\0"
-	local CHAT_EX_COLOR ="\255\0\139\139"
 	local CHAT_MENTION ="\255\255\0\0"
 	
 	-- channel chat
@@ -100,7 +99,7 @@ function ChatWindows:init()
 	)
 	lobby:AddListener("OnSaidEx", 
 		function(listener, chanName, userName, message, msgDate)
-			self:ProcessChat(chanName, userName, message, msgDate, CHAT_EX_MENTION, CHAT_EX_COLOR, true)
+			self:ProcessChat(chanName, userName, message, msgDate, CHAT_EX_MENTION, Configuration.meColor, true)
 		end
 	)
 
@@ -136,7 +135,7 @@ function ChatWindows:init()
 	lobby:AddListener("OnSaidPrivateEx",
 		function(listener, userName, message, msgDate)
 			local privateChatConsole = self:GetPrivateChatConsole(userName)
-			privateChatConsole:AddMessage(message, userName, msgDate, "\255\0\139\139", true)
+			privateChatConsole:AddMessage(message, userName, msgDate, Configuration.meColor, true)
 			self:_NotifyTab(userName, userName, "Private", message, "sounds/beep4.wav", 15)
 		end
 	)
@@ -144,7 +143,7 @@ function ChatWindows:init()
 		function(listener, userName)
 			local privateChatConsole = self.privateChatConsoles[userName]
 			if privateChatConsole ~= nil then
-				privateChatConsole:AddMessage(userName .. " is now offline", nil, nil, "\255\0\139\139", true)
+				privateChatConsole:AddMessage(userName .. " is now offline", nil, nil, Configuration.meColor, true)
 			end
 		end
 	)
@@ -152,7 +151,7 @@ function ChatWindows:init()
 		function(listener, userName)
 			local privateChatConsole = self.privateChatConsoles[userName]
 			if privateChatConsole ~= nil then
-				privateChatConsole:AddMessage(userName .. " just got online", nil, nil, "\255\0\139\139", true)
+				privateChatConsole:AddMessage(userName .. " just got online", nil, nil, Configuration.meColor, true)
 			end
 		end
 	)

@@ -26,6 +26,7 @@ function Configuration:init()
 	self.successColor = "\255\0\255\0"
 	self.partialColor = "\255\190\210\50"
 	self.selectedColor = "\255\99\184\255"
+	self.meColor = "\255\0\190\190"
 	self.buttonFocusColor = {0.54,0.72,1,0.3}
 	self.buttonSelectedColor = {0.54,0.72,1,0.6}--{1.0, 1.0, 1.0, 1.0}
 	
