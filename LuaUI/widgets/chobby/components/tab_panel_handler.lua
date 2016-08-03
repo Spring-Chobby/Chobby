@@ -146,6 +146,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		if heading then
 			heading:Dispose()
 			local size = Configuration:GetFont(fontSizeScale).size
+			local buttonSize = math.min(size * 1.8)
 			heading = TextBox:New {
 				x = 4 + 2*size,
 				y = 40 - size,
@@ -158,7 +159,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 				text = i18n(name),
 			}
 			
-			backButton:SetPos(4, 48 - size*2, size*2, size*2)
+			backButton:SetPos(4, 39 - size * 1.5, buttonSize, buttonSize)
 		end
 		
 		for i = 1, #tabs do
@@ -376,6 +377,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		end
 		
 		local size = Configuration:GetFont(fontSizeScale).size
+		local buttonSize = math.min(size * 1.5)
 		heading = TextBox:New {
 			x = 4 + size*2,
 			y = 40 - size,
@@ -389,12 +391,12 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		}
 		backButton = Button:New {
 			name = name .. "_back_button",
-			x = 4,
+			x = 1,
 			y = 48 - size*2,
-			width = size*2,
-			height = size*2,
+			width = buttonSize,
+			height = buttonSize,
 			caption = "",
-			padding = {2,2,2,2},
+			padding = {1,0,1,1},
 			children = {
 				Image:New {
 					x = 0,
