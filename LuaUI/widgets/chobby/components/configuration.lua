@@ -197,7 +197,7 @@ function Configuration:GetMinimapSmallImage(mapName, gameName)
 		return minimapImage
 	end
 	Spring.Echo("Missing minimap image for", mapName)
-	return "luaui/images/minimapNotFound.png"
+	return "luaui/images/minimapNotFound1.png"
 end
 
 function Configuration:GetMinimapImage(mapName, gameName)
@@ -207,7 +207,7 @@ function Configuration:GetMinimapImage(mapName, gameName)
 		return minimapImage
 	end
 	Spring.Echo("Missing minimap image for", mapName)
-	return "luaui/images/minimapNotFound.png"
+	return "luaui/images/minimapNotFound1.png"
 end
 
 function Configuration:GetGameConfigFilePath(gameName, fileName, shortnameFallback)
