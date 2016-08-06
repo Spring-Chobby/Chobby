@@ -41,7 +41,7 @@ local textPanel
 local textbox, nameLabel
 local nvlPanel, nvlStack
 local portraitPanel, portrait
-local background
+local background, backgroundBlack
 local menuButton, menuStack
 local buttonSave, buttonLoad, buttonLog, buttonQuit
 local logPanel
@@ -123,19 +123,39 @@ local function CountElements(tbl)
   return num
 end
 
--- hax for parent directory syntax
+local function SplitString(str, sep)
+  local sep, fields = sep or ":", {}
+  local pattern = string.format("([^%s]+)", sep)
+  string.gsub(str, pattern, function(c) fields[#fields+1] = c end)
+  return fields
+end
+
+local function MakePath(entries, endSlash)
+  local toBuild = {}
+  for i=1,#entries do
+    local entry = entries[i]
+    local items = SplitString(entry, "/")
+    for j=1,#items do
+      local item = items[j]
+      if item == ".." then
+        toBuild[#toBuild] = nil
+      else
+        toBuild[#toBuild + 1] = item
+      end
+    end
+  end
+  local ret = table.concat(toBuild, "/")
+  if endSlash then ret = ret .. "/" end
+  return ret
+end
+
+-- support for parent directory syntax
 local function GetFilePath(givenPath)
   if givenPath == nil then
     return ""
   end
-  
-  if string.find(givenPath, "../../", 1, true) == 1 then
-    return string.sub(givenPath, 7)
-  elseif string.find(givenPath, "../", 1, true) == 1 then
-    return config.VN_DIR .. string.sub(givenPath, 4)
-  else
-    return defs.storyDir .. givenPath
-  end
+
+  return MakePath({defs.storyDir, givenPath})
 end
 
 -- This forces the background to the back after toggling GUI (so bg doesn't draw in front of UI elements)
@@ -147,7 +167,7 @@ local function ResetMainLayers(force)
     menuStack:SetLayer(3)
   end
   ]]--
-  background:SetLayer(99)
+  backgroundBlack:SetLayer(99)
 end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -182,6 +202,15 @@ local function PlayScriptLine(line)
       waitTime = waitTime or options.waitTime.value
     end
     
+    if not data.nvlMode then
+      if not waitTime then
+        textPanel:Show()
+        ResetMainLayers()
+      else
+        textPanel:Hide()
+      end
+    end
+    
   elseif line > #defs.scripts[data.currentScript] then
     Spring.Log(widget:GetInfo().name, LOG.WARNING, "Reached end of script " .. data.currentScript)
   end
@@ -191,7 +220,7 @@ local function StartScript(scriptName)
   if mainWindow.hidden then
     mainWindow:Show()
   end
-  mainWindow:SetLayer(1)  -- bring to front
+  ResetMainLayers()
   data.currentScript = scriptName
   data.currentLine = 1
   PlayScriptLine(1)
@@ -271,8 +300,13 @@ local function ShakeImage(anim, proportion)
   local strengthY = anim.strengthY or 24
   
   -- invert direction each frame
-  local newOffsetX = math.random(1, strengthX) * ((anim.offsetX > 1) and -1 or 1)
-  local newOffsetY = math.random(1, strengthY) * ((anim.offsetY > 1) and -1 or 1)
+  local newOffsetX, newOffsetY = 0, 0
+  if strengthX > 0 then
+    newOffsetX = math.random(1, strengthX) * ((anim.offsetX > 1) and -1 or 1)
+  end
+  if strengthY > 0 then
+    newOffsetY = math.random(1, strengthY) * ((anim.offsetY > 1) and -1 or 1)
+  end
   newOffsetX = math.floor(newOffsetX * (1 - proportion) + 0.5)
   newOffsetY = math.floor(newOffsetY * (1 - proportion) + 0.5)
   anim.offsetX = newOffsetX
@@ -880,7 +914,7 @@ local function ToggleMenu()
   else
     menuStack:Show()
   end
-  background:SetLayer(99999)
+  ResetMainLayers()
   menuVisible = not menuVisible
 end
 
@@ -1155,10 +1189,10 @@ local function LoadStory(storyID, dir)
     CloseStory()
   end
   
-  defs.storyDir = (dir or config.VN_DIR) .. storyID .. "/"
+  defs.storyDir = MakePath({dir or config.VN_DIR, storyID}, true)
   local storyPath = defs.storyDir .. "story_info.lua"
   if not VFS.FileExists(storyPath, VFS.RAW_FIRST) then
-    Spring.Log(widget:GetInfo().name, LOG.ERROR, "VN story " .. storyID .. " does not exist")
+    Spring.Log(widget:GetInfo().name, LOG.ERROR, "VN story " .. storyPath .. " does not exist")
     return
   end
   
@@ -1185,6 +1219,7 @@ local function LoadStory(storyID, dir)
   end
   for _,charDefPath in ipairs(defs.storyInfo.characterDefs) do
     local path = defs.storyDir .. charDefPath
+    Spring.Echo("kekeke", path)
     if VFS.FileExists(path, VFS.RAW_FIRST) then
       local loadedCharDefs = VFS.Include(path)	--Spring.Utilities.json.decode(VFS.LoadFile(path, VFS.ZIP))
       for charName,data in pairs(loadedCharDefs) do
@@ -1439,14 +1474,17 @@ function widget:Initialize()
     height = "100%",
   }
   
-  background = Image:New{
+  backgroundBlack = Image:New{
     parent = mainWindow,
-    name = "vn_background",
-    x = 4,
+    name = "vn_background_black",
+    x = 0,
     y = 24,
-    width = "100%",
-    height = "100%",
-        OnClick = {function(self, x, y, mouse)
+    right = 0,
+    bottom = 0,
+    keepAspect = false,
+    itemMargin = {0, 0, 0, 0},
+    file = string.sub(DIR, 1, -9) .. "Images/vn/bg_black.png",
+    OnClick = {function(self, x, y, mouse)
         if mouse == 1 then
           if not uiHidden then
             AdvanceText(0, true)
@@ -1459,6 +1497,18 @@ function widget:Initialize()
       end
     },
     OnMouseDown = {function(self) return true end},
+  }  
+  
+  background = Image:New{
+    parent = backgroundBlack,
+    name = "vn_background",
+    x = 0,
+    y = 0,
+    right = 0,
+    bottom = 0,
+    padding = {0, 0, 0, 0},
+    itemMargin = {0, 0, 0, 0},
+    keepAspect = false,
   }
   
   nvlPanel:Hide()
