@@ -197,7 +197,7 @@ local function GetUserControls(userName, autoResize, maxNameLength, isInBattle, 
 	local userControls = reinitialize or {}
 	
 	userControls.isInBattle = isInBattle
-	userControls.lobby = (isSingleplayer and WG.LibLobby.lobbySkirmish) or lobby
+	userControls.lobby = (isSingleplayer and WG.LibLobby.localLobby) or lobby
 	userControls.isSingleplayer = isSingleplayer 
 	
 	local offset = 0
@@ -475,7 +475,7 @@ end
 local function AddListeners()
 	lobby:AddListener("OnUpdateUserStatus", UpdateUserActivity)
 	lobby:AddListener("OnUpdateUserBattleStatus", UpdateUserBattleStatus)
-	WG.LibLobby.lobbySkirmish:AddListener("OnUpdateUserBattleStatus", UpdateUserBattleStatus)
+	WG.LibLobby.localLobby:AddListener("OnUpdateUserBattleStatus", UpdateUserBattleStatus)
 end
 
 --------------------------------------------------------------------------------

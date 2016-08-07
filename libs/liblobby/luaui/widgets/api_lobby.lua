@@ -47,12 +47,12 @@ function widget:Initialize()
 	InterfaceSkirmish = VFS.Include(LIB_LOBBY_DIRNAME .. "interface_skirmish.lua", nil, VFS.RAW_FIRST)
 	self.lobby = Interface()
 
-	self.lobbySkirmish = InterfaceSkirmish()
+	self.localLobby = InterfaceSkirmish()
 
 	--// Export Widget Globals
 	WG.LibLobby = {
 		lobby = self.lobby, -- instance (singleton)
-		lobbySkirmish = self.lobbySkirmish
+		localLobby = self.localLobby
 	}
 
 end

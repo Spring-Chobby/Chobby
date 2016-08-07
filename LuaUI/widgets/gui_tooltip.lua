@@ -775,7 +775,7 @@ local function UpdateTooltip(inputText)
 		local userName = string.sub(inputText, 13)
 		local myLobby, inBattleroom
 		if inputText:starts(USER_SP_TOOLTIP_PREFIX) then
-			myLobby = WG.LibLobby.lobbySkirmish
+			myLobby = WG.LibLobby.localLobby
 			inBattleroom = true
 		else
 			myLobby = lobby

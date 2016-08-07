@@ -122,6 +122,7 @@ function Configuration:SetConfigValue(key, value)
 	self[key] = value
 	if key == "useSpringRestart" then
 		lobby.useSpringRestart = value
+		localLobby.useSpringRestart = value
 	end
 	self:_CallListeners("OnConfigurationChange", key, value)
 end

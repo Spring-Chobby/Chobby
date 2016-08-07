@@ -531,7 +531,7 @@ function widget:Initialize()
 		end
 	end
 	WG.LibLobby.lobby:AddListener("OnBattleAboutToStart", onBattleAboutToStart)
-	WG.LibLobby.lobbySkirmish:AddListener("OnBattleAboutToStart", onBattleAboutToStart)
+	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", onBattleAboutToStart)
 	
 	WG.SettingsWindow = SettingsWindow
 end
@@ -541,7 +541,7 @@ function widget:Shutdown()
 
 	if WG.LibLobby then
 		WG.LibLobby.lobby:RemoveListener("OnBattleAboutToStart", onBattleAboutToStart)
-		WG.LibLobby.lobbySkirmish:RemoveListener("OnBattleAboutToStart", onBattleAboutToStart)
+		WG.LibLobby.localLobby:RemoveListener("OnBattleAboutToStart", onBattleAboutToStart)
 	end
 end
 

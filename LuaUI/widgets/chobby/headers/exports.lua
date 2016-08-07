@@ -41,6 +41,7 @@ end
 if WG and WG.LibLobby then
 	LibLobby = WG.LibLobby
 	lobby = LibLobby.lobby
+	localLobby = LibLobby.localLobby
 end
 
 if WG and WG.i18n then
