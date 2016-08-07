@@ -25,19 +25,18 @@ local headersent
 local host = "zero-k.info"
 local port = 80
 local path = "/replays/20160704_190323_Drab_100.sdf"
-local file = "20160704_190323_Drab_100.sdf";
-local replaydata = "";
-local saveFilename = "";
-local replayMap = "";
-local replayGame = "";
+local file = "20160704_190323_Drab_100.sdf"
+local replaydata = ""
+local replayMap = ""
+local replayGame = ""
 
-local downloads = {};
-local url;
+local downloads = {}
+local url
 
-local hasMap = false;
-local hasEngine = false;
-local hasGame = false;
-local hasFile = false;
+local hasMap = false
+local hasEngine = false
+local hasGame = false
+local hasFile = false
 
 local downloads = {
 	map = false,
@@ -52,34 +51,34 @@ local function dumpConfig()
 end
 
 local function newset()
-    local reverse = {}
-    local set = {}
-    return setmetatable(set, {__index = {
-        insert = function(set, value)
-            if not reverse[value] then
-                table.insert(set, value)
-                reverse[value] = table.getn(set)
-            end
-        end,
-        remove = function(set, value)
-            local index = reverse[value]
-            if index then
-                reverse[value] = nil
-                local top = table.remove(set)
-                if top ~= value then
-                    reverse[top] = index
-                    set[index] = top
-                end
-            end
-        end
-    }})
+	local reverse = {}
+	local set = {}
+	return setmetatable(set, {__index = {
+		insert = function(set, value)
+			if not reverse[value] then
+				table.insert(set, value)
+				reverse[value] = table.getn(set)
+			end
+		end,
+		remove = function(set, value)
+			local index = reverse[value]
+			if index then
+				reverse[value] = nil
+				local top = table.remove(set)
+				if top ~= value then
+					reverse[top] = index
+					set[index] = top
+				end
+			end
+		end
+	}})
 end
 
 local function Echo(stuff)
-     Chotify:Post({
-         title = "Launching Replay",
-         body = stuff,
-     })
+	 Chotify:Post({
+		 title = "Launching Replay",
+		 body = stuff,
+	 })
 end
 
 
@@ -100,7 +99,7 @@ end
 function widget:Initialize()
 	CHOBBY_DIR = "LuaUI/widgets/chobby/"
 	VFS.Include("LuaUI/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	url = VFS.Include("libs/neturl/url.lua");
+	url = VFS.Include("libs/neturl/url.lua")
 	lobby:AddListener("OnLaunchRemoteReplay", onLaunchReplay)
 end
 
@@ -111,54 +110,51 @@ function onLaunchReplay(wtf, replay, game, map, engine)
 	--Echo('map: '.. map)
 	--Echo('engine: '.. engine)
 
-	hasGame = false;
-	hasMap = false;
-	hasEngine = false;
-	hasFile = false;
+	hasGame = false
+	hasMap = false
+	hasEngine = false
+	hasFile = false
 
 	hasEngine = engine:find(Game.version) == 1
 	
 	if not hasEngine then
-		return Abort("Wrong engine "..engine);
+		return Abort("Wrong engine "..engine)
 	end
 
-	replayMap = map;
-	replayGame = game;
+	replayMap = map
+	replayGame = game
 
 	if(VFS.HasArchive(game)) then
-		hasGame = true;
+		hasGame = true
 	else
-		Echo("Downloading game...");
+		Echo("Downloading game...")
 		VFS.DownloadArchive(game, "game")
 	end
 
 	if(VFS.HasArchive(map)) then
-		hasMap = true;
+		hasMap = true
 	else
-		Echo("Downloading map...");
-		VFS.DownloadArchive(map, "map");
+		Echo("Downloading map...")
+		VFS.DownloadArchive(map, "map")
 	end
 
-
- 
 	-- somehow check for engine? or check if current = required, and use that
+	local parsed = url.parse(replay)
+	local localpath = parsed.path
 
-	local parsed = url.parse(replay);
-	local localpath = parsed.path;
+	host = parsed.host
+	file = localpath:match("([^/]*)$")
+	path = localpath:gsub(" ","%%20")
 
-	host = parsed.host;
-	file = localpath:match("([^/]*)$");
-	path = localpath:gsub(" ","%%20");
+	replaydata = ""
 
-	replaydata = "";
-
-	Echo("Downloading replay file");
-	SocketConnect(host, port);
+	Echo("Downloading replay file")
+	SocketConnect(host, port)
 end
 
 -- called when data was received through a connection
 local function SocketDataReceived(sock, str)
-	replaydata = replaydata .. str;
+	replaydata = replaydata .. str
 end
 
 local headersent
@@ -172,8 +168,8 @@ local function SocketWriteAble(sock)
 	end
 end
 
-local function AttemptStart()
-	-- Echo("Checking if ready to start");
+local function AttemptStart(saveFilename)
+	-- Echo("Checking if ready to start")
 
 	if not hasFile then
 		return -- Echo("Weird attempt to start without demofile")
@@ -184,12 +180,12 @@ local function AttemptStart()
 	end
 
 	if not hasGame then
-		return Echo("Downloading game...");
+		return Echo("Downloading game...")
 	end
 
-	Echo("Starting Spring");
+	Echo("Starting Spring")
 
-	Spring.Start(saveFilename, "");
+	Spring.Start(saveFilename, "")
 end
 
 local function Abort(reason)
@@ -201,35 +197,35 @@ local function Abort(reason)
 	Chotify:Post({
 		title = "Replay Failed",
 		body = reason
-	});
+	})
 end
 
 
 -- called when a connection is closed
 local function SocketClosed(sock)
-	--Echo("closed connection");
-    local body_start = replaydata:find("\r\n\r\n", 1, true);
+	--Echo("closed connection")
+	local body_start = replaydata:find("\r\n\r\n", 1, true)
 
 	if not body_start then
-		Abort("Connection failure");
+		Abort("Connection failure")
 		Spring.Echo(replaydata)
-		return;
+		return
 	end
 
-	body_start = body_start + 4;
+	body_start = body_start + 4
 
-	local headers = replaydata:sub(1,body_start-1);
+	local headers = replaydata:sub(1,body_start-1)
 	if headers:find("200 OK") then
-		saveFilename = 'demos/'..file;
+		local saveFilename = 'demos/'..file
 		local f = assert(io.open(saveFilename, 'wb')) -- open in "binary" mode
-		f:write(replaydata:sub(body_start));
+		f:write(replaydata:sub(body_start))
 		f:close()
-		replaydata = "";
-		hasFile = true;
-		AttemptStart();
+		replaydata = ""
+		hasFile = true
+		AttemptStart(saveFilename)
 	else
-		Abort("Unable to download replay file");
-		Spring.Echo(headers);
+		Abort("Unable to download replay file")
+		Spring.Echo(headers)
 	end
 end
 
@@ -237,37 +233,37 @@ function widget:DownloadQueued(downloadID, archiveName, archiveType)
 	--Echo("Download "..downloadID.." queued")
 	--Echo("name = "..archiveName..", type = "..archiveType)
 	if (archiveName == replayMap and archiveType == "map") then
-		--Echo("Queued map donwload");
-		downloads.map = downloadID;
+		--Echo("Queued map donwload")
+		downloads.map = downloadID
 	end
 
 	if (archiveName == replayGame and archiveType == "game") then
-		--Echo("Queued game download");
-		downloads["game"] = downloadID;
+		--Echo("Queued game download")
+		downloads["game"] = downloadID
 	end
 end
 
 function widget:DownloadFailed(downloadID)
 	if(downloads.map == downloadID) then
-		Abort("Map download failed");
+		Abort("Map download failed")
 	end
 
 	if(downloads.game == downloadID) then
-		Abort("Game download failed");
+		Abort("Game download failed")
 	end	
 end
 
 function widget:DownloadFinished(downloadID)
 	if(downloads.map == downloadID) then
-		hasMap = true;
-		Echo("Map download complete");
-		AttemptStart();
+		hasMap = true
+		Echo("Map download complete")
+		AttemptStart()
 	end
 
 	if(downloads.game == downloadID) then
-		hasGame = true;
-		Echo("Game download complete");
-		AttemptStart();
+		hasGame = true
+		Echo("Game download complete")
+		AttemptStart()
 	end
 end
 
