@@ -185,7 +185,7 @@ local function AttemptStart(saveFilename)
 
 	Echo("Starting Spring")
 
-	Spring.Start(saveFilename, "")
+	WG.Chobby.localLobby:StartGameFromFile(saveFilename)
 end
 
 local function Abort(reason)
