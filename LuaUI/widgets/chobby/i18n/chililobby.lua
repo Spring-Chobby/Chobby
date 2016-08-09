@@ -94,7 +94,7 @@ return {
 		downloads_completed = "All downloads completed.",
 
 		-- Settings
-		notifyForAllChat = "All chat notifies",
+		notifyForAllChat = "Receive all chat related notifications",
 		debugMode = "Debug mode",
 		
 		-- chat_windows.lua
