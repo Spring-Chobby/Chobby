@@ -88,8 +88,8 @@ return {
 		game_starting_soon = "Game starting soon",
 		timeout_leaving_queue = "Timeout, leaving queue",
 		items_to_download = {
-			one = "One item to download.",
-			other = "%{count} items to download.",
+			one = "One item left to download.",
+			other = "%{count} items left to download.",
 		},
 		downloads_completed = "All downloads completed.",
 
@@ -112,10 +112,10 @@ return {
 		team = "Team",
 		invite_player = "Invite player",
 		invited_to_team = "Invited to join team",
-		invites_you_to_join_team = " invites you to join a team",
+		invites_you_to_join_team = " has invited you to join a team",
 		joined_team = " has joined the team",
 		join_team = "You have joined a team",
-		declined_invite_team = " has declined to join the team",
+		declined_invite_team = " has declined your invitation to join the team",
 	},
 	sr = {
 		connect_to_spring_server = 'Prijavljivanje na Spring lobi server',
