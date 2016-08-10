@@ -394,7 +394,7 @@ function ChatWindows:UpdateOldChatLinePosition(console)
 	end
 	console.spHistory:AddChild(self.oldChatLine)
 	
-	local position = console.tbHistory:GetPhysicalLinePosition(self.activeUnreadMessages) + 8
+	local position = console.tbHistory:GetPhysicalLinePosition(self.activeUnreadMessages) - 6
 	self.oldChatLine:SetPos(0, position)
 	self.oldChatLine._relativeBounds.right = 0
 	self.oldChatLine:UpdateClientArea()
