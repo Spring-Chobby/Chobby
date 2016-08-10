@@ -1132,9 +1132,9 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 
 	local function MessageListener(message)
 		if message:starts("/me ") then
-			lobby:SayBattleEx(message:sub(5))
+			battleLobby:SayBattleEx(message:sub(5))
 		else
-			lobby:SayBattle(message)
+			battleLobby:SayBattle(message)
 		end
 	end
 	local battleRoomConsole = WG.Chobby.Console("Battleroom Chat", MessageListener, true)
@@ -1157,13 +1157,20 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		parent = bottomPanel,
 	}
 
+	local CHAT_MENTION = "\255\255\0\0"
+	local CHAT_ME = WG.Chobby.Configuration.meColor
+	
 	local onSaidBattle = function(listener, userName, message)
-		battleRoomConsole:AddMessage(userName .. ": " .. message)
+		local iAmMentioned = (string.find(message, WG.LibLobby.lobby:GetMyUserName()) and userName ~= WG.LibLobby.lobby:GetMyUserName())
+		local chatColour = (iAmMentioned and CHAT_MENTION) or nil
+		battleRoomConsole:AddMessage(message, userName, false, chatColour, false)
 	end
 	battleLobby:AddListener("OnSaidBattle", onSaidBattle)
 
 	local onSaidBattleEx = function(listener, userName, message)
-		battleRoomConsole:AddMessage("\255\0\139\139" .. userName .. " " .. message .. "\b")
+		local iAmMentioned = (string.find(message, WG.LibLobby.lobby:GetMyUserName()) and userName ~= WG.LibLobby.lobby:GetMyUserName())
+		local chatColour = (iAmMentioned and CHAT_MENTION) or CHAT_ME
+		battleRoomConsole:AddMessage(message, userName, false, chatColour, true)
 	end
 	battleLobby:AddListener("OnSaidBattleEx", onSaidBattleEx)
 

@@ -89,8 +89,13 @@ function Interface:JoinBattle(battleID, password, scriptPassword)
 end
 
 function Interface:LeaveBattle()
+	local myBattleID = self:GetMyBattleID()
+	if not myBattleID then
+		Spring.Echo("LeaveBattle sent while not in battle")
+		return
+	end
 	local sendData = {
-		BattleID = self:GetMyBattleID(),
+		BattleID = myBattleID,
 	}
 	self:_SendCommand("LeaveBattle " .. json.encode(sendData))
 	return self

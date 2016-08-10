@@ -182,6 +182,12 @@ function InterfaceSkirmish:SayBattle(message)
 	return self
 end
 
+function InterfaceSkirmish:SayBattleEx(message)
+	self:super("SayBattleEx", message)
+	self:_OnSaidBattleEx(self:GetMyUserName(), message)
+	return self
+end
+
 function InterfaceSkirmish:SetBattleStatus(status)
 	self:super("SetBattleStatus", status)
 	self:_OnUpdateUserBattleStatus(self:GetMyUserName(), status)

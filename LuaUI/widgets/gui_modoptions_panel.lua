@@ -78,7 +78,7 @@ local function CreateModoptionWindow()
 		caption = "",
 		name = "modoptionsSelectionWindow",
 		parent = screen0,
-		width = 720,
+		width = 800,
 		height = 500,
 		resizable = false,
 		draggable = false,
@@ -91,6 +91,7 @@ local function CreateModoptionWindow()
 		tabs[#tabs + 1] = {
 			name = key,
 			caption = data.title,
+			font = WG.Chobby.Configuration:GetFont(2),
 			children = PopulateTab(data.options)
 		}
 	end
@@ -118,7 +119,7 @@ local function CreateModoptionWindow()
 		height = 50,
 		resizable = false,
 		draggable = false,
-		padding = {0, 5, 0, 0},
+		padding = {0, 0, 0, 0},
 		parent = modoptionsSelectionWindow,
 		children = {
 			tabPanel.tabBar
