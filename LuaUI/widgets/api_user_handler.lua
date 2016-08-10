@@ -64,7 +64,12 @@ local function UserLevelToImage(level, isBot, isAdmin)
 	elseif isAdmin then
 		return IMAGE_MODERATOR
 	elseif level then
-		local rankBracket = math.min(8, math.floor(level/10)) + 1
+		local rankBracket 
+		if level < 60 then
+			rankBracket = math.min(12, math.floor(level/5) + 1)
+		else
+			rankBracket = math.min(21, math.floor(level/10) + 7)
+		end
 		return "luaui/images/ranks/" .. rankBracket .. ".png"
 	end
 end
