@@ -158,6 +158,23 @@ function EditBox:_SetSelection(selStart, selStartY, selEnd, selEndY)
 	end
 end
 
+function EditBox:GetPhysicalLinePosition(distanceFromBottom)
+	local lineID = #self.lines - distanceFromBottom
+	if lineID < 1 then
+		return 0
+	end
+	
+	local position = 0
+	for i = #self.physicalLines, 1, -1 do
+		local data = self.physicalLines[i]
+		if data.lineID == lineID then
+			position = data.y
+		elseif data.lineID < lineID then
+			return position
+		end
+	end
+end
+
 function EditBox:_GeneratePhysicalLines(logicalLineID)
 	local line = self.lines[logicalLineID]
 	local text = line.text

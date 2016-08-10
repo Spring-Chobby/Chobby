@@ -61,6 +61,9 @@ function ChatWindows:init()
 		function(listener, chanName, author, changedTime, topic)
 			local channelConsole = self:GetChannelConsole(chanName)
 			if channelConsole ~= nil then
+				if self:IsChannelSelected(chanName) and self.activeUnreadMessages and self.activeUnreadMessages ~= 0 then
+					self.activeUnreadMessages = self.activeUnreadMessages + 1
+				end
 				channelConsole:AddMessage(topic, nil, nil, Configuration.meColor)
 			end
 		end
@@ -108,12 +111,18 @@ function ChatWindows:init()
 	lobby:AddListener("OnSayPrivate",
 		function(listener, userName, message, msgDate)
 			local privateChatConsole = self:GetPrivateChatConsole(userName)
+			if self:IsChannelSelected(userName .. " messages") and self.activeUnreadMessages and self.activeUnreadMessages ~= 0 then
+				self.activeUnreadMessages = self.activeUnreadMessages + 1
+			end
 			privateChatConsole:AddMessage(message, lobby:GetMyUserName(), msgDate)
 		end
 	)
 	lobby:AddListener("OnSayPrivateEx",
 		function(listener, userName, message, msgDate)
 			local privateChatConsole = self:GetPrivateChatConsole(userName)
+			if self:IsChannelSelected(userName .. " messages") and self.activeUnreadMessages and self.activeUnreadMessages ~= 0 then
+				self.activeUnreadMessages = self.activeUnreadMessages + 1
+			end
 			privateChatConsole:AddMessage(message, lobby:GetMyUserName(), msgDate, true)
 		end
 	)
@@ -126,35 +135,57 @@ function ChatWindows:init()
 					channelConsole:AddMessage(message, userName, msgDate)
 				end
 			else
+				local chanName = userName .. " messages"
 				local privateChatConsole = self:GetPrivateChatConsole(userName)
+				if self:IsChannelSelected(chanName) and self.activeUnreadMessages and self.activeUnreadMessages ~= 0 then
+					self.activeUnreadMessages = self.activeUnreadMessages + 1
+				end
 				privateChatConsole:AddMessage(message, userName, msgDate)
-				self:_NotifyTab(userName, userName, "Private", message, "sounds/beep4.wav", 15)
+				self:_NotifyTab(chanName, userName, "Private", message, "sounds/beep4.wav", 15)
 			end
 		end
 	)
 	lobby:AddListener("OnSaidPrivateEx",
 		function(listener, userName, message, msgDate)
+			local chanName = userName .. " messages"
 			local privateChatConsole = self:GetPrivateChatConsole(userName)
+			if self:IsChannelSelected(chanName) and self.activeUnreadMessages and self.activeUnreadMessages ~= 0 then
+				self.activeUnreadMessages = self.activeUnreadMessages + 1
+			end
 			privateChatConsole:AddMessage(message, userName, msgDate, Configuration.meColor, true)
-			self:_NotifyTab(userName, userName, "Private", message, "sounds/beep4.wav", 15)
+			self:_NotifyTab(chanName, userName, "Private", message, "sounds/beep4.wav", 15)
 		end
 	)
 	lobby:AddListener("OnRemoveUser",
 		function(listener, userName)
-			local privateChatConsole = self.privateChatConsoles[userName]
+			local chanName = userName .. " messages"
+			local privateChatConsole = self.privateChatConsoles[chanName]
 			if privateChatConsole ~= nil then
+				if self:IsChannelSelected(chanName) and self.activeUnreadMessages and self.activeUnreadMessages ~= 0 then
+					self.activeUnreadMessages = self.activeUnreadMessages + 1
+				end
 				privateChatConsole:AddMessage(userName .. " is now offline", nil, nil, Configuration.meColor, true)
 			end
 		end
 	)
 	lobby:AddListener("OnAddUser",
 		function(listener, userName)
-			local privateChatConsole = self.privateChatConsoles[userName]
+			local chanName = userName .. " messages"
+			local privateChatConsole = self.privateChatConsoles[chanName]
 			if privateChatConsole ~= nil then
+				if self:IsChannelSelected(chanName) and self.activeUnreadMessages and self.activeUnreadMessages ~= 0 then
+					self.activeUnreadMessages = self.activeUnreadMessages + 1
+				end
 				privateChatConsole:AddMessage(userName .. " just got online", nil, nil, Configuration.meColor, true)
 			end
 		end
 	)
+	
+	self.oldChatLine = Line:New {
+		x = 0,
+		right = 0,
+		height = 1,
+	}
 
 	self.serverPanel = ScrollPanel:New {
 		x = 0,
@@ -181,6 +212,9 @@ function ChatWindows:init()
 				end
 				local console = self.tabbars[name]
 				if console then
+					self.activeUnreadMessages = console.unreadMessages
+					self:UpdateOldChatLinePosition(console)
+					
 					self.totalNewMessages = self.totalNewMessages - console.unreadMessages
 					interfaceRoot.GetRightPanelHandler().SetActivity("chat", self.totalNewMessages)
 					console.unreadMessages = 0
@@ -342,6 +376,31 @@ function ChatWindows:init()
 	self:UpdateJoinPosition()
 end
 
+function ChatWindows:IsChannelSelected(chanName)
+	return self.tabPanel.tabBar:IsSelected(chanName)
+end
+
+function ChatWindows:UpdateOldChatLinePosition(console)
+	if not (self:IsChannelSelected(console.channelName) and console.tbHistory) then
+		return
+	end
+	
+	if self.oldChatLine.parent then
+		self.oldChatLine.parent:RemoveChild(self.oldChatLine)
+	end
+	
+	if not (self.activeUnreadMessages and self.activeUnreadMessages ~= 0) then
+		return
+	end
+	console.spHistory:AddChild(self.oldChatLine)
+	
+	local position = console.tbHistory:GetPhysicalLinePosition(self.activeUnreadMessages) + 8
+	self.oldChatLine:SetPos(0, position)
+	self.oldChatLine._relativeBounds.right = 0
+	self.oldChatLine:UpdateClientArea()
+	self.oldChatLine:BringToFront()
+end
+
 function ChatWindows:CycleTab(direction)
 	local selected = self.tabPanel.tabBar.selected
 	local children = self.tabPanel.tabBar.children
@@ -361,6 +420,9 @@ function ChatWindows:ProcessChat(chanName, userName, message, msgDate, notifyCol
 	if channelConsole ~= nil then
 		local iAmMentioned = (string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName())
 		local chatColour = (iAmMentioned and notifyColor) or chatColor
+		if self:IsChannelSelected(chanName) and self.activeUnreadMessages and self.activeUnreadMessages ~= 0 then
+			self.activeUnreadMessages = self.activeUnreadMessages + 1
+		end
 		channelConsole:AddMessage(message, userName, msgDate, chatColour, thirdPerson)
 		if iAmMentioned then
 			self:_NotifyTab(chanName, userName, chanName, true, message, "sounds/beep4.wav", 15)
@@ -614,7 +676,10 @@ function ChatWindows:GetChannelConsole(chanName)
 				lobby:Say(chanName, message)
 			end
 		end
-		channelConsole = Console(chanName, MessageListener)
+		local function Resize(obj)
+			self:UpdateOldChatLinePosition(obj)
+		end
+		channelConsole = Console(chanName, MessageListener, nil, Resize)
 		self.channelConsoles[chanName] = channelConsole
 
 		Configuration.channels[chanName] = true
@@ -683,7 +748,8 @@ function ChatWindows:GetChannelConsole(chanName)
 end
 
 function ChatWindows:GetPrivateChatConsole(userName)
-	local privateChatConsole = self.privateChatConsoles[userName]
+	local chanName = userName .. " messages"
+	local privateChatConsole = self.privateChatConsoles[chanName]
 
 	if privateChatConsole == nil then
 		local function MessageListener(message)
@@ -693,8 +759,11 @@ function ChatWindows:GetPrivateChatConsole(userName)
 				lobby:SayPrivate(userName, message)
 			end
 		end
-		privateChatConsole = Console(userName .. " messages", MessageListener)
-		self.privateChatConsoles[userName] = privateChatConsole
+		local function Resize(obj)
+			self:UpdateOldChatLinePosition(obj)
+		end
+		privateChatConsole = Console(chanName, MessageListener, nil, Resize)
+		self.privateChatConsoles[chanName] = privateChatConsole
 		
 		local caption = "@" .. userName
 		local myFont = Font:New(Configuration:GetFont(1))
@@ -705,8 +774,8 @@ function ChatWindows:GetPrivateChatConsole(userName)
 			caption = "x",
 			OnClick = {
 				function()
-					self.privateChatConsoles[userName] = nil
-					self.tabPanel:RemoveTab(userName, true)
+					self.privateChatConsoles[chanName] = nil
+					self.tabPanel:RemoveTab(chanName, true)
 					self:UpdateJoinPosition()
 				end
 			},
@@ -715,7 +784,7 @@ function ChatWindows:GetPrivateChatConsole(userName)
 		self.ignoreTabClick = true
 		self.tabPanel:AddTab(
 			{
-				name = userName,
+				name = chanName,
 				caption = caption,
 				font = Configuration:GetFont(1),
 				children = {
@@ -732,12 +801,12 @@ function ChatWindows:GetPrivateChatConsole(userName)
 			self.tabPanel.tabBar:DisableHighlight()
 		end
 		self.ignoreTabClick = false
-		self.tabbars[userName] = privateChatConsole
+		self.tabbars[chanName] = privateChatConsole
 		
 		self:UpdateJoinPosition()
 		
-		if self.switchToTab and self.switchToTab == userName then
-			self.tabPanel.tabBar:Select(userName)
+		if self.switchToTab and self.switchToTab == chanName then
+			self.tabPanel.tabBar:Select(chanName)
 			self.switchToTab = false
 		end
 	end

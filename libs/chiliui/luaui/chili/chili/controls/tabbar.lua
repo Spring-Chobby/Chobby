@@ -26,7 +26,13 @@ function TabBar:New(obj)
 	if (obj.tabs) then
 		for i=1,#obj.tabs do
 			obj:AddChild(
-				TabBarItem:New{name = obj.tabs[i].name, caption = obj.tabs[i].caption or obj.tabs[i].name, defaultWidth = obj.minItemWidth, defaultHeight = obj.minItemHeight} --FIXME inherit font too
+				TabBarItem:New{
+					name = obj.tabs[i].name,
+					caption = obj.tabs[i].caption or obj.tabs[i].name,
+					font = obj.tabs[i].font,
+					defaultWidth = obj.minItemWidth,
+					defaultHeight = obj.minItemHeight,
+				}
 			)
 		end
 	end
@@ -90,6 +96,12 @@ function TabBar:Select(tabname, highlight)
 	return false
 end
 
+function TabBar:IsSelected(name)
+	if not self.selected then
+		return false
+	end
+	return self.children[self.selected].name == name
+end
 
 function TabBar:Remove(tabname, updateSelection)
 	for i = 1, #self.children do

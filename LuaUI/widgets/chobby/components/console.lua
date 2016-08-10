@@ -1,16 +1,26 @@
 Console = LCS.class{}
 
-function Console:init(channelName, sendMessageListener, noHistoryLoad)
+function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeFunc)
 	self.listener = sendMessageListener
 	self.showDate = true
 	self.dateFormat = "%H:%M"
 	
 	self.channelName = channelName
-
+	
+	local onResize
+	if onResizeFunc then
+		onResize = {
+			function () 
+				onResizeFunc(self) 
+			end
+		}
+	end
+	
 	-- TODO: currently this is handled by chat windows and battleroom chat separately
 	self.unreadMessages = 0
 
 	self.spHistory = ScrollPanel:New {
+		name = self.channelName and (self.channelName .. " scroll panel"),
 		x = 0,
 		right = 2,
 		y = 0,
@@ -41,7 +51,9 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad)
 			end
 			obj._inmousemove = true
 		end},
+		onResize = onResize
 	}
+	
 	self.ebInputText = EditBox:New {
 		x = 0,
 		bottom = 7,
@@ -257,7 +269,5 @@ function Console:LoadHistory(numLines)
 			end
 		end
 	end
-	
 	--local logFile, errorMessage = io.open(, 'r')
-
 end
