@@ -316,7 +316,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			entryCheck = WG.MultiplayerEntryPopup,
 			tabs = {
 				{name = "matchmaking", control = queueListWindow.window},
-				{name = "custom", control = battleListWindow.window},
+				{name = "serverList", control = battleListWindow.window},
 			},
 			cleanupFunction = CleanMultiplayerState
 		},

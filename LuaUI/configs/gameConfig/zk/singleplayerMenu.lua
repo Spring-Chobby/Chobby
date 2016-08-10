@@ -4,7 +4,7 @@ return {
 		control = Control:New {},
 	},
 	{
-		name = "custom", 
+		name = "skirmish", 
 		control = WG.BattleRoomWindow.GetSingleplayerControl(),
 		entryCheck = WG.BattleRoomWindow.SetSingleplayerGame,
 	},
