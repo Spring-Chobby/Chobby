@@ -66,6 +66,8 @@ end
 --------------------------------------------------------------------------------
 -- Initialization
 
+local COMBO_X = 230
+local CHECK_WIDTH = 190
 
 local function InitializeControls(window)
 	window.OnParent = nil
@@ -85,25 +87,25 @@ local function InitializeControls(window)
 		font = Configuration:GetFont(4),
 		caption = "Lobby",
 	}
-	offset = offset + 20
-	
 	offset = offset + 10
+	
+	offset = offset + 30
 	Label:New {
-		x = 40,
+		x = 60,
 		y = offset,
 		width = 90,
 		height = 40,
 		valign = "center",
-		align = "right",
+		align = "left",
 		parent = window,
 		font = Configuration:GetFont(2),
 		caption = "Display:",
 	}
 	ComboBox:New {
-		x = 140,
+		x = COMBO_X,
 		y = offset,
 		width = 180,
-		height = 45,
+		height = 25,
 		parent = window,
 		items = {"Fullscreen Window", "Windowed", "Fullscreen"},
 		font = Configuration:GetFont(2),
@@ -122,25 +124,24 @@ local function InitializeControls(window)
 			end
 		},
 	}
-	offset = offset + 40
 	
-	offset = offset + 10
+	offset = offset + 30
 	Label:New {
-		x = 40,
+		x = 60,
 		y = offset,
 		width = 90,
 		height = 40,
 		valign = "center",
-		align = "right",
+		align = "left",
 		parent = window,
 		font = Configuration:GetFont(2),
 		caption = "Panels:",
 	}
 	ComboBox:New {
-		x = 140,
+		x = COMBO_X,
 		y = offset,
 		width = 180,
-		height = 45,
+		height = 25,
 		parent = window,
 		items = {"Autodetect", "Always Two", "Always One"},
 		font = Configuration:GetFont(2),
@@ -155,11 +156,11 @@ local function InitializeControls(window)
 			end
 		},
 	}
-	offset = offset + 40
 	
+	offset = offset + 30
 	local autoLogin = Checkbox:New {
 		x = 60,
-		width = 200,
+		width = CHECK_WIDTH,
 		y = offset,
 		height = 40,
 		parent = window,
@@ -174,11 +175,11 @@ local function InitializeControls(window)
 			freezeSettings = false
 		end},
 	}
-	offset = offset + 30
 	
+	offset = offset + 30
 	local notifyAllChat = Checkbox:New {
 		x = 60,
-		width = 200,
+		width = CHECK_WIDTH,
 		y = offset,
 		height = 40,
 		parent = window,
@@ -191,11 +192,11 @@ local function InitializeControls(window)
 			Configuration:SetConfigValue("notifyForAllChat", newState)
 		end},
 	}
-	offset = offset + 30
 	
+	offset = offset + 30
 	local mapWhitelist = Checkbox:New {
 		x = 60,
-		width = 200,
+		width = CHECK_WIDTH,
 		y = offset,
 		height = 40,
 		parent = window,
@@ -208,11 +209,11 @@ local function InitializeControls(window)
 			Configuration:SetConfigValue("onlyShowFeaturedMaps", newState)
 		end},
 	}
-	offset = offset + 30
 	
+	offset = offset + 30
 	local debugMode = Checkbox:New {
 		x = 60,
-		width = 200,
+		width = CHECK_WIDTH,
 		y = offset,
 		height = 40,
 		parent = window,
@@ -225,17 +226,17 @@ local function InitializeControls(window)
 			Configuration:SetConfigValue("debugMode", newState)
 		end},
 	}
-	offset = offset + 30
 	
+	offset = offset + 30
 	local useSpringRestart = Checkbox:New {
 		x = 60,
-		width = 200,
+		width = CHECK_WIDTH,
 		y = offset,
 		height = 40,
 		parent = window,
 		boxalign = "right",
 		boxsize = 20,
-		caption = "Use Spring.Restart            EXPERIMENTAL",
+		caption = "Use Spring.Restart          EXPERIMENTAL",
 		checked = Configuration.useSpringRestart or false,
 		font = Configuration:GetFont(2),
 		OnChange = {function (obj, newState)
@@ -260,23 +261,23 @@ local function InitializeControls(window)
 	}
 	offset = offset + 20
 	
-	offset = offset + 10
+	offset = offset + 30
 	Label:New {
-		x = 40,
+		x = 60,
 		y = offset,
 		width = 90,
-		height = 45,
+		height = 25,
 		valign = "center",
-		align = "right",
+		align = "left",
 		parent = window,
 		font = Configuration:GetFont(2),
 		caption = "Display:",
 	}
 	ComboBox:New {
-		x = 140,
+		x = COMBO_X,
 		y = offset,
 		width = 180,
-		height = 45,
+		height = 25,
 		parent = window,
 		items = {"Fullscreen Window", "Windowed", "Fullscreen"},
 		font = Configuration:GetFont(2),
@@ -293,26 +294,25 @@ local function InitializeControls(window)
 			end
 		},
 	}
-	offset = offset + 40
 	
-	offset = offset + 10
+	offset = offset + 30
 	Label:New {
-		x = 40,
+		x = 60,
 		y = offset,
 		width = 90,
 		height = 40,
 		valign = "center",
-		align = "right",
+		align = "left",
 		parent = window,
 		font = Configuration:GetFont(2),
 		caption = "Singleplayer:",
 	}
 	ComboBox:New {
 		name = "gameSelection",
-		x = 140,
+		x = COMBO_X,
 		y = offset,
 		width = 180,
-		height = 45,
+		height = 25,
 		parent = window,
 		items = {"Generic", "Zero-K"},
 		font = Configuration:GetFont(2),
@@ -327,16 +327,15 @@ local function InitializeControls(window)
 			end
 		},
 	}
-	offset = offset + 40
 	
-	offset = offset + 10
+	offset = offset + 30
 	Label:New {
-		x = 40,
+		x = 60,
 		y = offset,
 		width = 90,
 		height = 40,
 		valign = "center",
-		align = "right",
+		align = "left",
 		parent = window,
 		font = Configuration:GetFont(2),
 		caption = "Settings:",
@@ -348,9 +347,9 @@ local function InitializeControls(window)
 	local function SettingsButton(x, y, caption, settings)
 		local button = Button:New {
 			name = caption,
-			x = 90*x,
+			x = 95*x,
 			y = 55*y, 
-			width = 80, 
+			width = 85, 
 			height = 45,
 			caption = caption,
 			font = Configuration:GetFont(2),

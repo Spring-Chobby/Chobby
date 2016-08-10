@@ -203,7 +203,7 @@ function ChatWindows:init()
 		height = 50,
 		resizable = false,
 		draggable = false,
-		padding = {10, 10, 0, 0},
+		padding = {0, 10, 0, 0},
 		children = {
 			self.tabPanel.tabBar
 		}
@@ -374,7 +374,7 @@ function ChatWindows:ReattachTabHolder()
 	if not self.chatWindow:GetChildByName(self.tabBarHolder.name) then
 		self.chatWindow:AddChild(self.tabBarHolder)
 	end
-	self.tabBarHolder:SetPos(0,0)
+	self.tabBarHolder:SetPos(13,0)
 	self.tabBarHolder:BringToFront()
 	self.tabBarHolder._relativeBounds.right = 0
 	self.tabBarHolder:UpdateClientArea(false)

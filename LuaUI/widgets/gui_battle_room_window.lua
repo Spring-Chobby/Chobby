@@ -497,25 +497,25 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 end
 
 local function AddTeamButtons(parent, offX, joinFunc, aiFunc)
-	local joinTeamButton = Button:New {
-		name = "joinTeamButton",
-		x = offX,
-		y = 4,
-		height = 24,
-		width = 75,
-		font =  WG.Chobby.Configuration:GetFont(3),
-		caption = i18n("join") .. "\b",
-		OnClick = {joinFunc},
-		parent = parent,
-	}
 	local addAiButton = Button:New {
-		x = offX + 85,
+		x = offX,
 		y = 4,
 		height = 24,
 		width = 75,
 		font = WG.Chobby.Configuration:GetFont(3),
 		caption = i18n("add_ai") .. "\b",
 		OnClick = {aiFunc},
+		parent = parent,
+	}
+	local joinTeamButton = Button:New {
+		name = "joinTeamButton",
+		x = offX + 85,
+		y = 4,
+		height = 24,
+		width = 75,
+		font =  WG.Chobby.Configuration:GetFont(3),
+		caption = i18n("join") .. "\b",
+		OnClick = {joinFunc},
 		parent = parent,
 	}
 end

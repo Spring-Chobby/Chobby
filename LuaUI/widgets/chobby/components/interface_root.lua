@@ -11,12 +11,17 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	local battleStatusWidth = 480
 	local panelButtonsWidth = 500
-	local panelButtonsHeight = 50
-	local statusWindowGapSmall = 45
+	local panelButtonsHeight = 42
+	local statusWindowGapSmall = 44
+	
+	local chatTabHolderHeight = 50
 	
 	local battleStatusTopPadding = 20
 	local battleStatusBottomPadding = 20
 	local battleStatusLeftPadding = 30
+	
+	local smallStatusLeftPadding = 5
+	local battleStatusTopPaddingSmall = 5
 	
 	local chatTabHolderRight = 0
 	
@@ -357,7 +362,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			end
 			
 		else
-			chatWindows:SetTabHolderParent(mainStatusWindow, 0, titleHeightSmall - panelButtonsHeight + imageFudge, chatTabHolderRight)
+			chatWindows:SetTabHolderParent(mainStatusWindow, smallStatusLeftPadding, titleHeightSmall - chatTabHolderHeight + imageFudge, chatTabHolderRight)
 			
 			rightPanelHandler.UpdateLayout(contentPlace, true)
 			if contentPlace:IsEmpty() and not panelWindow:IsEmpty() then
@@ -518,7 +523,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			userStatusWindow._relativeBounds.bottom = 0
 			userStatusWindow:UpdateClientArea()
 			
-			battleStatusHolder:SetPos(0, 0)
+			battleStatusHolder:SetPos(smallStatusLeftPadding, battleStatusTopPaddingSmall)
 			battleStatusHolder._relativeBounds.bottom = statusWindowGapSmall
 			battleStatusHolder:UpdateClientArea()
 			

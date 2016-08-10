@@ -125,18 +125,18 @@ local function GetBattleInfoHolder(parent, battleID)
 	
 	function externalFunctions.Resize(smallMode)
 		if smallMode then
-			minimap:SetPos(nil, nil, 37, 37)
+			minimap:SetPos(nil, nil, 33, 33)
 			
 			lblTitle.font.size = Configuration:GetFont(1).size
-			lblTitle:SetPos(43, 3, 160)
+			lblTitle:SetPos(43, 1, 160)
 			
 			lblPlayerStatus.font.size = Configuration:GetFont(2).size
-			lblPlayerStatus:SetPos(66, 20)
+			lblPlayerStatus:SetPos(66, 18)
 			
-			imPlayerStatus:SetPos(45, 19, 17, 17)
+			imPlayerStatus:SetPos(45, 17, 17, 17)
 			
 			lblPlayers.font.size = Configuration:GetFont(2).size
-			lblPlayers:SetPos(160, 20)
+			lblPlayers:SetPos(160, 18)
 			
 			playersPrefix = PLAYER_PREFIX_SMALL
 		else

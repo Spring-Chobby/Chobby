@@ -80,7 +80,7 @@ local function InitializeControls(window)
 		y = 5,
 		right = 5,
 		width = 100, 
-		height = 40,
+		height = 41,
 		caption = i18n("login"),
 		parent = window,
 		font = WG.Chobby.Configuration:GetFont(3),
@@ -102,7 +102,7 @@ local function InitializeControls(window)
 	local userControl
 	onAccepted = function(listener)
 		userControl = WG.UserHandler.GetStatusUser(lobby:GetMyUserName())
-		userControl:SetPos(nil, 45)
+		userControl:SetPos(nil, 54)
 		window:AddChild(userControl)
 		lobby:Ping()
 	end
