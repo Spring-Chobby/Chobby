@@ -103,9 +103,9 @@ local function InitializeControls(window)
 	}
 	ComboBox:New {
 		x = COMBO_X,
-		y = offset,
+		y = offset + 2,
 		width = 180,
-		height = 25,
+		height = 26,
 		parent = window,
 		items = {"Fullscreen Window", "Windowed", "Fullscreen"},
 		font = Configuration:GetFont(2),
@@ -139,9 +139,9 @@ local function InitializeControls(window)
 	}
 	ComboBox:New {
 		x = COMBO_X,
-		y = offset,
+		y = offset + 2,
 		width = 180,
-		height = 25,
+		height = 26,
 		parent = window,
 		items = {"Autodetect", "Always Two", "Always One"},
 		font = Configuration:GetFont(2),
@@ -275,9 +275,9 @@ local function InitializeControls(window)
 	}
 	ComboBox:New {
 		x = COMBO_X,
-		y = offset,
+		y = offset + 2,
 		width = 180,
-		height = 25,
+		height = 26,
 		parent = window,
 		items = {"Fullscreen Window", "Windowed", "Fullscreen"},
 		font = Configuration:GetFont(2),
@@ -310,9 +310,9 @@ local function InitializeControls(window)
 	ComboBox:New {
 		name = "gameSelection",
 		x = COMBO_X,
-		y = offset,
+		y = offset + 2,
 		width = 180,
-		height = 25,
+		height = 26,
 		parent = window,
 		items = {"Generic", "Zero-K"},
 		font = Configuration:GetFont(2),
