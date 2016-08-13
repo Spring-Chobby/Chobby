@@ -202,11 +202,12 @@ local function PlayScriptLine(line)
       waitTime = waitTime or options.waitTime.value
     end
     
+    -- automatically hide text box while in wait mode, show otherwise
     if not data.nvlMode then
-      if not waitTime then
+      if (action == 'AddText' or (not waitTime)) and textPanel.hidden then
         textPanel:Show()
         ResetMainLayers()
-      else
+      elseif not textPanel.hidden and (type(waitTime) == 'number' and (waitTime > 0)) then
         textPanel:Hide()
       end
     end
@@ -354,26 +355,28 @@ local function AdvanceAnimations(dt)
       if anim.endColor then
         target.color = target.color or {1, 1, 1, 1}
         for i=1,4 do
-          target.color[i] = anim.endColor[i] * proportion + anim.startColor[i] * (1 - proportion)
+          target.color[i] = anim.endColor[i] * math.sin(proportion * math.pi * 0.5) + anim.startColor[i] * math.cos(proportion * math.pi * 0.5)
         end
         if (dissolve) then
           target.color2 = target.color2 or Spring.Utilities.CopyTable(target.color) or {1, 1, 1, 1}
           for i=1,4 do
-            target.color2[i] = anim.endColor[i] * (1 - proportion) + anim.startColor[i] * proportion
+            target.color2[i] = anim.endColor[i] * math.cos(proportion * math.pi * 0.5) + anim.startColor[i] * math.sin(proportion * math.pi * 0.5)
           end
         end
       elseif anim.endAlpha then
         target.color = target.color or {1, 1, 1, 1}
-        target.color[4] = anim.endAlpha * proportion + anim.startAlpha * (1 - proportion)
+        target.color[4] = anim.endAlpha * math.sin(proportion * math.pi * 0.5) + anim.startAlpha * math.cos(proportion * math.pi * 0.5)
         if dissolve then
           target.color2 = target.color2 or Spring.Utilities.CopyTable(target.color) or {1, 1, 1, 1}
-          target.color2[4] = anim.endAlpha * (1- proportion) + anim.startAlpha * proportion
+          target.color2[4] = anim.endAlpha * math.cos(proportion * math.pi * 0.5) + anim.startAlpha * math.sin(proportion * math.pi * 0.5)
         end
       end
       target:Invalidate()
     end
     
     if done then
+      target.color = anim.endColor or target.color
+      target.color[4] = anim.endAlpha or target.color[4]
       toRemove[#toRemove+1] = i
     end
   end
@@ -460,6 +463,14 @@ local function AddAnimation(args, image)
   local anim = args.animation
   anim.image = args.id
   image.color = args.startColor or image.color or {1, 1, 1, 1}
+  
+  if anim.type == "dissolve" and (not anim.startColor) then
+    anim.startAlpha = anim.startAlpha or 0
+  end
+  if anim.type == "dissolve" and (not anim.endColor) then
+    anim.endAlpha = anim.endAlpha or 1
+  end
+  
   image.color[4] = anim.startAlpha or 1
   
   anim.startX = anim.startX or args.x
@@ -689,6 +700,7 @@ scriptFunctions = {
   AddBackground = function(args)
     local argsType = type(args)
     local image = (argsType == 'string' and args) or (argsType == 'table' and args.file)
+    background.oldFile = background.file
     background.file = GetFilePath(image)
     data.backgroundFile = image
     if (argsType == 'table' and args.animation) then
@@ -1219,7 +1231,6 @@ local function LoadStory(storyID, dir)
   end
   for _,charDefPath in ipairs(defs.storyInfo.characterDefs) do
     local path = defs.storyDir .. charDefPath
-    Spring.Echo("kekeke", path)
     if VFS.FileExists(path, VFS.RAW_FIRST) then
       local loadedCharDefs = VFS.Include(path)	--Spring.Utilities.json.decode(VFS.LoadFile(path, VFS.ZIP))
       for charName,data in pairs(loadedCharDefs) do
@@ -1310,7 +1321,7 @@ function widget:Initialize()
     x = screen0.width*0.5 - WINDOW_WIDTH/2,
     y = screen0.height/2 - WINDOW_HEIGHT/2 - 8,
     width  = WINDOW_WIDTH,
-    height = WINDOW_HEIGHT + 24,
+    height = WINDOW_HEIGHT + 32,
     padding = {8, 8, 8, 8};
     --autosize   = true;
     parent = screen0,
@@ -1480,7 +1491,7 @@ function widget:Initialize()
     x = 0,
     y = 24,
     right = 0,
-    bottom = 0,
+    height = WINDOW_HEIGHT,
     keepAspect = false,
     itemMargin = {0, 0, 0, 0},
     file = string.sub(DIR, 1, -9) .. "Images/vn/bg_black.png",
