@@ -58,17 +58,19 @@ local function CountryShortnameToFlag(shortname)
 	end
 end
 
-local function UserLevelToImage(level, isBot, isAdmin)
+local function UserLevelToImage(level, isBot, isAdmin, rank)
 	if isBot then
 		return IMAGE_AUTOHOST
 	elseif isAdmin then
 		return IMAGE_MODERATOR
-	elseif level then
-		local rankBracket 
-		if level < 60 then
-			rankBracket = math.min(12, math.floor(level/5) + 1)
-		else
-			rankBracket = math.min(21, math.floor(level/10) + 7)
+	elseif level or rank then
+		local rankBracket = rank
+		if not rankBracket then
+			if level < 60 then
+				rankBracket = math.min(12, math.floor(level/5) + 1)
+			else
+				rankBracket = math.min(21, math.floor(level/10) + 7)
+			end
 		end
 		return "luaui/images/ranks/" .. rankBracket .. ".png"
 	end
@@ -149,7 +151,7 @@ local function GetUserRankImageName(userName, userControl)
 	if userControl.isSingleplayer and not userBattleInfo.aiLib then
 		return IMAGE_PLAYER
 	end
-	return UserLevelToImage(userInfo.level, userInfo.isBot or userBattleInfo.aiLib, userInfo.isAdmin)
+	return UserLevelToImage(userInfo.level, userInfo.isBot or userBattleInfo.aiLib, userInfo.isAdmin, userInfo.rank)
 end
 
 local function GetUserStatusImages(userName, isInBattle, userControl)
@@ -190,6 +192,17 @@ local function UpdateUserBattleStatus(listener, userName)
 				data.syncStatus.file = GetUserSyncStatus(userName, data)
 				data.syncStatus:Invalidate()
 			end
+		end
+	end
+end
+
+local function UpdateUserCountry(listener, userName, country)
+	for i = 1, #userListList do
+		local userList = userListList[i]
+		local data = userList[userName]
+		if data then
+			data.country.file = GetUserCountryImage(userName, data)
+			data.country:Invalidate()
 		end
 	end
 end
@@ -481,6 +494,7 @@ local function AddListeners()
 	lobby:AddListener("OnUpdateUserStatus", UpdateUserActivity)
 	lobby:AddListener("OnUpdateUserBattleStatus", UpdateUserBattleStatus)
 	WG.LibLobby.localLobby:AddListener("OnUpdateUserBattleStatus", UpdateUserBattleStatus)
+	lobby:AddListener("OnAddUser", UpdateUserCountry)
 end
 
 --------------------------------------------------------------------------------

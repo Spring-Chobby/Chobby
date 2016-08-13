@@ -56,7 +56,6 @@ end
 function Chobby:_Initialize()
 	self:WrapCall(function()
 		WG.Delay(function()
-			--self.downloader = Downloader()
 			--local statusBar = StatusBar()
 			local background = Background(true)
 			

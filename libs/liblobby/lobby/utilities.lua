@@ -7,14 +7,6 @@ function dumpConfig()
 	end
 end
 
-function string.starts(String,Start)
-	return string.sub(String,1,string.len(Start))==Start
-end
-
-function string.ends(String,End)
-	return End=='' or string.sub(String,-string.len(End))==End
-end
-
 function explode(div,str)
 if (div=='') then return false end
 local pos,arr = 0,{}
@@ -87,3 +79,10 @@ function ShallowCopy(orig)
 	return copy
 end
 
+function rshift(x, by)
+  return math.floor(x / 2 ^ by)
+end
+
+function lshift(x, by)
+  return x * 2 ^ by
+end

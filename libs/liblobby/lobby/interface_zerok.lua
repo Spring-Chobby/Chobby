@@ -410,12 +410,12 @@ Interface.jsonCommands["BattleRemoved"] = Interface._BattleRemoved
 
 function Interface:_JoinedBattle(data)
 	-- {"BattleID":3,"User":"Neptunium"}
-	if data.User ~= self:GetBattle(data.BattleID).founder then
-		self:_OnJoinedBattle(data.BattleID, data.User, 0)
-	end
 	if data.User == self:GetMyUserName() then
 		self:_OnBattleScriptPassword(data.ScriptPassword)
 		self:_OnJoinBattle(data.BattleID, 0)
+	end
+	if data.User ~= self:GetBattle(data.BattleID).founder then
+		self:_OnJoinedBattle(data.BattleID, data.User, 0)
 	end
 end
 Interface.jsonCommands["JoinedBattle"] = Interface._JoinedBattle

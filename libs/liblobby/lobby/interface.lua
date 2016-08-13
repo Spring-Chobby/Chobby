@@ -64,17 +64,53 @@ end
 
 function Interface:SetBattleStatus(status)
 	self:super("SetBattleStatus", status)
-	status.isReady = status.isReady or self:GetMyIsReady()
-	status.teamNumber = status.teamNumber or self:GetMyTeamNumber()
-	status.teamColor = status.teamColor or self:GetMyTeamColor()
-	status.allyNumber = status.allyNumber or self:GetMyAllyNumber()
-	status.isSpectator = status.isSpectator or self:GetMyIsSpectator()
-	status.sync = status.sync or self:GetMySync()
-	status.side = status.side or self:GetMySide()
+	local bs = {}
+	if status.isReady ~= nil then
+		bs.isReady     = status.isReady
+	else
+		status.isReady = self:GetMyIsReady()
+	end
+	if status.teamNumber ~= nil then
+		bs.teamNumber  = status.teamNumber
+	else
+		bs.teamNumber  = self:GetMyTeamNumber() or 0
+	end
+	if status.teamColor ~= nil then
+		bs.teamColor   = status.teamColor
+	else
+		bs.teamColor   = self:GetMyTeamColor()
+	end
+	if status.allyNumber ~= nil then
+		bs.allyNumber  = status.allyNumber 
+	else
+		bs.allyNumber  = self:GetMyAllyNumber() or 0
+	end
+	if status.isSpectator ~= nil then 
+		bs.isSpectator = status.isSpectator
+	else
+		bs.isSpectator = self:GetMyIsSpectator()
+	end
+	if status.sync ~= nil then
+		bs.sync        = status.sync
+	else
+		bs.sync        = self:GetMySync()
+	end
+	if status.side ~= nil then
+		bs.side        = status.side
+	else
+		bs.side        = self:GetMySide() or 0
+	end
 
-	local battleStatus = tostring((status.isReady and 2 or 0) + (status.isSpectator and 2^10 or 0) + (status.sync and 2^22 or 2^23))
+	local battleStatusString = tostring(
+		(bs.isReady and 2 or 0) +
+		lshift(bs.teamNumber, 2) +
+		lshift(bs.allyNumber, 6) +
+		(bs.isSpectator and 0 or 2^10) +
+		(bs.sync and 2^22 or 2^23) +
+		lshift(bs.side, 24)
+	)
 	myTeamColor = status.teamColor or math.floor(math.random() * 255 * 2^16 + math.random() * 255 * 2^8 + math.random() * 255)
-	self:_SendCommand(concat("MYBATTLESTATUS", battleStatus, myTeamColor))
+	self:_SendCommand(concat("MYBATTLESTATUS", battleStatusString, myTeamColor))
 	return self
 end
 
@@ -218,10 +254,11 @@ Interface.commandPattern["REMOVEUSER"] = "(%S+)"
 
 function Interface:_OnClientStatus(userName, status)
 	self:_OnUpdateUserStatus(userName, {
-		isInGame = (status%2 == 1),
-		isAway   = (status%4 >= 2),
-		rank     = (status%64 >= 32),
-		isBot    = (status%128 >= 64),
+		isInGame    = (status%2 == 1),
+		isAway      = (status%4 >= 2),
+		rank        = rshift(status, 2) % 8 + 1,
+		isModerator = rshift(status, 5) % 2 == 1,
+		isBot       = rshift(status, 6) % 2 == 1,
 	})
 end
 Interface.commands["CLIENTSTATUS"] = Interface._OnClientStatus
@@ -288,16 +325,14 @@ Interface.commandPattern["UPDATEBATTLEINFO"] = "(%d+)%s+(%S+)%s+(%S+)%s+(%S+)%s+
 function Interface:_OnClientBattleStatus(userName, battleStatus, teamColor)
 	battleStatus = tonumber(battleStatus)
 	self:_OnUpdateUserBattleStatus(userName, {
-		isReady    = (battleStatus%2 == 1),
-		teamNumber = (battleStatus%4 >= 2),
-		allyNumber = (battleStatus%4 >= 2),
-		mode       = (battleStatus%4 >= 2),
-		handicap   = (battleStatus%4 >= 2),
-		sync       = (battleStatus%4 >= 2),
-		side       = (battleStatus%4 >= 2),
-		-- teamColor
+		isReady      = rshift(battleStatus, 1) % 2 == 1,
+		teamNumber   = rshift(battleStatus, 2) % 16,
+		allyNumber   = rshift(battleStatus, 6) % 16,
+		isSpectator  = rshift(battleStatus, 10) % 2 == 0,
+		handicap     = rshift(battleStatus, 11) % 128,
+		sync         = rshift(battleStatus, 22) % 4,
+		side         = rshift(battleStatus, 24) % 16,
 	})
--- 	self:_OnUpdateUserBattleStatus(userName, battleStatus, teamColor)
 end
 Interface.commands["CLIENTBATTLESTATUS"] = Interface._OnClientBattleStatus
 Interface.commandPattern["CLIENTBATTLESTATUS"] = "(%S+)%s+(%S+)%s+(%S+)"

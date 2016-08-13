@@ -74,8 +74,6 @@ end
 -- end
 
 local function InitializeControls(window)
-	-- TODO: Representing my user should be done in a uniform way: 
-	-- See: https://github.com/Spring-Chobby/Chobby/issues/49
 	btnLogout = Button:New {
 		y = 5,
 		right = 5,
