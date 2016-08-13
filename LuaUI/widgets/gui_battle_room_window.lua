@@ -136,7 +136,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		parent = rightInfo,
 	}
 
-	local minimap = Panel:New {
+	local minimapPanel = Panel:New {
 		x = 0,
 		y = 0,
 		right = 0,
@@ -144,14 +144,27 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		padding = {1,1,1,1},
 		parent = rightInfo,
 	}
-	local minimapImage = Image:New {
+	local btnMinimap = Button:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		parent = minimapPanel,
+		padding = {5,5,5,5},
+		OnClick = {
+			function()
+				WG.Chobby.MapListWindow(battleLobby, battle.gameName, battle.mapName)
+			end
+		},
+	}
+	local imMinimap = Image:New {
 		x = 0,
 		y = 0,
 		right = 0,
 		bottom = 0,
 		keepAspect = true,
 		file = WG.Chobby.Configuration:GetMinimapImage(battle.mapName, battle.gameName),
-		parent = minimap,
+		parent = btnMinimap,
 	}
 
 	local btnStartBattle = Button:New {
@@ -220,18 +233,18 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	rightInfo.OnResize = {
 		function (obj, xSize, ySize)
 			if xSize + minimapBottomClearance < ySize then
-				minimap._relativeBounds.left = 0
-				minimap._relativeBounds.right = 0
-				minimap:SetPos(nil, nil, nil, xSize)
-				minimap:UpdateClientArea()
+				minimapPanel._relativeBounds.left = 0
+				minimapPanel._relativeBounds.right = 0
+				minimapPanel:SetPos(nil, nil, nil, xSize)
+				minimapPanel:UpdateClientArea()
 				
 				lblMapName:SetPos(5, xSize + 5)
 			else
 				local horPadding = ((xSize + minimapBottomClearance) - ySize)/2
-				minimap._relativeBounds.left = horPadding
-				minimap._relativeBounds.right = horPadding
-				minimap:SetPos(nil, nil, nil, ySize - minimapBottomClearance)
-				minimap:UpdateClientArea()
+				minimapPanel._relativeBounds.left = horPadding
+				minimapPanel._relativeBounds.right = horPadding
+				minimapPanel:SetPos(nil, nil, nil, ySize - minimapBottomClearance)
+				minimapPanel:UpdateClientArea()
 				
 				lblMapName:SetPos(5, ySize - minimapBottomClearance + 5)
 			end
@@ -239,8 +252,8 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	}
 	
 	local leftOffset = 0
-	local newTeam = Button:New {
-		name = "newTeam",
+	local btnNewTeam = Button:New {
+		name = "btnNewTeam",
 		x = 5,
 		y = leftOffset,
 		height = 35,
@@ -443,8 +456,8 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		end
 		if mapName then
 			lblMapName:SetCaption(mapName:gsub("_", " "))
-			minimapImage.file = WG.Chobby.Configuration:GetMinimapImage(mapName, battle.gameName)
-			minimapImage:Invalidate()
+			imMinimap.file = WG.Chobby.Configuration:GetMinimapImage(mapName, battle.gameName)
+			imMinimap:Invalidate()
 			
 			-- TODO: Bit lazy here, seeing as we only need to update the map
 			UpdateArchiveStatus()
