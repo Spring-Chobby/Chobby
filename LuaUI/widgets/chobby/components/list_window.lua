@@ -75,9 +75,7 @@ function ListWindow:init(parent, title, noWindow, windowClassname)
 	self.columns = 1
 	self.itemHeight = 60
 	self.itemPadding = 20
-	self.itemNames = {}
-	self.itemPanelMapping = {}
-	self.orderPanelMapping = {}
+	self:Clear()
 end
 
 function ListWindow:OnResize()
@@ -124,11 +122,14 @@ end
 
 function ListWindow:Clear()
 	self.listPanel:ClearChildren()
+	self.itemNames = {}
+	self.itemPanelMapping = {}
+	self.orderPanelMapping = {}
 end
 
 function ListWindow:AddRow(items, id)
 	if self.itemPanelMapping[id] then
-		Spring.Echo("Tried to add duplicate list window item", id)
+		Spring.Log("Chobby", LOG.ERROR, "Tried to add duplicate list window item", id)
 		return
 	end
 	local thisWidth = items[#items].x + items[#items].width
@@ -269,6 +270,7 @@ end
 function ListWindow:RemoveRow(id)
 	local panel = self.itemPanelMapping[id]
 	if not panel then
+		Spring.Log("Chobby", LOG.WARNING, "Trying to remove row which doesn't exist, with ID: " .. tostring(id))
 		return
 	end
 	local index = panel.index

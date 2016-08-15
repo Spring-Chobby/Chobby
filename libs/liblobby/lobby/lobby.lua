@@ -15,8 +15,12 @@ function Lobby:_Clean()
 	self.users = {}
 	self.userCount = 0
 
-	self.friends = {}
+	self.friends = {} -- list
+	self.isFriend = {} -- map
 	self.friendCount = 0
+	self.friendRequests = {} -- list
+	self.hasFriendRequest = {} -- map
+	self.friendRequestCount = 0
 
 	self.channels = {}
 	self.channelCount = 0
@@ -101,6 +105,10 @@ function Lobby:Connect(host, port)
 	return self
 end
 
+function Lobby:Register(userName, password, email)
+	return self
+end
+
 function Lobby:Login(user, password, cpu, localIP, lobbyVersion)
 	self.myUserName = user
 	self.loginData = { user, password, cpu, localIP, lobbyVersion}
@@ -114,6 +122,46 @@ end
 ------------------------
 -- User commands
 ------------------------
+
+-- FIXME: Currently uberserver requires to explicitly ask for the friend and friend request lists. This could be removed to simplify the protocol.
+function Lobby:FriendList()
+	return self
+end
+function Lobby:FriendRequestList()
+	return self
+end
+
+function Lobby:FriendRequest(userName)
+	return self
+end
+
+function Lobby:AcceptFriendRequest(userName)
+	local user = self:GetUser(userName)
+	if user then
+		user.hasFriendRequest = false
+	end
+	return self
+end
+
+function Lobby:DeclineFriendRequest(userName)
+	local user = self:GetUser(userName)
+	if user then
+		user.hasFriendRequest = false
+	end
+	return self
+end
+
+function Lobby:Unfriend(userName)
+	return self
+end
+
+function Lobby:Ignore(userName)
+	return self
+end
+
+function Lobby:Unignore(userName)
+	return self
+end
 
 ------------------------
 -- Battle commands
@@ -285,17 +333,27 @@ function Lobby:_OnAddUser(userName, country, cpu, accountID, lobbyVersion, clan)
 		cpu = cpu,
 		accountID = accountID,
 		lobbyVersion = lobbyVersion,
-		clan = clan
+		clan = clan,
+		isFriend = self.isFriend[userName],
+		hasFriendRequest = self.hasFriendRequest[userName],
 	}
 	self:_CallListeners("OnAddUser", userName, country, cpu, accountID, lobbyVersion, clan)
 end
 
 function Lobby:_OnRemoveUser(userName)
 	if not self.users[userName] then
-		Spring.Echo("Tried to remove missing user", userName)
+		Spring.Log("liblobby", LOG.ERROR, "Tried to remove missing user", userName)
 		return
 	end
+	local userInfo = self.users[userName]
+	-- preserve isFriend/hasFriendRequest
+	local isFriend, hasFriendRequest = userInfo.isFriend, userInfo.hasFriendRequest
 	self.users[userName] = nil
+	if isFriend or hasFriendRequest then
+		userInfo = self:TryGetUser(userName)
+		userInfo.isFriend         = isFriend
+		userInfo.hasFriendRequest = hasFriendRequest
+	end
 	self.userCount = self.userCount - 1
 	self:_CallListeners("OnRemoveUser", userName)
 end
@@ -318,6 +376,63 @@ function Lobby:_OnUpdateUserStatus(userName, status)
 			end
 		end
 	end
+end
+
+function Lobby:_OnFriend(userName)
+	table.insert(self.friends, userName)
+	self.isFriend[userName] = true
+	self.friendCount = self.friendCount + 1
+	local userInfo = self:TryGetUser(userName)
+	userInfo.isFriend = true
+	self:_CallListeners("OnFriend", userName)
+end
+
+function Lobby:_OnUnfriend(userName)
+	for i, v in pairs(self.friends) do
+		if v == userName then
+			table.remove(self.friends, i)
+			break
+		end
+	end
+	self.isFriend[userName] = false
+	self.friendCount = self.friendCount - 1
+	local userInfo = self:GetUser(userName)
+	-- don't need to create offline users in this case
+	if userInfo then
+		userInfo.isFriend = false
+	end
+	self:_CallListeners("OnUnfriend", userName)
+end
+
+function Lobby:_OnFriendList(friends)
+	self.friends = friends
+	self.friendCount = #friends
+	for _, userName in pairs(self.friends) do
+		self.isFriend[userName] = true
+		local userInfo = self:TryGetUser(userName)
+		userInfo.isFriend = true
+	end
+	self:_CallListeners("OnFriendList", self:GetFriends())
+end
+
+function Lobby:_OnFriendRequest(userName)
+	table.insert(self.friendRequests, userName)
+	self.hasFriendRequest[userName] = true
+	self.friendRequestCount = self.friendRequestCount + 1
+	local userInfo = self:TryGetUser(userName)
+	userInfo.hasFriendRequest = true
+	self:_CallListeners("OnFriendRequest", userName)
+end
+
+function Lobby:_OnFriendRequestList(friendRequests)
+	self.friendRequests = friendRequests
+	self.friendRequestCount = #friendRequests
+	for _, userName in pairs(self.friendRequests) do
+		self.hasFriendRequest[userName] = true
+		local userInfo = self:TryGetUser(userName)
+		userInfo.hasFriendRequest = true
+	end
+	self:_CallListeners("OnFriendRequestList", self:GetFriendRequests())
 end
 
 ------------------------
@@ -609,20 +724,6 @@ function Lobby:_OnSayPrivateEx(userName, message, sayTime)
 end
 
 ------------------------
--- Friend & ignore commands
-------------------------
-
-function Lobby:_OnFriendListBEGIN(...)
-	self.friends = {}
-	self.friendCount = 0
-end
-
-function Lobby:_OnFriendList(userName, ...)
-	table.insert(self.friends, userName)
-	self.friendCount = self.friendCount + 1
-end
-
-------------------------
 -- Matchmaking commands
 ------------------------
 
@@ -765,6 +866,18 @@ end
 function Lobby:GetUserCount()
 	return self.userCount
 end
+-- gets the userInfo, or creates a new one with an offline user if it doesn't exist
+function Lobby:TryGetUser(userName)
+	local userInfo = self:GetUser(userName)
+	if not userInfo then
+		userInfo = {
+			userName = userName,
+			isOffline = true
+		}
+		self.users[userName] = userInfo
+	end
+	return userInfo
+end
 function Lobby:GetUser(userName)
 	return self.users[userName]
 end
@@ -783,6 +896,13 @@ end
 -- returns friends table (not necessarily an array)
 function Lobby:GetFriends()
 	return ShallowCopy(self.friends)
+end
+function Lobby:GetFriendRequestCount()
+	return self.friendRequestCount
+end
+-- returns friends table (not necessarily an array)
+function Lobby:GetFriendRequests()
+	return ShallowCopy(self.friendRequests)
 end
 
 -- battles

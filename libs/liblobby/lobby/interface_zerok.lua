@@ -19,6 +19,18 @@ Interface.commandPattern = {}
 -- Connectivity commands
 ------------------------
 
+function Interface:Register(userName, password, email)
+	self:super("Register", userName, password, email)
+	-- FIXME: email argument is currently not sent to the server
+	password = VFS.CalculateHash(password, 0)
+	local sendData = {
+		Name = userName,
+		PasswordHash = password,
+	}
+	self:_SendCommand("Register " .. json.encode(sendData))
+	return self
+end
+
 function Interface:Login(user, password, cpu, localIP, lobbyVersion)
 	self:super("Login", user, password, cpu, localIP)
 	if localIP == nil then
@@ -47,14 +59,39 @@ end
 -- User commands
 ------------------------
 
-function Interface:Register(userName, password, email)
-	-- FIXME: email argument is currently not sent to the server
-	password = VFS.CalculateHash(password, 0)
-	local sendData = {
-		Name = userName,
-		PasswordHash = password,
-	}
-	self:_SendCommand("Register " .. json.encode(sendData))
+function Interface:FriendRequest(userName)
+	self:super("FriendRequest", userName)
+	Spring.Echo("TODO: Implement FriendRequest")
+	return self
+end
+
+function Interface:AcceptFriendRequest(userName)
+	self:super("AcceptFriendRequest", userName)
+	Spring.Echo("TODO: Implement AcceptFriendRequest")
+	return self
+end
+
+function Interface:DeclineFriendRequest(userName)
+	self:super("DeclineFriendRequest", userName)
+	Spring.Echo("TODO: Implement DeclineFriendRequest")
+	return self
+end
+
+function Interface:Unfriend(userName)
+	self:super("Unfriend", userName)
+	Spring.Echo("TODO: Implement Unfriend")
+	return self
+end
+
+function Interface:Ignore(userName)
+	self:super("Ignore", userName)
+	Spring.Echo("TODO: Implement Ignore")
+	return self
+end
+
+function Interface:Unignore(userName)
+	self:super("Unignore", userName)
+	Spring.Echo("TODO: Implement Unignore")
 	return self
 end
 

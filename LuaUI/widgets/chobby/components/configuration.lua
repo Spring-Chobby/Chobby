@@ -197,7 +197,7 @@ function Configuration:GetMinimapSmallImage(mapName, gameName)
 	if minimapImage then
 		return minimapImage
 	end
-	Spring.Echo("Missing minimap image for", mapName)
+	Spring.Log("Chobby", LOG.WARNING, "Missing minimap image for", mapName)
 	return "luaui/images/minimapNotFound1.png"
 end
 
@@ -207,7 +207,7 @@ function Configuration:GetMinimapImage(mapName, gameName)
 	if minimapImage then
 		return minimapImage
 	end
-	Spring.Echo("Missing minimap image for", mapName)
+	Spring.Log("Chobby", LOG.WARNING, "Missing minimap image for", mapName)
 	return "luaui/images/minimapNotFound1.png"
 end
 

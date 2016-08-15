@@ -19,6 +19,14 @@ Interface.commandPattern = {}
 -- Connectivity commands
 ------------------------
 
+function Interface:Register(userName, password, email)
+	self:super("Register", userName, password, email)
+	-- FIXME: email argument is currently not sent to the server
+	password = VFS.CalculateHash(password, 0)
+	self:_SendCommand(concat("REGISTER", userName, password))
+	return self
+end
+
 function Interface:Login(user, password, cpu, localIP)
 	self:super("Login", user, password, cpu, localIP)
 	if localIP == nil then
@@ -45,6 +53,52 @@ end
 ------------------------
 -- User commands
 ------------------------
+
+function Interface:FriendList()
+	self:_SendCommand("FRIENDLIST", true)
+	return self
+end
+
+function Interface:FriendRequestList()
+	self:_SendCommand("FRIENDREQUESTLIST", true)
+	return self
+end
+
+function Interface:FriendRequest(userName)
+	self:super("FriendRequest", userName)
+	self:_SendCommand(concat("FRIENDREQUEST", "userName="..userName))
+	return self
+end
+
+function Interface:AcceptFriendRequest(userName)
+	self:super("AcceptFriendRequest", userName)
+	self:_SendCommand(concat("ACCEPTFRIENDREQUEST", "userName="..userName))
+	return self
+end
+
+function Interface:DeclineFriendRequest(userName)
+	self:super("DeclineFriendRequest", userName)
+	self:_SendCommand(concat("DECLINEFRIENDREQUEST", "userName="..userName))
+	return self
+end
+
+function Interface:Unfriend(userName)
+	self:super("Unfriend", userName)
+	self:_SendCommand(concat("UNFRIEND", "userName="..userName))
+	return self
+end
+
+function Interface:Ignore(userName)
+	self:super("Ignore", userName)
+	self:_SendCommand(concat("IGNORE", "userName="..userName))
+	return self
+end
+
+function Interface:Unignore(userName)
+	self:super("Unignore", userName)
+	self:_SendCommand(concat("UNIGNORE", "userName="..userName))
+	return self
+end
 
 ------------------------
 -- Battle commands
@@ -263,6 +317,70 @@ function Interface:_OnClientStatus(userName, status)
 end
 Interface.commands["CLIENTSTATUS"] = Interface._OnClientStatus
 Interface.commandPattern["CLIENTSTATUS"] = "(%S+)%s+(%S+)"
+
+--friends
+function Interface:_OnFriend(tags)
+	local tags = parseTags(tags)
+	local userName = getTag(tags, "userName", true)
+	self:super("_OnFriend", userName)
+end
+Interface.commands["FRIEND"] = Interface._OnFriend
+Interface.commandPattern["FRIEND"] = "(.+)"
+
+function Interface:_OnUnfriend(tags)
+	local tags = parseTags(tags)
+	local userName = getTag(tags, "userName", true)
+	self:super("_OnUnfriend", userName)
+end
+Interface.commands["UNFRIEND"] = Interface._OnUnfriend
+Interface.commandPattern["UNFRIEND"] = "(.+)"
+
+function Interface:_OnFriendList(tags)
+	local tags = parseTags(tags)
+	local userName = getTag(tags, "userName", true)
+	table.insert(self._friendList, userName)
+end
+Interface.commands["FRIENDLIST"] = Interface._OnFriendList
+Interface.commandPattern["FRIENDLIST"] = "(.+)"
+
+function Interface:_OnFriendListBegin()
+	self._friendList = {}
+end
+Interface.commands["FRIENDLISTBEGIN"] = Interface._OnFriendListBegin
+
+function Interface:_OnFriendListEnd()
+	self:super("_OnFriendList", self._friendList)
+	self._friendList = {}
+end
+Interface.commands["FRIENDLISTEND"] = Interface._OnFriendListEnd
+
+-- friend requests
+function Interface:_OnFriendRequest(tags)
+	local tags = parseTags(tags)
+	local userName = getTag(tags, "userName", true)
+	self:super("_OnFriendRequest", userName)
+end
+Interface.commands["FRIENDREQUEST"] = Interface._OnFriendRequest
+Interface.commandPattern["FRIENDREQUEST"] = "(.+)"
+
+function Interface:_OnFriendRequestList(tags)
+	local tags = parseTags(tags)
+	local userName = getTag(tags, "userName", true)
+	table.insert(self._friendRequestList, userName)
+end
+Interface.commands["FRIENDREQUESTLIST"] = Interface._OnFriendRequestList
+Interface.commandPattern["FRIENDREQUESTLIST"] = "(.+)"
+
+function Interface:_OnFriendRequestListBegin()
+	self._friendRequestList = {}
+end
+Interface.commands["FRIENDREQUESTLISTBEGIN"] = Interface._OnFriendRequestListBegin
+
+function Interface:_OnFriendRequestListEnd()
+	self:super("_OnFriendRequestList", self._friendRequestList)
+	self._friendRequestList = {}
+end
+Interface.commands["FRIENDREQUESTLISTEND"] = Interface._OnFriendRequestListEnd
 
 ------------------------
 -- Battle commands
@@ -568,11 +686,6 @@ function Interface:ForceTeamNo(userName, teamNo)
 	return self
 end
 
-function Interface:FriendList()
-	self:_SendCommand("FRIENDLIST", true)
-	return self
-end
-
 function Interface:GetInGameTime()
 	self:_SendCommand("GETINGAMETIME")
 	return self
@@ -683,13 +796,6 @@ function Interface:ReadyCheckResponse(name, response, responseTime)
 		response.responseTime = responseTime
 	end
 	self:_SendCommand(concat("READYCHECKRESPONSE", json.encode(response)))
-	return self
-end
-
-function Interface:Register(userName, password, email)
-	-- FIXME: email argument is currently not sent to the server
-	password = VFS.CalculateHash(password, 0)
-	self:_SendCommand(concat("REGISTER", userName, password))
 	return self
 end
 
@@ -1170,28 +1276,6 @@ function Interface:_OnInviteTeamDeclined(obj)
 	self:_CallListeners("OnInviteTeamDeclined", obj.userName, obj.reason)
 end
 Interface.jsonCommands["INVITETEAMDECLINED"] = Interface._OnInviteTeamDeclined
-
-function Interface:_OnFriendListParse(tags)
-	local tags = parseTags(tags)
-	local userName = getTag(tags, "userName", true)
-	self:_OnFriendList(userName)
-end
-
-function Interface:_OnFriendList(userName)
-	self:_CallListeners("OnFriendList", userName)
-end
-Interface.commands["FRIENDLIST"] = Interface._OnFriendListParse
-Interface.commandPattern["FRIENDLIST"] = "(.+)"
-
-function Interface:_OnFriendListBegin()
-	self:_CallListeners("OnFriendListBegin")
-end
-Interface.commands["FRIENDLISTBEGIN"] = Interface._OnFriendListBegin
-
-function Interface:_OnFriendListEnd()
-	self:_CallListeners("OnFriendListEnd")
-end
-Interface.commands["FRIENDLISTEND"] = Interface._OnFriendListEnd
 
 function Interface:_OnListQueues(queues)
 	self:_CallListeners("OnListQueues", queues)

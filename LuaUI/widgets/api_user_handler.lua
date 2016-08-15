@@ -23,6 +23,8 @@ local singleplayerUsers = {}
 local channelUsers = {}
 local teamUsers = {}
 local statusUsers = {}
+local friendUsers = {}
+local notificationUsers = {}
 
 local userListList = {
 	battleUsers,
@@ -30,7 +32,9 @@ local userListList = {
 	singleplayerUsers,
 	channelUsers,
 	teamUsers,
-	statusUsers
+	statusUsers,
+	friendUsers,
+	notificationUsers,
 }
 
 local IMAGE_AFK = "luaui/images/away.png"
@@ -118,12 +122,13 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 			end
 		end
 		
-		if userInfo.myFriend then -- TODO: Implement
-			comboOptions[#comboOptions + 1] = "De-Friend"
+		if userInfo.isFriend then
+			comboOptions[#comboOptions + 1] = "Unfriend"
 		else
 			comboOptions[#comboOptions + 1] = "Friend"
 		end
 		comboOptions[#comboOptions + 1] = "Report"
+		comboOptions[#comboOptions + 1] = "Ignore"
 	end
 	
 	if (userBattleInfo.aiLib and userBattleInfo.owner == myUserName) or userControl.lobby:GetMyIsAdmin() then
@@ -272,8 +277,16 @@ local function GetUserControls(userName, autoResize, maxNameLength, isInBattle, 
 						else
 							Spring.Echo("TODO - Implement player kick.")
 						end
+					elseif selectedName == "Unfriend" then
+						userControls.lobby:Unfriend(userName)
 					elseif selectedName == "Friend" then
-						Spring.Echo("TODO - Be Friends.")
+						local userInfo = userControls.lobby:GetUser(userName)
+						if userInfo and userInfo.hasFriendRequest then
+							userControls.lobby:AcceptFriendRequest(userName)
+						else
+							
+							userControls.lobby:FriendRequest(userName)
+						end
 					elseif selectedName == "Join Battle" then
 						local userInfo = userControls.lobby:GetUser(userName) or {}
 						if userInfo.battleID then
@@ -283,6 +296,8 @@ local function GetUserControls(userName, autoResize, maxNameLength, isInBattle, 
 						end
 					elseif selectedName == "Report" then
 						Spring.Echo("TODO - Open the right webpage")
+					elseif selectedName == "Ignore" then
+						userControls.lobby:Ignore(userName)
 					end
 				end
 			}
@@ -480,6 +495,30 @@ function userHandler.GetStatusUser(userName)
 	
 	statusUsers[userName] = GetUserControls(userName, false, WG.Chobby.Configuration.statusMaxNameLength, false, false, false, true)
 	return statusUsers[userName].mainControl
+end
+
+function userHandler.GetFriendUser(userName)
+	if friendUsers[userName] then
+		if friendUsers[userName].needReinitialization then
+			friendUsers[userName] = GetUserControls(userName, false, WG.Chobby.Configuration.friendMaxNameLength, false, false, friendUsers[userName], false)
+		end
+		return friendUsers[userName].mainControl
+	end
+	
+	friendUsers[userName] = GetUserControls(userName, false, WG.Chobby.Configuration.friendMaxNameLength, false, false, false, false)
+	return friendUsers[userName].mainControl
+end
+
+function userHandler.GetNotificationUser(userName)
+	if notificationUsers[userName] then
+		if notificationUsers[userName].needReinitialization then
+			notificationUsers[userName] = GetUserControls(userName, false, WG.Chobby.Configuration.friendMaxNameLength, false, false, notificationUsers[userName], false)
+		end
+		return notificationUsers[userName].mainControl
+	end
+	
+	notificationUsers[userName] = GetUserControls(userName, false, WG.Chobby.Configuration.friendMaxNameLength, false, false, false, false)
+	return notificationUsers[userName].mainControl
 end
 
 --------------------------------------------------------------------------------

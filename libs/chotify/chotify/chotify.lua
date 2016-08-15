@@ -54,20 +54,23 @@ function Chotify:Post(obj)
         height = 100,
         caption = title,
         parent = Chili.Screen0,
-        children = {
-            Chili.Label:New {
-                x = 0,
-                right = 20,
-                y = 0,
-                bottom = 10,
-                valign = 'center',
-                align = 'center',
-                caption = body,
-            }
-        },
         draggable = false,
         resizable = false,
     }
+    if type(body) == "string" then
+        Chili.Label:New {
+            x = 0,
+            right = 20,
+            y = 0,
+            bottom = 10,
+            valign = 'center',
+            align = 'center',
+            caption = body,
+            parent = window,
+        }
+    else
+        window:AddChild(body)
+    end
     ChiliFX:AddFadeEffect({
         obj = window, 
         time = 0.2,
@@ -99,7 +102,11 @@ function Chotify:Update(id, obj)
         window:SetCaption(title)
     end
     if body ~= nil then
-        window.children[1]:SetCaption(body)
+        if type(body) == "string" then
+            window.children[1]:SetCaption(body)
+        else
+            window.children = body
+        end
     end
 end
 

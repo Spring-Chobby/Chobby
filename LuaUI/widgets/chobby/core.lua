@@ -36,6 +36,9 @@ local includes = {
 	"components/status_bar/sb_player_welcome.lua",
 	"components/status_bar/sb_server_status.lua",
 	
+	-- friends
+	"components/friend_list_window.lua",
+	
 	-- new stuff
 	"components/interface_root.lua",
 	"components/tab_panel_handler.lua",
