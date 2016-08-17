@@ -216,7 +216,15 @@ end
 --------------------------------------------------------------------------------
 -- Control Handling
 
-local function GetUserControls(userName, autoResize, maxNameLength, isInBattle, isSingleplayer, reinitialize, disableInteraction, supressSync)
+local function GetUserControls(userName, opts)
+	local autoResize         = opts.autoResize
+	local maxNameLength      = opts.maxNameLength
+	local isInBattle         = opts.isInBattle
+	local isSingleplayer     = opts.isSingleplayer
+	local reinitialize       = opts.reinitialize
+	local disableInteraction = opts.disableInteraction
+	local supressSync        = opts.supressSync
+
 	local userControls = reinitialize or {}
 	
 	userControls.isInBattle = isInBattle
@@ -421,104 +429,68 @@ local userHandler = {
 	UserLevelToImage = UserLevelToImage,
 }
 
+local function _GetUser(userList, userName, opts)
+	opts.reinitialize = userList[userName]
+	if not userList[userName] or userList[userName].needReinitialization then
+		userList[userName] = GetUserControls(userName, opts)
+	end
+	return userList[userName].mainControl
+end
+
 function userHandler.GetBattleUser(userName, isSingleplayer)
 	if isSingleplayer then
 		return userHandler.GetSingleplayerUser(userName)
 	end
 
-	if battleUsers[userName] then
-		if battleUsers[userName].needReinitialization then
-			battleUsers[userName] = GetUserControls(userName, true, false, true, false, battleUsers[userName])
-		end
-		return battleUsers[userName].mainControl
-	end
-	
-	battleUsers[userName] = GetUserControls(userName, true, false, true)
-	return battleUsers[userName].mainControl
+	return _GetUser(battleUsers, userName, {
+		autoResize     = true,
+		isInBattle     = true,
+	})
 end
 
 function userHandler.GetTooltipUser(userName)
-	if tooltipUsers[userName] then
-		if tooltipUsers[userName].needReinitialization then
-			tooltipUsers[userName] = GetUserControls(userName, false, false, true, false, battleUsers[userName], nil, true)
-		end
-		return tooltipUsers[userName].mainControl
-	end
-	
-	tooltipUsers[userName] = GetUserControls(userName, false, false, true, nil, nil, nil, true)
-	return tooltipUsers[userName].mainControl
+	return _GetUser(tooltipUsers, userName, {
+		isInBattle     = true,
+		supressSync    = true,
+	})
 end
 
 function userHandler.GetSingleplayerUser(userName)
-	if singleplayerUsers[userName] then
-		if singleplayerUsers[userName].needReinitialization then
-			singleplayerUsers[userName] = GetUserControls(userName, true, false, true, true, singleplayerUsers[userName])
-		end
-		return singleplayerUsers[userName].mainControl
-	end
-	
-	singleplayerUsers[userName] = GetUserControls(userName, true, false, true, true)
-	return singleplayerUsers[userName].mainControl
+	return _GetUser(singleplayerUsers, userName, {
+		autoResize     = true,
+		isInBattle     = true,
+		isSingleplayer = true,
+	})
 end
 
-function userHandler.GetChannelUser(userName)		
-	if channelUsers[userName] then
-		if channelUsers[userName].needReinitialization then
-			channelUsers[userName] = GetUserControls(userName, false, WG.Chobby.Configuration.chatMaxNameLength, false, false, channelUsers[userName])
-		end
-		return channelUsers[userName].mainControl
-	end
-	
-	channelUsers[userName] = GetUserControls(userName, false, WG.Chobby.Configuration.chatMaxNameLength)
-	return channelUsers[userName].mainControl
+function userHandler.GetChannelUser(userName)
+	return _GetUser(channelUsers, userName, {
+		maxNameLength  = WG.Chobby.Configuration.chatMaxNameLength,
+	})
 end
 
-function userHandler.GetTeamUser(userName)		
-	if teamUsers[userName] then
-		if teamUsers[userName].needReinitialization then
-			teamUsers[userName] = GetUserControls(userName, false, false, false, false, teamUsers[userName])
-		end
-		return teamUsers[userName].mainControl
-	end
-	
-	teamUsers[userName] = GetUserControls(userName, false)
-	return teamUsers[userName].mainControl
+function userHandler.GetTeamUser(userName)
+	return _GetUser(teamUsers, userName, {
+	})
 end
 
 function userHandler.GetStatusUser(userName)
-	if statusUsers[userName] then
-		if statusUsers[userName].needReinitialization then
-			statusUsers[userName] = GetUserControls(userName, false, WG.Chobby.Configuration.statusMaxNameLength, false, false, statusUsers[userName], true)
-		end
-		return statusUsers[userName].mainControl
-	end
-	
-	statusUsers[userName] = GetUserControls(userName, false, WG.Chobby.Configuration.statusMaxNameLength, false, false, false, true)
-	return statusUsers[userName].mainControl
+	return _GetUser(statusUsers, userName, {
+		maxNameLength       = WG.Chobby.Configuration.statusMaxNameLength,
+		disableInteraction  = true,
+	})
 end
 
 function userHandler.GetFriendUser(userName)
-	if friendUsers[userName] then
-		if friendUsers[userName].needReinitialization then
-			friendUsers[userName] = GetUserControls(userName, false, WG.Chobby.Configuration.friendMaxNameLength, false, false, friendUsers[userName], false)
-		end
-		return friendUsers[userName].mainControl
-	end
-	
-	friendUsers[userName] = GetUserControls(userName, false, WG.Chobby.Configuration.friendMaxNameLength, false, false, false, false)
-	return friendUsers[userName].mainControl
+	return _GetUser(friendUsers, userName, {
+		maxNameLength  = WG.Chobby.Configuration.friendMaxNameLength,
+	})
 end
 
 function userHandler.GetNotificationUser(userName)
-	if notificationUsers[userName] then
-		if notificationUsers[userName].needReinitialization then
-			notificationUsers[userName] = GetUserControls(userName, false, WG.Chobby.Configuration.friendMaxNameLength, false, false, notificationUsers[userName], false)
-		end
-		return notificationUsers[userName].mainControl
-	end
-	
-	notificationUsers[userName] = GetUserControls(userName, false, WG.Chobby.Configuration.friendMaxNameLength, false, false, false, false)
-	return notificationUsers[userName].mainControl
+	return _GetUser(notificationUsers, userName, {
+		maxNameLength  = WG.Chobby.Configuration.notificationMaxNameLength,
+	})
 end
 
 --------------------------------------------------------------------------------
@@ -531,9 +503,11 @@ end
 
 local function AddListeners()
 	lobby:AddListener("OnUpdateUserStatus", UpdateUserActivity)
+	lobby:AddListener("OnAddUser", UpdateUserActivity)
+	lobby:AddListener("OnRemoveUser", UpdateUserActivity)
+	lobby:AddListener("OnAddUser", UpdateUserCountry)
 	lobby:AddListener("OnUpdateUserBattleStatus", UpdateUserBattleStatus)
 	WG.LibLobby.localLobby:AddListener("OnUpdateUserBattleStatus", UpdateUserBattleStatus)
-	lobby:AddListener("OnAddUser", UpdateUserCountry)
 end
 
 --------------------------------------------------------------------------------

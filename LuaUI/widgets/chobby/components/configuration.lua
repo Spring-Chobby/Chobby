@@ -12,6 +12,8 @@ function Configuration:init()
 	
 	self.chatMaxNameLength = 120 -- Pixels
 	self.statusMaxNameLength = 180
+	self.friendMaxNameLength = 180
+	self.notificationMaxNameLength = 180
 
 	self.userName = ""
 	self.password = ""
