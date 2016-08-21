@@ -802,6 +802,9 @@ local function InitializeIntermissionControls()
 								after = function()
 									SwitchToScreen("main")
 									ResetGamedata()
+									if WG.Music then
+										WG.Music.StartTrack()
+									end
 								end
 							}) end,
 							i18n("quit_confirm"), nil, 360, 200)
