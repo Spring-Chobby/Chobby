@@ -16,6 +16,7 @@ local scripts = {
 		-- test really long strings
 		{"AddText", {speakerID = "eileen", textID = "intro3", name = 'Eileen the Red', text = "Many of your fathers and brothers have perished valiantly in the face of a contemptible enemy. We must never forget what the Federation has done to our people! My brother, Garma Zabi, has shown us these virtues through our own valiant sacrifice. By focusing our anger and sorrow, we are finally in a position where victory is within our grasp, and once again, our most cherished nation will flourish. Victory is the greatest tribute we can pay those who sacrifice their lives for us! Rise, our people, rise! Take your sorrow and turn it into anger! Zeon thirsts for the strength of its people! SIEG ZEON!! SIEG ZEON!! SIEG ZEON!!!"}},
 		{"AddText", {textID = "intro2", text = "...", size = 24}},
+		{"AddTextAsImage", {id = "textImage", textID = "intro_sky_text", text = "Flying Text!!!", color={0,1,1,1}, size = 24, y = "0.5", animation = {startX = "1.3", endX = "-1", time = 5}, wait = 5}},
 		{"ModifyImage", {id = "eileen", defID = "eileen_concerned", animation = {type = "dissolve", startAlpha = 0, endAlpha = 1, time = 0.5}}},
 		{"AddText", {speakerID = "eileen", textID = "intro4", text = "Wait a minute... this isn't Ren'Py..."}},
 		--{"SetPortrait", nil},

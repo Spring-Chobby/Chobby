@@ -199,7 +199,7 @@ local function PlayScriptLine(line)
       AdvanceScript(false)
     end
     if (action ~= "AddText" and type(args) == 'table' and args.wait) then
-      waitTime = waitTime or options.waitTime.value
+      waitTime = args.wait or options.waitTime.value
     end
     
     -- automatically hide text box while in wait mode, show otherwise
@@ -227,6 +227,18 @@ local function StartScript(scriptName)
   PlayScriptLine(1)
 end
 
+local function ResizeNVLEntryPanel(textControl, nvlControlsEntry)
+    textControl:Invalidate()
+    local panel = nvlControlsEntry.panel
+    local height = textControl.height + panel.padding[2] + panel.padding[4]
+    if (panel.height < height) then
+      panel:Resize(nil, height, true, true)
+      panel:Hide()  -- force refresh
+      panel:Show()
+      --Spring.Echo("force resizing", textControl.height, panel.height)
+    end
+end
+
 -- Text scrolling behaviour, advance to next script line at end if so desired
 local function AdvanceText(time, toEnd)
   local nvlControlsEntry = nvlControls[#nvlControls]
@@ -252,16 +264,7 @@ local function AdvanceText(time, toEnd)
       textControl:SetText(newText)
     end
     if nvl then
-      -- force panel size
-      textControl:Invalidate()
-      local panel = nvlControlsEntry.panel
-      local height = textControl.height + panel.padding[2] + panel.padding[4]
-      if (panel.height < height) then
-        panel:Resize(nil, height, true, true)
-        panel:Hide()  -- force refresh
-        panel:Show()
-        --Spring.Echo("force resizing", textControl.height, panel.height)
-      end
+      ResizeNVLEntryPanel(textControl, nvlControlsEntry)
     end
   else
     if toEnd then
@@ -324,6 +327,8 @@ local function AdvanceAnimations(dt)
     local anim = animations[i]
     local done = false
     local target = anim.image and data.images[anim.image] or background
+    local color, color2
+    
     anim.timeElapsed = (anim.timeElapsed or 0) + dt
     if anim.timeElapsed >= anim.time then
       anim.timeElapsed = anim.time
@@ -337,9 +342,24 @@ local function AdvanceAnimations(dt)
     elseif (anim.type == "shake") then
       ShakeImage(anim, proportion)
     else
-      local dissolve = anim.type == "dissolve" 
+      if (target.classname == "label") or (target.classname == "textbox") then
+        target.font.color = target.font.color or {1,1,1,1}
+        target.font.color2 = target.font.color2 or Spring.Utilities.CopyTable(target.font.color) or {1, 1, 1, 1}
+        color = target.font.color
+        color2 = target.font.color2
+      else
+        target.color = target.color or {1,1,1,1}
+        target.color2 = target.color2 or Spring.Utilities.CopyTable(target.color) or {1,1,1,1}
+        color = target.color
+        color2 = target.color2
+      end
+      
+      local dissolve = anim.type == "dissolve"
+      
       anim.startX = anim.startX or target.x
       anim.startY = anim.startY or target.y
+      anim.startWidth = anim.startWidth or target.width
+      anim.startHeight = anim.startHeight or target.height
       anim.startColor = anim.startColor or target.color or {1, 1, 1, 1}
       anim.startAlpha = anim.startAlpha or (target.color and target.color[4]) or 1
       if dissolve then
@@ -352,31 +372,40 @@ local function AdvanceAnimations(dt)
       if anim.endY then
         target.y = math.floor(anim.endY * proportion + anim.startY * (1 - proportion) + 0.5)
       end
+      if anim.endWidth then
+        target.width = math.floor(anim.endWidth * proportion + anim.startWidth * (1 - proportion) + 0.5)
+      end
+      if anim.endHeight then
+        target.height = math.floor(anim.endHeight * proportion + anim.startHeight * (1 - proportion) + 0.5)
+      end
+      
       if anim.endColor then
-        target.color = target.color or {1, 1, 1, 1}
         for i=1,4 do
-          target.color[i] = anim.endColor[i] * math.sin(proportion * math.pi * 0.5) + anim.startColor[i] * math.cos(proportion * math.pi * 0.5)
+          color[i] = anim.endColor[i] * math.sin(proportion * math.pi * 0.5) + anim.startColor[i] * math.cos(proportion * math.pi * 0.5)
         end
         if (dissolve) then
-          target.color2 = target.color2 or Spring.Utilities.CopyTable(target.color) or {1, 1, 1, 1}
           for i=1,4 do
-            target.color2[i] = anim.endColor[i] * math.cos(proportion * math.pi * 0.5) + anim.startColor[i] * math.sin(proportion * math.pi * 0.5)
+            color2[i] = anim.endColor[i] * math.cos(proportion * math.pi * 0.5) + anim.startColor[i] * math.sin(proportion * math.pi * 0.5)
           end
         end
       elseif anim.endAlpha then
-        target.color = target.color or {1, 1, 1, 1}
-        target.color[4] = anim.endAlpha * math.sin(proportion * math.pi * 0.5) + anim.startAlpha * math.cos(proportion * math.pi * 0.5)
+        color[4] = anim.endAlpha * math.sin(proportion * math.pi * 0.5) + anim.startAlpha * math.cos(proportion * math.pi * 0.5)
         if dissolve then
-          target.color2 = target.color2 or Spring.Utilities.CopyTable(target.color) or {1, 1, 1, 1}
-          target.color2[4] = anim.endAlpha * math.cos(proportion * math.pi * 0.5) + anim.startAlpha * math.sin(proportion * math.pi * 0.5)
+          color2[4] = anim.endAlpha * math.cos(proportion * math.pi * 0.5) + anim.startAlpha * math.sin(proportion * math.pi * 0.5)
         end
       end
       target:Invalidate()
     end
     
     if done then
-      target.color = anim.endColor or target.color
-      target.color[4] = anim.endAlpha or target.color[4]
+      if color then
+        if anim.endColor then
+          for i=1,4 do
+            color[i] = anim.endColor[i] 
+          end
+        end
+        color[4] = anim.endAlpha or color[4]
+      end
       toRemove[#toRemove+1] = i
     end
   end
@@ -501,68 +530,79 @@ local function SetPortrait(image)
   portrait:Invalidate()
 end
 
-local function SetTextboxHeight(control)
-  local font = control.font
-  local padding = control.padding
-  local width  = control.width - padding[1] - padding[3]
-  local height = control.height - padding[2] - padding[4]
-  
-  control._wrappedText = control.font:WrapText(control.text, width, height)
-  local textHeight,textDescender,numLines = control.font:GetTextHeight(control._wrappedText)
-  textHeight = textHeight-textDescender
+local function AddNVLTextBox(name, text, size, instant)
+  local panel = Panel:New {
+    parent = nvlStack,
+    width="100%",
+    height = 36,
+    backgroundColor = {1, 1, 1, 0},
+    --autosize = instant,
+  }
 
-  if (control.autoObeyLineHeight) then
-    if (numLines>1) then
-      textHeight = numLines * control.font:GetLineHeight()
-    else
-      --// AscenderHeight = LineHeight w/o such deep chars as 'g','p',...
-      textHeight = math.min( math.max(textHeight, control.font:GetAscenderHeight()), control.font:GetLineHeight())
-    end
-  end
-  control:Resize(nil, textHeight, true, true)
-end
-
-local function AddNVLTextBox(name, text)
-  local text = TextBox:New {
+  local textBox = TextBox:New {
+    parent = panel,
     text = text,
     align = "left",
     x = NVL_NAME_WIDTH + 4 + 4 + 8,
     y = 4,
     right = 4,
     height = 32,
-    --autoHeight = false  -- we do the resizing manually later
+    font    = {
+      size = size
+    }
   }
-  -- set textbox height
-  --SetTextboxHeight(text)
   
-  local name = TextBox:New {
+  local name = Label:New {
+    parent = panel,
     align = "left",
-    text = name or "",  -- todo i18n
+    caption = name or "",  -- todo i18n
     x = 4,
     y = 4,
     width = NVL_NAME_WIDTH,
-    height = 20,
+    height = 32,
     font    = {
-      size = 16;
+      size = DEFAULT_FONT_SIZE;
       shadow = true;
       color = speaker and speaker.color
     }
   }
-  text:UpdateLayout()
-  local panel = Panel:New {
-    width="100%",
-    height = 32,
-    backgroundColor = {1, 1, 1, 0},
-    --autosize = true,
-    children = {
-      name,
-      text,
-    },
-  }
-  nvlStack:AddChild(panel)
-  text:SetText("")
-  nvlControls[#nvlControls + 1] = {panel = panel, name = name, text = text}
-  return panel, name, text
+  
+  --textBox:UpdateLayout()
+  
+  -- hax to fix panel height
+  if instant then
+    local font = textBox.font
+    local padding = textBox.padding
+    local width  = textBox.width - padding[1] - padding[3]
+    local height = textBox.height - padding[2] - padding[4]
+    if textBox.autoHeight then
+      height = 1e9
+    end
+    local wrappedText = font:WrapText(textBox.text, width, height)
+    local textHeight,textDescender,numLines = font:GetTextHeight(wrappedText)
+    textHeight = textHeight-textDescender
+
+    if (numLines>1) then
+      textHeight = numLines * font:GetLineHeight()
+    else
+      --// AscenderHeight = LineHeight w/o such deep chars as 'g','p',...
+      textHeight = math.min( math.max(textHeight, font:GetAscenderHeight()), font:GetLineHeight())
+    end
+    local panelHeight = math.max(textHeight + 12, 32)
+    panel.height = panelHeight
+    panel:Invalidate()
+  end
+  
+  --nvlStack:AddChild(panel)
+  nvlControls[#nvlControls + 1] = {panel = panel, name = name, text = textBox}
+  
+  if not instant then
+    textBox:SetText("")
+  else
+    --ResizeNVLEntryPanel(textBox, nvlControls[#nvlControls])
+  end
+  
+  return panel, name, textBox
 end
 
 local function SubstituteVars(str)
@@ -572,6 +612,9 @@ end
 local function AddText(args)
   -- TODO get i18n string
   local instant = args.instant or options.textSpeed.value <= 0
+  if Spring.GetPressedKeys()[306] then  -- ctrl
+    instant = true
+  end
   args.text = SubstituteVars(args.text)
   
   if (args.append) then
@@ -586,19 +629,20 @@ local function AddText(args)
     speakerName = speakerName or speaker.name or ""
   end
   
+  args.size = args.size or DEFAULT_FONT_SIZE
+  
   local textControl = textbox
   local label = nameLabel
   if data.nvlMode then
     if append then
-      local lastNVLControl = nvlControls[#nvlControls] or AddNVLTextBox(args.name or speaker.name, args.text)
+      local lastNVLControl = nvlControls[#nvlControls] or AddNVLTextBox(args.name or speaker.name, args.text, args.size, instant)
       label = lastNVLControl.name
       textControl = lastNVLControl.text
     else
-      _,label,textControl = AddNVLTextBox(args.name or speaker.name, args.text)
+      _,label,textControl = AddNVLTextBox(args.name or speaker.name, args.text, args.size, instant)
     end
   end
   
-  args.size = args.size or DEFAULT_FONT_SIZE
   if args.size ~= textControl.font.size then
     textControl.font.size = args.size
     --textBox:Invalidate()
@@ -612,15 +656,13 @@ local function AddText(args)
   
   if (args.speakerID) then
     local color = speaker.color
-    --nameLabel:SetCaption(string.char(color[4], color[1], color[2], color[3]).. speaker.name.."\008")
     label.font.color = color
-    label:SetText(speakerName)
+    label:SetCaption(speakerName)
     if args.setPortrait ~= false then
       SetPortrait(speaker.portrait)
     end
   else
-    --nameLabel:SetCaption("")
-    label:SetText(args.name or "")
+    label:SetCaption(args.name or "")
     if args.setPortrait ~= false then
       SetPortrait(nil)
     end
@@ -647,10 +689,86 @@ local function AddText(args)
   end
 end
 
+local function AddImage(args, isText)
+  if not args.id then
+    Spring.Log(widget:GetInfo().name, LOG.ERROR, "Attempting to add image with nil id")
+    return
+  end
+  local image = data.images[args.id]
+  if image then
+    Spring.Log(widget:GetInfo().name, LOG.WARNING, "Image " .. args.id .. " already exists, modifying instead")
+    return scriptFunctions.ModifyImage(args)
+  end
+  
+  local imageDef = defs.images[args.defID] and Spring.Utilities.CopyTable(defs.images[args.defID], true) or {}
+  args = Spring.Utilities.MergeTable(args, imageDef, false)
+  
+  args.x = args.x or 0
+  args.y = args.y or 0
+  args.anchor = args.anchor or {0, 0}
+  
+  if isText then
+    image = Label:New {
+      id = args.id,
+      parent = background,
+      caption = args.text,
+      height = args.height,
+      width = args.width,
+      align = args.align,
+      font = {size = args.size or DEFAULT_FONT_SIZE, color = args.color, shadow = args.shadow}
+    }
+  else
+    image = Image:New{
+      id = args.id,
+      parent = background,
+      file = GetFilePath(args.file),
+      height = args.height,
+      width = args.width,
+    }
+  end
+  
+  if (type(args.x) == 'string') then
+    args.x = image.parent.width * tonumber(args.x)
+  end
+  if (type(args.y) == 'string') then
+    args.y = image.parent.height * tonumber(args.y)
+  end
+  image.x = args.x - args.anchor[1]
+  image.y = args.y - args.anchor[2]
+  image.anchor = args.anchor
+  
+  if (args.animation) then
+    AddAnimation(args, image)
+  end
+  
+  data.images[args.id] = image
+  if (args.layer) then
+    image:SetLayer(layer)
+    image.layer = args.layer
+  else
+    image.layer = CountElements(data.images)
+  end
+  
+  image:Invalidate()
+end
+
+local function RemoveImage(id)
+  local image = data.images[id]
+  if not image then
+    Spring.Log(widget:GetInfo().name, LOG.ERROR, "Attempt to modify nonexistent image " .. id)
+    return
+  end
+  image:Dispose()
+  data.images[id] = nil
+end
+
 -- disposes of existing stuff
 local function Cleanup()
   for imageID, image in pairs(data.images) do
     image:Dispose()
+  end
+  if nvlPanel.visible and nvlPanel.parent then
+    nvlPanel:Hide()
   end
   scriptFunctions.ClearNVL()
   animations = {}
@@ -660,7 +778,7 @@ local function Cleanup()
   scriptFunctions.StopMusic()
   SetPortrait(nil)
   textbox:SetText("")
-  nameLabel:SetText("")
+  nameLabel:SetCaption("")
   RemoveChoiceDialogPanel()
   
   data.images = {}
@@ -689,7 +807,7 @@ local function CloseStory()
     images = {}
   }
   if (not mainWindow.hidden) then
-    mainWindow:Show()
+    mainWindow:Hide()
   end
 end
 
@@ -710,49 +828,15 @@ scriptFunctions = {
   end,
   
   AddImage = function(args)
-    local image = data.images[args.id]
-    if image then
-      Spring.Log(widget:GetInfo().name, LOG.WARNING, "Image " .. args.id .. " already exists, modifying instead")
-      return scriptFunctions.ModifyImage(args)
-    end
-    
-    local imageDef = defs.images[args.defID] and Spring.Utilities.CopyTable(defs.images[args.defID], true) or {anchor = {}}
-    args = Spring.Utilities.MergeTable(args, imageDef, false)
-    
-    local image = Image:New{
-      id = args.id,
-      parent = background,
-      file = GetFilePath(args.file),
-      height = args.height,
-      width = args.width,
-    }
-    if (type(args.x) == 'string') then
-      args.x = image.parent.width * tonumber(args.x)
-    end
-    if (type(args.y) == 'string') then
-      args.y = image.parent.height * tonumber(args.y)
-    end
-    image.x = args.x - args.anchor[1]
-    image.y = args.y - args.anchor[2]
-    image.anchor = args.anchor or {}
-    
-    if (args.animation) then
-      AddAnimation(args, image)
-    end
-    
-    data.images[args.id] = image
-    if (args.layer) then
-      image:SetLayer(layer)
-      image.layer = args.layer
-    else
-      image.layer = CountElements(data.images)
-    end
-    
-    image:Invalidate()
+    AddImage(args, false)
   end,
   
   AddText = function(args)
     AddText(args)
+  end,
+  
+  AddTextAsImage = function(args)
+    AddImage(args, true)
   end,
   
   ClearNVL = function()
@@ -765,7 +849,7 @@ scriptFunctions = {
   end,
   
   ClearText = function()
-    nameLabel:SetText("")
+    nameLabel:SetCaption("")
     nameLabel:Invalidate()
     textbox:SetText("")
     data.currentText = nil
@@ -784,6 +868,9 @@ scriptFunctions = {
   
   Exit = function()
     mainWindow:Hide()
+    if WG.Music then
+      --WG.Music.StartTrack()
+    end
   end,
   
   JumpScript = function(script)
@@ -832,7 +919,9 @@ scriptFunctions = {
     
     local trackFull = GetFilePath(track)
     local intro = (argsType == 'table' and args.intro and GetFilePath(args.intro)) or trackFull
-    if argsType == 'table' and args.loop and WG.Music and WG.Music.StartLoopingTrack then
+    local loop = (argsType == 'table' and args.loop ~= false) or true
+    
+    if loop and WG.Music and WG.Music.StartLoopingTrack then
       WG.Music.StartLoopingTrack(intro, trackFull)
     elseif WG.Music then
       WG.Music.StartTrack(trackFull)
@@ -855,13 +944,7 @@ scriptFunctions = {
   RemoveImage = function(args)
     local argsType = type(args)
     local id = (argsType == 'string' and args) or (argsType == 'table' and args.id)
-    local image = data.images[id]
-    if not image then
-      Spring.Log(widget:GetInfo().name, LOG.ERROR, "Attempt to modify nonexistent image " .. id)
-      return
-    end
-    image:Dispose()
-    data.images[id] = nil
+    RemoveImage(id)
   end,
   
   SetPortrait = function(args)
@@ -1046,9 +1129,9 @@ local function CreateLogPanel()
       height = LOG_PANEL_HEIGHT,
       y = (LOG_PANEL_HEIGHT + 4)*(count-1),
       children = {
-        TextBox:New {
+        Label:New {
           align = "left",
-          text = entry.name or (speaker and speaker.name) or "",  -- todo i18n
+          caption = entry.name or (speaker and speaker.name) or "",  -- todo i18n
           x = 4,
           y = 4,
           right = 4,
@@ -1377,7 +1460,7 @@ function widget:Initialize()
     caption = "OPT",
     width = MENU_BUTTON_WIDTH,
     height = MENU_BUTTON_HEIGHT,
-    OnClick = {function() WG.crude.OpenPath(options_path); WG.crude.ShowMenu(); end}
+    OnClick = {function() if WG.crude then WG.crude.OpenPath(options_path); WG.crude.ShowMenu(); end end}
   }
   
   buttonQuit = Button:New{
@@ -1385,7 +1468,11 @@ function widget:Initialize()
     caption = "QUIT",
     width = MENU_BUTTON_WIDTH,
     height = MENU_BUTTON_HEIGHT,
-    OnClick = {function() Cleanup(); mainWindow:Hide() end}
+    OnClick = {function() Cleanup(); mainWindow:Hide()
+      if WG.Music then
+        --WG.Music.StartTrack()
+      end
+    end}
   }
   
   local menuChildren
@@ -1437,10 +1524,10 @@ function widget:Initialize()
     }
   end
   
-  nameLabel = TextBox:New{
+  nameLabel = Label:New{
     parent = textPanel,
     name = "vn_nameLabel",
-    text = "",
+    caption = "",
     x = (USE_PORTRAIT and PORTRAIT_WIDTH + 8 or 0) + 8,
     y = 4,
     right = 4,
@@ -1538,10 +1625,11 @@ function widget:Initialize()
     scriptFunctions = scriptFunctions,
   }
   
-  --StartStory("test")
+  StartStory("test")
 end
 
 function widget:Shutdown()
+  --CloseStory()
   WG.VisualNovel = nil
 end
 --------------------------------------------------------------------------------

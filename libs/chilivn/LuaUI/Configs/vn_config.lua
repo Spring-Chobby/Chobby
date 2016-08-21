@@ -27,6 +27,7 @@ local config = {
 local autoAdvanceActions = {
 	"AddBackground",
 	"AddImage",
+	"AddTextAsImage",
 	"ClearNVL",
 	"ModifyImage",
 	"RemoveImage",
