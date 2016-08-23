@@ -100,7 +100,7 @@ function TabBar:IsSelected(name)
 	if not self.selected then
 		return false
 	end
-	return self.children[self.selected].name == name
+	return self.children[self.selected] and self.children[self.selected].name == name
 end
 
 function TabBar:Remove(tabname, updateSelection)
