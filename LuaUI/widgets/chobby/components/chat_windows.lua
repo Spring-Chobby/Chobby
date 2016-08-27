@@ -586,6 +586,14 @@ function ChatWindows:CreateDebugConsole()
 	)
 	lobby:AddListener("OnCommandSent",
 		function(listner, command)
+			local subPos = string.find(command, [["PasswordHash":"]])
+			if subPos then
+				subPos = subPos + 15
+				local endPos = string.find(command, [["]], subPos + 1)
+				if endPos then
+					command = string.sub(command, 0, subPos) .. "REDACTED" .. string.sub(command, endPos)
+				end
+			end
 			Spring.Echo("Server", ">" .. command)
 			self.debugConsole:AddMessage(">" .. command)
 		end
