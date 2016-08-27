@@ -1,8 +1,8 @@
 QueueWindow = LCS.class{}
 
 function QueueWindow:init(queue)
-	local joinedQueueTime = Spring.GetGameSeconds()
-	local lastUpdate = Spring.GetGameSeconds()
+	local joinedQueueTime = Spring.GetTimer()
+	local lastUpdate = Spring.GetTimer()
 
 	self.lblStatus = Label:New {
 		x = 10,
@@ -14,10 +14,10 @@ function QueueWindow:init(queue)
 		Update =
 		function(...)
 			Label.Update(self.lblStatus, ...)
-			local currentTime = Spring.GetGameSeconds()
-			if currentTime ~= lastUpdate then
-				lastUpdate = curentTime
-				local diff = math.floor(currentTime - joinedQueueTime)
+			local currentTime = Spring.GetTimer()
+			if Spring.DiffTimers(currentTime, lastUpdate) > 0.5 then
+				local diff = math.floor(Spring.DiffTimers(currentTime, joinedQueueTime))
+				lastUpdate = currentTime
 				self.lblStatus:SetCaption(i18n("time_in_queue") .. ": " .. tostring(diff) .. "s")
 			end
 			self.lblStatus:RequestUpdate()
@@ -70,7 +70,7 @@ end
 
 function QueueWindow:HideWindow()
 	ChiliFX:AddFadeEffect({
-		obj = self.queueWindow, 
+		obj = self.queueWindow,
 		time = 0.15,
 		endValue = 0,
 		startValue = 1,

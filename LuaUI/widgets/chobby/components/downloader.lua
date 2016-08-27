@@ -2,7 +2,7 @@ Downloader = Component:extends{}
 
 function Downloader:init(tbl, timeout, updateListener, completeListener, queueFont)
 	self:super("init")
-	
+
 	queueFont = queueFont or 1
 	self.lblDownload = Label:New {
 		x = 20,
@@ -22,7 +22,7 @@ function Downloader:init(tbl, timeout, updateListener, completeListener, queueFo
 		height = 30,
 		value = 0,
 	}
-	
+
 	self.queueLabel = Label:New {
 		x = 0,
 		y = 60,
@@ -33,7 +33,7 @@ function Downloader:init(tbl, timeout, updateListener, completeListener, queueFo
 		font = Configuration:GetFont(queueFont),
 		caption = "Queue:",
 	}
-	
+
 	self.queueList = Label:New {
 		x = 5,
 		y = 80,
@@ -57,7 +57,7 @@ function Downloader:init(tbl, timeout, updateListener, completeListener, queueFo
 			self.queueList,
 		},
 	}, tbl))
-	
+
 	self.lblDownload:Hide()
 	self.prDownload:Hide()
 	self.queueLabel:Hide()
@@ -74,7 +74,7 @@ end
 function Downloader:UpdateQueue()
 	local downloadCount = 0
 	local failure = false
-	
+
 	local queueText = false
 	for downloadID, data in pairs(self.downloads) do
 		downloadCount = downloadCount + 1
@@ -95,7 +95,7 @@ function Downloader:UpdateQueue()
 			end
 		end
 	end
-	
+
 	if queueText then
 		self.queueList:SetCaption(queueText)
 	else
@@ -104,7 +104,7 @@ function Downloader:UpdateQueue()
 			self.queueList:Hide()
 		end
 	end
-	
+
 	if self.updateListener then
 		self.updateListener(downloadCount, failure)
 	end
@@ -128,7 +128,7 @@ function Downloader:_CleanupDownload(myDelayID)
 		end
 	end
 	self:UpdateQueue()
-	
+
 	for _, _ in pairs(self.downloads) do
 		return -- don't hide progress bar if there are active downloads
 	end
@@ -152,13 +152,14 @@ function Downloader:DownloadProgress(downloadID, downloaded, total)
 	if not self.downloads[downloadID] then
 		return
 	end
-	if Spring.GetGameSeconds() == self._lastUpdate or total == 0 then
+	local currentTime = Spring.GetTimer()
+	if self._lastUpdate and Spring.DiffTimers(currentTime, self._lastUpdate) > 0.5  or total == 0 then
 		return
 	end
-	
-	self._lastUpdate = Spring.GetGameSeconds()
 
-	
+	self._lastUpdate = currentTime
+
+
 	local elapsedTime = os.clock() - self.downloads[downloadID].startTime
 	local doneRatio = downloaded / total
 	local remainingSeconds = (1 - doneRatio) * elapsedTime / (doneRatio + 0.001)
@@ -220,9 +221,9 @@ function Downloader:DownloadFinished(downloadID)
 	if self.completeListener then
 		self.completeListener(self.downloads[downloadID].archiveName, true)
 	end
-	
+
 	self.prDownload:SetCaption("\255\0\255\0Download complete.\b")
-	
+
 	-- Effectively a reimplementation of SignalMask from LUS
 	if self.timeout then
 		self.delayID = self.delayID + 1
@@ -242,9 +243,9 @@ function Downloader:DownloadFailed(downloadID, errorID)
 	if self.completeListener then
 		self.completeListener(self.downloads[downloadID].archiveName, false)
 	end
-	
+
 	self.prDownload:SetCaption("\255\255\0\0Download failed [".. errorID .."].\b")
-	
+
 	-- Effectively a reimplementation of SignalMask from LUS
 	if self.timeout then
 		self.delayID = self.delayID + 1
