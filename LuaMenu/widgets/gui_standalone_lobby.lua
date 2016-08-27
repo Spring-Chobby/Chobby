@@ -10,7 +10,7 @@ function widget:GetInfo()
 	}
 end
 
-function widget:Initialize()
+function widget:GameStart()
 	Spring.SendCommands({
 		"ResBar 0",
 		"ToolTip 0",
@@ -41,13 +41,14 @@ function widget:Initialize()
 		"bind Ctrl+f12 screenshot png",
 
 		"bind Ctrl+v pastetext",
+		"vsync 1",
 	})
-	Spring.SetConfigInt("MouseDragScrollThreshold", 0, true)
-	Spring.LoadCmdColorsConfig("mouseBox 0.0 0.0 0.0 0.0")
-	Spring.SetDrawSky(false)
-	Spring.SetDrawWater(false)
-	Spring.SetDrawGround(false)
-	Spring.SetAtmosphere({fogColor = { 0.0, 0.0, 0.0, 0 }})
-	gl.SlaveMiniMap(true)
-	gl.ConfigMiniMap(-1,-1,-1,-1)
+	-- Spring.SetConfigInt("MouseDragScrollThreshold", 0, true)
+	-- Spring.LoadCmdColorsConfig("mouseBox 0.0 0.0 0.0 0.0")
+	-- Spring.SetDrawSky(false)
+	-- Spring.SetDrawWater(false)
+	-- Spring.SetDrawGround(false)
+	-- Spring.SetAtmosphere({fogColor = { 0.0, 0.0, 0.0, 0 }})
+	-- gl.SlaveMiniMap(true)
+	-- gl.ConfigMiniMap(-1,-1,-1,-1)
 end
