@@ -13,10 +13,10 @@ function widget:GetInfo()
 	}
 end
 
-local IMG_BATTLE_RUNNING     = "luaui/images/runningBattle.png"
+local IMG_BATTLE_RUNNING     = LUA_DIRNAME .. "images/runningBattle.png"
 local IMG_BATTLE_NOT_RUNNING = ""
-local IMG_STATUS_SPECTATOR   = "luaui/images/spectating.png"
-local IMG_STATUS_PLAYER      = "luaui/images/playing.png"
+local IMG_STATUS_SPECTATOR   = LUA_DIRNAME .. "images/spectating.png"
+local IMG_STATUS_PLAYER      = LUA_DIRNAME .. "images/playing.png"
 
 local PLAYER_PREFIX_BIG = "Players: "
 local PLAYER_PREFIX_SMALL = ""
@@ -27,16 +27,16 @@ local PLAYER_PREFIX_SMALL = ""
 
 local function GetBattleInfoHolder(parent, battleID)
 	local externalFunctions = {}
-	
+
 	local playersPrefix = PLAYER_PREFIX_BIG
-	
+
 	local battle = lobby:GetBattle(battleID)
 	if not battle then
 		return nil
 	end
-	
+
 	local Configuration = WG.Chobby.Configuration
-	
+
 	local mainControl = Control:New {
 		x = 0,
 		y = 0,
@@ -45,7 +45,7 @@ local function GetBattleInfoHolder(parent, battleID)
 		padding = {0, 0, 0, 0},
 		parent = parent,
 	}
-	
+
 	local lblTitle = Label:New {
 		name = "title",
 		x = 70,
@@ -79,7 +79,7 @@ local function GetBattleInfoHolder(parent, battleID)
 		file = IMG_STATUS_SPECTATOR,
 		parent = mainControl,
 	}
-	
+
 	local lblPlayers = Label:New {
 		name = "playersCaption",
 		x = 84,
@@ -91,7 +91,7 @@ local function GetBattleInfoHolder(parent, battleID)
 		caption = playersPrefix .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers,
 		parent = mainControl,
 	}
-	
+
 	local minimap = Panel:New {
 		x = 2,
 		y = 2,
@@ -122,77 +122,77 @@ local function GetBattleInfoHolder(parent, battleID)
 	}
 	runningImage:BringToFront()
 	imPlayerStatus:BringToFront()
-	
+
 	function externalFunctions.Resize(smallMode)
 		if smallMode then
 			minimap:SetPos(nil, nil, 33, 33)
-			
+
 			lblTitle.font.size = Configuration:GetFont(1).size
 			lblTitle:SetPos(43, 1, 160)
-			
+
 			lblPlayerStatus.font.size = Configuration:GetFont(2).size
 			lblPlayerStatus:SetPos(66, 18)
-			
+
 			imPlayerStatus:SetPos(45, 17, 17, 17)
-			
+
 			lblPlayers.font.size = Configuration:GetFont(2).size
 			lblPlayers:SetPos(160, 18)
-			
+
 			playersPrefix = PLAYER_PREFIX_SMALL
 		else
 			minimap:SetPos(nil, nil, 73, 73)
-			
+
 			lblTitle.font.size = Configuration:GetFont(2).size
 			lblTitle:SetPos(80, 4, 235)
-			
+
 			lblPlayerStatus.font.size = Configuration:GetFont(2).size
 			lblPlayerStatus:SetPos(108, 31)
-			
+
 			imPlayerStatus:SetPos(84, 28, 20, 20)
-			
+
 			lblPlayers.font.size = Configuration:GetFont(2).size
 			lblPlayers:SetPos(84, 55)
-			
+
 			playersPrefix = PLAYER_PREFIX_BIG
 		end
 		local text = StringUtilities.GetTruncatedStringWithDotDot(battle.title, lblTitle.font, lblTitle.width)
 		lblTitle:SetCaption(text)
-		
+
 		lblPlayers:SetCaption(playersPrefix .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
 	end
-	
+
 	function externalFunctions.Update(newBattleID)
 		battleID = newBattleID
 		battle = lobby:GetBattle(battleID)
 		if not battle then
 			return
 		end
-		
+
 		if not mainControl.visible then
 			mainControl:Show()
 		end
-		
+
 		local text = StringUtilities.GetTruncatedStringWithDotDot(battle.title, lblTitle.font, lblTitle.width)
 		lblTitle:SetCaption(text)
-		
+
 		minimapImage.file = Configuration:GetMinimapImage(battle.mapName, battle.gameName)
 		minimapImage:Invalidate()
-		
+
 		runningImage.file = (battle.isRunning and IMG_BATTLE_RUNNING) or IMG_BATTLE_NOT_RUNNING
 		runningImage:Invalidate()
 	end
-	
+
 	local function OnUpdateBattleInfo(listeners, updatedBattleID)
 		if updatedBattleID ~= battleID then
 			return
 		end
 		minimapImage.file = Configuration:GetMinimapImage(battle.mapName, battle.gameName)
 		minimapImage:Invalidate()
-		
+
 		lblPlayers:SetCaption(playersPrefix .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
 	end
 	lobby:AddListener("OnUpdateBattleInfo", OnUpdateBattleInfo)
-	
+
 	local function OnBattleIngameUpdate(listeners, updatedBattleID)
 		if updatedBattleID ~= battleID then
 			return
@@ -201,7 +201,7 @@ local function GetBattleInfoHolder(parent, battleID)
 		runningImage:Invalidate()
 	end
 	lobby:AddListener("OnBattleIngameUpdate", OnBattleIngameUpdate)
-	
+
 	local function PlayersUpdate(listeners, battleID)
 		if updatedBattleID ~= battleID then
 			return
@@ -210,7 +210,7 @@ local function GetBattleInfoHolder(parent, battleID)
 	end
 	lobby:AddListener("OnLeftBattle", PlayersUpdate)
 	lobby:AddListener("OnJoinedBattle", PlayersUpdate)
-	
+
 	local function OnUpdateUserTeamStatus(listeners)
 		lblPlayers:SetCaption(playersPrefix .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
 	end
@@ -230,7 +230,7 @@ local function GetBattleInfoHolder(parent, battleID)
 		end
 	end
 	lobby:AddListener("OnUpdateUserTeamStatus", onUpdateUserTeamStatus)
-	
+
 	return externalFunctions
 end
 
@@ -265,9 +265,9 @@ local function InitializeControls(parentControl)
 		parent = parentControl,
 		font = WG.Chobby.Configuration:GetFont(3),
 	}
-	
+
 	battleInfoHolder = GetBattleInfoHolder(infoHolder, lobby:GetMyBattleID())
-	
+
 	parentControl.OnResize = parentControl.OnResize or {}
 	parentControl.OnResize[#parentControl.OnResize + 1] = function (obj, xSize, ySize)
 		local smallMode = (ySize < 60)
@@ -276,24 +276,24 @@ local function InitializeControls(parentControl)
 			infoHolder._relativeBounds.bottom = 2
 			infoHolder._relativeBounds.right = 2
 			infoHolder:UpdateClientArea()
-			
+
 			lblBattle:SetPos(nil, 9)
 		else
 			infoHolder:SetPos(nil, 4, 330)
 			infoHolder._relativeBounds.bottom = 4
 			infoHolder._relativeBounds.right = 4
 			infoHolder:UpdateClientArea()
-			
+
 			lblBattle:SetPos(nil, 27)
 		end
 		battleInfoHolder.Resize(smallMode)
 	end
-	
+
 	local unreadMessages = 0
 	local voting = false
-	
+
 	parentControl.tooltip = "battle_tooltip_" .. (lobby:GetMyBattleID() or 0)
-	
+
 	parentControl.OnClick = parentControl.OnClick or {}
 	parentControl.OnClick[#parentControl.OnClick + 1] = function (obj)
 		if unreadMessages > 0 then
@@ -301,7 +301,7 @@ local function InitializeControls(parentControl)
 			statusWindowHandler.SetActivity("myBattle", unreadMessages)
 		end
 	end
-	
+
 	local function OnSaidBattle(listeners, userName, message)
 		local userInfo = lobby:GetUser(userName) or {}
 		if userInfo.isBot then
@@ -321,7 +321,7 @@ local function InitializeControls(parentControl)
 	end
 	lobby:AddListener("OnSaidBattle", OnSaidBattle)
 	lobby:AddListener("OnSaidBattleEx", OnSaidBattle)
-	
+
 	local function OnVoteUpdate()
 		if statusWindowHandler.IsTabSelected("myBattle") then
 			voting = false
@@ -338,13 +338,13 @@ local function InitializeControls(parentControl)
 		end
 	end
 	lobby:AddListener("OnVoteUpdate", OnVoteUpdate)
-	
+
 	local function OnVoteEnd()
 		voting = false
 	end
 	lobby:AddListener("OnVoteEnd", OnVoteEnd)
-	
-	local function onJoinBattle(listener, battleID)	
+
+	local function onJoinBattle(listener, battleID)
 		parentControl.tooltip = "battle_tooltip_" .. battleID
 		battleInfoHolder.Update(battleID)
 	end
@@ -381,8 +381,8 @@ end
 -- Widget Interface
 
 function widget:Initialize()
-	
-	VFS.Include("LuaUI/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
+
+	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
 	WG.BattleStatusPanel = BattleStatusPanel
 end

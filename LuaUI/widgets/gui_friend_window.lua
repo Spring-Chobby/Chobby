@@ -52,8 +52,8 @@ local function DelayedInitialize()
 end
 
 function widget:Initialize()
-	CHOBBY_DIR = "LuaUI/widgets/chobby/"
-	VFS.Include("LuaUI/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
+	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
+	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
 	WG.Delay(DelayedInitialize, 1)
 

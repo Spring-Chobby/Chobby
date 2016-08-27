@@ -1,5 +1,5 @@
 --chili export
-CHOBBY_DIR = CHOBBY_DIR or "LuaUI/widgets/chobby/"
+CHOBBY_DIR = CHOBBY_DIR or LUA_DIRNAME .. "widgets/chobby/"
 CHOBBY_IMG_DIR = CHOBBY_DIR .. "images/"
 
 if WG and WG.Chili then

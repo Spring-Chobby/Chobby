@@ -29,13 +29,13 @@ local function LoadLibraries()
 	end
 end
 
-if LUA_NAME == "LuaUI" then
-	assert(LUAUI_DIRNAME)
+if LUA_NAME == "LuaUI" or LUA_NAME == "LuaMenu" then
+	--assert(LUAUI_DIRNAME)
 
 	--// Config & Widget Locations
-	ORDER_FILENAME  = LUAUI_DIRNAME .. 'Config/' .. Game.modShortName .. '_order.lua'
-	CONFIG_FILENAME = LUAUI_DIRNAME .. 'Config/' .. Game.modShortName .. '_data.lua'
-	KNOWN_FILENAME  = LUAUI_DIRNAME .. 'Config/' .. Game.modShortName .. '_known.lua'
+	ORDER_FILENAME  = LUA_DIRNAME .. 'Config/' .. Game.modShortName .. '_order.lua'
+	CONFIG_FILENAME = LUA_DIRNAME .. 'Config/' .. Game.modShortName .. '_data.lua'
+	KNOWN_FILENAME  = LUA_DIRNAME .. 'Config/' .. Game.modShortName .. '_known.lua'
 
 	-- VFS.RAW_FIRST loads user widgets first
 	-- VFS.ZIP_FIRST loads game widgets first
@@ -46,28 +46,28 @@ if LUA_NAME == "LuaUI" then
 		local configData = VFS.Include(CONFIG_FILENAME)
 		localWidgets = configData and configData["Chili lobby"] and configData["Chili lobby"].loadLocalWidgets
 	end
-	
+
 	if localWidgets then
 		VFSMODE = VFS.RAW_FIRST
 	else
 		VFSMODE = VFS.ZIP
 	end
 	VFS.DEF_MODE = VFSMODE
-	
-	
+
+
 	ADDON_DIRS     = {
-		LUAUI_DIRNAME .. 'Addons/';
-		LUAUI_DIRNAME .. 'Widgets/';
-		LUAUI_DIRNAME .. 'SystemAddons/';
-		LUAUI_DIRNAME .. 'SystemWidgets/';
+		LUA_DIRNAME .. 'Addons/';
+		LUA_DIRNAME .. 'Widgets/';
+		LUA_DIRNAME .. 'SystemAddons/';
+		LUA_DIRNAME .. 'SystemWidgets/';
 		LUA_DIRNAME .. 'chili/'; -- DEPRECATED: Scheduled for removal in 103
 	}
 	--// Create the "LuaUI/Config" directory
-	Spring.CreateDir(LUAUI_DIRNAME .. 'Config') --FIXME LuaRules!
+	Spring.CreateDir(LUA_DIRNAME .. 'Config') --FIXME LuaRules!
 else
 	--//
 	VFSMODE = VFS.RAW_FIRST
-	
+
 	AddonNames = handler.AddonName .. "s/"
 
 	ADDON_DIRS     = {

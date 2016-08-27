@@ -37,15 +37,15 @@ local userListList = {
 	notificationUsers,
 }
 
-local IMAGE_AFK = "luaui/images/away.png"
-local IMAGE_BATTLE = "luaui/images/battle.png"
-local IMAGE_INGAME = "luaui/images/ingame.png"
-local IMAGE_FLAG_UNKNOWN = "luaui/images/flags/unknown.png"
-local IMAGE_AUTOHOST = "luaui/images/ranks/robot.png"
-local IMAGE_MODERATOR = "luaui/images/ranks/moderator.png"
-local IMAGE_PLAYER = "luaui/images/ranks/player.png"
-local IMAGE_READY = "luaui/images/ready.png"
-local IMAGE_UNREADY = "luaui/images/unready.png"
+local IMAGE_AFK = LUA_DIRNAME .. "images/away.png"
+local IMAGE_BATTLE = LUA_DIRNAME .. "images/battle.png"
+local IMAGE_INGAME = LUA_DIRNAME .. "images/ingame.png"
+local IMAGE_FLAG_UNKNOWN = LUA_DIRNAME .. "images/flags/unknown.png"
+local IMAGE_AUTOHOST = LUA_DIRNAME .. "images/ranks/robot.png"
+local IMAGE_MODERATOR = LUA_DIRNAME .. "images/ranks/moderator.png"
+local IMAGE_PLAYER = LUA_DIRNAME .. "images/ranks/player.png"
+local IMAGE_READY = LUA_DIRNAME .. "images/ready.png"
+local IMAGE_UNREADY = LUA_DIRNAME .. "images/unready.png"
 
 local USER_SP_TOOLTIP_PREFIX = "user_single_"
 local USER_MP_TOOLTIP_PREFIX = "user_battle_"
@@ -56,7 +56,7 @@ local USER_CH_TOOLTIP_PREFIX = "user_chat_s_"
 -- Globally Applicable Utilities
 
 local function CountryShortnameToFlag(shortname)
-	local fileName = "luaui/images/flags/" .. string.lower(shortname) .. ".png"
+	local fileName = LUA_DIRNAME .. "images/flags/" .. string.lower(shortname) .. ".png"
 	if VFS.FileExists(fileName) then
 		return fileName
 	end
@@ -76,7 +76,7 @@ local function UserLevelToImage(level, isBot, isAdmin, rank)
 				rankBracket = math.min(21, math.floor(level/10) + 7)
 			end
 		end
-		return "luaui/images/ranks/" .. rankBracket .. ".png"
+		return LUA_DIRNAME .. "images/ranks/" .. rankBracket .. ".png"
 	end
 end
 
@@ -114,14 +114,14 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 	local comboOptions = {}
 	if (not userBattleInfo.aiLib) and userName ~= myUserName then
 		comboOptions[#comboOptions + 1] = "Message"
-		
+
 		if (not isInBattle) and userInfo.battleID then
 			local battle = lobby:GetBattle(userInfo.battleID)
 			if battle and WG.Chobby.Configuration:IsValidEngineVersion(battle.engineVersion) then
 				comboOptions[#comboOptions + 1] = "Join Battle"
 			end
 		end
-		
+
 		if userInfo.isFriend then
 			comboOptions[#comboOptions + 1] = "Unfriend"
 		else
@@ -130,11 +130,11 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 		comboOptions[#comboOptions + 1] = "Report"
 		comboOptions[#comboOptions + 1] = "Ignore"
 	end
-	
+
 	if (userBattleInfo.aiLib and userBattleInfo.owner == myUserName) or userControl.lobby:GetMyIsAdmin() then
 		comboOptions[#comboOptions + 1] = "Kick"
 	end
-	
+
 	if #comboOptions == 0 then
 		comboOptions[1] = Label:New {
 			x = 0,
@@ -145,14 +145,14 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 			caption = "No Actions",
 		}
 	end
-	
+
 	return comboOptions
 end
 
 local function GetUserRankImageName(userName, userControl)
 	local userInfo = userControl.lobby:GetUser(userName) or {}
 	local userBattleInfo = userControl.lobby:GetUserBattleStatus(userName) or {}
-	
+
 	if userControl.isSingleplayer and not userBattleInfo.aiLib then
 		return IMAGE_PLAYER
 	end
@@ -178,7 +178,7 @@ local function UpdateUserActivity(listener, userName)
 		local data = userList[userName]
 		if data then
 			data.mainControl.items = GetUserComboBoxOptions(userName, data.isInBattle, data)
-			
+
 			local status1, status2 = GetUserStatusImages(userName, data.isInBattle, data)
 			data.statusFirst.file = status1
 			data.statusSecond.file = status2
@@ -226,23 +226,23 @@ local function GetUserControls(userName, opts)
 	local supressSync        = opts.supressSync
 
 	local userControls = reinitialize or {}
-	
+
 	userControls.isInBattle = isInBattle
 	userControls.lobby = (isSingleplayer and WG.LibLobby.localLobby) or lobby
-	userControls.isSingleplayer = isSingleplayer 
-	
+	userControls.isSingleplayer = isSingleplayer
+
 	local offset = 0
-	
+
 	if reinitialize then
 		userControls.mainControl:ClearChildren()
 	else
 		local tooltip = ((isSingleplayer and USER_SP_TOOLTIP_PREFIX) or (isInBattle and USER_MP_TOOLTIP_PREFIX) or USER_CH_TOOLTIP_PREFIX) .. userName
-	
+
 		local ControlType = ComboBox
 		if disableInteraction then
 			ControlType = Control
 		end
-	
+
 		userControls.mainControl = ControlType:New {
 			name = userName,
 			x = 0,
@@ -292,7 +292,7 @@ local function GetUserControls(userName, opts)
 						if userInfo and userInfo.hasFriendRequest then
 							userControls.lobby:AcceptFriendRequest(userName)
 						else
-							
+
 							userControls.lobby:FriendRequest(userName)
 						end
 					elseif selectedName == "Join Battle" then
@@ -311,7 +311,7 @@ local function GetUserControls(userName, opts)
 			}
 		}
 	end
-	
+
 	if isInBattle and not supressSync then
 		offset = offset + 1
 		userControls.syncStatus = Image:New {
@@ -326,7 +326,7 @@ local function GetUserControls(userName, opts)
 		}
 		offset = offset + 23
 	end
-	
+
 	if not isSingleplayer then
 		offset = offset + 1
 		userControls.country = Image:New {
@@ -341,7 +341,7 @@ local function GetUserControls(userName, opts)
 		}
 		offset = offset + 23
 	end
-	
+
 	offset = offset + 2
 	userControls.level = Image:New {
 		name = "level",
@@ -354,7 +354,7 @@ local function GetUserControls(userName, opts)
 		file = GetUserRankImageName(userName, userControls),
 	}
 	offset = offset + 23
-	
+
 	offset = offset + 1
 	userControls.name = TextBox:New {
 		name = "name",
@@ -373,7 +373,7 @@ local function GetUserControls(userName, opts)
 		userControls.name:SetText(truncatedName)
 	end
 	offset = offset + userControls.name.font:GetTextWidth(userControls.name.text)
-	
+
 	local status1, status2 = GetUserStatusImages(userName, isInBattle, userControls)
 	offset = offset + 3
 	userControls.statusFirst = Image:New {
@@ -387,7 +387,7 @@ local function GetUserControls(userName, opts)
 		file = status1,
 	}
 	offset = offset + 20
-	
+
 	offset = offset + 1
 	userControls.statusSecond = Image:New {
 		name = "statusSecond",
@@ -400,24 +400,24 @@ local function GetUserControls(userName, opts)
 		file = status2,
 	}
 	offset = offset + 20
-	
+
 	if autoResize then
 		userControls.mainControl.OnResize = userControls.mainControl.OnResize or {}
 		userControls.mainControl.OnResize[#userControls.mainControl.OnResize + 1] = function (obj, sizeX, sizeY)
 			local maxWidth = sizeX - userNameStart - 40
 			local truncatedName = StringUtilities.GetTruncatedStringWithDotDot(userName, userControls.name.font, maxWidth)
 			userControls.name:SetText(truncatedName)
-			
+
 			offset = userNameStart + userControls.name.font:GetTextWidth(userControls.name.text) + 3
 			userControls.statusFirst:SetPos(offset)
 			offset = offset + 21
 			userControls.statusSecond:SetPos(offset)
 		end
 	end
-	
+
 	-- This is always checked against main lobby.
 	userControls.needReinitialization = lobby.status ~= "connected"
-	
+
 	return userControls
 end
 
@@ -515,11 +515,11 @@ end
 -- Widget Interface
 
 function widget:Initialize()
-	CHOBBY_DIR = "LuaUI/widgets/chobby/"
-	VFS.Include("LuaUI/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	
+	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
+	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
+
 	AddListeners()
-	
+
 	WG.UserHandler = userHandler
 end
 

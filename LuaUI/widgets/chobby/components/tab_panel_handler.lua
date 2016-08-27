@@ -1,7 +1,7 @@
 function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsVertical, backFunction, cleanupFunction, fontSizeScale, tabWidth, tabControlOverride)
-	
+
 	local externalFunctions = {}
-	
+
 	local BUTTON_SPACING = 5
 
 	-------------------------------------------------------------------
@@ -9,24 +9,24 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 	-------------------------------------------------------------------
 	local buttonsHolder
 	local titleBackControl
-	
+
 	local fontSizeScale = fontSizeScale or 3
 	local buttonOffset = 0
 	local buttonWidth = tabWidth
 	local buttonHeight = 70
-	
+
 	local heading -- has a value if the tab panel has a heading
 	local backButton
-	
+
 	local tabs = {}
-	
+
 	-------------------------------------------------------------------
 	-- Local functions
 	-------------------------------------------------------------------
-	
+
 	local function ToggleShow(obj, tab, openOnly)
 		local control = tab.control
-		
+
 		if displayPanel.visible then
 			if displayPanel:GetChildByName(control.name) then
 				if not openOnly then
@@ -40,16 +40,16 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		if not displayPanel.visible then
 			displayPanel:Show()
 		end
-		
+
 		ButtonUtilities.SetButtonSelected(obj)
 	end
-	
+
 	local function SetButtonPositionAndSize(index)
 		if tabsVertical then
 			tabs[index].button:SetPos(
-				nil, 
-				(index - 1) * (buttonHeight + BUTTON_SPACING) + buttonOffset, 
-				nil, 
+				nil,
+				(index - 1) * (buttonHeight + BUTTON_SPACING) + buttonOffset,
+				nil,
 				buttonHeight
 			)
 			tabs[index].button:SetPosRelative(
@@ -80,7 +80,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 			)
 		end
 	end
-	
+
 	local function UpdateButtonLayout(newTabsVertical)
 		if newTabsVertical ~= nil then
 			tabsVertical = newTabsVertical
@@ -89,8 +89,8 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 			SetButtonPositionAndSize(i)
 		end
 	end
-	
-		
+
+
 	local function OpenConfirmationPopup(sucessFunction)
 		local backConfirm = Configuration.backConfirmation[name]
 		if not backConfirm then
@@ -105,7 +105,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		end
 		return false
 	end
-	
+
 	-------------------------------------------------------------------
 	-- External Functions
 	-------------------------------------------------------------------
@@ -113,23 +113,23 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		displayPanel = panelParent
 		UpdateButtonLayout(newTabsVertical)
 	end
-	
+
 	function externalFunctions.Hide()
 		if buttonsHolder.visible then
 			buttonsHolder:Hide()
 		end
 	end
-	
+
 	function externalFunctions.Show()
 		if not buttonsHolder.visible then
 			buttonsHolder:Show()
 		end
 	end
-	
+
 	function externalFunctions.IsVisible()
 		return buttonsHolder.visible
 	end
-	
+
 	function externalFunctions.IsTabSelected(tabName)
 		for i = 1, #tabs do
 			if tabs[i].control and tabs[i].control.parent and ((not tabName) or tabName == tabs[i].name)then
@@ -138,7 +138,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		end
 		return false
 	end
-	
+
 	function externalFunctions.Rescale(newFontSize, newButtonHeight, newButtonWidth)
 		fontSizeScale = newFontSize or fontSizeScale
 		buttonWidth = newButtonWidth or buttonWidth
@@ -158,10 +158,10 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 				fontsize = size,
 				text = i18n(name),
 			}
-			
+
 			backButton:SetPos(4, 39 - size * 1.5, buttonSize, buttonSize)
 		end
-		
+
 		for i = 1, #tabs do
 			if tabs[i].button then
 				SetButtonPositionAndSize(i)
@@ -169,13 +169,13 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 			end
 		end
 	end
-	
+
 	function externalFunctions.OpenTab(tabIndex)
 		if tabs[tabIndex] then
 			ToggleShow(tabs[tabIndex].button, tabs[tabIndex], true)
 		end
 	end
-	
+
 	function externalFunctions.OpenTabByName(tabName)
 		for i = 1, #tabs do
 			if tabs[i].name == tabName then
@@ -184,7 +184,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 			end
 		end
 	end
-	
+
 	function externalFunctions.GetManagedControlByName(controlName)
 		for i = 1, #tabs do
 			if tabs[i].control and tabs[i].control.name == controlName then
@@ -193,7 +193,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		end
 		return false
 	end
-	
+
 	function externalFunctions.Destroy()
 		for i = 1, #tabs do
 			if tabs[i].control then
@@ -203,7 +203,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		end
 		tabs = nil
 	end
-	
+
 	function externalFunctions.RemoveTab(name)
 		local index = 1
 		local found = false
@@ -222,7 +222,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 			UpdateButtonLayout()
 		end
 	end
-	
+
 	function externalFunctions.SetActivity(name, activityCount, priorityLevel)
 		priorityLevel = priorityLevel or 1
 		activityCount = activityCount or 0
@@ -254,7 +254,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 			end
 		end
 	end
-	
+
 	function externalFunctions.SetTabCaption(name, caption)
 		for i = 1, #tabs do
 			if tabs[i].name == name and tabs[i].activityLabel then
@@ -262,10 +262,10 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 			end
 		end
 	end
-	
+
 	function externalFunctions.AddTab(name, humanName, control, onClick, rank, selected, entryCheck)
 		local newTab = {}
-		
+
 		newTab.name = name
 		newTab.rank = rank or (#tabs + 1)
 		newTab.control = control
@@ -286,18 +286,18 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 					font = Configuration:GetFont(fontSizeScale),
 				}
 			end
-			
+
 			buttonsHolder:AddChild(button)
-			
+
 			button.OnClick = button.OnClick or {}
-			button.OnClick[#button.OnClick + 1] = function(obj) 
+			button.OnClick[#button.OnClick + 1] = function(obj)
 				if newTab.entryCheck then
 					newTab.entryCheck(ToggleShow, obj, newTab)
 				else
 					ToggleShow(obj, newTab)
 				end
 			end
-			
+
 			newTab.activityLabel = Label:New {
 				name = "activity_label",
 				y = 2,
@@ -310,17 +310,17 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 				font = Configuration:GetFont(1),
 				caption = "",
 			}
-			
+
 			newTab.activityLabel:BringToFront()
-			
+
 			if selected then
 				ToggleShow(button, newTab)
 			end
-			
+
 			control.OnOrphan = control.OnOrphan or {}
 			control.OnOrphan[#control.OnOrphan + 1] = function(obj)
 				ButtonUtilities.SetButtonDeselected(button)
-				
+
 				if (displayPanel:IsEmpty() or displayPanel:GetChildByName(control.name))
 						and displayPanel.visible then
 					displayPanel:Hide()
@@ -340,17 +340,17 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		end
 
 		newTab.button = button
-		
+
 		local index = #tabs + 1
 		while index > 1 and newTab.rank < tabs[index - 1].rank do
 			tabs[index] = tabs[index - 1]
 			index = index - 1
 		end
 		tabs[index] = newTab
-		
+
 		UpdateButtonLayout()
 	end
-	
+
 	-------------------------------------------------------------------
 	-- Initialization
 	-------------------------------------------------------------------
@@ -364,7 +364,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-	
+
 	if backFunction then
 		-- Add heading and back button
 		buttonOffset = 50
@@ -375,7 +375,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 			end
 			backFunction(externalFunctions) -- Returns UI to main menu
 		end
-		
+
 		local size = Configuration:GetFont(fontSizeScale).size
 		local buttonSize = math.min(size * 1.5)
 		heading = TextBox:New {
@@ -403,7 +403,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 					y = 0,
 					right = 0,
 					bottom = 0,
-					file = "luaui/widgets/chobby/images/left.png",
+					file = LUA_DIRNAME .. "widgets/chobby/images/left.png",
 				}
 			},
 			parent = buttonsHolder,
@@ -417,16 +417,16 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 			},
 		}
 	end
-	
+
 	for i = 1, #initialTabs do
 		externalFunctions.AddTab(
-			initialTabs[i].name, 
-			i18n(initialTabs[i].name), 
+			initialTabs[i].name,
+			i18n(initialTabs[i].name),
 			initialTabs[i].control,
 			nil, nil, nil,
 			initialTabs[i].entryCheck
 		)
 	end
-	
+
 	return externalFunctions
 end

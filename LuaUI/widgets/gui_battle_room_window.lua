@@ -48,8 +48,8 @@ local multiplayerWrapper
 
 local singleplayerGame = "Chobby $VERSION"
 
-local IMG_READY    = "luaui/images/ready.png"
-local IMG_UNREADY  = "luaui/images/unready.png"
+local IMG_READY    = LUA_DIRNAME .. "images/ready.png"
+local IMG_UNREADY  = LUA_DIRNAME .. "images/unready.png"
 
 
 --------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ local function UpdateArchiveStatus()
 	end
 	local haveGame = VFS.HasArchive(battle.gameName)
 	local haveMap = VFS.HasArchive(battle.mapName)
-	
+
 	if haveGame then
 		imHaveGame.file = IMG_READY
 		lblHaveGame:SetCaption(i18n("have_game"))
@@ -80,7 +80,7 @@ local function UpdateArchiveStatus()
 		lblHaveGame:SetCaption(i18n("dont_have_game"))
 	end
 	imHaveGame:Invalidate()
-	
+
 	if haveMap then
 		imHaveMap.file = IMG_READY
 		lblHaveMap:SetCaption(i18n("have_map"))
@@ -89,7 +89,7 @@ local function UpdateArchiveStatus()
 		lblHaveMap:SetCaption(i18n("dont_have_map"))
 	end
 	imHaveMap:Invalidate()
-	
+
 	haveMapAndGame = (haveGame and haveMap)
 end
 
@@ -109,7 +109,7 @@ end
 
 function widget:DownloadFinished()
 	UpdateArchiveStatus()
-	
+
 	if battleLobby then
 		battleLobby:SetBattleStatus({
 			sync = (haveMapAndGame and 1) or 2, -- 0 = unknown, 1 = synced, 2 = unsynced
@@ -190,7 +190,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		},
 		parent = rightInfo,
 	}
-	
+
 	local btnPlay
 	local btnSpectate = Button:New {
 		x = "50%",
@@ -210,7 +210,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		},
 		parent = rightInfo,
 	}
-	
+
 	btnPlay = Button:New {
 		x = 0,
 		right = "50%",
@@ -229,7 +229,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		},
 		parent = rightInfo,
 	}
-	
+
 	rightInfo.OnResize = {
 		function (obj, xSize, ySize)
 			if xSize + minimapBottomClearance < ySize then
@@ -237,7 +237,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 				minimapPanel._relativeBounds.right = 0
 				minimapPanel:SetPos(nil, nil, nil, xSize)
 				minimapPanel:UpdateClientArea()
-				
+
 				lblMapName:SetPos(5, xSize + 5)
 			else
 				local horPadding = ((xSize + minimapBottomClearance) - ySize)/2
@@ -245,12 +245,12 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 				minimapPanel._relativeBounds.right = horPadding
 				minimapPanel:SetPos(nil, nil, nil, ySize - minimapBottomClearance)
 				minimapPanel:UpdateClientArea()
-				
+
 				lblMapName:SetPos(5, ySize - minimapBottomClearance + 5)
 			end
 		end
 	}
-	
+
 	local leftOffset = 0
 	local btnNewTeam = Button:New {
 		name = "btnNewTeam",
@@ -290,7 +290,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		parent = leftInfo
 	}
 	leftOffset = leftOffset + 38
-	
+
 	local btnPickMap = Button:New {
 		x = 5,
 		y = leftOffset,
@@ -308,7 +308,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	leftOffset = leftOffset + 38
 
 	WG.ModoptionsPanel.LoadModotpions(battle.gameName, battleLobby)
-	
+
 	local btnModoptions = Button:New {
 		x = 5,
 		y = leftOffset,
@@ -324,8 +324,8 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		parent = leftInfo,
 	}
 	leftOffset = leftOffset + 38
-	
-	--local lblNumberOfPlayers 
+
+	--local lblNumberOfPlayers
 	--if battleLobby.name ~= "singleplayer" then
 	--	lblNumberOfPlayers = Label:New {
 	--		x = 8,
@@ -338,7 +338,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	--	}
 	--	leftOffset = leftOffset + 25
 	--end
-	
+
 	imHaveGame = Image:New {
 		x = 8,
 		y = leftOffset,
@@ -372,7 +372,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		parent = leftInfo,
 	}
 	leftOffset = leftOffset + 25
-	
+
 	local downloader = WG.Chobby.Downloader(
 		{
 			x = 0,
@@ -380,10 +380,10 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 			right = 0,
 			y = leftOffset,
 			parent = leftInfo,
-		}, 
+		},
 		8
 	)
-	
+
 	local modoptionsHolder = Control:New {
 		x = 0,
 		bottom = 0,
@@ -400,26 +400,26 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	if modoptionsHolder.children[1].visible then
 		modoptionsHolder.children[1]:Hide()
 	end
-	
+
 	downloader.lblDownload.OnHide = downloader.lblDownload.OnHide or {}
 	downloader.lblDownload.OnHide[#downloader.lblDownload.OnHide + 1] = function ()
 		if not modoptionsHolder.visible then
 			modoptionsHolder:Show()
 		end
 	end
-	
+
 	downloader.lblDownload.OnShow = downloader.lblDownload.OnShow or {}
 	downloader.lblDownload.OnShow[#downloader.lblDownload.OnShow + 1] = function ()
 		if modoptionsHolder.visible then
 			modoptionsHolder:Hide()
 		end
 	end
-	
+
 	leftOffset = leftOffset + 120
 	-- Example downloads
 	--MaybeDownloadArchive("Titan-v2", "map")
 	--MaybeDownloadArchive("tinyskirmishredux1.1", "map")
-	
+
 	onUpdateUserTeamStatusSelf = function(listener, userName, allyNumber, isSpectator)
 		if userName == myUserName then
 			if isSpectator then
@@ -436,7 +436,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		end
 	end
 	battleLobby:AddListener("OnUpdateUserTeamStatus", onUpdateUserTeamStatusSelf)
-	
+
 	onBattleIngameUpdate = function(listener, updatedBattleID, isRunning)
 		if battleID == updatedBattleID then
 			if isRunning then
@@ -447,9 +447,9 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		end
 	end
 	battleLobby:AddListener("OnBattleIngameUpdate", onBattleIngameUpdate)
-	
+
 	onBattleIngameUpdate(nil, battleID, battle.isRunning)
-	
+
 	onUpdateBattleInfo = function(listener, updatedBattleID, spectatorCount, locked, mapHash, mapName)
 		if battleID ~= updatedBattleID then
 			return
@@ -458,11 +458,11 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 			lblMapName:SetCaption(mapName:gsub("_", " "))
 			imMinimap.file = WG.Chobby.Configuration:GetMinimapImage(mapName, battle.gameName)
 			imMinimap:Invalidate()
-			
+
 			-- TODO: Bit lazy here, seeing as we only need to update the map
 			UpdateArchiveStatus()
 			MaybeDownloadMap(battle)
-			
+
 			if not VFS.HasArchive(mapName) then
 				battleLobby:SetBattleStatus({
 					sync = 2, -- 0 = unknown, 1 = synced, 2 = unsynced
@@ -471,13 +471,13 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		end
 	end
 	battleLobby:AddListener("OnUpdateBattleInfo", onUpdateBattleInfo)
-	
+
 	--local UpdatePlayers = function(battleID)
 	--	if lblNumberOfPlayers then
 	--		lblNumberOfPlayers:SetCaption(i18n("players") .. ": " .. tostring(#battle.users - battle.spectatorCount) .. "/" .. tostring(battle.maxPlayers))
 	--	end
 	--end
-	
+
 	onLeftBattle_counter = function(listener, leftBattleID, userName)
 		if battleID ~= leftBattleID then
 			return
@@ -501,7 +501,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		--UpdatePlayers(battleID)
 	end
 	battleLobby:AddListener("OnJoinedBattle", onJoinedBattle)
-	
+
 	--UpdatePlayers(battleID)
 
 	MaybeDownloadGame(battle)
@@ -534,9 +534,9 @@ local function AddTeamButtons(parent, offX, joinFunc, aiFunc)
 end
 
 local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
-	
+
 	local SPACING = 22
-		
+
 	local mainScrollPanel = ScrollPanel:New {
 		x = 0,
 		right = 0,
@@ -545,7 +545,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		parent = playerParent,
 		horizontalScrollbar = false,
 	}
-	
+
 	local mainStackPanel = Control:New {
 		x = 0,
 		right = 0,
@@ -563,7 +563,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		parent = spectatorParent,
 		horizontalScrollbar = false,
 	}
-		
+
 	local spectatorStackPanel = Control:New {
 		x = 0,
 		right = 0,
@@ -572,19 +572,19 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		parent = spectatorScrollPanel,
 	}
 	spectatorStackPanel._relativeBounds.bottom = nil
-	
+
 	-- Object handling
 	local player = {}
 	local team = {}
-	
+
 	local function PositionChildren(panel, minHeight)
 		local children = panel.children
-		
+
 		minHeight = minHeight - 10
-		
+
 		local childrenCount = #children
 		local bottomBuffer = 0
-		
+
 		local totalHeight = 0
 		local maxHeight = 0
 		for i = 1, #children do
@@ -594,7 +594,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				maxHeight = child.height
 			end
 		end
-		
+
 		if childrenCount * maxHeight + bottomBuffer > minHeight then
 			if totalHeight < minHeight then
 				totalHeight = minHeight
@@ -617,7 +617,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		end
 		panel:Invalidate()
 	end
-	
+
 	local function GetPlayerData(name)
 		if not player[name] then
 			player[name] = {
@@ -627,7 +627,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		end
 		return player[name]
 	end
-	
+
 	local function GetTeam(teamIndex)
 		teamIndex = teamIndex or -1
 		if not team[teamIndex] then
@@ -638,7 +638,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				end
 				emptyTeamIndex = checkTeam
 			end
-		
+
 			local humanName, parentStack, parentScroll
 			if teamIndex == -1 then
 				humanName = "Spectators"
@@ -659,7 +659,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				padding = {0, 0, 0, 0},
 				parent = parentStack,
 			}
-			
+
 			local label = Label:New {
 				x = 5,
 				y = 0,
@@ -679,7 +679,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 								allyNumber = teamIndex,
 								isSpectator = false,
 							})
-					end, 
+					end,
 					function()
 						WG.Chobby.AiListWindow(battleLobby, battle.gameName, teamIndex)
 					end
@@ -694,14 +694,14 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				parent = teamHolder,
 				preserveChildrenOrder = true,
 			}
-			
+
 			if teamIndex == -1 then
 				-- Empty spectator team is created. Position children to prevent flicker.
 				PositionChildren(parentStack, parentScroll.height)
 			end
-			
+
 			local teamData = {}
-			
+
 			function teamData.AddPlayer(name)
 				local playerData = GetPlayerData(name)
 				if playerData.team == teamIndex then
@@ -719,13 +719,13 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 					teamStack:AddChild(playerControl)
 					playerControl:SetPos(nil, (#teamStack.children - 1)*SPACING)
 					playerControl:Invalidate()
-					
+
 					teamHolder:SetPos(nil, nil, nil, #teamStack.children*SPACING + 35)
 					PositionChildren(parentStack, parentScroll.height)
 					teamHolder:Invalidate()
 				end
 			end
-			
+
 			function teamData.RemovePlayer(name)
 				local playerData = GetPlayerData(name)
 				if playerData.team ~= teamIndex then
@@ -746,14 +746,14 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 					index = index + 1
 				end
 				teamHolder:SetPos(nil, nil, nil, #teamStack.children*SPACING + 35)
-				
+
 				if name == battleLobby:GetMyUserName() then
 					local joinTeam = teamHolder:GetChildByName("joinTeamButton")
 					if joinTeam then
 						joinTeam:SetVisibility(true)
 					end
 				end
-				
+
 				if teamStack:IsEmpty() and teamIndex ~= -1 then
 					local teamCount = 0
 					for _,_ in pairs(team) do
@@ -764,7 +764,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 						if teamIndex < emptyTeamIndex then
 							emptyTeamIndex = teamIndex
 						end
-					
+
 						team[teamIndex] = nil
 						parentStack:RemoveChild(parentStack:GetChildByName(teamIndex))
 						teamHolder:Dispose()
@@ -776,18 +776,18 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				end
 				PositionChildren(parentStack, parentScroll.height)
 			end
-			
+
 			team[teamIndex] = teamData
 		end
-		return team[teamIndex] 
+		return team[teamIndex]
 	end
-	
+
 	-- Object modification
 	local function AddPlayerToTeam(allyTeamID, name)
 		local teamObject = GetTeam(allyTeamID)
 		teamObject.AddPlayer(name)
 	end
-	
+
 	local function RemovePlayerFromTeam(name)
 		local playerData = GetPlayerData(name)
 		if playerData.team then
@@ -795,16 +795,16 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 			teamObject.RemovePlayer(name)
 		end
 	end
-	
+
 	GetTeam(-1) -- Make Spectator heading appear
 	GetTeam(0) -- Always show two teams
 	GetTeam(1)
-	
+
 	OpenNewTeam = function ()
-		GetTeam(emptyTeamIndex) 
+		GetTeam(emptyTeamIndex)
 		PositionChildren(mainStackPanel, mainScrollPanel.height)
 	end
-	
+
 	-- Global function
 	function ViewResizeUpdate()
 		if mainStackPanel and spectatorStackPanel then
@@ -812,7 +812,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 			PositionChildren(spectatorStackPanel, spectatorScrollPanel.height)
 		end
 	end
-	
+
 	onUpdateUserTeamStatus = function(listener, userName, allyNumber, isSpectator)
 		if isSpectator then
 			allyNumber = -1
@@ -825,14 +825,14 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		AddPlayerToTeam(allyNumber, userName)
 	end
 	battleLobby:AddListener("OnUpdateUserTeamStatus", onUpdateUserTeamStatus)
-	
+
 	onLeftBattle = function(listener, leftBattleID, userName)
 		if leftBattleID == battleID then
 			RemovePlayerFromTeam(userName)
 		end
 	end
 	battleLobby:AddListener("OnLeftBattle", onLeftBattle)
-	
+
 	onRemoveAi = function(listener, botName)
 		RemovePlayerFromTeam(botName)
 	end
@@ -841,9 +841,9 @@ end
 
 local function SetupVotePanel(votePanel, battle, battleID)
 	local height = votePanel.clientHeight
-	
+
 	local offset = 0
-	
+
 	local activePanel = Control:New {
 		x = 0,
 		y = 0,
@@ -852,7 +852,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		padding = {0, 0, 0, 0},
 		parent = votePanel,
 	}
-	
+
 	local buttonNo
 	local buttonYes = Button:New {
 		x = offset,
@@ -881,7 +881,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		parent = activePanel,
 	}
 	offset = offset + height
-	
+
 	buttonNo = Button:New {
 		x = offset,
 		y = 0,
@@ -910,7 +910,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 	offset = offset + height
 
 	offset = offset + 2
-	
+
 	local voteName = Label:New {
 		x = offset,
 		y = 4,
@@ -920,7 +920,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		caption = "",
 		parent = activePanel,
 	}
-	
+
 	local voteProgress = Progressbar:New {
 		x = offset,
 		y = height * 0.5,
@@ -929,7 +929,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		value = 0,
 		parent = activePanel,
 	}
-	
+
 	local voteCountLabel = Label:New {
 		right = 5,
 		y = height * 0.5,
@@ -940,11 +940,11 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		caption = "20/50",
 		parent = activePanel,
 	}
-	
+
 	if activePanel.visible then
 		activePanel:Hide()
 	end
-	
+
 	local voteResultLabel = Label:New {
 		x = 5,
 		y = 4,
@@ -955,17 +955,17 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		caption = "",
 		parent = votePanel,
 	}
-	
+
 	if voteResultLabel.visible then
 		voteResultLabel:Hide()
 	end
-	
+
 	local function HideVoteResult()
 		if voteResultLabel.visible then
 			voteResultLabel:Hide()
 		end
 	end
-	
+
 	onVoteUpdate = function(listener, message, yesVotes, noVotes, votesNeeded)
 		voteName:SetCaption(message)
 		voteCountLabel:SetCaption(yesVotes .. "/" .. votesNeeded)
@@ -976,7 +976,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		HideVoteResult()
 	end
 	battleLobby:AddListener("OnVoteUpdate", onVoteUpdate)
-	
+
 	onVoteEnd = function(listener, message, success)
 		if activePanel.visible then
 			activePanel:Hide()
@@ -986,10 +986,10 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		if not voteResultLabel.visible then
 			voteResultLabel:Show()
 		end
-		
+
 		ButtonUtilities.SetButtonDeselected(buttonYes)
 		ButtonUtilities.SetButtonDeselected(buttonNo)
-		
+
 		WG.Delay(HideVoteResult, 5)
 	end
 	battleLobby:AddListener("OnVoteEnd", onVoteEnd)
@@ -997,13 +997,13 @@ end
 
 local function InitializeControls(battleID, oldLobby, topPoportion)
 	local battle = battleLobby:GetBattle(battleID)
-	
+
 	local EXTERNAL_PAD_VERT = 10
 	local EXTERNAL_PAD_HOR = 15
 	local INTERNAL_PAD = 2
-	
+
 	local BOTTOM_SPACING = 50
-	
+
 	window = Control:New {
 		x = 0,
 		y = 0,
@@ -1011,10 +1011,10 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		height = "100%",
 		resizable = false,
 		padding = {0, 0, 0, 0},
-		OnDispose = { 
+		OnDispose = {
 			function()
 				emptyTeamIndex = 0
-			
+
 				oldLobby:RemoveListener("OnBattleClosed", onBattleClosed)
 				oldLobby:RemoveListener("OnLeftBattle", onLeftBattle_counter)
 				oldLobby:RemoveListener("OnJoinedBattle", onJoinedBattle)
@@ -1030,7 +1030,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 			end
 		},
 	}
-	
+
 	local subPanel = Control:New {
 		x = 0,
 		y = 42,
@@ -1039,7 +1039,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		padding = {0, 0, 0, 0},
 		parent = window,
 	}
-	
+
 	local topPanel = Control:New {
 		x = 0,
 		y = 0,
@@ -1048,7 +1048,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		padding = {0, 0, 0, 0},
 		parent = subPanel,
 	}
-	
+
 	local bottomPanel = Control:New {
 		x = 0,
 		y = topPoportion .. "%",
@@ -1057,7 +1057,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		padding = {0, 0, 0, 0},
 		parent = subPanel,
 	}
-	
+
 	local playerPanel = Control:New {
 		x = 0,
 		y = 0,
@@ -1066,7 +1066,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		padding = {EXTERNAL_PAD_HOR, EXTERNAL_PAD_VERT, INTERNAL_PAD, 0},
 		parent = topPanel,
 	}
-	
+
 	local spectatorPanel = Control:New {
 		x = "67%",
 		y = 0,
@@ -1076,9 +1076,9 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		padding = {INTERNAL_PAD, INTERNAL_PAD, EXTERNAL_PAD_HOR, EXTERNAL_PAD_VERT + 7},
 		parent = bottomPanel,
 	}
-	
+
 	SetupPlayerPanel(playerPanel, spectatorPanel, battle, battleID)
-	
+
 	local votePanel = Control:New {
 		x = 0,
 		right = "33%",
@@ -1087,9 +1087,9 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		padding = {EXTERNAL_PAD_HOR, INTERNAL_PAD, 1, INTERNAL_PAD},
 		parent = topPanel,
 	}
-	
+
 	SetupVotePanel(votePanel)
-	
+
 	local leftInfo = Control:New {
 		x = "48%",
 		y = 0,
@@ -1098,7 +1098,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		padding = {INTERNAL_PAD, EXTERNAL_PAD_VERT, 1, 0},
 		parent = topPanel,
 	}
-	
+
 	local rightInfo = Control:New {
 		x = "67%",
 		y = 0,
@@ -1107,9 +1107,9 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		padding = {1, EXTERNAL_PAD_VERT, EXTERNAL_PAD_HOR, INTERNAL_PAD},
 		parent = topPanel,
 	}
-	
+
 	SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, battleLobby:GetMyUserName())
-	
+
 	local btnQuitBattle = Button:New {
 		right = 7,
 		y = 5,
@@ -1125,9 +1125,9 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		},
 		parent = window,
 	}
-	
+
 	local battleTitle = i18n("battle") .. ": " .. tostring(battle.title)
-	
+
 	local lblBattleTitle = Label:New {
 		x = 18,
 		y = 16,
@@ -1151,7 +1151,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		end
 	end
 	local battleRoomConsole = WG.Chobby.Console("Battleroom Chat", MessageListener, true)
-	
+
 	local chatPanel = Control:New {
 		x = 0,
 		y = 0,
@@ -1172,7 +1172,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 
 	local CHAT_MENTION = "\255\255\0\0"
 	local CHAT_ME = WG.Chobby.Configuration.meColor
-	
+
 	local onSaidBattle = function(listener, userName, message)
 		local iAmMentioned = (string.find(message, WG.LibLobby.lobby:GetMyUserName()) and userName ~= WG.LibLobby.lobby:GetMyUserName())
 		local chatColour = (iAmMentioned and CHAT_MENTION) or nil
@@ -1197,9 +1197,9 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		end
 	end
 	battleLobby:AddListener("OnBattleClosed", onBattleClosed)
-	
+
 	WG.Delay(ViewResizeUpdate, 0.1)
-	
+
 	return window
 end
 
@@ -1214,16 +1214,16 @@ function BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
 		window:Dispose()
 		window = nil
 	end
-	
+
 	if singleplayerWrapper then
 		singleplayerWrapper = nil
 	end
-	
+
 	local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
 	parentTabPanel = tabPanel
-	
+
 	battleLobby = WG.LibLobby.lobby
-				
+
 	multiplayerWrapper = Control:New {
 		x = 0,
 		y = 0,
@@ -1231,12 +1231,12 @@ function BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
 		height = "100%",
 		resizable = false,
 		padding = {0, 0, 0, 0},
-		
+
 		OnParent = {
 			function(obj)
 				if obj:IsEmpty() then
 					wrapperControl = obj
-					
+
 					local battleWindow = InitializeControls(battleID, battleLobby, 55)
 					obj:AddChild(battleWindow)
 				end
@@ -1250,9 +1250,9 @@ function BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
 	}
 
 	tabPanel.AddTab("myBattle", "My Battle", multiplayerWrapper, false, 3, true)
-	
+
 	UpdateArchiveStatus()
-	
+
 	battleLobby:SetBattleStatus({
 		allyNumber = 0,
 		isSpectator = false,
@@ -1261,7 +1261,7 @@ function BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
 end
 
 function BattleRoomWindow.GetSingleplayerControl()
-	
+
 	singleplayerWrapper = Control:New {
 		name = "singleplayerWrapper",
 		x = 0,
@@ -1270,14 +1270,14 @@ function BattleRoomWindow.GetSingleplayerControl()
 		height = "100%",
 		resizable = false,
 		padding = {0, 0, 0, 0},
-		
+
 		OnParent = {
 			function(obj)
-				
+
 				if multiplayerWrapper then
 					local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
 					tabPanel.RemoveTab("myBattle")
-					
+
 					if window then
 						window:Dispose()
 						window = nil
@@ -1286,44 +1286,44 @@ function BattleRoomWindow.GetSingleplayerControl()
 				elseif window then
 					return
 				end
-				
+
 				local singleplayerDefault = WG.Chobby.Configuration:GetGameConfig(singleplayerGame, "skirmishDefault.lua")
-				
+
 				local defaultMap = Game.mapName
 				if singleplayerDefault and singleplayerDefault.map then
 					defaultMap = singleplayerDefault.map
 				end
-				
+
 				parentTabPanel = nil
-				
+
 				battleLobby = WG.LibLobby.localLobby
 				battleLobby:SetBattleState(lobby:GetMyUserName() or "Player", singleplayerGame, defaultMap, "Skirmish Battle")
 
 				wrapperControl = obj
-				
+
 				local battleWindow = InitializeControls(1, battleLobby, 70)
 				obj:AddChild(battleWindow)
 
 				UpdateArchiveStatus()
-				
+
 				battleLobby:SetBattleStatus({
 					allyNumber = 0,
 					isSpectator = false,
 					sync = (haveMapAndGame and 1) or 2, -- 0 = unknown, 1 = synced, 2 = unsynced
 				})
-				
+
 				if singleplayerDefault and singleplayerDefault.enemyAI then
 					battleLobby:AddAi(singleplayerDefault.enemyAI .. " (1)", singleplayerDefault.enemyAI, 1)
 				end
 			end
 		},
 	}
-	
+
 	return singleplayerWrapper
 end
 
 function BattleRoomWindow.SetSingleplayerGame(ToggleShowFunc, battleroomObj, tabData)
-	
+
 	local function SetGameFail()
 		WG.LibLobby.localLobby:LeaveBattle()
 	end
@@ -1332,7 +1332,7 @@ function BattleRoomWindow.SetSingleplayerGame(ToggleShowFunc, battleroomObj, tab
 		singleplayerGame = name
 		ToggleShowFunc(battleroomObj, tabData)
 	end
-	
+
 	local config = WG.Chobby.Configuration
 	if config.singleplayer_mode == 1 then
 		WG.Chobby.GameListWindow(SetGameFail, SetGameSucess)
@@ -1346,14 +1346,14 @@ function BattleRoomWindow.LeaveBattle(onlyMultiplayer, onlySingleplayer)
 	if not battleLobby then
 		return
 	end
-	
+
 	if onlyMultiplayer and battleLobby.name == "singleplayer" then
 		return
 	end
-	
+
 	battleLobby:LeaveBattle()
 	onBattleClosed(_, battleLobby:GetMyBattleID())
-	
+
 	local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
 	tabPanel.RemoveTab("myBattle")
 end
@@ -1368,11 +1368,11 @@ function widget:ViewResize(vsx, vsy, viewGeometry)
 end
 
 function widget:Initialize()
-	CHOBBY_DIR = "LuaUI/widgets/chobby/"
-	VFS.Include("LuaUI/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	
+	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
+	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
+
 	MaybeDownloadArchive("Zero-K v1.4.7.1", "game")
-	
+
 	WG.BattleRoomWindow = BattleRoomWindow
 end
 

@@ -2,7 +2,7 @@
 --------------------------------------------------------------------------------
 --
 --  file:    main.lua
---  brief:   the entry point from LuaUI
+--  brief:   the entry point from LuaMenu
 --  author:  jK
 --
 --  Copyright (C) 2011-2013.

@@ -52,7 +52,7 @@ local function ProcessStringOption(data, index)
 	}
 end
 
-local function PopulateTab(options)	
+local function PopulateTab(options)
 	-- list = combobox
 	-- bool = tickbox
 	-- number = sliderbar (with label)
@@ -84,9 +84,9 @@ local function CreateModoptionWindow()
 		draggable = false,
 		classname = "overlay_window",
 	}
-	
+
 	local tabs = {}
-	
+
 	for key, data in pairs(modoptionStructure) do
 		tabs[#tabs + 1] = {
 			name = key,
@@ -97,11 +97,11 @@ local function CreateModoptionWindow()
 	end
 	Spring.Utilities.TableEcho(tabs, "tabstabstabstabstabstabstabstabstabstabstabstabs")
 
-			
+
 	local tabPanel = Chili.DetachableTabPanel:New {
-		x = 5, 
+		x = 5,
 		right = 5,
-		y = 45, 
+		y = 45,
 		bottom = 85,
 		padding = {0, 0, 0, 0},
 		minTabWidth = 85,
@@ -110,7 +110,7 @@ local function CreateModoptionWindow()
 		OnTabChange = {
 		}
 	}
-				
+
 	local tabBarHolder = Control:New {
 		name = "tabBarHolder",
 		x = 0,
@@ -128,11 +128,11 @@ local function CreateModoptionWindow()
 	local function CancelFunc()
 		modoptionsSelectionWindow:Dispose()
 	end
-	
+
 	local function AcceptFunc()
-	
+
 	end
-	
+
 	local buttonAccept = Button:New {
 		right = 150,
 		width = 135,
@@ -148,7 +148,7 @@ local function CreateModoptionWindow()
 			end
 		},
 	}
-	
+
 	local buttonCancel = Button:New {
 		right = 1,
 		width = 135,
@@ -164,12 +164,12 @@ local function CreateModoptionWindow()
 			end
 		},
 	}
-	
+
 	local popupHolder = WG.Chobby.PriorityPopup(modoptionsSelectionWindow, CancelFunc, AcceptFunc)
 end
 
 local function InitializeModoptionsDisplay()
-	
+
 	local mainScrollPanel = ScrollPanel:New {
 		x = 0,
 		right = 0,
@@ -177,7 +177,7 @@ local function InitializeModoptionsDisplay()
 		bottom = 0,
 		horizontalScrollbar = false,
 	}
-	
+
 	local lblText = TextBox:New {
 		x = 1,
 		right = 1,
@@ -187,7 +187,7 @@ local function InitializeModoptionsDisplay()
 		text = "",
 		parent = mainScrollPanel,
 	}
-	
+
 	modoptionListenerLobby = battleLobby
 	local function OnSetModOptions(listener, data)
 		local modoptions = battleLobby:GetMyBattleModoptions()
@@ -200,7 +200,7 @@ local function InitializeModoptionsDisplay()
 			end
 		end
 		lblText:SetText(text)
-		
+
 		if mainScrollPanel.parent then
 			if empty and mainScrollPanel.visible then
 				mainScrollPanel:Hide()
@@ -211,22 +211,22 @@ local function InitializeModoptionsDisplay()
 		end
 	end
 	battleLobby:AddListener("OnSetModOptions", OnSetModOptions)
-	
+
 	local externalFunctions = {}
-	
+
 	function externalFunctions.Update()
 		if modoptionListenerLobby then
 			modoptionListenerLobby:RemoveListener("OnSetModOptions", OnSetModOptions)
 		end
 		battleLobby:AddListener("OnSetModOptions", OnSetModOptions)
-	
+
 		OnSetModOptions()
 	end
-	
+
 	function externalFunctions.GetControl()
 		return mainScrollPanel
 	end
-	
+
 	return externalFunctions
 end
 
@@ -246,7 +246,7 @@ function ModoptionsPanel.LoadModotpions(gameName, newBattleLobby)
 	if not modoptions then
 		return
 	end
-	
+
 	-- Set modoptionDefaults
 	for i = 1, #modoptions do
 		local data = modoptions[i]
@@ -258,7 +258,7 @@ function ModoptionsPanel.LoadModotpions(gameName, newBattleLobby)
 			end
 		end
 	end
-	
+
 	-- Populate the sections
 	for i = 1, #modoptions do
 		local data = modoptions[i]
@@ -267,7 +267,7 @@ function ModoptionsPanel.LoadModotpions(gameName, newBattleLobby)
 				title = data.section,
 				options = {}
 			}
-			
+
 			local options = modoptionStructure[data.section].options
 			options[#options + 1] = data
 		end
@@ -292,8 +292,8 @@ end
 -- Initialization
 
 function widget:Initialize()
-	CHOBBY_DIR = "LuaUI/widgets/chobby/"
-	VFS.Include("LuaUI/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	
+	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
+	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
+
 	WG.ModoptionsPanel = ModoptionsPanel
 end

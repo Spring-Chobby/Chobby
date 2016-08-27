@@ -19,7 +19,7 @@ end
 
 local completedDownloadPosition = 400
 local itemSpacing = 28
-local parentWindow 
+local parentWindow
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ local function InitializeControls(window)
 		font = WG.Chobby.Configuration:GetFont(4),
 		caption = "Downloads",
 	}
-	
+
 	Label:New {
 		x = 40,
 		y = 360,
@@ -79,7 +79,7 @@ local function InitializeControls(window)
 		font = WG.Chobby.Configuration:GetFont(4),
 		caption = "Complete",
 	}
-	
+
 end
 
 --------------------------------------------------------------------------------
@@ -102,7 +102,7 @@ function DownloadWindow.GetControl()
 			end
 		},
 	}
-	
+
 	local downloader = WG.Chobby.Downloader(
 		{
 			x = 40,
@@ -110,15 +110,15 @@ function DownloadWindow.GetControl()
 			right = 40,
 			y = 85,
 			parent = window,
-		}, 
+		},
 		false,
 		DownloadUpdateFunction,
 		DownloadCompleteFunction,
 		2
 	)
-	
+
 	parentWindow = window
-	
+
 	return window
 end
 
@@ -130,11 +130,11 @@ local function DelayedInitialize()
 end
 
 function widget:Initialize()
-	CHOBBY_DIR = "LuaUI/widgets/chobby/"
-	VFS.Include("LuaUI/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	
+	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
+	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
+
 	WG.Delay(DelayedInitialize, 1)
-	
+
 	WG.DownloadWindow = DownloadWindow
 end
 

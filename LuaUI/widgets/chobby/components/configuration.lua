@@ -5,11 +5,11 @@ VFS.Include("libs/liblobby/lobby/json.lua")
 -- all configuration attribute changes should use the :Set*Attribute*() and :Get*Attribute*() methods in order to assure proper functionality
 function Configuration:init()
 	self.listeners = {}
-	
+
 --     self.serverAddress = "localhost"
 	self.serverAddress = WG.Server.serverAddress or "springrts.com"
 	self.serverPort = 8200
-	
+
 	self.chatMaxNameLength = 120 -- Pixels
 	self.statusMaxNameLength = 180
 	self.friendMaxNameLength = 180
@@ -19,7 +19,7 @@ function Configuration:init()
 	self.password = ""
 	self.autoLogin = false
 	self.channels = {}
-	
+
 	self.promptNewUsersToLogIn = false
 
 	self.errorColor = "\255\255\0\0"
@@ -31,13 +31,13 @@ function Configuration:init()
 	self.meColor = "\255\0\190\190"
 	self.buttonFocusColor = {0.54,0.72,1,0.3}
 	self.buttonSelectedColor = {0.54,0.72,1,0.6}--{1.0, 1.0, 1.0, 1.0}
-	
+
 	self.loadLocalWidgets = false
-	
+
 	-- Do not ask again tests.
 	self.confirmation_mainMenuFromBattle = false
 	self.confirmation_battleFromBattle = false
-	
+
 	self.backConfirmation = {
 		multiplayer = {
 			{
@@ -51,21 +51,21 @@ function Configuration:init()
 		singleplayer = {
 		}
 	}
-	
+
 	self.userListWidth = 220 -- Main user list width. Possibly configurable in the future.
-	
+
 	self.shortnameMap = {
 		"chobby",
 		"zk",
 	}
 	self.singleplayer_mode = 2
-	
+
 	self.lastLoginChatLength = 25
 	self.notifyForAllChat = true
 	self.debugMode = false
 	self.onlyShowFeaturedMaps = true
 	self.useSpringRestart = false
-	
+
 	self.font = {
 		[0] = {size = 10, shadow = false},
 		[1] = {size = 14, shadow = false},
@@ -74,10 +74,10 @@ function Configuration:init()
 		[4] = {size = 32, shadow = false},
 		[5] = {size = 48, shadow = false},
 	}
-	
-	self.countryShortnames = VFS.Include("luaui/configs/countryShortname.lua")
-	
-	self.game_settings = VFS.Include("luaui/configs/springsettings/springsettings3.lua")
+
+	self.countryShortnames = VFS.Include(LUA_DIRNAME .. "configs/countryShortname.lua")
+
+	self.game_settings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings3.lua")
 end
 
 ---------------------------------------------------------------------------------
@@ -97,7 +97,7 @@ function Configuration:GetConfigData()
 		userName = self.userName,
 		password = self.password,
 		autoLogin = self.autoLogin,
-		channels = self.channels,	
+		channels = self.channels,
 		singleplayer_mode = self.singleplayer_mode,
 		game_fullscreen = self.game_fullscreen,
 		panel_layout = self.panel_layout,
@@ -200,7 +200,7 @@ function Configuration:GetMinimapSmallImage(mapName, gameName)
 		return minimapImage
 	end
 	Spring.Log("Chobby", LOG.WARNING, "Missing minimap image for", mapName)
-	return "luaui/images/minimapNotFound1.png"
+	return LUA_DIRNAME .. "images/minimapNotFound1.png"
 end
 
 function Configuration:GetMinimapImage(mapName, gameName)
@@ -210,14 +210,14 @@ function Configuration:GetMinimapImage(mapName, gameName)
 		return minimapImage
 	end
 	Spring.Log("Chobby", LOG.WARNING, "Missing minimap image for", mapName)
-	return "luaui/images/minimapNotFound1.png"
+	return LUA_DIRNAME .. "images/minimapNotFound1.png"
 end
 
 function Configuration:GetGameConfigFilePath(gameName, fileName, shortnameFallback)
 	local gameInfo = gameName and VFS.GetArchiveInfo(gameName)
 	local shortname = (gameInfo and gameInfo.shortname and string.lower(gameInfo.shortname)) or shortnameFallback
 	if shortname then
-		local filePath = "luaui/configs/gameConfig/" .. shortname .. "/" .. fileName
+		local filePath = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/" .. fileName
 		if VFS.FileExists(filePath) then
 			return filePath
 		end
@@ -250,13 +250,13 @@ end
 
 function Configuration:GetBackgroundImage()
 	local shortname = self.shortnameMap[self.singleplayer_mode]
-	
+
 	local skinConfig = self:GetGameConfig(false, "skinning/skinConfig.lua", shortname)
 	local backgroundFocus
 	if skinConfig then
 		backgroundFocus = skinConfig.backgroundFocus
 	end
-	
+
 	local pngImage = self:GetGameConfigFilePath(false, "skinning/background.png", shortname)
 	if pngImage then
 		return pngImage, backgroundFocus
@@ -265,7 +265,7 @@ function Configuration:GetBackgroundImage()
 end
 
 function Configuration:IsValidEngineVersion(engineVersion)
-	if tonumber(Game.version) then 
+	if tonumber(Game.version) then
 		-- Master releases lack the '.0' at the end. Who knows what other cases are wrong.
 		-- Add as required.
 		return engineVersion == (Game.version .. ".0")
@@ -326,7 +326,7 @@ function Configuration:_CallListeners(event, ...)
 	for i = 1, #eventListeners do
 		local listener = eventListeners[i]
 		args = {...}
-		xpcall(function() listener(listener, unpack(args)) end, 
+		xpcall(function() listener(listener, unpack(args)) end,
 			function(err) self:_PrintError(err) end )
 	end
 	return true

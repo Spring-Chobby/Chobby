@@ -53,7 +53,7 @@ local function SetLobbyFullscreenMode(mode)
 		end
 		Spring.SetConfigInt("WindowBorderless", 0, false)
 		Spring.SetConfigInt("Fullscreen", 0, false)
-		Spring.SendCommands("fullscreen 0") 
+		Spring.SendCommands("fullscreen 0")
 	elseif mode == 3 then
 		Spring.SetConfigInt("XResolution", screenX, false)
 		Spring.SetConfigInt("YResolution", screenY, false)
@@ -71,13 +71,13 @@ local CHECK_WIDTH = 190
 
 local function InitializeControls(window)
 	window.OnParent = nil
-	
+
 	local freezeSettings = true
-	
+
 	local Configuration = WG.Chobby.Configuration
-	
+
 	local offset = 20
-	
+
 	Label:New {
 		x = 40,
 		y = offset,
@@ -88,7 +88,7 @@ local function InitializeControls(window)
 		caption = "Lobby",
 	}
 	offset = offset + 10
-	
+
 	offset = offset + 30
 	Label:New {
 		x = 60,
@@ -116,15 +116,15 @@ local function InitializeControls(window)
 				if freezeSettings then
 					return
 				end
-			
+
 				SetLobbyFullscreenMode(obj.selected)
-				
+
 				lobbyFullscreen = obj.selected
 				Configuration.lobby_fullscreen = obj.selected
 			end
 		},
 	}
-	
+
 	offset = offset + 30
 	Label:New {
 		x = 60,
@@ -156,7 +156,7 @@ local function InitializeControls(window)
 			end
 		},
 	}
-	
+
 	offset = offset + 30
 	local autoLogin = Checkbox:New {
 		x = 60,
@@ -175,7 +175,7 @@ local function InitializeControls(window)
 			freezeSettings = false
 		end},
 	}
-	
+
 	offset = offset + 30
 	local notifyAllChat = Checkbox:New {
 		x = 60,
@@ -192,7 +192,7 @@ local function InitializeControls(window)
 			Configuration:SetConfigValue("notifyForAllChat", newState)
 		end},
 	}
-	
+
 	offset = offset + 30
 	local mapWhitelist = Checkbox:New {
 		x = 60,
@@ -209,7 +209,7 @@ local function InitializeControls(window)
 			Configuration:SetConfigValue("onlyShowFeaturedMaps", newState)
 		end},
 	}
-	
+
 	offset = offset + 30
 	local debugMode = Checkbox:New {
 		x = 60,
@@ -226,7 +226,7 @@ local function InitializeControls(window)
 			Configuration:SetConfigValue("debugMode", newState)
 		end},
 	}
-	
+
 	offset = offset + 30
 	local useSpringRestart = Checkbox:New {
 		x = 60,
@@ -244,11 +244,11 @@ local function InitializeControls(window)
 		end},
 	}
 	offset = offset + 30
-	
+
 	------------------------------------------------------------------
 	-- Ingame
 	------------------------------------------------------------------
-	
+
 	offset = offset + 60
 	Label:New {
 		x = 40,
@@ -260,7 +260,7 @@ local function InitializeControls(window)
 		caption = "Game",
 	}
 	offset = offset + 20
-	
+
 	offset = offset + 30
 	Label:New {
 		x = 60,
@@ -288,13 +288,13 @@ local function InitializeControls(window)
 				if freezeSettings then
 					return
 				end
-				
+
 				battleStartDisplay = obj.selected
 				Configuration.game_fullscreen = obj.selected
 			end
 		},
 	}
-	
+
 	offset = offset + 30
 	Label:New {
 		x = 60,
@@ -327,7 +327,7 @@ local function InitializeControls(window)
 			end
 		},
 	}
-	
+
 	offset = offset + 30
 	Label:New {
 		x = 60,
@@ -340,23 +340,23 @@ local function InitializeControls(window)
 		font = Configuration:GetFont(2),
 		caption = "Settings:",
 	}
-	
+
 	local useCustomSettings = true
 	local settingsPresetControls = {}
-	
+
 	local function SettingsButton(x, y, caption, settings)
 		local button = Button:New {
 			name = caption,
 			x = 95*x,
-			y = 55*y, 
-			width = 85, 
+			y = 55*y,
+			width = 85,
 			height = 45,
 			caption = caption,
 			font = Configuration:GetFont(2),
 			OnClick = {
 				function (obj)
 					if settings then
-						Configuration.game_settings = VFS.Include("luaui/configs/springsettings/" .. settings)
+						Configuration.game_settings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/" .. settings)
 					end
 					ButtonUtilities.SetButtonSelected(obj)
 					for i = 1, #settingsPresetControls do
@@ -368,10 +368,10 @@ local function InitializeControls(window)
 				end
 			},
 		}
-		
+
 		settingsPresetControls[#settingsPresetControls + 1] = button
 		if settings then
-			if Spring.Utilities.TableEqual(VFS.Include("luaui/configs/springsettings/" .. settings), Configuration.game_settings) then
+			if Spring.Utilities.TableEqual(VFS.Include(LUA_DIRNAME .. "configs/springsettings/" .. settings), Configuration.game_settings) then
 				useCustomSettings = false
 				ButtonUtilities.SetButtonSelected(button)
 			end
@@ -380,7 +380,7 @@ local function InitializeControls(window)
 		end
 		return button
 	end
-	
+
 	local settingsHolder = Control:New {
 		x = 135,
 		y = offset,
@@ -396,12 +396,12 @@ local function InitializeControls(window)
 			SettingsButton(1, 1, "Ultra",   "springsettings4.lua"),
 		}
 	}
-	
+
 	local customSettingsButton = SettingsButton(2, 1,  "Custom")
 	settingsHolder:AddChild(customSettingsButton)
-	
+
 	freezeSettings = false
-	
+
 	local function onConfigurationChange(listener, key, value)
 		if freezeSettings then
 			return
@@ -410,7 +410,7 @@ local function InitializeControls(window)
 			autoLogin:SetToggle(value)
 		end
 	end
-	
+
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 end
 
@@ -421,7 +421,7 @@ end
 local SettingsWindow = {}
 
 function SettingsWindow.GetControl()
-	
+
 	local window = Control:New {
 		x = "0%",
 		y = "0%",
@@ -451,14 +451,14 @@ local function DelayedInitialize()
 end
 
 function widget:Initialize()
-	CHOBBY_DIR = "LuaUI/widgets/chobby/"
-	VFS.Include("LuaUI/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	
+	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
+	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
+
 	WG.Delay(DelayedInitialize, 1)
-	
+
 	onBattleAboutToStart = function(listener)
 		local screenX, screenY = Spring.GetScreenGeometry()
-		
+
 		-- Stopgap solution, has side effects
 		if battleStartDisplay == 1 then
 			Spring.SetConfigInt("XResolutionWindowed", screenX, false)
@@ -479,10 +479,10 @@ function widget:Initialize()
 			Spring.SetConfigInt("YResolution", screenY, false)
 			Spring.SetConfigInt("Fullscreen", 1, false)
 		end
-		
+
 		-- Settings which rely on io
 		local gameSettings = WG.Chobby.Configuration.game_settings
-		
+
 		if battleStartDisplay == 1 then
 			gameSettings.XResolutionWindowed = screenX
 			gameSettings.YResolutionWindowed = screenY
@@ -502,7 +502,7 @@ function widget:Initialize()
 			gameSettings.YResolution = screenY
 			gameSettings.Fullscreen = 1
 		end
-		
+
 		--local settingsFile, errorMessage = io.open('springsettings.cfg', 'w+')
 		--if settingsFile then
 		--	for key, value in pairs(gameSettings) do
@@ -531,7 +531,7 @@ function widget:Initialize()
 	end
 	WG.LibLobby.lobby:AddListener("OnBattleAboutToStart", onBattleAboutToStart)
 	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", onBattleAboutToStart)
-	
+
 	WG.SettingsWindow = SettingsWindow
 end
 

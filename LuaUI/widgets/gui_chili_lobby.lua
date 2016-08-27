@@ -18,7 +18,7 @@ LIBS_DIR = "libs/"
 LCS = loadstring(VFS.LoadFile(LIBS_DIR .. "lcs/LCS.lua"))
 LCS = LCS()
 
-CHOBBY_DIR = "LuaUI/widgets/chobby/"
+CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -45,16 +45,16 @@ function widget:Initialize()
 		widgetHandler:RemoveWidget(widget)
 		return
 	end
-	
+
 	Spring.SetWMCaption("Ingame Lobby", "IngameLobby")
-	
+
 	Chobby = VFS.Include(CHOBBY_DIR .. "core.lua", nil)
-	
+
 	WG.Chobby = Chobby
 	WG.Chobby:_Initialize()
-	
+
 	interfaceRoot = WG.Chobby.GetInterfaceRoot()
-	
+
 	Chobby.interfaceRoot = interfaceRoot
 end
 

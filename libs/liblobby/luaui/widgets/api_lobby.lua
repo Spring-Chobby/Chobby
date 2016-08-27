@@ -27,10 +27,10 @@ LIB_LOBBY_DIRNAME = "libs/liblobby/lobby/"
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 local config
-if VFS.FileExists("luaui/configs/liblobby_configuration.lua") then
-	config = VFS.Include("luaui/configs/liblobby_configuration.lua", nil, VFS.RAW_FIRST)
+if VFS.FileExists(LUA_DIRNAME .. "configs/liblobby_configuration.lua") then
+	config = VFS.Include(LUA_DIRNAME .. "configs/liblobby_configuration.lua", nil, VFS.RAW_FIRST)
 else
-	config = VFS.Include("libs/liblobby/luaui/configs/liblobby_configuration.lua", nil, VFS.RAW_FIRST)
+	config = VFS.Include("libs/liblobby/" .. LUA_DIRNAME .. "configs/liblobby_configuration.lua", nil, VFS.RAW_FIRST)
 end
 
 function widget:Initialize()

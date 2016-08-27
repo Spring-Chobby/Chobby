@@ -64,7 +64,7 @@ end
 -- 	end
 -- 	lblPing:SetCaption(color .. latency .. "ms\b")
 -- end
--- 
+--
 -- local _lastUpdate = os.clock()
 -- function widget:Update()
 -- 	if os.clock() - _lastUpdate > 1 then
@@ -77,14 +77,14 @@ local function InitializeControls(window)
 	btnLogout = Button:New {
 		y = 5,
 		right = 5,
-		width = 100, 
+		width = 100,
 		height = 41,
 		caption = i18n("login"),
 		parent = window,
 		font = WG.Chobby.Configuration:GetFont(3),
 		OnClick = {Logout}
 	}
-	
+
 	lblPing = Label:New {
 		name = "ping",
 		x = 0,
@@ -110,7 +110,7 @@ local function InitializeControls(window)
 			window:RemoveChild(userControl)
 		end
 	end
-	
+
 	onPong = function(listener)
 		--UpdateLatency()
 	end
@@ -162,8 +162,8 @@ function widget:Update()
 end
 
 function widget:Initialize()
-	
-	VFS.Include("LuaUI/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
+
+	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
 	WG.UserStatusPanel = UserStatusPanel
 

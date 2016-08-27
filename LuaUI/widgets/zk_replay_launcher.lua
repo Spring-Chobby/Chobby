@@ -97,8 +97,8 @@ local function SocketConnect(host, port)
 end
 
 function widget:Initialize()
-	CHOBBY_DIR = "LuaUI/widgets/chobby/"
-	VFS.Include("LuaUI/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
+	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
+	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 	url = VFS.Include("libs/neturl/url.lua")
 	lobby:AddListener("OnLaunchRemoteReplay", onLaunchReplay)
 end
@@ -116,7 +116,7 @@ function onLaunchReplay(wtf, replay, game, map, engine)
 	hasFile = false
 
 	hasEngine = engine:find(Game.version) == 1
-	
+
 	if not hasEngine then
 		return Abort("Wrong engine "..engine)
 	end
@@ -250,7 +250,7 @@ function widget:DownloadFailed(downloadID)
 
 	if(downloads.game == downloadID) then
 		Abort("Game download failed")
-	end	
+	end
 end
 
 function widget:DownloadFinished(downloadID)
