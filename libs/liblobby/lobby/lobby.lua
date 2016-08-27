@@ -43,7 +43,7 @@ function Lobby:_Clean()
 	self.myChannels = {}
 	self.myBattleID = nil
 	self.scriptPassword = nil
-	
+
 	-- reconnection delay in seconds
 	self.reconnectionDelay = 5
 end
@@ -61,7 +61,7 @@ end
 
 local function GenerateScriptTxt(battleID)
 	local battle = lobby:GetBattle(battleID)
-	local scriptTxt = 
+	local scriptTxt =
 [[
 [GAME]
 {
@@ -205,7 +205,7 @@ function Lobby:ConnectToBattle(useSpringRestart)
 		return
 	end
 	self:_CallListeners("OnBattleAboutToStart")
-	
+
 	Spring.Echo("Game starts!")
 	local battle = self:GetBattle(self.myBattleID)
 	local springURL = "spring://" .. self:GetMyUserName() .. ":" .. self:GetScriptPassword() .. "@" .. battle.ip .. ":" .. battle.port
@@ -449,8 +449,8 @@ end
 
 -- TODO: This function has an awful signature and should be reworked. At least make it use a key/value table.
 function Lobby:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName, title, gameName, spectatorCount)
-	self.battles[battleID] = { 
-		battleID=battleID, type=type, natType=natType, founder=founder, ip=ip, port=port, 
+	self.battles[battleID] = {
+		battleID=battleID, type=type, natType=natType, founder=founder, ip=ip, port=port,
 		maxPlayers=maxPlayers, passworded=passworded, rank=rank, mapHash=mapHash, spectatorCount = spectatorCount or 0,
 		engineName=engineName, engineVersion=engineVersion, mapName=mapName, title=title, gameName=gameName, users={founder},
 	}
@@ -501,10 +501,10 @@ function Lobby:_OnLeftBattle(battleID, userName)
 			break
 		end
 	end
-	
+
 	self.users[userName].battleID = nil
 	self:_CallListeners("OnUpdateUserStatus", userName, {battleID = false})
-	
+
 	self:_CallListeners("OnLeftBattle", battleID, userName)
 end
 
@@ -525,13 +525,13 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	if not self.userBattleStatus[userName] then
 		self.userBattleStatus[userName] = {}
 	end
-	
+
 	local userData = self.userBattleStatus[userName]
-	
+
 	-- If userData.allyNumber is present then an update must occur.
 	local changedAllyTeam = userData.allyNumber or (status.allyNumber ~= userData.allyNumber)
 	local changedSpectator = (status.isSpectator ~= userData.isSpectator)
-	
+
 	userData.allyNumber = status.allyNumber or userData.allyNumber
 	userData.teamNumber = status.teamNumber or userData.teamNumber
 	if status.isSpectator ~= nil then
@@ -540,7 +540,7 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	userData.sync       = status.sync  or userData.sync
 	userData.aiLib      = status.aiLib or userData.aiLib
 	userData.owner      = status.owner or userData.owner
-	
+
 	status.allyNumber   = userData.allyNumber
 	status.teamNumber   = userData.teamNumber
 	status.isSpectator  = userData.isSpectator
@@ -548,7 +548,7 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	status.aiLib        = userData.aiLib
 	status.owner        = userData.owner
 	self:_CallListeners("OnUpdateUserBattleStatus", userName, status)
-	
+
 	if changedSpectator or changedAllyTeam then
 		--Spring.Echo("OnUpdateUserTeamStatus", changedAllyTeam, changedSpectator, "spectator", status.isSpectator, userData.isSpectator, "ally Team", status.allyNumber, userData.allyNumber)
 		self:_CallListeners("OnUpdateUserTeamStatus", userName, status.allyNumber, status.isSpectator)
@@ -677,11 +677,11 @@ end
 
 function Lobby:_OnLeft(chanName, userName, reason)
 	local channel = self:_GetChannel(chanName)
-	
+
 	if not (channel and channel.users) then
 		return
 	end
-	
+
 	if userName == self.myUserName then
 		for i, v in pairs(self.myChannels) do
 			if v == chanName then
@@ -797,32 +797,32 @@ end
 
 function Lobby:_OnDisconnected(...)
 	self:_CallListeners("OnDisconnected")
-	
+
 	for battleID, battle in pairs(self.battles) do
 		for _, useName in pairs(battle.users) do
 			self:_OnLeftBattle(battleID, useName)
 		end
 		self:_OnBattleClosed(battleID)
 	end
-	
+
 	for userName,_ in pairs(self.users) do
 		self:_OnRemoveUser(userName)
 	end
-	
+
 	self:_PreserveData()
 	self:_Clean()
-	self.disconnectTime = Spring.GetGameSeconds()
+	self.disconnectTime = Spring.GetTimer()
 end
 
 function Lobby:Reconnect()
-	self.lastReconnectionAttempt = Spring.GetGameSeconds()
+	self.lastReconnectionAttempt = Spring.GetTimer()
 	self:Connect(self._oldData.host, self._oldData.port)
 end
 
 function Lobby:SafeUpdate(...)
 	if self.status == "disconnected" and self.disconnectTime ~= nil then
-		local nowSeconds = Spring.GetGameSeconds()
-		if self.lastReconnectionAttempt == nil or nowSeconds - self.lastReconnectionAttempt > self.reconnectionDelay then
+		local currentTime = Spring.GetTimer()
+		if self.lastReconnectionAttempt == nil or Spring.DiffTimers(currentTime, self.lastReconnectionAttempt) > self.reconnectionDelay then
 			self:Reconnect()
 		end
 	end
@@ -975,8 +975,8 @@ end
 function Lobby:GetMyAllyNumber()
 	if self.userBattleStatus[self.myUserName] then
 		return self.userBattleStatus[self.myUserName].allyNumber
-	end	
-end 
+	end
+end
 
 function Lobby:GetMyTeamNumber()
 	if self.userBattleStatus[self.myUserName] then

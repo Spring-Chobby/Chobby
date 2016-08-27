@@ -12,7 +12,7 @@ Interface = Lobby:extends{}
 function Interface:init()
 -- dumpConfig()
 	self.messagesSentCount = 0
-	self.lastSentSeconds = Spring.GetGameSeconds()
+	self.lastSentSeconds = Spring.GetTimer()
 	self.status = "offline"
 	self.finishedConnecting = false
 	self.listeners = {}
@@ -35,7 +35,7 @@ function Interface:Connect(host, port)
 	if res == nil and err == "host not found" then
 		self:_OnDisconnected("Host not found")
 		-- The socket is expected to return "timeout" immediately since timeout time is set  to 0
-	elseif not (res == nil and err == "timeout") then 
+	elseif not (res == nil and err == "timeout") then
 		Spring.Log(LOG_SECTION, LOG.ERROR, "Error in connect: " .. err)
     else
         self.status = "connecting"
@@ -64,7 +64,7 @@ function Interface:_SendCommand(command, sendMessageCount)
 	end
 	self.client:send(command)
 	self:_CallListeners("OnCommandSent", command:sub(1, #command-1))
-	self.lastSentSeconds = Spring.GetGameSeconds()
+	self.lastSentSeconds = Spring.GetTimer()
 end
 
 function Interface:SendCustomCommand(command)
@@ -208,8 +208,8 @@ function Interface:SafeUpdate()
 	self:_SocketUpdate()
 	-- prevent timeout with PING
 	if self.status == "connected" then
-		local nowSeconds = Spring.GetGameSeconds()
-		if nowSeconds - self.lastSentSeconds > 30 then
+		local currentTime = Spring.GetTimer()
+		if Spring.DiffTimers(currentTime, self.lastSentSeconds) > 30 then
 			self:Ping()
 		end
 	end
