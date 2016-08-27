@@ -662,7 +662,7 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 			self:_SetSelection(1, 1, #self.lines[#self.lines].text + 1, #self.lines)
 		end
 	else
-		eatInput = false
+		eatInput = self.state.focused
 	end
 	
 	-- text selection handling
