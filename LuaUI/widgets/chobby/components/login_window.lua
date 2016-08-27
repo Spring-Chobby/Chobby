@@ -32,7 +32,7 @@ function createTabGroup(ctrls)
 end
 
 local function GetLobbyName()
-	local version = Game.gameVersion
+	local version = Game.gameVersion or "$VERSION"
 	-- try to extract version from .git
 	if version == "$VERSION" then
 		version = "git"
@@ -43,27 +43,27 @@ local function GetLobbyName()
 			version = version .. " - " .. tostring(gitCommit)
 		end
 	end
-	return Game.gameName .. " " .. version
+	return (Game.gameName or 'Chobby') .. " " .. version
 end
 
 function LoginWindow:init(failFunction, cancelText, windowClassname)
-	
+
 	if screen0:GetChildByName("loginWindow") then
 		Spring.Echo("Tried to spawn duplicate login window")
 		return
 	end
-	
+
 	self.CancelFunc = function ()
 		self.window:Dispose()
 		if failFunction then
 			failFunction()
 		end
 	end
-	
+
 	self.AcceptFunc = function ()
 		self:tryLogin()
 	end
-		
+
 	self.lblInstructions = Label:New {
 		x = 15,
 		width = 170,
@@ -132,7 +132,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		font = Configuration:GetFont(3),
 		OnKeyPress = {
 			function(obj, key, mods, ...)
-				if key == Spring.GetKeyCode("enter") or 
+				if key == Spring.GetKeyCode("enter") or
 					key == Spring.GetKeyCode("numpad_enter") then
 					self:tryLogin()
 				end
@@ -148,7 +148,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		caption = "",
 		font = Configuration:GetFont(4),
 	}
-	
+
 	self.cbAutoLogin = Checkbox:New {
 		x = 15,
 		width = 190,
@@ -193,7 +193,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 			end
 		},
 	}
-	
+
 	self.btnCancel = Button:New {
 		right = 1,
 		width = 130,
@@ -208,7 +208,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 			end
 		},
 	}
-	
+
 	local ww, wh = Spring.GetWindowGeometry()
 	local w, h = 430, 420
 	self.window = Window:New {
@@ -248,7 +248,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 			end
 		}
 	}
-	
+
 	self.window:BringToFront()
 
 	createTabGroup({self.ebServerAddress, self.ebServerPort, self.ebUsername, self.ebPassword})
@@ -286,7 +286,7 @@ end
 
 function LoginWindow:tryLogin()
 	self.lblError:SetCaption("")
-	
+
 	username = self.ebUsername.text
 	password = self.ebPassword.text
 	if username == '' or password == '' then
@@ -364,7 +364,7 @@ function LoginWindow:OnRegister()
 end
 
 function LoginWindow:OnConnected()
-	
+
 	self.lblError:SetCaption(Configuration:GetPartialColor() .. i18n("connecting"))
 
 	self.onDenied = function(listener, reason)
@@ -375,7 +375,7 @@ function LoginWindow:OnConnected()
 		lobby:RemoveListener("OnAccepted", self.onAccepted)
 		lobby:RemoveListener("OnDenied", self.onDenied)
 		ChiliFX:AddFadeEffect({
-			obj = self.window, 
+			obj = self.window,
 			time = 0.2,
 			endValue = 0,
 			startValue = 1,

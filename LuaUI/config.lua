@@ -33,9 +33,9 @@ if LUA_NAME == "LuaUI" or LUA_NAME == "LuaMenu" then
 	--assert(LUAUI_DIRNAME)
 
 	--// Config & Widget Locations
-	ORDER_FILENAME  = LUA_DIRNAME .. 'Config/' .. Game.modShortName .. '_order.lua'
-	CONFIG_FILENAME = LUA_DIRNAME .. 'Config/' .. Game.modShortName .. '_data.lua'
-	KNOWN_FILENAME  = LUA_DIRNAME .. 'Config/' .. Game.modShortName .. '_known.lua'
+	ORDER_FILENAME  = LUA_DIRNAME .. 'Config/IGL_order.lua'
+	CONFIG_FILENAME = LUA_DIRNAME .. 'Config/IGL_data.lua'
+	KNOWN_FILENAME  = LUA_DIRNAME .. 'Config/IGL_known.lua'
 
 	-- VFS.RAW_FIRST loads user widgets first
 	-- VFS.ZIP_FIRST loads game widgets first
