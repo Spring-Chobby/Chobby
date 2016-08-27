@@ -25,13 +25,13 @@ function widget:Initialize()
 	end
 end
 
-local sec = 0 --amount of second since last "collect garbage".
+local timer = Spring.GetTimer() --time of last "collect garbage".
 local interval = 20 -- interval of 20 seconds
 local memThreshold = 102400 --amount of memory usage (kilobyte) before calling LUA GC
-function widget:Update(dt)
-	sec = sec + dt
-	if (sec >= interval) then --if minimum interval reached:
-		sec = 0
+function widget:Update()
+	local currentTime = Spring.GetTimer()
+	if Spring.DiffTimers(currentTime, timer) >= interval then --if minimum interval reached:
+		timer = currentTime
 		local memusage = collectgarbage("count") --get total amount of memory usage
 		if (memusage > memThreshold) then
 			local memString = "Calling Garbage Collector on excessive Lua memory usage: " .. ('%.1f'):format(memusage/1024) .. " MB" --display current memory usage to player

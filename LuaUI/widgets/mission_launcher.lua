@@ -22,7 +22,7 @@ local RESULTS_QUERY_PERIOD = 0.1
 local results = {}
 local listeners = {}
 local waitingForResults = false
-local timer = 0
+local timer = Spring.GetTimer()
 
 local function RemoveResultsFile()
 	if VFS.FileExists(RESULTS_FILE) then
@@ -32,7 +32,7 @@ end
 
 local function LaunchMission(startscript, listenerFunc)
 	listeners[#listeners + 1] = listenerFunc
-	RemoveResultsFile()	
+	RemoveResultsFile()
 	results = {}
 	Spring.Start(startscript, "")
 	waitingForResults = true
@@ -49,24 +49,24 @@ local function LoadResults()
 		results = VFS.Include(RESULTS_FILE)
 		--RemoveResultsFile()
 		waitingForResults = false
-		
+
 		for i,listener in pairs(listeners) do
 			if (type(listener) == 'function') then
 				listener(results)
 			end
 		end
 		listeners = {}
-		
+
 		return results
 	end
 end
 
 -- periodically query for results
-function widget:Update(dt)
-	timer = timer + dt
-	if (timer > RESULTS_QUERY_PERIOD) then
+function widget:Update()
+	local currentTime = Spring.GetTimer()
+	if Spring.DiffTimers(currentTime, timer) > RESULTS_QUERY_PERIOD then
 		LoadResults()
-		timer = 0
+		timer = currentTime
 	end
 end
 
