@@ -269,7 +269,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local function ExitSpring()
 		Spring.Echo("Quitting...")
-		Spring.SendCommands("quitforce")
+		Spring.Quit()
 	end
 
 	-- Exit button

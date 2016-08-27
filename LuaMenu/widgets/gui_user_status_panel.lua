@@ -45,7 +45,7 @@ end
 
 local function Quit()
 	Spring.Echo("Quitting...")
-	Spring.SendCommands("quitforce")
+	Spring.Quit()
 end
 
 -- local function UpdateLatency()

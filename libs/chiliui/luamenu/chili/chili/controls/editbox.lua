@@ -67,7 +67,7 @@ function EditBox:New(obj)
 	return obj
 end
 
-function EditBox:Dispose(...)	
+function EditBox:Dispose(...)
 	Control.Dispose(self)
 	self.hintFont:SetParent()
 end
@@ -138,7 +138,7 @@ function EditBox:_SetSelection(selStart, selStartY, selEnd, selEndY)
 			self.selStartPhysical  = self.selStartPhysical - #pl.text
 		end
 	end
-	
+
 	if selEnd or selEndY then
 		self.selEndPhysical  = self.selEnd
 		local logicalLine = self.lines[self.selEndY]
@@ -163,7 +163,7 @@ function EditBox:GetPhysicalLinePosition(distanceFromBottom)
 	if lineID < 1 then
 		return 0
 	end
-	
+
 	local position = 0
 	for i = #self.physicalLines, 1, -1 do
 		local data = self.physicalLines[i]
@@ -248,7 +248,7 @@ function EditBox:_GeneratePhysicalLines(logicalLineID)
 		end
 	  end
     end
-	
+
 	if self.autoHeight then
 		local totalHeight = #self.physicalLines * fontLineHeight
 		self:Resize(nil, totalHeight, true, true)
@@ -269,7 +269,7 @@ function EditBox:AddLine(text)
 	--   if self.autoHeight then
 --     local textHeight,textDescender,numLines = font:GetTextHeight(self._wrappedText)
 --     textHeight = textHeight-textDescender
--- 
+--
 --     if (self.autoObeyLineHeight) then
 --       if (numLines>1) then
 --         textHeight = numLines * font:GetLineHeight()
@@ -278,7 +278,7 @@ function EditBox:AddLine(text)
 --         textHeight = math.min( math.max(textHeight, font:GetAscenderHeight()), font:GetLineHeight())
 --       end
 --     end
--- 
+--
 --     self:Resize(nil, textHeight, true, true)
 --   end
 	self._inRequestUpdate = true
@@ -305,7 +305,7 @@ function EditBox:UpdateLayout()
 -- 		table.insert(lines, self.lines[i].text)
 -- 	end
 -- 	local txt = table.concat(lines, "\n")
--- 
+--
 -- 	self:SetText(txt)
 --   end
   local font = self.font
@@ -395,7 +395,7 @@ function EditBox:_SetCursorByMousePos(x, y)
 		local text = self.text
 		-- properly accounts for passworded text where characters are represented as "*"
 		-- TODO: what if the passworded text is displayed differently? this is using assumptions about the skin
-		if #text > 0 and self.passwordInput then 
+		if #text > 0 and self.passwordInput then
 			text = string.rep("*", #text)
 		end
 		self.cursorY = #self.physicalLines
@@ -419,8 +419,8 @@ function EditBox:_SetCursorByMousePos(x, y)
 				break
 			end
 		end
-		
-		
+
+
 		-- convert back to logical line
 		self.physicalCursorY = self.cursorY
 		self.physicalCursor = self.cursor
@@ -483,7 +483,7 @@ function EditBox:MouseDown(x, y, ...)
 		self.selEnd = nil
 		self.selEndY = nil
 	end
-	
+
 	self._interactedTime = Spring.GetTimer()
 	inherited.MouseDown(self, x, y, ...)
 	self:Invalidate()
@@ -662,9 +662,9 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 			self:_SetSelection(1, 1, #self.lines[#self.lines].text + 1, #self.lines)
 		end
 	else
-		eatInput = false
+		eatInput = self.state.focused
 	end
-	
+
 	-- text selection handling
 	if key == Spring.GetKeyCode("left") or key == Spring.GetKeyCode("right") or key == Spring.GetKeyCode("home") or key == Spring.GetKeyCode("end") then
 		if mods.shift then
@@ -677,7 +677,7 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 			self.selEnd = nil
 		end
 	end
-	
+
 
 	self._interactedTime = Spring.GetTimer()
 	eatInput = inherited.KeyPress(self, key, mods, isRepeat, label, unicode, ...) or eatInput

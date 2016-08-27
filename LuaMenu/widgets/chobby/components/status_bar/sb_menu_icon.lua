@@ -104,20 +104,20 @@ function SBMenuIcon:Settings()
 				height = 40,
 				y = 40,
 				items = { "English", "Japanese", "Serbian", "Spanish" },
-				OnSelect = {function(obj, indx, changed) 
+				OnSelect = {function(obj, indx, changed)
 					if changed then
 						local locales = { "en", "jp", "sr", "es" }
 						i18n.setLocale(locales[indx])
 					end
 				end},
 			},
-			Checkbox:New { 
+			Checkbox:New {
 				x = 10,
 				width = 300,
 				y = 100,
 				caption = i18n("Enable GLSL animations (experimental)"),
 				checked = ChiliFX:IsEnabled(),
-				OnChange = {function(obj, val) 
+				OnChange = {function(obj, val)
 					if val then
 						ChiliFX:Enable()
 						Chotify:Post({
@@ -155,5 +155,5 @@ end
 
 function SBMenuIcon:Quit()
 	Spring.Echo("Quitting...")
-	Spring.SendCommands("quitforce")
+	Spring.Quit()
 end
