@@ -75,8 +75,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	ingameInterfaceHolder:Hide()
 	
 	local lobbyInterfaceHolder = Control:New {
-		x = 0,
-		y = 0,
+		x = 10,
+		y = 10,
 		right = 0,
 		bottom = 0,
 		name = "lobbyInterfaceHolder",
@@ -87,9 +87,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		children = {},
 	}
 	
-	local mainInterfaceHolder = Window:New {
-		x = 0,
-		y = 0,
+	local mainInterfaceHolder = Control:New {
+		x = 20,
+		y = 20,
 		right = 0,
 		bottom = 0,
 		name = "mainInterfaceHolder",
