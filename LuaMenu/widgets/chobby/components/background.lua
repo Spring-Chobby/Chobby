@@ -84,9 +84,12 @@ function Background:Enable()
 			file = file,
 			
 			-- Eat all the input so none of it reaches ingame when the menu is visible.
-			OnMouseDown = eatInputSetFunction,
-			OnKeyPress = eatInputSetFunction,
+			OnKeyPress   = eatInputSetFunction,
 			OnMouseWheel = eatInputSetFunction,
+			OnClick      = eatInputSetFunction,
+			OnDblClick   = eatInputSetFunction,
+			OnMouseDown  = eatInputSetFunction,
+			OnMouseUp    = eatInputSetFunction,
 		}
 
 		
