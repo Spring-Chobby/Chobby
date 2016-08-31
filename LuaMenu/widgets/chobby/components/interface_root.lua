@@ -74,13 +74,26 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	}
 	ingameInterfaceHolder:Hide()
 	
-	local mainInterfaceHolder = Control:New {
+	local lobbyInterfaceHolder = Control:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		name = "lobbyInterfaceHolder",
+		parent = screen0,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		children = {},
+	}
+	
+	local mainInterfaceHolder = Window:New {
 		x = 0,
 		y = 0,
 		right = 0,
 		bottom = 0,
 		name = "mainInterfaceHolder",
-		parent = screen0,
+		parent = lobbyInterfaceHolder,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
@@ -94,7 +107,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		right = 0,
 		height = topBarHeight,
 		name = "topBarHolder",
-		parent = mainInterfaceHolder,
+		parent = lobbyInterfaceHolder,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
@@ -193,7 +206,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		name = "mainButtonsHolder",
 		parent = mainWindow,
 		padding = {0, 0, 0, 0},
-		children = {}
+		children = {},
 	}
 	local mainButtons = Control:New {
 		x = 0,
@@ -426,10 +439,12 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		end
 	end
 	
-	local function UpdateLayout()
+	local function UpdateDoublePanel(newDoublePanel)
+		if newDoublePanel == doublePanelMode then
+			return
+		end
+		doublePanelMode = newDoublePanel
 		
-		local topBarOffset = (showTopBar and topBarHeight) or 0
-
 		if doublePanelMode then
 			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidth)
 			RescaleMainWindow(3, 70)
@@ -453,27 +468,27 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			-- Make Main Window take up more space
 			panelButtonsHolder:Show()
 			panelWindowHolder:Show()
-			panelWindowHolder:SetPos(nil, titleHeight + topBarOffset)
+			panelWindowHolder:SetPos(nil, titleHeight)
 
-			mainWindow:SetPos(nil, titleHeight + topBarOffset)
+			mainWindow:SetPos(nil, titleHeight)
 			mainWindow._relativeBounds.right = panelWidthRel .. "%"
 			mainWindow._relativeBounds.bottom = 0
 			mainWindow:UpdateClientArea()
 
 			-- Align game title and status.
-			headingWindow:SetPos(0, topBarOffset, titleWidth, titleHeight)
-			mainStatusWindow:SetPos(titleWidth, topBarOffset, titleHeight, titleHeight)
+			headingWindow:SetPos(0, 0, titleWidth, titleHeight)
+			mainStatusWindow:SetPos(titleWidth, 0, titleHeight, titleHeight)
 			mainStatusWindow._relativeBounds.right = 0
 			mainStatusWindow:UpdateClientArea()
 
 			userStatusWindow._relativeBounds.bottom = panelButtonsHeight
 			userStatusWindow:UpdateClientArea()
 
-			battleStatusHolder:SetPos(battleStatusLeftPadding, battleStatusTopPadding + topBarOffset)
+			battleStatusHolder:SetPos(battleStatusLeftPadding, battleStatusTopPadding)
 			battleStatusHolder._relativeBounds.bottom = battleStatusBottomPadding
 			battleStatusHolder:UpdateClientArea()
 
-			topPartImage:SetPos(nil, topBarOffset, nil, titleHeight + imageFudge)
+			topPartImage:SetPos(nil, nil, nil, titleHeight + imageFudge)
 		else
 			rightPanelHandler.Rescale(2, 55)
 			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidthSmall)
@@ -501,25 +516,25 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			if panelWindowHolder.visible then
 				panelWindowHolder:Hide()
 			end
-			mainWindow:SetPos(nil, titleHeightSmall + topBarOffset)
+			mainWindow:SetPos(nil, titleHeightSmall)
 			mainWindow._relativeBounds.right = 0
 			mainWindow._relativeBounds.bottom = 0
 			mainWindow:UpdateClientArea()
 
 			-- Align game title and status.
-			headingWindow:SetPos(nil, topBarOffset, mainButtonsWidthSmall + padding, titleHeightSmall)
-			mainStatusWindow:SetPos(mainButtonsWidthSmall, topBarOffset, titleHeightSmall, titleHeightSmall)
+			headingWindow:SetPos(0, 0, mainButtonsWidthSmall + padding, titleHeightSmall)
+			mainStatusWindow:SetPos(mainButtonsWidthSmall, 0, titleHeightSmall, titleHeightSmall)
 			mainStatusWindow._relativeBounds.right = 0
 			mainStatusWindow:UpdateClientArea()
 
 			userStatusWindow._relativeBounds.bottom = 0
 			userStatusWindow:UpdateClientArea()
 
-			battleStatusHolder:SetPos(smallStatusLeftPadding, battleStatusTopPaddingSmall + topBarOffset)
+			battleStatusHolder:SetPos(smallStatusLeftPadding, battleStatusTopPaddingSmall)
 			battleStatusHolder._relativeBounds.bottom = statusWindowGapSmall
 			battleStatusHolder:UpdateClientArea()
 
-			topPartImage:SetPos(nil, topBarOffset, nil, titleHeightSmall + imageFudge)
+			topPartImage:SetPos(nil, nil, nil, titleHeightSmall + imageFudge)
 		end
 
 		headingImage.file = Configuration:GetHeadingImage(doublePanelMode)
@@ -549,8 +564,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			bottomPad = 40
 			middlePad = 20
 		end
-		
-		local topBarOffset = (showTopBar and topBarHeight) or 0
 		
 		contentPlace:SetPos(leftPad)
 		contentPlace._relativeBounds.right = middlePad
@@ -591,25 +604,17 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-------------------------------------------------------------------
 	-- Visibility and size handlers
 	-------------------------------------------------------------------
-	local function UpdateDoublePanel(newDoublePanel)
-		if newDoublePanel == doublePanelMode then
-			return
-		end
-		doublePanelMode = newDoublePanel
-		
-		UpdateLayout()
-	end
 
 	local function SetMainInterfaceVisible(newVisible)
-		if mainInterfaceHolder.visible == newVisible then
+		if lobbyInterfaceHolder.visible == newVisible then
 			return
 		end
 		backgroundHolder:SetEnabled(newVisible)
 		if newVisible then
-			mainInterfaceHolder:Show()
+			lobbyInterfaceHolder:Show()
 			ingameInterfaceHolder:Hide()
 		else
-			mainInterfaceHolder:Hide()
+			lobbyInterfaceHolder:Hide()
 			ingameInterfaceHolder:Show()
 		end
 	end
@@ -620,11 +625,15 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			return
 		end
 		topBarHolder:SetVisibility(newVisible)
-		
 		showTopBar = newVisible
+		
+		local topOffset = (showTopBar and topBarHeight) or 0
+		mainInterfaceHolder._relativeBounds.top = topOffset
+		mainInterfaceHolder._relativeBounds.bottom = 0
+		mainInterfaceHolder:UpdateClientArea()
+		
 		local screenWidth, screenHeight = Spring.GetViewGeometry()
-		UpdateLayout()
-		UpdatePadding(screenWidth, screenHeight)
+		screen0:Resize(screenWidth, screenHeight)
 	end
 	
 	-------------------------------------------------------------------
@@ -784,8 +793,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		globalKeyListener = newListenerFunc
 	end
 
-	function externalFunctions.GetMainInterfaceHolder()
-		return mainInterfaceHolder
+	function externalFunctions.GetLobbyInterfaceHolder()
+		return lobbyInterfaceHolder
 	end
 	
 	-------------------------------------------------------------------

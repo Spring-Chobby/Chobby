@@ -80,7 +80,7 @@ function ReadyCheckWindow:init(queue, responseTime, queueWindow)
 		y = math.floor(math.max(0, (sh) / 2 - h)),
 		width = w,
 		height = h,
-		parent = WG.Chobby.mainInterfaceHolder,
+		parent = WG.Chobby.lobbyInterfaceHolder,
 		draggable = false,
 		resizable = false,
 		children = {
@@ -162,7 +162,7 @@ function ReadyCheckWindow:AddBackground()
 		bottom = 0,
 		padding = {0,0,0,0},
 		margin = {0,0,0,0},
-		parent = WG.Chobby.mainInterfaceHolder,
+		parent = WG.Chobby.lobbyInterfaceHolder,
 		Draw = function()
 			if not self.sentTime then
 				local diff = os.clock() - self.startTime

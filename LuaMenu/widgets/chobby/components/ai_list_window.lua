@@ -2,7 +2,7 @@ AiListWindow = ListWindow:extends{}
 
 function AiListWindow:init(lobby, gameName, allyTeam)
 
-	self:super('init', WG.Chobby.mainInterfaceHolder, "Choose AI", false, "overlay_window")
+	self:super('init', WG.Chobby.lobbyInterfaceHolder, "Choose AI", false, "overlay_window")
 	self.window:SetPos(nil, nil, 500, 700)
 	
 	-- Disable game-specific AIs for now since it breaks /luaui reload

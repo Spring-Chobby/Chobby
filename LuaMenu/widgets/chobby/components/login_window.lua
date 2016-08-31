@@ -48,7 +48,7 @@ end
 
 function LoginWindow:init(failFunction, cancelText, windowClassname)
 
-	if WG.Chobby.mainInterfaceHolder:GetChildByName("loginWindow") then
+	if WG.Chobby.lobbyInterfaceHolder:GetChildByName("loginWindow") then
 		Spring.Echo("Tried to spawn duplicate login window")
 		return
 	end
@@ -236,7 +236,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 			self.btnRegister,
 			self.btnCancel
 		},
-		parent = WG.Chobby.mainInterfaceHolder,
+		parent = WG.Chobby.lobbyInterfaceHolder,
 		OnDispose = {
 			function()
 				self:RemoveListeners()
@@ -466,7 +466,7 @@ function LoginWindow:createAgreementWindow()
 			self.btnNo,
 
 		},
-		parent = WG.Chobby.mainInterfaceHolder,
+		parent = WG.Chobby.lobbyInterfaceHolder,
 	}
 end
 

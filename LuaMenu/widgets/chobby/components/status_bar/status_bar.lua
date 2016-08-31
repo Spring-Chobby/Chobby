@@ -9,7 +9,7 @@ function StatusBar:init()
 		height = 50,
 		minHeight = 50,
 		border = 1,
-		parent = WG.Chobby.mainInterfaceHolder,
+		parent = WG.Chobby.lobbyInterfaceHolder,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},

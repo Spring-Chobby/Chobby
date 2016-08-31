@@ -77,8 +77,8 @@ function widget:Initialize()
 
 	interfaceRoot = WG.Chobby.GetInterfaceRoot()
 
-	mainInterfaceHolder = interfaceRoot.GetMainInterfaceHolder()
-	Chobby.mainInterfaceHolder = mainInterfaceHolder
+	lobbyInterfaceHolder = interfaceRoot.GetLobbyInterfaceHolder()
+	Chobby.lobbyInterfaceHolder = lobbyInterfaceHolder
 	Chobby.interfaceRoot = interfaceRoot
 end
 

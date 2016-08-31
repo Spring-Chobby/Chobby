@@ -347,7 +347,7 @@ function BattleListWindow:OpenHostWindow()
 	local hostBattleWindow = Window:New {
 		caption = "",
 		name = "hostBattle",
-		parent = WG.Chobby.mainInterfaceHolder,
+		parent = WG.Chobby.lobbyInterfaceHolder,
 		width = 530,
 		height = 260,
 		resizable = false,
@@ -478,7 +478,7 @@ function BattleListWindow:JoinBattle(battle)
 			caption = "",
 			resizable = false,
 			draggable = false,
-			parent = WG.Chobby.mainInterfaceHolder,
+			parent = WG.Chobby.lobbyInterfaceHolder,
 			classname = "overlay_window",
 			OnDispose = {
 				function()

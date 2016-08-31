@@ -77,7 +77,7 @@ local function CreateModoptionWindow()
 	local modoptionsSelectionWindow = Window:New {
 		caption = "",
 		name = "modoptionsSelectionWindow",
-		parent = WG.Chobby.mainInterfaceHolder,
+		parent = WG.Chobby.lobbyInterfaceHolder,
 		width = 800,
 		height = 500,
 		resizable = false,

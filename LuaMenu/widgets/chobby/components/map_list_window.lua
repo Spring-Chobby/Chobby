@@ -2,7 +2,7 @@ MapListWindow = ListWindow:extends{}
 
 function MapListWindow:init(lobby, gameName, zoomToMap)
 
-	self:super('init', WG.Chobby.mainInterfaceHolder, "Select Map", false, "overlay_window")
+	self:super('init', WG.Chobby.lobbyInterfaceHolder, "Select Map", false, "overlay_window")
 	self.window:SetPos(nil, nil, 500, 700)
 	
 	local zoomY
