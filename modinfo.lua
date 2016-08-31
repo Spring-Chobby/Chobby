@@ -9,10 +9,11 @@ local modinfo = {
 	shortGame       = "IGL",
 	mutator         = "Official",
 	description     = "An in-game lobby",
-	modtype         = 1,
+	modtype         = "5",
 	url             = "https://github.com/Spring-Chobby/Chobby",
 	depend = {
 		"Spring Cursors",
+		"Spring content v1",
 	},
 	onlyLocal = true
 }
