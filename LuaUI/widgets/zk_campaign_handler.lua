@@ -39,7 +39,14 @@ local newGameCampaignButtons = {}
 local newGameCampaignDetails = {}	-- panel, stackPanel, titleLabel, authorLabel, descTextBox
 local saveScroll, loadScroll, saveDescEdit
 local saveLoadControls = {}	-- {id, container, titleLabel, descTextBox, image (someday), isNew}
+local starmapWindow, starmapBackgroundHolder, starmapBackground, starmapBackground2, starmapPlanetImage, starmapInfoPanel
 
+local starmapAnimation = nil
+
+local STARMAP_WINDOW_WIDTH = 1280
+local STARMAP_WINDOW_HEIGHT = 768
+local PLANET_IMAGE_SIZE = 259
+local PLANET_BACKGROUND_SIZE = 1280
 local CAMPAIGN_SELECTOR_BUTTON_HEIGHT = 96
 local SAVEGAME_BUTTON_HEIGHT = 128
 local SAVE_DIR = "saves/"
@@ -54,10 +61,10 @@ local gamedata = {
 	--[[
 	campaignID = nil
 	vnStory = nil
-	mapAvailable = false
 	nextMissionScript = nil
 	chapterTitle = ""
 	]]
+	mapEnabled = false,
 	completedMissions = {},
 	unlockedScenes = {},
 	vars = {},
@@ -66,6 +73,10 @@ local gamedata = {
 local campaignDefs = {}	-- {name, author, image, definition, starting function call}
 local campaignDefsByID = {}
 local currentCampaignID = nil
+
+local planetDefs = {}
+local planetDefsByID = {}
+local missionDefs = {}
 
 local saves = {}
 local savesOrdered = {}
@@ -93,10 +104,15 @@ end
 local function ResetGamedata()
 	gamedata = {
 		chapterTitle = "",
+		mapEnabled = false,
 		completedMissions = {},
 		unlockedScenes = {},
 		vars = {},
 	}
+	currentCampaignID = nil
+	planetDefs = {}
+	planetDefsByID = {}
+	missionDefs = {}
 	
 	SetControlGreyout(startButton, true)
 end
@@ -108,6 +124,7 @@ local function LoadCampaignDefs()
 			if VFS.FileExists(subdir .. "campaigninfo.lua") then
 				local def = VFS.Include(subdir .. "campaigninfo.lua")
 				def.dir = subdir
+				def.vnDir = subdir .. (def.vnDir or 'vn')
 				campaignDefs[#campaignDefs+1] = def
 				campaignDefsByID[def.id] = def
 			end
@@ -116,6 +133,25 @@ local function LoadCampaignDefs()
 	end)
 	if (not success) then
 		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error loading campaign defs: " .. err)
+	end
+end
+
+local function LoadCampaign(campaignID)
+	local def = campaignDefsByID[campaignID]
+	local success, err = pcall(function()
+		local planetDefPath = def.dir .. "planetDefs.lua"
+		local missionDefPath = def.dir .. "missionDefs.lua"
+		planetDefs = VFS.FileExists(planetDefPath) and VFS.Include(planetDefPath) or {}
+		missionDefs = VFS.FileExists(missionDefPath) and VFS.Include(missionDefPath) or {}
+		for i=1,#planetDefs do
+			planetDefsByID[planetDefs[i].id] = planetDefs[i]	
+		end
+		if def.startFunction then
+			def.startFunction()
+		end
+	end)
+	if (not success) then
+		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error loading campaign " .. campaignID .. ": " .. err)
 	end
 end
 
@@ -279,7 +315,303 @@ local function SelectCampaign(campaignID)
 	UpdateCampaignDetailsPanel(campaignID)
 end
 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+local function IsMissionUnlocked(missionID)
+	local mission = missionDefs[missionID]
+	if not mission then
+		return false
+	end
+	if gamedata.completedMissions[requiredMissionID] then
+		return true
+	elseif #(mission.requiredMissions or {}) == 0 then
+		return true
+	end
+	for j, requiredMissionSet in ipairs(mission.requiredMissions) do
+		for k, requiredMissionID in ipairs(requiredMissionSet) do
+			if gamedata.completedMissions[requiredMissionID] then
+				return true
+			end
+		end
+	end
+	return false
+end
 
+local function IsPlanetVisible(planetDef)
+	for i=1,#planetDef.missions do
+		local missionID = planetDef.missions[i]
+		if gamedata.completedMissions[missionID] then
+			return true
+		elseif IsMissionUnlocked(missionID) then
+			return true
+		end
+	end
+	return false
+end
+
+local function CloseStarMap()
+	if starmapWindow then
+		starmapWindow:Dispose()
+		starmapWindow = nil
+	end
+end
+
+local function BackToStarmap()
+	starmapAnimation = "out"
+	--starmapBackground2.file = nil
+	--starmapPlanetImage.file = nil
+	--starmapBackground2:Invalidate()
+	--starmapPlanetImage:Invalidate()
+	starmapInfoPanel:Dispose()
+end
+
+local function SelectPlanet(planetID)
+	local planetDef = planetDefsByID[planetID]
+	starmapAnimation = "in"
+	starmapBackground2.file = campaignDefsByID[currentCampaignID].dir .. planetDef.background
+	starmapPlanetImage.file = campaignDefsByID[currentCampaignID].dir .. planetDef.image
+	starmapBackground2:Invalidate()
+	starmapPlanetImage:Invalidate()
+	
+	local font_large = 20
+	local font_normal = 20
+	
+	-- display planet info panel
+	starmapInfoPanel = Panel:New{
+		name = "chobby_campaign_starmapInfoPanel",
+		parent = starmapWindow,
+		y = "20%",
+		right = 16,
+		width = "60%",
+		bottom = "20%",
+		backgroundColor = {0.3, 0.3, 0.3, 1},
+		children = {
+			-- title
+			Label:New{
+				x = 4,
+				y = 4,
+				caption = string.upper(planetDef.name),
+				font = {size = 30}
+			},
+			-- grid of details
+			Grid:New{
+				x = 4,
+				y = 40,
+				right = 4,
+				bottom = "60%",
+				columns = 2,
+				rows = 4,
+				children = {
+					Label:New{caption = "Type", font = {size = font_large}},
+					Label:New{caption = planetDef.type or "<UNKNOWN>", font = {size = font_normal}},
+					Label:New{caption = "Radius", font = {size = font_large}},
+					Label:New{caption = planetDef.radius or "<UNKNOWN>", font = {size = font_normal}},
+					Label:New{caption = "Primary", font = {size = font_large}},
+					Label:New{caption = planetDef.primary .. " (" .. planetDef.primaryType .. ") ", font = {size = font_normal}},
+					Label:New{caption = "Military rating", font = {size = font_large}},
+					Label:New{caption = tostring(planetDef.milRating or "<UNKNOWN>"), font = {size = font_normal}},
+				},
+			},
+			-- desc text
+			TextBox:New {
+				x = 4,
+				y = "45%",
+				right = 4,
+				bottom = "25%",
+				text = planetDef.text,
+				font = {size = 18},
+			},
+			-- mission list
+			--missionsStack,
+			-- back button
+			Button:New{
+				right = 0,
+				y = 0,
+				width = 64,
+				height = 48,
+				caption = i18n("back"),
+				font = {size = 20},
+				OnClick = {BackToStarmap}
+			}
+		}
+	}
+	local missionsStack = StackPanel:New {
+		parent = starmapInfoPanel,
+		orientation = "vertical",
+		x = 4,
+		right = 4,
+		height = "25%",
+		bottom = 0,
+		resizeItems = false,
+		autoArrangeV = false,
+	}
+	for i=1,#planetDef.missions do
+		local missionID = planetDef.missions[i]
+		if IsMissionUnlocked(missionID) then
+			local missionDef = missionDefs[missionID]
+			if missionDef then
+				local completed = gamedata.completedMissions[missionID]
+				missionsStack:AddChild(Button:New{
+					width = "100%",
+					x = 0,
+					height = 36,
+					caption = (completed and "(completed) " or "") .. missionDef.text,
+					font = {size = 22, color = completed and {0.2, 1, 0.4, 1} or nil},
+					OnClick = {function()
+						if missionDef.script then
+							WG.VisualNovel.StartScript(missionDef.script)
+							CloseStarMap()
+						end
+					end}
+				})
+			end
+		end
+	end
+	starmapInfoPanel:SetLayer(1)
+end
+
+local function MakePlanetButton(planetDef)
+	--Spring.Echo("Making planet image for "..planetDef.name)
+	local x = math.floor(planetDef.pos[1]*starmapBackground.width + 0.5)
+	local y = math.floor(planetDef.pos[2]*starmapBackground.height + 0.5)
+	
+	local allMissionsCompleted = true
+	for i=1,#planetDef.missions do
+		local missionID = planetDef.missions[i]
+		local completed = gamedata.completedMissions[missionID]
+		if not completed then
+			allMissionsCompleted = false
+			break
+		end
+	end
+	
+	local button = Button:New{
+		parent = starmapBackgroundHolder,
+		width = planetDef.sizeMap[1],
+		height = planetDef.sizeMap[2],
+		x = x,
+		y = y,
+		padding = {0, 0, 0, 0},
+		caption = "",
+		--backgroundColor = {0, 0, 0, 0},
+		children = {
+			Image:New {
+				file = campaignDefsByID[currentCampaignID].dir .. planetDef.image,
+				x = 0,
+				y = 0,
+				width = "100%",
+				height = "100%",
+				keepAspect = true,
+				padding = {0, 0, 0, 0},
+			},
+		},
+		OnClick = { function(self)
+				SelectPlanet(planetDef.id)
+			end
+		}
+	}
+	button:SetLayer(1)
+	
+	local label = Label:New {
+		parent = starmapBackgroundHolder,
+		x = x - 24,
+		y = y - 16,
+		width = planetDef.sizeMap[1] + 48,
+		align = "center",
+		caption = planetDef.name,
+		font = {color = allMissionsCompleted and {0.2, 1, 0.4, 1} or nil}
+	}
+	label:SetLayer(1)
+end
+
+local function MakeStarMap()
+	CloseStarMap()
+	
+	starmapWindow = Window:New{
+		name = "chobby_campaign_starmap",
+		caption = "Starmap",
+		--fontSize = 50,
+		x = screen0.width*0.5 - STARMAP_WINDOW_WIDTH/2,
+		y = screen0.height/2 - STARMAP_WINDOW_HEIGHT/2 - 8,
+		width  = STARMAP_WINDOW_WIDTH,
+		height = STARMAP_WINDOW_HEIGHT + 32,
+		padding = {8, 8, 8, 8};
+		--autosize   = true;
+		parent = screen0,
+		draggable = true,
+		resizable = false,
+	}
+	-- back button
+	starmapClose = Button:New{
+		name = "chobby_campaign_starmapClose",
+		parent = starmapWindow,
+		right = 0,
+		y = 32,
+		width = 64,
+		height = 48,
+		caption = i18n("close"),
+		font = {size = 20},
+		OnClick = {CloseStarMap}
+	}
+	starmapBackgroundHolder = Panel:New{
+		name = "chobby_campaign_starmapBackgroundHolder",
+		parent = starmapWindow,
+		x = 0,
+		y = 32,
+		right = 0,
+		bottom = 0,
+		backgroundColor = {0, 0, 0, 0},
+		padding = {0,0,0,0}
+	}
+	starmapBackground2 = Image:New{
+		name = "chobby_campaign_starmapBackground2",
+		parent = starmapBackgroundHolder,
+		x = 0,
+		y = 0,
+		width = PLANET_BACKGROUND_SIZE,
+		height = PLANET_BACKGROUND_SIZE,
+		file = "",
+		keepAspect = false,
+		color = {1,1,1,0}
+	}
+	-- force offscreen
+	starmapBackground2.x = (-PLANET_BACKGROUND_SIZE + starmapBackgroundHolder.width)/2
+	starmapBackground2.y = (-PLANET_BACKGROUND_SIZE + starmapBackgroundHolder.height)/2
+	--starmapBackground2.width = 0
+	--starmapBackground2.height = 0
+	
+	starmapPlanetImage = Image:New{
+		name = "chobby_campaign_starmapPlanetImage",
+		parent = starmapBackground2,
+		x = (PLANET_BACKGROUND_SIZE - starmapBackgroundHolder.width)/2 + 128,
+		y = (PLANET_BACKGROUND_SIZE - starmapBackgroundHolder.height)/2 + 192,
+		height = PLANET_IMAGE_SIZE,
+		width = PLANET_IMAGE_SIZE,
+		file = "",
+		color = {1,1,1,0}
+	}
+	
+	starmapBackground = Image:New{
+		name = "chobby_campaign_starmapBackground",
+		parent = starmapBackgroundHolder,
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		file = campaignDefsByID[currentCampaignID].dir .. campaignDefsByID[currentCampaignID].mapImage,
+		keepAspect = false,
+	}
+	-- planet loop
+	for i=1,#planetDefs do
+		local planetDef = planetDefs[i]
+		if IsPlanetVisible(planetDef) then
+			MakePlanetButton(planetDef)
+		end
+	end
+	starmapBackground2:SetLayer(1)
+end
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 local function SaveGame(id)
 	local success, err = pcall(function()
 		Spring.CreateDir(SAVE_DIR)
@@ -304,6 +636,7 @@ local function LoadGame(saveData)
 	local success, err = pcall(function()
 		Spring.CreateDir(SAVE_DIR)
 		currentCampaignID = saveData.campaignID
+		LoadCampaign(currentCampaignID)
 		gamedata = Spring.Utilities.CopyTable(saveData)
 		gamedata.id = nil
 		if saveData.description then
@@ -367,7 +700,6 @@ local function StartNewGame()
 	if not currentCampaignID then
 		return
 	end
-	local def = campaignDefsByID[currentCampaignID]
 			
 	ChiliFX:AddFadeEffect({
 		obj = screens.newGame, 
@@ -375,9 +707,7 @@ local function StartNewGame()
 		endValue = 0,
 		startValue = 1,
 		after = function()
-			if def.startFunction then
-				def.startFunction()
-			end
+			LoadCampaign(currentCampaignID)
 			SwitchToScreen("intermission")
 		end
 	})
@@ -764,7 +1094,9 @@ local function InitializeIntermissionControls()
 						height = 48,
 						caption = i18n("next_episode"),
 						OnClick = { function()
-							if gamedata.nextMissionScript then
+							if gamedata.mapEnabled then
+								MakeStarMap()
+							elseif gamedata.nextMissionScript then
 								WG.VisualNovel.Cleanup()
 								WG.VisualNovel.StartScript(gamedata.nextMissionScript)
 							end
@@ -951,6 +1283,35 @@ end
 --------------------------------------------------------------------------------
 -- callins
 --------------------------------------------------------------------------------
+local timer = 0
+local ANIMATION_TIME = 0.6
+
+function widget:Update(dt)
+	if starmapAnimation then
+		timer = timer + dt
+		local stage = timer/ANIMATION_TIME
+		if stage > 1 then stage = 1 end
+		if starmapAnimation == "out" then
+			stage = 1 - stage
+		end
+		starmapBackground2.color[4] = stage
+		starmapBackground2.width = math.floor(PLANET_BACKGROUND_SIZE * stage + 0.5)
+		starmapBackground2.height = math.floor(PLANET_BACKGROUND_SIZE * stage + 0.5)
+		starmapBackground2:Invalidate()
+		
+		starmapPlanetImage.color[4] = stage
+		starmapPlanetImage.width = math.floor(PLANET_IMAGE_SIZE * stage + 0.5)
+		starmapPlanetImage.height = math.floor(PLANET_IMAGE_SIZE * stage + 0.5)
+		starmapPlanetImage:Invalidate()
+		
+		if timer >= ANIMATION_TIME then
+			Spring.Echo(starmapPlanetImage.height, starmapPlanetImage.width, starmapPlanetImage.x, starmapPlanetImage.y)
+			timer = 0
+			starmapAnimation = nil
+		end
+	end
+end
+
 function widget:Initialize()
 	CHOBBY_DIR = "LuaUI/widgets/chobby/"
 	VFS.Include("LuaUI/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
@@ -964,6 +1325,7 @@ function widget:Initialize()
 		AdvanceCampaign = AdvanceCampaign,
 		UnlockScene = UnlockScene,
 		SetChapterTitle = SetChapterTitle,
+		SetMapEnabled = function(bool) gamedata.mapEnabled = bool end,
 	}
 	
 	ResetGamedata()
