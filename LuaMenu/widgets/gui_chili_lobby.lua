@@ -38,8 +38,8 @@ end
 
 local oldName
 function widget:GamePreload()
-	oldName = gameName
 	local gameName = Spring.GetGameName()
+	oldName = gameName
 	Spring.Echo("gameName", gameName)
 	interfaceRoot.SetIngame(gameName ~= "")
 end

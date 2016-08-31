@@ -69,7 +69,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
-		children = {}
+		children = {},
+		preserveChildrenOrder = true
 	}
 	ingameInterfaceHolder:Hide()
 	
@@ -83,7 +84,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
-		children = {}
+		children = {},
+		preserveChildrenOrder = true
 	}
 	
 	local topBarHolder = Control:New {
