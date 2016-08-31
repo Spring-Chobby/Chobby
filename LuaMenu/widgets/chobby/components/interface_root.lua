@@ -46,6 +46,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-- Switch to single panel mode when below the minimum screen width
 	local minScreenWidth = 1280
 
+	local gameRunning = false
 	local showTopBar = false
 	local doublePanelMode = true
 	local autodetectDoublePanel = true
@@ -58,6 +59,20 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-------------------------------------------------------------------
 	-- Window structure
 	-------------------------------------------------------------------
+	local ingameInterfaceHolder = Control:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		name = "ingameInterfaceHolder",
+		parent = screen0,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		children = {}
+	}
+	ingameInterfaceHolder:Hide()
+	
 	local mainInterfaceHolder = Control:New {
 		x = 0,
 		y = 0,
@@ -70,6 +85,20 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
+	
+	local topBarHolder = Control:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		height = topBarHeight,
+		name = "topBarHolder",
+		parent = mainInterfaceHolder,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		children = {}
+	}
+	topBarHolder:Hide()
 	
 	local headingWindow = Control:New {
 		x = 0,
@@ -177,7 +206,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-
+	
 	local topPartImage = Image:New {
 		x = 0,
 		y = 0,
@@ -303,6 +332,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		},
 	}
 
+	local backgroundHolder = Background()
+	
 	-------------------------------------------------------------------
 	-- In-Window Handlers
 	-------------------------------------------------------------------
@@ -350,6 +381,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons, panelWindow, rightPanelTabs)
 	mainWindowHandler = GetSubmenuHandler(mainButtons, contentPlace, submenus)
 
+	-------------------------------------------------------------------
+	-- Resizing functions
+	-------------------------------------------------------------------
 
 	local function RescaleMainWindow(newFontSize, newButtonHeight)
 		mainWindowHandler.Rescale(newFontSize, newButtonHeight)
@@ -551,7 +585,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		contentPlaceHolder._relativeBounds.right = 0
 		contentPlaceHolder:UpdateClientArea()
 	end
-
+	
+	-------------------------------------------------------------------
+	-- Visibility and size handlers
+	-------------------------------------------------------------------
 	local function UpdateDoublePanel(newDoublePanel)
 		if newDoublePanel == doublePanelMode then
 			return
@@ -561,6 +598,107 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		UpdateLayout()
 	end
 
+	local function SetMainInterfaceVisible(newVisible)
+		if mainInterfaceHolder.visible == newVisible then
+			return
+		end
+		backgroundHolder:SetEnabled(newVisible)
+		if newVisible then
+			mainInterfaceHolder:Show()
+			ingameInterfaceHolder:Hide()
+		else
+			mainInterfaceHolder:Hide()
+			ingameInterfaceHolder:Show()
+		end
+	end
+		
+	local function SetTopBarVisible(newVisible)
+		Spring.Echo("newVisible == showTopBar", newVisible, showTopBar)
+		if newVisible == showTopBar then
+			return
+		end
+		topBarHolder:SetVisibility(newVisible)
+		
+		showTopBar = newVisible
+		local screenWidth, screenHeight = Spring.GetViewGeometry()
+		UpdateLayout()
+		UpdatePadding(screenWidth, screenHeight)
+	end
+	
+	-------------------------------------------------------------------
+	-- Top bar initialisation
+	-------------------------------------------------------------------
+	
+	local switchToMenuButton = Button:New {
+		y = 5,
+		right = 5,
+		width = 100,
+		height = 41,
+		name = "switchToMenuButton",
+		caption = "Menu",
+		font = WG.Chobby.Configuration:GetFont(3),
+		parent = ingameInterfaceHolder,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		
+		OnClick = {
+			function ()
+				SetMainInterfaceVisible(true)
+			end
+		}
+	}
+	local switchToGameButton = Button:New {
+		y = 5,
+		right = 5,
+		width = 100,
+		height = 41,
+		name = "switchToGameButton",
+		caption = "Game",
+		font = WG.Chobby.Configuration:GetFont(3),
+		parent = topBarHolder,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		
+		OnClick = {
+			function ()
+				SetMainInterfaceVisible(false)
+			end
+		}
+	}
+	local leaveGameButton = Button:New {
+		y = 5,
+		right = 110,
+		width = 100,
+		height = 41,
+		height = topBarHeight - 10,
+		name = "leaveGameButton",
+		caption = "Leave",
+		font = WG.Chobby.Configuration:GetFont(3),
+		parent = topBarHolder,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		
+		OnClick = {
+			function ()
+				Spring.Reload("")
+			end
+		}
+	}
+	
+	local topBarImage = Image:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		file = IMAGE_TOP_BACKGROUND,
+		parent = topBarHolder,
+		keepAspect = false,
+		color = {0.218, 0.23, 0.49, 0.9},
+	}
+	
 	-------------------------------------------------------------------
 	-- External Functions
 	-------------------------------------------------------------------
@@ -585,18 +723,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		screen0:Resize(screenWidth, screenHeight)
 	end
 	
-	function externalFunctions.SetTopBarVisible(newVisible)
-		if newVisible == showTopBar then
-			return
-		end
-		showTopBar = newVisible
-		local screenWidth, screenHeight = Spring.GetViewGeometry()
-		UpdateLayout()
-		UpdatePadding(screenWidth, screenHeight)
-	end
-	
-	function externalFunctions.SetMainInterfaceVisible(newVisible)
-
+	function externalFunctions.SetIngame(newIngame)
+		gameRunning = not newIngame
+		SetMainInterfaceVisible(not newIngame)
+		SetTopBarVisible(newIngame)
 	end
 	
 	function externalFunctions.GetChatWindow()

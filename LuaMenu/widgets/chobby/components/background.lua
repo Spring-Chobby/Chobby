@@ -1,7 +1,7 @@
 Background = LCS.class{}
 
-function Background:init(startEnabled)
-	self:SetEnabled(startEnabled)
+function Background:init()
+	self:Enable()
 	
 	local function onConfigurationChange(listener, key, value)
 		if key == "singleplayer_mode" then
@@ -67,23 +67,38 @@ function Background:Enable()
 		local file, focus = Configuration:GetBackgroundImage()
 		self.backgroundFocus = focus
 		local texInfo = gl.TextureInfo(file)
-		self.width, self.height = texInfo.xsize, texInfo.ysize
+		self.width, self.height = texInfo.xsize, texInfo.ysize	
+		
+		local eatInputSetFunction = {
+			function ()
+				return true
+			end
+		}
+		
 		self.backgroundImage = Image:New {
-			y = 0,
 			x = 0,
+			y = 0,
 			right = 0,
 			bottom = 0,
 			keepAspect = false,
 			file = file,
+			
+			-- Eat all the input so none of it reaches ingame when the menu is visible.
+			OnMouseDown = eatInputSetFunction,
+			OnKeyPress = eatInputSetFunction,
+			OnMouseWheel = eatInputSetFunction,
 		}
+
+		
 		self.backgroundControl = Control:New {
+			name = "backgroundControl",
 			x = 0,
 			y = 0,
 			right = 0,
 			bottom = 0,
 			padding = {0,0,0,0},
 			margin = {0,0,0,0},
-			parent = WG.Chobby.mainInterfaceHolder,
+			parent = screen0,
 			children = {
 				self.backgroundImage
 			},
@@ -91,7 +106,7 @@ function Background:Enable()
 				function (obj)
 					self:Resize(obj)
 				end
-			}
+			},
 		}
 	end
 	if not self.backgroundImage.visible then

@@ -34,6 +34,12 @@ function widget:ViewResize(vsx, vsy, viewGeometry)
 	WG.Chobby:_ViewResize(vsx, vsy)
 end
 
+function widget:GamePreload()
+	local gameName = Spring.GetGameName()
+	Spring.Echo("gameName", gameName)
+	interfaceRoot.SetIngame(not not gameName)
+end
+
 function widget:Initialize()
 	if not WG.LibLobby then
 		Spring.Log("chobby", LOG.ERROR, "Missing liblobby.")
