@@ -15,6 +15,8 @@ LUA_NAME    = Script.GetName()
 LUA_DIRNAME = Script.GetName() .. "/"
 LUA_VERSION = Script.GetName() .. " v1.0"
 
+VFS.DEF_MODE = VFS.ZIP_FIRST
+
 _G[("%s_DIRNAME"):format(LUA_NAME:upper())] = LUA_DIRNAME -- creates LUAUI_DIRNAME
 _G[("%s_VERSION"):format(LUA_NAME:upper())] = LUA_VERSION -- creates LUAUI_VERSION
 
