@@ -46,6 +46,12 @@ EditBox = Control:Inherit{
   physicalLines = {},
   cursorX = 1,
   cursorY = 1,
+  
+  inedibleInput = {
+    [Spring.GetKeyCode("enter")] = true,
+    [Spring.GetKeyCode("numpad_enter")] = true,
+    [Spring.GetKeyCode("esc")] = true,
+  },
 }
 
 local this = EditBox
@@ -662,7 +668,7 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 			self:_SetSelection(1, 1, #self.lines[#self.lines].text + 1, #self.lines)
 		end
 	else
-		eatInput = self.state.focused
+		eatInput = self.state.focused and not self.inedibleInput[key]
 	end
 
 	-- text selection handling
