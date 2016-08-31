@@ -7,12 +7,12 @@ function ChatWindows:init()
 	self.currentTab = false
 	self.storedCurrentTab = false
 	self.totalNewMessages = 0
-	
+
 	self.visible = false
 
 	-- setup debug console to listen to commands
 	self:CreateDebugConsole()
-	
+
 	-- get a list of channels when login is done
 	lobby:AddListener("OnLoginInfoEnd",
 		function(listener)
@@ -32,13 +32,13 @@ function ChatWindows:init()
 
 					local channelsArray = {}
 					for chanName, v in pairs(self.channels) do
-						table.insert(channelsArray, { 
-							chanName = chanName, 
-							userCount = v.userCount, 
+						table.insert(channelsArray, {
+							chanName = chanName,
+							userCount = v.userCount,
 							topic = v.topic,
 						})
 					end
-					table.sort(channelsArray, 
+					table.sort(channelsArray,
 						function(a, b)
 							return a.userCount > b.userCount
 						end
@@ -68,7 +68,7 @@ function ChatWindows:init()
 			end
 		end
 	)
-	
+
 	self.onJoined = function(listener, chanName, userName)
 		if self.currentTab and self.userListPanels[self.currentTab] then
 			self.userListPanels[self.currentTab]:OnJoined(userName)
@@ -82,8 +82,8 @@ function ChatWindows:init()
 		end
 	end
 	lobby:AddListener("OnLeft", self.onLeft)
-	
-	
+
+
 	self.onClients = function(listener, chanName, clients)
 		if self.currentTab and self.userListPanels[self.currentTab] then
 			self.userListPanels[self.currentTab]:Update()
@@ -93,14 +93,14 @@ function ChatWindows:init()
 
 	local CHAT_EX_MENTION = "\255\255\0\0"
 	local CHAT_MENTION ="\255\255\0\0"
-	
+
 	-- channel chat
-	lobby:AddListener("OnSaid", 
+	lobby:AddListener("OnSaid",
 		function(listener, chanName, userName, message, msgDate)
 			self:ProcessChat(chanName, userName, message, msgDate, CHAT_MENTION)
 		end
 	)
-	lobby:AddListener("OnSaidEx", 
+	lobby:AddListener("OnSaidEx",
 		function(listener, chanName, userName, message, msgDate)
 			self:ProcessChat(chanName, userName, message, msgDate, CHAT_EX_MENTION, Configuration.meColor, true)
 		end
@@ -180,7 +180,7 @@ function ChatWindows:init()
 			end
 		end
 	)
-	
+
 	self.oldChatLine = Line:New {
 		x = 0,
 		right = 0,
@@ -195,9 +195,9 @@ function ChatWindows:init()
 	}
 
 	self.tabPanel = Chili.DetachableTabPanel:New {
-		x = 10, 
+		x = 10,
 		right = 10,
-		y = 0, 
+		y = 0,
 		bottom = 10,
 		padding = {0, 0, 0, 0},
 		tabs = {
@@ -214,7 +214,7 @@ function ChatWindows:init()
 				if console then
 					self.activeUnreadMessages = console.unreadMessages
 					self:UpdateOldChatLinePosition(console)
-					
+
 					self.totalNewMessages = self.totalNewMessages - console.unreadMessages
 					interfaceRoot.GetRightPanelHandler().SetActivity("chat", self.totalNewMessages)
 					console.unreadMessages = 0
@@ -228,7 +228,7 @@ function ChatWindows:init()
 		}
 	}
 	self.tabPanel.tabBar:DisableHighlight()
-	
+
 	self.tabBarHolder = Control:New {
 		name = "tabBarHolder",
 		x = 0,
@@ -242,7 +242,7 @@ function ChatWindows:init()
 			self.tabPanel.tabBar
 		}
 	}
-	
+
 	self.joinButton = Button:New {
 		x = 2000,
 		y = 5,
@@ -250,7 +250,7 @@ function ChatWindows:init()
 		height = 30,
 		parent = self.tabBarHolder,
 		caption = "+",
-		OnClick = { 
+		OnClick = {
 			function()
 				if self.joinWindow == nil then
 					self:CreateJoinChannelWindow()
@@ -258,9 +258,9 @@ function ChatWindows:init()
 			end
 		},
 	},
-	
+
 	self.tabBarHolder:BringToFront()
-	
+
 	self.chatWindow = Control:New {
 		x = 0,
 		y = 0,
@@ -275,7 +275,7 @@ function ChatWindows:init()
 			self.tabBarHolder,
 		},
 	}
-	
+
 	self.window = Control:New {
 		x = 0,
 		y = 0,
@@ -303,11 +303,11 @@ function ChatWindows:init()
 			end
 		},
 	}
-	
+
 	self.loginButton = Button:New {
 		x = "25%",
-		y = "45%", 
-		width = "50%", 
+		y = "45%",
+		width = "50%",
 		height = "10%",
 		caption = i18n("login_to_chat"),
 		font = Configuration:GetFont(4),
@@ -318,15 +318,15 @@ function ChatWindows:init()
 			end
 		}
 	}
-	
+
 	local function onConfigurationChange(listener, key, value)
 		if key == "debugMode" then
 			if value and not self.tabPanel:GetTab("debug") then
 				self.ignoreTabClick = true
 				self.tabPanel:AddTab(
-					{ 
-						name = "debug", 
-						caption = i18n("debug"), 
+					{
+						name = "debug",
+						caption = i18n("debug"),
 						font = Configuration:GetFont(1),
 						children = {self.debugConsole.panel}
 					},
@@ -345,8 +345,8 @@ function ChatWindows:init()
 		end
 	end
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
-	
-	lobby:AddListener("OnDisconnected", 
+
+	lobby:AddListener("OnDisconnected",
 		function ()
 			if self.tabPanel.tabBar.visible then
 				self.tabPanel.tabBar:Hide()
@@ -356,7 +356,7 @@ function ChatWindows:init()
 			self.window:AddChild(self.loginButton)
 		end
 	)
-	
+
 	lobby:AddListener("OnConnect", function ()
 			if not self.tabPanel.tabBar.visible then
 				self.tabPanel.tabBar:Show()
@@ -366,12 +366,12 @@ function ChatWindows:init()
 			self.window:AddChild(self.chatWindow)
 		end
 	)
-	
+
 	if self.tabPanel.tabBar.visible then
 		self.tabPanel.tabBar:Hide()
 		self.joinButton:Hide()
 	end
-	
+
 	self:ReattachTabHolder()
 	self:UpdateJoinPosition()
 end
@@ -384,16 +384,16 @@ function ChatWindows:UpdateOldChatLinePosition(console)
 	if not (self:IsChannelSelected(console.channelName) and console.tbHistory) then
 		return
 	end
-	
+
 	if self.oldChatLine.parent then
 		self.oldChatLine.parent:RemoveChild(self.oldChatLine)
 	end
-	
+
 	if not (self.activeUnreadMessages and self.activeUnreadMessages ~= 0) then
 		return
 	end
 	console.spHistory:AddChild(self.oldChatLine)
-	
+
 	local position = console.tbHistory:GetPhysicalLinePosition(self.activeUnreadMessages) - 6
 	self.oldChatLine:SetPos(0, position)
 	self.oldChatLine._relativeBounds.right = 0
@@ -440,7 +440,7 @@ function ChatWindows:ReattachTabHolder()
 	self.tabBarHolder:BringToFront()
 	self.tabBarHolder._relativeBounds.right = 0
 	self.tabBarHolder:UpdateClientArea(false)
-	
+
 	self.tabPanel._relativeBounds.top = 50
 	self.tabPanel:UpdateClientArea(false)
 	self.tabPanel:Invalidate()
@@ -454,11 +454,11 @@ function ChatWindows:SetTabHolderParent(newParent, newX, newY, newRight)
 	self.tabBarHolder:BringToFront()
 	self.tabBarHolder._relativeBounds.right = newRight
 	self.tabBarHolder:UpdateClientArea(false)
-	
+
 	self.tabPanel._relativeBounds.top = 15
 	self.tabPanel:UpdateClientArea(false)
 	self.tabPanel:Invalidate()
-		
+
 	self.tabPanel.OnTabClick = {
 		function()
 			if self.ignoreTabClick then
@@ -486,7 +486,7 @@ function ChatWindows:SetTabActivation(tabName, activationLevel, outlineColor)
 	if not ctrl then
 		return
 	end
-	
+
 	if activationLevel then
 		if (ctrl.activationLevel or 0) > activationLevel then
 			return
@@ -503,7 +503,7 @@ function ChatWindows:SetTabActivation(tabName, activationLevel, outlineColor)
 		ctrl.font.color = {1,1,1,1}
 	end
 	ctrl.activationLevel = activationLevel
-	
+
 	ctrl:Invalidate()
 end
 
@@ -521,7 +521,7 @@ function ChatWindows:SetTabBadge(tabName, text)
 			y = 0,
 			height = 12,
 			caption = Configuration:GetFont(1),
-			font = { 
+			font = {
 				Configuration:GetFont(1).size,
 				outline = true,
 				autoOutlineColor = false,
@@ -545,11 +545,11 @@ function ChatWindows:_NotifyTab(tabName, userName, chanName, nameMentioned, mess
 		local mentionNumber = (nameMentioned and 0) or 1
 		self:SetTabActivation(tabName, (nameMentioned and 2) or 1, {1, mentionNumber, mentionNumber, 1})
 		self.totalNewMessages = self.totalNewMessages + (console.unreadMessages - oldMessages)
-		
+
 		if not self.window.parent then
 			interfaceRoot.GetRightPanelHandler().SetActivity("chat", self.totalNewMessages, 2 - mentionNumber)
 		end
-		
+
 		if nameMentioned then
 			Chotify:Post({
 				title = userName .. " in " .. chanName .. ":",
@@ -580,6 +580,14 @@ function ChatWindows:CreateDebugConsole()
 	)
 	lobby:AddListener("OnCommandReceived",
 		function(listner, command)
+			local subPos = string.find(command, [["PasswordHash":"]])
+			if subPos then
+				subPos = subPos + 15
+				local endPos = string.find(command, [["]], subPos + 1)
+				if endPos then
+					command = string.sub(command, 0, subPos) .. "REDACTED" .. string.sub(command, endPos)
+				end
+			end
 			Spring.Echo("Server", "<" .. command)
 			self.debugConsole:AddMessage("<" .. command)
 		end
@@ -683,15 +691,15 @@ function ChatWindows:GetChannelConsole(chanName)
 		self.channelConsoles[chanName] = channelConsole
 
 		Configuration.channels[chanName] = true
-		
+
 
 		local userListPanel = UserListPanel(function() return lobby:GetChannel(chanName) end, 22)
 		self.userListPanels[chanName] = userListPanel
-		
+
 		local caption = "#" .. chanName
 		local myFont = Font:New(Configuration:GetFont(1))
 		caption = StringUtilities.GetTruncatedStringWithDotDot(caption, myFont, 70)
-		
+
 		local closeChannelButton = Button:New {
 			width = 24, height = 24, y = 5, right = Configuration.userListWidth + 18,
 			caption = "x",
@@ -705,7 +713,7 @@ function ChatWindows:GetChannelConsole(chanName)
 				end
 			},
 		}
-		
+
 		self.ignoreTabClick = true
 		self.tabPanel:AddTab(
 			{
@@ -728,16 +736,16 @@ function ChatWindows:GetChannelConsole(chanName)
 			},
 			false
 		)
-		
+
 		closeChannelButton:BringToFront()
-		
+
 		if not self.window.parent then
 			self.tabPanel.tabBar:DisableHighlight()
 		end
 		self.ignoreTabClick = false
 		self.tabbars[chanName] = channelConsole
 		self:UpdateJoinPosition()
-		
+
 		if self.switchToTab and self.switchToTab == chanName then
 			self.tabPanel.tabBar:Select(chanName)
 			self.switchToTab = false
@@ -764,11 +772,11 @@ function ChatWindows:GetPrivateChatConsole(userName)
 		end
 		privateChatConsole = Console(chanName, MessageListener, nil, Resize)
 		self.privateChatConsoles[chanName] = privateChatConsole
-		
+
 		local caption = "@" .. userName
 		local myFont = Font:New(Configuration:GetFont(1))
 		caption = StringUtilities.GetTruncatedStringWithDotDot(caption, myFont, 70)
-		
+
 		local closeChannelButton = Button:New {
 			width = 24, height = 24, y = 5, right = 18,
 			caption = "x",
@@ -780,7 +788,7 @@ function ChatWindows:GetPrivateChatConsole(userName)
 				end
 			},
 		}
-		
+
 		self.ignoreTabClick = true
 		self.tabPanel:AddTab(
 			{
@@ -794,17 +802,17 @@ function ChatWindows:GetPrivateChatConsole(userName)
 			},
 			true
 		)
-		
+
 		closeChannelButton:BringToFront()
-		
+
 		if not self.window.parent then
 			self.tabPanel.tabBar:DisableHighlight()
 		end
 		self.ignoreTabClick = false
 		self.tabbars[chanName] = privateChatConsole
-		
+
 		self:UpdateJoinPosition()
-		
+
 		if self.switchToTab and self.switchToTab == chanName then
 			self.tabPanel.tabBar:Select(chanName)
 			self.switchToTab = false
@@ -824,7 +832,7 @@ function ChatWindows:CreateJoinChannelWindow()
 		self.joinWindow:Dispose()
 		self.joinWindow = nil
 	end
-	
+
 	local function JoinChannel()
 		local channelName = ebChannelName.text:gsub("#", "")
 		if channelName ~= "" then
@@ -862,7 +870,7 @@ function ChatWindows:CreateJoinChannelWindow()
 			}
 		},
 	}
-	
+
 	local popupHolder = PriorityPopup(self.joinWindow, CancelFunc, JoinChannel)
 	screen0:FocusControl(ebChannelName)
 end
