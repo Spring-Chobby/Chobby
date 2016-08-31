@@ -838,7 +838,7 @@ function ChatWindows:CreateJoinChannelWindow()
 	self.joinWindow = Window:New {
 		caption = i18n("join_channel"),
 		name = "chatWindow",
-		parent = screen0,
+		parent = WG.Chobby.mainInterfaceHolder,
 		x = "45%",
 		y = "45%",
 		width = 200,

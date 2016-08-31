@@ -10,7 +10,7 @@ function ConfirmationPopup:init(successFunction, question, doNotAskAgainKey, wid
 		caption = "",
 		resizable = false,
 		draggable = false,
-		parent = screen0,
+		parent = WG.Chobby.mainInterfaceHolder,
 		classname = "overlay_window",
 	}
 	

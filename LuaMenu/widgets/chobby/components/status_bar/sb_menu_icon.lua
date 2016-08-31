@@ -86,7 +86,7 @@ function SBMenuIcon:Settings()
 		y = math.floor(math.max(0, (sh) / 2 - h)),
 		width = w,
 		height = h,
-		parent = screen0,
+		parent = WG.Chobby.mainInterfaceHolder,
 		draggable = false,
 		resizable = false,
 		children = {

@@ -70,7 +70,7 @@ function TeamWindow:init()
 		y = 60,
 		bottom = 510,
 		height = 500,
-		parent = screen0,
+		parent = WG.Chobby.mainInterfaceHolder,
 		caption = i18n("team"),
 		resizable = false,
 		draggable = false,
@@ -89,7 +89,7 @@ function TeamWindow:CreateInvitePlayerWindow()
 	local window
 	window = Window:New {
 		caption = i18n("invite_player"),
-		parent = screen0,
+		parent = WG.Chobby.mainInterfaceHolder,
 		x = "45%",
 		y = "45%",
 		width = 200,
@@ -127,7 +127,7 @@ end
 function TeamWindow:OnInviteTeam(userName)
 	window = Window:New {
 		caption = i18n("invited_to_team"),
-		parent = screen0,
+		parent = WG.Chobby.mainInterfaceHolder,
 		x = "45%",
 		y = "45%",
 		width = 200,

@@ -25,7 +25,7 @@ function PriorityPopup:init(mainWindow, cancelFunction, acceptFunction)
 		bottom = 0,
 		padding = {0,0,0,0},
 		margin = {0,0,0,0},
-		parent = screen0,
+		parent = WG.Chobby.mainInterfaceHolder,
 		Draw = function()
 			if not sentTime then
 				local diff = os.clock() - startTime

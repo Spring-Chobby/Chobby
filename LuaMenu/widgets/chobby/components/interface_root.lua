@@ -40,10 +40,13 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local statusButtonWidth = 420
 	local statusButtonWidthSmall = 310
+	
+	local topBarHeight = 50
 
 	-- Switch to single panel mode when below the minimum screen width
 	local minScreenWidth = 1280
 
+	local showTopBar = false
 	local doublePanelMode = true
 	local autodetectDoublePanel = true
 
@@ -55,14 +58,26 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-------------------------------------------------------------------
 	-- Window structure
 	-------------------------------------------------------------------
+	local mainInterfaceHolder = Control:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		name = "mainInterfaceHolder",
+		parent = screen0,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		children = {}
+	}
+	
 	local headingWindow = Control:New {
 		x = 0,
 		y = 0,
 		width = titleWidth,
 		height = titleHeight,
 		name = "headingWindow",
-		caption = "", -- Your Game Here
-		parent = screen0,
+		parent = mainInterfaceHolder,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
@@ -93,7 +108,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		height = titleHeight,
 		name = "mainStatusWindow",
 		caption = "", -- Status Window
-		parent = screen0,
+		parent = mainInterfaceHolder,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
@@ -119,7 +134,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		bottom = battleStatusBottomPadding,
 		name = "battleStatusHolder",
 		caption = "", -- Battle and MM Status Window
-		parent = screen0,
+		parent = mainInterfaceHolder,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
@@ -133,7 +148,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		bottom = 0,
 		name = "mainWindow",
 		caption = "", -- Main Window
-		parent = screen0,
+		parent = mainInterfaceHolder,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
@@ -169,7 +184,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		right = 0,
 		height = titleHeight,
 		file = IMAGE_TOP_BACKGROUND,
-		parent = screen0,
+		parent = mainInterfaceHolder,
 		keepAspect = false,
 		color = {0.218, 0.23, 0.49, 0.25},
 	}
@@ -246,7 +261,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		bottom = 0,
 		name = "panelWindowHolder",
 		caption = "", -- Panel Window
-		parent = screen0,
+		parent = mainInterfaceHolder,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
@@ -374,6 +389,108 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			end
 		end
 	end
+	
+	local function UpdateLayout()
+		
+		local topBarOffset = (showTopBar and topBarHeight) or 0
+
+		if doublePanelMode then
+			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidth)
+			RescaleMainWindow(3, 70)
+
+			-- Make main buttons wider
+			contentPlaceHolder:SetPos(mainButtonsWidth)
+			contentPlaceHolder._relativeBounds.right = 0
+			contentPlaceHolder:UpdateClientArea()
+
+			--contentPlace.color = VISIBLE_COLOR
+
+			mainButtonsHolder:SetPos(nil, nil, mainButtonsWidth)
+
+			-- Move Panel Buttons
+			mainButtons:RemoveChild(panelButtons)
+			panelButtonsHolder:AddChild(panelButtons)
+
+			panelButtons:SetPosRelative("0%","0%", "100%","100%")
+			--mainButtons:SetPosRelative("0%","0%", nil,"100%")
+
+			-- Make Main Window take up more space
+			panelButtonsHolder:Show()
+			panelWindowHolder:Show()
+			panelWindowHolder:SetPos(nil, titleHeight + topBarOffset)
+
+			mainWindow:SetPos(nil, titleHeight + topBarOffset)
+			mainWindow._relativeBounds.right = panelWidthRel .. "%"
+			mainWindow._relativeBounds.bottom = 0
+			mainWindow:UpdateClientArea()
+
+			-- Align game title and status.
+			headingWindow:SetPos(0, topBarOffset, titleWidth, titleHeight)
+			mainStatusWindow:SetPos(titleWidth, topBarOffset, titleHeight, titleHeight)
+			mainStatusWindow._relativeBounds.right = 0
+			mainStatusWindow:UpdateClientArea()
+
+			userStatusWindow._relativeBounds.bottom = panelButtonsHeight
+			userStatusWindow:UpdateClientArea()
+
+			battleStatusHolder:SetPos(battleStatusLeftPadding, battleStatusTopPadding + topBarOffset)
+			battleStatusHolder._relativeBounds.bottom = battleStatusBottomPadding
+			battleStatusHolder:UpdateClientArea()
+
+			topPartImage:SetPos(nil, topBarOffset, nil, titleHeight + imageFudge)
+		else
+			rightPanelHandler.Rescale(2, 55)
+			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidthSmall)
+			RescaleMainWindow(2, 55)
+
+			-- Make main buttons thinner
+			contentPlaceHolder:SetPos(mainButtonsWidthSmall)
+			contentPlaceHolder._relativeBounds.right = 0
+			contentPlaceHolder:UpdateClientArea()
+
+			--contentPlace.color = INVISIBLE_COLOR
+
+			mainButtonsHolder:SetPos(nil, nil, mainButtonsWidthSmall)
+
+			-- Move Panel Buttons
+			panelButtonsHolder:RemoveChild(panelButtons)
+			mainButtons:AddChild(panelButtons)
+
+			panelButtons:SetPosRelative("0%","45%", "100%","50%")
+			--mainButtons:SetPosRelative("0%","0%", nil,"50%")
+
+			-- Make Main Window take up more space
+			panelButtonsHolder:Hide()
+			panelButtonsHolder:ClearChildren()
+			if panelWindowHolder.visible then
+				panelWindowHolder:Hide()
+			end
+			mainWindow:SetPos(nil, titleHeightSmall + topBarOffset)
+			mainWindow._relativeBounds.right = 0
+			mainWindow._relativeBounds.bottom = 0
+			mainWindow:UpdateClientArea()
+
+			-- Align game title and status.
+			headingWindow:SetPos(nil, topBarOffset, mainButtonsWidthSmall + padding, titleHeightSmall)
+			mainStatusWindow:SetPos(mainButtonsWidthSmall, topBarOffset, titleHeightSmall, titleHeightSmall)
+			mainStatusWindow._relativeBounds.right = 0
+			mainStatusWindow:UpdateClientArea()
+
+			userStatusWindow._relativeBounds.bottom = 0
+			userStatusWindow:UpdateClientArea()
+
+			battleStatusHolder:SetPos(smallStatusLeftPadding, battleStatusTopPaddingSmall + topBarOffset)
+			battleStatusHolder._relativeBounds.bottom = statusWindowGapSmall
+			battleStatusHolder:UpdateClientArea()
+
+			topPartImage:SetPos(nil, topBarOffset, nil, titleHeightSmall + imageFudge)
+		end
+
+		headingImage.file = Configuration:GetHeadingImage(doublePanelMode)
+		headingImage:Invalidate()
+
+		UpdateChildLayout()
+	end
 
 	local function UpdatePadding(screenWidth, screenHeight)
 		local leftPad, rightPad, bottomPad, middlePad
@@ -396,7 +513,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			bottomPad = 40
 			middlePad = 20
 		end
-
+		
+		local topBarOffset = (showTopBar and topBarHeight) or 0
+		
 		contentPlace:SetPos(leftPad)
 		contentPlace._relativeBounds.right = middlePad
 		contentPlace._relativeBounds.bottom = bottomPad
@@ -433,107 +552,13 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		contentPlaceHolder:UpdateClientArea()
 	end
 
-	local function UpdatePanelLayout(newDoublePanel)
+	local function UpdateDoublePanel(newDoublePanel)
 		if newDoublePanel == doublePanelMode then
 			return
 		end
 		doublePanelMode = newDoublePanel
-
-		if doublePanelMode then
-			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidth)
-			RescaleMainWindow(3, 70)
-
-			-- Make main buttons wider
-			contentPlaceHolder:SetPos(mainButtonsWidth)
-			contentPlaceHolder._relativeBounds.right = 0
-			contentPlaceHolder:UpdateClientArea()
-
-			--contentPlace.color = VISIBLE_COLOR
-
-			mainButtonsHolder:SetPos(nil, nil, mainButtonsWidth)
-
-			-- Move Panel Buttons
-			mainButtons:RemoveChild(panelButtons)
-			panelButtonsHolder:AddChild(panelButtons)
-
-			panelButtons:SetPosRelative("0%","0%", "100%","100%")
-			--mainButtons:SetPosRelative("0%","0%", nil,"100%")
-
-			-- Make Main Window take up more space
-			panelButtonsHolder:Show()
-			panelWindowHolder:Show()
-
-			mainWindow:SetPos(nil, titleHeight)
-			mainWindow._relativeBounds.right = panelWidthRel .. "%"
-			mainWindow._relativeBounds.bottom = 0
-			mainWindow:UpdateClientArea()
-
-			-- Align game title and status.
-			headingWindow:SetPos(0, 0, titleWidth, titleHeight)
-			mainStatusWindow:SetPos(titleWidth, nil, titleHeight, titleHeight)
-			mainStatusWindow._relativeBounds.right = 0
-			mainStatusWindow:UpdateClientArea()
-
-			userStatusWindow._relativeBounds.bottom = panelButtonsHeight
-			userStatusWindow:UpdateClientArea()
-
-			battleStatusHolder:SetPos(battleStatusLeftPadding, battleStatusTopPadding)
-			battleStatusHolder._relativeBounds.bottom = battleStatusBottomPadding
-			battleStatusHolder:UpdateClientArea()
-
-			topPartImage:SetPos(nil, nil, nil, titleHeight + imageFudge)
-		else
-			rightPanelHandler.Rescale(2, 55)
-			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidthSmall)
-			RescaleMainWindow(2, 55)
-
-			-- Make main buttons thinner
-			contentPlaceHolder:SetPos(mainButtonsWidthSmall)
-			contentPlaceHolder._relativeBounds.right = 0
-			contentPlaceHolder:UpdateClientArea()
-
-			--contentPlace.color = INVISIBLE_COLOR
-
-			mainButtonsHolder:SetPos(nil, nil, mainButtonsWidthSmall)
-
-			-- Move Panel Buttons
-			panelButtonsHolder:RemoveChild(panelButtons)
-			mainButtons:AddChild(panelButtons)
-
-			panelButtons:SetPosRelative("0%","45%", "100%","50%")
-			--mainButtons:SetPosRelative("0%","0%", nil,"50%")
-
-			-- Make Main Window take up more space
-			panelButtonsHolder:Hide()
-			panelButtonsHolder:ClearChildren()
-			if panelWindowHolder.visible then
-				panelWindowHolder:Hide()
-			end
-			mainWindow:SetPos(nil, titleHeightSmall)
-			mainWindow._relativeBounds.right = 0
-			mainWindow._relativeBounds.bottom = 0
-			mainWindow:UpdateClientArea()
-
-			-- Align game title and status.
-			headingWindow:SetPos(nil, nil, mainButtonsWidthSmall + padding, titleHeightSmall)
-			mainStatusWindow:SetPos(mainButtonsWidthSmall, nil, titleHeightSmall, titleHeightSmall)
-			mainStatusWindow._relativeBounds.right = 0
-			mainStatusWindow:UpdateClientArea()
-
-			userStatusWindow._relativeBounds.bottom = 0
-			userStatusWindow:UpdateClientArea()
-
-			battleStatusHolder:SetPos(smallStatusLeftPadding, battleStatusTopPaddingSmall)
-			battleStatusHolder._relativeBounds.bottom = statusWindowGapSmall
-			battleStatusHolder:UpdateClientArea()
-
-			topPartImage:SetPos(nil, nil, nil, titleHeightSmall + imageFudge)
-		end
-
-		headingImage.file = Configuration:GetHeadingImage(doublePanelMode)
-		headingImage:Invalidate()
-
-		UpdateChildLayout()
+		
+		UpdateLayout()
 	end
 
 	-------------------------------------------------------------------
@@ -542,7 +567,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	function externalFunctions.ViewResize(screenWidth, screenHeight)
 		if autodetectDoublePanel then
 			local newDoublePanel = minScreenWidth <= screenWidth
-			UpdatePanelLayout(newDoublePanel)
+			UpdateDoublePanel(newDoublePanel)
 		end
 		UpdatePadding(screenWidth, screenHeight)
 	end
@@ -551,15 +576,29 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		autodetectDoublePanel = newAutodetectDoublePanel
 		local screenWidth, screenHeight = Spring.GetViewGeometry()
 		if autodetectDoublePanel then
-			UpdatePanelLayout(screenWidth > minScreenWidth)
+			UpdateDoublePanel(screenWidth > minScreenWidth)
 		else
-			UpdatePanelLayout(newDoublePanel)
+			UpdateDoublePanel(newDoublePanel)
 		end
 		UpdatePadding(screenWidth, screenHeight)
 		-- Make all children request realign.
 		screen0:Resize(screenWidth, screenHeight)
 	end
+	
+	function externalFunctions.SetTopBarVisible(newVisible)
+		if newVisible == showTopBar then
+			return
+		end
+		showTopBar = newVisible
+		local screenWidth, screenHeight = Spring.GetViewGeometry()
+		UpdateLayout()
+		UpdatePadding(screenWidth, screenHeight)
+	end
+	
+	function externalFunctions.SetMainInterfaceVisible(newVisible)
 
+	end
+	
 	function externalFunctions.GetChatWindow()
 		return chatWindows
 	end
@@ -613,6 +652,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		globalKeyListener = newListenerFunc
 	end
 
+	function externalFunctions.GetMainInterfaceHolder()
+		return mainInterfaceHolder
+	end
+	
 	-------------------------------------------------------------------
 	-- Listening
 	-------------------------------------------------------------------

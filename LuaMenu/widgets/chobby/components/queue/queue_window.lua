@@ -30,7 +30,7 @@ function QueueWindow:init(queue)
 		y = 520,
 		width = 500,
 		height = 100,
-		parent = screen0,
+		parent = WG.Chobby.mainInterfaceHolder,
 		draggable = false,
 		resizable = false,
 		children = {

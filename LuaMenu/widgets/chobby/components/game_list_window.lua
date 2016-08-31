@@ -2,7 +2,7 @@ GameListWindow = ListWindow:extends{}
 
 function GameListWindow:init(failFunction, sucessFunction)
 
-	self:super('init', screen0, "Select Game", false, "overlay_window")
+	self:super('init', WG.Chobby.mainInterfaceHolder, "Select Game", false, "overlay_window")
 	self.window:SetPos(nil, nil, 500, 700)
 	
 	for i, archive in pairs(VFS.GetAllArchives()) do
