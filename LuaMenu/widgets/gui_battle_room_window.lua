@@ -1358,12 +1358,20 @@ function BattleRoomWindow.LeaveBattle(onlyMultiplayer, onlySingleplayer)
 	tabPanel.RemoveTab("myBattle")
 end
 
+local oldSizeX, oldSizeY
 function widget:ViewResize(vsx, vsy, viewGeometry)
 	if ViewResizeUpdate then
 		WG.Delay(ViewResizeUpdate, 0.1)
 		WG.Delay(ViewResizeUpdate, 0.2)
 		WG.Delay(ViewResizeUpdate, 0.4)
 		WG.Delay(ViewResizeUpdate, 0.8)
+	end
+end
+
+function widget:Update()
+	local screenWidth, screenHeight = Spring.GetWindowGeometry()
+	if screenWidth ~= oldSizeX or screenHeight ~= oldSizeY then
+		widget:ViewResize(screenWidth, screenHeight)
 	end
 end
 
