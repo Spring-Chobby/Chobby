@@ -118,6 +118,16 @@ return {
 		joined_team = " has joined the team",
 		join_team = "You have joined a team",
 		declined_invite_team = " has declined your invitation to join the team",
+
+		-- api_user_handler.lua
+		offline_status = "Offline",
+		ingame_status  = "In game",
+		battle_status  = "In battle",
+		afk_status     = "Away",
+		online_status  = "Online",
+
+		-- friend_list_window.lua
+		friend_request = "Friend request",
 	},
 	sr = {
 		connect_to_spring_server = 'Prijavljivanje na Spring lobi server',

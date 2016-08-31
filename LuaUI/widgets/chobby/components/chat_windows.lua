@@ -46,8 +46,8 @@ function ChatWindows:init()
 					self:UpdateChannels(channelsArray)
 				end
 			)
-
-			lobby:Channels()
+-- FIXME: It makes sense to sometimes get a list of all channels, but not always.
+-- 			lobby:Channels()
 		end
 	)
 

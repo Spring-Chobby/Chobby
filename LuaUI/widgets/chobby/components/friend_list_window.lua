@@ -56,13 +56,23 @@ function FriendListWindow:CompareItems(userName1, userName2)
 end
 
 function FriendListWindow:AddFriendRequest(userName)
-	userControl = WG.UserHandler.GetFriendUser(userName)
+	userControl = WG.UserHandler.GetFriendRequestUser(userName)
 	userControl:SetPos(0, 0, 250, 80)
-	local btnAccept = Button:New {
+	local lblFriendRequest = Label:New {
 		x = 0,
-		y = 30,
-		width = 80,
-		height = 50,
+		y = 0,
+		width = 100,
+		height = 30,
+		caption = i18n("friend_request"),
+		font = Configuration:GetFont(1),
+	}
+	lblFriendRequest.font.color = { 0.5, 0.5, 0.5, 1 }
+	lblFriendRequest:Invalidate()
+	local btnAccept = Button:New {
+		x = 10,
+		y = 50,
+		width = 100,
+		height = 30,
 		caption = i18n("accept"),
 		font = Configuration:GetFont(2),
 		classname = "option_button",
@@ -74,10 +84,10 @@ function FriendListWindow:AddFriendRequest(userName)
 		},
 	}
 	local btnDecline = Button:New {
-		x = 250 - 80,
-		y = 30,
-		width = 80,
-		height = 50,
+		x = 250 - 100 - 10,
+		y = 50,
+		width = 100,
+		height = 30,
 		caption = i18n("decline"),
 		font = Configuration:GetFont(2),
 		classname = "negative_button",
@@ -88,7 +98,7 @@ function FriendListWindow:AddFriendRequest(userName)
 			end
 		},
 	}
-	self:AddRow({btnAccept, btnDecline, userControl}, userName)
+	self:AddRow({lblFriendRequest, btnAccept, btnDecline, userControl}, userName)
 end
 
 function FriendListWindow:AddFriend(userName)
@@ -103,7 +113,6 @@ function FriendListWindow:OnFriend(userName)
 end
 
 function FriendListWindow:OnUnfriend(userName)
-	Spring.Echo("Unfriend", userName)
 -- 	interfaceRoot.GetRightPanelHandler().SetActivity("friends", lobby:GetFriendRequestCount())
 	self:RemoveRow(userName)
 end
@@ -117,6 +126,12 @@ end
 
 function FriendListWindow:OnFriendRequest(userName)
 -- 	interfaceRoot.GetRightPanelHandler().SetActivity("friends", lobby:GetFriendRequestCount())
+	local userControl = WG.UserHandler.GetNotificationUser(userName)
+	userControl:SetPos(20, 40, 250, 20)
+	Chotify:Post({
+		title = i18n("New friend request"),
+		body  = userControl,
+	})
 	self:AddFriendRequest(userName)
 end
 
