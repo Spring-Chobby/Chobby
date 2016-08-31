@@ -1360,6 +1360,7 @@ end
 
 local oldSizeX, oldSizeY
 function widget:ViewResize(vsx, vsy, viewGeometry)
+	oldSizeX, oldSizeY = vsx, vsy
 	if ViewResizeUpdate then
 		WG.Delay(ViewResizeUpdate, 0.1)
 		WG.Delay(ViewResizeUpdate, 0.2)

@@ -71,6 +71,7 @@ end
 
 local oldSizeX, oldSizeY
 function widget:ViewResize(vsx, vsy)
+	oldSizeX, oldSizeY = vsx, vsy
 	screenWidth = vsx
 	screenHeight = vsy
 end
