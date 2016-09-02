@@ -287,6 +287,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	mainContent_window:Hide()
 	
 	-- Exit button
+	local function ExitSpring()
+		Spring.Echo("Quitting...")
+		Spring.Quit()
+	end
+	
 	local buttons_exit = Button:New {
 		x = 0,
 		bottom = 0,
@@ -347,11 +352,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		children = {}
 	}
 	rightPanel_window:Hide()
-
-	local function ExitSpring()
-		Spring.Echo("Quitting...")
-		Spring.Quit()
-	end
 
 	-----------------------------------
 	-- Background holder is put here to be at the back
@@ -654,8 +654,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		
 		local screenWidth, screenHeight = Spring.GetViewGeometry()
 		screen0:Resize(screenWidth, screenHeight)
-		
-		UpdateChildLayout()
 	end
 	
 	-------------------------------------------------------------------
