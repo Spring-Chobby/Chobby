@@ -33,6 +33,8 @@ function Configuration:init()
 	self.buttonSelectedColor = {0.54,0.72,1,0.6}--{1.0, 1.0, 1.0, 1.0}
 
 	self.loadLocalWidgets = false
+	self.displayBots = false
+	self.displayBadEngines = false
 
 	-- Do not ask again tests.
 	self.confirmation_mainMenuFromBattle = false
@@ -110,6 +112,8 @@ function Configuration:GetConfigData()
 		loadLocalWidgets = self.loadLocalWidgets,
 		onlyShowFeaturedMaps = self.onlyShowFeaturedMaps,
 		useSpringRestart = self.useSpringRestart,
+		displayBots = self.displayBots,
+		displayBadEngines = self.displayBadEngines,
 	}
 end
 
@@ -265,12 +269,16 @@ function Configuration:GetBackgroundImage()
 end
 
 function Configuration:IsValidEngineVersion(engineVersion)
+	if self.displayBadEngines then
+		return true
+	end
+	Spring.Echo("Checking engineVersion", engineVersion, "against", Game.version, "numbers", tonumber(Game.version), string.gsub(Game.version, " develop", ""))
 	if tonumber(Game.version) then
 		-- Master releases lack the '.0' at the end. Who knows what other cases are wrong.
 		-- Add as required.
 		return engineVersion == (Game.version .. ".0")
 	else
-		return engineVersion == Game.version
+		return string.gsub(Game.version, " develop", "") == engineVersion
 	end
 end
 

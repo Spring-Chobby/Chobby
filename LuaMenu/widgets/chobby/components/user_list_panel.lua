@@ -54,7 +54,7 @@ function UserListPanel:AddUser(userName)
 		Spring.Echo("User data not found", userName)
 		return
 	end
-	if userData.isBot then 
+	if userData.isBot and not Configuration.displayBots then 
 		return 
 	end
 	

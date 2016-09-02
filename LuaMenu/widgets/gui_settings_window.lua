@@ -244,6 +244,41 @@ local function InitializeControls(window)
 			Configuration:SetConfigValue("useSpringRestart", newState)
 		end},
 	}
+
+	offset = offset + 30
+	local showBots = Checkbox:New {
+		x = 60,
+		width = CHECK_WIDTH,
+		y = offset,
+		height = 40,
+		parent = window,
+		boxalign = "right",
+		boxsize = 20,
+		caption = "Show channel bots",
+		checked = Configuration.displayBots or false,
+		font = Configuration:GetFont(2),
+		OnChange = {function (obj, newState)
+			Configuration:SetConfigValue("displayBots", newState)
+		end},
+	}
+	
+	offset = offset + 30
+	local showWrongEngine = Checkbox:New {
+		x = 60,
+		width = CHECK_WIDTH,
+		y = offset,
+		height = 40,
+		parent = window,
+		boxalign = "right",
+		boxsize = 20,
+		caption = "Show wrong engines",
+		checked = Configuration.displayBadEngines or false,
+		font = Configuration:GetFont(2),
+		OnChange = {function (obj, newState)
+			Configuration:SetConfigValue("displayBadEngines", newState)
+		end},
+	}
+	
 	offset = offset + 30
 
 	------------------------------------------------------------------
