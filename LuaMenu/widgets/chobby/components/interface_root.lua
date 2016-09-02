@@ -75,8 +75,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	ingameInterfaceHolder:Hide()
 	
 	local lobbyInterfaceHolder = Control:New {
-		x = 10,
-		y = 10,
+		x = 0,
+		y = 0,
 		right = 0,
 		bottom = 0,
 		name = "lobbyInterfaceHolder",
@@ -85,49 +85,45 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		draggable = false,
 		padding = {0, 0, 0, 0},
 		children = {},
-	}
-	
-	local mainInterfaceHolder = Control:New {
-		x = 20,
-		y = 20,
-		right = 0,
-		bottom = 0,
-		name = "mainInterfaceHolder",
-		parent = lobbyInterfaceHolder,
-		resizable = false,
-		draggable = false,
-		padding = {0, 0, 0, 0},
-		children = {},
 		preserveChildrenOrder = true
 	}
 	
-	local topBarHolder = Control:New {
+	-- Direct children of lobbyInterfaceHolder are called holder_<name>
+	-- and are each within their own subsection
+	
+	-----------------------------------
+	-- Ingame top bar holder
+	-----------------------------------
+	local holder_topBar = Control:New {
 		x = 0,
 		y = 0,
 		right = 0,
 		height = topBarHeight,
-		name = "topBarHolder",
+		name = "holder_topBar",
 		parent = lobbyInterfaceHolder,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-	topBarHolder:Hide()
+	holder_topBar:Hide()
 	
-	local headingWindow = Control:New {
+	-----------------------------------
+	-- Heading holder
+	-----------------------------------
+	local holder_heading = Control:New {
 		x = 0,
 		y = 0,
 		width = titleWidth,
 		height = titleHeight,
-		name = "headingWindow",
-		parent = mainInterfaceHolder,
+		name = "holder_heading",
+		parent = lobbyInterfaceHolder,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-	local headingImage = Image:New {
+	local heading_image = Image:New {
 		y = 0,
 		x = 0,
 		right = 0,
@@ -140,213 +136,226 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			--Spring.OpenURL("https://gitter.im/Spring-Chobby/Chobby")
 			--Spring.OpenURL("/home/gajop")
 		end},
-		parent = headingWindow,
+		parent = holder_heading,
 	}
 
-	--headingWindow:SetPosRelative("20%","20%","20%","20%")
-
-	local mainStatusWindow = Control:New {
+	-----------------------------------
+	-- Top middle and top right status
+	-----------------------------------
+	local holder_status = Control:New {
 		x = titleWidth,
 		y = 0,
 		right = 0,
 		height = titleHeight,
-		name = "mainStatusWindow",
+		name = "holder_status",
 		caption = "", -- Status Window
-		parent = mainInterfaceHolder,
+		parent = lobbyInterfaceHolder,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
 	}
 
-	local userStatusWindow = Control:New {
+	local status_userWindow = Control:New {
 		y = 0,
 		right = 0,
 		bottom = panelButtonsHeight,
 		width = userStatusWidth,
 		height = "100%",
 		padding = {0, 0, 0, 0},
-		parent = mainStatusWindow,
+		parent = holder_status,
 		children = {
 			WG.UserStatusPanel.GetControl(),
 		}
 	}
 
-	local battleStatusHolder = Control:New {
+	local status_battleHolder = Control:New {
 		x = battleStatusLeftPadding,
 		y = battleStatusTopPadding,
 		right = userStatusWidth,
 		bottom = battleStatusBottomPadding,
-		name = "battleStatusHolder",
+		name = "status_battleHolder",
 		caption = "", -- Battle and MM Status Window
-		parent = mainInterfaceHolder,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
-		parent = mainStatusWindow,
+		parent = holder_status,
 	}
 
-	local mainWindow = Control:New {
-		x = 0,
-		y = titleHeight,
-		width = (100 - panelWidthRel) .. "%",
+	local status_panelButtons = Control:New {
 		bottom = 0,
-		name = "mainWindow",
-		caption = "", -- Main Window
-		parent = mainInterfaceHolder,
+		right = 0,
+		width = panelButtonsWidth,
+		height = panelButtonsHeight,
+		name = "status_panelButtons",
+		parent = holder_status,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-	local mainButtonsHolder = Control:New {
-		x = padding,
-		y = padding,
-		width = mainButtonsWidth,
-		bottom = padding,
-		name = "mainButtonsHolder",
-		parent = mainWindow,
-		padding = {0, 0, 0, 0},
-		children = {},
-	}
-	local mainButtons = Control:New {
-		x = 0,
-		y = 0,
+	local panelButtons_buttons = Control:New {
+		x = "0%",
+		y = "0%",
 		width = "100%",
 		height = "100%",
-		name = "mainButtons",
-		caption = "", -- Main Buttons
-		parent = mainButtonsHolder,
+		name = "panelButtons_buttons",
+		caption = "", -- Panel Buttons
+		parent = status_panelButtons,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
 	
-	local topPartImage = Image:New {
+	-----------------------------------
+	-- Main Window
+	-----------------------------------
+	local holder_mainWindow = Control:New {
+		x = 0,
+		y = titleHeight,
+		width = (100 - panelWidthRel) .. "%",
+		bottom = 0,
+		name = "holder_mainWindow",
+		caption = "", -- Main Window
+		parent = lobbyInterfaceHolder,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		children = {}
+	}
+	local mainWindow_buttonsHolder = Control:New {
+		x = padding,
+		y = padding,
+		width = mainButtonsWidth,
+		bottom = padding,
+		name = "mainWindow_buttonsHolder",
+		parent = holder_mainWindow,
+		padding = {0, 0, 0, 0},
+		children = {},
+	}
+	local buttonsHolder_buttons = Control:New {
 		x = 0,
 		y = 0,
-		right = 0,
-		height = titleHeight,
-		file = IMAGE_TOP_BACKGROUND,
-		parent = mainInterfaceHolder,
-		keepAspect = false,
-		color = {0.218, 0.23, 0.49, 0.25},
+		width = "100%",
+		height = "100%",
+		name = "buttonsHolder_buttons",
+		caption = "", -- Main Buttons
+		parent = mainWindow_buttonsHolder,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		children = {}
 	}
-
-	local mainButtonsImage = Image:New {
+	
+	local buttonsHolder_image = Image:New {
 		x = 0,
 		y = 0,
 		right = 0,
 		bottom = 0,
 		file = IMAGE_TOP_BACKGROUND,
-		parent = mainButtonsHolder,
+		parent = mainWindow_buttonsHolder,
 		keepAspect = false,
 		color = {0.218, 0.23, 0.49, 0.1},
 	}
 
-	local contentPlaceHolder = Control:New {
+	local mainWindow_mainContent = Control:New {
 		x = mainButtonsWidth,
 		y = padding,
 		right = padding,
 		bottom = padding,
-		name = "contentPlaceHolder",
+		name = "mainWindow_mainContent",
 		caption = "", -- Content Place
-		parent = mainWindow,
+		parent = holder_mainWindow,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-	local contentPlace = Window:New {
+	local mainContent_window = Window:New {
 		x = 0,
 		y = 0,
 		right = 0,
 		bottom = 0,
-		name = "contentPlace",
+		name = "mainContent_window",
 		caption = "", -- Content Place
-		parent = contentPlaceHolder,
+		parent = mainWindow_mainContent,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-	contentPlace:Hide()
-
-	local panelButtonsHolder = Control:New {
-		bottom = 0,
-		right = 0,
-		width = panelButtonsWidth,
-		height = panelButtonsHeight,
-		name = "panelButtonsHolder",
-		parent = mainStatusWindow,
-		resizable = false,
-		draggable = false,
-		padding = {0, 0, 0, 0},
-		children = {}
-	}
-	local panelButtons = Control:New {
-		x = "0%",
-		y = "0%",
-		width = "100%",
-		height = "100%",
-		name = "panelButtons",
-		caption = "", -- Panel Buttons
-		parent = panelButtonsHolder,
-		resizable = false,
-		draggable = false,
-		padding = {0, 0, 0, 0},
-		children = {}
-	}
-
-	local panelWindowHolder = Control:New {
-		x = (100 - panelWidthRel) .. "%",
-		y = titleHeight,
-		right = 0,
-		bottom = 0,
-		name = "panelWindowHolder",
-		caption = "", -- Panel Window
-		parent = mainInterfaceHolder,
-		resizable = false,
-		draggable = false,
-		padding = {0, 0, 0, 0},
-		children = {}
-	}
-	local panelWindow = Window:New {
-		x = 0,
-		y = 0,
-		right = 0,
-		bottom = 0,
-		name = "panelWindow",
-		caption = "", -- Panel Window
-		parent = panelWindowHolder,
-		resizable = false,
-		draggable = false,
-		padding = {0, 0, 0, 0},
-		children = {}
-	}
-	panelWindow:Hide()
-
-	local function ExitSpring()
-		Spring.Echo("Quitting...")
-		Spring.Quit()
-	end
-
+	mainContent_window:Hide()
+	
 	-- Exit button
-	local exitButton = Button:New {
+	local buttons_exit = Button:New {
 		x = 0,
 		bottom = 0,
 		width = "100%",
 		height = 70,
 		caption = i18n("exit"),
 		font = Configuration:GetFont(3),
-		parent = mainButtons,
+		parent = buttonsHolder_buttons,
 		OnClick = {
 			function(self)
 				ConfirmationPopup(ExitSpring, "Are you sure you want to quit?", nil, 315, 200)
 			end
 		},
 	}
+	
+	-----------------------------------
+	-- Top image
+	-----------------------------------
+	local holder_topImage = Image:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		height = titleHeight,
+		file = IMAGE_TOP_BACKGROUND,
+		parent = lobbyInterfaceHolder,
+		keepAspect = false,
+		color = {0.218, 0.23, 0.49, 0.25},
+	}
+	
+	-----------------------------------
+	-- Right panel holder
+	-----------------------------------
+	
+	local holder_rightPanel = Control:New {
+		x = (100 - panelWidthRel) .. "%",
+		y = titleHeight,
+		right = 0,
+		bottom = 0,
+		name = "holder_rightPanel",
+		caption = "", -- Panel Window
+		parent = lobbyInterfaceHolder,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		children = {}
+	}
+	local rightPanel_window = Window:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		name = "rightPanel_window",
+		caption = "", -- Panel Window
+		parent = holder_rightPanel,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		children = {}
+	}
+	rightPanel_window:Hide()
 
+	local function ExitSpring()
+		Spring.Echo("Quitting...")
+		Spring.Quit()
+	end
+
+	-----------------------------------
+	-- Background holder is put here to be at the back
+	-----------------------------------
 	local backgroundHolder = Background()
 	
 	-------------------------------------------------------------------
@@ -392,9 +401,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		myBattle = WG.BattleStatusPanel.GetControl
 	}
 
-	local battleStatusPanelHandler = GetTabPanelHandler("myBattlePanel", battleStatusHolder, contentPlace, {}, nil, nil, nil, nil, statusButtonWidth, battleStatusTabControls)
-	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons, panelWindow, rightPanelTabs)
-	mainWindowHandler = GetSubmenuHandler(mainButtons, contentPlace, submenus)
+	local battleStatusPanelHandler = GetTabPanelHandler("myBattlePanel", status_battleHolder, mainContent_window, {}, nil, nil, nil, nil, statusButtonWidth, battleStatusTabControls)
+	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons_buttons, rightPanel_window, rightPanelTabs)
+	mainWindowHandler = GetSubmenuHandler(buttonsHolder_buttons, mainContent_window, submenus)
 
 	-------------------------------------------------------------------
 	-- Resizing functions
@@ -402,143 +411,145 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local function RescaleMainWindow(newFontSize, newButtonHeight)
 		mainWindowHandler.Rescale(newFontSize, newButtonHeight)
-		exitButton:SetPos(nil, nil, nil, newButtonHeight)
+		buttons_exit:SetPos(nil, nil, nil, newButtonHeight)
 
-		ButtonUtilities.SetFontSizeScale(exitButton, newFontSize)
+		ButtonUtilities.SetFontSizeScale(buttons_exit, newFontSize)
 	end
 
 	local function UpdateChildLayout()
 		if doublePanelMode then
 			chatWindows:ReattachTabHolder()
 
-			rightPanelHandler.UpdateLayout(panelWindow, false)
-			if not contentPlace:IsEmpty() then
-				local control, index = rightPanelHandler.GetManagedControlByName(contentPlace.children[1].name)
+			rightPanelHandler.UpdateLayout(rightPanel_window, false)
+			if not mainContent_window:IsEmpty() then
+				local control, index = rightPanelHandler.GetManagedControlByName(mainContent_window.children[1].name)
 				if control then
-					contentPlace:ClearChildren()
-					contentPlace:SetVisibility(false)
+					mainContent_window:ClearChildren()
+					mainContent_window:SetVisibility(false)
 					rightPanelHandler.OpenTab(index)
-				elseif panelWindow.visible then
-					panelWindow:Hide()
+				elseif rightPanel_window.visible then
+					rightPanel_window:Hide()
 				end
-			elseif panelWindow.visible then
-				panelWindow:Hide()
+			elseif rightPanel_window.visible then
+				rightPanel_window:Hide()
 			end
 
 		else
-			chatWindows:SetTabHolderParent(mainStatusWindow, smallStatusLeftPadding, titleHeightSmall - chatTabHolderHeight + imageFudge, chatTabHolderRight)
+			chatWindows:SetTabHolderParent(holder_status, smallStatusLeftPadding, titleHeightSmall - chatTabHolderHeight + imageFudge, chatTabHolderRight)
 
-			rightPanelHandler.UpdateLayout(contentPlace, true)
-			if contentPlace:IsEmpty() and not panelWindow:IsEmpty() then
-				local panelChild = panelWindow.children[1]
+			rightPanelHandler.UpdateLayout(mainContent_window, true)
+			if mainContent_window:IsEmpty() and not rightPanel_window:IsEmpty() then
+				local panelChild = rightPanel_window.children[1]
 				local control, index = rightPanelHandler.GetManagedControlByName(panelChild.name)
 				rightPanelHandler.OpenTab(index)
 			else
-				panelWindow:ClearChildren()
+				rightPanel_window:ClearChildren()
 			end
 		end
 	end
-	
+
 	local function UpdateDoublePanel(newDoublePanel)
 		if newDoublePanel == doublePanelMode then
 			return
 		end
 		doublePanelMode = newDoublePanel
 		
+		local topOffset = (showTopBar and topBarHeight) or 0
+		
 		if doublePanelMode then
 			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidth)
 			RescaleMainWindow(3, 70)
 
 			-- Make main buttons wider
-			contentPlaceHolder:SetPos(mainButtonsWidth)
-			contentPlaceHolder._relativeBounds.right = 0
-			contentPlaceHolder:UpdateClientArea()
+			mainWindow_mainContent:SetPos(mainButtonsWidth)
+			mainWindow_mainContent._relativeBounds.right = 0
+			mainWindow_mainContent:UpdateClientArea()
 
-			--contentPlace.color = VISIBLE_COLOR
+			--mainContent_window.color = VISIBLE_COLOR
 
-			mainButtonsHolder:SetPos(nil, nil, mainButtonsWidth)
+			mainWindow_buttonsHolder:SetPos(nil, nil, mainButtonsWidth)
 
 			-- Move Panel Buttons
-			mainButtons:RemoveChild(panelButtons)
-			panelButtonsHolder:AddChild(panelButtons)
+			buttonsHolder_buttons:RemoveChild(panelButtons_buttons)
+			status_panelButtons:AddChild(panelButtons_buttons)
 
-			panelButtons:SetPosRelative("0%","0%", "100%","100%")
-			--mainButtons:SetPosRelative("0%","0%", nil,"100%")
+			panelButtons_buttons:SetPosRelative("0%","0%", "100%","100%")
+			--buttonsHolder_buttons:SetPosRelative("0%","0%", nil,"100%")
 
 			-- Make Main Window take up more space
-			panelButtonsHolder:Show()
-			panelWindowHolder:Show()
-			panelWindowHolder:SetPos(nil, titleHeight)
+			status_panelButtons:Show()
+			holder_rightPanel:Show()
+			holder_rightPanel:SetPos(nil, titleHeight + topOffset)
 
-			mainWindow:SetPos(nil, titleHeight)
-			mainWindow._relativeBounds.right = panelWidthRel .. "%"
-			mainWindow._relativeBounds.bottom = 0
-			mainWindow:UpdateClientArea()
+			holder_mainWindow:SetPos(nil, titleHeight + topOffset)
+			holder_mainWindow._relativeBounds.right = panelWidthRel .. "%"
+			holder_mainWindow._relativeBounds.bottom = 0
+			holder_mainWindow:UpdateClientArea()
 
 			-- Align game title and status.
-			headingWindow:SetPos(0, 0, titleWidth, titleHeight)
-			mainStatusWindow:SetPos(titleWidth, 0, titleHeight, titleHeight)
-			mainStatusWindow._relativeBounds.right = 0
-			mainStatusWindow:UpdateClientArea()
+			holder_heading:SetPos(0, topOffset, titleWidth, titleHeight)
+			holder_status:SetPos(titleWidth, topOffset, titleHeight, titleHeight)
+			holder_status._relativeBounds.right = 0
+			holder_status:UpdateClientArea()
 
-			userStatusWindow._relativeBounds.bottom = panelButtonsHeight
-			userStatusWindow:UpdateClientArea()
+			status_userWindow._relativeBounds.bottom = panelButtonsHeight
+			status_userWindow:UpdateClientArea()
 
-			battleStatusHolder:SetPos(battleStatusLeftPadding, battleStatusTopPadding)
-			battleStatusHolder._relativeBounds.bottom = battleStatusBottomPadding
-			battleStatusHolder:UpdateClientArea()
+			status_battleHolder:SetPos(battleStatusLeftPadding, battleStatusTopPadding)
+			status_battleHolder._relativeBounds.bottom = battleStatusBottomPadding
+			status_battleHolder:UpdateClientArea()
 
-			topPartImage:SetPos(nil, nil, nil, titleHeight + imageFudge)
+			holder_topImage:SetPos(nil, topOffset, nil, titleHeight + imageFudge)
 		else
 			rightPanelHandler.Rescale(2, 55)
 			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidthSmall)
 			RescaleMainWindow(2, 55)
 
 			-- Make main buttons thinner
-			contentPlaceHolder:SetPos(mainButtonsWidthSmall)
-			contentPlaceHolder._relativeBounds.right = 0
-			contentPlaceHolder:UpdateClientArea()
+			mainWindow_mainContent:SetPos(mainButtonsWidthSmall)
+			mainWindow_mainContent._relativeBounds.right = 0
+			mainWindow_mainContent:UpdateClientArea()
 
-			--contentPlace.color = INVISIBLE_COLOR
+			--mainContent_window.color = INVISIBLE_COLOR
 
-			mainButtonsHolder:SetPos(nil, nil, mainButtonsWidthSmall)
+			mainWindow_buttonsHolder:SetPos(nil, nil, mainButtonsWidthSmall)
 
 			-- Move Panel Buttons
-			panelButtonsHolder:RemoveChild(panelButtons)
-			mainButtons:AddChild(panelButtons)
+			status_panelButtons:RemoveChild(panelButtons_buttons)
+			buttonsHolder_buttons:AddChild(panelButtons_buttons)
 
-			panelButtons:SetPosRelative("0%","45%", "100%","50%")
-			--mainButtons:SetPosRelative("0%","0%", nil,"50%")
+			panelButtons_buttons:SetPosRelative("0%","45%", "100%","50%")
+			--buttonsHolder_buttons:SetPosRelative("0%","0%", nil,"50%")
 
 			-- Make Main Window take up more space
-			panelButtonsHolder:Hide()
-			panelButtonsHolder:ClearChildren()
-			if panelWindowHolder.visible then
-				panelWindowHolder:Hide()
+			status_panelButtons:Hide()
+			status_panelButtons:ClearChildren()
+			if holder_rightPanel.visible then
+				holder_rightPanel:Hide()
 			end
-			mainWindow:SetPos(nil, titleHeightSmall)
-			mainWindow._relativeBounds.right = 0
-			mainWindow._relativeBounds.bottom = 0
-			mainWindow:UpdateClientArea()
+			holder_mainWindow:SetPos(nil, titleHeightSmall + topOffset)
+			holder_mainWindow._relativeBounds.right = 0
+			holder_mainWindow._relativeBounds.bottom = 0
+			holder_mainWindow:UpdateClientArea()
 
 			-- Align game title and status.
-			headingWindow:SetPos(0, 0, mainButtonsWidthSmall + padding, titleHeightSmall)
-			mainStatusWindow:SetPos(mainButtonsWidthSmall, 0, titleHeightSmall, titleHeightSmall)
-			mainStatusWindow._relativeBounds.right = 0
-			mainStatusWindow:UpdateClientArea()
+			holder_heading:SetPos(0, topOffset, mainButtonsWidthSmall + padding, titleHeightSmall)
+			holder_status:SetPos(mainButtonsWidthSmall, topOffset, titleHeightSmall, titleHeightSmall)
+			holder_status._relativeBounds.right = 0
+			holder_status:UpdateClientArea()
 
-			userStatusWindow._relativeBounds.bottom = 0
-			userStatusWindow:UpdateClientArea()
+			status_userWindow._relativeBounds.bottom = 0
+			status_userWindow:UpdateClientArea()
 
-			battleStatusHolder:SetPos(smallStatusLeftPadding, battleStatusTopPaddingSmall)
-			battleStatusHolder._relativeBounds.bottom = statusWindowGapSmall
-			battleStatusHolder:UpdateClientArea()
+			status_battleHolder:SetPos(smallStatusLeftPadding, battleStatusTopPaddingSmall)
+			status_battleHolder._relativeBounds.bottom = statusWindowGapSmall
+			status_battleHolder:UpdateClientArea()
 
-			topPartImage:SetPos(nil, nil, nil, titleHeightSmall + imageFudge)
+			holder_topImage:SetPos(nil, topOffset, nil, titleHeightSmall + imageFudge)
 		end
 
-		headingImage.file = Configuration:GetHeadingImage(doublePanelMode)
-		headingImage:Invalidate()
+		heading_image.file = Configuration:GetHeadingImage(doublePanelMode)
+		heading_image:Invalidate()
 
 		UpdateChildLayout()
 	end
@@ -565,40 +576,40 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			middlePad = 20
 		end
 		
-		contentPlace:SetPos(leftPad)
-		contentPlace._relativeBounds.right = middlePad
-		contentPlace._relativeBounds.bottom = bottomPad
-		contentPlace:UpdateClientArea()
+		mainContent_window:SetPos(leftPad)
+		mainContent_window._relativeBounds.right = middlePad
+		mainContent_window._relativeBounds.bottom = bottomPad
+		mainContent_window:UpdateClientArea()
 
-		panelWindow:SetPos(middlePad)
-		panelWindow._relativeBounds.right = rightPad
-		panelWindow._relativeBounds.bottom = bottomPad
-		panelWindow:UpdateClientArea()
+		rightPanel_window:SetPos(middlePad)
+		rightPanel_window._relativeBounds.right = rightPad
+		rightPanel_window._relativeBounds.bottom = bottomPad
+		rightPanel_window:UpdateClientArea()
 
-		panelButtonsHolder._relativeBounds.right = rightPad
-		panelWindow:UpdateClientArea()
+		status_panelButtons._relativeBounds.right = rightPad
+		rightPanel_window:UpdateClientArea()
 
-		exitButton._relativeBounds.bottom = bottomPad
-		exitButton:UpdateClientArea()
+		buttons_exit._relativeBounds.bottom = bottomPad
+		buttons_exit:UpdateClientArea()
 
 		if doublePanelMode then
-			battleStatusHolder._relativeBounds.right = panelButtonsWidth + rightPad
-			battleStatusHolder:UpdateClientArea()
+			status_battleHolder._relativeBounds.right = panelButtonsWidth + rightPad
+			status_battleHolder:UpdateClientArea()
 		else
-			battleStatusHolder._relativeBounds.right = userStatusWidth
-			battleStatusHolder:UpdateClientArea()
+			status_battleHolder._relativeBounds.right = userStatusWidth
+			status_battleHolder:UpdateClientArea()
 		end
 
-		mainButtonsHolder:SetPos(leftButtonPad)
+		mainWindow_buttonsHolder:SetPos(leftButtonPad)
 		local contentOffset = leftButtonPad
 		if doublePanelMode then
 			contentOffset = contentOffset + mainButtonsWidth
 		else
 			contentOffset = contentOffset + mainButtonsWidthSmall
 		end
-		contentPlaceHolder:SetPos(contentOffset)
-		contentPlaceHolder._relativeBounds.right = 0
-		contentPlaceHolder:UpdateClientArea()
+		mainWindow_mainContent:SetPos(contentOffset)
+		mainWindow_mainContent._relativeBounds.right = 0
+		mainWindow_mainContent:UpdateClientArea()
 	end
 	
 	-------------------------------------------------------------------
@@ -620,20 +631,31 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	end
 		
 	local function SetTopBarVisible(newVisible)
-		Spring.Echo("newVisible == showTopBar", newVisible, showTopBar)
 		if newVisible == showTopBar then
 			return
 		end
-		topBarHolder:SetVisibility(newVisible)
+		holder_topBar:SetVisibility(newVisible)
 		showTopBar = newVisible
 		
 		local topOffset = (showTopBar and topBarHeight) or 0
-		mainInterfaceHolder._relativeBounds.top = topOffset
-		mainInterfaceHolder._relativeBounds.bottom = 0
-		mainInterfaceHolder:UpdateClientArea()
+		local titleOffset = (doublePanelMode and titleHeight) or titleHeightSmall
+		
+		holder_rightPanel:SetPos(nil, titleOffset + topOffset)
+		holder_rightPanel._relativeBounds.bottom = 0
+		holder_rightPanel:UpdateClientArea()
+			
+		holder_mainWindow:SetPos(nil, titleOffset + topOffset)
+		holder_mainWindow._relativeBounds.bottom = 0
+		holder_mainWindow:UpdateClientArea()
+		
+		holder_topImage:SetPos(nil, topOffset)
+		holder_heading:SetPos(nil, topOffset)
+		holder_status:SetPos(nil, topOffset)
 		
 		local screenWidth, screenHeight = Spring.GetViewGeometry()
 		screen0:Resize(screenWidth, screenHeight)
+		
+		UpdateChildLayout()
 	end
 	
 	-------------------------------------------------------------------
@@ -667,7 +689,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		name = "switchToGameButton",
 		caption = "Game",
 		font = WG.Chobby.Configuration:GetFont(3),
-		parent = topBarHolder,
+		parent = holder_topBar,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
@@ -687,7 +709,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		name = "leaveGameButton",
 		caption = "Leave",
 		font = WG.Chobby.Configuration:GetFont(3),
-		parent = topBarHolder,
+		parent = holder_topBar,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
@@ -705,7 +727,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		right = 0,
 		bottom = 0,
 		file = IMAGE_TOP_BACKGROUND,
-		parent = topBarHolder,
+		parent = holder_topBar,
 		keepAspect = false,
 		color = {0.218, 0.23, 0.49, 0.9},
 	}
@@ -745,11 +767,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	end
 
 	function externalFunctions.GetContentPlace()
-		return contentPlace
+		return mainContent_window
 	end
 
 	function externalFunctions.GetStatusWindow()
-		return mainStatusWindow
+		return holder_status
 	end
 
 	function externalFunctions.GetMainWindowHandler()
@@ -810,8 +832,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				externalFunctions.SetPanelDisplayMode(false, false)
 			end
 		elseif key == "singleplayer_mode" then
-			headingImage.file = Configuration:GetHeadingImage(doublePanelMode)
-			headingImage:Invalidate()
+			heading_image.file = Configuration:GetHeadingImage(doublePanelMode)
+			heading_image:Invalidate()
 
 			local newShortname = Configuration.shortnameMap[value]
 			local replacementTabs = Configuration:GetGameConfig(false, "singleplayerMenu.lua", newShortname) or {}
