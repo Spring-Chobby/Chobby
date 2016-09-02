@@ -74,29 +74,16 @@ function Background:Enable()
 		local texInfo = gl.TextureInfo(file)
 		self.width, self.height = texInfo.xsize, texInfo.ysize	
 		
-		local eatInputSetFunction = {
-			function ()
-				return true
-			end
-		}
-		
 		self.backgroundImage = Image:New {
 			x = 0,
 			y = 0,
 			right = 0,
 			bottom = 0,
+			padding = {0,0,0,0},
+			margin = {0,0,0,0},
 			keepAspect = false,
 			file = file,
-			
-			-- Eat all the input so none of it reaches ingame when the menu is visible.
-			OnKeyPress   = eatInputSetFunction,
-			OnMouseWheel = eatInputSetFunction,
-			OnClick      = eatInputSetFunction,
-			OnDblClick   = eatInputSetFunction,
-			OnMouseDown  = eatInputSetFunction,
-			OnMouseUp    = eatInputSetFunction,
 		}
-
 		
 		self.backgroundControl = Control:New {
 			name = "backgroundControl",

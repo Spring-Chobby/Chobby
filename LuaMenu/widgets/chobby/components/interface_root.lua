@@ -622,6 +622,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		if lobbyInterfaceHolder.visible == newVisible then
 			return
 		end
+		WG.SetGameInputBlock(newVisible)
+		
 		backgroundHolder:SetEnabled(newVisible)
 		if newVisible then
 			lobbyInterfaceHolder:Show()
