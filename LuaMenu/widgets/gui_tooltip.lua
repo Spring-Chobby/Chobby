@@ -69,18 +69,9 @@ local function InitWindow()
 	tipWindow:Hide()
 end
 
-local oldSizeX, oldSizeY
 function widget:ViewResize(vsx, vsy)
-	oldSizeX, oldSizeY = vsx, vsy
 	screenWidth = vsx
 	screenHeight = vsy
-end
-
-local function EvilHax()
-	local screenWidth, screenHeight = Spring.GetWindowGeometry()
-	if screenWidth ~= oldSizeX or screenHeight ~= oldSizeY then
-		widget:ViewResize(screenWidth, screenHeight)
-	end
 end
 
 --------------------------------------------------------------------------
@@ -823,8 +814,6 @@ end
 local currentTooltipText = false
 
 function widget:Update()
-	EvilHax()
-
 	local text = GetTooltip()
 	if text then
 		if currentTooltipText ~= text then
