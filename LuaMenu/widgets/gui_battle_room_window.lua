@@ -72,24 +72,28 @@ local function UpdateArchiveStatus()
 	local haveGame = VFS.HasArchive(battle.gameName)
 	local haveMap = VFS.HasArchive(battle.mapName)
 
-	if haveGame then
-		imHaveGame.file = IMG_READY
-		lblHaveGame:SetCaption(i18n("have_game"))
-	else
-		imHaveGame.file = IMG_UNREADY
-		lblHaveGame:SetCaption(i18n("dont_have_game"))
+	if imHaveGame then
+		if haveGame then
+			imHaveGame.file = IMG_READY
+			lblHaveGame:SetCaption(i18n("have_game"))
+		else
+			imHaveGame.file = IMG_UNREADY
+			lblHaveGame:SetCaption(i18n("dont_have_game"))
+		end
+		imHaveGame:Invalidate()
 	end
-	imHaveGame:Invalidate()
-
-	if haveMap then
-		imHaveMap.file = IMG_READY
-		lblHaveMap:SetCaption(i18n("have_map"))
-	else
-		imHaveMap.file = IMG_UNREADY
-		lblHaveMap:SetCaption(i18n("dont_have_map"))
+	
+	if imHaveMap then
+		if haveMap then
+			imHaveMap.file = IMG_READY
+			lblHaveMap:SetCaption(i18n("have_map"))
+		else
+			imHaveMap.file = IMG_UNREADY
+			lblHaveMap:SetCaption(i18n("dont_have_map"))
+		end
+		imHaveMap:Invalidate()
 	end
-	imHaveMap:Invalidate()
-
+	
 	haveMapAndGame = (haveGame and haveMap)
 end
 
@@ -1030,7 +1034,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 			end
 		},
 	}
-
+	
 	local subPanel = Control:New {
 		x = 0,
 		y = 42,
