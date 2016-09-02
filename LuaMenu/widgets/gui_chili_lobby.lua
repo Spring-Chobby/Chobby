@@ -41,16 +41,8 @@ function widget:GamePreload()
 	interfaceRoot.SetIngame(gameName ~= "")
 end
 
--- Not in widget handler.
---function widget:ActivateMenu()
---	interfaceRoot.SetIngame(false)
---end
-
-function widget:Update()
-	local name = Spring.GetGameName()
-	if name ~= oldName then
-		widget:GamePreload()
-	end
+function widget:ActivateMenu()
+	interfaceRoot.SetIngame(false)
 end
 
 function widget:Initialize()
