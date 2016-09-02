@@ -459,6 +459,11 @@ function widget:Initialize()
 	onBattleAboutToStart = function(listener)
 		local screenX, screenY = Spring.GetScreenGeometry()
 
+		if true then
+			SetLobbyFullscreenMode(1)
+			return
+		end
+		
 		-- Stopgap solution, has side effects
 		if battleStartDisplay == 1 then
 			Spring.SetConfigInt("XResolutionWindowed", screenX, false)
@@ -466,6 +471,7 @@ function widget:Initialize()
 			Spring.SetConfigInt("WindowPosX", 0, false)
 			Spring.SetConfigInt("WindowPosY", 0, false)
 			Spring.SetConfigInt("WindowBorderless", 1, false)
+			Spring.SetConfigInt("Fullscreen", 0)
 		elseif battleStartDisplay == 2 then
 			Spring.SetConfigInt("WindowPosX", 0, false)
 			Spring.SetConfigInt("WindowPosY", 80, false)
@@ -474,10 +480,12 @@ function widget:Initialize()
 			Spring.SetConfigInt("WindowBorderless", 0, false)
 			Spring.SetConfigInt("WindowBorderless", 0, false)
 			Spring.SetConfigInt("Fullscreen", 0, false)
+			Spring.SetConfigInt("Fullscreen", 0)
 		elseif battleStartDisplay == 3 then
 			Spring.SetConfigInt("XResolution", screenX, false)
 			Spring.SetConfigInt("YResolution", screenY, false)
 			Spring.SetConfigInt("Fullscreen", 1, false)
+			Spring.SetConfigInt("Fullscreen", 1)
 		end
 
 		-- Settings which rely on io

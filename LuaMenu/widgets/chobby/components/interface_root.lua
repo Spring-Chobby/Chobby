@@ -480,6 +480,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			status_panelButtons:Show()
 			holder_rightPanel:Show()
 			holder_rightPanel:SetPos(nil, titleHeight + topOffset)
+			holder_rightPanel._relativeBounds.bottom = 0
+			holder_rightPanel:UpdateClientArea()
 
 			holder_mainWindow:SetPos(nil, titleHeight + topOffset)
 			holder_mainWindow._relativeBounds.right = panelWidthRel .. "%"
