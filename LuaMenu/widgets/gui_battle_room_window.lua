@@ -1002,6 +1002,11 @@ end
 local function InitializeControls(battleID, oldLobby, topPoportion)
 	local battle = battleLobby:GetBattle(battleID)
 
+	if not battle then
+		Spring.Echo("Attempted to join missing battle", battleID, topPoportion)
+		return false
+	end
+	
 	local EXTERNAL_PAD_VERT = 10
 	local EXTERNAL_PAD_HOR = 15
 	local INTERNAL_PAD = 2
@@ -1240,13 +1245,15 @@ function BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
 					wrapperControl = obj
 
 					local battleWindow = InitializeControls(battleID, battleLobby, 55)
-					obj:AddChild(battleWindow)
+					if battleWindow then
+						obj:AddChild(battleWindow)
+					end
 				end
 			end
 		},
 		OnHide = {
 			function(obj)
-				tabPanel.RemoveTab("myBattle")
+				tabPanel.RemoveTab("myBattle", true)
 			end
 		}
 	}
@@ -1278,7 +1285,7 @@ function BattleRoomWindow.GetSingleplayerControl()
 
 				if multiplayerWrapper then
 					local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
-					tabPanel.RemoveTab("myBattle")
+					tabPanel.RemoveTab("myBattle", true)
 
 					if window then
 						window:Dispose()
@@ -1304,6 +1311,10 @@ function BattleRoomWindow.GetSingleplayerControl()
 				wrapperControl = obj
 
 				local battleWindow = InitializeControls(1, battleLobby, 70)
+				if not battleWindow then
+					return
+				end
+				
 				obj:AddChild(battleWindow)
 
 				UpdateArchiveStatus()
@@ -1357,7 +1368,7 @@ function BattleRoomWindow.LeaveBattle(onlyMultiplayer, onlySingleplayer)
 	onBattleClosed(_, battleLobby:GetMyBattleID())
 
 	local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
-	tabPanel.RemoveTab("myBattle")
+	tabPanel.RemoveTab("myBattle", true)
 end
 
 function widget:Initialize()

@@ -654,6 +654,12 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		holder_heading:SetPos(nil, topOffset)
 		holder_status:SetPos(nil, topOffset)
 		
+		if showTopBar then
+			backgroundHolder:SetAlpha(0.85)
+		else
+			backgroundHolder:SetAlpha(1)
+		end
+		
 		local screenWidth, screenHeight = Spring.GetViewGeometry()
 		screen0:Resize(screenWidth, screenHeight)
 	end

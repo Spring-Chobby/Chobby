@@ -34,6 +34,7 @@ local function SetLobbyFullscreenMode(mode)
 		Spring.SetConfigInt("WindowPosX", 0, false)
 		Spring.SetConfigInt("WindowPosY", 0, false)
 		Spring.SetConfigInt("WindowBorderless", 1, false)
+		Spring.SetConfigInt("WindowBorderless", 1)
 		Spring.SetConfigInt("Fullscreen", 0)
 	elseif mode == 2 then
 		local winSizeX, winSizeY, winPosX, winPosY = Spring.GetWindowGeometry()

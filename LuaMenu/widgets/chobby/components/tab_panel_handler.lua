@@ -204,7 +204,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		tabs = nil
 	end
 
-	function externalFunctions.RemoveTab(name)
+	function externalFunctions.RemoveTab(name, killControl)
 		local index = 1
 		local found = false
 		while index <= #tabs do
@@ -213,6 +213,9 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 				index = index + 1
 			elseif tabs[index].name == name then
 				tabs[index].button:Dispose()
+				if killControl then
+					tabs[index].control:Dispose()
+				end
 				found = true
 			else
 				index = index + 1

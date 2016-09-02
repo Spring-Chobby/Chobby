@@ -179,6 +179,7 @@ function EditBox:GetPhysicalLinePosition(distanceFromBottom)
 			return position
 		end
 	end
+	return 0
 end
 
 function EditBox:_GeneratePhysicalLines(logicalLineID)

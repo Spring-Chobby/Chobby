@@ -17,6 +17,11 @@ function Background:init()
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)		
 end
 
+function Background:SetAlpha(newAlpha)
+	self.backgroundImage.color[4] = newAlpha
+	self.backgroundImage:Invalidate()
+end
+
 function Background:Resize(backgroundControl)
 	backgroundControl = backgroundControl or self.backgroundControl
 	if not self.backgroundImage then

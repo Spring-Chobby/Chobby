@@ -61,6 +61,7 @@ function Chobby:_Initialize()
 		WG.Delay(function()
 			lobby:AddListener("OnJoinBattle", 
 				function(listener, battleID)
+					Spring.Echo("Showing battle with ID", battleID)
 					WG.BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
 				end
 			)
