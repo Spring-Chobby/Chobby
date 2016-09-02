@@ -243,7 +243,7 @@ local function UpdateUserCountry(listener, userName)
 	for i = 1, #userListList do
 		local userList = userListList[i]
 		local data = userList[userName]
-		if data then
+		if data and data.imCountry then
 			data.imCountry.file = GetUserCountryImage(userName, data)
 			data.imCountry:Invalidate()
 		end
