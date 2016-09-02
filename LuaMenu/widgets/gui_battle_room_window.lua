@@ -1291,7 +1291,7 @@ function BattleRoomWindow.GetSingleplayerControl()
 
 				local singleplayerDefault = WG.Chobby.Configuration:GetGameConfig(singleplayerGame, "skirmishDefault.lua")
 
-				local defaultMap = Game.mapName
+				local defaultMap = Game.mapName or "Red Comet"
 				if singleplayerDefault and singleplayerDefault.map then
 					defaultMap = singleplayerDefault.map
 				end
