@@ -39,10 +39,12 @@ function widget:GamePreload()
 	local gameName = Spring.GetGameName()
 	oldName = gameName
 	interfaceRoot.SetIngame(gameName ~= "")
+	lobby:SetIngameStatus(true)
 end
 
 function widget:ActivateMenu()
 	interfaceRoot.SetIngame(false)
+	lobby:SetIngameStatus(false)
 end
 
 function widget:Initialize()

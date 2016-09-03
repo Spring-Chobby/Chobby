@@ -120,6 +120,18 @@ function Lobby:Ping()
 end
 
 ------------------------
+-- Status commands
+------------------------
+
+function Lobby:SetIngameStatus(isInGame)
+	return self
+end
+
+function Lobby:SetAwayStatus(isAway)
+	return self
+end
+
+------------------------
 -- User commands
 ------------------------
 

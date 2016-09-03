@@ -437,7 +437,7 @@ local function GetBattleTooltip(battleID, battle)
 
 	-- InGameSince
 	local hostInfo = lobby:GetUser(battle.founder) or {}
-	if hostInfo.inGameSince then
+	if hostInfo.inGameSince and hostInfo.isInGame then
 		if not battleTooltip.inGameSince then
 			battleTooltip.inGameSince = GetTooltipLine(battleTooltip.mainControl, true)
 		end
@@ -630,7 +630,7 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 	end
 
 	-- InGameSince
-	if userInfo.inGameSince then
+	if userInfo.inGameSince and userInfo.isInGame then
 		if not userTooltip.inGameSince then
 			userTooltip.inGameSince = GetTooltipLine(userTooltip.mainControl, true)
 		end
@@ -645,7 +645,7 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 	end
 
 	-- Away Since
-	if userInfo.awaySince then
+	if userInfo.awaySince and userInfo.isAway then
 		if not userTooltip.awaySince then
 			userTooltip.awaySince = GetTooltipLine(userTooltip.mainControl, true)
 		end

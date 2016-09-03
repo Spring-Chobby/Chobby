@@ -56,6 +56,28 @@ function Interface:Ping()
 end
 
 ------------------------
+-- Status commands
+------------------------
+
+function Interface:SetIngameStatus(isInGame)
+	local sendData = {
+		IsInGame = isInGame,
+	}
+
+	self:_SendCommand("ChangeUserStatus " .. json.encode(sendData))
+	return self
+end
+
+function Interface:SetAwayStatus(isAway)
+	local sendData = {
+		IsAfk = isAway,
+	}
+
+	self:_SendCommand("ChangeUserStatus " .. json.encode(sendData))
+	return self
+end
+
+------------------------
 -- User commands
 ------------------------
 
