@@ -364,6 +364,7 @@ local function BackToStarmap()
 	--starmapBackground2:Invalidate()
 	--starmapPlanetImage:Invalidate()
 	starmapInfoPanel:Dispose()
+	starmapClose:SetLayer(1)
 end
 
 local function SelectPlanet(planetID)
@@ -371,6 +372,8 @@ local function SelectPlanet(planetID)
 	starmapAnimation = "in"
 	starmapBackground2.file = campaignDefsByID[currentCampaignID].dir .. planetDef.background
 	starmapPlanetImage.file = campaignDefsByID[currentCampaignID].dir .. planetDef.image
+	starmapPlanetImage.fullWidth = planetDef.size[1]
+	starmapPlanetImage.fullHeight = planetDef.size[2]
 	starmapBackground2:Invalidate()
 	starmapPlanetImage:Invalidate()
 	
@@ -1305,8 +1308,8 @@ function widget:Update()
 		starmapBackground2:Invalidate()
 		
 		starmapPlanetImage.color[4] = stage
-		starmapPlanetImage.width = math.floor(PLANET_IMAGE_SIZE * stage + 0.5)
-		starmapPlanetImage.height = math.floor(PLANET_IMAGE_SIZE * stage + 0.5)
+		starmapPlanetImage.width = math.floor(starmapPlanetImage.fullWidth * stage + 0.5)
+		starmapPlanetImage.height = math.floor(starmapPlanetImage.fullHeight * stage + 0.5)
 		starmapPlanetImage:Invalidate()
 		
 		if animElapsed >= ANIMATION_TIME then
