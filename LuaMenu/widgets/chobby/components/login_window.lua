@@ -212,7 +212,6 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	local ww, wh = Spring.GetWindowGeometry()
 	local w, h = 430, 420
 	self.window = Window:New {
-		name = "loginWindow",
 		x = (ww - w) / 2,
 		y = (wh - h) / 2,
 		width = w,

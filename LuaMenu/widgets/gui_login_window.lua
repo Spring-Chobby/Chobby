@@ -34,7 +34,11 @@ local wantLoginStatus = {
 local function MultiplayerEntryPopup()
 	if wantLoginStatus[lobby:GetConnectionStatus()] then
 		local loginWindow = WG.Chobby.LoginWindow(MultiplayerFailFunction, nil, "overlay_window")
-		local popup = WG.Chobby.PriorityPopup(loginWindow.window, loginWindow.CancelFunc, loginWindow.AcceptFunc)
+		if loginWindow and loginWindow.window then
+			local popup = WG.Chobby.PriorityPopup(loginWindow.window, loginWindow.CancelFunc, loginWindow.AcceptFunc)
+		else
+			Spring.Echo("Failed to create loginWindow")
+		end
 	end
 end
 
