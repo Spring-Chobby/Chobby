@@ -1352,6 +1352,9 @@ function BattleRoomWindow.SetSingleplayerGame(ToggleShowFunc, battleroomObj, tab
 	elseif config.singleplayer_mode == 2 then
 		singleplayerGame = "Zero-K v1.4.7.1"
 		ToggleShowFunc(battleroomObj, tabData)
+	elseif config.singleplayer_mode == 3 then
+		singleplayerGame = "Zero-K $VERSION"
+		ToggleShowFunc(battleroomObj, tabData)
 	end
 end
 

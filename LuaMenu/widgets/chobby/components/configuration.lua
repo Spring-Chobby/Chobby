@@ -59,6 +59,7 @@ function Configuration:init()
 	self.shortnameMap = {
 		"chobby",
 		"zk",
+		"zk",
 	}
 	self.singleplayer_mode = 2
 

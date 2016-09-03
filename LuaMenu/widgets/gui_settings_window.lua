@@ -350,7 +350,7 @@ local function InitializeControls(window)
 		width = 180,
 		height = 26,
 		parent = window,
-		items = {"Generic", "Zero-K"},
+		items = {"Generic", "Zero-K", "Zero-K Dev"},
 		font = Configuration:GetFont(2),
 		itemFontSize = Configuration:GetFont(2).size,
 		selected = Configuration.singleplayer_mode or 2,
