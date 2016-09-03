@@ -1313,7 +1313,6 @@ function widget:Update()
 		starmapPlanetImage:Invalidate()
 		
 		if animElapsed >= ANIMATION_TIME then
-			Spring.Echo(starmapPlanetImage.height, starmapPlanetImage.width, starmapPlanetImage.x, starmapPlanetImage.y)
 			animElapsed = 0
 			starmapAnimation = nil
 		end
