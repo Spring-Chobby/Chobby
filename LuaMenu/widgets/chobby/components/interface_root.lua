@@ -708,6 +708,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			end
 		}
 	}
+	
+	local function LeaveGameFunction()
+		Spring.Reload("")
+	end
+	
 	local leaveGameButton = Button:New {
 		y = 5,
 		right = 110,
@@ -724,7 +729,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		
 		OnClick = {
 			function ()
-				Spring.Reload("")
+				ConfirmationPopup(LeaveGameFunction, "Are you sure you want to leave the game?", nil, 315, 200)
 			end
 		}
 	}
