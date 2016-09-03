@@ -343,6 +343,15 @@ local function InitializeControls(window)
 		font = Configuration:GetFont(2),
 		caption = "Singleplayer:",
 	}
+	
+	local gameChoices = {"Generic", "Zero-K"}
+	for i, archive in pairs(VFS.GetAllArchives()) do
+		local info = VFS.GetArchiveInfo(archive)
+		if info and info.modtype == 1 and info.name == "Zero-K $VERSION" then
+			gameChoices[3] = "Zero-K Dev"
+		end
+	end
+	
 	ComboBox:New {
 		name = "gameSelection",
 		x = COMBO_X,
@@ -350,7 +359,7 @@ local function InitializeControls(window)
 		width = 180,
 		height = 26,
 		parent = window,
-		items = {"Generic", "Zero-K", "Zero-K Dev"},
+		items = gameChoices,
 		font = Configuration:GetFont(2),
 		itemFontSize = Configuration:GetFont(2).size,
 		selected = Configuration.singleplayer_mode or 2,
