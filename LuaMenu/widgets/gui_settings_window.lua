@@ -495,34 +495,9 @@ function widget:Initialize()
 	onBattleAboutToStart = function(listener)
 		local screenX, screenY = Spring.GetScreenGeometry()
 
-		if true then
-			SetLobbyFullscreenMode(1)
-			return
-		end
 		
 		-- Stopgap solution, has side effects
-		if battleStartDisplay == 1 then
-			Spring.SetConfigInt("XResolutionWindowed", screenX, false)
-			Spring.SetConfigInt("YResolutionWindowed", screenY, false)
-			Spring.SetConfigInt("WindowPosX", 0, false)
-			Spring.SetConfigInt("WindowPosY", 0, false)
-			Spring.SetConfigInt("WindowBorderless", 1, false)
-			Spring.SetConfigInt("Fullscreen", 0)
-		elseif battleStartDisplay == 2 then
-			Spring.SetConfigInt("WindowPosX", 0, false)
-			Spring.SetConfigInt("WindowPosY", 80, false)
-			Spring.SetConfigInt("XResolutionWindowed", screenX, false)
-			Spring.SetConfigInt("YResolutionWindowed", screenY - 80, false)
-			Spring.SetConfigInt("WindowBorderless", 0, false)
-			Spring.SetConfigInt("WindowBorderless", 0, false)
-			Spring.SetConfigInt("Fullscreen", 0, false)
-			Spring.SetConfigInt("Fullscreen", 0)
-		elseif battleStartDisplay == 3 then
-			Spring.SetConfigInt("XResolution", screenX, false)
-			Spring.SetConfigInt("YResolution", screenY, false)
-			Spring.SetConfigInt("Fullscreen", 1, false)
-			Spring.SetConfigInt("Fullscreen", 1)
-		end
+		SetLobbyFullscreenMode(battleStartDisplay)
 
 		-- Settings which rely on io
 		local gameSettings = WG.Chobby.Configuration.game_settings
