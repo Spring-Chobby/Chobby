@@ -495,6 +495,7 @@ end
 local function AddAnimation(args, image)
   local anim = args.animation
   anim.image = args.id
+  anim.time = anim.time or 1
   image.color = args.startColor or image.color or {1, 1, 1, 1}
   
   if anim.type == "dissolve" and (not anim.startColor) then
@@ -747,7 +748,7 @@ local function AddImage(args, isText)
   
   data.images[args.id] = image
   if (args.layer) then
-    image:SetLayer(layer)
+    image:SetLayer(args.layer)
     image.layer = args.layer
   else
     image.layer = CountElements(data.images)
@@ -883,7 +884,9 @@ scriptFunctions = {
   
   ModifyImage = function(args)
     local image = data.images[args.id]
-    if not image then
+    if args.id == "background" then
+      image = background
+    elseif not image then
       Spring.Log(widget:GetInfo().name, LOG.ERROR, "Attempt to modify nonexistent image " .. args.id)
       return
     end
