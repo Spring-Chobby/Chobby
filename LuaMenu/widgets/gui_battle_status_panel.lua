@@ -14,7 +14,7 @@ function widget:GetInfo()
 end
 
 local IMG_BATTLE_RUNNING     = LUA_DIRNAME .. "images/runningBattle.png"
-local IMG_BATTLE_NOT_RUNNING = ""
+local IMG_BATTLE_NOT_RUNNING = LUA_DIRNAME .. "images/nothing.png"
 local IMG_STATUS_SPECTATOR   = LUA_DIRNAME .. "images/spectating.png"
 local IMG_STATUS_PLAYER      = LUA_DIRNAME .. "images/playing.png"
 

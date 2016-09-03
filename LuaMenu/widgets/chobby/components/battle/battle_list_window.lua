@@ -1,7 +1,7 @@
 BattleListWindow = ListWindow:extends{}
 
 local BATTLE_RUNNING = LUA_DIRNAME .. "images/runningBattle.png"
-local BATTLE_NOT_RUNNING = ""
+local BATTLE_NOT_RUNNING = LUA_DIRNAME .. "images/nothing.png"
 
 local IMG_READY    = LUA_DIRNAME .. "images/ready.png"
 local IMG_UNREADY  = LUA_DIRNAME .. "images/unready.png"

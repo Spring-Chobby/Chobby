@@ -40,7 +40,7 @@ end
 --------------------------------------------------------------------------
 
 local function SetNotAway()
-	linputTime = Spring.GetTimer()
+	inputTime = Spring.GetTimer()
 	if currentlyAway and WG.LibLobby.lobby then
 		currentlyAway = false
 		WG.LibLobby.lobby:SetAwayStatus(false)

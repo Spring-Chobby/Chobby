@@ -31,7 +31,7 @@ local IMAGE_BATTLE = LUA_DIRNAME .. "images/battle.png"
 local IMAGE_INGAME = LUA_DIRNAME .. "images/ingame.png"
 local IMAGE_LOCK = LUA_DIRNAME .. "widgets/chobby/images/lock.png"
 local BATTLE_RUNNING = LUA_DIRNAME .. "images/runningBattle.png"
-local BATTLE_NOT_RUNNING = ""
+local BATTLE_NOT_RUNNING = LUA_DIRNAME .. "images/nothing.png"
 
 local PASSWORD_EXPLAINATION = "Battle requires a password to join."
 
