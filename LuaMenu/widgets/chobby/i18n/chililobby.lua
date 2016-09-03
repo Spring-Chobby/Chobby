@@ -128,6 +128,28 @@ return {
 
 		-- friend_list_window.lua
 		friend_request = "Friend request",
+
+		-- campaign handler
+		campaign = "Campaign",
+		campaign_caps = "CAMPAIGN",
+		intermission_caps = "INTERMISSION",
+		new_game = "New Game",
+		new_game_caps = "NEW GAME",
+		load_game = "Load Game",
+		save = "Save",
+		save_caps = "SAVE",
+		save_new_game = "Save a new game",
+		save_overwrite_confirm = "Are you sure you want to overwrite this save?",
+		autosave = "Autosave",
+		load = "Load",
+		load_caps = "LOAD",
+		load_confirm = "Loading will lose any unsaved progress. Are you sure?",
+		delete = "Delete",
+		delete_confirm = "Are you sure you want to delete this save?",
+		saveload = "Save / Load",
+		saveload_caps = "SAVE / LOAD",
+		quit_confirm = "Quitting will lose any unsaved progress. Are you sure?",
+		next_episode = "Next Episode",
 	},
 	sr = {
 		connect_to_spring_server = 'Prijavljivanje na Spring lobi server',
