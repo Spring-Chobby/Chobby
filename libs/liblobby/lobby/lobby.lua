@@ -213,7 +213,8 @@ function Lobby:ConnectToBattle(useSpringRestart)
 	if useSpringRestart then
 		Spring.Restart(springURL, "")
 	else
-		Spring.Reload(springURL)
+		local scriptTxt = GenerateScriptTxt(self.myBattleID)
+		Spring.Reload(scriptTxt)
 	end
 	--local scriptFileName = "scriptFile.txt"
 	--local scriptFile = io.open(scriptFileName, "w")
