@@ -129,7 +129,7 @@ function InterfaceSkirmish:StartGameFromFile(scriptFileName)
 	if self.useSpringRestart then
 		Spring.Restart(scriptFileName, "")
 	else
-		Spring.Start(scriptFileName, "")
+		Spring.Reload(scriptFileName)
 	end
 	return false
 end

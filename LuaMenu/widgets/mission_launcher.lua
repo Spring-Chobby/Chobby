@@ -34,7 +34,7 @@ local function LaunchMission(startscript, listenerFunc)
 	listeners[#listeners + 1] = listenerFunc
 	RemoveResultsFile()
 	results = {}
-	Spring.Start(startscript, "")
+	Spring.Reload(startscript)
 	waitingForResults = true
 end
 
