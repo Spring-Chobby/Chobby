@@ -46,7 +46,9 @@ end
 function Interface:Disconnect()
 	self.status = "offline"
 	self.finishedConnecting = false
-	self.client:close()
+	if self.client then
+		self.client:close()
+	end
 	self:_OnDisconnected()
 end
 
