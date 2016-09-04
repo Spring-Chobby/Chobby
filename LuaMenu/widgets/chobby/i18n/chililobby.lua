@@ -37,6 +37,7 @@ return {
 		enter_battle_password = "Enter Battle Password",
 		game_name = "Game Name",
 		password_optional = "Password (Optional)",
+		game_type = "Game Type",
 		menu = "Menu",
 		settings = "Settings",
 		logout = "Logout",
@@ -52,6 +53,10 @@ return {
 		play_normal_multiplayer_game = "Play a normal multiplayer game",
 		quick_start = "Quick Start",
 		custom = "Custom",
+		oneVsOne = "1v1",
+		cooperative = "Cooperative",
+		freeForAll = "FFA",
+		team = "Team",
 		serverList = "Server List",
 		skirmish = "Skirmish",
 		play_custom_multiplayer_game = "Play a custom multiplayer game",
@@ -111,7 +116,6 @@ return {
 		--
 
 		language = "Language",
-		team = "Team",
 		invite_player = "Invite player",
 		invited_to_team = "Invited to join team",
 		invites_you_to_join_team = " has invited you to join a team",

@@ -1136,13 +1136,16 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	}
 
 	local battleTitle = i18n("battle") .. ": " .. tostring(battle.title)
+	if battle.gameType then
+		battleTitle = i18n(WG.Chobby.Configuration.battleTypeToName[battle.gameType]) .. " " .. battleTitle
+	end
 
 	local lblBattleTitle = Label:New {
 		x = 18,
 		y = 16,
 		right = 100,
 		height = 30,
-		font =  WG.Chobby.Configuration:GetFont(3),
+		font = WG.Chobby.Configuration:GetFont(3),
 		caption = "",
 		parent = window,
 		OnResize = {

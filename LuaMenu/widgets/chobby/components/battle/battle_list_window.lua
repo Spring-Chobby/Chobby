@@ -349,7 +349,7 @@ function BattleListWindow:OpenHostWindow()
 		name = "hostBattle",
 		parent = WG.Chobby.lobbyInterfaceHolder,
 		width = 530,
-		height = 260,
+		height = 310,
 		resizable = false,
 		draggable = false,
 		classname = "overlay_window",
@@ -405,6 +405,29 @@ function BattleListWindow:OpenHostWindow()
 		parent = hostBattleWindow,
 	}
 
+	local typeLabel = Label:New {
+		x = 15,
+		width = 200,
+		y = 155,
+		align = "right",
+		height = 35,
+		caption = i18n("game_type") .. ":",
+		font = Configuration:GetFont(3),
+		parent = hostBattleWindow,
+	}
+	local typeCombo = ComboBox:New {
+		x = 220,
+		width = 260,
+		y = 150,
+		height = 35,
+		text = "",
+		font = Configuration:GetFont(3),
+		items = {"Cooperative", "Team", "1v1", "FFA", "Custom"},
+		itemFontSize = Configuration:GetFont(3).size,
+		selected = 1,
+		parent = hostBattleWindow,
+	}
+	
 	local function CancelFunc()
 		hostBattleWindow:Dispose()
 	end
@@ -412,9 +435,9 @@ function BattleListWindow:OpenHostWindow()
 	local function HostBattle()
 		WG.BattleRoomWindow.LeaveBattle()
 		if string.len(passwordEdit.text) > 0 then
-			lobby:HostBattle(gameNameEdit.text, passwordEdit.text)
+			lobby:HostBattle(gameNameEdit.text, passwordEdit.text, typeCombo.items[typeCombo.selected])
 		else
-			lobby:HostBattle(gameNameEdit.text)
+			lobby:HostBattle(gameNameEdit.text, nil, typeCombo.items[typeCombo.selected])
 		end
 		hostBattleWindow:Dispose()
 	end

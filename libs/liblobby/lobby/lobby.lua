@@ -449,16 +449,17 @@ function Lobby:_OnBattleIngameUpdate(userName, isInGame)
 end
 
 -- TODO: This function has an awful signature and should be reworked. At least make it use a key/value table.
-function Lobby:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName, title, gameName, spectatorCount, isRunning, runningSince)
+function Lobby:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName, title, gameName, spectatorCount, isRunning, runningSince, gameType)
 	self.battles[battleID] = {
 		battleID = battleID, type = type, natType = natType, founder = founder, ip = ip, port = port,
 		maxPlayers = maxPlayers, passworded = passworded, rank = rank, mapHash = mapHash, spectatorCount = spectatorCount or 0,
 		engineName = engineName, engineVersion = engineVersion, mapName = mapName, title = title, gameName = gameName, users = {},
-		isRunning = isRunning, runningSince = runningSince
+		isRunning = isRunning, runningSince = runningSince, gameType = gameType
 	}
 	self.battleCount = self.battleCount + 1
 
-	self:_CallListeners("OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, engineName, engineVersion, map, title, gameName, spectatorCount, isRunning, runningSince)
+	self:_CallListeners("OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, 
+		engineName, engineVersion, map, title, gameName, spectatorCount, isRunning, runningSince, gameType)
 end
 
 function Lobby:_OnBattleClosed(battleID)

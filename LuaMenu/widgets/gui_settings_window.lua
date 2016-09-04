@@ -507,7 +507,10 @@ function widget:ActivateMenu()
 		ignoreFirstCall = false
 		return
 	end
-	SetLobbyFullscreenMode(Configuration.lobby_fullscreen)
+	if not (WG.Chobby and WG.Chobby.Configuration) then
+		return
+	end
+	SetLobbyFullscreenMode(WG.Chobby.Configuration.lobby_fullscreen)
 end
 
 local onBattleAboutToStart

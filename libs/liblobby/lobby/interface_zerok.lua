@@ -470,7 +470,7 @@ function Interface:_BattleAdded(data)
 	local header = data.Header
 	self:_OnBattleOpened(header.BattleID, 0, 0, header.Founder, header.Ip, 
 		header.Port, header.MaxPlayers, (header.Password and true) or false, 0, 4, "Spring " .. header.Engine, header.Engine, 
-		header.Map, header.Title or "no title", header.Game, header.SpectatorCount, header.IsRunning, header.RunningSince)
+		header.Map, header.Title or "no title", header.Game, header.SpectatorCount, header.IsRunning, header.RunningSince, header.Mode)
 end
 Interface.jsonCommands["BattleAdded"] = Interface._BattleAdded
 

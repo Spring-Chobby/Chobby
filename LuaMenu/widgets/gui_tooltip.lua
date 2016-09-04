@@ -403,14 +403,25 @@ local function GetBattleTooltip(battleID, battle)
 	end
 	local offset = 7
 
-	-- Battle Name]
+	-- Battle Name
 	if not battleTooltip.title then
 		battleTooltip.title = GetTooltipLine(battleTooltip.mainControl, nil, 3)
 	end
 	local truncatedName = StringUtilities.GetTruncatedStringWithDotDot(battle.title, battleTooltip.title.GetFont(), width - 10)
 	battleTooltip.title.Update(offset, truncatedName)
-	offset = offset + 23 -- * battleTooltip.title.GetLines() -- Not required with truncation
+	offset = offset + 25 -- * battleTooltip.title.GetLines() -- Not required with truncation
 
+	-- Battle Type
+	if battle.gameType then
+		if not battleTooltip.gameType then
+			battleTooltip.gameType = GetTooltipLine(battleTooltip.mainControl)
+		end
+		battleTooltip.gameType.Update(offset, i18n(Configuration.battleTypeToName[battle.gameType]))
+		offset = offset + 21
+	elseif battleTooltip.gameType then
+		battleTooltip.gameType.Hide()
+	end
+	
 	-- Players and Spectators
 	if battle.spectatorCount and battle.maxPlayers and battle.users then
 		if not battleTooltip.playerCount then

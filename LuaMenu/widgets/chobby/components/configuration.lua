@@ -35,6 +35,14 @@ function Configuration:init()
 	self.loadLocalWidgets = false
 	self.displayBots = false
 	self.displayBadEngines = false
+	
+	self.battleTypeToName = {
+		[5] = "cooperative",
+		[6] = "team",
+		[3] = "oneVsOne",
+		[4] = "freeForAll",
+		[0] = "custom",
+	}
 
 	-- Do not ask again tests.
 	self.confirmation_mainMenuFromBattle = false
