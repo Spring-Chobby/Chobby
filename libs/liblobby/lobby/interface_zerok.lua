@@ -824,6 +824,9 @@ function Interface:_SetModOptions(data)
 		Spring.Echo("Invalid modoptions format")
 		return
 	end
+	
+	data.Options.commanderTypes = nil
+	
 	self:_OnSetModOptions(data.Options)
 end
 Interface.jsonCommands["SetModOptions"] = Interface._SetModOptions
