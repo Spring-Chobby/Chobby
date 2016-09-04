@@ -5,7 +5,7 @@ function widget:GetInfo()
 		author  = 'GoogleFrog',
 		date    = '2016',
 		license = 'GNU GPL v3',
-		layer   = 0,
+		layer   = 2000,
 		enabled = true,
 	}
 end
