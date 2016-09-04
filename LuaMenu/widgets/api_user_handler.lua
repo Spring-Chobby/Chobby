@@ -271,15 +271,12 @@ local function GetUserControls(userName, opts)
 	local isSingleplayer     = opts.isSingleplayer
 	local reinitialize       = opts.reinitialize
 	local disableInteraction = opts.disableInteraction
-	local suppressSync        = opts.suppressSync
+	local suppressSync       = opts.suppressSync
 	local large              = opts.large
 	local hideStatus         = opts.hideStatus
 	local offset             = opts.offset or 0
 	local offsetY            = opts.offsetY or 0
-	local large              = opts.large
-	local hideStatus         = opts.hideStatus
-	local offset             = opts.offset or 0
-	local offsetY            = opts.offsetY or 0
+	local height             = opts.height or 22
 
 	local userControls = reinitialize or {}
 
@@ -309,7 +306,7 @@ local function GetUserControls(userName, opts)
 			x = 0,
 			y = 0,
 			right = 0,
-			height = 22,
+			height = height,
  			backgroundColor = backgroundColor,
  			borderColor     = borderColor,
 			padding = {0, 0, 0, 0},
@@ -467,7 +464,7 @@ local function GetUserControls(userName, opts)
 			offset = offset + 20
 		else
 			offsetY = offsetY + 35
-			offset = 0
+			offset = 5
 			local imgFile, status, fontColor = GetUserStatus(userName, isInBattle, userControls)
 			userControls.imStatusLarge = Image:New {
 				name = "imStatusLarge",
@@ -584,6 +581,9 @@ end
 function userHandler.GetFriendUser(userName)
 	return _GetUser(friendUsers, userName, {
 		large          = true,
+		offset         = 5,
+		offsetY        = 6,
+		height         = 80,
 		maxNameLength  = WG.Chobby.Configuration.friendMaxNameLength,
 	})
 end
