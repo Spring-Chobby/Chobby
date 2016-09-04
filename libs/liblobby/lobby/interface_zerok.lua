@@ -511,7 +511,8 @@ function Interface:_BattleUpdate(data)
 		self:_OnBattleIngameUpdate(header.BattleID, header.IsRunning)
 	end
 	
-	self:_OnUpdateBattleInfo(header.BattleID, header.SpectatorCount, header.Locked, 0, header.Map, header.Engine, header.RunningSince)
+		Spring.Echo("header.Gameheader.Game", header.Game)
+	self:_OnUpdateBattleInfo(header.BattleID, header.SpectatorCount, header.Locked, 0, header.Map, header.Engine, header.RunningSince, header.Game, header.Mode)
 end
 Interface.jsonCommands["BattleUpdate"] = Interface._BattleUpdate
 

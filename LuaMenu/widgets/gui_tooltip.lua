@@ -412,14 +412,14 @@ local function GetBattleTooltip(battleID, battle)
 	offset = offset + 25 -- * battleTooltip.title.GetLines() -- Not required with truncation
 
 	-- Battle Type
-	if battle.gameType then
-		if not battleTooltip.gameType then
-			battleTooltip.gameType = GetTooltipLine(battleTooltip.mainControl)
+	if battle.battleMode then
+		if not battleTooltip.battleMode then
+			battleTooltip.battleMode = GetTooltipLine(battleTooltip.mainControl)
 		end
-		battleTooltip.gameType.Update(offset, i18n(Configuration.battleTypeToName[battle.gameType]))
+		battleTooltip.battleMode.Update(offset, i18n(Configuration.battleTypeToName[battle.battleMode]))
 		offset = offset + 21
-	elseif battleTooltip.gameType then
-		battleTooltip.gameType.Hide()
+	elseif battleTooltip.battleMode then
+		battleTooltip.battleMode.Hide()
 	end
 	
 	-- Players and Spectators

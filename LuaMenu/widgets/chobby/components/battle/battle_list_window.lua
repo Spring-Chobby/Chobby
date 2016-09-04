@@ -213,7 +213,7 @@ function BattleListWindow:AddBattle(battleID, battle)
 		parent = parentButton,
 	}
 	local lblGame = Label:New {
-		name = "game",
+		name = "gameCaption",
 		x = height + 100,
 		right = 0,
 		y = 20,
@@ -307,15 +307,14 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 		return
 	end
 	local items = self:GetRowItems(battleID)
+	
 	local mapCaption = items.battleButton:GetChildByName("mapCaption")
 	local imHaveMap = items.battleButton:GetChildByName("imHaveMap")
 	local minimapImage = items.battleButton:GetChildByName("minimap"):GetChildByName("minimapImage")
-	local playersCaption = items.battleButton:GetChildByName("playersCaption")
-
+	
 	minimapImage.file = Configuration:GetMinimapImage(battle.mapName, battle.gameName)
 	minimapImage:Invalidate()
-
-	playersCaption:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
+	
 	mapCaption:SetCaption(battle.mapName:gsub("_", " "))
 	if VFS.HasArchive(battle.mapName) then
 		imHaveMap.file = IMG_READY
@@ -323,6 +322,15 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 		imHaveMap.file = IMG_UNREADY
 	end
 	imHaveMap:Invalidate()
+	
+	local gameCaption = items.battleButton:GetChildByName("gameCaption")
+	local imHaveGame = items.battleButton:GetChildByName("imHaveGame")
+	
+	imHaveGame.file = (VFS.HasArchive(battle.gameName) and IMG_READY or IMG_UNREADY)
+	gameCaption:SetCaption(battle.gameName:gsub("_", " "))
+	
+	local playersCaption = items.battleButton:GetChildByName("playersCaption")
+	playersCaption:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
 
 	self:RecalculateOrder(battleID)
 end

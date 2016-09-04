@@ -454,7 +454,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 
 	onBattleIngameUpdate(nil, battleID, battle.isRunning)
 
-	onUpdateBattleInfo = function(listener, updatedBattleID, spectatorCount, locked, mapHash, mapName)
+	onUpdateBattleInfo = function(listener, updatedBattleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)
 		if battleID ~= updatedBattleID then
 			return
 		end
@@ -466,12 +466,17 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 			-- TODO: Bit lazy here, seeing as we only need to update the map
 			UpdateArchiveStatus()
 			MaybeDownloadMap(battle)
-
-			if not VFS.HasArchive(mapName) then
-				battleLobby:SetBattleStatus({
-					sync = 2, -- 0 = unknown, 1 = synced, 2 = unsynced
-				})
-			end
+		end
+		
+		if gameName then
+			UpdateArchiveStatus()
+			MaybeDownloadGame(battle)
+		end
+		
+		if (mapName and not VFS.HasArchive(mapName)) or (gameName and not VFS.HasArchive(gameName)) then
+			battleLobby:SetBattleStatus({
+				sync = 2, -- 0 = unknown, 1 = synced, 2 = unsynced
+			})
 		end
 	end
 	battleLobby:AddListener("OnUpdateBattleInfo", onUpdateBattleInfo)
@@ -1136,8 +1141,8 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	}
 
 	local battleTitle = i18n("battle") .. ": " .. tostring(battle.title)
-	if battle.gameType then
-		battleTitle = i18n(WG.Chobby.Configuration.battleTypeToName[battle.gameType]) .. " " .. battleTitle
+	if battle.battleMode then
+		battleTitle = i18n(WG.Chobby.Configuration.battleTypeToName[battle.battleMode]) .. " " .. battleTitle
 	end
 
 	local lblBattleTitle = Label:New {

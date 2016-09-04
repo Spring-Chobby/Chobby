@@ -453,17 +453,17 @@ function Lobby:_OnBattleIngameUpdate(battleID, isRunning)
 end
 
 -- TODO: This function has an awful signature and should be reworked. At least make it use a key/value table.
-function Lobby:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName, title, gameName, spectatorCount, isRunning, runningSince, gameType)
+function Lobby:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName, title, gameName, spectatorCount, isRunning, runningSince, battleMode)
 	self.battles[battleID] = {
 		battleID = battleID, type = type, natType = natType, founder = founder, ip = ip, port = port,
 		maxPlayers = maxPlayers, passworded = passworded, rank = rank, mapHash = mapHash, spectatorCount = spectatorCount or 0,
 		engineName = engineName, engineVersion = engineVersion, mapName = mapName, title = title, gameName = gameName, users = {},
-		isRunning = isRunning, runningSince = runningSince, gameType = gameType
+		isRunning = isRunning, runningSince = runningSince, battleMode = battleMode
 	}
 	self.battleCount = self.battleCount + 1
 
 	self:_CallListeners("OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, 
-		engineName, engineVersion, map, title, gameName, spectatorCount, isRunning, runningSince, gameType)
+		engineName, engineVersion, map, title, gameName, spectatorCount, isRunning, runningSince, battleMode)
 end
 
 function Lobby:_OnBattleClosed(battleID)
@@ -515,7 +515,7 @@ function Lobby:_OnLeftBattle(battleID, userName)
 	self:_CallListeners("OnLeftBattle", battleID, userName)
 end
 
-function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince)
+function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)
 	local battle = self.battles[battleID]
 	battle.spectatorCount = spectatorCount or battle.spectatorCount
 	battle.locked         = locked         or battle.locked
@@ -523,7 +523,10 @@ function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, ma
 	battle.mapName        = mapName        or battle.mapName
 	battle.engineVersion  = engineVersion  or battle.engineVersion
 	battle.runningSince   = runningSince   or battle.runningSince
-	self:_CallListeners("OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince)
+	battle.gameName       = gameName       or battle.gameName
+	battle.battleMode     = battleMode     or battle.battleMode
+		Spring.Echo("_OnUpdateBattleInfo_OnUpdateBattleInfo", gameName)
+	self:_CallListeners("OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)
 end
 
 -- Updates the specified status keys
