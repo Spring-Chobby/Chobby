@@ -677,7 +677,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 			if teamIndex ~= -1 then
 				AddTeamButtons(
 					teamHolder,
-					82,
+					88,
 					function()
 						battleLobby:SetBattleStatus({
 								allyNumber = teamIndex,

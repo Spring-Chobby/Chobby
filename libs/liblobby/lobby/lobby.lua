@@ -29,6 +29,7 @@ function Lobby:_Clean()
 	self.battleCount = 0
 	self.modoptions = {}
 
+	self.battleAis = {}
 	self.userBattleStatus = {}
 
 	self.queues = {}
@@ -493,6 +494,8 @@ function Lobby:_OnLeftBattle(battleID, userName)
 	if self:GetMyUserName() == userName then
 		self.myBattleID = nil
 		self.modoptions = {}
+		self.battleAis = {}
+		self.userBattleStatus = {}
 	end
 
 	local battleUsers = self.battles[battleID].users
@@ -559,16 +562,21 @@ end
 
 -- Also calls the OnUpdateUserBattleStatus
 function Lobby:_OnAddAi(battleID, aiName, status)
-	self:_OnAddUser(aiName)
-	self:_OnJoinedBattle(battleID, aiName)
 	status.isSpectator = false
+	table.insert(self.battleAis, aiName)
 	self:_OnUpdateUserBattleStatus(aiName, status)
 	self:_CallListeners("OnAddAi", aiName, status)
 end
 
 function Lobby:_OnRemoveAi(battleID, aiName, aiLib, allyNumber, owner)
-	-- TODO: maybe needs proper listeners
-	self:_OnLeftBattle(battleID, aiName)
+	for i, v in pairs(self.battleAis) do
+		if v == aiName then
+			table.remove(self.battleAis, i)
+			break
+		end
+	end
+	self:_CallListeners("OnLeftBattle", battleID, aiName)
+	self.userBattleStatus[aiName] = nil
 end
 
 function Lobby:_OnSaidBattle(userName, message, sayTime)
