@@ -142,11 +142,19 @@ function Interface:HostBattle(battleTitle, password, modeName)
 	-- 3 = 1v1
 	-- 4 = FFA
 	-- 0 = Custom
+	local engineName
+	if tonumber(Game.version) then
+		engineName = Game.version .. ".0"
+	else
+		engineName = string.gsub(Game.version, " develop", "")
+	end
+	
 	local sendData = {
 		Header = {
 			Title = battleTitle,
 			Mode = (modeName and nameToMode[modeName]) or 0,
 			Password = password,
+			Engine = engineName
 		}
 	}
 	
