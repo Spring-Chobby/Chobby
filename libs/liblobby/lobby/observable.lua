@@ -29,15 +29,17 @@ function Lobby:RemoveListener(event, listener)
 	end
 end
 
+-- Using solution in http://lua-users.org/lists/lua-l/2006-02/msg00537.html
 function Lobby:_CallListeners(event, ...)
 	if self.listeners[event] == nil then
 		return nil -- no event listeners
 	end
 	local eventListeners = ShallowCopy(self.listeners[event])
+	local args = {...}
+	local n = select("#", ...)
 	for i = 1, #eventListeners do
 		local listener = eventListeners[i]
-		args = {...}
-		xpcall(function() listener(listener, unpack(args)) end, 
+		xpcall(function() listener(listener, unpack(args, 1, n)) end,
 			function(err) self:_PrintError(err) end )
 	end
 	return true
