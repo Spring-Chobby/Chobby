@@ -238,22 +238,22 @@ local function InitializeControls(window)
 		end},
 	}
 
-	offset = offset + 30
-	local useSpringRestart = Checkbox:New {
-		x = 60,
-		width = CHECK_WIDTH,
-		y = offset,
-		height = 40,
-		parent = window,
-		boxalign = "right",
-		boxsize = 20,
-		caption = "Use Spring.Restart          EXPERIMENTAL",
-		checked = Configuration.useSpringRestart or false,
-		font = Configuration:GetFont(2),
-		OnChange = {function (obj, newState)
-			Configuration:SetConfigValue("useSpringRestart", newState)
-		end},
-	}
+	--offset = offset + 30
+	--local useSpringRestart = Checkbox:New {
+	--	x = 60,
+	--	width = CHECK_WIDTH,
+	--	y = offset,
+	--	height = 40,
+	--	parent = window,
+	--	boxalign = "right",
+	--	boxsize = 20,
+	--	caption = "Use Spring.Restart          EXPERIMENTAL",
+	--	checked = Configuration.useSpringRestart or false,
+	--	font = Configuration:GetFont(2),
+	--	OnChange = {function (obj, newState)
+	--		Configuration:SetConfigValue("useSpringRestart", newState)
+	--	end},
+	--}
 
 	offset = offset + 30
 	local showBots = Checkbox:New {
