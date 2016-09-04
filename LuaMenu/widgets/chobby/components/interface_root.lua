@@ -375,9 +375,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local rightPanelTabs = {
 		{name = "chat", control = chatWindows.window},
+		{name = "friends", control = WG.FriendWindow.GetControl()},
 		{name = "settings", control = WG.SettingsWindow.GetControl()},
 		{name = "downloads", control = WG.DownloadWindow.GetControl()},
-		{name = "friends", control = WG.FriendWindow.GetControl()},
 	}
 
 	local queueListWindow = QueueListWindow()
