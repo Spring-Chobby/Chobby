@@ -153,7 +153,7 @@ function Downloader:DownloadProgress(downloadID, downloaded, total)
 		return
 	end
 	local currentTime = Spring.GetTimer()
-	if self._lastUpdate and Spring.DiffTimers(currentTime, self._lastUpdate) > 0.5 or total == 0 then
+	if self._lastUpdate and Spring.DiffTimers(currentTime, self._lastUpdate) < 0.5 or total == 0 then
 		return
 	end
 
