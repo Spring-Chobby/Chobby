@@ -628,9 +628,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		if newVisible then
 			lobbyInterfaceHolder:Show()
 			ingameInterfaceHolder:Hide()
+			lobbyInterfaceHolder:BringToFront()
 		else
 			lobbyInterfaceHolder:Hide()
 			ingameInterfaceHolder:Show()
+			ingameInterfaceHolder:BringToFront()
 		end
 	end
 		
