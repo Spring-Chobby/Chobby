@@ -18,11 +18,20 @@ local currentlyAway = false
 local inputTime = Spring.GetTimer()
 local AWAY_TIME = 240 -- Seconds?
 
+local function SetNotAway()
+	inputTime = Spring.GetTimer()
+	if currentlyAway and WG.LibLobby.lobby then
+		currentlyAway = false
+		WG.LibLobby.lobby:SetAwayStatus(false)
+	end
+end
+
 local oldX, oldY
 function widget:Update()
 	local x,y = Spring.GetMouseState()
 	if oldX ~= x or oldY ~= y then
-		widget:MouseMove(x, y)
+		oldX, oldY = x, y
+		SetNotAway()
 	end
 
 	if currentlyAway then
@@ -39,21 +48,7 @@ end
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
 
-local function SetNotAway()
-	inputTime = Spring.GetTimer()
-	if currentlyAway and WG.LibLobby.lobby then
-		currentlyAway = false
-		WG.LibLobby.lobby:SetAwayStatus(false)
-	end
-end
-
 function widget:MousePress(x,y,button)
-	SetNotAway()
-	return false
-end
-
-function widget:MouseMove(x,y,dx,dy,button)
-	oldX, oldY = x, y
 	SetNotAway()
 	return false
 end

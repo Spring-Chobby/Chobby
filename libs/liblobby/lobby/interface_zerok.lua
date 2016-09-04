@@ -507,7 +507,9 @@ function Interface:_BattleUpdate(data)
 		Spring.Log(LOG_SECTION, LOG.ERROR, "Interface:_BattleUpdate no such battle with ID: " .. tostring(header.BattleID))
 		return
 	end
-	self:_OnBattleIngameUpdate(header.BattleID, not not header.IsRunning)
+	if header.IsRunning ~= nil then
+		self:_OnBattleIngameUpdate(header.BattleID, header.IsRunning)
+	end
 	
 	self:_OnUpdateBattleInfo(header.BattleID, header.SpectatorCount, header.Locked, 0, header.Map, header.Engine, header.RunningSince)
 end
