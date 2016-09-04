@@ -182,8 +182,8 @@ local function AttemptStart(saveFilename)
 	end
 
 	Echo("Starting Spring")
-
-	WG.Chobby.localLobby:StartReplay(saveFilename)
+	
+	WG.Chobby.localLobby:StartReplay(saveFilename, replayGame, replayMap)
 end
 
 local function Abort(reason)

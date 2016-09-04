@@ -124,11 +124,13 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName)
 	-- end
 end
 
-function InterfaceSkirmish:StartReplay(replayFilename)
+function InterfaceSkirmish:StartReplay(replayFilename, replayGame, replayMap)
 	local scriptTxt =
 [[
 [GAME]
 {
+	MapName=__MAP__;
+	GameType=__GAME__;
 	HostIP=__IP__;
 	HostPort=__PORT__;
 	IsHost=1;
@@ -141,8 +143,12 @@ function InterfaceSkirmish:StartReplay(replayFilename)
 						:gsub("__PORT__", "0")
 						:gsub("__MY_PLAYER_NAME__", lobby:GetMyUserName() .. " (spectating)")
 						:gsub("_DEMO_FILE", replayFilename)
+						:gsub("__MAP__", replayMap)
+						:gsub("__GAME__", replayGame)
 	self:_CallListeners("OnBattleAboutToStart")
 	
+	
+	Spring.Echo("starting game", scriptTxt)
 	if self.useSpringRestart then
 		Spring.Restart(scriptString, "")
 	else
