@@ -443,7 +443,7 @@ local function GetBattleTooltip(battleID, battle)
 		end
 		battleTooltip.inGameSince.Update(
 			offset,
-			"Running for " .. GetTimeToPast(hostInfo.inGameSince),
+			"Running for " .. GetTimeToPast(battle.runningSince or hostInfo.inGameSince),
 			IMAGE_INGAME
 		)
 		offset = offset + 20

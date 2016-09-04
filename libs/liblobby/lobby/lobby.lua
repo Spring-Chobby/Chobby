@@ -59,8 +59,7 @@ function Lobby:_PreserveData()
 	}
 end
 
-local function GenerateScriptTxt(battleID)
-	local battle = lobby:GetBattle(battleID)
+local function GenerateScriptTxt(battleIp, battlePort, scriptPassword)
 	local scriptTxt =
 [[
 [GAME]
@@ -73,10 +72,10 @@ local function GenerateScriptTxt(battleID)
 }
 ]]
 
-	scriptTxt = scriptTxt:gsub("__IP__", battle.ip)
-						:gsub("__PORT__", battle.port)
+	scriptTxt = scriptTxt:gsub("__IP__", battleIp)
+						:gsub("__PORT__", battlePort)
 						:gsub("__MY_PLAYER_NAME__", lobby:GetMyUserName())
-						:gsub("__MY_PASSWD__", lobby:GetScriptPassword())
+						:gsub("__MY_PASSWD__", scriptPassword)
 	return scriptTxt
 end
 
@@ -211,7 +210,7 @@ function Lobby:SayBattleEx(message)
 	return self
 end
 
-function Lobby:ConnectToBattle(useSpringRestart)
+function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, scriptPassword)
 	if not self.myBattleID then
 		Spring.Echo("Cannot connect to battle.")
 		return
@@ -219,13 +218,12 @@ function Lobby:ConnectToBattle(useSpringRestart)
 	self:_CallListeners("OnBattleAboutToStart")
 
 	Spring.Echo("Game starts!")
-	local battle = self:GetBattle(self.myBattleID)
-	local springURL = "spring://" .. self:GetMyUserName() .. ":" .. self:GetScriptPassword() .. "@" .. battle.ip .. ":" .. battle.port
-	Spring.Echo(springURL)
 	if useSpringRestart then
+		local springURL = "spring://" .. self:GetMyUserName() .. ":" .. scriptPassword .. "@" .. battleIp .. ":" .. battlePort
+		Spring.Echo(springURL)
 		Spring.Restart(springURL, "")
 	else
-		local scriptTxt = GenerateScriptTxt(self.myBattleID)
+		local scriptTxt = GenerateScriptTxt(battleIp, battlePort, scriptPassword)
 		Spring.Reload(scriptTxt)
 	end
 	--local scriptFileName = "scriptFile.txt"
@@ -379,16 +377,6 @@ function Lobby:_OnUpdateUserStatus(userName, status)
 		self.users[userName][k] = v
 	end
 	self:_CallListeners("OnUpdateUserStatus", userName, status)
-
-	if status.isInGame ~= nil then
-		self:_OnBattleIngameUpdate(userName, status.isInGame)
-		if self.myBattleID and status.isInGame then
-			local myBattle = self:GetBattle(self.myBattleID)
-			if myBattle and myBattle.founder == userName then
-				self:ConnectToBattle(self.useSpringRestart)
-			end
-		end
-	end
 end
 
 function Lobby:_OnFriend(userName)
@@ -461,17 +449,16 @@ function Lobby:_OnBattleIngameUpdate(userName, isInGame)
 end
 
 -- TODO: This function has an awful signature and should be reworked. At least make it use a key/value table.
-function Lobby:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName, title, gameName, spectatorCount)
+function Lobby:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName, title, gameName, spectatorCount, isRunning, runningSince)
 	self.battles[battleID] = {
-		battleID=battleID, type=type, natType=natType, founder=founder, ip=ip, port=port,
-		maxPlayers=maxPlayers, passworded=passworded, rank=rank, mapHash=mapHash, spectatorCount = spectatorCount or 0,
-		engineName=engineName, engineVersion=engineVersion, mapName=mapName, title=title, gameName=gameName, users={founder},
+		battleID = battleID, type = type, natType = natType, founder = founder, ip = ip, port = port,
+		maxPlayers = maxPlayers, passworded = passworded, rank = rank, mapHash = mapHash, spectatorCount = spectatorCount or 0,
+		engineName = engineName, engineVersion = engineVersion, mapName = mapName, title = title, gameName = gameName, users = {},
+		isRunning = isRunning, runningSince = runningSince
 	}
 	self.battleCount = self.battleCount + 1
 
-	self.battles[battleID].isRunning = self.users[founder].isInGame
-
-	self:_CallListeners("OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, engineName, engineVersion, map, title, gameName)
+	self:_CallListeners("OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, engineName, engineVersion, map, title, gameName, spectatorCount, isRunning, runningSince)
 end
 
 function Lobby:_OnBattleClosed(battleID)
@@ -521,13 +508,14 @@ function Lobby:_OnLeftBattle(battleID, userName)
 	self:_CallListeners("OnLeftBattle", battleID, userName)
 end
 
-function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName)
+function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName, engineVersion)
 	local battle = self.battles[battleID]
 	battle.spectatorCount = spectatorCount or battle.spectatorCount
 	battle.locked         = locked         or battle.locked
 	battle.mapHash        = mapHash        or battle.mapHash
 	battle.mapName        = mapName        or battle.mapName
-	self:_CallListeners("OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName)
+	battle.engineVersion  = engineVersion  or battle.engineVersion
+	self:_CallListeners("OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName, engineVersion)
 end
 
 -- Updates the specified status keys
