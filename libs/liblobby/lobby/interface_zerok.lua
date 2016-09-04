@@ -83,7 +83,12 @@ end
 
 function Interface:FriendRequest(userName)
 	self:super("FriendRequest", userName)
-	Spring.Echo("TODO: Implement FriendRequest")
+	local sendData = {
+		TargetName = userName,
+		Relation = 1, -- Friend
+	}
+	
+	self:_SendCommand("SetAccountRelation " .. json.encode(sendData))
 	return self
 end
 
@@ -101,19 +106,34 @@ end
 
 function Interface:Unfriend(userName)
 	self:super("Unfriend", userName)
-	Spring.Echo("TODO: Implement Unfriend")
+	local sendData = {
+		TargetName = userName,
+		Relation = 0, -- None
+	}
+	
+	self:_SendCommand("SetAccountRelation " .. json.encode(sendData))
 	return self
 end
 
 function Interface:Ignore(userName)
 	self:super("Ignore", userName)
-	Spring.Echo("TODO: Implement Ignore")
+	local sendData = {
+		TargetName = userName,
+		Relation = 2, -- Ignore
+	}
+	
+	self:_SendCommand("SetAccountRelation " .. json.encode(sendData))
 	return self
 end
 
 function Interface:Unignore(userName)
 	self:super("Unignore", userName)
-	Spring.Echo("TODO: Implement Unignore")
+	local sendData = {
+		TargetName = userName,
+		Relation = 0, -- None
+	}
+	
+	self:_SendCommand("SetAccountRelation " .. json.encode(sendData))
 	return self
 end
 
@@ -455,6 +475,20 @@ function Interface:_UserDisconnected(data)
 	self:_OnRemoveUser(data.Name)
 end
 Interface.jsonCommands["UserDisconnected"] = Interface._UserDisconnected
+
+------------------------
+-- Friend and Ignore lists
+------------------------
+
+function Interface:_FriendList(data)
+	self:_OnFriendList(data.Friends)
+end
+Interface.jsonCommands["FriendList"] = Interface._FriendList
+
+function Interface:_IgnoreList(data)
+	self:_OnIgnoreList(data.Ignores)
+end
+Interface.jsonCommands["IgnoreList"] = Interface._IgnoreList
 
 ------------------------
 -- Battle commands

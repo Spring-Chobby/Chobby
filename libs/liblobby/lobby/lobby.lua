@@ -21,6 +21,12 @@ function Lobby:_Clean()
 	self.friendRequests = {} -- list
 	self.hasFriendRequest = {} -- map
 	self.friendRequestCount = 0
+	self.friendListRecieved = false
+	
+	self.ignored = {} -- list
+	self.isIgnored = {} -- map
+	self.ignoredCount = 0
+	self.ignoreListRecieved = false
 
 	self.channels = {}
 	self.channelCount = 0
@@ -351,6 +357,7 @@ function Lobby:_OnAddUser(userName, country, cpu, accountID, lobbyVersion, clan)
 		lobbyVersion = lobbyVersion,
 		clan = clan,
 		isFriend = self.isFriend[userName],
+		isIgnored = self.isIgnored[userName],
 		hasFriendRequest = self.hasFriendRequest[userName],
 	}
 	self:_CallListeners("OnAddUser", userName, country, cpu, accountID, lobbyVersion, clan)
@@ -384,6 +391,10 @@ function Lobby:_OnUpdateUserStatus(userName, status)
 	self:_CallListeners("OnUpdateUserStatus", userName, status)
 end
 
+------------------------
+-- Friend
+------------------------
+
 function Lobby:_OnFriend(userName)
 	table.insert(self.friends, userName)
 	self.isFriend[userName] = true
@@ -410,14 +421,36 @@ function Lobby:_OnUnfriend(userName)
 	self:_CallListeners("OnUnfriend", userName)
 end
 
-function Lobby:_OnFriendList(friends)
-	self.friends = friends
-	self.friendCount = #friends
+function Lobby:_OnFriendList(data)
+	if self.friendListRecieved then
+		local newFriendMap = {}
+		for i = 1, #data do
+			local userName = data[i]
+			if not self.isFriend[userName] then
+				self:_OnFriend(userName)
+			end
+			newFriendMap[userName] = true
+		end
+	
+		for _, userName in pairs(self.friends) do
+			if not newFriendMap[userName] then
+				self:_OnUnfriend(userName)
+			end
+		end
+		return
+	end
+	
+	self.friends = data
+	self.friendCount = #data
+	self.isFriend = {}
 	for _, userName in pairs(self.friends) do
 		self.isFriend[userName] = true
 		local userInfo = self:TryGetUser(userName)
 		userInfo.isFriend = true
 	end
+	
+	self.friendListRecieved = true
+	
 	self:_CallListeners("OnFriendList", self:GetFriends())
 end
 
@@ -438,7 +471,71 @@ function Lobby:_OnFriendRequestList(friendRequests)
 		local userInfo = self:TryGetUser(userName)
 		userInfo.hasFriendRequest = true
 	end
+	
 	self:_CallListeners("OnFriendRequestList", self:GetFriendRequests())
+end
+
+------------------------
+-- Ignore
+------------------------
+
+function Lobby:_OnAddIgnoreUser(userName)
+	table.insert(self.ignored, userName)
+	self.isIgnored[userName] = true
+	self.ignoredCount = self.ignoredCount + 1
+	local userInfo = self:TryGetUser(userName)
+	userInfo.isIgnored = true
+	self:_CallListeners("OnAddIgnoreUser", userName)
+end
+
+function Lobby:_OnRemoveIgnoreUser(userName)
+	for i, v in pairs(self.ignored) do
+		if v == userName then
+			table.remove(self.ignored, i)
+			break
+		end
+	end
+	self.isIgnored[userName] = false
+	self.ignoredCount = self.ignoredCount - 1
+	local userInfo = self:GetUser(userName)
+	-- don't need to create offline users in this case
+	if userInfo then
+		userInfo.isIgnored = false
+	end
+	self:_CallListeners("OnRemoveIgnoreUser", userName)
+end
+
+function Lobby:_OnIgnoreList(data)
+	if self.ignoreListRecieved then
+		local newIgnoreMap = {}
+		for i = 1, #data do
+			local userName = data[i]
+			if not self.isIgnored[userName] then
+				self:_OnAddIgnoreUser(userName)
+			end
+			newIgnoreMap[userName] = true
+		end
+	
+		for _, userName in pairs(self.ignored) do
+			if not newIgnoreMap[userName] then
+				self:_OnRemoveIgnoreUser(userName)
+			end
+		end
+		return
+	end
+	
+	self.ignored = data
+	self.ignoredCount = #data
+	self.isIgnored = {}
+	for _, userName in pairs(self.ignored) do
+		self.isIgnored[userName] = true
+		local userInfo = self:TryGetUser(userName)
+		userInfo.isIgnored = true
+	end
+	
+	self.ignoreListRecieved = true
+	
+	self:_CallListeners("OnIgnoreList", self:Getignored())
 end
 
 ------------------------
@@ -920,6 +1017,14 @@ end
 -- returns friends table (not necessarily an array)
 function Lobby:GetFriendRequests()
 	return ShallowCopy(self.friendRequests)
+end
+
+-- ignore
+function Lobby:GetignoredCount()
+	return self.ignoredCount
+end
+function Lobby:Getignored()
+	return ShallowCopy(self.ignored)
 end
 
 -- battles
