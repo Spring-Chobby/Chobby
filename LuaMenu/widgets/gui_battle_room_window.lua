@@ -387,6 +387,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		},
 		8
 	)
+	leftOffset = leftOffset + 120
 
 	local modoptionsHolder = Control:New {
 		x = 0,
@@ -405,19 +406,19 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		modoptionsHolder.children[1]:Hide()
 	end
 
-	downloader.lblDownload.OnHide = downloader.lblDownload.OnHide or {}
-	downloader.lblDownload.OnHide[#downloader.lblDownload.OnHide + 1] = function ()
-		if not modoptionsHolder.visible then
-			modoptionsHolder:Show()
-		end
-	end
-
-	downloader.lblDownload.OnShow = downloader.lblDownload.OnShow or {}
-	downloader.lblDownload.OnShow[#downloader.lblDownload.OnShow + 1] = function ()
-		if modoptionsHolder.visible then
-			modoptionsHolder:Hide()
-		end
-	end
+	--downloader.lblDownload.OnHide = downloader.lblDownload.OnHide or {}
+	--downloader.lblDownload.OnHide[#downloader.lblDownload.OnHide + 1] = function ()
+	--	if not modoptionsHolder.visible then
+	--		modoptionsHolder:Show()
+	--	end
+	--end
+    --
+	--downloader.lblDownload.OnShow = downloader.lblDownload.OnShow or {}
+	--downloader.lblDownload.OnShow[#downloader.lblDownload.OnShow + 1] = function ()
+	--	if modoptionsHolder.visible then
+	--		modoptionsHolder:Hide()
+	--	end
+	--end
 
 	leftOffset = leftOffset + 120
 	-- Example downloads
@@ -1077,7 +1078,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		y = 0,
 		right = "52%",
 		bottom = BOTTOM_SPACING,
-		padding = {EXTERNAL_PAD_HOR, EXTERNAL_PAD_VERT, INTERNAL_PAD, 0},
+		padding = {EXTERNAL_PAD_HOR, EXTERNAL_PAD_VERT, INTERNAL_PAD, INTERNAL_PAD},
 		parent = topPanel,
 	}
 
@@ -1109,7 +1110,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		y = 0,
 		right = "33%",
 		bottom = BOTTOM_SPACING,
-		padding = {INTERNAL_PAD, EXTERNAL_PAD_VERT, 1, 0},
+		padding = {INTERNAL_PAD, EXTERNAL_PAD_VERT, 1, INTERNAL_PAD},
 		parent = topPanel,
 	}
 

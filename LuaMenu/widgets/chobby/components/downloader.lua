@@ -64,7 +64,7 @@ function Downloader:init(tbl, timeout, updateListener, completeListener, queueFo
 	self.queueList:Hide()
 
 	self.downloads = {}
-	self._lastUpdate = 0
+	self._lastUpdate = Spring.GetTimer()
 	self.delayID = 0
 	self.timeout = timeout
 	self.updateListener = updateListener
@@ -153,7 +153,7 @@ function Downloader:DownloadProgress(downloadID, downloaded, total)
 		return
 	end
 	local currentTime = Spring.GetTimer()
-	if self._lastUpdate and Spring.DiffTimers(currentTime, self._lastUpdate) > 0.5  or total == 0 then
+	if self._lastUpdate and Spring.DiffTimers(currentTime, self._lastUpdate) > 0.5 or total == 0 then
 		return
 	end
 
