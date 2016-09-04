@@ -38,6 +38,18 @@ local options = {
     type   = 'section',
   },
   {
+    key    = 'startconds',
+    name   = 'Start',
+    desc   = 'Start condition settings.',
+    type   = 'section',
+  },
+  {
+    key    = 'mapsettings',
+    name   = 'Map',
+    desc   = 'Map settings.',
+    type   = 'section',
+  },
+  {
     key    = 'silly', -- lava, fun, zombies
     name   = 'Silly',
     desc   = 'Silly options for trolling.',
@@ -64,7 +76,7 @@ local options = {
     desc   = 'Causes an allyteam to lose if they have no commanders left on their team',
     type   = 'bool',
     def    = false,
-    section= 'modifiers',
+    section= 'a_important',
   },
   {
     key = "noelo",
@@ -192,7 +204,7 @@ local options = {
     name        = "Reclaimable allies",
     desc        = "Allows reclaiming allied units and structures",
     type        = "bool",
-    section     = "modifiers",
+    section     = "experimental",
     def         = false,
   },
   {
@@ -231,7 +243,7 @@ local options = {
     name   = 'Disable ceasefire panel',
     desc   = 'Disable ceasefire control panel (When "Fixed ingame alliances" is off).',
     type   = 'bool',
-    section = 'diplomacy',
+    section = 'startconds',
     def    = false,
   },
   {
@@ -287,9 +299,22 @@ local options = {
   },
   {
     key    = 'experimental',
-    name   = 'Experimental Settings',
-    desc   = 'Experimental settings.',
+    name   = 'Experimental',
+    desc   = 'Experimental.',
     type   = 'section',
+  },
+  {
+    key    = 'shield_merge',
+    name   = 'Shield type',
+    desc   = 'Shield merge method.',
+    type   = 'list',
+    section= 'experimental',
+    def    = 'none',
+    items = {
+      {key = 'none', name = "None", desc = 'Shield link only'},
+      {key = 'share', name = "Impact sharing", desc = 'On impact, neighbours contribute charge to make up the required charge.'},
+      {key = 'penetrate', name = "Partial Penetrate", desc = 'Projectiles drain shields that they penetrate but lose effective damage for subsequent shield impacts.'},
+    },
   },
   {
     key    = 'marketandbounty',

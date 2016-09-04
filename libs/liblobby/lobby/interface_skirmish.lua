@@ -228,6 +228,11 @@ function InterfaceSkirmish:RemoveAi(aiName)
 	return self
 end
 
+function InterfaceSkirmish:SetModOptions(data)
+	self:_OnSetModOptions(data)
+	return self
+end
+
 -------------------------------------------------
 -- END Client commands
 -------------------------------------------------

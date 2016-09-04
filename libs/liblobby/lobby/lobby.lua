@@ -255,6 +255,10 @@ function Lobby:VoteNo()
 	return self
 end
 
+function Lobby:SetModOptions(data)
+	return self
+end
+
 ------------------------
 -- Channel & private chat commands
 ------------------------
@@ -667,6 +671,7 @@ function Lobby:_OnSetModOptions(data)
 	for key, value in pairs(data) do
 		self.modoptions[key] = value
 	end
+	
 	self:_CallListeners("OnSetModOptions", data)
 end
 

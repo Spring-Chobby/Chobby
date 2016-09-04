@@ -833,7 +833,7 @@ local function UpdateTooltip(inputText)
 		end
 	else -- For everything else display a normal tooltip
 		tipWindow:ClearChildren()
-		tipTextDisplay:SetText(text)
+		tipTextDisplay:SetText(inputText)
 		tipWindow:AddChild(tipTextDisplay)
 		tipTextDisplay:UpdateLayout()
 	end

@@ -296,6 +296,15 @@ function Interface:VoteNo()
 	return self
 end
 
+function Interface:SetModOptions(data)
+	local sendData = {
+		Options = data,
+	}
+	
+	self:_SendCommand("SetModOptions " .. json.encode(sendData))
+	return self
+end
+
 ------------------------
 -- Channel & private chat commands
 ------------------------
