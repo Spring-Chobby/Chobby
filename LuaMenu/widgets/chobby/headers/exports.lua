@@ -31,6 +31,7 @@ end
 local includes = {
 	"utilities/buttons.lua",
 	"utilities/stringUtilities.lua",
+	"utilities/log.lua",
 }
 
 for _, file in ipairs(includes) do

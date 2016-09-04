@@ -49,7 +49,7 @@ end
 function LoginWindow:init(failFunction, cancelText, windowClassname)
 
 	if WG.Chobby.lobbyInterfaceHolder:GetChildByName("loginWindow") then
-		Spring.Echo("Tried to spawn duplicate login window")
+		Log.Error("Tried to spawn duplicate login window")
 		return
 	end
 
