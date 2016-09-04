@@ -61,6 +61,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 				nil,
 				buttonWidth
 			)
+			tabs[index].button._relativeBounds.right = nil
 			tabs[index].button:SetPosRelative(
 				nil,
 				"0%",
@@ -70,6 +71,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		else
 			local buttonSize = 100/#tabs
 			local pos = (index - 1)*buttonSize .. "%"
+			tabs[index].button._relativeBounds.right = nil
 			tabs[index].button:SetPosRelative(
 				(index - 1)*buttonSize .. "%",
 				0,
