@@ -22,6 +22,8 @@ local fullscreen = 0
 local battleStartDisplay = 1
 local lobbyFullscreen = 1
 
+local FUDGE = 0
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
@@ -29,11 +31,11 @@ local lobbyFullscreen = 1
 local function SetLobbyFullscreenMode(mode)
 	local screenX, screenY = Spring.GetScreenGeometry()
 	if mode == 1 then
-		Spring.SetConfigInt("XResolutionWindowed", screenX, false)
-		Spring.SetConfigInt("YResolutionWindowed", screenY, false)
-		Spring.SetConfigInt("WindowPosX", 0, false)
-		Spring.SetConfigInt("WindowPosY", 0, false)
-		Spring.SetConfigInt("WindowBorderless", 1, false)
+		Spring.SetConfigInt("Fullscreen", 1) -- Required to remove FUDGE
+		Spring.SetConfigInt("XResolutionWindowed", screenX - FUDGE*2, false)
+		Spring.SetConfigInt("YResolutionWindowed", screenY - FUDGE*2, false)
+		Spring.SetConfigInt("WindowPosX", FUDGE, false)
+		Spring.SetConfigInt("WindowPosY", FUDGE, false)
 		Spring.SetConfigInt("WindowBorderless", 1)
 		Spring.SetConfigInt("Fullscreen", 0)
 	elseif mode == 2 then
@@ -53,7 +55,6 @@ local function SetLobbyFullscreenMode(mode)
 			Spring.SetConfigInt("YResolutionWindowed", screenY*3/4, false)
 		end
 		Spring.SetConfigInt("WindowBorderless", 0, false)
-		Spring.SetConfigInt("Fullscreen", 0, false)
 		Spring.SetConfigInt("Fullscreen", 0)
 	elseif mode == 3 then
 		Spring.SetConfigInt("XResolution", screenX, false)
