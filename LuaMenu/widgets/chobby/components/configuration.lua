@@ -278,9 +278,6 @@ function Configuration:GetBackgroundImage()
 end
 
 function Configuration:IsValidEngineVersion(engineVersion)
-	if self.displayBadEngines then
-		return true
-	end
 	Spring.Echo("Checking engineVersion", engineVersion, "against", Game.version, "numbers", tonumber(Game.version), string.gsub(Game.version, " develop", ""))
 	if tonumber(Game.version) then
 		-- Master releases lack the '.0' at the end. Who knows what other cases are wrong.

@@ -94,7 +94,7 @@ function BattleListWindow:Update()
 end
 
 function BattleListWindow:AddBattle(battleID, battle)
-	if not Configuration:IsValidEngineVersion(battle.engineVersion) then
+	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 
@@ -268,7 +268,7 @@ end
 
 function BattleListWindow:UpdateSync(battleID)
 	local battle = lobby:GetBattle(battleID)
-	if not Configuration:IsValidEngineVersion(battle.engineVersion) then
+	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	local items = self:GetRowItems(battleID)
@@ -281,7 +281,7 @@ end
 
 function BattleListWindow:JoinedBattle(battleID)
 	local battle = lobby:GetBattle(battleID)
-	if not Configuration:IsValidEngineVersion(battle.engineVersion) then
+	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	local items = self:GetRowItems(battleID)
@@ -292,7 +292,7 @@ end
 
 function BattleListWindow:LeftBattle(battleID)
 	local battle = lobby:GetBattle(battleID)
-	if not Configuration:IsValidEngineVersion(battle.engineVersion) then
+	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	local items = self:GetRowItems(battleID)
@@ -303,7 +303,7 @@ end
 
 function BattleListWindow:OnUpdateBattleInfo(battleID)
 	local battle = lobby:GetBattle(battleID)
-	if not Configuration:IsValidEngineVersion(battle.engineVersion) then
+	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	local items = self:GetRowItems(battleID)
@@ -329,7 +329,7 @@ end
 
 function BattleListWindow:OnBattleIngameUpdate(battleID, isRunning)
 	local battle = lobby:GetBattle(battleID)
-	if not Configuration:IsValidEngineVersion(battle.engineVersion) then
+	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	local items = self:GetRowItems(battleID)

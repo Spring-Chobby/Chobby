@@ -112,10 +112,8 @@ function onLaunchReplay(wtf, replay, game, map, engine)
 
 	hasGame = false
 	hasMap = false
-	hasEngine = false
+	hasEngine = WG.Chobby.Configuration:IsValidEngineVersion(engine)
 	hasFile = false
-
-	hasEngine = engine:find(Game.version) == 1
 
 	if not hasEngine then
 		return Abort("Wrong engine "..engine)
@@ -185,7 +183,7 @@ local function AttemptStart(saveFilename)
 
 	Echo("Starting Spring")
 
-	WG.Chobby.localLobby:StartGameFromFile(saveFilename)
+	WG.Chobby.localLobby:StartReplay(saveFilename)
 end
 
 local function Abort(reason)
