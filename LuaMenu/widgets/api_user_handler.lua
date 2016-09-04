@@ -134,7 +134,11 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 			comboOptions[#comboOptions + 1] = "Friend"
 		end
 		comboOptions[#comboOptions + 1] = "Report"
-		comboOptions[#comboOptions + 1] = "Ignore"
+		if userInfo.isIgnored then
+			comboOptions[#comboOptions + 1] = "Unignore"
+		else
+			comboOptions[#comboOptions + 1] = "Ignore"
+		end
 	end
 
 	if (userBattleInfo.aiLib and userBattleInfo.owner == myUserName) or userControl.lobby:GetMyIsAdmin() then
@@ -223,6 +227,12 @@ local function UpdateUserActivity(listener, userName)
 				data.lblStatusLarge:SetCaption(i18n(status .. "_status"))
 			end
 		end
+	end
+end
+
+local function UpdateUserActivityList(listener, userList)
+	for i = 1, #userList do
+		UpdateUserActivity(_, userList[i])
 	end
 end
 
@@ -355,6 +365,8 @@ local function GetUserControls(userName, opts)
 						end
 					elseif selectedName == "Report" then
 						Spring.Echo("TODO - Open the right webpage")
+					elseif selectedName == "Unignore" then
+						userControls.lobby:Unignore(userName)
 					elseif selectedName == "Ignore" then
 						userControls.lobby:Ignore(userName)
 					end
@@ -600,7 +612,14 @@ end
 -- Listeners
 
 local function AddListeners()
-	lobby:AddListener("OnUpdateUserStatus", UpdateUserActivity)
+	lobby:AddListener("OnFriendList", UpdateUserActivityList)
+	lobby:AddListener("OnIgnoreList", UpdateUserActivityList)
+
+	lobby:AddListener("OnFriend", UpdateUserActivity)
+	lobby:AddListener("OnUnfriend", UpdateUserActivity)
+	lobby:AddListener("OnAddIgnoreUser", UpdateUserActivity)
+	lobby:AddListener("OnRemoveIgnoreUser", UpdateUserActivity)
+	
 	lobby:AddListener("OnAddUser", UpdateUserActivity)
 	lobby:AddListener("OnRemoveUser", UpdateUserActivity)
 	lobby:AddListener("OnAddUser", UpdateUserCountry)
