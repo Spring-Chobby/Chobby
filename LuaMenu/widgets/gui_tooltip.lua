@@ -456,14 +456,13 @@ local function GetBattleTooltip(battleID, battle)
 	end
 
 	-- InGameSince
-	local hostInfo = lobby:GetUser(battle.founder) or {}
-	if hostInfo.inGameSince and hostInfo.isInGame then
+	if battle.runningSince and battle.isRunning then
 		if not battleTooltip.inGameSince then
 			battleTooltip.inGameSince = GetTooltipLine(battleTooltip.mainControl, true)
 		end
 		battleTooltip.inGameSince.Update(
 			offset,
-			"Running for " .. GetTimeToPast(battle.runningSince or hostInfo.inGameSince),
+			"Running for " .. GetTimeToPast(battle.runningSince),
 			IMAGE_INGAME
 		)
 		offset = offset + 20
