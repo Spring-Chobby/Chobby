@@ -183,7 +183,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 			function()
 				if haveMapAndGame then
 					if battle.isRunning then
-						battleLobby:ConnectToBattle()
+						battleLobby:RejoinBattle(battleID)
 					else
 						battleLobby:StartBattle()
 					end

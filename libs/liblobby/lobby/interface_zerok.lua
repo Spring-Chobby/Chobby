@@ -161,6 +161,14 @@ function Interface:HostBattle(battleTitle, password, modeName)
 	self:_SendCommand("OpenBattle " .. json.encode(sendData))
 end
 
+function Interface:RejoinBattle(battleID)
+	local sendData = {
+		BattleID = battleID,
+	}
+	self:_SendCommand("RequestConnectSpring " .. json.encode(sendData))
+	return self
+end
+
 function Interface:JoinBattle(battleID, password, scriptPassword)
 	local sendData = {
 		BattleID = battleID,
@@ -499,7 +507,9 @@ function Interface:_BattleUpdate(data)
 		Spring.Log(LOG_SECTION, LOG.ERROR, "Interface:_BattleUpdate no such battle with ID: " .. tostring(header.BattleID))
 		return
 	end
-	self:_OnUpdateBattleInfo(header.BattleID, header.SpectatorCount, header.Locked, 0, header.Map, header.Engine)
+	self:_OnBattleIngameUpdate(header.BattleID, not not header.IsRunning)
+	
+	self:_OnUpdateBattleInfo(header.BattleID, header.SpectatorCount, header.Locked, 0, header.Map, header.Engine, header.RunningSince)
 end
 Interface.jsonCommands["BattleUpdate"] = Interface._BattleUpdate
 

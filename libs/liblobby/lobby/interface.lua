@@ -104,6 +104,11 @@ end
 -- Battle commands
 ------------------------
 
+function Interface:RejoinBattle(battleID)
+	self:ConnectToBattle()
+	return self
+end
+
 function Interface:JoinBattle(battleID, password, scriptPassword)
 	self:super("JoinBattle", battleID, password, scriptPassword)
 	self:_SendCommand(concat("JOINBATTLE", battleID, password, scriptPassword))
@@ -316,7 +321,11 @@ function Interface:_OnClientStatus(userName, status)
 	})
 	
 	if status.isInGame ~= nil then
-		self:_OnBattleIngameUpdate(userName, status.isInGame)
+		
+		local battleID = self:GetBattleFoundedBy(userName)
+		if battleID then
+			self:_OnBattleIngameUpdate(battleID, status.isInGame)
+		end
 		if self.myBattleID and status.isInGame then
 			local myBattle = self:GetBattle(self.myBattleID)
 			if myBattle and myBattle.founder == userName then

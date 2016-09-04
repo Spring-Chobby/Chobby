@@ -183,6 +183,10 @@ function Lobby:HostBattle(battleName, password)
 	return self
 end
 
+function Lobby:RejoinBattle(battleID)
+	return self
+end
+
 function Lobby:JoinBattle(battleID, password, scriptPassword)
 	return self
 end
@@ -441,11 +445,10 @@ end
 -- Battle commands
 ------------------------
 
-function Lobby:_OnBattleIngameUpdate(userName, isInGame)
-	local battleID = self:GetBattleFoundedBy(userName)
-	if battleID then
-		self.battles[battleID].isRunning = isInGame
-		self:_CallListeners("OnBattleIngameUpdate", battleID, isInGame)
+function Lobby:_OnBattleIngameUpdate(battleID, isRunning)
+	if self.battles[battleID] and self.battles[battleID].isRunning ~= isRunning then
+		self.battles[battleID].isRunning = isRunning
+		self:_CallListeners("OnBattleIngameUpdate", battleID, isRunning)
 	end
 end
 
@@ -512,14 +515,15 @@ function Lobby:_OnLeftBattle(battleID, userName)
 	self:_CallListeners("OnLeftBattle", battleID, userName)
 end
 
-function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName, engineVersion)
+function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince)
 	local battle = self.battles[battleID]
 	battle.spectatorCount = spectatorCount or battle.spectatorCount
 	battle.locked         = locked         or battle.locked
 	battle.mapHash        = mapHash        or battle.mapHash
 	battle.mapName        = mapName        or battle.mapName
 	battle.engineVersion  = engineVersion  or battle.engineVersion
-	self:_CallListeners("OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName, engineVersion)
+	battle.runningSince   = runningSince   or battle.runningSince
+	self:_CallListeners("OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince)
 end
 
 -- Updates the specified status keys
