@@ -157,6 +157,16 @@ function InterfaceSkirmish:StartReplay(replayFilename, replayGame, replayMap)
 	return false
 end
 
+function InterfaceSkirmish:StartGameFromFile(scriptFileName)
+	self:_CallListeners("OnBattleAboutToStart")
+	if self.useSpringRestart then
+		Spring.Restart(scriptFileName, "")
+	else
+		Spring.Start(scriptFileName, "")
+	end
+	return false
+end
+
 -- TODO: Needs clean implementation in lobby.lua
 function InterfaceSkirmish:StartBattle()
 	local battle = self:GetBattle(self:GetMyBattleID())
