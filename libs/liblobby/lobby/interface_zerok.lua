@@ -481,12 +481,54 @@ Interface.jsonCommands["UserDisconnected"] = Interface._UserDisconnected
 ------------------------
 
 function Interface:_FriendList(data)
-	self:_OnFriendList(data.Friends)
+	--if self.friendListRecieved then
+		local newFriendMap = {}
+		for i = 1, #data.Friends do
+			local userName = data.Friends[i]
+			if not self.isFriend[userName] then
+				self:_OnFriend(userName)
+				self:_OnRemoveIgnoreUser(userName)
+			end
+			newFriendMap[userName] = true
+		end
+	
+		for _, userName in pairs(self.friends) do
+			if not newFriendMap[userName] then
+				self:_OnUnfriend(userName)
+				self:_OnRemoveIgnoreUser(userName)
+			end
+		end
+		--return
+	--end
+	--self.friendListRecieved = true
+	--
+	--self:_OnFriendList(data.Friends)
 end
 Interface.jsonCommands["FriendList"] = Interface._FriendList
 
 function Interface:_IgnoreList(data)
-	self:_OnIgnoreList(data.Ignores)
+	--if self.ignoreListRecieved then
+		local newIgnoreMap = {}
+		for i = 1, #data.Ignores do
+			local userName = data.Ignores[i]
+			if not self.isIgnored[userName] then
+				self:_OnAddIgnoreUser(userName)
+				self:_OnUnfriend(userName)
+			end
+			newIgnoreMap[userName] = true
+		end
+	
+		for _, userName in pairs(self.ignored) do
+			if not newIgnoreMap[userName] then
+				self:_OnUnfriend(userName)
+				self:_OnRemoveIgnoreUser(userName)
+			end
+		end
+		--return
+	--end
+	--self.ignoreListRecieved = true
+	--
+	--self:_OnIgnoreList(data.Ignores)
 end
 Interface.jsonCommands["IgnoreList"] = Interface._IgnoreList
 

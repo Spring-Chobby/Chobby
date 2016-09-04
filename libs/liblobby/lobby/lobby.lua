@@ -422,24 +422,6 @@ function Lobby:_OnUnfriend(userName)
 end
 
 function Lobby:_OnFriendList(data)
-	if self.friendListRecieved then
-		local newFriendMap = {}
-		for i = 1, #data do
-			local userName = data[i]
-			if not self.isFriend[userName] then
-				self:_OnFriend(userName)
-			end
-			newFriendMap[userName] = true
-		end
-	
-		for _, userName in pairs(self.friends) do
-			if not newFriendMap[userName] then
-				self:_OnUnfriend(userName)
-			end
-		end
-		return
-	end
-	
 	self.friends = data
 	self.friendCount = #data
 	self.isFriend = {}
@@ -448,8 +430,6 @@ function Lobby:_OnFriendList(data)
 		local userInfo = self:TryGetUser(userName)
 		userInfo.isFriend = true
 	end
-	
-	self.friendListRecieved = true
 	
 	self:_CallListeners("OnFriendList", self:GetFriends())
 end
@@ -506,24 +486,6 @@ function Lobby:_OnRemoveIgnoreUser(userName)
 end
 
 function Lobby:_OnIgnoreList(data)
-	if self.ignoreListRecieved then
-		local newIgnoreMap = {}
-		for i = 1, #data do
-			local userName = data[i]
-			if not self.isIgnored[userName] then
-				self:_OnAddIgnoreUser(userName)
-			end
-			newIgnoreMap[userName] = true
-		end
-	
-		for _, userName in pairs(self.ignored) do
-			if not newIgnoreMap[userName] then
-				self:_OnRemoveIgnoreUser(userName)
-			end
-		end
-		return
-	end
-	
 	self.ignored = data
 	self.ignoredCount = #data
 	self.isIgnored = {}
@@ -532,8 +494,6 @@ function Lobby:_OnIgnoreList(data)
 		local userInfo = self:TryGetUser(userName)
 		userInfo.isIgnored = true
 	end
-	
-	self.ignoreListRecieved = true
 	
 	self:_CallListeners("OnIgnoreList", self:Getignored())
 end

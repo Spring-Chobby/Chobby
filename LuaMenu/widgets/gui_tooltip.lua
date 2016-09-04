@@ -593,6 +593,17 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 		userTooltip.clan.Hide()
 	end
 
+	-- Ignore and Friend
+	if userInfo.isIgnored or userInfo.isFriend then
+		if not userTooltip.friendIgnore then
+			userTooltip.friendIgnore = GetTooltipLine(userTooltip.mainControl, true)
+		end
+		userTooltip.friendIgnore.Update(offset, userInfo.isIgnored and "Ignored" or "Friend")
+		offset = offset + 20
+	elseif userTooltip.friendIgnore then
+		userTooltip.friendIgnore:Hide()
+	end
+	
 	-- Country
 	if userInfo.country then
 		if not userTooltip.country then
