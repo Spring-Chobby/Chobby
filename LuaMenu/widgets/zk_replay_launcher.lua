@@ -75,12 +75,23 @@ local function newset()
 end
 
 local function Echo(stuff)
-	 Chotify:Post({
-		 title = "Launching Replay",
-		 body = stuff,
-	 })
+	Chotify:Post({
+		title = "Launching Replay",
+		body = stuff,
+	})
 end
 
+local function Abort(reason)
+	hasFile = false
+	hasGame = false
+	hasEngine = false
+	hasMap = false
+
+	Chotify:Post({
+		title = "Replay Failed",
+		body = reason
+	})
+end
 
 -- initiates a connection to host:port, returns true on success
 local function SocketConnect(host, port)
@@ -182,22 +193,8 @@ local function AttemptStart(saveFilename)
 	end
 
 	Echo("Starting Spring")
-	WG.Chobby.localLobby:StartGameFromFile(saveFilename)
-	--WG.Chobby.localLobby:StartReplay(saveFilename, replayGame, replayMap)
+	WG.Chobby.localLobby:StartReplay(saveFilename)
 end
-
-local function Abort(reason)
-	hasFile = false
-	hasGame = false
-	hasEngine = false
-	hasMap = false
-
-	Chotify:Post({
-		title = "Replay Failed",
-		body = reason
-	})
-end
-
 
 -- called when a connection is closed
 local function SocketClosed(sock)
