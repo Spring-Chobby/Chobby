@@ -56,6 +56,28 @@ function Interface:Ping()
 end
 
 ------------------------
+-- Status commands
+------------------------
+
+function Interface:SetIngameStatus(isInGame)
+	local sendData = {
+		IsInGame = isInGame,
+	}
+
+	self:_SendCommand("ChangeUserStatus " .. json.encode(sendData))
+	return self
+end
+
+function Interface:SetAwayStatus(isAway)
+	local sendData = {
+		IsAfk = isAway,
+	}
+
+	self:_SendCommand("ChangeUserStatus " .. json.encode(sendData))
+	return self
+end
+
+------------------------
 -- User commands
 ------------------------
 
@@ -99,20 +121,52 @@ end
 -- Battle commands
 ------------------------
 
-function Interface:HostBattle(battleTitle, password)
-	self.springieSpawnText = "!spawn mod=zk:stable,title=" .. battleTitle .. ((password and ",password=" .. password .. ",") or ",")
-	local sendData = {
-		Place = 2, 
-		Target = "Springiee",
-		IsEmote = false,
-		Text = self.springieSpawnText,
-		Ring = false,
-	}
-	self.springieSpawnTimer = Spring.GetTimer()
-	self.springieSpawnTitle = battleTitle
-	self.springieSpawnPassword = password
+local modeToName = {
+	[5] = "Cooperative",
+	[6] = "Team",
+	[3] = "1v1",
+	[4] = "FFA",
+	[0] = "Custom",
+}
+
+local nameToMode = {}
+for i, v in pairs(modeToName) do
+	nameToMode[v] = i
+end
+
+function Interface:HostBattle(battleTitle, password, modeName)
+	--OpenBattle {"Header":{"Mode":6,"Password":"bla","Title":"GoogleFrog's Teams"}}
+	-- Mode:
+	-- 5 = Cooperative
+	-- 6 = Teams
+	-- 3 = 1v1
+	-- 4 = FFA
+	-- 0 = Custom
+	local engineName
+	if tonumber(Game.version) then
+		engineName = Game.version .. ".0"
+	else
+		engineName = string.gsub(Game.version, " develop", "")
+	end
 	
-	self:_SendCommand("Say " .. json.encode(sendData))
+	local sendData = {
+		Header = {
+			Title = battleTitle,
+			Mode = (modeName and nameToMode[modeName]) or 0,
+			Password = password,
+			Engine = engineName
+		}
+	}
+	
+	self:_SendCommand("OpenBattle " .. json.encode(sendData))
+end
+
+function Interface:RejoinBattle(battleID)
+	local sendData = {
+		BattleID = battleID,
+	}
+	self:_SendCommand("RequestConnectSpring " .. json.encode(sendData))
+	return self
 end
 
 function Interface:JoinBattle(battleID, password, scriptPassword)
@@ -406,6 +460,13 @@ Interface.jsonCommands["UserDisconnected"] = Interface._UserDisconnected
 -- Battle commands
 ------------------------
 
+function Interface:_ConnectSpring(data)
+	if data.Ip and data.Port and data.ScriptPassword then
+		Spring.Echo("Connecting to battle", data.Game, data.Map, data.Engine)
+		self:ConnectToBattle(self.useSpringRestart, data.Ip, data.Port, data.ScriptPassword)
+	end
+end
+Interface.jsonCommands["ConnectSpring"] = Interface._ConnectSpring
 
 function Interface:_LeftBattle(data)
 	self:_OnLeftBattle(data.BattleID, data.User)
@@ -415,27 +476,9 @@ Interface.jsonCommands["LeftBattle"] = Interface._LeftBattle
 function Interface:_BattleAdded(data)
 	-- {"Header":{"BattleID":3,"Engine":"100.0","Game":"Zero-K v1.4.6.11","Map":"Zion_v1","MaxPlayers":16,"SpectatorCount":1,"Title":"SERIOUS HOST","Port":8760,"Ip":"158.69.140.0","Founder":"Neptunium"}}
 	local header = data.Header
-	if self.springieSpawnTimer then
-		local currentTime = Spring.GetTimer()
-		local waitTime = Spring.DiffTimers(currentTime, self.springieSpawnTimer)
-		if waitTime > 10 then -- Only wait 10 seconds
-			self.springieSpawnTimer = nil
-			self.springieSpawnTitle = nil
-			self.springieSpawnPassword = nil
-			self.springieSpawnText = nil
-		elseif self.springieSpawnTitle == header.Title then
-			self:JoinBattle(header.BattleID, self.springieSpawnPassword)
-			self.springieSpawnTitle = nil
-			self.springieSpawnPassword = nil
-			self.springieSpawnText = nil
-			-- Don't clear spawn timer yet because there are actions that happen after
-			-- the battle opens.
-			--self.springieSpawnTimer = nil 
-		end
-	end
 	self:_OnBattleOpened(header.BattleID, 0, 0, header.Founder, header.Ip, 
 		header.Port, header.MaxPlayers, (header.Password and true) or false, 0, 4, "Spring " .. header.Engine, header.Engine, 
-		header.Map, header.Title or "no title", header.Game, header.SpectatorCount)
+		header.Map, header.Title or "no title", header.Game, header.SpectatorCount, header.IsRunning, header.RunningSince, header.Mode)
 end
 Interface.jsonCommands["BattleAdded"] = Interface._BattleAdded
 
@@ -451,21 +494,24 @@ function Interface:_JoinedBattle(data)
 		self:_OnBattleScriptPassword(data.ScriptPassword)
 		self:_OnJoinBattle(data.BattleID, 0)
 	end
-	if data.User ~= self:GetBattle(data.BattleID).founder then
-		self:_OnJoinedBattle(data.BattleID, data.User, 0)
-	end
+	self:_OnJoinedBattle(data.BattleID, data.User, 0)
 end
 Interface.jsonCommands["JoinedBattle"] = Interface._JoinedBattle
 
 function Interface:_BattleUpdate(data)
 	-- BattleUpdate {"Header":{"BattleID":362,"Map":"Quicksilver 1.1"}
+	-- BattleUpdate {"Header":{"BattleID":21,"Engine":"103.0.1-88-g1a9cfdd"}
 	local header = data.Header
 	--Spring.Utilities.TableEcho(header, "header")
 	if not self.battles[header.BattleID] then
 		Spring.Log(LOG_SECTION, LOG.ERROR, "Interface:_BattleUpdate no such battle with ID: " .. tostring(header.BattleID))
 		return
 	end
-	self:_OnUpdateBattleInfo(header.BattleID, header.SpectatorCount, header.Locked, 0, header.Map)
+	if header.IsRunning ~= nil then
+		self:_OnBattleIngameUpdate(header.BattleID, header.IsRunning)
+	end
+	
+	self:_OnUpdateBattleInfo(header.BattleID, header.SpectatorCount, header.Locked, 0, header.Map, header.Engine, header.RunningSince)
 end
 Interface.jsonCommands["BattleUpdate"] = Interface._BattleUpdate
 
@@ -646,9 +692,6 @@ function Interface:_Say(data)
 			self:_OnSaidBattle(data.User, data.Text, data.Time)
 		end
 	elseif data.Place == 2 then -- Send to user?
-		if self.springieSpawnTimer and (data.Text == SPRINGIE_HOST_MESSAGE or data.Text == self.springieSpawnText) then
-			return
-		end
 		if data.Target == self:GetMyUserName() then
 			if emote then
 				self:_OnSaidPrivateEx(data.User, data.Text, data.Time)

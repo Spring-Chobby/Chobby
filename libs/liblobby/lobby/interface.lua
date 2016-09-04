@@ -104,6 +104,11 @@ end
 -- Battle commands
 ------------------------
 
+function Interface:RejoinBattle(battleID)
+	self:ConnectToBattle()
+	return self
+end
+
 function Interface:JoinBattle(battleID, password, scriptPassword)
 	self:super("JoinBattle", battleID, password, scriptPassword)
 	self:_SendCommand(concat("JOINBATTLE", battleID, password, scriptPassword))
@@ -314,6 +319,21 @@ function Interface:_OnClientStatus(userName, status)
 		isModerator = rshift(status, 5) % 2 == 1,
 		isBot       = rshift(status, 6) % 2 == 1,
 	})
+	
+	if status.isInGame ~= nil then
+		
+		local battleID = self:GetBattleFoundedBy(userName)
+		if battleID then
+			self:_OnBattleIngameUpdate(battleID, status.isInGame)
+		end
+		if self.myBattleID and status.isInGame then
+			local myBattle = self:GetBattle(self.myBattleID)
+			if myBattle and myBattle.founder == userName then
+				local battle = self:GetBattle(self.myBattleID)
+				self:ConnectToBattle(self.useSpringRestart, battle.ip, battle.port, self:GetScriptPassword())
+			end
+		end
+	end
 end
 Interface.commands["CLIENTSTATUS"] = Interface._OnClientStatus
 Interface.commandPattern["CLIENTSTATUS"] = "(%S+)%s+(%S+)"
@@ -394,10 +414,12 @@ function Interface:_OnBattleOpened(battleID, type, natType, founder, ip, port, m
 	port = tonumber(port)
 	maxPlayers = tonumber(maxPlayers)
 	passworded = tonumber(passworded) ~= 0
+	
+	local isRunning = self.users[founder].isInGame
 
 	local engineName, engineVersion, map, title, gameName = unpack(explode("\t", other))
 
-	self:super("_OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, engineName, engineVersion, map, title, gameName)
+	self:super("_OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, engineName, engineVersion, map, title, gameName, isRunning)
 end
 Interface.commands["BATTLEOPENED"] = Interface._OnBattleOpened
 Interface.commandPattern["BATTLEOPENED"] = "(%d+)%s+(%d)%s+(%d)%s+(%S+)%s+(%S+)%s+(%d+)%s+(%d+)%s+(%d+)%s+(%S+)%s+(%S+)%s*(.*)"
