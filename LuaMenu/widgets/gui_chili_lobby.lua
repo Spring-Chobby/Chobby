@@ -26,12 +26,21 @@ CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 
 local interfaceRoot
 
+local oldSizeX, oldSizeY
 function widget:ViewResize(vsx, vsy, viewGeometry)
+	oldSizeX, oldSizeY = vsx, vsy
 	if interfaceRoot then
 		interfaceRoot.ViewResize(vsx, vsy)
 	end
 	--Spring.Utilities.TableEcho(viewGeometry, "viewGeometry")
 	WG.Chobby:_ViewResize(vsx, vsy)
+end
+
+function widget:Update()
+	local screenWidth, screenHeight = Spring.GetWindowGeometry()
+	if screenWidth ~= oldSizeX or screenHeight ~= oldSizeY then
+		widget:ViewResize(screenWidth, screenHeight)
+	end
 end
 
 local oldName

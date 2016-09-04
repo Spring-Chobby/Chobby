@@ -22,6 +22,9 @@ local window
 local imHaveMap, imHaveGame
 local lblHaveMap, lblHaveGame
 
+-- Function which is called to fix scroll panel sizes
+local ViewResizeUpdate
+
 -- Listeners, needed here so they can be deregistered
 local onBattleClosed
 local onLeftBattle_counter
@@ -806,16 +809,13 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		PositionChildren(mainStackPanel, mainScrollPanel.height)
 	end
 
-	mainScrollPanel.OnResize = {
-		function (obj)
+	-- Global function
+	function ViewResizeUpdate()
+		if mainStackPanel and spectatorStackPanel then
 			PositionChildren(mainStackPanel, mainScrollPanel.height)
-		end
-	}
-	spectatorScrollPanel.OnResize = {
-		function ()
 			PositionChildren(spectatorStackPanel, spectatorScrollPanel.height)
 		end
-	}
+	end
 
 	onUpdateUserTeamStatus = function(listener, userName, allyNumber, isSpectator)
 		if isSpectator then
@@ -1207,6 +1207,8 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	end
 	battleLobby:AddListener("OnBattleClosed", onBattleClosed)
 
+	WG.Delay(ViewResizeUpdate, 0.1)
+
 	return window
 end
 
@@ -1372,6 +1374,24 @@ function BattleRoomWindow.LeaveBattle(onlyMultiplayer, onlySingleplayer)
 
 	local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
 	tabPanel.RemoveTab("myBattle", true)
+end
+
+local oldSizeX, oldSizeY
+function widget:ViewResize(vsx, vsy, viewGeometry)
+	oldSizeX, oldSizeY = vsx, vsy
+	if ViewResizeUpdate then
+		WG.Delay(ViewResizeUpdate, 0.1)
+		WG.Delay(ViewResizeUpdate, 0.2)
+		WG.Delay(ViewResizeUpdate, 0.4)
+		WG.Delay(ViewResizeUpdate, 0.8)
+	end
+end
+
+function widget:Update()
+	local screenWidth, screenHeight = Spring.GetWindowGeometry()
+	if screenWidth ~= oldSizeX or screenHeight ~= oldSizeY then
+		widget:ViewResize(screenWidth, screenHeight)
+	end
 end
 
 function widget:Initialize()
