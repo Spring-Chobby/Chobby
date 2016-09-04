@@ -43,15 +43,17 @@ function widget:Update()
 	end
 end
 
-local oldName
 function widget:GamePreload()
-	local gameName = Spring.GetGameName()
-	oldName = gameName
-	interfaceRoot.SetIngame(gameName ~= "")
+	interfaceRoot.SetIngame(Spring.GetGameName() ~= "")
 	lobby:SetIngameStatus(true)
 end
 
+local ignoreFirstCall = true
 function widget:ActivateMenu()
+	if ignoreFirstCall then
+		ignoreFirstCall = false
+		return
+	end
 	interfaceRoot.SetIngame(false)
 	lobby:SetIngameStatus(false)
 end

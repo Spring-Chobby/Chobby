@@ -24,11 +24,18 @@ local lobbyFullscreen = 1
 
 local FUDGE = 0
 
+local currentMode = false
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
 
 local function SetLobbyFullscreenMode(mode)
+	if mode == currentMode then
+		return
+	end
+	currentMode = mode
+
 	local screenX, screenY = Spring.GetScreenGeometry()
 	if mode == 1 then
 		Spring.SetConfigInt("Fullscreen", 1) -- Required to remove FUDGE
@@ -119,7 +126,9 @@ local function InitializeControls(window)
 					return
 				end
 
-				SetLobbyFullscreenMode(obj.selected)
+				if Spring.GetGameName() == "" then
+					SetLobbyFullscreenMode(obj.selected)
+				end
 
 				lobbyFullscreen = obj.selected
 				Configuration.lobby_fullscreen = obj.selected
@@ -326,6 +335,10 @@ local function InitializeControls(window)
 					return
 				end
 
+				if Spring.GetGameName() ~= "" then
+					SetLobbyFullscreenMode(obj.selected)
+				end
+				
 				battleStartDisplay = obj.selected
 				Configuration.game_fullscreen = obj.selected
 			end
@@ -487,6 +500,15 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface
+
+local ignoreFirstCall = true
+function widget:ActivateMenu()
+	if ignoreFirstCall then
+		ignoreFirstCall = false
+		return
+	end
+	SetLobbyFullscreenMode(Configuration.lobby_fullscreen)
+end
 
 local onBattleAboutToStart
 
