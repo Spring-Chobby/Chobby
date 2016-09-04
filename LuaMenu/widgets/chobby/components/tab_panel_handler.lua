@@ -3,6 +3,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 	local externalFunctions = {}
 
 	local BUTTON_SPACING = 5
+	local BUTTON_SIDE_SPACING = 3
 
 	-------------------------------------------------------------------
 	-- Local variables
@@ -47,16 +48,13 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 	local function SetButtonPositionAndSize(index)
 		if tabsVertical then
 			tabs[index].button:SetPos(
-				nil,
+				BUTTON_SIDE_SPACING,
 				(index - 1) * (buttonHeight + BUTTON_SPACING) + buttonOffset,
 				nil,
 				buttonHeight
 			)
-			tabs[index].button:SetPosRelative(
-				"0%",
-				nil,
-				"100%"
-			)
+			tabs[index].button._relativeBounds.right = BUTTON_SIDE_SPACING
+			tabs[index].button:UpdateClientArea()
 		elseif buttonWidth then
 			tabs[index].button:SetPos(
 				(index - 1) * (buttonWidth + BUTTON_SPACING) + buttonOffset,

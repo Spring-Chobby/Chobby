@@ -5,7 +5,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local globalKeyListener = false
 
 	local titleWidthRel = 28
-	local panelWidthRel = 40
+	local panelWidthRel = 42
 
 	local userStatusPanelWidth = 250
 
@@ -50,6 +50,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local showTopBar = false
 	local doublePanelMode = true
 	local autodetectDoublePanel = true
+	
+	local BUTTON_SIDE_SPACING = 3 -- Matches tab_panel_handler
 
 	local IMAGE_TOP_BACKGROUND = LUA_DIRNAME .. "images/top-background.png"
 
@@ -293,9 +295,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	end
 	
 	local buttons_exit = Button:New {
-		x = 0,
+		x = BUTTON_SIDE_SPACING,
 		bottom = 0,
-		width = "100%",
+		right = BUTTON_SIDE_SPACING,
 		height = 70,
 		caption = i18n("exit"),
 		font = Configuration:GetFont(3),
@@ -660,8 +662,16 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		
 		if showTopBar then
 			backgroundHolder:SetAlpha(0.85)
+			--buttonsHolder_image.color[4] = 0.1
+			--buttonsHolder_image:Invalidate()
+			--holder_topImage.color[4] = 0.25
+			--holder_topImage:Invalidate()
 		else
 			backgroundHolder:SetAlpha(1)
+			--buttonsHolder_image.color[4] = 0.1
+			--buttonsHolder_image:Invalidate()
+			--holder_topImage.color[4] = 0.25
+			--holder_topImage:Invalidate()
 		end
 		
 		local screenWidth, screenHeight = Spring.GetViewGeometry()
