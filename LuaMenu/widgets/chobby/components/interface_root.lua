@@ -593,7 +593,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		status_panelButtons._relativeBounds.right = rightPad
 		rightPanel_window:UpdateClientArea()
 
-		buttons_exit._relativeBounds.bottom = bottomPad
+		buttons_exit._relativeBounds.bottom = (bottomPad > 0 and bottomPad) or 4
 		buttons_exit:UpdateClientArea()
 
 		if doublePanelMode then
