@@ -171,6 +171,10 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		parent = btnMinimap,
 	}
 
+	local function RejoinBattleFunc()
+		battleLobby:RejoinBattle(battleID)
+	end
+	
 	local btnStartBattle = Button:New {
 		x = 0,
 		bottom = 0,
@@ -183,7 +187,11 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 			function()
 				if haveMapAndGame then
 					if battle.isRunning then
-						battleLobby:RejoinBattle(battleID)
+						if Spring.GetGameName() == "" then
+							RejoinBattleFunc()
+						else
+							 WG.Chobby.ConfirmationPopup(RejoinBattleFunc, "Are you sure you want to leave your current game to rejoin this one?", nil, 315, 200)
+						end
 					else
 						battleLobby:StartBattle()
 					end
@@ -1303,6 +1311,7 @@ function BattleRoomWindow.GetSingleplayerControl()
 						window = nil
 					end
 					WG.LibLobby.lobby:LeaveBattle()
+					multiplayerWrapper = nil
 				elseif window then
 					return
 				end
