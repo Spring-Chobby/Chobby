@@ -333,9 +333,7 @@ local function GetUserControls(userName, opts)
 			OnSelectName = {
 				function (obj, selectedName)
 					if selectedName == "Message" then
-						local chatWindow = WG.Chobby.interfaceRoot.GetChatWindow()
-						chatWindow.switchToTab = userName
-						chatWindow:GetPrivateChatConsole(userName)
+						local chatWindow = WG.Chobby.interfaceRoot.OpenPrivateChat(userName)
 					elseif selectedName == "Kick" then
 						local userBattleInfo = userControls.lobby:GetUserBattleStatus(userName) or {}
 						if userBattleInfo and userBattleInfo.aiLib then

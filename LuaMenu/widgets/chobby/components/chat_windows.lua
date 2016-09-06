@@ -747,16 +747,16 @@ function ChatWindows:GetChannelConsole(chanName)
 		self.tabbars[chanName] = channelConsole
 		self:UpdateJoinPosition()
 
-		if self.switchToTab and self.switchToTab == chanName then
+		if self.switchToTabOnJoin and self.switchToTabOnJoin == chanName then
 			self.tabPanel.tabBar:Select(chanName)
-			self.switchToTab = false
+			self.switchToTabOnJoin = false
 		end
 	end
 
 	return channelConsole
 end
 
-function ChatWindows:GetPrivateChatConsole(userName)
+function ChatWindows:GetPrivateChatConsole(userName, switchTo)
 	local chanName = userName .. " messages"
 	local privateChatConsole = self.privateChatConsoles[chanName]
 
@@ -813,13 +813,11 @@ function ChatWindows:GetPrivateChatConsole(userName)
 		self.tabbars[chanName] = privateChatConsole
 
 		self:UpdateJoinPosition()
-
-		if self.switchToTab and self.switchToTab == chanName then
-			self.tabPanel.tabBar:Select(chanName)
-			self.switchToTab = false
-		end
 	end
 
+	if switchTo then
+		self.tabPanel.tabBar:Select(chanName)
+	end
 	return privateChatConsole
 end
 
@@ -838,7 +836,7 @@ function ChatWindows:CreateJoinChannelWindow()
 		local channelName = ebChannelName.text:gsub("#", "")
 		if channelName ~= "" then
 			lobby:Join(channelName)
-			self.switchToTab = ebChannelName.text
+			self.switchToTabOnJoin = ebChannelName.text
 		end
 		self.joinWindow:Dispose()
 		self.joinWindow = nil

@@ -790,6 +790,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	function externalFunctions.GetChatWindow()
 		return chatWindows
 	end
+	
+	function externalFunctions.OpenPrivateChat(userName)
+		chatWindows:GetPrivateChatConsole(userName, true)
+		rightPanelHandler.OpenTabByName("chat")
+	end
 
 	function externalFunctions.GetContentPlace()
 		return mainContent_window
