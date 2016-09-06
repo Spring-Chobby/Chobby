@@ -462,13 +462,18 @@ Interface.commandPattern["ADDUSER"] = "(%S+)%s+(%S%S)%s+(%S+)%s*(.*)"
 
 function Interface:_User(data)
 	-- CHECKME: verify that name, country, cpu and similar info doesn't change
-	if self.users[data.Name] == nil then
+	-- It can change now that we remember user data of friends through disconnect.
+	if self.users[data.Name] == nil or self.users[data.Name].isOffline then
 		self:_OnAddUser(data.Name, data.Country, 3, data.AccountID, data.LobbyVersion, data.Clan)
 	end
 	self:_OnUpdateUserStatus(data.Name, {
-		isInGame=data.IsInGame,
-		isAway=data.IsAway,
-		isAdmin=data.IsAdmin,
+		country = data.Country,
+		clan = data.Clan,
+		lobbyVersion = data.LobbyVersion,
+		accountID = data.AccountID,
+		isInGame = data.IsInGame,
+		isAway = data.IsAway,
+		isAdmin = data.IsAdmin,
 		level = data.Level,
 		isBot = data.IsBot,
 		awaySince = data.AwaySince,
