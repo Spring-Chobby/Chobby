@@ -760,7 +760,7 @@ end
 local function RemoveImage(id)
   local image = data.images[id]
   if not image then
-    Spring.Log(widget:GetInfo().name, LOG.ERROR, "Attempt to modify nonexistent image " .. id)
+    Spring.Log(widget:GetInfo().name, LOG.ERROR, "Attempt to remove nonexistent image " .. id)
     return
   end
   image:Dispose()
@@ -891,7 +891,7 @@ scriptFunctions = {
       return
     end
     
-    local imageDef = defs.images[args.defID] and Spring.Utilities.CopyTable(defs.images[args.defID], true) or {anchor = {}}
+    local imageDef = defs.images[args.defID] and Spring.Utilities.CopyTable(defs.images[args.defID], true) or {anchor = {0, 0}}
     args = Spring.Utilities.MergeTable(args, imageDef, false)
     
     if args.file then
@@ -907,7 +907,7 @@ scriptFunctions = {
     if (type(args.y) == 'string') then
       args.y = screen0.height * tonumber(args.y)
     end
-    local anchor = args.anchor or image.anchor or {}
+    local anchor = args.anchor or image.anchor or {0, 0}
     image.anchor = anchor
     if args.x then image.x = args.x - anchor[1] end
     if args.y then image.y = args.y - anchor[2] end
