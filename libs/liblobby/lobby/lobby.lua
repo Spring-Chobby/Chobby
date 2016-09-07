@@ -351,30 +351,26 @@ end
 -- User commands
 ------------------------
 
-function Lobby:_OnAddUser(userName, country, cpu, accountID, lobbyVersion, clan)
+function Lobby:_OnAddUser(userName, status)
 	if self.users[userName] then
 		local userInfo = self.users[userName]
-		userInfo.country = country
-		userInfo.cpu = cpu
-		userInfo.accountID = accountID
-		userInfo.lobbyVersion = lobbyVersion
-		userInfo.clan = clan
 		userInfo.isOffline = false
+		for k, v in pairs(status) do
+			self.users[userName][k] = v
+		end
 	else
 		self.userCount = self.userCount + 1
 		self.users[userName] = {
 			userName = userName,
-			country = country,
-			cpu = cpu,
-			accountID = accountID,
-			lobbyVersion = lobbyVersion,
-			clan = clan,
 			isFriend = self.isFriend[userName],
 			isIgnored = self.isIgnored[userName],
 			hasFriendRequest = self.hasFriendRequest[userName],
 		}
+		for k, v in pairs(status) do
+			self.users[userName][k] = v
+		end
 	end
-	self:_CallListeners("OnAddUser", userName, country, cpu, accountID, lobbyVersion, clan)
+	self:_CallListeners("OnAddUser", userName, status)
 end
 
 function Lobby:_OnRemoveUser(userName)

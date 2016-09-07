@@ -297,12 +297,17 @@ Interface.commands["PONG"] = Interface._OnPong
 -- User commands
 ------------------------
 
-function Interface:_OnAddUser(userName, country, cpu, accountID)
+function Interface:_AddUser(userName, country, cpu, accountID)
 	cpu = tonumber(cpu)
 	accountID = tonumber(accountID)
-	self:super("_OnAddUser", userName, country, cpu, accountID)
+	local status = {
+		country = country, 
+		cpu = cpu, 
+		accountID = accountID
+	}
+	self:super("_OnAddUser", userName, status)
 end
-Interface.commands["ADDUSER"] = Interface._OnAddUser
+Interface.commands["ADDUSER"] = Interface._AddUser
 Interface.commandPattern["ADDUSER"] = "(%S+)%s+(%S%S)%s+(%S+)%s*(.*)"
 
 function Interface:_OnRemoveUser(userName)
