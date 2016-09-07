@@ -15,7 +15,8 @@ local modinfo = {
 		"Spring Cursors",
 		"Spring content v1",
 	},
-	onlyLocal = true
+	onlyLocal       = true,
+	engine          = "103.0.1-95-g20ebb8c",
 }
 
 return modinfo
