@@ -355,8 +355,10 @@ function Lobby:_OnAddUser(userName, status)
 	if self.users[userName] then
 		local userInfo = self.users[userName]
 		userInfo.isOffline = false
-		for k, v in pairs(status) do
-			self.users[userName][k] = v
+		if status then
+			for k, v in pairs(status) do
+				self.users[userName][k] = v
+			end
 		end
 	else
 		self.userCount = self.userCount + 1
@@ -366,8 +368,10 @@ function Lobby:_OnAddUser(userName, status)
 			isIgnored = self.isIgnored[userName],
 			hasFriendRequest = self.hasFriendRequest[userName],
 		}
-		for k, v in pairs(status) do
-			self.users[userName][k] = v
+		if status then
+			for k, v in pairs(status) do
+				self.users[userName][k] = v
+			end
 		end
 	end
 	self:_CallListeners("OnAddUser", userName, status)
