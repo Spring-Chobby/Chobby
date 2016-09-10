@@ -57,6 +57,8 @@ local USER_SP_TOOLTIP_PREFIX = "user_single_"
 local USER_MP_TOOLTIP_PREFIX = "user_battle_"
 local USER_CH_TOOLTIP_PREFIX = "user_chat_s_"
 
+local UserLevelToImageConfFunction
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Globally Applicable Utilities
@@ -68,22 +70,11 @@ local function CountryShortnameToFlag(shortname)
 	end
 end
 
-local function UserLevelToImage(level, isBot, isAdmin, rank)
-	if isBot then
-		return IMAGE_AUTOHOST
-	elseif isAdmin then
-		return IMAGE_MODERATOR
-	elseif level or rank then
-		local rankBracket = rank
-		if not rankBracket then
-			if level < 60 then
-				rankBracket = math.min(12, math.floor(level/5) + 1)
-			else
-				rankBracket = math.min(21, math.floor(level/10) + 7)
-			end
-		end
-		return LUA_DIRNAME .. "images/ranks/" .. rankBracket .. ".png"
+local function UserLevelToImage(level, skill, isBot, isAdmin)
+	if UserLevelToImageConfFunction then
+		return UserLevelToImageConfFunction(level, skill, isBot, isAdmin)
 	end
+	return IMAGE_PLAYER
 end
 
 --------------------------------------------------------------------------------
@@ -166,7 +157,7 @@ local function GetUserRankImageName(userName, userControl)
 	if userControl.isSingleplayer and not userBattleInfo.aiLib then
 		return IMAGE_PLAYER
 	end
-	return UserLevelToImage(userInfo.level, userInfo.isBot or userBattleInfo.aiLib, userInfo.isAdmin, userInfo.rank)
+	return UserLevelToImage(userInfo.level, userInfo.skill, userInfo.isBot or userBattleInfo.aiLib, userInfo.isAdmin)
 end
 
 local function GetUserStatusImages(userName, isInBattle, userControl)
@@ -630,6 +621,8 @@ end
 -- Widget Interface
 
 function widget:Initialize()
+	UserLevelToImageConfFunction = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/rankFunction.lua", nil, VFS.RAW_FIRST)
+	
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
