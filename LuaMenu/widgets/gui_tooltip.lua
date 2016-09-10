@@ -189,10 +189,12 @@ local function GetTooltipLine(parent, hasImage, fontSize, xOffset)
 	function externalFunctions.UpdatePosition(newPosition)
 		if not textDisplay.visible then
 			textDisplay:Show()
-			textDisplay:SetPos(nil, newPosition)
 		end
-		if hasImage and not imageDisplay.visible then
-			imageDisplay:Show()
+		textDisplay:SetPos(nil, newPosition)
+		if hasImage then
+			if not imageDisplay.visible then
+				imageDisplay:Show()
+			end
 			imageDisplay:SetPos(nil, newPosition - 4)
 		end
 	end
