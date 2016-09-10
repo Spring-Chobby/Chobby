@@ -53,6 +53,8 @@ local IMAGE_UNREADY      = IMAGE_DIR .. "unready.png"
 local IMAGE_ONLINE       = IMAGE_DIR .. "online.png"
 local IMAGE_OFFLINE      = IMAGE_DIR .. "offline.png"
 
+local IMAGE_CLAN_PATH    = "LuaUI/Configs/Clans/"
+
 local USER_SP_TOOLTIP_PREFIX = "user_single_"
 local USER_MP_TOOLTIP_PREFIX = "user_battle_"
 local USER_CH_TOOLTIP_PREFIX = "user_chat_s_"
@@ -75,6 +77,14 @@ local function UserLevelToImage(level, skill, isBot, isAdmin)
 		return UserLevelToImageConfFunction(level, skill, isBot, isAdmin)
 	end
 	return IMAGE_PLAYER
+end
+
+local function GetUserClanImage(userName, userControl)
+	local userInfo = userControl.lobby:GetUser(userName) or {}
+	if userInfo.clan then
+		local clanFile = IMAGE_CLAN_PATH .. userInfo.clan .. ".png"
+		return VFS.FileExists(clanFile) and clanFile
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -403,6 +413,22 @@ local function GetUserControls(userName, opts)
 		file = GetUserRankImageName(userName, userControls),
 	}
 	offset = offset + 23
+	
+	local clanImage = GetUserClanImage(userName, userControls)
+	if clanImage then
+		offset = offset + 1
+		userControls.imClan = Image:New {
+			name = "imClan",
+			x = offset,
+			y = offsetY + 1,
+			width = 21,
+			height = 19,
+			parent = userControls.mainControl,
+			keepAspect = true,
+			file = clanImage,
+		}
+		offset = offset + 23
+	end
 
 	offset = offset + 1
 	userControls.tbName = TextBox:New {
@@ -513,6 +539,7 @@ end
 local userHandler = {
 	CountryShortnameToFlag = CountryShortnameToFlag,
 	UserLevelToImage = UserLevelToImage,
+	GetUserClanImage = GetUserClanImage
 }
 
 local function _GetUser(userList, userName, opts)
