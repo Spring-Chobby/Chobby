@@ -524,28 +524,33 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	UpdateArchiveStatus()
 end
 
-local function AddTeamButtons(parent, offX, joinFunc, aiFunc)
-	local addAiButton = Button:New {
-		x = offX,
-		y = 4,
-		height = 24,
-		width = 75,
-		font = WG.Chobby.Configuration:GetFont(3),
-		caption = i18n("add_ai") .. "\b",
-		OnClick = {aiFunc},
-		parent = parent,
-	}
-	local joinTeamButton = Button:New {
-		name = "joinTeamButton",
-		x = offX + 85,
-		y = 4,
-		height = 24,
-		width = 75,
-		font =  WG.Chobby.Configuration:GetFont(3),
-		caption = i18n("join") .. "\b",
-		OnClick = {joinFunc},
-		parent = parent,
-	}
+local function AddTeamButtons(parent, offX, joinFunc, aiFunc, unjoinable, disallowBots)
+	if not disallowBots then
+		local addAiButton = Button:New {
+			x = offX,
+			y = 4,
+			height = 24,
+			width = 75,
+			font = WG.Chobby.Configuration:GetFont(3),
+			caption = i18n("add_ai") .. "\b",
+			OnClick = {aiFunc},
+			parent = parent,
+		}
+		offX = offX + 85
+	end
+	if not unjoinable then
+		local joinTeamButton = Button:New {
+			name = "joinTeamButton",
+			x = offX,
+			y = 4,
+			height = 24,
+			width = 75,
+			font =  WG.Chobby.Configuration:GetFont(3),
+			caption = i18n("join") .. "\b",
+			OnClick = {joinFunc},
+			parent = parent,
+		}
+	end
 end
 
 local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
@@ -660,7 +665,15 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				parentStack = spectatorStackPanel
 				parentScroll = spectatorScrollPanel
 			else
-				humanName = "Team " .. teamIndex
+				if battle.disallowCustomTeams then
+					if teamIndex == 0 then
+						humanName = "Players"
+					else
+						humanName = "Bots"
+					end
+				else
+					humanName = "Team " .. (teamIndex + 1)
+				end
 				parentStack = mainStackPanel
 				parentScroll = mainScrollPanel
 			end
@@ -697,7 +710,9 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 					end,
 					function()
 						WG.Chobby.AiListWindow(battleLobby, battle.gameName, teamIndex)
-					end
+					end,
+					battle.disallowCustomTeams and teamIndex ~= 0,
+					(battle.disallowBots or battle.disallowCustomTeams) and teamIndex == 0
 				)
 			end
 			local teamStack = Control:New {
@@ -812,8 +827,10 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 	end
 
 	GetTeam(-1) -- Make Spectator heading appear
-	GetTeam(0) -- Always show two teams
-	GetTeam(1)
+	GetTeam(0) -- Always show two teams in custom battles
+	if not (battle.disallowCustomTeams and battle.disallowBots) then
+		GetTeam(1)
+	end
 
 	OpenNewTeam = function ()
 		GetTeam(emptyTeamIndex)

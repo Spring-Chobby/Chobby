@@ -619,9 +619,15 @@ Interface.jsonCommands["LeftBattle"] = Interface._LeftBattle
 function Interface:_BattleAdded(data)
 	-- {"Header":{"BattleID":3,"Engine":"100.0","Game":"Zero-K v1.4.6.11","Map":"Zion_v1","MaxPlayers":16,"SpectatorCount":1,"Title":"SERIOUS HOST","Port":8760,"Ip":"158.69.140.0","Founder":"Neptunium"}}
 	local header = data.Header
-	self:_OnBattleOpened(header.BattleID, 0, 0, header.Founder, header.Ip, 
-		header.Port, header.MaxPlayers, (header.Password and true) or false, 0, 4, "Spring " .. header.Engine, header.Engine, 
-		header.Map, header.Title or "no title", header.Game, header.SpectatorCount, header.IsRunning, header.RunningSince, header.Mode)
+	self:_OnBattleOpened(
+		header.BattleID, 0, 0, header.Founder, header.Ip, header.Port, 
+		header.MaxPlayers, (header.Password and true) or false, 0, 4, "Spring " .. header.Engine, header.Engine, 
+		header.Map, header.Title or "no title", header.Game, header.SpectatorCount, 
+		header.IsRunning, header.RunningSince, 
+		header.Mode, 
+		header.Mode ~= 0, -- Is Custom
+		(header.Mode ~= 5 and header.Mode ~= 0) -- Is Bots
+	)
 end
 Interface.jsonCommands["BattleAdded"] = Interface._BattleAdded
 
