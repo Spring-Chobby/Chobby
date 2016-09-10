@@ -584,9 +584,13 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 	-- Clan
 	if userInfo.clan then
 		if not userTooltip.clan then
-			userTooltip.clan = GetTooltipLine(userTooltip.mainControl)
+			userTooltip.clan = GetTooltipLine(userTooltip.mainControl, true)
 		end
-		userTooltip.clan.Update(offset, "Clan: " .. userInfo.clan)
+		userTooltip.clan.Update(
+			offset,
+			"Clan: " .. userInfo.clan,
+			WG.UserHandler.GetClanImage(userInfo.clan)
+		)
 		offset = offset + 20
 	elseif userTooltip.clan then
 		userTooltip.clan.Hide()

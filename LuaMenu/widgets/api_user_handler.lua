@@ -79,10 +79,9 @@ local function UserLevelToImage(level, skill, isBot, isAdmin)
 	return IMAGE_PLAYER
 end
 
-local function GetUserClanImage(userName, userControl)
-	local userInfo = userControl.lobby:GetUser(userName) or {}
-	if userInfo.clan then
-		local clanFile = IMAGE_CLAN_PATH .. userInfo.clan .. ".png"
+local function GetClanImage(clanName)
+	if clanName then
+		local clanFile = IMAGE_CLAN_PATH .. clanName .. ".png"
 		return VFS.FileExists(clanFile) and clanFile
 	end
 end
@@ -112,6 +111,11 @@ local function GetUserSyncStatus(userName, userControl)
 	else
 		return IMAGE_UNREADY
 	end
+end
+
+local function GetUserClanImage(userName, userControl)
+	local userInfo = userControl.lobby:GetUser(userName) or {}
+	return GetClanImage(userInfo.clan)
 end
 
 local function GetUserComboBoxOptions(userName, isInBattle, userControl)
@@ -539,7 +543,7 @@ end
 local userHandler = {
 	CountryShortnameToFlag = CountryShortnameToFlag,
 	UserLevelToImage = UserLevelToImage,
-	GetUserClanImage = GetUserClanImage
+	GetClanImage = GetClanImage
 }
 
 local function _GetUser(userList, userName, opts)
