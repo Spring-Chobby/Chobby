@@ -24,6 +24,9 @@ local DIR = GetDirectory(source)
 local config = VFS.Include(string.sub(DIR, 1, -9) .. "Configs/vn_config.lua")
 config.VN_DIR = string.sub(DIR, 1, -15) .. config.VN_DIR
 
+local BG_BLACK = string.sub(DIR, 1, -9) .. "Images/vn/bg_black.png"
+local BG_WHITE = string.sub(DIR, 1, -9) .. "Images/vn/bg_white.png"
+
 local Chili
 local Window
 local Panel
@@ -41,7 +44,7 @@ local textPanel
 local textbox, nameLabel
 local nvlPanel, nvlStack
 local portraitPanel, portrait
-local background, backgroundBlack
+local background, backgroundBlack, overlay
 local menuButton, menuStack
 local buttonSave, buttonLoad, buttonLog, buttonQuit
 local logPanel
@@ -104,12 +107,16 @@ local data = {
   nvlMode = false,
   nvlText = {},  -- {[1] = <AddText args table>, [2] = ...}
 
-  currentScript = nil,
-
-  currentLine = 1,
+  --currentScript = nil,
+  --currentLine = 1,
+  scriptCallstack = {}
 }
 
 scriptFunctions = {}  -- not local so script can access it
+
+local imagesToPreload = {
+
+}
 
 local menuVisible = false
 local uiHidden = false
@@ -161,32 +168,89 @@ end
 
 -- This forces the background to the back after toggling GUI (so bg doesn't draw in front of UI elements)
 local function ResetMainLayers(force)
-  --[[
-  if force or (not uiHidden) then
-    textPanel:SetLayer(1)
-    menuButton:SetLayer(2)
-    menuStack:SetLayer(3)
-  end
-  ]]--
   backgroundBlack:SetLayer(99)
+end
+
+local function PreloadImage(file)
+  file = GetFilePath(file)
+  imagesToPreload[#imagesToPreload + 1] = file
 end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 function AdvanceScript() end  -- redefined in a bit
 
-local function GetCurrentScriptLineItem()
-  local item = defs.scripts[data.currentScript][data.currentLine]
+function PreloadImagesInScript(scriptName)
+  for i=1,#defs.scripts[scriptName] do
+    local item = defs.scripts[scriptName][i]
+    local file = nil
+    
+    if item[1] == "AddImage" then
+      local args = item[2]
+      local imageDef = defs.images[args.defID] and Spring.Utilities.CopyTable(defs.images[args.defID], true) or {}
+      file = imageDef.file or args.file
+    elseif item[1] == "AddBackground" then
+      local argsType = type(args)
+      file = (argsType == 'string' and args) or (argsType == 'table' and args.file)
+    end
+    
+    if file then
+      PreloadImage(file)
+    end
+  end
+end
+
+local function GetCurrentScriptAndLine()
+  local currentStackItem = data.scriptCallstack[#data.scriptCallstack]
+  if currentStackItem == nil then
+    --Spring.Log(widget:GetInfo().name, LOG.WARNING, "No script loaded #54")
+    return nil, 1
+  end
+  local currentScript = currentStackItem[1]
+  local line = currentStackItem[2]
+  return currentScript, line
+end
+
+-- returns the script command for the current script at the specified line (or the current line if no line is specified)
+local function GetScriptLineItem(script, line)
+  local currentScript, currentLine = GetCurrentScriptAndLine()
+  script = script or currentScript
+  line = line or currentLine
+  if not script then
+    Spring.Log(widget:GetInfo().name, LOG.ERROR, "Attempt to get item for nonexistent script")
+    return nil
+  elseif not defs.scripts[script] then
+    Spring.Log(widget:GetInfo().name, LOG.ERROR, "Attempt to get item for invalid script " .. script)
+    return nil
+  end
+  local item = defs.scripts[currentScript][currentLine]
   return item
+end
+
+local function PushScriptStack(newScript, startingLine)
+  data.scriptCallstack[#data.scriptCallstack + 1] = {newScript, startingLine or 1}
+  PreloadImagesInScript(newScript)
+end
+
+local function PopScriptStack()
+  if #data.scriptCallstack == 1 then
+    Spring.Log(widget:GetInfo().name, LOG.WARNING, "Reached bottom of script call stack")
+    return false
+  elseif #data.scriptCallstack <= 0 then
+    Spring.Log(widget:GetInfo().name, LOG.WARNING, "No script loaded, cannot pop stack")
+    return false
+  end
+  data.scriptCallstack[#data.scriptCallstack] = nil
+  return true
 end
 
 -- Runs the action for the current line in the script
 local function PlayScriptLine(line)
-  if (not data.currentScript) then
+  if (data.storyID == nil) then
     Spring.Log(widget:GetInfo().name, LOG.ERROR, "No story loaded")
     return
   end
-  line = line or data.currentLine
-  local item = defs.scripts[data.currentScript][line]
+  
+  local item = GetScriptLineItem(nil, line)
   if item then
     if type(item) == 'function' then
       item()
@@ -216,8 +280,12 @@ local function PlayScriptLine(line)
         end
       end
     end
-  elseif line > #defs.scripts[data.currentScript] then
-    Spring.Log(widget:GetInfo().name, LOG.WARNING, "Reached end of script " .. data.currentScript)
+  elseif line > #defs.scripts[GetCurrentScriptAndLine()] then
+    if PopScriptStack() then
+      AdvanceScript()
+    else
+      -- nothing to do
+    end
   end
 end
 
@@ -226,9 +294,9 @@ local function StartScript(scriptName)
     mainWindow:Show()
   end
   ResetMainLayers()
-  data.currentScript = scriptName
-  data.currentLine = 1
-  PlayScriptLine(1)
+  data.scriptCallstack = {{scriptName, 1}}
+  PreloadImagesInScript(scriptName)
+  PlayScriptLine()
 end
 
 local function ResizeNVLEntryPanel(textControl, nvlControlsEntry)
@@ -277,7 +345,7 @@ local function AdvanceText(time, toEnd)
       if autoAdvance then
         waitTime = waitTime or options.waitTime.value
       else
-        local item = GetCurrentScriptLineItem()
+        local item = GetScriptLineItem()
         if item then
           local args = item[2]
           if (type(args) == 'table') and args.wait == false then
@@ -330,7 +398,12 @@ local function AdvanceAnimations(dt)
   for i=1, #animations do
     local anim = animations[i]
     local done = false
-    local target = anim.image and data.images[anim.image] or background
+    local target = anim.image and data.images[anim.image]
+    if anim.image == "background" then
+      target = background
+    elseif anim.image == "overlay" then
+      target = overlay
+    end
     local color, color2
     
     anim.timeElapsed = (anim.timeElapsed or 0) + dt
@@ -345,6 +418,8 @@ local function AdvanceAnimations(dt)
       proportion = 0  -- animation at zero point, do nothing for now
     elseif (anim.type == "shake") then
       ShakeImage(anim, proportion)
+    elseif target == nil then
+      toRemove[#toRemove+1] = i
     else
       if (target.classname == "label") or (target.classname == "textbox") then
         target.font.color = target.font.color or {1,1,1,1}
@@ -439,8 +514,9 @@ AdvanceScript = function(skipAnims)
   if skipAnims then
     AdvanceAnimations(99999)
   end
-  data.currentLine = data.currentLine + 1
-  PlayScriptLine(data.currentLine)
+  local currentStackItem = data.scriptCallstack[#data.scriptCallstack]
+  currentStackItem[2] = currentStackItem[2] + 1
+  PlayScriptLine(currentStackItem[2])
 end
 
 
@@ -713,14 +789,18 @@ local function AddImage(args, isText)
   args.anchor = args.anchor or {0, 0}
   
   if isText then
+    args.size = args.size or DEFAULT_FONT_SIZE
     image = Label:New {
       id = args.id,
       parent = background,
-      caption = args.text,
-      height = args.height,
+      caption = SubstituteVars(args.text),
+      height = args.height or (args.size + 8),
       width = args.width,
       align = args.align,
-      font = {size = args.size or DEFAULT_FONT_SIZE, color = args.color, shadow = args.shadow}
+      valign = args.valign,
+      autosize = (args.autosize == nil and true) or false,
+      savespace = false,
+      font = {size = args.size, color = args.color, shadow = args.shadow}
     }
   else
     image = Image:New{
@@ -741,6 +821,7 @@ local function AddImage(args, isText)
   image.x = args.x - args.anchor[1]
   image.y = args.y - args.anchor[2]
   image.anchor = args.anchor
+  image.color = args.color or image.color
   
   if (args.animation) then
     AddAnimation(args, image)
@@ -780,6 +861,14 @@ local function Cleanup()
   --for screenID, screen in pairs(data.subscreens) do
   --  screen:Dispose()
   --end
+  
+  background.file = BG_BLACK
+  background.color = {1,1,1,1}
+  overlay.file = BG_WHITE
+  overlay.color = {0,0,0,0}
+  background:Invalidate()
+  overlay:Invalidate()
+  
   scriptFunctions.StopMusic()
   SetPortrait(nil)
   textbox:SetText("")
@@ -791,14 +880,11 @@ local function Cleanup()
   data.vars = {}
   data.textLog = {}
   data.backgroundFile = ""
-  background.file = ""
-  background:Invalidate()
   data.portraitFile = ""
   data.currentText = nil
   data.currentMusic = nil
   data.nvlMode = false
-  data.currentScript = nil
-  data.currentLine = 1
+  data.scriptCallstack = {}
 end
 
 local function CloseStory()
@@ -826,7 +912,9 @@ scriptFunctions = {
     background.oldFile = background.file
     background.file = GetFilePath(image)
     data.backgroundFile = image
+    background.color = args.color or background.color
     if (argsType == 'table' and args.animation) then
+      args.id = "background"
       AddAnimation(args, background)
     end
     background:Invalidate()
@@ -842,6 +930,14 @@ scriptFunctions = {
   
   AddTextAsImage = function(args)
     AddImage(args, true)
+  end,
+  
+  CallScript = function(args)
+    local argsType = type(args)
+    local script = (argsType == 'string' and args) or (argsType == 'table' and args.script)
+    local line = (argsType == 'table' and args.line) or 1
+    PushScriptStack(script, line)
+    PlayScriptLine()
   end,
   
   ClearNVL = function()
@@ -886,6 +982,8 @@ scriptFunctions = {
     local image = data.images[args.id]
     if args.id == "background" then
       image = background
+    elseif args.id == "overlay" then
+      image = overlay
     elseif not image then
       Spring.Log(widget:GetInfo().name, LOG.ERROR, "Attempt to modify nonexistent image " .. args.id)
       return
@@ -911,6 +1009,8 @@ scriptFunctions = {
     image.anchor = anchor
     if args.x then image.x = args.x - anchor[1] end
     if args.y then image.y = args.y - anchor[2] end
+    
+    image.color = args.color or image.color
     
     if (args.animation) then
       AddAnimation(args, image)
@@ -983,6 +1083,7 @@ scriptFunctions = {
   
   ShakeScreen = function(args)
     args.type = "shake"
+    args.id = "background"
     AddAnimation({animation = args}, background)
   end,
   
@@ -1275,7 +1376,7 @@ local function LoadGame(filename)
   scriptFunctions.PlayMusic({track = data.currentMusic, wait = true})
   
   RemoveChoiceDialogPanel()
-  local scriptItem = GetCurrentScriptLineItem()
+  local scriptItem = GetScriptLineItem()
   if scriptItem and scriptItem[1] == "ChoiceDialog" then
     PlayScriptLine()
   end
@@ -1362,11 +1463,11 @@ function widget:Update()
     local dt = Spring.DiffTimers(currentTime, timer)
   timer = currentTime
   
-  if (data.currentScript == nil) then
+  if (GetCurrentScriptAndLine() == nil) then
     return
   end
   
-  if (waitTime) then
+  if (waitTime and type(waitTime) == "number") then
     waitTime = waitTime - dt
     if waitTime <= 0 then
       waitTime = nil
@@ -1383,6 +1484,22 @@ function widget:Update()
       AdvanceText(textTime, false)
     end
     textTime = 0
+  end
+end
+
+-- image preloader
+function widget:DrawGenesis()
+  if #imagesToPreload > 0 then
+    for i=1,#imagesToPreload do
+      local file = imagesToPreload[v]
+      if file then
+        --Spring.Echo(file)
+        gl.Texture(file)
+        gl.Texture(false)
+        v = v + 1
+      end
+    end
+    imagesToPreload = {}
   end
 end
 
@@ -1592,7 +1709,8 @@ function widget:Initialize()
     height = WINDOW_HEIGHT,
     keepAspect = false,
     itemMargin = {0, 0, 0, 0},
-    file = string.sub(DIR, 1, -9) .. "Images/vn/bg_black.png",
+    file = BG_BLACK,
+    color = {0, 0, 0, 1},
     OnClick = {function(self, x, y, mouse)
         if mouse == 1 then
           if not uiHidden then
@@ -1606,7 +1724,21 @@ function widget:Initialize()
       end
     },
     OnMouseDown = {function(self) return true end},
-  }  
+  }
+  
+  overlay = Image:New{
+    parent = backgroundBlack,
+    name = "vn_overlay",
+    x = 0,
+    y = 0,
+    right = 0,
+    bottom = 0,
+    padding = {0, 0, 0, 0},
+    itemMargin = {0, 0, 0, 0},
+    file = BG_WHITE,
+    color = {0, 0, 0, 0},
+    keepAspect = false,
+  }
   
   background = Image:New{
     parent = backgroundBlack,
@@ -1617,6 +1749,7 @@ function widget:Initialize()
     bottom = 0,
     padding = {0, 0, 0, 0},
     itemMargin = {0, 0, 0, 0},
+    file = BG_BLACK,
     keepAspect = false,
   }
   
