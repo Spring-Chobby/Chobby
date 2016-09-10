@@ -405,7 +405,7 @@ local function GetUserControls(userName, opts)
 		offset = offset + 23
 	end
 
-	offset = offset + 2
+	offset = offset + 1
 	userControls.imLevel = Image:New {
 		name = "imLevel",
 		x = offset,
@@ -447,7 +447,7 @@ local function GetUserControls(userName, opts)
 		text = userName,
 	}
 	local userNameStart = offset
-	local truncatedName = StringUtilities.TruncateStringIfRequiredAndDotDot(userName, userControls.tbName.font, maxNameLength)
+	local truncatedName = StringUtilities.TruncateStringIfRequiredAndDotDot(userName, userControls.tbName.font, maxNameLength and (maxNameLength - offset))
 	if truncatedName then
 		userControls.tbName:SetText(truncatedName)
 	end

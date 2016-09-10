@@ -10,10 +10,10 @@ function Configuration:init()
 	self.serverAddress = WG.Server.serverAddress or "springrts.com"
 	self.serverPort = 8200
 
-	self.chatMaxNameLength = 120 -- Pixels
-	self.statusMaxNameLength = 180
-	self.friendMaxNameLength = 180
-	self.notificationMaxNameLength = 180
+	self.chatMaxNameLength = 170 -- Pixels
+	self.statusMaxNameLength = 230
+	self.friendMaxNameLength = 230
+	self.notificationMaxNameLength = 230
 
 	self.userName = ""
 	self.password = ""

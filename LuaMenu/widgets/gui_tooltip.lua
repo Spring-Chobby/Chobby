@@ -25,12 +25,14 @@ local USER_CH_TOOLTIP_PREFIX = "user_chat_s_"
 
 local TOOLTIP_TEXT_NAME = "tooltipText"
 
-local IMAGE_MODERATOR = LUA_DIRNAME .. "images/ranks/moderator.png"
-local IMAGE_AFK = LUA_DIRNAME .. "images/away.png"
-local IMAGE_BATTLE = LUA_DIRNAME .. "images/battle.png"
-local IMAGE_INGAME = LUA_DIRNAME .. "images/ingame.png"
-local IMAGE_LOCK = LUA_DIRNAME .. "widgets/chobby/images/lock.png"
-local BATTLE_RUNNING = LUA_DIRNAME .. "images/runningBattle.png"
+local IMAGE_MODERATOR    = LUA_DIRNAME .. "images/ranks/moderator.png"
+local IMAGE_FRIEND       = LUA_DIRNAME .. "images/ranks/friend.png"
+local IMAGE_MUTE         = LUA_DIRNAME .. "images/ranks/noChat.png"
+local IMAGE_AFK          = LUA_DIRNAME .. "images/away.png"
+local IMAGE_BATTLE       = LUA_DIRNAME .. "images/battle.png"
+local IMAGE_INGAME       = LUA_DIRNAME .. "images/ingame.png"
+local IMAGE_LOCK         = LUA_DIRNAME .. "widgets/chobby/images/lock.png"
+local BATTLE_RUNNING     = LUA_DIRNAME .. "images/runningBattle.png"
 local BATTLE_NOT_RUNNING = LUA_DIRNAME .. "images/nothing.png"
 
 local PASSWORD_EXPLAINATION = "Battle requires a password to join."
@@ -601,7 +603,11 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 		if not userTooltip.friendIgnore then
 			userTooltip.friendIgnore = GetTooltipLine(userTooltip.mainControl, true)
 		end
-		userTooltip.friendIgnore.Update(offset, userInfo.isIgnored and "Ignored" or "Friend")
+		userTooltip.friendIgnore.Update(
+			offset, 
+			userInfo.isIgnored and "Ignored" or "Friend", 
+			userInfo.isIgnored and IMAGE_MUTE or IMAGE_FRIEND
+		)
 		offset = offset + 20
 	elseif userTooltip.friendIgnore then
 		userTooltip.friendIgnore:Hide()
