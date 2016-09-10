@@ -27,6 +27,9 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 
 	local function ToggleShow(obj, tab, openOnly)
 		local control = tab.control
+		if not control then
+			return
+		end
 
 		if displayPanel.visible then
 			if displayPanel:GetChildByName(control.name) then
@@ -184,6 +187,14 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 			end
 		end
 	end
+	
+	function externalFunctions.GetTabByName(tabName)
+		for i = 1, #tabs do
+			if tabs[i].name == tabName then
+				return i
+			end
+		end
+	end
 
 	function externalFunctions.GetManagedControlByName(controlName)
 		for i = 1, #tabs do
@@ -274,52 +285,53 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		newTab.control = control
 		newTab.entryCheck = entryCheck
 		local button
-		if control then
-			if tabControlOverride and tabControlOverride[name] then
-				button = tabControlOverride[name]()
-			else
-				button = Button:New {
-					name = name .. "_button",
-					x = "0%",
-					y = "0%",
-					width = "100%",
-					height = "100%",
-					padding = {0,0,0,0},
-					caption = humanName,
-					font = Configuration:GetFont(fontSizeScale),
-				}
-			end
-
-			buttonsHolder:AddChild(button)
-
-			button.OnClick = button.OnClick or {}
-			button.OnClick[#button.OnClick + 1] = function(obj)
-				if newTab.entryCheck then
-					newTab.entryCheck(ToggleShow, obj, newTab)
-				else
-					ToggleShow(obj, newTab)
-				end
-			end
-
-			newTab.activityLabel = Label:New {
-				name = "activity_label",
-				y = 2,
-				right = 2,
-				width = 50,
-				height = 5,
-				valign = "top",
-				align = "right",
-				parent = button,
-				font = Configuration:GetFont(1),
-				caption = "",
+		
+		if tabControlOverride and tabControlOverride[name] then
+			button = tabControlOverride[name]()
+		else
+			button = Button:New {
+				name = name .. "_button",
+				x = "0%",
+				y = "0%",
+				width = "100%",
+				height = "100%",
+				padding = {0,0,0,0},
+				caption = humanName,
+				font = Configuration:GetFont(fontSizeScale),
 			}
+		end
 
-			newTab.activityLabel:BringToFront()
+		buttonsHolder:AddChild(button)
 
-			if selected then
-				ToggleShow(button, newTab)
+		button.OnClick = button.OnClick or {}
+		button.OnClick[#button.OnClick + 1] = function(obj)
+			if newTab.entryCheck then
+				newTab.entryCheck(ToggleShow, obj, newTab)
+			else
+				ToggleShow(obj, newTab)
 			end
+		end
 
+		newTab.activityLabel = Label:New {
+			name = "activity_label",
+			y = 2,
+			right = 2,
+			width = 50,
+			height = 5,
+			valign = "top",
+			align = "right",
+			parent = button,
+			font = Configuration:GetFont(1),
+			caption = "",
+		}
+
+		newTab.activityLabel:BringToFront()
+
+		if selected then
+			ToggleShow(button, newTab)
+		end
+
+		if control then
 			control.OnOrphan = control.OnOrphan or {}
 			control.OnOrphan[#control.OnOrphan + 1] = function(obj)
 				ButtonUtilities.SetButtonDeselected(button)
@@ -329,17 +341,6 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 					displayPanel:Hide()
 				end
 			end
-		else
-			button = Button:New {
-				x = "0%",
-				y = "0%",
-				width = "100%",
-				height = "100%",
-				caption = humanName,
-				font = Configuration:GetFont(fontSizeScale),
-				parent = buttonsHolder,
-				OnClick = {onClick},
-			}
 		end
 
 		newTab.button = button

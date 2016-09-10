@@ -380,7 +380,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		{name = "downloads", control = WG.DownloadWindow.GetControl()},
 	}
 
-	local queueListWindow = QueueListWindow()
+	local queueListWindow = WG.QueueListWindow.GetControl()
 	local battleListWindow = BattleListWindow()
 
 	local submenus = {
@@ -392,7 +392,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			name = "multiplayer",
 			entryCheck = WG.MultiplayerEntryPopup,
 			tabs = {
-				{name = "matchmaking", control = queueListWindow.window},
+				{name = "matchmaking", control = queueListWindow},
 				{name = "serverList", control = battleListWindow.window},
 			},
 			cleanupFunction = CleanMultiplayerState
@@ -400,10 +400,14 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	}
 
 	local battleStatusTabControls = {
-		myBattle = WG.BattleStatusPanel.GetControl
+		myBattle = WG.BattleStatusPanel.GetControl,
+		myQueue = WG.QueueStatusPanel.GetTabControl,
 	}
 
-	local battleStatusPanelHandler = GetTabPanelHandler("myBattlePanel", status_battleHolder, mainContent_window, {}, nil, nil, nil, nil, statusButtonWidth, battleStatusTabControls)
+	local battleStatusPanelHandler = GetTabPanelHandler(
+		"myBattlePanel", status_battleHolder, mainContent_window, {}, nil, nil, nil, nil, 
+		statusButtonWidth, battleStatusTabControls
+	)
 	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons_buttons, rightPanel_window, rightPanelTabs)
 	mainWindowHandler = GetSubmenuHandler(buttonsHolder_buttons, mainContent_window, submenus)
 

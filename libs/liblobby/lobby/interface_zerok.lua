@@ -871,7 +871,8 @@ function Interface:_MatchMakerSetup(data)
 	local queues = data.PossibleQueues
 	self.queueCount = 0
 	self.queues = {}
-	for _, queue in pairs(queues) do
+	for i = 1, #queues do
+		local queue = queues[i]
 		self:_OnQueueOpened(queue.Name, queue.Description, queue.Maps, queue.MaxPartySize)
 	end
 end

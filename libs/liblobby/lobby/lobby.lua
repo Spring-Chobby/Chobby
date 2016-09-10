@@ -840,18 +840,17 @@ end
 -- Matchmaking commands
 ------------------------
 
-function Lobby:_OnQueueOpened(name, title, mapNames, maxPartSize, gameNames)
-	local name = queue.name
+function Lobby:_OnQueueOpened(name, description, mapNames, maxPartSize, gameNames)
 	self.queues[name] = {
 		name = name,
-		title = title,
+		description = description,
 		mapNames = mapNames,
 		maxPartSize = maxPartSize,
 		gameNames = gameNames
 	}
 	self.queueCount = self.queueCount + 1
 	
-	self:_CallListeners("OnQueueOpened", name, title, mapNames, maxPartSize, gameNames)
+	self:_CallListeners("OnQueueOpened", name, description, mapNames, maxPartSize, gameNames)
 end
 
 function Lobby:_OnQueueClosed(name)
