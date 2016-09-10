@@ -4,7 +4,7 @@ local IMAGE_DIR          = LUA_DIRNAME .. "images/"
 local IMAGE_AUTOHOST     = IMAGE_DIR .. "ranks/robot.png"
 local IMAGE_PLAYER       = IMAGE_DIR .. "ranks/player.png"
 
-local rankUnlocks = {5, 10, 15, 30, 50, 75, 100}
+local rankUnlocks = {5, 10, 20, 40, 80, 160}
 local rankCount = #rankUnlocks
 
 local function GetImageFunction(level, skill, isBot, isModerator)
@@ -17,8 +17,7 @@ local function GetImageFunction(level, skill, isBot, isModerator)
 		end
 		levelBracket = levelBracket - 1
 		
-		skill = math.random()*1600 + 1000 
-		local skillBracket = math.max(0, math.min(7, math.floor((skill-1000)/200)))
+		local skillBracket = math.max(0, math.min(2, math.floor((skill-1100)/400)))
 		
 		return RANK_DIR .. levelBracket .. "_" .. skillBracket .. ".png"
 	end
