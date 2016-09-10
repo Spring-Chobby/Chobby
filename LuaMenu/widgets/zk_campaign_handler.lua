@@ -140,8 +140,8 @@ end
 local function LoadCampaign(campaignID)
 	local def = campaignDefsByID[campaignID]
 	local success, err = pcall(function()
-		local planetDefPath = def.dir .. "planetDefs.lua"
-		local missionDefPath = def.dir .. "missionDefs.lua"
+		local planetDefPath = def.dir .. "planetdefs.lua"
+		local missionDefPath = def.dir .. "missiondefs.lua"
 		planetDefs = VFS.FileExists(planetDefPath) and VFS.Include(planetDefPath) or {}
 		missionDefs = VFS.FileExists(missionDefPath) and VFS.Include(missionDefPath) or {}
 		for i=1,#planetDefs do
