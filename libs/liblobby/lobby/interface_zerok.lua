@@ -385,6 +385,42 @@ function Interface:SayPrivateEx(userName, message)
 	return self
 end
 
+------------------------
+-- Matchmaking commands
+------------------------
+
+function Lobby:JoinMatchmaking(queueList)
+	local sendData = {
+		Queues = queueList
+	}
+	self:_SendCommand("MatchMakerQueueRequest " .. json.encode(sendData))
+	return self
+end
+
+function Lobby:LeaveMatchmaking()
+	local sendData = {
+		Queues = {}
+	}
+	self:_SendCommand("MatchMakerQueueRequest " .. json.encode(sendData))
+	return self
+end
+
+function Lobby:AcceptMatchmakingMatch()
+	local sendData = {
+		Ready = true
+	}
+	self:_SendCommand("AreYouReadyResponse " .. json.encode(sendData))
+	return self
+end
+
+function Lobby:RejectMatchmakingMatch()
+	local sendData = {
+		Ready = false
+	}
+	self:_SendCommand("AreYouReadyResponse " .. json.encode(sendData))
+	return self
+end
+
 -------------------------------------------------
 -- END Client commands
 -------------------------------------------------
@@ -820,6 +856,35 @@ function Interface:_Say(data)
 	end
 end
 Interface.jsonCommands["Say"] = Interface._Say
+
+------------------------
+-- Matchmaking commands
+------------------------
+
+function Interface:_MatchMakerSetup(data)
+	local queues = data.PossibleQueues
+	self.queueCount = 0
+	self.queues = {}
+	for _, queue in pairs(queues) do
+		self:_OnQueueOpened(queue.Name, queue.Description, queue.Maps, queue.MaxPartySize)
+	end
+end
+Interface.jsonCommands["MatchMakerSetup"] = Interface._MatchMakerSetup
+
+function Interface:_MatchMakerStatus(data)
+	self:_OnMatchMakerStatus(data.MatchMakerEnabled, data.JoinedQueues, data.Text)
+end
+Interface.jsonCommands["MatchMakerStatus"] = Interface._MatchMakerStatus
+
+function Interface:_MatchMakerQueueRequestFailed(data)
+	self:_OnMatchMakerStatus(false, nil, data.Reason)
+end
+Interface.jsonCommands["MatchMakerQueueRequestFailed"] = Interface._MatchMakerQueueRequestFailed
+
+function Interface:_AreYouReady(data)
+	self:_OnMatchMakerReadyCheck(data.NeedReadyResponse, data.Text, data.SecondsRemaining)
+end
+Interface.jsonCommands["AreYouReady"] = Interface._AreYouReady
 
 -------------------
 -- Unimplemented --

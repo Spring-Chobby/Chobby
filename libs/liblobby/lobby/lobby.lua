@@ -284,6 +284,26 @@ function Lobby:SayPrivate(userName, message)
 	return self
 end
 
+------------------------
+-- Matchmaking commands
+------------------------
+
+function Lobby:JoinMatchmaking(queueList)
+	return self
+end
+
+function Lobby:LeaveMatchmaking()
+	return self
+end
+
+function Lobby:AcceptMatchmakingMatch()
+	return self
+end
+
+function Lobby:RejectMatchmakingMatch()
+	return self
+end
+
 -------------------------------------------------
 -- END Client commands
 -------------------------------------------------
@@ -816,25 +836,41 @@ end
 -- Matchmaking commands
 ------------------------
 
-function Lobby:_OnListQueues(queues, ...)
-	self.queueCount = 0
-	self.queues = {}
-	for _, queue in pairs(queues) do
-		self.queues[queue.name] = queue
-		self.queueCount = self.queueCount + 1
-	end
-end
-
-function Lobby:_OnQueueOpened(queue)
+function Lobby:_OnQueueOpened(name, title, mapNames, maxPartSize, gameNames)
 	local name = queue.name
-	self.queues[name] = queue
+	self.queues[name] = {
+		name = name,
+		title = title,
+		mapNames = mapNames,
+		maxPartSize = maxPartSize,
+		gameNames = gameNames
+	}
 	self.queueCount = self.queueCount + 1
+	
+	self:_CallListeners("OnQueueOpened", name, title, mapNames, maxPartSize, gameNames)
 end
 
-function Lobby:_OnQueueClosed(queue)
-	local name = queue.name
-	self.queues[name] = nil
-	self.queueCount = self.queueCount - 1
+function Lobby:_OnQueueClosed(name)
+	if self.queues[name] then
+		self.queues[name] = nil
+		self.queueCount = self.queueCount - 1
+	end
+	
+	self:_CallListeners("OnQueueClosed", name)
+end
+
+function Lobby:_OnMatchMakerStatus(inMatchmaking, joinedQueues, statusText)
+	if inMatchmaking then
+		self.joinedQueues = joinedQueues
+	else
+		self.joinedQueues = nil
+	end
+	
+	self:_CallListeners("OnMatchMakerStatus", inMatchmaking, joinedQueues, statusText)
+end
+
+function Lobby:_OnMatchMakerReadyCheck(responseRequired, readyText, secondsRemaining)
+	self:_CallListeners("OnMatchMakerReadyCheck", responseRequired, readyText, secondsRemaining)
 end
 
 ------------------------

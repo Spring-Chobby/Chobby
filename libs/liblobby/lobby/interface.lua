@@ -1108,15 +1108,15 @@ end
 Interface.commands["OPENBATTLEFAILED"] = Interface._OnOpenBattleFailed
 Interface.commandPattern["OPENBATTLEFAILED"] = "([^\t]+)"
 
-function Interface:_OnQueueOpened(obj)
-	self:_CallListeners("OnQueueOpened", obj)
+function Interface:_QueueOpened(obj)
+	self:_OnQueueOpened(obj.name, obj.title, obj.mapNames, nil, obj.gameNames)
 end
-Interface.jsonCommands["QUEUEOPENED"] = Interface._OnQueueOpened
+Interface.jsonCommands["QUEUEOPENED"] = Interface._QueueOpened
 
-function Interface:_OnQueueClosed(obj)
-	self:_CallListeners("OnQueueClosed", obj.name)
+function Interface:_QueueClosed(obj)
+	self:_OnQueueClosed(obj.name)
 end
-Interface.jsonCommands["QUEUECLOSED"] = Interface._OnQueueClosed
+Interface.jsonCommands["QUEUECLOSED"] = Interface._QueueClosed
 
 function Interface:_OnQueueLeft(obj)
 	self:_CallListeners("OnQueueLeft", obj.name, obj.userNames)
@@ -1305,7 +1305,11 @@ end
 Interface.jsonCommands["INVITETEAMDECLINED"] = Interface._OnInviteTeamDeclined
 
 function Interface:_OnListQueues(queues)
-	self:_CallListeners("OnListQueues", queues)
+	self.queueCount = 0
+	self.queues = {}
+	for _, queue in pairs(queues) do
+		self:_OnQueueOpened(obj.name, obj.title, obj.mapNames, nil, obj.gameNames)
+	end
 end
 Interface.jsonCommands["LISTQUEUES"] = Interface._OnListQueues
 
