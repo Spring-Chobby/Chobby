@@ -920,7 +920,10 @@ local function InitializeMainControls()
 				caption = i18n("campaign_caps"),
 				align = "center",
 				y = 24,
-				x = "30%",
+				x = 0,
+				right = 0,
+				height = 56,
+				autosize = false,
 				font = {
 					size = 48,
 					outlineWidth = 12,
@@ -941,16 +944,19 @@ local function InitializeMainControls()
 				children = {
 					Button:New {
 						name = 'chobby_campaign_mainLoad',
-						width = 128,
-						height = 48,
+						width = 192,
+						height = 64,
 						caption = i18n("load_game"),
+						font = {size = 28},
 						OnClick = {function() OpenSaveOrLoadMenu(false) end}
+						
 					},
 					Button:New {
 						name = 'chobby_campaign_mainNew',
-						width = 128,
-						height = 48,
+						width = 192,
+						height = 64,
 						caption = i18n("new_game"),
+						font = {size = 28},
 						OnClick = {function() SwitchToScreen("newGame") end}
 					},
 				}
@@ -1094,9 +1100,10 @@ local function InitializeIntermissionControls()
 					-- TODO functions
 					Button:New {
 						name = 'chobby_campaign_intermissionNext',
-						width = 128,
+						width = 160,
 						height = 48,
 						caption = i18n("next_episode"),
+						font = {size = 20},
 						OnClick = { function()
 							if gamedata.mapEnabled then
 								MakeStarMap()
@@ -1108,27 +1115,30 @@ local function InitializeIntermissionControls()
 					},
 					Button:New {
 						name = 'chobby_campaign_intermissionSave',
-						width = 128,
+						width = 160,
 						height = 48,
 						caption = i18n("save"),
+						font = {size = 20},
 						OnClick = { function()
 							OpenSaveOrLoadMenu(true)
-						end}
+						end},
 					},
 					Button:New {
 						name = 'chobby_campaign_intermissionLoad',
-						width = 128,
+						width = 160,
 						height = 48,
 						caption = i18n("load"),
+						font = {size = 20},
 						OnClick = { function()
 							OpenSaveOrLoadMenu(false)
 						end}
 					},
 					Button:New {
 						name = 'chobby_campaign_intermissionQuit',
-						width = 128,
+						width = 160,
 						height = 48,
 						caption = i18n("quit"),
+						font = {size = 20},
 						OnClick = { function(self)
 							WG.Chobby.ConfirmationPopup(function() ChiliFX:AddFadeEffect({
 								obj = screens.intermission, 
