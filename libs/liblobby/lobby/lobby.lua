@@ -38,9 +38,8 @@ function Lobby:_Clean()
 	self.battleAis = {}
 	self.userBattleStatus = {}
 
-	self.joinedQueueList = {}
 	self.joinedQueues = {}
-	
+	self.joinedQueueList = {}
 	self.queues = {}
 	self.queueCount = 0
 
@@ -869,14 +868,19 @@ function Lobby:_OnQueueClosed(name)
 	self:_CallListeners("OnQueueClosed", name)
 end
 
-function Lobby:_OnMatchMakerStatus(inMatchmaking, joinedQueues, statusText)
+function Lobby:_OnMatchMakerStatus(inMatchmaking, joinedQueueList, statusText)
 	if inMatchmaking then
-		self.joinedQueues = joinedQueues
+		self.joinedQueueList = joinedQueueList
+		self.joinedQueues = {}
+		for i = 1, #joinedQueueList do
+			self.joinedQueues[joinedQueueList[i]] = true
+		end
 	else
 		self.joinedQueues = nil
+		self.joinedQueueList = nil
 	end
 	
-	self:_CallListeners("OnMatchMakerStatus", inMatchmaking, joinedQueues, statusText)
+	self:_CallListeners("OnMatchMakerStatus", inMatchmaking, joinedQueueList, statusText)
 end
 
 function Lobby:_OnMatchMakerReadyCheck(responseRequired, readyText, secondsRemaining)

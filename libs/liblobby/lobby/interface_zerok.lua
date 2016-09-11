@@ -390,6 +390,12 @@ end
 ------------------------
 
 function Interface:JoinMatchmaking(queueNamePossiblyList)
+	self.joinedQueues = self.joinedQueues or {}
+	self.joinedQueueList = self.joinedQueueList or {}
+	
+	Spring.Utilities.TableEcho(self.joinedQueues, "self.joinedQueues")
+	Spring.Utilities.TableEcho(self.joinedQueueList, "self.joinedQueueList")
+	
 	if type(queueNamePossiblyList) == "table" then
 		for i = 1, #queueNamePossiblyList do
 			local queueName = queueNamePossiblyList[i]
@@ -401,7 +407,7 @@ function Interface:JoinMatchmaking(queueNamePossiblyList)
 	else
 		local queueName = queueNamePossiblyList
 		if not self.joinedQueues[queueName] then
-			self.joinedQueues[queueName] = true
+			self.joinedQueues[#self.joinedQueues + 1] = queueName
 			self.joinedQueueList[#self.joinedQueueList + 1] =  queueName
 		end
 	end
@@ -414,9 +420,22 @@ function Interface:JoinMatchmaking(queueNamePossiblyList)
 end
 
 function Interface:LeaveMatchmaking(queueNamePossiblyList)
-	if type(queueNamePossiblyList) == "table" then
-		for i = 1, #queueNamePossiblyList do
-			local queueName = queueNamePossiblyList[i]
+	if self.joinedQueues and self.joinedQueueList then
+		if type(queueNamePossiblyList) == "table" then
+			for i = 1, #queueNamePossiblyList do
+				local queueName = queueNamePossiblyList[i]
+				if self.joinedQueues[queueName] then
+					for i, v in pairs(self.joinedQueueList) do
+						if v == queueName then
+							table.remove(self.joinedQueueList, i)
+							break
+						end
+					end
+					self.joinedQueues[queueName] = nil
+				end
+			end
+		else
+			local queueName = queueNamePossiblyList
 			if self.joinedQueues[queueName] then
 				for i, v in pairs(self.joinedQueueList) do
 					if v == queueName then
@@ -427,30 +446,16 @@ function Interface:LeaveMatchmaking(queueNamePossiblyList)
 				self.joinedQueues[queueName] = nil
 			end
 		end
-	else
-		local queueName = queueNamePossiblyList
-		if self.joinedQueues[queueName] then
-			for i, v in pairs(self.joinedQueueList) do
-				if v == queueName then
-					table.remove(self.joinedQueueList, i)
-					break
-				end
-			end
-			self.joinedQueues[queueName] = nil
-		end
 	end
 	
 	local sendData = {
-		Queues = self.joinedQueues
+		Queues = self.joinedQueueList or {}
 	}
 	self:_SendCommand("MatchMakerQueueRequest " .. json.encode(sendData))
 	return self
 end
 
 function Interface:LeaveMatchmakingAll()
-	self.joinedQueues = {}
-	self.joinedQueueList = {}
-		
 	local sendData = {
 		Queues = {}
 	}
