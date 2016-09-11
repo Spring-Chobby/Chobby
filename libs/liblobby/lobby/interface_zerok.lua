@@ -389,23 +389,77 @@ end
 -- Matchmaking commands
 ------------------------
 
-function Lobby:JoinMatchmaking(queueList)
+function Interface:JoinMatchmaking(queueNamePossiblyList)
+	if type(queueNamePossiblyList) == "table" then
+		for i = 1, #queueNamePossiblyList do
+			local queueName = queueNamePossiblyList[i]
+			if not self.joinedQueues[queueName] then
+				self.joinedQueues[queueName] = true
+				self.joinedQueueList[#self.joinedQueueList + 1] =  queueName
+			end
+		end
+	else
+		local queueName = queueNamePossiblyList
+		if not self.joinedQueues[queueName] then
+			self.joinedQueues[queueName] = true
+			self.joinedQueueList[#self.joinedQueueList + 1] =  queueName
+		end
+	end
+	
 	local sendData = {
-		Queues = queueList
+		Queues = self.joinedQueueList
 	}
 	self:_SendCommand("MatchMakerQueueRequest " .. json.encode(sendData))
 	return self
 end
 
-function Lobby:LeaveMatchmaking()
+function Interface:LeaveMatchmaking(queueNamePossiblyList)
+	if type(queueNamePossiblyList) == "table" then
+		for i = 1, #queueNamePossiblyList do
+			local queueName = queueNamePossiblyList[i]
+			if self.joinedQueues[queueName] then
+				for i, v in pairs(self.joinedQueueList) do
+					if v == queueName then
+						table.remove(self.joinedQueueList, i)
+						break
+					end
+				end
+				self.joinedQueues[queueName] = nil
+			end
+		end
+	else
+		local queueName = queueNamePossiblyList
+		if self.joinedQueues[queueName] then
+			for i, v in pairs(self.joinedQueueList) do
+				if v == queueName then
+					table.remove(self.joinedQueueList, i)
+					break
+				end
+			end
+			self.joinedQueues[queueName] = nil
+		end
+	end
+	
+	local sendData = {
+		Queues = self.joinedQueues
+	}
+	self:_SendCommand("MatchMakerQueueRequest " .. json.encode(sendData))
+	return self
+end
+
+function Interface:LeaveMatchmakingAll()
+	self.joinedQueues = {}
+	self.joinedQueueList = {}
+		
 	local sendData = {
 		Queues = {}
 	}
 	self:_SendCommand("MatchMakerQueueRequest " .. json.encode(sendData))
+	
 	return self
 end
 
-function Lobby:AcceptMatchmakingMatch()
+function Interface:AcceptMatchmakingMatch()
 	local sendData = {
 		Ready = true
 	}
@@ -413,7 +467,7 @@ function Lobby:AcceptMatchmakingMatch()
 	return self
 end
 
-function Lobby:RejectMatchmakingMatch()
+function Interface:RejectMatchmakingMatch()
 	local sendData = {
 		Ready = false
 	}

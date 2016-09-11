@@ -76,7 +76,7 @@ local function InitializeControls(parentControl)
 		classname = "negative_button",
 		OnClick = {
 			function()
-				lobby:LeaveMatchmaking()
+				lobby:LeaveMatchmakingAll()
 			end
 		},
 		parent = parentControl,

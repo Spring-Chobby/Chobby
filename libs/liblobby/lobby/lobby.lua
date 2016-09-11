@@ -38,6 +38,9 @@ function Lobby:_Clean()
 	self.battleAis = {}
 	self.userBattleStatus = {}
 
+	self.joinedQueueList = {}
+	self.joinedQueues = {}
+	
 	self.queues = {}
 	self.queueCount = 0
 
@@ -288,11 +291,15 @@ end
 -- Matchmaking commands
 ------------------------
 
-function Lobby:JoinMatchmaking(queueList)
+function Lobby:JoinMatchmaking(queueNamePossiblyList)
 	return self
 end
 
-function Lobby:LeaveMatchmaking()
+function Lobby:LeaveMatchmaking(queueNamePossiblyList)
+	return self
+end
+
+function Lobby:LeaveMatchmakingAll()
 	return self
 end
 
