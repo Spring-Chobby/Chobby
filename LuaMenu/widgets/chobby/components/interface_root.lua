@@ -157,17 +157,18 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		padding = {0, 0, 0, 0},
 	}
 	
-	local holder_matchmaking = Panel:New {
+	local holder_matchMaking = Control:New {
 		x = titleWidth,
 		y = 0,
 		right = 0,
 		height = titleHeight,
-		name = "holder_matchmaking",
+		name = "holder_matchMaking",
 		caption = "", -- Status Window
 		parent = lobbyInterfaceHolder,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
+		children = {}
 	}
 
 	local status_userWindow = Control:New {
@@ -393,7 +394,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		{name = "downloads", control = WG.DownloadWindow.GetControl()},
 	}
 
-	local queueListWindow = QueueListWindow()
+	local queueListWindow = WG.QueueListWindow.GetControl()
 	local battleListWindow = BattleListWindow()
 
 	local submenus = {
@@ -405,7 +406,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			name = "multiplayer",
 			entryCheck = WG.MultiplayerEntryPopup,
 			tabs = {
-				{name = "matchmaking", control = queueListWindow.window},
+				{name = "matchMaking", control = queueListWindow},
 				{name = "serverList", control = battleListWindow.window},
 			},
 			cleanupFunction = CleanMultiplayerState
@@ -424,6 +425,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons_buttons, rightPanel_window, rightPanelTabs)
 	mainWindowHandler = GetSubmenuHandler(buttonsHolder_buttons, mainContent_window, submenus)
 
+	local matchMakerStatus = WG.QueueStatusPanel.GetControl()
+	holder_matchMaking:AddChild(matchMakerStatus)
+	matchMakerStatus:Hide()
+	
 	-------------------------------------------------------------------
 	-- Resizing functions
 	-------------------------------------------------------------------
@@ -777,7 +782,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-------------------------------------------------------------------
 	-- External Functions
 	-------------------------------------------------------------------
-	function externalFunctions.UpdateMatchmakingHolderPosition()
+	function externalFunctions.UpdateMatchMakingHolderPosition()
 		local screenWidth, screenHeight = Spring.GetViewGeometry()
 		
 		local battleShown = (battleStatusPanelHandler.GetTabByName("myBattle") and true) or false
@@ -803,7 +808,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				xPos = (100 - panelWidthRel)*screenWidth/100 - middlePad - width
 			end
 		else
-			width = 256
+			width = screenWidth/3 - 40
 			height = titleHeightSmall - statusWindowGapSmall - 3
 			yPos = 4
 			
@@ -816,7 +821,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			end
 		end
 	
-		holder_matchmaking:SetPos(xPos, yPos, width, height)
+		holder_matchMaking:SetPos(xPos, yPos, width, height)
 	end
 	
 	function externalFunctions.ViewResize(screenWidth, screenHeight)
@@ -826,7 +831,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		end
 		UpdatePadding(screenWidth, screenHeight)
 		
-		externalFunctions.UpdateMatchmakingHolderPosition()
+		externalFunctions.UpdateMatchMakingHolderPosition()
 	end
 
 	function externalFunctions.SetPanelDisplayMode(newAutodetectDoublePanel, newDoublePanel)

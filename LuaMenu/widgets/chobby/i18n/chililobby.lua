@@ -50,7 +50,7 @@ return {
 		skirmish = "Skirmish",
 		multiplayer = "Multiplayer",
 		["exit"] = "Exit",
-		matchmaking = "Matchmaking",
+		matchMaking = "Matchmaking",
 		finding_match = "Finding Match",
 		play_normal_multiplayer_game = "Play a normal multiplayer game",
 		quick_start = "Quick Start",
@@ -164,7 +164,7 @@ return {
 		multiplayer = "マルチプレイヤー",
 		queues = "キュー",
 		chat = "チャット",
-		matchmaking = "マチメイキング", -- 対戦?
+		matchMaking = "マチメイキング", -- 対戦?
 		register_verb = "登録",
 		custom_games = "カスタムゲーム",
 		battle = "対戦",
@@ -200,7 +200,7 @@ return {
 		play_singleplayer_game = "Juagar partida de un jugador",
 		skirmish = "SKIRMISH",
 		multiplayer = "Multijugador",
-		matchmaking = "MATCHMAKING",
+		matchMaking = "MATCHMAKING",
 		play_normal_multiplayer_game = "Jugar partida multijugador normal",
 		custom = "CUSTOM",
 		play_custom_multiplayer_game = "Jugar partida multijugador personalizada",

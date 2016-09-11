@@ -171,5 +171,5 @@ function QueueListWindow:JoinQueue(queueName, btnJoin)
 		end
 	end
 	lobby:AddListener("OnMatchMakerStatus", self.onJoinQueue)
-	lobby:JoinMatchmaking(queueName)
+	lobby:JoinMatchMaking(queueName)
 end

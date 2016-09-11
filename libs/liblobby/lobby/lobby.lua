@@ -287,26 +287,26 @@ function Lobby:SayPrivate(userName, message)
 end
 
 ------------------------
--- Matchmaking commands
+-- MatchMaking commands
 ------------------------
 
-function Lobby:JoinMatchmaking(queueNamePossiblyList)
+function Lobby:JoinMatchMaking(queueNamePossiblyList)
 	return self
 end
 
-function Lobby:LeaveMatchmaking(queueNamePossiblyList)
+function Lobby:LeaveMatchMaking(queueNamePossiblyList)
 	return self
 end
 
-function Lobby:LeaveMatchmakingAll()
+function Lobby:LeaveMatchMakingAll()
 	return self
 end
 
-function Lobby:AcceptMatchmakingMatch()
+function Lobby:AcceptMatchMakingMatch()
 	return self
 end
 
-function Lobby:RejectMatchmakingMatch()
+function Lobby:RejectMatchMakingMatch()
 	return self
 end
 
@@ -843,7 +843,7 @@ function Lobby:_OnSayPrivateEx(userName, message, sayTime)
 end
 
 ------------------------
--- Matchmaking commands
+-- MatchMaking commands
 ------------------------
 
 function Lobby:_OnQueueOpened(name, description, mapNames, maxPartSize, gameNames)
@@ -868,8 +868,8 @@ function Lobby:_OnQueueClosed(name)
 	self:_CallListeners("OnQueueClosed", name)
 end
 
-function Lobby:_OnMatchMakerStatus(inMatchmaking, joinedQueueList, statusText)
-	if inMatchmaking then
+function Lobby:_OnMatchMakerStatus(inMatchMaking, joinedQueueList, statusText)
+	if inMatchMaking then
 		self.joinedQueueList = joinedQueueList
 		self.joinedQueues = {}
 		for i = 1, #joinedQueueList do
@@ -880,7 +880,7 @@ function Lobby:_OnMatchMakerStatus(inMatchmaking, joinedQueueList, statusText)
 		self.joinedQueueList = nil
 	end
 	
-	self:_CallListeners("OnMatchMakerStatus", inMatchmaking, joinedQueueList, statusText)
+	self:_CallListeners("OnMatchMakerStatus", inMatchMaking, joinedQueueList, statusText)
 end
 
 function Lobby:_OnMatchMakerReadyCheck(responseRequired, readyText, secondsRemaining)

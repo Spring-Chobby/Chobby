@@ -386,10 +386,10 @@ function Interface:SayPrivateEx(userName, message)
 end
 
 ------------------------
--- Matchmaking commands
+-- MatchMaking commands
 ------------------------
 
-function Interface:JoinMatchmaking(queueNamePossiblyList)
+function Interface:JoinMatchMaking(queueNamePossiblyList)
 	self.joinedQueues = self.joinedQueues or {}
 	self.joinedQueueList = self.joinedQueueList or {}
 	
@@ -416,7 +416,7 @@ function Interface:JoinMatchmaking(queueNamePossiblyList)
 	return self
 end
 
-function Interface:LeaveMatchmaking(queueNamePossiblyList)
+function Interface:LeaveMatchMaking(queueNamePossiblyList)
 	if self.joinedQueues and self.joinedQueueList then
 		if type(queueNamePossiblyList) == "table" then
 			for i = 1, #queueNamePossiblyList do
@@ -452,7 +452,7 @@ function Interface:LeaveMatchmaking(queueNamePossiblyList)
 	return self
 end
 
-function Interface:LeaveMatchmakingAll()
+function Interface:LeaveMatchMakingAll()
 	local sendData = {
 		Queues = {}
 	}
@@ -461,7 +461,7 @@ function Interface:LeaveMatchmakingAll()
 	return self
 end
 
-function Interface:AcceptMatchmakingMatch()
+function Interface:AcceptMatchMakingMatch()
 	local sendData = {
 		Ready = true
 	}
@@ -469,7 +469,7 @@ function Interface:AcceptMatchmakingMatch()
 	return self
 end
 
-function Interface:RejectMatchmakingMatch()
+function Interface:RejectMatchMakingMatch()
 	local sendData = {
 		Ready = false
 	}
@@ -920,7 +920,7 @@ end
 Interface.jsonCommands["Say"] = Interface._Say
 
 ------------------------
--- Matchmaking commands
+-- MatchMaking commands
 ------------------------
 
 function Interface:_MatchMakerSetup(data)

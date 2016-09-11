@@ -17,56 +17,12 @@ end
 --------------------------------------------------------------------------------
 -- Initialization
 
-local function InitializeControls(parentControl)
-	local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
+local function InitializeQueueStatusHandler(parentControl)
 	local lobby = WG.LibLobby.lobby
 
-	local queueButtonHolder = Control:New {
-		name = "findingMatch",
-		x = 4,
-		right = "51%",
-		y = 4,
-		bottom = 4,
-		caption = "", -- Battle and MM Status Window
-		resizable = false,
-		draggable = false,
-		padding = {0, 0, 0, 0},
-		parent = parentControl,
-	}
-	
-	
-	local queueProgressWrapper = Control:New {
-		x = 0,
-		y = 0,
-		width = "100%",
-		height = "100%",
-		resizable = false,
-		padding = {0, 0, 0, 0},
-
-		--OnParent = {
-		--	function(obj)
-		--		if obj:IsEmpty() then
-		--			wrapperControl = obj
-        --
-		--			local battleWindow = InitializeControls(battleID, battleLobby, 55)
-		--			if battleWindow then
-		--				obj:AddChild(battleWindow)
-		--			end
-		--		end
-		--	end
-		--},
-		OnHide = {
-			function(obj)
-				--tabPanel.RemoveTab("myBattle", true)
-			end
-		}
-	}
-	
-	local queueButton = WG.Chobby.GetTabPanelHandler("queueButton", queueButtonHolder, WG.Chobby.interfaceRoot.GetContentPlace(), {{name = "finding_match", control = queueProgressWrapper}})
-	
 	local button = Button:New {
 		name = "cancel",
-		x = "51%",
+		x = "65%",
 		right = 4,
 		y = 4,
 		bottom = 4,
@@ -76,29 +32,53 @@ local function InitializeControls(parentControl)
 		classname = "negative_button",
 		OnClick = {
 			function()
-				lobby:LeaveMatchmakingAll()
+				lobby:LeaveMatchMakingAll()
 			end
 		},
 		parent = parentControl,
 	}
 	
-	local function onMatchMakerStatus(listener, inMatchmaking, joinedQueues, statusText)
-		parentControl.tooltip = "queue_tooltip"
+	local queueStatusText = TextBox:New {
+		x = 12,
+		y = 12,
+		right = "37%",
+		bottom = 12,
+		fontsize = WG.Chobby.Configuration:GetFont(2).size,
+		text = "",
+		parent = parentControl
+	}
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.ResetTimer()
 	end
-	lobby:AddListener("OnMatchMakerStatus", onMatchMakerStatus)
+	
+	function externalFunctions.UpdateMatches(joinedQueueList, statusText)
+		queueStatusText:SetText(statusText)
+	end
+	
+	function externalFunctions.Resize(xSize, ySize)
+	end
+	
+	return externalFunctions
 end
 
 local function PopupReadyCheckWindow(_, required, text)
+	if not required then
+		-- What is this for?
+		return
+	end
+
 	local lobby = WG.LibLobby.lobby
 	local readyWindow
 	
 	local function AcceptFunc()
-		lobby:AcceptMatchmakingMatch()
+		lobby:AcceptMatchMakingMatch()
 		readyWindow:Dispose()
 	end
 	
 	local function CancelFunc()
-		lobby:RejectMatchmakingMatch()
+		lobby:RejectMatchMakingMatch()
 		readyWindow:Dispose()
 	end
 	
@@ -144,62 +124,54 @@ end
 
 local QueueStatusPanel = {}
 
-function QueueStatusPanel.GetTabControl()
-	local button = Panel:New {
+function QueueStatusPanel.GetControl()
+	local lobby = WG.LibLobby.lobby
+	local queueStatusHandler
+	
+	local queuePanel = Panel:New {
 		x = 0,
 		y = 0,
-		width = 340,
+		right = 0,
 		bottom = 0,
 		padding = {0,0,0,0},
 		caption = "",
 		resizable = false,
 		draggable = false,
-		OnParent = {
-			function(obj)
-				if obj:IsEmpty() then
-					InitializeControls(obj)
+		OnResize = {
+			function (obj, xSize, ySize)
+				if queueStatusHandler then
+					queueStatusHandler.Resize(xSize, ySize)
 				end
 			end
-		},
+		}
 	}
-	return button
-end
-
-function QueueStatusPanel.ShowQueueWindow()
-	local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
-	local lobby = WG.LibLobby.lobby
 	
-	if not tabPanel.GetTabByName("myQueue") then
-		tabPanel.AddTab("myQueue", "Queue", nil, false, 3)
-	end
+	queueStatusHandler = InitializeQueueStatusHandler(queuePanel)
+	
+	lobby:AddListener("OnMatchMakerStatus", 
+		function(listener, inMatchMaking, joinedQueueList, statusText)
+			if inMatchMaking then
+				if not queuePanel.visible then
+					queueStatusHandler.ResetTimer()
+				end
+				queueStatusHandler.UpdateMatches(joinedQueueList, statusText)
+			end
+			queuePanel:SetVisibility(inMatchMaking)
+		end
+	)
+	
+	lobby:AddListener("OnMatchMakerReadyCheck", PopupReadyCheckWindow)
+	return queuePanel
 end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface
 
-local function DelayedInitialize()
-	local lobby = WG.LibLobby.lobby
-	
-	lobby:AddListener("OnMatchMakerStatus", 
-		function(listener, inMatchmaking)
-			if inMatchmaking then
-				WG.QueueStatusPanel.ShowQueueWindow()
-			else
-				local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
-				tabPanel.RemoveTab("myQueue")
-			end
-		end
-	)
-	
-	lobby:AddListener("OnMatchMakerReadyCheck", PopupReadyCheckWindow)
-end
-
 function widget:Initialize()
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
 	WG.QueueStatusPanel = QueueStatusPanel
-	--WG.Delay(DelayedInitialize, 1)
 end
 
 --------------------------------------------------------------------------------

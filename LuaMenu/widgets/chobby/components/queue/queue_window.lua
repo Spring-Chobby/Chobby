@@ -42,7 +42,7 @@ function QueueWindow:init(queueName)
 				right = 5,
 				width = 70,
 				height = 45,
-				OnClick = { function () lobby:LeaveMatchmaking(queueName) end },
+				OnClick = { function () lobby:LeaveMatchMaking(queueName) end },
 			},
 		},
 		OnDispose = { function() self:RemoveListeners() end },

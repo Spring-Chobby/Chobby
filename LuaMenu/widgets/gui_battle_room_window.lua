@@ -1288,13 +1288,13 @@ function BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
 		OnHide = {
 			function(obj)
 				tabPanel.RemoveTab("myBattle", true)
-				WG.Chobby.interfaceRoot.UpdateMatchmakingHolderPosition()
+				WG.Chobby.interfaceRoot.UpdateMatchMakingHolderPosition()
 			end
 		}
 	}
 
 	tabPanel.AddTab("myBattle", "My Battle", multiplayerWrapper, false, 3, true)
-	WG.Chobby.interfaceRoot.UpdateMatchmakingHolderPosition()
+	WG.Chobby.interfaceRoot.UpdateMatchMakingHolderPosition()
 
 	UpdateArchiveStatus()
 
@@ -1322,7 +1322,7 @@ function BattleRoomWindow.GetSingleplayerControl()
 				if multiplayerWrapper then
 					local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
 					tabPanel.RemoveTab("myBattle", true)
-					WG.Chobby.interfaceRoot.UpdateMatchmakingHolderPosition()
+					WG.Chobby.interfaceRoot.UpdateMatchMakingHolderPosition()
 					
 					if window then
 						window:Dispose()
@@ -1410,7 +1410,7 @@ function BattleRoomWindow.LeaveBattle(onlyMultiplayer, onlySingleplayer)
 
 	local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
 	tabPanel.RemoveTab("myBattle", true)
-	WG.Chobby.interfaceRoot.UpdateMatchmakingHolderPosition()
+	WG.Chobby.interfaceRoot.UpdateMatchMakingHolderPosition()
 end
 
 function widget:Initialize()

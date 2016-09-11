@@ -4,7 +4,7 @@
 function widget:GetInfo()
 	return {
 		name      = "Queue List Window",
-		desc      = "Handles matchmaking queue list display.",
+		desc      = "Handles matchMaking queue list display.",
 		author    = "GoogleFrog",
 		date      = "11 September 2016",
 		license   = "GNU LGPL, v2.1 or later",
@@ -16,6 +16,82 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Initialization
+
+local function MakeQueueControl(parentControl, queueName, queueDescription)
+	local Configuration = WG.Chobby.Configuration
+	
+	local btnLeave, btnJoin
+	
+	btnJoin = Button:New {
+		x = 0,
+		y = 0,
+		width = 80,
+		bottom = 0,
+		caption = i18n("join"),
+		font = Configuration:GetFont(3),
+		classname = "option_button",
+		OnClick = {
+			function(obj)
+				WG.LibLobby.lobby:JoinMatchMaking(queueName)
+				obj:SetVisibility(false)
+				btnLeave:SetVisibility(true)
+			end
+		},
+		parent = parentControl
+	}
+	
+	btnLeave = Button:New {
+		x = 0,
+		y = 0,
+		width = 80,
+		bottom = 0,
+		caption = i18n("leave"),
+		font = Configuration:GetFont(3),
+		classname = "action_button",
+		OnClick = {
+			function(obj)
+				WG.LibLobby.lobby:LeaveMatchMaking(queueName)
+				obj:SetVisibility(false)
+				btnJoin:SetVisibility(true)
+			end
+		},
+		parent = parentControl
+	}
+	btnLeave:SetVisibility(false)
+	
+	local lblTitle = TextBox:New {
+		x = 90,
+		y = 10,
+		width = 120,
+		bottom = 0,
+		fontsize = Configuration:GetFont(3).size,
+		text = queueName,
+		parent = parentControl
+	}
+	
+	local lblDescription = TextBox:New {
+		x = 180,
+		y = 15,
+		width = 120,
+		right = 5,
+		align = "bottom",
+		bottom = 0,
+		fontsize = Configuration:GetFont(1).size,
+		text = queueDescription,
+		parent = parentControl
+	}
+	
+	local externalFunctionsAndData = {}
+	
+	externalFunctionsAndData.inQueue = false
+	
+	function externalFunctionsAndData.SetInQueue(inQueue)
+		btnJoin:SetVisibility(not inQueue)
+		btnLeave:SetVisibility(inQueue)
+	end
+	
+	return externalFunctionsAndData
+end
 
 local function InitializeControls(window)
 	local Configuration = WG.Chobby.Configuration
@@ -51,36 +127,32 @@ local function InitializeControls(window)
 		x = 5,
 		right = 5,
 		y = 55,
-		bottom = 250,
+		height = 200,
 		borderColor = {0,0,0,0},
 		horizontalScrollbar = false,
 		parent = window
 	}
+	
 		
 	local queues = 0
-	local tickedQueues = {}
+	local queueHolders = {}
 	local function AddQueue(_, queueName, queueDescription)
 		if listPanel:GetChildByName(queueName) then
 			return
 		end
 	
-		local newQueue = Checkbox:New {
-			name = queueName,
-			x = 60,
-			width = 220,
-			y = queues*35 + 10,
-			height = 40,
-			boxalign = "right",
-			boxsize = 20,
-			caption = queueName,
-			tooltip = queueDescription,
-			checked = false,
-			font = WG.Chobby.Configuration:GetFont(2),
-			OnChange = {function (obj, newState)
-				tickedQueues[queueName] = newState or nil
-			end},
+		local queueHolder = Control:New {
+			x = 10,
+			y = queues*50 + 20,
+			right = 0,
+			height = 35,
+			caption = "", -- Status Window
 			parent = listPanel,
+			resizable = false,
+			draggable = false,
+			padding = {0, 0, 0, 0},
 		}
+		queueHolders[queueName] = MakeQueueControl(queueHolder, queueName, queueDescription)
 		queues = queues + 1
 	end
 	
@@ -89,34 +161,22 @@ local function InitializeControls(window)
 		AddQueue(_, data.name, data.description)
 	end
 	
-	lobby:AddListener("OnQueueOpened", AddQueue)
+	local function UpdateQueueStatus(listener, inMatchMaking, joinedQueueList)
+		for i = 1, #joinedQueueList do
+			local queueName = joinedQueueList[i]
+			if queueHolders[queueName] then
+				queueHolders[queueName].inQueue = true
+			end
+		end
 		
-	local function SendMatchmakingRequest()
-		local tickedQueueList = {}
-		for name, _ in pairs(tickedQueues) do
-			tickedQueueList[#tickedQueueList + 1] = name
+		for name, queueHolder in pairs(queueHolders) do
+			queueHolder.SetInQueue(queueHolder.inQueue)
+			queueHolder.inQueue = false
 		end
-		if #tickedQueueList == 0 then
-			return
-		end
-		WG.LibLobby.lobby:JoinMatchmaking(tickedQueueList)
 	end
 	
-	local btnStartSearch = Button:New {
-		x = 7,
-		bottom = 200,
-		width = 80,
-		height = 45,
-		caption = i18n("start"),
-		font = Configuration:GetFont(3),
-		classname = "negative_button",
-		OnClick = {
-			function()
-				SendMatchmakingRequest()
-			end
-		},
-		parent = window
-	}
+	lobby:AddListener("OnQueueOpened", AddQueue)
+	lobby:AddListener("OnMatchMakerStatus", UpdateQueueStatus)
 end
 
 --------------------------------------------------------------------------------
