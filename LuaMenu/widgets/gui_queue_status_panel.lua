@@ -90,6 +90,7 @@ end
 
 local function PopupReadyCheckWindow(_, required, text)
 	local lobby = WG.LibLobby.lobby
+	local readyWindow
 	
 	local function AcceptFunc()
 		lobby:AcceptMatchmakingMatch()
@@ -106,7 +107,7 @@ local function PopupReadyCheckWindow(_, required, text)
 		font = WG.Chobby.Configuration:GetFont(2),
 	}
 	
-	local readyWindow = Window:New {
+	readyWindow = Window:New {
 		caption = "",
 		name = "readyWindow",
 		parent = WG.Chobby.lobbyInterfaceHolder,
@@ -134,7 +135,7 @@ local function PopupReadyCheckWindow(_, required, text)
 		}
 	}
 	
-	local popupHolder = PriorityPopup(readyWindow, CancelFunc, AcceptFunc)
+	local popupHolder = WG.Chobby.PriorityPopup(readyWindow, CancelFunc, AcceptFunc)
 end
 
 --------------------------------------------------------------------------------
