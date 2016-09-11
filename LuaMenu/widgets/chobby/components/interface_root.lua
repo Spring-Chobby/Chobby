@@ -380,7 +380,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		{name = "downloads", control = WG.DownloadWindow.GetControl()},
 	}
 
-	local queueListWindow = WG.QueueListWindow.GetControl()
+	local queueListWindow = QueueListWindow()
 	local battleListWindow = BattleListWindow()
 
 	local submenus = {
@@ -392,7 +392,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			name = "multiplayer",
 			entryCheck = WG.MultiplayerEntryPopup,
 			tabs = {
-				{name = "matchmaking", control = queueListWindow},
+				{name = "matchmaking", control = queueListWindow.window},
 				{name = "serverList", control = battleListWindow.window},
 			},
 			cleanupFunction = CleanMultiplayerState
@@ -401,7 +401,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local battleStatusTabControls = {
 		myBattle = WG.BattleStatusPanel.GetControl,
-		myQueue = WG.QueueStatusPanel.GetTabControl,
+		--myQueue = WG.QueueStatusPanel.GetTabControl,
 	}
 
 	local battleStatusPanelHandler = GetTabPanelHandler(

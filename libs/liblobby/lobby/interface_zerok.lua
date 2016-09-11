@@ -393,9 +393,6 @@ function Interface:JoinMatchmaking(queueNamePossiblyList)
 	self.joinedQueues = self.joinedQueues or {}
 	self.joinedQueueList = self.joinedQueueList or {}
 	
-	Spring.Utilities.TableEcho(self.joinedQueues, "self.joinedQueues")
-	Spring.Utilities.TableEcho(self.joinedQueueList, "self.joinedQueueList")
-	
 	if type(queueNamePossiblyList) == "table" then
 		for i = 1, #queueNamePossiblyList do
 			local queueName = queueNamePossiblyList[i]
@@ -932,7 +929,7 @@ function Interface:_MatchMakerSetup(data)
 	self.queues = {}
 	for i = 1, #queues do
 		local queue = queues[i]
-		self:_OnQueueOpened(queue.Name, queue.Description, queue.Maps, queue.MaxPartySize)
+		self:_OnQueueOpened(queue.Name, queue.Description, queue.Maps, queue.MaxPartySize, {"Zero-K v1.4.9.1"})
 	end
 end
 Interface.jsonCommands["MatchMakerSetup"] = Interface._MatchMakerSetup

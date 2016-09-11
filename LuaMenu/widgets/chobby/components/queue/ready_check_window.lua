@@ -1,7 +1,7 @@
 ReadyCheckWindow = LCS.class{}
 
-function ReadyCheckWindow:init(queue, responseTime, queueWindow)	
-	self.queue = queue
+function ReadyCheckWindow:init(queueName, responseTime, queueWindow)	
+	self.queueName = queueName
 	self.responseTime = responseTime
 	self.queueWindow = queueWindow
 
@@ -75,7 +75,7 @@ function ReadyCheckWindow:init(queue, responseTime, queueWindow)
 	local sw, sh = Spring.GetWindowGeometry()
 	local w, h = 350, 200
 	self.window = Window:New {
-		caption = queue.title,
+		caption = queueName,
 		x = math.floor((sw - w) / 2),
 		y = math.floor(math.max(0, (sh) / 2 - h)),
 		width = w,
@@ -143,7 +143,7 @@ function ReadyCheckWindow:SendResponse(response, noResponseTime)
 		responseTime = math.floor(self.currentTime - self.startTime)
 	end
 	self.sentResponse = true	
-	lobby:ReadyCheckResponse(self.queue.name, response, responseTime)
+	lobby:ReadyCheckResponse(self.queueName, response, responseTime)
 
 	-- hide buttons
 	self.btnYes:Hide()

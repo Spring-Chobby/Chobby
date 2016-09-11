@@ -199,7 +199,7 @@ function widget:Initialize()
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
 	WG.QueueStatusPanel = QueueStatusPanel
-	WG.Delay(DelayedInitialize, 1)
+	--WG.Delay(DelayedInitialize, 1)
 end
 
 --------------------------------------------------------------------------------
