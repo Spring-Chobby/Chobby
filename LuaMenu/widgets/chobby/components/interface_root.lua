@@ -38,8 +38,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local padding = 0
 
-	local statusButtonWidth = 370
-	local statusButtonWidthSmall = 310
+	local statusButtonWidth = 340
+	local statusButtonWidthSmall = 290
 	
 	local topBarHeight = 50
 
@@ -150,6 +150,19 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		right = 0,
 		height = titleHeight,
 		name = "holder_status",
+		caption = "", -- Status Window
+		parent = lobbyInterfaceHolder,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+	}
+	
+	local holder_matchmaking = Panel:New {
+		x = titleWidth,
+		y = 0,
+		right = 0,
+		height = titleHeight,
+		name = "holder_matchmaking",
 		caption = "", -- Status Window
 		parent = lobbyInterfaceHolder,
 		resizable = false,
@@ -764,12 +777,56 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-------------------------------------------------------------------
 	-- External Functions
 	-------------------------------------------------------------------
+	function externalFunctions.UpdateMatchmakingHolderPosition()
+		local screenWidth, screenHeight = Spring.GetViewGeometry()
+		
+		local battleShown = (battleStatusPanelHandler.GetTabByName("myBattle") and true) or false
+		
+		local xPos, yPos, width, height
+		if doublePanelMode then
+			width = screenWidth/4 - 20
+			height = titleHeight - panelButtonsHeight - 5
+			yPos = 0
+			
+			local middlePad
+			if screenWidth < 1366 then
+				middlePad = 0
+			elseif screenWidth < 1650 then
+				middlePad = 10
+			else
+				middlePad = 20
+			end
+			
+			if battleShown then
+				xPos = (100 - panelWidthRel)*screenWidth/100 + middlePad
+			else
+				xPos = (100 - panelWidthRel)*screenWidth/100 - middlePad - width
+			end
+		else
+			width = 256
+			height = titleHeightSmall - statusWindowGapSmall - 3
+			yPos = 4
+			
+			xPos = (screenWidth - width)/2
+			if battleShown then
+			local leftBound = mainButtonsWidthSmall + statusButtonWidthSmall + 15
+				if xPos < leftBound then
+					xPos = leftBound
+				end
+			end
+		end
+	
+		holder_matchmaking:SetPos(xPos, yPos, width, height)
+	end
+	
 	function externalFunctions.ViewResize(screenWidth, screenHeight)
 		if autodetectDoublePanel then
 			local newDoublePanel = minScreenWidth <= screenWidth
 			UpdateDoublePanel(newDoublePanel)
 		end
 		UpdatePadding(screenWidth, screenHeight)
+		
+		externalFunctions.UpdateMatchmakingHolderPosition()
 	end
 
 	function externalFunctions.SetPanelDisplayMode(newAutodetectDoublePanel, newDoublePanel)

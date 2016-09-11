@@ -136,7 +136,7 @@ local function GetBattleInfoHolder(parent, battleID)
 			imPlayerStatus:SetPos(45, 17, 17, 17)
 
 			lblPlayers.font.size = Configuration:GetFont(2).size
-			lblPlayers:SetPos(160, 18)
+			lblPlayers:SetPos(152, 18)
 
 			playersPrefix = PLAYER_PREFIX_SMALL
 		else
