@@ -51,6 +51,7 @@ return {
 		multiplayer = "Multiplayer",
 		["exit"] = "Exit",
 		matchmaking = "Matchmaking",
+		finding_match = "Finding Match",
 		play_normal_multiplayer_game = "Play a normal multiplayer game",
 		quick_start = "Quick Start",
 		custom = "Custom",

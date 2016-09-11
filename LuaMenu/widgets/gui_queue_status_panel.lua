@@ -21,22 +21,52 @@ local function InitializeControls(parentControl)
 	local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
 	local lobby = WG.LibLobby.lobby
 
-	local lblQueue = Label:New {
-		name = "lblQueue",
-		x = 14,
-		width = 85,
-		y = 27,
-		height = 20,
-		align = "left",
-		valign = "center",
-		caption = "Finding match",
+	local queueButtonHolder = Control:New {
+		name = "findingMatch",
+		x = 4,
+		right = "51%",
+		y = 4,
+		bottom = 4,
+		caption = "", -- Battle and MM Status Window
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
 		parent = parentControl,
-		font = WG.Chobby.Configuration:GetFont(3),
 	}
+	
+	
+	local queueProgressWrapper = Control:New {
+		x = 0,
+		y = 0,
+		width = "100%",
+		height = "100%",
+		resizable = false,
+		padding = {0, 0, 0, 0},
+
+		--OnParent = {
+		--	function(obj)
+		--		if obj:IsEmpty() then
+		--			wrapperControl = obj
+        --
+		--			local battleWindow = InitializeControls(battleID, battleLobby, 55)
+		--			if battleWindow then
+		--				obj:AddChild(battleWindow)
+		--			end
+		--		end
+		--	end
+		--},
+		OnHide = {
+			function(obj)
+				--tabPanel.RemoveTab("myBattle", true)
+			end
+		}
+	}
+	
+	local queueButton = WG.Chobby.GetTabPanelHandler("queueButton", queueButtonHolder, WG.Chobby.interfaceRoot.GetContentPlace(), {{name = "finding_match", control = queueProgressWrapper}})
 	
 	local button = Button:New {
 		name = "cancel",
-		x = 180,
+		x = "51%",
 		right = 4,
 		y = 4,
 		bottom = 4,
@@ -51,7 +81,7 @@ local function InitializeControls(parentControl)
 		},
 		parent = parentControl,
 	}
-
+	
 	local function onMatchMakerStatus(listener, inMatchmaking, joinedQueues, statusText)
 		parentControl.tooltip = "queue_tooltip"
 	end
@@ -114,7 +144,7 @@ end
 local QueueStatusPanel = {}
 
 function QueueStatusPanel.GetTabControl()
-	local button = Window:New {
+	local button = Panel:New {
 		x = 0,
 		y = 0,
 		width = 340,
@@ -137,7 +167,7 @@ end
 function QueueStatusPanel.ShowQueueWindow()
 	local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
 	local lobby = WG.LibLobby.lobby
-
+	
 	if not tabPanel.GetTabByName("myQueue") then
 		tabPanel.AddTab("myQueue", "Queue", nil, false, 3)
 	end

@@ -38,7 +38,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local padding = 0
 
-	local statusButtonWidth = 420
+	local statusButtonWidth = 370
 	local statusButtonWidthSmall = 310
 	
 	local topBarHeight = 50

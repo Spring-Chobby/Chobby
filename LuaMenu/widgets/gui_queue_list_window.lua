@@ -60,7 +60,12 @@ local function InitializeControls(window)
 	local queues = 0
 	local tickedQueues = {}
 	local function AddQueue(_, queueName, queueDescription)
+		if listPanel:GetChildByName(queueName) then
+			return
+		end
+	
 		local newQueue = Checkbox:New {
+			name = queueName,
 			x = 60,
 			width = 220,
 			y = queues*35 + 10,
