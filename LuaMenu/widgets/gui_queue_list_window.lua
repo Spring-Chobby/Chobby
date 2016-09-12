@@ -161,9 +161,11 @@ local function InitializeControls(window)
 		AddQueue(_, data.name, data.description)
 	end
 	
-	local function UpdateQueueStatus(listener, inMatchMaking, joinedQueueList)
+	local function UpdateQueueStatus(listener, inMatchMaking, joinedQueueList, queueCounts, currentEloWidth, joinedTime)
+		local peopleInCommonQueues = 0
 		for i = 1, #joinedQueueList do
 			local queueName = joinedQueueList[i]
+			peopleInCommonQueues = peopleInCommonQueues + ((queueCounts and queueCounts[queueName]) or 0)
 			if queueHolders[queueName] then
 				queueHolders[queueName].inQueue = true
 			end

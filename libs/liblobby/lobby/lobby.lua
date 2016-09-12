@@ -868,7 +868,7 @@ function Lobby:_OnQueueClosed(name)
 	self:_CallListeners("OnQueueClosed", name)
 end
 
-function Lobby:_OnMatchMakerStatus(inMatchMaking, joinedQueueList, statusText)
+function Lobby:_OnMatchMakerStatus(inMatchMaking, joinedQueueList, queueCounts, currentEloWidth, joinedTime)
 	if inMatchMaking then
 		self.joinedQueueList = joinedQueueList
 		self.joinedQueues = {}
@@ -880,11 +880,19 @@ function Lobby:_OnMatchMakerStatus(inMatchMaking, joinedQueueList, statusText)
 		self.joinedQueueList = nil
 	end
 	
-	self:_CallListeners("OnMatchMakerStatus", inMatchMaking, joinedQueueList, statusText)
+	self:_CallListeners("OnMatchMakerStatus", inMatchMaking, joinedQueueList, queueCounts, currentEloWidth, joinedTime)
 end
 
-function Lobby:_OnMatchMakerReadyCheck(responseRequired, readyText, secondsRemaining)
-	self:_CallListeners("OnMatchMakerReadyCheck", responseRequired, readyText, secondsRemaining)
+function Lobby:_OnMatchMakerReadyCheck(secondsRemaining)
+	self:_CallListeners("OnMatchMakerReadyCheck", secondsRemaining)
+end
+
+function Lobby:_OnMatchMakerReadyUpdate(readyAccepted, likelyToPlay, queueReadyCounts)
+	self:_CallListeners("OnMatchMakerReadyUpdate", readyAccepted, likelyToPlay, queueReadyCounts)
+end
+
+function Lobby:_OnMatchMakerReadyResult(isBattleStarting, areYouBanned)
+	self:_CallListeners("OnMatchMakerReadyResult", isBattleStarting, areYouBanned)
 end
 
 ------------------------

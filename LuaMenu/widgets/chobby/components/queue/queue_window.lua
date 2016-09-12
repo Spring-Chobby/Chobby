@@ -48,7 +48,7 @@ function QueueWindow:init(queueName)
 		OnDispose = { function() self:RemoveListeners() end },
 	}
 
-	self.onReadyCheck = function(listener, name, responseTime)
+	self.onReadyCheck = function(listener, responseTime)
 		if name == queueName then
 			self:HideWindow()
 			ReadyCheckWindow(queueName, responseTime, self.queueWindow)

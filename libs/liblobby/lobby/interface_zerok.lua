@@ -935,7 +935,7 @@ end
 Interface.jsonCommands["MatchMakerSetup"] = Interface._MatchMakerSetup
 
 function Interface:_MatchMakerStatus(data)
-	self:_OnMatchMakerStatus(data.MatchMakerEnabled, data.JoinedQueues, data.Text)
+	self:_OnMatchMakerStatus(data.MatchMakerEnabled, data.JoinedQueues, data.QueueCounts, data.CurrentEloWidth, data.JoinedTime)
 end
 Interface.jsonCommands["MatchMakerStatus"] = Interface._MatchMakerStatus
 
@@ -945,9 +945,20 @@ end
 Interface.jsonCommands["MatchMakerQueueRequestFailed"] = Interface._MatchMakerQueueRequestFailed
 
 function Interface:_AreYouReady(data)
-	self:_OnMatchMakerReadyCheck(data.NeedReadyResponse, data.Text, data.SecondsRemaining)
+	self:_OnMatchMakerReadyCheck(data.SecondsRemaining)
 end
 Interface.jsonCommands["AreYouReady"] = Interface._AreYouReady
+
+function Interface:_AreYouReadyUpdate(data)
+	self:_OnMatchMakerReadyUpdate(data.ReadyAccepted, data.LikelyToPlay, data.QueueReadyCounts)
+end
+Interface.jsonCommands["AreYouReadyUpdate"] = Interface._AreYouReadyUpdate
+
+function Interface:_AreYouReadyResult(data)
+	self:_OnMatchMakerReadyResult(data.IsBattleStarting, data.AreYouBanned)
+end
+Interface.jsonCommands["AreYouReadyResult"] = Interface.AreYouReadyResult
+
 
 -------------------
 -- Unimplemented --

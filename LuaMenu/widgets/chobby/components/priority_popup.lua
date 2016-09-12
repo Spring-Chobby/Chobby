@@ -1,6 +1,6 @@
 PriorityPopup = Component:extends{}
 
-function PriorityPopup:init(mainWindow, cancelFunction, acceptFunction)
+function PriorityPopup:init(mainWindow, cancelFunction, acceptFunction, parentControlOverride)
 	local sentTime
 	local startTime = os.clock()
 	
@@ -25,7 +25,7 @@ function PriorityPopup:init(mainWindow, cancelFunction, acceptFunction)
 		bottom = 0,
 		padding = {0,0,0,0},
 		margin = {0,0,0,0},
-		parent = WG.Chobby.lobbyInterfaceHolder,
+		parent = parentControlOverride or WG.Chobby.lobbyInterfaceHolder,
 		Draw = function()
 			if not sentTime then
 				local diff = os.clock() - startTime
