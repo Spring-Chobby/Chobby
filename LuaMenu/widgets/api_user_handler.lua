@@ -413,7 +413,7 @@ local function GetUserControls(userName, opts)
 		width = 19,
 		height = 19,
 		parent = userControls.mainControl,
-		keepAspect = true,
+		keepAspect = false,
 		file = GetUserRankImageName(userName, userControls),
 	}
 	offset = offset + 23
