@@ -15,6 +15,15 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Variables
+
+local requiredMaps = {}
+local requiredMapCount = 0
+
+local panelInterface
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Initialization
 
 local function MakeQueueControl(parentControl, queueName, queueDescription)
@@ -32,6 +41,11 @@ local function MakeQueueControl(parentControl, queueName, queueDescription)
 		classname = "option_button",
 		OnClick = {
 			function(obj)
+				if requiredMapCount ~= 0 then
+					WG.Chobby.InformationPopup("Map downloads must complete before you are able to join matchmaking.")
+					return
+				end
+			
 				WG.LibLobby.lobby:JoinMatchMaking(queueName)
 				obj:SetVisibility(false)
 				btnLeave:SetVisibility(true)
@@ -133,10 +147,19 @@ local function InitializeControls(window)
 		parent = window
 	}
 	
-		
+	local requirementText = TextBox:New {
+		x = 5,
+		right = 5,
+		y = 265,
+		height = 200,
+		fontsize = Configuration:GetFont(2).size,
+		text = "",
+		parent = window
+	}
+	
 	local queues = 0
 	local queueHolders = {}
-	local function AddQueue(_, queueName, queueDescription)
+	local function AddQueue(_, queueName, queueDescription, mapNames)
 		if listPanel:GetChildByName(queueName) then
 			return
 		end
@@ -158,7 +181,7 @@ local function InitializeControls(window)
 	
 	local possibleQueues = lobby:GetQueues()
 	for name, data in pairs(possibleQueues) do
-		AddQueue(_, data.name, data.description)
+		AddQueue(_, data.name, data.description, data.mapNames)
 	end
 	
 	local function UpdateQueueStatus(listener, inMatchMaking, joinedQueueList, queueCounts, currentEloWidth, joinedTime)
@@ -179,6 +202,27 @@ local function InitializeControls(window)
 	
 	lobby:AddListener("OnQueueOpened", AddQueue)
 	lobby:AddListener("OnMatchMakerStatus", UpdateQueueStatus)
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.UpdateRequirementText()
+		local newText = ""
+		local firstEntry = true
+		for name,_ in pairs(requiredMaps) do
+			if firstEntry then
+				newText = "Required maps: "
+			else
+				newText = newText .. ", "
+			end
+			firstEntry = false
+			newText = newText .. name
+		end
+		requirementText:SetText(newText)
+	end
+	
+	externalFunctions.UpdateRequirementText()
+	
+	return externalFunctions
 end
 
 --------------------------------------------------------------------------------
@@ -198,7 +242,7 @@ function QueueListWindow.GetControl()
 		OnParent = {
 			function(obj)
 				if obj:IsEmpty() then
-					InitializeControls(obj)
+					panelInterface = InitializeControls(obj)
 				end
 			end
 		},
@@ -210,10 +254,48 @@ end
 --------------------------------------------------------------------------------
 -- Widget Interface
 
+function widget:DownloadFinished()
+	for mapName,_ in pairs(requiredMaps) do
+		local haveMap = VFS.HasArchive(mapName)
+		if haveMap then
+			requiredMaps[mapName] = nil
+			requiredMapCount = requiredMapCount - 1
+		end
+	end
+	
+	if panelInterface then
+		panelInterface.UpdateRequirementText()
+	end
+end
+
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
+	local function AddQueue(_, queueName, queueDescription, mapNames)
+		Spring.Utilities.TableEcho(mapNames, "mapNames")
+		for i = 1, #mapNames do
+			local mapName = mapNames[i]
+			if not requiredMaps[mapName] then
+				local haveMap = VFS.HasArchive(mapName)
+				if not haveMap then
+					requiredMaps[mapName] = true
+					requiredMapCount = requiredMapCount + 1
+					
+					VFS.DownloadArchive(mapName, "map")
+				end
+			end
+		end
+		
+		Spring.Utilities.TableEcho(requiredMaps, "requiredMaps")
+		
+		if panelInterface then
+			panelInterface.UpdateRequirementText()
+		end
+	end
+	
+	WG.LibLobby.lobby:AddListener("OnQueueOpened", AddQueue)
+	
 	WG.QueueListWindow = QueueListWindow
 end
 
