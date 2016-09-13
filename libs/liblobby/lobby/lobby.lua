@@ -842,6 +842,10 @@ function Lobby:_OnSayPrivateEx(userName, message, sayTime)
 	self:_CallListeners("OnSayPrivateEx", userName, message, sayTime)
 end
 
+function Lobby:_OnSayServerMessage(message, sayTime)
+	self:_CallListeners("OnSayServerMessage", message, sayTime)
+end
+
 ------------------------
 -- MatchMaking commands
 ------------------------

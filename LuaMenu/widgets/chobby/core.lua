@@ -68,6 +68,18 @@ function Chobby:_Initialize()
 			)
 		end, 0.001)
 	end)
+	self:WrapCall(function()
+		WG.Delay(function()
+			lobby:AddListener("OnSayServerMessage", 
+				function(listener, text, timeSent)
+					Chotify:Post({
+						title = "Server",
+						body = text,
+					})
+				end
+			)
+		end, 0.001)
+	end)
 end
 
 function Chobby:GetRegisteredComponents()

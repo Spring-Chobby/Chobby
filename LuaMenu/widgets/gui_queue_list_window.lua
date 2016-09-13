@@ -273,7 +273,6 @@ function widget:Initialize()
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
 	local function AddQueue(_, queueName, queueDescription, mapNames)
-		Spring.Utilities.TableEcho(mapNames, "mapNames")
 		for i = 1, #mapNames do
 			local mapName = mapNames[i]
 			if not requiredMaps[mapName] then
@@ -286,8 +285,6 @@ function widget:Initialize()
 				end
 			end
 		end
-		
-		Spring.Utilities.TableEcho(requiredMaps, "requiredMaps")
 		
 		if panelInterface then
 			panelInterface.UpdateRequirementText()

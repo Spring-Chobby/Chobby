@@ -915,6 +915,7 @@ function Interface:_Say(data)
 		if data.Text == "Invalid password" then
 			self:_CallListeners("OnJoinBattleFailed", data.Text)
 		end
+		self:_OnSayServerMessage(data.Text, data.Time)
 	end
 end
 Interface.jsonCommands["Say"] = Interface._Say
