@@ -187,6 +187,19 @@ local function GetUserStatusImages(userName, isInBattle, userControl)
 	end
 end
 
+local function GetUserNameColor(userName, userControl)
+	local userInfo = userControl.lobby:GetUser(userName) or {}
+	if userControl.showModerator and userInfo.isAdmin then
+		return WG.Chobby.Configuration:GetModeratorColor()
+	end
+	if userControl.showFounder and userInfo.battleID then
+		local battle = lobby:GetBattle(userInfo.battleID)
+		if battle and battle.founder == userName then
+			return WG.Chobby.Configuration:GetFounderColor()
+		end
+	end
+end
+
 -- gets status name, image and color
 -- used for large user displays
 local function GetUserStatus(userName, isInBattle, userControl)
@@ -216,6 +229,11 @@ local function UpdateUserActivity(listener, userName)
 			data.imLevel.file = GetUserRankImageName(userName, data)
 			data.imLevel:Invalidate()
 
+			if data.showFounder then
+				data.tbName.font.color = GetUserNameColor(userName, data) or WG.Chobby.Configuration:GetUserNameColor()
+				data.tbName:Invalidate()
+			end
+			
 			if data.imStatusFirst then
 				local status1, status2 = GetUserStatusImages(userName, data.isInBattle, data)
 				data.imStatusFirst.file = status1
@@ -282,9 +300,13 @@ local function GetUserControls(userName, opts)
 	local offset             = opts.offset or 0
 	local offsetY            = opts.offsetY or 0
 	local height             = opts.height or 22
+	local showFounder    = opts.showFounder
+	local showModerator      = opts.showModerator
 
 	local userControls = reinitialize or {}
 
+	userControls.showFounder = showFounder
+	userControls.showModerator = showModerator
 	userControls.isInBattle = isInBattle
 	userControls.lobby = (isSingleplayer and WG.LibLobby.localLobby) or lobby
 	userControls.isSingleplayer = isSingleplayer
@@ -433,7 +455,7 @@ local function GetUserControls(userName, opts)
 		}
 		offset = offset + 23
 	end
-
+	
 	offset = offset + 1
 	userControls.tbName = TextBox:New {
 		name = "tbName",
@@ -449,7 +471,13 @@ local function GetUserControls(userName, opts)
 	local userNameStart = offset
 	local truncatedName = StringUtilities.TruncateStringIfRequiredAndDotDot(userName, userControls.tbName.font, maxNameLength and (maxNameLength - offset))
 	if truncatedName then
-		userControls.tbName:SetText(truncatedName)
+		userControls.tbName:SetText(nameColor .. truncatedName)
+	end
+	
+	local nameColor = GetUserNameColor(userName, userControls)
+	if nameColor then
+		userControls.tbName.font.color = nameColor
+		userControls.tbName:Invalidate()
 	end
 	offset = offset + userControls.tbName.font:GetTextWidth(userControls.tbName.text)
 
@@ -562,13 +590,17 @@ function userHandler.GetBattleUser(userName, isSingleplayer)
 	return _GetUser(battleUsers, userName, {
 		autoResize     = true,
 		isInBattle     = true,
+		showModerator  = true,
+		showFounder    = true,
 	})
 end
 
 function userHandler.GetTooltipUser(userName)
 	return _GetUser(tooltipUsers, userName, {
 		isInBattle     = true,
-		suppressSync    = true,
+		suppressSync   = true,
+		showModerator  = true,
+		showFounder    = true,
 	})
 end
 
@@ -583,6 +615,7 @@ end
 function userHandler.GetChannelUser(userName)
 	return _GetUser(channelUsers, userName, {
 		maxNameLength  = WG.Chobby.Configuration.chatMaxNameLength,
+		showModerator  = true,
 	})
 end
 

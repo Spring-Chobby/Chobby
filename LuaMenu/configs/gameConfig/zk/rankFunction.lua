@@ -3,7 +3,6 @@ local IMAGE_DIR          = LUA_DIRNAME .. "images/"
 
 local IMAGE_AUTOHOST     = IMAGE_DIR .. "ranks/robot.png"
 local IMAGE_PLAYER       = IMAGE_DIR .. "ranks/player.png"
-local IMAGE_MODERATOR    = IMAGE_DIR .. "ranks/moderator.png"
 
 local rankUnlocks = {5, 10, 20, 35, 50, 75, 100}
 local rankCount = #rankUnlocks
@@ -11,8 +10,6 @@ local rankCount = #rankUnlocks
 local function GetImageFunction(level, skill, isBot, isModerator)
 	if isBot then
 		return IMAGE_AUTOHOST
-	elseif isModerator then
-		return IMAGE_MODERATOR
 	elseif level and skill then
 		local levelBracket = 1
 		while levelBracket <= rankCount and rankUnlocks[levelBracket] <= level do

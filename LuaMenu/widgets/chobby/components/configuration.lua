@@ -29,6 +29,11 @@ function Configuration:init()
 	self.partialColor = "\255\190\210\50"
 	self.selectedColor = "\255\99\184\255"
 	self.meColor = "\255\0\190\190"
+	
+	self.moderatorColor = {0.68, 0.78, 1, 1}
+	self.founderColor = {0.7, 1, 0.65, 1}
+	self.userNameColor = {1, 1, 1, 1}
+	
 	self.buttonFocusColor = {0.54,0.72,1,0.3}
 	self.buttonSelectedColor = {0.54,0.72,1,0.6}--{1.0, 1.0, 1.0, 1.0}
 
@@ -180,6 +185,18 @@ end
 
 function Configuration:GetButtonFocusColor()
 	return self.buttonFocusColor
+end
+
+function Configuration:GetModeratorColor()
+	return self.moderatorColor
+end
+
+function Configuration:GetFounderColor()
+	return self.founderColor
+end
+
+function Configuration:GetUserNameColor()
+	return self.useNameColor
 end
 
 -- NOTE: this one is in opengl range [0,1]

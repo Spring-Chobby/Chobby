@@ -170,12 +170,18 @@ local function GetTooltipLine(parent, hasImage, fontSize, xOffset)
 		text = "",
 	}
 
-	function externalFunctions.Update(newPosition, newText, newImage)
+	function externalFunctions.Update(newPosition, newText, newImage, newColor)
 		if not textDisplay.visible then
 			textDisplay:Show()
 		end
 		textDisplay:SetText(newText)
 		textDisplay:SetPos(nil, newPosition)
+		
+		if newColor then
+			textDisplay.font.color = newColor
+			textDisplay:Invalidate()
+		end
+		
 		if hasImage then
 			if not imageDisplay.visible then
 				imageDisplay:Show()
@@ -637,7 +643,8 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 			userTooltip.moderator.Update(
 				offset,
 				"Moderator",
-				IMAGE_MODERATOR
+				IMAGE_MODERATOR,
+				Configuration:GetModeratorColor()
 			)
 		end
 		userTooltip.moderator.UpdatePosition(offset)
