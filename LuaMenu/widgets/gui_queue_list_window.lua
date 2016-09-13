@@ -147,10 +147,20 @@ local function InitializeControls(window)
 		parent = window
 	}
 	
+	local statusText = TextBox:New {
+		x = 5,
+		right = 5,
+		y = 270,
+		height = 200,
+		fontsize = Configuration:GetFont(2).size,
+		text = "",
+		parent = window
+	}
+	
 	local requirementText = TextBox:New {
 		x = 5,
 		right = 5,
-		y = 265,
+		y = 350,
 		height = 200,
 		fontsize = Configuration:GetFont(2).size,
 		text = "",
@@ -184,7 +194,7 @@ local function InitializeControls(window)
 		AddQueue(_, data.name, data.description, data.mapNames)
 	end
 	
-	local function UpdateQueueStatus(listener, inMatchMaking, joinedQueueList, queueCounts, currentEloWidth, joinedTime)
+	local function UpdateQueueStatus(listener, inMatchMaking, joinedQueueList, queueCounts, currentEloWidth, joinedTime, bannedTime)
 		local peopleInCommonQueues = 0
 		for i = 1, #joinedQueueList do
 			local queueName = joinedQueueList[i]
@@ -197,6 +207,10 @@ local function InitializeControls(window)
 		for name, queueHolder in pairs(queueHolders) do
 			queueHolder.SetInQueue(queueHolder.inQueue)
 			queueHolder.inQueue = false
+		end
+		
+		if bannedTime then
+			statusText:SetText("You are banned from matchmaking for " .. bannedTime)
 		end
 	end
 	

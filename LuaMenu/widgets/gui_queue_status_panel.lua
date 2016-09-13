@@ -228,7 +228,7 @@ local function CreateReadyCheckWindow(secondsRemaining)
 	
 	function externalFunctions.UpdateTimer()
 		local newTimeRemaining = secondsRemaining - math.ceil(Spring.DiffTimers(Spring.GetTimer(), startTimer))
-		if newTimeRemaining < -1 then
+		if newTimeRemaining < 0 then
 			DoDispose()
 		end
 		if not displayTimer then
@@ -241,9 +241,9 @@ local function CreateReadyCheckWindow(secondsRemaining)
 		statusLabel:SetCaption(((acceptRegistered and "Waiting for players ") or "Accept in ") .. timeRemaining .. "s")
 	end
 	
-	function externalFunctions.UpdatePlayerCount(queueReadyCounts)
+	function externalFunctions.UpdatePlayerCount(readyPlayers)
 		-- queueReadyCounts is not a useful number.
-		--playersAcceptedLabel:SetCaption("Players accepted: " .. queueReadyCounts)
+		playersAcceptedLabel:SetCaption("Players accepted: " .. readyPlayers)
 	end
 	
 	function externalFunctions.AcceptRegistered()
@@ -304,7 +304,7 @@ function QueueStatusPanel.GetControl()
 	queueStatusHandler = InitializeQueueStatusHandler(queuePanel)
 	
 	lobby:AddListener("OnMatchMakerStatus", 
-		function(listener, inMatchMaking, joinedQueueList, queueCounts, currentEloWidth, joinedTime)
+		function(listener, inMatchMaking, joinedQueueList, queueCounts, currentEloWidth, joinedTime, bannedTime)
 			findingMatch = inMatchMaking
 			
 			if inMatchMaking then
@@ -324,12 +324,12 @@ function QueueStatusPanel.GetControl()
 		end
 	end
 	
-	local function OnMatchMakerReadyUpdate(_, readyAccepted, likelyToPlay, queueReadyCounts)
+	local function OnMatchMakerReadyUpdate(_, readyAccepted, likelyToPlay, queueReadyCounts, battleSize, readyPlayers)
 		if readyAccepted then
 			readyCheckPopup.AcceptRegistered()
 		end
-		if queueReadyCounts then
-			readyCheckPopup.UpdatePlayerCount(queueReadyCounts)
+		if readyPlayers then
+			readyCheckPopup.UpdatePlayerCount(readyPlayers)
 		end
 	end
 	

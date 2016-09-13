@@ -634,6 +634,8 @@ end
 local function AddListeners()
 	lobby:AddListener("OnFriendList", UpdateUserActivityList)
 	lobby:AddListener("OnIgnoreList", UpdateUserActivityList)
+	
+	lobby:AddListener("OnUpdateUserStatus", UpdateUserActivity)
 
 	lobby:AddListener("OnFriend", UpdateUserActivity)
 	lobby:AddListener("OnUnfriend", UpdateUserActivity)
