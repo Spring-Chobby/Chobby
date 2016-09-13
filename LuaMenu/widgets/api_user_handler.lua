@@ -470,10 +470,6 @@ local function GetUserControls(userName, opts)
 	}
 	local userNameStart = offset
 	local truncatedName = StringUtilities.TruncateStringIfRequiredAndDotDot(userName, userControls.tbName.font, maxNameLength and (maxNameLength - offset))
-	if truncatedName then
-		userControls.tbName:SetText(nameColor .. truncatedName)
-	end
-	
 	local nameColor = GetUserNameColor(userName, userControls)
 	if nameColor then
 		userControls.tbName.font.color = nameColor
