@@ -1404,7 +1404,15 @@ function BattleRoomWindow.LeaveBattle(onlyMultiplayer, onlySingleplayer)
 	if onlyMultiplayer and battleLobby.name == "singleplayer" then
 		return
 	end
-
+	
+	if onlySingleplayer and battleLobby.name == "singleplayer" then
+		if window then
+			window:Dispose()
+			window = nil
+		end
+		return
+	end
+	
 	battleLobby:LeaveBattle()
 	onBattleClosed(_, battleLobby:GetMyBattleID())
 

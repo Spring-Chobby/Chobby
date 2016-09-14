@@ -934,7 +934,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			local newShortname = Configuration.shortnameMap[value]
 			local replacementTabs = Configuration:GetGameConfig(false, "singleplayerMenu.lua", newShortname) or {}
 
-			mainWindowHandler.SetBackAtMainMenu()
+			WG.BattleRoomWindow.LeaveBattle(false, true)
 			mainWindowHandler.ReplaceSubmenu(1, replacementTabs)
 		end
 	end
