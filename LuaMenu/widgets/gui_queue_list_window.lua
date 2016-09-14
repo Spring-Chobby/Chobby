@@ -104,6 +104,11 @@ local function MakeQueueControl(parentControl, queueName, queueDescription)
 		btnLeave:SetVisibility(inQueue)
 	end
 	
+	function externalFunctionsAndData.UpdateQueueInformation(newName, newDescription)
+		lblTitle:SetText(newName)
+		lblDescription:SetText(newDescription)
+	end
+	
 	return externalFunctionsAndData
 end
 
@@ -170,7 +175,8 @@ local function InitializeControls(window)
 	local queues = 0
 	local queueHolders = {}
 	local function AddQueue(_, queueName, queueDescription, mapNames)
-		if listPanel:GetChildByName(queueName) then
+		if queueHolders[queueName] then
+			queueHolders[queueName].UpdateQueueInformation(queueName, queueDescription)
 			return
 		end
 	

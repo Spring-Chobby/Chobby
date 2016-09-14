@@ -1388,7 +1388,7 @@ function BattleRoomWindow.SetSingleplayerGame(ToggleShowFunc, battleroomObj, tab
 	if config.singleplayer_mode == 1 then
 		WG.Chobby.GameListWindow(SetGameFail, SetGameSucess)
 	elseif config.singleplayer_mode == 2 then
-		singleplayerGame = "Zero-K v1.4.7.1"
+		singleplayerGame = "Zero-K v1.4.9.1"
 		ToggleShowFunc(battleroomObj, tabData)
 	elseif config.singleplayer_mode == 3 then
 		singleplayerGame = "Zero-K $VERSION"
@@ -1416,8 +1416,6 @@ end
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-
-	MaybeDownloadArchive("Zero-K v1.4.7.1", "game")
 
 	WG.BattleRoomWindow = BattleRoomWindow
 end
