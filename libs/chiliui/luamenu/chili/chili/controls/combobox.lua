@@ -59,9 +59,12 @@ function ComboBox:Select(itemIdx)
     self:Invalidate()
   elseif (type(itemIdx)=="string") then
     self:CallListeners(self.OnSelectName, itemIdx, true)
-    self:Invalidate()
+    for i = 1, #self.items do
+      if self.items[i] == itemIdx then
+        self:Select(i)
+      end
+    end
   end
-  --FIXME add Select(name)
 end
 
 function ComboBox:_CloseWindow()

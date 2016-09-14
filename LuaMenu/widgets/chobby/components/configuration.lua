@@ -94,6 +94,8 @@ function Configuration:init()
 	self.countryShortnames = VFS.Include(LUA_DIRNAME .. "configs/countryShortname.lua")
 
 	self.game_settings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings3.lua")
+	local settingsFile, settingsDefaults = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/settingsMenu.lua")
+	self.settingsMenuValues = settingsDefaults
 end
 
 ---------------------------------------------------------------------------------
@@ -128,6 +130,7 @@ function Configuration:GetConfigData()
 		useSpringRestart = self.useSpringRestart,
 		displayBots = self.displayBots,
 		displayBadEngines = self.displayBadEngines,
+		settingsMenuValues = self.settingsMenuValues,
 	}
 end
 
