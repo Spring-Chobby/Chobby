@@ -57,7 +57,7 @@ local emptyTeamIndex = 0
 
 local haveMapAndGame = false
 
-local function UpdateArchiveStatus()
+local function UpdateArchiveStatus(updateSync)
 	if not battleLobby:GetMyBattleID() then
 		return
 	end
@@ -92,6 +92,12 @@ local function UpdateArchiveStatus()
 	end
 	
 	haveMapAndGame = (haveGame and haveMap)
+	
+	if updateSync and battleLobby then
+		battleLobby:SetBattleStatus({
+			sync = (haveMapAndGame and 1) or 2, -- 0 = unknown, 1 = synced, 2 = unsynced
+		})
+	end
 end
 
 local function MaybeDownloadArchive(archiveName, archiveType)
@@ -109,13 +115,7 @@ local function MaybeDownloadMap(battle)
 end
 
 function widget:DownloadFinished()
-	UpdateArchiveStatus()
-
-	if battleLobby then
-		battleLobby:SetBattleStatus({
-			sync = (haveMapAndGame and 1) or 2, -- 0 = unknown, 1 = synced, 2 = unsynced
-		})
-	end
+	UpdateArchiveStatus(true)
 end
 
 local OpenNewTeam
@@ -470,12 +470,12 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 			imMinimap:Invalidate()
 
 			-- TODO: Bit lazy here, seeing as we only need to update the map
-			UpdateArchiveStatus()
+			UpdateArchiveStatus(true)
 			MaybeDownloadMap(battle)
 		end
 		
 		if gameName then
-			UpdateArchiveStatus()
+			UpdateArchiveStatus(true)
 			MaybeDownloadGame(battle)
 		end
 		
@@ -521,7 +521,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 
 	MaybeDownloadGame(battle)
 	MaybeDownloadMap(battle)
-	UpdateArchiveStatus()
+	UpdateArchiveStatus(true)
 end
 
 local function AddTeamButtons(parent, offX, joinFunc, aiFunc, unjoinable, disallowBots)
