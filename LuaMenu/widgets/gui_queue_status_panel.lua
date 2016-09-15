@@ -176,7 +176,10 @@ local function CreateReadyCheckWindow(secondsRemaining)
 	local timeRemaining = secondsRemaining
 	
 	local function DoDispose()
-		readyCheckWindow:Dispose()
+		if readyCheckWindow then
+			readyCheckWindow:Dispose()
+			readyCheckWindow = nil	
+		end
 	end
 	
 	local function CancelFunc()

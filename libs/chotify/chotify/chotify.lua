@@ -18,6 +18,9 @@ function Chotify:CloseNotification(id)
         return
     end
     local window = notification.window
+	if not window then
+		return
+	end
     ChiliFX:AddFadeEffect({
         obj = window, 
         time = 0.2,
