@@ -39,6 +39,8 @@ local newGameCampaignButtons = {}
 local newGameCampaignDetails = {}	-- panel, stackPanel, titleLabel, authorLabel, descTextBox
 local saveScroll, loadScroll, saveDescEdit
 local saveLoadControls = {}	-- {id, container, titleLabel, descTextBox, image (someday), isNew}
+local codexText, codexImage, codexTree, codexTreeScroll
+local codexTreeControls = {}	-- {[entry ID] = Button}
 local starmapWindow, starmapBackgroundHolder, starmapBackground, starmapBackground2, starmapPlanetImage, starmapInfoPanel
 
 local timer = Spring.GetTimer()
@@ -68,6 +70,8 @@ local gamedata = {
 	mapEnabled = false,
 	completedMissions = {},
 	unlockedScenes = {},
+	codexUnlocked = {},
+	codexRead = {},
 	vars = {},
 }
 
@@ -78,6 +82,7 @@ local currentCampaignID = nil
 local planetDefs = {}
 local planetDefsByID = {}
 local missionDefs = {}
+local codexEntries = {}
 
 local saves = {}
 local savesOrdered = {}
@@ -108,14 +113,62 @@ local function ResetGamedata()
 		mapEnabled = false,
 		completedMissions = {},
 		unlockedScenes = {},
+		codexUnlocked = {},
+		codexRead = {},
 		vars = {},
 	}
 	currentCampaignID = nil
 	planetDefs = {}
 	planetDefsByID = {}
 	missionDefs = {}
+	codexEntries = {}
 	
 	SetControlGreyout(startButton, true)
+end
+
+local function UpdateCodexEntry(entryID)
+	gamedata.codexRead[entryID] = true
+	local entry = codexEntries[entryID]
+	codexText:SetText(entry.text)
+end
+
+local function LoadCodexEntries()
+	local nodes = {}
+	local categories = {}
+	for id, entry in pairs(codexEntries) do
+		categories[entry.category] = categories[entry.category] or {}
+		local cat = categories[entry.category]
+		cat[#cat + 1] = id
+	end
+	for catID, cat in pairs(categories) do
+		local node = {catID, {}}
+		local subnode = node[2]
+		for i=1,#cat do
+			local entryID = cat[i]
+			local entry = codexEntries[entryID]
+			local button = Button:New{
+				caption = entry.name,
+				x = 16,
+				backgroundColor = {0,0,0,0},
+				borderColor = {0,0,0,0},
+				OnClick = { function()
+					UpdateCodexEntry(entryID)
+				end}
+			}
+			subnode[#subnode + 1] = button
+			--Spring.Echo(catID, entry.name)
+		end
+		nodes[#nodes + 1] = node
+	end
+	if codexTree then
+		codexTree:Dispose()	
+	end
+	codexTree = Chili.TreeView:New{
+		parent = codexTreeScroll,
+		name = 'chobby_campaign_codexTree',
+		nodes = nodes,	--{"wtf", "lololol", {"omg"}},
+		--font = {size = 16}
+	}
 end
 
 local function LoadCampaignDefs()
@@ -142,11 +195,14 @@ local function LoadCampaign(campaignID)
 	local success, err = pcall(function()
 		local planetDefPath = def.dir .. "planetdefs.lua"
 		local missionDefPath = def.dir .. "missiondefs.lua"
+		local codexDefPath = def.dir .. "codex.lua"
 		planetDefs = VFS.FileExists(planetDefPath) and VFS.Include(planetDefPath) or {}
 		missionDefs = VFS.FileExists(missionDefPath) and VFS.Include(missionDefPath) or {}
+		codexEntries = VFS.FileExists(codexDefPath) and VFS.Include(codexDefPath) or {}
 		for i=1,#planetDefs do
 			planetDefsByID[planetDefs[i].id] = planetDefs[i]	
 		end
+		LoadCodexEntries()
 		if def.startFunction then
 			def.startFunction()
 		end
@@ -643,7 +699,7 @@ local function LoadGame(saveData)
 		Spring.CreateDir(SAVE_DIR)
 		currentCampaignID = saveData.campaignID
 		LoadCampaign(currentCampaignID)
-		gamedata = Spring.Utilities.CopyTable(saveData)
+		gamedata = Spring.Utilities.MergeTable(saveData, gamedata)
 		gamedata.id = nil
 		if saveData.description then
 			saveDescEdit:SetText(saveData.description)
@@ -1080,7 +1136,7 @@ local function InitializeIntermissionControls()
 				y = 24,
 				x = 8,
 				font = {
-					size = 36,
+					size = 40,
 					outlineWidth = 12,
 					outlineHeight = 12,
 					outline = true,
@@ -1133,6 +1189,16 @@ local function InitializeIntermissionControls()
 						font = {size = 20},
 						OnClick = { function()
 							OpenSaveOrLoadMenu(false)
+						end}
+					},
+					Button:New {
+						name = 'chobby_campaign_intermissionCodex',
+						width = 160,
+						height = 48,
+						caption = i18n("codex"),
+						font = {size = 20},
+						OnClick = { function()
+							SwitchToScreen("codex")
 						end}
 					},
 					Button:New {
@@ -1268,6 +1334,96 @@ local function InitializeSaveLoadWindow()
 	}
 end
 
+local function InitializeCodexControls()
+	local codexTextScroll = ScrollPanel:New{
+		name = 'chobby_campaign_codexTextScroll',
+		x = 4,
+		y = "40%",
+		bottom = 4,
+		right = 4,
+		orientation = "vertical",
+		children = {}
+	}
+	codexText = TextBox:New {
+		name = 'chobby_campaign_codexText',
+		parent = codexTextScroll,
+		x = 0,
+		y = 0,
+		width = "100%",
+		height = "100%",
+		text = "",
+		font = {size = 16},
+	}
+	
+	local codexImagePanel = Panel:New{
+		name = 'chobby_campaign_codexImagePanel',
+		y = 64,
+		right = 4,
+		height = 72,
+		width = 72,
+	}
+	codexImage = Image:New{
+		parent = codexImagePanel,
+		name = 'chobby_campaign_codexImage',
+		x = 0,
+		y = 0,
+		width = "100%",
+		height = "100%",
+	}
+	
+	codexTreeScroll = ScrollPanel:New{
+		name = 'chobby_campaign_codexTreeScroll',
+		x = 4,
+		y = 64,
+		bottom = "65%",
+		right = "50%",
+		orientation = "vertical",
+		children = {}
+	}
+	codexTree = Chili.TreeView:New{
+		parent = codexTreeScroll,
+		name = 'chobby_campaign_codexTree',
+	}
+	
+	screens.codex = Panel:New {
+		parent = window,
+		name = 'chobby_campaign_codex',
+		x = 0,
+		y = 0,
+		width = "100%",
+		height = "100%",
+		backgroundColor = {0, 0, 0, 0},
+		children = {
+			Label:New {
+				name = 'chobby_campaign_codexTitle',
+				caption = i18n("codex"),
+				x = 4,
+				y = 8,
+				font = {
+					size = 40,
+					outlineWidth = 10,
+					outlineHeight = 10,
+					outline = true,
+					outlineColor = {0.54,0.72,1,0.3},
+					autoOutlineColor = false,
+				}
+			},
+			Button:New {
+				name = 'chobby_campaign_codexBack',
+				width = 60,
+				height = 36,
+				y = 4,
+				right = 4,
+				caption = "Back",
+				OnClick = {function() SwitchToScreen(lastScreenID) end}
+			},
+			codexImagePanel,
+			codexTextScroll,
+			codexTreeScroll,
+		}
+	}
+end
+
 local function InitializeControls()
 	Chili = WG.Chili
 	Window = Chili.Window
@@ -1293,6 +1449,7 @@ local function InitializeControls()
 	InitializeNewGameControls()	
 	InitializeIntermissionControls()
 	InitializeSaveLoadWindow()
+	InitializeCodexControls()
 	SwitchToScreen("main")
 end
 

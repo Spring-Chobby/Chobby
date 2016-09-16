@@ -141,7 +141,7 @@ return {
 		save_new_game = "Save a new game",
 		save_overwrite_confirm = "Are you sure you want to overwrite this save?",
 		autosave = "Autosave",
-		load = "Load",
+		["load"] = "Load",
 		load_caps = "LOAD",
 		load_confirm = "Loading will lose any unsaved progress. Are you sure?",
 		delete = "Delete",
@@ -150,6 +150,7 @@ return {
 		saveload_caps = "SAVE / LOAD",
 		quit_confirm = "Quitting will lose any unsaved progress. Are you sure?",
 		next_episode = "Next Episode",
+		codex = "Codex",
 	},
 	sr = {
 		connect_to_spring_server = 'Prijavljivanje na Spring lobi server',
