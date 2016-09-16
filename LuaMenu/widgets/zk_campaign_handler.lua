@@ -234,7 +234,9 @@ local function GetSaves()
 end
 
 local function FindFirstEmptySaveSlot()
-	for i=#saves,MAX_SAVES do
+	local start = #saves
+	if start == 0 then start = 1 end
+	for i=start,MAX_SAVES do
 		if saves[i] == nil then
 			return i
 		end
