@@ -184,7 +184,9 @@ function PreloadImagesInScript(scriptName)
     local item = defs.scripts[scriptName][i]
     local file = nil
     
-    if item[1] == "AddImage" then
+    if type(item) == "function" then
+      -- do nothing
+    elseif item[1] == "AddImage" then
       local args = item[2]
       local imageDef = defs.images[args.defID] and Spring.Utilities.CopyTable(defs.images[args.defID], true) or {}
       file = imageDef.file or args.file
@@ -254,6 +256,7 @@ local function PlayScriptLine(line)
   if item then
     if type(item) == 'function' then
       item()
+      AdvanceScript(false)
     else
       local action = item[1]
       local args = item[2]
@@ -346,7 +349,7 @@ local function AdvanceText(time, toEnd)
         waitTime = waitTime or options.waitTime.value
       else
         local item = GetScriptLineItem()
-        if item then
+        if item and type(item) ~= "function" then
           local args = item[2]
           if (type(args) == 'table') and args.wait == false then
             waitTime = waitTime or 0

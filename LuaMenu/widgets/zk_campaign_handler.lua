@@ -37,6 +37,7 @@ local startButton
 local newGameCampaignScroll
 local newGameCampaignButtons = {}
 local newGameCampaignDetails = {}	-- panel, stackPanel, titleLabel, authorLabel, descTextBox
+local intermissionButtonCodex
 local saveScroll, loadScroll, saveDescEdit
 local saveLoadControls = {}	-- {id, container, titleLabel, descTextBox, image (someday), isNew}
 local codexText, codexImage, codexTree, codexTreeScroll
@@ -52,6 +53,8 @@ local PLANET_IMAGE_SIZE = 259
 local PLANET_BACKGROUND_SIZE = 1280
 local CAMPAIGN_SELECTOR_BUTTON_HEIGHT = 96
 local SAVEGAME_BUTTON_HEIGHT = 128
+local OUTLINE_COLOR = {0.54,0.72,1,0.3}
+local CODEX_BUTTON_FONT_SIZE = 14
 local SAVE_DIR = "saves/campaign/"
 local MAX_SAVES = 999
 local AUTOSAVE_ID = "auto"
@@ -126,40 +129,115 @@ local function ResetGamedata()
 	SetControlGreyout(startButton, true)
 end
 
+local function IsCodexEntryVisible(id)
+	return gamedata.codexUnlocked[id] or codexEntries[id].alwaysUnlocked
+end
+
+local function UpdateCodexButtonState(unread)
+	if unread == nil then
+		unread = false
+		for id, entry in pairs(codexEntries) do
+			if IsCodexEntryVisible(id) then
+				if not gamedata.codexRead[id] then
+					unread = true
+					break
+				end
+			end
+		end
+	end
+	intermissionButtonCodex.font.shadow = unread,
+	intermissionButtonCodex:Invalidate()
+end
+
 local function UpdateCodexEntry(entryID)
+	if not gamedata.codexRead[entryID] then
+		if codexTreeControls[entryID] then
+			local button = codexTreeControls[entryID]
+			--button.font.outline = false
+			button.font.shadow = false
+			--button.font.size = CODEX_BUTTON_FONT_SIZE
+			button:Invalidate()
+		end
+	end
 	gamedata.codexRead[entryID] = true
 	local entry = codexEntries[entryID]
 	codexText:SetText(entry.text)
 end
 
+local function UnlockCodexEntry(entryID)
+	gamedata.codexUnlocked[entryID] = true
+	UpdateCodexButtonState(true)
+end
+
+local function SortCodexEntries(a, b)
+	local entryA = codexEntries[a]
+	local entryB = codexEntries[b]
+	if (not entryA) or (not entryB) then
+		return false
+	end
+	local aKey = entryA.sortkey or entryA.name
+	local bKey = entryB.sortkey or entryB.name
+	aKey = string.lower(aKey)
+	bKey = string.lower(bKey)
+	return aKey < bKey
+end
+
 local function LoadCodexEntries()
+	-- list all categories and which entries they have
 	local nodes = {}
 	local categories = {}
+	local categoriesOrdered = {}
 	for id, entry in pairs(codexEntries) do
-		categories[entry.category] = categories[entry.category] or {}
-		local cat = categories[entry.category]
-		cat[#cat + 1] = id
+		if IsCodexEntryVisible(id) then
+			categories[entry.category] = categories[entry.category] or {}
+			local cat = categories[entry.category]
+			cat[#cat + 1] = id
+		end
 	end
-	for catID, cat in pairs(categories) do
+	
+	-- sort categories
+	for catID in pairs(categories) do
+		categoriesOrdered[#categoriesOrdered + 1] = catID
+	end
+	table.sort(categoriesOrdered)
+	
+	-- make tree view nodes
+	for i=1,#categoriesOrdered do
+		local catID = categoriesOrdered[i]
+		local cat = categories[catID]
+		table.sort(cat, SortCodexEntries)
 		local node = {catID, {}}
 		local subnode = node[2]
-		for i=1,#cat do
-			local entryID = cat[i]
+		for j=1,#cat do
+			local entryID = cat[j]
 			local entry = codexEntries[entryID]
+			--local unlocked = gamedata.codexUnlocked[entryID]
+			local read = gamedata.codexRead[entryID]
 			local button = Button:New{
 				caption = entry.name,
-				x = 16,
 				backgroundColor = {0,0,0,0},
 				borderColor = {0,0,0,0},
 				OnClick = { function()
 					UpdateCodexEntry(entryID)
-				end}
+				end},
+				font = {
+					size = CODEX_BUTTON_FONT_SIZE,	-- - (read and 0 or 1),
+					shadow = (read ~= true),
+					--outline = (read ~= true),
+					outlineWidth = 6,
+					outlineHeight = 6,
+					outlineColor = Spring.Utilities.CopyTable(OUTLINE_COLOR),
+					autoOutlineColor = false,
+				}
 			}
+			codexTreeControls[entryID] = button
 			subnode[#subnode + 1] = button
 			--Spring.Echo(catID, entry.name)
 		end
 		nodes[#nodes + 1] = node
 	end
+	
+	-- make treeview
 	if codexTree then
 		codexTree:Dispose()	
 	end
@@ -167,8 +245,9 @@ local function LoadCodexEntries()
 		parent = codexTreeScroll,
 		name = 'chobby_campaign_codexTree',
 		nodes = nodes,	--{"wtf", "lololol", {"omg"}},
-		--font = {size = 16}
+		font = {size = CODEX_BUTTON_FONT_SIZE}
 	}
+	UpdateCodexButtonState()
 end
 
 local function LoadCampaignDefs()
@@ -202,7 +281,7 @@ local function LoadCampaign(campaignID)
 		for i=1,#planetDefs do
 			planetDefsByID[planetDefs[i].id] = planetDefs[i]	
 		end
-		LoadCodexEntries()
+		
 		if def.startFunction then
 			def.startFunction()
 		end
@@ -697,9 +776,10 @@ end
 local function LoadGame(saveData)
 	local success, err = pcall(function()
 		Spring.CreateDir(SAVE_DIR)
+		ResetGamedata()
 		currentCampaignID = saveData.campaignID
 		LoadCampaign(currentCampaignID)
-		gamedata = Spring.Utilities.MergeTable(saveData, gamedata)
+		gamedata = Spring.Utilities.MergeTable(saveData, gamedata, true)
 		gamedata.id = nil
 		if saveData.description then
 			saveDescEdit:SetText(saveData.description)
@@ -975,7 +1055,7 @@ local function InitializeMainControls()
 		children = {
 			Label:New {
 				name = 'chobby_campaign_mainTitle',
-				caption = i18n("campaign_caps"),
+				caption = string.upper(i18n("campaign")),
 				align = "center",
 				y = 24,
 				x = 0,
@@ -987,7 +1067,7 @@ local function InitializeMainControls()
 					outlineWidth = 12,
 					outlineHeight = 12,
 					outline = true,
-					outlineColor = {0.54,0.72,1,0.3},
+					outlineColor = Spring.Utilities.CopyTable(OUTLINE_COLOR),
 					autoOutlineColor = false,
 				}
 			},
@@ -1028,13 +1108,14 @@ local function InitializeNewGameControls()
 	startButton = Button:New {
 		name = 'chobby_campaign_newGameStart',
 		width = 60,
-		height = 36,
+		height = 40,
 		y = 4,
 		right = 4,
 		caption = i18n("start_verb"),
 		OnClick = { function(self)
 			StartNewGame()
-		end}
+		end},
+		font = {size = 18}
 	}
 	newGameCampaignScroll = ScrollPanel:New {
 		name = 'chobby_campaign_newGameScroll',
@@ -1091,7 +1172,7 @@ local function InitializeNewGameControls()
 		children = {
 			Label:New {
 				name = 'chobby_campaign_newGameTitle',
-				caption = i18n("new_game_caps"),
+				caption = string.upper(i18n("new_game")),
 				x = 4,
 				y = 24,
 				font = {
@@ -1099,7 +1180,7 @@ local function InitializeNewGameControls()
 					outlineWidth = 10,
 					outlineHeight = 10,
 					outline = true,
-					outlineColor = {0.54,0.72,1,0.3},
+					outlineColor = Spring.Utilities.CopyTable(OUTLINE_COLOR),
 					autoOutlineColor = false,
 				}
 			},
@@ -1107,11 +1188,12 @@ local function InitializeNewGameControls()
 			Button:New {
 				name = 'chobby_campaign_newGameBack',
 				width = 60,
-				height = 36,
+				height = 40,
 				y = 4,
 				right = 4 + 60 + 4,
-				caption = "Back",
-				OnClick = {function() SwitchToScreen("main") end}
+				caption = i18n("back"),
+				OnClick = {function() SwitchToScreen("main") end},
+				font = {size = 18}
 			},
 			newGameCampaignScroll,
 			newGameCampaignDetails.panel,
@@ -1121,6 +1203,24 @@ end
 
 local function InitializeIntermissionControls()
 	--intermission screen
+	intermissionButtonCodex = Button:New {
+		name = 'chobby_campaign_intermissionCodex',
+		width = 160,
+		height = 48,
+		caption = i18n("codex"),
+		font = {
+			size = 20,
+			shadow = false,
+			outlineWidth = 6,
+			outlineHeight = 6,
+			outlineColor = Spring.Utilities.CopyTable(OUTLINE_COLOR),
+			autoOutlineColor = false,
+		},
+		OnClick = { function()
+			LoadCodexEntries(); SwitchToScreen("codex")
+		end}
+	}
+	
 	screens.intermission = Panel:New {
 		parent = window,
 		name = 'chobby_campaign_intermission',
@@ -1132,7 +1232,7 @@ local function InitializeIntermissionControls()
 		children = {
 			Label:New {
 				name = 'chobby_campaign_intermissionTitle',
-				caption = i18n("intermission_caps"),
+				caption = string.upper(i18n("intermission")),
 				y = 24,
 				x = 8,
 				font = {
@@ -1140,7 +1240,7 @@ local function InitializeIntermissionControls()
 					outlineWidth = 12,
 					outlineHeight = 12,
 					outline = true,
-					outlineColor = {0.54,0.72,1,0.3},
+					outlineColor = Spring.Utilities.CopyTable(OUTLINE_COLOR),
 					autoOutlineColor = false,
 				}
 			},
@@ -1191,16 +1291,7 @@ local function InitializeIntermissionControls()
 							OpenSaveOrLoadMenu(false)
 						end}
 					},
-					Button:New {
-						name = 'chobby_campaign_intermissionCodex',
-						width = 160,
-						height = 48,
-						caption = i18n("codex"),
-						font = {size = 20},
-						OnClick = { function()
-							SwitchToScreen("codex")
-						end}
-					},
+					intermissionButtonCodex,
 					Button:New {
 						name = 'chobby_campaign_intermissionQuit',
 						width = 160,
@@ -1261,7 +1352,7 @@ local function InitializeSaveLoadWindow()
 		children = {
 			Label:New {
 				name = 'chobby_campaign_saveTitle',
-				caption = i18n("save_caps"),
+				caption = string.upper(i18n("save")),
 				x = 4,
 				y = 8,
 				font = {
@@ -1269,18 +1360,19 @@ local function InitializeSaveLoadWindow()
 					outlineWidth = 10,
 					outlineHeight = 10,
 					outline = true,
-					outlineColor = {0.54,0.72,1,0.3},
+					outlineColor = Spring.Utilities.CopyTable(OUTLINE_COLOR),
 					autoOutlineColor = false,
 				}
 			},
 			Button:New {
 				name = 'chobby_campaign_saveBack',
 				width = 60,
-				height = 36,
+				height = 40,
 				y = 4,
 				right = 4,
-				caption = "Back",
-				OnClick = {function() SwitchToScreen(lastScreenID) end}
+				caption = i18n("back"),
+				OnClick = {function() SwitchToScreen(lastScreenID) end},
+				font = {size = 18}
 			},
 			saveDescEdit,
 			saveScroll,
@@ -1308,7 +1400,7 @@ local function InitializeSaveLoadWindow()
 		children = {
 			Label:New {
 				name = 'chobby_campaign_loadTitle',
-				caption = i18n("load_caps"),
+				caption = string.upper(i18n("load")),
 				x = 4,
 				y = 8,
 				font = {
@@ -1316,18 +1408,19 @@ local function InitializeSaveLoadWindow()
 					outlineWidth = 10,
 					outlineHeight = 10,
 					outline = true,
-					outlineColor = {0.54,0.72,1,0.3},
+					outlineColor = Spring.Utilities.CopyTable(OUTLINE_COLOR),
 					autoOutlineColor = false,
 				}
 			},
 			Button:New {
 				name = 'chobby_campaign_loadBack',
 				width = 60,
-				height = 36,
+				height = 40,
 				y = 4,
 				right = 4,
-				caption = "Back",
-				OnClick = {function() SwitchToScreen(lastScreenID) end}
+				caption = i18n("back"),
+				OnClick = {function() SwitchToScreen(lastScreenID) end},
+				font = {size = 18}
 			},
 			loadScroll,
 		}
@@ -1375,7 +1468,7 @@ local function InitializeCodexControls()
 		name = 'chobby_campaign_codexTreeScroll',
 		x = 4,
 		y = 64,
-		bottom = "65%",
+		bottom = "60%",
 		right = "50%",
 		orientation = "vertical",
 		children = {}
@@ -1396,7 +1489,7 @@ local function InitializeCodexControls()
 		children = {
 			Label:New {
 				name = 'chobby_campaign_codexTitle',
-				caption = i18n("codex"),
+				caption = string.upper(i18n("codex")),
 				x = 4,
 				y = 8,
 				font = {
@@ -1404,7 +1497,7 @@ local function InitializeCodexControls()
 					outlineWidth = 10,
 					outlineHeight = 10,
 					outline = true,
-					outlineColor = {0.54,0.72,1,0.3},
+					outlineColor = Spring.Utilities.CopyTable(OUTLINE_COLOR),
 					autoOutlineColor = false,
 				}
 			},
@@ -1414,8 +1507,9 @@ local function InitializeCodexControls()
 				height = 36,
 				y = 4,
 				right = 4,
-				caption = "Back",
-				OnClick = {function() SwitchToScreen(lastScreenID) end}
+				caption = i18n("back"),
+				OnClick = {function() UpdateCodexButtonState(); SwitchToScreen(lastScreenID) end},
+				font = {size = 18}
 			},
 			codexImagePanel,
 			codexTextScroll,
@@ -1500,6 +1594,7 @@ function widget:Initialize()
 		SetNextMissionScript = SetNextMissionScript,
 		AdvanceCampaign = AdvanceCampaign,
 		UnlockScene = UnlockScene,
+		UnlockCodexEntry = UnlockCodexEntry,
 		SetChapterTitle = SetChapterTitle,
 		SetMapEnabled = function(bool) gamedata.mapEnabled = bool end,
 	}
