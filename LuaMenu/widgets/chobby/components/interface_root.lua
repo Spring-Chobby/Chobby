@@ -786,6 +786,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		local screenWidth, screenHeight = Spring.GetViewGeometry()
 		
 		local battleShown = (battleStatusPanelHandler.GetTabByName("myBattle") and true) or false
+		local topOffset = (showTopBar and topBarHeight) or 0
 		
 		local xPos, yPos, width, height
 		if doublePanelMode then
@@ -821,7 +822,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			end
 		end
 	
-		holder_matchMaking:SetPos(xPos, yPos, width, height)
+		holder_matchMaking:SetPos(xPos, topOffset + yPos, width, height)
 	end
 	
 	function externalFunctions.ViewResize(screenWidth, screenHeight)
@@ -851,6 +852,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		gameRunning = not newIngame
 		SetMainInterfaceVisible(not newIngame)
 		SetTopBarVisible(newIngame)
+		externalFunctions.UpdateMatchMakingHolderPosition()
 	end
 	
 	function externalFunctions.GetChatWindow()
