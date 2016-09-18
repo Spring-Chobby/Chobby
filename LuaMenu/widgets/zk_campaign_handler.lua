@@ -50,6 +50,7 @@ local starmapAnimation = nil
 local runningMission = false
 local missionCompletionFunc = nil	-- function
 local missionArchive = nil
+local requiredMap = nil
 
 local STARMAP_WINDOW_WIDTH = 1280
 local STARMAP_WINDOW_HEIGHT = 768
@@ -329,15 +330,47 @@ local function CleanupAfterMission()
 	end
 end
 
-local function LaunchMission(missionName, func)
+local function GetMissionStartscriptString(missionID)
+	local dir = campaignDefsByID[currentCampaignID].dir
+	local startscript = missionDefs[missionID].startscript
+	startscript = dir .. startscript
+	local scriptString = VFS.LoadFile(startscript)
+	return scriptString
+end
+
+local function GetMapNameFromStartscript(startscript)
+	return string.match(startscript, "MapName%s?=%s?(.-);")
+end
+
+local function GetMapForMissionIfNeeded(missionID, startscriptStr)
+	if not startscriptStr then
+		startscriptStr = GetMissionStartscriptString(missionID)
+	end
+	local map = GetMapNameFromStartscript(startscriptStr)
+	if not VFS.HasArchive(map) then
+		VFS.DownloadArchive(map, "map")
+		requiredMap = map
+		return map
+	end
+	return nil
+end
+
+local function LaunchMission(missionID, func)
 	local success, err = pcall(function()
 		local dir = campaignDefsByID[currentCampaignID].dir
-		-- load startscript and mutator
-		local startscript = missionDefs[missionName].startscript
+		local startscript = missionDefs[missionID].startscript
 		startscript = dir .. startscript
 		local scriptString = VFS.LoadFile(startscript)
 		--missionArchive = dir .. missionDefs[missionName].archive
 		--VFS.MapArchive(missionArchive)
+		
+		-- check for map
+		local needMap = GetMapForMissionIfNeeded(missionID, scriptString)
+		if needMap then
+			WG.VisualNovel.scriptFunctions.Exit()
+			WG.Chobby.InformationPopup("You do not have the map " .. needMap .. " required for this mission. It will now be downloaded.")
+			return
+		end
 		
 		-- TODO: might want to edit startscript before we run Spring with it
 		WG.LibLobby.localLobby:StartGameFromString(scriptString)
@@ -1643,6 +1676,12 @@ function widget:ActivateMenu()
 	end
 end
 
+function widget:DownloadFinished()
+	if VFS.HasArchive(requiredMap) then
+		requiredMap = nil
+	end
+end
+
 function widget:Initialize()
 	CHOBBY_DIR = "LuaMenu/widgets/chobby/"
 	VFS.Include("LuaMenu/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
@@ -1658,6 +1697,7 @@ function widget:Initialize()
 		UnlockCodexEntry = UnlockCodexEntry,
 		SetChapterTitle = SetChapterTitle,
 		SetMapEnabled = function(bool) gamedata.mapEnabled = bool end,
+		GetMapForMissionIfNeeded = GetMapForMissionIfNeeded,
 		LaunchMission = LaunchMission,
 	}
 	
