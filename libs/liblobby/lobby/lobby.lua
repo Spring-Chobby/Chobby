@@ -225,17 +225,17 @@ end
 
 function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, scriptPassword, gameName, mapName, engineName)
 	if gameName and not VFS.HasArchive(gameName) then
-		WG.Chobby.InformationPopup("Cannont start game: missing game file " .. gameName .. ".")
+		WG.Chobby.InformationPopup("Cannont start game: missing game file '" .. gameName .. "'.")
 		return
 	end
 
 	if mapName and not VFS.HasArchive(mapName) then
-		WG.Chobby.InformationPopup("Cannont start game: missing map file " .. mapName .. ".")
+		WG.Chobby.InformationPopup("Cannont start game: missing map file '" .. mapName .. "'.")
 		return
 	end
 	
 	if engineName and not WG.Chobby.Configuration:IsValidEngineVersion(engineName) then
-		WG.Chobby.InformationPopup("Cannont start game: mwrong Spring version. The required version is " .. engineName .. ", your version is " .. Game.version .. ".")
+		WG.Chobby.InformationPopup("Cannont start game: wrong Spring engine version. The required version is '" .. engineName .. "', your version is '" .. Game.version .. "'.", 420, 260)
 		return
 	end
 	
