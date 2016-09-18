@@ -706,7 +706,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	local switchToMenuButton = Button:New {
 		y = 5,
-		right = 5,
+		right = 6,
 		width = 100,
 		height = 41,
 		name = "switchToMenuButton",
@@ -913,6 +913,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		globalKeyListener = newListenerFunc
 	end
 
+	function externalFunctions.GetIngameInterfaceHolder()
+		return ingameInterfaceHolder
+	end
+	
 	function externalFunctions.GetLobbyInterfaceHolder()
 		return lobbyInterfaceHolder
 	end

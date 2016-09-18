@@ -17,8 +17,21 @@ end
 --------------------------------------------------------------------------------
 -- Variables
 local queueStatusHandler -- global for timer update
+local queueStatusIngame
 local readyCheckPopup 
 local findingMatch = false
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Utilities
+
+local function SecondsToMinutes(seconds)
+	if seconds < 60 then
+		return seconds .. "s"
+	end
+	local modSeconds = (seconds%60)
+	return math.floor(seconds/60) .. ":" .. ((modSeconds < 10 and "0") or "") .. modSeconds
+end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -80,7 +93,7 @@ local function InitializeQueueStatusHandler(parentControl)
 			return
 		end
 		timeWaiting = newTimeWaiting
-		queueStatusText:SetText(queueText .. ((bigMode and  "\nTime Waiting: ") or ", Wait: ") .. timeWaiting .. "s")
+		queueStatusText:SetText(queueText .. ((bigMode and  "\nTime Waiting: ") or ", Wait: ") .. SecondsToMinutes(timeWaiting))
 	end
 	
 	local function UpdateQueueText()
@@ -120,6 +133,30 @@ local function InitializeQueueStatusHandler(parentControl)
 	end
 	
 	return externalFunctions
+end
+
+local function InitializeIngameStatus(parentControl)	
+	local queuePanel = Window:New {
+		right = 2,
+		y = 52,
+		height = 78,
+		width = 300,
+		padding = {0,0,0,0},
+		caption = "",
+		resizable = false,
+		draggable = false,
+		--classname = "overlay_window",
+		parent = parentControl,
+		--OnResize = {
+		--	function (obj, xSize, ySize)
+		--		if queueStatusHandler then
+		--			queueStatusHandler.Resize(xSize, ySize)
+		--		end
+		--	end
+		--}
+	}
+	
+	return queuePanel, InitializeQueueStatusHandler(queuePanel)
 end
 
 --------------------------------------------------------------------------------
@@ -241,7 +278,7 @@ local function CreateReadyCheckWindow(secondsRemaining)
 			return
 		end
 		timeRemaining = newTimeRemaining
-		statusLabel:SetCaption(((acceptRegistered and "Waiting for players ") or "Accept in ") .. timeRemaining .. "s")
+		statusLabel:SetCaption(((acceptRegistered and "Waiting for players ") or "Accept in ") .. SecondsToMinutes(timeWaiting))
 	end
 	
 	function externalFunctions.UpdatePlayerCount(readyPlayers)
@@ -285,6 +322,7 @@ local QueueStatusPanel = {}
 
 function QueueStatusPanel.GetControl()
 	local lobby = WG.LibLobby.lobby
+	local queueStatusIngamePanel
 	
 	local queuePanel = Panel:New {
 		x = 0,
@@ -310,14 +348,21 @@ function QueueStatusPanel.GetControl()
 		function(listener, inMatchMaking, joinedQueueList, queueCounts, currentEloWidth, joinedTime, bannedTime)
 			findingMatch = inMatchMaking
 			
+			if not queueStatusIngame then
+				queueStatusIngamePanel, queueStatusIngame = InitializeIngameStatus(WG.Chobby.interfaceRoot.GetIngameInterfaceHolder())
+			end
+			
 			if inMatchMaking then
 				
 				if not queuePanel.visible then
 					queueStatusHandler.ResetTimer()
+					queueStatusIngame.ResetTimer()
 				end
 				queueStatusHandler.UpdateMatches(joinedQueueList, queueCounts, currentEloWidth, joinedTime)
+				queueStatusIngame.UpdateMatches(joinedQueueList, queueCounts, currentEloWidth, joinedTime)
 			end
 			queuePanel:SetVisibility(inMatchMaking)
+			queueStatusIngamePanel:SetVisibility(inMatchMaking)
 		end
 	)
 	
@@ -352,8 +397,13 @@ end
 -- Widget Interface
 
 function widget:Update(dt)
-	if queueStatusHandler and findingMatch then
-		queueStatusHandler.UpdateTimer()
+	if findingMatch then
+		if queueStatusHandler then
+			queueStatusHandler.UpdateTimer()
+		end
+		if queueStatusIngame then
+			queueStatusIngame.UpdateTimer()
+		end
 	end
 	if readyCheckPopup then
 		readyCheckPopup.UpdateTimer()
