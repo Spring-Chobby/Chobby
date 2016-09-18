@@ -2,7 +2,7 @@ ALLOW_SAVE_LOAD = false	-- note: only disables the buttons, not the functions
 USE_PORTRAIT = false
 
 WINDOW_WIDTH = 1280
-WINDOW_HEIGHT = 720
+WINDOW_HEIGHT = 768
 DEFAULT_FONT_SIZE = 20
 LOG_PANEL_HEIGHT = 80
 MENU_BUTTON_HEIGHT = 32
