@@ -1002,17 +1002,31 @@ Interface.jsonCommands["SetModOptions"] = Interface._SetModOptions
 function Interface:_OnSiteToLobbyCommand(msg)
 	local springLink = msg.Command;
 
-	if (springLink) then
-		springLink = tostring(springLink);
-		Spring.Echo(springLink);
-	    local s,e = springLink:find('@start_replay:') 
-		if(s == 1)then
-			local repString = springLink:sub(15)
-			Spring.Echo(repString);
+	if not springLink then
+		return
+	end
+	springLink = tostring(springLink);
+	
+	local s,e = springLink:find('@start_replay:') 
+	if(s == 1)then
+		local repString = springLink:sub(15)
+		Spring.Echo(repString);
 
-			local replay, game, map, engine = repString:match("([^,]+),([^,]+),([^,]+),([^,]+)");
-			self:_OnLaunchRemoteReplay(replay, game, map, engine);
-		end
+		local replay, game, map, engine = repString:match("([^,]+),([^,]+),([^,]+),([^,]+)");
+		self:_OnLaunchRemoteReplay(replay, game, map, engine);
+		return
+	end
+	
+	s,e = springLink:find('@select_map:') 
+	if s then
+		self:SelectMap(springLink:sub(e + 1))
+		return
+	end
+	
+	s,e = springLink:find('chat/user/') 
+	if s then
+		WG.Chobby.interfaceRoot.OpenPrivateChat(springLink:sub(e + 1))
+		return
 	end
 end
 
