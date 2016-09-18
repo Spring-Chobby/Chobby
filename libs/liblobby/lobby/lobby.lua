@@ -223,13 +223,24 @@ function Lobby:SayBattleEx(message)
 	return self
 end
 
-function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, scriptPassword)
-	if not self.myBattleID then
-		Spring.Echo("Cannot connect to battle.")
+function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, scriptPassword, gameName, mapName, engineName)
+	if gameName and not VFS.HasArchive(gameName) then
+		WG.Chobby.InformationPopup("Cannont start game: missing game file " .. gameName .. ".")
 		return
 	end
-	self:_CallListeners("OnBattleAboutToStart")
 
+	if mapName and not VFS.HasArchive(mapName) then
+		WG.Chobby.InformationPopup("Cannont start game: missing map file " .. mapName .. ".")
+		return
+	end
+	
+	if engineName and not WG.Chobby.Configuration:IsValidEngineVersion(engineName) then
+		WG.Chobby.InformationPopup("Cannont start game: mwrong Spring version. The required version is " .. engineName .. ", your version is " .. Game.version .. ".")
+		return
+	end
+	
+	self:_CallListeners("OnBattleAboutToStart")
+	
 	Spring.Echo("Game starts!")
 	if useSpringRestart then
 		local springURL = "spring://" .. self:GetMyUserName() .. ":" .. scriptPassword .. "@" .. battleIp .. ":" .. battlePort
