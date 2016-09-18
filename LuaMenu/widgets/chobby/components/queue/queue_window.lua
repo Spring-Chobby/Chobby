@@ -1,6 +1,6 @@
 QueueWindow = LCS.class{}
 
-function QueueWindow:init(queue)
+function QueueWindow:init(queueName)
 	local joinedQueueTime = Spring.GetTimer()
 	local lastUpdate = Spring.GetTimer()
 
@@ -25,7 +25,8 @@ function QueueWindow:init(queue)
 	}
 
 	self.queueWindow = Window:New {
-		caption = queue.title,
+		name = "queue_" .. queueName,
+		caption = queueName,
 		x = 10,
 		y = 520,
 		width = 500,
@@ -41,31 +42,34 @@ function QueueWindow:init(queue)
 				right = 5,
 				width = 70,
 				height = 45,
-				OnClick = { function () lobby:LeaveQueue(queue.name) end },
+				OnClick = { function () lobby:LeaveMatchMaking(queueName) end },
 			},
 		},
 		OnDispose = { function() self:RemoveListeners() end },
 	}
 
-	self.onReadyCheck = function(listener, name, responseTime)
-		if name == queue.name then
+	self.onReadyCheck = function(listener, responseTime)
+		if name == queueName then
 			self:HideWindow()
-			ReadyCheckWindow(queue, responseTime, self.queueWindow)
+			ReadyCheckWindow(queueName, responseTime, self.queueWindow)
 		end
 	end
-	lobby:AddListener("OnReadyCheck", self.onReadyCheck)
+	lobby:AddListener("OnMatchMakerReadyCheck", self.onReadyCheck)
 
-	self.onLeftQueue = function(listener, name, reason)
-		if queue.name == name then
-			self.queueWindow:Dispose()
+	self.onLeftQueue = function(listener,  _, joinedQueueList)
+		for i = 1, #joinedQueueList do
+			if queueName == name then
+				return
+			end
 		end
+		self.queueWindow:Dispose()
 	end
-	lobby:AddListener("OnLeftQueue", self.onLeftQueue)
+	lobby:AddListener("OnMatchMakerStatus", self.onLeftQueue)
 end
 
 function QueueWindow:RemoveListeners()
-	lobby:RemoveListener("OnLeftQueue", self.onLeftQueue)
-	lobby:RemoveListener("OnReadyCheck", self.onReadyCheck)
+	lobby:RemoveListener("OnMatchMakerStatus", self.onLeftQueue)
+	lobby:RemoveListener("OnMatchMakerReadyCheck", self.onReadyCheck)
 end
 
 function QueueWindow:HideWindow()

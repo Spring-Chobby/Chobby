@@ -21,6 +21,12 @@ function Lobby:_Clean()
 	self.friendRequests = {} -- list
 	self.hasFriendRequest = {} -- map
 	self.friendRequestCount = 0
+	self.friendListRecieved = false
+	
+	self.ignored = {} -- list
+	self.isIgnored = {} -- map
+	self.ignoredCount = 0
+	self.ignoreListRecieved = false
 
 	self.channels = {}
 	self.channelCount = 0
@@ -29,8 +35,11 @@ function Lobby:_Clean()
 	self.battleCount = 0
 	self.modoptions = {}
 
+	self.battleAis = {}
 	self.userBattleStatus = {}
 
+	self.joinedQueues = {}
+	self.joinedQueueList = {}
 	self.queues = {}
 	self.queueCount = 0
 
@@ -59,8 +68,7 @@ function Lobby:_PreserveData()
 	}
 end
 
-local function GenerateScriptTxt(battleID)
-	local battle = lobby:GetBattle(battleID)
+local function GenerateScriptTxt(battleIp, battlePort, scriptPassword)
 	local scriptTxt =
 [[
 [GAME]
@@ -73,16 +81,16 @@ local function GenerateScriptTxt(battleID)
 }
 ]]
 
-	scriptTxt = scriptTxt:gsub("__IP__", battle.ip)
-						:gsub("__PORT__", battle.port)
+	scriptTxt = scriptTxt:gsub("__IP__", battleIp)
+						:gsub("__PORT__", battlePort)
 						:gsub("__MY_PLAYER_NAME__", lobby:GetMyUserName())
-						:gsub("__MY_PASSWD__", lobby:GetScriptPassword())
+						:gsub("__MY_PASSWD__", scriptPassword)
 	return scriptTxt
 end
 
 -- TODO: This doesn't belong in the API. Battleroom chat commands are not part of the protocol (yet), and will cause issues with rooms where !start doesn't do anything.
 function Lobby:StartBattle()
-	self:SayBattle("!start")
+	self:SayBattle("!poll start")
 	return self
 end
 
@@ -117,6 +125,18 @@ end
 
 function Lobby:Ping()
 	self.pingTimer = Spring.GetTimer()
+end
+
+------------------------
+-- Status commands
+------------------------
+
+function Lobby:SetIngameStatus(isInGame)
+	return self
+end
+
+function Lobby:SetAwayStatus(isAway)
+	return self
 end
 
 ------------------------
@@ -171,6 +191,10 @@ function Lobby:HostBattle(battleName, password)
 	return self
 end
 
+function Lobby:RejoinBattle(battleID)
+	return self
+end
+
 function Lobby:JoinBattle(battleID, password, scriptPassword)
 	return self
 end
@@ -199,21 +223,31 @@ function Lobby:SayBattleEx(message)
 	return self
 end
 
-function Lobby:ConnectToBattle(useSpringRestart)
-	if not self.myBattleID then
-		Spring.Echo("Cannot connect to battle.")
+function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, scriptPassword, gameName, mapName, engineName)
+	if gameName and not VFS.HasArchive(gameName) then
+		WG.Chobby.InformationPopup("Cannont start game: missing game file " .. gameName .. ".")
 		return
 	end
-	self:_CallListeners("OnBattleAboutToStart")
 
+	if mapName and not VFS.HasArchive(mapName) then
+		WG.Chobby.InformationPopup("Cannont start game: missing map file " .. mapName .. ".")
+		return
+	end
+	
+	if engineName and not WG.Chobby.Configuration:IsValidEngineVersion(engineName) then
+		WG.Chobby.InformationPopup("Cannont start game: mwrong Spring version. The required version is " .. engineName .. ", your version is " .. Game.version .. ".")
+		return
+	end
+	
+	self:_CallListeners("OnBattleAboutToStart")
+	
 	Spring.Echo("Game starts!")
-	local battle = self:GetBattle(self.myBattleID)
-	local springURL = "spring://" .. self:GetMyUserName() .. ":" .. self:GetScriptPassword() .. "@" .. battle.ip .. ":" .. battle.port
-	Spring.Echo(springURL)
 	if useSpringRestart then
+		local springURL = "spring://" .. self:GetMyUserName() .. ":" .. scriptPassword .. "@" .. battleIp .. ":" .. battlePort
+		Spring.Echo(springURL)
 		Spring.Restart(springURL, "")
 	else
-		local scriptTxt = GenerateScriptTxt(self.myBattleID)
+		local scriptTxt = GenerateScriptTxt(battleIp, battlePort, scriptPassword)
 		Spring.Reload(scriptTxt)
 	end
 	--local scriptFileName = "scriptFile.txt"
@@ -231,6 +265,10 @@ function Lobby:VoteYes()
 end
 
 function Lobby:VoteNo()
+	return self
+end
+
+function Lobby:SetModOptions(data)
 	return self
 end
 
@@ -256,6 +294,30 @@ function Lobby:SayEx(chanName, message)
 end
 
 function Lobby:SayPrivate(userName, message)
+	return self
+end
+
+------------------------
+-- MatchMaking commands
+------------------------
+
+function Lobby:JoinMatchMaking(queueNamePossiblyList)
+	return self
+end
+
+function Lobby:LeaveMatchMaking(queueNamePossiblyList)
+	return self
+end
+
+function Lobby:LeaveMatchMakingAll()
+	return self
+end
+
+function Lobby:AcceptMatchMakingMatch()
+	return self
+end
+
+function Lobby:RejectMatchMakingMatch()
 	return self
 end
 
@@ -326,19 +388,30 @@ end
 -- User commands
 ------------------------
 
-function Lobby:_OnAddUser(userName, country, cpu, accountID, lobbyVersion, clan)
-	self.userCount = self.userCount + 1
-	self.users[userName] = {
-		userName = userName,
-		country = country,
-		cpu = cpu,
-		accountID = accountID,
-		lobbyVersion = lobbyVersion,
-		clan = clan,
-		isFriend = self.isFriend[userName],
-		hasFriendRequest = self.hasFriendRequest[userName],
-	}
-	self:_CallListeners("OnAddUser", userName, country, cpu, accountID, lobbyVersion, clan)
+function Lobby:_OnAddUser(userName, status)
+	if self.users[userName] then
+		local userInfo = self.users[userName]
+		userInfo.isOffline = false
+		if status then
+			for k, v in pairs(status) do
+				self.users[userName][k] = v
+			end
+		end
+	else
+		self.userCount = self.userCount + 1
+		self.users[userName] = {
+			userName = userName,
+			isFriend = self.isFriend[userName],
+			isIgnored = self.isIgnored[userName],
+			hasFriendRequest = self.hasFriendRequest[userName],
+		}
+		if status then
+			for k, v in pairs(status) do
+				self.users[userName][k] = v
+			end
+		end
+	end
+	self:_CallListeners("OnAddUser", userName, status)
 end
 
 function Lobby:_OnRemoveUser(userName)
@@ -367,17 +440,11 @@ function Lobby:_OnUpdateUserStatus(userName, status)
 		self.users[userName][k] = v
 	end
 	self:_CallListeners("OnUpdateUserStatus", userName, status)
-
-	if status.isInGame ~= nil then
-		self:_OnBattleIngameUpdate(userName, status.isInGame)
-		if self.myBattleID and status.isInGame then
-			local myBattle = self:GetBattle(self.myBattleID)
-			if myBattle and myBattle.founder == userName then
-				self:ConnectToBattle(self.useSpringRestart)
-			end
-		end
-	end
 end
+
+------------------------
+-- Friend
+------------------------
 
 function Lobby:_OnFriend(userName)
 	table.insert(self.friends, userName)
@@ -405,14 +472,16 @@ function Lobby:_OnUnfriend(userName)
 	self:_CallListeners("OnUnfriend", userName)
 end
 
-function Lobby:_OnFriendList(friends)
-	self.friends = friends
-	self.friendCount = #friends
+function Lobby:_OnFriendList(data)
+	self.friends = data
+	self.friendCount = #data
+	self.isFriend = {}
 	for _, userName in pairs(self.friends) do
 		self.isFriend[userName] = true
 		local userInfo = self:TryGetUser(userName)
 		userInfo.isFriend = true
 	end
+	
 	self:_CallListeners("OnFriendList", self:GetFriends())
 end
 
@@ -433,33 +502,80 @@ function Lobby:_OnFriendRequestList(friendRequests)
 		local userInfo = self:TryGetUser(userName)
 		userInfo.hasFriendRequest = true
 	end
+	
 	self:_CallListeners("OnFriendRequestList", self:GetFriendRequests())
+end
+
+------------------------
+-- Ignore
+------------------------
+
+function Lobby:_OnAddIgnoreUser(userName)
+	table.insert(self.ignored, userName)
+	self.isIgnored[userName] = true
+	self.ignoredCount = self.ignoredCount + 1
+	local userInfo = self:TryGetUser(userName)
+	userInfo.isIgnored = true
+	self:_CallListeners("OnAddIgnoreUser", userName)
+end
+
+function Lobby:_OnRemoveIgnoreUser(userName)
+	for i, v in pairs(self.ignored) do
+		if v == userName then
+			table.remove(self.ignored, i)
+			break
+		end
+	end
+	self.isIgnored[userName] = false
+	self.ignoredCount = self.ignoredCount - 1
+	local userInfo = self:GetUser(userName)
+	-- don't need to create offline users in this case
+	if userInfo then
+		userInfo.isIgnored = false
+	end
+	self:_CallListeners("OnRemoveIgnoreUser", userName)
+end
+
+function Lobby:_OnIgnoreList(data)
+	self.ignored = data
+	self.ignoredCount = #data
+	self.isIgnored = {}
+	for _, userName in pairs(self.ignored) do
+		self.isIgnored[userName] = true
+		local userInfo = self:TryGetUser(userName)
+		userInfo.isIgnored = true
+	end
+	
+	self:_CallListeners("OnIgnoreList", self:Getignored())
 end
 
 ------------------------
 -- Battle commands
 ------------------------
 
-function Lobby:_OnBattleIngameUpdate(userName, isInGame)
-	local battleID = self:GetBattleFoundedBy(userName)
-	if battleID then
-		self.battles[battleID].isRunning = isInGame
-		self:_CallListeners("OnBattleIngameUpdate", battleID, isInGame)
+function Lobby:_OnBattleIngameUpdate(battleID, isRunning)
+	if self.battles[battleID] and self.battles[battleID].isRunning ~= isRunning then
+		self.battles[battleID].isRunning = isRunning
+		self:_CallListeners("OnBattleIngameUpdate", battleID, isRunning)
 	end
 end
 
 -- TODO: This function has an awful signature and should be reworked. At least make it use a key/value table.
-function Lobby:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName, title, gameName, spectatorCount)
+function Lobby:_OnBattleOpened(battleID, type, natType, founder, ip, port, 
+		maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName, 
+		title, gameName, spectatorCount, isRunning, runningSince, 
+		battleMode, disallowCustomTeams, disallowBots)
 	self.battles[battleID] = {
-		battleID=battleID, type=type, natType=natType, founder=founder, ip=ip, port=port,
-		maxPlayers=maxPlayers, passworded=passworded, rank=rank, mapHash=mapHash, spectatorCount = spectatorCount or 0,
-		engineName=engineName, engineVersion=engineVersion, mapName=mapName, title=title, gameName=gameName, users={founder},
+		battleID = battleID, type = type, natType = natType, founder = founder, ip = ip, port = port,
+		maxPlayers = maxPlayers, passworded = passworded, rank = rank, mapHash = mapHash, spectatorCount = spectatorCount or 0,
+		engineName = engineName, engineVersion = engineVersion, mapName = mapName, title = title, gameName = gameName, users = {},
+		isRunning = isRunning, runningSince = runningSince, 
+		battleMode = battleMode, disallowCustomTeams = disallowCustomTeams, disallowBots = disallowBots
 	}
 	self.battleCount = self.battleCount + 1
 
-	self.battles[battleID].isRunning = self.users[founder].isInGame
-
-	self:_CallListeners("OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, engineName, engineVersion, map, title, gameName)
+	self:_CallListeners("OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, 
+		engineName, engineVersion, map, title, gameName, spectatorCount, isRunning, runningSince, battleMode)
 end
 
 function Lobby:_OnBattleClosed(battleID)
@@ -493,6 +609,8 @@ function Lobby:_OnLeftBattle(battleID, userName)
 	if self:GetMyUserName() == userName then
 		self.myBattleID = nil
 		self.modoptions = {}
+		self.battleAis = {}
+		self.userBattleStatus = {}
 	end
 
 	local battleUsers = self.battles[battleID].users
@@ -509,13 +627,18 @@ function Lobby:_OnLeftBattle(battleID, userName)
 	self:_CallListeners("OnLeftBattle", battleID, userName)
 end
 
-function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName)
+function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)
 	local battle = self.battles[battleID]
 	battle.spectatorCount = spectatorCount or battle.spectatorCount
 	battle.locked         = locked         or battle.locked
 	battle.mapHash        = mapHash        or battle.mapHash
 	battle.mapName        = mapName        or battle.mapName
-	self:_CallListeners("OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName)
+	battle.engineVersion  = engineVersion  or battle.engineVersion
+	battle.runningSince   = runningSince   or battle.runningSince
+	battle.gameName       = gameName       or battle.gameName
+	battle.battleMode     = battleMode     or battle.battleMode
+		Spring.Echo("_OnUpdateBattleInfo_OnUpdateBattleInfo", gameName)
+	self:_CallListeners("OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)
 end
 
 -- Updates the specified status keys
@@ -558,16 +681,21 @@ end
 
 -- Also calls the OnUpdateUserBattleStatus
 function Lobby:_OnAddAi(battleID, aiName, status)
-	self:_OnAddUser(aiName)
-	self:_OnJoinedBattle(battleID, aiName)
 	status.isSpectator = false
+	table.insert(self.battleAis, aiName)
 	self:_OnUpdateUserBattleStatus(aiName, status)
 	self:_CallListeners("OnAddAi", aiName, status)
 end
 
 function Lobby:_OnRemoveAi(battleID, aiName, aiLib, allyNumber, owner)
-	-- TODO: maybe needs proper listeners
-	self:_OnLeftBattle(battleID, aiName)
+	for i, v in pairs(self.battleAis) do
+		if v == aiName then
+			table.remove(self.battleAis, i)
+			break
+		end
+	end
+	self:_CallListeners("OnLeftBattle", battleID, aiName)
+	self.userBattleStatus[aiName] = nil
 end
 
 function Lobby:_OnSaidBattle(userName, message, sayTime)
@@ -594,6 +722,7 @@ function Lobby:_OnSetModOptions(data)
 	for key, value in pairs(data) do
 		self.modoptions[key] = value
 	end
+	
 	self:_CallListeners("OnSetModOptions", data)
 end
 
@@ -724,29 +853,61 @@ function Lobby:_OnSayPrivateEx(userName, message, sayTime)
 	self:_CallListeners("OnSayPrivateEx", userName, message, sayTime)
 end
 
-------------------------
--- Matchmaking commands
-------------------------
-
-function Lobby:_OnListQueues(queues, ...)
-	self.queueCount = 0
-	self.queues = {}
-	for _, queue in pairs(queues) do
-		self.queues[queue.name] = queue
-		self.queueCount = self.queueCount + 1
-	end
+function Lobby:_OnSayServerMessage(message, sayTime)
+	self:_CallListeners("OnSayServerMessage", message, sayTime)
 end
 
-function Lobby:_OnQueueOpened(queue)
-	local name = queue.name
-	self.queues[name] = queue
+------------------------
+-- MatchMaking commands
+------------------------
+
+function Lobby:_OnQueueOpened(name, description, mapNames, maxPartSize, gameNames)
+	self.queues[name] = {
+		name = name,
+		description = description,
+		mapNames = mapNames,
+		maxPartSize = maxPartSize,
+		gameNames = gameNames
+	}
 	self.queueCount = self.queueCount + 1
+	
+	self:_CallListeners("OnQueueOpened", name, description, mapNames, maxPartSize, gameNames)
 end
 
-function Lobby:_OnQueueClosed(queue)
-	local name = queue.name
-	self.queues[name] = nil
-	self.queueCount = self.queueCount - 1
+function Lobby:_OnQueueClosed(name)
+	if self.queues[name] then
+		self.queues[name] = nil
+		self.queueCount = self.queueCount - 1
+	end
+	
+	self:_CallListeners("OnQueueClosed", name)
+end
+
+function Lobby:_OnMatchMakerStatus(inMatchMaking, joinedQueueList, queueCounts, currentEloWidth, joinedTime, bannedTime)
+	if inMatchMaking then
+		self.joinedQueueList = joinedQueueList
+		self.joinedQueues = {}
+		for i = 1, #joinedQueueList do
+			self.joinedQueues[joinedQueueList[i]] = true
+		end
+	else
+		self.joinedQueues = nil
+		self.joinedQueueList = nil
+	end
+	
+	self:_CallListeners("OnMatchMakerStatus", inMatchMaking, joinedQueueList, queueCounts, currentEloWidth, joinedTime, bannedTime)
+end
+
+function Lobby:_OnMatchMakerReadyCheck(secondsRemaining)
+	self:_CallListeners("OnMatchMakerReadyCheck", secondsRemaining)
+end
+
+function Lobby:_OnMatchMakerReadyUpdate(readyAccepted, likelyToPlay, queueReadyCounts, myBattleSize, myBattleReadyCount)
+	self:_CallListeners("OnMatchMakerReadyUpdate", readyAccepted, likelyToPlay, queueReadyCounts, myBattleSize, myBattleReadyCount)
+end
+
+function Lobby:_OnMatchMakerReadyResult(isBattleStarting, areYouBanned)
+	self:_CallListeners("OnMatchMakerReadyResult", isBattleStarting, areYouBanned)
 end
 
 ------------------------
@@ -904,6 +1065,14 @@ end
 -- returns friends table (not necessarily an array)
 function Lobby:GetFriendRequests()
 	return ShallowCopy(self.friendRequests)
+end
+
+-- ignore
+function Lobby:GetignoredCount()
+	return self.ignoredCount
+end
+function Lobby:Getignored()
+	return ShallowCopy(self.ignored)
 end
 
 -- battles

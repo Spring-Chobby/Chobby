@@ -14,7 +14,7 @@ function widget:GetInfo()
 end
 
 local IMG_BATTLE_RUNNING     = LUA_DIRNAME .. "images/runningBattle.png"
-local IMG_BATTLE_NOT_RUNNING = ""
+local IMG_BATTLE_NOT_RUNNING = LUA_DIRNAME .. "images/nothing.png"
 local IMG_STATUS_SPECTATOR   = LUA_DIRNAME .. "images/spectating.png"
 local IMG_STATUS_PLAYER      = LUA_DIRNAME .. "images/playing.png"
 
@@ -136,7 +136,7 @@ local function GetBattleInfoHolder(parent, battleID)
 			imPlayerStatus:SetPos(45, 17, 17, 17)
 
 			lblPlayers.font.size = Configuration:GetFont(2).size
-			lblPlayers:SetPos(160, 18)
+			lblPlayers:SetPos(152, 18)
 
 			playersPrefix = PLAYER_PREFIX_SMALL
 		else

@@ -57,7 +57,7 @@ local emptyTeamIndex = 0
 
 local haveMapAndGame = false
 
-local function UpdateArchiveStatus()
+local function UpdateArchiveStatus(updateSync)
 	if not battleLobby:GetMyBattleID() then
 		return
 	end
@@ -92,6 +92,12 @@ local function UpdateArchiveStatus()
 	end
 	
 	haveMapAndGame = (haveGame and haveMap)
+	
+	if updateSync and battleLobby then
+		battleLobby:SetBattleStatus({
+			sync = (haveMapAndGame and 1) or 2, -- 0 = unknown, 1 = synced, 2 = unsynced
+		})
+	end
 end
 
 local function MaybeDownloadArchive(archiveName, archiveType)
@@ -109,13 +115,7 @@ local function MaybeDownloadMap(battle)
 end
 
 function widget:DownloadFinished()
-	UpdateArchiveStatus()
-
-	if battleLobby then
-		battleLobby:SetBattleStatus({
-			sync = (haveMapAndGame and 1) or 2, -- 0 = unknown, 1 = synced, 2 = unsynced
-		})
-	end
+	UpdateArchiveStatus(true)
 end
 
 local OpenNewTeam
@@ -168,6 +168,10 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		parent = btnMinimap,
 	}
 
+	local function RejoinBattleFunc()
+		battleLobby:RejoinBattle(battleID)
+	end
+	
 	local btnStartBattle = Button:New {
 		x = 0,
 		bottom = 0,
@@ -180,7 +184,11 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 			function()
 				if haveMapAndGame then
 					if battle.isRunning then
-						battleLobby:ConnectToBattle()
+						if Spring.GetGameName() == "" then
+							RejoinBattleFunc()
+						else
+							 WG.Chobby.ConfirmationPopup(RejoinBattleFunc, "Are you sure you want to leave your current game to rejoin this one?", nil, 315, 200)
+						end
 					else
 						battleLobby:StartBattle()
 					end
@@ -384,6 +392,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		},
 		8
 	)
+	leftOffset = leftOffset + 120
 
 	local modoptionsHolder = Control:New {
 		x = 0,
@@ -402,19 +411,19 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		modoptionsHolder.children[1]:Hide()
 	end
 
-	downloader.lblDownload.OnHide = downloader.lblDownload.OnHide or {}
-	downloader.lblDownload.OnHide[#downloader.lblDownload.OnHide + 1] = function ()
-		if not modoptionsHolder.visible then
-			modoptionsHolder:Show()
-		end
-	end
-
-	downloader.lblDownload.OnShow = downloader.lblDownload.OnShow or {}
-	downloader.lblDownload.OnShow[#downloader.lblDownload.OnShow + 1] = function ()
-		if modoptionsHolder.visible then
-			modoptionsHolder:Hide()
-		end
-	end
+	--downloader.lblDownload.OnHide = downloader.lblDownload.OnHide or {}
+	--downloader.lblDownload.OnHide[#downloader.lblDownload.OnHide + 1] = function ()
+	--	if not modoptionsHolder.visible then
+	--		modoptionsHolder:Show()
+	--	end
+	--end
+    --
+	--downloader.lblDownload.OnShow = downloader.lblDownload.OnShow or {}
+	--downloader.lblDownload.OnShow[#downloader.lblDownload.OnShow + 1] = function ()
+	--	if modoptionsHolder.visible then
+	--		modoptionsHolder:Hide()
+	--	end
+	--end
 
 	leftOffset = leftOffset + 120
 	-- Example downloads
@@ -451,7 +460,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 
 	onBattleIngameUpdate(nil, battleID, battle.isRunning)
 
-	onUpdateBattleInfo = function(listener, updatedBattleID, spectatorCount, locked, mapHash, mapName)
+	onUpdateBattleInfo = function(listener, updatedBattleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)
 		if battleID ~= updatedBattleID then
 			return
 		end
@@ -461,14 +470,19 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 			imMinimap:Invalidate()
 
 			-- TODO: Bit lazy here, seeing as we only need to update the map
-			UpdateArchiveStatus()
+			UpdateArchiveStatus(true)
 			MaybeDownloadMap(battle)
-
-			if not VFS.HasArchive(mapName) then
-				battleLobby:SetBattleStatus({
-					sync = 2, -- 0 = unknown, 1 = synced, 2 = unsynced
-				})
-			end
+		end
+		
+		if gameName then
+			UpdateArchiveStatus(true)
+			MaybeDownloadGame(battle)
+		end
+		
+		if (mapName and not VFS.HasArchive(mapName)) or (gameName and not VFS.HasArchive(gameName)) then
+			battleLobby:SetBattleStatus({
+				sync = 2, -- 0 = unknown, 1 = synced, 2 = unsynced
+			})
 		end
 	end
 	battleLobby:AddListener("OnUpdateBattleInfo", onUpdateBattleInfo)
@@ -507,31 +521,36 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 
 	MaybeDownloadGame(battle)
 	MaybeDownloadMap(battle)
-	UpdateArchiveStatus()
+	UpdateArchiveStatus(true)
 end
 
-local function AddTeamButtons(parent, offX, joinFunc, aiFunc)
-	local addAiButton = Button:New {
-		x = offX,
-		y = 4,
-		height = 24,
-		width = 75,
-		font = WG.Chobby.Configuration:GetFont(3),
-		caption = i18n("add_ai") .. "\b",
-		OnClick = {aiFunc},
-		parent = parent,
-	}
-	local joinTeamButton = Button:New {
-		name = "joinTeamButton",
-		x = offX + 85,
-		y = 4,
-		height = 24,
-		width = 75,
-		font =  WG.Chobby.Configuration:GetFont(3),
-		caption = i18n("join") .. "\b",
-		OnClick = {joinFunc},
-		parent = parent,
-	}
+local function AddTeamButtons(parent, offX, joinFunc, aiFunc, unjoinable, disallowBots)
+	if not disallowBots then
+		local addAiButton = Button:New {
+			x = offX,
+			y = 4,
+			height = 24,
+			width = 75,
+			font = WG.Chobby.Configuration:GetFont(3),
+			caption = i18n("add_ai") .. "\b",
+			OnClick = {aiFunc},
+			parent = parent,
+		}
+		offX = offX + 85
+	end
+	if not unjoinable then
+		local joinTeamButton = Button:New {
+			name = "joinTeamButton",
+			x = offX,
+			y = 4,
+			height = 24,
+			width = 75,
+			font =  WG.Chobby.Configuration:GetFont(3),
+			caption = i18n("join") .. "\b",
+			OnClick = {joinFunc},
+			parent = parent,
+		}
+	end
 end
 
 local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
@@ -646,7 +665,15 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				parentStack = spectatorStackPanel
 				parentScroll = spectatorScrollPanel
 			else
-				humanName = "Team " .. teamIndex
+				if battle.disallowCustomTeams then
+					if teamIndex == 0 then
+						humanName = "Players"
+					else
+						humanName = "Bots"
+					end
+				else
+					humanName = "Team " .. (teamIndex + 1)
+				end
 				parentStack = mainStackPanel
 				parentScroll = mainScrollPanel
 			end
@@ -674,7 +701,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 			if teamIndex ~= -1 then
 				AddTeamButtons(
 					teamHolder,
-					82,
+					88,
 					function()
 						battleLobby:SetBattleStatus({
 								allyNumber = teamIndex,
@@ -683,7 +710,9 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 					end,
 					function()
 						WG.Chobby.AiListWindow(battleLobby, battle.gameName, teamIndex)
-					end
+					end,
+					battle.disallowCustomTeams and teamIndex ~= 0,
+					(battle.disallowBots or battle.disallowCustomTeams) and teamIndex == 0
 				)
 			end
 			local teamStack = Control:New {
@@ -798,8 +827,10 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 	end
 
 	GetTeam(-1) -- Make Spectator heading appear
-	GetTeam(0) -- Always show two teams
-	GetTeam(1)
+	GetTeam(0) -- Always show two teams in custom battles
+	if not (battle.disallowCustomTeams and battle.disallowBots) then
+		GetTeam(1)
+	end
 
 	OpenNewTeam = function ()
 		GetTeam(emptyTeamIndex)
@@ -1072,7 +1103,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		y = 0,
 		right = "52%",
 		bottom = BOTTOM_SPACING,
-		padding = {EXTERNAL_PAD_HOR, EXTERNAL_PAD_VERT, INTERNAL_PAD, 0},
+		padding = {EXTERNAL_PAD_HOR, EXTERNAL_PAD_VERT, INTERNAL_PAD, INTERNAL_PAD},
 		parent = topPanel,
 	}
 
@@ -1104,7 +1135,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		y = 0,
 		right = "33%",
 		bottom = BOTTOM_SPACING,
-		padding = {INTERNAL_PAD, EXTERNAL_PAD_VERT, 1, 0},
+		padding = {INTERNAL_PAD, EXTERNAL_PAD_VERT, 1, INTERNAL_PAD},
 		parent = topPanel,
 	}
 
@@ -1136,13 +1167,16 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	}
 
 	local battleTitle = i18n("battle") .. ": " .. tostring(battle.title)
+	if battle.battleMode then
+		battleTitle = i18n(WG.Chobby.Configuration.battleTypeToName[battle.battleMode]) .. " " .. battleTitle
+	end
 
 	local lblBattleTitle = Label:New {
 		x = 18,
 		y = 16,
 		right = 100,
 		height = 30,
-		font =  WG.Chobby.Configuration:GetFont(3),
+		font = WG.Chobby.Configuration:GetFont(3),
 		caption = "",
 		parent = window,
 		OnResize = {
@@ -1254,11 +1288,13 @@ function BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
 		OnHide = {
 			function(obj)
 				tabPanel.RemoveTab("myBattle", true)
+				WG.Chobby.interfaceRoot.UpdateMatchMakingHolderPosition()
 			end
 		}
 	}
 
 	tabPanel.AddTab("myBattle", "My Battle", multiplayerWrapper, false, 3, true)
+	WG.Chobby.interfaceRoot.UpdateMatchMakingHolderPosition()
 
 	UpdateArchiveStatus()
 
@@ -1286,12 +1322,14 @@ function BattleRoomWindow.GetSingleplayerControl()
 				if multiplayerWrapper then
 					local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
 					tabPanel.RemoveTab("myBattle", true)
-
+					WG.Chobby.interfaceRoot.UpdateMatchMakingHolderPosition()
+					
 					if window then
 						window:Dispose()
 						window = nil
 					end
 					WG.LibLobby.lobby:LeaveBattle()
+					multiplayerWrapper = nil
 				elseif window then
 					return
 				end
@@ -1350,7 +1388,7 @@ function BattleRoomWindow.SetSingleplayerGame(ToggleShowFunc, battleroomObj, tab
 	if config.singleplayer_mode == 1 then
 		WG.Chobby.GameListWindow(SetGameFail, SetGameSucess)
 	elseif config.singleplayer_mode == 2 then
-		singleplayerGame = "Zero-K v1.4.7.1"
+		singleplayerGame = "Zero-K v1.4.9.1"
 		ToggleShowFunc(battleroomObj, tabData)
 	elseif config.singleplayer_mode == 3 then
 		singleplayerGame = "Zero-K $VERSION"
@@ -1366,19 +1404,26 @@ function BattleRoomWindow.LeaveBattle(onlyMultiplayer, onlySingleplayer)
 	if onlyMultiplayer and battleLobby.name == "singleplayer" then
 		return
 	end
-
+	
+	if onlySingleplayer and battleLobby.name == "singleplayer" then
+		if window then
+			window:Dispose()
+			window = nil
+		end
+		return
+	end
+	
 	battleLobby:LeaveBattle()
 	onBattleClosed(_, battleLobby:GetMyBattleID())
 
 	local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
 	tabPanel.RemoveTab("myBattle", true)
+	WG.Chobby.interfaceRoot.UpdateMatchMakingHolderPosition()
 end
 
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-
-	MaybeDownloadArchive("Zero-K v1.4.7.1", "game")
 
 	WG.BattleRoomWindow = BattleRoomWindow
 end

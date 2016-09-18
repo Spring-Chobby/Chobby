@@ -104,6 +104,11 @@ end
 -- Battle commands
 ------------------------
 
+function Interface:RejoinBattle(battleID)
+	self:ConnectToBattle()
+	return self
+end
+
 function Interface:JoinBattle(battleID, password, scriptPassword)
 	self:super("JoinBattle", battleID, password, scriptPassword)
 	self:_SendCommand(concat("JOINBATTLE", battleID, password, scriptPassword))
@@ -292,12 +297,17 @@ Interface.commands["PONG"] = Interface._OnPong
 -- User commands
 ------------------------
 
-function Interface:_OnAddUser(userName, country, cpu, accountID)
+function Interface:_AddUser(userName, country, cpu, accountID)
 	cpu = tonumber(cpu)
 	accountID = tonumber(accountID)
-	self:super("_OnAddUser", userName, country, cpu, accountID)
+	local status = {
+		country = country, 
+		cpu = cpu, 
+		accountID = accountID
+	}
+	self:super("_OnAddUser", userName, status)
 end
-Interface.commands["ADDUSER"] = Interface._OnAddUser
+Interface.commands["ADDUSER"] = Interface._AddUser
 Interface.commandPattern["ADDUSER"] = "(%S+)%s+(%S%S)%s+(%S+)%s*(.*)"
 
 function Interface:_OnRemoveUser(userName)
@@ -314,6 +324,21 @@ function Interface:_OnClientStatus(userName, status)
 		isModerator = rshift(status, 5) % 2 == 1,
 		isBot       = rshift(status, 6) % 2 == 1,
 	})
+	
+	if status.isInGame ~= nil then
+		
+		local battleID = self:GetBattleFoundedBy(userName)
+		if battleID then
+			self:_OnBattleIngameUpdate(battleID, status.isInGame)
+		end
+		if self.myBattleID and status.isInGame then
+			local myBattle = self:GetBattle(self.myBattleID)
+			if myBattle and myBattle.founder == userName then
+				local battle = self:GetBattle(self.myBattleID)
+				self:ConnectToBattle(self.useSpringRestart, battle.ip, battle.port, self:GetScriptPassword())
+			end
+		end
+	end
 end
 Interface.commands["CLIENTSTATUS"] = Interface._OnClientStatus
 Interface.commandPattern["CLIENTSTATUS"] = "(%S+)%s+(%S+)"
@@ -394,10 +419,12 @@ function Interface:_OnBattleOpened(battleID, type, natType, founder, ip, port, m
 	port = tonumber(port)
 	maxPlayers = tonumber(maxPlayers)
 	passworded = tonumber(passworded) ~= 0
+	
+	local isRunning = self.users[founder].isInGame
 
 	local engineName, engineVersion, map, title, gameName = unpack(explode("\t", other))
 
-	self:super("_OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, engineName, engineVersion, map, title, gameName)
+	self:super("_OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, engineName, engineVersion, map, title, gameName, isRunning)
 end
 Interface.commands["BATTLEOPENED"] = Interface._OnBattleOpened
 Interface.commandPattern["BATTLEOPENED"] = "(%d+)%s+(%d)%s+(%d)%s+(%S+)%s+(%S+)%s+(%d+)%s+(%d+)%s+(%d+)%s+(%S+)%s+(%S+)%s*(.*)"
@@ -433,9 +460,9 @@ end
 Interface.commands["LEFTBATTLE"] = Interface._OnLeftBattle
 Interface.commandPattern["LEFTBATTLE"] = "(%d+)%s+(%S+)"
 
-function Interface:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName)
+function Interface:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)
 	battleID = tonumber(battleID)
-	self:super("_OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName)
+	self:super("_OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)
 end
 Interface.commands["UPDATEBATTLEINFO"] = Interface._OnUpdateBattleInfo
 Interface.commandPattern["UPDATEBATTLEINFO"] = "(%d+)%s+(%S+)%s+(%S+)%s+(%S+)%s+([^\t]+)"
@@ -1081,15 +1108,15 @@ end
 Interface.commands["OPENBATTLEFAILED"] = Interface._OnOpenBattleFailed
 Interface.commandPattern["OPENBATTLEFAILED"] = "([^\t]+)"
 
-function Interface:_OnQueueOpened(obj)
-	self:_CallListeners("OnQueueOpened", obj)
+function Interface:_QueueOpened(obj)
+	self:_OnQueueOpened(obj.name, obj.title, obj.mapNames, nil, obj.gameNames)
 end
-Interface.jsonCommands["QUEUEOPENED"] = Interface._OnQueueOpened
+Interface.jsonCommands["QUEUEOPENED"] = Interface._QueueOpened
 
-function Interface:_OnQueueClosed(obj)
-	self:_CallListeners("OnQueueClosed", obj.name)
+function Interface:_QueueClosed(obj)
+	self:_OnQueueClosed(obj.name)
 end
-Interface.jsonCommands["QUEUECLOSED"] = Interface._OnQueueClosed
+Interface.jsonCommands["QUEUECLOSED"] = Interface._QueueClosed
 
 function Interface:_OnQueueLeft(obj)
 	self:_CallListeners("OnQueueLeft", obj.name, obj.userNames)
@@ -1278,7 +1305,11 @@ end
 Interface.jsonCommands["INVITETEAMDECLINED"] = Interface._OnInviteTeamDeclined
 
 function Interface:_OnListQueues(queues)
-	self:_CallListeners("OnListQueues", queues)
+	self.queueCount = 0
+	self.queues = {}
+	for _, queue in pairs(queues) do
+		self:_OnQueueOpened(obj.name, obj.title, obj.mapNames, nil, obj.gameNames)
+	end
 end
 Interface.jsonCommands["LISTQUEUES"] = Interface._OnListQueues
 

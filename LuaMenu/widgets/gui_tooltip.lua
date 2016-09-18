@@ -25,13 +25,15 @@ local USER_CH_TOOLTIP_PREFIX = "user_chat_s_"
 
 local TOOLTIP_TEXT_NAME = "tooltipText"
 
-local IMAGE_MODERATOR = LUA_DIRNAME .. "images/ranks/moderator.png"
-local IMAGE_AFK = LUA_DIRNAME .. "images/away.png"
-local IMAGE_BATTLE = LUA_DIRNAME .. "images/battle.png"
-local IMAGE_INGAME = LUA_DIRNAME .. "images/ingame.png"
-local IMAGE_LOCK = LUA_DIRNAME .. "widgets/chobby/images/lock.png"
-local BATTLE_RUNNING = LUA_DIRNAME .. "images/runningBattle.png"
-local BATTLE_NOT_RUNNING = ""
+local IMAGE_MODERATOR    = LUA_DIRNAME .. "images/ranks/moderator.png"
+local IMAGE_FRIEND       = LUA_DIRNAME .. "images/ranks/friend.png"
+local IMAGE_MUTE         = LUA_DIRNAME .. "images/ranks/noChat.png"
+local IMAGE_AFK          = LUA_DIRNAME .. "images/away.png"
+local IMAGE_BATTLE       = LUA_DIRNAME .. "images/battle.png"
+local IMAGE_INGAME       = LUA_DIRNAME .. "images/ingame.png"
+local IMAGE_LOCK         = LUA_DIRNAME .. "widgets/chobby/images/lock.png"
+local BATTLE_RUNNING     = LUA_DIRNAME .. "images/runningBattle.png"
+local BATTLE_NOT_RUNNING = LUA_DIRNAME .. "images/nothing.png"
 
 local PASSWORD_EXPLAINATION = "Battle requires a password to join."
 
@@ -69,9 +71,18 @@ local function InitWindow()
 	tipWindow:Hide()
 end
 
+local oldSizeX, oldSizeY
 function widget:ViewResize(vsx, vsy)
+	oldSizeX, oldSizeY = vsx, vsy
 	screenWidth = vsx
 	screenHeight = vsy
+end
+
+local function EvilHax()
+	local screenWidth, screenHeight = Spring.GetWindowGeometry()
+	if screenWidth ~= oldSizeX or screenHeight ~= oldSizeY then
+		widget:ViewResize(screenWidth, screenHeight)
+	end
 end
 
 --------------------------------------------------------------------------
@@ -159,12 +170,18 @@ local function GetTooltipLine(parent, hasImage, fontSize, xOffset)
 		text = "",
 	}
 
-	function externalFunctions.Update(newPosition, newText, newImage)
+	function externalFunctions.Update(newPosition, newText, newImage, newColor)
 		if not textDisplay.visible then
 			textDisplay:Show()
 		end
 		textDisplay:SetText(newText)
 		textDisplay:SetPos(nil, newPosition)
+		
+		if newColor then
+			textDisplay.font.color = newColor
+			textDisplay:Invalidate()
+		end
+		
 		if hasImage then
 			if not imageDisplay.visible then
 				imageDisplay:Show()
@@ -178,10 +195,12 @@ local function GetTooltipLine(parent, hasImage, fontSize, xOffset)
 	function externalFunctions.UpdatePosition(newPosition)
 		if not textDisplay.visible then
 			textDisplay:Show()
-			textDisplay:SetPos(nil, newPosition)
 		end
-		if hasImage and not imageDisplay.visible then
-			imageDisplay:Show()
+		textDisplay:SetPos(nil, newPosition)
+		if hasImage then
+			if not imageDisplay.visible then
+				imageDisplay:Show()
+			end
 			imageDisplay:SetPos(nil, newPosition - 4)
 		end
 	end
@@ -394,14 +413,25 @@ local function GetBattleTooltip(battleID, battle)
 	end
 	local offset = 7
 
-	-- Battle Name]
+	-- Battle Name
 	if not battleTooltip.title then
 		battleTooltip.title = GetTooltipLine(battleTooltip.mainControl, nil, 3)
 	end
 	local truncatedName = StringUtilities.GetTruncatedStringWithDotDot(battle.title, battleTooltip.title.GetFont(), width - 10)
 	battleTooltip.title.Update(offset, truncatedName)
-	offset = offset + 23 -- * battleTooltip.title.GetLines() -- Not required with truncation
+	offset = offset + 25 -- * battleTooltip.title.GetLines() -- Not required with truncation
 
+	-- Battle Type
+	if battle.battleMode then
+		if not battleTooltip.battleMode then
+			battleTooltip.battleMode = GetTooltipLine(battleTooltip.mainControl)
+		end
+		battleTooltip.battleMode.Update(offset, i18n(Configuration.battleTypeToName[battle.battleMode]))
+		offset = offset + 21
+	elseif battleTooltip.battleMode then
+		battleTooltip.battleMode.Hide()
+	end
+	
 	-- Players and Spectators
 	if battle.spectatorCount and battle.maxPlayers and battle.users then
 		if not battleTooltip.playerCount then
@@ -436,14 +466,13 @@ local function GetBattleTooltip(battleID, battle)
 	end
 
 	-- InGameSince
-	local hostInfo = lobby:GetUser(battle.founder) or {}
-	if hostInfo.inGameSince then
+	if battle.runningSince and battle.isRunning then
 		if not battleTooltip.inGameSince then
 			battleTooltip.inGameSince = GetTooltipLine(battleTooltip.mainControl, true)
 		end
 		battleTooltip.inGameSince.Update(
 			offset,
-			"Running for " .. GetTimeToPast(hostInfo.inGameSince),
+			"Running for " .. GetTimeToPast(battle.runningSince),
 			IMAGE_INGAME
 		)
 		offset = offset + 20
@@ -565,14 +594,33 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 	-- Clan
 	if userInfo.clan then
 		if not userTooltip.clan then
-			userTooltip.clan = GetTooltipLine(userTooltip.mainControl)
+			userTooltip.clan = GetTooltipLine(userTooltip.mainControl, true)
 		end
-		userTooltip.clan.Update(offset, "Clan: " .. userInfo.clan)
+		userTooltip.clan.Update(
+			offset,
+			"Clan: " .. userInfo.clan,
+			WG.UserHandler.GetClanImage(userInfo.clan)
+		)
 		offset = offset + 20
 	elseif userTooltip.clan then
 		userTooltip.clan.Hide()
 	end
 
+	-- Ignore and Friend
+	if userInfo.isIgnored or userInfo.isFriend then
+		if not userTooltip.friendIgnore then
+			userTooltip.friendIgnore = GetTooltipLine(userTooltip.mainControl, true)
+		end
+		userTooltip.friendIgnore.Update(
+			offset, 
+			userInfo.isIgnored and "Ignored" or "Friend", 
+			userInfo.isIgnored and IMAGE_MUTE or IMAGE_FRIEND
+		)
+		offset = offset + 20
+	elseif userTooltip.friendIgnore then
+		userTooltip.friendIgnore:Hide()
+	end
+	
 	-- Country
 	if userInfo.country then
 		if not userTooltip.country then
@@ -595,7 +643,8 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 			userTooltip.moderator.Update(
 				offset,
 				"Moderator",
-				IMAGE_MODERATOR
+				IMAGE_MODERATOR,
+				Configuration:GetModeratorColor()
 			)
 		end
 		userTooltip.moderator.UpdatePosition(offset)
@@ -622,7 +671,7 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 		userTooltip.level.Update(
 			offset,
 			text,
-			WG.UserHandler.UserLevelToImage(userInfo.level, isBot)
+			WG.UserHandler.UserLevelToImage(userInfo.level, userInfo.skill, isBot)
 		)
 		offset = offset + 20
 	elseif userTooltip.level then
@@ -630,7 +679,7 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 	end
 
 	-- InGameSince
-	if userInfo.inGameSince then
+	if userInfo.inGameSince and userInfo.isInGame then
 		if not userTooltip.inGameSince then
 			userTooltip.inGameSince = GetTooltipLine(userTooltip.mainControl, true)
 		end
@@ -645,7 +694,7 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 	end
 
 	-- Away Since
-	if userInfo.awaySince then
+	if userInfo.awaySince and userInfo.isAway then
 		if not userTooltip.awaySince then
 			userTooltip.awaySince = GetTooltipLine(userTooltip.mainControl, true)
 		end
@@ -802,7 +851,7 @@ local function UpdateTooltip(inputText)
 		end
 	else -- For everything else display a normal tooltip
 		tipWindow:ClearChildren()
-		tipTextDisplay:SetText(text)
+		tipTextDisplay:SetText(inputText)
 		tipWindow:AddChild(tipTextDisplay)
 		tipTextDisplay:UpdateLayout()
 	end
@@ -814,6 +863,8 @@ end
 local currentTooltipText = false
 
 function widget:Update()
+	EvilHax()
+
 	local text = GetTooltip()
 	if text then
 		if currentTooltipText ~= text then

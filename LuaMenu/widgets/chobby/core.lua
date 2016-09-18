@@ -48,6 +48,7 @@ local includes = {
 	"components/map_list_window.lua",
 	"components/game_list_window.lua",
 	"components/confirmation_popup.lua",
+	"components/information_popup.lua",
 }
 
 Chobby = widget
@@ -63,6 +64,18 @@ function Chobby:_Initialize()
 				function(listener, battleID)
 					Spring.Echo("Showing battle with ID", battleID)
 					WG.BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
+				end
+			)
+		end, 0.001)
+	end)
+	self:WrapCall(function()
+		WG.Delay(function()
+			lobby:AddListener("OnSayServerMessage", 
+				function(listener, text, timeSent)
+					Chotify:Post({
+						title = "Server",
+						body = text,
+					})
 				end
 			)
 		end, 0.001)

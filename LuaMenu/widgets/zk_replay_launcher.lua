@@ -75,12 +75,23 @@ local function newset()
 end
 
 local function Echo(stuff)
-	 Chotify:Post({
-		 title = "Launching Replay",
-		 body = stuff,
-	 })
+	Chotify:Post({
+		title = "Launching Replay",
+		body = stuff,
+	})
 end
 
+local function Abort(reason)
+	hasFile = false
+	hasGame = false
+	hasEngine = false
+	hasMap = false
+
+	Chotify:Post({
+		title = "Replay Failed",
+		body = reason
+	})
+end
 
 -- initiates a connection to host:port, returns true on success
 local function SocketConnect(host, port)
@@ -112,10 +123,8 @@ function onLaunchReplay(wtf, replay, game, map, engine)
 
 	hasGame = false
 	hasMap = false
-	hasEngine = false
+	hasEngine = WG.Chobby.Configuration:IsValidEngineVersion(engine)
 	hasFile = false
-
-	hasEngine = engine:find(Game.version) == 1
 
 	if not hasEngine then
 		return Abort("Wrong engine "..engine)
@@ -184,22 +193,8 @@ local function AttemptStart(saveFilename)
 	end
 
 	Echo("Starting Spring")
-
-	WG.Chobby.localLobby:StartGameFromFile(saveFilename)
+	WG.Chobby.localLobby:StartReplay(saveFilename)
 end
-
-local function Abort(reason)
-	hasFile = false
-	hasGame = false
-	hasEngine = false
-	hasMap = false
-
-	Chotify:Post({
-		title = "Replay Failed",
-		body = reason
-	})
-end
-
 
 -- called when a connection is closed
 local function SocketClosed(sock)

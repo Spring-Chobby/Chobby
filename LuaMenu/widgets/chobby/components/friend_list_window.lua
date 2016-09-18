@@ -5,8 +5,8 @@ function FriendListWindow:init(parent)
 
 	self:SetMinItemWidth(240)
 	self.columns = 3
-	self.itemHeight = 80
-	self.itemPadding = 1
+	self.itemHeight = 82
+	self.itemPadding = 0
 
 	lobby:AddListener("OnAddUser",           function(listener, ...) self:OnAddUser(...) end)
 	lobby:AddListener("OnRemoveUser",        function(listener, ...) self:OnRemoveUser(...) end)
@@ -102,8 +102,8 @@ function FriendListWindow:AddFriendRequest(userName)
 end
 
 function FriendListWindow:AddFriend(userName)
-	userControl = WG.UserHandler.GetFriendUser(userName)
-	userControl:SetPos(0, 0, 250, 80)
+	local userControl = WG.UserHandler.GetFriendUser(userName)
+	--userControl:SetPos(0, 0, 250, 80)
 	self:AddRow({userControl}, userName)
 end
 

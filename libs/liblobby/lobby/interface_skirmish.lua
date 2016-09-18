@@ -124,12 +124,35 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName)
 	-- end
 end
 
+function InterfaceSkirmish:StartReplay(replayFilename)
+	local scriptTxt =
+[[
+[GAME]
+{
+	DemoFile=__FILE__;
+}
+]]
+
+	scriptTxt = scriptTxt:gsub("__FILE__", replayFilename)
+	self:_CallListeners("OnBattleAboutToStart")
+	
+	Spring.Echo("starting game", scriptTxt)
+	Spring.Reload(scriptTxt)
+	return false
+end
+
+function InterfaceSkirmish:StartGameFromString(scriptString)
+	self:_CallListeners("OnBattleAboutToStart")
+	Spring.Reload(scriptString)
+	return false
+end
+
 function InterfaceSkirmish:StartGameFromFile(scriptFileName)
 	self:_CallListeners("OnBattleAboutToStart")
 	if self.useSpringRestart then
 		Spring.Restart(scriptFileName, "")
 	else
-		Spring.Reload(scriptFileName)
+		Spring.Start(scriptFileName, "")
 	end
 	return false
 end
@@ -208,6 +231,11 @@ end
 
 function InterfaceSkirmish:RemoveAi(aiName)
 	self:_OnRemoveAi(self:GetMyBattleID(), aiName)
+	return self
+end
+
+function InterfaceSkirmish:SetModOptions(data)
+	self:_OnSetModOptions(data)
 	return self
 end
 

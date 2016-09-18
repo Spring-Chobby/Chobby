@@ -37,7 +37,7 @@ local function MultiplayerEntryPopup()
 		if loginWindow and loginWindow.window then
 			local popup = WG.Chobby.PriorityPopup(loginWindow.window, loginWindow.CancelFunc, loginWindow.AcceptFunc)
 		else
-			Spring.Echo("Failed to create loginWindow")
+			Log.Error("Failed to create loginWindow")
 		end
 	end
 end

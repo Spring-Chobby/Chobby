@@ -188,8 +188,18 @@ function widget:TextInput(utf8, ...)
 	return screen0:TextInput(utf8, ...)
 end
 
+
+local oldSizeX, oldSizeY
 function widget:ViewResize(vsx, vsy)
+	oldSizeX, oldSizeY = vsx, vsy
 	screen0:Resize(vsx, vsy)
+end
+
+function widget:Update()
+	local screenWidth, screenHeight = Spring.GetWindowGeometry()
+	if screenWidth ~= oldSizeX or screenHeight ~= oldSizeY then
+		widget:ViewResize(screenWidth, screenHeight)
+	end
 end
 
 widget.TweakIsAbove      = widget.IsAbove

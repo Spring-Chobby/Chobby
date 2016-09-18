@@ -26,7 +26,9 @@ CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 
 local interfaceRoot
 
+local oldSizeX, oldSizeY
 function widget:ViewResize(vsx, vsy, viewGeometry)
+	oldSizeX, oldSizeY = vsx, vsy
 	if interfaceRoot then
 		interfaceRoot.ViewResize(vsx, vsy)
 	end
@@ -34,15 +36,26 @@ function widget:ViewResize(vsx, vsy, viewGeometry)
 	WG.Chobby:_ViewResize(vsx, vsy)
 end
 
-local oldName
-function widget:GamePreload()
-	local gameName = Spring.GetGameName()
-	oldName = gameName
-	interfaceRoot.SetIngame(gameName ~= "")
+function widget:Update()
+	local screenWidth, screenHeight = Spring.GetWindowGeometry()
+	if screenWidth ~= oldSizeX or screenHeight ~= oldSizeY then
+		widget:ViewResize(screenWidth, screenHeight)
+	end
 end
 
+function widget:GamePreload()
+	interfaceRoot.SetIngame(Spring.GetGameName() ~= "")
+	lobby:SetIngameStatus(true)
+end
+
+local ignoreFirstCall = true
 function widget:ActivateMenu()
+	if ignoreFirstCall then
+		ignoreFirstCall = false
+		return
+	end
 	interfaceRoot.SetIngame(false)
+	lobby:SetIngameStatus(false)
 end
 
 function widget:Initialize()

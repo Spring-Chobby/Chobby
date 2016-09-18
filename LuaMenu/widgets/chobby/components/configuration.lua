@@ -10,10 +10,10 @@ function Configuration:init()
 	self.serverAddress = WG.Server.serverAddress or "springrts.com"
 	self.serverPort = 8200
 
-	self.chatMaxNameLength = 120 -- Pixels
-	self.statusMaxNameLength = 180
-	self.friendMaxNameLength = 180
-	self.notificationMaxNameLength = 180
+	self.chatMaxNameLength = 170 -- Pixels
+	self.statusMaxNameLength = 230
+	self.friendMaxNameLength = 230
+	self.notificationMaxNameLength = 230
 
 	self.userName = ""
 	self.password = ""
@@ -29,12 +29,25 @@ function Configuration:init()
 	self.partialColor = "\255\190\210\50"
 	self.selectedColor = "\255\99\184\255"
 	self.meColor = "\255\0\190\190"
+	
+	self.moderatorColor = {0.68, 0.78, 1, 1}
+	self.founderColor = {0.7, 1, 0.65, 1}
+	self.userNameColor = {1, 1, 1, 1}
+	
 	self.buttonFocusColor = {0.54,0.72,1,0.3}
 	self.buttonSelectedColor = {0.54,0.72,1,0.6}--{1.0, 1.0, 1.0, 1.0}
 
 	self.loadLocalWidgets = false
 	self.displayBots = false
 	self.displayBadEngines = false
+	
+	self.battleTypeToName = {
+		[5] = "cooperative",
+		[6] = "team",
+		[3] = "oneVsOne",
+		[4] = "freeForAll",
+		[0] = "custom",
+	}
 
 	-- Do not ask again tests.
 	self.confirmation_mainMenuFromBattle = false
@@ -81,6 +94,8 @@ function Configuration:init()
 	self.countryShortnames = VFS.Include(LUA_DIRNAME .. "configs/countryShortname.lua")
 
 	self.game_settings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings3.lua")
+	local settingsFile, settingsDefaults = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/settingsMenu.lua")
+	self.settingsMenuValues = settingsDefaults
 end
 
 ---------------------------------------------------------------------------------
@@ -115,6 +130,7 @@ function Configuration:GetConfigData()
 		useSpringRestart = self.useSpringRestart,
 		displayBots = self.displayBots,
 		displayBadEngines = self.displayBadEngines,
+		settingsMenuValues = self.settingsMenuValues,
 	}
 end
 
@@ -172,6 +188,18 @@ end
 
 function Configuration:GetButtonFocusColor()
 	return self.buttonFocusColor
+end
+
+function Configuration:GetModeratorColor()
+	return self.moderatorColor
+end
+
+function Configuration:GetFounderColor()
+	return self.founderColor
+end
+
+function Configuration:GetUserNameColor()
+	return self.useNameColor
 end
 
 -- NOTE: this one is in opengl range [0,1]
@@ -270,10 +298,7 @@ function Configuration:GetBackgroundImage()
 end
 
 function Configuration:IsValidEngineVersion(engineVersion)
-	if self.displayBadEngines then
-		return true
-	end
-	Spring.Echo("Checking engineVersion", engineVersion, "against", Game.version, "numbers", tonumber(Game.version), string.gsub(Game.version, " develop", ""))
+	--Spring.Echo("Checking engineVersion", engineVersion, "against", Game.version, "numbers", tonumber(Game.version), string.gsub(Game.version, " develop", ""))
 	if tonumber(Game.version) then
 		-- Master releases lack the '.0' at the end. Who knows what other cases are wrong.
 		-- Add as required.

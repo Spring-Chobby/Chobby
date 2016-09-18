@@ -1,7 +1,7 @@
 BattleListWindow = ListWindow:extends{}
 
 local BATTLE_RUNNING = LUA_DIRNAME .. "images/runningBattle.png"
-local BATTLE_NOT_RUNNING = ""
+local BATTLE_NOT_RUNNING = LUA_DIRNAME .. "images/nothing.png"
 
 local IMG_READY    = LUA_DIRNAME .. "images/ready.png"
 local IMG_UNREADY  = LUA_DIRNAME .. "images/unready.png"
@@ -94,7 +94,7 @@ function BattleListWindow:Update()
 end
 
 function BattleListWindow:AddBattle(battleID, battle)
-	if not Configuration:IsValidEngineVersion(battle.engineVersion) then
+	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 
@@ -213,7 +213,7 @@ function BattleListWindow:AddBattle(battleID, battle)
 		parent = parentButton,
 	}
 	local lblGame = Label:New {
-		name = "game",
+		name = "gameCaption",
 		x = height + 100,
 		right = 0,
 		y = 20,
@@ -268,7 +268,7 @@ end
 
 function BattleListWindow:UpdateSync(battleID)
 	local battle = lobby:GetBattle(battleID)
-	if not Configuration:IsValidEngineVersion(battle.engineVersion) then
+	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	local items = self:GetRowItems(battleID)
@@ -281,7 +281,7 @@ end
 
 function BattleListWindow:JoinedBattle(battleID)
 	local battle = lobby:GetBattle(battleID)
-	if not Configuration:IsValidEngineVersion(battle.engineVersion) then
+	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	local items = self:GetRowItems(battleID)
@@ -292,7 +292,7 @@ end
 
 function BattleListWindow:LeftBattle(battleID)
 	local battle = lobby:GetBattle(battleID)
-	if not Configuration:IsValidEngineVersion(battle.engineVersion) then
+	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	local items = self:GetRowItems(battleID)
@@ -303,19 +303,18 @@ end
 
 function BattleListWindow:OnUpdateBattleInfo(battleID)
 	local battle = lobby:GetBattle(battleID)
-	if not Configuration:IsValidEngineVersion(battle.engineVersion) then
+	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	local items = self:GetRowItems(battleID)
+	
 	local mapCaption = items.battleButton:GetChildByName("mapCaption")
 	local imHaveMap = items.battleButton:GetChildByName("imHaveMap")
 	local minimapImage = items.battleButton:GetChildByName("minimap"):GetChildByName("minimapImage")
-	local playersCaption = items.battleButton:GetChildByName("playersCaption")
-
+	
 	minimapImage.file = Configuration:GetMinimapImage(battle.mapName, battle.gameName)
 	minimapImage:Invalidate()
-
-	playersCaption:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
+	
 	mapCaption:SetCaption(battle.mapName:gsub("_", " "))
 	if VFS.HasArchive(battle.mapName) then
 		imHaveMap.file = IMG_READY
@@ -323,13 +322,22 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 		imHaveMap.file = IMG_UNREADY
 	end
 	imHaveMap:Invalidate()
+	
+	local gameCaption = items.battleButton:GetChildByName("gameCaption")
+	local imHaveGame = items.battleButton:GetChildByName("imHaveGame")
+	
+	imHaveGame.file = (VFS.HasArchive(battle.gameName) and IMG_READY or IMG_UNREADY)
+	gameCaption:SetCaption(battle.gameName:gsub("_", " "))
+	
+	local playersCaption = items.battleButton:GetChildByName("playersCaption")
+	playersCaption:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
 
 	self:RecalculateOrder(battleID)
 end
 
 function BattleListWindow:OnBattleIngameUpdate(battleID, isRunning)
 	local battle = lobby:GetBattle(battleID)
-	if not Configuration:IsValidEngineVersion(battle.engineVersion) then
+	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	local items = self:GetRowItems(battleID)
@@ -349,7 +357,7 @@ function BattleListWindow:OpenHostWindow()
 		name = "hostBattle",
 		parent = WG.Chobby.lobbyInterfaceHolder,
 		width = 530,
-		height = 260,
+		height = 310,
 		resizable = false,
 		draggable = false,
 		classname = "overlay_window",
@@ -405,6 +413,29 @@ function BattleListWindow:OpenHostWindow()
 		parent = hostBattleWindow,
 	}
 
+	local typeLabel = Label:New {
+		x = 15,
+		width = 200,
+		y = 155,
+		align = "right",
+		height = 35,
+		caption = i18n("game_type") .. ":",
+		font = Configuration:GetFont(3),
+		parent = hostBattleWindow,
+	}
+	local typeCombo = ComboBox:New {
+		x = 220,
+		width = 260,
+		y = 150,
+		height = 35,
+		text = "",
+		font = Configuration:GetFont(3),
+		items = {"Cooperative", "Team", "1v1", "FFA", "Custom"},
+		itemFontSize = Configuration:GetFont(3).size,
+		selected = 1,
+		parent = hostBattleWindow,
+	}
+	
 	local function CancelFunc()
 		hostBattleWindow:Dispose()
 	end
@@ -412,9 +443,9 @@ function BattleListWindow:OpenHostWindow()
 	local function HostBattle()
 		WG.BattleRoomWindow.LeaveBattle()
 		if string.len(passwordEdit.text) > 0 then
-			lobby:HostBattle(gameNameEdit.text, passwordEdit.text)
+			lobby:HostBattle(gameNameEdit.text, passwordEdit.text, typeCombo.items[typeCombo.selected])
 		else
-			lobby:HostBattle(gameNameEdit.text)
+			lobby:HostBattle(gameNameEdit.text, nil, typeCombo.items[typeCombo.selected])
 		end
 		hostBattleWindow:Dispose()
 	end

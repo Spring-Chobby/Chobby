@@ -56,12 +56,39 @@ function Interface:Ping()
 end
 
 ------------------------
+-- Status commands
+------------------------
+
+function Interface:SetIngameStatus(isInGame)
+	local sendData = {
+		IsInGame = isInGame,
+	}
+
+	self:_SendCommand("ChangeUserStatus " .. json.encode(sendData))
+	return self
+end
+
+function Interface:SetAwayStatus(isAway)
+	local sendData = {
+		IsAfk = isAway,
+	}
+
+	self:_SendCommand("ChangeUserStatus " .. json.encode(sendData))
+	return self
+end
+
+------------------------
 -- User commands
 ------------------------
 
 function Interface:FriendRequest(userName)
 	self:super("FriendRequest", userName)
-	Spring.Echo("TODO: Implement FriendRequest")
+	local sendData = {
+		TargetName = userName,
+		Relation = 1, -- Friend
+	}
+	
+	self:_SendCommand("SetAccountRelation " .. json.encode(sendData))
 	return self
 end
 
@@ -79,19 +106,34 @@ end
 
 function Interface:Unfriend(userName)
 	self:super("Unfriend", userName)
-	Spring.Echo("TODO: Implement Unfriend")
+	local sendData = {
+		TargetName = userName,
+		Relation = 0, -- None
+	}
+	
+	self:_SendCommand("SetAccountRelation " .. json.encode(sendData))
 	return self
 end
 
 function Interface:Ignore(userName)
 	self:super("Ignore", userName)
-	Spring.Echo("TODO: Implement Ignore")
+	local sendData = {
+		TargetName = userName,
+		Relation = 2, -- Ignore
+	}
+	
+	self:_SendCommand("SetAccountRelation " .. json.encode(sendData))
 	return self
 end
 
 function Interface:Unignore(userName)
 	self:super("Unignore", userName)
-	Spring.Echo("TODO: Implement Unignore")
+	local sendData = {
+		TargetName = userName,
+		Relation = 0, -- None
+	}
+	
+	self:_SendCommand("SetAccountRelation " .. json.encode(sendData))
 	return self
 end
 
@@ -99,20 +141,52 @@ end
 -- Battle commands
 ------------------------
 
-function Interface:HostBattle(battleTitle, password)
-	self.springieSpawnText = "!spawn mod=zk:stable,title=" .. battleTitle .. ((password and ",password=" .. password .. ",") or ",")
-	local sendData = {
-		Place = 2, 
-		Target = "Springiee",
-		IsEmote = false,
-		Text = self.springieSpawnText,
-		Ring = false,
-	}
-	self.springieSpawnTimer = Spring.GetTimer()
-	self.springieSpawnTitle = battleTitle
-	self.springieSpawnPassword = password
+local modeToName = {
+	[5] = "Cooperative",
+	[6] = "Team",
+	[3] = "1v1",
+	[4] = "FFA",
+	[0] = "Custom",
+}
+
+local nameToMode = {}
+for i, v in pairs(modeToName) do
+	nameToMode[v] = i
+end
+
+function Interface:HostBattle(battleTitle, password, modeName)
+	--OpenBattle {"Header":{"Mode":6,"Password":"bla","Title":"GoogleFrog's Teams"}}
+	-- Mode:
+	-- 5 = Cooperative
+	-- 6 = Teams
+	-- 3 = 1v1
+	-- 4 = FFA
+	-- 0 = Custom
+	local engineName
+	if tonumber(Game.version) then
+		engineName = Game.version .. ".0"
+	else
+		engineName = string.gsub(Game.version, " develop", "")
+	end
 	
-	self:_SendCommand("Say " .. json.encode(sendData))
+	local sendData = {
+		Header = {
+			Title = battleTitle,
+			Mode = (modeName and nameToMode[modeName]) or 0,
+			Password = password,
+			Engine = engineName
+		}
+	}
+	
+	self:_SendCommand("OpenBattle " .. json.encode(sendData))
+end
+
+function Interface:RejoinBattle(battleID)
+	local sendData = {
+		BattleID = battleID,
+	}
+	self:_SendCommand("RequestConnectSpring " .. json.encode(sendData))
+	return self
 end
 
 function Interface:JoinBattle(battleID, password, scriptPassword)
@@ -222,6 +296,15 @@ function Interface:VoteNo()
 	return self
 end
 
+function Interface:SetModOptions(data)
+	local sendData = {
+		Options = data,
+	}
+	
+	self:_SendCommand("SetModOptions " .. json.encode(sendData))
+	return self
+end
+
 ------------------------
 -- Channel & private chat commands
 ------------------------
@@ -302,6 +385,98 @@ function Interface:SayPrivateEx(userName, message)
 	return self
 end
 
+------------------------
+-- MatchMaking commands
+------------------------
+
+function Interface:JoinMatchMaking(queueNamePossiblyList)
+	self.joinedQueues = self.joinedQueues or {}
+	self.joinedQueueList = self.joinedQueueList or {}
+	
+	if type(queueNamePossiblyList) == "table" then
+		for i = 1, #queueNamePossiblyList do
+			local queueName = queueNamePossiblyList[i]
+			if not self.joinedQueues[queueName] then
+				self.joinedQueues[queueName] = true
+				self.joinedQueueList[#self.joinedQueueList + 1] =  queueName
+			end
+		end
+	else
+		local queueName = queueNamePossiblyList
+		if not self.joinedQueues[queueName] then
+			self.joinedQueues[#self.joinedQueues + 1] = queueName
+			self.joinedQueueList[#self.joinedQueueList + 1] =  queueName
+		end
+	end
+	
+	local sendData = {
+		Queues = self.joinedQueueList
+	}
+	self:_SendCommand("MatchMakerQueueRequest " .. json.encode(sendData))
+	return self
+end
+
+function Interface:LeaveMatchMaking(queueNamePossiblyList)
+	if self.joinedQueues and self.joinedQueueList then
+		if type(queueNamePossiblyList) == "table" then
+			for i = 1, #queueNamePossiblyList do
+				local queueName = queueNamePossiblyList[i]
+				if self.joinedQueues[queueName] then
+					for i, v in pairs(self.joinedQueueList) do
+						if v == queueName then
+							table.remove(self.joinedQueueList, i)
+							break
+						end
+					end
+					self.joinedQueues[queueName] = nil
+				end
+			end
+		else
+			local queueName = queueNamePossiblyList
+			if self.joinedQueues[queueName] then
+				for i, v in pairs(self.joinedQueueList) do
+					if v == queueName then
+						table.remove(self.joinedQueueList, i)
+						break
+					end
+				end
+				self.joinedQueues[queueName] = nil
+			end
+		end
+	end
+	
+	local sendData = {
+		Queues = self.joinedQueueList or {}
+	}
+	self:_SendCommand("MatchMakerQueueRequest " .. json.encode(sendData))
+	return self
+end
+
+function Interface:LeaveMatchMakingAll()
+	local sendData = {
+		Queues = {}
+	}
+	self:_SendCommand("MatchMakerQueueRequest " .. json.encode(sendData))
+	
+	return self
+end
+
+function Interface:AcceptMatchMakingMatch()
+	local sendData = {
+		Ready = true
+	}
+	self:_SendCommand("AreYouReadyResponse " .. json.encode(sendData))
+	return self
+end
+
+function Interface:RejectMatchMakingMatch()
+	local sendData = {
+		Ready = false
+	}
+	self:_SendCommand("AreYouReadyResponse " .. json.encode(sendData))
+	return self
+end
+
 -------------------------------------------------
 -- END Client commands
 -------------------------------------------------
@@ -379,14 +554,36 @@ Interface.commandPattern["ADDUSER"] = "(%S+)%s+(%S%S)%s+(%S+)%s*(.*)"
 
 function Interface:_User(data)
 	-- CHECKME: verify that name, country, cpu and similar info doesn't change
-	if self.users[data.Name] == nil then
-		self:_OnAddUser(data.Name, data.Country, 3, data.AccountID, data.LobbyVersion, data.Clan)
+	-- It can change now that we remember user data of friends through disconnect.
+	if self.users[data.Name] == nil or self.users[data.Name].isOffline then
+		self:_OnAddUser(data.Name, {
+			country = data.Country,
+			clan = data.Clan,
+			lobbyVersion = data.LobbyVersion,
+			accountID = data.AccountID,
+			isInGame = data.IsInGame,
+			isAway = data.IsAway,
+			isAdmin = data.IsAdmin,
+			level = data.Level,
+			skill1v1 = data.Effective1v1Elo,
+			skill = data.EffectiveMmElo,
+			isBot = data.IsBot,
+			awaySince = data.AwaySince,
+			inGameSince = data.InGameSince,
+		})
+		return
 	end
 	self:_OnUpdateUserStatus(data.Name, {
-		isInGame=data.IsInGame,
-		isAway=data.IsAway,
-		isAdmin=data.IsAdmin,
+		country = data.Country,
+		clan = data.Clan,
+		lobbyVersion = data.LobbyVersion,
+		accountID = data.AccountID,
+		isInGame = data.IsInGame,
+		isAway = data.IsAway,
+		isAdmin = data.IsAdmin,
 		level = data.Level,
+		skill1v1 = data.Effective1v1Elo,
+		skill = data.EffectiveElo,
 		isBot = data.IsBot,
 		awaySince = data.AwaySince,
 		inGameSince = data.InGameSince,
@@ -403,9 +600,72 @@ end
 Interface.jsonCommands["UserDisconnected"] = Interface._UserDisconnected
 
 ------------------------
+-- Friend and Ignore lists
+------------------------
+
+function Interface:_FriendList(data)
+	--if self.friendListRecieved then
+		local newFriendMap = {}
+		for i = 1, #data.Friends do
+			local userName = data.Friends[i]
+			if not self.isFriend[userName] then
+				self:_OnFriend(userName)
+				self:_OnRemoveIgnoreUser(userName)
+			end
+			newFriendMap[userName] = true
+		end
+	
+		for _, userName in pairs(self.friends) do
+			if not newFriendMap[userName] then
+				self:_OnUnfriend(userName)
+				self:_OnRemoveIgnoreUser(userName)
+			end
+		end
+		--return
+	--end
+	--self.friendListRecieved = true
+	--
+	--self:_OnFriendList(data.Friends)
+end
+Interface.jsonCommands["FriendList"] = Interface._FriendList
+
+function Interface:_IgnoreList(data)
+	--if self.ignoreListRecieved then
+		local newIgnoreMap = {}
+		for i = 1, #data.Ignores do
+			local userName = data.Ignores[i]
+			if not self.isIgnored[userName] then
+				self:_OnAddIgnoreUser(userName)
+				self:_OnUnfriend(userName)
+			end
+			newIgnoreMap[userName] = true
+		end
+	
+		for _, userName in pairs(self.ignored) do
+			if not newIgnoreMap[userName] then
+				self:_OnUnfriend(userName)
+				self:_OnRemoveIgnoreUser(userName)
+			end
+		end
+		--return
+	--end
+	--self.ignoreListRecieved = true
+	--
+	--self:_OnIgnoreList(data.Ignores)
+end
+Interface.jsonCommands["IgnoreList"] = Interface._IgnoreList
+
+------------------------
 -- Battle commands
 ------------------------
 
+function Interface:_ConnectSpring(data)
+	if data.Ip and data.Port and data.ScriptPassword then
+		Spring.Echo("Connecting to battle", data.Game, data.Map, data.Engine)
+		self:ConnectToBattle(self.useSpringRestart, data.Ip, data.Port, data.ScriptPassword, data.Game, data.Map, data.Engine)
+	end
+end
+Interface.jsonCommands["ConnectSpring"] = Interface._ConnectSpring
 
 function Interface:_LeftBattle(data)
 	self:_OnLeftBattle(data.BattleID, data.User)
@@ -415,27 +675,15 @@ Interface.jsonCommands["LeftBattle"] = Interface._LeftBattle
 function Interface:_BattleAdded(data)
 	-- {"Header":{"BattleID":3,"Engine":"100.0","Game":"Zero-K v1.4.6.11","Map":"Zion_v1","MaxPlayers":16,"SpectatorCount":1,"Title":"SERIOUS HOST","Port":8760,"Ip":"158.69.140.0","Founder":"Neptunium"}}
 	local header = data.Header
-	if self.springieSpawnTimer then
-		local currentTime = Spring.GetTimer()
-		local waitTime = Spring.DiffTimers(currentTime, self.springieSpawnTimer)
-		if waitTime > 10 then -- Only wait 10 seconds
-			self.springieSpawnTimer = nil
-			self.springieSpawnTitle = nil
-			self.springieSpawnPassword = nil
-			self.springieSpawnText = nil
-		elseif self.springieSpawnTitle == header.Title then
-			self:JoinBattle(header.BattleID, self.springieSpawnPassword)
-			self.springieSpawnTitle = nil
-			self.springieSpawnPassword = nil
-			self.springieSpawnText = nil
-			-- Don't clear spawn timer yet because there are actions that happen after
-			-- the battle opens.
-			--self.springieSpawnTimer = nil 
-		end
-	end
-	self:_OnBattleOpened(header.BattleID, 0, 0, header.Founder, header.Ip, 
-		header.Port, header.MaxPlayers, (header.Password and true) or false, 0, 4, "Spring " .. header.Engine, header.Engine, 
-		header.Map, header.Title or "no title", header.Game, header.SpectatorCount)
+	self:_OnBattleOpened(
+		header.BattleID, 0, 0, header.Founder, header.Ip, header.Port, 
+		header.MaxPlayers, (header.Password and true) or false, 0, 4, "Spring " .. header.Engine, header.Engine, 
+		header.Map, header.Title or "no title", header.Game, header.SpectatorCount, 
+		header.IsRunning, header.RunningSince, 
+		header.Mode, 
+		header.Mode ~= 0, -- Is Custom
+		(header.Mode ~= 5 and header.Mode ~= 0) -- Is Bots
+	)
 end
 Interface.jsonCommands["BattleAdded"] = Interface._BattleAdded
 
@@ -451,21 +699,25 @@ function Interface:_JoinedBattle(data)
 		self:_OnBattleScriptPassword(data.ScriptPassword)
 		self:_OnJoinBattle(data.BattleID, 0)
 	end
-	if data.User ~= self:GetBattle(data.BattleID).founder then
-		self:_OnJoinedBattle(data.BattleID, data.User, 0)
-	end
+	self:_OnJoinedBattle(data.BattleID, data.User, 0)
 end
 Interface.jsonCommands["JoinedBattle"] = Interface._JoinedBattle
 
 function Interface:_BattleUpdate(data)
 	-- BattleUpdate {"Header":{"BattleID":362,"Map":"Quicksilver 1.1"}
+	-- BattleUpdate {"Header":{"BattleID":21,"Engine":"103.0.1-88-g1a9cfdd"}
 	local header = data.Header
 	--Spring.Utilities.TableEcho(header, "header")
 	if not self.battles[header.BattleID] then
 		Spring.Log(LOG_SECTION, LOG.ERROR, "Interface:_BattleUpdate no such battle with ID: " .. tostring(header.BattleID))
 		return
 	end
-	self:_OnUpdateBattleInfo(header.BattleID, header.SpectatorCount, header.Locked, 0, header.Map)
+	if header.IsRunning ~= nil then
+		self:_OnBattleIngameUpdate(header.BattleID, header.IsRunning)
+	end
+	
+		Spring.Echo("header.Gameheader.Game", header.Game)
+	self:_OnUpdateBattleInfo(header.BattleID, header.SpectatorCount, header.Locked, 0, header.Map, header.Engine, header.RunningSince, header.Game, header.Mode)
 end
 Interface.jsonCommands["BattleUpdate"] = Interface._BattleUpdate
 
@@ -646,9 +898,6 @@ function Interface:_Say(data)
 			self:_OnSaidBattle(data.User, data.Text, data.Time)
 		end
 	elseif data.Place == 2 then -- Send to user?
-		if self.springieSpawnTimer and (data.Text == SPRINGIE_HOST_MESSAGE or data.Text == self.springieSpawnText) then
-			return
-		end
 		if data.Target == self:GetMyUserName() then
 			if emote then
 				self:_OnSaidPrivateEx(data.User, data.Text, data.Time)
@@ -666,9 +915,51 @@ function Interface:_Say(data)
 		if data.Text == "Invalid password" then
 			self:_CallListeners("OnJoinBattleFailed", data.Text)
 		end
+		self:_OnSayServerMessage(data.Text, data.Time)
 	end
 end
 Interface.jsonCommands["Say"] = Interface._Say
+
+------------------------
+-- MatchMaking commands
+------------------------
+
+function Interface:_MatchMakerSetup(data)
+	local queues = data.PossibleQueues
+	self.queueCount = 0
+	self.queues = {}
+	for i = 1, #queues do
+		local queue = queues[i]
+		self:_OnQueueOpened(queue.Name, queue.Description, queue.Maps, queue.MaxPartySize, {"Zero-K v1.4.9.1"})
+	end
+end
+Interface.jsonCommands["MatchMakerSetup"] = Interface._MatchMakerSetup
+
+function Interface:_MatchMakerStatus(data)
+	self:_OnMatchMakerStatus(data.MatchMakerEnabled, data.JoinedQueues, data.QueueCounts, data.CurrentEloWidth, data.JoinedTime, data.BannedSeconds)
+end
+Interface.jsonCommands["MatchMakerStatus"] = Interface._MatchMakerStatus
+
+function Interface:_MatchMakerQueueRequestFailed(data)
+	self:_OnMatchMakerStatus(false, nil, data.Reason)
+end
+Interface.jsonCommands["MatchMakerQueueRequestFailed"] = Interface._MatchMakerQueueRequestFailed
+
+function Interface:_AreYouReady(data)
+	self:_OnMatchMakerReadyCheck(data.SecondsRemaining)
+end
+Interface.jsonCommands["AreYouReady"] = Interface._AreYouReady
+
+function Interface:_AreYouReadyUpdate(data)
+	self:_OnMatchMakerReadyUpdate(data.ReadyAccepted, data.LikelyToPlay, data.QueueReadyCounts, data.YourBattleSize, data.YourBattleReady)
+end
+Interface.jsonCommands["AreYouReadyUpdate"] = Interface._AreYouReadyUpdate
+
+function Interface:_AreYouReadyResult(data)
+	self:_OnMatchMakerReadyResult(data.IsBattleStarting, data.AreYouBanned)
+end
+Interface.jsonCommands["AreYouReadyResult"] = Interface.AreYouReadyResult
+
 
 -------------------
 -- Unimplemented --
@@ -695,6 +986,9 @@ function Interface:_SetModOptions(data)
 		Spring.Echo("Invalid modoptions format")
 		return
 	end
+	
+	data.Options.commanderTypes = nil
+	
 	self:_OnSetModOptions(data.Options)
 end
 Interface.jsonCommands["SetModOptions"] = Interface._SetModOptions
@@ -708,17 +1002,31 @@ Interface.jsonCommands["SetModOptions"] = Interface._SetModOptions
 function Interface:_OnSiteToLobbyCommand(msg)
 	local springLink = msg.Command;
 
-	if (springLink) then
-		springLink = tostring(springLink);
-		Spring.Echo(springLink);
-	    local s,e = springLink:find('@start_replay:') 
-		if(s == 1)then
-			local repString = springLink:sub(15)
-			Spring.Echo(repString);
+	if not springLink then
+		return
+	end
+	springLink = tostring(springLink);
+	
+	local s,e = springLink:find('@start_replay:') 
+	if(s == 1)then
+		local repString = springLink:sub(15)
+		Spring.Echo(repString);
 
-			local replay, game, map, engine = repString:match("([^,]+),([^,]+),([^,]+),([^,]+)");
-			self:_OnLaunchRemoteReplay(replay, game, map, engine);
-		end
+		local replay, game, map, engine = repString:match("([^,]+),([^,]+),([^,]+),([^,]+)");
+		self:_OnLaunchRemoteReplay(replay, game, map, engine);
+		return
+	end
+	
+	s,e = springLink:find('@select_map:') 
+	if s then
+		self:SelectMap(springLink:sub(e + 1))
+		return
+	end
+	
+	s,e = springLink:find('chat/user/') 
+	if s then
+		WG.Chobby.interfaceRoot.OpenPrivateChat(springLink:sub(e + 1))
+		return
 	end
 end
 

@@ -53,9 +53,13 @@ local IMAGE_UNREADY      = IMAGE_DIR .. "unready.png"
 local IMAGE_ONLINE       = IMAGE_DIR .. "online.png"
 local IMAGE_OFFLINE      = IMAGE_DIR .. "offline.png"
 
+local IMAGE_CLAN_PATH    = "LuaUI/Configs/Clans/"
+
 local USER_SP_TOOLTIP_PREFIX = "user_single_"
 local USER_MP_TOOLTIP_PREFIX = "user_battle_"
 local USER_CH_TOOLTIP_PREFIX = "user_chat_s_"
+
+local UserLevelToImageConfFunction
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -68,21 +72,17 @@ local function CountryShortnameToFlag(shortname)
 	end
 end
 
-local function UserLevelToImage(level, isBot, isAdmin, rank)
-	if isBot then
-		return IMAGE_AUTOHOST
-	elseif isAdmin then
-		return IMAGE_MODERATOR
-	elseif level or rank then
-		local rankBracket = rank
-		if not rankBracket then
-			if level < 60 then
-				rankBracket = math.min(12, math.floor(level/5) + 1)
-			else
-				rankBracket = math.min(21, math.floor(level/10) + 7)
-			end
-		end
-		return LUA_DIRNAME .. "images/ranks/" .. rankBracket .. ".png"
+local function UserLevelToImage(level, skill, isBot, isAdmin)
+	if UserLevelToImageConfFunction then
+		return UserLevelToImageConfFunction(level, skill, isBot, isAdmin)
+	end
+	return IMAGE_PLAYER
+end
+
+local function GetClanImage(clanName)
+	if clanName then
+		local clanFile = IMAGE_CLAN_PATH .. clanName .. ".png"
+		return VFS.FileExists(clanFile) and clanFile
 	end
 end
 
@@ -113,6 +113,11 @@ local function GetUserSyncStatus(userName, userControl)
 	end
 end
 
+local function GetUserClanImage(userName, userControl)
+	local userInfo = userControl.lobby:GetUser(userName) or {}
+	return GetClanImage(userInfo.clan)
+end
+
 local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 	local userInfo = userControl.lobby:GetUser(userName) or {}
 	local userBattleInfo = userControl.lobby:GetUserBattleStatus(userName) or {}
@@ -134,7 +139,11 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 			comboOptions[#comboOptions + 1] = "Friend"
 		end
 		comboOptions[#comboOptions + 1] = "Report"
-		comboOptions[#comboOptions + 1] = "Ignore"
+		if userInfo.isIgnored then
+			comboOptions[#comboOptions + 1] = "Unignore"
+		else
+			comboOptions[#comboOptions + 1] = "Ignore"
+		end
 	end
 
 	if (userBattleInfo.aiLib and userBattleInfo.owner == myUserName) or userControl.lobby:GetMyIsAdmin() then
@@ -162,7 +171,7 @@ local function GetUserRankImageName(userName, userControl)
 	if userControl.isSingleplayer and not userBattleInfo.aiLib then
 		return IMAGE_PLAYER
 	end
-	return UserLevelToImage(userInfo.level, userInfo.isBot or userBattleInfo.aiLib, userInfo.isAdmin, userInfo.rank)
+	return UserLevelToImage(userInfo.level, userInfo.skill, userInfo.isBot or userBattleInfo.aiLib, userInfo.isAdmin)
 end
 
 local function GetUserStatusImages(userName, isInBattle, userControl)
@@ -175,6 +184,19 @@ local function GetUserStatusImages(userName, isInBattle, userControl)
 		end
 	elseif userInfo.isAway then
 		return IMAGE_AFK
+	end
+end
+
+local function GetUserNameColor(userName, userControl)
+	local userInfo = userControl.lobby:GetUser(userName) or {}
+	if userControl.showModerator and userInfo.isAdmin then
+		return WG.Chobby.Configuration:GetModeratorColor()
+	end
+	if userControl.showFounder and userInfo.battleID then
+		local battle = lobby:GetBattle(userInfo.battleID)
+		if battle and battle.founder == userName then
+			return WG.Chobby.Configuration:GetFounderColor()
+		end
 	end
 end
 
@@ -207,6 +229,11 @@ local function UpdateUserActivity(listener, userName)
 			data.imLevel.file = GetUserRankImageName(userName, data)
 			data.imLevel:Invalidate()
 
+			if data.showFounder then
+				data.tbName.font.color = GetUserNameColor(userName, data) or WG.Chobby.Configuration:GetUserNameColor()
+				data.tbName:Invalidate()
+			end
+			
 			if data.imStatusFirst then
 				local status1, status2 = GetUserStatusImages(userName, data.isInBattle, data)
 				data.imStatusFirst.file = status1
@@ -223,6 +250,12 @@ local function UpdateUserActivity(listener, userName)
 				data.lblStatusLarge:SetCaption(i18n(status .. "_status"))
 			end
 		end
+	end
+end
+
+local function UpdateUserActivityList(listener, userList)
+	for i = 1, #userList do
+		UpdateUserActivity(_, userList[i])
 	end
 end
 
@@ -261,17 +294,21 @@ local function GetUserControls(userName, opts)
 	local isSingleplayer     = opts.isSingleplayer
 	local reinitialize       = opts.reinitialize
 	local disableInteraction = opts.disableInteraction
-	local suppressSync        = opts.suppressSync
+	local suppressSync       = opts.suppressSync
 	local large              = opts.large
 	local hideStatus         = opts.hideStatus
 	local offset             = opts.offset or 0
 	local offsetY            = opts.offsetY or 0
+	local height             = opts.height or 22
+	local showFounder    = opts.showFounder
+	local showModerator      = opts.showModerator
 
 	local userControls = reinitialize or {}
 
+	userControls.showFounder = showFounder
+	userControls.showModerator = showModerator
 	userControls.isInBattle = isInBattle
 	userControls.lobby = (isSingleplayer and WG.LibLobby.localLobby) or lobby
-
 	userControls.isSingleplayer = isSingleplayer
 
 	if reinitialize then
@@ -291,15 +328,14 @@ local function GetUserControls(userName, opts)
 			borderColor = {0, 0, 0, 0}
 		end
 
-
 		userControls.mainControl = ControlType:New {
 			name = userName,
 			x = 0,
 			y = 0,
 			right = 0,
-			height = 22,
-			backgroundColor = {0, 0, 0, 0},
-			borderColor = {0, 0, 0, 0},
+			height = height,
+ 			backgroundColor = backgroundColor,
+ 			borderColor     = borderColor,
 			padding = {0, 0, 0, 0},
 			caption = "",
 			tooltip = (not disableInteraction) and tooltip,
@@ -324,9 +360,7 @@ local function GetUserControls(userName, opts)
 			OnSelectName = {
 				function (obj, selectedName)
 					if selectedName == "Message" then
-						local chatWindow = WG.Chobby.interfaceRoot.GetChatWindow()
-						chatWindow.switchToTab = userName
-						chatWindow:GetPrivateChatConsole(userName)
+						local chatWindow = WG.Chobby.interfaceRoot.OpenPrivateChat(userName)
 					elseif selectedName == "Kick" then
 						local userBattleInfo = userControls.lobby:GetUserBattleStatus(userName) or {}
 						if userBattleInfo and userBattleInfo.aiLib then
@@ -353,6 +387,8 @@ local function GetUserControls(userName, opts)
 						end
 					elseif selectedName == "Report" then
 						Spring.Echo("TODO - Open the right webpage")
+					elseif selectedName == "Unignore" then
+						userControls.lobby:Unignore(userName)
 					elseif selectedName == "Ignore" then
 						userControls.lobby:Ignore(userName)
 					end
@@ -391,7 +427,7 @@ local function GetUserControls(userName, opts)
 		offset = offset + 23
 	end
 
-	offset = offset + 2
+	offset = offset + 1
 	userControls.imLevel = Image:New {
 		name = "imLevel",
 		x = offset,
@@ -399,11 +435,27 @@ local function GetUserControls(userName, opts)
 		width = 19,
 		height = 19,
 		parent = userControls.mainControl,
-		keepAspect = true,
+		keepAspect = false,
 		file = GetUserRankImageName(userName, userControls),
 	}
 	offset = offset + 23
-
+	
+	local clanImage = GetUserClanImage(userName, userControls)
+	if clanImage then
+		offset = offset + 1
+		userControls.imClan = Image:New {
+			name = "imClan",
+			x = offset,
+			y = offsetY + 1,
+			width = 21,
+			height = 19,
+			parent = userControls.mainControl,
+			keepAspect = true,
+			file = clanImage,
+		}
+		offset = offset + 23
+	end
+	
 	offset = offset + 1
 	userControls.tbName = TextBox:New {
 		name = "tbName",
@@ -417,9 +469,11 @@ local function GetUserControls(userName, opts)
 		text = userName,
 	}
 	local userNameStart = offset
-	local truncatedName = StringUtilities.TruncateStringIfRequiredAndDotDot(userName, userControls.tbName.font, maxNameLength)
-	if truncatedName then
-		userControls.tbName:SetText(truncatedName)
+	local truncatedName = StringUtilities.TruncateStringIfRequiredAndDotDot(userName, userControls.tbName.font, maxNameLength and (maxNameLength - offset))
+	local nameColor = GetUserNameColor(userName, userControls)
+	if nameColor then
+		userControls.tbName.font.color = nameColor
+		userControls.tbName:Invalidate()
 	end
 	offset = offset + userControls.tbName.font:GetTextWidth(userControls.tbName.text)
 
@@ -453,7 +507,7 @@ local function GetUserControls(userName, opts)
 			offset = offset + 20
 		else
 			offsetY = offsetY + 35
-			offset = 0
+			offset = 5
 			local imgFile, status, fontColor = GetUserStatus(userName, isInBattle, userControls)
 			userControls.imStatusLarge = Image:New {
 				name = "imStatusLarge",
@@ -513,6 +567,7 @@ end
 local userHandler = {
 	CountryShortnameToFlag = CountryShortnameToFlag,
 	UserLevelToImage = UserLevelToImage,
+	GetClanImage = GetClanImage
 }
 
 local function _GetUser(userList, userName, opts)
@@ -531,13 +586,17 @@ function userHandler.GetBattleUser(userName, isSingleplayer)
 	return _GetUser(battleUsers, userName, {
 		autoResize     = true,
 		isInBattle     = true,
+		showModerator  = true,
+		showFounder    = true,
 	})
 end
 
 function userHandler.GetTooltipUser(userName)
 	return _GetUser(tooltipUsers, userName, {
 		isInBattle     = true,
-		suppressSync    = true,
+		suppressSync   = true,
+		showModerator  = true,
+		showFounder    = true,
 	})
 end
 
@@ -552,6 +611,7 @@ end
 function userHandler.GetChannelUser(userName)
 	return _GetUser(channelUsers, userName, {
 		maxNameLength  = WG.Chobby.Configuration.chatMaxNameLength,
+		showModerator  = true,
 	})
 end
 
@@ -570,6 +630,9 @@ end
 function userHandler.GetFriendUser(userName)
 	return _GetUser(friendUsers, userName, {
 		large          = true,
+		offset         = 5,
+		offsetY        = 6,
+		height         = 80,
 		maxNameLength  = WG.Chobby.Configuration.friendMaxNameLength,
 	})
 end
@@ -598,7 +661,16 @@ end
 -- Listeners
 
 local function AddListeners()
+	lobby:AddListener("OnFriendList", UpdateUserActivityList)
+	lobby:AddListener("OnIgnoreList", UpdateUserActivityList)
+	
 	lobby:AddListener("OnUpdateUserStatus", UpdateUserActivity)
+
+	lobby:AddListener("OnFriend", UpdateUserActivity)
+	lobby:AddListener("OnUnfriend", UpdateUserActivity)
+	lobby:AddListener("OnAddIgnoreUser", UpdateUserActivity)
+	lobby:AddListener("OnRemoveIgnoreUser", UpdateUserActivity)
+	
 	lobby:AddListener("OnAddUser", UpdateUserActivity)
 	lobby:AddListener("OnRemoveUser", UpdateUserActivity)
 	lobby:AddListener("OnAddUser", UpdateUserCountry)
@@ -611,6 +683,8 @@ end
 -- Widget Interface
 
 function widget:Initialize()
+	UserLevelToImageConfFunction = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/rankFunction.lua", nil, VFS.RAW_FIRST)
+	
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 

@@ -5,7 +5,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local globalKeyListener = false
 
 	local titleWidthRel = 28
-	local panelWidthRel = 40
+	local panelWidthRel = 42
 
 	local userStatusPanelWidth = 250
 
@@ -38,8 +38,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local padding = 0
 
-	local statusButtonWidth = 420
-	local statusButtonWidthSmall = 310
+	local statusButtonWidth = 340
+	local statusButtonWidthSmall = 290
 	
 	local topBarHeight = 50
 
@@ -50,6 +50,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local showTopBar = false
 	local doublePanelMode = true
 	local autodetectDoublePanel = true
+	
+	local BUTTON_SIDE_SPACING = 3 -- Matches tab_panel_handler
 
 	local IMAGE_TOP_BACKGROUND = LUA_DIRNAME .. "images/top-background.png"
 
@@ -153,6 +155,20 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
+	}
+	
+	local holder_matchMaking = Control:New {
+		x = titleWidth,
+		y = 0,
+		right = 0,
+		height = titleHeight,
+		name = "holder_matchMaking",
+		caption = "", -- Status Window
+		parent = lobbyInterfaceHolder,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		children = {}
 	}
 
 	local status_userWindow = Control:New {
@@ -293,9 +309,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	end
 	
 	local buttons_exit = Button:New {
-		x = 0,
+		x = BUTTON_SIDE_SPACING,
 		bottom = 0,
-		width = "100%",
+		right = BUTTON_SIDE_SPACING,
 		height = 70,
 		caption = i18n("exit"),
 		font = Configuration:GetFont(3),
@@ -373,12 +389,12 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local rightPanelTabs = {
 		{name = "chat", control = chatWindows.window},
+		{name = "friends", control = WG.FriendWindow.GetControl()},
 		{name = "settings", control = WG.SettingsWindow.GetControl()},
 		{name = "downloads", control = WG.DownloadWindow.GetControl()},
-		{name = "friends", control = WG.FriendWindow.GetControl()},
 	}
 
-	local queueListWindow = QueueListWindow()
+	local queueListWindow = WG.QueueListWindow.GetControl()
 	local battleListWindow = BattleListWindow()
 
 	local submenus = {
@@ -390,7 +406,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			name = "multiplayer",
 			entryCheck = WG.MultiplayerEntryPopup,
 			tabs = {
-				{name = "matchmaking", control = queueListWindow.window},
+				{name = "matchMaking", control = queueListWindow},
 				{name = "serverList", control = battleListWindow.window},
 			},
 			cleanupFunction = CleanMultiplayerState
@@ -398,13 +414,21 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	}
 
 	local battleStatusTabControls = {
-		myBattle = WG.BattleStatusPanel.GetControl
+		myBattle = WG.BattleStatusPanel.GetControl,
+		--myQueue = WG.QueueStatusPanel.GetTabControl,
 	}
 
-	local battleStatusPanelHandler = GetTabPanelHandler("myBattlePanel", status_battleHolder, mainContent_window, {}, nil, nil, nil, nil, statusButtonWidth, battleStatusTabControls)
+	local battleStatusPanelHandler = GetTabPanelHandler(
+		"myBattlePanel", status_battleHolder, mainContent_window, {}, nil, nil, nil, nil, 
+		statusButtonWidth, battleStatusTabControls
+	)
 	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons_buttons, rightPanel_window, rightPanelTabs)
 	mainWindowHandler = GetSubmenuHandler(buttonsHolder_buttons, mainContent_window, submenus)
 
+	local matchMakerStatus = WG.QueueStatusPanel.GetControl()
+	holder_matchMaking:AddChild(matchMakerStatus)
+	matchMakerStatus:Hide()
+	
 	-------------------------------------------------------------------
 	-- Resizing functions
 	-------------------------------------------------------------------
@@ -591,7 +615,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		status_panelButtons._relativeBounds.right = rightPad
 		rightPanel_window:UpdateClientArea()
 
-		buttons_exit._relativeBounds.bottom = bottomPad
+		buttons_exit._relativeBounds.bottom = (bottomPad > 0 and bottomPad) or 4
 		buttons_exit:UpdateClientArea()
 
 		if doublePanelMode then
@@ -628,9 +652,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		if newVisible then
 			lobbyInterfaceHolder:Show()
 			ingameInterfaceHolder:Hide()
+			lobbyInterfaceHolder:BringToFront()
 		else
 			lobbyInterfaceHolder:Hide()
 			ingameInterfaceHolder:Show()
+			ingameInterfaceHolder:BringToFront()
 		end
 	end
 		
@@ -658,8 +684,16 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		
 		if showTopBar then
 			backgroundHolder:SetAlpha(0.85)
+			--buttonsHolder_image.color[4] = 0.1
+			--buttonsHolder_image:Invalidate()
+			--holder_topImage.color[4] = 0.25
+			--holder_topImage:Invalidate()
 		else
 			backgroundHolder:SetAlpha(1)
+			--buttonsHolder_image.color[4] = 0.1
+			--buttonsHolder_image:Invalidate()
+			--holder_topImage.color[4] = 0.25
+			--holder_topImage:Invalidate()
 		end
 		
 		local screenWidth, screenHeight = Spring.GetViewGeometry()
@@ -708,6 +742,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			end
 		}
 	}
+	
+	local function LeaveGameFunction()
+		Spring.Reload("")
+	end
+	
 	local leaveGameButton = Button:New {
 		y = 5,
 		right = 110,
@@ -724,7 +763,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		
 		OnClick = {
 			function ()
-				Spring.Reload("")
+				ConfirmationPopup(LeaveGameFunction, "Are you sure you want to leave the game?", nil, 315, 200)
 			end
 		}
 	}
@@ -743,12 +782,57 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-------------------------------------------------------------------
 	-- External Functions
 	-------------------------------------------------------------------
+	function externalFunctions.UpdateMatchMakingHolderPosition()
+		local screenWidth, screenHeight = Spring.GetViewGeometry()
+		
+		local battleShown = (battleStatusPanelHandler.GetTabByName("myBattle") and true) or false
+		local topOffset = (showTopBar and topBarHeight) or 0
+		
+		local xPos, yPos, width, height
+		if doublePanelMode then
+			width = screenWidth/4 - 20
+			height = titleHeight - panelButtonsHeight - 5
+			yPos = 0
+			
+			local middlePad
+			if screenWidth < 1366 then
+				middlePad = 0
+			elseif screenWidth < 1650 then
+				middlePad = 10
+			else
+				middlePad = 20
+			end
+			
+			if battleShown then
+				xPos = (100 - panelWidthRel)*screenWidth/100 + middlePad
+			else
+				xPos = (100 - panelWidthRel)*screenWidth/100 - middlePad - width
+			end
+		else
+			width = screenWidth/3 - 40
+			height = titleHeightSmall - statusWindowGapSmall - 3
+			yPos = 4
+			
+			xPos = (screenWidth - width)/2
+			if battleShown then
+			local leftBound = mainButtonsWidthSmall + statusButtonWidthSmall + 15
+				if xPos < leftBound then
+					xPos = leftBound
+				end
+			end
+		end
+	
+		holder_matchMaking:SetPos(xPos, topOffset + yPos, width, height)
+	end
+	
 	function externalFunctions.ViewResize(screenWidth, screenHeight)
 		if autodetectDoublePanel then
 			local newDoublePanel = minScreenWidth <= screenWidth
 			UpdateDoublePanel(newDoublePanel)
 		end
 		UpdatePadding(screenWidth, screenHeight)
+		
+		externalFunctions.UpdateMatchMakingHolderPosition()
 	end
 
 	function externalFunctions.SetPanelDisplayMode(newAutodetectDoublePanel, newDoublePanel)
@@ -768,10 +852,16 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		gameRunning = not newIngame
 		SetMainInterfaceVisible(not newIngame)
 		SetTopBarVisible(newIngame)
+		externalFunctions.UpdateMatchMakingHolderPosition()
 	end
 	
 	function externalFunctions.GetChatWindow()
 		return chatWindows
+	end
+	
+	function externalFunctions.OpenPrivateChat(userName)
+		chatWindows:GetPrivateChatConsole(userName, true)
+		rightPanelHandler.OpenTabByName("chat")
 	end
 
 	function externalFunctions.GetContentPlace()
@@ -846,7 +936,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			local newShortname = Configuration.shortnameMap[value]
 			local replacementTabs = Configuration:GetGameConfig(false, "singleplayerMenu.lua", newShortname) or {}
 
-			mainWindowHandler.SetBackAtMainMenu()
+			WG.BattleRoomWindow.LeaveBattle(false, true)
 			mainWindowHandler.ReplaceSubmenu(1, replacementTabs)
 		end
 	end

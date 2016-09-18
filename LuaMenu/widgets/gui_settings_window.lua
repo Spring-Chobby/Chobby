@@ -22,18 +22,53 @@ local fullscreen = 0
 local battleStartDisplay = 1
 local lobbyFullscreen = 1
 
+local FUDGE = 0
+
+local currentMode = false
+
+local ITEM_OFFSET = 38
+
+local COMBO_X = 230
+local COMBO_WIDTH = 235
+local CHECK_WIDTH = 230
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
 
+local configParamTypes = {}
+for _, param in pairs(Spring.GetConfigParams()) do
+	configParamTypes[param.name] = param.type
+end
+
+local function SetSpringsettingsValue(key, value)
+	local configType = configParamTypes[key]
+	if configType == "int" then
+		Spring.SetConfigInt(key, value)
+	elseif configType == "bool" or configType == "float" then
+		Spring.SetConfigString(key, value)
+	elseif configType == nil then
+		Spring.Log("Settings", LOG.WARNING, "No such key: " .. tostring(key) .. ", but setting it as string anyway.")
+		Spring.SetConfigString(key, value)
+	else
+		Spring.Log("Settings", LOG.WARNING, "Unexpected key type: " .. configType .. ", but setting it as string anyway.")
+		Spring.SetConfigString(key, value)
+	end
+end
+
 local function SetLobbyFullscreenMode(mode)
+	if mode == currentMode then
+		return
+	end
+	currentMode = mode
+
 	local screenX, screenY = Spring.GetScreenGeometry()
 	if mode == 1 then
-		Spring.SetConfigInt("XResolutionWindowed", screenX, false)
-		Spring.SetConfigInt("YResolutionWindowed", screenY, false)
-		Spring.SetConfigInt("WindowPosX", 0, false)
-		Spring.SetConfigInt("WindowPosY", 0, false)
-		Spring.SetConfigInt("WindowBorderless", 1, false)
+		Spring.SetConfigInt("Fullscreen", 1) -- Required to remove FUDGE
+		Spring.SetConfigInt("XResolutionWindowed", screenX - FUDGE*2, false)
+		Spring.SetConfigInt("YResolutionWindowed", screenY - FUDGE*2, false)
+		Spring.SetConfigInt("WindowPosX", FUDGE, false)
+		Spring.SetConfigInt("WindowPosY", FUDGE, false)
 		Spring.SetConfigInt("WindowBorderless", 1)
 		Spring.SetConfigInt("Fullscreen", 0)
 	elseif mode == 2 then
@@ -53,7 +88,6 @@ local function SetLobbyFullscreenMode(mode)
 			Spring.SetConfigInt("YResolutionWindowed", screenY*3/4, false)
 		end
 		Spring.SetConfigInt("WindowBorderless", 0, false)
-		Spring.SetConfigInt("Fullscreen", 0, false)
 		Spring.SetConfigInt("Fullscreen", 0)
 	elseif mode == 3 then
 		Spring.SetConfigInt("XResolution", screenX, false)
@@ -65,49 +99,33 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Initialization
+-- Lobby Settings
 
-local COMBO_X = 230
-local CHECK_WIDTH = 190
-
-local function InitializeControls(window)
-	window.OnParent = nil
-
+local function GetLobbyTabControls()
 	local freezeSettings = true
 
 	local Configuration = WG.Chobby.Configuration
 
-	local offset = 20
+	local offset = 0
+	
+	local children = {}
 
-	Label:New {
-		x = 40,
-		y = offset,
-		width = 180,
-		height = 30,
-		parent = window,
-		font = Configuration:GetFont(4),
-		caption = "Lobby",
-	}
-	offset = offset + 10
-
-	offset = offset + 30
-	Label:New {
-		x = 60,
+	offset = offset + ITEM_OFFSET
+	children[#children + 1] = Label:New {
+		x = 20,
 		y = offset,
 		width = 90,
-		height = 40,
-		valign = "center",
+		height = 30,
+		valign = "top",
 		align = "left",
-		parent = window,
 		font = Configuration:GetFont(2),
-		caption = "Display:",
+		caption = "Display",
 	}
-	ComboBox:New {
+	children[#children + 1] = ComboBox:New {
 		x = COMBO_X,
-		y = offset + 2,
-		width = 180,
-		height = 26,
-		parent = window,
+		y = offset,
+		width = COMBO_WIDTH,
+		height = 30,
 		items = {"Fullscreen Window", "Windowed", "Fullscreen"},
 		font = Configuration:GetFont(2),
 		itemFontSize = Configuration:GetFont(2).size,
@@ -118,7 +136,9 @@ local function InitializeControls(window)
 					return
 				end
 
-				SetLobbyFullscreenMode(obj.selected)
+				if Spring.GetGameName() == "" then
+					SetLobbyFullscreenMode(obj.selected)
+				end
 
 				lobbyFullscreen = obj.selected
 				Configuration.lobby_fullscreen = obj.selected
@@ -126,24 +146,22 @@ local function InitializeControls(window)
 		},
 	}
 
-	offset = offset + 30
-	Label:New {
-		x = 60,
+	offset = offset + ITEM_OFFSET
+	children[#children + 1] = Label:New {
+		x = 20,
 		y = offset,
 		width = 90,
 		height = 40,
-		valign = "center",
+		valign = "top",
 		align = "left",
-		parent = window,
 		font = Configuration:GetFont(2),
-		caption = "Panels:",
+		caption = "Panels",
 	}
-	ComboBox:New {
+	children[#children + 1] = ComboBox:New {
 		x = COMBO_X,
-		y = offset + 2,
-		width = 180,
-		height = 26,
-		parent = window,
+		y = offset,
+		width = COMBO_WIDTH,
+		height = 30,
 		items = {"Autodetect", "Always Two", "Always One"},
 		font = Configuration:GetFont(2),
 		itemFontSize = Configuration:GetFont(2).size,
@@ -158,13 +176,12 @@ local function InitializeControls(window)
 		},
 	}
 
-	offset = offset + 30
+	offset = offset + ITEM_OFFSET
 	local autoLogin = Checkbox:New {
-		x = 60,
+		x = 20,
 		width = CHECK_WIDTH,
 		y = offset,
-		height = 40,
-		parent = window,
+		height = 30,
 		boxalign = "right",
 		boxsize = 20,
 		caption = i18n("autoLogin"),
@@ -176,14 +193,14 @@ local function InitializeControls(window)
 			freezeSettings = false
 		end},
 	}
+	children[#children + 1] = autoLogin
 
-	offset = offset + 30
-	local notifyAllChat = Checkbox:New {
-		x = 60,
+	offset = offset + ITEM_OFFSET
+	children[#children + 1] = Checkbox:New {
+		x = 20,
 		width = CHECK_WIDTH,
 		y = offset,
-		height = 40,
-		parent = window,
+		height = 30,
 		boxalign = "right",
 		boxsize = 20,
 		caption = i18n("notifyForAllChat"),
@@ -194,13 +211,12 @@ local function InitializeControls(window)
 		end},
 	}
 
-	offset = offset + 30
-	local mapWhitelist = Checkbox:New {
-		x = 60,
+	offset = offset + ITEM_OFFSET
+	children[#children + 1] = Checkbox:New {
+		x = 20,
 		width = CHECK_WIDTH,
 		y = offset,
-		height = 40,
-		parent = window,
+		height = 30,
 		boxalign = "right",
 		boxsize = 20,
 		caption = i18n("only_featured_maps"),
@@ -211,13 +227,12 @@ local function InitializeControls(window)
 		end},
 	}
 
-	offset = offset + 30
-	local debugMode = Checkbox:New {
-		x = 60,
+	offset = offset + ITEM_OFFSET
+	children[#children + 1] = Checkbox:New {
+		x = 20,
 		width = CHECK_WIDTH,
 		y = offset,
-		height = 40,
-		parent = window,
+		height = 30,
 		boxalign = "right",
 		boxsize = 20,
 		caption = i18n("debugMode"),
@@ -228,30 +243,29 @@ local function InitializeControls(window)
 		end},
 	}
 
-	offset = offset + 30
-	local useSpringRestart = Checkbox:New {
-		x = 60,
-		width = CHECK_WIDTH,
-		y = offset,
-		height = 40,
-		parent = window,
-		boxalign = "right",
-		boxsize = 20,
-		caption = "Use Spring.Restart          EXPERIMENTAL",
-		checked = Configuration.useSpringRestart or false,
-		font = Configuration:GetFont(2),
-		OnChange = {function (obj, newState)
-			Configuration:SetConfigValue("useSpringRestart", newState)
-		end},
-	}
+	--offset = offset + ITEM_OFFSET
+	--local useSpringRestart = Checkbox:New {
+	--	x = 60,
+	--	width = CHECK_WIDTH,
+	--	y = offset,
+	--	height = 40,
+	--	parent = window,
+	--	boxalign = "right",
+	--	boxsize = 20,
+	--	caption = "Use Spring.Restart          EXPERIMENTAL",
+	--	checked = Configuration.useSpringRestart or false,
+	--	font = Configuration:GetFont(2),
+	--	OnChange = {function (obj, newState)
+	--		Configuration:SetConfigValue("useSpringRestart", newState)
+	--	end},
+	--}
 
-	offset = offset + 30
-	local showBots = Checkbox:New {
-		x = 60,
+	offset = offset + ITEM_OFFSET
+	children[#children + 1] = Checkbox:New {
+		x = 20,
 		width = CHECK_WIDTH,
 		y = offset,
-		height = 40,
-		parent = window,
+		height = 30,
 		boxalign = "right",
 		boxsize = 20,
 		caption = "Show channel bots",
@@ -262,13 +276,12 @@ local function InitializeControls(window)
 		end},
 	}
 	
-	offset = offset + 30
-	local showWrongEngine = Checkbox:New {
-		x = 60,
+	offset = offset + ITEM_OFFSET
+	children[#children + 1] = Checkbox:New {
+		x = 20,
 		width = CHECK_WIDTH,
 		y = offset,
-		height = 40,
-		parent = window,
+		height = 30,
 		boxalign = "right",
 		boxsize = 20,
 		caption = "Show wrong engines",
@@ -279,69 +292,17 @@ local function InitializeControls(window)
 		end},
 	}
 	
-	offset = offset + 30
-
-	------------------------------------------------------------------
-	-- Ingame
-	------------------------------------------------------------------
-
-	offset = offset + 60
-	Label:New {
-		x = 40,
+	offset = offset + ITEM_OFFSET
+	children[#children + 1] = Label:New {
+		x = 20,
 		y = offset,
-		width = 180,
+		width = 90,
 		height = 30,
-		parent = window,
-		font = Configuration:GetFont(4),
-		caption = "Game",
-	}
-	offset = offset + 20
-
-	offset = offset + 30
-	Label:New {
-		x = 60,
-		y = offset,
-		width = 90,
-		height = 25,
-		valign = "center",
+		valign = "top",
 		align = "left",
 		parent = window,
 		font = Configuration:GetFont(2),
-		caption = "Display:",
-	}
-	ComboBox:New {
-		x = COMBO_X,
-		y = offset + 2,
-		width = 180,
-		height = 26,
-		parent = window,
-		items = {"Fullscreen Window", "Windowed", "Fullscreen"},
-		font = Configuration:GetFont(2),
-		itemFontSize = Configuration:GetFont(2).size,
-		selected = Configuration.game_fullscreen or battleStartDisplay,
-		OnSelect = {
-			function (obj)
-				if freezeSettings then
-					return
-				end
-
-				battleStartDisplay = obj.selected
-				Configuration.game_fullscreen = obj.selected
-			end
-		},
-	}
-
-	offset = offset + 30
-	Label:New {
-		x = 60,
-		y = offset,
-		width = 90,
-		height = 40,
-		valign = "center",
-		align = "left",
-		parent = window,
-		font = Configuration:GetFont(2),
-		caption = "Singleplayer:",
+		caption = "Singleplayer",
 	}
 	
 	local gameChoices = {"Generic", "Zero-K"}
@@ -352,12 +313,12 @@ local function InitializeControls(window)
 		end
 	end
 	
-	ComboBox:New {
+	children[#children + 1] = ComboBox:New {
 		name = "gameSelection",
 		x = COMBO_X,
-		y = offset + 2,
-		width = 180,
-		height = 26,
+		y = offset,
+		width = COMBO_WIDTH,
+		height = 30,
 		parent = window,
 		items = gameChoices,
 		font = Configuration:GetFont(2),
@@ -372,37 +333,69 @@ local function InitializeControls(window)
 			end
 		},
 	}
+	
+	local function onConfigurationChange(listener, key, value)
+		if freezeSettings then
+			return
+		end
+		if key == "autoLogin" then
+			autoLogin:SetToggle(value)
+		end
+	end
 
-	offset = offset + 30
-	Label:New {
-		x = 60,
-		y = offset,
+	freezeSettings = false
+	
+	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
+	
+	return children
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Game Settings
+
+local settingsComboBoxes = {}
+
+local function MakePresetsControl(settingPresets, offset)
+	local Configuration = WG.Chobby.Configuration
+	
+	local presetLabel = Label:New {
+		name = "presetLabel",
+		x = 20,
+		y = offset + 10,
 		width = 90,
 		height = 40,
-		valign = "center",
+		valign = "top",
 		align = "left",
 		parent = window,
 		font = Configuration:GetFont(2),
-		caption = "Settings:",
+		caption = "Presets",
 	}
-
+    
 	local useCustomSettings = true
 	local settingsPresetControls = {}
 
 	local function SettingsButton(x, y, caption, settings)
 		local button = Button:New {
 			name = caption,
-			x = 95*x,
-			y = 55*y,
-			width = 85,
-			height = 45,
+			x = 80*x,
+			y = 45*y,
+			width = 75,
+			height = 40,
 			caption = caption,
 			font = Configuration:GetFont(2),
+			customSettings = not settings,
 			OnClick = {
 				function (obj)
 					if settings then
-						Configuration.game_settings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/" .. settings)
+						for key, value in pairs(settings) do
+							local comboBox = settingsComboBoxes[key]
+							if comboBox then
+								comboBox:Select(value)
+							end
+						end
 					end
+					
 					ButtonUtilities.SetButtonSelected(obj)
 					for i = 1, #settingsPresetControls do
 						local control = settingsPresetControls[i]
@@ -413,10 +406,10 @@ local function InitializeControls(window)
 				end
 			},
 		}
-
+    
 		settingsPresetControls[#settingsPresetControls + 1] = button
 		if settings then
-			if Spring.Utilities.TableEqual(VFS.Include(LUA_DIRNAME .. "configs/springsettings/" .. settings), Configuration.game_settings) then
+			if Spring.Utilities.TableEqual(settings, Configuration.settingsMenuValues) then
 				useCustomSettings = false
 				ButtonUtilities.SetButtonSelected(button)
 			end
@@ -425,38 +418,292 @@ local function InitializeControls(window)
 		end
 		return button
 	end
-
+    
 	local settingsHolder = Control:New {
-		x = 135,
+		name = "settingsHolder",
+		x = COMBO_X,
 		y = offset,
-		width = 540,
+		width = COMBO_WIDTH,
 		height = 120,
-		parent = window,
 		padding = {0, 0, 0, 0},
 		children = {
-			SettingsButton(0, 0, "Minimal", "springsettings0.lua"),
-			SettingsButton(1, 0, "Low",     "springsettings1.lua"),
-			SettingsButton(2, 0, "Medium",  "springsettings2.lua"),
-			SettingsButton(0, 1, "High",    "springsettings3.lua"),
-			SettingsButton(1, 1, "Ultra",   "springsettings4.lua"),
+			SettingsButton(0, 0, "Minimal", settingPresets.Minimal),
+			SettingsButton(1, 0, "Low",     settingPresets.Low),
+			SettingsButton(2, 0, "Medium",  settingPresets.Medium),
+			SettingsButton(0, 1, "High",    settingPresets.High),
+			SettingsButton(1, 1, "Ultra",   settingPresets.Ultra),
+		}
+	}
+    
+	local customSettingsButton = SettingsButton(2, 1,  "Custom")
+	settingsHolder:AddChild(customSettingsButton)
+	
+	local function EnableCustomSettings()
+		ButtonUtilities.SetButtonSelected(customSettingsButton)
+		for i = 1, #settingsPresetControls do
+			local control = settingsPresetControls[i]
+			if not control.customSettings then
+				ButtonUtilities.SetButtonDeselected(control)
+			end
+		end
+	end
+	
+	return presetLabel, settingsHolder, EnableCustomSettings, offset + ITEM_OFFSET*2 + 20
+end
+
+local function ProcessScreenSizeOption(data, offset)
+	local Configuration = WG.Chobby.Configuration
+	
+	local freezeSettings = true
+	
+	local label = Label:New {
+		name = data.name .. "_label",
+		x = 20,
+		y = offset,
+		width = 350,
+		height = 30,
+		valign = "top",
+		align = "left",
+		caption = data.humanName,
+		font = Configuration:GetFont(2),
+		tooltip = data.desc,
+	}
+	local list = ComboBox:New {
+		name = data.name .. "_combo",
+		x = COMBO_X,
+		y = offset,
+		width = COMBO_WIDTH,
+		height = 30,
+		items = {"Fullscreen Window", "Windowed", "Fullscreen"},
+		font = Configuration:GetFont(2),
+		itemFontSize = Configuration:GetFont(2).size,
+		selected = Configuration.game_fullscreen or 1,
+		OnSelect = {
+			function (obj)
+				if freezeSettings then
+					return
+				end
+
+				if Spring.GetGameName() ~= "" then
+					SetLobbyFullscreenMode(obj.selected)
+				end
+
+				battleStartDisplay = obj.selected
+				Configuration.game_fullscreen = obj.selected
+			end
+		},
+	}
+	
+	freezeSettings = false
+	
+	return label, list, offset + ITEM_OFFSET
+end
+
+local function ProcessSettingsOption(data, offset, customSettingsSwitch)
+	local Configuration = WG.Chobby.Configuration
+	
+	local label = Label:New {
+		name = data.name .. "_label",
+		x = 20,
+		y = offset,
+		width = 350,
+		height = 30,
+		valign = "top",
+		align = "left",
+		caption = data.humanName,
+		font = Configuration:GetFont(2),
+		tooltip = data.desc,
+	}
+	
+	local defaultItem = 1
+	local defaultName = Configuration.settingsMenuValues[data.name]
+	
+	local items = {}
+	for i = 1, #data.options do
+		local itemName = data.options[i].name
+		items[i] = itemName
+		if itemName == defaultName then
+			defaultItem = i
+		end
+	end
+	
+	settingsComboBoxes[data.name] = ComboBox:New {
+		name = data.name .. "_combo",
+		x = COMBO_X,
+		y = offset,
+		width = COMBO_WIDTH,
+		height = 30,
+		items = items,
+		font = Configuration:GetFont(2),
+		itemFontSize = Configuration:GetFont(2).size,
+		selected = defaultItem,
+		OnSelect = {
+			function (obj, num)
+				local selectedData = data.options[num]
+				Configuration.settingsMenuValues[data.name] = selectedData.name
+				
+				if customSettingsSwitch then
+					customSettingsSwitch()
+				end
+				
+				if data.fileTarget then
+					local sourceFile = VFS.LoadFile(selectedData.file)
+					local settingsFile = io.open(data.fileTarget, "w")
+					settingsFile:write(sourceFile)
+					settingsFile:close()
+				else
+					local applyData = selectedData.apply
+					for applyName, value in pairs(applyData) do
+						Configuration.game_settings[applyName] = value
+						SetSpringsettingsValue(applyName, value)
+					end
+				end
+			end
+		}
+	}
+	
+	return label, settingsComboBoxes[data.name], offset + ITEM_OFFSET
+end
+
+local function PopulateTab(settingPresets, settingOptions)
+	local children = {}
+	local offset = 20
+	local customSettingsSwitch
+	local label, list
+	
+	if settingPresets then
+		label, list, customSettingsSwitch, offset = MakePresetsControl(settingPresets, offset)
+		children[#children + 1] = label
+		children[#children + 1] = list
+	end
+	
+	for i = 1, #settingOptions do
+		local data = settingOptions[i]
+		if data.displayModeToggle then
+			label, list, offset = ProcessScreenSizeOption(data, offset)
+		else
+			label, list, offset = ProcessSettingsOption(data, offset, customSettingsSwitch)
+		end
+		children[#children + 1] = label
+		children[#children + 1] = list
+	end
+	return children
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Initialization
+
+
+local function InitializeControls(window)
+	window.OnParent = nil
+
+	local tabs = {
+		{
+			name = "Lobby",
+			caption = "Lobby",
+			font = WG.Chobby.Configuration:GetFont(3),
+			children = GetLobbyTabControls()
+		}
+	}
+	
+	local settingsFile, settingsDefaults = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/settingsMenu.lua")
+	
+	for i = 1, #settingsFile do
+		local data = settingsFile[i]
+		tabs[#tabs + 1] = {
+			name = data.name,
+			caption = data.name,
+			font = WG.Chobby.Configuration:GetFont(3),
+			children = PopulateTab(data.presets, data.settings)
+		}
+	end
+	
+	local tabPanel = Chili.DetachableTabPanel:New {
+		x = 5,
+		right = 5,
+		y = 45,
+		bottom = 1,
+		padding = {0, 0, 0, 0},
+		minTabWidth = 130,
+		tabs = tabs,
+		parent = window,
+		OnTabChange = {
 		}
 	}
 
-	local customSettingsButton = SettingsButton(2, 1,  "Custom")
-	settingsHolder:AddChild(customSettingsButton)
+	local tabBarHolder = Control:New {
+		name = "tabBarHolder",
+		x = 0,
+		y = 0,
+		width = "100%",
+		height = 50,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		parent = window,
+		children = {
+			tabPanel.tabBar
+		}
+	}
+	
+	--offset = offset + 60
+	--Label:New {
+	--	x = 40,
+	--	y = offset,
+	--	width = COMBO_WIDTH,
+	--	height = 30,
+	--	parent = window,
+	--	font = Configuration:GetFont(4),
+	--	caption = "Game",
+	--}
+	--offset = offset + 20
 
-	freezeSettings = false
+	
+	--
+	--offset = offset + ITEM_OFFSET
+	--Label:New {
+	--	x = 60,
+	--	y = offset,
+	--	width = 90,
+	--	height = 25,
+	--	valign = "top",
+	--	align = "left",
+	--	parent = window,
+	--	font = Configuration:GetFont(2),
+	--	caption = "Display",
+	--}
+	--ComboBox:New {
+	--	x = COMBO_X,
+	--	y = offset + 2,
+	--	width = COMBO_WIDTH,
+	--	height = 26,
+	--	parent = window,
+	--	items = {"Fullscreen Window", "Windowed", "Fullscreen"},
+	--	font = Configuration:GetFont(2),
+	--	itemFontSize = Configuration:GetFont(2).size,
+	--	selected = Configuration.game_fullscreen or battleStartDisplay,
+	--	OnSelect = {
+	--		function (obj)
+	--			if freezeSettings then
+	--				return
+	--			end
+    --
+	--			if Spring.GetGameName() ~= "" then
+	--				SetLobbyFullscreenMode(obj.selected)
+	--			end
+	--			
+	--			battleStartDisplay = obj.selected
+	--			Configuration.game_fullscreen = obj.selected
+	--		end
+	--	},
+	--}
 
-	local function onConfigurationChange(listener, key, value)
-		if freezeSettings then
-			return
-		end
-		if key == "autoLogin" then
-			autoLogin:SetToggle(value)
-		end
-	end
 
-	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
+
+    --
+	--freezeSettings = false
+
 end
 
 --------------------------------------------------------------------------------
@@ -468,6 +715,7 @@ local SettingsWindow = {}
 function SettingsWindow.GetControl()
 
 	local window = Control:New {
+		name = "settingsWindow",
 		x = "0%",
 		y = "0%",
 		width = "100%",
@@ -487,6 +735,18 @@ end
 --------------------------------------------------------------------------------
 -- Widget Interface
 
+local ignoreFirstCall = true
+function widget:ActivateMenu()
+	if ignoreFirstCall then
+		ignoreFirstCall = false
+		return
+	end
+	if not (WG.Chobby and WG.Chobby.Configuration) then
+		return
+	end
+	SetLobbyFullscreenMode(WG.Chobby.Configuration.lobby_fullscreen)
+end
+
 local onBattleAboutToStart
 
 local function DelayedInitialize()
@@ -504,8 +764,6 @@ function widget:Initialize()
 	onBattleAboutToStart = function(listener)
 		local screenX, screenY = Spring.GetScreenGeometry()
 
-		
-		-- Stopgap solution, has side effects
 		SetLobbyFullscreenMode(battleStartDisplay)
 
 		-- Settings which rely on io
@@ -531,30 +789,9 @@ function widget:Initialize()
 			gameSettings.Fullscreen = 1
 		end
 
-		--local settingsFile, errorMessage = io.open('springsettings.cfg', 'w+')
-		--if settingsFile then
-		--	for key, value in pairs(gameSettings) do
-		--		settingsFile:write(key .. " = " .. value .. "\n")
-		--	end
-		--end
 
-		local configParamTypes = {}
-		for _, param in pairs(Spring.GetConfigParams()) do
-			configParamTypes[param.name] = param.type
-		end
 		for key, value in pairs(gameSettings) do
-			local configType = configParamTypes[key]
-			if configType == "int" then
-				Spring.SetConfigInt(key, value)
-			elseif configType == "bool" or configType == "float" then
-				Spring.SetConfigString(key, value)
-			elseif configType == nil then
-				Spring.Log("Settings", LOG.WARNING, "No such key: " .. tostring(key) .. ", but setting it as string anyway.")
-				Spring.SetConfigString(key, value)
-			else
-				Spring.Log("Settings", LOG.WARNING, "Unexpected key type: " .. configType .. ", but setting it as string anyway.")
-				Spring.SetConfigString(key, value)
-			end
+			SetSpringsettingsValue(key, value)
 		end
 	end
 	WG.LibLobby.lobby:AddListener("OnBattleAboutToStart", onBattleAboutToStart)
