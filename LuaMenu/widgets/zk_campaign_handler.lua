@@ -47,6 +47,10 @@ local starmapWindow, starmapBackgroundHolder, starmapBackground, starmapBackgrou
 local timer = Spring.GetTimer()
 local starmapAnimation = nil
 
+local runningMission = false
+local missionCompletionFunc = nil	-- function
+local missionArchive = nil
+
 local STARMAP_WINDOW_WIDTH = 1280
 local STARMAP_WINDOW_HEIGHT = 768
 local PLANET_IMAGE_SIZE = 259
@@ -59,6 +63,7 @@ local SAVE_DIR = "saves/campaign/"
 local MAX_SAVES = 999
 local AUTOSAVE_ID = "auto"
 local AUTOSAVE_FILENAME = "autosave"
+local RESULTS_FILE_PATH = "cache/mission_results.lua"
 --------------------------------------------------------------------------------
 -- data
 --------------------------------------------------------------------------------
@@ -108,8 +113,7 @@ local function WriteDate(dateTable)
 	return string.format("%02d/%02d/%04d", dateTable.day, dateTable.month, dateTable.year)
 	.. " " .. string.format("%02d:%02d:%02d", dateTable.hour, dateTable.min, dateTable.sec)
 end
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
+
 local function ResetGamedata()
 	gamedata = {
 		chapterTitle = "",
@@ -128,6 +132,9 @@ local function ResetGamedata()
 	
 	SetControlGreyout(startButton, true)
 end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 local function IsCodexEntryVisible(id)
 	return gamedata.codexUnlocked[id] or codexEntries[id].alwaysUnlocked
@@ -166,7 +173,9 @@ end
 
 local function UnlockCodexEntry(entryID)
 	gamedata.codexUnlocked[entryID] = true
-	UpdateCodexButtonState(true)
+	if codexEntries[entryID] then	-- don't mark codex button as having unread if the entry we just unlocked doesn't actually exist
+		UpdateCodexButtonState(true)
+	end
 end
 
 local function SortCodexEntries(a, b)
@@ -250,6 +259,9 @@ local function LoadCodexEntries()
 	UpdateCodexButtonState()
 end
 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
 local function LoadCampaignDefs()
 	local success, err = pcall(function()
 		local subdirs = VFS.SubDirs(CAMPAIGN_DIR)
@@ -307,6 +319,38 @@ end
 local function SetChapterTitle(title)
 	gamedata.chapterTitle = title
 end
+
+local function CleanupAfterMission()
+	runningMission = false
+	missionCompletionFunc = nil
+	if missionArchive then
+		VFS.UnmapArchive(missionArchive)
+		missionArchive = nil	
+	end
+end
+
+local function LaunchMission(missionName, func)
+	local success, err = pcall(function()
+		local dir = campaignDefsByID[currentCampaignID].dir
+		-- load startscript and mutator
+		local startscript = missionDefs[missionName].startscript
+		startscript = dir .. startscript
+		local scriptString = VFS.LoadFile(startscript)
+		--missionArchive = dir .. missionDefs[missionName].archive
+		--VFS.MapArchive(missionArchive)
+		
+		-- TODO: might want to edit startscript before we run Spring with it
+		WG.LibLobby.localLobby:StartGameFromString(scriptString)
+		runningMission = true
+		missionCompletionFunc = func
+	end)
+	if (not success) then
+		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error launching mission: " .. err)
+	end
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 local function SortSavesByDate(a, b)
 	if a == nil or b == nil then
@@ -786,6 +830,7 @@ local function LoadGame(saveData)
 		end
 		SetVNStory(gamedata.vnStory, campaignDefsByID[currentCampaignID].vnDir)
 		--Spring.Log(widget:GetInfo().name, LOG.INFO, "Save file " .. path .. " loaded")
+		UpdateCodexButtonState()
 		SwitchToScreen("intermission")
 	end)
 	if (not success) then
@@ -1305,6 +1350,7 @@ local function InitializeIntermissionControls()
 								endValue = 0,
 								startValue = 1,
 								after = function()
+									CleanupAfterMission()
 									SwitchToScreen("main")
 									ResetGamedata()
 									if WG.Music then
@@ -1445,7 +1491,7 @@ local function InitializeCodexControls()
 		width = "100%",
 		height = "100%",
 		text = "",
-		font = {size = 16},
+		font = {size = 18},
 	}
 	
 	local codexImagePanel = Panel:New{
@@ -1582,6 +1628,21 @@ function widget:Update()
 	end
 end
 
+-- called when returning to menu from a game
+function widget:ActivateMenu()
+	--Spring.Log(widget:GetInfo().name, LOG.INFO, "ActivateMenu called", runningMission)
+	if runningMission then
+		Spring.Log(widget:GetInfo().name, LOG.INFO, "Finished running mission")
+		if VFS.FileExists(RESULTS_FILE_PATH) then
+			local results = VFS.Include(RESULTS_FILE_PATH)
+			missionCompletionFunc(results)
+		else
+			Spring.Log(widget:GetInfo().name, LOG.ERROR, "Unable to load mission results file")
+		end
+		CleanupAfterMission()
+	end
+end
+
 function widget:Initialize()
 	CHOBBY_DIR = "LuaMenu/widgets/chobby/"
 	VFS.Include("LuaMenu/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
@@ -1597,6 +1658,7 @@ function widget:Initialize()
 		UnlockCodexEntry = UnlockCodexEntry,
 		SetChapterTitle = SetChapterTitle,
 		SetMapEnabled = function(bool) gamedata.mapEnabled = bool end,
+		LaunchMission = LaunchMission,
 	}
 	
 	ResetGamedata()
