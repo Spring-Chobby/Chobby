@@ -17,12 +17,41 @@ local function GetDirectory(filepath)
     return filepath and filepath:gsub("(.*/)(.*)", "%1") 
 end
 
+local function SplitString(str, sep)
+  local sep, fields = sep or ":", {}
+  local pattern = string.format("([^%s]+)", sep)
+  string.gsub(str, pattern, function(c) fields[#fields+1] = c end)
+  return fields
+end
+
+-- support for parent directory syntax
+local function MakePath(entries, endSlash)
+  local toBuild = {}
+  for i=1,#entries do
+    local entry = entries[i]
+    local items = SplitString(entry, "/")
+    for j=1,#items do
+      local item = items[j]
+      if item == ".." then
+        toBuild[#toBuild] = nil
+      else
+        toBuild[#toBuild + 1] = item
+      end
+    end
+  end
+  local ret = table.concat(toBuild, "/")
+  if endSlash then ret = ret .. "/" end
+  return ret
+end
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
 assert(debug)
 local source = debug and debug.getinfo(1).source
 local DIR = GetDirectory(source)
 
-local config = VFS.Include(string.sub(DIR, 1, -9) .. "Configs/vn_config.lua")
-config.VN_DIR = string.sub(DIR, 1, -15) .. config.VN_DIR
+local config = VFS.Include(MakePath({DIR, "..", "Configs/vn_config.lua"}, false))
+config.VN_DIR = MakePath({DIR, "..", "..", config.VN_DIR}, true)
 
 local BG_BLACK = string.sub(DIR, 1, -9) .. "Images/vn/bg_black.png"
 local BG_WHITE = string.sub(DIR, 1, -9) .. "Images/vn/bg_white.png"
@@ -115,7 +144,7 @@ local data = {
 scriptFunctions = {}  -- not local so script can access it
 
 local imagesToPreload = {
-
+  BG_BLACK, BG_WHITE
 }
 
 local menuVisible = false
@@ -131,33 +160,6 @@ local function CountElements(tbl)
   return num
 end
 
-local function SplitString(str, sep)
-  local sep, fields = sep or ":", {}
-  local pattern = string.format("([^%s]+)", sep)
-  string.gsub(str, pattern, function(c) fields[#fields+1] = c end)
-  return fields
-end
-
-local function MakePath(entries, endSlash)
-  local toBuild = {}
-  for i=1,#entries do
-    local entry = entries[i]
-    local items = SplitString(entry, "/")
-    for j=1,#items do
-      local item = items[j]
-      if item == ".." then
-        toBuild[#toBuild] = nil
-      else
-        toBuild[#toBuild + 1] = item
-      end
-    end
-  end
-  local ret = table.concat(toBuild, "/")
-  if endSlash then ret = ret .. "/" end
-  return ret
-end
-
--- support for parent directory syntax
 local function GetFilePath(givenPath)
   if givenPath == nil then
     return ""
@@ -367,10 +369,8 @@ local function ShakeImage(anim, proportion)
   anim.offsetX = anim.offsetX or (math.random() > 0.5 and 1 or -1)
   anim.offsetY = anim.offsetY or (math.random() > 0.5 and 1 or -1)
   
-  if (proportion == 1) then	-- animation end, reset to normal
-    target.x = anim.baseX
-    target.y = anim.baseY
-    target:Invalidate()
+  if (proportion >= 1) then	-- animation end, reset to normal
+    target:SetPos(anim.baseX, anim.baseY)
     return
   end
   proportion = 0.2 + proportion * 0.8
@@ -390,9 +390,7 @@ local function ShakeImage(anim, proportion)
   newOffsetY = math.floor(newOffsetY * (1 - proportion) + 0.5)
   anim.offsetX = newOffsetX
   anim.offsetY = newOffsetY
-  target.x = anim.baseX + newOffsetX
-  target.y = anim.baseY + newOffsetY
-  target:Invalidate()
+  target:SetPos(anim.baseX + newOffsetX, anim.baseY + newOffsetY)
 end
 
 -- Advance animations a frame
@@ -448,17 +446,19 @@ local function AdvanceAnimations(dt)
         anim.startAlpha2 = anim.startAlpha2 or (target.color and 1 - target.color[4]) or 0
         target.file2 = target.oldFile
       end
+      
+      local newX, newY, newW, newH
       if anim.endX then
-        target.x = math.floor(anim.endX * proportion + anim.startX * (1 - proportion) + 0.5)
+        newX = math.floor(anim.endX * proportion + anim.startX * (1 - proportion) + 0.5)
       end
       if anim.endY then
-        target.y = math.floor(anim.endY * proportion + anim.startY * (1 - proportion) + 0.5)
+        newY = math.floor(anim.endY * proportion + anim.startY * (1 - proportion) + 0.5)
       end
       if anim.endWidth then
-        target.width = math.floor(anim.endWidth * proportion + anim.startWidth * (1 - proportion) + 0.5)
+        newW = math.floor(anim.endWidth * proportion + anim.startWidth * (1 - proportion) + 0.5)
       end
       if anim.endHeight then
-        target.height = math.floor(anim.endHeight * proportion + anim.startHeight * (1 - proportion) + 0.5)
+        newH = math.floor(anim.endHeight * proportion + anim.startHeight * (1 - proportion) + 0.5)
       end
       
       if anim.endColor then
@@ -476,6 +476,7 @@ local function AdvanceAnimations(dt)
           color2[4] = anim.endAlpha * math.cos(proportion * math.pi * 0.5) + anim.startAlpha * math.sin(proportion * math.pi * 0.5)
         end
       end
+      target:SetPos(newX, newY, newW, newH)
       target:Invalidate()
     end
     
@@ -502,6 +503,8 @@ local function AdvanceAnimations(dt)
     if (anim.removeTargetOnDone) then
       data.images[target.id] = nil
       target:Dispose()
+    else
+      target:Invalidate()
     end
   end
 end
@@ -999,8 +1002,6 @@ scriptFunctions = {
       image.oldFile = image.file
       image.file = GetFilePath(args.file)
     end
-    if args.height then image.height = args.height end
-    if args.width then image.width = args.width end
     
     if (type(args.x) == 'string') then
       args.x = screen0.width * tonumber(args.x)
@@ -1010,16 +1011,25 @@ scriptFunctions = {
     end
     local anchor = args.anchor or image.anchor or {0, 0}
     image.anchor = anchor
-    if args.x then image.x = args.x - anchor[1] end
-    if args.y then image.y = args.y - anchor[2] end
     
-    image.color = args.color or image.color
+    local wantedX, wantedY
+    if args.x then
+      wantedX = args.x - anchor[1]
+    end
+    if args.y then
+      wantedY = args.y - anchor[2]
+    end
+    
+    image:SetPos(wantedX, wantedY, args.width, args.height)
+    
+    if args.color then
+      image.color = args.color
+      image:Invalidate()
+    end
     
     if (args.animation) then
       AddAnimation(args, image)
     end
-    
-    image:Invalidate()
   end,
   
   PlayMusic = function(args)
@@ -1534,7 +1544,7 @@ function widget:Initialize()
     --fontSize = 50,
     x = screen0.width*0.5 - WINDOW_WIDTH/2,
     y = screen0.height/2 - WINDOW_HEIGHT/2 - 8,
-    width  = WINDOW_WIDTH,
+    width  = WINDOW_WIDTH + 16,
     height = WINDOW_HEIGHT + 32,
     padding = {8, 8, 8, 8};
     --autosize   = true;
