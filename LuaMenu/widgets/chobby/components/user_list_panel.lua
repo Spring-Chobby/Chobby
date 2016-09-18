@@ -35,16 +35,42 @@ function UserListPanel:OnLeft(userName)
 	self:Update()
 end
 
+function UserListPanel:CompareItems(userName1, userName2)
+	local userData1 = lobby:GetUser(userName1)
+	local userData2 = lobby:GetUser(userName2)
+	if userData1.isAdmin ~= userData2.isAdmin then
+		return userData1.isAdmin
+	end
+	return true
+end
+
 function UserListPanel:GetUsers()
 	local channel = self.userUpdateFunction()
 	return (channel and channel.users) or {}
 end
 
+local function CompareUsers(userName, otherName)
+	local userData = lobby:GetUser(userName)
+	local otherData = lobby:GetUser(otherName)
+	if not otherData then
+		return true
+	end
+	
+	if otherData.isAdmin ~= userData.isAdmin then
+		return userData.isAdmin
+	end
+	
+	return userName < otherName
+end
+
 function UserListPanel:Update()
 	self.userPanel:ClearChildren()
-
-	for _, userName in pairs(self:GetUsers()) do
-		self:AddUser(userName)
+	local users = self:GetUsers()
+	
+	table.sort(users, CompareUsers)
+	
+	for i = 1, #users do
+		self:AddUser(users[i])
 	end
 end
 
