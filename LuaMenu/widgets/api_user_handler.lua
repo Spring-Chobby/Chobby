@@ -475,6 +475,9 @@ local function GetUserControls(userName, opts)
 		userControls.tbName.font.color = nameColor
 		userControls.tbName:Invalidate()
 	end
+	if truncatedName then
+		userControls.tbName:SetText(truncatedName)
+	end
 	offset = offset + userControls.tbName.font:GetTextWidth(userControls.tbName.text)
 
 	if not hideStatus then
