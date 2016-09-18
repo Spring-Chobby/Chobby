@@ -215,6 +215,10 @@ function Lobby:RemoveAi(aiName)
 	return self
 end
 
+function Lobby:KickUser(userName)
+	return self
+end
+
 function Lobby:SayBattle(message)
 	return self
 end

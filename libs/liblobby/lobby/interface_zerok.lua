@@ -244,6 +244,22 @@ function Interface:RemoveAi(aiName)
 	return self
 end
 
+function Interface:KickUser(userName)
+	if not userName then
+		return
+	end
+	local sendData = {
+		Place = 1, -- Battle?
+		User = self:GetMyUserName(),
+		IsEmote = false,
+		Text = "!kick " .. userName,
+		Ring = false,
+		--Time = "2016-06-25T07:17:20.7548313Z",
+	}
+	self:_SendCommand("Say " .. json.encode(sendData))
+	return self
+end
+
 function Interface:SayBattle(message)
 	local sendData = {
 		Place = 1, -- Battle?

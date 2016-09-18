@@ -146,7 +146,9 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 		end
 	end
 
-	if (userBattleInfo.aiLib and userBattleInfo.owner == myUserName) or userControl.lobby:GetMyIsAdmin() then
+	-- userControl.lobby:GetMyIsAdmin()
+	-- Let everyone start kick votes.
+	if isInBattle or (userBattleInfo.aiLib and userBattleInfo.owner == myUserName) then
 		comboOptions[#comboOptions + 1] = "Kick"
 	end
 
@@ -366,7 +368,7 @@ local function GetUserControls(userName, opts)
 						if userBattleInfo and userBattleInfo.aiLib then
 							userControls.lobby:RemoveAi(userName)
 						else
-							Spring.Echo("TODO - Implement player kick.")
+							userControls.lobby:KickUser(userName)
 						end
 					elseif selectedName == "Unfriend" then
 						userControls.lobby:Unfriend(userName)
