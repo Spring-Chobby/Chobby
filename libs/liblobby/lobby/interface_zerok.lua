@@ -566,7 +566,7 @@ function Interface:_User(data)
 			isAdmin = data.IsAdmin,
 			level = data.Level,
 			skill1v1 = data.Effective1v1Elo,
-			skill = data.EffectiveElo,
+			skill = data.EffectiveMmElo,
 			isBot = data.IsBot,
 			awaySince = data.AwaySince,
 			inGameSince = data.InGameSince,

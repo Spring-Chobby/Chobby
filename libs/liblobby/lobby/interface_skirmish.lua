@@ -141,6 +141,12 @@ function InterfaceSkirmish:StartReplay(replayFilename)
 	return false
 end
 
+function InterfaceSkirmish:StartGameFromString(scriptString)
+	self:_CallListeners("OnBattleAboutToStart")
+	Spring.Reload(scriptString)
+	return false
+end
+
 function InterfaceSkirmish:StartGameFromFile(scriptFileName)
 	self:_CallListeners("OnBattleAboutToStart")
 	if self.useSpringRestart then
