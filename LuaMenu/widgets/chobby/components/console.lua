@@ -206,23 +206,50 @@ function Console:AddMessage(message, userName, dateOverride, color, thirdPerson)
 			txt = txt .. color
 		end
 	end
+
+	local textTooltip, onTextClick
 	if userName ~= nil then
+		local userStartIndex, userEndIndex
 		if thirdPerson then
+			userStartIndex = #txt
 			txt = txt .. userName .. " "
+			userEndIndex = userStartIndex + #userName
 		else
+			userStartIndex = #txt + 4 
 			txt = txt .. "\255\50\160\255" .. userName .. ": \255\255\255\255"
+			userEndIndex = userStartIndex + #userName
 			whiteText = whiteText .. userName .. ": "
 			if color ~= nil then
 				txt = txt .. color
 			end
 		end
+
+		textTooltip = {
+			{
+				startIndex = userStartIndex, 
+				endIndex = userEndIndex, 
+				tooltip =  "user_chat_s_" .. userName
+			}
+		}
+		onTextClick = {
+			{
+				startIndex = userStartIndex, 
+				endIndex = userEndIndex, 
+				OnTextClick = { 
+					function() 
+						Spring.Echo("Clicked on " .. userName .. ". TODO: Spawn popup.") 
+					end
+				} 
+			}
+		}
 	end
+
 	txt = txt .. message
 	whiteText = whiteText .. message
 	if self.tbHistory.text == "" then
-		self.tbHistory:SetText(txt)
+		self.tbHistory:SetText(txt, textTooltip, onTextClick)
 	else
-		self.tbHistory:AddLine(txt)
+		self.tbHistory:AddLine(txt, textTooltip, onTextClick)
 	end
 	
 	if self.channelName then

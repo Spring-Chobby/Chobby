@@ -263,10 +263,12 @@ function EditBox:_GeneratePhysicalLines(logicalLineID)
 end
 
 -- will automatically wrap into multiple lines if too long
-function EditBox:AddLine(text)
+function EditBox:AddLine(text, tooltips, OnTextClick)
 	-- add logical line
 	local line = {
 		text = text,
+		tooltips = tooltips,
+		OnTextClick = OnTextClick,
 		pls = {}, -- indexes of physical lines
 	}
 	table.insert(self.lines, line)
@@ -391,13 +393,22 @@ function EditBox:Update(...)
 	end
 end
 
-function EditBox:_SetCursorByMousePos(x, y)
+function EditBox:_GetCursorByMousePos(x, y)
+	local retVal = {
+		offset = self.offset,
+		cursor = self.cursor,
+		cursorY = self.cursorY,
+		physicalCursor = self.physicalCursor,
+		physicalCursorY = self.physicalCursorY
+	}
+
 	local clientX, clientY = self.clientArea[1], self.clientArea[2]
 	if not self.multiline and x - clientX < 0 then
-		self.offset  = self.offset - 1
-		self.offset  = math.max(0, self.offset)
-		self.cursor  = self.offset + 1
-		self.cursorY = 1
+		retVal.offset  = retVal.offset - 1
+		retVal.offset  = math.max(0, retVal.offset)
+		retVal.cursor  = retVal.offset + 1
+		retVal.cursorY = 1
+		return retVal
 	else
 		local text = self.text
 		-- properly accounts for passworded text where characters are represented as "*"
@@ -405,37 +416,37 @@ function EditBox:_SetCursorByMousePos(x, y)
 		if #text > 0 and self.passwordInput then
 			text = string.rep("*", #text)
 		end
-		self.cursorY = #self.physicalLines
+		retVal.cursorY = #self.physicalLines
 		for i, line in pairs(self.physicalLines) do
 			if line.y > y - clientY then
-				self.cursorY = math.max(1, i-1)
+				retVal.cursorY = math.max(1, i-1)
 				break
 			end
 		end
-		local selLine = self.physicalLines[self.cursorY]
-		if not selLine then return end
+		local selLine = self.physicalLines[retVal.cursorY]
+		if not selLine then return retVal end
 		selLine = selLine.text
 		if not self.multiline then
 			selLine = text
 		end
-		self.cursor = #selLine + 1
+		retVal.cursor = #selLine + 1
 		for i = 1, #selLine do
-			local tmp = selLine:sub(1 + self.offset, i)
+			local tmp = selLine:sub(1 + retVal.offset, i)
 			if self.font:GetTextWidth(tmp) > (x - clientX) then
-				self.cursor = i
+				retVal.cursor = i
 				break
 			end
 		end
 
 
 		-- convert back to logical line
-		self.physicalCursorY = self.cursorY
-		self.physicalCursor = self.cursor
+		retVal.physicalCursorY = retVal.cursorY
+		retVal.physicalCursor  = retVal.cursor
 
-		local physicalLine = self.physicalLines[self.physicalCursorY]
-		self.cursorY = physicalLine.lineID
+		local physicalLine = self.physicalLines[retVal.physicalCursorY]
+		retVal.cursorY = physicalLine.lineID
 
-		local logicalLine = self.lines[self.cursorY]
+		local logicalLine = self.lines[retVal.cursorY]
 		for i, plID in pairs(logicalLine.pls) do
 			-- FIXME when less tired
 -- 			if i > 1 or #physicalLine.text + 1 == self.physicalCursor then
@@ -444,10 +455,10 @@ function EditBox:_SetCursorByMousePos(x, y)
 -- 			if i > 1 then
 -- 				self.cursor = self.cursor - 1
 -- 			end
-			if plID == self.physicalCursorY then
+			if plID == retVal.physicalCursorY then
 				break
 			end
-			self.cursor = self.cursor + #self.physicalLines[plID].text
+			retVal.cursor = retVal.cursor + #self.physicalLines[plID].text
 		end
 -- 		if logicalLine.pls[#logicalLine.pls] ~= self.physicalCursorY and  then
 -- 			self.cursor = self.cursor - 1
@@ -469,10 +480,40 @@ function EditBox:_SetCursorByMousePos(x, y)
 -- 				break
 -- 			end
 -- 		end
+		return retVal
 	end
 end
 
+function EditBox:_SetCursorByMousePos(x, y)
+	local retVal = self:_GetCursorByMousePos(x, y)
+	self.offset          = retVal.offset
+	self.cursor          = retVal.cursor
+	self.cursorY         = retVal.cursorY
+	self.physicalCursor  = retVal.physicalCursor
+	self.physicalCursorY = retVal.physicalCursorY
+end
+
+
 function EditBox:MouseDown(x, y, ...)
+	-- FIXME: didn't feel like reimplementing Screen:MouseDown to capture MouseClick correctly, so clicking on text items is triggered in MouseDown
+	-- handle clicking on text items
+	local retVal = self:_GetCursorByMousePos(x, y)
+	local line = self.lines[retVal.cursorY]
+	if line and line.OnTextClick then
+		local cx, cy = self:ScreenToLocal(x, y)
+		for _, OnTextClick in pairs(line.OnTextClick) do
+			if OnTextClick.startIndex <= retVal.cursor and OnTextClick.endIndex >= retVal.cursor then
+				for _, f in pairs(OnTextClick.OnTextClick) do
+					f(self, cx, cy, ...)
+				end
+				self._interactedTime = Spring.GetTimer()
+				inherited.MouseDown(self, x, y, ...)
+				self:Invalidate()
+				return self
+			end
+		end
+	end
+
 	if not self.selectable then
 		return false
 	end
@@ -498,6 +539,18 @@ function EditBox:MouseDown(x, y, ...)
 end
 
 function EditBox:MouseMove(x, y, dx, dy, button)
+	if button == nil then -- handle tooltips
+		local retVal = self:_GetCursorByMousePos(x, y)
+		local line = self.lines[retVal.cursorY]
+		if line and line.tooltips then
+			for _, tooltip in pairs(line.tooltips) do
+				if tooltip.startIndex <= retVal.cursor and tooltip.endIndex >= retVal.cursor then
+					Screen0.currentTooltip = tooltip.tooltip
+				end
+			end
+		end
+	end
+
 	if button ~= 1 then
 		return inherited.MouseMove(self, x, y, dx, dy, button)
 	end
