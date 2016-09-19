@@ -5,11 +5,12 @@ Installation
 
 There are multiple ways you can install Chobby.
 
-1. Chobby.exe wrapper
+#### 1. Chobby.exe wrapper ####
+
 
 Download `chobby.exe` from http://zero-k.info/lobby/chobby.exe and execute it. It will download the newest version of Chobby and required engine, and automatically execute it. Should work under Windows and Linux.
 
-2. Rapid (pr-downloader)
+#### 2. Rapid (pr-downloader) ####
 
 Chobby is on rapid, under the "chobby" tag.
 
@@ -19,7 +20,7 @@ To download with pr-downloader use this command line:
 
 You will need to obtain the appropriate engine and configure it manually.
 
-3. Development version from Github
+#### 3. Development version from Github ####
 
 The development version of Chobby can be obtained directly from here, and should be placed in your games subdirectory.
 Example (execute in your games folder):
