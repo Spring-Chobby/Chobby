@@ -61,6 +61,14 @@ function BattleListWindow:init(parent)
 		self:OnBattleIngameUpdate(battleID, isRunning)
 	end
 	lobby:AddListener("OnBattleIngameUpdate", self.onBattleIngameUpdate)
+
+	local function onConfigurationChange(listener, key, value)
+		if key == "displayBadEngines" then
+			update()
+		end
+	end
+	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
+
 	update()
 end
 
@@ -73,7 +81,7 @@ function BattleListWindow:RemoveListeners()
 end
 
 function BattleListWindow:Update()
-	self.listPanel:ClearChildren()
+	self:Clear()
 
 	local battles = lobby:GetBattles()
 	Spring.Echo("Number of battles: " .. lobby:GetBattleCount())
