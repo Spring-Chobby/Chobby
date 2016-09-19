@@ -163,7 +163,7 @@ end
 --------------------------------------------------------------------------------
 -- Ready Check Popup
 
-local function CreateReadyCheckWindow(secondsRemaining)
+local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 	local Configuration = WG.Chobby.Configuration
 	
 	local readyCheckWindow = Window:New {
@@ -215,7 +215,8 @@ local function CreateReadyCheckWindow(secondsRemaining)
 	local function DoDispose()
 		if readyCheckWindow then
 			readyCheckWindow:Dispose()
-			readyCheckWindow = nil	
+			readyCheckWindow = nil
+			DestroyFunc()
 		end
 	end
 	
@@ -257,12 +258,12 @@ local function CreateReadyCheckWindow(secondsRemaining)
 		classname = "negative_button",
 		OnClick = {
 			function()
-				RejectFunc()
+				CancelFunc()
 			end
 		},
 	}
 
-	local popupHolder = WG.Chobby.PriorityPopup(readyCheckWindow, RejectFunc, AcceptFunc, screen0)
+	local popupHolder = WG.Chobby.PriorityPopup(readyCheckWindow, CancelFunc, AcceptFunc, screen0)
 	
 	local externalFunctions = {}
 	
@@ -361,18 +362,26 @@ function QueueStatusPanel.GetControl()
 				queueStatusHandler.UpdateMatches(joinedQueueList, queueCounts, currentEloWidth, joinedTime)
 				queueStatusIngame.UpdateMatches(joinedQueueList, queueCounts, currentEloWidth, joinedTime)
 			end
+			
 			queuePanel:SetVisibility(inMatchMaking)
 			queueStatusIngamePanel:SetVisibility(inMatchMaking)
 		end
 	)
 	
+	local function DestroyReadyCheckPopup()
+		readyCheckPopup = nil
+	end
+	
 	local function OnMatchMakerReadyCheck(_, secondsRemaining)
 		if not readyCheckPopup then
-			readyCheckPopup = CreateReadyCheckWindow(secondsRemaining)
+			readyCheckPopup = CreateReadyCheckWindow(secondsRemaining, DestroyReadyCheckPopup)
 		end
 	end
 	
 	local function OnMatchMakerReadyUpdate(_, readyAccepted, likelyToPlay, queueReadyCounts, battleSize, readyPlayers)
+		if not readyCheckPopup then
+			return
+		end
 		if readyAccepted then
 			readyCheckPopup.AcceptRegistered()
 		end
@@ -382,12 +391,24 @@ function QueueStatusPanel.GetControl()
 	end
 	
 	local function OnMatchMakerReadyResult(_, isBattleStarting, areYouBanned)
+		if not readyCheckPopup then
+			return
+		end
 		readyCheckPopup.MatchMakingComplete(isBattleStarting)
+	end
+	
+	local function OnBattleAboutToStart()
+		-- If the battle is starting while popup is active then assume success.
+		if not readyCheckPopup then
+			return
+		end
+		readyCheckPopup.MatchMakingComplete(true)
 	end
 	
 	lobby:AddListener("OnMatchMakerReadyCheck", OnMatchMakerReadyCheck)
 	lobby:AddListener("OnMatchMakerReadyUpdate", OnMatchMakerReadyUpdate)
 	lobby:AddListener("OnMatchMakerReadyResult", OnMatchMakerReadyResult)
+	lobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
 	
 	return queuePanel
 end
