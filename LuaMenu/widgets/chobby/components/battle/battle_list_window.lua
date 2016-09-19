@@ -96,8 +96,8 @@ function BattleListWindow:Update()
 		end
 	)
 
-	for battleID, battle in pairs(battles) do
-		self:AddBattle(battleID, battle)
+	for _, battle in pairs(battles) do
+		self:AddBattle(battle.battleID, battle)
 	end
 end
 
