@@ -688,7 +688,7 @@ function ChatWindows:GetChannelConsole(chanName)
 		local function Resize(obj)
 			self:UpdateOldChatLinePosition(obj)
 		end
-		channelConsole = Console(chanName, MessageListener, nil, Resize)
+		channelConsole = Console(chanName, MessageListener, nil, Resize, false)
 		self.channelConsoles[chanName] = channelConsole
 
 		Configuration.channels[chanName] = true
@@ -771,7 +771,7 @@ function ChatWindows:GetPrivateChatConsole(userName, switchTo)
 		local function Resize(obj)
 			self:UpdateOldChatLinePosition(obj)
 		end
-		privateChatConsole = Console(chanName, MessageListener, nil, Resize)
+		privateChatConsole = Console(chanName, MessageListener, nil, Resize, false)
 		self.privateChatConsoles[chanName] = privateChatConsole
 
 		local caption = "@" .. userName

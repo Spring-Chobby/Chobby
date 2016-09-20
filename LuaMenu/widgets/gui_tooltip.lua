@@ -857,19 +857,12 @@ local function UpdateTooltip(inputText)
 	end
 end
 
---------------------------------------------------------------------------
---------------------------------------------------------------------------
--- Widget callins
 local currentTooltipText = false
-
-function widget:Update()
-	EvilHax()
-
-	local text = GetTooltip()
-	if text then
-		if currentTooltipText ~= text then
-			currentTooltipText = text
-			UpdateTooltip(text)
+local function CheckTooltipUpdate(newText)
+	if newText then
+		if currentTooltipText ~= newText then
+			currentTooltipText = newText
+			UpdateTooltip(newText)
 		end
 		SetTooltipPos()
 	else
@@ -878,6 +871,15 @@ function widget:Update()
 			currentTooltipText = false
 		end
 	end
+end
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+-- Widget callins
+
+function widget:Update()
+	EvilHax()
+	CheckTooltipUpdate(GetTooltip())
 end
 
 function widget:Initialize()

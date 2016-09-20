@@ -302,8 +302,9 @@ local function GetUserControls(userName, opts)
 	local offset             = opts.offset or 0
 	local offsetY            = opts.offsetY or 0
 	local height             = opts.height or 22
-	local showFounder    = opts.showFounder
+	local showFounder        = opts.showFounder
 	local showModerator      = opts.showModerator
+	local comboBoxOnly       = opts.comboBoxOnly
 
 	local userControls = reinitialize or {}
 
@@ -331,7 +332,7 @@ local function GetUserControls(userName, opts)
 		end
 
 		userControls.mainControl = ControlType:New {
-			name = userName,
+			name = (not comboBoxOnly) and userName, -- Many can be added to screen0
 			x = 0,
 			y = 0,
 			right = 0,
@@ -352,6 +353,9 @@ local function GetUserControls(userName, opts)
 			OnOpen = {
 				function (obj)
 					obj.tooltip = nil
+					-- Update hovered tooltip
+					local x,y = Spring.GetMouseState()
+					screen0:IsAbove(x,y)
 				end
 			},
 			OnClose = {
@@ -398,7 +402,11 @@ local function GetUserControls(userName, opts)
 			}
 		}
 	end
-
+	
+	if comboBoxOnly then
+		return userControls
+	end
+	
 	if isInBattle and not suppressSync then
 		offset = offset + 1
 		userControls.imSyncStatus = Image:New {
@@ -566,6 +574,35 @@ local function GetUserControls(userName, opts)
 	return userControls
 end
 
+local function _GetUserDropdownMenu(userName, isInBattle)
+	local opts = {
+		isInBattle = isInBattle,
+		comboBoxOnly = true
+	}
+	local userControls = GetUserControls(userName, opts)
+	local parentControl = WG.Chobby.interfaceRoot.GetLobbyInterfaceHolder()
+	
+	parentControl:AddChild(userControls.mainControl)
+	userControls.mainControl:BringToFront()
+	
+	local x,y = Spring.GetMouseState()
+	local screenWidth, screenHeight = Spring.GetWindowGeometry()
+	userControls.mainControl:SetPos(math.max(0, x - 60), screenHeight - y - userControls.mainControl.height + 5, 120)
+	
+	local function delayFunc()
+		-- Must click on the new ComboBox, otherwise an infinite loop may be caused.
+		screen0:MouseDown(x, y + 10, 1)
+	end
+	
+	WG.Delay(delayFunc, 0.001)
+	
+	userControls.mainControl.OnClose = userControls.mainControl.OnClose or {}
+	userControls.mainControl.OnClose[#userControls.mainControl.OnClose + 1] = 
+	function (obj)
+		obj:Dispose()
+	end
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- External Functions
@@ -655,6 +692,10 @@ function userHandler.GetNotificationUser(userName)
 	return _GetUser(notificationUsers, userName, {
 		maxNameLength  = WG.Chobby.Configuration.notificationMaxNameLength,
 	})
+end
+
+function userHandler.GetUserDropdownMenu(userName, isInbattle)
+	_GetUserDropdownMenu(userName, isInbattle)
 end
 
 --------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 Console = LCS.class{}
 
-function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeFunc)
+function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeFunc, isBattleChat)
 	self.listener = sendMessageListener
 	self.showDate = true
 	self.dateFormat = "%H:%M"
@@ -237,7 +237,8 @@ function Console:AddMessage(message, userName, dateOverride, color, thirdPerson)
 				endIndex = userEndIndex, 
 				OnTextClick = { 
 					function() 
-						Spring.Echo("Clicked on " .. userName .. ". TODO: Spawn popup.") 
+						WG.UserHandler.GetUserDropdownMenu(userName, isBattleChat)
+						--Spring.Echo("Clicked on " .. userName .. ". TODO: Spawn popup.") 
 					end
 				} 
 			}
