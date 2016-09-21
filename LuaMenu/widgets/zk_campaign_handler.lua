@@ -1607,7 +1607,7 @@ local function InitializeControls()
 	Button = Chili.Button
 	
 	-- window to hold things
-	window = Window:New {
+	window = Panel:New {
 		name = 'chobby_campaign_window',
 		x = 0,
 		y = 0,
@@ -1615,7 +1615,8 @@ local function InitializeControls()
 		height = "100%",
 		resizable = false,
 		draggable = false,
-		--padding = {0, 0, 0, 0},
+		padding = {0, 0, 0, 0},
+		backgroundColor = {0, 0, 0, 0}
 	}
 	
 	InitializeMainControls()
