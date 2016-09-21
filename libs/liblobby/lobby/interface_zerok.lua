@@ -820,7 +820,7 @@ local function FindLastOccurence(mainString, subString)
 end
 
 function Interface:ProcessVote(data, battle, duplicateMessageTime)
-	if (not battle) and battle.founder == data.User then
+	if (not battle) or battle.founder == data.User then
 		return false
 	end
 	local message = data.Text

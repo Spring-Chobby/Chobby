@@ -396,6 +396,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local queueListWindow = WG.QueueListWindow.GetControl()
 	local battleListWindow = BattleListWindow()
+	local battleWatchListWindow = BattleWatchListWindow()
 
 	local submenus = {
 		{
@@ -406,7 +407,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			name = "multiplayer",
 			entryCheck = WG.MultiplayerEntryPopup,
 			tabs = {
-				{name = "matchMaking", control = queueListWindow},
+				{name = "play", control = queueListWindow},
+				{name = "watch", control = battleWatchListWindow.window},
 				{name = "serverList", control = battleListWindow.window},
 			},
 			cleanupFunction = CleanMultiplayerState

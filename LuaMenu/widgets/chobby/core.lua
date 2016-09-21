@@ -20,6 +20,7 @@ local includes = {
 
 	-- battle
 	"components/battle/battle_list_window.lua",
+	"components/battle/battle_watch_list_window.lua",
 	-- queue
 	"components/queue/queue_list_window.lua",
 	"components/queue/queue_window.lua",
