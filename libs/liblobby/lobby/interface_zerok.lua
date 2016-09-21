@@ -952,7 +952,7 @@ end
 Interface.jsonCommands["MatchMakerSetup"] = Interface._MatchMakerSetup
 
 function Interface:_MatchMakerStatus(data)
-	self:_OnMatchMakerStatus(data.MatchMakerEnabled, data.JoinedQueues, data.QueueCounts, data.CurrentEloWidth, data.JoinedTime, data.BannedSeconds)
+	self:_OnMatchMakerStatus(data.MatchMakerEnabled, data.JoinedQueues, data.QueueCounts, data.IngameCounts, data.CurrentEloWidth, data.JoinedTime, data.BannedSeconds)
 end
 Interface.jsonCommands["MatchMakerStatus"] = Interface._MatchMakerStatus
 

@@ -26,7 +26,7 @@ local panelInterface
 --------------------------------------------------------------------------------
 -- Initialization
 
-local function MakeQueueControl(parentControl, queueName, queueDescription)
+local function MakeQueueControl(parentControl, queueName, queueDescription, players, waiting)
 	local Configuration = WG.Chobby.Configuration
 	
 	local btnLeave, btnJoin
@@ -75,9 +75,9 @@ local function MakeQueueControl(parentControl, queueName, queueDescription)
 	
 	local lblTitle = TextBox:New {
 		x = 90,
-		y = 10,
+		y = 15,
 		width = 120,
-		bottom = 0,
+		height = 33,
 		fontsize = Configuration:GetFont(3).size,
 		text = queueName,
 		parent = parentControl
@@ -85,13 +85,37 @@ local function MakeQueueControl(parentControl, queueName, queueDescription)
 	
 	local lblDescription = TextBox:New {
 		x = 180,
-		y = 15,
+		y = 8,
 		width = 120,
+		height = 22,
 		right = 5,
 		align = "bottom",
-		bottom = 0,
 		fontsize = Configuration:GetFont(1).size,
 		text = queueDescription,
+		parent = parentControl
+	}
+	
+	local lblPlayers = TextBox:New {
+		x = 180,
+		y = 30,
+		width = 120,
+		height = 22,
+		right = 5,
+		align = "bottom",
+		fontsize = Configuration:GetFont(1).size,
+		text = "Playing: " .. players,
+		parent = parentControl
+	}
+	
+	local lblWaiting = TextBox:New {
+		x = 280,
+		y = 30,
+		width = 120,
+		height = 22,
+		right = 5,
+		align = "bottom",
+		fontsize = Configuration:GetFont(1).size,
+		text = "Waiting: " .. waiting,
 		parent = parentControl
 	}
 	
@@ -104,9 +128,19 @@ local function MakeQueueControl(parentControl, queueName, queueDescription)
 		btnLeave:SetVisibility(inQueue)
 	end
 	
-	function externalFunctionsAndData.UpdateQueueInformation(newName, newDescription)
-		lblTitle:SetText(newName)
-		lblDescription:SetText(newDescription)
+	function externalFunctionsAndData.UpdateQueueInformation(newName, newDescription, newPlayers, newWaiting)
+		if newName then
+			lblTitle:SetText(newName)
+		end
+		if newDescription then
+			lblDescription:SetText(newDescription)
+		end
+		if newPlayers then
+			lblPlayers:SetText("Playing: " .. newPlayers)
+		end
+		if newWaiting then
+			lblWaiting:SetText("Waiting: " .. newWaiting)
+		end
 	end
 	
 	return externalFunctionsAndData
@@ -176,22 +210,22 @@ local function InitializeControls(window)
 	local queueHolders = {}
 	local function AddQueue(_, queueName, queueDescription, mapNames)
 		if queueHolders[queueName] then
-			queueHolders[queueName].UpdateQueueInformation(queueName, queueDescription)
+			queueHolders[queueName].UpdateQueueInformation(queueName, queueDescription, "?", "?")
 			return
 		end
 	
 		local queueHolder = Control:New {
 			x = 10,
-			y = queues*50 + 20,
+			y = queues*55 + 15,
 			right = 0,
-			height = 35,
+			height = 45,
 			caption = "", -- Status Window
 			parent = listPanel,
 			resizable = false,
 			draggable = false,
 			padding = {0, 0, 0, 0},
 		}
-		queueHolders[queueName] = MakeQueueControl(queueHolder, queueName, queueDescription)
+		queueHolders[queueName] = MakeQueueControl(queueHolder, queueName, queueDescription, "?", "?")
 		queues = queues + 1
 	end
 	
@@ -200,14 +234,16 @@ local function InitializeControls(window)
 		AddQueue(_, data.name, data.description, data.mapNames)
 	end
 	
-	local function UpdateQueueStatus(listener, inMatchMaking, joinedQueueList, queueCounts, currentEloWidth, joinedTime, bannedTime)
-		local peopleInCommonQueues = 0
+	local function UpdateQueueStatus(listener, inMatchMaking, joinedQueueList, queueCounts, ingameCounts, currentEloWidth, joinedTime, bannedTime)
 		for i = 1, #joinedQueueList do
 			local queueName = joinedQueueList[i]
-			peopleInCommonQueues = peopleInCommonQueues + ((queueCounts and queueCounts[queueName]) or 0)
 			if queueHolders[queueName] then
 				queueHolders[queueName].inQueue = true
 			end
+		end
+		
+		for queueName, waitingCount in pairs(queueCounts) do
+			queueHolders[queueName].UpdateQueueInformation(nil, nil, ingameCounts and ingameCounts[queueName], waitingCount)
 		end
 		
 		for name, queueHolder in pairs(queueHolders) do
