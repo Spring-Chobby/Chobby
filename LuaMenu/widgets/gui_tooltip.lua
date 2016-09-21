@@ -758,7 +758,7 @@ local function SetTooltipPos()
 	y = screenHeight - y -- Spring y is from the bottom, chili is from the top
 
 	-- Making sure the tooltip is within the boundaries of the screen
-	y = (y + height > screenHeight) and (y - height) or (y + 20)
+	y = ((y + height > screenHeight) and (y > height) and (y - height)) or (y + 20)
 	x = (x + width > screenWidth) and (screenWidth - width) or x
 
 	tipWindow:SetPos(x, y, width, height)
