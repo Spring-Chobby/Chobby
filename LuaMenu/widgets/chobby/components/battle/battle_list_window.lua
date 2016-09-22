@@ -102,6 +102,7 @@ function BattleListWindow:Update()
 end
 
 function BattleListWindow:AddBattle(battleID, battle)
+	battle = battle or lobby:GetBattle(battleID)
 	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
@@ -279,7 +280,13 @@ function BattleListWindow:UpdateSync(battleID)
 	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
+	
 	local items = self:GetRowItems(battleID)
+	if not items then
+		self:AddBattle(battleID)
+		return
+	end
+	
 	local imHaveMap = items.battleButton:GetChildByName("imHaveMap")
 	local imHaveGame = items.battleButton:GetChildByName("imHaveGame")
 
@@ -292,7 +299,13 @@ function BattleListWindow:JoinedBattle(battleID)
 	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
+	
 	local items = self:GetRowItems(battleID)
+	if not items then
+		self:AddBattle(battleID)
+		return
+	end
+	
 	local playersCaption = items.battleButton:GetChildByName("playersCaption")
 	playersCaption:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
 	self:RecalculateOrder(battleID)
@@ -303,7 +316,13 @@ function BattleListWindow:LeftBattle(battleID)
 	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
+	
 	local items = self:GetRowItems(battleID)
+	if not items then
+		self:AddBattle(battleID)
+		return
+	end
+	
 	local playersCaption = items.battleButton:GetChildByName("playersCaption")
 	playersCaption:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
 	self:RecalculateOrder(battleID)
@@ -314,7 +333,12 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
+	
 	local items = self:GetRowItems(battleID)
+	if not items then
+		self:AddBattle(battleID)
+		return
+	end
 	
 	local mapCaption = items.battleButton:GetChildByName("mapCaption")
 	local imHaveMap = items.battleButton:GetChildByName("imHaveMap")
@@ -348,7 +372,13 @@ function BattleListWindow:OnBattleIngameUpdate(battleID, isRunning)
 	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
+	
 	local items = self:GetRowItems(battleID)
+	if not items then
+		self:AddBattle(battleID)
+		return
+	end
+	
 	local runningImage = items.battleButton:GetChildByName("minimap"):GetChildByName("runningImage")
 	if isRunning then
 		runningImage.file = BATTLE_RUNNING
