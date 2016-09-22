@@ -10,8 +10,6 @@ function widget:GetInfo()
 	}
 end
 
-local mousePosX, mousePosY
-local tipWindow, tipTextDisplay
 
 local spGetGameFrame            = Spring.GetGameFrame
 local spGetMouseState           = Spring.GetMouseState
@@ -36,6 +34,14 @@ local BATTLE_RUNNING     = LUA_DIRNAME .. "images/runningBattle.png"
 local BATTLE_NOT_RUNNING = LUA_DIRNAME .. "images/nothing.png"
 
 local PASSWORD_EXPLAINATION = "Battle requires a password to join."
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+-- Variables
+
+local mousePosX, mousePosY
+local tipWindow, tipTextDisplay
+local tooltipOverride = nil
 
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
@@ -726,6 +732,9 @@ end
 -- Tooltip maintence
 
 local function GetTooltip()
+	if tooltipOverride then
+		return tooltipOverride
+	end
 	if screen0.currentTooltip then -- this gives chili absolute priority, otherwise TraceSreenRay() would ignore the fact ChiliUI is underneath the mouse
 		return screen0.currentTooltip
 	end
@@ -825,6 +834,25 @@ end
 
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
+-- External Functions
+
+local TooltipHandler = {}
+
+function TooltipHandler.TooltipOverrideClear()
+	tooltipOverride = nil
+	CheckTooltipUpdate(GetTooltip())
+end
+
+function TooltipHandler.TooltipOverride(newText, overrideTime)
+	tooltipOverride = newText
+	CheckTooltipUpdate(tooltipOverride)
+	if overrideTime then
+		WG.Delay(TooltipHandler.TooltipOverrideClear, overrideTime)
+	end
+end
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
 -- Widget callins
 
 function widget:Update()
@@ -837,6 +865,7 @@ function widget:Initialize()
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
 	InitWindow()
+	WG.TooltipHandler = TooltipHandler
 end
 
 function widget:Shutdown()

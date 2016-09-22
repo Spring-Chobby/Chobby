@@ -244,6 +244,8 @@ function Console:AddMessage(message, userName, dateOverride, color, thirdPerson)
 			}
 		}
 	end
+	
+	onTextClick = WG.BrowserHandler.AddClickableUrls(message, onTextClick or {})
 
 	txt = txt .. message
 	whiteText = whiteText .. message
