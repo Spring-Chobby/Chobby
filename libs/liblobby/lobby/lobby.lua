@@ -338,10 +338,7 @@ end
 ------------------------
 
 function Lobby:_OnConnect(protocolVersion, springVersion, udpPort, serverMode)
-	if self.status == "disconnected" and self.disconnectTime ~= nil then -- in the process of reconnecting
-		self.disconnectTime = nil
-		self:Login(unpack(self._oldData.loginData))
-	end
+	self:Login(unpack(self.loginData))
 	self:_CallListeners("OnConnect", protocolVersion, springVersion, udpPort, serverMode)
 end
 
@@ -982,7 +979,7 @@ end
 
 function Lobby:Reconnect()
 	self.lastReconnectionAttempt = Spring.GetTimer()
-	self:Connect(self._oldData.host, self._oldData.port)
+	self:Connect(self._oldData.host, self._oldData.port, self._oldData.loginData[1], self._oldData.loginData[2], self._oldData.loginData[3], self._oldData.loginData[4])
 end
 
 function Lobby:SafeUpdate(...)

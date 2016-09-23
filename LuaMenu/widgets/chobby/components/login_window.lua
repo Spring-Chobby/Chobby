@@ -312,7 +312,7 @@ function LoginWindow:tryLogin()
 		end
 		lobby:AddListener("OnDisconnected", self.onDisconnected)
 
-		lobby:Connect(Configuration:GetServerAddress(), Configuration:GetServerPort())
+		lobby:Connect(Configuration:GetServerAddress(), Configuration:GetServerPort(), username, password, 3, nil, GetLobbyName())
 	else
 		lobby:Login(username, password, 3, nil, GetLobbyName())
 	end
@@ -341,7 +341,7 @@ function LoginWindow:tryRegister()
 		end
 		lobby:AddListener("OnConnect", self.onConnectRegister)
 
-		lobby:Connect(Configuration:GetServerAddress(), Configuration:GetServerPort())
+		lobby:Connect(Configuration:GetServerAddress(), Configuration:GetServerPort(), username, password, 3, nil, GetLobbyName())
 	else
 		lobby:Register(username, password, "name@email.com")
 	end
@@ -404,8 +404,6 @@ function LoginWindow:OnConnected()
 		lobby:RemoveListener("OnAgreement", self.onAgreement)
 	end
 	lobby:AddListener("OnAgreementEnd", self.onAgreementEnd)
-
-	lobby:Login(username, password, 3, nil, GetLobbyName())
 end
 
 function LoginWindow:createAgreementWindow()
