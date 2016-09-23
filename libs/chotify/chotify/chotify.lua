@@ -61,14 +61,12 @@ function Chotify:Post(obj)
         resizable = false,
     }
     if type(body) == "string" then
-        Chili.Label:New {
-            x = 0,
-            right = 20,
-            y = 0,
-            bottom = 10,
-            valign = 'center',
-            align = 'center',
-            caption = body,
+        Chili.TextBox:New {
+            x = 5,
+            right = 5,
+            y = 15,
+            bottom = 5,
+            text = body,
             parent = window,
         }
     else
