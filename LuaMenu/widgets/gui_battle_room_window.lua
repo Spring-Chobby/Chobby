@@ -1217,14 +1217,16 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	local CHAT_ME = WG.Chobby.Configuration.meColor
 
 	local onSaidBattle = function(listener, userName, message)
-		local iAmMentioned = (string.find(message, WG.LibLobby.lobby:GetMyUserName()) and userName ~= WG.LibLobby.lobby:GetMyUserName())
+		local myUserName = battleLobby:GetMyUserName()
+		local iAmMentioned = myUserName and userName ~= myUserName and (string.find(message, myUserName)
 		local chatColour = (iAmMentioned and CHAT_MENTION) or nil
 		battleRoomConsole:AddMessage(message, userName, false, chatColour, false)
 	end
 	battleLobby:AddListener("OnSaidBattle", onSaidBattle)
 
 	local onSaidBattleEx = function(listener, userName, message)
-		local iAmMentioned = (string.find(message, WG.LibLobby.lobby:GetMyUserName()) and userName ~= WG.LibLobby.lobby:GetMyUserName())
+		local myUserName = battleLobby:GetMyUserName()
+		local iAmMentioned = myUserName and userName ~= myUserName and (string.find(message, myUserName)
 		local chatColour = (iAmMentioned and CHAT_MENTION) or CHAT_ME
 		battleRoomConsole:AddMessage(message, userName, false, chatColour, true)
 	end
