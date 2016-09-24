@@ -279,7 +279,7 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 			return
 		end
 		timeRemaining = newTimeRemaining
-		statusLabel:SetCaption(((acceptRegistered and "Waiting for players ") or "Accept in ") .. SecondsToMinutes(timeWaiting))
+		statusLabel:SetCaption(((acceptRegistered and "Waiting for players ") or "Accept in ") .. SecondsToMinutes(timeRemaining))
 	end
 	
 	function externalFunctions.UpdatePlayerCount(readyPlayers)
@@ -308,6 +308,7 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 		else
 			statusLabel:SetCaption(Configuration:GetErrorColor() .. "Match rejected")
 		end
+		Spring.Echo("MatchMakingComplete", success)
 		displayTimer = false
 		WG.Delay(DoDispose, 1)
 	end
@@ -391,6 +392,7 @@ function QueueStatusPanel.GetControl()
 	end
 	
 	local function OnMatchMakerReadyResult(_, isBattleStarting, areYouBanned)
+		Spring.Echo("OnMatchMakerReadyResult", isBattleStarting, areYouBanned)
 		if not readyCheckPopup then
 			return
 		end
