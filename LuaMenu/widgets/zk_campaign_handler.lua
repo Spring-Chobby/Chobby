@@ -1678,7 +1678,7 @@ function widget:ActivateMenu()
 end
 
 function widget:DownloadFinished()
-	if VFS.HasArchive(requiredMap) then
+	if requiredMap and VFS.HasArchive(requiredMap) then
 		requiredMap = nil
 	end
 end
