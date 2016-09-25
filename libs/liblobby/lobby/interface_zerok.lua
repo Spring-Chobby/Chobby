@@ -698,7 +698,8 @@ function Interface:_BattleAdded(data)
 		header.IsRunning, header.RunningSince, 
 		header.Mode, 
 		header.Mode ~= 0, -- Is Custom
-		(header.Mode ~= 5 and header.Mode ~= 0) -- Is Bots
+		(header.Mode ~= 5 and header.Mode ~= 0), -- Is Bots
+		header.IsMatchMaker
 	)
 end
 Interface.jsonCommands["BattleAdded"] = Interface._BattleAdded
@@ -732,8 +733,20 @@ function Interface:_BattleUpdate(data)
 		self:_OnBattleIngameUpdate(header.BattleID, header.IsRunning)
 	end
 	
-		Spring.Echo("header.Gameheader.Game", header.Game)
-	self:_OnUpdateBattleInfo(header.BattleID, header.SpectatorCount, header.Locked, 0, header.Map, header.Engine, header.RunningSince, header.Game, header.Mode)
+	self:_OnUpdateBattleInfo(
+		header.BattleID, 
+		header.SpectatorCount, 
+		header.Locked, 
+		0, 
+		header.Map, 
+		header.Engine, 
+		header.RunningSince, 
+		header.Game, 
+		header.Mode, 
+		header.Mode ~= 0, -- Is Custom
+		(header.Mode ~= 5 and header.Mode ~= 0), -- Is Bots
+		header.IsMatchMaker
+	)
 end
 Interface.jsonCommands["BattleUpdate"] = Interface._BattleUpdate
 
@@ -974,8 +987,7 @@ Interface.jsonCommands["AreYouReadyUpdate"] = Interface._AreYouReadyUpdate
 function Interface:_AreYouReadyResult(data)
 	self:_OnMatchMakerReadyResult(data.IsBattleStarting, data.AreYouBanned)
 end
-Interface.jsonCommands["AreYouReadyResult"] = Interface.AreYouReadyResult
-
+Interface.jsonCommands["AreYouReadyResult"] = Interface._AreYouReadyResult
 
 -------------------
 -- Unimplemented --

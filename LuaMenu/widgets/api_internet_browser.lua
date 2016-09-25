@@ -28,7 +28,7 @@ end
 function BrowserHandler.AddClickableUrls(chatString, onTextClick)
 
 	local urlStart, urlEnd = string.find(chatString, "http[^%s]*")
-	Spring.Echo("URL urlStart, urlEnd", chatString, urlStart, urlEnd)
+	--Spring.Echo("URL urlStart, urlEnd", chatString, urlStart, urlEnd)
 	while urlStart do
 		-- Cull end puncuation
 		local endChar = string.sub(chatString, urlEnd, urlEnd)
