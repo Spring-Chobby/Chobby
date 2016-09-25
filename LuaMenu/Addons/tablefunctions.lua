@@ -54,6 +54,22 @@ function Spring.Utilities.TableEqual(table1, table2)
 	return true
 end
 
+-- Returns whether the first table is equal to a subset of the second
+function Spring.Utilities.TableSubsetEquals(table1, table2)
+	if not table1 then
+		return true
+	end
+	if not table2 then
+		return false
+	end
+	for key, value in pairs(table1) do
+		if table2[key] ~= value then
+			return false
+		end
+	end
+	return true
+end
+
 function Spring.Utilities.TableToString(data)
 	 local str = ""
 
