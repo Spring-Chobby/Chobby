@@ -150,6 +150,9 @@ local function InitializeControls(window)
 	local Configuration = WG.Chobby.Configuration
 	local lobby = WG.LibLobby.lobby
 	
+	local banStart
+	local banDuration
+	
 	local lblTitle = Label:New {
 		x = 20,
 		right = 5,
@@ -255,7 +258,9 @@ local function InitializeControls(window)
 		end
 		
 		if bannedTime then
-			statusText:SetText("You are banned from matchmaking for " .. bannedTime)
+			statusText:SetText("You are banned from matchmaking for " .. bannedTime .. " seconds")
+			banStart = Spring.GetTimer()
+			banDuration = bannedTime
 		end
 	end
 	
@@ -263,6 +268,19 @@ local function InitializeControls(window)
 	lobby:AddListener("OnMatchMakerStatus", UpdateQueueStatus)
 	
 	local externalFunctions = {}
+		
+	function externalFunctions.UpdateBanTimer()
+		if not banStart then
+			return
+		end
+		local timeRemaining = banDuration - math.ceil(Spring.DiffTimers(Spring.GetTimer(), banStart))
+		if timeRemaining < 0 then
+			banStart = false
+			statusText:SetText("")
+			return
+		end
+		statusText:SetText("You are banned from matchmaking for " .. timeRemaining .. " seconds")
+	end
 	
 	function externalFunctions.UpdateRequirementText()
 		local newText = ""
@@ -312,6 +330,12 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface
+
+function widget:Update()
+	if panelInterface then
+		panelInterface.UpdateBanTimer()
+	end
+end
 
 function widget:DownloadFinished()
 	for mapName,_ in pairs(requiredMaps) do

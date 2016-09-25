@@ -90,7 +90,7 @@ local ingame = false
 local OPEN_TRACK_NAME = 'sounds/music/lobby/The Secret of Ayers Rock.ogg'
 
 function widget:Update()
-	if ingame then
+	if ingame or (WG.Chobby.Configuration.menuMusicVolume == 0 )then
 		return
 	end
 	
