@@ -608,7 +608,7 @@ local function ProcessScreenSizeOption(data, offset)
 	return label, list, offset + ITEM_OFFSET
 end
 
-local function ProcessSettingsOption(data, offset, customSettingsSwitch)
+local function ProcessSettingsOption(data, offset, defaults, customSettingsSwitch)
 	local Configuration = WG.Chobby.Configuration
 	
 	local label = Label:New {
@@ -625,7 +625,7 @@ local function ProcessSettingsOption(data, offset, customSettingsSwitch)
 	}
 	
 	local defaultItem = 1
-	local defaultName = Configuration.settingsMenuValues[data.name]
+	local defaultName = Configuration.settingsMenuValues[data.name] or defaults[data.name]
 	
 	local items = {}
 	for i = 1, #data.options do
@@ -682,7 +682,7 @@ local function ProcessSettingsOption(data, offset, customSettingsSwitch)
 	return label, settingsComboBoxes[data.name], offset + ITEM_OFFSET
 end
 
-local function ProcessSettingsNumber(data, offset, customSettingsSwitch)
+local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitch)
 	local Configuration = WG.Chobby.Configuration
 	
 	local label = Label:New {
@@ -726,7 +726,7 @@ local function ProcessSettingsNumber(data, offset, customSettingsSwitch)
 		y = offset,
 		width = COMBO_WIDTH,
 		height = 30,
-		text = tostring(Configuration.settingsMenuValues[data.name]),
+		text = tostring(Configuration.settingsMenuValues[data.name] or defaults[data.name]),
 		font = Configuration:GetFont(2),
 		OnFocusUpdate = {
 			function (obj)
@@ -747,7 +747,7 @@ local function ProcessSettingsNumber(data, offset, customSettingsSwitch)
 	return label, numberInput, offset + ITEM_OFFSET
 end
 
-local function PopulateTab(settingPresets, settingOptions)
+local function PopulateTab(settingPresets, settingOptions, settingsDefaults)
 	local children = {}
 	local offset = ITEM_OFFSET
 	local customSettingsSwitch
@@ -764,9 +764,9 @@ local function PopulateTab(settingPresets, settingOptions)
 		if data.displayModeToggle then
 			label, list, offset = ProcessScreenSizeOption(data, offset)
 		elseif data.isNumberSetting then
-			label, list, offset = ProcessSettingsNumber(data, offset, customSettingsSwitch)
+			label, list, offset = ProcessSettingsNumber(data, offset, settingsDefaults, customSettingsSwitch)
 		else
-			label, list, offset = ProcessSettingsOption(data, offset, customSettingsSwitch)
+			label, list, offset = ProcessSettingsOption(data, offset, settingsDefaults, customSettingsSwitch)
 		end
 		children[#children + 1] = label
 		children[#children + 1] = list
@@ -799,7 +799,7 @@ local function InitializeControls(window)
 			name = data.name,
 			caption = data.name,
 			font = WG.Chobby.Configuration:GetFont(3),
-			children = PopulateTab(data.presets, data.settings)
+			children = PopulateTab(data.presets, data.settings, settingsDefaults)
 		}
 	end
 	
