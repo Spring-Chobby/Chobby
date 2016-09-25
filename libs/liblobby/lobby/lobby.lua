@@ -903,7 +903,7 @@ function Lobby:_OnMatchMakerStatus(inMatchMaking, joinedQueueList, queueCounts, 
 	end
 	
 	if queueCounts or ingameCounts then
-		for name, queueData in pairs(queues) do
+		for name, queueData in pairs(self.queues) do
 			queueData.playersIngame = (ingameCounts and ingameCounts[name]) or queueData.playersIngame
 			queueData.playersWaiting = (queueCounts and queueCounts[name]) or queueData.playersWaiting
 		end

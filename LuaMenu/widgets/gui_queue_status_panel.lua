@@ -187,20 +187,20 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 		parent = readyCheckWindow,
 	}
 
-	local statusLabel = Label:New {
-		x = 30,
-		width = 200,
-		y = 75,
+	local statusLabel = TextBox:New {
+		x = 15,
+		width = 250,
+		y = 80,
 		height = 35,
-		caption = "",
-		font = Configuration:GetFont(3),
+		text = "",
+		fontsize = Configuration:GetFont(3).size,
 		parent = readyCheckWindow,
 	}
 
 	local playersAcceptedLabel = Label:New {
-		x = 30,
-		width = 200,
-		y = 120,
+		x = 15,
+		width = 250,
+		y = 130,
 		height = 35,
 		caption = "Players accepted: 0",
 		font = Configuration:GetFont(3),
@@ -208,6 +208,7 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 	}
 
 	local acceptRegistered = false
+	local rejectedMatch = false
 	local displayTimer = true
 	local startTimer = Spring.GetTimer()
 	local timeRemaining = secondsRemaining
@@ -222,7 +223,8 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 	
 	local function CancelFunc()
 		lobby:RejectMatchMakingMatch()
-		statusLabel:SetCaption(Configuration:GetErrorColor() .. "Rejected match")
+		statusLabel:SetText(Configuration:GetErrorColor() .. "Rejected match")
+		rejectedMatch = true
 		displayTimer = false
 		WG.Delay(DoDispose, 1)
 	end
@@ -279,7 +281,7 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 			return
 		end
 		timeRemaining = newTimeRemaining
-		statusLabel:SetCaption(((acceptRegistered and "Waiting for players ") or "Accept in ") .. SecondsToMinutes(timeRemaining))
+		statusLabel:SetText(((acceptRegistered and "Waiting for players ") or "Accept in ") .. SecondsToMinutes(timeRemaining))
 	end
 	
 	function externalFunctions.UpdatePlayerCount(readyPlayers)
@@ -292,7 +294,7 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 			return
 		end
 		acceptRegistered = true
-		statusLabel:SetCaption("Waiting for players " .. (timeRemaining or "time error") .. "s")
+		statusLabel:SetText("Waiting for players " .. (timeRemaining or "time error") .. "s")
 		
 		buttonAccept:Hide()
 		
@@ -304,13 +306,14 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 	
 	function externalFunctions.MatchMakingComplete(success)
 		if success then
-			statusLabel:SetCaption(Configuration:GetSuccessColor() .. "Battle starting")
-		else
-			statusLabel:SetCaption(Configuration:GetErrorColor() .. "Match rejected")
+			statusLabel:SetText(Configuration:GetSuccessColor() .. "Battle starting")
+		elseif (not rejectedMatch) then
+			-- If we rejected the match then this message is not useful.
+			statusLabel:SetText(Configuration:GetWarningColor() .. "Match rejected by another player")
 		end
 		Spring.Echo("MatchMakingComplete", success)
 		displayTimer = false
-		WG.Delay(DoDispose, 1)
+		WG.Delay(DoDispose, 3)
 	end
 	
 	return externalFunctions
