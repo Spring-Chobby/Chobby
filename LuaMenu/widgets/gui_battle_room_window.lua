@@ -479,6 +479,7 @@ end
 local function AddTeamButtons(parent, offX, joinFunc, aiFunc, unjoinable, disallowBots)
 	if not disallowBots then
 		local addAiButton = Button:New {
+			name = "addAiButton",
 			x = offX,
 			y = 4,
 			height = 24,
@@ -508,6 +509,8 @@ end
 local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 
 	local SPACING = 22
+	local disallowCustomTeams = battle.disallowCustomTeams
+	local disallowBots = battle.disallowBots
 
 	local mainScrollPanel = ScrollPanel:New {
 		x = 0,
@@ -617,7 +620,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				parentStack = spectatorStackPanel
 				parentScroll = spectatorScrollPanel
 			else
-				if battle.disallowCustomTeams then
+				if disallowCustomTeams then
 					if teamIndex == 0 then
 						humanName = "Players"
 					else
@@ -663,8 +666,8 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 					function()
 						WG.Chobby.AiListWindow(battleLobby, battle.gameName, teamIndex)
 					end,
-					battle.disallowCustomTeams and teamIndex ~= 0,
-					(battle.disallowBots or battle.disallowCustomTeams) and teamIndex == 0
+					disallowCustomTeams and teamIndex ~= 0,
+					(disallowBots or disallowCustomTeams) and teamIndex ~= 1
 				)
 			end
 			local teamStack = Control:New {
@@ -683,6 +686,50 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 			end
 
 			local teamData = {}
+			
+			function teamData.UpdateBattleMode()
+				local addAiButton = teamHolder:GetChildByName("addAiButton")
+				if addAiButton then
+					teamHolder:RemoveChild(addAiButton)
+					addAiButton:Dispose()
+				end
+				local joinTeamButton = teamHolder:GetChildByName("joinTeamButton")
+				if joinTeamButton then
+					teamHolder:RemoveChild(joinTeamButton)
+					joinTeamButton:Dispose()
+				end
+				
+				AddTeamButtons(
+					teamHolder,
+					88,
+					function()
+						battleLobby:SetBattleStatus({
+								allyNumber = teamIndex,
+								isSpectator = false,
+							})
+					end,
+					function()
+						WG.Chobby.AiListWindow(battleLobby, battle.gameName, teamIndex)
+					end,
+					disallowCustomTeams and teamIndex ~= 0,
+					(disallowBots or disallowCustomTeams) and teamIndex ~= 1
+				)
+				
+				if teamIndex ~= -1 then
+					if disallowCustomTeams then
+						if teamIndex == 0 then
+							humanName = "Players"
+						elseif teamIndex == 1 then
+							humanName = "Bots"
+						else
+							humanName = "Invalid"
+						end
+					else
+						humanName = "Team " .. (teamIndex + 1)
+					end
+				end
+				label:SetCaption(humanName)
+			end
 
 			function teamData.AddPlayer(name)
 				local playerData = GetPlayerData(name)
@@ -707,7 +754,44 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 					teamHolder:Invalidate()
 				end
 			end
+			
+			function teamData.RemoveTeam()
+				if teamIndex < emptyTeamIndex then
+					emptyTeamIndex = teamIndex
+				end
 
+				team[teamIndex] = nil
+				parentStack:RemoveChild(parentStack:GetChildByName(teamIndex))
+				teamHolder:Dispose()
+			end
+
+			function teamData.CheckRemoval()
+				if teamStack:IsEmpty() and teamIndex ~= -1 then
+					local removeHolder = false
+					
+					if disallowCustomTeams then
+						if teamIndex > 1 then
+							teamData.RemoveTeam()
+							return true
+						elseif disallowBots and teamIndex > 0 then
+							teamData.RemoveTeam()
+							return true
+						end
+					else
+						if teamIndex > 1 then
+							local maxTeam = 0
+							for teamID,_ in pairs(team) do
+								maxTeam = math.max(teamID, maxTeam)
+							end
+							if teamIndex == maxTeam then
+								teamData.RemoveTeam()
+								return true
+							end
+						end
+					end
+				end
+			end
+			
 			function teamData.RemovePlayer(name)
 				local playerData = GetPlayerData(name)
 				if playerData.team ~= teamIndex then
@@ -736,27 +820,11 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 					end
 				end
 
-				if teamStack:IsEmpty() and teamIndex ~= -1 then
-					local teamCount = 0
-					for _,_ in pairs(team) do
-						teamCount = teamCount + 1
-					end
-					-- Don't leave us with less than two teams (spectator is a team too)
-					if teamCount > 3 then
-						if teamIndex < emptyTeamIndex then
-							emptyTeamIndex = teamIndex
-						end
-
-						team[teamIndex] = nil
-						parentStack:RemoveChild(parentStack:GetChildByName(teamIndex))
-						teamHolder:Dispose()
-					else
-						teamHolder:Invalidate()
-					end
-				else
+				
+				if not teamData.CheckRemoval() then
 					teamHolder:Invalidate()
+					PositionChildren(parentStack, parentScroll.height)
 				end
-				PositionChildren(parentStack, parentScroll.height)
 			end
 
 			team[teamIndex] = teamData
@@ -780,7 +848,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 
 	GetTeam(-1) -- Make Spectator heading appear
 	GetTeam(0) -- Always show two teams in custom battles
-	if not (battle.disallowCustomTeams and battle.disallowBots) then
+	if not (disallowCustomTeams and disallowBots) then
 		GetTeam(1)
 	end
 
@@ -801,6 +869,20 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 	}
 
 	local externalFunctions = {}
+	
+	function externalFunctions.UpdateBattleMode(newDisallowCustomTeams, newDisallowBots)
+		disallowCustomTeams = newDisallowCustomTeams
+		disallowBots = newDisallowBots
+		
+		if not (disallowCustomTeams and disallowBots) then
+			GetTeam(1)
+		end
+		for teamIndex, teamData in pairs(team) do
+			if not teamData.CheckRemoval() then
+				teamData.UpdateBattleMode()
+			end
+		end
+	end
 	
 	function externalFunctions.UpdateUserTeamStatus(userName, allyNumber, isSpectator)
 		if isSpectator then
@@ -1103,9 +1185,10 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		parent = mainWindow,
 	}
 
-	local battleTitle = i18n("battle") .. ": " .. tostring(battle.title)
+	local rawBattleTitle = tostring(battle.title)
+	local battleTitle = i18n("battle") .. ": " .. rawBattleTitle
 	if battle.battleMode then
-		battleTitle = i18n(WG.Chobby.Configuration.battleTypeToName[battle.battleMode]) .. " " .. battleTitle
+		battleTitle = i18n(WG.Chobby.Configuration.battleTypeToName[battle.battleMode]) .. ": " .. battleTitle
 	end
 
 	local lblBattleTitle = Label:New {
@@ -1180,7 +1263,15 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		infoHandler.BattleIngameUpdate(updatedBattleID, isRunning)
 	end
 
-	local function OnUpdateBattleInfo(listener, updatedBattleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)
+	local function OnUpdateBattleInfo(listener, updatedBattleID, spectatorCount, locked, mapHash, mapName, 
+			engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker)
+		if battleMode then
+			battleTitle = i18n(WG.Chobby.Configuration.battleTypeToName[battleMode]) .. ": " .. rawBattleTitle
+			lblBattleTitle:SetCaption(battleTitle)
+			
+			playerHandler.UpdateBattleMode(disallowCustomTeams, disallowBots)
+		end
+		
 		infoHandler.UpdateBattleInfo(updatedBattleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)
 	end
 	
