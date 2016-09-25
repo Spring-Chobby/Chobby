@@ -15,7 +15,7 @@ return {
 		-- console
 		type_here_to_chat = "Type here to chat. Press enter to send.",
 		-- login_window
-		connect_to_spring_server = 'Connect to the Spring lobby server',
+		connect_to_spring_server = 'Connect to the lobby server',
 		username = 'Username',
 		password = 'Password',
 		login_noun = 'Login',
