@@ -238,7 +238,7 @@ local function InitializeControls(window)
 		AddQueue(_, data.name, data.description, data.mapNames)
 	end
 	
-	local function UpdateQueueStatus(listener, inMatchMaking, joinedQueueList, queueCounts, ingameCounts, currentEloWidth, joinedTime, bannedTime)
+	local function UpdateQueueStatus(listener, inMatchMaking, joinedQueueList, queueCounts, ingameCounts, _, _, _, bannedTime)
 		if joinedQueueList then
 			for i = 1, #joinedQueueList do
 				local queueName = joinedQueueList[i]
@@ -262,6 +262,12 @@ local function InitializeControls(window)
 			banStart = Spring.GetTimer()
 			banDuration = bannedTime
 		end
+	end
+	
+	if lobby.matchMakerBannedTime then
+		statusText:SetText("You are banned from matchmaking for " .. lobby.matchMakerBannedTime .. " seconds")
+		banStart = Spring.GetTimer()
+		banDuration = lobby.matchMakerBannedTime
 	end
 	
 	lobby:AddListener("OnQueueOpened", AddQueue)

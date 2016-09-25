@@ -429,7 +429,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local matchMakerStatus = WG.QueueStatusPanel.GetControl()
 	holder_matchMaking:AddChild(matchMakerStatus)
-	matchMakerStatus:Hide()
 	
 	-------------------------------------------------------------------
 	-- Resizing functions
