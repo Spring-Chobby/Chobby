@@ -38,10 +38,10 @@ end
 --------------------------------------------------------------------------------
 
 local randomTrackList = {
-	"sounds/music/lobby/A Magnificent Journey (Alternative Version).ogg",
-	"sounds/music/lobby/Dream Infinity.ogg",
-	"sounds/music/lobby/Interstellar.ogg",
-	"sounds/music/lobby/Tomorrow Landscape.ogg",
+	"sounds/lobbyMusic/A Magnificent Journey (Alternative Version).ogg",
+	"sounds/lobbyMusic/Dream Infinity.ogg",
+	"sounds/lobbyMusic/Interstellar.ogg",
+	"sounds/lobbyMusic/Tomorrow Landscape.ogg",
 }
 
 local function GetRandomTrack(previousTrack)
@@ -87,7 +87,7 @@ end
 
 local firstActivation = true
 local ingame = false
-local OPEN_TRACK_NAME = 'sounds/music/lobby/The Secret of Ayers Rock.ogg'
+local OPEN_TRACK_NAME = 'sounds/lobbyMusic/The Secret of Ayers Rock.ogg'
 
 function widget:Update()
 	if ingame or (WG.Chobby.Configuration.menuMusicVolume == 0 )then
