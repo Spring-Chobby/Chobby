@@ -81,6 +81,7 @@ function Configuration:init()
 	self.debugMode = false
 	self.onlyShowFeaturedMaps = true
 	self.useSpringRestart = false
+	self.menuMusicVolume = 5
 
 	self.font = {
 		[0] = {size = 10, shadow = false},
@@ -133,6 +134,7 @@ function Configuration:GetConfigData()
 		displayBots = self.displayBots,
 		displayBadEngines = self.displayBadEngines,
 		settingsMenuValues = self.settingsMenuValues,
+		menuMusicVolume = self.menuMusicVolume,
 	}
 end
 

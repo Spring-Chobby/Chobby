@@ -178,6 +178,36 @@ local function GetLobbyTabControls()
 	}
 
 	offset = offset + ITEM_OFFSET
+	children[#children + 1] = Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(2),
+		caption = "Menu Music Volume",
+	}
+	children[#children + 1] = Trackbar:New {
+		x = COMBO_X,
+		y = offset,
+		width  = COMBO_WIDTH,
+		height = 30,
+		value  = Configuration.menuMusicVolume or 1,
+		min    = 0,
+		max    = 10,
+		step   = 0.05,
+		OnChange = {
+			function(obj, value)
+				if freezeSettings then
+					return
+				end
+				Configuration:SetConfigValue("menuMusicVolume", value)
+			end
+		}
+	}
+	
+	offset = offset + ITEM_OFFSET
 	local autoLogin = Checkbox:New {
 		x = 20,
 		width = CHECK_WIDTH,
