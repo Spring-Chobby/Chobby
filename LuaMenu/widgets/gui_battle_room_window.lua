@@ -18,27 +18,15 @@ end
 -- Local variables
 
 -- Chili controls
-local window
+local mainWindow
 local imHaveMap, imHaveGame
 local lblHaveMap, lblHaveGame
-
--- Listeners, needed here so they can be deregistered
-local onBattleClosed
-local onLeftBattle_counter
-local onJoinedBattle
-local onSaidBattle
-local onSaidBattleEx
-local onUpdateUserTeamStatus
-local onUpdateUserTeamStatusSelf
-local onLeftBattle
-local onRemoveAi
-local onVoteUpdate
-local onVoteEnd
 
 -- Globals
 local battleLobby
 local wrapperControl
 local parentTabPanel
+local mainWindowFunctions
 
 local singleplayerWrapper
 local multiplayerWrapper
@@ -334,20 +322,6 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	}
 	leftOffset = leftOffset + 38
 
-	--local lblNumberOfPlayers
-	--if battleLobby.name ~= "singleplayer" then
-	--	lblNumberOfPlayers = Label:New {
-	--		x = 8,
-	--		y = leftOffset,
-	--		width = 200,
-	--		height = 30,
-	--		caption = "",
-	--		font = WG.Chobby.Configuration:GetFont(1),
-	--		parent = leftInfo,
-	--	}
-	--	leftOffset = leftOffset + 25
-	--end
-
 	imHaveGame = Image:New {
 		x = 8,
 		y = leftOffset,
@@ -411,26 +385,15 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		modoptionsHolder.children[1]:Hide()
 	end
 
-	--downloader.lblDownload.OnHide = downloader.lblDownload.OnHide or {}
-	--downloader.lblDownload.OnHide[#downloader.lblDownload.OnHide + 1] = function ()
-	--	if not modoptionsHolder.visible then
-	--		modoptionsHolder:Show()
-	--	end
-	--end
-    --
-	--downloader.lblDownload.OnShow = downloader.lblDownload.OnShow or {}
-	--downloader.lblDownload.OnShow[#downloader.lblDownload.OnShow + 1] = function ()
-	--	if modoptionsHolder.visible then
-	--		modoptionsHolder:Hide()
-	--	end
-	--end
-
 	leftOffset = leftOffset + 120
+	
 	-- Example downloads
 	--MaybeDownloadArchive("Titan-v2", "map")
 	--MaybeDownloadArchive("tinyskirmishredux1.1", "map")
 
-	onUpdateUserTeamStatusSelf = function(listener, userName, allyNumber, isSpectator)
+	local externalFunction = {}
+	
+	function externalFunction.UpdateUserTeamStatus(userName, allyNumber, isSpectator)
 		if userName == myUserName then
 			if isSpectator then
 				ButtonUtilities.SetButtonDeselected(btnPlay)
@@ -445,9 +408,8 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 			end
 		end
 	end
-	battleLobby:AddListener("OnUpdateUserTeamStatus", onUpdateUserTeamStatusSelf)
 
-	onBattleIngameUpdate = function(listener, updatedBattleID, isRunning)
+	function externalFunction.BattleIngameUpdate(updatedBattleID, isRunning)
 		if battleID == updatedBattleID then
 			if isRunning then
 				btnStartBattle:SetCaption(i18n("rejoin"))
@@ -456,11 +418,10 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 			end
 		end
 	end
-	battleLobby:AddListener("OnBattleIngameUpdate", onBattleIngameUpdate)
 
-	onBattleIngameUpdate(nil, battleID, battle.isRunning)
+	externalFunction.BattleIngameUpdate(battleID, battle.isRunning)
 
-	onUpdateBattleInfo = function(listener, updatedBattleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)
+	function externalFunction.UpdateBattleInfo(updatedBattleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)
 		if battleID ~= updatedBattleID then
 			return
 		end
@@ -485,43 +446,31 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 			})
 		end
 	end
-	battleLobby:AddListener("OnUpdateBattleInfo", onUpdateBattleInfo)
 
-	--local UpdatePlayers = function(battleID)
-	--	if lblNumberOfPlayers then
-	--		lblNumberOfPlayers:SetCaption(i18n("players") .. ": " .. tostring(#battle.users - battle.spectatorCount) .. "/" .. tostring(battle.maxPlayers))
-	--	end
-	--end
-
-	onLeftBattle_counter = function(listener, leftBattleID, userName)
+	function externalFunction.LeftBattle(leftBattleID, userName)
 		if battleID ~= leftBattleID then
 			return
 		end
 		if battleLobby:GetMyUserName() == userName then
-			window:Dispose()
-			window = nil
+			mainWindow:Dispose()
+			mainWindow = nil
 			if wrapperControl and wrapperControl.visible and wrapperControl.parent then
 				wrapperControl:Hide()
 			end
-		else
-			--UpdatePlayers(battleID)
 		end
 	end
-	battleLobby:AddListener("OnLeftBattle", onLeftBattle_counter)
 
-	onJoinedBattle = function(listener, joinedBattleId, userName)
+	function externalFunction.JoinedBattle(joinedBattleId, userName)
 		if battleID ~= joinedBattleId then
 			return
 		end
-		--UpdatePlayers(battleID)
 	end
-	battleLobby:AddListener("OnJoinedBattle", onJoinedBattle)
-
-	--UpdatePlayers(battleID)
 
 	MaybeDownloadGame(battle)
 	MaybeDownloadMap(battle)
 	UpdateArchiveStatus(true)
+	
+	return externalFunction
 end
 
 local function AddTeamButtons(parent, offX, joinFunc, aiFunc, unjoinable, disallowBots)
@@ -848,7 +797,9 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		end
 	}
 
-	onUpdateUserTeamStatus = function(listener, userName, allyNumber, isSpectator)
+	local externalFunctions = {}
+	
+	function externalFunctions.UpdateUserTeamStatus(userName, allyNumber, isSpectator)
 		if isSpectator then
 			allyNumber = -1
 		end
@@ -859,19 +810,18 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		RemovePlayerFromTeam(userName)
 		AddPlayerToTeam(allyNumber, userName)
 	end
-	battleLobby:AddListener("OnUpdateUserTeamStatus", onUpdateUserTeamStatus)
 
-	onLeftBattle = function(listener, leftBattleID, userName)
+	function externalFunctions.LeftBattle(leftBattleID, userName)
 		if leftBattleID == battleID then
 			RemovePlayerFromTeam(userName)
 		end
 	end
-	battleLobby:AddListener("OnLeftBattle", onLeftBattle)
 
-	onRemoveAi = function(listener, botName)
+	function externalFunctions.RemoveAi(botName)
 		RemovePlayerFromTeam(botName)
 	end
-	battleLobby:AddListener("OnRemoveAi", onRemoveAi)
+	
+	return externalFunctions
 end
 
 local function SetupVotePanel(votePanel, battle, battleID)
@@ -1000,8 +950,10 @@ local function SetupVotePanel(votePanel, battle, battleID)
 			voteResultLabel:Hide()
 		end
 	end
+	
+	local externalFunctions = {}
 
-	onVoteUpdate = function(listener, message, yesVotes, noVotes, votesNeeded)
+	function externalFunctions.VoteUpdate(message, yesVotes, noVotes, votesNeeded)
 		voteName:SetCaption(message)
 		voteCountLabel:SetCaption(yesVotes .. "/" .. votesNeeded)
 		voteProgress:SetValue(100 * yesVotes / votesNeeded)
@@ -1010,9 +962,8 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		end
 		HideVoteResult()
 	end
-	battleLobby:AddListener("OnVoteUpdate", onVoteUpdate)
 
-	onVoteEnd = function(listener, message, success)
+	function externalFunctions.VoteEnd(message, success)
 		if activePanel.visible then
 			activePanel:Hide()
 		end
@@ -1027,7 +978,8 @@ local function SetupVotePanel(votePanel, battle, battleID)
 
 		WG.Delay(HideVoteResult, 5)
 	end
-	battleLobby:AddListener("OnVoteEnd", onVoteEnd)
+	
+	return externalFunctions
 end
 
 local function InitializeControls(battleID, oldLobby, topPoportion)
@@ -1044,31 +996,13 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 
 	local BOTTOM_SPACING = 50
 
-	window = Control:New {
+	mainWindow = Control:New {
 		x = 0,
 		y = 0,
 		width = "100%",
 		height = "100%",
 		resizable = false,
 		padding = {0, 0, 0, 0},
-		OnDispose = {
-			function()
-				emptyTeamIndex = 0
-
-				oldLobby:RemoveListener("OnBattleClosed", onBattleClosed)
-				oldLobby:RemoveListener("OnLeftBattle", onLeftBattle_counter)
-				oldLobby:RemoveListener("OnJoinedBattle", onJoinedBattle)
-				oldLobby:RemoveListener("OnSaidBattle", onSaidBattle)
-				oldLobby:RemoveListener("OnSaidBattleEx", onSaidBattleEx)
-				oldLobby:RemoveListener("OnUpdateUserTeamStatus", onUpdateUserTeamStatus)
-				oldLobby:RemoveListener("OnUpdateUserTeamStatus", onUpdateUserTeamStatusSelf)
-				oldLobby:RemoveListener("OnLeftBattle", onLeftBattle)
-				oldLobby:RemoveListener("OnRemoveAi", onRemoveAi)
-				oldLobby:RemoveListener("OnBattleIngameUpdate", onBattleIngameUpdate)
-				oldLobby:RemoveListener("OnVoteUpdate", onVoteUpdate)
-				oldLobby:RemoveListener("OnVoteEnd", onVoteEnd)
-			end
-		},
 	}
 	
 	local subPanel = Control:New {
@@ -1077,7 +1011,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		right = 0,
 		bottom = 0,
 		padding = {0, 0, 0, 0},
-		parent = window,
+		parent = mainWindow,
 	}
 
 	local topPanel = Control:New {
@@ -1117,7 +1051,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		parent = bottomPanel,
 	}
 
-	SetupPlayerPanel(playerPanel, spectatorPanel, battle, battleID)
+	local playerHandler = SetupPlayerPanel(playerPanel, spectatorPanel, battle, battleID)
 
 	local votePanel = Control:New {
 		x = 0,
@@ -1128,8 +1062,8 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		parent = topPanel,
 	}
 
-	SetupVotePanel(votePanel)
-
+	local votePanel = SetupVotePanel(votePanel)
+	
 	local leftInfo = Control:New {
 		x = "48%",
 		y = 0,
@@ -1148,7 +1082,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		parent = topPanel,
 	}
 
-	SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, battleLobby:GetMyUserName())
+	local infoHandler = SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, battleLobby:GetMyUserName())
 
 	local btnQuitBattle = Button:New {
 		right = 7,
@@ -1163,7 +1097,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 				battleLobby:LeaveBattle()
 			end
 		},
-		parent = window,
+		parent = mainWindow,
 	}
 
 	local battleTitle = i18n("battle") .. ": " .. tostring(battle.title)
@@ -1178,7 +1112,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		height = 30,
 		font = WG.Chobby.Configuration:GetFont(3),
 		caption = "",
-		parent = window,
+		parent = mainWindow,
 		OnResize = {
 			function (obj, xSize, ySize)
 				obj:SetCaption(StringUtilities.GetTruncatedStringWithDotDot(battleTitle, obj.font, obj.width))
@@ -1215,35 +1149,102 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 
 	local CHAT_MENTION = "\255\255\0\0"
 	local CHAT_ME = WG.Chobby.Configuration.meColor
+	
+	-- Lobby interface
+	local externalFunctionsAndData = {}
+	
+	local function OnUpdateUserTeamStatus(listener, userName, allyNumber, isSpectator)
+		infoHandler.UpdateUserTeamStatus(userName, allyNumber, isSpectator)
+		playerHandler.UpdateUserTeamStatus(userName, allyNumber, isSpectator)
+	end
 
-	local onSaidBattle = function(listener, userName, message)
+	local function OnBattleIngameUpdate(listener, updatedBattleID, isRunning)
+		infoHandler.BattleIngameUpdate(updatedBattleID, isRunning)
+	end
+
+	local function OnUpdateBattleInfo(listener, updatedBattleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)
+		infoHandler.UpdateBattleInfo(updatedBattleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)
+	end
+	
+	local function OnLeftBattle(listener, leftBattleID, userName)
+		infoHandler.LeftBattle(leftBattleID, userName)
+		playerHandler.LeftBattle(leftBattleID, userName)
+	end
+
+	local function OnJoinedBattle(listener, joinedBattleId, userName)
+		infoHandler.JoinedBattle(joinedBattleId, userName)
+	end
+	
+	local function OnRemoveAi(listener, botName)
+		playerHandler.RemoveAi(botName)
+	end
+	
+	local function OnVoteUpdate(listener, message, yesVotes, noVotes, votesNeeded)
+		votePanel.VoteUpdate(message, yesVotes, noVotes, votesNeeded)
+	end
+	
+	local function OnVoteEnd(listener, message, success)
+		votePanel.VoteEnd(message, success)
+	end
+	
+	local function OnSaidBattle(listener, userName, message)
 		local myUserName = battleLobby:GetMyUserName()
 		local iAmMentioned = myUserName and userName ~= myUserName and string.find(message, myUserName)
 		local chatColour = (iAmMentioned and CHAT_MENTION) or nil
 		battleRoomConsole:AddMessage(message, userName, false, chatColour, false)
 	end
-	battleLobby:AddListener("OnSaidBattle", onSaidBattle)
 
-	local onSaidBattleEx = function(listener, userName, message)
+	local function OnSaidBattleEx(listener, userName, message)
 		local myUserName = battleLobby:GetMyUserName()
 		local iAmMentioned = myUserName and userName ~= myUserName and string.find(message, myUserName)
 		local chatColour = (iAmMentioned and CHAT_MENTION) or CHAT_ME
 		battleRoomConsole:AddMessage(message, userName, false, chatColour, true)
 	end
-	battleLobby:AddListener("OnSaidBattleEx", onSaidBattleEx)
 
-	onBattleClosed = function(listener, closedBattleID, ... )
+	function externalFunctionsAndData.OnBattleClosed(listener, closedBattleID)
 		if battleID == closedBattleID then
-			window:Dispose()
-			window = nil
+			mainWindow:Dispose()
+			mainWindow = nil
 			if wrapperControl and wrapperControl.visible and wrapperControl.parent then
 				wrapperControl:Hide()
 			end
 		end
 	end
-	battleLobby:AddListener("OnBattleClosed", onBattleClosed)
+	
+	battleLobby:AddListener("OnUpdateUserTeamStatus", OnUpdateUserTeamStatus)
+	battleLobby:AddListener("OnBattleIngameUpdate", OnBattleIngameUpdate)
+	battleLobby:AddListener("OnUpdateBattleInfo", OnUpdateBattleInfo)
+	battleLobby:AddListener("OnLeftBattle", OnLeftBattle)
+	battleLobby:AddListener("OnJoinedBattle", OnJoinedBattle)
+	battleLobby:AddListener("OnRemoveAi", OnRemoveAi)
+	battleLobby:AddListener("OnVoteUpdate", OnVoteUpdate)
+	battleLobby:AddListener("OnVoteEnd", OnVoteEnd)
+	battleLobby:AddListener("OnSaidBattle", OnSaidBattle)
+	battleLobby:AddListener("OnSaidBattleEx", OnSaidBattleEx)
+	battleLobby:AddListener("OnBattleClosed", externalFunctionsAndData.OnBattleClosed)
 
-	return window
+	local function OnDisposeFunction()
+		emptyTeamIndex = 0
+		
+		oldLobby:RemoveListener("OnUpdateUserTeamStatus", OnUpdateUserTeamStatus)
+		oldLobby:RemoveListener("OnBattleIngameUpdate", OnBattleIngameUpdate)
+		oldLobby:RemoveListener("OnUpdateBattleInfo", OnUpdateBattleInfo)
+		oldLobby:RemoveListener("OnLeftBattle", OnLeftBattle)
+		oldLobby:RemoveListener("OnJoinedBattle", OnJoinedBattle)
+		oldLobby:RemoveListener("OnRemoveAi", OnRemoveAi)
+		oldLobby:RemoveListener("OnVoteUpdate", OnVoteUpdate)
+		oldLobby:RemoveListener("OnVoteEnd", OnVoteEnd)
+		oldLobby:RemoveListener("OnSaidBattle", OnSaidBattle)
+		oldLobby:RemoveListener("OnSaidBattleEx", OnSaidBattleEx)
+		oldLobby:RemoveListener("OnBattleClosed", externalFunctionsAndData.OnBattleClosed)
+	end
+	
+	mainWindow.OnDispose = mainWindow.OnDispose or {}
+	mainWindow.OnDispose[#mainWindow.OnDispose + 1] = OnDisposeFunction
+	
+	externalFunctionsAndData.mainWindow = mainWindow
+	
+	return externalFunctionsAndData
 end
 
 --------------------------------------------------------------------------------
@@ -1253,9 +1254,9 @@ end
 local BattleRoomWindow = {}
 
 function BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
-	if window then
-		window:Dispose()
-		window = nil
+	if mainWindow then
+		mainWindow:Dispose()
+		mainWindow = nil
 	end
 
 	if singleplayerWrapper then
@@ -1280,7 +1281,8 @@ function BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
 				if obj:IsEmpty() then
 					wrapperControl = obj
 
-					local battleWindow = InitializeControls(battleID, battleLobby, 55)
+					mainWindowFunctions = InitializeControls(battleID, battleLobby, 55)
+					local battleWindow = mainWindowFunctions.mainWindow
 					if battleWindow then
 						obj:AddChild(battleWindow)
 					end
@@ -1326,13 +1328,13 @@ function BattleRoomWindow.GetSingleplayerControl()
 					tabPanel.RemoveTab("myBattle", true)
 					WG.Chobby.interfaceRoot.UpdateMatchMakingHolderPosition()
 					
-					if window then
-						window:Dispose()
-						window = nil
+					if mainWindow then
+						mainWindow:Dispose()
+						mainWindow = nil
 					end
 					WG.LibLobby.lobby:LeaveBattle()
 					multiplayerWrapper = nil
-				elseif window then
+				elseif mainWindow then
 					return
 				end
 
@@ -1350,7 +1352,8 @@ function BattleRoomWindow.GetSingleplayerControl()
 
 				wrapperControl = obj
 
-				local battleWindow = InitializeControls(1, battleLobby, 70)
+				mainWindowFunctions = InitializeControls(1, battleLobby, 70)
+				local battleWindow = mainWindowFunctions.mainWindow
 				if not battleWindow then
 					return
 				end
@@ -1408,16 +1411,18 @@ function BattleRoomWindow.LeaveBattle(onlyMultiplayer, onlySingleplayer)
 	end
 	
 	if onlySingleplayer and battleLobby.name == "singleplayer" then
-		if window then
-			window:Dispose()
-			window = nil
+		if mainWindow then
+			mainWindow:Dispose()
+			mainWindow = nil
 		end
 		return
 	end
 	
 	battleLobby:LeaveBattle()
-	onBattleClosed(_, battleLobby:GetMyBattleID())
-
+	if mainWindowFunctions then
+		mainWindowFunctions.OnBattleClosed(_, battleLobby:GetMyBattleID())
+	end
+	
 	local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
 	tabPanel.RemoveTab("myBattle", true)
 	WG.Chobby.interfaceRoot.UpdateMatchMakingHolderPosition()
