@@ -72,30 +72,6 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		caption = i18n("connect_to_spring_server"),
 		font = Configuration:GetFont(3),
 	}
-	self.lblServerAddress = Label:New {
-		x = 15,
-		width = 170,
-		y = 90,
-		height = 35,
-		caption = i18n("server") .. ":",
-		font = Configuration:GetFont(3),
-	}
-	self.ebServerAddress = EditBox:New {
-		x = 135,
-		width = 125,
-		y = 85,
-		height = 35,
-		text = Configuration.serverAddress,
-		font = Configuration:GetFont(3),
-	}
-	self.ebServerPort = EditBox:New {
-		x = 265,
-		width = 70,
-		y = 85,
-		height = 35,
-		text = tostring(Configuration.serverPort),
-		font = Configuration:GetFont(3),
-	}
 
 	self.lblUsername = Label:New {
 		x = 15,
@@ -222,11 +198,8 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		classname = windowClassname,
 		children = {
 			self.lblInstructions,
-			self.lblServerAddress,
 			self.lblUsername,
 			self.lblPassword,
-			self.ebServerAddress,
-			self.ebServerPort,
 			self.ebUsername,
 			self.ebPassword,
 			self.lblError,
@@ -250,7 +223,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 
 	self.window:BringToFront()
 
-	createTabGroup({self.ebServerAddress, self.ebServerPort, self.ebUsername, self.ebPassword})
+	createTabGroup({self.ebUsername, self.ebPassword})
 	screen0:FocusControl(self.ebUsername)
 	-- FIXME: this should probably be moved to the lobby wrapper
 	self.loginAttempts = 0
@@ -291,8 +264,6 @@ function LoginWindow:tryLogin()
 	if username == '' or password == '' then
 		return
 	end
-	Configuration.serverAddress = self.ebServerAddress.text
-	Configuration.serverPort = self.ebServerPort.text
 	Configuration.userName  = username
 	Configuration.password  = password
 
@@ -328,8 +299,6 @@ function LoginWindow:tryRegister()
 	if username == '' or password == '' then
 		return
 	end
-	Configuration.serverAddress = self.ebServerAddress.text
-	Configuration.serverPort = self.ebServerPort.text
 
 	if not lobby.connected or self.loginAttempts >= 3 then
 		self.loginAttempts = 0

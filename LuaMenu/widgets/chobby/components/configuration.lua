@@ -6,7 +6,7 @@ VFS.Include("libs/liblobby/lobby/json.lua")
 function Configuration:init()
 	self.listeners = {}
 
---     self.serverAddress = "localhost"
+	--self.serverAddress = "localhost"
 	self.serverAddress = WG.Server.serverAddress or "springrts.com"
 	self.serverPort = 8200
 
@@ -112,6 +112,8 @@ end
 
 function Configuration:GetConfigData()
 	return {
+		serverAddress = self.serverAddress,
+		serverPort = self.serverPort,
 		userName = self.userName,
 		password = self.password,
 		autoLogin = self.autoLogin,
