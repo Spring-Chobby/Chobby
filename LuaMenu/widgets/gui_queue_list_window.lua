@@ -209,8 +209,9 @@ local function InitializeControls(window)
 	local queues = 0
 	local queueHolders = {}
 	local function AddQueue(_, queueName, queueDescription, mapNames)
+		local queueData = lobby:GetQueue(queueName) or {}
 		if queueHolders[queueName] then
-			queueHolders[queueName].UpdateQueueInformation(queueName, queueDescription, "?", "?")
+			queueHolders[queueName].UpdateQueueInformation(queueName, queueDescription, queueData.playersIngame or "?", queueData.playersWaiting or "?")
 			return
 		end
 	
@@ -225,7 +226,7 @@ local function InitializeControls(window)
 			draggable = false,
 			padding = {0, 0, 0, 0},
 		}
-		queueHolders[queueName] = MakeQueueControl(queueHolder, queueName, queueDescription, "?", "?")
+		queueHolders[queueName] = MakeQueueControl(queueHolder, queueName, queueDescription, queueData.playersIngame or "?", queueData.playersWaiting or "?")
 		queues = queues + 1
 	end
 	
@@ -235,10 +236,12 @@ local function InitializeControls(window)
 	end
 	
 	local function UpdateQueueStatus(listener, inMatchMaking, joinedQueueList, queueCounts, ingameCounts, currentEloWidth, joinedTime, bannedTime)
-		for i = 1, #joinedQueueList do
-			local queueName = joinedQueueList[i]
-			if queueHolders[queueName] then
-				queueHolders[queueName].inQueue = true
+		if joinedQueueList then
+			for i = 1, #joinedQueueList do
+				local queueName = joinedQueueList[i]
+				if queueHolders[queueName] then
+					queueHolders[queueName].inQueue = true
+				end
 			end
 		end
 		

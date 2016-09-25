@@ -872,7 +872,9 @@ function Lobby:_OnQueueOpened(name, description, mapNames, maxPartSize, gameName
 		description = description,
 		mapNames = mapNames,
 		maxPartSize = maxPartSize,
-		gameNames = gameNames
+		gameNames = gameNames,
+		playersIngame = 0,
+		playersWaiting = 0,
 	}
 	self.queueCount = self.queueCount + 1
 	
@@ -898,6 +900,13 @@ function Lobby:_OnMatchMakerStatus(inMatchMaking, joinedQueueList, queueCounts, 
 	else
 		self.joinedQueues = nil
 		self.joinedQueueList = nil
+	end
+	
+	if queueCounts or ingameCounts then
+		for name, queueData in pairs(queues) do
+			queueData.playersIngame = (ingameCounts and ingameCounts[name]) or queueData.playersIngame
+			queueData.playersWaiting = (queueCounts and queueCounts[name]) or queueData.playersWaiting
+		end
 	end
 	
 	self:_CallListeners("OnMatchMakerStatus", inMatchMaking, joinedQueueList, queueCounts, ingameCounts, currentEloWidth, joinedTime, bannedTime)
