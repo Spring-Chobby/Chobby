@@ -278,10 +278,10 @@ local function PlayScriptLine(line)
       -- automatically hide text box while in wait mode, show otherwise
       if not data.nvlMode then
         if (action == 'AddText' or (not waitTime)) and textPanel.hidden then
-          textPanel:Show()
+          textPanel:SetVisibility(true)
           ResetMainLayers()
         elseif not textPanel.hidden and (type(waitTime) == 'number' and (waitTime > 0)) then
-          textPanel:Hide()
+          textPanel:SetVisibility(false)
         end
       end
     end
@@ -296,7 +296,7 @@ end
 
 local function StartScript(scriptName)
   if mainWindow.hidden then
-    mainWindow:Show()
+    mainWindow:SetVisibility(true)
   end
   ResetMainLayers()
   data.scriptCallstack = {{scriptName, 1}}
@@ -310,8 +310,8 @@ local function ResizeNVLEntryPanel(textControl, nvlControlsEntry)
     local height = textControl.height + panel.padding[2] + panel.padding[4]
     if (panel.height < height) then
       panel:Resize(nil, height, true, true)
-      panel:Hide()  -- force refresh
-      panel:Show()
+      panel:SetVisibility(false)  -- force refresh
+      panel:SetVisibility(true)
       --Spring.Echo("force resizing", textControl.height, panel.height)
     end
 end
@@ -860,7 +860,7 @@ local function Cleanup()
     image:Dispose()
   end
   if nvlPanel.visible and nvlPanel.parent then
-    nvlPanel:Hide()
+    nvlPanel:SetVisibility(false)
   end
   scriptFunctions.ClearNVL()
   animations = {}
@@ -904,7 +904,7 @@ local function CloseStory()
     images = {}
   }
   if (not mainWindow.hidden) then
-    mainWindow:Hide()
+    mainWindow:SetVisibility(false)
   end
 end
 
@@ -974,7 +974,7 @@ scriptFunctions = {
   end,
   
   Exit = function()
-    mainWindow:Hide()
+    mainWindow:SetVisibility(false)
     if WG.Music then
       --WG.Music.StartTrack()
     end
@@ -1078,11 +1078,11 @@ scriptFunctions = {
     data.nvlMode = bool
     if not uiHidden then
       if (bool) then
-        textPanel:Hide()
-        nvlPanel:Show()
+        textPanel:SetVisibility(false)
+        nvlPanel:SetVisibility(true)
       else
-        textPanel:Show()
-        nvlPanel:Hide()
+        textPanel:SetVisibility(true)
+        nvlPanel:SetVisibility(false)
       end
       ResetMainLayers()
     end
@@ -1126,9 +1126,9 @@ scriptFunctions = {
 -- Show/hide the menu buttons
 local function ToggleMenu()
   if menuVisible then
-    menuStack:Hide()
+    menuStack:SetVisibility(false)
   else
-    menuStack:Show()
+    menuStack:SetVisibility(true)
   end
   ResetMainLayers()
   menuVisible = not menuVisible
@@ -1137,29 +1137,29 @@ end
 local function ToggleUI()
   if uiHidden then
     if data.nvlMode then
-      nvlPanel:Show()
+      nvlPanel:SetVisibility(true)
     else
-      textPanel:Show()
+      textPanel:SetVisibility(true)
     end
-    menuButton:Show()
+    menuButton:SetVisibility(true)
     if menuVisible then
-      menuStack:Show()
+      menuStack:SetVisibility(true)
     end
     if panelChoiceDialog ~= nil then
-      panelChoiceDialog:Show()
+      panelChoiceDialog:SetVisibility(true)
     end
   else
     if data.nvlMode then
-      nvlPanel:Hide()
+      nvlPanel:SetVisibility(false)
     else
-      textPanel:Hide()
+      textPanel:SetVisibility(false)
     end
-    menuButton:Hide()
+    menuButton:SetVisibility(false)
     if menuVisible then
-      menuStack:Hide()
+      menuStack:SetVisibility(false)
     end
     if panelChoiceDialog ~= nil then
-      panelChoiceDialog:Hide()
+      panelChoiceDialog:SetVisibility(false)
     end
   end
   ResetMainLayers(true)
@@ -1609,7 +1609,7 @@ function widget:Initialize()
     caption = "QUIT",
     width = MENU_BUTTON_WIDTH,
     height = MENU_BUTTON_HEIGHT,
-    OnClick = {function() Cleanup(); mainWindow:Hide()
+    OnClick = {function() Cleanup(); mainWindow:SetVisibility(false)
       if WG.Music then
         --WG.Music.StartTrack()
       end
@@ -1635,7 +1635,7 @@ function widget:Initialize()
     padding = {0, 0, 0, 0},
     children = menuChildren,
   }
-  menuStack:Hide()
+  menuStack:SetVisibility(false)
   
   textPanel = Panel:New {
     parent = mainWindow,
@@ -1766,8 +1766,8 @@ function widget:Initialize()
     keepAspect = false,
   }
   
-  nvlPanel:Hide()
-  mainWindow:Hide()
+  nvlPanel:SetVisibility(false)
+  mainWindow:SetVisibility(false)
   
   WG.VisualNovel = {
     GetDefs = GetDefs,
