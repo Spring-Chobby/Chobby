@@ -60,7 +60,7 @@ local looping = false
 local paused = false
 local lastTrackTime = -1
 
-local warTracks, peaceTracks, briefingTracks, victoryTracks, defeatTracks
+local lobbyTracks = {}
 
 local firstTime = false
 local wasPaused = false
@@ -154,7 +154,7 @@ function widget:Update()
 		end
 		
 		local vfsMode = (options.useIncludedTracks.value and VFS.RAW_FIRST) or VFS.RAW
-		lobbyTracks	= warTracks or VFS.DirList('sounds/music/lobby/', '*.ogg', vfsMode)
+		lobbyTracks	= lobbyTracks or VFS.DirList('sounds/music/lobby/', '*.ogg', vfsMode) or {}
 	end
 	
 	timeframetimer_short = timeframetimer_short + dt
@@ -233,6 +233,18 @@ function widget:Initialize()
 	-- end
 	--math.randomseed(os.clock()* 101.01)--lurker wants you to burn in hell rgn
 	-- for i=1,20 do Spring.Echo(math.random()) end
+end
+
+function widget:GamePreload()
+	-- ingame, no longer any of our business
+	if Spring.GetGameName() ~= "" then
+		StopTrack(true)
+	end
+end
+
+-- called when returning to menu from a game
+function widget:ActivateMenu()
+	StartTrack()	-- start playing music again
 end
 
 function widget:Shutdown()
