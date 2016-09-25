@@ -1422,8 +1422,8 @@ local function InitializeIntermissionControls()
 									CleanupAfterMission()
 									SwitchToScreen("main")
 									ResetGamedata()
-									if WG.Music then
-										WG.Music.StartTrack()
+									if WG.MusicHandler then
+										WG.MusicHandler.StartTrack()
 									end
 								end
 							}) end,
