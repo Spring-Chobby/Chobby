@@ -129,7 +129,11 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 		if (not isInBattle) and userInfo.battleID then
 			local battle = lobby:GetBattle(userInfo.battleID)
 			if battle and WG.Chobby.Configuration:IsValidEngineVersion(battle.engineVersion) then
-				comboOptions[#comboOptions + 1] = "Join Battle"
+				if not WG.Chobby.Configuration.showMatchMakerBattles and battle.isMatchMaker then
+					comboOptions[#comboOptions + 1] = "Watch Battle"
+				else
+					comboOptions[#comboOptions + 1] = "Join Battle"
+				end
 			end
 		end
 
@@ -390,6 +394,11 @@ local function GetUserControls(userName, opts)
 							-- TODO: Passworded battles
 							WG.BattleRoomWindow.LeaveBattle()
 							userControls.lobby:JoinBattle(userInfo.battleID)
+						end
+					elseif selectedName == "Watch Battle" then
+						local userInfo = userControls.lobby:GetUser(userName) or {}
+						if userInfo.battleID then
+							lobby:RejoinBattle(userInfo.battleID)
 						end
 					elseif selectedName == "Report" then
 						Spring.Echo("TODO - Open the right webpage")

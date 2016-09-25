@@ -1075,6 +1075,10 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		return false
 	end
 	
+	if not WG.Chobby.Configuration.showMatchMakerBattles and battle.isMatchMaker then
+		return
+	end
+	
 	local EXTERNAL_PAD_VERT = 10
 	local EXTERNAL_PAD_HOR = 15
 	local INTERNAL_PAD = 2
@@ -1351,16 +1355,24 @@ end
 local BattleRoomWindow = {}
 
 function BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
+	
 	if mainWindow then
 		mainWindow:Dispose()
 		mainWindow = nil
 	end
+	
+	local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
 
+	if multiplayerWrapper then
+		tabPanel.RemoveTab("myBattle", true)
+		WG.Chobby.interfaceRoot.UpdateMatchMakingHolderPosition()
+		multiplayerWrapper:Dispose()
+		multiplayerWrapper = nil
+	end
+	
 	if singleplayerWrapper then
 		singleplayerWrapper = nil
 	end
-
-	local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
 
 	battleLobby = WG.LibLobby.lobby
 

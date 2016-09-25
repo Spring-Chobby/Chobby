@@ -565,18 +565,18 @@ end
 function Lobby:_OnBattleOpened(battleID, type, natType, founder, ip, port, 
 		maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName, 
 		title, gameName, spectatorCount, isRunning, runningSince, 
-		battleMode, disallowCustomTeams, disallowBots)
+		battleMode, disallowCustomTeams, disallowBots, isMatchMaker)
 	self.battles[battleID] = {
 		battleID = battleID, type = type, natType = natType, founder = founder, ip = ip, port = port,
 		maxPlayers = maxPlayers, passworded = passworded, rank = rank, mapHash = mapHash, spectatorCount = spectatorCount or 0,
 		engineName = engineName, engineVersion = engineVersion, mapName = mapName, title = title, gameName = gameName, users = {},
 		isRunning = isRunning, runningSince = runningSince, 
-		battleMode = battleMode, disallowCustomTeams = disallowCustomTeams, disallowBots = disallowBots
+		battleMode = battleMode, disallowCustomTeams = disallowCustomTeams, disallowBots = disallowBots, isMatchMaker = isMatchMaker
 	}
 	self.battleCount = self.battleCount + 1
 
 	self:_CallListeners("OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, 
-		engineName, engineVersion, map, title, gameName, spectatorCount, isRunning, runningSince, battleMode)
+		engineName, engineVersion, map, title, gameName, spectatorCount, isRunning, runningSince, battleMode, isMatchMaker)
 end
 
 function Lobby:_OnBattleClosed(battleID)

@@ -106,6 +106,10 @@ function BattleListWindow:AddBattle(battleID, battle)
 	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
+	
+	if not WG.Chobby.Configuration.showMatchMakerBattles and battle and battle.isMatchMaker then
+		return
+	end
 
 	local height = self.itemHeight - 20
 	local parentButton = Button:New {
@@ -126,11 +130,14 @@ function BattleListWindow:AddBattle(battleID, battle)
 						return
 					end
 					if not Configuration.confirmation_battleFromBattle then
-						local function Success()
-							self:JoinBattle(battle)
+						local myBattle = lobby:GetBattle(myBattleID)
+						if not WG.Chobby.Configuration.showMatchMakerBattles and myBattle and not myBattle.isMatchMaker then
+							local function Success()
+								self:JoinBattle(battle)
+							end
+							ConfirmationPopup(Success, "Are you sure you want to leave your current battle and join a new one?", "confirmation_battleFromBattle")
+							return
 						end
-						ConfirmationPopup(Success, "Are you sure you want to leave your current battle and join a new one?", "confirmation_battleFromBattle")
-						return
 					end
 				end
 				self:JoinBattle(battle)

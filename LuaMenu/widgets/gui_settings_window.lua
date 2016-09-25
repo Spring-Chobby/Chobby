@@ -324,6 +324,22 @@ local function GetLobbyTabControls()
 	}
 	
 	offset = offset + ITEM_OFFSET
+	children[#children + 1] = Checkbox:New {
+		x = 20,
+		width = CHECK_WIDTH,
+		y = offset,
+		height = 30,
+		boxalign = "right",
+		boxsize = 20,
+		caption = "Debug for MatchMaker",
+		checked = Configuration.showMatchMakerBattles or false,
+		font = Configuration:GetFont(2),
+		OnChange = {function (obj, newState)
+			Configuration:SetConfigValue("showMatchMakerBattles", newState)
+		end},
+	}
+	
+	offset = offset + ITEM_OFFSET
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
