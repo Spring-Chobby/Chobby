@@ -31,8 +31,8 @@ function Spring.Utilities.GetTimeToPast(pastTimeString, includeSeconds)
 		--tonumber(os.date("!%Y")),
 	}
 
-	local pastSeconds = pastTime[1] + 60*(pastTime[2] + 24*pastTime[3])
-	local currentSeconds = currentTime[1] + 60*(currentTime[2] + 24*currentTime[3])
+	local pastSeconds = pastTime[1] + 60*(pastTime[2] + 60*pastTime[3])
+	local currentSeconds = currentTime[1] + 60*(currentTime[2] + 60*currentTime[3])
 	if currentTime[4] ~= pastTime[4] then
 		-- Always assume that the past time is one day behind.
 		currentSeconds = currentSeconds + 86400
@@ -42,6 +42,10 @@ function Spring.Utilities.GetTimeToPast(pastTimeString, includeSeconds)
 	local hours = math.floor(distanceSeconds/3600)
 	local minutes = math.floor(distanceSeconds/60)%60
 	local seconds = math.floor(distanceSeconds)%60
+	
+	--Spring.Echo("pastTime", pastTime[1], pastTime[2], pastTime[3], pastTime[4], "pastSeconds", pastSeconds)
+	--Spring.Echo("currentTime", currentTime[1], currentTime[2], currentTime[3], currentTime[4], "currentSeconds", currentSeconds)
+	--Spring.Echo("distanceSeconds", distanceSeconds)
 	
 	local timeText = ""
 	if hours > 0 then
