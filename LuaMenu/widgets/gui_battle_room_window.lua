@@ -19,13 +19,10 @@ end
 
 -- Chili controls
 local mainWindow
-local imHaveMap, imHaveGame
-local lblHaveMap, lblHaveGame
 
 -- Globals
 local battleLobby
 local wrapperControl
-local parentTabPanel
 local mainWindowFunctions
 
 local singleplayerWrapper
@@ -57,26 +54,10 @@ local function UpdateArchiveStatus(updateSync)
 	local haveGame = VFS.HasArchive(battle.gameName)
 	local haveMap = VFS.HasArchive(battle.mapName)
 
-	if imHaveGame then
-		if haveGame then
-			imHaveGame.file = IMG_READY
-			lblHaveGame:SetCaption(i18n("have_game"))
-		else
-			imHaveGame.file = IMG_UNREADY
-			lblHaveGame:SetCaption(i18n("dont_have_game"))
-		end
-		imHaveGame:Invalidate()
-	end
-	
-	if imHaveMap then
-		if haveMap then
-			imHaveMap.file = IMG_READY
-			lblHaveMap:SetCaption(i18n("have_map"))
-		else
-			imHaveMap.file = IMG_UNREADY
-			lblHaveMap:SetCaption(i18n("dont_have_map"))
-		end
-		imHaveMap:Invalidate()
+	if mainWindowFunctions and mainWindowFunctions.GetInfoHandler() then
+		local infoHandler = mainWindowFunctions.GetInfoHandler()
+		infoHandler.SetHaveGame(haveGame)
+		infoHandler.SetHaveMap(haveMap)
 	end
 	
 	haveMapAndGame = (haveGame and haveMap)
@@ -305,7 +286,6 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	leftOffset = leftOffset + 38
 
 	WG.ModoptionsPanel.LoadModotpions(battle.gameName, battleLobby)
-
 	local btnModoptions = Button:New {
 		x = 5,
 		y = leftOffset,
@@ -322,7 +302,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	}
 	leftOffset = leftOffset + 38
 
-	imHaveGame = Image:New {
+	local imHaveGame = Image:New {
 		x = 8,
 		y = leftOffset,
 		width = 15,
@@ -330,7 +310,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		file = IMG_READY,
 		parent = leftInfo,
 	}
-	lblHaveGame = Label:New {
+	local lblHaveGame = Label:New {
 		x = 28,
 		y = leftOffset,
 		caption = "",
@@ -339,7 +319,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	}
 	leftOffset = leftOffset + 25
 
-	imHaveMap = Image:New {
+	local imHaveMap = Image:New {
 		x = 8,
 		y = leftOffset,
 		width = 15,
@@ -347,7 +327,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		file = IMG_READY,
 		parent = leftInfo,
 	}
-	lblHaveMap = Label:New {
+	local lblHaveMap = Label:New {
 		x = 28,
 		y = leftOffset,
 		caption = "",
@@ -391,9 +371,32 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	--MaybeDownloadArchive("Titan-v2", "map")
 	--MaybeDownloadArchive("tinyskirmishredux1.1", "map")
 
-	local externalFunction = {}
+	local externalFunctions = {}
 	
-	function externalFunction.UpdateUserTeamStatus(userName, allyNumber, isSpectator)
+	function externalFunctions.SetHaveGame(newHaveGame)
+		if newHaveGame then
+			imHaveGame.file = IMG_READY
+			lblHaveGame:SetCaption(i18n("have_game"))
+		else
+			imHaveGame.file = IMG_UNREADY
+			lblHaveGame:SetCaption(i18n("dont_have_game"))
+		end
+		imHaveGame:Invalidate()
+	end
+	
+	function externalFunctions.SetHaveMap(newHaveMap)
+		if newHaveMap then
+			imHaveMap.file = IMG_READY
+			lblHaveMap:SetCaption(i18n("have_map"))
+		else
+			imHaveMap.file = IMG_UNREADY
+			lblHaveMap:SetCaption(i18n("dont_have_map"))
+		end
+		imHaveMap:Invalidate()
+	end
+	
+	-- Lobby interface
+	function externalFunctions.UpdateUserTeamStatus(userName, allyNumber, isSpectator)
 		if userName == myUserName then
 			if isSpectator then
 				ButtonUtilities.SetButtonDeselected(btnPlay)
@@ -409,7 +412,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		end
 	end
 
-	function externalFunction.BattleIngameUpdate(updatedBattleID, isRunning)
+	function externalFunctions.BattleIngameUpdate(updatedBattleID, isRunning)
 		if battleID == updatedBattleID then
 			if isRunning then
 				btnStartBattle:SetCaption(i18n("rejoin"))
@@ -419,9 +422,9 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		end
 	end
 
-	externalFunction.BattleIngameUpdate(battleID, battle.isRunning)
+	externalFunctions.BattleIngameUpdate(battleID, battle.isRunning)
 
-	function externalFunction.UpdateBattleInfo(updatedBattleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)
+	function externalFunctions.UpdateBattleInfo(updatedBattleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)
 		if battleID ~= updatedBattleID then
 			return
 		end
@@ -447,7 +450,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		end
 	end
 
-	function externalFunction.LeftBattle(leftBattleID, userName)
+	function externalFunctions.LeftBattle(leftBattleID, userName)
 		if battleID ~= leftBattleID then
 			return
 		end
@@ -460,7 +463,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		end
 	end
 
-	function externalFunction.JoinedBattle(joinedBattleId, userName)
+	function externalFunctions.JoinedBattle(joinedBattleId, userName)
 		if battleID ~= joinedBattleId then
 			return
 		end
@@ -470,7 +473,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	MaybeDownloadMap(battle)
 	UpdateArchiveStatus(true)
 	
-	return externalFunction
+	return externalFunctions
 end
 
 local function AddTeamButtons(parent, offX, joinFunc, aiFunc, unjoinable, disallowBots)
@@ -1150,9 +1153,24 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	local CHAT_MENTION = "\255\255\0\0"
 	local CHAT_ME = WG.Chobby.Configuration.meColor
 	
-	-- Lobby interface
-	local externalFunctionsAndData = {}
+	-- External Functions
+	local externalFunctions = {}
 	
+	function externalFunctions.OnBattleClosed(listener, closedBattleID)
+		if battleID == closedBattleID then
+			mainWindow:Dispose()
+			mainWindow = nil
+			if wrapperControl and wrapperControl.visible and wrapperControl.parent then
+				wrapperControl:Hide()
+			end
+		end
+	end
+	
+	function externalFunctions.GetInfoHandler()
+		return infoHandler
+	end
+	
+	-- Lobby interface
 	local function OnUpdateUserTeamStatus(listener, userName, allyNumber, isSpectator)
 		infoHandler.UpdateUserTeamStatus(userName, allyNumber, isSpectator)
 		playerHandler.UpdateUserTeamStatus(userName, allyNumber, isSpectator)
@@ -1201,16 +1219,6 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		battleRoomConsole:AddMessage(message, userName, false, chatColour, true)
 	end
 
-	function externalFunctionsAndData.OnBattleClosed(listener, closedBattleID)
-		if battleID == closedBattleID then
-			mainWindow:Dispose()
-			mainWindow = nil
-			if wrapperControl and wrapperControl.visible and wrapperControl.parent then
-				wrapperControl:Hide()
-			end
-		end
-	end
-	
 	battleLobby:AddListener("OnUpdateUserTeamStatus", OnUpdateUserTeamStatus)
 	battleLobby:AddListener("OnBattleIngameUpdate", OnBattleIngameUpdate)
 	battleLobby:AddListener("OnUpdateBattleInfo", OnUpdateBattleInfo)
@@ -1221,7 +1229,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	battleLobby:AddListener("OnVoteEnd", OnVoteEnd)
 	battleLobby:AddListener("OnSaidBattle", OnSaidBattle)
 	battleLobby:AddListener("OnSaidBattleEx", OnSaidBattleEx)
-	battleLobby:AddListener("OnBattleClosed", externalFunctionsAndData.OnBattleClosed)
+	battleLobby:AddListener("OnBattleClosed", externalFunctions.OnBattleClosed)
 
 	local function OnDisposeFunction()
 		emptyTeamIndex = 0
@@ -1236,15 +1244,13 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		oldLobby:RemoveListener("OnVoteEnd", OnVoteEnd)
 		oldLobby:RemoveListener("OnSaidBattle", OnSaidBattle)
 		oldLobby:RemoveListener("OnSaidBattleEx", OnSaidBattleEx)
-		oldLobby:RemoveListener("OnBattleClosed", externalFunctionsAndData.OnBattleClosed)
+		oldLobby:RemoveListener("OnBattleClosed", externalFunctions.OnBattleClosed)
 	end
 	
 	mainWindow.OnDispose = mainWindow.OnDispose or {}
 	mainWindow.OnDispose[#mainWindow.OnDispose + 1] = OnDisposeFunction
 	
-	externalFunctionsAndData.mainWindow = mainWindow
-	
-	return externalFunctionsAndData
+	return mainWindow, externalFunctions
 end
 
 --------------------------------------------------------------------------------
@@ -1264,7 +1270,6 @@ function BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
 	end
 
 	local tabPanel = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
-	parentTabPanel = tabPanel
 
 	battleLobby = WG.LibLobby.lobby
 
@@ -1281,8 +1286,8 @@ function BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
 				if obj:IsEmpty() then
 					wrapperControl = obj
 
-					mainWindowFunctions = InitializeControls(battleID, battleLobby, 55)
-					local battleWindow = mainWindowFunctions.mainWindow
+					local battleWindow, functions = InitializeControls(battleID, battleLobby, 55)
+					mainWindowFunctions = functions
 					if battleWindow then
 						obj:AddChild(battleWindow)
 					end
@@ -1345,15 +1350,13 @@ function BattleRoomWindow.GetSingleplayerControl()
 					defaultMap = singleplayerDefault.map
 				end
 
-				parentTabPanel = nil
-
 				battleLobby = WG.LibLobby.localLobby
 				battleLobby:SetBattleState(lobby:GetMyUserName() or "Player", singleplayerGame, defaultMap, "Skirmish Battle")
 
 				wrapperControl = obj
 
-				mainWindowFunctions = InitializeControls(1, battleLobby, 70)
-				local battleWindow = mainWindowFunctions.mainWindow
+				local battleWindow, functions = InitializeControls(1, battleLobby, 70)
+				mainWindowFunctions = functions
 				if not battleWindow then
 					return
 				end
