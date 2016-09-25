@@ -596,6 +596,8 @@ local function ProcessSettingsOption(data, offset, customSettingsSwitch)
 		end
 	end
 	
+	local freezeSettings = true
+	
 	settingsComboBoxes[data.name] = ComboBox:New {
 		name = data.name .. "_combo",
 		x = COMBO_X,
@@ -608,6 +610,10 @@ local function ProcessSettingsOption(data, offset, customSettingsSwitch)
 		selected = defaultItem,
 		OnSelect = {
 			function (obj, num)
+				if freezeSettings then
+					return freezeSettings
+				end
+			
 				local selectedData = data.options[num]
 				Configuration.settingsMenuValues[data.name] = selectedData.name
 				
@@ -630,6 +636,8 @@ local function ProcessSettingsOption(data, offset, customSettingsSwitch)
 			end
 		}
 	}
+	
+	freezeSettings = false
 	
 	return label, settingsComboBoxes[data.name], offset + ITEM_OFFSET
 end
