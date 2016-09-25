@@ -91,6 +91,7 @@ function widget:KeyPress(key, mods, isRepeat, label, unicode)
 end
 
 function widget:Shutdown()
+	Spring.Echo("Chobby Shutdown")
 	WG.Chobby = nil
 end
 
