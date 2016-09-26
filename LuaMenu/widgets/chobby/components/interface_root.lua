@@ -373,6 +373,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-- Background holder is put here to be at the back
 	-----------------------------------
 	local backgroundHolder = Background()
+	local ingameBackgroundHolder = Background(IMAGE_TOP_BACKGROUND, {0, 0, 0, 0.5})
+	ingameBackgroundHolder:Disable()
 	
 	-------------------------------------------------------------------
 	-- In-Window Handlers
@@ -649,7 +651,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		end
 		WG.SetGameInputBlock(newVisible)
 		
-		backgroundHolder:SetEnabled(newVisible)
+		backgroundHolder:SetEnabled(newVisible and not showTopBar)
+		ingameBackgroundHolder:SetEnabled(newVisible and showTopBar)
+		
 		if newVisible then
 			lobbyInterfaceHolder:Show()
 			ingameInterfaceHolder:Hide()
@@ -684,13 +688,13 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		holder_status:SetPos(nil, topOffset)
 		
 		if showTopBar then
-			backgroundHolder:SetAlpha(0.85)
 			--buttonsHolder_image.color[4] = 0.1
 			--buttonsHolder_image:Invalidate()
 			--holder_topImage.color[4] = 0.25
 			--holder_topImage:Invalidate()
 		else
-			backgroundHolder:SetAlpha(1)
+			backgroundHolder:SetEnabled(true)
+			ingameBackgroundHolder:SetEnabled(false)
 			--buttonsHolder_image.color[4] = 0.1
 			--buttonsHolder_image:Invalidate()
 			--holder_topImage.color[4] = 0.25
