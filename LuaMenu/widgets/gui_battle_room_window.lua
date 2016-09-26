@@ -699,23 +699,23 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 					joinTeamButton:Dispose()
 				end
 				
-				AddTeamButtons(
-					teamHolder,
-					88,
-					function()
-						battleLobby:SetBattleStatus({
-								allyNumber = teamIndex,
-								isSpectator = false,
-							})
-					end,
-					function()
-						WG.Chobby.AiListWindow(battleLobby, battle.gameName, teamIndex)
-					end,
-					disallowCustomTeams and teamIndex ~= 0,
-					(disallowBots or disallowCustomTeams) and teamIndex ~= 1
-				)
-				
 				if teamIndex ~= -1 then
+					AddTeamButtons(
+						teamHolder,
+						88,
+						function()
+							battleLobby:SetBattleStatus({
+									allyNumber = teamIndex,
+									isSpectator = false,
+								})
+						end,
+						function()
+							WG.Chobby.AiListWindow(battleLobby, battle.gameName, teamIndex)
+						end,
+						disallowCustomTeams and teamIndex ~= 0,
+						(disallowBots or disallowCustomTeams) and teamIndex ~= 1
+					)
+				
 					if disallowCustomTeams then
 						if teamIndex == 0 then
 							humanName = "Players"
