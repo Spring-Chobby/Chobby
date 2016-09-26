@@ -66,10 +66,20 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 	
 	local function onConfigurationChange(listener, key, value)
 		if key == "chatFontSize" then
-			self.ebInputText.font.size = value
+			local oldFont = self.ebInputText.font
+			-- Relevant settings depend on skin
+			local fontSettings = {	
+				font         = oldFont.font,
+				color        = oldFont.color,
+				outlineColor = oldFont.outlineColor,
+				outline      = oldFont.outline,
+				shadow       = oldFont.shadow,
+				size         = value,
+			}
+			self.ebInputText.font = Font:New(fontSettings)
 			self.ebInputText:UpdateLayout()
 			
-			self.tbHistory.font.size = value
+			self.tbHistory.font = Font:New(fontSettings)
 			self.tbHistory:UpdateLayout()
 		end
 	end
