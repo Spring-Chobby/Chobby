@@ -10,7 +10,8 @@ function Configuration:init()
 	self.serverAddress = WG.Server.serverAddress or "springrts.com"
 	self.serverPort = 8200
 
-	self.chatMaxNameLength = 210 -- Pixels
+	self.userListWidth = 205 -- Main user list width. Possibly configurable in the future.
+	self.chatMaxNameLength = 195 -- Pixels
 	self.statusMaxNameLength = 210
 	self.friendMaxNameLength = 230
 	self.notificationMaxNameLength = 230
@@ -74,8 +75,6 @@ function Configuration:init()
 		singleplayer = {
 		}
 	}
-
-	self.userListWidth = 220 -- Main user list width. Possibly configurable in the future.
 
 	self.shortnameMap = {
 		"chobby",
