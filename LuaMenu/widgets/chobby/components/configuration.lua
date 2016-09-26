@@ -59,7 +59,15 @@ function Configuration:init()
 				doNotAskAgainKey = "confirmation_mainMenuFromBattle",
 				question = "You are in a battle and will leave it if you return to the main menu. Are you sure you want to return to the main menu?",
 				testFunction = function ()
-					return (lobby:GetMyBattleID() and true) or false
+					local battleID = lobby:GetMyBattleID()
+					if not battleID then
+						return false
+					end
+					if self.showMatchMakerBattles then
+						return true
+					end
+					local battle = lobby:GetBattle(battleID)
+					return (battle and not battle.isMatchMaker) or false
 				end
 			}
 		},
