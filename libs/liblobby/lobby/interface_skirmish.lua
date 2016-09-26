@@ -40,8 +40,6 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName)
 	local ais = {}
 	local aiCount = 0
 
-	local allyTeamMap = {}
-
 	for userName, data in pairs(self.userBattleStatus) do
 		if data.allyNumber then
 			if data.aiLib then
@@ -73,17 +71,27 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName)
 			end
 		end
 	end
-
+	
 	for i, teamData in pairs(teams) do
-		if not allyTeamMap[teamData.AllyTeam] then
-			allyTeamMap[teamData.AllyTeam] = allyTeamCount
-			allyTeams[allyTeamCount] = {
+		if not allyTeams[teamData.AllyTeam] then
+			allyTeams[teamData.AllyTeam] = {
 				numallies = 0,
 			}
-			allyTeamCount = allyTeamCount + 1
 		end
-		teamData.AllyTeam = allyTeamMap[teamData.AllyTeam]
 	end
+	
+	-- This kind of thing would prevent holes in allyTeams
+	--local allyTeamMap = {}
+	--for i, teamData in pairs(teams) do
+	--	if not allyTeamMap[teamData.AllyTeam] then
+	--		allyTeamMap[teamData.AllyTeam] = allyTeamCount
+	--		allyTeams[allyTeamCount] = {
+	--			numallies = 0,
+	--		}
+	--		allyTeamCount = allyTeamCount + 1
+	--	end
+	--	teamData.AllyTeam = allyTeamMap[teamData.AllyTeam]
+	--end
 
 	local script = {
 		gametype = gameName,
