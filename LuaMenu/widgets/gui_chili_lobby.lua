@@ -43,11 +43,6 @@ function widget:Update()
 	end
 end
 
-function widget:GamePreload()
-	interfaceRoot.SetIngame(Spring.GetGameName() ~= "")
-	lobby:SetIngameStatus(true)
-end
-
 local ignoreFirstCall = true
 function widget:ActivateMenu()
 	if ignoreFirstCall then
@@ -86,6 +81,13 @@ function widget:Initialize()
 	if taskbarIcon then
 		Spring.SetWMIcon(taskbarIcon)
 	end
+	
+	local function OnBattleAboutToStart()
+		interfaceRoot.SetIngame(true)
+		lobby:SetIngameStatus(true)
+	end
+	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
+	WG.LibLobby.lobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
 	
 	local function onConfigurationChange(listener, key, value)
 		if key == "singleplayer_mode" then
