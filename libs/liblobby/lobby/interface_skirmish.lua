@@ -104,6 +104,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName)
 		numplayers = playerCount,
 		numusers = playerCount + aiCount,
 		startpostype = 2,
+		modoptions = self.modoptions,
 	}
 
 	for i, ai in pairs(ais) do
