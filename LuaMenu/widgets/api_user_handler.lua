@@ -234,6 +234,48 @@ local function GetUserStatus(userName, isInBattle, userControl)
 	end
 end
 
+local function UpdateUserControlStatus(userName, userControls)
+	if userControls.imStatusLarge then
+		local imgFile, status, fontColor = GetUserStatus(userName, isInBattle, userControls)
+		userControls.tbName.font.color = fontColor
+		userControls.tbName:Invalidate()
+		userControls.imStatusLarge.file = imgFile
+		userControls.imStatusLarge:Invalidate()
+		userControls.lblStatusLarge.font.color = fontColor
+		userControls.lblStatusLarge:SetCaption(i18n(status .. "_status"))
+		return
+	elseif not userControls.imStatusFirst then
+		return
+	end
+	
+	local status1, status2 = GetUserStatusImages(userName, userControls.isInBattle, userControls)
+	userControls.imStatusFirst.file = status1
+	userControls.imStatusSecond.file = status2
+	userControls.imStatusFirst:Invalidate()
+	userControls.imStatusSecond:Invalidate()
+	
+	if not userControls.maxNameLength then
+		return
+	end
+	local statusFirstPos = userControls.nameStartY + userControls.nameActualLength + 3
+	local statusSecondPos = userControls.nameStartY + userControls.nameActualLength + 24
+	if status2 and userControls.nameStartY + userControls.nameActualLength + 42 > userControls.maxNameLength then
+		statusFirstPos = userControls.maxNameLength - 42
+		statusSecondPos = userControls.maxNameLength - 21
+	elseif status1 and userControls.nameStartY + userControls.nameActualLength + 21 > userControls.maxNameLength then
+		statusFirstPos = userControls.maxNameLength - 21
+	end
+	
+	userControls.imStatusFirst:SetPos(statusFirstPos)
+	userControls.imStatusSecond:SetPos(statusSecondPos)
+	
+	local nameSpace = userControls.maxNameLength - userControls.nameStartY - (userControls.maxNameLength - statusFirstPos)
+	local truncatedName = StringUtilities.TruncateStringIfRequiredAndDotDot(userName, userControls.tbName.font, nameSpace)
+	if truncatedName then
+		userControls.tbName:SetText(truncatedName)
+	end
+end
+
 local function UpdateUserActivity(listener, userName)
 	for i = 1, #userListList do
 		local userList = userListList[i]
@@ -248,22 +290,7 @@ local function UpdateUserActivity(listener, userName)
 				data.tbName.font.color = GetUserNameColor(userName, data) or WG.Chobby.Configuration:GetUserNameColor()
 				data.tbName:Invalidate()
 			end
-			
-			if data.imStatusFirst then
-				local status1, status2 = GetUserStatusImages(userName, data.isInBattle, data)
-				data.imStatusFirst.file = status1
-				data.imStatusSecond.file = status2
-				data.imStatusFirst:Invalidate()
-				data.imStatusSecond:Invalidate()
-			elseif data.imStatusLarge then
-				local imgFile, status, fontColor = GetUserStatus(userName, isInBattle, data)
-				data.tbName.font.color = fontColor
-				data.tbName:Invalidate()
-				data.imStatusLarge.file = imgFile
-				data.imStatusLarge:Invalidate()
-				data.lblStatusLarge.font.color = fontColor
-				data.lblStatusLarge:SetCaption(i18n(status .. "_status"))
-			end
+			UpdateUserControlStatus(userName, data)
 		end
 	end
 end
@@ -506,6 +533,9 @@ local function GetUserControls(userName, opts)
 	}
 	local userNameStart = offset
 	local truncatedName = StringUtilities.TruncateStringIfRequiredAndDotDot(userName, userControls.tbName.font, maxNameLength and (maxNameLength - offset))
+	userControls.nameStartY = offset
+	userControls.maxNameLength = maxNameLength
+	
 	local nameColor = GetUserNameColor(userName, userControls)
 	if nameColor then
 		userControls.tbName.font.color = nameColor
@@ -514,7 +544,8 @@ local function GetUserControls(userName, opts)
 	if truncatedName then
 		userControls.tbName:SetText(truncatedName)
 	end
-	offset = offset + userControls.tbName.font:GetTextWidth(userControls.tbName.text)
+	userControls.nameActualLength = userControls.tbName.font:GetTextWidth(userControls.tbName.text)
+	offset = offset + userControls.nameActualLength
 
 	if not hideStatus then
 		if not large then
@@ -544,6 +575,8 @@ local function GetUserControls(userName, opts)
 				file = status2,
 			}
 			offset = offset + 20
+			
+			UpdateUserControlStatus(userName, userControls)
 		else
 			offsetY = offsetY + 35
 			offset = 5
