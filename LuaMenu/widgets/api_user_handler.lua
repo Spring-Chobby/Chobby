@@ -123,6 +123,7 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 	local userBattleInfo = userControl.lobby:GetUserBattleStatus(userName) or {}
 	local myUserName = userControl.lobby:GetMyUserName()
 	local comboOptions = {}
+	
 	if (not userBattleInfo.aiLib) and userName ~= myUserName then
 		comboOptions[#comboOptions + 1] = "Message"
 
@@ -142,7 +143,11 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 		else
 			comboOptions[#comboOptions + 1] = "Friend"
 		end
-		comboOptions[#comboOptions + 1] = "Report"
+		
+		if userInfo.accountID then
+			comboOptions[#comboOptions + 1] = "Report"
+		end
+		
 		if userInfo.isIgnored then
 			comboOptions[#comboOptions + 1] = "Unignore"
 		else
@@ -150,6 +155,10 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 		end
 	end
 
+	if userInfo.accountID then
+		comboOptions[#comboOptions + 1] = "User Page"
+	end
+	
 	-- userControl.lobby:GetMyIsAdmin()
 	-- Let everyone start kick votes.
 	if isInBattle or (userBattleInfo.aiLib and userBattleInfo.owner == myUserName) then
@@ -400,8 +409,16 @@ local function GetUserControls(userName, opts)
 						if userInfo.battleID then
 							lobby:RejoinBattle(userInfo.battleID)
 						end
+					elseif selectedName == "User Page" then
+						local userInfo = userControls.lobby:GetUser(userName) or {}
+						if userInfo.accountID then
+							WG.BrowserHandler.OpenUrl("http://zero-k.info/Users/Detail/" .. userInfo.accountID)
+						end
 					elseif selectedName == "Report" then
-						Spring.Echo("TODO - Open the right webpage")
+						local userInfo = userControls.lobby:GetUser(userName) or {}
+						if userInfo.accountID then
+							WG.BrowserHandler.OpenUrl("http://zero-k.info/Users/ReportToAdmin/" .. userInfo.accountID)
+						end
 					elseif selectedName == "Unignore" then
 						userControls.lobby:Unignore(userName)
 					elseif selectedName == "Ignore" then
