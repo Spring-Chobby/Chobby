@@ -70,8 +70,6 @@ function widget:Initialize()
 		return
 	end
 
-	Spring.SetWMCaption("Ingame Lobby", "IngameLobby")
-
 	Chobby = VFS.Include(CHOBBY_DIR .. "core.lua", nil)
 
 	WG.Chobby = Chobby
@@ -82,6 +80,22 @@ function widget:Initialize()
 	lobbyInterfaceHolder = interfaceRoot.GetLobbyInterfaceHolder()
 	Chobby.lobbyInterfaceHolder = lobbyInterfaceHolder
 	Chobby.interfaceRoot = interfaceRoot
+	
+	Spring.SetWMCaption("Ingame Lobby", "IngameLobby")
+	local taskbarIcon = Chobby.Configuration:GetTaskbarIcon()
+	if taskbarIcon then
+		Spring.SetWMIcon(taskbarIcon)
+	end
+	
+	local function onConfigurationChange(listener, key, value)
+		if key == "singleplayer_mode" then
+			local taskbarIcon = Chobby.Configuration:GetTaskbarIcon()
+			if taskbarIcon then
+				Spring.SetWMIcon(taskbarIcon)
+			end
+		end
+	end
+	Chobby.Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 end
 
 function widget:KeyPress(key, mods, isRepeat, label, unicode)

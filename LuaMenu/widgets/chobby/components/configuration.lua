@@ -308,6 +308,15 @@ function Configuration:GetBackgroundImage()
 	return self:GetGameConfigFilePath(false, "skinning/background.jpg", shortname), backgroundFocus
 end
 
+function Configuration:GetTaskbarIcon()
+	local shortname = self.shortnameMap[self.singleplayer_mode]
+	local pngImage = self:GetGameConfigFilePath(false, "taskbarLogo.png", shortname)
+	if pngImage then
+		return pngImage
+	end
+	return false
+end
+
 function Configuration:IsValidEngineVersion(engineVersion)
 	--Spring.Echo("Checking engineVersion", engineVersion, "against", Game.version, "numbers", tonumber(Game.version), string.gsub(Game.version, " develop", ""))
 	if tonumber(Game.version) then
