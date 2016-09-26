@@ -593,8 +593,18 @@ function Lobby:_OnJoinBattle(battleID, hashCode)
 end
 
 function Lobby:_OnJoinedBattle(battleID, userName, scriptPassword)
-	table.insert(self.battles[battleID].users, userName)
-
+	local found = false
+	local users = self.battles[battleID].users
+	for i = 1, #users do
+		if users[i] == userName then
+			found = true
+			break
+		end
+	end
+	if not found then
+		table.insert(self.battles[battleID].users, userName)
+	end
+	
 	self.users[userName].battleID = battleID
 	self:_CallListeners("OnUpdateUserStatus", userName, {battleID = battleID})
 
