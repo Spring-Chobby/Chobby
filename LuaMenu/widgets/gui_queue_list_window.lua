@@ -17,8 +17,8 @@ end
 --------------------------------------------------------------------------------
 -- Variables
 
-local requiredMaps = {}
-local requiredMapCount = 0
+local requiredResources = {}
+local requiredResourceCount = 0
 
 local panelInterface
 
@@ -41,8 +41,8 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		classname = "option_button",
 		OnClick = {
 			function(obj)
-				if requiredMapCount ~= 0 then
-					WG.Chobby.InformationPopup("Map downloads must complete before you are able to join matchmaking.")
+				if requiredResourceCount ~= 0 then
+					WG.Chobby.InformationPopup("All required maps and games must be downloaded before you can join matchmaking.")
 					return
 				end
 			
@@ -291,9 +291,9 @@ local function InitializeControls(window)
 	function externalFunctions.UpdateRequirementText()
 		local newText = ""
 		local firstEntry = true
-		for name,_ in pairs(requiredMaps) do
+		for name,_ in pairs(requiredResources) do
 			if firstEntry then
-				newText = "Required maps: "
+				newText = "Required resources: "
 			else
 				newText = newText .. ", "
 			end
@@ -314,8 +314,8 @@ end
 
 local QueueListWindow = {}
 
-function QueueListWindow.HaveRequiredMapsAndGame()
-	return requiredMapCount == 0
+function QueueListWindow.HaveMatchMakerResources()
+	return requiredResourceCount == 0
 end
 
 function QueueListWindow.GetControl()
@@ -348,11 +348,11 @@ function widget:Update()
 end
 
 function widget:DownloadFinished()
-	for mapName,_ in pairs(requiredMaps) do
-		local haveMap = VFS.HasArchive(mapName)
-		if haveMap then
-			requiredMaps[mapName] = nil
-			requiredMapCount = requiredMapCount - 1
+	for resourceName,_ in pairs(requiredResources) do
+		local haveResource = VFS.HasArchive(resourceName)
+		if haveResource then
+			requiredResources[resourceName] = nil
+			requiredResourceCount = requiredResourceCount - 1
 		end
 	end
 	
@@ -365,16 +365,29 @@ function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
-	local function AddQueue(_, queueName, queueDescription, mapNames)
+	local function AddQueue(_, queueName, queueDescription, mapNames, maxPartSize, gameNames)
 		for i = 1, #mapNames do
 			local mapName = mapNames[i]
-			if not requiredMaps[mapName] then
+			if not requiredResources[mapName] then
 				local haveMap = VFS.HasArchive(mapName)
 				if not haveMap then
-					requiredMaps[mapName] = true
-					requiredMapCount = requiredMapCount + 1
+					requiredResources[mapName] = true
+					requiredResourceCount = requiredResourceCount + 1
 					
 					VFS.DownloadArchive(mapName, "map")
+				end
+			end
+		end
+		
+		for i = 1, #gameNames do
+			local gameName = gameNames[i]
+			if not requiredResources[gameName] then
+				local haveGame = VFS.HasArchive(gameName)
+				if not haveGame then
+					requiredResources[gameName] = true
+					requiredResourceCount = requiredResourceCount + 1
+					
+					VFS.DownloadArchive(gameName, "game")
 				end
 			end
 		end

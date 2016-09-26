@@ -498,7 +498,7 @@ function QueueStatusPanel.GetControl()
 				
 				instantQueueHandler.SetVisibility(false)
 			else
-				if (not bannedTime) and WG.QueueListWindow.HaveRequiredMapsAndGame() and instantQueueHandler.ProcessInstantStartQueue(instantStartQueues) then
+				if (not bannedTime) and WG.QueueListWindow.HaveMatchMakerResources() and instantQueueHandler.ProcessInstantStartQueue(instantStartQueues) then
 					instantQueueHandler.SetVisibility(true)
 				else
 					instantQueueHandler.SetVisibility(false)
