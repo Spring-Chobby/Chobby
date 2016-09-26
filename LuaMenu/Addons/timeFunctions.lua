@@ -5,6 +5,10 @@ Spring.Utilities = Spring.Utilities or {}
 -------------------------------------------------------------------------------------
 
 function Spring.Utilities.GetTimeToPast(pastTimeString, includeSeconds)
+	if (not pastTimeString) or (type(pastTimeString) ~= "string") then
+		return "??"
+	end
+
 	-- Example: 2016-07-21T14:49:00.4731696Z
 	local pastTime = {
 		string.sub(pastTimeString, 18, 19),
@@ -18,7 +22,7 @@ function Spring.Utilities.GetTimeToPast(pastTimeString, includeSeconds)
 	for i = 1, #pastTime do
 		pastTime[i] = tonumber(pastTime[i])
 		if not pastTime[i] then
-			return
+			return "??"
 		end
 	end
 

@@ -729,9 +729,6 @@ function Interface:_BattleUpdate(data)
 		Spring.Log(LOG_SECTION, LOG.ERROR, "Interface:_BattleUpdate no such battle with ID: " .. tostring(header.BattleID))
 		return
 	end
-	if header.IsRunning ~= nil then
-		self:_OnBattleIngameUpdate(header.BattleID, header.IsRunning)
-	end
 	
 	self:_OnUpdateBattleInfo(
 		header.BattleID, 
@@ -747,6 +744,11 @@ function Interface:_BattleUpdate(data)
 		(header.Mode ~= 5 and header.Mode ~= 0), -- Is Bots
 		header.IsMatchMaker
 	)
+	
+	if header.IsRunning ~= nil then
+		-- battle.RunningSince should be set by this point.
+		self:_OnBattleIngameUpdate(header.BattleID, header.IsRunning)
+	end
 end
 Interface.jsonCommands["BattleUpdate"] = Interface._BattleUpdate
 
