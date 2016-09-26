@@ -193,10 +193,10 @@ local function GetLobbyTabControls()
 		y = offset,
 		width  = COMBO_WIDTH,
 		height = 30,
-		value  = Configuration.menuMusicVolume or 5,
+		value  = Configuration.menuMusicVolume or 0.5,
 		min    = 0,
-		max    = 10,
-		step   = 0.05,
+		max    = 1,
+		step   = 0.02,
 		OnChange = {
 			function(obj, value)
 				if freezeSettings then
@@ -223,10 +223,10 @@ local function GetLobbyTabControls()
 		y = offset,
 		width  = COMBO_WIDTH,
 		height = 30,
-		value  = Configuration.menuNotificationVolume or 5,
+		value  = Configuration.menuNotificationVolume or 0.5,
 		min    = 0,
-		max    = 10,
-		step   = 0.05,
+		max    = 1,
+		step   = 0.02,
 		OnChange = {
 			function(obj, value)
 				if freezeSettings then

@@ -285,6 +285,10 @@ end
 local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 	local Configuration = WG.Chobby.Configuration
 	
+	if Configuration.menuNotificationVolume ~= 0 then
+		Spring.PlaySoundFile("sounds/matchFound.wav", Configuration.menuNotificationVolume or 1)
+	end
+	
 	local readyCheckWindow = Window:New {
 		caption = "",
 		name = "readyCheckWindow",

@@ -89,8 +89,8 @@ function Configuration:init()
 	self.debugMode = false
 	self.onlyShowFeaturedMaps = true
 	self.useSpringRestart = false
-	self.menuMusicVolume = 5
-	self.menuNotificationVolume = 5
+	self.menuMusicVolume = 0.5
+	self.menuNotificationVolume = 0.8
 	self.showMatchMakerBattles = false
 	
 	self.chatFontSize = 16

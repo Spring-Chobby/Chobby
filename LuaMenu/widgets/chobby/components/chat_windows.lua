@@ -556,6 +556,7 @@ function ChatWindows:_NotifyTab(tabName, userName, chanName, nameMentioned, mess
 				title = userName .. " in " .. chanName .. ":",
 				body = message,
 				sound = sound,
+				soundVolume = WG.Chobby.Configuration.menuNotificationVolume or 1,
 				time = popupDuration,
 			})
 		end
