@@ -82,7 +82,10 @@ function Configuration:init()
 	self.onlyShowFeaturedMaps = true
 	self.useSpringRestart = false
 	self.menuMusicVolume = 5
+	self.menuNotificationVolume = 5
 	self.showMatchMakerBattles = false
+	
+	self.chatFontSize = 16
 
 	self.font = {
 		[0] = {size = 10, shadow = false},
@@ -136,7 +139,9 @@ function Configuration:GetConfigData()
 		displayBadEngines = self.displayBadEngines,
 		settingsMenuValues = self.settingsMenuValues,
 		menuMusicVolume = self.menuMusicVolume,
+		menuNotificationVolume = self.menuNotificationVolume,
 		showMatchMakerBattles = self.showMatchMakerBattles,
+		chatFontSize = self.chatFontSize,
 	}
 end
 

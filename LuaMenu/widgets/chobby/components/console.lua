@@ -34,7 +34,7 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 -- 		maxHeight = 500,
 		bottom = 0,
 		text = "",
-		fontsize = Configuration:GetFont(1).size,
+		fontsize = Configuration.chatFontSize,
 		parent = self.spHistory,
 		selectable = true,
 
@@ -60,9 +60,20 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 		height = 25,
 		right = 2,
 		text = "",
-		fontsize = Configuration:GetFont(1).size,
+		fontsize = Configuration.chatFontSize,
 		--hint = i18n("type_here_to_chat"),
 	}
+	
+	local function onConfigurationChange(listener, key, value)
+		if key == "chatFontSize" then
+			self.ebInputText.font.size = value
+			self.ebInputText:UpdateLayout()
+			
+			self.tbHistory.font.size = value
+			self.tbHistory:UpdateLayout()
+		end
+	end
+	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 	
 	self.ebInputText.KeyPress = function(something, key, ...)
 		if key == Spring.GetKeyCode("tab") then
