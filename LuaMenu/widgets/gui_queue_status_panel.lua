@@ -244,12 +244,12 @@ local function InitializeInstantQueueHandler(parentControl)
 	function externalFunctions.ProcessInstantStartQueue(instantStartQueues)
 		if instantStartQueues and #instantStartQueues > 0 then
 			local instantQueueName
-			local bestPriority = 0
+			local bestPriority = -1
 			for i = 1, #instantStartQueues do
 				local queueName = instantStartQueues[i]
-				if instantStartQueuePriority[queueName] > bestPriority then
+				if (instantStartQueuePriority[queueName] or 0) > bestPriority then
 					instantQueueName = queueName
-					bestPriority = instantStartQueuePriority[queueName]
+					bestPriority = (instantStartQueuePriority[queueName] or 0)
 				end
 			end
 			if instantQueueName then
@@ -498,7 +498,7 @@ function QueueStatusPanel.GetControl()
 				
 				instantQueueHandler.SetVisibility(false)
 			else
-				if (not bannedTime) and instantQueueHandler.ProcessInstantStartQueue(instantStartQueues) then
+				if (not bannedTime) and WG.QueueListWindow.HaveRequiredMapsAndGame() and instantQueueHandler.ProcessInstantStartQueue(instantStartQueues) then
 					instantQueueHandler.SetVisibility(true)
 				else
 					instantQueueHandler.SetVisibility(false)

@@ -314,6 +314,10 @@ end
 
 local QueueListWindow = {}
 
+function QueueListWindow.HaveRequiredMapsAndGame()
+	return requiredMapCount == 0
+end
+
 function QueueListWindow.GetControl()
 
 	local window = Control:New {
