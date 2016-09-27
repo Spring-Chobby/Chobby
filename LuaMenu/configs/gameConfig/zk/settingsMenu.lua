@@ -1,3 +1,5 @@
+local invertZoomMult = -1
+
 local settings = {
 	{
 		name = "Graphics",
@@ -479,8 +481,9 @@ local settings = {
 			{
 				name = "Default",
 				settings = {
-					MouseZoomSpeed = 25,
 					IconDistance = 151,
+					MouseZoomSpeed = 25,
+					InvertZoom = "Off",
 					MiddlePanSpeed = 10,
 					CameraPanSpeed = 10,
 				}
@@ -506,8 +509,34 @@ local settings = {
 				minValue = 1,
 				maxValue = 500,
 				springConversion = function(value)
-					return value*-1
+					return value*invertZoomMult
 				end,
+			},
+			{
+				name = "InvertZoom",
+				humanName = "Invert Zoom",
+				options = {
+					{
+						name = "On",
+						applyFunction = function()
+							invertZoomMult = 1
+							local currentZoom = WG.Chobby.Configuration.settingsMenuValues["MouseZoomSpeed"] or 25
+							return {
+								ScrollWheelSpeed = currentZoom,
+							}
+						end
+					},
+					{
+						name = "Off",
+						applyFunction = function()
+							invertZoomMult = -1
+							local currentZoom = WG.Chobby.Configuration.settingsMenuValues["MouseZoomSpeed"] or 25
+							return {
+								ScrollWheelSpeed = currentZoom * -1,
+							}
+						end
+					},
+				},
 			},
 			{
 				name = "MiddlePanSpeed",
@@ -548,8 +577,9 @@ local settingsDefaults = {
 	AntiAliasing = "Low",
 	ShaderDetail = "High",
 	FancySky = "Off",
-	MouseZoomSpeed = 25,
 	IconDistance = 151,
+	MouseZoomSpeed = 25,
+	InvertZoom = "Off",
 	MiddlePanSpeed = 10,
 	CameraPanSpeed = 10,
 }

@@ -334,6 +334,7 @@ function QueueListWindow.GetControl()
 			end
 		},
 	}
+	
 	return window
 end
 

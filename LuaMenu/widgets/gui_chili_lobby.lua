@@ -53,6 +53,10 @@ function widget:ActivateMenu()
 	lobby:SetIngameStatus(false)
 end
 
+function widget:ActivateGame()
+	interfaceRoot.SetIngame(true)
+end
+
 function widget:Initialize()
 	if not WG.LibLobby then
 		Spring.Log("chobby", LOG.ERROR, "Missing liblobby.")
@@ -83,7 +87,6 @@ function widget:Initialize()
 	end
 	
 	local function OnBattleAboutToStart()
-		interfaceRoot.SetIngame(true)
 		lobby:SetIngameStatus(true)
 	end
 	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)

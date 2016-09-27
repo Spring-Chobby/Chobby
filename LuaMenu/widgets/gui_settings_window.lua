@@ -57,6 +57,15 @@ local function SetSpringsettingsValue(key, value)
 	end
 end
 
+local function ToggleFullscreenOff()
+	Spring.SetConfigInt("Fullscreen", 0, false)
+end
+
+local function ToggleFullscreen()
+	Spring.SetConfigInt("Fullscreen", 1, false)
+	Spring.SetConfigInt("Fullscreen", 0, false)
+end
+
 local function SetLobbyFullscreenMode(mode)
 	if mode == currentMode then
 		return
@@ -64,14 +73,19 @@ local function SetLobbyFullscreenMode(mode)
 	currentMode = mode
 
 	local screenX, screenY = Spring.GetScreenGeometry()
+	Spring.Echo("screenX, screenY", screenX, screenY)
 	if mode == 1 then
-		Spring.SetConfigInt("Fullscreen", 1) -- Required to remove FUDGE
+		-- Required to remove FUDGE
+		Spring.SetConfigInt("Fullscreen", 1)
+		
 		Spring.SetConfigInt("XResolutionWindowed", screenX - FUDGE*2, false)
 		Spring.SetConfigInt("YResolutionWindowed", screenY - FUDGE*2, false)
 		Spring.SetConfigInt("WindowPosX", FUDGE, false)
 		Spring.SetConfigInt("WindowPosY", FUDGE, false)
-		Spring.SetConfigInt("WindowBorderless", 1)
-		Spring.SetConfigInt("Fullscreen", 0)
+		Spring.SetConfigInt("WindowBorderless", 1, false)
+		Spring.SetConfigInt("Fullscreen", 0, false)
+		
+		WG.Delay(ToggleFullscreen, 0.1)
 	elseif mode == 2 then
 		local winSizeX, winSizeY, winPosX, winPosY = Spring.GetWindowGeometry()
 		winPosY = screenY - winPosY - winSizeY
@@ -743,7 +757,10 @@ local function ProcessSettingsOption(data, offset, defaults, customSettingsSwitc
 					settingsFile:write(sourceFile)
 					settingsFile:close()
 				else
-					local applyData = selectedData.apply
+					local applyData = selectedData.apply or (selectedData.applyFunction and selectedData.applyFunction())
+					if not applyData then
+						return
+					end
 					for applyName, value in pairs(applyData) do
 						Configuration.game_settings[applyName] = value
 						SetSpringsettingsValue(applyName, value)
@@ -957,6 +974,14 @@ local function DelayedInitialize()
 	lobbyFullscreen = Configuration.lobby_fullscreen or 1
 end
 
+function widget:ActivateMenu()
+	local gameSettings = WG.Chobby.Configuration.game_settings
+	
+	for key, value in pairs(gameSettings) do
+		SetSpringsettingsValue(key, value)
+	end
+end
+
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
@@ -990,7 +1015,6 @@ function widget:Initialize()
 			gameSettings.YResolution = screenY
 			gameSettings.Fullscreen = 1
 		end
-
 
 		for key, value in pairs(gameSettings) do
 			SetSpringsettingsValue(key, value)
