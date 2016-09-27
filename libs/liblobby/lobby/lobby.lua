@@ -339,6 +339,9 @@ end
 
 function Lobby:_OnConnect(protocolVersion, springVersion, udpPort, serverMode)
 	self:Login(unpack(self.loginData))
+	if Spring.GetGameName() ~= "" then
+		lobby:SetIngameStatus(true)
+	end
 	self:_CallListeners("OnConnect", protocolVersion, springVersion, udpPort, serverMode)
 end
 
