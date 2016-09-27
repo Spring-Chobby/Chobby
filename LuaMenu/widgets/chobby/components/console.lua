@@ -1,6 +1,6 @@
 Console = LCS.class{}
 
-function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeFunc)
+function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeFunc, isBattleChat)
 	self.listener = sendMessageListener
 	self.showDate = true
 	self.dateFormat = "%H:%M"
@@ -34,7 +34,7 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 -- 		maxHeight = 500,
 		bottom = 0,
 		text = "",
-		fontsize = Configuration:GetFont(1).size,
+		fontsize = Configuration.chatFontSize,
 		parent = self.spHistory,
 		selectable = true,
 
@@ -60,9 +60,30 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 		height = 25,
 		right = 2,
 		text = "",
-		fontsize = Configuration:GetFont(1).size,
+		fontsize = Configuration.chatFontSize,
 		--hint = i18n("type_here_to_chat"),
 	}
+	
+	local function onConfigurationChange(listener, key, value)
+		if key == "chatFontSize" then
+			local oldFont = self.ebInputText.font
+			-- Relevant settings depend on skin
+			local fontSettings = {	
+				font         = oldFont.font,
+				color        = oldFont.color,
+				outlineColor = oldFont.outlineColor,
+				outline      = oldFont.outline,
+				shadow       = oldFont.shadow,
+				size         = value,
+			}
+			self.ebInputText.font = Font:New(fontSettings)
+			self.ebInputText:UpdateLayout()
+			
+			self.tbHistory.font = Font:New(fontSettings)
+			self.tbHistory:UpdateLayout()
+		end
+	end
+	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 	
 	self.ebInputText.KeyPress = function(something, key, ...)
 		if key == Spring.GetKeyCode("tab") then
@@ -206,23 +227,53 @@ function Console:AddMessage(message, userName, dateOverride, color, thirdPerson)
 			txt = txt .. color
 		end
 	end
+
+	local textTooltip, onTextClick
 	if userName ~= nil then
+		local userStartIndex, userEndIndex
 		if thirdPerson then
+			userStartIndex = #txt
 			txt = txt .. userName .. " "
+			userEndIndex = userStartIndex + #userName
 		else
+			userStartIndex = #txt + 4 
 			txt = txt .. "\255\50\160\255" .. userName .. ": \255\255\255\255"
+			userEndIndex = userStartIndex + #userName
 			whiteText = whiteText .. userName .. ": "
 			if color ~= nil then
 				txt = txt .. color
 			end
 		end
+
+		textTooltip = {
+			{
+				startIndex = userStartIndex, 
+				endIndex = userEndIndex, 
+				tooltip =  "user_chat_s_" .. userName
+			}
+		}
+		onTextClick = {
+			{
+				startIndex = userStartIndex, 
+				endIndex = userEndIndex, 
+				OnTextClick = { 
+					function() 
+						WG.UserHandler.GetUserDropdownMenu(userName, isBattleChat)
+						--Spring.Echo("Clicked on " .. userName .. ". TODO: Spawn popup.") 
+					end
+				} 
+			}
+		}
 	end
+	
+	onTextClick = WG.BrowserHandler.AddClickableUrls(message, onTextClick or {})
+
 	txt = txt .. message
 	whiteText = whiteText .. message
 	if self.tbHistory.text == "" then
-		self.tbHistory:SetText(txt)
+		self.tbHistory:SetText(txt, textTooltip, onTextClick)
 	else
-		self.tbHistory:AddLine(txt)
+		self.tbHistory:AddLine(txt, textTooltip, onTextClick)
 	end
 	
 	if self.channelName then

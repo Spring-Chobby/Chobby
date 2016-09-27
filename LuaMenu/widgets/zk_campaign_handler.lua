@@ -17,6 +17,19 @@ end
 --------------------------------------------------------------------------------
 local CAMPAIGN_DIR = "campaign/"
 
+local STARMAP_WINDOW_WIDTH = 1280
+local STARMAP_WINDOW_HEIGHT = 768
+local PLANET_IMAGE_SIZE = 259
+local PLANET_BACKGROUND_SIZE = 1280
+local CAMPAIGN_SELECTOR_BUTTON_HEIGHT = 96
+local SAVEGAME_BUTTON_HEIGHT = 128
+local OUTLINE_COLOR = {0.54,0.72,1,0.3}
+local CODEX_BUTTON_FONT_SIZE = 14
+local SAVE_DIR = "saves/campaign/"
+local MAX_SAVES = 999
+local AUTOSAVE_ID = "auto"
+local AUTOSAVE_FILENAME = "autosave"
+local RESULTS_FILE_PATH = "cache/mission_results.lua"
 --------------------------------------------------------------------------------
 -- Chili elements
 --------------------------------------------------------------------------------
@@ -28,6 +41,7 @@ local ScrollPanel
 local Label
 local Button
 
+-- chili elements
 local window
 local screens = {}	-- main, newGame, save, load, intermission, codex
 local currentScreenID = "main"
@@ -47,27 +61,16 @@ local starmapWindow, starmapBackgroundHolder, starmapBackground, starmapBackgrou
 local timer = Spring.GetTimer()
 local starmapAnimation = nil
 
+-- mission launcher variables
 local runningMission = false
 local missionCompletionFunc = nil	-- function
 local missionArchive = nil
 local requiredMap = nil
 
-local STARMAP_WINDOW_WIDTH = 1280
-local STARMAP_WINDOW_HEIGHT = 768
-local PLANET_IMAGE_SIZE = 259
-local PLANET_BACKGROUND_SIZE = 1280
-local CAMPAIGN_SELECTOR_BUTTON_HEIGHT = 96
-local SAVEGAME_BUTTON_HEIGHT = 128
-local OUTLINE_COLOR = {0.54,0.72,1,0.3}
-local CODEX_BUTTON_FONT_SIZE = 14
-local SAVE_DIR = "saves/campaign/"
-local MAX_SAVES = 999
-local AUTOSAVE_ID = "auto"
-local AUTOSAVE_FILENAME = "autosave"
-local RESULTS_FILE_PATH = "cache/mission_results.lua"
 --------------------------------------------------------------------------------
 -- data
 --------------------------------------------------------------------------------
+-- this stores anything that goes into a save file
 local gamedata = {
 	chapterTitle = "",
 	--[[
@@ -88,6 +91,7 @@ local campaignDefs = {}	-- {name, author, image, definition, starting function c
 local campaignDefsByID = {}
 local currentCampaignID = nil
 
+-- loaded when campaign is loaded
 local planetDefs = {}
 local planetDefsByID = {}
 local missionDefs = {}
@@ -98,6 +102,7 @@ local savesOrdered = {}
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Makes a control grey for disabled, or whitish for enabled
 local function SetControlGreyout(control, state)
 	if state then
 		control.backgroundColor = {0.4, 0.4, 0.4, 1}
@@ -141,6 +146,8 @@ local function IsCodexEntryVisible(id)
 	return gamedata.codexUnlocked[id] or codexEntries[id].alwaysUnlocked
 end
 
+-- Makes the codex button in intermission screen have a blue textshadow if any entries are unread
+-- removes the shadow if not
 local function UpdateCodexButtonState(unread)
 	if unread == nil then
 		unread = false
@@ -157,6 +164,8 @@ local function UpdateCodexButtonState(unread)
 	intermissionButtonCodex:Invalidate()
 end
 
+-- This happens when a button for a codex entry is clicked
+-- It removes the "unread" blue shadow from the text, and writes the entry contents to the text box
 local function UpdateCodexEntry(entryID)
 	if not gamedata.codexRead[entryID] then
 		if codexTreeControls[entryID] then
@@ -262,7 +271,7 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
-
+-- Called on Initialize
 local function LoadCampaignDefs()
 	local success, err = pcall(function()
 		local subdirs = VFS.SubDirs(CAMPAIGN_DIR)
@@ -282,6 +291,7 @@ local function LoadCampaignDefs()
 	end
 end
 
+-- This is called when a new game is started or a save is loaded
 local function LoadCampaign(campaignID)
 	local def = campaignDefsByID[campaignID]
 	local success, err = pcall(function()
@@ -304,10 +314,12 @@ local function LoadCampaign(campaignID)
 	end
 end
 
+-- Sets the next Visual Novel script to be played on clicking the Next Episode button in intermission
 local function SetNextMissionScript(script)
 	gamedata.nextMissionScript = script
 end
 
+-- Tells Visual Novel widget to load a story
 local function SetVNStory(story, dir)
 	if (not story) or story == "" then
 		return
@@ -317,6 +329,7 @@ local function SetVNStory(story, dir)
 	WG.VisualNovel.LoadStory(story, dir)
 end
 
+-- chapter titles are visible on save file
 local function SetChapterTitle(title)
 	gamedata.chapterTitle = title
 end
@@ -342,6 +355,7 @@ local function GetMapNameFromStartscript(startscript)
 	return string.match(startscript, "MapName%s?=%s?(.-);")
 end
 
+-- Checks if we have the map specified in the mission's startscript, if not download it
 local function GetMapForMissionIfNeeded(missionID, startscriptStr)
 	if not startscriptStr then
 		startscriptStr = GetMissionStartscriptString(missionID)
@@ -383,8 +397,9 @@ local function LaunchMission(missionID, func)
 end
 
 --------------------------------------------------------------------------------
+-- Savegame utlity functions
 --------------------------------------------------------------------------------
-
+-- FIXME: currently unused as it doesn't seem to give the correct order
 local function SortSavesByDate(a, b)
 	if a == nil or b == nil then
 		return false
@@ -404,6 +419,7 @@ local function SortSavesByDate(a, b)
 	return false
 end
 
+-- Returns the data stored in a save file
 local function GetSave(filename)
 	local ret = nil
 	local success, err = pcall(function()
@@ -420,6 +436,7 @@ local function GetSave(filename)
 	end
 end
 
+-- Loads the list of save files and their contents
 local function GetSaves()
 	Spring.CreateDir(SAVE_DIR)
 	saves = {}
@@ -445,6 +462,7 @@ local function GetSaves()
 	--table.sort(savesOrdered, SortSavesByDate)
 end
 
+-- e.g. if save slots 1, 2, 5, and 7 are used, return 3
 local function FindFirstEmptySaveSlot()
 	local start = #saves
 	if start == 0 then start = 1 end
@@ -501,6 +519,8 @@ local function SetSaveLoadButtonStates()
 end
 ]]
 
+-- Called when player clicks a campaign selection button in new game screen
+-- Writes details of the campaign to the details panel
 local function UpdateCampaignDetailsPanel(campaignID)
 	local def = campaignDefsByID[campaignID]
 	if not def then
@@ -516,9 +536,11 @@ local function UpdateCampaignDetailsPanel(campaignID)
 	EnableStartButton()
 end
 
+-- Called when player clicks a campaign selection button in new game screen
 local function SelectCampaign(campaignID)
 	local def = campaignDefsByID[campaignID]
 	currentCampaignID = def.id
+	-- grey out the buttons of the unselected campaigns, highlight the selected one
 	for id,button in pairs(newGameCampaignButtons) do
 		if id == campaignID then
 			button.backgroundColor = {1,1,1,1}
@@ -531,17 +553,21 @@ local function SelectCampaign(campaignID)
 end
 
 --------------------------------------------------------------------------------
+-- star map stuff
 --------------------------------------------------------------------------------
 local function IsMissionUnlocked(missionID)
 	local mission = missionDefs[missionID]
 	if not mission then
 		return false
 	end
-	if gamedata.completedMissions[requiredMissionID] then
+	-- any completed missions are considered unlocked
+	if gamedata.completedMissions[missionID] then
 		return true
+	-- no missions required to lock this
 	elseif #(mission.requiredMissions or {}) == 0 then
 		return true
 	end
+	-- check if we have completed any set of required missions
 	for j, requiredMissionSet in ipairs(mission.requiredMissions) do
 		for k, requiredMissionID in ipairs(requiredMissionSet) do
 			if gamedata.completedMissions[requiredMissionID] then
@@ -552,12 +578,11 @@ local function IsMissionUnlocked(missionID)
 	return false
 end
 
+-- returns true if any missions on the planet have been completed or unlocked
 local function IsPlanetVisible(planetDef)
 	for i=1,#planetDef.missions do
 		local missionID = planetDef.missions[i]
-		if gamedata.completedMissions[missionID] then
-			return true
-		elseif IsMissionUnlocked(missionID) then
+		if IsMissionUnlocked(missionID) then
 			return true
 		end
 	end
@@ -571,6 +596,7 @@ local function CloseStarMap()
 	end
 end
 
+-- Called when clicking back button on planet detail panel
 local function BackToStarmap()
 	starmapAnimation = "out"
 	--starmapBackground2.file = nil
@@ -581,6 +607,7 @@ local function BackToStarmap()
 	starmapClose:SetLayer(1)
 end
 
+-- Called when clicking a planet button on the galaxy map
 local function SelectPlanet(planetID)
 	local planetDef = planetDefsByID[planetID]
 	starmapAnimation = "in"
@@ -653,6 +680,7 @@ local function SelectPlanet(planetID)
 			}
 		}
 	}
+	-- list of missions on this planet
 	local missionsStack = StackPanel:New {
 		parent = starmapInfoPanel,
 		orientation = "vertical",
@@ -781,6 +809,7 @@ local function MakeStarMap()
 		backgroundColor = {0, 0, 0, 0},
 		padding = {0,0,0,0}
 	}
+	-- this is the "local" star background that gets drawn in planet detail screen
 	starmapBackground2 = Image:New{
 		name = "chobby_campaign_starmapBackground2",
 		parent = starmapBackgroundHolder,
@@ -798,6 +827,7 @@ local function MakeStarMap()
 	--starmapBackground2.width = 0
 	--starmapBackground2.height = 0
 	
+	-- Planet image in detail screen
 	starmapPlanetImage = Image:New{
 		name = "chobby_campaign_starmapPlanetImage",
 		parent = starmapBackground2,
@@ -808,7 +838,7 @@ local function MakeStarMap()
 		file = "",
 		color = {1,1,1,0}
 	}
-	
+	-- this background is for the galaxy overview
 	starmapBackground = Image:New{
 		name = "chobby_campaign_starmapBackground",
 		parent = starmapBackgroundHolder,
@@ -944,8 +974,9 @@ local function AdvanceCampaign(completedMissionID, nextScript, chapterTitle)
 	SaveGame(AUTOSAVE_ID)
 end
 --------------------------------------------------------------------------------
+-- Save/Load UI
 --------------------------------------------------------------------------------
-
+-- Generates a button for each available campaign, in the New Game screen
 local function AddCampaignSelectorButtons()
 	for i=1,#campaignDefs do
 		local def = campaignDefs[i]
@@ -1005,6 +1036,7 @@ local function RemoveSaveEntryButtons()
 	saveLoadControls = {}
 end
 
+-- Makes a button for a save game on the save/load screen
 local function AddSaveEntryButton(saveFile, allowSave, count)
 	local id = saveFile and saveFile.id or #savesOrdered + 1
 	local controlsEntry = {id = id}
@@ -1093,6 +1125,7 @@ local function AddSaveEntryButton(saveFile, allowSave, count)
 
 end
 
+-- Generates the buttons for the savegames on the save/load screen
 local function AddSaveEntryButtons(allowSave)
 	local startIndex = #savesOrdered
 	local count = 0
@@ -1120,6 +1153,9 @@ local function OpenSaveOrLoadMenu(save)
 	end
 end
 
+--------------------------------------------------------------------------------
+-- Make Chili controls
+--------------------------------------------------------------------------------
 local function InitializeMainControls()
 	-- main menu
 	screens.main = Panel:New {
@@ -1386,8 +1422,8 @@ local function InitializeIntermissionControls()
 									CleanupAfterMission()
 									SwitchToScreen("main")
 									ResetGamedata()
-									if WG.Music then
-										WG.Music.StartTrack()
+									if WG.MusicHandler then
+										WG.MusicHandler.StartTrack()
 									end
 								end
 							}) end,
@@ -1607,7 +1643,7 @@ local function InitializeControls()
 	Button = Chili.Button
 	
 	-- window to hold things
-	window = Window:New {
+	window = Panel:New {
 		name = 'chobby_campaign_window',
 		x = 0,
 		y = 0,
@@ -1615,7 +1651,8 @@ local function InitializeControls()
 		height = "100%",
 		resizable = false,
 		draggable = false,
-		--padding = {0, 0, 0, 0},
+		padding = {0, 0, 0, 0},
+		backgroundColor = {0, 0, 0, 0}
 	}
 	
 	InitializeMainControls()
@@ -1637,6 +1674,8 @@ function widget:Update()
 	local dt = Spring.DiffTimers(currentTime, timer)
 	timer = currentTime
 	
+	-- animation in: expands the planet image and star background image when opening a planet detail screen
+	-- animation out: shrinks and disappears those images when returning to galaxy map
 	if starmapAnimation then
 		animElapsed = animElapsed + dt
 		local stage = animElapsed/ANIMATION_TIME
@@ -1677,7 +1716,7 @@ function widget:ActivateMenu()
 end
 
 function widget:DownloadFinished()
-	if VFS.HasArchive(requiredMap) then
+	if requiredMap and VFS.HasArchive(requiredMap) then
 		requiredMap = nil
 	end
 end

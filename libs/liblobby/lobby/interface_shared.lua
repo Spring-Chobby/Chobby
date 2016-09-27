@@ -26,10 +26,13 @@ function Interface:init()
 	self:super("init")
 end
 
-function Interface:Connect(host, port)
+function Interface:Connect(host, port, user, password, cpu, localIP, lobbyVersion)
 	self:super("Connect", host, port)
 	self.client = socket.tcp()
 	self.client:settimeout(0)
+	
+	self.loginData = {user, password, cpu, localIP, lobbyVersion}
+	
 	self._startedConnectingTime = os.clock()
 	local res, err = self.client:connect(host, port)
 	if res == nil and err == "host not found" then

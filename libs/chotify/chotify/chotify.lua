@@ -44,7 +44,7 @@ function Chotify:Post(obj)
     local time = obj.time or 5
 
     if obj.sound then
-        Spring.PlaySoundFile(obj.sound, 1.0)
+        Spring.PlaySoundFile(obj.sound, obj.soundVolume or 1)
     end
 
     local id = self._idCounter
@@ -61,14 +61,12 @@ function Chotify:Post(obj)
         resizable = false,
     }
     if type(body) == "string" then
-        Chili.Label:New {
-            x = 0,
-            right = 20,
-            y = 0,
-            bottom = 10,
-            valign = 'center',
-            align = 'center',
-            caption = body,
+        Chili.TextBox:New {
+            x = 5,
+            right = 5,
+            y = 15,
+            bottom = 5,
+            text = body,
             parent = window,
         }
     else

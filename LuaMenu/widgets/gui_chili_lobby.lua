@@ -43,11 +43,6 @@ function widget:Update()
 	end
 end
 
-function widget:GamePreload()
-	interfaceRoot.SetIngame(Spring.GetGameName() ~= "")
-	lobby:SetIngameStatus(true)
-end
-
 local ignoreFirstCall = true
 function widget:ActivateMenu()
 	if ignoreFirstCall then
@@ -70,8 +65,6 @@ function widget:Initialize()
 		return
 	end
 
-	Spring.SetWMCaption("Ingame Lobby", "IngameLobby")
-
 	Chobby = VFS.Include(CHOBBY_DIR .. "core.lua", nil)
 
 	WG.Chobby = Chobby
@@ -82,6 +75,29 @@ function widget:Initialize()
 	lobbyInterfaceHolder = interfaceRoot.GetLobbyInterfaceHolder()
 	Chobby.lobbyInterfaceHolder = lobbyInterfaceHolder
 	Chobby.interfaceRoot = interfaceRoot
+	
+	Spring.SetWMCaption("Ingame Lobby", "IngameLobby")
+	local taskbarIcon = Chobby.Configuration:GetTaskbarIcon()
+	if taskbarIcon then
+		Spring.SetWMIcon(taskbarIcon)
+	end
+	
+	local function OnBattleAboutToStart()
+		interfaceRoot.SetIngame(true)
+		lobby:SetIngameStatus(true)
+	end
+	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
+	WG.LibLobby.lobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
+	
+	local function onConfigurationChange(listener, key, value)
+		if key == "singleplayer_mode" then
+			local taskbarIcon = Chobby.Configuration:GetTaskbarIcon()
+			if taskbarIcon then
+				Spring.SetWMIcon(taskbarIcon)
+			end
+		end
+	end
+	Chobby.Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 end
 
 function widget:KeyPress(key, mods, isRepeat, label, unicode)
@@ -91,6 +107,7 @@ function widget:KeyPress(key, mods, isRepeat, label, unicode)
 end
 
 function widget:Shutdown()
+	Spring.Echo("Chobby Shutdown")
 	WG.Chobby = nil
 end
 

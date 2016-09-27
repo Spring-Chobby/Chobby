@@ -1,32 +1,41 @@
 Background = LCS.class{}
 
-function Background:init()
-	self:Enable()
-	
-	local function onConfigurationChange(listener, key, value)
-		if key == "singleplayer_mode" then
-			local file, focus = Configuration:GetBackgroundImage()
-			self.backgroundFocus = focus
-			self.backgroundImage.file = file
-			local texInfo = gl.TextureInfo(file)
-			self.width, self.height = texInfo.xsize, texInfo.ysize
-			self.backgroundControl:Invalidate()
-			self:Resize()
+function Background:init(imageOverride, colorOverride, backgroundFocus)
+	self.colorOverride = colorOverride
+	if imageOverride then
+		self.imageOverride = imageOverride
+		self.backgroundFocus = backgroundFocus
+		self:Enable()
+	else
+		self:Enable()
+		local function onConfigurationChange(listener, key, value)
+			if key == "singleplayer_mode" then
+				local file, focus = Configuration:GetBackgroundImage()
+				self.backgroundFocus = focus
+				self.backgroundImage.file = file
+				local texInfo = gl.TextureInfo(file)
+				self.width, self.height = texInfo.xsize, texInfo.ysize
+				self.backgroundControl:Invalidate()
+				self:Resize()
+			end
 		end
-	end
-	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)		
+		Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
+	end		
 end
 
 function Background:SetAlpha(newAlpha)
-	self.backgroundImage.color[4] = newAlpha
-	self.backgroundImage:Invalidate()
+	if self.backgroundImage then
+		self.backgroundImage.color[4] = newAlpha
+		self.backgroundImage:Invalidate()
+	end
 end
 
 function Background:Resize(backgroundControl)
 	backgroundControl = backgroundControl or self.backgroundControl
-	if not self.backgroundImage then
+	if not (self.backgroundImage and self.backgroundFocus) then
 		return
 	end
+	
 	local width, height = self.width, self.height
 	if not (width and height) then
 		return
@@ -69,9 +78,15 @@ end
 
 function Background:Enable()
 	if not self.backgroundControl then
-		local file, focus = Configuration:GetBackgroundImage()
-		self.backgroundFocus = focus
-		local texInfo = gl.TextureInfo(file)
+		local imageFile
+		if self.imageOverride then
+			imageFile = self.imageOverride
+		else
+			local file, focus = Configuration:GetBackgroundImage()
+			imageFile = file
+			self.backgroundFocus = focus
+		end
+		local texInfo = gl.TextureInfo(imageFile)
 		self.width, self.height = texInfo.xsize, texInfo.ysize	
 		
 		self.backgroundImage = Image:New {
@@ -81,12 +96,12 @@ function Background:Enable()
 			bottom = 0,
 			padding = {0,0,0,0},
 			margin = {0,0,0,0},
+			color = self.colorOverride,
 			keepAspect = false,
-			file = file,
+			file = imageFile,
 		}
 		
 		self.backgroundControl = Control:New {
-			name = "backgroundControl",
 			x = 0,
 			y = 0,
 			right = 0,

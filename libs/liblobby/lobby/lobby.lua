@@ -338,10 +338,7 @@ end
 ------------------------
 
 function Lobby:_OnConnect(protocolVersion, springVersion, udpPort, serverMode)
-	if self.status == "disconnected" and self.disconnectTime ~= nil then -- in the process of reconnecting
-		self.disconnectTime = nil
-		self:Login(unpack(self._oldData.loginData))
-	end
+	self:Login(unpack(self.loginData))
 	self:_CallListeners("OnConnect", protocolVersion, springVersion, udpPort, serverMode)
 end
 
@@ -568,18 +565,18 @@ end
 function Lobby:_OnBattleOpened(battleID, type, natType, founder, ip, port, 
 		maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName, 
 		title, gameName, spectatorCount, isRunning, runningSince, 
-		battleMode, disallowCustomTeams, disallowBots)
+		battleMode, disallowCustomTeams, disallowBots, isMatchMaker)
 	self.battles[battleID] = {
 		battleID = battleID, type = type, natType = natType, founder = founder, ip = ip, port = port,
 		maxPlayers = maxPlayers, passworded = passworded, rank = rank, mapHash = mapHash, spectatorCount = spectatorCount or 0,
 		engineName = engineName, engineVersion = engineVersion, mapName = mapName, title = title, gameName = gameName, users = {},
 		isRunning = isRunning, runningSince = runningSince, 
-		battleMode = battleMode, disallowCustomTeams = disallowCustomTeams, disallowBots = disallowBots
+		battleMode = battleMode, disallowCustomTeams = disallowCustomTeams, disallowBots = disallowBots, isMatchMaker = isMatchMaker
 	}
 	self.battleCount = self.battleCount + 1
 
 	self:_CallListeners("OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, 
-		engineName, engineVersion, map, title, gameName, spectatorCount, isRunning, runningSince, battleMode)
+		engineName, engineVersion, map, title, gameName, spectatorCount, isRunning, runningSince, battleMode, isMatchMaker)
 end
 
 function Lobby:_OnBattleClosed(battleID)
@@ -596,8 +593,18 @@ function Lobby:_OnJoinBattle(battleID, hashCode)
 end
 
 function Lobby:_OnJoinedBattle(battleID, userName, scriptPassword)
-	table.insert(self.battles[battleID].users, userName)
-
+	local found = false
+	local users = self.battles[battleID].users
+	for i = 1, #users do
+		if users[i] == userName then
+			found = true
+			break
+		end
+	end
+	if not found then
+		table.insert(self.battles[battleID].users, userName)
+	end
+	
 	self.users[userName].battleID = battleID
 	self:_CallListeners("OnUpdateUserStatus", userName, {battleID = battleID})
 
@@ -631,7 +638,7 @@ function Lobby:_OnLeftBattle(battleID, userName)
 	self:_CallListeners("OnLeftBattle", battleID, userName)
 end
 
-function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)
+function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker)
 	local battle = self.battles[battleID]
 	battle.spectatorCount = spectatorCount or battle.spectatorCount
 	battle.locked         = locked         or battle.locked
@@ -641,8 +648,12 @@ function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, ma
 	battle.runningSince   = runningSince   or battle.runningSince
 	battle.gameName       = gameName       or battle.gameName
 	battle.battleMode     = battleMode     or battle.battleMode
-		Spring.Echo("_OnUpdateBattleInfo_OnUpdateBattleInfo", gameName)
-	self:_CallListeners("OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)
+	battle.disallowCustomTeams = disallowCustomTeams or battle.disallowCustomTeams
+	battle.disallowBots   = disallowBots   or battle.disallowBots
+	battle.isMatchMaker   = isMatchMaker   or battle.isMatchMaker
+	
+	Spring.Echo("_OnUpdateBattleInfo_OnUpdateBattleInfo", gameName)
+	self:_CallListeners("OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker)
 end
 
 -- Updates the specified status keys
@@ -871,7 +882,9 @@ function Lobby:_OnQueueOpened(name, description, mapNames, maxPartSize, gameName
 		description = description,
 		mapNames = mapNames,
 		maxPartSize = maxPartSize,
-		gameNames = gameNames
+		gameNames = gameNames,
+		playersIngame = 0,
+		playersWaiting = 0,
 	}
 	self.queueCount = self.queueCount + 1
 	
@@ -887,7 +900,7 @@ function Lobby:_OnQueueClosed(name)
 	self:_CallListeners("OnQueueClosed", name)
 end
 
-function Lobby:_OnMatchMakerStatus(inMatchMaking, joinedQueueList, queueCounts, currentEloWidth, joinedTime, bannedTime)
+function Lobby:_OnMatchMakerStatus(inMatchMaking, joinedQueueList, queueCounts, ingameCounts, instantStartQueues, currentEloWidth, joinedTime, bannedTime)
 	if inMatchMaking then
 		self.joinedQueueList = joinedQueueList
 		self.joinedQueues = {}
@@ -899,7 +912,16 @@ function Lobby:_OnMatchMakerStatus(inMatchMaking, joinedQueueList, queueCounts, 
 		self.joinedQueueList = nil
 	end
 	
-	self:_CallListeners("OnMatchMakerStatus", inMatchMaking, joinedQueueList, queueCounts, currentEloWidth, joinedTime, bannedTime)
+	self.matchMakerBannedTime = bannedTime
+	
+	if queueCounts or ingameCounts then
+		for name, queueData in pairs(self.queues) do
+			queueData.playersIngame = (ingameCounts and ingameCounts[name]) or queueData.playersIngame
+			queueData.playersWaiting = (queueCounts and queueCounts[name]) or queueData.playersWaiting
+		end
+	end
+	
+	self:_CallListeners("OnMatchMakerStatus", inMatchMaking, joinedQueueList, queueCounts, ingameCounts, instantStartQueues, currentEloWidth, joinedTime, bannedTime)
 end
 
 function Lobby:_OnMatchMakerReadyCheck(secondsRemaining)
@@ -982,7 +1004,7 @@ end
 
 function Lobby:Reconnect()
 	self.lastReconnectionAttempt = Spring.GetTimer()
-	self:Connect(self._oldData.host, self._oldData.port)
+	self:Connect(self._oldData.host, self._oldData.port, self._oldData.loginData[1], self._oldData.loginData[2], self._oldData.loginData[3], self._oldData.loginData[4])
 end
 
 function Lobby:SafeUpdate(...)

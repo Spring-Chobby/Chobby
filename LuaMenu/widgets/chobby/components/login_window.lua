@@ -72,35 +72,11 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		caption = i18n("connect_to_spring_server"),
 		font = Configuration:GetFont(3),
 	}
-	self.lblServerAddress = Label:New {
-		x = 15,
-		width = 170,
-		y = 90,
-		height = 35,
-		caption = i18n("server") .. ":",
-		font = Configuration:GetFont(3),
-	}
-	self.ebServerAddress = EditBox:New {
-		x = 135,
-		width = 125,
-		y = 85,
-		height = 35,
-		text = Configuration.serverAddress,
-		font = Configuration:GetFont(3),
-	}
-	self.ebServerPort = EditBox:New {
-		x = 265,
-		width = 70,
-		y = 85,
-		height = 35,
-		text = tostring(Configuration.serverPort),
-		font = Configuration:GetFont(3),
-	}
 
 	self.lblUsername = Label:New {
 		x = 15,
 		width = 170,
-		y = 130,
+		y = 95,
 		height = 35,
 		caption = i18n("username") .. ":",
 		font = Configuration:GetFont(3),
@@ -108,7 +84,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	self.ebUsername = EditBox:New {
 		x = 135,
 		width = 200,
-		y = 125,
+		y = 90,
 		height = 35,
 		text = Configuration.userName,
 		font = Configuration:GetFont(3),
@@ -117,7 +93,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	self.lblPassword = Label:New {
 		x = 15,
 		width = 170,
-		y = 175,
+		y = 135,
 		height = 35,
 		caption = i18n("password") .. ":",
 		font = Configuration:GetFont(3),
@@ -125,7 +101,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	self.ebPassword = EditBox:New {
 		x = 135,
 		width = 200,
-		y = 170,
+		y = 130,
 		height = 35,
 		text = Configuration.password,
 		passwordInput = true,
@@ -140,19 +116,19 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		},
 	}
 
-	self.lblError = Label:New {
+	self.txtError = TextBox:New {
 		x = 15,
 		right = 15,
-		y = 265,
+		y = 215,
 		height = 90,
 		caption = "",
-		font = Configuration:GetFont(4),
+		fontsize = Configuration:GetFont(4).size,
 	}
 
 	self.cbAutoLogin = Checkbox:New {
 		x = 15,
 		width = 190,
-		y = 220,
+		y = 175,
 		height = 35,
 		boxalign = "right",
 		boxsize = 15,
@@ -210,7 +186,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	}
 
 	local ww, wh = Spring.GetWindowGeometry()
-	local w, h = 430, 420
+	local w, h = 430, 380
 	self.window = Window:New {
 		x = (ww - w) / 2,
 		y = (wh - h) / 2,
@@ -222,14 +198,11 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		classname = windowClassname,
 		children = {
 			self.lblInstructions,
-			self.lblServerAddress,
 			self.lblUsername,
 			self.lblPassword,
-			self.ebServerAddress,
-			self.ebServerPort,
 			self.ebUsername,
 			self.ebPassword,
-			self.lblError,
+			self.txtError,
 			self.cbAutoLogin,
 			self.btnLogin,
 			self.btnRegister,
@@ -250,7 +223,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 
 	self.window:BringToFront()
 
-	createTabGroup({self.ebServerAddress, self.ebServerPort, self.ebUsername, self.ebPassword})
+	createTabGroup({self.ebUsername, self.ebPassword})
 	screen0:FocusControl(self.ebUsername)
 	-- FIXME: this should probably be moved to the lobby wrapper
 	self.loginAttempts = 0
@@ -284,15 +257,13 @@ function LoginWindow:RemoveListeners()
 end
 
 function LoginWindow:tryLogin()
-	self.lblError:SetCaption("")
+	self.txtError:SetText("")
 
 	username = self.ebUsername.text
 	password = self.ebPassword.text
 	if username == '' or password == '' then
 		return
 	end
-	Configuration.serverAddress = self.ebServerAddress.text
-	Configuration.serverPort = self.ebServerPort.text
 	Configuration.userName  = username
 	Configuration.password  = password
 
@@ -308,11 +279,11 @@ function LoginWindow:tryLogin()
 
 		self.onDisconnected = function(listener)
 			lobby:RemoveListener("OnDisconnected", self.onDisconnected)
-			self.lblError:SetCaption(Configuration:GetErrorColor() .. "Cannot reach server:\n" .. tostring(Configuration:GetServerAddress()) .. ":" .. tostring(Configuration:GetServerPort()))
+			self.txtError:SetText(Configuration:GetErrorColor() .. "Cannot reach server:\n" .. tostring(Configuration:GetServerAddress()) .. ":" .. tostring(Configuration:GetServerPort()))
 		end
 		lobby:AddListener("OnDisconnected", self.onDisconnected)
 
-		lobby:Connect(Configuration:GetServerAddress(), Configuration:GetServerPort())
+		lobby:Connect(Configuration:GetServerAddress(), Configuration:GetServerPort(), username, password, 3, nil, GetLobbyName())
 	else
 		lobby:Login(username, password, 3, nil, GetLobbyName())
 	end
@@ -321,15 +292,13 @@ function LoginWindow:tryLogin()
 end
 
 function LoginWindow:tryRegister()
-	self.lblError:SetCaption("")
+	self.txtError:SetText("")
 
 	username = self.ebUsername.text
 	password = self.ebPassword.text
 	if username == '' or password == '' then
 		return
 	end
-	Configuration.serverAddress = self.ebServerAddress.text
-	Configuration.serverPort = self.ebServerPort.text
 
 	if not lobby.connected or self.loginAttempts >= 3 then
 		self.loginAttempts = 0
@@ -341,7 +310,7 @@ function LoginWindow:tryRegister()
 		end
 		lobby:AddListener("OnConnect", self.onConnectRegister)
 
-		lobby:Connect(Configuration:GetServerAddress(), Configuration:GetServerPort())
+		lobby:Connect(Configuration:GetServerAddress(), Configuration:GetServerPort(), username, password, 3, nil, GetLobbyName())
 	else
 		lobby:Register(username, password, "name@email.com")
 	end
@@ -352,11 +321,11 @@ end
 function LoginWindow:OnRegister()
 	lobby:Register(username, password, "name@email.com")
 	lobby:AddListener("OnRegistrationAccepted", function(listener)
-		self.lblError:SetCaption(Configuration:GetSuccessColor() .. "Registered!")
+		self.txtError:SetText(Configuration:GetSuccessColor() .. "Registered!")
 		--lobby:RemoveListener("OnRegistrationAccepted", listener)
 	end)
 	lobby:AddListener("OnRegistrationDenied", function(listener, err)
-		self.lblError:SetCaption(Configuration:GetErrorColor() .. (err or "Unknown Error"))
+		self.txtError:SetText(Configuration:GetErrorColor() .. (err or "Unknown Error"))
 		--lobby:RemoveListener("OnRegistrationDenied", listener)
 	end)
 
@@ -364,10 +333,10 @@ end
 
 function LoginWindow:OnConnected()
 
-	self.lblError:SetCaption(Configuration:GetPartialColor() .. i18n("connecting"))
+	self.txtError:SetText(Configuration:GetPartialColor() .. i18n("connecting"))
 
 	self.onDenied = function(listener, reason)
-		self.lblError:SetCaption(Configuration:GetErrorColor() .. (reason or "Denied, unknown reason"))
+		self.txtError:SetText(Configuration:GetErrorColor() .. (reason or "Denied, unknown reason"))
 	end
 
 	self.onAccepted = function(listener)
@@ -404,8 +373,6 @@ function LoginWindow:OnConnected()
 		lobby:RemoveListener("OnAgreement", self.onAgreement)
 	end
 	lobby:AddListener("OnAgreementEnd", self.onAgreementEnd)
-
-	lobby:Login(username, password, 3, nil, GetLobbyName())
 end
 
 function LoginWindow:createAgreementWindow()

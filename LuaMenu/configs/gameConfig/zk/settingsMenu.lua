@@ -2,75 +2,90 @@ local settings = {
 	{
 		name = "Graphics",
 		presets = {
-			Minimal = {
-				WaterType = "Basic",
-				WaterQuality = "Low",
-				DeferredRendering = "Off",
-				Shadows = "None",
-				ShadowDetail = "Low",
-				ParticleLimit = "Minimal",
-				TerrainDetail = "Minimal",
-				VegetationDetail = "Minimal",
-				CompatibilityMode = "On",
-				AntiAliasing = "Off",
-				ShaderDetail = "Minimal",
-				FancySky = "Off",
+			{
+				name = "Minimal",
+				settings = {
+					WaterType = "Basic",
+					WaterQuality = "Low",
+					DeferredRendering = "Off",
+					Shadows = "None",
+					ShadowDetail = "Low",
+					ParticleLimit = "Minimal",
+					TerrainDetail = "Minimal",
+					VegetationDetail = "Minimal",
+					CompatibilityMode = "On",
+					AntiAliasing = "Off",
+					ShaderDetail = "Minimal",
+					FancySky = "Off",
+				}
 			},
-			Low = {
-				WaterType = "Bumpmapped",
-				WaterQuality = "Low",
-				DeferredRendering = "Off",
-				Shadows = "Units Only",
-				ShadowDetail = "Low",
-				ParticleLimit = "Low",
-				TerrainDetail = "Low",
-				VegetationDetail = "Low",
-				CompatibilityMode = "Off",
-				AntiAliasing = "Off",
-				ShaderDetail = "Low",
-				FancySky = "Off",
+			{
+				name = "Low",
+				settings = {
+					WaterType = "Bumpmapped",
+					WaterQuality = "Low",
+					DeferredRendering = "Off",
+					Shadows = "Units Only",
+					ShadowDetail = "Low",
+					ParticleLimit = "Low",
+					TerrainDetail = "Low",
+					VegetationDetail = "Low",
+					CompatibilityMode = "Off",
+					AntiAliasing = "Off",
+					ShaderDetail = "Low",
+					FancySky = "Off",
+				}
 			},
-			Medium = {
-				WaterType = "Bumpmapped",
-				WaterQuality = "Medium",
-				DeferredRendering = "On",
-				Shadows = "Units Only",
-				ShadowDetail = "Medium",
-				ParticleLimit = "Medium",
-				TerrainDetail = "Medium",
-				VegetationDetail = "Medium",
-				CompatibilityMode = "Off",
-				AntiAliasing = "Off",
-				ShaderDetail = "Medium",
-				FancySky = "Off",
+			{
+				name = "Medium",
+				settings = {
+					WaterType = "Bumpmapped",
+					WaterQuality = "Medium",
+					DeferredRendering = "On",
+					Shadows = "Units Only",
+					ShadowDetail = "Medium",
+					ParticleLimit = "Medium",
+					TerrainDetail = "Medium",
+					VegetationDetail = "Medium",
+					CompatibilityMode = "Off",
+					AntiAliasing = "Off",
+					ShaderDetail = "Medium",
+					FancySky = "Off",
+				}
 			},
-			High = {
-				WaterType = "Bumpmapped",
-				WaterQuality = "High",
-				DeferredRendering = "On",
-				Shadows = "Units and Terrain",
-				ShadowDetail = "Medium",
-				ParticleLimit = "High",
-				TerrainDetail = "High",
-				VegetationDetail = "High",
-				CompatibilityMode = "Off",
-				AntiAliasing = "Low",
-				ShaderDetail = "High",
-				FancySky = "Off",
+			{
+				name = "High",
+				settings = {
+					WaterType = "Bumpmapped",
+					WaterQuality = "High",
+					DeferredRendering = "On",
+					Shadows = "Units and Terrain",
+					ShadowDetail = "Medium",
+					ParticleLimit = "High",
+					TerrainDetail = "High",
+					VegetationDetail = "High",
+					CompatibilityMode = "Off",
+					AntiAliasing = "Low",
+					ShaderDetail = "High",
+					FancySky = "Off",
+				}
 			},
-			Ultra = {
-				WaterType = "Bumpmapped",
-				WaterQuality = "High",
-				DeferredRendering = "On",
-				Shadows = "Units and Terrain",
-				ShadowDetail = "Ultra",
-				ParticleLimit = "Ultra",
-				TerrainDetail = "Ultra",
-				VegetationDetail = "Ultra",
-				CompatibilityMode = "Off",
-				AntiAliasing = "High",
-				ShaderDetail = "Ultra",
-				FancySky = "On",
+			{
+				name = "Ultra",
+				settings = {
+					WaterType = "Bumpmapped",
+					WaterQuality = "High",
+					DeferredRendering = "On",
+					Shadows = "Units and Terrain",
+					ShadowDetail = "Ultra",
+					ParticleLimit = "Ultra",
+					TerrainDetail = "Ultra",
+					VegetationDetail = "Ultra",
+					CompatibilityMode = "Off",
+					AntiAliasing = "High",
+					ShaderDetail = "Ultra",
+					FancySky = "On",
+				}
 			},
 		},
 		
@@ -458,6 +473,66 @@ local settings = {
 			},
 		},
 	},
+	{
+		name = "Interface",
+		presets = {
+			{
+				name = "Default",
+				settings = {
+					MouseZoomSpeed = 25,
+					IconDistance = 151,
+					MiddlePanSpeed = 10,
+					CameraPanSpeed = 10,
+				}
+			},
+		},
+		settings = {
+			{
+				name = "IconDistance",
+				humanName = "Icon Distance",
+				isNumberSetting = true,
+				applyName = "UnitIconDist",
+				minValue = 0,
+				maxValue = 10000,
+				springConversion = function(value)
+					return value
+				end,
+			},
+			{
+				name = "MouseZoomSpeed",
+				humanName = "Mouse Zoom Speed",
+				isNumberSetting = true,
+				applyName = "ScrollWheelSpeed",
+				minValue = 1,
+				maxValue = 500,
+				springConversion = function(value)
+					return value*-1
+				end,
+			},
+			{
+				name = "MiddlePanSpeed",
+				humanName = "Middle Click Pan Speed",
+				isNumberSetting = true,
+				applyName = "MiddleClickScrollSpeed",
+				minValue = 0,
+				maxValue = 1000,
+				springConversion = function(value)
+					return value*-1/2000
+				end,
+			},
+			{
+				name = "CameraPanSpeed",
+				humanName = "Camera Pan Speed",
+				isNumberSetting = true,
+				applyName = "OverheadScrollSpeed",
+				minValue = 0,
+				maxValue = 1000,
+				springConversion = function(value)
+					return value
+				end,
+			},
+		},
+	},
 }
 
 local settingsDefaults = {
@@ -473,6 +548,10 @@ local settingsDefaults = {
 	AntiAliasing = "Low",
 	ShaderDetail = "High",
 	FancySky = "Off",
+	MouseZoomSpeed = 25,
+	IconDistance = 151,
+	MiddlePanSpeed = 10,
+	CameraPanSpeed = 10,
 }
 
 return settings, settingsDefaults

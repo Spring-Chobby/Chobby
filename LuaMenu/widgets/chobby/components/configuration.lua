@@ -6,12 +6,13 @@ VFS.Include("libs/liblobby/lobby/json.lua")
 function Configuration:init()
 	self.listeners = {}
 
---     self.serverAddress = "localhost"
+	--self.serverAddress = "localhost"
 	self.serverAddress = WG.Server.serverAddress or "springrts.com"
 	self.serverPort = 8200
 
-	self.chatMaxNameLength = 170 -- Pixels
-	self.statusMaxNameLength = 230
+	self.userListWidth = 205 -- Main user list width. Possibly configurable in the future.
+	self.chatMaxNameLength = 195 -- Pixels
+	self.statusMaxNameLength = 210
 	self.friendMaxNameLength = 230
 	self.notificationMaxNameLength = 230
 
@@ -59,15 +60,21 @@ function Configuration:init()
 				doNotAskAgainKey = "confirmation_mainMenuFromBattle",
 				question = "You are in a battle and will leave it if you return to the main menu. Are you sure you want to return to the main menu?",
 				testFunction = function ()
-					return (lobby:GetMyBattleID() and true) or false
+					local battleID = lobby:GetMyBattleID()
+					if not battleID then
+						return false
+					end
+					if self.showMatchMakerBattles then
+						return true
+					end
+					local battle = lobby:GetBattle(battleID)
+					return (battle and not battle.isMatchMaker) or false
 				end
 			}
 		},
 		singleplayer = {
 		}
 	}
-
-	self.userListWidth = 220 -- Main user list width. Possibly configurable in the future.
 
 	self.shortnameMap = {
 		"chobby",
@@ -81,6 +88,11 @@ function Configuration:init()
 	self.debugMode = false
 	self.onlyShowFeaturedMaps = true
 	self.useSpringRestart = false
+	self.menuMusicVolume = 0.5
+	self.menuNotificationVolume = 0.8
+	self.showMatchMakerBattles = false
+	
+	self.chatFontSize = 16
 
 	self.font = {
 		[0] = {size = 10, shadow = false},
@@ -112,6 +124,8 @@ end
 
 function Configuration:GetConfigData()
 	return {
+		serverAddress = self.serverAddress,
+		serverPort = self.serverPort,
 		userName = self.userName,
 		password = self.password,
 		autoLogin = self.autoLogin,
@@ -131,6 +145,10 @@ function Configuration:GetConfigData()
 		displayBots = self.displayBots,
 		displayBadEngines = self.displayBadEngines,
 		settingsMenuValues = self.settingsMenuValues,
+		menuMusicVolume = self.menuMusicVolume,
+		menuNotificationVolume = self.menuNotificationVolume,
+		showMatchMakerBattles = self.showMatchMakerBattles,
+		chatFontSize = self.chatFontSize,
 	}
 end
 
@@ -295,6 +313,15 @@ function Configuration:GetBackgroundImage()
 		return pngImage, backgroundFocus
 	end
 	return self:GetGameConfigFilePath(false, "skinning/background.jpg", shortname), backgroundFocus
+end
+
+function Configuration:GetTaskbarIcon()
+	local shortname = self.shortnameMap[self.singleplayer_mode]
+	local pngImage = self:GetGameConfigFilePath(false, "taskbarLogo.png", shortname)
+	if pngImage then
+		return pngImage
+	end
+	return false
 end
 
 function Configuration:IsValidEngineVersion(engineVersion)

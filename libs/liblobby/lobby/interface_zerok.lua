@@ -698,7 +698,8 @@ function Interface:_BattleAdded(data)
 		header.IsRunning, header.RunningSince, 
 		header.Mode, 
 		header.Mode ~= 0, -- Is Custom
-		(header.Mode ~= 5 and header.Mode ~= 0) -- Is Bots
+		(header.Mode ~= 5 and header.Mode ~= 0), -- Is Bots
+		header.IsMatchMaker
 	)
 end
 Interface.jsonCommands["BattleAdded"] = Interface._BattleAdded
@@ -728,12 +729,26 @@ function Interface:_BattleUpdate(data)
 		Spring.Log(LOG_SECTION, LOG.ERROR, "Interface:_BattleUpdate no such battle with ID: " .. tostring(header.BattleID))
 		return
 	end
+	
+	self:_OnUpdateBattleInfo(
+		header.BattleID, 
+		header.SpectatorCount, 
+		header.Locked, 
+		0, 
+		header.Map, 
+		header.Engine, 
+		header.RunningSince, 
+		header.Game, 
+		header.Mode, 
+		header.Mode ~= 0, -- Is Custom
+		(header.Mode ~= 5 and header.Mode ~= 0), -- Is Bots
+		header.IsMatchMaker
+	)
+	
 	if header.IsRunning ~= nil then
+		-- battle.RunningSince should be set by this point.
 		self:_OnBattleIngameUpdate(header.BattleID, header.IsRunning)
 	end
-	
-		Spring.Echo("header.Gameheader.Game", header.Game)
-	self:_OnUpdateBattleInfo(header.BattleID, header.SpectatorCount, header.Locked, 0, header.Map, header.Engine, header.RunningSince, header.Game, header.Mode)
 end
 Interface.jsonCommands["BattleUpdate"] = Interface._BattleUpdate
 
@@ -820,7 +835,7 @@ local function FindLastOccurence(mainString, subString)
 end
 
 function Interface:ProcessVote(data, battle, duplicateMessageTime)
-	if (not battle) and battle.founder == data.User then
+	if (not battle) or battle.founder == data.User then
 		return false
 	end
 	local message = data.Text
@@ -946,13 +961,19 @@ function Interface:_MatchMakerSetup(data)
 	self.queues = {}
 	for i = 1, #queues do
 		local queue = queues[i]
-		self:_OnQueueOpened(queue.Name, queue.Description, queue.Maps, queue.MaxPartySize, {"Zero-K v1.4.9.1"})
+		
+		-- Remove when server updates
+		if queue.Game == "zk:stable" then
+			queue.Game = "Zero-K v1.4.9.3"
+		end
+		
+		self:_OnQueueOpened(queue.Name, queue.Description, queue.Maps, queue.MaxPartySize, {queue.Game})
 	end
 end
 Interface.jsonCommands["MatchMakerSetup"] = Interface._MatchMakerSetup
 
 function Interface:_MatchMakerStatus(data)
-	self:_OnMatchMakerStatus(data.MatchMakerEnabled, data.JoinedQueues, data.QueueCounts, data.CurrentEloWidth, data.JoinedTime, data.BannedSeconds)
+	self:_OnMatchMakerStatus(data.MatchMakerEnabled, data.JoinedQueues, data.QueueCounts, data.IngameCounts, data.InstantStartQueues, data.CurrentEloWidth, data.JoinedTime, data.BannedSeconds)
 end
 Interface.jsonCommands["MatchMakerStatus"] = Interface._MatchMakerStatus
 
@@ -974,8 +995,7 @@ Interface.jsonCommands["AreYouReadyUpdate"] = Interface._AreYouReadyUpdate
 function Interface:_AreYouReadyResult(data)
 	self:_OnMatchMakerReadyResult(data.IsBattleStarting, data.AreYouBanned)
 end
-Interface.jsonCommands["AreYouReadyResult"] = Interface.AreYouReadyResult
-
+Interface.jsonCommands["AreYouReadyResult"] = Interface._AreYouReadyResult
 
 -------------------
 -- Unimplemented --

@@ -142,7 +142,7 @@ function ChatWindows:init()
 					self.activeUnreadMessages = self.activeUnreadMessages + 1
 				end
 				privateChatConsole:AddMessage(message, userName, msgDate)
-				self:_NotifyTab(chanName, userName, "Private", message, "sounds/beep4.wav", 15)
+				self:_NotifyTab(chanName, userName, "Private", true, message, "sounds/beep4.wav", 15)
 			end
 		end
 	)
@@ -154,7 +154,7 @@ function ChatWindows:init()
 				self.activeUnreadMessages = self.activeUnreadMessages + 1
 			end
 			privateChatConsole:AddMessage(message, userName, msgDate, Configuration.meColor, true)
-			self:_NotifyTab(chanName, userName, "Private", message, "sounds/beep4.wav", 15)
+			self:_NotifyTab(chanName, userName, "Private", true, message, "sounds/beep4.wav", 15)
 		end
 	)
 	lobby:AddListener("OnRemoveUser",
@@ -556,6 +556,7 @@ function ChatWindows:_NotifyTab(tabName, userName, chanName, nameMentioned, mess
 				title = userName .. " in " .. chanName .. ":",
 				body = message,
 				sound = sound,
+				soundVolume = (WG.Chobby.Configuration.menuNotificationVolume or 1)*0.5,
 				time = popupDuration,
 			})
 		end
@@ -688,7 +689,7 @@ function ChatWindows:GetChannelConsole(chanName)
 		local function Resize(obj)
 			self:UpdateOldChatLinePosition(obj)
 		end
-		channelConsole = Console(chanName, MessageListener, nil, Resize)
+		channelConsole = Console(chanName, MessageListener, nil, Resize, false)
 		self.channelConsoles[chanName] = channelConsole
 
 		Configuration.channels[chanName] = true
@@ -771,7 +772,7 @@ function ChatWindows:GetPrivateChatConsole(userName, switchTo)
 		local function Resize(obj)
 			self:UpdateOldChatLinePosition(obj)
 		end
-		privateChatConsole = Console(chanName, MessageListener, nil, Resize)
+		privateChatConsole = Console(chanName, MessageListener, nil, Resize, false)
 		self.privateChatConsoles[chanName] = privateChatConsole
 
 		local caption = "@" .. userName

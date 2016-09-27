@@ -123,13 +123,18 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 	local userBattleInfo = userControl.lobby:GetUserBattleStatus(userName) or {}
 	local myUserName = userControl.lobby:GetMyUserName()
 	local comboOptions = {}
+	
 	if (not userBattleInfo.aiLib) and userName ~= myUserName then
 		comboOptions[#comboOptions + 1] = "Message"
 
 		if (not isInBattle) and userInfo.battleID then
 			local battle = lobby:GetBattle(userInfo.battleID)
 			if battle and WG.Chobby.Configuration:IsValidEngineVersion(battle.engineVersion) then
-				comboOptions[#comboOptions + 1] = "Join Battle"
+				if not WG.Chobby.Configuration.showMatchMakerBattles and battle.isMatchMaker then
+					comboOptions[#comboOptions + 1] = "Watch Battle"
+				else
+					comboOptions[#comboOptions + 1] = "Join Battle"
+				end
 			end
 		end
 
@@ -138,7 +143,11 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 		else
 			comboOptions[#comboOptions + 1] = "Friend"
 		end
-		comboOptions[#comboOptions + 1] = "Report"
+		
+		if userInfo.accountID then
+			comboOptions[#comboOptions + 1] = "Report"
+		end
+		
 		if userInfo.isIgnored then
 			comboOptions[#comboOptions + 1] = "Unignore"
 		else
@@ -146,6 +155,10 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 		end
 	end
 
+	if userInfo.accountID then
+		comboOptions[#comboOptions + 1] = "User Page"
+	end
+	
 	-- userControl.lobby:GetMyIsAdmin()
 	-- Let everyone start kick votes.
 	if isInBattle or (userBattleInfo.aiLib and userBattleInfo.owner == myUserName) then
@@ -221,6 +234,48 @@ local function GetUserStatus(userName, isInBattle, userControl)
 	end
 end
 
+local function UpdateUserControlStatus(userName, userControls)
+	if userControls.imStatusLarge then
+		local imgFile, status, fontColor = GetUserStatus(userName, isInBattle, userControls)
+		userControls.tbName.font.color = fontColor
+		userControls.tbName:Invalidate()
+		userControls.imStatusLarge.file = imgFile
+		userControls.imStatusLarge:Invalidate()
+		userControls.lblStatusLarge.font.color = fontColor
+		userControls.lblStatusLarge:SetCaption(i18n(status .. "_status"))
+		return
+	elseif not userControls.imStatusFirst then
+		return
+	end
+	
+	local status1, status2 = GetUserStatusImages(userName, userControls.isInBattle, userControls)
+	userControls.imStatusFirst.file = status1
+	userControls.imStatusSecond.file = status2
+	userControls.imStatusFirst:Invalidate()
+	userControls.imStatusSecond:Invalidate()
+	
+	if not userControls.maxNameLength then
+		return
+	end
+	local statusFirstPos = userControls.nameStartY + userControls.nameActualLength + 3
+	local statusSecondPos = userControls.nameStartY + userControls.nameActualLength + 24
+	if status2 and userControls.nameStartY + userControls.nameActualLength + 42 > userControls.maxNameLength then
+		statusFirstPos = userControls.maxNameLength - 42
+		statusSecondPos = userControls.maxNameLength - 21
+	elseif status1 and userControls.nameStartY + userControls.nameActualLength + 21 > userControls.maxNameLength then
+		statusFirstPos = userControls.maxNameLength - 21
+	end
+	
+	userControls.imStatusFirst:SetPos(statusFirstPos)
+	userControls.imStatusSecond:SetPos(statusSecondPos)
+	
+	local nameSpace = userControls.maxNameLength - userControls.nameStartY - (userControls.maxNameLength - statusFirstPos)
+	local truncatedName = StringUtilities.TruncateStringIfRequiredAndDotDot(userName, userControls.tbName.font, nameSpace)
+	if truncatedName then
+		userControls.tbName:SetText(truncatedName)
+	end
+end
+
 local function UpdateUserActivity(listener, userName)
 	for i = 1, #userListList do
 		local userList = userListList[i]
@@ -235,22 +290,7 @@ local function UpdateUserActivity(listener, userName)
 				data.tbName.font.color = GetUserNameColor(userName, data) or WG.Chobby.Configuration:GetUserNameColor()
 				data.tbName:Invalidate()
 			end
-			
-			if data.imStatusFirst then
-				local status1, status2 = GetUserStatusImages(userName, data.isInBattle, data)
-				data.imStatusFirst.file = status1
-				data.imStatusSecond.file = status2
-				data.imStatusFirst:Invalidate()
-				data.imStatusSecond:Invalidate()
-			elseif data.imStatusLarge then
-				local imgFile, status, fontColor = GetUserStatus(userName, isInBattle, data)
-				data.tbName.font.color = fontColor
-				data.tbName:Invalidate()
-				data.imStatusLarge.file = imgFile
-				data.imStatusLarge:Invalidate()
-				data.lblStatusLarge.font.color = fontColor
-				data.lblStatusLarge:SetCaption(i18n(status .. "_status"))
-			end
+			UpdateUserControlStatus(userName, data)
 		end
 	end
 end
@@ -302,8 +342,9 @@ local function GetUserControls(userName, opts)
 	local offset             = opts.offset or 0
 	local offsetY            = opts.offsetY or 0
 	local height             = opts.height or 22
-	local showFounder    = opts.showFounder
+	local showFounder        = opts.showFounder
 	local showModerator      = opts.showModerator
+	local comboBoxOnly       = opts.comboBoxOnly
 
 	local userControls = reinitialize or {}
 
@@ -331,7 +372,7 @@ local function GetUserControls(userName, opts)
 		end
 
 		userControls.mainControl = ControlType:New {
-			name = userName,
+			name = (not comboBoxOnly) and userName, -- Many can be added to screen0
 			x = 0,
 			y = 0,
 			right = 0,
@@ -352,6 +393,9 @@ local function GetUserControls(userName, opts)
 			OnOpen = {
 				function (obj)
 					obj.tooltip = nil
+					-- Update hovered tooltip
+					local x,y = Spring.GetMouseState()
+					screen0:IsAbove(x,y)
 				end
 			},
 			OnClose = {
@@ -387,8 +431,21 @@ local function GetUserControls(userName, opts)
 							WG.BattleRoomWindow.LeaveBattle()
 							userControls.lobby:JoinBattle(userInfo.battleID)
 						end
+					elseif selectedName == "Watch Battle" then
+						local userInfo = userControls.lobby:GetUser(userName) or {}
+						if userInfo.battleID then
+							lobby:RejoinBattle(userInfo.battleID)
+						end
+					elseif selectedName == "User Page" then
+						local userInfo = userControls.lobby:GetUser(userName) or {}
+						if userInfo.accountID then
+							WG.BrowserHandler.OpenUrl("http://zero-k.info/Users/Detail/" .. userInfo.accountID)
+						end
 					elseif selectedName == "Report" then
-						Spring.Echo("TODO - Open the right webpage")
+						local userInfo = userControls.lobby:GetUser(userName) or {}
+						if userInfo.accountID then
+							WG.BrowserHandler.OpenUrl("http://zero-k.info/Users/ReportToAdmin/" .. userInfo.accountID)
+						end
 					elseif selectedName == "Unignore" then
 						userControls.lobby:Unignore(userName)
 					elseif selectedName == "Ignore" then
@@ -398,7 +455,11 @@ local function GetUserControls(userName, opts)
 			}
 		}
 	end
-
+	
+	if comboBoxOnly then
+		return userControls
+	end
+	
 	if isInBattle and not suppressSync then
 		offset = offset + 1
 		userControls.imSyncStatus = Image:New {
@@ -472,6 +533,9 @@ local function GetUserControls(userName, opts)
 	}
 	local userNameStart = offset
 	local truncatedName = StringUtilities.TruncateStringIfRequiredAndDotDot(userName, userControls.tbName.font, maxNameLength and (maxNameLength - offset))
+	userControls.nameStartY = offset
+	userControls.maxNameLength = maxNameLength
+	
 	local nameColor = GetUserNameColor(userName, userControls)
 	if nameColor then
 		userControls.tbName.font.color = nameColor
@@ -480,7 +544,8 @@ local function GetUserControls(userName, opts)
 	if truncatedName then
 		userControls.tbName:SetText(truncatedName)
 	end
-	offset = offset + userControls.tbName.font:GetTextWidth(userControls.tbName.text)
+	userControls.nameActualLength = userControls.tbName.font:GetTextWidth(userControls.tbName.text)
+	offset = offset + userControls.nameActualLength
 
 	if not hideStatus then
 		if not large then
@@ -510,6 +575,8 @@ local function GetUserControls(userName, opts)
 				file = status2,
 			}
 			offset = offset + 20
+			
+			UpdateUserControlStatus(userName, userControls)
 		else
 			offsetY = offsetY + 35
 			offset = 5
@@ -564,6 +631,35 @@ local function GetUserControls(userName, opts)
 	userControls.needReinitialization = lobby.status ~= "connected"
 
 	return userControls
+end
+
+local function _GetUserDropdownMenu(userName, isInBattle)
+	local opts = {
+		isInBattle = isInBattle,
+		comboBoxOnly = true
+	}
+	local userControls = GetUserControls(userName, opts)
+	local parentControl = WG.Chobby.interfaceRoot.GetLobbyInterfaceHolder()
+	
+	parentControl:AddChild(userControls.mainControl)
+	userControls.mainControl:BringToFront()
+	
+	local x,y = Spring.GetMouseState()
+	local screenWidth, screenHeight = Spring.GetWindowGeometry()
+	userControls.mainControl:SetPos(math.max(0, x - 60), screenHeight - y - userControls.mainControl.height + 5, 120)
+	
+	local function delayFunc()
+		-- Must click on the new ComboBox, otherwise an infinite loop may be caused.
+		screen0:MouseDown(x, y + 10, 1)
+	end
+	
+	WG.Delay(delayFunc, 0.001)
+	
+	userControls.mainControl.OnClose = userControls.mainControl.OnClose or {}
+	userControls.mainControl.OnClose[#userControls.mainControl.OnClose + 1] = 
+	function (obj)
+		obj:Dispose()
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -655,6 +751,10 @@ function userHandler.GetNotificationUser(userName)
 	return _GetUser(notificationUsers, userName, {
 		maxNameLength  = WG.Chobby.Configuration.notificationMaxNameLength,
 	})
+end
+
+function userHandler.GetUserDropdownMenu(userName, isInbattle)
+	_GetUserDropdownMenu(userName, isInbattle)
 end
 
 --------------------------------------------------------------------------------

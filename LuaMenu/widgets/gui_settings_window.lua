@@ -31,6 +31,7 @@ local ITEM_OFFSET = 38
 local COMBO_X = 230
 local COMBO_WIDTH = 235
 local CHECK_WIDTH = 230
+local TEXT_OFFSET = 6
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -113,7 +114,7 @@ local function GetLobbyTabControls()
 	offset = offset + ITEM_OFFSET
 	children[#children + 1] = Label:New {
 		x = 20,
-		y = offset,
+		y = offset + TEXT_OFFSET,
 		width = 90,
 		height = 30,
 		valign = "top",
@@ -149,13 +150,13 @@ local function GetLobbyTabControls()
 	offset = offset + ITEM_OFFSET
 	children[#children + 1] = Label:New {
 		x = 20,
-		y = offset,
+		y = offset + TEXT_OFFSET,
 		width = 90,
 		height = 40,
 		valign = "top",
 		align = "left",
 		font = Configuration:GetFont(2),
-		caption = "Panels",
+		caption = "Panel mode",
 	}
 	children[#children + 1] = ComboBox:New {
 		x = COMBO_X,
@@ -176,6 +177,96 @@ local function GetLobbyTabControls()
 		},
 	}
 
+	offset = offset + ITEM_OFFSET
+	children[#children + 1] = Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(2),
+		caption = "Menu Music Volume",
+	}
+	children[#children + 1] = Trackbar:New {
+		x = COMBO_X,
+		y = offset,
+		width  = COMBO_WIDTH,
+		height = 30,
+		value  = Configuration.menuMusicVolume or 0.5,
+		min    = 0,
+		max    = 1,
+		step   = 0.02,
+		OnChange = {
+			function(obj, value)
+				if freezeSettings then
+					return
+				end
+				Configuration:SetConfigValue("menuMusicVolume", value)
+			end
+		}
+	}
+	
+	offset = offset + ITEM_OFFSET
+	children[#children + 1] = Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(2),
+		caption = "Notification Volume",
+	}
+	children[#children + 1] = Trackbar:New {
+		x = COMBO_X,
+		y = offset,
+		width  = COMBO_WIDTH,
+		height = 30,
+		value  = Configuration.menuNotificationVolume or 0.5,
+		min    = 0,
+		max    = 1,
+		step   = 0.02,
+		OnChange = {
+			function(obj, value)
+				if freezeSettings then
+					return
+				end
+				Configuration:SetConfigValue("menuNotificationVolume", value)
+			end
+		}
+	}
+	
+	offset = offset + ITEM_OFFSET
+	children[#children + 1] = Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(2),
+		caption = "Chat Font Size",
+	}
+	children[#children + 1] = Trackbar:New {
+		x = COMBO_X,
+		y = offset,
+		width  = COMBO_WIDTH,
+		height = 30,
+		value  = Configuration.chatFontSize or 16,
+		min    = 12,
+		max    = 20,
+		step   = 1,
+		OnChange = {
+			function(obj, value)
+				if freezeSettings then
+					return
+				end
+				Configuration:SetConfigValue("chatFontSize", value)
+			end
+		}
+	}
+	
 	offset = offset + ITEM_OFFSET
 	local autoLogin = Checkbox:New {
 		x = 20,
@@ -293,9 +384,92 @@ local function GetLobbyTabControls()
 	}
 	
 	offset = offset + ITEM_OFFSET
+	children[#children + 1] = Checkbox:New {
+		x = 20,
+		width = CHECK_WIDTH,
+		y = offset,
+		height = 30,
+		boxalign = "right",
+		boxsize = 20,
+		caption = "Debug for MatchMaker",
+		checked = Configuration.showMatchMakerBattles or false,
+		font = Configuration:GetFont(2),
+		OnChange = {function (obj, newState)
+			Configuration:SetConfigValue("showMatchMakerBattles", newState)
+		end},
+	}
+	
+	offset = offset + ITEM_OFFSET
 	children[#children + 1] = Label:New {
 		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(2),
+		caption = "Server Address",
+	}
+	children[#children + 1] = EditBox:New {
+		x = COMBO_X,
 		y = offset,
+		width = COMBO_WIDTH,
+		height = 30,
+		text = Configuration.serverAddress,
+		font = Configuration:GetFont(2),
+		OnFocusUpdate = {
+			function (obj)
+				if obj.focused then
+					return
+				end
+				
+				Configuration.serverAddress = obj.text
+				obj:SetText(Configuration.serverAddress)
+			end
+		}
+	}
+	
+	offset = offset + ITEM_OFFSET
+	children[#children + 1] = Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(2),
+		caption = "Server Port",
+	}
+	children[#children + 1] = EditBox:New {
+		x = COMBO_X,
+		y = offset,
+		width = COMBO_WIDTH,
+		height = 30,
+		text = tostring(Configuration.serverPort),
+		font = Configuration:GetFont(2),
+		OnFocusUpdate = {
+			function (obj)
+				if obj.focused then
+					return
+				end
+				
+				local newValue = tonumber(obj.text)
+				
+				if not newValue then
+					obj:SetText(tostring(Configuration.serverPort))
+					return
+				end
+				
+				Configuration.serverPort = math.floor(0.5 + math.max(0, newValue))
+				obj:SetText(tostring(Configuration.serverPort))
+			end
+		}
+	}
+	
+	offset = offset + ITEM_OFFSET
+	children[#children + 1] = Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
 		width = 90,
 		height = 30,
 		valign = "top",
@@ -355,6 +529,7 @@ end
 -- Game Settings
 
 local settingsComboBoxes = {}
+local settingsUpdateFunction = {}
 
 local function MakePresetsControl(settingPresets, offset)
 	local Configuration = WG.Chobby.Configuration
@@ -362,14 +537,14 @@ local function MakePresetsControl(settingPresets, offset)
 	local presetLabel = Label:New {
 		name = "presetLabel",
 		x = 20,
-		y = offset + 10,
+		y = offset + TEXT_OFFSET,
 		width = 90,
 		height = 40,
 		valign = "top",
 		align = "left",
 		parent = window,
 		font = Configuration:GetFont(2),
-		caption = "Presets",
+		caption = "Preset:",
 	}
     
 	local useCustomSettings = true
@@ -379,9 +554,9 @@ local function MakePresetsControl(settingPresets, offset)
 		local button = Button:New {
 			name = caption,
 			x = 80*x,
-			y = 45*y,
+			y = ITEM_OFFSET*y,
 			width = 75,
-			height = 40,
+			height = 30,
 			caption = caption,
 			font = Configuration:GetFont(2),
 			customSettings = not settings,
@@ -392,6 +567,10 @@ local function MakePresetsControl(settingPresets, offset)
 							local comboBox = settingsComboBoxes[key]
 							if comboBox then
 								comboBox:Select(value)
+							end
+							local updateFunction = settingsUpdateFunction[key]
+							if updateFunction then
+								updateFunction(value)
 							end
 						end
 					end
@@ -409,7 +588,7 @@ local function MakePresetsControl(settingPresets, offset)
     
 		settingsPresetControls[#settingsPresetControls + 1] = button
 		if settings then
-			if Spring.Utilities.TableEqual(settings, Configuration.settingsMenuValues) then
+			if Spring.Utilities.TableSubsetEquals(settings, Configuration.settingsMenuValues) then
 				useCustomSettings = false
 				ButtonUtilities.SetButtonSelected(button)
 			end
@@ -419,24 +598,30 @@ local function MakePresetsControl(settingPresets, offset)
 		return button
 	end
     
+	local x = 0
+	local y = 0
+	local settingsButtons = {}
+	for i = 1, #settingPresets do
+		settingsButtons[#settingsButtons + 1] = SettingsButton(x, y, settingPresets[i].name, settingPresets[i].settings)
+		x = x + 1
+		if x > 2 then
+			x = 0
+			y = y + 1
+		end
+	end
+	
+	local customSettingsButton = SettingsButton(x, y, "Custom")
+	settingsButtons[#settingsButtons + 1] = customSettingsButton
+	
 	local settingsHolder = Control:New {
 		name = "settingsHolder",
 		x = COMBO_X,
 		y = offset,
 		width = COMBO_WIDTH,
-		height = 120,
+		height = ITEM_OFFSET*(y + 1),
 		padding = {0, 0, 0, 0},
-		children = {
-			SettingsButton(0, 0, "Minimal", settingPresets.Minimal),
-			SettingsButton(1, 0, "Low",     settingPresets.Low),
-			SettingsButton(2, 0, "Medium",  settingPresets.Medium),
-			SettingsButton(0, 1, "High",    settingPresets.High),
-			SettingsButton(1, 1, "Ultra",   settingPresets.Ultra),
-		}
+		children = settingsButtons
 	}
-    
-	local customSettingsButton = SettingsButton(2, 1,  "Custom")
-	settingsHolder:AddChild(customSettingsButton)
 	
 	local function EnableCustomSettings()
 		ButtonUtilities.SetButtonSelected(customSettingsButton)
@@ -448,7 +633,7 @@ local function MakePresetsControl(settingPresets, offset)
 		end
 	end
 	
-	return presetLabel, settingsHolder, EnableCustomSettings, offset + ITEM_OFFSET*2 + 20
+	return presetLabel, settingsHolder, EnableCustomSettings, offset + ITEM_OFFSET*(y + 1)
 end
 
 local function ProcessScreenSizeOption(data, offset)
@@ -459,7 +644,7 @@ local function ProcessScreenSizeOption(data, offset)
 	local label = Label:New {
 		name = data.name .. "_label",
 		x = 20,
-		y = offset,
+		y = offset + TEXT_OFFSET,
 		width = 350,
 		height = 30,
 		valign = "top",
@@ -499,13 +684,13 @@ local function ProcessScreenSizeOption(data, offset)
 	return label, list, offset + ITEM_OFFSET
 end
 
-local function ProcessSettingsOption(data, offset, customSettingsSwitch)
+local function ProcessSettingsOption(data, offset, defaults, customSettingsSwitch)
 	local Configuration = WG.Chobby.Configuration
 	
 	local label = Label:New {
 		name = data.name .. "_label",
 		x = 20,
-		y = offset,
+		y = offset + TEXT_OFFSET,
 		width = 350,
 		height = 30,
 		valign = "top",
@@ -516,7 +701,7 @@ local function ProcessSettingsOption(data, offset, customSettingsSwitch)
 	}
 	
 	local defaultItem = 1
-	local defaultName = Configuration.settingsMenuValues[data.name]
+	local defaultName = Configuration.settingsMenuValues[data.name] or defaults[data.name]
 	
 	local items = {}
 	for i = 1, #data.options do
@@ -526,6 +711,8 @@ local function ProcessSettingsOption(data, offset, customSettingsSwitch)
 			defaultItem = i
 		end
 	end
+	
+	local freezeSettings = true
 	
 	settingsComboBoxes[data.name] = ComboBox:New {
 		name = data.name .. "_combo",
@@ -539,6 +726,10 @@ local function ProcessSettingsOption(data, offset, customSettingsSwitch)
 		selected = defaultItem,
 		OnSelect = {
 			function (obj, num)
+				if freezeSettings then
+					return freezeSettings
+				end
+			
 				local selectedData = data.options[num]
 				Configuration.settingsMenuValues[data.name] = selectedData.name
 				
@@ -562,12 +753,79 @@ local function ProcessSettingsOption(data, offset, customSettingsSwitch)
 		}
 	}
 	
+	freezeSettings = false
+	
 	return label, settingsComboBoxes[data.name], offset + ITEM_OFFSET
 end
 
-local function PopulateTab(settingPresets, settingOptions)
+local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitch)
+	local Configuration = WG.Chobby.Configuration
+	
+	local label = Label:New {
+		name = data.name .. "_label",
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 350,
+		height = 30,
+		valign = "top",
+		align = "left",
+		caption = data.humanName,
+		font = Configuration:GetFont(2),
+		tooltip = data.desc,
+	}
+	
+	local function SetEditboxValue(obj, newValue)
+		newValue = tonumber(newValue)
+		
+		if not newValue then
+			obj:SetText(tostring(Configuration.settingsMenuValues[data.name]))
+			return
+		end
+		
+		if customSettingsSwitch then
+			customSettingsSwitch()
+		end
+		
+		local newValue = math.floor(0.5 + math.max(data.minValue, math.min(data.maxValue, newValue)))
+		local springValue = data.springConversion(newValue)
+		Configuration.settingsMenuValues[data.name] = newValue
+		Configuration.game_settings[data.applyName] = springValue
+		SetSpringsettingsValue(data.applyName, springValue)
+		
+		obj:SetText(tostring(newValue))
+	end
+	
+	local freezeSettings = true
+	
+	local numberInput = EditBox:New {
+		x = COMBO_X,
+		y = offset,
+		width = COMBO_WIDTH,
+		height = 30,
+		text = tostring(Configuration.settingsMenuValues[data.name] or defaults[data.name]),
+		font = Configuration:GetFont(2),
+		OnFocusUpdate = {
+			function (obj)
+				if obj.focused or freezeSettings then
+					return
+				end
+				SetEditboxValue(obj, obj.text)
+			end
+		}
+	}
+	
+	freezeSettings = false
+	
+	settingsUpdateFunction[data.name] = function (newValue)
+		SetEditboxValue(numberInput, newValue)
+	end
+
+	return label, numberInput, offset + ITEM_OFFSET
+end
+
+local function PopulateTab(settingPresets, settingOptions, settingsDefaults)
 	local children = {}
-	local offset = 20
+	local offset = ITEM_OFFSET
 	local customSettingsSwitch
 	local label, list
 	
@@ -581,8 +839,10 @@ local function PopulateTab(settingPresets, settingOptions)
 		local data = settingOptions[i]
 		if data.displayModeToggle then
 			label, list, offset = ProcessScreenSizeOption(data, offset)
+		elseif data.isNumberSetting then
+			label, list, offset = ProcessSettingsNumber(data, offset, settingsDefaults, customSettingsSwitch)
 		else
-			label, list, offset = ProcessSettingsOption(data, offset, customSettingsSwitch)
+			label, list, offset = ProcessSettingsOption(data, offset, settingsDefaults, customSettingsSwitch)
 		end
 		children[#children + 1] = label
 		children[#children + 1] = list
@@ -615,7 +875,7 @@ local function InitializeControls(window)
 			name = data.name,
 			caption = data.name,
 			font = WG.Chobby.Configuration:GetFont(3),
-			children = PopulateTab(data.presets, data.settings)
+			children = PopulateTab(data.presets, data.settings, settingsDefaults)
 		}
 	end
 	
@@ -646,64 +906,6 @@ local function InitializeControls(window)
 			tabPanel.tabBar
 		}
 	}
-	
-	--offset = offset + 60
-	--Label:New {
-	--	x = 40,
-	--	y = offset,
-	--	width = COMBO_WIDTH,
-	--	height = 30,
-	--	parent = window,
-	--	font = Configuration:GetFont(4),
-	--	caption = "Game",
-	--}
-	--offset = offset + 20
-
-	
-	--
-	--offset = offset + ITEM_OFFSET
-	--Label:New {
-	--	x = 60,
-	--	y = offset,
-	--	width = 90,
-	--	height = 25,
-	--	valign = "top",
-	--	align = "left",
-	--	parent = window,
-	--	font = Configuration:GetFont(2),
-	--	caption = "Display",
-	--}
-	--ComboBox:New {
-	--	x = COMBO_X,
-	--	y = offset + 2,
-	--	width = COMBO_WIDTH,
-	--	height = 26,
-	--	parent = window,
-	--	items = {"Fullscreen Window", "Windowed", "Fullscreen"},
-	--	font = Configuration:GetFont(2),
-	--	itemFontSize = Configuration:GetFont(2).size,
-	--	selected = Configuration.game_fullscreen or battleStartDisplay,
-	--	OnSelect = {
-	--		function (obj)
-	--			if freezeSettings then
-	--				return
-	--			end
-    --
-	--			if Spring.GetGameName() ~= "" then
-	--				SetLobbyFullscreenMode(obj.selected)
-	--			end
-	--			
-	--			battleStartDisplay = obj.selected
-	--			Configuration.game_fullscreen = obj.selected
-	--		end
-	--	},
-	--}
-
-
-
-    --
-	--freezeSettings = false
-
 end
 
 --------------------------------------------------------------------------------

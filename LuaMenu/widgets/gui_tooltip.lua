@@ -10,8 +10,6 @@ function widget:GetInfo()
 	}
 end
 
-local mousePosX, mousePosY
-local tipWindow, tipTextDisplay
 
 local spGetGameFrame            = Spring.GetGameFrame
 local spGetMouseState           = Spring.GetMouseState
@@ -36,6 +34,14 @@ local BATTLE_RUNNING     = LUA_DIRNAME .. "images/runningBattle.png"
 local BATTLE_NOT_RUNNING = LUA_DIRNAME .. "images/nothing.png"
 
 local PASSWORD_EXPLAINATION = "Battle requires a password to join."
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+-- Variables
+
+local mousePosX, mousePosY
+local tipWindow, tipTextDisplay
+local tooltipOverride = nil
 
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
@@ -88,56 +94,6 @@ end
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
 -- Specific tooltip type utilities
-
-local function GetTimeToPast(pastTimeString)
-	-- Example: 2016-07-21T14:49:00.4731696Z
-	local pastTime = {
-		string.sub(pastTimeString, 18, 19),
-		string.sub(pastTimeString, 15, 16),
-		string.sub(pastTimeString, 12, 13),
-		string.sub(pastTimeString, 9, 10),
-		--string.sub(pastTimeString, 6, 7),
-		--string.sub(pastTimeString, 0, 4),
-	}
-
-	for i = 1, #pastTime do
-		pastTime[i] = tonumber(pastTime[i])
-		if not pastTime[i] then
-			return
-		end
-	end
-
-	local currentTime = {
-		tonumber(os.date("!%S")),
-		tonumber(os.date("!%M")),
-		tonumber(os.date("!%H")),
-		tonumber(os.date("!%d")),
-		--tonumber(os.date("!%m")),
-		--tonumber(os.date("!%Y")),
-	}
-
-	local pastSeconds = pastTime[1] + 60*(pastTime[2] + 24*pastTime[3])
-	local currentSeconds = currentTime[1] + 60*(currentTime[2] + 24*currentTime[3])
-	if currentTime[4] ~= pastTime[4] then
-		-- Always assume that the past time is one day behind.
-		currentSeconds = currentSeconds + 86400
-	end
-
-	local distanceSeconds = currentSeconds - pastSeconds
-	local hours = math.floor(distanceSeconds/3600)
-	local minutes = math.floor(distanceSeconds/60)%60
-	local seconds = math.floor(distanceSeconds)%60
-
-	local timeText = ""
-	if hours > 0 then
-		timeText = timeText .. hours .. "h "
-	end
-	if hours > 0 or minutes > 0 then
-		timeText = timeText .. minutes .. "m "
-	end
-
-	return timeText .. seconds .. "s"
-end
 
 local function GetTooltipLine(parent, hasImage, fontSize, xOffset)
 	local textDisplay, imageDisplay
@@ -472,7 +428,7 @@ local function GetBattleTooltip(battleID, battle)
 		end
 		battleTooltip.inGameSince.Update(
 			offset,
-			"Running for " .. GetTimeToPast(battle.runningSince),
+			"Running for " .. Spring.Utilities.GetTimeToPast(battle.runningSince, true),
 			IMAGE_INGAME
 		)
 		offset = offset + 20
@@ -685,7 +641,7 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 		end
 		userTooltip.inGameSince.Update(
 			offset,
-			"In game for " .. GetTimeToPast(userInfo.inGameSince),
+			"In game for " .. Spring.Utilities.GetTimeToPast(userInfo.inGameSince, true),
 			IMAGE_INGAME
 		)
 		offset = offset + 20
@@ -700,7 +656,7 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 		end
 		userTooltip.awaySince.Update(
 			offset,
-			"Idle for " .. GetTimeToPast(userInfo.awaySince),
+			"Idle for " .. Spring.Utilities.GetTimeToPast(userInfo.awaySince, true),
 			IMAGE_AFK
 		)
 		offset = offset + 20
@@ -776,6 +732,9 @@ end
 -- Tooltip maintence
 
 local function GetTooltip()
+	if tooltipOverride then
+		return tooltipOverride
+	end
 	if screen0.currentTooltip then -- this gives chili absolute priority, otherwise TraceSreenRay() would ignore the fact ChiliUI is underneath the mouse
 		return screen0.currentTooltip
 	end
@@ -808,7 +767,7 @@ local function SetTooltipPos()
 	y = screenHeight - y -- Spring y is from the bottom, chili is from the top
 
 	-- Making sure the tooltip is within the boundaries of the screen
-	y = (y + height > screenHeight) and (y - height) or (y + 20)
+	y = ((y + height > screenHeight) and (y > height) and (y - height)) or (y + 20)
 	x = (x + width > screenWidth) and (screenWidth - width) or x
 
 	tipWindow:SetPos(x, y, width, height)
@@ -857,19 +816,12 @@ local function UpdateTooltip(inputText)
 	end
 end
 
---------------------------------------------------------------------------
---------------------------------------------------------------------------
--- Widget callins
 local currentTooltipText = false
-
-function widget:Update()
-	EvilHax()
-
-	local text = GetTooltip()
-	if text then
-		if currentTooltipText ~= text then
-			currentTooltipText = text
-			UpdateTooltip(text)
+local function CheckTooltipUpdate(newText)
+	if newText then
+		if currentTooltipText ~= newText then
+			currentTooltipText = newText
+			UpdateTooltip(newText)
 		end
 		SetTooltipPos()
 	else
@@ -880,11 +832,40 @@ function widget:Update()
 	end
 end
 
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+-- External Functions
+
+local TooltipHandler = {}
+
+function TooltipHandler.TooltipOverrideClear()
+	tooltipOverride = nil
+	CheckTooltipUpdate(GetTooltip())
+end
+
+function TooltipHandler.TooltipOverride(newText, overrideTime)
+	tooltipOverride = newText
+	CheckTooltipUpdate(tooltipOverride)
+	if overrideTime then
+		WG.Delay(TooltipHandler.TooltipOverrideClear, overrideTime)
+	end
+end
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+-- Widget callins
+
+function widget:Update()
+	EvilHax()
+	CheckTooltipUpdate(GetTooltip())
+end
+
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
 	InitWindow()
+	WG.TooltipHandler = TooltipHandler
 end
 
 function widget:Shutdown()

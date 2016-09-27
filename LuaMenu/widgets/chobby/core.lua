@@ -20,6 +20,7 @@ local includes = {
 
 	-- battle
 	"components/battle/battle_list_window.lua",
+	"components/battle/battle_watch_list_window.lua",
 	-- queue
 	"components/queue/queue_list_window.lua",
 	"components/queue/queue_window.lua",
@@ -62,6 +63,10 @@ function Chobby:_Initialize()
 		WG.Delay(function()
 			lobby:AddListener("OnJoinBattle", 
 				function(listener, battleID)
+					local battle = lobby:GetBattle(battleID)
+					if not WG.Chobby.Configuration.showMatchMakerBattles and battle and battle.isMatchMaker then
+						return
+					end
 					Spring.Echo("Showing battle with ID", battleID)
 					WG.BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
 				end
@@ -80,6 +85,19 @@ function Chobby:_Initialize()
 			)
 		end, 0.001)
 	end)
+	self:WrapCall(function()
+		WG.Delay(function()
+			lobby:AddListener("OnConnect", 
+				function(listener, _, engineName)
+					if engineName and not WG.Chobby.Configuration:IsValidEngineVersion(engineName) then
+						WG.Chobby.InformationPopup("Wrong Spring engine version. The required version is '" .. engineName .. "', your version is '" .. Game.version .. "'.", 420, 260)
+					end
+				end
+			)
+		end, 0.001)
+	end)
+	
+	
 end
 
 function Chobby:GetRegisteredComponents()

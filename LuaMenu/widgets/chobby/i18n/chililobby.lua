@@ -15,7 +15,7 @@ return {
 		-- console
 		type_here_to_chat = "Type here to chat. Press enter to send.",
 		-- login_window
-		connect_to_spring_server = 'Connect to the Spring lobby server',
+		connect_to_spring_server = 'Connect to the lobby server',
 		username = 'Username',
 		password = 'Password',
 		login_noun = 'Login',
@@ -67,6 +67,7 @@ return {
 		play_custom_multiplayer_game = "Play a custom multiplayer game",
 		queues = "Queues",
 		custom_games = "Custom games",
+		spectate_running_games = "Select a game to watch",
 		download = "Download",
 		downloads = "Downloads",
 		friend_list = "Friend list",
@@ -83,6 +84,7 @@ return {
 		spectate = "Spectate",
 		spectating = "Spectating",
 		play = "Play",
+		watch = "Watch",
 		playing = "Playing",
 		pick_map = "Change Map",
 		add_team = "Add Team",
