@@ -71,7 +71,6 @@ local function SocketConnect(host, port)
 		return false
 	end
 
-	OpenFolder("c:\\temp")
 	return true
 end
 
