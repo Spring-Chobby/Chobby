@@ -757,7 +757,10 @@ local function ProcessSettingsOption(data, offset, defaults, customSettingsSwitc
 					settingsFile:write(sourceFile)
 					settingsFile:close()
 				else
-					local applyData = selectedData.apply
+					local applyData = selectedData.apply or (selectedData.applyFunction and selectedData.applyFunction())
+					if not applyData then
+						return
+					end
 					for applyName, value in pairs(applyData) do
 						Configuration.game_settings[applyName] = value
 						SetSpringsettingsValue(applyName, value)
@@ -971,6 +974,14 @@ local function DelayedInitialize()
 	lobbyFullscreen = Configuration.lobby_fullscreen or 1
 end
 
+function widget:ActivateMenu()
+	local gameSettings = WG.Chobby.Configuration.game_settings
+	
+	for key, value in pairs(gameSettings) do
+		SetSpringsettingsValue(key, value)
+	end
+end
+
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
@@ -1004,7 +1015,6 @@ function widget:Initialize()
 			gameSettings.YResolution = screenY
 			gameSettings.Fullscreen = 1
 		end
-
 
 		for key, value in pairs(gameSettings) do
 			SetSpringsettingsValue(key, value)
