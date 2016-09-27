@@ -22,7 +22,7 @@ local fullscreen = 0
 local battleStartDisplay = 1
 local lobbyFullscreen = 1
 
-local FUDGE = 7
+local FUDGE = 0
 
 local currentMode = false
 
@@ -57,6 +57,15 @@ local function SetSpringsettingsValue(key, value)
 	end
 end
 
+local function ToggleFullscreenOff()
+	Spring.SetConfigInt("Fullscreen", 0, false)
+end
+
+local function ToggleFullscreen()
+	Spring.SetConfigInt("Fullscreen", 1, false)
+	Spring.SetConfigInt("Fullscreen", 0, false)
+end
+
 local function SetLobbyFullscreenMode(mode)
 	if mode == currentMode then
 		return
@@ -66,13 +75,17 @@ local function SetLobbyFullscreenMode(mode)
 	local screenX, screenY = Spring.GetScreenGeometry()
 	Spring.Echo("screenX, screenY", screenX, screenY)
 	if mode == 1 then
-		--Spring.SetConfigInt("Fullscreen", 1) -- Required to remove FUDGE
+		-- Required to remove FUDGE
+		Spring.SetConfigInt("Fullscreen", 1)
+		
 		Spring.SetConfigInt("XResolutionWindowed", screenX - FUDGE*2, false)
 		Spring.SetConfigInt("YResolutionWindowed", screenY - FUDGE*2, false)
 		Spring.SetConfigInt("WindowPosX", FUDGE, false)
 		Spring.SetConfigInt("WindowPosY", FUDGE, false)
 		Spring.SetConfigInt("WindowBorderless", 1, false)
 		Spring.SetConfigInt("Fullscreen", 0, false)
+		
+		WG.Delay(ToggleFullscreen, 0.1)
 	elseif mode == 2 then
 		local winSizeX, winSizeY, winPosX, winPosY = Spring.GetWindowGeometry()
 		winPosY = screenY - winPosY - winSizeY
