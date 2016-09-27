@@ -32,7 +32,9 @@ end
 -- callin functions
 --------------------
 
-commands["Message"] = Message
+
+
+--commands["Message"] = Message
 
 
 
@@ -42,7 +44,11 @@ commands["Message"] = Message
 
 -- sends command to wrapper
 function SendCommand(cmdName, args) 
-	client:send(cmdName .. " " ..json.encode(args).."\n")
+	if (args == nil) then
+		client:send(cmdName .. " {}\n")
+	else
+		client:send(cmdName .. " " ..json.encode(args).."\n")
+	end
 end
 
 
@@ -55,6 +61,12 @@ end
 -- opens folder
 function OpenFolder(folder) 
 	SendCommand("OpenFolder", {Folder = folder})
+end
+
+
+-- opens folder
+function Restart() 
+	SendCommand("Restart", nil)
 end
 
 
@@ -82,8 +94,6 @@ function widget:Initialize()
     local port = VFS.LoadFile("chobby_wrapper_port.txt"); -- get wrapper port from VFS file
     Spring.Log("Chobby", LOG.NOTICE, "Using wrapper port: "..port);
     SocketConnect("127.0.0.1", port)	
-	
-	SendCommand("Message", {Text = "test123"})
 end
 
 -- pocesses raw string line and executes command
