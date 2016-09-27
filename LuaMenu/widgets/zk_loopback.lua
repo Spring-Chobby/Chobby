@@ -32,9 +32,11 @@ end
 -- callin functions
 --------------------
 
+--function Example(args)
+--	Echo(args.Message)
+--end
 
-
---commands["Message"] = Message
+--commands["Example"] = Example
 
 
 
@@ -67,6 +69,10 @@ end
 -- opens folder
 function Restart() 
 	SendCommand("Restart", nil)
+end
+
+function Alert(message)
+	SendCommand("Alert", {Message= message})
 end
 
 
