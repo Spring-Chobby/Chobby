@@ -1137,6 +1137,10 @@ function Lobby:GetQueues()
 	return ShallowCopy(self.queues)
 end
 
+function Lobby:GetJoinedQueues()
+	return ShallowCopy(self.joinedQueues)
+end
+
 -- team
 function Lobby:GetTeam()
 	return self.team

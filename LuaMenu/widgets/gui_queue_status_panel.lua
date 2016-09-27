@@ -444,6 +444,29 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Disable matchmaker while loading
+local savedQueues
+
+local function SaveQueues()
+	local lobby = WG.LibLobby.lobby
+	savedQueues = lobby:GetJoinedQueues()
+	lobby:LeaveMatchMakingAll()
+end
+
+function widget:ActivateGame()
+	if not savedQueues then
+		return
+	end
+	
+	for queueName, _ in pairs(savedQueues) do
+		WG.LibLobby.lobby:JoinMatchMaking(queueName)
+	end
+	
+	savedQueues = nil
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- External functions
 
 local QueueStatusPanel = {}
@@ -543,6 +566,7 @@ function QueueStatusPanel.GetControl()
 	end
 	
 	local function OnBattleAboutToStart()
+		SaveQueues()
 		-- If the battle is starting while popup is active then assume success.
 		if not readyCheckPopup then
 			return
@@ -554,6 +578,8 @@ function QueueStatusPanel.GetControl()
 	lobby:AddListener("OnMatchMakerReadyUpdate", OnMatchMakerReadyUpdate)
 	lobby:AddListener("OnMatchMakerReadyResult", OnMatchMakerReadyResult)
 	lobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
+
+	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", SaveQueues)
 	
 	return fakeQueuePanel
 end
