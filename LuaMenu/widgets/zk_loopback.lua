@@ -29,23 +29,37 @@ local function Echo(stuff)
 end
 
 -----------------------------------------------------
+-- callin functions
+--------------------
 
--- example function
-function Message(args) 
-	Echo(args.Text)
-end
 commands["Message"] = Message
 
 
 
 -----------------------------------------------------
+-- callout functions
+---------------------
 
 -- sends command to wrapper
 function SendCommand(cmdName, args) 
 	client:send(cmdName .. " " ..json.encode(args).."\n")
 end
 
+
+-- opens URL
+function OpenUrl(url) 
+	SendCommand("OpenUrl", {Url = url})
+end
+
+
+-- opens folder
+function OpenFolder(folder) 
+	SendCommand("OpenFolder", {Folder = folder})
+end
+
+
 -----------------------------------------------------
+
 
 
 local function SocketConnect(host, port)
@@ -56,6 +70,8 @@ local function SocketConnect(host, port)
 		Echo("Error in connect wrapper: "..err)
 		return false
 	end
+
+	OpenFolder("c:\\temp")
 	return true
 end
 
