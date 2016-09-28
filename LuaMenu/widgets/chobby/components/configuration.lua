@@ -92,7 +92,7 @@ function Configuration:init()
 	self.menuNotificationVolume = 0.8
 	self.showMatchMakerBattles = false
 	
-	self.chatFontSize = 16
+	self.chatFontSize = 18
 
 	self.font = {
 		[0] = {size = 10, shadow = false},
