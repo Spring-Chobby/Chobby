@@ -71,10 +71,20 @@ function Restart()
 	SendCommand("Restart", nil)
 end
 
+-- notifies user/flashes spring window (message ignored atm)
 function Alert(message)
 	SendCommand("Alert", {Message= message})
 end
 
+-- sets TTS volume
+function TtsVolume(volume) 
+	SendCommand("TtsVolume", {Volume = volume})
+end
+
+-- speaks using TTS, send name of speaker for alternating speaker voices
+function TtsSay(name, text) 
+	SendCommand("TtsSay", {Name = name, Text = text})
+end
 
 -----------------------------------------------------
 
@@ -88,7 +98,6 @@ local function SocketConnect(host, port)
 		Echo("Error in connect wrapper: "..err)
 		return false
 	end
-
 	return true
 end
 
