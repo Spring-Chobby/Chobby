@@ -41,6 +41,7 @@ function Configuration:init()
 	self.loadLocalWidgets = false
 	self.displayBots = false
 	self.displayBadEngines = false
+	self.doNotSetAnySpringSettings = false
 	
 	self.battleTypeToName = {
 		[5] = "cooperative",
@@ -91,6 +92,7 @@ function Configuration:init()
 	self.menuMusicVolume = 0.5
 	self.menuNotificationVolume = 0.8
 	self.showMatchMakerBattles = false
+	self.hideInterface = false
 	
 	self.chatFontSize = 16
 

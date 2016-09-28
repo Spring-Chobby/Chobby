@@ -43,6 +43,9 @@ for _, param in pairs(Spring.GetConfigParams()) do
 end
 
 local function SetSpringsettingsValue(key, value)
+	if WG.Chobby.Configuration.doNotSetAnySpringSettings then
+		return
+	end
 	local configType = configParamTypes[key]
 	if configType == "int" then
 		Spring.SetConfigInt(key, value)
@@ -116,16 +119,36 @@ end
 --------------------------------------------------------------------------------
 -- Lobby Settings
 
+local function AddCheckboxSetting(offset, caption, key, default)
+	local Configuration = WG.Chobby.Configuration
+
+	local control = Checkbox:New {
+		x = 20,
+		width = CHECK_WIDTH,
+		y = offset,
+		height = 30,
+		boxalign = "right",
+		boxsize = 20,
+		caption = caption,
+		checked = Configuration[key] or default,
+		font = Configuration:GetFont(2),
+		OnChange = {function (obj, newState)
+			Configuration:SetConfigValue(key, newState)
+		end},
+	}
+	
+	return control, offset + ITEM_OFFSET
+end
+
 local function GetLobbyTabControls()
 	local freezeSettings = true
 
 	local Configuration = WG.Chobby.Configuration
 
-	local offset = 0
+	local offset = ITEM_OFFSET
 	
 	local children = {}
 
-	offset = offset + ITEM_OFFSET
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -160,8 +183,8 @@ local function GetLobbyTabControls()
 			end
 		},
 	}
-
 	offset = offset + ITEM_OFFSET
+	
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -190,8 +213,8 @@ local function GetLobbyTabControls()
 			end
 		},
 	}
-
 	offset = offset + ITEM_OFFSET
+	
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -220,8 +243,8 @@ local function GetLobbyTabControls()
 			end
 		}
 	}
-	
 	offset = offset + ITEM_OFFSET
+	
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -250,8 +273,8 @@ local function GetLobbyTabControls()
 			end
 		}
 	}
-	
 	offset = offset + ITEM_OFFSET
+	
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -280,8 +303,8 @@ local function GetLobbyTabControls()
 			end
 		}
 	}
-	
 	offset = offset + ITEM_OFFSET
+	
 	local autoLogin = Checkbox:New {
 		x = 20,
 		width = CHECK_WIDTH,
@@ -299,121 +322,17 @@ local function GetLobbyTabControls()
 		end},
 	}
 	children[#children + 1] = autoLogin
-
 	offset = offset + ITEM_OFFSET
-	children[#children + 1] = Checkbox:New {
-		x = 20,
-		width = CHECK_WIDTH,
-		y = offset,
-		height = 30,
-		boxalign = "right",
-		boxsize = 20,
-		caption = i18n("notifyForAllChat"),
-		checked = Configuration.notifyForAllChat or false,
-		font = Configuration:GetFont(2),
-		OnChange = {function (obj, newState)
-			Configuration:SetConfigValue("notifyForAllChat", newState)
-		end},
-	}
 
-	offset = offset + ITEM_OFFSET
-	children[#children + 1] = Checkbox:New {
-		x = 20,
-		width = CHECK_WIDTH,
-		y = offset,
-		height = 30,
-		boxalign = "right",
-		boxsize = 20,
-		caption = i18n("only_featured_maps"),
-		checked = Configuration.onlyShowFeaturedMaps or false,
-		font = Configuration:GetFont(2),
-		OnChange = {function (obj, newState)
-			Configuration:SetConfigValue("onlyShowFeaturedMaps", newState)
-		end},
-	}
-
-	offset = offset + ITEM_OFFSET
-	children[#children + 1] = Checkbox:New {
-		x = 20,
-		width = CHECK_WIDTH,
-		y = offset,
-		height = 30,
-		boxalign = "right",
-		boxsize = 20,
-		caption = i18n("debugMode"),
-		checked = Configuration.debugMode or false,
-		font = Configuration:GetFont(2),
-		OnChange = {function (obj, newState)
-			Configuration:SetConfigValue("debugMode", newState)
-		end},
-	}
-
-	--offset = offset + ITEM_OFFSET
-	--local useSpringRestart = Checkbox:New {
-	--	x = 60,
-	--	width = CHECK_WIDTH,
-	--	y = offset,
-	--	height = 40,
-	--	parent = window,
-	--	boxalign = "right",
-	--	boxsize = 20,
-	--	caption = "Use Spring.Restart          EXPERIMENTAL",
-	--	checked = Configuration.useSpringRestart or false,
-	--	font = Configuration:GetFont(2),
-	--	OnChange = {function (obj, newState)
-	--		Configuration:SetConfigValue("useSpringRestart", newState)
-	--	end},
-	--}
-
-	offset = offset + ITEM_OFFSET
-	children[#children + 1] = Checkbox:New {
-		x = 20,
-		width = CHECK_WIDTH,
-		y = offset,
-		height = 30,
-		boxalign = "right",
-		boxsize = 20,
-		caption = "Show channel bots",
-		checked = Configuration.displayBots or false,
-		font = Configuration:GetFont(2),
-		OnChange = {function (obj, newState)
-			Configuration:SetConfigValue("displayBots", newState)
-		end},
-	}
+	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("notifyForAllChat"), "notifyForAllChat", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("only_featured_maps"), "onlyShowFeaturedMaps", true)
+	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("debugMode"), "debugMode", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, "Show channel bots", "displayBots", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, "Show wrong engines", "displayBadEngines", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, "Debug for MatchMaker", "showMatchMakerBattles", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, "Hide interface", "hideInterface", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, "Neuter Settings", "doNotSetAnySpringSettings", false)
 	
-	offset = offset + ITEM_OFFSET
-	children[#children + 1] = Checkbox:New {
-		x = 20,
-		width = CHECK_WIDTH,
-		y = offset,
-		height = 30,
-		boxalign = "right",
-		boxsize = 20,
-		caption = "Show wrong engines",
-		checked = Configuration.displayBadEngines or false,
-		font = Configuration:GetFont(2),
-		OnChange = {function (obj, newState)
-			Configuration:SetConfigValue("displayBadEngines", newState)
-		end},
-	}
-	
-	offset = offset + ITEM_OFFSET
-	children[#children + 1] = Checkbox:New {
-		x = 20,
-		width = CHECK_WIDTH,
-		y = offset,
-		height = 30,
-		boxalign = "right",
-		boxsize = 20,
-		caption = "Debug for MatchMaker",
-		checked = Configuration.showMatchMakerBattles or false,
-		font = Configuration:GetFont(2),
-		OnChange = {function (obj, newState)
-			Configuration:SetConfigValue("showMatchMakerBattles", newState)
-		end},
-	}
-	
-	offset = offset + ITEM_OFFSET
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -442,8 +361,8 @@ local function GetLobbyTabControls()
 			end
 		}
 	}
-	
 	offset = offset + ITEM_OFFSET
+	
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -479,8 +398,8 @@ local function GetLobbyTabControls()
 			end
 		}
 	}
-	
 	offset = offset + ITEM_OFFSET
+	
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -521,6 +440,7 @@ local function GetLobbyTabControls()
 			end
 		},
 	}
+	offset = offset + ITEM_OFFSET
 	
 	local function onConfigurationChange(listener, key, value)
 		if freezeSettings then
@@ -977,7 +897,8 @@ end
 function widget:ActivateMenu()
 	local gameSettings = WG.Chobby.Configuration.game_settings
 	
-	for key, value in pairs(gameSettings) do
+	local gameSettingsOverride = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings3.lua")
+	for key, value in pairs(gameSettingsOverride) do
 		SetSpringsettingsValue(key, value)
 	end
 end
@@ -1016,7 +937,8 @@ function widget:Initialize()
 			gameSettings.Fullscreen = 1
 		end
 
-		for key, value in pairs(gameSettings) do
+		local gameSettingsOverride = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings3.lua")
+		for key, value in pairs(gameSettingsOverride) do
 			SetSpringsettingsValue(key, value)
 		end
 	end
