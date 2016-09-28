@@ -69,6 +69,10 @@ end
 --------------------------------------------------------------------------------
 
 function widget:DrawScreen()
+	if WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.hideInterface then
+		return
+	end
+
 	gl.Color(1,1,1,1)
 	if (not screen0:IsEmpty()) then
 		gl.PushMatrix()
@@ -83,6 +87,10 @@ end
 
 
 function widget:DrawLoadScreen()
+	if WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.hideInterface then
+		return
+	end
+	
 	gl.Color(1,1,1,1)
 	if (not screen0:IsEmpty()) then
 		gl.PushMatrix()
@@ -98,6 +106,10 @@ end
 
 
 function widget:TweakDrawScreen()
+	if WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.hideInterface then
+		return
+	end
+	
 	gl.Color(1,1,1,1)
 	if (not screen0:IsEmpty()) then
 		gl.PushMatrix()
@@ -112,6 +124,10 @@ end
 
 
 function widget:DrawGenesis()
+	if WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.hideInterface then
+		return
+	end
+	
 	gl.Color(1,1,1,1)
 	tf.Update()
 	th.Update()
