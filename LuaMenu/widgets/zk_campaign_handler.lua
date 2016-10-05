@@ -534,6 +534,8 @@ local function UpdateCampaignDetailsPanel(campaignID)
 	end
 	newGameCampaignDetails.titleLabel:SetCaption(def.name)
 	newGameCampaignDetails.authorLabel:SetCaption("by " .. def.author)
+	newGameCampaignDetails.versionLabel:SetCaption("Version: " .. (def.version or "1"))
+	newGameCampaignDetails.lengthLabel:SetCaption("Length: " .. (def.length or "unknown"))
 	-- make sure text box is right width
 	newGameCampaignDetails.descTextBox.width = newGameCampaignDetails.stackPanel.width - newGameCampaignDetails.stackPanel.padding[1] - newGameCampaignDetails.stackPanel.padding[3]
 	newGameCampaignDetails.descTextBox:SetText(def.description)
@@ -1273,6 +1275,16 @@ local function InitializeNewGameControls()
 		parent = newGameCampaignDetails.stackPanel,
 		caption = "",
 		font = { size = 20 },
+	}
+	newGameCampaignDetails.versionLabel = Label:New {
+		parent = newGameCampaignDetails.stackPanel,
+		caption = "",
+		font = { size = 18 },
+	}
+	newGameCampaignDetails.lengthLabel = Label:New {
+		parent = newGameCampaignDetails.stackPanel,
+		caption = "",
+		font = { size = 18 },
 	}
 	newGameCampaignDetails.descTextBox = TextBox:New {
 		parent = newGameCampaignDetails.stackPanel,
