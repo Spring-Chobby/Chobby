@@ -60,7 +60,7 @@ local function CompareUsers(userName, otherName)
 		return userData.isAdmin
 	end
 	
-	return userName < otherName
+	return string.lower(userName) < string.lower(otherName)
 end
 
 function UserListPanel:Update()
