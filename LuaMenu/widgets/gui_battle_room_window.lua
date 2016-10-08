@@ -1269,7 +1269,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 
 	local function OnUpdateBattleInfo(listener, updatedBattleID, spectatorCount, locked, mapHash, mapName, 
 			engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker)
-		if battleMode then
+		if battleMode and battleID == updatedBattleID then
 			battleTitle = i18n(WG.Chobby.Configuration.battleTypeToName[battleMode]) .. ": " .. rawBattleTitle
 			lblBattleTitle:SetCaption(battleTitle)
 			
