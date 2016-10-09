@@ -313,6 +313,10 @@ local function LoadCampaign(campaignID)
 		if def.startFunction then
 			def.startFunction()
 		end
+		
+		if WG.MusicHandler then
+			WG.MusicHandler.StopTrack()
+		end
 	end)
 	if (not success) then
 		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error loading campaign " .. campaignID .. ": " .. err)

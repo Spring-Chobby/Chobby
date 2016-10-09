@@ -102,6 +102,10 @@ function widget:Update()
 		return
 	end
 	
+	if not playingTrack then
+		return	
+	end
+	
 	local playedTime, totalTime = Spring.GetSoundStreamTime()
 	playedTime = math.floor(playedTime)
 	totalTime = math.floor(totalTime)
