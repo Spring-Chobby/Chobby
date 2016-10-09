@@ -297,6 +297,7 @@ end
 local function StartScript(scriptName)
   if mainWindow.hidden then
     mainWindow:SetVisibility(true)
+    mainWindow:SetLayer(1)
   end
   ResetMainLayers()
   data.scriptCallstack = {{scriptName, 1}}
