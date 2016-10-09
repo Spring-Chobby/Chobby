@@ -269,6 +269,15 @@ local function LoadCodexEntries()
 	UpdateCodexButtonState()
 end
 
+local function GetGameIfNeeded(game)
+	if not game then return false end
+	
+	if not VFS.HasArchive(game) then
+		VFS.DownloadArchive(game, "game")
+		return true
+	end
+	return false
+end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Called on Initialize
@@ -309,6 +318,7 @@ local function LoadCampaign(campaignID)
 		for i=1,#planetDefs do
 			planetDefsByID[planetDefs[i].id] = planetDefs[i]	
 		end
+		
 		
 		if def.startFunction then
 			def.startFunction()
@@ -352,24 +362,18 @@ local function CleanupAfterMission()
 	end
 end
 
-local function GetMissionStartscriptString(missionID)
+local function GetMissionStartscript(missionID)
 	local dir = campaignDefsByID[currentCampaignID].dir
 	local startscript = missionDefs[missionID].startscript
 	startscript = dir .. startscript
-	local scriptString = VFS.LoadFile(startscript)
-	return scriptString
-end
-
-local function GetMapNameFromStartscript(startscript)
-	return string.match(startscript, "MapName%s?=%s?(.-);")
+	local scriptTable = VFS.Include(startscript)
+	return scriptTable
 end
 
 -- Checks if we have the map specified in the mission's startscript, if not download it
-local function GetMapForMissionIfNeeded(missionID, startscriptStr)
-	if not startscriptStr then
-		startscriptStr = GetMissionStartscriptString(missionID)
-	end
-	local map = GetMapNameFromStartscript(startscriptStr)
+local function GetMapForMissionIfNeeded(missionID, startscript)
+	local startscript = startscript or GetMissionStartscript(missionID)
+	local map = startscript["MapName"] or startscript["mapname"]
 	if not VFS.HasArchive(map) then
 		VFS.DownloadArchive(map, "map")
 		requiredMap = map
@@ -378,24 +382,56 @@ local function GetMapForMissionIfNeeded(missionID, startscriptStr)
 	return nil
 end
 
+local function ScriptTXT(script)
+	local string = '[Game]\n{\n\n'
+
+	-- First write Tables
+	for key, value in pairs(script) do
+		if type(value) == 'table' then
+			string = string..'\t['..key..']\n\t{\n'
+			for key, value in pairs(value) do
+				string = string..'\t\t'..key..' = '..value..';\n'
+			end
+			string = string..'\t}\n\n'
+		end
+	end
+
+	-- Then the rest (purely for aesthetics)
+	for key, value in pairs(script) do
+		if type(value) ~= 'table' then
+			string = string..'\t'..key..' = '..value..';\n'
+		end
+	end
+	string = string..'}'
+	return string
+end
+
 local function LaunchMission(missionID, func)
 	local success, err = pcall(function()
 		local dir = campaignDefsByID[currentCampaignID].dir
-		local startscript = missionDefs[missionID].startscript
-		startscript = dir .. startscript
-		local scriptString = VFS.LoadFile(startscript)
+		local startscript = GetMissionStartscript(missionID)
 		--missionArchive = dir .. missionDefs[missionName].archive
 		--VFS.MapArchive(missionArchive)
 		
 		-- check for map
-		local needMap = GetMapForMissionIfNeeded(missionID, scriptString)
+		local needMap = GetMapForMissionIfNeeded(missionID, startscript)
 		if needMap then
 			WG.VisualNovel.scriptFunctions.Exit()
 			WG.Chobby.InformationPopup("You do not have the map " .. needMap .. " required for this mission. It will now be downloaded.")
 			return
 		end
 		
+		-- TODO: check for game
+		local game = campaignDefsByID[currentCampaignID].game
+		if GetGameIfNeeded(game) then
+			WG.VisualNovel.scriptFunctions.Exit()
+			WG.Chobby.InformationPopup("You do not have the game " .. game .. " required to play the campaign. It will now be downloaded.")
+			return	
+		end
+		
 		-- TODO: might want to edit startscript before we run Spring with it
+		local scriptString = ScriptTXT(startscript)
+		
 		WG.LibLobby.localLobby:StartGameFromString(scriptString)
 		runningMission = true
 		missionCompletionFunc = func
