@@ -895,10 +895,17 @@ end
 --------------------------------------------------------------------------------
 -- Widget Interface
 
-local ignoreFirstCall = true
+local firstCall = true
 function widget:ActivateMenu()
-	if ignoreFirstCall then
-		ignoreFirstCall = false
+	if firstCall then
+		local gameSettings = WG.Chobby.Configuration.game_settings
+		
+		local gameSettingsOverride = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings3.lua")
+		for key, value in pairs(gameSettingsOverride) do
+			SetSpringsettingsValue(key, value)
+		end
+		
+		firstCall = false
 		return
 	end
 	if not (WG.Chobby and WG.Chobby.Configuration) then
@@ -913,15 +920,6 @@ local function DelayedInitialize()
 	local Configuration = WG.Chobby.Configuration
 	battleStartDisplay = Configuration.game_fullscreen or 1
 	lobbyFullscreen = Configuration.lobby_fullscreen or 1
-end
-
-function widget:ActivateMenu()
-	local gameSettings = WG.Chobby.Configuration.game_settings
-	
-	local gameSettingsOverride = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings3.lua")
-	for key, value in pairs(gameSettingsOverride) do
-		SetSpringsettingsValue(key, value)
-	end
 end
 
 function widget:Initialize()
