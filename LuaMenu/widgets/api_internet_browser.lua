@@ -21,8 +21,12 @@ local urlPattern = "https?://[%w-_%.%?%.:/%+=&]+"
 local BrowserHandler = {}
 
 function BrowserHandler.OpenUrl(urlString)
-	Spring.SetClipboard(urlString)
-	WG.TooltipHandler.TooltipOverride("URL copied " .. urlString, 1)
+	if WG.WrapperLoopback then
+		WG.WrapperLoopback.OpenUrl(urlString)
+	else
+		Spring.SetClipboard(urlString)
+		WG.TooltipHandler.TooltipOverride("URL copied " .. urlString, 1)
+	end
 end
 
 function BrowserHandler.AddClickableUrls(chatString, onTextClick)

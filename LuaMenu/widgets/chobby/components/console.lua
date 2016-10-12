@@ -331,7 +331,6 @@ function Console:LoadHistory(numLines)
 				else
 					self.tbHistory:AddLine(txt)
 				end
-				Spring.Echo("hahaha", line)
 			end
 		end
 	end

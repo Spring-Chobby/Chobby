@@ -28,6 +28,7 @@ return {
 		spectating_game_status = "Spectating",
 		playing_game_status = "Playing",
 		only_featured_maps = "Only featured maps",
+		download_maps = "Download Maps",
 		--
 		start_download = 'Start download',
 		download_noun = 'Download',

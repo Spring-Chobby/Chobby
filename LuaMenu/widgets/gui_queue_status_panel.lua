@@ -289,6 +289,10 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 		Spring.PlaySoundFile("sounds/matchFound.wav", Configuration.menuNotificationVolume or 1)
 	end
 	
+	if WG.WrapperLoopback then
+		WG.WrapperLoopback.Alert("Match found")
+	end
+	
 	local readyCheckWindow = Window:New {
 		caption = "",
 		name = "readyCheckWindow",
