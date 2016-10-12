@@ -148,7 +148,8 @@ end
 function widget:Update()
 	local readable, writeable, err = socket.select({client}, {client}, 0)
 	if err ~= nil then
-		Echo("Error in select: " .. err)
+		Spring.Echo("Loopback error in select", err)
+		--Echo("Error in select: " .. err)
 	end
 	for _, input in ipairs(readable) do
 		local s, status, str = input:receive('*a') --try to read all data
