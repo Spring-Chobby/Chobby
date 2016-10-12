@@ -106,10 +106,6 @@ end
 
 -- init
 function widget:Initialize()
-	if true then
-		widgetHandler:RemoveWidget()
-		return
-	end
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 	
