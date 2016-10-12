@@ -21,11 +21,15 @@ local urlPattern = "https?://[%w-_%.%?%.:/%+=&]+"
 local BrowserHandler = {}
 
 function BrowserHandler.OpenUrl(urlString)
-	Spring.SetClipboard(urlString)
-	WG.TooltipHandler.TooltipOverride("URL copied " .. urlString, 1)
+	if WG.WrapperLoopback then
+		WG.WrapperLoopback.OpenUrl(urlString)
+	else
+		Spring.SetClipboard(urlString)
+		WG.TooltipHandler.TooltipOverride("URL copied " .. urlString, 1)
+	end
 end
 
-function BrowserHandler.AddClickableUrls(chatString, onTextClick)
+function BrowserHandler.AddClickableUrls(chatString, onTextClick, textTooltip)
 
 	local urlStart, urlEnd = string.find(chatString, "http[^%s]*")
 	--Spring.Echo("URL urlStart, urlEnd", chatString, urlStart, urlEnd)
@@ -48,10 +52,16 @@ function BrowserHandler.AddClickableUrls(chatString, onTextClick)
 			} 
 		}
 		
+		textTooltip[#textTooltip + 1] = {
+			startIndex = urlStart, 
+			endIndex = urlEnd,
+			tooltip = urlString,
+		}
+		
 		urlStart, urlEnd = string.find(chatString, urlPattern, urlEnd)
 	end
 	
-	return onTextClick
+	return onTextClick, textTooltip
 end
 
 --------------------------------------------------------------------------------

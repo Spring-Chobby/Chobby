@@ -118,7 +118,7 @@ function BattleWatchListWindow:AddBattle(battleID)
 	}
 
 	local lblTitle = Label:New {
-		name = "title",
+		name = "lblTitle",
 		x = height + 3,
 		y = 0,
 		right = 0,
@@ -278,6 +278,10 @@ function BattleWatchListWindow:OnUpdateBattleInfo(battleID)
 	if not (VFS.HasArchive(battle.mapName) and VFS.HasArchive(battle.gameName)) then
 		self:RemoveRow(battleID)
 	end
+	
+	-- Resets title and truncates.
+	local lblTitle = items.battleButton:GetChildByName("lblTitle")
+	lblTitle.OnResize[1](lblTitle)
 	
 	local minimapImage = items.battleButton:GetChildByName("minimap"):GetChildByName("minimapImage")
 	minimapImage.file = Configuration:GetMinimapImage(battle.mapName, battle.gameName)

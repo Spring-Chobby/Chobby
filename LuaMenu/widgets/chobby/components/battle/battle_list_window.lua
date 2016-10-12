@@ -147,7 +147,7 @@ function BattleListWindow:AddBattle(battleID, battle)
 	}
 
 	local lblTitle = Label:New {
-		name = "title",
+		name = "lblTitle",
 		x = height + 3,
 		y = 0,
 		right = 0,
@@ -347,9 +347,13 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 		return
 	end
 	
+	local lblTitle = items.battleButton:GetChildByName("lblTitle")
 	local mapCaption = items.battleButton:GetChildByName("mapCaption")
 	local imHaveMap = items.battleButton:GetChildByName("imHaveMap")
 	local minimapImage = items.battleButton:GetChildByName("minimap"):GetChildByName("minimapImage")
+	
+	-- Resets title and truncates.
+	lblTitle.OnResize[1](lblTitle)
 	
 	minimapImage.file = Configuration:GetMinimapImage(battle.mapName, battle.gameName)
 	minimapImage:Invalidate()

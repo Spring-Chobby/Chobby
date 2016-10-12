@@ -145,7 +145,7 @@ local function GetLobbyTabControls()
 
 	local Configuration = WG.Chobby.Configuration
 
-	local offset = ITEM_OFFSET
+	local offset = 5
 	
 	local children = {}
 
@@ -762,7 +762,7 @@ end
 
 local function PopulateTab(settingPresets, settingOptions, settingsDefaults)
 	local children = {}
-	local offset = ITEM_OFFSET
+	local offset = 5
 	local customSettingsSwitch
 	local label, list
 	
@@ -784,7 +784,18 @@ local function PopulateTab(settingPresets, settingOptions, settingsDefaults)
 		children[#children + 1] = label
 		children[#children + 1] = list
 	end
-	return children
+	
+	local listPanel = ScrollPanel:New {
+		x = 5,
+		right = 5,
+		y = 15,
+		bottom = 8,
+		borderColor = {0,0,0,0},
+		horizontalScrollbar = false,
+		children = children
+	}
+	
+	return {listPanel}
 end
 
 --------------------------------------------------------------------------------
@@ -795,12 +806,22 @@ end
 local function InitializeControls(window)
 	window.OnParent = nil
 
+	local lobbySettingsList = ScrollPanel:New {
+		x = 5,
+		right = 5,
+		y = 15,
+		bottom = 8,
+		borderColor = {0,0,0,0},
+		horizontalScrollbar = false,
+		children = GetLobbyTabControls()
+	}
+	
 	local tabs = {
 		{
 			name = "Lobby",
 			caption = "Lobby",
 			font = WG.Chobby.Configuration:GetFont(3),
-			children = GetLobbyTabControls()
+			children = {lobbySettingsList}
 		}
 	}
 	
@@ -874,10 +895,17 @@ end
 --------------------------------------------------------------------------------
 -- Widget Interface
 
-local ignoreFirstCall = true
+local firstCall = true
 function widget:ActivateMenu()
-	if ignoreFirstCall then
-		ignoreFirstCall = false
+	if firstCall then
+		local gameSettings = WG.Chobby.Configuration.game_settings
+		
+		local gameSettingsOverride = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings3.lua")
+		for key, value in pairs(gameSettingsOverride) do
+			SetSpringsettingsValue(key, value)
+		end
+		
+		firstCall = false
 		return
 	end
 	if not (WG.Chobby and WG.Chobby.Configuration) then
@@ -892,15 +920,6 @@ local function DelayedInitialize()
 	local Configuration = WG.Chobby.Configuration
 	battleStartDisplay = Configuration.game_fullscreen or 1
 	lobbyFullscreen = Configuration.lobby_fullscreen or 1
-end
-
-function widget:ActivateMenu()
-	local gameSettings = WG.Chobby.Configuration.game_settings
-	
-	local gameSettingsOverride = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings3.lua")
-	for key, value in pairs(gameSettingsOverride) do
-		SetSpringsettingsValue(key, value)
-	end
 end
 
 function widget:Initialize()

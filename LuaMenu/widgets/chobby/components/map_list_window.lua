@@ -5,6 +5,24 @@ function MapListWindow:init(lobby, gameName, zoomToMap)
 	self:super('init', WG.Chobby.lobbyInterfaceHolder, "Select Map", false, "overlay_window")
 	self.window:SetPos(nil, nil, 500, 700)
 	
+	if WG.WrapperLoopback then
+		self.btnOnlineMaps = Button:New {
+			right = 95,
+			y = 5,
+			width = 180,
+			height = 45,
+			caption = i18n("download_maps"),
+			font = Configuration:GetFont(3),
+			classname = "option_button",
+			parent = self.window,
+			OnClick = {
+				function ()
+					WG.WrapperLoopback.OpenUrl("http://zero-k.info/Maps")
+				end
+			},
+		}
+	end
+	
 	local zoomY
 	local whitelist
 	if Configuration.onlyShowFeaturedMaps then
