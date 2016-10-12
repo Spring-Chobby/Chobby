@@ -122,8 +122,12 @@ local function GetBattleInfoHolder(parent, battleID)
 	}
 	runningImage:BringToFront()
 	imPlayerStatus:BringToFront()
+	
+	local currentSmallMode = false
 
 	function externalFunctions.Resize(smallMode)
+		currentSmallMode = smallMode
+		
 		if smallMode then
 			minimap:SetPos(nil, nil, 33, 33)
 
@@ -155,7 +159,7 @@ local function GetBattleInfoHolder(parent, battleID)
 
 			playersPrefix = PLAYER_PREFIX_BIG
 		end
-		local text = StringUtilities.GetTruncatedStringWithDotDot(battle.title, lblTitle.font, lblTitle.width)
+		local text = StringUtilities.GetTruncatedStringWithDotDot(battle.title, lblTitle.font, (smallMode and 160) or 235)
 		lblTitle:SetCaption(text)
 
 		lblPlayers:SetCaption(playersPrefix .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
@@ -172,9 +176,6 @@ local function GetBattleInfoHolder(parent, battleID)
 			mainControl:Show()
 		end
 
-		local text = StringUtilities.GetTruncatedStringWithDotDot(battle.title, lblTitle.font, lblTitle.width)
-		lblTitle:SetCaption(text)
-
 		minimapImage.file = Configuration:GetMinimapImage(battle.mapName, battle.gameName)
 		minimapImage:Invalidate()
 
@@ -189,8 +190,7 @@ local function GetBattleInfoHolder(parent, battleID)
 		minimapImage.file = Configuration:GetMinimapImage(battle.mapName, battle.gameName)
 		minimapImage:Invalidate()
 
-		local text = StringUtilities.GetTruncatedStringWithDotDot(battle.title, lblTitle.font, lblTitle.width)
-		lblTitle:SetCaption(text)
+		externalFunctions.Resize(currentSmallMode)
 		
 		lblPlayers:SetCaption(playersPrefix .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
 	end
