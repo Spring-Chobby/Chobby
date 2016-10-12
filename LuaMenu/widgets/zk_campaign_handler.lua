@@ -50,7 +50,7 @@ local lastScreenID = "main"
 local startButton
 local newGameCampaignScroll
 local newGameCampaignButtons = {}
-local newGameCampaignDetails = {}	-- panel, stackPanel, titleLabel, authorLabel, descTextBox
+local newGameCampaignDetails = {}	-- panel, stackPanel, titleLabel, authorLabel, versionLabel, lengthLabel, descTextBox
 local intermissionButtonCodex
 local saveScroll, loadScroll, saveDescEdit
 local saveLoadControls = {}	-- {id, container, titleLabel, descTextBox, image (someday), isNew}
@@ -276,12 +276,17 @@ local function LoadCampaignDefs()
 	local success, err = pcall(function()
 		local subdirs = VFS.SubDirs(CAMPAIGN_DIR)
 		for i,subdir in pairs(subdirs) do
-			if VFS.FileExists(subdir .. "campaigninfo.lua") then
-				local def = VFS.Include(subdir .. "campaigninfo.lua")
-				def.dir = subdir
-				def.vnDir = subdir .. (def.vnDir or 'vn')
-				campaignDefs[#campaignDefs+1] = def
-				campaignDefsByID[def.id] = def
+			local success2, err2 = pcall(function()
+				if VFS.FileExists(subdir .. "campaigninfo.lua") then
+					local def = VFS.Include(subdir .. "campaigninfo.lua")
+					def.dir = subdir
+					def.vnDir = subdir .. (def.vnDir or 'vn')
+					campaignDefs[#campaignDefs+1] = def
+					campaignDefsByID[def.id] = def
+				end
+			end)
+			if (not success2) then
+				Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error loading campaign defs: " .. err2)
 			end
 		end
 		table.sort(campaignDefs, function(a, b) return (a.order or 100) < (b.order or 100) end) 
@@ -529,6 +534,8 @@ local function UpdateCampaignDetailsPanel(campaignID)
 	end
 	newGameCampaignDetails.titleLabel:SetCaption(def.name)
 	newGameCampaignDetails.authorLabel:SetCaption("by " .. def.author)
+	newGameCampaignDetails.versionLabel:SetCaption("Version: " .. (def.version or "1"))
+	newGameCampaignDetails.lengthLabel:SetCaption("Length: " .. (def.length or "unknown"))
 	-- make sure text box is right width
 	newGameCampaignDetails.descTextBox.width = newGameCampaignDetails.stackPanel.width - newGameCampaignDetails.stackPanel.padding[1] - newGameCampaignDetails.stackPanel.padding[3]
 	newGameCampaignDetails.descTextBox:SetText(def.description)
@@ -1268,6 +1275,16 @@ local function InitializeNewGameControls()
 		parent = newGameCampaignDetails.stackPanel,
 		caption = "",
 		font = { size = 20 },
+	}
+	newGameCampaignDetails.versionLabel = Label:New {
+		parent = newGameCampaignDetails.stackPanel,
+		caption = "",
+		font = { size = 18 },
+	}
+	newGameCampaignDetails.lengthLabel = Label:New {
+		parent = newGameCampaignDetails.stackPanel,
+		caption = "",
+		font = { size = 18 },
 	}
 	newGameCampaignDetails.descTextBox = TextBox:New {
 		parent = newGameCampaignDetails.stackPanel,

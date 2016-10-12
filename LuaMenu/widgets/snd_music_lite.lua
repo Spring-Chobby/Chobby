@@ -16,26 +16,9 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
-local playingTrack
-
-local function StartTrack(trackName, volume)
-	volume = volume or WG.Chobby.Configuration.menuMusicVolume
-	Spring.Echo("Starting Track", trackName, volume)
-	if volume == 0 then
-		return
-	end
-	Spring.StopSoundStream()
-	Spring.PlaySoundStream(trackName, volume)
-	playingTrack = true
-end
-
-local function StopTrack()
-	Spring.StopSoundStream()
-	playingTrack = false
-end
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
+local playingTrack	-- boolean
+local previousTrack
+local loopTrack	-- string trackPath
 
 local randomTrackList = {
 	"sounds/lobbyMusic/A Magnificent Journey (Alternative Version).ogg",
@@ -67,7 +50,32 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
-local previousTrack
+local function StartTrack(trackName, volume)
+	trackName = trackName or GetRandomTrack(previousTrack)
+	volume = volume or WG.Chobby.Configuration.menuMusicVolume
+	Spring.Echo("Starting Track", trackName, volume)
+	if volume == 0 then
+		return
+	end
+	Spring.StopSoundStream()
+	Spring.PlaySoundStream(trackName, volume)
+	playingTrack = true
+end
+
+local function LoopTrack(trackName, trackNameIntro, volume)
+	trackNameIntro = trackNameIntro or trackName
+	loopTrack = trackName
+	StartTrack(trackNameIntro, volume)
+end
+
+local function StopTrack()
+	Spring.StopSoundStream()
+	playingTrack = false
+	loopTrack = nil
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 local function SetTrackVolume(volume)
 	if volume == 0 then
@@ -99,7 +107,7 @@ function widget:Update()
 	totalTime = math.floor(totalTime)
 
 	if (playedTime >= totalTime) then
-		local newTrack = GetRandomTrack(previousTrack)
+		local newTrack = loopTrack or GetRandomTrack(previousTrack)
 		StartTrack(newTrack)
 		previousTrack = newTrack
 	end
@@ -107,6 +115,8 @@ end
 
 local MusicHandler = {
 	StartTrack = StartTrack,
+	StopTrack = StopTrack,
+	LoopTrack = LoopTrack
 }
 
 -- Called just before the game loads

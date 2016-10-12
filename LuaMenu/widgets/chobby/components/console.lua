@@ -290,6 +290,18 @@ function Console:AddMessage(message, userName, dateOverride, color, thirdPerson)
 	end
 end
 
+local function lineIterator(s)
+	if s:sub(-1)~="\n" then s=s.."\n" end
+	return s:gmatch("(.-)\n")
+end
+
+-- remove trailing whitespace from string.
+local function rtrim(s)
+	local n = #s
+	while n > 0 and s:find("^%s", n) do n = n - 1 end
+	return s:sub(1, n)
+end
+
 function Console:LoadHistory(numLines)
 	if not self.channelName then
 		return
@@ -299,16 +311,18 @@ function Console:LoadHistory(numLines)
 		return
 	end
 	
+	local logfile = VFS.LoadFile(path)
 	local lineCount = 0
-	for line in io.lines(path) do
+	for line in lineIterator(logfile) do
 		lineCount = lineCount + 1
 	end
 	
 	local waitToWrite = lineCount - numLines
-	for line in io.lines(path) do
+	for line in lineIterator(logfile) do
 		if waitToWrite > 0 then
 			waitToWrite = waitToWrite - 1
 		else
+			line = rtrim(line)
 			local start = string.find(line, "%[")
 			if start then
 				local txt = "\255\128\128\128" .. string.sub(line, start)
@@ -317,6 +331,7 @@ function Console:LoadHistory(numLines)
 				else
 					self.tbHistory:AddLine(txt)
 				end
+				Spring.Echo("hahaha", line)
 			end
 		end
 	end
