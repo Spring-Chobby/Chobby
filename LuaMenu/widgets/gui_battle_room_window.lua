@@ -481,26 +481,28 @@ local function AddTeamButtons(parent, offX, joinFunc, aiFunc, unjoinable, disall
 		local addAiButton = Button:New {
 			name = "addAiButton",
 			x = offX,
-			y = 4,
-			height = 24,
-			width = 75,
-			font = WG.Chobby.Configuration:GetFont(3),
+			y = 5,
+			height = 22,
+			width = 72,
+			font = WG.Chobby.Configuration:GetFont(2),
 			caption = i18n("add_ai") .. "\b",
 			OnClick = {aiFunc},
+			classname = "option_button",
 			parent = parent,
 		}
-		offX = offX + 85
+		offX = offX + 82
 	end
 	if not unjoinable then
 		local joinTeamButton = Button:New {
 			name = "joinTeamButton",
 			x = offX,
-			y = 4,
-			height = 24,
-			width = 75,
-			font =  WG.Chobby.Configuration:GetFont(3),
+			y = 5,
+			height = 22,
+			width = 72,
+			font =  WG.Chobby.Configuration:GetFont(2),
 			caption = i18n("join") .. "\b",
 			OnClick = {joinFunc},
+			classname = "option_button",
 			parent = parent,
 		}
 	end
@@ -654,9 +656,17 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				parent = teamHolder,
 			}
 			if teamIndex ~= -1 then
+				local seperator = Line:New {
+					x = 0,
+					y = 25,
+					right = 0,
+					height = 2,
+					parent = teamHolder
+				}
+			
 				AddTeamButtons(
 					teamHolder,
-					88,
+					90,
 					function()
 						battleLobby:SetBattleStatus({
 								allyNumber = teamIndex,
@@ -672,7 +682,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 			end
 			local teamStack = Control:New {
 				x = 0,
-				y = 30,
+				y = 31,
 				right = 0,
 				bottom = 0,
 				padding = {0, 0, 0, 0},
@@ -702,7 +712,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				if teamIndex ~= -1 then
 					AddTeamButtons(
 						teamHolder,
-						88,
+						90,
 						function()
 							battleLobby:SetBattleStatus({
 									allyNumber = teamIndex,
