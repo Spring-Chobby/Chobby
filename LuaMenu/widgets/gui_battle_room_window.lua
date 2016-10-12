@@ -1189,8 +1189,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		parent = mainWindow,
 	}
 
-	local rawBattleTitle = tostring(battle.title)
-	local battleTitle = i18n("battle") .. ": " .. rawBattleTitle
+	local battleTitle = i18n("battle") .. ": " .. tostring(battle.title)
 	if battle.battleMode then
 		battleTitle = i18n(WG.Chobby.Configuration.battleTypeToName[battle.battleMode]) .. ": " .. battleTitle
 	end
@@ -1268,12 +1267,14 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	end
 
 	local function OnUpdateBattleInfo(listener, updatedBattleID, spectatorCount, locked, mapHash, mapName, 
-			engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker)
-		if battleMode and battleID == updatedBattleID then
-			battleTitle = i18n(WG.Chobby.Configuration.battleTypeToName[battleMode]) .. ": " .. rawBattleTitle
+			engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker, newPlayerList, maxPlayers, title)
+		if (battleMode or title) and battleID == updatedBattleID then
+			battleTitle = i18n(WG.Chobby.Configuration.battleTypeToName[battleMode]) .. ": " .. tostring(battle.title)
 			lblBattleTitle:SetCaption(battleTitle)
 			
-			playerHandler.UpdateBattleMode(disallowCustomTeams, disallowBots)
+			if battleMode then
+				playerHandler.UpdateBattleMode(disallowCustomTeams, disallowBots)
+			end
 		end
 		
 		infoHandler.UpdateBattleInfo(updatedBattleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)

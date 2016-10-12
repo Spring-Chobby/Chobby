@@ -641,7 +641,7 @@ function Lobby:_OnLeftBattle(battleID, userName)
 	self:_CallListeners("OnLeftBattle", battleID, userName)
 end
 
-function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker, newPlayerList)
+function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker, newPlayerList, maxPlayers, title)
 	local battle = self.battles[battleID]
 	battle.spectatorCount = spectatorCount or battle.spectatorCount
 	battle.locked         = locked         or battle.locked
@@ -654,6 +654,8 @@ function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, ma
 	battle.disallowCustomTeams = disallowCustomTeams or battle.disallowCustomTeams
 	battle.disallowBots   = disallowBots   or battle.disallowBots
 	battle.isMatchMaker   = isMatchMaker   or battle.isMatchMaker
+	battle.maxPlayers     = maxPlayers     or battle.maxPlayers
+	battle.title          = title          or battle.title
 	
 	if newPlayerList then
 		local newPlayerMap = {}
@@ -671,8 +673,7 @@ function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, ma
 		end
 	end
 	
-	Spring.Echo("_OnUpdateBattleInfo_OnUpdateBattleInfo", gameName)
-	self:_CallListeners("OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker)
+	self:_CallListeners("OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker, newPlayerList, maxPlayers, title)
 end
 
 -- Updates the specified status keys

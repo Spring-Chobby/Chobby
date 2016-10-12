@@ -189,6 +189,9 @@ local function GetBattleInfoHolder(parent, battleID)
 		minimapImage.file = Configuration:GetMinimapImage(battle.mapName, battle.gameName)
 		minimapImage:Invalidate()
 
+		local text = StringUtilities.GetTruncatedStringWithDotDot(battle.title, lblTitle.font, lblTitle.width)
+		lblTitle:SetCaption(text)
+		
 		lblPlayers:SetCaption(playersPrefix .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
 	end
 	lobby:AddListener("OnUpdateBattleInfo", OnUpdateBattleInfo)
