@@ -1034,17 +1034,21 @@ scriptFunctions = {
   
   PlayMusic = function(args)
     local argsType = type(args)
-    local track = (argsType == 'string' and args) or (argsType == 'table' and args.track)
+    local argsTable = argsType == 'table' and args or {}
+    local track = (argsType == 'string' and args) or (argsTable.track)
     if not track then return end
     
     local trackFull = GetFilePath(track)
-    local intro = (argsType == 'table' and args.intro and GetFilePath(args.intro)) or trackFull
-    local loop = (argsType == 'table' and args.loop ~= false) or true
+    local intro = (argsTable.intro and GetFilePath(argsTable.intro)) or trackFull
+    local loop = (argsTable.loop ~= false) or true
+    local volume = argsTable.volume
     
     if loop and WG.Music and WG.Music.StartLoopingTrack then
       WG.Music.StartLoopingTrack(intro, trackFull)
     elseif WG.Music then
       WG.Music.StartTrack(trackFull)
+    elseif WG.MusicHandler then -- chobby music player
+      WG.MusicHandler.LoopTrack(trackFull, intro, volume)
     else
       Spring.StopSoundStream()
       Spring.PlaySoundStream(trackFull, 1)
@@ -1103,6 +1107,8 @@ scriptFunctions = {
   StopMusic = function(args)
     if WG.Music and WG.Music.StopTrack then
       WG.Music.StopTrack(args and (not args.continue) or true)
+    elseif WG.MusicHandler then
+      WG.MusicHandler.StopTrack()
     else
       Spring.StopSoundStream()
     end
