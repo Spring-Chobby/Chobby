@@ -29,7 +29,7 @@ function BrowserHandler.OpenUrl(urlString)
 	end
 end
 
-function BrowserHandler.AddClickableUrls(chatString, onTextClick)
+function BrowserHandler.AddClickableUrls(chatString, onTextClick, textTooltip)
 
 	local urlStart, urlEnd = string.find(chatString, "http[^%s]*")
 	--Spring.Echo("URL urlStart, urlEnd", chatString, urlStart, urlEnd)
@@ -52,10 +52,16 @@ function BrowserHandler.AddClickableUrls(chatString, onTextClick)
 			} 
 		}
 		
+		textTooltip[#textTooltip + 1] = {
+			startIndex = urlStart, 
+			endIndex = urlEnd,
+			tooltip = urlString,
+		}
+		
 		urlStart, urlEnd = string.find(chatString, urlPattern, urlEnd)
 	end
 	
-	return onTextClick
+	return onTextClick, textTooltip
 end
 
 --------------------------------------------------------------------------------
