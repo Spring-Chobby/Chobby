@@ -742,7 +742,8 @@ function Interface:_BattleUpdate(data)
 		header.Mode, 
 		header.Mode ~= 0, -- Is Custom
 		(header.Mode ~= 5 and header.Mode ~= 0), -- Is Bots
-		header.IsMatchMaker
+		header.IsMatchMaker,
+		header.Users
 	)
 	
 	if header.IsRunning ~= nil then
