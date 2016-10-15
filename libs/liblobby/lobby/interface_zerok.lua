@@ -700,7 +700,8 @@ function Interface:_BattleAdded(data)
 		header.Mode, 
 		header.Mode ~= 0, -- Is Custom
 		(header.Mode ~= 5 and header.Mode ~= 0), -- Is Bots
-		header.IsMatchMaker
+		header.IsMatchMaker,
+		header.PlayerCount
 	)
 end
 Interface.jsonCommands["BattleAdded"] = Interface._BattleAdded
@@ -746,7 +747,8 @@ function Interface:_BattleUpdate(data)
 		header.IsMatchMaker,
 		header.Users,
 		header.MaxPlayers,
-		header.Title
+		header.Title,
+		header.PlayerCount
 	)
 	
 	if header.IsRunning ~= nil then

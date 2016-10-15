@@ -88,7 +88,7 @@ local function GetBattleInfoHolder(parent, battleID)
 		height = 20,
 		valign = 'top',
 		font = Configuration:GetFont(2),
-		caption = playersPrefix .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers,
+		caption = playersPrefix .. lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers,
 		parent = mainControl,
 	}
 
@@ -162,7 +162,7 @@ local function GetBattleInfoHolder(parent, battleID)
 		local text = StringUtilities.GetTruncatedStringWithDotDot(battle.title, lblTitle.font, (smallMode and 160) or 235)
 		lblTitle:SetCaption(text)
 
-		lblPlayers:SetCaption(playersPrefix .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
+		lblPlayers:SetCaption(playersPrefix .. lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers)
 	end
 
 	function externalFunctions.Update(newBattleID)
@@ -192,7 +192,7 @@ local function GetBattleInfoHolder(parent, battleID)
 
 		externalFunctions.Resize(currentSmallMode)
 		
-		lblPlayers:SetCaption(playersPrefix .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
+		lblPlayers:SetCaption(playersPrefix .. lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers)
 	end
 	lobby:AddListener("OnUpdateBattleInfo", OnUpdateBattleInfo)
 
@@ -205,17 +205,17 @@ local function GetBattleInfoHolder(parent, battleID)
 	end
 	lobby:AddListener("OnBattleIngameUpdate", OnBattleIngameUpdate)
 
-	local function PlayersUpdate(listeners, battleID)
+	local function PlayersUpdate(listeners, updatedBattleID)
 		if updatedBattleID ~= battleID then
 			return
 		end
-		lblPlayers:SetCaption(playersPrefix .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
+		lblPlayers:SetCaption(playersPrefix .. lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers)
 	end
 	lobby:AddListener("OnLeftBattle", PlayersUpdate)
 	lobby:AddListener("OnJoinedBattle", PlayersUpdate)
 
 	local function OnUpdateUserTeamStatus(listeners)
-		lblPlayers:SetCaption(playersPrefix .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
+		lblPlayers:SetCaption(playersPrefix .. lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers)
 	end
 	lobby:AddListener("OnUpdateUserTeamStatus", OnUpdateUserTeamStatus)
 
