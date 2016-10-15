@@ -91,6 +91,12 @@ function Configuration:init()
 		"zk",
 		"zk",
 	}
+	self.skirmishGameByMode = {
+		[1] = nil, -- Opens game selection screen
+		[2] = "Zero-K v1.4.10.0",
+		[3] = "Zero-K $VERSION",
+	}
+	
 	self.singleplayer_mode = 2
 
 	self.lastLoginChatLength = 25
@@ -344,6 +350,10 @@ function Configuration:IsValidEngineVersion(engineVersion)
 	else
 		return string.gsub(Game.version, " develop", "") == engineVersion
 	end
+end
+
+function Configuration:GetSkirmishGame()
+	return self.skirmishGameByMode[self.singleplayer_mode]
 end
 
 ---------------------------------------------------------------------------------

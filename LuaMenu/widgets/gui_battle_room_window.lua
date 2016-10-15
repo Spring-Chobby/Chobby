@@ -1507,14 +1507,12 @@ function BattleRoomWindow.SetSingleplayerGame(ToggleShowFunc, battleroomObj, tab
 	end
 
 	local config = WG.Chobby.Configuration
-	if config.singleplayer_mode == 1 then
+	local skirmishGame = config:GetSkirmishGame()
+	if skirmishGame then
+		singleplayerGame = skirmishGame
+		ToggleShowFunc(battleroomObj, tabData)
+	else
 		WG.Chobby.GameListWindow(SetGameFail, SetGameSucess)
-	elseif config.singleplayer_mode == 2 then
-		singleplayerGame = "Zero-K v1.4.10.0"
-		ToggleShowFunc(battleroomObj, tabData)
-	elseif config.singleplayer_mode == 3 then
-		singleplayerGame = "Zero-K $VERSION"
-		ToggleShowFunc(battleroomObj, tabData)
 	end
 end
 
