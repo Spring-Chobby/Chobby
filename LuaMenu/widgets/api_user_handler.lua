@@ -798,5 +798,9 @@ function widget:Initialize()
 	WG.UserHandler = userHandler
 end
 
+--function widget:Update()
+--	lobby:SetAllUserStatusRandomly()
+--end
+	
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------

@@ -1256,3 +1256,20 @@ end
 -------------------------------------------------
 -- END Data access
 -------------------------------------------------
+
+-------------------------------------------------
+-- BEGIN Debug stuff
+-------------------------------------------------
+
+function Lobby:SetAllUserStatusRandomly()
+	local status = {}
+	for userName, data in pairs(self.users) do
+		status.isAway = math.random() > 0.5
+		status.isInGame = math.random() > 0.5
+		self:_OnUpdateUserStatus(userName, status)
+	end
+end
+
+-------------------------------------------------
+-- END Debug stuff
+-------------------------------------------------
