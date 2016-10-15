@@ -438,6 +438,7 @@ local function LaunchMission(missionID, func)
 		-- TODO: might want to edit startscript before we run Spring with it
 		local scriptString = ScriptTXT(startscript)
 		
+		WG.VisualNovel.scriptFunctions.Exit()
 		WG.LibLobby.localLobby:StartGameFromString(scriptString)
 		runningMission = true
 		missionCompletionFunc = func
