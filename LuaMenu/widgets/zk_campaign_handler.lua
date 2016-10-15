@@ -269,7 +269,10 @@ local function LoadCodexEntries()
 	UpdateCodexButtonState()
 end
 
+-- FIXME: no way to actually detect if we're missing a rapid mod atm
 local function GetGameIfNeeded(game)
+	return false
+	--[[
 	if not game then return false end
 	
 	if not VFS.HasArchive(game) then
@@ -277,6 +280,7 @@ local function GetGameIfNeeded(game)
 		return true
 	end
 	return false
+	--]]
 end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -319,6 +323,7 @@ local function LoadCampaign(campaignID)
 			planetDefsByID[planetDefs[i].id] = planetDefs[i]	
 		end
 		
+		GetGameIfNeeded(def.game)
 		
 		if def.startFunction then
 			def.startFunction()
