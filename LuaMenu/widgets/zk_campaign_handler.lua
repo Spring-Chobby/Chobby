@@ -267,6 +267,7 @@ local function LoadCodexEntries()
 		font = {size = CODEX_BUTTON_FONT_SIZE}
 	}
 	UpdateCodexButtonState()
+	codexText:SetText("")
 end
 
 -- FIXME: no way to actually detect if we're missing a rapid mod atm
