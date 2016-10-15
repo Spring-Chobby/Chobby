@@ -6,6 +6,8 @@ function widget:GetInfo()
 		date    = '4 September 2016',
 		license = 'GNU GPL v3',
 		layer   = -2000,
+		handler = true,
+		api     = true, -- Makes KeyPress occur before chili
 		enabled = true,
 	}
 end
