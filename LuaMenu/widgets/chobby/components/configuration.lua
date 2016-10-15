@@ -54,6 +54,15 @@ function Configuration:init()
 	-- Do not ask again tests.
 	self.confirmation_mainMenuFromBattle = false
 	self.confirmation_battleFromBattle = false
+	
+	function self.link_reportPlayer(accountID) 
+		return "http://zero-k.info/Users/ReportToAdmin/" .. accountID
+	end
+	
+	function self.link_userPage(accountID) 
+		return "http://zero-k.info/Users/Detail/" .. accountID
+	end
+	
 
 	self.backConfirmation = {
 		multiplayer = {
