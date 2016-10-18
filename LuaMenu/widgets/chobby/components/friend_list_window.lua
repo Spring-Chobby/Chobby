@@ -19,7 +19,7 @@ function FriendListWindow:init(parent)
 end
 
 function FriendListWindow:OnAddUser(userName)
-	local userInfo = lobby:GetUser(userName)
+	local userInfo = lobby:TryGetUser(userName)
 	if userInfo.isFriend then
 		local userControl = WG.UserHandler.GetNotificationUser(userName)
 		userControl:SetPos(30, 30, 250, 20)
@@ -34,7 +34,7 @@ function FriendListWindow:OnRemoveUser(userName)
 	if not lobby.status == "connected" then
 		return
 	end
-	local userInfo = lobby:GetUser(userName)
+	local userInfo = lobby:TryGetUser(userName)
 	if userInfo and userInfo.isFriend then
 		local userControl = WG.UserHandler.GetNotificationUser(userName)
 		userControl:SetPos(30, 30, 250, 20)

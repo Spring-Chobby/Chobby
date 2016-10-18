@@ -791,7 +791,7 @@ local function UpdateTooltip(inputText)
 				inBattleroom = true
 			end
 		end
-		local userInfo = myLobby:GetUser(userName) or {}
+		local userInfo = myLobby:TryGetUser(userName)
 		local userBattleInfo = myLobby:GetUserBattleStatus(userName) or {}
 
 		local tooltipControl = GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)

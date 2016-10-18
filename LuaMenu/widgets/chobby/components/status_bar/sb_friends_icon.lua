@@ -53,7 +53,7 @@ function SBFriendsIcon:init()
 	self.onFriend = function(listener)
 		local onlineFriends = {}
 		for key, friend in pairs(lobby:GetFriends()) do
-			if lobby:GetUser(friend) ~= nil then
+			if lobby:TryGetUser(friend) ~= nil then
 				table.insert(onlineFriends, friend)
 			end
 		end
