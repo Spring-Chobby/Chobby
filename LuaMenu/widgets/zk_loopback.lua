@@ -28,21 +28,9 @@ local function Echo(stuff)
 	})
 end
 
------------------------------------------------------
--- callin functions
---------------------
-
---function Example(args)
---	Echo(args.Message)
---end
-
---commands["Example"] = Example
-
-
-
------------------------------------------------------
--- callout functions
----------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Connectivity and sending
 
 -- sends command to wrapper
 function SendCommand(cmdName, args) 
@@ -53,33 +41,6 @@ function SendCommand(cmdName, args)
 	end
 end
 
-
--- opens URL
-function OpenUrl(url) 
-	SendCommand("OpenUrl", {Url = url})
-end
-
-
--- opens folder
-function OpenFolder(folder) 
-	SendCommand("OpenFolder", {Folder = folder})
-end
-
-
--- opens folder
-function Restart() 
-	SendCommand("Restart", nil)
-end
-
-function Alert(message)
-	SendCommand("Alert", {Message= message})
-end
-
-
------------------------------------------------------
-
-
-
 local function SocketConnect(host, port)
 	client=socket.tcp()
 	client:settimeout(0)
@@ -88,9 +49,60 @@ local function SocketConnect(host, port)
 		Echo("Error in connect wrapper: "..err)
 		return false
 	end
-
 	return true
 end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Callin Functions
+
+-- Use listener interface from configuration when implementing this
+--function Example(args)
+--	Echo(args.Message)
+--end
+
+--commands["Example"] = Example
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Callout Functions
+
+local WrapperLoopback = {}
+
+-- opens URL
+function WrapperLoopback.OpenUrl(url) 
+	Spring.Echo("Opening URL", url)
+	SendCommand("OpenUrl", {Url = url})
+end
+
+-- opens folder
+function WrapperLoopback.OpenFolder(folder) 
+	SendCommand("OpenFolder", {Folder = folder})
+end
+
+-- restart chobby
+function WrapperLoopback.Restart() 
+	SendCommand("Restart", nil)
+end
+
+-- notifies user/flashes spring window (message ignored atm)
+function WrapperLoopback.Alert(message)
+	SendCommand("Alert", {Message= message})
+end
+
+-- sets TTS volume
+function WrapperLoopback.TtsVolume(volume) 
+	SendCommand("TtsVolume", {Volume = volume})
+end
+
+-- speaks using TTS, send name of speaker for alternating speaker voices
+function WrapperLoopback.TtsSay(name, text) 
+	SendCommand("TtsSay", {Name = name, Text = text})
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Widget Interface
 
 -- init
 function widget:Initialize()
@@ -98,8 +110,15 @@ function widget:Initialize()
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 	
     local port = VFS.LoadFile("chobby_wrapper_port.txt"); -- get wrapper port from VFS file
-    Spring.Log("Chobby", LOG.NOTICE, "Using wrapper port: "..port);
-    SocketConnect("127.0.0.1", port)	
+	if not port then
+		widgetHandler:RemoveWidget()
+		Spring.Log("Chobby", LOG.NOTICE, "No port support, chobby_wrapper_port.txt not found.")
+		return
+	end
+    Spring.Log("Chobby", LOG.NOTICE, "Using wrapper port: ", port)
+    SocketConnect("127.0.0.1", port)
+	
+	WG.WrapperLoopback = WrapperLoopback
 end
 
 -- pocesses raw string line and executes command
@@ -125,12 +144,12 @@ local function CommandReceived(command)
 	end
 end
 
-
 -- update socket - receive data and split into lines
 function widget:Update()
 	local readable, writeable, err = socket.select({client}, {client}, 0)
-	if err~=nil then
-		Echo("Error in select: " .. err)
+	if err ~= nil then
+		Spring.Echo("Loopback error in select", err)
+		--Echo("Error in select: " .. err)
 	end
 	for _, input in ipairs(readable) do
 		local s, status, str = input:receive('*a') --try to read all data

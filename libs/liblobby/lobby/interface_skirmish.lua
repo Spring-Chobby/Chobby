@@ -40,27 +40,40 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName)
 	local ais = {}
 	local aiCount = 0
 
+	-- Add the player, this is to make the player team 0.
 	for userName, data in pairs(self.userBattleStatus) do
-		if data.allyNumber then
-			if data.aiLib then
-				ais[aiCount] = {
-					Name = userName,
-					Team = teamCount,
-					IsFromDemo = 0,
-					ShortName = data.aiLib,
-					Host = 0,
+		if data.allyNumber and not data.aiLib then
+			players[playerCount] = {
+				Name = userName,
+				Team = teamCount,
+				IsFromDemo = 0,
+				Spectator = (data.isSpectator and 1) or nil,
+				rank = 0,
+			}
+			playerCount = playerCount + 1
+			if not data.IsSpectator then
+				teams[teamCount] = {
+					TeamLeader = 0,
+					AllyTeam = data.allyNumber,
+					rgbcolor = '0.99609375 0.546875 0',
 				}
-				aiCount = aiCount + 1
-			else
-				players[playerCount] = {
-					Name = userName,
-					Team = teamCount,
-					IsFromDemo = 0,
-					Spectator = (data.isSpectator and 1) or nil,
-					rank = 0,
-				}
-				playerCount = playerCount + 1
+				teamCount = teamCount + 1
 			end
+		end
+	end
+	
+	-- Add the AIs
+	for userName, data in pairs(self.userBattleStatus) do
+		if data.allyNumber and data.aiLib then
+			ais[aiCount] = {
+				Name = userName,
+				Team = teamCount,
+				IsFromDemo = 0,
+				ShortName = data.aiLib,
+				Host = 0,
+			}
+			aiCount = aiCount + 1
+			
 			if not data.IsSpectator then
 				teams[teamCount] = {
 					TeamLeader = 0,

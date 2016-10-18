@@ -50,6 +50,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local showTopBar = false
 	local doublePanelMode = true
 	local autodetectDoublePanel = true
+	local wideContentPlace = false
 	
 	local BUTTON_SIDE_SPACING = 3 -- Matches tab_panel_handler
 
@@ -224,6 +225,38 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	}
 	
 	-----------------------------------
+	-- Right panel holder
+	-----------------------------------
+	
+	local holder_rightPanel = Control:New {
+		x = (100 - panelWidthRel) .. "%",
+		y = titleHeight,
+		right = 0,
+		bottom = 0,
+		name = "holder_rightPanel",
+		caption = "", -- Panel Window
+		parent = lobbyInterfaceHolder,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		children = {}
+	}
+	local rightPanel_window = Window:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		name = "rightPanel_window",
+		caption = "", -- Panel Window
+		parent = holder_rightPanel,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		children = {}
+	}
+	rightPanel_window:Hide()
+	
+	-----------------------------------
 	-- Main Window
 	-----------------------------------
 	local holder_mainWindow = Control:New {
@@ -336,38 +369,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		keepAspect = false,
 		color = {0.218, 0.23, 0.49, 0.25},
 	}
-	
-	-----------------------------------
-	-- Right panel holder
-	-----------------------------------
-	
-	local holder_rightPanel = Control:New {
-		x = (100 - panelWidthRel) .. "%",
-		y = titleHeight,
-		right = 0,
-		bottom = 0,
-		name = "holder_rightPanel",
-		caption = "", -- Panel Window
-		parent = lobbyInterfaceHolder,
-		resizable = false,
-		draggable = false,
-		padding = {0, 0, 0, 0},
-		children = {}
-	}
-	local rightPanel_window = Window:New {
-		x = 0,
-		y = 0,
-		right = 0,
-		bottom = 0,
-		name = "rightPanel_window",
-		caption = "", -- Panel Window
-		parent = holder_rightPanel,
-		resizable = false,
-		draggable = false,
-		padding = {0, 0, 0, 0},
-		children = {}
-	}
-	rightPanel_window:Hide()
 
 	-----------------------------------
 	-- Background holder is put here to be at the back
@@ -511,7 +512,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			holder_rightPanel:UpdateClientArea()
 
 			holder_mainWindow:SetPos(nil, titleHeight + topOffset)
-			holder_mainWindow._relativeBounds.right = panelWidthRel .. "%"
+			if wideContentPlace then
+				holder_mainWindow._relativeBounds.right = 0
+			else
+				holder_mainWindow._relativeBounds.right = panelWidthRel .. "%"
+			end
 			holder_mainWindow._relativeBounds.bottom = 0
 			holder_mainWindow:UpdateClientArea()
 
@@ -640,6 +645,19 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		mainWindow_mainContent._relativeBounds.right = 0
 		mainWindow_mainContent:UpdateClientArea()
 	end
+	
+	local function SetWideContentPlace(newWideContentPlace)
+		if doublePanelMode then
+			if newWideContentPlace then
+				holder_mainWindow._relativeBounds.right = 0
+			else
+				holder_mainWindow._relativeBounds.right = panelWidthRel .. "%"
+			end
+			holder_mainWindow._relativeBounds.bottom = 0
+			holder_mainWindow:UpdateClientArea()
+		end
+	end
+	
 	
 	-------------------------------------------------------------------
 	-- Visibility and size handlers
@@ -851,6 +869,13 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		UpdatePadding(screenWidth, screenHeight)
 		-- Make all children request realign.
 		screen0:Resize(screenWidth, screenHeight)
+	end
+	
+	function externalFunctions.SetWideContentPlace(newWideContentPlace)
+		if wideContentPlace == newWideContentPlace then
+			return
+		end
+		SetWideContentPlace(newWideContentPlace)
 	end
 	
 	function externalFunctions.SetIngame(newIngame)

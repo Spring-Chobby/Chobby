@@ -568,18 +568,19 @@ end
 function Lobby:_OnBattleOpened(battleID, type, natType, founder, ip, port, 
 		maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName, 
 		title, gameName, spectatorCount, isRunning, runningSince, 
-		battleMode, disallowCustomTeams, disallowBots, isMatchMaker)
+		battleMode, disallowCustomTeams, disallowBots, isMatchMaker, playerCount)
 	self.battles[battleID] = {
 		battleID = battleID, type = type, natType = natType, founder = founder, ip = ip, port = port,
 		maxPlayers = maxPlayers, passworded = passworded, rank = rank, mapHash = mapHash, spectatorCount = spectatorCount or 0,
 		engineName = engineName, engineVersion = engineVersion, mapName = mapName, title = title, gameName = gameName, users = {},
 		isRunning = isRunning, runningSince = runningSince, 
-		battleMode = battleMode, disallowCustomTeams = disallowCustomTeams, disallowBots = disallowBots, isMatchMaker = isMatchMaker
+		battleMode = battleMode, disallowCustomTeams = disallowCustomTeams, disallowBots = disallowBots, isMatchMaker = isMatchMaker,
+		playerCount = playerCount,
 	}
 	self.battleCount = self.battleCount + 1
 
 	self:_CallListeners("OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, 
-		engineName, engineVersion, map, title, gameName, spectatorCount, isRunning, runningSince, battleMode, isMatchMaker)
+		engineName, engineVersion, map, title, gameName, spectatorCount, isRunning, runningSince, battleMode, isMatchMaker, playerCount)
 end
 
 function Lobby:_OnBattleClosed(battleID)
@@ -641,7 +642,7 @@ function Lobby:_OnLeftBattle(battleID, userName)
 	self:_CallListeners("OnLeftBattle", battleID, userName)
 end
 
-function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker)
+function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker, newPlayerList, maxPlayers, title, playerCount)
 	local battle = self.battles[battleID]
 	battle.spectatorCount = spectatorCount or battle.spectatorCount
 	battle.locked         = locked         or battle.locked
@@ -654,9 +655,27 @@ function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, ma
 	battle.disallowCustomTeams = disallowCustomTeams or battle.disallowCustomTeams
 	battle.disallowBots   = disallowBots   or battle.disallowBots
 	battle.isMatchMaker   = isMatchMaker   or battle.isMatchMaker
+	battle.maxPlayers     = maxPlayers     or battle.maxPlayers
+	battle.title          = title          or battle.title
+	battle.playerCount    = playerCount    or battle.playerCount
 	
-	Spring.Echo("_OnUpdateBattleInfo_OnUpdateBattleInfo", gameName)
-	self:_CallListeners("OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker)
+	if newPlayerList then
+		local newPlayerMap = {}
+		for i = 1, #newPlayerList do
+			newPlayerMap[newPlayerList[i]] = true
+		end
+		for _, userName in pairs(battle.users) do
+			if not newPlayerMap[userName] then
+				self:_OnLeftBattle(battleID, userName)
+			end
+		end
+		for i = 1, #newPlayerList do
+			-- _OnJoinedBattle deals with duplicates
+			self:_OnJoinedBattle(battleID, newPlayerList[i])
+		end
+	end
+	
+	self:_CallListeners("OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker, newPlayerList, maxPlayers, title)
 end
 
 -- Updates the specified status keys
@@ -1113,6 +1132,19 @@ function Lobby:GetBattle(battleID)
 	return self.battles[battleID]
 end
 
+function Lobby:GetBattlePlayerCount(battleID)
+	local battle = self:GetBattle(battleID)
+	if not battle then
+		return 0
+	end
+	
+	if battle.playerCount then
+		return battle.playerCount
+	else
+		return #battle.users - battle.spectatorCount
+	end
+end
+
 function Lobby:GetBattleFoundedBy(userName)
 	-- TODO, improve data structures to make this search nice
 	for battleID, battleData in pairs(self.battles) do
@@ -1238,4 +1270,21 @@ end
 
 -------------------------------------------------
 -- END Data access
+-------------------------------------------------
+
+-------------------------------------------------
+-- BEGIN Debug stuff
+-------------------------------------------------
+
+function Lobby:SetAllUserStatusRandomly()
+	local status = {}
+	for userName, data in pairs(self.users) do
+		status.isAway = math.random() > 0.5
+		status.isInGame = math.random() > 0.5
+		self:_OnUpdateUserStatus(userName, status)
+	end
+end
+
+-------------------------------------------------
+-- END Debug stuff
 -------------------------------------------------

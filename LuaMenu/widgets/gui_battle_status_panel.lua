@@ -88,7 +88,7 @@ local function GetBattleInfoHolder(parent, battleID)
 		height = 20,
 		valign = 'top',
 		font = Configuration:GetFont(2),
-		caption = playersPrefix .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers,
+		caption = playersPrefix .. lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers,
 		parent = mainControl,
 	}
 
@@ -122,8 +122,12 @@ local function GetBattleInfoHolder(parent, battleID)
 	}
 	runningImage:BringToFront()
 	imPlayerStatus:BringToFront()
+	
+	local currentSmallMode = false
 
 	function externalFunctions.Resize(smallMode)
+		currentSmallMode = smallMode
+		
 		if smallMode then
 			minimap:SetPos(nil, nil, 33, 33)
 
@@ -155,10 +159,10 @@ local function GetBattleInfoHolder(parent, battleID)
 
 			playersPrefix = PLAYER_PREFIX_BIG
 		end
-		local text = StringUtilities.GetTruncatedStringWithDotDot(battle.title, lblTitle.font, lblTitle.width)
+		local text = StringUtilities.GetTruncatedStringWithDotDot(battle.title, lblTitle.font, (smallMode and 160) or 235)
 		lblTitle:SetCaption(text)
 
-		lblPlayers:SetCaption(playersPrefix .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
+		lblPlayers:SetCaption(playersPrefix .. lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers)
 	end
 
 	function externalFunctions.Update(newBattleID)
@@ -171,9 +175,6 @@ local function GetBattleInfoHolder(parent, battleID)
 		if not mainControl.visible then
 			mainControl:Show()
 		end
-
-		local text = StringUtilities.GetTruncatedStringWithDotDot(battle.title, lblTitle.font, lblTitle.width)
-		lblTitle:SetCaption(text)
 
 		minimapImage.file = Configuration:GetMinimapImage(battle.mapName, battle.gameName)
 		minimapImage:Invalidate()
@@ -189,7 +190,9 @@ local function GetBattleInfoHolder(parent, battleID)
 		minimapImage.file = Configuration:GetMinimapImage(battle.mapName, battle.gameName)
 		minimapImage:Invalidate()
 
-		lblPlayers:SetCaption(playersPrefix .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
+		externalFunctions.Resize(currentSmallMode)
+		
+		lblPlayers:SetCaption(playersPrefix .. lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers)
 	end
 	lobby:AddListener("OnUpdateBattleInfo", OnUpdateBattleInfo)
 
@@ -202,17 +205,17 @@ local function GetBattleInfoHolder(parent, battleID)
 	end
 	lobby:AddListener("OnBattleIngameUpdate", OnBattleIngameUpdate)
 
-	local function PlayersUpdate(listeners, battleID)
+	local function PlayersUpdate(listeners, updatedBattleID)
 		if updatedBattleID ~= battleID then
 			return
 		end
-		lblPlayers:SetCaption(playersPrefix .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
+		lblPlayers:SetCaption(playersPrefix .. lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers)
 	end
 	lobby:AddListener("OnLeftBattle", PlayersUpdate)
 	lobby:AddListener("OnJoinedBattle", PlayersUpdate)
 
 	local function OnUpdateUserTeamStatus(listeners)
-		lblPlayers:SetCaption(playersPrefix .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
+		lblPlayers:SetCaption(playersPrefix .. lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers)
 	end
 	lobby:AddListener("OnUpdateUserTeamStatus", OnUpdateUserTeamStatus)
 

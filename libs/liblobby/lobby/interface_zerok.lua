@@ -507,17 +507,18 @@ end
 
 local registerResponseCodes = {
 	[0] = "Ok",
-	[1] = "Name already registered",
-	[2] = "Smurf",
-	[3] = "Invalid name",
-	[4] = "Invalid password",
+	[1] = "Already connected",
+	[2] = "Name already exists",
+	[3] = "Invalid password",
+	[4] = "Banned",
+	[5] = "Invalid name",
 }
 
 local loginResponseCodes = {
 	[0] = "Ok",
-	[1] = "Invalid password",
-	[2] = "Invalid login",
-	[3] = "Name not registered",
+	[2] = "Invalid name",
+	[3] = "Invalid password",
+	[4] = "Banned",
 }
 
 function Interface:_Welcome(data)
@@ -699,7 +700,8 @@ function Interface:_BattleAdded(data)
 		header.Mode, 
 		header.Mode ~= 0, -- Is Custom
 		(header.Mode ~= 5 and header.Mode ~= 0), -- Is Bots
-		header.IsMatchMaker
+		header.IsMatchMaker,
+		header.PlayerCount
 	)
 end
 Interface.jsonCommands["BattleAdded"] = Interface._BattleAdded
@@ -742,7 +744,11 @@ function Interface:_BattleUpdate(data)
 		header.Mode, 
 		header.Mode ~= 0, -- Is Custom
 		(header.Mode ~= 5 and header.Mode ~= 0), -- Is Bots
-		header.IsMatchMaker
+		header.IsMatchMaker,
+		header.Users,
+		header.MaxPlayers,
+		header.Title,
+		header.PlayerCount
 	)
 	
 	if header.IsRunning ~= nil then

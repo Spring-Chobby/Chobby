@@ -251,7 +251,7 @@ local function GetBattleInfoHolder(parent, offset, battleID)
 		height = 20,
 		valign = 'top',
 		font = Configuration:GetFont(1),
-		caption = (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers,
+		caption = lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers,
 		parent = mainControl,
 	}
 
@@ -322,7 +322,7 @@ local function GetBattleInfoHolder(parent, offset, battleID)
 		mainControl:SetPos(nil, offset)
 
 		lblTitle:SetCaption(StringUtilities.GetTruncatedStringWithDotDot(battle.title, lblTitle.font, lblTitle.width))
-		lblPlayers:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
+		lblPlayers:SetCaption(lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers)
 		lblGame:SetCaption(StringUtilities.GetTruncatedStringWithDotDot(battle.gameName, lblTitle.font, lblTitle.width))
 		lblMap:SetCaption(StringUtilities.GetTruncatedStringWithDotDot(battle.mapName, lblTitle.font, lblTitle.width))
 
@@ -393,7 +393,7 @@ local function GetBattleTooltip(battleID, battle)
 		if not battleTooltip.playerCount then
 			battleTooltip.playerCount = GetTooltipLine(battleTooltip.mainControl)
 		end
-		battleTooltip.playerCount.Update(offset, "Players: " .. (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
+		battleTooltip.playerCount.Update(offset, "Players: " .. lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers)
 
 		if not battleTooltip.spectatorCount then
 			battleTooltip.spectatorCount = GetTooltipLine(battleTooltip.mainControl, nil, nil, 130)

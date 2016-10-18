@@ -81,7 +81,7 @@ function BattleWatchListWindow:Update()
 	battles = tmp
 	table.sort(battles,
 		function(a, b)
-			return #a.users > #b.users
+			return lobby:GetBattlePlayerCount(a.battleID) > lobby:GetBattlePlayerCount(b.battleID)
 		end
 	)
 
@@ -118,7 +118,7 @@ function BattleWatchListWindow:AddBattle(battleID)
 	}
 
 	local lblTitle = Label:New {
-		name = "title",
+		name = "lblTitle",
 		x = height + 3,
 		y = 0,
 		right = 0,
@@ -193,10 +193,10 @@ function BattleWatchListWindow:AddBattle(battleID)
 end
 
 function BattleWatchListWindow:CompareItems(id1, id2)
-	local battle1, battle2 = lobby:GetBattle(id1), lobby:GetBattle(id2)
-	if battle1 and battle2 then
-		return #battle1.users - #battle2.users
+	if id1 and id2 then
+		return lobby:GetBattlePlayerCount(id1) - lobby:GetBattlePlayerCount(id2)
 	else
+		local battle1, battle2 = lobby:GetBattle(id1), lobby:GetBattle(id2)
 		Spring.Echo("battle1", id1, battle1, battle1 and battle1.users)
 		Spring.Echo("battle2", id2, battle2, battle2 and battle2.users)
 		return 0
@@ -246,8 +246,8 @@ function BattleWatchListWindow:JoinedBattle(battleID)
 	end
 	local battle = lobby:GetBattle(battleID)
 	local playersOnMapCaption = items.battleButton:GetChildByName("playersOnMapCaption")
-	local playerCount = (#battle.users - battle.spectatorCount)
-	playersOnMapCaption:SetCaption((#battle.users - battle.spectatorCount) .. ((playerCount == 1 and " player on " ) or " players on ") .. battle.mapName:gsub("_", " "))
+	local playerCount = lobby:GetBattlePlayerCount(battleID)
+	playersOnMapCaption:SetCaption(playerCount .. ((playerCount == 1 and " player on " ) or " players on ") .. battle.mapName:gsub("_", " "))
 	self:RecalculateOrder(battleID)
 end
 
@@ -258,8 +258,8 @@ function BattleWatchListWindow:LeftBattle(battleID)
 	end
 	local battle = lobby:GetBattle(battleID)
 	local playersOnMapCaption = items.battleButton:GetChildByName("playersOnMapCaption")
-	local playerCount = (#battle.users - battle.spectatorCount)
-	playersOnMapCaption:SetCaption((#battle.users - battle.spectatorCount) .. ((playerCount == 1 and " player on " ) or " players on ") .. battle.mapName:gsub("_", " "))
+	local playerCount = lobby:GetBattlePlayerCount(battleID)
+	playersOnMapCaption:SetCaption(playerCount .. ((playerCount == 1 and " player on " ) or " players on ") .. battle.mapName:gsub("_", " "))
 	self:RecalculateOrder(battleID)
 end
 
@@ -279,13 +279,17 @@ function BattleWatchListWindow:OnUpdateBattleInfo(battleID)
 		self:RemoveRow(battleID)
 	end
 	
+	-- Resets title and truncates.
+	local lblTitle = items.battleButton:GetChildByName("lblTitle")
+	lblTitle.OnResize[1](lblTitle)
+	
 	local minimapImage = items.battleButton:GetChildByName("minimap"):GetChildByName("minimapImage")
 	minimapImage.file = Configuration:GetMinimapImage(battle.mapName, battle.gameName)
 	minimapImage:Invalidate()
 	
 	local playersOnMapCaption = items.battleButton:GetChildByName("playersOnMapCaption")
-	local playerCount = (#battle.users - battle.spectatorCount)
-	playersOnMapCaption:SetCaption((#battle.users - battle.spectatorCount) .. ((playerCount == 1 and " player on " ) or " players on ") .. battle.mapName:gsub("_", " "))
+	local playerCount = lobby:GetBattlePlayerCount(battleID)
+	playersOnMapCaption:SetCaption(playerCount .. ((playerCount == 1 and " player on " ) or " players on ") .. battle.mapName:gsub("_", " "))
 
 	self:RecalculateOrder(battleID)
 end

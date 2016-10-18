@@ -92,7 +92,7 @@ function BattleListWindow:Update()
 	battles = tmp
 	table.sort(battles,
 		function(a, b)
-			return #a.users > #b.users
+			return lobby:GetBattlePlayerCount(a.battleID) > lobby:GetBattlePlayerCount(b.battleID)
 		end
 	)
 
@@ -147,7 +147,7 @@ function BattleListWindow:AddBattle(battleID, battle)
 	}
 
 	local lblTitle = Label:New {
-		name = "title",
+		name = "lblTitle",
 		x = height + 3,
 		y = 0,
 		right = 0,
@@ -266,10 +266,10 @@ function BattleListWindow:AddBattle(battleID, battle)
 end
 
 function BattleListWindow:CompareItems(id1, id2)
-	local battle1, battle2 = lobby:GetBattle(id1), lobby:GetBattle(id2)
-	if battle1 and battle2 then
-		return #battle1.users - #battle2.users
+	if id1 and id2 then
+		return lobby:GetBattlePlayerCount(id1) - lobby:GetBattlePlayerCount(id2)
 	else
+		local battle1, battle2 = lobby:GetBattle(id1), lobby:GetBattle(id2)
 		Spring.Echo("battle1", id1, battle1, battle1 and battle1.users)
 		Spring.Echo("battle2", id2, battle2, battle2 and battle2.users)
 		return 0
@@ -314,7 +314,7 @@ function BattleListWindow:JoinedBattle(battleID)
 	end
 	
 	local playersCaption = items.battleButton:GetChildByName("playersCaption")
-	playersCaption:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
+	playersCaption:SetCaption(lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers)
 	self:RecalculateOrder(battleID)
 end
 
@@ -331,7 +331,7 @@ function BattleListWindow:LeftBattle(battleID)
 	end
 	
 	local playersCaption = items.battleButton:GetChildByName("playersCaption")
-	playersCaption:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
+	playersCaption:SetCaption(lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers)
 	self:RecalculateOrder(battleID)
 end
 
@@ -347,9 +347,13 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 		return
 	end
 	
+	local lblTitle = items.battleButton:GetChildByName("lblTitle")
 	local mapCaption = items.battleButton:GetChildByName("mapCaption")
 	local imHaveMap = items.battleButton:GetChildByName("imHaveMap")
 	local minimapImage = items.battleButton:GetChildByName("minimap"):GetChildByName("minimapImage")
+	
+	-- Resets title and truncates.
+	lblTitle.OnResize[1](lblTitle)
 	
 	minimapImage.file = Configuration:GetMinimapImage(battle.mapName, battle.gameName)
 	minimapImage:Invalidate()
@@ -369,7 +373,7 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 	gameCaption:SetCaption(battle.gameName:gsub("_", " "))
 	
 	local playersCaption = items.battleButton:GetChildByName("playersCaption")
-	playersCaption:SetCaption((#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers)
+	playersCaption:SetCaption(lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers)
 
 	self:RecalculateOrder(battleID)
 end

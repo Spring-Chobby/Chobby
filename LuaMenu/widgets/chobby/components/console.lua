@@ -266,7 +266,7 @@ function Console:AddMessage(message, userName, dateOverride, color, thirdPerson)
 		}
 	end
 	
-	onTextClick = WG.BrowserHandler.AddClickableUrls(message, onTextClick or {})
+	onTextClick, textTooltip = WG.BrowserHandler.AddClickableUrls(message, onTextClick or {}, textTooltip or {})
 
 	txt = txt .. message
 	whiteText = whiteText .. message
@@ -331,7 +331,6 @@ function Console:LoadHistory(numLines)
 				else
 					self.tbHistory:AddLine(txt)
 				end
-				Spring.Echo("hahaha", line)
 			end
 		end
 	end

@@ -124,13 +124,15 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 	local myUserName = userControl.lobby:GetMyUserName()
 	local comboOptions = {}
 	
+	local Configuration = WG.Chobby.Configuration
+	
 	if (not userBattleInfo.aiLib) and userName ~= myUserName then
 		comboOptions[#comboOptions + 1] = "Message"
 
 		if (not isInBattle) and userInfo.battleID then
 			local battle = lobby:GetBattle(userInfo.battleID)
-			if battle and WG.Chobby.Configuration:IsValidEngineVersion(battle.engineVersion) then
-				if not WG.Chobby.Configuration.showMatchMakerBattles and battle.isMatchMaker then
+			if battle and Configuration:IsValidEngineVersion(battle.engineVersion) then
+				if not Configuration.showMatchMakerBattles and battle.isMatchMaker then
 					comboOptions[#comboOptions + 1] = "Watch Battle"
 				else
 					comboOptions[#comboOptions + 1] = "Join Battle"
@@ -144,7 +146,7 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 			comboOptions[#comboOptions + 1] = "Friend"
 		end
 		
-		if userInfo.accountID then
+		if userInfo.accountID and Configuration.link_reportPlayer then
 			comboOptions[#comboOptions + 1] = "Report"
 		end
 		
@@ -155,7 +157,7 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 		end
 	end
 
-	if userInfo.accountID then
+	if userInfo.accountID and Configuration.link_userPage then
 		comboOptions[#comboOptions + 1] = "User Page"
 	end
 	
@@ -171,7 +173,7 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 			y = 0,
 			width = 100,
 			height = 30,
-			font = WG.Chobby.Configuration:GetFont(1),
+			font = Configuration:GetFont(1),
 			caption = "No Actions",
 		}
 	end
@@ -347,6 +349,8 @@ local function GetUserControls(userName, opts)
 	local comboBoxOnly       = opts.comboBoxOnly
 
 	local userControls = reinitialize or {}
+	
+	local Configuration = WG.Chobby.Configuration
 
 	userControls.showFounder = showFounder
 	userControls.showModerator = showModerator
@@ -384,7 +388,7 @@ local function GetUserControls(userName, opts)
 			tooltip = (not disableInteraction) and tooltip,
 			ignoreItemCaption = true,
 			selectByName = true,
-			itemFontSize = WG.Chobby.Configuration:GetFont(2).size,
+			itemFontSize = Configuration:GetFont(2).size,
 			itemHeight = 30,
 			selected = 0,
 			maxDropDownWidth = 120,
@@ -436,15 +440,15 @@ local function GetUserControls(userName, opts)
 						if userInfo.battleID then
 							lobby:RejoinBattle(userInfo.battleID)
 						end
-					elseif selectedName == "User Page" then
+					elseif selectedName == "User Page" and Configuration.link_userPage then
 						local userInfo = userControls.lobby:GetUser(userName) or {}
 						if userInfo.accountID then
-							WG.BrowserHandler.OpenUrl("http://zero-k.info/Users/Detail/" .. userInfo.accountID)
+							WG.BrowserHandler.OpenUrl(Configuration.link_userPage(userInfo.accountID))
 						end
-					elseif selectedName == "Report" then
+					elseif selectedName == "Report" and Configuration.link_reportPlayer then
 						local userInfo = userControls.lobby:GetUser(userName) or {}
 						if userInfo.accountID then
-							WG.BrowserHandler.OpenUrl("http://zero-k.info/Users/ReportToAdmin/" .. userInfo.accountID)
+							WG.BrowserHandler.OpenUrl(Configuration.link_reportPlayer(userInfo.accountID))
 						end
 					elseif selectedName == "Unignore" then
 						userControls.lobby:Unignore(userName)
@@ -528,7 +532,7 @@ local function GetUserControls(userName, opts)
 		bottom = 4,
 		align = "left",
 		parent = userControls.mainControl,
-		fontsize = WG.Chobby.Configuration:GetFont(2).size,
+		fontsize = Configuration:GetFont(2).size,
 		text = userName,
 	}
 	local userNameStart = offset
@@ -600,7 +604,7 @@ local function GetUserControls(userName, opts)
 				valign = 'center',
 				parent = userControls.mainControl,
 				caption = i18n(status .. "_status"),
-				font = WG.Chobby.Configuration:GetFont(1),
+				font = Configuration:GetFont(1),
 			}
 			userControls.lblStatusLarge.font.color = fontColor
 			userControls.lblStatusLarge:Invalidate()
@@ -798,5 +802,9 @@ function widget:Initialize()
 	WG.UserHandler = userHandler
 end
 
+--function widget:Update()
+--	lobby:SetAllUserStatusRandomly()
+--end
+	
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
