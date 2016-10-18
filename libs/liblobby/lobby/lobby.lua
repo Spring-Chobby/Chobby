@@ -1285,6 +1285,13 @@ function Lobby:SetAllUserStatusRandomly()
 	end
 end
 
+function Lobby:SetAllUserAway(newAway)
+	local status = {isAway = newAway}
+	for userName, data in pairs(self.users) do
+		self:_OnUpdateUserStatus(userName, status)
+	end
+end
+
 -------------------------------------------------
 -- END Debug stuff
 -------------------------------------------------

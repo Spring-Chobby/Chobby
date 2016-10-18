@@ -802,9 +802,23 @@ function widget:Initialize()
 	WG.UserHandler = userHandler
 end
 
---function widget:Update()
---	lobby:SetAllUserStatusRandomly()
---end
+local oldTimer
+local awayStatus = false
+function widget:Update()
+	if not oldTimer then
+		oldTimer = Spring.GetTimer()
+	end
+	local newTimer = Spring.GetTimer()
+	local deltaTime = Spring.DiffTimers(newTimer, oldTimer)
+	if deltaTime < 2 then
+		return
+	end
+	oldTimer = newTimer
+	awayStatus = not awayStatus
+	lobby:SetAllUserAway(awayStatus)
+	
+	--lobby:SetAllUserStatusRandomly()
+end
 	
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
