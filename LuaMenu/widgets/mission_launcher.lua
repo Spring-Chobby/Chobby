@@ -42,8 +42,6 @@ local function GetResults()
 	return Spring.Utilities.CopyTable(results)
 end
 
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
 local function LoadResults()
 	if VFS.FileExists(RESULTS_FILE) then
 		results = VFS.Include(RESULTS_FILE)
@@ -60,14 +58,11 @@ local function LoadResults()
 		return results
 	end
 end
-
--- periodically query for results
-function widget:Update()
-	local currentTime = Spring.GetTimer()
-	if Spring.DiffTimers(currentTime, timer) > RESULTS_QUERY_PERIOD then
-		LoadResults()
-		timer = currentTime
-	end
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- called when returning to menu from a game
+function widget:ActivateMenu()
+	LoadResults()
 end
 
 function widget:Initialize()

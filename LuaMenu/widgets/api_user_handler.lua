@@ -275,6 +275,10 @@ local function UpdateUserControlStatus(userName, userControls)
 	local truncatedName = StringUtilities.TruncateStringIfRequiredAndDotDot(userName, userControls.tbName.font, nameSpace)
 	if truncatedName then
 		userControls.tbName:SetText(truncatedName)
+		userControls.nameTruncated = true
+	elseif userControls.nameTruncated then
+		userControls.tbName:SetText(userName)
+		userControls.nameTruncated = false
 	end
 end
 
@@ -547,6 +551,7 @@ local function GetUserControls(userName, opts)
 	end
 	if truncatedName then
 		userControls.tbName:SetText(truncatedName)
+		userControls.nameTruncated = true
 	end
 	userControls.nameActualLength = userControls.tbName.font:GetTextWidth(userControls.tbName.text)
 	offset = offset + userControls.nameActualLength
@@ -802,8 +807,22 @@ function widget:Initialize()
 	WG.UserHandler = userHandler
 end
 
+--local oldTimer
+--local awayStatus = false
 --function widget:Update()
---	lobby:SetAllUserStatusRandomly()
+--	if not oldTimer then
+--		oldTimer = Spring.GetTimer()
+--	end
+--	local newTimer = Spring.GetTimer()
+--	local deltaTime = Spring.DiffTimers(newTimer, oldTimer)
+--	if deltaTime < 2 then
+--		return
+--	end
+--	oldTimer = newTimer
+--	awayStatus = not awayStatus
+--	lobby:SetAllUserAway(awayStatus)
+--	
+--	--lobby:SetAllUserStatusRandomly()
 --end
 	
 --------------------------------------------------------------------------------

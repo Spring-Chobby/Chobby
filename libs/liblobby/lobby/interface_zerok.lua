@@ -326,10 +326,12 @@ end
 ------------------------
 
 function Interface:Join(chanName, key)
-	local sendData = {
-		ChannelName = chanName
-	}
-	self:_SendCommand("JoinChannel " .. json.encode(sendData))
+	if not self:GetInChannel(chanName) then
+		local sendData = {
+			ChannelName = chanName
+		}
+		self:_SendCommand("JoinChannel " .. json.encode(sendData))
+	end
 	return self
 end
 

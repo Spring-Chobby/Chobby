@@ -828,14 +828,7 @@ function Lobby:_OnJoined(chanName, userName)
 end
 
 function Lobby:_OnJoin(chanName)
-	local isNewChannel = true
-	for i, v in pairs(self.myChannels) do
-		if v == chanName then
-			--Spring.Echo("Duplicate uchannel joined", chanName)
-			isNewChannel = false
-			break
-		end
-	end
+	local isNewChannel = not self:GetInChannel(chanName)
 	if isNewChannel then
 		table.insert(self.myChannels, chanName)
 	end
@@ -1189,6 +1182,15 @@ function Lobby:GetChannel(channelName)
 	return self.channels[channelName]
 end
 
+function Lobby:GetInChannel(chanName)
+	for i, v in pairs(self.myChannels) do
+		if v == chanName then
+			return true
+		end
+	end
+	return false
+end
+
 function Lobby:GetMyChannels()
 	return self.myChannels
 end
@@ -1281,6 +1283,13 @@ function Lobby:SetAllUserStatusRandomly()
 	for userName, data in pairs(self.users) do
 		status.isAway = math.random() > 0.5
 		status.isInGame = math.random() > 0.5
+		self:_OnUpdateUserStatus(userName, status)
+	end
+end
+
+function Lobby:SetAllUserAway(newAway)
+	local status = {isAway = newAway}
+	for userName, data in pairs(self.users) do
 		self:_OnUpdateUserStatus(userName, status)
 	end
 end

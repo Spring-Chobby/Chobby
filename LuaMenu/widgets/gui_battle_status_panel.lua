@@ -306,7 +306,7 @@ local function InitializeControls(parentControl)
 	end
 
 	local function OnSaidBattle(listeners, userName, message)
-		local userInfo = lobby:GetUser(userName) or {}
+		local userInfo = lobby:TryGetUser(userName)
 		if userInfo.isBot then
 			return
 		end

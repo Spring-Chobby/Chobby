@@ -1,6 +1,6 @@
 AiListWindow = ListWindow:extends{}
 
-function AiListWindow:init(lobby, gameName, allyTeam)
+function AiListWindow:init(gameName)
 
 	self:super('init', WG.Chobby.lobbyInterfaceHolder, "Choose AI", false, "overlay_window")
 	self.window:SetPos(nil, nil, 500, 700)
@@ -36,7 +36,7 @@ function AiListWindow:init(lobby, gameName, allyTeam)
 						while found do
 							found = false
 							aiName = ai.shortName .. " (" .. tostring(counter) .. ")"
-							for _, userName in pairs(lobby.battleAis) do
+							for _, userName in pairs(self.lobby.battleAis) do
 								if aiName == userName then
 									found = true
 									break
@@ -44,7 +44,7 @@ function AiListWindow:init(lobby, gameName, allyTeam)
 							end
 							counter = counter + 1
 						end
-						lobby:AddAi(aiName, ai.shortName, allyTeam)
+						self.lobby:AddAi(aiName, ai.shortName, self.allyTeam)
 						self:HideWindow()
 					end
 				},
@@ -52,6 +52,9 @@ function AiListWindow:init(lobby, gameName, allyTeam)
 			self:AddRow({addAIButton} ,ai.shortName)
 		end
 	end
-	
-	self.popupHolder = PriorityPopup(self.window)
+end
+
+function AiListWindow:SetLobbyAndAllyTeam(lobby, allyTeam)
+	self.lobby = lobby or self.lobby
+	self.allyTeam = allyTeam or self.allyTeam
 end

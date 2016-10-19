@@ -261,7 +261,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		--				isSpectator = false,
 		--			})
 		--		elseif obj.selected == 2 then
-		--			WG.Chobby.AiListWindow(battleLobby, battle.gameName, emptyTeamIndex)
+		--			WG.PopupPreloader.ShowAiListWindow(battleLobby, battle.gameName, emptyTeamIndex)
 		--		end
 		--	end
 		--},
@@ -674,7 +674,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 							})
 					end,
 					function()
-						WG.Chobby.AiListWindow(battleLobby, battle.gameName, teamIndex)
+						WG.PopupPreloader.ShowAiListWindow(battleLobby, battle.gameName, teamIndex)
 					end,
 					disallowCustomTeams and teamIndex ~= 0,
 					(disallowBots or disallowCustomTeams) and teamIndex ~= 1
@@ -720,7 +720,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 								})
 						end,
 						function()
-							WG.Chobby.AiListWindow(battleLobby, battle.gameName, teamIndex)
+							WG.PopupPreloader.ShowAiListWindow(battleLobby, battle.gameName, teamIndex)
 						end,
 						disallowCustomTeams and teamIndex ~= 0,
 						(disallowBots or disallowCustomTeams) and teamIndex ~= 1

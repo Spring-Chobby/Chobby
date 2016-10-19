@@ -36,8 +36,8 @@ function UserListPanel:OnLeft(userName)
 end
 
 function UserListPanel:CompareItems(userName1, userName2)
-	local userData1 = lobby:GetUser(userName1)
-	local userData2 = lobby:GetUser(userName2)
+	local userData1 = lobby:TryGetUser(userName1)
+	local userData2 = lobby:TryGetUser(userName2)
 	if userData1.isAdmin ~= userData2.isAdmin then
 		return userData1.isAdmin
 	end
@@ -50,8 +50,8 @@ function UserListPanel:GetUsers()
 end
 
 local function CompareUsers(userName, otherName)
-	local userData = lobby:GetUser(userName)
-	local otherData = lobby:GetUser(otherName)
+	local userData = lobby:TryGetUser(userName)
+	local otherData = lobby:TryGetUser(otherName)
 	if not otherData then
 		return true
 	end
@@ -75,7 +75,7 @@ function UserListPanel:Update()
 end
 
 function UserListPanel:AddUser(userName)
-	local userData = lobby:GetUser(userName)
+	local userData = lobby:TryGetUser(userName)
 	if not userData then
 		Spring.Echo("User data not found", userName)
 		return

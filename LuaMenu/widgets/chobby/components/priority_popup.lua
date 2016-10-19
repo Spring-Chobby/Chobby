@@ -1,10 +1,12 @@
 PriorityPopup = Component:extends{}
 
-function PriorityPopup:init(mainWindow, cancelFunction, acceptFunction, parentControlOverride)
+function PriorityPopup:init(mainWindow, cancelFunction, acceptFunction, parentControlOverride, hideWindow)
 	local sentTime
 	local startTime = os.clock()
 	
 	self.mainWindow = mainWindow
+	
+	self.hideWindow = hideWindow
 
 	local function KeyListener(key)
 		if cancelFunction and key == Spring.GetKeyCode("esc") then
@@ -125,5 +127,9 @@ function PriorityPopup:GetWindow()
 end
 
 function PriorityPopup:ClosePopup()
-	self.mainWindow:Dispose()
+	if self.hideWindow then
+		self.mainWindow:Hide()
+	else
+		self.mainWindow:Dispose()
+	end
 end
