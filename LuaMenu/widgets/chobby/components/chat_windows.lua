@@ -823,54 +823,84 @@ function ChatWindows:GetPrivateChatConsole(userName, switchTo)
 end
 
 function ChatWindows:CreateJoinChannelWindow()
-	local ebChannelName = EditBox:New {
-		hint = "Channel",
-		text = "",
+	self.joinWindow = Window:New {
+		caption = "",
+		name = "hostBattle",
+		parent = WG.Chobby.lobbyInterfaceHolder,
+		width = 312,
+		height = 216,
+		resizable = false,
+		draggable = false,
+		classname = "overlay_window",
 	}
 
+	local title = Label:New {
+		x = 45,
+		width = 170,
+		y = 15,
+		height = 35,
+		caption = i18n("join_channel"),
+		font = Configuration:GetFont(4),
+		parent = self.joinWindow,
+	}
+	
+	local channelEdit = EditBox:New {
+		x = 3,
+		right = 3,
+		y = 66,
+		height = 35,
+		text = "",
+		font = Configuration:GetFont(3),
+		parent = self.joinWindow,
+	}
+	
 	local function CancelFunc()
 		self.joinWindow:Dispose()
 		self.joinWindow = nil
 	end
 
 	local function JoinChannel()
-		local channelName = ebChannelName.text:gsub("#", "")
+		local channelName = channelEdit.text:gsub("#", "")
 		if channelName ~= "" then
 			lobby:Join(channelName)
-			self.switchToTabOnJoin = ebChannelName.text
+			self.switchToTabOnJoin = channelEdit.text
 		end
 		self.joinWindow:Dispose()
 		self.joinWindow = nil
 	end
+	
+	local buttonJoin = Button:New {
+		right = 150,
+		width = 135,
+		bottom = 1,
+		height = 70,
+		caption = i18n("join"),
+		font = Configuration:GetFont(3),
+		parent = self.joinWindow,
+		classname = "action_button",
+		OnClick = {
+			function()
+				JoinChannel()
+			end
+		},
+	}
 
-	self.joinWindow = Window:New {
-		caption = i18n("join_channel"),
-		name = "chatWindow",
-		parent = WG.Chobby.lobbyInterfaceHolder,
-		x = "45%",
-		y = "45%",
-		width = 200,
-		height = 180,
-		resizable = false,
-		children = {
-			StackPanel:New {
-				x = 0, y = 0,
-				right = 0, bottom = 0,
-				children = {
-					ebChannelName,
-					Button:New {
-						caption = i18n("ok"),
-						OnClick = {JoinChannel},
-					},
-					Button:New {
-						caption = i18n("cancel"),
-						OnClick = {CancelFunc},
-					},
-				},
-			}
+	local buttonCancel = Button:New {
+		right = 1,
+		width = 135,
+		bottom = 1,
+		height = 70,
+		caption = i18n("cancel"),
+		font = Configuration:GetFont(3),
+		parent = self.joinWindow,
+		classname = "negative_button",
+		OnClick = {
+			function()
+				CancelFunc()
+			end
 		},
 	}
 
 	local popupHolder = PriorityPopup(self.joinWindow, CancelFunc, JoinChannel)
-	screen0:FocusControl(ebChannelName)
+	screen0:FocusControl(channelEdit)
 end
