@@ -828,14 +828,7 @@ function Lobby:_OnJoined(chanName, userName)
 end
 
 function Lobby:_OnJoin(chanName)
-	local isNewChannel = true
-	for i, v in pairs(self.myChannels) do
-		if v == chanName then
-			--Spring.Echo("Duplicate uchannel joined", chanName)
-			isNewChannel = false
-			break
-		end
-	end
+	local isNewChannel = not self:GetInChannel(chanName)
 	if isNewChannel then
 		table.insert(self.myChannels, chanName)
 	end
@@ -1187,6 +1180,15 @@ function Lobby:GetChannelCount()
 end
 function Lobby:GetChannel(channelName)
 	return self.channels[channelName]
+end
+
+function Lobby:GetInChannel(chanName)
+	for i, v in pairs(self.myChannels) do
+		if v == chanName then
+			return true
+		end
+	end
+	return false
 end
 
 function Lobby:GetMyChannels()

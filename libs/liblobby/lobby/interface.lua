@@ -203,7 +203,9 @@ end
 
 function Interface:Join(chanName, key)
 	self:super("Join", chanName, key)
-	self:_SendCommand(concat("JOIN", chanName, key))
+	if not self:GetInChannel(chanName) then
+		self:_SendCommand(concat("JOIN", chanName, key))
+	end
 	return self
 end
 
