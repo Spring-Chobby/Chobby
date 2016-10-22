@@ -50,8 +50,10 @@ function Interface:Login(user, password, cpu, localIP, lobbyVersion)
 end
 
 function Interface:Ping()
-	self:super("Ping")
-	self:_SendCommand("Ping {}")
+	if self.REVERSE_COMPAT then
+		self:super("Ping")
+		self:_SendCommand("Ping {}")
+	end
 	return self
 end
 
@@ -527,6 +529,8 @@ function Interface:_Welcome(data)
 	-- Engine
 	-- Game
 	-- Version of Game
+	-- REVERSE COMPAT
+	self.REVERSE_COMPAT = (data.Version == "1.4.9.26")
 	self:_OnConnect(4, data.Engine, 2, 1)
 end
 Interface.jsonCommands["Welcome"] = Interface._Welcome
@@ -543,7 +547,7 @@ function Interface:_RegisterResponse(data)
 	if data.ResultCode == 0 then
 		self:_OnRegistrationAccepted()
 	else
-		self:_OnRegistrationDenied(registerResponseCodes[data.ResultCode] or "Reason error")
+		self:_OnRegistrationDenied(registerResponseCodes[data.ResultCode] or "Reason error " .. tostring(data.ResultCode))
 	end
 end
 Interface.jsonCommands["RegisterResponse"] = Interface._RegisterResponse
@@ -554,7 +558,7 @@ function Interface:_LoginResponse(data)
 	if data.ResultCode == 0 then
 		self:_OnAccepted()
 	else
-		self:_OnDenied(loginResponseCodes[data.ResultCode] or "Reason error")
+		self:_OnDenied(loginResponseCodes[data.ResultCode] or "Reason error " .. tostring(data.ResultCode))
 	end
 end
 Interface.jsonCommands["LoginResponse"] = Interface._LoginResponse
@@ -741,21 +745,23 @@ Interface.jsonCommands["JoinedBattle"] = Interface._JoinedBattle
 
 function Interface:_JoinBattleSuccess(data)
 	
-	self:_OnJoinedBattle(data.BattleID, self.myUserName, 0)
+	self:_OnJoinBattle(data.BattleID, 0)
+	
+	local battle = self:GetBattle(data.BattleID)
 	
 	local newPlayers = data.Players
 	local newPlayerMap = {}
 	for i = 1, #newPlayers do
-		newPlayerMap[newPlayers[i]] = true
+		newPlayerMap[newPlayers[i].Name] = true
 	end
 	for _, userName in pairs(battle.users) do
 		if not newPlayerMap[userName] then
-			self:_OnLeftBattle(battleID, userName)
+			self:_OnLeftBattle(data.BattleID, userName)
 		end
 	end
 	for i = 1, #newPlayers do
 		-- _OnJoinedBattle deals with duplicates
-		self:_OnJoinedBattle(battleID, newPlayers[i].name)
+		self:_OnJoinedBattle(data.BattleID, newPlayers[i].Name)
 		self:_UpdateUserBattleStatus(newPlayers[i])
 	end
 	
