@@ -642,7 +642,7 @@ function Lobby:_OnLeftBattle(battleID, userName)
 	self:_CallListeners("OnLeftBattle", battleID, userName)
 end
 
-function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker, newPlayerList, maxPlayers, title, playerCount)
+function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker, maxPlayers, title, playerCount)
 	local battle = self.battles[battleID]
 	battle.spectatorCount = spectatorCount or battle.spectatorCount
 	battle.locked         = locked         or battle.locked
@@ -658,22 +658,6 @@ function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, ma
 	battle.maxPlayers     = maxPlayers     or battle.maxPlayers
 	battle.title          = title          or battle.title
 	battle.playerCount    = playerCount    or battle.playerCount
-	
-	if newPlayerList then
-		local newPlayerMap = {}
-		for i = 1, #newPlayerList do
-			newPlayerMap[newPlayerList[i]] = true
-		end
-		for _, userName in pairs(battle.users) do
-			if not newPlayerMap[userName] then
-				self:_OnLeftBattle(battleID, userName)
-			end
-		end
-		for i = 1, #newPlayerList do
-			-- _OnJoinedBattle deals with duplicates
-			self:_OnJoinedBattle(battleID, newPlayerList[i])
-		end
-	end
 	
 	self:_CallListeners("OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker, newPlayerList, maxPlayers, title)
 end

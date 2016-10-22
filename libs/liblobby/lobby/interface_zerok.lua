@@ -592,6 +592,21 @@ function Interface:_User(data)
 		})
 		return
 	end
+	
+	local currentBattle = self.users[data.Name].battleID
+	if data.BattleID ~= currentBattle then
+		if data.BattleID then
+			if currentBattle then
+				self:_OnLeftBattle(currentBattle, data.Name)
+			end
+			if data.Name ~= self.myUserName then
+				self:_OnJoinedBattle(data.BattleID, data.Name, 0)
+			end
+		elseif currentBattle then
+			self:_OnLeftBattle(currentBattle, data.Name)
+		end
+	end
+	
 	self:_OnUpdateUserStatus(data.Name, {
 		country = data.Country,
 		clan = data.Clan,
@@ -724,6 +739,36 @@ function Interface:_JoinedBattle(data)
 end
 Interface.jsonCommands["JoinedBattle"] = Interface._JoinedBattle
 
+function Interface:_JoinBattleSuccess(data)
+	
+	self:_OnJoinedBattle(data.BattleID, self.myUserName, 0)
+	
+	local newPlayers = data.Players
+	local newPlayerMap = {}
+	for i = 1, #newPlayers do
+		newPlayerMap[newPlayers[i]] = true
+	end
+	for _, userName in pairs(battle.users) do
+		if not newPlayerMap[userName] then
+			self:_OnLeftBattle(battleID, userName)
+		end
+	end
+	for i = 1, #newPlayers do
+		-- _OnJoinedBattle deals with duplicates
+		self:_OnJoinedBattle(battleID, newPlayers[i].name)
+		self:_UpdateUserBattleStatus(newPlayers[i])
+	end
+	
+	local newAis = data.Bots
+	battle.battleAis = {}
+	for i = 1, #newAis do
+		self:_UpdateBotStatus(newAis[i])
+	end
+	
+	self:_OnSetModOptions(data.Options)
+end
+Interface.jsonCommands["JoinBattleSuccess"] = Interface._JoinBattleSuccess
+
 function Interface:_BattleUpdate(data)
 	-- BattleUpdate {"Header":{"BattleID":362,"Map":"Quicksilver 1.1"}
 	-- BattleUpdate {"Header":{"BattleID":21,"Engine":"103.0.1-88-g1a9cfdd"}
@@ -747,7 +792,6 @@ function Interface:_BattleUpdate(data)
 		header.Mode ~= 0, -- Is Custom
 		(header.Mode ~= 5 and header.Mode ~= 0), -- Is Bots
 		header.IsMatchMaker,
-		header.Users,
 		header.MaxPlayers,
 		header.Title,
 		header.PlayerCount
