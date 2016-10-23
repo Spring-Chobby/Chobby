@@ -420,7 +420,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local battleStatusTabControls = {
 		myBattle = WG.BattleStatusPanel.GetControl,
-		--myQueue = WG.QueueStatusPanel.GetTabControl,
 	}
 	
 	local battleTabHolder = Control:New {

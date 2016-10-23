@@ -65,7 +65,7 @@ end
 --------------------------------------------------------------------------
 local function DelayedInitialize()
 	--StartStatusAndInvitesPanelTest()
-	AddTwoStatusPanels()
+	--AddTwoStatusPanels()
 end
 
 function widget:Initialize()

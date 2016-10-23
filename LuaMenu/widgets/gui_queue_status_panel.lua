@@ -16,8 +16,8 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Variables
-local queueStatusHandler -- global for timer update
-local queueStatusIngame
+local statusQueueLobby -- global for timer update
+local statusQueueIngame
 local readyCheckPopup 
 local findingMatch = false
 
@@ -42,29 +42,32 @@ end
 --------------------------------------------------------------------------------
 -- Initialization
 
-local function InitializeQueueStatusHandler(parentControl, ControlType)
+local function InitializeQueueStatusHandler(name, ControlType, parent, pos)
 	local lobby = WG.LibLobby.lobby
 
 	ControlType = ControlType or Panel
 	
 	local queuePanel = ControlType:New {
-		x = 0,
-		y = 0,
-		right = 0,
-		bottom = 0,
+		name = name,
+		x = (pos and pos.x) or ((not pos) and 0),
+		y = (pos and pos.y) or ((not pos) and 0),
+		right = (pos and pos.right) or ((not pos) and 0),
+		bottom = (pos and pos.bottom) or ((not pos) and 0),
+		width = pos and pos.width,
+		height = pos and pos.height,
 		padding = {0,0,0,0},
 		caption = "",
 		resizable = false,
 		draggable = false,
-		parent = parentControl,
+		parent = parent
 	}
 	
 	local button = Button:New {
 		name = "cancel",
 		x = "68%",
-		right = 4,
-		y = 4,
-		bottom = 4,
+		right = 3,
+		y = 3,
+		bottom = 3,
 		padding = {0,0,0,0},
 		caption = "Cancel",
 		font = WG.Chobby.Configuration:GetFont(3),
@@ -97,13 +100,7 @@ local function InitializeQueueStatusHandler(parentControl, ControlType)
 		parent = queuePanel
 	}
 	
-	local externalFunctions = {}
-	
-	function externalFunctions.ResetTimer()
-		queueTimer = Spring.GetTimer()
-	end
-	
-	function externalFunctions.UpdateTimer(forceUpdate)
+	local function UpdateTimer(forceUpdate)
 		if not queueTimer then
 			return
 		end
@@ -114,10 +111,36 @@ local function InitializeQueueStatusHandler(parentControl, ControlType)
 		timeWaiting = newTimeWaiting
 		queueStatusText:SetText(queueText .. ((bigMode and  "\nTime Waiting: ") or ", Wait: ") .. SecondsToMinutes(timeWaiting))
 	end
-	
+		
 	local function UpdateQueueText()
 		queueText = ((bigMode and "Searching: ") or "Search: ") .. queueString .. ((bigMode and  "\nPlayers: ") or "\nPlay: ") .. playersString
-		externalFunctions.UpdateTimer(true)
+		UpdateTimer(true)
+	end
+	
+	local function Resize(obj, xSize, ySize)
+		queueStatusText._relativeBounds.right = rightBound
+		queueStatusText._relativeBounds.bottom = bottomBound
+		queueStatusText:UpdateClientArea()
+		if ySize < 60 then
+			queueStatusText:SetPos(6, 1)
+			bigMode = false
+		else
+			queueStatusText:SetPos(8, 13)
+			bigMode = true
+		end
+		UpdateQueueText()
+	end
+	
+	queuePanel.OnResize = {Resize}
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.ResetTimer()
+		queueTimer = Spring.GetTimer()
+	end
+	
+	function externalFunctions.UpdateTimer(forceUpdate)
+		UpdateTimer(forceUpdate)
 	end
 	
 	function externalFunctions.UpdateMatches(joinedQueueList, queueCounts, currentEloWidth, joinedTime)
@@ -137,28 +160,14 @@ local function InitializeQueueStatusHandler(parentControl, ControlType)
 		UpdateQueueText()
 	end
 	
-	function externalFunctions.Resize(xSize, ySize)
-		queueStatusText._relativeBounds.right = rightBound
-		queueStatusText._relativeBounds.bottom = bottomBound
-		queueStatusText:UpdateClientArea()
-		if ySize < 60 then
-			queueStatusText:SetPos(6, 4)
-			bigMode = false
-		else
-			queueStatusText:SetPos(8, 13)
-			bigMode = true
-		end
-		UpdateQueueText()
-	end
-	
-	function externalFunctions.SetVisibility(newVisibility)
-		queuePanel:SetVisibility(newVisibility)
+	function externalFunctions.GetHolder()
+		return queuePanel
 	end
 	
 	return externalFunctions
 end
 
-local function InitializeInstantQueueHandler(parentControl)
+local function InitializeInstantQueueHandler()
 	local lobby = WG.LibLobby.lobby
 	local queueName
 
@@ -171,7 +180,6 @@ local function InitializeInstantQueueHandler(parentControl)
 		caption = "",
 		resizable = false,
 		draggable = false,
-		parent = parentControl,
 	}
 	
 	local button = Button:New {
@@ -204,22 +212,15 @@ local function InitializeInstantQueueHandler(parentControl)
 		fontsize = WG.Chobby.Configuration:GetFont(3).size,
 		text = "",
 		parent = queuePanel
-	}
-	
-	local externalFunctions = {}
-	
+	}	
+		
 	local function UpdateQueueText()
 		if queueName then
 			queueStatusText:SetText(queueName .. " Availible\nClick to Join")
 		end
 	end
 	
-	function externalFunctions.UpdateQueueName(newQueueName)
-		queueName = newQueueName
-		UpdateQueueText()
-	end
-	
-	function externalFunctions.Resize(xSize, ySize)
+	local function Resize(obj, xSize, ySize)
 		queueStatusText._relativeBounds.right = rightBound
 		queueStatusText._relativeBounds.bottom = bottomBound
 		queueStatusText:UpdateClientArea()
@@ -237,8 +238,13 @@ local function InitializeInstantQueueHandler(parentControl)
 		UpdateQueueText()
 	end
 	
-	function externalFunctions.SetVisibility(newVisibility)
-		queuePanel:SetVisibility(newVisibility)
+	queuePanel.OnResize = {Resize}
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.UpdateQueueName(newQueueName)
+		queueName = newQueueName
+		UpdateQueueText()
 	end
 	
 	function externalFunctions.ProcessInstantStartQueue(instantStartQueues)
@@ -259,23 +265,11 @@ local function InitializeInstantQueueHandler(parentControl)
 		end
 	end
 	
-	return externalFunctions
-end
-
-local function InitializeIngameStatus(parentControl)	
-	local fakeQueuePanel = Control:New {
-		right = 2,
-		y = 52,
-		height = 78,
-		width = 300,
-		padding = {0,0,0,0},
-		caption = "",
-		resizable = false,
-		draggable = false,
-		parent = parentControl,
-	}
+	function externalFunctions.GetHolder()
+		return queuePanel
+	end
 	
-	return fakeQueuePanel, InitializeQueueStatusHandler(fakeQueuePanel, Window)
+	return externalFunctions
 end
 
 --------------------------------------------------------------------------------
@@ -475,69 +469,52 @@ end
 
 local QueueStatusPanel = {}
 
-function QueueStatusPanel.GetControl()
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Widget Interface
+
+function DelayedInitialize()
 	local lobby = WG.LibLobby.lobby
-	local queueStatusIngamePanel
+	local statusQueueIngame
+
+	local statusAndInvitesPanel = WG.Chobby.interfaceRoot.GetStatusAndInvitesPanel()
 	
-	local fakeQueuePanel = Control:New {
-		x = 0,
-		y = 0,
-		right = 0,
-		bottom = 0,
-		padding = {0,0,0,0},
-		caption = "",
-		resizable = false,
-		draggable = false,
-		OnResize = {
-			function (obj, xSize, ySize)
-				if queueStatusHandler then
-					queueStatusHandler.Resize(xSize, ySize)
-					instantQueueHandler.Resize(xSize, ySize)
-				end
-			end
-		}
-	}
-	
-	queueStatusHandler = InitializeQueueStatusHandler(fakeQueuePanel)
-	instantQueueHandler = InitializeInstantQueueHandler(fakeQueuePanel)
-	
-	queueStatusHandler.SetVisibility(false)
-	instantQueueHandler.SetVisibility(false)
+	statusQueueLobby = InitializeQueueStatusHandler("lobbyQueue")
+	instantQueueHandler = InitializeInstantQueueHandler()
 	
 	local previouslyInMatchMaking = false
-	
-	lobby:AddListener("OnMatchMakerStatus", 
-		function(listener, inMatchMaking, joinedQueueList, queueCounts, ingameCounts, instantStartQueues, currentEloWidth, joinedTime, bannedTime)
-			findingMatch = inMatchMaking
-			
-			if not queueStatusIngame then
-				queueStatusIngamePanel, queueStatusIngame = InitializeIngameStatus(WG.Chobby.interfaceRoot.GetIngameInterfaceHolder())
-			end
-			
-			Spring.Utilities.TableEcho(instantStartQueues, "instantStartQueues")
-			if inMatchMaking then
-				if not previouslyInMatchMaking then
-					queueStatusHandler.ResetTimer()
-					queueStatusIngame.ResetTimer()
-				end
-				queueStatusHandler.UpdateMatches(joinedQueueList, queueCounts, currentEloWidth, joinedTime)
-				queueStatusIngame.UpdateMatches(joinedQueueList, queueCounts, currentEloWidth, joinedTime)
-				
-				instantQueueHandler.SetVisibility(false)
-			else
-				if (not bannedTime) and WG.QueueListWindow.HaveMatchMakerResources() and instantQueueHandler.ProcessInstantStartQueue(instantStartQueues) then
-					instantQueueHandler.SetVisibility(true)
-				else
-					instantQueueHandler.SetVisibility(false)
-				end
-			end
-			
-			previouslyInMatchMaking = inMatchMaking
-			
-			queueStatusHandler.SetVisibility(inMatchMaking)
-			queueStatusIngamePanel:SetVisibility(inMatchMaking)
+	local function OnMatchMakerStatus(listener, inMatchMaking, joinedQueueList, queueCounts, ingameCounts, instantStartQueues, currentEloWidth, joinedTime, bannedTime)
+		findingMatch = inMatchMaking
+		
+		if not statusQueueIngame then
+			local pos = {right = 2, y = 52, width = 290, height = 70}
+			statusQueueIngame = InitializeQueueStatusHandler("ingameQueue", Window, WG.Chobby.interfaceRoot.GetIngameInterfaceHolder(), pos)
 		end
-	)
+		
+		if inMatchMaking then
+			if not previouslyInMatchMaking then
+				statusQueueIngame.ResetTimer()
+				statusQueueLobby.ResetTimer()
+				statusAndInvitesPanel.AddControl(statusQueueLobby.GetHolder(), 9)
+				statusQueueIngame.GetHolder():SetVisibility(inMatchMaking)
+			end
+			statusQueueIngame.UpdateMatches(joinedQueueList, queueCounts, currentEloWidth, joinedTime)
+			statusQueueLobby.UpdateMatches(joinedQueueList, queueCounts, currentEloWidth, joinedTime)
+		elseif previouslyInMatchMaking then
+			statusAndInvitesPanel.RemoveControl(statusQueueLobby.GetHolder().name)
+			statusQueueIngame.GetHolder():SetVisibility(inMatchMaking)
+		end
+		
+		previouslyInMatchMaking = inMatchMaking
+		
+		if somethingelse then
+			if (not bannedTime) and WG.QueueListWindow.HaveMatchMakerResources() and instantQueueHandler.ProcessInstantStartQueue(instantStartQueues) then
+				instantQueueHandler.SetVisibility(true)
+			else
+				instantQueueHandler.SetVisibility(false)
+			end
+		end
+	end
 	
 	local function DestroyReadyCheckPopup()
 		readyCheckPopup = nil
@@ -578,27 +555,22 @@ function QueueStatusPanel.GetControl()
 		readyCheckPopup.MatchMakingComplete(true)
 	end
 	
+	lobby:AddListener("OnMatchMakerStatus", OnMatchMakerStatus)
 	lobby:AddListener("OnMatchMakerReadyCheck", OnMatchMakerReadyCheck)
 	lobby:AddListener("OnMatchMakerReadyUpdate", OnMatchMakerReadyUpdate)
 	lobby:AddListener("OnMatchMakerReadyResult", OnMatchMakerReadyResult)
 	lobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
 
 	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", SaveQueues)
-	
-	return fakeQueuePanel
 end
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
--- Widget Interface
 
 function widget:Update(dt)
 	if findingMatch then
-		if queueStatusHandler then
-			queueStatusHandler.UpdateTimer()
+		if statusQueueLobby then
+			statusQueueLobby.UpdateTimer()
 		end
-		if queueStatusIngame then
-			queueStatusIngame.UpdateTimer()
+		if statusQueueIngame then
+			statusQueueIngame.UpdateTimer()
 		end
 	end
 	if readyCheckPopup then
@@ -610,6 +582,7 @@ function widget:Initialize()
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
 	WG.QueueStatusPanel = QueueStatusPanel
+	WG.Delay(DelayedInitialize, 1)
 end
 
 --------------------------------------------------------------------------------
