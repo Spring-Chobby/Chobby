@@ -157,21 +157,21 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		draggable = false,
 		padding = {0, 0, 0, 0},
 	}
-	
-	local holder_matchMaking = Control:New {
+
+	local holder_statusAndInvites = Window:New {
 		x = titleWidth,
 		y = 0,
 		right = 0,
 		height = titleHeight,
-		name = "holder_matchMaking",
+		name = "holder_statusAndInvites",
 		caption = "", -- Status Window
-		parent = lobbyInterfaceHolder,
+		parent = holder_status,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-
+	
 	local status_userWindow = Control:New {
 		y = 0,
 		right = 0,
@@ -429,9 +429,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	)
 	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons_buttons, rightPanel_window, rightPanelTabs)
 	mainWindowHandler = GetSubmenuHandler(buttonsHolder_buttons, mainContent_window, submenus)
-
-	local matchMakerStatus = WG.QueueStatusPanel.GetControl()
-	holder_matchMaking:AddChild(matchMakerStatus)
+	
+	local statusAndInvitesPanel = GetControlPanelHandler(holder_statusAndInvites)
 	
 	-------------------------------------------------------------------
 	-- Resizing functions
@@ -733,6 +732,50 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		screen0:Resize(screenWidth, screenHeight)
 	end
 	
+	local function UpdateStatusAndInvitesHolderPosition()
+		local screenWidth, screenHeight = Spring.GetViewGeometry()
+		
+		local xPos, yPos, width, height
+		local controlCount = statusAndInvitesPanel.GetControlCount()
+		
+		if controlCount < 2 then
+			width = statusButtonWidthSmall
+		else
+			width = statusButtonWidthSmall*2 + 2
+		end
+		
+		if doublePanelMode then
+			height = 75
+			yPos = 4
+			
+			local middlePad
+			if screenWidth < 1366 then
+				middlePad = 0
+			elseif screenWidth < 1650 then
+				middlePad = 10
+			else
+				middlePad = 20
+			end
+			
+			xPos = 0
+		else
+			height = 75
+			yPos = 4
+			
+			xPos = 5
+			if false then
+				local leftBound = mainButtonsWidthSmall + statusButtonWidthSmall + 15
+				if xPos < leftBound then
+					xPos = leftBound
+				end
+			end
+		end
+	
+		holder_statusAndInvites:SetPos(xPos, yPos, width, height)
+	end
+	
+	statusAndInvitesPanel.SetUpdateFunction(UpdateStatusAndInvitesHolderPosition)
+	
 	-------------------------------------------------------------------
 	-- Top bar initialisation
 	-------------------------------------------------------------------
@@ -815,47 +858,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-------------------------------------------------------------------
 	-- External Functions
 	-------------------------------------------------------------------
-	function externalFunctions.UpdateMatchMakingHolderPosition()
-		local screenWidth, screenHeight = Spring.GetViewGeometry()
-		
-		local battleShown = (battleStatusPanelHandler.GetTabByName("myBattle") and true) or false
-		local topOffset = (showTopBar and topBarHeight) or 0
-		
-		local xPos, yPos, width, height
-		if doublePanelMode then
-			width = screenWidth/4 - 20
-			height = titleHeight - panelButtonsHeight - 5
-			yPos = 0
-			
-			local middlePad
-			if screenWidth < 1366 then
-				middlePad = 0
-			elseif screenWidth < 1650 then
-				middlePad = 10
-			else
-				middlePad = 20
-			end
-			
-			if battleShown then
-				xPos = (100 - panelWidthRel)*screenWidth/100 + middlePad
-			else
-				xPos = (100 - panelWidthRel)*screenWidth/100 - middlePad - width
-			end
-		else
-			width = screenWidth/3 - 40
-			height = titleHeightSmall - statusWindowGapSmall - 3
-			yPos = 4
-			
-			xPos = (screenWidth - width)/2
-			if battleShown then
-			local leftBound = mainButtonsWidthSmall + statusButtonWidthSmall + 15
-				if xPos < leftBound then
-					xPos = leftBound
-				end
-			end
-		end
-	
-		holder_matchMaking:SetPos(xPos, topOffset + yPos, width, height)
+	function externalFunctions.UpdateStatusAndInvitesHolderPosition()
+		UpdateStatusAndInvitesHolderPosition()
 	end
 	
 	function externalFunctions.ViewResize(screenWidth, screenHeight)
@@ -865,7 +869,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		end
 		UpdatePadding(screenWidth, screenHeight)
 		
-		externalFunctions.UpdateMatchMakingHolderPosition()
+		UpdateStatusAndInvitesHolderPosition()
 	end
 
 	function externalFunctions.SetPanelDisplayMode(newAutodetectDoublePanel, newDoublePanel)
@@ -892,7 +896,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		gameRunning = not newIngame
 		SetMainInterfaceVisible(not newIngame)
 		SetTopBarVisible(newIngame)
-		externalFunctions.UpdateMatchMakingHolderPosition()
+		UpdateStatusAndInvitesHolderPosition()
 	end
 	
 	function externalFunctions.GetChatWindow()
@@ -923,7 +927,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	function externalFunctions.GetBattleStatusWindowHandler()
 		return battleStatusPanelHandler
 	end
-
+	
+	function externalFunctions.GetStatusAndInvitesPanel()
+		return statusAndInvitesPanel
+	end
+	
 	function externalFunctions.GetDoublePanelMode()
 		return doublePanelMode
 	end
