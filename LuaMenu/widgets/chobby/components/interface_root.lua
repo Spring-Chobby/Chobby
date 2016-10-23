@@ -41,7 +41,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local statusButtonWidth = 290
 	local statusButtonWidthSmall = 290
 	
-	local topBarHeight = 50
+	local topBarHeight = 42
 
 	-- Switch to single panel mode when below the minimum screen width
 	local minScreenWidth = 1280
@@ -514,8 +514,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			holder_mainWindow:UpdateClientArea()
 			
 			buttonsHolder_image:SetPos(nil, 0)
-			holder_rightPanel._relativeBounds.bottom = 0
-			holder_rightPanel:UpdateClientArea()
+			buttonsHolder_image._relativeBounds.bottom = 0
+			buttonsHolder_image:UpdateClientArea()
 
 			-- Align game title and status.
 			holder_heading:SetPos(0, topOffset, titleWidth, titleHeight)
@@ -561,8 +561,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			holder_mainWindow:UpdateClientArea()
 
 			buttonsHolder_image:SetPos(nil, chatTabHolderHeight)
-			holder_rightPanel._relativeBounds.bottom = 0
-			holder_rightPanel:UpdateClientArea()
+			buttonsHolder_image._relativeBounds.bottom = 0
+			buttonsHolder_image:UpdateClientArea()
 			
 			-- Align game title and status.
 			holder_heading:SetPos(0, topOffset, mainButtonsWidthSmall + padding, titleHeightSmall)
@@ -692,17 +692,17 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		holder_status:SetPos(nil, topOffset)
 		
 		if showTopBar then
-			--buttonsHolder_image.color[4] = 0.1
-			--buttonsHolder_image:Invalidate()
-			--holder_topImage.color[4] = 0.25
-			--holder_topImage:Invalidate()
+			buttonsHolder_image.color[4] = 0.3
+			buttonsHolder_image:Invalidate()
+			holder_topImage.color[4] = 0.45
+			holder_topImage:Invalidate()
 		else
 			backgroundHolder:SetEnabled(true)
 			ingameBackgroundHolder:SetEnabled(false)
-			--buttonsHolder_image.color[4] = 0.1
-			--buttonsHolder_image:Invalidate()
-			--holder_topImage.color[4] = 0.25
-			--holder_topImage:Invalidate()
+			buttonsHolder_image.color[4] = 0.1
+			buttonsHolder_image:Invalidate()
+			holder_topImage.color[4] = 0.25
+			holder_topImage:Invalidate()
 		end
 		
 		local screenWidth, screenHeight = Spring.GetViewGeometry()
@@ -744,10 +744,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-------------------------------------------------------------------
 	
 	local switchToMenuButton = Button:New {
-		y = 5,
-		right = 6,
-		width = 100,
-		height = 41,
+		y = 2,
+		right = 3,
+		width = 108,
+		height = 38,
 		name = "switchToMenuButton",
 		caption = "Menu",
 		font = WG.Chobby.Configuration:GetFont(3),
@@ -763,10 +763,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		}
 	}
 	local switchToGameButton = Button:New {
-		y = 5,
-		right = 5,
-		width = 100,
-		height = 41,
+		y = 2,
+		right = 3,
+		width = 108,
+		height = 38,
 		name = "switchToGameButton",
 		caption = "Game",
 		font = WG.Chobby.Configuration:GetFont(3),
@@ -787,11 +787,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	end
 	
 	local leaveGameButton = Button:New {
-		y = 5,
-		right = 110,
-		width = 100,
-		height = 41,
-		height = topBarHeight - 10,
+		y = 2,
+		right = 114,
+		width = 108,
+		height = 38,
 		name = "leaveGameButton",
 		caption = "Leave",
 		font = WG.Chobby.Configuration:GetFont(3),
