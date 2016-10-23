@@ -499,7 +499,7 @@ local function AddTeamButtons(parent, offX, joinFunc, aiFunc, unjoinable, disall
 			y = 5,
 			height = 22,
 			width = 72,
-			font =  WG.Chobby.Configuration:GetFont(2),
+			font = WG.Chobby.Configuration:GetFont(2),
 			caption = i18n("join") .. "\b",
 			OnClick = {joinFunc},
 			classname = "option_button",
@@ -673,8 +673,12 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 								isSpectator = false,
 							})
 					end,
-					function()
-						WG.PopupPreloader.ShowAiListWindow(battleLobby, battle.gameName, teamIndex)
+					function (obj, x, y, button)
+						local quickAddAi
+						if button == 3 and WG.Chobby.Configuration.lastAddedAiName then
+							quickAddAi = WG.Chobby.Configuration.lastAddedAiName
+						end
+						WG.PopupPreloader.ShowAiListWindow(battleLobby, battle.gameName, teamIndex, quickAddAi)
 					end,
 					disallowCustomTeams and teamIndex ~= 0,
 					(disallowBots or disallowCustomTeams) and teamIndex ~= 1

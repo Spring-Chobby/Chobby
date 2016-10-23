@@ -69,13 +69,16 @@ end
 
 local PopupPreloader = {}
 
-function PopupPreloader.ShowAiListWindow(battleLobby, newGameName, teamIndex)
+function PopupPreloader.ShowAiListWindow(battleLobby, newGameName, teamIndex, quickAddAi)
 	if newGameName ~= oldGameName then
 		oldGameName = newGameName
 		UpdateAiListWindow(newGameName)
 	end
 	
 	aiListWindow:SetLobbyAndAllyTeam(battleLobby, teamIndex)
+	if quickAddAi and aiListWindow:QuickAdd(quickAddAi) then
+		return
+	end
 	
 	aiListWindow.window:Show()
 	aiListWindow.window:SetPos(nil, nil, 500, 700)

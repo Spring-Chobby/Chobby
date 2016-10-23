@@ -44,6 +44,7 @@ function Configuration:init()
 	self.doNotSetAnySpringSettings = false
 	
 	self.myAccountID = false
+	self.lastAddedAiName = false
 	
 	self.battleTypeToName = {
 		[5] = "cooperative",
@@ -169,6 +170,7 @@ function Configuration:GetConfigData()
 		showMatchMakerBattles = self.showMatchMakerBattles,
 		chatFontSize = self.chatFontSize,
 		myAccountID = self.myAccountID,
+		lastAddedAiName = self.lastAddedAiName,
 	}
 end
 
