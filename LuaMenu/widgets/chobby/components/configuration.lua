@@ -43,6 +43,8 @@ function Configuration:init()
 	self.displayBadEngines = false
 	self.doNotSetAnySpringSettings = false
 	
+	self.myAccountID = false
+	
 	self.battleTypeToName = {
 		[5] = "cooperative",
 		[6] = "team",
@@ -166,6 +168,7 @@ function Configuration:GetConfigData()
 		menuNotificationVolume = self.menuNotificationVolume,
 		showMatchMakerBattles = self.showMatchMakerBattles,
 		chatFontSize = self.chatFontSize,
+		myAccountID = self.myAccountID,
 	}
 end
 

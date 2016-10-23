@@ -172,7 +172,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		children = {}
 	}
 	
-	local status_userWindow = Window:New {
+	local status_userWindow = Control:New {
 		y = 0,
 		right = 0,
 		bottom = panelButtonsHeight,
@@ -530,7 +530,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		else
 			rightPanelHandler.Rescale(2, 55)
 			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidthSmall)
-			RescaleMainWindow(2, 55, 47)
+			RescaleMainWindow(2, 55, 46)
 
 			-- Make main buttons thinner
 			mainWindow_mainContent:SetPos(mainButtonsWidthSmall, chatTabHolderHeight)

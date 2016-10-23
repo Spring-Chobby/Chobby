@@ -68,7 +68,6 @@ function GetControlPanelHandler(panelHolder)
 
 	
 	function externalFunctions.RemoveControl(name)
-		Spring.Echo("Remove Control", name)
 		if not panelHolder:GetChildByName(name) then
 			return
 		end
@@ -88,7 +87,6 @@ function GetControlPanelHandler(panelHolder)
 	end
 
 	function externalFunctions.AddControl(control, rank)
-		Spring.Echo("Add Control", rank)
 		if panelHolder:GetChildByName(control.name) then
 			return
 		end

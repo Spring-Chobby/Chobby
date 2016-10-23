@@ -56,16 +56,18 @@ local function StartStatusAndInvitesPanelTest()
 	GetStatusControl(4, true)
 end
 
-local function AddTwoStatusPanels()
+local function AddStaticPanels()
 	GetStatusControl(1)
 	GetStatusControl(2)
+	GetStatusControl(3)
+	GetStatusControl(4)
 end
 
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
 local function DelayedInitialize()
 	--StartStatusAndInvitesPanelTest()
-	--AddTwoStatusPanels()
+	--AddStaticPanels()
 end
 
 function widget:Initialize()
