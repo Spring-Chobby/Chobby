@@ -652,8 +652,12 @@ function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, ma
 	battle.runningSince   = runningSince   or battle.runningSince
 	battle.gameName       = gameName       or battle.gameName
 	battle.battleMode     = battleMode     or battle.battleMode
-	battle.disallowCustomTeams = disallowCustomTeams or battle.disallowCustomTeams
-	battle.disallowBots   = disallowBots   or battle.disallowBots
+	if disallowCustomTeams ~= nil then
+		battle.disallowCustomTeams = disallowCustomTeams
+	end
+	if disallowBots ~= nil then
+		battle.disallowBots = battle.disallowBots
+	end
 	battle.isMatchMaker   = isMatchMaker   or battle.isMatchMaker
 	battle.maxPlayers     = maxPlayers     or battle.maxPlayers
 	battle.title          = title          or battle.title

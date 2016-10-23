@@ -719,8 +719,8 @@ function Interface:_BattleAdded(data)
 		header.Map, header.Title or "no title", header.Game, header.SpectatorCount, 
 		header.IsRunning, header.RunningSince, 
 		header.Mode, 
-		header.Mode ~= 0, -- Is Custom
-		(header.Mode ~= 5 and header.Mode ~= 0), -- Is Bots
+		header.Mode and (header.Mode ~= 0), -- Is Custom
+		header.Mode and (header.Mode ~= 5 and header.Mode ~= 0), -- Is Bots
 		header.IsMatchMaker,
 		header.PlayerCount
 	)
@@ -795,8 +795,8 @@ function Interface:_BattleUpdate(data)
 		header.RunningSince, 
 		header.Game, 
 		header.Mode, 
-		header.Mode ~= 0, -- Is Custom
-		(header.Mode ~= 5 and header.Mode ~= 0), -- Is Bots
+		header.Mode and (header.Mode ~= 0), -- Is Custom
+		header.Mode and (header.Mode ~= 5 and header.Mode ~= 0), -- Is Bots
 		header.IsMatchMaker,
 		header.MaxPlayers,
 		header.Title,
