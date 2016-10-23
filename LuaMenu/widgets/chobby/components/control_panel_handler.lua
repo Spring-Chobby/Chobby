@@ -62,6 +62,11 @@ function GetControlPanelHandler(panelHolder)
 		updateFunction = newUpdateFunction
 	end
 
+	function externalFunctions.GetChildByName(name)
+		return panelHolder:GetChildByName(name)
+	end
+
+	
 	function externalFunctions.RemoveControl(name)
 		Spring.Echo("Remove Control", name)
 		if not panelHolder:GetChildByName(name) then

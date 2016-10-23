@@ -15,7 +15,7 @@ end
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
 -- Status and invites panel test
-local function GetStatusControl(rank)
+local function GetStatusControl(rank, alsoRemove)
 	local name = "window" .. rank
 	local window = Panel:New {
 		name = name,
@@ -32,14 +32,16 @@ local function GetStatusControl(rank)
 	
 	function AddWindow()
 		local handler = WG.Chobby.interfaceRoot.GetStatusAndInvitesPanel()
-		handler.RemoveControl(name)
+		handler.AddControl(window, rank)
 		
-		WG.Delay(RemoveWindow, math.random()*4)
+		if alsoRemove then
+			WG.Delay(RemoveWindow, math.random()*4)
+		end
 	end
 	
 	function RemoveWindow()
 		local handler = WG.Chobby.interfaceRoot.GetStatusAndInvitesPanel()
-		handler.AddControl(window, rank)
+		handler.RemoveControl(name)
 		
 		WG.Delay(AddWindow, math.random()*4)
 	end
@@ -48,17 +50,22 @@ local function GetStatusControl(rank)
 end
 
 local function StartStatusAndInvitesPanelTest()
+	GetStatusControl(1, true)
+	GetStatusControl(2, true)
+	GetStatusControl(3, true)
+	GetStatusControl(4, true)
+end
+
+local function AddTwoStatusPanels()
 	GetStatusControl(1)
 	GetStatusControl(2)
-	GetStatusControl(3)
-	GetStatusControl(4)
 end
 
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
 local function DelayedInitialize()
-	StartStatusAndInvitesPanelTest()
-
+	--StartStatusAndInvitesPanelTest()
+	AddTwoStatusPanels()
 end
 
 function widget:Initialize()

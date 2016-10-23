@@ -38,7 +38,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local padding = 0
 
-	local statusButtonWidth = 340
+	local statusButtonWidth = 290
 	local statusButtonWidthSmall = 290
 	
 	local topBarHeight = 50
@@ -422,9 +422,17 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		myBattle = WG.BattleStatusPanel.GetControl,
 		--myQueue = WG.QueueStatusPanel.GetTabControl,
 	}
-
+	
+	local battleTabHolder = Control:New {
+		name = "battleTabHolder",
+		caption = "", -- Battle and MM Status Window
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+	}
+	
 	local battleStatusPanelHandler = GetTabPanelHandler(
-		"myBattlePanel", status_battleHolder, mainContent_window, {}, nil, nil, nil, nil, 
+		"myBattlePanel", battleTabHolder, mainContent_window, {}, nil, nil, nil, nil, 
 		statusButtonWidth, battleStatusTabControls
 	)
 	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons_buttons, rightPanel_window, rightPanelTabs)
@@ -857,6 +865,20 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		
 		UpdateStatusAndInvitesHolderPosition()
 	end
+	
+	function externalFunctions.SetBattleTabHolderVisible(newVisible, rank)
+		local oldVisible = ((statusAndInvitesPanel.GetChildByName(battleTabHolder.name) and true) or false)
+		if oldVisible == newVisible then
+			return
+		end
+		
+		if newVisible then
+			statusAndInvitesPanel.AddControl(battleTabHolder, rank or 0)
+		else
+			statusAndInvitesPanel.RemoveControl(battleTabHolder.name)
+		end
+	end
+	
 
 	function externalFunctions.SetPanelDisplayMode(newAutodetectDoublePanel, newDoublePanel)
 		autodetectDoublePanel = newAutodetectDoublePanel
