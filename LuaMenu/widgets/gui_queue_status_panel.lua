@@ -122,7 +122,7 @@ local function InitializeQueueStatusHandler(name, ControlType, parent, pos)
 		queueStatusText._relativeBounds.bottom = bottomBound
 		queueStatusText:UpdateClientArea()
 		if ySize < 60 then
-			queueStatusText:SetPos(6, 1)
+			queueStatusText:SetPos(6, 2)
 			bigMode = false
 		else
 			queueStatusText:SetPos(8, 13)
@@ -225,7 +225,7 @@ local function InitializeInstantQueueHandler()
 		queueStatusText._relativeBounds.bottom = bottomBound
 		queueStatusText:UpdateClientArea()
 		if ySize < 60 then
-			queueStatusText:SetPos(xSize/4 - 52, 4)
+			queueStatusText:SetPos(xSize/4 - 52, 2)
 			queueStatusText.font.size = WG.Chobby.Configuration:GetFont(2).size
 			queueStatusText:Invalidate()
 			bigMode = false
@@ -483,6 +483,7 @@ function DelayedInitialize()
 	instantQueueHandler = InitializeInstantQueueHandler()
 	
 	local previouslyInMatchMaking = false
+	local previousInstantStart = false
 	local function OnMatchMakerStatus(listener, inMatchMaking, joinedQueueList, queueCounts, ingameCounts, instantStartQueues, currentEloWidth, joinedTime, bannedTime)
 		findingMatch = inMatchMaking
 		
@@ -504,16 +505,17 @@ function DelayedInitialize()
 			statusAndInvitesPanel.RemoveControl(statusQueueLobby.GetHolder().name)
 			statusQueueIngame.GetHolder():SetVisibility(inMatchMaking)
 		end
-		
 		previouslyInMatchMaking = inMatchMaking
 		
-		if somethingelse then
-			if (not bannedTime) and WG.QueueListWindow.HaveMatchMakerResources() and instantQueueHandler.ProcessInstantStartQueue(instantStartQueues) then
-				instantQueueHandler.SetVisibility(true)
-			else
-				instantQueueHandler.SetVisibility(false)
+		local instantStart = ((not bannedTime) and WG.QueueListWindow.HaveMatchMakerResources() and instantQueueHandler.ProcessInstantStartQueue(instantStartQueues))
+		if previousInstantStart then	
+			if not instantStart then
+				statusAndInvitesPanel.RemoveControl(statusQueueLobby.GetHolder().name)
 			end
+		elseif instantStart then
+				statusAndInvitesPanel.AddControl(instantQueueHandler.GetHolder(), 5)
 		end
+		previousInstantStart = instantStart
 	end
 	
 	local function DestroyReadyCheckPopup()
