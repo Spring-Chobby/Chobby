@@ -158,11 +158,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		padding = {0, 0, 0, 0},
 	}
 
-	local holder_statusAndInvites = Window:New {
+	local holder_statusAndInvites = Control:New {
 		x = titleWidth,
 		y = 0,
 		right = 0,
-		height = titleHeight,
+		height = titleHeightSmall,
 		name = "holder_statusAndInvites",
 		caption = "", -- Status Window
 		parent = holder_status,
@@ -745,30 +745,16 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		end
 		
 		if doublePanelMode then
-			height = 75
+			height = titleHeightSmall
 			yPos = 4
-			
-			local middlePad
-			if screenWidth < 1366 then
-				middlePad = 0
-			elseif screenWidth < 1650 then
-				middlePad = 10
-			else
-				middlePad = 20
+			if screenWidth > 1500 or controlCount < 2 then
+				yPos = 26
 			end
-			
-			xPos = 0
+			xPos = 20
 		else
-			height = 75
-			yPos = 4
-			
+			height = titleHeightSmall
+			yPos = 0
 			xPos = 5
-			if false then
-				local leftBound = mainButtonsWidthSmall + statusButtonWidthSmall + 15
-				if xPos < leftBound then
-					xPos = leftBound
-				end
-			end
 		end
 	
 		holder_statusAndInvites:SetPos(xPos, yPos, width, height)

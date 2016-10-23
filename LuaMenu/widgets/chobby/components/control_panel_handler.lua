@@ -2,7 +2,7 @@ function GetControlPanelHandler(panelHolder)
 
 	local externalFunctions = {}
 
-	local CONTROL_SPACING = 3
+	local CONTROL_SPACING = 2
 	local CONTROL_SIDE_SPACING = 2
 
 	-------------------------------------------------------------------
