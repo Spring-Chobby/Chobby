@@ -152,7 +152,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 			local buttonSize = math.min(size * 1.8)
 			heading = TextBox:New {
 				x = 4 + 2*size,
-				y = 40 - size,
+				y = 36 - size,
 				right = 0,
 				height = 30,
 				valign = "center",
@@ -162,7 +162,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 				text = i18n(name),
 			}
 
-			backButton:SetPos(4, 39 - size * 1.5, buttonSize, buttonSize)
+			backButton:SetPos(4, 35 - size * 1.5, buttonSize, buttonSize)
 		end
 
 		for i = 1, #tabs do
@@ -371,7 +371,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 
 	if backFunction then
 		-- Add heading and back button
-		buttonOffset = 50
+		buttonOffset = 50 - BUTTON_SPACING
 
 		local function SucessFunction()
 			if cleanupFunction then
@@ -384,7 +384,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		local buttonSize = math.min(size * 1.5)
 		heading = TextBox:New {
 			x = 4 + size*2,
-			y = 40 - size,
+			y = 36 - size,
 			right = 0,
 			height = 30,
 			valign = "center",
@@ -396,7 +396,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		backButton = Button:New {
 			name = name .. "_back_button",
 			x = 1,
-			y = 39 - size * 1.5,
+			y = 35 - size * 1.5,
 			width = buttonSize,
 			height = buttonSize,
 			caption = "",

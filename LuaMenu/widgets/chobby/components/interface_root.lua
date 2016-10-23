@@ -14,7 +14,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local panelButtonsHeight = 42
 	local statusWindowGapSmall = 44
 
-	local chatTabHolderHeight = 50
+	local chatTabHolderHeight = 45
 
 	local battleStatusTopPadding = 20
 	local battleStatusBottomPadding = 20
@@ -26,7 +26,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local chatTabHolderRight = 0
 
 	local titleHeight = 125
-	local titleHeightSmall = 90
+	local titleHeightSmall = 75
 	local titleWidth = 360
 
 	local mainButtonsWidth = 180
@@ -463,7 +463,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			end
 
 		else
-			chatWindows:SetTabHolderParent(holder_status, smallStatusLeftPadding, titleHeightSmall - chatTabHolderHeight + imageFudge, chatTabHolderRight)
+			chatWindows:SetTabHolderParent(holder_mainWindow, smallStatusLeftPadding + mainButtonsWidthSmall, -5, chatTabHolderRight)
 
 			rightPanelHandler.UpdateLayout(mainContent_window, true)
 			if mainContent_window:IsEmpty() and not rightPanel_window:IsEmpty() then
@@ -489,8 +489,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			RescaleMainWindow(3, 70)
 
 			-- Make main buttons wider
-			mainWindow_mainContent:SetPos(mainButtonsWidth)
+			mainWindow_mainContent:SetPos(mainButtonsWidth, 0)
 			mainWindow_mainContent._relativeBounds.right = 0
+			mainWindow_mainContent._relativeBounds.bottom = 0
 			mainWindow_mainContent:UpdateClientArea()
 
 			--mainContent_window.color = VISIBLE_COLOR
@@ -540,8 +541,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			RescaleMainWindow(2, 55)
 
 			-- Make main buttons thinner
-			mainWindow_mainContent:SetPos(mainButtonsWidthSmall)
+			mainWindow_mainContent:SetPos(mainButtonsWidthSmall, chatTabHolderHeight)
 			mainWindow_mainContent._relativeBounds.right = 0
+			mainWindow_mainContent._relativeBounds.bottom = 0
 			mainWindow_mainContent:UpdateClientArea()
 
 			--mainContent_window.color = INVISIBLE_COLOR
