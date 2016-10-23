@@ -597,17 +597,19 @@ function Interface:_User(data)
 		return
 	end
 	
-	local currentBattle = self.users[data.Name].battleID
-	if data.BattleID ~= currentBattle then
-		if data.BattleID then
-			if currentBattle then
+	if not self.REVERSE_COMPAT then
+		local currentBattle = self.users[data.Name].battleID
+		if data.BattleID ~= currentBattle then
+			if data.BattleID then
+				if currentBattle then
+					self:_OnLeftBattle(currentBattle, data.Name)
+				end
+				if data.Name ~= self.myUserName then
+					self:_OnJoinedBattle(data.BattleID, data.Name, 0)
+				end
+			elseif currentBattle then
 				self:_OnLeftBattle(currentBattle, data.Name)
 			end
-			if data.Name ~= self.myUserName then
-				self:_OnJoinedBattle(data.BattleID, data.Name, 0)
-			end
-		elseif currentBattle then
-			self:_OnLeftBattle(currentBattle, data.Name)
 		end
 	end
 	

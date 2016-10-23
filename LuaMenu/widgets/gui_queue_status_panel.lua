@@ -490,6 +490,7 @@ function DelayedInitialize()
 		if not statusQueueIngame then
 			local pos = {right = 2, y = 52, width = 290, height = 70}
 			statusQueueIngame = InitializeQueueStatusHandler("ingameQueue", Window, WG.Chobby.interfaceRoot.GetIngameInterfaceHolder(), pos)
+			statusQueueIngame.GetHolder():SetVisibility(inMatchMaking)
 		end
 		
 		if inMatchMaking then
