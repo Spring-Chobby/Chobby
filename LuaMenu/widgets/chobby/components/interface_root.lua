@@ -172,30 +172,16 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		children = {}
 	}
 	
-	local status_userWindow = Control:New {
+	local status_userWindow = Window:New {
 		y = 0,
 		right = 0,
 		bottom = panelButtonsHeight,
 		width = userStatusWidth,
-		height = "100%",
 		padding = {0, 0, 0, 0},
 		parent = holder_status,
 		children = {
 			WG.UserStatusPanel.GetControl(),
 		}
-	}
-
-	local status_battleHolder = Control:New {
-		x = battleStatusLeftPadding,
-		y = battleStatusTopPadding,
-		right = userStatusWidth,
-		bottom = battleStatusBottomPadding,
-		name = "status_battleHolder",
-		caption = "", -- Battle and MM Status Window
-		resizable = false,
-		draggable = false,
-		padding = {0, 0, 0, 0},
-		parent = holder_status,
 	}
 
 	local status_panelButtons = Control:New {
@@ -540,10 +526,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			status_userWindow._relativeBounds.bottom = panelButtonsHeight
 			status_userWindow:UpdateClientArea()
 
-			status_battleHolder:SetPos(battleStatusLeftPadding, battleStatusTopPadding)
-			status_battleHolder._relativeBounds.bottom = battleStatusBottomPadding
-			status_battleHolder:UpdateClientArea()
-
 			holder_topImage:SetPos(nil, topOffset, nil, titleHeight + imageFudge)
 		else
 			rightPanelHandler.Rescale(2, 55)
@@ -590,11 +572,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 			status_userWindow._relativeBounds.bottom = 0
 			status_userWindow:UpdateClientArea()
-
-			status_battleHolder:SetPos(smallStatusLeftPadding, battleStatusTopPaddingSmall)
-			status_battleHolder._relativeBounds.bottom = statusWindowGapSmall
-			status_battleHolder:UpdateClientArea()
-
+			
 			holder_topImage:SetPos(nil, topOffset, nil, titleHeightSmall + imageFudge + chatTabHolderHeight)
 		end
 
@@ -641,14 +619,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 		buttons_exit._relativeBounds.bottom = (bottomPad > 0 and bottomPad) or 4
 		buttons_exit:UpdateClientArea()
-
-		if doublePanelMode then
-			status_battleHolder._relativeBounds.right = panelButtonsWidth + rightPad
-			status_battleHolder:UpdateClientArea()
-		else
-			status_battleHolder._relativeBounds.right = userStatusWidth
-			status_battleHolder:UpdateClientArea()
-		end
 
 		mainWindow_buttonsHolder:SetPos(leftButtonPad)
 		local contentOffset = leftButtonPad
