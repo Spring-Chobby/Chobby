@@ -520,6 +520,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			end
 			holder_mainWindow._relativeBounds.bottom = 0
 			holder_mainWindow:UpdateClientArea()
+			
+			buttonsHolder_image:SetPos(nil, 0)
+			holder_rightPanel._relativeBounds.bottom = 0
+			holder_rightPanel:UpdateClientArea()
 
 			-- Align game title and status.
 			holder_heading:SetPos(0, topOffset, titleWidth, titleHeight)
@@ -568,6 +572,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			holder_mainWindow._relativeBounds.bottom = 0
 			holder_mainWindow:UpdateClientArea()
 
+			buttonsHolder_image:SetPos(nil, chatTabHolderHeight)
+			holder_rightPanel._relativeBounds.bottom = 0
+			holder_rightPanel:UpdateClientArea()
+			
 			-- Align game title and status.
 			holder_heading:SetPos(0, topOffset, mainButtonsWidthSmall + padding, titleHeightSmall)
 			holder_status:SetPos(mainButtonsWidthSmall, topOffset, titleHeightSmall, titleHeightSmall)
@@ -581,7 +589,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			status_battleHolder._relativeBounds.bottom = statusWindowGapSmall
 			status_battleHolder:UpdateClientArea()
 
-			holder_topImage:SetPos(nil, topOffset, nil, titleHeightSmall + imageFudge)
+			holder_topImage:SetPos(nil, topOffset, nil, titleHeightSmall + imageFudge + chatTabHolderHeight)
 		end
 
 		heading_image.file = Configuration:GetHeadingImage(doublePanelMode)

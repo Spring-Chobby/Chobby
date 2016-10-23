@@ -32,7 +32,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 	local function SetButtonPositionAndSize(index)
 		submenus[index].button:SetPos(
 			BUTTON_SIDE_SPACING, 
-			(index - 1) * (buttonHeight + BUTTON_SPACING) + BUTTON_OFFSET, 
+			(index - 1) * (buttonHeight + BUTTON_SPACING) + BUTTON_OFFSET - BUTTON_SPACING, 
 			nil, 
 			buttonHeight
 		)
@@ -132,7 +132,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 		
 		submenus[i].button = Button:New {
 			x = BUTTON_SIDE_SPACING,
-			y = (i - 1) * (buttonHeight + BUTTON_SPACING) + BUTTON_OFFSET,
+			y = (i - 1) * (buttonHeight + BUTTON_SPACING) + BUTTON_OFFSET - BUTTON_SPACING,
 			right = BUTTON_SIDE_SPACING,
 			height = buttonHeight,
 			caption = i18n(submenus[i].name),
