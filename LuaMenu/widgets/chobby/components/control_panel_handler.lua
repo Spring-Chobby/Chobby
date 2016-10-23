@@ -2,8 +2,8 @@ function GetControlPanelHandler(panelHolder)
 
 	local externalFunctions = {}
 
-	local CONTROL_SPACING = 2
-	local CONTROL_SIDE_SPACING = 2
+	local CONTROL_SPACING = 3
+	local CONTROL_SIDE_SPACING = 4
 
 	-------------------------------------------------------------------
 	-- Local variables
@@ -44,9 +44,9 @@ function GetControlPanelHandler(panelHolder)
 		end
 		
 		if #controls > 2 then
-			controlHeight = 36
+			controlHeight = 38
 		else
-			controlHeight = 75
+			controlHeight = 79
 		end
 		
 		for i = 1, #controls do

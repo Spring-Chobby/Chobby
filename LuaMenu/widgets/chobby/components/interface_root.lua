@@ -14,7 +14,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local panelButtonsHeight = 42
 	local statusWindowGapSmall = 44
 
-	local chatTabHolderHeight = 45
+	local chatTabHolderHeight = 41
 
 	local battleStatusTopPadding = 20
 	local battleStatusBottomPadding = 20
@@ -26,7 +26,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local chatTabHolderRight = 0
 
 	local titleHeight = 125
-	local titleHeightSmall = 75
+	local titleHeightSmall = 82
 	local titleWidth = 360
 
 	local mainButtonsWidth = 180
@@ -443,8 +443,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-- Resizing functions
 	-------------------------------------------------------------------
 
-	local function RescaleMainWindow(newFontSize, newButtonHeight)
-		mainWindowHandler.Rescale(newFontSize, newButtonHeight)
+	local function RescaleMainWindow(newFontSize, newButtonHeight, newButtonOffset)
+		mainWindowHandler.Rescale(newFontSize, newButtonHeight, newButtonOffset)
 		buttons_exit:SetPos(nil, nil, nil, newButtonHeight)
 
 		ButtonUtilities.SetFontSizeScale(buttons_exit, newFontSize)
@@ -469,7 +469,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			end
 
 		else
-			chatWindows:SetTabHolderParent(holder_mainWindow, smallStatusLeftPadding + mainButtonsWidthSmall, -5, chatTabHolderRight)
+			chatWindows:SetTabHolderParent(holder_mainWindow, smallStatusLeftPadding + mainButtonsWidthSmall, -8, chatTabHolderRight)
 
 			rightPanelHandler.UpdateLayout(mainContent_window, true)
 			if mainContent_window:IsEmpty() and not rightPanel_window:IsEmpty() then
@@ -492,7 +492,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		
 		if doublePanelMode then
 			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidth)
-			RescaleMainWindow(3, 70)
+			RescaleMainWindow(3, 70, 50)
 
 			-- Make main buttons wider
 			mainWindow_mainContent:SetPos(mainButtonsWidth, 0)
@@ -548,7 +548,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		else
 			rightPanelHandler.Rescale(2, 55)
 			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidthSmall)
-			RescaleMainWindow(2, 55)
+			RescaleMainWindow(2, 55, 47)
 
 			-- Make main buttons thinner
 			mainWindow_mainContent:SetPos(mainButtonsWidthSmall, chatTabHolderHeight)
@@ -748,7 +748,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		if controlCount < 2 then
 			width = statusButtonWidthSmall
 		else
-			width = statusButtonWidthSmall*2 + 2
+			width = statusButtonWidthSmall*2 + 6
 		end
 		
 		if doublePanelMode then
@@ -760,7 +760,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			xPos = 20
 		else
 			height = titleHeightSmall
-			yPos = 0
+			yPos = 2
 			xPos = 5
 		end
 	
@@ -1008,7 +1008,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	battleStatusPanelHandler.Rescale(4, 70)
 	rightPanelHandler.Rescale(2, 70)
-	RescaleMainWindow(3, 70)
+	RescaleMainWindow(3, 70, 50)
 
 	externalFunctions.ViewResize(screenWidth, screenHeight)
 	UpdatePadding(screenWidth, screenHeight)

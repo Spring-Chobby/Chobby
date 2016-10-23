@@ -129,33 +129,33 @@ local function GetBattleInfoHolder(parent, battleID)
 		currentSmallMode = smallMode
 		
 		if smallMode then
-			minimap:SetPos(nil, nil, 28, 28)
+			minimap:SetPos(nil, nil, 30, 30)
 
 			lblTitle.font.size = Configuration:GetFont(1).size
 			lblTitle:SetPos(36, 1, 160)
 
 			lblPlayerStatus.font.size = Configuration:GetFont(2).size
-			lblPlayerStatus:SetPos(56, 15)
+			lblPlayerStatus:SetPos(58, 15)
 
-			imPlayerStatus:SetPos(38, 15, 15, 15)
+			imPlayerStatus:SetPos(40, 15, 15, 15)
 
 			lblPlayers.font.size = Configuration:GetFont(2).size
 			lblPlayers:SetPos(165, 15)
 
 			playersPrefix = PLAYER_PREFIX_SMALL
 		else
-			minimap:SetPos(nil, nil, 65, 65)
+			minimap:SetPos(nil, nil, 68, 68)
 
 			lblTitle.font.size = Configuration:GetFont(2).size
-			lblTitle:SetPos(72, 3, 235)
+			lblTitle:SetPos(76, 3, 235)
 
 			lblPlayerStatus.font.size = Configuration:GetFont(2).size
-			lblPlayerStatus:SetPos(99, 27)
+			lblPlayerStatus:SetPos(103, 27)
 
-			imPlayerStatus:SetPos(76, 23, 20, 20)
+			imPlayerStatus:SetPos(80, 23, 20, 20)
 
 			lblPlayers.font.size = Configuration:GetFont(2).size
-			lblPlayers:SetPos(76, 48)
+			lblPlayers:SetPos(80, 48)
 
 			playersPrefix = PLAYER_PREFIX_BIG
 		end

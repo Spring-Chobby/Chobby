@@ -65,9 +65,9 @@ local function InitializeQueueStatusHandler(name, ControlType, parent, pos)
 	local button = Button:New {
 		name = "cancel",
 		x = "68%",
-		right = 3,
-		y = 3,
-		bottom = 3,
+		right = 4,
+		y = 4,
+		bottom = 4,
 		padding = {0,0,0,0},
 		caption = "Cancel",
 		font = WG.Chobby.Configuration:GetFont(3),
@@ -184,7 +184,7 @@ local function InitializeInstantQueueHandler()
 	
 	local button = Button:New {
 		name = "join",
-		x = "50%",
+		x = "68%",
 		right = 4,
 		y = 4,
 		bottom = 4,
@@ -205,7 +205,7 @@ local function InitializeInstantQueueHandler()
 	local bigMode = true
 	
 	local queueStatusText = TextBox:New {
-		x = 12,
+		x = 20,
 		y = 18,
 		right = rightBound,
 		bottom = bottomBound,
@@ -510,10 +510,10 @@ function DelayedInitialize()
 		local instantStart = ((not bannedTime) and WG.QueueListWindow.HaveMatchMakerResources() and instantQueueHandler.ProcessInstantStartQueue(instantStartQueues))
 		if previousInstantStart then	
 			if not instantStart then
-				statusAndInvitesPanel.RemoveControl(statusQueueLobby.GetHolder().name)
+				statusAndInvitesPanel.RemoveControl(instantQueueHandler.GetHolder().name)
 			end
 		elseif instantStart then
-				statusAndInvitesPanel.AddControl(instantQueueHandler.GetHolder(), 5)
+			statusAndInvitesPanel.AddControl(instantQueueHandler.GetHolder(), 5)
 		end
 		previousInstantStart = instantStart
 	end
