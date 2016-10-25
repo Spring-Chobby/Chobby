@@ -216,7 +216,7 @@ local function InitializeInstantQueueHandler()
 		
 	local function UpdateQueueText()
 		if queueName then
-			queueStatusText:SetText(queueName .. " Availible\nClick to Join")
+			queueStatusText:SetText(queueName .. " Available\nClick to Join")
 		end
 	end
 	
