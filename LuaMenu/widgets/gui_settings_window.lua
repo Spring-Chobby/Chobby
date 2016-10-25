@@ -74,6 +74,10 @@ local function SetLobbyFullscreenMode(mode)
 		return
 	end
 	currentMode = mode
+	
+	if WG.Chobby.Configuration.doNotSetAnySpringSettings then
+		return
+	end
 
 	local screenX, screenY = Spring.GetScreenGeometry()
 	Spring.Echo("screenX, screenY", screenX, screenY)
