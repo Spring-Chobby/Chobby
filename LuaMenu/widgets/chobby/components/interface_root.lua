@@ -14,7 +14,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local panelButtonsHeight = 42
 	local statusWindowGapSmall = 44
 
-	local chatTabHolderHeight = 50
+	local chatTabHolderHeight = 41
 
 	local battleStatusTopPadding = 20
 	local battleStatusBottomPadding = 20
@@ -26,7 +26,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local chatTabHolderRight = 0
 
 	local titleHeight = 125
-	local titleHeightSmall = 90
+	local titleHeightSmall = 82
 	local titleWidth = 360
 
 	local mainButtonsWidth = 180
@@ -38,10 +38,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local padding = 0
 
-	local statusButtonWidth = 340
+	local statusButtonWidth = 290
 	local statusButtonWidthSmall = 290
 	
-	local topBarHeight = 50
+	local topBarHeight = 42
 
 	-- Switch to single panel mode when below the minimum screen width
 	local minScreenWidth = 1280
@@ -157,45 +157,31 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		draggable = false,
 		padding = {0, 0, 0, 0},
 	}
-	
-	local holder_matchMaking = Control:New {
+
+	local holder_statusAndInvites = Control:New {
 		x = titleWidth,
 		y = 0,
 		right = 0,
-		height = titleHeight,
-		name = "holder_matchMaking",
+		height = titleHeightSmall,
+		name = "holder_statusAndInvites",
 		caption = "", -- Status Window
-		parent = lobbyInterfaceHolder,
+		parent = holder_status,
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-
+	
 	local status_userWindow = Control:New {
 		y = 0,
 		right = 0,
 		bottom = panelButtonsHeight,
 		width = userStatusWidth,
-		height = "100%",
 		padding = {0, 0, 0, 0},
 		parent = holder_status,
 		children = {
 			WG.UserStatusPanel.GetControl(),
 		}
-	}
-
-	local status_battleHolder = Control:New {
-		x = battleStatusLeftPadding,
-		y = battleStatusTopPadding,
-		right = userStatusWidth,
-		bottom = battleStatusBottomPadding,
-		name = "status_battleHolder",
-		caption = "", -- Battle and MM Status Window
-		resizable = false,
-		draggable = false,
-		padding = {0, 0, 0, 0},
-		parent = holder_status,
 	}
 
 	local status_panelButtons = Control:New {
@@ -420,25 +406,31 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local battleStatusTabControls = {
 		myBattle = WG.BattleStatusPanel.GetControl,
-		--myQueue = WG.QueueStatusPanel.GetTabControl,
 	}
-
+	
+	local battleTabHolder = Control:New {
+		name = "battleTabHolder",
+		caption = "", -- Battle and MM Status Window
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+	}
+	
 	local battleStatusPanelHandler = GetTabPanelHandler(
-		"myBattlePanel", status_battleHolder, mainContent_window, {}, nil, nil, nil, nil, 
+		"myBattlePanel", battleTabHolder, mainContent_window, {}, nil, nil, nil, nil, 
 		statusButtonWidth, battleStatusTabControls
 	)
 	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons_buttons, rightPanel_window, rightPanelTabs)
 	mainWindowHandler = GetSubmenuHandler(buttonsHolder_buttons, mainContent_window, submenus)
-
-	local matchMakerStatus = WG.QueueStatusPanel.GetControl()
-	holder_matchMaking:AddChild(matchMakerStatus)
+	
+	local statusAndInvitesPanel = GetControlPanelHandler(holder_statusAndInvites)
 	
 	-------------------------------------------------------------------
 	-- Resizing functions
 	-------------------------------------------------------------------
 
-	local function RescaleMainWindow(newFontSize, newButtonHeight)
-		mainWindowHandler.Rescale(newFontSize, newButtonHeight)
+	local function RescaleMainWindow(newFontSize, newButtonHeight, newButtonOffset)
+		mainWindowHandler.Rescale(newFontSize, newButtonHeight, newButtonOffset)
 		buttons_exit:SetPos(nil, nil, nil, newButtonHeight)
 
 		ButtonUtilities.SetFontSizeScale(buttons_exit, newFontSize)
@@ -463,7 +455,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			end
 
 		else
-			chatWindows:SetTabHolderParent(holder_status, smallStatusLeftPadding, titleHeightSmall - chatTabHolderHeight + imageFudge, chatTabHolderRight)
+			chatWindows:SetTabHolderParent(holder_mainWindow, smallStatusLeftPadding + mainButtonsWidthSmall, -8, chatTabHolderRight)
 
 			rightPanelHandler.UpdateLayout(mainContent_window, true)
 			if mainContent_window:IsEmpty() and not rightPanel_window:IsEmpty() then
@@ -486,11 +478,12 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		
 		if doublePanelMode then
 			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidth)
-			RescaleMainWindow(3, 70)
+			RescaleMainWindow(3, 70, 50)
 
 			-- Make main buttons wider
-			mainWindow_mainContent:SetPos(mainButtonsWidth)
+			mainWindow_mainContent:SetPos(mainButtonsWidth, 0)
 			mainWindow_mainContent._relativeBounds.right = 0
+			mainWindow_mainContent._relativeBounds.bottom = 0
 			mainWindow_mainContent:UpdateClientArea()
 
 			--mainContent_window.color = VISIBLE_COLOR
@@ -519,6 +512,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			end
 			holder_mainWindow._relativeBounds.bottom = 0
 			holder_mainWindow:UpdateClientArea()
+			
+			buttonsHolder_image:SetPos(nil, 0)
+			buttonsHolder_image._relativeBounds.bottom = 0
+			buttonsHolder_image:UpdateClientArea()
 
 			-- Align game title and status.
 			holder_heading:SetPos(0, topOffset, titleWidth, titleHeight)
@@ -529,19 +526,16 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			status_userWindow._relativeBounds.bottom = panelButtonsHeight
 			status_userWindow:UpdateClientArea()
 
-			status_battleHolder:SetPos(battleStatusLeftPadding, battleStatusTopPadding)
-			status_battleHolder._relativeBounds.bottom = battleStatusBottomPadding
-			status_battleHolder:UpdateClientArea()
-
 			holder_topImage:SetPos(nil, topOffset, nil, titleHeight + imageFudge)
 		else
 			rightPanelHandler.Rescale(2, 55)
 			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidthSmall)
-			RescaleMainWindow(2, 55)
+			RescaleMainWindow(2, 55, 46)
 
 			-- Make main buttons thinner
-			mainWindow_mainContent:SetPos(mainButtonsWidthSmall)
+			mainWindow_mainContent:SetPos(mainButtonsWidthSmall, chatTabHolderHeight)
 			mainWindow_mainContent._relativeBounds.right = 0
+			mainWindow_mainContent._relativeBounds.bottom = 0
 			mainWindow_mainContent:UpdateClientArea()
 
 			--mainContent_window.color = INVISIBLE_COLOR
@@ -566,6 +560,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			holder_mainWindow._relativeBounds.bottom = 0
 			holder_mainWindow:UpdateClientArea()
 
+			buttonsHolder_image:SetPos(nil, chatTabHolderHeight)
+			buttonsHolder_image._relativeBounds.bottom = 0
+			buttonsHolder_image:UpdateClientArea()
+			
 			-- Align game title and status.
 			holder_heading:SetPos(0, topOffset, mainButtonsWidthSmall + padding, titleHeightSmall)
 			holder_status:SetPos(mainButtonsWidthSmall, topOffset, titleHeightSmall, titleHeightSmall)
@@ -574,12 +572,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 			status_userWindow._relativeBounds.bottom = 0
 			status_userWindow:UpdateClientArea()
-
-			status_battleHolder:SetPos(smallStatusLeftPadding, battleStatusTopPaddingSmall)
-			status_battleHolder._relativeBounds.bottom = statusWindowGapSmall
-			status_battleHolder:UpdateClientArea()
-
-			holder_topImage:SetPos(nil, topOffset, nil, titleHeightSmall + imageFudge)
+			
+			holder_topImage:SetPos(nil, topOffset, nil, titleHeightSmall + imageFudge + chatTabHolderHeight)
 		end
 
 		heading_image.file = Configuration:GetHeadingImage(doublePanelMode)
@@ -625,14 +619,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 		buttons_exit._relativeBounds.bottom = (bottomPad > 0 and bottomPad) or 4
 		buttons_exit:UpdateClientArea()
-
-		if doublePanelMode then
-			status_battleHolder._relativeBounds.right = panelButtonsWidth + rightPad
-			status_battleHolder:UpdateClientArea()
-		else
-			status_battleHolder._relativeBounds.right = userStatusWidth
-			status_battleHolder:UpdateClientArea()
-		end
 
 		mainWindow_buttonsHolder:SetPos(leftButtonPad)
 		local contentOffset = leftButtonPad
@@ -706,32 +692,62 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		holder_status:SetPos(nil, topOffset)
 		
 		if showTopBar then
-			--buttonsHolder_image.color[4] = 0.1
-			--buttonsHolder_image:Invalidate()
-			--holder_topImage.color[4] = 0.25
-			--holder_topImage:Invalidate()
+			buttonsHolder_image.color[4] = 0.3
+			buttonsHolder_image:Invalidate()
+			holder_topImage.color[4] = 0.45
+			holder_topImage:Invalidate()
 		else
 			backgroundHolder:SetEnabled(true)
 			ingameBackgroundHolder:SetEnabled(false)
-			--buttonsHolder_image.color[4] = 0.1
-			--buttonsHolder_image:Invalidate()
-			--holder_topImage.color[4] = 0.25
-			--holder_topImage:Invalidate()
+			buttonsHolder_image.color[4] = 0.1
+			buttonsHolder_image:Invalidate()
+			holder_topImage.color[4] = 0.25
+			holder_topImage:Invalidate()
 		end
 		
 		local screenWidth, screenHeight = Spring.GetViewGeometry()
 		screen0:Resize(screenWidth, screenHeight)
 	end
 	
+	local function UpdateStatusAndInvitesHolderPosition()
+		local screenWidth, screenHeight = Spring.GetViewGeometry()
+		
+		local xPos, yPos, width, height
+		local controlCount = statusAndInvitesPanel.GetControlCount()
+		
+		if controlCount < 2 then
+			width = statusButtonWidthSmall
+		else
+			width = statusButtonWidthSmall*2 + 6
+		end
+		
+		if doublePanelMode then
+			height = titleHeightSmall
+			yPos = 4
+			if screenWidth > 1500 or controlCount < 2 then
+				yPos = 26
+			end
+			xPos = 20
+		else
+			height = titleHeightSmall
+			yPos = 2
+			xPos = 5
+		end
+	
+		holder_statusAndInvites:SetPos(xPos, yPos, width, height)
+	end
+	
+	statusAndInvitesPanel.SetUpdateFunction(UpdateStatusAndInvitesHolderPosition)
+	
 	-------------------------------------------------------------------
 	-- Top bar initialisation
 	-------------------------------------------------------------------
 	
 	local switchToMenuButton = Button:New {
-		y = 5,
-		right = 6,
-		width = 100,
-		height = 41,
+		y = 2,
+		right = 3,
+		width = 108,
+		height = 38,
 		name = "switchToMenuButton",
 		caption = "Menu",
 		font = WG.Chobby.Configuration:GetFont(3),
@@ -747,10 +763,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		}
 	}
 	local switchToGameButton = Button:New {
-		y = 5,
-		right = 5,
-		width = 100,
-		height = 41,
+		y = 2,
+		right = 3,
+		width = 108,
+		height = 38,
 		name = "switchToGameButton",
 		caption = "Game",
 		font = WG.Chobby.Configuration:GetFont(3),
@@ -771,11 +787,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	end
 	
 	local leaveGameButton = Button:New {
-		y = 5,
-		right = 110,
-		width = 100,
-		height = 41,
-		height = topBarHeight - 10,
+		y = 2,
+		right = 114,
+		width = 108,
+		height = 38,
 		name = "leaveGameButton",
 		caption = "Leave",
 		font = WG.Chobby.Configuration:GetFont(3),
@@ -805,47 +820,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-------------------------------------------------------------------
 	-- External Functions
 	-------------------------------------------------------------------
-	function externalFunctions.UpdateMatchMakingHolderPosition()
-		local screenWidth, screenHeight = Spring.GetViewGeometry()
-		
-		local battleShown = (battleStatusPanelHandler.GetTabByName("myBattle") and true) or false
-		local topOffset = (showTopBar and topBarHeight) or 0
-		
-		local xPos, yPos, width, height
-		if doublePanelMode then
-			width = screenWidth/4 - 20
-			height = titleHeight - panelButtonsHeight - 5
-			yPos = 0
-			
-			local middlePad
-			if screenWidth < 1366 then
-				middlePad = 0
-			elseif screenWidth < 1650 then
-				middlePad = 10
-			else
-				middlePad = 20
-			end
-			
-			if battleShown then
-				xPos = (100 - panelWidthRel)*screenWidth/100 + middlePad
-			else
-				xPos = (100 - panelWidthRel)*screenWidth/100 - middlePad - width
-			end
-		else
-			width = screenWidth/3 - 40
-			height = titleHeightSmall - statusWindowGapSmall - 3
-			yPos = 4
-			
-			xPos = (screenWidth - width)/2
-			if battleShown then
-			local leftBound = mainButtonsWidthSmall + statusButtonWidthSmall + 15
-				if xPos < leftBound then
-					xPos = leftBound
-				end
-			end
-		end
-	
-		holder_matchMaking:SetPos(xPos, topOffset + yPos, width, height)
+	function externalFunctions.UpdateStatusAndInvitesHolderPosition()
+		UpdateStatusAndInvitesHolderPosition()
 	end
 	
 	function externalFunctions.ViewResize(screenWidth, screenHeight)
@@ -855,8 +831,22 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		end
 		UpdatePadding(screenWidth, screenHeight)
 		
-		externalFunctions.UpdateMatchMakingHolderPosition()
+		UpdateStatusAndInvitesHolderPosition()
 	end
+	
+	function externalFunctions.SetBattleTabHolderVisible(newVisible, rank)
+		local oldVisible = ((statusAndInvitesPanel.GetChildByName(battleTabHolder.name) and true) or false)
+		if oldVisible == newVisible then
+			return
+		end
+		
+		if newVisible then
+			statusAndInvitesPanel.AddControl(battleTabHolder, rank or 0)
+		else
+			statusAndInvitesPanel.RemoveControl(battleTabHolder.name)
+		end
+	end
+	
 
 	function externalFunctions.SetPanelDisplayMode(newAutodetectDoublePanel, newDoublePanel)
 		autodetectDoublePanel = newAutodetectDoublePanel
@@ -882,7 +872,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		gameRunning = not newIngame
 		SetMainInterfaceVisible(not newIngame)
 		SetTopBarVisible(newIngame)
-		externalFunctions.UpdateMatchMakingHolderPosition()
+		UpdateStatusAndInvitesHolderPosition()
 	end
 	
 	function externalFunctions.GetChatWindow()
@@ -913,7 +903,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	function externalFunctions.GetBattleStatusWindowHandler()
 		return battleStatusPanelHandler
 	end
-
+	
+	function externalFunctions.GetStatusAndInvitesPanel()
+		return statusAndInvitesPanel
+	end
+	
 	function externalFunctions.GetDoublePanelMode()
 		return doublePanelMode
 	end
@@ -983,7 +977,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	battleStatusPanelHandler.Rescale(4, 70)
 	rightPanelHandler.Rescale(2, 70)
-	RescaleMainWindow(3, 70)
+	RescaleMainWindow(3, 70, 50)
 
 	externalFunctions.ViewResize(screenWidth, screenHeight)
 	UpdatePadding(screenWidth, screenHeight)

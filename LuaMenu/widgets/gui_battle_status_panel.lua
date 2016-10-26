@@ -129,37 +129,37 @@ local function GetBattleInfoHolder(parent, battleID)
 		currentSmallMode = smallMode
 		
 		if smallMode then
-			minimap:SetPos(nil, nil, 33, 33)
+			minimap:SetPos(nil, nil, 30, 30)
 
 			lblTitle.font.size = Configuration:GetFont(1).size
-			lblTitle:SetPos(43, 1, 160)
+			lblTitle:SetPos(36, 1, 160)
 
 			lblPlayerStatus.font.size = Configuration:GetFont(2).size
-			lblPlayerStatus:SetPos(66, 18)
+			lblPlayerStatus:SetPos(58, 15)
 
-			imPlayerStatus:SetPos(45, 17, 17, 17)
+			imPlayerStatus:SetPos(40, 15, 15, 15)
 
 			lblPlayers.font.size = Configuration:GetFont(2).size
-			lblPlayers:SetPos(152, 18)
+			lblPlayers:SetPos(165, 15)
 
 			playersPrefix = PLAYER_PREFIX_SMALL
 		else
-			minimap:SetPos(nil, nil, 73, 73)
+			minimap:SetPos(nil, nil, 68, 68)
 
 			lblTitle.font.size = Configuration:GetFont(2).size
-			lblTitle:SetPos(80, 4, 235)
+			lblTitle:SetPos(76, 3, 235)
 
 			lblPlayerStatus.font.size = Configuration:GetFont(2).size
-			lblPlayerStatus:SetPos(108, 31)
+			lblPlayerStatus:SetPos(103, 27)
 
-			imPlayerStatus:SetPos(84, 28, 20, 20)
+			imPlayerStatus:SetPos(80, 23, 20, 20)
 
 			lblPlayers.font.size = Configuration:GetFont(2).size
-			lblPlayers:SetPos(84, 55)
+			lblPlayers:SetPos(80, 48)
 
 			playersPrefix = PLAYER_PREFIX_BIG
 		end
-		local text = StringUtilities.GetTruncatedStringWithDotDot(battle.title, lblTitle.font, (smallMode and 160) or 235)
+		local text = StringUtilities.GetTruncatedStringWithDotDot(battle.title, lblTitle.font, smallMode and 180 or 145)
 		lblTitle:SetCaption(text)
 
 		lblPlayers:SetCaption(playersPrefix .. lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers)
@@ -247,7 +247,7 @@ local function InitializeControls(parentControl)
 	local statusWindowHandler = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
 
 	local infoHolder = Panel:New {
-		x = 85,
+		x = 68,
 		right = 4,
 		y = 4,
 		bottom = 4,
@@ -258,7 +258,7 @@ local function InitializeControls(parentControl)
 	}
 	local lblBattle = Label:New {
 		name = "lblBattle",
-		x = 14,
+		x = 8,
 		width = 85,
 		y = 27,
 		height = 20,
@@ -275,19 +275,19 @@ local function InitializeControls(parentControl)
 	parentControl.OnResize[#parentControl.OnResize + 1] = function (obj, xSize, ySize)
 		local smallMode = (ySize < 60)
 		if smallMode then
-			infoHolder:SetPos(nil, 2, 220)
+			infoHolder:SetPos(nil, 2, 237)
 			infoHolder._relativeBounds.bottom = 2
 			infoHolder._relativeBounds.right = 2
 			infoHolder:UpdateClientArea()
 
-			lblBattle:SetPos(nil, 9)
+			lblBattle:SetPos(nil, 6)
 		else
-			infoHolder:SetPos(nil, 4, 330)
-			infoHolder._relativeBounds.bottom = 4
-			infoHolder._relativeBounds.right = 4
+			infoHolder:SetPos(nil, 4, 237)
+			infoHolder._relativeBounds.bottom = 3
+			infoHolder._relativeBounds.right = 3
 			infoHolder:UpdateClientArea()
 
-			lblBattle:SetPos(nil, 27)
+			lblBattle:SetPos(nil, 24)
 		end
 		battleInfoHolder.Resize(smallMode)
 	end
@@ -364,7 +364,7 @@ function BattleStatusPanel.GetControl()
 	local button = Button:New {
 		x = 0,
 		y = 0,
-		width = 340,
+		width = 290,
 		bottom = 0,
 		padding = {0,0,0,0},
 		caption = "",
@@ -377,6 +377,20 @@ function BattleStatusPanel.GetControl()
 		},
 	}
 	return button
+end
+
+function BattleStatusPanel.AddBattleTab(control)
+	local interfaceRoot = WG.Chobby.interfaceRoot
+	local tabPanel = interfaceRoot.GetBattleStatusWindowHandler()
+	tabPanel.AddTab("myBattle", "My Battle", control, false, 3, true)
+	interfaceRoot.SetBattleTabHolderVisible(true, 10)
+end
+
+function BattleStatusPanel.RemoveBattleTab()
+	local interfaceRoot = WG.Chobby.interfaceRoot
+	local tabPanel = interfaceRoot.GetBattleStatusWindowHandler()
+	interfaceRoot.SetBattleTabHolderVisible(false)
+	tabPanel.RemoveTab("myBattle", true)
 end
 
 --------------------------------------------------------------------------------

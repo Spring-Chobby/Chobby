@@ -20,6 +20,7 @@ return {
 		password = 'Password',
 		login_noun = 'Login',
 		login_verb = 'Login',
+		profile = 'Profile',
 		error_log = 'Error log',
 		register_verb = "Register",
 		autoLogin = "Login automatically",

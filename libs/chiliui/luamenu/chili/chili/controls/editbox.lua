@@ -34,6 +34,7 @@ EditBox = Control:Inherit{
   hint   = "",
   cursor = 1,
   offset = 1,
+  lineSpacing = 0,
   selStart = nil,
   selEnd = nil,
 
@@ -208,7 +209,7 @@ function EditBox:_GeneratePhysicalLines(logicalLineID)
 	local wrappedText = font:WrapText(text, width, height)
 
 	local y = 0
-	local fontLineHeight = font:GetLineHeight()
+	local fontLineHeight = font:GetLineHeight() + self.lineSpacing
 	local prevLine = self.physicalLines[#self.physicalLines]
 	if prevLine ~= nil then
 		y = prevLine.y + fontLineHeight
@@ -281,10 +282,10 @@ function EditBox:AddLine(text, tooltips, OnTextClick)
 --
 --     if (self.autoObeyLineHeight) then
 --       if (numLines>1) then
---         textHeight = numLines * font:GetLineHeight()
+--         textHeight = numLines * font:GetLineHeight() + self.lineSpacing
 --       else
 --         --// AscenderHeight = LineHeight w/o such deep chars as 'g','p',...
---         textHeight = math.min( math.max(textHeight, font:GetAscenderHeight()), font:GetLineHeight())
+--         textHeight = math.min( math.max(textHeight, font:GetAscenderHeight()), font:GetLineHeight() + self.lineSpacing)
 --       end
 --     end
 --
@@ -335,7 +336,7 @@ function EditBox:UpdateLayout()
 	end
 
 	if self.autoHeight then
-		local fontLineHeight = font:GetLineHeight()
+		local fontLineHeight = font:GetLineHeight() + self.lineSpacing
 		local totalHeight = #self.physicalLines * fontLineHeight
 		self:Resize(nil, totalHeight, true, true)
 	end
@@ -345,7 +346,7 @@ function EditBox:UpdateLayout()
     local h, d, numLines = font:GetTextHeight(self.text);
 
     if (self.autoObeyLineHeight) then
-      h = math.ceil(numLines * font:GetLineHeight())
+      h = math.ceil(numLines * (font:GetLineHeight() + self.lineSpacing))
     else
       h = math.ceil(h-d)
     end

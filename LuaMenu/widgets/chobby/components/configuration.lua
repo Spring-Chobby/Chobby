@@ -11,8 +11,8 @@ function Configuration:init()
 	self.serverPort = 8200
 
 	self.userListWidth = 205 -- Main user list width. Possibly configurable in the future.
-	self.chatMaxNameLength = 195 -- Pixels
-	self.statusMaxNameLength = 210
+	self.chatMaxNameLength = 185 -- Pixels
+	self.statusMaxNameLength = 185
 	self.friendMaxNameLength = 230
 	self.notificationMaxNameLength = 230
 
@@ -42,6 +42,9 @@ function Configuration:init()
 	self.displayBots = false
 	self.displayBadEngines = false
 	self.doNotSetAnySpringSettings = false
+	
+	self.myAccountID = false
+	self.lastAddedAiName = false
 	
 	self.battleTypeToName = {
 		[5] = "cooperative",
@@ -166,6 +169,8 @@ function Configuration:GetConfigData()
 		menuNotificationVolume = self.menuNotificationVolume,
 		showMatchMakerBattles = self.showMatchMakerBattles,
 		chatFontSize = self.chatFontSize,
+		myAccountID = self.myAccountID,
+		lastAddedAiName = self.lastAddedAiName,
 	}
 end
 

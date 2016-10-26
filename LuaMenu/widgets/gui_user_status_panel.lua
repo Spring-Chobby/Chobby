@@ -17,7 +17,13 @@ end
 --------------------------------------------------------------------------------
 -- Chili
 local btnLogout
-local lblPing
+local connectivityText
+local connectivityImage
+
+local IMAGE_DIR          = LUA_DIRNAME .. "images/"
+local IMAGE_ONLINE       = IMAGE_DIR .. "online.png"
+local IMAGE_CONNECTING   = IMAGE_DIR .. "connecting.png"
+local IMAGE_OFFLINE      = IMAGE_DIR .. "offline.png"
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -43,6 +49,13 @@ local function Logout()
 	end
 end
 
+local function GoToProfilePage()
+	local Configuration = WG.Chobby.Configuration
+	if Configuration.myAccountID then
+		WG.BrowserHandler.OpenUrl(Configuration.link_userPage(Configuration.myAccountID))
+	end
+end
+
 local function Quit()
 	Spring.Echo("Quitting...")
 	Spring.Quit()
@@ -62,7 +75,7 @@ end
 -- 		end
 -- 		color = "\255\255\125\0"
 -- 	end
--- 	lblPing:SetCaption(color .. latency .. "ms\b")
+-- 	connectivityText:SetCaption(color .. latency .. "ms\b")
 -- end
 --
 -- local _lastUpdate = os.clock()
@@ -75,48 +88,82 @@ end
 
 local function InitializeControls(window)
 	btnLogout = Button:New {
-		y = 5,
-		right = 5,
-		width = 100,
-		height = 41,
+		y = 2,
+		right = 3,
+		width = 108,
+		height = 38,
 		caption = i18n("login"),
 		parent = window,
 		font = WG.Chobby.Configuration:GetFont(3),
 		OnClick = {Logout}
 	}
+	
+	if WG.Chobby.Configuration.link_userPage then
+		btnProfile = Button:New {
+			y = 2,
+			right = 114,
+			width = 108,
+			height = 38,
+			caption = i18n("profile"),
+			parent = window,
+			font = WG.Chobby.Configuration:GetFont(3),
+			OnClick = {GoToProfilePage}
+		}
+	end
 
-	lblPing = Label:New {
-		name = "ping",
-		x = 0,
+	connectivityText = TextBox:New {
+		name = "connectivityText",
+		x = 40,
 		width = 150,
-		y = 15,
+		y = 53,
 		height = 20,
 		valign = "center",
-		caption = "\255\180\180\180" .. i18n("offline") .. "\b",
-		font = WG.Chobby.Configuration:GetFont(3),
+		text = "\255\180\180\180" .. i18n("offline") .. "\b",
+		fontsize = WG.Chobby.Configuration:GetFont(3).size,
+		parent = window,
+	}
+	
+	connectivityImage = Image:New {
+		name = "connectivityImage",
+		x = 15,
+		y = 52,
+		width = 18,
+		height = 18,
+		keepAspect = false,
+		file = IMAGE_OFFLINE,
 		parent = window,
 	}
 
 	local userControl
 	onAccepted = function(listener)
 		userControl = WG.UserHandler.GetStatusUser(lobby:GetMyUserName())
-		userControl:SetPos(nil, 54)
+		userControl:SetPos(40, 51, 190)
 		window:AddChild(userControl)
+		window:RemoveChild(connectivityText)
 		lobby:Ping()
 	end
 
 	onDisconnected = function(listener)
 		if userControl and userControl.parent then
 			window:RemoveChild(userControl)
+			window:AddChild(connectivityText)
 		end
 	end
 
 	onPong = function(listener)
 		--UpdateLatency()
 	end
+	
+	local function onAddUser(listener, userName, status)
+		if userName == lobby:GetMyUserName() and status.accountID then
+			WG.Chobby.Configuration:SetConfigValue("myAccountID", status.accountID)
+		end
+	end
+	
 	lobby:AddListener("OnDisconnected", onDisconnected)
 	lobby:AddListener("OnAccepted", onAccepted)
 	lobby:AddListener("OnPong", onPong)
+	lobby:AddListener("OnAddUser", onAddUser)
 end
 
 function UserStatusPanel.GetControl()
@@ -148,14 +195,20 @@ function widget:Update()
 	if newStatus ~= oldStatus then
 		if newStatus == "disconnected" or newStatus == "offline" then
 			btnLogout:SetCaption(i18n("login"))
-			lblPing:SetCaption("\255\180\180\180" .. i18n("offline") .. "\b")
+			connectivityText:SetText("\255\180\180\180" .. i18n("offline") .. "\b")
+			connectivityImage.file = IMAGE_OFFLINE
+			connectivityImage:Invalidate()
 		else
 			btnLogout:SetCaption(i18n("logout"))
 		end
 		if newStatus == "connecting" then
-			lblPing:SetCaption(WG.Chobby.Configuration:GetPartialColor() .. i18n("connecting") .. "\b")
+			connectivityText:SetText(WG.Chobby.Configuration:GetPartialColor() .. i18n("connecting") .. "\b")
+			connectivityImage.file = IMAGE_CONNECTING
+			connectivityImage:Invalidate()
 		elseif newStatus == "connected" then
-			lblPing:SetCaption(WG.Chobby.Configuration:GetSuccessColor() .. i18n("online") .. "\b")
+			connectivityText:SetText(WG.Chobby.Configuration:GetSuccessColor() .. i18n("online") .. "\b")
+			connectivityImage.file = IMAGE_ONLINE
+			connectivityImage:Invalidate()
 		end
 		oldStatus = newStatus
 	end
@@ -166,9 +219,6 @@ function widget:Initialize()
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
 	WG.UserStatusPanel = UserStatusPanel
-
-	-- TODO: This should probably be moved elsewhere
-	WG.Delay(UserStatusPanel.GetControl, 0.01)
 end
 
 function widget:Shutdown()
