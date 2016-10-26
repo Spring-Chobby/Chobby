@@ -178,16 +178,48 @@ local function ProcessNumberOption(data, index)
 end
 
 local function ProcessStringOption(data, index)
-	return Label:New {
+	
+	local label = Label:New {
 		x = 5,
-		y = index*32,
-		width = 355,
-		height = 40,
+		y = 0,
+		width = 350,
+		height = 30,
 		valign = "center",
 		align = "left",
-		caption = data.name .. " (Not implemented)",
+		caption = data.name,
 		font = WG.Chobby.Configuration:GetFont(2),
 		tooltip = data.desc,
+	}
+	
+	local oldText = modoptionChanges[data.key] or modoptionDefaults[data.key]
+	
+	local textBox = EditBox:New {
+		x = 340,
+		y = 1,
+		width = 180,
+		height = 30,
+		text   = oldText,
+		fontSize = WG.Chobby.Configuration:GetFont(2).size,
+		OnFocusUpdate = {
+			function (obj)
+				if obj.focused then
+					return
+				end
+				modoptionLocalChanges[data.key] = obj.text
+			end
+		}
+	}
+	
+	return Control:New {
+		x = 0,
+		y = index*32,
+		width = 600,
+		height = 32,
+		padding = {0, 0, 0, 0},
+		children = {
+			label,
+			textBox
+		}
 	}
 end
 
@@ -217,7 +249,7 @@ local function CreateModoptionWindow()
 		caption = "",
 		name = "modoptionsSelectionWindow",
 		parent = WG.Chobby.lobbyInterfaceHolder,
-		width = 800,
+		width = 748,
 		height = 500,
 		resizable = false,
 		draggable = false,
@@ -240,10 +272,10 @@ local function CreateModoptionWindow()
 	local tabPanel = Chili.DetachableTabPanel:New {
 		x = 5,
 		right = 5,
-		y = 45,
+		y = 65,
 		bottom = 85,
 		padding = {0, 0, 0, 0},
-		minTabWidth = 130,
+		minTabWidth = 120,
 		tabs = tabs,
 		parent = modoptionsSelectionWindow,
 		OnTabChange = {
