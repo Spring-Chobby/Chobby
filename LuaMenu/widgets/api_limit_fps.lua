@@ -16,15 +16,27 @@ end
 
 local MAX_FPS = 15
 
+local lastTimer
+local forceRedraw = false
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Externals Functions
+
+local LimitFps = {}
+
+function LimitFps.ForceRedraw()
+	forceRedraw = true
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Callins
 
-local lastTimer
-local forceRedraw = false
-
 function widget:Initialize() 
 	lastTimer = Spring.GetTimer();
+	
+	WG.LimitFps = LimitFps
 end
 
 function widget:AllowDraw()

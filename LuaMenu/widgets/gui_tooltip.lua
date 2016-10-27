@@ -10,6 +10,7 @@ function widget:GetInfo()
 	}
 end
 
+local oldX, oldY
 
 local spGetGameFrame            = Spring.GetGameFrame
 local spGetMouseState           = Spring.GetMouseState
@@ -750,6 +751,11 @@ local function SetTooltipPos()
 	end
 
 	local x,y = spGetMouseState()
+	if WG.LimitFps and (x ~= oldX or y ~= oldY) then
+		WG.LimitFps.ForceRedraw()
+	end
+	oldX, oldY = y, z
+	
 	local width,height
 
 	if tooltipChild.name == TOOLTIP_TEXT_NAME then
