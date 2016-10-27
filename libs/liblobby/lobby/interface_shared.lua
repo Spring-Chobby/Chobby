@@ -16,7 +16,12 @@ function Interface:init()
 	self.status = "offline"
 	self.finishedConnecting = false
 	self.listeners = {}
-	self.duplicateMessageTimes = {} -- how do I give interface_zerok it's own init?
+	
+	-- Inheritance is too shallow for interface_zerok.lua to get its own init.
+	if self.InheritanceIsBrokenWorkaroundInit then
+		self:InheritanceIsBrokenWorkaroundInit()
+	end
+	
 	-- timeout (in seconds) until first message is received from server before disconnect is assumed
 	self.connectionTimeout = 50
 
