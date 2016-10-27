@@ -201,7 +201,7 @@ function BattleListWindow:AddBattle(battleID, battle)
 		height = height - 10,
 		valign = 'center',
 		font = Configuration:GetFont(2),
-		caption = (#battle.users - battle.spectatorCount) .. "/" .. battle.maxPlayers,
+		caption = lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers,
 		parent = parentButton,
 	}
 

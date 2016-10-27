@@ -164,7 +164,7 @@ function BattleWatchListWindow:AddBattle(battleID)
 	}
 	runningImage:BringToFront()
 
-	local playerCount = (#battle.users - battle.spectatorCount)
+	local playerCount = lobby:GetBattlePlayerCount(battleID)
 	local lblPlayersOnMap = Label:New {
 		name = "playersOnMapCaption",
 		x = height + 3,
