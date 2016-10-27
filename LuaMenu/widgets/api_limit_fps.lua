@@ -15,16 +15,29 @@ function widget:GetInfo()
 end
 
 local MAX_FPS = 15
+local oldX, oldY
+
+local lastTimer
+local forceRedraw = false
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Externals Functions
+
+local LimitFps = {}
+
+function LimitFps.ForceRedraw()
+	forceRedraw = true
+end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Callins
 
-local lastTimer
-local forceRedraw = false
-
 function widget:Initialize() 
 	lastTimer = Spring.GetTimer();
+	
+	WG.LimitFps = LimitFps
 end
 
 function widget:AllowDraw()
@@ -39,6 +52,14 @@ function widget:AllowDraw()
 		return true
 	end 
 	return false
+end
+
+function widget:Update()
+	local x,y = Spring.GetMouseState()
+	if x ~= oldX or y ~= oldY then
+		forceRedraw = true
+	end
+	oldX, oldY = y, z
 end
 
 function widget:MousePress()
