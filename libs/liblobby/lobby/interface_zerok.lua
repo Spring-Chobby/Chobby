@@ -12,6 +12,15 @@ Interface.jsonCommands = {}
 Interface.commandPattern = {}
 
 -------------------------------------------------
+-- Initialization
+-------------------------------------------------
+
+function Interface:InheritanceIsBrokenWorkaroundInit()
+	self.duplicateMessageTimes = {}
+	self.commonChannels = {"zk"}
+end
+
+-------------------------------------------------
 -- BEGIN Client commands
 -------------------------------------------------
 
@@ -594,6 +603,10 @@ function Interface:_User(data)
 			awaySince = data.AwaySince,
 			inGameSince = data.InGameSince,
 		})
+		
+		for i = 1, #self.commonChannels do
+			self:_OnJoined(self.commonChannels[i], data.Name)
+		end
 		return
 	end
 	
