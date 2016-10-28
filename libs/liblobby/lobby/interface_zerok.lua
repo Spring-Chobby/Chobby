@@ -541,6 +541,7 @@ function Interface:_Welcome(data)
 	-- REVERSE COMPAT
 	self.REVERSE_COMPAT = (data.Version == "1.4.9.26")
 	self:_OnConnect(4, data.Engine, 2, 1)
+	self:_OnUserCount(data.UserCount)
 end
 Interface.jsonCommands["Welcome"] = Interface._Welcome
 
@@ -648,6 +649,10 @@ Interface.jsonCommands["User"] = Interface._User
 
 function Interface:_UserDisconnected(data)
 	-- UserDisconnected {"Name":"Springiee81","Reason":"quit"}
+	for i = 1, #self.commonChannels do
+		self:_OnLeft(self.commonChannels[i], data.Name, "")
+	end
+	
 	self:_OnRemoveUser(data.Name)
 end
 Interface.jsonCommands["UserDisconnected"] = Interface._UserDisconnected
@@ -1047,6 +1052,7 @@ Interface.jsonCommands["MatchMakerSetup"] = Interface._MatchMakerSetup
 
 function Interface:_MatchMakerStatus(data)
 	self:_OnMatchMakerStatus(data.MatchMakerEnabled, data.JoinedQueues, data.QueueCounts, data.IngameCounts, data.InstantStartQueues, data.CurrentEloWidth, data.JoinedTime, data.BannedSeconds)
+	self:_OnUserCount(data.UserCount)
 end
 Interface.jsonCommands["MatchMakerStatus"] = Interface._MatchMakerStatus
 

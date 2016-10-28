@@ -84,13 +84,19 @@ function ChatWindows:init()
 	end
 	lobby:AddListener("OnLeft", self.onLeft)
 
-
 	self.onClients = function(listener, chanName, clients)
 		if self.currentTab and self.userListPanels[self.currentTab] then
 			self.userListPanels[self.currentTab]:Update()
 		end
 	end
 	lobby:AddListener("OnClients", self.onClients)
+
+	self.onUserCount = function(listener)
+		if self.currentTab and self.userListPanels[self.currentTab] then
+			self.userListPanels[self.currentTab]:UpdateUserCount()
+		end
+	end
+	lobby:AddListener("OnUserCount", self.onUserCount)
 
 	local CHAT_EX_MENTION = "\255\255\0\0"
 	local CHAT_MENTION ="\255\255\0\0"
@@ -210,6 +216,7 @@ function ChatWindows:init()
 				self.currentTab = name
 				if self.userListPanels[self.currentTab] then
 					self.userListPanels[self.currentTab]:Update()
+					self.userListPanels[self.currentTab]:UpdateUserCount()
 				end
 				local console = self.tabbars[name]
 				if console then

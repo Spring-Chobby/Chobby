@@ -1,14 +1,25 @@
 UserListPanel = LCS.class{}
 
-function UserListPanel:init(userUpdateFunction, spacing)
+function UserListPanel:init(userUpdateFunction, spacing, showCount)
 	self.userUpdateFunction = userUpdateFunction
 	self.spacing = spacing
 
+	self.textCount = TextBox:New {
+		name = "textCount",
+		x = 7,
+		right = 0,
+		height = 20,
+		bottom = 2,
+		align = "left",
+		fontsize = Configuration:GetFont(2).size,
+		text = lobby:GetUserCount() .. " players online",
+	}
+	
 	self.userPanel = ScrollPanel:New {
 		x = 0,
 		right = 0,
 		y = 0,
-		bottom = 0,
+		bottom = 28,
 		horizontalScrollbar = false,
 	}
 
@@ -22,6 +33,7 @@ function UserListPanel:init(userUpdateFunction, spacing)
 		itemMargin   = {0, 0, 0, 0},
 		children = {
 			self.userPanel,
+			self.textCount,
 		},
 	}
 	self:Update()
@@ -72,6 +84,10 @@ function UserListPanel:Update()
 	for i = 1, #users do
 		self:AddUser(users[i])
 	end
+end
+
+function UserListPanel:UpdateUserCount()
+	self.textCount:SetText(lobby:GetUserCount() .. " players online")
 end
 
 function UserListPanel:AddUser(userName)
