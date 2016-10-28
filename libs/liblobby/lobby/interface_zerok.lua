@@ -649,6 +649,10 @@ Interface.jsonCommands["User"] = Interface._User
 
 function Interface:_UserDisconnected(data)
 	-- UserDisconnected {"Name":"Springiee81","Reason":"quit"}
+	for i = 1, #self.commonChannels do
+		self:_OnLeft(self.commonChannels[i], data.Name, "")
+	end
+	
 	self:_OnRemoveUser(data.Name)
 end
 Interface.jsonCommands["UserDisconnected"] = Interface._UserDisconnected
