@@ -939,6 +939,11 @@ function Lobby:_OnMatchMakerReadyResult(isBattleStarting, areYouBanned)
 	self:_CallListeners("OnMatchMakerReadyResult", isBattleStarting, areYouBanned)
 end
 
+function Lobby:_OnUserCount(userCount)
+	self.fullUserCount = userCount
+	self:_CallListeners("OnUserCount", userCount)
+end
+
 ------------------------
 -- Team commands
 ------------------------
@@ -1054,9 +1059,15 @@ end
 -------------------------------------------------
 
 -- users
+-- Returns all users, visible users
 function Lobby:GetUserCount()
-	return self.userCount
+	if self.fullUserCount then
+		return self.fullUserCount, self.userCount
+	else
+		return self.userCount, self.userCount
+	end
 end
+
 -- gets the userInfo, or creates a new one with an offline user if it doesn't exist
 function Lobby:TryGetUser(userName)
 	local userInfo = self:GetUser(userName)

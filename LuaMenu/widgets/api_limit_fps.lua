@@ -15,10 +15,12 @@ function widget:GetInfo()
 end
 
 local MAX_FPS = 15
+local FAST_FPS = 40
 local oldX, oldY
 
 local lastTimer
 local forceRedraw = false
+local fastRedraw = false
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -43,23 +45,29 @@ end
 function widget:AllowDraw()
 	if forceRedraw then
 		forceRedraw = false
+		fastRedraw = false
 		return true
 	end
 	local timer = Spring.GetTimer();
 	local diff = Spring.DiffTimers(timer, lastTimer)
-	if (diff >= 1/MAX_FPS) then
+	if (fastRedraw and (diff >= 1/FAST_FPS)) then
+		fastRedraw = false
 		lastTimer = timer
 		return true
-	end 
+	elseif (diff >= 1/MAX_FPS) then
+		lastTimer = timer
+		return true
+	end
 	return false
 end
 
 function widget:Update()
-	local x,y = Spring.GetMouseState()
+	local x, y = Spring.GetMouseState()
+	--Spring.Echo("Mouse", x, oldX, y, oldY)
 	if x ~= oldX or y ~= oldY then
-		forceRedraw = true
+		fastRedraw = true
 	end
-	oldX, oldY = y, z
+	oldX, oldY = x, y
 end
 
 function widget:MousePress()
