@@ -475,7 +475,6 @@ local QueueStatusPanel = {}
 
 function DelayedInitialize()
 	local lobby = WG.LibLobby.lobby
-	local statusQueueIngame
 
 	local statusAndInvitesPanel = WG.Chobby.interfaceRoot.GetStatusAndInvitesPanel()
 	
