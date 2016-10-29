@@ -21,6 +21,7 @@ return {
 		login_noun = 'Login',
 		login_verb = 'Login',
 		profile = 'Profile',
+		home = 'Home',
 		error_log = 'Error log',
 		register_verb = "Register",
 		autoLogin = "Login automatically",

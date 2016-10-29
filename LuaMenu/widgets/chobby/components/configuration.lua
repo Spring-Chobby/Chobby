@@ -66,6 +66,9 @@ function Configuration:init()
 		return "http://zero-k.info/Users/Detail/" .. accountID
 	end
 	
+	function self.link_homePage() 
+		return "http://zero-k.info/"
+	end
 
 	self.backConfirmation = {
 		multiplayer = {
