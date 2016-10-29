@@ -43,6 +43,7 @@ function widget:Initialize()
 end
 
 function widget:AllowDraw()
+	--Spring.Echo("AllowDraw game", Spring.GetGameName())
 	if forceRedraw then
 		forceRedraw = false
 		fastRedraw = false

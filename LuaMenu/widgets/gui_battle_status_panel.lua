@@ -241,8 +241,6 @@ end
 --------------------------------------------------------------------------------
 -- Initialization
 
-local battleInfoHolder
-
 local function InitializeControls(parentControl)
 	local statusWindowHandler = WG.Chobby.interfaceRoot.GetBattleStatusWindowHandler()
 
@@ -269,7 +267,7 @@ local function InitializeControls(parentControl)
 		font = WG.Chobby.Configuration:GetFont(3),
 	}
 
-	battleInfoHolder = GetBattleInfoHolder(infoHolder, lobby:GetMyBattleID())
+	local battleInfoHolder = GetBattleInfoHolder(infoHolder, lobby:GetMyBattleID())
 
 	parentControl.OnResize = parentControl.OnResize or {}
 	parentControl.OnResize[#parentControl.OnResize + 1] = function (obj, xSize, ySize)
