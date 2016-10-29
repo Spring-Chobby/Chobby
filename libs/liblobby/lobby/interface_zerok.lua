@@ -577,6 +577,25 @@ Interface.jsonCommands["LoginResponse"] = Interface._LoginResponse
 -- User commands
 ------------------------
 
+-- This should be a local function but that does not work nicely.
+function Interface:UpdateUserBattleStatus(userName, newBattleID)	
+	if not self.REVERSE_COMPAT then
+		local currentBattle = self.users[userName].battleID
+		if newBattleID ~= currentBattle then
+			if newBattleID then
+				if currentBattle then
+					self:_OnLeftBattle(currentBattle, userName)
+				end
+				if userName ~= self.myUserName then
+					self:_OnJoinedBattle(newBattleID, userName, 0)
+				end
+			elseif currentBattle then
+				self:_OnLeftBattle(currentBattle, userName)
+			end
+		end
+	end
+end
+
 function Interface:_OnAddUser(userName, country, cpu, accountID, lobbyVersion, clan)
 	cpu = tonumber(cpu)
 	accountID = tonumber(accountID)
@@ -608,25 +627,11 @@ function Interface:_User(data)
 		for i = 1, #self.commonChannels do
 			self:_OnJoined(self.commonChannels[i], data.Name)
 		end
+		
+		self:UpdateUserBattleStatus(data.Name, data.BattleID)
 		return
 	end
-	
-	if not self.REVERSE_COMPAT then
-		local currentBattle = self.users[data.Name].battleID
-		if data.BattleID ~= currentBattle then
-			if data.BattleID then
-				if currentBattle then
-					self:_OnLeftBattle(currentBattle, data.Name)
-				end
-				if data.Name ~= self.myUserName then
-					self:_OnJoinedBattle(data.BattleID, data.Name, 0)
-				end
-			elseif currentBattle then
-				self:_OnLeftBattle(currentBattle, data.Name)
-			end
-		end
-	end
-	
+
 	self:_OnUpdateUserStatus(data.Name, {
 		country = data.Country,
 		clan = data.Clan,
@@ -642,6 +647,8 @@ function Interface:_User(data)
 		awaySince = data.AwaySince,
 		inGameSince = data.InGameSince,
 	})
+	
+	self:UpdateUserBattleStatus(data.Name, data.BattleID)
 	
 	-- User {"AccountID":212941,"SpringieLevel":1,"Avatar":"corflak","Country":"CZ","EffectiveElo":1100,"Effective1v1Elo":1100,"InGameSince":"2016-06-25T11:36:38.9075025Z","IsAdmin":false,"IsBot":true,"IsInBattleRoom":false,"BanMute":false,"BanSpecChat":false,"Level":0,"ClientType":4,"LobbyVersion":"Springie 1.3.2.116","Name":"Elerium","IsAway":false,"IsInGame":true}
 end
