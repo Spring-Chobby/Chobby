@@ -285,7 +285,6 @@ local function UpdateUserControlStatus(userName, userControls)
 end
 
 local function UpdateUserActivity(listener, userName)
-	Spring.Echo("UpdateUserActivity", userName)
 	for i = 1, #userListList do
 		local userList = userListList[i]
 		local data = userList[userName]

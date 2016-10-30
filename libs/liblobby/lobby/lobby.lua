@@ -632,6 +632,11 @@ function Lobby:_OnLeftBattle(battleID, userName)
 		self.battleAis = {}
 		self.userBattleStatus = {}
 	end
+	
+	if not (battleID and self.battles[battleID]) then
+		Spring.Echo("Tried to remove user from unknown battle", battleID)
+		return
+	end
 
 	local battleUsers = self.battles[battleID].users
 	for i, v in pairs(battleUsers) do
@@ -999,15 +1004,15 @@ end
 function Lobby:_OnDisconnected(...)
 	self:_CallListeners("OnDisconnected")
 
+	for userName,_ in pairs(self.users) do
+		self:_OnRemoveUser(userName)
+	end
+
 	for battleID, battle in pairs(self.battles) do
 		for _, useName in pairs(battle.users) do
 			self:_OnLeftBattle(battleID, useName)
 		end
 		self:_OnBattleClosed(battleID)
-	end
-
-	for userName,_ in pairs(self.users) do
-		self:_OnRemoveUser(userName)
 	end
 
 	self:_PreserveData()
