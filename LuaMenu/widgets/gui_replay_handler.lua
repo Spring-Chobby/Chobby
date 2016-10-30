@@ -104,7 +104,6 @@ end
 
 local function InitializeControls(parentControl)
 	local Configuration = WG.Chobby.Configuration
-	local replays = VFS.DirList("demos")
 	
 	Label:New {
 		x = 15,
@@ -144,6 +143,7 @@ local function InitializeControls(parentControl)
 	
 	local function AddReplays()
 		local items = {}
+		local replays = VFS.DirList("demos")
 		
 		for	i = 1, #replays do
 			local replayPath = replays[i]
@@ -173,7 +173,6 @@ local function InitializeControls(parentControl)
 		parent = parentControl,
 		OnClick = {
 			function ()
-				WG.Chobby.InformationPopup("Refresh does not work at the moment. Restart the game to refresh.")
 				AddReplays()
 			end
 		},
