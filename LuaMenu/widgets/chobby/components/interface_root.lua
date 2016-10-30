@@ -10,7 +10,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local userStatusPanelWidth = 250
 
 	local battleStatusWidth = 480
-	local panelButtonsWidth = 500
+	local panelButtonsWidth = 538
 	local panelButtonsHeight = 42
 	local statusWindowGapSmall = 44
 
@@ -379,6 +379,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local rightPanelTabs = {
 		{name = "chat", control = chatWindows.window},
 		{name = "friends", control = WG.FriendWindow.GetControl()},
+		{name = "replays", control = WG.ReplayHandler.GetControl()},
 		{name = "settings", control = WG.SettingsWindow.GetControl()},
 		{name = "downloads", control = WG.DownloadWindow.GetControl()},
 	}
@@ -419,7 +420,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local battleStatusPanelHandler = GetTabPanelHandler(
 		"myBattlePanel", battleTabHolder, mainContent_window, {}, nil, nil, nil, nil, 
 		statusButtonWidth, battleStatusTabControls
-	)
+	)											
 	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons_buttons, rightPanel_window, rightPanelTabs)
 	mainWindowHandler = GetSubmenuHandler(buttonsHolder_buttons, mainContent_window, submenus)
 	
@@ -546,7 +547,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			status_panelButtons:RemoveChild(panelButtons_buttons)
 			buttonsHolder_buttons:AddChild(panelButtons_buttons)
 
-			panelButtons_buttons:SetPosRelative("0%","45%", "100%","50%")
+			panelButtons_buttons:SetPosRelative("0%","44%", "100%","50%")
 			--buttonsHolder_buttons:SetPosRelative("0%","0%", nil,"50%")
 
 			-- Make Main Window take up more space
@@ -724,7 +725,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		if doublePanelMode then
 			height = titleHeightSmall
 			yPos = 4
-			if screenWidth > 1500 or controlCount < 2 then
+			if screenWidth > 1540 or controlCount < 2 then
 				yPos = 26
 			end
 			xPos = 20

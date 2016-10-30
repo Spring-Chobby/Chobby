@@ -31,6 +31,8 @@ return {
 		playing_game_status = "Playing",
 		only_featured_maps = "Only featured maps",
 		download_maps = "Download Maps",
+		download_replays = "Download Replays",
+		refresh = "Refresh",
 		--
 		start_download = 'Start download',
 		download_noun = 'Download',
@@ -47,6 +49,7 @@ return {
 		game_type = "Game Type",
 		menu = "Menu",
 		settings = "Settings",
+		replays = "Replays",
 		logout = "Logout",
 		login = "Login",
 		login_to_chat = "Login required for chat",

@@ -1,11 +1,34 @@
 ListWindow = Component:extends{}
 
-function ListWindow:init(parent, title, noWindow, windowClassname)
+function ListWindow:init(parent, title, noWindow, windowClassname, noClose)
 	self:DoInit() -- Lack of inheritance strikes again.
 	
 	self.CancelFunc = function ()
 		self:HideWindow()
 	end
+	
+	local ControlType = Window
+	if noWindow then
+		ControlType = Control
+	end
+	
+	self.window = ControlType:New {
+		x = 0,
+		right = 0,
+		y = 0,
+		bottom = 0,
+		parent = parent,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		classname = windowClassname,
+		OnDispose = {
+			function()
+				self:RemoveListeners()
+			end
+		},
+	}
+	
 	
 	self.lblTitle = Label:New {
 		x = 20,
@@ -14,23 +37,27 @@ function ListWindow:init(parent, title, noWindow, windowClassname)
 		height = 20,
 		font = Configuration:GetFont(3),
 		caption = title,
+		parent = self.window
 	}
 
-	self.btnClose = Button:New {
-		right = 7,
-		y = 5,
-		width = 80,
-		height = 45,
-		caption = i18n("close"),
-		font = Configuration:GetFont(3),
-		classname = "negative_button",
-		OnClick = {
-			function()
-				self.CancelFunc()
-			end
-		},
-	}
-
+	if not noClose then
+		self.btnClose = Button:New {
+			right = 7,
+			y = 5,
+			width = 80,
+			height = 45,
+			caption = i18n("close"),
+			font = Configuration:GetFont(3),
+			classname = "negative_button",
+			OnClick = {
+				function()
+					self.CancelFunc()
+				end
+			},
+			parent = self.window
+		}
+	end
+	
 	self.listPanel = ScrollPanel:New {
 		x = 5,
 		right = 5,
@@ -42,36 +69,10 @@ function ListWindow:init(parent, title, noWindow, windowClassname)
 			function()
 				self:OnResize()
 			end
-		}
+		},
+		parent = self.window
 	}
-	
-	local ControlType = Window
-	if noWindow then
-		ControlType = Control
-	end
 
-	self.window = ControlType:New {
-		x = 0,
-		right = 0,
-		y = 0,
-		bottom = 0,
-		parent = parent,
-		resizable = false,
-		draggable = false,
-		padding = {0, 0, 0, 0},
-		classname = windowClassname,
-		children = {
-			self.lblTitle,
-			self.btnClose,
-			self.listPanel,
-		},
-		OnDispose = {
-			function()
-				self:RemoveListeners()
-			end
-		},
-	}
-	
 	self.columns = 1
 	self.itemHeight = 60
 	self.itemPadding = 20
