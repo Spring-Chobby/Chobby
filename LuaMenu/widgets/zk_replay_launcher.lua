@@ -194,7 +194,7 @@ local function AttemptStart(saveFilename)
 	end
 
 	Echo("Starting Spring")
-	--WG.Chobby.localLobby:StartReplay(saveFilename)
+	WG.Chobby.localLobby:StartReplay(saveFilename)
 end
 
 -- called when a connection is closed
