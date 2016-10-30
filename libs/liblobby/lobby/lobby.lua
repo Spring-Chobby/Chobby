@@ -424,6 +424,11 @@ function Lobby:_OnRemoveUser(userName)
 		return
 	end
 	local userInfo = self.users[userName]
+	
+	if userInfo.battleID then
+		self:_OnLeftBattle(userInfo.battleID, userName)
+	end
+	
 	-- preserve isFriend/hasFriendRequest
 	local isFriend, hasFriendRequest = userInfo.isFriend, userInfo.hasFriendRequest
 	self.users[userName] = nil
