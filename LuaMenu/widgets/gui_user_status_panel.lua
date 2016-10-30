@@ -51,8 +51,8 @@ end
 
 local function GoToProfilePage()
 	local Configuration = WG.Chobby.Configuration
-	if Configuration.myAccountID then
-		WG.BrowserHandler.OpenUrl(Configuration.link_userPage(Configuration.myAccountID))
+	if Configuration.link_homePage then
+		WG.BrowserHandler.OpenUrl(Configuration.link_homePage())
 	end
 end
 
@@ -104,7 +104,7 @@ local function InitializeControls(window)
 			right = 114,
 			width = 108,
 			height = 38,
-			caption = i18n("profile"),
+			caption = i18n("home"),
 			parent = window,
 			font = WG.Chobby.Configuration:GetFont(3),
 			OnClick = {GoToProfilePage}

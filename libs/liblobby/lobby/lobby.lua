@@ -424,6 +424,11 @@ function Lobby:_OnRemoveUser(userName)
 		return
 	end
 	local userInfo = self.users[userName]
+	
+	if userInfo.battleID then
+		self:_OnLeftBattle(userInfo.battleID, userName)
+	end
+	
 	-- preserve isFriend/hasFriendRequest
 	local isFriend, hasFriendRequest = userInfo.isFriend, userInfo.hasFriendRequest
 	self.users[userName] = nil
@@ -626,6 +631,11 @@ function Lobby:_OnLeftBattle(battleID, userName)
 		self.modoptions = {}
 		self.battleAis = {}
 		self.userBattleStatus = {}
+	end
+	
+	if not (battleID and self.battles[battleID]) then
+		Spring.Echo("Tried to remove user from unknown battle", battleID)
+		return
 	end
 
 	local battleUsers = self.battles[battleID].users
@@ -994,15 +1004,15 @@ end
 function Lobby:_OnDisconnected(...)
 	self:_CallListeners("OnDisconnected")
 
+	for userName,_ in pairs(self.users) do
+		self:_OnRemoveUser(userName)
+	end
+
 	for battleID, battle in pairs(self.battles) do
 		for _, useName in pairs(battle.users) do
 			self:_OnLeftBattle(battleID, useName)
 		end
 		self:_OnBattleClosed(battleID)
-	end
-
-	for userName,_ in pairs(self.users) do
-		self:_OnRemoveUser(userName)
 	end
 
 	self:_PreserveData()

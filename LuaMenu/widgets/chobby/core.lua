@@ -10,6 +10,7 @@ local includes = {
 	"components/list_window.lua",
 	"components/console.lua",
 	"components/user_list_panel.lua",
+	"components/sortable_list.lua",
 
 	-- misc
 	"components/login_window.lua",

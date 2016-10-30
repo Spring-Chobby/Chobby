@@ -61,22 +61,22 @@ local function InitializeControls(window)
 	initialized = true
 
 	Label:New {
-		x = 40,
-		y = 40,
+		x = 15,
+		y = 11,
 		width = 180,
 		height = 30,
 		parent = window,
-		font = WG.Chobby.Configuration:GetFont(4),
+		font = WG.Chobby.Configuration:GetFont(3),
 		caption = "Downloads",
 	}
 
 	Label:New {
-		x = 40,
+		x = 15,
 		y = 360,
 		width = 180,
 		height = 30,
 		parent = window,
-		font = WG.Chobby.Configuration:GetFont(4),
+		font = WG.Chobby.Configuration:GetFont(3),
 		caption = "Complete",
 	}
 
@@ -105,7 +105,7 @@ function DownloadWindow.GetControl()
 
 	local downloader = WG.Chobby.Downloader(
 		{
-			x = 40,
+			x = 20,
 			height = 260,
 			right = 40,
 			y = 85,
