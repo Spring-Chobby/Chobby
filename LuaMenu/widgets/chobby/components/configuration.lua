@@ -99,7 +99,7 @@ function Configuration:init()
 	}
 	self.skirmishGameByMode = {
 		[1] = nil, -- Opens game selection screen
-		[2] = "Zero-K v1.4.10.0",
+		[2] = "Zero-K v1.4.11.0",
 		[3] = "Zero-K $VERSION",
 	}
 	
