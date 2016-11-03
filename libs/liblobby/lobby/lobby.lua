@@ -342,7 +342,18 @@ function Lobby:_OnConnect(protocolVersion, springVersion, udpPort, serverMode)
 	if Spring.GetGameName() ~= "" then
 		lobby:SetIngameStatus(true)
 	end
-	self:_CallListeners("OnConnect", protocolVersion, springVersion, udpPort, serverMode)
+	self:_CallListeners("OnConnect", protocolVersion, udpPort, serverMode)
+	self:_OnSuggestedEngineVersion(springVersion)
+end
+
+function Lobby:_OnSuggestedEngineVersion(springVersion)
+	self.suggestedEngineVersion = springVersion
+	self:_CallListeners("OnSuggestedEngineVersion", springVersion)
+end
+
+function Lobby:_OnSuggestedGameVersion(gameVersion)
+	self.suggestedGameVersion = gameVersion
+	self:_CallListeners("OnSuggestedGameVersion", gameVersion)
 end
 
 function Lobby:_OnAccepted()
@@ -1099,6 +1110,14 @@ end
 -- returns users table (not necessarily an array)
 function Lobby:GetUsers()
 	return ShallowCopy(self.users)
+end
+
+function Lobby:GetSuggestedEngineVersion()
+	return self.suggestedEngineVersion or false
+end
+
+function Lobby:GetSuggestedGameVersion()
+	return self.suggestedGameVersion or false
 end
 
 -- friends

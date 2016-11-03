@@ -545,6 +545,16 @@ function Interface:_Welcome(data)
 end
 Interface.jsonCommands["Welcome"] = Interface._Welcome
 
+function Interface:_DefaultEngineChanged(data)
+	self:_OnSuggestedEngineVersion(data.Engine)
+end
+Interface.jsonCommands["DefaultEngineChanged"] = Interface._DefaultEngineChanged
+
+function Interface:_DefaultGameChanged(data)
+	self:_OnSuggestedGameVersion(data.Game)
+end
+Interface.jsonCommands["DefaultGameChanged"] = Interface._DefaultGameChanged
+
 function Interface:_Ping(data)
 	self:_OnPong()
 	self:Ping()
