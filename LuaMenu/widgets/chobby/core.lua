@@ -90,8 +90,8 @@ function Chobby:_Initialize()
 	end)
 	self:WrapCall(function()
 		WG.Delay(function()
-			lobby:AddListener("OnConnect", 
-				function(listener, _, engineName)
+			lobby:AddListener("OnSuggestedEngineVersion", 
+				function(listener, engineName)
 					if engineName and not WG.Chobby.Configuration:IsValidEngineVersion(engineName) then
 						WG.Chobby.InformationPopup("Wrong Spring engine version. The required version is '" .. engineName .. "', your version is '" .. Game.version .. "'.", 420, 260)
 					end

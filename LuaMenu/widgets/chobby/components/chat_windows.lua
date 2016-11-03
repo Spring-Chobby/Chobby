@@ -911,3 +911,16 @@ function ChatWindows:CreateJoinChannelWindow()
 	local popupHolder = PriorityPopup(self.joinWindow, CancelFunc, JoinChannel)
 	screen0:FocusControl(channelEdit)
 end
+
+function ChatWindows:ClearHistory()
+	if self.debugConsole then
+		self.debugConsole:ClearHistory()
+	end
+	for _,console in pairs(self.channelConsoles) do
+		console:ClearHistory()
+	end
+	for _,console in pairs(self.privateChatConsoles) do
+		console:ClearHistory()
+	end
+end
+

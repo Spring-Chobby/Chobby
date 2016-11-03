@@ -345,6 +345,33 @@ local function GetLobbyTabControls()
 		valign = "top",
 		align = "left",
 		font = Configuration:GetFont(2),
+		caption = "Clear Channel History",
+	}
+	children[#children + 1] = Button:New {
+		x = COMBO_X,
+		y = offset,
+		width = COMBO_WIDTH,
+		height = 30,
+		caption = "Apply",
+		tooltip = "Clears chat history displayed in the lobby, does not affect the chat history files saved to your computer",
+		font = Configuration:GetFont(2),
+		OnClick = {
+			function (obj)
+				WG.Chobby.interfaceRoot.GetChatWindow():ClearHistory()
+				WG.BattleRoomWindow.ClearChatHistory()
+			end
+		}
+	}
+	offset = offset + ITEM_OFFSET
+	
+	children[#children + 1] = Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(2),
 		caption = "Server Address",
 	}
 	children[#children + 1] = EditBox:New {
