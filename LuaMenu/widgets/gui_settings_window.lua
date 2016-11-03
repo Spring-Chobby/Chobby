@@ -168,7 +168,7 @@ local function GetLobbyTabControls()
 		y = offset,
 		width = COMBO_WIDTH,
 		height = 30,
-		items = {"Fullscreen Window", "Windowed", "Fullscreen"},
+		items = {"Borderless Window", "Windowed", "Fullscreen"},
 		font = Configuration:GetFont(2),
 		itemFontSize = Configuration:GetFont(2).size,
 		selected = Configuration.lobby_fullscreen or 1,
@@ -336,6 +336,33 @@ local function GetLobbyTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Debug for MatchMaker", "showMatchMakerBattles", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Hide interface", "hideInterface", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Neuter Settings", "doNotSetAnySpringSettings", false)
+	
+	children[#children + 1] = Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(2),
+		caption = "Clear Channel History",
+	}
+	children[#children + 1] = Button:New {
+		x = COMBO_X,
+		y = offset,
+		width = COMBO_WIDTH,
+		height = 30,
+		caption = "Apply",
+		tooltip = "Clears chat history displayed in the lobby, does not affect the chat history files saved to your computer",
+		font = Configuration:GetFont(2),
+		OnClick = {
+			function (obj)
+				WG.Chobby.interfaceRoot.GetChatWindow():ClearHistory()
+				WG.BattleRoomWindow.ClearChatHistory()
+			end
+		}
+	}
+	offset = offset + ITEM_OFFSET
 	
 	children[#children + 1] = Label:New {
 		x = 20,
@@ -597,7 +624,7 @@ local function ProcessScreenSizeOption(data, offset)
 		y = offset,
 		width = COMBO_WIDTH,
 		height = 30,
-		items = {"Fullscreen Window", "Windowed", "Fullscreen"},
+		items = {"Borderless Window", "Windowed", "Fullscreen"},
 		font = Configuration:GetFont(2),
 		itemFontSize = Configuration:GetFont(2).size,
 		selected = Configuration.game_fullscreen or 1,

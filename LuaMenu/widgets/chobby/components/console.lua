@@ -337,3 +337,7 @@ function Console:LoadHistory(numLines)
 	end
 	--local logFile, errorMessage = io.open(, 'r')
 end
+
+function Console:ClearHistory()
+	self.tbHistory:SetText("")
+end

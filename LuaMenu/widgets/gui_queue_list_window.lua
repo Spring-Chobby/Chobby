@@ -22,6 +22,11 @@ local requiredResourceCount = 0
 
 local panelInterface
 
+local function HaveRightEngineVersion()
+	local engineVersion = WG.LibLobby.lobby:GetSuggestedEngineVersion()
+	return (not engineVersion) or WG.Chobby.Configuration:IsValidEngineVersion(engineVersion)
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Initialization
@@ -41,6 +46,10 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		classname = "option_button",
 		OnClick = {
 			function(obj)
+				if not HaveRightEngineVersion() then
+					WG.Chobby.InformationPopup("Game engine update required, restart the menu to apply.")
+					return
+				end
 				if requiredResourceCount ~= 0 then
 					WG.Chobby.InformationPopup("All required maps and games must be downloaded before you can join matchmaking.")
 					return
@@ -300,6 +309,14 @@ local function InitializeControls(window)
 			firstEntry = false
 			newText = newText .. name
 		end
+		
+		if not HaveRightEngineVersion() then
+			if firstEntry then
+				newText = "Game engine update required, restart the menu to apply."
+			else
+				newText = "\nGame engine update required, restart the menu to apply."
+			end
+		end
 		requirementText:SetText(newText)
 	end
 	
@@ -315,7 +332,7 @@ end
 local QueueListWindow = {}
 
 function QueueListWindow.HaveMatchMakerResources()
-	return requiredResourceCount == 0
+	return requiredResourceCount == 0 and HaveRightEngineVersion()
 end
 
 function QueueListWindow.GetControl()

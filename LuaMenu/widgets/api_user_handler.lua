@@ -72,9 +72,9 @@ local function CountryShortnameToFlag(shortname)
 	end
 end
 
-local function UserLevelToImage(level, skill, isBot, isAdmin)
+local function UserLevelToImage(level, skill, isBot, isAdmin, oldImage)
 	if UserLevelToImageConfFunction then
-		return UserLevelToImageConfFunction(level, skill, isBot, isAdmin)
+		return UserLevelToImageConfFunction(level, skill, isBot, isAdmin, oldImage)
 	end
 	return IMAGE_PLAYER
 end
@@ -181,14 +181,16 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 	return comboOptions
 end
 
-local function GetUserRankImageName(userName, userControl)
+local function GetUserRankImageName(userName, userControl, oldImage)
+
 	local userInfo = userControl.lobby:GetUser(userName) or {}
 	local userBattleInfo = userControl.lobby:GetUserBattleStatus(userName) or {}
-
+	
 	if userControl.isSingleplayer and not userBattleInfo.aiLib then
 		return IMAGE_PLAYER
 	end
-	return UserLevelToImage(userInfo.level, userInfo.skill, userInfo.isBot or userBattleInfo.aiLib, userInfo.isAdmin)
+	local image = UserLevelToImage(userInfo.level, userInfo.skill, userInfo.isBot or userBattleInfo.aiLib, userInfo.isAdmin, oldImage)
+	return image
 end
 
 local function GetUserStatusImages(userName, isInBattle, userControl)
@@ -289,7 +291,7 @@ local function UpdateUserActivity(listener, userName)
 		if data then
 			data.mainControl.items = GetUserComboBoxOptions(userName, data.isInBattle, data)
 
-			data.imLevel.file = GetUserRankImageName(userName, data)
+			data.imLevel.file = GetUserRankImageName(userName, data, data.imLevel.file)
 			data.imLevel:Invalidate()
 
 			if data.showFounder then

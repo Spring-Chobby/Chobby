@@ -1,7 +1,7 @@
 FriendListWindow = ListWindow:extends{}
 
 function FriendListWindow:init(parent)
-	self:super("init", parent, i18n("friends"), true)
+	self:super("init", parent, i18n("friends"), true, nil, true)
 
 	self:SetMinItemWidth(240)
 	self.columns = 3

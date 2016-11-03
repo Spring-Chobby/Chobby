@@ -80,7 +80,7 @@ function EditBox:Dispose(...)
 end
 
 function EditBox:HitTest(x,y)
-	return self
+	return self.selectable and self
 end
 
 --//=============================================================================

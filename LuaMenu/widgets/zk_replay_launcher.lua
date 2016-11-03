@@ -22,7 +22,7 @@ local client
 local set
 local headersent
 
-local host = "zero-k.info"
+local siteName = "zero-k.info"
 local port = 80
 local path = "/replays/20160704_190323_Drab_100.sdf"
 local file = "20160704_190323_Drab_100.sdf"
@@ -75,6 +75,7 @@ local function newset()
 end
 
 local function Echo(stuff)
+	Spring.Echo(stuff)
 	Chotify:Post({
 		title = "Launching Replay",
 		body = stuff,
@@ -172,8 +173,8 @@ local function SocketWriteAble(sock)
 	if headersent==nil then
 		-- socket is writeable
 		headersent=1
-		--Echo("sending http request".." GET " .. path .. " HTTP/1.0\r\nHost: " .. host ..  " \r\n\r\n")
-		sock:send("GET " .. path .. " HTTP/1.0\r\nHost: " .. host ..  " \r\n\r\n")
+		Echo("sending http request".." GET " .. path .. " HTTP/1.0\r\nHost: " .. siteName ..  " \r\n\r\n")
+		sock:send("GET " .. path .. " HTTP/1.0\r\nHost: " .. siteName ..  " \r\n\r\n")
 	end
 end
 
@@ -268,9 +269,15 @@ function widget:Update()
 	end
 	-- get sockets ready for read
 	local readable, writeable, err = socket.select(set, set, 0)
+	--Spring.Utilities.TableEcho(set, "set")
+	--Spring.Utilities.TableEcho(readable, "readable")
+	--Spring.Utilities.TableEcho(writeable, "writeable")
+	--Spring.Echo("headersent", headersent)
+	--Spring.Echo("err", err)
 	if err~=nil then
 		-- some error happened in select
 		if err=="timeout" then
+			headersent = nil
 			-- nothing to do, return
 			return
 		end
@@ -286,6 +293,7 @@ function widget:Update()
 			set:remove(input)
 		end
 	end
+	
 	for __, output in ipairs(writeable) do
 		SocketWriteAble(output)
 	end

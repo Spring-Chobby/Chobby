@@ -133,12 +133,19 @@ local function TableEcho(data, name, indent, tableChecked)
 	local newIndent = indent .. "    "
 	for name, v in pairs(data) do
 		local ty = type(v)
+		--Spring.Echo("type", ty)
 		if ty == "table" then
 			TableEcho(v, name, newIndent, true)
 		elseif ty == "boolean" then
 			Spring.Echo(newIndent .. name .. " = " .. (v and "true" or "false"))
 		elseif ty == "string" or ty == "number" then
-			Spring.Echo(newIndent .. name .. " = " .. v)
+			if type(name) == "userdata" then
+				Spring.Echo(newIndent, name, v)
+			else
+				Spring.Echo(newIndent .. name .. " = " .. v)
+			end
+		elseif ty == "userdata" then
+			Spring.Echo(newIndent .. "userdata", name, v)
 		else
 			Spring.Echo(newIndent .. name .. " = ", v)
 		end

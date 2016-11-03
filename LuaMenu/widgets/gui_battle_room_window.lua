@@ -576,7 +576,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 			if totalHeight < minHeight then
 				totalHeight = minHeight
 			end
-			panel:SetPos(nil, nil, nil, totalHeight)
+			panel:SetPos(nil, nil, nil, totalHeight + 15)
 			local runningHeight = 0
 			for i = 1, #children do
 				local child = children[i]
@@ -1256,6 +1256,10 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	-- External Functions
 	local externalFunctions = {}
 	
+	function externalFunctions.ClearChatHistory()
+		battleRoomConsole:ClearHistory()
+	end
+	
 	function externalFunctions.OnBattleClosed(listener, closedBattleID)
 		if battleID == closedBattleID then
 			mainWindow:Dispose()
@@ -1536,6 +1540,12 @@ function BattleRoomWindow.LeaveBattle(onlyMultiplayer, onlySingleplayer)
 	end
 	
 	WG.BattleStatusPanel.RemoveBattleTab()
+end
+
+function BattleRoomWindow.ClearChatHistory()
+	if mainWindowFunctions and mainWindowFunctions.ClearChatHistory then
+		mainWindowFunctions.ClearChatHistory()
+	end
 end
 
 function widget:Initialize()

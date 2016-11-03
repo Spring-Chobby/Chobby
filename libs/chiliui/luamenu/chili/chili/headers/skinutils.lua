@@ -431,9 +431,27 @@ function DrawEditBox(obj)
 
 		gl.Color(1,1,1,1)
 		if obj.multiline then
-			for _, line in pairs(obj.physicalLines) do
-				font:Draw(line.text, clientX, clientY + line.y)
+			
+			if obj.parent and obj.parent:InheritsFrom("scrollpanel") then
+				local scrollPosY = obj.parent.scrollPosY
+				local scrollHeight = obj.parent.clientArea[4]
+				
+				local h, d, numLines = obj.font:GetTextHeight(obj.text);
+				local minDrawY = scrollPosY - (h or 0)
+				local maxDrawY = scrollPosY + scrollHeight + (h or 0)
+				
+				for _, line in pairs(obj.physicalLines) do
+					local drawPos = clientY + line.y
+					if drawPos > minDrawY and drawPos < maxDrawY then
+						font:Draw(line.text, clientX, clientY + line.y)
+					end
+				end
+			else
+				for _, line in pairs(obj.physicalLines) do
+					font:Draw(line.text, clientX, clientY + line.y)
+				end
 			end
+		
 		else
 			font:DrawInBox(txt, clientX, clientY, clientWidth, clientHeight, obj.align, obj.valign)
 		end
