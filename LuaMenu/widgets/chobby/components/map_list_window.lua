@@ -5,7 +5,7 @@ function MapListWindow:init(lobby, gameName, zoomToMap)
 	self:super('init', WG.Chobby.lobbyInterfaceHolder, "Select Map", false, "overlay_window")
 	self.window:SetPos(nil, nil, 500, 700)
 	
-	if WG.WrapperLoopback then
+	if WG.WrapperLoopback and Configuration.gameConfig.link_maps then
 		self.btnOnlineMaps = Button:New {
 			right = 95,
 			y = 5,
@@ -17,7 +17,7 @@ function MapListWindow:init(lobby, gameName, zoomToMap)
 			parent = self.window,
 			OnClick = {
 				function ()
-					WG.WrapperLoopback.OpenUrl("http://zero-k.info/Maps")
+					WG.WrapperLoopback.OpenUrl(Configuration.gameConfig.link_maps())
 				end
 			},
 		}
@@ -26,7 +26,7 @@ function MapListWindow:init(lobby, gameName, zoomToMap)
 	local zoomY
 	local whitelist
 	if Configuration.onlyShowFeaturedMaps then
-		whitelist = Configuration:GetGameConfig(gameName, "mapWhitelist.lua")
+		whitelist = Configuration.gameConfig.mapWhitelist
 	end
 	
 	for i, archive in pairs(VFS.GetAllArchives()) do
@@ -63,7 +63,7 @@ function MapListWindow:init(lobby, gameName, zoomToMap)
 				right = 0,
 				bottom = 0,
 				keepAspect = true,
-				file = Configuration:GetMinimapSmallImage(info.name, gameName),
+				file = Configuration:GetMinimapSmallImage(info.name),
 				parent = minimap,
 			}
 			self:AddRow({pickMapButton}, info.name)

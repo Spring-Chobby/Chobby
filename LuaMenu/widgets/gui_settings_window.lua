@@ -443,14 +443,6 @@ local function GetLobbyTabControls()
 		caption = "Singleplayer",
 	}
 	
-	local gameChoices = {"Generic", "Zero-K"}
-	for i, archive in pairs(VFS.GetAllArchives()) do
-		local info = VFS.GetArchiveInfo(archive)
-		if info and info.modtype == 1 and info.name == "Zero-K $VERSION" then
-			gameChoices[3] = "Zero-K Dev"
-		end
-	end
-	
 	children[#children + 1] = ComboBox:New {
 		name = "gameSelection",
 		x = COMBO_X,
@@ -458,16 +450,16 @@ local function GetLobbyTabControls()
 		width = COMBO_WIDTH,
 		height = 30,
 		parent = window,
-		items = gameChoices,
+		items = Configuration.gameConfigHumanNames,
 		font = Configuration:GetFont(2),
 		itemFontSize = Configuration:GetFont(2).size,
-		selected = Configuration.singleplayer_mode or 2,
+		selected = 1, -- TODO, get from config.
 		OnSelect = {
 			function (obj)
 				if freezeSettings then
 					return
 				end
-				Configuration:SetConfigValue("singleplayer_mode", obj.selected)
+				Configuration:SetConfigValue("gameConfigName", Configuration.gameConfigOptions[obj.selected])
 			end
 		},
 	}
@@ -791,7 +783,7 @@ local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitc
 	return label, numberInput, offset + ITEM_OFFSET
 end
 
-local function PopulateTab(settingPresets, settingOptions, settingsDefaults)
+local function PopulateTab(settingPresets, settingOptions, settingsDefault)
 	local children = {}
 	local offset = 5
 	local customSettingsSwitch
@@ -808,9 +800,9 @@ local function PopulateTab(settingPresets, settingOptions, settingsDefaults)
 		if data.displayModeToggle then
 			label, list, offset = ProcessScreenSizeOption(data, offset)
 		elseif data.isNumberSetting then
-			label, list, offset = ProcessSettingsNumber(data, offset, settingsDefaults, customSettingsSwitch)
+			label, list, offset = ProcessSettingsNumber(data, offset, settingsDefault, customSettingsSwitch)
 		else
-			label, list, offset = ProcessSettingsOption(data, offset, settingsDefaults, customSettingsSwitch)
+			label, list, offset = ProcessSettingsOption(data, offset, settingsDefault, customSettingsSwitch)
 		end
 		children[#children + 1] = label
 		children[#children + 1] = list
@@ -856,7 +848,8 @@ local function InitializeControls(window)
 		}
 	}
 	
-	local settingsFile, settingsDefaults = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/settingsMenu.lua")
+	local settingsFile = WG.Chobby.Configuration.gameConfig.settingsConfig
+	local settingsDefault = WG.Chobby.Configuration.gameConfig.settingsDefault
 	
 	for i = 1, #settingsFile do
 		local data = settingsFile[i]
@@ -864,7 +857,7 @@ local function InitializeControls(window)
 			name = data.name,
 			caption = data.name,
 			font = WG.Chobby.Configuration:GetFont(3),
-			children = PopulateTab(data.presets, data.settings, settingsDefaults)
+			children = PopulateTab(data.presets, data.settings, settingsDefault)
 		}
 	end
 	

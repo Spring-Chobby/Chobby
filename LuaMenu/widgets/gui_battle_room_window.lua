@@ -133,7 +133,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		right = 0,
 		bottom = 0,
 		keepAspect = true,
-		file = WG.Chobby.Configuration:GetMinimapImage(battle.mapName, battle.gameName),
+		file = WG.Chobby.Configuration:GetMinimapImage(battle.mapName),
 		parent = btnMinimap,
 	}
 
@@ -430,7 +430,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		end
 		if mapName then
 			lblMapName:SetCaption(mapName:gsub("_", " "))
-			imMinimap.file = WG.Chobby.Configuration:GetMinimapImage(mapName, battle.gameName)
+			imMinimap.file = WG.Chobby.Configuration:GetMinimapImage(mapName)
 			imMinimap:Invalidate()
 
 			-- TODO: Bit lazy here, seeing as we only need to update the map
@@ -1458,7 +1458,7 @@ function BattleRoomWindow.GetSingleplayerControl()
 					return
 				end
 
-				local singleplayerDefault = WG.Chobby.Configuration:GetGameConfig(singleplayerGame, "skirmishDefault.lua")
+				local singleplayerDefault = WG.Chobby.Configuration.gameConfig.skirmishDefault
 
 				local defaultMap = Game.mapName or "Red Comet"
 				if singleplayerDefault and singleplayerDefault.map then
@@ -1508,7 +1508,7 @@ function BattleRoomWindow.SetSingleplayerGame(ToggleShowFunc, battleroomObj, tab
 	end
 
 	local config = WG.Chobby.Configuration
-	local skirmishGame = config:GetSkirmishGame()
+	local skirmishGame = config.gameConfig.defaultGameArchiveName
 	if skirmishGame then
 		singleplayerGame = skirmishGame
 		ToggleShowFunc(battleroomObj, tabData)
