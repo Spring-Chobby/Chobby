@@ -1,4 +1,6 @@
 local invertZoomMult = -1
+local MiddleClickScrollSpeed = -1/200
+local OverheadScrollSpeed = 50
 
 local settings = {
 	{
@@ -542,22 +544,26 @@ local settings = {
 				name = "MiddlePanSpeed",
 				humanName = "Middle Click Pan Speed",
 				isNumberSetting = true,
-				applyName = "MiddleClickScrollSpeed",
 				minValue = 0,
 				maxValue = 1000,
-				springConversion = function(value)
-					return value*-1/2000
+				applyFunction = function(value)
+					MiddleClickScrollSpeed = value*(-1/200)
+					return {
+						MiddleClickScrollSpeed = MiddleClickScrollSpeed/OverheadScrollSpeed,
+					}
 				end,
 			},
 			{
 				name = "CameraPanSpeed",
 				humanName = "Camera Pan Speed",
 				isNumberSetting = true,
-				applyName = "OverheadScrollSpeed",
 				minValue = 0,
 				maxValue = 1000,
-				springConversion = function(value)
-					return value
+				applyFunction = function(value)
+					return {
+						OverheadScrollSpeed = value,
+						MiddleClickScrollSpeed = MiddleClickScrollSpeed/value,
+					}
 				end,
 			},
 		},
@@ -581,7 +587,7 @@ local settingsDefaults = {
 	MouseZoomSpeed = 25,
 	InvertZoom = "Off",
 	MiddlePanSpeed = 10,
-	CameraPanSpeed = 10,
+	CameraPanSpeed = 50,
 }
 
 return settings, settingsDefaults
