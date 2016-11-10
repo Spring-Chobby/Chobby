@@ -499,7 +499,7 @@ function Object:SetChildLayer(child,layer)
   local children = self.children
 
   if layer < 0 then
-    layer = layer + #children - 1
+    layer = layer + #children + 1
   end
   
   layer = math.min(layer, #children)
