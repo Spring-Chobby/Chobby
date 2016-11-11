@@ -418,7 +418,7 @@ local ModoptionsPanel = {}
 function ModoptionsPanel.LoadModotpions(gameName, newBattleLobby)
 	battleLobby = newBattleLobby
 
-	modoptions = WG.Chobby.Configuration:GetGameConfig(gameName, "ModOptions.lua")
+	modoptions = WG.Chobby.Configuration.gameConfig.defaultModoptions
 	modoptionDefaults = {}
 	modoptionChanges = {}
 	modoptionStructure = {

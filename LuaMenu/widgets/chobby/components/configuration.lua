@@ -57,18 +57,6 @@ function Configuration:init()
 	-- Do not ask again tests.
 	self.confirmation_mainMenuFromBattle = false
 	self.confirmation_battleFromBattle = false
-	
-	function self.link_reportPlayer(accountID) 
-		return "http://zero-k.info/Users/ReportToAdmin/" .. accountID
-	end
-	
-	function self.link_userPage(accountID) 
-		return "http://zero-k.info/Users/Detail/" .. accountID
-	end
-	
-	function self.link_homePage() 
-		return "http://zero-k.info/"
-	end
 
 	self.backConfirmation = {
 		multiplayer = {
@@ -92,19 +80,30 @@ function Configuration:init()
 		}
 	}
 
-	self.shortnameMap = {
-		"chobby",
+	self.gameConfigName = "zk"
+	self.gameConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/mainConfig.lua")
+	
+	-- TODO, generate this from directory structure
+	local gameConfigOptions = {
 		"zk",
-		"zk",
-	}
-	self.skirmishGameByMode = {
-		[1] = nil, -- Opens game selection screen
-		[2] = "Zero-K v1.4.11.0",
-		[3] = "Zero-K $VERSION",
+		"generic",
+		"zkdev",
+		"evorts"
 	}
 	
-	self.singleplayer_mode = 2
-
+	self.gameConfigOptions = {}
+	self.gameConfigHumanNames = {}
+	for i = 1, #gameConfigOptions do
+		local fileName = LUA_DIRNAME .. "configs/gameConfig/" .. gameConfigOptions[i] .. "/mainConfig.lua"
+		if VFS.FileExists(fileName) then
+			local gameConfig = VFS.Include(fileName)
+			if gameConfig.CheckAvailability() then
+				self.gameConfigHumanNames[#self.gameConfigHumanNames + 1] = gameConfig.name
+				self.gameConfigOptions[#self.gameConfigOptions + 1] = gameConfigOptions[i]
+			end
+		end
+	end
+	
 	self.lastLoginChatLength = 25
 	self.notifyForAllChat = true
 	self.debugMode = false
@@ -129,8 +128,8 @@ function Configuration:init()
 	self.countryShortnames = VFS.Include(LUA_DIRNAME .. "configs/countryShortname.lua")
 
 	self.game_settings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings3.lua")
-	local settingsFile, settingsDefaults = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/settingsMenu.lua")
-	self.settingsMenuValues = settingsDefaults
+	
+	self.settingsMenuValues = self.gameConfig.settingsDefault
 end
 
 ---------------------------------------------------------------------------------
@@ -153,7 +152,7 @@ function Configuration:GetConfigData()
 		password = self.password,
 		autoLogin = self.autoLogin,
 		channels = self.channels,
-		singleplayer_mode = self.singleplayer_mode,
+		gameConfigName = self.gameConfigName,
 		game_fullscreen = self.game_fullscreen,
 		panel_layout = self.panel_layout,
 		lobby_fullscreen = self.lobby_fullscreen,
@@ -189,6 +188,9 @@ function Configuration:SetConfigValue(key, value)
 	if key == "useSpringRestart" then
 		lobby.useSpringRestart = value
 		localLobby.useSpringRestart = value
+	end
+	if key == "gameConfigName" then
+		self.gameConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. value .. "/mainConfig.lua")
 	end
 	self:_CallListeners("OnConfigurationChange", key, value)
 end
@@ -269,44 +271,30 @@ function Configuration:GetFont(sizeScale)
 	}
 end
 
-function Configuration:GetMinimapSmallImage(mapName, gameName)
+function Configuration:GetMinimapSmallImage(mapName)
+	if not self.gameConfig.minimapThumbnailPath then
+		return LUA_DIRNAME .. "images/minimapNotFound1.png"
+	end
 	mapName = string.gsub(mapName, " ", "_")
-	local minimapImage = self:GetGameConfigFilePath(gameName, "minimapThumbnail/" .. mapName .. ".png", "zk")
-	if minimapImage then
-		return minimapImage
+	local filePath = self.gameConfig.minimapThumbnailPath .. mapName .. ".png"
+	if not VFS.FileExists(filePath) then
+		Spring.Log("Chobby", LOG.WARNING, "Missing minimap image for", mapName)
+		return LUA_DIRNAME .. "images/minimapNotFound1.png"
 	end
-	Spring.Log("Chobby", LOG.WARNING, "Missing minimap image for", mapName)
-	return LUA_DIRNAME .. "images/minimapNotFound1.png"
+	return filePath
 end
 
-function Configuration:GetMinimapImage(mapName, gameName)
+function Configuration:GetMinimapImage(mapName)
+	if not self.gameConfig.minimapOverridePath then
+		return LUA_DIRNAME .. "images/minimapNotFound1.png"
+	end
 	mapName = string.gsub(mapName, " ", "_")
-	local minimapImage = self:GetGameConfigFilePath(gameName, "minimapOverride/" .. mapName .. ".jpg", "zk")
-	if minimapImage then
-		return minimapImage
+	local filePath = self.gameConfig.minimapOverridePath .. mapName .. ".jpg"
+	if not VFS.FileExists(filePath) then
+		Spring.Log("Chobby", LOG.WARNING, "Missing minimap image for", mapName)
+		return LUA_DIRNAME .. "images/minimapNotFound1.png"
 	end
-	Spring.Log("Chobby", LOG.WARNING, "Missing minimap image for", mapName)
-	return LUA_DIRNAME .. "images/minimapNotFound1.png"
-end
-
-function Configuration:GetGameConfigFilePath(gameName, fileName, shortnameFallback)
-	local gameInfo = gameName and VFS.GetArchiveInfo(gameName)
-	local shortname = (gameInfo and gameInfo.shortname and string.lower(gameInfo.shortname)) or shortnameFallback
-	if shortname then
-		local filePath = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/" .. fileName
-		if VFS.FileExists(filePath) then
-			return filePath
-		end
-	end
-	return false
-end
-
-function Configuration:GetGameConfig(gameName, fileName, shortnameFallback)
-	local filePath = self:GetGameConfigFilePath(gameName, fileName, shortnameFallback)
-	if filePath then
-		return VFS.Include(filePath)
-	end
-	return false
+	return filePath
 end
 
 function Configuration:GetCountryLongname(shortname)
@@ -318,35 +306,10 @@ end
 
 function Configuration:GetHeadingImage(fullscreenMode)
 	if fullscreenMode then
-		return self:GetGameConfigFilePath(false, "skinning/headingLarge.png", self.shortnameMap[self.singleplayer_mode])
+		return self.gameConfig.headingLarge
 	else
-		return self:GetGameConfigFilePath(false, "skinning/headingSmall.png", self.shortnameMap[self.singleplayer_mode])
+		return self.gameConfig.headingSmall
 	end
-end
-
-function Configuration:GetBackgroundImage()
-	local shortname = self.shortnameMap[self.singleplayer_mode]
-
-	local skinConfig = self:GetGameConfig(false, "skinning/skinConfig.lua", shortname)
-	local backgroundFocus
-	if skinConfig then
-		backgroundFocus = skinConfig.backgroundFocus
-	end
-
-	local pngImage = self:GetGameConfigFilePath(false, "skinning/background.png", shortname)
-	if pngImage then
-		return pngImage, backgroundFocus
-	end
-	return self:GetGameConfigFilePath(false, "skinning/background.jpg", shortname), backgroundFocus
-end
-
-function Configuration:GetTaskbarIcon()
-	local shortname = self.shortnameMap[self.singleplayer_mode]
-	local pngImage = self:GetGameConfigFilePath(false, "taskbarLogo.png", shortname)
-	if pngImage then
-		return pngImage
-	end
-	return false
 end
 
 function Configuration:IsValidEngineVersion(engineVersion)
@@ -358,10 +321,6 @@ function Configuration:IsValidEngineVersion(engineVersion)
 	else
 		return string.gsub(Game.version, " develop", "") == engineVersion
 	end
-end
-
-function Configuration:GetSkirmishGame()
-	return self.skirmishGameByMode[self.singleplayer_mode]
 end
 
 ---------------------------------------------------------------------------------

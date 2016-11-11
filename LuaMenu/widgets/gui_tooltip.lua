@@ -228,7 +228,7 @@ local function GetBattleInfoHolder(parent, offset, battleID)
 		width = 70,
 		height = 70,
 		keepAspect = true,
-		file = Configuration:GetMinimapImage(battle.mapName, battle.gameName),
+		file = Configuration:GetMinimapImage(battle.mapName),
 		parent = mainControl,
 	}
 	local runningImage = Image:New {
@@ -333,7 +333,7 @@ local function GetBattleInfoHolder(parent, offset, battleID)
 			imgPassworded:Hide()
 		end
 
-		minimapImage.file = Configuration:GetMinimapImage(battle.mapName, battle.gameName)
+		minimapImage.file = Configuration:GetMinimapImage(battle.mapName)
 		minimapImage:Invalidate()
 
 		runningImage.file = (battle.isRunning and BATTLE_RUNNING) or BATTLE_NOT_RUNNING

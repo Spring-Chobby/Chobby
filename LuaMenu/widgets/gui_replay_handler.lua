@@ -178,7 +178,7 @@ local function InitializeControls(parentControl)
 		},
 	}
 		
-	if WG.WrapperLoopback then
+	if WG.WrapperLoopback and Configuration.gameConfig.link_replays then
 		Button:New {
 			x = 210,
 			y = 5,
@@ -190,7 +190,7 @@ local function InitializeControls(parentControl)
 			parent = parentControl,
 			OnClick = {
 				function ()
-					WG.WrapperLoopback.OpenUrl("http://zero-k.info/Battles")
+					WG.WrapperLoopback.OpenUrl(Configuration.gameConfig.link_replays())
 				end
 			},
 		}

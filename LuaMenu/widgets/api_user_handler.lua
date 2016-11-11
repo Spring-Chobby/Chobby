@@ -146,7 +146,7 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 			comboOptions[#comboOptions + 1] = "Friend"
 		end
 		
-		if userInfo.accountID and Configuration.link_reportPlayer then
+		if userInfo.accountID and Configuration.gameConfig.link_reportPlayer then
 			comboOptions[#comboOptions + 1] = "Report"
 		end
 		
@@ -157,7 +157,7 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 		end
 	end
 
-	if userInfo.accountID and Configuration.link_userPage then
+	if userInfo.accountID and Configuration.gameConfig.link_userPage then
 		comboOptions[#comboOptions + 1] = "User Page"
 	end
 	
@@ -446,15 +446,15 @@ local function GetUserControls(userName, opts)
 						if userInfo.battleID then
 							lobby:RejoinBattle(userInfo.battleID)
 						end
-					elseif selectedName == "User Page" and Configuration.link_userPage then
+					elseif selectedName == "User Page" and Configuration.gameConfig.link_userPage then
 						local userInfo = userControls.lobby:GetUser(userName) or {}
 						if userInfo.accountID then
-							WG.BrowserHandler.OpenUrl(Configuration.link_userPage(userInfo.accountID))
+							WG.BrowserHandler.OpenUrl(Configuration.gameConfig.link_userPage(userInfo.accountID))
 						end
-					elseif selectedName == "Report" and Configuration.link_reportPlayer then
+					elseif selectedName == "Report" and Configuration.gameConfig.link_reportPlayer then
 						local userInfo = userControls.lobby:GetUser(userName) or {}
 						if userInfo.accountID then
-							WG.BrowserHandler.OpenUrl(Configuration.link_reportPlayer(userInfo.accountID))
+							WG.BrowserHandler.OpenUrl(Configuration.gameConfig.link_reportPlayer(userInfo.accountID))
 						end
 					elseif selectedName == "Unignore" then
 						userControls.lobby:Unignore(userName)
@@ -798,13 +798,27 @@ end
 --------------------------------------------------------------------------------
 -- Widget Interface
 
-function widget:Initialize()
-	UserLevelToImageConfFunction = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/rankFunction.lua", nil, VFS.RAW_FIRST)
+local function DelayedInitialize()
+	local Configuration = WG.Chobby.Configuration
+	UserLevelToImageConfFunction = Configuration.gameConfig.rankFunction
 	
+	local function onConfigurationChange(listener, key, value)
+		if key == "gameConfigName" then
+			UserLevelToImageConfFunction = Configuration.gameConfig.rankFunction
+			-- TODO, update all rank icons.
+		end
+	end
+	
+	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
+end
+
+
+function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
 	AddListeners()
+	WG.Delay(DelayedInitialize, 1)
 
 	WG.UserHandler = userHandler
 end

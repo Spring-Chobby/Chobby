@@ -391,7 +391,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local submenus = {
 		{
 			name = "singleplayer",
-			tabs = Configuration:GetGameConfig(false, "singleplayerMenu.lua", Configuration.shortnameMap[Configuration.singleplayer_mode]) or {}
+			tabs = Configuration.gameConfig.singleplayerConfig
 		},
 		{
 			name = "multiplayer",
@@ -958,12 +958,12 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			elseif value == 3 then
 				externalFunctions.SetPanelDisplayMode(false, false)
 			end
-		elseif key == "singleplayer_mode" then
+		elseif key == "gameConfigName" then
 			heading_image.file = Configuration:GetHeadingImage(doublePanelMode)
 			heading_image:Invalidate()
 
 			local newShortname = Configuration.shortnameMap[value]
-			local replacementTabs = Configuration:GetGameConfig(false, "singleplayerMenu.lua", newShortname) or {}
+			local replacementTabs = Configuration.gameConfig.singleplayerConfing
 
 			WG.BattleRoomWindow.LeaveBattle(false, true)
 			mainWindowHandler.ReplaceSubmenu(1, replacementTabs)

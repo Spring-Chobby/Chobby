@@ -178,7 +178,7 @@ function BattleListWindow:AddBattle(battleID, battle)
 		right = 0,
 		bottom = 0,
 		keepAspect = true,
-		file = Configuration:GetMinimapSmallImage(battle.mapName, battle.gameName),
+		file = Configuration:GetMinimapSmallImage(battle.mapName),
 		parent = minimap,
 	}
 	local runningImage = Image:New {
@@ -355,7 +355,7 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 	-- Resets title and truncates.
 	lblTitle.OnResize[1](lblTitle)
 	
-	minimapImage.file = Configuration:GetMinimapImage(battle.mapName, battle.gameName)
+	minimapImage.file = Configuration:GetMinimapImage(battle.mapName)
 	minimapImage:Invalidate()
 	
 	mapCaption:SetCaption(battle.mapName:gsub("_", " "))
@@ -541,7 +541,7 @@ function BattleListWindow:JoinBattle(battle)
 		WG.BattleRoomWindow.LeaveBattle()
 		lobby:JoinBattle(battle.battleID)
 	else
-		local tryJoin
+		local tryJoin, passwordWindow
 
 		local function onJoinBattleFailed(listener, reason)
 			lblError:SetCaption(reason)
@@ -550,7 +550,7 @@ function BattleListWindow:JoinBattle(battle)
 			passwordWindow:Dispose()
 		end
 
-		local passwordWindow = Window:New {
+		passwordWindow = Window:New {
 			x = 700,
 			y = 300,
 			width = 315,

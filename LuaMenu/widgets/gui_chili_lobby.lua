@@ -81,7 +81,7 @@ function widget:Initialize()
 	Chobby.interfaceRoot = interfaceRoot
 	
 	Spring.SetWMCaption("Ingame Lobby", "IngameLobby")
-	local taskbarIcon = Chobby.Configuration:GetTaskbarIcon()
+	local taskbarIcon = Chobby.Configuration.gameConfig.taskbarIcon
 	if taskbarIcon then
 		Spring.SetWMIcon(taskbarIcon)
 	end
@@ -93,8 +93,8 @@ function widget:Initialize()
 	WG.LibLobby.lobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
 	
 	local function onConfigurationChange(listener, key, value)
-		if key == "singleplayer_mode" then
-			local taskbarIcon = Chobby.Configuration:GetTaskbarIcon()
+		if key == "gameConfigName" then
+			local taskbarIcon = Chobby.Configuration.gameConfig.taskbarIcon
 			if taskbarIcon then
 				Spring.SetWMIcon(taskbarIcon)
 			end

@@ -9,10 +9,10 @@ function Background:init(imageOverride, colorOverride, backgroundFocus)
 	else
 		self:Enable()
 		local function onConfigurationChange(listener, key, value)
-			if key == "singleplayer_mode" then
-				local file, focus = Configuration:GetBackgroundImage()
-				self.backgroundFocus = focus
+			if key == "gameConfigName" then
+				local file = Configuration.gameConfig.background.image
 				self.backgroundImage.file = file
+				self.backgroundFocus = Configuration.gameConfig.background.backgroundFocus
 				local texInfo = gl.TextureInfo(file)
 				self.width, self.height = texInfo.xsize, texInfo.ysize
 				self.backgroundControl:Invalidate()
@@ -82,9 +82,8 @@ function Background:Enable()
 		if self.imageOverride then
 			imageFile = self.imageOverride
 		else
-			local file, focus = Configuration:GetBackgroundImage()
-			imageFile = file
-			self.backgroundFocus = focus
+			imageFile = Configuration.gameConfig.background.image
+			self.backgroundFocus = Configuration.gameConfig.background.backgroundFocus
 		end
 		local texInfo = gl.TextureInfo(imageFile)
 		self.width, self.height = texInfo.xsize, texInfo.ysize	
