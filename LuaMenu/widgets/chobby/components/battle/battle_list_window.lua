@@ -541,7 +541,7 @@ function BattleListWindow:JoinBattle(battle)
 		WG.BattleRoomWindow.LeaveBattle()
 		lobby:JoinBattle(battle.battleID)
 	else
-		local tryJoin
+		local tryJoin, passwordWindow
 
 		local function onJoinBattleFailed(listener, reason)
 			lblError:SetCaption(reason)
@@ -550,7 +550,7 @@ function BattleListWindow:JoinBattle(battle)
 			passwordWindow:Dispose()
 		end
 
-		local passwordWindow = Window:New {
+		passwordWindow = Window:New {
 			x = 700,
 			y = 300,
 			width = 315,
