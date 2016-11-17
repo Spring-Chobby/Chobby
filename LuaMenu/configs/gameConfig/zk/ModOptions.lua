@@ -78,6 +78,21 @@ local options = {
     def    = false,
     section= 'a_important',
   },
+
+	{
+		key     = 'sharemode',
+		name    = 'Commshare',
+		desc    = 'Determines whether players can merge together during gameplay.',
+		type    = 'list',
+		section = 'a_important',
+		def     = 'invite',
+		items   = {
+			{ key='all', name = "Merge All", desc = 'Merges all at game start. Recommend using allowunmerge = false with this.' },
+			{ key='invite', name = "Invite Only", desc = 'Allows players to merge only if both give consent.' },
+			{ key='none', name = "Off", desc = 'Turns commsharing off.' },
+		},
+	},
+	
   {
     key = "noelo",
     name = "No Elo",
@@ -262,17 +277,17 @@ local options = {
       { key='alloff', name="All Off", desc='Disable all speed boost' },
     },
   },
-  --{ Causes desync bug. Re-enable in 101.0
-  --  key    = 'waterlevel',
-  --  name   = 'Water Level',
-  --  desc   = 'Adjusts the water level of the map',
-  --  type   = 'number',
-  --  section= 'mapsettings',
-  --  def    = 0,
-  --  min    = -2000,
-  --  max    = 2000,
-  --  step   = 1,
-  --},
+  { -- Might cause desync, check if they occur.
+    key    = 'waterlevel',
+    name   = 'Water Level',
+    desc   = 'Adjusts the water level of the map',
+    type   = 'number',
+    section= 'mapsettings',
+    def    = 0,
+    min    = -2000,
+    max    = 2000,
+    step   = 1,
+  },
   {
     key    = 'metalmult',
     name   = 'Metal Extraction Multiplier',
@@ -387,6 +402,18 @@ local options = {
     def    = 1,
     min    = 0.000001,
     max    = 10000,
+    step   = 0.05,
+  },
+    {
+    key    = 'raidDefenseBuildingRangeMult',
+    name   = 'Range Multiplier for Raid-Damaging Buildings',
+    desc   = 'Multiplies the ranges of all buildings that are able to directly damage ground-based raids, excluding ' ..
+    'superweapons, nuclear weapons and the missile silo.',
+    type   = 'number',
+    section= 'experimental',
+    def    = 1,
+    min    = 0,
+    max    = 100000,
     step   = 0.05,
   },
   {
