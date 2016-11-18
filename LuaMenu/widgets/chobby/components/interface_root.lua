@@ -876,6 +876,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		UpdateStatusAndInvitesHolderPosition()
 	end
 	
+	function externalFunctions.SetMainInterfaceVisible(newVisible)
+		SetMainInterfaceVisible(newVisible)
+	end
+	
 	function externalFunctions.GetChatWindow()
 		return chatWindows
 	end
@@ -944,6 +948,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	function externalFunctions.GetLobbyInterfaceHolder()
 		return lobbyInterfaceHolder
+	end
+	
+	function externalFunctions.SetLobbyButtonEnabled(newEnabled)
+		Spring.Echo("SetLobbyButtonEnabled", newEnabled)
+		switchToMenuButton:SetVisibility(newEnabled)
 	end
 	
 	-------------------------------------------------------------------
