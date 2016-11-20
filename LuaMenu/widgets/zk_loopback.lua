@@ -57,11 +57,15 @@ end
 -- Callin Functions
 
 -- Use listener interface from configuration when implementing this
---function Example(args)
---	Echo(args.Message)
---end
 
---commands["Example"] = Example
+-- reports that download has ended/was aborted
+function DownloadFileDone(args)
+	Echo(args.Name)
+	Echo(args.FileType)
+	Echo(args.IsSuccess)
+end
+
+commands["DownloadFileDone"] = DownloadFileDone
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -75,7 +79,7 @@ function WrapperLoopback.OpenUrl(url)
 	SendCommand("OpenUrl", {Url = url})
 end
 
--- opens folder
+-- opens folder (gamedata folder only technically)
 function WrapperLoopback.OpenFolder(folder) 
 	SendCommand("OpenFolder", {Folder = folder})
 end
@@ -99,6 +103,12 @@ end
 function WrapperLoopback.TtsSay(name, text) 
 	SendCommand("TtsSay", {Name = name, Text = text})
 end
+
+-- downloads a file, fileType can be any of RAPID, MAP, MISSION, DEMO, ENGINE, NOTKNOWN
+function WrapperLoopback.TtsSay(name, fileType) 
+	SendCommand("DownloadFile", {Name = name, FileType = fileType})
+end
+
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
