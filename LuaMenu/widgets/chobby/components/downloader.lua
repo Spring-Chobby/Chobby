@@ -1,6 +1,6 @@
 Downloader = Component:extends{}
 
-function Downloader:init(tbl, timeout, updateListener, completeListener, queueFont)
+function Downloader:init(tbl, timeout, updateListener, completeListener, queueFont, visibleListener)
 	self:super("init")
 
 	queueFont = queueFont or 1
@@ -69,6 +69,7 @@ function Downloader:init(tbl, timeout, updateListener, completeListener, queueFo
 	self.timeout = timeout
 	self.updateListener = updateListener
 	self.completeListener = completeListener
+	self.visibleListener = visibleListener
 end
 
 function Downloader:UpdateQueue()
@@ -108,12 +109,19 @@ function Downloader:UpdateQueue()
 	if self.updateListener then
 		self.updateListener(downloadCount, failure)
 	end
+	
+	if self.visibleListener then
+		self.visibleListener(true)
+	end
 end
 
 function Downloader:Hide()
 	if self.prDownload.visible then
 		self.lblDownload:Hide()
 		self.prDownload:Hide()
+	end
+	if self.visibleListener then
+		self.visibleListener(false)
 	end
 end
 
@@ -141,6 +149,9 @@ function Downloader:_CleanupDownload(myDelayID)
 	if not self.lblDownload.hidden then
 		self.lblDownload:Hide()
 	end
+	if self.visibleListener then
+		self.visibleListener(false)
+	end
 end
 
 -- util function to round to decimal spaces
@@ -158,7 +169,6 @@ function Downloader:DownloadProgress(downloadID, downloaded, total)
 	end
 
 	self._lastUpdate = currentTime
-
 
 	local elapsedTime = os.clock() - self.downloads[downloadID].startTime
 	local doneRatio = downloaded / total
