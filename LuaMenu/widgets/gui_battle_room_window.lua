@@ -300,8 +300,17 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		},
 		parent = leftInfo,
 	}
-	leftOffset = leftOffset + 38
+	leftOffset = leftOffset + 40
 
+	local lblGame = Label:New {
+		x = 8,
+		y = leftOffset,
+		caption = battle.gameName,
+		font = WG.Chobby.Configuration:GetFont(1),
+		parent = leftInfo,
+	}
+	leftOffset = leftOffset + 26
+	
 	local imHaveGame = Image:New {
 		x = 8,
 		y = leftOffset,
@@ -335,7 +344,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		parent = leftInfo,
 	}
 	leftOffset = leftOffset + 25
-
+	
 	local downloader = WG.Chobby.Downloader(
 		{
 			x = 0,
@@ -439,6 +448,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		end
 		
 		if gameName then
+			lblGame:SetCaption(gameName)
 			UpdateArchiveStatus(true)
 			MaybeDownloadGame(battle)
 		end

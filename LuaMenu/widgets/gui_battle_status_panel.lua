@@ -50,7 +50,7 @@ local function GetBattleInfoHolder(parent, battleID)
 		name = "title",
 		x = 70,
 		y = 1,
-		width = 245,
+		width = 225,
 		height = 20,
 		valign = 'top',
 		font = Configuration:GetFont(2),
@@ -132,7 +132,7 @@ local function GetBattleInfoHolder(parent, battleID)
 			minimap:SetPos(nil, nil, 30, 30)
 
 			lblTitle.font.size = Configuration:GetFont(1).size
-			lblTitle:SetPos(36, 1, 160)
+			lblTitle:SetPos(36, 1, 150)
 
 			lblPlayerStatus.font.size = Configuration:GetFont(2).size
 			lblPlayerStatus:SetPos(58, 15)
@@ -147,7 +147,7 @@ local function GetBattleInfoHolder(parent, battleID)
 			minimap:SetPos(nil, nil, 68, 68)
 
 			lblTitle.font.size = Configuration:GetFont(2).size
-			lblTitle:SetPos(76, 3, 235)
+			lblTitle:SetPos(76, 3, 225)
 
 			lblPlayerStatus.font.size = Configuration:GetFont(2).size
 			lblPlayerStatus:SetPos(103, 27)
@@ -159,7 +159,7 @@ local function GetBattleInfoHolder(parent, battleID)
 
 			playersPrefix = PLAYER_PREFIX_BIG
 		end
-		local text = StringUtilities.GetTruncatedStringWithDotDot(battle.title, lblTitle.font, smallMode and 180 or 145)
+		local text = StringUtilities.GetTruncatedStringWithDotDot(battle.title, lblTitle.font, smallMode and 160 or 130)
 		lblTitle:SetCaption(text)
 
 		lblPlayers:SetCaption(playersPrefix .. lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers)
