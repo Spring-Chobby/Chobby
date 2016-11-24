@@ -189,9 +189,10 @@ function ChatWindows:init()
 	)
 
 	self.oldChatLine = Line:New {
+		classname = "lineStandOut",
 		x = 0,
 		right = 0,
-		height = 1,
+		height = 3,
 	}
 
 	self.serverPanel = ScrollPanel:New {

@@ -158,8 +158,8 @@ local bugLines = {
 		"Using engine " .. Game.version .. ".",
 	},
 	{
-		"Cpen game data folder to find settings, infolog etc...",
-		"Data",
+		"Open game data folder to find settings, infolog etc...",
+		"Local Data",
 		function ()
 			WG.WrapperLoopback.OpenFolder()
 		end

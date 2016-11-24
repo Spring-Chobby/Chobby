@@ -68,7 +68,7 @@ local function CreateMissionEntry(missionData)
 	
 	local startButton = Button:New {
 		x = 86,
-		y = 36,
+		y = 34,
 		width = 65,
 		height = 34,
 		caption = i18n("play"),
@@ -90,7 +90,7 @@ local function CreateMissionEntry(missionData)
 	
 	local missionName = TextBox:New {
 		name = "missionName",
-		x = 86,
+		x = 90,
 		y = 8,
 		right = 0,
 		height = 20,
