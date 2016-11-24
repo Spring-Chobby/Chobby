@@ -590,8 +590,10 @@ function ChatWindows:CreateDebugConsole()
 	)
 	lobby:AddListener("OnCommandReceived",
 		function(listner, command)
-			Spring.Echo("Server", "<" .. command)
-			self.debugConsole:AddMessage("<" .. command)
+			Spring.Echo("LuaMenuServerMessage", "<" .. command)
+			if Configuration.activeDebugConsole then
+				self.debugConsole:AddMessage("<" .. command)
+			end
 		end
 	)
 	lobby:AddListener("OnCommandSent",
@@ -604,8 +606,10 @@ function ChatWindows:CreateDebugConsole()
 					command = string.sub(command, 0, subPos) .. "REDACTED" .. string.sub(command, endPos)
 				end
 			end
-			Spring.Echo("Server", ">" .. command)
-			self.debugConsole:AddMessage(">" .. command)
+			Spring.Echo("LuaMenuServerMessage", ">" .. command)
+			if Configuration.activeDebugConsole then
+				self.debugConsole:AddMessage(">" .. command)
+			end
 		end
 	)
 	self.tabbars["Debug"] = self.debugConsole

@@ -109,6 +109,7 @@ function Configuration:init()
 	self.lastLoginChatLength = 25
 	self.notifyForAllChat = true
 	self.debugMode = false
+	self.activeDebugConsole = false
 	self.onlyShowFeaturedMaps = true
 	self.useSpringRestart = false
 	self.menuMusicVolume = 0.5
