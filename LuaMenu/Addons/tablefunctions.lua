@@ -4,7 +4,7 @@ Spring.Utilities = Spring.Utilities or {}
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
 --deep not safe with circular tables! defaults To false
-	function Spring.Utilities.CopyTable(tableToCopy, deep)
+function Spring.Utilities.CopyTable(tableToCopy, deep)
 	local copy = {}
 	for key, value in pairs(tableToCopy) do
 		if (deep and type(value) == "table") then

@@ -24,6 +24,7 @@ local externalFuncAndData = {
 	settingsConfig         = settingsConfig,
 	settingsDefault        = settingsDefault,
 	singleplayerConfig     = singleplayerConfig,
+	helpSubmenuConfig      = {},
 	headingLarge           = headingLarge,
 	headingSmall           = headingSmall,
 	background             = background,

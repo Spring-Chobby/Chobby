@@ -19,7 +19,6 @@ local settings = {
 	EdgeMoveWidth = 0.003,
 	FPSFOV = 90,
 	FSAA = 0,
-	Fullscreen = 0,
 	GrassDetail = 0,
 	GroundDecals = 0,
 	GroundDetail = 30,

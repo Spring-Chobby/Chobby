@@ -1,10 +1,13 @@
 SortableList = Component:extends{}
 
-function SortableList:init(holder, headings)
+function SortableList:init(holder, headings, itemHeight, defaultSort, sortDirection)
 	self:DoInit() -- Lack of inheritance strikes again.
 
-	self.sortBy = 1
-	self.smallToLarge = true
+	self.sortBy = false
+	self.smallToLarge = sortDirection
+	if self.smallToLarge == nil then
+		self.smallToLarge = true
+	end
 	
 	self.holder = holder
 	
@@ -15,37 +18,39 @@ function SortableList:init(holder, headings)
 	
 	self.headingButtons = {}
 	
-	for i = 1, #headings do
-		local heading = headings[i]
-		self.headingButtons[i] = Button:New {
-			x = heading.x,
-			y = 0,
-			right = heading.right,
-			width = heading.width,
-			height = 38,
-			caption = heading.name,
-			font = Configuration:GetFont(3),
-			--classname = "option_button",
-			parent = self.holder,
-			OnClick = {
-				function ()
-					if self.sortBy == i then
-						self.smallToLarge = not self.smallToLarge
-					else
-						self.sortBy = i
-						self.smallToLarge = true
+	if headings then
+		self.sortBy = defaultSort or 1
+		for i = 1, #headings do
+			local heading = headings[i]
+			self.headingButtons[i] = Button:New {
+				x = heading.x,
+				y = 0,
+				right = heading.right,
+				width = heading.width,
+				height = 38,
+				caption = heading.name,
+				font = Configuration:GetFont(3),
+				--classname = "option_button",
+				parent = self.holder,
+				OnClick = {
+					function ()
+						if self.sortBy == i then
+							self.smallToLarge = not self.smallToLarge
+						else
+							self.sortBy = i
+							self.smallToLarge = true
+						end
+						self:UpdateOrder()
 					end
-					self:UpdateOrder()
-				end
-			},
-		}
-	
+				},
+			}
+		end
 	end
 	
 	self.listPanel = ScrollPanel:New {
 		x = 0,
 		right = 0,
-		y = 42,
+		y = (headings and 42) or 0,
 		bottom = 0,
 		borderColor = {0,0,0,0},
 		horizontalScrollbar = false,
@@ -57,7 +62,7 @@ function SortableList:init(holder, headings)
 		}
 	}
 
-	self.itemHeight = 40
+	self.itemHeight = itemHeight or 40
 	self.itemPadding = 3
 end
 
@@ -146,14 +151,16 @@ function SortableList:UpdateOrder()
 	
 	local function SortFunction(a, b)
 		if self.smallToLarge then
-			return self.sortDataById[a][self.sortBy] > self.sortDataById[b][self.sortBy]
-		else
 			return self.sortDataById[a][self.sortBy] < self.sortDataById[b][self.sortBy]
+		else
+			return self.sortDataById[a][self.sortBy] > self.sortDataById[b][self.sortBy]
 		end
 	end
 	
-	table.sort(self.identifierList, SortFunction)
-
+	if self.sortBy then
+		table.sort(self.identifierList, SortFunction)
+	end
+	
 	for i = 1, self.items do
 		self:RecalculatePosition(i)
 	end

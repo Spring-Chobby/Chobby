@@ -300,8 +300,17 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		},
 		parent = leftInfo,
 	}
-	leftOffset = leftOffset + 38
+	leftOffset = leftOffset + 40
 
+	local lblGame = Label:New {
+		x = 8,
+		y = leftOffset,
+		caption = battle.gameName,
+		font = WG.Chobby.Configuration:GetFont(1),
+		parent = leftInfo,
+	}
+	leftOffset = leftOffset + 26
+	
 	local imHaveGame = Image:New {
 		x = 8,
 		y = leftOffset,
@@ -335,25 +344,13 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		parent = leftInfo,
 	}
 	leftOffset = leftOffset + 25
-
-	local downloader = WG.Chobby.Downloader(
-		{
-			x = 0,
-			height = 120,
-			right = 0,
-			y = leftOffset,
-			parent = leftInfo,
-		},
-		8
-	)
-	leftOffset = leftOffset + 120
-
+	
 	local modoptionsHolder = Control:New {
 		x = 0,
-		bottom = 0,
-		right = 0,
-		padding = {2, 0, 2, 0},
 		y = leftOffset,
+		right = 0,
+		height = 120,
+		padding = {2, 0, 2, 0},
 		autosize = false,
 		resizable = false,
 		children = {
@@ -364,7 +361,33 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	if modoptionsHolder.children[1].visible then
 		modoptionsHolder.children[1]:Hide()
 	end
-
+	
+	local modoptionTopPosition = leftOffset
+	local modoptionBottomPosition = leftOffset + 120
+	local downloadVisibility = true
+	local function OnDownloaderVisibility(newVisible)
+		if newVisible ~= nil then
+			downloadVisibility = newVisible
+		end
+		local newY = downloadVisibility and modoptionBottomPosition or modoptionTopPosition
+		local newHeight = math.max(10, leftInfo.clientArea[4] - newY)
+		modoptionsHolder:SetPos(nil, newY, nil, newHeight)
+	end
+	OnDownloaderVisibility(false)
+	leftInfo.OnResize = leftInfo.OnResize or {}
+	leftInfo.OnResize[#leftInfo.OnResize + 1] = function ()
+		OnDownloaderVisibility()
+	end
+	
+	local downloaderPos = {
+		x = 0,
+		height = 120,
+		right = 0,
+		y = leftOffset,
+		parent = leftInfo,
+	}
+	
+	local downloader = WG.Chobby.Downloader(downloaderPos, 8, nil, nil, nil, OnDownloaderVisibility)
 	leftOffset = leftOffset + 120
 	
 	-- Example downloads
@@ -439,6 +462,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		end
 		
 		if gameName then
+			lblGame:SetCaption(gameName)
 			UpdateArchiveStatus(true)
 			MaybeDownloadGame(battle)
 		end

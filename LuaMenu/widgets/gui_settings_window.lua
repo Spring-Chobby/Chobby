@@ -17,8 +17,6 @@ end
 --------------------------------------------------------------------------------
 -- Local Variables
 
-local fullscreen = 0
-
 local battleStartDisplay = 1
 local lobbyFullscreen = 1
 
@@ -61,12 +59,13 @@ local function SetSpringsettingsValue(key, value)
 end
 
 local function ToggleFullscreenOff()
+	Spring.SetConfigInt("Fullscreen", 1, false)
 	Spring.SetConfigInt("Fullscreen", 0, false)
 end
 
-local function ToggleFullscreen()
-	Spring.SetConfigInt("Fullscreen", 1, false)
+local function ToggleFullscreenOn()
 	Spring.SetConfigInt("Fullscreen", 0, false)
+	Spring.SetConfigInt("Fullscreen", 1, false)
 end
 
 local function SetLobbyFullscreenMode(mode)
@@ -78,6 +77,8 @@ local function SetLobbyFullscreenMode(mode)
 	if WG.Chobby.Configuration.doNotSetAnySpringSettings then
 		return
 	end
+	
+	Spring.Echo("SetLobbyFullscreenMode", mode)
 
 	local screenX, screenY = Spring.GetScreenGeometry()
 	Spring.Echo("screenX, screenY", screenX, screenY)
@@ -92,7 +93,7 @@ local function SetLobbyFullscreenMode(mode)
 		Spring.SetConfigInt("WindowBorderless", 1, false)
 		Spring.SetConfigInt("Fullscreen", 0, false)
 		
-		WG.Delay(ToggleFullscreen, 0.1)
+		WG.Delay(ToggleFullscreenOff, 0.1)
 	elseif mode == 2 then
 		local winSizeX, winSizeY, winPosX, winPosY = Spring.GetWindowGeometry()
 		winPosY = screenY - winPosY - winSizeY
@@ -115,7 +116,7 @@ local function SetLobbyFullscreenMode(mode)
 		Spring.SetConfigInt("XResolution", screenX, false)
 		Spring.SetConfigInt("YResolution", screenY, false)
 		Spring.SetConfigInt("Fullscreen", 1, false)
-		Spring.SetConfigInt("Fullscreen", 1)
+		--WG.Delay(ToggleFullscreenOn, 0.1)
 	end
 end
 
@@ -331,6 +332,7 @@ local function GetLobbyTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("notifyForAllChat"), "notifyForAllChat", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("only_featured_maps"), "onlyShowFeaturedMaps", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("debugMode"), "debugMode", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, "Debug server messages", "activeDebugConsole", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Show channel bots", "displayBots", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Show wrong engines", "displayBadEngines", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Debug for MatchMaker", "showMatchMakerBattles", false)
@@ -443,6 +445,15 @@ local function GetLobbyTabControls()
 		caption = "Singleplayer",
 	}
 	
+	local singleplayerSelectedName = Configuration.gameConfigName
+	local singleplayerSelected = 1
+	for i = 1, #Configuration.gameConfigOptions do
+		if Configuration.gameConfigOptions[i] == singleplayerSelectedName then
+			singleplayerSelected = i
+			break
+		end
+	end
+	
 	children[#children + 1] = ComboBox:New {
 		name = "gameSelection",
 		x = COMBO_X,
@@ -453,7 +464,7 @@ local function GetLobbyTabControls()
 		items = Configuration.gameConfigHumanNames,
 		font = Configuration:GetFont(2),
 		itemFontSize = Configuration:GetFont(2).size,
-		selected = 1, -- TODO, get from config.
+		selected = singleplayerSelected,
 		OnSelect = {
 			function (obj)
 				if freezeSettings then

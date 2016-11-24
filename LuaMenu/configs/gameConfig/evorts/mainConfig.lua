@@ -36,6 +36,7 @@ local externalFuncAndData = {
 	settingsConfig         = settingsConfig,
 	settingsDefault        = settingsDefault,
 	singleplayerConfig     = singleplayerConfig,
+	helpSubmenuConfig      = {},
 	skirmishDefault        = skirmishDefault,
 	defaultModoptions      = defaultModoptions,
 	rankFunction           = rankFunction,

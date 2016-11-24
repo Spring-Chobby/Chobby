@@ -437,9 +437,7 @@ local function GetUserControls(userName, opts)
 					elseif selectedName == "Join Battle" then
 						local userInfo = userControls.lobby:GetUser(userName) or {}
 						if userInfo.battleID then
-							-- TODO: Passworded battles
-							WG.BattleRoomWindow.LeaveBattle()
-							userControls.lobby:JoinBattle(userInfo.battleID)
+							WG.Chobby.interfaceRoot.TryToJoinBattle(userInfo.battleID)
 						end
 					elseif selectedName == "Watch Battle" then
 						local userInfo = userControls.lobby:GetUser(userName) or {}

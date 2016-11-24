@@ -115,6 +115,27 @@ local function InitializeControls(parentControl)
 		caption = "Replays",
 	}
 	
+	local loadingPanel = Panel:New {
+		classname = "overlay_window",
+		x = "20%",
+		y = "45%",
+		right = "20%",
+		bottom = "45%",
+		parent = parentControl,
+	}
+	
+	local loadingLabel = Label:New {
+		x = "5%",
+		y = "5%",
+		width = "90%",
+		height = "90%",
+		align = "center",
+		valign = "center",
+		parent = loadingPanel,
+		font = Configuration:GetFont(3),
+		caption = "Loading",
+	}
+	
 	-------------------------
 	-- Replay List
 	-------------------------
@@ -139,21 +160,38 @@ local function InitializeControls(parentControl)
 	local engineName = Game.version
 	engineName = string.gsub(engineName, "%.", "%%%.")
 	engineName = string.gsub(engineName, "%-", "%%%-")
-	local replayList = WG.Chobby.SortableList(listHolder, headings)
+	local replayList = WG.Chobby.SortableList(listHolder, headings, nil, nil, false)
+	
+	local dots = 1
 	
 	local function AddReplays()
-		local items = {}
 		local replays = VFS.DirList("demos")
 		
-		for	i = 1, #replays do
-			local replayPath = replays[i]
-			local control, sortData = CreateReplayEntry(replayPath, engineName)
-			if control then
-				items[#items + 1] = {replayPath, control, sortData}
-			end
-		end	
+		loadingPanel:SetVisibility(true)
+		loadingPanel:BringToFront()
 		
-		replayList:AddItems(items)
+		local index = 1
+		local function PartialAddReplays()
+			local items = {}
+			for i = 1, 20 do
+				if index > #replays then
+					loadingPanel:SetVisibility(false)
+					return
+				end
+				local replayPath = replays[index]
+				local control, sortData = CreateReplayEntry(replayPath, engineName)
+				if control then
+					items[#items + 1] = {replayPath, control, sortData}
+				end
+				
+				index = index + 1
+			end
+			
+			replayList:AddItems(items)
+			WG.Delay(PartialAddReplays, 0.1)
+		end
+		
+		WG.Delay(PartialAddReplays, 0.1)
 	end
 		
 	AddReplays()

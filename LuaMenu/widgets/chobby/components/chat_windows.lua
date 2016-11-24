@@ -189,9 +189,10 @@ function ChatWindows:init()
 	)
 
 	self.oldChatLine = Line:New {
+		classname = "lineStandOut",
 		x = 0,
 		right = 0,
-		height = 1,
+		height = 3,
 	}
 
 	self.serverPanel = ScrollPanel:New {
@@ -313,9 +314,9 @@ function ChatWindows:init()
 	}
 
 	self.loginButton = Button:New {
-		x = "25%",
+		x = "15%",
 		y = "45%",
-		width = "50%",
+		width = "70%",
 		height = "10%",
 		caption = i18n("login_to_chat"),
 		font = Configuration:GetFont(4),
@@ -589,8 +590,10 @@ function ChatWindows:CreateDebugConsole()
 	)
 	lobby:AddListener("OnCommandReceived",
 		function(listner, command)
-			Spring.Echo("Server", "<" .. command)
-			self.debugConsole:AddMessage("<" .. command)
+			Spring.Echo("LuaMenuServerMessage", "<" .. command)
+			if Configuration.activeDebugConsole then
+				self.debugConsole:AddMessage("<" .. command)
+			end
 		end
 	)
 	lobby:AddListener("OnCommandSent",
@@ -603,8 +606,10 @@ function ChatWindows:CreateDebugConsole()
 					command = string.sub(command, 0, subPos) .. "REDACTED" .. string.sub(command, endPos)
 				end
 			end
-			Spring.Echo("Server", ">" .. command)
-			self.debugConsole:AddMessage(">" .. command)
+			Spring.Echo("LuaMenuServerMessage", ">" .. command)
+			if Configuration.activeDebugConsole then
+				self.debugConsole:AddMessage(">" .. command)
+			end
 		end
 	)
 	self.tabbars["Debug"] = self.debugConsole

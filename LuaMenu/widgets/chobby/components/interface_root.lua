@@ -401,7 +401,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				{name = "watch", control = battleWatchListWindow.window},
 				{name = "serverList", control = battleListWindow.window},
 			},
-			cleanupFunction = CleanMultiplayerState
+			cleanupFunction = Configuration.leaveMultiplayerOnMainMenu and CleanMultiplayerState or nil
+		},
+		{
+			name = "help",
+			tabs = Configuration.gameConfig.helpSubmenuConfig
 		},
 	}
 
@@ -925,6 +929,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		if globalKeyListener then
 			return globalKeyListener(key, mods, isRepeat, label, unicode)
 		end
+		if (not isRepeat) and lobbyInterfaceHolder.visible and showTopBar and key == Spring.GetKeyCode("f11") then
+			SetMainInterfaceVisible(false)
+			return true
+		end
 		if chatWindows.visible and key == Spring.GetKeyCode("tab") and mods.ctrl then
 			if mods.shift then
 				chatWindows:CycleTab(-1)
@@ -955,6 +963,12 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		switchToMenuButton:SetVisibility(newEnabled)
 	end
 	
+	function externalFunctions.TryToJoinBattle(battleID)
+		local battle = battleID and lobby:GetBattle(battleID)
+		if battle then
+			battleListWindow:JoinBattle(battle)
+		end
+	end
 	-------------------------------------------------------------------
 	-- Listening
 	-------------------------------------------------------------------
@@ -973,9 +987,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 			local newShortname = Configuration.shortnameMap[value]
 			local replacementTabs = Configuration.gameConfig.singleplayerConfing
+			local replacementHelpTabs = Configuration.gameConfig.helpSubmenuConfig
 
 			WG.BattleRoomWindow.LeaveBattle(false, true)
 			mainWindowHandler.ReplaceSubmenu(1, replacementTabs)
+			mainWindowHandler.ReplaceSubmenu(3, replacementHelpTabs)
 		end
 	end
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)

@@ -321,6 +321,16 @@ skin.line = {
   tiles = {0, 0, 0, 0},
   TileImageV = ":cl:tech_line_vert.png",
   tilesV = {0, 0, 0, 0},
+  borderColor = {50/255, 125/255, 141/255, 1},
+  DrawControl = DrawLine,
+}
+
+skin.lineStandOut = {
+  TileImage = ":cl:tech_line.png",
+  tiles = {0, 0, 0, 0},
+  TileImageV = ":cl:tech_line_vert.png",
+  tilesV = {0, 0, 0, 0},
+  borderColor = {1, 0.2, 0.2, 1},
   DrawControl = DrawLine,
 }
 
