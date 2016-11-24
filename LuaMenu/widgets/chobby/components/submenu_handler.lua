@@ -92,8 +92,8 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 		externalFunctions.SetBackAtMainMenu()
 		submenus[index].panelHandler.Destroy()
 		
-		
-		local newPanelHandler = GetTabPanelHandler(submenus[index].name, buttonWindow, panelWindow, newTabs, true, BackToMainMenu, newCleanupFunction)
+		local newPanelHandler = GetTabPanelHandler(submenus[index].name, buttonWindow, panelWindow, newTabs, true, BackToMainMenu, newCleanupFunction, fontSizeScale)
+		Spring.Utilities.TableEcho(newPanelHandler, "newPanelHandler")
 		newPanelHandler.Rescale(fontSizeScale, buttonHeight, nil, buttonOffset)
 		newPanelHandler.Hide()
 		submenus[index].panelHandler = newPanelHandler
@@ -142,17 +142,19 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 			caption = i18n(submenus[i].name),
 			font = { size = 20},
 			parent = buttonsHolder,
-			OnClick = {function(self) 
-				if buttonsHolder.visible then
-					buttonsHolder:Hide()
+			OnClick = {
+				function(self) 
+					if buttonsHolder.visible then
+						buttonsHolder:Hide()
+					end
+					
+					submenus[i].panelHandler.Show()
+					
+					if submenus[i].entryCheck then
+						submenus[i].entryCheck()
+					end
 				end
-				
-				submenus[i].panelHandler.Show()
-				
-				if submenus[i].entryCheck then
-					submenus[i].entryCheck()
-				end
-			end},
+			},
 		}
 	end
 	

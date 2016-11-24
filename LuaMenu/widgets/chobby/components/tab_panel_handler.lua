@@ -9,7 +9,6 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 	-- Local variables
 	-------------------------------------------------------------------
 	local buttonsHolder
-	local titleBackControl
 
 	local fontSizeScale = fontSizeScale or 3
 	local buttonOffset = 0
@@ -118,15 +117,11 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 	end
 
 	function externalFunctions.Hide()
-		if buttonsHolder.visible then
-			buttonsHolder:Hide()
-		end
+		buttonsHolder:SetVisibility(false)
 	end
 
 	function externalFunctions.Show()
-		if not buttonsHolder.visible then
-			buttonsHolder:Show()
-		end
+		buttonsHolder:SetVisibility(true)
 	end
 
 	function externalFunctions.IsVisible()
@@ -215,6 +210,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 			end
 			tabs[i].button:Dispose()
 		end
+		buttonsHolder:Dispose()
 		tabs = nil
 	end
 

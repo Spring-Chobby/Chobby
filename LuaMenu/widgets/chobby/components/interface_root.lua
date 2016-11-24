@@ -985,8 +985,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			heading_image.file = Configuration:GetHeadingImage(doublePanelMode)
 			heading_image:Invalidate()
 
-			local newShortname = Configuration.shortnameMap[value]
-			local replacementTabs = Configuration.gameConfig.singleplayerConfing
+			local replacementTabs = Configuration.gameConfig.singleplayerConfig
 			local replacementHelpTabs = Configuration.gameConfig.helpSubmenuConfig
 
 			WG.BattleRoomWindow.LeaveBattle(false, true)
