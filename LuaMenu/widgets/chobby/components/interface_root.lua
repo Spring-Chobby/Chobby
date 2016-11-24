@@ -929,6 +929,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		if globalKeyListener then
 			return globalKeyListener(key, mods, isRepeat, label, unicode)
 		end
+		if (not isRepeat) and lobbyInterfaceHolder.visible and showTopBar and key == Spring.GetKeyCode("f11") then
+			SetMainInterfaceVisible(false)
+			return true
+		end
 		if chatWindows.visible and key == Spring.GetKeyCode("tab") and mods.ctrl then
 			if mods.shift then
 				chatWindows:CycleTab(-1)
