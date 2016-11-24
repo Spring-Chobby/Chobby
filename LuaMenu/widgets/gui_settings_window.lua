@@ -444,6 +444,15 @@ local function GetLobbyTabControls()
 		caption = "Singleplayer",
 	}
 	
+	local singleplayerSelectedName = Configuration.gameConfigName
+	local singleplayerSelected = 1
+	for i = 1, #Configuration.gameConfigOptions do
+		if Configuration.gameConfigOptions[i] == singleplayerSelectedName then
+			singleplayerSelected = i
+			break
+		end
+	end
+	
 	children[#children + 1] = ComboBox:New {
 		name = "gameSelection",
 		x = COMBO_X,
@@ -454,7 +463,7 @@ local function GetLobbyTabControls()
 		items = Configuration.gameConfigHumanNames,
 		font = Configuration:GetFont(2),
 		itemFontSize = Configuration:GetFont(2).size,
-		selected = 1, -- TODO, get from config.
+		selected = singleplayerSelected,
 		OnSelect = {
 			function (obj)
 				if freezeSettings then
