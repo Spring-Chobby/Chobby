@@ -57,10 +57,12 @@ function Configuration:init()
 	-- Do not ask again tests.
 	self.confirmation_mainMenuFromBattle = false
 	self.confirmation_battleFromBattle = false
+	
+	self.leaveMultiplayerOnMainMenu = false
 
 	self.backConfirmation = {
 		multiplayer = {
-			{
+			self.leaveMultiplayerOnMainMenu and {
 				doNotAskAgainKey = "confirmation_mainMenuFromBattle",
 				question = "You are in a battle and will leave it if you return to the main menu. Are you sure you want to return to the main menu?",
 				testFunction = function ()
@@ -74,7 +76,7 @@ function Configuration:init()
 					local battle = lobby:GetBattle(battleID)
 					return (battle and not battle.isMatchMaker) or false
 				end
-			}
+			} or nil
 		},
 		singleplayer = {
 		}

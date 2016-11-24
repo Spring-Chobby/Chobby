@@ -401,7 +401,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				{name = "watch", control = battleWatchListWindow.window},
 				{name = "serverList", control = battleListWindow.window},
 			},
-			cleanupFunction = CleanMultiplayerState
+			cleanupFunction = Configuration.leaveMultiplayerOnMainMenu and CleanMultiplayerState or nil
 		},
 	}
 
