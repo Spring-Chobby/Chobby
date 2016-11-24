@@ -59,6 +59,7 @@ return {
 		help = "Help",
 		about = "About",
 		links = "Links",
+		missions = "Missions",
 		community = "Community",
 		report_a_bug = "Report A Bug",
 		skirmish = "Skirmish",

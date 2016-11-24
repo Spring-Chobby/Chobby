@@ -1,10 +1,13 @@
 SortableList = Component:extends{}
 
-function SortableList:init(holder, headings, itemHeight)
+function SortableList:init(holder, headings, itemHeight, defaultSort, sortDirection)
 	self:DoInit() -- Lack of inheritance strikes again.
 
 	self.sortBy = false
-	self.smallToLarge = true
+	self.smallToLarge = sortDirection
+	if self.smallToLarge == nil then
+		self.smallToLarge = true
+	end
 	
 	self.holder = holder
 	
@@ -16,6 +19,7 @@ function SortableList:init(holder, headings, itemHeight)
 	self.headingButtons = {}
 	
 	if headings then
+		self.sortBy = defaultSort or 1
 		for i = 1, #headings do
 			local heading = headings[i]
 			self.headingButtons[i] = Button:New {
@@ -147,9 +151,9 @@ function SortableList:UpdateOrder()
 	
 	local function SortFunction(a, b)
 		if self.smallToLarge then
-			return self.sortDataById[a][self.sortBy] > self.sortDataById[b][self.sortBy]
-		else
 			return self.sortDataById[a][self.sortBy] < self.sortDataById[b][self.sortBy]
+		else
+			return self.sortDataById[a][self.sortBy] > self.sortDataById[b][self.sortBy]
 		end
 	end
 	

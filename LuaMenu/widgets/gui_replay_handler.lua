@@ -160,7 +160,7 @@ local function InitializeControls(parentControl)
 	local engineName = Game.version
 	engineName = string.gsub(engineName, "%.", "%%%.")
 	engineName = string.gsub(engineName, "%-", "%%%-")
-	local replayList = WG.Chobby.SortableList(listHolder, headings)
+	local replayList = WG.Chobby.SortableList(listHolder, headings, nil, nil, false)
 	
 	local dots = 1
 	
