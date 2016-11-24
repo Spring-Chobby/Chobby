@@ -313,9 +313,9 @@ function ChatWindows:init()
 	}
 
 	self.loginButton = Button:New {
-		x = "25%",
+		x = "15%",
 		y = "45%",
-		width = "50%",
+		width = "70%",
 		height = "10%",
 		caption = i18n("login_to_chat"),
 		font = Configuration:GetFont(4),
