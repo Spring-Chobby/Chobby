@@ -963,6 +963,12 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		switchToMenuButton:SetVisibility(newEnabled)
 	end
 	
+	function externalFunctions.TryToJoinBattle(battleID)
+		local battle = battleID and lobby:GetBattle(battleID)
+		if battle then
+			battleListWindow:JoinBattle(battle)
+		end
+	end
 	-------------------------------------------------------------------
 	-- Listening
 	-------------------------------------------------------------------
