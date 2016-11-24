@@ -20,7 +20,6 @@ local settings = {
 	FPSFOV = 90,
 	FSAA = 1,
 	FSAALevel = 16,
-	Fullscreen = 0,
 	GrassDetail = 10,
 	GroundDecals = 5,
 	GroundDetail = 120,

@@ -17,8 +17,6 @@ end
 --------------------------------------------------------------------------------
 -- Local Variables
 
-local fullscreen = 0
-
 local battleStartDisplay = 1
 local lobbyFullscreen = 1
 
@@ -61,12 +59,13 @@ local function SetSpringsettingsValue(key, value)
 end
 
 local function ToggleFullscreenOff()
+	Spring.SetConfigInt("Fullscreen", 1, false)
 	Spring.SetConfigInt("Fullscreen", 0, false)
 end
 
-local function ToggleFullscreen()
-	Spring.SetConfigInt("Fullscreen", 1, false)
+local function ToggleFullscreenOn()
 	Spring.SetConfigInt("Fullscreen", 0, false)
+	Spring.SetConfigInt("Fullscreen", 1, false)
 end
 
 local function SetLobbyFullscreenMode(mode)
@@ -78,6 +77,8 @@ local function SetLobbyFullscreenMode(mode)
 	if WG.Chobby.Configuration.doNotSetAnySpringSettings then
 		return
 	end
+	
+	Spring.Echo("SetLobbyFullscreenMode", mode)
 
 	local screenX, screenY = Spring.GetScreenGeometry()
 	Spring.Echo("screenX, screenY", screenX, screenY)
@@ -92,7 +93,7 @@ local function SetLobbyFullscreenMode(mode)
 		Spring.SetConfigInt("WindowBorderless", 1, false)
 		Spring.SetConfigInt("Fullscreen", 0, false)
 		
-		WG.Delay(ToggleFullscreen, 0.1)
+		WG.Delay(ToggleFullscreenOff, 0.1)
 	elseif mode == 2 then
 		local winSizeX, winSizeY, winPosX, winPosY = Spring.GetWindowGeometry()
 		winPosY = screenY - winPosY - winSizeY
@@ -115,7 +116,7 @@ local function SetLobbyFullscreenMode(mode)
 		Spring.SetConfigInt("XResolution", screenX, false)
 		Spring.SetConfigInt("YResolution", screenY, false)
 		Spring.SetConfigInt("Fullscreen", 1, false)
-		Spring.SetConfigInt("Fullscreen", 1)
+		--WG.Delay(ToggleFullscreenOn, 0.1)
 	end
 end
 
