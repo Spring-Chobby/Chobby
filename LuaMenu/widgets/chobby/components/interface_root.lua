@@ -403,6 +403,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			},
 			cleanupFunction = Configuration.leaveMultiplayerOnMainMenu and CleanMultiplayerState or nil
 		},
+		{
+			name = "help",
+			tabs = Configuration.gameConfig.helpSubmenuConfig
+		},
 	}
 
 	local battleStatusTabControls = {
@@ -973,9 +977,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 			local newShortname = Configuration.shortnameMap[value]
 			local replacementTabs = Configuration.gameConfig.singleplayerConfing
+			local replacementHelpTabs = Configuration.gameConfig.helpSubmenuConfig
 
 			WG.BattleRoomWindow.LeaveBattle(false, true)
 			mainWindowHandler.ReplaceSubmenu(1, replacementTabs)
+			mainWindowHandler.ReplaceSubmenu(3, replacementHelpTabs)
 		end
 	end
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)

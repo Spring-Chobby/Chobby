@@ -77,7 +77,7 @@ end
 
 -- opens folder
 function WrapperLoopback.OpenFolder(folder) 
-	SendCommand("OpenFolder", {Folder = folder})
+	SendCommand("OpenFolder", nil)
 end
 
 -- restart chobby
