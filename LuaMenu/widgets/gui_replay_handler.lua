@@ -166,6 +166,7 @@ local function InitializeControls(parentControl)
 	
 	local function AddReplays()
 		local replays = VFS.DirList("demos")
+		Spring.Utilities.TableEcho(replays, "replaysList")
 		
 		loadingPanel:SetVisibility(true)
 		loadingPanel:BringToFront()
@@ -175,6 +176,8 @@ local function InitializeControls(parentControl)
 			local items = {}
 			for i = 1, 20 do
 				if index > #replays then
+					replayList:AddItems(items)
+					Spring.Echo("replayList adding", #items, "replays.")
 					loadingPanel:SetVisibility(false)
 					return
 				end
@@ -182,10 +185,14 @@ local function InitializeControls(parentControl)
 				local control, sortData = CreateReplayEntry(replayPath, engineName)
 				if control then
 					items[#items + 1] = {replayPath, control, sortData}
+					Spring.Echo("Added replay", replayPath)
+				else
+					Spring.Echo("Rejected replay", replayPath)
 				end
 				
 				index = index + 1
 			end
+			Spring.Echo("replayList adding", #items, "replays.")
 			
 			replayList:AddItems(items)
 			WG.Delay(PartialAddReplays, 0.1)

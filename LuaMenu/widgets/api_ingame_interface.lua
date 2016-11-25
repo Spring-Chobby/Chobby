@@ -20,6 +20,14 @@ end
 
 local externalFunctions = {}
 
+function externalFunctions.SetLobbyOverlayActive(newActive)
+	if Spring.SendLuaUIMsg then
+		Spring.SendLuaUIMsg("LobbyOverlayActive" .. ((newActive and "1") or "0"))
+	else
+		Spring.Echo("Spring.SendLuaUIMsg does not exist in LuaMenu")
+	end
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Callins
