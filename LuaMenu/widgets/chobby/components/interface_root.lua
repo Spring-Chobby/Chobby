@@ -672,6 +672,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			ingameInterfaceHolder:Show()
 			ingameInterfaceHolder:BringToFront()
 		end
+		
+		if WG.IngameInterface then
+			WG.IngameInterface.SetLobbyOverlayActive(newVisible)
+		end
 	end
 		
 	local function SetTopBarVisible(newVisible)
