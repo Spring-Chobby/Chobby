@@ -12,6 +12,7 @@ local settings = {
 					WaterType = "Basic",
 					WaterQuality = "Low",
 					DeferredRendering = "Off",
+					UnitReflections = "Off",
 					Shadows = "None",
 					ShadowDetail = "Low",
 					ParticleLimit = "Minimal",
@@ -29,6 +30,7 @@ local settings = {
 					WaterType = "Bumpmapped",
 					WaterQuality = "Low",
 					DeferredRendering = "Off",
+					UnitReflections = "Low",
 					Shadows = "Units Only",
 					ShadowDetail = "Low",
 					ParticleLimit = "Low",
@@ -46,6 +48,7 @@ local settings = {
 					WaterType = "Bumpmapped",
 					WaterQuality = "Medium",
 					DeferredRendering = "On",
+					UnitReflections = "Medium",
 					Shadows = "Units Only",
 					ShadowDetail = "Medium",
 					ParticleLimit = "Medium",
@@ -63,6 +66,7 @@ local settings = {
 					WaterType = "Bumpmapped",
 					WaterQuality = "High",
 					DeferredRendering = "On",
+					UnitReflections = "High",
 					Shadows = "Units and Terrain",
 					ShadowDetail = "Medium",
 					ParticleLimit = "High",
@@ -78,8 +82,9 @@ local settings = {
 				name = "Ultra",
 				settings = {
 					WaterType = "Bumpmapped",
-					WaterQuality = "High",
+					WaterQuality = "Ultra",
 					DeferredRendering = "On",
+					UnitReflections = "Ultra",
 					Shadows = "Units and Terrain",
 					ShadowDetail = "Ultra",
 					ParticleLimit = "Ultra",
@@ -175,6 +180,18 @@ local settings = {
 							BumpWaterTexSizeReflection = 256,
 						}
 					},
+					{
+						name = "Ultra",
+						apply = {
+							BumpWaterAnisotropy = 2,
+							BumpWaterBlurReflection = 1,
+							BumpWaterReflection = 2,
+							BumpWaterRefraction = 2,
+							BumpWaterDepthBits = 32,
+							BumpWaterShoreWaves = 1,
+							BumpWaterTexSizeReflection = 1024,
+						}
+					},
 				},
 			},
 			{
@@ -193,6 +210,47 @@ local settings = {
 						apply = {
 							AllowDeferredModelRendering = 0,
 							AllowDeferredMapRendering = 0,
+						}
+					},
+				},
+			},
+			{
+				name = "UnitReflections",
+				humanName = "Unit Reflection Quality",
+				options = {
+					{
+						name="Off",
+						apply = {
+							CubeTexSizeReflection = 1,
+							CubeTexSizeSpecular = 1,
+						}
+					},
+					{
+						name="Low",
+						apply = {
+							CubeTexSizeReflection = 64,
+							CubeTexSizeSpecular = 64,
+						}
+					},
+					{
+						name="Medium",
+						apply = {
+							CubeTexSizeReflection = 128,
+							CubeTexSizeSpecular = 128,
+						}
+					},
+					{
+						name="High",
+						apply = {
+							CubeTexSizeReflection = 256,
+							CubeTexSizeSpecular = 256,
+						}
+					},
+					{
+						name="Ultra",
+						apply = {
+							CubeTexSizeReflection = 1024,
+							CubeTexSizeSpecular = 1024,
 						}
 					},
 				},
@@ -346,7 +404,7 @@ local settings = {
 						name = "High",
 						apply = {
 							GroundScarAlphaFade = 1,
-							GroundDecals = 3,
+							GroundDecals = 5,
 							GroundDetail = 150,
 						}
 					},
@@ -354,8 +412,8 @@ local settings = {
 						name = "Ultra",
 						apply = {
 							GroundScarAlphaFade = 1,
-							GroundDecals = 5,
-							GroundDetail = 200,
+							GroundDecals = 10,
+							GroundDetail = 250,
 						}
 					},
 				},
@@ -389,14 +447,14 @@ local settings = {
 						name = "High",
 						apply = {
 							TreeRadius = 1500,
-							GrassDetail = 7,
+							GrassDetail = 9,
 						}
 					},
 					{
 						name = "Ultra",
 						apply = {
 							TreeRadius = 2500,
-							GrassDetail = 10,
+							GrassDetail = 16,
 						}
 					},
 				},
@@ -455,6 +513,7 @@ local settings = {
 							FSAALevel = 2,
 							FSAA = 0,
 							SmoothLines = 0,
+							SmoothPoints = 0,
 						}
 					},
 					{
@@ -463,6 +522,7 @@ local settings = {
 							FSAALevel = 2,
 							FSAA = 1,
 							SmoothLines = 1,
+							SmoothPoints = 1,
 						}
 					},
 					{
@@ -471,6 +531,7 @@ local settings = {
 							FSAALevel = 8,
 							FSAA = 1,
 							SmoothLines = 3,
+							SmoothPoints = 3,
 						}
 					},
 				},
