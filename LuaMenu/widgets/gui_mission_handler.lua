@@ -82,7 +82,7 @@ local function CreateMissionEntry(missionData)
 				startScript = startScript:gsub("%%MOD%%",  WG.Chobby.Configuration.gameConfig.defaultGameArchiveName)
 				startScript = startScript:gsub("%%NAME%%", WG.Chobby.localLobby:GetMyUserName())
 				
-				WG.Chobby.localLobby:StartGameFromStringg(startScript)
+				WG.Chobby.localLobby:StartGameFromString(startScript)
 			end
 		},
 		parent = holder,
