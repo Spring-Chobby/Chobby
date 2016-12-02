@@ -758,6 +758,7 @@ local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitc
 		end
 		
 		local newValue = math.floor(0.5 + math.max(data.minValue, math.min(data.maxValue, newValue)))
+		Configuration.settingsMenuValues[data.name] = newValue
 		obj:SetText(tostring(newValue))
 		
 		local applyFunction = data.applyFunction
@@ -770,7 +771,6 @@ local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitc
 			end
 		else
 			local springValue = data.springConversion(newValue)
-			Configuration.settingsMenuValues[data.name] = newValue
 			Configuration.game_settings[data.applyName] = springValue
 			SetSpringsettingsValue(data.applyName, springValue)
 		end
