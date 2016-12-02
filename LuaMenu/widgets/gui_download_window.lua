@@ -17,9 +17,10 @@ end
 --------------------------------------------------------------------------------
 -- Local Variables
 
-local completedDownloadPosition = 400
+local completedDownloadPosition = 0
 local itemSpacing = 28
 local parentWindow
+local completedMaps
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -40,13 +41,14 @@ local function DownloadCompleteFunction(name, success)
 	end
 
 	Label:New {
-		x = 70,
+		x = 15,
 		y = completedDownloadPosition,
 		width = 180,
 		height = 30,
 		parent = parentWindow,
 		font = WG.Chobby.Configuration:GetFont(2),
 		caption = text,
+		parent = completedMaps,
 	}
 	completedDownloadPosition = completedDownloadPosition + itemSpacing
 end
@@ -78,6 +80,16 @@ local function InitializeControls(window)
 		parent = window,
 		font = WG.Chobby.Configuration:GetFont(3),
 		caption = "Complete",
+	}
+	
+	completedMaps = ScrollPanel:New {
+		x = 5,
+		right = 5,
+		y = 395,
+		bottom = 8,
+		borderColor = {0, 0, 0, 0},
+		horizontalScrollbar = false,
+		parent = window,
 	}
 
 end
