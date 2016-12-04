@@ -229,7 +229,7 @@ function Downloader:DownloadFinished(downloadID)
 	end
 	self.downloads[downloadID].complete = true
 	if self.completeListener then
-		self.completeListener(self.downloads[downloadID].archiveName, true)
+		self.completeListener(self.downloads[downloadID].archiveName, self.downloads[downloadID].archiveType, true)
 	end
 
 	self.prDownload:SetCaption("\255\0\255\0Download complete.\b")

@@ -17,9 +17,10 @@ end
 --------------------------------------------------------------------------------
 -- Local Variables
 
-local completedDownloadPosition = 400
+local completedDownloadPosition = 0
 local itemSpacing = 28
 local parentWindow
+local completed
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -33,18 +34,39 @@ local function DownloadUpdateFunction(downloadCount, failure)
 	interfaceRoot.GetRightPanelHandler().SetActivity("downloads", downloadCount)
 end
 
-local function DownloadCompleteFunction(name, success)
+local function DownloadCompleteFunction(name, archiveType, success)
 	local text = name
+	
 	if not success then
 		text = text .. WG.Chobby.Configuration:GetErrorColor() .. " Failed"
+		
+		Button:New {
+			right = 20,
+			y = completedDownloadPosition,
+			width = 60,
+			height = 30,
+			caption = "Retry"),
+			tooltip = "Try to download this item again",
+			font = WG.Chobby.Configuration:GetFont(2),
+			parent = completed,
+			OnClick = {
+				function ()
+					if archiveType == "map" then
+						VFS.DownloadArchive(name, "map")
+					elseif archiveType == "game" then
+						VFS.DownloadArchive(name, "game")
+					end
+				end
+			}
+		}
 	end
 
 	Label:New {
-		x = 70,
+		x = 15,
 		y = completedDownloadPosition,
 		width = 180,
 		height = 30,
-		parent = parentWindow,
+		parent = completed,
 		font = WG.Chobby.Configuration:GetFont(2),
 		caption = text,
 	}
@@ -78,6 +100,16 @@ local function InitializeControls(window)
 		parent = window,
 		font = WG.Chobby.Configuration:GetFont(3),
 		caption = "Complete",
+	}
+	
+	completed = ScrollPanel:New {
+		x = 5,
+		right = 5,
+		y = 395,
+		bottom = 8,
+		borderColor = {0, 0, 0, 0},
+		horizontalScrollbar = false,
+		parent = window,
 	}
 
 end
