@@ -45,7 +45,6 @@ local function DownloadCompleteFunction(name, success)
 		y = completedDownloadPosition,
 		width = 180,
 		height = 30,
-		parent = parentWindow,
 		font = WG.Chobby.Configuration:GetFont(2),
 		caption = text,
 		parent = completedMaps,
