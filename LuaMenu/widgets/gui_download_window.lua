@@ -20,7 +20,7 @@ end
 local completedDownloadPosition = 0
 local itemSpacing = 28
 local parentWindow
-local completedMaps
+local completed
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -38,6 +38,7 @@ local function DownloadCompleteFunction(name, success)
 	local text = name
 	if not success then
 		text = text .. WG.Chobby.Configuration:GetErrorColor() .. " Failed"
+			parent = completed,
 	end
 
 	Label:New {
@@ -81,7 +82,7 @@ local function InitializeControls(window)
 		caption = "Complete",
 	}
 	
-	completedMaps = ScrollPanel:New {
+	completed = ScrollPanel:New {
 		x = 5,
 		right = 5,
 		y = 395,
