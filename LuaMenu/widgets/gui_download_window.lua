@@ -45,7 +45,7 @@ local function DownloadCompleteFunction(name, archiveType, success)
 			y = completedDownloadPosition,
 			width = 60,
 			height = 30,
-			caption = "Retry"),
+			caption = "Retry",
 			tooltip = "Try to download this item again",
 			font = WG.Chobby.Configuration:GetFont(2),
 			parent = completed,
