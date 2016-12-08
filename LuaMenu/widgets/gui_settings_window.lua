@@ -61,6 +61,14 @@ end
 local function ToggleFullscreenOff()
 	Spring.SetConfigInt("Fullscreen", 1, false)
 	Spring.SetConfigInt("Fullscreen", 0, false)
+	
+	if WG.Chobby.Configuration.agressivelySetBorderlessWindowed then
+		local screenX, screenY = Spring.GetScreenGeometry()
+		Spring.SetConfigInt("XResolutionWindowed", screenX - FUDGE*2, false)
+		Spring.SetConfigInt("YResolutionWindowed", screenY - FUDGE*2, false)
+		Spring.SetConfigInt("WindowPosX", FUDGE, false)
+		Spring.SetConfigInt("WindowPosY", FUDGE, false)
+	end
 end
 
 local function ToggleFullscreenOn()
@@ -94,6 +102,9 @@ local function SetLobbyFullscreenMode(mode)
 		Spring.SetConfigInt("Fullscreen", 0, false)
 		
 		WG.Delay(ToggleFullscreenOff, 0.1)
+		if WG.Chobby.Configuration.agressivelySetBorderlessWindowed then
+			WG.Delay(ToggleFullscreenOff, 0.5)
+		end
 	elseif mode == 2 then
 		local winSizeX, winSizeY, winPosX, winPosY = Spring.GetWindowGeometry()
 		winPosY = screenY - winPosY - winSizeY
@@ -338,6 +349,7 @@ local function GetLobbyTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Debug for MatchMaker", "showMatchMakerBattles", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Hide interface", "hideInterface", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Neuter Settings", "doNotSetAnySpringSettings", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, "Agressive Set Borderless", "agressivelySetBorderlessWindowed", false)
 	
 	children[#children + 1] = Label:New {
 		x = 20,

@@ -42,6 +42,7 @@ function Configuration:init()
 	self.displayBots = false
 	self.displayBadEngines = false
 	self.doNotSetAnySpringSettings = false
+	self.agressivelySetBorderlessWindowed = false
 	
 	self.myAccountID = false
 	self.lastAddedAiName = false
@@ -169,6 +170,8 @@ function Configuration:GetConfigData()
 		useSpringRestart = self.useSpringRestart,
 		displayBots = self.displayBots,
 		displayBadEngines = self.displayBadEngines,
+		doNotSetAnySpringSettings = self.doNotSetAnySpringSettings,
+		agressivelySetBorderlessWindowed = self.agressivelySetBorderlessWindowed,
 		settingsMenuValues = self.settingsMenuValues,
 		menuMusicVolume = self.menuMusicVolume,
 		menuNotificationVolume = self.menuNotificationVolume,
