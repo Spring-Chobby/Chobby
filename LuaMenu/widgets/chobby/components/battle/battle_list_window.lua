@@ -351,6 +351,23 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 	local mapCaption = items.battleButton:GetChildByName("mapCaption")
 	local imHaveMap = items.battleButton:GetChildByName("imHaveMap")
 	local minimapImage = items.battleButton:GetChildByName("minimap"):GetChildByName("minimapImage")
+	local password = items.battleButton:GetChildByName("password")
+	
+	-- Password Update
+	if password and not battle.passworded then
+		password:Dispose()
+	elseif battle.passworded and not password then
+		local imgPassworded = Image:New {
+			name = "password",
+			x = items.battleButton.height + 28,
+			y = 22,
+			height = 30,
+			width = 30,
+			margin = {0, 0, 0, 0},
+			file = CHOBBY_IMG_DIR .. "lock.png",
+			parent = items.battleButton,
+		}
+	end
 	
 	-- Resets title and truncates.
 	lblTitle.OnResize[1](lblTitle)

@@ -837,7 +837,8 @@ function Interface:_BattleUpdate(data)
 		header.IsMatchMaker,
 		header.MaxPlayers,
 		header.Title,
-		header.PlayerCount
+		header.PlayerCount,
+		(header.Password and true) or false
 	)
 	
 	if header.IsRunning ~= nil then
