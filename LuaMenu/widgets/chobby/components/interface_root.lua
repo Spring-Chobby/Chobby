@@ -659,6 +659,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			return
 		end
 		WG.SetGameInputBlock(newVisible)
+		screen0:FocusControl()
 		
 		backgroundHolder:SetEnabled(newVisible and not showTopBar)
 		ingameBackgroundHolder:SetEnabled(newVisible and showTopBar)
