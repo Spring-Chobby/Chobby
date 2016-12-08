@@ -52,6 +52,18 @@ EditBox = Control:Inherit{
     [Spring.GetKeyCode("enter")] = true,
     [Spring.GetKeyCode("numpad_enter")] = true,
     [Spring.GetKeyCode("esc")] = true,
+    [Spring.GetKeyCode("f1")] = true,
+    [Spring.GetKeyCode("f2")] = true,
+    [Spring.GetKeyCode("f3")] = true,
+    [Spring.GetKeyCode("f4")] = true,
+    [Spring.GetKeyCode("f5")] = true,
+    [Spring.GetKeyCode("f6")] = true,
+    [Spring.GetKeyCode("f7")] = true,
+    [Spring.GetKeyCode("f8")] = true,
+    [Spring.GetKeyCode("f9")] = true,
+    [Spring.GetKeyCode("f10")] = true,
+    [Spring.GetKeyCode("f11")] = true,
+    [Spring.GetKeyCode("f12")] = true,
   },
 }
 

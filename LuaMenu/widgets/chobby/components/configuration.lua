@@ -42,6 +42,7 @@ function Configuration:init()
 	self.displayBots = false
 	self.displayBadEngines = false
 	self.doNotSetAnySpringSettings = false
+	self.agressivelySetBorderlessWindowed = false
 	
 	self.myAccountID = false
 	self.lastAddedAiName = false
@@ -165,10 +166,13 @@ function Configuration:GetConfigData()
 		confirmation_mainMenuFromBattle = self.confirmation_mainMenuFromBattle,
 		confirmation_battleFromBattle = self.confirmation_battleFromBattle,
 		loadLocalWidgets = self.loadLocalWidgets,
+		activeDebugConsole = self.activeDebugConsole,
 		onlyShowFeaturedMaps = self.onlyShowFeaturedMaps,
 		useSpringRestart = self.useSpringRestart,
 		displayBots = self.displayBots,
 		displayBadEngines = self.displayBadEngines,
+		doNotSetAnySpringSettings = self.doNotSetAnySpringSettings,
+		agressivelySetBorderlessWindowed = self.agressivelySetBorderlessWindowed,
 		settingsMenuValues = self.settingsMenuValues,
 		menuMusicVolume = self.menuMusicVolume,
 		menuNotificationVolume = self.menuNotificationVolume,
@@ -176,6 +180,10 @@ function Configuration:GetConfigData()
 		chatFontSize = self.chatFontSize,
 		myAccountID = self.myAccountID,
 		lastAddedAiName = self.lastAddedAiName,
+		window_WindowPosX = self.window_WindowPosX,
+		window_WindowPosY = self.window_WindowPosY,
+		window_XResolutionWindowed = self.window_XResolutionWindowed,
+		window_YResolutionWindowed = self.window_YResolutionWindowed,
 	}
 end
 

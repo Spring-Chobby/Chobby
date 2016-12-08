@@ -61,6 +61,14 @@ end
 local function ToggleFullscreenOff()
 	Spring.SetConfigInt("Fullscreen", 1, false)
 	Spring.SetConfigInt("Fullscreen", 0, false)
+	
+	if WG.Chobby.Configuration.agressivelySetBorderlessWindowed then
+		local screenX, screenY = Spring.GetScreenGeometry()
+		Spring.SetConfigInt("XResolutionWindowed", screenX - FUDGE*2, false)
+		Spring.SetConfigInt("YResolutionWindowed", screenY - FUDGE*2, false)
+		Spring.SetConfigInt("WindowPosX", FUDGE, false)
+		Spring.SetConfigInt("WindowPosY", FUDGE, false)
+	end
 end
 
 local function ToggleFullscreenOn()
@@ -72,9 +80,33 @@ local function SetLobbyFullscreenMode(mode)
 	if mode == currentMode then
 		return
 	end
+	
+	local Configuration = WG.Chobby.Configuration		
+	
+	-- Remember window settings
+	if currentMode == 2 then
+		local x = Spring.GetConfigInt("WindowPosX")
+		local y = Spring.GetConfigInt("WindowPosY")
+		local width = Spring.GetConfigInt("XResolutionWindowed")
+		local height = Spring.GetConfigInt("YResolutionWindowed")
+		
+		if x then
+			Configuration:SetConfigValue("window_WindowPosX", x)
+		end
+		if y then
+			Configuration:SetConfigValue("window_WindowPosY", y)
+		end
+		if width then
+			Configuration:SetConfigValue("window_XResolutionWindowed", width)
+		end
+		if height then
+			Configuration:SetConfigValue("window_YResolutionWindowed", height)
+		end
+	end
+	
 	currentMode = mode
 	
-	if WG.Chobby.Configuration.doNotSetAnySpringSettings then
+	if Configuration.doNotSetAnySpringSettings then
 		return
 	end
 	
@@ -94,9 +126,21 @@ local function SetLobbyFullscreenMode(mode)
 		Spring.SetConfigInt("Fullscreen", 0, false)
 		
 		WG.Delay(ToggleFullscreenOff, 0.1)
+		if Configuration.agressivelySetBorderlessWindowed then
+			WG.Delay(ToggleFullscreenOff, 0.5)
+		end
 	elseif mode == 2 then
 		local winSizeX, winSizeY, winPosX, winPosY = Spring.GetWindowGeometry()
-		winPosY = screenY - winPosY - winSizeY
+		winPosX = Configuration.window_WindowPosX or winPosX
+		winSizeX = Configuration.window_XResolutionWindowed or winSizeX
+		winSizeY = Configuration.window_YResolutionWindowed or winSizeY
+		
+		if Configuration.window_WindowPosY then
+			winPosY = Configuration.window_WindowPosY
+		else	
+			winPosY = screenY - winPosY - winSizeY
+		end
+		
 		if winPosY > 10 then
 			-- Window is not stuck at the top of the screen
 			Spring.SetConfigInt("WindowPosX", math.min(winPosX, screenX - 50), false)
@@ -119,6 +163,34 @@ local function SetLobbyFullscreenMode(mode)
 		--WG.Delay(ToggleFullscreenOn, 0.1)
 	end
 end
+
+local function SaveLobbyDisplayMode()
+	local Configuration = WG.Chobby.Configuration		
+	
+	-- Remember window settings
+	if (currentMode == 2 or not currentMode) and lobbyFullscreen == 2 then
+		local x = Spring.GetConfigInt("WindowPosX")
+		local y = Spring.GetConfigInt("WindowPosY")
+		local width = Spring.GetConfigInt("XResolutionWindowed")
+		local height = Spring.GetConfigInt("YResolutionWindowed")
+		
+		if x then
+			Configuration:SetConfigValue("window_WindowPosX", x)
+		end
+		if y then
+			Configuration:SetConfigValue("window_WindowPosY", y)
+		end
+		if width then
+			Configuration:SetConfigValue("window_XResolutionWindowed", width)
+		end
+		if height then
+			Configuration:SetConfigValue("window_YResolutionWindowed", height)
+		end
+	end
+	
+	SetLobbyFullscreenMode(lobbyFullscreen)
+end
+
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -338,6 +410,7 @@ local function GetLobbyTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Debug for MatchMaker", "showMatchMakerBattles", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Hide interface", "hideInterface", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Neuter Settings", "doNotSetAnySpringSettings", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, "Agressive Set Borderless", "agressivelySetBorderlessWindowed", false)
 	
 	children[#children + 1] = Label:New {
 		x = 20,
@@ -758,6 +831,7 @@ local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitc
 		end
 		
 		local newValue = math.floor(0.5 + math.max(data.minValue, math.min(data.maxValue, newValue)))
+		Configuration.settingsMenuValues[data.name] = newValue
 		obj:SetText(tostring(newValue))
 		
 		local applyFunction = data.applyFunction
@@ -770,7 +844,6 @@ local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitc
 			end
 		else
 			local springValue = data.springConversion(newValue)
-			Configuration.settingsMenuValues[data.name] = newValue
 			Configuration.game_settings[data.applyName] = springValue
 			SetSpringsettingsValue(data.applyName, springValue)
 		end
@@ -1013,7 +1086,7 @@ function widget:Initialize()
 end
 
 function widget:Shutdown()
-	SetLobbyFullscreenMode(lobbyFullscreen)
+	SaveLobbyDisplayMode()
 
 	if WG.LibLobby then
 		WG.LibLobby.lobby:RemoveListener("OnBattleAboutToStart", onBattleAboutToStart)
