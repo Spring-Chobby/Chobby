@@ -166,6 +166,7 @@ function Configuration:GetConfigData()
 		confirmation_mainMenuFromBattle = self.confirmation_mainMenuFromBattle,
 		confirmation_battleFromBattle = self.confirmation_battleFromBattle,
 		loadLocalWidgets = self.loadLocalWidgets,
+		activeDebugConsole = self.activeDebugConsole,
 		onlyShowFeaturedMaps = self.onlyShowFeaturedMaps,
 		useSpringRestart = self.useSpringRestart,
 		displayBots = self.displayBots,

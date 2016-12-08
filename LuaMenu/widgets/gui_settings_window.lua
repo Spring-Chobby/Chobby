@@ -164,6 +164,34 @@ local function SetLobbyFullscreenMode(mode)
 	end
 end
 
+local function SaveLobbyDisplayMode()
+	local Configuration = WG.Chobby.Configuration		
+	
+	-- Remember window settings
+	if (currentMode == 2 or not currentMode) and lobbyFullscreen == 2 then
+		local x = Spring.GetConfigInt("WindowPosX")
+		local y = Spring.GetConfigInt("WindowPosY")
+		local width = Spring.GetConfigInt("XResolutionWindowed")
+		local height = Spring.GetConfigInt("YResolutionWindowed")
+		
+		if x then
+			Configuration:SetConfigValue("window_WindowPosX", x)
+		end
+		if y then
+			Configuration:SetConfigValue("window_WindowPosY", y)
+		end
+		if width then
+			Configuration:SetConfigValue("window_XResolutionWindowed", width)
+		end
+		if height then
+			Configuration:SetConfigValue("window_YResolutionWindowed", height)
+		end
+	end
+	
+	SetLobbyFullscreenMode(lobbyFullscreen)
+end
+
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Lobby Settings
@@ -1058,7 +1086,7 @@ function widget:Initialize()
 end
 
 function widget:Shutdown()
-	SetLobbyFullscreenMode(lobbyFullscreen)
+	SaveLobbyDisplayMode()
 
 	if WG.LibLobby then
 		WG.LibLobby.lobby:RemoveListener("OnBattleAboutToStart", onBattleAboutToStart)
