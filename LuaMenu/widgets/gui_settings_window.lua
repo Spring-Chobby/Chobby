@@ -80,9 +80,33 @@ local function SetLobbyFullscreenMode(mode)
 	if mode == currentMode then
 		return
 	end
+	
+	local Configuration = WG.Chobby.Configuration		
+	
+	-- Remember window settings
+	if currentMode == 2 then
+		local x = Spring.GetConfigInt("WindowPosX")
+		local y = Spring.GetConfigInt("WindowPosY")
+		local width = Spring.GetConfigInt("XResolutionWindowed")
+		local height = Spring.GetConfigInt("YResolutionWindowed")
+		
+		if x then
+			Configuration:SetConfigValue("window_WindowPosX", x)
+		end
+		if y then
+			Configuration:SetConfigValue("window_WindowPosY", y)
+		end
+		if width then
+			Configuration:SetConfigValue("window_XResolutionWindowed", width)
+		end
+		if height then
+			Configuration:SetConfigValue("window_YResolutionWindowed", height)
+		end
+	end
+	
 	currentMode = mode
 	
-	if WG.Chobby.Configuration.doNotSetAnySpringSettings then
+	if Configuration.doNotSetAnySpringSettings then
 		return
 	end
 	
@@ -102,12 +126,21 @@ local function SetLobbyFullscreenMode(mode)
 		Spring.SetConfigInt("Fullscreen", 0, false)
 		
 		WG.Delay(ToggleFullscreenOff, 0.1)
-		if WG.Chobby.Configuration.agressivelySetBorderlessWindowed then
+		if Configuration.agressivelySetBorderlessWindowed then
 			WG.Delay(ToggleFullscreenOff, 0.5)
 		end
 	elseif mode == 2 then
 		local winSizeX, winSizeY, winPosX, winPosY = Spring.GetWindowGeometry()
-		winPosY = screenY - winPosY - winSizeY
+		winPosX = Configuration.window_WindowPosX or winPosX
+		winSizeX = Configuration.window_XResolutionWindowed or winSizeX
+		winSizeY = Configuration.window_YResolutionWindowed or winSizeY
+		
+		if Configuration.window_WindowPosY then
+			winPosY = Configuration.window_WindowPosY
+		else	
+			winPosY = screenY - winPosY - winSizeY
+		end
+		
 		if winPosY > 10 then
 			-- Window is not stuck at the top of the screen
 			Spring.SetConfigInt("WindowPosX", math.min(winPosX, screenX - 50), false)

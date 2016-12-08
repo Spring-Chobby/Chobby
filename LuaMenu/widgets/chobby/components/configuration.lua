@@ -179,6 +179,10 @@ function Configuration:GetConfigData()
 		chatFontSize = self.chatFontSize,
 		myAccountID = self.myAccountID,
 		lastAddedAiName = self.lastAddedAiName,
+		window_WindowPosX = self.window_WindowPosX,
+		window_WindowPosY = self.window_WindowPosY,
+		window_XResolutionWindowed = self.window_XResolutionWindowed,
+		window_YResolutionWindowed = self.window_YResolutionWindowed,
 	}
 end
 
