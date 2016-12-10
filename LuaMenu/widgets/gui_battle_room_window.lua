@@ -43,7 +43,7 @@ local emptyTeamIndex = 0
 local haveMapAndGame = false
 
 local function UpdateArchiveStatus(updateSync)
-	if not battleLobby:GetMyBattleID() then
+	if not battleLobby or not battleLobby:GetMyBattleID() then
 		return
 	end
 	local battle = battleLobby:GetBattle(battleLobby:GetMyBattleID())
