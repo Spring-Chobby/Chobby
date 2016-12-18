@@ -251,7 +251,7 @@ function Downloader:DownloadFailed(downloadID, errorID)
 	end
 	self.downloads[downloadID].failed = true
 	if self.completeListener then
-		self.completeListener(self.downloads[downloadID].archiveName, false)
+		self.completeListener(self.downloads[downloadID].archiveName, self.downloads[downloadID].archiveType, false)
 	end
 
 	self.prDownload:SetCaption("\255\255\0\0Download failed [".. errorID .."].\b")
