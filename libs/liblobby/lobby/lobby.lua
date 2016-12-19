@@ -775,6 +775,13 @@ function Lobby:_OnSetModOptions(data)
 	self:_CallListeners("OnSetModOptions", data)
 end
 
+function Lobby:_OnResetModOptions()
+	local oldModoptions = self.modoptions
+	self.modoptions = {}
+	
+	self:_CallListeners("OnResetModOptions", oldModoptions)
+end
+
 ------------------------
 -- Channel & private chat commands
 ------------------------

@@ -18,9 +18,45 @@ local modoptionStructure = {}
 
 local modoptionListenerLobby
 
+local modoptionControlNames = {}
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Functions
+-- Utility Function
+
+local function UpdateControlValue(key, value)
+	if not modoptionControlNames then
+		return
+	end
+	local control = modoptionControlNames[key]
+	if control then
+		if control.SetText then -- editbox
+			control:SetText(value)
+			control:FocusUpdate()
+		elseif control.Select and control.itemKeyToName then -- combobox
+			control:Select(control.itemKeyToName[value])
+		elseif control.SetToggle then -- checkbox
+			control:SetToggle(value == true or value == 1)
+		end
+	end
+end
+
+	
+local function ResetToDefault()
+	if not (modoptionDefaults and modoptionChanges) then
+		return
+	end
+	for key, value in pairs(modoptionLocalChanges) do
+		UpdateControlValue(key, modoptionDefaults[key])
+	end
+	for key, value in pairs(modoptionChanges) do
+		UpdateControlValue(key, modoptionDefaults[key])
+	end
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Option Control Handling
 
 local function ProcessListOption(data, index)
 	local label = Label:New {
@@ -40,9 +76,11 @@ local function ProcessListOption(data, index)
 	
 	local items = {}
 	local itemNameToKey = {}
+	local itemKeyToName = {}
 	for i, itemData in pairs(data.items) do
 		items[i] = itemData.name
 		itemNameToKey[itemData.name] = itemData.key
+		itemKeyToName[itemData.key] = itemData.name
 		
 		if itemData.key == defaultKey then
 			defaultItem = i
@@ -63,8 +101,10 @@ local function ProcessListOption(data, index)
 			function (obj, selectedName)
 				modoptionLocalChanges[data.key] = itemNameToKey[selectedName]
 			end
-		}
+		},
+		itemKeyToName = itemKeyToName -- Not a chili key
 	}
+	modoptionControlNames[data.key] = list
 	
 	return Control:New {
 		x = 0,
@@ -80,7 +120,7 @@ local function ProcessListOption(data, index)
 end
 
 local function ProcessBoolOption(data, index)
-	return Checkbox:New {
+	local checkBox = Checkbox:New {
 		x = 5,
 		y = index*32,
 		width = 355,
@@ -98,6 +138,9 @@ local function ProcessBoolOption(data, index)
 			end
 		},
 	}
+	modoptionControlNames[data.key] = checkBox
+	
+	return checkBox
 end
 
 local function ProcessNumberOption(data, index)
@@ -163,6 +206,7 @@ local function ProcessNumberOption(data, index)
 			end
 		}
 	}
+	modoptionControlNames[data.key] = numberBox
 	
 	return Control:New {
 		x = 0,
@@ -209,6 +253,7 @@ local function ProcessStringOption(data, index)
 			end
 		}
 	}
+	modoptionControlNames[data.key] = textBox
 	
 	return Control:New {
 		x = 0,
@@ -244,6 +289,10 @@ local function PopulateTab(options)
 	return children
 end
 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Modoptions Window Handler
+
 local function CreateModoptionWindow()
 	local modoptionsSelectionWindow = Window:New {
 		caption = "",
@@ -257,7 +306,8 @@ local function CreateModoptionWindow()
 	}
 
 	modoptionLocalChanges = {}
-	
+	modoptionControlNames = {}
+
 	local tabs = {}
 
 	for key, data in pairs(modoptionStructure.sections) do
@@ -308,8 +358,24 @@ local function CreateModoptionWindow()
 		modoptionsSelectionWindow:Dispose()
 	end
 
+	buttonReset = Button:New {
+		right = 301,
+		width = 135,
+		bottom = 1,
+		height = 70,
+		caption = i18n("reset"),
+		font = WG.Chobby.Configuration:GetFont(3),
+		parent = modoptionsSelectionWindow,
+		classname = "option_button",
+		OnClick = {
+			function()
+				ResetToDefault()
+			end
+		},
+	}
+	
 	buttonAccept = Button:New {
-		right = 150,
+		right = 151,
 		width = 135,
 		bottom = 1,
 		height = 70,
@@ -376,6 +442,8 @@ local function InitializeModoptionsDisplay()
 			else
 				modoptionChanges[key] = nil
 			end
+			
+			UpdateControlValue(key, value)
 		end
 		lblText:SetText(text)
 
@@ -389,14 +457,17 @@ local function InitializeModoptionsDisplay()
 		end
 	end
 	battleLobby:AddListener("OnSetModOptions", OnSetModOptions)
+	battleLobby:AddListener("OnResetModOptions", OnSetModOptions)
 
 	local externalFunctions = {}
 
 	function externalFunctions.Update()
 		if modoptionListenerLobby then
 			modoptionListenerLobby:RemoveListener("OnSetModOptions", OnSetModOptions)
+			modoptionListenerLobby:RemoveListener("OnResetModOptions", OnSetModOptions)
 		end
 		battleLobby:AddListener("OnSetModOptions", OnSetModOptions)
+		battleLobby:RemoveListener("OnResetModOptions", OnSetModOptions)
 
 		OnSetModOptions()
 	end
@@ -411,6 +482,7 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- External Interface
+
 local modoptionsDisplay
 
 local ModoptionsPanel = {}
