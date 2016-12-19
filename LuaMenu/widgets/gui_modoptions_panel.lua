@@ -46,9 +46,6 @@ local function ResetToDefault()
 	if not (modoptionDefaults and modoptionChanges) then
 		return
 	end
-	for key, value in pairs(modoptionLocalChanges) do
-		UpdateControlValue(key, modoptionDefaults[key])
-	end
 	for key, value in pairs(modoptionChanges) do
 		UpdateControlValue(key, modoptionDefaults[key])
 	end
@@ -120,6 +117,15 @@ local function ProcessListOption(data, index)
 end
 
 local function ProcessBoolOption(data, index)
+	local checked = false
+	if modoptionChanges[data.key] == nil then
+		if modoptionDefaults[data.key] == "1" then
+			checked = true
+		end
+	elseif modoptionChanges[data.key] == "1" then
+		checked = true
+	end
+	
 	local checkBox = Checkbox:New {
 		x = 5,
 		y = index*32,
@@ -128,7 +134,7 @@ local function ProcessBoolOption(data, index)
 		boxalign = "right",
 		boxsize = 20,
 		caption = data.name,
-		checked = (modoptionChanges[data.key] ~= nil and modoptionChanges[data.key] ~= 0) or (modoptionChanges[data.key] == nil and modoptionDefaults[data.key] == 1),
+		checked = checked,
 		font = WG.Chobby.Configuration:GetFont(2),
 		tooltip = data.desc,
 		
@@ -304,8 +310,8 @@ local function CreateModoptionWindow()
 		draggable = false,
 		classname = "overlay_window",
 	}
-
-	modoptionLocalChanges = {}
+	
+	modoptionLocalChanges = Spring.Utilities.CopyTable(modoptionChanges)
 	modoptionControlNames = {}
 
 	local tabs = {}
@@ -438,13 +444,17 @@ local function InitializeModoptionsDisplay()
 			if modoptionDefaults[key] == nil or modoptionDefaults[key] ~= value then
 				text = text .. "\255\120\120\120" .. tostring(key) .. " = \255\255\255\255" .. tostring(value) .. "\n"
 				empty = false
-				modoptionChanges[key] = value
-			else
-				modoptionChanges[key] = nil
 			end
 			
 			UpdateControlValue(key, value)
 		end
+		for key, value in pairs(modoptionChanges) do
+			if not modoptions[key] then
+				UpdateControlValue(key, modoptionDefaults[key])
+			end
+		end
+		modoptionChanges = modoptions
+		
 		lblText:SetText(text)
 
 		if mainScrollPanel.parent then
