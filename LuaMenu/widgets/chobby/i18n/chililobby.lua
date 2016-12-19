@@ -4,6 +4,7 @@ return {
 		-- general
 		ok = "OK",
 		cancel = "Cancel",
+		reset = "Reset",
 		close = "Close",
 		yes = "Yes",
 		apply = "Apply",

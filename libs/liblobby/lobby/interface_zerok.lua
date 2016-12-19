@@ -324,12 +324,17 @@ function Interface:VoteNo()
 end
 
 function Interface:SetModOptions(data)
-	local sendData = {
-		Options = data,
-	}
+	for key, value in pairs(data) do
+		local sendData = {
+			Options = data,
+		}
+		
+		self:_SendCommand("SetModOptions " .. json.encode(sendData))
+		return self
+	end
 	
-	self:_SendCommand("SetModOptions " .. json.encode(sendData))
-	return self
+	-- Send empty
+	self:_SendCommand("SetModOptions {\"Options\":{}}")
 end
 
 ------------------------
