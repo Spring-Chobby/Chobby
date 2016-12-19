@@ -324,7 +324,7 @@ function Interface:VoteNo()
 end
 
 function Interface:SetModOptions(data)
-	for key, value in pairs(data) do
+	for _,_ in pairs(data) do
 		local sendData = {
 			Options = data,
 		}
@@ -333,8 +333,8 @@ function Interface:SetModOptions(data)
 		return self
 	end
 	
-	-- Send empty
-	self:_SendCommand("SetModOptions {\"Options\":{}}")
+	-- Don't send anything, server thinks it means reset to default
+	--self:_SendCommand("SetModOptions {\"Options\":{}}")
 end
 
 ------------------------
@@ -1125,9 +1125,13 @@ function Interface:_SetModOptions(data)
 		return
 	end
 	
-	data.Options.commanderTypes = nil
+	for _,_ in pairs(data.Options) do
+		data.Options.commanderTypes = nil
+		self:_OnSetModOptions(data.Options)
+		return
+	end
 	
-	self:_OnSetModOptions(data.Options)
+	self:_OnResetModOptions()
 end
 Interface.jsonCommands["SetModOptions"] = Interface._SetModOptions
 

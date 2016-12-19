@@ -457,14 +457,17 @@ local function InitializeModoptionsDisplay()
 		end
 	end
 	battleLobby:AddListener("OnSetModOptions", OnSetModOptions)
+	battleLobby:AddListener("OnResetModOptions", OnSetModOptions)
 
 	local externalFunctions = {}
 
 	function externalFunctions.Update()
 		if modoptionListenerLobby then
 			modoptionListenerLobby:RemoveListener("OnSetModOptions", OnSetModOptions)
+			modoptionListenerLobby:RemoveListener("OnResetModOptions", OnSetModOptions)
 		end
 		battleLobby:AddListener("OnSetModOptions", OnSetModOptions)
+		battleLobby:RemoveListener("OnResetModOptions", OnSetModOptions)
 
 		OnSetModOptions()
 	end
