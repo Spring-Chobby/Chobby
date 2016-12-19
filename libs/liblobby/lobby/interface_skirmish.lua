@@ -106,6 +106,10 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName)
 	--	teamData.AllyTeam = allyTeamMap[teamData.AllyTeam]
 	--end
 
+	if string.find(gameName, ":") then
+		gameName = "rapid://" .. gameName
+	end
+	
 	local script = {
 		gametype = gameName,
 		hostip = '127.0.0.1',

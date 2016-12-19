@@ -42,6 +42,13 @@ local emptyTeamIndex = 0
 
 local haveMapAndGame = false
 
+local function HasGame(gameName)
+	if gameName == "zk:stable" then
+		return true
+	end
+	return VFS.HasArchive(gameName)
+end
+
 local function UpdateArchiveStatus(updateSync)
 	if not battleLobby or not battleLobby:GetMyBattleID() then
 		return
@@ -51,7 +58,7 @@ local function UpdateArchiveStatus(updateSync)
 		haveMapAndGame = false
 		return
 	end
-	local haveGame = VFS.HasArchive(battle.gameName)
+	local haveGame = HasGame(battle.gameName) 
 	local haveMap = VFS.HasArchive(battle.mapName)
 
 	if mainWindowFunctions and mainWindowFunctions.GetInfoHandler() then
@@ -467,7 +474,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 			MaybeDownloadGame(battle)
 		end
 		
-		if (mapName and not VFS.HasArchive(mapName)) or (gameName and not VFS.HasArchive(gameName)) then
+		if (mapName and not VFS.HasArchive(mapName)) or (gameName and not HasGame(gameName)) then
 			battleLobby:SetBattleStatus({
 				sync = 2, -- 0 = unknown, 1 = synced, 2 = unsynced
 			})
