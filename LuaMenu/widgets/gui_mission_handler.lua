@@ -17,7 +17,6 @@ end
 --------------------------------------------------------------------------------
 -- Local Variables
 
-
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
@@ -31,6 +30,44 @@ local function LoadMissions()
 	Spring.Echo("Error loading missions.")
 	return false
 end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Downloads
+
+local alreadyDownloaded = {}
+
+local function MaybeDownloadArchive(archiveName, archiveType)
+	if not VFS.HasArchive(archiveName) then
+		VFS.DownloadArchive(archiveName, archiveType)
+	end
+end
+
+local function MaybeDownloadGame(gameName)
+	MaybeDownloadArchive(gameName, "game")
+end
+
+local function MaybeDownloadMap(mapName)
+	MaybeDownloadArchive(mapName, "map")
+end
+
+local function DownloadRequirements()
+	if not alreadyDownloaded[WG.Chobby.Configuration.gameConfig.defaultGameArchiveName] then
+		MaybeDownloadGame(WG.Chobby.Configuration.gameConfig.defaultGameArchiveName)
+		alreadyDownloaded[WG.Chobby.Configuration.gameConfig.defaultGameArchiveName] = true
+	end
+	local missions = LoadMissions()
+	for i = 1, #missions do
+		if not alreadyDownloaded[missions[i].Map] then
+			MaybeDownloadMap(missions[i].Map)
+			alreadyDownloaded[missions[i].Map] = true
+		end
+	end
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Mission Control Handler
 
 local function CreateMissionEntry(missionData)
 	local Configuration = WG.Chobby.Configuration
@@ -77,9 +114,29 @@ local function CreateMissionEntry(missionData)
 		OnClick = {
 			function()
 				local startScript = missionData.Script
+				
+				local gameName = WG.Chobby.Configuration.gameConfig.defaultGameArchiveName
+				local haveGame = (gameName == "zk:stable") or VFS.HasArchive(gameName)
+				if not haveGame then
+					WG.Chobby.InformationPopup("You do not have the game file required. It will now be downloaded.")
+					MaybeDownloadGame(gameName)
+					return
+				end
+				
+				local haveMap = VFS.HasArchive(missionData.Map)
+				if not haveMap then
+					WG.Chobby.InformationPopup("You do not have the map file required. It will now be downloaded.")
+					MaybeDownloadMap(missionData.Map)
+					return
+				end
+				
+				local gameName = WG.Chobby.Configuration.gameConfig.defaultGameArchiveName
+				if string.find(gameName, ":") then
+					gameName = "rapid://" .. gameName
+				end
 			
-				startScript = startScript:gsub("%%MAP%%", missionData.Map)
-				startScript = startScript:gsub("%%MOD%%",  WG.Chobby.Configuration.gameConfig.defaultGameArchiveName)
+				startScript = startScript:gsub("%%MAP%%",  missionData.Map)
+				startScript = startScript:gsub("%%MOD%%",  gameName)
 				startScript = startScript:gsub("%%NAME%%", WG.Chobby.localLobby:GetMyUserName())
 				
 				WG.Chobby.localLobby:StartGameFromString(startScript)
@@ -222,6 +279,8 @@ function MissionHandler.GetControl()
 			end
 		},
 	}
+	
+	WG.Delay(DownloadRequirements, 0.1)
 	return window
 end
 
@@ -229,15 +288,9 @@ end
 --------------------------------------------------------------------------------
 -- Widget Interface
 
-local function DelayedInitialize()
-	local Configuration = WG.Chobby.Configuration
-end
-
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-
-	--WG.Delay(DelayedInitialize, 1)
 
 	WG.MissionHandler = MissionHandler
 end

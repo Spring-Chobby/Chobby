@@ -827,6 +827,11 @@ function Interface:_BattleUpdate(data)
 		return
 	end
 	
+	local password = nil
+	if header.Password ~= nil then
+		password = (header.Password and true) or false
+	end
+	
 	self:_OnUpdateBattleInfo(
 		header.BattleID, 
 		header.SpectatorCount, 
@@ -843,7 +848,7 @@ function Interface:_BattleUpdate(data)
 		header.MaxPlayers,
 		header.Title,
 		header.PlayerCount,
-		(header.Password and true) or false
+		password
 	)
 	
 	if header.IsRunning ~= nil then
