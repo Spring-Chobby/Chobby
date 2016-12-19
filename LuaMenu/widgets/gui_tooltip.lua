@@ -588,6 +588,16 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 			WG.UserHandler.CountryShortnameToFlag(userInfo.country)
 		)
 		offset = offset + 20
+	elseif userBattleInfo.owner then
+		if not userTooltip.country then
+			userTooltip.country = GetTooltipLine(userTooltip.mainControl, true)
+		end
+		userTooltip.country.Update(
+			offset,
+			"Owner: " .. userBattleInfo.owner,
+			IMAGE_BATTLE
+		)
+		offset = offset + 20
 	elseif userTooltip.country then
 		userTooltip.country:Hide()
 	end
