@@ -8,7 +8,49 @@ function AiListWindow:init(gameName)
 	self.validAiNames = {}
 	
 	-- Disable game-specific AIs for now since it breaks /luaui reload
-	local ais = VFS.GetAvailableAIs(gameName)
+	local ais
+	if gameName == "zk:stable" then
+		ais = {
+			[1] = {
+				version = "<not-versioned>",
+				shortName = "CAI",
+			},
+			[2] = {
+				version = "<not-versioned>",
+				shortName = "Chicken: Very Easy",
+			},
+			[3] = {
+				version = "<not-versioned>",
+				shortName = "Chicken: Easy",
+			},
+			[4] = {
+				version = "<not-versioned>",
+				shortName = "Chicken: Normal",
+			},
+			[5] = {
+				version = "<not-versioned>",
+				shortName = "Chicken: Hard",
+			},
+			[6] = {
+				version = "<not-versioned>",
+				shortName = "Chicken: Suicidal",
+			},
+			[7] = {
+				version = "<not-versioned>",
+				shortName = "Chicken: Custom",
+			},
+			[8] = {
+				version = "<not-versioned>",
+				shortName = "Null AI",
+			},
+		}
+		local otherAis = VFS.GetAvailableAIs(gameName)
+		for i = 1, #otherAis do
+			ais[#ais + 1] = otherAis[i]
+		end
+	else
+		ais = VFS.GetAvailableAIs(gameName)
+	end
 	
 	local blackList = Configuration.gameConfig.aiBlacklist
 	
