@@ -38,7 +38,7 @@ local minimapThumbnailPath = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .
 local externalFuncAndData = {
 	dirName                = "zk",
 	name                   = "Zero-K",
-	defaultGameArchiveName = "zk:stable",
+	defaultGameArchiveName = "Zero-K v1.4.12.17", -- Use rapid tag "zk:stable" when https://springrts.com/mantis/view.php?id=5422 is fixed.
 	mapWhitelist           = mapWhitelist,
 	aiBlacklist            = aiBlacklist,
 	settingsConfig         = settingsConfig,
