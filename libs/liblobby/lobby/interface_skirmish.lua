@@ -202,7 +202,13 @@ end
 -- Skirmish only
 function InterfaceSkirmish:SetBattleState(myUserName, gameName, mapName, title)
 	local myBattleID = 1
+	
+	-- Clear all data when a new battle is created
+	self:_Clean()
 
+	self.battleAis = {}
+	self.userBattleStatus = {}
+	
 	self:_OnAddUser(myUserName)
 	self.myUserName = myUserName
 						--(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName, title, gameName, spectatorCount)
