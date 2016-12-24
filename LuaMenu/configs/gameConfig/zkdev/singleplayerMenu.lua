@@ -8,6 +8,11 @@ return {
 		control = WG.BattleRoomWindow.GetSingleplayerControl(),
 		entryCheck = WG.BattleRoomWindow.SetSingleplayerGame,
 	},
+	{
+		name = "load",
+		control = 	WG.LoadWindow.GetWindow(),
+		entryCheck = WG.BattleRoomWindow.SetSingleplayerGame,
+	},
 	--{
 	--	name = "quick_start", 
 	--	control = Control:New {},
