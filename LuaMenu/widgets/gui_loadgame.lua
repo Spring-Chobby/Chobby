@@ -18,6 +18,7 @@ end
 local SAVEGAME_BUTTON_HEIGHT = 128
 local OUTLINE_COLOR = {0.54,0.72,1,0.3}
 local SAVE_DIR = "Saves"
+local SAVE_DIR_LENGTH = string.len(SAVE_DIR) + 2
 local AUTOSAVE_DIR = SAVE_DIR .. "/auto"
 local MAX_SAVES = 999
 --------------------------------------------------------------------------------
@@ -112,10 +113,12 @@ local function SortSavesByFilename(a, b)
 end
 
 -- Returns the data stored in a save file
-local function GetSave(filename)
+local function GetSave(path)
 	local ret = nil
 	local success, err = pcall(function()
-		local saveData = VFS.Include(filename)
+		local saveData = VFS.Include(path)
+		saveData.filename = string.sub(path, SAVE_DIR_LENGTH, -5)	-- pure filename without directory or extension
+		saveData.path = path
 		ret = saveData
 	end)
 	if (not success) then
@@ -131,11 +134,10 @@ local function GetSaves()
 	saves = {}
 	local savefiles = VFS.DirList(SAVE_DIR, "*.lua")
 	for i=1,#savefiles do
-		local savefile = savefiles[i]
-		local saveData = GetSave(savefile)
+		local path = savefiles[i]
+		local saveData = GetSave(path)
 		if saveData then
 			saves[#saves + 1] = saveData
-			saveData.filename = savefile
 		end
 	end
 	table.sort(saves, SortSavesByFilename)
@@ -180,26 +182,30 @@ local function OpenLoadMenu()
 end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
-local function LoadGame(saveData)
-	local success, err = pcall(function()
-		Spring.CreateDir(SAVE_DIR)
-		-- FIXME actually load save
-		if saveData.description then
-			saveDescEdit:SetText(saveData.description)
-		end
-		--Spring.Log(widget:GetInfo().name, LOG.INFO, "Save file " .. path .. " loaded")
-	end)
-	if (not success) then
-		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error loading game: " .. err)
-	end
-end
-
 local function LoadGameByFilename(filename)
-	local saveData = GetSave(filename)
+	Spring.Echo(filename)
+	local saveData = GetSave(SAVE_DIR .. '/' .. filename .. ".lua")
 	if saveData then
-		LoadGame(saveData)
+		local success, err = pcall(function()		
+			--Spring.Log(widget:GetInfo().name, LOG.INFO, "Save file " .. path .. " loaded")
+			local script = [[
+[GAME]
+{
+	SaveFile=__FILE__;
+	IsHost=1;
+	OnlyLocal=1;
+	MyPlayerName=__PLAYERNAME__;
+}
+]]
+			script = script:gsub("__FILE__", filename .. ".slsf")
+			script = script:gsub("__PLAYERNAME__", saveData.playerName)
+			Spring.Reload(script)
+		end)
+		if (not success) then
+			Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error loading game: " .. err)
+		end
 	else
-		-- TODO error message
+		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Save game " .. filename .. " not found")
 	end
 end
 
@@ -222,7 +228,7 @@ end
 local function SaveLoadConfirmationDialogPopup(filename, saveMode)
 	local text = i18n("load_confirm")
 	local yesFunc = function()
-			LoadGameByID(filename)
+			LoadGameByFilename(filename)
 		end
 	WG.Chobby.ConfirmationPopup(yesFunc, text, nil, 360, 200)
 end
@@ -250,9 +256,9 @@ local function AddSaveEntryButton(saveFile, allowSave)
 		caption = "",
 		OnClick = { function(self)
 				if ingame then
-					SaveLoadConfirmationDialogPopup(filename, false)
+					SaveLoadConfirmationDialogPopup(saveFile.filename, false)
 				else
-					LoadGameByFilename(filename)
+					LoadGameByFilename(saveFile.filename)
 				end
 			end
 		}
