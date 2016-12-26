@@ -164,7 +164,7 @@ local function CreateMissionEntry(missionData)
 		height = 20,
 		valign = 'center',
 		fontsize = Configuration:GetFont(2).size,
-		text = string.format("Difficulty %.1f", missionData.Difficulty),
+		text = string.format("Difficulty %.1f", missionData.Difficulty or 0),
 		parent = holder,
 	}
 	local missionMap = TextBox:New {
@@ -179,7 +179,7 @@ local function CreateMissionEntry(missionData)
 		parent = holder,
 	}
 	
-	return holder, {missionData.DisplayName, missionData.Difficulty, missionData.Map}
+	return holder, {missionData.DisplayName, missionData.Difficulty or 0, missionData.Map}
 end
 
 --------------------------------------------------------------------------------
