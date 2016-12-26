@@ -10,7 +10,7 @@ return {
 	},
 	{
 		name = "load",
-		control = 	WG.LoadWindow.GetWindow(),
+		control = WG.LoadGameWindow.GetControl(),
 		entryCheck = WG.BattleRoomWindow.SetSingleplayerGame,
 	},
 	--{
