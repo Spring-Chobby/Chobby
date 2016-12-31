@@ -459,15 +459,8 @@ local function GetLobbyTabControls()
 		font = Configuration:GetFont(2),
 		OnClick = {
 			function (obj)
-				local path = "cache/103dev-develop/paths/"
-				local cacheFiles = VFS.DirList(path)
-				if cacheFiles then
-					Spring.Echo("Deleting path cache", #cacheFiles)
-					for i = 1, #cacheFiles do
-						os.remove(cacheFiles[i])
-					end
-				else
-					Spring.Echo("Deleting path cache error")
+				if WG.CacheHandler then
+					WG.CacheHandler.DeletePathCache()
 				end
 			end
 		}
