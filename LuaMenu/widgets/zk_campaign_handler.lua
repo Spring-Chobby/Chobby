@@ -25,11 +25,11 @@ local CAMPAIGN_SELECTOR_BUTTON_HEIGHT = 96
 local SAVEGAME_BUTTON_HEIGHT = 128
 local OUTLINE_COLOR = {0.54,0.72,1,0.3}
 local CODEX_BUTTON_FONT_SIZE = 14
-local SAVE_DIR = "saves/campaign/"
+local SAVE_DIR = "Saves/campaign/"
 local MAX_SAVES = 999
 local AUTOSAVE_ID = "auto"
 local AUTOSAVE_FILENAME = "autosave"
-local RESULTS_FILE_PATH = "cache/mission_results.lua"
+local RESULTS_FILE_PATH = "Saves/mission_results.lua"
 --------------------------------------------------------------------------------
 -- Chili elements
 --------------------------------------------------------------------------------
