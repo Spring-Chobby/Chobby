@@ -428,12 +428,47 @@ local function GetLobbyTabControls()
 		width = COMBO_WIDTH,
 		height = 30,
 		caption = "Apply",
-		tooltip = "Clears chat history displayed in the lobby, does not affect the chat history files saved to your computer",
+		tooltip = "Clears chat history displayed in the lobby, does not affect the chat history files saved to your computer.",
 		font = Configuration:GetFont(2),
 		OnClick = {
 			function (obj)
 				WG.Chobby.interfaceRoot.GetChatWindow():ClearHistory()
 				WG.BattleRoomWindow.ClearChatHistory()
+			end
+		}
+	}
+	offset = offset + ITEM_OFFSET
+	
+	children[#children + 1] = Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(2),
+		caption = "Delete Path Cache",
+	}
+	children[#children + 1] = Button:New {
+		x = COMBO_X,
+		y = offset,
+		width = COMBO_WIDTH,
+		height = 30,
+		caption = "Apply",
+		tooltip = "Deletes path cache. May solve desync.",
+		font = Configuration:GetFont(2),
+		OnClick = {
+			function (obj)
+				local path = "cache/103dev-develop/paths/"
+				local cacheFiles = VFS.DirList(path)
+				if cacheFiles then
+					Spring.Echo("Deleting path cache", #cacheFiles)
+					for i = 1, #cacheFiles do
+						os.remove(cacheFiles[i])
+					end
+				else
+					Spring.Echo("Deleting path cache error")
+				end
 			end
 		}
 	}
