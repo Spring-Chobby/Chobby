@@ -379,7 +379,7 @@ local settings = {
 					{
 						name = "Minimal",
 						apply = {
-							GroundScarAlphaFade = 0,
+							GroundScarAlphaFade = 1,
 							GroundDecals = 0,
 							GroundDetail = 75,
 						}
@@ -473,8 +473,8 @@ local settings = {
 					{
 						name = "Off",
 						apply = {
-							DynamicSky = 1,
-							AdvSky = 1,
+							DynamicSky = 0,
+							AdvSky = 0,
 						}
 					},
 				},
@@ -486,19 +486,27 @@ local settings = {
 					{
 						name = "On",
 						apply = {
-							LoadingMT = 0, 
-							AdvUnitShading = 0, 
-							LuaShaders = 0, 
-							UsePBO = 0, 
+							LoadingMT = 0,
+							AdvUnitShading = 0,
+							AdvMapShading = 0,
+							LuaShaders = 0,
+							UsePBO = 0,
+							["3DTrees"] = 0,
+							MaxDynamicMapLights = 0,
+							MaxDynamicModelLights = 0,
 						}
 					},
 					{
 						name = "Off",
 						apply = {
-							LoadingMT = 1, 
+							LoadingMT = 1,
 							AdvUnitShading = 1, 
-							LuaShaders = 1, 
-							UsePBO = 1, 
+							AdvMapShading = 1,
+							LuaShaders = 1,
+							UsePBO = 1,
+							["3DTrees"] = 1,
+							MaxDynamicMapLights = 1,
+							MaxDynamicModelLights = 1,
 						}
 					},
 				},

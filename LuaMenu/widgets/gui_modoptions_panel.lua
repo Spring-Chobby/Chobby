@@ -304,7 +304,7 @@ local function CreateModoptionWindow()
 		caption = "",
 		name = "modoptionsSelectionWindow",
 		parent = WG.Chobby.lobbyInterfaceHolder,
-		width = 748,
+		width = 880,
 		height = 500,
 		resizable = false,
 		draggable = false,
