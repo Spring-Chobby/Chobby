@@ -1143,6 +1143,26 @@ end
 Interface.jsonCommands["OnPartyInvite"] = Interface.OnPartyInvite
 
 function Interface:_OnPartyStatus(partyID, partyUsers)
+	-- Update user partyID
+	if partyMap[partyID] then
+		for i = 1, #partyMap[partyID] do
+			local userName = partyMap[partyID][i]
+			-- Consider using self:TryGetUser(userName)
+			if self.users[userName] then
+				self.users[userName].partyID = nil
+			end
+		end
+	end
+	
+	for i = 1, #partyUsers do
+		local userName = partyUsers[i]
+		-- Consider using self:TryGetUser(userName)
+		if self.users[userName] then
+			self.users[userName].partyID = partyID
+		end
+	end
+	
+	-- Update partyMap and make events
 	if #partyUsers == 0 then
 		if partyMap[partyID] then
 			self:_OnPartyDestroy(partyID, partyMap[partyID])
