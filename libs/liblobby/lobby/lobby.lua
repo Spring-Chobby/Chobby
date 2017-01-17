@@ -43,6 +43,9 @@ function Lobby:_Clean()
 	self.queues = {}
 	self.queueCount = 0
 
+	self.partyMap = {}
+	self.partyID = nil
+	
 	self.team = nil
 
 	self.latency = 0 -- in ms
@@ -973,6 +976,26 @@ end
 function Lobby:_OnUserCount(userCount)
 	self.fullUserCount = userCount
 	self:_CallListeners("OnUserCount", userCount)
+end
+
+------------------------
+-- Party commands
+------------------------
+
+function Lobby:_OnPartyInviteRecieved(partyID, partyUsers, timeoutSeconds)
+	self:_CallListeners("OnPartyInviteRecieved", partyID, partyUsers, timeoutSeconds)
+end
+
+function Lobby:_OnPartyCreate(partyID, partyUsers)
+	self:_CallListeners("OnPartyCreate", partyID, partyUsers)
+end
+
+function Lobby:_OnPartyUpdate(partyID, partyUsers)
+	self:_CallListeners("OnPartyUpdate", partyID, partyUsers)
+end
+
+function Lobby:_OnPartyDestroy(partyID, partyUsers)
+	self:_CallListeners("OnPartyDestroy", partyID, partyUsers)
 end
 
 ------------------------

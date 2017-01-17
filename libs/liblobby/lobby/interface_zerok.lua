@@ -511,6 +511,35 @@ function Interface:RejectMatchMakingMatch()
 	return self
 end
 
+------------------------
+-- Party commands
+------------------------
+
+function Interface:InviteToParty(userName)
+	local sendData = {
+		UserName = userName
+	}
+	self:_SendCommand("InviteToParty " .. json.encode(sendData))
+	return self
+end
+
+function Interface:LeaveParty(partyID)
+	local sendData = {
+		PartyID = partyID
+	}
+	self:_SendCommand("LeaveParty " .. json.encode(sendData))
+	return self
+end
+
+function Interface:PartyInviteResponse(partyID, accepted)
+	local sendData = {
+		PartyID = partyID,
+		Accepted = accepted
+	}
+	self:_SendCommand("PartyInviteResponse " .. json.encode(sendData))
+	return self
+end
+
 -------------------------------------------------
 -- END Client commands
 -------------------------------------------------
@@ -1073,7 +1102,7 @@ function Interface:_MatchMakerSetup(data)
 			queue.Game = "Zero-K v1.4.9.3"
 		end
 		
-		self:_OnQueueOpened(queue.Name, queue.Description, queue.Maps, queue.MaxPartySize, {queue.Game})
+		self:_OnQueueOpened(queue.Name, queue.Description, queue.Maps, queue.MaxpartySize, {queue.Game})
 	end
 end
 Interface.jsonCommands["MatchMakerSetup"] = Interface._MatchMakerSetup
@@ -1103,6 +1132,33 @@ function Interface:_AreYouReadyResult(data)
 	self:_OnMatchMakerReadyResult(data.IsBattleStarting, data.AreYouBanned)
 end
 Interface.jsonCommands["AreYouReadyResult"] = Interface._AreYouReadyResult
+
+------------------------
+-- Party commands
+------------------------
+
+function Interface:_OnPartyInvite(partyID, partyUsers, timoutSeconds)
+	self:_OnPartyInviteRecieved(partyID, partyUsers, timoutSeconds)
+end
+Interface.jsonCommands["OnPartyInvite"] = Interface.OnPartyInvite
+
+function Interface:_OnPartyStatus(partyID, partyUsers)
+	if #partyUsers == 0 then
+		if partyMap[partyID] then
+			self:_OnPartyDestroy(partyID, partyMap[partyID])
+			partyMap[partyID] = nil
+		end
+		return
+	end
+	partyMap[partyID] = partyUsers
+	if partyMap[partyID] then
+		self:_OnPartyUpdate(partyID, partyUsers)
+	else
+		self:_OnPartyCreate(partyID, partyUsers)
+	end
+end
+Interface.jsonCommands["OnPartyStatus"] = Interface._OnPartyStatus
+
 
 -------------------
 -- Unimplemented --
