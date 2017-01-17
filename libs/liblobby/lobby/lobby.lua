@@ -328,6 +328,22 @@ function Lobby:RejectMatchMakingMatch()
 	return self
 end
 
+------------------------
+-- Party commands
+------------------------
+
+function Lobby:InviteToParty(userName)
+	return self
+end
+
+function Lobby:LeaveParty(partyID)
+	return self
+end
+
+function Lobby:PartyInviteResponse(partyID, accepted)
+	return self
+end
+
 -------------------------------------------------
 -- END Client commands
 -------------------------------------------------
