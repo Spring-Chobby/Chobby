@@ -382,6 +382,66 @@ local function GetLobbyTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 	
+	children[#children + 1] = Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(2),
+		caption = "Background Brightness",
+	}
+	children[#children + 1] = Trackbar:New {
+		x = COMBO_X,
+		y = offset,
+		width  = COMBO_WIDTH,
+		height = 30,
+		value  = Configuration.menuBackgroundBrightness or 1,
+		min    = 0,
+		max    = 1,
+		step   = 0.02,
+		OnChange = {
+			function(obj, value)
+				if freezeSettings then
+					return
+				end
+				Configuration:SetConfigValue("menuBackgroundBrightness", value)
+			end
+		}
+	}
+	offset = offset + ITEM_OFFSET
+	
+	children[#children + 1] = Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(2),
+		caption = "Game Overlay Opacity",
+	}
+	children[#children + 1] = Trackbar:New {
+		x = COMBO_X,
+		y = offset,
+		width  = COMBO_WIDTH,
+		height = 30,
+		value  = Configuration.gameOverlayOpacity or 0.5,
+		min    = 0,
+		max    = 1,
+		step   = 0.02,
+		OnChange = {
+			function(obj, value)
+				if freezeSettings then
+					return
+				end
+				Configuration:SetConfigValue("gameOverlayOpacity", value)
+			end
+		}
+	}
+	offset = offset + ITEM_OFFSET
+	
 	local autoLogin = Checkbox:New {
 		x = 20,
 		width = CHECK_WIDTH,

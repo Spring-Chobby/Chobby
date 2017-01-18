@@ -115,6 +115,8 @@ function Configuration:init()
 	self.useSpringRestart = false
 	self.menuMusicVolume = 0.5
 	self.menuNotificationVolume = 0.8
+	self.menuBackgroundBrightness = 1
+	self.gameOverlayOpacity = 0.5
 	self.showMatchMakerBattles = false
 	self.hideInterface = false
 	
@@ -176,6 +178,8 @@ function Configuration:GetConfigData()
 		settingsMenuValues = self.settingsMenuValues,
 		menuMusicVolume = self.menuMusicVolume,
 		menuNotificationVolume = self.menuNotificationVolume,
+		menuBackgroundBrightness = self.menuBackgroundBrightness,
+		gameOverlayOpacity = self.gameOverlayOpacity,
 		showMatchMakerBattles = self.showMatchMakerBattles,
 		chatFontSize = self.chatFontSize,
 		myAccountID = self.myAccountID,
