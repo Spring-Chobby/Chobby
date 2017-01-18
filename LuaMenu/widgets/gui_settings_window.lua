@@ -81,7 +81,7 @@ local function SetLobbyFullscreenMode(mode)
 		return
 	end
 	
-	local Configuration = WG.Chobby.Configuration		
+	local Configuration = WG.Chobby.Configuration
 	
 	-- Remember window settings
 	if currentMode == 2 then
@@ -525,6 +525,7 @@ local function GetVoidTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Hide interface", "hideInterface", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Neuter Settings", "doNotSetAnySpringSettings", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Agressive Set Borderless", "agressivelySetBorderlessWindowed", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, "Use wrong engine", "useWrongEngine", false)
 	
 	children[#children + 1] = Label:New {
 		x = 20,
