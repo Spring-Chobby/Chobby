@@ -44,7 +44,7 @@ function Lobby:_Clean()
 	self.queueCount = 0
 
 	self.partyMap = {}
-	self.partyID = nil
+	self.myPartyID = nil
 	
 	self.team = nil
 
@@ -1002,6 +1002,14 @@ function Lobby:_OnPartyInviteRecieved(partyID, partyUsers, timeoutSeconds)
 	self:_CallListeners("OnPartyInviteRecieved", partyID, partyUsers, timeoutSeconds)
 end
 
+function Lobby:_OnPartyJoined(partyID, partyUsers)
+	self:_CallListeners("OnPartyJoined", partyID, partyUsers)
+end
+
+function Lobby:_OnPartyLeft(partyID, partyUsers)
+	self:_CallListeners("OnPartyLeft", partyID, partyUsers)
+end
+
 function Lobby:_OnPartyCreate(partyID, partyUsers)
 	self:_CallListeners("OnPartyCreate", partyID, partyUsers)
 end
@@ -1330,6 +1338,10 @@ end
 
 function Lobby:GetMyBattleID()
 	return self.myBattleID
+end
+
+function Lobby:GetMyPartyID()
+	return self.myPartyID
 end
 
 function Lobby:GetMyBattleModoptions()

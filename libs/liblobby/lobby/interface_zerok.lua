@@ -1143,6 +1143,9 @@ end
 Interface.jsonCommands["OnPartyInvite"] = Interface.OnPartyInvite
 
 function Interface:_OnPartyStatus(partyID, partyUsers)
+	local wasInParty = false
+	local nowInParty = false
+	
 	-- Update user partyID
 	if partyMap[partyID] then
 		for i = 1, #partyMap[partyID] do
@@ -1150,6 +1153,10 @@ function Interface:_OnPartyStatus(partyID, partyUsers)
 			-- Consider using self:TryGetUser(userName)
 			if self.users[userName] then
 				self.users[userName].partyID = nil
+				if userName == self.myUserName then
+					wasInParty = true
+					self.myPartyID = nil
+				end
 			end
 		end
 	end
@@ -1159,10 +1166,19 @@ function Interface:_OnPartyStatus(partyID, partyUsers)
 		-- Consider using self:TryGetUser(userName)
 		if self.users[userName] then
 			self.users[userName].partyID = partyID
+			if userName == self.myUserName then
+				nowInParty = true
+				self.myPartyID = partyID
+			end
 		end
 	end
 	
-	-- Update partyMap and make events
+	-- Leave party even, before party is destroyed
+	if wasInParty and not nowInParty then
+		self:_OnPartyLeft(partyID, partyMap[partyID])
+	end
+	
+	-- Update partyMap and make non-personal event
 	if #partyUsers == 0 then
 		if partyMap[partyID] then
 			self:_OnPartyDestroy(partyID, partyMap[partyID])
@@ -1175,6 +1191,11 @@ function Interface:_OnPartyStatus(partyID, partyUsers)
 		self:_OnPartyUpdate(partyID, partyUsers)
 	else
 		self:_OnPartyCreate(partyID, partyUsers)
+	end
+	
+	-- Join party even, after party is created
+	if wasInParty and not nowInParty then
+		self:_OnPartyJoined(partyID, partyUsers)
 	end
 end
 Interface.jsonCommands["OnPartyStatus"] = Interface._OnPartyStatus
