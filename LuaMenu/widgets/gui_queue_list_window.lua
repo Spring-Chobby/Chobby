@@ -192,7 +192,7 @@ local function InitializeControls(window)
 		x = 5,
 		right = 5,
 		y = 55,
-		height = 200,
+		height = 250,
 		borderColor = {0,0,0,0},
 		horizontalScrollbar = false,
 		parent = window
@@ -201,7 +201,7 @@ local function InitializeControls(window)
 	local statusText = TextBox:New {
 		x = 5,
 		right = 5,
-		y = 270,
+		y = 320,
 		height = 200,
 		fontsize = Configuration:GetFont(2).size,
 		text = "",
@@ -211,7 +211,7 @@ local function InitializeControls(window)
 	local requirementText = TextBox:New {
 		x = 5,
 		right = 5,
-		y = 350,
+		y = 400,
 		height = 200,
 		fontsize = Configuration:GetFont(2).size,
 		text = "",
