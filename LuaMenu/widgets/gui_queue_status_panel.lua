@@ -112,7 +112,7 @@ local function InitializeQueueStatusHandler(name, ControlType, parent, pos)
 		end
 		timeWaiting = newTimeWaiting
 		timeString = SecondsToMinutes(timeWaiting)
-		queueStatusText:SetText("Finding Match: " .. timeString .. "\n" .. queueString .. ((bigMode and  "\nPlayers: ") or "\nPlay: ") .. playersString)
+		queueStatusText:SetText("Finding Match - " .. timeString .. "\n" .. queueString .. ((bigMode and  "\nPlayers: ") or "\nPlay: ") .. playersString)
 	end
 		
 	local function UpdateQueueText()

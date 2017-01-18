@@ -42,6 +42,7 @@ return {
 		open_mp_game = "Host Game",
 		host = "Host",
 		match_found = "Match Found",
+		party_invite = "Party Invite",
 		accept = "Accept",
 		reject = "Reject",
 		enter_battle_password = "Enter Battle Password",

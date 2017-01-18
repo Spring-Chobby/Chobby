@@ -523,9 +523,12 @@ function Interface:InviteToParty(userName)
 	return self
 end
 
-function Interface:LeaveParty(partyID)
+function Interface:LeaveParty()
+	if not self.myPartyID then
+		return
+	end
 	local sendData = {
-		PartyID = partyID
+		PartyID = self.myPartyID
 	}
 	self:_SendCommand("LeaveParty " .. json.encode(sendData))
 	return self

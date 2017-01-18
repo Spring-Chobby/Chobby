@@ -336,7 +336,7 @@ function Lobby:InviteToParty(userName)
 	return self
 end
 
-function Lobby:LeaveParty(partyID)
+function Lobby:LeaveParty()
 	return self
 end
 
