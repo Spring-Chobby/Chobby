@@ -101,7 +101,7 @@ local settings = {
 		settings = {
 			{
 				name = "DisplayMode",
-				humanName = "Display",
+				humanName = "Game Display Mode",
 				displayModeToggle = true,
 			},
 			{
