@@ -85,7 +85,7 @@ local function InitializePartyStatusHandler(name)
 		right = "32%",
 		y = 4,
 		bottom = 4,
-		padding = {0, -1, 0, 0},
+		padding = {1, 1, 1, 1},
 		horizontalScrollbar = false,
 		parent = queuePanel
 	}
