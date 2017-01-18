@@ -43,6 +43,7 @@ function Configuration:init()
 	self.displayBadEngines = false
 	self.doNotSetAnySpringSettings = false
 	self.agressivelySetBorderlessWindowed = false
+	self.useWrongEngine = false
 	
 	self.myAccountID = false
 	self.lastAddedAiName = false

@@ -23,8 +23,12 @@ local requiredResourceCount = 0
 local panelInterface
 
 local function HaveRightEngineVersion()
+	local configuration = WG.Chobby.Configuration
+	if configuration.useWrongEngine then
+		return true
+	end
 	local engineVersion = WG.LibLobby.lobby:GetSuggestedEngineVersion()
-	return (not engineVersion) or WG.Chobby.Configuration:IsValidEngineVersion(engineVersion)
+	return (not engineVersion) or configuration:IsValidEngineVersion(engineVersion)
 end
 
 --------------------------------------------------------------------------------
