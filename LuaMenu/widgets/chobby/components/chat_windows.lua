@@ -237,7 +237,36 @@ function ChatWindows:init()
 		}
 	}
 	self.tabPanel.tabBar:DisableHighlight()
-
+	
+	self.tabBarFudgeHolder = Control:New {
+		name = "fudgeControl",
+		x = 0,
+		y = 0,
+		width = 100,
+		bottom = 0,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		children = {
+			self.tabPanel.tabBar
+		}
+	}
+	
+	self.tabScrollPanel = ScrollPanel:New {
+		x = 0,
+		right = 0,
+		y = 0,
+		bottom = 0,
+		padding = {0,0,0,0},
+		borderColor = {0,0,0,0},
+		backgroundColor = {0,0,0,0},
+		verticalScrollbar = false,
+		parent = window,
+		children = {
+			self.tabBarFudgeHolder
+		}
+	}
+	
 	self.tabBarHolder = Control:New {
 		name = "tabBarHolder",
 		x = 0,
@@ -248,7 +277,7 @@ function ChatWindows:init()
 		draggable = false,
 		padding = {0, 10, 0, 0},
 		children = {
-			self.tabPanel.tabBar
+			self.tabScrollPanel
 		}
 	}
 
@@ -257,7 +286,7 @@ function ChatWindows:init()
 		y = 5,
 		width = 30,
 		height = 30,
-		parent = self.tabBarHolder,
+		parent = self.tabScrollPanel,
 		caption = "+",
 		OnClick = {
 			function()
@@ -685,6 +714,7 @@ end
 
 function ChatWindows:UpdateJoinPosition()
 	self.joinButton:SetPos(#self.tabPanel.tabBar.children * 70 + 10)
+	self.tabBarFudgeHolder:SetPos(nil, nil, #self.tabPanel.tabBar.children * 70 + 5)
 end
 
 function ChatWindows:GetChannelConsole(chanName)
