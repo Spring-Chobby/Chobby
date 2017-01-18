@@ -21,7 +21,8 @@ local battleUsers = {}
 local tooltipUsers = {}
 local singleplayerUsers = {}
 local channelUsers = {}
-local teamUsers = {}
+local partyUsers = {}
+local popupUsers = {}
 local statusUsers = {}
 local friendUsers = {}
 local friendRequestUsers = {}
@@ -32,7 +33,8 @@ local userListList = {
 	tooltipUsers,
 	singleplayerUsers,
 	channelUsers,
-	teamUsers,
+	partyUsers,
+	popupUsers,
 	statusUsers,
 	friendUsers,
 	friendRequestUsers,
@@ -744,8 +746,13 @@ function userHandler.GetChannelUser(userName)
 	})
 end
 
-function userHandler.GetTeamUser(userName)
-	return _GetUser(teamUsers, userName, {
+function userHandler.GetPartyUser(userName)
+	return _GetUser(partyUsers, userName, {
+	})
+end
+
+function userHandler.GetPopupUser(userName)
+	return _GetUser(popupUsers, userName, {
 	})
 end
 
