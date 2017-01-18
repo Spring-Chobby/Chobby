@@ -1151,9 +1151,9 @@ function Interface:_OnPartyStatus(data)
 	local nowInParty = false
 	
 	-- Update user partyID
-	if partyMap[partyID] then
-		for i = 1, #partyMap[partyID] do
-			local userName = partyMap[partyID][i]
+	if self.partyMap[partyID] then
+		for i = 1, #self.partyMap[partyID] do
+			local userName = self.partyMap[partyID][i]
 			-- Consider using self:TryGetUser(userName)
 			if self.users[userName] then
 				self.users[userName].partyID = nil
@@ -1179,19 +1179,19 @@ function Interface:_OnPartyStatus(data)
 	
 	-- Leave party even, before party is destroyed
 	if wasInParty and not nowInParty then
-		self:_OnPartyLeft(partyID, partyMap[partyID])
+		self:_OnPartyLeft(partyID, self.partyMap[partyID])
 	end
 	
-	-- Update partyMap and make non-personal event
+	-- Update self.partyMap and make non-personal event
 	if #partyUsers == 0 then
-		if partyMap[partyID] then
-			self:_OnPartyDestroy(partyID, partyMap[partyID])
-			partyMap[partyID] = nil
+		if self.partyMap[partyID] then
+			self:_OnPartyDestroy(partyID, self.partyMap[partyID])
+			self.partyMap[partyID] = nil
 		end
 		return
 	end
-	partyMap[partyID] = partyUsers
-	if partyMap[partyID] then
+	self.partyMap[partyID] = partyUsers
+	if self.partyMap[partyID] then
 		self:_OnPartyUpdate(partyID, partyUsers)
 	else
 		self:_OnPartyCreate(partyID, partyUsers)

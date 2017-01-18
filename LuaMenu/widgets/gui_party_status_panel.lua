@@ -36,17 +36,15 @@ end
 --------------------------------------------------------------------------------
 -- Initialization
 
-local function InitializePartyStatusHandler(name, ControlType, parent, pos)
+local function InitializePartyStatusHandler(name)
 	local lobby = WG.LibLobby.lobby
-
-	ControlType = ControlType or Panel
 	
-	local queuePanel = ControlType:New {
+	local queuePanel = Panel:New {
 		name = name,
-		x = (pos and pos.x) or ((not pos) and 0),
-		y = (pos and pos.y) or ((not pos) and 0),
-		right = (pos and pos.right) or ((not pos) and 0),
-		bottom = (pos and pos.bottom) or ((not pos) and 0),
+		x = 8,
+		y = 0,
+		right = 0,
+		bottom = 0,
 		width = pos and pos.width,
 		height = pos and pos.height,
 		padding = {0,0,0,0},
@@ -56,14 +54,22 @@ local function InitializePartyStatusHandler(name, ControlType, parent, pos)
 		parent = parent
 	}
 	
+	local partyTitle = TextBox:New {
+		x = "73%",
+		y = 12,
+		fontsize = WG.Chobby.Configuration:GetFont(3).size,
+		text = i18n("party"),
+		parent = queuePanel
+	}
+	
 	local button = Button:New {
-		name = "cancel",
-		x = 4,
-		right = "70%",
+		name = "leaveParty",
+		x = "70%",
 		y = 4,
+		right = 4,
 		bottom = 4,
 		padding = {0,0,0,0},
-		caption = "Leave",
+		caption = i18n("leave"),
 		font = WG.Chobby.Configuration:GetFont(3),
 		classname = "negative_button",
 		OnClick = {
@@ -74,84 +80,39 @@ local function InitializePartyStatusHandler(name, ControlType, parent, pos)
 		parent = queuePanel,
 	}
 	
-	local rightBound = "33%"
-	local bottomBound = 12
-	local queueText = nil
-	local bigMode = true
-	local queueTimer = Spring.GetTimer()
-	
-	local timeWaiting = 0
-	local queueString = ""
-	local playersString = ""
-	
-	local queueStatusText = TextBox:New {
-		x = 8,
-		y = 12,
-		right = rightBound,
-		bottom = bottomBound,
-		fontsize = WG.Chobby.Configuration:GetFont(2).size,
-		text = "",
+	local listPanel = ScrollPanel:New {
+		x = 4,
+		right = "32%",
+		y = 4,
+		bottom = 4,
+		horizontalScrollbar = false,
 		parent = queuePanel
 	}
 	
-	local function UpdateTimer(forceUpdate)
-		if not queueTimer then
-			return
-		end
-		local newTimeWaiting = math.floor(Spring.DiffTimers(Spring.GetTimer(),queueTimer))
-		if (not forceUpdate) and timeWaiting == newTimeWaiting then
-			return
-		end
-		timeWaiting = newTimeWaiting
-		queueStatusText:SetText(queueText .. ((bigMode and  "\nTime Waiting: ") or ", Wait: ") .. SecondsToMinutes(timeWaiting))
-	end
-		
-	local function UpdateQueueText()
-		queueText = ((bigMode and "Searching: ") or "Search: ") .. queueString .. ((bigMode and  "\nPlayers: ") or "\nPlay: ") .. playersString
-		UpdateTimer(true)
-	end
-	
 	local function Resize(obj, xSize, ySize)
-		queueStatusText._relativeBounds.right = rightBound
-		queueStatusText._relativeBounds.bottom = bottomBound
-		queueStatusText:UpdateClientArea()
 		if ySize < 60 then
-			queueStatusText:SetPos(6, 2)
-			bigMode = false
+			button._relativeBounds.top = 4
 		else
-			queueStatusText:SetPos(8, 13)
-			bigMode = true
+			button._relativeBounds.top = 38
 		end
-		UpdateQueueText()
+		partyTitle:SetVisibility(ySize >= 60)
+		button:UpdateClientArea()
 	end
 	
 	queuePanel.OnResize = {Resize}
 	
 	local externalFunctions = {}
 	
-	function externalFunctions.ResetTimer()
-		queueTimer = Spring.GetTimer()
-	end
-	
-	function externalFunctions.UpdateTimer(forceUpdate)
-		UpdateTimer(forceUpdate)
-	end
-	
-	function externalFunctions.UpdateMatches(joinedQueueList, queueCounts, currentEloWidth, joinedTime)
-		local firstQueue = true
-		playersString = ""
-		queueString = ""
-		for i = 1, #joinedQueueList do
-			if not firstQueue then
-				queueString = queueString .. ", "
-				playersString = playersString .. ", "
+	function externalFunctions.UpdateParty(partyUsers)
+		listPanel:ClearChildren()
+		for i = 1, #partyUsers do
+			local userName = partyUsers[i]
+			if userName ~= lobby:GetMyUserName() then
+				local userControl = WG.UserHandler.GetPartyUser(userName)
+				listPanel:AddChild(userControl)
+				userControl:SetPos(nil, (i - 1)*22)
 			end
-			playersString = playersString .. ((queueCounts and queueCounts[joinedQueueList[i]]) or 0)
-			firstQueue = false
-			queueString = queueString .. joinedQueueList[i] 
 		end
-		
-		UpdateQueueText()
 	end
 	
 	function externalFunctions.GetHolder()
@@ -167,11 +128,6 @@ end
 
 local function CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, DestroyFunc)
 	local Configuration = WG.Chobby.Configuration
-	
-	-- testing
-	--for i = 2, 11 do
-	--	partyUsers[i] = partyUsers[1]
-	--end
 	
 	local MAX_USERS = 10
 	local USER_SPACE = 22
@@ -211,26 +167,23 @@ local function CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, De
 	}
 	
 	for i = 1, #partyUsers do
-		local userControl = WG.UserHandler.GetNotificationUser(partyUsers[i])
+		local userControl = WG.UserHandler.GetPopupUser(partyUsers[i])
 		listPanel:AddChild(userControl)
 		userControl:SetPos(1, 1 + (i - 1)*USER_SPACE)
 		userControl._relativeBounds.right = 1
 		userControl:UpdateClientArea(false)
 	end
 	
-	-- Status label is unused but might be useful later.
-	local statusLabel = TextBox:New {
-		x = 160,
-		right = 0,
-		y = 15,
-		height = 35,
-		text = "",
-		fontsize = Configuration:GetFont(4).size,
-		parent = partyInviteWindow,
-	}
-
-	local acceptRegistered = false
-	local rejectedMatch = false
+	--local statusLabel = TextBox:New {
+	--	x = 160,
+	--	right = 0,
+	--	y = 15,
+	--	height = 35,
+	--	text = "",
+	--	fontsize = Configuration:GetFont(4).size,
+	--	parent = partyInviteWindow,
+	--}
+	
 	local startTimer = Spring.GetTimer()
 	local timeRemaining = secondsRemaining
 	
@@ -250,6 +203,10 @@ local function CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, De
 	local function AcceptFunc()
 		lobby:PartyInviteResponse(partyID, true)
 		WG.Delay(DoDispose, 0.1)
+		
+		-- Hack for testing until parties work.
+		--partyUsers[#partyUsers + 1] = lobby:GetMyUserName() -- Adding to table is highly dangerous
+		--lobby:_OnPartyStatus({PartyID = partyID, UserNames = partyUsers})
 	end
 
 	local buttonAccept = Button:New {
@@ -305,29 +262,6 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Disable matchmaker while loading
-local savedQueues
-
-local function SaveQueues()
-	local lobby = WG.LibLobby.lobby
-	savedQueues = lobby:GetJoinedQueues()
-	lobby:LeaveMatchMakingAll()
-end
-
-function widget:ActivateGame()
-	if not savedQueues then
-		return
-	end
-	
-	for queueName, _ in pairs(savedQueues) do
-		WG.LibLobby.lobby:JoinMatchMaking(queueName)
-	end
-	
-	savedQueues = nil
-end
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
 -- External functions
 
 local PartyStatusPanel = {}
@@ -361,7 +295,7 @@ function DelayedInitialize()
 	
 	local function OnPartyUpdate(_, partyID, partyUsers)
 		if partyID == lobby:GetMyPartyID() then
-			OnPartyJoined(partyID, partyUsers)
+			OnPartyJoined(_, _, partyUsers)
 		end
 	end
 	
