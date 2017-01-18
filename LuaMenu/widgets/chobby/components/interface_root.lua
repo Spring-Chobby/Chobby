@@ -359,8 +359,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-----------------------------------
 	-- Background holder is put here to be at the back
 	-----------------------------------
-	local backgroundHolder = Background()
-	local ingameBackgroundHolder = Background(IMAGE_TOP_BACKGROUND, {0, 0, 0, 0.5})
+	local backgroundHolder = Background(nil, nil, nil, "menuBackgroundBrightness")
+	local ingameBackgroundHolder = Background(IMAGE_TOP_BACKGROUND, {0, 0, 0, 0.5}, nil, "gameOverlayOpacity")
 	ingameBackgroundHolder:Disable()
 	
 	-------------------------------------------------------------------

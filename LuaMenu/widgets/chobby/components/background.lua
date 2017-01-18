@@ -1,26 +1,31 @@
 Background = LCS.class{}
 
-function Background:init(imageOverride, colorOverride, backgroundFocus)
+function Background:init(imageOverride, colorOverride, backgroundFocus, alphaSettingName, alphaSettingInvert)
 	self.colorOverride = colorOverride
 	if imageOverride then
 		self.imageOverride = imageOverride
 		self.backgroundFocus = backgroundFocus
-		self:Enable()
-	else
-		self:Enable()
-		local function onConfigurationChange(listener, key, value)
-			if key == "gameConfigName" then
-				local file = Configuration.gameConfig.background.image
-				self.backgroundImage.file = file
-				self.backgroundFocus = Configuration.gameConfig.background.backgroundFocus
-				local texInfo = gl.TextureInfo(file)
-				self.width, self.height = texInfo.xsize, texInfo.ysize
-				self.backgroundControl:Invalidate()
-				self:Resize()
-			end
+	end
+	self:Enable()
+	
+	local function onConfigurationChange(listener, key, value)
+		if (not imageOverride) and key == "gameConfigName" then
+			local file = Configuration.gameConfig.background.image
+			self.backgroundImage.file = file
+			self.backgroundFocus = Configuration.gameConfig.background.backgroundFocus
+			local texInfo = gl.TextureInfo(file)
+			self.width, self.height = texInfo.xsize, texInfo.ysize
+			self.backgroundControl:Invalidate()
+			self:Resize()
 		end
-		Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
-	end		
+		if key == alphaSettingName then
+			if alphaSettingInvert then
+				value = 1 - value
+			end
+			self:SetAlpha(value)
+		end
+	end
+	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 end
 
 function Background:SetAlpha(newAlpha)
