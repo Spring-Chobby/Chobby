@@ -168,20 +168,30 @@ end
 local function CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, DestroyFunc)
 	local Configuration = WG.Chobby.Configuration
 	
+	-- testing
+	--for i = 2, 11 do
+	--	partyUsers[i] = partyUsers[1]
+	--end
+	
+	local MAX_USERS = 10
+	local USER_SPACE = 22
+	local BASE_HEIGHT = 175
+	local userHeight = math.max(60, USER_SPACE*math.min(#partyUsers, MAX_USERS))
+	
 	local partyInviteWindow = Window:New {
 		caption = "",
 		name = "partyInviteWindow",
 		parent = screen0,
 		width = 310,
-		height = 310,
+		height = BASE_HEIGHT + userHeight,
 		resizable = false,
 		draggable = false,
 		classname = "overlay_window",
 	}
-
+	
 	local titleText = i18n("party_invite")
 	local title = Label:New {
-		x = 30,
+		x = 20,
 		right = 0,
 		y = 15,
 		height = 35,
@@ -190,6 +200,24 @@ local function CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, De
 		parent = partyInviteWindow,
 	}
 
+	local listPanel = ScrollPanel:New {
+		x = 10,
+		right = 10,
+		y = 60,
+		bottom = 80,
+		borderColor = (#partyUsers <= MAX_USERS and {0,0,0,0}) or nil,
+		horizontalScrollbar = false,
+		parent = partyInviteWindow
+	}
+	
+	for i = 1, #partyUsers do
+		local userControl = WG.UserHandler.GetNotificationUser(partyUsers[i])
+		listPanel:AddChild(userControl)
+		userControl:SetPos(1, 1 + (i - 1)*USER_SPACE)
+		userControl._relativeBounds.right = 1
+		userControl:UpdateClientArea(false)
+	end
+	
 	-- Status label is unused but might be useful later.
 	local statusLabel = TextBox:New {
 		x = 160,
