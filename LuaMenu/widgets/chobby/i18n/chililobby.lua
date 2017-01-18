@@ -43,6 +43,7 @@ return {
 		host = "Host",
 		match_found = "Match Found",
 		party_invite = "Party Invite",
+		party = "Party",
 		accept = "Accept",
 		reject = "Reject",
 		enter_battle_password = "Enter Battle Password",
