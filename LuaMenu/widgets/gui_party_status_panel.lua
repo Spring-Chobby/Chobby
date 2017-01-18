@@ -105,12 +105,14 @@ local function InitializePartyStatusHandler(name)
 	
 	function externalFunctions.UpdateParty(partyUsers)
 		listPanel:ClearChildren()
+		local position = 0
 		for i = 1, #partyUsers do
 			local userName = partyUsers[i]
 			if userName ~= lobby:GetMyUserName() then
 				local userControl = WG.UserHandler.GetPartyUser(userName)
 				listPanel:AddChild(userControl)
-				userControl:SetPos(nil, (i - 1)*22)
+				userControl:SetPos(nil, position*22)
+				position = position + 1
 			end
 		end
 	end
