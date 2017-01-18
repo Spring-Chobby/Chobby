@@ -234,7 +234,7 @@ local function GetLobbyTabControls()
 		valign = "top",
 		align = "left",
 		font = Configuration:GetFont(2),
-		caption = "Display",
+		caption = "Lobby Display Mode",
 	}
 	children[#children + 1] = ComboBox:New {
 		x = COMBO_X,
@@ -270,7 +270,7 @@ local function GetLobbyTabControls()
 		valign = "top",
 		align = "left",
 		font = Configuration:GetFont(2),
-		caption = "Panel mode",
+		caption = "Split Panel Mode",
 	}
 	children[#children + 1] = ComboBox:New {
 		x = COMBO_X,
@@ -289,6 +289,36 @@ local function GetLobbyTabControls()
 				Configuration:SetConfigValue("panel_layout", obj.selected)
 			end
 		},
+	}
+	offset = offset + ITEM_OFFSET
+	
+	children[#children + 1] = Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(2),
+		caption = "Chat Font Size",
+	}
+	children[#children + 1] = Trackbar:New {
+		x = COMBO_X,
+		y = offset,
+		width  = COMBO_WIDTH,
+		height = 30,
+		value  = Configuration.chatFontSize or 16,
+		min    = 12,
+		max    = 20,
+		step   = 1,
+		OnChange = {
+			function(obj, value)
+				if freezeSettings then
+					return
+				end
+				Configuration:SetConfigValue("chatFontSize", value)
+			end
+		}
 	}
 	offset = offset + ITEM_OFFSET
 	
@@ -352,36 +382,6 @@ local function GetLobbyTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 	
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		font = Configuration:GetFont(2),
-		caption = "Chat Font Size",
-	}
-	children[#children + 1] = Trackbar:New {
-		x = COMBO_X,
-		y = offset,
-		width  = COMBO_WIDTH,
-		height = 30,
-		value  = Configuration.chatFontSize or 16,
-		min    = 12,
-		max    = 20,
-		step   = 1,
-		OnChange = {
-			function(obj, value)
-				if freezeSettings then
-					return
-				end
-				Configuration:SetConfigValue("chatFontSize", value)
-			end
-		}
-	}
-	offset = offset + ITEM_OFFSET
-	
 	local autoLogin = Checkbox:New {
 		x = 20,
 		width = CHECK_WIDTH,
@@ -403,6 +403,60 @@ local function GetLobbyTabControls()
 
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("notifyForAllChat"), "notifyForAllChat", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("only_featured_maps"), "onlyShowFeaturedMaps", true)
+	
+	children[#children + 1] = Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(2),
+		caption = "Delete Path Cache",
+	}
+	children[#children + 1] = Button:New {
+		x = COMBO_X,
+		y = offset,
+		width = COMBO_WIDTH,
+		height = 30,
+		caption = "Apply",
+		tooltip = "Deletes path cache. May solve desync.",
+		font = Configuration:GetFont(2),
+		OnClick = {
+			function (obj)
+				if WG.CacheHandler then
+					WG.CacheHandler.DeletePathCache()
+				end
+			end
+		}
+	}
+	offset = offset + ITEM_OFFSET
+	
+	local function onConfigurationChange(listener, key, value)
+		if freezeSettings then
+			return
+		end
+		if key == "autoLogin" then
+			autoLogin:SetToggle(value)
+		end
+	end
+
+	freezeSettings = false
+	
+	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
+	
+	return children
+end
+
+local function GetVoidTabControls()
+	local freezeSettings = true
+
+	local Configuration = WG.Chobby.Configuration
+
+	local offset = 5
+	
+	local children = {}
+
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("debugMode"), "debugMode", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Debug server messages", "activeDebugConsole", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Show channel bots", "displayBots", false)
@@ -434,34 +488,6 @@ local function GetLobbyTabControls()
 			function (obj)
 				WG.Chobby.interfaceRoot.GetChatWindow():ClearHistory()
 				WG.BattleRoomWindow.ClearChatHistory()
-			end
-		}
-	}
-	offset = offset + ITEM_OFFSET
-	
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		font = Configuration:GetFont(2),
-		caption = "Delete Path Cache",
-	}
-	children[#children + 1] = Button:New {
-		x = COMBO_X,
-		y = offset,
-		width = COMBO_WIDTH,
-		height = 30,
-		caption = "Apply",
-		tooltip = "Deletes path cache. May solve desync.",
-		font = Configuration:GetFont(2),
-		OnClick = {
-			function (obj)
-				if WG.CacheHandler then
-					WG.CacheHandler.DeletePathCache()
-				end
 			end
 		}
 	}
@@ -576,19 +602,6 @@ local function GetLobbyTabControls()
 		},
 	}
 	offset = offset + ITEM_OFFSET
-	
-	local function onConfigurationChange(listener, key, value)
-		if freezeSettings then
-			return
-		end
-		if key == "autoLogin" then
-			autoLogin:SetToggle(value)
-		end
-	end
-
-	freezeSettings = false
-	
-	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 	
 	return children
 end
@@ -930,7 +943,15 @@ local function PopulateTab(settingPresets, settingOptions, settingsDefault)
 		children[#children + 1] = list
 	end
 	
-	local listPanel = ScrollPanel:New {
+	return children
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Initialization
+
+local function MakeTab(name, children)
+	local contentsPanel = ScrollPanel:New {
 		x = 5,
 		right = 5,
 		y = 15,
@@ -940,34 +961,19 @@ local function PopulateTab(settingPresets, settingOptions, settingsDefault)
 		children = children
 	}
 	
-	return {listPanel}
+	return {
+		name = name,
+		caption = name,
+		font = WG.Chobby.Configuration:GetFont(3),
+		children = {contentsPanel}
+	}
 end
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
--- Initialization
-
 
 local function InitializeControls(window)
 	window.OnParent = nil
-
-	local lobbySettingsList = ScrollPanel:New {
-		x = 5,
-		right = 5,
-		y = 15,
-		bottom = 8,
-		borderColor = {0,0,0,0},
-		horizontalScrollbar = false,
-		children = GetLobbyTabControls()
-	}
 	
 	local tabs = {
-		{
-			name = "Lobby",
-			caption = "Lobby",
-			font = WG.Chobby.Configuration:GetFont(3),
-			children = {lobbySettingsList}
-		}
+		MakeTab("Lobby", GetLobbyTabControls())
 	}
 	
 	local settingsFile = WG.Chobby.Configuration.gameConfig.settingsConfig
@@ -975,13 +981,10 @@ local function InitializeControls(window)
 	
 	for i = 1, #settingsFile do
 		local data = settingsFile[i]
-		tabs[#tabs + 1] = {
-			name = data.name,
-			caption = data.name,
-			font = WG.Chobby.Configuration:GetFont(3),
-			children = PopulateTab(data.presets, data.settings, settingsDefault)
-		}
+		tabs[#tabs + 1] = MakeTab(data.name, PopulateTab(data.presets, data.settings, settingsDefault))
 	end
+	
+	tabs[#tabs + 1] = MakeTab("Void", GetVoidTabControls())
 	
 	local tabPanel = Chili.DetachableTabPanel:New {
 		x = 5,
