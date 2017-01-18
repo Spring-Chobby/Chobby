@@ -22,7 +22,9 @@ local readyCheckPopup
 local findingMatch = false
 
 local instantStartQueuePriority = {
-	["Teams"] = 2,
+	["4v4"] = 4,
+	["3v3"] = 3,
+	["2v2"] = 2,
 	["1v1"] = 1,
 }
 
@@ -64,7 +66,7 @@ local function InitializeQueueStatusHandler(name, ControlType, parent, pos)
 	
 	local button = Button:New {
 		name = "cancel",
-		x = "68%",
+		x = "70%",
 		right = 4,
 		y = 4,
 		bottom = 4,
@@ -82,13 +84,13 @@ local function InitializeQueueStatusHandler(name, ControlType, parent, pos)
 	
 	local rightBound = "33%"
 	local bottomBound = 12
-	local queueText = nil
 	local bigMode = true
 	local queueTimer = Spring.GetTimer()
 	
 	local timeWaiting = 0
 	local queueString = ""
 	local playersString = ""
+	local timeString = ""
 	
 	local queueStatusText = TextBox:New {
 		x = 8,
@@ -109,11 +111,11 @@ local function InitializeQueueStatusHandler(name, ControlType, parent, pos)
 			return
 		end
 		timeWaiting = newTimeWaiting
-		queueStatusText:SetText(queueText .. ((bigMode and  "\nTime Waiting: ") or ", Wait: ") .. SecondsToMinutes(timeWaiting))
+		timeString = SecondsToMinutes(timeWaiting)
+		queueStatusText:SetText("Finding Match: " .. timeString .. "\n" .. queueString .. ((bigMode and  "\nPlayers: ") or "\nPlay: ") .. playersString)
 	end
 		
 	local function UpdateQueueText()
-		queueText = ((bigMode and "Searching: ") or "Search: ") .. queueString .. ((bigMode and  "\nPlayers: ") or "\nPlay: ") .. playersString
 		UpdateTimer(true)
 	end
 	
