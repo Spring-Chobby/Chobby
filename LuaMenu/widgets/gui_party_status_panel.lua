@@ -58,7 +58,7 @@ local function InitializePartyStatusHandler(name, ControlType, parent, pos)
 	
 	local button = Button:New {
 		name = "cancel",
-		x = 4
+		x = 4,
 		right = "70%",
 		y = 4,
 		bottom = 4,
@@ -179,23 +179,25 @@ local function CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, De
 		classname = "overlay_window",
 	}
 
+	local titleText = i18n("party_invite")
 	local title = Label:New {
-		x = 40,
+		x = 30,
 		right = 0,
 		y = 15,
 		height = 35,
-		caption = i18n("party_invite"),
+		caption = titleText,
 		font = Configuration:GetFont(4),
 		parent = partyInviteWindow,
 	}
 
+	-- Status label is unused but might be useful later.
 	local statusLabel = TextBox:New {
-		x = 15,
-		width = 250,
-		y = 80,
+		x = 160,
+		right = 0,
+		y = 15,
 		height = 35,
 		text = "",
-		fontsize = Configuration:GetFont(3).size,
+		fontsize = Configuration:GetFont(4).size,
 		parent = partyInviteWindow,
 	}
 
@@ -219,6 +221,7 @@ local function CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, De
 
 	local function AcceptFunc()
 		lobby:PartyInviteResponse(partyID, true)
+		WG.Delay(DoDispose, 0.1)
 	end
 
 	local buttonAccept = Button:New {
@@ -266,7 +269,7 @@ local function CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, De
 			return
 		end
 		timeRemaining = newTimeRemaining
-		statusLabel:SetText(SecondsToMinutes(timeRemaining))
+		title:SetCaption(titleText .. " (" .. SecondsToMinutes(timeRemaining) .. ")")
 	end
 	
 	return externalFunctions
@@ -313,7 +316,7 @@ function DelayedInitialize()
 	
 	local displayingParty = false
 	
-	local function OnPartyJoined(_, partyUsers)
+	local function OnPartyJoined(_, _, partyUsers)
 		if not displayingParty then
 			statusAndInvitesPanel.AddControl(partyPanel.GetHolder(), 4)
 		end
@@ -321,14 +324,14 @@ function DelayedInitialize()
 		partyPanel.UpdateParty(partyUsers)
 	end
 	
-	local function OnPartyLeft(_, partyUsers)
+	local function OnPartyLeft(_, _, partyUsers)
 		if displayingParty then
 			statusAndInvitesPanel.RemoveControl(partyPanel.GetHolder().name)
 		end
 		displayingParty = false
 	end
 	
-	local function OnPartyUpdate(partyID, partyUsers)
+	local function OnPartyUpdate(_, partyID, partyUsers)
 		if partyID == lobby:GetMyPartyID() then
 			OnPartyJoined(partyID, partyUsers)
 		end
@@ -338,7 +341,7 @@ function DelayedInitialize()
 		invitePopup = nil
 	end
 	
-	local function OnPartyInviteRecieved(partyID, partyUsers, secondsRemaining)
+	local function OnPartyInviteRecieved(_, partyID, partyUsers, secondsRemaining)
 		if not invitePopup then
 			invitePopup = CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, DestroyInvitePopup)
 		end

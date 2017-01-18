@@ -1140,12 +1140,13 @@ Interface.jsonCommands["AreYouReadyResult"] = Interface._AreYouReadyResult
 -- Party commands
 ------------------------
 
-function Interface:_OnPartyInvite(partyID, partyUsers, timoutSeconds)
-	self:_OnPartyInviteRecieved(partyID, partyUsers, timoutSeconds)
+function Interface:_OnPartyInvite(data)
+	self:_OnPartyInviteRecieved(data.PartyID, data.UserNames, data.TimeoutSeconds)
 end
-Interface.jsonCommands["OnPartyInvite"] = Interface.OnPartyInvite
+Interface.jsonCommands["OnPartyInvite"] = Interface._OnPartyInvite
 
-function Interface:_OnPartyStatus(partyID, partyUsers)
+function Interface:_OnPartyStatus(data)
+	local partyID, partyUsers = data.PartyID, data.UserNames
 	local wasInParty = false
 	local nowInParty = false
 	
