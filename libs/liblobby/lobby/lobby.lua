@@ -1254,6 +1254,23 @@ function Lobby:GetJoinedQueues()
 	return ShallowCopy(self.joinedQueues)
 end
 
+-- parties
+function Lobby:GetUserParty(userName)
+	local userInfo = self.users[userName]
+	return userInfo and userInfo.partyID and self.partyMap[userInfo.partyID]
+end
+
+function Lobby:GetUserPartyID(userName)
+	local userInfo = self.users[userName]
+	return userInfo and userInfo.partyID
+end
+
+function Lobby:GetUsersShareParty(userOne, userTwo)
+	local userInfoOne = self.users[userOne]
+	local userInfoTwo = self.users[userTwo]
+	return userInfoOne and userInfoTwo and userInfoOne.partyID and (userInfoOne.partyID == userInfoTwo.partyID)
+end
+
 -- team
 function Lobby:GetTeam()
 	return self.team

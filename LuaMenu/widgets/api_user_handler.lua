@@ -124,6 +124,9 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 	local myUserName = userControl.lobby:GetMyUserName()
 	local comboOptions = {}
 	
+	local myPartyID = userControl.lobby:GetMyPartyID()
+	local userPartyID = userControl.lobby:GetUserPartyID(userName)
+	
 	local Configuration = WG.Chobby.Configuration
 	
 	if (not userBattleInfo.aiLib) and userName ~= myUserName then
@@ -144,6 +147,19 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 			comboOptions[#comboOptions + 1] = "Unfriend"
 		else
 			comboOptions[#comboOptions + 1] = "Friend"
+		end
+		
+		if not (myPartyID and (myPartyID == userPartyID)) then
+			-- Do not show any party options for people already in my party.
+			if (not myPartyID) and userPartyID then
+				-- Join others party if they have one and I don't.
+				comboOptions[#comboOptions + 1] = "Join Party"
+			else
+				-- Invite user to make a party or join mine. Note that the
+				-- user might be in a party which is not visible to me. In
+				-- this case the command might be the same as join party.
+				comboOptions[#comboOptions + 1] = "Invite to Party"
+			end
 		end
 		
 		if userInfo.accountID and Configuration.gameConfig.link_reportPlayer then
@@ -397,8 +413,9 @@ local function GetUserControls(userName, opts)
 			itemFontSize = Configuration:GetFont(2).size,
 			itemHeight = 30,
 			selected = 0,
-			maxDropDownWidth = 120,
+			maxDropDownWidth = 150,
 			minDropDownHeight = 0,
+			maxDropDownHeight = 300,
 			items = GetUserComboBoxOptions(userName, isInBattle, userControls),
 			OnOpen = {
 				function (obj)
@@ -434,6 +451,8 @@ local function GetUserControls(userName, opts)
 
 							userControls.lobby:FriendRequest(userName)
 						end
+					elseif selectedName == "Join Party" or selectedName == "Invite to Party" then
+						userControls.lobby:InviteToParty(userName)
 					elseif selectedName == "Join Battle" then
 						local userInfo = userControls.lobby:GetUser(userName) or {}
 						if userInfo.battleID then
