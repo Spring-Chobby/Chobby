@@ -288,7 +288,7 @@ function DelayedInitialize()
 		partyPanel.UpdateParty(partyUsers)
 	end
 	
-	local function OnPartyLeft(_, _, partyUsers)
+	local function OnPartyLeft()
 		if displayingParty then
 			statusAndInvitesPanel.RemoveControl(partyPanel.GetHolder().name)
 		end
@@ -315,6 +315,7 @@ function DelayedInitialize()
 	lobby:AddListener("OnPartyJoined", OnPartyJoined)
 	lobby:AddListener("OnPartyLeft", OnPartyLeft)
 	lobby:AddListener("OnPartyUpdate", OnPartyUpdate)
+	lobby:AddListener("OnDisconnected", OnPartyLeft)
 end
 
 function widget:Update(dt)

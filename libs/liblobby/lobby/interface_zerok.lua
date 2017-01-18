@@ -579,8 +579,6 @@ function Interface:_Welcome(data)
 	self.REVERSE_COMPAT = (data.Version == "1.4.9.26")
 	self:_OnConnect(4, data.Engine, 2, 1)
 	self:_OnUserCount(data.UserCount)
-	
-	self:_ClearParties()
 end
 Interface.jsonCommands["Welcome"] = Interface._Welcome
 
@@ -1205,12 +1203,6 @@ function Interface:_OnPartyStatus(data)
 	end
 end
 Interface.jsonCommands["OnPartyStatus"] = Interface._OnPartyStatus
-
-function Interface:_ClearParties()
-	for partyID, _ in pairs(self.partyMap) do
-		self:_OnPartyStatus({PartyID = partyID, UserNames = {}})
-	end
-end
 
 -------------------
 -- Unimplemented --
