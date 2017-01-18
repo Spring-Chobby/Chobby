@@ -559,11 +559,16 @@ function DelayedInitialize()
 		readyCheckPopup.MatchMakingComplete(true)
 	end
 	
+	local function OnDisconnected()
+		OnMatchMakerStatus(false, false)
+	end
+	
 	lobby:AddListener("OnMatchMakerStatus", OnMatchMakerStatus)
 	lobby:AddListener("OnMatchMakerReadyCheck", OnMatchMakerReadyCheck)
 	lobby:AddListener("OnMatchMakerReadyUpdate", OnMatchMakerReadyUpdate)
 	lobby:AddListener("OnMatchMakerReadyResult", OnMatchMakerReadyResult)
 	lobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
+	lobby:AddListener("OnDisconnected", OnDisconnected)
 
 	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", SaveQueues)
 end

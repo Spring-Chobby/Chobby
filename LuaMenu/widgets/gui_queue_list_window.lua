@@ -257,8 +257,10 @@ local function InitializeControls(window)
 			end
 		end
 		
-		for queueName, waitingCount in pairs(queueCounts) do
-			queueHolders[queueName].UpdateQueueInformation(nil, nil, ingameCounts and ingameCounts[queueName], waitingCount)
+		if queueCounts then
+			for queueName, waitingCount in pairs(queueCounts) do
+				queueHolders[queueName].UpdateQueueInformation(nil, nil, ingameCounts and ingameCounts[queueName], waitingCount)
+			end
 		end
 		
 		for name, queueHolder in pairs(queueHolders) do
