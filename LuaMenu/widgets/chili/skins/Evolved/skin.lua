@@ -142,6 +142,7 @@ skin.editbox = {
   TileImageBK = ":cl:panel2_bg.png",
   TileImageFG = ":cl:editbox_border.png",
   tiles       = {1,1,1,1},
+  cursorFramerate = 1, -- Per second
 
   DrawControl = DrawEditBox,
 }

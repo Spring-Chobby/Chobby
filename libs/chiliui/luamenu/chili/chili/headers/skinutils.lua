@@ -461,14 +461,29 @@ function DrawEditBox(obj)
 			local cursorX = font:GetTextWidth(cursorTxt)
 
 			local dt = Spring.DiffTimers(Spring.GetTimer(), obj._interactedTime)
-			local as = math.sin(dt * 8);
-			local ac = math.cos(dt * 8);
-			if (as < 0) then as = 0 end
-			if (ac < 0) then ac = 0 end
-			local alpha = as + ac
-			if (alpha > 1) then alpha = 1 end
-			alpha = 0.8 * alpha
-
+			local alpha
+			if obj.cursorFramerate then
+				if math.floor(dt*obj.cursorFramerate)%2 == 0 then
+					alpha = 0.8
+				else
+					alpha = 0
+				end
+			else
+				local as = math.sin(dt * 8);
+				local ac = math.cos(dt * 8);
+				if (as < 0) then
+					as = 0
+				end
+				if (ac < 0) then
+					ac = 0
+				end
+				local alpha = as + ac
+				if (alpha > 1) then 
+					alpha = 1
+				end
+				alpha = 0.8 * alpha
+			end
+			
 			local cc = obj.cursorColor
 			gl.Color(cc[1], cc[2], cc[3], cc[4] * alpha)
 			gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawCursor, cursorX + clientX - 1, clientY, 3, clientHeight)
