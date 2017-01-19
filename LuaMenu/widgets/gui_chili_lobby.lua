@@ -58,6 +58,7 @@ function widget:ActivateGame()
 end
 
 function widget:Initialize()
+	WG.LimitFps.ForceRedrawPeriod(5) -- High FPS for the first few seconds to shorten the initial white flash.
 	if not WG.LibLobby then
 		Spring.Log("chobby", LOG.ERROR, "Missing liblobby.")
 		widgetHandler:RemoveWidget(widget)

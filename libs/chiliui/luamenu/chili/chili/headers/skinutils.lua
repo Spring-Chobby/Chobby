@@ -477,7 +477,7 @@ function DrawEditBox(obj)
 				if (ac < 0) then
 					ac = 0
 				end
-				local alpha = as + ac
+				alpha = as + ac
 				if (alpha > 1) then 
 					alpha = 1
 				end
