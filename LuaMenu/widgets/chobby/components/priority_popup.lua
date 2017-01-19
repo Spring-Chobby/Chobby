@@ -18,6 +18,8 @@ function PriorityPopup:init(mainWindow, cancelFunction, acceptFunction, parentCo
 		end
 	end
 	
+	WG.LimitFps.ForceRedrawPeriod(1)
+	
 	interfaceRoot.SetGlobalKeyListener(KeyListener)
 	
 	self.background = Control:New {
