@@ -14,12 +14,13 @@ function widget:GetInfo()
 	}
 end
 
-local MAX_FPS = 15
+local MAX_FPS = 5
 local FAST_FPS = 40
 local oldX, oldY
 
 local lastTimer
 local forceRedraw = false
+local constantRedrawSeconds = false
 local fastRedraw = false
 
 --------------------------------------------------------------------------------
@@ -32,9 +33,13 @@ function LimitFps.ForceRedraw()
 	forceRedraw = true
 end
 
+function LimitFps.ForceRedrawPeriod(seconds)
+	constantRedrawSeconds = math.max(seconds, constantRedrawSeconds or 0)
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Callins
+-- Initialization
 
 function widget:Initialize() 
 	lastTimer = Spring.GetTimer();
@@ -42,16 +47,25 @@ function widget:Initialize()
 	WG.LimitFps = LimitFps
 end
 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Allow redraw handling and logic
+
 function widget:AllowDraw()
-	--Spring.Echo("AllowDraw game", Spring.GetGameName())
 	if forceRedraw then
 		forceRedraw = false
 		fastRedraw = false
 		return true
 	end
-	local timer = Spring.GetTimer();
+	local timer = Spring.GetTimer()
 	local diff = Spring.DiffTimers(timer, lastTimer)
-	if (fastRedraw and (diff >= 1/FAST_FPS)) then
+	if constantRedrawSeconds then
+		constantRedrawSeconds = constantRedrawSeconds - diff
+		if constantRedrawSeconds <= 0 then
+			constantRedrawSeconds = false
+		end
+	end
+	if (fastRedraw or constantRedrawSeconds) and (diff >= 1/FAST_FPS) then
 		fastRedraw = false
 		lastTimer = timer
 		return true
@@ -62,7 +76,11 @@ function widget:AllowDraw()
 	return false
 end
 
-function widget:Update()
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Force redraw on input
+
+function widget:Update(dt)
 	local x, y = Spring.GetMouseState()
 	--Spring.Echo("Mouse", x, oldX, y, oldY)
 	if x ~= oldX or y ~= oldY then
