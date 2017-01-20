@@ -146,7 +146,7 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 			end
 		end
 		
-		if not (myPartyID and (myPartyID == userPartyID)) then
+		if (not myPartyID) or myPartyID ~= userPartyID then
 			-- Do not show any party options for people already in my party.
 			if (not myPartyID) and userPartyID then
 				-- Join others party if they have one and I don't.
@@ -221,7 +221,7 @@ local function GetUserStatusImages(userName, isInBattle, userControl)
 	local userInfo = userControl.lobby:GetUser(userName) or {}
 	local images = {}
 	
-	if userInfo.inviationSent then
+	if userInfo.pendingPartyInvite then
 		images[#images + 1] = IMAGE_PARTY_INVITE
 	end
 	
@@ -337,6 +337,16 @@ local function UpdateUserControlStatus(userName, userControls)
 	end
 end
 
+local function UpdateUserComboboxOptions(_, userName)
+	for i = 1, #userListList do
+		local userList = userListList[i]
+		local data = userList[userName]
+		if data then
+			data.mainControl.items = GetUserComboBoxOptions(userName, data.isInBattle, data)
+		end
+	end
+end
+
 local function UpdateUserActivity(listener, userName)
 	for i = 1, #userListList do
 		local userList = userListList[i]
@@ -357,6 +367,21 @@ end
 local function UpdateUserActivityList(listener, userList)
 	for i = 1, #userList do
 		UpdateUserActivity(_, userList[i])
+	end
+end
+
+local function OnPartyUpdate(listener, partyID, partyUsers)
+	if partyID ~= lobby:GetMyPartyID() then
+		return
+	end
+	for i = 1, #partyUsers do
+		UpdateUserComboboxOptions(_, partyUsers[i])
+	end
+end
+
+local function OnPartyLeft(listener, partyID, partyUsers)
+	for i = 1, #partyUsers do
+		UpdateUserComboboxOptions(_, partyUsers[i])
 	end
 end
 
@@ -817,8 +842,12 @@ local function AddListeners()
 	lobby:AddListener("OnAddIgnoreUser", UpdateUserActivity)
 	lobby:AddListener("OnRemoveIgnoreUser", UpdateUserActivity)
 	
-	lobby:AddListener("OnPartyInvitationSent", UpdateUserActivity)
-	lobby:AddListener("OnPartyInvitationResponse", UpdateUserActivity)
+	lobby:AddListener("OnPartyInviteSent", UpdateUserActivity)
+	lobby:AddListener("OnPartyInviteResponse", UpdateUserActivity)
+	
+	lobby:AddListener("OnPartyCreate", OnPartyUpdate)
+	lobby:AddListener("OnPartyUpdate", OnPartyUpdate)
+	lobby:AddListener("OnPartyLeft", OnPartyLeft)
 	
 	lobby:AddListener("OnAddUser", UpdateUserActivity)
 	lobby:AddListener("OnRemoveUser", UpdateUserActivity)
