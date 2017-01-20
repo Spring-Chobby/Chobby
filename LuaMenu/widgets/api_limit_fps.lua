@@ -94,6 +94,11 @@ function widget:MousePress()
 	return false
 end
 
+function widget:MouseWheel()
+	forceRedraw = true
+	return false
+end
+
 function widget:KeyPress()
 	forceRedraw = true
 	return false
