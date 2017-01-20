@@ -144,12 +144,6 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 				end
 			end
 		end
-
-		if userInfo.isFriend then
-			comboOptions[#comboOptions + 1] = "Unfriend"
-		else
-			comboOptions[#comboOptions + 1] = "Friend"
-		end
 		
 		if not (myPartyID and (myPartyID == userPartyID)) then
 			-- Do not show any party options for people already in my party.
@@ -164,18 +158,29 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 			end
 		end
 		
+		if userInfo.accountID and Configuration.gameConfig.link_userPage then
+			comboOptions[#comboOptions + 1] = "User Page"
+		end
+		
 		if userInfo.accountID and Configuration.gameConfig.link_reportPlayer then
 			comboOptions[#comboOptions + 1] = "Report"
 		end
 		
 		if userInfo.isIgnored then
 			comboOptions[#comboOptions + 1] = "Unignore"
-		else
+		elseif not userInfo.isAdmin then
 			comboOptions[#comboOptions + 1] = "Ignore"
+		end
+		
+		if userInfo.isFriend then
+			comboOptions[#comboOptions + 1] = "Unfriend"
+		else
+			comboOptions[#comboOptions + 1] = "Friend"
 		end
 	end
 
-	if userInfo.accountID and Configuration.gameConfig.link_userPage then
+	if userName == myUserName and userInfo.accountID and Configuration.gameConfig.link_userPage then
+		-- Only add for myself since the same thing is added in the previous block
 		comboOptions[#comboOptions + 1] = "User Page"
 	end
 	
