@@ -18,7 +18,7 @@ local currentlyAway = false
 --------------------------------------------------------------------------
 
 local inputTime = Spring.GetTimer()
-local AWAY_TIME = 3 -- Seconds?
+local AWAY_TIME = 240 -- Seconds?
 
 local function SetNotAway()
 	inputTime = Spring.GetTimer()
