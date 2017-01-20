@@ -296,7 +296,7 @@ local function UpdateUserControlStatus(userName, userControls)
 	local statusImageOffset = userControls.nameStartY + userControls.nameActualLength + 3
 	if userControls.maxNameLength then
 		if statusImageOffset + 21*(#imageFiles) > userControls.maxNameLength then
-			statusImageOffset = statusImageOffset - 21*(#imageFiles)
+			statusImageOffset = userControls.maxNameLength - 21*(#imageFiles)
 		end
 		
 		local nameSpace = userControls.maxNameLength - userControls.nameStartY - (userControls.maxNameLength - statusImageOffset)
