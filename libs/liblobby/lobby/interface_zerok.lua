@@ -516,6 +516,25 @@ end
 ------------------------
 
 function Interface:InviteToParty(userName)
+	self:_OnPartyInviteSent(userName) -- Notify widgets that lobby sent an invitation.
+	
+	local function InviteRejectCheck()
+		local myParty = self:GetMyParty()
+		if not myParty then
+			self:_OnPartyInviteResponse(userName, false)
+			return
+		end
+		for i = 1, #myParty do
+			if myParty[i] == userName then
+				return
+			end
+		end
+		
+		self:_OnPartyInviteResponse(userName, false)
+	end
+	
+	WG.Delay(InviteRejectCheck, 65)
+	
 	local sendData = {
 		UserName = userName
 	}
@@ -1189,6 +1208,16 @@ function Interface:_OnPartyStatus(data)
 		self:_OnPartyUpdate(partyID, partyUsers)
 	else
 		self:_OnPartyCreate(partyID, partyUsers)
+	end
+	
+	-- Update party invite response
+	if self.myPartyID == partyID then
+		for i = 1, #partyUsers do
+			local userName = partyUsers[i]
+			if self.users[userName] and self.users[userName].pendingPartyInvite then
+				self:_OnPartyInviteResponse(userName, true)
+			end
+		end
 	end
 	
 	-- Join party even, after party is created

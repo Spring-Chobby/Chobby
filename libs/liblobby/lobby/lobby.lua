@@ -1022,6 +1022,18 @@ function Lobby:_OnPartyDestroy(partyID, partyUsers)
 	self:_CallListeners("OnPartyDestroy", partyID, partyUsers)
 end
 
+function Lobby:_OnPartyInviteSent(userName) -- Invite sent to another user
+	local userInfo = self:TryGetUser(userName)
+	userInfo.pendingPartyInvite = true
+	self:_CallListeners("OnPartyInviteSent", userName)
+end
+
+function Lobby:_OnPartyInviteResponse(userName, accepted) -- Invite response recieved from another user
+	local userInfo = self:TryGetUser(userName)
+	userInfo.pendingPartyInvite = false
+	self:_CallListeners("OnPartyInviteResponse", userName, accepted)
+end
+
 ------------------------
 -- Team commands
 ------------------------
