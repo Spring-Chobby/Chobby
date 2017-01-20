@@ -664,6 +664,8 @@ local function GetVoidTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 	
+	freezeSettings = false
+	
 	return children
 end
 
