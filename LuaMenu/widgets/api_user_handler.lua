@@ -46,6 +46,7 @@ local IMAGE_DIR          = LUA_DIRNAME .. "images/"
 local IMAGE_AFK          = IMAGE_DIR .. "away.png"
 local IMAGE_BATTLE       = IMAGE_DIR .. "battle.png"
 local IMAGE_INGAME       = IMAGE_DIR .. "ingame.png"
+local IMAGE_PARTY_INVITE = IMAGE_DIR .. "partyInvite.png"
 local IMAGE_FLAG_UNKNOWN = IMAGE_DIR .. "flags/unknown.png"
 local IMAGE_AUTOHOST     = IMAGE_DIR .. "ranks/robot.png"
 local IMAGE_MODERATOR    = IMAGE_DIR .. "ranks/moderator.png"
@@ -218,15 +219,25 @@ end
 
 local function GetUserStatusImages(userName, isInBattle, userControl)
 	local userInfo = userControl.lobby:GetUser(userName) or {}
+	local images = {}
+	
+	if userInfo.inviationSent then
+		images[#images + 1] = IMAGE_PARTY_INVITE
+	end
+	
 	if userInfo.isInGame or (userInfo.battleID and not isInBattle) then
 		if userInfo.isInGame then
-			return IMAGE_INGAME, (userInfo.isAway and IMAGE_AFK)
+			images[#images + 1] = IMAGE_INGAME
 		else
-			return IMAGE_BATTLE, (userInfo.isAway and IMAGE_AFK)
+			images[#images + 1] = IMAGE_BATTLE
 		end
-	elseif userInfo.isAway then
-		return IMAGE_AFK
 	end
+	
+	if userInfo.isAway then
+		images[#images + 1] = IMAGE_AFK
+	end
+	
+	return images
 end
 
 local function GetUserNameColor(userName, userControl)
@@ -275,39 +286,54 @@ local function UpdateUserControlStatus(userName, userControls)
 		userControls.lblStatusLarge.font.color = fontColor
 		userControls.lblStatusLarge:SetCaption(i18n(status .. "_status"))
 		return
-	elseif not userControls.imStatusFirst then
+	elseif not userControls.statusImages then
 		return
 	end
 	
-	local status1, status2 = GetUserStatusImages(userName, userControls.isInBattle, userControls)
-	userControls.imStatusFirst.file = status1
-	userControls.imStatusSecond.file = status2
-	userControls.imStatusFirst:Invalidate()
-	userControls.imStatusSecond:Invalidate()
+	local imageFiles = GetUserStatusImages(userName, userControls.isInBattle, userControls)
+	local imageControlCount = math.max(#userControls.statusImages, #imageFiles)
 	
-	if not userControls.maxNameLength then
-		return
+	local statusImageOffset = userControls.nameStartY + userControls.nameActualLength + 3
+	if userControls.maxNameLength then
+		if statusImageOffset + 21*(#imageFiles) > userControls.maxNameLength then
+			statusImageOffset = statusImageOffset - 21*(#imageFiles)
+		end
+		
+		local nameSpace = userControls.maxNameLength - userControls.nameStartY - (userControls.maxNameLength - statusImageOffset)
+		local truncatedName = StringUtilities.TruncateStringIfRequiredAndDotDot(userName, userControls.tbName.font, nameSpace)
+		
+		if truncatedName then
+			userControls.tbName:SetText(truncatedName)
+			userControls.nameTruncated = true
+		elseif userControls.nameTruncated then
+			userControls.tbName:SetText(userName)
+			userControls.nameTruncated = false
+		end
 	end
-	local statusFirstPos = userControls.nameStartY + userControls.nameActualLength + 3
-	local statusSecondPos = userControls.nameStartY + userControls.nameActualLength + 24
-	if status2 and userControls.nameStartY + userControls.nameActualLength + 42 > userControls.maxNameLength then
-		statusFirstPos = userControls.maxNameLength - 42
-		statusSecondPos = userControls.maxNameLength - 21
-	elseif status1 and userControls.nameStartY + userControls.nameActualLength + 21 > userControls.maxNameLength then
-		statusFirstPos = userControls.maxNameLength - 21
-	end
 	
-	userControls.imStatusFirst:SetPos(statusFirstPos)
-	userControls.imStatusSecond:SetPos(statusSecondPos)
-	
-	local nameSpace = userControls.maxNameLength - userControls.nameStartY - (userControls.maxNameLength - statusFirstPos)
-	local truncatedName = StringUtilities.TruncateStringIfRequiredAndDotDot(userName, userControls.tbName.font, nameSpace)
-	if truncatedName then
-		userControls.tbName:SetText(truncatedName)
-		userControls.nameTruncated = true
-	elseif userControls.nameTruncated then
-		userControls.tbName:SetText(userName)
-		userControls.nameTruncated = false
+	for i = 1, imageControlCount do
+		if not userControls.statusImages[i] then
+			userControls.statusImages[i] = Image:New {
+				name = "statusImage" .. i,
+				x = statusImageOffset,
+				y = 1,
+				width = 19,
+				height = 19,
+				parent = userControls.mainControl,
+				keepAspect = true,
+				image = imageFiles[i]
+			}
+		end
+		
+		if imageFiles[i] then
+			userControls.statusImages[i]:SetVisibility(true)
+			userControls.statusImages[i].file = imageFiles[i]
+			userControls.statusImages[i]:Invalidate()
+			userControls.statusImages[i]:SetPos(statusImageOffset)
+		else
+			userControls.statusImages[i]:SetVisibility(false)
+		end
+		statusImageOffset = statusImageOffset + 21
 	end
 end
 
@@ -586,33 +612,7 @@ local function GetUserControls(userName, opts)
 
 	if not hideStatus then
 		if not large then
-			local status1, status2 = GetUserStatusImages(userName, isInBattle, userControls)
-			offset = offset + 3
-			userControls.imStatusFirst = Image:New {
-				name = "imStatusFirst",
-				x = offset,
-				y = offsetY + 1,
-				width = 19,
-				height = 19,
-				parent = userControls.mainControl,
-				keepAspect = true,
-				file = status1,
-			}
-			offset = offset + 20
-
-			offset = offset + 1
-			userControls.imStatusSecond = Image:New {
-				name = "imStatusSecond",
-				x = offset,
-				y = offsetY + 1,
-				width = 19,
-				height = 19,
-				parent = userControls.mainControl,
-				keepAspect = true,
-				file = status2,
-			}
-			offset = offset + 20
-			
+			userControls.statusImages = {}
 			UpdateUserControlStatus(userName, userControls)
 		else
 			offsetY = offsetY + 35
@@ -654,19 +654,18 @@ local function GetUserControls(userName, opts)
 			userControls.tbName:SetText(truncatedName)
 
 			offset = userNameStart + userControls.tbName.font:GetTextWidth(userControls.tbName.text) + 3
-			if userControls.imStatusFirst then
-				userControls.imStatusFirst:SetPos(offset)
-				offset = offset + 21
-			end
-			if userControls.imStatusSecond then
-				userControls.imStatusSecond:SetPos(offset)
+			if userControls.statusImages then
+				for i = 1, #userControls.statusImages do
+					userControls.statusImages[i]:SetPos(offset)
+					offset = offset + 21
+				end
 			end
 		end
 	end
-
+	
 	-- This is always checked against main lobby.
 	userControls.needReinitialization = lobby.status ~= "connected"
-
+	
 	return userControls
 end
 
@@ -817,6 +816,9 @@ local function AddListeners()
 	lobby:AddListener("OnUnfriend", UpdateUserActivity)
 	lobby:AddListener("OnAddIgnoreUser", UpdateUserActivity)
 	lobby:AddListener("OnRemoveIgnoreUser", UpdateUserActivity)
+	
+	lobby:AddListener("OnPartyInvitationSent", UpdateUserActivity)
+	lobby:AddListener("OnPartyInvitationResponse", UpdateUserActivity)
 	
 	lobby:AddListener("OnAddUser", UpdateUserActivity)
 	lobby:AddListener("OnRemoveUser", UpdateUserActivity)
