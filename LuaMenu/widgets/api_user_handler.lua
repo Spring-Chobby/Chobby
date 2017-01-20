@@ -240,6 +240,10 @@ local function GetUserNameColor(userName, userControl)
 			return WG.Chobby.Configuration:GetFounderColor()
 		end
 	end
+	if userInfo.isIgnored then
+		return WG.Chobby.Configuration:GetIgnoredUserNameColor()
+	end
+	return WG.Chobby.Configuration:GetUserNameColor()
 end
 
 -- gets status name, image and color
@@ -313,14 +317,12 @@ local function UpdateUserActivity(listener, userName)
 		local data = userList[userName]
 		if data then
 			data.mainControl.items = GetUserComboBoxOptions(userName, data.isInBattle, data)
-
 			data.imLevel.file = GetUserRankImageName(userName, data, data.imLevel.file)
 			data.imLevel:Invalidate()
-
-			if data.showFounder then
-				data.tbName.font.color = GetUserNameColor(userName, data) or WG.Chobby.Configuration:GetUserNameColor()
-				data.tbName:Invalidate()
-			end
+			
+			data.tbName.font.color = GetUserNameColor(userName, data)
+			data.tbName:Invalidate()
+			
 			UpdateUserControlStatus(userName, data)
 		end
 	end
