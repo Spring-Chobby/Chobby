@@ -267,9 +267,9 @@ function Console:AddMessage(message, userName, dateOverride, color, thirdPerson)
 		}
 	end
 	
-	onTextClick, textTooltip = WG.BrowserHandler.AddClickableUrls(message, onTextClick or {}, textTooltip or {})
-
 	txt = txt .. message
+	onTextClick, textTooltip = WG.BrowserHandler.AddClickableUrls(txt, onTextClick or {}, textTooltip or {})
+	
 	whiteText = whiteText .. message
 	if self.tbHistory.text == "" then
 		self.tbHistory:SetText(txt, textTooltip, onTextClick)
