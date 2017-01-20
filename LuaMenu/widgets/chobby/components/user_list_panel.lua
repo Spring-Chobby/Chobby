@@ -72,6 +72,10 @@ local function CompareUsers(userName, otherName)
 		return userData.isAdmin
 	end
 	
+	if otherData.isIgnored ~= userData.isIgnored then
+		return otherData.isIgnored
+	end
+	
 	return string.lower(userName) < string.lower(otherName)
 end
 
