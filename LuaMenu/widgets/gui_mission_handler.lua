@@ -201,13 +201,13 @@ local function InitializeControls(parentControl)
 	
 	local missions = LoadMissions()
 	
-	if not missions then
+	if true or not missions then
 		local missingPanel = Panel:New {
 			classname = "overlay_window",
 			x = "10%",
-			y = "45%",
+			y = "44%",
 			right = "10%",
-			bottom = "45%",
+			bottom = "44%",
 			parent = parentControl,
 		}
 		
@@ -215,12 +215,23 @@ local function InitializeControls(parentControl)
 			x = "5%",
 			y = "5%",
 			width = "90%",
-			height = "90%",
+			height = "40%",
 			align = "center",
 			valign = "center",
 			parent = missingPanel,
 			font = Configuration:GetFont(3),
 			caption = "Error Loading Missions",
+		}
+		local missingLabel = Label:New {
+			x = "5%",
+			y = "50%",
+			width = "90%",
+			height = "40%",
+			align = "center",
+			valign = "center",
+			parent = missingPanel,
+			font = Configuration:GetFont(3),
+			caption = "check that your install directory is writable.",
 		}
 		return
 	end
