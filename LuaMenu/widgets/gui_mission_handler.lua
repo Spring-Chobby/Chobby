@@ -201,7 +201,7 @@ local function InitializeControls(parentControl)
 	
 	local missions = LoadMissions()
 	
-	if true or not missions then
+	if not missions then
 		local missingPanel = Panel:New {
 			classname = "overlay_window",
 			x = "10%",
