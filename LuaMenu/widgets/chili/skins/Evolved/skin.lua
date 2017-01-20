@@ -86,6 +86,20 @@ skin.negative_button = {
   DrawControl = DrawButton,
 }
 
+skin.disabled_button = {
+  TileImageBK = ":cl:tech_button_action_bk.png",
+  TileImageFG = ":cl:tech_button_action_fg.png",
+  tiles = {22, 22, 22, 22}, --// tile widths: left,top,right,bottom
+  padding = {10, 10, 10, 10},
+
+  focusColor  = {0.4, 0.4, 0.4, 0.25},
+  
+  backgroundColor = {0.4, 0.4, 0.4, 0.5},
+  borderColor = {1,1,1,0},
+
+  DrawControl = DrawButton,
+}
+
 skin.combobox = {
 	TileImageBK = ":cl:combobox_ctrl.png",
 	TileImageFG = ":cl:combobox_ctrl_fg.png",

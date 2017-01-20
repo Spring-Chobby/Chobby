@@ -1099,13 +1099,7 @@ function Interface:_MatchMakerSetup(data)
 	self.queues = {}
 	for i = 1, #queues do
 		local queue = queues[i]
-		
-		-- Remove when server updates
-		if queue.Game == "zk:stable" then
-			queue.Game = "Zero-K v1.4.9.3"
-		end
-		
-		self:_OnQueueOpened(queue.Name, queue.Description, queue.Maps, queue.MaxpartySize, {queue.Game})
+		self:_OnQueueOpened(queue.Name, queue.Description, queue.Maps, queue.MaxPartySize, {queue.Game})
 	end
 end
 Interface.jsonCommands["MatchMakerSetup"] = Interface._MatchMakerSetup

@@ -929,19 +929,19 @@ end
 -- MatchMaking commands
 ------------------------
 
-function Lobby:_OnQueueOpened(name, description, mapNames, maxPartSize, gameNames)
+function Lobby:_OnQueueOpened(name, description, mapNames, maxPartySize, gameNames)
 	self.queues[name] = {
 		name = name,
 		description = description,
 		mapNames = mapNames,
-		maxPartSize = maxPartSize,
+		maxPartySize = maxPartySize,
 		gameNames = gameNames,
 		playersIngame = 0,
 		playersWaiting = 0,
 	}
 	self.queueCount = self.queueCount + 1
 	
-	self:_CallListeners("OnQueueOpened", name, description, mapNames, maxPartSize, gameNames)
+	self:_CallListeners("OnQueueOpened", name, description, mapNames, maxPartySize, gameNames)
 end
 
 function Lobby:_OnQueueClosed(name)
@@ -1359,6 +1359,11 @@ end
 
 function Lobby:GetMyPartyID()
 	return self.myPartyID
+end
+
+function Lobby:GetMyParty()
+	local userInfo = self.users[self.myUserName]
+	return userInfo and userInfo.partyID and self.partyMap[userInfo.partyID]
 end
 
 function Lobby:GetMyBattleModoptions()

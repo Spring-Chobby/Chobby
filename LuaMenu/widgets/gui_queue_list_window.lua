@@ -35,10 +35,13 @@ end
 --------------------------------------------------------------------------------
 -- Initialization
 
-local function MakeQueueControl(parentControl, queueName, queueDescription, players, waiting)
+local function MakeQueueControl(parentControl, queueName, queueDescription, players, waiting, maxPartySize)
 	local Configuration = WG.Chobby.Configuration
-	
+	local lobby = WG.LibLobby.lobby
 	local btnLeave, btnJoin
+	
+	local currentPartySize = 1
+	local inQueue = false
 	
 	btnJoin = Button:New {
 		x = 0,
@@ -59,7 +62,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 					return
 				end
 			
-				WG.LibLobby.lobby:JoinMatchMaking(queueName)
+				lobby:JoinMatchMaking(queueName)
 				obj:SetVisibility(false)
 				btnLeave:SetVisibility(true)
 			end
@@ -77,7 +80,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		classname = "action_button",
 		OnClick = {
 			function(obj)
-				WG.LibLobby.lobby:LeaveMatchMaking(queueName)
+				lobby:LeaveMatchMaking(queueName)
 				obj:SetVisibility(false)
 				btnJoin:SetVisibility(true)
 			end
@@ -86,8 +89,21 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 	}
 	btnLeave:SetVisibility(false)
 	
+	local labelDisabled = TextBox:New {
+		x = 0,
+		y = 18,
+		width = 120,
+		height = 22,
+		right = 5,
+		align = "bottom",
+		fontsize = Configuration:GetFont(1).size,
+		text = "Party too large",
+		parent = parentControl
+	}
+	labelDisabled:SetVisibility(false)
+	
 	local lblTitle = TextBox:New {
-		x = 90,
+		x = 105,
 		y = 15,
 		width = 120,
 		height = 33,
@@ -132,16 +148,37 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		parent = parentControl
 	}
 	
-	local externalFunctionsAndData = {}
-	
-	externalFunctionsAndData.inQueue = false
-	
-	function externalFunctionsAndData.SetInQueue(inQueue)
-		btnJoin:SetVisibility(not inQueue)
-		btnLeave:SetVisibility(inQueue)
+	local function UpdateButton()
+		if currentPartySize > maxPartySize then
+			btnJoin:SetVisibility(false)
+			btnLeave:SetVisibility(false)
+			labelDisabled:SetVisibility(true)
+		else
+			btnJoin:SetVisibility(not inQueue)
+			btnLeave:SetVisibility(inQueue)
+			labelDisabled:SetVisibility(false)
+		end
 	end
 	
-	function externalFunctionsAndData.UpdateQueueInformation(newName, newDescription, newPlayers, newWaiting)
+	local externalFunctions = {}
+	
+	function externalFunctions.SetInQueue(newInQueue)
+		if newInQueue == inQueue then
+			return
+		end
+		inQueue = newInQueue
+		UpdateButton()
+	end
+	
+	function externalFunctions.UpdateCurrentPartySize(newCurrentPartySize)
+		if newCurrentPartySize == currentPartySize then
+			return
+		end
+		currentPartySize = newCurrentPartySize
+		UpdateButton()
+	end
+	
+	function externalFunctions.UpdateQueueInformation(newName, newDescription, newPlayers, newWaiting, newMaxPartySize)
 		if newName then
 			lblTitle:SetText(newName)
 		end
@@ -156,7 +193,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		end
 	end
 	
-	return externalFunctionsAndData
+	return externalFunctions
 end
 
 local function InitializeControls(window)
@@ -172,7 +209,7 @@ local function InitializeControls(window)
 		y = 16,
 		height = 20,
 		font = Configuration:GetFont(3),
-		caption = "Queues",
+		caption = "Join matchmaking queues",
 		parent = window
 	}
 
@@ -224,10 +261,10 @@ local function InitializeControls(window)
 	
 	local queues = 0
 	local queueHolders = {}
-	local function AddQueue(_, queueName, queueDescription, mapNames)
+	local function AddQueue(_, queueName, queueDescription, mapNames, maxPartySize)
 		local queueData = lobby:GetQueue(queueName) or {}
 		if queueHolders[queueName] then
-			queueHolders[queueName].UpdateQueueInformation(queueName, queueDescription, queueData.playersIngame or "?", queueData.playersWaiting or "?")
+			queueHolders[queueName].UpdateQueueInformation(queueName, queueDescription, queueData.playersIngame or "?", queueData.playersWaiting or "?", maxPartySize)
 			return
 		end
 	
@@ -242,21 +279,23 @@ local function InitializeControls(window)
 			draggable = false,
 			padding = {0, 0, 0, 0},
 		}
-		queueHolders[queueName] = MakeQueueControl(queueHolder, queueName, queueDescription, queueData.playersIngame or "?", queueData.playersWaiting or "?")
+		queueHolders[queueName] = MakeQueueControl(queueHolder, queueName, queueDescription, queueData.playersIngame or "?", queueData.playersWaiting or "?", maxPartySize)
 		queues = queues + 1
 	end
 	
 	local possibleQueues = lobby:GetQueues()
 	for name, data in pairs(possibleQueues) do
-		AddQueue(_, data.name, data.description, data.mapNames)
+		AddQueue(_, data.name, data.description, data.mapNames, data.maxPartySize)
 	end
 	
 	local function UpdateQueueStatus(listener, inMatchMaking, joinedQueueList, queueCounts, ingameCounts, _, _, _, bannedTime)
+		local joinedQueueNames = {}
 		if joinedQueueList then
 			for i = 1, #joinedQueueList do
 				local queueName = joinedQueueList[i]
 				if queueHolders[queueName] then
-					queueHolders[queueName].inQueue = true
+					joinedQueueNames[queueName] = true
+					queueHolder.SetInQueue(true)
 				end
 			end
 		end
@@ -268,8 +307,9 @@ local function InitializeControls(window)
 		end
 		
 		for name, queueHolder in pairs(queueHolders) do
-			queueHolder.SetInQueue(queueHolder.inQueue)
-			queueHolder.inQueue = false
+			if not joinedQueueNames[queueName] then
+				queueHolder.SetInQueue(false)
+			end
 		end
 		
 		if bannedTime then
@@ -279,15 +319,41 @@ local function InitializeControls(window)
 		end
 	end
 	
+	local function OnPartyUpdate(listener, partyID, partyUsers)
+		if lobby:GetMyPartyID() ~= partyID then
+			return
+		end
+		for name, queueHolder in pairs(queueHolders) do
+			queueHolder.UpdateCurrentPartySize(#partyUsers)
+		end
+	end
+		
+	local function OnPartyLeft(listener, partyID, partyUsers)
+		for name, queueHolder in pairs(queueHolders) do
+			queueHolder.UpdateCurrentPartySize(1)
+		end
+	end
+	
+	lobby:AddListener("OnQueueOpened", AddQueue)
+	lobby:AddListener("OnMatchMakerStatus", UpdateQueueStatus)
+	
+	lobby:AddListener("OnPartyCreate", OnPartyUpdate)
+	lobby:AddListener("OnPartyUpdate", OnPartyUpdate)
+	lobby:AddListener("OnPartyDestroy", OnPartyUpdate)
+	lobby:AddListener("OnPartyLeft", OnPartyLeft)
+	
+	-- Initialization
 	if lobby.matchMakerBannedTime then
 		statusText:SetText("You are banned from matchmaking for " .. lobby.matchMakerBannedTime .. " seconds")
 		banStart = Spring.GetTimer()
 		banDuration = lobby.matchMakerBannedTime
 	end
 	
-	lobby:AddListener("OnQueueOpened", AddQueue)
-	lobby:AddListener("OnMatchMakerStatus", UpdateQueueStatus)
+	if lobby:GetMyPartyID() then
+		OnPartyUpdate(_, lobby:GetMyPartyID(), lobby:GetMyParty())
+	end
 	
+	-- External functions
 	local externalFunctions = {}
 		
 	function externalFunctions.UpdateBanTimer()
