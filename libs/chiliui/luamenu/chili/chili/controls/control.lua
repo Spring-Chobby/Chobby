@@ -1496,17 +1496,6 @@ function Control:MouseWheel(x, y, ...)
   return inherited.MouseWheel(self, cx, cy, ...)
 end
 
---[[
-function Control:KeyPress(...)
-  return inherited.KeyPress(self, ...)
-end
-
-
-function Control:TextInput(...)
-  return inherited.TextInput(self, ...)
-end
---]]
-
 
 function Control:FocusUpdate(...)
   self:InvalidateSelf()
