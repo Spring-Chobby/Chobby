@@ -295,7 +295,7 @@ local function InitializeControls(window)
 				local queueName = joinedQueueList[i]
 				if queueHolders[queueName] then
 					joinedQueueNames[queueName] = true
-					queueHolder.SetInQueue(true)
+					queueHolders[queueName].SetInQueue(true)
 				end
 			end
 		end
@@ -306,7 +306,7 @@ local function InitializeControls(window)
 			end
 		end
 		
-		for name, queueHolder in pairs(queueHolders) do
+		for queueName, queueHolder in pairs(queueHolders) do
 			if not joinedQueueNames[queueName] then
 				queueHolder.SetInQueue(false)
 			end

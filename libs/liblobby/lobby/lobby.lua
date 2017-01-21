@@ -42,6 +42,7 @@ function Lobby:_Clean()
 	self.joinedQueueList = {}
 	self.queues = {}
 	self.queueCount = 0
+	self.pendingQueueRequests = 0
 
 	self.partyMap = {}
 	self.myPartyID = nil
@@ -954,6 +955,15 @@ function Lobby:_OnQueueClosed(name)
 end
 
 function Lobby:_OnMatchMakerStatus(inMatchMaking, joinedQueueList, queueCounts, ingameCounts, instantStartQueues, currentEloWidth, joinedTime, bannedTime)
+	
+	if self.pendingQueueRequests > 0 then
+		-- Sent incomplete data, ignore it and wait for the next one that should be arriving shortly.
+		self.pendingQueueRequests = self.pendingQueueRequests - 1
+		if self.pendingQueueRequests > 0 then
+			return
+		end
+	end
+	
 	if inMatchMaking then
 		self.joinedQueueList = joinedQueueList
 		self.joinedQueues = {}

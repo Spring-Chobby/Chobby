@@ -427,6 +427,8 @@ function Interface:JoinMatchMaking(queueNamePossiblyList)
 	self.joinedQueues = self.joinedQueues or {}
 	self.joinedQueueList = self.joinedQueueList or {}
 	
+	self.pendingQueueRequests = self.pendingQueueRequests + 1
+	
 	if type(queueNamePossiblyList) == "table" then
 		for i = 1, #queueNamePossiblyList do
 			local queueName = queueNamePossiblyList[i]
@@ -451,6 +453,8 @@ function Interface:JoinMatchMaking(queueNamePossiblyList)
 end
 
 function Interface:LeaveMatchMaking(queueNamePossiblyList)
+	self.pendingQueueRequests = self.pendingQueueRequests + 1
+	
 	if self.joinedQueues and self.joinedQueueList then
 		if type(queueNamePossiblyList) == "table" then
 			for i = 1, #queueNamePossiblyList do
