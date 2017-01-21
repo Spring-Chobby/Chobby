@@ -52,9 +52,10 @@ local function MaybeDownloadMap(mapName)
 end
 
 local function DownloadRequirements()
-	if not alreadyDownloaded[WG.Chobby.Configuration.gameConfig.defaultGameArchiveName] then
-		MaybeDownloadGame(WG.Chobby.Configuration.gameConfig.defaultGameArchiveName)
-		alreadyDownloaded[WG.Chobby.Configuration.gameConfig.defaultGameArchiveName] = true
+	local gameName = config:GetDefaultGameName()
+	if not alreadyDownloaded[gameName] then
+		MaybeDownloadGame(gameName)
+		alreadyDownloaded[gameName] = true
 	end
 	local missions = LoadMissions()
 	for i = 1, #missions do
@@ -115,7 +116,7 @@ local function CreateMissionEntry(missionData)
 			function()
 				local startScript = missionData.Script
 				
-				local gameName = WG.Chobby.Configuration.gameConfig.defaultGameArchiveName
+				local gameName = WG.Chobby.Configuration.gameConfig._defaultGameArchiveName
 				local haveGame = (gameName == "zk:stable") or VFS.HasArchive(gameName)
 				if not haveGame then
 					WG.Chobby.InformationPopup("You do not have the game file required. It will now be downloaded.")
@@ -130,7 +131,7 @@ local function CreateMissionEntry(missionData)
 					return
 				end
 				
-				local gameName = WG.Chobby.Configuration.gameConfig.defaultGameArchiveName
+				local gameName = WG.Chobby.Configuration.gameConfig._defaultGameArchiveName
 				if string.find(gameName, ":") then
 					gameName = "rapid://" .. gameName
 				end

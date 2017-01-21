@@ -36,29 +36,30 @@ local minimapThumbnailPath = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .
 ---------------------------------------------------------------------------------
 
 local externalFuncAndData = {
-	dirName                = "zk",
-	name                   = "Zero-K",
-	defaultGameArchiveName = "Zero-K v1.5.1.10", -- Use rapid tag "zk:stable" when https://springrts.com/mantis/view.php?id=5422 is fixed.
-	mapWhitelist           = mapWhitelist,
-	aiBlacklist            = aiBlacklist,
-	settingsConfig         = settingsConfig,
-	settingsDefault        = settingsDefault,
-	singleplayerConfig     = singleplayerConfig,
-	helpSubmenuConfig      = helpSubmenuConfig,
-	skirmishDefault        = skirmishDefault,
-	defaultModoptions      = defaultModoptions,
-	rankFunction           = rankFunction,
-	headingLarge           = headingLarge,
-	headingSmall           = headingSmall,
-	taskbarIcon            = taskbarIcon,
-	background             = background,
-	minimapOverridePath    = minimapOverridePath,
-	minimapThumbnailPath   = minimapThumbnailPath,
-	link_reportPlayer      = link_reportPlayer, 
-	link_userPage          = link_userPage, 
-	link_homePage          = link_homePage,
-	link_replays           = link_replays,
-	link_maps              = link_maps,
+	dirName                 = "zk",
+	name                    = "Zero-K",
+	_defaultGameArchiveName = "Zero-K v1.5.1.10", -- Do not use directly
+	_defaultGameRapidTag    = "zk:stable", -- Do not use directly
+	mapWhitelist            = mapWhitelist,
+	aiBlacklist             = aiBlacklist,
+	settingsConfig          = settingsConfig,
+	settingsDefault         = settingsDefault,
+	singleplayerConfig      = singleplayerConfig,
+	helpSubmenuConfig       = helpSubmenuConfig,
+	skirmishDefault         = skirmishDefault,
+	defaultModoptions       = defaultModoptions,
+	rankFunction            = rankFunction,
+	headingLarge            = headingLarge,
+	headingSmall            = headingSmall,
+	taskbarIcon             = taskbarIcon,
+	background              = background,
+	minimapOverridePath     = minimapOverridePath,
+	minimapThumbnailPath    = minimapThumbnailPath,
+	link_reportPlayer       = link_reportPlayer, 
+	link_userPage           = link_userPage, 
+	link_homePage           = link_homePage,
+	link_replays            = link_replays,
+	link_maps               = link_maps,
 }
 
 function externalFuncAndData.CheckAvailability()
