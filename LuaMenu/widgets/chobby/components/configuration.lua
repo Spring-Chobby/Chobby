@@ -344,6 +344,22 @@ function Configuration:IsValidEngineVersion(engineVersion)
 	end
 end
 
+function Configuration:GetDefaultGameName()
+	if not self.gameConfig then
+		return false
+	end
+	
+	local rapidTag = self.gameConfig._defaultGameRapidTag
+	if rapidTag and VFS.GetNameFromRapidTag then
+		local rapidName = VFS.GetNameFromRapidTag(rapidTag)
+		if rapidName then
+			return rapidName
+		end
+	end
+	
+	return self.gameConfig._defaultGameArchiveName
+end
+
 ---------------------------------------------------------------------------------
 -- Listener handler
 ---------------------------------------------------------------------------------
