@@ -494,6 +494,7 @@ function BattleListWindow:OpenHostWindow()
 		width = 260,
 		y = 150,
 		height = 35,
+		itemHeight = 22,
 		text = "",
 		font = Configuration:GetFont(3),
 		items = {"Cooperative", "Team", "1v1", "FFA", "Custom"},
