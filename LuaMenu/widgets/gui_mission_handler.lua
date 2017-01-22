@@ -52,6 +52,7 @@ local function MaybeDownloadMap(mapName)
 end
 
 local function DownloadRequirements()
+	local config = WG.Chobby.Configuration
 	local gameName = config:GetDefaultGameName()
 	if not alreadyDownloaded[gameName] then
 		MaybeDownloadGame(gameName)
