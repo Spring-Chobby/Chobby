@@ -1791,7 +1791,7 @@ function widget:Initialize()
 	
 	InitializeControls()
 	
-	WG.CampaignHandler = {
+	WG.ZKCampaignHandler = {
 		GetWindow = function() return window end,
 		SetVNStory = SetVNStory,
 		SetNextMissionScript = SetNextMissionScript,
@@ -1810,5 +1810,5 @@ function widget:Initialize()
 end
 
 function widget:Shutdown()
-	WG.CampaignHandler = nil
+	WG.ZKCampaignHandler = nil
 end

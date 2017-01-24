@@ -17,9 +17,27 @@ return {
 	--	name = "quick_start", 
 	--	control = Control:New {},
 	--},
-	--{
-	--	name = "campaign", 
-	--	control = WG.CampaignHandler.GetWindow(),
-	--	entryCheck = WG.BattleRoomWindow.SetSingleplayerGame,
-	--},
+	{
+		name = "campaign",
+		submenuData = {
+			tabs = {
+				{
+					name = "technology", 
+					control = Control:New {},
+				},
+				{
+					name = "options", 
+					control = Control:New {},
+				},
+				{
+					name = "codex", 
+					control = Control:New {},
+				},
+				{
+					name = "bla", 
+					control = Control:New {},
+				},
+			},
+		},
+	},
 }
