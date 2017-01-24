@@ -24,7 +24,17 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 	-- Local functions
 	-------------------------------------------------------------------
 
+	local function OpenSubmenu(panelHandler)
+		buttonsHolder:SetVisibility(false)
+		panelHandler.Show()
+	end
+	
 	local function ToggleShow(obj, tab, openOnly)
+		if tab.panelHandler then
+			OpenSubmenu(tab.panelHandler)
+			return
+		end
+		
 		local control = tab.control
 		if not control then
 			return
@@ -138,9 +148,16 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 	end
 
 	function externalFunctions.Rescale(newFontSize, newButtonHeight, newButtonWidth, newButtonOffset)
+		for i = 1, #tabs do
+			if tabs[i].panelHandler then
+				tabs[i].panelHandler.Rescale(newFontSize, newButtonHeight, newButtonWidth, newButtonOffset)
+			end
+		end
+		
 		fontSizeScale = newFontSize or fontSizeScale
 		buttonWidth = newButtonWidth or buttonWidth
 		buttonHeight = newButtonHeight or buttonHeight
+		
 		if newButtonOffset then
 			buttonOffset = newButtonOffset - BUTTON_SPACING
 		end
@@ -276,7 +293,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		end
 	end
 
-	function externalFunctions.AddTab(name, humanName, control, onClick, rank, selected, entryCheck)
+	function externalFunctions.AddTab(name, humanName, control, onClick, rank, selected, entryCheck, submenuData)
 		local newTab = {}
 
 		newTab.name = name
@@ -310,7 +327,27 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 				ToggleShow(obj, newTab)
 			end
 		end
-
+		
+		if submenuData then
+			local function BackToSubmenu(subPanelHandler)
+				subPanelHandler.Hide() 
+				if not buttonsHolder.visible then
+					buttonsHolder:Show()
+				end
+				
+				if displayPanel.children[1] and subPanelHandler.GetManagedControlByName(displayPanel.children[1].name) then
+					displayPanel:ClearChildren()
+					if displayPanel.visible then
+						displayPanel:Hide()
+					end
+				end
+			end
+		
+			local panelHandler = GetTabPanelHandler(name, buttonWindow, displayPanel, submenuData.tabs, tabsVertical, BackToSubmenu, submenuData.cleanupFunction, fontSizeScale)
+			panelHandler.Hide()
+			newTab.panelHandler = panelHandler
+		end
+		
 		newTab.activityLabel = Label:New {
 			name = "activity_label",
 			y = 2,
@@ -427,7 +464,8 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 			i18n(initialTabs[i].name),
 			initialTabs[i].control,
 			nil, nil, nil,
-			initialTabs[i].entryCheck
+			initialTabs[i].entryCheck,
+			initialTabs[i].submenuData
 		)
 	end
 	
