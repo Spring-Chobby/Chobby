@@ -637,19 +637,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		mainWindow_mainContent:UpdateClientArea()
 	end
 	
-	local function SetWideContentPlace(newWideContentPlace)
-		if doublePanelMode then
-			if newWideContentPlace then
-				holder_mainWindow._relativeBounds.right = 0
-			else
-				holder_mainWindow._relativeBounds.right = panelWidthRel .. "%"
-			end
-			holder_mainWindow._relativeBounds.bottom = 0
-			holder_mainWindow:UpdateClientArea()
-		end
-	end
-	
-	
 	-------------------------------------------------------------------
 	-- Visibility and size handlers
 	-------------------------------------------------------------------
@@ -869,13 +856,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		UpdatePadding(screenWidth, screenHeight)
 		-- Make all children request realign.
 		screen0:Resize(screenWidth, screenHeight)
-	end
-	
-	function externalFunctions.SetWideContentPlace(newWideContentPlace)
-		if wideContentPlace == newWideContentPlace then
-			return
-		end
-		SetWideContentPlace(newWideContentPlace)
 	end
 	
 	function externalFunctions.SetIngame(newIngame)
