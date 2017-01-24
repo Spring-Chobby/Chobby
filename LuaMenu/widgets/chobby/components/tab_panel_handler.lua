@@ -391,6 +391,21 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 		UpdateButtonLayout()
 	end
 
+	function externalFunctions.CloseSubmenu()
+		local closedSubmenu = false
+		for i = 1, #tabs do
+			if tabs[i].panelHandler then
+				closedSubmenu = tabs[i].panelHandler.CloseSubmenu() or closedSubmenu
+			end
+		end
+		
+		externalFunctions.Hide()
+		if externalFunctions.IsTabSelected() then
+			return true
+		end
+		return closedSubmenu
+	end
+	
 	-------------------------------------------------------------------
 	-- Initialization
 	-------------------------------------------------------------------

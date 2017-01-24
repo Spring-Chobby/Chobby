@@ -64,15 +64,12 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 				return
 			end
 		end
-	
+		
 		local clearMainWindow = false
 		for i = 1, #submenus do
 			local panelHandler = submenus[i].panelHandler
-			if panelHandler.IsTabSelected() then
-				clearMainWindow = true
-			end
 			if panelHandler then
-				panelHandler.Hide()
+				clearMainWindow = panelHandler.CloseSubmenu() or clearMainWindow
 			end
 		end
 		
