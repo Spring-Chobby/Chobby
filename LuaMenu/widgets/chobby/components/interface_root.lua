@@ -343,6 +343,40 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	}
 	
 	-----------------------------------
+	-- Submenu window
+	-----------------------------------
+	-- Note that the position of these controls is maintained by pure evil.
+	-- If anything in the UI changes this will need updating to take it into account.
+	
+	local holder_submenuWindow = Control:New {
+		x = mainButtonsWidth,
+		y = titleHeight,
+		right = 0,
+		bottom = 0,
+		name = "holder_submenuWindow",
+		caption = "",
+		parent = lobbyInterfaceHolder,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		children = {}
+	}
+	
+	local submenuWindow_mainContent = Control:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		name = "submenuWindow_mainContent",
+		caption = "",
+		parent = holder_submenuWindow,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		children = {}
+	}
+	
+	-----------------------------------
 	-- Top image
 	-----------------------------------
 	local holder_topImage = Image:New {
@@ -494,6 +528,12 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			--mainContent_window.color = VISIBLE_COLOR
 
 			mainWindow_buttonsHolder:SetPos(nil, nil, mainButtonsWidth)
+			
+			-- Submenu window position
+			holder_submenuWindow:SetPos(mainButtonsWidth, titleHeight + topOffset)
+			holder_submenuWindow._relativeBounds.right = 0
+			holder_submenuWindow._relativeBounds.bottom = 0
+			holder_submenuWindow:UpdateClientArea()
 
 			-- Move Panel Buttons
 			buttonsHolder_buttons:RemoveChild(panelButtons_buttons)
@@ -547,6 +587,12 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 			mainWindow_buttonsHolder:SetPos(nil, nil, mainButtonsWidthSmall)
 
+			-- Submenu window position
+			holder_submenuWindow:SetPos(mainButtonsWidthSmall, titleHeightSmall + topOffset + chatTabHolderHeight)
+			holder_submenuWindow._relativeBounds.right = 0
+			holder_submenuWindow._relativeBounds.bottom = 0
+			holder_submenuWindow:UpdateClientArea()
+			
 			-- Move Panel Buttons
 			status_panelButtons:RemoveChild(panelButtons_buttons)
 			buttonsHolder_buttons:AddChild(panelButtons_buttons)
@@ -618,6 +664,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		rightPanel_window._relativeBounds.right = rightPad
 		rightPanel_window._relativeBounds.bottom = bottomPad
 		rightPanel_window:UpdateClientArea()
+		
+		submenuWindow_mainContent:SetPos(leftPad + leftButtonPad)
+		submenuWindow_mainContent._relativeBounds.right = rightPad
+		submenuWindow_mainContent._relativeBounds.bottom = bottomPad
+		submenuWindow_mainContent:UpdateClientArea()
 
 		status_panelButtons._relativeBounds.right = rightPad
 		rightPanel_window:UpdateClientArea()
