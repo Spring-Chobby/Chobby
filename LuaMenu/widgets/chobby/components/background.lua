@@ -10,13 +10,7 @@ function Background:init(imageOverride, colorOverride, backgroundFocus, alphaSet
 	
 	local function onConfigurationChange(listener, key, value)
 		if (not imageOverride) and key == "gameConfigName" then
-			local file = Configuration.gameConfig.background.image
-			self.backgroundImage.file = file
-			self.backgroundFocus = Configuration.gameConfig.background.backgroundFocus
-			local texInfo = gl.TextureInfo(file)
-			self.width, self.height = texInfo.xsize, texInfo.ysize
-			self.backgroundControl:Invalidate()
-			self:Resize()
+			self:SetDefaultImage()
 		end
 		if key == alphaSettingName then
 			if alphaSettingInvert then
@@ -28,6 +22,16 @@ function Background:init(imageOverride, colorOverride, backgroundFocus, alphaSet
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 end
 
+function Background:SetDefaultImage()
+	local file = Configuration.gameConfig.background.image
+	self.backgroundImage.file = file
+	self.backgroundFocus = Configuration.gameConfig.background.backgroundFocus
+	local texInfo = gl.TextureInfo(file)
+	self.width, self.height = texInfo.xsize, texInfo.ysize
+	self.backgroundControl:Invalidate()
+	self:Resize()
+end
+
 function Background:SetAlpha(newAlpha)
 	if self.backgroundImage then
 		self.backgroundImage.color[4] = newAlpha
@@ -35,9 +39,78 @@ function Background:SetAlpha(newAlpha)
 	end
 end
 
+function Background:SetOverride(imageOverride, imageBoundOverride)
+	self.imageOverride = imageOverride
+	self.backgroundImage.file = imageOverride
+	self.imageBoundOverride = imageBoundOverride
+	
+	local texInfo = gl.TextureInfo(imageOverride)
+	self.width, self.height = texInfo.xsize, texInfo.ysize
+	self.backgroundControl:Invalidate()
+end
+
+function Background:RemoveOverride()
+	if not self.imageBoundOverride then
+		return
+	end
+	self.imageOverride = nil
+	self.imageBoundOverride = nil
+	self:SetDefaultImage()
+end
+
+function Background:ResizeAspectWindow(windowX, windowY, windowWidth, windowHeight)
+	local backgroundControl = self.backgroundControl
+	
+	if not self.imageBoundOverride then
+		return false
+	end
+	
+	local imageSizeX, imageSizeY = self.width, self.height
+	if not (imageSizeX and imageSizeY) then
+		return false
+	end
+	local winSizeX, winSizeY = Spring.GetWindowGeometry()
+	
+	if winSizeX <= 0 or winSizeY <= 0 or imageSizeX <= 0 or imageSizeY <= 0 then 
+		return false
+	end
+	
+	local imageBound = self.imageBoundOverride
+	local imageWidth = imageSizeX*imageBound.width
+	local imageHeight = imageSizeY*imageBound.height
+	
+	local xOffset, yOffset = 0, 0
+	
+	local imageRatio = windowWidth*imageHeight/(windowHeight*imageWidth)
+	if imageRatio > 1 then
+		local newWidth = windowHeight*imageWidth/imageHeight
+		xOffset = (windowWidth - newWidth)/2
+		windowX = windowX + xOffset
+		windowWidth = newWidth
+	else
+		local newHeight = windowWidth*imageHeight/imageWidth
+		yOffset = (windowHeight - newHeight)/2
+		windowY = windowY + yOffset
+		windowHeight = newHeight
+	end
+	
+	imageWidth = windowWidth/imageBound.width
+	imageHeight = windowHeight/imageBound.height
+	
+	local imageX = windowX - imageWidth*imageBound.x
+	local imageY = windowY - imageHeight*imageBound.y
+	
+	self.backgroundImage:SetPos(imageX, imageY, imageWidth, imageHeight)
+	return xOffset, yOffset, windowWidth, windowHeight
+end
+
 function Background:Resize(backgroundControl)
 	backgroundControl = backgroundControl or self.backgroundControl
 	if not (self.backgroundImage and self.backgroundFocus) then
+		return
+	end
+	
+	if self.imageBoundOverride then
 		return
 	end
 	

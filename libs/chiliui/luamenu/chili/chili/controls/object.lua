@@ -54,6 +54,7 @@ Object = {
   OnShow          = {},
   OnOrphan        = {},
   OnParent        = {},
+  OnParentPost    = {}, -- Called after parent is set
 
   disableChildrenHitTest = false, --// if set childrens are not clickable/draggable etc - their mouse events are not processed
 } 
@@ -256,6 +257,8 @@ function Object:SetParent(obj)
   self.parent = MakeWeakLink(obj, self.parent)
 
   self:Invalidate()
+  
+  self:CallListeners(self.OnParentPost, self)
 end
 
 --- Adds the child object
