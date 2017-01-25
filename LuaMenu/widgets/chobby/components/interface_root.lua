@@ -501,7 +501,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			end
 
 		else
-			chatWindows:SetTabHolderParent(holder_mainWindow, smallStatusLeftPadding + mainButtonsWidthSmall, -8, chatTabHolderRight)
+			chatWindows:SetTabHolderParent(holder_mainWindow, smallStatusLeftPadding + mainButtonsWidthSmall, -9, chatTabHolderRight)
 
 			rightPanelHandler.UpdateLayout(mainContent_window, true)
 			if mainContent_window:IsEmpty() and not rightPanel_window:IsEmpty() then
