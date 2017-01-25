@@ -186,8 +186,11 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 		end
 		if backButton then
 			local size = Configuration:GetFont(fontSizeScale).size
-			local buttonSize = math.floor(size * 1.7)
-			backButton:SetPos(nil, nil, nil, buttonSize)
+			local buttonSize = math.floor(size * 1.75)
+			local horSpacing = math.floor(size * 1.2)
+			backButton:SetPos(horSpacing, nil, nil, buttonSize)
+			backButton._relativeBounds.right = horSpacing
+			backButton:UpdateClientArea()
 		end
 
 		for i = 1, #tabs do
