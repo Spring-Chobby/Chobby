@@ -90,7 +90,7 @@ function widget:Update(dt)
 end
 
 function widget:MousePress()
-	forceRedraw = true
+	LimitFps.ForceRedrawPeriod(0.2)
 	return false
 end
 
