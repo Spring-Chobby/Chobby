@@ -112,6 +112,190 @@ end
 local _DrawTiledTexture = _DrawTiledTexture
 
 
+function _DrawRepeatingTiledTexture(x,y,w,h, skLeft,skTop,skRight,skBottom, texw,texh, texIndex)
+    texIndex = texIndex or 0
+	
+    local txLeft   = skLeft/texw
+    local txTop    = skTop/texh
+    local txRight  = skRight/texw
+    local txBottom = skBottom/texh
+
+    --//scale down the texture if we don't have enough space
+
+    local scaleY = h/(skTop+skBottom)
+    local scaleX = w/(skLeft+skRight)
+    local scale = (scaleX < scaleY) and scaleX or scaleY
+    if (scale<1) then
+      skTop = skTop * scale
+      skBottom = skBottom * scale
+      skLeft = skLeft * scale
+      skRight = skRight * scale
+    end
+	
+	local horTileWidth = (texw - skLeft - skRight)
+	local widthRepeat = (w - skLeft - skRight)/horTileWidth
+	local horFrac = (1 - txLeft - txRight) *(widthRepeat%1)
+	
+	local vertTileWidth = (texh - skTop - skBottom)
+	local heightRepeat = (h - skTop - skBottom)/vertTileWidth
+	local vertFrac = (1 - txTop - txBottom) *(heightRepeat%1)
+	
+    --//topleft
+    gl.MultiTexCoord(texIndex,0,0)
+    gl.Vertex(x,      y)
+
+    gl.MultiTexCoord(texIndex,0,txTop)
+    gl.Vertex(x,      y+skTop)
+    gl.MultiTexCoord(texIndex,txLeft,0)
+    gl.Vertex(x+skLeft, y)
+    gl.MultiTexCoord(texIndex,txLeft,txTop)
+    gl.Vertex(x+skLeft, y+skTop)
+
+    --//topcenter
+	for i = 1, widthRepeat do
+		gl.MultiTexCoord(texIndex, 1-txRight, 0)
+		gl.Vertex(x + skLeft + i*horTileWidth, y)
+		gl.MultiTexCoord(texIndex, 1-txRight, txTop)
+		gl.Vertex(x + skLeft + i*horTileWidth, y+skTop)
+		
+		-- Highly degenerate :(
+		gl.MultiTexCoord(texIndex, 1-txRight, txTop)
+		gl.Vertex(x + skLeft + i*horTileWidth, y+skTop)
+		gl.MultiTexCoord(texIndex, txLeft, 0)
+		gl.Vertex(x + skLeft + i*horTileWidth, y)
+		gl.MultiTexCoord(texIndex, txLeft, txTop)
+		gl.Vertex(x + skLeft + i*horTileWidth, y+skTop)
+	end
+	
+    gl.MultiTexCoord(texIndex,txLeft + horFrac,0)
+    gl.Vertex(x+w-skRight, y)
+    gl.MultiTexCoord(texIndex,txLeft + horFrac,txTop)
+    gl.Vertex(x+w-skRight, y+skTop)
+
+	-- Highly degenerate :(
+    gl.MultiTexCoord(texIndex,txLeft + horFrac,txTop)
+    gl.Vertex(x+w-skRight, y+skTop)
+	gl.MultiTexCoord(texIndex,1 - txLeft,0)
+    gl.Vertex(x+w-skRight, y)
+    gl.MultiTexCoord(texIndex,1 - txLeft,txTop)
+    gl.Vertex(x+w-skRight, y+skTop)
+	
+    --//topright
+    gl.MultiTexCoord(texIndex,1,0)
+    gl.Vertex(x+w,       y)
+    gl.MultiTexCoord(texIndex,1,txTop)
+    gl.Vertex(x+w,       y+skTop)
+
+    --//right center
+    gl.MultiTexCoord(texIndex,1,txTop)
+    gl.Vertex(x+w,       y+skTop)
+    gl.MultiTexCoord(texIndex,1 - txRight, txTop)
+    gl.Vertex(x+w - skRight,       y+skTop)    --//degenerate
+	
+	for i = 1, heightRepeat do
+		gl.MultiTexCoord(texIndex,1,1-txBottom)
+		gl.Vertex(x + w, y + skTop + i*vertTileWidth)
+		gl.MultiTexCoord(texIndex,1-txRight,1-txBottom)
+		gl.Vertex(x + w - skRight, y + skTop + i*vertTileWidth)
+		
+		-- Highly degenerate :(
+		gl.MultiTexCoord(texIndex,1-txRight,1-txBottom)
+		gl.Vertex(x + w - skRight, y + skTop + i*vertTileWidth)
+		gl.MultiTexCoord(texIndex,1,txTop)
+		gl.Vertex(x + w, y + skTop + i*vertTileWidth)
+		gl.MultiTexCoord(texIndex,1 - txRight,txTop)
+		gl.Vertex(x + w - skRight, y + skTop + i*vertTileWidth)
+	end
+	
+    gl.MultiTexCoord(texIndex,1, txTop + vertFrac)
+    gl.Vertex(x+w, y + h - skBottom)
+    gl.MultiTexCoord(texIndex,1 - txRight, txTop + vertFrac)
+    gl.Vertex(x+w-skRight, y + h - skBottom)
+
+	-- Highly degenerate :(
+    gl.MultiTexCoord(texIndex,1 - txRight, txTop + vertFrac)
+    gl.Vertex(x+w-skRight, y + h - skBottom)
+    gl.MultiTexCoord(texIndex,1 - txRight, txTop)
+    gl.Vertex(x+w-skRight, y+skTop)
+	
+    --//background
+    gl.MultiTexCoord(texIndex,txLeft, 1 - txBottom)
+    gl.Vertex(x+skLeft,    y + h - skBottom)
+    gl.MultiTexCoord(texIndex,txLeft,txTop)
+    gl.Vertex(x+skLeft,    y+skTop)
+
+    --//left center
+    gl.MultiTexCoord(texIndex,0,txTop)
+    gl.Vertex(x,       y+skTop)
+	
+	for i = 1, heightRepeat do
+		gl.MultiTexCoord(texIndex, txLeft, 1 - txBottom)
+		gl.Vertex(x + skLeft, y + skTop + i*vertTileWidth)
+		gl.MultiTexCoord(texIndex, 0 , 1 - txBottom)
+		gl.Vertex(x, y + skTop + i*vertTileWidth)
+		
+		-- Highly degenerate :(
+		gl.MultiTexCoord(texIndex, 0 , 1 - txBottom)
+		gl.Vertex(x, y + skTop + i*vertTileWidth)
+		gl.MultiTexCoord(texIndex,txLeft,txTop)
+		gl.Vertex(x + skLeft, y + skTop + i*vertTileWidth)
+		gl.MultiTexCoord(texIndex,0,txTop)
+		gl.Vertex(x, y + skTop + i*vertTileWidth)
+	end
+	
+    gl.MultiTexCoord(texIndex, txLeft, txTop + vertFrac)
+    gl.Vertex(x+skLeft, y + h - skBottom)
+    gl.MultiTexCoord(texIndex, 0, txTop + vertFrac)
+    gl.Vertex(x, y + h - skBottom)
+	
+    gl.MultiTexCoord(texIndex, txLeft, 1 - txBottom)
+    gl.Vertex(x + skLeft, y + h - skBottom)
+    gl.MultiTexCoord(texIndex, 0, 1 - txBottom)
+    gl.Vertex(x, y + h - skBottom)
+
+    --//bottom right
+    gl.MultiTexCoord(texIndex,0,1)
+    gl.Vertex(x,      y+h)    --//degenerate
+    gl.MultiTexCoord(texIndex,txLeft,1-txBottom)
+    gl.Vertex(x+skLeft, y+h-skBottom)
+    gl.MultiTexCoord(texIndex,txLeft,1)
+    gl.Vertex(x+skLeft, y+h)
+
+    --//bottom center
+	for i = 1, widthRepeat do
+		gl.MultiTexCoord(texIndex, 1-txRight, 1)
+		gl.Vertex(x + skLeft + i*horTileWidth, y + h)
+		gl.MultiTexCoord(texIndex, 1-txRight, 1 - txBottom)
+		gl.Vertex(x + skLeft + i*horTileWidth, y + h - skBottom)
+		
+		-- Highly degenerate :(
+		gl.MultiTexCoord(texIndex, 1-txRight, 1 - txBottom)
+		gl.Vertex(x + skLeft + i*horTileWidth, y + h - skBottom)
+		gl.MultiTexCoord(texIndex, txLeft, 1)
+		gl.Vertex(x + skLeft + i*horTileWidth, y + h)
+		gl.MultiTexCoord(texIndex, txLeft, 1 - txBottom)
+		gl.Vertex(x + skLeft + i*horTileWidth, y + h - skBottom)
+	end
+	
+    gl.MultiTexCoord(texIndex,txLeft + horFrac, 1)
+    gl.Vertex(x+w-skRight, y + h)
+    gl.MultiTexCoord(texIndex,txLeft + horFrac, 1 - txBottom)
+    gl.Vertex(x+w-skRight, y + h - skBottom)
+
+	-- Highly degenerate :(
+	gl.MultiTexCoord(texIndex,1 - txLeft, 1 - txBottom)
+    gl.Vertex(x+w-skRight, y + h - skBottom)
+    gl.MultiTexCoord(texIndex,1 - txLeft, 1)
+    gl.Vertex(x+w-skRight, y + h)
+	
+    --//bottom right
+    gl.MultiTexCoord(texIndex,1,1-txBottom)
+    gl.Vertex(x+w, y+h-skBottom)
+    gl.MultiTexCoord(texIndex,1,1)
+    gl.Vertex(x+w, y+h)
+end
+local _DrawRepeatingTiledTexture = _DrawRepeatingTiledTexture
+
 function _DrawTiledBorder(x,y,w,h, skLeft,skTop,skRight,skBottom, texw,texh, texIndex)
   texIndex = texIndex or 0
 
@@ -289,6 +473,30 @@ function DrawWindow(obj)
     local tw,th = texInfo.xsize, texInfo.ysize
 
     gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, 0,0,w,h, skLeft,skTop,skRight,skBottom, tw,th)
+  gl.Texture(0,false)
+
+  if (obj.caption) then
+    obj.font:Print(obj.caption, w*0.5, 9, "center")
+  end
+end
+
+function DrawRepeatingTiledWindow(obj)
+  local w = obj.width
+  local h = obj.height
+
+  local skLeft,skTop,skRight,skBottom = unpack4(obj.tiles)
+
+  local c = obj.color
+  if (c) then
+    gl.Color(c)
+  else
+    gl.Color(1,1,1,1)
+  end
+  TextureHandler.LoadTexture(0,obj.TileImage,obj)
+    local texInfo = gl.TextureInfo(obj.TileImage) or {xsize=1, ysize=1}
+    local tw,th = texInfo.xsize, texInfo.ysize
+
+    gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawRepeatingTiledTexture, 0,0,w,h, skLeft,skTop,skRight,skBottom, tw,th)
   gl.Texture(0,false)
 
   if (obj.caption) then
