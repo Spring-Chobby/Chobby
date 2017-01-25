@@ -51,7 +51,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName)
 				rank = 0,
 			}
 			playerCount = playerCount + 1
-			if not data.IsSpectator then
+			if not data.isSpectator then
 				teams[teamCount] = {
 					TeamLeader = 0,
 					AllyTeam = data.allyNumber,
