@@ -459,8 +459,8 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 			children = {
 				Image:New {
 					x = 0,
-					y = 1,
-					bottom = 0,
+					y = 0,
+					bottom = 1,
 					width = "50%",
 					file = LUA_DIRNAME .. "widgets/chobby/images/left.png",
 				}
