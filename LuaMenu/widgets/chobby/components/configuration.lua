@@ -325,11 +325,12 @@ function Configuration:GetCountryLongname(shortname)
 	return shortname
 end
 
-function Configuration:GetHeadingImage(fullscreenMode)
+function Configuration:GetHeadingImage(fullscreenMode, title)
+	local subheadings = self.gameConfig.subheadings 
 	if fullscreenMode then
-		return self.gameConfig.headingLarge
+		return (subheadings and subheadings.large and subheadings.large[title]) or self.gameConfig.headingLarge
 	else
-		return self.gameConfig.headingSmall
+		return (subheadings and subheadings.small and subheadings.small[title]) or self.gameConfig.headingSmall
 	end
 end
 

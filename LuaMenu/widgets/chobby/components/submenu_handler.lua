@@ -1,4 +1,4 @@
-function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submenus)
+function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submenus, titleUpdateFunction)
 	
 	local externalFunctions = {}
 	local submenuPanelNames = {}
@@ -11,6 +11,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 	local BUTTON_SPACING = 5
 	local BUTTON_SIDE_SPACING = 3
 	local buttonOffset = 50
+	local title
 	
 	-------------------------------------------------------------------
 	-- Local Functions
@@ -21,12 +22,23 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 			buttonsHolder:Show()
 		end
 		
+		titleUpdateFunction()
+		title = nil
+		
 		if panelWindow.children[1] and panelHandler.GetManagedControlByName(panelWindow.children[1].name) then
 			panelWindow:ClearChildren()
 			if panelWindow.visible then
 				panelWindow:Hide()
 			end
 		end
+	end
+	
+	local function SetTitle(newTitle)
+		if newTitle == title then
+			return
+		end
+		title = newTitle
+		titleUpdateFunction(title)
 	end
 	
 	local function SetButtonPositionAndSize(index)
@@ -45,6 +57,10 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 	-------------------------------------------------------------------
 	function externalFunctions.GetTabList(name)
 		return submenuPanelNames[name]
+	end
+	
+	function externalFunctions.GetSubheadingName()
+		return title
 	end
 	
 	function externalFunctions.GetCurrentSubmenu()
@@ -89,7 +105,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 		externalFunctions.SetBackAtMainMenu()
 		submenus[index].panelHandler.Destroy()
 		
-		local newPanelHandler = GetTabPanelHandler(submenus[index].name, buttonWindow, panelWindow, submenuPanelWindow, newTabs, true, BackToMainMenu, newCleanupFunction, fontSizeScale)
+		local newPanelHandler = GetTabPanelHandler(submenus[index].name, buttonWindow, panelWindow, submenuPanelWindow, newTabs, true, BackToMainMenu, newCleanupFunction, fontSizeScale, nil, nil, nil, SetTitle)
 		Spring.Utilities.TableEcho(newPanelHandler, "newPanelHandler")
 		newPanelHandler.Rescale(fontSizeScale, buttonHeight, nil, buttonOffset)
 		newPanelHandler.Hide()
@@ -125,7 +141,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 	
 	for i = 1, #submenus do
 		
-		local panelHandler = GetTabPanelHandler(submenus[i].name, buttonWindow, panelWindow, submenuPanelWindow, submenus[i].tabs, true, BackToMainMenu, submenus[i].cleanupFunction, fontSizeScale, submenus[i].submenuControl)
+		local panelHandler = GetTabPanelHandler(submenus[i].name, buttonWindow, panelWindow, submenuPanelWindow, submenus[i].tabs, true, BackToMainMenu, submenus[i].cleanupFunction, fontSizeScale, submenus[i].submenuControl, nil, nil, SetTitle)
 		panelHandler.Hide()
 		
 		submenuPanelNames[submenus[i].name] = panelHandler

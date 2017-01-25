@@ -247,7 +247,7 @@ skin.scrollpanel = {
 
   padding = {5, 5, 5, 0},
 
-  scrollbarSize = 11,
+  scrollbarSize = 14,
   DrawControl = DrawScrollPanel,
   DrawControlPostChildren = DrawScrollPanelBorder,
 }
