@@ -232,7 +232,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		y = 0,
 		right = 0,
 		bottom = 0,
-		classname = "overlay_window",
+		classname = "main_window",
 		name = "rightPanel_window",
 		caption = "", -- Panel Window
 		parent = holder_rightPanel,
@@ -312,7 +312,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		y = 0,
 		right = 0,
 		bottom = 0,
-		classname = "overlay_window",
+		classname = "main_window",
 		name = "mainContent_window",
 		caption = "", -- Content Place
 		parent = mainWindow_mainContent,

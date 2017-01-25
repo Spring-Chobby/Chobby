@@ -39,8 +39,8 @@ skin.button = {
   tiles = {22, 22, 22, 22}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
 
-  backgroundColor = {0, 0, 0, 0.5},
-  focusColor  = {0.94, 0.50, 0.23, 0.5},
+  backgroundColor = {0, 0, 0, 0.7},
+  focusColor  = {0.94, 0.50, 0.23, 0.7},
   borderColor = {1,1,1,0},
 
   DrawControl = DrawButton,
@@ -279,6 +279,33 @@ skin.treeview = {
 
 skin.window = {
   TileImage = ":c:tech_dragwindow.png",
+  --TileImage = ":cl:tech_window.png",
+  --TileImage = ":cl:window_tooltip.png",
+  --tiles = {25, 25, 25, 25}, --// tile widths: left,top,right,bottom
+  tiles = {62, 62, 62, 62}, --// tile widths: left,top,right,bottom
+  padding = {13, 13, 13, 13},
+  hitpadding = {4, 4, 4, 4},
+
+  captionColor = {1, 1, 1, 0.45},
+
+  backgroundColor = {0.1, 0.1, 0.1, 0.7},
+
+  boxes = {
+    resize = {-21, -21, -10, -10},
+    drag = {0, 0, "100%", 10},
+  },
+
+  NCHitTest = NCHitTestWithPadding,
+  NCMouseDown = WindowNCMouseDown,
+  NCMouseDownPostChildren = WindowNCMouseDownPostChildren,
+
+  DrawControl = DrawWindow,
+  DrawDragGrip = function() end,
+  DrawResizeGrip = DrawResizeGrip,
+}
+
+skin.main_window = {
+  TileImage = ":c:tech_mainwindow.png",
   --TileImage = ":cl:tech_window.png",
   --TileImage = ":cl:window_tooltip.png",
   --tiles = {25, 25, 25, 25}, --// tile widths: left,top,right,bottom
