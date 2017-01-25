@@ -25,7 +25,6 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 	-------------------------------------------------------------------
 
 	local function SetSubmenuDisplayVisibility(newVisibility)
-		Spring.Echo("name", name, submenuDisplayPanel, submenuControl)
 		if not (submenuDisplayPanel and submenuControl) then
 			return
 		end
@@ -140,6 +139,13 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 	end
 
 	function externalFunctions.Hide()
+		if displayPanel.children[1] and externalFunctions.GetManagedControlByName(displayPanel.children[1].name) then
+			displayPanel:ClearChildren()
+			if displayPanel.visible then
+				displayPanel:Hide()
+			end
+		end
+		
 		SetSubmenuDisplayVisibility(false)
 		buttonsHolder:SetVisibility(false)
 	end

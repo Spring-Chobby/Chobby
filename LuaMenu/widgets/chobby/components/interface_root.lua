@@ -1014,6 +1014,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		return lobbyInterfaceHolder
 	end
 	
+	function externalFunctions.GetBackgroundHolder()
+		return backgroundHolder
+	end
+	
 	function externalFunctions.SetLobbyButtonEnabled(newEnabled)
 		Spring.Echo("SetLobbyButtonEnabled", newEnabled)
 		switchToMenuButton:SetVisibility(newEnabled)
