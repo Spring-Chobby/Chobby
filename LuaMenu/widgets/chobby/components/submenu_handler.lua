@@ -1,4 +1,4 @@
-function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
+function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submenus)
 	
 	local externalFunctions = {}
 	local submenuPanelNames = {}
@@ -89,7 +89,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 		externalFunctions.SetBackAtMainMenu()
 		submenus[index].panelHandler.Destroy()
 		
-		local newPanelHandler = GetTabPanelHandler(submenus[index].name, buttonWindow, panelWindow, newTabs, true, BackToMainMenu, newCleanupFunction, fontSizeScale)
+		local newPanelHandler = GetTabPanelHandler(submenus[index].name, buttonWindow, panelWindow, submenuPanelWindow, newTabs, true, BackToMainMenu, newCleanupFunction, fontSizeScale)
 		Spring.Utilities.TableEcho(newPanelHandler, "newPanelHandler")
 		newPanelHandler.Rescale(fontSizeScale, buttonHeight, nil, buttonOffset)
 		newPanelHandler.Hide()
@@ -125,7 +125,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenus)
 	
 	for i = 1, #submenus do
 		
-		local panelHandler = GetTabPanelHandler(submenus[i].name, buttonWindow, panelWindow, submenus[i].tabs, true, BackToMainMenu, submenus[i].cleanupFunction, fontSizeScale)
+		local panelHandler = GetTabPanelHandler(submenus[i].name, buttonWindow, panelWindow, submenuPanelWindow, submenus[i].tabs, true, BackToMainMenu, submenus[i].cleanupFunction, fontSizeScale, submenus[i].submenuControl)
 		panelHandler.Hide()
 		
 		submenuPanelNames[submenus[i].name] = panelHandler

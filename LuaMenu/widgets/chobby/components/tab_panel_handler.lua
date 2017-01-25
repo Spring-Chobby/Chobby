@@ -1,4 +1,4 @@
-function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsVertical, backFunction, cleanupFunction, fontSizeScale, tabWidth, tabControlOverride)
+function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPanel, initialTabs, tabsVertical, backFunction, cleanupFunction, fontSizeScale, tabWidth, tabControlOverride, submenuControl)
 
 	local externalFunctions = {}
 
@@ -24,8 +24,21 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 	-- Local functions
 	-------------------------------------------------------------------
 
+	local function SetSubmenuDisplayVisibility(newVisibility)
+		Spring.Echo("name", name, submenuDisplayPanel, submenuControl)
+		if not (submenuDisplayPanel and submenuControl) then
+			return
+		end
+		if newVisibility then
+			submenuDisplayPanel:AddChild(submenuControl)
+		else
+			submenuDisplayPanel:ClearChildren()
+		end
+		submenuDisplayPanel:SetVisibility(newVisibility)
+	end
+	
 	local function OpenSubmenu(panelHandler)
-		buttonsHolder:SetVisibility(false)
+		externalFunctions.Hide()
 		panelHandler.Show()
 	end
 	
@@ -127,10 +140,12 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 	end
 
 	function externalFunctions.Hide()
+		SetSubmenuDisplayVisibility(false)
 		buttonsHolder:SetVisibility(false)
 	end
 
 	function externalFunctions.Show()
+		SetSubmenuDisplayVisibility(true)
 		buttonsHolder:SetVisibility(true)
 	end
 
@@ -343,7 +358,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, initialTabs, tabsV
 				end
 			end
 		
-			local panelHandler = GetTabPanelHandler(name, buttonWindow, displayPanel, submenuData.tabs, tabsVertical, BackToSubmenu, submenuData.cleanupFunction, fontSizeScale)
+			local panelHandler = GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPanel, submenuData.tabs, tabsVertical, BackToSubmenu, submenuData.cleanupFunction, fontSizeScale, tabWidth, tabControlOverride, submenuData.submenuControl)
 			panelHandler.Hide()
 			newTab.panelHandler = panelHandler
 		end
