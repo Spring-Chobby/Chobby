@@ -3,7 +3,7 @@
 
 local skin = {
   info = {
-    name    = "Evolved",
+    name    = "EvolvedBasic",
     version = "0.3",
     author  = "jK",
   }
@@ -306,7 +306,10 @@ skin.window = {
 
 skin.main_window = {
   TileImage = ":c:tech_mainwindow.png",
-  tiles = {176, 64, 176, 64}, --// tile widths: left,top,right,bottom
+  --TileImage = ":cl:tech_window.png",
+  --TileImage = ":cl:window_tooltip.png",
+  --tiles = {25, 25, 25, 25}, --// tile widths: left,top,right,bottom
+  tiles = {62, 62, 62, 62}, --// tile widths: left,top,right,bottom
   padding = {13, 13, 13, 13},
   hitpadding = {4, 4, 4, 4},
 
@@ -323,7 +326,7 @@ skin.main_window = {
   NCMouseDown = WindowNCMouseDown,
   NCMouseDownPostChildren = WindowNCMouseDownPostChildren,
 
-  DrawControl = DrawRepeatingTiledWindow,
+  DrawControl = DrawWindow,
   DrawDragGrip = function() end,
   DrawResizeGrip = DrawResizeGrip,
 }
