@@ -89,7 +89,7 @@ function _DrawTiledTexture(x,y,w,h, skLeft,skTop,skRight,skBottom, texw,texh, te
     gl.MultiTexCoord(texIndex,0,1-txBottom)
     gl.Vertex(x,    y+h-skBottom)
 
-    --//bottom right
+    --//bottom left
     gl.MultiTexCoord(texIndex,0,1)
     gl.Vertex(x,      y+h)    --//degenerate
     gl.MultiTexCoord(texIndex,txLeft,1-txBottom)
@@ -225,6 +225,9 @@ function _DrawRepeatingTiledTexture(x,y,w,h, skLeft,skTop,skRight,skBottom, texw
     gl.Vertex(x+skLeft,    y+skTop)
 
     --//left center
+    gl.MultiTexCoord(texIndex,txLeft,txTop)
+    gl.Vertex(x+skLeft,    y+skTop)
+	
     gl.MultiTexCoord(texIndex,0,txTop)
     gl.Vertex(x,       y+skTop)
 	
@@ -248,12 +251,10 @@ function _DrawRepeatingTiledTexture(x,y,w,h, skLeft,skTop,skRight,skBottom, texw
     gl.MultiTexCoord(texIndex, 0, txTop + vertFrac)
     gl.Vertex(x, y + h - skBottom)
 	
-    gl.MultiTexCoord(texIndex, txLeft, 1 - txBottom)
-    gl.Vertex(x + skLeft, y + h - skBottom)
     gl.MultiTexCoord(texIndex, 0, 1 - txBottom)
     gl.Vertex(x, y + h - skBottom)
 
-    --//bottom right
+    --//bottom left
     gl.MultiTexCoord(texIndex,0,1)
     gl.Vertex(x,      y+h)    --//degenerate
     gl.MultiTexCoord(texIndex,txLeft,1-txBottom)
@@ -263,24 +264,24 @@ function _DrawRepeatingTiledTexture(x,y,w,h, skLeft,skTop,skRight,skBottom, texw
 
     --//bottom center
 	for i = 1, widthRepeat do
+		gl.MultiTexCoord(texIndex, 1-txRight, 1 - txBottom)
+		gl.Vertex(x + skLeft + i*horTileWidth, y + h - skBottom)
 		gl.MultiTexCoord(texIndex, 1-txRight, 1)
 		gl.Vertex(x + skLeft + i*horTileWidth, y + h)
-		gl.MultiTexCoord(texIndex, 1-txRight, 1 - txBottom)
-		gl.Vertex(x + skLeft + i*horTileWidth, y + h - skBottom)
 		
 		-- Highly degenerate :(
-		gl.MultiTexCoord(texIndex, 1-txRight, 1 - txBottom)
-		gl.Vertex(x + skLeft + i*horTileWidth, y + h - skBottom)
-		gl.MultiTexCoord(texIndex, txLeft, 1)
+		gl.MultiTexCoord(texIndex, 1-txRight, 1)
 		gl.Vertex(x + skLeft + i*horTileWidth, y + h)
 		gl.MultiTexCoord(texIndex, txLeft, 1 - txBottom)
 		gl.Vertex(x + skLeft + i*horTileWidth, y + h - skBottom)
+		gl.MultiTexCoord(texIndex, txLeft, 1)
+		gl.Vertex(x + skLeft + i*horTileWidth, y + h)
 	end
 	
-    gl.MultiTexCoord(texIndex,txLeft + horFrac, 1)
-    gl.Vertex(x+w-skRight, y + h)
     gl.MultiTexCoord(texIndex,txLeft + horFrac, 1 - txBottom)
     gl.Vertex(x+w-skRight, y + h - skBottom)
+    gl.MultiTexCoord(texIndex,txLeft + horFrac, 1)
+    gl.Vertex(x+w-skRight, y + h)
 
 	-- Highly degenerate :(
 	gl.MultiTexCoord(texIndex,1 - txLeft, 1 - txBottom)
