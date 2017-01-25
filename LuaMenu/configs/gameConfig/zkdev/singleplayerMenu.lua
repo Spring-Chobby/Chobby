@@ -4,6 +4,26 @@ return {
 		control = WG.MissionHandler.GetControl(),
 	},
 	{
+		name = "campaign",
+		submenuData = {
+			submenuControl = WG.CampaignHandler.GetControl(),
+			tabs = {
+				{
+					name = "technology", 
+					control = Control:New {},
+				},
+				{
+					name = "codex", 
+					control = Control:New {},
+				},
+				{
+					name = "options", 
+					control = Control:New {},
+				},
+			},
+		},
+	},
+	{
 		name = "skirmish", 
 		control = WG.BattleRoomWindow.GetSingleplayerControl(),
 		entryCheck = WG.BattleRoomWindow.SetSingleplayerGame,
@@ -17,28 +37,4 @@ return {
 	--	name = "quick_start", 
 	--	control = Control:New {},
 	--},
-	{
-		name = "campaign",
-		submenuData = {
-			submenuControl = WG.CampaignHandler.GetControl(),
-			tabs = {
-				{
-					name = "technology", 
-					control = Control:New {},
-				},
-				{
-					name = "options", 
-					control = Control:New {},
-				},
-				{
-					name = "codex", 
-					control = Control:New {},
-				},
-				{
-					name = "bla", 
-					control = Control:New {},
-				},
-			},
-		},
-	},
 }

@@ -25,7 +25,7 @@ local IMAGE_BOUNDS = {
 --------------------------------------------------------------------------------
 
 local function InitializeControls(parent)
-	local window = Window:New {
+	local window = Control:New {
 		name = "planetsHolder",
 		padding = {0,0,0,0},
 		resizable = false,

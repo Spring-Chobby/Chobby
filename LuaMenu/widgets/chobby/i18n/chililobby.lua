@@ -100,6 +100,8 @@ return {
 		spectating = "Spectating",
 		play = "Play",
 		watch = "Watch",
+		matchmaking = "Matchmaking",
+		customGames = "Custom Games",
 		playing = "Playing",
 		pick_map = "Change Map",
 		add_team = "Add Team",
@@ -171,6 +173,8 @@ return {
 		saveload = "Save / Load",
 		quit_confirm = "Quitting will lose any unsaved progress. Are you sure?",
 		next_episode = "Next Episode",
+		technology = "Technology",
+		options = "Options",
 		codex = "Codex",
 	},
 	sr = {

@@ -1,4 +1,4 @@
-function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPanel, initialTabs, tabsVertical, backFunction, cleanupFunction, fontSizeScale, tabWidth, tabControlOverride, submenuControl)
+function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPanel, initialTabs, tabsVertical, backFunction, cleanupFunction, fontSizeScale, tabWidth, tabControlOverride, submenuControl, titleUpdateFunction)
 
 	local externalFunctions = {}
 
@@ -15,7 +15,6 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 	local buttonWidth = tabWidth
 	local buttonHeight = 70
 
-	local heading -- has a value if the tab panel has a heading
 	local backButton
 
 	local tabs = {}
@@ -153,6 +152,9 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 	function externalFunctions.Show()
 		SetSubmenuDisplayVisibility(true)
 		buttonsHolder:SetVisibility(true)
+		if titleUpdateFunction then
+			titleUpdateFunction(name)
+		end
 	end
 
 	function externalFunctions.IsVisible()
@@ -182,23 +184,10 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 		if newButtonOffset then
 			buttonOffset = newButtonOffset - BUTTON_SPACING
 		end
-		if heading then
-			heading:Dispose()
+		if backButton then
 			local size = Configuration:GetFont(fontSizeScale).size
-			local buttonSize = math.min(size * 1.7)
-			heading = TextBox:New {
-				x = 4 + 2*size,
-				y = 34 - size,
-				right = 0,
-				height = 30,
-				valign = "center",
-				align = "center",
-				parent = buttonsHolder,
-				fontsize = size,
-				text = i18n(name),
-			}
-
-			backButton:SetPos(4, 36 - size * 1.5, buttonSize, buttonSize)
+			local buttonSize = math.floor(size * 1.7)
+			backButton:SetPos(nil, nil, nil, buttonSize)
 		end
 
 		for i = 1, #tabs do
@@ -206,6 +195,9 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 				SetButtonPositionAndSize(i)
 				ButtonUtilities.SetFontSizeScale(tabs[i].button, fontSizeScale)
 			end
+		end
+		if backButton then
+			ButtonUtilities.SetFontSizeScale(backButton, fontSizeScale)
 		end
 	end
 
@@ -352,9 +344,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 		if submenuData then
 			local function BackToSubmenu(subPanelHandler)
 				subPanelHandler.Hide() 
-				if not buttonsHolder.visible then
-					buttonsHolder:Show()
-				end
+				externalFunctions.Show()
 				
 				if displayPanel.children[1] and subPanelHandler.GetManagedControlByName(displayPanel.children[1].name) then
 					displayPanel:ClearChildren()
@@ -364,7 +354,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 				end
 			end
 		
-			local panelHandler = GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPanel, submenuData.tabs, tabsVertical, BackToSubmenu, submenuData.cleanupFunction, fontSizeScale, tabWidth, tabControlOverride, submenuData.submenuControl)
+			local panelHandler = GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPanel, submenuData.tabs, tabsVertical, BackToSubmenu, submenuData.cleanupFunction, fontSizeScale, tabWidth, tabControlOverride, submenuData.submenuControl, titleUpdateFunction)
 			panelHandler.Hide()
 			newTab.panelHandler = panelHandler
 		end
@@ -442,7 +432,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 	}
 
 	if backFunction then
-		-- Add heading and back button
+		-- Add back button
 		buttonOffset = 50 - BUTTON_SPACING
 
 		local function SucessFunction()
@@ -454,31 +444,21 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 
 		local size = Configuration:GetFont(fontSizeScale).size
 		local buttonSize = math.min(size * 1.5)
-		heading = TextBox:New {
-			x = 4 + size*2,
-			y = 36 - size,
-			right = 0,
-			height = 30,
-			valign = "center",
-			align = "center",
-			parent = buttonsHolder,
-			fontsize = size,
-			text = i18n(name),
-		}
 		backButton = Button:New {
 			name = name .. "_back_button",
-			x = 1,
-			y = 35 - size * 1.5,
-			width = buttonSize,
+			x = 16,
+			y = 4,
+			right = 16,
 			height = buttonSize,
-			caption = "",
+			caption = "      Back",
 			padding = {1,0,1,1},
+			font = Configuration:GetFont(fontSizeScale),
 			children = {
 				Image:New {
 					x = 0,
-					y = 0,
-					right = 0,
+					y = 1,
 					bottom = 0,
+					width = "50%",
 					file = LUA_DIRNAME .. "widgets/chobby/images/left.png",
 				}
 			},

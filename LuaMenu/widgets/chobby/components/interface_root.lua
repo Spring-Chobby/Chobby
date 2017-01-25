@@ -232,6 +232,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		y = 0,
 		right = 0,
 		bottom = 0,
+		classname = "overlay_window",
 		name = "rightPanel_window",
 		caption = "", -- Panel Window
 		parent = holder_rightPanel,
@@ -311,6 +312,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		y = 0,
 		right = 0,
 		bottom = 0,
+		classname = "overlay_window",
 		name = "mainContent_window",
 		caption = "", -- Content Place
 		parent = mainWindow_mainContent,
@@ -431,9 +433,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			name = "multiplayer",
 			entryCheck = WG.MultiplayerEntryPopup,
 			tabs = {
-				{name = "play", control = queueListWindow},
+				{name = "matchmaking", control = queueListWindow},
 				{name = "watch", control = battleWatchListWindow.window},
-				{name = "serverList", control = battleListWindow.window},
+				{name = "customGames", control = battleListWindow.window},
 			},
 			cleanupFunction = Configuration.leaveMultiplayerOnMainMenu and CleanMultiplayerState or nil
 		},
@@ -455,12 +457,17 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		padding = {0, 0, 0, 0},
 	}
 	
+	local function UpdateTitle(newTitle)
+		heading_image.file = Configuration:GetHeadingImage(doublePanelMode, newTitle)
+		heading_image:Invalidate()
+	end
+	
 	local battleStatusPanelHandler = GetTabPanelHandler(
 		"myBattlePanel", battleTabHolder, mainContent_window, nil, {}, nil, nil, nil, nil, 
 		statusButtonWidth, battleStatusTabControls
 	)											
 	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons_buttons, rightPanel_window, nil, rightPanelTabs)
-	mainWindowHandler = GetSubmenuHandler(buttonsHolder_buttons, mainContent_window, submenuWindow_mainContent, submenus)
+	mainWindowHandler = GetSubmenuHandler(buttonsHolder_buttons, mainContent_window, submenuWindow_mainContent, submenus, UpdateTitle)
 	
 	local statusAndInvitesPanel = GetControlPanelHandler(holder_statusAndInvites)
 	
@@ -627,7 +634,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			holder_topImage:SetPos(nil, topOffset, nil, titleHeightSmall + imageFudge + chatTabHolderHeight)
 		end
 
-		heading_image.file = Configuration:GetHeadingImage(doublePanelMode)
+		heading_image.file = Configuration:GetHeadingImage(doublePanelMode, mainWindowHandler.GetSubheadingName())
 		heading_image:Invalidate()
 
 		UpdateChildLayout()
@@ -881,6 +888,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-------------------------------------------------------------------
 	-- External Functions
 	-------------------------------------------------------------------
+	
 	function externalFunctions.UpdateStatusAndInvitesHolderPosition()
 		UpdateStatusAndInvitesHolderPosition()
 	end
@@ -1042,7 +1050,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				externalFunctions.SetPanelDisplayMode(false, false)
 			end
 		elseif key == "gameConfigName" then
-			heading_image.file = Configuration:GetHeadingImage(doublePanelMode)
+			heading_image.file = Configuration:GetHeadingImage(doublePanelMode, mainWindowHandler.GetSubheadingName())
 			heading_image:Invalidate()
 
 			local replacementTabs = Configuration.gameConfig.singleplayerConfig

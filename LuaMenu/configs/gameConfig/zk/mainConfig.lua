@@ -18,6 +18,19 @@ local headingSmall    = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/s
 local backgroundImage = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/background.jpg"
 local taskbarIcon     = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/taskbarLogo.png"
 
+local subheadings = {
+	large = {
+		singleplayer = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingSingleplayerLarge.png",
+		multiplayer = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingMultiplayerLarge.png",
+		campaign = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingCampaignLarge.png",
+	},
+	small = {
+		singleplayer = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingSingleplayerSmall.png",
+		multiplayer = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingMultiplayerSmall.png",
+		campaign = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingCampaignSmall.png",
+	},
+}
+
 local background = {
 	image           = backgroundImage,
 	backgroundFocus = backgroundConfig.backgroundFocus,
@@ -51,6 +64,7 @@ local externalFuncAndData = {
 	rankFunction            = rankFunction,
 	headingLarge            = headingLarge,
 	headingSmall            = headingSmall,
+	subheadings             = subheadings,
 	taskbarIcon             = taskbarIcon,
 	background              = background,
 	minimapOverridePath     = minimapOverridePath,
