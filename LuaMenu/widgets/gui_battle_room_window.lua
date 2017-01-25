@@ -592,7 +592,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 
 		local childrenCount = #children
 		local bottomBuffer = 0
-
+		
 		local totalHeight = 0
 		local maxHeight = 0
 		for i = 1, #children do
@@ -835,6 +835,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 						end
 					end
 				end
+				return false
 			end
 			
 			function teamData.RemovePlayer(name)
@@ -864,12 +865,9 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 						joinTeam:SetVisibility(true)
 					end
 				end
-
 				
-				if not teamData.CheckRemoval() then
-					teamHolder:Invalidate()
-					PositionChildren(parentStack, parentScroll.height)
-				end
+				teamData.CheckRemoval()
+				PositionChildren(parentStack, parentScroll.height)
 			end
 
 			team[teamIndex] = teamData
