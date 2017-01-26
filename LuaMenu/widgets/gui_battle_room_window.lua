@@ -179,9 +179,9 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 
 	local btnPlay
 	local btnSpectate = Button:New {
-		x = "50%",
+		x = "50.5%",
 		right = 0,
-		bottom = 52,
+		bottom = 51,
 		height = 48,
 		classname = "button_highlight",
 		caption = "\255\66\138\201" .. i18n("spectator") ..  "\b",
@@ -200,8 +200,8 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 
 	btnPlay = Button:New {
 		x = 0,
-		right = "50%",
-		bottom = 52,
+		right = "50.5%",
+		bottom = 51,
 		height = 48,
 		classname = "button_highlight",
 		caption = "\255\66\138\201" .. i18n("player") ..  "\b",
