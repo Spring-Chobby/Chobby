@@ -1,6 +1,6 @@
 ListWindow = Component:extends{}
 
-function ListWindow:init(parent, title, noWindow, windowClassname, noClose)
+function ListWindow:init(parent, title, noWindow, windowClassname, noClose, customPadding)
 	self:DoInit() -- Lack of inheritance strikes again.
 	
 	self.CancelFunc = function ()
@@ -20,7 +20,7 @@ function ListWindow:init(parent, title, noWindow, windowClassname, noClose)
 		parent = parent,
 		resizable = false,
 		draggable = false,
-		padding = {0, 0, 0, 0},
+		padding = customPadding or {0, 0, 0, 0},
 		classname = windowClassname,
 		OnDispose = {
 			function()

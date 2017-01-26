@@ -1066,11 +1066,11 @@ local function InitializeControls(window)
 		name = "tabBarHolder",
 		x = 0,
 		y = 0,
-		width = "100%",
+		right = 0,
 		height = 50,
 		resizable = false,
 		draggable = false,
-		padding = {0, 0, 0, 0},
+		padding = {8, 4, 8, 0},
 		parent = window,
 		children = {
 			tabPanel.tabBar

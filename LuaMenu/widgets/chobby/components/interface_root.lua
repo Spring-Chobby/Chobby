@@ -238,7 +238,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		parent = holder_rightPanel,
 		resizable = false,
 		draggable = false,
-		padding = {0, 0, 0, 0},
+		padding = {5, 4, 7, 2},
 		children = {}
 	}
 	rightPanel_window:Hide()
@@ -318,7 +318,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		parent = mainWindow_mainContent,
 		resizable = false,
 		draggable = false,
-		padding = {0, 0, 0, 0},
+		padding = {5, 4, 7, 2},
 		children = {}
 	}
 	mainContent_window:Hide()
@@ -501,7 +501,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			end
 
 		else
-			chatWindows:SetTabHolderParent(holder_mainWindow, smallStatusLeftPadding + mainButtonsWidthSmall, -9, chatTabHolderRight)
+			chatWindows:SetTabHolderParent(holder_mainWindow, smallStatusLeftPadding + mainButtonsWidthSmall + 4, -9, chatTabHolderRight)
 
 			rightPanelHandler.UpdateLayout(mainContent_window, true)
 			if mainContent_window:IsEmpty() and not rightPanel_window:IsEmpty() then
