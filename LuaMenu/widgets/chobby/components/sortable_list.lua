@@ -52,6 +52,7 @@ function SortableList:init(holder, headings, itemHeight, defaultSort, sortDirect
 		right = 0,
 		y = (headings and 42) or 0,
 		bottom = 0,
+		borderColor = {0,0,0,0},
 		horizontalScrollbar = false,
 		parent = self.holder,
 		OnResize = {

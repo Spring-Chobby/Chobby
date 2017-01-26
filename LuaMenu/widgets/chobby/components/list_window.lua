@@ -65,6 +65,7 @@ function ListWindow:init(parent, title, noWindow, windowClassname, noClose, cust
 		bottom = 16,
 		horizontalScrollbar = false,
 		padding = {4, 4, 4, 4},
+		borderColor = {0,0,0,0},
 		OnResize = {
 			function()
 				self:OnResize()
