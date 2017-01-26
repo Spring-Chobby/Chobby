@@ -52,7 +52,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local autodetectDoublePanel = true
 	local wideContentPlace = false
 	
-	local BUTTON_SIDE_SPACING = 3 -- Matches tab_panel_handler
+	local buttonSpacingLarge = 4 -- Matches tab panel handler and submenu handler
+	local BUTTON_SIDE_SPACING = 1 -- Matches tab panel handler and submenu handler
+	local buttonSpacingSmall = 2
 
 	local IMAGE_TOP_BACKGROUND = LUA_DIRNAME .. "images/top-background.png"
 
@@ -475,8 +477,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-- Resizing functions
 	-------------------------------------------------------------------
 
-	local function RescaleMainWindow(newFontSize, newButtonHeight, newButtonOffset)
-		mainWindowHandler.Rescale(newFontSize, newButtonHeight, newButtonOffset)
+	local function RescaleMainWindow(newFontSize, newButtonHeight, newButtonOffset, newButtonSpacing)
+		mainWindowHandler.Rescale(newFontSize, newButtonHeight, newButtonOffset, newButtonSpacing)
 		buttons_exit:SetPos(nil, nil, nil, newButtonHeight)
 
 		ButtonUtilities.SetFontSizeScale(buttons_exit, newFontSize)
@@ -523,8 +525,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		local topOffset = (showTopBar and topBarHeight) or 0
 		
 		if doublePanelMode then
-			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidth)
-			RescaleMainWindow(3, 70, 50)
+			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidth, buttonSpacingLarge)
+			RescaleMainWindow(3, 70, 50, buttonSpacingLarge)
 
 			-- Make main buttons wider
 			mainWindow_mainContent:SetPos(mainButtonsWidth, 0)
@@ -580,9 +582,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 			holder_topImage:SetPos(nil, topOffset, nil, titleHeight + imageFudge)
 		else
-			rightPanelHandler.Rescale(2, 55)
-			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidthSmall)
-			RescaleMainWindow(2, 55, 46)
+			rightPanelHandler.Rescale(2, 55, nil, nil, buttonSpacingSmall)
+			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidthSmall, nil, buttonSpacingSmall)
+			RescaleMainWindow(2, 55, 46, buttonSpacingSmall)
 
 			-- Make main buttons thinner
 			mainWindow_mainContent:SetPos(mainButtonsWidthSmall, chatTabHolderHeight)

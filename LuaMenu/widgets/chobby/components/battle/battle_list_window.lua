@@ -571,7 +571,7 @@ function BattleListWindow:JoinBattle(battle)
 		passwordWindow = Window:New {
 			x = 700,
 			y = 300,
-			width = 315,
+			width = 316,
 			height = 240,
 			caption = "",
 			resizable = false,
@@ -633,7 +633,7 @@ function BattleListWindow:JoinBattle(battle)
 		end
 
 		local btnJoin = Button:New {
-			x = 1,
+			x = 5,
 			width = 135,
 			bottom = 1,
 			height = 70,
@@ -648,7 +648,7 @@ function BattleListWindow:JoinBattle(battle)
 			parent = passwordWindow,
 		}
 		local btnClose = Button:New {
-			right = 1,
+			right = 5,
 			width = 135,
 			bottom = 1,
 			height = 70,

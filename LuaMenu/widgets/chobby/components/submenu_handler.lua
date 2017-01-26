@@ -8,8 +8,10 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 	local fontSizeScale = 3
 	local buttonHeight = 70
 	
-	local BUTTON_SPACING = 5
-	local BUTTON_SIDE_SPACING = 3
+	-- Matches interface root and submenu handler
+	local buttonSpacing = 4
+	local BUTTON_SIDE_SPACING = 1
+	
 	local buttonOffset = 50
 	local title
 	
@@ -44,7 +46,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 	local function SetButtonPositionAndSize(index)
 		submenus[index].button:SetPos(
 			BUTTON_SIDE_SPACING, 
-			(index - 1) * (buttonHeight + BUTTON_SPACING) + buttonOffset - BUTTON_SPACING, 
+			(index - 1) * (buttonHeight + buttonSpacing) + buttonOffset - buttonSpacing, 
 			nil, 
 			buttonHeight
 		)
@@ -92,6 +94,9 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 		if not buttonsHolder.visible then
 			buttonsHolder:Show()
 		end
+		if titleUpdateFunction then
+			titleUpdateFunction()
+		end
 		
 		if clearMainWindow then
 			panelWindow:ClearChildren()
@@ -107,19 +112,20 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 		
 		local newPanelHandler = GetTabPanelHandler(submenus[index].name, buttonWindow, panelWindow, submenuPanelWindow, newTabs, true, BackToMainMenu, newCleanupFunction, fontSizeScale, nil, nil, nil, SetTitle)
 		Spring.Utilities.TableEcho(newPanelHandler, "newPanelHandler")
-		newPanelHandler.Rescale(fontSizeScale, buttonHeight, nil, buttonOffset)
+		newPanelHandler.Rescale(fontSizeScale, buttonHeight, nil, buttonOffset, buttonSpacing)
 		newPanelHandler.Hide()
 		submenus[index].panelHandler = newPanelHandler
 	end
 	
-	function externalFunctions.Rescale(newFontSize, newButtonHeight, newButtonOffset)
+	function externalFunctions.Rescale(newFontSize, newButtonHeight, newButtonOffset, newButtonSpacing)
 		fontSizeScale = newFontSize or fontSizeScale
 		buttonHeight = newButtonHeight or buttonHeight
+		buttonSpacing = newButtonSpacing or buttonSpacing
 		if newButtonOffset then
 			buttonOffset = newButtonOffset
 		end
 		for i = 1, #submenus do
-			submenus[i].panelHandler.Rescale(newFontSize, newButtonHeight, nil, newButtonOffset)
+			submenus[i].panelHandler.Rescale(newFontSize, newButtonHeight, nil, newButtonOffset, buttonSpacing)
 			ButtonUtilities.SetFontSizeScale(submenus[i].button, fontSizeScale)
 			SetButtonPositionAndSize(i)
 		end
@@ -149,7 +155,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 		
 		submenus[i].button = Button:New {
 			x = BUTTON_SIDE_SPACING,
-			y = (i - 1) * (buttonHeight + BUTTON_SPACING) + buttonOffset - BUTTON_SPACING,
+			y = (i - 1) * (buttonHeight + buttonSpacing) + buttonOffset - buttonSpacing,
 			right = BUTTON_SIDE_SPACING,
 			height = buttonHeight,
 			caption = i18n(submenus[i].name),

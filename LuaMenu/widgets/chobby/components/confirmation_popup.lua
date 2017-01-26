@@ -36,7 +36,7 @@ function ConfirmationPopup:init(successFunction, question, doNotAskAgainKey, wid
 	}
 	
 	local btnAccept = Button:New {
-		x = 1,
+		x = 5,
 		width = 135,
 		bottom = 1,
 		height = 70,
@@ -51,7 +51,7 @@ function ConfirmationPopup:init(successFunction, question, doNotAskAgainKey, wid
 		parent = mainWindow,
 	}
 	local btnClose = Button:New {
-		right = 1,
+		right = 5,
 		width = 135,
 		bottom = 1,
 		height = 70,
