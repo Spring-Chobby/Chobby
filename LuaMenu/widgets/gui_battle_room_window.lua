@@ -128,7 +128,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		bottom = 0,
 		classname = "button_square",
 		parent = minimapPanel,
-		padding = {5,5,5,5},
+		padding = {2,2,2,2},
 		OnClick = {
 			function()
 				WG.Chobby.MapListWindow(battleLobby, battle.gameName, battle.mapName)
@@ -554,7 +554,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 	local mainScrollPanel = ScrollPanel:New {
 		x = 0,
 		right = 0,
-		y = 0,
+		y = 1,
 		bottom = 0,
 		parent = playerParent,
 		horizontalScrollbar = false,
@@ -1128,8 +1128,8 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		return
 	end
 	
-	local EXTERNAL_PAD_VERT = 10
-	local EXTERNAL_PAD_HOR = 15
+	local EXTERNAL_PAD_VERT = 9
+	local EXTERNAL_PAD_HOR = 12
 	local INTERNAL_PAD = 2
 
 	local BOTTOM_SPACING = 50
@@ -1145,7 +1145,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	
 	local subPanel = Control:New {
 		x = 0,
-		y = 42,
+		y = 47,
 		right = 0,
 		bottom = 0,
 		padding = {0, 0, 0, 0},
@@ -1223,8 +1223,8 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	local infoHandler = SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, battleLobby:GetMyUserName())
 
 	local btnQuitBattle = Button:New {
-		right = 9,
-		y = 5,
+		right = 11,
+		y = 7,
 		width = 80,
 		height = 45,
 		font =  WG.Chobby.Configuration:GetFont(3),
@@ -1244,8 +1244,8 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	end
 
 	local lblBattleTitle = Label:New {
-		x = 18,
-		y = 16,
+		x = 20,
+		y = 17,
 		right = 100,
 		height = 30,
 		font = WG.Chobby.Configuration:GetFont(3),

@@ -8,7 +8,7 @@ function MapListWindow:init(lobby, gameName, zoomToMap)
 	if WG.WrapperLoopback and Configuration.gameConfig.link_maps then
 		self.btnOnlineMaps = Button:New {
 			right = 95,
-			y = 5,
+			y = 7,
 			width = 180,
 			height = 45,
 			caption = i18n("download_maps"),
@@ -49,10 +49,10 @@ function MapListWindow:init(lobby, gameName, zoomToMap)
 			}
 			local minimap = Panel:New {
 				name = "minimap",
-				x = 1,
-				y = 1,
-				width = 64,
-				height = 64,
+				x = 3,
+				y = 3,
+				width = 52,
+				height = 52,
 				padding = {1,1,1,1},
 				parent = pickMapButton,
 			}

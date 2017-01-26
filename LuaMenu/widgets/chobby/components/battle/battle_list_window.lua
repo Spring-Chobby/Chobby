@@ -11,7 +11,7 @@ function BattleListWindow:init(parent)
 
 	self.btnNewBattle = Button:New {
 		x = 190,
-		y = 5,
+		y = 7,
 		width = 150,
 		height = 45,
 		caption = i18n("open_mp_game"),

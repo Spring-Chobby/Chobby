@@ -214,8 +214,8 @@ local function InitializeControls(window)
 	}
 
 	local btnClose = Button:New {
-		right = 9,
-		y = 5,
+		right = 11,
+		y = 7,
 		width = 80,
 		height = 45,
 		caption = i18n("close"),

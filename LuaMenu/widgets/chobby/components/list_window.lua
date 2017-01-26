@@ -33,7 +33,7 @@ function ListWindow:init(parent, title, noWindow, windowClassname, noClose, cust
 	self.lblTitle = Label:New {
 		x = 20,
 		right = 5,
-		y = 16,
+		y = 17,
 		height = 20,
 		font = Configuration:GetFont(3),
 		caption = title,
@@ -42,8 +42,8 @@ function ListWindow:init(parent, title, noWindow, windowClassname, noClose, cust
 
 	if not noClose then
 		self.btnClose = Button:New {
-			right = 9,
-			y = 5,
+			right = 11,
+			y = 7,
 			width = 80,
 			height = 45,
 			caption = i18n("close"),
@@ -59,12 +59,12 @@ function ListWindow:init(parent, title, noWindow, windowClassname, noClose, cust
 	end
 	
 	self.listPanel = ScrollPanel:New {
-		x = 5,
-		right = 6,
-		y = 55,
-		bottom = 10,
-		borderColor = {0,0,0,0},
+		x = 12,
+		right = 12,
+		y = 57,
+		bottom = 16,
 		horizontalScrollbar = false,
+		padding = {4, 4, 4, 4},
 		OnResize = {
 			function()
 				self:OnResize()
@@ -75,7 +75,7 @@ function ListWindow:init(parent, title, noWindow, windowClassname, noClose, cust
 
 	self.columns = 1
 	self.itemHeight = 60
-	self.itemPadding = 20
+	self.itemPadding = 2
 	self:Clear()
 end
 
@@ -196,7 +196,7 @@ function ListWindow:CalulatePosition(index)
 	local row = math.floor((index - 1)/self.columns)
 	
 	local x = math.floor(1000*xAcross)/10 .. "%"
-	local y = 10 + row * (self.itemHeight + self.itemPadding)
+	local y = self.itemPadding + row * (self.itemHeight + self.itemPadding)
 	local width = math.floor(1000/self.columns)/10 .. "%"
 	local height = self.itemHeight
 	return x,y,width,height

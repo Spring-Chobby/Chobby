@@ -202,8 +202,8 @@ local function InitializeControls(parentControl)
 	}
 	
 	local btnLeaveScreen = Button:New {
-		right = 9,
-		y = 5,
+		right = 11,
+		y = 7,
 		width = 80,
 		height = 45,
 		font =  WG.Chobby.Configuration:GetFont(3),
