@@ -126,6 +126,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		y = 0,
 		right = 0,
 		bottom = 0,
+		classname = "button_square",
 		parent = minimapPanel,
 		padding = {5,5,5,5},
 		OnClick = {
@@ -182,6 +183,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		right = 0,
 		bottom = 52,
 		height = 48,
+		classname = "button_highlight",
 		caption = "\255\66\138\201" .. i18n("spectator") ..  "\b",
 		font =  WG.Chobby.Configuration:GetFont(3),
 		OnClick = {
@@ -201,6 +203,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		right = "50%",
 		bottom = 52,
 		height = 48,
+		classname = "button_highlight",
 		caption = "\255\66\138\201" .. i18n("player") ..  "\b",
 		font =  WG.Chobby.Configuration:GetFont(3),
 		OnClick = {
@@ -243,7 +246,8 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		y = leftOffset,
 		height = 35,
 		right = 5,
-		caption = "\255\66\138\201" .. i18n("add_team") ..  "\b",
+		classname = "option_button",
+		caption = i18n("add_team") ..  "\b",
 		font = WG.Chobby.Configuration:GetFont(2),
 		OnClick = {
 			function()
@@ -281,7 +285,8 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		y = leftOffset,
 		height = 35,
 		right = 5,
-		caption = "\255\66\138\201" .. i18n("pick_map") ..  "\b",
+		classname = "option_button",
+		caption = i18n("pick_map") ..  "\b",
 		font =  WG.Chobby.Configuration:GetFont(2),
 		OnClick = {
 			function()
@@ -298,7 +303,8 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		y = leftOffset,
 		height = 35,
 		right = 5,
-		caption = "\255\66\138\201" .. "Adv Options" ..  "\b",
+		classname = "option_button",
+		caption = "Adv Options" ..  "\b",
 		font =  WG.Chobby.Configuration:GetFont(2),
 		OnClick = {
 			function()
@@ -512,8 +518,8 @@ local function AddTeamButtons(parent, offX, joinFunc, aiFunc, unjoinable, disall
 		local addAiButton = Button:New {
 			name = "addAiButton",
 			x = offX,
-			y = 5,
-			height = 22,
+			y = 4,
+			height = 24,
 			width = 72,
 			font = WG.Chobby.Configuration:GetFont(2),
 			caption = i18n("add_ai") .. "\b",
@@ -527,8 +533,8 @@ local function AddTeamButtons(parent, offX, joinFunc, aiFunc, unjoinable, disall
 		local joinTeamButton = Button:New {
 			name = "joinTeamButton",
 			x = offX,
-			y = 5,
-			height = 22,
+			y = 4,
+			height = 24,
 			width = 72,
 			font = WG.Chobby.Configuration:GetFont(2),
 			caption = i18n("join") .. "\b",

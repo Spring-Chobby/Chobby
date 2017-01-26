@@ -11,7 +11,7 @@ function ConfirmationPopup:init(successFunction, question, doNotAskAgainKey, wid
 		resizable = false,
 		draggable = false,
 		parent = WG.Chobby.lobbyInterfaceHolder,
-		classname = "overlay_window",
+		classname = "main_window",
 	}
 	
 	local function CancelFunc()

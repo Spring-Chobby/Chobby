@@ -34,9 +34,9 @@ skin.icons = {
 }
 
 skin.button = {
-  TileImageBK = ":cl:tech_button_bk.png",
-  TileImageFG = ":cl:tech_button_fg.png",
-  tiles = {22, 22, 22, 22}, --// tile widths: left,top,right,bottom
+  TileImageBK = ":cl:tech_button_small_bk.png",
+  TileImageFG = ":cl:tech_button_small_fg.png",
+  tiles = {45, 22, 45, 22}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
 
   backgroundColor = {0, 0, 0, 0.7},
@@ -46,56 +46,80 @@ skin.button = {
   DrawControl = DrawButton,
 }
 
-skin.action_button = {
+skin.button_large = {
+  TileImageBK = ":cl:tech_button_bk.png",
+  TileImageFG = ":cl:tech_button_fg.png",
+  tiles = {120, 60, 120, 60}, --// tile widths: left,top,right,bottom
+  padding = {10, 10, 10, 10},
+
+  backgroundColor = {0, 0, 0, 0.7},
+  focusColor  = {0.94, 0.50, 0.23, 0.7},
+  borderColor = {1,1,1,0},
+
+  DrawControl = DrawButton,
+}
+
+skin.button_highlight = {
+  TileImageBK = ":cl:tech_button_bright_small_bk.png",
+  TileImageFG = ":cl:tech_button_bright_small_fg.png",
+  tiles = {45, 22, 45, 22}, --// tile widths: left,top,right,bottom
+  padding = {10, 10, 10, 10},
+
+  backgroundColor = {0.2, 0.25, 0.35, 0.7},
+  focusColor  = {0.3, 0.375, 0.525, 0.5},
+  borderColor = {1,1,1,0},
+
+  DrawControl = DrawButton,
+}
+
+skin.button_square = {
   TileImageBK = ":cl:tech_button_action_bk.png",
   TileImageFG = ":cl:tech_button_action_fg.png",
   tiles = {22, 22, 22, 22}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
 
-  backgroundColor = {0.94, 0.50, 0.23, 0.75},
+  backgroundColor = {0, 0, 0, 0.7},
+  focusColor  = {0.94, 0.50, 0.23, 0.4},
   borderColor = {1,1,1,0},
+
+  DrawControl = DrawButton,
+}
+
+skin.action_button = {
+  TileImageBK = ":cl:tech_button_bright_small_bk.png",
+  TileImageFG = ":cl:tech_button_bright_small_fg.png",
+  tiles = {45, 22, 45, 22}, --// tile widths: left,top,right,bottom
+  padding = {10, 10, 10, 10},
+
+  backgroundColor = {0.94, 0.50, 0.23, 0.65},
+  focusColor  = {0.94, 0.50, 0.23, 0.9},
+  borderColor = {0.94, 0.50, 0.23, 0.15},
 
   DrawControl = DrawButton,
 }
 
 skin.option_button = {
-  TileImageBK = ":cl:tech_button_action_bk.png",
-  TileImageFG = ":cl:tech_button_action_fg.png",
-  tiles = {22, 22, 22, 22}, --// tile widths: left,top,right,bottom
+  TileImageBK = ":cl:tech_button_bright_small_bk.png",
+  TileImageFG = ":cl:tech_button_bright_small_fg.png",
+  tiles = {45, 22, 45, 22}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
   
-  focusColor  = {0.21, 0.53, 0.60, 1},
-  
-  backgroundColor = {0.21, 0.53, 0.60, 0.75},
-  borderColor = {1,1,1,0},
+  backgroundColor = {0.21, 0.53, 0.60, 0.65},
+  focusColor  = {0.21, 0.53, 0.60, 0.9},
+  borderColor = {0.21, 0.53, 0.60, 0.15},
 
   DrawControl = DrawButton,
 }
 
 skin.negative_button = {
-  TileImageBK = ":cl:tech_button_action_bk.png",
-  TileImageFG = ":cl:tech_button_action_fg.png",
-  tiles = {22, 22, 22, 22}, --// tile widths: left,top,right,bottom
+  TileImageBK = ":cl:tech_button_bright_small_bk.png",
+  TileImageFG = ":cl:tech_button_bright_small_fg.png",
+  tiles = {45, 22, 45, 22}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
-
-  focusColor  = {0.72, 0.05, 0.12, 1},
   
-  backgroundColor = {0.72, 0.05, 0.12, 0.5},
-  borderColor = {1,1,1,0},
-
-  DrawControl = DrawButton,
-}
-
-skin.disabled_button = {
-  TileImageBK = ":cl:tech_button_action_bk.png",
-  TileImageFG = ":cl:tech_button_action_fg.png",
-  tiles = {22, 22, 22, 22}, --// tile widths: left,top,right,bottom
-  padding = {10, 10, 10, 10},
-
-  focusColor  = {0.4, 0.4, 0.4, 0.25},
-  
-  backgroundColor = {0.4, 0.4, 0.4, 0.5},
-  borderColor = {1,1,1,0},
+  backgroundColor = {0.72, 0.05, 0.12, 0.65},
+  focusColor  = {0.72, 0.05, 0.12, 0.9},
+  borderColor = {0.72, 0.05, 0.12, 0.15},
 
   DrawControl = DrawButton,
 }
@@ -311,7 +335,6 @@ skin.main_window = {
   hitpadding = {4, 4, 4, 4},
 
   captionColor = {1, 1, 1, 0.45},
-
   backgroundColor = {0.1, 0.1, 0.1, 0.7},
 
   boxes = {
@@ -380,11 +403,11 @@ skin.tabbar = {
 skin.tabbaritem = {
   -- yes these are reverted, but also a lie (see images), only one is used
   TileImageFG = ":cl:tech_tabbaritem_bk.png",
-  TileImageBK = ":cl:tech_tabbaritem_fg.png",
-  tiles = {10, 10, 10, 0}, --// tile widths: left,top,right,bottom
+  TileImageBK = ":cl:tech_tabbaritem_bk.png",
+  tiles = {12, 12, 12, 12}, --// tile widths: left,top,right,bottom
   padding = {1, 1, 1, 2},
   -- since it's color multiplication, it's easier to control white color (1, 1, 1) than black color (0, 0, 0) to get desired results
-  backgroundColor = {0, 0, 0, 1.0},
+  backgroundColor = {0.3, 0.3, 0.3, 0.5},
   -- actually kill this anyway
   borderColor     = {0, 0, 0, 0},
   focusColor      = {0.46, 0.54, 0.68, 1.0},
