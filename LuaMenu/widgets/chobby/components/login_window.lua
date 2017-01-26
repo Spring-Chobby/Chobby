@@ -147,7 +147,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		height = 70,
 		caption = i18n("login_verb"),
 		font = Configuration:GetFont(3),
-		classname = "option_button",
+		classname = "action_button",
 		OnClick = {
 			function()
 				self.AcceptFunc()

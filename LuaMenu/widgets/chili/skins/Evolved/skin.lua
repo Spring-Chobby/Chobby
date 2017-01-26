@@ -91,9 +91,9 @@ skin.action_button = {
   tiles = {45, 22, 45, 22}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
 
-  backgroundColor = {0.94, 0.50, 0.23, 0.65},
-  focusColor  = {0.94, 0.50, 0.23, 0.9},
-  borderColor = {0.94, 0.50, 0.23, 0.15},
+  backgroundColor = {0.98, 0.48, 0.26, 0.65},
+  focusColor  = {0.98, 0.48, 0.26, 0.9},
+  borderColor = {0.98, 0.48, 0.26, 0.15},
 
   DrawControl = DrawButton,
 }
@@ -117,9 +117,9 @@ skin.negative_button = {
   tiles = {45, 22, 45, 22}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
   
-  backgroundColor = {0.72, 0.05, 0.12, 0.65},
-  focusColor  = {0.72, 0.05, 0.12, 0.9},
-  borderColor = {0.72, 0.05, 0.12, 0.15},
+  backgroundColor = {0.85, 0.05, 0.25, 0.65},
+  focusColor  = {0.85, 0.05, 0.25, 0.9},
+  borderColor = {0.85, 0.05, 0.25, 0.15},
 
   DrawControl = DrawButton,
 }
