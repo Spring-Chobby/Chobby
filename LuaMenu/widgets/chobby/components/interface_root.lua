@@ -528,7 +528,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		local topOffset = (showTopBar and topBarHeight) or 0
 		
 		if doublePanelMode then
-			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidth, buttonSpacingLarge)
+			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidth)
 			RescaleMainWindow(3, 70, 50, buttonSpacingLarge)
 
 			-- Make main buttons wider
@@ -586,7 +586,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			holder_topImage:SetPos(nil, topOffset, nil, titleHeight + imageFudge)
 		else
 			rightPanelHandler.Rescale(2, 55, nil, nil, buttonSpacingSmall)
-			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidthSmall, nil, buttonSpacingSmall)
+			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidthSmall)
 			RescaleMainWindow(2, 55, 46, buttonSpacingSmall)
 
 			-- Make main buttons thinner
