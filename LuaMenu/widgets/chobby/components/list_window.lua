@@ -42,7 +42,7 @@ function ListWindow:init(parent, title, noWindow, windowClassname, noClose, cust
 
 	if not noClose then
 		self.btnClose = Button:New {
-			right = 7,
+			right = 9,
 			y = 5,
 			width = 80,
 			height = 45,
@@ -60,7 +60,7 @@ function ListWindow:init(parent, title, noWindow, windowClassname, noClose, cust
 	
 	self.listPanel = ScrollPanel:New {
 		x = 5,
-		right = 5,
+		right = 6,
 		y = 55,
 		bottom = 10,
 		borderColor = {0,0,0,0},

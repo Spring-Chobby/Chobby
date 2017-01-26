@@ -238,7 +238,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		parent = holder_rightPanel,
 		resizable = false,
 		draggable = false,
-		padding = {5, 4, 7, 2},
+		padding = {5, 4, 5, 2},
 		children = {}
 	}
 	rightPanel_window:Hide()
@@ -318,7 +318,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		parent = mainWindow_mainContent,
 		resizable = false,
 		draggable = false,
-		padding = {5, 4, 7, 2},
+		padding = {5, 4, 5, 2},
 		children = {}
 	}
 	mainContent_window:Hide()

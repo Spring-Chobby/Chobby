@@ -1223,7 +1223,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	local infoHandler = SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, battleLobby:GetMyUserName())
 
 	local btnQuitBattle = Button:New {
-		right = 7,
+		right = 9,
 		y = 5,
 		width = 80,
 		height = 45,
