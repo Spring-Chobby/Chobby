@@ -192,13 +192,29 @@ local function InitializeControls(parentControl)
 	local Configuration = WG.Chobby.Configuration
 	
 	Label:New {
-		x = 15,
-		y = 11,
+		x = 18,
+		y = 16,
 		width = 180,
 		height = 30,
 		parent = parentControl,
 		font = Configuration:GetFont(3),
-		caption = "Missions",
+		caption = "Select Mission",
+	}
+	
+	local btnLeaveScreen = Button:New {
+		right = 7,
+		y = 5,
+		width = 80,
+		height = 45,
+		font =  WG.Chobby.Configuration:GetFont(3),
+		caption = i18n("close"),
+		classname = "negative_button",
+		OnClick = {
+			function()
+				parentControl:Hide()
+			end
+		},
+		parent = parentControl,
 	}
 	
 	local missions = LoadMissions()
@@ -280,10 +296,11 @@ function MissionHandler.GetControl()
 
 	local window = Control:New {
 		name = "missionHandler",
-		x = "0%",
-		y = "0%",
-		width = "100%",
-		height = "100%",
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		padding = {0, 0, 0, 0},
 		OnParent = {
 			function(obj)
 				if obj:IsEmpty() then

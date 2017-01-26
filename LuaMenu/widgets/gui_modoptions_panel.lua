@@ -342,11 +342,11 @@ local function CreateModoptionWindow()
 		name = "tabBarHolder",
 		x = 0,
 		y = 0,
-		width = "100%",
+		right = 0,
 		height = 50,
 		resizable = false,
 		draggable = false,
-		padding = {0, 0, 0, 0},
+		padding = {6, 0, 6, 0},
 		parent = modoptionsSelectionWindow,
 		children = {
 			tabPanel.tabBar
@@ -365,7 +365,7 @@ local function CreateModoptionWindow()
 	end
 
 	buttonReset = Button:New {
-		right = 301,
+		right = 294,
 		width = 135,
 		bottom = 1,
 		height = 70,
@@ -381,7 +381,7 @@ local function CreateModoptionWindow()
 	}
 	
 	buttonAccept = Button:New {
-		right = 151,
+		right = 150,
 		width = 135,
 		bottom = 1,
 		height = 70,
@@ -397,7 +397,7 @@ local function CreateModoptionWindow()
 	}
 
 	local buttonCancel = Button:New {
-		right = 1,
+		right = 6,
 		width = 135,
 		bottom = 1,
 		height = 70,

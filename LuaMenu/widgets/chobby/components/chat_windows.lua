@@ -262,6 +262,7 @@ function ChatWindows:init()
 		backgroundColor = {0,0,0,0},
 		verticalScrollbar = false,
 		parent = window,
+		scrollbarSize = 11,
 		children = {
 			self.tabBarFudgeHolder
 		}
