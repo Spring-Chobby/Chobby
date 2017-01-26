@@ -28,6 +28,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local titleHeight = 125
 	local titleHeightSmall = 82
 	local titleWidth = 360
+	
+	-- Large title is 180x125
+	-- Small title is 140x82
 
 	local mainButtonsWidth = 180
 	local mainButtonsWidthSmall = 140
@@ -133,7 +136,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		x = 0,
 		right = 0,
 		bottom = 0,
-		keepAspect = false,
+		keepAspect = true,
 		file = Configuration:GetHeadingImage(doublePanelMode),
 		OnClick = { function()
 			Spring.Echo("OpenURL: uncomment me in interface_root.lua")
