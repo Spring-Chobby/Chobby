@@ -297,7 +297,7 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 		height = 310,
 		resizable = false,
 		draggable = false,
-		classname = "overlay_window",
+		classname = "main_window",
 	}
 
 	local title = Label:New {

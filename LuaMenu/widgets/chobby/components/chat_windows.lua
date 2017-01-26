@@ -873,7 +873,7 @@ function ChatWindows:CreateJoinChannelWindow()
 		height = 216,
 		resizable = false,
 		draggable = false,
-		classname = "overlay_window",
+		classname = "main_window",
 	}
 
 	local title = Label:New {

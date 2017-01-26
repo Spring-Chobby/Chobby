@@ -308,7 +308,7 @@ local function CreateModoptionWindow()
 		height = 500,
 		resizable = false,
 		draggable = false,
-		classname = "overlay_window",
+		classname = "main_window",
 	}
 	
 	modoptionLocalChanges = Spring.Utilities.CopyTable(modoptionChanges)

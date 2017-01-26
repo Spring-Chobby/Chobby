@@ -11,7 +11,7 @@ function InformationPopup:init(infoText, width, height)
 		resizable = false,
 		draggable = false,
 		parent = WG.Chobby.lobbyInterfaceHolder,
-		classname = "overlay_window",
+		classname = "main_window",
 	}
 	
 	local function DoneFunc()

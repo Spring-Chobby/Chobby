@@ -2,7 +2,7 @@ AiListWindow = ListWindow:extends{}
 
 function AiListWindow:init(gameName)
 
-	self:super('init', WG.Chobby.lobbyInterfaceHolder, "Choose AI", false, "overlay_window")
+	self:super('init', WG.Chobby.lobbyInterfaceHolder, "Choose AI", false, "main_window")
 	self.window:SetPos(nil, nil, 500, 700)
 	
 	self.validAiNames = {}

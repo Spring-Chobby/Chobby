@@ -426,7 +426,7 @@ function BattleListWindow:OpenHostWindow()
 		height = 310,
 		resizable = false,
 		draggable = false,
-		classname = "overlay_window",
+		classname = "main_window",
 	}
 
 	local title = Label:New {
@@ -577,7 +577,7 @@ function BattleListWindow:JoinBattle(battle)
 			resizable = false,
 			draggable = false,
 			parent = WG.Chobby.lobbyInterfaceHolder,
-			classname = "overlay_window",
+			classname = "main_window",
 			OnDispose = {
 				function()
 					lobby:RemoveListener("OnJoinBattleFailed", onJoinBattleFailed)

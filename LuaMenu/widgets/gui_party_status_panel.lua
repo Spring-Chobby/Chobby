@@ -145,7 +145,7 @@ local function CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, De
 		height = BASE_HEIGHT + userHeight,
 		resizable = false,
 		draggable = false,
-		classname = "overlay_window",
+		classname = "main_window",
 	}
 	
 	local titleText = i18n("party_invite")
