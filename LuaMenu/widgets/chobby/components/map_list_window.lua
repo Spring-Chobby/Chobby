@@ -2,7 +2,7 @@ MapListWindow = ListWindow:extends{}
 
 function MapListWindow:init(lobby, gameName, zoomToMap)
 
-	self:super('init', WG.Chobby.lobbyInterfaceHolder, "Select Map", false, "main_window", nil, {6, 7, 9, 4})
+	self:super('init', WG.Chobby.lobbyInterfaceHolder, "Select Map", false, "main_window", nil, {6, 7, 7, 4})
 	self.window:SetPos(nil, nil, 500, 700)
 	
 	if WG.WrapperLoopback and Configuration.gameConfig.link_maps then

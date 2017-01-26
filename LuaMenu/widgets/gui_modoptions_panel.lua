@@ -279,20 +279,28 @@ local function PopulateTab(options)
 	-- bool = tickbox
 	-- number = sliderbar (with label)
 	-- string = editBox
-	local children = {}
+	
+	local contentsPanel = ScrollPanel:New {
+		x = 6,
+		right = 5,
+		y = 10,
+		bottom = 8,
+		horizontalScrollbar = false,
+	}
+	
 	for i = 1, #options do
 		local data = options[i]
 		if data.type == "list" then
-			children[#children + 1] = ProcessListOption(data, #children)
+			contentsPanel:AddChild(ProcessListOption(data, #contentsPanel.children))
 		elseif data.type == "bool" then
-			children[#children + 1] = ProcessBoolOption(data, #children)
+			contentsPanel:AddChild(ProcessBoolOption(data, #contentsPanel.children))
 		elseif data.type == "number" then
-			children[#children + 1] = ProcessNumberOption(data, #children)
+			contentsPanel:AddChild(ProcessNumberOption(data, #contentsPanel.children))
 		elseif data.type == "string" then
-			children[#children + 1] = ProcessStringOption(data, #children)
+			contentsPanel:AddChild(ProcessStringOption(data, #contentsPanel.children))
 		end
 	end
-	return children
+	return {contentsPanel}
 end
 
 --------------------------------------------------------------------------------
@@ -304,7 +312,7 @@ local function CreateModoptionWindow()
 		caption = "",
 		name = "modoptionsSelectionWindow",
 		parent = WG.Chobby.lobbyInterfaceHolder,
-		width = 880,
+		width = 920,
 		height = 500,
 		resizable = false,
 		draggable = false,
@@ -326,10 +334,10 @@ local function CreateModoptionWindow()
 	end
 
 	local tabPanel = Chili.DetachableTabPanel:New {
-		x = 5,
-		right = 5,
-		y = 65,
-		bottom = 85,
+		x = 4,
+		right = 4,
+		y = 49,
+		bottom = 75,
 		padding = {0, 0, 0, 0},
 		minTabWidth = 120,
 		tabs = tabs,
@@ -343,12 +351,19 @@ local function CreateModoptionWindow()
 		x = 0,
 		y = 0,
 		right = 0,
-		height = 50,
+		height = 60,
 		resizable = false,
 		draggable = false,
-		padding = {6, 0, 6, 0},
+		padding = {18, 6, 18, 0},
 		parent = modoptionsSelectionWindow,
 		children = {
+			Line:New {
+				classname = "line_solid",
+				x = 0,
+				y = 52,
+				right = 0,
+				bottom = 0,
+			},
 			tabPanel.tabBar
 		}
 	}

@@ -141,7 +141,7 @@ skin.combobox = {
 skin.combobox_window = {
 	clone     = "window";
 	TileImage = ":cl:combobox_wnd.png";
-	tiles     = {10, 10, 10, 10};
+	tiles     = {2, 2, 2, 2};
 	padding   = {4, 3, 3, 4};
 }
 
@@ -179,7 +179,7 @@ skin.editbox = {
 
   TileImageBK = ":cl:panel2_bg.png",
   TileImageFG = ":cl:editbox_border.png",
-  tiles       = {1,1,1,1},
+  tiles       = {2, 2, 2, 2},
   cursorFramerate = 1, -- Per second
 
   DrawControl = DrawEditBox,
@@ -189,8 +189,10 @@ skin.textbox = {
   hintFont = table.merge({color = {1,1,1,0.7}}, skin.general.font),
 
   TileImageBK = ":cl:panel2_bg.png",
+  bkgndtiles = {14,14,14,14},
+  
   TileImageFG = ":cl:panel2_border.png",
-  tiles       = {1,1,1,1},
+  tiles       = {2, 2, 2, 2},
 
   borderColor     = {0.0, 0.0, 0.0, 0.0},
   focusColor      = {0.0, 0.0, 0.0, 0.0},
@@ -208,7 +210,7 @@ skin.imagelistview = {
   colorBK_selected = {1,0.7,0.1,0.8},
 
   colorFG          = {0, 0, 0, 0},
-  colorFG_selected = {1,1,1,1},
+  colorFG_selected = {2, 2, 2, 2},
 
   imageBK  = ":cl:node_selected_bw.png",
   imageFG  = ":cl:node_selected.png",
@@ -231,7 +233,7 @@ skin.imagelistviewitem = {
 skin.panel = {
   TileImageBK = ":cl:tech_button.png",
   TileImageFG = ":cl:empty.png",
-  tiles = {22, 22, 22, 22},
+  tiles = {2, 2, 2, 2},
 
   DrawControl = DrawPanel,
 }
@@ -252,7 +254,7 @@ skin.progressbar = {
 
 skin.scrollpanel = {
   BorderTileImage = ":cl:panel2_border.png",
-  bordertiles = {1,1,1,1},
+  bordertiles = {2, 2, 2, 2},
 
   BackgroundTileImage = ":cl:panel2_bg.png",
   bkgndtiles = {14,14,14,14},
@@ -303,10 +305,7 @@ skin.treeview = {
 
 skin.window = {
   TileImage = ":c:tech_dragwindow.png",
-  --TileImage = ":cl:tech_window.png",
-  --TileImage = ":cl:window_tooltip.png",
-  --tiles = {25, 25, 25, 25}, --// tile widths: left,top,right,bottom
-  tiles = {62, 62, 62, 62}, --// tile widths: left,top,right,bottom
+  tiles = {2, 2, 2, 2}, --// tile widths: left,top,right,bottom
   padding = {13, 13, 13, 13},
   hitpadding = {4, 4, 4, 4},
 
@@ -353,10 +352,7 @@ skin.main_window = {
 
 skin.overlay_window = {
   TileImage = ":c:tech_overlaywindow.png",
-  --TileImage = ":cl:tech_window.png",
-  --TileImage = ":cl:window_tooltip.png",
-  --tiles = {25, 25, 25, 25}, --// tile widths: left,top,right,bottom
-  tiles = {62, 62, 62, 62}, --// tile widths: left,top,right,bottom
+  tiles = {2, 2, 2, 2}, --// tile widths: left,top,right,bottom
   padding = {13, 13, 13, 13},
   hitpadding = {4, 4, 4, 4},
 

@@ -202,7 +202,7 @@ local function InitializeControls(parentControl)
 	}
 	
 	local btnLeaveScreen = Button:New {
-		right = 7,
+		right = 9,
 		y = 5,
 		width = 80,
 		height = 45,

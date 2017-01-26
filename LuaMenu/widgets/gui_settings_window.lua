@@ -1017,9 +1017,8 @@ local function MakeTab(name, children)
 	local contentsPanel = ScrollPanel:New {
 		x = 5,
 		right = 5,
-		y = 15,
+		y = 10,
 		bottom = 8,
-		borderColor = {0,0,0,0},
 		horizontalScrollbar = false,
 		children = children
 	}
@@ -1055,7 +1054,7 @@ local function InitializeControls(window)
 		y = 45,
 		bottom = 1,
 		padding = {0, 0, 0, 0},
-		minTabWidth = 130,
+		minTabWidth = 120,
 		tabs = tabs,
 		parent = window,
 		OnTabChange = {
@@ -1067,10 +1066,10 @@ local function InitializeControls(window)
 		x = 0,
 		y = 0,
 		right = 0,
-		height = 50,
+		height = 55,
 		resizable = false,
 		draggable = false,
-		padding = {8, 4, 8, 0},
+		padding = {14, 8, 14, 0},
 		parent = window,
 		children = {
 			tabPanel.tabBar
