@@ -2,8 +2,9 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 
 	local externalFunctions = {}
 
-	local BUTTON_SPACING = 5
-	local BUTTON_SIDE_SPACING = 3
+	-- Matches interface root and submenu handler
+	local buttonSpacing = 4
+	local BUTTON_SIDE_SPACING = 1
 
 	-------------------------------------------------------------------
 	-- Local variables
@@ -72,7 +73,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 		if tabsVertical then
 			tabs[index].button:SetPos(
 				BUTTON_SIDE_SPACING,
-				(index - 1) * (buttonHeight + BUTTON_SPACING) + buttonOffset,
+				(index - 1) * (buttonHeight + buttonSpacing) + buttonOffset,
 				nil,
 				buttonHeight
 			)
@@ -80,7 +81,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 			tabs[index].button:UpdateClientArea()
 		elseif buttonWidth then
 			tabs[index].button:SetPos(
-				(index - 1) * (buttonWidth + BUTTON_SPACING) + buttonOffset,
+				(index - 1) * (buttonWidth + buttonSpacing) + buttonOffset,
 				nil,
 				buttonWidth
 			)
@@ -170,7 +171,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 		return false
 	end
 
-	function externalFunctions.Rescale(newFontSize, newButtonHeight, newButtonWidth, newButtonOffset)
+	function externalFunctions.Rescale(newFontSize, newButtonHeight, newButtonWidth, newButtonOffset, newButtonSpacing)
 		for i = 1, #tabs do
 			if tabs[i].panelHandler then
 				tabs[i].panelHandler.Rescale(newFontSize, newButtonHeight, newButtonWidth, newButtonOffset)
@@ -180,9 +181,10 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 		fontSizeScale = newFontSize or fontSizeScale
 		buttonWidth = newButtonWidth or buttonWidth
 		buttonHeight = newButtonHeight or buttonHeight
+		buttonSpacing = newButtonSpacing or buttonSpacing
 		
 		if newButtonOffset then
-			buttonOffset = newButtonOffset - BUTTON_SPACING
+			buttonOffset = newButtonOffset - buttonSpacing
 		end
 		if backButton then
 			local size = Configuration:GetFont(fontSizeScale).size
@@ -437,7 +439,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 
 	if backFunction then
 		-- Add back button
-		buttonOffset = 50 - BUTTON_SPACING
+		buttonOffset = 50 - buttonSpacing
 
 		local function SucessFunction()
 			if cleanupFunction then
