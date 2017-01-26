@@ -1068,7 +1068,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-------------------------------------------------------------------
 	local screenWidth, screenHeight = Spring.GetWindowGeometry()
 
-	battleStatusPanelHandler.Rescale(4, 70)
+	battleStatusPanelHandler.Rescale(3, 70)
 	rightPanelHandler.Rescale(2, 70)
 	RescaleMainWindow(3, 70, 50)
 

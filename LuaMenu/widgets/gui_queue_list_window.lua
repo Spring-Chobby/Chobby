@@ -206,7 +206,7 @@ local function InitializeControls(window)
 	local lblTitle = Label:New {
 		x = 20,
 		right = 5,
-		y = 16,
+		y = 17,
 		height = 20,
 		font = Configuration:GetFont(3),
 		caption = "Join matchmaking queues",

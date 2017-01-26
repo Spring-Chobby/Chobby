@@ -319,7 +319,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 		local button
 		
 		if tabControlOverride and tabControlOverride[name] then
-			button = tabControlOverride[name]()
+			button = tabControlOverride[name](fontSizeScale)
 		else
 			button = Button:New {
 				name = name .. "_button",
@@ -334,7 +334,8 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 		end
 
 		buttonsHolder:AddChild(button)
-
+		ButtonUtilities.SetFontSizeScale(button, fontSizeScale)
+		
 		button.OnClick = button.OnClick or {}
 		button.OnClick[#button.OnClick + 1] = function(obj)
 			if newTab.entryCheck then
@@ -404,7 +405,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 
 		UpdateButtonLayout()
 	end
-
+	
 	function externalFunctions.CloseSubmenu()
 		local closedSubmenu = false
 		for i = 1, #tabs do

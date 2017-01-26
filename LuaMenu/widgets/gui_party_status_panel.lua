@@ -45,6 +45,7 @@ local function InitializePartyStatusHandler(name)
 		y = 0,
 		right = 0,
 		bottom = 0,
+		classname = "overlay_panel",
 		width = pos and pos.width,
 		height = pos and pos.height,
 		padding = {0,0,0,0},
@@ -141,7 +142,7 @@ local function CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, De
 		caption = "",
 		name = "partyInviteWindow",
 		parent = screen0,
-		width = 310,
+		width = 316,
 		height = BASE_HEIGHT + userHeight,
 		resizable = false,
 		draggable = false,
@@ -213,7 +214,7 @@ local function CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, De
 	end
 
 	local buttonAccept = Button:New {
-		right = 150,
+		x = 5,
 		width = 135,
 		bottom = 1,
 		height = 70,
@@ -229,7 +230,7 @@ local function CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, De
 	}
 
 	local buttonReject = Button:New {
-		right = 1,
+		right = 5,
 		width = 135,
 		bottom = 1,
 		height = 70,

@@ -49,7 +49,7 @@ local function GetBattleInfoHolder(parent, battleID)
 	local lblTitle = Label:New {
 		name = "title",
 		x = 70,
-		y = 1,
+		y = 0,
 		width = 225,
 		height = 20,
 		valign = 'top',
@@ -134,25 +134,25 @@ local function GetBattleInfoHolder(parent, battleID)
 			lblTitle.font.size = Configuration:GetFont(1).size
 			lblTitle:SetPos(36, 1, 150)
 
-			lblPlayerStatus.font.size = Configuration:GetFont(2).size
-			lblPlayerStatus:SetPos(58, 15)
+			lblPlayerStatus.font.size = Configuration:GetFont(1).size
+			lblPlayerStatus:SetPos(58, 18)
 
-			imPlayerStatus:SetPos(40, 15, 15, 15)
+			imPlayerStatus:SetPos(43, 18, 12, 12)
 
-			lblPlayers.font.size = Configuration:GetFont(2).size
-			lblPlayers:SetPos(165, 15)
+			lblPlayers.font.size = Configuration:GetFont(1).size
+			lblPlayers:SetPos(165, 18)
 
 			playersPrefix = PLAYER_PREFIX_SMALL
 		else
 			minimap:SetPos(nil, nil, 68, 68)
 
 			lblTitle.font.size = Configuration:GetFont(2).size
-			lblTitle:SetPos(76, 3, 225)
+			lblTitle:SetPos(76, 2, 225)
 
 			lblPlayerStatus.font.size = Configuration:GetFont(2).size
-			lblPlayerStatus:SetPos(103, 27)
+			lblPlayerStatus:SetPos(103, 26)
 
-			imPlayerStatus:SetPos(80, 23, 20, 20)
+			imPlayerStatus:SetPos(82, 26, 18, 18)
 
 			lblPlayers.font.size = Configuration:GetFont(2).size
 			lblPlayers:SetPos(80, 48)
@@ -254,18 +254,18 @@ local function InitializeControls(parentControl)
 		draggable = false,
 		padding = {0, 0, 0, 0},
 	}
-	local lblBattle = Label:New {
-		name = "lblBattle",
-		x = 8,
-		width = 85,
-		y = 27,
-		height = 20,
-		align = "left",
-		valign = "center",
-		caption = "Battle",
-		parent = parentControl,
-		font = WG.Chobby.Configuration:GetFont(3),
-	}
+	--local lblBattle = Label:New {
+	--	name = "lblBattle",
+	--	x = 8,
+	--	width = 85,
+	--	y = 27,
+	--	height = 20,
+	--	align = "left",
+	--	valign = "center",
+	--	caption = "Battle",
+	--	parent = parentControl,
+	--	font = WG.Chobby.Configuration:GetFont(3),
+	--}
 
 	local battleInfoHolder = GetBattleInfoHolder(infoHolder, lobby:GetMyBattleID())
 
@@ -278,14 +278,14 @@ local function InitializeControls(parentControl)
 			infoHolder._relativeBounds.right = 2
 			infoHolder:UpdateClientArea()
 
-			lblBattle:SetPos(nil, 6)
+			--lblBattle:SetPos(nil, 6)
 		else
 			infoHolder:SetPos(nil, 4, 237)
 			infoHolder._relativeBounds.bottom = 3
 			infoHolder._relativeBounds.right = 3
 			infoHolder:UpdateClientArea()
 
-			lblBattle:SetPos(nil, 24)
+			--lblBattle:SetPos(nil, 24)
 		end
 		battleInfoHolder.Resize(smallMode)
 	end
@@ -358,14 +358,15 @@ end
 
 local BattleStatusPanel = {}
 
-function BattleStatusPanel.GetControl()
+function BattleStatusPanel.GetControl(fontSizeScale)
 	local button = Button:New {
 		x = 0,
 		y = 0,
 		width = 290,
 		bottom = 0,
 		padding = {0,0,0,0},
-		caption = "",
+		font = WG.Chobby.Configuration:GetFont(fontSizeScale),
+		caption = "Battle                                    ",
 		OnParent = {
 			function(obj)
 				if obj:IsEmpty() then

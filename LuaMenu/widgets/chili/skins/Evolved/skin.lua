@@ -238,6 +238,17 @@ skin.panel = {
   DrawControl = DrawPanel,
 }
 
+skin.overlay_panel = {
+  TileImageBK = ":cl:tech_overlaywindow.png",
+  TileImageFG = ":cl:empty.png",
+  tiles = {2, 2, 2, 2},
+
+  backgroundColor = {0.1, 0.1, 0.1, 0.7},
+
+  DrawControl = DrawPanel,
+}
+
+
 skin.progressbar = {
   TileImageFG = ":cl:tech_progressbar_full.png",
   TileImageBK = ":cl:tech_progressbar_empty.png",
