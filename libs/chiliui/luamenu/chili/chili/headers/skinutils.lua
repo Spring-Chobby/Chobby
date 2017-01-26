@@ -848,10 +848,10 @@ function DrawScrollPanel(obj)
       local width = obj.width
       local height = obj.height
       if (obj._vscrollbar) then
-        width = width - obj.scrollbarSize
+        width = width - obj.scrollbarSize - 1
       end
       if (obj._hscrollbar) then
-        height = height - obj.scrollbarSize
+        height = height - obj.scrollbarSize - 1
       end
 
       gl.Color(obj.backgroundColor)

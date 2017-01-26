@@ -122,8 +122,8 @@ function PriorityPopup:ViewResize(screenWidth, screenHeight)
 	self.mainWindow:BringToFront()
 	
 	self.mainWindow:SetPos(
-		(screenWidth - self.mainWindow.width)/2,
-		(screenHeight - self.mainWindow.height)/2
+		math.floor((screenWidth - self.mainWindow.width)/2),
+		math.floor((screenHeight - self.mainWindow.height)/2)
 	)
 end
 
