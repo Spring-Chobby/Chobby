@@ -15,7 +15,7 @@ end
 
 local GALAXY_IMAGE = LUA_DIRNAME .. "images/heic1403aDowngrade.jpg"
 local IMAGE_BOUNDS = {
-	x = 800/4000,
+	x = 850/4000,
 	y = 800/2602,
 	width = 2400/4000,
 	height = 1500/2602,
@@ -25,7 +25,7 @@ local IMAGE_BOUNDS = {
 --------------------------------------------------------------------------------
 
 local function InitializeControls(parent)
-	local window = Control:New {
+	local window = Window:New {
 		name = "planetsHolder",
 		padding = {0,0,0,0},
 		resizable = false,
