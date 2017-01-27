@@ -36,7 +36,7 @@ skin.icons = {
 skin.button = {
   TileImageBK = ":cl:tech_button_small_bk.png",
   TileImageFG = ":cl:tech_button_small_fg.png",
-  tiles = {45, 22, 45, 22}, --// tile widths: left,top,right,bottom
+  tiles = {20, 14, 20, 14}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
 
   backgroundColor = {0, 0, 0, 0.7},
@@ -62,7 +62,7 @@ skin.button_large = {
 skin.button_highlight = {
   TileImageBK = ":cl:tech_button_bright_small_bk.png",
   TileImageFG = ":cl:tech_button_bright_small_fg.png",
-  tiles = {45, 22, 45, 22}, --// tile widths: left,top,right,bottom
+  tiles = {20, 14, 20, 14}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
 
   backgroundColor = {0.2, 0.25, 0.35, 0.7},
@@ -88,7 +88,7 @@ skin.button_square = {
 skin.action_button = {
   TileImageBK = ":cl:tech_button_bright_small_bk.png",
   TileImageFG = ":cl:tech_button_bright_small_fg.png",
-  tiles = {45, 22, 45, 22}, --// tile widths: left,top,right,bottom
+  tiles = {20, 14, 20, 14}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
 
   backgroundColor = {0.98, 0.48, 0.26, 0.65},
@@ -101,7 +101,7 @@ skin.action_button = {
 skin.option_button = {
   TileImageBK = ":cl:tech_button_bright_small_bk.png",
   TileImageFG = ":cl:tech_button_bright_small_fg.png",
-  tiles = {45, 22, 45, 22}, --// tile widths: left,top,right,bottom
+  tiles = {20, 14, 20, 14}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
   
   backgroundColor = {0.21, 0.53, 0.60, 0.65},
@@ -114,7 +114,7 @@ skin.option_button = {
 skin.negative_button = {
   TileImageBK = ":cl:tech_button_bright_small_bk.png",
   TileImageFG = ":cl:tech_button_bright_small_fg.png",
-  tiles = {45, 22, 45, 22}, --// tile widths: left,top,right,bottom
+  tiles = {20, 14, 20, 14}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
   
   backgroundColor = {0.85, 0.05, 0.25, 0.65},
@@ -339,7 +339,7 @@ skin.window = {
 }
 
 skin.main_window = {
-  TileImage = ":c:tech_mainwindow.png",
+  TileImage = ":c:tech_mainwindow1.png",
   tiles = {176, 64, 176, 64}, --// tile widths: left,top,right,bottom
   padding = {13, 13, 13, 13},
   hitpadding = {4, 4, 4, 4},
