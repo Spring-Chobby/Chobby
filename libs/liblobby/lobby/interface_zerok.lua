@@ -1046,7 +1046,18 @@ function Interface:ProcessVote(data, battle, duplicateMessageTime)
 		return true
 	end
 	
-	self:_OnVoteUpdate(voteMessage, yesVotes, noVotes, votesNeeded)
+	-- Get poll type and parameters
+	local pollType = false
+	local pollParameter = false
+	
+	local mapStart = string.find(voteMessage, "Change map to ")
+	if mapStart then
+		mapStart = mapStart + 14
+		pollParameter = string.sub(voteMessage, mapStart, lasturl - 1)
+		pollType = "map"
+	end
+	
+	self:_OnVoteUpdate(voteMessage, yesVotes, noVotes, votesNeeded, pollType, pollParameter)
 	return true
 end
 
