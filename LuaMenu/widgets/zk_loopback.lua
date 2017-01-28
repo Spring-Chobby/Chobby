@@ -105,7 +105,7 @@ function WrapperLoopback.TtsSay(name, text)
 end
 
 -- downloads a file, fileType can be any of RAPID, MAP, MISSION, DEMO, ENGINE, NOTKNOWN
-function WrapperLoopback.TtsSay(name, fileType) 
+function WrapperLoopback.DownloadFile(name, fileType) 
 	SendCommand("DownloadFile", {Name = name, FileType = fileType})
 end
 

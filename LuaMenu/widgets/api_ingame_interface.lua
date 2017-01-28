@@ -30,17 +30,60 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Callins
+-- Text To Speech
 
-function widget:RecvLuaMsg(msg)
+local TTT_SAY = "textToSpeechSay_"
+local TTS_VOLUME = "textToSpeechVolume_"
+
+local function HandleTextToSpeech(msg)
+	if string.find(msg, TTT_SAY) == 1 then
+		msg = string.sub(msg, 17)
+		local nameEnd = string.find(msg, "%s")
+		local name = string.sub(msg, 0, nameEnd)
+		msg = string.sub(msg, nameEnd + 1)
+		WG.WrapperLoopback.TtsSay(name, msg)
+		return true
+	end
+	
+	if string.find(msg, TTS_VOLUME) == 1 then
+		msg = string.sub(msg, 20)
+		WG.WrapperLoopback.TtsVolume(tonumber(msg) or 0)
+		return true
+	end
+	
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Lobby Overlay
+
+local REMOVE_BUTTON = "disableLobbyButton"
+local ENABLE_OVERLAY = "showLobby"
+
+local function HandleLobbyOverlay(msg)
 	local Chobby = WG.Chobby
 	local interfaceRoot = Chobby and Chobby.interfaceRoot
 	if interfaceRoot then
-		if msg == "disableLobbyButton" then 
+		if msg == REMOVE_BUTTON then 
 			interfaceRoot.SetLobbyButtonEnabled(false)
-		elseif msg == "showLobby" then 
+			return true
+		elseif msg == ENABLE_OVERLAY then 
 			interfaceRoot.SetMainInterfaceVisible(true)
+			return true
 		end
+	end
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Callins
+
+function widget:RecvLuaMsg(msg)
+	if HandleLobbyOverlay(msg) then
+		return
+	end
+	if HandleTextToSpeech(msg) then
+		return
 	end
 end
 
