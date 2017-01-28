@@ -155,7 +155,6 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		
 		mapName = battle.mapName:gsub("_", " ")
 		mapName = StringUtilities.GetTruncatedStringWithDotDot(mapName, tbMapName.font, width - 22)
-		Spring.Echo("mapName", mapName)
 		tbMapName:SetText(mapName)
 		local length = tbMapName.font:GetTextWidth(mapName)
 		imMapLink:SetPos(length + 5)
