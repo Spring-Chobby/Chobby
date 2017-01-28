@@ -9,7 +9,7 @@ local defaultModoptions  = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. s
 local rankFunction       = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/rankFunction.lua")
 local backgroundConfig   = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/skinConfig.lua")
 
-local link_reportPlayer, link_userPage, link_homePage, link_replays, link_maps = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/linkFunctions.lua")
+local link_reportPlayer, link_userPage, link_homePage, link_replays, link_maps, link_particularMapPage = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/linkFunctions.lua")
 
 local settingsConfig, settingsDefault = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/settingsMenu.lua")
 
@@ -76,6 +76,7 @@ local externalFuncAndData = {
 	link_homePage           = link_homePage,
 	link_replays            = link_replays,
 	link_maps               = link_maps,
+	link_particularMapPage  = link_particularMapPage,
 }
 
 function externalFuncAndData.CheckAvailability()
