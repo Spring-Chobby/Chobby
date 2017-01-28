@@ -180,6 +180,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		right = 0,
 		bottom = 0,
 		classname = "button_square",
+		caption = "",
 		parent = minimapPanel,
 		padding = {2,2,2,2},
 		OnClick = {
@@ -1013,9 +1014,45 @@ end
 
 local function SetupVotePanel(votePanel, battle, battleID)
 	local height = votePanel.clientHeight
-
+	local config = WG.Chobby.Configuration
 	local offset = 0
 
+	local currentMapName
+	
+	local minimapPanel = Panel:New {
+		x = 0,
+		y = 0,
+		bottom = 0,
+		width = height,
+		padding = {1,1,1,1},
+		parent = votePanel,
+	}
+	local btnMinimap = Button:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		classname = "button_square",
+		caption = "",
+		parent = minimapPanel,
+		padding = {1,1,1,1},
+		OnClick = {
+			function ()
+				if currentMapName and config.gameConfig.link_particularMapPage then
+					WG.BrowserHandler.OpenUrl(config.gameConfig.link_particularMapPage(currentMapName))
+				end
+			end
+		},
+	}
+	local imMinimap = Image:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		keepAspect = true,
+		parent = btnMinimap,
+	}
+	
 	local activePanel = Control:New {
 		x = 0,
 		y = 0,
@@ -1088,7 +1125,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		y = 4,
 		width = 50,
 		bottom = height * 0.4,
-		font = WG.Chobby.Configuration:GetFont(2),
+		font = config:GetFont(1),
 		caption = "",
 		parent = activePanel,
 	}
@@ -1108,7 +1145,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		width = 50,
 		bottom = 0,
 		align = "left",
-		font = WG.Chobby.Configuration:GetFont(2),
+		font = config:GetFont(2),
 		caption = "20/50",
 		parent = activePanel,
 	}
@@ -1123,7 +1160,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		right = 0,
 		bottom = height * 0.4,
 		align = "left",
-		font = WG.Chobby.Configuration:GetFont(2),
+		font = config:GetFont(2),
 		caption = "",
 		parent = votePanel,
 	}
@@ -1139,21 +1176,44 @@ local function SetupVotePanel(votePanel, battle, battleID)
 	end
 	
 	local externalFunctions = {}
-
-	function externalFunctions.VoteUpdate(message, yesVotes, noVotes, votesNeeded)
+	
+	local oldPollType, oldPollParameter
+	local function UpdatePollType(pollType, pollParameter)
+		if newPollType == pollType and newPollParameter == pollParameter then
+			return
+		end
+		oldPollType, oldPollParameter = pollType, pollParameter
+		
+		if pollType == "map" then
+			minimapPanel:SetVisibility(true)
+			activePanel:SetPos(height + 2)
+			activePanel._relativeBounds.right = 0
+			activePanel:UpdateClientArea()
+			if pollParameter then
+				imMinimap.file = config:GetMinimapImage(pollParameter)
+				imMinimap:Invalidate()
+				currentMapName = pollParameter
+			end
+		else
+			minimapPanel:SetVisibility(false)
+			activePanel:SetPos(0)
+			activePanel._relativeBounds.right = 0
+			activePanel:UpdateClientArea()
+		end
+	end
+	
+	function externalFunctions.VoteUpdate(message, yesVotes, noVotes, votesNeeded, pollType, pollParameter)
+		UpdatePollType(pollType, pollParameter)
 		voteName:SetCaption(message)
 		voteCountLabel:SetCaption(yesVotes .. "/" .. votesNeeded)
 		voteProgress:SetValue(100 * yesVotes / votesNeeded)
-		if not activePanel.visible then
-			activePanel:Show()
-		end
+		activePanel:SetVisibility(true)
 		HideVoteResult()
 	end
 
 	function externalFunctions.VoteEnd(message, success)
-		if activePanel.visible then
-			activePanel:Hide()
-		end
+		activePanel:SetVisibility(false)
+		minimapPanel:SetVisibility(false)
 		local text = ((success and WG.Chobby.Configuration:GetSuccessColor()) or WG.Chobby.Configuration:GetErrorColor()) .. message .. ((success and " Passed.") or " Failed.")
 		voteResultLabel:SetCaption(text)
 		if not voteResultLabel.visible then
@@ -1399,8 +1459,8 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		playerHandler.RemoveAi(botName)
 	end
 	
-	local function OnVoteUpdate(listener, message, yesVotes, noVotes, votesNeeded)
-		votePanel.VoteUpdate(message, yesVotes, noVotes, votesNeeded)
+	local function OnVoteUpdate(listener, message, yesVotes, noVotes, votesNeeded, pollType, pollParameter)
+		votePanel.VoteUpdate(message, yesVotes, noVotes, votesNeeded, pollType, pollParameter)
 	end
 	
 	local function OnVoteEnd(listener, message, success)
