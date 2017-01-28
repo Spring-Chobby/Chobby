@@ -17,10 +17,39 @@ local urlPattern = "https?://[%w-_%.%?%.:/%+=&]+"
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Utilities
+
+local function ApplySessionToken(urlString)
+	local isZkSite = string.find(urlString, "http://zero%-k%.info") == 1
+	if not isZkSite then
+		return urlString
+	end
+	local lobby = WG.LibLobby.lobby
+	if lobby:GetMyIsAdmin() then
+		return urlString -- Don't use tokens for admins
+	end
+	local token = lobby:GetMySessionToken()
+	if not token then
+		return urlString
+	end
+	local alreadyAddedPos = string.find(urlString, "%?asmallcake=")
+	if alreadyAddedPos then
+		return string.sub(urlString, 0, alreadyAddedPos) .. token
+	end
+	local hasQuestionMark = string.find(urlString, "%?")
+	if hasQuestionMark then
+		return urlString .. "&asmallcake=" .. token
+	end
+	return urlString .. "?asmallcake=" .. token
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- External Functions
 local BrowserHandler = {}
 
 function BrowserHandler.OpenUrl(urlString)
+	urlString = ApplySessionToken(urlString)
 	if WG.WrapperLoopback then
 		WG.WrapperLoopback.OpenUrl(urlString)
 	else

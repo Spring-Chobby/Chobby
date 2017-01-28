@@ -635,6 +635,7 @@ Interface.jsonCommands["RegisterResponse"] = Interface._RegisterResponse
 function Interface:_LoginResponse(data)
 	-- ResultCode: 1 = connected, 2 = name exists, 3 = password wrong, 4 = banned
 	-- Reason (for ban I presume)
+	self.sessionToken = data.SessionToken
 	if data.ResultCode == 0 then
 		self:_OnAccepted()
 	else

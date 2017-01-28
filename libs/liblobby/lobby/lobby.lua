@@ -56,6 +56,7 @@ function Lobby:_Clean()
 	self.myChannels = {}
 	self.myBattleID = nil
 	self.scriptPassword = nil
+	self.sessionToken = nil
 
 	-- reconnection delay in seconds
 	self.reconnectionDelay = 5
@@ -1394,6 +1395,10 @@ end
 
 function Lobby:GetMyUserName()
 	return self.myUserName
+end
+
+function Lobby:GetMySessionToken()
+	return self.sessionToken
 end
 
 function Lobby:GetMyIsAdmin()

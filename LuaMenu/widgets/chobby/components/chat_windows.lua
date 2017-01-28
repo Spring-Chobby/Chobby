@@ -620,6 +620,14 @@ function ChatWindows:CreateDebugConsole()
 	)
 	lobby:AddListener("OnCommandReceived",
 		function(listner, command)
+			local sessionPos = string.find(command, [["SessionToken":"]])
+			if sessionPos then
+				sessionPos = sessionPos + 15
+				local endPos = string.find(command, [["]], sessionPos + 1)
+				if endPos then
+					command = string.sub(command, 0, sessionPos) .. "REDACTED" .. string.sub(command, endPos)
+				end
+			end
 			Spring.Echo("LuaMenuServerMessage", "<" .. command)
 			if Configuration.activeDebugConsole then
 				self.debugConsole:AddMessage("<" .. command)
@@ -628,12 +636,12 @@ function ChatWindows:CreateDebugConsole()
 	)
 	lobby:AddListener("OnCommandSent",
 		function(listner, command)
-			local subPos = string.find(command, [["PasswordHash":"]])
-			if subPos then
-				subPos = subPos + 15
-				local endPos = string.find(command, [["]], subPos + 1)
+			local passwordPos = string.find(command, [["PasswordHash":"]])
+			if passwordPos then
+				passwordPos = passwordPos + 15
+				local endPos = string.find(command, [["]], passwordPos + 1)
 				if endPos then
-					command = string.sub(command, 0, subPos) .. "REDACTED" .. string.sub(command, endPos)
+					command = string.sub(command, 0, passwordPos) .. "REDACTED" .. string.sub(command, endPos)
 				end
 			end
 			Spring.Echo("LuaMenuServerMessage", ">" .. command)
