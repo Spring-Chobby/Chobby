@@ -72,7 +72,7 @@ local function CompareUsers(userName, otherName)
 		return userData.isAdmin
 	end
 	
-	if otherData.isIgnored ~= userData.isIgnored then
+	if (not not otherData.isIgnored) ~= (not not userData.isIgnored) then
 		return otherData.isIgnored
 	end
 	
