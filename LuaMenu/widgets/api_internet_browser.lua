@@ -19,9 +19,24 @@ local urlPattern = "https?://[%w-_%.%?%.:/%+=&]+"
 --------------------------------------------------------------------------------
 -- Utilities
 
+local function IsZkSiteUrl(urlString)
+	if string.find(urlString, "http://zero%-k%.info/") == 1 then
+		return true
+	end
+	if string.find(urlString, "http://zero%-k%.info") == 1 and string.len(urlString) == 18 then
+		return true
+	end
+	if string.find(urlString, "https://zero%-k%.info/") == 1 then
+		return true
+	end
+	if string.find(urlString, "https://zero%-k%.info") == 1 and string.len(urlString) == 19 then
+		return true
+	end
+	return false
+end
+
 local function ApplySessionToken(urlString)
-	local isZkSite = string.find(urlString, "http://zero%-k%.info") == 1
-	if not isZkSite then
+	if not IsZkSiteUrl(urlString) then
 		return urlString
 	end
 	local lobby = WG.LibLobby.lobby
