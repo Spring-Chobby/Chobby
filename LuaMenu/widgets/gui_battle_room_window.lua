@@ -32,6 +32,7 @@ local singleplayerGame = "Chobby $VERSION"
 
 local IMG_READY    = LUA_DIRNAME .. "images/ready.png"
 local IMG_UNREADY  = LUA_DIRNAME .. "images/unready.png"
+local IMG_LINK     = LUA_DIRNAME .. "images/link.png"
 
 
 --------------------------------------------------------------------------------
@@ -101,18 +102,70 @@ local OpenNewTeam
 -- Chili/interface management
 
 local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUserName)
-
+	local config = WG.Chobby.Configuration
 	local minimapBottomClearance = 135
 
-	local lblMapName = Label:New {
-		x = 5,
-		bottom = 110,
+	local currentMapName
+	local mapLinkWidth = 150
+	
+	local btnMapLink = Button:New {
+		x = 3,
+		y = 0,
+		right = 3,
 		height = 20,
-		font = WG.Chobby.Configuration:GetFont(2),
-		caption = battle.mapName:gsub("_", " "),
+		classname = "button_square",
+		caption = "",
+		padding = {0, 0, 0, 0},
 		parent = rightInfo,
+		OnClick = {
+			function ()
+				if currentMapName and config.gameConfig.link_particularMapPage then
+					WG.BrowserHandler.OpenUrl(config.gameConfig.link_particularMapPage(currentMapName))
+				end
+			end
+		}
 	}
 
+	local tbMapName = TextBox:New {
+		name = "tbMapName",
+		x = 2,
+		y = 3,
+		right = 20,
+		align = "left",
+		parent = btnMapLink,
+		fontsize = config:GetFont(2).size,
+	}
+	local imMapLink = Image:New {
+		x = 0,
+		y = 1,
+		width = 18,
+		height = 18,
+		keepAspect = true,
+		file = IMG_LINK,
+		parent = btnMapLink,
+	}
+	
+	local function SetMapName(mapName, width)
+		currentMapName = mapName
+		mapLinkWidth = width
+		
+		if not currentMapName then
+			return
+		end
+		
+		mapName = battle.mapName:gsub("_", " ")
+		mapName = StringUtilities.GetTruncatedStringWithDotDot(mapName, tbMapName.font, width - 22)
+		Spring.Echo("mapName", mapName)
+		tbMapName:SetText(mapName)
+		local length = tbMapName.font:GetTextWidth(mapName)
+		imMapLink:SetPos(length + 5)
+	end
+	SetMapName(battle.mapName, mapLinkWidth)
+	
+	btnMapLink.OnResize[#btnMapLink.OnResize + 1] = function (self, xSize, ySize)
+		SetMapName(currentMapName, xSize)
+	end
+	
 	local minimapPanel = Panel:New {
 		x = 0,
 		y = 0,
@@ -141,7 +194,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		right = 0,
 		bottom = 0,
 		keepAspect = true,
-		file = WG.Chobby.Configuration:GetMinimapImage(battle.mapName),
+		file = config:GetMinimapImage(battle.mapName),
 		parent = btnMinimap,
 	}
 
@@ -156,7 +209,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		height = 48,
 		caption = i18n("start"),
 		classname = "action_button",
-		font = WG.Chobby.Configuration:GetFont(4),
+		font = config:GetFont(4),
 		OnClick = {
 			function()
 				if haveMapAndGame then
@@ -185,7 +238,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		height = 48,
 		classname = "button_highlight",
 		caption = "\255\66\138\201" .. i18n("spectator") ..  "\b",
-		font =  WG.Chobby.Configuration:GetFont(3),
+		font =  config:GetFont(3),
 		OnClick = {
 			function(obj)
 				battleLobby:SetBattleStatus({isSpectator = true})
@@ -205,7 +258,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		height = 48,
 		classname = "button_highlight",
 		caption = "\255\66\138\201" .. i18n("player") ..  "\b",
-		font =  WG.Chobby.Configuration:GetFont(3),
+		font =  config:GetFont(3),
 		OnClick = {
 			function(obj)
 				battleLobby:SetBattleStatus({isSpectator = false})
@@ -226,7 +279,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 				minimapPanel:SetPos(nil, nil, nil, xSize)
 				minimapPanel:UpdateClientArea()
 
-				lblMapName:SetPos(5, xSize + 5)
+				btnMapLink:SetPos(nil, xSize + 2)
 			else
 				local horPadding = ((xSize + minimapBottomClearance) - ySize)/2
 				minimapPanel._relativeBounds.left = horPadding
@@ -234,7 +287,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 				minimapPanel:SetPos(nil, nil, nil, ySize - minimapBottomClearance)
 				minimapPanel:UpdateClientArea()
 
-				lblMapName:SetPos(5, ySize - minimapBottomClearance + 5)
+				btnMapLink:SetPos(nil, ySize - minimapBottomClearance + 2)
 			end
 		end
 	}
@@ -248,7 +301,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		right = 5,
 		classname = "option_button",
 		caption = i18n("add_team") ..  "\b",
-		font = WG.Chobby.Configuration:GetFont(2),
+		font = config:GetFont(2),
 		OnClick = {
 			function()
 				if OpenNewTeam then
@@ -258,7 +311,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		},
 		-- Combo box settings
 		--ignoreItemCaption = true,
-		--itemFontSize = WG.Chobby.Configuration:GetFont(1).size,
+		--itemFontSize = config:GetFont(1).size,
 		--itemHeight = 30,
 		--selected = 0,
 		--maxDropDownWidth = 120,
@@ -287,7 +340,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		right = 5,
 		classname = "option_button",
 		caption = i18n("pick_map") ..  "\b",
-		font =  WG.Chobby.Configuration:GetFont(2),
+		font =  config:GetFont(2),
 		OnClick = {
 			function()
 				WG.Chobby.MapListWindow(battleLobby, battle.gameName, battle.mapName)
@@ -305,7 +358,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		right = 5,
 		classname = "option_button",
 		caption = "Adv Options" ..  "\b",
-		font =  WG.Chobby.Configuration:GetFont(2),
+		font =  config:GetFont(2),
 		OnClick = {
 			function()
 				WG.ModoptionsPanel.ShowModoptions()
@@ -319,7 +372,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		x = 8,
 		y = leftOffset,
 		caption = battle.gameName,
-		font = WG.Chobby.Configuration:GetFont(1),
+		font = config:GetFont(1),
 		parent = leftInfo,
 	}
 	leftOffset = leftOffset + 26
@@ -336,7 +389,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		x = 28,
 		y = leftOffset,
 		caption = "",
-		font = WG.Chobby.Configuration:GetFont(1),
+		font = config:GetFont(1),
 		parent = leftInfo,
 	}
 	leftOffset = leftOffset + 25
@@ -353,7 +406,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		x = 28,
 		y = leftOffset,
 		caption = "",
-		font = WG.Chobby.Configuration:GetFont(1),
+		font = config:GetFont(1),
 		parent = leftInfo,
 	}
 	leftOffset = leftOffset + 25
@@ -465,8 +518,8 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 			return
 		end
 		if mapName then
-			lblMapName:SetCaption(mapName:gsub("_", " "))
-			imMinimap.file = WG.Chobby.Configuration:GetMinimapImage(mapName)
+			SetMapName(mapName, mapLinkWidth)
+			imMinimap.file = config:GetMinimapImage(mapName)
 			imMinimap:Invalidate()
 
 			-- TODO: Bit lazy here, seeing as we only need to update the map

@@ -18,4 +18,8 @@ local function link_maps()
 	return "http://zero-k.info/Maps"
 end
 
-return link_reportPlayer, link_userPage, link_homePage, link_replays, link_maps
+local function link_particularMapPage(mapName)
+	return "http://zero-k.info/Maps/DetailName?name=" .. mapName
+end
+
+return link_reportPlayer, link_userPage, link_homePage, link_replays, link_maps, link_particularMapPage
