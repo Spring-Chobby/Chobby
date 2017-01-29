@@ -517,6 +517,29 @@ local function GetVoidTabControls()
 	
 	local children = {}
 
+	children[#children + 1] = Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(3),
+		caption = "Warning: These settings are experimental and not officially supported",
+	}
+	offset = offset + 40
+	children[#children + 1] = Label:New {
+		x = 115,
+		y = offset,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(3),
+		caption = "Proceed at your own risk",
+	}
+	offset = offset + 40 + TEXT_OFFSET
+
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("debugMode"), "debugMode", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Debug server messages", "activeDebugConsole", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Show channel bots", "displayBots", false)
@@ -1046,7 +1069,7 @@ local function InitializeControls(window)
 		tabs[#tabs + 1] = MakeTab(data.name, PopulateTab(data.presets, data.settings, settingsDefault))
 	end
 	
-	tabs[#tabs + 1] = MakeTab("Void", GetVoidTabControls())
+	tabs[#tabs + 1] = MakeTab("Developer", GetVoidTabControls())
 	
 	local tabPanel = Chili.DetachableTabPanel:New {
 		x = 5,
