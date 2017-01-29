@@ -65,24 +65,24 @@ local communityLines = {
 		end
 	},
 	{
-		"ShadowFury333's Twich stream.",
+		"Shadowfury333's Youtube channel.",
+		"Youtube",
+		function ()
+			WG.WrapperLoopback.OpenUrl("https://www.youtube.com/user/Shadowfury333")
+		end
+	},
+	{
+		"Shadowfury333's Twitch stream.",
 		"Twitch",
 		function ()
 			WG.WrapperLoopback.OpenUrl("https://www.twitch.tv/shadowfury333")
 		end
 	},
 	{
-		"ShadowFury333's Hitbox stream.",
+		"Shadowfury333's Hitbox stream.",
 		"Hitbox",
 		function ()
 			WG.WrapperLoopback.OpenUrl("http://www.hitbox.tv/shadowfury333")
-		end
-	},
-	{
-		"ShadowFury333's Youtube channel.",
-		"Youtube",
-		function ()
-			WG.WrapperLoopback.OpenUrl("https://www.youtube.com/user/Shadowfury333")
 		end
 	},
 	{
