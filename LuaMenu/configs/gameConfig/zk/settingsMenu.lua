@@ -494,6 +494,7 @@ local settings = {
 							["3DTrees"] = 0,
 							MaxDynamicMapLights = 0,
 							MaxDynamicModelLights = 0,
+							ROAM = 1,
 						}
 					},
 					{
@@ -507,6 +508,7 @@ local settings = {
 							["3DTrees"] = 1,
 							MaxDynamicMapLights = 1,
 							MaxDynamicModelLights = 1,
+							ROAM = 1, --Maybe ROAM = 0 when the new renderer is fully developed
 						}
 					},
 				},
