@@ -36,6 +36,11 @@ local TTT_SAY = "textToSpeechSay_"
 local TTS_VOLUME = "textToSpeechVolume_"
 
 local function HandleTextToSpeech(msg)
+	local Configuration = WG.Chobby.Configuration
+	if not Configuration.enableTextToSpeech then
+		return false
+	end
+	
 	if string.find(msg, TTT_SAY) == 1 then
 		msg = string.sub(msg, 17)
 		local nameEnd = string.find(msg, "%s")
@@ -50,7 +55,6 @@ local function HandleTextToSpeech(msg)
 		WG.WrapperLoopback.TtsVolume(tonumber(msg) or 0)
 		return true
 	end
-	
 end
 
 --------------------------------------------------------------------------------

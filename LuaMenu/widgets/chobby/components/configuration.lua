@@ -121,6 +121,7 @@ function Configuration:init()
 	self.gameOverlayOpacity = 0.5
 	self.showMatchMakerBattles = false
 	self.hideInterface = false
+	self.enableTextToSpeech = true
 	
 	self.chatFontSize = 18
 
@@ -183,6 +184,7 @@ function Configuration:GetConfigData()
 		menuBackgroundBrightness = self.menuBackgroundBrightness,
 		gameOverlayOpacity = self.gameOverlayOpacity,
 		showMatchMakerBattles = self.showMatchMakerBattles,
+		enableTextToSpeech = self.enableTextToSpeech,
 		chatFontSize = self.chatFontSize,
 		myAccountID = self.myAccountID,
 		lastAddedAiName = self.lastAddedAiName,

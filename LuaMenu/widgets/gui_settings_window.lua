@@ -964,10 +964,11 @@ local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitc
 		local applyFunction = data.applyFunction
 		if applyFunction then
 			local applyData = applyFunction(newValue)
-			
-			for applyName, value in pairs(applyData) do
-				Configuration.game_settings[applyName] = value
-				SetSpringsettingsValue(applyName, value)
+			if applyData then
+				for applyName, value in pairs(applyData) do
+					Configuration.game_settings[applyName] = value
+					SetSpringsettingsValue(applyName, value)
+				end
 			end
 		else
 			local springValue = data.springConversion(newValue)
