@@ -808,6 +808,17 @@ function Object:LocalToClient(x,y)
   return x,y
 end
 
+-- LocalToScreen does not do what it says it does because 
+-- self:LocalToParent(x,y) = 2*self.x, 2*self.y
+-- However, too much chili depends on the current LocalToScreen
+-- so this working version exists for widgets.
+function Object:CorrectlyImplementedLocalToScreen(x,y)
+  if (not self.parent) then
+    return x,y
+  end
+  return (self.parent):ClientToScreen(x,y)
+end
+
 
 function Object:LocalToScreen(x,y)
   if (not self.parent) then
@@ -851,6 +862,14 @@ function Object:LocalToObject(x, y, obj)
   end
   x, y = self:LocalToParent(x, y)
   return self.parent:LocalToObject(x, y, obj)
+end
+
+
+function Object:IsVisibleOnScreen()
+  if (not self.parent) or (not self.visible) then
+    return false
+  end
+  return (self.parent):IsVisibleOnScreen()
 end
 
 --//=============================================================================
