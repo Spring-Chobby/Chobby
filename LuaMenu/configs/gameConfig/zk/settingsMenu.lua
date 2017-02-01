@@ -557,6 +557,7 @@ local settings = {
 					IconDistance = 151,
 					MouseZoomSpeed = 25,
 					InvertZoom = "Off",
+					TextToSpeech = "On",
 					MiddlePanSpeed = 10,
 					CameraPanSpeed = 10,
 				}
@@ -612,6 +613,28 @@ local settings = {
 				},
 			},
 			{
+				name = "TextToSpeech",
+				humanName = "Text To Speech",
+				options = {
+					{
+						name = "On",
+						applyFunction = function()
+							local Configuration = WG.Chobby.Configuration
+							Configuration:SetConfigValue("enableTextToSpeech", true)
+							return false
+						end
+					},
+					{
+						name = "Off",
+						applyFunction = function()
+							local Configuration = WG.Chobby.Configuration
+							Configuration:SetConfigValue("enableTextToSpeech", false)
+							return false
+						end
+					},
+				},
+			},
+			{
 				name = "MiddlePanSpeed",
 				humanName = "Middle Click Pan Speed",
 				isNumberSetting = true,
@@ -657,6 +680,7 @@ local settingsDefaults = {
 	IconDistance = 151,
 	MouseZoomSpeed = 25,
 	InvertZoom = "Off",
+	TextToSpeech = "On",
 	MiddlePanSpeed = 10,
 	CameraPanSpeed = 50,
 }
