@@ -339,7 +339,7 @@ skin.window = {
 }
 
 skin.main_window = {
-  TileImage = ":c:tech_mainwindow1.png",
+  TileImage = ":c:tech_mainwindow_dark.png",
   tiles = {176, 64, 176, 64}, --// tile widths: left,top,right,bottom
   padding = {13, 13, 13, 13},
   hitpadding = {4, 4, 4, 4},
@@ -356,7 +356,7 @@ skin.main_window = {
   NCMouseDown = WindowNCMouseDown,
   NCMouseDownPostChildren = WindowNCMouseDownPostChildren,
 
-  DrawControl = DrawRepeatingTiledWindow,
+  DrawControl = DrawWindow,
   DrawDragGrip = function() end,
   DrawResizeGrip = DrawResizeGrip,
 }
