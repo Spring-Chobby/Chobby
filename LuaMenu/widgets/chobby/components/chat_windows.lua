@@ -203,10 +203,10 @@ function ChatWindows:init()
 	}
 
 	self.tabPanel = Chili.DetachableTabPanel:New {
-		x = 10,
-		right = 10,
+		x = 7,
+		right = 7,
 		y = 0,
-		bottom = 10,
+		bottom = 9,
 		padding = {0, 0, 0, 0},
 		tabs = {
 			[1] = (Configuration.debugMode and { name = "debug", caption = i18n("debug"), children = {self.debugConsole.panel} }) or nil,
