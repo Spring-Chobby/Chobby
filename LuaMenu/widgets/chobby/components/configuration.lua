@@ -111,6 +111,7 @@ function Configuration:init()
 	
 	self.lastLoginChatLength = 25
 	self.notifyForAllChat = true
+	self.simplifiedSkirmishSetup = true
 	self.debugMode = false
 	self.activeDebugConsole = false
 	self.onlyShowFeaturedMaps = true
@@ -167,6 +168,7 @@ function Configuration:GetConfigData()
 		lobby_fullscreen = self.lobby_fullscreen,
 		game_settings = self.game_settings,
 		notifyForAllChat = self.notifyForAllChat,
+		simplifiedSkirmishSetup = self.simplifiedSkirmishSetup,
 		debugMode = self.debugMode,
 		confirmation_mainMenuFromBattle = self.confirmation_mainMenuFromBattle,
 		confirmation_battleFromBattle = self.confirmation_battleFromBattle,

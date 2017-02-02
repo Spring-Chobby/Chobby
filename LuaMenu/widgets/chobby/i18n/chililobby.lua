@@ -126,6 +126,7 @@ return {
 
 		-- Settings
 		notifyForAllChat = "Notify for all chat",
+		simplifiedSkirmishSetup = "Simple skirmish setup",
 		debugMode = "Debug mode",
 
 		-- chat_windows.lua
