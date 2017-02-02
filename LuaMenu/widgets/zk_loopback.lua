@@ -65,7 +65,23 @@ function DownloadFileDone(args)
 	Echo(args.IsSuccess)
 end
 
+
+-- notifies that steam is online
+function SteamOnline(args) 
+	Echo(args.AuthToken)
+	Echo(args.LobbyID)
+	Echo(args.Friends) -- list of IDS
+end
+
+-- requests to join a friend's game/party
+function SteamJoinfriend(args) 
+	Echo(args.FriendSteamID)
+end
+
+
 commands["DownloadFileDone"] = DownloadFileDone
+commands["SteamOnline"] = SteamOnline
+commands["SteamJoinFriend"] = SteamJoinFriend
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
