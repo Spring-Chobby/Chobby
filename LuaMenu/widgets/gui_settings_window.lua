@@ -199,6 +199,11 @@ end
 local function AddCheckboxSetting(offset, caption, key, default)
 	local Configuration = WG.Chobby.Configuration
 
+	local checked = Configuration[key]
+	if checked == nil then
+		checked = default
+	end
+	
 	local control = Checkbox:New {
 		x = 20,
 		width = CHECK_WIDTH,
@@ -207,7 +212,7 @@ local function AddCheckboxSetting(offset, caption, key, default)
 		boxalign = "right",
 		boxsize = 20,
 		caption = caption,
-		checked = Configuration[key] or default,
+		checked = checked,
 		font = Configuration:GetFont(2),
 		OnChange = {function (obj, newState)
 			Configuration:SetConfigValue(key, newState)
