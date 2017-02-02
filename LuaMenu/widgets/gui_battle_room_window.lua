@@ -217,7 +217,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 						if Spring.GetGameName() == "" then
 							RejoinBattleFunc()
 						else
-							 WG.Chobby.ConfirmationPopup(RejoinBattleFunc, "Are you sure you want to leave your current game to rejoin this one?", nil, 315, 200)
+							WG.Chobby.ConfirmationPopup(RejoinBattleFunc, "Are you sure you want to leave your current game to rejoin this one?", nil, 315, 200)
 						end
 					else
 						battleLobby:StartBattle()
@@ -1228,7 +1228,159 @@ local function SetupVotePanel(votePanel, battle, battleID)
 	return externalFunctions
 end
 
-local function InitializeControls(battleID, oldLobby, topPoportion)
+local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOptions, firstPage, ApplyFunction)
+	local Configuration = WG.Chobby.Configuration
+	
+	local subPanel = Control:New {
+		x = 0,
+		y = 47,
+		right = 0,
+		bottom = 0,
+		padding = {0, 0, 0, 0},
+		parent = mainWindow,
+	}
+	if not firstPage then
+		subPanel:Hide()
+	end
+	
+	local lblBattleTitle = Label:New {
+		x = "40%",
+		right = "40%",
+		y = 70,
+		height = 30,
+		font = Configuration:GetFont(4),
+		align = "center",
+		valign = "center",
+		caption = pageConfig.humanName,
+		parent = subPanel,
+	}
+	
+	local buttons = {}
+	
+	local advButton
+	
+	local nextButton = Button:New {
+		x = "36%",
+		right = "36%",
+		y = 150 + (#pageConfig.options)*70,
+		height = 64,
+		classname = "action_button",
+		caption = (nextPage and "Next") or i18n("start"),
+		font = Configuration:GetFont(4),
+		OnClick = {
+			function(obj)
+				subPanel:SetVisibility(false)
+				if nextPage then
+					nextPage:SetVisibility(true)
+				else
+					ApplyFunction(true)
+				end
+			end
+		},
+		parent = subPanel,
+	}
+	nextButton:Hide()
+	
+	if not nextPage then
+		advButton = Button:New {
+			x = "78%",
+			right = "5%",
+			bottom = "4%",
+			height = 48,
+			classname = "option_button",
+			caption = "Advanced",
+			font = Configuration:GetFont(2),
+			OnClick = {
+				function(obj)
+					subPanel:SetVisibility(false)
+					ApplyFunction(false)
+				end
+			},
+			parent = subPanel,
+		}
+		advButton:Hide()
+	end
+	
+	for i = 1, #pageConfig.options do
+		local x, y, right, height, caption, tooltip
+		if pageConfig.minimap then
+			if i%2 == 1 then
+				x, y, right, height = "25%", ((i + 1)/2)*140 - 10, "51%", 128
+			else
+				x, y, right, height = "51%", (i/2)*140 - 10, "25%", 128
+			end
+			tooltip = pageConfig.options[i]
+			caption = ""
+		else
+			x, y, right, height = "36%", 60 + i*70, "36%", 64
+			caption = pageConfig.options[i]
+		end
+		buttons[i] = Button:New {
+			x = x,
+			y = y,
+			right = right,
+			height = height,
+			classname = "button_highlight",
+			caption = caption,
+			tooltip = tooltip,
+			font = Configuration:GetFont(4),
+			OnClick = {
+				function(obj)
+					for j = 1, #buttons do
+						if j ~= i then
+							ButtonUtilities.SetButtonDeselected(buttons[j])
+						end
+					end
+					ButtonUtilities.SetButtonSelected(obj)
+					selectedOptions[pageConfig.name] = i
+					nextButton:SetVisibility(true)
+					if advButton then
+						advButton:SetVisibility(true)
+					end
+				end
+			},
+			parent = subPanel,
+		}
+		if pageConfig.minimap then
+			local imMinimap = Image:New {
+				x = 0,
+				y = 0,
+				right = 0,
+				bottom = 0,
+				keepAspect = true,
+				file = Configuration:GetMinimapImage(pageConfig.options[i]),
+				parent = buttons[i],
+			}
+		end
+		ButtonUtilities.SetButtonSelected(buttons[i])
+	end
+	
+	return subPanel
+end
+
+local function SetupEasySetupPanel(mainWindow, standardSubPanel, setupData)
+	local pageConfigs = setupData.pages
+	local nextPage
+	local selectedOptions = {} -- Passed and modified by reference
+	
+	local function ApplyFunction(startGame)
+		setupData.ApplyFunction(battleLobby, selectedOptions)
+		if startGame then
+			if haveMapAndGame then
+				battleLobby:StartBattle()
+			else
+				Spring.Echo("Do something if map or game is missing")
+			end
+		end
+		standardSubPanel:SetVisibility(true)
+	end
+	
+	for i = #pageConfigs, 1, -1 do
+		nextPage = InitializeSetupPage(mainWindow, pageConfigs[i], nextPage, selectedOptions, i == 1, ApplyFunction)
+	end
+end
+
+local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 	local battle = battleLobby:GetBattle(battleID)
 
 	if not battle then
@@ -1236,7 +1388,8 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		return false
 	end
 	
-	if not WG.Chobby.Configuration.showMatchMakerBattles and battle.isMatchMaker then
+	local Configuration = WG.Chobby.Configuration
+	if not Configuration.showMatchMakerBattles and battle.isMatchMaker then
 		return
 	end
 	
@@ -1263,6 +1416,10 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		padding = {0, 0, 0, 0},
 		parent = mainWindow,
 	}
+	if setupData and Configuration.simplifiedSkirmishSetup then
+		subPanel:SetVisibility(false)
+		SetupEasySetupPanel(mainWindow, subPanel, setupData)
+	end
 
 	local topPanel = Control:New {
 		x = 0,
@@ -1339,8 +1496,8 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		y = 7,
 		width = 80,
 		height = 45,
-		font =  WG.Chobby.Configuration:GetFont(3),
-		caption = i18n("leave"),
+		font = Configuration:GetFont(3),
+		caption = ((battleLobby.name == "singleplayer") and i18n("close")) or i18n("leave"),
 		classname = "negative_button",
 		OnClick = {
 			function()
@@ -1352,7 +1509,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 
 	local battleTitle = tostring(battle.title)
 	if battle.battleMode then
-		battleTitle = i18n(WG.Chobby.Configuration.battleTypeToName[battle.battleMode]) .. ": " .. battleTitle
+		battleTitle = i18n(Configuration.battleTypeToName[battle.battleMode]) .. ": " .. battleTitle
 	end
 
 	local lblBattleTitle = Label:New {
@@ -1360,7 +1517,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 		y = 17,
 		right = 100,
 		height = 30,
-		font = WG.Chobby.Configuration:GetFont(3),
+		font = Configuration:GetFont(3),
 		caption = "",
 		parent = mainWindow,
 		OnResize = {
@@ -1398,7 +1555,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	}
 
 	local CHAT_MENTION = "\255\255\0\0"
-	local CHAT_ME = WG.Chobby.Configuration.meColor
+	local CHAT_ME = Configuration.meColor
 	
 	-- External Functions
 	local externalFunctions = {}
@@ -1434,7 +1591,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion)
 	local function OnUpdateBattleInfo(listener, updatedBattleID, spectatorCount, locked, mapHash, mapName, 
 			engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker, newPlayerList, maxPlayers, title)
 		if (battleMode or title) and battleID == updatedBattleID then
-			battleTitle = i18n(WG.Chobby.Configuration.battleTypeToName[battle.battleMode]) .. ": " .. tostring(battle.title)
+			battleTitle = i18n(Configuration.battleTypeToName[battle.battleMode]) .. ": " .. tostring(battle.title)
 			lblBattleTitle:SetCaption(battleTitle)
 			
 			if battleMode then
@@ -1578,7 +1735,7 @@ function BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
 	})
 end
 
-function BattleRoomWindow.GetSingleplayerControl()
+function BattleRoomWindow.GetSingleplayerControl(setupData)
 
 	singleplayerWrapper = Control:New {
 		name = "singleplayerWrapper",
@@ -1617,7 +1774,7 @@ function BattleRoomWindow.GetSingleplayerControl()
 
 				wrapperControl = obj
 
-				local battleWindow, functions = InitializeControls(1, battleLobby, 70)
+				local battleWindow, functions = InitializeControls(1, battleLobby, 70, setupData)
 				mainWindowFunctions = functions
 				if not battleWindow then
 					return
@@ -1632,8 +1789,8 @@ function BattleRoomWindow.GetSingleplayerControl()
 					isSpectator = false,
 					sync = (haveMapAndGame and 1) or 2, -- 0 = unknown, 1 = synced, 2 = unsynced
 				})
-
-				if singleplayerDefault and singleplayerDefault.enemyAI then
+				
+				if not (setupData and WG.Chobby.Configuration.simplifiedSkirmishSetup) and singleplayerDefault and singleplayerDefault.enemyAI then
 					battleLobby:AddAi(singleplayerDefault.enemyAI .. " (1)", singleplayerDefault.enemyAI, 1)
 				end
 			end
