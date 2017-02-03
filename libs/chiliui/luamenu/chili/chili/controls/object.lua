@@ -253,6 +253,7 @@ function Object:SetParent(obj)
   -- Children always appear to visible when they recieve new parents because they
   -- are added to the visible child list.
   self.visible = true
+  self.hidden = false
   
   self.parent = MakeWeakLink(obj, self.parent)
 
