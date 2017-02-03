@@ -141,6 +141,11 @@ function WrapperLoopback.SteamOpenWebsite(url)
 end
 
 
+-- invites friend to a game, even offline
+function WrapperLoopback.SteamInviteFriendToGame(steamID) 
+	SendCommand("SteamInviteFriendToGame", {SteamID = steamID})
+end
+
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
