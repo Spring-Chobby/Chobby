@@ -126,6 +126,22 @@ function WrapperLoopback.DownloadFile(name, fileType)
 end
 
 
+-- opens steam section, default = "Friends"
+-- WARNING: FPS needs to be increased, overlay works at chobby FPS
+function WrapperLoopback.SteamOpenOverlaySection(name) 
+	SendCommand("SteamOpenOverlaySection", {Option = name})
+end
+
+
+-- opens url in steam browser
+-- of overlay not available, opens ext. browser
+-- WARNING: FPS needs to be increased, overlay works at chobby FPS
+function WrapperLoopback.SteamOpenWebsite(url) 
+	SendCommand("SteamOpenOverlayWebsite", {Url = url})
+end
+
+
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface
