@@ -69,7 +69,7 @@ end
 -- notifies that steam is online
 function SteamOnline(args) 
 	Echo(args.AuthToken)
-	Echo(args.LobbyID)
+	Echo(args.FriendSteamID) -- friend to join instantly
 	Echo(args.Friends) -- list of IDS
 end
 
@@ -126,7 +126,7 @@ function WrapperLoopback.DownloadFile(name, fileType)
 end
 
 
--- opens steam section, default = "Friends"
+-- opens steam section, default = "LobbyInvite"
 -- WARNING: FPS needs to be increased, overlay works at chobby FPS
 function WrapperLoopback.SteamOpenOverlaySection(name) 
 	SendCommand("SteamOpenOverlaySection", {Option = name})
