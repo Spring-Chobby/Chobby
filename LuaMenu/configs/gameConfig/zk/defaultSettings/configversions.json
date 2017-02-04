@@ -1,1 +1,16 @@
-{"Versions":{"lups.cfg":1,"springsettings.cfg":1}}
+{  
+   "Versions":[  
+      {  
+         "Platform":null,
+         "VersionNumber":1,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/lups.cfg",
+         "TargetPath":"lups.cfg"
+      },
+      {  
+         "Platform":null,
+         "VersionNumber":1,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/springsettings.cfg",
+         "TargetPath":"springsettings.cfg"
+      }
+   ]
+}
