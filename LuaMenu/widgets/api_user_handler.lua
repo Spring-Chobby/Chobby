@@ -515,6 +515,10 @@ local function GetUserControls(userName, opts)
 						end
 					elseif selectedName == "Join Party" or selectedName == "Invite to Party" then
 						userControls.lobby:InviteToParty(userName)
+						local userInfo = userControls.lobby:GetUser(userName)
+						if WG.SteamHandler.GetIsSteamFriend(userInfo.steamID) and userInfo.isOffline then
+							WG.SteamHandler.InviteUserViaSteam(userName, userInfo.steamID)
+						end
 					elseif selectedName == "Join Battle" then
 						local userInfo = userControls.lobby:GetUser(userName) or {}
 						if userInfo.battleID then

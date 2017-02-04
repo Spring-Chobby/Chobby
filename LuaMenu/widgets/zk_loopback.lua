@@ -65,19 +65,15 @@ function DownloadFileDone(args)
 	Echo(args.IsSuccess)
 end
 
-
 -- notifies that steam is online
-function SteamOnline(args) 
-	Echo(args.AuthToken)
-	Echo(args.FriendSteamID) -- friend to join instantly
-	Echo(args.Friends) -- list of IDS
+function SteamOnline(args)
+	WG.SteamHandler.SteamOnline(args.AuthToken, args.FriendSteamID, args.Friends)
 end
 
 -- requests to join a friend's game/party
-function SteamJoinfriend(args) 
-	Echo(args.FriendSteamID)
+function SteamJoinfriend(args)
+	WG.SteamHandler.SteamJoinfriend(args.FriendSteamID)
 end
-
 
 commands["DownloadFileDone"] = DownloadFileDone
 commands["SteamOnline"] = SteamOnline
@@ -146,6 +142,13 @@ function WrapperLoopback.SteamInviteFriendToGame(steamID)
 	SendCommand("SteamInviteFriendToGame", {SteamID = steamID})
 end
 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Data
+
+function WrapperLoopback.GetSteamAuthToken() 
+
+end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------

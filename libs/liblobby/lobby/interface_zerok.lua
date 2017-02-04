@@ -35,6 +35,7 @@ function Interface:Register(userName, password, email)
 	local sendData = {
 		Name = userName,
 		PasswordHash = password,
+		AuthToken = self.steamAuthToken,
 	}
 	self:_SendCommand("Register " .. json.encode(sendData))
 	return self
@@ -53,6 +54,7 @@ function Interface:Login(user, password, cpu, localIP, lobbyVersion)
 		UserID = 0,
 		ClientType = 1,
 		LobbyVersion = lobbyVersion,
+		AuthToken = self.steamAuthToken,
 	}
 	
 	self:_SendCommand("Login " .. json.encode(sendData))
@@ -566,6 +568,21 @@ function Interface:PartyInviteResponse(partyID, accepted)
 	return self
 end
 
+------------------------
+-- Steam commands
+------------------------
+
+function Interface:SetSteamAuthToken(steamAuthToken)
+	self:super("SetSteamAuthToken", steamAuthToken)
+	if self.status == "connected" then
+		local sendData = {
+			AuthToken = steamAuthToken,
+		}
+		self:_SendCommand("LinkSteam " .. json.encode(sendData))
+	end
+	return self
+end
+
 -------------------------------------------------
 -- END Client commands
 -------------------------------------------------
@@ -693,6 +710,7 @@ function Interface:_User(data)
 			isBot = data.IsBot,
 			awaySince = data.AwaySince,
 			inGameSince = data.InGameSince,
+			steamID = data.SteamID,
 		})
 		
 		for i = 1, #self.commonChannels do
@@ -717,6 +735,7 @@ function Interface:_User(data)
 		isBot = data.IsBot,
 		awaySince = data.AwaySince,
 		inGameSince = data.InGameSince,
+		steamID = data.SteamID,
 	})
 	
 	self:UpdateUserBattleStatus(data.Name, data.BattleID)

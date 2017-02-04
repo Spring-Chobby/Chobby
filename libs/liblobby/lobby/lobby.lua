@@ -13,6 +13,7 @@ end
 
 function Lobby:_Clean()
 	self.users = {}
+	self.userBySteamID = {}
 	self.userCount = 0
 
 	self.friends = {} -- list
@@ -346,6 +347,15 @@ function Lobby:PartyInviteResponse(partyID, accepted)
 	return self
 end
 
+------------------------
+-- Steam commands
+------------------------
+
+function Lobby:SetSteamAuthToken(steamAuthToken)
+	self.steamAuthToken = steamAuthToken
+	return self
+end
+
 -------------------------------------------------
 -- END Client commands
 -------------------------------------------------
@@ -425,6 +435,10 @@ end
 ------------------------
 
 function Lobby:_OnAddUser(userName, status)
+	if status.steamID then
+		self.userBySteamID[status.steamID] = userName
+	end
+
 	if self.users[userName] then
 		local userInfo = self.users[userName]
 		userInfo.isOffline = false
@@ -463,7 +477,19 @@ function Lobby:_OnRemoveUser(userName)
 	
 	-- preserve isFriend/hasFriendRequest
 	local isFriend, hasFriendRequest = userInfo.isFriend, userInfo.hasFriendRequest
-	self.users[userName] = nil
+	local oldUserInfo = self.users[userName]
+	local persistentUserInfo = {
+		userName = userName,
+		isOffline = true,
+		accountID = oldUserInfo.accountID,
+		country = oldUserInfo.country,
+		clan = oldUserInfo.clan,
+		level = oldUserInfo.level,
+		isAdmin = oldUserInfo.isAdmin,
+		steamID = oldUserInfo.steamID,
+	}
+	self.users[userName] =persistentUserInfo
+	
 	if isFriend or hasFriendRequest then
 		userInfo = self:TryGetUser(userName)
 		userInfo.isFriend         = isFriend
@@ -477,6 +503,9 @@ end
 -- Status keys can be: isAway, isInGame, isModerator, rank, isBot
 -- Example: _OnUpdateUserStatus("gajop", {isAway=false, isInGame=true})
 function Lobby:_OnUpdateUserStatus(userName, status)
+	if status.steamID then
+		self.userBySteamID[status.steamID] = userName
+	end
 	for k, v in pairs(status) do
 		self.users[userName][k] = v
 	end
@@ -1201,6 +1230,10 @@ end
 
 function Lobby:GetSuggestedGameVersion()
 	return self.suggestedGameVersion or false
+end
+
+function Lobby:GetUserNameBySteamID(steamID)
+	return self.userBySteamID[steamID]
 end
 
 -- friends
