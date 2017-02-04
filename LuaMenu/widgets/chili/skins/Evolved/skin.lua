@@ -85,6 +85,19 @@ skin.button_square = {
   DrawControl = DrawButton,
 }
 
+skin.button_planet = {
+  TileImageBK = ":cl:tech_button_circle_bk.png",
+  TileImageFG = ":cl:tech_button_circle_fg.png",
+  tiles = {32, 32, 32, 32}, --// tile widths: left,top,right,bottom
+  padding = {0, 0, 0, 0},
+  
+  backgroundColor = {0, 0, 0, 0},
+  focusColor  = {0.94, 0.50, 0.23, 0.4},
+  borderColor = {1,1,1,0},
+
+  DrawControl = DrawButton,
+}
+
 skin.action_button = {
   TileImageBK = ":cl:tech_button_bright_small_bk.png",
   TileImageFG = ":cl:tech_button_bright_small_fg.png",
