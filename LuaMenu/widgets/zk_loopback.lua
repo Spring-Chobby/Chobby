@@ -59,20 +59,20 @@ end
 -- Use listener interface from configuration when implementing this
 
 -- reports that download has ended/was aborted
-function DownloadFileDone(args)
+local function DownloadFileDone(args)
 	Echo(args.Name)
 	Echo(args.FileType)
 	Echo(args.IsSuccess)
 end
 
 -- notifies that steam is online
-function SteamOnline(args)
+local function SteamOnline(args)
 	WG.SteamHandler.SteamOnline(args.AuthToken, args.FriendSteamID, args.Friends)
 end
 
 -- requests to join a friend's game/party
-function SteamJoinfriend(args)
-	WG.SteamHandler.SteamJoinfriend(args.FriendSteamID)
+local function SteamJoinFriend(args)
+	WG.SteamHandler.SteamJoinFriend(args.FriendSteamID)
 end
 
 commands["DownloadFileDone"] = DownloadFileDone
@@ -159,14 +159,14 @@ function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 	
-    local port = VFS.LoadFile("chobby_wrapper_port.txt"); -- get wrapper port from VFS file
+	local port = VFS.LoadFile("chobby_wrapper_port.txt"); -- get wrapper port from VFS file
 	if not port then
 		widgetHandler:RemoveWidget()
 		Spring.Log("Chobby", LOG.NOTICE, "No port support, chobby_wrapper_port.txt not found.")
 		return
 	end
-    Spring.Log("Chobby", LOG.NOTICE, "Using wrapper port: ", port)
-    SocketConnect("127.0.0.1", port)
+	Spring.Log("Chobby", LOG.NOTICE, "Using wrapper port: ", port)
+	SocketConnect("127.0.0.1", port)
 	
 	WG.WrapperLoopback = WrapperLoopback
 end
@@ -180,7 +180,7 @@ local function CommandReceived(command)
 	else
 		cmdName = command
 	end
-
+	
 	local commandFunc = commands[cmdName]
 	if commandFunc ~= nil then
 		local success, obj = pcall(json.decode, arguments)
