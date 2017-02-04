@@ -75,9 +75,16 @@ local function SteamJoinFriend(args)
 	WG.SteamHandler.SteamJoinFriend(args.FriendSteamID)
 end
 
+
+local function SteamOverlayChanged(args) 
+	WG.SteamHandler.SteamOverlayChanged(args.IsActive)
+end
+
 commands["DownloadFileDone"] = DownloadFileDone
 commands["SteamOnline"] = SteamOnline
 commands["SteamJoinFriend"] = SteamJoinFriend
+commands["SteamOverlayChanged"] = SteamOverlayChanged
+
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
