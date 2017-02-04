@@ -435,7 +435,7 @@ end
 ------------------------
 
 function Lobby:_OnAddUser(userName, status)
-	if status.steamID then
+	if status and status.steamID then
 		self.userBySteamID[status.steamID] = userName
 	end
 
@@ -503,7 +503,7 @@ end
 -- Status keys can be: isAway, isInGame, isModerator, rank, isBot
 -- Example: _OnUpdateUserStatus("gajop", {isAway=false, isInGame=true})
 function Lobby:_OnUpdateUserStatus(userName, status)
-	if status.steamID then
+	if status and status.steamID then
 		self.userBySteamID[status.steamID] = userName
 	end
 	for k, v in pairs(status) do
