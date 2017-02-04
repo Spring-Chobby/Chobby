@@ -429,6 +429,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local battleListWindow = BattleListWindow()
 	local battleWatchListWindow = BattleWatchListWindow()
 
+	local MULTIPLAYER_INDEX = 2
 	local submenus = {
 		{
 			name = "singleplayer",
@@ -921,7 +922,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		end
 	end
 	
-
+	function externalFunctions.OpenMultiplayerTabByName(name)
+		mainWindowHandler.SetBackAtMainMenu()
+		mainWindowHandler.OpenSubmenu(MULTIPLAYER_INDEX, name)
+	end
+	
 	function externalFunctions.SetPanelDisplayMode(newAutodetectDoublePanel, newDoublePanel)
 		autodetectDoublePanel = newAutodetectDoublePanel
 		local screenWidth, screenHeight = Spring.GetViewGeometry()

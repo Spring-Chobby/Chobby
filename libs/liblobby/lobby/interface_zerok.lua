@@ -963,10 +963,14 @@ local AUTOHOST_SUPRESSION = {
 }
 
 function Interface:_JoinChannelResponse(data)
-	-- JoinChannelResponse {"ChannelName":"sy","Success":true,"Channel":{"Users":["GoogleFrog","ikinz","DeinFreund","NorthChileanG","hokomoko"],"ChannelName":"sy"}}
+	--{"Channel":{"Users":["GoogleFrog","Test1234"],"ChannelName":"bla","Topic":{"SetBy":"GoogleFrog","SetDate":"2017-02-04T05:45:42.5126703Z","Text":"bla"},"IsDeluge":false},"ChannelName":"bla","Success":true}
 	if data.Success then
+		local channel = data.Channel
 		self:_OnJoin(data.ChannelName)
-		self:_OnClients(data.ChannelName, data.Channel.Users)
+		self:_OnClients(data.ChannelName, channel.Users)
+		if channel and channel.Topic and channel.Topic.Text then
+			self:_OnChannelTopic(data.ChannelName, channel.Topic.SetBy, channel.Topic.SetDate, channel.Topic.Text)
+		end
 	end
 end
 Interface.jsonCommands["JoinChannelResponse"] = Interface._JoinChannelResponse
@@ -1124,6 +1128,11 @@ function Interface:_Say(data)
 end
 Interface.jsonCommands["Say"] = Interface._Say
 
+function Interface:_ChangeTopic(data)
+	-- {"ChannelName":"bla","Topic":{"SetBy":"GoogleFrog","SetDate":"2017-02-04T05:37:41.2052699Z","Text":"bla"}}
+	self:_OnChannelTopic(data.ChannelName, data.Topic.SetBy, data.Topic.SetDate, data.Topic.Text)
+end
+Interface.jsonCommands["ChangeTopic"] = Interface._ChangeTopic
 ------------------------
 -- MatchMaking commands
 ------------------------
@@ -1263,6 +1272,13 @@ function Interface:_SetRectangle(data)
 end
 Interface.jsonCommands["SetRectangle"] = Interface._SetRectangle
 
+
+--PwMatchCommand
+
+-------------------------------------------------
+-- END Client commands
+-------------------------------------------------
+
 function Interface:_SetModOptions(data)
 	if not data.Options then
 		Spring.Echo("Invalid modoptions format")
@@ -1279,11 +1295,31 @@ function Interface:_SetModOptions(data)
 end
 Interface.jsonCommands["SetModOptions"] = Interface._SetModOptions
 
---PwMatchCommand
-
--------------------------------------------------
--- END Client commands
--------------------------------------------------
+function Interface:_BattleDebriefing(data)
+	--{
+	--	"Url":"http://zero-k.info/Battles/Detail/445337",
+	--	"ChatChannel":"debriefing_445337","ServerBattleID":445337,
+	--	"DebriefingUsers":{
+	--		"Test4321":{
+	--			"EloChange":7.68809843,
+	--			"IsInVictoryTeam":true,
+	--			"AllyNumber":0,
+	--			"IsLevelUp":false,
+	--			"Awards":[]
+	--		},
+	--		"Test1234":{
+	--		"EloChange":-7.68809843,
+	--		"IsInVictoryTeam":false,
+	--		"LoseTime":15,
+	--		"AllyNumber":1,
+	--		"IsLevelUp":false,
+	--		"Awards":[]
+	--		}
+	--	}
+	--}
+	self:_OnBattleDebriefing(data.Url, data.ChatChannel, data.ServerBattleID, data.DebriefingUsers)
+end
+Interface.jsonCommands["BattleDebriefing"] = Interface._BattleDebriefing
 
 function Interface:_OnSiteToLobbyCommand(msg)
 	local springLink = msg.Command;

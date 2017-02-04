@@ -152,6 +152,13 @@ function Configuration:SetConfigData(data)
 			self:SetConfigValue(k, v)
 		end
 	end
+	
+	-- Fix old channel memory.
+	for key, value in pairs(self.channels) do
+		if string.find(key, "debriefing") then
+			self.channels[key] = nil
+		end
+	end
 end
 
 function Configuration:GetConfigData()

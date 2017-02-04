@@ -75,6 +75,21 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 		return false
 	end
 	
+	function externalFunctions.OpenSubmenu(index, tabName)
+		if buttonsHolder.visible then
+			buttonsHolder:Hide()
+		end
+		
+		submenus[index].panelHandler.Show()
+		
+		if submenus[index].entryCheck then
+			submenus[index].entryCheck()
+		end
+		if tabName then
+			submenus[index].panelHandler.OpenTabByName(tabName)
+		end
+	end
+	
 	function externalFunctions.SetBackAtMainMenu(submenuName)
 		if submenuName then
 			local index = externalFunctions.GetCurrentSubmenu()
@@ -163,15 +178,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 			parent = buttonsHolder,
 			OnClick = {
 				function(self) 
-					if buttonsHolder.visible then
-						buttonsHolder:Hide()
-					end
-					
-					submenus[i].panelHandler.Show()
-					
-					if submenus[i].entryCheck then
-						submenus[i].entryCheck()
-					end
+					externalFunctions.OpenSubmenu(i)
 				end
 			},
 		}

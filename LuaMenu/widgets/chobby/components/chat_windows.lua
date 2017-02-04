@@ -65,7 +65,7 @@ function ChatWindows:init()
 				if self:IsChannelSelected(chanName) and self.activeUnreadMessages and self.activeUnreadMessages ~= 0 then
 					self.activeUnreadMessages = self.activeUnreadMessages + 1
 				end
-				channelConsole:AddMessage(topic, nil, nil, Configuration.meColor)
+				channelConsole:SetTopic(topic)
 			end
 		end
 	)
@@ -727,6 +727,9 @@ function ChatWindows:UpdateJoinPosition()
 end
 
 function ChatWindows:GetChannelConsole(chanName)
+	if string.find(chanName, "debriefing") then
+		return false
+	end
 	local channelConsole = self.channelConsoles[chanName]
 
 	if channelConsole == nil then
