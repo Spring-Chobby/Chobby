@@ -108,3 +108,7 @@ function UserListPanel:AddUser(userName)
 	userControl:SetPos(nil, #(self.userPanel.children) * self.spacing)
 	self.userPanel:AddChild(userControl)
 end
+
+function UserListPanel:Delete()
+	self = nil
+end

@@ -292,6 +292,10 @@ function Console:AddMessage(message, userName, dateOverride, color, thirdPerson)
 	end
 end
 
+function Console:SetTopic(newTopic)
+	self:AddMessage(newTopic, nil, nil, Configuration.meColor)
+end
+
 local function lineIterator(s)
 	if s:sub(-1)~="\n" then s=s.."\n" end
 	return s:gmatch("(.-)\n")
@@ -341,4 +345,8 @@ end
 
 function Console:ClearHistory()
 	self.tbHistory:SetText("")
+end
+
+function Console:Delete()
+	self = nil
 end

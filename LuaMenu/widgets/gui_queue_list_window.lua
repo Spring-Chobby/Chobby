@@ -17,6 +17,8 @@ end
 --------------------------------------------------------------------------------
 -- Variables
 
+local DEBRIEFING_CHANNEL = "debriefing"
+
 local requiredResources = {}
 local requiredResourceCount = 0
 
@@ -196,6 +198,146 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 	return externalFunctions
 end
 
+local function GetDebriefingChat(window, vertPos, channelName)
+	local lobby = WG.LibLobby.lobby
+	
+	local function MessageListener(message)
+		if message:starts("/me ") then
+			lobby:SayEx(channelName, message:sub(5))
+		else
+			lobby:Say(channelName, message)
+		end
+	end
+	local debriefingConsole = WG.Chobby.Console("Debriefing Chat", MessageListener, true)
+	local userListPanel = WG.Chobby.UserListPanel(function() return lobby:GetChannel(channelName) end, 22)
+	
+	local chatPanel = Control:New {
+		x = 0,
+		y = vertPos,
+		bottom = 0,
+		right = "33%",
+		padding = {12, 2, 2, 9},
+		itemPadding = {0, 0, 0, 0},
+		itemMargin = {0, 0, 0, 0},
+		children = {
+			debriefingConsole.panel
+		},
+		parent = window,
+	}
+	local spectatorPanel = Control:New {
+		x = "67%",
+		y = vertPos,
+		right = 0,
+		bottom = 0,
+		-- Add 7 to line up with chat
+		padding = {2, 2, 12, 16},
+		parent = window,
+		children = {
+			userListPanel.panel
+		},
+	}
+	
+	window:Invalidate()
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.UpdateUsers()
+		userListPanel:Update()
+	end
+	
+	function externalFunctions.AddMessage(message, userName, msgDate, chatColour, thirdPerson)
+		debriefingConsole:AddMessage(message, userName, msgDate, chatColour, thirdPerson)
+	end
+	
+	function externalFunctions.SetTopic(message)
+		debriefingConsole:SetTopic(message)
+	end
+	
+	function externalFunctions.Delete()
+		debriefingConsole:Delete()
+		userListPanel:Delete()
+		chatPanel:Dispose()
+		spectatorPanel:Dispose()
+	end
+	
+	return externalFunctions
+end
+
+local function SetupDebriefingTracker(window)
+	local Configuration = WG.Chobby.Configuration
+	local lobby = WG.LibLobby.lobby
+	
+	local debriefingChat
+	local debriefingChannelName
+	local ignoredChannels = {}
+	local channelTopics = {}
+	
+	local function OnJoin(listener, chanName)
+		if (not string.find(chanName, DEBRIEFING_CHANNEL)) or ignoredChannels[chanName] or chanName == debriefingChannelName then
+			return
+		end
+		if debriefingChannelName then
+			lobby:Leave(debriefingChannelName)
+			ignoredChannels[debriefingChannelName] = true
+		end
+		if debriefingChat then
+			debriefingChat.Delete()
+		end
+		debriefingChannelName = chanName
+		debriefingChat = GetDebriefingChat(window, 430, debriefingChannelName)
+		WG.Chobby.interfaceRoot.OpenMultiplayerTabByName("matchmaking")
+		
+		if channelTopics[debriefingChannelName] then
+			debriefingChat.SetTopic("Post game chat")
+			debriefingChat.SetTopic(channelTopics[debriefingChannelName])
+			channelTopics = {}
+		end
+	end
+	lobby:AddListener("OnJoin", OnJoin)
+	
+	local function UpdateUsers(listener, chanName, userName)
+		if not (chanName == debriefingChannelName and debriefingChat) then
+			return
+		end
+		debriefingChat.UpdateUsers()
+	end
+	lobby:AddListener("OnJoined", UpdateUsers)
+	lobby:AddListener("OnLeft", UpdateUsers)
+	lobby:AddListener("OnClients", UpdateUsers)
+
+	local CHAT_MENTION ="\255\255\0\0"
+
+	-- channel chat
+	local function OnSaid(listener, chanName, userName, message, msgDate)
+		if not (chanName == debriefingChannelName and debriefingChat) then
+			return
+		end
+		local iAmMentioned = (string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName())
+		debriefingChat.AddMessage(message, userName, msgDate, iAmMentioned and CHAT_MENTION)
+	end
+	lobby:AddListener("OnSaid", OnSaid)
+	
+	local function OnSaidEx(listener, chanName, userName, message, msgDate)
+		if not (chanName == debriefingChannelName and debriefingChat) then
+			return
+		end
+		local iAmMentioned = (string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName())
+		debriefingChat.AddMessage(message, userName, msgDate, (iAmMentioned and CHAT_MENTION) or Configuration.meColor, true)
+	end
+	lobby:AddListener("OnSaidEx", OnSaidEx)
+	
+	local function OnBattleDebriefing(listener, url, chanName, serverBattleID, userList)
+		local debriefTopic = "Battle link: " .. (url or "not found")
+		if debriefingChannelName == chanName and debriefingChat then
+			debriefingChat.SetTopic("Post game chat") -- URL doesn't work on line one.
+			debriefingChat.SetTopic(debriefTopic)
+		elseif string.find(chanName, DEBRIEFING_CHANNEL) then
+			channelTopics[debriefingChannelName] = debriefTopic
+		end
+	end
+	lobby:AddListener("OnBattleDebriefing", OnBattleDebriefing)
+end
+
 local function InitializeControls(window)
 	local Configuration = WG.Chobby.Configuration
 	local lobby = WG.LibLobby.lobby
@@ -240,7 +382,7 @@ local function InitializeControls(window)
 	}
 	
 	local statusText = TextBox:New {
-		x = 5,
+		x = 12,
 		right = 5,
 		y = 320,
 		height = 200,
@@ -250,7 +392,7 @@ local function InitializeControls(window)
 	}
 	
 	local requirementText = TextBox:New {
-		x = 5,
+		x = 12,
 		right = 5,
 		y = 400,
 		height = 200,
@@ -353,6 +495,8 @@ local function InitializeControls(window)
 		OnPartyUpdate(_, lobby:GetMyPartyID(), lobby:GetMyParty())
 	end
 	
+	SetupDebriefingTracker(window)
+	
 	-- External functions
 	local externalFunctions = {}
 		
@@ -407,9 +551,11 @@ function QueueListWindow.HaveMatchMakerResources()
 	return requiredResourceCount == 0 and HaveRightEngineVersion()
 end
 
+local queueListWindowControl
+
 function QueueListWindow.GetControl()
 
-	local window = Control:New {
+	queueListWindowControl = Control:New {
 		x = "0%",
 		y = "0%",
 		width = "100%",
@@ -424,12 +570,22 @@ function QueueListWindow.GetControl()
 		},
 	}
 	
-	return window
+	return queueListWindowControl
 end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface
+
+function widget:ActivateGame()
+	-- You can enter debriefing before you look at the queue list window.
+	-- Need to create it if a game starts.
+	if not (queueListWindowControl and queueListWindowControl:IsEmpty()) then
+		return
+	end
+	
+	panelInterface = InitializeControls(queueListWindowControl)
+end
 
 function widget:Update()
 	if panelInterface then

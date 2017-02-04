@@ -1079,10 +1079,13 @@ end
 -- Misc
 ------------------------
 
+function Lobby:_OnBattleDebriefing(url, chanName, serverBattleID, userList)
+	self:_CallListeners("OnBattleDebriefing", url, chanName, serverBattleID, userList)
+end
+
 function Lobby:_OnLaunchRemoteReplay(url, game, map, engine)
 	self:_CallListeners("OnLaunchRemoteReplay", url, game, map, engine)
 end
-
 
 -------------------------------------------------
 -- END Server commands
