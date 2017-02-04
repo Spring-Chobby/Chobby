@@ -132,6 +132,11 @@ function SteamHandler.GetIsSteamFriend(steamID)
 	return steamID and steamFriendByID[steamID]
 end
 
+
+function SteamHandler.SteamOverlayChanged(isActive) 
+	Spring.Echo("OVERLAY CHANGE " .. isActive)
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Initialization
