@@ -21,11 +21,86 @@ local IMAGE_BOUNDS = {
 	height = 1500/2602,
 }
 
+local planetImages = {
+	LUA_DIRNAME .. "images/planets/arid01.png",
+	LUA_DIRNAME .. "images/planets/barren01.png",
+	LUA_DIRNAME .. "images/planets/terran03_damaged.png",
+	LUA_DIRNAME .. "images/planets/tundra01.png",
+}
+
+local planetPositions = {
+	{0.22, 0.1},
+	{0.31, 0.19},
+	{0.3, 0.36},
+	{0.14, 0.44},
+	{0.05, 0.54},
+	{0.3, 0.52},
+	{0.24, 0.69},
+	{0.16, 0.91},
+	{0.27, 0.85},
+	{0.7, 0.9},
+	{0.56, 0.87},
+	{0.42, 0.72},
+	{0.64, 0.79},
+	{0.59, 0.66},
+	{0.61, 0.52},
+	{0.66, 0.35},
+	{0.47, 0.11},
+	{0.64, 0.19},
+	{0.72, 0.08},
+	{0.72, 0.66},
+	{0.79, 0.52},
+	{0.85, 0.35},
+	{0.89, 0.22},
+	{0.92, 0.63},
+	{0.41, 0.91},
+}
+
+local PLANET_SIZE = 54
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
-local function InitializeControls(parent)
-	local window = Window:New {
+local function GetPlanet(planetHolder, xPos, yPos)
+	
+	local button = Button:New{
+		x = 0,
+		y = 0,
+		width = PLANET_SIZE,
+		height = PLANET_SIZE,
+		classname = "button_planet",
+		caption = "",
+		OnClick = { 
+			function(self)
+				--SelectPlanet(planetDef.id)
+			end
+		},
+		parent = planetHolder,
+	}
+	
+	local image = Image:New {
+		file = planetImages[math.floor(math.random()*4) + 1],
+		x = 3,
+		y = 3,
+		right = 2,
+		bottom = 2,
+		keepAspect = true,
+		parent = button,
+	}
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.UpdatePosition(xSize, ySize)
+		local x = math.max(0, math.min(xSize - PLANET_SIZE, xPos*xSize - PLANET_SIZE/2))
+		local y = math.max(0, math.min(ySize - PLANET_SIZE, yPos*ySize - PLANET_SIZE/2))
+		button:SetPos(x,y)
+	end
+	
+	return externalFunctions
+end
+
+local function InitializePlanetHandler(parent)
+	local window = Control:New {
 		name = "planetsHolder",
 		padding = {0,0,0,0},
 		resizable = false,
@@ -33,10 +108,20 @@ local function InitializeControls(parent)
 		parent = parent,
 	}
 	
+	local planets = {}
+	for i = 1, #planetPositions do
+		planets[i] = GetPlanet(window, planetPositions[i][1], planetPositions[i][2])
+	end
+	
 	local externalFunctions = {}
 	
 	function externalFunctions.UpdatePosition(x, y, width, height)
 		window:SetPos(x, y, width, height)
+		if x then
+			for i = 1, #planets do
+				planets[i].UpdatePosition(width, height)
+			end
+		end
 	end
 	
 	return externalFunctions
@@ -62,7 +147,7 @@ function externalFunctions.GetControl()
 		OnParentPost = {
 			function(obj, parent)
 				if obj:IsEmpty() then
-					planetsHandler = InitializeControls(obj)
+					planetsHandler = InitializePlanetHandler(obj)
 				end
 				
 				local background = WG.Chobby.interfaceRoot.GetBackgroundHolder()
