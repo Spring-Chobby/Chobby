@@ -522,6 +522,10 @@ end
 ------------------------
 
 function Interface:InviteToParty(userName)
+	if userName == self:GetMyUserName() then
+		Spring.Echo("Attempted to invite self to party")
+		return
+	end
 	self:_OnPartyInviteSent(userName) -- Notify widgets that lobby sent an invitation.
 	
 	local function InviteRejectCheck()
