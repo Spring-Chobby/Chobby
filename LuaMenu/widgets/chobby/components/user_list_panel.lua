@@ -1,19 +1,22 @@
 UserListPanel = LCS.class{}
 
-function UserListPanel:init(userUpdateFunction, spacing, showCount)
+function UserListPanel:init(userUpdateFunction, spacing, showCount, getUserFunction)
 	self.userUpdateFunction = userUpdateFunction
 	self.spacing = spacing
+	self.getUserFunction = getUserFunction
 
-	self.textCount = TextBox:New {
-		name = "textCount",
-		x = 7,
-		right = 0,
-		height = 20,
-		bottom = 2,
-		align = "left",
-		fontsize = Configuration:GetFont(2).size,
-		text = lobby:GetUserCount() .. " players online",
-	}
+	if showCount then
+		self.textCount = TextBox:New {
+			name = "textCount",
+			x = 7,
+			right = 0,
+			height = 20,
+			bottom = 2,
+			align = "left",
+			fontsize = Configuration:GetFont(2).size,
+			text = lobby:GetUserCount() .. " players online",
+		}
+	end
 	
 	self.userPanel = ScrollPanel:New {
 		x = 0,
@@ -91,7 +94,9 @@ function UserListPanel:Update()
 end
 
 function UserListPanel:UpdateUserCount()
-	self.textCount:SetText(lobby:GetUserCount() .. " players online")
+	if self.textCount then
+		self.textCount:SetText(lobby:GetUserCount() .. " players online")
+	end
 end
 
 function UserListPanel:AddUser(userName)
@@ -104,7 +109,7 @@ function UserListPanel:AddUser(userName)
 		return 
 	end
 	
-	local userControl = WG.UserHandler.GetChannelUser(userName)
+	local userControl = (self.getUserFunction and self.getUserFunction(userName)) or WG.UserHandler.GetChannelUser(userName)
 	userControl:SetPos(nil, #(self.userPanel.children) * self.spacing)
 	self.userPanel:AddChild(userControl)
 end
