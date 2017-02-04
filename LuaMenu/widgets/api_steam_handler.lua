@@ -49,6 +49,7 @@ end
 
 local listenersInitialized = false
 local function InitializeListeners()
+	local lobby = WG.LibLobby.lobby
 	if listenersInitialized then
 		return
 	end
