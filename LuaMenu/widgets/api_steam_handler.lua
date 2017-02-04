@@ -58,13 +58,15 @@ local function InitializeListeners()
 	local function OnUsersSent()
 		if storedFriendList then
 			AddSteamFriends(storedFriendList)
+			storedFriendList = nil
 		end
 		if storedJoinFriendID then
 			JoinFriend(storedJoinFriendID)
+			storedJoinFriendID = nil
 		end
 	end
 	
-	lobby:AddListener("OnQueueOpened", OnUsersSent)
+	lobby:AddListener("OnFriendList", OnUsersSent) -- All users are present before FriendList is recieved.
 end
 
 --------------------------------------------------------------------------------
@@ -93,13 +95,12 @@ function SteamHandler.SteamOnline(authToken, joinFriendID, friendList)
 	if lobby.status ~= "connected" then
 		storedJoinFriendID = joinFriendID
 		storedFriendList = friendList
+		InitializeListeners()
 		return
 	end
 	
 	AddSteamFriends(storedFriendList)
 	JoinFriend(joinFriendID) 
-	
-	InitializeListeners()
 end
 
 function SteamHandler.SteamJoinFriend(joinFriendID)
@@ -111,11 +112,10 @@ function SteamHandler.SteamJoinFriend(joinFriendID)
 	
 	if lobby.status ~= "connected" then
 		storedJoinFriendID = joinFriendID
+		InitializeListeners()
 		return
 	end
 	JoinFriend(joinFriendID) 
-	
-	InitializeListeners()
 end
 
 function SteamHandler.InviteUserViaSteam(userName, steamID)

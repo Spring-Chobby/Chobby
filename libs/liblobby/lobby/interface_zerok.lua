@@ -783,8 +783,8 @@ function Interface:_FriendList(data)
 		--return
 	--end
 	--self.friendListRecieved = true
-	--
-	--self:_OnFriendList(data.Friends)
+	
+	self:_OnFriendList(data.Friends)
 end
 Interface.jsonCommands["FriendList"] = Interface._FriendList
 
