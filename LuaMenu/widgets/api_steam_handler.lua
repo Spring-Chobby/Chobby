@@ -23,6 +23,9 @@ local steamFriendByID = {}
 -- Utilities
 
 local function AddSteamFriends(friendIDList)
+	if not friendIDList then
+		return
+	end
 	local lobby = WG.LibLobby.lobby
 	for i = 1, #friendIDList do
 		local userName = lobby:GetUserNameBySteamID(friendIDList[i])
@@ -31,6 +34,9 @@ local function AddSteamFriends(friendIDList)
 end
 
 local function JoinFriend(friendID)
+	if not friendID then
+		return
+	end
 	local lobby = WG.LibLobby.lobby
 	local userName = lobby:GetUserNameBySteamID(friendID)
 	lobby:InviteToParty(userName)
@@ -77,8 +83,10 @@ function SteamHandler.SteamOnline(authToken, joinFriendID, friendList)
 		lobby:SetSteamAuthToken(authToken)
 	end
 	
-	for i = 1, #storedFriendList do
-		steamFriendByID[storedFriendList[i]] = true
+	if storedFriendList then
+		for i = 1, #storedFriendList do
+			steamFriendByID[storedFriendList[i]] = true
+		end
 	end
 	
 	if lobby.status ~= "connected" then
