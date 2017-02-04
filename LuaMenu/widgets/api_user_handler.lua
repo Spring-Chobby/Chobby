@@ -21,6 +21,7 @@ local battleUsers = {}
 local tooltipUsers = {}
 local singleplayerUsers = {}
 local channelUsers = {}
+local debriefingUsers = {}
 local partyUsers = {}
 local popupUsers = {}
 local statusUsers = {}
@@ -33,6 +34,7 @@ local userListList = {
 	tooltipUsers,
 	singleplayerUsers,
 	channelUsers,
+	debriefingUsers,
 	partyUsers,
 	popupUsers,
 	statusUsers,
@@ -772,6 +774,13 @@ end
 
 function userHandler.GetChannelUser(userName)
 	return _GetUser(channelUsers, userName, {
+		maxNameLength  = WG.Chobby.Configuration.chatMaxNameLength,
+		showModerator  = true,
+	})
+end
+
+function userHandler.GetDebriefingUser(userName)
+	return _GetUser(debriefingUsers, userName, {
 		maxNameLength  = WG.Chobby.Configuration.chatMaxNameLength,
 		showModerator  = true,
 	})

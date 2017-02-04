@@ -198,7 +198,8 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 	return externalFunctions
 end
 
-local function GetDebriefingChat(window, vertPos, channelName)
+local function GetDebriefingChat(window, vertPos, channelName, RemoveFunction)
+	local Configuration = WG.Chobby.Configuration
 	local lobby = WG.LibLobby.lobby
 	
 	local function MessageListener(message)
@@ -209,7 +210,7 @@ local function GetDebriefingChat(window, vertPos, channelName)
 		end
 	end
 	local debriefingConsole = WG.Chobby.Console("Debriefing Chat", MessageListener, true)
-	local userListPanel = WG.Chobby.UserListPanel(function() return lobby:GetChannel(channelName) end, 22)
+	local userListPanel = WG.Chobby.UserListPanel(function() return lobby:GetChannel(channelName) end, 22, nil, WG.UserHandler.GetDebriefingUser)
 	
 	local chatPanel = Control:New {
 		x = 0,
@@ -237,9 +238,23 @@ local function GetDebriefingChat(window, vertPos, channelName)
 		},
 	}
 	
-	window:Invalidate()
-	
 	local externalFunctions = {}
+	
+	local closeChannelButton = Button:New {
+		width = 24, height = 24, y = 5, right = 12,
+		caption = "x",
+		OnClick = {
+			function()
+				lobby:Leave(channelName)
+				RemoveFunction()
+				externalFunctions.Delete()
+			end
+		},
+		parent = chatPanel,
+	}
+	closeChannelButton:BringToFront()
+	
+	window:Invalidate()
 	
 	function externalFunctions.UpdateUsers()
 		userListPanel:Update()
@@ -272,6 +287,11 @@ local function SetupDebriefingTracker(window)
 	local ignoredChannels = {}
 	local channelTopics = {}
 	
+	local function RemoveFunction()
+		debriefingChannelName = nil
+		debriefingChat = nil
+	end
+	
 	local function OnJoin(listener, chanName)
 		if (not string.find(chanName, DEBRIEFING_CHANNEL)) or ignoredChannels[chanName] or chanName == debriefingChannelName then
 			return
@@ -284,7 +304,7 @@ local function SetupDebriefingTracker(window)
 			debriefingChat.Delete()
 		end
 		debriefingChannelName = chanName
-		debriefingChat = GetDebriefingChat(window, 430, debriefingChannelName)
+		debriefingChat = GetDebriefingChat(window, 430, debriefingChannelName, RemoveFunction)
 		WG.Chobby.interfaceRoot.OpenMultiplayerTabByName("matchmaking")
 		
 		if channelTopics[debriefingChannelName] then
