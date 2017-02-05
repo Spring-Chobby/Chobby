@@ -766,7 +766,7 @@ function Interface:_FriendList(data)
 	--if self.friendListRecieved then
 		local newFriendMap = {}
 		for i = 1, #data.Friends do
-			local userName = data.Friends[i]
+			local userName = data.Friends[i].Name
 			if not self.isFriend[userName] then
 				self:_OnFriend(userName)
 				self:_OnRemoveIgnoreUser(userName)
