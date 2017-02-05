@@ -351,7 +351,7 @@ local function SetupDebriefingTracker(window)
 		if debriefingChannelName == chanName and debriefingChat then
 			debriefingChat.SetTopic("Post game chat") -- URL doesn't work on line one.
 			debriefingChat.SetTopic(debriefTopic)
-		elseif string.find(chanName, DEBRIEFING_CHANNEL) then
+		elseif chanName and string.find(chanName, DEBRIEFING_CHANNEL) then
 			channelTopics[debriefingChannelName] = debriefTopic
 		end
 	end
