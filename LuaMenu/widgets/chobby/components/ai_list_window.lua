@@ -54,30 +54,35 @@ function AiListWindow:init(gameName)
 	
 	local blackList = Configuration.gameConfig.aiBlacklist
 	
+	local isRunning64Bit = Configuration:GetIsRunning64Bit()
+	
 	for i, ai in pairs(ais) do
-		if (not blackList) or (not blackList[ai.shortName]) then
-			local version = " v" .. ai.version
-			if version == " v<not-versioned>" then
-				version = ""
+		local shortName = ai.shortName or "Unknown"
+		if (not blackList) or (not blackList[shortName]) then
+			if not ((isRunning64Bit and string.find(shortName, "32")) or ((not isRunning64Bit) and string.find(shortName, "64"))) then
+				local version = " v" .. ai.version
+				if version == " v<not-versioned>" then
+					version = ""
+				end
+				
+				self.validAiNames[shortName] = true
+				
+				local addAIButton = Button:New {
+					x = 0,
+					y = 0,
+					width = "100%",
+					height = "100%",
+					caption = shortName .. version,
+					font = Configuration:GetFont(3),
+					OnClick = {
+						function()
+							self:AddAi(shortName)
+							self:HideWindow()
+						end
+					},
+				}
+				self:AddRow({addAIButton}, shortName)
 			end
-			
-			self.validAiNames[ai.shortName] = true
-			
-			local addAIButton = Button:New {
-				x = 0,
-				y = 0,
-				width = "100%",
-				height = "100%",
-				caption = ai.shortName .. version,
-				font = Configuration:GetFont(3),
-				OnClick = {
-					function()
-						self:AddAi(ai.shortName)
-						self:HideWindow()
-					end
-				},
-			}
-			self:AddRow({addAIButton}, ai.shortName)
 		end
 	end
 end
