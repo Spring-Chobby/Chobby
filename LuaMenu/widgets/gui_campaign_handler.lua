@@ -21,11 +21,22 @@ local IMAGE_BOUNDS = {
 	height = 1500/2602,
 }
 
+-- TODO: migrate this stuff to external def file
 local planetImages = {
 	LUA_DIRNAME .. "images/planets/arid01.png",
 	LUA_DIRNAME .. "images/planets/barren01.png",
+	LUA_DIRNAME .. "images/planets/barren03.png",
+	LUA_DIRNAME .. "images/planets/terran01.png",
 	LUA_DIRNAME .. "images/planets/terran03_damaged.png",
 	LUA_DIRNAME .. "images/planets/tundra01.png",
+	LUA_DIRNAME .. "images/planets/tundra03.png",
+}
+
+local backgroundImages = {
+	LUA_DIRNAME .. "images/starbackgrounds/1.jpg",
+	LUA_DIRNAME .. "images/starbackgrounds/2.jpg",
+	LUA_DIRNAME .. "images/starbackgrounds/3.jpg",
+	LUA_DIRNAME .. "images/starbackgrounds/4.jpg",
 }
 
 local planetPositions = {
@@ -57,9 +68,133 @@ local planetPositions = {
 }
 
 local PLANET_SIZE = 54
+local PLANET_SIZE_LARGE = 240
+
+local SAMPLE_PLANET_DEF = {
+	name = "Pong",
+	["type"] = "Terran",
+	radius = "6700 km",
+	primary = "Tau Ceti",
+	primaryType = "G8",
+	milRating = 1,
+	text = [[Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+	Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+	Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+	Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.]]
+}
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- TODO: use shader animation to ease info panel in
+local function SelectPlanet(planetID, planetHandler)
+	local planetDef = SAMPLE_PLANET_DEF	--planetDefsByID[planetID]
+	
+	local font_large = 20
+	local font_normal = 20
+	
+	local starmapInfoPanel = Panel:New{
+		parent = planetHandler,
+		x = 32,
+		y = 32,
+		right = 32,
+		bottom = 32,
+	}
+	
+	local subPanel = Panel:New{
+		parent = starmapInfoPanel,
+		x = "50%",
+		y = "10%",
+		right = 8,
+		bottom = "10%",
+		children = {
+			-- title
+			Label:New{
+				x = textX,
+				y = 12,
+				caption = string.upper(planetDef.name),
+				font = {size = 30}
+			},
+			-- grid of details
+			Grid:New{
+				x = 4,
+				y = 72,
+				right = 4,
+				bottom = "60%",
+				columns = 2,
+				rows = 4,
+				children = {
+					Label:New{caption = "Type", font = {size = font_large}},
+					Label:New{caption = planetDef.type or "<UNKNOWN>", font = {size = font_normal}},
+					Label:New{caption = "Radius", font = {size = font_large}},
+					Label:New{caption = planetDef.radius or "<UNKNOWN>", font = {size = font_normal}},
+					Label:New{caption = "Primary", font = {size = font_large}},
+					Label:New{caption = planetDef.primary .. " (" .. planetDef.primaryType .. ") ", font = {size = font_normal}},
+					Label:New{caption = "Military rating", font = {size = font_large}},
+					Label:New{caption = tostring(planetDef.milRating or "<UNKNOWN>"), font = {size = font_normal}},
+				},
+			},
+			-- desc text
+			TextBox:New {
+				x = 4,
+				y = "45%",
+				right = 4,
+				bottom = "25%",
+				text = planetDef.text,
+				font = {size = 18},
+			},
+		}
+	}
+	
+	-- close button
+	Button:New{
+		parent = starmapInfoPanel,
+		right = 0,
+		y = 0,
+		width = 64,
+		height = 48,
+		caption = i18n("close"),
+		font = {size = 20},
+		OnClick = {function(self) self.parent:Dispose() end}
+	}
+	
+	-- list of missions on this planet
+	--local missionsStack = StackPanel:New {
+	--	parent = starmapInfoPanel,
+	--	orientation = "vertical",
+	--	x = 4,
+	--	right = 4,
+	--	height = "25%",
+	--	bottom = 0,
+	--	resizeItems = false,
+	--	autoArrangeV = false,
+	--}
+	--for i=1,#planetDef.missions do
+	--end
+	
+	-- planet image
+	Image:New{
+		parent = starmapInfoPanel,
+		x = 32,
+		y = (starmapInfoPanel.height - PLANET_SIZE_LARGE) / 2,
+		height = PLANET_SIZE_LARGE,
+		width = PLANET_SIZE_LARGE,
+		file = planetImages[math.floor(math.random()*#planetImages) + 1],
+	}
+	
+	-- background
+	Image:New{
+		parent = starmapInfoPanel,
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		file = backgroundImages[math.floor(math.random()*#backgroundImages) + 1],
+		keepAspect = false,
+	}
+	
+	starmapInfoPanel:SetLayer(1)
+end
+
 
 local function GetPlanet(planetHolder, xPos, yPos)
 	
@@ -72,14 +207,14 @@ local function GetPlanet(planetHolder, xPos, yPos)
 		caption = "",
 		OnClick = { 
 			function(self)
-				--SelectPlanet(planetDef.id)
+				SelectPlanet(nil, planetHolder)	-- FIXME specify actual planetID
 			end
 		},
 		parent = planetHolder,
 	}
 	
 	local image = Image:New {
-		file = planetImages[math.floor(math.random()*4) + 1],
+		file = planetImages[math.floor(math.random()*#planetImages) + 1],
 		x = 3,
 		y = 3,
 		right = 2,
@@ -196,3 +331,4 @@ end
 function widget:Shutdown()
 	WG.CampaignHandler = nil
 end
+
