@@ -500,7 +500,7 @@ local settings = {
 					{
 						name = "Off",
 						apply = {
-							LoadingMT = 1,
+							LoadingMT = 0, -- See https://github.com/spring/spring/commit/bdd6b641960759ccadf3e7201e37f2192d873791
 							AdvUnitShading = 1, 
 							AdvMapShading = 1,
 							LuaShaders = 1,
