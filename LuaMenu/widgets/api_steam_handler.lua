@@ -29,7 +29,7 @@ local function AddSteamFriends(friendIDList)
 	local lobby = WG.LibLobby.lobby
 	for i = 1, #friendIDList do
 		local userName = lobby:GetUserNameBySteamID(friendIDList[i])
-		lobby:FriendRequest(userName)
+		lobby:FriendRequest(userName, friendIDList[i])
 	end
 end
 

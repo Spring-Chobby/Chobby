@@ -157,7 +157,7 @@ function Lobby:FriendRequestList()
 	return self
 end
 
-function Lobby:FriendRequest(userName)
+function Lobby:FriendRequest(userName, steamID)
 	return self
 end
 
@@ -177,7 +177,7 @@ function Lobby:DeclineFriendRequest(userName)
 	return self
 end
 
-function Lobby:Unfriend(userName)
+function Lobby:Unfriend(userName, steamID)
 	return self
 end
 

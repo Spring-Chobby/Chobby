@@ -94,10 +94,11 @@ end
 -- User commands
 ------------------------
 
-function Interface:FriendRequest(userName)
-	self:super("FriendRequest", userName)
+function Interface:FriendRequest(userName, steamID)
+	self:super("FriendRequest", userName, steamID)
 	local sendData = {
 		TargetName = userName,
+		SteamID = steamID,
 		Relation = 1, -- Friend
 	}
 	
@@ -117,10 +118,11 @@ function Interface:DeclineFriendRequest(userName)
 	return self
 end
 
-function Interface:Unfriend(userName)
-	self:super("Unfriend", userName)
+function Interface:Unfriend(userName, steamID)
+	self:super("Unfriend", userName, steamID)
 	local sendData = {
 		TargetName = userName,
+		SteamID = steamID,
 		Relation = 0, -- None
 	}
 	
