@@ -16,7 +16,7 @@
 local infos = {
 	{
 		key    = 'shortName',
-		value  = 'CircuitAI64',
+		value  = 'CircuitAIHard64',
 		desc   = 'machine conform name.',
 	},
 	{
@@ -25,7 +25,7 @@ local infos = {
 	},
 	{
 		key    = 'name',
-		value  = 'Circuit64',
+		value  = 'CircuitHard64',
 		desc   = 'human readable name.',
 	},
 	{
