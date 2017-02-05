@@ -16,9 +16,13 @@ function Configuration:init()
 	self.friendMaxNameLength = 230
 	self.notificationMaxNameLength = 230
 
-	self.userName = ""
-	self.password = ""
-	self.autoLogin = false
+	self.userName = false
+	self.suggestedNameFromSteam = false
+	self.password = false
+	self.autoLogin = true
+	self.firstLoginEver = true
+	self.canAuthenticateWithSteam = false
+	self.wantAuthenticateWithSteam = true
 	self.channels = {}
 
 	self.promptNewUsersToLogIn = false
@@ -166,8 +170,11 @@ function Configuration:GetConfigData()
 		serverAddress = self.serverAddress,
 		serverPort = self.serverPort,
 		userName = self.userName,
+		suggestedNameFromSteam = self.suggestedNameFromSteam,
 		password = self.password,
 		autoLogin = self.autoLogin,
+		firstLoginEver = self.firstLoginEver,
+		wantAuthenticateWithSteam = self.wantAuthenticateWithSteam,
 		channels = self.channels,
 		gameConfigName = self.gameConfigName,
 		game_fullscreen = self.game_fullscreen,

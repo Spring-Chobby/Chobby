@@ -48,7 +48,7 @@ local function LoginPopup()
 end
 
 local function InitialWindow()
-	if WG.Chobby.Configuration.autoLogin then
+	if WG.Chobby.Configuration.autoLogin and WG.Chobby.Configuration.userName then
 		local loginWindow = WG.Chobby.LoginWindow(nil, nil, "main_window")
 		loginWindow.window:Hide()
 		lobby:AddListener("OnDenied", function(listener)

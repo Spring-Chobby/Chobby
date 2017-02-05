@@ -25,7 +25,10 @@ return {
 		home = 'Home',
 		error_log = 'Error log',
 		register_verb = "Register",
+		login_long = "Connect to server",
+		register_long = "Register your account",
 		autoLogin = "Login automatically",
+		authenticateSteam = "Authenticate with Steam",
 		play_offline = "Play offline",
 		-- gui_battle_status_panel
 		spectating_game_status = "Spectating",
