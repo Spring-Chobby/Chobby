@@ -75,7 +75,7 @@ end
 
 local SteamHandler = {}
 
-function SteamHandler.SteamOnline(authToken, joinFriendID, friendList)
+function SteamHandler.SteamOnline(authToken, joinFriendID, friendList, mySteamName)
 	local lobby = WG.LibLobby.lobby
 	if not lobby then
 		Spring.Echo("Loopback error: Sent steam before lobby initialization")

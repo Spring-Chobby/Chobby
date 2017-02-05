@@ -67,7 +67,7 @@ end
 
 -- notifies that steam is online
 local function SteamOnline(args)
-	WG.SteamHandler.SteamOnline(args.AuthToken, args.FriendSteamID, args.Friends)
+	WG.SteamHandler.SteamOnline(args.AuthToken, args.FriendSteamID, args.Friends, args.MySteamName)
 end
 
 -- requests to join a friend's game/party
