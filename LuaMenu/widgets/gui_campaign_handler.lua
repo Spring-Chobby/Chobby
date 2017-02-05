@@ -182,15 +182,21 @@ local function SelectPlanet(planetID, planetHandler)
 	}
 	
 	-- background
-	Image:New{
+	local overflowX = (starmapInfoPanel.width - starmapInfoPanel.width) / 2
+	local overflowY = (starmapInfoPanel.width - starmapInfoPanel.height) / 2
+	local bg = Image:New{
 		parent = starmapInfoPanel,
 		x = 0,
 		y = 0,
-		right = 0,
-		bottom = 0,
+		height = starmapInfoPanel.width,
+		width = starmapInfoPanel.width,
 		file = backgroundImages[math.floor(math.random()*#backgroundImages) + 1],
 		keepAspect = false,
 	}
+	-- force offscreen position
+	bg.x = -overflowX
+	bg.y = -overflowY
+	bg:Invalidate()
 	
 	starmapInfoPanel:SetLayer(1)
 end
@@ -331,4 +337,3 @@ end
 function widget:Shutdown()
 	WG.CampaignHandler = nil
 end
-
