@@ -372,6 +372,37 @@ function Configuration:GetDefaultGameName()
 	return self.gameConfig._defaultGameArchiveName
 end
 
+function Configuration:GetIsRunning64Bit()
+	if self.isRunning64Bit ~= nil then
+		return self.isRunning64Bit
+	end
+	local infologFile, err = io.open("infolog.txt", "r")
+	if not infologFile then
+		Spring.Echo("Error opening infolog.txt", err)
+		return false
+	end
+	local line = infologFile:read()
+	while line do
+		if string.find(line, "Physical CPU Cores") then
+			break
+		end
+		if string.find(line, "Word Size") then
+			if string.find(line, "64%-bit") then
+				self.isRunning64Bit = true
+				infologFile:close()
+				return true
+			else
+				self.isRunning64Bit = false
+				infologFile:close()
+				return false
+			end
+		end
+		line = infologFile:read()
+	end
+	infologFile:close()
+	return false
+end
+
 ---------------------------------------------------------------------------------
 -- Listener handler
 ---------------------------------------------------------------------------------
