@@ -542,16 +542,7 @@ function Lobby:_OnUnfriend(userName)
 	self:_CallListeners("OnUnfriend", userName)
 end
 
-function Lobby:_OnFriendList(data)
-	self.friends = data
-	self.friendCount = #data
-	self.isFriend = {}
-	for _, userName in pairs(self.friends) do
-		self.isFriend[userName] = true
-		local userInfo = self:TryGetUser(userName)
-		userInfo.isFriend = true
-	end
-	
+function Lobby:_OnFriendList()
 	self:_CallListeners("OnFriendList", self:GetFriends())
 end
 
@@ -1204,6 +1195,11 @@ end
 -- gets the userInfo, or creates a new one with an offline user if it doesn't exist
 function Lobby:TryGetUser(userName)
 	local userInfo = self:GetUser(userName)
+	if type(userName) ~= "string" then
+		Spring.Echo("TryGetUser called with type", type(userName))
+		Spring.Echo(debug.traceback())
+		return {}
+	end
 	if not userInfo then
 		userInfo = {
 			userName = userName,
