@@ -87,7 +87,7 @@ return {
 				},
 				{
 					name = "codex", 
-					control = Control:New {},
+					control = WG.CodexHandler.GetControl(),
 				},
 				{
 					name = "options", 
