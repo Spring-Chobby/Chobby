@@ -155,7 +155,9 @@ local communityControl = Control:New {
 
 local bugLines = {
 	{
-		"Using engine " .. Game.version .. ".",
+		textFunction = function ()
+			return "Using engine " .. Game.version .. " " .. ((WG.Chobby.Configuration:GetIsRunning64Bit() and "64-bit.") or "32-bit.")
+		end,
 	},
 	{
 		"Open game data folder to find settings, infolog etc...",
@@ -220,7 +222,7 @@ local bugControl = Control:New {
 			local items = {}
 			for i = 1, #bugLines do
 				local data = bugLines[i]
-				items[#items + 1] = {#items, CreateLine(data[1], data[2], data[3])}
+				items[#items + 1] = {#items, CreateLine(data[1] or data.textFunction(), data[2], data[3])}
 			end
 			
 			list:AddItems(items)
