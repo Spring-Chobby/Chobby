@@ -14,61 +14,61 @@
       },
       {
          "Platform":null,
-         "VersionNumber":1,
+         "VersionNumber":2,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAI_32/0.9.11.b/AIInfo.lua",
          "TargetPath":"AI/Skirmish/CircuitAI_32/0.9.11.b/AIInfo.lua"
       },
       {
          "Platform":null,
-         "VersionNumber":1,
+         "VersionNumber":2,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAI_32/0.9.11.b/AIOptions.lua",
          "TargetPath":"AI/Skirmish/CircuitAI_32/0.9.11.b/AIOptions.lua"
       },
       {
          "Platform":null,
-         "VersionNumber":1,
+         "VersionNumber":2,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAI_32/0.9.11.b/libSkirmishAI.so",
          "TargetPath":"AI/Skirmish/CircuitAI_32/0.9.11.b/libSkirmishAI.so"
       },
       {
          "Platform":null,
-         "VersionNumber":1,
+         "VersionNumber":2,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAI_32/0.9.11.b/SkirmishAI.dll",
          "TargetPath":"AI/Skirmish/CircuitAI_32/0.9.11.b/SkirmishAI.dll"
       },
       {
          "Platform":null,
-         "VersionNumber":1,
+         "VersionNumber":2,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAI_32/0.9.11.b/config/circuit.json",
          "TargetPath":"AI/Skirmish/CircuitAI_32/0.9.11.b/config/circuit.json"
       },
       {
          "Platform":null,
-         "VersionNumber":1,
+         "VersionNumber":2,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAI_64/0.9.11.b/AIInfo.lua",
          "TargetPath":"AI/Skirmish/CircuitAI_64/0.9.11.b/AIInfo.lua"
       },
       {
          "Platform":null,
-         "VersionNumber":1,
+         "VersionNumber":2,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAI_64/0.9.11.b/AIOptions.lua",
          "TargetPath":"AI/Skirmish/CircuitAI_64/0.9.11.b/AIOptions.lua"
       },
       {
          "Platform":null,
-         "VersionNumber":1,
+         "VersionNumber":2,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAI_64/0.9.11.b/libSkirmishAI.so",
          "TargetPath":"AI/Skirmish/CircuitAI_64/0.9.11.b/libSkirmishAI.so"
       },
       {
          "Platform":null,
-         "VersionNumber":1,
+         "VersionNumber":2,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAI_64/0.9.11.b/SkirmishAI.dll",
          "TargetPath":"AI/Skirmish/CircuitAI_64/0.9.11.b/SkirmishAI.dll"
       },
       {
          "Platform":null,
-         "VersionNumber":1,
+         "VersionNumber":2,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAI_64/0.9.11.b/config/circuit.json",
          "TargetPath":"AI/Skirmish/CircuitAI_64/0.9.11.b/config/circuit.json"
       }
