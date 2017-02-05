@@ -63,47 +63,56 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	self.AcceptFunc = function ()
 		self:tryLogin()
 	end
-
-	self.lblInstructions = Label:New {
+	
+	self.lblLoginInstructions = Label:New {
 		x = 15,
 		width = 170,
-		y = 30,
+		y = 14,
 		height = 35,
-		caption = i18n("connect_to_spring_server"),
+		caption = i18n("login_long"),
 		font = Configuration:GetFont(3),
 	}
-
-	self.lblUsername = Label:New {
+	
+	self.lblRegisterInstructions = Label:New {
 		x = 15,
 		width = 170,
-		y = 95,
+		y = 14,
 		height = 35,
-		caption = i18n("username") .. ":",
+		caption = i18n("register_long"),
 		font = Configuration:GetFont(3),
+	}
+	
+	self.txtUsername = TextBox:New {
+		x = 15,
+		width = 170,
+		y = 60,
+		height = 35,
+		text = i18n("username") .. ":",
+		fontsize = Configuration:GetFont(3).size,
 	}
 	self.ebUsername = EditBox:New {
 		x = 135,
 		width = 200,
-		y = 90,
+		y = 55,
 		height = 35,
-		text = Configuration.userName,
+		text = Configuration.userName or Configuration.mySteamName or "",
 		font = Configuration:GetFont(3),
 	}
 
-	self.lblPassword = Label:New {
+	self.txtPassword = TextBox:New {
 		x = 15,
 		width = 170,
-		y = 135,
+		y = 100,
 		height = 35,
-		caption = i18n("password") .. ":",
-		font = Configuration:GetFont(3),
+		text = i18n("password") .. ":",
+		fontsize = Configuration:GetFont(3).size,
 	}
 	self.ebPassword = EditBox:New {
 		x = 135,
 		width = 200,
-		y = 130,
+		y = 95,
 		height = 35,
-		text = Configuration.password,
+		text = Configuration.password or "",
 		passwordInput = true,
 		font = Configuration:GetFont(3),
 		OnKeyPress = {
@@ -115,20 +124,11 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 			end
 		},
 	}
-
-	self.txtError = TextBox:New {
-		x = 15,
-		right = 15,
-		y = 215,
-		height = 90,
-		caption = "",
-		fontsize = Configuration:GetFont(4).size,
-	}
-
+	
 	self.cbAutoLogin = Checkbox:New {
 		x = 15,
-		width = 190,
-		y = 175,
+		width = 215,
+		y = 135,
 		height = 35,
 		boxalign = "right",
 		boxsize = 15,
@@ -139,11 +139,43 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 			Configuration:SetConfigValue("autoLogin", obj.checked)
 		end},
 	}
-
+	
+	local function UpdateAuthenticateWithSteam()
+		local canAndWant = Configuration.wantAuthenticateWithSteam and Configuration.canAuthenticateWithSteam
+		self.ebPassword:SetVisibility(not canAndWant)
+		self.txtPassword:SetVisibility(not canAndWant)
+		self.cbAuthenticateSteam:SetVisibility(Configuration.canAuthenticateWithSteam)
+	end
+	
+	self.cbAuthenticateSteam = Checkbox:New {
+		x = 15,
+		width = 215,
+		y = 160,
+		height = 35,
+		boxalign = "right",
+		boxsize = 15,
+		caption = i18n("authenticateSteam"),
+		checked = Configuration.wantAuthenticateWithSteam,
+		font = Configuration:GetFont(2),
+		OnClick = {function (obj)
+			Configuration:SetConfigValue("wantAuthenticateWithSteam", obj.checked)
+			UpdateAuthenticateWithSteam()
+		end},
+	}
+	
+	self.txtError = TextBox:New {
+		x = 15,
+		right = 15,
+		y = 198,
+		height = 90,
+		text = "",
+		fontsize = Configuration:GetFont(3).size,
+	}
+	
 	self.btnLogin = Button:New {
-		x = 1,
+		right = 140,
 		width = 130,
-		bottom = 1,
+		y = 237,
 		height = 70,
 		caption = i18n("login_verb"),
 		font = Configuration:GetFont(3),
@@ -156,9 +188,9 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	}
 
 	self.btnRegister = Button:New {
-		x = 137,
+		right = 140,
 		width = 130,
-		bottom = 1,
+		y = 237,
 		height = 70,
 		caption = i18n("register_verb"),
 		font = Configuration:GetFont(3),
@@ -171,9 +203,9 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	}
 
 	self.btnCancel = Button:New {
-		right = 1,
+		right = 2,
 		width = 130,
-		bottom = 1,
+		y = 237,
 		height = 70,
 		caption = i18n(cancelText or "cancel"),
 		font = Configuration:GetFont(3),
@@ -184,29 +216,73 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 			end
 		},
 	}
-
+	
 	local ww, wh = Spring.GetWindowGeometry()
 	local w, h = 430, 380
-	self.window = Window:New {
-		x = (ww - w) / 2,
-		y = (wh - h) / 2,
-		width = w,
-		height = h,
-		caption = i18n("login_noun"),
+
+	self.tabPanel = Chili.DetachableTabPanel:New {
+		x = 0,
+		right = 0,
+		y = 0,
+		minTabWidth = w/2 - 20,
+		bottom = 0,
+		padding = {0, 0, 0, 0},
+		tabs = {
+			[1] = { name = "login", caption = i18n("login"), children = {self.btnLogin, self.lblLoginInstructions}, font = Configuration:GetFont(2)},
+			[2] = { name = "register", caption = i18n("register_verb"), children = {self.btnRegister, self.lblRegisterInstructions}, font = Configuration:GetFont(2)},
+		},
+	}
+	
+	self.tabBarHolder = Control:New {
+		name = "tabBarHolder",
+		x = 9,
+		y = 0,
+		right = 0,
+		height = 30,
 		resizable = false,
 		draggable = false,
-		classname = windowClassname,
+		padding = {0, 2, 0, 0},
 		children = {
-			self.lblInstructions,
-			self.lblUsername,
-			self.lblPassword,
+			self.tabPanel.tabBar
+		}
+	}
+	
+	-- Prompt user to register account if their account has not been registered.
+	if Configuration.firstLoginEver then
+		self.tabPanel.tabBar:Select("register")
+	end
+	
+	self.contentsPanel = ScrollPanel:New {
+		x = 5,
+		right = 5,
+		y = 30,
+		bottom = 4,
+		horizontalScrollbar = false,
+		children = {
+			self.tabPanel,
+			self.txtUsername,
+			self.txtPassword,
 			self.ebUsername,
 			self.ebPassword,
 			self.txtError,
 			self.cbAutoLogin,
-			self.btnLogin,
-			self.btnRegister,
+			self.cbAuthenticateSteam,
 			self.btnCancel
+		}
+	}
+	
+	self.window = Window:New {
+		x = math.floor((ww - w) / 2),
+		y = math.floor((wh - h) / 2),
+		width = w,
+		height = h,
+		caption = "",
+		resizable = false,
+		draggable = false,
+		classname = windowClassname,
+		children = {
+			self.tabBarHolder,
+			self.contentsPanel,
 		},
 		parent = WG.Chobby.lobbyInterfaceHolder,
 		OnDispose = {
@@ -221,6 +297,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		}
 	}
 
+	UpdateAuthenticateWithSteam()
 	self.window:BringToFront()
 
 	createTabGroup({self.ebUsername, self.ebPassword})
@@ -319,6 +396,7 @@ function LoginWindow:tryRegister()
 end
 
 function LoginWindow:OnRegister()
+	Configuration.firstLoginEver = false
 	lobby:Register(username, password, "name@email.com")
 	lobby:AddListener("OnRegistrationAccepted", function(listener)
 		self.txtError:SetText(Configuration:GetSuccessColor() .. "Registered!")
@@ -332,6 +410,7 @@ function LoginWindow:OnRegister()
 end
 
 function LoginWindow:OnConnected()
+	Configuration.firstLoginEver = false
 
 	self.txtError:SetText(Configuration:GetPartialColor() .. i18n("connecting"))
 
