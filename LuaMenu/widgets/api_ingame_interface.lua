@@ -66,12 +66,14 @@ local ENABLE_OVERLAY = "showLobby"
 
 local function HandleLobbyOverlay(msg)
 	local Chobby = WG.Chobby
+	Spring.Echo("HandleLobbyOverlay", msg)
 	local interfaceRoot = Chobby and Chobby.interfaceRoot
 	if interfaceRoot then
 		if msg == REMOVE_BUTTON then 
 			interfaceRoot.SetLobbyButtonEnabled(false)
 			return true
 		elseif msg == ENABLE_OVERLAY then 
+			Spring.Echo("HandleLobbyOverlay SetMainInterfaceVisibley")
 			interfaceRoot.SetMainInterfaceVisible(true)
 			return true
 		end
