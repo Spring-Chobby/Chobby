@@ -27,8 +27,7 @@ local planetList = VFS.Include("campaign/planetDefs.lua")
 --------------------------------------------------------------------------------
 -- TODO: use shader animation to ease info panel in
 local function SelectPlanet(planetHandler, planetData)
-	local font_large = 20
-	local font_normal = 20
+	local Configuration = WG.Chobby.Configuration
 	
 	local starmapInfoPanel = Panel:New{
 		parent = planetHandler,
@@ -50,7 +49,7 @@ local function SelectPlanet(planetHandler, planetData)
 				x = textX,
 				y = 12,
 				caption = string.upper(planetData.name),
-				font = {size = 30}
+				font = Configuration:GetFont(4),
 			},
 			-- grid of details
 			Grid:New{
@@ -61,14 +60,14 @@ local function SelectPlanet(planetHandler, planetData)
 				columns = 2,
 				rows = 4,
 				children = {
-					Label:New{caption = "Type", font = {size = font_large}},
-					Label:New{caption = planetData.infoDisplay.terrainType or "<UNKNOWN>", font = {size = font_normal}},
-					Label:New{caption = "Radius", font = {size = font_large}},
-					Label:New{caption = planetData.infoDisplay.radius or "<UNKNOWN>", font = {size = font_normal}},
-					Label:New{caption = "Primary", font = {size = font_large}},
-					Label:New{caption = planetData.infoDisplay.primary .. " (" .. planetData.infoDisplay.primaryType .. ") ", font = {size = font_normal}},
-					Label:New{caption = "Military rating", font = {size = font_large}},
-					Label:New{caption = tostring(planetData.infoDisplay.milRating or "<UNKNOWN>"), font = {size = font_normal}},
+					Label:New{caption = "Type", font = Configuration:GetFont(3)},
+					Label:New{caption = planetData.infoDisplay.terrainType or "<UNKNOWN>", font = Configuration:GetFont(3)},
+					Label:New{caption = "Radius", font = Configuration:GetFont(3)},
+					Label:New{caption = planetData.infoDisplay.radius or "<UNKNOWN>", font = Configuration:GetFont(3)},
+					Label:New{caption = "Primary", font = Configuration:GetFont(3)},
+					Label:New{caption = planetData.infoDisplay.primary .. " (" .. planetData.infoDisplay.primaryType .. ") ", font = Configuration:GetFont(3)},
+					Label:New{caption = "Military rating", font = Configuration:GetFont(3)},
+					Label:New{caption = tostring(planetData.infoDisplay.milRating or "<UNKNOWN>"), font = Configuration:GetFont(3)},
 				},
 			},
 			-- desc text
@@ -78,21 +77,42 @@ local function SelectPlanet(planetHandler, planetData)
 				right = 4,
 				bottom = "25%",
 				text = planetData.infoDisplay.text,
-				font = {size = 18},
+				font = Configuration:GetFont(2),
 			},
+		}
+	}
+	
+	local startButton = Button:New{
+		right = 10,
+		bottom = 10,
+		width = 135,
+		height = 70,
+		classname = "action_button",
+		parent = subPanel,
+		caption = i18n("start"),
+		font = Configuration:GetFont(4),
+		OnClick = {
+			function(self) 
+				self.parent:Dispose() 
+			end
 		}
 	}
 	
 	-- close button
 	Button:New{
 		parent = starmapInfoPanel,
-		right = 0,
-		y = 0,
-		width = 64,
-		height = 48,
+		y = 3,
+		right = 3,
+		width = 80,
+		height = 45,
+		classname = "negative_button",
 		caption = i18n("close"),
-		font = {size = 20},
-		OnClick = {function(self) self.parent:Dispose() end}
+		font = Configuration:GetFont(3),
+		OnClick = {
+			function(self) 
+				self.parent:Dispose() 
+			end
+		}
 	}
 	
 	-- list of missions on this planet
@@ -110,12 +130,13 @@ local function SelectPlanet(planetHandler, planetData)
 	--end
 	
 	-- planet image
-	Image:New{
+	local planetImage = Image:New{
 		parent = starmapInfoPanel,
-		x = 32,
+		x = 0,
+		right = "50%",
 		y = (starmapInfoPanel.height - planetData.infoDisplay.size) / 2,
 		height = planetData.infoDisplay.size,
-		width = planetData.infoDisplay.size,
+		keepAspect = true,
 		file = planetData.infoDisplay.image,
 	}
 	
@@ -126,8 +147,8 @@ local function SelectPlanet(planetHandler, planetData)
 		parent = starmapInfoPanel,
 		x = 0,
 		y = 0,
-		height = starmapInfoPanel.width,
-		width = starmapInfoPanel.width,
+		right = 0,
+		bottom = 0,
 		file = planetData.infoDisplay.backgroundImage,
 		keepAspect = false,
 	}
@@ -137,6 +158,11 @@ local function SelectPlanet(planetHandler, planetData)
 	bg:Invalidate()
 	
 	starmapInfoPanel:SetLayer(1)
+	
+	starmapInfoPanel.OnResize = starmapInfoPanel.OnResize or {}
+	starmapInfoPanel.OnResize[#starmapInfoPanel.OnResize + 1] = function(obj, xSize, ySize)
+		planetImage:SetPos(nil, math.floor((ySize - planetData.infoDisplay.size)/2))
+	end
 end
 
 
