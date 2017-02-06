@@ -21,74 +21,12 @@ local IMAGE_BOUNDS = {
 	height = 1500/2602,
 }
 
--- TODO: migrate this stuff to external def file
-local planetImages = {
-	LUA_DIRNAME .. "images/planets/arid01.png",
-	LUA_DIRNAME .. "images/planets/barren01.png",
-	LUA_DIRNAME .. "images/planets/barren03.png",
-	LUA_DIRNAME .. "images/planets/terran01.png",
-	LUA_DIRNAME .. "images/planets/terran03_damaged.png",
-	LUA_DIRNAME .. "images/planets/tundra01.png",
-	LUA_DIRNAME .. "images/planets/tundra03.png",
-}
-
-local backgroundImages = {
-	LUA_DIRNAME .. "images/starbackgrounds/1.jpg",
-	LUA_DIRNAME .. "images/starbackgrounds/2.jpg",
-	LUA_DIRNAME .. "images/starbackgrounds/3.jpg",
-	LUA_DIRNAME .. "images/starbackgrounds/4.jpg",
-}
-
-local planetPositions = {
-	{0.22, 0.1},
-	{0.31, 0.19},
-	{0.3, 0.36},
-	{0.14, 0.44},
-	{0.05, 0.54},
-	{0.3, 0.52},
-	{0.24, 0.69},
-	{0.16, 0.91},
-	{0.27, 0.85},
-	{0.7, 0.9},
-	{0.56, 0.87},
-	{0.42, 0.72},
-	{0.64, 0.79},
-	{0.59, 0.66},
-	{0.61, 0.52},
-	{0.66, 0.35},
-	{0.47, 0.11},
-	{0.64, 0.19},
-	{0.72, 0.08},
-	{0.72, 0.66},
-	{0.79, 0.52},
-	{0.85, 0.35},
-	{0.89, 0.22},
-	{0.92, 0.63},
-	{0.41, 0.91},
-}
-
-local PLANET_SIZE = 54
-local PLANET_SIZE_LARGE = 240
-
-local SAMPLE_PLANET_DEF = {
-	name = "Pong",
-	["type"] = "Terran",
-	radius = "6700 km",
-	primary = "Tau Ceti",
-	primaryType = "G8",
-	milRating = 1,
-	text = [[Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-	Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-	Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-	Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.]]
-}
+local planetList = VFS.Include("campaign/planetDefs.lua")
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- TODO: use shader animation to ease info panel in
-local function SelectPlanet(planetID, planetHandler)
-	local planetDef = SAMPLE_PLANET_DEF	--planetDefsByID[planetID]
-	
+local function SelectPlanet(planetHandler, planetData)
 	local font_large = 20
 	local font_normal = 20
 	
@@ -111,7 +49,7 @@ local function SelectPlanet(planetID, planetHandler)
 			Label:New{
 				x = textX,
 				y = 12,
-				caption = string.upper(planetDef.name),
+				caption = string.upper(planetData.name),
 				font = {size = 30}
 			},
 			-- grid of details
@@ -124,13 +62,13 @@ local function SelectPlanet(planetID, planetHandler)
 				rows = 4,
 				children = {
 					Label:New{caption = "Type", font = {size = font_large}},
-					Label:New{caption = planetDef.type or "<UNKNOWN>", font = {size = font_normal}},
+					Label:New{caption = planetData.infoDisplay.terrainType or "<UNKNOWN>", font = {size = font_normal}},
 					Label:New{caption = "Radius", font = {size = font_large}},
-					Label:New{caption = planetDef.radius or "<UNKNOWN>", font = {size = font_normal}},
+					Label:New{caption = planetData.infoDisplay.radius or "<UNKNOWN>", font = {size = font_normal}},
 					Label:New{caption = "Primary", font = {size = font_large}},
-					Label:New{caption = planetDef.primary .. " (" .. planetDef.primaryType .. ") ", font = {size = font_normal}},
+					Label:New{caption = planetData.infoDisplay.primary .. " (" .. planetData.infoDisplay.primaryType .. ") ", font = {size = font_normal}},
 					Label:New{caption = "Military rating", font = {size = font_large}},
-					Label:New{caption = tostring(planetDef.milRating or "<UNKNOWN>"), font = {size = font_normal}},
+					Label:New{caption = tostring(planetData.infoDisplay.milRating or "<UNKNOWN>"), font = {size = font_normal}},
 				},
 			},
 			-- desc text
@@ -139,7 +77,7 @@ local function SelectPlanet(planetID, planetHandler)
 				y = "45%",
 				right = 4,
 				bottom = "25%",
-				text = planetDef.text,
+				text = planetData.infoDisplay.text,
 				font = {size = 18},
 			},
 		}
@@ -175,10 +113,10 @@ local function SelectPlanet(planetID, planetHandler)
 	Image:New{
 		parent = starmapInfoPanel,
 		x = 32,
-		y = (starmapInfoPanel.height - PLANET_SIZE_LARGE) / 2,
-		height = PLANET_SIZE_LARGE,
-		width = PLANET_SIZE_LARGE,
-		file = planetImages[math.floor(math.random()*#planetImages) + 1],
+		y = (starmapInfoPanel.height - planetData.infoDisplay.size) / 2,
+		height = planetData.infoDisplay.size,
+		width = planetData.infoDisplay.size,
+		file = planetData.infoDisplay.image,
 	}
 	
 	-- background
@@ -190,7 +128,7 @@ local function SelectPlanet(planetID, planetHandler)
 		y = 0,
 		height = starmapInfoPanel.width,
 		width = starmapInfoPanel.width,
-		file = backgroundImages[math.floor(math.random()*#backgroundImages) + 1],
+		file = planetData.infoDisplay.backgroundImage,
 		keepAspect = false,
 	}
 	-- force offscreen position
@@ -202,29 +140,31 @@ local function SelectPlanet(planetID, planetHandler)
 end
 
 
-local function GetPlanet(planetHolder, xPos, yPos)
+local function GetPlanet(planetHolder, planetData)
+	local planetSize = planetData.mapDisplay.size
+	local xPos, yPos = planetData.mapDisplay.x, planetData.mapDisplay.y
 	
 	local button = Button:New{
 		x = 0,
 		y = 0,
-		width = PLANET_SIZE,
-		height = PLANET_SIZE,
+		width = planetSize,
+		height = planetSize,
 		classname = "button_planet",
 		caption = "",
 		OnClick = { 
 			function(self)
-				SelectPlanet(nil, planetHolder)	-- FIXME specify actual planetID
+				SelectPlanet(planetHolder, planetData)
 			end
 		},
 		parent = planetHolder,
 	}
 	
 	local image = Image:New {
-		file = planetImages[math.floor(math.random()*#planetImages) + 1],
 		x = 3,
 		y = 3,
 		right = 2,
 		bottom = 2,
+		file = planetData.mapDisplay.image,
 		keepAspect = true,
 		parent = button,
 	}
@@ -232,8 +172,8 @@ local function GetPlanet(planetHolder, xPos, yPos)
 	local externalFunctions = {}
 	
 	function externalFunctions.UpdatePosition(xSize, ySize)
-		local x = math.max(0, math.min(xSize - PLANET_SIZE, xPos*xSize - PLANET_SIZE/2))
-		local y = math.max(0, math.min(ySize - PLANET_SIZE, yPos*ySize - PLANET_SIZE/2))
+		local x = math.max(0, math.min(xSize - planetSize, xPos*xSize - planetSize/2))
+		local y = math.max(0, math.min(ySize - planetSize, yPos*ySize - planetSize/2))
 		button:SetPos(x,y)
 	end
 	
@@ -250,8 +190,8 @@ local function InitializePlanetHandler(parent)
 	}
 	
 	local planets = {}
-	for i = 1, #planetPositions do
-		planets[i] = GetPlanet(window, planetPositions[i][1], planetPositions[i][2])
+	for i = 1, #planetList do
+		planets[i] = GetPlanet(window, planetList[i])
 	end
 	
 	local externalFunctions = {}
