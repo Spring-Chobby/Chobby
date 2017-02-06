@@ -84,6 +84,9 @@ local function MakePlanet(planetID)
 				extraUnlocks = {
 					"factoryshield",
 					"shieldfelon",
+					"armdeva",
+					"armfus",
+					"corllt",
 				},
 				startUnits = {
 					{
@@ -91,7 +94,55 @@ local function MakePlanet(planetID)
 						x = 1000,
 						z = 300,
 						facing = 2,
-					}
+					},
+					{
+						name = "armfus",
+						x = 1000,
+						z = 500,
+						facing = 1,
+					},
+					{
+						name = "armfus",
+						x = 1200,
+						z = 500,
+						facing = 0,
+					},
+					{
+						name = "armnanotc",
+						x = 1000,
+						z = 400,
+						facing = 2,
+					},
+					{
+						name = "armwar",
+						x = 850,
+						z = 850,
+						facing = 0,
+					},
+					{
+						name = "armwar",
+						x = 900,
+						z = 850,
+						facing = 0,
+					},
+					{
+						name = "armwar",
+						x = 850,
+						z = 900,
+						facing = 0,
+					},
+					{
+						name = "armwar",
+						x = 900,
+						z = 900,
+						facing = 0,
+					},
+					{
+						name = "corsktl",
+						x = 4710,
+						z = 4670,
+						facing = 0,
+					},
 				}
 			},
 			aiConfig = {
