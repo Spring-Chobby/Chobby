@@ -6,7 +6,7 @@ function InterfaceSkirmish:init()
 	self.myUserName = "Player"
 end
 
-local function ScriptTXT(script)
+function InterfaceSkirmish:MakeScriptTXT(script)
 	local string = '[Game]\n{\n\n'
 
 	-- First write Tables
@@ -37,6 +37,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName)
 	local teamCount = 0
 	local players = {}
 	local playerCount = 0
+	local maxAllyTeamID = -1
 	local ais = {}
 	local aiCount = 0
 
@@ -57,21 +58,41 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName)
 					AllyTeam = data.allyNumber,
 					rgbcolor = '0.99609375 0.546875 0',
 				}
+				maxAllyTeamID = math.max(maxAllyTeamID, data.allyNumber)
 				teamCount = teamCount + 1
 			end
 		end
 	end
 	
+	-- Check for chicken difficutly modoption. Possibly add an AI due to it.
+	local chickenName
+	if self.modoptions and self.modoptions.chickenailevel and self.modoptions.chickenailevel ~= "none" then
+		chickenName = self.modoptions.chickenailevel
+	end
+	
 	-- Add the AIs
+	local chickenAdded = false
 	for userName, data in pairs(self.userBattleStatus) do
-		if data.allyNumber and data.aiLib then
-			ais[aiCount] = {
-				Name = userName,
-				Team = teamCount,
-				IsFromDemo = 0,
-				ShortName = data.aiLib,
-				Host = 0,
-			}
+		if data.allyNumber and data.aiLib then	
+			if chickenName and string.find(data.aiLib, "Chicken") then
+				-- Override chicken AI if difficulty modoption is present
+				ais[aiCount] = {
+					Name = chickenName,
+					Team = teamCount,
+					IsFromDemo = 0,
+					ShortName = chickenName,
+					Host = 0,
+				}
+				chickenAdded = true
+			else
+				ais[aiCount] = {
+					Name = userName,
+					Team = teamCount,
+					IsFromDemo = 0,
+					ShortName = data.aiLib,
+					Host = 0,
+				}
+			end
 			aiCount = aiCount + 1
 			
 			if not data.IsSpectator then
@@ -80,11 +101,33 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName)
 					AllyTeam = data.allyNumber,
 					rgbcolor = '0.99609375 0.546875 0',
 				}
+				maxAllyTeamID = math.max(maxAllyTeamID, data.allyNumber)
 				teamCount = teamCount + 1
 			end
 		end
 	end
 	
+	-- Add chicken from the modoption if no chicken is present
+	if chickenName and not chickenAdded then
+		ais[aiCount] = {
+			Name = chickenName,
+			Team = teamCount,
+			IsFromDemo = 0,
+			ShortName = chickenName,
+			Host = 0,
+		}
+		aiCount = aiCount + 1
+		
+		teams[teamCount] = {
+			TeamLeader = 0,
+			AllyTeam = maxAllyTeamID + 1,
+			rgbcolor = '0.99609375 0.546875 0',
+		}
+		maxAllyTeamID = maxAllyTeamID + 1
+		teamCount = teamCount + 1
+	end
+	
+	-- Add allyTeams
 	for i, teamData in pairs(teams) do
 		if not allyTeams[teamData.AllyTeam] then
 			allyTeams[teamData.AllyTeam] = {
@@ -139,7 +182,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName)
 
 	-- local scriptFileName = "scriptFile.txt"
 	-- local scriptFile = io.open(scriptFileName, "w")
-	local scriptTxt = ScriptTXT(script)
+	local scriptTxt = self:MakeScriptTXT(script)
 	Spring.Reload(scriptTxt)
 	-- scriptFile:write(scriptTxt)
 	-- scriptFile:close()
