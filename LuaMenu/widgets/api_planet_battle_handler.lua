@@ -63,11 +63,28 @@ local function StartBattle(gameName, gameConfig, playerUnlocks)
 		},
 	}
 	
+	local fullPlayerUnlocks = {}
+	local playerUnlocksMap = {}
+	for i = 1, #playerUnlocks do
+		fullPlayerUnlocks[#fullPlayerUnlocks + 1] = playerUnlocks[i]
+		playerUnlocksMap[playerUnlocks[i]] = true
+	end
+	if gameConfig.playerConfig.extraUnlocks then
+		local extra = gameConfig.playerConfig.extraUnlocks
+		for i = 1, #extra do
+			if not playerUnlocksMap[extra[i]] then
+				fullPlayerUnlocks[#fullPlayerUnlocks + 1] = extra[i]
+				playerUnlocksMap[extra[i]] = true
+			end
+		end
+	end
+	
 	teams[teamCount] = {
 		TeamLeader = 0,
 		AllyTeam = gameConfig.playerConfig.allyTeam,
 		rgbcolor = '0 0 0',
-		campaignunlocks = TableToBase64(playerUnlocks),
+		campaignunlocks = TableToBase64(fullPlayerUnlocks),
+		extrastartunits = TableToBase64(gameConfig.playerConfig.startUnits),
 	}
 	teamCount = teamCount + 1
 	
@@ -93,6 +110,7 @@ local function StartBattle(gameName, gameConfig, playerUnlocks)
 			AllyTeam = aiData.allyTeam,
 			rgbcolor = '0 0 0',
 			campaignunlocks = TableToBase64(aiData.unlocks),
+			extrastartunits = TableToBase64(aiData.startUnits),
 		}
 		teamCount = teamCount + 1
 	end
@@ -136,7 +154,7 @@ local function StartBattle(gameName, gameConfig, playerUnlocks)
 	end
 
 	local scriptString = localLobby:MakeScriptTXT(script)
-	Spring.Echo("scriptString", scriptString)
+	--Spring.Echo("scriptString", scriptString)
 	localLobby:StartGameFromString(scriptString)
 end
 
