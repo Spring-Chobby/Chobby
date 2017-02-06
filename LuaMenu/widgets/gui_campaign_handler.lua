@@ -21,7 +21,7 @@ local IMAGE_BOUNDS = {
 	height = 1500/2602,
 }
 
-local planetList = VFS.Include("campaign/planetDefs.lua")
+local planetConfig = VFS.Include("campaign/planetDefs.lua")
 
 local playerUnlocks = {
 	"cormex",
@@ -33,7 +33,7 @@ local playerUnlocks = {
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- TODO: use shader animation to ease info panel in
-local function SelectPlanet(planetHandler, planetData)
+local function SelectPlanet(planetHandler, planetID, planetData)
 	local Configuration = WG.Chobby.Configuration
 	
 	local starmapInfoPanel = Panel:New{
@@ -100,7 +100,7 @@ local function SelectPlanet(planetHandler, planetData)
 		font = Configuration:GetFont(4),
 		OnClick = {
 			function(self)
-				WG.PlanetBattleHandler.StartBattle(planetData, playerUnlocks)
+				WG.PlanetBattleHandler.StartBattle(planetID, planetData, playerUnlocks)
 			end
 		}
 	}
@@ -172,8 +172,7 @@ local function SelectPlanet(planetHandler, planetData)
 	end
 end
 
-
-local function GetPlanet(planetHolder, planetData)
+local function GetPlanet(planetHolder, planetID, planetData)
 	local planetSize = planetData.mapDisplay.size
 	local xPos, yPos = planetData.mapDisplay.x, planetData.mapDisplay.y
 	
@@ -186,7 +185,7 @@ local function GetPlanet(planetHolder, planetData)
 		caption = "",
 		OnClick = { 
 			function(self)
-				SelectPlanet(planetHolder, planetData)
+				SelectPlanet(planetHolder, planetID, planetData)
 			end
 		},
 		parent = planetHolder,
@@ -222,9 +221,9 @@ local function InitializePlanetHandler(parent)
 		parent = parent,
 	}
 	
-	local planets = {}
-	for i = 1, #planetList do
-		planets[i] = GetPlanet(window, planetList[i])
+	local planetList = {}
+	for i = 1, #planetConfig do
+		planetList[i] = GetPlanet(window, i, planetConfig[i])
 	end
 	
 	local externalFunctions = {}
@@ -232,13 +231,41 @@ local function InitializePlanetHandler(parent)
 	function externalFunctions.UpdatePosition(x, y, width, height)
 		window:SetPos(x, y, width, height)
 		if x then
-			for i = 1, #planets do
-				planets[i].UpdatePosition(width, height)
+			for i = 1, #planetList do
+				planetList[i].UpdatePosition(width, height)
 			end
 		end
 	end
 	
 	return externalFunctions
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Ingame interface
+
+local BATTLE_WON_STRING = "Campaign_PlanetBattleWon"
+
+function widget:RecvLuaMsg(msg)
+	if string.find(msg, BATTLE_WON_STRING) then
+		msg = string.sub(msg, 25)
+		local planetID = tonumber(msg)
+		if planetID and planetConfig[planetID] then
+			local config = planetConfig[planetID]
+			local wonString = ""
+			if config.completionReward then
+				local units = config.completionReward.units
+				local modules = config.completionReward.modules
+				for i = 1, #units do
+					wonString = wonString .. units[i] .. ", "
+				end
+				for i = 1, #modules do
+					wonString = wonString .. modules[i] .. ", "
+				end
+			end
+			WG.Chobby.InformationPopup("You won the battle and are rewarded with: " .. wonString .. ".")
+		end
+	end
 end
 
 --------------------------------------------------------------------------------

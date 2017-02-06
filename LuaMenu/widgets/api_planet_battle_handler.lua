@@ -38,7 +38,7 @@ local function TableToBase64(inputTable)
 	return Spring.Utilities.Base64Encode(Spring.Utilities.TableToString(inputTable))
 end
 
-local function StartBattle(gameName, gameConfig, playerUnlocks)
+local function StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName)
 	local allyTeams = {}
 	local allyTeamCount = 0
 	local teams = {}
@@ -136,7 +136,7 @@ local function StartBattle(gameName, gameConfig, playerUnlocks)
 		numusers = playerCount + aiCount,
 		startpostype = 2,
 		modoptions = {
-			issingleplayercampaign = 1
+			singleplayercampaignbattleid = planetID
 		},
 	}
 
@@ -163,7 +163,7 @@ end
 -- External Functions
 local PlanetBattleHandler = {}
 
-function PlanetBattleHandler.StartBattle(planetData, playerUnlocks)
+function PlanetBattleHandler.StartBattle(planetID, planetData, playerUnlocks)
 	local Configuration = WG.Chobby.Configuration
 	local gameConfig = planetData.gameConfig
 
@@ -188,7 +188,7 @@ function PlanetBattleHandler.StartBattle(planetData, playerUnlocks)
 	end
 	
 	local function StartBattleFunc()
-		if StartBattle(gameName, gameConfig, playerUnlocks) then
+		if StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName) then
 			Spring.Echo("Start battle success!")
 		end
 	end
