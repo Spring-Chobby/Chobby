@@ -117,8 +117,8 @@ local function CreateMissionEntry(missionData)
 			function()
 				local startScript = missionData.Script
 				
-				local gameName = WG.Chobby.Configuration.gameConfig._defaultGameArchiveName
-				local haveGame = (gameName == "zk:stable") or VFS.HasArchive(gameName)
+				local gameName = WG.Chobby.Configuration:GetDefaultGameName()
+				local haveGame = VFS.HasArchive(gameName)
 				if not haveGame then
 					WG.Chobby.InformationPopup("You do not have the game file required. It will now be downloaded.")
 					MaybeDownloadGame(gameName)
@@ -132,7 +132,7 @@ local function CreateMissionEntry(missionData)
 					return
 				end
 				
-				local gameName = WG.Chobby.Configuration.gameConfig._defaultGameArchiveName
+				local gameName = WG.Chobby.Configuration:GetDefaultGameName()
 				if string.find(gameName, ":") then
 					gameName = "rapid://" .. gameName
 				end
