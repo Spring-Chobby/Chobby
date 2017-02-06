@@ -44,9 +44,6 @@ local emptyTeamIndex = 0
 local haveMapAndGame = false
 
 local function HasGame(gameName)
-	if gameName == "zk:stable" then
-		return true
-	end
 	return VFS.HasArchive(gameName)
 end
 
