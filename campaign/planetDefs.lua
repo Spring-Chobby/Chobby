@@ -71,6 +71,69 @@ local function MakePlanet(planetID)
 			Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 			Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 			Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.]]
+		},
+		gameConfig = {
+			missionStartscript = false,
+			mapName = "TitanDuel",
+			playerConfig = {
+				startX = 400,
+				startZ = 400,
+				allyTeam = 0,
+				useUnlocks = true,
+				facplop = true,
+				extraUnlocks = {
+					"factoryshield",
+					"shieldfelon",
+				},
+				startUnits = {
+					{
+						name = "corllt",
+						x = 1000,
+						z = 300,
+						facing = 2,
+					}
+				}
+			},
+			aiConfig = {
+				{
+					startX = 200,
+					startZ = 200,
+					aiLib = "CircuitAIHard",
+					humanName = "Ally",
+					bitDependant = true,
+					facplop = false,
+					allyTeam = 0,
+					unlocks = {
+						"factorycloak",
+						"corllt",
+						"cormex",
+						"armsolar",
+						"armpw",
+					}
+				},
+				{
+					startX = 3200,
+					aiLib = "CircuitAIHard",
+					humanName = "Mortal Enemy",
+					bitDependant = true,
+					facplop = true,
+					allyTeam = 1,
+					unlocks = {
+						"factorycloak",
+						"corllt",
+						"cormex",
+						"armsolar",
+						"armwar",
+					}
+				},
+			},
+		},
+		completionReward = {
+			unlocks = {
+				"cafus",
+			},
+			modules = {
+			},
 		}
 	}
 	

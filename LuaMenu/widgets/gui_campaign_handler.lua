@@ -23,6 +23,13 @@ local IMAGE_BOUNDS = {
 
 local planetList = VFS.Include("campaign/planetDefs.lua")
 
+local playerUnlocks = {
+	"cormex",
+	"armsolar",
+	"armpw",
+	"factorycloak",
+}
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- TODO: use shader animation to ease info panel in
@@ -92,8 +99,8 @@ local function SelectPlanet(planetHandler, planetData)
 		caption = i18n("start"),
 		font = Configuration:GetFont(4),
 		OnClick = {
-			function(self) 
-				self.parent:Dispose() 
+			function(self)
+				WG.PlanetBattleHandler.StartBattle(planetData, playerUnlocks)
 			end
 		}
 	}
