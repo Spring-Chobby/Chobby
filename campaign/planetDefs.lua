@@ -143,6 +143,12 @@ local function MakePlanet(planetID)
 						z = 4670,
 						facing = 0,
 					},
+					{
+						name = "corsktl",
+						x = 300,
+						z = 300,
+						facing = 0,
+					},
 				}
 			},
 			aiConfig = {
@@ -181,7 +187,7 @@ local function MakePlanet(planetID)
 			},
 		},
 		completionReward = {
-			unlocks = {
+			units = {
 				"cafus",
 			},
 			modules = {

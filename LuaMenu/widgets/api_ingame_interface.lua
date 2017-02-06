@@ -30,10 +30,16 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Text To Speech
+-- Patterns to match
 
 local TTT_SAY = "textToSpeechSay_"
 local TTS_VOLUME = "textToSpeechVolume_"
+local REMOVE_BUTTON = "disableLobbyButton"
+local ENABLE_OVERLAY = "showLobby"
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Text To Speech
 
 local function HandleTextToSpeech(msg)
 	local Configuration = WG.Chobby.Configuration
@@ -60,9 +66,6 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Lobby Overlay
-
-local REMOVE_BUTTON = "disableLobbyButton"
-local ENABLE_OVERLAY = "showLobby"
 
 local function HandleLobbyOverlay(msg)
 	local Chobby = WG.Chobby
