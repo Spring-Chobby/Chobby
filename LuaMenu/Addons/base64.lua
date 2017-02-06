@@ -10,6 +10,9 @@
 
 -- bitshift functions (<<, >> equivalent)
 -- shift left
+
+Spring.Utilities = Spring.Utilities or {}
+
 local function lsh(value,shift)
 	return (value*(2^shift)) % 256
 end
