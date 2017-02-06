@@ -113,6 +113,7 @@ local function MakePlanet(planetID)
 				},
 				{
 					startX = 3200,
+					startZ = 3200,
 					aiLib = "CircuitAIHard",
 					humanName = "Mortal Enemy",
 					bitDependant = true,

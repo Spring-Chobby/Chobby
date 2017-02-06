@@ -31,6 +31,13 @@ local function MaybeDownloadMap(mapName)
 	MaybeDownloadArchive(mapName, "map")
 end
 
+local function TableToBase64(inputTable)
+	if not inputTable then
+		return 
+	end
+	return Spring.Utilities.Base64Encode(Spring.Utilities.TableToString(inputTable))
+end
+
 local function StartBattle(gameName, gameConfig, playerUnlocks)
 	local allyTeams = {}
 	local allyTeamCount = 0
@@ -60,6 +67,7 @@ local function StartBattle(gameName, gameConfig, playerUnlocks)
 		TeamLeader = 0,
 		AllyTeam = gameConfig.playerConfig.allyTeam,
 		rgbcolor = '0 0 0',
+		campaignunlocks = TableToBase64(playerUnlocks),
 	}
 	teamCount = teamCount + 1
 	
@@ -84,6 +92,7 @@ local function StartBattle(gameName, gameConfig, playerUnlocks)
 			TeamLeader = 0,
 			AllyTeam = aiData.allyTeam,
 			rgbcolor = '0 0 0',
+			campaignunlocks = TableToBase64(aiData.unlocks),
 		}
 		teamCount = teamCount + 1
 	end
@@ -108,7 +117,9 @@ local function StartBattle(gameName, gameConfig, playerUnlocks)
 		numplayers = playerCount,
 		numusers = playerCount + aiCount,
 		startpostype = 2,
-		modoptions = {},
+		modoptions = {
+			issingleplayercampaign = 1
+		},
 	}
 
 	for i, ai in pairs(ais) do
@@ -125,6 +136,7 @@ local function StartBattle(gameName, gameConfig, playerUnlocks)
 	end
 
 	local scriptString = localLobby:MakeScriptTXT(script)
+	Spring.Echo("scriptString", scriptString)
 	localLobby:StartGameFromString(scriptString)
 end
 
