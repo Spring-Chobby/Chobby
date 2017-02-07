@@ -38,12 +38,12 @@ end
 -- May as well handle its own config, does not need to wait for the rest of chobby to load.
 function widget:GetConfigData()
 	return {
-		engineVersion = Game.version
+		engineVersion = Spring.Utilities.GetEngineVersion()
 	}
 end
 
 function widget:SetConfigData(data)
-	if data.engineVersion ~= Game.version then
+	if data.engineVersion ~= Spring.Utilities.GetEngineVersion() then
 		CacheHandler.DeletePathCache()
 	end
 	widgetHandler:RemoveCallIn("Update")

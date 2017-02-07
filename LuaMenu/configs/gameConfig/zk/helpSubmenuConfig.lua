@@ -156,7 +156,7 @@ local communityControl = Control:New {
 local bugLines = {
 	{
 		textFunction = function ()
-			return "Using engine " .. Game.version .. " " .. ((WG.Chobby.Configuration:GetIsRunning64Bit() and "64-bit.") or "32-bit.")
+			return "Using engine " .. Spring.Utilities.GetEngineVersion() .. " " .. ((WG.Chobby.Configuration:GetIsRunning64Bit() and "64-bit.") or "32-bit.")
 		end,
 	},
 	{

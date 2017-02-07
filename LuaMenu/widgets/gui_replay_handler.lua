@@ -157,7 +157,7 @@ local function InitializeControls(parentControl)
 		{name = "Name", x = 530, right = 5},
 	}
 	
-	local engineName = Game.version
+	local engineName = Spring.Utilities.GetEngineVersion()
 	engineName = string.gsub(engineName, "%.", "%%%.")
 	engineName = string.gsub(engineName, "%-", "%%%-")
 	local replayList = WG.Chobby.SortableList(listHolder, headings, nil, nil, false)

@@ -178,10 +178,10 @@ function Interface:HostBattle(battleTitle, password, modeName)
 	-- 4 = FFA
 	-- 0 = Custom
 	local engineName
-	if tonumber(Game.version) then
-		engineName = Game.version .. ".0"
+	if tonumber(Spring.Utilities.GetEngineVersion()) then
+		engineName = Spring.Utilities.GetEngineVersion() .. ".0"
 	else
-		engineName = string.gsub(Game.version, " develop", "")
+		engineName = string.gsub(Spring.Utilities.GetEngineVersion(), " develop", "")
 	end
 	
 	local sendData = {

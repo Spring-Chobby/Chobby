@@ -32,18 +32,7 @@ function createTabGroup(ctrls)
 end
 
 local function GetLobbyName()
-	local version = Game.gameVersion or "$VERSION"
-	-- try to extract version from .git
-	if version == "$VERSION" then
-		version = "git"
-
-		local gitCommit = VFS.LoadFile(".git/refs/heads/master", VFS.MOD)
-		-- FIXME: This will always be nil because Spring prevents us from accessing folders or files starting with a dot
-		if gitCommit then
-			version = version .. " - " .. tostring(gitCommit)
-		end
-	end
-	return (Game.gameName or 'Chobby') .. " " .. version
+	return 'Chobby'
 end
 
 function LoginWindow:init(failFunction, cancelText, windowClassname)
