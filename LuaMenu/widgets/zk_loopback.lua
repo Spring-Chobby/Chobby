@@ -149,6 +149,22 @@ function WrapperLoopback.SteamInviteFriendToGame(steamID)
 	SendCommand("SteamInviteFriendToGame", {SteamID = steamID})
 end
 
+
+-- sends error event to GA. Severity must be one of: Undefined, Debug, Info, Warning, Error,Critical,
+function WrapperLoopback.GaAddErrorEvent(severity, message) 
+	SendCommand("GaAddErrorEvent", {Severity = severity, Message = message}) 
+end
+
+-- sends GA design event (for example gui actions). Value is optional, if sent must be double
+function WrapperLoopback.GaAddDesignEvent(eventID, value) 
+	SendCommand("GaAddDesignEvent", {EventID = eventID, Value = value}) 
+end 
+
+-- sends GA progression event. Score is optional, if sent must be double. Level3 and 2 are optional but if 3 is sent then 2 and 1 must be set and if 2 is sent then 1 must be set.
+function WrapperLoopback.GaAddProgressionEvent(status, progression1, progression2, progression3, score) 
+	SendCommand("GaAddProgressionEvent", {Status = status, Progression1 = progression1, Progression2 = progression2, Progression3 = progression3, Score = score}) 
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Data
