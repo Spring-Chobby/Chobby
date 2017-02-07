@@ -139,7 +139,7 @@ local function MakePlanet(planetID)
 					},
 					{
 						name = "corsktl",
-						x = 4710,
+						x = 4210,
 						z = 4670,
 						facing = 0,
 					},
