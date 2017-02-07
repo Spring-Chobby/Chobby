@@ -137,9 +137,7 @@ function json.decode(s, startPos)
 	if curChar==[["]] or curChar==[[']] then
 		return decode_scanString(s,startPos)
 	end
-	if string.sub(s,startPos,startPos+1)=='/*' then
-		return json.decode(s, decode_scanComment(s,startPos))
-	end
+	
 	-- Otherwise, it must be a constant
 	return decode_scanConstant(s,startPos)
 end
@@ -183,6 +181,16 @@ function decode_scanArray(s,startPos)
 	until false
 end
 
+--- Scans a single line comment and discards the comment.
+-- Returns the position of the next character following the comment.
+-- @param string s The JSON string to scan.
+-- @param int startPos The starting position of the comment
+function decode_scanSingleLineComment(s, startPos)
+	assert( string.sub(s,startPos,startPos+1)=='//', "decode_scanSingleLineComment called but comment does not start at position " .. startPos)
+	local endPos = string.find(s,'\n',startPos+2)
+	return endPos+1
+end
+
 --- Scans a comment and discards the comment.
 -- Returns the position of the next character following the comment.
 -- @param string s The JSON string to scan.
@@ -210,7 +218,7 @@ function decode_scanConstant(s, startPos)
 			return consts[k], startPos + string.len(k)
 		end
 	end
-	assert(nil, 'Failed to scan constant from string ' .. s .. ' at starting position ' .. startPos)
+	assert(nil, 'Failed to scan constant from string ' .. s .. ' at starting position ' .. startPos .. string.sub(s,startPos))
 end
 
 --- Scans a number from the JSON encoded string.
@@ -316,10 +324,16 @@ end
 -- @return int The first position where non-whitespace was encountered, or string.len(s)+1 if the end of string
 -- was reached.
 function decode_scanWhitespace(s,startPos)
-	local whitespace=" \n\r\t"
+	local whitespace=" \n\r\t/"
 	local stringLen = string.len(s)
 	while ( string.find(whitespace, string.sub(s,startPos,startPos), 1, true)  and startPos <= stringLen) do
-		startPos = startPos + 1
+		if string.sub(s,startPos,startPos+1)=='//' then
+			startPos = decode_scanSingleLineComment(s,startPos)
+		elseif string.sub(s,startPos,startPos+1)=='/*' then
+			startPos = decode_scanComment(s,startPos)
+		else
+			startPos = startPos + 1
+		end
 	end
 	return startPos
 end
