@@ -353,13 +353,13 @@ function Configuration:GetHeadingImage(fullscreenMode, title)
 end
 
 function Configuration:IsValidEngineVersion(engineVersion)
-	--Spring.Echo("Checking engineVersion", engineVersion, "against", Game.version, "numbers", tonumber(Game.version), string.gsub(Game.version, " develop", ""))
-	if tonumber(Game.version) then
+	--Spring.Echo("Checking engineVersion", engineVersion, "against", Spring.Utilities.GetEngineVersion(), "numbers", tonumber(Spring.Utilities.GetEngineVersion()), string.gsub(Spring.Utilities.GetEngineVersion(), " develop", ""))
+	if tonumber(Spring.Utilities.GetEngineVersion()) then
 		-- Master releases lack the '.0' at the end. Who knows what other cases are wrong.
 		-- Add as required.
-		return engineVersion == (Game.version .. ".0")
+		return engineVersion == (Spring.Utilities.GetEngineVersion() .. ".0")
 	else
-		return string.gsub(Game.version, " develop", "") == engineVersion
+		return string.gsub(Spring.Utilities.GetEngineVersion(), " develop", "") == engineVersion
 	end
 end
 

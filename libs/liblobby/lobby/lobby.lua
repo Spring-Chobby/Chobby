@@ -245,7 +245,7 @@ function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, scriptPas
 	end
 	
 	if engineName and not WG.Chobby.Configuration:IsValidEngineVersion(engineName) then
-		WG.Chobby.InformationPopup("Cannont start game: wrong Spring engine version. The required version is '" .. engineName .. "', your version is '" .. Game.version .. "'.", 420, 260)
+		WG.Chobby.InformationPopup("Cannont start game: wrong Spring engine version. The required version is '" .. engineName .. "', your version is '" .. Spring.Utilities.GetEngineVersion() .. "'.", 420, 260)
 		return
 	end
 	
