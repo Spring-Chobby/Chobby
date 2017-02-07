@@ -101,7 +101,11 @@ local function StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName)
 			Team = teamCount,
 			IsFromDemo = 0,
 			ShortName = shortName,
+			comm_merge = 0,
 			Host = 0,
+			Options = {
+				comm_merge = 0,
+			}
 		}
 		aiCount = aiCount + 1
 		

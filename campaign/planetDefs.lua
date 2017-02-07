@@ -169,6 +169,22 @@ local function MakePlanet(planetID)
 					}
 				},
 				{
+					startX = 250,
+					startZ = 250,
+					aiLib = "CircuitAIHard",
+					humanName = "Another Ally",
+					bitDependant = true,
+					facplop = false,
+					allyTeam = 0,
+					unlocks = {
+						"factorycloak",
+						"corllt",
+						"cormex",
+						"armsolar",
+						"armpw",
+					}
+				},
+				{
 					startX = 3200,
 					startZ = 3200,
 					aiLib = "CircuitAIHard",
