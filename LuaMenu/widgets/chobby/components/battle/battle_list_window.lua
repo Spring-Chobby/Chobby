@@ -561,12 +561,19 @@ function BattleListWindow:JoinBattle(battle)
 	else
 		local tryJoin, passwordWindow
 
-		local function onJoinBattleFailed(listener, reason)
-			lblError:SetCaption(reason)
-		end
-		local function onJoinBattle(listener)
-			passwordWindow:Dispose()
-		end
+		local lblError = Label:New {
+			x = 30,
+			width = 100,
+			y = 110,
+			height = 80,
+			caption = "",
+			font = {
+				color = { 1, 0, 0, 1 },
+				size = Configuration:GetFont(2).size,
+				shadow = Configuration:GetFont(2).shadow,
+			},
+			parent = passwordWindow,
+		}
 
 		passwordWindow = Window:New {
 			x = 700,
@@ -585,6 +592,14 @@ function BattleListWindow:JoinBattle(battle)
 				end
 			},
 		}
+		
+		local function onJoinBattleFailed(listener, reason)
+			lblError:SetCaption(reason)
+		end
+		
+		local function onJoinBattle(listener)
+			passwordWindow:Dispose()
+		end
 
 		local lblPassword = Label:New {
 			x = 25,
@@ -593,20 +608,6 @@ function BattleListWindow:JoinBattle(battle)
 			height = 35,
 			font = Configuration:GetFont(3),
 			caption = i18n("enter_battle_password"),
-			parent = passwordWindow,
-		}
-
-		local lblError = Label:New {
-			x = 30,
-			width = 100,
-			y = 110,
-			height = 80,
-			caption = "",
-			font = {
-				color = { 1, 0, 0, 1 },
-				size = Configuration:GetFont(2).size,
-				shadow = Configuration:GetFont(2).shadow,
-			},
 			parent = passwordWindow,
 		}
 
