@@ -194,7 +194,7 @@ end
 -- if date is not passed, current time is assumed
 function Console:AddMessage(message, userName, dateOverride, color, thirdPerson, nameColor, nameTooltip, supressNameClick)
 	nameColor = nameColor or "\255\50\160\255"
-	nameTooltip = nameTooltip or ("user_chat_s_" .. userName)
+	nameTooltip = nameTooltip or (userName and ("user_chat_s_" .. userName))
 	local txt = ""
 	local whiteText = ""
 	if self.showDate then

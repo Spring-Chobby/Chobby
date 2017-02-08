@@ -99,8 +99,6 @@ function Chobby:_Initialize()
 			)
 		end, 0.001)
 	end)
-	
-	
 end
 
 function Chobby:GetRegisteredComponents()
