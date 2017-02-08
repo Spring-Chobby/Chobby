@@ -466,7 +466,7 @@ function ChatWindows:ProcessChat(chanName, userName, message, msgDate, notifyCol
 	end
 	local nameColor
 	if source == lobby.SOURCE_DISCORD then
-	channelConsole:AddMessage(message, userName, msgDate, chatColour, thirdPerson, "\255\50\255\160", "Discord user.", true)
+	channelConsole:AddMessage(message, userName, msgDate, chatColour, thirdPerson, "\255\40\210\220", "Discord user.", true)
 	else
 		channelConsole:AddMessage(message, userName, msgDate, chatColour, thirdPerson, nameColor)
 	end
