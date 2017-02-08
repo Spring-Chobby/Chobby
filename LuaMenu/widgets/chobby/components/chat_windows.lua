@@ -103,8 +103,8 @@ function ChatWindows:init()
 
 	-- channel chat
 	lobby:AddListener("OnSaid",
-		function(listener, chanName, userName, message, msgDate)
-			self:ProcessChat(chanName, userName, message, msgDate, CHAT_MENTION)
+		function(listener, chanName, userName, message, msgDate, source)
+			self:ProcessChat(chanName, userName, message, msgDate, CHAT_MENTION, nil, nil, source)
 		end
 	)
 	lobby:AddListener("OnSaidEx",
@@ -454,20 +454,26 @@ function ChatWindows:CycleTab(direction)
 	self.tabPanel.tabBar:Select(child.name)
 end
 
-function ChatWindows:ProcessChat(chanName, userName, message, msgDate, notifyColor, chatColor, thirdPerson)
+function ChatWindows:ProcessChat(chanName, userName, message, msgDate, notifyColor, chatColor, thirdPerson, source)
 	local channelConsole = self.channelConsoles[chanName]
-	if channelConsole ~= nil then
-		local iAmMentioned = (string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName())
-		local chatColour = (iAmMentioned and notifyColor) or chatColor
-		if self:IsChannelSelected(chanName) and self.activeUnreadMessages and self.activeUnreadMessages ~= 0 then
-			self.activeUnreadMessages = self.activeUnreadMessages + 1
-		end
-		channelConsole:AddMessage(message, userName, msgDate, chatColour, thirdPerson)
-		if iAmMentioned then
-			self:_NotifyTab(chanName, userName, chanName, true, message, "sounds/beep4.wav", 15)
-		elseif Configuration.notifyForAllChat then
-			self:_NotifyTab(chanName, userName, chanName, false)
-		end
+	if not channelConsole then
+		return
+	end
+	local iAmMentioned = (string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName())
+	local chatColour = (iAmMentioned and notifyColor) or chatColor
+	if self:IsChannelSelected(chanName) and self.activeUnreadMessages and self.activeUnreadMessages ~= 0 then
+		self.activeUnreadMessages = self.activeUnreadMessages + 1
+	end
+	local nameColor
+	if source == lobby.SOURCE_DISCORD then
+	channelConsole:AddMessage(message, userName, msgDate, chatColour, thirdPerson, "\255\50\255\160", "Discord user.", true)
+	else
+		channelConsole:AddMessage(message, userName, msgDate, chatColour, thirdPerson, nameColor)
+	end
+	if iAmMentioned then
+		self:_NotifyTab(chanName, userName, chanName, true, message, "sounds/beep4.wav", 15)
+	elseif Configuration.notifyForAllChat then
+		self:_NotifyTab(chanName, userName, chanName, false)
 	end
 end
 

@@ -1112,6 +1112,16 @@ function Interface:_Say(data)
 	
 	local emote = data.IsEmote
 	if data.Place == 0 then -- Send to channel?
+		if data.User == "Nightwatch" then
+			local msg = data.Text
+			local startPos = string.find(msg, "<")
+			local endPos = string.find(msg, "> ")
+			local endPosName = string.find(msg, "#")
+			if startPos and endPos and endPosName then
+				self:_OnSaid(data.Target, string.sub(msg, startPos + 1, endPosName - 1), string.sub(msg, endPos + 2), data.Time, self.SOURCE_DISCORD)
+				return
+			end
+		end
 		if emote then
 			self:_OnSaidEx(data.Target, data.User, data.Text, data.Time)
 		else

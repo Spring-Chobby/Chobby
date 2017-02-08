@@ -15,6 +15,8 @@ function Lobby:_Clean()
 	self.users = {}
 	self.userBySteamID = {}
 	self.userCount = 0
+	
+	self.SOURCE_DISCORD = 1
 
 	self.friends = {} -- list
 	self.isFriend = {} -- map
@@ -919,8 +921,8 @@ function Lobby:_OnLeft(chanName, userName, reason)
 	self:_CallListeners("OnLeft", chanName, userName, reason)
 end
 
-function Lobby:_OnSaid(chanName, userName, message, sayTime)
-	self:_CallListeners("OnSaid", chanName, userName, message, sayTime)
+function Lobby:_OnSaid(chanName, userName, message, sayTime, source)
+	self:_CallListeners("OnSaid", chanName, userName, message, sayTime, source)
 end
 
 function Lobby:_OnSaidEx(chanName, userName, message, sayTime)

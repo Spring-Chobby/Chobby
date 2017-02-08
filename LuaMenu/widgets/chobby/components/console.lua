@@ -192,7 +192,9 @@ function Console:SendMessage()
 end
 
 -- if date is not passed, current time is assumed
-function Console:AddMessage(message, userName, dateOverride, color, thirdPerson)
+function Console:AddMessage(message, userName, dateOverride, color, thirdPerson, nameColor, nameTooltip, supressNameClick)
+	nameColor = nameColor or "\255\50\160\255"
+	nameTooltip = nameTooltip or ("user_chat_s_" .. userName)
 	local txt = ""
 	local whiteText = ""
 	if self.showDate then
@@ -239,7 +241,7 @@ function Console:AddMessage(message, userName, dateOverride, color, thirdPerson)
 			userEndIndex = userStartIndex + #userName
 		else
 			userStartIndex = #txt + 4 
-			txt = txt .. "\255\50\160\255" .. userName .. ": \255\255\255\255"
+			txt = txt .. nameColor .. userName .. ": \255\255\255\255"
 			userEndIndex = userStartIndex + #userName
 			whiteText = whiteText .. userName .. ": "
 			if color ~= nil then
@@ -251,21 +253,25 @@ function Console:AddMessage(message, userName, dateOverride, color, thirdPerson)
 			{
 				startIndex = userStartIndex, 
 				endIndex = userEndIndex, 
-				tooltip =  "user_chat_s_" .. userName
+				tooltip = nameTooltip
 			}
 		}
-		onTextClick = {
-			{
-				startIndex = userStartIndex, 
-				endIndex = userEndIndex, 
-				OnTextClick = { 
-					function() 
-						WG.UserHandler.GetUserDropdownMenu(userName, isBattleChat)
-						--Spring.Echo("Clicked on " .. userName .. ". TODO: Spawn popup.") 
-					end
-				} 
+		if supressNameClick then
+			onTextClick = {} -- Think about putting discord link here?
+		else
+			onTextClick = {
+				{
+					startIndex = userStartIndex, 
+					endIndex = userEndIndex, 
+					OnTextClick = { 
+						function() 
+							WG.UserHandler.GetUserDropdownMenu(userName, isBattleChat)
+							--Spring.Echo("Clicked on " .. userName .. ". TODO: Spawn popup.") 
+						end
+					} 
+				}
 			}
-		}
+		end
 	end
 	
 	txt = txt .. message
