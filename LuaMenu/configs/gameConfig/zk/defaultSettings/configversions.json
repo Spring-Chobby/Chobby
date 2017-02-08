@@ -188,5 +188,12 @@
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/Steam/x64/libsteam_api.so",
          "TargetPath":"libsteam_api.so"
       },	  
+	  
+      {
+         "Platform":null,
+         "VersionNumber":1,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/sqlite3.dll",
+         "TargetPath":"sqlite3.dll"
+      },	  	  
    ]
 }
