@@ -1504,11 +1504,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		parent = mainWindow,
 	}
 
-	local battleTitle = tostring(battle.title)
-	if battle.battleMode then
-		battleTitle = i18n(Configuration.battleTypeToName[battle.battleMode]) .. ": " .. battleTitle
-	end
-
+	local battleTitle = ""
 	local lblBattleTitle = Label:New {
 		x = 20,
 		y = 17,
@@ -1522,7 +1518,21 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 				obj:SetCaption(StringUtilities.GetTruncatedStringWithDotDot(battleTitle, obj.font, obj.width))
 			end
 		}
-	}
+	}	
+	
+	local function UpdateBattleTitle()
+		Spring.Echo("battle.engineVersion", battle.engineVersion)
+		if Configuration:IsValidEngineVersion(battle.engineVersion) then
+			battleTitle = i18n(Configuration.battleTypeToName[battle.battleMode]) .. ": " .. tostring(battle.title)
+			local truncatedTitle = StringUtilities.GetTruncatedStringWithDotDot(battleTitle, lblBattleTitle.font, lblBattleTitle.width)
+			lblBattleTitle:SetCaption(truncatedTitle)
+		else
+			battleTitle = "\255\255\0\0Warning: Restart to get correct engine version"
+			local truncatedTitle = StringUtilities.GetTruncatedStringWithDotDot(battleTitle, lblBattleTitle.font, lblBattleTitle.width)
+			lblBattleTitle:SetCaption(truncatedTitle)
+		end
+	end
+	UpdateBattleTitle()
 
 	local function MessageListener(message)
 		if message:starts("/me ") then
@@ -1583,10 +1593,8 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 
 	local function OnUpdateBattleInfo(listener, updatedBattleID, spectatorCount, locked, mapHash, mapName, 
 			engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker, newPlayerList, maxPlayers, title)
-		if (battleMode or title) and battleID == updatedBattleID then
-			battleTitle = i18n(Configuration.battleTypeToName[battle.battleMode]) .. ": " .. tostring(battle.title)
-			lblBattleTitle:SetCaption(battleTitle)
-			
+		if (battleMode or title or engineVersion) and battleID == updatedBattleID then
+			UpdateBattleTitle()
 			if battleMode then
 				playerHandler.UpdateBattleMode(disallowCustomTeams, disallowBots)
 			end
