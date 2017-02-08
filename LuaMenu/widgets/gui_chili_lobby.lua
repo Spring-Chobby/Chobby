@@ -81,7 +81,6 @@ function widget:Initialize()
 	Chobby.lobbyInterfaceHolder = lobbyInterfaceHolder
 	Chobby.interfaceRoot = interfaceRoot
 	
-	Spring.SetWMCaption("Ingame Lobby", "IngameLobby")
 	local taskbarIcon = Chobby.Configuration.gameConfig.taskbarIcon
 	if taskbarIcon then
 		Spring.SetWMIcon(taskbarIcon)
