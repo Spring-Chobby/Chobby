@@ -1390,6 +1390,8 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		return
 	end
 	
+	local isSingleplayer = (battleLobby.name == "singleplayer")
+	
 	local EXTERNAL_PAD_VERT = 9
 	local EXTERNAL_PAD_HOR = 12
 	local INTERNAL_PAD = 2
@@ -1494,7 +1496,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		width = 80,
 		height = 45,
 		font = Configuration:GetFont(3),
-		caption = ((battleLobby.name == "singleplayer") and i18n("close")) or i18n("leave"),
+		caption = (isSingleplayer and i18n("close")) or i18n("leave"),
 		classname = "negative_button",
 		OnClick = {
 			function()
@@ -1521,7 +1523,12 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 	}	
 	
 	local function UpdateBattleTitle()
-		Spring.Echo("battle.engineVersion", battle.engineVersion)
+		if isSingleplayer then
+			battleTitle = tostring(battle.title)
+			local truncatedTitle = StringUtilities.GetTruncatedStringWithDotDot(battleTitle, lblBattleTitle.font, lblBattleTitle.width)
+			lblBattleTitle:SetCaption(truncatedTitle)
+			return
+		end
 		if Configuration:IsValidEngineVersion(battle.engineVersion) then
 			battleTitle = i18n(Configuration.battleTypeToName[battle.battleMode]) .. ": " .. tostring(battle.title)
 			local truncatedTitle = StringUtilities.GetTruncatedStringWithDotDot(battleTitle, lblBattleTitle.font, lblBattleTitle.width)
