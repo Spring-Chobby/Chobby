@@ -56,7 +56,6 @@ function Interface:Login(user, password, cpu, localIP, lobbyVersion)
 		LobbyVersion = lobbyVersion,
 		SteamAuthToken = self.steamAuthToken,
 	}
-	
 	self:_SendCommand("Login " .. json.encode(sendData))
 end
 
