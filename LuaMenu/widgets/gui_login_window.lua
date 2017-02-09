@@ -17,6 +17,8 @@ end
 --------------------------------------------------------------------------------
 -- Local Variables
 
+local registerName, registerPassword
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Initialization
@@ -48,8 +50,9 @@ local function LoginPopup()
 end
 
 local function InitialWindow()
-	if WG.Chobby.Configuration.autoLogin and WG.Chobby.Configuration.userName then
-		local loginWindow = WG.Chobby.LoginWindow(nil, nil, "main_window")
+	local Configuration = WG.Chobby.Configuration
+	if Configuration.autoLogin and Configuration.userName then
+		local loginWindow = LoginWindow(nil, nil, "main_window")
 		loginWindow.window:Hide()
 		lobby:AddListener("OnDenied", function(listener)
 			loginWindow.window:Show()
@@ -57,10 +60,33 @@ local function InitialWindow()
 			lobby:RemoveListener("OnDenied", listener)
 		end)
 		loginWindow:tryLogin()
-	elseif WG.Chobby.Configuration.promptNewUsersToLogIn then
+	elseif Configuration.promptNewUsersToLogIn then
 		local loginWindow = WG.Chobby.LoginWindow(nil, "play_offline", "main_window")
 		local popup = WG.Chobby.PriorityPopup(loginWindow.window, loginWindow.CancelFunc, loginWindow.AcceptFunc)
 	end
+	
+	local function OnConnect()
+		if registerName then
+			lobby:Register(registerName, registerPassword)
+			registerName = nil
+		end
+		if Configuration.userName and Configuration.password then
+			lobby:Login(Configuration.userName, Configuration.password, 3, nil, "Chobby")
+		end
+	end
+	
+	lobby:AddListener("OnConnect", OnConnect)
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- External Functions
+
+local LoginWindowHandler = {}
+
+function LoginWindowHandler.QueueRegister(name, password)
+	registerName = name
+	registerPassword = password
 end
 
 --------------------------------------------------------------------------------
@@ -75,6 +101,7 @@ function widget:Initialize()
 	WG.LoginPopup = LoginPopup
 
 	WG.Delay(InitialWindow, 0.001)
+	WG.LoginWindowHandler = LoginWindowHandler
 end
 
 function widget:Shutdown()

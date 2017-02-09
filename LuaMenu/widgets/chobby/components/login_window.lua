@@ -48,10 +48,6 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 			failFunction()
 		end
 	end
-
-	self.AcceptFunc = function ()
-		self:tryLogin()
-	end
 	
 	self.lblLoginInstructions = Label:New {
 		x = 15,
@@ -106,9 +102,12 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		font = Configuration:GetFont(3),
 		OnKeyPress = {
 			function(obj, key, mods, ...)
-				if key == Spring.GetKeyCode("enter") or
-					key == Spring.GetKeyCode("numpad_enter") then
-					self:tryLogin()
+				if key == Spring.GetKeyCode("enter") or key == Spring.GetKeyCode("numpad_enter") then
+					if self.tabPanel.tabBar:IsSelected("login") then
+						self:tryLogin()
+					else
+						self:tryRegister()
+					end
 				end
 			end
 		},
@@ -171,7 +170,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		classname = "action_button",
 		OnClick = {
 			function()
-				self.AcceptFunc()
+				self:tryLogin()
 			end
 		},
 	}
@@ -372,13 +371,16 @@ function LoginWindow:tryRegister()
 
 		self.onConnectRegister = function(listener)
 			lobby:RemoveListener("OnConnect", self.onConnectRegister)
+			self:OnConnected(listener)
 			self:OnRegister(listener)
 		end
+		WG.LoginWindowHandler.QueueRegister(username, password)
 		lobby:AddListener("OnConnect", self.onConnectRegister)
 
 		lobby:Connect(Configuration:GetServerAddress(), Configuration:GetServerPort(), username, password, 3, nil, GetLobbyName())
 	else
 		lobby:Register(username, password, "name@email.com")
+		lobby:Login(username, password, 3, nil, GetLobbyName())
 	end
 
 	self.loginAttempts = self.loginAttempts + 1
@@ -386,7 +388,6 @@ end
 
 function LoginWindow:OnRegister()
 	Configuration.firstLoginEver = false
-	lobby:Register(username, password, "name@email.com")
 	lobby:AddListener("OnRegistrationAccepted", function(listener)
 		self.txtError:SetText(Configuration:GetSuccessColor() .. "Registered!")
 		--lobby:RemoveListener("OnRegistrationAccepted", listener)
