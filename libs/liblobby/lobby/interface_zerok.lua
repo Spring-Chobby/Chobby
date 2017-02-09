@@ -1121,10 +1121,17 @@ function Interface:_Say(data)
 				return
 			end
 		end
+		local userName = data.User
+		if data.Source == self.SOURCE_DISCORD and userName then
+			local endPosName = string.find(userName, "#")
+			if endPosName then
+				userName = string.sub(userName, 0, endPosName - 1)
+			end
+		end
 		if emote then
-			self:_OnSaidEx(data.Target, data.User, data.Text, data.Time, data.Source)
+			self:_OnSaidEx(data.Target, userName, data.Text, data.Time, data.Source)
 		else
-			self:_OnSaid(data.Target, data.User, data.Text, data.Time, data.Source)
+			self:_OnSaid(data.Target, userName, data.Text, data.Time, data.Source)
 		end
 	elseif data.Place == 1 or data.Place == 3 then
 		-- data.Place == 1 -> General battle chat
