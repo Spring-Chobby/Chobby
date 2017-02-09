@@ -1122,9 +1122,9 @@ function Interface:_Say(data)
 			end
 		end
 		if emote then
-			self:_OnSaidEx(data.Target, data.User, data.Text, data.Time)
+			self:_OnSaidEx(data.Target, data.User, data.Text, data.Time, data.Source)
 		else
-			self:_OnSaid(data.Target, data.User, data.Text, data.Time)
+			self:_OnSaid(data.Target, data.User, data.Text, data.Time, data.Source)
 		end
 	elseif data.Place == 1 or data.Place == 3 then
 		-- data.Place == 1 -> General battle chat

@@ -16,7 +16,7 @@ function Lobby:_Clean()
 	self.userBySteamID = {}
 	self.userCount = 0
 	
-	self.SOURCE_DISCORD = 1
+	self.SOURCE_DISCORD = 0
 
 	self.friends = {} -- list
 	self.isFriend = {} -- map
