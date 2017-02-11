@@ -40,23 +40,9 @@ local Button
 --------------------------------------------------------------------------------
 local ingame = false
 
-local saveList = {}
 --------------------------------------------------------------------------------
 -- General utility functions
 --------------------------------------------------------------------------------
--- Makes a control grey for disabled, or whitish for enabled
-local function SetControlGreyout(control, state)
-	if state then
-		control.backgroundColor = {0.4, 0.4, 0.4, 1}
-		control.font.color = {0.4, 0.4, 0.4, 1}
-		control:Invalidate()
-	else
-		control.backgroundColor = {.8,.8,.8,1}
-		control.font.color = nil
-		control:Invalidate()
-	end
-end
-
 local function WriteDate(dateTable)
 	return string.format("%02d/%02d/%04d", dateTable.day, dateTable.month, dateTable.year)
 	.. "\n" .. string.format("%02d:%02d:%02d", dateTable.hour, dateTable.min, dateTable.sec)
@@ -132,9 +118,6 @@ local function GetSaveDescText(saveFile)
 		.. "\n" .. i18n("time_ingame") .. ": " .. SecondsToClock(saveFile.gameframe/30)
 end
 
--- redefined later
-local function OpenLoadMenu()
-end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 local function LoadGameByFilename(filename)
@@ -164,7 +147,7 @@ local function LoadGameByFilename(filename)
 	end
 end
 
-local function DeleteSave(filename)
+local function DeleteSave(filename, saveList)
 	local success, err = pcall(function()
 		local pathNoExtension = SAVE_DIR .. "/" .. filename
 		os.remove(pathNoExtension .. ".lua")
@@ -189,7 +172,7 @@ local function SaveLoadConfirmationDialogPopup(filename, saveMode)
 end
 
 -- Makes a button for a save game on the save/load screen
-local function AddSaveEntryButton(saveFile, isSaveMode)	
+local function AddSaveEntryButton(saveFile, saveList)	
 	local container = Panel:New {
 		x = 0,
 		y = 0,
@@ -288,7 +271,7 @@ local function AddSaveEntryButton(saveFile, isSaveMode)
 		classname = "action_button",
 		font = WG.Chobby.Configuration:GetFont(2),
 		OnClick = { function(self)
-				WG.Chobby.ConfirmationPopup(function(self) DeleteSave(saveFile.filename) end, i18n("delete_confirm"), nil, 360, 200)
+				WG.Chobby.ConfirmationPopup(function(self) DeleteSave(saveFile.filename, saveList) end, i18n("delete_confirm"), nil, 360, 200)
 			end
 		}
 	}
@@ -296,6 +279,17 @@ local function AddSaveEntryButton(saveFile, isSaveMode)
 	return saveFile.filename, container, {saveFile.filename, saveFile.gameName .. "" .. saveFile.gameVersion, DateToString(saveFile.date)}
 end
 
+local function PopulateSaveList(saveList)
+	saveList:Clear()
+	local saves = GetSaves()
+	local items = {}
+	for i = 1, #saves do
+		local filename, controls, order = AddSaveEntryButton(saves[i], saveList)
+		items[#items + 1] = {filename, controls, order}
+	end
+		
+	saveList:AddItems(items)
+end
 --------------------------------------------------------------------------------
 -- Make Chili controls
 --------------------------------------------------------------------------------
@@ -333,17 +327,17 @@ local function InitializeControls(parent)
 		{name = "Game", x = 257, width = 218},
 		{name = "Date", x = 437, width = 138},
 	}
-	
-	saveList = WG.Chobby.SortableList(listHolder, headings, 80, 3)
 
-	local saves = GetSaves()
-	local items = {}
-	for i = 1, #saves do
-		local filename, controls, order = AddSaveEntryButton(saves[i])
-		items[#items + 1] = {filename, controls, order}
+	local saveList = WG.Chobby.SortableList(listHolder, headings, 80, 3)
+	PopulateSaveList(saveList)
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.PopulateSaveList()
+		PopulateSaveList(saveList)
 	end
-		
-	saveList:AddItems(items)
+	
+	return externalFunctions
 end
 
 --------------------------------------------------------------------------------
@@ -353,6 +347,8 @@ end
 local LoadGameWindow = {}
 
 function LoadGameWindow.GetControl()
+	local controlFuncs
+	
 	local window = Control:New {
 		name = "missionHandler",
 		x = "0%",
@@ -362,7 +358,10 @@ function LoadGameWindow.GetControl()
 		OnParent = {
 			function(obj)
 				if obj:IsEmpty() then
-					InitializeControls(obj)
+					controlFuncs = InitializeControls(obj)
+				else
+					-- update save list
+					controlFuncs.PopulateSaveList()
 				end
 			end
 		},
