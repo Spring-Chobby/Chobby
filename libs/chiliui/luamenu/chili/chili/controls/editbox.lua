@@ -41,7 +41,6 @@ EditBox = Control:Inherit{
   editable = true,
   selectable = true,
   multiline = false,
-  subTooltips = false,
 
   passwordInput = false,
   lines = {},
@@ -553,28 +552,18 @@ function EditBox:MouseDown(x, y, ...)
 end
 
 function EditBox:MouseMove(x, y, dx, dy, button)
-	if self.subTooltips then
-		local tooltipSet = false
-		
-		if button == nil then -- handle tooltips
-			local retVal = self:_GetCursorByMousePos(x, y)
-			local line = self.lines[retVal.cursorY]
-			if line and line.tooltips then
-				for _, tooltip in pairs(line.tooltips) do
-					if tooltip.startIndex <= retVal.cursor and tooltip.endIndex >= retVal.cursor then
-						self.tooltip = tooltip.tooltip
-						tooltipSet = true
-						break
-					end
+	if button == nil then -- handle tooltips
+		local retVal = self:_GetCursorByMousePos(x, y)
+		local line = self.lines[retVal.cursorY]
+		if line and line.tooltips then
+			for _, tooltip in pairs(line.tooltips) do
+				if tooltip.startIndex <= retVal.cursor and tooltip.endIndex >= retVal.cursor then
+					Screen0.currentTooltip = tooltip.tooltip
 				end
 			end
 		end
-		
-		if not tooltipSet then
-			self.tooltip = nil
-		end
 	end
-	
+
 	if button ~= 1 then
 		return inherited.MouseMove(self, x, y, dx, dy, button)
 	end
