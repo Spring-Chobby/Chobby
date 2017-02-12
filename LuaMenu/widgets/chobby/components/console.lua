@@ -38,6 +38,7 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 		fontsize = Configuration.chatFontSize,
 		parent = self.spHistory,
 		selectable = true,
+		subTooltips = true,
 
 		_inmousemove = false,
 		OnClick = { function(obj)
