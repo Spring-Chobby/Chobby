@@ -445,9 +445,18 @@ function EditBox:_GetCursorByMousePos(x, y)
 		end
 		retVal.cursor = #selLine + 1
 		for i = 1, #selLine do
-			local tmp = selLine:sub(1 + retVal.offset, i)
-			if self.font:GetTextWidth(tmp) > (x - clientX) then
-				retVal.cursor = i
+			local tmpLen = self.font:GetTextWidth(selLine:sub(1 + retVal.offset, i))
+			if tmpLen > (x - clientX) then
+				if i > 1 then
+					local tmpPrevLen = self.font:GetTextWidth(selLine:sub(1 + retVal.offset, i - 1))
+					if math.abs(tmpPrevLen - (x - clientX)) > math.abs(tmpLen - (x - clientX)) then
+						retVal.cursor = i + 1 -- selection is closer to the end of the character
+					else
+						retVal.cursor = i     -- selection is closer to the beginning of the character
+					end
+				else
+					retVal.cursor = i
+				end
 				break
 			end
 		end
