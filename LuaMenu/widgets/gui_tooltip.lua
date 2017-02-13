@@ -866,7 +866,7 @@ end
 
 function TooltipHandler.TooltipOverride(newText, overrideTime)
 	tooltipOverride = newText
-	CheckTooltipUpdate(tooltipOverride)
+	CheckTooltipUpdate(GetTooltip())
 	if overrideTime then
 		WG.Delay(TooltipHandler.TooltipOverrideClear, overrideTime)
 	end

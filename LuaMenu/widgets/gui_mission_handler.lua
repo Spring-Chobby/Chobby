@@ -28,7 +28,7 @@ local function LoadMissions()
 		return Spring.Utilities.json.decode(file)
 	end
 	Spring.Echo("Error loading missions.")
-	return false
+	return nil
 end
 
 --------------------------------------------------------------------------------
@@ -59,10 +59,12 @@ local function DownloadRequirements()
 		alreadyDownloaded[gameName] = true
 	end
 	local missions = LoadMissions()
-	for i = 1, #missions do
-		if not alreadyDownloaded[missions[i].Map] then
-			MaybeDownloadMap(missions[i].Map)
-			alreadyDownloaded[missions[i].Map] = true
+	if missions ~= nil then
+		for i = 1, #missions do
+			if not alreadyDownloaded[missions[i].Map] then
+				MaybeDownloadMap(missions[i].Map)
+				alreadyDownloaded[missions[i].Map] = true
+			end
 		end
 	end
 end
