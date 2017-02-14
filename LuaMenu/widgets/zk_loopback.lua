@@ -165,6 +165,36 @@ function WrapperLoopback.GaAddProgressionEvent(status, progression1, progression
 	SendCommand("GaAddProgressionEvent", {Status = status, Progression1 = progression1, Progression2 = progression2, Progression3 = progression3, Score = score}) 
 end
 
+
+-- NOTE: amount must be whole number
+function WrapperLoopback.GaAddBusinessEvent(amount, cartType, currency, itemId, itemType) 
+	SendCommand("GaAddBusinessEvent", {Amount = amount, CartType= cartType, Currency = currency, ItemId = itemId, ItemType = itemType}) 
+end
+
+-- NOTE: flow type:  Undefined | Source | Sink
+function WrapperLoopback.GaAddResourceEvent(amount, currency, flowType, itemId, itemType) 
+	SendCommand("GaAddResourceEvent", {Amount = amount, Currency = currency, FlowType = flowType, ItemId = itemId, ItemType = itemType}) 
+end
+
+function WrapperLoopback.GaConfigureResourceCurrencies(list) 
+	SendCommand("GaConfigureResourceCurrencies", {List = list}) 
+end
+
+function WrapperLoopback.GaConfigureResourceItemTypes(list) 
+	SendCommand("GaConfigureResourceItemTypes", {List = list}) 
+end
+
+-- NOTE: level 1-3
+function WrapperLoopback.GaConfigureCustomDimensions(level, list) 
+	SendCommand("GaConfigureCustomDimensions", {Level = level, List = list}) 
+end
+
+
+-- NOTE: level 1-3
+function WrapperLoopback.GaSetCustomDimension(level, list) 
+	SendCommand("GaSetCustomDimension", {Level = level, List = list}) 
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Data
