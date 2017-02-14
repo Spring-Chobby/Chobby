@@ -11,38 +11,57 @@ function AiListWindow:init(gameName)
 	local ais = VFS.GetAvailableAIs(gameName)
 	
 	local blackList = Configuration.gameConfig.aiBlacklist
-	
+	local oldAiVersions = (not Configuration.showOldAiVersions) and Configuration.gameConfig.oldAiVersions
 	local isRunning64Bit = Configuration:GetIsRunning64Bit()
 	
 	for i, ai in pairs(ais) do
-		local shortName = ai.shortName or "Unknown"
-		if (not blackList) or (not blackList[shortName]) then
-			if not ((isRunning64Bit and string.find(shortName, "32")) or ((not isRunning64Bit) and string.find(shortName, "64"))) then
-				local version = " v" .. ai.version
-				if version == " v<not-versioned>" then
-					version = ""
-				end
-				
-				self.validAiNames[shortName] = true
-				
-				local addAIButton = Button:New {
-					x = 0,
-					y = 0,
-					width = "100%",
-					height = "100%",
-					caption = shortName .. version,
-					font = Configuration:GetFont(3),
-					OnClick = {
-						function()
-							self:AddAi(shortName)
-							self:HideWindow()
-						end
-					},
-				}
-				self:AddRow({addAIButton}, shortName)
+		self:AddAiToList(ai, blackList, oldAiVersions, isRunning64Bit)
+	end
+end
+
+function AiListWindow:AddAiToList(ai, blackList, oldAiVersions, isRunning64Bit)
+	local shortName = ai.shortName or "Unknown"
+	
+	if blackList and blackList[shortName] then
+		return
+	end
+	
+	if (isRunning64Bit and string.find(shortName, "32")) or ((not isRunning64Bit) and string.find(shortName, "64")) then
+		return
+	end
+	
+	
+	local version = " v" .. ai.version
+	if version == " v<not-versioned>" then
+		version = ""
+	end
+	local fullName = shortName .. version
+	
+	if oldAiVersions then
+		for i = 1, #oldAiVersions do
+			if string.find(fullName, oldAiVersions[i]) then
+				return
 			end
 		end
 	end
+	
+	self.validAiNames[shortName] = true
+	
+	local addAIButton = Button:New {
+		x = 0,
+		y = 0,
+		width = "100%",
+		height = "100%",
+		caption = fullName,
+		font = Configuration:GetFont(3),
+		OnClick = {
+			function()
+				self:AddAi(shortName)
+				self:HideWindow()
+			end
+		},
+	}
+	self:AddRow({addAIButton}, fullName)
 end
 
 function AiListWindow:AddAi(shortName)

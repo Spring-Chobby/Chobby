@@ -523,28 +523,17 @@ local function GetVoidTabControls()
 	
 	local children = {}
 
-	children[#children + 1] = Label:New {
+	children[#children + 1] = TextBox:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
-		width = 90,
+		right = 10,
 		height = 40,
 		valign = "top",
 		align = "left",
-		font = Configuration:GetFont(3),
-		caption = "Warning: These settings are experimental and not officially supported",
+		fontsize = Configuration:GetFont(3).size,
+		text = "Warning: These settings are experimental and not officially supported, proceed at your own risk.",
 	}
-	offset = offset + 40
-	children[#children + 1] = Label:New {
-		x = 115,
-		y = offset,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		font = Configuration:GetFont(3),
-		caption = "Proceed at your own risk",
-	}
-	offset = offset + 40 + TEXT_OFFSET
+	offset = offset + 65
 
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("debugMode"), "debugMode", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Debug server messages", "activeDebugConsole", false)
@@ -555,6 +544,7 @@ local function GetVoidTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Neuter Settings", "doNotSetAnySpringSettings", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Agressive Set Borderless", "agressivelySetBorderlessWindowed", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Use wrong engine", "useWrongEngine", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, "Show old AI versions", "showOldAiVersions", false)
 	
 	children[#children + 1] = Label:New {
 		x = 20,

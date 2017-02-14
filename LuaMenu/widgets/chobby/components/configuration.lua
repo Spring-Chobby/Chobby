@@ -127,6 +127,7 @@ function Configuration:init()
 	self.showMatchMakerBattles = false
 	self.hideInterface = false
 	self.enableTextToSpeech = true
+	self.showOldAiVersions = false
 	
 	self.chatFontSize = 18
 
@@ -201,6 +202,7 @@ function Configuration:GetConfigData()
 		gameOverlayOpacity = self.gameOverlayOpacity,
 		showMatchMakerBattles = self.showMatchMakerBattles,
 		enableTextToSpeech = self.enableTextToSpeech,
+		showOldAiVersions = self.showOldAiVersions,
 		chatFontSize = self.chatFontSize,
 		myAccountID = self.myAccountID,
 		lastAddedAiName = self.lastAddedAiName,

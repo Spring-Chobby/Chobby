@@ -2,6 +2,7 @@ local shortname = "zk"
 
 local mapWhitelist       = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/mapWhitelist.lua")
 local aiBlacklist        = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/aiBlacklist.lua")
+local oldAiVersions      = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/oldAiVersions.lua")
 local singleplayerConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/singleplayerMenu.lua")
 local helpSubmenuConfig  = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/helpSubmenuConfig.lua")
 local skirmishDefault    = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skirmishDefault.lua")
@@ -57,6 +58,7 @@ local externalFuncAndData = {
 	_defaultGameRapidTag    = "zk:stable", -- Do not read directly
 	mapWhitelist            = mapWhitelist,
 	aiBlacklist             = aiBlacklist,
+	oldAiVersions           = oldAiVersions,
 	settingsConfig          = settingsConfig,
 	settingsDefault         = settingsDefault,
 	singleplayerConfig      = singleplayerConfig,

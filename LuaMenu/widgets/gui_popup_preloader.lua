@@ -14,6 +14,8 @@ local oldGameName
 local aiListWindow
 local aiPopup
 
+local showOldAiVersions = false
+
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
 -- AI List window updating
@@ -70,8 +72,9 @@ end
 local PopupPreloader = {}
 
 function PopupPreloader.ShowAiListWindow(battleLobby, newGameName, teamIndex, quickAddAi)
-	if newGameName ~= oldGameName then
+	if newGameName ~= oldGameName or WG.Chobby.Configuration.showOldAiVersions ~= showOldAiVersions then
 		oldGameName = newGameName
+		showOldAiVersions = WG.Chobby.Configuration.showOldAiVersions
 		UpdateAiListWindow(newGameName)
 	end
 	
