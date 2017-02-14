@@ -649,6 +649,11 @@ function EditBox:UpdateLine(lineID, text)
 	self.selStartY = 1
 end
 
+local function RemoveColorFromText(text)
+	text = text:gsub("\255...", ""):gsub("\b", "")
+	return text
+end
+
 function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	local cp = self.cursor
 	local txt = self.text
@@ -716,7 +721,7 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 				if sy > ey then
 					sy, ey = ey, sy
 					s, e = e, s
-				elseif sy == ey then
+				elseif sy == ey and s > e then
 					s, e = e, s
 				end
 			elseif s > e then
@@ -731,15 +736,14 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 				local ls = {}
 				local topText = self.lines[sy].text
 				local bottomText = self.lines[ey].text
-				table.insert(ls, topText:sub(s))
+				table.insert(ls, RemoveColorFromText(topText:sub(s)))
 				for i = sy+1, ey-1 do
-					table.insert(ls, self.lines[i].text)
+					table.insert(ls, RemoveColorFromText(self.lines[i].text))
 				end
-				table.insert(ls, bottomText:sub(1, e))
+				table.insert(ls, RemoveColorFromText(bottomText:sub(1, e - 1)))
 				txt = table.concat(ls, "\n")
 			end
 			Spring.SetClipboard(txt)
--- 			Spring.SetClipboard()
 		end
 		if key == Spring.GetKeyCode("x") and self.selStart ~= nil then
 			self:ClearSelected()
