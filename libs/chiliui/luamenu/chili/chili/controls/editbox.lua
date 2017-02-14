@@ -703,17 +703,20 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 		local s = self.selStart
 		local e = self.selEnd
 		if s and e then
-			if self.multiline and sy > ey then
-				sy, ey = sy, ey
-				s, e = e, s
-			elseif sy == ey and s > e then
+			if self.multiline then
+				if sy > ey then
+					sy, ey = ey, sy
+					s, e = e, s
+				elseif sy == ey then
+					s, e = e, s
+				end
+			elseif s > e then
 				s, e = e, s
 			end
 			if self.multiline then
 				txt = self.lines[sy].text
 			end
 			if not self.multiline or sy == ey then
--- 				Spring.Echo("SEL", txt:sub(s, e - 1))
 				txt = txt:sub(s, e - 1)
 			else
 				local ls = {}
