@@ -147,9 +147,20 @@ local function CreateMissionEntry(missionData)
 		parent = holder,
 	}
 	
+	local missionOrder = TextBox:New {
+		name = "missionOrder",
+		x = 90,
+		y = 8,
+		right = 0,
+		height = 20,
+		valign = 'center',
+		fontsize = Configuration:GetFont(3).size,
+		text = tostring(missionData.FeaturedOrder or ""),
+		parent = holder,
+	}
 	local missionName = TextBox:New {
 		name = "missionName",
-		x = 90,
+		x = 126,
 		y = 8,
 		right = 0,
 		height = 20,
@@ -181,7 +192,7 @@ local function CreateMissionEntry(missionData)
 		parent = holder,
 	}
 	
-	return holder, {missionData.DisplayName, missionData.Difficulty or 0, missionData.Map}
+	return holder, {missionData.FeaturedOrder or math.huge, missionData.DisplayName, missionData.Difficulty or 0, missionData.Map}
 end
 
 --------------------------------------------------------------------------------
@@ -270,12 +281,13 @@ local function InitializeControls(parentControl)
 	}
 	
 	local headings = {
-		{name = "Name", x = 88, width = 157},
-		{name = "Difficulty", x = 250, width = 125},
-		{name = "Map", x = 380, right = 5},
+		{name = "#", x = 88, width = 36},
+		{name = "Name", x = 124, width = 157},
+		{name = "Difficulty", x = 286, width = 125},
+		{name = "Map", x = 416, right = 5},
 	}
 	
-	local missionList = WG.Chobby.SortableList(listHolder, headings, 80, 2)
+	local missionList = WG.Chobby.SortableList(listHolder, headings, 80, 1)
 
 	local items = {}
 	for i = 1, #missions do
