@@ -295,14 +295,6 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 end
 
 function LoginWindow:RemoveListeners()
-	if self.onAccepted then
-		lobby:RemoveListener("OnAccepted", self.onAccepted)
-		self.onAccepted = nil
-	end
-	if self.onDenied then
-		lobby:RemoveListener("OnDenied", self.onDenied)
-		self.onDenied = nil
-	end
 	if self.onAgreementEnd then
 		lobby:RemoveListener("OnAgreementEnd", self.onAgreementEnd)
 		self.onAgreementEnd = nil
@@ -324,13 +316,13 @@ end
 function LoginWindow:tryLogin()
 	self.txtError:SetText("")
 
-	username = self.ebUsername.text
-	password = self.ebPassword.text
-	if username == '' or password == '' then
+	local username = self.ebUsername.text
+	local password = ((not self.cbAuthenticateSteam.checked) and self.ebPassword.text) or nil
+	if username == '' then
 		return
 	end
-	Configuration.userName  = username
-	Configuration.password  = password
+	Configuration.userName = username
+	Configuration.password = password
 
 	if not lobby.connected or self.loginAttempts >= 3 then
 		self.loginAttempts = 0
@@ -359,9 +351,9 @@ end
 function LoginWindow:tryRegister()
 	self.txtError:SetText("")
 
-	username = self.ebUsername.text
-	password = self.ebPassword.text
-	if username == '' or password == '' then
+	local username = self.ebUsername.text
+	local password = ((not self.cbAuthenticateSteam.checked) and self.ebPassword.text) or nil
+	if username == '' then
 		return
 	end
 
@@ -372,7 +364,6 @@ function LoginWindow:tryRegister()
 		self.onConnectRegister = function(listener)
 			lobby:RemoveListener("OnConnect", self.onConnectRegister)
 			self:OnConnected(listener)
-			self:OnRegister(listener)
 		end
 		WG.LoginWindowHandler.QueueRegister(username, password)
 		lobby:AddListener("OnConnect", self.onConnectRegister)
@@ -386,47 +377,9 @@ function LoginWindow:tryRegister()
 	self.loginAttempts = self.loginAttempts + 1
 end
 
-function LoginWindow:OnRegister()
-	Configuration.firstLoginEver = false
-	lobby:AddListener("OnRegistrationAccepted", function(listener)
-		self.txtError:SetText(Configuration:GetSuccessColor() .. "Registered!")
-		--lobby:RemoveListener("OnRegistrationAccepted", listener)
-	end)
-	lobby:AddListener("OnRegistrationDenied", function(listener, err)
-		self.txtError:SetText(Configuration:GetErrorColor() .. (err or "Unknown Error"))
-		--lobby:RemoveListener("OnRegistrationDenied", listener)
-	end)
-
-end
-
 function LoginWindow:OnConnected()
-	Configuration.firstLoginEver = false
-
-	self.txtError:SetText(Configuration:GetPartialColor() .. i18n("connecting"))
-
-	self.onDenied = function(listener, reason)
-		self.txtError:SetText(Configuration:GetErrorColor() .. (reason or "Denied, unknown reason"))
-	end
-
-	self.onAccepted = function(listener)
-		lobby:RemoveListener("OnAccepted", self.onAccepted)
-		lobby:RemoveListener("OnDenied", self.onDenied)
-		ChiliFX:AddFadeEffect({
-			obj = self.window,
-			time = 0.2,
-			endValue = 0,
-			startValue = 1,
-			after = function()
-				self.window:Dispose()
-			end,
-		})
-		for channelName, _ in pairs(Configuration:GetChannels()) do
-			lobby:Join(channelName)
-		end
-	end
-
-	lobby:AddListener("OnAccepted", self.onAccepted)
-	lobby:AddListener("OnDenied", self.onDenied)
+	Spring.Echo("OnConnected")
+	--self.txtError:SetText(Configuration:GetPartialColor() .. i18n("connecting"))
 
 	self.onAgreement = function(listener, line)
 		if self.agreementText == nil then

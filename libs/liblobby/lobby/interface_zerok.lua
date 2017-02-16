@@ -31,11 +31,17 @@ end
 function Interface:Register(userName, password, email)
 	self:super("Register", userName, password, email)
 	-- FIXME: email argument is currently not sent to the server
-	password = VFS.CalculateHash(password, 0)
+	password = (password and string.len(password) > 0 and VFS.CalculateHash(password, 0)) or nil
+	local steamToken = (self.wantSteamAuthentication and self.steamAuthToken) or nil
+	if not (password or steamToken) then
+		self:_OnRegistrationDenied("Password required")
+		Spring.Echo("_OnRegistrationDenied")
+		return self
+	end
 	local sendData = {
 		Name = userName,
 		PasswordHash = password,
-		SteamAuthToken = self.steamAuthToken,
+		SteamAuthToken = steamToken
 	}
 	self:_SendCommand("Register " .. json.encode(sendData))
 	return self
@@ -46,15 +52,19 @@ function Interface:Login(user, password, cpu, localIP, lobbyVersion)
 	if localIP == nil then
 		localIP = "*"
 	end
-	password = VFS.CalculateHash(password, 0)
-	
+	password = (password and string.len(password) > 0 and VFS.CalculateHash(password, 0)) or nil
+	local steamToken = (self.wantSteamAuthentication and self.steamAuthToken) or nil
+	if not (password or steamToken) then
+		self:_OnDenied("Password required")
+		return self
+	end
 	local sendData = {
 		Name = user,
 		PasswordHash = password,
 		UserID = 0,
 		ClientType = 1,
 		LobbyVersion = lobbyVersion,
-		SteamAuthToken = self.steamAuthToken,
+		SteamAuthToken = steamToken,
 	}
 	self:_SendCommand("Login " .. json.encode(sendData))
 end
@@ -579,7 +589,7 @@ end
 
 function Interface:SetSteamAuthToken(steamAuthToken)
 	self:super("SetSteamAuthToken", steamAuthToken)
-	if self.status == "connected" then
+	if self.status == "connected" and self.wantSteamAuthentication then
 		local sendData = {
 			AuthToken = steamAuthToken,
 		}
@@ -604,15 +614,15 @@ local registerResponseCodes = {
 	[0] = "Ok",
 	[1] = "Already connected",
 	[2] = "Name already exists",
-	[3] = "Invalid password",
+	[3] = "Invalid characters in password",
 	[4] = "Banned",
-	[5] = "Invalid name",
+	[5] = "Invalid characters in name",
 }
 
 local loginResponseCodes = {
 	[0] = "Ok",
 	[2] = "Invalid name",
-	[3] = "Invalid password",
+	[3] = "Invalid characters in name",
 	[4] = "Banned",
 }
 

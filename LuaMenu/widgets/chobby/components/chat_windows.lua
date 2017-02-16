@@ -650,6 +650,15 @@ function ChatWindows:CreateDebugConsole()
 					command = string.sub(command, 0, passwordPos) .. "REDACTED" .. string.sub(command, endPos)
 				end
 			end
+			local steamAuthTokenPos = string.find(command, [["SteamAuthToken":"]])
+			if steamAuthTokenPos then
+				steamAuthTokenPos = steamAuthTokenPos + 17
+				local endPos = string.find(command, [["]], steamAuthTokenPos + 1)
+				if endPos then
+					command = string.sub(command, 0, steamAuthTokenPos) .. "REDACTED" .. string.sub(command, endPos)
+				end
+			end
+			
 			Spring.Echo("LuaMenuServerMessage", ">" .. command)
 			if Configuration.activeDebugConsole then
 				self.debugConsole:AddMessage(">" .. command)

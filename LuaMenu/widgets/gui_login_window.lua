@@ -19,9 +19,17 @@ end
 
 local registerName, registerPassword
 
+local currentLoginWindow
+
+local registerRecieved = false
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Initialization
+
+local function ResetRegisterRecieved()
+	registerRecieved = false
+end
 
 local function MultiplayerFailFunction()
 	WG.Chobby.interfaceRoot.GetMainWindowHandler().SetBackAtMainMenu()
@@ -33,9 +41,17 @@ local wantLoginStatus = {
 	["disconnected"] = true,
 }
 
+local function GetNewLoginWindow(failFunc)
+	if currentLoginWindow and currentLoginWindow.window then
+		currentLoginWindow.window:Dispose()
+	end
+	currentLoginWindow = WG.Chobby.LoginWindow(failFunc, nil, "main_window")
+	return currentLoginWindow
+end
+
 local function MultiplayerEntryPopup()
 	if wantLoginStatus[lobby:GetConnectionStatus()] then
-		local loginWindow = WG.Chobby.LoginWindow(MultiplayerFailFunction, nil, "main_window")
+		local loginWindow = GetNewLoginWindow(MultiplayerFailFunction)
 		if loginWindow and loginWindow.window then
 			local popup = WG.Chobby.PriorityPopup(loginWindow.window, loginWindow.CancelFunc, loginWindow.AcceptFunc)
 		else
@@ -45,14 +61,16 @@ local function MultiplayerEntryPopup()
 end
 
 local function LoginPopup()
-	local loginWindow = WG.Chobby.LoginWindow(nil, nil, "main_window")
+	local loginWindow = GetNewLoginWindow()
 	local popup = WG.Chobby.PriorityPopup(loginWindow.window, loginWindow.CancelFunc, loginWindow.AcceptFunc)
 end
 
-local function InitialWindow()
+local function InitializeListeners()
 	local Configuration = WG.Chobby.Configuration
+	
+	-- Autologin behaviour
 	if Configuration.autoLogin and Configuration.userName then
-		local loginWindow = WG.Chobby.LoginWindow(nil, nil, "main_window")
+		local loginWindow = GetNewLoginWindow()
 		loginWindow.window:Hide()
 		lobby:AddListener("OnDenied", function(listener)
 			loginWindow.window:Show()
@@ -65,12 +83,58 @@ local function InitialWindow()
 		local popup = WG.Chobby.PriorityPopup(loginWindow.window, loginWindow.CancelFunc, loginWindow.AcceptFunc)
 	end
 	
+	-- Register and login response codes
+	local function OnRegistrationAccepted()
+		if currentLoginWindow then
+			registerRecieved = true
+			WG.Delay(ResetRegisterRecieved, 0.8)
+			currentLoginWindow.txtError:SetText(Configuration:GetSuccessColor() .. "Registered!")
+		end
+	end
+	local function OnRegistrationDenied(listener, err)
+		if currentLoginWindow then
+			registerRecieved = true
+			WG.Delay(ResetRegisterRecieved, 0.8)
+			currentLoginWindow.txtError:SetText(Configuration:GetErrorColor() .. (err or "Unknown Error"))
+		end
+	end
+	local function OnLoginAccepted()
+		Configuration.firstLoginEver = false
+		if currentLoginWindow then
+			ChiliFX:AddFadeEffect({
+				obj = currentLoginWindow.window,
+				time = 0.2,
+				endValue = 0,
+				startValue = 1,
+				after = function()
+					currentLoginWindow.window:Dispose()
+				end,
+			})
+			for channelName, _ in pairs(Configuration:GetChannels()) do
+				lobby:Join(channelName)
+			end
+		end
+	end
+	local function OnLoginDenied(listener, err)
+		if currentLoginWindow and not registerRecieved then
+			currentLoginWindow.txtError:SetText(Configuration:GetErrorColor() .. (err or "Denied, unknown reason"))
+		end
+	end
+	
+	lobby:AddListener("OnRegistrationAccepted", OnRegistrationAccepted)
+	lobby:AddListener("OnRegistrationDenied", OnRegistrationDenied)
+	lobby:AddListener("OnAccepted", OnLoginAccepted)
+	lobby:AddListener("OnDenied", OnLoginDenied)
+	
+	-- Stored register on connect
 	local function OnConnect()
 		if registerName then
 			lobby:Register(registerName, registerPassword)
+			Configuration.userName = registerName
+			Configuration.password = registerPassword
 			registerName = nil
 		end
-		if Configuration.userName and Configuration.password then
+		if Configuration.userName then
 			lobby:Login(Configuration.userName, Configuration.password, 3, nil, "Chobby")
 		end
 	end
@@ -100,7 +164,7 @@ function widget:Initialize()
 	WG.MultiplayerEntryPopup = MultiplayerEntryPopup
 	WG.LoginPopup = LoginPopup
 
-	WG.Delay(InitialWindow, 0.001)
+	WG.Delay(InitializeListeners, 0.001)
 	WG.LoginWindowHandler = LoginWindowHandler
 end
 
