@@ -39,6 +39,10 @@ local function JoinFriend(friendID)
 	end
 	local lobby = WG.LibLobby.lobby
 	local userName = lobby:GetUserNameBySteamID(friendID)
+	if not userName then
+		WG.Chobby.InformationPopup("Error processing game invite.")
+		return
+	end
 	lobby:InviteToParty(userName)
 	
 	local userInfo = lobby:GetUser(userName) or {}
