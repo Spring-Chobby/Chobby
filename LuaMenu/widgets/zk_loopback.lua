@@ -67,14 +67,15 @@ end
 
 -- notifies that steam is online
 local function SteamOnline(args)
+	Spring.Utilities.TableEcho(args, "SteamOnline")
 	WG.SteamHandler.SteamOnline(args.AuthToken, args.FriendSteamID, args.Friends, args.SuggestedName)
 end
 
 -- requests to join a friend's game/party
 local function SteamJoinFriend(args)
+	Spring.Utilities.TableEcho(args, "SteamJoinFriend")
 	WG.SteamHandler.SteamJoinFriend(args.FriendSteamID)
 end
-
 
 local function SteamOverlayChanged(args) 
 	WG.SteamHandler.SteamOverlayChanged(args.IsActive)
@@ -84,7 +85,6 @@ commands["DownloadFileDone"] = DownloadFileDone
 commands["SteamOnline"] = SteamOnline
 commands["SteamJoinFriend"] = SteamJoinFriend
 commands["SteamOverlayChanged"] = SteamOverlayChanged
-
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
