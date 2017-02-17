@@ -64,7 +64,7 @@ function Lobby:_Clean()
 	self.wantSteamAuthentication = true
 
 	-- reconnection delay in seconds
-	self.reconnectionDelay = 5
+	self.reconnectionDelay = 15
 end
 
 function Lobby:_PreserveData()
@@ -381,6 +381,7 @@ function Lobby:_OnConnect(protocolVersion, springVersion, udpPort, serverMode)
 	if Spring.GetGameName() ~= "" then
 		lobby:SetIngameStatus(true)
 	end
+	self.disconnectTime = nil
 	self:_CallListeners("OnConnect", protocolVersion, udpPort, serverMode)
 	self:_OnSuggestedEngineVersion(springVersion)
 end
@@ -1148,7 +1149,7 @@ function Lobby:Reconnect()
 end
 
 function Lobby:SafeUpdate(...)
-	if self.status == "disconnected" and self.disconnectTime ~= nil then
+	if (self.status == "disconnected" or self.status == "connecting") and self.disconnectTime ~= nil then
 		local currentTime = Spring.GetTimer()
 		if self.lastReconnectionAttempt == nil or Spring.DiffTimers(currentTime, self.lastReconnectionAttempt) > self.reconnectionDelay then
 			self:Reconnect()
