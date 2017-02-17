@@ -317,7 +317,7 @@ function LoginWindow:tryLogin()
 	self.txtError:SetText("")
 
 	local username = self.ebUsername.text
-	local password = ((not self.cbAuthenticateSteam.checked) and self.ebPassword.text) or nil
+	local password = (self.ebPassword.visible and self.ebPassword.text) or nil
 	if username == '' then
 		return
 	end
@@ -352,7 +352,7 @@ function LoginWindow:tryRegister()
 	self.txtError:SetText("")
 
 	local username = self.ebUsername.text
-	local password = ((not self.cbAuthenticateSteam.checked) and self.ebPassword.text) or nil
+	local password = (self.ebPassword.visible and self.ebPassword.text) or nil
 	if username == '' then
 		return
 	end
