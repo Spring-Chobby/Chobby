@@ -39,6 +39,8 @@ local function JoinFriend(friendID)
 	end
 	local lobby = WG.LibLobby.lobby
 	local userName = lobby:GetUserNameBySteamID(friendID)
+	Spring.Echo("friendID", friendID)
+	Spring.Utilities.TableEcho(lobby.userBySteamID, "lobby.userBySteamID")
 	if not userName then
 		WG.Chobby.InformationPopup("Error processing game invite.")
 		return
