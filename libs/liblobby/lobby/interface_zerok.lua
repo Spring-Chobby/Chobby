@@ -621,8 +621,8 @@ local registerResponseCodes = {
 
 local loginResponseCodes = {
 	[0] = "Ok",
-	[2] = "Invalid name",
-	[3] = "Invalid characters in name",
+	[2] = "Invalid characters in name",
+	[3] = "Incorrect password",
 	[4] = "Banned",
 }
 
