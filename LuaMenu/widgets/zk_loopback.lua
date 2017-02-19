@@ -81,10 +81,18 @@ local function SteamOverlayChanged(args)
 	WG.SteamHandler.SteamOverlayChanged(args.IsActive)
 end
 
+local function WrapperOnline(args) 
+	--args.DefaultServerPort
+	--args.DefaultServerHost
+	--args.UserID
+end
+
+
 commands["DownloadFileDone"] = DownloadFileDone
 commands["SteamOnline"] = SteamOnline
 commands["SteamJoinFriend"] = SteamJoinFriend
 commands["SteamOverlayChanged"] = SteamOverlayChanged
+commands["WrapperOnline"] = WrapperOnline
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
