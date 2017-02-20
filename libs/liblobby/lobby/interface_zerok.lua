@@ -249,10 +249,11 @@ function Interface:SetBattleStatus(status)
 	return self
 end
 
-function Interface:AddAi(aiName, aiLib, allyNumber)
+function Interface:AddAi(aiName, aiLib, allyNumber, version)
 	local sendData = {
 		Name         = aiName,
 		AiLib        = aiLib,
+		Version      = version,
 		AllyNumber   = allyNumber,
 		Owner        = self:GetMyUserName(),
 	}
@@ -968,6 +969,7 @@ function Interface:_UpdateBotStatus(data)
 	local status = {
 		allyNumber    = data.AllyNumber,
 		teamNumber    = data.TeamNumber,
+		aiVersion     = data.Version,
 		aiLib         = data.AiLib,
 		owner         = data.Owner,
 	}

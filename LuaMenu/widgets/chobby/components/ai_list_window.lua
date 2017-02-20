@@ -56,7 +56,7 @@ function AiListWindow:AddAiToList(ai, blackList, oldAiVersions, isRunning64Bit)
 		font = Configuration:GetFont(3),
 		OnClick = {
 			function()
-				self:AddAi(shortName)
+				self:AddAi(shortName, ai.version)
 				self:HideWindow()
 			end
 		},
@@ -64,7 +64,7 @@ function AiListWindow:AddAiToList(ai, blackList, oldAiVersions, isRunning64Bit)
 	self:AddRow({addAIButton}, fullName)
 end
 
-function AiListWindow:AddAi(shortName)
+function AiListWindow:AddAi(shortName, version)
 	local aiName
 	local counter = 1
 	local found = true
@@ -79,7 +79,7 @@ function AiListWindow:AddAi(shortName)
 		end
 		counter = counter + 1
 	end
-	self.lobby:AddAi(aiName, shortName, self.allyTeam)
+	self.lobby:AddAi(aiName, shortName, self.allyTeam, version)
 	WG.Chobby.Configuration:SetConfigValue("lastAddedAiName", shortName)
 end
 

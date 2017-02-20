@@ -217,7 +217,7 @@ function Lobby:SetBattleStatus(status)
 	return self
 end
 
-function Lobby:AddAi(aiName, allyNumber, allyNumber)
+function Lobby:AddAi(aiName, allyNumber, allyNumber, version)
 	return self
 end
 
@@ -762,6 +762,7 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	end
 	userData.sync       = status.sync  or userData.sync
 	userData.aiLib      = status.aiLib or userData.aiLib
+	userData.aiVersion  = status.aiVersion or userData.aiVersion
 	userData.owner      = status.owner or userData.owner
 
 	status.allyNumber   = userData.allyNumber
@@ -769,6 +770,7 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	status.isSpectator  = userData.isSpectator
 	status.sync         = userData.sync
 	status.aiLib        = userData.aiLib
+	status.aiVersion    = userData.aiVersion
 	status.owner        = userData.owner
 	self:_CallListeners("OnUpdateUserBattleStatus", userName, status)
 

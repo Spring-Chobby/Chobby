@@ -98,6 +98,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName)
 					Team = teamCount,
 					IsFromDemo = 0,
 					ShortName = data.aiLib,
+					Version = data.aiVersion,
 					Host = 0,
 				}
 			end
@@ -191,6 +192,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName)
 	-- local scriptFileName = "scriptFile.txt"
 	-- local scriptFile = io.open(scriptFileName, "w")
 	local scriptTxt = self:MakeScriptTXT(script)
+	--Spring.Echo(scriptTxt)
 	Spring.Reload(scriptTxt)
 	-- scriptFile:write(scriptTxt)
 	-- scriptFile:close()
@@ -275,12 +277,13 @@ end
 -- BEGIN Client commands
 -------------------------------------------------
 
-function InterfaceSkirmish:AddAi(aiName, aiLib, allyNumber)
-	self:super("AddAi", aiName, aiLib, allyNumber)
+function InterfaceSkirmish:AddAi(aiName, aiLib, allyNumber, version)
+	self:super("AddAi", aiName, aiLib, allyNumber, version)
 	self:_OnAddAi(self:GetMyBattleID(), aiName, {
 		aiLib = aiLib,
 		allyNumber = allyNumber,
 		owner = self:GetMyUserName(),
+		aiVersion = version,
 	})
 end
 

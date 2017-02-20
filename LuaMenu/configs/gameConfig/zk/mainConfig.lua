@@ -56,6 +56,7 @@ local externalFuncAndData = {
 	name                    = "Zero-K",
 	_defaultGameArchiveName = "Zero-K v1.5.2.5", -- Do not read directly
 	_defaultGameRapidTag    = "zk:stable", -- Do not read directly
+	aiVersion               = "0.9.12",
 	mapWhitelist            = mapWhitelist,
 	aiBlacklist             = aiBlacklist,
 	oldAiVersions           = oldAiVersions,
