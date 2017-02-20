@@ -67,6 +67,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 				lobby:JoinMatchMaking(queueName)
 				obj:SetVisibility(false)
 				btnLeave:SetVisibility(true)
+				WG.Analytics.SendOnetimeEvent("lobby:multiplayer:matchmaking:join_" .. queueName)
 			end
 		},
 		parent = parentControl

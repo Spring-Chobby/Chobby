@@ -136,13 +136,11 @@ function WrapperLoopback.DownloadFile(name, fileType)
 	SendCommand("DownloadFile", {Name = name, FileType = fileType})
 end
 
-
 -- opens steam section, default = "LobbyInvite"
 -- WARNING: FPS needs to be increased, overlay works at chobby FPS
 function WrapperLoopback.SteamOpenOverlaySection(name) 
 	SendCommand("SteamOpenOverlaySection", {Option = name})
 end
-
 
 -- opens url in steam browser
 -- of overlay not available, opens ext. browser
@@ -151,12 +149,14 @@ function WrapperLoopback.SteamOpenWebsite(url)
 	SendCommand("SteamOpenOverlayWebsite", {Url = url})
 end
 
-
 -- invites friend to a game, even offline
 function WrapperLoopback.SteamInviteFriendToGame(steamID) 
 	SendCommand("SteamInviteFriendToGame", {SteamID = steamID})
 end
 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Analytics
 
 -- sends error event to GA. Severity must be one of: Undefined, Debug, Info, Warning, Error,Critical,
 function WrapperLoopback.GaAddErrorEvent(severity, message) 
@@ -172,7 +172,6 @@ end
 function WrapperLoopback.GaAddProgressionEvent(status, progression1, progression2, progression3, score) 
 	SendCommand("GaAddProgressionEvent", {Status = status, Progression1 = progression1, Progression2 = progression2, Progression3 = progression3, Score = score}) 
 end
-
 
 -- NOTE: amount must be whole number
 function WrapperLoopback.GaAddBusinessEvent(amount, cartType, currency, itemId, itemType) 
@@ -196,7 +195,6 @@ end
 function WrapperLoopback.GaConfigureCustomDimensions(level, list) 
 	SendCommand("GaConfigureCustomDimensions", {Level = level, List = list}) 
 end
-
 
 -- NOTE: level 1-3
 function WrapperLoopback.GaSetCustomDimension(level, list) 

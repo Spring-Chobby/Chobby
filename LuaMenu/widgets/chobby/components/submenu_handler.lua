@@ -79,6 +79,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 		if buttonsHolder.visible then
 			buttonsHolder:Hide()
 		end
+		WG.Analytics.SendOnetimeEvent(submenus[index].analyticsName)
 		
 		submenus[index].panelHandler.Show()
 		
@@ -124,8 +125,9 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 	function externalFunctions.ReplaceSubmenu(index, newTabs, newCleanupFunction)
 		externalFunctions.SetBackAtMainMenu()
 		submenus[index].panelHandler.Destroy()
+		submenus[index].analyticsName = "lobby:" .. submenus[index].name
 		
-		local newPanelHandler = GetTabPanelHandler(submenus[index].name, buttonWindow, panelWindow, submenuPanelWindow, newTabs, true, BackToMainMenu, newCleanupFunction, fontSizeScale, nil, nil, nil, SetTitle)
+		local newPanelHandler = GetTabPanelHandler(submenus[index].name, buttonWindow, panelWindow, submenuPanelWindow, newTabs, true, BackToMainMenu, newCleanupFunction, fontSizeScale, nil, nil, nil, SetTitle, "lobby:" .. submenus[index].name)
 		Spring.Utilities.TableEcho(newPanelHandler, "newPanelHandler")
 		newPanelHandler.Rescale(fontSizeScale, buttonHeight, nil, buttonOffset, buttonSpacing)
 		newPanelHandler.Hide()
@@ -162,7 +164,8 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 	
 	for i = 1, #submenus do
 		
-		local panelHandler = GetTabPanelHandler(submenus[i].name, buttonWindow, panelWindow, submenuPanelWindow, submenus[i].tabs, true, BackToMainMenu, submenus[i].cleanupFunction, fontSizeScale, submenus[i].submenuControl, nil, nil, SetTitle)
+		submenus[i].analyticsName = "lobby:" .. submenus[i].name
+		local panelHandler = GetTabPanelHandler(submenus[i].name, buttonWindow, panelWindow, submenuPanelWindow, submenus[i].tabs, true, BackToMainMenu, submenus[i].cleanupFunction, fontSizeScale, submenus[i].submenuControl, nil, nil, SetTitle, submenus[i].analyticsName)
 		panelHandler.Hide()
 		
 		submenuPanelNames[submenus[i].name] = panelHandler

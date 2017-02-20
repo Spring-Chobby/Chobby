@@ -1,4 +1,4 @@
-function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPanel, initialTabs, tabsVertical, backFunction, cleanupFunction, fontSizeScale, tabWidth, tabControlOverride, submenuControl, titleUpdateFunction)
+function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPanel, initialTabs, tabsVertical, backFunction, cleanupFunction, fontSizeScale, tabWidth, tabControlOverride, submenuControl, titleUpdateFunction, analyticsName)
 
 	local externalFunctions = {}
 
@@ -42,6 +42,9 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 	end
 	
 	local function ToggleShow(obj, tab, openOnly)
+		if analyticsName then
+			WG.Analytics.SendOnetimeEvent(analyticsName .. ":" .. tab.name)
+		end
 		if tab.panelHandler then
 			OpenSubmenu(tab.panelHandler)
 			return
@@ -360,7 +363,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 				end
 			end
 		
-			local panelHandler = GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPanel, submenuData.tabs, tabsVertical, BackToSubmenu, submenuData.cleanupFunction, fontSizeScale, tabWidth, tabControlOverride, submenuData.submenuControl, titleUpdateFunction)
+			local panelHandler = GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPanel, submenuData.tabs, tabsVertical, BackToSubmenu, submenuData.cleanupFunction, fontSizeScale, tabWidth, tabControlOverride, submenuData.submenuControl, titleUpdateFunction, (analyticsName and (analyticsName .. ":" .. name)) or nil)
 			panelHandler.Hide()
 			newTab.panelHandler = panelHandler
 		end

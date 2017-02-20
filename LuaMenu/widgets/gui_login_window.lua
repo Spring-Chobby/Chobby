@@ -85,6 +85,7 @@ local function InitializeListeners()
 	
 	-- Register and login response codes
 	local function OnRegistrationAccepted()
+		WG.Analytics.SendOnetimeEvent("lobby:account_created")
 		if currentLoginWindow then
 			registerRecieved = true
 			WG.Delay(ResetRegisterRecieved, 0.8)
@@ -92,6 +93,7 @@ local function InitializeListeners()
 		end
 	end
 	local function OnRegistrationDenied(listener, err)
+		WG.Analytics.SendErrorEvent(err or "unknown")
 		if currentLoginWindow then
 			registerRecieved = true
 			WG.Delay(ResetRegisterRecieved, 0.8)
@@ -100,6 +102,7 @@ local function InitializeListeners()
 	end
 	local function OnLoginAccepted()
 		Configuration.firstLoginEver = false
+		WG.Analytics.SendOnetimeEvent("lobby:logged_in")
 		if currentLoginWindow then
 			ChiliFX:AddFadeEffect({
 				obj = currentLoginWindow.window,
@@ -116,6 +119,7 @@ local function InitializeListeners()
 		end
 	end
 	local function OnLoginDenied(listener, err)
+		WG.Analytics.SendErrorEvent(err or "unknown")
 		if currentLoginWindow and not registerRecieved then
 			currentLoginWindow.txtError:SetText(Configuration:GetErrorColor() .. (err or "Denied, unknown reason"))
 		end
@@ -128,7 +132,9 @@ local function InitializeListeners()
 	
 	-- Stored register on connect
 	local function OnConnect()
+		WG.Analytics.SendOnetimeEvent("lobby:server_connect")
 		if registerName then
+			WG.Analytics.SendOnetimeEvent("lobby:send_register")
 			lobby:Register(registerName, registerPassword)
 			Configuration.userName = registerName
 			Configuration.password = registerPassword

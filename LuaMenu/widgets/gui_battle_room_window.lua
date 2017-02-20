@@ -197,6 +197,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 
 	local function RejoinBattleFunc()
 		battleLobby:RejoinBattle(battleID)
+		WG.Analytics.SendOnetimeEvent("lobby:multiplayer:custom:rejoin")
 	end
 	
 	local btnStartBattle = Button:New {
@@ -217,6 +218,11 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 							WG.Chobby.ConfirmationPopup(RejoinBattleFunc, "Are you sure you want to leave your current game to rejoin this one?", nil, 315, 200)
 						end
 					else
+						if battleLobby.name == "singleplayer" then
+							WG.Analytics.SendOnetimeEvent("lobby:singleplayer:skirmish:start")
+						else
+							WG.Analytics.SendOnetimeEvent("lobby:multiplayer:custom:start")
+						end
 						battleLobby:StartBattle()
 					end
 				else
@@ -243,6 +249,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 				ButtonUtilities.SetCaption(btnPlay, i18n("play"))
 				ButtonUtilities.SetButtonSelected(obj)
 				ButtonUtilities.SetCaption(obj, i18n("spectating"))
+				WG.Analytics.SendOnetimeEvent("lobby:multiplayer:custom:spectate")
 			end
 		},
 		parent = rightInfo,
@@ -263,6 +270,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 				ButtonUtilities.SetCaption(btnSpectate, i18n("spectate"))
 				ButtonUtilities.SetButtonSelected(obj)
 				ButtonUtilities.SetCaption(obj, i18n("playing"))
+				WG.Analytics.SendOnetimeEvent("lobby:multiplayer:custom:play")
 			end
 		},
 		parent = rightInfo,
@@ -1268,8 +1276,11 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 			function(obj)
 				subPanel:SetVisibility(false)
 				if nextPage then
+					WG.Analytics.SendOnetimeEvent("lobby:singleplayer:skirmish:" .. pageConfig.name, selectedOptions[pageConfig.name])
 					nextPage:SetVisibility(true)
 				else
+					WG.Analytics.SendOnetimeEvent("lobby:singleplayer:skirmish:" .. pageConfig.name, selectedOptions[pageConfig.name])
+					WG.Analytics.SendOnetimeEvent("lobby:singleplayer:skirmish:start_quick")
 					ApplyFunction(true)
 				end
 			end
@@ -1289,6 +1300,7 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 			font = Configuration:GetFont(2),
 			OnClick = {
 				function(obj)
+					WG.Analytics.SendOnetimeEvent("lobby:singleplayer:skirmish:advanced")
 					subPanel:SetVisibility(false)
 					ApplyFunction(false)
 				end

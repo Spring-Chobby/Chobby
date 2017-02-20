@@ -349,6 +349,7 @@ function LoginWindow:tryLogin()
 end
 
 function LoginWindow:tryRegister()
+	WG.Analytics.SendOnetimeEvent("lobby:try_register")
 	self.txtError:SetText("")
 
 	local username = self.ebUsername.text

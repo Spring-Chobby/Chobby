@@ -441,7 +441,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			tabs = {
 				{name = "matchmaking", control = queueListWindow},
 				{name = "watch", control = battleWatchListWindow.window},
-				{name = "customGames", control = battleListWindow.window},
+				{name = "custom", control = battleListWindow.window},
 			},
 			cleanupFunction = Configuration.leaveMultiplayerOnMainMenu and CleanMultiplayerState or nil
 		},
