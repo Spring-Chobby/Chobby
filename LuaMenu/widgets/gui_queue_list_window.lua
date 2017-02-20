@@ -152,7 +152,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 	}
 	
 	local function UpdateButton()
-		if currentPartySize > maxPartySize then
+		if maxPartySize and (currentPartySize > maxPartySize) then
 			btnJoin:SetVisibility(false)
 			btnLeave:SetVisibility(false)
 			labelDisabled:SetVisibility(true)
