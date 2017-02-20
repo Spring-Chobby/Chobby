@@ -65,21 +65,21 @@
 		"unit":      ["gunshipcon", "blastwing", "bladew", "armkam", "gunshipsupport", "armbrawl", "blackdawn", "corcrw", "corvalk", "corbtrans", "gunshipaa"],
 		"land": {
 			// 0-8m Opening - Blastwing and banshee Harass
-			"tier0": [ 0.00,         0.67,        0.00,     0.10,     0.21,             0.00,       0.02,        0.00,     0.00,      0.00,        0.00],
+			"tier0": [ 0.00,         0.17,        0.00,     0.10,     0.71,             0.00,       0.02,        0.00,     0.00,      0.00,        0.00],
 			// 9-16m Early Game - Banshee with a chance of Blackdawn
-			"tier1": [ 0.00,         0.20,        0.00,     0.02,     0.67,             0.01,       0.10,        0.00,     0.00,      0.00,        0.00],
+			"tier1": [ 0.00,         0.20,        0.00,     0.02,     0.75,             0.01,       0.02,        0.00,     0.00,      0.00,        0.00],
 			// 17-24m Expanding - Time to start a-makin Brawlers
-			"tier2": [ 0.00,         0.42,        0.00,     0.00,     0.41,             0.07,       0.08,        0.02,     0.00,      0.00,        0.00],
+			"tier2": [ 0.00,         0.02,        0.00,     0.00,     0.87,             0.05,       0.04,        0.02,     0.00,      0.00,        0.00],
 			// 25-32m Expansions meet - Time to keep a-makin Brawlers
-			"tier3": [ 0.00,         0.45,        0.00,     0.00,     0.33,             0.09,       0.08,        0.05,     0.00,      0.00,        0.00],
+			"tier3": [ 0.00,         0.05,        0.00,     0.00,     0.73,             0.09,       0.08,        0.05,     0.00,      0.00,        0.00],
 			// 33m -40m Solid Fronts - Brawlers with a chance of Krow
-			"tier4": [ 0.00,         0.44,        0.00,     0.00,     0.25,             0.13,       0.10,        0.08,     0.00,      0.00,        0.00],
+			"tier4": [ 0.00,         0.04,        0.00,     0.00,     0.65,             0.13,       0.10,        0.08,     0.00,      0.00,        0.00],
 			// 41m - 56m Mid Game - Brawlers with a bigger chance of Krow
-			"tier5": [ 0.00,         0.55,        0.00,     0.00,     0.17,             0.12,       0.06,        0.10,     0.00,      0.00,        0.00],
+			"tier5": [ 0.00,         0.05,        0.00,     0.00,     0.67,             0.12,       0.06,        0.10,     0.00,      0.00,        0.00],
 			// 57m - 72m Late Game - we must have 2 facs & Striders by now, go nuts!
-			"tier6": [ 0.00,         0.55,        0.00,     0.00,     0.00,             0.30,       0.02,        0.13,     0.00,      0.00,        0.00],
+			"tier6": [ 0.00,         0.05,        0.00,     0.00,     0.00,             0.80,       0.02,        0.13,     0.00,      0.00,        0.00],
 			// 72m - inf+ Late late Game - Spam Krows!
-			"tier7": [ 0.00,         0.55,        0.00,     0.00,     0.00,             0.30,       0.00,        0.15,     0.00,      0.00,        0.00]
+			"tier7": [ 0.00,         0.05,        0.00,     0.00,     0.00,             0.80,       0.00,        0.15,     0.00,      0.00,        0.00]
 		},
 
 		"caretaker": 2
@@ -96,11 +96,11 @@
 			// 0-8m Opening - Ducks and Archers
 			"tier0": [ 0.00,      0.73,          0.25,          0.00,          0.02,       0.00,          0.00,       0.00],
 			// 9-16m Early Game - Still mostly Ducks, Ducks are amazing
-			"tier1": [ 0.05,      0.56,          0.16,          0.20,          0.03,       0.00,          0.00,       0.00],
+			"tier1": [ 0.05,      0.50,          0.16,          0.20,          0.09,       0.00,          0.00,       0.00],
 			// 17-24m Expanding - Less Ducks, more Scallop/Bouy
 			"tier2": [ 0.10,      0.31,          0.09,          0.40,          0.05,       0.05,          0.00,       0.00],
 			// 25-32m Expansions meet - Time to start producing Bouy
-			"tier3": [ 0.10,      0.31,          0.02,          0.42,          0.02,       0.13,          0.00,       0.00],
+			"tier3": [ 0.10,      0.21,          0.02,          0.42,          0.12,       0.13,          0.00,       0.00],
 			// 33m -40m Solid Fronts - Time to start producing even more Bouy
 			"tier4": [ 0.11,      0.26,          0.02,          0.42,          0.04,       0.15,          0.00,       0.00],
 			// 41m - 56m Mid Game - Switch to Grizzly
@@ -162,11 +162,11 @@
 			// 33m -40m Solid Fronts - 	Overdrive Ravager production
 			"tier4": [ 0.12,     0.10,     0.37,       0.00,      0.05,       0.29,      0.02,         0.05,      0.00,      0.00],
 			// 41m - 56m Mid Game - Drop Slashers, more Artillery
-			"tier5": [ 0.14,     0.16,     0.33,       0.00,      0.02,       0.25,      0.01,         0.05,      0.04,      0.00],
+			"tier5": [ 0.14,     0.16,     0.23,       0.00,      0.02,       0.35,      0.01,         0.05,      0.04,      0.00],
 			// 57m - 72m Late Game -  More artillery and Ravager
 			"tier6": [ 0.16,     0.22,     0.03,       0.00,      0.02,       0.42,      0.02,         0.06,      0.07,      0.00],
 			// 72m - inf+ Late late Game - Maximum Artillery
-			"tier7": [ 0.17,     0.22,     0.05,       0.00,      0.02,       0.42,      0.05,         0.00,      0.07,      0.00]
+			"tier7": [ 0.17,     0.12,     0.05,       0.00,      0.02,       0.52,      0.05,         0.00,      0.07,      0.00]
 		},
 
 		"caretaker": 3
@@ -465,21 +465,20 @@
 		"retreat": 0.01
 	},
 	"bladew": {
-		"role": ["support", "air"],
+		"role": ["air", "air"],
 		"retreat": 0.9
 	},
 	"gunshipsupport": {
-		"role": ["skirmish", "air"],
+		"role": ["air"],
 		"dmg_mod": 1.7,
 		"retreat": 0.75
 	},
 	"armkam": {
 		"role": ["scout", "air"],
-		"retreat": 0.8,
-		"dmg_mod": 0.5
+		"retreat": 0.8
 	},
 	"armbrawl": {
-		"role": ["assault", "air"],
+		"role": ["air"],
 		"attribute": ["no_strafe", "siege"],
 		"retreat": 0.55,
 		"dmg_mod": 1.25
@@ -530,7 +529,7 @@
 	},
 	"amphriot": {
 		"role": ["riot"],
-		"attribute": ["support"],
+		"attribute": ["melee", "support"],
 		"retreat": 0.35  // too slow to be retreating all the time
 	},
 	"amphassault": {
@@ -827,7 +826,7 @@
 		"retreat": 0.6
 	},
 	"armcybr": {
-		"role": ["bomber", "air"],
+		"role": ["bomber", "support", "air"],
 		"retreat": 0.6,
 		"dmg_mod": 1.5
 	},
@@ -1034,10 +1033,6 @@
 		"role": ["static"],
 		"dmg_mod": 3.5
 	},
-	"armmstor": {
-		"role": ["static"],
-		"limit": 5
-	},
 
 	//	"unit": ["corllt", "corrl", "armdeva", "corhlt", "turrettorp", "corrazor", "armnanotc", "cordoom", "corjamt", "armartic", "armanni", "corbhmth"],//
 
@@ -1071,7 +1066,7 @@
 	"raider": {
 		"vs":         ["builder", "anti_air", "scout", "raider", "assault", "anti_heavy"],
 		"ratio":      [ 1.35,      0.50,       2.00,    2.00,     0.50,       0.50],
-		"importance": [ 25.0,      20.0,       66.0,    70.0,     20.0,       20.0],
+		"importance": [ 35.0,      20.0,       66.0,    70.0,     20.0,       20.0],
 		"max_percent": 0.40,
 		"eps_step": 0.00
 	},
@@ -1106,14 +1101,14 @@
 	"builder": {
 		"vs":         ["static", "artillery", "support", "assault"],
 		"ratio":      [ 0.5,	0.5,	0.50,	0.25],
-		"importance": [ 15.0,	15.0,	15.0,	25.0],
-		"max_percent": 0.20,
+		"importance": [ 25.0,	25.0,	25.0,	25.0],
+		"max_percent": 0.25,
 		"eps_step": 0.00
 	},
 	"anti_air": {
 		"vs":         ["air"],
-		"ratio":      [ 0.67],
-		"importance": [ 88.0],
+		"ratio":      [ 0.75],
+		"importance": [ 90.0],
 		"max_percent": 0.30,
 		"eps_step": 0.03
 	},
@@ -1126,7 +1121,7 @@
 	},
 	"anti_heavy": {
 		"vs":         ["heavy", "static", "support"],
-		"ratio":      [ 1.0,     0.6,	1.5],
+		"ratio":      [ 0.25,     0.4,	1.0],
 		"importance": [ 66.0,    25.0,	35.0],
 		"max_percent": 0.30,
 		"eps_step": 0.00
@@ -1153,9 +1148,9 @@
 		"eps_step": 0.01
 	},
 	"assault": {
-		"vs":         ["riot", "static", "assault", "anti_air", "support"],
-		"ratio":      [ 2.00,   3.00,     2.50,      2.00,		1.00],
-		"importance": [ 30.0,   25.0,     30.0,      25.0,		50.0],
+		"vs":         ["riot", "static", "assault", "anti_air", "support", "heavy"],
+		"ratio":      [ 2.50,   3.00,     2.50,      2.00,		1.50,		2.0],
+		"importance": [ 30.0,   25.0,     30.0,      25.0,		35.0,		25.0],
 		"max_percent": 0.80,
 		"eps_step": 0.02
 	},
@@ -1214,7 +1209,7 @@
 	"eps_step": 0.13,
 
 	// Mobile buildpower to metal income ratio
-	"buildpower": 1.25,
+	"buildpower": 1.28,
 	// Metal excess to income ratio, -1 to disable
 	"excess": -1.0,
 
@@ -1340,8 +1335,8 @@
 
 			// Commander hides if ("time" elapsed) and ("threat" exceeds value or enemy has "air")
 			"hide": {
-				"time": 200,  // seconds
-				"threat": 10,
+				"time": 400,  // seconds
+				"threat": 30,
 				"air": true
 			}
 		},
@@ -1425,7 +1420,7 @@
 
 			// Commander hides if ("time" elapsed) and ("threat" exceeds value or enemy has "air")
 			"hide": {
-				"time": 300,  // seconds
+				"time": 600,  // seconds
 				"threat": 20,
 				"air": true
 			}
@@ -1508,8 +1503,8 @@
 
 			// Commander hides if ("time" elapsed) and ("threat" exceeds value or enemy has "air")
 			"hide": {
-				"time": 500,  // seconds
-				"threat": 30,
+				"time": 600,  // seconds
+				"threat": 60,
 				"air": true
 			}
 		},
@@ -1593,135 +1588,10 @@
 
 			// Commander hides if ("time" elapsed) and ("threat" exceeds value or enemy has "air")
 			"hide": {
-				"time": 400,  // seconds
-				"threat": 20,
+				"time": 600,  // seconds
+				"threat": 50,
 				"air": true
 			}
-		}
-	}
-},
-
-// Actions on building finished event
-"build_chain": {
-	// WARNING: Avoid recursion
-	// <category>: factory, nano, store, pylon, energy, defence, bunker, big_gun, radar, sonar, mex, repair
-	"energy": {
-		// <UnitDef>: {<elements>}
-		"cafus": {
-			// Available elements:
-			// "energy": mex or <boolean>
-			// "pylon": <boolean>
-			// "porc": <boolean>
-			// "terra": <boolean>
-			// "hub": [
-			//     // chain1
-			//     [{<unit1>, <category>, <offset>, <condition>}, {<unit2>, <category>, <offset>, <condition>}, ...],
-			//     // chain2
-			//     [{...}, {...}, ...],
-			//     ...
-			// ]
-			// <unit>: UnitDef
-			// <offset>:
-			//     1) [x, z] in South facing, elmos
-			//     2) {<direction>: <delta>} - left, right, front, back
-			// <condition>: air, no_air, maybe
-
-			// Build pylon in direction of nearby mex cluster
-			"pylon": true,
-
-			// Build chain of units
-			"hub": [
-				[  // chain1
-					{"unit": "corllt", "category": "defence", "offset": [-80, -80]},
-					{"unit": "corrl", "category": "defence", "offset": [-70, 70]},
-					{"unit": "corrl", "category": "defence", "offset": [-80, 80]},
-					{"unit": "armcir", "category": "defence", "offset": {"front": 120}, "condition": "air"},
-					{"unit": "corflak", "category": "defence", "offset": {"front": 120}, "condition": "no_air"}
-				],
-				[  // chain2
-					{"unit": "corllt", "category": "defence", "offset": [80, 80]},
-					{"unit": "armartic", "category": "defence", "offset": {"right": 80}},
-					{"unit": "corrl", "category": "defence", "offset": [70, -70]},
-					{"unit": "corrl", "category": "defence", "offset": [80, -80]},
-					{"unit": "armcir", "category": "defence", "offset": {"front": 120}, "condition": "air"},
-					{"unit": "corflak", "category": "defence", "offset": {"front": 120}, "condition": "no_air"}
-				]
-			]
-		},
-		"armfus": {
-			"pylon": true,
-			"hub": [[
-					{"unit": "corllt", "category": "defence", "offset": [-80, -80]},
-					{"unit": "corrl", "category": "defence", "offset": [-70, 70]}
-				]]
-		}
-	},
-	"factory": {
-		"factoryplane": {
-			"hub": [[{"unit": "armnanotc", "category": "nano", "offset": {"back": 0}}]]
-		},
-		"factorygunship": {
-			"hub": [[{"unit": "armnanotc", "category": "nano", "offset": {"back": 0}}]]
-		}
-	},
-	"mex": {
-		"cormex": {
-//			"terra": true,
-//			"energy": "mex",
-			"porc": true
-		}
-	},
-	"big_gun": {
-		"armbrtha": {
-			"hub": [[
-					{"unit": "corrad", "category": "radar", "offset": {"back": 40}},
-					{"unit": "armcir", "category": "defence", "offset": {"left": 120}, "condition": "air"},
-					{"unit": "corllt", "category": "defence", "offset": [-80, 80]},
-					{"unit": "corrl", "category": "defence", "offset": [80, 80]},
-					{"unit": "armdeva", "category": "defence", "offset": [80, -80]},
-					{"unit": "corrl", "category": "defence", "offset": [-80, -80]}
-				]]
-		},
-		"raveparty": {
-			"hub": [[
-					{"unit": "corrad", "category": "radar", "offset": {"back": 40}},
-					{"unit": "armcir", "category": "defence", "offset": {"left": 120}, "condition": "air"},
-					{"unit": "corllt", "category": "defence", "offset": [-80, 80]},
-					{"unit": "corrl", "category": "defence", "offset": [80, 80]},
-					{"unit": "armdeva", "category": "defence", "offset": [80, -80]},
-					{"unit": "corrl", "category": "defence", "offset": [-80, -80]}
-				]]
-		},
-		"mahlazer": {
-			"hub": [[
-					{"unit": "corrad", "category": "radar", "offset": {"back": 40}},
-					{"unit": "armcir", "category": "defence", "offset": {"left": 120}, "condition": "air"},
-					{"unit": "corllt", "category": "defence", "offset": [-80, 80]},
-					{"unit": "corrl", "category": "defence", "offset": [80, 80]},
-					{"unit": "armdeva", "category": "defence", "offset": [80, -80]},
-					{"unit": "corrl", "category": "defence", "offset": [-80, -80]}
-				]]
-		},
-		"corsilo": {
-			"hub": [[
-					{"unit": "corrad", "category": "radar", "offset": {"back": 40}},
-					{"unit": "armcir", "category": "defence", "offset": {"left": 120}, "condition": "air"},
-					{"unit": "corllt", "category": "defence", "offset": [-80, 80]},
-					{"unit": "corrl", "category": "defence", "offset": [80, 80]},
-					{"unit": "armdeva", "category": "defence", "offset": [80, -80]},
-					{"unit": "corrl", "category": "defence", "offset": [-80, -80]}
-				]]
-		},
-		"screamer": {
-			"pylon": true,
-			"hub": [
-					[
-					{"unit": "corrad", "category": "radar", "offset": {"back": 40}},
-					{"unit": "corllt", "category": "defence", "offset": [-80, 80]},
-					{"unit": "corrl", "category": "defence", "offset": [80, 80]},
-					{"unit": "armdeva", "category": "defence", "offset": [80, -80]},
-					{"unit": "corrl", "category": "defence", "offset": [-80, -80]}
-				]]
 		}
 	}
 },
