@@ -1153,7 +1153,7 @@
 			"armfus": [4],
 			"armwin": [20]
 		},
-		"factor": 2.50,  // income factor for energy
+		"factor": 2.50  // income factor for energy
 	},
 
 	// Scales metal income
