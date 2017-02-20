@@ -100,5 +100,5 @@ function widget:GetConfigData()
 end
 
 function widget:SetConfigData(data)
-	--onetimeEvents = data
+	onetimeEvents = data
 end

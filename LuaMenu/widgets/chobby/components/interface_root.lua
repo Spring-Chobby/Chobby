@@ -470,9 +470,13 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	local battleStatusPanelHandler = GetTabPanelHandler(
 		"myBattlePanel", battleTabHolder, mainContent_window, nil, {}, nil, nil, nil, nil, 
-		statusButtonWidth, battleStatusTabControls
-	)											
-	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons_buttons, rightPanel_window, nil, rightPanelTabs)
+		statusButtonWidth, battleStatusTabControls, nil, nil, "lobby:battle"
+	)
+	
+	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons_buttons, rightPanel_window, 
+		nil, rightPanelTabs, nil, nil, nil, nil, nil, nil, nil, nil, "lobby:panel"
+	)
+	
 	mainWindowHandler = GetSubmenuHandler(buttonsHolder_buttons, mainContent_window, submenuWindow_mainContent, submenus, UpdateTitle)
 	
 	local statusAndInvitesPanel = GetControlPanelHandler(holder_statusAndInvites)
