@@ -445,9 +445,18 @@ function EditBox:_GetCursorByMousePos(x, y)
 		end
 		retVal.cursor = #selLine + 1
 		for i = 1, #selLine do
-			local tmp = selLine:sub(1 + retVal.offset, i)
-			if self.font:GetTextWidth(tmp) > (x - clientX) then
-				retVal.cursor = i
+			local tmpLen = self.font:GetTextWidth(selLine:sub(1 + retVal.offset, i))
+			if tmpLen > (x - clientX) then
+				if i > 1 then
+					local tmpPrevLen = self.font:GetTextWidth(selLine:sub(1 + retVal.offset, i - 1))
+					if math.abs(tmpPrevLen - (x - clientX)) > math.abs(tmpLen - (x - clientX)) then
+						retVal.cursor = i + 1 -- selection is closer to the end of the character
+					else
+						retVal.cursor = i     -- selection is closer to the beginning of the character
+					end
+				else
+					retVal.cursor = i
+				end
 				break
 			end
 		end
@@ -640,6 +649,11 @@ function EditBox:UpdateLine(lineID, text)
 	self.selStartY = 1
 end
 
+local function RemoveColorFromText(text)
+	text = text:gsub("\255...", ""):gsub("\b", "")
+	return text
+end
+
 function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	local cp = self.cursor
 	local txt = self.text
@@ -707,7 +721,7 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 				if sy > ey then
 					sy, ey = ey, sy
 					s, e = e, s
-				elseif sy == ey then
+				elseif sy == ey and s > e then
 					s, e = e, s
 				end
 			elseif s > e then
@@ -722,15 +736,14 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 				local ls = {}
 				local topText = self.lines[sy].text
 				local bottomText = self.lines[ey].text
-				table.insert(ls, topText:sub(s))
+				table.insert(ls, RemoveColorFromText(topText:sub(s)))
 				for i = sy+1, ey-1 do
-					table.insert(ls, self.lines[i].text)
+					table.insert(ls, RemoveColorFromText(self.lines[i].text))
 				end
-				table.insert(ls, bottomText:sub(1, e))
+				table.insert(ls, RemoveColorFromText(bottomText:sub(1, e - 1)))
 				txt = table.concat(ls, "\n")
 			end
 			Spring.SetClipboard(txt)
--- 			Spring.SetClipboard()
 		end
 		if key == Spring.GetKeyCode("x") and self.selStart ~= nil then
 			self:ClearSelected()
