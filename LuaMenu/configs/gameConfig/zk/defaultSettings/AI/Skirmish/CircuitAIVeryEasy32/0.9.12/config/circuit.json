@@ -1193,7 +1193,7 @@
 	"base": [[0, 20], [1, 30], [0, 40], [1, 50], [0, 60], [1, 70], [0, 120], [5, 580], [1, 980], [5, 1160], [1, 1380], [2, 1680], [5, 2000], [2, 2420], [13, 2800], [7, 3300]],
 
 	"superweapon": {
-		"unit":   "armbrtha"],
+		"unit": ["armbrtha"],
 		"weight": [ 0.1],
 
 		"condition": [50, 70]  // [<Minimum income>, <maximum seconds to build>]
@@ -1593,8 +1593,8 @@
 			"type": ["circle", "engy_low"],
 			// Integer radius of a blocker or desciption string.
 			// Available string values: explosion, expl_ally
-//			"radius": "explosion",  // default: "explosion"
-			"ignore": ["mex", "engy_mid", "engy_high", nano"]
+			// "radius": "explosion",  // default: "explosion"
+			"ignore": ["mex", "engy_mid", "engy_high", "nano"]
 		},
 		"fusion": {
 			"type": ["circle", "engy_mid"],
