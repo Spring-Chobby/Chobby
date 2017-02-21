@@ -73,8 +73,11 @@ local function InitializeListeners()
 		local loginWindow = GetNewLoginWindow()
 		loginWindow.window:Hide()
 		lobby:AddListener("OnDenied", function(listener)
-			loginWindow.window:Show()
-			local popup = WG.Chobby.PriorityPopup(loginWindow.window, loginWindow.CancelFunc, loginWindow.AcceptFunc)
+			if not currentLoginWindow then
+				GetNewLoginWindow()
+			end
+			currentLoginWindow.window:Show()
+			local popup = WG.Chobby.PriorityPopup(currentLoginWindow.window, currentLoginWindow.CancelFunc, currentLoginWindow.AcceptFunc)
 			lobby:RemoveListener("OnDenied", listener)
 		end)
 		loginWindow:tryLogin()
