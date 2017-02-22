@@ -9,3 +9,4 @@ return {
 		entryCheck = WG.BattleRoomWindow.SetSingleplayerGame,
 	},
 }
+
