@@ -314,6 +314,6 @@
          "VersionNumber":1,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/sqlite3.dll",
          "TargetPath":"sqlite3.dll"
-      },	  	  
+      }
    ]
 }
