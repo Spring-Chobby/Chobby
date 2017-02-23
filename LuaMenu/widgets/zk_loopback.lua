@@ -79,18 +79,60 @@ local function SteamOverlayChanged(args)
 	WG.SteamHandler.SteamOverlayChanged(args.IsActive)
 end
 
+
+-- TODO wire this to set initial stuff and pass userid to ZKLS
 local function WrapperOnline(args) 
 	--args.DefaultServerPort
 	--args.DefaultServerHost
 	--args.UserID
 end
 
+-- TODO wrapper will send this to confirm friend join on steam (either invite or self join) use to auto accept party join request and to notify player when joining "offline" COOP 
+local function SteamFriendJoinedMe(args) 
+	--[[ 
+	    public string FriendSteamID { get; set; }
+        public string FriendSteamName { get; set; }
+	]]--
+end
+
+
+-- TODO wrapper will send this to indiciate P2P host request is ok and this chobby should start hosting asap, using the given local port
+local function SteamHostGameSuccess(args) 
+	-- args.HostPort
+end
+
+-- TODO p2p hosting has failed
+local function SteamHostGameFailed(args)
+	-- args.CausedBySteamID
+	-- args.Reason
+end
+
+-- TODO when client receives this he should connect given game, it MUST use the passed ClientPort for local game
+local function SteamConnectSpring(args)
+	--[[
+        public string HostIP { get; set; }
+        public int HostPort { get; set; }
+        public int ClientPort { get; set; }
+
+        public string Name { get; set; }
+        public string ScriptPassword { get; set; }
+        public string Map { get; set; }
+        public string Game { get; set; }
+
+        public string Engine { get; set; }	
+	]]--
+end
 
 commands["DownloadFileDone"] = DownloadFileDone
 commands["SteamOnline"] = SteamOnline
 commands["SteamJoinFriend"] = SteamJoinFriend
 commands["SteamOverlayChanged"] = SteamOverlayChanged
 commands["WrapperOnline"] = WrapperOnline
+commands["SteamFriendJoinedMe"] = SteamFriendJoinedMe
+commands["SteamHostGameSuccess"] = SteamHostGameSuccess
+commands["SteamHostGameFailed"] = SteamHostGameFailed
+commands["SteamConnectSpring"] = SteamConnectSpring
+
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -150,6 +192,26 @@ end
 -- invites friend to a game, even offline
 function WrapperLoopback.SteamInviteFriendToGame(steamID) 
 	SendCommand("SteamInviteFriendToGame", {SteamID = steamID})
+end
+
+
+-- TODO instructs wrapper to establish p2p, punch ports and start clients 
+function WrapperLoopback.SteamHostGameRequest(args)
+	--[[
+        public class SteamHostPlayerEntry
+        {
+            public string SteamID { get; set; }
+            public string Name { get; set; }
+            public string ScriptPassword { get; set; }
+        }
+        
+        public List<SteamHostPlayerEntry> Players { get; set; } = new List<SteamHostPlayerEntry>();
+        public string Map { get; set; }
+        public string Game { get; set; }
+
+        public string Engine { get; set; }	
+	]]--
+	SendCommand("SteamHostGameRequest", args)
 end
 
 --------------------------------------------------------------------------------
