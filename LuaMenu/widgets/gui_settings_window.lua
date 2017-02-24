@@ -45,12 +45,12 @@ local function SetSpringsettingsValue(key, value)
 		return
 	end
 	local configType = configParamTypes[key]
-	Spring.Log("SetSettings", configType, key, value)
+	Spring.Echo("SetSettings", configType, key, value)
 	if configType == "int" then
-		Spring.Log("SetSettings Int", key, value)
+		Spring.Echo("SetSettings Int", key, value)
 		Spring.SetConfigInt(key, value)
 	elseif configType == "bool" or configType == "float" then
-		Spring.Log("SetSettings Value", key, value)
+		Spring.Echo("SetSettings Value", key, value)
 		Spring.SetConfigString(key, value)
 	elseif configType == nil then
 		Spring.Log("Settings", LOG.WARNING, "No such key: " .. tostring(key) .. ", but setting it as string anyway.")
@@ -1133,9 +1133,7 @@ local firstCall = true
 function widget:ActivateMenu()
 	if firstCall then
 		local gameSettings = WG.Chobby.Configuration.game_settings
-		
-		local gameSettingsOverride = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings3.lua")
-		for key, value in pairs(gameSettingsOverride) do
+		for key, value in pairs(gameSettings) do
 			SetSpringsettingsValue(key, value)
 		end
 		
