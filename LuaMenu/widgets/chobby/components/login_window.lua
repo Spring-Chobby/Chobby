@@ -128,29 +128,6 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		end},
 	}
 	
-	local function UpdateAuthenticateWithSteam()
-		local canAndWant = Configuration.wantAuthenticateWithSteam and Configuration.canAuthenticateWithSteam
-		self.ebPassword:SetVisibility(not canAndWant)
-		self.txtPassword:SetVisibility(not canAndWant)
-		self.cbAuthenticateSteam:SetVisibility(Configuration.canAuthenticateWithSteam)
-	end
-	
-	self.cbAuthenticateSteam = Checkbox:New {
-		x = 15,
-		width = 215,
-		y = 160,
-		height = 35,
-		boxalign = "right",
-		boxsize = 15,
-		caption = i18n("authenticateSteam"),
-		checked = Configuration.wantAuthenticateWithSteam,
-		font = Configuration:GetFont(2),
-		OnClick = {function (obj)
-			Configuration:SetConfigValue("wantAuthenticateWithSteam", obj.checked)
-			UpdateAuthenticateWithSteam()
-		end},
-	}
-	
 	self.txtError = TextBox:New {
 		x = 15,
 		right = 15,
@@ -254,7 +231,6 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 			self.ebPassword,
 			self.txtError,
 			self.cbAutoLogin,
-			self.cbAuthenticateSteam,
 			self.btnCancel
 		}
 	}
@@ -284,10 +260,9 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 			end
 		}
 	}
-
-	UpdateAuthenticateWithSteam()
+	
 	self.window:BringToFront()
-
+	
 	createTabGroup({self.ebUsername, self.ebPassword})
 	screen0:FocusControl(self.ebUsername)
 	-- FIXME: this should probably be moved to the lobby wrapper

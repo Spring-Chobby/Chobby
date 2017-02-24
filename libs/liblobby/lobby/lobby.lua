@@ -61,8 +61,6 @@ function Lobby:_Clean()
 	self.scriptPassword = nil
 	self.sessionToken = nil
 	
-	self.wantSteamAuthentication = true
-
 	-- reconnection delay in seconds
 	self.reconnectionDelay = 15
 end
@@ -357,11 +355,6 @@ end
 
 function Lobby:SetSteamAuthToken(steamAuthToken)
 	self.steamAuthToken = steamAuthToken
-	return self
-end
-
-function Lobby:SetWantSteamAuthentication(newWant)
-	self.wantSteamAuthentication = wantSteamAuthentication
 	return self
 end
 

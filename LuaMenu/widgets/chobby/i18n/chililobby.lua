@@ -34,6 +34,7 @@ return {
 		spectating_game_status = "Spectating",
 		playing_game_status = "Playing",
 		only_featured_maps = "Only featured maps",
+		login_with_steam = "Login with Steam",
 		download_maps = "Download Maps",
 		download_replays = "Download Replays",
 		refresh = "Refresh",

@@ -28,11 +28,11 @@ end
 -- Connectivity commands
 ------------------------
 
-function Interface:Register(userName, password, email)
+function Interface:Register(userName, password, email, useSteamLogin)
 	self:super("Register", userName, password, email)
 	-- FIXME: email argument is currently not sent to the server
 	password = (password and string.len(password) > 0 and VFS.CalculateHash(password, 0)) or nil
-	local steamToken = (self.wantSteamAuthentication and self.steamAuthToken) or nil
+	local steamToken = (useSteamLogin and self.steamAuthToken) or nil
 	if not (password or steamToken) then
 		self:_OnRegistrationDenied("Password required")
 		Spring.Echo("_OnRegistrationDenied")
@@ -47,13 +47,13 @@ function Interface:Register(userName, password, email)
 	return self
 end
 
-function Interface:Login(user, password, cpu, localIP, lobbyVersion)
+function Interface:Login(user, password, cpu, localIP, lobbyVersion, useSteamLogin)
 	self:super("Login", user, password, cpu, localIP)
 	if localIP == nil then
 		localIP = "*"
 	end
 	password = (password and string.len(password) > 0 and VFS.CalculateHash(password, 0)) or nil
-	local steamToken = (self.wantSteamAuthentication and self.steamAuthToken) or nil
+	local steamToken = (useSteamLogin and self.steamAuthToken) or nil
 	if not (password or steamToken) then
 		self:_OnDenied("Password required")
 		return self
@@ -590,11 +590,12 @@ end
 
 function Interface:SetSteamAuthToken(steamAuthToken)
 	self:super("SetSteamAuthToken", steamAuthToken)
-	if self.status == "connected" and self.wantSteamAuthentication then
+	if self.status == "connected" then
 		local sendData = {
 			AuthToken = steamAuthToken,
 		}
-		self:_SendCommand("LinkSteam " .. json.encode(sendData))
+		-- Don't do this automatically now that 1:1 steam link exists.
+		--self:_SendCommand("LinkSteam " .. json.encode(sendData))
 	end
 	return self
 end
