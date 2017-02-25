@@ -1309,7 +1309,7 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 		}
 		advButton:Hide()
 		
-		if Configuration.canAuthenticateWithSteam then
+		if Configuration.canAuthenticateWithSteam and false then
 			lichoButton = Button:New {
 				x = "36%",
 				right = "36%",

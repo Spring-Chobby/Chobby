@@ -24,7 +24,6 @@ function Configuration:init()
 	self.canAuthenticateWithSteam = false
 	self.wantAuthenticateWithSteam = true
 	self.steamLinkComplete = false
-	self.mySteamID
 	self.channels = {}
 
 	self.errorColor = "\255\255\0\0"
