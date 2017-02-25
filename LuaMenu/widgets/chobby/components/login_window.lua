@@ -81,7 +81,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		width = 200,
 		y = 51,
 		height = 35,
-		text = Configuration.userName or Configuration.mySteamName or "",
+		text = Configuration.userName or Configuration.suggestedNameFromSteam or "",
 		font = Configuration:GetFont(3),
 	}
 

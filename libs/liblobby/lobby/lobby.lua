@@ -127,7 +127,7 @@ end
 
 function Lobby:Login(user, password, cpu, localIP, lobbyVersion)
 	self.myUserName = user
-	self.loginData = { user, password, cpu, localIP, lobbyVersion}
+	self.loginData = {user, password, cpu, localIP, lobbyVersion}
 	return self
 end
 
