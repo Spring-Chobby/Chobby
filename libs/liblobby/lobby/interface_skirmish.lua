@@ -38,7 +38,7 @@ function InterfaceSkirmish:MakeScriptTXT(script)
 	return str
 end
 
-function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFriends, friendsReplaceAI)
+function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFriends, friendsReplaceAI, hostPort)
 	local allyTeams = {}
 	local allyTeamCount = 0
 	local teams = {}
@@ -180,7 +180,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFrie
 	local script = {
 		gametype = gameName,
 		hostip = '127.0.0.1',
-		hostport = 0,
+		hostport = hostPort or 0,
 		ishost = 1,
 		mapname = mapName,
 		myplayername = playerName,
@@ -252,12 +252,12 @@ function InterfaceSkirmish:StartGameFromFile(scriptFileName)
 end
 
 -- TODO: Needs clean implementation in lobby.lua
-function InterfaceSkirmish:StartBattle(extraFriends, friendsReplaceAI)
+function InterfaceSkirmish:StartBattle(extraFriends, friendsReplaceAI, hostPort)
 	local battle = self:GetBattle(self:GetMyBattleID())
 	if battle.gameName and battle.mapName then
 		self:_CallListeners("OnBattleAboutToStart")
 		self:_OnSaidBattleEx("Battle", "about to start", battle.gameName, battle.mapName, self:GetMyUserName() or "noname")
-		self:_StartScript(battle.gameName, battle.mapName, self:GetMyUserName() or "noname", extraFriends, friendsReplaceAI)
+		self:_StartScript(battle.gameName, battle.mapName, self:GetMyUserName() or "noname", extraFriends, friendsReplaceAI, hostPort)
 	end
 	return self
 end

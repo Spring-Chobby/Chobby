@@ -99,11 +99,13 @@ end
 
 -- TODO wrapper will send this to indiciate P2P host request is ok and this chobby should start hosting asap, using the given local port
 local function SteamHostGameSuccess(args) 
+	WG.SteamCoopHandler.SteamHostGameSuccess(args.HostPort)
 	-- args.HostPort
 end
 
 -- TODO p2p hosting has failed
 local function SteamHostGameFailed(args)
+	WG.SteamCoopHandler.SteamHostGameFailed(args.CausedBySteamID, args.Reason)
 	-- args.CausedBySteamID
 	-- args.Reason
 end

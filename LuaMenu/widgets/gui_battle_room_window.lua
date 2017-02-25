@@ -1418,7 +1418,9 @@ local function SetupEasySetupPanel(mainWindow, standardSubPanel, setupData)
 		setupData.ApplyFunction(battleLobby, selectedOptions)
 		if startGame then
 			if haveMapAndGame then
-				battleLobby:StartBattle(WG.SteamCoopHandler and WG.SteamCoopHandler.GetCoopFriendList(), true)
+				local hostPort = WG.SteamCoopHandler and WG.SteamCoopHandler.GetHostPort()
+				local friendNames = hostPort and WG.SteamCoopHandler.GetCoopFriendList()
+				battleLobby:StartBattle(friendNames, true, hostPort)
 			else
 				Spring.Echo("Do something if map or game is missing")
 			end
