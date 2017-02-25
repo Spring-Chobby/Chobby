@@ -629,6 +629,10 @@ local registerResponseCodes = {
 	[3] = "Invalid characters in password",
 	[4] = "Banned",
 	[5] = "Invalid characters in name",
+	[6] = "Invalid Steam token",
+	[7] = "Steam already linked",
+	[8] = "Missing password and token",
+	[9] = "Too many connection attempts",
 }
 
 local loginResponseCodes = {
@@ -636,7 +640,11 @@ local loginResponseCodes = {
 	[2] = "Invalid characters in name",
 	[3] = "Incorrect password",
 	[4] = "Banned",
-	[5] = "Steam not linked",
+	[5] = "Invalid Steam token",
+	[6] = "Too many connection attempts",
+	[7] = "Steam account not yet linked. Re-register.",
+	[8] = "Your Steam account is not linked.",
+	[9] = "Your Steam account is already linked to a different username.",
 }
 
 function Interface:_Welcome(data)
@@ -684,9 +692,6 @@ function Interface:_LoginResponse(data)
 	if data.ResultCode == 0 then
 		self:_OnAccepted()
 	else
-		if data.ResultCode == 2 and string.find(data.Reason, "not linked") then
-			data.ResultCode = 5
-		end
 		self:_OnDenied(loginResponseCodes[data.ResultCode] or "Reason error " .. tostring(data.ResultCode))
 	end
 end
