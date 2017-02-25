@@ -225,6 +225,7 @@ end
 --------------------------------------------------------------------------------
 -- Analytics
 
+
 -- sends error event to GA. Severity must be one of: Undefined, Debug, Info, Warning, Error,Critical,
 function WrapperLoopback.GaAddErrorEvent(severity, message) 
 	SendCommand("GaAddErrorEvent", {Severity = severity, Message = message}) 
