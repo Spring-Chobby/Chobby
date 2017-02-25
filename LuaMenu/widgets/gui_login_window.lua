@@ -70,6 +70,7 @@ local function TrySimpleSteamLogin()
 end
 
 local function TrySimpleLogin()
+	local Configuration = WG.Chobby.Configuration
 	if lobby.connected then
 		lobby:Login(Configuration.userName, Configuration.password, 3, nil, "Chobby")
 	else
