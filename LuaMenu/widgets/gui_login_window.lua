@@ -135,9 +135,9 @@ local function InitializeListeners()
 					currentLoginWindow.window:Dispose()
 				end,
 			})
-			for channelName, _ in pairs(Configuration:GetChannels()) do
-				lobby:Join(channelName)
-			end
+		end
+		for channelName, _ in pairs(Configuration:GetChannels()) do
+			lobby:Join(channelName)
 		end
 	end
 	
