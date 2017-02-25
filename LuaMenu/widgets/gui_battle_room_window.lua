@@ -1262,7 +1262,7 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 	
 	local buttons = {}
 	
-	local advButton
+	local advButton, lichoButton
 	
 	local nextButton = Button:New {
 		x = "36%",
@@ -1308,6 +1308,25 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 			parent = subPanel,
 		}
 		advButton:Hide()
+		
+		if Configuration.canAuthenticateWithSteam then
+			lichoButton = Button:New {
+				x = "36%",
+				right = "36%",
+				y = 150 + (#pageConfig.options + 1)*70,
+				height = 64,
+				classname = "option_button",
+				caption = "Invite Licho",
+				font = Configuration:GetFont(3),
+				OnClick = {
+					function(obj)
+						WG.SteamCoopHandler.InviteLichoToGame()
+					end
+				},
+				parent = subPanel,
+			}
+			lichoButton:Hide()
+		end
 	end
 	
 	for i = 1, #pageConfig.options do
@@ -1345,6 +1364,9 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 					nextButton:SetVisibility(true)
 					if advButton then
 						advButton:SetVisibility(true)
+					end
+					if lichoButton then
+						lichoButton:SetVisibility(true)
 					end
 				end
 			},
