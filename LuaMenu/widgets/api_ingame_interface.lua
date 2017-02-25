@@ -58,7 +58,7 @@ local function HandleTextToSpeech(msg)
 	
 	if string.find(msg, TTS_VOLUME) == 1 then
 		msg = string.sub(msg, 20)
-		WG.WrapperLoopback.TtsVolume((tonumber(msg) or 0)/100)
+		WG.WrapperLoopback.TtsVolume(tonumber(msg) or 0)
 		return true
 	end
 end
