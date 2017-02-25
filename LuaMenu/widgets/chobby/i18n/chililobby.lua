@@ -46,6 +46,7 @@ return {
 		friends = 'Friends',
 		start_verb = 'Start',
 		open_mp_game = "Host Game",
+		steam_friends = "Steam Friends",
 		host = "Host",
 		match_found = "Match Found",
 		party_invite = "Party Invite",

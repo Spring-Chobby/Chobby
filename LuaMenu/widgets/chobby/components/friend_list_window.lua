@@ -7,7 +7,31 @@ function FriendListWindow:init(parent)
 	self.columns = 3
 	self.itemHeight = 82
 	self.itemPadding = 0
-
+	
+	self.btnSteamFriends = Button:New {
+		x = 110,
+		y = 7,
+		width = 180,
+		height = 45,
+		caption = i18n("steam_friends"),
+		font = Configuration:GetFont(3),
+		classname = "option_button",
+		parent = self.window,
+		OnClick = {
+			function ()
+				WG.WrapperLoopback.SteamOpenOverlaySection()
+			end
+		},
+	}
+	
+	self.btnSteamFriends:SetVisibility(Configuration.canAuthenticateWithSteam)
+	local function onConfigurationChange(listener, key, value)
+		if key == "canAuthenticateWithSteam" then
+			self.btnSteamFriends:SetVisibility(value)
+		end
+	end
+	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
+	
 	lobby:AddListener("OnAddUser",           function(listener, ...) self:OnAddUser(...) end)
 	lobby:AddListener("OnRemoveUser",        function(listener, ...) self:OnRemoveUser(...) end)
 	lobby:AddListener("OnFriend",            function(listener, ...) self:OnFriend(...) end)

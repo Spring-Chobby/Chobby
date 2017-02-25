@@ -690,7 +690,7 @@ function Interface:_LoginResponse(data)
 	-- Reason (for ban I presume)
 	self.sessionToken = data.SessionToken
 	if data.ResultCode == 0 then
-		self:_OnAccepted()
+		self:_OnAccepted(data.Name)
 	else
 		self:_OnDenied(loginResponseCodes[data.ResultCode] or "Reason error " .. tostring(data.ResultCode))
 	end
