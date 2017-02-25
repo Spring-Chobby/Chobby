@@ -1262,7 +1262,7 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 	
 	local buttons = {}
 	
-	local advButton, lichoButton
+	local advButton, lichoButton, googleFrogButton
 	
 	local nextButton = Button:New {
 		x = "36%",
@@ -1326,6 +1326,23 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 				parent = subPanel,
 			}
 			lichoButton:Hide()
+			
+			googleFrogButton = Button:New {
+				x = "36%",
+				right = "36%",
+				y = 150 + (#pageConfig.options + 2)*70,
+				height = 64,
+				classname = "option_button",
+				caption = "Invite GoogleFrog",
+				font = Configuration:GetFont(3),
+				OnClick = {
+					function(obj)
+						WG.SteamCoopHandler.InviteGoogleFrogToGame()
+					end
+				},
+				parent = subPanel,
+			}
+			googleFrogButton:Hide()
 		end
 	end
 	
@@ -1367,6 +1384,9 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 					end
 					if lichoButton then
 						lichoButton:SetVisibility(true)
+					end
+					if googleFrogButton then
+						googleFrogButton:SetVisibility(true)
 					end
 				end
 			},

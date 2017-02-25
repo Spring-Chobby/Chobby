@@ -37,6 +37,10 @@ function SteamCoopHandler.InviteLichoToGame()
 	WG.WrapperLoopback.SteamInviteFriendToGame("76561197962341674") 
 end
 
+function SteamCoopHandler.InviteGoogleFrogToGame()
+	WG.WrapperLoopback.SteamInviteFriendToGame("76561198005614529") 
+end
+
 function SteamCoopHandler.NotifyFriendJoined(steamID, userName)
 	friendsInGame[#friendsInGame + 1] = userName
 	WG.Chobby.InformationPopup((userName or "???") .. " joined your coop game.")
@@ -51,6 +55,8 @@ end
 
 function widget:Initialize()
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
+	
+	WG.SteamCoopHandler = SteamCoopHandler
 	WG.Delay(DelayedInitialize, 1)
 end
 
