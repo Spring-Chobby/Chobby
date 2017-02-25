@@ -179,7 +179,7 @@ end
 -- opens steam section, default = "LobbyInvite"
 -- WARNING: FPS needs to be increased, overlay works at chobby FPS
 function WrapperLoopback.SteamOpenOverlaySection(name) 
-	SendCommand("SteamOpenOverlaySection", {Option = name})
+	SendCommand("SteamOpenOverlaySection", {Option = name or "LobbyInvite"})
 end
 
 -- opens url in steam browser
