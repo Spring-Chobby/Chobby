@@ -1170,23 +1170,23 @@ function widget:Initialize()
 		local gameSettings = WG.Chobby.Configuration.game_settings
 
 		if battleStartDisplay == 1 then
-			gameSettings.XResolutionWindowed = screenX
-			gameSettings.YResolutionWindowed = screenY
-			gameSettings.WindowPosX = 0
-			gameSettings.WindowPosY = 0
-			gameSettings.WindowBorderless = 1
+			SetSpringsettingsValue("XResolutionWindowed", screenX)
+			SetSpringsettingsValue("YResolutionWindowed", screenY)
+			SetSpringsettingsValue("WindowPosX", 0)
+			SetSpringsettingsValue("WindowPosY", 0)
+			SetSpringsettingsValue("WindowBorderless", 1)
 		elseif battleStartDisplay == 2 then
-			gameSettings.WindowPosX = 0
-			gameSettings.WindowPosY = 80
-			gameSettings.XResolutionWindowed = screenX
-			gameSettings.YResolutionWindowed = screenY - 80
-			gameSettings.WindowBorderless = 0
-			gameSettings.WindowBorderless = 0
-			gameSettings.Fullscreen = 0
+			SetSpringsettingsValue("WindowPosX", 0)
+			SetSpringsettingsValue("WindowPosY", 80)
+			SetSpringsettingsValue("XResolutionWindowed", screenX)
+			SetSpringsettingsValue("YResolutionWindowed", screenY - 80)
+			SetSpringsettingsValue("WindowBorderless", 0)
+			SetSpringsettingsValue("WindowBorderless", 0)
+			SetSpringsettingsValue("Fullscreen", 0)
 		elseif battleStartDisplay == 3 then
-			gameSettings.XResolution = screenX
-			gameSettings.YResolution = screenY
-			gameSettings.Fullscreen = 1
+			SetSpringsettingsValue("XResolution", screenX)
+			SetSpringsettingsValue("YResolution", screenY)
+			SetSpringsettingsValue("Fullscreen", 1
 		end
 		
 		for key, value in pairs(gameSettings) do
