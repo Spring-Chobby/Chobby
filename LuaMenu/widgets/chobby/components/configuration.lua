@@ -24,6 +24,7 @@ function Configuration:init()
 	self.canAuthenticateWithSteam = false
 	self.wantAuthenticateWithSteam = true
 	self.steamLinkComplete = false
+	self.mySteamID
 	self.channels = {}
 
 	self.errorColor = "\255\255\0\0"
@@ -354,15 +355,18 @@ function Configuration:GetHeadingImage(fullscreenMode, title)
 	end
 end
 
-function Configuration:IsValidEngineVersion(engineVersion)
-	--Spring.Echo("Checking engineVersion", engineVersion, "against", Spring.Utilities.GetEngineVersion(), "numbers", tonumber(Spring.Utilities.GetEngineVersion()), string.gsub(Spring.Utilities.GetEngineVersion(), " develop", ""))
+function Configuration:GetEngineVersion()
 	if tonumber(Spring.Utilities.GetEngineVersion()) then
 		-- Master releases lack the '.0' at the end. Who knows what other cases are wrong.
 		-- Add as required.
-		return engineVersion == (Spring.Utilities.GetEngineVersion() .. ".0")
+		return (Spring.Utilities.GetEngineVersion() .. ".0")
 	else
-		return string.gsub(Spring.Utilities.GetEngineVersion(), " develop", "") == engineVersion
+		return string.gsub(Spring.Utilities.GetEngineVersion(), " develop", "")
 	end
+end
+
+function Configuration:IsValidEngineVersion(engineVersion)
+	return engineVersion == self:GetEngineVersion()
 end
 
 function Configuration:GetDefaultGameName()

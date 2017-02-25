@@ -15,9 +15,15 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Globals
+
+local localLobby
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Variables
 
-local friendsInGame = {}
+local friendsInGame
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -42,8 +48,13 @@ function SteamCoopHandler.InviteGoogleFrogToGame()
 end
 
 function SteamCoopHandler.NotifyFriendJoined(steamID, userName)
+	friendsInGame = friendsInGame or {}
 	friendsInGame[#friendsInGame + 1] = userName
 	WG.Chobby.InformationPopup((userName or "???") .. " joined your coop game.")
+end
+
+function SteamCoopHandler.GetCoopFriendList()
+	return friendsInGame
 end
 
 --------------------------------------------------------------------------------
@@ -51,6 +62,30 @@ end
 -- Widget Interface
 
 function DelayedInitialize()
+	local Configuration = WG.Chobby.Configuration
+	localLobby = WG.LibLobby.localLobby
+	
+	local function OnBattleAboutToStart(gameName, mapName, myName)
+		if not friendsInGame then
+			return
+		end
+		
+		local args = {
+			SteamHostPlayerEntry = {
+				SteamID = Configuration.mySteamID,
+				Name = userName,
+				ScriptPassword = "12345",
+			},
+			SteamHostPlayerEntry = friendsInGame,
+			Map = mapName,
+			Game = gameName,
+			Engine = Configuration:GetEngineVersion()
+		}
+		
+		WG.WrapperLoopback.SteamHostGameRequest(args)
+		friendsInGame = nil
+	end
+	localLobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
 end
 
 function widget:Initialize()
