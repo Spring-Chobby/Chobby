@@ -1186,7 +1186,7 @@ function widget:Initialize()
 		elseif battleStartDisplay == 3 then
 			SetSpringsettingsValue("XResolution", screenX)
 			SetSpringsettingsValue("YResolution", screenY)
-			SetSpringsettingsValue("Fullscreen", 1
+			SetSpringsettingsValue("Fullscreen", 1)
 		end
 		
 		for key, value in pairs(gameSettings) do
