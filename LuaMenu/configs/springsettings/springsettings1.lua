@@ -35,6 +35,7 @@ local settings = {
 	MaxSounds = 32,
 	MaximumTransmissionUnit = 0,
 	MiddleClickScrollSpeed = -0.001,
+	MiniMapMarker = 0,
 	MinimapOnLeft = 1,
 	MouseDragScrollThreshold = 0,
 	MoveWarnings = 0,
