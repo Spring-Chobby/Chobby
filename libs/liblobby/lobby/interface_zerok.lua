@@ -633,6 +633,8 @@ local registerResponseCodes = {
 	[7] = "Steam already linked",
 	[8] = "Missing password and token",
 	[9] = "Too many connection attempts",
+	[10] = "Already linked steam, connecting",
+	[11] = "Already registered, use password",
 }
 
 local loginResponseCodes = {
