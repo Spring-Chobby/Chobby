@@ -414,8 +414,8 @@ function Lobby:_OnRegistrationAccepted()
 	self:_CallListeners("OnRegistrationAccepted")
 end
 
-function Lobby:_OnRegistrationDenied(reason)
-	self:_CallListeners("OnRegistrationDenied", reason)
+function Lobby:_OnRegistrationDenied(reason, accountAlreadyExists)
+	self:_CallListeners("OnRegistrationDenied", reason, accountAlreadyExists)
 end
 
 function Lobby:_OnLoginInfoEnd()

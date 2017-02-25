@@ -25,8 +25,6 @@ function Configuration:init()
 	self.wantAuthenticateWithSteam = true
 	self.channels = {}
 
-	self.promptNewUsersToLogIn = false
-
 	self.errorColor = "\255\255\0\0"
 	self.warningColor = "\255\255\255\0"
 	self.normalColor = "\255\255\255\255"

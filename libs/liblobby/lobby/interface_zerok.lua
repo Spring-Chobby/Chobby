@@ -30,7 +30,7 @@ end
 
 function Interface:Register(userName, password, email, useSteamLogin)
 	self:super("Register", userName, password, email)
-	-- FIXME: email argument is currently not sent to the server
+	
 	password = (password and string.len(password) > 0 and VFS.CalculateHash(password, 0)) or nil
 	local steamToken = (useSteamLogin and self.steamAuthToken) or nil
 	if not (password or steamToken) then
@@ -58,14 +58,24 @@ function Interface:Login(user, password, cpu, localIP, lobbyVersion, useSteamLog
 		self:_OnDenied("Password required")
 		return self
 	end
-	local sendData = {
-		Name = user,
-		PasswordHash = password,
-		UserID = 0,
-		ClientType = 1,
-		LobbyVersion = lobbyVersion,
-		SteamAuthToken = steamToken,
-	}
+	local REVERSE_COMPAT = true
+	if steamToken and (not password) and not REVERSE_COMPAT then
+		sendData = {
+			UserID = 0,
+			ClientType = 1,
+			LobbyVersion = lobbyVersion,
+			SteamAuthToken = steamToken,
+		}
+	else
+		sendData = {
+			Name = user,
+			PasswordHash = password,
+			UserID = 0,
+			ClientType = 1,
+			LobbyVersion = lobbyVersion,
+			SteamAuthToken = steamToken,
+		}
+	end
 	self:_SendCommand("Login " .. json.encode(sendData))
 end
 
@@ -626,6 +636,7 @@ local loginResponseCodes = {
 	[2] = "Invalid characters in name",
 	[3] = "Incorrect password",
 	[4] = "Banned",
+	[5] = "Steam not linked",
 }
 
 function Interface:_Welcome(data)
@@ -661,7 +672,7 @@ function Interface:_RegisterResponse(data)
 	if data.ResultCode == 0 then
 		self:_OnRegistrationAccepted()
 	else
-		self:_OnRegistrationDenied(registerResponseCodes[data.ResultCode] or "Reason error " .. tostring(data.ResultCode))
+		self:_OnRegistrationDenied(registerResponseCodes[data.ResultCode] or "Reason error " .. tostring(data.ResultCode), data.ResultCode == 2)
 	end
 end
 Interface.jsonCommands["RegisterResponse"] = Interface._RegisterResponse
@@ -673,6 +684,9 @@ function Interface:_LoginResponse(data)
 	if data.ResultCode == 0 then
 		self:_OnAccepted()
 	else
+		if data.ResultCode == 2 and string.find(data.Reason, "not linked") then
+			data.ResultCode = 5
+		end
 		self:_OnDenied(loginResponseCodes[data.ResultCode] or "Reason error " .. tostring(data.ResultCode))
 	end
 end

@@ -41,7 +41,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		Log.Error("Tried to spawn duplicate login window")
 		return
 	end
-
+	
 	self.CancelFunc = function ()
 		self.window:Dispose()
 		if failFunction then
@@ -78,7 +78,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	self.ebUsername = EditBox:New {
 		x = 135,
 		width = 200,
-		y = 55,
+		y = 51,
 		height = 35,
 		text = Configuration.userName or Configuration.mySteamName or "",
 		font = Configuration:GetFont(3),
@@ -95,7 +95,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	self.ebPassword = EditBox:New {
 		x = 135,
 		width = 200,
-		y = 95,
+		y = 91,
 		height = 35,
 		text = Configuration.password or "",
 		passwordInput = true,
@@ -184,6 +184,9 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	
 	local ww, wh = Spring.GetWindowGeometry()
 	local w, h = 430, 380
+	if self.steamMode then
+	
+	end
 
 	self.tabPanel = Chili.DetachableTabPanel:New {
 		x = 0,

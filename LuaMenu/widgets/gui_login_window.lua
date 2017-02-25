@@ -45,7 +45,13 @@ local function GetNewLoginWindow(failFunc)
 	if currentLoginWindow and currentLoginWindow.window then
 		currentLoginWindow.window:Dispose()
 	end
-	currentLoginWindow = WG.Chobby.LoginWindow(failFunc, nil, "main_window")
+	local Configuration = WG.Chobby.Configuration
+	local steamMode = Configuration.canAuthenticateWithSteam and Configuration.wantAuthenticateWithSteam
+	if steamMode then
+		currentLoginWindow = WG.Chobby.SteamLoginWindow(failFunc, nil, "main_window")
+	else
+		currentLoginWindow = WG.Chobby.LoginWindow(failFunc, nil, "main_window")
+	end
 	return currentLoginWindow
 end
 
@@ -81,9 +87,6 @@ local function InitializeListeners()
 			lobby:RemoveListener("OnDenied", listener)
 		end)
 		loginWindow:tryLogin()
-	elseif Configuration.promptNewUsersToLogIn then
-		local loginWindow = WG.Chobby.LoginWindow(nil, "play_offline", "main_window")
-		local popup = WG.Chobby.PriorityPopup(loginWindow.window, loginWindow.CancelFunc, loginWindow.AcceptFunc)
 	end
 	
 	-- Register and login response codes
@@ -95,9 +98,12 @@ local function InitializeListeners()
 			currentLoginWindow.txtError:SetText(Configuration:GetSuccessColor() .. "Registered!")
 		end
 	end
-	local function OnRegistrationDenied(listener, err)
+	local function OnRegistrationDenied(listener, err, accountAlreadyExists)
 		WG.Analytics.SendErrorEvent(err or "unknown")
 		if currentLoginWindow then
+			if accountAlreadyExists and currentLoginWindow.ShowPassword then
+				currentLoginWindow:ShowPassword()
+			end
 			registerRecieved = true
 			WG.Delay(ResetRegisterRecieved, 0.8)
 			currentLoginWindow.txtError:SetText(Configuration:GetErrorColor() .. (err or "Unknown Error"))
@@ -136,15 +142,16 @@ local function InitializeListeners()
 	-- Stored register on connect
 	local function OnConnect()
 		WG.Analytics.SendOnetimeEvent("lobby:server_connect")
+		local steamMode = Configuration.canAuthenticateWithSteam and Configuration.wantAuthenticateWithSteam
 		if registerName then
 			WG.Analytics.SendOnetimeEvent("lobby:send_register")
-			lobby:Register(registerName, registerPassword)
+			lobby:Register(registerName, registerPassword, nil, steamMode)
 			Configuration.userName = registerName
 			Configuration.password = registerPassword
 			registerName = nil
 		end
 		if Configuration.userName then
-			lobby:Login(Configuration.userName, Configuration.password, 3, nil, "Chobby")
+			lobby:Login(Configuration.userName, Configuration.password, 3, nil, "Chobby", steamMode)
 		end
 	end
 	
