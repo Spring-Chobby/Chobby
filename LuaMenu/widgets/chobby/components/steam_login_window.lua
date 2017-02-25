@@ -15,6 +15,7 @@ function SteamLoginWindow:init(failFunction, cancelText, windowClassname)
 		if failFunction then
 			failFunction()
 		end
+		self.window = nil
 	end
 	
 	local ww, wh = Spring.GetWindowGeometry()

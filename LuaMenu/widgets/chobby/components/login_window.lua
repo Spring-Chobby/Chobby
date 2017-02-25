@@ -47,6 +47,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		if failFunction then
 			failFunction()
 		end
+		self.window = nil
 	end
 	
 	self.lblLoginInstructions = Label:New {

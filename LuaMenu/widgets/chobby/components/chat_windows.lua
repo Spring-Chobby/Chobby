@@ -353,7 +353,7 @@ function ChatWindows:init()
 		parent = self.window,
 		OnClick = {function ()
 				Spring.Echo("Login")
-				WG.LoginPopup()
+				WG.LoginWindowHandler.TryLogin()
 			end
 		}
 	}

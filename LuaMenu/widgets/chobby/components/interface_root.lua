@@ -437,7 +437,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		},
 		{
 			name = "multiplayer",
-			entryCheck = WG.MultiplayerEntryPopup,
+			entryCheck = WG.LoginWindowHandler.TryLoginMultiplayer,
 			tabs = {
 				{name = "matchmaking", control = queueListWindow},
 				{name = "watch", control = battleWatchListWindow.window},

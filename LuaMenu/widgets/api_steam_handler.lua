@@ -106,6 +106,8 @@ function SteamHandler.SteamOnline(authToken, joinFriendID, friendList, suggested
 		end
 	end
 	
+	WG.LoginWindowHandler.TrySimpleSteamLogin()
+	
 	if lobby.status ~= "connected" then
 		storedJoinFriendID = joinFriendID
 		storedFriendList = friendList
@@ -114,7 +116,7 @@ function SteamHandler.SteamOnline(authToken, joinFriendID, friendList, suggested
 	end
 	
 	AddSteamFriends(storedFriendList)
-	JoinFriend(joinFriendID) 
+	JoinFriend(joinFriendID)
 end
 
 function SteamHandler.SteamJoinFriend(joinFriendID)
