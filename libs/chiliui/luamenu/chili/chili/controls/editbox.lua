@@ -141,7 +141,7 @@ function EditBox:_LineLog2Phys(logicalLine, pos)
 			if #pl.text + 1 >= px or plID == #logicalLine.pls then
 				break
 			end
-			if pl.text:sub(#pl.text - 1, #pl.text - 1) ~= " " then
+			if pl.extraSpace then
 				px = px - 1
 			end
 			px = px - #pl.text + 1
@@ -227,7 +227,7 @@ function EditBox:_GeneratePhysicalLines(logicalLineID)
 	for lineIndex, lineText in pairs(explode("\n", wrappedText)) do
 	  local th, td = font:GetTextHeight(lineText)
 	  local _txt = colorPrefix .. lineText
-	  table.insert(self.physicalLines, {
+	  local physicalLine = {
 		  text = _txt,
 		  th   = th,
 		  td   = td,
@@ -238,12 +238,20 @@ function EditBox:_GeneratePhysicalLines(logicalLineID)
 		  lineID = logicalLineID,
 		  colorPrefix = colorPrefix,
 		  logLineX = logLineX,
-	  })
+		  extraSpace = false,
+	  }
+	  table.insert(self.physicalLines, physicalLine)
 	  logLineX = logLineX + #lineText - 1
 	  -- sometimes font:WrapText (see above) adds a " " at the end of the line, and sometimes it doesn't
 	  -- this handles the situations when it doesn't
 	  if _txt:sub(#_txt - 1, #_txt - 1) ~= " " then
-	  	logLineX = logLineX + 1
+	  	-- a lack of " " at the end might be caused by two things
+	  	-- 1) the string is continuous and there shouldn't be a " " in the first place
+        -- 2) there are two words and there is a " "
+		if text:sub(logLineX + 1, logLineX + 1) == " " then
+	  		logLineX = logLineX + 1
+	  		physicalLine.extraSpace = true
+	    end
 	  end
 	  y = y + fontLineHeight
 
@@ -413,7 +421,8 @@ function EditBox:_GetCursorByMousePos(x, y)
 		cursor = self.cursor,
 		cursorY = self.cursorY,
 		physicalCursor = self.physicalCursor,
-		physicalCursorY = self.physicalCursorY
+		physicalCursorY = self.physicalCursorY,
+		outOfBounds = false,
 	}
 
 	local clientX, clientY = self.clientArea[1], self.clientArea[2]
@@ -455,7 +464,7 @@ function EditBox:_GetCursorByMousePos(x, y)
 			retVal.physicalCursor = retVal.physicalCursor + 1
 		end
 		local isStartLine = true
-		for i = 1, #selLine do
+		for i = retVal.offset, #selLine do
 			local tmpLen = self.font:GetTextWidth(selLine:sub(1 + retVal.offset, i))
 			if tmpLen > (x - clientX) then
 				if i > 1 then
@@ -471,6 +480,9 @@ function EditBox:_GetCursorByMousePos(x, y)
 				break
 			end
 			isStartLine = false
+			if i == #selLine then
+				retVal.outOfBounds = true
+			end
 		end
 
 		-- calculate the logical line position
@@ -479,7 +491,7 @@ function EditBox:_GetCursorByMousePos(x, y)
 		if isStartLine then
 			retVal.cursor = retVal.cursor + #physicalLine.colorPrefix
 		end
--- 		Spring.Echo(self.cursor)
+		--Spring.Echo(retVal.cursor, self.offset)
 --         for i = self.offset, #text do
 --            local tmp = text:sub(self.offset, i)
 --            local h, d = self.font:GetTextHeight(tmp)
@@ -515,9 +527,10 @@ function EditBox:MouseDown(x, y, ...)
 	-- handle clicking on text items
 	local retVal = self:_GetCursorByMousePos(x, y)
 	local line = self.lines[retVal.cursorY]
-	if line and line.OnTextClick then
+	if line and line.OnTextClick and not retVal.outOfBounds then
 		local cx, cy = self:ScreenToLocal(x, y)
 		for _, OnTextClick in pairs(line.OnTextClick) do
+			--Spring.Echo(OnTextClick.startIndex, OnTextClick.endIndex, retVal.cursor)
 			if OnTextClick.startIndex <= retVal.cursor and OnTextClick.endIndex >= retVal.cursor then
 				for _, f in pairs(OnTextClick.OnTextClick) do
 					f(self, cx, cy, ...)
@@ -561,7 +574,7 @@ function EditBox:MouseMove(x, y, dx, dy, button)
 		if button == nil then -- handle tooltips
 			local retVal = self:_GetCursorByMousePos(x, y)
 			local line = self.lines[retVal.cursorY]
-			if line and line.tooltips then
+			if line and line.tooltips and not retVal.outOfBounds then
 				for _, tooltip in pairs(line.tooltips) do
 					if tooltip.startIndex <= retVal.cursor and tooltip.endIndex >= retVal.cursor then
 						self.tooltip = tooltip.tooltip
