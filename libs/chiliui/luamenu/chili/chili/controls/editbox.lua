@@ -756,10 +756,7 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	-- select all
 	elseif mods.ctrl and key == Spring.GetKeyCode("a") then
 		if not self.multiline then
-			self.selStart = 1
-			self.selStartPhysical = 1
-			self.selEnd = #txt + 1
-			self.selEndPhysical = #txt + 1
+			self:_SetSelection(1, nil, #txt + 1, nil)
 		else
 			self:_SetSelection(1, 1, #self.lines[#self.lines].text + 1, #self.lines)
 		end

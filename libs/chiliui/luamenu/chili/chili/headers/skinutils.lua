@@ -610,19 +610,25 @@ function DrawEditBox(obj)
 
 		local clientX,clientY,clientWidth,clientHeight = unpack4(obj.clientArea)
 
-		--// make cursor pos always visible (when text is longer than editbox!)
 		if not obj.multiline then
+      --// make cursor pos always visible (when text is longer than editbox!)
 			repeat
 				local txt = text:sub(obj.offset, obj.cursor)
 				local wt = font:GetTextWidth(txt)
-				if (wt <= clientWidth) then
-					break
-				end
-				if (obj.offset >= obj.cursor) then
+				if wt <= clientWidth or obj.offset >= obj.cursor then
 					break
 				end
 				obj.offset = obj.offset + 1
 			until (false)
+      --// but also automatically always show the maximum amount of text (scroll left on deletion)
+      repeat
+        local txt = text:sub(obj.offset-1)
+        local wt = font:GetTextWidth(txt)
+        if wt > clientWidth or obj.offset < 1 then
+          break
+        end
+        obj.offset = obj.offset - 1
+      until (false)
 		end
 
 		local txt = text:sub(obj.offset)
