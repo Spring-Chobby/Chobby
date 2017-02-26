@@ -21,7 +21,7 @@ local IMAGE_BOUNDS = {
 	height = 1500/2602,
 }
 
-local planetConfig = VFS.Include("campaign/planetDefs.lua")
+local planetConfig = {}
 
 local playerUnlocks = {
 	"cormex",
@@ -221,6 +221,7 @@ local function InitializePlanetHandler(parent)
 		parent = parent,
 	}
 	
+	planetConfig = WG.CampaignAPI.GetPlanetDefs()
 	local planetList = {}
 	for i = 1, #planetConfig do
 		planetList[i] = GetPlanet(window, i, planetConfig[i])
@@ -258,9 +259,11 @@ function widget:RecvLuaMsg(msg)
 				local modules = config.completionReward.modules
 				for i = 1, #units do
 					wonString = wonString .. units[i] .. ", "
+					WG.CampaignAPI.UnlockUnit(units[i])
 				end
 				for i = 1, #modules do
 					wonString = wonString .. modules[i] .. ", "
+					WG.CampaignAPI.UnlockModule(modules[i])
 				end
 			end
 			WG.Chobby.InformationPopup("You won the battle and are rewarded with: " .. wonString .. ".")

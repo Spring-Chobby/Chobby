@@ -17,7 +17,6 @@ end
 --------------------------------------------------------------------------------
 -- Local Variables
 
-local DEFAULT_PATH = "campaign/sample/codex.lua"	-- FIXME placeholder
 local CODEX_BUTTON_FONT_SIZE = 14
 local OUTLINE_COLOR = {0.54,0.72,1,0.3}
 local IMAGE_SIZE = 96
@@ -42,9 +41,7 @@ local function SortCodexEntries(a, b)
 end
 
 local function LoadCodexEntries(path)
-	-- list all categories and which entries they have
-	path = DEFAULT_PATH	-- FIXME
-	local codexEntries = VFS.Include(path)
+	local codexEntries = WG.CampaignAPI.GetCodexEntries()
 	
 	local categories = {}
 	local categoriesOrdered = {}
@@ -65,7 +62,7 @@ local function LoadCodexEntries(path)
 end
 
 local function UpdateCodexEntry(entry, codexText, codexImage)
-	-- TODO reimplement read/unread tracking
+	-- TODO reimplement coloration for specific entries' read/unread state
 	--[[
 	if not gamedata.codexRead[entryID] then
 		if codexTreeControls[entryID] then
@@ -76,8 +73,8 @@ local function UpdateCodexEntry(entry, codexText, codexImage)
 			button:Invalidate()
 		end
 	end
-	gamedata.codexRead[entryID] = true
 	]]
+	WG.CampaignAPI.MarkCodexEntryRead(entry.id)
 	codexText:SetText(entry.text)
 	codexImage.file = entry.image
 	codexImage:Invalidate()
