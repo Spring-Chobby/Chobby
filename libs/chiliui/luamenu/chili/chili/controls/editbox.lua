@@ -627,13 +627,8 @@ function EditBox:ClearSelected()
 		left, right = right, left
 	end
 	self.cursor = right
-	local i = 0
 	while self.cursor ~= left do
 		self.text, self.cursor = Utf8BackspaceAt(self.text, self.cursor)
-		i = i + 1
-		if i > 100 then
-			break
-		end
 	end
 	self.selStart = nil
 	self.selEnd = nil
