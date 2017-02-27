@@ -179,6 +179,28 @@ function WrapperLoopback.DownloadFile(name, fileType)
 	SendCommand("DownloadFile", {Name = name, FileType = fileType})
 end
 
+
+function WrapperLoopback.StartNewSpring(args) 
+--[[
+    public class StartNewSpring
+    {
+        public string StartScriptContent { get; set; }  // content of the script - leave empty if launching demo
+        public string StartDemoName { get; set; } // name of the demo to launch
+
+		public string Engine { get; set; } // name of the engine, this file also gets auto checked/downloaded
+		
+        public string SpringSettings { get; set;  } // spring settings override
+        
+        public List<DownloadFile> Downloads { get; set; } // list of downloads, files here will be downloaded before spring is started. Include demo file here, if its not local already.
+														  // each download file contains  FileType and Name
+														  // non-rapid entries will be always redownloaded, so check presence of map before requesting it, wrapper does not init unitsync 
+    }
+]]--
+
+	SendCommands("StartNewSpring", args)
+end
+
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Steam
