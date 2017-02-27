@@ -20,6 +20,14 @@ return {
 					name = "options", 
 					control = Control:New {},
 				},
+				{
+					name = "save",
+					control = WG.CampaignSaveLoadWindow.GetControl(true),
+				},
+				{
+					name = "load",
+					control = WG.CampaignSaveLoadWindow.GetControl(false),
+				},
 			},
 		},
 	},

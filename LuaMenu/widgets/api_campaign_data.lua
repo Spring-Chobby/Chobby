@@ -18,13 +18,12 @@ end
 local CAMPAIGN_DIR = "campaign/"
 
 local SAVE_DIR = "Saves/campaign/"
-local MAX_SAVES = 999
+local AUTOSAVE_DIR = SAVE_DIR .. "/auto"
+--local MAX_SAVES = 999
 local AUTOSAVE_ID = "auto"
 local AUTOSAVE_FILENAME = "autosave"
-local RESULTS_FILE_PATH = "Saves/mission_results.lua"
 
 local starmapAnimation = nil
-
 
 --------------------------------------------------------------------------------
 -- data
@@ -34,7 +33,6 @@ local gamedata = {}
 
 local campaignDefs = {}	-- {name, author, image, definition, starting function call}
 local campaignDefsByID = {}
-local currentCampaignID = nil
 
 -- loaded when campaign is loaded
 local planetDefs = {}
@@ -43,7 +41,6 @@ local missionDefs = {}
 local codexEntries = {}
 
 local saves = {}
-local savesOrdered = {}
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -65,7 +62,6 @@ local function ResetGamedata()
 		
 		vars = {},
 	}
-	currentCampaignID = nil
 	planetDefs = {}
 	planetDefsByID = {}
 	missionDefs = {}
@@ -137,6 +133,8 @@ local function LoadCampaign(campaignID)
 		--if WG.MusicHandler then
 		--	WG.MusicHandler.StopTrack()
 		--end
+		
+		gamedata.campaignID = campaignID
 	end)
 	if (not success) then
 		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error loading campaign " .. campaignID .. ": " .. err)
@@ -153,7 +151,7 @@ local function SetVNStory(story, dir)
 	if (not story) or story == "" then
 		return
 	end
-	dir = dir or campaignDefsByID[currentCampaignID].vnDir
+	dir = dir or campaignDefsByID[gamedata.campaignID].vnDir
 	gamedata.vnStory = story
 	WG.VisualNovel.LoadStory(story, dir)
 end
@@ -163,13 +161,22 @@ local function SetChapterTitle(title)
 	gamedata.chapterTitle = title
 end
 
+local function GetCampaignTitle(campaignID)
+	if campaignDefsByID[campaignID] then
+		return campaignDefsByID[campaignID].name
+	end
+	return nil
+end
+
+-- TODO mission handler (has its own widget now, just do campaign-specific stuff here)
+--[[
 local function CleanupAfterMission()
 	runningMission = false
 	missionCompletionFunc = nil
 end
 
 local function GetMissionStartscript(missionID)
-	local dir = campaignDefsByID[currentCampaignID].dir
+	local dir = campaignDefsByID[gamedata.campaignID].dir
 	local startscript = missionDefs[missionID].startscript
 	startscript = dir .. startscript
 	local scriptTable = VFS.Include(startscript)
@@ -214,7 +221,7 @@ end
 
 local function LaunchMission(missionID, func)
 	local success, err = pcall(function()
-		local dir = campaignDefsByID[currentCampaignID].dir
+		local dir = campaignDefsByID[gamedata.campaignID].dir
 		local startscript = GetMissionStartscript(missionID)
 		--missionArchive = dir .. missionDefs[missionName].archive
 		--VFS.MapArchive(missionArchive)
@@ -228,7 +235,7 @@ local function LaunchMission(missionID, func)
 		end
 		
 		-- TODO: check for game
-		local game = campaignDefsByID[currentCampaignID].game
+		local game = campaignDefsByID[gamedata.campaignID].game
 		if GetGameIfNeeded(game) then
 			WG.VisualNovel.scriptFunctions.Exit()
 			WG.Chobby.InformationPopup("You do not have the game " .. game .. " required to play the campaign. It will now be downloaded.")
@@ -247,15 +254,16 @@ local function LaunchMission(missionID, func)
 		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error launching mission: " .. err)
 	end
 end
+]]
 
 --------------------------------------------------------------------------------
 -- Savegame utlity functions
 --------------------------------------------------------------------------------
 -- Returns the data stored in a save file
-local function GetSave(filename)
+local function GetSave(filepath)
 	local ret = nil
 	local success, err = pcall(function()
-		local saveData = VFS.Include(filename)
+		local saveData = VFS.Include(filepath)
 		local campaignDef = campaignDefsByID[saveData.campaignID]
 		--if (campaignDef) then
 			ret = saveData
@@ -272,29 +280,25 @@ end
 local function GetSaves()
 	Spring.CreateDir(SAVE_DIR)
 	saves = {}
-	savesOrdered = {}
-	local savefiles = VFS.DirList(SAVE_DIR, "save*.lua")
+	local savefiles = VFS.DirList(SAVE_DIR, "*.lua")
 	for i=1,#savefiles do
-		local savefile = savefiles[i]
-		local saveData = GetSave(savefile)
+		local filepath = savefiles[i]
+		local saveData = GetSave(filepath)
 		if saveData then
-			saveData.id = saveData.id or i
-			saves[saveData.id] = saveData
-			savesOrdered[#savesOrdered + 1] = saveData
+			saves[saveData.name] = saveData
 		end
 	end
 	if VFS.FileExists(SAVE_DIR .. AUTOSAVE_FILENAME .. ".lua") then
 		local saveData = GetSave(SAVE_DIR .. AUTOSAVE_FILENAME .. ".lua")
 		if saveData then
-			saveData.id = AUTOSAVE_ID
-			saves[saveData.id] = saveData
-			savesOrdered[#savesOrdered + 1] = saveData
+			saves[AUTOSAVE_FILENAME] = saveData
 		end
 	end
-	--table.sort(savesOrdered, SortSavesByDate)
+	return saves
 end
 
 -- e.g. if save slots 1, 2, 5, and 7 are used, return 3
+--[[
 local function FindFirstEmptySaveSlot()
 	local start = #saves
 	if start == 0 then start = 1 end
@@ -305,6 +309,8 @@ local function FindFirstEmptySaveSlot()
 	end
 	return MAX_SAVES
 end
+]]
+
 --------------------------------------------------------------------------------
 -- star map stuff
 --------------------------------------------------------------------------------
@@ -344,39 +350,32 @@ end
 --------------------------------------------------------------------------------
 -- Save/load, progression
 --------------------------------------------------------------------------------
-
-local function SaveGame(id)
+local function SaveGame(filename, description, autosave)
 	local success, err = pcall(function()
 		Spring.CreateDir(SAVE_DIR)
-		id = id or FindFirstEmptySaveSlot()
 		local isAutosave = (id == AUTOSAVE_ID)
-		path = SAVE_DIR .. (isAutosave and AUTOSAVE_FILENAME or ("save" .. string.format("%03d", id))) .. ".lua"
+		path = SAVE_DIR .. (isAutosave and AUTOSAVE_FILENAME or filename) .. ".lua"
 		local saveData = Spring.Utilities.CopyTable(gamedata, true)
+		saveData.name = filename
 		saveData.date = os.date('*t')
-		saveData.id = id
-		saveData.description = isAutosave and "" or saveDescEdit.text
-		saveData.campaignID = currentCampaignID
+		saveData.description = isAutosave and "" or description
 		table.save(saveData, path)
-		--Spring.Log(widget:GetInfo().name, LOG.INFO, "Saved game to " .. path)
-		Spring.Echo(widget:GetInfo().name .. ": Saved game to " .. path)
+		Spring.Log(widget:GetInfo().name, LOG.INFO, "Saved game to " .. path)
+		--Spring.Echo(widget:GetInfo().name .. ": Saved game to " .. path)
 	end)
 	if (not success) then
 		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error saving game: " .. err)
 	end
+	return success
 end
 
 local function LoadGame(saveData)
 	local success, err = pcall(function()
 		Spring.CreateDir(SAVE_DIR)
 		ResetGamedata()
-		currentCampaignID = saveData.campaignID
-		LoadCampaign(currentCampaignID)
+		LoadCampaign(saveData.campaignID)
 		gamedata = Spring.Utilities.MergeTable(saveData, gamedata, true)
-		gamedata.id = nil
-		if saveData.description then
-			saveDescEdit:SetText(saveData.description)
-		end
-		SetVNStory(gamedata.vnStory, campaignDefsByID[currentCampaignID].vnDir)
+		SetVNStory(gamedata.vnStory, campaignDefsByID[gamedata.campaignID].vnDir)
 		--Spring.Log(widget:GetInfo().name, LOG.INFO, "Save file " .. path .. " loaded")
 	end)
 	if (not success) then
@@ -384,21 +383,9 @@ local function LoadGame(saveData)
 	end
 end
 
-local function LoadGameByID(id)
-	LoadGame(saves[id])
+local function LoadGameByFilename(filename)
+	LoadGame(saves[filename])
 end
--- don't really need this
---[[
-local function LoadGameFromFile(path)
-	if VFS.FileExists(path) then
-		local saveData = VFS.Include(path)
-		LoadGame(saveData)
-		Spring.Echo(widget:GetInfo().name .. ": Save file " .. path .. " loaded")
-	else
-		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Save file " .. path .. " does not exist")
-	end
-end
-]]
 
 local function DeleteSave(id)
 	local success, err = pcall(function()
@@ -430,10 +417,10 @@ local function DeleteSave(id)
 end
 
 local function StartNewGame()
-	if not currentCampaignID then
+	if not gamedata.campaignID then
 		return
 	end
-	LoadCampaign(currentCampaignID)
+	LoadCampaign(gamedata.campaignID)
 end
 
 local function AdvanceCampaign(completedMissionID, nextScript, chapterTitle)
@@ -495,15 +482,25 @@ local externalFunctions = {
 	--GetCampaigns = GetCampaigns
 	GetPlanetDefs = function() return planetDefs end,
 	GetCodexEntries = function() return codexEntries end,
+	GetCampaignTitle = GetCampaignTitle,
+	IsCodexEntryRead = function(id) return gamedata.codexRead[id] end,
+	
+	SaveGame = SaveGame,
+	LoadGame = LoadGame,
+	LoadGameByFilename = LoadGameByFilename,
+	GetSaves = GetSaves,
+	
+	SetChapterTitle = SetChapterTitle,
 	SetVNStory = SetVNStory,
 	SetNextMissionScript = SetNextMissionScript,
 	AdvanceCampaign = AdvanceCampaign,
+	
 	UnlockScene = UnlockScene,
 	UnlockUnit = UnlockUnit,
 	UnlockModule = UnlockModule,
 	UnlockCodexEntry = UnlockCodexEntry,
 	MarkCodexEntryRead = MarkCodexEntryRead,
-	SetChapterTitle = SetChapterTitle,
+	
 	SetMapEnabled = function(bool) gamedata.mapEnabled = bool end,
 	GetMapForMissionIfNeeded = GetMapForMissionIfNeeded,
 	LaunchMission = LaunchMission,

@@ -232,7 +232,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 	}
 	
 	-- save date
-	x = x + 140
+	x = x + 220
 	local saveDate = TextBox:New {
 		name = "saveDate",
 		x = x,
@@ -246,7 +246,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 	}
 	
 	-- save details
-	x = x + 180
+	x = x + 140
 	local details = TextBox:New {
 		name = "saveDetails",
 		x = x,
@@ -302,7 +302,7 @@ local function InitializeControls(parent)
 		y = 11,
 		width = 180,
 		height = 30,
-		parent = parentControl,
+		parent = parent,
 		font = Configuration:GetFont(3),
 		caption = string.upper(i18n("load")),
 	}
@@ -323,9 +323,9 @@ local function InitializeControls(parent)
 	}
 	
 	local headings = {
-		{name = "Name", x = 97, width = 158},
-		{name = "Game", x = 257, width = 218},
-		{name = "Date", x = 437, width = 138},
+		{name = "Name", x = 97, width = 200},
+		{name = "Game", x = 97 + 200, width = 220},
+		{name = "Date", x = 97 + 200 + 218, width = 140},
 	}
 
 	local saveList = WG.Chobby.SortableList(listHolder, headings, 80, 3)
@@ -350,7 +350,7 @@ function LoadGameWindow.GetControl()
 	local controlFuncs
 	
 	local window = Control:New {
-		name = "missionHandler",
+		name = "loadGameHandler",
 		x = "0%",
 		y = "0%",
 		width = "100%",
