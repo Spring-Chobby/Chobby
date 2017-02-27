@@ -41,12 +41,13 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		Log.Error("Tried to spawn duplicate login window")
 		return
 	end
-
+	
 	self.CancelFunc = function ()
 		self.window:Dispose()
 		if failFunction then
 			failFunction()
 		end
+		self.window = nil
 	end
 	
 	self.lblLoginInstructions = Label:New {
@@ -78,9 +79,9 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	self.ebUsername = EditBox:New {
 		x = 135,
 		width = 200,
-		y = 55,
+		y = 51,
 		height = 35,
-		text = Configuration.userName or Configuration.mySteamName or "",
+		text = Configuration.userName or Configuration.suggestedNameFromSteam or "",
 		font = Configuration:GetFont(3),
 	}
 
@@ -95,7 +96,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	self.ebPassword = EditBox:New {
 		x = 135,
 		width = 200,
-		y = 95,
+		y = 91,
 		height = 35,
 		text = Configuration.password or "",
 		passwordInput = true,
@@ -125,29 +126,6 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		font = Configuration:GetFont(2),
 		OnClick = {function (obj)
 			Configuration:SetConfigValue("autoLogin", obj.checked)
-		end},
-	}
-	
-	local function UpdateAuthenticateWithSteam()
-		local canAndWant = Configuration.wantAuthenticateWithSteam and Configuration.canAuthenticateWithSteam
-		self.ebPassword:SetVisibility(not canAndWant)
-		self.txtPassword:SetVisibility(not canAndWant)
-		self.cbAuthenticateSteam:SetVisibility(Configuration.canAuthenticateWithSteam)
-	end
-	
-	self.cbAuthenticateSteam = Checkbox:New {
-		x = 15,
-		width = 215,
-		y = 160,
-		height = 35,
-		boxalign = "right",
-		boxsize = 15,
-		caption = i18n("authenticateSteam"),
-		checked = Configuration.wantAuthenticateWithSteam,
-		font = Configuration:GetFont(2),
-		OnClick = {function (obj)
-			Configuration:SetConfigValue("wantAuthenticateWithSteam", obj.checked)
-			UpdateAuthenticateWithSteam()
 		end},
 	}
 	
@@ -207,6 +185,9 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	
 	local ww, wh = Spring.GetWindowGeometry()
 	local w, h = 430, 380
+	if self.steamMode then
+	
+	end
 
 	self.tabPanel = Chili.DetachableTabPanel:New {
 		x = 0,
@@ -254,7 +235,6 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 			self.ebPassword,
 			self.txtError,
 			self.cbAutoLogin,
-			self.cbAuthenticateSteam,
 			self.btnCancel
 		}
 	}
@@ -284,10 +264,9 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 			end
 		}
 	}
-
-	UpdateAuthenticateWithSteam()
+	
 	self.window:BringToFront()
-
+	
 	createTabGroup({self.ebUsername, self.ebPassword})
 	screen0:FocusControl(self.ebUsername)
 	-- FIXME: this should probably be moved to the lobby wrapper
@@ -295,14 +274,6 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 end
 
 function LoginWindow:RemoveListeners()
-	if self.onAccepted then
-		lobby:RemoveListener("OnAccepted", self.onAccepted)
-		self.onAccepted = nil
-	end
-	if self.onDenied then
-		lobby:RemoveListener("OnDenied", self.onDenied)
-		self.onDenied = nil
-	end
 	if self.onAgreementEnd then
 		lobby:RemoveListener("OnAgreementEnd", self.onAgreementEnd)
 		self.onAgreementEnd = nil
@@ -324,13 +295,13 @@ end
 function LoginWindow:tryLogin()
 	self.txtError:SetText("")
 
-	username = self.ebUsername.text
-	password = self.ebPassword.text
-	if username == '' or password == '' then
+	local username = self.ebUsername.text
+	local password = (self.ebPassword.visible and self.ebPassword.text) or nil
+	if username == '' then
 		return
 	end
-	Configuration.userName  = username
-	Configuration.password  = password
+	Configuration.userName = username
+	Configuration.password = password
 
 	if not lobby.connected or self.loginAttempts >= 3 then
 		self.loginAttempts = 0
@@ -357,11 +328,12 @@ function LoginWindow:tryLogin()
 end
 
 function LoginWindow:tryRegister()
+	WG.Analytics.SendOnetimeEvent("lobby:try_register")
 	self.txtError:SetText("")
 
-	username = self.ebUsername.text
-	password = self.ebPassword.text
-	if username == '' or password == '' then
+	local username = self.ebUsername.text
+	local password = (self.ebPassword.visible and self.ebPassword.text) or nil
+	if username == '' then
 		return
 	end
 
@@ -372,7 +344,6 @@ function LoginWindow:tryRegister()
 		self.onConnectRegister = function(listener)
 			lobby:RemoveListener("OnConnect", self.onConnectRegister)
 			self:OnConnected(listener)
-			self:OnRegister(listener)
 		end
 		WG.LoginWindowHandler.QueueRegister(username, password)
 		lobby:AddListener("OnConnect", self.onConnectRegister)
@@ -386,47 +357,9 @@ function LoginWindow:tryRegister()
 	self.loginAttempts = self.loginAttempts + 1
 end
 
-function LoginWindow:OnRegister()
-	Configuration.firstLoginEver = false
-	lobby:AddListener("OnRegistrationAccepted", function(listener)
-		self.txtError:SetText(Configuration:GetSuccessColor() .. "Registered!")
-		--lobby:RemoveListener("OnRegistrationAccepted", listener)
-	end)
-	lobby:AddListener("OnRegistrationDenied", function(listener, err)
-		self.txtError:SetText(Configuration:GetErrorColor() .. (err or "Unknown Error"))
-		--lobby:RemoveListener("OnRegistrationDenied", listener)
-	end)
-
-end
-
 function LoginWindow:OnConnected()
-	Configuration.firstLoginEver = false
-
-	self.txtError:SetText(Configuration:GetPartialColor() .. i18n("connecting"))
-
-	self.onDenied = function(listener, reason)
-		self.txtError:SetText(Configuration:GetErrorColor() .. (reason or "Denied, unknown reason"))
-	end
-
-	self.onAccepted = function(listener)
-		lobby:RemoveListener("OnAccepted", self.onAccepted)
-		lobby:RemoveListener("OnDenied", self.onDenied)
-		ChiliFX:AddFadeEffect({
-			obj = self.window,
-			time = 0.2,
-			endValue = 0,
-			startValue = 1,
-			after = function()
-				self.window:Dispose()
-			end,
-		})
-		for channelName, _ in pairs(Configuration:GetChannels()) do
-			lobby:Join(channelName)
-		end
-	end
-
-	lobby:AddListener("OnAccepted", self.onAccepted)
-	lobby:AddListener("OnDenied", self.onDenied)
+	Spring.Echo("OnConnected")
+	--self.txtError:SetText(Configuration:GetPartialColor() .. i18n("connecting"))
 
 	self.onAgreement = function(listener, line)
 		if self.agreementText == nil then

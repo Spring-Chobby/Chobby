@@ -45,7 +45,7 @@ local function Logout()
 		lobby:Disconnect()
 	else
 		Spring.Echo("Login")
-		WG.LoginPopup()
+		WG.LoginWindowHandler.TryLogin()
 	end
 end
 

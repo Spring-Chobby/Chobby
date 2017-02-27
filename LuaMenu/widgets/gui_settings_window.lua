@@ -45,9 +45,12 @@ local function SetSpringsettingsValue(key, value)
 		return
 	end
 	local configType = configParamTypes[key]
+	Spring.Echo("SetSettings", configType, key, value)
 	if configType == "int" then
+		Spring.Echo("SetSettings Int", key, value)
 		Spring.SetConfigInt(key, value)
 	elseif configType == "bool" or configType == "float" then
+		Spring.Echo("SetSettings Value", key, value)
 		Spring.SetConfigString(key, value)
 	elseif configType == nil then
 		Spring.Log("Settings", LOG.WARNING, "No such key: " .. tostring(key) .. ", but setting it as string anyway.")
@@ -469,6 +472,7 @@ local function GetLobbyTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("simplifiedSkirmishSetup"), "simplifiedSkirmishSetup", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("notifyForAllChat"), "notifyForAllChat", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("only_featured_maps"), "onlyShowFeaturedMaps", true)
+	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("login_with_steam"), "wantAuthenticateWithSteam", true)
 	
 	children[#children + 1] = Label:New {
 		x = 20,
@@ -523,28 +527,17 @@ local function GetVoidTabControls()
 	
 	local children = {}
 
-	children[#children + 1] = Label:New {
+	children[#children + 1] = TextBox:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
-		width = 90,
+		right = 10,
 		height = 40,
 		valign = "top",
 		align = "left",
-		font = Configuration:GetFont(3),
-		caption = "Warning: These settings are experimental and not officially supported",
+		fontsize = Configuration:GetFont(3).size,
+		text = "Warning: These settings are experimental and not officially supported, proceed at your own risk.",
 	}
-	offset = offset + 40
-	children[#children + 1] = Label:New {
-		x = 115,
-		y = offset,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		font = Configuration:GetFont(3),
-		caption = "Proceed at your own risk",
-	}
-	offset = offset + 40 + TEXT_OFFSET
+	offset = offset + 65
 
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("debugMode"), "debugMode", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Debug server messages", "activeDebugConsole", false)
@@ -555,6 +548,7 @@ local function GetVoidTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Neuter Settings", "doNotSetAnySpringSettings", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Agressive Set Borderless", "agressivelySetBorderlessWindowed", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Use wrong engine", "useWrongEngine", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, "Show old AI versions", "showOldAiVersions", false)
 	
 	children[#children + 1] = Label:New {
 		x = 20,
@@ -1140,9 +1134,7 @@ local firstCall = true
 function widget:ActivateMenu()
 	if firstCall then
 		local gameSettings = WG.Chobby.Configuration.game_settings
-		
-		local gameSettingsOverride = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings3.lua")
-		for key, value in pairs(gameSettingsOverride) do
+		for key, value in pairs(gameSettings) do
 			SetSpringsettingsValue(key, value)
 		end
 		
@@ -1178,27 +1170,26 @@ function widget:Initialize()
 		local gameSettings = WG.Chobby.Configuration.game_settings
 
 		if battleStartDisplay == 1 then
-			gameSettings.XResolutionWindowed = screenX
-			gameSettings.YResolutionWindowed = screenY
-			gameSettings.WindowPosX = 0
-			gameSettings.WindowPosY = 0
-			gameSettings.WindowBorderless = 1
+			SetSpringsettingsValue("XResolutionWindowed", screenX)
+			SetSpringsettingsValue("YResolutionWindowed", screenY)
+			SetSpringsettingsValue("WindowPosX", 0)
+			SetSpringsettingsValue("WindowPosY", 0)
+			SetSpringsettingsValue("WindowBorderless", 1)
 		elseif battleStartDisplay == 2 then
-			gameSettings.WindowPosX = 0
-			gameSettings.WindowPosY = 80
-			gameSettings.XResolutionWindowed = screenX
-			gameSettings.YResolutionWindowed = screenY - 80
-			gameSettings.WindowBorderless = 0
-			gameSettings.WindowBorderless = 0
-			gameSettings.Fullscreen = 0
+			SetSpringsettingsValue("WindowPosX", 0)
+			SetSpringsettingsValue("WindowPosY", 80)
+			SetSpringsettingsValue("XResolutionWindowed", screenX)
+			SetSpringsettingsValue("YResolutionWindowed", screenY - 80)
+			SetSpringsettingsValue("WindowBorderless", 0)
+			SetSpringsettingsValue("WindowBorderless", 0)
+			SetSpringsettingsValue("Fullscreen", 0)
 		elseif battleStartDisplay == 3 then
-			gameSettings.XResolution = screenX
-			gameSettings.YResolution = screenY
-			gameSettings.Fullscreen = 1
+			SetSpringsettingsValue("XResolution", screenX)
+			SetSpringsettingsValue("YResolution", screenY)
+			SetSpringsettingsValue("Fullscreen", 1)
 		end
-
-		local gameSettingsOverride = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings3.lua")
-		for key, value in pairs(gameSettingsOverride) do
+		
+		for key, value in pairs(gameSettings) do
 			SetSpringsettingsValue(key, value)
 		end
 	end

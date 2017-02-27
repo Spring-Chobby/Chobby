@@ -67,6 +67,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 				lobby:JoinMatchMaking(queueName)
 				obj:SetVisibility(false)
 				btnLeave:SetVisibility(true)
+				WG.Analytics.SendOnetimeEvent("lobby:multiplayer:matchmaking:join_" .. queueName)
 			end
 		},
 		parent = parentControl
@@ -151,7 +152,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 	}
 	
 	local function UpdateButton()
-		if currentPartySize > maxPartySize then
+		if maxPartySize and (currentPartySize > maxPartySize) then
 			btnJoin:SetVisibility(false)
 			btnLeave:SetVisibility(false)
 			labelDisabled:SetVisibility(true)

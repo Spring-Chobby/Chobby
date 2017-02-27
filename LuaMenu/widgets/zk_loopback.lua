@@ -75,15 +75,66 @@ local function SteamJoinFriend(args)
 	WG.SteamHandler.SteamJoinFriend(args.FriendSteamID)
 end
 
-
 local function SteamOverlayChanged(args) 
 	WG.SteamHandler.SteamOverlayChanged(args.IsActive)
+end
+
+
+-- TODO wire this to set initial stuff and pass userid to ZKLS
+local function WrapperOnline(args) 
+	--args.DefaultServerPort
+	--args.DefaultServerHost
+	--args.UserID
+end
+
+-- TODO wrapper will send this to confirm friend join on steam (either invite or self join) use to auto accept party join request and to notify player when joining "offline" COOP 
+local function SteamFriendJoinedMe(args) 
+	WG.SteamCoopHandler.NotifyFriendJoined(args.FriendSteamID, args.FriendSteamName)
+	--[[ 
+	    public string FriendSteamID { get; set; }
+        public string FriendSteamName { get; set; }
+	]]--
+end
+
+
+-- TODO wrapper will send this to indiciate P2P host request is ok and this chobby should start hosting asap, using the given local port
+local function SteamHostGameSuccess(args) 
+	WG.SteamCoopHandler.SteamHostGameSuccess(args.HostPort)
+	-- args.HostPort
+end
+
+-- TODO p2p hosting has failed
+local function SteamHostGameFailed(args)
+	WG.SteamCoopHandler.SteamHostGameFailed(args.CausedBySteamID, args.Reason)
+	-- args.CausedBySteamID
+	-- args.Reason
+end
+
+-- TODO when client receives this he should connect given game, it MUST use the passed ClientPort for local game
+local function SteamConnectSpring(args)
+	--[[
+        public string HostIP { get; set; }
+        public int HostPort { get; set; }
+        public int ClientPort { get; set; }
+
+        public string Name { get; set; }
+        public string ScriptPassword { get; set; }
+        public string Map { get; set; }
+        public string Game { get; set; }
+
+        public string Engine { get; set; }	
+	]]--
 end
 
 commands["DownloadFileDone"] = DownloadFileDone
 commands["SteamOnline"] = SteamOnline
 commands["SteamJoinFriend"] = SteamJoinFriend
 commands["SteamOverlayChanged"] = SteamOverlayChanged
+commands["WrapperOnline"] = WrapperOnline
+commands["SteamFriendJoinedMe"] = SteamFriendJoinedMe
+commands["SteamHostGameSuccess"] = SteamHostGameSuccess
+commands["SteamHostGameFailed"] = SteamHostGameFailed
+commands["SteamConnectSpring"] = SteamConnectSpring
 
 
 --------------------------------------------------------------------------------
@@ -128,13 +179,15 @@ function WrapperLoopback.DownloadFile(name, fileType)
 	SendCommand("DownloadFile", {Name = name, FileType = fileType})
 end
 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Steam
 
 -- opens steam section, default = "LobbyInvite"
 -- WARNING: FPS needs to be increased, overlay works at chobby FPS
 function WrapperLoopback.SteamOpenOverlaySection(name) 
-	SendCommand("SteamOpenOverlaySection", {Option = name})
+	SendCommand("SteamOpenOverlaySection", {Option = name or "LobbyInvite"})
 end
-
 
 -- opens url in steam browser
 -- of overlay not available, opens ext. browser
@@ -143,11 +196,34 @@ function WrapperLoopback.SteamOpenWebsite(url)
 	SendCommand("SteamOpenOverlayWebsite", {Url = url})
 end
 
-
 -- invites friend to a game, even offline
 function WrapperLoopback.SteamInviteFriendToGame(steamID) 
 	SendCommand("SteamInviteFriendToGame", {SteamID = steamID})
 end
+
+
+-- TODO instructs wrapper to establish p2p, punch ports and start clients 
+function WrapperLoopback.SteamHostGameRequest(args)
+	--[[
+        public class SteamHostPlayerEntry
+        {
+            public string SteamID { get; set; }
+            public string Name { get; set; }
+            public string ScriptPassword { get; set; }
+        }
+        
+        public List<SteamHostPlayerEntry> Players { get; set; } = new List<SteamHostPlayerEntry>();
+        public string Map { get; set; }
+        public string Game { get; set; }
+
+        public string Engine { get; set; }	
+	]]--
+	SendCommand("SteamHostGameRequest", args)
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Analytics
 
 
 -- sends error event to GA. Severity must be one of: Undefined, Debug, Info, Warning, Error,Critical,
@@ -163,6 +239,34 @@ end
 -- sends GA progression event. Score is optional, if sent must be double. Level3 and 2 are optional but if 3 is sent then 2 and 1 must be set and if 2 is sent then 1 must be set.
 function WrapperLoopback.GaAddProgressionEvent(status, progression1, progression2, progression3, score) 
 	SendCommand("GaAddProgressionEvent", {Status = status, Progression1 = progression1, Progression2 = progression2, Progression3 = progression3, Score = score}) 
+end
+
+-- NOTE: amount must be whole number
+function WrapperLoopback.GaAddBusinessEvent(amount, cartType, currency, itemId, itemType) 
+	SendCommand("GaAddBusinessEvent", {Amount = amount, CartType= cartType, Currency = currency, ItemId = itemId, ItemType = itemType}) 
+end
+
+-- NOTE: flow type:  Undefined | Source | Sink
+function WrapperLoopback.GaAddResourceEvent(amount, currency, flowType, itemId, itemType) 
+	SendCommand("GaAddResourceEvent", {Amount = amount, Currency = currency, FlowType = flowType, ItemId = itemId, ItemType = itemType}) 
+end
+
+function WrapperLoopback.GaConfigureResourceCurrencies(list) 
+	SendCommand("GaConfigureResourceCurrencies", {List = list}) 
+end
+
+function WrapperLoopback.GaConfigureResourceItemTypes(list) 
+	SendCommand("GaConfigureResourceItemTypes", {List = list}) 
+end
+
+-- NOTE: level 1-3
+function WrapperLoopback.GaConfigureCustomDimensions(level, list) 
+	SendCommand("GaConfigureCustomDimensions", {Level = level, List = list}) 
+end
+
+-- NOTE: level 1-3
+function WrapperLoopback.GaSetCustomDimension(level, list) 
+	SendCommand("GaSetCustomDimension", {Level = level, List = list}) 
 end
 
 --------------------------------------------------------------------------------

@@ -23,9 +23,8 @@ function Configuration:init()
 	self.firstLoginEver = true
 	self.canAuthenticateWithSteam = false
 	self.wantAuthenticateWithSteam = true
+	self.steamLinkComplete = false
 	self.channels = {}
-
-	self.promptNewUsersToLogIn = false
 
 	self.errorColor = "\255\255\0\0"
 	self.warningColor = "\255\255\255\0"
@@ -127,6 +126,7 @@ function Configuration:init()
 	self.showMatchMakerBattles = false
 	self.hideInterface = false
 	self.enableTextToSpeech = true
+	self.showOldAiVersions = false
 	
 	self.chatFontSize = 18
 
@@ -175,6 +175,7 @@ function Configuration:GetConfigData()
 		autoLogin = self.autoLogin,
 		firstLoginEver = self.firstLoginEver,
 		wantAuthenticateWithSteam = self.wantAuthenticateWithSteam,
+		steamLinkComplete = self.steamLinkComplete,
 		channels = self.channels,
 		gameConfigName = self.gameConfigName,
 		game_fullscreen = self.game_fullscreen,
@@ -201,6 +202,7 @@ function Configuration:GetConfigData()
 		gameOverlayOpacity = self.gameOverlayOpacity,
 		showMatchMakerBattles = self.showMatchMakerBattles,
 		enableTextToSpeech = self.enableTextToSpeech,
+		showOldAiVersions = self.showOldAiVersions,
 		chatFontSize = self.chatFontSize,
 		myAccountID = self.myAccountID,
 		lastAddedAiName = self.lastAddedAiName,
@@ -352,15 +354,18 @@ function Configuration:GetHeadingImage(fullscreenMode, title)
 	end
 end
 
-function Configuration:IsValidEngineVersion(engineVersion)
-	--Spring.Echo("Checking engineVersion", engineVersion, "against", Spring.Utilities.GetEngineVersion(), "numbers", tonumber(Spring.Utilities.GetEngineVersion()), string.gsub(Spring.Utilities.GetEngineVersion(), " develop", ""))
+function Configuration:GetEngineVersion()
 	if tonumber(Spring.Utilities.GetEngineVersion()) then
 		-- Master releases lack the '.0' at the end. Who knows what other cases are wrong.
 		-- Add as required.
-		return engineVersion == (Spring.Utilities.GetEngineVersion() .. ".0")
+		return (Spring.Utilities.GetEngineVersion() .. ".0")
 	else
-		return string.gsub(Spring.Utilities.GetEngineVersion(), " develop", "") == engineVersion
+		return string.gsub(Spring.Utilities.GetEngineVersion(), " develop", "")
 	end
+end
+
+function Configuration:IsValidEngineVersion(engineVersion)
+	return engineVersion == self:GetEngineVersion()
 end
 
 function Configuration:GetDefaultGameName()

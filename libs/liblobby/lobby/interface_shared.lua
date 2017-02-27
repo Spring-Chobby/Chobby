@@ -33,6 +33,9 @@ end
 
 function Interface:Connect(host, port, user, password, cpu, localIP, lobbyVersion)
 	self:super("Connect", host, port)
+	if self.client then
+		self.client:close()
+	end
 	self.client = socket.tcp()
 	self.client:settimeout(0)
 	

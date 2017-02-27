@@ -22,10 +22,9 @@ local readyCheckPopup
 local findingMatch = false
 
 local instantStartQueuePriority = {
-	["4v4"] = 4,
-	["3v3"] = 3,
-	["2v2"] = 2,
-	["1v1"] = 1,
+	["Teams"] = 3,
+	["1v1"] = 2,
+	["Coop"] = 1,
 }
 
 --------------------------------------------------------------------------------

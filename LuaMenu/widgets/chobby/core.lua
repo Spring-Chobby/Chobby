@@ -14,6 +14,7 @@ local includes = {
 
 	-- misc
 	"components/login_window.lua",
+	"components/steam_login_window.lua",
 	"components/chat_windows.lua",
 	"components/team_window.lua",
 	"components/downloader.lua",

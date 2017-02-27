@@ -17,8 +17,6 @@ end
 --------------------------------------------------------------------------------
 -- Local Variables
 
-local DEFAULT_PATH = "campaign/sample/codex.lua"	-- FIXME placeholder
-local CODEX_BUTTON_FONT_SIZE = 14
 local OUTLINE_COLOR = {0.54,0.72,1,0.3}
 local IMAGE_SIZE = 96
 --------------------------------------------------------------------------------
@@ -42,9 +40,7 @@ local function SortCodexEntries(a, b)
 end
 
 local function LoadCodexEntries(path)
-	-- list all categories and which entries they have
-	path = DEFAULT_PATH	-- FIXME
-	local codexEntries = VFS.Include(path)
+	local codexEntries = WG.CampaignAPI.GetCodexEntries()
 	
 	local categories = {}
 	local categoriesOrdered = {}
@@ -64,20 +60,13 @@ local function LoadCodexEntries(path)
 	return codexEntries, categories, categoriesOrdered
 end
 
-local function UpdateCodexEntry(entry, codexText, codexImage)
-	-- TODO reimplement read/unread tracking
-	--[[
-	if not gamedata.codexRead[entryID] then
-		if codexTreeControls[entryID] then
-			local button = codexTreeControls[entryID]
-			--button.font.outline = false
-			button.font.shadow = false
-			--button.font.size = CODEX_BUTTON_FONT_SIZE
-			button:Invalidate()
-		end
+local function UpdateCodexEntry(entry, codexText, codexImage, entryButton)
+	if not WG.CampaignAPI.IsCodexEntryRead(entry.id) then
+		--entryButton.font.outline = false
+		entryButton.font.shadow = false
+		entryButton:Invalidate()
 	end
-	gamedata.codexRead[entryID] = true
-	]]
+	WG.CampaignAPI.MarkCodexEntryRead(entry.id)
 	codexText:SetText(entry.text)
 	codexImage.file = entry.image
 	codexImage:Invalidate()
@@ -97,21 +86,21 @@ local function PopulateCodexTree(parent, codexText, codexImage)
 		for j=1,#cat do
 			local entry = cat[j]
 			--local unlocked = gamedata.codexUnlocked[entryID]
-			local read = true	--gamedata.codexRead[entryID]
+			local read = WG.CampaignAPI.IsCodexEntryRead(entry.id)
 			local button = Button:New{
 				caption = entry.name,
 				backgroundColor = {0,0,0,0},
 				borderColor = {0,0,0,0},
-				OnClick = { function()
-					UpdateCodexEntry(entry, codexText, codexImage)
+				OnClick = { function(self)
+					UpdateCodexEntry(entry, codexText, codexImage, self)
 				end},
 				font = {
-					size = CODEX_BUTTON_FONT_SIZE,	-- - (read and 0 or 1),
+					size = WG.Chobby.Configuration:GetFont(2).size,	-- - (read and 0 or 1),
 					shadow = (read ~= true),
 					--outline = (read ~= true),
 					outlineWidth = 6,
 					outlineHeight = 6,
-					--outlineColor = Spring.Utilities.CopyTable(OUTLINE_COLOR),
+					outlineColor = Spring.Utilities.CopyTable(OUTLINE_COLOR),
 					autoOutlineColor = false,
 				}
 			}
@@ -128,7 +117,7 @@ local function PopulateCodexTree(parent, codexText, codexImage)
 	local codexTree = Chili.TreeView:New{
 		parent = parent,
 		nodes = nodes,	--{"wtf", "lololol", {"omg"}},
-		font = {size = CODEX_BUTTON_FONT_SIZE}
+		font = WG.Chobby.Configuration:GetFont(2)
 	}
 	codexText:SetText("")
 end
@@ -138,6 +127,18 @@ end
 -- Controls
 
 local function InitializeControls(parentControl)
+	local Configuration = WG.Chobby.Configuration
+	
+	Label:New {
+		parent = parentControl,
+		x = 15,
+		y = 11,
+		width = 180,
+		height = 30,
+		font = Configuration:GetFont(3),
+		caption = i18n("Codex"),
+	}
+
 	local codexTextScroll = ScrollPanel:New{
 		parent = parentControl,
 		x = "40%",
@@ -154,7 +155,7 @@ local function InitializeControls(parentControl)
 		width = "100%",
 		height = "100%",
 		text = "",
-		font = {size = 18},
+		font = Configuration:GetFont(2),
 	}
 	
 	local codexImagePanel = Panel:New{
@@ -175,7 +176,7 @@ local function InitializeControls(parentControl)
 	local codexTreeScroll = ScrollPanel:New{
 		parent = parentControl,
 		x = 4,
-		y = 4,
+		y = 48,
 		bottom = 4,
 		right = "60%",
 		orientation = "vertical",

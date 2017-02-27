@@ -60,9 +60,9 @@ function Lobby:_Clean()
 	self.myBattleID = nil
 	self.scriptPassword = nil
 	self.sessionToken = nil
-
+	
 	-- reconnection delay in seconds
-	self.reconnectionDelay = 5
+	self.reconnectionDelay = 15
 end
 
 function Lobby:_PreserveData()
@@ -127,7 +127,7 @@ end
 
 function Lobby:Login(user, password, cpu, localIP, lobbyVersion)
 	self.myUserName = user
-	self.loginData = { user, password, cpu, localIP, lobbyVersion}
+	self.loginData = {user, password, cpu, localIP, lobbyVersion}
 	return self
 end
 
@@ -215,7 +215,7 @@ function Lobby:SetBattleStatus(status)
 	return self
 end
 
-function Lobby:AddAi(aiName, allyNumber, allyNumber)
+function Lobby:AddAi(aiName, allyNumber, allyNumber, version)
 	return self
 end
 
@@ -374,6 +374,7 @@ function Lobby:_OnConnect(protocolVersion, springVersion, udpPort, serverMode)
 	if Spring.GetGameName() ~= "" then
 		lobby:SetIngameStatus(true)
 	end
+	self.disconnectTime = nil
 	self:_CallListeners("OnConnect", protocolVersion, udpPort, serverMode)
 	self:_OnSuggestedEngineVersion(springVersion)
 end
@@ -388,9 +389,12 @@ function Lobby:_OnSuggestedGameVersion(gameVersion)
 	self:_CallListeners("OnSuggestedGameVersion", gameVersion)
 end
 
-function Lobby:_OnAccepted()
+function Lobby:_OnAccepted(newName)
 	if self.status == "connecting" then
 		self.status = "connected"
+	end
+	if newName then
+		self.myUserName = newName
 	end
 	self:_CallListeners("OnAccepted")
 end
@@ -413,8 +417,8 @@ function Lobby:_OnRegistrationAccepted()
 	self:_CallListeners("OnRegistrationAccepted")
 end
 
-function Lobby:_OnRegistrationDenied(reason)
-	self:_CallListeners("OnRegistrationDenied", reason)
+function Lobby:_OnRegistrationDenied(reason, accountAlreadyExists)
+	self:_CallListeners("OnRegistrationDenied", reason, accountAlreadyExists)
 end
 
 function Lobby:_OnLoginInfoEnd()
@@ -754,6 +758,7 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	end
 	userData.sync       = status.sync  or userData.sync
 	userData.aiLib      = status.aiLib or userData.aiLib
+	userData.aiVersion  = status.aiVersion or userData.aiVersion
 	userData.owner      = status.owner or userData.owner
 
 	status.allyNumber   = userData.allyNumber
@@ -761,6 +766,7 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	status.isSpectator  = userData.isSpectator
 	status.sync         = userData.sync
 	status.aiLib        = userData.aiLib
+	status.aiVersion    = userData.aiVersion
 	status.owner        = userData.owner
 	self:_CallListeners("OnUpdateUserBattleStatus", userName, status)
 
@@ -1141,7 +1147,7 @@ function Lobby:Reconnect()
 end
 
 function Lobby:SafeUpdate(...)
-	if self.status == "disconnected" and self.disconnectTime ~= nil then
+	if (self.status == "disconnected" or self.status == "connecting") and self.disconnectTime ~= nil then
 		local currentTime = Spring.GetTimer()
 		if self.lastReconnectionAttempt == nil or Spring.DiffTimers(currentTime, self.lastReconnectionAttempt) > self.reconnectionDelay then
 			self:Reconnect()

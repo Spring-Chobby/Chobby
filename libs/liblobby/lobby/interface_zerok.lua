@@ -28,34 +28,54 @@ end
 -- Connectivity commands
 ------------------------
 
-function Interface:Register(userName, password, email)
+function Interface:Register(userName, password, email, useSteamLogin)
 	self:super("Register", userName, password, email)
-	-- FIXME: email argument is currently not sent to the server
-	password = VFS.CalculateHash(password, 0)
+	
+	password = (password and string.len(password) > 0 and VFS.CalculateHash(password, 0)) or nil
+	local steamToken = (useSteamLogin and self.steamAuthToken) or nil
+	if not (password or steamToken) then
+		self:_OnRegistrationDenied("Password required")
+		Spring.Echo("_OnRegistrationDenied")
+		return self
+	end
 	local sendData = {
 		Name = userName,
 		PasswordHash = password,
-		SteamAuthToken = self.steamAuthToken,
+		SteamAuthToken = steamToken
 	}
 	self:_SendCommand("Register " .. json.encode(sendData))
 	return self
 end
 
-function Interface:Login(user, password, cpu, localIP, lobbyVersion)
+function Interface:Login(user, password, cpu, localIP, lobbyVersion, useSteamLogin)
 	self:super("Login", user, password, cpu, localIP)
 	if localIP == nil then
 		localIP = "*"
 	end
-	password = VFS.CalculateHash(password, 0)
-	
-	local sendData = {
-		Name = user,
-		PasswordHash = password,
-		UserID = 0,
-		ClientType = 1,
-		LobbyVersion = lobbyVersion,
-		SteamAuthToken = self.steamAuthToken,
-	}
+	password = (password and string.len(password) > 0 and VFS.CalculateHash(password, 0)) or nil
+	local steamToken = (useSteamLogin and self.steamAuthToken) or nil
+	if not (password or steamToken) then
+		self:_OnDenied("Password required")
+		return self
+	end
+	local REVERSE_COMPAT = true
+	if steamToken and (not password) and not REVERSE_COMPAT then
+		sendData = {
+			UserID = 0,
+			ClientType = 1,
+			LobbyVersion = lobbyVersion,
+			SteamAuthToken = steamToken,
+		}
+	else
+		sendData = {
+			Name = user,
+			PasswordHash = password,
+			UserID = 0,
+			ClientType = 1,
+			LobbyVersion = lobbyVersion,
+			SteamAuthToken = steamToken,
+		}
+	end
 	self:_SendCommand("Login " .. json.encode(sendData))
 end
 
@@ -239,10 +259,11 @@ function Interface:SetBattleStatus(status)
 	return self
 end
 
-function Interface:AddAi(aiName, aiLib, allyNumber)
+function Interface:AddAi(aiName, aiLib, allyNumber, version)
 	local sendData = {
 		Name         = aiName,
 		AiLib        = aiLib,
+		Version      = version,
 		AllyNumber   = allyNumber,
 		Owner        = self:GetMyUserName(),
 	}
@@ -583,7 +604,8 @@ function Interface:SetSteamAuthToken(steamAuthToken)
 		local sendData = {
 			AuthToken = steamAuthToken,
 		}
-		self:_SendCommand("LinkSteam " .. json.encode(sendData))
+		-- Don't do this automatically now that 1:1 steam link exists.
+		--self:_SendCommand("LinkSteam " .. json.encode(sendData))
 	end
 	return self
 end
@@ -604,16 +626,27 @@ local registerResponseCodes = {
 	[0] = "Ok",
 	[1] = "Already connected",
 	[2] = "Name already exists",
-	[3] = "Invalid password",
+	[3] = "Invalid characters in password",
 	[4] = "Banned",
-	[5] = "Invalid name",
+	[5] = "Invalid characters in name",
+	[6] = "Invalid Steam token",
+	[7] = "Steam already linked",
+	[8] = "Missing password and token",
+	[9] = "Too many connection attempts",
+	[10] = "Already linked steam, connecting",
+	[11] = "Already registered, use password",
 }
 
 local loginResponseCodes = {
 	[0] = "Ok",
-	[2] = "Invalid name",
-	[3] = "Invalid password",
+	[2] = "Invalid characters in name",
+	[3] = "Incorrect password",
 	[4] = "Banned",
+	[5] = "Invalid Steam token",
+	[6] = "Too many connection attempts",
+	[7] = "Steam account not yet linked. Re-register.",
+	[8] = "Your Steam account is not linked.",
+	[9] = "Your Steam account is already linked to a different username.",
 }
 
 function Interface:_Welcome(data)
@@ -649,7 +682,7 @@ function Interface:_RegisterResponse(data)
 	if data.ResultCode == 0 then
 		self:_OnRegistrationAccepted()
 	else
-		self:_OnRegistrationDenied(registerResponseCodes[data.ResultCode] or "Reason error " .. tostring(data.ResultCode))
+		self:_OnRegistrationDenied(registerResponseCodes[data.ResultCode] or "Reason error " .. tostring(data.ResultCode), data.ResultCode == 2)
 	end
 end
 Interface.jsonCommands["RegisterResponse"] = Interface._RegisterResponse
@@ -659,7 +692,7 @@ function Interface:_LoginResponse(data)
 	-- Reason (for ban I presume)
 	self.sessionToken = data.SessionToken
 	if data.ResultCode == 0 then
-		self:_OnAccepted()
+		self:_OnAccepted(data.Name)
 	else
 		self:_OnDenied(loginResponseCodes[data.ResultCode] or "Reason error " .. tostring(data.ResultCode))
 	end
@@ -958,6 +991,7 @@ function Interface:_UpdateBotStatus(data)
 	local status = {
 		allyNumber    = data.AllyNumber,
 		teamNumber    = data.TeamNumber,
+		aiVersion     = data.Version,
 		aiLib         = data.AiLib,
 		owner         = data.Owner,
 	}

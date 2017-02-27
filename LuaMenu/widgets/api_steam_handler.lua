@@ -39,6 +39,12 @@ local function JoinFriend(friendID)
 	end
 	local lobby = WG.LibLobby.lobby
 	local userName = lobby:GetUserNameBySteamID(friendID)
+	Spring.Echo("friendID", friendID)
+	Spring.Utilities.TableEcho(lobby.userBySteamID, "lobby.userBySteamID")
+	if not userName then
+		WG.Chobby.InformationPopup("Error processing game invite.")
+		return
+	end
 	lobby:InviteToParty(userName)
 	
 	local userInfo = lobby:GetUser(userName) or {}
@@ -100,6 +106,8 @@ function SteamHandler.SteamOnline(authToken, joinFriendID, friendList, suggested
 		end
 	end
 	
+	WG.LoginWindowHandler.TrySimpleSteamLogin()
+	
 	if lobby.status ~= "connected" then
 		storedJoinFriendID = joinFriendID
 		storedFriendList = friendList
@@ -108,7 +116,7 @@ function SteamHandler.SteamOnline(authToken, joinFriendID, friendList, suggested
 	end
 	
 	AddSteamFriends(storedFriendList)
-	JoinFriend(joinFriendID) 
+	JoinFriend(joinFriendID)
 end
 
 function SteamHandler.SteamJoinFriend(joinFriendID)
@@ -140,9 +148,8 @@ function SteamHandler.GetIsSteamFriend(steamID)
 	return steamID and steamFriendByID[steamID]
 end
 
-
 function SteamHandler.SteamOverlayChanged(isActive) 
-	Spring.Echo("OVERLAY CHANGE " .. isActive)
+	Spring.Echo("OVERLAY CHANGE", isActive)
 end
 
 --------------------------------------------------------------------------------
