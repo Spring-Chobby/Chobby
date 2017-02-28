@@ -380,6 +380,7 @@ local settings = {
 							GroundScarAlphaFade = 1,
 							GroundDecals = 0,
 							GroundDetail = 75,
+							GroundDetailBias = 2,
 						}
 					},
 					{
@@ -388,6 +389,7 @@ local settings = {
 							GroundScarAlphaFade = 0,
 							GroundDecals = 1,
 							GroundDetail = 100,
+							GroundDetailBias = 4,
 						}
 					},
 					{
@@ -396,6 +398,7 @@ local settings = {
 							GroundScarAlphaFade = 1,
 							GroundDecals = 2,
 							GroundDetail = 120,
+							GroundDetailBias = 6,
 						}
 					},
 					{
@@ -404,6 +407,7 @@ local settings = {
 							GroundScarAlphaFade = 1,
 							GroundDecals = 5,
 							GroundDetail = 150,
+							GroundDetailBias = 8,
 						}
 					},
 					{
@@ -412,6 +416,7 @@ local settings = {
 							GroundScarAlphaFade = 1,
 							GroundDecals = 10,
 							GroundDetail = 250,
+							GroundDetailBias = 10,
 						}
 					},
 				},
