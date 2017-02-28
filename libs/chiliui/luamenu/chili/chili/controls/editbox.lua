@@ -131,50 +131,41 @@ function EditBox:SetText(newtext)
 	self:Invalidate()
 end
 
+function EditBox:_LineLog2Phys(logicalLine, pos)
+	local px, py = pos, 0
+	if self.multiline then
+		for _, plID in pairs(logicalLine.pls) do
+			local pl = self.physicalLines[plID]
+			py = plID
+			px  = px + #pl.colorPrefix
+			if #pl.text + 1 >= px or plID == #logicalLine.pls then
+				break
+			end
+			if pl.extraSpace then
+				px = px - 1
+			end
+			px = px - #pl.text + 1
+		end
+	end
+	return px, py
+end
+
 function EditBox:_SetSelection(selStart, selStartY, selEnd, selEndY)
 	if #self.lines == 0 then
 		return
 	end
 	self.selStart  = selStart        or self.selStart
 	self.selStartY = selStartY       or self.selStartY
--- 	self.selStartY = self.selStartY  or 1
 	self.selEnd    = selEnd          or self.selEnd
 	self.selEndY   = selEndY         or self.selEndY
--- 	self.selEndY   = self.selEndY    or 1
 	if selStart or selStartY then
-		self.selStartPhysical  = self.selStart
 		local logicalLine = self.lines[self.selStartY]
-		if logicalLine == nil then
-			-- FIXME: Don't ignore errors
-			Spring.Log("Chobby", LOG.DEBUG, "self.selStartY", self.selStartY, #self.lines)
-			return
-		end
-		for _, plID in pairs(logicalLine.pls) do
-			local pl = self.physicalLines[plID]
-			self.selStartPhysicalY = plID
-			if #pl.text + 1 >= self.selStartPhysical or plID == #logicalLine.pls then
-				break
-			end
-			self.selStartPhysical  = self.selStartPhysical - #pl.text
-		end
+		self.selStartPhysical, self.selStartPhysicalY = self:_LineLog2Phys(logicalLine, self.selStart)
 	end
 
 	if selEnd or selEndY then
-		self.selEndPhysical  = self.selEnd
 		local logicalLine = self.lines[self.selEndY]
-		if logicalLine == nil then
-			-- FIXME: Don't ignore errors
-			Spring.Log("Chobby", LOG.DEBUG, "self.selEndY", self.selEndY, #self.lines)
-			return
-		end
-		for _, plID in pairs(logicalLine.pls) do
-			local pl = self.physicalLines[plID]
-			self.selEndPhysicalY = plID
-			if #pl.text + 1 >= self.selEndPhysical or plID == #logicalLine.pls then
-				break
-			end
-			self.selEndPhysical = self.selEndPhysical - #pl.text
-		end
+		self.selEndPhysical, self.selEndPhysicalY  = self:_LineLog2Phys(logicalLine, self.selEnd)
 	end
 end
 
@@ -232,10 +223,11 @@ function EditBox:_GeneratePhysicalLines(logicalLineID)
 	local colorPrefix = ""
 	local totalLength = 0
 	-- split the text into physical lines
+	local logLineX = 0
 	for lineIndex, lineText in pairs(explode("\n", wrappedText)) do
 	  local th, td = font:GetTextHeight(lineText)
 	  local _txt = colorPrefix .. lineText
-	  table.insert(self.physicalLines, {
+	  local physicalLine = {
 		  text = _txt,
 		  th   = th,
 		  td   = td,
@@ -244,7 +236,23 @@ function EditBox:_GeneratePhysicalLines(logicalLineID)
 		  y    = y,
 		  -- link to the logical line ID
 		  lineID = logicalLineID,
-	  })
+		  colorPrefix = colorPrefix,
+		  logLineX = logLineX,
+		  extraSpace = false,
+	  }
+	  table.insert(self.physicalLines, physicalLine)
+	  logLineX = logLineX + #lineText - 1
+	  -- sometimes font:WrapText (see above) adds a " " at the end of the line, and sometimes it doesn't
+	  -- this handles the situations when it doesn't
+	  if _txt:sub(#_txt - 1, #_txt - 1) ~= " " then
+	  	-- a lack of " " at the end might be caused by two things
+	  	-- 1) the string is continuous and there shouldn't be a " " in the first place
+        -- 2) there are two words and there is a " "
+		if text:sub(logLineX + 1, logLineX + 1) == " " then
+	  		logLineX = logLineX + 1
+	  		physicalLine.extraSpace = true
+	    end
+	  end
 	  y = y + fontLineHeight
 
 	  -- link to the physical line ID
@@ -413,7 +421,8 @@ function EditBox:_GetCursorByMousePos(x, y)
 		cursor = self.cursor,
 		cursorY = self.cursorY,
 		physicalCursor = self.physicalCursor,
-		physicalCursorY = self.physicalCursorY
+		physicalCursorY = self.physicalCursorY,
+		outOfBounds = false,
 	}
 
 	local clientX, clientY = self.clientArea[1], self.clientArea[2]
@@ -430,63 +439,59 @@ function EditBox:_GetCursorByMousePos(x, y)
 		if #text > 0 and self.passwordInput then
 			text = string.rep("*", #text)
 		end
-		retVal.cursorY = #self.physicalLines
+
+		-- find Y coordinate
+		retVal.physicalCursorY = #self.physicalLines
 		for i, line in pairs(self.physicalLines) do
 			if line.y > y - clientY then
-				retVal.cursorY = math.max(1, i-1)
+				retVal.physicalCursorY = math.max(1, i-1)
 				break
 			end
 		end
-		local selLine = self.physicalLines[retVal.cursorY]
+		local selLine = self.physicalLines[retVal.physicalCursorY]
 		if not selLine then return retVal end
 		selLine = selLine.text
 		if not self.multiline then
 			selLine = text
 		end
-		retVal.cursor = #selLine + 1
-		for i = 1, #selLine do
+		local physicalLine = self.physicalLines[retVal.physicalCursorY]
+		retVal.cursorY = physicalLine.lineID
+		local logicalLine = self.lines[retVal.cursorY]
+
+		-- find the X coordinate
+		retVal.physicalCursor = #selLine
+		if retVal.physicalCursorY == logicalLine.pls[#logicalLine.pls] then
+			retVal.physicalCursor = retVal.physicalCursor + 1
+		end
+		local isStartLine = true
+		for i = retVal.offset, #selLine do
 			local tmpLen = self.font:GetTextWidth(selLine:sub(1 + retVal.offset, i))
 			if tmpLen > (x - clientX) then
 				if i > 1 then
 					local tmpPrevLen = self.font:GetTextWidth(selLine:sub(1 + retVal.offset, i - 1))
 					if math.abs(tmpPrevLen - (x - clientX)) > math.abs(tmpLen - (x - clientX)) then
-						retVal.cursor = i + 1 -- selection is closer to the end of the character
+						retVal.physicalCursor = i + 1 -- selection is closer to the end of the character
 					else
-						retVal.cursor = i     -- selection is closer to the beginning of the character
+						retVal.physicalCursor = i     -- selection is closer to the beginning of the character
 					end
 				else
-					retVal.cursor = i
+					retVal.physicalCursor = i
 				end
 				break
 			end
-		end
-
-
-		-- convert back to logical line
-		retVal.physicalCursorY = retVal.cursorY
-		retVal.physicalCursor  = retVal.cursor
-
-		local physicalLine = self.physicalLines[retVal.physicalCursorY]
-		retVal.cursorY = physicalLine.lineID
-
-		local logicalLine = self.lines[retVal.cursorY]
-		for i, plID in pairs(logicalLine.pls) do
-			-- FIXME when less tired
--- 			if i > 1 or #physicalLine.text + 1 == self.physicalCursor then
--- 				self.cursor = self.cursor - 1
--- 			end
--- 			if i > 1 then
--- 				self.cursor = self.cursor - 1
--- 			end
-			if plID == retVal.physicalCursorY then
-				break
+			isStartLine = false
+			if i == #selLine then
+				retVal.outOfBounds = true
 			end
-			retVal.cursor = retVal.cursor + #self.physicalLines[plID].text
 		end
--- 		if logicalLine.pls[#logicalLine.pls] ~= self.physicalCursorY and  then
--- 			self.cursor = self.cursor - 1
--- 		end
--- 		Spring.Echo(self.cursor)
+
+		-- calculate the logical line position
+		retVal.cursor = retVal.physicalCursor + physicalLine.logLineX - #physicalLine.colorPrefix
+		-- always include the color prefix (normally it wouldn't be included if the cursor isn't on the first position)
+		if isStartLine then
+			retVal.cursor = retVal.cursor + #physicalLine.colorPrefix
+		end
+		--Spring.Echo(retVal.cursor, self.offset)
 --         for i = self.offset, #text do
 --            local tmp = text:sub(self.offset, i)
 --            local h, d = self.font:GetTextHeight(tmp)
@@ -522,9 +527,10 @@ function EditBox:MouseDown(x, y, ...)
 	-- handle clicking on text items
 	local retVal = self:_GetCursorByMousePos(x, y)
 	local line = self.lines[retVal.cursorY]
-	if line and line.OnTextClick then
+	if line and line.OnTextClick and not retVal.outOfBounds then
 		local cx, cy = self:ScreenToLocal(x, y)
 		for _, OnTextClick in pairs(line.OnTextClick) do
+			--Spring.Echo(OnTextClick.startIndex, OnTextClick.endIndex, retVal.cursor)
 			if OnTextClick.startIndex <= retVal.cursor and OnTextClick.endIndex >= retVal.cursor then
 				for _, f in pairs(OnTextClick.OnTextClick) do
 					f(self, cx, cy, ...)
@@ -568,7 +574,7 @@ function EditBox:MouseMove(x, y, dx, dy, button)
 		if button == nil then -- handle tooltips
 			local retVal = self:_GetCursorByMousePos(x, y)
 			local line = self.lines[retVal.cursorY]
-			if line and line.tooltips then
+			if line and line.tooltips and not retVal.outOfBounds then
 				for _, tooltip in pairs(line.tooltips) do
 					if tooltip.startIndex <= retVal.cursor and tooltip.endIndex >= retVal.cursor then
 						self.tooltip = tooltip.tooltip
@@ -595,6 +601,7 @@ function EditBox:MouseMove(x, y, dx, dy, button)
 		self:_SetSelection(cp, cpy, nil, nil)
 	end
 	self:_SetSelection(nil, nil, self.cursor, self.cursorY)
+	--Spring.Echo(self:GetSelectionText())
 
 	self._interactedTime = Spring.GetTimer()
 	inherited.MouseMove(self, x, y, dx, dy, button)
@@ -620,13 +627,8 @@ function EditBox:ClearSelected()
 		left, right = right, left
 	end
 	self.cursor = right
-	local i = 0
 	while self.cursor ~= left do
 		self.text, self.cursor = Utf8BackspaceAt(self.text, self.cursor)
-		i = i + 1
-		if i > 100 then
-			break
-		end
 	end
 	self.selStart = nil
 	self.selEnd = nil
@@ -652,6 +654,43 @@ end
 local function RemoveColorFromText(text)
 	text = text:gsub("\255...", ""):gsub("\b", "")
 	return text
+end
+
+function EditBox:GetSelectionText()
+	local sy = self.selStartY
+	local ey = self.selEndY
+	local s = self.selStart
+	local e = self.selEnd
+	local txt = self.text
+	if s and e then
+		if self.multiline then
+			if sy > ey then
+				sy, ey = ey, sy
+				s, e = e, s
+			elseif sy == ey and s > e then
+				s, e = e, s
+			end
+		elseif s > e then
+			s, e = e, s
+		end
+		if self.multiline then
+			txt = self.lines[sy].text
+		end
+		if not self.multiline or sy == ey then
+			txt = RemoveColorFromText(txt:sub(s, e - 1))
+		else
+			local ls = {}
+			local topText = self.lines[sy].text
+			local bottomText = self.lines[ey].text
+			table.insert(ls, RemoveColorFromText(topText:sub(s)))
+			for i = sy+1, ey-1 do
+				table.insert(ls, RemoveColorFromText(self.lines[i].text))
+			end
+			table.insert(ls, RemoveColorFromText(bottomText:sub(1, e - 1)))
+			txt = table.concat(ls, "\n")
+		end
+		return txt
+	end
 end
 
 function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
@@ -712,41 +751,12 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 
 	-- copy & paste
 	elseif mods.ctrl and (key == Spring.GetKeyCode("c") or (key == Spring.GetKeyCode("x") and self.editable)) then
-		local sy = self.selStartY
-		local ey = self.selEndY
-		local s = self.selStart
-		local e = self.selEnd
-		if s and e then
-			if self.multiline then
-				if sy > ey then
-					sy, ey = ey, sy
-					s, e = e, s
-				elseif sy == ey and s > e then
-					s, e = e, s
-				end
-			elseif s > e then
-				s, e = e, s
-			end
-			if self.multiline then
-				txt = self.lines[sy].text
-			end
-			if not self.multiline or sy == ey then
-				txt = txt:sub(s, e - 1)
-			else
-				local ls = {}
-				local topText = self.lines[sy].text
-				local bottomText = self.lines[ey].text
-				table.insert(ls, RemoveColorFromText(topText:sub(s)))
-				for i = sy+1, ey-1 do
-					table.insert(ls, RemoveColorFromText(self.lines[i].text))
-				end
-				table.insert(ls, RemoveColorFromText(bottomText:sub(1, e - 1)))
-				txt = table.concat(ls, "\n")
-			end
+		txt = self:GetSelectionText()
+		if self.selStart and self.selEnd then
 			Spring.SetClipboard(txt)
-		end
-		if key == Spring.GetKeyCode("x") and self.selStart ~= nil then
-			self:ClearSelected()
+			if key == Spring.GetKeyCode("x") then
+				self:ClearSelected()
+			end
 		end
 	elseif mods.ctrl and key == Spring.GetKeyCode("v") and self.editable then
 		self:TextInput(Spring.GetClipboard())
@@ -754,10 +764,7 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	-- select all
 	elseif mods.ctrl and key == Spring.GetKeyCode("a") then
 		if not self.multiline then
-			self.selStart = 1
-			self.selStartPhysical = 1
-			self.selEnd = #txt + 1
-			self.selEndPhysical = #txt + 1
+			self:_SetSelection(1, nil, #txt + 1, nil)
 		else
 			self:_SetSelection(1, 1, #self.lines[#self.lines].text + 1, #self.lines)
 		end

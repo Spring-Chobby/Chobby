@@ -48,7 +48,7 @@ function FriendListWindow:OnAddUser(userName)
 		local userControl = WG.UserHandler.GetNotificationUser(userName)
 		userControl:SetPos(30, 30, 250, 20)
 		Chotify:Post({
-			title = i18n("User got online"),
+			title = i18n("User is now online"),
 			body  = userControl,
 		})
 	end
@@ -63,7 +63,7 @@ function FriendListWindow:OnRemoveUser(userName)
 		local userControl = WG.UserHandler.GetNotificationUser(userName)
 		userControl:SetPos(30, 30, 250, 20)
 		Chotify:Post({
-			title = i18n("User went offline"),
+			title = i18n("User is now offline"),
 			body  = userControl,
 		})
 	end
