@@ -750,15 +750,16 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 		self.cursor = #txt + 1
 
 	-- copy & paste
-	elseif mods.ctrl and (key == Spring.GetKeyCode("c") or (key == Spring.GetKeyCode("x") and self.editable)) then
+	elseif (mods.ctrl and key == Spring.GetKeyCode("c")) or (mods.ctrl and key == Spring.GetKeyCode("insert")) or 
+		(self.editable and ((mods.ctrl and key == Spring.GetKeyCode("x")) or (mods.shift and key == Spring.GetKeyCode("delete")))) then
 		txt = self:GetSelectionText()
 		if self.selStart and self.selEnd then
 			Spring.SetClipboard(txt)
-			if key == Spring.GetKeyCode("x") then
+			if key == Spring.GetKeyCode("x") or key == Spring.GetKeyCode("delete") then
 				self:ClearSelected()
 			end
 		end
-	elseif mods.ctrl and key == Spring.GetKeyCode("v") and self.editable then
+	elseif ((mods.ctrl and key == Spring.GetKeyCode("v")) or (mods.shift and key == Spring.GetKeyCode("insert"))) and self.editable then
 		self:TextInput(Spring.GetClipboard())
 
 	-- select all
