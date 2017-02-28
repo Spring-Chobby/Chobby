@@ -1,6 +1,4 @@
 local invertZoomMult = -1
-local MiddleClickScrollSpeed = -1/200
-local OverheadScrollSpeed = 50
 
 local settings = {
 	{
@@ -641,9 +639,13 @@ local settings = {
 				minValue = 0,
 				maxValue = 1000,
 				applyFunction = function(value)
-					MiddleClickScrollSpeed = value*(-1/200)
+					local camPan = 50
+					if WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.game_settings then
+						camPan = WG.Chobby.Configuration.game_settings.OverheadScrollSpeed or camPan
+					end
+					value = value*(-1/200)
 					return {
-						MiddleClickScrollSpeed = MiddleClickScrollSpeed/OverheadScrollSpeed,
+						MiddleClickScrollSpeed = value/camPan,
 					}
 				end,
 			},
@@ -654,9 +656,14 @@ local settings = {
 				minValue = 0,
 				maxValue = 1000,
 				applyFunction = function(value)
+					local middleScroll = 10
+					if WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.settingsMenuValues then
+						middleScroll = WG.Chobby.Configuration.settingsMenuValues.MiddlePanSpeed or middleScroll
+					end
+					middleScroll = middleScroll*(-1/200)
 					return {
+						MiddleClickScrollSpeed = middleScroll/value,
 						OverheadScrollSpeed = value,
-						MiddleClickScrollSpeed = MiddleClickScrollSpeed/value,
 					}
 				end,
 			},
