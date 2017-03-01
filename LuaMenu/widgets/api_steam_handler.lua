@@ -87,6 +87,7 @@ function SteamHandler.SteamOnline(authToken, joinFriendID, friendList, suggested
 		Spring.Echo("Loopback error: Sent steam before Configuration initialization")
 		return
 	end
+	Spring.Echo("SteamOnline", "Recieved")
 	Configuration:SetConfigValue("canAuthenticateWithSteam", true)
 	Configuration:SetConfigValue("suggestedNameFromSteam", suggestedNameFromSteam)
 	
