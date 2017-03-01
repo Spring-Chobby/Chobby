@@ -43,9 +43,12 @@ if LUA_NAME == "LuaUI" or LUA_NAME == "LuaMenu" then
 	local localWidgets = false
 
 	if VFS.FileExists(CONFIG_FILENAME) then --check config file whether user want to use localWidgetsFirst
-		local configData, err = pcall(VFS.Include, CONFIG_FILENAME)
-		if not configData then
-			Spring.Log(LUA_NAME, "error", "Failed to load config: " .. err)
+		local configData
+		local status, rvalue = pcall(VFS.Include, CONFIG_FILENAME)
+		if status then
+			configData = rvalue
+		else
+			Spring.Log(LUA_NAME, "error", "Failed to load config: " .. rvalue)
 			configData = {}
 		end
 		localWidgets = configData and configData["Chili lobby"] and configData["Chili lobby"].loadLocalWidgets
