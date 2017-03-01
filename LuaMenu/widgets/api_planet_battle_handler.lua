@@ -15,66 +15,6 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Circuit
-
-local function LoadCircuitConfig(circuitName, version)
-	local path = "AI/Skirmish/" .. circuitName .. "/" .. version .. "/config/circuit.json"
-	if VFS.FileExists(path) then
-		local file = VFS.LoadFile(path)
-		return Spring.Utilities.json.decode(file)
-	end
-	return false
-end
-
-local function SaveCircuitConfig(circuitName, version, index, configTable)
-	local path = "AI/Skirmish/" .. circuitName .. "/" .. version .. "/config/temp" .. index .. ".json"
-	local configFile = io.open(path, "w")
-	configFile:write(Spring.Utilities.json.encode(configTable))
-	configFile:close()
-	return "temp" .. index
-end
-
-local function IsBadUnit(str)
-	if string.len(str) < 9 then
-		return false
-	end
-	if string.find(str, "cloak") or string.find(str, "gunship") or string.find(str, "plane") then
-		return false
-	end
-	if string.find(str, "factory") or string.find(str, "hub") then
-		return true
-	end
-	return false
-end
-
-function RecursivelyDeleteFactories(config)
-	-- All passed by reference
-	for key, value in pairs(config) do
-		if IsBadUnit(key) then
-			config[key] = nil
-		end
-		if type(value) == "table" then
-			RecursivelyDeleteFactories(value)
-		elseif type(value) == "string" and IsBadUnit(value) then
-			if type(key) == "number" then
-				local i = 1
-				while i <= #config do
-					if IsBadUnit(config[i]) then
-						config[i] = config[#config]
-						config[#config] = nil
-					else
-						i = i + 1
-					end
-				end
-			else
-				config[key] = nil
-			end
-		end
-	end
-end
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
 -- Downloads
 
 local function MaybeDownloadArchive(archiveName, archiveType)
@@ -100,6 +40,31 @@ local function TableToBase64(inputTable)
 		return 
 	end
 	return Spring.Utilities.Base64Encode(Spring.Utilities.TableToString(inputTable))
+end
+
+local function MakeCircuitDisableString(unlockedUnits)
+	local Configuration = WG.Chobby.Configuration
+	local unitList = Configuration.gameConfig.unitList
+	if not unitList then
+		return nil
+	end
+	local unlockedMap = {}
+	if unlockedUnits then
+		for i = 1, #unlockedUnits do
+			unlockedMap[unlockedUnits[i]] = true
+		end
+	end
+	local disabled
+	for i = 1, #unitList do
+		if not unlockedMap[unitList[i]] then
+			if not disabled then
+				disabled = unitList[i]
+			else
+				disabled = disabled .. "+" .. unitList[i]
+			end
+		end
+	end
+	return disabled
 end
 
 --------------------------------------------------------------------------------
@@ -164,10 +129,6 @@ local function StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName)
 			shortName = shortName .. bitExtension
 		end
 		
-		local config = LoadCircuitConfig(shortName, "0.9.11.b")
-		RecursivelyDeleteFactories(config)
-		local configName = SaveCircuitConfig(shortName, "0.9.11.b", aiCount, config)
-		
 		ais[aiCount] = {
 			Name = aiData.humanName,
 			Team = teamCount,
@@ -177,7 +138,7 @@ local function StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName)
 			Host = 0,
 			Options = {
 				comm_merge = 0,
-				config = configName,
+				disabledunits = MakeCircuitDisableString(aiData.unlocks)
 			}
 		}
 		aiCount = aiCount + 1
@@ -285,3 +246,68 @@ end
 function widget:Initialize()
 	WG.PlanetBattleHandler = PlanetBattleHandler
 end
+
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Circuit Config Handling
+
+local function LoadCircuitConfig(circuitName, version)
+	local path = "AI/Skirmish/" .. circuitName .. "/" .. version .. "/config/circuit.json"
+	if VFS.FileExists(path) then
+		local file = VFS.LoadFile(path)
+		return Spring.Utilities.json.decode(file)
+	end
+	return false
+end
+
+local function SaveCircuitConfig(circuitName, version, index, configTable)
+	local path = "AI/Skirmish/" .. circuitName .. "/" .. version .. "/config/temp" .. index .. ".json"
+	local configFile = io.open(path, "w")
+	configFile:write(Spring.Utilities.json.encode(configTable))
+	configFile:close()
+	return "temp" .. index
+end
+
+local function IsBadUnit(str)
+	if string.len(str) < 9 then
+		return false
+	end
+	if string.find(str, "cloak") or string.find(str, "gunship") or string.find(str, "plane") then
+		return false
+	end
+	if string.find(str, "factory") or string.find(str, "hub") then
+		return true
+	end
+	return false
+end
+
+function RecursivelyDeleteFactories(config)
+	-- All passed by reference
+	for key, value in pairs(config) do
+		if IsBadUnit(key) then
+			config[key] = nil
+		end
+		if type(value) == "table" then
+			RecursivelyDeleteFactories(value)
+		elseif type(value) == "string" and IsBadUnit(value) then
+			if type(key) == "number" then
+				local i = 1
+				while i <= #config do
+					if IsBadUnit(config[i]) then
+						config[i] = config[#config]
+						config[#config] = nil
+					else
+						i = i + 1
+					end
+				end
+			else
+				config[key] = nil
+			end
+		end
+	end
+end
+
+--local config = LoadCircuitConfig(shortName, "0.9.12")
+--RecursivelyDeleteFactories(config)
+--local configName = SaveCircuitConfig(shortName, "0.9.12", aiCount, config)
