@@ -77,9 +77,9 @@ local function CountryShortnameToFlag(shortname)
 	end
 end
 
-local function UserLevelToImage(level, skill, isBot, isAdmin, oldImage)
+local function UserLevelToImage(icon, isBot)
 	if UserLevelToImageConfFunction then
-		return UserLevelToImageConfFunction(level, skill, isBot, isAdmin, oldImage)
+		return UserLevelToImageConfFunction(icon, isBot)
 	end
 	return IMAGE_PLAYER
 end
@@ -215,7 +215,7 @@ local function GetUserRankImageName(userName, userControl, oldImage)
 	if userControl.isSingleplayer and not userBattleInfo.aiLib then
 		return IMAGE_PLAYER
 	end
-	local image = UserLevelToImage(userInfo.level, userInfo.skill, userInfo.isBot or userBattleInfo.aiLib, userInfo.isAdmin, oldImage)
+	local image = UserLevelToImage(userInfo.icon, userInfo.isBot or userBattleInfo.aiLib, userInfo.isAdmin, oldImage)
 	return image
 end
 
