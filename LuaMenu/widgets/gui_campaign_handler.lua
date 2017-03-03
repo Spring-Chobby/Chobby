@@ -185,30 +185,42 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 	end
 end
 
-local function GetPlanet(planetHolder, planetID, planetData, adjacency)
+local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 	local Configuration = WG.Chobby.Configuration
 	
 	local planetSize = planetData.mapDisplay.size
 	local xPos, yPos = planetData.mapDisplay.x, planetData.mapDisplay.y
 	
-	local visited = (math.random() > 0.9)
+	local captured = planetData.startingPlanet or WG.CampaignAPI.IsPlanetCaptured(planetID)
+	if planetData.startingPlanet then
+		WG.CampaignAPI.UnlockUnits(planetData.completionReward.units)
+	end
+	
 	local startable
 	
 	local target
-	local targetSize = math.floor(planetSize*1.3)
+	local targetSize = math.ceil(math.floor(planetSize*1.35)/2)*2
+	local planetOffset = math.floor((targetSize - planetSize)/2)
 	
-	local xSize, ySize = 0, 0
-	
-	local button = Button:New{
+	local planetHolder = Control:New{
 		x = 0,
 		y = 0,
+		width = targetSize,
+		height = targetSize,
+		padding = {0, 0, 0, 0},
+		parent = galaxyHolder,
+	}
+	
+	local button = Button:New{
+		x = planetOffset,
+		y = planetOffset,
 		width = planetSize,
 		height = planetSize,
 		classname = "button_planet",
 		caption = "",
 		OnClick = { 
 			function(self)
-				SelectPlanet(planetHolder, planetID, planetData, startable)
+				SelectPlanet(galaxyHolder, planetID, planetData, startable)
 			end
 		},
 		parent = planetHolder,
@@ -238,25 +250,18 @@ local function GetPlanet(planetHolder, planetID, planetData, adjacency)
 	
 	local externalFunctions = {}
 	
-	function externalFunctions.UpdatePosition(newXSize, newYSize)
-		xSize = newXSize or xSize
-		ySize = newYSize or ySize
-		local x = math.max(0, math.min(xSize - planetSize, xPos*xSize - planetSize/2))
-		local y = math.max(0, math.min(ySize - planetSize, yPos*ySize - planetSize/2))
-		button:SetPos(x, y)
-		if target then
-			local tx = math.max(0, math.min(xSize - targetSize, xPos*xSize - targetSize/2))
-			local ty = math.max(0, math.min(ySize - targetSize, yPos*ySize - targetSize/2))
-			target:SetPos(tx, ty)
-		end
+	function externalFunctions.UpdatePosition(xSize, ySize)
+		local x = math.max(0, math.min(xSize - targetSize, xPos*xSize - targetSize/2))
+		local y = math.max(0, math.min(ySize - targetSize, yPos*ySize - targetSize/2))
+		planetHolder:SetPos(x, y)
 	end
 	
 	function externalFunctions.UpdateStartable()
-		startable = visited
+		startable = captured
 		if not startable then
 			for i = 1, #adjacency do
 				if adjacency[i] then
-					if planetList[i].GetVisited() then
+					if planetList[i].GetCaptured() then
 						startable = true
 						break
 					end
@@ -272,23 +277,24 @@ local function GetPlanet(planetHolder, planetID, planetData, adjacency)
 		image:Invalidate()
 		
 		if target then
-			target:SetVisibility(startable and not visited)
+			target:SetVisibility(startable and not captured)
 			target:SendToBack()
-		elseif startable and not visited then
+		elseif startable and not captured then
 			target = Image:New{
+				x = 0,
+				y = 0,
 				width = targetSize,
 				height = targetSize,
 				file = TARGET_IMAGE,
 				keepAspect = true,
 				parent = planetHolder,
 			}
-			externalFunctions.UpdatePosition()
 			target:SendToBack()
 		end
 	end
 	
-	function externalFunctions.GetVisited()
-		return visited
+	function externalFunctions.GetCaptured()
+		return captured
 	end
 	
 	return externalFunctions
@@ -300,7 +306,7 @@ local function DrawEdgeLines()
 			local pid = planetEdgeList[i][p]
 			local planetData = planetList[pid]
 			local x, y = planetConfig[pid].mapDisplay.x, planetConfig[pid].mapDisplay.y
-			gl.Color((planetData.GetVisited() and ACTIVE_COLOR) or INACTIVE_COLOR)
+			gl.Color((planetData.GetCaptured() and ACTIVE_COLOR) or INACTIVE_COLOR)
 			gl.Vertex(x, y)
 		end
 	end

@@ -107,6 +107,7 @@ local function MakePlanet(planetID)
 	local planetData = {
 		id = "planet" .. planetID,
 		name = "Pong",
+		startingPlanet = math.random() > 0.9,
 		mapDisplay = {
 			x = planetPositions[planetID][1],
 			y = planetPositions[planetID][2],

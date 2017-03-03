@@ -41,6 +41,15 @@ local codexEntries = {}
 
 local saves = {}
 
+local function UnlockThing(thingData, id)
+	if thingData.map[id] then
+		return false
+	end
+	thingData.map[id] = true
+	thingData.list[#thingData.list + 1] = id
+	return true
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 local function ResetGamedata()
@@ -51,8 +60,9 @@ local function ResetGamedata()
 		nextMissionScript = nil,
 		
 		commConfig = {},
-		unitsUnlocked = {},
+		unitsUnlocked = {map = {}, list = {}},
 		modulesUnlocked = {},
+		planetsCaptured = {map = {}, list = {}},
 		retinue = {},
 		missionsCompleted = {},
 		scenesUnlocked = {},
@@ -417,27 +427,6 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
-local function UnlockScene(id)
-	gamedata.scenesUnlocked[id] = true
-end
-
-local function UnlockCodexEntry(id)
-	gamedata.codexUnlocked[id] = true
-end
-
-local function MarkCodexEntryRead(id)
-	gamedata.codexRead[id] = true
-end
-
-local function UnlockUnit(id)
-	gamedata.unitsUnlocked[id] = true
-end
-
-local function UnlockModule(id)
-	gamedata.modulesUnlocked[id] = true
-end
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
 -- callins
 
 -- called when returning to menu from a game
@@ -463,6 +452,25 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+
+local function UnlockScene(id)
+	gamedata.scenesUnlocked[id] = true
+end
+
+local function UnlockCodexEntry(id)
+	gamedata.codexUnlocked[id] = true
+end
+
+local function MarkCodexEntryRead(id)
+	gamedata.codexRead[id] = true
+end
+
+local function UnlockModule(id)
+	gamedata.modulesUnlocked[id] = true
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- External Functions
 
 local externalFunctions = {
@@ -484,7 +492,6 @@ local externalFunctions = {
 	AdvanceCampaign = AdvanceCampaign,
 	
 	UnlockScene = UnlockScene,
-	UnlockUnit = UnlockUnit,
 	UnlockModule = UnlockModule,
 	UnlockCodexEntry = UnlockCodexEntry,
 	MarkCodexEntryRead = MarkCodexEntryRead,
@@ -494,12 +501,36 @@ local externalFunctions = {
 	LaunchMission = LaunchMission,
 }
 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Callins
+
+function externalFunctions.UnlockUnits(unlockList)
+	for i = 1, #unlockList do
+		UnlockThing(gamedata.unitsUnlocked, unlockList[i])
+	end
+end
+
+function externalFunctions.CapturePlanet(planetID, unlockList)
+	if UnlockThing(gamedata.planetsCaptured, planetID) then
+		UnlockUnits(unlockList)
+	end
+end
+
 function externalFunctions.GetPlanetDefs()
 	local planetData = planetDefPath and VFS.FileExists(planetDefPath) and VFS.Include(planetDefPath)
 	if planetData then
 		return planetData
 	end
 	return {}
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Callouts
+
+function externalFunctions.IsPlanetCaptured(planetID)
+	return gamedata.planetsCaptured.map[planetID]
 end
 
 --------------------------------------------------------------------------------
