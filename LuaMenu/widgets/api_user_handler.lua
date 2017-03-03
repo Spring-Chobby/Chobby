@@ -77,11 +77,15 @@ local function CountryShortnameToFlag(shortname)
 	end
 end
 
-local function UserLevelToImage(icon, isBot)
+local function UserLevelToImage(level, skill, isBot, isAdmin)
 	if UserLevelToImageConfFunction then
-		return UserLevelToImageConfFunction(icon, isBot)
+		return UserLevelToImageConfFunction(level, skill, isBot, isAdmin)
 	end
 	return IMAGE_PLAYER
+end
+
+local function GetUserRankImage(userInfo, isBot)
+	return userInfo.icon or UserLevelToImage(userInfo.level, userInfo.skill, isBot, userInfo.isAdmin)
 end
 
 local function GetClanImage(clanName)
@@ -207,7 +211,7 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 	return comboOptions
 end
 
-local function GetUserRankImageName(userName, userControl, oldImage)
+local function GetUserRankImageName(userName, userControl)
 
 	local userInfo = userControl.lobby:GetUser(userName) or {}
 	local userBattleInfo = userControl.lobby:GetUserBattleStatus(userName) or {}
@@ -215,7 +219,7 @@ local function GetUserRankImageName(userName, userControl, oldImage)
 	if userControl.isSingleplayer and not userBattleInfo.aiLib then
 		return IMAGE_PLAYER
 	end
-	local image = UserLevelToImage(userInfo.icon, userInfo.isBot or userBattleInfo.aiLib, userInfo.isAdmin, oldImage)
+	local image = GetUserRankImage(userInfo, userInfo.isBot or userBattleInfo.aiLib)
 	return image
 end
 
@@ -734,7 +738,7 @@ end
 -- External Functions
 local userHandler = {
 	CountryShortnameToFlag = CountryShortnameToFlag,
-	UserLevelToImage = UserLevelToImage,
+	GetUserRankImage = GetUserRankImage,
 	GetClanImage = GetClanImage
 }
 

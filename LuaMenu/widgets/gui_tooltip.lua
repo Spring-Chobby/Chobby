@@ -637,7 +637,7 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 		userTooltip.level.Update(
 			offset,
 			text,
-			WG.UserHandler.UserLevelToImage(userInfo.icon, isBot)
+			WG.UserHandler.GetUserRankImage(userInfo, isBot)
 		)
 		offset = offset + 20
 	elseif userTooltip.level then
