@@ -35,8 +35,7 @@ local campaignDefs = {}	-- {name, author, image, definition, starting function c
 local campaignDefsByID = {}
 
 -- loaded when campaign is loaded
-local planetDefs = {}
-local planetDefsByID = {}
+local planetDefPath
 local missionDefs = {}
 local codexEntries = {}
 
@@ -62,8 +61,7 @@ local function ResetGamedata()
 		
 		vars = {},
 	}
-	planetDefs = {}
-	planetDefsByID = {}
+	planetDefPath = nil
 	missionDefs = {}
 	codexEntries = {}
 end
@@ -114,15 +112,12 @@ end
 local function LoadCampaign(campaignID)
 	local def = campaignDefsByID[campaignID]
 	local success, err = pcall(function()
-		local planetDefPath = def.dir .. "planetDefs.lua"
 		local missionDefPath = def.dir .. "missionDefs.lua"
 		local codexDefPath = def.dir .. "codex.lua"
-		planetDefs = VFS.FileExists(planetDefPath) and VFS.Include(planetDefPath) or {}
+		planetDefPath = def.dir .. "planetDefs.lua"
+		
 		missionDefs = VFS.FileExists(missionDefPath) and VFS.Include(missionDefPath) or {}
 		codexEntries = VFS.FileExists(codexDefPath) and VFS.Include(codexDefPath) or {}
-		for i=1,#planetDefs do
-			planetDefsByID[planetDefs[i].id] = planetDefs[i]	
-		end
 		
 		GetGameIfNeeded(def.game)
 		
@@ -337,16 +332,6 @@ local function IsMissionUnlocked(missionID)
 	return false
 end
 
--- returns true if any missions on the planet have been completed or unlocked
-local function IsPlanetVisible(planetDef)
-	for i=1,#planetDef.missions do
-		local missionID = planetDef.missions[i]
-		if IsMissionUnlocked(missionID) then
-			return true
-		end
-	end
-	return false
-end
 --------------------------------------------------------------------------------
 -- Save/load, progression
 --------------------------------------------------------------------------------
@@ -476,11 +461,14 @@ function widget:DownloadFinished()
 	end
 end
 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- External Functions
+
 local externalFunctions = {
 	--GetCurrentData = nil,
 	--LoadCampaign = LoadCampaign,
 	--GetCampaigns = GetCampaigns
-	GetPlanetDefs = function() return planetDefs end,
 	GetCodexEntries = function() return codexEntries end,
 	GetCampaignTitle = GetCampaignTitle,
 	IsCodexEntryRead = function(id) return gamedata.codexRead[id] end,
@@ -505,6 +493,18 @@ local externalFunctions = {
 	GetMapForMissionIfNeeded = GetMapForMissionIfNeeded,
 	LaunchMission = LaunchMission,
 }
+
+function externalFunctions.GetPlanetDefs()
+	local planetData = planetDefPath and VFS.FileExists(planetDefPath) and VFS.Include(planetDefPath)
+	if planetData then
+		return planetData
+	end
+	return {}
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Initialiazation
 
 function widget:Initialize()
 	CHOBBY_DIR = "LuaMenu/widgets/chobby/"

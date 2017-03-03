@@ -44,7 +44,61 @@ local planetPositions = {
 	{0.41, 0.91},
 }
 
-local PLANET_SIZE_MAP = 54
+local planetAdjacency = {
+	{},
+	{1},
+	{0, 1},
+	{0, 0, 1},
+	{0, 0, 0, 1},
+	{0, 0, 1, 0, 0},
+	{0, 0, 0, 0, 0, 1},
+	{0, 0, 0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0, 0, 1, 1},
+	{0, 0, 0, 0, 0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0},
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1},
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	{0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1},
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0},
+	{0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+}
+
+local planetEdgeList = {}
+-- Complete the matrix
+for i = 1, #planetAdjacency do
+	local row = planetAdjacency[i]
+	row[i] = 0
+	for j = i + 1, #planetAdjacency do
+		row[j] = planetAdjacency[j][i]
+	end
+end
+
+-- Convert to true/false and make edge list
+for i = 1, #planetAdjacency do
+	for j = 1, #planetAdjacency do
+		planetAdjacency[j][i] = (planetAdjacency[j][i] == 1)
+	end
+end
+
+-- Make edge list
+for i = 1, #planetAdjacency do
+	for j = i + 1, #planetAdjacency do
+		if planetAdjacency[j][i] then
+			planetEdgeList[#planetEdgeList + 1] = {j, i}
+		end
+	end
+end
+
+local PLANET_SIZE_MAP = 48
 local PLANET_SIZE_INFO = 240
 
 local function MakePlanet(planetID)
@@ -167,6 +221,9 @@ local function MakePlanet(planetID)
 						"cormex",
 						"armsolar",
 						"armpw",
+						"armrock",
+						"armwar",
+						"armham",
 					}
 				},
 				{
@@ -220,4 +277,4 @@ for i = 1, #planetPositions do
 	planets[i] = MakePlanet(i)
 end
 
-return planets
+return {planets = planets, planetAdjacency = planetAdjacency, planetEdgeList = planetEdgeList}

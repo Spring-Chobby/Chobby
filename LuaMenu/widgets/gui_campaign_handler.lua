@@ -21,7 +21,11 @@ local IMAGE_BOUNDS = {
 	height = 1500/2602,
 }
 
-local planetConfig = {}
+local edgeDrawList = 0
+local planetConfig, planetAdjacency, planetEdgeList
+
+local ACTIVE_COLOR = {0,1,0,0.7}
+local INACTIVE_COLOR = {0.3, 0.3, 0.3, 0.7}
 
 local playerUnlocks = {
 	"cormex",
@@ -29,6 +33,8 @@ local playerUnlocks = {
 	"armpw",
 	"factorycloak",
 }
+
+local planetList
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -173,6 +179,8 @@ local function SelectPlanet(planetHandler, planetID, planetData)
 end
 
 local function GetPlanet(planetHolder, planetID, planetData)
+	local Configuration = WG.Chobby.Configuration
+	
 	local planetSize = planetData.mapDisplay.size
 	local xPos, yPos = planetData.mapDisplay.x, planetData.mapDisplay.y
 	
@@ -201,6 +209,18 @@ local function GetPlanet(planetHolder, planetID, planetData)
 		parent = button,
 	}
 	
+	if Configuration.debugMode then
+		local number = Label:New {
+			x = 3,
+			y = 3,
+			right = 2,
+			bottom = 2,
+			caption = planetID,
+			font = Configuration:GetFont(4),
+			parent = image,
+		}
+	end
+	
 	local externalFunctions = {}
 	
 	function externalFunctions.UpdatePosition(xSize, ySize)
@@ -209,23 +229,82 @@ local function GetPlanet(planetHolder, planetID, planetData)
 		button:SetPos(x,y)
 	end
 	
+	local visited = (math.random() > 0.5)
+	function externalFunctions.GetVisited()
+		return visited
+	end
+	
 	return externalFunctions
+end
+
+local function DrawEdgeLines()
+	for i = 1, #planetEdgeList do
+		for p = 1, 2 do
+			local pid = planetEdgeList[i][p]
+			local planetData = planetList[pid]
+			local x, y = planetConfig[pid].mapDisplay.x, planetConfig[pid].mapDisplay.y
+			gl.Color((planetData.GetVisited() and ACTIVE_COLOR) or INACTIVE_COLOR)
+			gl.Vertex(x, y)
+		end
+	end
+end
+
+local function CreateEdgeList()
+	gl.BeginEnd(GL.LINES, DrawEdgeLines)
+end
+
+local function UpdateEdgeList()
+	gl.DeleteList(edgeDrawList)
+	edgeDrawList = gl.CreateList(CreateEdgeList)
 end
 
 local function InitializePlanetHandler(parent)
 	local window = Control:New {
 		name = "planetsHolder",
 		padding = {0,0,0,0},
-		resizable = false,
-		draggable = false,
 		parent = parent,
 	}
+	local planetWindow = Control:New {
+		name = "planetWindow",
+		x = 0,
+		y = 0,
+		width = "100%",
+		height = "100%",
+		padding = {0,0,0,0},
+		parent = window,
+	}
 	
-	planetConfig = WG.CampaignAPI.GetPlanetDefs()
-	local planetList = {}
+	local planetData = WG.CampaignAPI.GetPlanetDefs()
+	planetConfig, planetAdjacency, planetEdgeList = planetData.planets, planetData.planetAdjacency, planetData.planetEdgeList
+	
+	planetList = {}
 	for i = 1, #planetConfig do
-		planetList[i] = GetPlanet(window, i, planetConfig[i])
+		planetList[i] = GetPlanet(planetWindow, i, planetConfig[i])
 	end
+	
+	UpdateEdgeList()
+	local graph = Chili.Control:New{
+		x       = 0,
+		y       = 0,
+		height  = "100%",
+		width   = "100%",
+		padding = {0,0,0,0},
+		drawcontrolv2 = true,
+		DrawControl = function (obj)
+			local x = obj.x
+			local y = obj.y
+			local w = obj.width
+			local h = obj.height
+			
+			gl.PushMatrix()
+			gl.Translate(x, y, 0)
+			gl.Scale(w, h, 1)
+			gl.LineWidth(3)
+			gl.CallList(edgeDrawList)
+			gl.PopMatrix()
+		end,
+		parent = window,
+	}
 	
 	local externalFunctions = {}
 	
@@ -251,7 +330,7 @@ function widget:RecvLuaMsg(msg)
 	if string.find(msg, BATTLE_WON_STRING) then
 		msg = string.sub(msg, 25)
 		local planetID = tonumber(msg)
-		if planetID and planetConfig[planetID] then
+		if planetID and planetConfig and planetConfig[planetID] then
 			local config = planetConfig[planetID]
 			local wonString = ""
 			if config.completionReward then
