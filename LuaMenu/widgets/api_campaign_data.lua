@@ -19,6 +19,8 @@ end
 -- this stores anything that goes into a save file
 local gamedata = {}
 
+local externalFunctions = {}
+
 local SAVE_DIR = "Saves/campaign/"
 
 --------------------------------------------------------------------------------
@@ -54,29 +56,6 @@ local function CallListeners(event, ...)
 	return true
 end
 
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
--- Game data
-
-local function ResetGamedata()
-	gamedata = {
-		unitsUnlocked = {map = {}, list = {}},
-		planetsCaptured = {map = {}, list = {}},
-	}
-end
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
--- External Functions
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
-
-local externalFunctions = {}
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
--- Listener handler
-
 function externalFunctions.AddListener(event, listener)
 	if listener == nil then
 		Spring.Log(LOG_SECTION, LOG.ERROR, "Event: " .. tostring(event) .. ", listener cannot be nil")
@@ -106,17 +85,143 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Callins
+-- Game data
 
-function externalFunctions.UnlockUnits(unlockList)
+local function ResetGamedata()
+	gamedata = {
+		unitsUnlocked = {map = {}, list = {}},
+		planetsCaptured = {map = {}, list = {}},
+	}
+end
+
+local function UnlockUnits(unlockList)
 	for i = 1, #unlockList do
 		UnlockThing(gamedata.unitsUnlocked, unlockList[i])
 	end
 end
 
-function externalFunctions.CapturePlanet(planetID, unlockList)
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Save/Load
+-- Returns the data stored in a save file
+local function GetSave(filepath)
+	local ret = nil
+	local success, err = pcall(function()
+		local saveData = VFS.Include(filepath)
+		ret = saveData
+	end)
+	if (not success) then
+		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error getting saves: " .. err)
+	else
+		return ret
+	end
+end
+
+-- Loads the list of save files and their contents
+local function GetSaves()
+	Spring.CreateDir(SAVE_DIR)
+	local saves = {}
+	local savefiles = VFS.DirList(SAVE_DIR, "*.lua")
+	for i = 1, #savefiles do
+		local filepath = savefiles[i]
+		local saveData = GetSave(filepath)
+		if saveData then
+			saves[saveData.name] = saveData
+		end
+	end
+	return saves
+end
+
+local function SaveGame()
+	local fileName = WG.Chobby.Configuration.campaignSaveFile
+	local success, err = pcall(function()
+		Spring.CreateDir(SAVE_DIR)
+		path = SAVE_DIR .. fileName .. ".lua"
+		local saveData = Spring.Utilities.CopyTable(gamedata, true)
+		saveData.name = fileName
+		saveData.date = os.date('*t')
+		saveData.description = isAutosave and "" or description
+		table.save(saveData, path)
+		Spring.Log(widget:GetInfo().name, LOG.INFO, "Saved game to " .. path)
+	end)
+	if (not success) then
+		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error saving game: " .. err)
+	end
+	return success
+end
+
+local function LoadGame(saveData)
+	local success, err = pcall(function()
+		Spring.CreateDir(SAVE_DIR)
+		ResetGamedata()
+		gamedata = Spring.Utilities.MergeTable(saveData, gamedata, true)
+		Spring.Log(widget:GetInfo().name, LOG.INFO, "Save file " .. saveData.name .. " loaded")
+	end)
+	if (not success) then
+		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error loading game: " .. err)
+	end
+end
+
+local function DeleteSave(id)
+	local success, err = pcall(function()
+		local path = SAVE_DIR .. (id == AUTOSAVE_ID and AUTOSAVE_FILENAME or ("save" .. string.format("%03d", id))) .. ".lua"
+		os.remove(path)
+		local num = 0
+		local parent = nil
+		for i=1,#saveLoadControls do
+			num = i
+			local entry = saveLoadControls[i]
+			if entry.id == id then
+				parent = entry.container.parent
+				entry.container:Dispose()
+				table.remove(saveLoadControls, i)
+				break
+			end
+		end
+		-- reposition save entry controls
+		for i=num,#saveLoadControls do
+			local entry = saveLoadControls[i]
+			entry.container.y = entry.container.y - (SAVEGAME_BUTTON_HEIGHT)
+		end
+		parent:Invalidate()
+		
+	end)
+	if (not success) then
+		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error deleting save " .. id .. ": " .. err)
+	end
+end
+
+local function StartNewGame()
+	local Configuration = WG.Chobby.Configuration
+	local planets = Configuration.campaignConfig.planetDefs.initialSetup.planets
+	ResetGamedata()
+	for i = 1, #planets do
+		externalFunctions.CapturePlanet(planets[i])
+	end
+	SaveGame()
+end
+
+local function LoadCampaignData()
+	local Configuration = WG.Chobby.Configuration
+	local saves = GetSaves()
+	local saveData = saves[Configuration.campaignSaveFile]
+	if saveData then
+		LoadGame(saveData)
+		return
+	end
+	StartNewGame(Configuration.campaignSaveFile)
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Callins
+
+function externalFunctions.CapturePlanet(planetID)
+	local planet = WG.Chobby.Configuration.campaignConfig.planetDefs.planets[planetID]
 	if UnlockThing(gamedata.planetsCaptured, planetID) then
-		UnlockUnits(unlockList)
+		UnlockUnits(planet.completionReward.units)
+		SaveGame()
+		CallListeners("PlanetCaptured", planetID)
 	end
 end
 
@@ -127,10 +232,6 @@ function externalFunctions.GetPlanetDefs()
 	end
 	return {}
 end
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
--- Callouts
 
 function externalFunctions.IsPlanetCaptured(planetID)
 	return gamedata.planetsCaptured.map[planetID]
@@ -146,7 +247,7 @@ function widget:Initialize()
 	
 	WG.CampaignData = externalFunctions
 	
-	ResetGamedata()
+	WG.Delay(LoadCampaignData, 0.1)
 end
 
 function widget:Shutdown()

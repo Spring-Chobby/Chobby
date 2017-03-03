@@ -116,6 +116,24 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 				end
 			}
 		}
+		
+		if Configuration.debugMode then
+			local autoWinButton = Button:New{
+				right = 150,
+				bottom = 10,
+				width = 135,
+				height = 70,
+				classname = "action_button",
+				parent = subPanel,
+				caption = "Auto Win",
+				font = Configuration:GetFont(4),
+				OnClick = {
+					function(self)
+						WG.CampaignData.CapturePlanet(planetID)
+					end
+				}
+			}
+		end
 	end
 	
 	-- close button
@@ -191,11 +209,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 	local planetSize = planetData.mapDisplay.size
 	local xPos, yPos = planetData.mapDisplay.x, planetData.mapDisplay.y
 	
-	local captured = planetData.startingPlanet or WG.CampaignData.IsPlanetCaptured(planetID)
-	if planetData.startingPlanet then
-		WG.CampaignData.UnlockUnits(planetData.completionReward.units)
-	end
-	
+	local captured = WG.CampaignData.IsPlanetCaptured(planetID)
 	local startable
 	
 	local target
@@ -257,6 +271,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 	end
 	
 	function externalFunctions.UpdateStartable()
+		captured = WG.CampaignData.IsPlanetCaptured(planetID)
 		startable = captured
 		if not startable then
 			for i = 1, #adjacency do
@@ -276,10 +291,12 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		end
 		image:Invalidate()
 		
+		local targetable = startable and not captured
 		if target then
-			target:SetVisibility(startable and not captured)
-			target:SendToBack()
-		elseif startable and not captured then
+			if not targetable then
+				target:Dispose()
+			end
+		elseif targetable then
 			target = Image:New{
 				x = 0,
 				y = 0,
@@ -351,7 +368,6 @@ local function InitializePlanetHandler(parent)
 		planetList[i].UpdateStartable()
 	end
 	
-	
 	UpdateEdgeList()
 	local graph = Chili.Control:New{
 		x       = 0,
@@ -375,6 +391,15 @@ local function InitializePlanetHandler(parent)
 		end,
 		parent = window,
 	}
+	
+	local function PlanetCaptured(listener, planetID)
+		planetList[planetID].UpdateStartable()
+		for i = 1, #planetList do
+			planetList[i].UpdateStartable()
+		end
+		UpdateEdgeList()
+	end
+	WG.CampaignData.AddListener("PlanetCaptured", PlanetCaptured)
 	
 	local externalFunctions = {}
 	
@@ -402,19 +427,7 @@ function widget:RecvLuaMsg(msg)
 		local planetID = tonumber(msg)
 		if planetID and planetConfig and planetConfig[planetID] then
 			local config = planetConfig[planetID]
-			local wonString = ""
-			if config.completionReward then
-				local units = config.completionReward.units
-				local modules = config.completionReward.modules
-				for i = 1, #units do
-					wonString = wonString .. units[i] .. ", "
-					WG.CampaignData.UnlockUnit(units[i])
-				end
-				for i = 1, #modules do
-					wonString = wonString .. modules[i] .. ", "
-					WG.CampaignData.UnlockModule(modules[i])
-				end
-			end
+			WG.CampaignData.CapturePlanet(planetID)
 			WG.Chobby.InformationPopup("You won the battle and are rewarded with: " .. wonString .. ".")
 		end
 	end
