@@ -27,6 +27,11 @@ local planetConfig, planetAdjacency, planetEdgeList
 local ACTIVE_COLOR = {0,1,0,0.7}
 local INACTIVE_COLOR = {0.3, 0.3, 0.3, 0.7}
 
+local PLANET_START_COLOR = {1, 1, 1, 1}
+local PLANET_NO_START_COLOR = {0.5, 0.5, 0.5, 1}
+
+local TARGET_IMAGE = LUA_DIRNAME .. "images/niceCircle.png"
+
 local playerUnlocks = {
 	"cormex",
 	"armsolar",
@@ -39,7 +44,7 @@ local planetList
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- TODO: use shader animation to ease info panel in
-local function SelectPlanet(planetHandler, planetID, planetData)
+local function SelectPlanet(planetHandler, planetID, planetData, startable)
 	local Configuration = WG.Chobby.Configuration
 	
 	local starmapInfoPanel = Panel:New{
@@ -95,21 +100,23 @@ local function SelectPlanet(planetHandler, planetID, planetData)
 		}
 	}
 	
-	local startButton = Button:New{
-		right = 10,
-		bottom = 10,
-		width = 135,
-		height = 70,
-		classname = "action_button",
-		parent = subPanel,
-		caption = i18n("start"),
-		font = Configuration:GetFont(4),
-		OnClick = {
-			function(self)
-				WG.PlanetBattleHandler.StartBattle(planetID, planetData, playerUnlocks)
-			end
+	if startable then
+		local startButton = Button:New{
+			right = 10,
+			bottom = 10,
+			width = 135,
+			height = 70,
+			classname = "action_button",
+			parent = subPanel,
+			caption = i18n("start"),
+			font = Configuration:GetFont(4),
+			OnClick = {
+				function(self)
+					WG.PlanetBattleHandler.StartBattle(planetID, planetData, playerUnlocks)
+				end
+			}
 		}
-	}
+	end
 	
 	-- close button
 	Button:New{
@@ -178,11 +185,19 @@ local function SelectPlanet(planetHandler, planetID, planetData)
 	end
 end
 
-local function GetPlanet(planetHolder, planetID, planetData)
+local function GetPlanet(planetHolder, planetID, planetData, adjacency)
 	local Configuration = WG.Chobby.Configuration
 	
 	local planetSize = planetData.mapDisplay.size
 	local xPos, yPos = planetData.mapDisplay.x, planetData.mapDisplay.y
+	
+	local visited = (math.random() > 0.9)
+	local startable
+	
+	local target
+	local targetSize = math.floor(planetSize*1.3)
+	
+	local xSize, ySize = 0, 0
 	
 	local button = Button:New{
 		x = 0,
@@ -193,7 +208,7 @@ local function GetPlanet(planetHolder, planetID, planetData)
 		caption = "",
 		OnClick = { 
 			function(self)
-				SelectPlanet(planetHolder, planetID, planetData)
+				SelectPlanet(planetHolder, planetID, planetData, startable)
 			end
 		},
 		parent = planetHolder,
@@ -223,13 +238,55 @@ local function GetPlanet(planetHolder, planetID, planetData)
 	
 	local externalFunctions = {}
 	
-	function externalFunctions.UpdatePosition(xSize, ySize)
+	function externalFunctions.UpdatePosition(newXSize, newYSize)
+		xSize = newXSize or xSize
+		ySize = newYSize or ySize
 		local x = math.max(0, math.min(xSize - planetSize, xPos*xSize - planetSize/2))
 		local y = math.max(0, math.min(ySize - planetSize, yPos*ySize - planetSize/2))
-		button:SetPos(x,y)
+		button:SetPos(x, y)
+		if target then
+			local tx = math.max(0, math.min(xSize - targetSize, xPos*xSize - targetSize/2))
+			local ty = math.max(0, math.min(ySize - targetSize, yPos*ySize - targetSize/2))
+			target:SetPos(tx, ty)
+		end
 	end
 	
-	local visited = (math.random() > 0.5)
+	function externalFunctions.UpdateStartable()
+		startable = visited
+		if not startable then
+			for i = 1, #adjacency do
+				if adjacency[i] then
+					if planetList[i].GetVisited() then
+						startable = true
+						break
+					end
+				end
+			end
+		end
+		
+		if startable then
+			image.color = PLANET_START_COLOR
+		else
+			image.color = PLANET_NO_START_COLOR
+		end
+		image:Invalidate()
+		
+		if target then
+			target:SetVisibility(startable and not visited)
+			target:SendToBack()
+		elseif startable and not visited then
+			target = Image:New{
+				width = targetSize,
+				height = targetSize,
+				file = TARGET_IMAGE,
+				keepAspect = true,
+				parent = planetHolder,
+			}
+			externalFunctions.UpdatePosition()
+			target:SendToBack()
+		end
+	end
+	
 	function externalFunctions.GetVisited()
 		return visited
 	end
@@ -279,8 +336,13 @@ local function InitializePlanetHandler(parent)
 	
 	planetList = {}
 	for i = 1, #planetConfig do
-		planetList[i] = GetPlanet(planetWindow, i, planetConfig[i])
+		planetList[i] = GetPlanet(planetWindow, i, planetConfig[i], planetAdjacency[i])
 	end
+	
+	for i = 1, #planetList do
+		planetList[i].UpdateStartable()
+	end
+	
 	
 	UpdateEdgeList()
 	local graph = Chili.Control:New{
