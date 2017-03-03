@@ -278,4 +278,10 @@ for i = 1, #planetPositions do
 	planets[i] = MakePlanet(i)
 end
 
-return {planets = planets, planetAdjacency = planetAdjacency, planetEdgeList = planetEdgeList}
+local retData = {
+	planets = planets,
+	planetAdjacency = planetAdjacency,
+	planetEdgeList = planetEdgeList
+}
+
+return retData

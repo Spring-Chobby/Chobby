@@ -3,13 +3,13 @@
 
 function widget:GetInfo()
 	return {
-		name      = "Campaign Save/Load",
+		name      = "Campaign Save/Load Old",
 		desc      = "see title",
 		author    = "KingRaptor",
 		date      = "2016.11.24",
 		license   = "GNU GPL, v2 or later",
 		layer     = 0,
-		enabled   = true  --  loaded by default?
+		enabled   = false  --  loaded by default?
 	}
 end
 

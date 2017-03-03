@@ -191,9 +191,9 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 	local planetSize = planetData.mapDisplay.size
 	local xPos, yPos = planetData.mapDisplay.x, planetData.mapDisplay.y
 	
-	local captured = planetData.startingPlanet or WG.CampaignAPI.IsPlanetCaptured(planetID)
+	local captured = planetData.startingPlanet or WG.CampaignData.IsPlanetCaptured(planetID)
 	if planetData.startingPlanet then
-		WG.CampaignAPI.UnlockUnits(planetData.completionReward.units)
+		WG.CampaignData.UnlockUnits(planetData.completionReward.units)
 	end
 	
 	local startable
@@ -322,6 +322,8 @@ local function UpdateEdgeList()
 end
 
 local function InitializePlanetHandler(parent)
+	local Configuration = WG.Chobby.Configuration
+	
 	local window = Control:New {
 		name = "planetsHolder",
 		padding = {0,0,0,0},
@@ -337,7 +339,7 @@ local function InitializePlanetHandler(parent)
 		parent = window,
 	}
 	
-	local planetData = WG.CampaignAPI.GetPlanetDefs()
+	local planetData = Configuration.campaignConfig.planetDefs
 	planetConfig, planetAdjacency, planetEdgeList = planetData.planets, planetData.planetAdjacency, planetData.planetEdgeList
 	
 	planetList = {}
@@ -406,11 +408,11 @@ function widget:RecvLuaMsg(msg)
 				local modules = config.completionReward.modules
 				for i = 1, #units do
 					wonString = wonString .. units[i] .. ", "
-					WG.CampaignAPI.UnlockUnit(units[i])
+					WG.CampaignData.UnlockUnit(units[i])
 				end
 				for i = 1, #modules do
 					wonString = wonString .. modules[i] .. ", "
-					WG.CampaignAPI.UnlockModule(modules[i])
+					WG.CampaignData.UnlockModule(modules[i])
 				end
 			end
 			WG.Chobby.InformationPopup("You won the battle and are rewarded with: " .. wonString .. ".")
