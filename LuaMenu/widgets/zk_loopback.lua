@@ -331,6 +331,7 @@ local function CommandReceived(command)
 	end
 	
 	local commandFunc = commands[cmdName]
+	Spring.Echo("LoopbackCommandReceived", cmdName)
 	if commandFunc ~= nil then
 		local success, obj = pcall(json.decode, arguments)
 		if not success then
@@ -353,15 +354,15 @@ function widget:Update()
 	for _, input in ipairs(readable) do
 		local s, status, str = input:receive('*a') --try to read all data
 		if (status == "timeout" or status == nil) and str ~= nil and str ~= "" then
-			local commands = explode("\n", str)
-			commands[1] = buffer .. commands[1]
-			for i = 1, #commands-1 do
-				local command = commands[i]
+			local commandList = explode("\n", str)
+			commandList[1] = buffer .. commandList[1]
+			for i = 1, #commandList-1 do
+				local command = commandList[i]
 				if command ~= nil then
 					CommandReceived(command)
 				end
 			end
-			buffer = commands[#commands]
+			buffer = commandList[#commandList]
 
 		elseif status == "closed" then
 			input:close()

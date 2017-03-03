@@ -40,7 +40,7 @@ local function SortCodexEntries(a, b)
 end
 
 local function LoadCodexEntries(path)
-	local codexEntries = WG.CampaignAPI.GetCodexEntries()
+	local codexEntries = WG.Chobby.Configuration.campaignConfig.codex
 	
 	local categories = {}
 	local categoriesOrdered = {}
@@ -61,12 +61,13 @@ local function LoadCodexEntries(path)
 end
 
 local function UpdateCodexEntry(entry, codexText, codexImage, entryButton)
-	if not WG.CampaignAPI.IsCodexEntryRead(entry.id) then
-		--entryButton.font.outline = false
-		entryButton.font.shadow = false
-		entryButton:Invalidate()
-	end
-	WG.CampaignAPI.MarkCodexEntryRead(entry.id)
+	-- Codex should handle this itself..?
+	--if not WG.CampaignAPI.IsCodexEntryRead(entry.id) then
+	--	--entryButton.font.outline = false
+	--	entryButton.font.shadow = false
+	--	entryButton:Invalidate()
+	--end
+	--WG.CampaignAPI.MarkCodexEntryRead(entry.id)
 	codexText:SetText(entry.text)
 	codexImage.file = entry.image
 	codexImage:Invalidate()
@@ -86,7 +87,7 @@ local function PopulateCodexTree(parent, codexText, codexImage)
 		for j=1,#cat do
 			local entry = cat[j]
 			--local unlocked = gamedata.codexUnlocked[entryID]
-			local read = WG.CampaignAPI.IsCodexEntryRead(entry.id)
+			--local read = WG.CampaignAPI.IsCodexEntryRead(entry.id) -- TODO handle
 			local button = Button:New{
 				caption = entry.name,
 				backgroundColor = {0,0,0,0},

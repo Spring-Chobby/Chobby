@@ -52,6 +52,8 @@ function Configuration:init()
 	self.myAccountID = false
 	self.lastAddedAiName = false
 	
+	self.campaignPath = "campaign/sample"
+	
 	self.battleTypeToName = {
 		[5] = "cooperative",
 		[6] = "team",
@@ -90,6 +92,10 @@ function Configuration:init()
 
 	self.gameConfigName = "zk"
 	self.gameConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/mainConfig.lua")
+	
+	self.campaignConfigName = "sample"
+	self.campaignConfig = VFS.Include("campaign/sample/mainConfig.lua")
+	self.campaignSaveFile = "Campaign1"
 	
 	-- TODO, generate this from directory structure
 	local gameConfigOptions = {

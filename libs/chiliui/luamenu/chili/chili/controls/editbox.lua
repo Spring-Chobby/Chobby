@@ -158,12 +158,12 @@ function EditBox:_SetSelection(selStart, selStartY, selEnd, selEndY)
 	self.selStartY = selStartY       or self.selStartY
 	self.selEnd    = selEnd          or self.selEnd
 	self.selEndY   = selEndY         or self.selEndY
-	if selStart or selStartY then
+	if (selStart or selStartY) and self.lines[self.selStartY]then
 		local logicalLine = self.lines[self.selStartY]
 		self.selStartPhysical, self.selStartPhysicalY = self:_LineLog2Phys(logicalLine, self.selStart)
 	end
 
-	if selEnd or selEndY then
+	if (selEnd or selEndY) and self.lines[self.selStartY] then
 		local logicalLine = self.lines[self.selEndY]
 		self.selEndPhysical, self.selEndPhysicalY  = self:_LineLog2Phys(logicalLine, self.selEnd)
 	end

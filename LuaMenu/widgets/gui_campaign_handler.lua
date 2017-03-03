@@ -21,7 +21,16 @@ local IMAGE_BOUNDS = {
 	height = 1500/2602,
 }
 
-local planetConfig = {}
+local edgeDrawList = 0
+local planetConfig, planetAdjacency, planetEdgeList
+
+local ACTIVE_COLOR = {0,1,0,0.7}
+local INACTIVE_COLOR = {0.3, 0.3, 0.3, 0.7}
+
+local PLANET_START_COLOR = {1, 1, 1, 1}
+local PLANET_NO_START_COLOR = {0.5, 0.5, 0.5, 1}
+
+local TARGET_IMAGE = LUA_DIRNAME .. "images/niceCircle.png"
 
 local playerUnlocks = {
 	"cormex",
@@ -30,10 +39,12 @@ local playerUnlocks = {
 	"factorycloak",
 }
 
+local planetList
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- TODO: use shader animation to ease info panel in
-local function SelectPlanet(planetHandler, planetID, planetData)
+local function SelectPlanet(planetHandler, planetID, planetData, startable)
 	local Configuration = WG.Chobby.Configuration
 	
 	local starmapInfoPanel = Panel:New{
@@ -89,21 +100,41 @@ local function SelectPlanet(planetHandler, planetID, planetData)
 		}
 	}
 	
-	local startButton = Button:New{
-		right = 10,
-		bottom = 10,
-		width = 135,
-		height = 70,
-		classname = "action_button",
-		parent = subPanel,
-		caption = i18n("start"),
-		font = Configuration:GetFont(4),
-		OnClick = {
-			function(self)
-				WG.PlanetBattleHandler.StartBattle(planetID, planetData, playerUnlocks)
-			end
+	if startable then
+		local startButton = Button:New{
+			right = 10,
+			bottom = 10,
+			width = 135,
+			height = 70,
+			classname = "action_button",
+			parent = subPanel,
+			caption = i18n("start"),
+			font = Configuration:GetFont(4),
+			OnClick = {
+				function(self)
+					WG.PlanetBattleHandler.StartBattle(planetID, planetData, playerUnlocks)
+				end
+			}
 		}
-	}
+		
+		if Configuration.debugMode then
+			local autoWinButton = Button:New{
+				right = 150,
+				bottom = 10,
+				width = 135,
+				height = 70,
+				classname = "action_button",
+				parent = subPanel,
+				caption = "Auto Win",
+				font = Configuration:GetFont(4),
+				OnClick = {
+					function(self)
+						WG.CampaignData.CapturePlanet(planetID)
+					end
+				}
+			}
+		end
+	end
 	
 	-- close button
 	Button:New{
@@ -172,20 +203,38 @@ local function SelectPlanet(planetHandler, planetID, planetData)
 	end
 end
 
-local function GetPlanet(planetHolder, planetID, planetData)
+local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
+	local Configuration = WG.Chobby.Configuration
+	
 	local planetSize = planetData.mapDisplay.size
 	local xPos, yPos = planetData.mapDisplay.x, planetData.mapDisplay.y
 	
-	local button = Button:New{
+	local captured = WG.CampaignData.IsPlanetCaptured(planetID)
+	local startable
+	
+	local target
+	local targetSize = math.ceil(math.floor(planetSize*1.35)/2)*2
+	local planetOffset = math.floor((targetSize - planetSize)/2)
+	
+	local planetHolder = Control:New{
 		x = 0,
 		y = 0,
+		width = targetSize,
+		height = targetSize,
+		padding = {0, 0, 0, 0},
+		parent = galaxyHolder,
+	}
+	
+	local button = Button:New{
+		x = planetOffset,
+		y = planetOffset,
 		width = planetSize,
 		height = planetSize,
 		classname = "button_planet",
 		caption = "",
 		OnClick = { 
 			function(self)
-				SelectPlanet(planetHolder, planetID, planetData)
+				SelectPlanet(galaxyHolder, planetID, planetData, startable)
 			end
 		},
 		parent = planetHolder,
@@ -201,31 +250,156 @@ local function GetPlanet(planetHolder, planetID, planetData)
 		parent = button,
 	}
 	
+	if Configuration.debugMode then
+		local number = Label:New {
+			x = 3,
+			y = 3,
+			right = 2,
+			bottom = 2,
+			caption = planetID,
+			font = Configuration:GetFont(4),
+			parent = image,
+		}
+	end
+	
 	local externalFunctions = {}
 	
 	function externalFunctions.UpdatePosition(xSize, ySize)
-		local x = math.max(0, math.min(xSize - planetSize, xPos*xSize - planetSize/2))
-		local y = math.max(0, math.min(ySize - planetSize, yPos*ySize - planetSize/2))
-		button:SetPos(x,y)
+		local x = math.max(0, math.min(xSize - targetSize, xPos*xSize - targetSize/2))
+		local y = math.max(0, math.min(ySize - targetSize, yPos*ySize - targetSize/2))
+		planetHolder:SetPos(x, y)
+	end
+	
+	function externalFunctions.UpdateStartable()
+		captured = WG.CampaignData.IsPlanetCaptured(planetID)
+		startable = captured
+		if not startable then
+			for i = 1, #adjacency do
+				if adjacency[i] then
+					if planetList[i].GetCaptured() then
+						startable = true
+						break
+					end
+				end
+			end
+		end
+		
+		if startable then
+			image.color = PLANET_START_COLOR
+		else
+			image.color = PLANET_NO_START_COLOR
+		end
+		image:Invalidate()
+		
+		local targetable = startable and not captured
+		if target then
+			if not targetable then
+				target:Dispose()
+			end
+		elseif targetable then
+			target = Image:New{
+				x = 0,
+				y = 0,
+				width = targetSize,
+				height = targetSize,
+				file = TARGET_IMAGE,
+				keepAspect = true,
+				parent = planetHolder,
+			}
+			target:SendToBack()
+		end
+	end
+	
+	function externalFunctions.GetCaptured()
+		return captured
 	end
 	
 	return externalFunctions
 end
 
+local function DrawEdgeLines()
+	for i = 1, #planetEdgeList do
+		for p = 1, 2 do
+			local pid = planetEdgeList[i][p]
+			local planetData = planetList[pid]
+			local x, y = planetConfig[pid].mapDisplay.x, planetConfig[pid].mapDisplay.y
+			gl.Color((planetData.GetCaptured() and ACTIVE_COLOR) or INACTIVE_COLOR)
+			gl.Vertex(x, y)
+		end
+	end
+end
+
+local function CreateEdgeList()
+	gl.BeginEnd(GL.LINES, DrawEdgeLines)
+end
+
+local function UpdateEdgeList()
+	gl.DeleteList(edgeDrawList)
+	edgeDrawList = gl.CreateList(CreateEdgeList)
+end
+
 local function InitializePlanetHandler(parent)
+	local Configuration = WG.Chobby.Configuration
+	
 	local window = Control:New {
 		name = "planetsHolder",
 		padding = {0,0,0,0},
-		resizable = false,
-		draggable = false,
 		parent = parent,
 	}
+	local planetWindow = Control:New {
+		name = "planetWindow",
+		x = 0,
+		y = 0,
+		width = "100%",
+		height = "100%",
+		padding = {0,0,0,0},
+		parent = window,
+	}
 	
-	planetConfig = WG.CampaignAPI.GetPlanetDefs()
-	local planetList = {}
+	local planetData = Configuration.campaignConfig.planetDefs
+	planetConfig, planetAdjacency, planetEdgeList = planetData.planets, planetData.planetAdjacency, planetData.planetEdgeList
+	
+	planetList = {}
 	for i = 1, #planetConfig do
-		planetList[i] = GetPlanet(window, i, planetConfig[i])
+		planetList[i] = GetPlanet(planetWindow, i, planetConfig[i], planetAdjacency[i])
 	end
+	
+	for i = 1, #planetList do
+		planetList[i].UpdateStartable()
+	end
+	
+	UpdateEdgeList()
+	local graph = Chili.Control:New{
+		x       = 0,
+		y       = 0,
+		height  = "100%",
+		width   = "100%",
+		padding = {0,0,0,0},
+		drawcontrolv2 = true,
+		DrawControl = function (obj)
+			local x = obj.x
+			local y = obj.y
+			local w = obj.width
+			local h = obj.height
+			
+			gl.PushMatrix()
+			gl.Translate(x, y, 0)
+			gl.Scale(w, h, 1)
+			gl.LineWidth(3)
+			gl.CallList(edgeDrawList)
+			gl.PopMatrix()
+		end,
+		parent = window,
+	}
+	
+	local function PlanetCaptured(listener, planetID)
+		planetList[planetID].UpdateStartable()
+		for i = 1, #planetList do
+			planetList[i].UpdateStartable()
+		end
+		UpdateEdgeList()
+	end
+	WG.CampaignData.AddListener("PlanetCaptured", PlanetCaptured)
 	
 	local externalFunctions = {}
 	
@@ -251,21 +425,9 @@ function widget:RecvLuaMsg(msg)
 	if string.find(msg, BATTLE_WON_STRING) then
 		msg = string.sub(msg, 25)
 		local planetID = tonumber(msg)
-		if planetID and planetConfig[planetID] then
+		if planetID and planetConfig and planetConfig[planetID] then
 			local config = planetConfig[planetID]
-			local wonString = ""
-			if config.completionReward then
-				local units = config.completionReward.units
-				local modules = config.completionReward.modules
-				for i = 1, #units do
-					wonString = wonString .. units[i] .. ", "
-					WG.CampaignAPI.UnlockUnit(units[i])
-				end
-				for i = 1, #modules do
-					wonString = wonString .. modules[i] .. ", "
-					WG.CampaignAPI.UnlockModule(modules[i])
-				end
-			end
+			WG.CampaignData.CapturePlanet(planetID)
 			WG.Chobby.InformationPopup("You won the battle and are rewarded with: " .. wonString .. ".")
 		end
 	end

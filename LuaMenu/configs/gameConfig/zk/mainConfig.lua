@@ -9,6 +9,7 @@ local skirmishDefault    = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. s
 local defaultModoptions  = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/ModOptions.lua")
 local rankFunction       = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/rankFunction.lua")
 local backgroundConfig   = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/skinConfig.lua")
+local unitList           = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/unitList.lua")
 
 local link_reportPlayer, link_userPage, link_homePage, link_replays, link_maps, link_particularMapPage = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/linkFunctions.lua")
 
@@ -18,6 +19,7 @@ local headingLarge    = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/s
 local headingSmall    = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingSmall.png"
 local backgroundImage = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/background.jpg"
 local taskbarIcon     = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/taskbarLogo.png"
+
 
 local subheadings = {
 	large = {
@@ -74,6 +76,7 @@ local externalFuncAndData = {
 	background              = background,
 	minimapOverridePath     = minimapOverridePath,
 	minimapThumbnailPath    = minimapThumbnailPath,
+	unitList                = unitList,
 	link_reportPlayer       = link_reportPlayer, 
 	link_userPage           = link_userPage, 
 	link_homePage           = link_homePage,

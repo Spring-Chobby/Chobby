@@ -3,13 +3,13 @@
 
 function widget:GetInfo()
 	return {
-		name      = "Campaign Handler ZK",
+		name      = "Campaign Handler ZK Old",
 		desc      = "Tells epic sagas of good versus evil",
 		author    = "KingRaptor",
 		date      = "2016.07.05",
 		license   = "GNU GPL, v2 or later",
 		layer     = 0,
-		enabled   = true  --  loaded by default?
+		enabled   = false  --  loaded by default?
 	}
 end
 
