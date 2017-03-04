@@ -1,5 +1,5 @@
 local lobbyinfo = {
-	game = "generic",
+	game = "zk",
 }
 
 return lobbyinfo
