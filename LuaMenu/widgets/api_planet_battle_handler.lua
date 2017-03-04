@@ -116,6 +116,9 @@ local function StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName)
 		TeamLeader = 0,
 		AllyTeam = gameConfig.playerConfig.allyTeam,
 		rgbcolor = '0 0 0',
+		start_x = gameConfig.playerConfig.startX,
+		start_z = gameConfig.playerConfig.startZ,
+		staticcomm = 1,
 		campaignunlocks = TableToBase64(fullPlayerUnlocks),
 		extrastartunits = TableToBase64(gameConfig.playerConfig.startUnits),
 	}
@@ -138,6 +141,7 @@ local function StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName)
 			Host = 0,
 			Options = {
 				comm_merge = 0,
+				staticcomm = 1,
 				disabledunits = MakeCircuitDisableString(aiData.unlocks)
 			}
 		}
@@ -147,6 +151,8 @@ local function StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName)
 			TeamLeader = 0,
 			AllyTeam = aiData.allyTeam,
 			rgbcolor = '0 0 0',
+			start_x = aiData.startX,
+			start_z = aiData.startZ,
 			campaignunlocks = TableToBase64(aiData.unlocks),
 			extrastartunits = TableToBase64(aiData.startUnits),
 		}
@@ -173,8 +179,9 @@ local function StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName)
 		nohelperais = 0,
 		numplayers = playerCount,
 		numusers = playerCount + aiCount,
-		startpostype = 2,
+		startpostype = 0, -- Fixed
 		modoptions = {
+			fixedstartpos = 1,
 			singleplayercampaignbattleid = planetID
 		},
 	}

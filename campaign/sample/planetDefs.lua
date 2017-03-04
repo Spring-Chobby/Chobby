@@ -228,7 +228,7 @@ local function MakePlanet(planetID)
 					}
 				},
 				{
-					startX = 250,
+					startX = 1250,
 					startZ = 250,
 					aiLib = "CircuitAIHard",
 					humanName = "Another Ally",
