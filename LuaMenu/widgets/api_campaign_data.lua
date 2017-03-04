@@ -91,6 +91,26 @@ local function ResetGamedata()
 	gamedata = {
 		unitsUnlocked = {map = {}, list = {}},
 		planetsCaptured = {map = {}, list = {}},
+		retinue = {
+			{
+				unitDefName = "armpw",
+				retinueID = 1,
+				experience = 3,
+				active = true,
+			},
+			{
+				unitDefName = "armorco",
+				retinueID = 2,
+				experience = 1,
+				active = true,
+			},
+			{
+				unitDefName = "armrock",
+				retinueID = 3,
+				experience = 1,
+				active = false,
+			}
+		},
 	}
 end
 
@@ -237,6 +257,20 @@ function externalFunctions.IsPlanetCaptured(planetID)
 	return gamedata.planetsCaptured.map[planetID]
 end
 
+function externalFunctions.GetRetinue()
+	return gamedata.retinue
+end
+
+function externalFunctions.GetActiveRetinue()
+	local activeRetinue = {}
+	for i = 1, #gamedata.retinue do
+		if gamedata.retinue[i].active then
+			activeRetinue[#activeRetinue + 1] = gamedata.retinue[i]
+		end
+	end
+	return activeRetinue
+end
+
 function externalFunctions.GetPlayerCommander()
 	return {
 		name = "blubb.",
@@ -274,6 +308,18 @@ end
 
 function externalFunctions.GetPlayerCommanderLevel()
 	return 2
+end
+
+function externalFunctions.GetSaveSlotControl()
+	local window = Control:New {
+		name = "saveSlotHandler",
+		x = "0%",
+		y = "0%",
+		width = "100%",
+		height = "100%",
+		padding = {0,0,0,0},
+	}
+	return window
 end
 
 --------------------------------------------------------------------------------

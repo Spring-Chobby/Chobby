@@ -125,6 +125,7 @@ local function StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName)
 		static_level = WG.CampaignData.GetPlayerCommanderLevel(),
 		campaignunlocks = TableToBase64(fullPlayerUnlocks),
 		extrastartunits = TableToBase64(gameConfig.playerConfig.startUnits),
+		retinuestartunits = TableToBase64(WG.CampaignData.GetActiveRetinue()),
 	}
 	teamCount = teamCount + 1
 	
