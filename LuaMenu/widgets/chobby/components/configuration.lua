@@ -52,8 +52,6 @@ function Configuration:init()
 	self.myAccountID = false
 	self.lastAddedAiName = false
 	
-	self.campaignPath = "campaign/sample"
-	
 	self.battleTypeToName = {
 		[5] = "cooperative",
 		[6] = "team",
@@ -93,6 +91,7 @@ function Configuration:init()
 	self.gameConfigName = "zk"
 	self.gameConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/mainConfig.lua")
 	
+	self.campaignPath = "campaign/sample"
 	self.campaignConfigName = "sample"
 	self.campaignConfig = VFS.Include("campaign/sample/mainConfig.lua")
 	self.campaignSaveFile = "Campaign1"
@@ -216,6 +215,7 @@ function Configuration:GetConfigData()
 		window_WindowPosY = self.window_WindowPosY,
 		window_XResolutionWindowed = self.window_XResolutionWindowed,
 		window_YResolutionWindowed = self.window_YResolutionWindowed,
+		campaignSaveFile = self.campaignSaveFile,
 	}
 end
 
