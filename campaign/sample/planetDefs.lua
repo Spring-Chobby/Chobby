@@ -246,6 +246,37 @@ local function MakePlanet(planetID)
 						"armrock",
 						"armwar",
 						"armham",
+					},
+					commanderLevel = 5,
+					commander = {
+						name = "Verminyan",
+						chassis = "engineer",
+						decorations = {},
+						modules = {
+						  {
+							"commweapon_shotgun",
+							"module_radarnet"
+						  },
+						  {
+							"module_adv_nano",
+							"commweapon_personal_shield"
+						  },
+						  {
+							"",
+							"",
+							"commweapon_shotgun"
+						  },
+						  {
+							"",
+							"",
+							""
+						  },
+						  {
+							"",
+							"",
+							""
+						  }
+						}
 					}
 				},
 				{
@@ -262,6 +293,15 @@ local function MakePlanet(planetID)
 						"cormex",
 						"armsolar",
 						"armpw",
+						"dante",
+					},
+					startUnits = {
+						{
+							name = "striderhub",
+							x = 1000,
+							z = 1300,
+							facing = 2,
+						},
 					}
 				},
 				{
@@ -278,7 +318,41 @@ local function MakePlanet(planetID)
 						"cormex",
 						"armsolar",
 						"armwar",
-					}
+					},
+					commanderLevel = 2,
+					commander = {
+						name = "You dig.",
+						chassis = "engineer",
+						decorations = {
+						  "skin_support_dark",
+						  icon_overhead = { image = "UW" }
+						},
+						modules = {
+						  {
+							"commweapon_beamlaser",
+							"module_radarnet"
+						  },
+						  {
+							"module_resurrect",
+							"module_adv_nano"
+						  },
+						  {
+							"module_adv_nano",
+							"module_adv_nano",
+							"commweapon_multistunner"
+						  },
+						  {
+							"module_adv_nano",
+							"module_adv_nano",
+							"module_adv_nano"
+						  },
+						  {
+							"module_adv_nano",
+							"module_adv_nano",
+							"module_cloak_field"
+						  }
+						}
+					},
 				},
 			},
 		},

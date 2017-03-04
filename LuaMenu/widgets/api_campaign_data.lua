@@ -237,6 +237,45 @@ function externalFunctions.IsPlanetCaptured(planetID)
 	return gamedata.planetsCaptured.map[planetID]
 end
 
+function externalFunctions.GetPlayerCommander()
+	return {
+		name = "blubb.",
+		chassis = "guardian",
+		decorations = {
+			icon_overhead = { image = "UW" }
+		},
+		modules = {
+			{
+				"commweapon_heavymachinegun",
+				"module_dmg_booster"
+			},
+			{
+				"module_dmg_booster",
+				"module_dmg_booster"
+			},
+			{
+				"commweapon_rocketlauncher",
+				"module_dmg_booster",
+				"module_dmg_booster"
+			},
+			{
+				"module_dmg_booster",
+				"module_dmg_booster",
+				"module_adv_targeting"
+			},
+			{
+				"module_adv_targeting",
+				"module_adv_targeting",
+				"module_adv_targeting"
+			}
+		}
+	}
+end
+
+function externalFunctions.GetPlayerCommanderLevel()
+	return 2
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Initialiazation
