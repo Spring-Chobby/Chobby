@@ -1,4 +1,4 @@
 local settings = {
-	--FontSize = 18, breaks chobby chat display
+	FontSize = 18,
 }
 return settings
