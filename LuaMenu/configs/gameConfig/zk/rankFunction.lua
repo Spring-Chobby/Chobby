@@ -7,7 +7,10 @@ local IMAGE_PLAYER       = IMAGE_DIR .. "ranks/player.png"
 local rankUnlocks = {5, 10, 20, 35, 50, 75, 100}
 local rankCount = #rankUnlocks
 
-local function GetImageFunction(level, skill, isBot, isModerator, oldImage)
+local function GetImageFunction(icon, level, skill, isBot, isModerator)
+	if icon then
+		return RANK_DIR .. icon .. ".png"
+	end
 	if isBot then
 		return IMAGE_AUTOHOST
 	elseif level and skill then
