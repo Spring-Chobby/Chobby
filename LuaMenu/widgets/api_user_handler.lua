@@ -85,7 +85,7 @@ local function UserLevelToImage(level, skill, isBot, isAdmin)
 end
 
 local function GetUserRankImage(userInfo, isBot)
-	return userInfo.icon or UserLevelToImage(userInfo.level, userInfo.skill, isBot, userInfo.isAdmin)
+	return userInfo.icon or UserLevelToImage(userInfo.level, math.max(userInfo.skill or 0, userInfo.casualSkill or 0), isBot, userInfo.isAdmin)
 end
 
 local function GetClanImage(clanName)
