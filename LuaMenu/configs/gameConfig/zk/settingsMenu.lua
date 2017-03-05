@@ -695,6 +695,7 @@ local settingsDefaults = {
 	TextToSpeech = "On",
 	MiddlePanSpeed = 10,
 	CameraPanSpeed = 50,
+	FontSize = 18,
 }
 
 return settings, settingsDefaults

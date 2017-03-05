@@ -14,6 +14,7 @@ local settings = {
 	DualScreenMiniMapOnLeft = 1,
 	EdgeMoveDynamic = 0,
 	EdgeMoveWidth = 0.003,
+	FontSize = 18,
 	FPSFOV = 90,
 	FSAA = 1,
 	FSAALevel = 2,
