@@ -8,7 +8,7 @@
       },
       {  
          "Platform":null,
-         "VersionNumber":2,
+         "VersionNumber":1,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/springsettings.cfg",
          "TargetPath":"springsettings.cfg"
       },

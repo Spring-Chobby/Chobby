@@ -60,4 +60,3 @@ local settings = {
 	snd_general = 100,
 }
 return settings
-	

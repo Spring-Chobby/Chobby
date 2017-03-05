@@ -146,7 +146,7 @@ function Configuration:init()
 
 	self.countryShortnames = VFS.Include(LUA_DIRNAME .. "configs/countryShortname.lua")
 
-	self.game_settings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings3.lua")
+	self.game_settings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings.lua")
 	
 	self.settingsMenuValues = self.gameConfig.settingsDefault
 end
@@ -167,6 +167,11 @@ function Configuration:SetConfigData(data)
 		if string.find(key, "debriefing") then
 			self.channels[key] = nil
 		end
+	end
+	
+	local newSpringsettings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettingsChanges.lua")
+	for key, value in pairs(newSpringsettings) do
+		self.game_settings[key] = value
 	end
 end
 
