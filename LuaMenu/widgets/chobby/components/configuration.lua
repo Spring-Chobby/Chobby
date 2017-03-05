@@ -169,6 +169,11 @@ function Configuration:SetConfigData(data)
 		end
 	end
 	
+	-- Fix broken fonts
+	self.game_settings.FontSize = nil
+	Spring.Echo("FontSize set to nil")
+	
+	-- Use this to send updated springsettings to everyone (once they restart chobby a few times).
 	local newSpringsettings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettingsChanges.lua")
 	for key, value in pairs(newSpringsettings) do
 		self.game_settings[key] = value
