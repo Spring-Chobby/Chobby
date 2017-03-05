@@ -69,7 +69,7 @@ end
 
 local function HandleLobbyOverlay(msg)
 	local Chobby = WG.Chobby
-	Spring.Echo("HandleLobbyOverlay", msg)
+	--Spring.Echo("HandleLobbyOverlay", msg)
 	local interfaceRoot = Chobby and Chobby.interfaceRoot
 	if interfaceRoot then
 		if msg == REMOVE_BUTTON then 
