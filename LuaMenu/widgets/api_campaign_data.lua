@@ -152,8 +152,12 @@ local function GetSaves()
 	return saves
 end
 
-local function SaveGame()
-	local fileName = WG.Chobby.Configuration.campaignSaveFile
+local function SaveGame(fileName)
+	if fileName then
+		WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", fileName)
+	else
+		fileName = WG.Chobby.Configuration.campaignSaveFile
+	end
 	local success, err = pcall(function()
 		Spring.CreateDir(SAVE_DIR)
 		path = SAVE_DIR .. fileName .. ".lua"
@@ -170,44 +174,20 @@ local function SaveGame()
 	return success
 end
 
-local function LoadGame(saveData)
+local function LoadGame(saveData, refreshGUI)
 	local success, err = pcall(function()
 		Spring.CreateDir(SAVE_DIR)
 		ResetGamedata()
 		gamedata = Spring.Utilities.MergeTable(saveData, gamedata, true)
+		if refreshGUI then
+			WG.CampaignHandler.Refresh()
+		end
+		WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", saveData.name)
+	
 		Spring.Log(widget:GetInfo().name, LOG.INFO, "Save file " .. saveData.name .. " loaded")
 	end)
 	if (not success) then
 		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error loading game: " .. err)
-	end
-end
-
-local function DeleteSave(id)
-	local success, err = pcall(function()
-		local path = SAVE_DIR .. (id == AUTOSAVE_ID and AUTOSAVE_FILENAME or ("save" .. string.format("%03d", id))) .. ".lua"
-		os.remove(path)
-		local num = 0
-		local parent = nil
-		for i=1,#saveLoadControls do
-			num = i
-			local entry = saveLoadControls[i]
-			if entry.id == id then
-				parent = entry.container.parent
-				entry.container:Dispose()
-				table.remove(saveLoadControls, i)
-				break
-			end
-		end
-		-- reposition save entry controls
-		for i=num,#saveLoadControls do
-			local entry = saveLoadControls[i]
-			entry.container.y = entry.container.y - (SAVEGAME_BUTTON_HEIGHT)
-		end
-		parent:Invalidate()
-		
-	end)
-	if (not success) then
-		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error deleting save " .. id .. ": " .. err)
 	end
 end
 
@@ -310,17 +290,47 @@ function externalFunctions.GetPlayerCommanderLevel()
 	return 2
 end
 
-function externalFunctions.GetSaveSlotControl()
-	local window = Control:New {
-		name = "saveSlotHandler",
-		x = "0%",
-		y = "0%",
-		width = "100%",
-		height = "100%",
-		padding = {0,0,0,0},
-	}
-	return window
+function externalFunctions.GetSaves()
+	return GetSaves()
 end
+
+function externalFunctions.LoadGameByFilename(filename)	
+	local saves = GetSaves()
+	local saveData = saves[filename]
+	if saveData then
+		LoadGame(saveData, true)
+		return
+	else
+		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Save " .. filename .. " does not exist")
+	end
+end
+
+function externalFunctions.DeleteSave(filename)
+	local Configuration = WG.Chobby.Configuration
+	
+	local success, err = pcall(function()
+		local pathNoExtension = SAVE_DIR .. "/" .. filename
+		os.remove(pathNoExtension .. ".lua")
+		if (filename == Configuration.campaignSaveFile) then
+			-- if this is current save, switch to next available save slot, or revert to "Campaign1" if none are available
+			local newName = "Campaign1"
+			local saves = GetSaves()
+			for name, save in pairs(saves) do
+				-- TODO: sort instead of just picking the first one?
+				newName = save.name
+				LoadGame(save, true)
+				break
+			end
+			WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", newName)
+		end
+	end)
+	if (not success) then
+		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error deleting save " .. filename .. ": " .. err)
+	end
+	return success
+end
+
+externalFunctions.StartNewGame = StartNewGame
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------

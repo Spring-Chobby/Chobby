@@ -3,13 +3,13 @@
 
 function widget:GetInfo()
 	return {
-		name      = "Campaign Save/Load Old",
-		desc      = "see title",
+		name      = "Campaign Save/Load",
+		desc      = "Create and manage campaign saves",
 		author    = "KingRaptor",
 		date      = "2016.11.24",
 		license   = "GNU GPL, v2 or later",
 		layer     = 0,
-		enabled   = false  --  loaded by default?
+		enabled   = true  --  loaded by default?
 	}
 end
 
@@ -81,59 +81,118 @@ local function GetSaveDescText(saveFile)
 		.. "\n" .. saveFile.chapterTitle
 end
 
-local function SaveGame(filename, description, isAutoSave)
-	local result = WG.CampaignAPI.SaveGame(filename, description, isAutoSave)
+local function SaveGame(filename)
+	local result = WG.CampaignData.SaveGame(filename)
 	if result then
-		WG.CampaignSaveLoadWindow.PopulateSaveList()
+		WG.CampaignSaveWindow.PopulateSaveList()
 	end
 end
 
 local function LoadGame(filename)
-	WG.CampaignAPI.LoadGameByFilename(filename)
+	WG.CampaignData.LoadGameByFilename(filename)
+	WG.CampaignSaveWindow.PopulateSaveList()
 end
 
-local function DeleteSave(filename, saveList)
-	local success, err = pcall(function()
-		local pathNoExtension = SAVE_DIR .. "/" .. filename
-		os.remove(pathNoExtension .. ".lua")
-		
-		saveList:RemoveItem(filename)
-	end)
-	if (not success) then
-		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error deleting save " .. filename .. ": " .. err)
+local function DeleteSave(filename)
+	WG.CampaignData.DeleteSave(filename)
+	WG.CampaignSaveWindow.PopulateSaveList()
+end
+
+local function PromptNewSave()
+	local newSaveWindow = Window:New {
+		x = 700,
+		y = 300,
+		width = 316,
+		height = 240,
+		caption = "",
+		resizable = false,
+		draggable = false,
+		parent = WG.Chobby.lobbyInterfaceHolder,
+		classname = "main_window",
+		OnDispose = {
+			function()
+				lobby:RemoveListener("OnJoinBattleFailed", onJoinBattleFailed)
+				lobby:RemoveListener("OnJoinBattle", onJoinBattle)
+			end
+		},
+	}
+
+	local lblSaveName = Label:New {
+		x = 25,
+		right = 15,
+		y = 15,
+		height = 35,
+		font = Configuration:GetFont(3),
+		caption = i18n("save_name"),
+		parent = newSaveWindow,
+	}
+
+	local ebSaveName = EditBox:New {
+		x = 30,
+		right = 30,
+		y = 60,
+		height = 35,
+		text = "",
+		hint = i18n("save_name"),
+		fontsize = Configuration:GetFont(3).size,
+		parent = newSaveWindow,
+	}
+
+	local function NewSave()
+		if ebSaveName.text and ebSaveName.text ~= "" then
+			WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", ebSaveName.text)
+			WG.CampaignData.StartNewGame()
+			newSaveWindow:Dispose()
+		end
 	end
+
+	local function CancelFunc()
+		newSaveWindow:Dispose()
+	end
+
+	local btnJoin = Button:New {
+		x = 5,
+		width = 135,
+		bottom = 1,
+		height = 70,
+		caption = i18n("new_game"),
+		font = Configuration:GetFont(3),
+		classname = "action_button",
+		OnClick = {
+			function()
+				NewSave()
+			end
+		},
+		parent = newSaveWindow,
+	}
+	local btnClose = Button:New {
+		right = 5,
+		width = 135,
+		bottom = 1,
+		height = 70,
+		caption = i18n("cancel"),
+		font = Configuration:GetFont(3),
+		classname = "negative_button",
+		OnClick = {
+			function()
+				CancelFunc()
+			end
+		},
+		parent = newSaveWindow,
+	}
+
+	local popupHolder = WG.Chobby.PriorityPopup(newSaveWindow, CancelFunc, NewSave)
+	screen0:FocusControl(ebPassword)
 end
 
 --------------------------------------------------------------------------------
 -- Save/Load UI
 --------------------------------------------------------------------------------
-local function SaveLoadConfirmationDialogPopup(filename, description, saveMode)
-	local text = saveMode and i18n("save_overwrite_confirm") or i18n("load_confirm")
-	local yesFunc = function()
-			if saveMode then
-				SaveGame(filename, description, false)
-			else
-				LoadGame(filename)
-			end
-		end
-	WG.Chobby.ConfirmationPopup(yesFunc, text, nil, 360, 200)
-end
-
-local function PromptSave(filename, description)
-	if not filename then
-		-- throw error message?
-	end
-	filename = trim(filename)
-	local saveExists = filename and VFS.FileExists(SAVE_DIR .. "/" .. filename .. ".lua") or false
-	if saveExists then
-		SaveLoadConfirmationDialogPopup(filename, description, true)
-	else
-		SaveGame(filename, description, false)
-	end
-end
 
 -- Makes a button for a save game on the save/load screen
-local function AddSaveEntryButton(saveFile, saveList)	
+local function AddSaveEntryButton(saveFile, saveList)
+	local current = saveFile.name == WG.Chobby.Configuration.campaignSaveFile
+	
 	local container = Panel:New {
 		x = 0,
 		y = 0,
@@ -143,26 +202,24 @@ local function AddSaveEntryButton(saveFile, saveList)
 		padding = {0, 0, 0, 0},
 	}
 	
-	-- load button
-	local loadButton = Button:New {
-		x = 3,
-		y = 3,
-		bottom = 3,
-		width = 80,
-		caption = i18n("load"),
-		classname = "action_button",
-		font = WG.Chobby.Configuration:GetFont(2),
-		OnClick = {
-			function()
-				if true then	-- FIXME check if currently in a campaign game
-					SaveLoadConfirmationDialogPopup(saveFile.name, false)
-				else
-					LoadGameByFilename(saveFile.name)
+	if not current then
+		-- load button
+		local loadButton = Button:New {
+			x = 3,
+			y = 3,
+			bottom = 3,
+			width = 80,
+			caption = i18n("load"),
+			classname = "action_button",
+			font = WG.Chobby.Configuration:GetFont(2),
+			OnClick = {
+				function()
+					LoadGame(saveFile.name)
 				end
-			end
-		},
-		parent = container,
-	}
+			},
+			parent = container,
+		}
+	end
 	
 	-- save name
 	local x = 95
@@ -174,27 +231,27 @@ local function AddSaveEntryButton(saveFile, saveList)
 		height = 20,
 		valign = 'center',
 		fontsize = Configuration:GetFont(2).size,
-		text = saveFile.name,
+		text = saveFile.name .. (current and " \255\0\255\255\(current)\008" or ""),
 		parent = container,
 	}
+	x = x + 200
 	
 	-- save's campaign name
-	x = x + 200
-	local campaignNameStr = WG.CampaignAPI.GetCampaignTitle(saveFile.campaignID) or saveFile.campaignID
-	local campaignName = TextBox:New {
-		name = "gameName",
-		x = x,
-		y = 12,
-		right = 0,
-		height = 20,
-		valign = 'center',
-		fontsize = Configuration:GetFont(2).size,
-		text = campaignNameStr,
-		parent = container,
-	}
+	--local campaignNameStr = WG.CampaignData.GetCampaignTitle(saveFile.campaignID) or saveFile.campaignID
+	--local campaignName = TextBox:New {
+	--	name = "gameName",
+	--	x = x,
+	--	y = 12,
+	--	right = 0,
+	--	height = 20,
+	--	valign = 'center',
+	--	fontsize = Configuration:GetFont(2).size,
+	--	text = campaignNameStr,
+	--	parent = container,
+	--}
+	--x = x + 220
 	
 	-- save date
-	x = x + 220
 	local saveDate = TextBox:New {
 		name = "saveDate",
 		x = x,
@@ -206,23 +263,23 @@ local function AddSaveEntryButton(saveFile, saveList)
 		text = WriteDate(saveFile.date),
 		parent = container,
 	}
+	x = x + 140
 	
 	-- save details
-	x = x + 140
-	local details = TextBox:New {
-		name = "saveDetails",
-		x = x,
-		y = 12,
-		right = 0,
-		height = 20,
-		valign = 'center',
-		fontsize = Configuration:GetFont(2).size,
-		text = GetSaveDescText(saveFile),
-		parent = container,
-	}
+	--local details = TextBox:New {
+	--	name = "saveDetails",
+	--	x = x,
+	--	y = 12,
+	--	right = 0,
+	--	height = 20,
+	--	valign = 'center',
+	--	fontsize = Configuration:GetFont(2).size,
+	--	text = GetSaveDescText(saveFile),
+	--	parent = container,
+	--}
+	--x = x + 200
 	
 	-- delete button
-	x = x + 200
 	local deleteButton = Button:New {
 		parent = container,
 		x = x,
@@ -238,14 +295,14 @@ local function AddSaveEntryButton(saveFile, saveList)
 		}
 	}
 	
-	return container, {saveFile.name, campaignNameStr, DateToString(saveFile.date)}
+	return container, {saveFile.name, DateToString(saveFile.date)}
 end
 
 local function PopulateSaveList(saveList)
 	saveList:Clear()
-	local saves = WG.CampaignAPI.GetSaves()
+	local saves = WG.CampaignData.GetSaves()
 	local items = {}
-	for filepath, save in pairs(saves) do
+	for name, save in pairs(saves) do
 		local controls, order = AddSaveEntryButton(save, saveList)
 		items[#items + 1] = {save.name, controls, order}
 	end
@@ -259,24 +316,13 @@ end
 local function InitializeControls(parent, saveMode)
 	Configuration = WG.Chobby.Configuration
 	
-	Label:New {
-		x = 15,
-		y = 11,
-		width = 180,
-		height = 30,
-		parent = parent,
-		font = Configuration:GetFont(3),
-		caption = string.upper(saveMode and i18n("save") or i18n("load")),
-	}
-	
 	-------------------------
 	-- Generate List
 	-------------------------
-	
 	local listHolder = Control:New {
 		x = 12,
 		right = 15,
-		y = saveMode and 110 or 80,
+		y = 80,
 		bottom = 15,
 		parent = parent,
 		resizable = false,
@@ -286,51 +332,27 @@ local function InitializeControls(parent, saveMode)
 	
 	local headings = {
 		{name = "Name", x = 97, width = 200},
-		{name = "Campaign", x = 97 + 200, width = 220},
-		{name = "Date", x = 97 + 200 + 220, width = 140},
+		--{name = "Campaign", x = 97 + 200, width = 220},
+		{name = "Date", x = 97 + --[[200 +]] 220, width = 140},
 	}
 
-	local saveList = WG.Chobby.SortableList(listHolder, headings, 80, 3)
+	local saveList = WG.Chobby.SortableList(listHolder, headings, 80, 2)
 	PopulateSaveList(saveList)
 	
-	if saveMode then
-		local saveFilenameEdit = EditBox:New {
-			x = 12,
-			right = 96,
-			y = 51,
-			height = 28,
-			hint = "Save Filename",
-			font = Configuration:GetFont(2),
-			parent = parent,
-		}
-		
-		local saveDescEdit = EditBox:New {
-			x = 12,
-			right = 96,
-			y = 81,
-			height = 28,
-			hint = "Save Description",
-			font = Configuration:GetFont(2),
-			parent = parent,
-		}
-	
-		local saveButton = Button:New {
-			width = 80,
-			right = 12,
-			y = 51,
-			height = 64,
-			caption = i18n("save") or "Save",
-			OnClick = {
-				function ()
-					if saveFilenameEdit.text and string.len(saveFilenameEdit.text) ~= 0 then
-						PromptSave(saveFilenameEdit.text, saveDescEdit.text)
-					end
-				end
-			},
-			font = Configuration:GetFont(3),
-			parent = parent,
-		}
-	end
+	local saveButton = Button:New {
+		width = 180,
+		x = 12,
+		y = 8,
+		height = 64,
+		caption = i18n("new_campaign"),
+		OnClick = {
+			function ()
+				PromptNewSave()
+			end
+		},
+		font = Configuration:GetFont(3),
+		parent = parent,
+	}
 	
 	local externalFunctions = {}
 	
@@ -345,13 +367,13 @@ end
 --------------------------------------------------------------------------------
 -- External Interface
 
-local CampaignSaveLoadWindow = {}
+local CampaignSaveWindow = {}
 
-function CampaignSaveLoadWindow.GetControl(saveMode)
+function CampaignSaveWindow.GetControl()
 	local controlFuncs
 	
 	local window = Control:New {
-		name = saveMode and "campaignSaveHandler" or "campaignLoadHandler",
+		name = "campaignSaveHandler",
 		x = "0%",
 		y = "0%",
 		width = "100%",
@@ -360,10 +382,7 @@ function CampaignSaveLoadWindow.GetControl(saveMode)
 			function(obj)
 				if obj:IsEmpty() then
 					controlFuncs = InitializeControls(obj, saveMode)
-					CampaignSaveLoadWindow.PopulateSaveList = controlFuncs.PopulateSaveList	-- hax
-				else
-					-- update save list
-					controlFuncs.PopulateSaveList()
+					CampaignSaveWindow.PopulateSaveList = controlFuncs.PopulateSaveList	-- hax
 				end
 			end
 		},
@@ -375,11 +394,6 @@ end
 --------------------------------------------------------------------------------
 -- callins
 --------------------------------------------------------------------------------
--- called when returning to menu from a game
-function widget:ActivateMenu()
-	Spring.Log(widget:GetInfo().name, LOG.INFO, "ActivateMenu called", runningMission)
-	ingame = false
-end
 
 function widget:Initialize()
 	CHOBBY_DIR = "LuaMenu/widgets/chobby/"
@@ -393,14 +407,9 @@ function widget:Initialize()
 	Label = Chili.Label
 	Button = Chili.Button
 	
-	WG.CampaignSaveLoadWindow = CampaignSaveLoadWindow
-	
-	local function OnBattleAboutToStart()
-		ingame = true
-	end
-	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
+	WG.CampaignSaveWindow = CampaignSaveWindow
 end
 
 function widget:Shutdown()
-	WG.CampaignSaveLoadWindow = nil
+	WG.CampaignSaveWindow = nil
 end

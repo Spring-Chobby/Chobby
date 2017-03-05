@@ -338,6 +338,12 @@ local function UpdateEdgeList()
 	edgeDrawList = gl.CreateList(CreateEdgeList)
 end
 
+local function UpdateAllStartable()
+	for i = 1, #planetList do
+		planetList[i].UpdateStartable()
+	end
+end
+
 local function InitializePlanetHandler(parent)
 	local Configuration = WG.Chobby.Configuration
 	
@@ -364,11 +370,9 @@ local function InitializePlanetHandler(parent)
 		planetList[i] = GetPlanet(planetWindow, i, planetConfig[i], planetAdjacency[i])
 	end
 	
-	for i = 1, #planetList do
-		planetList[i].UpdateStartable()
-	end
-	
+	UpdateAllStartable()
 	UpdateEdgeList()
+	
 	local graph = Chili.Control:New{
 		x       = 0,
 		y       = 0,
@@ -394,9 +398,7 @@ local function InitializePlanetHandler(parent)
 	
 	local function PlanetCaptured(listener, planetID)
 		planetList[planetID].UpdateStartable()
-		for i = 1, #planetList do
-			planetList[i].UpdateStartable()
-		end
+		UpdateAllStartable(planetList)
 		UpdateEdgeList()
 	end
 	WG.CampaignData.AddListener("PlanetCaptured", PlanetCaptured)
@@ -441,7 +443,7 @@ local externalFunctions = {}
 
 function externalFunctions.GetControl()
 	
-	local planetsHandler
+	local planetsHandler = {}
 	
 	local window = Control:New {
 		name = "campaignHandler",
@@ -486,6 +488,11 @@ function externalFunctions.GetControl()
 		},
 	}
 	return window
+end
+
+function externalFunctions.Refresh()
+	UpdateAllStartable()
+	UpdateEdgeList()
 end
 
 --------------------------------------------------------------------------------
