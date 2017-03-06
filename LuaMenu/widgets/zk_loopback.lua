@@ -126,6 +126,17 @@ local function SteamConnectSpring(args)
 	]]--
 end
 
+local function DownloadImageDone(args)
+	--[[
+    public class DownloadImageDone
+    {
+        public string RequestToken { get; set; } // client can set token to track multiple responses/requests
+        public string ImageType { get; set; }
+        public string Name { get; set; }
+    }
+	]]--
+end
+
 commands["DownloadFileDone"] = DownloadFileDone
 commands["SteamOnline"] = SteamOnline
 commands["SteamJoinFriend"] = SteamJoinFriend
@@ -135,6 +146,7 @@ commands["SteamFriendJoinedMe"] = SteamFriendJoinedMe
 commands["SteamHostGameSuccess"] = SteamHostGameSuccess
 commands["SteamHostGameFailed"] = SteamHostGameFailed
 commands["SteamConnectSpring"] = SteamConnectSpring
+commands["DownloadImageDone"] = DownloadImageDone
 
 
 --------------------------------------------------------------------------------
@@ -200,6 +212,19 @@ function WrapperLoopback.StartNewSpring(args)
 	SendCommands("StartNewSpring", args)
 end
 
+
+function WrapperLoopback.DownloadImage(args) 
+--[[
+    [ChobbyMessage]
+    public class DownloadImage
+    {
+        public string RequestToken { get; set; } // client can set token to track multiple responses/requests
+        public string ImageType { get; set; }  // "Avatars" or "Clans"
+        public string Name { get; set; }
+    }
+]]--
+	SendCommand("DownloadImage", args)
+end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
