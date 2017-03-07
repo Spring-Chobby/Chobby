@@ -132,12 +132,12 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 	local userBattleInfo = userControl.lobby:GetUserBattleStatus(userName) or {}
 	local myUserName = userControl.lobby:GetMyUserName()
 	local comboOptions = {}
-	
+
 	local myPartyID = userControl.lobby:GetMyPartyID()
 	local userPartyID = userControl.lobby:GetUserPartyID(userName)
-	
+
 	local Configuration = WG.Chobby.Configuration
-	
+
 	if (not userBattleInfo.aiLib) and userName ~= myUserName then
 		comboOptions[#comboOptions + 1] = "Message"
 
@@ -151,7 +151,7 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 				end
 			end
 		end
-		
+
 		if (not myPartyID) or myPartyID ~= userPartyID then
 			-- Do not show any party options for people already in my party.
 			if (not myPartyID) and userPartyID then
@@ -164,21 +164,21 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 				comboOptions[#comboOptions + 1] = "Invite to Party"
 			end
 		end
-		
+
 		if userInfo.accountID and Configuration.gameConfig.link_userPage then
 			comboOptions[#comboOptions + 1] = "User Page"
 		end
-		
+
 		if userInfo.accountID and Configuration.gameConfig.link_reportPlayer then
 			comboOptions[#comboOptions + 1] = "Report"
 		end
-		
+
 		if userInfo.isIgnored then
 			comboOptions[#comboOptions + 1] = "Unignore"
 		elseif not userInfo.isAdmin then
 			comboOptions[#comboOptions + 1] = "Ignore"
 		end
-		
+
 		if userInfo.isFriend then
 			comboOptions[#comboOptions + 1] = "Unfriend"
 		else
@@ -190,10 +190,11 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 		-- Only add for myself since the same thing is added in the previous block
 		comboOptions[#comboOptions + 1] = "User Page"
 	end
-	
+
 	-- userControl.lobby:GetMyIsAdmin()
 	-- Let everyone start kick votes.
-	if isInBattle or (userBattleInfo.aiLib and userBattleInfo.owner == myUserName) then
+	if userName ~= myUserName and
+		(isInBattle or (userBattleInfo.aiLib and userBattleInfo.owner == myUserName)) then
 		comboOptions[#comboOptions + 1] = "Kick"
 	end
 
@@ -215,7 +216,7 @@ local function GetUserRankImageName(userName, userControl)
 
 	local userInfo = userControl.lobby:GetUser(userName) or {}
 	local userBattleInfo = userControl.lobby:GetUserBattleStatus(userName) or {}
-	
+
 	if userControl.isSingleplayer and not userBattleInfo.aiLib then
 		return IMAGE_PLAYER
 	end
@@ -226,11 +227,11 @@ end
 local function GetUserStatusImages(userName, isInBattle, userControl)
 	local userInfo = userControl.lobby:GetUser(userName) or {}
 	local images = {}
-	
+
 	if userInfo.pendingPartyInvite then
 		images[#images + 1] = IMAGE_PARTY_INVITE
 	end
-	
+
 	if userInfo.isInGame or (userInfo.battleID and not isInBattle) then
 		if userInfo.isInGame then
 			images[#images + 1] = IMAGE_INGAME
@@ -238,11 +239,11 @@ local function GetUserStatusImages(userName, isInBattle, userControl)
 			images[#images + 1] = IMAGE_BATTLE
 		end
 	end
-	
+
 	if userInfo.isAway then
 		images[#images + 1] = IMAGE_AFK
 	end
-	
+
 	return images
 end
 
@@ -295,19 +296,19 @@ local function UpdateUserControlStatus(userName, userControls)
 	elseif not userControls.statusImages then
 		return
 	end
-	
+
 	local imageFiles = GetUserStatusImages(userName, userControls.isInBattle, userControls)
 	local imageControlCount = math.max(#userControls.statusImages, #imageFiles)
-	
+
 	local statusImageOffset = userControls.nameStartY + userControls.nameActualLength + 3
 	if userControls.maxNameLength then
 		if statusImageOffset + 21*(#imageFiles) > userControls.maxNameLength then
 			statusImageOffset = userControls.maxNameLength - 21*(#imageFiles)
 		end
-		
+
 		local nameSpace = userControls.maxNameLength - userControls.nameStartY - (userControls.maxNameLength - statusImageOffset)
 		local truncatedName = StringUtilities.TruncateStringIfRequiredAndDotDot(userName, userControls.tbName.font, nameSpace)
-		
+
 		if truncatedName then
 			userControls.tbName:SetText(truncatedName)
 			userControls.nameTruncated = true
@@ -316,7 +317,7 @@ local function UpdateUserControlStatus(userName, userControls)
 			userControls.nameTruncated = false
 		end
 	end
-	
+
 	for i = 1, imageControlCount do
 		if not userControls.statusImages[i] then
 			userControls.statusImages[i] = Image:New {
@@ -330,7 +331,7 @@ local function UpdateUserControlStatus(userName, userControls)
 				image = imageFiles[i]
 			}
 		end
-		
+
 		if imageFiles[i] then
 			userControls.statusImages[i]:SetVisibility(true)
 			userControls.statusImages[i].file = imageFiles[i]
@@ -361,10 +362,10 @@ local function UpdateUserActivity(listener, userName)
 			data.mainControl.items = GetUserComboBoxOptions(userName, data.isInBattle, data)
 			data.imLevel.file = GetUserRankImageName(userName, data, data.imLevel.file)
 			data.imLevel:Invalidate()
-			
+
 			data.tbName.font.color = GetUserNameColor(userName, data)
 			data.tbName:Invalidate()
-			
+
 			UpdateUserControlStatus(userName, data)
 		end
 	end
@@ -437,7 +438,7 @@ local function GetUserControls(userName, opts)
 	local comboBoxOnly       = opts.comboBoxOnly
 
 	local userControls = reinitialize or {}
-	
+
 	local Configuration = WG.Chobby.Configuration
 
 	userControls.showFounder = showFounder
@@ -552,11 +553,11 @@ local function GetUserControls(userName, opts)
 			}
 		}
 	end
-	
+
 	if comboBoxOnly then
 		return userControls
 	end
-	
+
 	if isInBattle and not suppressSync then
 		offset = offset + 1
 		userControls.imSyncStatus = Image:New {
@@ -599,7 +600,7 @@ local function GetUserControls(userName, opts)
 		file = GetUserRankImageName(userName, userControls),
 	}
 	offset = offset + 23
-	
+
 	local clanImage = GetUserClanImage(userName, userControls)
 	if clanImage then
 		offset = offset + 1
@@ -615,7 +616,7 @@ local function GetUserControls(userName, opts)
 		}
 		offset = offset + 23
 	end
-	
+
 	offset = offset + 1
 	userControls.tbName = TextBox:New {
 		name = "tbName",
@@ -632,7 +633,7 @@ local function GetUserControls(userName, opts)
 	local truncatedName = StringUtilities.TruncateStringIfRequiredAndDotDot(userName, userControls.tbName.font, maxNameLength and (maxNameLength - offset))
 	userControls.nameStartY = offset
 	userControls.maxNameLength = maxNameLength
-	
+
 	local nameColor = GetUserNameColor(userName, userControls)
 	if nameColor then
 		userControls.tbName.font.color = nameColor
@@ -697,10 +698,10 @@ local function GetUserControls(userName, opts)
 			end
 		end
 	end
-	
+
 	-- This is always checked against main lobby.
 	userControls.needReinitialization = lobby.status ~= "connected"
-	
+
 	return userControls
 end
 
@@ -711,23 +712,23 @@ local function _GetUserDropdownMenu(userName, isInBattle)
 	}
 	local userControls = GetUserControls(userName, opts)
 	local parentControl = WG.Chobby.interfaceRoot.GetLobbyInterfaceHolder()
-	
+
 	parentControl:AddChild(userControls.mainControl)
 	userControls.mainControl:BringToFront()
-	
+
 	local x,y = Spring.GetMouseState()
 	local screenWidth, screenHeight = Spring.GetWindowGeometry()
 	userControls.mainControl:SetPos(math.max(0, x - 60), screenHeight - y - userControls.mainControl.height + 5, 120)
-	
+
 	local function delayFunc()
 		-- Must click on the new ComboBox, otherwise an infinite loop may be caused.
 		screen0:MouseDown(x, y + 10, 1)
 	end
-	
+
 	WG.Delay(delayFunc, 0.001)
-	
+
 	userControls.mainControl.OnClose = userControls.mainControl.OnClose or {}
-	userControls.mainControl.OnClose[#userControls.mainControl.OnClose + 1] = 
+	userControls.mainControl.OnClose[#userControls.mainControl.OnClose + 1] =
 	function (obj)
 		obj:Dispose()
 	end
@@ -851,21 +852,21 @@ end
 local function AddListeners()
 	lobby:AddListener("OnFriendList", UpdateUserActivityList)
 	lobby:AddListener("OnIgnoreList", UpdateUserActivityList)
-	
+
 	lobby:AddListener("OnUpdateUserStatus", UpdateUserActivity)
 
 	lobby:AddListener("OnFriend", UpdateUserActivity)
 	lobby:AddListener("OnUnfriend", UpdateUserActivity)
 	lobby:AddListener("OnAddIgnoreUser", UpdateUserActivity)
 	lobby:AddListener("OnRemoveIgnoreUser", UpdateUserActivity)
-	
+
 	lobby:AddListener("OnPartyInviteSent", UpdateUserActivity)
 	lobby:AddListener("OnPartyInviteResponse", UpdateUserActivity)
-	
+
 	lobby:AddListener("OnPartyCreate", OnPartyUpdate)
 	lobby:AddListener("OnPartyUpdate", OnPartyUpdate)
 	lobby:AddListener("OnPartyLeft", OnPartyLeft)
-	
+
 	lobby:AddListener("OnAddUser", UpdateUserActivity)
 	lobby:AddListener("OnRemoveUser", UpdateUserActivity)
 	lobby:AddListener("OnAddUser", UpdateUserCountry)
@@ -880,14 +881,14 @@ end
 local function DelayedInitialize()
 	local Configuration = WG.Chobby.Configuration
 	UserLevelToImageConfFunction = Configuration.gameConfig.rankFunction
-	
+
 	local function onConfigurationChange(listener, key, value)
 		if key == "gameConfigName" then
 			UserLevelToImageConfFunction = Configuration.gameConfig.rankFunction
 			-- TODO, update all rank icons.
 		end
 	end
-	
+
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 end
 
@@ -916,9 +917,9 @@ end
 --	oldTimer = newTimer
 --	awayStatus = not awayStatus
 --	lobby:SetAllUserAway(awayStatus)
---	
+--
 --	--lobby:SetAllUserStatusRandomly()
 --end
-	
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
