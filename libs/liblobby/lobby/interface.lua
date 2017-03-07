@@ -115,49 +115,75 @@ function Interface:LeaveBattle()
 end
 
 function Interface:SetBattleStatus(status)
+	if not self._requestedBattleStatus then
+		return
+	end
 	self:super("SetBattleStatus", status)
+
+  -- FIXME: (or rather FIX UI code)
+	-- This function is invoked too many times (before an answer gets received),
+	-- so we're setting the values before
+	-- they get confirmed from the server, otherwise we end up sending different info
+	local myUserName = self:GetMyUserName()
+	if not self.userBattleStatus[myUserName] then
+		self.userBattleStatus[userName] = {}
+	end
+	local userData = self.userBattleStatus[myUserName]
+
 	local bs = {}
 	if status.isReady ~= nil then
-		bs.isReady     = status.isReady
+		bs.isReady       = status.isReady
+		userData.isReady = status.isReady
 	else
 		status.isReady = self:GetMyIsReady()
 	end
 	if status.teamNumber ~= nil then
-		bs.teamNumber  = status.teamNumber
+		bs.teamNumber       = status.teamNumber
+		userData.teamNumber = status.teamNumber
 	else
 		bs.teamNumber  = self:GetMyTeamNumber() or 0
 	end
 	if status.teamColor ~= nil then
-		bs.teamColor   = status.teamColor
+		bs.teamColor       = status.teamColor
+		userData.teamColor = status.teamColor
 	else
 		bs.teamColor   = self:GetMyTeamColor()
 	end
 	if status.allyNumber ~= nil then
-		bs.allyNumber  = status.allyNumber
+		bs.allyNumber       = status.allyNumber
+		userData.allyNumber = status.allyNumber
 	else
 		bs.allyNumber  = self:GetMyAllyNumber() or 0
 	end
 	if status.isSpectator ~= nil then
-		bs.isSpectator = status.isSpectator
+		bs.isSpectator       = status.isSpectator
+		userData.isSpectator = status.isSpectator
 	else
 		bs.isSpectator = self:GetMyIsSpectator()
 	end
 	if status.sync ~= nil then
 		bs.sync        = status.sync
+		userData.sync  = status.sync
 	else
 		bs.sync        = self:GetMySync()
 	end
 	if status.side ~= nil then
 		bs.side        = status.side
+		userData.side  = status.side
 	else
 		bs.side        = self:GetMySide() or 0
+	end
+
+	playMode = 1 -- not spectator
+	if bs.isSpectator then
+		playMode = 0 -- spectator
 	end
 
 	local battleStatusString = tostring(
 		(bs.isReady and 2 or 0) +
 		lshift(bs.teamNumber, 2) +
 		lshift(bs.allyNumber, 6) +
-		(bs.isSpectator and 0 or 2^10) +
+		lshift(playMode, 10) +
 		(bs.sync and 2^22 or 2^23) +
 		lshift(bs.side, 24)
 	)
@@ -439,6 +465,7 @@ Interface.commandPattern["BATTLECLOSED"] = "(%d+)"
 
 -- hashCode will be a string due to lua limitations
 function Interface:_OnJoinBattle(battleID, hashCode)
+	self._requestedBattleStatus = nil
 	battleID = tonumber(battleID)
 	self:super("_OnJoinBattle", battleID, hashCode)
 end
@@ -470,7 +497,7 @@ Interface.commandPattern["UPDATEBATTLEINFO"] = "(%d+)%s+(%S+)%s+(%S+)%s+(%S+)%s+
 
 function Interface:_OnClientBattleStatus(userName, battleStatus, teamColor)
 	battleStatus = tonumber(battleStatus)
-	self:_OnUpdateUserBattleStatus(userName, {
+	status = {
 		isReady      = rshift(battleStatus, 1) % 2 == 1,
 		teamNumber   = rshift(battleStatus, 2) % 16,
 		allyNumber   = rshift(battleStatus, 6) % 16,
@@ -478,7 +505,8 @@ function Interface:_OnClientBattleStatus(userName, battleStatus, teamColor)
 		handicap     = rshift(battleStatus, 11) % 128,
 		sync         = rshift(battleStatus, 22) % 4,
 		side         = rshift(battleStatus, 24) % 16,
-	})
+	}
+	self:_OnUpdateUserBattleStatus(userName, status)
 end
 Interface.commands["CLIENTBATTLESTATUS"] = Interface._OnClientBattleStatus
 Interface.commandPattern["CLIENTBATTLESTATUS"] = "(%S+)%s+(%S+)%s+(%S+)"
@@ -1160,7 +1188,8 @@ Interface.commands["REMOVESTARTRECT"] = Interface._OnRemoveStartRect
 Interface.commandPattern["REMOVESTARTRECT"] = "(%d+)"
 
 function Interface:_OnRequestBattleStatus()
-	self:_CallListeners("OnRequestBattleStatus")
+	self._requestedBattleStatus = true
+	self:SetBattleStatus({})
 end
 Interface.commands["REQUESTBATTLESTATUS"] = Interface._OnRequestBattleStatus
 
