@@ -28,7 +28,12 @@ function widget:Update()
 	currentTime = os.clock()
 	for i, call in pairs(calls) do
 		if currentTime >= call[2] then
-			call[1]()
+			success, err = pcall(function()
+				call[1]()
+			end)
+			if not success then
+				Spring.Log("delay_api", "error", "Error with delayed call: " .. tostring(err))
+			end
 			calls[i] = nil
 		end
 	end
