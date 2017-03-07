@@ -428,6 +428,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local queueListWindow = WG.QueueListWindow.GetControl()
 	local battleListWindow = BattleListWindow()
 	local battleWatchListWindow = BattleWatchListWindow()
+	local planetwarsListWindow = WG.PlanetwarsListWindow.GetControl()
 
 	local MULTIPLAYER_INDEX = 2
 	local submenus = {
@@ -442,6 +443,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				{name = "matchmaking", control = queueListWindow},
 				{name = "watch", control = battleWatchListWindow.window},
 				{name = "custom", control = battleListWindow.window},
+				{name = "planetwars", control = planetwarsListWindow},
+				
 			},
 			cleanupFunction = Configuration.leaveMultiplayerOnMainMenu and CleanMultiplayerState or nil
 		},

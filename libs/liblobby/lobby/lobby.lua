@@ -489,6 +489,7 @@ function Lobby:_OnRemoveUser(userName)
 		accountID = oldUserInfo.accountID,
 		country = oldUserInfo.country,
 		clan = oldUserInfo.clan,
+		faction = oldUserInfo.faction,
 		level = oldUserInfo.level,
 		skill = oldUserInfo.skill,
 		casualSkill = oldUserInfo.casualSkill,
@@ -1439,12 +1440,19 @@ function Lobby:GetMyUserName()
 	return self.myUserName
 end
 
+function Lobby:GetMyFaction()
+	if self.myUserName and self.users[self.myUserName] then
+		return self.users[self.myUserName].faction
+	end
+	return false
+end
+
 function Lobby:GetMySessionToken()
 	return self.sessionToken
 end
 
 function Lobby:GetMyIsAdmin()
-	if self.users[self.myUserName] then
+	if self.myUserName and self.users[self.myUserName] then
 		return self.users[self.myUserName].isAdmin
 	end
 	return false

@@ -737,6 +737,7 @@ function Interface:_User(data)
 		self:_OnAddUser(data.Name, {
 			country = data.Country,
 			clan = data.Clan,
+			faction = data.Faction,
 			lobbyVersion = data.LobbyVersion,
 			accountID = data.AccountID,
 			isInGame = data.IsInGame,
@@ -763,6 +764,7 @@ function Interface:_User(data)
 	self:_OnUpdateUserStatus(data.Name, {
 		country = data.Country,
 		clan = data.Clan,
+		faction = data.Faction,
 		lobbyVersion = data.LobbyVersion,
 		accountID = data.AccountID,
 		isInGame = data.IsInGame,
