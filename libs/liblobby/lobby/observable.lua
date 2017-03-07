@@ -46,10 +46,7 @@ function Lobby:_CallListeners(event, ...)
 end
 
 function Lobby:_PrintError(err)
-	Spring.Echo("_PrintError")
-	Spring.Echo(LOG_SECTION)
-	Spring.Echo(LOG.ERROR)
-	Spring.Echo(err)
-	Spring.Echo(debug.traceback(err))
+	-- FIXME: cleanup more
+	Spring.Log(LOG_SECTION, LOG.ERROR, err)
 	Spring.Log(LOG_SECTION, LOG.ERROR, debug.traceback(err))
 end

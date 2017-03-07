@@ -34,21 +34,14 @@ function Interface:Login(user, password, cpu, localIP)
 	end
 	password = VFS.CalculateHash(password, 0)
 	self:_SendCommand(concat("LOGIN", user, password, cpu, localIP, "LuaLobby\t", "0\t", "a b m cl et p"))
-	return
+	return self
 end
 
 function Interface:Ping()
 	self:super("Ping")
 	self:_SendCommand("PING", true)
-	return
+	return self
 end
-
--- TODO
--- function Interface:_OnMOTD(message)
--- 	self:super("_OnMOTD", message)
--- end
--- Interface.commands["MOTD"] = Interface._OnMOTD
--- Interface.commandPattern["MOTD"] = "([^\t]*)"
 
 ------------------------
 -- User commands
@@ -140,11 +133,11 @@ function Interface:SetBattleStatus(status)
 		bs.teamColor   = self:GetMyTeamColor()
 	end
 	if status.allyNumber ~= nil then
-		bs.allyNumber  = status.allyNumber 
+		bs.allyNumber  = status.allyNumber
 	else
 		bs.allyNumber  = self:GetMyAllyNumber() or 0
 	end
-	if status.isSpectator ~= nil then 
+	if status.isSpectator ~= nil then
 		bs.isSpectator = status.isSpectator
 	else
 		bs.isSpectator = self:GetMyIsSpectator()
@@ -178,7 +171,7 @@ end
 -- 	self:_SendCommand(concat("JOINBATTLEACCEPT", userName))
 -- 	return self
 -- end
--- 
+--
 -- function Interface:JoinBattleDeny(userName, reason)
 -- 	self:super("JoinBattleDeny", userName, reason)
 -- 	self:_SendCommand(concat("JOINBATTLEDENY", userName, reason))
@@ -251,6 +244,12 @@ end
 Interface.commands["TASServer"] = Interface._OnTASServer
 Interface.commandPattern["TASServer"] = "(%S+)%s+(%S+)%s+(%S+)%s+(%S+)"
 
+function Interface:_OnMOTD(message)
+	-- IGNORED
+end
+Interface.commands["MOTD"] = Interface._OnMOTD
+Interface.commandPattern["MOTD"] = "([^\t]*)"
+
 function Interface:_OnAccepted()
 	self:super("_OnAccepted")
 end
@@ -299,17 +298,17 @@ Interface.commands["PONG"] = Interface._OnPong
 -- User commands
 ------------------------
 
-function Interface:_AddUser(userName, country, cpu, accountID)
+function Interface:_OnAddUser(userName, country, cpu, accountID)
 	cpu = tonumber(cpu)
 	accountID = tonumber(accountID)
 	local status = {
-		country = country, 
-		cpu = cpu, 
+		country = country,
+		cpu = cpu,
 		accountID = accountID
 	}
 	self:super("_OnAddUser", userName, status)
 end
-Interface.commands["ADDUSER"] = Interface._AddUser
+Interface.commands["ADDUSER"] = Interface._OnAddUser
 Interface.commandPattern["ADDUSER"] = "(%S+)%s+(%S%S)%s+(%S+)%s*(.*)"
 
 function Interface:_OnRemoveUser(userName)
@@ -326,9 +325,9 @@ function Interface:_OnClientStatus(userName, status)
 		isModerator = rshift(status, 5) % 2 == 1,
 		isBot       = rshift(status, 6) % 2 == 1,
 	})
-	
+
 	if status.isInGame ~= nil then
-		
+
 		local battleID = self:GetBattleFoundedBy(userName)
 		if battleID then
 			self:_OnBattleIngameUpdate(battleID, status.isInGame)
@@ -421,7 +420,7 @@ function Interface:_OnBattleOpened(battleID, type, natType, founder, ip, port, m
 	port = tonumber(port)
 	maxPlayers = tonumber(maxPlayers)
 	passworded = tonumber(passworded) ~= 0
-	
+
 	local isRunning = self.users[founder].isInGame
 
 	local engineName, engineVersion, map, title, gameName = unpack(explode("\t", other))
@@ -728,17 +727,17 @@ end
 function Interface:InviteTeam(userName)
 	self:_SendCommand(concat("INVITETEAM", json.encode({userName=userName})))
 	return self
-end 
+end
 
 function Interface:InviteTeamAccept(userName)
 	self:_SendCommand(concat("INVITETEAMACCEPT", json.encode({userName=userName})))
 	return self
-end 
+end
 
 function Interface:InviteTeamDecline(userName)
 	self:_SendCommand(concat("INVITETEAMDECLINE", json.encode({userName=userName})))
 	return self
-end 
+end
 
 function Interface:JoinQueue(name, params)
 	local tbl = {name=name}
@@ -862,12 +861,12 @@ end
 -- 	self:_SendCommand(concat("SAYDATA", chanName, message))
 -- 	return self
 -- end
--- 
+--
 -- function Interface:SayDataBattle(message)
 -- 	self:_SendCommand(concat("SAYDATABATTLE", message))
 -- 	return self
 -- end
--- 
+--
 -- function Interface:SayDataPrivate(userName, message)
 -- 	self:_SendCommand(concat("SAYDATAPRIVATE", userName, message))
 -- 	return self
@@ -1176,13 +1175,13 @@ Interface.commandPattern["RING"] = "(%S+)"
 -- end
 -- Interface.commands["SAIDDATA"] = Interface._OnSaidData
 -- Interface.commandPattern["SAIDDATA"] = "(%S+)%s+(%S+)%s+(.*)"
--- 
+--
 -- function Interface:_OnSaidDataBattle(userName, message)
 -- 	self:_CallListeners("OnSaidDataBattle", userName, message)
 -- end
 -- Interface.commands["SAIDDATABATTLE"] = Interface._OnSaidDataBattle
 -- Interface.commandPattern["SAIDDATABATTLE"] = "(%S+)%s+(.*)"
--- 
+--
 -- function Interface:_OnSaidDataPrivate(userName, message)
 -- 	self:_CallListeners("OnSaidDataPrivate", userName, message)
 -- end
@@ -1208,12 +1207,12 @@ Interface.jsonCommands["SAIDTEAMEX"] = Interface._OnSaidTeamEx
 -- end
 -- Interface.commands["SCRIPT"] = Interface._OnScript
 -- Interface.commandPattern["SCRIPT"] = "([^\t]+)"
--- 
+--
 -- function Interface:_OnScriptEnd()
 -- 	self:_CallListeners("OnScriptEnd")
 -- end
 -- Interface.commands["SCRIPTEND"] = Interface._OnScriptEnd
--- 
+--
 -- function Interface:_OnScriptStart()
 -- 	self:_CallListeners("OnScriptStart")
 -- end
