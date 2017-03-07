@@ -18,7 +18,7 @@ return {
 				},
 				{
 					name = "options", 
-					control = Control:New {},
+					control = WG.CampaignOptionsWindow.GetControl(),
 				},
 			},
 		},

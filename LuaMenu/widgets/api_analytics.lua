@@ -34,7 +34,7 @@ function Analytics.SendOnetimeEvent(eventName, value)
 		return
 	end
 	onetimeEvents[eventName] = true
-	Spring.Echo("DesignEvent", eventName, value)
+	--Spring.Echo("DesignEvent", eventName, value)
 	if WG.WrapperLoopback then
 		WG.WrapperLoopback.GaAddDesignEvent(eventName, value)
 	end
@@ -45,7 +45,7 @@ function Analytics.SendErrorEvent(eventName, severity)
 		return
 	end
 	severity = severity or "Info"
-	Spring.Echo("ErrorEvent", eventName, severity)
+	--Spring.Echo("ErrorEvent", eventName, severity)
 	if WG.WrapperLoopback then
 		WG.WrapperLoopback.GaAddErrorEvent(severity, eventName)
 	end

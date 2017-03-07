@@ -79,6 +79,7 @@ local function StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName)
 	local players = {}
 	local ais = {}
 	local aiCount = 0
+	local commanderTypes = {}
 	
 	local localLobby = WG.LibLobby.localLobby
 	local Configuration = WG.Chobby.Configuration
@@ -112,12 +113,19 @@ local function StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName)
 		end
 	end
 	
+	commanderTypes.player_commander = WG.CampaignData.GetPlayerCommander()
+	
 	teams[teamCount] = {
 		TeamLeader = 0,
 		AllyTeam = gameConfig.playerConfig.allyTeam,
 		rgbcolor = '0 0 0',
+		start_x = gameConfig.playerConfig.startX,
+		start_z = gameConfig.playerConfig.startZ,
+		staticcomm = "player_commander",
+		static_level = WG.CampaignData.GetPlayerCommanderLevel(),
 		campaignunlocks = TableToBase64(fullPlayerUnlocks),
 		extrastartunits = TableToBase64(gameConfig.playerConfig.startUnits),
+		retinuestartunits = TableToBase64(WG.CampaignData.GetActiveRetinue()),
 	}
 	teamCount = teamCount + 1
 	
@@ -143,16 +151,28 @@ local function StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName)
 		}
 		aiCount = aiCount + 1
 		
+		local commanderName, noCommander
+		if aiData.commander then
+			commanderName = "ai_commander_" .. aiCount
+			commanderTypes[commanderName] = aiData.commander
+		else
+			noCommander = 1
+		end
+		
 		teams[teamCount] = {
 			TeamLeader = 0,
 			AllyTeam = aiData.allyTeam,
 			rgbcolor = '0 0 0',
+			start_x = aiData.startX,
+			start_z = aiData.startZ,
+			nocommander = noCommander,
+			staticcomm = commanderName,
+			static_level = aiData.commanderLevel or 1,
 			campaignunlocks = TableToBase64(aiData.unlocks),
 			extrastartunits = TableToBase64(aiData.startUnits),
 		}
 		teamCount = teamCount + 1
 	end
-	
 	
 	-- Add allyTeams
 	for i, teamData in pairs(teams) do
@@ -173,8 +193,10 @@ local function StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName)
 		nohelperais = 0,
 		numplayers = playerCount,
 		numusers = playerCount + aiCount,
-		startpostype = 2,
+		startpostype = 0, -- Fixed
 		modoptions = {
+			commandertypes = TableToBase64(commanderTypes),
+			fixedstartpos = 1,
 			singleplayercampaignbattleid = planetID
 		},
 	}

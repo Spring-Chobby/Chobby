@@ -52,8 +52,6 @@ function Configuration:init()
 	self.myAccountID = false
 	self.lastAddedAiName = false
 	
-	self.campaignPath = "campaign/sample"
-	
 	self.battleTypeToName = {
 		[5] = "cooperative",
 		[6] = "team",
@@ -93,6 +91,7 @@ function Configuration:init()
 	self.gameConfigName = "zk"
 	self.gameConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/mainConfig.lua")
 	
+	self.campaignPath = "campaign/sample"
 	self.campaignConfigName = "sample"
 	self.campaignConfig = VFS.Include("campaign/sample/mainConfig.lua")
 	self.campaignSaveFile = "Campaign1"
@@ -147,7 +146,7 @@ function Configuration:init()
 
 	self.countryShortnames = VFS.Include(LUA_DIRNAME .. "configs/countryShortname.lua")
 
-	self.game_settings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings3.lua")
+	self.game_settings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings.lua")
 	
 	self.settingsMenuValues = self.gameConfig.settingsDefault
 end
@@ -168,6 +167,11 @@ function Configuration:SetConfigData(data)
 		if string.find(key, "debriefing") then
 			self.channels[key] = nil
 		end
+	end
+	
+	local newSpringsettings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettingsChanges.lua")
+	for key, value in pairs(newSpringsettings) do
+		self.game_settings[key] = value
 	end
 end
 
@@ -216,6 +220,7 @@ function Configuration:GetConfigData()
 		window_WindowPosY = self.window_WindowPosY,
 		window_XResolutionWindowed = self.window_XResolutionWindowed,
 		window_YResolutionWindowed = self.window_YResolutionWindowed,
+		campaignSaveFile = self.campaignSaveFile,
 	}
 end
 

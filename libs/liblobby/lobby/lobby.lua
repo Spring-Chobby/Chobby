@@ -490,6 +490,9 @@ function Lobby:_OnRemoveUser(userName)
 		country = oldUserInfo.country,
 		clan = oldUserInfo.clan,
 		level = oldUserInfo.level,
+		skill = oldUserInfo.skill,
+		casualSkill = oldUserInfo.casualSkill,
+		icon = oldUserInfo.icon,
 		isAdmin = oldUserInfo.isAdmin,
 		steamID = oldUserInfo.steamID,
 	}

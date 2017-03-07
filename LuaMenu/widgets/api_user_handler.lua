@@ -77,15 +77,15 @@ local function CountryShortnameToFlag(shortname)
 	end
 end
 
-local function UserLevelToImage(level, skill, isBot, isAdmin)
+local function UserLevelToImage(icon, level, skill, isBot, isAdmin)
 	if UserLevelToImageConfFunction then
-		return UserLevelToImageConfFunction(level, skill, isBot, isAdmin)
+		return UserLevelToImageConfFunction(icon, level, skill, isBot, isAdmin)
 	end
 	return IMAGE_PLAYER
 end
 
 local function GetUserRankImage(userInfo, isBot)
-	return userInfo.icon or UserLevelToImage(userInfo.level, userInfo.skill, isBot, userInfo.isAdmin)
+	return UserLevelToImage(userInfo.icon, userInfo.level, math.max(userInfo.skill or 0, userInfo.casualSkill or 0), isBot, userInfo.isAdmin)
 end
 
 local function GetClanImage(clanName)
