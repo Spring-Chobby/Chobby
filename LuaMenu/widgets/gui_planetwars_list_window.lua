@@ -38,15 +38,27 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Initialization
+-- Planet List
 
-local function MakeQueueControl(parentControl, queueName, queueDescription, players, waiting, maxPartySize)
+local function MakePlanetControl(parentControl, index, planetID, planetName, planetMap, playersNeeded, playersCount)
 	local Configuration = WG.Chobby.Configuration
 	local lobby = WG.LibLobby.lobby
 	local btnLeave, btnJoin
 	
-	local currentPartySize = 1
+	Spring.Echo("MakePlanetControl", MakePlanetControl)
 	local inQueue = false
+	
+	local holder = Control:New {
+		x = 10,
+		y = index*55 + 15,
+		right = 0,
+		height = 45,
+		caption = "",
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+		parent = parentControl,
+	}
 	
 	btnJoin = Button:New {
 		x = 0,
@@ -62,18 +74,14 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 					WG.Chobby.InformationPopup("Game engine update required, restart the menu to apply.")
 					return
 				end
-				if requiredResourceCount ~= 0 then
-					WG.Chobby.InformationPopup("All required maps and games must be downloaded before you can join matchmaking.")
-					return
-				end
 			
-				lobby:JoinMatchMaking(queueName)
+				lobby:PwJoinPlanet(planetID)
 				obj:SetVisibility(false)
 				btnLeave:SetVisibility(true)
-				WG.Analytics.SendOnetimeEvent("lobby:multiplayer:matchmaking:join_" .. queueName)
+				--WG.Analytics.SendOnetimeEvent("lobby:multiplayer:matchmaking:join_" .. queueName)
 			end
 		},
-		parent = parentControl
+		parent = holder
 	}
 	
 	btnLeave = Button:New {
@@ -91,7 +99,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 				btnJoin:SetVisibility(true)
 			end
 		},
-		parent = parentControl
+		parent = holder
 	}
 	btnLeave:SetVisibility(false)
 	
@@ -104,7 +112,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		align = "bottom",
 		fontsize = Configuration:GetFont(1).size,
 		text = "Party too large",
-		parent = parentControl
+		parent = holder
 	}
 	labelDisabled:SetVisibility(false)
 	
@@ -115,7 +123,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		height = 33,
 		fontsize = Configuration:GetFont(3).size,
 		text = queueName,
-		parent = parentControl
+		parent = holder
 	}
 	
 	local lblDescription = TextBox:New {
@@ -127,7 +135,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		align = "bottom",
 		fontsize = Configuration:GetFont(1).size,
 		text = queueDescription,
-		parent = parentControl
+		parent = holder
 	}
 	
 	local lblPlayers = TextBox:New {
@@ -138,8 +146,8 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		right = 5,
 		align = "bottom",
 		fontsize = Configuration:GetFont(1).size,
-		text = "Playing: " .. players,
-		parent = parentControl
+		text = "Playing: ",
+		parent = holder
 	}
 	
 	local lblWaiting = TextBox:New {
@@ -150,8 +158,8 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		right = 5,
 		align = "bottom",
 		fontsize = Configuration:GetFont(1).size,
-		text = "Waiting: " .. waiting,
-		parent = parentControl
+		text = "Waiting: ",
+		parent = holder
 	}
 	
 	local function UpdateButton()
@@ -168,46 +176,52 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 	
 	local externalFunctions = {}
 	
-	function externalFunctions.SetInQueue(newInQueue)
-		if newInQueue == inQueue then
-			return
-		end
-		inQueue = newInQueue
-		UpdateButton()
+	function externalFunctions.UpdatePlanetControl(newPlanetData)
+	
 	end
 	
-	function externalFunctions.UpdateCurrentPartySize(newCurrentPartySize)
-		if newCurrentPartySize == currentPartySize then
-			return
-		end
-		currentPartySize = newCurrentPartySize
-		UpdateButton()
+	function externalFunctions.Hide()
+	
 	end
 	
-	function externalFunctions.UpdateQueueInformation(newName, newDescription, newPlayers, newWaiting, newMaxPartySize)
-		if newName then
-			lblTitle:SetText(newName)
+	return externalFunctions
+end
+
+local function GetPlanetList(parentControl)
+	
+	local planets = {}
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.SetPlanetList(newPlanetList, activeForMe)
+		local index = 1
+		if newPlanetList then
+			while index <= #newPlanetList do
+				local planetData = newPlanetList[index]
+				if planets[index] then
+					planets[index].UpdatePlanetControl(planetData.PlanetID, planetData.PlanetName, planetData.Map, planetData.Needed, planetData.Count)
+				else
+					planets[index] = MakePlanetControl(parentControl, index, planetData.PlanetID, planetData.PlanetName, planetData.Map, planetData.Needed, planetData.Count)
+				end
+				index = index + 1
+			end
 		end
-		if newDescription then
-			lblDescription:SetText(newDescription)
-		end
-		if newPlayers then
-			lblPlayers:SetText("Playing: " .. newPlayers)
-		end
-		if newWaiting then
-			lblWaiting:SetText("Waiting: " .. newWaiting)
+		while index <= #planets do
+			planets[index].Hide()
+			index = index + 1
 		end
 	end
 	
 	return externalFunctions
 end
 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Initialization
+
 local function InitializeControls(window)
 	local Configuration = WG.Chobby.Configuration
 	local lobby = WG.LibLobby.lobby
-	
-	local banStart
-	local banDuration
 	
 	local lblTitle = Label:New {
 		x = 20,
@@ -238,24 +252,39 @@ local function InitializeControls(window)
 	local listPanel = ScrollPanel:New {
 		x = 5,
 		right = 5,
-		y = 90,
-		height = 250,
+		y = 55,
+		bottom = 250,
 		borderColor = {0,0,0,0},
 		horizontalScrollbar = false,
 		parent = window
 	}
 	
+	local planetList = GetPlanetList(listPanel)
+	
 	local statusText = TextBox:New {
 		x = 12,
 		right = 5,
-		y = 55,
-		height = 200,
+		bottom = 120,
+		height = 100,
 		fontsize = Configuration:GetFont(2).size,
 		text = "",
 		parent = window
 	}
 	
+	local function OnPwMatchCommand(listener, attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds)
+		planetList.SetPlanetList(planets)
+	end
+	
+	lobby:AddListener("OnPwMatchCommand", OnPwMatchCommand)
+	
+	local planetwarsData = lobby:GetPlanetwarsData()
+	OnPwMatchCommand(_, planetwarsData.attackerFaction, planetwarsData.defenderFactions, planetwarsData.currentMode, planetwarsData.planets, 457)
+	
 	local externalFunctions = {}
+	
+	function externalFunctions.UpdateTimer()
+	
+	end
 	
 	return externalFunctions
 end
@@ -273,8 +302,8 @@ end
 local queueListWindowControl
 
 function PlanetwarsListWindow.GetControl()
-
 	planetwarsListWindowControl = Control:New {
+		name = "planetwarsListWindowControl",
 		x = "0%",
 		y = "0%",
 		width = "100%",
@@ -298,7 +327,7 @@ end
 
 function widget:Update()
 	if panelInterface then
-		panelInterface.UpdatePhaseTime()
+		panelInterface.UpdateTimer()
 	end
 end
 
