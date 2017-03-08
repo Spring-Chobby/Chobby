@@ -102,7 +102,6 @@ local function InitializeListeners()
 	
 	local function OnRegistrationDenied(listener, err, accountAlreadyExists)
 		WG.Analytics.SendErrorEvent(err or "unknown")
-		lobby:Disconnect()
 		
 		if Configuration.canAuthenticateWithSteam and Configuration.wantAuthenticateWithSteam then
 			Configuration.steamLinkComplete = true
