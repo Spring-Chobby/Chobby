@@ -17,11 +17,24 @@ end
 --------------------------------------------------------------------------------
 -- Variables
 
-
-local requiredResources = {}
-local requiredResourceCount = 0
+local IMG_LINK     = LUA_DIRNAME .. "images/link.png"
 
 local panelInterface
+local PLANET_NAME_LENGTH = 210
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Utilities
+
+local function MaybeDownloadArchive(archiveName, archiveType)
+	if not VFS.HasArchive(archiveName) then
+		VFS.DownloadArchive(archiveName, archiveType)
+	end
+end
+
+local function MaybeDownloadMap(mapName)
+	MaybeDownloadArchive(mapName, "map")
+end
 
 local function HaveRightEngineVersion()
 	local configuration = WG.Chobby.Configuration
@@ -33,155 +46,290 @@ local function HaveRightEngineVersion()
 end
 
 local function HaveRightGameVersion()
+	local gameName = WG.Chobby.Configuration:GetDefaultGameName()
+	local haveGame = VFS.HasArchive(gameName)
+	return haveGame
+end
 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Planet Drawer
+
+local function GetPlanetImage(holder, x, y, size, planetImage, structureList)
+	local children = {}
+	
+	if structureList then
+		for i = 1, #structureList do
+			children[#children + 1] = Image:New {
+				x = 0,
+				y = 0,
+				right = 0,
+				bottom = 0,
+				keepAspect = true,
+				file = "LuaMenu/images/structures/" .. structureList[i],
+			}
+		end
+	end
+	
+	if planetImage then
+		local planetPad = math.floor(size*7/30)
+		children[#children + 1] = Image:New {
+			x = planetPad,
+			y = planetPad,
+			right = planetPad,
+			bottom = planetPad,
+			keepAspect = true,
+			file = "LuaMenu/images/planets/" .. planetImage,
+		}
+	end
+	
+	local imagePanel = Panel:New {
+		classname = "panel_light",
+		x = x,
+		y = y,
+		width = size,
+		height = size,
+		padding = {1,1,1,1},
+		children = children,
+		parent = holder,
+	}
+	
+	return imagePanel
 end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Planet List
 
-local function MakePlanetControl(parentControl, index, planetID, planetName, planetMap, playersNeeded, playersCount)
+local function MakePlanetControl(planetData, attacker, defender)
 	local Configuration = WG.Chobby.Configuration
 	local lobby = WG.LibLobby.lobby
-	local btnLeave, btnJoin
 	
-	Spring.Echo("MakePlanetControl", MakePlanetControl)
-	local inQueue = false
+	local config = WG.Chobby.Configuration
+	local mapName = planetData.Map
+	local planetID = planetData.PlanetID
 	
-	local holder = Control:New {
-		x = 10,
-		y = index*55 + 15,
-		right = 0,
-		height = 45,
-		caption = "",
+	local joinedBattle = false
+	local downloading = false
+	local currentPlayers = planetData.Count or 0
+	local maxPlayers = planetData.Needed or 0
+	
+	local btnJoin
+	
+	local holder = Panel:New {
+		x = 0,
+		y = 0,
+		width = "100%",
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
-		parent = parentControl,
 	}
 	
-	btnJoin = Button:New {
+	local planetImage = GetPlanetImage(holder, 2, 2, 86, planetData.PlanetImage, planetData.StructureImages)
+	
+	local minimapPanel = Panel:New {
+		x = 100,
+		y = 5,
+		width = 26,
+		height = 26,
+		padding = {1,1,1,1},
+		parent = holder,
+	}
+	local btnMinimap = Button:New {
 		x = 0,
 		y = 0,
-		width = 80,
+		right = 0,
 		bottom = 0,
-		caption = i18n("join"),
+		classname = "button_square",
+		caption = "",
+		parent = minimapPanel,
+		padding = {1,1,1,1},
+		OnClick = {
+			function ()
+				if mapName and config.gameConfig.link_particularMapPage then
+					WG.BrowserHandler.OpenUrl(config.gameConfig.link_particularMapPage(mapName))
+				end
+			end
+		},
+	}
+	local imMinimap = Image:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		keepAspect = true,
+		file = config:GetMinimapImage(mapName),
+		parent = btnMinimap,
+	}
+	
+	local btnPlanetLink = Button:New {
+		x = 130,
+		y = 7,
+		width = PLANET_NAME_LENGTH,
+		height = 24,
+		classname = "button_square",
+		caption = "",
+		padding = {0, 0, 0, 0},
+		parent = holder,
+		OnClick = {
+			function ()
+				WG.BrowserHandler.OpenUrl("http://zero-k.info/Planetwars/Planet/" .. planetID)
+			end
+		}
+	}
+	local tbPlanetName = TextBox:New {
+		x = 2,
+		y = 3,
+		right = 20,
+		align = "left",
+		fontsize = config:GetFont(3).size,
+		parent = btnPlanetLink,
+	}
+	local imgPlanetLink = Image:New {
+		x = 0,
+		y = 4,
+		width = 18,
+		height = 18,
+		keepAspect = true,
+		file = IMG_LINK,
+		parent = btnPlanetLink,
+	}
+	
+	local playerCaption = TextBox:New {
+		name = "missionName",
+		x = 270,
+		y = 54,
+		width = 350,
+		height = 20,
+		valign = 'center',
+		fontsize = Configuration:GetFont(3).size,
+		text = "0/0",
+		parent = holder,
+	}
+	
+	local function SetPlanetName(newPlanetName)
+		newPlanetName = StringUtilities.GetTruncatedStringWithDotDot(newPlanetName, tbPlanetName.font, PLANET_NAME_LENGTH - 24)
+		tbPlanetName:SetText(newPlanetName)
+		local length = tbPlanetName.font:GetTextWidth(newPlanetName)
+		imgPlanetLink:SetPos(length + 7)
+	end
+	
+	local function UpdatePlayerCaption()
+		if joinedBattle then
+			playerCaption:SetText("Joined - Waiting for players: " .. currentPlayers .. "/" .. maxPlayers)
+		else
+			playerCaption:SetText(currentPlayers .. "/" .. maxPlayers)
+		end
+	end
+	
+	local function UpdateJoinButton()
+		if not (attacker or defender) then
+			playerCaption:SetPos(104)
+			UpdatePlayerCaption()
+			btnJoin:SetVisibility(false)
+			return
+		end
+		
+		if joinedBattle then
+			playerCaption:SetPos(104)
+		else
+			playerCaption:SetPos(270)
+			local haveMap = VFS.HasArchive(mapName)
+			if haveMap then
+				if attacker then
+					btnJoin:SetCaption(i18n("attack_planet"))
+				elseif defender then
+					btnJoin:SetCaption(i18n("defend_planet"))
+				end
+			else
+				if downloading then
+					btnJoin:SetCaption(i18n("downloading"))
+				else
+					btnJoin:SetCaption(i18n("download_map"))
+				end
+			end
+		end
+		UpdatePlayerCaption()
+		btnJoin:SetVisibility(not joinedBattle)
+	end
+	
+	btnJoin = Button:New {
+		x = 100,
+		width = 160,
+		bottom = 6,
+		height = 45,
+		caption = i18n("defend_planet"),
 		font = Configuration:GetFont(3),
 		classname = "option_button",
 		OnClick = {
 			function(obj)
+				if not VFS.HasArchive(mapName) then
+					if not downloading then
+						MaybeDownloadMap(mapName)
+						downloading = true
+						UpdateJoinButton()
+					end
+					return
+				end
+				
 				if not HaveRightEngineVersion() then
 					WG.Chobby.InformationPopup("Game engine update required, restart the menu to apply.")
 					return
 				end
-			
+				
+				if not HaveRightGameVersion() then
+					WG.Chobby.InformationPopup("Game version update required, restart the menu to apply.")
+					return
+				end
+				
+				joinedBattle = true
 				lobby:PwJoinPlanet(planetID)
-				obj:SetVisibility(false)
-				btnLeave:SetVisibility(true)
-				--WG.Analytics.SendOnetimeEvent("lobby:multiplayer:matchmaking:join_" .. queueName)
+				UpdateJoinButton()
+				WG.Analytics.SendOnetimeEvent("lobby:multiplayer:planetwars:join")
 			end
 		},
 		parent = holder
 	}
 	
-	btnLeave = Button:New {
-		x = 0,
-		y = 0,
-		width = 80,
-		bottom = 0,
-		caption = i18n("leave"),
-		font = Configuration:GetFont(3),
-		classname = "action_button",
-		OnClick = {
-			function(obj)
-				lobby:LeaveMatchMaking(queueName)
-				obj:SetVisibility(false)
-				btnJoin:SetVisibility(true)
-			end
-		},
-		parent = holder
-	}
-	btnLeave:SetVisibility(false)
-	
-	local labelDisabled = TextBox:New {
-		x = 0,
-		y = 18,
-		width = 120,
-		height = 22,
-		right = 5,
-		align = "bottom",
-		fontsize = Configuration:GetFont(1).size,
-		text = "Party too large",
-		parent = holder
-	}
-	labelDisabled:SetVisibility(false)
-	
-	local lblTitle = TextBox:New {
-		x = 105,
-		y = 15,
-		width = 120,
-		height = 33,
-		fontsize = Configuration:GetFont(3).size,
-		text = queueName,
-		parent = holder
-	}
-	
-	local lblDescription = TextBox:New {
-		x = 180,
-		y = 8,
-		width = 120,
-		height = 22,
-		right = 5,
-		align = "bottom",
-		fontsize = Configuration:GetFont(1).size,
-		text = queueDescription,
-		parent = holder
-	}
-	
-	local lblPlayers = TextBox:New {
-		x = 180,
-		y = 30,
-		width = 120,
-		height = 22,
-		right = 5,
-		align = "bottom",
-		fontsize = Configuration:GetFont(1).size,
-		text = "Playing: ",
-		parent = holder
-	}
-	
-	local lblWaiting = TextBox:New {
-		x = 280,
-		y = 30,
-		width = 120,
-		height = 22,
-		right = 5,
-		align = "bottom",
-		fontsize = Configuration:GetFont(1).size,
-		text = "Waiting: ",
-		parent = holder
-	}
-	
-	local function UpdateButton()
-		if maxPartySize and (currentPartySize > maxPartySize) then
-			btnJoin:SetVisibility(false)
-			btnLeave:SetVisibility(false)
-			labelDisabled:SetVisibility(true)
-		else
-			btnJoin:SetVisibility(not inQueue)
-			btnLeave:SetVisibility(inQueue)
-			labelDisabled:SetVisibility(false)
-		end
-	end
+	-- Initialization
+	SetPlanetName(planetData.PlanetName)
+	UpdateJoinButton()
 	
 	local externalFunctions = {}
 	
-	function externalFunctions.UpdatePlanetControl(newPlanetData)
-	
+	function externalFunctions.UpdatePlanetControl(newPlanetData, newAttacker, newDefender, resetJoinedBattle)
+		mapName = newPlanetData.Map
+		currentPlayers = newPlanetData.Count or 0
+		maxPlayers = newPlanetData.Needed or 0
+		
+		if resetJoinedBattle then
+			joinedBattle = false
+		end
+		
+		attacker, defender = newAttacker, newDefender
+		
+		if planetID ~= newPlanetData.PlanetID then
+			planetImage:Dispose()
+			planetImage = GetPlanetImage(holder, 2, 2, 86, newPlanetData.PlanetImage, newPlanetData.StructureImages)
+			
+			imMinimap.file = config:GetMinimapImage(mapName)
+			imMinimap:Invalidate()
+			
+			SetPlanetName(newPlanetData.PlanetName)
+		end
+		planetID = newPlanetData.PlanetID
+		
+		UpdateJoinButton()
 	end
 	
-	function externalFunctions.Hide()
+	function externalFunctions.CheckDownload()
+		if holder.visible then
+			UpdateJoinButton()
+		end
+	end
 	
+	function externalFunctions.GetControl()
+		return holder
 	end
 	
 	return externalFunctions
@@ -191,24 +339,29 @@ local function GetPlanetList(parentControl)
 	
 	local planets = {}
 	
+	local sortableList = WG.Chobby.SortableList(parentControl, nil, 90, 1)
+
 	local externalFunctions = {}
 	
-	function externalFunctions.SetPlanetList(newPlanetList, activeForMe)
-		local index = 1
+	function externalFunctions.SetPlanetList(newPlanetList, attacker, defender, modeSwitched)
+		sortableList:Clear()
+		local items = {}
 		if newPlanetList then
-			while index <= #newPlanetList do
-				local planetData = newPlanetList[index]
-				if planets[index] then
-					planets[index].UpdatePlanetControl(planetData.PlanetID, planetData.PlanetName, planetData.Map, planetData.Needed, planetData.Count)
+			for i = 1, #newPlanetList do
+				if planets[i] then
+					planets[i].UpdatePlanetControl(newPlanetList[i], attacker, defender, modeSwitched)
 				else
-					planets[index] = MakePlanetControl(parentControl, index, planetData.PlanetID, planetData.PlanetName, planetData.Map, planetData.Needed, planetData.Count)
+					planets[i] = MakePlanetControl(newPlanetList[i], attacker, defender, modeSwitched)
 				end
-				index = index + 1
+				items[i] = {i, planets[i].GetControl()}
 			end
+			sortableList:AddItems(items)
 		end
-		while index <= #planets do
-			planets[index].Hide()
-			index = index + 1
+	end
+	
+	function externalFunctions.CheckDownload()
+		for i = 1, #planets do
+			planets[i].CheckDownload()
 		end
 	end
 	
@@ -248,18 +401,17 @@ local function InitializeControls(window)
 		},
 		parent = window
 	}
-
-	local listPanel = ScrollPanel:New {
+	
+	local listHolder = Control:New {
 		x = 5,
 		right = 5,
 		y = 55,
 		bottom = 250,
-		borderColor = {0,0,0,0},
-		horizontalScrollbar = false,
-		parent = window
+		padding = {0, 0, 0, 0},
+		parent = window,
 	}
 	
-	local planetList = GetPlanetList(listPanel)
+	local planetList = GetPlanetList(listHolder)
 	
 	local statusText = TextBox:New {
 		x = 12,
@@ -271,8 +423,24 @@ local function InitializeControls(window)
 		parent = window
 	}
 	
-	local function OnPwMatchCommand(listener, attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds)
-		planetList.SetPlanetList(planets)
+	local function OnPwMatchCommand(listener, attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
+		if attackerFaction then
+			lblTitle:SetCaption("Planetwars: " .. attackerFaction .. " attacking")
+		end
+		
+		local myFaction = lobby:GetMyFaction()
+		local attacker = (myFaction == attackerFaction)
+		local defender = false
+		if defenderFactions then
+			for i = 1, #defenderFactions do
+				if myFaction == defenderFactions[i] then
+					defender = true
+					break
+				end
+			end
+		end
+		
+		planetList.SetPlanetList(planets, (currentMode == lobby.PW_ATTACK) and attacker,  (currentMode == lobby.PW_DEFEND) and defender, modeSwitched)
 	end
 	
 	lobby:AddListener("OnPwMatchCommand", OnPwMatchCommand)
@@ -281,6 +449,10 @@ local function InitializeControls(window)
 	OnPwMatchCommand(_, planetwarsData.attackerFaction, planetwarsData.defenderFactions, planetwarsData.currentMode, planetwarsData.planets, 457)
 	
 	local externalFunctions = {}
+	
+	function externalFunctions.CheckDownload()
+		planetList.CheckDownload()
+	end
 	
 	function externalFunctions.UpdateTimer()
 	
@@ -332,12 +504,7 @@ function widget:Update()
 end
 
 function widget:DownloadFinished()
-	for resourceName,_ in pairs(requiredResources) do
-		if panelInterface then
-			panelInterface.UpdateRequiredResource(resourceName)
-		end
-	end
-	
+	panelInterface.CheckDownload()
 end
 
 function widget:Initialize()

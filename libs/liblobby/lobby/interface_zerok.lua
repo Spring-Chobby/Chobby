@@ -1352,15 +1352,14 @@ Interface.jsonCommands["OnPartyStatus"] = Interface._OnPartyStatus
 -- Planetwars commands
 ------------------------
 
-local planetwarsMode = {
-	[1] = "Defending",
-	[2] = "Attacking",
-	[3] = "Inactive",
-}
-
 function Interface:_PwMatchCommand(data)
+	if not self.PW_DEFEND then
+		self.PW_ATTACK = 1
+		self.PW_DEFEND = 2
+		self.PW_INACTIVE = 3
+	end
 	--<PwMatchCommand {"AttackerFaction":"Hegemony","DeadlineSeconds":993,"DefenderFactions":[],"Mode":1,"Options":[{"Count":0,"Map":"RustyDelta_Final","Needed":2,"PlanetID":3932,"PlanetName":"Vishnu"},{"Count":0,"Map":"Altored Divide Remake V3","Needed":2,"PlanetID":3933,"PlanetName":"Brunhilde"}]}
-	self:_OnPwMatchCommand(data.AttackerFaction, data.DefenderFactions, planetwarsMode[data.Mode], data.Options, data.DeadlineSeconds)
+	self:_OnPwMatchCommand(data.AttackerFaction, data.DefenderFactions, data.Mode, data.Options, data.DeadlineSeconds)
 end
 Interface.jsonCommands["PwMatchCommand"] = Interface._PwMatchCommand
 

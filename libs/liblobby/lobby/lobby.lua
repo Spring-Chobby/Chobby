@@ -1095,12 +1095,13 @@ end
 ------------------------
 
 function Lobby:_OnPwMatchCommand(attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds)
+	local modeSwitched = (self.planetwarsData.currentMode ~= currentMode)
 	self.planetwarsData.attackerFaction  = attackerFaction
 	self.planetwarsData.defenderFactions = defenderFactions
 	self.planetwarsData.currentMode      = currentMode
 	self.planetwarsData.planets          = planets
 	
-	self:_CallListeners("OnPwMatchCommand", attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds)
+	self:_CallListeners("OnPwMatchCommand", attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
 end
 
 ------------------------

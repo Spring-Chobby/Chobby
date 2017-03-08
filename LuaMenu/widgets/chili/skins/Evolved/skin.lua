@@ -251,6 +251,16 @@ skin.panel = {
   DrawControl = DrawPanel,
 }
 
+skin.panel_light = {
+  TileImageBK = ":cl:tech_overlaywindow.png",
+  TileImageFG = ":cl:empty.png",
+  tiles = {2, 2, 2, 2},
+
+  backgroundColor = {0.4, 0.4, 0.4, 0.7},
+
+  DrawControl = DrawPanel,
+}
+
 skin.overlay_panel = {
   TileImageBK = ":cl:tech_overlaywindow.png",
   TileImageFG = ":cl:empty.png",
