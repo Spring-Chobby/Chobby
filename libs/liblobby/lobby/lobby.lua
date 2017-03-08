@@ -50,6 +50,8 @@ function Lobby:_Clean()
 	self.partyMap = {}
 	self.myPartyID = nil
 	
+	self.planetwarsData = {}
+	
 	self.team = nil
 
 	self.latency = 0 -- in ms
@@ -350,6 +352,14 @@ function Lobby:PartyInviteResponse(partyID, accepted)
 end
 
 ------------------------
+-- Planetwars commands
+------------------------
+
+function Lobby:PwJoinPlanet(planetID)
+	return self
+end
+
+------------------------
 -- Steam commands
 ------------------------
 
@@ -628,6 +638,10 @@ function Lobby:_OnBattleIngameUpdate(battleID, isRunning)
 		self.battles[battleID].isRunning = isRunning
 		self:_CallListeners("OnBattleIngameUpdate", battleID, isRunning)
 	end
+end
+
+function Lobby:_OnRejoinOption(battleID)
+	self:_CallListeners("OnRejoinOption", battleID)
 end
 
 -- TODO: This function has an awful signature and should be reworked. At least make it use a key/value table.
@@ -1077,6 +1091,19 @@ function Lobby:_OnPartyInviteResponse(userName, accepted) -- Invite response rec
 end
 
 ------------------------
+-- Planetwars Commands
+------------------------
+
+function Lobby:_OnPwMatchCommand(attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds)
+	self.planetwarsData.attackerFaction  = attackerFaction
+	self.planetwarsData.defenderFactions = defenderFactions
+	self.planetwarsData.currentMode      = currentMode
+	self.planetwarsData.planets          = planets
+	
+	self:_CallListeners("OnPwMatchCommand", attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds)
+end
+
+------------------------
 -- Team commands
 ------------------------
 
@@ -1445,6 +1472,10 @@ function Lobby:GetMyFaction()
 		return self.users[self.myUserName].faction
 	end
 	return false
+end
+
+function Lobby:GetPlanetwarsData()
+	return self.planetwarsData
 end
 
 function Lobby:GetMySessionToken()

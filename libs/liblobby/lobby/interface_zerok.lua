@@ -595,6 +595,18 @@ function Interface:PartyInviteResponse(partyID, accepted)
 end
 
 ------------------------
+-- Planetwars commands
+------------------------
+
+function Interface:PwJoinPlanet(planetID)
+	local sendData = {
+		PlanetID = planetID
+	}
+	self:_SendCommand("PwJoinPlanet " .. json.encode(sendData))
+	return self
+end
+
+------------------------
 -- Steam commands
 ------------------------
 
@@ -868,6 +880,11 @@ function Interface:_LeftBattle(data)
 	self:_OnLeftBattle(data.BattleID, data.User)
 end
 Interface.jsonCommands["LeftBattle"] = Interface._LeftBattle
+
+function Interface:_RejoinOption(data)
+	self:_OnRejoinOption(data.BattleID)
+end
+Interface.jsonCommands["RejoinOption"] = Interface._RejoinOption
 
 function Interface:_BattleAdded(data)
 	-- {"Header":{"BattleID":3,"Engine":"100.0","Game":"Zero-K v1.4.6.11","Map":"Zion_v1","MaxPlayers":16,"SpectatorCount":1,"Title":"SERIOUS HOST","Port":8760,"Ip":"158.69.140.0","Founder":"Neptunium"}}
@@ -1330,6 +1347,22 @@ function Interface:_OnPartyStatus(data)
 	end
 end
 Interface.jsonCommands["OnPartyStatus"] = Interface._OnPartyStatus
+
+------------------------
+-- Planetwars commands
+------------------------
+
+local planetwarsMode = {
+	[1] = "Defending",
+	[2] = "Attacking",
+	[3] = "Inactive",
+}
+
+function Interface:_PwMatchCommand(data)
+	--<PwMatchCommand {"AttackerFaction":"Hegemony","DeadlineSeconds":993,"DefenderFactions":[],"Mode":1,"Options":[{"Count":0,"Map":"RustyDelta_Final","Needed":2,"PlanetID":3932,"PlanetName":"Vishnu"},{"Count":0,"Map":"Altored Divide Remake V3","Needed":2,"PlanetID":3933,"PlanetName":"Brunhilde"}]}
+	self:_OnPwMatchCommand(data.AttackerFaction, data.DefenderFactions, planetwarsMode[data.Mode], data.Options, data.DeadlineSeconds)
+end
+Interface.jsonCommands["PwMatchCommand"] = Interface._PwMatchCommand
 
 -------------------
 -- Unimplemented --

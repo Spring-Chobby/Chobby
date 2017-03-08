@@ -104,6 +104,7 @@ return {
 		have_map = "Have map",
 		start = "Start",
 		rejoin = "Rejoin",
+		abandon = "Abandon",
 		spectate = "Spectate",
 		spectating = "Spectating",
 		play = "Play",
