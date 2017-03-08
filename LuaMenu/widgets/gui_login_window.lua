@@ -102,6 +102,7 @@ local function InitializeListeners()
 	
 	local function OnRegistrationDenied(listener, err, accountAlreadyExists)
 		WG.Analytics.SendErrorEvent(err or "unknown")
+		lobby:Disconnect()
 		
 		if Configuration.canAuthenticateWithSteam and Configuration.wantAuthenticateWithSteam then
 			Configuration.steamLinkComplete = true
@@ -145,6 +146,7 @@ local function InitializeListeners()
 	
 	local function OnLoginDenied(listener, err)
 		WG.Analytics.SendErrorEvent(err or "unknown")
+		lobby:Disconnect()
 		if currentLoginWindow and not registerRecieved then
 			currentLoginWindow.txtError:SetText(Configuration:GetErrorColor() .. (err or "Denied, unknown reason"))
 		end
