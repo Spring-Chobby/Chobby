@@ -132,7 +132,9 @@ local function InitializeListeners()
 				endValue = 0,
 				startValue = 1,
 				after = function()
-					currentLoginWindow.window:Dispose()
+					if currentLoginWindow and currentLoginWindow.window then
+						currentLoginWindow.window:Dispose()
+					end
 				end,
 			})
 		end
