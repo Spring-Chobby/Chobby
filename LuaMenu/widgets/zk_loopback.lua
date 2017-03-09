@@ -81,10 +81,13 @@ end
 
 
 -- TODO wire this to set initial stuff and pass userid to ZKLS
-local function WrapperOnline(args) 
-	--args.DefaultServerPort
-	--args.DefaultServerHost
-	--args.UserID
+local function WrapperOnline(args)
+	local config = WG.Chobby and WG.Chobby.Configuration
+	if config then
+		config.DefaultServerPort = args.DefaultServerPort
+		config.DefaultServerHost = args.DefaultServerHost
+		config.UserID = args.UserID
+	end
 end
 
 -- TODO wrapper will send this to confirm friend join on steam (either invite or self join) use to auto accept party join request and to notify player when joining "offline" COOP 

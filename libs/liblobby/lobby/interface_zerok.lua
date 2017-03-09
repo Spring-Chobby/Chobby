@@ -58,10 +58,11 @@ function Interface:Login(user, password, cpu, localIP, lobbyVersion, useSteamLog
 		self:_OnDenied("Password required")
 		return self
 	end
+	local config = WG.Chobby and WG.Chobby.Configuration
 	local REVERSE_COMPAT = true
 	if steamToken and (not password) and not REVERSE_COMPAT then
 		sendData = {
-			UserID = 0,
+			UserID = (config and config.UserID) or 0,
 			ClientType = 1,
 			LobbyVersion = lobbyVersion,
 			SteamAuthToken = steamToken,
@@ -70,7 +71,7 @@ function Interface:Login(user, password, cpu, localIP, lobbyVersion, useSteamLog
 		sendData = {
 			Name = user,
 			PasswordHash = password,
-			UserID = 0,
+			UserID = (config and config.UserID) or 0,
 			ClientType = 1,
 			LobbyVersion = lobbyVersion,
 			SteamAuthToken = steamToken,
