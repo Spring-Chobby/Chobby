@@ -28,17 +28,6 @@ local includes = {
 	"components/queue/queue_window.lua",
 	"components/queue/ready_check_window.lua",
 
-	-- status bar
-	"components/status_bar/status_bar.lua",
-	"components/status_bar/sb_item.lua",
-	"components/status_bar/sb_connection_status.lua",
-	"components/status_bar/sb_downloads_icon.lua",
-	"components/status_bar/sb_errors_icon.lua",
-	"components/status_bar/sb_friends_icon.lua",
-	"components/status_bar/sb_menu_icon.lua",
-	"components/status_bar/sb_player_welcome.lua",
-	"components/status_bar/sb_server_status.lua",
-
 	-- friends
 	"components/friend_list_window.lua",
 
