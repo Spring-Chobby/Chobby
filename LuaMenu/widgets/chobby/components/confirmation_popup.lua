@@ -1,6 +1,6 @@
 ConfirmationPopup = LCS.class{}
 
-function ConfirmationPopup:init(successFunction, question, doNotAskAgainKey, width, height)
+function ConfirmationPopup:init(successFunction, question, doNotAskAgainKey, width, height, yesText, noText)
 	
 	local mainWindow = Window:New {
 		x = 700,
@@ -40,7 +40,7 @@ function ConfirmationPopup:init(successFunction, question, doNotAskAgainKey, wid
 		width = 135,
 		bottom = 1,
 		height = 70,
-		caption = i18n("yes"),
+		caption = i18n(yesText or "yes"),
 		font = Configuration:GetFont(3),
 		classname = "action_button",
 		OnClick = {
@@ -55,7 +55,7 @@ function ConfirmationPopup:init(successFunction, question, doNotAskAgainKey, wid
 		width = 135,
 		bottom = 1,
 		height = 70,
-		caption = i18n("cancel"),
+		caption = i18n(noText or "cancel"),
 		font = Configuration:GetFont(3),
 		classname = "negative_button",
 		OnClick = {

@@ -595,6 +595,18 @@ function Interface:PartyInviteResponse(partyID, accepted)
 end
 
 ------------------------
+-- Planetwars commands
+------------------------
+
+function Interface:PwJoinPlanet(planetID)
+	local sendData = {
+		PlanetID = planetID
+	}
+	self:_SendCommand("PwJoinPlanet " .. json.encode(sendData))
+	return self
+end
+
+------------------------
 -- Steam commands
 ------------------------
 
@@ -737,6 +749,7 @@ function Interface:_User(data)
 		self:_OnAddUser(data.Name, {
 			country = data.Country,
 			clan = data.Clan,
+			faction = data.Faction,
 			lobbyVersion = data.LobbyVersion,
 			accountID = data.AccountID,
 			isInGame = data.IsInGame,
@@ -763,6 +776,7 @@ function Interface:_User(data)
 	self:_OnUpdateUserStatus(data.Name, {
 		country = data.Country,
 		clan = data.Clan,
+		faction = data.Faction,
 		lobbyVersion = data.LobbyVersion,
 		accountID = data.AccountID,
 		isInGame = data.IsInGame,
@@ -866,6 +880,11 @@ function Interface:_LeftBattle(data)
 	self:_OnLeftBattle(data.BattleID, data.User)
 end
 Interface.jsonCommands["LeftBattle"] = Interface._LeftBattle
+
+function Interface:_RejoinOption(data)
+	self:_OnRejoinOption(data.BattleID)
+end
+Interface.jsonCommands["RejoinOption"] = Interface._RejoinOption
 
 function Interface:_BattleAdded(data)
 	-- {"Header":{"BattleID":3,"Engine":"100.0","Game":"Zero-K v1.4.6.11","Map":"Zion_v1","MaxPlayers":16,"SpectatorCount":1,"Title":"SERIOUS HOST","Port":8760,"Ip":"158.69.140.0","Founder":"Neptunium"}}
@@ -1328,6 +1347,21 @@ function Interface:_OnPartyStatus(data)
 	end
 end
 Interface.jsonCommands["OnPartyStatus"] = Interface._OnPartyStatus
+
+------------------------
+-- Planetwars commands
+------------------------
+
+function Interface:_PwMatchCommand(data)
+	if not self.PW_DEFEND then
+		self.PW_ATTACK = 1
+		self.PW_DEFEND = 2
+		self.PW_INACTIVE = 3
+	end
+	--<PwMatchCommand {"AttackerFaction":"Hegemony","DeadlineSeconds":993,"DefenderFactions":[],"Mode":1,"Options":[{"Count":0,"Map":"RustyDelta_Final","Needed":2,"PlanetID":3932,"PlanetName":"Vishnu"},{"Count":0,"Map":"Altored Divide Remake V3","Needed":2,"PlanetID":3933,"PlanetName":"Brunhilde"}]}
+	self:_OnPwMatchCommand(data.AttackerFaction, data.DefenderFactions, data.Mode, data.Options, data.DeadlineSeconds)
+end
+Interface.jsonCommands["PwMatchCommand"] = Interface._PwMatchCommand
 
 -------------------
 -- Unimplemented --

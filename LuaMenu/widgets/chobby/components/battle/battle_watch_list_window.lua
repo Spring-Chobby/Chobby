@@ -100,6 +100,10 @@ function BattleWatchListWindow:AddBattle(battleID)
 	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
+	
+	local function RejoinBattleFunc()
+		lobby:RejoinBattle(battleID)
+	end
 
 	local height = self.itemHeight - 20
 	local parentButton = Button:New {
@@ -111,7 +115,11 @@ function BattleWatchListWindow:AddBattle(battleID)
 		caption = "",
 		OnClick = {
 			function()
-				lobby:RejoinBattle(battleID)
+				if Spring.GetGameName() == "" then
+					RejoinBattleFunc()
+				else
+					WG.Chobby.ConfirmationPopup(RejoinBattleFunc, "Are you sure you want to leave your current game to watch/rejoin this one?", nil, 315, 200)
+				end
 			end
 		},
 		tooltip = "battle_tooltip_" .. battleID,

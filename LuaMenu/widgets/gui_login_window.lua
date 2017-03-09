@@ -125,7 +125,7 @@ local function InitializeListeners()
 			Configuration.steamLinkComplete = true
 		end
 
-		if currentLoginWindow then
+		if currentLoginWindow and currentLoginWindow.window then
 			currentLoginWindow.window:Dispose()
 		end
 		for channelName, _ in pairs(Configuration:GetChannels()) do
@@ -135,6 +135,7 @@ local function InitializeListeners()
 
 	local function OnLoginDenied(listener, err)
 		WG.Analytics.SendErrorEvent(err or "unknown")
+		lobby:Disconnect()
 		if currentLoginWindow and not registerRecieved then
 			currentLoginWindow.txtError:SetText(Configuration:GetErrorColor() .. (err or "Denied, unknown reason"))
 		end
