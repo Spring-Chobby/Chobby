@@ -641,7 +641,12 @@ end
 
 function ChatWindows:CreateDebugConsole()
 	local function MessageListener(message)
+		if message:starts("!") then
+			-- simulate receiving a message from the server
+			lobby:CommandReceived(message:sub(2))
+		else
 		lobby:SendCustomCommand(message)
+	end
 	end
 	self.debugConsole = Console(nil, MessageListener)
 	table.insert(self.debugConsole.ebInputText.OnKeyPress,
@@ -655,18 +660,18 @@ function ChatWindows:CreateDebugConsole()
 	lobby:AddListener("OnCommandReceived",
 		function(listner, command)
 			command = self:RedactMessage(command)
-			Spring.Echo("LuaMenuServerMessage", "<" .. command)
+			Spring.Log("ServerMessage", LOG.NOTICE, command)
 			if Configuration.activeDebugConsole then
-				self.debugConsole:AddMessage("<" .. command)
+				self.debugConsole:AddMessage("<--" .. command)
 			end
 		end
 	)
 	lobby:AddListener("OnCommandSent",
 		function(listner, command)
 			command = self:RedactMessage(command)
-			Spring.Echo("LuaMenuServerMessage", ">" .. command)
+			Spring.Log("ClientMessage", LOG.NOTICE, command)
 			if Configuration.activeDebugConsole then
-				self.debugConsole:AddMessage(">" .. command)
+				self.debugConsole:AddMessage("-->" .. command)
 			end
 		end
 	)
@@ -990,4 +995,3 @@ function ChatWindows:ClearHistory()
 		console:ClearHistory()
 	end
 end
-
