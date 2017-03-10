@@ -657,7 +657,7 @@ function DrawEditBox(obj)
 				
 				for _, line in pairs(obj.physicalLines) do
 					local drawPos = clientY + line.y
-					if drawPos > minDrawY and drawPos < maxDrawY then
+					if (drawPos > minDrawY and drawPos < maxDrawY) or obj.useRTT then
 						font:Draw(line.text, clientX, clientY + line.y)
 					end
 				end
