@@ -82,7 +82,7 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Force redraw on input
+-- Force redraw on input or screen resize
 
 function widget:Update(dt)
 	local x, y = Spring.GetMouseState()
@@ -106,4 +106,8 @@ end
 function widget:KeyPress()
 	forceRedraw = true
 	return false
+end
+
+function widget:ViewResize(vsx, vsy)
+	LimitFps.ForceRedrawPeriod(0.5)
 end
