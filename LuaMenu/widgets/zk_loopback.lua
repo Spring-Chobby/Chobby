@@ -140,6 +140,10 @@ local function DownloadImageDone(args)
 	]]--
 end
 
+local function PwRequestJoinPlanet(args)
+ --  args.PlanetID
+end
+
 commands["DownloadFileDone"] = DownloadFileDone
 commands["SteamOnline"] = SteamOnline
 commands["SteamJoinFriend"] = SteamJoinFriend
@@ -150,6 +154,7 @@ commands["SteamHostGameSuccess"] = SteamHostGameSuccess
 commands["SteamHostGameFailed"] = SteamHostGameFailed
 commands["SteamConnectSpring"] = SteamConnectSpring
 commands["DownloadImageDone"] = DownloadImageDone
+commands["PwRequestJoinPlanet"] = PwRequestJoinPlanet
 
 
 --------------------------------------------------------------------------------
