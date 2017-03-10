@@ -22,6 +22,8 @@ local IMG_LINK     = LUA_DIRNAME .. "images/link.png"
 local panelInterface
 local PLANET_NAME_LENGTH = 210
 
+local phaseTimer
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
@@ -49,6 +51,31 @@ local function HaveRightGameVersion()
 	local gameName = WG.Chobby.Configuration:GetDefaultGameName()
 	local haveGame = VFS.HasArchive(gameName)
 	return haveGame
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Timing
+
+local function GetPhaseTimer()
+	local deadlineSeconds
+	local startTimer
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.SetNewDeadline(newDeadlineSeconds)
+		deadlineSeconds = newDeadlineSeconds
+		startTimer = Spring.GetTimer()
+	end
+	
+	function externalFunctions.GetTimeRemaining()
+		if not deadlineSeconds then
+			return false
+		end
+		return math.max(0, deadlineSeconds - math.ceil(Spring.DiffTimers(Spring.GetTimer(), startTimer)))
+	end
+	
+	return externalFunctions
 end
 
 --------------------------------------------------------------------------------
@@ -376,6 +403,8 @@ local function InitializeControls(window)
 	local Configuration = WG.Chobby.Configuration
 	local lobby = WG.LibLobby.lobby
 	
+	local title = "Planetwars"
+	
 	local lblTitle = Label:New {
 		x = 20,
 		right = 5,
@@ -424,8 +453,26 @@ local function InitializeControls(window)
 	}
 	
 	local function OnPwMatchCommand(listener, attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
-		if attackerFaction then
-			lblTitle:SetCaption("Planetwars: " .. attackerFaction .. " attacking")
+		if currentMode == lobby.PW_ATTACK then
+			if attackerFaction then
+				title = "Planetwars: " .. attackerFaction .. " planning attack - "
+			else
+				title = "Planetwars: attacking - "
+			end
+		else
+			if defenderFactions and #defenderFactions then
+				local defenderString = ""
+				for i = 1, #defenderFactions do
+					if i == #defenderFactions then
+						defenderString = defenderString .. defenderFactions[i]
+					else
+						defenderString = defenderString .. defenderFactions[i] .. ", "
+					end
+					title = "Planetwars: " .. defenderString .. " mustering defense - "
+				end
+			else
+				title = "Planetwars: defending - "
+			end
 		end
 		
 		local myFaction = lobby:GetMyFaction()
@@ -455,7 +502,10 @@ local function InitializeControls(window)
 	end
 	
 	function externalFunctions.UpdateTimer()
-	
+		local timeRemaining = phaseTimer.GetTimeRemaining()
+		if timeRemaining then
+			lblTitle:SetCaption(title .. Spring.Utilities.FormatTime(timeRemaining, true))
+		end
 	end
 	
 	return externalFunctions
@@ -493,6 +543,17 @@ function PlanetwarsListWindow.GetControl()
 	return planetwarsListWindowControl
 end
 
+function DelayedInitialize()
+	local Configuration = WG.Chobby.Configuration
+	local lobby = WG.LibLobby.lobby
+	
+	phaseTimer = GetPhaseTimer()
+	
+	local function OnPwMatchCommand(listener, attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
+		phaseTimer.SetNewDeadline(deadlineSeconds)
+	end
+	lobby:AddListener("OnPwMatchCommand", OnPwMatchCommand)
+end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface
@@ -510,6 +571,7 @@ end
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
+	WG.Delay(DelayedInitialize, 1)
 	
 	WG.PlanetwarsListWindow = PlanetwarsListWindow
 end
