@@ -134,7 +134,7 @@ end
 --------------------------------------------------------------------------------
 -- Planet List
 
-local function MakePlanetControl(planetData, attacker, defender)
+local function MakePlanetControl(planetData, DeselectOtherFunc, attacker, defender)
 	local Configuration = WG.Chobby.Configuration
 	local lobby = WG.LibLobby.lobby
 	
@@ -318,6 +318,7 @@ local function MakePlanetControl(planetData, attacker, defender)
 				joinedBattle = true
 				lobby:PwJoinPlanet(planetID)
 				UpdateJoinButton()
+				DeselectOtherFunc(planetID)
 				WG.Analytics.SendOnetimeEvent("lobby:multiplayer:planetwars:join")
 			end
 		},
@@ -357,7 +358,18 @@ local function MakePlanetControl(planetData, attacker, defender)
 	end
 	
 	function externalFunctions.CheckDownload()
-		if holder.visible then
+		if not holder.visible then
+			return
+		end
+		UpdateJoinButton()
+	end
+	
+	function externalFunctions.Deselect(exceptionPlanetID)
+		if (not holder.visible) or (planetID == exceptionPlanetID) then
+			return
+		end
+		if joinedBattle then
+			joinedBattle = false
 			UpdateJoinButton()
 		end
 	end
@@ -373,6 +385,12 @@ local function GetPlanetList(parentControl)
 	
 	local planets = {}
 	
+	local function DeselectPlanets(exceptionPlanetID)
+		for i = 1, #planets do
+			planets[i].Deselect(exceptionPlanetID)
+		end
+	end	
+	
 	local sortableList = WG.Chobby.SortableList(parentControl, nil, 90, 1)
 
 	local externalFunctions = {}
@@ -386,7 +404,7 @@ local function GetPlanetList(parentControl)
 				if planets[i] then
 					planets[i].UpdatePlanetControl(newPlanetList[i], attacker, defender, modeSwitched)
 				else
-					planets[i] = MakePlanetControl(newPlanetList[i], attacker, defender, modeSwitched)
+					planets[i] = MakePlanetControl(newPlanetList[i], DeselectPlanets, attacker, defender, modeSwitched)
 				end
 				items[i] = {i, planets[i].GetControl()}
 			end
