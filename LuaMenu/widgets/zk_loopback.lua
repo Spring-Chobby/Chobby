@@ -150,7 +150,6 @@ commands["SteamHostGameSuccess"] = SteamHostGameSuccess
 commands["SteamHostGameFailed"] = SteamHostGameFailed
 commands["SteamConnectSpring"] = SteamConnectSpring
 commands["DownloadImageDone"] = DownloadImageDone
-commands["PwRequestJoinPlanet"] = PwRequestJoinPlanet
 
 
 --------------------------------------------------------------------------------

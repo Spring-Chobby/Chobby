@@ -87,6 +87,7 @@ function GetControlPanelHandler(panelHolder)
 	end
 
 	function externalFunctions.AddControl(control, rank)
+		-- High rank puts => more visible and less mobile.
 		if panelHolder:GetChildByName(control.name) then
 			return
 		end

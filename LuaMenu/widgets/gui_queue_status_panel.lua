@@ -516,7 +516,7 @@ function DelayedInitialize()
 				statusAndInvitesPanel.RemoveControl(instantQueueHandler.GetHolder().name)
 			end
 		elseif instantStart then
-			statusAndInvitesPanel.AddControl(instantQueueHandler.GetHolder(), 5)
+			statusAndInvitesPanel.AddControl(instantQueueHandler.GetHolder(), 3)
 		end
 		previousInstantStart = instantStart
 	end

@@ -59,6 +59,65 @@ local function HaveRightGameVersion()
 	return haveGame
 end
 
+local function TryToJoinPlanet(planetData)
+	local lobby = WG.LibLobby.lobby
+	
+	local mapName = planetData.Map
+	if not VFS.HasArchive(mapName) then
+		queuePlanetJoin = planetData
+		WG.Chobby.InformationPopup("Downloading map required to attack planet. Please wait.")
+		return
+	end
+	queuePlanetJoin = nil
+	
+	if not HaveRightEngineVersion() then
+		WG.Chobby.InformationPopup("Game engine update required, restart the menu to apply.")
+		return
+	end
+	
+	if not HaveRightGameVersion() then
+		WG.Chobby.InformationPopup("Game version update required, restart the menu to apply.")
+		return
+	end
+	
+	lobby:PwJoinPlanet(planetData.PlanetID)
+	if panelInterface then
+		panelInterface.SetPlanetJoined(planetID)
+	end
+	WG.Analytics.SendOnetimeEvent("lobby:multiplayer:planetwars:join_site")
+end
+
+local function GetAttackingOrDefending(lobby, attackerFaction, defenderFactions)
+	local myFaction = lobby:GetMyFaction()
+	local attacker = (myFaction == attackerFaction)
+	local defender = false
+	if defenderFactions then
+		for i = 1, #defenderFactions do
+			if myFaction == defenderFactions[i] then
+				return attacker, true
+			end
+		end
+	end
+	return attacker, false
+end
+
+local function GetActivity(lobby, attackerFactiom, defenderFactions, currentMode, planets)
+	local attacking, defending = GetAttackingOrDefending(lobby, attackerFaction, defenderFactions)
+	
+	attacking, defending = (currentMode == lobby.PW_ATTACK) and attacker, (currentMode == lobby.PW_DEFEND) and defender
+	
+	if attacking then
+		for i = 1, #planets do
+			if planets[i].Needed + 1 == planets[i].Count then
+				return planets[i], true
+			end
+		end
+	elseif defending then
+		return planets[1], false
+	end
+	return false
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Timing
@@ -128,6 +187,95 @@ local function GetPlanetImage(holder, x, y, size, planetImage, structureList)
 	}
 	
 	return imagePanel
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Battle Nagger
+
+local function InitializeActivityPromptHandler()
+	local lobby = WG.LibLobby.lobby
+	local planetData
+
+	local holder = Panel:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		classname = "overlay_panel",
+		padding = {0,0,0,0},
+		caption = "",
+		resizable = false,
+		draggable = false,
+	}
+	
+	local button = Button:New {
+		name = "join",
+		x = "68%",
+		right = 4,
+		y = 4,
+		bottom = 4,
+		padding = {0,0,0,0},
+		caption = "Join",
+		font = WG.Chobby.Configuration:GetFont(3),
+		classname = "action_button",
+		OnClick = {
+			function()
+				if planetData then
+					TryToJoinPlanet(planetData)
+				end
+			end
+		},
+		parent = holder,
+	}
+	
+	local bottomBound = 5
+	local bigMode = true
+	
+	local battleStatusText = TextBox:New {
+		x = 20,
+		y = 18,
+		width = "50%",
+		bottom = bottomBound,
+		fontsize = WG.Chobby.Configuration:GetFont(3).size,
+		text = "",
+		parent = holder
+	}
+	
+	local function Resize(obj, xSize, ySize)
+		if ySize < 60 then
+			battleStatusText:SetPos(xSize/4 - 52, 2)
+			battleStatusText.font.size = WG.Chobby.Configuration:GetFont(2).size
+			battleStatusText:Invalidate()
+			bigMode = false
+		else
+			battleStatusText:SetPos(xSize/4 - 62, 18)
+			battleStatusText.font.size = WG.Chobby.Configuration:GetFont(3).size
+			battleStatusText:Invalidate()
+			bigMode = true
+		end
+		battleStatusText._relativeBounds.bottom = bottomBound
+		battleStatusText:UpdateClientArea()
+	end
+	
+	holder.OnResize = {Resize}
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.SetActivity(newPlanetData, isAttacker)
+		planetData = newPlanetData
+		if isAttacker then
+			battleStatusText:SetText("Invade planet " .. planetData.PlanetName )
+		else
+			battleStatusText:SetText("Defend planet " .. planetData.PlanetName)
+		end
+	end
+	
+	function externalFunctions.GetHolder()
+		return holder
+	end
+	
+	return externalFunctions
 end
 
 --------------------------------------------------------------------------------
@@ -378,6 +526,16 @@ local function MakePlanetControl(planetData, DeselectOtherFunc, attacker, defend
 		return holder
 	end
 	
+	function externalFunctions.SetPlanetJoinedIfIDMatches(checkPlanetID)
+		if (not holder.visible) or (planetID ~= checkPlanetID) then
+			return
+		end
+		
+		joinedBattle = true
+		UpdateJoinButton()
+		DeselectOtherFunc(planetID)
+	end
+	
 	return externalFunctions
 end
 
@@ -397,6 +555,9 @@ local function GetPlanetList(parentControl)
 	
 	function externalFunctions.SetPlanetList(newPlanetList, attacker, defender, modeSwitched)
 		Spring.Echo("SetPlanetList modeSwitched", modeSwitched)
+		if modeSwitched then
+			queuePlanetJoin = nil
+		end
 		sortableList:Clear()
 		local items = {}
 		if newPlanetList then
@@ -415,6 +576,12 @@ local function GetPlanetList(parentControl)
 	function externalFunctions.CheckDownload()
 		for i = 1, #planets do
 			planets[i].CheckDownload()
+		end
+	end
+	
+	function externalFunctions.SetPlanetJoined(planetID)
+		for i = 1, #planets do
+			planets[i].SetPlanetJoinedIfIDMatches(planetID)
 		end
 	end
 	
@@ -502,17 +669,7 @@ local function InitializeControls(window)
 			end
 		end
 		
-		local myFaction = lobby:GetMyFaction()
-		local attacker = (myFaction == attackerFaction)
-		local defender = false
-		if defenderFactions then
-			for i = 1, #defenderFactions do
-				if myFaction == defenderFactions[i] then
-					defender = true
-					break
-				end
-			end
-		end
+		local attacker, defender = GetAttackingOrDefending(lobby, attackerFaction, defenderFactions)
 		
 		if not missingResources then
 			if attacker then
@@ -532,7 +689,7 @@ local function InitializeControls(window)
 			end
 		end
 		
-		planetList.SetPlanetList(planets, (currentMode == lobby.PW_ATTACK) and attacker,  (currentMode == lobby.PW_DEFEND) and defender, modeSwitched)
+		planetList.SetPlanetList(planets, (currentMode == lobby.PW_ATTACK) and attacker, (currentMode == lobby.PW_DEFEND) and defender, modeSwitched)
 	end
 	
 	lobby:AddListener("OnPwMatchCommand", OnPwMatchCommand)
@@ -559,6 +716,10 @@ local function InitializeControls(window)
 		if timeRemaining then
 			lblTitle:SetCaption(title .. Spring.Utilities.FormatTime(timeRemaining, true))
 		end
+	end
+	
+	function externalFunctions.SetPlanetJoined(planetID)
+		planetList.SetPlanetJoined(planetID)
 	end
 	
 	-- Initialization
@@ -606,7 +767,10 @@ function DelayedInitialize()
 	local Configuration = WG.Chobby.Configuration
 	local lobby = WG.LibLobby.lobby
 	
+	local statusAndInvitesPanel = WG.Chobby.interfaceRoot.GetStatusAndInvitesPanel()
+	
 	phaseTimer = GetPhaseTimer()
+	activityPromptHandler = InitializeActivityPromptHandler()
 	
 	local function AddQueue(_, queueName, queueDescription, mapNames, maxPartSize, gameNames)
 		for i = 1, #gameNames do
@@ -620,8 +784,28 @@ function DelayedInitialize()
 	
 	local function OnPwMatchCommand(listener, attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
 		phaseTimer.SetNewDeadline(deadlineSeconds)
+		
+		local planetData, isAttacker = GetActivity(lobby, attackerFactiom, defenderFactions, currentMode, planets)
+		if planetData then
+			activityPromptHandler.SetActivity(planetData, isAttacker)
+			statusAndInvitesPanel.AddControl(activityPromptHandler.GetHolder(), 5)
+		else
+			statusAndInvitesPanel.RemoveControl(activityPromptHandler.GetHolder().name)
+		end
 	end
 	lobby:AddListener("OnPwMatchCommand", OnPwMatchCommand)
+	
+	local function OnPwRequestJoinPlanet(listener, joinPlanetID)
+		local planetwarsData = lobby:GetPlanetwarsData()
+		local planets = planetwarsData.planets
+		for i = 1, #planets do
+			if joinPlanetID == planets[i].PlanetID then
+				TryToJoinPlanet(planets[i])
+				break
+			end
+		end
+	end
+	lobby:AddListener("OnPwRequestJoinPlanet", OnPwRequestJoinPlanet)
 end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -635,6 +819,10 @@ end
 
 function widget:DownloadFinished()
 	panelInterface.CheckDownload()
+	
+	if queuePlanetJoin then
+		TryToJoinPlanet(queuePlanetJoin)
+	end
 end
 
 function widget:Initialize()
