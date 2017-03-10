@@ -1102,9 +1102,28 @@ function Lobby:_OnPwMatchCommand(attackerFaction, defenderFactions, currentMode,
 	self.planetwarsData.currentMode      = currentMode
 	self.planetwarsData.planets          = planets
 	
+	Spring.Echo("OnPwMatchCommand modeSwitched", modeSwitched)
+	if modeSwitched then
+		self.planetwarsData.joinPlanet = nil
+		self.planetwarsData.attackingPlanet = nil
+	end
+	
 	self:_CallListeners("OnPwMatchCommand", attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
 end
 
+function Lobby:_OnPwRequestJoinPlanet(planetID)
+	self:_CallListeners("OnPwRequestJoinPlanet", planetID)
+end
+
+function Lobby:_OnPwJoinPlanetSuccess(planetID)
+	self.planetwarsData.joinPlanet = planetID
+	self:_CallListeners("OnPwJoinPlanetSuccess", planetID)
+end
+
+function Lobby:_OnPwAttackingPlanet(planetID)
+	self.planetwarsData.attackingPlanet = planetID
+	self:_CallListeners("OnPwAttackingPlanet", planetID)
+end
 ------------------------
 -- Team commands
 ------------------------

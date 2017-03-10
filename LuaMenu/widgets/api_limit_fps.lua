@@ -94,6 +94,7 @@ function widget:Update(dt)
 end
 
 function widget:MousePress()
+	forceRedraw = true
 	LimitFps.ForceRedrawPeriod(0.2)
 	return false
 end
@@ -109,5 +110,6 @@ function widget:KeyPress()
 end
 
 function widget:ViewResize(vsx, vsy)
+	forceRedraw = true
 	LimitFps.ForceRedrawPeriod(0.5)
 end

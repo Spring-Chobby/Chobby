@@ -338,6 +338,7 @@ local function MakePlanetControl(planetData, attacker, defender)
 		if resetJoinedBattle then
 			joinedBattle = false
 		end
+		Spring.Echo("SetPlanetList modeSwitched", joinedBattle)
 		
 		attacker, defender = newAttacker, newDefender
 		
@@ -377,6 +378,7 @@ local function GetPlanetList(parentControl)
 	local externalFunctions = {}
 	
 	function externalFunctions.SetPlanetList(newPlanetList, attacker, defender, modeSwitched)
+		Spring.Echo("SetPlanetList modeSwitched", modeSwitched)
 		sortableList:Clear()
 		local items = {}
 		if newPlanetList then
@@ -442,7 +444,7 @@ local function InitializeControls(window)
 		x = 5,
 		right = 5,
 		y = 100,
-		bottom = 250,
+		bottom = 5,
 		padding = {0, 0, 0, 0},
 		parent = window,
 	}
@@ -462,7 +464,7 @@ local function InitializeControls(window)
 	local function OnPwMatchCommand(listener, attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
 		if currentMode == lobby.PW_ATTACK then
 			if attackerFaction then
-				title = "Planetwars: " .. attackerFaction .. " selecting target - "
+				title = "Planetwars: " .. attackerFaction .. " attacking - "
 			else
 				title = "Planetwars: attacking - "
 			end
@@ -475,7 +477,7 @@ local function InitializeControls(window)
 					else
 						defenderString = defenderString .. defenderFactions[i] .. ", "
 					end
-					title = "Planetwars: " .. defenderString .. " mustering defense - "
+					title = "Planetwars: " .. defenderString .. " defending - "
 				end
 			else
 				title = "Planetwars: defending - "

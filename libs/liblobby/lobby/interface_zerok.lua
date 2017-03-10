@@ -1364,6 +1364,21 @@ function Interface:_PwMatchCommand(data)
 end
 Interface.jsonCommands["PwMatchCommand"] = Interface._PwMatchCommand
 
+function Interface:_PwRequestJoinPlanet(data)
+	self:_OnPwRequestJoinPlanet(data.PlanetID)
+end
+Interface.jsonCommands["PwRequestJoinPlanet"] = Interface._PwMatchCommand
+
+function Interface:_PwJoinPlanetSuccess(data)
+	self:_OnPwJoinPlanetSuccess(data.PlanetID)
+end
+Interface.jsonCommands["PwJoinPlanetSuccess"] = Interface._PwJoinPlanetSuccess
+
+function Interface:PwAttackingPlanet(data)
+	self:_OnPwAttackingPlanet(data.PlanetID)
+end
+Interface.jsonCommands["PwAttackingPlanet"] = Interface._PwAttackingPlanet
+
 -------------------
 -- Unimplemented --
 
