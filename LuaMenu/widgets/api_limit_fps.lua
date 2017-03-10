@@ -14,7 +14,7 @@ function widget:GetInfo()
 	}
 end
 
-local MAX_FPS = 60
+local MAX_FPS = 5
 local FAST_FPS = 40
 local oldX, oldY
 
