@@ -23,6 +23,7 @@ local panelInterface
 local PLANET_NAME_LENGTH = 210
 
 local phaseTimer
+local requiredGame = false
 
 local MISSING_ENGINE_TEXT = "Game engine update required, restart the menu to apply."
 local MISSING_GAME_TEXT = "Game version update required. Wait for a download or restart to apply it immediately."
@@ -51,8 +52,10 @@ local function HaveRightEngineVersion()
 end
 
 local function HaveRightGameVersion()
-	local gameName = WG.Chobby.Configuration:GetDefaultGameName()
-	local haveGame = VFS.HasArchive(gameName)
+	if not requiredGame then
+		return false
+	end
+	local haveGame = VFS.HasArchive(requiredGame)
 	return haveGame
 end
 
@@ -584,6 +587,16 @@ function DelayedInitialize()
 	local lobby = WG.LibLobby.lobby
 	
 	phaseTimer = GetPhaseTimer()
+	
+	local function AddQueue(_, queueName, queueDescription, mapNames, maxPartSize, gameNames)
+		for i = 1, #gameNames do
+			requiredGame = gameNames[i]
+		end
+		if panelInterface then
+			panelInterface.CheckDownload()
+		end
+	end
+	lobby:AddListener("OnQueueOpened", AddQueue)
 	
 	local function OnPwMatchCommand(listener, attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
 		phaseTimer.SetNewDeadline(deadlineSeconds)
