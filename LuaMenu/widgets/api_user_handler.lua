@@ -357,16 +357,16 @@ end
 local function UpdateUserActivity(listener, userName)
 	for i = 1, #userListList do
 		local userList = userListList[i]
-		local data = userList[userName]
-		if data then
-			data.mainControl.items = GetUserComboBoxOptions(userName, data.isInBattle, data)
-			data.imLevel.file = GetUserRankImageName(userName, data, data.imLevel.file)
-			data.imLevel:Invalidate()
+		local userControls = userList[userName]
+		if userControls then
+			userControls.mainControl.items = GetUserComboBoxOptions(userName, userControls.isInBattle, userControls)
+			userControls.imLevel.file = GetUserRankImageName(userName, userControls)
+			userControls.imLevel:Invalidate()
 
-			data.tbName.font.color = GetUserNameColor(userName, data)
-			data.tbName:Invalidate()
+			userControls.tbName.font.color = GetUserNameColor(userName, userControls)
+			userControls.tbName:Invalidate()
 
-			UpdateUserControlStatus(userName, data)
+			UpdateUserControlStatus(userName, userControls)
 		end
 	end
 end
