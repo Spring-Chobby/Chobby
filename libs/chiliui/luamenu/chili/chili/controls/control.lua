@@ -75,7 +75,7 @@ Control = Object:Inherit{
 
   drawcontrolv2 = nil, --// disable backward support with old DrawControl gl state (with 2.1 self.xy translation isn't needed anymore)
 
-  useRTT = false, --((gl.CreateFBO and gl.BlendFuncSeparate) ~= nil),
+  useRTT = (gl.CreateFBO and gl.BlendFuncSeparate) ~= nil,
   useDLists = false, --(gl.CreateList ~= nil), --FIXME broken in combination with RTT (wrong blending)
 
   OnResize        = {},
@@ -641,7 +641,7 @@ function Control:SetPosRelative(x, y, w, h, clientArea, dontUpdateRelative)
   end
 end
 
---- Resize the control 
+--- Resize the control
 -- @int w width
 -- @int h height
 -- @param clientArea TODO
@@ -1111,6 +1111,11 @@ end
 
 
 function Control:IsInView()
+    -- FIXME: This is a workaround for the RTT bug, but probably not placed in
+    -- the right spot and might cause some other issues/not be optimal
+    if self.useRTT then
+        return true
+    end
 	if UnlinkSafe(self.parent) then
 		return self.parent:IsRectInView(self.x, self.y, self.width, self.height)
 	end

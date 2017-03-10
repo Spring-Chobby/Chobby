@@ -2,16 +2,16 @@ ListWindow = Component:extends{}
 
 function ListWindow:init(parent, title, noWindow, windowClassname, noClose, customPadding)
 	self:DoInit() -- Lack of inheritance strikes again.
-	
+
 	self.CancelFunc = function ()
 		self:HideWindow()
 	end
-	
+
 	local ControlType = Window
 	if noWindow then
 		ControlType = Control
 	end
-	
+
 	self.window = ControlType:New {
 		x = 0,
 		right = 0,
@@ -28,8 +28,8 @@ function ListWindow:init(parent, title, noWindow, windowClassname, noClose, cust
 			end
 		},
 	}
-	
-	
+
+
 	self.lblTitle = Label:New {
 		x = 20,
 		right = 5,
@@ -57,7 +57,7 @@ function ListWindow:init(parent, title, noWindow, windowClassname, noClose, cust
 			parent = self.window
 		}
 	end
-	
+
 	self.listPanel = ScrollPanel:New {
 		x = 12,
 		right = 12,
@@ -104,16 +104,7 @@ function ListWindow:SetMinItemWidth(newMinItemWidth)
 end
 
 function ListWindow:HideWindow()
-	ChiliFX:AddFadeEffect({
-		obj = self.window, 
-		time = 0.15,
-		endValue = 0,
-		startValue = 1,
-		after = function()
-			self.window:Hide()
-		end
-	})
-	--self.window:Hide() --Dispose()
+	self.window:Hide()
 end
 
 function ListWindow:AddListeners()
@@ -135,14 +126,14 @@ function ListWindow:AddRow(items, id)
 		return
 	end
 	local thisWidth = items[#items].x + items[#items].width
-		
+
 	local itemNames = {}
 	for i = 1, #items do
 		itemNames[items[i].name] = items[i]
 	end
-	
+
 	self.itemNames[id] = itemNames
-	
+
 	local container = Control:New {
 		name = "container",
 		width = "100%",
@@ -160,7 +151,7 @@ function ListWindow:AddRow(items, id)
 		itemPadding = {0, 0, 0, 0},
 		children = { container },
 	}
-	
+
 	local index = #self.listPanel.children + 1
 	local x,y,width,height = self:CalulatePosition(index)
 	local w = Control:New {
@@ -195,7 +186,7 @@ end
 function ListWindow:CalulatePosition(index)
 	local xAcross = ((index - 1)%self.columns)/self.columns
 	local row = math.floor((index - 1)/self.columns)
-	
+
 	local x = math.floor(1000*xAcross)/10 .. "%"
 	local y = self.itemPadding + row * (self.itemHeight + self.itemPadding)
 	local width = math.floor(1000/self.columns)/10 .. "%"
@@ -205,9 +196,9 @@ end
 
 function ListWindow:RecalculatePosition(index)
 	local x,y,width,height = self:CalulatePosition(index)
-	
+
 	local child = self.orderPanelMapping[index]
-	
+
 	child._relativeBounds.left = x
 	child._relativeBounds.width = width
 	child:SetPos(nil, y, nil, height)
@@ -223,10 +214,10 @@ end
 
 function ListWindow:SwapPlaces(panel1, panel2)
 	tmp = panel1.index
-	
+
 	local x1,y1,w1,h1 = panel1._relativeBounds.left, panel1.y, panel1._relativeBounds.width, panel1.height
 	local x2,y2,w2,h2 = panel2._relativeBounds.left, panel2.y, panel2._relativeBounds.width, panel2.height
-	
+
 	panel1._relativeBounds.left = x2
 	panel1._relativeBounds.width = w2
 	panel1:SetPos(nil, y2, nil, h2)
@@ -236,11 +227,11 @@ function ListWindow:SwapPlaces(panel1, panel2)
 	panel2._relativeBounds.width = w1
 	panel2:SetPos(nil, y1, nil, h1)
 	panel2:UpdateClientArea()
-	
+
 	-- Swap positions in table
 	panel1.index = panel2.index
 	self.orderPanelMapping[panel1.index] = panel1
-	
+
 	panel2.index = tmp
 	self.orderPanelMapping[panel2.index] = panel2
 end
@@ -276,7 +267,7 @@ function ListWindow:RemoveRow(id)
 		return
 	end
 	local index = panel.index
-	
+
 	-- move elements up
 	while index < #self.listPanel.children do
 		local panel1 = self.orderPanelMapping[index]

@@ -28,20 +28,9 @@ local includes = {
 	"components/queue/queue_window.lua",
 	"components/queue/ready_check_window.lua",
 
-	-- status bar
-	"components/status_bar/status_bar.lua",
-	"components/status_bar/sb_item.lua",
-	"components/status_bar/sb_connection_status.lua",
-	"components/status_bar/sb_downloads_icon.lua",
-	"components/status_bar/sb_errors_icon.lua",
-	"components/status_bar/sb_friends_icon.lua",
-	"components/status_bar/sb_menu_icon.lua",
-	"components/status_bar/sb_player_welcome.lua",
-	"components/status_bar/sb_server_status.lua",
-	
 	-- friends
 	"components/friend_list_window.lua",
-	
+
 	-- new stuff
 	"components/interface_root.lua",
 	"components/tab_panel_handler.lua",
@@ -64,14 +53,14 @@ end
 function Chobby:_Initialize()
 	self:WrapCall(function()
 		WG.Delay(function()
-			lobby:AddListener("OnJoinBattle", 
+			lobby:AddListener("OnJoinBattle",
 				function(listener, battleID)
 					local battle = lobby:GetBattle(battleID)
 					if not WG.Chobby.Configuration.showMatchMakerBattles and battle and battle.isMatchMaker then
 						WG.BattleStatusPanel.RemoveBattleTab()
 						return
 					end
-					Spring.Echo("Showing battle with ID", battleID)
+					Spring.Log("chobby", LOG.NOTICE, "Showing battle with ID", battleID)
 					WG.BattleRoomWindow.ShowMultiplayerBattleRoom(battleID)
 				end
 			)
@@ -79,7 +68,7 @@ function Chobby:_Initialize()
 	end)
 	self:WrapCall(function()
 		WG.Delay(function()
-			lobby:AddListener("OnSayServerMessage", 
+			lobby:AddListener("OnSayServerMessage",
 				function(listener, text, timeSent)
 					Chotify:Post({
 						title = "Server",
@@ -91,7 +80,7 @@ function Chobby:_Initialize()
 	end)
 	self:WrapCall(function()
 		WG.Delay(function()
-			lobby:AddListener("OnSuggestedEngineVersion", 
+			lobby:AddListener("OnSuggestedEngineVersion",
 				function(listener, engineName)
 					if engineName and not WG.Chobby.Configuration:IsValidEngineVersion(engineName) then
 						WG.Chobby.InformationPopup("Wrong Spring engine version. The required version is '" .. engineName .. "', your version is '" .. Spring.Utilities.GetEngineVersion() .. "'.\n\nRestart the game to get the correct version.", 480, 248)
@@ -160,7 +149,7 @@ function Chobby:_DownloadQueued(id, archiveName, archiveType)
 end
 
 function Chobby:WrapCall(func)
-	xpcall(function() func() end, 
+	xpcall(function() func() end,
 		function(err) self:_PrintError(err) end )
 end
 

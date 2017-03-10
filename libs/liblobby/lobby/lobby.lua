@@ -15,7 +15,7 @@ function Lobby:_Clean()
 	self.users = {}
 	self.userBySteamID = {}
 	self.userCount = 0
-	
+
 	self.SOURCE_DISCORD = 0
 
 	self.friends = {} -- list
@@ -25,7 +25,7 @@ function Lobby:_Clean()
 	self.hasFriendRequest = {} -- map
 	self.friendRequestCount = 0
 	self.friendListRecieved = false
-	
+
 	self.ignored = {} -- list
 	self.isIgnored = {} -- map
 	self.ignoredCount = 0
@@ -62,7 +62,7 @@ function Lobby:_Clean()
 	self.myBattleID = nil
 	self.scriptPassword = nil
 	self.sessionToken = nil
-	
+
 	-- reconnection delay in seconds
 	self.reconnectionDelay = 15
 end
@@ -247,14 +247,14 @@ function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, scriptPas
 		WG.Chobby.InformationPopup("Cannont start game: missing map file '" .. mapName .. "'.")
 		return
 	end
-	
+
 	if engineName and not WG.Chobby.Configuration:IsValidEngineVersion(engineName) then
 		WG.Chobby.InformationPopup("Cannont start game: wrong Spring engine version. The required version is '" .. engineName .. "', your version is '" .. Spring.Utilities.GetEngineVersion() .. "'.", 420, 260)
 		return
 	end
-	
+
 	self:_CallListeners("OnBattleAboutToStart")
-	
+
 	Spring.Echo("Game starts!")
 	if useSpringRestart then
 		local springURL = "spring://" .. self:GetMyUserName() .. ":" .. scriptPassword .. "@" .. battleIp .. ":" .. battlePort
@@ -440,7 +440,7 @@ function Lobby:_OnPong()
 	if self.pingTimer then
 		self.latency = Spring.DiffTimers(self.pongTimer, self.pingTimer, true)
 	else
-		Spring.Echo("missing self.pingTimer")
+		Spring.Log(LOG_SECTION, "warning", "Missing self.pingTimer in Lobby:_OnPong()")
 	end
 	self:_CallListeners("OnPong")
 end
@@ -485,11 +485,11 @@ function Lobby:_OnRemoveUser(userName)
 		return
 	end
 	local userInfo = self.users[userName]
-	
+
 	if userInfo.battleID then
 		self:_OnLeftBattle(userInfo.battleID, userName)
 	end
-	
+
 	-- preserve isFriend/hasFriendRequest
 	local isFriend, hasFriendRequest = userInfo.isFriend, userInfo.hasFriendRequest
 	local oldUserInfo = self.users[userName]
@@ -508,7 +508,7 @@ function Lobby:_OnRemoveUser(userName)
 		steamID = oldUserInfo.steamID,
 	}
 	self.users[userName] =persistentUserInfo
-	
+
 	if isFriend or hasFriendRequest then
 		userInfo = self:TryGetUser(userName)
 		userInfo.isFriend         = isFriend
@@ -582,7 +582,7 @@ function Lobby:_OnFriendRequestList(friendRequests)
 		local userInfo = self:TryGetUser(userName)
 		userInfo.hasFriendRequest = true
 	end
-	
+
 	self:_CallListeners("OnFriendRequestList", self:GetFriendRequests())
 end
 
@@ -625,7 +625,7 @@ function Lobby:_OnIgnoreList(data)
 		local userInfo = self:TryGetUser(userName)
 		userInfo.isIgnored = true
 	end
-	
+
 	self:_CallListeners("OnIgnoreList", self:Getignored())
 end
 
@@ -645,21 +645,21 @@ function Lobby:_OnRejoinOption(battleID)
 end
 
 -- TODO: This function has an awful signature and should be reworked. At least make it use a key/value table.
-function Lobby:_OnBattleOpened(battleID, type, natType, founder, ip, port, 
-		maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName, 
-		title, gameName, spectatorCount, isRunning, runningSince, 
+function Lobby:_OnBattleOpened(battleID, type, natType, founder, ip, port,
+		maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName,
+		title, gameName, spectatorCount, isRunning, runningSince,
 		battleMode, disallowCustomTeams, disallowBots, isMatchMaker, playerCount)
 	self.battles[battleID] = {
 		battleID = battleID, type = type, natType = natType, founder = founder, ip = ip, port = port,
 		maxPlayers = maxPlayers, passworded = passworded, rank = rank, mapHash = mapHash, spectatorCount = spectatorCount or 0,
 		engineName = engineName, engineVersion = engineVersion, mapName = mapName, title = title, gameName = gameName, users = {},
-		isRunning = isRunning, runningSince = runningSince, 
+		isRunning = isRunning, runningSince = runningSince,
 		battleMode = battleMode, disallowCustomTeams = disallowCustomTeams, disallowBots = disallowBots, isMatchMaker = isMatchMaker,
 		playerCount = playerCount,
 	}
 	self.battleCount = self.battleCount + 1
 
-	self:_CallListeners("OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, 
+	self:_CallListeners("OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash,
 		engineName, engineVersion, map, title, gameName, spectatorCount, isRunning, runningSince, battleMode, isMatchMaker, playerCount)
 end
 
@@ -688,7 +688,7 @@ function Lobby:_OnJoinedBattle(battleID, userName, scriptPassword)
 	if not found then
 		table.insert(self.battles[battleID].users, userName)
 	end
-	
+
 	self.users[userName].battleID = battleID
 	self:_CallListeners("OnUpdateUserStatus", userName, {battleID = battleID})
 
@@ -707,9 +707,10 @@ function Lobby:_OnLeftBattle(battleID, userName)
 		self.battleAis = {}
 		self.userBattleStatus = {}
 	end
-	
+
 	if not (battleID and self.battles[battleID]) then
-		Spring.Echo("Tried to remove user from unknown battle", battleID)
+		Spring.Log(LOG_SECTION, "error",
+			"Lobby:_OnLeftBattle: Tried to remove user from unknown battle: " .. tostring(battleID))
 		return
 	end
 
@@ -750,7 +751,7 @@ function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, ma
 	if passworded ~= nil then
 		battle.passworded = passworded
 	end
-	
+
 	self:_CallListeners("OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker, newPlayerList, maxPlayers, title, playerCount)
 end
 
@@ -837,14 +838,14 @@ function Lobby:_OnSetModOptions(data)
 	for key, value in pairs(data) do
 		self.modoptions[key] = value
 	end
-	
+
 	self:_CallListeners("OnSetModOptions", data)
 end
 
 function Lobby:_OnResetModOptions()
 	local oldModoptions = self.modoptions
 	self.modoptions = {}
-	
+
 	self:_CallListeners("OnResetModOptions", oldModoptions)
 end
 
@@ -900,7 +901,7 @@ function Lobby:_OnJoined(chanName, userName)
 		local isNewUser = true
 		for i, v in pairs(channel.users) do
 			if v == userName then
-				Spring.Echo("Duplicate user added to channel", chanName, userName)
+				Spring.Log(LOG_SECTION, "warning", "Duplicate user(" .. tostring(userName) .. ") added to channel (" .. tostring(chanName) .. ")")
 				isNewUser = false
 				break
 			end
@@ -987,7 +988,7 @@ function Lobby:_OnQueueOpened(name, description, mapNames, maxPartySize, gameNam
 		playersWaiting = 0,
 	}
 	self.queueCount = self.queueCount + 1
-	
+
 	self:_CallListeners("OnQueueOpened", name, description, mapNames, maxPartySize, gameNames)
 end
 
@@ -996,12 +997,12 @@ function Lobby:_OnQueueClosed(name)
 		self.queues[name] = nil
 		self.queueCount = self.queueCount - 1
 	end
-	
+
 	self:_CallListeners("OnQueueClosed", name)
 end
 
 function Lobby:_OnMatchMakerStatus(inMatchMaking, joinedQueueList, queueCounts, ingameCounts, instantStartQueues, currentEloWidth, joinedTime, bannedTime)
-	
+
 	if self.pendingQueueRequests > 0 then
 		-- Sent incomplete data, ignore it and wait for the next one that should be arriving shortly.
 		self.pendingQueueRequests = self.pendingQueueRequests - 1
@@ -1009,7 +1010,7 @@ function Lobby:_OnMatchMakerStatus(inMatchMaking, joinedQueueList, queueCounts, 
 			return
 		end
 	end
-	
+
 	if inMatchMaking then
 		self.joinedQueueList = joinedQueueList
 		self.joinedQueues = {}
@@ -1020,16 +1021,16 @@ function Lobby:_OnMatchMakerStatus(inMatchMaking, joinedQueueList, queueCounts, 
 		self.joinedQueues = nil
 		self.joinedQueueList = nil
 	end
-	
+
 	self.matchMakerBannedTime = bannedTime
-	
+
 	if queueCounts or ingameCounts then
 		for name, queueData in pairs(self.queues) do
 			queueData.playersIngame = (ingameCounts and ingameCounts[name]) or queueData.playersIngame
 			queueData.playersWaiting = (queueCounts and queueCounts[name]) or queueData.playersWaiting
 		end
 	end
-	
+
 	self:_CallListeners("OnMatchMakerStatus", inMatchMaking, joinedQueueList, queueCounts, ingameCounts, instantStartQueues, currentEloWidth, joinedTime, bannedTime)
 end
 
@@ -1235,8 +1236,8 @@ end
 function Lobby:TryGetUser(userName)
 	local userInfo = self:GetUser(userName)
 	if type(userName) ~= "string" then
-		Spring.Echo("TryGetUser called with type", type(userName))
-		Spring.Echo(debug.traceback())
+		Spring.Log(LOG_SECTION, "error", "TryGetUser called with type: " .. tostring(type(userName)))
+		Spring.Log(LOG_SECTION, "error", debug.traceback())
 		return {}
 	end
 	if not userInfo then
@@ -1309,7 +1310,7 @@ function Lobby:GetBattlePlayerCount(battleID)
 	if not battle then
 		return 0
 	end
-	
+
 	if battle.playerCount then
 		return battle.playerCount
 	else

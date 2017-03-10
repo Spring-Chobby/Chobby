@@ -14,7 +14,7 @@ function widget:GetInfo()
 	}
 end
 
-local MAX_FPS = 5
+local MAX_FPS = 60
 local FAST_FPS = 40
 local oldX, oldY
 
@@ -41,9 +41,9 @@ end
 --------------------------------------------------------------------------------
 -- Initialization
 
-function widget:Initialize() 
+function widget:Initialize()
 	lastTimer = Spring.GetTimer();
-	
+
 	WG.LimitFps = LimitFps
 end
 

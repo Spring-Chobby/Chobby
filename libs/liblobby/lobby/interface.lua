@@ -34,21 +34,14 @@ function Interface:Login(user, password, cpu, localIP)
 	end
 	password = VFS.CalculateHash(password, 0)
 	self:_SendCommand(concat("LOGIN", user, password, cpu, localIP, "LuaLobby\t", "0\t", "a b m cl et p"))
-	return
+	return self
 end
 
 function Interface:Ping()
 	self:super("Ping")
 	self:_SendCommand("PING", true)
-	return
+	return self
 end
-
--- TODO
--- function Interface:_OnMOTD(message)
--- 	self:super("_OnMOTD", message)
--- end
--- Interface.commands["MOTD"] = Interface._OnMOTD
--- Interface.commandPattern["MOTD"] = "([^\t]*)"
 
 ------------------------
 -- User commands
@@ -122,49 +115,75 @@ function Interface:LeaveBattle()
 end
 
 function Interface:SetBattleStatus(status)
+	if not self._requestedBattleStatus then
+		return
+	end
 	self:super("SetBattleStatus", status)
+
+  -- FIXME: (or rather FIX UI code)
+	-- This function is invoked too many times (before an answer gets received),
+	-- so we're setting the values before
+	-- they get confirmed from the server, otherwise we end up sending different info
+	local myUserName = self:GetMyUserName()
+	if not self.userBattleStatus[myUserName] then
+		self.userBattleStatus[userName] = {}
+	end
+	local userData = self.userBattleStatus[myUserName]
+
 	local bs = {}
 	if status.isReady ~= nil then
-		bs.isReady     = status.isReady
+		bs.isReady       = status.isReady
+		userData.isReady = status.isReady
 	else
 		status.isReady = self:GetMyIsReady()
 	end
 	if status.teamNumber ~= nil then
-		bs.teamNumber  = status.teamNumber
+		bs.teamNumber       = status.teamNumber
+		userData.teamNumber = status.teamNumber
 	else
 		bs.teamNumber  = self:GetMyTeamNumber() or 0
 	end
 	if status.teamColor ~= nil then
-		bs.teamColor   = status.teamColor
+		bs.teamColor       = status.teamColor
+		userData.teamColor = status.teamColor
 	else
 		bs.teamColor   = self:GetMyTeamColor()
 	end
 	if status.allyNumber ~= nil then
-		bs.allyNumber  = status.allyNumber 
+		bs.allyNumber       = status.allyNumber
+		userData.allyNumber = status.allyNumber
 	else
 		bs.allyNumber  = self:GetMyAllyNumber() or 0
 	end
-	if status.isSpectator ~= nil then 
-		bs.isSpectator = status.isSpectator
+	if status.isSpectator ~= nil then
+		bs.isSpectator       = status.isSpectator
+		userData.isSpectator = status.isSpectator
 	else
 		bs.isSpectator = self:GetMyIsSpectator()
 	end
 	if status.sync ~= nil then
 		bs.sync        = status.sync
+		userData.sync  = status.sync
 	else
 		bs.sync        = self:GetMySync()
 	end
 	if status.side ~= nil then
 		bs.side        = status.side
+		userData.side  = status.side
 	else
 		bs.side        = self:GetMySide() or 0
+	end
+
+	playMode = 1 -- not spectator
+	if bs.isSpectator then
+		playMode = 0 -- spectator
 	end
 
 	local battleStatusString = tostring(
 		(bs.isReady and 2 or 0) +
 		lshift(bs.teamNumber, 2) +
 		lshift(bs.allyNumber, 6) +
-		(bs.isSpectator and 0 or 2^10) +
+		lshift(playMode, 10) +
 		(bs.sync and 2^22 or 2^23) +
 		lshift(bs.side, 24)
 	)
@@ -178,7 +197,7 @@ end
 -- 	self:_SendCommand(concat("JOINBATTLEACCEPT", userName))
 -- 	return self
 -- end
--- 
+--
 -- function Interface:JoinBattleDeny(userName, reason)
 -- 	self:super("JoinBattleDeny", userName, reason)
 -- 	self:_SendCommand(concat("JOINBATTLEDENY", userName, reason))
@@ -251,6 +270,12 @@ end
 Interface.commands["TASServer"] = Interface._OnTASServer
 Interface.commandPattern["TASServer"] = "(%S+)%s+(%S+)%s+(%S+)%s+(%S+)"
 
+function Interface:_OnMOTD(message)
+	-- IGNORED
+end
+Interface.commands["MOTD"] = Interface._OnMOTD
+Interface.commandPattern["MOTD"] = "([^\t]*)"
+
 function Interface:_OnAccepted()
 	self:super("_OnAccepted")
 end
@@ -299,17 +324,17 @@ Interface.commands["PONG"] = Interface._OnPong
 -- User commands
 ------------------------
 
-function Interface:_AddUser(userName, country, cpu, accountID)
+function Interface:_OnAddUser(userName, country, cpu, accountID)
 	cpu = tonumber(cpu)
 	accountID = tonumber(accountID)
 	local status = {
-		country = country, 
-		cpu = cpu, 
+		country = country,
+		cpu = cpu,
 		accountID = accountID
 	}
 	self:super("_OnAddUser", userName, status)
 end
-Interface.commands["ADDUSER"] = Interface._AddUser
+Interface.commands["ADDUSER"] = Interface._OnAddUser
 Interface.commandPattern["ADDUSER"] = "(%S+)%s+(%S%S)%s+(%S+)%s*(.*)"
 
 function Interface:_OnRemoveUser(userName)
@@ -326,9 +351,9 @@ function Interface:_OnClientStatus(userName, status)
 		isModerator = rshift(status, 5) % 2 == 1,
 		isBot       = rshift(status, 6) % 2 == 1,
 	})
-	
+
 	if status.isInGame ~= nil then
-		
+
 		local battleID = self:GetBattleFoundedBy(userName)
 		if battleID then
 			self:_OnBattleIngameUpdate(battleID, status.isInGame)
@@ -421,7 +446,7 @@ function Interface:_OnBattleOpened(battleID, type, natType, founder, ip, port, m
 	port = tonumber(port)
 	maxPlayers = tonumber(maxPlayers)
 	passworded = tonumber(passworded) ~= 0
-	
+
 	local isRunning = self.users[founder].isInGame
 
 	local engineName, engineVersion, map, title, gameName = unpack(explode("\t", other))
@@ -440,6 +465,7 @@ Interface.commandPattern["BATTLECLOSED"] = "(%d+)"
 
 -- hashCode will be a string due to lua limitations
 function Interface:_OnJoinBattle(battleID, hashCode)
+	self._requestedBattleStatus = nil
 	battleID = tonumber(battleID)
 	self:super("_OnJoinBattle", battleID, hashCode)
 end
@@ -471,7 +497,7 @@ Interface.commandPattern["UPDATEBATTLEINFO"] = "(%d+)%s+(%S+)%s+(%S+)%s+(%S+)%s+
 
 function Interface:_OnClientBattleStatus(userName, battleStatus, teamColor)
 	battleStatus = tonumber(battleStatus)
-	self:_OnUpdateUserBattleStatus(userName, {
+	status = {
 		isReady      = rshift(battleStatus, 1) % 2 == 1,
 		teamNumber   = rshift(battleStatus, 2) % 16,
 		allyNumber   = rshift(battleStatus, 6) % 16,
@@ -479,7 +505,8 @@ function Interface:_OnClientBattleStatus(userName, battleStatus, teamColor)
 		handicap     = rshift(battleStatus, 11) % 128,
 		sync         = rshift(battleStatus, 22) % 4,
 		side         = rshift(battleStatus, 24) % 16,
-	})
+	}
+	self:_OnUpdateUserBattleStatus(userName, status)
 end
 Interface.commands["CLIENTBATTLESTATUS"] = Interface._OnClientBattleStatus
 Interface.commandPattern["CLIENTBATTLESTATUS"] = "(%S+)%s+(%S+)%s+(%S+)"
@@ -728,17 +755,17 @@ end
 function Interface:InviteTeam(userName)
 	self:_SendCommand(concat("INVITETEAM", json.encode({userName=userName})))
 	return self
-end 
+end
 
 function Interface:InviteTeamAccept(userName)
 	self:_SendCommand(concat("INVITETEAMACCEPT", json.encode({userName=userName})))
 	return self
-end 
+end
 
 function Interface:InviteTeamDecline(userName)
 	self:_SendCommand(concat("INVITETEAMDECLINE", json.encode({userName=userName})))
 	return self
-end 
+end
 
 function Interface:JoinQueue(name, params)
 	local tbl = {name=name}
@@ -862,12 +889,12 @@ end
 -- 	self:_SendCommand(concat("SAYDATA", chanName, message))
 -- 	return self
 -- end
--- 
+--
 -- function Interface:SayDataBattle(message)
 -- 	self:_SendCommand(concat("SAYDATABATTLE", message))
 -- 	return self
 -- end
--- 
+--
 -- function Interface:SayDataPrivate(userName, message)
 -- 	self:_SendCommand(concat("SAYDATAPRIVATE", userName, message))
 -- 	return self
@@ -1161,7 +1188,8 @@ Interface.commands["REMOVESTARTRECT"] = Interface._OnRemoveStartRect
 Interface.commandPattern["REMOVESTARTRECT"] = "(%d+)"
 
 function Interface:_OnRequestBattleStatus()
-	self:_CallListeners("OnRequestBattleStatus")
+	self._requestedBattleStatus = true
+	self:SetBattleStatus({})
 end
 Interface.commands["REQUESTBATTLESTATUS"] = Interface._OnRequestBattleStatus
 
@@ -1176,13 +1204,13 @@ Interface.commandPattern["RING"] = "(%S+)"
 -- end
 -- Interface.commands["SAIDDATA"] = Interface._OnSaidData
 -- Interface.commandPattern["SAIDDATA"] = "(%S+)%s+(%S+)%s+(.*)"
--- 
+--
 -- function Interface:_OnSaidDataBattle(userName, message)
 -- 	self:_CallListeners("OnSaidDataBattle", userName, message)
 -- end
 -- Interface.commands["SAIDDATABATTLE"] = Interface._OnSaidDataBattle
 -- Interface.commandPattern["SAIDDATABATTLE"] = "(%S+)%s+(.*)"
--- 
+--
 -- function Interface:_OnSaidDataPrivate(userName, message)
 -- 	self:_CallListeners("OnSaidDataPrivate", userName, message)
 -- end
@@ -1208,12 +1236,12 @@ Interface.jsonCommands["SAIDTEAMEX"] = Interface._OnSaidTeamEx
 -- end
 -- Interface.commands["SCRIPT"] = Interface._OnScript
 -- Interface.commandPattern["SCRIPT"] = "([^\t]+)"
--- 
+--
 -- function Interface:_OnScriptEnd()
 -- 	self:_CallListeners("OnScriptEnd")
 -- end
 -- Interface.commands["SCRIPTEND"] = Interface._OnScriptEnd
--- 
+--
 -- function Interface:_OnScriptStart()
 -- 	self:_CallListeners("OnScriptStart")
 -- end
