@@ -101,14 +101,14 @@ local function GetAttackingOrDefending(lobby, attackerFaction, defenderFactions)
 	return attacker, false
 end
 
-local function GetActivity(lobby, attackerFactiom, defenderFactions, currentMode, planets)
+local function GetActivity(lobby, attackerFaction, defenderFactions, currentMode, planets)
 	local attacking, defending = GetAttackingOrDefending(lobby, attackerFaction, defenderFactions)
 	
-	attacking, defending = (currentMode == lobby.PW_ATTACK) and attacker, (currentMode == lobby.PW_DEFEND) and defender
+	attacking, defending = (currentMode == lobby.PW_ATTACK) and attacking, (currentMode == lobby.PW_DEFEND) and defender
 	
 	if attacking then
 		for i = 1, #planets do
-			if planets[i].Needed + 1 == planets[i].Count then
+			if planets[i].Count + 1 == planets[i].Needed then
 				return planets[i], true
 			end
 		end
@@ -554,7 +554,6 @@ local function GetPlanetList(parentControl)
 	local externalFunctions = {}
 	
 	function externalFunctions.SetPlanetList(newPlanetList, attacker, defender, modeSwitched)
-		Spring.Echo("SetPlanetList modeSwitched", modeSwitched)
 		if modeSwitched then
 			queuePlanetJoin = nil
 		end
@@ -598,6 +597,8 @@ local function InitializeControls(window)
 	
 	local title = "Planetwars"
 	local missingResources = false
+	
+	local oldAttackerFaction, oldDefenderFactions, oldMode = "", {}, 1
 	
 	local lblTitle = Label:New {
 		x = 20,
@@ -646,7 +647,33 @@ local function InitializeControls(window)
 		parent = window
 	}
 	
+	local function UpdateStatusText(attacker, defender, currentMode)
+		if not missingResources then
+			if attacker then
+				if currentMode == lobby.PW_ATTACK then
+					statusText:SetText("Select a planet to attack. The invasion will launch when enough players join.")
+				else
+					if lobby.planetwarsData.attackingPlanet then
+						statusText:SetText("You have launched an attack on an enemy planet. Wait for a response from the defenders or win automatically.")
+					else
+						statusText:SetText("Your enemies are trying to respond to an invasion launched by your faction.")
+					end
+				end
+			else
+				if currentMode == lobby.PW_ATTACK then
+					statusText:SetText("An opposing faction is selecting a planet to attack.")
+				elseif defender then
+					statusText:SetText("Your planet is under attack. Join the defense before it is too late.")
+				else
+					statusText:SetText("Another faction is attempting to fight off an invasion.")
+				end
+			end
+		end
+	end
+	
 	local function OnPwMatchCommand(listener, attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
+		oldAttackerFaction, oldDefenderFactions, oldMode = attackerFaction, defenderFactions, currentMode
+		
 		if currentMode == lobby.PW_ATTACK then
 			if attackerFaction then
 				title = "Planetwars: " .. attackerFaction .. " attacking - "
@@ -670,29 +697,18 @@ local function InitializeControls(window)
 		end
 		
 		local attacker, defender = GetAttackingOrDefending(lobby, attackerFaction, defenderFactions)
-		
-		if not missingResources then
-			if attacker then
-				if currentMode == lobby.PW_ATTACK then
-					statusText:SetText("Select a planet to attack. The invasion will launch when enough players join.")
-				else
-					statusText:SetText("Your enemies are trying to respond to an invasion launched by your faction.")
-				end
-			else
-				if currentMode == lobby.PW_ATTACK then
-					statusText:SetText("An opposing faction is selecting a planet to attack.")
-				elseif defender then
-					statusText:SetText("Your planet is under attack. Join the defense before it is too late.")
-				else
-					statusText:SetText("Another faction is attempting to fight off an invasion.")
-				end
-			end
-		end
+		UpdateStatusText(attacker, defender, currentMode)
 		
 		planetList.SetPlanetList(planets, (currentMode == lobby.PW_ATTACK) and attacker, (currentMode == lobby.PW_DEFEND) and defender, modeSwitched)
 	end
 	
 	lobby:AddListener("OnPwMatchCommand", OnPwMatchCommand)
+	
+	local function OnPwAttackingPlanet()
+		local attacker, defender = GetAttackingOrDefending(lobby, oldAttackerFaction, oldDefenderFactions)
+		UpdateStatusText(attacker, defender, oldMode)
+	end
+	lobby:AddListener("OnPwAttackingPlanet", OnPwAttackingPlanet)
 	
 	local externalFunctions = {}
 	
@@ -785,7 +801,7 @@ function DelayedInitialize()
 	local function OnPwMatchCommand(listener, attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
 		phaseTimer.SetNewDeadline(deadlineSeconds)
 		
-		local planetData, isAttacker = GetActivity(lobby, attackerFactiom, defenderFactions, currentMode, planets)
+		local planetData, isAttacker = GetActivity(lobby, attackerFaction, defenderFactions, currentMode, planets)
 		if planetData then
 			activityPromptHandler.SetActivity(planetData, isAttacker)
 			statusAndInvitesPanel.AddControl(activityPromptHandler.GetHolder(), 5)

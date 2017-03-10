@@ -1374,7 +1374,7 @@ function Interface:_PwJoinPlanetSuccess(data)
 end
 Interface.jsonCommands["PwJoinPlanetSuccess"] = Interface._PwJoinPlanetSuccess
 
-function Interface:PwAttackingPlanet(data)
+function Interface:_PwAttackingPlanet(data)
 	self:_OnPwAttackingPlanet(data.PlanetID)
 end
 Interface.jsonCommands["PwAttackingPlanet"] = Interface._PwAttackingPlanet
