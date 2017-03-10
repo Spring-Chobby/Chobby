@@ -24,6 +24,9 @@ local PLANET_NAME_LENGTH = 210
 
 local phaseTimer
 
+local MISSING_ENGINE_TEXT = "Game engine update required, restart the menu to apply."
+local MISSING_GAME_TEXT = "Game version update required. Wait for a download or restart to apply it immediately."
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
@@ -404,6 +407,7 @@ local function InitializeControls(window)
 	local lobby = WG.LibLobby.lobby
 	
 	local title = "Planetwars"
+	local missingResources = false
 	
 	local lblTitle = Label:New {
 		x = 20,
@@ -434,7 +438,7 @@ local function InitializeControls(window)
 	local listHolder = Control:New {
 		x = 5,
 		right = 5,
-		y = 55,
+		y = 100,
 		bottom = 250,
 		padding = {0, 0, 0, 0},
 		parent = window,
@@ -443,10 +447,10 @@ local function InitializeControls(window)
 	local planetList = GetPlanetList(listHolder)
 	
 	local statusText = TextBox:New {
-		x = 12,
-		right = 5,
-		bottom = 120,
-		height = 100,
+		x = 20,
+		right = 16,
+		y = 60,
+		height = 50,
 		fontsize = Configuration:GetFont(2).size,
 		text = "",
 		parent = window
@@ -487,18 +491,44 @@ local function InitializeControls(window)
 			end
 		end
 		
+		if not missingResources then
+			if attacker then
+				if currentMode == lobby.PW_ATTACK then
+					statusText:SetText("Select a planet to attack. The invasion will launch when enough players join.")
+				else
+					statusText:SetText("Your enemies are trying to respond to an invasion launched by your faction.")
+				end
+			else
+				if currentMode == lobby.PW_ATTACK then
+					statusText:SetText("An opposing faction is selecting a planet to attack.")
+				elseif defender then
+					statusText:SetText("Your planet is under attack. Join the defense before it is too late.")
+				else
+					statusText:SetText("Another faction is attempting to fight off an invasion.")
+				end
+			end
+		end
+		
 		planetList.SetPlanetList(planets, (currentMode == lobby.PW_ATTACK) and attacker,  (currentMode == lobby.PW_DEFEND) and defender, modeSwitched)
 	end
 	
 	lobby:AddListener("OnPwMatchCommand", OnPwMatchCommand)
 	
-	local planetwarsData = lobby:GetPlanetwarsData()
-	OnPwMatchCommand(_, planetwarsData.attackerFaction, planetwarsData.defenderFactions, planetwarsData.currentMode, planetwarsData.planets, 457)
-	
 	local externalFunctions = {}
 	
 	function externalFunctions.CheckDownload()
 		planetList.CheckDownload()
+		if not HaveRightEngineVersion() then
+			statusText:SetText(MISSING_ENGINE_TEXT)
+			missingResources = true
+			return
+		end
+		if not HaveRightGameVersion() then
+			statusText:SetText(MISSING_GAME_TEXT)
+			missingResources = true
+			return
+		end
+		missingResources = false
 	end
 	
 	function externalFunctions.UpdateTimer()
@@ -507,6 +537,12 @@ local function InitializeControls(window)
 			lblTitle:SetCaption(title .. Spring.Utilities.FormatTime(timeRemaining, true))
 		end
 	end
+	
+	-- Initialization
+	externalFunctions.CheckDownload()
+	
+	local planetwarsData = lobby:GetPlanetwarsData()
+	OnPwMatchCommand(_, planetwarsData.attackerFaction, planetwarsData.defenderFactions, planetwarsData.currentMode, planetwarsData.planets, 457)
 	
 	return externalFunctions
 end
