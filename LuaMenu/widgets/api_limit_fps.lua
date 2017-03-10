@@ -52,6 +52,10 @@ end
 -- Allow redraw handling and logic
 
 function widget:AllowDraw()
+	local config = WG.Chobby.Configuration
+	if config.drawAtFullSpeed then
+		return true
+	end
 	if forceRedraw then
 		forceRedraw = false
 		fastRedraw = false

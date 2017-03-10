@@ -132,6 +132,7 @@ function Configuration:init()
 	self.hideInterface = false
 	self.enableTextToSpeech = true
 	self.showOldAiVersions = false
+	self.drawAtFullSpeed = false
 	
 	self.chatFontSize = 18
 
@@ -197,6 +198,7 @@ function Configuration:GetConfigData()
 		debugMode = self.debugMode,
 		confirmation_mainMenuFromBattle = self.confirmation_mainMenuFromBattle,
 		confirmation_battleFromBattle = self.confirmation_battleFromBattle,
+		drawAtFullSpeed = self.drawAtFullSpeed,
 		loadLocalWidgets = self.loadLocalWidgets,
 		activeDebugConsole = self.activeDebugConsole,
 		onlyShowFeaturedMaps = self.onlyShowFeaturedMaps,

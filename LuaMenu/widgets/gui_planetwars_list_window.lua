@@ -455,7 +455,7 @@ local function InitializeControls(window)
 	local function OnPwMatchCommand(listener, attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
 		if currentMode == lobby.PW_ATTACK then
 			if attackerFaction then
-				title = "Planetwars: " .. attackerFaction .. " planning attack - "
+				title = "Planetwars: " .. attackerFaction .. " selecting target - "
 			else
 				title = "Planetwars: attacking - "
 			end

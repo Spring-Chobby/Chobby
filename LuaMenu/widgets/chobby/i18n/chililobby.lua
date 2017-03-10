@@ -135,6 +135,7 @@ return {
 
 		-- Settings
 		notifyForAllChat = "Notify for all chat",
+		drawFullSpeed = "Full speed draw updates",
 		simplifiedSkirmishSetup = "Simple skirmish setup",
 		debugMode = "Debug mode",
 
