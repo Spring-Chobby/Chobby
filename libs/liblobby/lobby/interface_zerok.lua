@@ -670,6 +670,10 @@ function Interface:_Welcome(data)
 	self.REVERSE_COMPAT = (data.Version == "1.4.9.26")
 	self:_OnConnect(4, data.Engine, 2, 1)
 	self:_OnUserCount(data.UserCount)
+	
+	if data.Factions then
+		self:_OnPwFactionUpdate(data.Factions)
+	end
 end
 Interface.jsonCommands["Welcome"] = Interface._Welcome
 

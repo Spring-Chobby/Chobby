@@ -781,7 +781,7 @@ local function InitializeControls(window)
 			return false
 		end
 		
-		if (not myUserInfo.faction) or myUserInfo.faction == "" then
+		if not lobby:GetFactionData(myUserInfo.faction) then
 			statusText:SetText("You need to join a faction.")
 			if not factionLinkButton then
 				factionLinkButton = Button:New {

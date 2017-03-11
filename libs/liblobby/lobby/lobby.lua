@@ -1124,6 +1124,14 @@ function Lobby:_OnPwAttackingPlanet(planetID)
 	self.planetwarsData.attackingPlanet = planetID
 	self:_CallListeners("OnPwAttackingPlanet", planetID)
 end
+
+function Lobby:_OnPwFactionUpdate(factionData)
+	self.planetwarsData.factionMap = {}
+	for i = 1, #factionData do
+		self.planetwarsData.factionMap[factionData[i].Shortcut] = true
+	end
+end
+
 ------------------------
 -- Team commands
 ------------------------
@@ -1498,6 +1506,11 @@ function Lobby:GetMyFaction()
 		return self.users[self.myUserName].faction
 	end
 	return false
+end
+
+function Lobby:GetFactionData(faction)
+	Spring.Echo("GetFactionData", faction)
+	return faction and self.planetwarsData.factionMap and self.planetwarsData.factionMap[faction]
 end
 
 function Lobby:GetPlanetwarsData()
