@@ -1509,7 +1509,6 @@ function Lobby:GetMyFaction()
 end
 
 function Lobby:GetFactionData(faction)
-	Spring.Echo("GetFactionData", faction)
 	return faction and self.planetwarsData.factionMap and self.planetwarsData.factionMap[faction]
 end
 
