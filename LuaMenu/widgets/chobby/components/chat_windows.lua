@@ -237,7 +237,7 @@ function ChatWindows:init()
 		}
 	}
 	self.tabPanel.tabBar:DisableHighlight()
-	
+
 	self.tabBarFudgeHolder = Control:New {
 		name = "fudgeControl",
 		x = 0,
@@ -251,7 +251,7 @@ function ChatWindows:init()
 			self.tabPanel.tabBar
 		}
 	}
-	
+
 	self.tabScrollPanel = ScrollPanel:New {
 		x = 0,
 		right = 0,
@@ -267,7 +267,7 @@ function ChatWindows:init()
 			self.tabBarFudgeHolder
 		}
 	}
-	
+
 	self.tabBarHolder = Control:New {
 		name = "tabBarHolder",
 		x = 0,
@@ -649,9 +649,15 @@ end
 
 function ChatWindows:CreateDebugConsole()
 	local function MessageListener(message)
-		lobby:SendCustomCommand(message)
+		if message:starts("!") then
+			-- simulate receiving a message from the server
+			lobby:CommandReceived(message:sub(2))
+		else
+			lobby:SendCustomCommand(message)
+		end
 	end
 	self.debugConsole = Console(nil, MessageListener)
+	self.debugConsole.ebInputText.hint = "Type text here to send commands to server. Prefix with ! to simulate receiving commands from server."
 	table.insert(self.debugConsole.ebInputText.OnKeyPress,
 		function(obj, key, ...)
 			-- allow tabs for the debug window
@@ -663,18 +669,18 @@ function ChatWindows:CreateDebugConsole()
 	lobby:AddListener("OnCommandReceived",
 		function(listner, command)
 			command = self:RedactMessage(command)
-			Spring.Echo("LuaMenuServerMessage", "<" .. command)
+			Spring.Log("ServerMessage", LOG.NOTICE, command)
 			if Configuration.activeDebugConsole then
-				self.debugConsole:AddMessage("<" .. command)
+				self.debugConsole:AddMessage("<--" .. command)
 			end
 		end
 	)
 	lobby:AddListener("OnCommandSent",
 		function(listner, command)
 			command = self:RedactMessage(command)
-			Spring.Echo("LuaMenuServerMessage", ">" .. command)
+			Spring.Log("ClientMessage", LOG.NOTICE, command)
 			if Configuration.activeDebugConsole then
-				self.debugConsole:AddMessage(">" .. command)
+				self.debugConsole:AddMessage("-->" .. command)
 			end
 		end
 	)
@@ -925,7 +931,7 @@ function ChatWindows:CreateJoinChannelWindow()
 		font = Configuration:GetFont(4),
 		parent = self.joinWindow,
 	}
-	
+
 	local channelEdit = EditBox:New {
 		x = 3,
 		right = 3,
@@ -935,7 +941,7 @@ function ChatWindows:CreateJoinChannelWindow()
 		font = Configuration:GetFont(3),
 		parent = self.joinWindow,
 	}
-	
+
 	local function CancelFunc()
 		self.joinWindow:Dispose()
 		self.joinWindow = nil
@@ -950,7 +956,7 @@ function ChatWindows:CreateJoinChannelWindow()
 		self.joinWindow:Dispose()
 		self.joinWindow = nil
 	end
-	
+
 	local buttonJoin = Button:New {
 		right = 150,
 		width = 135,
@@ -998,4 +1004,3 @@ function ChatWindows:ClearHistory()
 		console:ClearHistory()
 	end
 end
-

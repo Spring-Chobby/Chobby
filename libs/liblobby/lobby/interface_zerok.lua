@@ -746,8 +746,7 @@ Interface.commandPattern["ADDUSER"] = "(%S+)%s+(%S%S)%s+(%S+)%s*(.*)"
 function Interface:_User(data)
 	-- CHECKME: verify that name, country, cpu and similar info doesn't change
 	-- It can change now that we remember user data of friends through disconnect.
-	if self.users[data.Name] == nil or self.users[data.Name].isOffline then
-		self:_OnAddUser(data.Name, {
+	local userTable = {
 			country = data.Country,
 			clan = data.Clan,
 			faction = data.Faction,
@@ -764,7 +763,9 @@ function Interface:_User(data)
 			awaySince = data.AwaySince,
 			inGameSince = data.InGameSince,
 			steamID = data.SteamID,
-		})
+	}
+	if self.users[data.Name] == nil or self.users[data.Name].isOffline then
+		self:_OnAddUser(data.Name, userTable)
 		
 		for i = 1, #self.commonChannels do
 			self:_OnJoined(self.commonChannels[i], data.Name)
@@ -774,24 +775,7 @@ function Interface:_User(data)
 		return
 	end
 
-	self:_OnUpdateUserStatus(data.Name, {
-		country = data.Country,
-		clan = data.Clan,
-		faction = data.Faction,
-		lobbyVersion = data.LobbyVersion,
-		accountID = data.AccountID,
-		isInGame = data.IsInGame,
-		isAway = data.IsAway,
-		isAdmin = data.IsAdmin,
-		level = data.Level,
-		skill = data.EffectiveMmElo,
-		casualSkill = data.EffectiveElo,
-		icon = data.Icon,
-		isBot = data.IsBot,
-		awaySince = data.AwaySince,
-		inGameSince = data.InGameSince,
-		steamID = data.SteamID,
-	})
+	self:_OnUpdateUserStatus(data.Name, userTable)
 	
 	self:UpdateUserBattleStatus(data.Name, data.BattleID)
 	

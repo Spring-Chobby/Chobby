@@ -21,8 +21,10 @@ function Chotify:CloseNotification(id)
 	if not window then
 		return
 	end
+    window:Dispose()
+    --[[
     ChiliFX:AddFadeEffect({
-        obj = window, 
+        obj = window,
         time = 0.2,
         endValue = 0,
         startValue = 1,
@@ -30,6 +32,7 @@ function Chotify:CloseNotification(id)
             window:Dispose()
         end,
     })
+    ]]
     self.notifications[id] = nil
 end
 
@@ -72,12 +75,14 @@ function Chotify:Post(obj)
     else
         window:AddChild(body)
     end
+    --[[
     ChiliFX:AddFadeEffect({
-        obj = window, 
+        obj = window,
         time = 0.2,
         endValue = 1,
         startValue = 0,
     })
+    ]]
     local startTime = os.clock()
     local notification = {
         window = window,

@@ -64,7 +64,7 @@ end
 local function ToggleFullscreenOff()
 	Spring.SetConfigInt("Fullscreen", 1, false)
 	Spring.SetConfigInt("Fullscreen", 0, false)
-	
+
 	if WG.Chobby.Configuration.agressivelySetBorderlessWindowed then
 		local screenX, screenY = Spring.GetScreenGeometry()
 		Spring.SetConfigInt("XResolutionWindowed", screenX - FUDGE*2, false)
@@ -83,16 +83,16 @@ local function SetLobbyFullscreenMode(mode)
 	if mode == currentMode then
 		return
 	end
-	
+
 	local Configuration = WG.Chobby.Configuration
-	
+
 	-- Remember window settings
 	if currentMode == 2 then
 		local x = Spring.GetConfigInt("WindowPosX")
 		local y = Spring.GetConfigInt("WindowPosY")
 		local width = Spring.GetConfigInt("XResolutionWindowed")
 		local height = Spring.GetConfigInt("YResolutionWindowed")
-		
+
 		if x then
 			Configuration:SetConfigValue("window_WindowPosX", x)
 		end
@@ -106,13 +106,13 @@ local function SetLobbyFullscreenMode(mode)
 			Configuration:SetConfigValue("window_YResolutionWindowed", height)
 		end
 	end
-	
+
 	currentMode = mode
-	
+
 	if Configuration.doNotSetAnySpringSettings then
 		return
 	end
-	
+
 	Spring.Echo("SetLobbyFullscreenMode", mode)
 
 	local screenX, screenY = Spring.GetScreenGeometry()
@@ -120,14 +120,14 @@ local function SetLobbyFullscreenMode(mode)
 	if mode == 1 then
 		-- Required to remove FUDGE
 		Spring.SetConfigInt("Fullscreen", 1)
-		
+
 		Spring.SetConfigInt("XResolutionWindowed", screenX - FUDGE*2, false)
 		Spring.SetConfigInt("YResolutionWindowed", screenY - FUDGE*2, false)
 		Spring.SetConfigInt("WindowPosX", FUDGE, false)
 		Spring.SetConfigInt("WindowPosY", FUDGE, false)
 		Spring.SetConfigInt("WindowBorderless", 1, false)
 		Spring.SetConfigInt("Fullscreen", 0, false)
-		
+
 		WG.Delay(ToggleFullscreenOff, 0.1)
 		if Configuration.agressivelySetBorderlessWindowed then
 			WG.Delay(ToggleFullscreenOff, 0.5)
@@ -137,13 +137,13 @@ local function SetLobbyFullscreenMode(mode)
 		winPosX = Configuration.window_WindowPosX or winPosX
 		winSizeX = Configuration.window_XResolutionWindowed or winSizeX
 		winSizeY = Configuration.window_YResolutionWindowed or winSizeY
-		
+
 		if Configuration.window_WindowPosY then
 			winPosY = Configuration.window_WindowPosY
-		else	
+		else
 			winPosY = screenY - winPosY - winSizeY
 		end
-		
+
 		if winPosY > 10 then
 			-- Window is not stuck at the top of the screen
 			Spring.SetConfigInt("WindowPosX", math.min(winPosX, screenX - 50), false)
@@ -168,15 +168,15 @@ local function SetLobbyFullscreenMode(mode)
 end
 
 local function SaveLobbyDisplayMode()
-	local Configuration = WG.Chobby.Configuration		
-	
+	local Configuration = WG.Chobby.Configuration
+
 	-- Remember window settings
 	if (currentMode == 2 or not currentMode) and lobbyFullscreen == 2 then
 		local x = Spring.GetConfigInt("WindowPosX")
 		local y = Spring.GetConfigInt("WindowPosY")
 		local width = Spring.GetConfigInt("XResolutionWindowed")
 		local height = Spring.GetConfigInt("YResolutionWindowed")
-		
+
 		if x then
 			Configuration:SetConfigValue("window_WindowPosX", x)
 		end
@@ -190,7 +190,7 @@ local function SaveLobbyDisplayMode()
 			Configuration:SetConfigValue("window_YResolutionWindowed", height)
 		end
 	end
-	
+
 	SetLobbyFullscreenMode(lobbyFullscreen)
 end
 
@@ -206,7 +206,7 @@ local function AddCheckboxSetting(offset, caption, key, default)
 	if checked == nil then
 		checked = default
 	end
-	
+
 	local control = Checkbox:New {
 		x = 20,
 		width = CHECK_WIDTH,
@@ -221,7 +221,7 @@ local function AddCheckboxSetting(offset, caption, key, default)
 			Configuration:SetConfigValue(key, newState)
 		end},
 	}
-	
+
 	return control, offset + ITEM_OFFSET
 end
 
@@ -231,7 +231,7 @@ local function GetLobbyTabControls()
 	local Configuration = WG.Chobby.Configuration
 
 	local offset = 5
-	
+
 	local children = {}
 
 	children[#children + 1] = Label:New {
@@ -269,7 +269,7 @@ local function GetLobbyTabControls()
 		},
 	}
 	offset = offset + ITEM_OFFSET
-	
+
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -299,7 +299,7 @@ local function GetLobbyTabControls()
 		},
 	}
 	offset = offset + ITEM_OFFSET
-	
+
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -329,7 +329,7 @@ local function GetLobbyTabControls()
 		}
 	}
 	offset = offset + ITEM_OFFSET
-	
+
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -359,7 +359,7 @@ local function GetLobbyTabControls()
 		}
 	}
 	offset = offset + ITEM_OFFSET
-	
+
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -389,7 +389,7 @@ local function GetLobbyTabControls()
 		}
 	}
 	offset = offset + ITEM_OFFSET
-	
+
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -419,7 +419,7 @@ local function GetLobbyTabControls()
 		}
 	}
 	offset = offset + ITEM_OFFSET
-	
+
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -449,7 +449,7 @@ local function GetLobbyTabControls()
 		}
 	}
 	offset = offset + ITEM_OFFSET
-	
+
 	local autoLogin = Checkbox:New {
 		x = 20,
 		width = CHECK_WIDTH,
@@ -473,7 +473,8 @@ local function GetLobbyTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("notifyForAllChat"), "notifyForAllChat", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("only_featured_maps"), "onlyShowFeaturedMaps", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("login_with_steam"), "wantAuthenticateWithSteam", true)
-	
+	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("animate_lobby"), "animate_lobby", true)
+
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -501,7 +502,7 @@ local function GetLobbyTabControls()
 		}
 	}
 	offset = offset + ITEM_OFFSET
-	
+
 	local function onConfigurationChange(listener, key, value)
 		if freezeSettings then
 			return
@@ -512,9 +513,9 @@ local function GetLobbyTabControls()
 	end
 
 	freezeSettings = false
-	
+
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
-	
+
 	return children
 end
 
@@ -524,7 +525,7 @@ local function GetVoidTabControls()
 	local Configuration = WG.Chobby.Configuration
 
 	local offset = 5
-	
+
 	local children = {}
 
 	children[#children + 1] = TextBox:New {
@@ -550,7 +551,7 @@ local function GetVoidTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Use wrong engine", "useWrongEngine", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Show old AI versions", "showOldAiVersions", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("drawFullSpeed"), "drawAtFullSpeed", false)
-	
+
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -577,7 +578,7 @@ local function GetVoidTabControls()
 		}
 	}
 	offset = offset + ITEM_OFFSET
-	
+
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -600,14 +601,14 @@ local function GetVoidTabControls()
 				if obj.focused then
 					return
 				end
-				
+
 				Configuration.serverAddress = obj.text
 				obj:SetText(Configuration.serverAddress)
 			end
 		}
 	}
 	offset = offset + ITEM_OFFSET
-	
+
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -630,21 +631,21 @@ local function GetVoidTabControls()
 				if obj.focused then
 					return
 				end
-				
+
 				local newValue = tonumber(obj.text)
-				
+
 				if not newValue then
 					obj:SetText(tostring(Configuration.serverPort))
 					return
 				end
-				
+
 				Configuration.serverPort = math.floor(0.5 + math.max(0, newValue))
 				obj:SetText(tostring(Configuration.serverPort))
 			end
 		}
 	}
 	offset = offset + ITEM_OFFSET
-	
+
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -656,7 +657,7 @@ local function GetVoidTabControls()
 		font = Configuration:GetFont(2),
 		caption = "Singleplayer",
 	}
-	
+
 	local singleplayerSelectedName = Configuration.gameConfigName
 	local singleplayerSelected = 1
 	for i = 1, #Configuration.gameConfigOptions do
@@ -665,7 +666,7 @@ local function GetVoidTabControls()
 			break
 		end
 	end
-	
+
 	children[#children + 1] = ComboBox:New {
 		name = "gameSelection",
 		x = COMBO_X,
@@ -687,9 +688,9 @@ local function GetVoidTabControls()
 		},
 	}
 	offset = offset + ITEM_OFFSET
-	
+
 	freezeSettings = false
-	
+
 	return children
 end
 
@@ -702,7 +703,7 @@ local settingsUpdateFunction = {}
 
 local function MakePresetsControl(settingPresets, offset)
 	local Configuration = WG.Chobby.Configuration
-	
+
 	local presetLabel = Label:New {
 		name = "presetLabel",
 		x = 20,
@@ -715,7 +716,7 @@ local function MakePresetsControl(settingPresets, offset)
 		font = Configuration:GetFont(2),
 		caption = "Preset:",
 	}
-    
+
 	local useCustomSettings = true
 	local settingsPresetControls = {}
 
@@ -743,7 +744,7 @@ local function MakePresetsControl(settingPresets, offset)
 							end
 						end
 					end
-					
+
 					ButtonUtilities.SetButtonSelected(obj)
 					for i = 1, #settingsPresetControls do
 						local control = settingsPresetControls[i]
@@ -754,7 +755,7 @@ local function MakePresetsControl(settingPresets, offset)
 				end
 			},
 		}
-    
+
 		settingsPresetControls[#settingsPresetControls + 1] = button
 		if settings then
 			if Spring.Utilities.TableSubsetEquals(settings, Configuration.settingsMenuValues) then
@@ -766,7 +767,7 @@ local function MakePresetsControl(settingPresets, offset)
 		end
 		return button
 	end
-    
+
 	local x = 0
 	local y = 0
 	local settingsButtons = {}
@@ -778,10 +779,10 @@ local function MakePresetsControl(settingPresets, offset)
 			y = y + 1
 		end
 	end
-	
+
 	local customSettingsButton = SettingsButton(x, y, "Custom")
 	settingsButtons[#settingsButtons + 1] = customSettingsButton
-	
+
 	local settingsHolder = Control:New {
 		name = "settingsHolder",
 		x = COMBO_X,
@@ -791,7 +792,7 @@ local function MakePresetsControl(settingPresets, offset)
 		padding = {0, 0, 0, 0},
 		children = settingsButtons
 	}
-	
+
 	local function EnableCustomSettings()
 		ButtonUtilities.SetButtonSelected(customSettingsButton)
 		for i = 1, #settingsPresetControls do
@@ -801,15 +802,15 @@ local function MakePresetsControl(settingPresets, offset)
 			end
 		end
 	end
-	
+
 	return presetLabel, settingsHolder, EnableCustomSettings, offset + ITEM_OFFSET*(y + 1)
 end
 
 local function ProcessScreenSizeOption(data, offset)
 	local Configuration = WG.Chobby.Configuration
-	
+
 	local freezeSettings = true
-	
+
 	local label = Label:New {
 		name = data.name .. "_label",
 		x = 20,
@@ -847,15 +848,15 @@ local function ProcessScreenSizeOption(data, offset)
 			end
 		},
 	}
-	
+
 	freezeSettings = false
-	
+
 	return label, list, offset + ITEM_OFFSET
 end
 
 local function ProcessSettingsOption(data, offset, defaults, customSettingsSwitch)
 	local Configuration = WG.Chobby.Configuration
-	
+
 	local label = Label:New {
 		name = data.name .. "_label",
 		x = 20,
@@ -868,10 +869,10 @@ local function ProcessSettingsOption(data, offset, defaults, customSettingsSwitc
 		font = Configuration:GetFont(2),
 		tooltip = data.desc,
 	}
-	
+
 	local defaultItem = 1
 	local defaultName = Configuration.settingsMenuValues[data.name] or defaults[data.name]
-	
+
 	local items = {}
 	for i = 1, #data.options do
 		local itemName = data.options[i].name
@@ -880,9 +881,9 @@ local function ProcessSettingsOption(data, offset, defaults, customSettingsSwitc
 			defaultItem = i
 		end
 	end
-	
+
 	local freezeSettings = true
-	
+
 	settingsComboBoxes[data.name] = ComboBox:New {
 		name = data.name .. "_combo",
 		x = COMBO_X,
@@ -898,14 +899,14 @@ local function ProcessSettingsOption(data, offset, defaults, customSettingsSwitc
 				if freezeSettings then
 					return freezeSettings
 				end
-			
+
 				local selectedData = data.options[num]
 				Configuration.settingsMenuValues[data.name] = selectedData.name
-				
+
 				if customSettingsSwitch then
 					customSettingsSwitch()
 				end
-				
+
 				if data.fileTarget then
 					local sourceFile = VFS.LoadFile(selectedData.file)
 					local settingsFile = io.open(data.fileTarget, "w")
@@ -924,15 +925,15 @@ local function ProcessSettingsOption(data, offset, defaults, customSettingsSwitc
 			end
 		}
 	}
-	
+
 	freezeSettings = false
-	
+
 	return label, settingsComboBoxes[data.name], offset + ITEM_OFFSET
 end
 
 local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitch)
 	local Configuration = WG.Chobby.Configuration
-	
+
 	local label = Label:New {
 		name = data.name .. "_label",
 		x = 20,
@@ -945,23 +946,23 @@ local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitc
 		font = Configuration:GetFont(2),
 		tooltip = data.desc,
 	}
-	
+
 	local function SetEditboxValue(obj, newValue)
 		newValue = tonumber(newValue)
-		
+
 		if not newValue then
 			obj:SetText(tostring(Configuration.settingsMenuValues[data.name]))
 			return
 		end
-		
+
 		if customSettingsSwitch then
 			customSettingsSwitch()
 		end
-		
+
 		local newValue = math.floor(0.5 + math.max(data.minValue, math.min(data.maxValue, newValue)))
 		Configuration.settingsMenuValues[data.name] = newValue
 		obj:SetText(tostring(newValue))
-		
+
 		local applyFunction = data.applyFunction
 		if applyFunction then
 			local applyData = applyFunction(newValue)
@@ -977,9 +978,9 @@ local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitc
 			SetSpringsettingsValue(data.applyName, springValue)
 		end
 	end
-	
+
 	local freezeSettings = true
-	
+
 	local numberInput = EditBox:New {
 		x = COMBO_X,
 		y = offset,
@@ -996,9 +997,9 @@ local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitc
 			end
 		}
 	}
-	
+
 	freezeSettings = false
-	
+
 	settingsUpdateFunction[data.name] = function (newValue)
 		SetEditboxValue(numberInput, newValue)
 	end
@@ -1011,13 +1012,13 @@ local function PopulateTab(settingPresets, settingOptions, settingsDefault)
 	local offset = 5
 	local customSettingsSwitch
 	local label, list
-	
+
 	if settingPresets then
 		label, list, customSettingsSwitch, offset = MakePresetsControl(settingPresets, offset)
 		children[#children + 1] = label
 		children[#children + 1] = list
 	end
-	
+
 	for i = 1, #settingOptions do
 		local data = settingOptions[i]
 		if data.displayModeToggle then
@@ -1030,7 +1031,7 @@ local function PopulateTab(settingPresets, settingOptions, settingsDefault)
 		children[#children + 1] = label
 		children[#children + 1] = list
 	end
-	
+
 	return children
 end
 
@@ -1047,7 +1048,7 @@ local function MakeTab(name, children)
 		horizontalScrollbar = false,
 		children = children
 	}
-	
+
 	return {
 		name = name,
 		caption = name,
@@ -1058,21 +1059,21 @@ end
 
 local function InitializeControls(window)
 	window.OnParent = nil
-	
+
 	local tabs = {
 		MakeTab("Lobby", GetLobbyTabControls())
 	}
-	
+
 	local settingsFile = WG.Chobby.Configuration.gameConfig.settingsConfig
 	local settingsDefault = WG.Chobby.Configuration.gameConfig.settingsDefault
-	
+
 	for i = 1, #settingsFile do
 		local data = settingsFile[i]
 		tabs[#tabs + 1] = MakeTab(data.name, PopulateTab(data.presets, data.settings, settingsDefault))
 	end
-	
+
 	tabs[#tabs + 1] = MakeTab("Developer", GetVoidTabControls())
-	
+
 	local tabPanel = Chili.DetachableTabPanel:New {
 		x = 5,
 		right = 5,
@@ -1138,7 +1139,7 @@ function widget:ActivateMenu()
 		for key, value in pairs(gameSettings) do
 			SetSpringsettingsValue(key, value)
 		end
-		
+
 		firstCall = false
 		return
 	end
@@ -1189,7 +1190,7 @@ function widget:Initialize()
 			SetSpringsettingsValue("YResolution", screenY)
 			SetSpringsettingsValue("Fullscreen", 1)
 		end
-		
+
 		for key, value in pairs(gameSettings) do
 			SetSpringsettingsValue(key, value)
 		end
