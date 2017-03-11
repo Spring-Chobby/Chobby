@@ -82,7 +82,7 @@ local function TryToJoinPlanet(planetData)
 	
 	lobby:PwJoinPlanet(planetData.PlanetID)
 	if panelInterface then
-		panelInterface.SetPlanetJoined(planetID)
+		panelInterface.SetPlanetJoined(planetData.PlanetID)
 	end
 	WG.Analytics.SendOnetimeEvent("lobby:multiplayer:planetwars:join_site")
 end
@@ -116,7 +116,7 @@ local function GetActivityToPrompt(lobby, attackerFaction, defenderFactions, cur
 		local planetID = lobby.planetwarsData.joinPlanet
 		for i = 1, #planets do
 			if planets[i].PlanetID == planetID then
-				return planets[i], false, true
+				return planets[i], true, true
 			end
 		end
 		return false
@@ -182,9 +182,11 @@ local function GetPlanetImage(holder, x, y, size, planetImage, structureList)
 		end
 	end
 	
+	local planetImageControl
+	
 	if planetImage then
 		local planetPad = math.floor(size*7/30)
-		children[#children + 1] = Image:New {
+		planetImageControl = Image:New {
 			x = planetPad,
 			y = planetPad,
 			right = planetPad,
@@ -192,6 +194,7 @@ local function GetPlanetImage(holder, x, y, size, planetImage, structureList)
 			keepAspect = true,
 			file = "LuaMenu/images/planets/" .. planetImage,
 		}
+		children[#children + 1] = planetImageControl
 	end
 	
 	local imagePanel = Panel:New {
@@ -203,6 +206,18 @@ local function GetPlanetImage(holder, x, y, size, planetImage, structureList)
 		padding = {1,1,1,1},
 		children = children,
 		parent = holder,
+		OnResize = {
+			function (obj, sizeX, sizeY)
+				if planetImageControl then
+					sizeX, sizeY = sizeX - 2, sizeY - 2 -- Padding
+					local planetPad = math.floor(math.max(sizeX, sizeY) * 7/30)
+					planetImageControl._relativeBounds.right = planetPad
+					planetImageControl._relativeBounds.bottom = planetPad
+					planetImageControl:UpdateClientArea()
+					planetImageControl:SetPos(planetPad, planetPad)
+				end
+			end
+		}
 	}
 	
 	return imagePanel
@@ -681,19 +696,28 @@ local function InitializeControls(window)
 				if currentMode == lobby.PW_ATTACK then
 					statusText:SetText("Select a planet to attack. The invasion will launch when enough players join.")
 				else
+					local planets = lobby.planetwarsData.planets
+					local planetName = planets and planets[1] and planets[1].PlanetName
 					if lobby.planetwarsData.attackingPlanet then
-						statusText:SetText("You have launched an attack on an enemy planet. Wait for a response from the defenders or win automatically.")
+						statusText:SetText("You have launched an attack on " .. (planetName or "an enemy planet") .. ". Wait for the defenders to respond in time.")
 					else
-						statusText:SetText("Your enemies are trying to respond to an invasion launched by your faction.")
+						statusText:SetText("Your faction is attacking " .. (planetName or "an enemy planet") .. " and is awaiting a response from defenders.")
 					end
 				end
 			else
 				if currentMode == lobby.PW_ATTACK then
 					statusText:SetText("An opposing faction is selecting a planet to attack.")
-				elseif defender then
-					statusText:SetText("Your planet is under attack. Join the defense before it is too late.")
 				else
-					statusText:SetText("Another faction is attempting to fight off an invasion.")
+					local planets = lobby.planetwarsData.planets
+					local planetName = planets and planets[1] and planets[1].PlanetName
+					if planetName then
+						planetName = " " .. planetName
+					end
+					if defender then
+						statusText:SetText("Your planet" .. (planetName or "") .. " is under attack. Join the defense before it is too late.")
+					else
+						statusText:SetText("Another faction is attempting to fight off an invasion.")
+					end
 				end
 			end
 		end
@@ -840,9 +864,11 @@ function DelayedInitialize()
 	lobby:AddListener("OnPwMatchCommand", OnPwMatchCommand)
 	
 	local function OnPwRequestJoinPlanet(listener, joinPlanetID)
+		Spring.Echo("OnPwRequestJoinPlanet", joinPlanetID)
 		local planetwarsData = lobby:GetPlanetwarsData()
 		local planets = planetwarsData.planets
 		for i = 1, #planets do
+			Spring.Echo("i", i, planets[i].PlanetID)
 			if joinPlanetID == planets[i].PlanetID then
 				TryToJoinPlanet(planets[i])
 				break
