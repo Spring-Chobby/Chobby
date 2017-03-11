@@ -1096,7 +1096,7 @@ end
 ------------------------
 
 function Lobby:_OnPwMatchCommand(attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds)
-	local modeSwitched = (self.planetwarsData.currentMode ~= currentMode)
+	local modeSwitched = (self.planetwarsData.currentMode ~= currentMode) or (self.planetwarsData.attackerFaction ~= attackerFaction)
 	self.planetwarsData.attackerFaction  = attackerFaction
 	self.planetwarsData.defenderFactions = defenderFactions
 	self.planetwarsData.currentMode      = currentMode
