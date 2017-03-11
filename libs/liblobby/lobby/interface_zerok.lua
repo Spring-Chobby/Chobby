@@ -58,10 +58,11 @@ function Interface:Login(user, password, cpu, localIP, lobbyVersion, useSteamLog
 		self:_OnDenied("Password required")
 		return self
 	end
+	local config = WG.Chobby and WG.Chobby.Configuration
 	local REVERSE_COMPAT = true
 	if steamToken and (not password) and not REVERSE_COMPAT then
 		sendData = {
-			UserID = 0,
+			UserID = (config and config.UserID) or 0,
 			ClientType = 1,
 			LobbyVersion = lobbyVersion,
 			SteamAuthToken = steamToken,
@@ -70,7 +71,7 @@ function Interface:Login(user, password, cpu, localIP, lobbyVersion, useSteamLog
 		sendData = {
 			Name = user,
 			PasswordHash = password,
-			UserID = 0,
+			UserID = (config and config.UserID) or 0,
 			ClientType = 1,
 			LobbyVersion = lobbyVersion,
 			SteamAuthToken = steamToken,
@@ -1346,6 +1347,21 @@ function Interface:_PwMatchCommand(data)
 	self:_OnPwMatchCommand(data.AttackerFaction, data.DefenderFactions, data.Mode, data.Options, data.DeadlineSeconds)
 end
 Interface.jsonCommands["PwMatchCommand"] = Interface._PwMatchCommand
+
+function Interface:_PwRequestJoinPlanet(data)
+	self:_OnPwRequestJoinPlanet(data.PlanetID)
+end
+Interface.jsonCommands["PwRequestJoinPlanet"] = Interface._PwMatchCommand
+
+function Interface:_PwJoinPlanetSuccess(data)
+	self:_OnPwJoinPlanetSuccess(data.PlanetID)
+end
+Interface.jsonCommands["PwJoinPlanetSuccess"] = Interface._PwJoinPlanetSuccess
+
+function Interface:_PwAttackingPlanet(data)
+	self:_OnPwAttackingPlanet(data.PlanetID)
+end
+Interface.jsonCommands["PwAttackingPlanet"] = Interface._PwAttackingPlanet
 
 -------------------
 -- Unimplemented --

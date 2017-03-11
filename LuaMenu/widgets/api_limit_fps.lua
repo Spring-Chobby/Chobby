@@ -14,7 +14,7 @@ function widget:GetInfo()
 	}
 end
 
-local MAX_FPS = 60
+local MAX_FPS = 5
 local FAST_FPS = 40
 local oldX, oldY
 
@@ -52,6 +52,10 @@ end
 -- Allow redraw handling and logic
 
 function widget:AllowDraw()
+	local config = WG.Chobby.Configuration
+	if config.drawAtFullSpeed then
+		return true
+	end
 	if forceRedraw then
 		forceRedraw = false
 		fastRedraw = false
@@ -78,7 +82,7 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Force redraw on input
+-- Force redraw on input or screen resize
 
 function widget:Update(dt)
 	local x, y = Spring.GetMouseState()
@@ -90,6 +94,7 @@ function widget:Update(dt)
 end
 
 function widget:MousePress()
+	forceRedraw = true
 	LimitFps.ForceRedrawPeriod(0.2)
 	return false
 end
@@ -102,4 +107,9 @@ end
 function widget:KeyPress()
 	forceRedraw = true
 	return false
+end
+
+function widget:ViewResize(vsx, vsy)
+	forceRedraw = true
+	LimitFps.ForceRedrawPeriod(0.5)
 end

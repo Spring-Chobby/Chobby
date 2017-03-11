@@ -636,6 +636,14 @@ function ChatWindows:RedactMessage(msg)
 			msg = string.sub(msg, 0, steamAuthTokenPos) .. "REDACTED" .. string.sub(msg, endPos)
 		end
 	end
+	local UserIDPos = string.find(msg, [["UserID":"]])
+	if UserIDPos then
+		UserIDPos = UserIDPos + 9
+		local endPos = string.find(msg, [["]], UserIDPos + 1)
+		if endPos then
+			msg = string.sub(msg, 0, UserIDPos) .. "REDACTED" .. string.sub(msg, endPos)
+		end
+	end
 	return msg
 end
 
