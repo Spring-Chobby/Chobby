@@ -144,8 +144,6 @@ function DelayedInitialize()
 	end
 
 	lobby:AddListener("OnUpdateUserStatus", OnUpdateUserStatus)
-
-	WG.Delay(function() OnUpdateUserStatus(nil, "gajop", { icon = "5_5"}) end, 2)
 end
 
 
