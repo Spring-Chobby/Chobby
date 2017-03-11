@@ -773,8 +773,8 @@ local function InitializeControls(window)
 			return false
 		end
 		
-		if (myUserInfo.level or 0) < 10 then
-			statusText:SetText("You need to be level 10 to participate in Planetwars.")
+		if (myUserInfo.level or 0) < 2 then
+			statusText:SetText("You need to be at least level 2 to participate in Planetwars.")
 			if factionLinkButton then
 				factionLinkButton:SetVisibility(false)
 			end
