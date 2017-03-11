@@ -223,6 +223,7 @@ local function InitializeActivityPromptHandler()
 	
 	local planetID
 	local planetImage
+	local planetImageSize = 77
 
 	local holder = Panel:New {
 		x = 0,
@@ -271,8 +272,9 @@ local function InitializeActivityPromptHandler()
 	
 	local function Resize(obj, xSize, ySize)
 		local statusX, statusY, statusWidth = 0, 0, 160
+		planetImageSize = ySize - 2
 		if planetImage then
-			planetImage:SetPos(1, 1, ySize - 2, ySize - 2)
+			planetImage:SetPos(1, 1, planetImageSize, planetImageSize)
 			statusX = ySize - 6
 			statusY = (ySize < 60 and 9) or 10
 			statusWidth = 200
@@ -319,7 +321,7 @@ local function InitializeActivityPromptHandler()
 				if planetImage then
 					planetImage:Dispose()
 				end
-				planetImage = GetPlanetImage(holder, 2, 2, 86, newPlanetData.PlanetImage, newPlanetData.StructureImages)
+				planetImage = GetPlanetImage(holder, 1, 1, planetImageSize, newPlanetData.PlanetImage, newPlanetData.StructureImages)
 			end
 		elseif planetImage then
 			planetImage:Dispose()
