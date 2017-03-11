@@ -124,7 +124,7 @@ local function InitializeQueueStatusHandler(name, ControlType, parent, pos)
 		queueStatusText._relativeBounds.bottom = bottomBound
 		queueStatusText:UpdateClientArea()
 		if ySize < 60 then
-			queueStatusText:SetPos(6, 2)
+			queueStatusText:SetPos(6, 3)
 			bigMode = false
 		else
 			queueStatusText:SetPos(8, 13)

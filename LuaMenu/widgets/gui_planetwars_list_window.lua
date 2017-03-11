@@ -65,7 +65,8 @@ local function TryToJoinPlanet(planetData)
 	local mapName = planetData.Map
 	if not VFS.HasArchive(mapName) then
 		queuePlanetJoin = planetData
-		WG.Chobby.InformationPopup("Downloading map required to attack planet. Please wait.")
+		MaybeDownloadMap(mapName)
+		WG.Chobby.InformationPopup("Map download required to attack planet. Please wait.")
 		return
 	end
 	queuePlanetJoin = nil
@@ -270,8 +271,8 @@ local function InitializeActivityPromptHandler()
 		local statusX, statusY, statusWidth = 0, 0, 160
 		if planetImage then
 			planetImage:SetPos(1, 1, ySize - 2, ySize - 2)
-			statusX = ySize - 2
-			statusY = (ySize < 60 and 10) or 6
+			statusX = ySize - 6
+			statusY = (ySize < 60 and 9) or 10
 			statusWidth = 200
 		end
 	
