@@ -707,30 +707,30 @@ local function InitializeControls(window)
 		if not missingResources then
 			if attacker then
 				if currentMode == lobby.PW_ATTACK then
-					statusText:SetText("Select a planet to attack. The invasion will launch when enough players join.")
+					statusText:SetText("Select a planet to attack. The invasion will launch when you are joined by enough players.")
 				else
 					local planets = lobby.planetwarsData.planets
 					local planetName = planets and planets[1] and planets[1].PlanetName
 					if lobby.planetwarsData.attackingPlanet then
-						statusText:SetText("You have launched an attack on " .. (planetName or "an enemy planet") .. ". Wait for the defenders to respond in time.")
+						statusText:SetText("You have launched an attack on " .. (planetName or "an enemy planet") .. ". The defenders have limited time to respond.")
 					else
-						statusText:SetText("Your faction is attacking " .. (planetName or "an enemy planet") .. " and is awaiting a response from defenders.")
+						statusText:SetText("Your faction is attacking " .. (planetName or "an enemy planet") .. ". The defenders have limited time to respond")
 					end
 				end
 			else
 				if currentMode == lobby.PW_ATTACK then
-					statusText:SetText("An opposing faction is selecting a planet to attack.")
-				else
+					statusText:SetText("Waiting for your enemies to launch an attack.")
+				elseif defender then
 					local planets = lobby.planetwarsData.planets
 					local planetName = planets and planets[1] and planets[1].PlanetName
 					if planetName then
 						planetName = " " .. planetName
 					end
-					if defender then
-						statusText:SetText("Your planet" .. (planetName or "") .. " is under attack. Join the defense before it is too late.")
-					else
-						statusText:SetText("Another faction is attempting to fight off an invasion.")
-					end
+					statusText:SetText("Your planet" .. (planetName or "") .. " is under attack. Join the defense before it is too late!")
+				elseif currentMode == lobby.PW_DEFEND then
+					statusText:SetText("Another faction is preparing their response to an invasion.")
+				else
+					statusText:SetText("Planetwars is either offline or loading.")
 				end
 			end
 		end
@@ -878,7 +878,6 @@ function DelayedInitialize()
 		UpdateActivity(attackerFaction, defenderFactions, currentMode, planets)
 	end
 	lobby:AddListener("OnPwMatchCommand", OnPwMatchCommand)
-	
 	
 	local function DoUnMatchedActivityUpdate()
 		local planetwarsData = lobby:GetPlanetwarsData()
