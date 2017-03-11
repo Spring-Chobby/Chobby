@@ -185,12 +185,11 @@ local function GetPlanetImage(holder, x, y, size, planetImage, structureList)
 	local planetImageControl
 	
 	if planetImage then
-		local planetPad = math.floor(size*7/30)
 		planetImageControl = Image:New {
-			x = planetPad,
-			y = planetPad,
-			right = planetPad,
-			bottom = planetPad,
+			x = "25%",
+			y = "25%",
+			right = "25%",
+			bottom = "25%",
 			keepAspect = true,
 			file = "LuaMenu/images/planets/" .. planetImage,
 		}
@@ -206,18 +205,6 @@ local function GetPlanetImage(holder, x, y, size, planetImage, structureList)
 		padding = {1,1,1,1},
 		children = children,
 		parent = holder,
-		OnResize = {
-			function (obj, sizeX, sizeY)
-				if planetImageControl then
-					sizeX, sizeY = sizeX - 2, sizeY - 2 -- Padding
-					local planetPad = math.floor(math.max(sizeX, sizeY) * 7/30)
-					planetImageControl._relativeBounds.right = planetPad
-					planetImageControl._relativeBounds.bottom = planetPad
-					planetImageControl:UpdateClientArea()
-					planetImageControl:SetPos(planetPad, planetPad)
-				end
-			end
-		}
 	}
 	
 	return imagePanel
@@ -230,6 +217,9 @@ end
 local function InitializeActivityPromptHandler()
 	local lobby = WG.LibLobby.lobby
 	local planetData
+	
+	local planetID
+	local planetImage
 
 	local holder = Panel:New {
 		x = 0,
@@ -269,7 +259,7 @@ local function InitializeActivityPromptHandler()
 	local battleStatusText = TextBox:New {
 		x = 20,
 		y = 18,
-		width = "50%",
+		width = 160,
 		bottom = bottomBound,
 		fontsize = WG.Chobby.Configuration:GetFont(3).size,
 		text = "",
@@ -277,13 +267,21 @@ local function InitializeActivityPromptHandler()
 	}
 	
 	local function Resize(obj, xSize, ySize)
+		local statusX, statusY, statusWidth = 0, 0, 160
+		if planetImage then
+			planetImage:SetPos(1, 1, ySize - 2, ySize - 2)
+			statusX = ySize - 2
+			statusY = (ySize < 60 and 10) or 6
+			statusWidth = 200
+		end
+	
 		if ySize < 60 then
-			battleStatusText:SetPos(xSize/4 - 52, 2)
+			battleStatusText:SetPos(statusX + xSize/4 - 52, statusY + 2, statusWidth)
 			battleStatusText.font.size = WG.Chobby.Configuration:GetFont(2).size
 			battleStatusText:Invalidate()
 			bigMode = false
 		else
-			battleStatusText:SetPos(xSize/4 - 62, 18)
+			battleStatusText:SetPos(statusX + xSize/4 - 62, statusY + 18, statusWidth)
 			battleStatusText.font.size = WG.Chobby.Configuration:GetFont(3).size
 			battleStatusText:Invalidate()
 			bigMode = true
@@ -300,18 +298,30 @@ local function InitializeActivityPromptHandler()
 		planetData = newPlanetData
 		if alreadyJoined then
 			if isAttacker then
-				battleStatusText:SetText("Invading " .. planetData.PlanetName )
+				battleStatusText:SetText("Attacking: " .. planetData.PlanetName)
 			else
-				battleStatusText:SetText("Defending " .. planetData.PlanetName)
+				battleStatusText:SetText("Defending: " .. planetData.PlanetName)
 			end
 		else
 			if isAttacker then
-				battleStatusText:SetText("Invade planet " .. planetData.PlanetName )
+				battleStatusText:SetText("Attack planet " .. planetData.PlanetName)
 			else
 				battleStatusText:SetText("Defend planet " .. planetData.PlanetName)
 			end
 		end
+		
 		button:SetVisibility(not alreadyJoined)
+		if alreadyJoined then
+			if planetID ~= newPlanetData.PlanetID then
+				if planetImage then
+					planetImage:Dispose()
+				end
+				planetImage = GetPlanetImage(holder, 2, 2, 86, newPlanetData.PlanetImage, newPlanetData.StructureImages)
+			end
+		elseif planetImage then
+			planetImage:Dispose()
+			planetImage = nil
+		end
 	end
 	
 	function externalFunctions.GetHolder()
