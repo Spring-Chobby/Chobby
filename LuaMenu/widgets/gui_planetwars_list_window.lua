@@ -101,9 +101,28 @@ local function GetAttackingOrDefending(lobby, attackerFaction, defenderFactions)
 	return attacker, false
 end
 
-local function GetActivity(lobby, attackerFaction, defenderFactions, currentMode, planets)
-	local attacking, defending = GetAttackingOrDefending(lobby, attackerFaction, defenderFactions)
+local function GetActivityToPrompt(lobby, attackerFaction, defenderFactions, currentMode, planets)
+	if lobby.planetwarsData.attackingPlanet then
+		local planetID = lobby.planetwarsData.attackingPlanet
+		for i = 1, #planets do
+			if planets[i].PlanetID == planetID then
+				return planets[i], true, true
+			end
+		end
+		return false
+	end
 	
+	if lobby.planetwarsData.joinPlanet then
+		local planetID = lobby.planetwarsData.joinPlanet
+		for i = 1, #planets do
+			if planets[i].PlanetID == planetID then
+				return planets[i], false, true
+			end
+		end
+		return false
+	end
+	
+	local attacking, defending = GetAttackingOrDefending(lobby, attackerFaction, defenderFactions)
 	attacking, defending = (currentMode == lobby.PW_ATTACK) and attacking, (currentMode == lobby.PW_DEFEND) and defender
 	
 	if attacking then
@@ -262,13 +281,22 @@ local function InitializeActivityPromptHandler()
 	
 	local externalFunctions = {}
 	
-	function externalFunctions.SetActivity(newPlanetData, isAttacker)
+	function externalFunctions.SetActivity(newPlanetData, isAttacker, alreadyJoined)
 		planetData = newPlanetData
-		if isAttacker then
-			battleStatusText:SetText("Invade planet " .. planetData.PlanetName )
+		if alreadyJoined then
+			if isAttacker then
+				battleStatusText:SetText("Invading " .. planetData.PlanetName )
+			else
+				battleStatusText:SetText("Defending " .. planetData.PlanetName)
+			end
 		else
-			battleStatusText:SetText("Defend planet " .. planetData.PlanetName)
+			if isAttacker then
+				battleStatusText:SetText("Invade planet " .. planetData.PlanetName )
+			else
+				battleStatusText:SetText("Defend planet " .. planetData.PlanetName)
+			end
 		end
+		button:SetVisibility(not alreadyJoined)
 	end
 	
 	function externalFunctions.GetHolder()
@@ -801,9 +829,9 @@ function DelayedInitialize()
 	local function OnPwMatchCommand(listener, attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
 		phaseTimer.SetNewDeadline(deadlineSeconds)
 		
-		local planetData, isAttacker = GetActivity(lobby, attackerFaction, defenderFactions, currentMode, planets)
+		local planetData, isAttacker, alreadyJoined = GetActivityToPrompt(lobby, attackerFaction, defenderFactions, currentMode, planets)
 		if planetData then
-			activityPromptHandler.SetActivity(planetData, isAttacker)
+			activityPromptHandler.SetActivity(planetData, isAttacker, alreadyJoined)
 			statusAndInvitesPanel.AddControl(activityPromptHandler.GetHolder(), 5)
 		else
 			statusAndInvitesPanel.RemoveControl(activityPromptHandler.GetHolder().name)
