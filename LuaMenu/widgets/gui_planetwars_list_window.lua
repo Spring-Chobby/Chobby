@@ -167,7 +167,63 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Planet Drawer
+-- Extended Controls
+
+local function GetLinkButton(holder, x, y, width, text, link)
+	local config = WG.Chobby.Configuration
+	
+	local btnLink = Button:New {
+		x = x,
+		y = t,
+		width = width,
+		height = 24,
+		classname = "button_square",
+		caption = "",
+		padding = {0, 0, 0, 0},
+		parent = holder,
+		OnClick = {
+			function ()
+				WG.BrowserHandler.OpenUrl(link)
+			end
+		},
+		--tooltip = link,
+	}
+	local tbText = TextBox:New {
+		x = 2,
+		y = 3,
+		right = 20,
+		align = "left",
+		fontsize = config:GetFont(3).size,
+		parent = btnLink,
+	}
+	local imgLink = Image:New {
+		x = 0,
+		y = 4,
+		width = 18,
+		height = 18,
+		keepAspect = true,
+		file = IMG_LINK,
+		parent = btnLink,
+	}
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.SetText(newText)
+		newText = StringUtilities.GetTruncatedStringWithDotDot(newText, tbText.font, width - 24)
+		tbText:SetText(newText)
+		local length = tbText.font:GetTextWidth(newText)
+		imgLink:SetPos(length + 7)
+	end
+	
+	function externalFunctions.GetControl()
+		return btnLink
+	end
+	
+	-- Initialization
+	externalFunctions.SetText(text)
+	
+	return externalFunctions
+end
 
 local function GetPlanetImage(holder, x, y, size, planetImage, structureList)
 	local children = {}
@@ -655,6 +711,7 @@ local function InitializeControls(window)
 	
 	local title = "Planetwars"
 	local missingResources = false
+	local factionLinkButton
 	
 	local oldAttackerFaction, oldDefenderFactions, oldMode = "", {}, 1
 	
@@ -705,35 +762,90 @@ local function InitializeControls(window)
 		parent = window
 	}
 	
+	local function CheckPlanetwarsRequirements()
+		local myUserInfo = lobby:GetMyInfo()
+		
+		if not myUserInfo then
+			statusText:SetText("Error getting user info. Are you fully logged in?")
+			if factionLinkButton then
+				factionLinkButton:SetVisibility(false)
+			end
+			return false
+		end
+		
+		if (myUserInfo.level or 0) < 10 then
+			statusText:SetText("You need to be level 10 to participate in Planetwars.")
+			if factionLinkButton then
+				factionLinkButton:SetVisibility(false)
+			end
+			return false
+		end
+		
+		if (not myUserInfo.faction) or myUserInfo.faction == "" then
+			statusText:SetText("You need to join a faction.")
+			if not factionLinkButton then
+				factionLinkButton = Button:New {
+					x = 250,
+					y = 44,
+					width = 160,
+					height = 45,
+					caption = "Join a Faction",
+					font = Configuration:GetFont(3),
+					classname = "action_button",
+					OnClick = {
+						function()
+							WG.BrowserHandler.OpenUrl("http://zero-k.info/Factions")
+						end
+					},
+					parent = window
+				}
+			end
+			factionLinkButton:SetVisibility(true)
+			return false
+		end
+		
+		if factionLinkButton then
+			factionLinkButton:Dispose()
+		end
+		
+		return true
+	end
+	
 	local function UpdateStatusText(attacker, defender, currentMode)
-		if not missingResources then
-			if attacker then
-				if currentMode == lobby.PW_ATTACK then
-					statusText:SetText("Select a planet to attack. The invasion will launch when you are joined by enough players.")
-				else
-					local planets = lobby.planetwarsData.planets
-					local planetName = planets and planets[1] and planets[1].PlanetName
-					if lobby.planetwarsData.attackingPlanet then
-						statusText:SetText("You have launched an attack on " .. (planetName or "an enemy planet") .. ". The defenders have limited time to respond.")
-					else
-						statusText:SetText("Your faction is attacking " .. (planetName or "an enemy planet") .. ". The defenders have limited time to respond")
-					end
-				end
+		if not CheckPlanetwarsRequirements() then
+			return
+		end
+		
+		if missingResources then
+			return
+		end
+	
+		if attacker then
+			if currentMode == lobby.PW_ATTACK then
+				statusText:SetText("Select a planet to attack. The invasion will launch when you are joined by enough players.")
 			else
-				if currentMode == lobby.PW_ATTACK then
-					statusText:SetText("Waiting for your enemies to launch an attack.")
-				elseif defender then
-					local planets = lobby.planetwarsData.planets
-					local planetName = planets and planets[1] and planets[1].PlanetName
-					if planetName then
-						planetName = " " .. planetName
-					end
-					statusText:SetText("Your planet" .. (planetName or "") .. " is under attack. Join the defense before it is too late!")
-				elseif currentMode == lobby.PW_DEFEND then
-					statusText:SetText("Another faction is preparing their response to an invasion.")
+				local planets = lobby.planetwarsData.planets
+				local planetName = planets and planets[1] and planets[1].PlanetName
+				if lobby.planetwarsData.attackingPlanet then
+					statusText:SetText("You have launched an attack on " .. (planetName or "an enemy planet") .. ". The defenders have limited time to respond.")
 				else
-					statusText:SetText("Planetwars is either offline or loading.")
+					statusText:SetText("Your faction is attacking " .. (planetName or "an enemy planet") .. ". The defenders have limited time to respond")
 				end
+			end
+		else
+			if currentMode == lobby.PW_ATTACK then
+				statusText:SetText("Waiting for your enemies to launch an attack.")
+			elseif defender then
+				local planets = lobby.planetwarsData.planets
+				local planetName = planets and planets[1] and planets[1].PlanetName
+				if planetName then
+					planetName = " " .. planetName
+				end
+				statusText:SetText("Your planet" .. (planetName or "") .. " is under attack. Join the defense before it is too late!")
+			elseif currentMode == lobby.PW_DEFEND then
+				statusText:SetText("Another faction is preparing their response to an invasion.")
+			else
+				statusText:SetText("Planetwars is either offline or loading.")
 			end
 		end
 	end
@@ -777,17 +889,30 @@ local function InitializeControls(window)
 	end
 	lobby:AddListener("OnPwAttackingPlanet", OnPwAttackingPlanet)
 	
+	local function OnUpdateUserStatus(listener, userName, status)
+		if lobby:GetMyUserName() == userName and status.level then
+			local attacker, defender = GetAttackingOrDefending(lobby, oldAttackerFaction, oldDefenderFactions)
+			UpdateStatusText(attacker, defender, oldMode)
+		end
+	end
+	lobby:AddListener("OnUpdateUserStatus", OnUpdateUserStatus)
+	
 	local externalFunctions = {}
 	
 	function externalFunctions.CheckDownload()
+		
 		planetList.CheckDownload()
 		if not HaveRightEngineVersion() then
-			statusText:SetText(MISSING_ENGINE_TEXT)
+			if CheckPlanetwarsRequirements() then
+				statusText:SetText(MISSING_ENGINE_TEXT)
+			end
 			missingResources = true
 			return
 		end
 		if not HaveRightGameVersion() then
-			statusText:SetText(MISSING_GAME_TEXT)
+			if CheckPlanetwarsRequirements() then
+				statusText:SetText(MISSING_GAME_TEXT)
+			end
 			missingResources = true
 			return
 		end

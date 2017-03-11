@@ -1488,6 +1488,11 @@ function Lobby:GetMyUserName()
 	return self.myUserName
 end
 
+function Lobby:GetMyInfo()
+	local userInfo = self.users[self.myUserName]
+	return userInfo
+end
+
 function Lobby:GetMyFaction()
 	if self.myUserName and self.users[self.myUserName] then
 		return self.users[self.myUserName].faction
