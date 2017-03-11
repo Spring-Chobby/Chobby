@@ -913,8 +913,9 @@ function widget:Update()
 end
 
 function widget:DownloadFinished()
-	panelInterface.CheckDownload()
-	
+	if panelInterface then
+		panelInterface.CheckDownload()
+	end
 	if queuePlanetJoin then
 		TryToJoinPlanet(queuePlanetJoin)
 	end
