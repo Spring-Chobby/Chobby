@@ -103,7 +103,7 @@ local function GetAttackingOrDefending(lobby, attackerFaction, defenderFactions)
 end
 
 local function GetActivityToPrompt(lobby, attackerFaction, defenderFactions, currentMode, planets)
-	if lobby.planetwarsData.attackingPlanet then
+	if lobby.planetwarsData.attackingPlanet and planets then
 		local planetID = lobby.planetwarsData.attackingPlanet
 		for i = 1, #planets do
 			if planets[i].PlanetID == planetID then
@@ -113,7 +113,7 @@ local function GetActivityToPrompt(lobby, attackerFaction, defenderFactions, cur
 		return false
 	end
 	
-	if lobby.planetwarsData.joinPlanet then
+	if lobby.planetwarsData.joinPlanet and planets then
 		local planetID = lobby.planetwarsData.joinPlanet
 		for i = 1, #planets do
 			if planets[i].PlanetID == planetID then
@@ -127,9 +127,11 @@ local function GetActivityToPrompt(lobby, attackerFaction, defenderFactions, cur
 	attacking, defending = (currentMode == lobby.PW_ATTACK) and attacking, (currentMode == lobby.PW_DEFEND) and defender
 	
 	if attacking then
-		for i = 1, #planets do
-			if planets[i].Count + 1 == planets[i].Needed then
-				return planets[i], true
+		if planets then
+			for i = 1, #planets do
+				if planets[i].Count + 1 == planets[i].Needed then
+					return planets[i], true
+				end
 			end
 		end
 	elseif defending then
@@ -305,9 +307,9 @@ local function InitializeActivityPromptHandler()
 			end
 		else
 			if isAttacker then
-				battleStatusText:SetText("Attack planet " .. planetData.PlanetName)
+				battleStatusText:SetText("Attack planet\n" .. planetData.PlanetName)
 			else
-				battleStatusText:SetText("Defend planet " .. planetData.PlanetName)
+				battleStatusText:SetText("Defend planet\n" .. planetData.PlanetName)
 			end
 		end
 		
@@ -861,9 +863,7 @@ function DelayedInitialize()
 	end
 	lobby:AddListener("OnQueueOpened", AddQueue)
 	
-	local function OnPwMatchCommand(listener, attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
-		phaseTimer.SetNewDeadline(deadlineSeconds)
-		
+	local function UpdateActivity(attackerFaction, defenderFactions, currentMode, planets)
 		local planetData, isAttacker, alreadyJoined = GetActivityToPrompt(lobby, attackerFaction, defenderFactions, currentMode, planets)
 		if planetData then
 			activityPromptHandler.SetActivity(planetData, isAttacker, alreadyJoined)
@@ -872,7 +872,20 @@ function DelayedInitialize()
 			statusAndInvitesPanel.RemoveControl(activityPromptHandler.GetHolder().name)
 		end
 	end
+	
+	local function OnPwMatchCommand(listener, attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
+		phaseTimer.SetNewDeadline(deadlineSeconds)
+		UpdateActivity(attackerFaction, defenderFactions, currentMode, planets)
+	end
 	lobby:AddListener("OnPwMatchCommand", OnPwMatchCommand)
+	
+	
+	local function DoUnMatchedActivityUpdate()
+		local planetwarsData = lobby:GetPlanetwarsData()
+		UpdateActivity(planetwarsData.attackerFaction, planetwarsData.defenderFactions, planetwarsData.currentMode, planetwarsData.planets)
+	end
+	lobby:AddListener("OnPwJoinPlanetSuccess", DoUnMatchedActivityUpdate)
+	lobby:AddListener("OnPwAttackingPlanet", DoUnMatchedActivityUpdate)
 	
 	local function OnPwRequestJoinPlanet(listener, joinPlanetID)
 		Spring.Echo("OnPwRequestJoinPlanet", joinPlanetID)
