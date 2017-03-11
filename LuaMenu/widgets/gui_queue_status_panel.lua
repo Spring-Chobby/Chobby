@@ -124,7 +124,7 @@ local function InitializeQueueStatusHandler(name, ControlType, parent, pos)
 		queueStatusText._relativeBounds.bottom = bottomBound
 		queueStatusText:UpdateClientArea()
 		if ySize < 60 then
-			queueStatusText:SetPos(6, 2)
+			queueStatusText:SetPos(6, 3)
 			bigMode = false
 		else
 			queueStatusText:SetPos(8, 13)
@@ -251,6 +251,10 @@ local function InitializeInstantQueueHandler()
 	end
 	
 	function externalFunctions.ProcessInstantStartQueue(instantStartQueues)
+		if lobby.planetwarsData.attackingPlanet then
+			-- Don't show instant start when player is actively invading a planet and waiting for defenders.
+			return false
+		end
 		if instantStartQueues and #instantStartQueues > 0 then
 			local instantQueueName
 			local bestPriority = -1
@@ -266,6 +270,7 @@ local function InitializeInstantQueueHandler()
 				return true
 			end
 		end
+		return false
 	end
 	
 	function externalFunctions.GetHolder()

@@ -128,7 +128,6 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 		submenus[index].analyticsName = "lobby:" .. submenus[index].name
 		
 		local newPanelHandler = GetTabPanelHandler(submenus[index].name, buttonWindow, panelWindow, submenuPanelWindow, newTabs, true, BackToMainMenu, newCleanupFunction, fontSizeScale, nil, nil, nil, SetTitle, "lobby:" .. submenus[index].name)
-		Spring.Utilities.TableEcho(newPanelHandler, "newPanelHandler")
 		newPanelHandler.Rescale(fontSizeScale, buttonHeight, nil, buttonOffset, buttonSpacing)
 		newPanelHandler.Hide()
 		submenus[index].panelHandler = newPanelHandler
