@@ -33,12 +33,12 @@ function Configuration:init()
 	self.partialColor = "\255\190\210\50"
 	self.selectedColor = "\255\99\184\255"
 	self.meColor = "\255\0\190\190"
-	
+
 	self.moderatorColor = {0.68, 0.78, 1, 1}
 	self.founderColor = {0.7, 1, 0.65, 1}
 	self.ignoredUserNameColor = {0.6, 0.6, 0.6, 1}
 	self.userNameColor = {1, 1, 1, 1}
-	
+
 	self.buttonFocusColor = {0.54,0.72,1,0.3}
 	self.buttonSelectedColor = {0.54,0.72,1,0.6}--{1.0, 1.0, 1.0, 1.0}
 
@@ -48,10 +48,10 @@ function Configuration:init()
 	self.doNotSetAnySpringSettings = false
 	self.agressivelySetBorderlessWindowed = false
 	self.useWrongEngine = false
-	
+
 	self.myAccountID = false
 	self.lastAddedAiName = false
-	
+
 	self.battleTypeToName = {
 		[5] = "cooperative",
 		[6] = "team",
@@ -63,7 +63,7 @@ function Configuration:init()
 	-- Do not ask again tests.
 	self.confirmation_mainMenuFromBattle = false
 	self.confirmation_battleFromBattle = false
-	
+
 	self.leaveMultiplayerOnMainMenu = false
 
 	self.backConfirmation = {
@@ -90,12 +90,12 @@ function Configuration:init()
 
 	self.gameConfigName = "zk"
 	self.gameConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/mainConfig.lua")
-	
+
 	self.campaignPath = "campaign/sample"
 	self.campaignConfigName = "sample"
 	self.campaignConfig = VFS.Include("campaign/sample/mainConfig.lua")
 	self.campaignSaveFile = "Campaign1"
-	
+
 	-- TODO, generate this from directory structure
 	local gameConfigOptions = {
 		"zk",
@@ -103,7 +103,7 @@ function Configuration:init()
 		"zkdev",
 		"evorts"
 	}
-	
+
 	self.gameConfigOptions = {}
 	self.gameConfigHumanNames = {}
 	for i = 1, #gameConfigOptions do
@@ -116,7 +116,7 @@ function Configuration:init()
 			end
 		end
 	end
-	
+
 	self.lastLoginChatLength = 25
 	self.notifyForAllChat = true
 	self.simplifiedSkirmishSetup = true
@@ -133,7 +133,7 @@ function Configuration:init()
 	self.enableTextToSpeech = true
 	self.showOldAiVersions = false
 	self.drawAtFullSpeed = false
-	
+
 	self.chatFontSize = 18
 
 	self.font = {
@@ -148,8 +148,10 @@ function Configuration:init()
 	self.countryShortnames = VFS.Include(LUA_DIRNAME .. "configs/countryShortname.lua")
 
 	self.game_settings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings.lua")
-	
+
 	self.settingsMenuValues = self.gameConfig.settingsDefault
+
+	self.animate_lobby = gl.CreateShader ~= nil
 end
 
 ---------------------------------------------------------------------------------
@@ -162,14 +164,14 @@ function Configuration:SetConfigData(data)
 			self:SetConfigValue(k, v)
 		end
 	end
-	
+
 	-- Fix old channel memory.
 	for key, value in pairs(self.channels) do
 		if string.find(key, "debriefing") then
 			self.channels[key] = nil
 		end
 	end
-	
+
 	local newSpringsettings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettingsChanges.lua")
 	for key, value in pairs(newSpringsettings) do
 		self.game_settings[key] = value
@@ -192,6 +194,7 @@ function Configuration:GetConfigData()
 		game_fullscreen = self.game_fullscreen,
 		panel_layout = self.panel_layout,
 		lobby_fullscreen = self.lobby_fullscreen,
+		animate_lobby = self.animate_lobby,
 		game_settings = self.game_settings,
 		notifyForAllChat = self.notifyForAllChat,
 		simplifiedSkirmishSetup = self.simplifiedSkirmishSetup,
@@ -332,7 +335,7 @@ function Configuration:GetMinimapSmallImage(mapName)
 	mapName = string.gsub(mapName, " ", "_")
 	local filePath = self.gameConfig.minimapThumbnailPath .. mapName .. ".png"
 	if not VFS.FileExists(filePath) then
-		Spring.Log("Chobby", LOG.WARNING, "Missing minimap image for", mapName)
+		Log.Warning("Missing minimap image for", mapName)
 		return LUA_DIRNAME .. "images/minimapNotFound1.png"
 	end
 	return filePath
@@ -345,7 +348,7 @@ function Configuration:GetMinimapImage(mapName)
 	mapName = string.gsub(mapName, " ", "_")
 	local filePath = self.gameConfig.minimapOverridePath .. mapName .. ".jpg"
 	if not VFS.FileExists(filePath) then
-		Spring.Log("Chobby", LOG.WARNING, "Missing minimap image for", mapName)
+		Log.Warning("Missing minimap image for", mapName)
 		return LUA_DIRNAME .. "images/minimapNotFound1.png"
 	end
 	return filePath
@@ -359,7 +362,7 @@ function Configuration:GetCountryLongname(shortname)
 end
 
 function Configuration:GetHeadingImage(fullscreenMode, title)
-	local subheadings = self.gameConfig.subheadings 
+	local subheadings = self.gameConfig.subheadings
 	if fullscreenMode then
 		return (subheadings and subheadings.large and subheadings.large[title]) or self.gameConfig.headingLarge
 	else
@@ -385,7 +388,7 @@ function Configuration:GetDefaultGameName()
 	if not self.gameConfig then
 		return false
 	end
-	
+
 	local rapidTag = self.gameConfig._defaultGameRapidTag
 	if rapidTag and VFS.GetNameFromRapidTag then
 		local rapidName = VFS.GetNameFromRapidTag(rapidTag)
@@ -393,7 +396,7 @@ function Configuration:GetDefaultGameName()
 			return rapidName
 		end
 	end
-	
+
 	return self.gameConfig._defaultGameArchiveName
 end
 
@@ -447,7 +450,7 @@ end
 
 function Configuration:AddListener(event, listener)
 	if listener == nil then
-		Spring.Log(LOG_SECTION, LOG.ERROR, "Event: " .. tostring(event) .. ", listener cannot be nil")
+		Log.Error("Event: " .. tostring(event) .. ", listener cannot be nil")
 		return
 	end
 	local eventListeners = self.listeners[event]
@@ -477,13 +480,20 @@ function Configuration:_CallListeners(event, ...)
 		return nil -- no event listeners
 	end
 	local eventListeners = ShallowCopy(self.listeners[event])
+	local args = {...}
+	local n = select("#", ...)
 	for i = 1, #eventListeners do
 		local listener = eventListeners[i]
-		args = {...}
-		xpcall(function() listener(listener, unpack(args)) end,
+		xpcall(function() listener(listener, unpack(args, 1, n)) end,
 			function(err) self:_PrintError(err) end )
 	end
 	return true
+end
+
+function Configuration:_PrintError(err)
+	-- FIXME: cleanup more
+	Log.Error(err)
+	Log.Error(debug.traceback(err))
 end
 
 ---------------------------------------------------------------------------------

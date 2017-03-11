@@ -24,7 +24,7 @@ function Chotify:CloseNotification(id)
     window:Dispose()
     --[[
     ChiliFX:AddFadeEffect({
-        obj = window, 
+        obj = window,
         time = 0.2,
         endValue = 0,
         startValue = 1,
@@ -77,7 +77,7 @@ function Chotify:Post(obj)
     end
     --[[
     ChiliFX:AddFadeEffect({
-        obj = window, 
+        obj = window,
         time = 0.2,
         endValue = 1,
         startValue = 0,

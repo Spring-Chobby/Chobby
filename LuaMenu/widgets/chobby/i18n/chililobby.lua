@@ -138,6 +138,7 @@ return {
 		drawFullSpeed = "Full speed draw updates",
 		simplifiedSkirmishSetup = "Simple skirmish setup",
 		debugMode = "Debug mode",
+		animate_lobby = "Lobby animations",
 
 		-- chat_windows.lua
 		server = "Server",
@@ -193,6 +194,10 @@ return {
 		technology = "Technology",
 		options = "Options",
 		codex = "Codex",
+
+		-- gui_rank_update_window.lua
+		rank_gained = "Rank Gained",
+		rank_lost = "Rank Lost",
 	},
 	sr = {
 		connect_to_spring_server = 'Prijavljivanje na Spring lobi server',
