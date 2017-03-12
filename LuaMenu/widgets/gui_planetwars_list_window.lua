@@ -21,6 +21,7 @@ local IMG_LINK     = LUA_DIRNAME .. "images/link.png"
 
 local panelInterface
 local PLANET_NAME_LENGTH = 210
+local FACTION_SPACING = 128
 
 local phaseTimer
 local requiredGame = false
@@ -715,9 +716,9 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Initialization
+-- Faction Selection
 
-local function MakeFactionSelector(parent, x, y)
+local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc)
 	local Configuration = WG.Chobby.Configuration
 	
 	local factionText = VFS.Include(LUA_DIRNAME .. "configs/planetwars/factionText.lua") or {}
@@ -733,7 +734,7 @@ local function MakeFactionSelector(parent, x, y)
 		x = x,
 		y = y,
 		width = 360,
-		height = ((#factionList)*128) + 40,
+		height = (#factionList)*FACTION_SPACING + 40,
 		padding = {0, 0, 0, 0},
 		parent = parent,
 	}
@@ -771,6 +772,9 @@ local function MakeFactionSelector(parent, x, y)
 			OnClick = {
 				function()
 					lobby:JoinFactionRequest(shortname)
+					if SelectionFunc then
+						SelectionFunc()
+					end
 				end
 			},
 			parent = holder,
@@ -788,13 +792,13 @@ local function MakeFactionSelector(parent, x, y)
 			}
 		end
 		
-		offset = offset + 128
+		offset = offset + FACTION_SPACING
 	end
 
 	Button:New {
 		x = 110,
 		y = offset,
-		width = 170,
+		width = 164,
 		height = 35,
 		caption = "Factions Page",
 		font = Configuration:GetFont(2),
@@ -809,7 +813,7 @@ local function MakeFactionSelector(parent, x, y)
 		children = {
 			Image:New {
 				right = 1,
-				y = 3,
+				y = 4,
 				width = 18,
 				height = 18,
 				keepAspect = true,
@@ -818,8 +822,76 @@ local function MakeFactionSelector(parent, x, y)
 		}
 	}
 	
+	if CancelFunc then
+		Button:New {
+			x = 280,
+			y = offset,
+			width = 80,
+			height = 35,
+			font =  WG.Chobby.Configuration:GetFont(2),
+			caption = i18n("cancel"),
+			classname = "negative_button",
+			OnClick = {
+				function()
+					CancelFunc()
+				end
+			},
+			parent = holder,
+		}
+	end
+	
 	return holder
 end
+
+local function MakeFactionSelectionPopup()
+	local Configuration = WG.Chobby.Configuration
+	local lobby = WG.LibLobby.lobby
+	
+	local factionList = lobby and lobby.planetwarsData.factionList
+	if not factionList then
+		return 
+	end
+	
+	local factionWindow = Window:New {
+		x = 700,
+		y = 300,
+		width = 420,
+		height = 130 + (#factionList)*FACTION_SPACING,
+		caption = "",
+		resizable = false,
+		draggable = false,
+		parent = WG.Chobby.lobbyInterfaceHolder,
+		classname = "main_window",
+		OnDispose = {
+			function()
+				lobby:RemoveListener("OnJoinBattleFailed", onJoinBattleFailed)
+				lobby:RemoveListener("OnJoinBattle", onJoinBattle)
+			end
+		},
+	}
+	
+	local function CancelFunc()
+		factionWindow:Dispose()
+	end
+	
+	MakeFactionSelector(factionWindow, 16, 55, CancelFunc, CancelFunc)
+
+	TextBox:New {
+		x = 38,
+		right = 15,
+		y = 15,
+		height = 35,
+		fontsize = Configuration:GetFont(3).size,
+		text = "Join a faction to play Planetwars",
+		parent = factionWindow,
+	}
+	
+	local popupHolder = WG.Chobby.PriorityPopup(factionWindow, CancelFunc, CancelFunc)
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Initialization
 
 local function InitializeControls(window)
 	local Configuration = WG.Chobby.Configuration
@@ -1097,6 +1169,24 @@ function DelayedInitialize()
 		end
 	end
 	lobby:AddListener("OnQueueOpened", AddQueue)
+	
+	if not Configuration.alreadySeenFactionPopup then
+		local function OnLoginInfoEnd()
+			local myInfo = lobby:GetMyInfo()
+			if Configuration.alreadySeenFactionPopup then
+				return
+			end
+			if not (myInfo and myInfo.level and myInfo.level >= 2) then
+				return
+			end
+			Configuration.alreadySeenFactionPopup = true
+			if lobby:GetFactionData(myInfo.faction) then
+				return
+			end
+			MakeFactionSelectionPopup()
+		end
+		lobby:AddListener("OnLoginInfoEnd", OnLoginInfoEnd)
+	end
 	
 	local function UpdateActivity(attackerFaction, defenderFactions, currentMode, planets)
 		local planetData, isAttacker, alreadyJoined = GetActivityToPrompt(lobby, attackerFaction, defenderFactions, currentMode, planets)

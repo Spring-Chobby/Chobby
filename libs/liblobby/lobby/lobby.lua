@@ -30,6 +30,7 @@ function Lobby:_Clean()
 	self.isIgnored = {} -- map
 	self.ignoredCount = 0
 	self.ignoreListRecieved = false
+	self.loginInfoEndSent = false
 
 	self.channels = {}
 	self.channelCount = 0
@@ -436,6 +437,11 @@ function Lobby:_OnRegistrationDenied(reason, accountAlreadyExists)
 end
 
 function Lobby:_OnLoginInfoEnd()
+	-- Can be called from multiple sources internally. Only send once per login
+	if self.loginInfoEndSent then
+		return
+	end
+	self.loginInfoEndSent = true
 	self:_CallListeners("OnLoginInfoEnd")
 end
 

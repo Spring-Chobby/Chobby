@@ -1238,6 +1238,7 @@ function Interface:_MatchMakerSetup(data)
 		local queue = queues[i]
 		self:_OnQueueOpened(queue.Name, queue.Description, queue.Maps, queue.MaxPartySize, {queue.Game})
 	end
+	self:_OnLoginInfoEnd()
 end
 Interface.jsonCommands["MatchMakerSetup"] = Interface._MatchMakerSetup
 

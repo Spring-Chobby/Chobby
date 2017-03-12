@@ -24,6 +24,7 @@ function Configuration:init()
 	self.canAuthenticateWithSteam = false
 	self.wantAuthenticateWithSteam = true
 	self.steamLinkComplete = false
+	self.alreadySeenFactionPopup = false
 	self.channels = {}
 
 	self.errorColor = "\255\255\0\0"
@@ -189,6 +190,7 @@ function Configuration:GetConfigData()
 		firstLoginEver = self.firstLoginEver,
 		wantAuthenticateWithSteam = self.wantAuthenticateWithSteam,
 		steamLinkComplete = self.steamLinkComplete,
+		alreadySeenFactionPopup = self.alreadySeenFactionPopup,
 		channels = self.channels,
 		gameConfigName = self.gameConfigName,
 		game_fullscreen = self.game_fullscreen,
