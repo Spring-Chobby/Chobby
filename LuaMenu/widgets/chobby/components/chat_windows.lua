@@ -13,45 +13,6 @@ function ChatWindows:init()
 	-- setup debug console to listen to commands
 	self:CreateDebugConsole()
 
-	-- get a list of channels when login is done
-	lobby:AddListener("OnLoginInfoEnd",
-		function(listener)
-			lobby:RemoveListener("OnLoginInfoEnd", listener)
-
-			self.channels = {} -- list of known channels retrieved from OnChannel
-			local onChannel = function(listener, chanName, userCount, topic)
-				self.channels[chanName] = { userCount = userCount, topic = topic }
-			end
-
-			lobby:AddListener("OnChannel", onChannel)
-
-			lobby:AddListener("OnEndOfChannels",
-				function(listener)
-					lobby:RemoveListener("OnEndOfChannels", listener)
-					lobby:RemoveListener("OnChannel", onChannel)
-
-					local channelsArray = {}
-					for chanName, v in pairs(self.channels) do
-						table.insert(channelsArray, {
-							chanName = chanName,
-							userCount = v.userCount,
-							topic = v.topic,
-						})
-					end
-					table.sort(channelsArray,
-						function(a, b)
-							return a.userCount > b.userCount
-						end
-					)
-					self:UpdateChannels(channelsArray)
-				end
-			)
-
--- FIXME: It makes sense to sometimes get a list of all channels, but not always.
--- 			lobby:Channels()
-		end
-	)
-
 	lobby:AddListener("OnJoin",
 		function(listener, chanName)
 			local channelConsole = self:GetChannelConsole(chanName)
