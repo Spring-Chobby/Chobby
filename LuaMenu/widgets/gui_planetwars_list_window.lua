@@ -113,17 +113,18 @@ local function GetActivityToPrompt(lobby, attackerFaction, defenderFactions, cur
 		return false
 	end
 	
+	local attacking, defending = GetAttackingOrDefending(lobby, attackerFaction, defenderFactions)
+	
 	if lobby.planetwarsData.joinPlanet and planets then
 		local planetID = lobby.planetwarsData.joinPlanet
 		for i = 1, #planets do
 			if planets[i].PlanetID == planetID then
-				return planets[i], true, true
+				return planets[i], attacking, true
 			end
 		end
 		return false
 	end
 	
-	local attacking, defending = GetAttackingOrDefending(lobby, attackerFaction, defenderFactions)
 	attacking, defending = (currentMode == lobby.PW_ATTACK) and attacking, (currentMode == lobby.PW_DEFEND) and defending
 	
 	if attacking then
@@ -326,7 +327,15 @@ local function InitializeActivityPromptHandler()
 		parent = holder
 	}
 	
+	local oldXSize, oldYSize
 	local function Resize(obj, xSize, ySize)
+		if xSize then
+			oldXSize, oldYSize = xSize, ySize
+		elseif not oldXSize then
+			return
+		else
+			xSize, ySize = oldXSize, oldYSize
+		end
 		local statusX, statusY, statusWidth = 0, 0, 160
 		planetImageSize = ySize - 2
 		if planetImage then
@@ -372,6 +381,8 @@ local function InitializeActivityPromptHandler()
 		end
 		
 		button:SetVisibility(not alreadyJoined)
+		Resize()
+		
 		if alreadyJoined then
 			if planetID ~= newPlanetData.PlanetID then
 				if planetImage then
