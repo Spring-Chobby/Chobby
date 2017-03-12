@@ -607,6 +607,14 @@ function Interface:PwJoinPlanet(planetID)
 	return self
 end
 
+function Interface:JoinFactionRequest(factionName)
+	local sendData = {
+		Faction = factionName
+	}
+	self:_SendCommand("JoinFactionRequest " .. json.encode(sendData))
+	return self
+end
+
 ------------------------
 -- Steam commands
 ------------------------

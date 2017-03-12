@@ -359,6 +359,10 @@ function Lobby:PwJoinPlanet(planetID)
 	return self
 end
 
+function Lobby:JoinFactionRequest(factionName)
+	return self
+end
+
 ------------------------
 -- Steam commands
 ------------------------

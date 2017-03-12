@@ -229,10 +229,6 @@ function WrapperLoopback.DownloadImage(args)
 	SendCommand("DownloadImage", args)
 end
 
-function WrapperLoopback.JoinFactionRequest(name) 
-	SendCommand("JoinFactionRequest", {Faction = name})
-end
-
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Steam
