@@ -28,6 +28,8 @@ local requiredGame = false
 local MISSING_ENGINE_TEXT = "Game engine update required, restart the menu to apply."
 local MISSING_GAME_TEXT = "Game version update required. Wait for a download or restart to apply it immediately."
 
+local updates = 0
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
@@ -715,6 +717,110 @@ end
 --------------------------------------------------------------------------------
 -- Initialization
 
+local function MakeFactionSelector(parent, x, y)
+	local Configuration = WG.Chobby.Configuration
+	
+	local factionText = VFS.Include(LUA_DIRNAME .. "configs/planetwars/factionText.lua") or {}
+	
+	local lobby = WG.LibLobby.lobby
+	local factionList = lobby and lobby.planetwarsData.factionList
+	if not (lobby or factionList) then
+		return
+	end
+	
+	local offset = 0
+	local holder = Control:New {
+		x = x,
+		y = y,
+		width = 360,
+		height = ((#factionList)*128) + 40,
+		padding = {0, 0, 0, 0},
+		parent = parent,
+	}
+	
+	local startIndex, endIndex, direction = 1, #factionList, 1
+	if updates%2 == 0 then
+		startIndex, endIndex, direction = #factionList, 1, -1
+	end
+	
+	for i = startIndex, endIndex, direction do
+		local shortname = factionList[i].Shortcut
+		local name = factionList[i].Name
+		local factionData = factionText[shortname]
+		
+		if factionData.image then
+			Image:New {
+				x = 0,
+				y = offset,
+				width = 110,
+				height = 110,
+				keepAspect = true,
+				file = factionData.image,
+				parent = holder,
+			}
+		end
+		
+		Button:New {
+			x = 120,
+			y = offset + 10,
+			width = 240,
+			height = 45,
+			caption = "Join " .. name,
+			font = Configuration:GetFont(3),
+			classname = "action_button",
+			OnClick = {
+				function()
+					lobby:JoinFactionRequest(shortname)
+				end
+			},
+			parent = holder,
+		}
+		
+		if factionData.motto and factionData.desc then
+			TextBox:New {
+				x = 120,
+				y = offset + 66,
+				width = 240,
+				height = 45,
+				fontsize = Configuration:GetFont(2).size,
+				text = [["]] .. factionData.motto .. [["]] .. "\n" .. factionData.desc,
+				parent = holder,
+			}
+		end
+		
+		offset = offset + 128
+	end
+
+	Button:New {
+		x = 110,
+		y = offset,
+		width = 170,
+		height = 35,
+		caption = "Factions Page",
+		font = Configuration:GetFont(2),
+		classname = "option_button",
+		padding = {2,4,4,4},
+		OnClick = {
+			function()
+				WG.BrowserHandler.OpenUrl("http://zero-k.info/Factions")
+			end
+		},
+		parent = holder,
+		children = {
+			Image:New {
+				right = 1,
+				y = 3,
+				width = 18,
+				height = 18,
+				keepAspect = true,
+				file = IMG_LINK
+			}
+		}
+	}
+	
+	return holder
+end
+
 local function InitializeControls(window)
 	local Configuration = WG.Chobby.Configuration
 	local lobby = WG.LibLobby.lobby
@@ -780,6 +886,7 @@ local function InitializeControls(window)
 			if factionLinkButton then
 				factionLinkButton:SetVisibility(false)
 			end
+			listHolder:SetVisibility(false)
 			return false
 		end
 		
@@ -788,29 +895,17 @@ local function InitializeControls(window)
 			if factionLinkButton then
 				factionLinkButton:SetVisibility(false)
 			end
+			listHolder:SetVisibility(false)
 			return false
 		end
 		
 		if not lobby:GetFactionData(myUserInfo.faction) then
 			statusText:SetText("You need to join a faction.")
 			if not factionLinkButton then
-				factionLinkButton = Button:New {
-					x = 250,
-					y = 44,
-					width = 160,
-					height = 45,
-					caption = "Join a Faction",
-					font = Configuration:GetFont(3),
-					classname = "action_button",
-					OnClick = {
-						function()
-							WG.BrowserHandler.OpenUrl("http://zero-k.info/Factions")
-						end
-					},
-					parent = window
-				}
+				factionLinkButton = MakeFactionSelector(window, 25, 95)
 			end
 			factionLinkButton:SetVisibility(true)
+			listHolder:SetVisibility(false)
 			return false
 		end
 		
@@ -818,6 +913,8 @@ local function InitializeControls(window)
 			factionLinkButton:Dispose()
 			factionLinkButton = nil
 		end
+		
+		listHolder:SetVisibility(true)
 		
 		return true
 	end
@@ -1041,6 +1138,7 @@ end
 -- Widget Interface
 
 function widget:Update()
+	updates = updates + 1 -- Random number
 	if panelInterface then
 		panelInterface.UpdateTimer()
 	end
