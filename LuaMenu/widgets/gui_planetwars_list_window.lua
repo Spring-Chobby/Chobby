@@ -805,6 +805,7 @@ local function InitializeControls(window)
 		
 		if factionLinkButton then
 			factionLinkButton:Dispose()
+			factionLinkButton = nil
 		end
 		
 		return true
@@ -889,7 +890,7 @@ local function InitializeControls(window)
 	lobby:AddListener("OnPwAttackingPlanet", OnPwAttackingPlanet)
 	
 	local function OnUpdateUserStatus(listener, userName, status)
-		if lobby:GetMyUserName() == userName and status.level then
+		if lobby:GetMyUserName() == userName then
 			local attacking, defending = GetAttackingOrDefending(lobby, oldAttackerFaction, oldDefenderFactions)
 			UpdateStatusText(attacking, defending, oldMode)
 		end
