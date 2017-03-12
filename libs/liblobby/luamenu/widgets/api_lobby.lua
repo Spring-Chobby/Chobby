@@ -38,11 +38,16 @@ function widget:Initialize()
 	LCS = LCS()
 
 	WG.Server = config.server
-	Spring.Utilities.TableEcho(WG.Server)
-	if WG.Server.ZKServer then
+	Spring.Log("liblobby", LOG.NOTICE, "liblobby configuration: ")
+	for k, v in pairs(WG.Server) do
+		Spring.Log("liblobby", LOG.NOTICE, k, v)
+	end
+	if WG.Server.protocol == "zks" then
 		Interface = VFS.Include(LIB_LOBBY_DIRNAME .. "interface_zerok.lua", nil, VFS.RAW_FIRST)
-	else
+	elseif WG.Server.protocol == "spring" then
 		Interface = VFS.Include(LIB_LOBBY_DIRNAME .. "interface.lua", nil, VFS.RAW_FIRST)
+	else
+		Spring.Log("liblobby", LOG.ERROR, "Invalid liblobby interface specified: " .. tostring(WG.Server.interface))
 	end
 	InterfaceSkirmish = VFS.Include(LIB_LOBBY_DIRNAME .. "interface_skirmish.lua", nil, VFS.RAW_FIRST)
 	self.lobby = Interface()
