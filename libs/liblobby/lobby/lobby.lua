@@ -652,7 +652,7 @@ function Lobby:_OnBattleOpened(battleID, type, natType, founder, ip, port,
 	self.battles[battleID] = {
 		battleID = battleID, type = type, natType = natType, founder = founder, ip = ip, port = port,
 		maxPlayers = maxPlayers, passworded = passworded, rank = rank, mapHash = mapHash, spectatorCount = spectatorCount or 0,
-		engineName = engineName, engineVersion = engineVersion, mapName = mapName, title = title, gameName = gameName, users = {},
+		engineName = engineName, engineVersion = engineVersion, mapName = mapName, title = title, gameName = gameName, users = {founder},
 		isRunning = isRunning, runningSince = runningSince,
 		battleMode = battleMode, disallowCustomTeams = disallowCustomTeams, disallowBots = disallowBots, isMatchMaker = isMatchMaker,
 		playerCount = playerCount,
