@@ -30,6 +30,7 @@ function Lobby:_Clean()
 	self.isIgnored = {} -- map
 	self.ignoredCount = 0
 	self.ignoreListRecieved = false
+	self.loginInfoEndSent = false
 
 	self.channels = {}
 	self.channelCount = 0
@@ -359,6 +360,10 @@ function Lobby:PwJoinPlanet(planetID)
 	return self
 end
 
+function Lobby:JoinFactionRequest(factionName)
+	return self
+end
+
 ------------------------
 -- Steam commands
 ------------------------
@@ -432,6 +437,11 @@ function Lobby:_OnRegistrationDenied(reason, accountAlreadyExists)
 end
 
 function Lobby:_OnLoginInfoEnd()
+	-- Can be called from multiple sources internally. Only send once per login
+	if self.loginInfoEndSent then
+		return
+	end
+	self.loginInfoEndSent = true
 	self:_CallListeners("OnLoginInfoEnd")
 end
 
@@ -525,6 +535,10 @@ function Lobby:_OnUpdateUserStatus(userName, status)
 	if status and status.steamID then
 		self.userBySteamID[status.steamID] = userName
 	end
+	-- Server sends full tables, not diffs
+	self.users[userName] = {}
+	
+	-- Copy table in case some nonsense occurs.
 	for k, v in pairs(status) do
 		self.users[userName][k] = v
 	end
@@ -1124,6 +1138,15 @@ function Lobby:_OnPwAttackingPlanet(planetID)
 	self.planetwarsData.attackingPlanet = planetID
 	self:_CallListeners("OnPwAttackingPlanet", planetID)
 end
+
+function Lobby:_OnPwFactionUpdate(factionData)
+	self.planetwarsData.factionMap = {}
+	self.planetwarsData.factionList = factionData
+	for i = 1, #factionData do
+		self.planetwarsData.factionMap[factionData[i].Shortcut] = true
+	end
+end
+
 ------------------------
 -- Team commands
 ------------------------
@@ -1488,11 +1511,20 @@ function Lobby:GetMyUserName()
 	return self.myUserName
 end
 
+function Lobby:GetMyInfo()
+	local userInfo = self.users[self.myUserName]
+	return userInfo
+end
+
 function Lobby:GetMyFaction()
 	if self.myUserName and self.users[self.myUserName] then
 		return self.users[self.myUserName].faction
 	end
 	return false
+end
+
+function Lobby:GetFactionData(faction)
+	return faction and self.planetwarsData.factionMap and self.planetwarsData.factionMap[faction]
 end
 
 function Lobby:GetPlanetwarsData()

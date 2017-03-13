@@ -48,10 +48,13 @@ local function CreateRankUpdateWindow(oldIcon, newIcon)
 	local newRank, newLevel = IconToLevelRank(newIcon)
 	local isRankUp = newLevel > oldLevel or newRank > oldRank
 
+	local titleOffset
 	local caption
 	if isRankUp then
 		caption = i18n("rank_gained")
+		titleOffset = 45
 	else
+		titleOffset = 70
 		caption = i18n("rank_lost")
 	end
 
@@ -74,7 +77,7 @@ local function CreateRankUpdateWindow(oldIcon, newIcon)
 	end
 
 	local lblTitle = Label:New {
-		x = 40,
+		x = titleOffset,
 		right = 0,
 		y = 15,
 		height = 35,
@@ -84,7 +87,7 @@ local function CreateRankUpdateWindow(oldIcon, newIcon)
 	}
 
 	local btnClose = Button:New {
-		right = 1,
+		x = 76,
 		width = 135,
 		bottom = 1,
 		height = 40,
@@ -144,6 +147,8 @@ function DelayedInitialize()
 	end
 
 	lobby:AddListener("OnUpdateUserStatus", OnUpdateUserStatus)
+	
+	--WG.Delay(function() OnUpdateUserStatus(nil, "YourName", { icon = "5_5"}) end, 5)
 end
 
 

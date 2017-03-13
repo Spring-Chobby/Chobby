@@ -607,6 +607,14 @@ function Interface:PwJoinPlanet(planetID)
 	return self
 end
 
+function Interface:JoinFactionRequest(factionName)
+	local sendData = {
+		Faction = factionName
+	}
+	self:_SendCommand("JoinFactionRequest " .. json.encode(sendData))
+	return self
+end
+
 ------------------------
 -- Steam commands
 ------------------------
@@ -670,6 +678,10 @@ function Interface:_Welcome(data)
 	self.REVERSE_COMPAT = (data.Version == "1.4.9.26")
 	self:_OnConnect(4, data.Engine, 2, 1)
 	self:_OnUserCount(data.UserCount)
+	
+	if data.Factions then
+		self:_OnPwFactionUpdate(data.Factions)
+	end
 end
 Interface.jsonCommands["Welcome"] = Interface._Welcome
 
@@ -1226,6 +1238,7 @@ function Interface:_MatchMakerSetup(data)
 		local queue = queues[i]
 		self:_OnQueueOpened(queue.Name, queue.Description, queue.Maps, queue.MaxPartySize, {queue.Game})
 	end
+	self:_OnLoginInfoEnd()
 end
 Interface.jsonCommands["MatchMakerSetup"] = Interface._MatchMakerSetup
 
