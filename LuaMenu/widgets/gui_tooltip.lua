@@ -382,7 +382,8 @@ local function GetBattleTooltip(battleID, battle)
 		if not battleTooltip.battleMode then
 			battleTooltip.battleMode = GetTooltipLine(battleTooltip.mainControl)
 		end
-		battleTooltip.battleMode.Update(offset, i18n(Configuration.battleTypeToName[battle.battleMode]))
+		local modeName = Configuration.battleTypeToName[battle.battleMode]
+		battleTooltip.battleMode.Update(offset, (modeName and i18n(modeName)) or "")
 		offset = offset + 21
 	elseif battleTooltip.battleMode then
 		battleTooltip.battleMode.Hide()
