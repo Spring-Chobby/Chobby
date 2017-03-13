@@ -347,7 +347,7 @@ function Interface:_OnClientStatus(userName, status)
 	self:_OnUpdateUserStatus(userName, {
 		isInGame    = (status%2 == 1),
 		isAway      = (status%4 >= 2),
-		rank        = rshift(status, 2) % 8 + 1,
+		level       = rshift(status, 2) % 8 + 1,
 		isModerator = rshift(status, 5) % 2 == 1,
 		isBot       = rshift(status, 6) % 2 == 1,
 	})

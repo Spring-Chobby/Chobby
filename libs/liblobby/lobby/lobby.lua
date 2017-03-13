@@ -531,6 +531,11 @@ end
 -- Updates the specified status keys
 -- Status keys can be: isAway, isInGame, isModerator, rank, isBot
 -- Example: _OnUpdateUserStatus("gajop", {isAway=false, isInGame=true})
+-- TODO: Specify all the keys and enforce them like it's done for OnUpdateUserBattleStatus
+-- This should make it easier to use and implement interfaces correctly
+-- Additionally specify extra (protocol specific) things in a subtable, e.g. exts = { faction = factionID, ... }
+-- This should allow for some flexibility while we're standardizing this interface
+-- (some things such as steamID might become standardized in the future)
 function Lobby:_OnUpdateUserStatus(userName, status)
 	if status and status.steamID then
 		self.userBySteamID[status.steamID] = userName

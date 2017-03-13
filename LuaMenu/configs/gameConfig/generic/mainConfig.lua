@@ -1,6 +1,7 @@
 local shortname = "generic"
 
 local singleplayerConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/singleplayerMenu.lua")
+local rankFunction       = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/rankFunction.lua")
 local backgroundConfig   = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/skinConfig.lua")
 
 local settingsConfig, settingsDefault = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/settingsMenu.lua")
@@ -25,6 +26,7 @@ local externalFuncAndData = {
 	settingsDefault        = settingsDefault,
 	singleplayerConfig     = singleplayerConfig,
 	helpSubmenuConfig      = {},
+	rankFunction           = rankFunction,
 	headingLarge           = headingLarge,
 	headingSmall           = headingSmall,
 	background             = background,
