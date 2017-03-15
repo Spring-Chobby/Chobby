@@ -970,9 +970,45 @@ local function InitializeControls(window)
 		x = 5,
 		right = 5,
 		y = 100,
-		bottom = 5,
+		bottom = 55,
 		padding = {0, 0, 0, 0},
 		parent = window,
+	}
+	
+	Button:New {
+		x = 15,
+		bottom = 12,
+		width = 150,
+		height = 32,
+		caption = "Galaxy Map",
+		font = Configuration:GetFont(2),
+		classname = "option_button",
+		padding = {2,4,4,4},
+		OnClick = {
+			function()
+				WG.BrowserHandler.OpenUrl("http://zero-k.info/Planetwars")
+			end
+		},
+		children = {
+			Image:New {
+				right = 1,
+				y = 4,
+				width = 18,
+				height = 18,
+				keepAspect = true,
+				file = IMG_LINK
+			}
+		},
+		parent = window,
+	}
+	local seeMorePlanets = TextBox:New {
+		x = 174,
+		right = 16,
+		bottom = 18,
+		height = 50,
+		fontsize = Configuration:GetFont(2).size,
+		text = "Select planets on the Galaxy Map for more options.",
+		parent = window
 	}
 	
 	local planetList = GetPlanetList(listHolder)
