@@ -26,10 +26,15 @@ local FACTION_SPACING = 128
 local phaseTimer
 local requiredGame = false
 
+local URGENT_ATTACK_TIME = 300 -- Five minutes
+local attackUrgent = false
+
 local MISSING_ENGINE_TEXT = "Game engine update required, restart the menu to apply."
 local MISSING_GAME_TEXT = "Game version update required. Wait for a download or restart to apply it immediately."
 
 local updates = 0
+
+local DoUnMatchedActivityUpdate -- Activity update function
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -105,7 +110,16 @@ local function GetAttackingOrDefending(lobby, attackerFaction, defenderFactions)
 	return attacking, false
 end
 
+local function IsAttackUrgent()
+	local timeRemaining = phaseTimer and phaseTimer.GetTimeRemaining()
+	return timeRemaining and timeRemaining < URGENT_ATTACK_TIME
+end
+
 local function GetActivityToPrompt(lobby, attackerFaction, defenderFactions, currentMode, planets)
+	if not (planets and planets[1]) then
+		return false
+	end
+	
 	if lobby.planetwarsData.attackingPlanet and planets then
 		local planetID = lobby.planetwarsData.attackingPlanet
 		for i = 1, #planets do
@@ -131,7 +145,17 @@ local function GetActivityToPrompt(lobby, attackerFaction, defenderFactions, cur
 	attacking, defending = (currentMode == lobby.PW_ATTACK) and attacking, (currentMode == lobby.PW_DEFEND) and defending
 	
 	if attacking then
-		if planets then
+		if IsAttackUrgent() then
+			local attackPlanet, attackMissing
+			for i = 1, #planets do
+				local missingPlayers = planets[i].Needed - planets[i].Count
+				if (not attackMissing) or (missingPlayers < attackMissing) then
+					attackPlanet = planets[i]
+					attackMissing = missingPlayers
+				end
+			end
+			return attackPlanet, true
+		else
 			for i = 1, #planets do
 				if planets[i].Count + 1 == planets[i].Needed then
 					return planets[i], true
@@ -366,12 +390,12 @@ local function InitializeActivityPromptHandler()
 	
 		if ySize < 60 then
 			planetStatusTextBox:SetPos(statusX + xSize/4 - 52, 2, statusWidth)
-			seperator:SetPos(statusX + xSize/4 - 60, 14, statusWidth + 8)
+			seperator:SetPos(statusX + xSize/4 - 60, 14, statusWidth)
 			battleStatusTextBox:SetPos(statusX + xSize/4 - 52, 20, statusWidth)
 			bigMode = false
 		else
 			planetStatusTextBox:SetPos(statusX + xSize/4 - 62, 18, statusWidth)
-			seperator:SetPos(statusX + xSize/4 - 70, 34, statusWidth + 8)
+			seperator:SetPos(statusX + xSize/4 - 70, 34, statusWidth)
 			battleStatusTextBox:SetPos(statusX + xSize/4 - 62, 44, statusWidth)
 			bigMode = true
 		end
@@ -395,7 +419,6 @@ local function InitializeActivityPromptHandler()
 	
 	function externalFunctions.SetActivity(newPlanetData, isAttacker, alreadyJoined, waitingForAllies)
 		planetData = newPlanetData
-		local timeRemaining = phaseTimer.GetTimeRemaining()
 		if alreadyJoined then
 			if isAttacker then
 				planetStatusTextBox:SetText("Attacking: " .. planetData.PlanetName)
@@ -970,7 +993,7 @@ local function InitializeControls(window)
 		x = 5,
 		right = 5,
 		y = 100,
-		bottom = 55,
+		bottom = 52,
 		padding = {0, 0, 0, 0},
 		parent = window,
 	}
@@ -1277,12 +1300,14 @@ function DelayedInitialize()
 	end
 	lobby:AddListener("OnPwMatchCommand", OnPwMatchCommand)
 	
-	local function DoUnMatchedActivityUpdate()
+	local function UnMatchedActivityUpdate()
 		local planetwarsData = lobby:GetPlanetwarsData()
 		UpdateActivity(planetwarsData.attackerFaction, planetwarsData.defenderFactions, planetwarsData.currentMode, planetwarsData.planets)
 	end
-	lobby:AddListener("OnPwJoinPlanetSuccess", DoUnMatchedActivityUpdate)
-	lobby:AddListener("OnPwAttackingPlanet", DoUnMatchedActivityUpdate)
+	lobby:AddListener("OnPwJoinPlanetSuccess", UnMatchedActivityUpdate)
+	lobby:AddListener("OnPwAttackingPlanet", UnMatchedActivityUpdate)
+	
+	DoUnMatchedActivityUpdate = UnMatchedActivityUpdate
 	
 	local function OnPwRequestJoinPlanet(listener, joinPlanetID)
 		local planetwarsData = lobby:GetPlanetwarsData()
@@ -1308,6 +1333,13 @@ function widget:Update()
 	end
 	if activityPromptHandler then
 		activityPromptHandler.UpdateTimer()
+	end
+	if DoUnMatchedActivityUpdate then
+		local newUrgent = IsAttackUrgent()
+		if newUrgent ~= attackUrgent then
+			attackUrgent = newUrgent
+			DoUnMatchedActivityUpdate()
+		end
 	end
 end
 
