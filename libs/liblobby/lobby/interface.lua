@@ -325,14 +325,14 @@ Interface.commands["PONG"] = Interface._OnPong
 ------------------------
 
 function Interface:_OnAddUser(userName, country, cpu, accountID)
-	cpu = tonumber(cpu)
-	accountID = tonumber(accountID)
-	local status = {
+	local userTable = {
+		-- constant
+		accountID = tonumber(accountID),
+		-- persistent
 		country = country,
-		cpu = cpu,
-		accountID = accountID
+		--cpu = tonumber(cpu),
 	}
-	self:super("_OnAddUser", userName, status)
+	self:super("_OnAddUser", userName, userTable)
 end
 Interface.commands["ADDUSER"] = Interface._OnAddUser
 Interface.commandPattern["ADDUSER"] = "(%S+)%s+(%S%S)%s+(%S+)%s*(.*)"
@@ -345,15 +345,16 @@ Interface.commandPattern["REMOVEUSER"] = "(%S+)"
 
 function Interface:_OnClientStatus(userName, status)
 	self:_OnUpdateUserStatus(userName, {
-		isInGame    = (status%2 == 1),
-		isAway      = (status%4 >= 2),
-		level       = rshift(status, 2) % 8 + 1,
-		isModerator = rshift(status, 5) % 2 == 1,
-		isBot       = rshift(status, 6) % 2 == 1,
+		isInGame = (status%2 == 1),
+		isAway = (status%4 >= 2),
+		isAdmin = rshift(status, 5) % 2 == 1,
+		isBot = rshift(status, 6) % 2 == 1,
+
+		-- level is rank in Spring terminology
+		level = rshift(status, 2) % 8 + 1,
 	})
 
 	if status.isInGame ~= nil then
-
 		local battleID = self:GetBattleFoundedBy(userName)
 		if battleID then
 			self:_OnBattleIngameUpdate(battleID, status.isInGame)
@@ -440,18 +441,33 @@ Interface.commands["FRIENDREQUESTLISTEND"] = Interface._OnFriendRequestListEnd
 
 -- mapHash (32bit) will remain a string, since spring lua uses floats (24bit mantissa)
 function Interface:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other)
-	battleID = tonumber(battleID)
-	type = tonumber(type)
-	natType = tonumber(natType)
-	port = tonumber(port)
-	maxPlayers = tonumber(maxPlayers)
-	passworded = tonumber(passworded) ~= 0
-
-	local isRunning = self.users[founder].isInGame
-
 	local engineName, engineVersion, map, title, gameName = unpack(explode("\t", other))
 
-	self:super("_OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, engineName, engineVersion, map, title, gameName, isRunning)
+	self:super("_OnBattleOpened", tonumber(battleID), {
+		founder = founder,
+		users = {founder}, -- initial users
+
+		ip = ip,
+		port = tonumber(port),
+
+		maxPlayers = tonumber(maxPlayers),
+		passworded = tonumber(passworded) ~= 0,
+
+		engineName = engineName,
+		engineVersion = engineVersion,
+		mapName = map,
+		title = title,
+		gameName = gameName,
+
+		spectatorCount = 0,
+		--playerCount = nil,
+		isRunning = self.users[founder].isInGame,
+
+		-- Spring stuff
+		-- unsupported
+		--type = tonumber(type)
+		--natType = tonumber(natType)
+	})
 end
 Interface.commands["BATTLEOPENED"] = Interface._OnBattleOpened
 Interface.commandPattern["BATTLEOPENED"] = "(%d+)%s+(%d)%s+(%d)%s+(%S+)%s+(%S+)%s+(%d+)%s+(%d+)%s+(%d+)%s+(%S+)%s+(%S+)%s*(.*)"
