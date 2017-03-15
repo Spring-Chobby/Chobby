@@ -1291,25 +1291,25 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 	}
 	nextButton:Hide()
 
+	advButton = Button:New {
+		x = "78%",
+		right = "5%",
+		bottom = "4%",
+		height = 48,
+		classname = "option_button",
+		caption = "Advanced",
+		font = Configuration:GetFont(2),
+		OnClick = {
+			function(obj)
+				WG.Analytics.SendOnetimeEvent("lobby:singleplayer:skirmish:advanced")
+				subPanel:SetVisibility(false)
+				ApplyFunction(false)
+			end
+		},
+		parent = subPanel,
+	}
+
 	if not nextPage then
-		advButton = Button:New {
-			x = "78%",
-			right = "5%",
-			bottom = "4%",
-			height = 48,
-			classname = "option_button",
-			caption = "Advanced",
-			font = Configuration:GetFont(2),
-			OnClick = {
-				function(obj)
-					WG.Analytics.SendOnetimeEvent("lobby:singleplayer:skirmish:advanced")
-					subPanel:SetVisibility(false)
-					ApplyFunction(false)
-				end
-			},
-			parent = subPanel,
-		}
-		advButton:Hide()
 
 		if Configuration.canAuthenticateWithSteam and false then
 			lichoButton = Button:New {
