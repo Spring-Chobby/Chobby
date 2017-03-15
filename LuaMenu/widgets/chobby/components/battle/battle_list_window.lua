@@ -432,9 +432,11 @@ function BattleListWindow:UpdateSync(battleID)
 	
 	local imHaveMap = items.battleButton:GetChildByName("imHaveMap")
 	local imHaveGame = items.battleButton:GetChildByName("imHaveGame")
-
-	imHaveGame.file = (VFS.HasArchive(battle.gameName) and IMG_READY or IMG_UNREADY)
-	imHaveMap.file = (VFS.HasArchive(battle.mapName) and IMG_READY or IMG_UNREADY)
+	
+	if imHaveMap then
+		imHaveGame.file = (VFS.HasArchive(battle.gameName) and IMG_READY or IMG_UNREADY)
+		imHaveMap.file = (VFS.HasArchive(battle.mapName) and IMG_READY or IMG_UNREADY)
+	end
 end
 
 function BattleListWindow:UpdateTimers()
@@ -516,7 +518,7 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 	local minimapImage = items.battleButton:GetChildByName("minimap"):GetChildByName("minimapImage")
 	local password = items.battleButton:GetChildByName("password")
 	
-	if password then
+	if imHaveMap then
 		-- Password Update
 		if password and not battle.passworded then
 			password:Dispose()
