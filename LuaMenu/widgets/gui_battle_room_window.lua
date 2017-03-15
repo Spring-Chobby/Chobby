@@ -1633,7 +1633,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 	end
 
 	function externalFunctions.OnBattleClosed(listener, closedBattleID)
-		if battleID == closedBattleID then
+		if battleID == closedBattleID and mainWindow then
 			mainWindow:Dispose()
 			mainWindow = nil
 			if wrapperControl and wrapperControl.visible and wrapperControl.parent then

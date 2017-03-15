@@ -26,10 +26,15 @@ local FACTION_SPACING = 128
 local phaseTimer
 local requiredGame = false
 
+local URGENT_ATTACK_TIME = 300 -- Five minutes
+local attackUrgent = false
+
 local MISSING_ENGINE_TEXT = "Game engine update required, restart the menu to apply."
 local MISSING_GAME_TEXT = "Game version update required. Wait for a download or restart to apply it immediately."
 
 local updates = 0
+
+local DoUnMatchedActivityUpdate -- Activity update function
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -105,12 +110,21 @@ local function GetAttackingOrDefending(lobby, attackerFaction, defenderFactions)
 	return attacking, false
 end
 
+local function IsAttackUrgent()
+	local timeRemaining = phaseTimer and phaseTimer.GetTimeRemaining()
+	return timeRemaining and timeRemaining < URGENT_ATTACK_TIME
+end
+
 local function GetActivityToPrompt(lobby, attackerFaction, defenderFactions, currentMode, planets)
+	if not (planets and planets[1]) then
+		return false
+	end
+	
 	if lobby.planetwarsData.attackingPlanet and planets then
 		local planetID = lobby.planetwarsData.attackingPlanet
 		for i = 1, #planets do
 			if planets[i].PlanetID == planetID then
-				return planets[i], true, true
+				return planets[i], true, true, false
 			end
 		end
 		return false
@@ -122,7 +136,7 @@ local function GetActivityToPrompt(lobby, attackerFaction, defenderFactions, cur
 		local planetID = lobby.planetwarsData.joinPlanet
 		for i = 1, #planets do
 			if planets[i].PlanetID == planetID then
-				return planets[i], attacking, true
+				return planets[i], attacking, true, true
 			end
 		end
 		return false
@@ -131,7 +145,17 @@ local function GetActivityToPrompt(lobby, attackerFaction, defenderFactions, cur
 	attacking, defending = (currentMode == lobby.PW_ATTACK) and attacking, (currentMode == lobby.PW_DEFEND) and defending
 	
 	if attacking then
-		if planets then
+		if IsAttackUrgent() then
+			local attackPlanet, attackMissing
+			for i = 1, #planets do
+				local missingPlayers = planets[i].Needed - planets[i].Count
+				if (not attackMissing) or (missingPlayers < attackMissing) then
+					attackPlanet = planets[i]
+					attackMissing = missingPlayers
+				end
+			end
+			return attackPlanet, true
+		else
 			for i = 1, #planets do
 				if planets[i].Count + 1 == planets[i].Needed then
 					return planets[i], true
@@ -299,7 +323,7 @@ local function InitializeActivityPromptHandler()
 	
 	local button = Button:New {
 		name = "join",
-		x = "68%",
+		x = "70%",
 		right = 4,
 		y = 4,
 		bottom = 4,
@@ -320,13 +344,31 @@ local function InitializeActivityPromptHandler()
 	local bottomBound = 5
 	local bigMode = true
 	
-	local battleStatusText = TextBox:New {
+	local planetStatusTextBox = TextBox:New {
 		x = 20,
 		y = 18,
-		width = 160,
-		bottom = bottomBound,
-		fontsize = WG.Chobby.Configuration:GetFont(3).size,
+		width = 195,
+		height = 20,
+		fontsize = WG.Chobby.Configuration:GetFont(2).size,
 		text = "",
+		parent = holder
+	}
+	local battleStatusTextBox = TextBox:New {
+		x = 40,
+		y = 18,
+		width = 195,
+		height = 20,
+		fontsize = WG.Chobby.Configuration:GetFont(2).size,
+		text = "",
+		parent = holder
+	}
+	local battleStatusText = ""
+	
+	local seperator = Line:New {
+		x = 0,
+		y = 25,
+		width = 195,
+		height = 2,
 		parent = holder
 	}
 	
@@ -339,49 +381,67 @@ local function InitializeActivityPromptHandler()
 		else
 			xSize, ySize = oldXSize, oldYSize
 		end
-		local statusX, statusY, statusWidth = 0, 0, 160
+		local statusX, statusWidth = 2, 195
 		planetImageSize = ySize - 2
 		if planetImage then
 			planetImage:SetPos(1, 1, planetImageSize, planetImageSize)
-			statusX = ySize - 6
-			statusY = (ySize < 60 and 9) or 10
-			statusWidth = 200
+			statusX = ySize - 5
 		end
 	
 		if ySize < 60 then
-			battleStatusText:SetPos(statusX + xSize/4 - 52, statusY + 2, statusWidth)
-			battleStatusText.font.size = WG.Chobby.Configuration:GetFont(2).size
-			battleStatusText:Invalidate()
+			planetStatusTextBox:SetPos(statusX + xSize/4 - 52, 2, statusWidth)
+			seperator:SetPos(statusX + xSize/4 - 60, 14, statusWidth)
+			battleStatusTextBox:SetPos(statusX + xSize/4 - 52, 20, statusWidth)
 			bigMode = false
 		else
-			battleStatusText:SetPos(statusX + xSize/4 - 62, statusY + 18, statusWidth)
-			battleStatusText.font.size = WG.Chobby.Configuration:GetFont(3).size
-			battleStatusText:Invalidate()
+			planetStatusTextBox:SetPos(statusX + xSize/4 - 62, 18, statusWidth)
+			seperator:SetPos(statusX + xSize/4 - 70, 34, statusWidth)
+			battleStatusTextBox:SetPos(statusX + xSize/4 - 62, 44, statusWidth)
 			bigMode = true
 		end
-		battleStatusText._relativeBounds.bottom = bottomBound
-		battleStatusText:UpdateClientArea()
 	end
 	
 	holder.OnResize = {Resize}
 	
 	local externalFunctions = {}
 	
-	function externalFunctions.SetActivity(newPlanetData, isAttacker, alreadyJoined)
+	local oldTimeRemaing = ""
+	function externalFunctions.UpdateTimer(forceUpdate)
+		local timeRemaining = phaseTimer.GetTimeRemaining()
+		timeRemaining = (timeRemaining and Spring.Utilities.FormatTime(timeRemaining, false)) or ""
+		if timeRemaining == oldTimeRemaing and (not forceUpdate) then
+			return
+		end
+		oldTimeRemaing = timeRemaining
+		
+		battleStatusTextBox:SetText(battleStatusText .. timeRemaining)
+	end
+	
+	function externalFunctions.SetActivity(newPlanetData, isAttacker, alreadyJoined, waitingForAllies)
 		planetData = newPlanetData
 		if alreadyJoined then
 			if isAttacker then
-				battleStatusText:SetText("Attacking: " .. planetData.PlanetName)
+				planetStatusTextBox:SetText("Attacking: " .. planetData.PlanetName)
+				if waitingForAllies then
+					battleStatusText = "Attackers " .. newPlanetData.Count .. "/" .. newPlanetData.Needed .. ", " 
+				else
+					battleStatusText = "Defenders " .. newPlanetData.Count .. "/" .. newPlanetData.Needed .. ", " 
+				end
 			else
-				battleStatusText:SetText("Defending: " .. planetData.PlanetName)
+				planetStatusTextBox:SetText("Defending: " .. planetData.PlanetName)
+				battleStatusText = "Defenders " .. newPlanetData.Count .. "/" .. newPlanetData.Needed .. ", "
 			end
 		else
 			if isAttacker then
-				battleStatusText:SetText("Attack planet\n" .. planetData.PlanetName)
+				planetStatusTextBox:SetText("Attack: " .. planetData.PlanetName)
+				battleStatusText = "Players " .. newPlanetData.Count .. "/" .. newPlanetData.Needed .. ", "
 			else
-				battleStatusText:SetText("Defend planet\n" .. planetData.PlanetName)
+				planetStatusTextBox:SetText("Defend: " .. planetData.PlanetName)
+				battleStatusText = "Players " .. newPlanetData.Count .. "/" .. newPlanetData.Needed .. ", " 
 			end
 		end
+		
+		externalFunctions.UpdateTimer(true)
 		
 		button:SetVisibility(not alreadyJoined)
 		Resize()
@@ -933,9 +993,45 @@ local function InitializeControls(window)
 		x = 5,
 		right = 5,
 		y = 100,
-		bottom = 5,
+		bottom = 52,
 		padding = {0, 0, 0, 0},
 		parent = window,
+	}
+	
+	Button:New {
+		x = 15,
+		bottom = 12,
+		width = 150,
+		height = 32,
+		caption = "Galaxy Map",
+		font = Configuration:GetFont(2),
+		classname = "option_button",
+		padding = {2,4,4,4},
+		OnClick = {
+			function()
+				WG.BrowserHandler.OpenUrl("http://zero-k.info/Planetwars")
+			end
+		},
+		children = {
+			Image:New {
+				right = 1,
+				y = 4,
+				width = 18,
+				height = 18,
+				keepAspect = true,
+				file = IMG_LINK
+			}
+		},
+		parent = window,
+	}
+	local seeMorePlanets = TextBox:New {
+		x = 174,
+		right = 16,
+		bottom = 18,
+		height = 50,
+		fontsize = Configuration:GetFont(2).size,
+		text = "Select planets on the Galaxy Map for more options.",
+		parent = window
 	}
 	
 	local planetList = GetPlanetList(listHolder)
@@ -1189,9 +1285,9 @@ function DelayedInitialize()
 	end
 	
 	local function UpdateActivity(attackerFaction, defenderFactions, currentMode, planets)
-		local planetData, isAttacker, alreadyJoined = GetActivityToPrompt(lobby, attackerFaction, defenderFactions, currentMode, planets)
+		local planetData, isAttacker, alreadyJoined, waitingForAllies = GetActivityToPrompt(lobby, attackerFaction, defenderFactions, currentMode, planets)
 		if planetData then
-			activityPromptHandler.SetActivity(planetData, isAttacker, alreadyJoined)
+			activityPromptHandler.SetActivity(planetData, isAttacker, alreadyJoined, waitingForAllies)
 			statusAndInvitesPanel.AddControl(activityPromptHandler.GetHolder(), 5)
 		else
 			statusAndInvitesPanel.RemoveControl(activityPromptHandler.GetHolder().name)
@@ -1204,12 +1300,14 @@ function DelayedInitialize()
 	end
 	lobby:AddListener("OnPwMatchCommand", OnPwMatchCommand)
 	
-	local function DoUnMatchedActivityUpdate()
+	local function UnMatchedActivityUpdate()
 		local planetwarsData = lobby:GetPlanetwarsData()
 		UpdateActivity(planetwarsData.attackerFaction, planetwarsData.defenderFactions, planetwarsData.currentMode, planetwarsData.planets)
 	end
-	lobby:AddListener("OnPwJoinPlanetSuccess", DoUnMatchedActivityUpdate)
-	lobby:AddListener("OnPwAttackingPlanet", DoUnMatchedActivityUpdate)
+	lobby:AddListener("OnPwJoinPlanetSuccess", UnMatchedActivityUpdate)
+	lobby:AddListener("OnPwAttackingPlanet", UnMatchedActivityUpdate)
+	
+	DoUnMatchedActivityUpdate = UnMatchedActivityUpdate
 	
 	local function OnPwRequestJoinPlanet(listener, joinPlanetID)
 		local planetwarsData = lobby:GetPlanetwarsData()
@@ -1223,6 +1321,7 @@ function DelayedInitialize()
 	end
 	lobby:AddListener("OnPwRequestJoinPlanet", OnPwRequestJoinPlanet)
 end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface
@@ -1231,6 +1330,16 @@ function widget:Update()
 	updates = updates + 1 -- Random number
 	if panelInterface then
 		panelInterface.UpdateTimer()
+	end
+	if activityPromptHandler then
+		activityPromptHandler.UpdateTimer()
+	end
+	if DoUnMatchedActivityUpdate then
+		local newUrgent = IsAttackUrgent()
+		if newUrgent ~= attackUrgent then
+			attackUrgent = newUrgent
+			DoUnMatchedActivityUpdate()
+		end
 	end
 end
 

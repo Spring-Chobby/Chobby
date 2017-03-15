@@ -70,13 +70,7 @@ function FriendListWindow:OnRemoveUser(userName)
 end
 
 function FriendListWindow:CompareItems(userName1, userName2)
-	if userName1 < userName2 then
-		return 1
-	elseif userName1 == userName2 then
-		return 0
-	else
-		return -1
-	end
+	return userName1 < userName2
 end
 
 function FriendListWindow:AddFriendRequest(userName)

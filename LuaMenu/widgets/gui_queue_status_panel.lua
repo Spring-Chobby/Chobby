@@ -187,7 +187,7 @@ local function InitializeInstantQueueHandler()
 	
 	local button = Button:New {
 		name = "join",
-		x = "68%",
+		x = "70%",
 		right = 4,
 		y = 4,
 		bottom = 4,
