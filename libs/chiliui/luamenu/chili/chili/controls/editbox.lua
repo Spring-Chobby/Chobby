@@ -158,14 +158,24 @@ function EditBox:_SetSelection(selStart, selStartY, selEnd, selEndY)
 	self.selStartY = selStartY       or self.selStartY
 	self.selEnd    = selEnd          or self.selEnd
 	self.selEndY   = selEndY         or self.selEndY
-	if (selStart or selStartY) and self.lines[self.selStartY]then
-		local logicalLine = self.lines[self.selStartY]
-		self.selStartPhysical, self.selStartPhysicalY = self:_LineLog2Phys(logicalLine, self.selStart)
+	if selStart or selStartY then
+        if not self.lines[self.selStartY] then
+            Spring.Log("chiliui", LOG.ERROR, "self.lines[self.selStartY] is nil for self.selStartY: " .. tostring(self.selStartY) .. " and #self.lines: " .. tostring(#self.lines))
+            Spring.Log("chiliui", LOG.ERROR, debug.traceback())
+        else
+    		local logicalLine = self.lines[self.selStartY]
+    		self.selStartPhysical, self.selStartPhysicalY = self:_LineLog2Phys(logicalLine, self.selStart)
+        end
 	end
 
-	if (selEnd or selEndY) and self.lines[self.selStartY] then
-		local logicalLine = self.lines[self.selEndY]
-		self.selEndPhysical, self.selEndPhysicalY  = self:_LineLog2Phys(logicalLine, self.selEnd)
+	if selEnd or selEndY then
+        if not self.lines[self.selEndY] then
+            Spring.Log("chiliui", LOG.ERROR, "self.lines[self.selEndY] is nil for self.selEndY: " .. tostring(self.selEndY) .. " and #self.lines: " .. tostring(#self.lines))
+            Spring.Log("chiliui", LOG.ERROR, debug.traceback())
+        else
+    		local logicalLine = self.lines[self.selEndY]
+    		self.selEndPhysical, self.selEndPhysicalY  = self:_LineLog2Phys(logicalLine, self.selEnd)
+        end
 	end
 end
 
@@ -616,7 +626,7 @@ function EditBox:MouseUp(...)
 end
 
 function EditBox:Select(startIndex, endIndex)
-	self:_SetSelection(startIndex, endIndex, 1, 1)
+	self:_SetSelection(startIndex, 1, endIndex, 1)
 	self:Invalidate()
 end
 
@@ -695,6 +705,7 @@ end
 
 function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	local cp = self.cursor
+    local cpy = self.cursorY
 	local txt = self.text
 	local eatInput = true
 
@@ -777,9 +788,9 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	if key == Spring.GetKeyCode("left") or key == Spring.GetKeyCode("right") or key == Spring.GetKeyCode("home") or key == Spring.GetKeyCode("end") then
 		if mods.shift then
 			if not self.selStart then
-				self:_SetSelection(cp, nil, nil, nil)
+				self:_SetSelection(cp, cpy, nil, nil)
 			end
-			self:_SetSelection(nil, nil, self.cursor, nil)
+			self:_SetSelection(nil, nil, self.cursor, self.cursorY)
 		elseif self.selStart then
 			self.selStart = nil
 			self.selEnd = nil
