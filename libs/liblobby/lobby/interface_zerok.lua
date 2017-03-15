@@ -993,12 +993,12 @@ function Interface:_BattleUpdate(data)
 		playerCount = header.PlayerCount,
 		spectatorCount = header.SpectatorCount,
 
-		runningSince = header.RunningSince
+		runningSince = header.RunningSince,
 		battleMode = header.Mode,
 		disallowCustomTeams = header.Mode and (header.Mode ~= 0),
 		disallowBots = header.Mode and (header.Mode ~= 5 and header.Mode ~= 0),
 		isMatchMaker = header.IsMatchMaker,
-	end
+	}
 
 	self:_OnUpdateBattleInfo(header.BattleID, battleInfo)
 	
