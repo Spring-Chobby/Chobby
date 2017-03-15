@@ -6,6 +6,7 @@ local function LoadConfig(filePath)
 	end
 	if not VFS.FileExists(CONFIG_FILE) then
 		Spring.Log("liblobby", LOG.WARNING, "Missing chobby_config.json file.")
+		return
 	end
 	local config
 	xpcall(function()
