@@ -205,11 +205,9 @@ function ListWindow:RecalculatePosition(index)
 	child:UpdateClientArea()
 end
 
--- res >  0: id1 before id2
--- res == 0: equal
--- res <  0: id2 before id1
+-- return true if id1 should be before id2
 function ListWindow:CompareItems(id1, id2)
-	return 0
+	return true
 end
 
 function ListWindow:SwapPlaces(panel1, panel2)
@@ -242,18 +240,18 @@ function ListWindow:RecalculateOrder(id)
 
 	-- move panel up if needed
 	while panel.index > 1 do
-		local panel2 = self.orderPanelMapping[panel.index - 1]
-		if self:CompareItems(panel.id, panel2.id) > 0 then
-			self:SwapPlaces(panel, panel2)
+		local prevPanel = self.orderPanelMapping[panel.index - 1]
+		if not self:CompareItems(panel.id, prevPanel.id) then
+			self:SwapPlaces(panel, prevPanel)
 		else
 			break
 		end
 	end
 	-- move panel down if needed
 	while panel.index < #self.listPanel.children - 1 do
-		local panel2 = self.orderPanelMapping[panel.index + 1]
-		if self:CompareItems(panel.id, panel2.id) < 0 then
-			self:SwapPlaces(panel, panel2)
+		local nextPanel = self.orderPanelMapping[panel.index + 1]
+		if self:CompareItems(panel.id, nextPanel.id) then
+			self:SwapPlaces(panel, nextPanel)
 		else
 			break
 		end

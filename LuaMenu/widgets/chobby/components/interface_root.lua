@@ -427,7 +427,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local queueListWindow = WG.QueueListWindow.GetControl()
 	local battleListWindow = BattleListWindow()
-	local battleWatchListWindow = BattleWatchListWindow()
 	local planetwarsListWindow = WG.PlanetwarsListWindow.GetControl()
 
 	local MULTIPLAYER_INDEX = 2
@@ -441,8 +440,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			entryCheck = WG.LoginWindowHandler.TryLoginMultiplayer,
 			tabs = {
 				{name = "matchmaking", control = queueListWindow},
-				{name = "watch", control = battleWatchListWindow.window},
-				{name = "custom", control = battleListWindow.window},
+				{name = "battle_list", control = battleListWindow.window},
 				{name = "planetwars", control = planetwarsListWindow},
 				
 			},

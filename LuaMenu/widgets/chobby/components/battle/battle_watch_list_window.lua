@@ -202,12 +202,12 @@ end
 
 function BattleWatchListWindow:CompareItems(id1, id2)
 	if id1 and id2 then
-		return lobby:GetBattlePlayerCount(id1) - lobby:GetBattlePlayerCount(id2)
+		return lobby:GetBattlePlayerCount(id1) > lobby:GetBattlePlayerCount(id2)
 	else
 		local battle1, battle2 = lobby:GetBattle(id1), lobby:GetBattle(id2)
 		Spring.Echo("battle1", id1, battle1, battle1 and battle1.users)
 		Spring.Echo("battle2", id2, battle2, battle2 and battle2.users)
-		return 0
+		return false
 	end
 end
 
