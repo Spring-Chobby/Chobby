@@ -729,7 +729,7 @@ Interface.jsonCommands["LoginResponse"] = Interface._LoginResponse
 ------------------------
 
 -- This should be a local function but that does not work nicely.
-function Interface:UpdateUserBattleStatus(userName, newBattleID)	
+function Interface:UpdateUserBattleStatus(userName, newBattleID)
 	if not self.REVERSE_COMPAT then
 		local currentBattle = self.users[userName].battleID
 		if newBattleID ~= currentBattle then
@@ -759,9 +759,9 @@ function Interface:_User(data)
 	-- CHECKME: verify that name, country, cpu and similar info doesn't change
 	-- It can change now that we remember user data of friends through disconnect.
 	local userTable = {
-			country = data.Country,
-			clan = data.Clan,
-			faction = data.Faction,
+			country = data.Country or false,
+			clan = data.Clan or false,
+			faction = data.Faction or false,
 			lobbyVersion = data.LobbyVersion,
 			accountID = data.AccountID,
 			isInGame = data.IsInGame,
