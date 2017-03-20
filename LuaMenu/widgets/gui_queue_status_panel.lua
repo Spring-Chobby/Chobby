@@ -18,7 +18,7 @@ end
 -- Variables
 local statusQueueLobby -- global for timer update
 local statusQueueIngame
-local readyCheckPopup 
+local readyCheckPopup
 local findingMatch = false
 
 local instantStartQueuePriority = {
@@ -47,7 +47,7 @@ local function InitializeQueueStatusHandler(name, ControlType, parent, pos)
 	local lobby = WG.LibLobby.lobby
 
 	ControlType = ControlType or Panel
-	
+
 	local queuePanel = ControlType:New {
 		name = name,
 		x = (pos and pos.x) or ((not pos) and 0),
@@ -63,7 +63,7 @@ local function InitializeQueueStatusHandler(name, ControlType, parent, pos)
 		draggable = false,
 		parent = parent
 	}
-	
+
 	local button = Button:New {
 		name = "cancel",
 		x = "70%",
@@ -81,17 +81,17 @@ local function InitializeQueueStatusHandler(name, ControlType, parent, pos)
 		},
 		parent = queuePanel,
 	}
-	
+
 	local rightBound = "33%"
 	local bottomBound = 12
 	local bigMode = true
 	local queueTimer = Spring.GetTimer()
-	
+
 	local timeWaiting = 0
 	local queueString = ""
 	local playersString = ""
 	local timeString = ""
-	
+
 	local queueStatusText = TextBox:New {
 		x = 8,
 		y = 12,
@@ -101,7 +101,7 @@ local function InitializeQueueStatusHandler(name, ControlType, parent, pos)
 		text = "",
 		parent = queuePanel
 	}
-	
+
 	local function UpdateTimer(forceUpdate)
 		if not queueTimer then
 			return
@@ -114,11 +114,11 @@ local function InitializeQueueStatusHandler(name, ControlType, parent, pos)
 		timeString = SecondsToMinutes(timeWaiting)
 		queueStatusText:SetText("Finding Match - " .. timeString .. "\n" .. queueString .. ((bigMode and  "\nPlayers: ") or "\nPlay: ") .. playersString)
 	end
-		
+
 	local function UpdateQueueText()
 		UpdateTimer(true)
 	end
-	
+
 	local function Resize(obj, xSize, ySize)
 		queueStatusText._relativeBounds.right = rightBound
 		queueStatusText._relativeBounds.bottom = bottomBound
@@ -132,19 +132,19 @@ local function InitializeQueueStatusHandler(name, ControlType, parent, pos)
 		end
 		UpdateQueueText()
 	end
-	
+
 	queuePanel.OnResize = {Resize}
-	
+
 	local externalFunctions = {}
-	
+
 	function externalFunctions.ResetTimer()
 		queueTimer = Spring.GetTimer()
 	end
-	
+
 	function externalFunctions.UpdateTimer(forceUpdate)
 		UpdateTimer(forceUpdate)
 	end
-	
+
 	function externalFunctions.UpdateMatches(joinedQueueList, queueCounts, currentEloWidth, joinedTime)
 		local firstQueue = true
 		playersString = ""
@@ -156,16 +156,16 @@ local function InitializeQueueStatusHandler(name, ControlType, parent, pos)
 			end
 			playersString = playersString .. ((queueCounts and queueCounts[joinedQueueList[i]]) or 0)
 			firstQueue = false
-			queueString = queueString .. joinedQueueList[i] 
+			queueString = queueString .. joinedQueueList[i]
 		end
-		
+
 		UpdateQueueText()
 	end
-	
+
 	function externalFunctions.GetHolder()
 		return queuePanel
 	end
-	
+
 	return externalFunctions
 end
 
@@ -184,7 +184,7 @@ local function InitializeInstantQueueHandler()
 		resizable = false,
 		draggable = false,
 	}
-	
+
 	local button = Button:New {
 		name = "join",
 		x = "70%",
@@ -202,11 +202,11 @@ local function InitializeInstantQueueHandler()
 		},
 		parent = queuePanel,
 	}
-	
+
 	local rightBound = "50%"
 	local bottomBound = 12
 	local bigMode = true
-	
+
 	local queueStatusText = TextBox:New {
 		x = 20,
 		y = 18,
@@ -215,14 +215,14 @@ local function InitializeInstantQueueHandler()
 		fontsize = WG.Chobby.Configuration:GetFont(3).size,
 		text = "",
 		parent = queuePanel
-	}	
-		
+	}
+
 	local function UpdateQueueText()
 		if queueName then
 			queueStatusText:SetText(queueName .. " Available\nClick to Join")
 		end
 	end
-	
+
 	local function Resize(obj, xSize, ySize)
 		queueStatusText._relativeBounds.right = rightBound
 		queueStatusText._relativeBounds.bottom = bottomBound
@@ -240,16 +240,16 @@ local function InitializeInstantQueueHandler()
 		end
 		UpdateQueueText()
 	end
-	
+
 	queuePanel.OnResize = {Resize}
-	
+
 	local externalFunctions = {}
-	
+
 	function externalFunctions.UpdateQueueName(newQueueName)
 		queueName = newQueueName
 		UpdateQueueText()
 	end
-	
+
 	function externalFunctions.ProcessInstantStartQueue(instantStartQueues)
 		if lobby.planetwarsData.attackingPlanet then
 			-- Don't show instant start when player is actively invading a planet and waiting for defenders.
@@ -272,11 +272,11 @@ local function InitializeInstantQueueHandler()
 		end
 		return false
 	end
-	
+
 	function externalFunctions.GetHolder()
 		return queuePanel
 	end
-	
+
 	return externalFunctions
 end
 
@@ -286,15 +286,25 @@ end
 
 local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 	local Configuration = WG.Chobby.Configuration
-	
+
+	local snd_volui = Spring.GetConfigString("snd_volui")
+	local snd_volmaster = Spring.GetConfigString("snd_volmaster")
+	-- These are defaults. Should be audible enough.
+	Spring.SetConfigString("snd_volui", 100)
+	Spring.SetConfigString("snd_volmaster", 60)
 	if Configuration.menuNotificationVolume ~= 0 then
-		Spring.PlaySoundFile("sounds/matchFound.wav", Configuration.menuNotificationVolume or 1)
+	    Spring.PlaySoundFile("sounds/matchFound.wav", Configuration.menuNotificationVolume or 1, "ui")
 	end
-	
+	WG.Delay(function()
+	    Spring.SetConfigString("snd_volui", snd_volui)
+	    Spring.SetConfigString("snd_volmaster", snd_volmaster)
+	end, 10)
+
+
 	if WG.WrapperLoopback then
 		WG.WrapperLoopback.Alert("Match found")
 	end
-	
+
 	local readyCheckWindow = Window:New {
 		caption = "",
 		name = "readyCheckWindow",
@@ -341,7 +351,7 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 	local displayTimer = true
 	local startTimer = Spring.GetTimer()
 	local timeRemaining = secondsRemaining
-	
+
 	local function DoDispose()
 		if readyCheckWindow then
 			readyCheckWindow:Dispose()
@@ -349,7 +359,7 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 			DestroyFunc()
 		end
 	end
-	
+
 	local function CancelFunc()
 		lobby:RejectMatchMakingMatch()
 		statusLabel:SetText(Configuration:GetErrorColor() .. "Rejected match")
@@ -395,9 +405,9 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 	}
 
 	local popupHolder = WG.Chobby.PriorityPopup(readyCheckWindow, CancelFunc, AcceptFunc, screen0)
-	
+
 	local externalFunctions = {}
-	
+
 	function externalFunctions.UpdateTimer()
 		local newTimeRemaining = secondsRemaining - math.ceil(Spring.DiffTimers(Spring.GetTimer(), startTimer))
 		if newTimeRemaining < 0 then
@@ -412,27 +422,27 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 		timeRemaining = newTimeRemaining
 		statusLabel:SetText(((acceptRegistered and "Waiting for players ") or "Accept in ") .. SecondsToMinutes(timeRemaining))
 	end
-	
+
 	function externalFunctions.UpdatePlayerCount(readyPlayers)
 		-- queueReadyCounts is not a useful number.
 		playersAcceptedLabel:SetCaption("Players accepted: " .. readyPlayers)
 	end
-	
+
 	function externalFunctions.AcceptRegistered()
 		if acceptRegistered then
 			return
 		end
 		acceptRegistered = true
 		statusLabel:SetText("Waiting for players " .. (timeRemaining or "time error") .. "s")
-		
+
 		buttonAccept:Hide()
-		
+
 		buttonReject:SetPos(nil, nil, 90, 60)
 		buttonReject._relativeBounds.right = 1
 		buttonReject._relativeBounds.bottom = 1
 		buttonReject:UpdateClientArea()
 	end
-	
+
 	function externalFunctions.MatchMakingComplete(success)
 		if success then
 			statusLabel:SetText(Configuration:GetSuccessColor() .. "Battle starting")
@@ -444,7 +454,7 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 		displayTimer = false
 		WG.Delay(DoDispose, 3)
 	end
-	
+
 	return externalFunctions
 end
 
@@ -463,11 +473,11 @@ function widget:ActivateGame()
 	if not savedQueues then
 		return
 	end
-	
+
 	for queueName, _ in pairs(savedQueues) do
 		WG.LibLobby.lobby:JoinMatchMaking(queueName)
 	end
-	
+
 	savedQueues = nil
 end
 
@@ -485,21 +495,21 @@ function DelayedInitialize()
 	local lobby = WG.LibLobby.lobby
 
 	local statusAndInvitesPanel = WG.Chobby.interfaceRoot.GetStatusAndInvitesPanel()
-	
+
 	statusQueueLobby = InitializeQueueStatusHandler("lobbyQueue")
 	instantQueueHandler = InitializeInstantQueueHandler()
-	
+
 	local previouslyInMatchMaking = false
 	local previousInstantStart = false
 	local function OnMatchMakerStatus(listener, inMatchMaking, joinedQueueList, queueCounts, ingameCounts, instantStartQueues, currentEloWidth, joinedTime, bannedTime)
 		findingMatch = inMatchMaking
-		
+
 		if not statusQueueIngame then
 			local pos = {right = 2, y = 52, width = 290, height = 70}
 			statusQueueIngame = InitializeQueueStatusHandler("ingameQueue", Window, WG.Chobby.interfaceRoot.GetIngameInterfaceHolder(), pos)
 			statusQueueIngame.GetHolder():SetVisibility(inMatchMaking)
 		end
-		
+
 		if inMatchMaking then
 			if not previouslyInMatchMaking then
 				statusQueueIngame.ResetTimer()
@@ -514,9 +524,9 @@ function DelayedInitialize()
 			statusQueueIngame.GetHolder():SetVisibility(inMatchMaking)
 		end
 		previouslyInMatchMaking = inMatchMaking
-		
+
 		local instantStart = ((not bannedTime) and WG.QueueListWindow.HaveMatchMakerResources() and instantQueueHandler.ProcessInstantStartQueue(instantStartQueues))
-		if previousInstantStart then	
+		if previousInstantStart then
 			if not instantStart then
 				statusAndInvitesPanel.RemoveControl(instantQueueHandler.GetHolder().name)
 			end
@@ -525,17 +535,17 @@ function DelayedInitialize()
 		end
 		previousInstantStart = instantStart
 	end
-	
+
 	local function DestroyReadyCheckPopup()
 		readyCheckPopup = nil
 	end
-	
+
 	local function OnMatchMakerReadyCheck(_, secondsRemaining)
 		if not readyCheckPopup then
 			readyCheckPopup = CreateReadyCheckWindow(secondsRemaining, DestroyReadyCheckPopup)
 		end
 	end
-	
+
 	local function OnMatchMakerReadyUpdate(_, readyAccepted, likelyToPlay, queueReadyCounts, battleSize, readyPlayers)
 		if not readyCheckPopup then
 			return
@@ -547,7 +557,7 @@ function DelayedInitialize()
 			readyCheckPopup.UpdatePlayerCount(readyPlayers)
 		end
 	end
-	
+
 	local function OnMatchMakerReadyResult(_, isBattleStarting, areYouBanned)
 		Spring.Echo("OnMatchMakerReadyResult", isBattleStarting, areYouBanned)
 		if not readyCheckPopup then
@@ -555,7 +565,7 @@ function DelayedInitialize()
 		end
 		readyCheckPopup.MatchMakingComplete(isBattleStarting)
 	end
-	
+
 	local function OnBattleAboutToStart()
 		SaveQueues()
 		-- If the battle is starting while popup is active then assume success.
@@ -564,11 +574,11 @@ function DelayedInitialize()
 		end
 		readyCheckPopup.MatchMakingComplete(true)
 	end
-	
+
 	local function OnDisconnected()
 		OnMatchMakerStatus(false, false)
 	end
-	
+
 	lobby:AddListener("OnMatchMakerStatus", OnMatchMakerStatus)
 	lobby:AddListener("OnMatchMakerReadyCheck", OnMatchMakerReadyCheck)
 	lobby:AddListener("OnMatchMakerReadyUpdate", OnMatchMakerReadyUpdate)
