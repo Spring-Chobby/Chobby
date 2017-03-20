@@ -1,10 +1,10 @@
 MapListWindow = ListWindow:extends{}
 
-function MapListWindow:init(lobby, gameName, zoomToMap)
+function MapListWindow:init(lobby, zoomToMap)
 
 	self:super('init', WG.Chobby.lobbyInterfaceHolder, "Select Map", false, "main_window", nil, {6, 7, 7, 4})
 	self.window:SetPos(nil, nil, 500, 700)
-	
+
 	if WG.WrapperLoopback and Configuration.gameConfig.link_maps then
 		self.btnOnlineMaps = Button:New {
 			right = 95,
@@ -22,13 +22,13 @@ function MapListWindow:init(lobby, gameName, zoomToMap)
 			},
 		}
 	end
-	
+
 	local zoomY
 	local whitelist
 	if Configuration.onlyShowFeaturedMaps then
 		whitelist = Configuration.gameConfig.mapWhitelist
 	end
-	
+
 	for i, archive in pairs(VFS.GetAllArchives()) do
 		local info = VFS.GetArchiveInfo(archive)
 		if info and info.modtype == 3 and ((not whitelist) or whitelist[info.name]) then
@@ -72,10 +72,10 @@ function MapListWindow:init(lobby, gameName, zoomToMap)
 			end
 		end
 	end
-	
+
 	if zoomY then
 		self.listPanel:SetScrollPos(0, zoomY, true, false)
 	end
-	
+
 	self.popupHolder = PriorityPopup(self.window, self.CancelFunc)
 end

@@ -262,7 +262,6 @@ function InterfaceSkirmish:StartBattle(extraFriends, friendsReplaceAI, hostPort)
 	return self
 end
 
--- TODO: Needs clean implementation in lobby.lua
 function InterfaceSkirmish:SelectMap(mapName)
 	self:_OnUpdateBattleInfo(self:GetMyBattleID(), {
 		mapName = mapName,

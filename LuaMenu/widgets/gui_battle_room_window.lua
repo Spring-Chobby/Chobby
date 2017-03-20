@@ -181,7 +181,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		padding = {2,2,2,2},
 		OnClick = {
 			function()
-				WG.Chobby.MapListWindow(battleLobby, battle.gameName, battle.mapName)
+				WG.Chobby.MapListWindow(battleLobby, battle.mapName)
 			end
 		},
 	}
@@ -348,7 +348,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		font =  config:GetFont(2),
 		OnClick = {
 			function()
-				WG.Chobby.MapListWindow(battleLobby, battle.gameName, battle.mapName)
+				WG.Chobby.MapListWindow(battleLobby, battle.mapName)
 			end
 		},
 		parent = leftInfo,
@@ -518,13 +518,13 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 
 	externalFunctions.BattleIngameUpdate(battleID, battle.isRunning)
 
-	function externalFunctions.UpdateBattleInfo(updatedBattleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)
+	function externalFunctions.UpdateBattleInfo(updatedBattleID, battleInfo)
 		if battleID ~= updatedBattleID then
 			return
 		end
-		if mapName then
-			SetMapName(mapName, mapLinkWidth)
-			imMinimap.file = config:GetMinimapImage(mapName)
+		if battleInfo.mapName then
+			SetMapName(battleInfo.mapName, mapLinkWidth)
+			imMinimap.file = config:GetMinimapImage(battleInfo.mapName)
 			imMinimap:Invalidate()
 
 			-- TODO: Bit lazy here, seeing as we only need to update the map
@@ -534,13 +534,13 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		-- TODO: messy code, rework; SetBattleStatus is called too many times;
 		-- UpdateArchiveStatus(true) is invoked in a couple of places, but also
 		-- the battleLobby status is manually checked set separately (why?)
-		if gameName then
-			lblGame:SetCaption(gameName)
+		if battleInfo.gameName then
+			lblGame:SetCaption(battleInfo.gameName)
 			UpdateArchiveStatus(true)
 			MaybeDownloadGame(battle)
 		end
 
-		if (mapName and not VFS.HasArchive(mapName)) or (gameName and not HasGame(gameName)) then
+		if (battleInfo.mapName and not VFS.HasArchive(battleInfo.mapName)) or (battleInfo.gameName and not HasGame(battleInfo.gameName)) then
 			battleLobby:SetBattleStatus({
 				sync = 2, -- 0 = unknown, 1 = synced, 2 = unsynced
 			})
