@@ -47,3 +47,7 @@ end
 function string.ends(String,End)
 	return End=='' or string.sub(String,-string.len(End))==End
 end
+
+function string.trim(str)
+	return str:match'^()%s*$' and '' or str:match'^%s*(.*%S)'
+end

@@ -80,19 +80,19 @@ function widget:Initialize()
 	lobbyInterfaceHolder = interfaceRoot.GetLobbyInterfaceHolder()
 	Chobby.lobbyInterfaceHolder = lobbyInterfaceHolder
 	Chobby.interfaceRoot = interfaceRoot
-	
+
 	Spring.SetWMCaption("Zero-K", "Zero-K")
 	local taskbarIcon = Chobby.Configuration.gameConfig.taskbarIcon
 	if taskbarIcon then
 		Spring.SetWMIcon(taskbarIcon)
 	end
-	
+
 	local function OnBattleAboutToStart()
 		lobby:SetIngameStatus(true)
 	end
 	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
 	WG.LibLobby.lobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
-	
+
 	local function onConfigurationChange(listener, key, value)
 		if key == "gameConfigName" then
 			local taskbarIcon = Chobby.Configuration.gameConfig.taskbarIcon
@@ -111,7 +111,7 @@ function widget:KeyPress(key, mods, isRepeat, label, unicode)
 end
 
 function widget:Shutdown()
-	Spring.Echo("Chobby Shutdown")
+	Spring.Log("Chobby", LOG.NOTICE, "Chobby Shutdown")
 	WG.Chobby = nil
 end
 

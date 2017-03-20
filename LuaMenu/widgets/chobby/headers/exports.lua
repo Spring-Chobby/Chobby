@@ -33,13 +33,14 @@ local includes = {
 	"utilities/buttons.lua",
 	"utilities/stringUtilities.lua",
 	"utilities/log.lua",
+	"utilities/package.lua",
 }
 
 for _, file in ipairs(includes) do
 	VFS.Include(CHOBBY_DIR .. file, Chobby, VFS.RAW_FIRST)
 end
 
---lobby export
+-- liblobby export
 if WG and WG.LibLobby then
 	LibLobby = WG.LibLobby
 	lobby = LibLobby.lobby
