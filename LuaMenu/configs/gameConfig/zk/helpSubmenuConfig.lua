@@ -13,7 +13,7 @@ local function CreateLine(lineText, linkText, onClick)
 		draggable = false,
 		padding = {0, 0, 0, 0},
 	}
-	
+
 	if onClick then
 		local linkButton = Button:New {
 			x = 3,
@@ -29,7 +29,7 @@ local function CreateLine(lineText, linkText, onClick)
 			parent = lineHolder,
 		}
 	end
-	
+
 	local text = TextBox:New {
 		name = "text",
 		x = 110,
@@ -41,7 +41,7 @@ local function CreateLine(lineText, linkText, onClick)
 		text = lineText,
 		parent = lineHolder,
 	}
-	
+
 	return lineHolder
 end
 
@@ -93,13 +93,6 @@ local communityLines = {
 		end
 	},
 	{
-		"Player list.",
-		"Players",
-		function ()
-			WG.WrapperLoopback.OpenUrl("http://zero-k.info/Users")
-		end
-	},
-	{
 		"Top 50 players.",
 		"Ladder",
 		function ()
@@ -135,15 +128,15 @@ local communityControl = Control:New {
 				return
 			end
 			firstCommunityParent = false
-			
+
 			local list = SortableList(obj)
-			
+
 			local items = {}
 			for i = 1, #communityLines do
 				local data = communityLines[i]
 				items[#items + 1] = {#items, CreateLine(data[1], data[2], data[3])}
 			end
-			
+
 			list:AddItems(items)
 		end
 	},
@@ -216,15 +209,15 @@ local bugControl = Control:New {
 				return
 			end
 			firstBugParent = false
-			
+
 			local list = SortableList(obj, nil, 70)
-			
+
 			local items = {}
 			for i = 1, #bugLines do
 				local data = bugLines[i]
 				items[#items + 1] = {#items, CreateLine(data[1] or data.textFunction(), data[2], data[3])}
 			end
-			
+
 			list:AddItems(items)
 		end
 	},
@@ -236,13 +229,11 @@ local bugControl = Control:New {
 
 return {
 	{
-		name = "links", 
+		name = "links",
 		control = communityControl,
 	},
 	{
-		name = "report_a_bug", 
+		name = "report_a_bug",
 		control = bugControl,
 	},
 }
-
-
