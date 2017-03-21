@@ -51,7 +51,6 @@ local function SetSpringsettingsValue(key, value)
 	value = (fixedSettingsOverride and fixedSettingsOverride[key]) or value
 	
 	local configType = configParamTypes[key]
-	Spring.Echo("SetSettings", configType, key, value)
 	if configType == "int" then
 		Spring.Echo("SetSettings Int", key, value)
 		Spring.SetConfigInt(key, value)
