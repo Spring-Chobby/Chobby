@@ -15,6 +15,9 @@ local background = {
 	backgroundFocus = backgroundConfig.backgroundFocus,
 }
 
+local minimapOverridePath  = LUA_DIRNAME .. "configs/gameConfig/zk/minimapOverride/"
+local minimapThumbnailPath = LUA_DIRNAME .. "configs/gameConfig/zk/minimapThumbnail/"
+
 ---------------------------------------------------------------------------------
 -- Getters
 ---------------------------------------------------------------------------------
@@ -22,6 +25,8 @@ local background = {
 local externalFuncAndData = {
 	dirName                = "generic",
 	name                   = "Generic",
+	editor                 = "rapid://sbc:test",
+	--editor                 = "SpringBoard Core $VERSION",
 	settingsConfig         = settingsConfig,
 	settingsDefault        = settingsDefault,
 	singleplayerConfig     = singleplayerConfig,
@@ -30,6 +35,8 @@ local externalFuncAndData = {
 	headingLarge           = headingLarge,
 	headingSmall           = headingSmall,
 	background             = background,
+	minimapOverridePath     = minimapOverridePath,
+	minimapThumbnailPath    = minimapThumbnailPath,
 }
 
 function externalFuncAndData.CheckAvailability()
