@@ -246,9 +246,7 @@ local function GetDebriefingChat(window, vertPos, channelName, RemoveFunction)
 		caption = "x",
 		OnClick = {
 			function()
-				lobby:Leave(channelName)
 				RemoveFunction()
-				externalFunctions.Delete()
 			end
 		},
 		parent = chatPanel,
@@ -289,6 +287,12 @@ local function SetupDebriefingTracker(window)
 	local channelTopics = {}
 	
 	local function RemoveFunction()
+		if debriefingChannelName then
+			lobby:Leave(debriefingChannelName)
+		end
+		if debriefingChat then
+			debriefingChat.Delete()
+		end
 		debriefingChannelName = nil
 		debriefingChat = nil
 	end
@@ -357,6 +361,11 @@ local function SetupDebriefingTracker(window)
 		end
 	end
 	lobby:AddListener("OnBattleDebriefing", OnBattleDebriefing)
+
+	local function OnBattleAboutToStart(listener)
+		RemoveFunction()
+	end
+	lobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
 end
 
 local function InitializeControls(window)

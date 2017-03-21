@@ -22,17 +22,6 @@ local SAVE_DIR_LENGTH = string.len(SAVE_DIR) + 2
 local AUTOSAVE_DIR = SAVE_DIR .. "/auto"
 
 local Configuration
---------------------------------------------------------------------------------
--- Chili elements
---------------------------------------------------------------------------------
-local Chili
-local Window
-local Panel
-local Grid
-local StackPanel
-local ScrollPanel
-local Label
-local Button
 
 --------------------------------------------------------------------------------
 -- data
@@ -67,10 +56,6 @@ local function SecondsToClock(seconds)
 			return mins..":"..secs
 		end
 	end
-end
-
-local function trim(str)
-  return str:match'^()%s*$' and '' or str:match'^%s*(.*%S)'
 end
 
 --------------------------------------------------------------------------------
@@ -192,7 +177,7 @@ end
 -- Makes a button for a save game on the save/load screen
 local function AddSaveEntryButton(saveFile, saveList)
 	local current = saveFile.name == WG.Chobby.Configuration.campaignSaveFile
-	
+
 	local container = Panel:New {
 		x = 0,
 		y = 0,
@@ -201,7 +186,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 		draggable = false,
 		padding = {0, 0, 0, 0},
 	}
-	
+
 	if not current then
 		-- load button
 		local loadButton = Button:New {
@@ -220,7 +205,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 			parent = container,
 		}
 	end
-	
+
 	-- save name
 	local x = 95
 	local saveName = TextBox:New {
@@ -235,7 +220,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 		parent = container,
 	}
 	x = x + 200
-	
+
 	-- save's campaign name
 	--local campaignNameStr = WG.CampaignData.GetCampaignTitle(saveFile.campaignID) or saveFile.campaignID
 	--local campaignName = TextBox:New {
@@ -250,7 +235,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 	--	parent = container,
 	--}
 	--x = x + 220
-	
+
 	-- save date
 	local saveDate = TextBox:New {
 		name = "saveDate",
@@ -264,7 +249,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 		parent = container,
 	}
 	x = x + 140
-	
+
 	-- save details
 	--local details = TextBox:New {
 	--	name = "saveDetails",
@@ -278,7 +263,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 	--	parent = container,
 	--}
 	--x = x + 200
-	
+
 	-- delete button
 	local deleteButton = Button:New {
 		parent = container,
@@ -294,7 +279,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 			end
 		}
 	}
-	
+
 	return container, {saveFile.name, DateToString(saveFile.date)}
 end
 
@@ -306,7 +291,7 @@ local function PopulateSaveList(saveList)
 		local controls, order = AddSaveEntryButton(save, saveList)
 		items[#items + 1] = {save.name, controls, order}
 	end
-		
+
 	saveList:AddItems(items)
 end
 --------------------------------------------------------------------------------
@@ -315,7 +300,7 @@ end
 
 local function InitializeControls(parent, saveMode)
 	Configuration = WG.Chobby.Configuration
-	
+
 	-------------------------
 	-- Generate List
 	-------------------------
@@ -329,7 +314,7 @@ local function InitializeControls(parent, saveMode)
 		draggable = false,
 		padding = {0, 0, 0, 0},
 	}
-	
+
 	local headings = {
 		{name = "Name", x = 97, width = 200},
 		--{name = "Campaign", x = 97 + 200, width = 220},
@@ -338,7 +323,7 @@ local function InitializeControls(parent, saveMode)
 
 	local saveList = WG.Chobby.SortableList(listHolder, headings, 80, 2)
 	PopulateSaveList(saveList)
-	
+
 	local saveButton = Button:New {
 		width = 180,
 		x = 12,
@@ -353,13 +338,13 @@ local function InitializeControls(parent, saveMode)
 		font = Configuration:GetFont(3),
 		parent = parent,
 	}
-	
+
 	local externalFunctions = {}
-	
+
 	function externalFunctions.PopulateSaveList()
 		PopulateSaveList(saveList)
 	end
-	
+
 	return externalFunctions
 end
 
@@ -371,7 +356,7 @@ local CampaignSaveWindow = {}
 
 function CampaignSaveWindow.GetControl()
 	local controlFuncs
-	
+
 	local window = Control:New {
 		name = "campaignSaveHandler",
 		x = "0%",
@@ -387,7 +372,7 @@ function CampaignSaveWindow.GetControl()
 			end
 		},
 	}
-	
+
 	return window
 end
 
@@ -398,15 +383,7 @@ end
 function widget:Initialize()
 	CHOBBY_DIR = "LuaMenu/widgets/chobby/"
 	VFS.Include("LuaMenu/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	
-	Chili = WG.Chili
-	Window = Chili.Window
-	Panel = Chili.Panel
-	StackPanel = Chili.StackPanel
-	ScrollPanel = Chili.ScrollPanel
-	Label = Chili.Label
-	Button = Chili.Button
-	
+
 	WG.CampaignSaveWindow = CampaignSaveWindow
 end
 

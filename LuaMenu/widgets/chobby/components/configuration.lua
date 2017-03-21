@@ -2,13 +2,26 @@ Configuration = LCS.class{}
 
 VFS.Include("libs/liblobby/lobby/json.lua")
 
+LIB_LOBBY_DIRNAME = "libs/liblobby/lobby/"
+
+
 -- all configuration attribute changes should use the :Set*Attribute*() and :Get*Attribute*() methods in order to assure proper functionality
 function Configuration:init()
 	self.listeners = {}
 
+	local fileConfig
+	if VFS.FileExists(LUA_DIRNAME .. "configs/liblobby_configuration.lua") then
+		fileConfig = VFS.Include(LUA_DIRNAME .. "configs/liblobby_configuration.lua", nil, VFS.RAW_FIRST)
+	end
+	if not fileConfig.game then
+		Spring.Log("Chobby", LOG.WARNING, "Missing game in chobby_config.json file.")
+		-- FIXME: This will be changed to "generic" in future versions.
+		fileConfig.game = "zk"
+	end
+
 	--self.serverAddress = "localhost"
-	self.serverAddress = WG.Server.serverAddress or "springrts.com"
-	self.serverPort = 8200
+	self.serverAddress = WG.Server.address
+	self.serverPort =  WG.Server.port
 
 	self.userListWidth = 205 -- Main user list width. Possibly configurable in the future.
 	self.chatMaxNameLength = 185 -- Pixels
@@ -89,8 +102,8 @@ function Configuration:init()
 		}
 	}
 
-	self.gameConfigName = "zk"
-	self.gameConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/mainConfig.lua")
+	self.gameConfigName = fileConfig.game
+	self.gameConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. self.gameConfigName .. "/mainConfig.lua")
 
 	self.campaignPath = "campaign/sample"
 	self.campaignConfigName = "sample"

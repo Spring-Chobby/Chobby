@@ -24,7 +24,7 @@ local function GetImageFunction(icon, level, skill, isBot, isModerator)
 		
 		return RANK_DIR .. levelBracket .. "_" .. skillBracket .. ".png"
 	end
-	return oldImage or IMAGE_PLAYER
+	return IMAGE_PLAYER
 end
 
 return GetImageFunction

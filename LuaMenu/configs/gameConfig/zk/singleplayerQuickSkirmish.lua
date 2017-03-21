@@ -48,9 +48,13 @@ local aiDifficultyMap = {
 }
 
 function skirmishSetupData.ApplyFunction(battleLobby, pageChoices)
+	local difficulty = pageChoices.difficulty or 2 -- easy is default
+	local gameType = pageChoices.gameType or 1
+	local map = pageChoices.map or 1
+	
 	local Configuration = WG.Chobby.Configuration
 	local pageConfig = skirmishSetupData.pages
-	battleLobby:SelectMap(pageConfig[2].options[pageChoices.map])
+	battleLobby:SelectMap(pageConfig[2].options[map])
 	
 	battleLobby:SetBattleStatus({
 		allyNumber = 0,
@@ -58,23 +62,23 @@ function skirmishSetupData.ApplyFunction(battleLobby, pageChoices)
 	})
 	
 	-- Chickens
-	if pageChoices.gameType == 4 then
-		battleLobby:AddAi(chickenDifficulty[pageChoices.difficulty], chickenDifficulty[pageChoices.difficulty], 1)
+	if gameType == 4 then
+		battleLobby:AddAi(chickenDifficulty[difficulty], chickenDifficulty[difficulty], 1)
 		return
 	end
 	
 	local bitAppend = (Configuration:GetIsRunning64Bit() and "64") or "32"
-	local aiName = aiDifficultyMap[pageChoices.difficulty] .. bitAppend
+	local aiName = aiDifficultyMap[difficulty] .. bitAppend
 	
 	-- AI game
 	local aiNumber = 1
-	local allies = pageChoices.gameType - 1
+	local allies = gameType - 1
 	for i = 1, allies do
 		battleLobby:AddAi(aiName .. " (" .. aiNumber .. ")", aiName, 0, Configuration.gameConfig.aiVersion)
 		aiNumber = aiNumber + 1
 	end
 	
-	local enemies = pageChoices.gameType
+	local enemies = gameType
 	for i = 1, enemies do
 		battleLobby:AddAi(aiName .. " (" .. aiNumber .. ")", aiName, 1, Configuration.gameConfig.aiVersion)
 		aiNumber = aiNumber + 1

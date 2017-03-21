@@ -262,9 +262,10 @@ function InterfaceSkirmish:StartBattle(extraFriends, friendsReplaceAI, hostPort)
 	return self
 end
 
--- TODO: Needs clean implementation in lobby.lua
 function InterfaceSkirmish:SelectMap(mapName)
-	self:_OnUpdateBattleInfo(self:GetMyBattleID(), 0, false, 0, mapName)
+	self:_OnUpdateBattleInfo(self:GetMyBattleID(), {
+		mapName = mapName,
+	})
 end
 
 -- Skirmish only
@@ -279,8 +280,14 @@ function InterfaceSkirmish:SetBattleState(myUserName, gameName, mapName, title)
 	
 	self:_OnAddUser(myUserName)
 	self.myUserName = myUserName
-						--(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName, title, gameName, spectatorCount)
-	self:_OnBattleOpened(myBattleID, nil,  nil,  myUserName, nil, nil, nil,         nil,       nil,       nil, nil,            nil, mapName, title, gameName, nil)
+	--(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName, title, gameName, spectatorCount)
+	self:_OnBattleOpened(myBattleID, {
+		founder = myUserName,
+		users = {},
+		gameName = gameName,
+		mapName = mapName,
+		title = title,
+	})
 	self:_OnJoinBattle(myBattleID, myUserName)
 	self:_OnJoinedBattle(myBattleID, myUserName)
 	self:_OnSetModOptions({})

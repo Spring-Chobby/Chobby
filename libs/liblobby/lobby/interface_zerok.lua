@@ -747,49 +747,51 @@ function Interface:UpdateUserBattleStatus(userName, newBattleID)
 	end
 end
 
-function Interface:_OnAddUser(userName, country, cpu, accountID, lobbyVersion, clan)
-	cpu = tonumber(cpu)
-	accountID = tonumber(accountID)
-	self:super("_OnAddUser", userName, country, cpu, accountID, lobbyVersion, clan)
-end
-Interface.commands["ADDUSER"] = Interface._OnAddUser
-Interface.commandPattern["ADDUSER"] = "(%S+)%s+(%S%S)%s+(%S+)%s*(.*)"
-
 function Interface:_User(data)
 	-- CHECKME: verify that name, country, cpu and similar info doesn't change
 	-- It can change now that we remember user data of friends through disconnect.
+	local userName = data.Name
 	local userTable = {
-			country = data.Country or false,
-			clan = data.Clan or false,
-			faction = data.Faction or false,
-			lobbyVersion = data.LobbyVersion,
-			accountID = data.AccountID,
-			isInGame = data.IsInGame,
-			isAway = data.IsAway,
-			isAdmin = data.IsAdmin,
-			level = data.Level,
-			skill = data.EffectiveMmElo,
-			casualSkill = data.EffectiveElo,
-			icon = data.Icon,
-			isBot = data.IsBot,
-			awaySince = data.AwaySince,
-			inGameSince = data.InGameSince,
-			steamID = data.SteamID,
+		-- constant
+		accountID = data.AccountID,
+		steamID   = data.SteamID,
+		-- persistent
+		country = data.Country or false,
+		isAdmin = data.IsAdmin,
+		level = data.Level or false,
+		-- transient
+		lobby = data.LobbyVersion,
+		isInGame = data.IsInGame,
+		isAway = data.IsAway,
+		isBot = data.IsBot,
+
+		-- ZK
+		-- persistent
+		clan = data.Clan or false,
+		faction = data.Faction or false,
+		-- persistent (rank/elo)
+		skill = data.EffectiveMmElo,
+		casualSkill = data.EffectiveElo,
+		icon = data.Icon,
+		-- transient
+		awaySince = data.AwaySince,
+		inGameSince = data.InGameSince,
 	}
-	if self.users[data.Name] == nil or self.users[data.Name].isOffline then
-		self:_OnAddUser(data.Name, userTable)
+	local user = self.users[userName]
+	if user == nil or user.isOffline then
+		self:_OnAddUser(userName, userTable)
 		
 		for i = 1, #self.commonChannels do
-			self:_OnJoined(self.commonChannels[i], data.Name)
+			self:_OnJoined(self.commonChannels[i], userName)
 		end
 		
-		self:UpdateUserBattleStatus(data.Name, data.BattleID)
+		self:UpdateUserBattleStatus(userName, data.BattleID)
 		return
 	end
 
-	self:_OnUpdateUserStatus(data.Name, userTable)
+	self:_OnUpdateUserStatus(userName, userTable)
 	
-	self:UpdateUserBattleStatus(data.Name, data.BattleID)
+	self:UpdateUserBattleStatus(userName, data.BattleID)
 	
 	-- User {"AccountID":212941,"SpringieLevel":1,"Avatar":"corflak","Country":"CZ","EffectiveElo":1100,"Effective1v1Elo":1100,"InGameSince":"2016-06-25T11:36:38.9075025Z","IsAdmin":false,"IsBot":true,"IsInBattleRoom":false,"BanMute":false,"BanSpecChat":false,"Level":0,"ClientType":4,"LobbyVersion":"Springie 1.3.2.116","Name":"Elerium","IsAway":false,"IsInGame":true}
 end
@@ -886,17 +888,33 @@ Interface.jsonCommands["RejoinOption"] = Interface._RejoinOption
 function Interface:_BattleAdded(data)
 	-- {"Header":{"BattleID":3,"Engine":"100.0","Game":"Zero-K v1.4.6.11","Map":"Zion_v1","MaxPlayers":16,"SpectatorCount":1,"Title":"SERIOUS HOST","Port":8760,"Ip":"158.69.140.0","Founder":"Neptunium"}}
 	local header = data.Header
-	self:_OnBattleOpened(
-		header.BattleID, 0, 0, header.Founder, header.Ip, header.Port, 
-		header.MaxPlayers, (header.Password and header.Password ~= "" and true) or false, 0, 4, "Spring " .. header.Engine, header.Engine, 
-		header.Map, header.Title or "no title", header.Game, header.SpectatorCount, 
-		header.IsRunning, header.RunningSince, 
-		header.Mode, 
-		header.Mode and (header.Mode ~= 0), -- Is Custom
-		header.Mode and (header.Mode ~= 5 and header.Mode ~= 0), -- Is Bots
-		header.IsMatchMaker,
-		header.PlayerCount
-	)
+	self:_OnBattleOpened(header.BattleID, {
+		founder = header.Founder,
+		users = {}, -- initial users
+
+		ip = header.Ip,
+		port = header.Port,
+
+		maxPlayers = header.MaxPlayers,
+		passworded = (header.Password and header.Password ~= "" and true) or false,
+
+		engineName = "Spring " .. header.Engine,
+		engineVersion = header.Engine,
+		gameName = header.Game,
+		mapName = header.Map,
+		title = header.Title or "no title",
+
+		playerCount = header.PlayerCount,
+		spectatorCount = header.SpectatorCount,
+		isRunning = header.IsRunning,
+
+		-- ZK specific
+		runningSince = header.RunningSince,
+		battleMode = header.Mode,
+		disallowCustomTeams = header.Mode and (header.Mode ~= 0), -- Is Custom
+		disallowBots = header.Mode and (header.Mode ~= 5 and header.Mode ~= 0), -- Is Bots
+		isMatchMaker = header.IsMatchMaker,
+	})
 end
 Interface.jsonCommands["BattleAdded"] = Interface._BattleAdded
 
@@ -963,24 +981,26 @@ function Interface:_BattleUpdate(data)
 		password = (header.Password and header.Password ~= "" and true) or false
 	end
 	
-	self:_OnUpdateBattleInfo(
-		header.BattleID, 
-		header.SpectatorCount, 
-		header.Locked, 
-		0, 
-		header.Map, 
-		header.Engine, 
-		header.RunningSince, 
-		header.Game, 
-		header.Mode, 
-		header.Mode and (header.Mode ~= 0), -- Is Custom
-		header.Mode and (header.Mode ~= 5 and header.Mode ~= 0), -- Is Bots
-		header.IsMatchMaker,
-		header.MaxPlayers,
-		header.Title,
-		header.PlayerCount,
-		password
-	)
+	local battleInfo = {
+		maxPlayers = header.MaxPlayers,
+		passworded = password,
+
+		engineName = header.Engine,
+		gameName = header.Game,
+		mapName = header.Map,
+		title = header.Title,
+
+		playerCount = header.PlayerCount,
+		spectatorCount = header.SpectatorCount,
+
+		runningSince = header.RunningSince,
+		battleMode = header.Mode,
+		disallowCustomTeams = header.Mode and (header.Mode ~= 0),
+		disallowBots = header.Mode and (header.Mode ~= 5 and header.Mode ~= 0),
+		isMatchMaker = header.IsMatchMaker,
+	}
+
+	self:_OnUpdateBattleInfo(header.BattleID, battleInfo)
 	
 	if header.IsRunning ~= nil then
 		-- battle.RunningSince should be set by this point.

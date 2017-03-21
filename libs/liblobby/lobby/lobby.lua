@@ -464,29 +464,25 @@ function Lobby:_OnAddUser(userName, status)
 		self.userBySteamID[status.steamID] = userName
 	end
 
-	if self.users[userName] then
-		local userInfo = self.users[userName]
-		userInfo.isOffline = false
-		if status then
-			for k, v in pairs(status) do
-				self.users[userName][k] = v
-			end
-		end
-	else
+	local userInfo = self.users[userName]
+	if not userInfo then
 		self.userCount = self.userCount + 1
-		self.users[userName] = {
+		userInfo = {
 			userName = userName,
 			isFriend = self.isFriend[userName],
 			isIgnored = self.isIgnored[userName],
 			hasFriendRequest = self.hasFriendRequest[userName],
 		}
-		if status then
-			for k, v in pairs(status) do
-				self.users[userName][k] = v
-			end
+		self.users[userName] = userInfo
+	else
+		userInfo.isOffline = false
+	end
+	if status then
+		for k, v in pairs(status) do
+			userInfo[k] = v
 		end
 	end
-	self:_CallListeners("OnAddUser", userName, status)
+	self:_CallListeners("OnAddUser", userName, userInfo)
 end
 
 function Lobby:_OnRemoveUser(userName)
@@ -502,21 +498,7 @@ function Lobby:_OnRemoveUser(userName)
 
 	-- preserve isFriend/hasFriendRequest
 	local isFriend, hasFriendRequest = userInfo.isFriend, userInfo.hasFriendRequest
-	local oldUserInfo = self.users[userName]
-	local persistentUserInfo = {
-		userName = userName,
-		isOffline = true,
-		accountID = oldUserInfo.accountID,
-		country = oldUserInfo.country,
-		clan = oldUserInfo.clan,
-		faction = oldUserInfo.faction,
-		level = oldUserInfo.level,
-		skill = oldUserInfo.skill,
-		casualSkill = oldUserInfo.casualSkill,
-		icon = oldUserInfo.icon,
-		isAdmin = oldUserInfo.isAdmin,
-		steamID = oldUserInfo.steamID,
-	}
+	local persistentUserInfo = self:_GetPersistentUserInfo(userName)
 	self.users[userName] =persistentUserInfo
 
 	if isFriend or hasFriendRequest then
@@ -529,8 +511,6 @@ function Lobby:_OnRemoveUser(userName)
 end
 
 -- Updates the specified status keys
--- Status keys can be: isAway, isInGame, isModerator, rank, isBot
--- Example: _OnUpdateUserStatus("gajop", {isAway=false, isInGame=true})
 function Lobby:_OnUpdateUserStatus(userName, status)
 	if status and status.steamID then
 		self.userBySteamID[status.steamID] = userName
@@ -655,23 +635,39 @@ function Lobby:_OnRejoinOption(battleID)
 	self:_CallListeners("OnRejoinOption", battleID)
 end
 
--- TODO: This function has an awful signature and should be reworked. At least make it use a key/value table.
-function Lobby:_OnBattleOpened(battleID, type, natType, founder, ip, port,
-		maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName,
-		title, gameName, spectatorCount, isRunning, runningSince,
-		battleMode, disallowCustomTeams, disallowBots, isMatchMaker, playerCount)
+function Lobby:_OnBattleOpened(battleID, battle)
 	self.battles[battleID] = {
-		battleID = battleID, type = type, natType = natType, founder = founder, ip = ip, port = port,
-		maxPlayers = maxPlayers, passworded = passworded, rank = rank, mapHash = mapHash, spectatorCount = spectatorCount or 0,
-		engineName = engineName, engineVersion = engineVersion, mapName = mapName, title = title, gameName = gameName, users = {},
-		isRunning = isRunning, runningSince = runningSince,
-		battleMode = battleMode, disallowCustomTeams = disallowCustomTeams, disallowBots = disallowBots, isMatchMaker = isMatchMaker,
-		playerCount = playerCount,
+		battleID = battleID,
+
+		founder = battle.founder,
+		users = battle.users,
+
+		ip = battle.ip,
+		port = battle.port,
+
+		maxPlayers = battle.maxPlayers,
+		passworded = battle.passworded,
+
+		engineName = battle.engineName,
+		engineVersion = battle.engineVersion,
+		mapName = battle.mapName,
+		title = battle.title,
+		gameName = battle.gameName,
+
+		playerCount = battle.playerCount,
+		spectatorCount = battle.spectatorCount,
+		isRunning = battle.isRunning,
+
+		-- ZK specific
+		runningSince = battle.runningSince,
+		battleMode = battle.battleMode,
+		disallowCustomTeams = battle.disallowCustomTeams,
+		disallowBots = battle.disallowBots,
+		isMatchMaker = battle.isMatchMaker,
 	}
 	self.battleCount = self.battleCount + 1
 
-	self:_CallListeners("OnBattleOpened", battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash,
-		engineName, engineVersion, map, title, gameName, spectatorCount, isRunning, runningSince, battleMode, isMatchMaker, playerCount)
+	self:_CallListeners("OnBattleOpened", battleID, self.battles[battleID])
 end
 
 function Lobby:_OnBattleClosed(battleID)
@@ -740,31 +736,38 @@ function Lobby:_OnLeftBattle(battleID, userName)
 	self:_CallListeners("OnLeftBattle", battleID, userName)
 end
 
-function Lobby:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker, maxPlayers, title, playerCount, passworded)
+-- spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker, maxPlayers, title, playerCount, passworded
+function Lobby:_OnUpdateBattleInfo(battleID, battleInfo)
 	local battle = self.battles[battleID]
-	battle.spectatorCount = spectatorCount or battle.spectatorCount
-	battle.locked         = locked         or battle.locked
-	battle.mapHash        = mapHash        or battle.mapHash
-	battle.mapName        = mapName        or battle.mapName
-	battle.engineVersion  = engineVersion  or battle.engineVersion
-	battle.runningSince   = runningSince   or battle.runningSince
-	battle.gameName       = gameName       or battle.gameName
-	battle.battleMode     = battleMode     or battle.battleMode
-	if disallowCustomTeams ~= nil then
-		battle.disallowCustomTeams = disallowCustomTeams
-	end
-	if disallowBots ~= nil then
-		battle.disallowBots = battle.disallowBots
-	end
-	battle.isMatchMaker   = isMatchMaker   or battle.isMatchMaker
-	battle.maxPlayers     = maxPlayers     or battle.maxPlayers
-	battle.title          = title          or battle.title
-	battle.playerCount    = playerCount    or battle.playerCount
-	if passworded ~= nil then
-		battle.passworded = passworded
+
+	battle.maxPlayers = battleInfo.maxPlayers or battle.maxPlayers
+	if battleInfo.passworded ~= nil then
+		battle.passworded = battleInfo.passworded
 	end
 
-	self:_CallListeners("OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker, newPlayerList, maxPlayers, title, playerCount)
+	battle.engineName = battleInfo.engineName or battle.engineName
+	battle.engineVersion = battleInfo.engineVersion or battle.engineVersion
+	battle.gameName = battleInfo.gameName or battle.gameName
+	battle.mapName = battleInfo.mapName or battle.mapName
+	battle.title = battleInfo.title or battle.title
+
+	battle.playerCount = battleInfo.playerCount or battle.playerCount
+	battle.spectatorCount = battleInfo.spectatorCount or battle.spectatorCount
+
+	-- ZK specific
+	battle.runningSince = battleInfo.runningSince or battle.runningSince
+	battle.battleMode = battleInfo.battleMode or battle.battleMode
+	if battleInfo.disallowCustomTeams ~= nil then
+		battle.disallowCustomTeams = battleInfo.disallowCustomTeams
+	end
+	if battleInfo.disallowBots ~= nil then
+		battle.disallowBots = battleInfo.disallowBots
+	end
+	if battleInfo.isMatchMaker ~= nil then
+		battle.isMatchMaker = battleInfo.isMatchMaker
+	end
+
+	self:_CallListeners("OnUpdateBattleInfo", battleID, battleInfo)
 end
 
 -- Updates the specified status keys
@@ -1538,6 +1541,29 @@ function Lobby:GetMyIsAdmin()
 		return self.users[self.myUserName].isAdmin
 	end
 	return false
+end
+
+function Lobby:_GetPersistentUserInfo(userName)
+	local oldUserInfo = self.users[userName]
+	return {
+		accountID   = oldUserInfo.accountID,
+		steamID     = oldUserInfo.steamID,
+
+		userName    = userName,
+		country     = oldUserInfo.country,
+		isAdmin     = oldUserInfo.isAdmin,
+		level       = oldUserInfo.level,
+
+		isOffline   = true,
+
+		-- custom ZK
+		clan        = oldUserInfo.clan,
+		faction     = oldUserInfo.faction,
+
+		skill       = oldUserInfo.skill,
+		casualSkill = oldUserInfo.casualSkill,
+		icon        = oldUserInfo.icon,
+	}
 end
 
 -------------------------------------------------
