@@ -515,11 +515,7 @@ function Lobby:_OnUpdateUserStatus(userName, status)
 	if status and status.steamID then
 		self.userBySteamID[status.steamID] = userName
 	end
-
-	-- Server DOES NOT send full tables, but diffs
-	-- self.users[userName] = {}
 	
-	-- Copy table in case some nonsense occurs.
 	for k, v in pairs(status) do
 		self.users[userName][k] = v
 	end
@@ -699,8 +695,9 @@ function Lobby:_OnJoinedBattle(battleID, userName, scriptPassword)
 	if not found then
 		table.insert(self.battles[battleID].users, userName)
 	end
-
-	self.users[userName].battleID = battleID
+	
+	local userInfo = self:TryGetUser(userName)
+	userInfo.battleID = battleID
 	self:_CallListeners("OnUpdateUserStatus", userName, {battleID = battleID})
 
 	self:_CallListeners("OnJoinedBattle", battleID, userName, scriptPassword)

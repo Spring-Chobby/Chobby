@@ -729,7 +729,7 @@ Interface.jsonCommands["LoginResponse"] = Interface._LoginResponse
 ------------------------
 
 -- This should be a local function but that does not work nicely.
-function Interface:UpdateUserBattleStatus(userName, newBattleID)	
+function Interface:UpdateUserBattleStatus(userName, newBattleID)
 	if not self.REVERSE_COMPAT then
 		local currentBattle = self.users[userName].battleID
 		if newBattleID ~= currentBattle then
@@ -756,9 +756,9 @@ function Interface:_User(data)
 		accountID = data.AccountID,
 		steamID   = data.SteamID,
 		-- persistent
-		country = data.Country,
+		country = data.Country or false,
 		isAdmin = data.IsAdmin,
-		level = data.Level,
+		level = data.Level or false,
 		-- transient
 		lobby = data.LobbyVersion,
 		isInGame = data.IsInGame,
@@ -767,8 +767,8 @@ function Interface:_User(data)
 
 		-- ZK
 		-- persistent
-		clan = data.Clan,
-		faction = data.Faction,
+		clan = data.Clan or false,
+		faction = data.Faction or false,
 		-- persistent (rank/elo)
 		skill = data.EffectiveMmElo,
 		casualSkill = data.EffectiveElo,
