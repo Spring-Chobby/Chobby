@@ -48,9 +48,9 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFrie
 	local maxAllyTeamID = -1
 	local ais = {}
 	local aiCount = 0
-	
+
 	extraFriends = extraFriends or {}
-	
+
 	-- Add the player, this is to make the player team 0.
 	for userName, data in pairs(self.userBattleStatus) do
 		if data.allyNumber and not data.aiLib then
@@ -62,7 +62,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFrie
 				rank = 0,
 			}
 			playerCount = playerCount + 1
-			
+
 			for i = 1, #extraFriends do
 				local friendName = extraFriends[i]
 				players[playerCount] = {
@@ -74,7 +74,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFrie
 				}
 				playerCount = playerCount + 1
 			end
-			
+
 			if not data.isSpectator then
 				teams[teamCount] = {
 					TeamLeader = 0,
@@ -86,13 +86,13 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFrie
 			end
 		end
 	end
-	
+
 	-- Check for chicken difficutly modoption. Possibly add an AI due to it.
 	local chickenName
 	if self.modoptions and self.modoptions.chickenailevel and self.modoptions.chickenailevel ~= "none" then
 		chickenName = self.modoptions.chickenailevel
 	end
-	
+
 	-- Add the AIs
 	local chickenAdded = false
 	for userName, data in pairs(self.userBattleStatus) do
@@ -118,7 +118,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFrie
 				}
 			end
 			aiCount = aiCount + 1
-			
+
 			if not data.IsSpectator then
 				teams[teamCount] = {
 					TeamLeader = 0,
@@ -130,7 +130,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFrie
 			end
 		end
 	end
-	
+
 	-- Add chicken from the modoption if no chicken is present
 	if chickenName and not chickenAdded then
 		ais[aiCount] = {
@@ -141,7 +141,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFrie
 			Host = 0,
 		}
 		aiCount = aiCount + 1
-		
+
 		teams[teamCount] = {
 			TeamLeader = 0,
 			AllyTeam = maxAllyTeamID + 1,
@@ -150,7 +150,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFrie
 		maxAllyTeamID = maxAllyTeamID + 1
 		teamCount = teamCount + 1
 	end
-	
+
 	-- Add allyTeams
 	for i, teamData in pairs(teams) do
 		if not allyTeams[teamData.AllyTeam] then
@@ -159,7 +159,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFrie
 			}
 		end
 	end
-	
+
 	-- This kind of thing would prevent holes in allyTeams
 	--local allyTeamMap = {}
 	--for i, teamData in pairs(teams) do
@@ -173,10 +173,14 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFrie
 	--	teamData.AllyTeam = allyTeamMap[teamData.AllyTeam]
 	--end
 
-	if string.find(gameName, ":") then
+	-- FIXME: I dislike treating rapid tags like this.
+	-- We shouldn't give special treatment for rapid tags, and just use them interchangabily with normal archives.
+	-- So we could just pass "rapid://tag:version" as gameName, while "tag:version" should be invalid.
+	-- The engine treats rapid dependencies just like normal archives and I see no reason we do otherwise.
+	if string.find(gameName, ":") and not string.find(gameName, "rapid://") then
 		gameName = "rapid://" .. gameName
 	end
-	
+
 	local script = {
 		gametype = gameName,
 		hostip = '127.0.0.1',
@@ -229,7 +233,7 @@ function InterfaceSkirmish:StartReplay(replayFilename)
 
 	scriptTxt = scriptTxt:gsub("__FILE__", replayFilename)
 	self:_CallListeners("OnBattleAboutToStart")
-	
+
 	Spring.Echo("starting game", scriptTxt)
 	Spring.Reload(scriptTxt)
 	return false
@@ -254,11 +258,18 @@ end
 -- TODO: Needs clean implementation in lobby.lua
 function InterfaceSkirmish:StartBattle(extraFriends, friendsReplaceAI, hostPort)
 	local battle = self:GetBattle(self:GetMyBattleID())
-	if battle.gameName and battle.mapName then
-		self:_CallListeners("OnBattleAboutToStart")
-		self:_OnSaidBattleEx("Battle", "about to start", battle.gameName, battle.mapName, self:GetMyUserName() or "noname")
-		self:_StartScript(battle.gameName, battle.mapName, self:GetMyUserName() or "noname", extraFriends, friendsReplaceAI, hostPort)
+	if not battle.gameName then
+		Spring.Log(LOG_SECTION, LOG.ERROR, "Missing battle.gameName. Game cannot start")
+		return self
 	end
+	if not battle.mapName then
+		Spring.Log(LOG_SECTION, LOG.ERROR, "Missing battle.mapName. Game cannot start")
+		return self
+	end
+
+	self:_CallListeners("OnBattleAboutToStart")
+	self:_OnSaidBattleEx("Battle", "about to start", battle.gameName, battle.mapName, self:GetMyUserName() or "noname")
+	self:_StartScript(battle.gameName, battle.mapName, self:GetMyUserName() or "noname", extraFriends, friendsReplaceAI, hostPort)
 	return self
 end
 
@@ -271,13 +282,13 @@ end
 -- Skirmish only
 function InterfaceSkirmish:SetBattleState(myUserName, gameName, mapName, title)
 	local myBattleID = 1
-	
+
 	-- Clear all data when a new battle is created
 	self:_Clean()
 
 	self.battleAis = {}
 	self.userBattleStatus = {}
-	
+
 	self:_OnAddUser(myUserName)
 	self.myUserName = myUserName
 	--(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other, engineVersion, mapName, title, gameName, spectatorCount)
