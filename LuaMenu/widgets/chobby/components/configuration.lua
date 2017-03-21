@@ -61,9 +61,12 @@ function Configuration:init()
 	self.displayBadEngines = false
 	self.doNotSetAnySpringSettings = false
 	self.agressivelySetBorderlessWindowed = false
-	self.atiIntelCompat = true
+	
 	self.useWrongEngine = false
 
+	self.atiIntelCompat = self:GetIsRunningAtiOrIntel()
+	Spring.Echo("ATI/intel compatibility state:", self.atiIntelCompat)
+	
 	self.myAccountID = false
 	self.lastAddedAiName = false
 
@@ -446,6 +449,35 @@ function Configuration:GetIsRunning64Bit()
 	end
 	infologFile:close()
 	return false
+end
+
+function Configuration:GetIsRunningAtiOrIntel()
+	if self.isRunningAtiOrIntel ~= nil then
+		return self.isRunningAtiOrIntel
+	end
+	local infologFile, err = io.open("infolog.txt", "r")
+	if not infologFile then
+		Spring.Echo("Error opening infolog.txt", err)
+		return false
+	end
+	local line = infologFile:read()
+	while line do
+		if string.find(line, "PostInit") then
+			-- We are past the part of the infolog where NVIDIA would appear
+			infologFile:close()
+			self.isRunningAtiOrIntel = true
+			return true
+		end
+		if string.find(line, "NVIDIA") then
+			infologFile:close()
+			self.isRunningAtiOrIntel = false
+			return false
+		end
+		line = infologFile:read()
+	end
+	infologFile:close()
+	self.isRunningAtiOrIntel = true
+	return true
 end
 
 ---------------------------------------------------------------------------------

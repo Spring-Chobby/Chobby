@@ -898,7 +898,7 @@ local function ProcessSettingsOption(data, offset, defaults, customSettingsSwitc
 	}
 
 	local defaultItem = 1
-	local defaultName = Configuration.settingsMenuValues[data.name] or defaults[data.name]
+	local defaultName = Configuration.settingsMenuValues[data.name] or ((data.defaultFunction and data.defaultFunction()) or defaults[data.name])
 
 	local items = {}
 	for i = 1, #data.options do
@@ -1144,6 +1144,9 @@ local function InitializeAtiIntelConfigListener()
 	end
 
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
+	
+	-- Do update
+	onConfigurationChange(_, "atiIntelCompat", Configuration.atiIntelCompat)
 end
 
 --------------------------------------------------------------------------------

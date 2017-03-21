@@ -535,6 +535,9 @@ local settings = {
 						end
 					},
 				},
+				defaultFunction = function ()
+					return (WG.Chobby.Configuration.atiIntelCompat and "On") or "Off"
+				end,
 			},
 			{
 				name = "AntiAliasing",
