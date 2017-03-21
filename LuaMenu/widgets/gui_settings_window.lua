@@ -31,6 +31,9 @@ local COMBO_WIDTH = 235
 local CHECK_WIDTH = 230
 local TEXT_OFFSET = 6
 
+local AtiIntelSettingsOverride = {Water = 1}
+local fixedSettingsOverride = AtiIntelSettingsOverride
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
@@ -44,6 +47,9 @@ local function SetSpringsettingsValue(key, value)
 	if WG.Chobby.Configuration.doNotSetAnySpringSettings then
 		return
 	end
+	
+	value = (fixedSettingsOverride and fixedSettingsOverride[key]) or value
+	
 	local configType = configParamTypes[key]
 	Spring.Echo("SetSettings", configType, key, value)
 	if configType == "int" then
@@ -194,6 +200,28 @@ local function SaveLobbyDisplayMode()
 	SetLobbyFullscreenMode(lobbyFullscreen)
 end
 
+local function UpdateFixedSettings(newOverride)
+	local gameSettings = WG.Chobby.Configuration.game_settings
+	
+	-- Reset old
+	local oldOverride = fixedSettingsOverride
+	fixedSettingsOverride = nil
+	if oldOverride then
+		for key, value in pairs(oldOverride) do
+			if gameSettings[key] then
+				SetSpringsettingsValue(key, gameSettings[key])
+			end
+		end
+	end
+	
+	-- Apply new
+	fixedSettingsOverride = newOverride
+	if newOverride then
+		for key, value in pairs(newOverride) do
+			SetSpringsettingsValue(key, value)
+		end
+	end
+end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -1103,6 +1131,22 @@ local function InitializeControls(window)
 	}
 end
 
+local function InitializeAtiIntelConfigListener()
+	local Configuration = WG.Chobby.Configuration
+
+	local function onConfigurationChange(listener, key, value)
+		if key == "atiIntelCompat" then
+			if value then
+				UpdateFixedSettings(AtiIntelSettingsOverride)
+			else
+				UpdateFixedSettings()
+			end
+		end
+	end
+
+	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- External Interface
@@ -1155,6 +1199,8 @@ local function DelayedInitialize()
 	local Configuration = WG.Chobby.Configuration
 	battleStartDisplay = Configuration.game_fullscreen or 1
 	lobbyFullscreen = Configuration.lobby_fullscreen or 1
+	
+	InitializeAtiIntelConfigListener()
 end
 
 function widget:Initialize()

@@ -25,7 +25,7 @@ local settings = {
 			{
 				name = "Low",
 				settings = {
-					WaterType = "Bumpmapped",
+					WaterType = "Reflective",
 					WaterQuality = "Low",
 					DeferredRendering = "Off",
 					UnitReflections = "Low",
@@ -517,6 +517,26 @@ local settings = {
 				},
 			},
 			{
+				name = "AtiIntelCompatibility",
+				humanName = "ATI/Intel Compatibility",
+				options = {
+					{
+						name = "On",
+						applyFunction = function()
+							WG.Chobby.Configuration:SetConfigValue("atiIntelCompat", true)
+							return {}
+						end
+					},
+					{
+						name = "Off",
+						applyFunction = function()
+							WG.Chobby.Configuration:SetConfigValue("atiIntelCompat", false)
+							return {}
+						end
+					},
+				},
+			},
+			{
 				name = "AntiAliasing",
 				humanName = "Anti Aliasing",
 				options = {
@@ -686,6 +706,7 @@ local settingsDefaults = {
 	TerrainDetail = "High",
 	VegetationDetail = "High",
 	CompatibilityMode = "Off",
+	AtiIntelCompatibility = "On",
 	AntiAliasing = "Low",
 	ShaderDetail = "High",
 	FancySky = "Off",

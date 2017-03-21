@@ -61,6 +61,7 @@ function Configuration:init()
 	self.displayBadEngines = false
 	self.doNotSetAnySpringSettings = false
 	self.agressivelySetBorderlessWindowed = false
+	self.atiIntelCompat = true
 	self.useWrongEngine = false
 
 	self.myAccountID = false
@@ -225,6 +226,7 @@ function Configuration:GetConfigData()
 		displayBadEngines = self.displayBadEngines,
 		doNotSetAnySpringSettings = self.doNotSetAnySpringSettings,
 		agressivelySetBorderlessWindowed = self.agressivelySetBorderlessWindowed,
+		atiIntelCompat = self.atiIntelCompat,
 		settingsMenuValues = self.settingsMenuValues,
 		menuMusicVolume = self.menuMusicVolume,
 		menuNotificationVolume = self.menuNotificationVolume,
