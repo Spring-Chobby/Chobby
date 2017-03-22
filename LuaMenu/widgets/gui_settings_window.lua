@@ -1174,6 +1174,44 @@ function SettingsWindow.GetControl()
 	return window
 end
 
+function SettingsWindow.WriteGameSpringsettings(fileName)
+	local settingsFile, errorMessage = io.open(fileName, 'w+')
+	if not settingsFile then
+		return
+	end
+	
+	local function WriteToFile(key, value)
+		value = (fixedSettingsOverride and fixedSettingsOverride[key]) or value
+		settingsFile:write(key .. " = " .. value .. "\n")
+	end
+	
+	local gameSettings = WG.Chobby.Configuration.game_settings
+	for key, value in pairs(gameSettings) do
+		WriteToFile(key, value)
+	end
+	
+	local screenX, screenY = Spring.GetScreenGeometry()
+	if battleStartDisplay == 1 then
+		WriteToFile("XResolutionWindowed", screenX)
+		WriteToFile("YResolutionWindowed", screenY)
+		WriteToFile("WindowPosX", 0)
+		WriteToFile("WindowPosY", 0)
+		WriteToFile("WindowBorderless", 1)
+	elseif battleStartDisplay == 2 then
+		WriteToFile("WindowPosX", 0)
+		WriteToFile("WindowPosY", 80)
+		WriteToFile("XResolutionWindowed", screenX)
+		WriteToFile("YResolutionWindowed", screenY - 80)
+		WriteToFile("WindowBorderless", 0)
+		WriteToFile("Fullscreen", 0)
+	elseif battleStartDisplay == 3 then
+		WriteToFile("XResolution", screenX)
+		WriteToFile("YResolution", screenY)
+		WriteToFile("WindowBorderless", 0)
+		WriteToFile("Fullscreen", 1)
+	end
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface

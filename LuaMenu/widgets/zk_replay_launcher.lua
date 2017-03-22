@@ -33,8 +33,10 @@ local replayGame = ""
 local downloads = {}
 local url
 
+local OTHER_SPRINGSETTINGS = "springsettings_other.cfg"
+
 local hasMap = false
-local hasEngine = false
+local restartEngine = false
 local hasGame = false
 local hasFile = false
 
@@ -85,7 +87,7 @@ end
 local function Abort(reason)
 	hasFile = false
 	hasGame = false
-	hasEngine = false
+	restartEngine = false
 	hasMap = false
 
 	Chotify:Post({
@@ -124,13 +126,9 @@ function onLaunchReplay(wtf, replay, game, map, engine)
 
 	hasGame = false
 	hasMap = false
-	hasEngine = WG.Chobby.Configuration:IsValidEngineVersion(engine)
+	restartEngine = (not WG.Chobby.Configuration:IsValidEngineVersion(engine)) and engine
 	hasFile = false
-
-	if not hasEngine then
-		return Abort("Wrong engine "..engine)
-	end
-
+	
 	replayMap = map
 	replayGame = game
 
@@ -194,7 +192,17 @@ local function AttemptStart(saveFilename)
 	end
 
 	Echo("Starting Spring")
-	WG.Chobby.localLobby:StartReplay(saveFilename)
+	if not restartEngine then
+		WG.Chobby.localLobby:StartReplay(saveFilename)
+	elseif WG.WrapperLoopback then
+		WG.SettingsWindow.WriteGameSpringsettings(OTHER_SPRINGSETTINGS)
+		local params = {
+			StartDemoName = saveFilename,
+			Engine = restartEngine,
+			SpringSettings = OTHER_SPRINGSETTINGS,
+		}
+		WG.WrapperLoopback.StartNewSpring(params) 
+	end
 end
 
 -- called when a connection is closed

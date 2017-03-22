@@ -17,20 +17,26 @@ end
 --------------------------------------------------------------------------------
 -- Local Variables
 
+local OTHER_SPRINGSETTINGS = "springsettings_other.cfg"
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
 
-local function CreateReplayEntry(replayPath, engineName)
+local function CreateReplayEntry(replayPath)
 	local Configuration = WG.Chobby.Configuration
 	
 	local fileName = string.sub(replayPath, 7)
-	local engineStart = string.find(fileName, engineName, 15)
+	fileName = string.gsub(fileName, " develop", "")
+	fileName = string.gsub(fileName, "%.sdfz", "")
+	local engineStart = string.find(string.reverse(fileName), "_")
+	
 	if not engineStart then
 		-- Don't show replays of the wrong engine
 		return
 	end
+	engineStart = string.len(fileName) - engineStart + 2
+	local engineName = string.sub(fileName, engineStart)
 	
 	local mapName = string.gsub(string.sub(fileName, 17, engineStart - 2), "_", " ")
 	local replayTime = string.sub(fileName, 0, 15)
@@ -55,7 +61,17 @@ local function CreateReplayEntry(replayPath, engineName)
 		font = WG.Chobby.Configuration:GetFont(2),
 		OnClick = {
 			function()
-				WG.Chobby.localLobby:StartReplay(replayPath)
+				if WG.Chobby.Configuration:IsValidEngineVersion(engineName) then
+					WG.Chobby.localLobby:StartReplay(replayPath)
+				elseif WG.WrapperLoopback then
+					WG.SettingsWindow.WriteGameSpringsettings(OTHER_SPRINGSETTINGS)
+					local params = {
+						StartDemoName = replayPath,
+						Engine = engineName,
+						SpringSettings = OTHER_SPRINGSETTINGS,
+					}
+					WG.WrapperLoopback.StartNewSpring(params) 
+				end
 			end
 		},
 		parent = replayPanel,
@@ -83,9 +99,20 @@ local function CreateReplayEntry(replayPath, engineName)
 		text = mapName,
 		parent = replayPanel,
 	}
+	local replayEngine = TextBox:New {
+		name = "replayEngine",
+		x = 535,
+		y = 12,
+		right = 0,
+		height = 20,
+		valign = 'center',
+		fontsize = Configuration:GetFont(2).size,
+		text = engineName,
+		parent = replayPanel,
+	}
 	local replayName = TextBox:New {
 		name = "replayName",
-		x = 535,
+		x = 740,
 		y = 5,
 		right = 0,
 		height = 20,
@@ -95,7 +122,7 @@ local function CreateReplayEntry(replayPath, engineName)
 		parent = replayPanel,
 	}
 	
-	return replayPanel, {replayTime, string.lower(mapName), fileName}
+	return replayPanel, {replayTime, string.lower(mapName), engineName, fileName}
 end
 
 --------------------------------------------------------------------------------
@@ -154,19 +181,15 @@ local function InitializeControls(parentControl)
 	local headings = {
 		{name = "Time", x = 88, width = 207},
 		{name = "Map", x = 300, width = 225},
-		{name = "Name", x = 530, right = 5},
+		{name = "Engine", x = 530, width = 215},
+		{name = "Name", x = 750, right = 5},
 	}
 	
-	local engineName = Spring.Utilities.GetEngineVersion()
-	engineName = string.gsub(engineName, "%.", "%%%.")
-	engineName = string.gsub(engineName, "%-", "%%%-")
 	local replayList = WG.Chobby.SortableList(listHolder, headings, nil, nil, false)
-	
-	local dots = 1
 	
 	local function AddReplays()
 		local replays = VFS.DirList("demos")
-		Spring.Utilities.TableEcho(replays, "replaysList")
+		--Spring.Utilities.TableEcho(replays, "replaysList")
 		
 		loadingPanel:SetVisibility(true)
 		loadingPanel:BringToFront()
@@ -182,12 +205,12 @@ local function InitializeControls(parentControl)
 					return
 				end
 				local replayPath = replays[index]
-				local control, sortData = CreateReplayEntry(replayPath, engineName)
+				local control, sortData = CreateReplayEntry(replayPath)
 				if control then
 					items[#items + 1] = {replayPath, control, sortData}
-					Spring.Echo("Added replay", replayPath)
+					--Spring.Echo("Added replay", replayPath)
 				else
-					Spring.Echo("Rejected replay", replayPath)
+					--Spring.Echo("Rejected replay", replayPath)
 				end
 				
 				index = index + 1

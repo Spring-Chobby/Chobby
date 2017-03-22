@@ -211,8 +211,8 @@ function WrapperLoopback.StartNewSpring(args)
 														  // non-rapid entries will be always redownloaded, so check presence of map before requesting it, wrapper does not init unitsync 
     }
 ]]--
-
-	SendCommands("StartNewSpring", args)
+	Spring.Utilities.TableEcho(args, "StartNewSpring")
+	SendCommand("StartNewSpring", args)
 end
 
 
