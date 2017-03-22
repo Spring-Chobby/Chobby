@@ -48,7 +48,7 @@ EditBox = Control:Inherit{
   physicalLines = {},
   cursorX = 1,
   cursorY = 1,
-  
+
   inedibleInput = {
     [Spring.GetKeyCode("enter")] = true,
     [Spring.GetKeyCode("numpad_enter")] = true,
@@ -580,7 +580,7 @@ end
 function EditBox:MouseMove(x, y, dx, dy, button)
 	if self.subTooltips then
 		local tooltipSet = false
-		
+
 		if button == nil then -- handle tooltips
 			local retVal = self:_GetCursorByMousePos(x, y)
 			local line = self.lines[retVal.cursorY]
@@ -594,12 +594,12 @@ function EditBox:MouseMove(x, y, dx, dy, button)
 				end
 			end
 		end
-		
+
 		if not tooltipSet then
 			self.tooltip = nil
 		end
 	end
-	
+
 	if button ~= 1 then
 		return inherited.MouseMove(self, x, y, dx, dy, button)
 	end
@@ -761,7 +761,7 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 		self.cursor = #txt + 1
 
 	-- copy & paste
-	elseif (mods.ctrl and key == Spring.GetKeyCode("c")) or (mods.ctrl and key == Spring.GetKeyCode("insert")) or 
+	elseif (mods.ctrl and key == Spring.GetKeyCode("c")) or (mods.ctrl and key == Spring.GetKeyCode("insert")) or
 		(self.editable and ((mods.ctrl and key == Spring.GetKeyCode("x")) or (mods.shift and key == Spring.GetKeyCode("delete")))) then
 		txt = self:GetSelectionText()
 		if self.selStart and self.selEnd then
@@ -776,7 +776,7 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	-- select all
 	elseif mods.ctrl and key == Spring.GetKeyCode("a") then
 		if not self.multiline then
-			self:_SetSelection(1, nil, #txt + 1, nil)
+			self:_SetSelection(1, 1, #txt + 1, 1)
 		else
 			self:_SetSelection(1, 1, #self.lines[#self.lines].text + 1, #self.lines)
 		end
