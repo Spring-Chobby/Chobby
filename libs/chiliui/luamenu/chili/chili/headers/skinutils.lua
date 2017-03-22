@@ -709,15 +709,10 @@ function DrawEditBox(obj)
 
 			local top, bottom = obj.selStartPhysicalY, obj.selEndPhysicalY
 			local left, right = obj.selStartPhysical,  obj.selEndPhysical
-            
-            if obj.multiline then
-                if top > bottom then
-                    top, bottom = bottom, top
-                    left, right = right, left
-                elseif top == bottom and s > e then
-                    left, right = right, left
-                end
-            elseif left > right then
+			if obj.multiline and top > bottom then
+                top, bottom = bottom, top
+				left, right = right, left
+            elseif top == bottom and left > right then
                 left, right = right, left
             end
 
