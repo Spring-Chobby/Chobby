@@ -61,12 +61,12 @@ function Configuration:init()
 	self.displayBadEngines = false
 	self.doNotSetAnySpringSettings = false
 	self.agressivelySetBorderlessWindowed = false
-	
+
 	self.useWrongEngine = false
 
 	self.atiIntelCompat = self:GetIsRunningAtiOrIntel()
 	Spring.Echo("ATI/intel compatibility state:", self.atiIntelCompat)
-	
+
 	self.myAccountID = false
 	self.lastAddedAiName = false
 
@@ -424,6 +424,9 @@ function Configuration:GetIsRunning64Bit()
 	if self.isRunning64Bit ~= nil then
 		return self.isRunning64Bit
 	end
+	if System then
+		return System.osWordSize == 64
+	end
 	local infologFile, err = io.open("infolog.txt", "r")
 	if not infologFile then
 		Spring.Echo("Error opening infolog.txt", err)
@@ -454,6 +457,9 @@ end
 function Configuration:GetIsRunningAtiOrIntel()
 	if self.isRunningAtiOrIntel ~= nil then
 		return self.isRunningAtiOrIntel
+	end
+	if System then
+		return System.gpuVendor == "Intel" or System.gpuVendor == "ATI"
 	end
 	local infologFile, err = io.open("infolog.txt", "r")
 	if not infologFile then
