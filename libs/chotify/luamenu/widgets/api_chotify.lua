@@ -42,3 +42,7 @@ end
 function widget:Update()
     WG.Chotify:_Update()
 end
+
+function widget:ViewResize(vsx, vsy)
+    WG.Chotify:ViewResize(vsx, vsy)
+end

@@ -1,11 +1,17 @@
 Chotify = LCS.class{}
 
+local vsx, vsy
+
 function Chotify:init()
     self.enabled = true
+    self.NOTIFICATION_LIMIT = 5
     Spring.Log("Chotify", LOG.NOTICE, "Enabled: " .. tostring(self.enabled))
 
     self.notifications = {}
+    self.totalNotifications = 0
     self._idCounter = 0
+
+    vsx, vsy = Spring.GetViewGeometry()
 end
 
 -- this receives the widget:Update callins
@@ -34,6 +40,9 @@ function Chotify:CloseNotification(id)
     })
     ]]
     self.notifications[id] = nil
+    self.totalNotifications = self.totalNotifications - 1
+    local sorted = self:_SortByStartTimeDesc()
+    self:_Realign(sorted)
 end
 
 function Chotify:Post(obj)
@@ -91,6 +100,13 @@ function Chotify:Post(obj)
         id = id,
     }
     self.notifications[id] = notification
+    self.totalNotifications = self.totalNotifications + 1
+    -- pop oldest
+    local sorted = self:_SortByStartTimeDesc()
+    if self.totalNotifications > self.NOTIFICATION_LIMIT then
+        self:CloseNotification(sorted[#sorted].id)
+    end
+    self:_Realign(sorted)
     WG.Delay(function() self:CloseNotification(id) end, time)
     return id
 end
@@ -114,6 +130,26 @@ function Chotify:Update(id, obj)
             window.children = body
         end
     end
+end
+
+function Chotify:_SortByStartTimeDesc()
+    local sorted = {}
+    for _, v in pairs(self.notifications) do
+        table.insert(sorted, v)
+    end
+    table.sort(sorted, function(a, b) return a.startTime > b.startTime end)
+    return sorted
+end
+
+function Chotify:_Realign(sorted)
+    for i, n in pairs(sorted) do
+        n.window:SetPos(nil, vsy - i * 110 + 5)
+    end
+end
+
+function Chotify:ViewResize(vsx_, vsy_)
+    vsx = vsx_
+    vsy = vsy_
 end
 
 function Chotify:Hide(id)
