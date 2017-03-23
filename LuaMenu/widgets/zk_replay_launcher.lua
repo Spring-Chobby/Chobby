@@ -33,8 +33,6 @@ local replayGame = ""
 local downloads = {}
 local url
 
-local OTHER_SPRINGSETTINGS = "springsettings_other.cfg"
-
 local hasMap = false
 local restartEngine = false
 local hasGame = false
@@ -191,15 +189,18 @@ local function AttemptStart(saveFilename)
 		return Echo("Downloading game...")
 	end
 
+	if not saveFilename then
+		return
+	end
+	
 	Echo("Starting Spring")
 	if not restartEngine then
 		WG.Chobby.localLobby:StartReplay(saveFilename)
 	elseif WG.WrapperLoopback then
-		WG.SettingsWindow.WriteGameSpringsettings(OTHER_SPRINGSETTINGS)
 		local params = {
-			StartDemoName = saveFilename,
+			StartDemoName = string.sub(saveFilename, 7, string.len(saveFilename) - 5),
 			Engine = restartEngine,
-			SpringSettings = OTHER_SPRINGSETTINGS,
+			SpringSettings = WG.SettingsWindow.GetSettingsString(),
 		}
 		WG.WrapperLoopback.StartNewSpring(params) 
 	end

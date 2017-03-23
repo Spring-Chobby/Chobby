@@ -17,8 +17,6 @@ end
 --------------------------------------------------------------------------------
 -- Local Variables
 
-local OTHER_SPRINGSETTINGS = "springsettings_other.cfg"
-
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
@@ -61,14 +59,16 @@ local function CreateReplayEntry(replayPath)
 		font = WG.Chobby.Configuration:GetFont(2),
 		OnClick = {
 			function()
+				if not replayPath then
+					return
+				end
 				if WG.Chobby.Configuration:IsValidEngineVersion(engineName) then
 					WG.Chobby.localLobby:StartReplay(replayPath)
 				elseif WG.WrapperLoopback then
-					WG.SettingsWindow.WriteGameSpringsettings(OTHER_SPRINGSETTINGS)
 					local params = {
-						StartDemoName = replayPath,
+						StartDemoName = string.sub(replayPath, 7, string.len(replayPath) - 5),
 						Engine = engineName,
-						SpringSettings = OTHER_SPRINGSETTINGS,
+						SpringSettings = WG.SettingsWindow.GetSettingsString(),
 					}
 					WG.WrapperLoopback.StartNewSpring(params) 
 				end
