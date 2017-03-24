@@ -577,10 +577,10 @@ local function GetUserControls(userName, opts)
 		offset = offset + 1
 		userControls.imCountry = Image:New {
 			name = "imCountry",
-			x = offset,
-			y = offsetY + 1,
-			width = 21,
-			height = 19,
+			x = offset + 2,
+			y = offsetY + 3,
+			width = 16,
+			height = 11,
 			parent = userControls.mainControl,
 			keepAspect = true,
 			file = GetUserCountryImage(userName, userControls),
