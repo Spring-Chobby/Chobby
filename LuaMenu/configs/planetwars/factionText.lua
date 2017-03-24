@@ -20,5 +20,4 @@ local data = {
 		image = LUA_DIRNAME .. "images/factions/Federation.png"
 	}	
 }
-
 return data
