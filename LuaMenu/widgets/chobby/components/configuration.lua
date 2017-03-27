@@ -64,8 +64,8 @@ function Configuration:init()
 
 	self.useWrongEngine = false
 
-	self.atiIntelCompat = self:GetIsRunningAtiOrIntel()
-	Spring.Echo("ATI/intel compatibility state:", self.atiIntelCompat)
+	self.atiIntelCompat = self:GetIsNotRunningNvidia()
+	Spring.Echo("ATI/intel/other non-nvidia compatibility state:", self.atiIntelCompat)
 
 	self.myAccountID = false
 	self.lastAddedAiName = false
@@ -424,8 +424,8 @@ function Configuration:GetIsRunning64Bit()
 	if self.isRunning64Bit ~= nil then
 		return self.isRunning64Bit
 	end
-	if System then
-		return System.osWordSize == 64
+	if Platform then
+		return Platform.osWordSize == 64
 	end
 	local infologFile, err = io.open("infolog.txt", "r")
 	if not infologFile then
@@ -454,12 +454,12 @@ function Configuration:GetIsRunning64Bit()
 	return false
 end
 
-function Configuration:GetIsRunningAtiOrIntel()
-	if self.isRunningAtiOrIntel ~= nil then
-		return self.isRunningAtiOrIntel
+function Configuration:GetIsNotRunningNvidia()
+	if self.isNotRunningNvidia ~= nil then
+		return self.isNotRunningNvidia
 	end
-	if System then
-		return System.gpuVendor == "Intel" or System.gpuVendor == "ATI"
+	if Platform then
+		return Platform.gpuVendor ~= "Nvidia"
 	end
 	local infologFile, err = io.open("infolog.txt", "r")
 	if not infologFile then
@@ -471,18 +471,18 @@ function Configuration:GetIsRunningAtiOrIntel()
 		if string.find(line, "PostInit") then
 			-- We are past the part of the infolog where NVIDIA would appear
 			infologFile:close()
-			self.isRunningAtiOrIntel = true
+			self.isNotRunningNvidia = true
 			return true
 		end
 		if string.find(line, "NVIDIA") then
 			infologFile:close()
-			self.isRunningAtiOrIntel = false
+			self.isNotRunningNvidia = false
 			return false
 		end
 		line = infologFile:read()
 	end
 	infologFile:close()
-	self.isRunningAtiOrIntel = true
+	self.isNotRunningNvidia = true
 	return true
 end
 
