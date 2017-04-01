@@ -778,7 +778,7 @@ end
 --------------------------------------------------------------------------------
 -- Faction Selection
 
-local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc)
+local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc, right, bottom)
 	local Configuration = WG.Chobby.Configuration
 	
 	local factionText = VFS.Include(LUA_DIRNAME .. "configs/planetwars/factionText.lua") or {}
@@ -789,13 +789,18 @@ local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc)
 		return
 	end
 	
+	local HolderType = (right and bottom and ScrollPanel) or Control
+	
 	local offset = 0
-	local holder = Control:New {
+	local holder = HolderType:New {
 		x = x,
 		y = y,
-		width = 400,
+		width = not (right and bottom) and 400,
+		right = right,
+		bottom = bottom,
 		height = (#factionList)*FACTION_SPACING + 40,
-		padding = {0, 0, 0, 0},
+		horizontalScrollbar = false,
+		padding = (right and bottom and {5, 5, 5, 5}) or {0, 0, 0, 0},
 		parent = parent,
 	}
 	
@@ -811,10 +816,10 @@ local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc)
 		
 		if factionData.image then
 			Image:New {
-				x = 0,
+				x = 2,
 				y = offset + 5,
-				width = 130,
-				height = 130,
+				width = 128,
+				height = 128,
 				keepAspect = true,
 				file = factionData.image,
 				parent = holder,
@@ -1070,7 +1075,7 @@ local function InitializeControls(window)
 		if not lobby:GetFactionData(myUserInfo.faction) then
 			statusText:SetText("You need to join a faction.")
 			if not factionLinkButton then
-				factionLinkButton = MakeFactionSelector(window, 25, 95)
+				factionLinkButton = MakeFactionSelector(window, 15, 80, nil, nil, 15, 52)
 			end
 			factionLinkButton:SetVisibility(true)
 			listHolder:SetVisibility(false)
