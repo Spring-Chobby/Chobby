@@ -814,14 +814,14 @@ local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc, righ
 		local name = factionList[i].Name
 		local factionData = factionText[shortname] or {}
 		
-		if factionData.image then
+		if factionData.imageLarge then
 			Image:New {
 				x = 2,
 				y = offset + 5,
 				width = 128,
 				height = 128,
 				keepAspect = true,
-				file = factionData.image,
+				file = factionData.imageLarge,
 				parent = holder,
 			}
 		end
