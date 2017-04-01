@@ -198,7 +198,7 @@ local function AttemptStart(saveFilename)
 		WG.Chobby.localLobby:StartReplay(saveFilename)
 	elseif WG.WrapperLoopback then
 		local params = {
-			StartDemoName = string.sub(saveFilename, 7, string.len(saveFilename) - 5),
+			StartDemoName = string.sub(saveFilename, 7),
 			Engine = restartEngine,
 			SpringSettings = WG.SettingsWindow.GetSettingsString(),
 		}

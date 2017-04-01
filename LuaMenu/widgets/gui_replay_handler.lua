@@ -66,7 +66,7 @@ local function CreateReplayEntry(replayPath)
 					WG.Chobby.localLobby:StartReplay(replayPath)
 				elseif WG.WrapperLoopback then
 					local params = {
-						StartDemoName = string.sub(replayPath, 7, string.len(replayPath) - 5),
+						StartDemoName = string.sub(replayPath, 7),
 						Engine = engineName,
 						SpringSettings = WG.SettingsWindow.GetSettingsString(),
 					}
