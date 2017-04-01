@@ -21,7 +21,7 @@ local IMG_LINK     = LUA_DIRNAME .. "images/link.png"
 
 local panelInterface
 local PLANET_NAME_LENGTH = 210
-local FACTION_SPACING = 128
+local FACTION_SPACING = 156
 
 local phaseTimer
 local requiredGame = false
@@ -793,7 +793,7 @@ local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc)
 	local holder = Control:New {
 		x = x,
 		y = y,
-		width = 360,
+		width = 400,
 		height = (#factionList)*FACTION_SPACING + 40,
 		padding = {0, 0, 0, 0},
 		parent = parent,
@@ -807,14 +807,14 @@ local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc)
 	for i = startIndex, endIndex, direction do
 		local shortname = factionList[i].Shortcut
 		local name = factionList[i].Name
-		local factionData = factionText[shortname]
+		local factionData = factionText[shortname] or {}
 		
 		if factionData.image then
 			Image:New {
 				x = 0,
-				y = offset,
-				width = 110,
-				height = 110,
+				y = offset + 5,
+				width = 130,
+				height = 130,
 				keepAspect = true,
 				file = factionData.image,
 				parent = holder,
@@ -822,9 +822,9 @@ local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc)
 		end
 		
 		Button:New {
-			x = 120,
-			y = offset + 10,
-			width = 240,
+			x = 140,
+			y = offset,
+			width = 260,
 			height = 45,
 			caption = "Join " .. name,
 			font = Configuration:GetFont(3),
@@ -842,8 +842,8 @@ local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc)
 		
 		if factionData.motto and factionData.desc then
 			TextBox:New {
-				x = 120,
-				y = offset + 66,
+				x = 140,
+				y = offset + 56,
 				width = 240,
 				height = 45,
 				fontsize = Configuration:GetFont(2).size,
@@ -856,9 +856,9 @@ local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc)
 	end
 
 	Button:New {
-		x = 110,
+		x = 140,
 		y = offset,
-		width = 164,
+		width = 170,
 		height = 35,
 		caption = "Factions Page",
 		font = Configuration:GetFont(2),
@@ -884,9 +884,9 @@ local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc)
 	
 	if CancelFunc then
 		Button:New {
-			x = 280,
+			x = 316,
 			y = offset,
-			width = 80,
+			width = 84,
 			height = 35,
 			font =  WG.Chobby.Configuration:GetFont(2),
 			caption = i18n("cancel"),
@@ -915,7 +915,7 @@ local function MakeFactionSelectionPopup()
 	local factionWindow = Window:New {
 		x = 700,
 		y = 300,
-		width = 420,
+		width = 460,
 		height = 130 + (#factionList)*FACTION_SPACING,
 		caption = "",
 		resizable = false,
@@ -1266,16 +1266,16 @@ function DelayedInitialize()
 	end
 	lobby:AddListener("OnQueueOpened", AddQueue)
 	
-	if not Configuration.alreadySeenFactionPopup then
+	if not Configuration.alreadySeenFactionPopup2 then
 		local function OnLoginInfoEnd()
 			local myInfo = lobby:GetMyInfo()
-			if Configuration.alreadySeenFactionPopup then
+			if Configuration.alreadySeenFactionPopup2 then
 				return
 			end
-			if not (myInfo and myInfo.level and myInfo.level >= 2) then
+			if (not Configuration.ignoreLevel) and not (myInfo and myInfo.level and myInfo.level >= 2) then
 				return
 			end
-			Configuration.alreadySeenFactionPopup = true
+			Configuration.alreadySeenFactionPopup2 = true
 			if lobby:GetFactionData(myInfo.faction) then
 				return
 			end
@@ -1355,7 +1355,7 @@ end
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	WG.Delay(DelayedInitialize, 1)
+	WG.Delay(DelayedInitialize, 0.3)
 	
 	WG.PlanetwarsListWindow = PlanetwarsListWindow
 end
