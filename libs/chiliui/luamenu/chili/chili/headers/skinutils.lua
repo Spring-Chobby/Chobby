@@ -656,7 +656,9 @@ function DrawEditBox(obj)
 				local maxDrawY = scrollPosY + scrollHeight + (h or 0)
 
 				for _, line in pairs(obj.physicalLines) do
-					local drawPos = clientY + line.y
+                    -- FIXME: figure out why clientY is always 0 (at least for all planetwars textboxes)
+					--local drawPos = clientY + line.y
+                    local drawPos = obj.y + line.y
 					if (drawPos > minDrawY and drawPos < maxDrawY) or obj.useRTT then
 						font:Draw(line.text, clientX, clientY + line.y)
 					end
