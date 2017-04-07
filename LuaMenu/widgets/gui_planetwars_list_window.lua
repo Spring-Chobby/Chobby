@@ -26,7 +26,7 @@ local FACTION_SPACING = 156
 local phaseTimer
 local requiredGame = false
 
-local URGENT_ATTACK_TIME = 300 -- Five minutes
+local URGENT_ATTACK_TIME = 3000 -- Fifty minutes
 local attackUrgent = false
 
 local MISSING_ENGINE_TEXT = "Game engine update required, restart the menu to apply."
