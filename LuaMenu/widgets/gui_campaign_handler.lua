@@ -295,6 +295,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		if target then
 			if not targetable then
 				target:Dispose()
+				target = nil
 			end
 		elseif targetable then
 			target = Image:New{
@@ -311,7 +312,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 	end
 	
 	function externalFunctions.GetCaptured()
-		return captured
+		return WG.CampaignData.IsPlanetCaptured(planetID)
 	end
 	
 	return externalFunctions

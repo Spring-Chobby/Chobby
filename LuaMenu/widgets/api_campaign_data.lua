@@ -179,6 +179,7 @@ local function LoadGame(saveData, refreshGUI)
 		Spring.CreateDir(SAVE_DIR)
 		ResetGamedata()
 		gamedata = Spring.Utilities.MergeTable(saveData, gamedata, true)
+		Spring.Utilities.TableEcho(gamedata, "gamedata")
 		if refreshGUI then
 			WG.CampaignHandler.Refresh()
 		end

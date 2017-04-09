@@ -128,6 +128,7 @@ local function PromptNewSave()
 			WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", ebSaveName.text)
 			WG.CampaignData.StartNewGame()
 			newSaveWindow:Dispose()
+			WG.CampaignSaveWindow.PopulateSaveList()
 		end
 	end
 
@@ -283,7 +284,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 	return container, {saveFile.name, DateToString(saveFile.date)}
 end
 
-local function PopulateSaveList(saveList)
+local function UpdateSaveList(saveList)
 	saveList:Clear()
 	local saves = WG.CampaignData.GetSaves()
 	local items = {}
@@ -294,6 +295,7 @@ local function PopulateSaveList(saveList)
 
 	saveList:AddItems(items)
 end
+
 --------------------------------------------------------------------------------
 -- Make Chili controls
 --------------------------------------------------------------------------------
@@ -322,7 +324,7 @@ local function InitializeControls(parent, saveMode)
 	}
 
 	local saveList = WG.Chobby.SortableList(listHolder, headings, 80, 2)
-	PopulateSaveList(saveList)
+	UpdateSaveList(saveList)
 
 	local saveButton = Button:New {
 		width = 180,
@@ -342,7 +344,7 @@ local function InitializeControls(parent, saveMode)
 	local externalFunctions = {}
 
 	function externalFunctions.PopulateSaveList()
-		PopulateSaveList(saveList)
+		UpdateSaveList(saveList)
 	end
 
 	return externalFunctions
