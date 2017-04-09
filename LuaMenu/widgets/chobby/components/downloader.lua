@@ -254,6 +254,10 @@ function Downloader:DownloadFailed(downloadID, errorID)
 		self.completeListener(self.downloads[downloadID].archiveName, self.downloads[downloadID].archiveType, false)
 	end
 
+	if WG.WrapperLoopback and WG.WrapperLoopback.DownloadFile then
+		WG.WrapperLoopback.DownloadFile(self.downloads[downloadID].archiveName, ((self.downloads[downloadID].archiveType == "map") and "MAP") or "RAPID")
+	end
+	
 	self.prDownload:SetCaption("\255\255\0\0Download failed [".. errorID .."].\b")
 
 	-- Effectively a reimplementation of SignalMask from LUS
