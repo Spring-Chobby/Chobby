@@ -21,7 +21,9 @@ end
 local externalFunctions = {}
 
 function externalFunctions.DownloadFinished(name, fileType, success)
-	widgetHandler:DownloadFinished()
+	if success then
+		widgetHandler:DownloadFinished()
+	end
 	Spring.Echo("Backup Download Finished", name, fileType, success)
 	Chotify:Post({
 		title = "Download " .. ((success and "Finished") or "Failed"),
@@ -34,11 +36,11 @@ end
 -- Initialization
 
 local function TestDownload()
-	WG.WrapperLoopback.DownloadFile("sands_of_time_v1.0", "MAP")
+	WG.WrapperLoopback.DownloadFile("Sands of Time v1.0", "MAP")
 	Spring.Echo("TestDownload")
 	Chotify:Post({
 		title = "Download Failed",
-		body = "Starting backup download for " .. ("sands_of_time_v1.0" or "???"),
+		body = "Starting backup download for " .. ("Sands of Time v1.0" or "???"),
 	})
 end
 
@@ -47,5 +49,5 @@ function widget:Initialize()
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 	
 	WG.DownloadHandler = externalFunctions
-	WG.Delay(TestDownload, 10)
+	--WG.Delay(TestDownload, 2)
 end

@@ -246,7 +246,7 @@ function Downloader:DownloadFinished(downloadID)
 end
 
 function Downloader:DownloadFailed(downloadID, errorID)
-	if not self.downloads[downloadID] then
+	if not (downloadID and self.downloads[downloadID]) then
 		return
 	end
 	self.downloads[downloadID].failed = true
