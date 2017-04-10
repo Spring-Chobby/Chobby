@@ -444,7 +444,6 @@ local function InitializeActivityPromptHandler()
 		externalFunctions.UpdateTimer(true)
 		
 		button:SetVisibility(not alreadyJoined)
-		Resize()
 		
 		if alreadyJoined then
 			if planetID ~= newPlanetData.PlanetID then
@@ -457,6 +456,8 @@ local function InitializeActivityPromptHandler()
 			planetImage:Dispose()
 			planetImage = nil
 		end
+		
+		Resize()
 	end
 	
 	function externalFunctions.GetHolder()
@@ -1298,6 +1299,22 @@ function DelayedInitialize()
 			statusAndInvitesPanel.RemoveControl(activityPromptHandler.GetHolder().name)
 		end
 	end
+	
+	-- Test data
+	--local TestAttack, TestDefend
+	--function TestAttack()
+	--	activityPromptHandler.SetActivity({PlanetName = "test", Map = "TitanDuel", Count = 2, Needed = 3, PlanetID = 1, PlanetImage = "12.png"}, true, true, true)
+	--	statusAndInvitesPanel.AddControl(activityPromptHandler.GetHolder(), 5)
+	--	
+	--	WG.Delay(TestDefend, 3)
+	--end
+	--function TestDefend()
+	--	activityPromptHandler.SetActivity({PlanetName = "test", Map = "TitanDuel", Count = 2, Needed = 3, PlanetID = 2, PlanetImage = "11.png"}, false, false, false)
+	--	statusAndInvitesPanel.AddControl(activityPromptHandler.GetHolder(), 5)
+	--	
+	--	WG.Delay(TestAttack, 3)
+	--end
+	--WG.Delay(TestAttack, 3)
 	
 	local function OnPwMatchCommand(listener, attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
 		phaseTimer.SetNewDeadline(deadlineSeconds)
