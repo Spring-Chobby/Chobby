@@ -40,6 +40,7 @@ return {
 		download_maps = "Download Maps",
 		download_replays = "Download Replays",
 		refresh = "Refresh",
+		more = "More",
 		--
 		start_download = 'Start download',
 		download_noun = 'Download',

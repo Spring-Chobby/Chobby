@@ -187,20 +187,30 @@ local function InitializeControls(parentControl)
 	
 	local replayList = WG.Chobby.SortableList(listHolder, headings, nil, nil, false)
 	
+	local PartialAddReplays, moreButton
+	
 	local function AddReplays()
 		local replays = VFS.DirList("demos")
 		--Spring.Utilities.TableEcho(replays, "replaysList")
 		
-		loadingPanel:SetVisibility(true)
-		loadingPanel:BringToFront()
+		replayList:Clear()
 		
-		local index = 1
-		local function PartialAddReplays()
+		if moreButton then
+			moreButton:SetVisibility(true)
+		end
+		
+		local index = #replays
+		PartialAddReplays = function()
+			loadingPanel:SetVisibility(true)
+			loadingPanel:BringToFront()
 			local items = {}
 			for i = 1, 20 do
-				if index > #replays then
+				if index < 1 then
 					replayList:AddItems(items)
 					Spring.Echo("replayList adding", #items, "replays.")
+					if moreButton then
+						moreButton:SetVisibility(false)
+					end
 					loadingPanel:SetVisibility(false)
 					return
 				end
@@ -208,22 +218,19 @@ local function InitializeControls(parentControl)
 				local control, sortData = CreateReplayEntry(replayPath)
 				if control then
 					items[#items + 1] = {replayPath, control, sortData}
-					--Spring.Echo("Added replay", replayPath)
-				else
-					--Spring.Echo("Rejected replay", replayPath)
 				end
 				
-				index = index + 1
+				index = index - 1
 			end
 			Spring.Echo("replayList adding", #items, "replays.")
 			
+			loadingPanel:SetVisibility(false)
 			replayList:AddItems(items)
-			WG.Delay(PartialAddReplays, 0.1)
 		end
 		
-		WG.Delay(PartialAddReplays, 0.1)
+		PartialAddReplays()
 	end
-		
+	
 	AddReplays()
 	
 	-------------------------
@@ -245,7 +252,25 @@ local function InitializeControls(parentControl)
 			end
 		},
 	}
-		
+	
+	moreButton = Button:New {
+		x = 430,
+		y = 5,
+		width = 85,
+		height = 38,
+		caption = i18n("more"),
+		font = Configuration:GetFont(3),
+		classname = "option_button",
+		parent = parentControl,
+		OnClick = {
+			function ()
+				if PartialAddReplays then
+					PartialAddReplays()
+				end
+			end
+		},
+	}
+	
 	if WG.WrapperLoopback and Configuration.gameConfig.link_replays then
 		Button:New {
 			x = 210,
