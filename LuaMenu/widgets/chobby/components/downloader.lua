@@ -224,7 +224,7 @@ function Downloader:DownloadStarted(downloadID)
 end
 
 function Downloader:DownloadFinished(downloadID)
-	if not self.downloads[downloadID] then
+	if not (downloadID and self.downloads[downloadID]) then
 		return
 	end
 	self.downloads[downloadID].complete = true
@@ -256,6 +256,10 @@ function Downloader:DownloadFailed(downloadID, errorID)
 
 	if WG.WrapperLoopback and WG.WrapperLoopback.DownloadFile then
 		WG.WrapperLoopback.DownloadFile(self.downloads[downloadID].archiveName, ((self.downloads[downloadID].archiveType == "map") and "MAP") or "RAPID")
+		Chotify:Post({
+			title = "Download Failed",
+			body = "Starting backup download for " .. (self.downloads[downloadID].archiveName or "???"),
+		})
 	end
 	
 	self.prDownload:SetCaption("\255\255\0\0Download failed [".. errorID .."].\b")
