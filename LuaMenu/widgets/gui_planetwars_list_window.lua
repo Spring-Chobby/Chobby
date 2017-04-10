@@ -34,6 +34,9 @@ local MISSING_GAME_TEXT = "Game version update required. Wait for a download or 
 
 local updates = 0
 
+local ATTACKER_SOUND = "sounds/matchFound.wav"
+local DEFENDER_SOUND = "sounds/marker_place.wav"
+
 local DoUnMatchedActivityUpdate -- Activity update function
 
 --------------------------------------------------------------------------------
@@ -303,11 +306,13 @@ end
 
 local function InitializeActivityPromptHandler()
 	local lobby = WG.LibLobby.lobby
+	local Configuration = WG.Chobby.Configuration
 	local planetData
 	
 	local planetID
 	local planetImage
 	local planetImageSize = 77
+	local oldIsAttacker
 
 	local holder = Panel:New {
 		x = 0,
@@ -329,7 +334,7 @@ local function InitializeActivityPromptHandler()
 		bottom = 4,
 		padding = {0,0,0,0},
 		caption = "Join",
-		font = WG.Chobby.Configuration:GetFont(3),
+		font = Configuration:GetFont(3),
 		classname = "action_button",
 		OnClick = {
 			function()
@@ -349,7 +354,7 @@ local function InitializeActivityPromptHandler()
 		y = 18,
 		width = 195,
 		height = 20,
-		fontsize = WG.Chobby.Configuration:GetFont(2).size,
+		fontsize = Configuration:GetFont(2).size,
 		text = "",
 		parent = holder
 	}
@@ -358,7 +363,7 @@ local function InitializeActivityPromptHandler()
 		y = 18,
 		width = 195,
 		height = 20,
-		fontsize = WG.Chobby.Configuration:GetFont(2).size,
+		fontsize = Configuration:GetFont(2).size,
 		text = "",
 		parent = holder
 	}
@@ -401,6 +406,38 @@ local function InitializeActivityPromptHandler()
 		end
 	end
 	
+	local function PossiblyPlayWarning(isAttacker)
+		isAttacker = (isAttacker and true) or false
+		if isAttacker == oldIsAttacker then
+			return
+		end
+		oldIsAttacker = isAttacker
+		if not Configuration.planetwarsNotifications then
+			return
+		end
+		if WG.WrapperLoopback then
+			if isAttacker then
+				WG.WrapperLoopback.Alert("Planetwars: attack a planet.")
+			else
+				WG.WrapperLoopback.Alert("Planetwars: defense required!")
+			end
+		end
+		
+		local snd_volui = Spring.GetConfigString("snd_volui")
+		local snd_volmaster = Spring.GetConfigString("snd_volmaster")
+		-- These are defaults. Should be audible enough.
+		Spring.SetConfigString("snd_volui", 100)
+		Spring.SetConfigString("snd_volmaster", 60)
+		if Configuration.menuNotificationVolume ~= 0 then
+			Spring.PlaySoundFile((isAttacker and ATTACKER_SOUND) or DEFENDER_SOUND, Configuration.menuNotificationVolume or 1, "ui")
+		end
+		WG.Delay(function()
+			Spring.SetConfigString("snd_volui", snd_volui)
+			Spring.SetConfigString("snd_volmaster", snd_volmaster)
+		end, 10)
+		
+	end
+	
 	holder.OnResize = {Resize}
 	
 	local externalFunctions = {}
@@ -419,6 +456,7 @@ local function InitializeActivityPromptHandler()
 	
 	function externalFunctions.SetActivity(newPlanetData, isAttacker, alreadyJoined, waitingForAllies)
 		planetData = newPlanetData
+		PossiblyPlayWarning(isAttacker)
 		if alreadyJoined then
 			if isAttacker then
 				planetStatusTextBox:SetText("Attacking: " .. planetData.PlanetName)

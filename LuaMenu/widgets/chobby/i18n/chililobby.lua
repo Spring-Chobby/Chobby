@@ -136,6 +136,7 @@ return {
 		downloads_completed = "All downloads completed.",
 
 		-- Settings
+		planetwars_notifications = "Planetwars notifications",
 		notifyForAllChat = "Notify for all chat",
 		drawFullSpeed = "Full speed draw updates",
 		simplifiedSkirmishSetup = "Simple skirmish setup",

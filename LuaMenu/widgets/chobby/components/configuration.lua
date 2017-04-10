@@ -139,6 +139,7 @@ function Configuration:init()
 
 	self.lastLoginChatLength = 25
 	self.notifyForAllChat = true
+	self.planetwarsNotifications = false -- Possibly too intrusive? See how it goes.
 	self.simplifiedSkirmishSetup = true
 	self.debugMode = false
 	self.activeDebugConsole = false
@@ -218,6 +219,7 @@ function Configuration:GetConfigData()
 		animate_lobby = self.animate_lobby,
 		game_settings = self.game_settings,
 		notifyForAllChat = self.notifyForAllChat,
+		planetwarsNotifications = self.planetwarsNotifications,
 		simplifiedSkirmishSetup = self.simplifiedSkirmishSetup,
 		debugMode = self.debugMode,
 		confirmation_mainMenuFromBattle = self.confirmation_mainMenuFromBattle,
