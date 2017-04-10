@@ -34,8 +34,8 @@ local MISSING_GAME_TEXT = "Game version update required. Wait for a download or 
 
 local updates = 0
 
-local ATTACKER_SOUND = "sounds/matchFound.wav"
-local DEFENDER_SOUND = "sounds/marker_place.wav"
+local ATTACKER_SOUND = "sounds/marker_place.wav"
+local DEFENDER_SOUND = "sounds/alarm.wav"
 
 local DoUnMatchedActivityUpdate -- Activity update function
 
