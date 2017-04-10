@@ -1043,7 +1043,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	function externalFunctions.SetLobbyButtonEnabled(newEnabled)
 		Spring.Echo("SetLobbyButtonEnabled", newEnabled)
-		if not ingameInterfaceHolder:GetChildByName("switchToMenuButton") then
+		if ingameInterfaceHolder:GetChildByName("switchToMenuButton") then
 			switchToMenuButton:SetVisibility(newEnabled)
 		else
 			Spring.Echo("Missing switchToMenuButton")
