@@ -312,7 +312,8 @@ local function InitializeActivityPromptHandler()
 	local planetID
 	local planetImage
 	local planetImageSize = 77
-	local oldIsAttacker
+	local oldIsAttacker = false
+	local newNotification = true
 
 	local holder = Panel:New {
 		x = 0,
@@ -407,10 +408,10 @@ local function InitializeActivityPromptHandler()
 	end
 	
 	local function PossiblyPlayWarning(isAttacker)
-		isAttacker = (isAttacker and true) or false
-		if isAttacker == oldIsAttacker then
+		if (not newNotification) and isAttacker == oldIsAttacker then
 			return
 		end
+		newNotification = false
 		oldIsAttacker = isAttacker
 		if not Configuration.planetwarsNotifications then
 			return
@@ -496,6 +497,10 @@ local function InitializeActivityPromptHandler()
 		end
 		
 		Resize()
+	end
+	
+	function externalFunctions.NotifyHidden()
+		newNotification = true
 	end
 	
 	function externalFunctions.GetHolder()
@@ -1334,6 +1339,7 @@ function DelayedInitialize()
 			activityPromptHandler.SetActivity(planetData, isAttacker, alreadyJoined, waitingForAllies)
 			statusAndInvitesPanel.AddControl(activityPromptHandler.GetHolder(), 5)
 		else
+			activityPromptHandler.NotifyHidden()
 			statusAndInvitesPanel.RemoveControl(activityPromptHandler.GetHolder().name)
 		end
 	end
