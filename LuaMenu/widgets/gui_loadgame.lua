@@ -70,6 +70,14 @@ local function SecondsToClock(seconds)
 	end
 end
 
+local function Notify(title, stuff)
+	Spring.Echo(stuff)
+	Chotify:Post({
+		title = title,
+		body = stuff,
+	})
+end
+
 --------------------------------------------------------------------------------
 -- Savegame utlity functions
 --------------------------------------------------------------------------------
@@ -123,27 +131,56 @@ end
 local function LoadGameByFilename(filename)
 	Spring.Echo(filename)
 	local saveData = GetSave(SAVE_DIR .. '/' .. filename .. ".lua")
-	if saveData then
-		local success, err = pcall(function()		
+	if not saveData then
+		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Save game " .. filename .. " not found")
+		return
+	end
+	
+	if not (saveData.gameName and saveData.gameVersion and saveData.map) then
+		Spring.Echo("Save game missing game or map", saveData.gameName, saveData.gameVersion, saveData.map)
+		return
+	end
+	
+	local game = saveData.gameName .. " " .. saveData.gameVersion
+	local map = saveData.map
+	local hasGame = true
+	
+	if not VFS.HasArchive(game) then
+		VFS.DownloadArchive(game, "game")
+		Notify("Downloading game...", "Retry when complete")
+		hasGame = false
+	end
+
+	if not VFS.HasArchive(map) then
+		VFS.DownloadArchive(map, "map")
+		Notify("Downloading map...", "Retry when complete")
+		return
+	end
+	
+	if not hasGame then
+		return
+	end
+
+	local success, err = pcall(
+		function()
 			--Spring.Log(widget:GetInfo().name, LOG.INFO, "Save file " .. path .. " loaded")
 			local script = [[
-[GAME]
-{
-	SaveFile=__FILE__;
-	IsHost=1;
-	OnlyLocal=1;
-	MyPlayerName=__PLAYERNAME__;
-}
-]]
+	[GAME]
+	{
+		SaveFile=__FILE__;
+		IsHost=1;
+		OnlyLocal=1;
+		MyPlayerName=__PLAYERNAME__;
+	}
+	]]
 			script = script:gsub("__FILE__", filename .. ".slsf")
 			script = script:gsub("__PLAYERNAME__", saveData.playerName)
-			Spring.Reload(script)
-		end)
-		if (not success) then
-			Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error loading game: " .. err)
+			WG.Chobby.localLobby:StartGameFromString(script)
 		end
-	else
-		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Save game " .. filename .. " not found")
+	)
+	
+	if (not success) then
+		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error loading game: " .. err)
 	end
 end
 

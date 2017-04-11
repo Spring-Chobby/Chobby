@@ -62,6 +62,8 @@ function Downloader:init(tbl, timeout, updateListener, completeListener, queueFo
 	self.prDownload:Hide()
 	self.queueLabel:Hide()
 	self.queueList:Hide()
+	
+	self.duplicateDownloads = {}
 
 	self.downloads = {}
 	self._lastUpdate = Spring.GetTimer()
@@ -232,6 +234,17 @@ function Downloader:DownloadFinished(downloadID)
 		self.completeListener(self.downloads[downloadID].archiveName, self.downloads[downloadID].archiveType, true)
 	end
 
+	if self.duplicateDownloads[self.downloads[downloadID].archiveName] then
+		if WG.WrapperLoopback and WG.WrapperLoopback.DownloadFile then
+			WG.WrapperLoopback.DownloadFile(self.downloads[downloadID].archiveName, ((self.downloads[downloadID].archiveType == "map") and "MAP") or "RAPID")
+			Chotify:Post({
+				title = "Download Failed",
+				body = "Starting backup download for " .. (self.downloads[downloadID].archiveName or "???"),
+			})
+		end
+	else
+		self.duplicateDownloads[self.downloads[downloadID].archiveName] = true
+	end
 	self.prDownload:SetCaption("\255\0\255\0Download complete.\b")
 
 	-- Effectively a reimplementation of SignalMask from LUS
