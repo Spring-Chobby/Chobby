@@ -330,6 +330,6 @@ function RecursivelyDeleteFactories(config)
 	end
 end
 
---local config = LoadCircuitConfig(shortName, "0.9.12")
+--local config = LoadCircuitConfig(shortName, "dev")
 --RecursivelyDeleteFactories(config)
---local configName = SaveCircuitConfig(shortName, "0.9.12", aiCount, config)
+--local configName = SaveCircuitConfig(shortName, "dev", aiCount, config)
