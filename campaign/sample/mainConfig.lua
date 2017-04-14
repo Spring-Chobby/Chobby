@@ -12,5 +12,4 @@ local externalFuncAndData = {
 	codex = codex,
 }
 
-
 return externalFuncAndData
