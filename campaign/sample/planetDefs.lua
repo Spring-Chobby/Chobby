@@ -309,6 +309,13 @@ local function MakePlanet(planetID)
 							z = 1300,
 							facing = 2,
 						},
+						{
+							name = "dante",
+							x = 800,
+							z = 1300,
+							facing = 2,
+							buildProgress = 0.4,
+						},
 					}
 				},
 				{
