@@ -32,13 +32,6 @@ local PLANET_NO_START_COLOR = {0.5, 0.5, 0.5, 1}
 
 local TARGET_IMAGE = LUA_DIRNAME .. "images/niceCircle.png"
 
-local playerUnlocks = {
-	"cormex",
-	"armsolar",
-	"armpw",
-	"factorycloak",
-}
-
 local planetList
 
 --------------------------------------------------------------------------------
@@ -112,7 +105,7 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 			font = Configuration:GetFont(4),
 			OnClick = {
 				function(self)
-					WG.PlanetBattleHandler.StartBattle(planetID, planetData, playerUnlocks)
+					WG.PlanetBattleHandler.StartBattle(planetID, planetData)
 				end
 			}
 		}
@@ -348,7 +341,7 @@ end
 local function InitializePlanetHandler(parent)
 	local Configuration = WG.Chobby.Configuration
 	
-	local window = Panel:New {
+	local window = ((Configuration.debugMode and Panel) or Control):New {
 		name = "planetsHolder",
 		padding = {0,0,0,0},
 		parent = parent,

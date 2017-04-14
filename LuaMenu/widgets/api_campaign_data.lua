@@ -90,27 +90,12 @@ end
 local function ResetGamedata()
 	gamedata = {
 		unitsUnlocked = {map = {}, list = {}},
+		modulesUnlocked = {map = {}, list = {}},
+		codexEntriesUnlocked = {map = {}, list = {}},
 		planetsCaptured = {map = {}, list = {}},
-		retinue = {
-			{
-				unitDefName = "armpw",
-				retinueID = 1,
-				experience = 3,
-				active = true,
-			},
-			{
-				unitDefName = "armorco",
-				retinueID = 2,
-				experience = 1,
-				active = true,
-			},
-			{
-				unitDefName = "armrock",
-				retinueID = 3,
-				experience = 1,
-				active = false,
-			}
-		},
+		commanderLevel = 1,
+		commanderLoadout = {},
+		retinue = {}, -- Unused
 	}
 end
 
@@ -241,6 +226,10 @@ function externalFunctions.GetRetinue()
 	return gamedata.retinue
 end
 
+function externalFunctions.GetUnitsUnlocks()
+	return gamedata.unitsUnlocked
+end
+
 function externalFunctions.GetActiveRetinue()
 	local activeRetinue = {}
 	for i = 1, #gamedata.retinue do
@@ -287,7 +276,7 @@ function externalFunctions.GetPlayerCommander()
 end
 
 function externalFunctions.GetPlayerCommanderLevel()
-	return 2
+	return gamedata.commanderLevel
 end
 
 function externalFunctions.GetSaves()

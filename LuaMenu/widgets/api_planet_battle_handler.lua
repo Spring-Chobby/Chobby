@@ -71,7 +71,7 @@ end
 --------------------------------------------------------------------------------
 -- Start Game
 
-local function StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName)
+local function StartBattleForReal(planetID, gameConfig, gameName)
 	local allyTeams = {}
 	local allyTeamCount = 0
 	local teams = {}
@@ -97,18 +97,14 @@ local function StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName)
 		},
 	}
 	
-	local fullPlayerUnlocks = {}
-	local playerUnlocksMap = {}
-	for i = 1, #playerUnlocks do
-		fullPlayerUnlocks[#fullPlayerUnlocks + 1] = playerUnlocks[i]
-		playerUnlocksMap[playerUnlocks[i]] = true
-	end
+	local playerUnlocks = WG.CampaignData.GetUnitsUnlocks()
+	local fullPlayerUnlocks = Spring.Utilities.CopyTable(playerUnlocks.list)
+
 	if gameConfig.playerConfig.extraUnlocks then
 		local extra = gameConfig.playerConfig.extraUnlocks
 		for i = 1, #extra do
-			if not playerUnlocksMap[extra[i]] then
+			if not playerUnlocks.map[extra[i]] then
 				fullPlayerUnlocks[#fullPlayerUnlocks + 1] = extra[i]
-				playerUnlocksMap[extra[i]] = true
 			end
 		end
 	end
@@ -224,7 +220,7 @@ end
 -- External Functions
 local PlanetBattleHandler = {}
 
-function PlanetBattleHandler.StartBattle(planetID, planetData, playerUnlocks)
+function PlanetBattleHandler.StartBattle(planetID, planetData)
 	local Configuration = WG.Chobby.Configuration
 	local gameConfig = planetData.gameConfig
 
@@ -249,7 +245,7 @@ function PlanetBattleHandler.StartBattle(planetID, planetData, playerUnlocks)
 	end
 	
 	local function StartBattleFunc()
-		if StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName) then
+		if StartBattleForReal(planetID, gameConfig, gameName) then
 			Spring.Echo("Start battle success!")
 		end
 	end

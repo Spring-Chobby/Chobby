@@ -122,13 +122,20 @@ end
 local PLANET_SIZE_MAP = 48
 local PLANET_SIZE_INFO = 240
 
+local startingUnits = { 
+	"cormex",
+	"armsolar",
+	"armpw",
+	"factorycloak",
+}
+
 local function MakePlanet(planetID)
 	local image = planetImages[math.floor(math.random()*#planetImages) + 1]
 	
 	local planetData = {
 		id = "planet" .. planetID,
 		name = "Pong",
-		startingPlanet = math.random() > 0.9,
+		startingPlanet = (planetID == 3),
 		mapDisplay = {
 			x = planetPositions[planetID][1],
 			y = planetPositions[planetID][2],
@@ -357,7 +364,7 @@ local function MakePlanet(planetID)
 			},
 		},
 		completionReward = {
-			units = {
+			units = (planetID == 3 and startingUnits) or {
 				"cafus",
 			},
 			modules = {
