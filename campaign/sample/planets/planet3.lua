@@ -1,65 +1,24 @@
-
--- TODO: Remove
-local planetImages = {
-	LUA_DIRNAME .. "images/planets/arid01.png",
-	LUA_DIRNAME .. "images/planets/barren01.png",
-	LUA_DIRNAME .. "images/planets/barren02.png",
-	LUA_DIRNAME .. "images/planets/barren03.png",
-	LUA_DIRNAME .. "images/planets/desert01.png",
-	LUA_DIRNAME .. "images/planets/desert02.png",
-	LUA_DIRNAME .. "images/planets/desert03.png",
-	LUA_DIRNAME .. "images/planets/inferno01.png",
-	LUA_DIRNAME .. "images/planets/inferno02.png",
-	LUA_DIRNAME .. "images/planets/inferno03.png",
-	LUA_DIRNAME .. "images/planets/inferno04.png",
-	LUA_DIRNAME .. "images/planets/ocean01.png",
-	LUA_DIRNAME .. "images/planets/ocean02.png",
-	LUA_DIRNAME .. "images/planets/ocean03.png",
-	LUA_DIRNAME .. "images/planets/radiated01.png",
-	LUA_DIRNAME .. "images/planets/radiated02.png",
-	LUA_DIRNAME .. "images/planets/radiated03.png",
-	LUA_DIRNAME .. "images/planets/swamp01.png",
-	LUA_DIRNAME .. "images/planets/swamp02.png",
-	LUA_DIRNAME .. "images/planets/swamp03.png",
-	LUA_DIRNAME .. "images/planets/terran01.png",
-	LUA_DIRNAME .. "images/planets/terran02.png",
-	LUA_DIRNAME .. "images/planets/terran03.png",
-	LUA_DIRNAME .. "images/planets/terran03_damaged.png",
-	LUA_DIRNAME .. "images/planets/terran04.png",
-	LUA_DIRNAME .. "images/planets/tundra01.png",
-	LUA_DIRNAME .. "images/planets/tundra02.png",
-	LUA_DIRNAME .. "images/planets/tundra03.png",
-}
-
-local backgroundImages = {
-	LUA_DIRNAME .. "images/starbackgrounds/1.jpg",
-	LUA_DIRNAME .. "images/starbackgrounds/2.jpg",
-	LUA_DIRNAME .. "images/starbackgrounds/3.jpg",
-	LUA_DIRNAME .. "images/starbackgrounds/4.jpg",
-}
-
-local PLANET_SIZE_MAP = 48
-local PLANET_SIZE_INFO = 240
-
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Planet config
 
-local image = planetImages[math.floor(math.random()*#planetImages) + 1]
-
-local planetData = {
+local function GetPlanet(planetUtilities)
+	
+	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	
+	local planetData = {
 	name = "Pong",
 	startingPlanet = true,
 	mapDisplay = {
 		x = 0.3,
 		y = 0.36,
 		image = image,
-		size = PLANET_SIZE_MAP,
+		size = planetUtilities.PLANET_SIZE_MAP,
 	},
 	infoDisplay = {
 		image = image,
-		size = PLANET_SIZE_INFO,
-		backgroundImage = backgroundImages[math.floor(math.random()*#backgroundImages) + 1],
+		size = planetUtilities.PLANET_SIZE_INFO,
+		backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
 		terrainType = "Terran",
 		radius = "6700 km",
 		primary = "Tau Ceti",
@@ -294,6 +253,9 @@ local planetData = {
 		modules = {
 		},
 	}
-}
+	}
+	
+	return planetData
+end
 
-return planetData
+return GetPlanet

@@ -55,8 +55,9 @@ for i = 1, #planetAdjacency do
 end
 
 local planets = {}
-for i = 1, #planetPositions do
-	planets[i] = VFS.Include("campaign/" .. shortname .. "/planets/planet" .. 1 .. ".lua")
+local planetUtilities = VFS.Include("campaign/" .. shortname .. "/planetUtilities.lua")
+for i = 1, 25 do
+	planets[i] = VFS.Include("campaign/" .. shortname .. "/planets/planet" .. i .. ".lua")(planetUtilities)
 	planets[i].id = ("planet" .. i)
 end
 
