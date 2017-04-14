@@ -70,6 +70,20 @@ local options = {
 --		type    = 'string',
 --		def     = '',
 --	},
+	{ -- string
+		key     = 'disabledunits',
+		name    = 'Disabled units',
+		desc    = 'Disable usage of specific units.\nSyntax: armwar+armpw+raveparty\nkey: disabledunits',
+		type    = 'string',
+		def     = '',
+	},
+	{ -- string
+		key     = 'version',
+		name    = 'AI version',
+		desc    = 'This value is used for parsing!',
+		type    = 'string',
+		def     = '0.9.14',
+	},
 }
 
 return options
