@@ -348,7 +348,7 @@ end
 local function InitializePlanetHandler(parent)
 	local Configuration = WG.Chobby.Configuration
 	
-	local window = Control:New {
+	local window = Panel:New {
 		name = "planetsHolder",
 		padding = {0,0,0,0},
 		parent = parent,
