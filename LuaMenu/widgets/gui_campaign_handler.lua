@@ -424,6 +424,26 @@ end
 
 local BATTLE_WON_STRING = "Campaign_PlanetBattleWon"
 
+local function MakeWinPopup(planetData)
+	local reward = planetData.completionReward
+	if not reward then
+		WG.Chobby.InformationPopup("You won the battle.")
+		return
+	end
+	local wonString = ""
+	if reward.units then
+		for i = 1, #reward.units do
+			wonString = wonString .. " " .. reward.units[i] 
+		end
+	end
+	if reward.modules then
+		for i = 1, #reward.modules do
+			wonString = wonString .. " " ..  reward.modules[i]
+		end
+	end
+	WG.Chobby.InformationPopup("You won the battle and are rewarded with" .. wonString .. ".")
+end
+
 function widget:RecvLuaMsg(msg)
 	if string.find(msg, BATTLE_WON_STRING) then
 		msg = string.sub(msg, 25)
@@ -431,7 +451,8 @@ function widget:RecvLuaMsg(msg)
 		if planetID and planetConfig and planetConfig[planetID] then
 			local config = planetConfig[planetID]
 			WG.CampaignData.CapturePlanet(planetID)
-			WG.Chobby.InformationPopup("You won the battle and are rewarded with: " .. wonString .. ".")
+			MakeWinPopup(planetConfig[planetID])
+
 		end
 	end
 end
