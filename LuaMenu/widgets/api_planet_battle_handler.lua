@@ -44,7 +44,7 @@ end
 
 local function MakeCircuitDisableString(unlockedUnits)
 	local Configuration = WG.Chobby.Configuration
-	local unitList = Configuration.gameConfig.unitList
+	local unitList = Configuration.gameConfig.gameUnitInformation.nameList
 	if not unitList then
 		return nil
 	end
