@@ -13,6 +13,8 @@ function widget:GetInfo()
 	}
 end
 
+local moduleDefs, chassisDefs, upgradeUtilities, UNBOUNDED_LEVEL, _, moduleDefNames = VFS.Include("Gamedata/commanders/dynamic_comm_defs.lua")
+
 local GALAXY_IMAGE = LUA_DIRNAME .. "images/heic1403aDowngrade.jpg"
 local IMAGE_BOUNDS = {
 	x = 850/4000,
@@ -31,6 +33,9 @@ local PLANET_START_COLOR = {1, 1, 1, 1}
 local PLANET_NO_START_COLOR = {0.5, 0.5, 0.5, 1}
 
 local TARGET_IMAGE = LUA_DIRNAME .. "images/niceCircle.png"
+local ICONS_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/unitpics/"
+
+local REWARD_ICON_SIZE = 58
 
 local planetList
 local selectedPlanet
@@ -38,6 +43,87 @@ local selectedPlanet
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- TODO: use shader animation to ease info panel in
+
+local function GetUnitInfo(unitName)
+	return WG.Chobby.Configuration.gameConfig.gameUnitInformation.humanNames[unitName]
+end
+
+local function GetModuleInfo(moduleName)
+	local index = moduleDefNames[moduleName]
+	return index and moduleDefs[index]
+end
+
+local function MakeRewardList(holder, name, rewardList, tooltipFunction)
+	local Configuration = WG.Chobby.Configuration
+	
+	TextBox:New {
+		x = 4,
+		y = 2,
+		right = 4,
+		height = 30,
+		text = name,
+		font = Configuration:GetFont(2),
+		parent = holder
+	}
+	
+	local scroll = ScrollPanel:New {
+		classname = "scrollpanel_borderless",
+		x = 3,
+		y = 18,
+		right = 3,
+		bottom = 2,
+		scrollbarSize = 12,
+		padding = {0, 0, 0, 0},
+		parent = holder,
+	}
+	
+	for i = 1, #rewardList do
+		local info = tooltipFunction(rewardList[i]) or {}
+		local image = Image:New{
+			x = (REWARD_ICON_SIZE + 4)*(i - 1),
+			y = 0,
+			width = REWARD_ICON_SIZE,
+			height = REWARD_ICON_SIZE,
+			keepAspect = true,
+			tooltip = (info.humanName or "???") .. "\n " .. (info.description or ""),
+			file = ICONS_DIR .. rewardList[i] .. ".png",
+			parent = scroll,
+		}
+		function image:HitTest(x,y) return self end
+	end
+end
+
+local function MakeRewardsPanel(parent, rewards)
+	local units = rewards.units and #rewards.units ~= 0 and rewards.units 
+	local modules = rewards.modules and #rewards.modules ~= 0 and rewards.modules 
+	
+	local bottom = 75
+	if modules then
+		local rewardsHolder = Control:New {
+			x = 10,
+			right = 10,
+			bottom = bottom,
+			height = 94,
+			padding = {0, 0, 0, 0},
+			parent = parent,
+		}
+		MakeRewardList(rewardsHolder, "Modules", modules, GetModuleInfo)
+		bottom = bottom + 98
+	end
+	if units then
+		local rewardsHolder = Control:New {
+			x = 10,
+			right = 10,
+			bottom = bottom,
+			height = 94,
+			padding = {0, 0, 0, 0},
+			parent = parent,
+		}
+		MakeRewardList(rewardsHolder, "Units", units, GetUnitInfo)
+		bottom = bottom + 98
+	end
+end
+
 local function SelectPlanet(planetHandler, planetID, planetData, startable)
 	local Configuration = WG.Chobby.Configuration
 	
@@ -53,8 +139,8 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 		parent = starmapInfoPanel,
 		x = "50%",
 		y = "10%",
-		right = 8,
-		bottom = "10%",
+		right = "5%",
+		bottom = "5%",
 		children = {
 			-- title
 			Label:New{
@@ -89,10 +175,12 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 				right = 4,
 				bottom = "25%",
 				text = planetData.infoDisplay.text,
-				font = Configuration:GetFont(2),
+				font = Configuration:GetFont(0),
 			},
 		}
 	}
+	
+	MakeRewardsPanel(subPanel, planetData.completionReward)
 	
 	if startable then
 		local startButton = Button:New{

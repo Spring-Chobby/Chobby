@@ -246,8 +246,27 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			units = {
 				"cafus",
+				"corrl",
+				"corllt",
+				"factoryjump",
+				"armrock",
+				"armkam",
+				"tawf114",
+				"nsaclash",
+				"armestor",
+				"shipscout",
+				"subraider",
+				"gunshipaa",
+				"shipcon",
+				"amphraider2",
+				"amphraider3",
+				"amphassault",
+				"amphaa",
 			},
 			modules = {
+				"commweapon_beamlaser",
+				"commweapon_riotcannon",
+				"module_ablative_armor",
 			},
 			codexEntries = {
 				"character_ada",
