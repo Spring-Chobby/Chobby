@@ -53,7 +53,7 @@ local function GetModuleInfo(moduleName)
 	return index and moduleDefs[index]
 end
 
-local function MakeRewardList(holder, name, rewardList, tooltipFunction)
+local function MakeRewardList(holder, name, rewardList, tooltipFunction, alreadyUnlockedCheck)
 	local Configuration = WG.Chobby.Configuration
 	
 	TextBox:New {
@@ -79,13 +79,21 @@ local function MakeRewardList(holder, name, rewardList, tooltipFunction)
 	
 	for i = 1, #rewardList do
 		local info = tooltipFunction(rewardList[i]) or {}
+		local alreadyUnlocked = alreadyUnlockedCheck(rewardList[i])
+		local color = nil
+		local statusString = ""
+		if alreadyUnlocked then
+			color = {0.5, 0.5, 0.5, 0.5}
+			statusString = " (already unlocked)"
+		end
 		local image = Image:New{
 			x = (REWARD_ICON_SIZE + 4)*(i - 1),
 			y = 0,
 			width = REWARD_ICON_SIZE,
 			height = REWARD_ICON_SIZE,
 			keepAspect = true,
-			tooltip = (info.humanName or "???") .. "\n " .. (info.description or ""),
+			color = color,
+			tooltip = (info.humanName or "???") .. statusString .. "\n " .. (info.description or ""),
 			file = ICONS_DIR .. rewardList[i] .. ".png",
 			parent = scroll,
 		}
@@ -107,7 +115,7 @@ local function MakeRewardsPanel(parent, rewards)
 			padding = {0, 0, 0, 0},
 			parent = parent,
 		}
-		MakeRewardList(rewardsHolder, "Modules", modules, GetModuleInfo)
+		MakeRewardList(rewardsHolder, "Modules", modules, GetModuleInfo, WG.CampaignData.GetModuleIsUnlocked)
 		bottom = bottom + 98
 	end
 	if units then
@@ -119,7 +127,7 @@ local function MakeRewardsPanel(parent, rewards)
 			padding = {0, 0, 0, 0},
 			parent = parent,
 		}
-		MakeRewardList(rewardsHolder, "Units", units, GetUnitInfo)
+		MakeRewardList(rewardsHolder, "Units", units, GetUnitInfo, WG.CampaignData.GetUnitIsUnlocked)
 		bottom = bottom + 98
 	end
 end

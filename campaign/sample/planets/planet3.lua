@@ -245,6 +245,7 @@ local function GetPlanet(planetUtilities)
 		},
 		completionReward = {
 			units = {
+				"armjamt",
 			},
 			modules = {
 			},

@@ -267,6 +267,14 @@ function externalFunctions.GetUnitsUnlocks()
 	return gamedata.unitsUnlocked
 end
 
+function externalFunctions.GetUnitIsUnlocked(unitName)
+	return gamedata.unitsUnlocked.map[unitName]
+end
+
+function externalFunctions.GetModuleIsUnlocked(moduleName)
+	return gamedata.modulesUnlocked.map[moduleName]
+end
+
 function externalFunctions.GetCodexEntryIsUnlocked(entryName)
 	return gamedata.codexEntriesUnlocked.map[entryName], gamedata.codexEntryRead[entryName]
 end
