@@ -105,7 +105,6 @@ local function UnlockCodexEntries(unlockList)
 	end
 end
 
-
 local function ResetGamedata()
 	gamedata = {
 		unitsUnlocked = {map = {}, list = {}},
@@ -235,8 +234,9 @@ function externalFunctions.CapturePlanet(planetID)
 	local planet = WG.Chobby.Configuration.campaignConfig.planetDefs.planets[planetID]
 	if UnlockThing(gamedata.planetsCaptured, planetID) then
 		UnlockRewardSet(planet.completionReward)
-		SaveGame()
+		CallListeners("RewardGained", planet.completionReward)
 		CallListeners("PlanetCaptured", planetID)
+		SaveGame()
 	end
 end
 

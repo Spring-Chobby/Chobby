@@ -242,6 +242,14 @@ function widget:Initialize()
 	end
 	WG.CampaignData.AddListener("CampaignLoaded", CampaignLoaded)
 	
+	local function RewardGained(listener, reward)
+		if codexManagerStuff and reward.codexEntries then
+			-- Should really use Add here.
+			codexManagerStuff.PopulateCodexTree()
+		end
+	end
+	WG.CampaignData.AddListener("RewardGained", RewardGained)
+	
 	WG.CodexHandler = CodexHandler
 end
 

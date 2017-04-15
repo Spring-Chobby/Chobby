@@ -244,10 +244,13 @@ local function GetPlanet(planetUtilities)
 			},
 		},
 		completionReward = {
-			units = (planetID == 3 and startingUnits) or {
+			units = {
 				"cafus",
 			},
 			modules = {
+			},
+			codexEntries = {
+				"character_ada",
 			},
 		}
 	}

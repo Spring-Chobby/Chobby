@@ -33,6 +33,7 @@ local PLANET_NO_START_COLOR = {0.5, 0.5, 0.5, 1}
 local TARGET_IMAGE = LUA_DIRNAME .. "images/niceCircle.png"
 
 local planetList
+local selectedPlanet
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -194,6 +195,14 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 	starmapInfoPanel.OnResize[#starmapInfoPanel.OnResize + 1] = function(obj, xSize, ySize)
 		planetImage:SetPos(nil, math.floor((ySize - planetData.infoDisplay.size)/2))
 	end
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.Close()
+		starmapInfoPanel:Dispose() 
+	end
+	
+	return externalFunctions
 end
 
 local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
@@ -227,7 +236,11 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		caption = "",
 		OnClick = { 
 			function(self)
-				SelectPlanet(galaxyHolder, planetID, planetData, startable)
+				if selectedPlanet then
+					selectedPlanet.Close()
+					selectedPlanet = nil
+				end
+				selectedPlanet = SelectPlanet(galaxyHolder, planetID, planetData, startable)
 			end
 		},
 		parent = planetHolder,
@@ -516,6 +529,10 @@ function widget:Initialize()
 	local function CampaignLoaded(listener)
 		UpdateAllStartable()
 		UpdateEdgeList()
+		if selectedPlanet then
+			selectedPlanet.Close()
+			selectedPlanet = nil
+		end
 	end
 	WG.CampaignData.AddListener("CampaignLoaded", CampaignLoaded)
 	

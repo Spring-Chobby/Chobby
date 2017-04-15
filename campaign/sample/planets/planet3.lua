@@ -248,6 +248,9 @@ local function GetPlanet(planetUtilities)
 			},
 			modules = {
 			},
+			codexEntries = {
+				"faction_dynasty",
+			},
 		}
 	}
 	
