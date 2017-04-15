@@ -61,21 +61,11 @@ for i = 1, 25 do
 	planets[i].id = ("planet" .. i)
 end
 
-local initialUnlocks = {units = {}, modules = {}}
 local initialPlanets = {}
 
-local function AddUnlocks(unlockTable, unlockType)
-	for i = 1, #unlockTable do
-		initialUnlocks[unlockType][#initialUnlocks[unlockType] + 1] = unlockTable[i]
-	end
-end
-
 for i = 1, #planets do
-	if planets[i].startingPlanet then
+	if planets[i].startingPlanetCaptured then
 		initialPlanets[#initialPlanets + 1] = i
-		local unlocks = planets[i].completionReward
-		AddUnlocks(unlocks.units, "units")
-		AddUnlocks(unlocks.modules, "modules")
 	end
 end
 
@@ -83,10 +73,7 @@ local retData = {
 	planets = planets,
 	planetAdjacency = planetAdjacency,
 	planetEdgeList = planetEdgeList,
-	initialSetup = {
-		planets = initialPlanets,
-		unlocks = initialUnlocks,
-	},
+	initialPlanets = initialPlanets,
 }
 
 return retData

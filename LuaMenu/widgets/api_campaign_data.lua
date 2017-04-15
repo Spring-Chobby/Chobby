@@ -8,8 +8,8 @@ function widget:GetInfo()
 		author    = "KingRaptor & GoogleFrog",
 		date      = "2 March 2017",
 		license   = "GNU GPL, v2 or later",
-		layer     = 0,
-		enabled   = true  --  loaded by default?
+		layer     = -1000,
+		enabled   = true,  --  loaded by default?
 	}
 end
 
@@ -87,11 +87,31 @@ end
 --------------------------------------------------------------------------------
 -- Game data
 
+local function UnlockUnits(unlockList)
+	for i = 1, #unlockList do
+		UnlockThing(gamedata.unitsUnlocked, unlockList[i])
+	end
+end
+
+local function UnlockModules(unlockList)
+	for i = 1, #unlockList do
+		UnlockThing(gamedata.modulesUnlocked, unlockList[i])
+	end
+end
+
+local function UnlockCodexEntries(unlockList)
+	for i = 1, #unlockList do
+		UnlockThing(gamedata.codexEntriesUnlocked, unlockList[i])
+	end
+end
+
+
 local function ResetGamedata()
 	gamedata = {
 		unitsUnlocked = {map = {}, list = {}},
 		modulesUnlocked = {map = {}, list = {}},
 		codexEntriesUnlocked = {map = {}, list = {}},
+		codexEntryRead = {},
 		planetsCaptured = {map = {}, list = {}},
 		commanderLevel = 1,
 		commanderLoadout = {},
@@ -99,9 +119,15 @@ local function ResetGamedata()
 	}
 end
 
-local function UnlockUnits(unlockList)
-	for i = 1, #unlockList do
-		UnlockThing(gamedata.unitsUnlocked, unlockList[i])
+local function UnlockRewardSet(rewardSet)
+	if rewardSet.units then
+		UnlockUnits(rewardSet.units)
+	end
+	if rewardSet.modules then
+		UnlockModules(rewardSet.modules)
+	end
+	if rewardSet.codexEntries then
+		UnlockCodexEntries(rewardSet.codexEntries)
 	end
 end
 
@@ -165,7 +191,7 @@ local function LoadGame(saveData, refreshGUI)
 		ResetGamedata()
 		gamedata = Spring.Utilities.MergeTable(saveData, gamedata, true)
 		if refreshGUI then
-			WG.CampaignHandler.Refresh()
+			CallListeners("CampaignLoaded")
 		end
 		WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", saveData.name)
 	
@@ -178,12 +204,16 @@ end
 
 local function StartNewGame()
 	local Configuration = WG.Chobby.Configuration
-	local planets = Configuration.campaignConfig.planetDefs.initialSetup.planets
 	ResetGamedata()
+	
+	local planets = Configuration.campaignConfig.planetDefs.initialPlanets
+	UnlockRewardSet(Configuration.campaignConfig.initialUnlocks)
 	for i = 1, #planets do
 		externalFunctions.CapturePlanet(planets[i])
 	end
 	SaveGame()
+	
+	CallListeners("CampaignLoaded")
 end
 
 local function LoadCampaignData()
@@ -204,15 +234,7 @@ end
 function externalFunctions.CapturePlanet(planetID)
 	local planet = WG.Chobby.Configuration.campaignConfig.planetDefs.planets[planetID]
 	if UnlockThing(gamedata.planetsCaptured, planetID) then
-		if planet.completionReward.units then
-			UnlockUnits(planet.completionReward.units)
-		end
-		if planet.completionReward.modules then
-			UnlockModules(planet.completionReward.modules)
-		end
-		if planet.completionReward.codexEntries then
-			UnlockCodexEntries(planet.completionReward.codexEntries)
-		end
+		UnlockRewardSet(planet.completionReward)
 		SaveGame()
 		CallListeners("PlanetCaptured", planetID)
 	end
@@ -234,8 +256,19 @@ function externalFunctions.GetRetinue()
 	return gamedata.retinue
 end
 
+function externalFunctions.SetCodexEntryRead(entryName)
+	if not gamedata.codexEntryRead[entryName] then
+		gamedata.codexEntryRead[entryName] = true
+		SaveGame()
+	end
+end
+
 function externalFunctions.GetUnitsUnlocks()
 	return gamedata.unitsUnlocked
+end
+
+function externalFunctions.GetCodexEntryIsUnlocked(entryName)
+	return gamedata.codexEntriesUnlocked.map[entryName], gamedata.codexEntryRead[entryName]
 end
 
 function externalFunctions.GetActiveRetinue()

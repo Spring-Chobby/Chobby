@@ -48,6 +48,7 @@ function Configuration:init()
 	self.successColor = "\255\0\255\0"
 	self.partialColor = "\255\190\210\50"
 	self.selectedColor = "\255\99\184\255"
+	self.highlightedColor = "\255\125\255\0"
 	self.meColor = "\255\0\190\190"
 
 	self.moderatorColor = {0.68, 0.78, 1, 1}
@@ -306,6 +307,10 @@ end
 
 function Configuration:GetSelectedColor()
 	return self.selectedColor
+end
+
+function Configuration:GetHighlightedColor()
+	return self.highlightedColor
 end
 
 function Configuration:GetButtonFocusColor()

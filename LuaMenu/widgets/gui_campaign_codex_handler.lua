@@ -8,7 +8,7 @@ function widget:GetInfo()
 		author    = "GoogleFrog, KingRaptor",
 		date      = "24 November 2016",
 		license   = "GNU LGPL, v2.1 or later",
-		layer     = -100000,
+		layer     = 0,
 		enabled   = true  --  loaded by default?
 	}
 end
@@ -22,15 +22,11 @@ local IMAGE_SIZE = 96
 local BUTTON_FONT = 2
 
 local selectedButton
+local codexManagerStuff -- FIXME rename
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
-
--- TODO
-local function IsCodexEntryVisible(id)
-	return true
-end
 
 local function SortCodexEntries(a, b)
 	if (not entryA) or (not entryB) then
@@ -49,11 +45,9 @@ local function LoadCodexEntries(path)
 	local categories = {}
 	local categoriesOrdered = {}
 	for id, entry in pairs(codexEntries) do
-		if IsCodexEntryVisible(id) then
-			categories[entry.category] = categories[entry.category] or {}
-			local cat = categories[entry.category]
-			cat[#cat + 1] = entry
-		end
+		categories[entry.category] = categories[entry.category] or {}
+		local cat = categories[entry.category]
+		cat[#cat + 1] = entry
 	end
 	
 	-- sort categories
@@ -78,37 +72,47 @@ local function UpdateCodexEntry(entry, codexText, codexImage, entryButton)
 end
 
 local function PopulateCodexTree(parent, codexText, codexImage)
+	if codexTree then
+		codexTree:Dispose()
+	end
+	
 	local nodes = {}
 	local codexEntries, categories, categoriesOrdered = LoadCodexEntries()
 	
 	-- make tree view nodes
-	for i=1,#categoriesOrdered do
+	for i = 1, #categoriesOrdered do
 		local catID = categoriesOrdered[i]
 		local cat = categories[catID]
 		table.sort(cat, SortCodexEntries)
 		local node = {catID, {}}
 		local subnode = node[2]
-		for j=1,#cat do
+		for j = 1, #cat do
 			local entry = cat[j]
-			--local unlocked = gamedata.codexUnlocked[entryID]
-			--local read = WG.CampaignAPI.IsCodexEntryRead(entry.id) -- TODO handle
-			local button = Button:New{
-				height = 24,
-				caption = entry.name,
-				OnClick = { function(self)
-					UpdateCodexEntry(entry, codexText, codexImage, self)
-					if selectedButton then
-						ButtonUtilities.SetButtonDeselected(selectedButton)
-					end
-					ButtonUtilities.SetButtonSelected(self)
-					selectedButton = self
-				end},
-				font = WG.Chobby.Configuration:GetFont(BUTTON_FONT)
-			}
-			
-			ButtonUtilities.SetFontSizeScale(button, BUTTON_FONT)
-			subnode[#subnode + 1] = button
-			--Spring.Echo(catID, entry.name)
+			local unlocked, alreadyRead = WG.CampaignData.GetCodexEntryIsUnlocked(entry.id)
+			Spring.Echo("entry.name", entry.id)
+			if unlocked then
+				local button = Button:New{
+					height = 24,
+					caption = entry.name,
+					OnClick = { function(self)
+						UpdateCodexEntry(entry, codexText, codexImage, self)
+						if selectedButton then
+							ButtonUtilities.SetButtonDeselected(selectedButton)
+						end
+						ButtonUtilities.SetButtonSelected(self)
+						WG.CampaignData.SetCodexEntryRead(entry.id)
+						selectedButton = self
+					end},
+					font = WG.Chobby.Configuration:GetFont(BUTTON_FONT)
+				}
+				
+				ButtonUtilities.SetFontSizeScale(button, BUTTON_FONT)
+				
+				if not alreadyRead then
+					ButtonUtilities.SetButtonHighlighted(button)
+				end
+				subnode[#subnode + 1] = button
+			end
 		end
 		nodes[#nodes + 1] = node
 	end
@@ -205,9 +209,6 @@ end
 local CodexHandler = {}
 
 function CodexHandler.GetControl()
-
-	local codexManagerStuff	-- FIXME rename
-
 	local window = Control:New {
 		name = "codexHandler",
 		x = 0,
@@ -219,8 +220,6 @@ function CodexHandler.GetControl()
 			function(obj)
 				if obj:IsEmpty() then
 					codexManagerStuff = InitializeControls(obj)
-				else
-					codexManagerStuff.PopulateCodexTree()
 				end
 			end
 		},
@@ -235,7 +234,14 @@ end
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-
+	
+	local function CampaignLoaded(listener)
+		if codexManagerStuff then
+			codexManagerStuff.PopulateCodexTree()
+		end
+	end
+	WG.CampaignData.AddListener("CampaignLoaded", CampaignLoaded)
+	
 	WG.CodexHandler = CodexHandler
 end
 

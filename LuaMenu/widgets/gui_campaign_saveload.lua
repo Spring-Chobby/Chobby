@@ -168,7 +168,7 @@ local function PromptNewSave()
 	}
 
 	local popupHolder = WG.Chobby.PriorityPopup(newSaveWindow, CancelFunc, NewSave)
-	screen0:FocusControl(ebPassword)
+	screen0:FocusControl(ebSaveName)
 end
 
 --------------------------------------------------------------------------------
@@ -309,7 +309,7 @@ local function InitializeControls(parent, saveMode)
 	local listHolder = Control:New {
 		x = 12,
 		right = 15,
-		y = 80,
+		y = 60,
 		bottom = 15,
 		parent = parent,
 		resizable = false,
@@ -318,27 +318,28 @@ local function InitializeControls(parent, saveMode)
 	}
 
 	local headings = {
-		{name = "Name", x = 97, width = 200},
+		{name = "Name", x = 90, width = 200},
 		--{name = "Campaign", x = 97 + 200, width = 220},
 		{name = "Date", x = 97 + --[[200 +]] 220, width = 140},
 	}
 
-	local saveList = WG.Chobby.SortableList(listHolder, headings, 80, 2)
+	local saveList = WG.Chobby.SortableList(listHolder, headings, 60, 2)
 	UpdateSaveList(saveList)
 
 	local saveButton = Button:New {
-		width = 180,
-		x = 12,
-		y = 8,
-		height = 64,
+		x = 5,
+		y = 5,
+		width = 160,
+		height = 38,
 		caption = i18n("new_campaign"),
+		font = Configuration:GetFont(3),
+		classname = "option_button",
+		parent = parent,
 		OnClick = {
 			function ()
 				PromptNewSave()
 			end
 		},
-		font = Configuration:GetFont(3),
-		parent = parent,
 	}
 
 	local externalFunctions = {}

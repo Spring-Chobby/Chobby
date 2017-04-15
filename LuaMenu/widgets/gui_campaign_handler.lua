@@ -265,7 +265,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 	
 	function externalFunctions.UpdateStartable()
 		captured = WG.CampaignData.IsPlanetCaptured(planetID)
-		startable = captured
+		startable = captured or planetData.startingPlanet
 		if not startable then
 			for i = 1, #adjacency do
 				if adjacency[i] then
@@ -505,11 +505,6 @@ function externalFunctions.GetControl()
 	return window
 end
 
-function externalFunctions.Refresh()
-	UpdateAllStartable()
-	UpdateEdgeList()
-end
-
 --------------------------------------------------------------------------------
 -- Callins
 --------------------------------------------------------------------------------
@@ -517,6 +512,12 @@ end
 function widget:Initialize()
 	CHOBBY_DIR = "LuaMenu/widgets/chobby/"
 	VFS.Include("LuaMenu/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
+	
+	local function CampaignLoaded(listener)
+		UpdateAllStartable()
+		UpdateEdgeList()
+	end
+	WG.CampaignData.AddListener("CampaignLoaded", CampaignLoaded)
 	
 	WG.CampaignHandler = externalFunctions
 end
