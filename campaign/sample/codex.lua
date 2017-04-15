@@ -89,6 +89,26 @@ local entries = {
 		category = "Technology",
 		text = ""
 	},
+	tech_dropships2 = {
+		name = "Dropships 2",
+		category = "Technology",
+		text = ""
+	},
+	tech_dropships3 = {
+		name = "Dropships 3",
+		category = "Technology",
+		text = ""
+	},
+	tech_dropships4 = {
+		name = "Dropships 4",
+		category = "Technology",
+		text = ""
+	},
+	tech_dropships5 = {
+		name = "Dropships 5",
+		category = "Technology",
+		text = ""
+	},
 }
 
 for i,v in pairs(entries) do

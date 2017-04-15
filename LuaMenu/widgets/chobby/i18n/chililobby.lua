@@ -6,6 +6,7 @@ return {
 		cancel = "Cancel",
 		reset = "Reset",
 		close = "Close",
+		continue = "Continue",
 		yes = "Yes",
 		apply = "Apply",
 		do_not_ask_again = "Do not ask again",

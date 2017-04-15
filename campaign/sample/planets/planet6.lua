@@ -250,7 +250,10 @@ local function GetPlanet(planetUtilities)
 			modules = {
 			},
 			codexEntries = {
-				"character_ada",
+				"tech_dropships",
+				"tech_dropships2",
+				"tech_dropships3",
+				"tech_dropships4",
 			},
 		}
 	}
