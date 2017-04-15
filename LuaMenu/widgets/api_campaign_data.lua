@@ -204,7 +204,15 @@ end
 function externalFunctions.CapturePlanet(planetID)
 	local planet = WG.Chobby.Configuration.campaignConfig.planetDefs.planets[planetID]
 	if UnlockThing(gamedata.planetsCaptured, planetID) then
-		UnlockUnits(planet.completionReward.units)
+		if planet.completionReward.units then
+			UnlockUnits(planet.completionReward.units)
+		end
+		if planet.completionReward.modules then
+			UnlockModules(planet.completionReward.modules)
+		end
+		if planet.completionReward.codexEntries then
+			UnlockCodexEntries(planet.completionReward.codexEntries)
+		end
 		SaveGame()
 		CallListeners("PlanetCaptured", planetID)
 	end

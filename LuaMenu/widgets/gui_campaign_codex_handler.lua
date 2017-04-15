@@ -19,6 +19,10 @@ end
 
 local OUTLINE_COLOR = {0.54,0.72,1,0.3}
 local IMAGE_SIZE = 96
+local BUTTON_FONT = 2
+
+local selectedButton
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
@@ -89,22 +93,20 @@ local function PopulateCodexTree(parent, codexText, codexImage)
 			--local unlocked = gamedata.codexUnlocked[entryID]
 			--local read = WG.CampaignAPI.IsCodexEntryRead(entry.id) -- TODO handle
 			local button = Button:New{
+				height = 24,
 				caption = entry.name,
-				backgroundColor = {0,0,0,0},
-				borderColor = {0,0,0,0},
 				OnClick = { function(self)
 					UpdateCodexEntry(entry, codexText, codexImage, self)
+					if selectedButton then
+						ButtonUtilities.SetButtonDeselected(selectedButton)
+					end
+					ButtonUtilities.SetButtonSelected(self)
+					selectedButton = self
 				end},
-				font = {
-					size = WG.Chobby.Configuration:GetFont(2).size,	-- - (read and 0 or 1),
-					shadow = (read ~= true),
-					--outline = (read ~= true),
-					outlineWidth = 6,
-					outlineHeight = 6,
-					outlineColor = Spring.Utilities.CopyTable(OUTLINE_COLOR),
-					autoOutlineColor = false,
-				}
+				font = WG.Chobby.Configuration:GetFont(BUTTON_FONT)
 			}
+			
+			ButtonUtilities.SetFontSizeScale(button, BUTTON_FONT)
 			subnode[#subnode + 1] = button
 			--Spring.Echo(catID, entry.name)
 		end
@@ -112,13 +114,15 @@ local function PopulateCodexTree(parent, codexText, codexImage)
 	end
 	
 	-- make treeview
-	for i=1,#parent.children do
-		parent.children[i]:Dispose()		
+	for i = 1, #parent.children do
+		parent.children[i]:Dispose()
 	end
 	local codexTree = Chili.TreeView:New{
 		parent = parent,
-		nodes = nodes,	--{"wtf", "lololol", {"omg"}},
-		font = WG.Chobby.Configuration:GetFont(2)
+		clickTextToToggle = true,
+		minItemHeight = 26,
+		labelFontsize = WG.Chobby.Configuration:GetFont(BUTTON_FONT).size,
+		nodes = nodes, --{"wtf", "lololol", {"omg"}},
 	}
 	codexText:SetText("")
 end

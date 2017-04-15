@@ -99,6 +99,12 @@ function widget:MousePress()
 	return false
 end
 
+function widget:MouseRelease()
+	forceRedraw = true
+	LimitFps.ForceRedrawPeriod(0.2)
+	return false
+end
+
 function widget:MouseWheel()
 	forceRedraw = true
 	return false

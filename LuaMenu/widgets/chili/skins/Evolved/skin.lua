@@ -326,7 +326,7 @@ skin.trackbar = {
 
 skin.treeview = {
   --ImageNode         = ":cl:node.png",
-  ImageNodeSelected = ":cl:node_selected.png",
+  ImageNodeSelected = ":cl:empty.png",
   tiles = {9, 9, 9, 9},
 
   ImageExpanded  = ":cl:treeview_node_expanded.png",
