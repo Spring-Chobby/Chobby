@@ -89,7 +89,6 @@ local function PopulateCodexTree(parent, codexText, codexImage)
 		for j = 1, #cat do
 			local entry = cat[j]
 			local unlocked, alreadyRead = WG.CampaignData.GetCodexEntryIsUnlocked(entry.id)
-			Spring.Echo("entry.name", entry.id)
 			if unlocked then
 				local button = Button:New{
 					height = 24,
