@@ -97,7 +97,7 @@ local function MakeRewardsPanel(parent, rewards)
 	local units = rewards.units and #rewards.units ~= 0 and rewards.units 
 	local modules = rewards.modules and #rewards.modules ~= 0 and rewards.modules 
 	
-	local bottom = 75
+	local bottom = 82
 	if modules then
 		local rewardsHolder = Control:New {
 			x = 10,

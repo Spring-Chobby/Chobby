@@ -112,7 +112,7 @@ local function ResetGamedata()
 		codexEntriesUnlocked = {map = {}, list = {}},
 		codexEntryRead = {},
 		planetsCaptured = {map = {}, list = {}},
-		commanderLevel = 1,
+		commanderLevel = 4,
 		commanderLoadout = {},
 		retinue = {}, -- Unused
 	}
@@ -284,10 +284,7 @@ end
 function externalFunctions.GetPlayerCommander()
 	return {
 		name = "blubb.",
-		chassis = "guardian",
-		decorations = {
-			icon_overhead = { image = "UW" }
-		},
+		chassis = "knight",
 		modules = {
 			{
 				"commweapon_heavymachinegun",
