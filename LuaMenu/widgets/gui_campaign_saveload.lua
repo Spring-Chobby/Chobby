@@ -194,7 +194,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 			x = 3,
 			y = 3,
 			bottom = 3,
-			width = 80,
+			width = 65,
 			caption = i18n("load"),
 			classname = "action_button",
 			font = WG.Chobby.Configuration:GetFont(2),
@@ -220,7 +220,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 		text = saveFile.name .. (current and " \255\0\255\255\(current)\008" or ""),
 		parent = container,
 	}
-	x = x + 200
+	x = x + 190
 
 	-- save's campaign name
 	--local campaignNameStr = WG.CampaignData.GetCampaignTitle(saveFile.campaignID) or saveFile.campaignID
@@ -249,7 +249,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 		text = WriteDate(saveFile.date),
 		parent = container,
 	}
-	x = x + 140
+	x = x + 130
 
 	-- save details
 	--local details = TextBox:New {
@@ -318,9 +318,8 @@ local function InitializeControls(parent, saveMode)
 	}
 
 	local headings = {
-		{name = "Name", x = 90, width = 200},
-		--{name = "Campaign", x = 97 + 200, width = 220},
-		{name = "Date", x = 97 + --[[200 +]] 220, width = 140},
+		{name = "Name", x = 85, width = 180},
+		{name = "Date", x = 280, width = 140},
 	}
 
 	local saveList = WG.Chobby.SortableList(listHolder, headings, 60, 2)
