@@ -133,6 +133,8 @@ end
 --//=============================================================================
 
 function ScrollPanel:GetCurrentExtents()
+  local minLeft, minTop, maxRight, maxBottom = self:GetChildrenCurrentExtents()
+  
   local left = self.x
   local top  = self.y
   local right  = self.x + self.width
