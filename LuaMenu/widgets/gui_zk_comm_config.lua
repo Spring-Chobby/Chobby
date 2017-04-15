@@ -248,7 +248,7 @@ local function CreateCommEntry(commConfig, configuratorStack, moduleList)
 		padding = {1,1,1,1},
 		parent = holder,
 	}
-	Spring.Echo("unitpics/" .. commConfig.chassis .. ".png")
+	
 	local image = Image:New {
 		name = "image",
 		x = 0,
@@ -256,7 +256,7 @@ local function CreateCommEntry(commConfig, configuratorStack, moduleList)
 		right = 0,
 		bottom = 0,
 		keepAspect = true,
-		file = "unitpics/" .. commConfig.chassis .. ".png",
+		file = "LuaMenu/configs/gameConfig/zk/unitpics/" .. commConfig.chassis .. ".png",
 		parent = imagePanel,
 	}
 	local commName = TextBox:New {
