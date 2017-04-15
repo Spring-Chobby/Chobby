@@ -140,10 +140,6 @@ function TreeViewNode:Toggle()
     return
   end
   
-  if WG.LimitFps then
-    WG.LimitFps.ForceRedraw()
-  end
-  
   if (self.expanded) then
     self:Collapse()
   else
