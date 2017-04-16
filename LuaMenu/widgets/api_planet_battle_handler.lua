@@ -120,6 +120,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		staticcomm = "player_commander",
 		static_level = WG.CampaignData.GetPlayerCommanderLevel(),
 		campaignunlocks = TableToBase64(fullPlayerUnlocks),
+		commanderparameters = TableToBase64(gameConfig.playerConfig.commanderParameters),
 		extrastartunits = TableToBase64(gameConfig.playerConfig.startUnits),
 		retinuestartunits = TableToBase64(WG.CampaignData.GetActiveRetinue()),
 	}
@@ -165,6 +166,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 			staticcomm = commanderName,
 			static_level = aiData.commanderLevel or 1,
 			campaignunlocks = TableToBase64(aiData.unlocks),
+			commanderparameters = TableToBase64(aiData.commanderParameters),
 			extrastartunits = TableToBase64(aiData.startUnits),
 		}
 		teamCount = teamCount + 1
@@ -192,6 +194,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		startpostype = 0, -- Fixed
 		modoptions = {
 			commandertypes = TableToBase64(commanderTypes),
+			defeatconditionconfig = TableToBase64(gameConfig.defeatConditionConfig),
 			fixedstartpos = 1,
 			singleplayercampaignbattleid = planetID
 		},

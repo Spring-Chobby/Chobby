@@ -36,12 +36,15 @@ local function GetPlanet(planetUtilities)
 				startX = 400,
 				startZ = 400,
 				allyTeam = 0,
-				useUnlocks = true,
 				facplop = true,
-				victoryCommanderAtLocation = {
-					x = 600,
-					z = 1200,
-					radius = 100,
+				commanderParameters = {
+					victoryAtLocation = {
+						x = 600,
+						z = 1200,
+						radius = 100,
+					},
+					facplop = true,
+					defeatIfDestroyed = true,
 				},
 				extraUnlocks = {
 					"factoryshield",
@@ -79,6 +82,30 @@ local function GetPlanet(planetUtilities)
 						name = "armwar",
 						x = 850,
 						z = 850,
+						facing = 0,
+					},
+					{
+						name = "blackdawn",
+						x = 1200,
+						z = 1200,
+						facing = 0,
+					},
+					{
+						name = "blackdawn",
+						x = 1250,
+						z = 1200,
+						facing = 0,
+					},
+					{
+						name = "blackdawn",
+						x = 1300,
+						z = 1200,
+						facing = 0,
+					},
+					{
+						name = "blackdawn",
+						x = 1350,
+						z = 1200,
 						facing = 0,
 					},
 					{
@@ -125,8 +152,10 @@ local function GetPlanet(planetUtilities)
 					startZ = 200,
 					aiLib = "CircuitAIHard",
 					humanName = "Ally",
-					bitDependant = true,
-					facplop = false,
+					bitDependant = true, -- Whether the AI name needs to be appended with 32bit or 64bit by the handler
+					commanderParameters = {
+						facplop = false,
+					},
 					allyTeam = 0,
 					unlocks = {
 						"factorycloak",
@@ -175,8 +204,10 @@ local function GetPlanet(planetUtilities)
 					startZ = 250,
 					aiLib = "CircuitAIHard",
 					humanName = "Another Ally",
-					bitDependant = true,
-					facplop = false,
+					bitDependant = true, -- Whether the AI name needs to be appended with 32bit or 64bit by the handler
+					commanderParameters = {
+						facplop = false,
+					},
 					allyTeam = 0,
 					unlocks = {
 						"factorycloak",
@@ -208,7 +239,9 @@ local function GetPlanet(planetUtilities)
 					aiLib = "CircuitAIHard",
 					humanName = "Mortal Enemy",
 					bitDependant = true,
-					facplop = true,
+					commanderParameters = {
+						facplop = true,
+					},
 					allyTeam = 1,
 					unlocks = {
 						"factorycloak",
@@ -254,6 +287,7 @@ local function GetPlanet(planetUtilities)
 				},
 			},
 			defeatConditionConfig = {
+				-- Indexed by allyTeam.
 				[0] = {
 					-- AllyTeam 0 is the players allyTeam. It can only have loseAfterSeconds.
 					loseAfterSeconds = 60,
