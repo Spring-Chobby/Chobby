@@ -193,7 +193,14 @@ function Configuration:SetConfigData(data)
 			self.channels[key] = nil
 		end
 	end
-
+	
+	self.game_settings.XResolutionWindowed = nil
+	self.game_settings.YResolutionWindowed = nil
+	self.game_settings.WindowPosX = nil
+	self.game_settings.WindowPosY = nil
+	self.game_settings.WindowBorderless = nil
+	self.game_settings.Fullscreen = nil
+	
 	local newSpringsettings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettingsChanges.lua")
 	for key, value in pairs(newSpringsettings) do
 		self.game_settings[key] = value
