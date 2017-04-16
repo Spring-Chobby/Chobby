@@ -255,7 +255,12 @@ local function GetPlanet(planetUtilities)
 				"tech_dropships3",
 				"tech_dropships4",
 			},
-		}
+		},
+		vitalUnitTypes = {
+			[1] = {
+				"factorycloak",
+			},
+		},
 	}
 	
 	return planetData

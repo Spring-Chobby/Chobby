@@ -265,7 +265,12 @@ local function GetPlanet(planetUtilities)
 			},
 			modules = {
 			},
-		}
+		},
+		vitalUnitTypes = {
+			[1] = {
+				"factorycloak",
+			},
+		},
 	}
 	
 	return planetData

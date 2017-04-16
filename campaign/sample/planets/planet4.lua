@@ -271,7 +271,12 @@ local function GetPlanet(planetUtilities)
 			codexEntries = {
 				"character_ada",
 			},
-		}
+		},
+		vitalUnitTypes = {
+			[1] = {
+				"factorycloak",
+			},
+		},
 	}
 	
 	return planetData
