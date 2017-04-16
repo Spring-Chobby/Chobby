@@ -38,6 +38,11 @@ local function GetPlanet(planetUtilities)
 				allyTeam = 0,
 				useUnlocks = true,
 				facplop = true,
+				victoryCommanderAtLocation = {
+					x = 600,
+					z = 1200,
+					radius = 100,
+				},
 				extraUnlocks = {
 					"factoryshield",
 					"shieldfelon",
@@ -77,10 +82,16 @@ local function GetPlanet(planetUtilities)
 						facing = 0,
 					},
 					{
-						name = "armwar",
+						name = "armpw",
 						x = 900,
 						z = 850,
 						facing = 0,
+						victoryAtLocation = {
+							x = 600,
+							z = 1200,
+							radius = 100,
+						},
+						defeatIfDestroyed = true, -- Also captured
 					},
 					{
 						name = "armwar",
@@ -242,17 +253,32 @@ local function GetPlanet(planetUtilities)
 					},
 				},
 			},
+			defeatConditionConfig = {
+				[0] = {
+					-- AllyTeam 0 is the players allyTeam. It can only have loseAfterSeconds.
+					loseAfterSeconds = 60,
+				},
+				[1] = {
+					-- The default behaviour, if no parameters are set, is the defeat condition of an
+					-- ordinary game. 
+					-- If ignoreUnitLossDefeat is true then unit loss does not cause defeat.
+					-- If at least one of vitalCommanders or vitalUnitTypes is set then losing all 
+					-- commanders (if vitalCommanders is true) as well as all the unit types in 
+					-- vitalUnitTypes (if there are any in the list) causes defeat.
+					ignoreUnitLossDefeat = false,
+					vitalCommanders = true,
+					vitalUnitTypes = {
+						"factorycloak",
+					},
+					loseAfterSeconds = false,
+				},
+			},
 		},
 		completionReward = {
 			units = {
 				"cafus",
 			},
 			modules = {
-			},
-		},
-		vitalUnitTypes = {
-			[1] = {
-				"factorycloak",
 			},
 		},
 	}

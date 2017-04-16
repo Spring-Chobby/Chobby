@@ -253,11 +253,6 @@ local function GetPlanet(planetUtilities)
 				"character_ada",
 			},
 		},
-		vitalUnitTypes = {
-			[1] = {
-				"factorycloak",
-			},
-		},
 	}
 	
 	return planetData
