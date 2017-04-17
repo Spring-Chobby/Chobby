@@ -34,7 +34,7 @@ local function MakeRewardList(holder, name, rewardsList, tooltipFunction, Unlock
 	local Configuration = WG.Chobby.Configuration
 	
 	local unlockList = {}
-	local iconsAcross = math.floor((holder.width - 14)/(REWARD_ICON_SIZE + 4))
+	local iconsAcross = math.floor((holder.width - 16)/(REWARD_ICON_SIZE + 4))
 	
 	local position = (GetPosition and GetPosition()) or 5
 	local height = 30 + math.ceil(#rewardsList/iconsAcross)*(REWARD_ICON_SIZE + 4)
@@ -111,7 +111,7 @@ local function MakeRewardList(holder, name, rewardsList, tooltipFunction, Unlock
 	local externalFunctions = {}
 	
 	function externalFunctions.ResizeFunction(xSize)
-		iconsAcross = math.floor((xSize - 14)/(REWARD_ICON_SIZE + 4))
+		iconsAcross = math.floor((xSize - 16)/(REWARD_ICON_SIZE + 4))
 		if GetPosition then
 			position = GetPosition()
 		end
@@ -129,7 +129,7 @@ local function MakeRewardList(holder, name, rewardsList, tooltipFunction, Unlock
 		end
 	end
 	function externalFunctions.GetBottom()
-		return position + height
+		return position + height + 18
 	end
 	
 	return externalFunctions
