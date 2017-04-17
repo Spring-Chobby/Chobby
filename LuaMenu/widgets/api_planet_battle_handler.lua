@@ -195,6 +195,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		modoptions = {
 			commandertypes = TableToBase64(commanderTypes),
 			defeatconditionconfig = TableToBase64(gameConfig.defeatConditionConfig),
+			bonusobjectiveconfig = TableToBase64(gameConfig.bonusObjectiveConfig),
 			fixedstartpos = 1,
 			singleplayercampaignbattleid = planetID
 		},
@@ -214,7 +215,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 	end
 
 	local scriptString = localLobby:MakeScriptTXT(script)
-	Spring.Echo("scriptString", scriptString)
+	--Spring.Echo("scriptString", scriptString)
 	localLobby:StartGameFromString(scriptString)
 end
 

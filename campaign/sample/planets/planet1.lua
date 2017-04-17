@@ -83,29 +83,30 @@ local function GetPlanet(planetUtilities)
 						x = 850,
 						z = 850,
 						facing = 0,
+						bonusObjectiveID = 4,
 					},
 					{
 						name = "blackdawn",
-						x = 1200,
-						z = 1200,
+						x = 2200,
+						z = 2200,
 						facing = 0,
 					},
 					{
 						name = "blackdawn",
-						x = 1250,
-						z = 1200,
+						x = 2250,
+						z = 2200,
 						facing = 0,
 					},
 					{
 						name = "blackdawn",
-						x = 1300,
-						z = 1200,
+						x = 2300,
+						z = 2200,
 						facing = 0,
 					},
 					{
 						name = "blackdawn",
-						x = 1350,
-						z = 1200,
+						x = 2350,
+						z = 2200,
 						facing = 0,
 					},
 					{
@@ -241,6 +242,7 @@ local function GetPlanet(planetUtilities)
 					bitDependant = true,
 					commanderParameters = {
 						facplop = true,
+						bonusObjectiveID = 5,
 					},
 					allyTeam = 1,
 					unlocks = {
@@ -307,8 +309,66 @@ local function GetPlanet(planetUtilities)
 					loseAfterSeconds = false,
 				},
 			},
+			bonusObjectiveConfig = {
+				-- Indexed by bonusObjectiveID
+				[1] = {
+					victoryByTime = 50,
+					experience = 20,
+				},
+				-- victoryByTime is a special case. All other bonus objectives are based on unit counts. 
+				-- They have the following format:
+				-- * Time Limit: Set by supplying either satisfyAtTime, satisfyByTime, satisfyUntilTime, satisfyAfterTime or satisfyForever.
+				-- * comparisionType: Set to either planetUtilities.COMPARE.AT_MOST, planetUtilities.COMPARE.AT_LEAST
+				-- * targetNumber: The number which is compared to the unit count.
+				-- * unitTypes: Unit types owned by the player that count towards the unit count.
+				-- * enemyUnitTypes: Unit types owned by enemy allyTeams that count towards unit count.
+				-- Note that experience is set in bonusObjectiveEffects
+				-- Note that startUnits with bonusObjectiveID set count towards the unit count. 
+				[2] = { -- Make the enemy have no more than 3 LLT at 40 seconds.
+					satisfyAtTime = 40,
+					comparisionType = planetUtilities.COMPARE.AT_MOST,
+					targetNumber = 4,
+					enemyUnitTypes = {
+						"corllt",
+					},
+					experience = 20,
+				},
+				[3] = { -- Have 3 Glaives by 35 seconds.
+					satisfyByTime = 35,
+					comparisionType = planetUtilities.COMPARE.AT_LEAST,
+					targetNumber = 3,
+					unitTypes = {
+						"armpw",
+					},
+					experience = 20,
+				},
+				[4] = { -- Keep a particular Warrior alive for 30 seconds.
+					satisfyUntilTime = 30,
+					comparisionType = planetUtilities.COMPARE.AT_LEAST,
+					targetNumber = 1,
+					-- See bonusObjectiveID in units table
+					experience = 20,
+				},
+				[5] = { -- Kill enemy commander in 30 seconds.
+					satisfyByTime = 30,
+					comparisionType = planetUtilities.COMPARE.AT_MOST,
+					targetNumber = 0,
+					-- See bonusObjectiveID in units table
+					experience = 20,
+				},
+				[6] = { -- Have and keep at least one cloaky factory forever after 50 seconds
+					satisfyAfterTime = 50,
+					comparisionType = planetUtilities.COMPARE.AT_LEAST,
+					targetNumber = 1,
+					unitTypes = {
+						"factorycloak",
+					},
+					experience = 20,
+				},
+			}
 		},
 		completionReward = {
+			experience = 80,
 			units = {
 				"cafus",
 			},

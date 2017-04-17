@@ -42,4 +42,9 @@ planetUtilities.backgroundImages = {
 planetUtilities.PLANET_SIZE_MAP = 48
 planetUtilities.PLANET_SIZE_INFO = 240
 
+planetUtilities.COMPARE = {
+	AT_LEAST = 1,
+	AT_MOST = 2
+}
+
 return planetUtilities
