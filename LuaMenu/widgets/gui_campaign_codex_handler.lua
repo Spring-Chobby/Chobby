@@ -71,6 +71,12 @@ local function UpdateCodexEntry(entry, codexText, codexImage, entryButton)
 	codexImage:Invalidate()
 end
 
+local function ClearCodexEntry(codexText, codexImage)
+	codexText:SetText("")
+	codexImage.file = nil
+	codexImage:Invalidate()
+end
+
 local function PopulateCodexTree(parent, codexText, codexImage)
 	if codexTree then
 		codexTree:Dispose()
@@ -91,17 +97,26 @@ local function PopulateCodexTree(parent, codexText, codexImage)
 			local unlocked, alreadyRead = WG.CampaignData.GetCodexEntryIsUnlocked(entry.id)
 			if unlocked then
 				local button = Button:New{
+					name = entry.id,
 					height = 24,
 					caption = entry.name,
-					OnClick = { function(self)
-						UpdateCodexEntry(entry, codexText, codexImage, self)
-						if selectedButton then
-							ButtonUtilities.SetButtonDeselected(selectedButton)
+					OnClick = { 
+						function(self)
+							if selectedButton and selectedButton.name == self.name then
+								ButtonUtilities.SetButtonDeselected(selectedButton)
+								ClearCodexEntry(codexText, codexImage)
+								selectedButton = nil
+								return
+							end
+							UpdateCodexEntry(entry, codexText, codexImage, self)
+							if selectedButton then
+								ButtonUtilities.SetButtonDeselected(selectedButton)
+							end
+							ButtonUtilities.SetButtonSelected(self)
+							WG.CampaignData.SetCodexEntryRead(entry.id)
+							selectedButton = self
 						end
-						ButtonUtilities.SetButtonSelected(self)
-						WG.CampaignData.SetCodexEntryRead(entry.id)
-						selectedButton = self
-					end},
+				},
 					font = WG.Chobby.Configuration:GetFont(BUTTON_FONT)
 				}
 				
