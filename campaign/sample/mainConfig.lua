@@ -5,6 +5,7 @@ local codex          = VFS.Include("campaign/" .. shortname .. "/codex.lua")
 local initialUnlocks = VFS.Include("campaign/" .. shortname .. "/initialUnlocks.lua")
 local abilityDefs    = VFS.Include("campaign/" .. shortname .. "/abilityDefs.lua")
 local unlocksList    = VFS.Include("campaign/" .. shortname .. "/unlocksList.lua")
+local commConfig     = VFS.Include("campaign/" .. shortname .. "/commConfig.lua")
 
 ---------------------------------------------------------------------------------
 -- Getters
@@ -16,6 +17,7 @@ local externalFuncAndData = {
 	initialUnlocks = initialUnlocks,
 	abilityDefs = abilityDefs,
 	unlocksList = unlocksList,
+	commConfig = commConfig,
 }
 
 return externalFuncAndData

@@ -33,8 +33,8 @@ local function GetPlanet(planetUtilities)
 			missionStartscript = false,
 			mapName = "TitanDuel",
 			playerConfig = {
-				startX = 400,
-				startZ = 400,
+				startX = 1800,
+				startZ = 1800,
 				allyTeam = 0,
 				facplop = true,
 				commanderParameters = {
@@ -42,9 +42,10 @@ local function GetPlanet(planetUtilities)
 						x = 600,
 						z = 1200,
 						radius = 100,
+						objectiveID = 5,
 					},
 					facplop = true,
-					defeatIfDestroyed = true,
+					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
 					"factoryshield",
@@ -118,8 +119,9 @@ local function GetPlanet(planetUtilities)
 							x = 600,
 							z = 1200,
 							radius = 100,
+							objectiveID = 6,
 						},
-						defeatIfDestroyed = true, -- Also captured
+						defeatIfDestroyedObjectiveID = 3, -- Also captured
 					},
 					{
 						name = "armwar",
@@ -292,7 +294,7 @@ local function GetPlanet(planetUtilities)
 				-- Indexed by allyTeam.
 				[0] = {
 					-- AllyTeam 0 is the players allyTeam. It can only have loseAfterSeconds.
-					loseAfterSeconds = 60,
+					loseAfterSeconds = 60*59,
 				},
 				[1] = {
 					-- The default behaviour, if no parameters are set, is the defeat condition of an
@@ -309,10 +311,33 @@ local function GetPlanet(planetUtilities)
 					loseAfterSeconds = false,
 				},
 			},
+			objectiveConfig = {
+				-- This is just related to displaying objectives on the UI.
+				[1] = {
+					description = "Win before 59:00",
+				},
+				[2] = {
+					description = "Protect your Commander",
+				},
+				[3] = {
+					description = "Protect your Glaive",
+				},
+				[4] = {
+					description = "Destroy enemy commanders and factories.",
+				},
+				[5] = {
+					description = "Move Commander to location.",
+				},
+				[6] = {
+					description = "Move Glaive to location.",
+				},
+			},
 			bonusObjectiveConfig = {
 				-- Indexed by bonusObjectiveID
 				[1] = {
 					victoryByTime = 50,
+					image = planetUtilities.ICON_OVERLAY.CLOCK,
+					description = "Win by 0:50",
 					experience = 20,
 				},
 				-- victoryByTime is a special case. All other bonus objectives are based on unit counts. 
@@ -331,6 +356,9 @@ local function GetPlanet(planetUtilities)
 					enemyUnitTypes = {
 						"corllt",
 					},
+					image = planetUtilities.ICON_DIR .. "corllt.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
+					description = "Less than 4 enemy LLTs until 0:40.",
 					experience = 20,
 				},
 				[3] = { -- Have 3 Glaives by 35 seconds.
@@ -340,6 +368,9 @@ local function GetPlanet(planetUtilities)
 					unitTypes = {
 						"armpw",
 					},
+					image = planetUtilities.ICON_DIR .. "armpw.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
+					description = "Have 3 Glaives by 0:35.",
 					experience = 20,
 				},
 				[4] = { -- Keep a particular Warrior alive for 30 seconds.
@@ -347,6 +378,9 @@ local function GetPlanet(planetUtilities)
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 1,
 					-- See bonusObjectiveID in units table
+					image = planetUtilities.ICON_DIR .. "armwar.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
+					description = "Keep your Warrior alive until 0:30.",
 					experience = 20,
 				},
 				[5] = { -- Kill enemy commander in 30 seconds.
@@ -354,6 +388,9 @@ local function GetPlanet(planetUtilities)
 					comparisionType = planetUtilities.COMPARE.AT_MOST,
 					targetNumber = 0,
 					-- See bonusObjectiveID in units table
+					image = planetUtilities.ICON_DIR .. "engineer.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
+					description = "Kill the enemy commander before 0:30.",
 					experience = 20,
 				},
 				[6] = { -- Have and keep at least one cloaky factory forever after 50 seconds
@@ -363,6 +400,9 @@ local function GetPlanet(planetUtilities)
 					unitTypes = {
 						"factorycloak",
 					},
+					image = planetUtilities.ICON_DIR .. "factorycloak.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
+					description = "Build a Cloakybot Factory by 0:50 and don't let it by destroyed.",
 					experience = 20,
 				},
 			}

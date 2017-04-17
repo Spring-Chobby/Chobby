@@ -41,6 +41,14 @@ planetUtilities.backgroundImages = {
 
 planetUtilities.PLANET_SIZE_MAP = 48
 planetUtilities.PLANET_SIZE_INFO = 240
+planetUtilities.ICON_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/unitpics/"
+
+planetUtilities.ICON_OVERLAY = {
+	ATTACK = LUA_DIRNAME .. "images/attack.png",
+	GUARD = LUA_DIRNAME .. "images/guard.png",
+	REPAIR = LUA_DIRNAME .. "images/repair.png",
+	CLOCK = LUA_DIRNAME .. "images/clock.png",
+}
 
 planetUtilities.COMPARE = {
 	AT_LEAST = 1,

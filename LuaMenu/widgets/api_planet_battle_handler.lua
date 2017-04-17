@@ -197,6 +197,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		modoptions = {
 			commandertypes = TableToBase64(commanderTypes),
 			defeatconditionconfig = TableToBase64(gameConfig.defeatConditionConfig),
+			objectiveconfig = TableToBase64(gameConfig.objectiveConfig),
 			bonusobjectiveconfig = TableToBase64(gameConfig.bonusObjectiveConfig),
 			fixedstartpos = 1,
 			singleplayercampaignbattleid = planetID

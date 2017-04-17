@@ -104,8 +104,10 @@ local function ResetGamedata()
 		abilitiesUnlocked = {map = {}, list = {}},
 		codexEntriesUnlocked = {map = {}, list = {}},
 		codexEntryRead = {},
+		bonusObjectivesComplete = {map = {}, list = {}},
 		planetsCaptured = {map = {}, list = {}},
-		commanderLevel = 4,
+		commanderExperience = 0,
+		commanderLevel = 1,
 		commanderLoadout = {},
 		retinue = {}, -- Unused
 	}
