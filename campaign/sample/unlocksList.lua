@@ -38,6 +38,7 @@ local function UnlockRewardSet(rewardSet)
 	end
 end
 
+UnlockRewardSet(initialUnlocks)
 for i = 1, #planetDefs.planets do
 	UnlockRewardSet(planetDefs.planets[i].completionReward)
 end
