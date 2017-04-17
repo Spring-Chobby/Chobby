@@ -98,6 +98,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 	}
 	
 	local playerUnlocks = WG.CampaignData.GetUnitsUnlocks()
+	local playerAbilities = WG.CampaignData.GetAbilityUnlocks()
 	local fullPlayerUnlocks = Spring.Utilities.CopyTable(playerUnlocks.list)
 
 	if gameConfig.playerConfig.extraUnlocks then
@@ -120,6 +121,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		staticcomm = "player_commander",
 		static_level = WG.CampaignData.GetPlayerCommanderLevel(),
 		campaignunlocks = TableToBase64(fullPlayerUnlocks),
+		campaignabilities = TableToBase64(playerAbilities.list),
 		commanderparameters = TableToBase64(gameConfig.playerConfig.commanderParameters),
 		extrastartunits = TableToBase64(gameConfig.playerConfig.startUnits),
 		retinuestartunits = TableToBase64(WG.CampaignData.GetActiveRetinue()),
@@ -268,7 +270,6 @@ end
 function widget:Initialize()
 	WG.PlanetBattleHandler = PlanetBattleHandler
 end
-
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------

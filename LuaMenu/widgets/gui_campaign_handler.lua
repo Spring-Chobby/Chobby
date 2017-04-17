@@ -48,6 +48,11 @@ local function GetUnitInfo(unitName)
 	return WG.Chobby.Configuration.gameConfig.gameUnitInformation.humanNames[unitName] or {}, ICONS_DIR .. unitName .. ".png"
 end
 
+local function GetAbilityInfo(abilityName)
+	local ability = WG.Chobby.Configuration.campaignConfig.abilityDefs[abilityName] or {}
+	return ability, ability.image
+end
+
 local function GetModuleInfo(moduleName)
 	local index = moduleDefNames[moduleName]
 	return index and moduleDefs[index] or {}, ICONS_DIR .. moduleName .. ".png"
@@ -153,6 +158,10 @@ local function MakeRewardsPanel(parent, rewards, cullUnlocked, showCodex)
 		if MakeRewardList(parent, bottom, "Codex", rewards.codexEntries, cullUnlocked, GetCodexEntryInfo, WG.CampaignData.GetCodexEntryIsUnlocked, 3.96, 2) then
 			bottom = bottom + 98
 		end
+	end
+	
+	if MakeRewardList(parent, bottom, "Abilities", rewards.abilities, cullUnlocked, GetAbilityInfo, WG.CampaignData.GetAbilityIsUnlocked) then
+		bottom = bottom + 98
 	end
 	
 	if MakeRewardList(parent, bottom, "Modules", rewards.modules, cullUnlocked, GetModuleInfo, WG.CampaignData.GetModuleIsUnlocked) then

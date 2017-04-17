@@ -374,6 +374,9 @@ local function GetPlanet(planetUtilities)
 			},
 			modules = {
 			},
+			abilities = {
+				"terraform",
+			}
 		},
 	}
 	

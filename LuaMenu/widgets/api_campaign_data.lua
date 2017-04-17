@@ -99,6 +99,12 @@ local function UnlockModules(unlockList)
 	end
 end
 
+local function UnlockAbilities(unlockList)
+	for i = 1, #unlockList do
+		UnlockThing(gamedata.abilitiesUnlocked, unlockList[i])
+	end
+end
+
 local function UnlockCodexEntries(unlockList)
 	for i = 1, #unlockList do
 		UnlockThing(gamedata.codexEntriesUnlocked, unlockList[i])
@@ -109,6 +115,7 @@ local function ResetGamedata()
 	gamedata = {
 		unitsUnlocked = {map = {}, list = {}},
 		modulesUnlocked = {map = {}, list = {}},
+		abilitiesUnlocked = {map = {}, list = {}},
 		codexEntriesUnlocked = {map = {}, list = {}},
 		codexEntryRead = {},
 		planetsCaptured = {map = {}, list = {}},
@@ -124,6 +131,9 @@ local function UnlockRewardSet(rewardSet)
 	end
 	if rewardSet.modules then
 		UnlockModules(rewardSet.modules)
+	end
+	if rewardSet.abilities then
+		UnlockAbilities(rewardSet.abilities)
 	end
 	if rewardSet.codexEntries then
 		UnlockCodexEntries(rewardSet.codexEntries)
@@ -267,12 +277,20 @@ function externalFunctions.GetUnitsUnlocks()
 	return gamedata.unitsUnlocked
 end
 
+function externalFunctions.GetAbilityUnlocks()
+	return gamedata.abilitiesUnlocked
+end
+
 function externalFunctions.GetUnitIsUnlocked(unitName)
 	return gamedata.unitsUnlocked.map[unitName]
 end
 
 function externalFunctions.GetModuleIsUnlocked(moduleName)
 	return gamedata.modulesUnlocked.map[moduleName]
+end
+
+function externalFunctions.GetAbilityIsUnlocked(abilityName)
+	return gamedata.abilitiesUnlocked.map[abilityName]
 end
 
 function externalFunctions.GetCodexEntryIsUnlocked(entryName)
