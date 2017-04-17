@@ -342,7 +342,8 @@ local function GetPlanet(planetUtilities)
 				},
 				-- victoryByTime is a special case. All other bonus objectives are based on unit counts. 
 				-- They have the following format:
-				-- * Time Limit: Set by supplying either satisfyAtTime, satisfyByTime, satisfyUntilTime, satisfyAfterTime or satisfyForever.
+				-- * Time Limit: Set by supplying either satisfyAtTime, satisfyByTime, satisfyUntilTime, 
+				--      satisfyAfterTime, satisfyForeverAfterFirstSatisfied or satisfyForever.
 				-- * comparisionType: Set to either planetUtilities.COMPARE.AT_MOST, planetUtilities.COMPARE.AT_LEAST
 				-- * targetNumber: The number which is compared to the unit count.
 				-- * unitTypes: Unit types owned by the player that count towards the unit count.
@@ -393,8 +394,8 @@ local function GetPlanet(planetUtilities)
 					description = "Kill the enemy commander before 0:30.",
 					experience = 20,
 				},
-				[6] = { -- Have and keep at least one cloaky factory forever after 50 seconds
-					satisfyAfterTime = 50,
+				[6] = { -- Have at least one cloaky factory after first satisfied
+					satisfyForeverAfterFirstSatisfied = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 1,
 					unitTypes = {
@@ -402,7 +403,7 @@ local function GetPlanet(planetUtilities)
 					},
 					image = planetUtilities.ICON_DIR .. "factorycloak.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build a Cloakybot Factory by 0:50 and don't let it by destroyed.",
+					description = "Build and protect a Cloakybot Factory.",
 					experience = 20,
 				},
 			}

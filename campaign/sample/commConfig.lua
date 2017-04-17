@@ -6,5 +6,5 @@ end
 
 return {
 	chassis = chassis,
-	GetLevelRequirements = GetLevelRequirements,
+	GetLevelRequirement = GetLevelRequirement,
 }

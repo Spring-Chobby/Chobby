@@ -128,6 +128,21 @@ local function UnlockRewardSet(rewardSet)
 	end
 end
 
+local function GainExperience(newExperience)
+	local Configuration = WG.Chobby.Configuration
+	local oldExperience = gamedata.commanderExperience
+	local oldLevel = gamedata.commanderLevel
+	gamedata.commanderExperience = gamedata.commanderExperience + newExperience
+	for i = 1, 50 do
+		if Configuration.campaignConfig.commConfig.GetLevelRequirement(gamedata.commanderLevel + 1) > gamedata.commanderExperience then
+			break
+		end
+		gamedata.commanderLevel = gamedata.commanderLevel + 1
+	end
+	
+	CallListeners("GainExperience", oldExperience, oldLevel, gamedata.commanderExperience, gamedata.commanderLevel)
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Save/Load
@@ -252,10 +267,8 @@ function externalFunctions.CapturePlanet(planetID, bonusObjectives)
 		end
 	end
 	
+	GainExperience(gainedExperience)
 	if saveRequired then
-		if gainedExperience then
-		
-		end
 		SaveGame()
 	end
 end

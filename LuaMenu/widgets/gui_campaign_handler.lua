@@ -36,6 +36,7 @@ local REWARD_ICON_SIZE = 58
 
 local planetList
 local selectedPlanet
+local currentWinPopup
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -262,6 +263,23 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess)
 	}
 	
 	local popupHolder = WG.Chobby.PriorityPopup(victoryWindow, CloseFunc, CloseFunc)
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.UpdateExperience(oldExperience, oldLevel, newExperience, newLevel)
+		Label:New {
+			x = 0,
+			y = 38,
+			width = childWidth,
+			height = 24,
+			align = "center",
+			caption = "Level: " .. oldLevel .. " -> " .. newLevel .. ". Experience: " .. oldExperience .. " -> " .. newExperience,
+			font = WG.Chobby.Configuration:GetFont(3),
+			parent = victoryWindow
+		}
+	end
+	
+	return externalFunctions
 end
 
 local function ProcessPlanetVictory(planetID, bonusObjectives)
@@ -271,7 +289,7 @@ local function ProcessPlanetVictory(planetID, bonusObjectives)
 	end
 	-- It is important to popup before capturing the planet to filter out the
 	-- already unlocked rewards.
-	MakeWinPopup(planetConfig[planetID], bonusObjectives)
+	currentWinPopup = MakeWinPopup(planetConfig[planetID], bonusObjectives)
 	WG.CampaignData.CapturePlanet(planetID, bonusObjectives)
 end
 
@@ -374,7 +392,7 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 				font = Configuration:GetFont(4),
 				OnClick = {
 					function(self)
-						ProcessPlanetVictory(planetID, {true, false, false, true, false, false})
+						ProcessPlanetVictory(planetID)
 					end
 				}
 			}
@@ -799,6 +817,13 @@ function widget:Initialize()
 		end
 	end
 	WG.CampaignData.AddListener("CampaignLoaded", CampaignLoaded)
+	
+	local function GainExperience(listener, oldExperience, oldLevel, newExperience, newLevel)
+		if currentWinPopup then
+			currentWinPopup.UpdateExperience(oldExperience, oldLevel, newExperience, newLevel)
+		end
+	end
+	WG.CampaignData.AddListener("GainExperience", GainExperience)
 	
 	WG.CampaignHandler = externalFunctions
 end
