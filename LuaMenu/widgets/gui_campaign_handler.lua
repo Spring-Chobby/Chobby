@@ -41,7 +41,7 @@ local selectedPlanet
 --------------------------------------------------------------------------------
 -- Rewards panels
 
-local function MakeRewardList(holder, bottom, name, rewardList, cullUnlocked, tooltipFunction, alreadyUnlockedCheck, widthMult, stackHeight)
+local function MakeRewardList(holder, bottom, name, rewardList, cullUnlocked, tooltipFunction, alreadyUnlockedCheck, widthMult, stackHeight, overrideTooltip)
 	if (not rewardList) or #rewardList == 0 then
 		return false
 	end
@@ -89,7 +89,7 @@ local function MakeRewardList(holder, bottom, name, rewardList, cullUnlocked, to
 				}
 			end
 			
-			local info, imageFile = tooltipFunction(rewardList[i])
+			local info, imageFile, imageOverlay = tooltipFunction(rewardList[i])
 			
 			local x, y = (REWARD_ICON_SIZE*widthMult + 4)*math.floor(position/stackHeight), (position%stackHeight)*REWARD_ICON_SIZE/stackHeight
 			if imageFile then
@@ -99,6 +99,8 @@ local function MakeRewardList(holder, bottom, name, rewardList, cullUnlocked, to
 					color = {0.5, 0.5, 0.5, 0.5}
 					statusString = " (already unlocked)"
 				end
+				local tooltip = (overrideTooltip and info) or ((info.humanName or "???") .. statusString .. "\n " .. (info.description or ""))
+				
 				local image = Image:New{
 					x = x,
 					y = y,
@@ -106,18 +108,21 @@ local function MakeRewardList(holder, bottom, name, rewardList, cullUnlocked, to
 					height = REWARD_ICON_SIZE/stackHeight,
 					keepAspect = true,
 					color = color,
-					tooltip = (info.humanName or "???") .. statusString .. "\n " .. (info.description or ""),
-					file = imageFile,
+					tooltip = tooltip,
+					file = imageOverlay or imageFile,
+					file2 = imageOverlay and imageFile,
 					parent = scroll,
 				}
 				function image:HitTest(x,y) return self end
 			else
+				local tooltip = (overrideTooltip and info) or (info.name or "???")
+				
 				Button:New {
 					x = x,
 					y = y,
 					width = REWARD_ICON_SIZE*widthMult,
 					height = REWARD_ICON_SIZE/stackHeight,
-					caption = info.name or "???",
+					caption = tooltip,
 					font = Configuration:GetFont(2),
 					parent = scroll
 				}
@@ -130,8 +135,59 @@ local function MakeRewardList(holder, bottom, name, rewardList, cullUnlocked, to
 	return (rewardsHolder and true) or false
 end
 
-local function MakeRewardsPanel(parent, rewards, cullUnlocked, showCodex)
+local function MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjectiveSuccess)
+
+	local objectiveConfig = planetData.gameConfig.bonusObjectiveConfig
+	if not objectiveConfig then
+		return bottom
+	end
+	
+	if bonusObjectiveSuccess then
+		local function IsObjectiveUnlocked(objectiveID)
+			return not bonusObjectiveSuccess[objectiveID]
+		end
+		local function GetObjectiveInfo(objectiveID)
+			local tooltip = objectiveConfig[objectiveID].description
+			if WG.CampaignData.GetBonusObjectiveComplete(planetData.index, objectiveID) then
+				tooltip = tooltip .. " \n(Previously complete)"
+			elseif bonusObjectiveSuccess[objectiveID] then
+				tooltip = tooltip .. " \n(Newly complete)"
+			else
+				tooltip = tooltip .. " \n(Incomplete)"
+			end 
+			return tooltip, objectiveConfig[objectiveID].image, objectiveConfig[objectiveID].imageOverlay
+		end
+		local objectiveList = {}
+		for i = 1, #objectiveConfig do
+			objectiveList[i] = i
+		end
+		if MakeRewardList(parent, bottom, "Bonus Objectives", objectiveList, false, GetObjectiveInfo, IsObjectiveUnlocked, nil, nil, true) then
+			return bottom + 98
+		end
+	else
+		local function IsObjectiveUnlocked(objectiveID)
+			return not WG.CampaignData.GetBonusObjectiveComplete(planetData.index, objectiveID)
+		end
+		local function GetObjectiveInfo(objectiveID)
+			local tooltip = objectiveConfig[objectiveID].description
+			return tooltip, objectiveConfig[objectiveID].image, objectiveConfig[objectiveID].imageOverlay
+		end
+		local objectiveList = {}
+		for i = 1, #objectiveConfig do
+			objectiveList[i] = i
+		end
+		if MakeRewardList(parent, bottom, "Bonus Objectives", objectiveList, false, GetObjectiveInfo, IsObjectiveUnlocked, nil, nil, true) then
+			return bottom + 98
+		end
+	end
+	
+	return bottom
+end
+
+local function MakeRewardsPanel(parent, planetData, cullUnlocked, showCodex, bonusObjectiveSuccess)
 	local bottom = 82
+	
+	rewards = planetData.completionReward
 	
 	if showCodex then
 		if MakeRewardList(parent, bottom, "Codex", rewards.codexEntries, cullUnlocked, WG.CampaignData.GetCodexEntryInfo, WG.CampaignData.GetCodexEntryIsUnlocked, 3.96, 2) then
@@ -150,13 +206,15 @@ local function MakeRewardsPanel(parent, rewards, cullUnlocked, showCodex)
 	if MakeRewardList(parent, bottom, "Units", rewards.units, cullUnlocked, WG.CampaignData.GetUnitInfo, WG.CampaignData.GetUnitIsUnlocked) then
 		bottom = bottom + 98
 	end
+	
+	bottom = MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjectiveSuccess)
 end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Planet capturing
 
-local function MakeWinPopup(planetData)
+local function MakeWinPopup(planetData, bonusObjectiveSuccess)
 	local victoryWindow = Window:New {
 		caption = "",
 		name = "victoryWindow",
@@ -181,7 +239,7 @@ local function MakeWinPopup(planetData)
 		parent = victoryWindow
 	}
 	
-	MakeRewardsPanel(victoryWindow, planetData.completionReward, true, true)
+	MakeRewardsPanel(victoryWindow, planetData, true, true, bonusObjectiveSuccess)
 	
 	local function CloseFunc()
 		victoryWindow:Dispose()
@@ -206,15 +264,15 @@ local function MakeWinPopup(planetData)
 	local popupHolder = WG.Chobby.PriorityPopup(victoryWindow, CloseFunc, CloseFunc)
 end
 
-local function ProcessPlanetVictory(planetID)
+local function ProcessPlanetVictory(planetID, bonusObjectives)
 	if selectedPlanet then
 		selectedPlanet.Close()
 		selectedPlanet = nil
 	end
 	-- It is important to popup before capturing the planet to filter out the
 	-- already unlocked rewards.
-	MakeWinPopup(planetConfig[planetID])
-	WG.CampaignData.CapturePlanet(planetID)
+	MakeWinPopup(planetConfig[planetID], bonusObjectives)
+	WG.CampaignData.CapturePlanet(planetID, bonusObjectives)
 end
 
 local function ProcessPlanetDefeat(planetID)
@@ -285,7 +343,7 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 		}
 	}
 	
-	MakeRewardsPanel(subPanel, planetData.completionReward)
+	MakeRewardsPanel(subPanel, planetData)
 	
 	if startable then
 		local startButton = Button:New{
@@ -316,7 +374,7 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 				font = Configuration:GetFont(4),
 				OnClick = {
 					function(self)
-						ProcessPlanetVictory(planetID)
+						ProcessPlanetVictory(planetID, {true, false, false, true, false, false})
 					end
 				}
 			}
@@ -639,12 +697,25 @@ end
 local BATTLE_WON_STRING = "Campaign_PlanetBattleWon"
 local BATTLE_LOST_STRING = "Campaign_PlanetBattleLost"
 
+local function MakeBonusObjectivesList(bonusObjectives)
+	if not bonusObjectives then
+		return false
+	end
+	local list = {}
+	local length = string.len(bonusObjectives)
+	for i = 1, length do
+		list[i] = (string.sub(bonusObjectives, i, i) == "1")
+	end
+	return list
+end
+
 function widget:RecvLuaMsg(msg)
 	if string.find(msg, BATTLE_WON_STRING) then
-		msg = string.sub(msg, 25)
-		local planetID = tonumber(msg)
+		local endOfID = string.find(msg, " ")
+		local planetID = tonumber(string.sub(msg, 25, endOfID))
+		local bonusObjectives = string.sub(msg, endOfID + 1)
 		if planetID and planetConfig and planetConfig[planetID] then
-			ProcessPlanetVictory(planetID)
+			ProcessPlanetVictory(planetID, MakeBonusObjectivesList(bonusObjectives))
 		end
 	end
 	if string.find(msg, BATTLE_LOST_STRING) then

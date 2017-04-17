@@ -228,12 +228,34 @@ end
 --------------------------------------------------------------------------------
 -- Callins
 
-function externalFunctions.CapturePlanet(planetID)
+function externalFunctions.CapturePlanet(planetID, bonusObjectives)
 	local planet = WG.Chobby.Configuration.campaignConfig.planetDefs.planets[planetID]
+	local saveRequired = false
+	local gainedExperience = 0
 	if UnlockThing(gamedata.planetsCaptured, planetID) then
 		UnlockRewardSet(planet.completionReward)
 		CallListeners("RewardGained", planet.completionReward)
 		CallListeners("PlanetCaptured", planetID)
+		gainedExperience = gainedExperience + (planet.completionReward.experience or 0)
+		saveRequired = true
+	end
+	
+	if bonusObjectives then
+		local bonusConfig = planet.gameConfig.bonusObjectiveConfig
+		if bonusConfig then
+			for i = 1, #bonusObjectives do
+				if bonusObjectives[i] and bonusConfig[i] and UnlockThing(gamedata.bonusObjectivesComplete, planetID .. "_" .. i) then
+					gainedExperience = gainedExperience + bonusConfig[i].experience
+					saveRequired = true
+				end
+			end
+		end
+	end
+	
+	if saveRequired then
+		if gainedExperience then
+		
+		end
 		SaveGame()
 	end
 end
@@ -283,6 +305,10 @@ end
 
 function externalFunctions.GetCodexEntryIsUnlocked(entryName)
 	return gamedata.codexEntriesUnlocked.map[entryName], gamedata.codexEntryRead[entryName]
+end
+
+function externalFunctions.GetBonusObjectiveComplete(planetID, objectiveID)
+	return gamedata.bonusObjectivesComplete.map[planetID .. "_" .. objectiveID]
 end
 
 function externalFunctions.GetUnitInfo(unitName)
