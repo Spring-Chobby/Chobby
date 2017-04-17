@@ -358,7 +358,7 @@ local function GetPlanet(planetUtilities)
 					},
 					image = planetUtilities.ICON_DIR .. "corllt.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Less than 4 enemy LLTs until 0:40.",
+					description = "Less than 4 enemy LLTs at 0:40.",
 					experience = 20,
 				},
 				[3] = { -- Have 3 Glaives by 35 seconds.
