@@ -16,12 +16,16 @@ end
 --------------------------------------------------------------------------------
 -- data
 --------------------------------------------------------------------------------
+
+local moduleDefs, chassisDefs, upgradeUtilities, UNBOUNDED_LEVEL, _, moduleDefNames = VFS.Include("Gamedata/commanders/dynamic_comm_defs.lua")
+
 -- this stores anything that goes into a save file
 local gamedata = {}
 
 local externalFunctions = {}
 
 local SAVE_DIR = "Saves/campaign/"
+local ICONS_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/unitpics/"
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -34,6 +38,12 @@ local function UnlockThing(thingData, id)
 	thingData.map[id] = true
 	thingData.list[#thingData.list + 1] = id
 	return true
+end
+
+local function UnlockListOfThings(unlockList, unlocksToAdd)
+	for i = 1, #unlocksToAdd do
+		UnlockThing(unlockList, unlocksToAdd[i])
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -87,30 +97,6 @@ end
 --------------------------------------------------------------------------------
 -- Game data
 
-local function UnlockUnits(unlockList)
-	for i = 1, #unlockList do
-		UnlockThing(gamedata.unitsUnlocked, unlockList[i])
-	end
-end
-
-local function UnlockModules(unlockList)
-	for i = 1, #unlockList do
-		UnlockThing(gamedata.modulesUnlocked, unlockList[i])
-	end
-end
-
-local function UnlockAbilities(unlockList)
-	for i = 1, #unlockList do
-		UnlockThing(gamedata.abilitiesUnlocked, unlockList[i])
-	end
-end
-
-local function UnlockCodexEntries(unlockList)
-	for i = 1, #unlockList do
-		UnlockThing(gamedata.codexEntriesUnlocked, unlockList[i])
-	end
-end
-
 local function ResetGamedata()
 	gamedata = {
 		unitsUnlocked = {map = {}, list = {}},
@@ -127,16 +113,16 @@ end
 
 local function UnlockRewardSet(rewardSet)
 	if rewardSet.units then
-		UnlockUnits(rewardSet.units)
+		UnlockListOfThings(gamedata.unitsUnlocked, rewardSet.units)
 	end
 	if rewardSet.modules then
-		UnlockModules(rewardSet.modules)
+		UnlockListOfThings(gamedata.modulesUnlocked, rewardSet.modules)
 	end
 	if rewardSet.abilities then
-		UnlockAbilities(rewardSet.abilities)
+		UnlockListOfThings(gamedata.abilitiesUnlocked, rewardSet.abilities)
 	end
 	if rewardSet.codexEntries then
-		UnlockCodexEntries(rewardSet.codexEntries)
+		UnlockListOfThings(gamedata.codexEntriesUnlocked, rewardSet.codexEntries)
 	end
 end
 
@@ -295,6 +281,24 @@ end
 
 function externalFunctions.GetCodexEntryIsUnlocked(entryName)
 	return gamedata.codexEntriesUnlocked.map[entryName], gamedata.codexEntryRead[entryName]
+end
+
+function externalFunctions.GetUnitInfo(unitName)
+	return WG.Chobby.Configuration.gameConfig.gameUnitInformation.humanNames[unitName] or {}, ICONS_DIR .. unitName .. ".png"
+end
+
+function externalFunctions.GetAbilityInfo(abilityName)
+	local ability = WG.Chobby.Configuration.campaignConfig.abilityDefs[abilityName] or {}
+	return ability, ability.image
+end
+
+function externalFunctions.GetModuleInfo(moduleName)
+	local index = moduleDefNames[moduleName]
+	return index and moduleDefs[index] or {}, ICONS_DIR .. moduleName .. ".png"
+end
+
+function externalFunctions.GetCodexEntryInfo(codexEntryName)
+	return WG.Chobby.Configuration.campaignConfig.codex[codexEntryName] or {}
 end
 
 function externalFunctions.GetActiveRetinue()

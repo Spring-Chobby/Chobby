@@ -206,10 +206,10 @@ local function InitializeControls(parentControl)
 	local Configuration = WG.Chobby.Configuration
 	
 	Label:New {
-		x = 18,
-		y = 16,
-		width = 180,
-		height = 30,
+		x = 20,
+		right = 5,
+		y = 17,
+		height = 20,
 		parent = parentControl,
 		font = Configuration:GetFont(3),
 		caption = "Select Mission",

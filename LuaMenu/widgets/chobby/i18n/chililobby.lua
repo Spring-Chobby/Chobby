@@ -198,6 +198,7 @@ return {
 		technology = "Technology",
 		options = "Options",
 		codex = "Codex",
+		technology = "Technology",
 
 		-- gui_rank_update_window.lua
 		rank_gained = "Rank Gained",

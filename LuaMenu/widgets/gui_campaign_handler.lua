@@ -13,8 +13,6 @@ function widget:GetInfo()
 	}
 end
 
-local moduleDefs, chassisDefs, upgradeUtilities, UNBOUNDED_LEVEL, _, moduleDefNames = VFS.Include("Gamedata/commanders/dynamic_comm_defs.lua")
-
 local GALAXY_IMAGE = LUA_DIRNAME .. "images/heic1403aDowngrade.jpg"
 local IMAGE_BOUNDS = {
 	x = 850/4000,
@@ -33,7 +31,6 @@ local PLANET_START_COLOR = {1, 1, 1, 1}
 local PLANET_NO_START_COLOR = {0.5, 0.5, 0.5, 1}
 
 local TARGET_IMAGE = LUA_DIRNAME .. "images/niceCircle.png"
-local ICONS_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/unitpics/"
 
 local REWARD_ICON_SIZE = 58
 
@@ -43,24 +40,6 @@ local selectedPlanet
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Rewards panels
-
-local function GetUnitInfo(unitName)
-	return WG.Chobby.Configuration.gameConfig.gameUnitInformation.humanNames[unitName] or {}, ICONS_DIR .. unitName .. ".png"
-end
-
-local function GetAbilityInfo(abilityName)
-	local ability = WG.Chobby.Configuration.campaignConfig.abilityDefs[abilityName] or {}
-	return ability, ability.image
-end
-
-local function GetModuleInfo(moduleName)
-	local index = moduleDefNames[moduleName]
-	return index and moduleDefs[index] or {}, ICONS_DIR .. moduleName .. ".png"
-end
-
-local function GetCodexEntryInfo(codexEntryName)
-	return WG.Chobby.Configuration.campaignConfig.codex[codexEntryName] or {}
-end
 
 local function MakeRewardList(holder, bottom, name, rewardList, cullUnlocked, tooltipFunction, alreadyUnlockedCheck, widthMult, stackHeight)
 	if (not rewardList) or #rewardList == 0 then
@@ -155,20 +134,20 @@ local function MakeRewardsPanel(parent, rewards, cullUnlocked, showCodex)
 	local bottom = 82
 	
 	if showCodex then
-		if MakeRewardList(parent, bottom, "Codex", rewards.codexEntries, cullUnlocked, GetCodexEntryInfo, WG.CampaignData.GetCodexEntryIsUnlocked, 3.96, 2) then
+		if MakeRewardList(parent, bottom, "Codex", rewards.codexEntries, cullUnlocked, WG.CampaignData.GetCodexEntryInfo, WG.CampaignData.GetCodexEntryIsUnlocked, 3.96, 2) then
 			bottom = bottom + 98
 		end
 	end
 	
-	if MakeRewardList(parent, bottom, "Abilities", rewards.abilities, cullUnlocked, GetAbilityInfo, WG.CampaignData.GetAbilityIsUnlocked) then
+	if MakeRewardList(parent, bottom, "Abilities", rewards.abilities, cullUnlocked, WG.CampaignData.GetAbilityInfo, WG.CampaignData.GetAbilityIsUnlocked) then
 		bottom = bottom + 98
 	end
 	
-	if MakeRewardList(parent, bottom, "Modules", rewards.modules, cullUnlocked, GetModuleInfo, WG.CampaignData.GetModuleIsUnlocked) then
+	if MakeRewardList(parent, bottom, "Modules", rewards.modules, cullUnlocked, WG.CampaignData.GetModuleInfo, WG.CampaignData.GetModuleIsUnlocked) then
 		bottom = bottom + 98
 	end
 	
-	if MakeRewardList(parent, bottom, "Units", rewards.units, cullUnlocked, GetUnitInfo, WG.CampaignData.GetUnitIsUnlocked) then
+	if MakeRewardList(parent, bottom, "Units", rewards.units, cullUnlocked, WG.CampaignData.GetUnitInfo, WG.CampaignData.GetUnitIsUnlocked) then
 		bottom = bottom + 98
 	end
 end

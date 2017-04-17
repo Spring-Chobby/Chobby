@@ -10,7 +10,7 @@ return {
 			tabs = {
 				{
 					name = "technology", 
-					control = Control:New {},
+					control = WG.TechnologyHandler.GetControl(),
 				},
 				{
 					name = "codex", 

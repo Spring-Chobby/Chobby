@@ -138,13 +138,13 @@ local function InitializeControls(parentControl)
 	local Configuration = WG.Chobby.Configuration
 	
 	Label:New {
-		parent = parentControl,
-		x = 15,
-		y = 11,
-		width = 180,
-		height = 30,
+		x = 20,
+		right = 5,
+		y = 17,
+		height = 20,
 		font = Configuration:GetFont(3),
-		caption = i18n("Codex"),
+		caption = i18n("codex"),
+		parent = parentControl
 	}
 
 	local codexTextScroll = ScrollPanel:New{
