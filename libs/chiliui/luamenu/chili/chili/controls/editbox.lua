@@ -137,7 +137,7 @@ function EditBox:_LineLog2Phys(logicalLine, pos)
 		for _, plID in pairs(logicalLine.pls) do
 			local pl = self.physicalLines[plID]
 			py = plID
-			px  = px + #pl.colorPrefix
+			px = px + #pl.colorPrefix
 			if #pl.text + 1 >= px or plID == #logicalLine.pls then
 				break
 			end
@@ -154,10 +154,10 @@ function EditBox:_SetSelection(selStart, selStartY, selEnd, selEndY)
 	if #self.lines == 0 then
 		return
 	end
-	self.selStart  = selStart        or self.selStart
-	self.selStartY = selStartY       or self.selStartY
-	self.selEnd    = selEnd          or self.selEnd
-	self.selEndY   = selEndY         or self.selEndY
+	self.selStart  = selStart        or self.selStart  or 0
+	self.selStartY = selStartY       or self.selStartY or 0
+	self.selEnd    = selEnd          or self.selEnd    or 0
+	self.selEndY   = selEndY         or self.selEndY   or 0
 	if selStart or selStartY then
         if not self.lines[self.selStartY] then
             Spring.Log("chiliui", LOG.ERROR, "self.lines[self.selStartY] is nil for self.selStartY: " .. tostring(self.selStartY) .. " and #self.lines: " .. tostring(#self.lines))
