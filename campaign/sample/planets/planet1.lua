@@ -406,6 +406,31 @@ local function GetPlanet(planetUtilities)
 					description = "Build and protect a Cloakybot Factory.",
 					experience = 20,
 				},
+				[7] = { -- Have 5 Glaives at any one time
+					satisfyOnce = true,
+					comparisionType = planetUtilities.COMPARE.AT_LEAST,
+					targetNumber = 5,
+					unitTypes = {
+						"armpw",
+					},
+					image = planetUtilities.ICON_DIR .. "armpw.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
+					description = "Have 5 Glaives.",
+					experience = 20,
+				},
+				[8] = { -- Build 5 Glaives
+					satisfyOnce = true,
+					countRemovedUnits = true, -- count units that previously died.
+					comparisionType = planetUtilities.COMPARE.AT_LEAST,
+					targetNumber = 5,
+					unitTypes = {
+						"armpw",
+					},
+					image = planetUtilities.ICON_DIR .. "armpw.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
+					description = "Build 5 Glaives.",
+					experience = 20,
+				},
 			}
 		},
 		completionReward = {
