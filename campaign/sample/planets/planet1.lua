@@ -340,6 +340,12 @@ local function GetPlanet(planetUtilities)
 					description = "Win by 0:50",
 					experience = 20,
 				},
+				[2] = { -- Complete all bonus objectives
+					completeAllBonusObjectives = true,
+					image = planetUtilities.ICON_OVERLAY.ALL,
+					description = "Complete all bonus objectives (in one battle).",
+					experience = 20,
+				},
 				-- victoryByTime is a special case. All other bonus objectives are based on unit counts. 
 				-- They have the following format:
 				-- * Time Limit: Set by supplying either satisfyAtTime, satisfyByTime, satisfyUntilTime, 
@@ -350,18 +356,6 @@ local function GetPlanet(planetUtilities)
 				-- * enemyUnitTypes: Unit types owned by enemy allyTeams that count towards unit count.
 				-- Note that experience is set in bonusObjectiveEffects
 				-- Note that startUnits with bonusObjectiveID set count towards the unit count. 
-				[2] = { -- Make the enemy have no more than 3 LLT at 40 seconds.
-					satisfyAtTime = 40,
-					comparisionType = planetUtilities.COMPARE.AT_MOST,
-					targetNumber = 4,
-					enemyUnitTypes = {
-						"corllt",
-					},
-					image = planetUtilities.ICON_DIR .. "corllt.png",
-					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Less than 4 enemy LLTs at 0:40.",
-					experience = 20,
-				},
 				[3] = { -- Have 3 Glaives by 35 seconds.
 					satisfyByTime = 35,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
@@ -403,7 +397,7 @@ local function GetPlanet(planetUtilities)
 					},
 					image = planetUtilities.ICON_DIR .. "factorycloak.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build and protect a Cloakybot Factory.",
+					description = "Have at least one cloaky factory once you do.",
 					experience = 20,
 				},
 				[7] = { -- Have 5 Glaives at any one time
@@ -429,6 +423,44 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "armpw.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
 					description = "Build 5 Glaives.",
+					experience = 20,
+				},
+				[9] = { -- Build and protect a cloaky factory
+					satisfyForeverAfterFirstSatisfied = true,
+					lockUnitsOnSatisfy = true, -- Makes the units used to satisfy the objective locked in once satisfied. This prevents overbuilding for leeway.
+					comparisionType = planetUtilities.COMPARE.AT_LEAST,
+					targetNumber = 1,
+					unitTypes = {
+						"factorycloak",
+					},
+					image = planetUtilities.ICON_DIR .. "factorycloak.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
+					description = "Build and protect a cloaky factory.",
+					experience = 20,
+				},
+				[10] = { -- Protect all Warriors
+					satisfyForever = true,
+					failOnUnitLoss = true, -- Fails the objective if any units being used to satisfy the objective are lost.
+					comparisionType = planetUtilities.COMPARE.AT_LEAST,
+					targetNumber = 0,
+					unitTypes = {
+						"armwar",
+					},
+					image = planetUtilities.ICON_DIR .. "armwar.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
+					description = "Don't lose any Warriors.",
+					experience = 20,
+				},
+				[11] = { -- Make the enemy have no more than 3 LLT at 40 seconds.
+					satisfyAtTime = 40,
+					comparisionType = planetUtilities.COMPARE.AT_MOST,
+					targetNumber = 4,
+					enemyUnitTypes = {
+						"corllt",
+					},
+					image = planetUtilities.ICON_DIR .. "corllt.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
+					description = "Less than 4 enemy LLTs at 0:40.",
 					experience = 20,
 				},
 			}

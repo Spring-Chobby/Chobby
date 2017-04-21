@@ -48,6 +48,7 @@ planetUtilities.ICON_OVERLAY = {
 	GUARD = LUA_DIRNAME .. "images/guard.png",
 	REPAIR = LUA_DIRNAME .. "images/repair.png",
 	CLOCK = LUA_DIRNAME .. "images/clock.png",
+	ALL = LUA_DIRNAME .. "images/battle.png",
 }
 
 planetUtilities.COMPARE = {
