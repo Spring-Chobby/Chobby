@@ -112,7 +112,7 @@ local function GetPlanet(planetUtilities)
 				{
 					startX = 200,
 					startZ = 200,
-					aiLib = "CircuitAIHard",
+					aiLib = "Circuit_difficulty_autofill",
 					humanName = "Ally",
 					bitDependant = true,
 					facplop = false,
@@ -162,7 +162,7 @@ local function GetPlanet(planetUtilities)
 				{
 					startX = 1250,
 					startZ = 250,
-					aiLib = "CircuitAIHard",
+					aiLib = "Circuit_difficulty_autofill",
 					humanName = "Another Ally",
 					bitDependant = true,
 					facplop = false,
@@ -194,7 +194,7 @@ local function GetPlanet(planetUtilities)
 				{
 					startX = 3200,
 					startZ = 3200,
-					aiLib = "CircuitAIHard",
+					aiLib = "Circuit_difficulty_autofill",
 					humanName = "Mortal Enemy",
 					bitDependant = true,
 					facplop = true,

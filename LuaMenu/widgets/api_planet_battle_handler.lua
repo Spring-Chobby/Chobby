@@ -131,7 +131,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 	-- Add the AIs
 	for i = 1, #gameConfig.aiConfig do
 		local aiData = gameConfig.aiConfig[i]
-		local shortName = aiData.aiLib
+		local shortName = WG.CampaignData.GetAI(aiData.aiLib)
 		if aiData.bitDependant then
 			shortName = shortName .. bitExtension
 		end

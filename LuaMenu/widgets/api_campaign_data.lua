@@ -107,6 +107,7 @@ local function ResetGamedata()
 		bonusObjectivesComplete = {map = {}, list = {}},
 		planetsCaptured = {map = {}, list = {}},
 		commanderExperience = 0,
+		difficultySetting = 1, -- 1,2,3 -> easy/medium/hard
 		commanderLevel = 1,
 		commanderLoadout = {},
 		retinue = {}, -- Unused
@@ -242,6 +243,23 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Callins
+
+function externalFunctions.GetAI(aiLibName)
+	local aiConfig = WG.Chobby.Configuration.campaignConfig.aiConfig
+	return (aiConfig.aiLibFunctions[aiLibName] and aiConfig.aiLibFunctions[aiLibName](gamedata.difficultySetting)) or aiLibName
+end
+
+function externalFunctions.GetDifficultySetting()
+	return gamedata.difficultySetting
+end
+
+function externalFunctions.SetDifficultySetting(newDifficulty)
+	if (not newDifficulty) or gamedata.difficultySetting == newDifficulty then
+		return
+	end
+	gamedata.difficultySetting = newDifficulty
+	SaveGame()
+end
 
 function externalFunctions.CapturePlanet(planetID, bonusObjectives)
 	local planet = WG.Chobby.Configuration.campaignConfig.planetDefs.planets[planetID]
