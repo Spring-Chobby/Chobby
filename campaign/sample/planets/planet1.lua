@@ -42,7 +42,7 @@ local function GetPlanet(planetUtilities)
 						x = 600,
 						z = 1200,
 						radius = 100,
-						objectiveID = 5,
+						objectiveID = 4,
 					},
 					facplop = true,
 					defeatIfDestroyedObjectiveID = 2,
@@ -119,7 +119,7 @@ local function GetPlanet(planetUtilities)
 							x = 600,
 							z = 1200,
 							radius = 100,
-							objectiveID = 6,
+							objectiveID = 4,
 						},
 						defeatIfDestroyedObjectiveID = 3, -- Also captured
 					},
@@ -294,7 +294,8 @@ local function GetPlanet(planetUtilities)
 				-- Indexed by allyTeam.
 				[0] = {
 					-- AllyTeam 0 is the players allyTeam. It can only have loseAfterSeconds.
-					loseAfterSeconds = 60*59,
+					loseAfterSeconds = 60,
+					timeLossObjectiveID = 1,
 				},
 				[1] = {
 					-- The default behaviour, if no parameters are set, is the defeat condition of an
@@ -309,12 +310,13 @@ local function GetPlanet(planetUtilities)
 						"factorycloak",
 					},
 					loseAfterSeconds = false,
+					allyTeamLossObjectiveID = 4,
 				},
 			},
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Win before 59:00",
+					description = "Win before 1:00",
 				},
 				[2] = {
 					description = "Protect your Commander",
@@ -323,13 +325,7 @@ local function GetPlanet(planetUtilities)
 					description = "Protect your Glaive",
 				},
 				[4] = {
-					description = "Destroy enemy commanders and factories.",
-				},
-				[5] = {
-					description = "Move Commander to location.",
-				},
-				[6] = {
-					description = "Move Glaive to location.",
+					description = "Destroy enemy commanders and factories, move your Commander to the location or move your Glaive to the location.",
 				},
 			},
 			bonusObjectiveConfig = {
