@@ -14,6 +14,6 @@ zkBaseConfig._defaultGameArchiveName = "Zero-K $VERSION"
 zkBaseConfig._defaultGameRapidTag    = nil
 zkBaseConfig.singleplayerConfig      = singleplayerConfig
 zkBaseConfig.skirmishDefault         = skirmishDefault
-zkBaseConfig.editor                  = "rapid://sbc:test"
+zkBaseConfig.editor                  = "SpringBoard ZK $VERSION"
 
 return zkBaseConfig

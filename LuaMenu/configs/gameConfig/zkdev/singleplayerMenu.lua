@@ -44,7 +44,7 @@ local menuItems = {
 	--},
 }
 
-if VFS.HasArchive("SpringBoard Core $VERSION") then
+if VFS.HasArchive("SpringBoard ZK $VERSION") then
 	menuItems[#menuItems + 1] = {
 		name = "editor",
 		control = WG.SpringBoardWindow.GetControl(),
