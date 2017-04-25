@@ -1,4 +1,4 @@
-return {
+local menuItems = {
 	{
 		name = "missions", 
 		control = WG.MissionHandler.GetControl(),
@@ -43,3 +43,12 @@ return {
 	--	control = Control:New {},
 	--},
 }
+
+if VFS.HasArchive("SpringBoard Core $VERSION") then
+	menuItems[#menuItems + 1] = {
+		name = "editor",
+		control = WG.SpringBoardWindow.GetControl(),
+	}
+end
+
+return menuItems
