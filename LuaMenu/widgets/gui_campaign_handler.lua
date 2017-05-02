@@ -15,8 +15,8 @@ end
 
 local GALAXY_IMAGE = LUA_DIRNAME .. "images/heic1403aDowngrade.jpg"
 local IMAGE_BOUNDS = {
-	x = 850/4000,
-	y = 800/2602,
+	x = 810/4000,
+	y = 710/2602,
 	width = 2400/4000,
 	height = 1500/2602,
 }

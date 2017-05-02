@@ -7,11 +7,11 @@ local function GetPlanet(planetUtilities)
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
 	local planetData = {
-		name = "Pong",
-		startingPlanet = false,
+		name = "Im Jaleth",
+		startingPlanet = true,
 		mapDisplay = {
-			x = 0.22,
-			y = 0.1,
+			x = 0.05,
+			y = 0.87,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -20,18 +20,15 @@ local function GetPlanet(planetUtilities)
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
 			terrainType = "Terran",
-			radius = "6700 km",
-			primary = "Tau Ceti",
+			radius = "6550 km",
+			primary = "Origin",
 			primaryType = "G8",
 			milRating = 1,
-			text = [[Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-			Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-			Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-			Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.]]
+			text = [[Your first battle will be straightforward. You have been provided with a starting base. Construct an army of Glaives and overwhelm your enemy.]]
 		},
 		gameConfig = {
 			missionStartscript = false,
-			mapName = "TitanDuel",
+			mapName = "Living Lands v2.03",
 			playerConfig = {
 				startX = 1800,
 				startZ = 1800,

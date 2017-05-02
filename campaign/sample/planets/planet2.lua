@@ -7,11 +7,11 @@ local function GetPlanet(planetUtilities)
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
 	local planetData = {
-		name = "Pong",
+		name = "Beth XVII",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.31,
-			y = 0.19,
+			x = 0.04,
+			y = 0.73,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -19,19 +19,16 @@ local function GetPlanet(planetUtilities)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Terran",
-			radius = "6700 km",
-			primary = "Tau Ceti",
-			primaryType = "G8",
+			terrainType = "Desert",
+			radius = "5950 km",
+			primary = "Beth",
+			primaryType = "G4",
 			milRating = 1,
-			text = [[Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-			Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-			Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-			Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.]]
+			text = [[Glaives served you well in the previous battle, but on this planet your opponent will construct Warrior riot bots and Stardust turrets to counter them. Retaliate with Rockos and your own Warriors to achieve victory.]]
 		},
 		gameConfig = {
 			missionStartscript = false,
-			mapName = "TitanDuel",
+			mapName = "Battle for Planet XVII-v01",
 			playerConfig = {
 				startX = 400,
 				startZ = 400,

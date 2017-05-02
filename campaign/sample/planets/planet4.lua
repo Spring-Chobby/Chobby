@@ -7,11 +7,11 @@ local function GetPlanet(planetUtilities)
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
 	local planetData = {
-		name = "Pong",
+		name = "Sigil",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.14,
-			y = 0.44,
+			x = 0.02,
+			y = 0.50,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -19,19 +19,16 @@ local function GetPlanet(planetUtilities)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Terran",
-			radius = "6700 km",
-			primary = "Tau Ceti",
-			primaryType = "G8",
+			terrainType = "Barren",
+			radius = "4400 km",
+			primary = "Cryptus",
+			primaryType = "F2",
 			milRating = 1,
-			text = [[Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-			Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-			Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-			Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.]]
+			text = [[In this battle you will have an ally to assist you against two enemies. Assist your teammate by using Scythes in stealth attacks against vulnerable targets, and Spectres to pick off enemy units one by one.]]
 		},
 		gameConfig = {
 			missionStartscript = false,
-			mapName = "TitanDuel",
+			mapName = "Barren 2",
 			playerConfig = {
 				startX = 400,
 				startZ = 400,

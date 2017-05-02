@@ -7,11 +7,11 @@ local function GetPlanet(planetUtilities)
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
 	local planetData = {
-		name = "Pong",
+		name = "Adimasi",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.05,
-			y = 0.54,
+			x = 0.13,
+			y = 0.63,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -20,18 +20,15 @@ local function GetPlanet(planetUtilities)
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
 			terrainType = "Terran",
-			radius = "6700 km",
-			primary = "Tau Ceti",
-			primaryType = "G8",
+			radius = "5500 km",
+			primary = "Naywain",
+			primaryType = "G4",
 			milRating = 1,
-			text = [[Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-			Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-			Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-			Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.]]
+			text = [[In some circumstances it is ill-advised to approach your enemy too closely... until you've softened them up, that is. Use Hammer artillery bots to weaken your opponent's defences before you commit to an assault. You can construct Lotus laser turrets to protect your Hammers while they work.]]
 		},
 		gameConfig = {
 			missionStartscript = false,
-			mapName = "TitanDuel",
+			mapName = "Wanderlust v03",
 			playerConfig = {
 				startX = 400,
 				startZ = 400,

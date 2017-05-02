@@ -39,7 +39,7 @@ planetUtilities.backgroundImages = {
 	LUA_DIRNAME .. "images/starbackgrounds/4.jpg",
 }
 
-planetUtilities.PLANET_SIZE_MAP = 48
+planetUtilities.PLANET_SIZE_MAP = 36
 planetUtilities.PLANET_SIZE_INFO = 240
 planetUtilities.ICON_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/unitpics/"
 

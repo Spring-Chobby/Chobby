@@ -7,11 +7,11 @@ local function GetPlanet(planetUtilities)
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
 	local planetData = {
-		name = "Pong",
+		name = "Hebat",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.3,
-			y = 0.52,
+			x = 0.2,
+			y = 0.7,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -19,19 +19,16 @@ local function GetPlanet(planetUtilities)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Terran",
-			radius = "6700 km",
-			primary = "Tau Ceti",
+			terrainType = "Sylvan",
+			radius = "3300 km",
+			primary = "Voblaka",
 			primaryType = "G8",
 			milRating = 1,
-			text = [[Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-			Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-			Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-			Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.]]
+			text = [[This battlefield is at a high altitude, so deploy Wind Generators to provide cheap and efficient energy income. Tick EMP mines positioned at strategic locations will prevent your opponent from getting too close to your wind farming operation.]]
 		},
 		gameConfig = {
 			missionStartscript = false,
-			mapName = "TitanDuel",
+			mapName = "Fairyland v1.0",
 			playerConfig = {
 				startX = 400,
 				startZ = 400,
