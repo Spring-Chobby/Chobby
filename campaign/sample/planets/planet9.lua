@@ -7,11 +7,11 @@ local function GetPlanet(planetUtilities)
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
 	local planetData = {
-		name = "Pong",
+		name = "Cadentem",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.27,
-			y = 0.85,
+			x = 0.17,
+			y = 0.28,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -19,19 +19,16 @@ local function GetPlanet(planetUtilities)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Terran",
+			terrainType = "Tundra",
 			radius = "6700 km",
-			primary = "Tau Ceti",
-			primaryType = "G8",
-			milRating = 1,
-			text = [[Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-			Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-			Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-			Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.]]
+			primary = "Sop",
+			primaryType = "G2VI",
+			milRating = 2,
+			text = [[Use Slasher missile trucks and Wolverine mine-laying artillery to push across this battlefield and destroy your enemy. Be sure to expand into the valley in the south-west as well - it is rich in metal deposits.]]
 		},
 		gameConfig = {
 			missionStartscript = false,
-			mapName = "TitanDuel",
+			mapName = "Avalanche",
 			playerConfig = {
 				startX = 400,
 				startZ = 400,

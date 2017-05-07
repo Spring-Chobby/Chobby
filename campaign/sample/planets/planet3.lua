@@ -11,7 +11,7 @@ local function GetPlanet(planetUtilities)
 		startingPlanet = false,
 		mapDisplay = {
 			x = 0.06,
-			y = 0.6,
+			y = 0.56,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -22,7 +22,7 @@ local function GetPlanet(planetUtilities)
 			terrainType = "Alpine",
 			radius = "1995 km",
 			primary = "Magus",
-			primaryType = "G2",
+			primaryType = "K4VI",
 			milRating = 1,
 			text = [[In this instance, the direct approach is called for. Use your Zeus lightning assault bots to break the enemy's defensive line (and his army). If it becomes necessary, construct Defender turrets to protect your expansions.]]
 		},

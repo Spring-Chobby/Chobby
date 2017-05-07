@@ -7,11 +7,11 @@ local function GetPlanet(planetUtilities)
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
 	local planetData = {
-		name = "Pong",
+		name = "Oscar Five-One",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.79,
-			y = 0.52,
+			x = 0.29,
+			y = 0.93,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},

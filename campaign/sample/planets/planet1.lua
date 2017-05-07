@@ -22,7 +22,7 @@ local function GetPlanet(planetUtilities)
 			terrainType = "Terran",
 			radius = "6550 km",
 			primary = "Origin",
-			primaryType = "G8",
+			primaryType = "G8V",
 			milRating = 1,
 			text = [[Your first battle will be straightforward. You have been provided with a starting base. Construct an army of Glaives and overwhelm your enemy.]]
 		},

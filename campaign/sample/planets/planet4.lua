@@ -11,7 +11,7 @@ local function GetPlanet(planetUtilities)
 		startingPlanet = false,
 		mapDisplay = {
 			x = 0.02,
-			y = 0.50,
+			y = 0.45,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -22,9 +22,9 @@ local function GetPlanet(planetUtilities)
 			terrainType = "Barren",
 			radius = "4400 km",
 			primary = "Cryptus",
-			primaryType = "F2",
+			primaryType = "F2III",
 			milRating = 1,
-			text = [[In this battle you will have an ally to assist you against two enemies. Assist your teammate by using Scythes in stealth attacks against vulnerable targets, and Spectres to pick off enemy units one by one.]]
+			text = [[In this battle you will have an ally to assist you against two enemies. Support your teammate by using Scythes in stealth attacks against vulnerable targets, and Spectres to pick off enemy units one by one.]]
 		},
 		gameConfig = {
 			missionStartscript = false,

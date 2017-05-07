@@ -7,11 +7,11 @@ local function GetPlanet(planetUtilities)
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
 	local planetData = {
-		name = "Pong",
+		name = "Blob",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.56,
-			y = 0.87,
+			x = 0.24,
+			y = 0.19,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -20,9 +20,9 @@ local function GetPlanet(planetUtilities)
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
 			terrainType = "Terran",
-			radius = "6700 km",
-			primary = "Tau Ceti",
-			primaryType = "G8",
+			radius = "4.1 km",
+			primary = "None",
+			primaryType = "N/A",
 			milRating = 1,
 			text = [[Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 			Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
@@ -31,7 +31,7 @@ local function GetPlanet(planetUtilities)
 		},
 		gameConfig = {
 			missionStartscript = false,
-			mapName = "TitanDuel",
+			mapName = "Apophis v2_2",
 			playerConfig = {
 				startX = 400,
 				startZ = 400,

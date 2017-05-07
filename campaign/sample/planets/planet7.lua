@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Arodor",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.08,
-			y = 0.48,
+			x = 0.11,
+			y = 0.42,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -22,7 +22,7 @@ local function GetPlanet(planetUtilities)
 			terrainType = "Desert",
 			radius = "6600 km",
 			primary = "Xar",
-			primaryType = "F0",
+			primaryType = "B2Ia",
 			milRating = 1,
 			text = [[Besides the occasional strange hills dotting the landscape, this is a smooth and level battlefield. Your opponent has arrived before you and has begun expanding their economy. Use your Scorchers to punish their greed.]]
 		},

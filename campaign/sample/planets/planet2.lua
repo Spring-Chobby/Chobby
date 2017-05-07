@@ -22,7 +22,7 @@ local function GetPlanet(planetUtilities)
 			terrainType = "Desert",
 			radius = "5950 km",
 			primary = "Beth",
-			primaryType = "G4",
+			primaryType = "G4V",
 			milRating = 1,
 			text = [[Glaives served you well in the previous battle, but on this planet your opponent will construct Warrior riot bots and Stardust turrets to counter them. Retaliate with Rockos and your own Warriors to achieve victory.]]
 		},

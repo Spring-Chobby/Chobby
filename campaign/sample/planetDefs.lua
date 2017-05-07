@@ -1,6 +1,6 @@
 local shortname = "sample"
 
-local N_PLANETS = 8
+local N_PLANETS = 21
 
 local planetEdgeList = {
 	{1,2},
@@ -10,7 +10,22 @@ local planetEdgeList = {
 	{3,7},
 	{4,8},
 	{5,6},
+	{5,12},
+	{6,18},
+	{6,19},
 	{7,8},
+	{7,9},
+	{7,17},
+	{9,10},
+	{9,11},
+	{12,13},
+	{12,17},
+	{13,14},
+	{13,16},
+	{14,15},
+	{18,20},
+	{19,20},
+	{20,21},
 }
 
 local planetAdjacency = {}
@@ -26,6 +41,7 @@ end
 -- Populate the matrix
 for i = 1, #planetEdgeList do
 	planetAdjacency[planetEdgeList[i][1]][planetEdgeList[i][2]] = true
+	planetAdjacency[planetEdgeList[i][2]][planetEdgeList[i][1]] = true
 end
 
 local planets = {}

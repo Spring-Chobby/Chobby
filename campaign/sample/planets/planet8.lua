@@ -11,7 +11,7 @@ local function GetPlanet(planetUtilities)
 		startingPlanet = false,
 		mapDisplay = {
 			x = 0.05,
-			y = 0.38,
+			y = 0.33,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -22,7 +22,7 @@ local function GetPlanet(planetUtilities)
 			terrainType = "Terran",
 			radius = "7200 km",
 			primary = "Thibella",
-			primaryType = "G2",
+			primaryType = "G3V",
 			milRating = 2,
 			text = [[Two opposing armies have reached a stalemate on this battlefield. Your job is to break the siege. You will be provided with a tank assault force - use it to spearhead your attack on the enemy nuclear silos.]]
 		},

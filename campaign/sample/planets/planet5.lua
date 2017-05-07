@@ -21,8 +21,8 @@ local function GetPlanet(planetUtilities)
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
 			terrainType = "Terran",
 			radius = "5500 km",
-			primary = "Naywain",
-			primaryType = "G4",
+			primary = "Naywan",
+			primaryType = "G7V",
 			milRating = 1,
 			text = [[In some circumstances it is ill-advised to approach your enemy too closely... until you've softened them up, that is. Use Hammer artillery bots to weaken your opponent's defences before you commit to an assault. You can construct Lotus laser turrets to protect your Hammers while they work.]]
 		},

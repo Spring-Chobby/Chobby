@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Hebat",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.2,
-			y = 0.7,
+			x = 0.205,
+			y = 0.705,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -22,7 +22,7 @@ local function GetPlanet(planetUtilities)
 			terrainType = "Sylvan",
 			radius = "3300 km",
 			primary = "Voblaka",
-			primaryType = "G8",
+			primaryType = "F9V",
 			milRating = 1,
 			text = [[This battlefield is at a high altitude, so deploy Wind Generators to provide cheap and efficient energy income. Tick EMP mines positioned at strategic locations will prevent your opponent from getting too close to your wind farming operation.]]
 		},
