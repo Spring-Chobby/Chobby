@@ -443,7 +443,7 @@ function Configuration:GetIsRunning64Bit()
 	Spring.Echo("GetIsRunning64Bit")
 	if Platform then
 		-- osWordSize is not the same as spring bit version.
-		return Platform.osWordSize == 64
+		--return Platform.osWordSize == 64
 	end
 	local infologFile, err = io.open("infolog.txt", "r")
 	if not infologFile then
