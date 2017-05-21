@@ -802,7 +802,7 @@
 		"limit": 2,
 		"retreat": 0.99
 	},
-	"planefighter: {
+	"planefighter": {
 		"role": ["scout", "air"],
 		"attribute": ["boost"],
 		"limit": 1,
