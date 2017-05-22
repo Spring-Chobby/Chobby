@@ -31,7 +31,7 @@ local COMBO_WIDTH = 235
 local CHECK_WIDTH = 230
 local TEXT_OFFSET = 6
 
-local AtiIntelSettingsOverride = {Water = 1}
+local AtiIntelSettingsOverride = {Water = 1, AdvSky = 0}
 local fixedSettingsOverride = AtiIntelSettingsOverride
 
 --------------------------------------------------------------------------------
