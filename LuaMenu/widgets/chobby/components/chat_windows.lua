@@ -91,7 +91,7 @@ function ChatWindows:init()
 			if self:IsChannelSelected(userName .. " messages") and self.activeUnreadMessages and self.activeUnreadMessages ~= 0 then
 				self.activeUnreadMessages = self.activeUnreadMessages + 1
 			end
-			privateChatConsole:AddMessage(message, lobby:GetMyUserName(), msgDate, true)
+			privateChatConsole:AddMessage(message, lobby:GetMyUserName(), msgDate, nil, true)
 		end
 	)
 	lobby:AddListener("OnSaidPrivate",
