@@ -31,6 +31,9 @@ local COMBO_WIDTH = 235
 local CHECK_WIDTH = 230
 local TEXT_OFFSET = 6
 
+local AtiIntelSettingsOverride = {Water = 1, AdvSky = 0}
+local fixedSettingsOverride = AtiIntelSettingsOverride
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
@@ -44,8 +47,10 @@ local function SetSpringsettingsValue(key, value)
 	if WG.Chobby.Configuration.doNotSetAnySpringSettings then
 		return
 	end
+	
+	value = (fixedSettingsOverride and fixedSettingsOverride[key]) or value
+	
 	local configType = configParamTypes[key]
-	Spring.Echo("SetSettings", configType, key, value)
 	if configType == "int" then
 		Spring.Echo("SetSettings Int", key, value)
 		Spring.SetConfigInt(key, value)
@@ -194,6 +199,28 @@ local function SaveLobbyDisplayMode()
 	SetLobbyFullscreenMode(lobbyFullscreen)
 end
 
+local function UpdateFixedSettings(newOverride)
+	local gameSettings = WG.Chobby.Configuration.game_settings
+	
+	-- Reset old
+	local oldOverride = fixedSettingsOverride
+	fixedSettingsOverride = nil
+	if oldOverride then
+		for key, value in pairs(oldOverride) do
+			if gameSettings[key] then
+				SetSpringsettingsValue(key, gameSettings[key])
+			end
+		end
+	end
+	
+	-- Apply new
+	fixedSettingsOverride = newOverride
+	if newOverride then
+		for key, value in pairs(newOverride) do
+			SetSpringsettingsValue(key, value)
+		end
+	end
+end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -469,6 +496,7 @@ local function GetLobbyTabControls()
 	children[#children + 1] = autoLogin
 	offset = offset + ITEM_OFFSET
 
+	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("planetwars_notifications"), "planetwarsNotifications", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("simplifiedSkirmishSetup"), "simplifiedSkirmishSetup", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("notifyForAllChat"), "notifyForAllChat", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("only_featured_maps"), "onlyShowFeaturedMaps", true)
@@ -871,7 +899,7 @@ local function ProcessSettingsOption(data, offset, defaults, customSettingsSwitc
 	}
 
 	local defaultItem = 1
-	local defaultName = Configuration.settingsMenuValues[data.name] or defaults[data.name]
+	local defaultName = Configuration.settingsMenuValues[data.name] or ((data.defaultFunction and data.defaultFunction()) or defaults[data.name])
 
 	local items = {}
 	for i = 1, #data.options do
@@ -1103,6 +1131,25 @@ local function InitializeControls(window)
 	}
 end
 
+local function InitializeAtiIntelConfigListener()
+	local Configuration = WG.Chobby.Configuration
+
+	local function onConfigurationChange(listener, key, value)
+		if key == "atiIntelCompat" then
+			if value then
+				UpdateFixedSettings(AtiIntelSettingsOverride)
+			else
+				UpdateFixedSettings()
+			end
+		end
+	end
+
+	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
+	
+	-- Do update
+	onConfigurationChange(_, "atiIntelCompat", Configuration.atiIntelCompat)
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- External Interface
@@ -1126,6 +1173,84 @@ function SettingsWindow.GetControl()
 		},
 	}
 	return window
+end
+
+function SettingsWindow.WriteGameSpringsettings(fileName)
+	local settingsFile, errorMessage = io.open(fileName, 'w+')
+	if not settingsFile then
+		return
+	end
+	
+	local function WriteToFile(key, value)
+		value = (fixedSettingsOverride and fixedSettingsOverride[key]) or value
+		settingsFile:write(key .. " = " .. value .. "\n")
+	end
+	
+	local gameSettings = WG.Chobby.Configuration.game_settings
+	for key, value in pairs(gameSettings) do
+		WriteToFile(key, value)
+	end
+	
+	local screenX, screenY = Spring.GetScreenGeometry()
+	if battleStartDisplay == 1 then
+		WriteToFile("XResolutionWindowed", screenX)
+		WriteToFile("YResolutionWindowed", screenY)
+		WriteToFile("WindowPosX", 0)
+		WriteToFile("WindowPosY", 0)
+		WriteToFile("WindowBorderless", 1)
+	elseif battleStartDisplay == 2 then
+		WriteToFile("WindowPosX", 0)
+		WriteToFile("WindowPosY", 80)
+		WriteToFile("XResolutionWindowed", screenX)
+		WriteToFile("YResolutionWindowed", screenY - 80)
+		WriteToFile("WindowBorderless", 0)
+		WriteToFile("Fullscreen", 0)
+	elseif battleStartDisplay == 3 then
+		WriteToFile("XResolution", screenX)
+		WriteToFile("YResolution", screenY)
+		WriteToFile("WindowBorderless", 0)
+		WriteToFile("Fullscreen", 1)
+	end
+end
+
+function SettingsWindow.GetSettingsString()
+	local settingsString = nil
+	
+	local function WriteSetting(key, value)
+		if settingsString then
+			settingsString = settingsString .. "\n" .. key .. " = " .. value
+		else
+			settingsString = key .. " = " .. value
+		end
+	end
+	
+	local gameSettings = WG.Chobby.Configuration.game_settings
+	for key, value in pairs(gameSettings) do
+		WriteSetting(key, value)
+	end
+	
+	local screenX, screenY = Spring.GetScreenGeometry()
+	if battleStartDisplay == 1 then
+		WriteSetting("XResolutionWindowed", screenX)
+		WriteSetting("YResolutionWindowed", screenY)
+		WriteSetting("WindowPosX", 0)
+		WriteSetting("WindowPosY", 0)
+		WriteSetting("WindowBorderless", 1)
+	elseif battleStartDisplay == 2 then
+		WriteSetting("WindowPosX", 0)
+		WriteSetting("WindowPosY", 80)
+		WriteSetting("XResolutionWindowed", screenX)
+		WriteSetting("YResolutionWindowed", screenY - 80)
+		WriteSetting("WindowBorderless", 0)
+		WriteSetting("Fullscreen", 0)
+	elseif battleStartDisplay == 3 then
+		WriteSetting("XResolution", screenX)
+		WriteSetting("YResolution", screenY)
+		WriteSetting("WindowBorderless", 0)
+		WriteSetting("Fullscreen", 1)
+	end
+	
+	return settingsString
 end
 
 --------------------------------------------------------------------------------
@@ -1155,6 +1280,8 @@ local function DelayedInitialize()
 	local Configuration = WG.Chobby.Configuration
 	battleStartDisplay = Configuration.game_fullscreen or 1
 	lobbyFullscreen = Configuration.lobby_fullscreen or 1
+	
+	InitializeAtiIntelConfigListener()
 end
 
 function widget:Initialize()

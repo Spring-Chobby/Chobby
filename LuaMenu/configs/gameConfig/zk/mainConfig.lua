@@ -1,15 +1,15 @@
 local shortname = "zk"
 
-local mapWhitelist       = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/mapWhitelist.lua")
-local aiBlacklist        = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/aiBlacklist.lua")
-local oldAiVersions      = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/oldAiVersions.lua")
-local singleplayerConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/singleplayerMenu.lua")
-local helpSubmenuConfig  = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/helpSubmenuConfig.lua")
-local skirmishDefault    = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skirmishDefault.lua")
-local defaultModoptions  = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/ModOptions.lua")
-local rankFunction       = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/rankFunction.lua")
-local backgroundConfig   = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/skinConfig.lua")
-local unitList           = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/unitList.lua")
+local mapWhitelist        = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/mapWhitelist.lua")
+local aiBlacklist         = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/aiBlacklist.lua")
+local oldAiVersions       = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/oldAiVersions.lua")
+local singleplayerConfig  = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/singleplayerMenu.lua")
+local helpSubmenuConfig   = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/helpSubmenuConfig.lua")
+local skirmishDefault     = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skirmishDefault.lua")
+local defaultModoptions   = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/ModOptions.lua")
+local rankFunction        = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/rankFunction.lua")
+local backgroundConfig    = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/skinConfig.lua")
+local gameUnitInformation = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/gameUnitInformation.lua")
 
 local link_reportPlayer, link_userPage, link_homePage, link_replays, link_maps, link_particularMapPage = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/linkFunctions.lua")
 
@@ -58,7 +58,7 @@ local externalFuncAndData = {
 	name                    = "Zero-K",
 	_defaultGameArchiveName = "Zero-K v1.5.2.5", -- Do not read directly
 	_defaultGameRapidTag    = "zk:stable", -- Do not read directly
-	aiVersion               = "0.9.12",
+	aiVersion               = "stable",
 	mapWhitelist            = mapWhitelist,
 	aiBlacklist             = aiBlacklist,
 	oldAiVersions           = oldAiVersions,
@@ -76,7 +76,7 @@ local externalFuncAndData = {
 	background              = background,
 	minimapOverridePath     = minimapOverridePath,
 	minimapThumbnailPath    = minimapThumbnailPath,
-	unitList                = unitList,
+	gameUnitInformation     = gameUnitInformation,
 	link_reportPlayer       = link_reportPlayer, 
 	link_userPage           = link_userPage, 
 	link_homePage           = link_homePage,

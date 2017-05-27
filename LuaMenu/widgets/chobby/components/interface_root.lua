@@ -47,7 +47,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local topBarHeight = 42
 
 	-- Switch to single panel mode when below the minimum screen width
-	local minScreenWidth = 1280
+	local minScreenWidth = 1360
 
 	local gameRunning = false
 	local showTopBar = false
@@ -1043,7 +1043,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	function externalFunctions.SetLobbyButtonEnabled(newEnabled)
 		Spring.Echo("SetLobbyButtonEnabled", newEnabled)
-		switchToMenuButton:SetVisibility(newEnabled)
+		if ingameInterfaceHolder:GetChildByName("switchToMenuButton") then
+			switchToMenuButton:SetVisibility(newEnabled)
+		else
+			Spring.Echo("Missing switchToMenuButton")
+		end
 	end
 	
 	function externalFunctions.TryToJoinBattle(battleID)

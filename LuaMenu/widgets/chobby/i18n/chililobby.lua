@@ -6,6 +6,7 @@ return {
 		cancel = "Cancel",
 		reset = "Reset",
 		close = "Close",
+		continue = "Continue",
 		yes = "Yes",
 		apply = "Apply",
 		do_not_ask_again = "Do not ask again",
@@ -40,6 +41,7 @@ return {
 		download_maps = "Download Maps",
 		download_replays = "Download Replays",
 		refresh = "Refresh",
+		more = "More",
 		--
 		start_download = 'Start download',
 		download_noun = 'Download',
@@ -135,6 +137,7 @@ return {
 		downloads_completed = "All downloads completed.",
 
 		-- Settings
+		planetwars_notifications = "Planetwars notifications",
 		notifyForAllChat = "Notify for all chat",
 		drawFullSpeed = "Full speed draw updates",
 		simplifiedSkirmishSetup = "Simple skirmish setup",
@@ -195,6 +198,7 @@ return {
 		technology = "Technology",
 		options = "Options",
 		codex = "Codex",
+		technology = "Technology",
 
 		-- gui_rank_update_window.lua
 		rank_gained = "Rank Gained",

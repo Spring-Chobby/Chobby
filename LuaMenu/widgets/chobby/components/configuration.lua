@@ -37,8 +37,10 @@ function Configuration:init()
 	self.canAuthenticateWithSteam = false
 	self.wantAuthenticateWithSteam = true
 	self.steamLinkComplete = false
-	self.alreadySeenFactionPopup = false
+	self.alreadySeenFactionPopup2 = false
 	self.channels = {}
+	
+	self.ignoreLevel = false
 
 	self.errorColor = "\255\255\0\0"
 	self.warningColor = "\255\255\255\0"
@@ -46,6 +48,7 @@ function Configuration:init()
 	self.successColor = "\255\0\255\0"
 	self.partialColor = "\255\190\210\50"
 	self.selectedColor = "\255\99\184\255"
+	self.highlightedColor = "\255\125\255\0"
 	self.meColor = "\255\0\190\190"
 
 	self.moderatorColor = {0.68, 0.78, 1, 1}
@@ -61,7 +64,11 @@ function Configuration:init()
 	self.displayBadEngines = false
 	self.doNotSetAnySpringSettings = false
 	self.agressivelySetBorderlessWindowed = false
+
 	self.useWrongEngine = false
+
+	self.atiIntelCompat = self:GetIsNotRunningNvidia()
+	Spring.Echo("ATI/intel/other non-nvidia compatibility state:", self.atiIntelCompat)
 
 	self.myAccountID = false
 	self.lastAddedAiName = false
@@ -133,6 +140,7 @@ function Configuration:init()
 
 	self.lastLoginChatLength = 25
 	self.notifyForAllChat = true
+	self.planetwarsNotifications = false -- Possibly too intrusive? See how it goes.
 	self.simplifiedSkirmishSetup = true
 	self.debugMode = false
 	self.activeDebugConsole = false
@@ -185,7 +193,14 @@ function Configuration:SetConfigData(data)
 			self.channels[key] = nil
 		end
 	end
-
+	
+	self.game_settings.XResolutionWindowed = nil
+	self.game_settings.YResolutionWindowed = nil
+	self.game_settings.WindowPosX = nil
+	self.game_settings.WindowPosY = nil
+	self.game_settings.WindowBorderless = nil
+	self.game_settings.Fullscreen = nil
+	
 	local newSpringsettings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettingsChanges.lua")
 	for key, value in pairs(newSpringsettings) do
 		self.game_settings[key] = value
@@ -203,7 +218,7 @@ function Configuration:GetConfigData()
 		firstLoginEver = self.firstLoginEver,
 		wantAuthenticateWithSteam = self.wantAuthenticateWithSteam,
 		steamLinkComplete = self.steamLinkComplete,
-		alreadySeenFactionPopup = self.alreadySeenFactionPopup,
+		alreadySeenFactionPopup2 = self.alreadySeenFactionPopup2,
 		channels = self.channels,
 		gameConfigName = self.gameConfigName,
 		game_fullscreen = self.game_fullscreen,
@@ -212,6 +227,7 @@ function Configuration:GetConfigData()
 		animate_lobby = self.animate_lobby,
 		game_settings = self.game_settings,
 		notifyForAllChat = self.notifyForAllChat,
+		planetwarsNotifications = self.planetwarsNotifications,
 		simplifiedSkirmishSetup = self.simplifiedSkirmishSetup,
 		debugMode = self.debugMode,
 		confirmation_mainMenuFromBattle = self.confirmation_mainMenuFromBattle,
@@ -225,6 +241,7 @@ function Configuration:GetConfigData()
 		displayBadEngines = self.displayBadEngines,
 		doNotSetAnySpringSettings = self.doNotSetAnySpringSettings,
 		agressivelySetBorderlessWindowed = self.agressivelySetBorderlessWindowed,
+		atiIntelCompat = self.atiIntelCompat,
 		settingsMenuValues = self.settingsMenuValues,
 		menuMusicVolume = self.menuMusicVolume,
 		menuNotificationVolume = self.menuNotificationVolume,
@@ -297,6 +314,10 @@ end
 
 function Configuration:GetSelectedColor()
 	return self.selectedColor
+end
+
+function Configuration:GetHighlightedColor()
+	return self.highlightedColor
 end
 
 function Configuration:GetButtonFocusColor()
@@ -419,6 +440,10 @@ function Configuration:GetIsRunning64Bit()
 	if self.isRunning64Bit ~= nil then
 		return self.isRunning64Bit
 	end
+	if Platform then
+		-- osWordSize is not the same as spring bit version.
+		--return Platform.osWordSize == 64
+	end
 	local infologFile, err = io.open("infolog.txt", "r")
 	if not infologFile then
 		Spring.Echo("Error opening infolog.txt", err)
@@ -444,6 +469,38 @@ function Configuration:GetIsRunning64Bit()
 	end
 	infologFile:close()
 	return false
+end
+
+function Configuration:GetIsNotRunningNvidia()
+	if self.isNotRunningNvidia ~= nil then
+		return self.isNotRunningNvidia
+	end
+	if Platform then
+		return Platform.gpuVendor ~= "Nvidia"
+	end
+	local infologFile, err = io.open("infolog.txt", "r")
+	if not infologFile then
+		Spring.Echo("Error opening infolog.txt", err)
+		return false
+	end
+	local line = infologFile:read()
+	while line do
+		if string.find(line, "PostInit") then
+			-- We are past the part of the infolog where NVIDIA would appear
+			infologFile:close()
+			self.isNotRunningNvidia = true
+			return true
+		end
+		if string.find(line, "NVIDIA") then
+			infologFile:close()
+			self.isNotRunningNvidia = false
+			return false
+		end
+		line = infologFile:read()
+	end
+	infologFile:close()
+	self.isNotRunningNvidia = true
+	return true
 end
 
 ---------------------------------------------------------------------------------

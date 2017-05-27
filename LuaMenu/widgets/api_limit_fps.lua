@@ -51,6 +51,11 @@ end
 --------------------------------------------------------------------------------
 -- Allow redraw handling and logic
 
+local function IsMousePressed()
+	local x,y, lmb, mmb, rmb = Spring.GetMouseState()
+	return lmb or mmb or rmb
+end
+
 function widget:AllowDraw()
 	local config = WG.Chobby.Configuration
 	if config.drawAtFullSpeed then
@@ -63,7 +68,7 @@ function widget:AllowDraw()
 	end
 	local timer = Spring.GetTimer()
 	local diff = Spring.DiffTimers(timer, lastTimer)
-	if constantRedrawSeconds then
+	if constantRedrawSeconds and not IsMousePressed() then
 		constantRedrawSeconds = constantRedrawSeconds - diff
 		if constantRedrawSeconds <= 0 then
 			constantRedrawSeconds = false
@@ -94,6 +99,12 @@ function widget:Update(dt)
 end
 
 function widget:MousePress()
+	forceRedraw = true
+	LimitFps.ForceRedrawPeriod(0.2)
+	return false
+end
+
+function widget:MouseRelease()
 	forceRedraw = true
 	LimitFps.ForceRedrawPeriod(0.2)
 	return false

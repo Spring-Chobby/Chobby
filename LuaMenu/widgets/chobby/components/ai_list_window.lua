@@ -31,8 +31,8 @@ function AiListWindow:AddAiToList(ai, blackList, oldAiVersions, isRunning64Bit)
 	end
 	
 	
-	local version = " v" .. ai.version
-	if version == " v<not-versioned>" then
+	local version = " " .. ai.version
+	if version == " <not-versioned>" then
 		version = ""
 	end
 	local fullName = shortName .. version

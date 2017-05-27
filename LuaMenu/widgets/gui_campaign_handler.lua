@@ -32,18 +32,279 @@ local PLANET_NO_START_COLOR = {0.5, 0.5, 0.5, 1}
 
 local TARGET_IMAGE = LUA_DIRNAME .. "images/niceCircle.png"
 
-local playerUnlocks = {
-	"cormex",
-	"armsolar",
-	"armpw",
-	"factorycloak",
-}
+local REWARD_ICON_SIZE = 58
 
 local planetList
+local selectedPlanet
+local currentWinPopup
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Rewards panels
+
+local function MakeRewardList(holder, bottom, name, rewardList, cullUnlocked, tooltipFunction, alreadyUnlockedCheck, widthMult, stackHeight, overrideTooltip)
+	if (not rewardList) or #rewardList == 0 then
+		return false
+	end
+	
+	local Configuration = WG.Chobby.Configuration
+	
+	widthMult = widthMult or 1
+	stackHeight = stackHeight or 1
+	
+	local scroll, rewardsHolder
+	
+	local position = 0
+	for i = 1, #rewardList do
+		local alreadyUnlocked = alreadyUnlockedCheck(rewardList[i])
+		if not (cullUnlocked and alreadyUnlocked) then
+			if not rewardsHolder then
+				rewardsHolder = Control:New {
+					x = 10,
+					right = 10,
+					bottom = bottom,
+					height = 94,
+					padding = {0, 0, 0, 0},
+					parent = holder,
+				}
+				
+				TextBox:New {
+					x = 4,
+					y = 2,
+					right = 4,
+					height = 30,
+					text = name,
+					font = Configuration:GetFont(2),
+					parent = rewardsHolder
+				}
+				
+				scroll = ScrollPanel:New {
+					classname = "scrollpanel_borderless",
+					x = 3,
+					y = 18,
+					right = 3,
+					bottom = 2,
+					scrollbarSize = 12,
+					padding = {0, 0, 0, 0},
+					parent = rewardsHolder,
+				}
+			end
+			
+			local info, imageFile, imageOverlay = tooltipFunction(rewardList[i])
+			
+			local x, y = (REWARD_ICON_SIZE*widthMult + 4)*math.floor(position/stackHeight), (position%stackHeight)*REWARD_ICON_SIZE/stackHeight
+			if imageFile then
+				local color = nil
+				local statusString = ""
+				if alreadyUnlocked then
+					color = {0.5, 0.5, 0.5, 0.5}
+					statusString = " (already unlocked)"
+				end
+				local tooltip = (overrideTooltip and info) or ((info.humanName or "???") .. statusString .. "\n " .. (info.description or ""))
+				
+				local image = Image:New{
+					x = x,
+					y = y,
+					width = REWARD_ICON_SIZE*widthMult,
+					height = REWARD_ICON_SIZE/stackHeight,
+					keepAspect = true,
+					color = color,
+					tooltip = tooltip,
+					file = imageOverlay or imageFile,
+					file2 = imageOverlay and imageFile,
+					parent = scroll,
+				}
+				function image:HitTest(x,y) return self end
+			else
+				local tooltip = (overrideTooltip and info) or (info.name or "???")
+				
+				Button:New {
+					x = x,
+					y = y,
+					width = REWARD_ICON_SIZE*widthMult,
+					height = REWARD_ICON_SIZE/stackHeight,
+					caption = tooltip,
+					font = Configuration:GetFont(2),
+					parent = scroll
+				}
+			end
+			
+			position = position + 1
+		end
+	end
+	
+	return (rewardsHolder and true) or false
+end
+
+local function MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjectiveSuccess)
+
+	local objectiveConfig = planetData.gameConfig.bonusObjectiveConfig
+	if not objectiveConfig then
+		return bottom
+	end
+	
+	if bonusObjectiveSuccess then
+		local function IsObjectiveUnlocked(objectiveID)
+			return not bonusObjectiveSuccess[objectiveID]
+		end
+		local function GetObjectiveInfo(objectiveID)
+			local tooltip = objectiveConfig[objectiveID].description
+			if WG.CampaignData.GetBonusObjectiveComplete(planetData.index, objectiveID) then
+				tooltip = tooltip .. " \n(Previously complete)"
+			elseif bonusObjectiveSuccess[objectiveID] then
+				tooltip = tooltip .. " \n(Newly complete)"
+			else
+				tooltip = tooltip .. " \n(Incomplete)"
+			end 
+			return tooltip, objectiveConfig[objectiveID].image, objectiveConfig[objectiveID].imageOverlay
+		end
+		local objectiveList = {}
+		for i = 1, #objectiveConfig do
+			objectiveList[i] = i
+		end
+		if MakeRewardList(parent, bottom, "Bonus Objectives", objectiveList, false, GetObjectiveInfo, IsObjectiveUnlocked, nil, nil, true) then
+			return bottom + 98
+		end
+	else
+		local function IsObjectiveUnlocked(objectiveID)
+			return not WG.CampaignData.GetBonusObjectiveComplete(planetData.index, objectiveID)
+		end
+		local function GetObjectiveInfo(objectiveID)
+			local tooltip = objectiveConfig[objectiveID].description
+			return tooltip, objectiveConfig[objectiveID].image, objectiveConfig[objectiveID].imageOverlay
+		end
+		local objectiveList = {}
+		for i = 1, #objectiveConfig do
+			objectiveList[i] = i
+		end
+		if MakeRewardList(parent, bottom, "Bonus Objectives", objectiveList, false, GetObjectiveInfo, IsObjectiveUnlocked, nil, nil, true) then
+			return bottom + 98
+		end
+	end
+	
+	return bottom
+end
+
+local function MakeRewardsPanel(parent, planetData, cullUnlocked, showCodex, bonusObjectiveSuccess)
+	local bottom = 82
+	
+	rewards = planetData.completionReward
+	
+	if showCodex then
+		if MakeRewardList(parent, bottom, "Codex", rewards.codexEntries, cullUnlocked, WG.CampaignData.GetCodexEntryInfo, WG.CampaignData.GetCodexEntryIsUnlocked, 3.96, 2) then
+			bottom = bottom + 98
+		end
+	end
+	
+	if MakeRewardList(parent, bottom, "Abilities", rewards.abilities, cullUnlocked, WG.CampaignData.GetAbilityInfo, WG.CampaignData.GetAbilityIsUnlocked) then
+		bottom = bottom + 98
+	end
+	
+	if MakeRewardList(parent, bottom, "Modules", rewards.modules, cullUnlocked, WG.CampaignData.GetModuleInfo, WG.CampaignData.GetModuleIsUnlocked) then
+		bottom = bottom + 98
+	end
+	
+	if MakeRewardList(parent, bottom, "Units", rewards.units, cullUnlocked, WG.CampaignData.GetUnitInfo, WG.CampaignData.GetUnitIsUnlocked) then
+		bottom = bottom + 98
+	end
+	
+	bottom = MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjectiveSuccess)
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Planet capturing
+
+local function MakeWinPopup(planetData, bonusObjectiveSuccess)
+	local victoryWindow = Window:New {
+		caption = "",
+		name = "victoryWindow",
+		parent = WG.Chobby.lobbyInterfaceHolder,
+		width = 520,
+		height = 480,
+		resizable = false,
+		draggable = false,
+		classname = "main_window",
+	}
+	
+	local childWidth = victoryWindow.width - victoryWindow.padding[1] - victoryWindow.padding[3]
+	
+	Label:New {
+		x = 0,
+		y = 6,
+		width = childWidth,
+		height = 30,
+		align = "center",
+		caption = planetData.name .. " conquered!",
+		font = WG.Chobby.Configuration:GetFont(4),
+		parent = victoryWindow
+	}
+	
+	MakeRewardsPanel(victoryWindow, planetData, true, true, bonusObjectiveSuccess)
+	
+	local function CloseFunc()
+		victoryWindow:Dispose()
+	end
+	
+	local buttonClose = Button:New {
+		x = (childWidth - 136)/2,
+		width = 136,
+		bottom = 1,
+		height = 70,
+		caption = i18n("continue"),
+		font = WG.Chobby.Configuration:GetFont(3),
+		parent = victoryWindow,
+		classname = "negative_button",
+		OnClick = {
+			function()
+				CloseFunc()
+			end
+		},
+	}
+	
+	local popupHolder = WG.Chobby.PriorityPopup(victoryWindow, CloseFunc, CloseFunc)
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.UpdateExperience(oldExperience, oldLevel, newExperience, newLevel)
+		Label:New {
+			x = 0,
+			y = 38,
+			width = childWidth,
+			height = 24,
+			align = "center",
+			caption = "Level: " .. oldLevel .. " -> " .. newLevel .. ". Experience: " .. oldExperience .. " -> " .. newExperience,
+			font = WG.Chobby.Configuration:GetFont(3),
+			parent = victoryWindow
+		}
+	end
+	
+	return externalFunctions
+end
+
+local function ProcessPlanetVictory(planetID, bonusObjectives)
+	if selectedPlanet then
+		selectedPlanet.Close()
+		selectedPlanet = nil
+	end
+	-- It is important to popup before capturing the planet to filter out the
+	-- already unlocked rewards.
+	currentWinPopup = MakeWinPopup(planetConfig[planetID], bonusObjectives)
+	WG.CampaignData.CapturePlanet(planetID, bonusObjectives)
+end
+
+local function ProcessPlanetDefeat(planetID)
+	if selectedPlanet then
+		selectedPlanet.Close()
+		selectedPlanet = nil
+	end
+	WG.Chobby.InformationPopup("Battle for " .. planetConfig[planetID].name .. " lost.")
+end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- TODO: use shader animation to ease info panel in
+
 local function SelectPlanet(planetHandler, planetID, planetData, startable)
 	local Configuration = WG.Chobby.Configuration
 	
@@ -59,8 +320,8 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 		parent = starmapInfoPanel,
 		x = "50%",
 		y = "10%",
-		right = 8,
-		bottom = "10%",
+		right = "5%",
+		bottom = "5%",
 		children = {
 			-- title
 			Label:New{
@@ -95,10 +356,12 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 				right = 4,
 				bottom = "25%",
 				text = planetData.infoDisplay.text,
-				font = Configuration:GetFont(2),
+				font = Configuration:GetFont(0),
 			},
 		}
 	}
+	
+	MakeRewardsPanel(subPanel, planetData)
 	
 	if startable then
 		local startButton = Button:New{
@@ -112,7 +375,7 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 			font = Configuration:GetFont(4),
 			OnClick = {
 				function(self)
-					WG.PlanetBattleHandler.StartBattle(planetID, planetData, playerUnlocks)
+					WG.PlanetBattleHandler.StartBattle(planetID, planetData)
 				end
 			}
 		}
@@ -121,7 +384,7 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 			local autoWinButton = Button:New{
 				right = 150,
 				bottom = 10,
-				width = 135,
+				width = 150,
 				height = 70,
 				classname = "action_button",
 				parent = subPanel,
@@ -129,7 +392,22 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 				font = Configuration:GetFont(4),
 				OnClick = {
 					function(self)
-						WG.CampaignData.CapturePlanet(planetID)
+						ProcessPlanetVictory(planetID)
+					end
+				}
+			}
+			local autoLostButton = Button:New{
+				right = 305,
+				bottom = 10,
+				width = 175,
+				height = 70,
+				classname = "action_button",
+				parent = subPanel,
+				caption = "Auto Lose",
+				font = Configuration:GetFont(4),
+				OnClick = {
+					function(self)
+						ProcessPlanetDefeat(planetID)
 					end
 				}
 			}
@@ -201,6 +479,14 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 	starmapInfoPanel.OnResize[#starmapInfoPanel.OnResize + 1] = function(obj, xSize, ySize)
 		planetImage:SetPos(nil, math.floor((ySize - planetData.infoDisplay.size)/2))
 	end
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.Close()
+		starmapInfoPanel:Dispose() 
+	end
+	
+	return externalFunctions
 end
 
 local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
@@ -234,7 +520,11 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		caption = "",
 		OnClick = { 
 			function(self)
-				SelectPlanet(galaxyHolder, planetID, planetData, startable)
+				if selectedPlanet then
+					selectedPlanet.Close()
+					selectedPlanet = nil
+				end
+				selectedPlanet = SelectPlanet(galaxyHolder, planetID, planetData, startable)
 			end
 		},
 		parent = planetHolder,
@@ -272,7 +562,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 	
 	function externalFunctions.UpdateStartable()
 		captured = WG.CampaignData.IsPlanetCaptured(planetID)
-		startable = captured
+		startable = captured or planetData.startingPlanet
 		if not startable then
 			for i = 1, #adjacency do
 				if adjacency[i] then
@@ -295,6 +585,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		if target then
 			if not targetable then
 				target:Dispose()
+				target = nil
 			end
 		elseif targetable then
 			target = Image:New{
@@ -311,7 +602,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 	end
 	
 	function externalFunctions.GetCaptured()
-		return captured
+		return WG.CampaignData.IsPlanetCaptured(planetID)
 	end
 	
 	return externalFunctions
@@ -347,7 +638,7 @@ end
 local function InitializePlanetHandler(parent)
 	local Configuration = WG.Chobby.Configuration
 	
-	local window = Control:New {
+	local window = ((Configuration.debugMode and Panel) or Control):New {
 		name = "planetsHolder",
 		padding = {0,0,0,0},
 		parent = parent,
@@ -422,15 +713,34 @@ end
 -- Ingame interface
 
 local BATTLE_WON_STRING = "Campaign_PlanetBattleWon"
+local BATTLE_LOST_STRING = "Campaign_PlanetBattleLost"
+
+local function MakeBonusObjectivesList(bonusObjectives)
+	if not bonusObjectives then
+		return false
+	end
+	local list = {}
+	local length = string.len(bonusObjectives)
+	for i = 1, length do
+		list[i] = (string.sub(bonusObjectives, i, i) == "1")
+	end
+	return list
+end
 
 function widget:RecvLuaMsg(msg)
 	if string.find(msg, BATTLE_WON_STRING) then
-		msg = string.sub(msg, 25)
+		local endOfID = string.find(msg, " ")
+		local planetID = tonumber(string.sub(msg, 25, endOfID))
+		local bonusObjectives = string.sub(msg, endOfID + 1)
+		if planetID and planetConfig and planetConfig[planetID] then
+			ProcessPlanetVictory(planetID, MakeBonusObjectivesList(bonusObjectives))
+		end
+	end
+	if string.find(msg, BATTLE_LOST_STRING) then
+		msg = string.sub(msg, 26)
 		local planetID = tonumber(msg)
 		if planetID and planetConfig and planetConfig[planetID] then
-			local config = planetConfig[planetID]
-			WG.CampaignData.CapturePlanet(planetID)
-			WG.Chobby.InformationPopup("You won the battle and are rewarded with: " .. wonString .. ".")
+			ProcessPlanetDefeat(planetID)
 		end
 	end
 end
@@ -490,11 +800,6 @@ function externalFunctions.GetControl()
 	return window
 end
 
-function externalFunctions.Refresh()
-	UpdateAllStartable()
-	UpdateEdgeList()
-end
-
 --------------------------------------------------------------------------------
 -- Callins
 --------------------------------------------------------------------------------
@@ -502,6 +807,23 @@ end
 function widget:Initialize()
 	CHOBBY_DIR = "LuaMenu/widgets/chobby/"
 	VFS.Include("LuaMenu/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
+	
+	local function CampaignLoaded(listener)
+		UpdateAllStartable()
+		UpdateEdgeList()
+		if selectedPlanet then
+			selectedPlanet.Close()
+			selectedPlanet = nil
+		end
+	end
+	WG.CampaignData.AddListener("CampaignLoaded", CampaignLoaded)
+	
+	local function GainExperience(listener, oldExperience, oldLevel, newExperience, newLevel)
+		if currentWinPopup then
+			currentWinPopup.UpdateExperience(oldExperience, oldLevel, newExperience, newLevel)
+		end
+	end
+	WG.CampaignData.AddListener("GainExperience", GainExperience)
 	
 	WG.CampaignHandler = externalFunctions
 end

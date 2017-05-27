@@ -91,7 +91,7 @@ function ChatWindows:init()
 			if self:IsChannelSelected(userName .. " messages") and self.activeUnreadMessages and self.activeUnreadMessages ~= 0 then
 				self.activeUnreadMessages = self.activeUnreadMessages + 1
 			end
-			privateChatConsole:AddMessage(message, lobby:GetMyUserName(), msgDate, true)
+			privateChatConsole:AddMessage(message, lobby:GetMyUserName(), msgDate, nil, true)
 		end
 	)
 	lobby:AddListener("OnSaidPrivate",
@@ -630,8 +630,8 @@ function ChatWindows:CreateDebugConsole()
 	lobby:AddListener("OnCommandReceived",
 		function(listner, command)
 			command = self:RedactMessage(command)
-			Spring.Log("ServerMessage", LOG.NOTICE, command)
 			if Configuration.activeDebugConsole then
+				Spring.Log("ServerMessage", LOG.NOTICE, command)
 				self.debugConsole:AddMessage("<--" .. command)
 			end
 		end
@@ -639,8 +639,8 @@ function ChatWindows:CreateDebugConsole()
 	lobby:AddListener("OnCommandSent",
 		function(listner, command)
 			command = self:RedactMessage(command)
-			Spring.Log("ClientMessage", LOG.NOTICE, command)
 			if Configuration.activeDebugConsole then
+				Spring.Log("ClientMessage", LOG.NOTICE, command)
 				self.debugConsole:AddMessage("-->" .. command)
 			end
 		end

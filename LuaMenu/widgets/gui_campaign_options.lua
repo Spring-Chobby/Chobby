@@ -53,23 +53,21 @@ end
 --------------------------------------------------------------------------------
 -- Initialization
 
-local function MakeTab(name, children, raw)
-	if not raw then
-		local contentsPanel = ScrollPanel:New {
-			x = 5,
-			right = 5,
-			y = 10,
-			bottom = 8,
-			horizontalScrollbar = false,
-			children = children
-		}
-	end
+local function MakeTab(name, children)
+	local contentsPanel = ScrollPanel:New {
+		x = 5,
+		right = 5,
+		y = 10,
+		bottom = 8,
+		horizontalScrollbar = false,
+		children = children
+	}
 	
 	return {
 		name = name,
 		caption = name,
 		font = WG.Chobby.Configuration:GetFont(3),
-		children = {raw and children or contentsPanel}
+		children = {contentsPanel}
 	}
 end
 
@@ -81,7 +79,8 @@ local function InitializeControls(window)
 	window.OnParent = nil
 	
 	local tabs = {
-		MakeTab("Save/Load", WG.CampaignSaveWindow.GetControl(), true)
+		MakeTab("Save/Load", {WG.CampaignSaveWindow.GetControl()}),
+		MakeTab("Settings", {WG.CampaignSettingsWindow.GetControl()}),
 	}
 	
 	local tabPanel = Chili.DetachableTabPanel:New {

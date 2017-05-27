@@ -8,20 +8,24 @@ function widget:GetInfo()
 		author    = "KingRaptor & GoogleFrog",
 		date      = "2 March 2017",
 		license   = "GNU GPL, v2 or later",
-		layer     = 0,
-		enabled   = true  --  loaded by default?
+		layer     = -1000,
+		enabled   = true,  --  loaded by default?
 	}
 end
 
 --------------------------------------------------------------------------------
 -- data
 --------------------------------------------------------------------------------
+
+local moduleDefs, chassisDefs, upgradeUtilities, UNBOUNDED_LEVEL, _, moduleDefNames = VFS.Include("Gamedata/commanders/dynamic_comm_defs.lua")
+
 -- this stores anything that goes into a save file
 local gamedata = {}
 
 local externalFunctions = {}
 
 local SAVE_DIR = "Saves/campaign/"
+local ICONS_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/unitpics/"
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -34,6 +38,12 @@ local function UnlockThing(thingData, id)
 	thingData.map[id] = true
 	thingData.list[#thingData.list + 1] = id
 	return true
+end
+
+local function UnlockListOfThings(unlockList, unlocksToAdd)
+	for i = 1, #unlocksToAdd do
+		UnlockThing(unlockList, unlocksToAdd[i])
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -90,34 +100,48 @@ end
 local function ResetGamedata()
 	gamedata = {
 		unitsUnlocked = {map = {}, list = {}},
+		modulesUnlocked = {map = {}, list = {}},
+		abilitiesUnlocked = {map = {}, list = {}},
+		codexEntriesUnlocked = {map = {}, list = {}},
+		codexEntryRead = {},
+		bonusObjectivesComplete = {map = {}, list = {}},
 		planetsCaptured = {map = {}, list = {}},
-		retinue = {
-			{
-				unitDefName = "armpw",
-				retinueID = 1,
-				experience = 3,
-				active = true,
-			},
-			{
-				unitDefName = "armorco",
-				retinueID = 2,
-				experience = 1,
-				active = true,
-			},
-			{
-				unitDefName = "armrock",
-				retinueID = 3,
-				experience = 1,
-				active = false,
-			}
-		},
+		commanderExperience = 0,
+		difficultySetting = 1, -- 1,2,3 -> easy/medium/hard
+		commanderLevel = 1,
+		commanderLoadout = {},
+		retinue = {}, -- Unused
 	}
 end
 
-local function UnlockUnits(unlockList)
-	for i = 1, #unlockList do
-		UnlockThing(gamedata.unitsUnlocked, unlockList[i])
+local function UnlockRewardSet(rewardSet)
+	if rewardSet.units then
+		UnlockListOfThings(gamedata.unitsUnlocked, rewardSet.units)
 	end
+	if rewardSet.modules then
+		UnlockListOfThings(gamedata.modulesUnlocked, rewardSet.modules)
+	end
+	if rewardSet.abilities then
+		UnlockListOfThings(gamedata.abilitiesUnlocked, rewardSet.abilities)
+	end
+	if rewardSet.codexEntries then
+		UnlockListOfThings(gamedata.codexEntriesUnlocked, rewardSet.codexEntries)
+	end
+end
+
+local function GainExperience(newExperience)
+	local Configuration = WG.Chobby.Configuration
+	local oldExperience = gamedata.commanderExperience
+	local oldLevel = gamedata.commanderLevel
+	gamedata.commanderExperience = gamedata.commanderExperience + newExperience
+	for i = 1, 50 do
+		if Configuration.campaignConfig.commConfig.GetLevelRequirement(gamedata.commanderLevel + 1) > gamedata.commanderExperience then
+			break
+		end
+		gamedata.commanderLevel = gamedata.commanderLevel + 1
+	end
+	
+	CallListeners("GainExperience", oldExperience, oldLevel, gamedata.commanderExperience, gamedata.commanderLevel)
 end
 
 --------------------------------------------------------------------------------
@@ -180,7 +204,7 @@ local function LoadGame(saveData, refreshGUI)
 		ResetGamedata()
 		gamedata = Spring.Utilities.MergeTable(saveData, gamedata, true)
 		if refreshGUI then
-			WG.CampaignHandler.Refresh()
+			CallListeners("CampaignLoaded")
 		end
 		WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", saveData.name)
 	
@@ -193,12 +217,16 @@ end
 
 local function StartNewGame()
 	local Configuration = WG.Chobby.Configuration
-	local planets = Configuration.campaignConfig.planetDefs.initialSetup.planets
 	ResetGamedata()
+	
+	local planets = Configuration.campaignConfig.planetDefs.initialPlanets
+	UnlockRewardSet(Configuration.campaignConfig.initialUnlocks)
 	for i = 1, #planets do
 		externalFunctions.CapturePlanet(planets[i])
 	end
 	SaveGame()
+	
+	CallListeners("CampaignLoaded")
 end
 
 local function LoadCampaignData()
@@ -216,12 +244,50 @@ end
 --------------------------------------------------------------------------------
 -- Callins
 
-function externalFunctions.CapturePlanet(planetID)
+function externalFunctions.GetAI(aiLibName)
+	local aiConfig = WG.Chobby.Configuration.campaignConfig.aiConfig
+	return (aiConfig.aiLibFunctions[aiLibName] and aiConfig.aiLibFunctions[aiLibName](gamedata.difficultySetting)) or aiLibName
+end
+
+function externalFunctions.GetDifficultySetting()
+	return gamedata.difficultySetting
+end
+
+function externalFunctions.SetDifficultySetting(newDifficulty)
+	if (not newDifficulty) or gamedata.difficultySetting == newDifficulty then
+		return
+	end
+	gamedata.difficultySetting = newDifficulty
+	SaveGame()
+end
+
+function externalFunctions.CapturePlanet(planetID, bonusObjectives)
 	local planet = WG.Chobby.Configuration.campaignConfig.planetDefs.planets[planetID]
+	local saveRequired = false
+	local gainedExperience = 0
 	if UnlockThing(gamedata.planetsCaptured, planetID) then
-		UnlockUnits(planet.completionReward.units)
-		SaveGame()
+		UnlockRewardSet(planet.completionReward)
+		CallListeners("RewardGained", planet.completionReward)
 		CallListeners("PlanetCaptured", planetID)
+		gainedExperience = gainedExperience + (planet.completionReward.experience or 0)
+		saveRequired = true
+	end
+	
+	if bonusObjectives then
+		local bonusConfig = planet.gameConfig.bonusObjectiveConfig
+		if bonusConfig then
+			for i = 1, #bonusObjectives do
+				if bonusObjectives[i] and bonusConfig[i] and UnlockThing(gamedata.bonusObjectivesComplete, planetID .. "_" .. i) then
+					gainedExperience = gainedExperience + bonusConfig[i].experience
+					saveRequired = true
+				end
+			end
+		end
+	end
+	
+	GainExperience(gainedExperience)
+	if saveRequired then
+		SaveGame()
 	end
 end
 
@@ -241,6 +307,59 @@ function externalFunctions.GetRetinue()
 	return gamedata.retinue
 end
 
+function externalFunctions.SetCodexEntryRead(entryName)
+	if not gamedata.codexEntryRead[entryName] then
+		gamedata.codexEntryRead[entryName] = true
+		SaveGame()
+	end
+end
+
+function externalFunctions.GetUnitsUnlocks()
+	return gamedata.unitsUnlocked
+end
+
+function externalFunctions.GetAbilityUnlocks()
+	return gamedata.abilitiesUnlocked
+end
+
+function externalFunctions.GetUnitIsUnlocked(unitName)
+	return gamedata.unitsUnlocked.map[unitName]
+end
+
+function externalFunctions.GetModuleIsUnlocked(moduleName)
+	return gamedata.modulesUnlocked.map[moduleName]
+end
+
+function externalFunctions.GetAbilityIsUnlocked(abilityName)
+	return gamedata.abilitiesUnlocked.map[abilityName]
+end
+
+function externalFunctions.GetCodexEntryIsUnlocked(entryName)
+	return gamedata.codexEntriesUnlocked.map[entryName], gamedata.codexEntryRead[entryName]
+end
+
+function externalFunctions.GetBonusObjectiveComplete(planetID, objectiveID)
+	return gamedata.bonusObjectivesComplete.map[planetID .. "_" .. objectiveID]
+end
+
+function externalFunctions.GetUnitInfo(unitName)
+	return WG.Chobby.Configuration.gameConfig.gameUnitInformation.humanNames[unitName] or {}, ICONS_DIR .. unitName .. ".png"
+end
+
+function externalFunctions.GetAbilityInfo(abilityName)
+	local ability = WG.Chobby.Configuration.campaignConfig.abilityDefs[abilityName] or {}
+	return ability, ability.image
+end
+
+function externalFunctions.GetModuleInfo(moduleName)
+	local index = moduleDefNames[moduleName]
+	return index and moduleDefs[index] or {}, ICONS_DIR .. moduleName .. ".png"
+end
+
+function externalFunctions.GetCodexEntryInfo(codexEntryName)
+	return WG.Chobby.Configuration.campaignConfig.codex[codexEntryName] or {}
+end
+
 function externalFunctions.GetActiveRetinue()
 	local activeRetinue = {}
 	for i = 1, #gamedata.retinue do
@@ -254,10 +373,7 @@ end
 function externalFunctions.GetPlayerCommander()
 	return {
 		name = "blubb.",
-		chassis = "guardian",
-		decorations = {
-			icon_overhead = { image = "UW" }
-		},
+		chassis = "knight",
 		modules = {
 			{
 				"commweapon_heavymachinegun",
@@ -287,7 +403,7 @@ function externalFunctions.GetPlayerCommander()
 end
 
 function externalFunctions.GetPlayerCommanderLevel()
-	return 2
+	return gamedata.commanderLevel
 end
 
 function externalFunctions.GetSaves()

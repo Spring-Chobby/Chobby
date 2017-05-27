@@ -48,7 +48,7 @@ EditBox = Control:Inherit{
   physicalLines = {},
   cursorX = 1,
   cursorY = 1,
-  
+
   inedibleInput = {
     [Spring.GetKeyCode("enter")] = true,
     [Spring.GetKeyCode("numpad_enter")] = true,
@@ -137,7 +137,7 @@ function EditBox:_LineLog2Phys(logicalLine, pos)
 		for _, plID in pairs(logicalLine.pls) do
 			local pl = self.physicalLines[plID]
 			py = plID
-			px  = px + #pl.colorPrefix
+			px = px + #pl.colorPrefix
 			if #pl.text + 1 >= px or plID == #logicalLine.pls then
 				break
 			end
@@ -349,7 +349,7 @@ function EditBox:UpdateLayout()
 --
 -- 	self:SetText(txt)
 --   end
-  local font = self.font
+	local font = self.font
 	if self.multiline then
 		if self._inRequestUpdate then
 			self._inRequestUpdate = false
@@ -580,7 +580,7 @@ end
 function EditBox:MouseMove(x, y, dx, dy, button)
 	if self.subTooltips then
 		local tooltipSet = false
-		
+
 		if button == nil then -- handle tooltips
 			local retVal = self:_GetCursorByMousePos(x, y)
 			local line = self.lines[retVal.cursorY]
@@ -594,12 +594,12 @@ function EditBox:MouseMove(x, y, dx, dy, button)
 				end
 			end
 		end
-		
+
 		if not tooltipSet then
 			self.tooltip = nil
 		end
 	end
-	
+
 	if button ~= 1 then
 		return inherited.MouseMove(self, x, y, dx, dy, button)
 	end
@@ -641,7 +641,9 @@ function EditBox:ClearSelected()
 		self.text, self.cursor = Utf8BackspaceAt(self.text, self.cursor)
 	end
 	self.selStart = nil
+	self.selStartY = nil
 	self.selEnd = nil
+	self.selEndY = nil
 	self:Invalidate()
 end
 
@@ -745,7 +747,7 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 				self.cursor = Utf8PrevChar(txt, self.cursor)
 			until self.cursor == 1 or (txt:sub(self.cursor-1, self.cursor-1) ~= " " and txt:sub(self.cursor, self.cursor) == " ")
 		else
-		self.cursor = Utf8PrevChar(txt, cp)
+			self.cursor = Utf8PrevChar(txt, cp)
 		end
 	elseif key == Spring.GetKeyCode("right") and not self.multiline then
 		if mods.ctrl then
@@ -753,7 +755,7 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 				self.cursor = Utf8NextChar(txt, self.cursor)
 			until self.cursor >= #txt-1 or (txt:sub(self.cursor-1, self.cursor-1) == " " and txt:sub(self.cursor, self.cursor) ~= " ")
 		else
-		self.cursor = Utf8NextChar(txt, cp)
+			self.cursor = Utf8NextChar(txt, cp)
 		end
 	elseif key == Spring.GetKeyCode("home") and not self.multiline then
 		self.cursor = 1
@@ -761,7 +763,7 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 		self.cursor = #txt + 1
 
 	-- copy & paste
-	elseif (mods.ctrl and key == Spring.GetKeyCode("c")) or (mods.ctrl and key == Spring.GetKeyCode("insert")) or 
+	elseif (mods.ctrl and key == Spring.GetKeyCode("c")) or (mods.ctrl and key == Spring.GetKeyCode("insert")) or
 		(self.editable and ((mods.ctrl and key == Spring.GetKeyCode("x")) or (mods.shift and key == Spring.GetKeyCode("delete")))) then
 		txt = self:GetSelectionText()
 		if self.selStart and self.selEnd then
@@ -776,7 +778,7 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 	-- select all
 	elseif mods.ctrl and key == Spring.GetKeyCode("a") then
 		if not self.multiline then
-			self:_SetSelection(1, nil, #txt + 1, nil)
+			self:_SetSelection(1, 1, #txt + 1, 1)
 		else
 			self:_SetSelection(1, 1, #self.lines[#self.lines].text + 1, #self.lines)
 		end
@@ -793,7 +795,9 @@ function EditBox:KeyPress(key, mods, isRepeat, label, unicode, ...)
 			self:_SetSelection(nil, nil, self.cursor, self.cursorY)
 		elseif self.selStart then
 			self.selStart = nil
+			self.selStartY = nil
 			self.selEnd = nil
+			self.selEndY = nil
 		end
 	end
 

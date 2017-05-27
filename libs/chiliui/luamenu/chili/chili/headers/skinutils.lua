@@ -114,7 +114,7 @@ local _DrawTiledTexture = _DrawTiledTexture
 
 function _DrawRepeatingTiledTexture(x,y,w,h, skLeft,skTop,skRight,skBottom, texw,texh, texIndex)
     texIndex = texIndex or 0
-	
+
     local txLeft   = skLeft/texw
     local txTop    = skTop/texh
     local txRight  = skRight/texw
@@ -131,15 +131,15 @@ function _DrawRepeatingTiledTexture(x,y,w,h, skLeft,skTop,skRight,skBottom, texw
       skLeft = skLeft * scale
       skRight = skRight * scale
     end
-	
+
 	local horTileWidth = (texw - skLeft - skRight)
 	local widthRepeat = (w - skLeft - skRight)/horTileWidth
 	local horFrac = (1 - txLeft - txRight) *(widthRepeat%1)
-	
+
 	local vertTileWidth = (texh - skTop - skBottom)
 	local heightRepeat = (h - skTop - skBottom)/vertTileWidth
 	local vertFrac = (1 - txTop - txBottom) *(heightRepeat%1)
-	
+
     --//topleft
     gl.MultiTexCoord(texIndex,0,0)
     gl.Vertex(x,      y)
@@ -157,7 +157,7 @@ function _DrawRepeatingTiledTexture(x,y,w,h, skLeft,skTop,skRight,skBottom, texw
 		gl.Vertex(x + skLeft + i*horTileWidth, y)
 		gl.MultiTexCoord(texIndex, 1-txRight, txTop)
 		gl.Vertex(x + skLeft + i*horTileWidth, y+skTop)
-		
+
 		-- Highly degenerate :(
 		gl.MultiTexCoord(texIndex, 1-txRight, txTop)
 		gl.Vertex(x + skLeft + i*horTileWidth, y+skTop)
@@ -166,7 +166,7 @@ function _DrawRepeatingTiledTexture(x,y,w,h, skLeft,skTop,skRight,skBottom, texw
 		gl.MultiTexCoord(texIndex, txLeft, txTop)
 		gl.Vertex(x + skLeft + i*horTileWidth, y+skTop)
 	end
-	
+
     gl.MultiTexCoord(texIndex,txLeft + horFrac,0)
     gl.Vertex(x+w-skRight, y)
     gl.MultiTexCoord(texIndex,txLeft + horFrac,txTop)
@@ -179,7 +179,7 @@ function _DrawRepeatingTiledTexture(x,y,w,h, skLeft,skTop,skRight,skBottom, texw
     gl.Vertex(x+w-skRight, y)
     gl.MultiTexCoord(texIndex,1 - txLeft,txTop)
     gl.Vertex(x+w-skRight, y+skTop)
-	
+
     --//topright
     gl.MultiTexCoord(texIndex,1,0)
     gl.Vertex(x+w,       y)
@@ -191,13 +191,13 @@ function _DrawRepeatingTiledTexture(x,y,w,h, skLeft,skTop,skRight,skBottom, texw
     gl.Vertex(x+w,       y+skTop)
     gl.MultiTexCoord(texIndex,1 - txRight, txTop)
     gl.Vertex(x+w - skRight,       y+skTop)    --//degenerate
-	
+
 	for i = 1, heightRepeat do
 		gl.MultiTexCoord(texIndex,1,1-txBottom)
 		gl.Vertex(x + w, y + skTop + i*vertTileWidth)
 		gl.MultiTexCoord(texIndex,1-txRight,1-txBottom)
 		gl.Vertex(x + w - skRight, y + skTop + i*vertTileWidth)
-		
+
 		-- Highly degenerate :(
 		gl.MultiTexCoord(texIndex,1-txRight,1-txBottom)
 		gl.Vertex(x + w - skRight, y + skTop + i*vertTileWidth)
@@ -206,7 +206,7 @@ function _DrawRepeatingTiledTexture(x,y,w,h, skLeft,skTop,skRight,skBottom, texw
 		gl.MultiTexCoord(texIndex,1 - txRight,txTop)
 		gl.Vertex(x + w - skRight, y + skTop + i*vertTileWidth)
 	end
-	
+
     gl.MultiTexCoord(texIndex,1, txTop + vertFrac)
     gl.Vertex(x+w, y + h - skBottom)
     gl.MultiTexCoord(texIndex,1 - txRight, txTop + vertFrac)
@@ -217,7 +217,7 @@ function _DrawRepeatingTiledTexture(x,y,w,h, skLeft,skTop,skRight,skBottom, texw
     gl.Vertex(x+w-skRight, y + h - skBottom)
     gl.MultiTexCoord(texIndex,1 - txRight, txTop)
     gl.Vertex(x+w-skRight, y+skTop)
-	
+
     --//background
     gl.MultiTexCoord(texIndex,txLeft, 1 - txBottom)
     gl.Vertex(x+skLeft,    y + h - skBottom)
@@ -227,16 +227,16 @@ function _DrawRepeatingTiledTexture(x,y,w,h, skLeft,skTop,skRight,skBottom, texw
     --//left center
     gl.MultiTexCoord(texIndex,txLeft,txTop)
     gl.Vertex(x+skLeft,    y+skTop)
-	
+
     gl.MultiTexCoord(texIndex,0,txTop)
     gl.Vertex(x,       y+skTop)
-	
+
 	for i = 1, heightRepeat do
 		gl.MultiTexCoord(texIndex, txLeft, 1 - txBottom)
 		gl.Vertex(x + skLeft, y + skTop + i*vertTileWidth)
 		gl.MultiTexCoord(texIndex, 0 , 1 - txBottom)
 		gl.Vertex(x, y + skTop + i*vertTileWidth)
-		
+
 		-- Highly degenerate :(
 		gl.MultiTexCoord(texIndex, 0 , 1 - txBottom)
 		gl.Vertex(x, y + skTop + i*vertTileWidth)
@@ -245,12 +245,12 @@ function _DrawRepeatingTiledTexture(x,y,w,h, skLeft,skTop,skRight,skBottom, texw
 		gl.MultiTexCoord(texIndex,0,txTop)
 		gl.Vertex(x, y + skTop + i*vertTileWidth)
 	end
-	
+
     gl.MultiTexCoord(texIndex, txLeft, txTop + vertFrac)
     gl.Vertex(x+skLeft, y + h - skBottom)
     gl.MultiTexCoord(texIndex, 0, txTop + vertFrac)
     gl.Vertex(x, y + h - skBottom)
-	
+
     gl.MultiTexCoord(texIndex, 0, 1 - txBottom)
     gl.Vertex(x, y + h - skBottom)
 
@@ -268,7 +268,7 @@ function _DrawRepeatingTiledTexture(x,y,w,h, skLeft,skTop,skRight,skBottom, texw
 		gl.Vertex(x + skLeft + i*horTileWidth, y + h - skBottom)
 		gl.MultiTexCoord(texIndex, 1-txRight, 1)
 		gl.Vertex(x + skLeft + i*horTileWidth, y + h)
-		
+
 		-- Highly degenerate :(
 		gl.MultiTexCoord(texIndex, 1-txRight, 1)
 		gl.Vertex(x + skLeft + i*horTileWidth, y + h)
@@ -277,7 +277,7 @@ function _DrawRepeatingTiledTexture(x,y,w,h, skLeft,skTop,skRight,skBottom, texw
 		gl.MultiTexCoord(texIndex, txLeft, 1)
 		gl.Vertex(x + skLeft + i*horTileWidth, y + h)
 	end
-	
+
     gl.MultiTexCoord(texIndex,txLeft + horFrac, 1 - txBottom)
     gl.Vertex(x+w-skRight, y + h - skBottom)
     gl.MultiTexCoord(texIndex,txLeft + horFrac, 1)
@@ -288,7 +288,7 @@ function _DrawRepeatingTiledTexture(x,y,w,h, skLeft,skTop,skRight,skBottom, texw
     gl.Vertex(x+w-skRight, y + h - skBottom)
     gl.MultiTexCoord(texIndex,1 - txLeft, 1)
     gl.Vertex(x+w-skRight, y + h)
-	
+
     --//bottom right
     gl.MultiTexCoord(texIndex,1,1-txBottom)
     gl.Vertex(x+w, y+h-skBottom)
@@ -589,18 +589,18 @@ function DrawEditBox(obj)
 	gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, 0, 0, obj.width, obj.height,  skLeft,skTop,skRight,skBottom, tw,th)
 	gl.Texture(0,false)
 
-	local text = obj.text	
+	local text = obj.text
 	local font = obj.font
 	local displayHint = false
-	
+
 	if text == "" and not obj.state.focused then
-		text = obj.hint		
+		text = obj.hint
 		displayHint = true
 		font = obj.hintFont
 	end
-	
+
 	if (text) then
-        if obj.passwordInput and not displayHint then 
+        if obj.passwordInput and not displayHint then
             text = string.rep("*", #text)
         end
 
@@ -646,17 +646,19 @@ function DrawEditBox(obj)
 
 		gl.Color(1,1,1,1)
 		if obj.multiline then
-			
+
 			if obj.parent and obj.parent:InheritsFrom("scrollpanel") then
 				local scrollPosY = obj.parent.scrollPosY
 				local scrollHeight = obj.parent.clientArea[4]
-				
+
 				local h, d, numLines = obj.font:GetTextHeight(obj.text);
 				local minDrawY = scrollPosY - (h or 0)
 				local maxDrawY = scrollPosY + scrollHeight + (h or 0)
-				
+
 				for _, line in pairs(obj.physicalLines) do
-					local drawPos = clientY + line.y
+					-- FIXME: figure out why clientY is always 0 (at least for all planetwars textboxes)
+					--local drawPos = clientY + line.y
+					local drawPos = obj.y + line.y
 					if (drawPos > minDrawY and drawPos < maxDrawY) or obj.useRTT then
 						font:Draw(line.text, clientX, clientY + line.y)
 					end
@@ -666,7 +668,7 @@ function DrawEditBox(obj)
 					font:Draw(line.text, clientX, clientY + line.y)
 				end
 			end
-		
+
 		else
 			font:DrawInBox(txt, clientX, clientY, clientWidth, clientHeight, obj.align, obj.valign)
 		end
@@ -693,12 +695,12 @@ function DrawEditBox(obj)
 					ac = 0
 				end
 				alpha = as + ac
-				if (alpha > 1) then 
+				if (alpha > 1) then
 					alpha = 1
 				end
 				alpha = 0.8 * alpha
 			end
-			
+
 			local cc = obj.cursorColor
 			gl.Color(cc[1], cc[2], cc[3], cc[4] * alpha)
 			gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawCursor, cursorX + clientX - 1, clientY, 3, clientHeight)
@@ -709,12 +711,12 @@ function DrawEditBox(obj)
 
 			local top, bottom = obj.selStartPhysicalY, obj.selEndPhysicalY
 			local left, right = obj.selStartPhysical,  obj.selEndPhysical
-            
+
             if obj.multiline then
                 if top > bottom then
                     top, bottom = bottom, top
                     left, right = right, left
-                elseif top == bottom and s > e then
+                elseif top == bottom and left > right then
                     left, right = right, left
                 end
             elseif left > right then

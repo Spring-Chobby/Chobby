@@ -44,7 +44,7 @@ end
 
 local function MakeCircuitDisableString(unlockedUnits)
 	local Configuration = WG.Chobby.Configuration
-	local unitList = Configuration.gameConfig.unitList
+	local unitList = Configuration.gameConfig.gameUnitInformation.nameList
 	if not unitList then
 		return nil
 	end
@@ -71,7 +71,7 @@ end
 --------------------------------------------------------------------------------
 -- Start Game
 
-local function StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName)
+local function StartBattleForReal(planetID, gameConfig, gameName)
 	local allyTeams = {}
 	local allyTeamCount = 0
 	local teams = {}
@@ -97,18 +97,15 @@ local function StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName)
 		},
 	}
 	
-	local fullPlayerUnlocks = {}
-	local playerUnlocksMap = {}
-	for i = 1, #playerUnlocks do
-		fullPlayerUnlocks[#fullPlayerUnlocks + 1] = playerUnlocks[i]
-		playerUnlocksMap[playerUnlocks[i]] = true
-	end
+	local playerUnlocks = WG.CampaignData.GetUnitsUnlocks()
+	local playerAbilities = WG.CampaignData.GetAbilityUnlocks()
+	local fullPlayerUnlocks = Spring.Utilities.CopyTable(playerUnlocks.list)
+
 	if gameConfig.playerConfig.extraUnlocks then
 		local extra = gameConfig.playerConfig.extraUnlocks
 		for i = 1, #extra do
-			if not playerUnlocksMap[extra[i]] then
+			if not playerUnlocks.map[extra[i]] then
 				fullPlayerUnlocks[#fullPlayerUnlocks + 1] = extra[i]
-				playerUnlocksMap[extra[i]] = true
 			end
 		end
 	end
@@ -124,6 +121,8 @@ local function StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName)
 		staticcomm = "player_commander",
 		static_level = WG.CampaignData.GetPlayerCommanderLevel(),
 		campaignunlocks = TableToBase64(fullPlayerUnlocks),
+		campaignabilities = TableToBase64(playerAbilities.list),
+		commanderparameters = TableToBase64(gameConfig.playerConfig.commanderParameters),
 		extrastartunits = TableToBase64(gameConfig.playerConfig.startUnits),
 		retinuestartunits = TableToBase64(WG.CampaignData.GetActiveRetinue()),
 	}
@@ -132,7 +131,7 @@ local function StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName)
 	-- Add the AIs
 	for i = 1, #gameConfig.aiConfig do
 		local aiData = gameConfig.aiConfig[i]
-		local shortName = aiData.aiLib
+		local shortName = WG.CampaignData.GetAI(aiData.aiLib)
 		if aiData.bitDependant then
 			shortName = shortName .. bitExtension
 		end
@@ -169,6 +168,7 @@ local function StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName)
 			staticcomm = commanderName,
 			static_level = aiData.commanderLevel or 1,
 			campaignunlocks = TableToBase64(aiData.unlocks),
+			commanderparameters = TableToBase64(aiData.commanderParameters),
 			extrastartunits = TableToBase64(aiData.startUnits),
 		}
 		teamCount = teamCount + 1
@@ -196,6 +196,9 @@ local function StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName)
 		startpostype = 0, -- Fixed
 		modoptions = {
 			commandertypes = TableToBase64(commanderTypes),
+			defeatconditionconfig = TableToBase64(gameConfig.defeatConditionConfig),
+			objectiveconfig = TableToBase64(gameConfig.objectiveConfig),
+			bonusobjectiveconfig = TableToBase64(gameConfig.bonusObjectiveConfig),
 			fixedstartpos = 1,
 			singleplayercampaignbattleid = planetID
 		},
@@ -215,7 +218,7 @@ local function StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName)
 	end
 
 	local scriptString = localLobby:MakeScriptTXT(script)
-	Spring.Echo("scriptString", scriptString)
+	--Spring.Echo("scriptString", scriptString)
 	localLobby:StartGameFromString(scriptString)
 end
 
@@ -224,7 +227,7 @@ end
 -- External Functions
 local PlanetBattleHandler = {}
 
-function PlanetBattleHandler.StartBattle(planetID, planetData, playerUnlocks)
+function PlanetBattleHandler.StartBattle(planetID, planetData)
 	local Configuration = WG.Chobby.Configuration
 	local gameConfig = planetData.gameConfig
 
@@ -249,7 +252,7 @@ function PlanetBattleHandler.StartBattle(planetID, planetData, playerUnlocks)
 	end
 	
 	local function StartBattleFunc()
-		if StartBattleForReal(planetID, gameConfig, playerUnlocks, gameName) then
+		if StartBattleForReal(planetID, gameConfig, gameName) then
 			Spring.Echo("Start battle success!")
 		end
 	end
@@ -268,7 +271,6 @@ end
 function widget:Initialize()
 	WG.PlanetBattleHandler = PlanetBattleHandler
 end
-
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -330,6 +332,6 @@ function RecursivelyDeleteFactories(config)
 	end
 end
 
---local config = LoadCircuitConfig(shortName, "0.9.12")
+--local config = LoadCircuitConfig(shortName, "stable")
 --RecursivelyDeleteFactories(config)
---local configName = SaveCircuitConfig(shortName, "0.9.12", aiCount, config)
+--local configName = SaveCircuitConfig(shortName, "stable", aiCount, config)

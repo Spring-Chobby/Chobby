@@ -34,7 +34,7 @@ local downloads = {}
 local url
 
 local hasMap = false
-local hasEngine = false
+local restartEngine = false
 local hasGame = false
 local hasFile = false
 
@@ -85,7 +85,7 @@ end
 local function Abort(reason)
 	hasFile = false
 	hasGame = false
-	hasEngine = false
+	restartEngine = false
 	hasMap = false
 
 	Chotify:Post({
@@ -124,13 +124,9 @@ function onLaunchReplay(wtf, replay, game, map, engine)
 
 	hasGame = false
 	hasMap = false
-	hasEngine = WG.Chobby.Configuration:IsValidEngineVersion(engine)
+	restartEngine = (not WG.Chobby.Configuration:IsValidEngineVersion(engine)) and engine
 	hasFile = false
-
-	if not hasEngine then
-		return Abort("Wrong engine "..engine)
-	end
-
+	
 	replayMap = map
 	replayGame = game
 
@@ -193,8 +189,21 @@ local function AttemptStart(saveFilename)
 		return Echo("Downloading game...")
 	end
 
+	if not saveFilename then
+		return
+	end
+	
 	Echo("Starting Spring")
-	WG.Chobby.localLobby:StartReplay(saveFilename)
+	if not restartEngine then
+		WG.Chobby.localLobby:StartReplay(saveFilename)
+	elseif WG.WrapperLoopback then
+		local params = {
+			StartDemoName = string.sub(saveFilename, 7),
+			Engine = restartEngine,
+			SpringSettings = WG.SettingsWindow.GetSettingsString(),
+		}
+		WG.WrapperLoopback.StartNewSpring(params) 
+	end
 end
 
 -- called when a connection is closed

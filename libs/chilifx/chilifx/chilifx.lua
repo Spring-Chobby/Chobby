@@ -31,6 +31,9 @@ function ChiliFX:LoadEffectDef(effectDef)
         error("Effect with name: " .. tostring(effectDef.name) ..
             " already exists. Remove it first")
     end
+    if not self.enabled then
+        return
+    end
 
     -- Create effect object from the shader definition
     Spring.Log(LOG_SECTION, LOG.INFO, "Loading effect " .. tostring(effectDef.name) .. "...")

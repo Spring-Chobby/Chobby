@@ -1,4 +1,4 @@
-local Package = {}
+Package = {}
 
 local RAPID_PREFIX = "rapid://"
 local IGNORED_DEPS = {

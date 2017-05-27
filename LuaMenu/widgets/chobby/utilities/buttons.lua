@@ -14,16 +14,19 @@ local function GetFont(size)
 end
 
 function ButtonUtilities.SetButtonSelected(button)
-	if button.highlighted then
+	if button.selected then
 		return
 	end
 	
 	local Configuration = WG.Chobby.Configuration
-	button.oldCaption = button.oldCaption or button.caption
-	button.oldBackgroundColor = button.oldBackgroundColor or button.backgroundColor
-	button.oldFont = button.oldFont or button.font
+	if not button.highlighted then
+		button.oldCaption = button.oldCaption or button.caption
+		button.oldBackgroundColor = button.oldBackgroundColor or button.backgroundColor
+		button.oldFont = button.oldFont or button.font
+	end
 	
-	button.highlighted = true
+	button.selected = true
+	button.highlighted = false
 	
 	button:SetCaption(Configuration:GetSelectedColor() .. button.oldCaption .. "\b")
 	button.font = Chili.Font:New(GetFont(button.oldFont.size - 2))
@@ -32,8 +35,30 @@ function ButtonUtilities.SetButtonSelected(button)
 	button:Invalidate()
 end
 
+function ButtonUtilities.SetButtonHighlighted(button)
+	if button.highlighted then
+		return
+	end
+
+	local Configuration = WG.Chobby.Configuration
+	if not button.selected then
+		button.oldCaption = button.oldCaption or button.caption
+		button.oldBackgroundColor = button.oldBackgroundColor or button.backgroundColor
+		button.oldFont = button.oldFont or button.font
+	end
+	
+	button.selected = false
+	button.highlighted = true
+	
+	button:SetCaption(Configuration:GetHighlightedColor() .. button.oldCaption .. "\b")
+	button.font = Chili.Font:New(GetFont(button.oldFont.size - 2))
+	
+	--button.backgroundColor = Configuration:GetButtonSelectedColor()
+	button:Invalidate()
+end
+
 function ButtonUtilities.SetButtonDeselected(button)
-	if not button.highlighted then
+	if not button.selected then
 		return
 	end
 
@@ -41,7 +66,8 @@ function ButtonUtilities.SetButtonDeselected(button)
 	button.oldBackgroundColor = button.oldBackgroundColor or button.backgroundColor
 	button.oldFont = button.oldFont or button.font
 	
-	button.highlighted = false
+	button.selected = false
+	button.selected = false
 	
 	button:SetCaption(button.oldCaption)
 	button.font = button.oldFont
@@ -52,9 +78,13 @@ end
 function ButtonUtilities.SetCaption(button, newCaption)
 	button:SetCaption(newCaption)
 	button.oldCaption = newCaption
+	if button.selected then
+		button.selected = false -- force redo
+		ButtonUtilities.SetButtonSelected(button)
+	end
 	if button.highlighted then
 		button.highlighted = false -- force redo
-		ButtonUtilities.SetButtonSelected(button)
+		ButtonUtilities.SetButtonHighlighted(button)
 	end
 end
 
@@ -62,8 +92,12 @@ function ButtonUtilities.SetFontSizeScale(button, sizeScale)
 	button.font = Chili.Font:New(WG.Chobby.Configuration:GetFont(sizeScale))
 	button:Invalidate()
 	button.oldFont = button.font
+	if button.selected then
+		button.selected = false -- force redo
+		ButtonUtilities.SetButtonSelected(button)
+	end
 	if button.highlighted then
 		button.highlighted = false -- force redo
-		ButtonUtilities.SetButtonSelected(button)
+		ButtonUtilities.SetButtonHighlighted(button)
 	end
 end

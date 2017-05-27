@@ -60,9 +60,7 @@ end
 
 -- reports that download has ended/was aborted
 local function DownloadFileDone(args)
-	Echo(args.Name)
-	Echo(args.FileType)
-	Echo(args.IsSuccess)
+	WG.DownloadHandler.DownloadFinished(args.Name, args.FileType, args.IsSuccess)
 end
 
 -- notifies that steam is online
@@ -211,8 +209,8 @@ function WrapperLoopback.StartNewSpring(args)
 														  // non-rapid entries will be always redownloaded, so check presence of map before requesting it, wrapper does not init unitsync 
     }
 ]]--
-
-	SendCommands("StartNewSpring", args)
+	Spring.Utilities.TableEcho(args, "StartNewSpring")
+	SendCommand("StartNewSpring", args)
 end
 
 

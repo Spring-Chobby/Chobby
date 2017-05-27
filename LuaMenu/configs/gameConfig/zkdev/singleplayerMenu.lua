@@ -1,4 +1,4 @@
-return {
+local menuItems = {
 	{
 		name = "missions", 
 		control = WG.MissionHandler.GetControl(),
@@ -10,7 +10,7 @@ return {
 			tabs = {
 				{
 					name = "technology", 
-					control = Control:New {},
+					control = WG.TechnologyHandler.GetControl(),
 				},
 				{
 					name = "codex", 
@@ -43,3 +43,12 @@ return {
 	--	control = Control:New {},
 	--},
 }
+
+if VFS.HasArchive("SpringBoard ZK $VERSION") then
+	menuItems[#menuItems + 1] = {
+		name = "editor",
+		control = WG.SpringBoardWindow.GetControl(),
+	}
+end
+
+return menuItems

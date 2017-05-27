@@ -43,6 +43,7 @@ local settings = {
 	MouseDragScrollThreshold = 0,
 	MoveWarnings = 0,
 	NormalMapping = 1,
+	OverheadMaxHeightFactor = 1.4,
 	OverheadScrollSpeed = 50,
 	ReconnectTimeout = 0,
 	ReflectiveWater = 4,

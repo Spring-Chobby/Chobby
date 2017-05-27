@@ -8,7 +8,8 @@ function widget:GetInfo()
 		date      = "future",
 		license   = "GNU LGPL, v2.1 or later",
 		layer     = -1000000,
-		enabled   = true  --  loaded by default?
+		enabled   = true, --  loaded by default?
+		api       = true,
 	}
 end
 

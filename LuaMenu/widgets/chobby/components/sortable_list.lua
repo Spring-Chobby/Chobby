@@ -1,6 +1,6 @@
 SortableList = Component:extends{}
 
-function SortableList:init(holder, headings, itemHeight, defaultSort, sortDirection)
+function SortableList:init(holder, headings, itemHeight, defaultSort, sortDirection, scrollPanelOverride)
 	self:DoInit() -- Lack of inheritance strikes again.
 
 	self.sortBy = false
@@ -47,20 +47,28 @@ function SortableList:init(holder, headings, itemHeight, defaultSort, sortDirect
 		end
 	end
 	
-	self.listPanel = ScrollPanel:New {
-		x = 0,
-		right = 0,
-		y = (headings and 42) or 0,
-		bottom = 0,
-		borderColor = {0,0,0,0},
-		horizontalScrollbar = false,
-		parent = self.holder,
-		OnResize = {
-			function()
-				self:OnResize()
-			end
+	if scrollPanelOverride then
+		scrollPanelOverride.OnResize = scrollPanelOverride.OnResize or {}
+		scrollPanelOverride.OnResize[#scrollPanelOverride.OnResize + 1] = function()
+			self:OnResize()
+		end
+		self.listPanel = scrollPanelOverride
+	else
+		self.listPanel = ScrollPanel:New {
+			x = 0,
+			right = 0,
+			y = (headings and 42) or 0,
+			bottom = 0,
+			borderColor = {0,0,0,0},
+			horizontalScrollbar = false,
+			parent = self.holder,
+			OnResize = {
+				function()
+					self:OnResize()
+				end
+			}
 		}
-	}
+	end
 
 	self.itemHeight = itemHeight or 40
 	self.itemPadding = 3

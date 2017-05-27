@@ -21,18 +21,21 @@ local IMG_LINK     = LUA_DIRNAME .. "images/link.png"
 
 local panelInterface
 local PLANET_NAME_LENGTH = 210
-local FACTION_SPACING = 128
+local FACTION_SPACING = 156
 
 local phaseTimer
 local requiredGame = false
 
-local URGENT_ATTACK_TIME = 300 -- Five minutes
+local URGENT_ATTACK_TIME = 3000 -- Fifty minutes
 local attackUrgent = false
 
 local MISSING_ENGINE_TEXT = "Game engine update required, restart the menu to apply."
 local MISSING_GAME_TEXT = "Game version update required. Wait for a download or restart to apply it immediately."
 
 local updates = 0
+
+local ATTACKER_SOUND = "sounds/marker_place.wav"
+local DEFENDER_SOUND = "sounds/alarm.wav"
 
 local DoUnMatchedActivityUpdate -- Activity update function
 
@@ -303,11 +306,14 @@ end
 
 local function InitializeActivityPromptHandler()
 	local lobby = WG.LibLobby.lobby
+	local Configuration = WG.Chobby.Configuration
 	local planetData
 	
 	local planetID
 	local planetImage
 	local planetImageSize = 77
+	local oldIsAttacker = false
+	local newNotification = true
 
 	local holder = Panel:New {
 		x = 0,
@@ -329,7 +335,7 @@ local function InitializeActivityPromptHandler()
 		bottom = 4,
 		padding = {0,0,0,0},
 		caption = "Join",
-		font = WG.Chobby.Configuration:GetFont(3),
+		font = Configuration:GetFont(3),
 		classname = "action_button",
 		OnClick = {
 			function()
@@ -349,7 +355,7 @@ local function InitializeActivityPromptHandler()
 		y = 18,
 		width = 195,
 		height = 20,
-		fontsize = WG.Chobby.Configuration:GetFont(2).size,
+		fontsize = Configuration:GetFont(2).size,
 		text = "",
 		parent = holder
 	}
@@ -358,7 +364,7 @@ local function InitializeActivityPromptHandler()
 		y = 18,
 		width = 195,
 		height = 20,
-		fontsize = WG.Chobby.Configuration:GetFont(2).size,
+		fontsize = Configuration:GetFont(2).size,
 		text = "",
 		parent = holder
 	}
@@ -401,6 +407,38 @@ local function InitializeActivityPromptHandler()
 		end
 	end
 	
+	local function PossiblyPlayWarning(isAttacker)
+		if (not newNotification) and isAttacker == oldIsAttacker then
+			return
+		end
+		newNotification = false
+		oldIsAttacker = isAttacker
+		if not Configuration.planetwarsNotifications then
+			return
+		end
+		if WG.WrapperLoopback then
+			if isAttacker then
+				WG.WrapperLoopback.Alert("Planetwars: attack a planet.")
+			else
+				WG.WrapperLoopback.Alert("Planetwars: defense required!")
+			end
+		end
+		
+		local snd_volui = Spring.GetConfigString("snd_volui")
+		local snd_volmaster = Spring.GetConfigString("snd_volmaster")
+		-- These are defaults. Should be audible enough.
+		Spring.SetConfigString("snd_volui", 100)
+		Spring.SetConfigString("snd_volmaster", 60)
+		if Configuration.menuNotificationVolume ~= 0 then
+			Spring.PlaySoundFile((isAttacker and ATTACKER_SOUND) or DEFENDER_SOUND, Configuration.menuNotificationVolume or 1, "ui")
+		end
+		WG.Delay(function()
+			Spring.SetConfigString("snd_volui", snd_volui)
+			Spring.SetConfigString("snd_volmaster", snd_volmaster)
+		end, 10)
+		
+	end
+	
 	holder.OnResize = {Resize}
 	
 	local externalFunctions = {}
@@ -419,6 +457,7 @@ local function InitializeActivityPromptHandler()
 	
 	function externalFunctions.SetActivity(newPlanetData, isAttacker, alreadyJoined, waitingForAllies)
 		planetData = newPlanetData
+		PossiblyPlayWarning(isAttacker)
 		if alreadyJoined then
 			if isAttacker then
 				planetStatusTextBox:SetText("Attacking: " .. planetData.PlanetName)
@@ -444,7 +483,6 @@ local function InitializeActivityPromptHandler()
 		externalFunctions.UpdateTimer(true)
 		
 		button:SetVisibility(not alreadyJoined)
-		Resize()
 		
 		if alreadyJoined then
 			if planetID ~= newPlanetData.PlanetID then
@@ -457,6 +495,12 @@ local function InitializeActivityPromptHandler()
 			planetImage:Dispose()
 			planetImage = nil
 		end
+		
+		Resize()
+	end
+	
+	function externalFunctions.NotifyHidden()
+		newNotification = true
 	end
 	
 	function externalFunctions.GetHolder()
@@ -778,7 +822,7 @@ end
 --------------------------------------------------------------------------------
 -- Faction Selection
 
-local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc)
+local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc, right, bottom)
 	local Configuration = WG.Chobby.Configuration
 	
 	local factionText = VFS.Include(LUA_DIRNAME .. "configs/planetwars/factionText.lua") or {}
@@ -789,13 +833,18 @@ local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc)
 		return
 	end
 	
+	local HolderType = (right and bottom and ScrollPanel) or Control
+	
 	local offset = 0
-	local holder = Control:New {
+	local holder = HolderType:New {
 		x = x,
 		y = y,
-		width = 360,
+		width = not (right and bottom) and 400,
+		right = right,
+		bottom = bottom,
 		height = (#factionList)*FACTION_SPACING + 40,
-		padding = {0, 0, 0, 0},
+		horizontalScrollbar = false,
+		padding = (right and bottom and {5, 5, 5, 5}) or {0, 0, 0, 0},
 		parent = parent,
 	}
 	
@@ -807,24 +856,24 @@ local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc)
 	for i = startIndex, endIndex, direction do
 		local shortname = factionList[i].Shortcut
 		local name = factionList[i].Name
-		local factionData = factionText[shortname]
+		local factionData = factionText[shortname] or {}
 		
-		if factionData.image then
+		if factionData.imageLarge then
 			Image:New {
-				x = 0,
-				y = offset,
-				width = 110,
-				height = 110,
+				x = 2,
+				y = offset + 5,
+				width = 128,
+				height = 128,
 				keepAspect = true,
-				file = factionData.image,
+				file = factionData.imageLarge,
 				parent = holder,
 			}
 		end
 		
 		Button:New {
-			x = 120,
-			y = offset + 10,
-			width = 240,
+			x = 140,
+			y = offset,
+			width = 260,
 			height = 45,
 			caption = "Join " .. name,
 			font = Configuration:GetFont(3),
@@ -842,8 +891,8 @@ local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc)
 		
 		if factionData.motto and factionData.desc then
 			TextBox:New {
-				x = 120,
-				y = offset + 66,
+				x = 140,
+				y = offset + 56,
 				width = 240,
 				height = 45,
 				fontsize = Configuration:GetFont(2).size,
@@ -856,9 +905,9 @@ local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc)
 	end
 
 	Button:New {
-		x = 110,
+		x = 140,
 		y = offset,
-		width = 164,
+		width = 170,
 		height = 35,
 		caption = "Factions Page",
 		font = Configuration:GetFont(2),
@@ -884,9 +933,9 @@ local function MakeFactionSelector(parent, x, y, SelectionFunc, CancelFunc)
 	
 	if CancelFunc then
 		Button:New {
-			x = 280,
+			x = 316,
 			y = offset,
-			width = 80,
+			width = 84,
 			height = 35,
 			font =  WG.Chobby.Configuration:GetFont(2),
 			caption = i18n("cancel"),
@@ -915,7 +964,7 @@ local function MakeFactionSelectionPopup()
 	local factionWindow = Window:New {
 		x = 700,
 		y = 300,
-		width = 420,
+		width = 460,
 		height = 130 + (#factionList)*FACTION_SPACING,
 		caption = "",
 		resizable = false,
@@ -1070,7 +1119,7 @@ local function InitializeControls(window)
 		if not lobby:GetFactionData(myUserInfo.faction) then
 			statusText:SetText("You need to join a faction.")
 			if not factionLinkButton then
-				factionLinkButton = MakeFactionSelector(window, 25, 95)
+				factionLinkButton = MakeFactionSelector(window, 15, 80, nil, nil, 15, 52)
 			end
 			factionLinkButton:SetVisibility(true)
 			listHolder:SetVisibility(false)
@@ -1266,16 +1315,16 @@ function DelayedInitialize()
 	end
 	lobby:AddListener("OnQueueOpened", AddQueue)
 	
-	if not Configuration.alreadySeenFactionPopup then
+	if not Configuration.alreadySeenFactionPopup2 then
 		local function OnLoginInfoEnd()
 			local myInfo = lobby:GetMyInfo()
-			if Configuration.alreadySeenFactionPopup then
+			if Configuration.alreadySeenFactionPopup2 then
 				return
 			end
-			if not (myInfo and myInfo.level and myInfo.level >= 2) then
+			if (not Configuration.ignoreLevel) and not (myInfo and myInfo.level and myInfo.level >= 2) then
 				return
 			end
-			Configuration.alreadySeenFactionPopup = true
+			Configuration.alreadySeenFactionPopup2 = true
 			if lobby:GetFactionData(myInfo.faction) then
 				return
 			end
@@ -1290,9 +1339,26 @@ function DelayedInitialize()
 			activityPromptHandler.SetActivity(planetData, isAttacker, alreadyJoined, waitingForAllies)
 			statusAndInvitesPanel.AddControl(activityPromptHandler.GetHolder(), 5)
 		else
+			activityPromptHandler.NotifyHidden()
 			statusAndInvitesPanel.RemoveControl(activityPromptHandler.GetHolder().name)
 		end
 	end
+	
+	-- Test data
+	--local TestAttack, TestDefend
+	--function TestAttack()
+	--	activityPromptHandler.SetActivity({PlanetName = "test", Map = "TitanDuel", Count = 2, Needed = 3, PlanetID = 1, PlanetImage = "12.png"}, true, true, true)
+	--	statusAndInvitesPanel.AddControl(activityPromptHandler.GetHolder(), 5)
+	--	
+	--	WG.Delay(TestDefend, 3)
+	--end
+	--function TestDefend()
+	--	activityPromptHandler.SetActivity({PlanetName = "test", Map = "TitanDuel", Count = 2, Needed = 3, PlanetID = 2, PlanetImage = "11.png"}, false, false, false)
+	--	statusAndInvitesPanel.AddControl(activityPromptHandler.GetHolder(), 5)
+	--	
+	--	WG.Delay(TestAttack, 3)
+	--end
+	--WG.Delay(TestAttack, 3)
 	
 	local function OnPwMatchCommand(listener, attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
 		phaseTimer.SetNewDeadline(deadlineSeconds)
@@ -1355,10 +1421,9 @@ end
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	WG.Delay(DelayedInitialize, 1)
+	WG.Delay(DelayedInitialize, 0.3)
 	
 	WG.PlanetwarsListWindow = PlanetwarsListWindow
 end
-
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------

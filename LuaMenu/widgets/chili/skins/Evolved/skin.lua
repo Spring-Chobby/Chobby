@@ -312,6 +312,32 @@ skin.scrollpanel = {
   DrawControlPostChildren = DrawScrollPanelBorder,
 }
 
+skin.scrollpanel_borderless = {
+  BorderTileImage = ":cl:empty.png",
+  bordertiles = {2, 2, 2, 2},
+
+  BackgroundTileImage = ":cl:empty.png",
+  bkgndtiles = {14,14,14,14},
+
+  TileImage = ":cl:tech_scrollbar.png",
+  tiles     = {7,7,7,7},
+  KnobTileImage = ":cl:tech_scrollbar_knob.png",
+  KnobTiles     = {6,8,6,8},
+
+  HTileImage = ":cl:tech_scrollbar.png",
+  htiles     = {7,7,7,7},
+  HKnobTileImage = ":cl:tech_scrollbar_knob.png",
+  HKnobTiles     = {6,8,6,8},
+
+  KnobColorSelected = {1,0.7,0.1,0.8},
+
+  padding = {5, 5, 5, 0},
+
+  scrollbarSize = 14,
+  DrawControl = DrawScrollPanel,
+  DrawControlPostChildren = function () end,
+}
+
 skin.trackbar = {
   TileImage = ":cn:trackbar.png",
   tiles     = {10, 14, 10, 14}, --// tile widths: left,top,right,bottom
@@ -326,7 +352,7 @@ skin.trackbar = {
 
 skin.treeview = {
   --ImageNode         = ":cl:node.png",
-  ImageNodeSelected = ":cl:node_selected.png",
+  ImageNodeSelected = ":cl:empty.png",
   tiles = {9, 9, 9, 9},
 
   ImageExpanded  = ":cl:treeview_node_expanded.png",
