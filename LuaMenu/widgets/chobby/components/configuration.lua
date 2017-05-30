@@ -205,6 +205,8 @@ function Configuration:SetConfigData(data)
 	for key, value in pairs(newSpringsettings) do
 		self.game_settings[key] = value
 	end
+	
+	self.forcedCompatibilityProfile = VFS.Include(LUA_DIRNAME .. "configs/springsettings/forcedCompatibilityProfile.lua")
 end
 
 function Configuration:GetConfigData()
