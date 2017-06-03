@@ -28,7 +28,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local titleHeight = 125
 	local titleHeightSmall = 82
 	local titleWidth = 360
-	
+
 	-- Large title is 180x125
 	-- Small title is 140x82
 
@@ -43,7 +43,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local statusButtonWidth = 290
 	local statusButtonWidthSmall = 290
-	
+
 	local topBarHeight = 42
 
 	-- Switch to single panel mode when below the minimum screen width
@@ -54,7 +54,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local doublePanelMode = true
 	local autodetectDoublePanel = true
 	local wideContentPlace = false
-	
+
 	local buttonSpacingLarge = 4 -- Matches tab panel handler and submenu handler
 	local BUTTON_SIDE_SPACING = 1 -- Matches tab panel handler and submenu handler
 	local buttonSpacingSmall = 2
@@ -81,7 +81,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		preserveChildrenOrder = true
 	}
 	ingameInterfaceHolder:Hide()
-	
+
 	local lobbyInterfaceHolder = Control:New {
 		x = 0,
 		y = 0,
@@ -95,10 +95,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		children = {},
 		preserveChildrenOrder = true
 	}
-	
+
 	-- Direct children of lobbyInterfaceHolder are called holder_<name>
 	-- and are each within their own subsection
-	
+
 	-----------------------------------
 	-- Ingame top bar holder
 	-----------------------------------
@@ -115,7 +115,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		children = {}
 	}
 	holder_topBar:Hide()
-	
+
 	-----------------------------------
 	-- Heading holder
 	-----------------------------------
@@ -176,7 +176,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-	
+
 	local status_userWindow = Control:New {
 		y = 0,
 		right = 0,
@@ -214,11 +214,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-	
+
 	-----------------------------------
 	-- Right panel holder
 	-----------------------------------
-	
+
 	local holder_rightPanel = Control:New {
 		x = (100 - panelWidthRel) .. "%",
 		y = titleHeight,
@@ -247,7 +247,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		children = {}
 	}
 	rightPanel_window:Hide()
-	
+
 	-----------------------------------
 	-- Main Window
 	-----------------------------------
@@ -287,7 +287,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-	
+
 	local buttonsHolder_image = Image:New {
 		x = 0,
 		y = 0,
@@ -327,13 +327,13 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		children = {}
 	}
 	mainContent_window:Hide()
-	
+
 	-- Exit button
 	local function ExitSpring()
 		Spring.Echo("Quitting...")
 		Spring.Quit()
 	end
-	
+
 	local buttons_exit = Button:New {
 		x = BUTTON_SIDE_SPACING,
 		bottom = 0,
@@ -348,13 +348,13 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			end
 		},
 	}
-	
+
 	-----------------------------------
 	-- Submenu window
 	-----------------------------------
 	-- Note that the position of these controls is maintained by pure evil.
 	-- If anything in the UI changes this will need updating to take it into account.
-	
+
 	local holder_submenuWindow = Control:New {
 		x = mainButtonsWidth,
 		y = titleHeight,
@@ -368,7 +368,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-	
+
 	local submenuWindow_mainContent = Control:New {
 		x = 0,
 		y = 0,
@@ -382,7 +382,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-	
+
 	-----------------------------------
 	-- Top image
 	-----------------------------------
@@ -403,7 +403,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local backgroundHolder = Background(nil, nil, nil, "menuBackgroundBrightness")
 	local ingameBackgroundHolder = Background(IMAGE_TOP_BACKGROUND, {0, 0, 0, 0.5}, nil, "gameOverlayOpacity")
 	ingameBackgroundHolder:Disable()
-	
+
 	-------------------------------------------------------------------
 	-- In-Window Handlers
 	-------------------------------------------------------------------
@@ -442,7 +442,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				{name = "matchmaking", control = queueListWindow},
 				{name = "battle_list", control = battleListWindow.window},
 				{name = "planetwars", control = planetwarsListWindow},
-				
+
 			},
 			cleanupFunction = Configuration.leaveMultiplayerOnMainMenu and CleanMultiplayerState or nil
 		},
@@ -455,7 +455,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local battleStatusTabControls = {
 		myBattle = WG.BattleStatusPanel.GetControl,
 	}
-	
+
 	local battleTabHolder = Control:New {
 		name = "battleTabHolder",
 		caption = "", -- Battle and MM Status Window
@@ -463,25 +463,25 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		draggable = false,
 		padding = {0, 0, 0, 0},
 	}
-	
+
 	local function UpdateTitle(newTitle)
 		heading_image.file = Configuration:GetHeadingImage(doublePanelMode, newTitle)
 		heading_image:Invalidate()
 	end
-	
+
 	local battleStatusPanelHandler = GetTabPanelHandler(
-		"myBattlePanel", battleTabHolder, mainContent_window, nil, {}, nil, nil, nil, nil, 
+		"myBattlePanel", battleTabHolder, mainContent_window, nil, {}, nil, nil, nil, nil,
 		statusButtonWidth, battleStatusTabControls, nil, nil, "lobby:battle"
 	)
-	
-	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons_buttons, rightPanel_window, 
+
+	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons_buttons, rightPanel_window,
 		nil, rightPanelTabs, nil, nil, nil, nil, nil, nil, nil, nil, "lobby:panel"
 	)
-	
+
 	mainWindowHandler = GetSubmenuHandler(buttonsHolder_buttons, mainContent_window, submenuWindow_mainContent, submenus, UpdateTitle)
-	
+
 	local statusAndInvitesPanel = GetControlPanelHandler(holder_statusAndInvites)
-	
+
 	-------------------------------------------------------------------
 	-- Resizing functions
 	-------------------------------------------------------------------
@@ -530,9 +530,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			return
 		end
 		doublePanelMode = newDoublePanel
-		
+
 		local topOffset = (showTopBar and topBarHeight) or 0
-		
+
 		if doublePanelMode then
 			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidth)
 			RescaleMainWindow(3, 70, 50, buttonSpacingLarge)
@@ -546,7 +546,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			--mainContent_window.color = VISIBLE_COLOR
 
 			mainWindow_buttonsHolder:SetPos(nil, nil, mainButtonsWidth)
-			
+
 			-- Submenu window position
 			holder_submenuWindow:SetPos(mainButtonsWidth, titleHeight + topOffset)
 			holder_submenuWindow._relativeBounds.right = 0
@@ -575,7 +575,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			end
 			holder_mainWindow._relativeBounds.bottom = 0
 			holder_mainWindow:UpdateClientArea()
-			
+
 			buttonsHolder_image:SetPos(nil, 0)
 			buttonsHolder_image._relativeBounds.bottom = 0
 			buttonsHolder_image:UpdateClientArea()
@@ -610,7 +610,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			holder_submenuWindow._relativeBounds.right = 0
 			holder_submenuWindow._relativeBounds.bottom = 0
 			holder_submenuWindow:UpdateClientArea()
-			
+
 			-- Move Panel Buttons
 			status_panelButtons:RemoveChild(panelButtons_buttons)
 			buttonsHolder_buttons:AddChild(panelButtons_buttons)
@@ -632,7 +632,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			buttonsHolder_image:SetPos(nil, chatTabHolderHeight)
 			buttonsHolder_image._relativeBounds.bottom = 0
 			buttonsHolder_image:UpdateClientArea()
-			
+
 			-- Align game title and status.
 			holder_heading:SetPos(0, topOffset, mainButtonsWidthSmall + padding, titleHeightSmall)
 			holder_status:SetPos(mainButtonsWidthSmall, topOffset, titleHeightSmall, titleHeightSmall)
@@ -641,7 +641,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 			status_userWindow._relativeBounds.bottom = 0
 			status_userWindow:UpdateClientArea()
-			
+
 			holder_topImage:SetPos(nil, topOffset, nil, titleHeightSmall + imageFudge + chatTabHolderHeight)
 		end
 
@@ -672,7 +672,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			bottomPad = 40
 			middlePad = 20
 		end
-		
+
 		mainContent_window:SetPos(leftPad)
 		mainContent_window._relativeBounds.right = middlePad
 		mainContent_window._relativeBounds.bottom = bottomPad
@@ -682,7 +682,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		rightPanel_window._relativeBounds.right = rightPad
 		rightPanel_window._relativeBounds.bottom = bottomPad
 		rightPanel_window:UpdateClientArea()
-		
+
 		submenuWindow_mainContent:SetPos(leftPad + leftButtonPad)
 		submenuWindow_mainContent._relativeBounds.right = rightPad
 		submenuWindow_mainContent._relativeBounds.bottom = bottomPad
@@ -705,7 +705,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		mainWindow_mainContent._relativeBounds.right = 0
 		mainWindow_mainContent:UpdateClientArea()
 	end
-	
+
 	local function SetWideContentPlace(newWideContentPlace)
 		if doublePanelMode then
 			if newWideContentPlace then
@@ -717,8 +717,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			holder_mainWindow:UpdateClientArea()
 		end
 	end
-	
-	
+
+
 	-------------------------------------------------------------------
 	-- Visibility and size handlers
 	-------------------------------------------------------------------
@@ -729,10 +729,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		end
 		WG.SetGameInputBlock(newVisible)
 		screen0:FocusControl()
-		
+
 		backgroundHolder:SetEnabled(newVisible and not showTopBar)
 		ingameBackgroundHolder:SetEnabled(newVisible and showTopBar)
-		
+
 		if newVisible then
 			lobbyInterfaceHolder:Show()
 			ingameInterfaceHolder:Hide()
@@ -742,34 +742,34 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			ingameInterfaceHolder:Show()
 			ingameInterfaceHolder:BringToFront()
 		end
-		
+
 		if WG.IngameInterface then
 			WG.IngameInterface.SetLobbyOverlayActive(newVisible)
 		end
 	end
-		
+
 	local function SetTopBarVisible(newVisible)
 		if newVisible == showTopBar then
 			return
 		end
 		holder_topBar:SetVisibility(newVisible)
 		showTopBar = newVisible
-		
+
 		local topOffset = (showTopBar and topBarHeight) or 0
 		local titleOffset = (doublePanelMode and titleHeight) or titleHeightSmall
-		
+
 		holder_rightPanel:SetPos(nil, titleOffset + topOffset)
 		holder_rightPanel._relativeBounds.bottom = 0
 		holder_rightPanel:UpdateClientArea()
-			
+
 		holder_mainWindow:SetPos(nil, titleOffset + topOffset)
 		holder_mainWindow._relativeBounds.bottom = 0
 		holder_mainWindow:UpdateClientArea()
-		
+
 		holder_topImage:SetPos(nil, topOffset)
 		holder_heading:SetPos(nil, topOffset)
 		holder_status:SetPos(nil, topOffset)
-		
+
 		if showTopBar then
 			buttonsHolder_image.color[4] = 0.3
 			buttonsHolder_image:Invalidate()
@@ -783,23 +783,23 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			holder_topImage.color[4] = 0.25
 			holder_topImage:Invalidate()
 		end
-		
+
 		local screenWidth, screenHeight = Spring.GetViewGeometry()
 		screen0:Resize(screenWidth, screenHeight)
 	end
-	
+
 	local function UpdateStatusAndInvitesHolderPosition()
 		local screenWidth, screenHeight = Spring.GetViewGeometry()
-		
+
 		local xPos, yPos, width, height
 		local controlCount = statusAndInvitesPanel.GetControlCount()
-		
+
 		if controlCount < 2 then
 			width = statusButtonWidthSmall
 		else
 			width = statusButtonWidthSmall*2 + 6
 		end
-		
+
 		if doublePanelMode then
 			height = titleHeightSmall
 			yPos = 4
@@ -812,16 +812,16 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			yPos = 2
 			xPos = 5
 		end
-	
+
 		holder_statusAndInvites:SetPos(xPos, yPos, width, height)
 	end
-	
+
 	statusAndInvitesPanel.SetUpdateFunction(UpdateStatusAndInvitesHolderPosition)
-	
+
 	-------------------------------------------------------------------
 	-- Top bar initialisation
 	-------------------------------------------------------------------
-	
+
 	local switchToMenuButton = Button:New {
 		y = 2,
 		right = 3,
@@ -834,7 +834,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
-		
+
 		OnClick = {
 			function ()
 				SetMainInterfaceVisible(true)
@@ -853,18 +853,18 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
-		
+
 		OnClick = {
 			function ()
 				SetMainInterfaceVisible(false)
 			end
 		}
 	}
-	
+
 	local function LeaveGameFunction()
 		Spring.Reload("")
 	end
-	
+
 	local leaveGameButton = Button:New {
 		y = 2,
 		right = 114,
@@ -877,14 +877,14 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
-		
+
 		OnClick = {
 			function ()
 				ConfirmationPopup(LeaveGameFunction, "Are you sure you want to leave the game?", nil, 315, 200)
 			end
 		}
 	}
-	
+
 	local topBarImage = Image:New {
 		x = 0,
 		y = 0,
@@ -895,43 +895,43 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		keepAspect = false,
 		color = {0.218, 0.23, 0.49, 0.9},
 	}
-	
+
 	-------------------------------------------------------------------
 	-- External Functions
 	-------------------------------------------------------------------
-	
+
 	function externalFunctions.UpdateStatusAndInvitesHolderPosition()
 		UpdateStatusAndInvitesHolderPosition()
 	end
-	
+
 	function externalFunctions.ViewResize(screenWidth, screenHeight)
 		if autodetectDoublePanel then
 			local newDoublePanel = minScreenWidth <= screenWidth
 			UpdateDoublePanel(newDoublePanel)
 		end
 		UpdatePadding(screenWidth, screenHeight)
-		
+
 		UpdateStatusAndInvitesHolderPosition()
 	end
-	
+
 	function externalFunctions.SetBattleTabHolderVisible(newVisible, rank)
 		local oldVisible = ((statusAndInvitesPanel.GetChildByName(battleTabHolder.name) and true) or false)
 		if oldVisible == newVisible then
 			return
 		end
-		
+
 		if newVisible then
 			statusAndInvitesPanel.AddControl(battleTabHolder, rank or 0)
 		else
 			statusAndInvitesPanel.RemoveControl(battleTabHolder.name)
 		end
 	end
-	
+
 	function externalFunctions.OpenMultiplayerTabByName(name)
 		mainWindowHandler.SetBackAtMainMenu()
 		mainWindowHandler.OpenSubmenu(MULTIPLAYER_INDEX, name)
 	end
-	
+
 	function externalFunctions.SetPanelDisplayMode(newAutodetectDoublePanel, newDoublePanel)
 		autodetectDoublePanel = newAutodetectDoublePanel
 		local screenWidth, screenHeight = Spring.GetViewGeometry()
@@ -941,32 +941,33 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			UpdateDoublePanel(newDoublePanel)
 		end
 		UpdatePadding(screenWidth, screenHeight)
+		UpdateStatusAndInvitesHolderPosition()
 		-- Make all children request realign.
 		screen0:Resize(screenWidth, screenHeight)
 	end
-	
+
 	function externalFunctions.SetWideContentPlace(newWideContentPlace)
 		if wideContentPlace == newWideContentPlace then
 			return
 		end
 		SetWideContentPlace(newWideContentPlace)
 	end
-	
+
 	function externalFunctions.SetIngame(newIngame)
 		gameRunning = not newIngame
 		SetMainInterfaceVisible(not newIngame)
 		SetTopBarVisible(newIngame)
 		UpdateStatusAndInvitesHolderPosition()
 	end
-	
+
 	function externalFunctions.SetMainInterfaceVisible(newVisible)
 		SetMainInterfaceVisible(newVisible)
 	end
-	
+
 	function externalFunctions.GetChatWindow()
 		return chatWindows
 	end
-	
+
 	function externalFunctions.OpenPrivateChat(userName)
 		chatWindows:GetPrivateChatConsole(userName, true)
 		rightPanelHandler.OpenTabByName("chat")
@@ -991,11 +992,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	function externalFunctions.GetBattleStatusWindowHandler()
 		return battleStatusPanelHandler
 	end
-	
+
 	function externalFunctions.GetStatusAndInvitesPanel()
 		return statusAndInvitesPanel
 	end
-	
+
 	function externalFunctions.GetDoublePanelMode()
 		return doublePanelMode
 	end
@@ -1032,15 +1033,15 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	function externalFunctions.GetIngameInterfaceHolder()
 		return ingameInterfaceHolder
 	end
-	
+
 	function externalFunctions.GetLobbyInterfaceHolder()
 		return lobbyInterfaceHolder
 	end
-	
+
 	function externalFunctions.GetBackgroundHolder()
 		return backgroundHolder
 	end
-	
+
 	function externalFunctions.SetLobbyButtonEnabled(newEnabled)
 		Spring.Echo("SetLobbyButtonEnabled", newEnabled)
 		if ingameInterfaceHolder:GetChildByName("switchToMenuButton") then
@@ -1049,7 +1050,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			Spring.Echo("Missing switchToMenuButton")
 		end
 	end
-	
+
 	function externalFunctions.TryToJoinBattle(battleID)
 		local battle = battleID and lobby:GetBattle(battleID)
 		if battle then

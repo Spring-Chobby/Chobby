@@ -205,6 +205,8 @@ function Configuration:SetConfigData(data)
 	for key, value in pairs(newSpringsettings) do
 		self.game_settings[key] = value
 	end
+	
+	self.forcedCompatibilityProfile = VFS.Include(LUA_DIRNAME .. "configs/springsettings/forcedCompatibilityProfile.lua")
 end
 
 function Configuration:GetConfigData()
@@ -441,7 +443,8 @@ function Configuration:GetIsRunning64Bit()
 		return self.isRunning64Bit
 	end
 	if Platform then
-		return Platform.osWordSize == 64
+		-- osWordSize is not the same as spring bit version.
+		--return Platform.osWordSize == 64
 	end
 	local infologFile, err = io.open("infolog.txt", "r")
 	if not infologFile then

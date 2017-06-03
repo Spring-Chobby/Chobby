@@ -42,6 +42,7 @@ local function GetPlanet(planetUtilities)
 					"factoryamph",
 					"amphcon",
 					"amphimpulse",
+					"amphtele",
 					"amphaa",
 				},
 				startUnits = {
@@ -87,8 +88,8 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = 100,
 			units = {
-				"amphcon",
 				"amphimpulse",
+				"amphtele",
 				"amphaa",
 			},
 			modules = {

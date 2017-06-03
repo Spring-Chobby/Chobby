@@ -42,6 +42,7 @@ local function GetPlanet(planetUtilities)
 					"factoryshield",
 					"shieldcon",
 					"shieldbomb",
+					"shieldaa",
 					"cloakjammer",
 					"staticjammer",
 				},
@@ -89,6 +90,7 @@ local function GetPlanet(planetUtilities)
 			experience = 100,
 			units = {
 				"shieldbomb",
+				"shieldaa",
 				"cloakjammer",
 				"staticjammer",
 			},

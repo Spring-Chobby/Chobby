@@ -7,7 +7,7 @@ local function GetPlanet(planetUtilities)
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
 	local planetData = {
-		name = "Blank",
+		name = "Phisnet-3617",
 		startingPlanet = false,
 		mapDisplay = {
 			x = 0.215,
@@ -19,10 +19,10 @@ local function GetPlanet(planetUtilities)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Terran",
-			radius = "6550 km",
-			primary = "Blank",
-			primaryType = "G8V",
+			terrainType = "Asteroid",
+			radius = "220 km",
+			primary = "None",
+			primaryType = "N/A",
 			milRating = 1,
 			text = [[The terrain is rough on this lonely asteroid and Cloaky bots would be unable to use their manuverability to full effect. Instead, you will deploy Shield bots to push through the enemy defences and destroy their base.]]
 		},

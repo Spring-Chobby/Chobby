@@ -31,7 +31,7 @@ local COMBO_WIDTH = 235
 local CHECK_WIDTH = 230
 local TEXT_OFFSET = 6
 
-local AtiIntelSettingsOverride = {Water = 1}
+local AtiIntelSettingsOverride = {Water = 1, AdvSky = 0}
 local fixedSettingsOverride = AtiIntelSettingsOverride
 
 --------------------------------------------------------------------------------
@@ -43,9 +43,16 @@ for _, param in pairs(Spring.GetConfigParams()) do
 	configParamTypes[param.name] = param.type
 end
 
-local function SetSpringsettingsValue(key, value)
+local function SetSpringsettingsValue(key, value, compatOverride)
 	if WG.Chobby.Configuration.doNotSetAnySpringSettings then
 		return
+	end
+	
+	if not compatOverride then
+		local compatProfile = WG.Chobby.Configuration.forcedCompatibilityProfile
+		if compatProfile and compatProfile[key] then
+			return
+		end
 	end
 	
 	value = (fixedSettingsOverride and fixedSettingsOverride[key]) or value
@@ -1320,6 +1327,14 @@ function widget:Initialize()
 
 		for key, value in pairs(gameSettings) do
 			SetSpringsettingsValue(key, value)
+		end
+		
+		local compatProfile = WG.Chobby.Configuration.forcedCompatibilityProfile
+		Spring.Utilities.TableEcho(compatProfile, "compatProfile")
+		if compatProfile then
+			for key, value in pairs(compatProfile) do
+				SetSpringsettingsValue(key, value, true)
+			end
 		end
 	end
 	WG.LibLobby.lobby:AddListener("OnBattleAboutToStart", onBattleAboutToStart)

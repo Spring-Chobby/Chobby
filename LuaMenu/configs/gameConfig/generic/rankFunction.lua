@@ -19,7 +19,7 @@ local function GetImageFunction(icon, level, skill, isBot, isModerator)
 	if isBot then
 		return IMAGE_AUTOHOST
 	elseif level then
-		return RANK_DIR .. levelFileMap[level]
+		return RANK_DIR .. (levelFileMap[level] or "21.png")
 	end
 	return IMAGE_PLAYER
 end
