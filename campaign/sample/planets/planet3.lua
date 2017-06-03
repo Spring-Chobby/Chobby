@@ -36,11 +36,8 @@ local function GetPlanet(planetUtilities)
 				useUnlocks = true,
 				facplop = true,
 				extraUnlocks = {
-					"factoryshield",
-					"shieldfelon",
-					"armdeva",
-					"armfus",
-					"corllt",
+					"cloakassault",
+					"turretmissile"
 				},
 				startUnits = {
 					{
@@ -242,7 +239,8 @@ local function GetPlanet(planetUtilities)
 		},
 		completionReward = {
 			units = {
-				"armjamt",
+				"cloakassault",
+				"turretmissile"
 			},
 			modules = {
 			},

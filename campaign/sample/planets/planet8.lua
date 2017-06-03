@@ -7,7 +7,7 @@ local function GetPlanet(planetUtilities)
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
 	local planetData = {
-		name = "Thibella Delta",
+		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
 			x = 0.05,
@@ -20,235 +20,80 @@ local function GetPlanet(planetUtilities)
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
 			terrainType = "Terran",
-			radius = "7200 km",
-			primary = "Thibella",
-			primaryType = "G3V",
-			milRating = 2,
-			text = [[Two opposing armies have reached a stalemate on this battlefield. Your job is to break the siege. You will be provided with a tank assault force - use it to spearhead your attack on the enemy nuclear silos.]]
+			radius = "6550 km",
+			primary = "Blank",
+			primaryType = "G8V",
+			milRating = 1,
+			text = [[Your opponent has taken to the air in this battle. Construct the anti-air Gremlin bot and Razor and Hacksaw defensive emplacements to bring them back to the ground. Remember the Defender is also effective as an anti-air defence.]]
 		},
 		gameConfig = {
 			missionStartscript = false,
-			mapName = "DeltaSiegeDry",
+			mapName = "LowTideV3",
 			playerConfig = {
-				startX = 400,
-				startZ = 400,
+				startX = 100,
+				startZ = 100,
 				allyTeam = 0,
-				useUnlocks = true,
-				facplop = true,
+				facplop = false,
+				commanderParameters = {
+					facplop = false,
+					defeatIfDestroyedObjectiveID = 2,
+				},
 				extraUnlocks = {
-					"factoryshield",
-					"shieldfelon",
-					"armdeva",
-					"armfus",
-					"corllt",
+					"cloakaa",
+					"turretaalaser",
+					"turretaaclose",
 				},
 				startUnits = {
-					{
-						name = "corllt",
-						x = 1000,
-						z = 300,
-						facing = 2,
-					},
-					{
-						name = "armfus",
-						x = 1000,
-						z = 500,
-						facing = 1,
-					},
-					{
-						name = "armfus",
-						x = 1200,
-						z = 500,
-						facing = 0,
-					},
-					{
-						name = "armnanotc",
-						x = 1000,
-						z = 400,
-						facing = 2,
-					},
-					{
-						name = "armwar",
-						x = 850,
-						z = 850,
-						facing = 0,
-					},
-					{
-						name = "armwar",
-						x = 900,
-						z = 850,
-						facing = 0,
-					},
-					{
-						name = "armwar",
-						x = 850,
-						z = 900,
-						facing = 0,
-					},
-					{
-						name = "armwar",
-						x = 900,
-						z = 900,
-						facing = 0,
-					},
-					{
-						name = "corsktl",
-						x = 4210,
-						z = 4670,
-						facing = 0,
-					},
-					{
-						name = "corsktl",
-						x = 300,
-						z = 300,
-						facing = 0,
-					},
 				}
 			},
 			aiConfig = {
 				{
-					startX = 200,
-					startZ = 200,
+					startX = 4000,
+					startZ = 75,
 					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Ally",
+					humanName = "Enemy",
 					bitDependant = true,
-					facplop = false,
-					allyTeam = 0,
-					unlocks = {
-						"factorycloak",
-						"corllt",
-						"cormex",
-						"armsolar",
-						"armpw",
-						"armrock",
-						"armwar",
-						"armham",
+					commanderParameters = {
+						facplop = false,
 					},
-					commanderLevel = 5,
-					commander = {
-						name = "Verminyan",
-						chassis = "engineer",
-						decorations = {},
-						modules = {
-						  {
-							"commweapon_shotgun",
-							"module_radarnet"
-						  },
-						  {
-							"module_adv_nano",
-							"commweapon_personal_shield"
-						  },
-						  {
-							"",
-							"",
-							"commweapon_shotgun"
-						  },
-						  {
-							"",
-							"",
-							""
-						  },
-						  {
-							"",
-							"",
-							""
-						  }
-						}
-					}
-				},
-				{
-					startX = 1250,
-					startZ = 250,
-					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Another Ally",
-					bitDependant = true,
-					facplop = false,
-					allyTeam = 0,
-					unlocks = {
-						"factorycloak",
-						"corllt",
-						"cormex",
-						"armsolar",
-						"armpw",
-						"dante",
-					},
-					startUnits = {
-						{
-							name = "striderhub",
-							x = 1000,
-							z = 1300,
-							facing = 2,
-						},
-						{
-							name = "dante",
-							x = 800,
-							z = 1300,
-							facing = 2,
-							buildProgress = 0.4,
-						},
-					}
-				},
-				{
-					startX = 3200,
-					startZ = 3200,
-					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Mortal Enemy",
-					bitDependant = true,
-					facplop = true,
 					allyTeam = 1,
 					unlocks = {
-						"factorycloak",
-						"corllt",
-						"cormex",
-						"armsolar",
-						"armwar",
+						"cloakraid",
 					},
 					commanderLevel = 2,
 					commander = {
-						name = "You dig.",
+						name = "Most Loyal Opposition",
 						chassis = "engineer",
 						decorations = {
 						  "skin_support_dark",
 						  icon_overhead = { image = "UW" }
 						},
-						modules = {
-						  {
-							"commweapon_beamlaser",
-							"module_radarnet"
-						  },
-						  {
-							"module_resurrect",
-							"module_adv_nano"
-						  },
-						  {
-							"module_adv_nano",
-							"module_adv_nano",
-							"commweapon_multistunner"
-						  },
-						  {
-							"module_adv_nano",
-							"module_adv_nano",
-							"module_adv_nano"
-						  },
-						  {
-							"module_adv_nano",
-							"module_adv_nano",
-							"module_cloak_field"
-						  }
-						}
+						modules = { }
 					},
+					startUnits = {
+					}
 				},
 			},
+			defeatConditionConfig = {
+
+			},
+			objectiveConfig = {
+				-- This is just related to displaying objectives on the UI.
+			},
+			bonusObjectiveConfig = {
+			}
 		},
 		completionReward = {
+			experience = 100,
 			units = {
-				"cafus",
+				"cloakaa",
+				"turretaalaser",
+				"turretaaclose",
 			},
 			modules = {
 			},
-			codexEntries = {
-				"character_ada",
-			},
+			abilities = {
+			}
 		},
 	}
 	

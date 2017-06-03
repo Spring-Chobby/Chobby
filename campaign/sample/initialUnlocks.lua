@@ -1,9 +1,8 @@
 return {
 	units = {
-		"cormex",
-		"armsolar",
-		"armpw",
-		"factorycloak",
+		"staticmex",
+		"staticradar",
+		"energysolar",
 	},
 	modules = {
 	},

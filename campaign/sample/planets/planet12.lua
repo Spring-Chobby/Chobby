@@ -7,7 +7,7 @@ local function GetPlanet(planetUtilities)
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
 	local planetData = {
-		name = "19721-Phisnet",
+		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
 			x = 0.215,
@@ -19,236 +19,87 @@ local function GetPlanet(planetUtilities)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Asteroid",
-			radius = "4.1 km",
-			primary = "None",
-			primaryType = "N/A",
+			terrainType = "Terran",
+			radius = "6550 km",
+			primary = "Blank",
+			primaryType = "G8V",
 			milRating = 1,
-			text = [[Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-			Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-			Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-			Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.]]
+			text = [[The terrain is rough on this lonely asteroid and Cloaky bots would be unable to use their manuverability to full effect. Instead, you will deploy Shield bots to push through the enemy defences and destroy their base.]]
 		},
 		gameConfig = {
 			missionStartscript = false,
 			mapName = "Apophis v2_2",
 			playerConfig = {
-				startX = 400,
-				startZ = 400,
+				startX = 100,
+				startZ = 100,
 				allyTeam = 0,
-				useUnlocks = true,
-				facplop = true,
+				facplop = false,
+				commanderParameters = {
+					facplop = false,
+					defeatIfDestroyedObjectiveID = 2,
+				},
 				extraUnlocks = {
 					"factoryshield",
-					"shieldfelon",
-					"armdeva",
-					"armfus",
-					"corllt",
+					"shieldcon",
+					"shieldraid",
+					"shieldskirm",
+					"shieldassault",
+					"shieldriot",
 				},
 				startUnits = {
-					{
-						name = "corllt",
-						x = 1000,
-						z = 300,
-						facing = 2,
-					},
-					{
-						name = "armfus",
-						x = 1000,
-						z = 500,
-						facing = 1,
-					},
-					{
-						name = "armfus",
-						x = 1200,
-						z = 500,
-						facing = 0,
-					},
-					{
-						name = "armnanotc",
-						x = 1000,
-						z = 400,
-						facing = 2,
-					},
-					{
-						name = "armwar",
-						x = 850,
-						z = 850,
-						facing = 0,
-					},
-					{
-						name = "armwar",
-						x = 900,
-						z = 850,
-						facing = 0,
-					},
-					{
-						name = "armwar",
-						x = 850,
-						z = 900,
-						facing = 0,
-					},
-					{
-						name = "armwar",
-						x = 900,
-						z = 900,
-						facing = 0,
-					},
-					{
-						name = "corsktl",
-						x = 4210,
-						z = 4670,
-						facing = 0,
-					},
-					{
-						name = "corsktl",
-						x = 300,
-						z = 300,
-						facing = 0,
-					},
 				}
 			},
 			aiConfig = {
 				{
-					startX = 200,
-					startZ = 200,
+					startX = 4000,
+					startZ = 75,
 					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Ally",
+					humanName = "Enemy",
 					bitDependant = true,
-					facplop = false,
-					allyTeam = 0,
-					unlocks = {
-						"factorycloak",
-						"corllt",
-						"cormex",
-						"armsolar",
-						"armpw",
-						"armrock",
-						"armwar",
-						"armham",
+					commanderParameters = {
+						facplop = false,
 					},
-					commanderLevel = 5,
-					commander = {
-						name = "Verminyan",
-						chassis = "engineer",
-						decorations = {},
-						modules = {
-						  {
-							"commweapon_shotgun",
-							"module_radarnet"
-						  },
-						  {
-							"module_adv_nano",
-							"commweapon_personal_shield"
-						  },
-						  {
-							"",
-							"",
-							"commweapon_shotgun"
-						  },
-						  {
-							"",
-							"",
-							""
-						  },
-						  {
-							"",
-							"",
-							""
-						  }
-						}
-					}
-				},
-				{
-					startX = 1250,
-					startZ = 250,
-					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Another Ally",
-					bitDependant = true,
-					facplop = false,
-					allyTeam = 0,
-					unlocks = {
-						"factorycloak",
-						"corllt",
-						"cormex",
-						"armsolar",
-						"armpw",
-						"dante",
-					},
-					startUnits = {
-						{
-							name = "striderhub",
-							x = 1000,
-							z = 1300,
-							facing = 2,
-						},
-						{
-							name = "dante",
-							x = 800,
-							z = 1300,
-							facing = 2,
-							buildProgress = 0.4,
-						},
-					}
-				},
-				{
-					startX = 3200,
-					startZ = 3200,
-					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Mortal Enemy",
-					bitDependant = true,
-					facplop = true,
 					allyTeam = 1,
 					unlocks = {
-						"factorycloak",
-						"corllt",
-						"cormex",
-						"armsolar",
-						"armwar",
+						"cloakraid",
 					},
 					commanderLevel = 2,
 					commander = {
-						name = "You dig.",
+						name = "Most Loyal Opposition",
 						chassis = "engineer",
 						decorations = {
 						  "skin_support_dark",
 						  icon_overhead = { image = "UW" }
 						},
-						modules = {
-						  {
-							"commweapon_beamlaser",
-							"module_radarnet"
-						  },
-						  {
-							"module_resurrect",
-							"module_adv_nano"
-						  },
-						  {
-							"module_adv_nano",
-							"module_adv_nano",
-							"commweapon_multistunner"
-						  },
-						  {
-							"module_adv_nano",
-							"module_adv_nano",
-							"module_adv_nano"
-						  },
-						  {
-							"module_adv_nano",
-							"module_adv_nano",
-							"module_cloak_field"
-						  }
-						}
+						modules = { }
 					},
+					startUnits = {
+					}
 				},
 			},
+			defeatConditionConfig = {
+
+			},
+			objectiveConfig = {
+				-- This is just related to displaying objectives on the UI.
+			},
+			bonusObjectiveConfig = {
+			}
 		},
 		completionReward = {
+			experience = 100,
 			units = {
-				"cafus",
+				"factoryshield",
+				"shieldcon",
+				"shieldraid",
+				"shieldskirm",
+				"shieldassault",
+				"shieldriot",
 			},
 			modules = {
 			},
+			abilities = {
+			}
 		},
 	}
 	
