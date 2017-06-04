@@ -167,6 +167,14 @@ function Configuration:init()
 		[5] = {size = 48, shadow = false},
 	}
 
+	self.configParamTypes = {}
+	for _, param in pairs(Spring.GetConfigParams()) do
+		self.configParamTypes[param.name] = param.type
+	end
+	
+	self.AtiIntelSettingsOverride = nil
+	self.fixedSettingsOverride = AtiIntelSettingsOverride
+
 	self.countryShortnames = VFS.Include(LUA_DIRNAME .. "configs/countryShortname.lua")
 
 	self.game_settings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings.lua")
@@ -174,6 +182,115 @@ function Configuration:init()
 	self.settingsMenuValues = self.gameConfig.settingsDefault
 
 	self.animate_lobby = gl.CreateShader ~= nil
+	
+	self:UpdateFixedSettings()
+end
+
+---------------------------------------------------------------------------------
+-- Settings
+---------------------------------------------------------------------------------
+
+function Configuration:SetSpringsettingsValue(key, value, compatOverride)
+	if self.doNotSetAnySpringSettings then
+		return
+	end
+	
+	if not compatOverride then
+		local compatProfile = self.forcedCompatibilityProfile
+		if compatProfile and compatProfile[key] then
+			return
+		end
+	end
+	
+	value = (self.fixedSettingsOverride and self.fixedSettingsOverride[key]) or value
+	
+	local configType = self.configParamTypes[key]
+	if configType == "int" then
+		Spring.Echo("SetSettings Int", key, value)
+		Spring.SetConfigInt(key, value)
+	elseif configType == "bool" or configType == "float" then
+		Spring.Echo("SetSettings Value", key, value)
+		Spring.SetConfigString(key, value)
+	elseif configType == nil then
+		Spring.Log("Settings", LOG.WARNING, "No such key: " .. tostring(key) .. ", but setting it as string anyway.")
+		Spring.SetConfigString(key, value)
+	else
+		Spring.Log("Settings", LOG.WARNING, "Unexpected key type: " .. configType .. ", but setting it as string anyway.")
+		Spring.SetConfigString(key, value)
+	end
+end
+
+function Configuration:UpdateFixedSettings(newOverride)
+	local gameSettings = self.game_settings
+	
+	-- Reset old
+	local oldOverride = self.fixedSettingsOverride
+	self.fixedSettingsOverride = nil
+	if oldOverride then
+		for key, value in pairs(oldOverride) do
+			if gameSettings[key] then
+				self:SetSpringsettingsValue(key, gameSettings[key])
+			end
+		end
+	end
+	
+	-- Apply new
+	self.fixedSettingsOverride = newOverride
+	if newOverride then
+		for key, value in pairs(newOverride) do
+			self:SetSpringsettingsValue(key, value)
+		end
+	end
+end
+
+function Configuration:SetSettingsConfigOption(name, newValue)
+	local setting = self.gameConfig.settingsNames[name]
+	if not setting then
+		return false
+	end
+	
+	self.settingsMenuValues[name] = newValue
+
+	if setting.isNumberSetting then
+		local applyFunction = setting.applyFunction
+		if applyFunction then
+			local applyData = applyFunction(newValue)
+			if applyData then
+				for applyName, value in pairs(applyData) do
+					self.game_settings[applyName] = value
+					self:SetSpringsettingsValue(applyName, value)
+				end
+			end
+		else
+			local springValue = setting.springConversion(newValue)
+			self.game_settings[setting.applyName] = springValue
+			self:SetSpringsettingsValue(setting.applyName, springValue)
+		end
+	else
+		-- Selection from multiple options
+		local selectedOption = setting.optionNames[newValue]
+		if setting.fileTarget then
+			local sourceFile = VFS.LoadFile(selectedOption.file)
+			local settingsFile = io.open(setting.fileTarget, "w")
+			settingsFile:write(sourceFile)
+			settingsFile:close()
+		else
+			local applyData = selectedOption.apply or (selectedOption.applyFunction and selectedOption.applyFunction())
+			if not applyData then
+				return
+			end
+			for applyName, value in pairs(applyData) do
+				self.game_settings[applyName] = value
+				self:SetSpringsettingsValue(applyName, value)
+			end
+		end
+	end
+end
+
+function Configuration:ApplySettingsConfigPreset(preset)
+	for name, value in pairs(preset) do
+		self:SetSettingsConfigOption(name, value)
+	end
 end
 
 ---------------------------------------------------------------------------------
@@ -207,6 +324,14 @@ function Configuration:SetConfigData(data)
 	end
 	
 	self.forcedCompatibilityProfile = VFS.Include(LUA_DIRNAME .. "configs/springsettings/forcedCompatibilityProfile.lua")
+	
+	self.defaultSettingsPreset = data.defaultSettingsPreset
+	if (not self.defaultSettingsPreset) and self.gameConfig.SettingsPresetFunc then
+		self.defaultSettingsPreset = self.gameConfig.SettingsPresetFunc()
+		if self.defaultSettingsPreset then
+			self:ApplySettingsConfigPreset(self.defaultSettingsPreset)
+		end
+	end
 end
 
 function Configuration:GetConfigData()
@@ -228,6 +353,7 @@ function Configuration:GetConfigData()
 		lobby_fullscreen = self.lobby_fullscreen,
 		animate_lobby = self.animate_lobby,
 		game_settings = self.game_settings,
+		defaultSettingsPreset = self.defaultSettingsPreset,
 		notifyForAllChat = self.notifyForAllChat,
 		planetwarsNotifications = self.planetwarsNotifications,
 		simplifiedSkirmishSetup = self.simplifiedSkirmishSetup,
@@ -278,6 +404,13 @@ function Configuration:SetConfigValue(key, value)
 	end
 	if key == "gameConfigName" then
 		self.gameConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. value .. "/mainConfig.lua")
+	end
+	if key == "atiIntelCompat" then
+		if value then
+			self:UpdateFixedSettings(self.AtiIntelSettingsOverride)
+		else
+			self:UpdateFixedSettings()
+		end
 	end
 	self:_CallListeners("OnConfigurationChange", key, value)
 end

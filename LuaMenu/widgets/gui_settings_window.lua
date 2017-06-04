@@ -31,47 +31,9 @@ local COMBO_WIDTH = 235
 local CHECK_WIDTH = 230
 local TEXT_OFFSET = 6
 
-local AtiIntelSettingsOverride = {Water = 1, AdvSky = 0}
-local fixedSettingsOverride = AtiIntelSettingsOverride
-
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
-
-local configParamTypes = {}
-for _, param in pairs(Spring.GetConfigParams()) do
-	configParamTypes[param.name] = param.type
-end
-
-local function SetSpringsettingsValue(key, value, compatOverride)
-	if WG.Chobby.Configuration.doNotSetAnySpringSettings then
-		return
-	end
-	
-	if not compatOverride then
-		local compatProfile = WG.Chobby.Configuration.forcedCompatibilityProfile
-		if compatProfile and compatProfile[key] then
-			return
-		end
-	end
-	
-	value = (fixedSettingsOverride and fixedSettingsOverride[key]) or value
-	
-	local configType = configParamTypes[key]
-	if configType == "int" then
-		Spring.Echo("SetSettings Int", key, value)
-		Spring.SetConfigInt(key, value)
-	elseif configType == "bool" or configType == "float" then
-		Spring.Echo("SetSettings Value", key, value)
-		Spring.SetConfigString(key, value)
-	elseif configType == nil then
-		Spring.Log("Settings", LOG.WARNING, "No such key: " .. tostring(key) .. ", but setting it as string anyway.")
-		Spring.SetConfigString(key, value)
-	else
-		Spring.Log("Settings", LOG.WARNING, "Unexpected key type: " .. configType .. ", but setting it as string anyway.")
-		Spring.SetConfigString(key, value)
-	end
-end
 
 local function ToggleFullscreenOff()
 	Spring.SetConfigInt("Fullscreen", 1, false)
@@ -204,29 +166,6 @@ local function SaveLobbyDisplayMode()
 	end
 
 	SetLobbyFullscreenMode(lobbyFullscreen)
-end
-
-local function UpdateFixedSettings(newOverride)
-	local gameSettings = WG.Chobby.Configuration.game_settings
-	
-	-- Reset old
-	local oldOverride = fixedSettingsOverride
-	fixedSettingsOverride = nil
-	if oldOverride then
-		for key, value in pairs(oldOverride) do
-			if gameSettings[key] then
-				SetSpringsettingsValue(key, gameSettings[key])
-			end
-		end
-	end
-	
-	-- Apply new
-	fixedSettingsOverride = newOverride
-	if newOverride then
-		for key, value in pairs(newOverride) do
-			SetSpringsettingsValue(key, value)
-		end
-	end
 end
 
 --------------------------------------------------------------------------------
@@ -738,7 +677,7 @@ local settingsUpdateFunction = {}
 
 local function MakePresetsControl(settingPresets, offset)
 	local Configuration = WG.Chobby.Configuration
-
+	
 	local presetLabel = Label:New {
 		name = "presetLabel",
 		x = 20,
@@ -934,29 +873,10 @@ local function ProcessSettingsOption(data, offset, defaults, customSettingsSwitc
 				if freezeSettings then
 					return freezeSettings
 				end
-
-				local selectedData = data.options[num]
-				Configuration.settingsMenuValues[data.name] = selectedData.name
-
 				if customSettingsSwitch then
 					customSettingsSwitch()
 				end
-
-				if data.fileTarget then
-					local sourceFile = VFS.LoadFile(selectedData.file)
-					local settingsFile = io.open(data.fileTarget, "w")
-					settingsFile:write(sourceFile)
-					settingsFile:close()
-				else
-					local applyData = selectedData.apply or (selectedData.applyFunction and selectedData.applyFunction())
-					if not applyData then
-						return
-					end
-					for applyName, value in pairs(applyData) do
-						Configuration.game_settings[applyName] = value
-						SetSpringsettingsValue(applyName, value)
-					end
-				end
+				Configuration:SetSettingsConfigOption(data.name, data.options[num].name)
 			end
 		}
 	}
@@ -995,23 +915,9 @@ local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitc
 		end
 
 		local newValue = math.floor(0.5 + math.max(data.minValue, math.min(data.maxValue, newValue)))
-		Configuration.settingsMenuValues[data.name] = newValue
 		obj:SetText(tostring(newValue))
-
-		local applyFunction = data.applyFunction
-		if applyFunction then
-			local applyData = applyFunction(newValue)
-			if applyData then
-				for applyName, value in pairs(applyData) do
-					Configuration.game_settings[applyName] = value
-					SetSpringsettingsValue(applyName, value)
-				end
-			end
-		else
-			local springValue = data.springConversion(newValue)
-			Configuration.game_settings[data.applyName] = springValue
-			SetSpringsettingsValue(data.applyName, springValue)
-		end
+		
+		Configuration:SetSettingsConfigOption(data.name, newValue)
 	end
 
 	local freezeSettings = true
@@ -1138,25 +1044,6 @@ local function InitializeControls(window)
 	}
 end
 
-local function InitializeAtiIntelConfigListener()
-	local Configuration = WG.Chobby.Configuration
-
-	local function onConfigurationChange(listener, key, value)
-		if key == "atiIntelCompat" then
-			if value then
-				UpdateFixedSettings(AtiIntelSettingsOverride)
-			else
-				UpdateFixedSettings()
-			end
-		end
-	end
-
-	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
-	
-	-- Do update
-	onConfigurationChange(_, "atiIntelCompat", Configuration.atiIntelCompat)
-end
-
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- External Interface
@@ -1187,6 +1074,7 @@ function SettingsWindow.WriteGameSpringsettings(fileName)
 	if not settingsFile then
 		return
 	end
+	local fixedSettingsOverride = WG.Chobby.Configuration.fixedSettingsOverride
 	
 	local function WriteToFile(key, value)
 		value = (fixedSettingsOverride and fixedSettingsOverride[key]) or value
@@ -1269,7 +1157,7 @@ function widget:ActivateMenu()
 	if firstCall then
 		local gameSettings = WG.Chobby.Configuration.game_settings
 		for key, value in pairs(gameSettings) do
-			SetSpringsettingsValue(key, value)
+			WG.Chobby.Configuration:SetSpringsettingsValue(key, value)
 		end
 
 		firstCall = false
@@ -1287,8 +1175,6 @@ local function DelayedInitialize()
 	local Configuration = WG.Chobby.Configuration
 	battleStartDisplay = Configuration.game_fullscreen or 1
 	lobbyFullscreen = Configuration.lobby_fullscreen or 1
-	
-	InitializeAtiIntelConfigListener()
 end
 
 function widget:Initialize()
@@ -1301,39 +1187,40 @@ function widget:Initialize()
 		local screenX, screenY = Spring.GetScreenGeometry()
 
 		SetLobbyFullscreenMode(battleStartDisplay)
+		local Configuration = WG.Chobby.Configuration
 
 		-- Settings which rely on io
-		local gameSettings = WG.Chobby.Configuration.game_settings
+		local gameSettings = Configuration.game_settings
 
 		if battleStartDisplay == 1 then
-			SetSpringsettingsValue("XResolutionWindowed", screenX)
-			SetSpringsettingsValue("YResolutionWindowed", screenY)
-			SetSpringsettingsValue("WindowPosX", 0)
-			SetSpringsettingsValue("WindowPosY", 0)
-			SetSpringsettingsValue("WindowBorderless", 1)
+			Configuration:SetSpringsettingsValue("XResolutionWindowed", screenX)
+			Configuration:SetSpringsettingsValue("YResolutionWindowed", screenY)
+			Configuration:SetSpringsettingsValue("WindowPosX", 0)
+			Configuration:SetSpringsettingsValue("WindowPosY", 0)
+			Configuration:SetSpringsettingsValue("WindowBorderless", 1)
 		elseif battleStartDisplay == 2 then
-			SetSpringsettingsValue("WindowPosX", 0)
-			SetSpringsettingsValue("WindowPosY", 80)
-			SetSpringsettingsValue("XResolutionWindowed", screenX)
-			SetSpringsettingsValue("YResolutionWindowed", screenY - 80)
-			SetSpringsettingsValue("WindowBorderless", 0)
-			SetSpringsettingsValue("WindowBorderless", 0)
-			SetSpringsettingsValue("Fullscreen", 0)
+			Configuration:SetSpringsettingsValue("WindowPosX", 0)
+			Configuration:SetSpringsettingsValue("WindowPosY", 80)
+			Configuration:SetSpringsettingsValue("XResolutionWindowed", screenX)
+			Configuration:SetSpringsettingsValue("YResolutionWindowed", screenY - 80)
+			Configuration:SetSpringsettingsValue("WindowBorderless", 0)
+			Configuration:SetSpringsettingsValue("WindowBorderless", 0)
+			Configuration:SetSpringsettingsValue("Fullscreen", 0)
 		elseif battleStartDisplay == 3 then
-			SetSpringsettingsValue("XResolution", screenX)
-			SetSpringsettingsValue("YResolution", screenY)
-			SetSpringsettingsValue("Fullscreen", 1)
+			Configuration:SetSpringsettingsValue("XResolution", screenX)
+			Configuration:SetSpringsettingsValue("YResolution", screenY)
+			Configuration:SetSpringsettingsValue("Fullscreen", 1)
 		end
 
 		for key, value in pairs(gameSettings) do
-			SetSpringsettingsValue(key, value)
+			Configuration:SetSpringsettingsValue(key, value)
 		end
 		
-		local compatProfile = WG.Chobby.Configuration.forcedCompatibilityProfile
+		local compatProfile = Configuration.forcedCompatibilityProfile
 		Spring.Utilities.TableEcho(compatProfile, "compatProfile")
 		if compatProfile then
 			for key, value in pairs(compatProfile) do
-				SetSpringsettingsValue(key, value, true)
+				Configuration:SetSpringsettingsValue(key, value, true)
 			end
 		end
 	end

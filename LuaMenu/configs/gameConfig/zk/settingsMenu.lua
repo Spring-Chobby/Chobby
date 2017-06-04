@@ -1,6 +1,6 @@
 local invertZoomMult = -1
 
-local settings = {
+local settingsConfig = {
 	{
 		name = "Graphics",
 		presets = {
@@ -701,7 +701,7 @@ local settings = {
 	},
 }
 
-local settingsDefaults = {
+local settingsDefault = {
 	WaterType = "Bumpmapped",
 	WaterQuality = "High",
 	DeferredRendering = "On",
@@ -723,4 +723,41 @@ local settingsDefaults = {
 	CameraPanSpeed = 50,
 }
 
-return settings, settingsDefaults
+local settingsNames = {}
+for i = 1, #settingsConfig do
+	local subSettings = settingsConfig[i].settings
+	for j = 1, #subSettings do
+		local data = subSettings[j]
+		settingsNames[data.name] = data
+		if data.options then
+			data.optionNames = {}
+			for k = 1, #data.options do
+				data.optionNames[data.options[k].name] = data.options[k]
+			end
+		end
+	end
+end
+
+local function DefaultPresetFunc()
+	if Platform then
+		local gpuMemorySize = Platform.gpuMemorySize
+		Spring.Utilities.TableEcho(Platform, "Platform")
+		if gpuMemorySize then
+			if gpuMemorySize < 1024 then
+				-- Minimal
+				return settingsConfig[1].presets[1].settings
+			elseif gpuMemorySize < 2048 then
+				-- Low
+				return settingsConfig[1].presets[2].settings
+			elseif gpuMemorySize == 2048 then
+				-- Medium
+				return settingsConfig[1].presets[3].settings
+			end
+		end
+		-- High
+		return settingsConfig[1].presets[4].settings
+	end
+	return false
+end
+
+return settingsConfig, settingsNames, settingsDefault, DefaultPresetFunc

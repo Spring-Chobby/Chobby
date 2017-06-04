@@ -13,7 +13,7 @@ local gameUnitInformation = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. 
 
 local link_reportPlayer, link_userPage, link_homePage, link_replays, link_maps, link_particularMapPage = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/linkFunctions.lua")
 
-local settingsConfig, settingsDefault = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/settingsMenu.lua")
+local settingsConfig, settingsNames, settingsDefault, SettingsPresetFunc = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/settingsMenu.lua")
 
 local headingLarge    = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingLarge.png"
 local headingSmall    = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingSmall.png"
@@ -63,7 +63,9 @@ local externalFuncAndData = {
 	aiBlacklist             = aiBlacklist,
 	oldAiVersions           = oldAiVersions,
 	settingsConfig          = settingsConfig,
+	settingsNames           = settingsNames,
 	settingsDefault         = settingsDefault,
+	SettingsPresetFunc      = SettingsPresetFunc,
 	singleplayerConfig      = singleplayerConfig,
 	helpSubmenuConfig       = helpSubmenuConfig,
 	skirmishDefault         = skirmishDefault,
