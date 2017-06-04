@@ -203,6 +203,8 @@ return {
 		-- gui_rank_update_window.lua
 		rank_gained = "Rank Gained",
 		rank_lost = "Rank Lost",
+		
+		advanced_button_tooltip = [[Fully configure game settings. Activate automatic advanced mode by disabling "Simple skirmish setup" in lobby settings.]],
 	},
 	sr = {
 		connect_to_spring_server = 'Prijavljivanje na Spring lobi server',
