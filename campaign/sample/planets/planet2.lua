@@ -28,7 +28,7 @@ local function GetPlanet(planetUtilities)
 		},
 		gameConfig = {
 			missionStartscript = false,
-			mapName = "Battle for Planet XVII-v01",
+			mapName = "Battle for PlanetXVII-v01",
 			playerConfig = {
 				startX = 400,
 				startZ = 400,
