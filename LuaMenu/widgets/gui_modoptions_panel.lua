@@ -203,7 +203,6 @@ local function ProcessNumberOption(data, index)
 				oldText = string.format("%." .. places .. "f", newValue)
 				-- Remove trailing zeros
 				while oldText:find("%.") and (oldText:find("0", oldText:len()) or oldText:find("%.", oldText:len())) do
-					Spring.Echo("oldText", oldText)
 					oldText = oldText:sub(0, oldText:len() - 1)
 				end
 				
