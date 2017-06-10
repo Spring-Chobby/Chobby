@@ -552,12 +552,21 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		}
 	end
 	
+	local function UpdateSize(sizeScale)
+		planetSize = planetData.mapDisplay.size*sizeScale
+		targetSize = math.ceil(math.floor(planetSize*1.35)/2)*2
+		planetOffset = math.floor((targetSize - planetSize)/2)
+		
+		button:SetPos(planetOffset, planetOffset, planetSize, planetSize)
+	end
+	
 	local externalFunctions = {}
 	
 	function externalFunctions.UpdatePosition(xSize, ySize)
+		UpdateSize(math.max(1, xSize/1050))
 		local x = math.max(0, math.min(xSize - targetSize, xPos*xSize - targetSize/2))
 		local y = math.max(0, math.min(ySize - targetSize, yPos*ySize - targetSize/2))
-		planetHolder:SetPos(x, y)
+		planetHolder:SetPos(x, y, targetSize, targetSize)
 	end
 	
 	function externalFunctions.UpdateStartable()
@@ -591,8 +600,8 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 			target = Image:New{
 				x = 0,
 				y = 0,
-				width = targetSize,
-				height = targetSize,
+				right = 0,
+				bottom = 0,
 				file = TARGET_IMAGE,
 				keepAspect = true,
 				parent = planetHolder,
