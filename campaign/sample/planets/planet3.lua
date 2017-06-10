@@ -7,11 +7,11 @@ local function GetPlanet(planetUtilities)
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
 	local planetData = {
-		name = "Pong",
-		startingPlanet = true,
+		name = "Myror",
+		startingPlanet = false,
 		mapDisplay = {
-			x = 0.3,
-			y = 0.36,
+			x = 0.06,
+			y = 0.56,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -19,19 +19,16 @@ local function GetPlanet(planetUtilities)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Terran",
-			radius = "6700 km",
-			primary = "Tau Ceti",
-			primaryType = "G8",
+			terrainType = "Alpine",
+			radius = "1995 km",
+			primary = "Magus",
+			primaryType = "K4VI",
 			milRating = 1,
-			text = [[Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-			Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-			Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-			Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.]]
+			text = [[In this instance, the direct approach is called for. Use your Zeus lightning assault bots to break the enemy's defensive line (and his army). If it becomes necessary, construct Defender turrets to protect your expansions.]]
 		},
 		gameConfig = {
 			missionStartscript = false,
-			mapName = "TitanDuel",
+			mapName = "Adamantine_Mountian-V1",
 			playerConfig = {
 				startX = 400,
 				startZ = 400,
@@ -39,11 +36,8 @@ local function GetPlanet(planetUtilities)
 				useUnlocks = true,
 				facplop = true,
 				extraUnlocks = {
-					"factoryshield",
-					"shieldfelon",
-					"armdeva",
-					"armfus",
-					"corllt",
+					"cloakassault",
+					"turretmissile"
 				},
 				startUnits = {
 					{
@@ -245,7 +239,8 @@ local function GetPlanet(planetUtilities)
 		},
 		completionReward = {
 			units = {
-				"armjamt",
+				"cloakassault",
+				"turretmissile"
 			},
 			modules = {
 			},
