@@ -57,6 +57,7 @@ local settings = {
 	UsePBO = 0,
 	VerboseLevel = 10,
 	Version = 2,
+	Water = 4,
 	WorkerThreadSpinTime = 5,
 	snd_general = 100,
 }

@@ -81,6 +81,13 @@ function DelayedInitialize()
 	
 	WG.LibLobby.lobby:AddListener("OnBattleAboutToStart", OnBattleStartSingleplayer)
 	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", OnBattleStartMultiplayer)
+	
+	Analytics.SendOnetimeEvent("lobby:started")
+	if Platform and Platform.glVersionShort and type(Platform.glVersionShort) == "string" then
+		Analytics.SendOnetimeEvent("graphics:openglVersion:" .. Platform.glVersionShort)
+	else
+		Analytics.SendOnetimeEvent("graphics:openglVersion:notFound")
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -96,7 +103,6 @@ end
 function widget:Initialize() 
 	WG.Analytics = Analytics
 	WG.Delay(DelayedInitialize, 1)
-	Analytics.SendOnetimeEvent("lobby:started")
 end
 
 function widget:GetConfigData()

@@ -1298,6 +1298,7 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 		height = 48,
 		classname = "option_button",
 		caption = "Advanced",
+		tooltip = i18n("advanced_button_tooltip"),
 		font = Configuration:GetFont(2),
 		OnClick = {
 			function(obj)

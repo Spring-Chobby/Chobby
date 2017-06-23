@@ -247,7 +247,7 @@ function PlanetBattleHandler.StartBattle(planetID, planetData)
 	local haveMap = VFS.HasArchive(gameConfig.mapName)
 	if not haveMap then
 		WG.Chobby.InformationPopup("You do not have the map file required. It will now be downloaded.")
-		MaybeDownloadMap(gameConfig.map)
+		MaybeDownloadMap(gameConfig.mapName)
 		return
 	end
 	
