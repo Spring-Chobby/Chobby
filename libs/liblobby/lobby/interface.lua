@@ -135,7 +135,7 @@ function Interface:SetBattleStatus(status)
 		bs.isReady       = status.isReady
 		userData.isReady = status.isReady
 	else
-		status.isReady = self:GetMyIsReady()
+		bs.isReady = self:GetMyIsReady()
 	end
 	if status.teamNumber ~= nil then
 		bs.teamNumber       = status.teamNumber
@@ -178,6 +178,7 @@ function Interface:SetBattleStatus(status)
 	if bs.isSpectator then
 		playMode = 0 -- spectator
 	end
+	bs.isReady = playMode
 
 	local battleStatusString = tostring(
 		(bs.isReady and 2 or 0) +
