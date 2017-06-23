@@ -230,6 +230,12 @@ function Interface:AddAi(aiName, aiLib, allyNumber, version)
 	return self
 end
 
+-- Ugliness
+function Interface:StartBattle()
+	self:SayBattle("!cv start")
+	return self
+end
+
 ------------------------
 -- Channel & private chat commands
 ------------------------
