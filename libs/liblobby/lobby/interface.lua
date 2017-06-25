@@ -135,7 +135,7 @@ function Interface:SetBattleStatus(status)
 		bs.isReady       = status.isReady
 		userData.isReady = status.isReady
 	else
-		status.isReady = self:GetMyIsReady()
+		bs.isReady = self:GetMyIsReady()
 	end
 	if status.teamNumber ~= nil then
 		bs.teamNumber       = status.teamNumber
@@ -178,6 +178,7 @@ function Interface:SetBattleStatus(status)
 	if bs.isSpectator then
 		playMode = 0 -- spectator
 	end
+	bs.isReady = playMode
 
 	local battleStatusString = tostring(
 		(bs.isReady and 2 or 0) +
@@ -213,6 +214,25 @@ end
 function Interface:SayBattleEx(message)
 	self:super("SayBattleEx", message)
 	self:_SendCommand(concat("SAYBATTLEEX", message))
+	return self
+end
+
+function Interface:AddAi(aiName, aiLib, allyNumber, version)
+	local battleStatusString = tostring(
+		2 +
+		lshift(allyNumber, 2) +
+		lshift(allyNumber, 6) +
+		lshift(1, 10) +
+		(1 and 2^22 or 2^23) +
+		lshift(0, 24)
+	)
+	self:_SendCommand(concat("ADDBOT", aiName, battleStatusString, 0, aiLib))
+	return self
+end
+
+-- Ugliness
+function Interface:StartBattle()
+	self:SayBattle("!cv start")
 	return self
 end
 
@@ -527,14 +547,26 @@ end
 Interface.commands["CLIENTBATTLESTATUS"] = Interface._OnClientBattleStatus
 Interface.commandPattern["CLIENTBATTLESTATUS"] = "(%S+)%s+(%S+)%s+(%S+)"
 
-function Interface:_OnAddBot(battleID, name, battleStatus, teamColor, aiDll)
+function Interface:_OnAddBot(battleID, name, owner, foobar, battleStatus, teamColor, aiDll)
 	battleID = tonumber(battleID)
-	local ai, dll = unpack(explode("\t", aiDll))
-	-- TODO: Fix params
-	self:_OnAddAi(battleID, name, battleStatus, teamColor, ai, dll)
+	-- local ai, dll = unpack(explode("\t", aiDll)))
+	Spring.Echo(battleID, name, owner, foobar, battleStatus, teamColor, aiDll)
+	Spring.Echo(battleStatus)
+	battleStatus = tonumber(battleStatus)
+	Spring.Echo(battleStatus)
+	status = {
+		isReady      = rshift(battleStatus, 1) % 2 == 1,
+		teamNumber   = rshift(battleStatus, 2) % 16,
+		allyNumber   = rshift(battleStatus, 6) % 16,
+		isSpectator  = rshift(battleStatus, 10) % 2 == 0,
+		handicap     = rshift(battleStatus, 11) % 128,
+		sync         = rshift(battleStatus, 22) % 4,
+		side         = rshift(battleStatus, 24) % 16,
+	}
+	self:_OnAddAi(battleID, name, status)
 end
 Interface.commands["ADDBOT"] = Interface._OnAddBot
-Interface.commandPattern["ADDBOT"] = "(%d+)%s+(%S+)%s+(%S+)%s+(%S+)%s+(%S+)%s+(.*)"
+Interface.commandPattern["ADDBOT"] = "(%d+)%s+(%S+)%s+(%S+)%s+(%S+)%s+(%S+)%s+(%S+)%s+(.*)"
 
 function Interface:_OnRemoveBot(battleID, name)
 	battleID = tonumber(battleID)
@@ -658,11 +690,6 @@ Interface.commandPattern["SAYPRIVATE"] = "(%S+)%s+(.*)"
 
 function Interface:UpdateBotStatus(data)
 	Spring.Echo("Implement UpdateBotStatus with ADDBOT etc..")
-end
-
-function Interface:AddBot(name, battleStatus, teamColor, aiDll)
-	self:_SendCommand(concat("ADDBOT", name, battleStatus, teamColor, aiDll))
-	return self
 end
 
 function Interface:AddStartRect(allyNo, left, top, right, bottom)

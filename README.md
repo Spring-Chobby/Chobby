@@ -35,6 +35,8 @@ Chobby is a Lua Menu and requires the newest engine. For exact version, see the 
 
 For development version of Chobby (obtained from Github), you can launch Chobby by running `spring --menu 'Chobby $VERSION'` or by setting `DefaultLuaMenu = Chobby $VERSION` in your springsettings.cfg (https://springrts.com/wiki/Springsettings.cfg). Versions obtained from Github should follow the same procedure, but set the appropriate fixed version instead, e.g. `Chobby test-1145-2d0ef36`, instead of `Chobby $VERSION`.
 
+If you are using `chobby:test` from rapid, you can specify rapid directly, instead of setting the version manually.
+e.g. `spring --menu 'rapid://chobby:test'` and `DefaultLuaMenu = rapid://chobby:test`
 
 [![Join the chat at https://gitter.im/Spring-Chobby/Chobby](https://badges.gitter.im/Spring-Chobby/Chobby.svg)](https://gitter.im/Spring-Chobby/Chobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 

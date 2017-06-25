@@ -50,9 +50,9 @@ function Lobby:_Clean()
 
 	self.partyMap = {}
 	self.myPartyID = nil
-	
+
 	self.planetwarsData = {}
-	
+
 	self.team = nil
 
 	self.latency = 0 -- in ms
@@ -218,7 +218,7 @@ function Lobby:SetBattleStatus(status)
 	return self
 end
 
-function Lobby:AddAi(aiName, allyNumber, allyNumber, version)
+function Lobby:AddAi(aiName, aiLib, allyNumber, version)
 	return self
 end
 
@@ -515,7 +515,7 @@ function Lobby:_OnUpdateUserStatus(userName, status)
 	if status and status.steamID then
 		self.userBySteamID[status.steamID] = userName
 	end
-	
+
 	for k, v in pairs(status) do
 		self.users[userName][k] = v
 	end
@@ -695,7 +695,7 @@ function Lobby:_OnJoinedBattle(battleID, userName, scriptPassword)
 	if not found then
 		table.insert(self.battles[battleID].users, userName)
 	end
-	
+
 	local userInfo = self:TryGetUser(userName)
 	userInfo.battleID = battleID
 	self:_CallListeners("OnUpdateUserStatus", userName, {battleID = battleID})
@@ -1116,13 +1116,13 @@ function Lobby:_OnPwMatchCommand(attackerFaction, defenderFactions, currentMode,
 	self.planetwarsData.defenderFactions = defenderFactions
 	self.planetwarsData.currentMode      = currentMode
 	self.planetwarsData.planets          = planets
-	
+
 	Spring.Echo("OnPwMatchCommand modeSwitched", modeSwitched)
 	if modeSwitched then
 		self.planetwarsData.joinPlanet = nil
 		self.planetwarsData.attackingPlanet = nil
 	end
-	
+
 	self:_CallListeners("OnPwMatchCommand", attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds, modeSwitched)
 end
 
