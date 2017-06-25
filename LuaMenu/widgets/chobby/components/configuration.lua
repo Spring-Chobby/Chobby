@@ -270,10 +270,15 @@ function Configuration:SetSettingsConfigOption(name, newValue)
 		-- Selection from multiple options
 		local selectedOption = setting.optionNames[newValue]
 		if setting.fileTarget then
-			local sourceFile = VFS.LoadFile(selectedOption.file)
-			local settingsFile = io.open(setting.fileTarget, "w")
-			settingsFile:write(sourceFile)
-			settingsFile:close()
+			self.settingsMenuValues[name .. "_file"] = selectedOption.file
+			if setting.applyFunction then
+				setting.applyFunction(selectedOption.file)
+			else
+				local sourceFile = VFS.LoadFile(selectedOption.file)
+				local settingsFile = io.open(setting.fileTarget, "w")
+				settingsFile:write(sourceFile)
+				settingsFile:close()
+			end
 		else
 			local applyData = selectedOption.apply or (selectedOption.applyFunction and selectedOption.applyFunction())
 			if not applyData then

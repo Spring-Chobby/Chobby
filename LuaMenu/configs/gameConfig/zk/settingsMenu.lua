@@ -1,5 +1,30 @@
 local invertZoomMult = -1
 
+local TRUE = "true"
+local FALSE = "false"
+
+local lupsFileTarget = "lups.cfg"
+
+local function UpdateLups()
+	local settings = WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.settingsMenuValues
+	if not settings then
+		return
+	end
+	
+	local lupsFileName = settings.ShaderDetail_file or "LuaMenu/configs/gameConfig/zk/lups/lups3.cfg"
+	local lupsAirJetDisabled = ((settings.LupsAirJet == "On") and FALSE) or TRUE
+	local lupsRibbonDisabled = ((settings.LupsRibbon == "On") and FALSE) or TRUE
+	
+	local sourceFile = VFS.LoadFile(lupsFileName)
+	
+	sourceFile = sourceFile:gsub("__AIR_JET__", lupsAirJetDisabled)
+	sourceFile = sourceFile:gsub("__RIBBON__", lupsRibbonDisabled)
+	
+	local settingsFile = io.open(lupsFileTarget, "w")
+	settingsFile:write(sourceFile)
+	settingsFile:close()
+end
+
 local settingsConfig = {
 	{
 		name = "Graphics",
@@ -19,6 +44,8 @@ local settingsConfig = {
 					CompatibilityMode = "On",
 					AntiAliasing = "Off",
 					ShaderDetail = "Minimal",
+					LupsAirJet = "Off",
+					LupsRibbon = "Off",
 					FancySky = "Off",
 				}
 			},
@@ -37,6 +64,8 @@ local settingsConfig = {
 					CompatibilityMode = "Off",
 					AntiAliasing = "Off",
 					ShaderDetail = "Low",
+					LupsAirJet = "Off",
+					LupsRibbon = "On",
 					FancySky = "Off",
 				}
 			},
@@ -55,6 +84,8 @@ local settingsConfig = {
 					CompatibilityMode = "Off",
 					AntiAliasing = "Off",
 					ShaderDetail = "Medium",
+					LupsAirJet = "On",
+					LupsRibbon = "On",
 					FancySky = "Off",
 				}
 			},
@@ -73,6 +104,8 @@ local settingsConfig = {
 					CompatibilityMode = "Off",
 					AntiAliasing = "Low",
 					ShaderDetail = "High",
+					LupsAirJet = "On",
+					LupsRibbon = "On",
 					FancySky = "Off",
 				}
 			},
@@ -91,6 +124,8 @@ local settingsConfig = {
 					CompatibilityMode = "Off",
 					AntiAliasing = "High",
 					ShaderDetail = "Ultra",
+					LupsAirJet = "On",
+					LupsRibbon = "On",
 					FancySky = "On",
 				}
 			},
@@ -346,7 +381,8 @@ local settingsConfig = {
 			{
 				name = "ShaderDetail",
 				humanName = "Shader Detail",
-				fileTarget = "lups.cfg",
+				fileTarget = lupsFileTarget,
+				applyFunction = UpdateLups,
 				options = {
 					{
 						name = "Minimal",
@@ -367,6 +403,34 @@ local settingsConfig = {
 					{
 						name = "Ultra",
 						file = "LuaMenu/configs/gameConfig/zk/lups/lups4.cfg"
+					},
+				},
+			},
+			{
+				name = "LupsAirJet",
+				humanName = "Aircraft Jets",
+				options = {
+					{
+						name = "On",
+						applyFunction = UpdateLups,
+					},
+					{
+						name = "Off",
+						applyFunction = UpdateLups,
+					},
+				},
+			},
+			{
+				name = "LupsRibbon",
+				humanName = "Aircraft Wing Trails",
+				options = {
+					{
+						name = "On",
+						applyFunction = UpdateLups,
+					},
+					{
+						name = "Off",
+						applyFunction = UpdateLups,
 					},
 				},
 			},
@@ -526,14 +590,14 @@ local settingsConfig = {
 						name = "On",
 						applyFunction = function()
 							WG.Chobby.Configuration:SetConfigValue("atiIntelCompat", true)
-							return {}
+							return
 						end
 					},
 					{
 						name = "Off",
 						applyFunction = function()
 							WG.Chobby.Configuration:SetConfigValue("atiIntelCompat", false)
-							return {}
+							return
 						end
 					},
 				},
@@ -714,6 +778,8 @@ local settingsDefault = {
 	AtiIntelCompatibility = "On",
 	AntiAliasing = "Low",
 	ShaderDetail = "High",
+	LupsAirJet = "On",
+	LupsRibbon = "On",
 	FancySky = "Off",
 	IconDistance = 151,
 	MouseZoomSpeed = 25,
@@ -741,7 +807,6 @@ end
 local function DefaultPresetFunc()
 	if Platform then
 		local gpuMemorySize = Platform.gpuMemorySize
-		Spring.Utilities.TableEcho(Platform, "Platform")
 		if gpuMemorySize then
 			if gpuMemorySize < 1024 then
 				-- Minimal
