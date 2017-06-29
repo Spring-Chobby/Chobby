@@ -1,6 +1,6 @@
 ConfirmationPopup = LCS.class{}
 
-function ConfirmationPopup:init(successFunction, question, doNotAskAgainKey, width, height, yesText, noText)
+function ConfirmationPopup:init(successFunction, question, doNotAskAgainKey, width, height, yesText, noText, failureFunction, disableAcceptHotkey, failureTimeout)
 	
 	local mainWindow = Window:New {
 		x = 700,
@@ -14,15 +14,31 @@ function ConfirmationPopup:init(successFunction, question, doNotAskAgainKey, wid
 		classname = "main_window",
 	}
 	
+	local applyTimeout = true
+	
 	local function CancelFunc()
+		applyTimeout = false
+		if failureFunction then
+			failureFunction()
+		end
 		mainWindow:Dispose()
 	end
 	
 	local function AcceptFunc()
+		applyTimeout = false
 		if successFunction then
 			successFunction()
 		end
 		mainWindow:Dispose()
+	end
+	
+	if failureTimeout then
+		local function TimeoutFunc()
+			if applyTimeout then
+				CancelFunc()
+			end
+		end
+		WG.Delay(TimeoutFunc, failureTimeout)
 	end
 	
 	local lblText = TextBox:New {
@@ -86,5 +102,5 @@ function ConfirmationPopup:init(successFunction, question, doNotAskAgainKey, wid
 		}
 	end
 	
-	local popupHolder = PriorityPopup(mainWindow, CancelFunc, AcceptFunc)
+	local popupHolder = PriorityPopup(mainWindow, CancelFunc, AcceptFunc, nil, nil, disableAcceptHotkey)
 end

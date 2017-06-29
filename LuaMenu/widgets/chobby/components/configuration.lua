@@ -40,6 +40,11 @@ function Configuration:init()
 	self.alreadySeenFactionPopup2 = false
 	self.channels = {}
 	
+	self.manualBorderless = {
+		game = {},
+		lobby = {},
+	}
+	
 	self.ignoreLevel = false
 
 	self.errorColor = "\255\255\0\0"
@@ -356,6 +361,7 @@ function Configuration:GetConfigData()
 		game_fullscreen = self.game_fullscreen,
 		panel_layout = self.panel_layout,
 		lobby_fullscreen = self.lobby_fullscreen,
+		manualBorderless = self.manualBorderless,
 		animate_lobby = self.animate_lobby,
 		game_settings = self.game_settings,
 		defaultSettingsPreset = self.defaultSettingsPreset,

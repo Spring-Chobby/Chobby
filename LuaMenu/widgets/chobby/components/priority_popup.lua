@@ -1,6 +1,6 @@
 PriorityPopup = Component:extends{}
 
-function PriorityPopup:init(mainWindow, cancelFunction, acceptFunction, parentControlOverride, hideWindow)
+function PriorityPopup:init(mainWindow, cancelFunction, acceptFunction, parentControlOverride, hideWindow, disableAcceptHotkey)
 	local sentTime
 	local startTime
 	
@@ -12,7 +12,7 @@ function PriorityPopup:init(mainWindow, cancelFunction, acceptFunction, parentCo
 		if cancelFunction and key == Spring.GetKeyCode("esc") then
 			cancelFunction()
 			return true
-		elseif acceptFunction and (key == Spring.GetKeyCode("enter") or key == Spring.GetKeyCode("numpad_enter")) then
+		elseif (not disableAcceptHotkey) and (acceptFunction and (key == Spring.GetKeyCode("enter") or key == Spring.GetKeyCode("numpad_enter"))) then
 			acceptFunction()
 			return true
 		end

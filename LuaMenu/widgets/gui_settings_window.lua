@@ -22,7 +22,9 @@ local lobbyFullscreen = 1
 
 local FUDGE = 0
 
+local inLobby = true
 local currentMode = false
+local currentManualBorderless = false
 
 local ITEM_OFFSET = 38
 
@@ -39,12 +41,19 @@ local function ToggleFullscreenOff()
 	Spring.SetConfigInt("Fullscreen", 1, false)
 	Spring.SetConfigInt("Fullscreen", 0, false)
 
-	if WG.Chobby.Configuration.agressivelySetBorderlessWindowed then
+	if WG.Chobby.Configuration.agressivelySetBorderlessWindowed and not currentManualBorderless then
 		local screenX, screenY = Spring.GetScreenGeometry()
-		Spring.SetConfigInt("XResolutionWindowed", screenX - FUDGE*2, false)
-		Spring.SetConfigInt("YResolutionWindowed", screenY - FUDGE*2, false)
-		Spring.SetConfigInt("WindowPosX", FUDGE, false)
-		Spring.SetConfigInt("WindowPosY", FUDGE, false)
+		if currentManualBorderless then
+			Spring.SetConfigInt("XResolutionWindowed", currentManualBorderless.width or (screenX - FUDGE*2), false)
+			Spring.SetConfigInt("YResolutionWindowed", currentManualBorderless.height or (screenY - FUDGE*2), false)
+			Spring.SetConfigInt("WindowPosX", currentManualBorderless.x or FUDGE, false)
+			Spring.SetConfigInt("WindowPosY", currentManualBorderless.y or FUDGE, false)
+		else
+			Spring.SetConfigInt("XResolutionWindowed", screenX - FUDGE*2, false)
+			Spring.SetConfigInt("YResolutionWindowed", screenY - FUDGE*2, false)
+			Spring.SetConfigInt("WindowPosX", FUDGE, false)
+			Spring.SetConfigInt("WindowPosY", FUDGE, false)
+		end
 	end
 end
 
@@ -79,9 +88,26 @@ local function SaveWindowPos(width, height, x, y)
 	Spring.SetConfigInt("WindowState", (x == 0 and 1) or 0, false)
 end
 
-local function SetLobbyFullscreenMode(mode)
-	if mode == currentMode then
-		return
+local function ManualBorderlessChange()
+	oldBorders = currentManualBorderless
+	if not oldBorders then
+		return true
+	end
+	local borders
+	if inLobby then
+		borders = WG.Chobby.Configuration.manualBorderless.lobby or {}
+	else
+		borders = WG.Chobby.Configuration.manualBorderless.game or {}
+	end
+	
+	return not (oldBorders.x == borders.x and oldBorders.y == borders.y and oldBorders.width == borders.width and oldBorders.height == borders.height)
+end
+
+local function SetLobbyFullscreenMode(mode, borderOverride)
+	if mode == currentMode and (not borderOverride) then
+		if not (mode == 4 and ManualBorderlessChange()) then
+			return
+		end
 	end
 
 	local Configuration = WG.Chobby.Configuration
@@ -100,14 +126,17 @@ local function SetLobbyFullscreenMode(mode)
 	Spring.Echo("SetLobbyFullscreenMode", mode)
 	--Spring.Log(LOG_SECTION, LOG.ERROR, debug.traceback("problem"))
 	
-	if mode == 1 then
+	if mode == 1 then -- Borderless
 		-- Required to remove FUDGE
+		currentManualBorderless = false
+		
 		Spring.SetConfigInt("Fullscreen", 1)
 
 		Spring.SetConfigInt("XResolutionWindowed", screenX - FUDGE*2, false)
 		Spring.SetConfigInt("YResolutionWindowed", screenY - FUDGE*2, false)
 		Spring.SetConfigInt("WindowPosX", FUDGE, false)
 		Spring.SetConfigInt("WindowPosY", FUDGE, false)
+	
 		Spring.SetConfigInt("WindowBorderless", 1, false)
 		Spring.SetConfigInt("Fullscreen", 0, false)
 
@@ -115,7 +144,7 @@ local function SetLobbyFullscreenMode(mode)
 		if Configuration.agressivelySetBorderlessWindowed then
 			WG.Delay(ToggleFullscreenOff, 0.5)
 		end
-	elseif mode == 2 then
+	elseif mode == 2 then -- Windowed
 		local winSizeX, winSizeY, winPosX, winPosY = Spring.GetWindowGeometry()
 		winPosX = Configuration.window_WindowPosX or winPosX
 		winSizeX = Configuration.window_XResolutionWindowed or winSizeX
@@ -142,11 +171,36 @@ local function SetLobbyFullscreenMode(mode)
 		end
 		Spring.SetConfigInt("WindowBorderless", 0, false)
 		Spring.SetConfigInt("Fullscreen", 0)
-	elseif mode == 3 then
+	elseif mode == 3 then -- Fullscreen
 		Spring.SetConfigInt("XResolution", screenX, false)
 		Spring.SetConfigInt("YResolution", screenY, false)
 		Spring.SetConfigInt("Fullscreen", 1, false)
 		--WG.Delay(ToggleFullscreenOn, 0.1)
+	elseif mode == 4 then -- Manual Borderless
+		local borders = borderOverride
+		if not borders then
+			if inLobby then
+				borders = WG.Chobby.Configuration.manualBorderless.lobby or {}
+			else
+				borders = WG.Chobby.Configuration.manualBorderless.game or {}
+			end
+		end
+		currentManualBorderless = Spring.Utilities.CopyTable(borders)
+		
+		Spring.SetConfigInt("Fullscreen", 1)
+		
+		Spring.SetConfigInt("XResolutionWindowed", borders.width or (screenX - FUDGE*2), false)
+		Spring.SetConfigInt("YResolutionWindowed", borders.height or (screenY - FUDGE*2), false)
+		Spring.SetConfigInt("WindowPosX", borders.x or FUDGE, false)
+		Spring.SetConfigInt("WindowPosY", borders.y or FUDGE, false)
+	
+		Spring.SetConfigInt("WindowBorderless", 1, false)
+		Spring.SetConfigInt("Fullscreen", 0, false)
+
+		WG.Delay(ToggleFullscreenOff, 0.1)
+		if Configuration.agressivelySetBorderlessWindowed then
+			WG.Delay(ToggleFullscreenOff, 0.5)
+		end
 	end
 end
 
@@ -155,7 +209,172 @@ local function SaveLobbyDisplayMode()
 	if (currentMode == 2 or not currentMode) and lobbyFullscreen == 2 then
 		SaveWindowPos()
 	end
+	inLobby = true
 	SetLobbyFullscreenMode(lobbyFullscreen)
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Manual Borderless Setting
+
+local function GetValueEntryBox(parent, name, position, currentValue)
+	local Configuration = WG.Chobby.Configuration
+	
+	local label = Label:New {
+		x = 15,
+		width = 80,
+		y = position + 5,
+		align = "right",
+		height = 35,
+		caption = name .. ":",
+		font = Configuration:GetFont(3),
+		parent = parent,
+	}
+	
+	local edit = EditBox:New {
+		x = 100,
+		width = 160,
+		y = position,
+		height = 35,
+		text = tostring(currentValue),
+		font = Configuration:GetFont(3),
+		parent = parent,
+		OnFocusUpdate = {
+			function (obj)
+				if obj.focused then
+					return
+				end
+				
+				local newValue = tonumber(obj.text)
+				
+				if not newValue then
+					obj:SetText(currentValue)
+					return
+				end
+				
+				currentValue = math.floor(math.max(0, newValue))
+				obj:SetText(tostring(currentValue))
+			end
+		}
+	}
+	
+	local function GetValue()
+		return currentValue
+	end
+	
+	return GetValue
+end
+
+local function ShowManualBorderlessEntryWindow(name)
+	local Configuration = WG.Chobby.Configuration
+	
+	local manualWindow = Window:New {
+		x = 700,
+		y = 300,
+		width = 316,
+		height = 334,
+		caption = "",
+		resizable = false,
+		draggable = false,
+		parent = WG.Chobby.lobbyInterfaceHolder,
+		classname = "main_window",
+	}
+	
+	local lblTitle = Label:New {
+		x = 35,
+		right = 15,
+		y = 15,
+		height = 35,
+		font = Configuration:GetFont(3),
+		caption = i18n("set_window_position"),
+		parent = manualWindow,
+	}
+	
+	local screenX, screenY = Spring.GetScreenGeometry()
+	local borders = WG.Chobby.Configuration.manualBorderless[name] or {}
+	
+	local xBox = GetValueEntryBox(manualWindow, "X", 60, borders.x or 0)
+	local yBox = GetValueEntryBox(manualWindow, "Y", 100, borders.y or 0)
+	local widthBox = GetValueEntryBox(manualWindow, "Width", 140, borders.width or screenX)
+	local heightBox = GetValueEntryBox(manualWindow, "Height", 180, borders.height or screenY)
+	
+	local function RetreatToSafety(force)
+		borders.x = 0
+		borders.y = 0
+		borders.width = screenX
+		borders.height = screenY
+		if force or ((name == "lobby") == (Spring.GetGameName() == "")) then
+			SetLobbyFullscreenMode(4)
+		end
+	end
+	
+	local function FinalApplyFunc()
+		local lobbySetting = (name == "lobby")
+		if lobbySetting then
+			if not inLobby then
+				SetLobbyFullscreenMode(battleStartDisplay)
+			end
+		else
+			if inLobby then
+				SetLobbyFullscreenMode(lobbyFullscreen)
+			end
+		end
+	end
+	
+	local function FinalApplyFailureFunc()
+		RetreatToSafety(true)
+	end
+	
+	local function ApplyFunc()
+		borders.x = xBox()
+		borders.y = yBox()
+		borders.width = widthBox()
+		borders.height = heightBox()
+		
+		SetLobbyFullscreenMode(4, borders)
+		
+		manualWindow:Dispose()
+		local confirmation = WG.Chobby.ConfirmationPopup(FinalApplyFunc, "Keep these settings?", nil, 315, 170, i18n("yes"), i18n("no"), FinalApplyFailureFunc, true, 5)
+	end
+
+	local function CancelFunc()
+		RetreatToSafety(false)
+		manualWindow:Dispose()
+	end
+	
+	local btnApply = Button:New {
+		x = 5,
+		width = 135,
+		bottom = 1,
+		height = 70,
+		caption = i18n("apply"),
+		font = Configuration:GetFont(3),
+		classname = "action_button",
+		OnClick = {
+			function()
+				ApplyFunc()
+			end
+		},
+		parent = manualWindow,
+	}
+	local btnClose = Button:New {
+		right = 5,
+		width = 135,
+		bottom = 1,
+		height = 70,
+		caption = i18n("cancel"),
+		font = Configuration:GetFont(3),
+		classname = "negative_button",
+		OnClick = {
+			function()
+				CancelFunc()
+			end
+		},
+		parent = manualWindow,
+	}
+
+	local popupHolder = WG.Chobby.PriorityPopup(manualWindow, CancelFunc, ApplyFunc)
+	--screen0:FocusControl(ebPassword)
 end
 
 --------------------------------------------------------------------------------
@@ -212,7 +431,7 @@ local function GetLobbyTabControls()
 		y = offset,
 		width = COMBO_WIDTH,
 		height = 30,
-		items = {"Borderless Window", "Windowed", "Fullscreen"},
+		items = {"Borderless Window", "Windowed", "Fullscreen", "Manual Borderless"},
 		font = Configuration:GetFont(2),
 		itemFontSize = Configuration:GetFont(2).size,
 		selected = Configuration.lobby_fullscreen or 1,
@@ -221,8 +440,9 @@ local function GetLobbyTabControls()
 				if freezeSettings then
 					return
 				end
-
-				if Spring.GetGameName() == "" then
+				if obj.selected == 4 then
+					ShowManualBorderlessEntryWindow("lobby")
+				elseif Spring.GetGameName() == "" then
 					SetLobbyFullscreenMode(obj.selected)
 				end
 
@@ -793,7 +1013,7 @@ local function ProcessScreenSizeOption(data, offset)
 		y = offset,
 		width = COMBO_WIDTH,
 		height = 30,
-		items = {"Borderless Window", "Windowed", "Fullscreen"},
+		items = {"Borderless Window", "Windowed", "Fullscreen", "Manual Borderless"},
 		font = Configuration:GetFont(2),
 		itemFontSize = Configuration:GetFont(2).size,
 		selected = Configuration.game_fullscreen or 1,
@@ -803,7 +1023,9 @@ local function ProcessScreenSizeOption(data, offset)
 					return
 				end
 
-				if Spring.GetGameName() ~= "" then
+				if obj.selected == 4 then
+					ShowManualBorderlessEntryWindow("game")
+				elseif Spring.GetGameName() ~= "" then
 					SetLobbyFullscreenMode(obj.selected)
 				end
 
@@ -1077,24 +1299,31 @@ function SettingsWindow.WriteGameSpringsettings(fileName)
 	end
 	
 	local screenX, screenY = Spring.GetScreenGeometry()
-	if battleStartDisplay == 1 then
+	if battleStartDisplay == 1 then -- Borderless Window
 		WriteToFile("XResolutionWindowed", screenX)
 		WriteToFile("YResolutionWindowed", screenY)
 		WriteToFile("WindowPosX", 0)
 		WriteToFile("WindowPosY", 0)
 		WriteToFile("WindowBorderless", 1)
-	elseif battleStartDisplay == 2 then
+	elseif battleStartDisplay == 2 then -- Window
 		WriteToFile("WindowPosX", 0)
 		WriteToFile("WindowPosY", 80)
 		WriteToFile("XResolutionWindowed", screenX)
 		WriteToFile("YResolutionWindowed", screenY - 80)
 		WriteToFile("WindowBorderless", 0)
 		WriteToFile("Fullscreen", 0)
-	elseif battleStartDisplay == 3 then
+	elseif battleStartDisplay == 3 then -- Fullscreen
 		WriteToFile("XResolution", screenX)
 		WriteToFile("YResolution", screenY)
 		WriteToFile("WindowBorderless", 0)
 		WriteToFile("Fullscreen", 1)
+	elseif battleStartDisplay == 4 then -- Manual Borderless
+		local borders = WG.Chobby.Configuration.manualBorderless.game or {}
+		WriteToFile("XResolutionWindowed", borders.width or screenX)
+		WriteToFile("YResolutionWindowed", borders.height or screenY)
+		WriteToFile("WindowPosX", borders.x or 0)
+		WriteToFile("WindowPosY", borders.y or 0)
+		WriteToFile("WindowBorderless", 1)
 	end
 end
 
@@ -1115,24 +1344,31 @@ function SettingsWindow.GetSettingsString()
 	end
 	
 	local screenX, screenY = Spring.GetScreenGeometry()
-	if battleStartDisplay == 1 then
+	if battleStartDisplay == 1 then -- Borderless Window
 		WriteSetting("XResolutionWindowed", screenX)
 		WriteSetting("YResolutionWindowed", screenY)
 		WriteSetting("WindowPosX", 0)
 		WriteSetting("WindowPosY", 0)
 		WriteSetting("WindowBorderless", 1)
-	elseif battleStartDisplay == 2 then
+	elseif battleStartDisplay == 2 then -- Window
 		WriteSetting("WindowPosX", 0)
 		WriteSetting("WindowPosY", 80)
 		WriteSetting("XResolutionWindowed", screenX)
 		WriteSetting("YResolutionWindowed", screenY - 80)
 		WriteSetting("WindowBorderless", 0)
 		WriteSetting("Fullscreen", 0)
-	elseif battleStartDisplay == 3 then
+	elseif battleStartDisplay == 3 then -- Fullscreen
 		WriteSetting("XResolution", screenX)
 		WriteSetting("YResolution", screenY)
 		WriteSetting("WindowBorderless", 0)
 		WriteSetting("Fullscreen", 1)
+	elseif battleStartDisplay == 4 then -- Manual Borderless
+		local borders = WG.Chobby.Configuration.manualBorderless.game or {}
+		WriteSetting("XResolutionWindowed", borders.width or screenX)
+		WriteSetting("YResolutionWindowed", borders.height or screenY)
+		WriteSetting("WindowPosX", borders.x or 0)
+		WriteSetting("WindowPosY", borders.y or 0)
+		WriteSetting("WindowBorderless", 1)
 	end
 	
 	return settingsString
@@ -1156,6 +1392,7 @@ function widget:ActivateMenu()
 	if not (WG.Chobby and WG.Chobby.Configuration) then
 		return
 	end
+	inLobby = true
 	SetLobbyFullscreenMode(WG.Chobby.Configuration.lobby_fullscreen)
 end
 
@@ -1190,19 +1427,20 @@ function widget:Initialize()
 	onBattleAboutToStart = function(listener)
 		local screenX, screenY = Spring.GetScreenGeometry()
 
+		inLobby = false
 		SetLobbyFullscreenMode(battleStartDisplay)
 		local Configuration = WG.Chobby.Configuration
 
 		-- Settings which rely on io
 		local gameSettings = Configuration.game_settings
 
-		if battleStartDisplay == 1 then
+		if battleStartDisplay == 1 then -- Borderless Window
 			Configuration:SetSpringsettingsValue("XResolutionWindowed", screenX)
 			Configuration:SetSpringsettingsValue("YResolutionWindowed", screenY)
 			Configuration:SetSpringsettingsValue("WindowPosX", 0)
 			Configuration:SetSpringsettingsValue("WindowPosY", 0)
 			Configuration:SetSpringsettingsValue("WindowBorderless", 1)
-		elseif battleStartDisplay == 2 then
+		elseif battleStartDisplay == 2 then -- Window
 			Configuration:SetSpringsettingsValue("WindowPosX", 0)
 			Configuration:SetSpringsettingsValue("WindowPosY", 80)
 			Configuration:SetSpringsettingsValue("XResolutionWindowed", screenX)
@@ -1210,10 +1448,17 @@ function widget:Initialize()
 			Configuration:SetSpringsettingsValue("WindowBorderless", 0)
 			Configuration:SetSpringsettingsValue("WindowBorderless", 0)
 			Configuration:SetSpringsettingsValue("Fullscreen", 0)
-		elseif battleStartDisplay == 3 then
+		elseif battleStartDisplay == 3 then -- Fullscreen
 			Configuration:SetSpringsettingsValue("XResolution", screenX)
 			Configuration:SetSpringsettingsValue("YResolution", screenY)
 			Configuration:SetSpringsettingsValue("Fullscreen", 1)
+		elseif battleStartDisplay == 4 then -- Manual Borderless
+			local borders = WG.Chobby.Configuration.manualBorderless.game or {}
+			Configuration:SetSpringsettingsValue("XResolutionWindowed", borders.width or screenX)
+			Configuration:SetSpringsettingsValue("YResolutionWindowed", borders.height or screenY)
+			Configuration:SetSpringsettingsValue("WindowPosX", borders.x or 0)
+			Configuration:SetSpringsettingsValue("WindowPosY", borders.y or 0)
+			Configuration:SetSpringsettingsValue("WindowBorderless", 1)
 		end
 
 		for key, value in pairs(gameSettings) do
