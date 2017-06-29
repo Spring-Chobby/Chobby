@@ -231,6 +231,18 @@ local function GetValueEntryBox(parent, name, position, currentValue)
 		parent = parent,
 	}
 	
+	local function FocusUpdate(obj)
+		local newValue = tonumber(obj.text)
+		
+		if not newValue then
+			obj:SetText(currentValue)
+			return
+		end
+		
+		currentValue = math.floor(math.max(0, newValue))
+		obj:SetText(tostring(currentValue))
+	end
+	
 	local edit = EditBox:New {
 		x = 100,
 		width = 160,
@@ -244,21 +256,13 @@ local function GetValueEntryBox(parent, name, position, currentValue)
 				if obj.focused then
 					return
 				end
-				
-				local newValue = tonumber(obj.text)
-				
-				if not newValue then
-					obj:SetText(currentValue)
-					return
-				end
-				
-				currentValue = math.floor(math.max(0, newValue))
-				obj:SetText(tostring(currentValue))
+				FocusUpdate(obj)
 			end
 		}
 	}
 	
 	local function GetValue()
+		FocusUpdate(edit)
 		return currentValue
 	end
 	
