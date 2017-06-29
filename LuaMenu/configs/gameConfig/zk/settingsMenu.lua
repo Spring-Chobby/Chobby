@@ -62,7 +62,7 @@ local settingsConfig = {
 					TerrainDetail = "Low",
 					VegetationDetail = "Low",
 					CompatibilityMode = "Off",
-					AntiAliasing = "Off",
+					AntiAliasing = "Low",
 					ShaderDetail = "Low",
 					LupsAirJet = "Off",
 					LupsRibbon = "On",
@@ -612,7 +612,7 @@ local settingsConfig = {
 					{
 						name = "Off",
 						apply = {
-							FSAALevel = 2,
+							FSAALevel = 0,
 							FSAA = 0,
 							SmoothLines = 0,
 							SmoothPoints = 0,
@@ -621,7 +621,7 @@ local settingsConfig = {
 					{
 						name = "Low",
 						apply = {
-							FSAALevel = 2,
+							FSAALevel = 4,
 							FSAA = 1,
 							SmoothLines = 1,
 							SmoothPoints = 1,
