@@ -608,7 +608,7 @@ function BattleListWindow:OpenHostWindow()
 	}
 
 	local title = Label:New {
-		x = 15,
+		x = 150,
 		width = 170,
 		y = 15,
 		height = 35,
