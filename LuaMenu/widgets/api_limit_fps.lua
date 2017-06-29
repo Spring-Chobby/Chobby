@@ -14,8 +14,6 @@ function widget:GetInfo()
 	}
 end
 
-local DRAW_AT_FULL_SPEED = true -- AllowDraw does not work. See https://springrts.com/mantis/view.php?id=5625
-
 local MAX_FPS = 5
 local FAST_FPS = 40
 local oldX, oldY
@@ -60,7 +58,7 @@ end
 
 function widget:AllowDraw()
 	local config = WG.Chobby.Configuration
-	if config.drawAtFullSpeed or DRAW_AT_FULL_SPEED then
+	if config.drawAtFullSpeed then
 		return true
 	end
 	if forceRedraw then

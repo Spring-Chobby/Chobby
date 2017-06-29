@@ -82,7 +82,7 @@ local settingsConfig = {
 					TerrainDetail = "Medium",
 					VegetationDetail = "Medium",
 					CompatibilityMode = "Off",
-					AntiAliasing = "Off",
+					AntiAliasing = "Low",
 					ShaderDetail = "Medium",
 					LupsAirJet = "On",
 					LupsRibbon = "On",
@@ -102,7 +102,7 @@ local settingsConfig = {
 					TerrainDetail = "High",
 					VegetationDetail = "High",
 					CompatibilityMode = "Off",
-					AntiAliasing = "Low",
+					AntiAliasing = "High",
 					ShaderDetail = "High",
 					LupsAirJet = "On",
 					LupsRibbon = "On",
@@ -607,7 +607,7 @@ local settingsConfig = {
 					{
 						name = "Off",
 						apply = {
-							FSAALevel = 0,
+							FSAALevel = 1, -- Required, see https://springrts.com/mantis/view.php?id=5625
 							FSAA = 0,
 							SmoothLines = 0,
 							SmoothPoints = 0,
