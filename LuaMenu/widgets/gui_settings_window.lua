@@ -53,6 +53,32 @@ local function ToggleFullscreenOn()
 	Spring.SetConfigInt("Fullscreen", 1, false)
 end
 
+local function SaveWindowPos(width, height, x, y)
+	local Configuration = WG.Chobby.Configuration
+
+	if not width then
+		width, height, x, y = Spring.GetWindowGeometry()
+	end
+	local screenX, screenY = Spring.GetScreenGeometry()
+	y = screenY - height - y
+
+	if x then
+		Configuration:SetConfigValue("window_WindowPosX", x)
+	end
+	if y then
+		Configuration:SetConfigValue("window_WindowPosY", y)
+	end
+	if width then
+		Configuration:SetConfigValue("window_XResolutionWindowed", width)
+	end
+	if height then
+		Configuration:SetConfigValue("window_YResolutionWindowed", height)
+	end
+	
+	-- WindowState is not saved by Spring. See https://springrts.com/mantis/view.php?id=5624
+	Spring.SetConfigInt("WindowState", (x == 0 and 1) or 0, false)
+end
+
 local function SetLobbyFullscreenMode(mode)
 	if mode == currentMode then
 		return
@@ -60,37 +86,20 @@ local function SetLobbyFullscreenMode(mode)
 
 	local Configuration = WG.Chobby.Configuration
 
-	-- Remember window settings
-	if currentMode == 2 then
-		local x = Spring.GetConfigInt("WindowPosX")
-		local y = Spring.GetConfigInt("WindowPosY")
-		local width = Spring.GetConfigInt("XResolutionWindowed")
-		local height = Spring.GetConfigInt("YResolutionWindowed")
-
-		if x then
-			Configuration:SetConfigValue("window_WindowPosX", x)
-		end
-		if y then
-			Configuration:SetConfigValue("window_WindowPosY", y)
-		end
-		if width then
-			Configuration:SetConfigValue("window_XResolutionWindowed", width)
-		end
-		if height then
-			Configuration:SetConfigValue("window_YResolutionWindowed", height)
-		end
+	if (currentMode == 2 or not currentMode) and lobbyFullscreen == 2 then 
+		SaveWindowPos()
 	end
-
 	currentMode = mode
 
 	if Configuration.doNotSetAnySpringSettings then
 		return
 	end
 
-	Spring.Echo("SetLobbyFullscreenMode", mode)
-
 	local screenX, screenY = Spring.GetScreenGeometry()
-	Spring.Echo("screenX, screenY", screenX, screenY)
+	
+	Spring.Echo("SetLobbyFullscreenMode", mode)
+	--Spring.Log(LOG_SECTION, LOG.ERROR, debug.traceback("problem"))
+	
 	if mode == 1 then
 		-- Required to remove FUDGE
 		Spring.SetConfigInt("Fullscreen", 1)
@@ -143,28 +152,9 @@ end
 
 local function SaveLobbyDisplayMode()
 	local Configuration = WG.Chobby.Configuration
-
-	-- Remember window settings
 	if (currentMode == 2 or not currentMode) and lobbyFullscreen == 2 then
-		local x = Spring.GetConfigInt("WindowPosX")
-		local y = Spring.GetConfigInt("WindowPosY")
-		local width = Spring.GetConfigInt("XResolutionWindowed")
-		local height = Spring.GetConfigInt("YResolutionWindowed")
-
-		if x then
-			Configuration:SetConfigValue("window_WindowPosX", x)
-		end
-		if y then
-			Configuration:SetConfigValue("window_WindowPosY", y)
-		end
-		if width then
-			Configuration:SetConfigValue("window_XResolutionWindowed", width)
-		end
-		if height then
-			Configuration:SetConfigValue("window_YResolutionWindowed", height)
-		end
+		SaveWindowPos()
 	end
-
 	SetLobbyFullscreenMode(lobbyFullscreen)
 end
 
@@ -1169,6 +1159,20 @@ function widget:ActivateMenu()
 	SetLobbyFullscreenMode(WG.Chobby.Configuration.lobby_fullscreen)
 end
 
+--local oldWidth, oldHeight, oldX, oldY
+--function widget:Update()
+--	if not ((currentMode == 2 or not currentMode) and lobbyFullscreen == 2) then
+--		return
+--	end
+--	
+--	local width, height, x, y = Spring.GetWindowGeometry()
+--	if width == oldWidth and height == oldHeight and x == oldX and y == oldY then
+--		return
+--	end
+--	oldWidth, oldHeight, oldX, oldY = width, height, x, y
+--	SaveWindowPos(width, height, x, y)
+--end
+
 local onBattleAboutToStart
 
 local function DelayedInitialize()
@@ -1181,7 +1185,7 @@ function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
-	WG.Delay(DelayedInitialize, 1)
+	WG.Delay(DelayedInitialize, 0.1)
 
 	onBattleAboutToStart = function(listener)
 		local screenX, screenY = Spring.GetScreenGeometry()
