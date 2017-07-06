@@ -85,6 +85,8 @@ function DelayedInitialize()
 	Analytics.SendOnetimeEvent("lobby:started")
 	if Platform and Platform.glVersionShort and type(Platform.glVersionShort) == "string" then
 		Analytics.SendOnetimeEvent("graphics:openglVersion:" .. Platform.glVersionShort)
+		Analytics.SendOnetimeEvent("graphics:gpu:" .. (Platform.gpu or "unknown"))
+		Analytics.SendOnetimeEvent("graphics:glRenderer:" .. (Platform.glRenderer or "unknown"))
 	else
 		Analytics.SendOnetimeEvent("graphics:openglVersion:notFound")
 	end
