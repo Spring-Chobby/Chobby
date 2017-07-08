@@ -18,8 +18,8 @@ function SortableList:init(holder, headings, itemHeight, defaultSort, sortDirect
 	
 	self.headingButtons = {}
 	
+	self.sortBy = defaultSort or 1
 	if headings then
-		self.sortBy = defaultSort or 1
 		for i = 1, #headings do
 			local heading = headings[i]
 			self.headingButtons[i] = Button:New {

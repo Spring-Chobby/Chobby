@@ -1,6 +1,6 @@
 local menuItems = {
 	{
-		name = "missions", 
+		name = "tutorials", 
 		control = WG.MissionHandler.GetControl(),
 	},
 	{

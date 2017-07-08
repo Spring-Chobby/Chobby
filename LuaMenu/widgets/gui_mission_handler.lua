@@ -150,50 +150,56 @@ local function CreateMissionEntry(missionData)
 		parent = holder,
 	}
 	
-	local missionOrder = TextBox:New {
-		name = "missionOrder",
+	--local missionOrder = TextBox:New {
+	--	name = "missionOrder",
+	--	x = 90,
+	--	y = 8,
+	--	right = 0,
+	--	height = 20,
+	--	valign = 'center',
+	--	fontsize = Configuration:GetFont(3).size,
+	--	text = tostring(missionData.FeaturedOrder or ""),
+	--	parent = holder,
+	--}
+	
+	local missionName = missionData.DisplayName
+	if missionData.FeaturedOrder then
+		missionName = tostring(missionData.FeaturedOrder) .. ": " .. missionName
+	end
+	
+	local missionName = TextBox:New {
+		name = "missionName",
 		x = 90,
 		y = 8,
 		right = 0,
 		height = 20,
 		valign = 'center',
 		fontsize = Configuration:GetFont(3).size,
-		text = tostring(missionData.FeaturedOrder or ""),
+		text = missionName,
 		parent = holder,
 	}
-	local missionName = TextBox:New {
-		name = "missionName",
-		x = 126,
-		y = 8,
-		right = 0,
-		height = 20,
-		valign = 'center',
-		fontsize = Configuration:GetFont(3).size,
-		text = missionData.DisplayName,
-		parent = holder,
-	}
-	local missionDifficulty = TextBox:New {
-		name = "missionDifficulty",
-		x = 170,
-		y = 42,
-		right = 0,
-		height = 20,
-		valign = 'center',
-		fontsize = Configuration:GetFont(2).size,
-		text = string.format("Difficulty %.1f", missionData.Difficulty or 0),
-		parent = holder,
-	}
-	local missionMap = TextBox:New {
-		name = "missionMap",
-		x = 320,
-		y = 42,
-		right = 0,
-		height = 20,
-		valign = 'center',
-		fontsize = Configuration:GetFont(2).size,
-		text = missionData.Map,
-		parent = holder,
-	}
+	--local missionDifficulty = TextBox:New {
+	--	name = "missionDifficulty",
+	--	x = 170,
+	--	y = 42,
+	--	right = 0,
+	--	height = 20,
+	--	valign = 'center',
+	--	fontsize = Configuration:GetFont(2).size,
+	--	text = string.format("Difficulty %.1f", missionData.Difficulty or 0),
+	--	parent = holder,
+	--}
+	--local missionMap = TextBox:New {
+	--	name = "missionMap",
+	--	x = 320,
+	--	y = 42,
+	--	right = 0,
+	--	height = 20,
+	--	valign = 'center',
+	--	fontsize = Configuration:GetFont(2).size,
+	--	text = missionData.Map,
+	--	parent = holder,
+	--}
 	
 	return holder, {missionData.FeaturedOrder or math.huge, missionData.DisplayName, missionData.Difficulty or 0, missionData.Map}
 end
@@ -212,7 +218,7 @@ local function InitializeControls(parentControl)
 		height = 20,
 		parent = parentControl,
 		font = Configuration:GetFont(3),
-		caption = "Select Mission",
+		caption = "Select Tutorial",
 	}
 	
 	local btnLeaveScreen = Button:New {
@@ -283,14 +289,15 @@ local function InitializeControls(parentControl)
 		padding = {0, 0, 0, 0},
 	}
 	
-	local headings = {
-		{name = "#", x = 88, width = 36},
-		{name = "Name", x = 124, width = 157},
-		{name = "Difficulty", x = 286, width = 125},
-		{name = "Map", x = 416, right = 5},
-	}
+	--local headings = {
+	--	{name = "#", x = 88, width = 36},
+	--	{name = "Name", x = 124, width = 157},
+	--	{name = "Difficulty", x = 286, width = 125},
+	--	{name = "Map", x = 416, right = 5},
+	--}
+	--local missionList = WG.Chobby.SortableList(listHolder, headings, 80, 1)
 	
-	local missionList = WG.Chobby.SortableList(listHolder, headings, 80, 1)
+	local missionList = WG.Chobby.SortableList(listHolder, nil, 80, 1)
 
 	local items = {}
 	for i = 1, #missions do
