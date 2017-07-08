@@ -301,8 +301,10 @@ local function InitializeControls(parentControl)
 
 	local items = {}
 	for i = 1, #missions do
-		local controls, order = CreateMissionEntry(missions[i])
-		items[#items + 1] = {#items, controls, order}
+		if string.find(missions[i].DisplayName, "Tutorial") then
+			local controls, order = CreateMissionEntry(missions[i])
+			items[#items + 1] = {#items, controls, order}
+		end
 	end
 		
 	missionList:AddItems(items)
