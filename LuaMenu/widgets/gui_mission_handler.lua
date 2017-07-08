@@ -306,7 +306,7 @@ local function InitializeControls(parentControl)
 			items[#items + 1] = {#items, controls, order}
 		end
 	end
-		
+	
 	missionList:AddItems(items)
 end
 
