@@ -461,12 +461,35 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	local downloader = WG.Chobby.Downloader(downloaderPos, 8, nil, nil, nil, OnDownloaderVisibility)
 	leftOffset = leftOffset + 120
 
+	
 	-- Example downloads
 	--MaybeDownloadArchive("Titan-v2", "map")
 	--MaybeDownloadArchive("tinyskirmishredux1.1", "map")
 
 	local externalFunctions = {}
 
+	function externalFunctions.UpdateBattleMode(disallowCustomTeams)
+		local offset = 0
+		if disallowCustomTeams then
+			btnNewTeam:SetVisibility(false)
+		else
+			btnNewTeam:SetVisibility(true)
+			offset = offset + 38
+		end
+		btnPickMap:SetPos(nil, offset)
+		offset = offset + 38
+		btnModoptions:SetPos(nil, offset)
+		offset = offset + 40
+		lblGame:SetPos(nil, offset)
+		offset = offset + 26
+		imHaveGame:SetPos(nil, offset)
+		lblHaveGame:SetPos(nil, offset)
+		offset = offset + 25
+		imHaveMap:SetPos(nil, offset)
+		lblHaveMap:SetPos(nil, offset)
+	end
+	externalFunctions.UpdateBattleMode(battle.disallowCustomTeams)
+	
 	function externalFunctions.SetHaveGame(newHaveGame)
 		if newHaveGame then
 			imHaveGame.file = IMG_READY
@@ -1663,6 +1686,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 			UpdateBattleTitle()
 			if newInfo.battleMode then
 				playerHandler.UpdateBattleMode(newInfo.disallowCustomTeams, newInfo.disallowBots)
+				infoHandler.UpdateBattleMode(newInfo.disallowCustomTeams)
 			end
 		end
 
