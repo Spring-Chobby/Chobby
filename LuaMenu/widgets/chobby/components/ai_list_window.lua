@@ -2,7 +2,7 @@ AiListWindow = ListWindow:extends{}
 
 function AiListWindow:init(gameName)
 
-	self:super('init', WG.Chobby.lobbyInterfaceHolder, "Choose AI", false, "main_window", nil, {6, 7, 7, 4})
+	self:super('init', lobbyInterfaceHolder, "Choose AI", false, "main_window", nil, {6, 7, 7, 4})
 	self.window:SetPos(nil, nil, 500, 700)
 	
 	self.validAiNames = {}
@@ -17,6 +17,16 @@ function AiListWindow:init(gameName)
 	for i, ai in pairs(ais) do
 		self:AddAiToList(ai, blackList, oldAiVersions, isRunning64Bit)
 	end
+	
+end
+function AiListWindow:CompareItems(id1, id2)
+	local order = Configuration.simpleAiList and Configuration.gameConfig.simpleAiOrder
+	if order then
+		local pos1 = order[id1]
+		local pos2 = order[id2]
+		return pos1 and pos2 and pos1 > pos2
+	end
+	return true
 end
 
 function AiListWindow:AddAiToList(ai, blackList, oldAiVersions, isRunning64Bit)
@@ -35,42 +45,50 @@ function AiListWindow:AddAiToList(ai, blackList, oldAiVersions, isRunning64Bit)
 	if version == " <not-versioned>" then
 		version = ""
 	end
-	local fullName = shortName .. version
+	local aiName = shortName .. version
 	
 	if oldAiVersions then
 		for i = 1, #oldAiVersions do
-			if string.find(fullName, oldAiVersions[i]) then
+			if string.find(aiName, oldAiVersions[i]) then
 				return
 			end
 		end
 	end
 	
-	self.validAiNames[shortName] = true
+	local displayName = aiName
+	if Configuration.simpleAiList and Configuration.gameConfig.GetAiSimpleName then
+		displayName = Configuration.gameConfig.GetAiSimpleName(displayName)
+		if not displayName then
+			return
+		end
+	end
+	
+	self.validAiNames[shortName] = displayName
 	
 	local addAIButton = Button:New {
 		x = 0,
 		y = 0,
 		width = "100%",
 		height = "100%",
-		caption = fullName,
+		caption = displayName,
 		font = Configuration:GetFont(3),
 		OnClick = {
 			function()
-				self:AddAi(shortName, ai.version)
+				self:AddAi(displayName, shortName, ai.version)
 				self:HideWindow()
 			end
 		},
 	}
-	self:AddRow({addAIButton}, fullName)
+	self:AddRow({addAIButton}, displayName)
 end
 
-function AiListWindow:AddAi(shortName, version)
+function AiListWindow:AddAi(displayName, shortName, version)
 	local aiName
 	local counter = 1
 	local found = true
 	while found do
 		found = false
-		aiName = shortName .. " (" .. tostring(counter) .. ")"
+		aiName = displayName .. " (" .. tostring(counter) .. ")"
 		for _, userName in pairs(self.lobby.battleAis) do
 			if aiName == userName then
 				found = true
@@ -80,12 +98,12 @@ function AiListWindow:AddAi(shortName, version)
 		counter = counter + 1
 	end
 	self.lobby:AddAi(aiName, shortName, self.allyTeam, version)
-	WG.Chobby.Configuration:SetConfigValue("lastAddedAiName", shortName)
+	Configuration:SetConfigValue("lastAddedAiName", shortName)
 end
 
 function AiListWindow:QuickAdd(shortName)
 	if self.validAiNames[shortName] then
-		self:AddAi(shortName)
+		self:AddAi(self.validAiNames[shortName], shortName)
 		return true
 	end
 end

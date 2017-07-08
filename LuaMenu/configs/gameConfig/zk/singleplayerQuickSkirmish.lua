@@ -69,18 +69,26 @@ function skirmishSetupData.ApplyFunction(battleLobby, pageChoices)
 	
 	local bitAppend = (Configuration:GetIsRunning64Bit() and "64") or "32"
 	local aiName = aiDifficultyMap[difficulty] .. bitAppend
+	local displayName = aiName
+	
+	if Configuration.gameConfig.GetAiSimpleName then
+		local betterName = Configuration.gameConfig.GetAiSimpleName(displayName)
+		if betterName then
+			displayName = betterName
+		end
+	end
 	
 	-- AI game
 	local aiNumber = 1
 	local allies = gameType - 1
 	for i = 1, allies do
-		battleLobby:AddAi(aiName .. " (" .. aiNumber .. ")", aiName, 0, Configuration.gameConfig.aiVersion)
+		battleLobby:AddAi(displayName .. " (" .. aiNumber .. ")", aiName, 0, Configuration.gameConfig.aiVersion)
 		aiNumber = aiNumber + 1
 	end
 	
 	local enemies = gameType
 	for i = 1, enemies do
-		battleLobby:AddAi(aiName .. " (" .. aiNumber .. ")", aiName, 1, Configuration.gameConfig.aiVersion)
+		battleLobby:AddAi(displayName .. " (" .. aiNumber .. ")", aiName, 1, Configuration.gameConfig.aiVersion)
 		aiNumber = aiNumber + 1
 	end
 end

@@ -150,6 +150,7 @@ function Configuration:init()
 	self.debugMode = false
 	self.activeDebugConsole = false
 	self.onlyShowFeaturedMaps = true
+	self.simpleAiList = true
 	self.useSpringRestart = false
 	self.menuMusicVolume = 0.5
 	self.menuNotificationVolume = 0.8
@@ -375,6 +376,7 @@ function Configuration:GetConfigData()
 		loadLocalWidgets = self.loadLocalWidgets,
 		activeDebugConsole = self.activeDebugConsole,
 		onlyShowFeaturedMaps = self.onlyShowFeaturedMaps,
+		simpleAiList = self.simpleAiList,
 		useSpringRestart = self.useSpringRestart,
 		displayBots = self.displayBots,
 		displayBadEngines = self.displayBadEngines,
