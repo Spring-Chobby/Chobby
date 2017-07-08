@@ -26,6 +26,7 @@ local externalFunctions = {}
 
 local SAVE_DIR = "Saves/campaign/"
 local ICONS_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/unitpics/"
+local LOAD_CAMPAIGN_STRING = "Campaign_LoadCampaign"
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -229,7 +230,7 @@ local function StartNewGame()
 	CallListeners("CampaignLoaded")
 end
 
-local function LoadCampaignData()
+local function LoadCampaignData(noCreateNew)
 	local Configuration = WG.Chobby.Configuration
 	local saves = GetSaves()
 	local saveData = saves[Configuration.campaignSaveFile]
@@ -237,7 +238,14 @@ local function LoadCampaignData()
 		LoadGame(saveData)
 		return
 	end
-	StartNewGame(Configuration.campaignSaveFile)
+	if (not noCreateNew) then
+		StartNewGame(Configuration.campaignSaveFile)
+	end
+end
+
+local function LoadGameByFilename(filename)
+	WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", filename)
+	LoadCampaignData(true)
 end
 
 --------------------------------------------------------------------------------
@@ -447,6 +455,19 @@ function externalFunctions.DeleteSave(filename)
 end
 
 externalFunctions.StartNewGame = StartNewGame
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+function widget:RecvLuaMsg(msg)
+	if string.find(msg, LOAD_CAMPAIGN_STRING) then
+		local filename = string.sub(msg, string.len(LOAD_CAMPAIGN_STRING) + 1)
+		Spring.Log(widget:GetInfo().name, LOG.INFO, "Loading campaign " .. filename)
+		if filename == WG.Chobby.Configuration.campaignSaveFile then
+			return	-- already loaded, do nothing
+		end
+		LoadGameByFilename(filename)
+	end
+end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------

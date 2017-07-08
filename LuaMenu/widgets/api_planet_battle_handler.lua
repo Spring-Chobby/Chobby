@@ -200,6 +200,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 			objectiveconfig = TableToBase64(gameConfig.objectiveConfig),
 			bonusobjectiveconfig = TableToBase64(gameConfig.bonusObjectiveConfig),
 			fixedstartpos = 1,
+			singleplayercampaignsavename = WG.Chobby.Configuration.campaignSaveFile,
 			singleplayercampaignbattleid = planetID
 		},
 	}
