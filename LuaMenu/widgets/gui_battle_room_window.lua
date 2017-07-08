@@ -985,6 +985,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 
 		if not (disallowCustomTeams and disallowBots) then
 			GetTeam(1)
+			PositionChildren(mainStackPanel, mainScrollPanel.height)
 		end
 		for teamIndex, teamData in pairs(team) do
 			if not teamData.CheckRemoval() then
@@ -1657,16 +1658,15 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		infoHandler.BattleIngameUpdate(updatedBattleID, isRunning)
 	end
 
-	local function OnUpdateBattleInfo(listener, updatedBattleID, spectatorCount, locked, mapHash, mapName,
-			engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker, newPlayerList, maxPlayers, title)
-		if (battleMode or title or engineVersion) and battleID == updatedBattleID then
+	local function OnUpdateBattleInfo(listener, updatedBattleID, newInfo)
+		if (newInfo.battleMode or newInfo.title or newInfo.engineVersion) and battleID == updatedBattleID then
 			UpdateBattleTitle()
-			if battleMode then
-				playerHandler.UpdateBattleMode(disallowCustomTeams, disallowBots)
+			if newInfo.battleMode then
+				playerHandler.UpdateBattleMode(newInfo.disallowCustomTeams, newInfo.disallowBots)
 			end
 		end
 
-		infoHandler.UpdateBattleInfo(updatedBattleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)
+		infoHandler.UpdateBattleInfo(updatedBattleID, newInfo)
 	end
 
 	local function OnLeftBattle(listener, leftBattleID, userName)
