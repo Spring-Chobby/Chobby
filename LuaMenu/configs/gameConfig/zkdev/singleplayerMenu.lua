@@ -5,6 +5,8 @@ local menuItems = {
 	},
 	{
 		name = "campaign",
+		entryCheck = WG.CampaignSaveWindow.PromptInitialSaveName,
+		entryCheckBootMode = true,
 		submenuData = {
 			submenuControl = WG.CampaignHandler.GetControl(),
 			tabs = {

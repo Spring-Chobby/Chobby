@@ -429,6 +429,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local battleListWindow = BattleListWindow()
 	local planetwarsListWindow = WG.PlanetwarsListWindow.GetControl()
 
+	local SINGLEPLAYER_INDEX = 1
 	local MULTIPLAYER_INDEX = 2
 	local submenus = {
 		{
@@ -927,10 +928,17 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	end
 
 	function externalFunctions.OpenMultiplayerTabByName(name)
+		-- name = nil just opens the MP menu.
 		mainWindowHandler.SetBackAtMainMenu()
 		mainWindowHandler.OpenSubmenu(MULTIPLAYER_INDEX, name)
 	end
 
+	function externalFunctions.OpenSingleplayerTabByName(name)
+		-- name = nil just opens the SP menu.
+		mainWindowHandler.SetBackAtMainMenu()
+		mainWindowHandler.OpenSubmenu(SINGLEPLAYER_INDEX, name)
+	end
+	
 	function externalFunctions.SetPanelDisplayMode(newAutodetectDoublePanel, newDoublePanel)
 		autodetectDoublePanel = newAutodetectDoublePanel
 		local screenWidth, screenHeight = Spring.GetViewGeometry()

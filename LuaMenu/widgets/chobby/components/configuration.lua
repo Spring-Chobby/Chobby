@@ -120,7 +120,7 @@ function Configuration:init()
 	self.campaignPath = "campaign/sample"
 	self.campaignConfigName = "sample"
 	self.campaignConfig = VFS.Include("campaign/sample/mainConfig.lua")
-	self.campaignSaveFile = "Campaign1"
+	self.campaignSaveFile = nil -- Set by user
 
 	-- TODO, generate this from directory structure
 	local gameConfigOptions = {

@@ -21,8 +21,6 @@ local SAVE_DIR = "Saves/campaign"
 local SAVE_DIR_LENGTH = string.len(SAVE_DIR) + 2
 local AUTOSAVE_DIR = SAVE_DIR .. "/auto"
 
-local Configuration
-
 --------------------------------------------------------------------------------
 -- data
 --------------------------------------------------------------------------------
@@ -68,7 +66,7 @@ end
 
 local function SaveGame(filename)
 	local result = WG.CampaignData.SaveGame(filename)
-	if result then
+	if result and WG.CampaignSaveWindow.PopulateSaveList then
 		WG.CampaignSaveWindow.PopulateSaveList()
 	end
 end
@@ -83,12 +81,14 @@ local function DeleteSave(filename)
 	WG.CampaignSaveWindow.PopulateSaveList()
 end
 
-local function PromptNewSave()
+local function PromptNewSave(backOnFail)
+	local Configuration = WG.Chobby.Configuration
+	
 	local newSaveWindow = Window:New {
 		x = 700,
 		y = 300,
 		width = 316,
-		height = 240,
+		height = 210,
 		caption = "",
 		resizable = false,
 		draggable = false,
@@ -108,17 +108,17 @@ local function PromptNewSave()
 		y = 15,
 		height = 35,
 		font = Configuration:GetFont(3),
-		caption = i18n("save_name"),
+		caption = i18n("commander_name"),
 		parent = newSaveWindow,
 	}
 
 	local ebSaveName = EditBox:New {
-		x = 30,
-		right = 30,
-		y = 60,
+		x = 25,
+		right = 25,
+		y = 50,
 		height = 35,
 		text = "",
-		hint = i18n("save_name"),
+		hint = i18n("commander_name"),
 		fontsize = Configuration:GetFont(3).size,
 		parent = newSaveWindow,
 	}
@@ -127,12 +127,18 @@ local function PromptNewSave()
 		if ebSaveName.text and ebSaveName.text ~= "" then
 			WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", ebSaveName.text)
 			WG.CampaignData.StartNewGame()
+			WG.CampaignData.SetCommanderName(ebSaveName.text)
 			newSaveWindow:Dispose()
-			WG.CampaignSaveWindow.PopulateSaveList()
+			if WG.CampaignSaveWindow.PopulateSaveList then
+				WG.CampaignSaveWindow.PopulateSaveList()
+			end
 		end
 	end
 
 	local function CancelFunc()
+		if backOnFail then
+			WG.Chobby.interfaceRoot.OpenSingleplayerTabByName()
+		end
 		newSaveWindow:Dispose()
 	end
 
@@ -141,7 +147,7 @@ local function PromptNewSave()
 		width = 135,
 		bottom = 1,
 		height = 70,
-		caption = i18n("new_game"),
+		caption = i18n("ok"),
 		font = Configuration:GetFont(3),
 		classname = "action_button",
 		OnClick = {
@@ -177,7 +183,8 @@ end
 
 -- Makes a button for a save game on the save/load screen
 local function AddSaveEntryButton(saveFile, saveList)
-	local current = saveFile.name == WG.Chobby.Configuration.campaignSaveFile
+	local Configuration = WG.Chobby.Configuration
+	local current = (saveFile.name == Configuration.campaignSaveFile)
 
 	local container = Panel:New {
 		x = 0,
@@ -301,7 +308,7 @@ end
 --------------------------------------------------------------------------------
 
 local function InitializeControls(parent, saveMode)
-	Configuration = WG.Chobby.Configuration
+	local Configuration = WG.Chobby.Configuration
 
 	-------------------------
 	-- Generate List
@@ -369,13 +376,20 @@ function CampaignSaveWindow.GetControl()
 			function(obj)
 				if obj:IsEmpty() then
 					controlFuncs = InitializeControls(obj, saveMode)
-					CampaignSaveWindow.PopulateSaveList = controlFuncs.PopulateSaveList	-- hax
+					CampaignSaveWindow.PopulateSaveList = controlFuncs.PopulateSaveList -- hax
 				end
 			end
 		},
 	}
 
 	return window
+end
+
+function CampaignSaveWindow.PromptInitialSaveName()
+	local Configuration = WG.Chobby.Configuration
+	if not Configuration.campaignSaveFile then
+		PromptNewSave(true)
+	end
 end
 
 --------------------------------------------------------------------------------

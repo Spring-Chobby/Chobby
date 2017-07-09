@@ -190,6 +190,7 @@ return {
 		save = "Save",
 		save_new_game = "Save a new game",
 		save_name = "Save name",
+		commander_name = "Commander name",
 		save_overwrite_confirm = "Are you sure you want to overwrite this save?",
 		autosave = "Autosave",
 		new_campaign = "New Campaign",

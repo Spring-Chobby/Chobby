@@ -314,13 +314,14 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 		end
 	end
 
-	function externalFunctions.AddTab(name, humanName, control, onClick, rank, selected, entryCheck, submenuData)
+	function externalFunctions.AddTab(name, humanName, control, onClick, rank, selected, entryCheck, submenuData, entryCheckBootMode)
 		local newTab = {}
 
 		newTab.name = name
 		newTab.rank = rank or (#tabs + 1)
 		newTab.control = control
 		newTab.entryCheck = entryCheck
+		newTab.entryCheckBootMode = entryCheckBootMode
 		local button
 		
 		if tabControlOverride and tabControlOverride[name] then
@@ -344,7 +345,12 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 		button.OnClick = button.OnClick or {}
 		button.OnClick[#button.OnClick + 1] = function(obj)
 			if newTab.entryCheck then
-				newTab.entryCheck(ToggleShow, obj, newTab)
+				if newTab.entryCheckBootMode then
+					newTab.entryCheck()
+					ToggleShow(obj, newTab)
+				else
+					newTab.entryCheck(ToggleShow, obj, newTab)
+				end
 			else
 				ToggleShow(obj, newTab)
 			end
@@ -490,7 +496,8 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 			initialTabs[i].control,
 			nil, nil, nil,
 			initialTabs[i].entryCheck,
-			initialTabs[i].submenuData
+			initialTabs[i].submenuData,
+			initialTabs[i].entryCheckBootMode
 		)
 	end
 	

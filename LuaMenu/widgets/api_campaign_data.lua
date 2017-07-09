@@ -110,6 +110,7 @@ local function ResetGamedata()
 		commanderExperience = 0,
 		difficultySetting = 1, -- 1,2,3 -> easy/medium/hard
 		commanderLevel = 1,
+		commanderName = "Commander",
 		commanderLoadout = {},
 		retinue = {}, -- Unused
 	}
@@ -183,6 +184,9 @@ local function SaveGame(fileName)
 	else
 		fileName = WG.Chobby.Configuration.campaignSaveFile
 	end
+	if not fileName then
+		return false
+	end
 	local success, err = pcall(function()
 		Spring.CreateDir(SAVE_DIR)
 		path = SAVE_DIR .. fileName .. ".lua"
@@ -232,14 +236,16 @@ end
 
 local function LoadCampaignData(noCreateNew)
 	local Configuration = WG.Chobby.Configuration
-	local saves = GetSaves()
-	local saveData = saves[Configuration.campaignSaveFile]
-	if saveData then
-		LoadGame(saveData)
-		return
+	if Configuration.campaignSaveFile then
+		local saves = GetSaves()
+		local saveData = saves[Configuration.campaignSaveFile]
+		if saveData then
+			LoadGame(saveData)
+			return
+		end
 	end
 	if (not noCreateNew) then
-		StartNewGame(Configuration.campaignSaveFile)
+		StartNewGame()
 	end
 end
 
@@ -297,6 +303,10 @@ function externalFunctions.CapturePlanet(planetID, bonusObjectives)
 	if saveRequired then
 		SaveGame()
 	end
+end
+
+function externalFunctions.SetCommanderName(newName)
+	gamedata.commanderName = newName
 end
 
 function externalFunctions.GetPlanetDefs()
@@ -380,7 +390,7 @@ end
 
 function externalFunctions.GetPlayerCommander()
 	return {
-		name = "blubb.",
+		name = gamedata.commanderName,
 		chassis = "knight",
 		modules = {
 			{
@@ -437,7 +447,7 @@ function externalFunctions.DeleteSave(filename)
 		os.remove(pathNoExtension .. ".lua")
 		if (filename == Configuration.campaignSaveFile) then
 			-- if this is current save, switch to next available save slot, or revert to "Campaign1" if none are available
-			local newName = "Campaign1"
+			local newName
 			local saves = GetSaves()
 			for name, save in pairs(saves) do
 				-- TODO: sort instead of just picking the first one?
@@ -446,6 +456,9 @@ function externalFunctions.DeleteSave(filename)
 				break
 			end
 			WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", newName)
+			if not newName then
+				WG.CampaignSaveWindow.PromptInitialSaveName()
+			end
 		end
 	end)
 	if (not success) then
