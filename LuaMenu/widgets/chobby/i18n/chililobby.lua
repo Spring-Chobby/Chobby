@@ -191,6 +191,8 @@ return {
 		save_new_game = "Save a new game",
 		save_name = "Save name",
 		commander_name = "Commander name",
+		configure_commander = "Configure Commander",
+		commander = "Commander",
 		save_overwrite_confirm = "Are you sure you want to overwrite this save?",
 		autosave = "Autosave",
 		new_campaign = "New Campaign",

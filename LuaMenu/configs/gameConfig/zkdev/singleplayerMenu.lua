@@ -15,6 +15,10 @@ local menuItems = {
 					control = WG.TechnologyHandler.GetControl(),
 				},
 				{
+					name = "commander", 
+					control = WG.CommanderHandler.GetControl(),
+				},
+				{
 					name = "codex", 
 					control = WG.CodexHandler.GetControl(),
 				},

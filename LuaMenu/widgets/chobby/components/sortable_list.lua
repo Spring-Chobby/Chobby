@@ -159,9 +159,9 @@ function SortableList:UpdateOrder()
 	
 	local function SortFunction(a, b)
 		if self.smallToLarge then
-			return self.sortDataById[a][self.sortBy] < self.sortDataById[b][self.sortBy]
+			return self.sortDataById[a] and self.sortDataById[b] and self.sortDataById[a][self.sortBy] < self.sortDataById[b][self.sortBy]
 		else
-			return self.sortDataById[a][self.sortBy] > self.sortDataById[b][self.sortBy]
+			return self.sortDataById[a] and self.sortDataById[b] and self.sortDataById[a][self.sortBy] > self.sortDataById[b][self.sortBy]
 		end
 	end
 	

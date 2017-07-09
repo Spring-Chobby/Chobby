@@ -51,7 +51,7 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
-local function CreateSlotEntry()	-- redefined later
+local function CreateSlotEntry() -- redefined later
 end
 
 local function CreateModuleEntry(moduleDef, commConfig, level, slotNum, moduleList, slotHolder)
