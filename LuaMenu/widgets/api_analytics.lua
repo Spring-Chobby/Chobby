@@ -71,6 +71,10 @@ end
 --------------------------------------------------------------------------------
 -- Initialize
 
+local function ProcessString(str)
+	return string.gsub(string.gsub(str," ","_"),"/","_")
+end
+
 function DelayedInitialize()
 	local function OnBattleStartSingleplayer()
 		Analytics.SendOnetimeEvent("lobby:singleplayer:game_loading")
@@ -85,11 +89,12 @@ function DelayedInitialize()
 	Analytics.SendOnetimeEvent("lobby:started")
 	if Platform and Platform.glVersionShort and type(Platform.glVersionShort) == "string" then
 		Analytics.SendOnetimeEvent("graphics:openglVersion:" .. Platform.glVersionShort)
-		Analytics.SendOnetimeEvent("graphics:gpu:" .. (Platform.gpu or "unknown"))
-		Analytics.SendOnetimeEvent("graphics:glRenderer:" .. (Platform.glRenderer or "unknown"))
 	else
 		Analytics.SendOnetimeEvent("graphics:openglVersion:notFound")
 	end
+	
+	Analytics.SendOnetimeEvent("graphics:gpu:" .. ProcessString(tostring((Platform and Platform.gpu) or "unknown") or "unknown"))
+	Analytics.SendOnetimeEvent("graphics:glRenderer:" .. ProcessString(tostring((Platform and Platform.glRenderer) or "unknown") or "unknown"))
 end
 
 --------------------------------------------------------------------------------
