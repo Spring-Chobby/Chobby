@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Thibella Delta",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.215,
-			y = 0.865,
+			x = 0.29,
+			y = 0.65,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},

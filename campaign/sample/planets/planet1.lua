@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities)
 			primary = "Origin",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[Your first battle will be straightforward. You have been provided with a starting base. Construct an army of Glaives and overwhelm your enemy.]]
+			text = [[Your first battle will be straightforward. You have been provided with a starting base. Construct an army of Glaives and Warriors and overwhelm your enemy.]]
 		},
 		gameConfig = {
 			missionStartscript = false,
@@ -41,6 +41,7 @@ local function GetPlanet(planetUtilities)
 				extraUnlocks = {
 					"factorycloak",
 					"cloakraid",
+					"cloakriot",
 					"staticmex",
 					"energysolar",
 					"cloakcon",
@@ -165,7 +166,7 @@ local function GetPlanet(planetUtilities)
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Destroy the enemy Commander and Cloaky Factory",
+					description = "Destroy the enemy Commander and Cloaky Bot Factory",
 				},
 				[2] = {
 					description = "Protect your Commander",
@@ -173,13 +174,7 @@ local function GetPlanet(planetUtilities)
 			},
 			bonusObjectiveConfig = {
 				-- Indexed by bonusObjectiveID
-				[1] = {
-					victoryByTime = 480,
-					image = planetUtilities.ICON_OVERLAY.CLOCK,
-					description = "Win by 8:00",
-					experience = 10,
-				},
-				[2] = { -- Have 3 mex by 1 minute.
+				[1] = { -- Have 3 mex by 1 minute.
 					satisfyByTime = 60,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 3,
@@ -191,7 +186,7 @@ local function GetPlanet(planetUtilities)
 					description = "Have 3 Metal Extractors by 1:00.",
 					experience = 10,
 				},
-				[3] = { -- Have 3 solar by 2 minute.
+				[2] = { -- Have 3 solar by 2 minute.
 					satisfyByTime = 120,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 3,
@@ -203,7 +198,7 @@ local function GetPlanet(planetUtilities)
 					description = "Have 3 Solar Generators by 2:00.",
 					experience = 10,
 				},
-				[4] = { -- Build a radar
+				[3] = { -- Build a radar
 					satisfyOnce = true,
 					countRemovedUnits = true, -- count units that previously died.
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
@@ -216,7 +211,7 @@ local function GetPlanet(planetUtilities)
 					description = "Build a Radar Tower.",
 					experience = 10,
 				},
-				[5] = { -- Build 5 Glaives
+				[4] = { -- Build 5 Glaives
 					satisfyOnce = true,
 					countRemovedUnits = true, -- count units that previously died.
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
@@ -229,13 +224,20 @@ local function GetPlanet(planetUtilities)
 					description = "Build 5 Glaives.",
 					experience = 10,
 				},
+				[5] = {
+					victoryByTime = 480,
+					image = planetUtilities.ICON_OVERLAY.CLOCK,
+					description = "Win by 8:00",
+					experience = 10,
+				},
 			}
 		},
 		completionReward = {
-			experience = 100,
+			experience = 20,
 			units = {
 				"factorycloak",
 				"cloakraid",
+				"cloakriot",
 				"cloakcon"
 			},
 			modules = {

@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.26,
-			y = 0.39,
+			x = 0.28,
+			y = 0.41,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},

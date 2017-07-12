@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.05,
-			y = 0.33,
+			x = 0.06,
+			y = 0.26,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[Your opponent has taken to the air in this battle. Construct the anti-air Gremlin bot and Razor and Hacksaw defensive emplacements to bring them back to the ground. Remember the Defender is also effective as an anti-air defence.]]
+			text = [[something weird]]
 		},
 		gameConfig = {
 			missionStartscript = false,
@@ -39,9 +39,6 @@ local function GetPlanet(planetUtilities)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"cloakaa",
-					"turretaalaser",
-					"turretaaclose",
 				},
 				startUnits = {
 				}
@@ -86,9 +83,6 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = 100,
 			units = {
-				"cloakaa",
-				"turretaalaser",
-				"turretaaclose",
 			},
 			modules = {
 			},

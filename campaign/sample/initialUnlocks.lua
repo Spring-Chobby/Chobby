@@ -2,6 +2,7 @@ return {
 	units = {
 		"staticmex",
 		"staticradar",
+		"turretlaser",
 		"energysolar",
 	},
 	modules = {
