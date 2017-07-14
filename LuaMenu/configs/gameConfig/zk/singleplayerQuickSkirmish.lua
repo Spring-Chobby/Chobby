@@ -11,6 +11,16 @@ local skirmishSetupData = {
 			},
 		},
 		{
+			humanName = "Select Difficulty",
+			name = "difficulty",
+			options = {
+				"Very Easy",
+				"Easy",
+				"Medium",
+				"Hard",
+			},
+		},
+		{
 			humanName = "Select Map",
 			name = "map",
 			minimap = true,
@@ -19,16 +29,6 @@ local skirmishSetupData = {
 				"Onyx Cauldron 1.7",
 				"Fairyland v1.0",
 				"Calamity 1.1",
-			},
-		},
-		{
-			humanName = "Select Difficulty",
-			name = "difficulty",
-			options = {
-				"Very Easy",
-				"Easy",
-				"Medium",
-				"Hard",
 			},
 		},
 	},
@@ -54,7 +54,7 @@ function skirmishSetupData.ApplyFunction(battleLobby, pageChoices)
 	
 	local Configuration = WG.Chobby.Configuration
 	local pageConfig = skirmishSetupData.pages
-	battleLobby:SelectMap(pageConfig[2].options[map])
+	battleLobby:SelectMap(pageConfig[3].options[map])
 	
 	battleLobby:SetBattleStatus({
 		allyNumber = 0,
