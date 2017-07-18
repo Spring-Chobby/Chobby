@@ -9,7 +9,8 @@ function widget:GetInfo()
 		date      = "4 July 2016",
 		license   = "GNU LGPL, v2.1 or later",
 		layer     = -100000,
-		enabled   = true  --  loaded by default?
+		enabled   = true,  --  loaded by default?
+		handler   = true,
 	}
 end
 
@@ -36,6 +37,23 @@ local TEXT_OFFSET = 6
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
+
+local function DisableWidget(name, veto)
+	if widgetHandler.knownInfos and widgetHandler.knownInfos[name] and widgetHandler.knownInfos[name].active and name ~=veto then
+		Spring.Echo("Removing widget", name)
+		widgetHandler:RemoveWidget(widgetHandler:FindByName(name))
+	end
+end
+
+local function DisableAllWidgets()
+	if WG.Delay then
+		WG.Delay(DisableAllWidgets, 0.1)
+	end
+	for name, data in pairs(widgetHandler.knownWidgets) do
+		DisableWidget(name, "Delay API")
+	end
+	DisableWidget("Delay API")
+end
 
 local function ToggleFullscreenOff()
 	Spring.SetConfigInt("Fullscreen", 1, false)
@@ -768,6 +786,32 @@ local function GetVoidTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 
+	children[#children + 1] = Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(2),
+		caption = "Disable Lobby",
+	}
+	children[#children + 1] = Button:New {
+		x = COMBO_X,
+		y = offset,
+		width = COMBO_WIDTH,
+		height = 30,
+		caption = "Disable",
+		tooltip = "Disables the entire lobby and menu.",
+		font = Configuration:GetFont(2),
+		OnClick = {
+			function (obj)
+				WG.Chobby.ConfirmationPopup(DisableAllWidgets, "This will break everything. Are you sure?", nil, 315, 170, i18n("yes"), i18n("cancel"))
+			end
+		}
+	}
+	offset = offset + ITEM_OFFSET
+	
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
