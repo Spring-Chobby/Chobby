@@ -544,10 +544,12 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		local number = Label:New {
 			x = 3,
 			y = 3,
-			right = 2,
-			bottom = 2,
+			right = 6,
+			bottom = 6,
+			align = "center",
+			valign = "center",
 			caption = planetID,
-			font = Configuration:GetFont(4),
+			font = Configuration:GetFont(3),
 			parent = image,
 		}
 	end
