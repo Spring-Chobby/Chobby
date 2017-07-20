@@ -88,7 +88,7 @@ local function PromptNewSave(backOnFail)
 		x = 700,
 		y = 300,
 		width = 316,
-		height = 210,
+		height = 300,
 		caption = "",
 		resizable = false,
 		draggable = false,
@@ -102,32 +102,59 @@ local function PromptNewSave(backOnFail)
 		},
 	}
 
+	local offset = 15
 	local lblSaveName = Label:New {
 		x = 25,
 		right = 15,
-		y = 15,
+		y = offset,
 		height = 35,
 		font = Configuration:GetFont(3),
 		caption = i18n("commander_name"),
 		parent = newSaveWindow,
 	}
-
+	offset = offset + 35
 	local ebSaveName = EditBox:New {
 		x = 25,
 		right = 25,
-		y = 50,
+		y = offset,
 		height = 35,
 		text = "",
 		hint = i18n("commander_name"),
 		fontsize = Configuration:GetFont(3).size,
 		parent = newSaveWindow,
 	}
+	offset = offset + 52
+	
+	local lblDifficulty = Label:New {
+		x = 25,
+		right = 15,
+		y = offset,
+		height = 35,
+		font = Configuration:GetFont(3),
+		caption = "Difficulty",
+		parent = newSaveWindow,
+	}
+	offset = offset + 35
+	local comboDifficulty = ComboBox:New {
+		x = 25,
+		right = 25,
+		y = offset,
+		height = 35,
+		text = "",
+		items = {"Easy", "Medium", "Hard"},
+		font = Configuration:GetFont(3),
+		itemFontSize = Configuration:GetFont(3).size,
+		selected = 2,
+		parent = newSaveWindow,
+	}
+	offset = offset + 52
 
 	local function NewSave()
 		if ebSaveName.text and ebSaveName.text ~= "" then
 			WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", ebSaveName.text)
 			WG.CampaignData.StartNewGame()
 			WG.CampaignData.SetCommanderName(ebSaveName.text)
+			WG.CampaignData.SetDifficultySetting(comboDifficulty.selected)
 			newSaveWindow:Dispose()
 			if WG.CampaignSaveWindow.PopulateSaveList then
 				WG.CampaignSaveWindow.PopulateSaveList()

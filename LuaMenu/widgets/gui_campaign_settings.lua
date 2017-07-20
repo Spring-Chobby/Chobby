@@ -46,7 +46,7 @@ local function InitializeControls(parent)
 		caption = "Difficulty",
 		parent = parent,
 	}
-	ComboBox:New {
+	local comboDifficulty = ComboBox:New {
 		x = COMBO_X,
 		y = offset,
 		width = COMBO_WIDTH,
@@ -66,6 +66,14 @@ local function InitializeControls(parent)
 		parent = parent,
 	}
 	offset = offset + ITEM_OFFSET
+	
+	local function UpdateSettings()
+		freezeSettings = true
+		comboDifficulty:Select(WG.CampaignData.GetDifficultySetting())
+		freezeSettings = false
+	end
+	WG.CampaignData.AddListener("CampaignSettingsUpdate", UpdateSettings)
+	WG.CampaignData.AddListener("CampaignLoaded", UpdateSettings)
 	
 	freezeSettings = false
 end
@@ -91,7 +99,6 @@ function CampaignSettingsWindow.GetControl()
 			end
 		},
 	}
-
 	return window
 end
 

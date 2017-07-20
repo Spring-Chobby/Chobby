@@ -272,6 +272,8 @@ function externalFunctions.SetDifficultySetting(newDifficulty)
 		return
 	end
 	gamedata.difficultySetting = newDifficulty
+	
+	CallListeners("CampaignSettingsUpdate")
 	SaveGame()
 end
 
@@ -476,7 +478,7 @@ function widget:RecvLuaMsg(msg)
 		local filename = string.sub(msg, string.len(LOAD_CAMPAIGN_STRING) + 1)
 		Spring.Log(widget:GetInfo().name, LOG.INFO, "Loading campaign " .. filename)
 		if filename == WG.Chobby.Configuration.campaignSaveFile then
-			return	-- already loaded, do nothing
+			return -- already loaded, do nothing
 		end
 		LoadGameByFilename(filename)
 	end
