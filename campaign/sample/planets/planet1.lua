@@ -239,6 +239,7 @@ local function GetPlanet(planetUtilities)
 				"cloakcon"
 			},
 			modules = {
+				"module_ablative_armor_LIMIT_B_4",
 			},
 			abilities = {
 			}

@@ -243,6 +243,7 @@ local function GetPlanet(planetUtilities)
 				"turretmissile"
 			},
 			modules = {
+				"module_ablative_armor_LIMIT_D_4",
 			},
 			codexEntries = {
 				"faction_dynasty",

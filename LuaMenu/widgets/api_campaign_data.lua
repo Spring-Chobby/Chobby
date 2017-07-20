@@ -32,6 +32,21 @@ local LOAD_CAMPAIGN_STRING = "Campaign_LoadCampaign"
 --------------------------------------------------------------------------------
 -- Utilities
 
+local function TranslateModule(moduleName)
+	-- Limited copies look like moduleName_LIMIT_A_4
+	local limitPos = string.find(moduleName, "_LIMIT_")
+	if not limitPos then
+		if moduleName and gamedata.modulesUnlockedLimit[moduleName] then
+			return moduleName, gamedata.modulesUnlockedLimit[moduleName]
+		end
+		return moduleName
+	end
+	local limit = string.sub(moduleName, limitPos + 9)
+	moduleName = string.sub(moduleName, 0, limitPos - 1)
+	
+	return moduleName, limit
+end
+
 local function UnlockThing(thingData, id)
 	if thingData.map[id] then
 		return false
@@ -41,9 +56,20 @@ local function UnlockThing(thingData, id)
 	return true
 end
 
-local function UnlockListOfThings(unlockList, unlocksToAdd)
+local function UnlockListOfThings(unlockList, unlocksToAdd, translationFunc, unlockLimitTable)
 	for i = 1, #unlocksToAdd do
-		UnlockThing(unlockList, unlocksToAdd[i])
+		if translationFunc then
+			local copyInstanceName = unlocksToAdd[i]
+			local unlockName, limit = translationFunc(copyInstanceName)
+			UnlockThing(unlockList, unlockName)
+			if limit then
+				if UnlockThing(unlockList, copyInstanceName) then
+					unlockLimitTable[unlockName] = (unlockLimitTable[unlockName] or 0) + (tonumber(limit) or 0)
+				end
+			end
+		else
+			UnlockThing(unlockList, unlocksToAdd[i])
+		end
 	end
 end
 
@@ -102,6 +128,7 @@ local function ResetGamedata()
 	gamedata = {
 		unitsUnlocked = {map = {}, list = {}},
 		modulesUnlocked = {map = {}, list = {}},
+		modulesUnlockedLimit = {}, -- Limit for particular modules, eg, 4 speed modules.
 		abilitiesUnlocked = {map = {}, list = {}},
 		codexEntriesUnlocked = {map = {}, list = {}},
 		codexEntryRead = {},
@@ -121,7 +148,7 @@ local function UnlockRewardSet(rewardSet)
 		UnlockListOfThings(gamedata.unitsUnlocked, rewardSet.units)
 	end
 	if rewardSet.modules then
-		UnlockListOfThings(gamedata.modulesUnlocked, rewardSet.modules)
+		UnlockListOfThings(gamedata.modulesUnlocked, rewardSet.modules, TranslateModule, gamedata.modulesUnlockedLimit)
 	end
 	if rewardSet.abilities then
 		UnlockListOfThings(gamedata.abilitiesUnlocked, rewardSet.abilities)
@@ -347,7 +374,7 @@ function externalFunctions.GetUnitIsUnlocked(unitName)
 end
 
 function externalFunctions.GetModuleIsUnlocked(moduleName)
-	return gamedata.modulesUnlocked.map[moduleName]
+	return gamedata.modulesUnlocked.map[moduleName], gamedata.modulesUnlockedLimit[moduleName]
 end
 
 function externalFunctions.GetAbilityIsUnlocked(abilityName)
@@ -372,8 +399,9 @@ function externalFunctions.GetAbilityInfo(abilityName)
 end
 
 function externalFunctions.GetModuleInfo(moduleName)
-	local index = moduleDefNames[moduleName]
-	return index and moduleDefs[index] or {}, ICONS_DIR .. moduleName .. ".png"
+	local parsedName, limit = TranslateModule(moduleName)
+	local index = moduleDefNames[parsedName]
+	return index and moduleDefs[index] or {}, ICONS_DIR .. parsedName .. ".png", nil, limit and ("\255\0\255\0x" .. limit)
 end
 
 function externalFunctions.GetCodexEntryInfo(codexEntryName)

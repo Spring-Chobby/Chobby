@@ -57,9 +57,22 @@ local function MakeRewardList(holder, name, rewardsList, tooltipFunction, Unlock
 		parent = rewardsHolder
 	}
 	
+	local function GetCountLabel(imageControl, count)
+		return Label:New {
+			x = 2,
+			y = "50%",
+			right = 4,
+			bottom = 6,
+			align = "right",
+			fontsize = Configuration:GetFont(3).size,
+			caption = "\255\0\255\0x" .. count,
+			parent = imageControl,
+		}
+	end
+	
 	for i = 1, #rewardsList do
 		local info, imageFile = tooltipFunction(rewardsList[i])
-		local unlocked = UnlockedCheck(rewardsList[i])
+		local unlocked, count = UnlockedCheck(rewardsList[i])
 		local statusString = ""
 		local color
 		if not unlocked then
@@ -79,27 +92,44 @@ local function MakeRewardList(holder, name, rewardsList, tooltipFunction, Unlock
 			file = imageFile,
 			parent = rewardsHolder,
 		}
+		local countLabel = count and GetCountLabel(imageControl, count)
+		
 		function imageControl:HitTest(x,y) return self end
 		
 		unlockList[i] = {
 			image = imageControl,
+			countLabel = countLabel,
 			name = rewardsList[i],
 			humanName = info.humanName or "???",
 			description = info.description or "",
 			unlocked = unlocked,
+			count = count,
 		}
 	end
 	
 	local function UpdateUnlocked(index)
 		local data = unlockList[index]
-		local unlocked = UnlockedCheck(data.name)
-		if unlocked == data.unlocked then
+		local unlocked, count = UnlockedCheck(data.name)
+		if unlocked == data.unlocked and count == data.count then
 			return
 		end
 		data.unlocked = unlocked
+		data.count = count
+		
+		if count then
+			if data.countLabel then
+				data.countLabel:SetCaption("\255\0\255\0x" .. count)
+			else
+				data.countLabel = GetCountLabel(data.image, count)
+			end
+		elseif data.countLabel then
+			data.countLabel:SetCaption("")
+		end
 		
 		local statusString = ""
-		if not unlocked then
+		if unlocked then
+			color = {1, 1, 1, 1}
+		else
 			color = {0.5, 0.5, 0.5, 0.5}
 			statusString = " (locked)"
 		end

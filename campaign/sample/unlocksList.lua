@@ -8,6 +8,15 @@ local unitsUnlocked = {list = {}, map = {}}
 local modulesUnlocked = {list = {}, map = {}}
 local abilitiesUnlocked = {list = {}, map = {}}
 
+local function TranslateModule(moduleName)
+	-- Limited copies look like moduleName_LIMIT_A_4
+	local limitPos = string.find(moduleName, "_LIMIT_")
+	if not limitPos then
+		return moduleName
+	end
+	return string.sub(moduleName, 0, limitPos - 1)
+end
+
 local function UnlockThing(thingData, id)
 	if thingData.map[id] then
 		return false
@@ -17,9 +26,13 @@ local function UnlockThing(thingData, id)
 	return true
 end
 
-local function UnlockListOfThings(unlockList, unlocksToAdd)
+local function UnlockListOfThings(unlockList, unlocksToAdd, translationFunc)
 	for i = 1, #unlocksToAdd do
-		UnlockThing(unlockList, unlocksToAdd[i])
+		if translationFunc then
+			UnlockThing(unlockList, translationFunc(unlocksToAdd[i]))
+		else
+			UnlockThing(unlockList, unlocksToAdd[i])
+		end
 	end
 end
 
@@ -31,7 +44,7 @@ local function UnlockRewardSet(rewardSet)
 		UnlockListOfThings(unitsUnlocked, rewardSet.units)
 	end
 	if rewardSet.modules then
-		UnlockListOfThings(modulesUnlocked, rewardSet.modules)
+		UnlockListOfThings(modulesUnlocked, rewardSet.modules, TranslateModule)
 	end
 	if rewardSet.abilities then
 		UnlockListOfThings(abilitiesUnlocked, rewardSet.abilities)
@@ -47,4 +60,5 @@ return {
 	units = unitsUnlocked,
 	modules = modulesUnlocked,
 	abilities = abilitiesUnlocked,
+	TranslateModule = TranslateModule,
 }

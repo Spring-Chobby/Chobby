@@ -90,7 +90,7 @@ local function MakeRewardList(holder, bottom, name, rewardList, cullUnlocked, to
 				}
 			end
 			
-			local info, imageFile, imageOverlay = tooltipFunction(rewardList[i])
+			local info, imageFile, imageOverlay, count = tooltipFunction(rewardList[i])
 			
 			local x, y = (REWARD_ICON_SIZE*widthMult + 4)*math.floor(position/stackHeight), (position%stackHeight)*REWARD_ICON_SIZE/stackHeight
 			if imageFile then
@@ -114,6 +114,18 @@ local function MakeRewardList(holder, bottom, name, rewardList, cullUnlocked, to
 					file2 = imageOverlay and imageFile,
 					parent = scroll,
 				}
+				if count then
+					Label:New {
+						x = 2,
+						y = "50%",
+						right = 4,
+						bottom = 6,
+						align = "right",
+						fontsize = Configuration:GetFont(3).size,
+						caption = count,
+						parent = image,
+					}
+				end
 				function image:HitTest(x,y) return self end
 			else
 				local tooltip = (overrideTooltip and info) or (info.name or "???")

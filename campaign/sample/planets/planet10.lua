@@ -89,6 +89,8 @@ local function GetPlanet(planetUtilities)
 				"vehcapture",
 			},
 			modules = {
+				"module_ablative_armor_LIMIT_A_4",
+				"module_dmg_booster",
 			},
 			abilities = {
 			}

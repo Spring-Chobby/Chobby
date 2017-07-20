@@ -78,6 +78,7 @@ local function GetPlanet(planetUtilities)
 				"cloakriot"
 			},
 			modules = {
+				"module_ablative_armor_LIMIT_C_4",
 			},
 		},
 	}
