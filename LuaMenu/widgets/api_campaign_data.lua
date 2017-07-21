@@ -17,8 +17,6 @@ end
 -- data
 --------------------------------------------------------------------------------
 
-local moduleDefs, chassisDefs, upgradeUtilities, UNBOUNDED_LEVEL, _, moduleDefNames = VFS.Include("Gamedata/commanders/dynamic_comm_defs.lua")
-
 -- this stores anything that goes into a save file
 local gamedata = {}
 
@@ -164,7 +162,7 @@ local function GainExperience(newExperience)
 	local oldLevel = gamedata.commanderLevel
 	gamedata.commanderExperience = gamedata.commanderExperience + newExperience
 	for i = 1, 50 do
-		if Configuration.campaignConfig.commConfig.GetLevelRequirement(gamedata.commanderLevel + 1) > gamedata.commanderExperience then
+		if Configuration.campaignConfig.commConfig.GetLevelUpRequirement(gamedata.commanderLevel) > gamedata.commanderExperience then
 			break
 		end
 		gamedata.commanderLevel = gamedata.commanderLevel + 1
@@ -400,8 +398,8 @@ end
 
 function externalFunctions.GetModuleInfo(moduleName)
 	local parsedName, limit = TranslateModule(moduleName)
-	local index = moduleDefNames[parsedName]
-	return index and moduleDefs[index] or {}, ICONS_DIR .. parsedName .. ".png", nil, limit and ("\255\0\255\0x" .. limit)
+	local index = WG.Chobby.Configuration.campaignConfig.commConfig.moduleDefNames[parsedName]
+	return index and WG.Chobby.Configuration.campaignConfig.commConfig.moduleDefs[index] or {}, ICONS_DIR .. parsedName .. ".png", nil, limit and ("\255\0\255\0x" .. limit)
 end
 
 function externalFunctions.GetCodexEntryInfo(codexEntryName)
