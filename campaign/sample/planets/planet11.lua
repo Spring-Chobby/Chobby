@@ -11,7 +11,7 @@ local function GetPlanet(planetUtilities)
 		startingPlanet = false,
 		mapDisplay = {
 			x = 0.24,
-			y = 0.19,
+			y = 0.22,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[On this planet your opponent sends gunships out from behind a formidable defensive array. Use Crasher AA vehicles to shoot down the gunships, then Impaler artillery to tear down the base.]]
+			text = [[The enemy Tanks will be difficult to defeat in direct combat. Instead, build Dominatrix vehicles to turn your opponent's units against each other.]]
 		},
 		gameConfig = {
 			missionStartscript = false,
@@ -33,16 +33,15 @@ local function GetPlanet(planetUtilities)
 				startX = 100,
 				startZ = 100,
 				allyTeam = 0,
-				facplop = false,
+				facplop = true,
 				commanderParameters = {
-					facplop = false,
+					facplop = true,
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
 					"factoryveh",
 					"vehcon",
-					"vehheavyarty",
-					"vehaa",
+					"vehcapture",
 				},
 				startUnits = {
 				}
@@ -87,8 +86,7 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = 100,
 			units = {
-				"vehheavyarty",
-				"vehaa",
+				"vehcapture",
 			},
 			modules = {
 			},

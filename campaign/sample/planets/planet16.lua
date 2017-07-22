@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.34,
-			y = 0.28,
+			x = 0.325,
+			y = 0.31,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[Abuse the combination of Roach mobile bombs and Eraser area cloakers to decimate enemy formations in this battle.]]
+			text = [[Abuse the combination of Roach mobile bombs and Eraser area cloakers to decimate enemy tank formations in this battle.]]
 		},
 		gameConfig = {
 			missionStartscript = false,
@@ -42,7 +42,6 @@ local function GetPlanet(planetUtilities)
 					"factoryshield",
 					"shieldcon",
 					"shieldbomb",
-					"shieldaa",
 					"cloakjammer",
 					"staticjammer",
 				},
@@ -90,7 +89,6 @@ local function GetPlanet(planetUtilities)
 			experience = 100,
 			units = {
 				"shieldbomb",
-				"shieldaa",
 				"cloakjammer",
 				"staticjammer",
 			},

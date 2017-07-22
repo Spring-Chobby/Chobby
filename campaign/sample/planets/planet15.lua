@@ -87,6 +87,7 @@ local function GetPlanet(planetUtilities)
 			experience = 100,
 			units = {
 				"shieldscout",
+				"shieldaa",
 			},
 			modules = {
 			},

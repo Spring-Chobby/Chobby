@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[The enemy Tanks will be difficult to defeat in direct combat. Instead, build Dominatrix vehicles to turn your opponent's units against each other.]]
+			text = [[On this planet your opponent sends gunships out from behind a formidable defensive array. Use Crasher AA vehicles to shoot down the gunships, then Impaler artillery to tear down the base.]]
 		},
 		gameConfig = {
 			missionStartscript = false,
@@ -41,7 +41,8 @@ local function GetPlanet(planetUtilities)
 				extraUnlocks = {
 					"factoryveh",
 					"vehcon",
-					"vehcapture",
+					"vehheavyarty",
+					"vehaa",
 				},
 				startUnits = {
 				}
@@ -86,7 +87,8 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = 100,
 			units = {
-				"vehcapture",
+				"vehheavyarty",
+				"vehaa",
 			},
 			modules = {
 				"module_ablative_armor_LIMIT_A_4",
