@@ -106,7 +106,7 @@ planetUtilities.COMMAND = {
 	
 	-- Custom commands
 	RAW_MOVE = 31109,
-	AREA_GUARD = 13922,
+	AREA_GUARD = 13922, -- Don't use, causes recursion
 }
 
 planetUtilities.ICON_OVERLAY = {

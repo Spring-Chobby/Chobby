@@ -52,12 +52,13 @@ local function GetPlanet(planetUtilities)
 						x = 300,
 						z = 3450,
 						facing = 2,
+						difficultyAtMost = 2,
 					},
 					{
 						name = "turretlaser",
 						x = 1000,
 						z = 3600,
-						facing = 1, 
+						facing = 1,
 					},
 					{
 						name = "staticmex",
@@ -115,6 +116,13 @@ local function GetPlanet(planetUtilities)
 							x = 3880,
 							z = 200,
 							facing = 2, 
+						},
+						{
+							name = "turretlaser",
+							x = 3300,
+							z = 300,
+							facing = 1,
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "staticmex",
