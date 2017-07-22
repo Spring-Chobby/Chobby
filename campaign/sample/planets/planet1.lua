@@ -224,7 +224,20 @@ local function GetPlanet(planetUtilities)
 					description = "Build 5 Glaives.",
 					experience = 10,
 				},
-				[5] = {
+				[5] = { -- Kill 10 Glaives
+					satisfyOnce = true,
+					onlyCountRemovedUnits = true, -- Only count units that died
+					comparisionType = planetUtilities.COMPARE.AT_LEAST,
+					targetNumber = 10,
+					enemyUnitTypes = {
+						"cloakraid",
+					},
+					image = planetUtilities.ICON_DIR .. "cloakraid.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
+					description = "Kill 10 Glaives.",
+					experience = 10,
+				},
+				[6] = {
 					victoryByTime = 480,
 					image = planetUtilities.ICON_OVERLAY.CLOCK,
 					description = "Win by 8:00",
