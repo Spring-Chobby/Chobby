@@ -55,18 +55,31 @@ local function GetPlanet(planetUtilities)
 						x = 2560,
 						z = 800,
 						facing = 0, 
+						commands = { -- commands {cmdID, cmdParams, cmdOpts}
+							{unitName = "cloakarty", options = {"shift", "ctrl"}},
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2560, 1200}},
+							{cmdID = planetUtilities.COMMAND.PATROL, pos = {2160, 1200}, options = {"shift"}},
+						},
 					},
 					{
 						name = "cloakcon",
 						x = 2760,
 						z = 800,
-						facing = 0, 
+						facing = 0,
+						commands = { -- Build commands use unitDefname for the cmdID.
+							{cmdID = planetUtilities.COMMAND.GUARD, atPosition = {2560, 800}},
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1560, 800}, options = {"shift"}},
+							{unitName = "turretmissile", pos = {64, 64}, facing = 3, options = {"shift"}},
+						},
 					},
 					{
 						name = "cloakcon",
 						x = 2360,
 						z = 800,
 						facing = 0, 
+						commands = {
+							{cmdID = planetUtilities.COMMAND.GUARD, atPosition = {2560, 800}},
+						},
 					},
 					{
 						name = "turretlaser",
