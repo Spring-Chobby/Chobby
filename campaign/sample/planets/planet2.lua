@@ -325,7 +325,7 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "factorycloak.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
 					description = "Build a Cloaky Factory.",
-					experience = 10,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Have 10 mex
 					satisfyOnce = true,
@@ -337,7 +337,7 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "staticmex.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
 					description = "Have 10 Metal Extractors.",
-					experience = 10,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { -- Build 10 Rockos
 					satisfyOnce = true,
@@ -350,7 +350,7 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "cloakskirm.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
 					description = "Build 10 Rockos.",
-					experience = 10,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[4] = { -- Kill enemy Stardusts in 8 minutes.
 					satisfyByTime = 480,
@@ -360,12 +360,12 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "turretriot.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
 					description = "Kill all five enemy Stardust turrets before 8:00.",
-					experience = 20,
+					experience = planetUtilities.BONUS_EXP,
 				},
 			},
 		},
 		completionReward = {
-			experience = 20,
+			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"cloakskirm",
 			},

@@ -181,7 +181,7 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "energywind.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
 					description = "Build 25 Wind Turbines.",
-					experience = 10,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Destroy the Placeholders
 					comparisionType = planetUtilities.COMPARE.AT_MOST,
@@ -190,7 +190,7 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "jumpblackhole.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
 					description = "Destroy all three enemy Placeholders.",
-					experience = 10,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { -- Have 12 mex by 7:30.
 					satisfyByTime = 450,
@@ -202,11 +202,12 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "staticmex.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
 					description = "Have 12 Metal Extractors by 7:30.",
-					experience = 20,
+					experience = planetUtilities.BONUS_EXP,
 				},
 			},
 		},
 		completionReward = {
+			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"energywind",
 				"cloakassault",

@@ -334,13 +334,13 @@ local function GetPlanet(planetUtilities)
 					victoryByTime = 50,
 					image = planetUtilities.ICON_OVERLAY.CLOCK,
 					description = "Win by 0:50",
-					experience = 20,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Complete all bonus objectives
 					completeAllBonusObjectives = true,
 					image = planetUtilities.ICON_OVERLAY.ALL,
 					description = "Complete all bonus objectives (in one battle).",
-					experience = 20,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				-- victoryByTime is a special case. All other bonus objectives are based on unit counts. 
 				-- They have the following format:
@@ -362,7 +362,7 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "armpw.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
 					description = "Have 3 Glaives by 0:35.",
-					experience = 20,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[4] = { -- Keep a particular Warrior alive for 30 seconds.
 					satisfyUntilTime = 30,
@@ -372,7 +372,7 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "armwar.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
 					description = "Keep your Warrior alive until 0:30.",
-					experience = 20,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[5] = { -- Kill enemy commander in 30 seconds.
 					satisfyByTime = 30,
@@ -382,7 +382,7 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "engineer.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
 					description = "Kill the enemy commander before 0:30.",
-					experience = 20,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[6] = { -- Have at least one cloaky factory after first satisfied
 					satisfyForeverAfterFirstSatisfied = true,
@@ -394,7 +394,7 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "factorycloak.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
 					description = "Have at least one cloaky factory once you do.",
-					experience = 20,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[7] = { -- Have 5 Glaives at any one time
 					satisfyOnce = true,
@@ -406,7 +406,7 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "armpw.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
 					description = "Have 5 Glaives.",
-					experience = 20,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[8] = { -- Build 5 Glaives
 					satisfyOnce = true,
@@ -419,7 +419,7 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "armpw.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
 					description = "Build 5 Glaives.",
-					experience = 20,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[9] = { -- Build and protect a cloaky factory
 					satisfyForeverAfterFirstSatisfied = true,
@@ -432,7 +432,7 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "factorycloak.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
 					description = "Build and protect a cloaky factory.",
-					experience = 20,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[10] = { -- Protect all Warriors
 					satisfyForever = true,
@@ -445,7 +445,7 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "armwar.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
 					description = "Don't lose any Warriors.",
-					experience = 20,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[11] = { -- Make the enemy have no more than 3 LLT at 40 seconds.
 					satisfyAtTime = 40,
@@ -457,12 +457,12 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "corllt.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
 					description = "Less than 4 enemy LLTs at 0:40.",
-					experience = 20,
+					experience = planetUtilities.BONUS_EXP,
 				},
 			}
 		},
 		completionReward = {
-			experience = 80,
+			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"cafus",
 			},

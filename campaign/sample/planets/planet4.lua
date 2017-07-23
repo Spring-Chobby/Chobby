@@ -285,7 +285,7 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "cloakaa.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
 					description = "Build 10 Gremlins.",
-					experience = 10,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Protect all Conjurers
 					satisfyForever = true,
@@ -298,7 +298,7 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "cloakcon.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
 					description = "Don't lose any Conjurers.",
-					experience = 10,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { -- Kill enemy commander in 7:30
 					satisfyByTime = 450,
@@ -308,11 +308,12 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "strike.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
 					description = "Kill the enemy commander before 7:30.",
-					experience = 20,
+					experience = planetUtilities.BONUS_EXP,
 				},
 			},
 		},
 		completionReward = {
+			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"cloakaa",
 				"turretaaclose",

@@ -192,7 +192,7 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "staticmex.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
 					description = "Have 3 Metal Extractors by 1:00.",
-					experience = 10,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Have 3 solar by 2 minute.
 					satisfyByTime = 120,
@@ -204,7 +204,7 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "energysolar.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
 					description = "Have 3 Solar Generators by 2:00.",
-					experience = 10,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { -- Build a radar
 					satisfyOnce = true,
@@ -217,7 +217,7 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "staticradar.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
 					description = "Build a Radar Tower.",
-					experience = 10,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[4] = { -- Build 5 Glaives
 					satisfyOnce = true,
@@ -230,7 +230,7 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "cloakraid.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
 					description = "Build 5 Glaives.",
-					experience = 10,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[5] = { -- Kill 10 Glaives
 					satisfyOnce = true,
@@ -243,18 +243,18 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "cloakraid.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
 					description = "Kill 10 Glaives.",
-					experience = 10,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[6] = {
 					victoryByTime = 480,
 					image = planetUtilities.ICON_OVERLAY.CLOCK,
 					description = "Win by 8:00",
-					experience = 10,
+					experience = planetUtilities.BONUS_EXP,
 				},
 			}
 		},
 		completionReward = {
-			experience = 20,
+			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"factorycloak",
 				"cloakraid",

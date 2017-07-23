@@ -76,6 +76,7 @@ local function GetPlanet(planetUtilities)
 			},
 		},
 		completionReward = {
+			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"factoryveh",
 				"vehcon",

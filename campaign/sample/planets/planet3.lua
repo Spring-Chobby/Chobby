@@ -356,7 +356,7 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "cloakcon.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
 					description = "Build 4 Conjurers.",
-					experience = 10,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Destroy the Impaler
 					comparisionType = planetUtilities.COMPARE.AT_MOST,
@@ -365,18 +365,18 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "vehheavyarty.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
 					description = "Destroy the enemy Impaler.",
-					experience = 10,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { 
 					victoryByTime = 360,
 					image = planetUtilities.ICON_OVERLAY.CLOCK,
 					description = "Win by 6:00",
-					experience = 20,
+					experience = planetUtilities.BONUS_EXP,
 				},
 			},
 		},
 		completionReward = {
-			experience = 20,
+			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"cloakbomb",
 				"turretmissile"

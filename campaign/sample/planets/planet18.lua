@@ -3459,13 +3459,13 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "cloakheavyraid.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
 					description = "Build 12 Scythes.",
-					experience = 10,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = {
 					victoryByTime = 600,
 					image = planetUtilities.ICON_OVERLAY.CLOCK,
 					description = "Win by 10:00",
-					experience = 10,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { -- Make the enemy have no more than one Sunlance by 8:00
 					satisfyOnce = true,
@@ -3479,12 +3479,12 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "turretsunlance.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
 					description = "Destroy one of the enemy Sunlance turrets by 8:00.",
-					experience = 20,
+					experience = planetUtilities.BONUS_EXP,
 				},
 			}
 		},
 		completionReward = {
-			experience = 80,
+			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"cloakheavyraid",
 			},

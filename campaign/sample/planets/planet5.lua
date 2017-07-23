@@ -388,13 +388,13 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "cloakarty.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
 					description = "Build 12 Hammers.",
-					experience = 10,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { -- Win in 10 minutes
 					victoryByTime = 600,
 					image = planetUtilities.ICON_OVERLAY.CLOCK,
 					description = "Win by 10:00",
-					experience = 10,
+					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Protect all mex
 					satisfyForever = true,
@@ -407,11 +407,12 @@ local function GetPlanet(planetUtilities)
 					image = planetUtilities.ICON_DIR .. "staticmex.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
 					description = "Don't lose any Metal Extractors.",
-					experience = 20,
+					experience = planetUtilities.BONUS_EXP,
 				},
 			},
 		},
 		completionReward = {
+			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"cloakarty",
 				"turretmissile",
