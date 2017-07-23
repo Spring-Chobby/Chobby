@@ -178,7 +178,7 @@ local function SetupInitialCommander(commanderDef)
 	
 	local initalModules = commanderDef.levelDefs[0].upgradeSlots
 	for i = 1, #initalModules do
-		commanderLoadout[0][i] = initalModules[i].defaultModule
+		gamedata.commanderLoadout[0][i] = initalModules[i].defaultModule
 	end
 end
 
