@@ -21,11 +21,6 @@ local TOP_HEIGHT = 200
 local HEADING_OFFSET = 36
 local BUTTON_SIZE = 50
 
-local modulePanelHandler
-
-local function UpdateAllUnlocks()
-end
-
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
@@ -34,8 +29,6 @@ local function ModuleIsValid(data, level, slotAllows, oldModuleName, alreadyOwne
 	if (not slotAllows[data.slotType]) or (data.requireLevel or 0) > level or data.unequipable then
 		return false
 	end
-	
-	local moduleName = data.name
 	
 	-- Check that requirements are met
 	if data.requireOneOf then
@@ -65,9 +58,14 @@ local function ModuleIsValid(data, level, slotAllows, oldModuleName, alreadyOwne
 	end
 	
 	-- Check that the module limit is not reached
+	local moduleName = data.name
 	if (data.limit or moduleLimit[moduleName]) and alreadyOwned[moduleName] then
+		local limit = data.limit or moduleLimit[moduleName]
+		if data.limit and moduleLimit[moduleName] and moduleLimit[moduleName] < data.limit then
+			limit = moduleLimit[moduleName]
+		end
 		local count = (alreadyOwned[moduleName] or 0) - ((oldModuleName == moduleName) and 1 or 0)
-		if count > math.min(data.limit or 100, moduleLimit[moduleName] or 100) then
+		if count >= limit then
 			return false
 		end
 	end
@@ -80,17 +78,17 @@ local function GetValidReplacementModuleSlot(moduleName, level, slot)
 	local moduleDefs = commConfig.moduleDefs
 	local moduleDefNames = commConfig.moduleDefNames
 	
-	local commanderLevel, _, commanderLoadout = WG.CampaignData.GetPlayerCommanderInformation()
+	local _, _, commanderLoadout = WG.CampaignData.GetPlayerCommanderInformation()
 	local loadoutModuleCounts = WG.CampaignData.GetCommanderModuleCounts()
 	local moduleList, moduleLimit = WG.CampaignData.GetModuleListAndLimit()
 	
-	commanderLevel = math.min(commanderLevel, chassisDef.highestDefinedLevel)
-	local slotAllows = chassisDef.levelDefs[commanderLevel].upgradeSlots[slot].slotAllows
+	level = math.min(level, chassisDef.highestDefinedLevel)
+	local slotAllows = chassisDef.levelDefs[level].upgradeSlots[slot].slotAllows
 	
 	local validList = {}
 	for i = 1, #moduleList do
 		local newModuleData = moduleDefNames[moduleList[i]] and moduleDefs[moduleDefNames[moduleList[i]]] -- filters out _LIMIT_ unlock entries.
-		if newModuleData and ModuleIsValid(newModuleData, commanderLevel, slotAllows, moduleName, loadoutModuleCounts, moduleLimit) then
+		if newModuleData and ModuleIsValid(newModuleData, level, slotAllows, moduleName, loadoutModuleCounts, moduleLimit) then
 			validList[#validList + 1] = moduleList[i]
 		end
 	end
@@ -161,7 +159,7 @@ local function GetModuleButton(parentControl, ClickFunc, moduleName, level, slot
 		moduleName = newModuleName
 		moduleData = moduleDefs[moduleDefNames[moduleName]]
 		
-		button.tooltip = moduleData.tooltip
+		button.tooltip = moduleData.description
 		button:Invalidate()
 		nameBox:SetText(moduleData.humanName)
 		image.file = moduleData.image
@@ -252,6 +250,12 @@ local function GetModuleList(parentControl, ClickFunc, left, right)
 		listScroll:SetVisibility(newVisiblity)
 	end
 	
+	function externalFunctions.Clear()
+		offset = 0
+		buttonList = {}
+		listScroll:ClearChildren()
+	end
+	
 	return externalFunctions
 end
 
@@ -282,6 +286,9 @@ local function MakeModulePanelHandler(parentControl)
 	local externalFunctions = {}
 	
 	function externalFunctions.UpdateLoadoutDisplay(commanderLevel, commanderName, commanderLoadout)
+		moduleSelector.SetVisibility(false)
+		currentLoadout.Clear()
+		
 		for level = 0, commanderLevel do
 			local slots = commanderLoadout[level]
 			if slots then
@@ -322,7 +329,6 @@ local function InitializeControls(parentControl)
 		caption = i18n("configure_commander"),
 		parent = parentControl
 	}
-	
 	
 	local btnClose = Button:New {
 		right = 11,
@@ -376,7 +382,7 @@ local function InitializeControls(parentControl)
 		parent = parentControl,
 	}
 	
-	modulePanelHandler = MakeModulePanelHandler(modulePanel)
+	local modulePanelHandler = MakeModulePanelHandler(modulePanel)
 	
 	local function UpdateCommanderDisplay()
 		local commanderLevel, commanderName, commanderLoadout = WG.CampaignData.GetPlayerCommanderInformation()
@@ -385,6 +391,14 @@ local function InitializeControls(parentControl)
 	end
 	UpdateCommanderDisplay()
 	
+	local function GainExperience(_, oldExperience, oldLevel, newExperience, newLevel)
+		if oldLevel ~= newLevel then
+			UpdateCommanderDisplay()
+		end
+	end
+	
+	WG.CampaignData.AddListener("CampaignLoaded", UpdateCommanderDisplay)
+	WG.CampaignData.AddListener("GainExperience", GainExperience)
 end
 
 --------------------------------------------------------------------------------
@@ -413,7 +427,6 @@ function CommanderHandler.GetControl()
 	return window
 end
 
-
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface
@@ -421,9 +434,6 @@ end
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	
-	WG.CampaignData.AddListener("CampaignLoaded", UpdateAllUnlocks)
-	WG.CampaignData.AddListener("RewardGained", UpdateAllUnlocks)
 	
 	WG.CommanderHandler = CommanderHandler
 end

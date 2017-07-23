@@ -370,7 +370,7 @@ local function GetPlanet(planetUtilities)
 				"cloakskirm",
 			},
 			modules = {
-				"module_ablative_armor_LIMIT_C_4",
+				"module_ablative_armor_LIMIT_C_1",
 			},
 		},
 	}

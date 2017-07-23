@@ -143,87 +143,10 @@ local function ResetGamedata()
 	}
 end
 
-local function UnlockRewardSet(rewardSet)
-	if rewardSet.units then
-		UnlockListOfThings(gamedata.unitsUnlocked, rewardSet.units)
-	end
-	if rewardSet.modules then
-		UnlockListOfThings(gamedata.modulesUnlocked, rewardSet.modules, TranslateModule, gamedata.modulesUnlockedLimit)
-	end
-	if rewardSet.abilities then
-		UnlockListOfThings(gamedata.abilitiesUnlocked, rewardSet.abilities)
-	end
-	if rewardSet.codexEntries then
-		UnlockListOfThings(gamedata.codexEntriesUnlocked, rewardSet.codexEntries)
-	end
-end
-
-local function GainExperience(newExperience)
-	local Configuration = WG.Chobby.Configuration
-	local oldExperience = gamedata.commanderExperience
-	local oldLevel = gamedata.commanderLevel
-	gamedata.commanderExperience = gamedata.commanderExperience + newExperience
-	for i = 1, 50 do
-		if Configuration.campaignConfig.commConfig.GetLevelRequirement(gamedata.commanderLevel + 1) > gamedata.commanderExperience then
-			break
-		end
-		gamedata.commanderLevel = gamedata.commanderLevel + 1
-	end
-	
-	CallListeners("GainExperience", oldExperience, oldLevel, gamedata.commanderExperience, gamedata.commanderLevel)
-end
-
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Commander Loadout
+-- Save Game
 
-local function UpdateCommanderModuleCounts()
-	local loadout = gamedata.commanderLoadout
-	commanderModuleCounts = {}
-	
-	local level = 0
-	while loadout[level] do
-		for i = 1, #loadout[level] do
-			commanderModuleCounts[loadout[level][i]] = (commanderModuleCounts[loadout[level][i]] or 0) + 1
-		end
-		level = level + 1
-	end
-end
-
-local function SelectCommanderModule(level, slot, moduleName, supressEvent)
-	if not gamedata.commanderLoadout[level] then
-		gamedata.commanderLoadout[level] = {}
-	end
-	
-	local oldModule = gamedata.commanderLoadout[level][slot]
-	if moduleName == oldModule then
-		if not supressEvent then
-			CallListeners("ModulePutInSlot", moduleName, oldModule, level, slot)
-		end
-		return
-	end
-	gamedata.commanderLoadout[level][slot] = moduleName
-	
-	if not supressEvent then
-		UpdateCommanderModuleCounts()
-		CallListeners("ModulePutInSlot", moduleName, oldModule, level, slot)
-	end
-end
-
-local function SetupInitialCommander(commanderDef)
-	gamedata.commanderChassis = commanderDef.chassis
-	
-	local initalModules = commanderDef.levelDefs[0].upgradeSlots
-	for i = 1, #initalModules do
-		SelectCommanderModule(0, i, initalModules[i].defaultModule, true)
-	end
-	UpdateCommanderModuleCounts()
-end
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
--- Save/Load
--- Returns the data stored in a save file
 local function GetSave(filepath)
 	local ret = nil
 	local success, err = pcall(function()
@@ -277,6 +200,98 @@ local function SaveGame(fileName)
 	return success
 end
 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Modules, Rewards
+
+local function UnlockRewardSet(rewardSet)
+	if rewardSet.units then
+		UnlockListOfThings(gamedata.unitsUnlocked, rewardSet.units)
+	end
+	if rewardSet.modules then
+		UnlockListOfThings(gamedata.modulesUnlocked, rewardSet.modules, TranslateModule, gamedata.modulesUnlockedLimit)
+	end
+	if rewardSet.abilities then
+		UnlockListOfThings(gamedata.abilitiesUnlocked, rewardSet.abilities)
+	end
+	if rewardSet.codexEntries then
+		UnlockListOfThings(gamedata.codexEntriesUnlocked, rewardSet.codexEntries)
+	end
+end
+
+local function UpdateCommanderModuleCounts()
+	local loadout = gamedata.commanderLoadout
+	commanderModuleCounts = {}
+	
+	local level = 0
+	while loadout[level] do
+		for i = 1, #loadout[level] do
+			commanderModuleCounts[loadout[level][i]] = (commanderModuleCounts[loadout[level][i]] or 0) + 1
+		end
+		level = level + 1
+	end
+end
+
+local function SelectCommanderModule(level, slot, moduleName, supressEvent)
+	if not gamedata.commanderLoadout[level] then
+		gamedata.commanderLoadout[level] = {}
+	end
+	
+	local oldModule = gamedata.commanderLoadout[level][slot]
+	if moduleName == oldModule then
+		if not supressEvent then
+			CallListeners("ModulePutInSlot", moduleName, oldModule, level, slot)
+		end
+		return
+	end
+	gamedata.commanderLoadout[level][slot] = moduleName
+	
+	if not supressEvent then
+		UpdateCommanderModuleCounts()
+		CallListeners("ModulePutInSlot", moduleName, oldModule, level, slot)
+	end
+	
+	SaveGame()
+end
+
+local function UnlockModuleSlots(level)
+	local chassisDef = WG.Chobby.Configuration.campaignConfig.commConfig.chassisDef
+	
+	level = math.min(level, chassisDef.highestDefinedLevel)
+	local initalModules = chassisDef.levelDefs[level].upgradeSlots
+	for i = 1, #initalModules do
+		SelectCommanderModule(level, i, initalModules[i].defaultModule, true)
+	end
+end
+
+local function SetupInitialCommander()
+	gamedata.commanderChassis = WG.Chobby.Configuration.campaignConfig.commConfig.chassisDef.chassis
+	UnlockModuleSlots(0)
+end
+
+local function GainExperience(newExperience)
+	local Configuration = WG.Chobby.Configuration
+	local oldExperience = gamedata.commanderExperience
+	local oldLevel = gamedata.commanderLevel
+	gamedata.commanderExperience = gamedata.commanderExperience + newExperience
+	for i = 1, 50 do
+		if Configuration.campaignConfig.commConfig.GetLevelRequirement(gamedata.commanderLevel + 1) > gamedata.commanderExperience then
+			break
+		end
+		gamedata.commanderLevel = gamedata.commanderLevel + 1
+		UnlockModuleSlots(gamedata.commanderLevel)
+	end
+	if oldLevel < gamedata.commanderLevel then
+		UpdateCommanderModuleCounts()
+	end
+	
+	CallListeners("GainExperience", oldExperience, oldLevel, gamedata.commanderExperience, gamedata.commanderLevel)
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Load or start new game
+
 local function LoadGame(saveData, refreshGUI)
 	local success, err = pcall(function()
 		Spring.CreateDir(SAVE_DIR)
@@ -304,7 +319,8 @@ local function StartNewGame()
 	for i = 1, #planets do
 		externalFunctions.CapturePlanet(planets[i])
 	end
-	SetupInitialCommander(campaignConfig.commConfig.chassisDef)
+	SetupInitialCommander()
+	UpdateCommanderModuleCounts()
 	SaveGame()
 	
 	CallListeners("CampaignLoaded")
@@ -378,6 +394,7 @@ function externalFunctions.CapturePlanet(planetID, bonusObjectives)
 	end
 	
 	GainExperience(gainedExperience)
+	
 	if saveRequired then
 		SaveGame()
 	end
