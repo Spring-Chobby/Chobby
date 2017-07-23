@@ -194,6 +194,22 @@ local function InitializeControls(parentControl)
 		parent = parentControl
 	}
 	
+	local btnClose = Button:New {
+		right = 11,
+		y = 7,
+		width = 80,
+		height = 45,
+		caption = i18n("close"),
+		font = Configuration:GetFont(3),
+		classname = "negative_button",
+		OnClick = {
+			function()
+				parentControl:Hide()
+			end
+		},
+		parent = parentControl
+	}
+	
 	local ResizeFunction
 	
 	local scrollPanel = ScrollPanel:New {

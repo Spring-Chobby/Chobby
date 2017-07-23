@@ -161,11 +161,27 @@ local function InitializeControls(parentControl)
 		caption = i18n("codex"),
 		parent = parentControl
 	}
+	
+	local btnClose = Button:New {
+		right = 11,
+		y = 7,
+		width = 80,
+		height = 45,
+		caption = i18n("close"),
+		font = Configuration:GetFont(3),
+		classname = "negative_button",
+		OnClick = {
+			function()
+				parentControl:Hide()
+			end
+		},
+		parent = parentControl
+	}
 
 	local codexTextScroll = ScrollPanel:New{
 		parent = parentControl,
 		x = "40%",
-		y = IMAGE_SIZE + 8 + 8,
+		y = IMAGE_SIZE + 48 + 8,
 		bottom = 4,
 		right = 4,
 		orientation = "vertical",
@@ -183,8 +199,8 @@ local function InitializeControls(parentControl)
 	
 	local codexImagePanel = Panel:New{
 		parent = parentControl,
-		y = 4,
-		right = 4,
+		x = "41%",
+		y = 48,
 		height = IMAGE_SIZE,
 		width = IMAGE_SIZE,
 	}

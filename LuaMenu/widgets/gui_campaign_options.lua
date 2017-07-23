@@ -78,6 +78,22 @@ end
 local function InitializeControls(window)
 	window.OnParent = nil
 	
+	local btnClose = Button:New {
+		right = 11,
+		y = 7,
+		width = 80,
+		height = 45,
+		caption = i18n("close"),
+		font = WG.Chobby.Configuration:GetFont(3),
+		classname = "negative_button",
+		OnClick = {
+			function()
+				window:Hide()
+			end
+		},
+		parent = window
+	}
+	
 	local tabs = {
 		MakeTab("Save/Load", {WG.CampaignSaveWindow.GetControl()}),
 		MakeTab("Settings", {WG.CampaignSettingsWindow.GetControl()}),
@@ -100,7 +116,7 @@ local function InitializeControls(window)
 		name = "tabBarHolder",
 		x = 0,
 		y = 0,
-		right = 0,
+		right = 90,
 		height = 55,
 		resizable = false,
 		draggable = false,
