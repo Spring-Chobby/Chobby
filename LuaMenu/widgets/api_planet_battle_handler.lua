@@ -125,7 +125,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		start_x = gameConfig.playerConfig.startX,
 		start_z = gameConfig.playerConfig.startZ,
 		staticcomm = "player_commander",
-		static_level = WG.CampaignData.GetPlayerCommanderLevel(),
+		static_level = WG.CampaignData.GetPlayerCommanderInformation(),
 		campaignunlocks = TableToBase64(fullPlayerUnlocks),
 		campaignabilities = TableToBase64(playerAbilities.list),
 		commanderparameters = TableToBase64(gameConfig.playerConfig.commanderParameters),

@@ -19,6 +19,7 @@ end
 
 -- this stores anything that goes into a save file
 local gamedata = {}
+local commanderModuleCounts = {}
 
 local externalFunctions = {}
 
@@ -172,14 +173,51 @@ local function GainExperience(newExperience)
 	CallListeners("GainExperience", oldExperience, oldLevel, gamedata.commanderExperience, gamedata.commanderLevel)
 end
 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Commander Loadout
+
+local function UpdateCommanderModuleCounts()
+	local loadout = gamedata.commanderLoadout
+	commanderModuleCounts = {}
+	
+	local level = 0
+	while loadout[level] do
+		for i = 1, #loadout[level] do
+			commanderModuleCounts[loadout[level][i]] = (commanderModuleCounts[loadout[level][i]] or 0) + 1
+		end
+		level = level + 1
+	end
+end
+
+local function SelectCommanderModule(level, slot, moduleName, supressEvent)
+	if not gamedata.commanderLoadout[level] then
+		gamedata.commanderLoadout[level] = {}
+	end
+	
+	local oldModule = gamedata.commanderLoadout[level][slot]
+	if moduleName == oldModule then
+		if not supressEvent then
+			CallListeners("ModulePutInSlot", moduleName, oldModule, level, slot)
+		end
+		return
+	end
+	gamedata.commanderLoadout[level][slot] = moduleName
+	
+	if not supressEvent then
+		UpdateCommanderModuleCounts()
+		CallListeners("ModulePutInSlot", moduleName, oldModule, level, slot)
+	end
+end
+
 local function SetupInitialCommander(commanderDef)
 	gamedata.commanderChassis = commanderDef.chassis
-	gamedata.commanderLoadout[0] = {}
 	
 	local initalModules = commanderDef.levelDefs[0].upgradeSlots
 	for i = 1, #initalModules do
-		gamedata.commanderLoadout[0][i] = initalModules[i].defaultModule
+		SelectCommanderModule(0, i, initalModules[i].defaultModule, true)
 	end
+	UpdateCommanderModuleCounts()
 end
 
 --------------------------------------------------------------------------------
@@ -244,6 +282,7 @@ local function LoadGame(saveData, refreshGUI)
 		Spring.CreateDir(SAVE_DIR)
 		ResetGamedata()
 		gamedata = Spring.Utilities.MergeTable(saveData, gamedata, true)
+		UpdateCommanderModuleCounts()
 		if refreshGUI then
 			CallListeners("CampaignLoaded")
 		end
@@ -344,6 +383,10 @@ function externalFunctions.CapturePlanet(planetID, bonusObjectives)
 	end
 end
 
+function externalFunctions.PutModuleInSlot(moduleName, level, slot)
+	SelectCommanderModule(level, slot, moduleName)
+end
+
 function externalFunctions.SetCommanderName(newName)
 	gamedata.commanderName = newName
 end
@@ -385,6 +428,14 @@ end
 
 function externalFunctions.GetModuleIsUnlocked(moduleName)
 	return gamedata.modulesUnlocked.map[moduleName], gamedata.modulesUnlockedLimit[moduleName]
+end
+
+function externalFunctions.GetModuleListAndLimit()
+	return gamedata.modulesUnlocked.list, gamedata.modulesUnlockedLimit
+end
+
+function externalFunctions.GetCommanderModuleCounts()
+	return commanderModuleCounts
 end
 
 function externalFunctions.GetAbilityIsUnlocked(abilityName)
@@ -431,37 +482,13 @@ end
 function externalFunctions.GetPlayerCommander()
 	return {
 		name = gamedata.commanderName,
-		chassis = "knight",
-		modules = {
-			{
-				"commweapon_heavymachinegun",
-				"module_dmg_booster"
-			},
-			{
-				"module_dmg_booster",
-				"module_dmg_booster"
-			},
-			{
-				"commweapon_rocketlauncher",
-				"module_dmg_booster",
-				"module_dmg_booster"
-			},
-			{
-				"module_dmg_booster",
-				"module_dmg_booster",
-				"module_adv_targeting"
-			},
-			{
-				"module_adv_targeting",
-				"module_adv_targeting",
-				"module_adv_targeting"
-			}
-		}
+		chassis = gamedata.commanderChassis,
+		modules = gamedata.commanderLoadout,
 	}
 end
 
-function externalFunctions.GetPlayerCommanderLevel()
-	return gamedata.commanderLevel
+function externalFunctions.GetPlayerCommanderInformation()
+	return gamedata.commanderLevel, gamedata.commanderName, gamedata.commanderLoadout
 end
 
 function externalFunctions.GetSaves()

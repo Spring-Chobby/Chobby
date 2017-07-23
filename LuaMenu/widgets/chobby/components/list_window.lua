@@ -29,16 +29,17 @@ function ListWindow:init(parent, title, noWindow, windowClassname, noClose, cust
 		},
 	}
 
-
-	self.lblTitle = Label:New {
-		x = 20,
-		right = 5,
-		y = 17,
-		height = 20,
-		font = Configuration:GetFont(3),
-		caption = title,
-		parent = self.window
-	}
+	if title then
+		self.lblTitle = Label:New {
+			x = 20,
+			right = 5,
+			y = 17,
+			height = 20,
+			font = Configuration:GetFont(3),
+			caption = title,
+			parent = self.window
+		}
+	end
 
 	if not noClose then
 		self.btnClose = Button:New {

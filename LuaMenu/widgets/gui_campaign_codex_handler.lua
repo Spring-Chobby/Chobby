@@ -116,7 +116,7 @@ local function PopulateCodexTree(parent, codexText, codexImage)
 							WG.CampaignData.SetCodexEntryRead(entry.id)
 							selectedButton = self
 						end
-				},
+					},
 					font = WG.Chobby.Configuration:GetFont(BUTTON_FONT)
 				}
 				

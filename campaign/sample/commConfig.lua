@@ -9,9 +9,9 @@ local moduleDefs = {
 	-- Empty Module Slots
 	{
 		name = "nullmodule",
-		humanName = "No Module",
-		description = "No Module",
-		image = moduleImagePath .. "module_none.png.png",
+		humanName = "Empty Slot",
+		description = "Put a module in this slot.",
+		image = moduleImagePath .. "module_none.png",
 		limit = false,
 		emptyModule = true,
 		cost = 0,
@@ -20,9 +20,9 @@ local moduleDefs = {
 	},
 	{
 		name = "nullbasicweapon",
-		humanName = "No Weapon",
-		description = "No Weapon",
-		image = moduleImagePath .. "module_none.png.png",
+		humanName = "Empty Slot",
+		description = "Put a weapon in this slot.",
+		image = moduleImagePath .. "module_none.png",
 		limit = false,
 		emptyModule = true,
 		cost = 0,
@@ -31,9 +31,9 @@ local moduleDefs = {
 	},
 	{
 		name = "nulladvweapon",
-		humanName = "No Weapon",
-		description = "No Weapon",
-		image = moduleImagePath .. "module_none.png.png",
+		humanName = "Empty Slot",
+		description = "Put a weapon in this slot.",
+		image = moduleImagePath .. "module_none.png",
 		limit = false,
 		emptyModule = true,
 		cost = 0,
@@ -50,7 +50,7 @@ local moduleDefs = {
 		limit = 2,
 		cost = 50,
 		requireChassis = {"recon", "assault", "support", "strike"},
-		requireLevel = 1,
+		requireLevel = 0,
 		slotType = "basic_weapon",
 		applicationFunction = function (modules, sharedData)
 			if sharedData.noMoreWeapons then
@@ -71,7 +71,7 @@ local moduleDefs = {
 		limit = 2,
 		cost = 50,
 		requireChassis = {"recon", "assault"},
-		requireLevel = 1,
+		requireLevel = 0,
 		slotType = "basic_weapon",
 		applicationFunction = function (modules, sharedData)
 			if sharedData.noMoreWeapons then
@@ -92,7 +92,7 @@ local moduleDefs = {
 		limit = 2,
 		cost = 50,
 		requireChassis = {"assault"},
-		requireLevel = 1,
+		requireLevel = 0,
 		slotType = "basic_weapon",
 		applicationFunction = function (modules, sharedData)
 			if sharedData.noMoreWeapons then
@@ -113,7 +113,7 @@ local moduleDefs = {
 		limit = 2,
 		cost = 50,
 		requireChassis = {"recon", "assault", "strike"},
-		requireLevel = 1,
+		requireLevel = 0,
 		slotType = "basic_weapon",
 		applicationFunction = function (modules, sharedData)
 			if sharedData.noMoreWeapons then
@@ -157,7 +157,7 @@ local moduleDefs = {
 		limit = 2,
 		cost = 50,
 		requireChassis = {"recon", "support", "strike"},
-		requireLevel = 1,
+		requireLevel = 0,
 		slotType = "basic_weapon",
 		applicationFunction = function (modules, sharedData)
 			if sharedData.noMoreWeapons then
@@ -179,7 +179,7 @@ local moduleDefs = {
 		limit = 2,
 		cost = 50,
 		requireChassis = {"support", "recon", "strike"},
-		requireLevel = 1,
+		requireLevel = 0,
 		slotType = "basic_weapon",
 		applicationFunction = function (modules, sharedData)
 			if sharedData.noMoreWeapons then
@@ -201,7 +201,7 @@ local moduleDefs = {
 		limit = 2,
 		cost = 50,
 		requireChassis = {"support", "strike"},
-		requireLevel = 1,
+		requireLevel = 0,
 		slotType = "basic_weapon",
 		applicationFunction = function (modules, sharedData)
 			if sharedData.noMoreWeapons then
@@ -222,7 +222,7 @@ local moduleDefs = {
 		limit = 2,
 		cost = 50,
 		requireChassis = {"assault"},
-		requireLevel = 1,
+		requireLevel = 0,
 		slotType = "basic_weapon",
 		applicationFunction = function (modules, sharedData)
 			if sharedData.noMoreWeapons then
@@ -244,7 +244,7 @@ local moduleDefs = {
 		limit = 2,
 		cost = 50,
 		requireChassis = {"assault"},
-		requireLevel = 1,
+		requireLevel = 0,
 		slotType = "basic_weapon",
 		applicationFunction = function (modules, sharedData)
 			if sharedData.noMoreWeapons then
@@ -266,7 +266,7 @@ local moduleDefs = {
 		limit = 2,
 		cost = 50,
 		requireChassis = {"recon", "support", "strike"},
-		requireLevel = 1,
+		requireLevel = 0,
 		slotType = "basic_weapon",
 		applicationFunction = function (modules, sharedData)
 			if sharedData.noMoreWeapons then
@@ -492,7 +492,7 @@ local moduleDefs = {
 		limit = 1,
 		cost = 300,
 		prohibitingModules = {"module_personal_cloak"},
-		requireLevel = 2,
+		requireLevel = 1,
 		slotType = "module",
 		applicationFunction = function (modules, sharedData)
 			-- Do not override area shield
@@ -558,7 +558,7 @@ local moduleDefs = {
 		image = moduleImagePath .. "module_jammer.png",
 		limit = 1,
 		cost = 200,
-		requireLevel = 2,
+		requireLevel = 1,
 		slotType = "module",
 		applicationFunction = function (modules, sharedData)
 			if not sharedData.cloakFieldRange then
@@ -587,7 +587,7 @@ local moduleDefs = {
 		limit = 1,
 		cost = 400,
 		prohibitingModules = {"commweapon_personal_shield", "commweapon_areashield"},
-		requireLevel = 2,
+		requireLevel = 1,
 		slotType = "module",
 		applicationFunction = function (modules, sharedData)
 			sharedData.decloakDistance = math.max(sharedData.decloakDistance or 0, 150)
@@ -664,7 +664,7 @@ local moduleDefs = {
 		image = moduleImagePath .. "module_autorepair.png",
 		limit = 8,
 		cost = 150,
-		requireLevel = 1,
+		requireLevel = 0,
 		slotType = "module",
 		applicationFunction = function (modules, sharedData)
 			sharedData.autorepairRate = (sharedData.autorepairRate or 0) + 10
@@ -678,7 +678,7 @@ local moduleDefs = {
 		image = moduleImagePath .. "module_ablative_armor.png",
 		limit = 8,
 		cost = 150,
-		requireLevel = 1,
+		requireLevel = 0,
 		slotType = "module",
 		applicationFunction = function (modules, sharedData)
 			sharedData.healthBonus = (sharedData.healthBonus or 0) + 600
@@ -707,7 +707,7 @@ local moduleDefs = {
 		image = moduleImagePath .. "module_dmg_booster.png",
 		limit = 8,
 		cost = 150,
-		requireLevel = 1,
+		requireLevel = 0,
 		slotType = "module",
 		applicationFunction = function (modules, sharedData)
 			-- Damage boost is applied via clone swapping
@@ -722,7 +722,7 @@ local moduleDefs = {
 		image = moduleImagePath .. "module_high_power_servos.png",
 		limit = 8,
 		cost = 150,
-		requireLevel = 1,
+		requireLevel = 0,
 		slotType = "module",
 		applicationFunction = function (modules, sharedData)
 			sharedData.speedMult = (sharedData.speedMult or 1) + 0.1
@@ -735,7 +735,7 @@ local moduleDefs = {
 		image = moduleImagePath .. "module_adv_targeting.png",
 		limit = 8,
 		cost = 150,
-		requireLevel = 1,
+		requireLevel = 0,
 		slotType = "module",
 		applicationFunction = function (modules, sharedData)
 			sharedData.rangeMult = (sharedData.rangeMult or 1) + 0.075
@@ -749,7 +749,7 @@ local moduleDefs = {
 		image = moduleImagePath .. "module_adv_nano.png",
 		limit = 8,
 		cost = 150,
-		requireLevel = 1,
+		requireLevel = 0,
 		slotType = "module",
 		applicationFunction = function (modules, sharedData)
 			-- All comms have 10 BP in their unitDef (even support)
@@ -770,15 +770,16 @@ local chassisDef = {
 	name = "knight",
 	humanName = "Knight",
 	secondPeashooter = true,
+	highestDefinedLevel = 5,
 	levelDefs = {
 		[0] = {
 			upgradeSlots = {
 				{
-					defaultModule = moduleDefNames.commweapon_beamlaser,
+					defaultModule = "commweapon_beamlaser",
 					slotAllows = "basic_weapon",
 				},
 				{
-					defaultModule = moduleDefNames.nullmodule,
+					defaultModule = "nullmodule",
 					slotAllows = "module",
 				},
 			},
@@ -786,11 +787,11 @@ local chassisDef = {
 		[1] = {
 			upgradeSlots = {
 				{
-					defaultModule = moduleDefNames.nullmodule,
+					defaultModule = "nullmodule",
 					slotAllows = "module",
 				},
 				{
-					defaultModule = moduleDefNames.nullmodule,
+					defaultModule = "nullmodule",
 					slotAllows = "module",
 				},
 			},
@@ -798,11 +799,11 @@ local chassisDef = {
 		[2] = {
 			upgradeSlots = {
 				{
-					defaultModule = moduleDefNames.nullmodule,
+					defaultModule = "nullmodule",
 					slotAllows = "module",
 				},
 				{
-					defaultModule = moduleDefNames.nullmodule,
+					defaultModule = "nullmodule",
 					slotAllows = "module",
 				},
 			},
@@ -810,15 +811,15 @@ local chassisDef = {
 		[3] = {
 			upgradeSlots = {
 				{
-					defaultModule = moduleDefNames.nullbasicweapon,
+					defaultModule = "nullbasicweapon",
 					slotAllows = {"adv_weapon", "basic_weapon"},
 				},
 				{
-					defaultModule = moduleDefNames.nullmodule,
+					defaultModule = "nullmodule",
 					slotAllows = "module",
 				},
 				{
-					defaultModule = moduleDefNames.nullmodule,
+					defaultModule = "nullmodule",
 					slotAllows = "module",
 				},
 			},
@@ -826,15 +827,15 @@ local chassisDef = {
 		[4] = {
 			upgradeSlots = {
 				{
-					defaultModule = moduleDefNames.nullmodule,
+					defaultModule = "nullmodule",
 					slotAllows = "module",
 				},
 				{
-					defaultModule = moduleDefNames.nullmodule,
+					defaultModule = "nullmodule",
 					slotAllows = "module",
 				},
 				{
-					defaultModule = moduleDefNames.nullmodule,
+					defaultModule = "nullmodule",
 					slotAllows = "module",
 				},
 			},
@@ -842,15 +843,15 @@ local chassisDef = {
 		[5] = {
 			upgradeSlots = {
 				{
-					defaultModule = moduleDefNames.nullmodule,
+					defaultModule = "nullmodule",
 					slotAllows = "module",
 				},
 				{
-					defaultModule = moduleDefNames.nullmodule,
+					defaultModule = "nullmodule",
 					slotAllows = "module",
 				},
 				{
-					defaultModule = moduleDefNames.nullmodule,
+					defaultModule = "nullmodule",
 					slotAllows = "module",
 				},
 			},
@@ -891,53 +892,19 @@ for i = 1, #moduleDefs do
 	end
 end
 
-------------------------------------------------------------------------
--- Utility Functions
-------------------------------------------------------------------------
-
-local function ModuleIsValid(level, slotAllows, moduleDefID, alreadyOwned, alreadyOwned2)
-	local data = moduleDefs[moduleDefID]
-	if (not slotAllows[data.slotType]) or (data.requireLevel or 0) > level or data.unequipable then
-		return false
-	end
-	
-	-- Check that requirements are met
-	if data.requireOneOf then
-		local foundRequirement = false
-		for j = 1, #data.requireOneOf do
-			-- Modules should not depend on themselves so this check is simplier than the
-			-- corresponding chcek in the replacement set generator.
-			local reqDefID = data.requireOneOf[j]
-			if (alreadyOwned[reqDefID] or (alreadyOwned2 and alreadyOwned2[reqDefID])) then
-				foundRequirement = true
-				break
+for i = 0, chassisDef.highestDefinedLevel do
+	local slots = chassisDef.levelDefs[i].upgradeSlots
+	for j = 1, #slots do
+		local newSlotAllows = {}
+		if type(slots[j].slotAllows) == "string" then
+			newSlotAllows[slots[j].slotAllows] = true
+		else
+			for allow = 1, #slots[j].slotAllows do
+				newSlotAllows[slots[j].slotAllows[allow]] = true
 			end
 		end
-		if not foundRequirement then
-			return false
-		end
+		slots[j].slotAllows = newSlotAllows
 	end
-	
-	-- Check that nothing prohibits this module
-	if data.prohibitingModules then
-		for j = 1, #data.prohibitingModules do
-			-- Modules cannot prohibit themselves otherwise this check makes no sense.
-			local probihitDefID = data.prohibitingModules[j]
-			if (alreadyOwned[probihitDefID] or (alreadyOwned2 and alreadyOwned2[probihitDefID])) then
-				return false
-			end
-		end
-	
-	end
-	
-	-- Check that the module limit is not reached
-	if data.limit and (alreadyOwned[moduleDefID] or (alreadyOwned2 and alreadyOwned2[moduleDefID])) then
-		local count = (alreadyOwned[moduleDefID] or 0) + ((alreadyOwned2 and alreadyOwned2[moduleDefID]) or 0) 
-		if count > data.limit then
-			return false
-		end
-	end
-	return true
 end
 
 ------------------------------------------------------------------------
@@ -951,7 +918,6 @@ end
 return {
 	moduleDefs = moduleDefs,
 	moduleDefNames = moduleDefNames,
-	ModuleIsValid = ModuleIsValid,
 	chassisDef = chassisDef,
 	GetLevelRequirement = GetLevelRequirement,
 }
