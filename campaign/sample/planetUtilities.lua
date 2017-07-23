@@ -117,6 +117,12 @@ planetUtilities.ICON_OVERLAY = {
 	ALL = LUA_DIRNAME .. "images/battle.png",
 }
 
+planetUtilities.DIFFICULTY = {
+	EASY = 1,
+	MEDIUM = 2,
+	HARD = 3,
+}
+
 planetUtilities.COMPARE = {
 	AT_LEAST = 1,
 	AT_MOST = 2

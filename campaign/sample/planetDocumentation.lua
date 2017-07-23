@@ -1,0 +1,418 @@
+-- Documentation for planet definitions.
+
+planetData = {
+	name = "Pong", -- The name of the planet
+	startingPlanet = false, -- Whether the planet is availible to be invaded at the start of the campaign.
+	
+	-- Position and image to be used on the map
+	mapDisplay = {
+		-- x,y is a proportion of the map area from the top left corner
+		x = 0.22, 
+		y = 0.1,
+		
+		-- Image is a path to an image using the standard luaMenu directory structure.
+		image = planetUtilities.planetImages[1], 
+		
+		-- Size to display on the galaxy map. It is somewhat scaled by the size of the chobby window.
+		size = planetUtilities.PLANET_SIZE_MAP, 
+	},
+	
+	-- Information displayed on the invasion selection screen.
+	infoDisplay = {
+		image = planetUtilities.planetImages[1], -- Image path
+		size = planetUtilities.PLANET_SIZE_INFO, -- size
+		backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1], -- Background for the invasion screen
+		terrainType = "Terran",
+		radius = "6550 km",
+		primary = "Origin",
+		primaryType = "G8V",
+		milRating = 1,
+		text = [[Your first battle will be straightforward. You have been provided with a starting base. Construct an army of Glaives and Warriors and overwhelm your enemy.]]
+	},
+	
+	-- Configuration for everything related to playing the battle
+	gameConfig = {
+		-- Startscript, if the mission is scripted. Not yet implemented. Would override everything almost everything else in this table
+		missionStartscript = false, 
+		
+		-- Map name, be careful of spaces.
+		mapName = "Living Lands v2.03",
+		
+		-- Configuration for everything owned by the player.
+		playerConfig = {
+			-- start coordinates of the players commander
+			startX = 300, 
+			startZ = 3800,
+			
+			-- AllyTeam of the player, always set this to zero.
+			allyTeam = 0,
+			
+			-- Parameters of the player commander. 
+			commanderParameters = {
+				-- Whether the commander starts with facplop
+				facplop = false,
+				
+				-- Contributed to allyTeam defeat if the unit is destroyed. The objectiveID is purely for UI.
+				-- Defeat if destroyed also triggers if the unit is captured.
+				defeatIfDestroyedObjectiveID = 2,
+				
+				-- Causes victory for allyTeam if the unit reaches the location. The objectiveID is purely for UI.
+				victoryAtLocation = {
+					x = 600,
+					z = 1200,
+					radius = 100,
+					objectiveID = 5,
+				},
+				
+				-- Bonus objective which the unit counts towards.
+				bonusObjectiveID = false,
+			},
+			
+			-- Extra unit unlocks that are availible to the player for the duration of the mission.
+			extraUnlocks = {
+				"factorycloak",
+				"cloakraid",
+				"cloakriot",
+				"staticmex",
+				"energysolar",
+				"cloakcon",
+			},
+			
+			-- Units that spawn at the start of the game.
+			startUnits = {
+				{
+					-- Unit def name
+					name = "cloakcon",
+					
+					-- Position and facing
+					x = 900,
+					z = 850,
+					facing = 0,
+					
+					-- Units have victoryAtLocation and defeatIfDestroyedObjectiveID identical to commanderParameters.
+					-- Please do not set difficultyAtMost or difficultyAtLeast for initial units with victory/defeat parameters,
+					-- who knows what would happen.
+					victoryAtLocation = {
+						x = 600,
+						z = 1200,
+						radius = 100,
+						objectiveID = 5,
+					},
+					
+					-- ObjectiveID is for mission UI. See objectiveConfig
+					defeatIfDestroyedObjectiveID = 3,
+					
+					-- List of commands for the initial unit. They are issued in order.See ProcessUnitCommand in 
+					-- mission_galaxy_campaign_battle gadget.
+					commands = {
+						-- Commands have:
+						--  * cmdID or unitName:
+						--    - cmdID is the ID of the command
+						--    - unitName is processed into the cmdID required to be a build order for that unit.
+						--  * atPosition, pos, params or <nothing>:
+						--    - atPosition sets the target of the command to be a unit standing quite close to the position specified.
+						--    - pos is an x,z position for the command. This saves you (the mission writer) from looking up y positions.
+						--    - params is raw parameter input. Use for state commands perhaps?
+						--    - If none of the previous three are set then the command is a sent with no parameters. Use this, for 
+						--        example, for STOP, WAIT or, with unitName, for factory build order.
+						--  * options - These are the modifiers for the command. Used mostly like they are on the keyboard. "shift", "ctrl", 
+						--    "alt", "meta". Remember to use "shift" for commands beyond the first.
+						--  * facing - Build facing for a unitName command with pos.
+						--  * radius - Radius of an area command with pos.
+						
+						{cmdID = planetUtilities.COMMAND.GUARD, atPosition = {2560, 800}},
+						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1560, 800}, options = {"shift"}},
+						{unitName = "turretmissile", pos = {64, 64}, facing = 3, options = {"shift"}},
+					},
+					
+					-- Whether the unit spawns can be conditional on the difficulty setting. 
+					-- Both 'at most' and 'at least' are availible and the usual usage would be to
+					-- give allied units 'at most' and enemy units 'at least'.
+					-- 1 = Easy, 2 = Medium, 3 = Hard
+					difficultyAtMost = nil,
+					difficultyAtLeast = nil,
+					
+					-- Units with difficultyAtMost and difficultyAtLeast can have bonusObjectiveID but be careful to make sure that objective makes sense.
+					-- See bonusObjectiveConfig
+					bonusObjectiveID = false,
+				},
+				{
+					name = "turretlaser", 
+					x = 300,
+					z = 3450,
+					facing = 2,
+				},
+				{
+					name = "armwar",
+					x = 850,
+					z = 900,
+					facing = 0,
+					bonusObjectiveID = 1,
+				},
+				-- etc...
+			}
+		},
+		
+		-- Configuration for all the AI teams in the game. These are mostly the same as player config.
+		aiConfig = {
+			{
+				-- Start position for AI commander. Better set this even if it has no commander since circuit or Spring may require it.
+				startX = 4000,
+				startZ = 75,
+				
+				-- ai library to use to run the AI. Can be any valid AI name string which player are sure to have. See LuaAI.lua in the root directory
+				-- of the Zero-K game repository for availible lua AIs, "Null AI" is an entry where which creates a completely passive AI.
+				-- If aiLib is a key found in campaignData.aiConfig.aiLibFunctions then it had better be a function that returns an AI appropriate for the
+				-- difficulty level. 'Circuit_difficulty_autofill' is one such entry, see aiConfig.lua.
+				aiLib = "Circuit_difficulty_autofill",
+				
+				-- AI name on the playerlist.
+				humanName = "Enemy",
+				
+				-- If bitDependant is true then '32' or '64' will be appended to the final AI name as required by the users system. This is for native AIs
+				-- that are compiled to particular systems.
+				bitDependant = true,
+				
+				-- Commander parameters is identical to playerConfig.
+				commanderParameters = {
+					facplop = false,
+				},
+				
+				-- Ally team of the AI
+				allyTeam = 1,
+				
+				-- Units that the AI can build
+				unlocks = {
+					"cloakraid",
+				},
+				
+				-- Level of the AI commander, if it exists
+				commanderLevel = 2,
+				
+				-- Name and loadout of the AI commander. Set 'commander = false' to not give the AI a commander.
+				commander = {
+					name = "Most Loyal Opposition",
+					chassis = "engineer",
+					decorations = {
+						"skin_support_dark",
+						icon_overhead = {
+							image = "UW"
+						},
+					},
+					-- Just a list of modules, no fancy module slot setup.
+					modules = { 
+						"commweapon_shotgun",
+					}
+				},
+				
+				-- Start units are identical to playerConfig
+				startUnits = {
+					{
+						name = "staticmex",
+						x = 3630,
+						z = 220,
+						facing = 2, 
+					},
+					{
+						name = "factorycloak",
+						x = 3750,
+						z = 340,
+						facing = 4, 
+					},
+				}
+			},
+			{
+				startX = 200,
+				startZ = 200,
+				aiLib = "Circuit_difficulty_autofill",
+				humanName = "Ally",
+				bitDependant = true, -- Whether the AI name needs to be appended with 32bit or 64bit by the handler
+				commanderParameters = {
+					facplop = false,
+				},
+				allyTeam = 0,
+				unlocks = {
+					"dante",
+				},
+				commanderLevel = 5,
+				commander = false,
+				startUnits = {
+					{
+						name = "striderhub",
+						x = 1000,
+						z = 1300,
+						facing = 2,
+						defeatIfDestroyedObjectiveID = 4,
+					},
+					-- etc...
+				}
+			},
+			-- etc..
+		},
+		
+		-- Configuration for what causes defeat for each allyTeam. Indexed by allyTeam.
+		defeatConditionConfig = {
+			[0] = { 
+				-- AllyTeam 0 had better be the players allyTeam.
+				-- The players allyTeam only supports the parameters loseAfterSeconds and timeLossObjectiveID
+				
+				-- Lose after this many seconds
+				loseAfterSeconds = 60,
+				
+				-- ObjectiveID is purely for the objectives UI. Sets the objective to mark as complete.
+				timeLossObjectiveID = 1,
+			}
+			[1] = {
+				-- If ignoreUnitLossDefeat is true then the defeault defeat condition, lose all units, is disabled.
+				ignoreUnitLossDefeat = false,
+				
+				-- If at least one of vitalCommanders or vitalUnitTypes is set then losing all vital unit types
+				-- causes defeat.
+				-- * If 'vitalCommanders = true' then commanders are vital unit types.
+				-- * If vitalUnitTypes is a list then every unit def name listed is an vital unit type.
+				-- The following configuration causes the allyTeam to lose if it loses all commanders and cloaky factories.
+				vitalCommanders = true,
+				vitalUnitTypes = {
+					"factorycloak",
+				},
+				
+				-- All allyTeams can have loseAfterSeconds.
+				loseAfterSeconds = false,
+				
+				-- ObjectiveID is purely for the objectives UI. Sets the objective to mark as complete.
+				allyTeamLossObjectiveID = 5,
+			},
+		},
+		
+		-- Objective config is pure UI. The descriptions should be filled with text which relates to the objective. Note that, as per the config,
+		-- there are three victory conditions in objective 5.
+		objectiveConfig = {
+			[1] = {
+				description = "Win before 1:00",
+			},
+			[2] = {
+				description = "Protect your Commander",
+			},
+			[3] = {
+				description = "Protect your Glaive",
+			},
+			[4] = {
+				description = "Protect your allied Strider Hub",
+			},
+			[5] = {
+				description = "Destroy enemy commanders and factories, move your Commander to the location or move your Glaive to the location.",
+			},
+		},
+		
+		-- Configuration for the bonus objectives. Indexed by bonus objective ID.
+		bonusObjectiveConfig = {
+			-- Objectives have the following simple parameters:
+			--  * experience - The experience rewarded to the player if they win a game in which the objective was completed.
+			--  * image, imageOverlay - The image used for the objective in the invasion and victory screens.
+			--  * description - The text that appears with the objective for the ingame UI and the invasion and victory screens.
+			--
+			-- Not so simple paramters, to be covered later (in order).
+			--  * <all the satisfication types>
+			--  * victoryByTime - A number of seconds, often false.
+			--  * targetNumber - A number
+			--  * comparisionType - either planetUtilities.COMPARE.AT_MOST or planetUtilities.COMPARE.AT_LEAST
+			--  * unitTypes - a table of unit def names
+			--  * enemyUnitTypes - a table of unit def names
+			--  * lockUnitsOnSatisfy - true/false
+			--  * countRemovedUnits - true/false
+			--  * onlyCountRemovedUnits - true/false
+			--
+			-- Bonus objectives work on the same system. They compare a number of units to their targetNumber and are satisfied based on their
+			-- satisfaction type. Ingame, an objective is either satisfied or not satisfied from second to second. It succeeds or failed based on
+			-- this constant satisfaction and satisfaction types. Once it succeeds or fails it stops checking.
+			-- 
+			-- Here are the satisfaction types, see CheckBonusObjective in the mission_galaxy_campaign_battle gadget for their implementation.
+			-- Technically types could be mixed but it is unintended and untested.
+			--  * satisfyAtTime = SECONDS 
+			--      The objective is succeeded if it is satisfied at the time specified. It fails if the time occurs and it is
+			--      not satisfied or if the game ends before SECONDS.
+			-- * satisfyByTime = SECONDS
+			--      Like satisfyAtTime except that the objective succeeded if it is satisfied at any time before SECONDS.
+			-- * satisfyUntilTime = SECONDS 
+			--      The objective fails if it is not satisfied at any time up until SECONDS. It succeeds it has not failed by the time either
+			--      either SECONDS has elapsed or the game ends.
+			-- * satisfyAfterTime = SECONDS
+			--      The objective fails if it is not satisfied at any time after and including SECONDS. It succeeds if the game ends and it has
+			--      not yet failed.
+			-- * satisfyForeverAfterFirstSatisfied = TRUE/FALSE
+			--      If set, the objective fails if it is not satisfied at any time after it is first satisfied. Succeeds if it is satisfied and
+			--      the game ends.
+			-- * satisfyOnce = TRUE/FALSE
+			--      Succeeds if it is satisfied at any point in the game.
+			-- * satisfyForever = TRUE/FALSE
+			--      Fails if it is ever not satisfied. Succeds if it has not failed and the game ends.
+			-- * victoryByTime = SECONDS
+			--      A special satisfication type that does not depend on units and targets. Succeeds if the player wins by SECONDS. 
+			--
+			-- An objective is satisfied based on the number of tracked relevant units tracked compared to targetNumber with comparisionType.
+			-- The relevant units are:
+			--  * All player team units of type unitTypes (note, player team, not allyTeam).
+			--  * All enemy allyTeam units of type enemyUnitTypes.
+			--  * All initial units with matching bonusObjectiveID.
+			--
+			-- If 'lockUnitsOnSatisfy = true' then the objective stops tracking new relevant units once it is first satified. This can be used to
+			-- make the player build and protect their first four Solars. With 'lockUnitsOnSatisfy = false' the same objective would have the
+			-- player build to four Solars and then always have at least four Solars.
+			--
+			-- If 'countRemovedUnits = false' and 'onlyCountRemovedUnits = false' then the objective stops couting relevant units that died.
+			--  * If 'countRemovedUnits = true' then the objective does not reduce the count for dead units, this can be used for an
+			--      objective "Make 20 Glaives" which doesn't care what happens to each Glaive after it is built.
+			--  * If 'onlyCountRemovedUnits = true' then the objective only counts those units that were relevant units before they died. Set
+			--      this to create an objective "Kill 5 Glaive" by making the objective only count removed enemy glaives.
+			
+			[1] = {
+				satisfyForever = true,
+				comparisionType = planetUtilities.COMPARE.AT_LEAST,
+				targetNumber = 1,
+				image = planetUtilities.ICON_DIR .. "cloakriot.png",
+				imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
+				description = "Keep your Warrior alive.",
+				experience = 10,
+			},
+			[2] = {
+				victoryByTime = 480,
+				image = planetUtilities.ICON_OVERLAY.CLOCK,
+				description = "Win by 8:00",
+				experience = 10,
+			},
+			-- See planet definitions for many more examples.
+		}
+	},
+	
+	-- Configuration for the rewards gained upon winning the battle. Does not include bonus objectives.
+	completionReward = {
+		experience = 20, -- Experience gained
+		
+		-- Unlocks do not need to be unique per planet.
+		
+		-- Units unlocked, by unitDefName
+		units = {
+			"factorycloak",
+			"cloakraid",
+			"cloakriot",
+			"cloakcon"
+		},
+		
+		-- Modules unlocked
+		modules = {
+			-- To unlock a limited number of repeat modules write
+			-- "<module name>_LIMIT_X_<N>" where
+			-- * 'module name' is the name of the module to be unlocked.
+			-- * X is the identifying character. Its purpose is to uniquely identify the module key, allowing the player to unlock multiple 
+			--   instances of four copies of the module without being able to grind a single planet to unlock all the copies.
+			-- * N is the number of modules to unlock, it can be more than one character in case you want more than 9 copies unlocked.
+			-- To evenly spread eight copies of a module across two planets give one "module_ablative_armor_LIMIT_A_4" and give the other
+			-- "module_ablative_armor_LIMIT_B_4".
+			"module_ablative_armor_LIMIT_B_4",
+		},
+		
+		-- Abilities (misc stuff) unlocked. Look up the names of abilities somewhere.
+		abilities = {
+		}
+	},
+}
