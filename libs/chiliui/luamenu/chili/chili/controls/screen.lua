@@ -163,9 +163,9 @@ end
 
 
 function Screen:IsAbove(x,y,...)
-  if math.abs(x - self.width/2) <= 1 and math.abs(y - self.height/2) <= 1 then
-    -- Do not register a hit if the mouse is not hovered over Spring
-    -- See https://springrts.com/mantis/view.php?id=5311
+  if select(6, Spring.GetMouseState()) then
+    -- Do not register hits for offscreen mouse. 
+    -- See https://springrts.com/mantis/view.php?id=5671 for the good solution.
     return
   end
   y = select(2,gl.GetViewSizes()) - y
