@@ -140,10 +140,8 @@ function Screen:Update(...)
 	local hoveredControl = UnlinkSafe(self.hoveredControl)
 	local activeControl = UnlinkSafe(self.activeControl)
 	if hoveredControl and (not activeControl) then
-		local x, y = Spring.GetMouseState()
-		if math.abs(x - self.width/2) <= 1 and math.abs(y - self.height/2) <= 1 then
-			-- Do not register a hit if the mouse is not hovered over Spring
-			-- See https://springrts.com/mantis/view.php?id=5311
+		local x, y, _, _, _, outsideSpring = Spring.GetMouseState()
+		if outsideSpring then
 			if self.currentTooltip then
 				self.currentTooltip = nil
 			end
