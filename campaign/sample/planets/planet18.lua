@@ -181,14 +181,10 @@ local function GetPlanet(planetUtilities)
 					startX = 7700,
 					startZ = 1200,
 					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Ally #1",
+					humanName = "Ally",
 					bitDependant = true, -- Whether the AI name needs to be appended with 32bit or 64bit by the handler
-					commanderParameters = {
-						facplop = false,
-					},
 					allyTeam = 0,
 					unlocks = {
-						"factorygunship",
 						"turretlaser",
 						"turretmissile",
 						"turretriot",
@@ -198,6 +194,7 @@ local function GetPlanet(planetUtilities)
 						"staticmex",
 						"staticcon",
 						"energysolar",
+						"factorygunship",
 						"gunshipcon",
 						"gunshipbomb",
 						"gunshipemp",
@@ -205,22 +202,38 @@ local function GetPlanet(planetUtilities)
 						"gunshipraid",
 						"gunshipassault",
 						"gunshipaa",
-						"gunshipskirm"
+						"gunshipskirm",
+						"factoryveh",
+						"vehcon",
+						"vehscout",
+						"vehraid",
+						"vehassault",
+						"vehriot",
+						"vehsupport",
+						"veharty",
+						"vehheavyarty",
+						"vehaa",
+						"factoryhover",
+						"hovercon",
+						"hoverraid",
+						"hoverriot",
+						"hoverskirm",
+						"hoverassault",
+						"hoverarty",
+						"hoveraa",
+						"factoryspider",
+						"spidercon",
+						"spiderscout",
+						"spiderskirm",
+						"spideremp",
+						"spiderriot",
+						"spiderassault",
+						"spidercrabe",
+						"spideraa",
 					},
-					commanderLevel = 2,
-					commander = {
-						name = "King",
-						chassis = "engineer",
-						decorations = {},
-						modules = {
-						  {
-							"commweapon_shotgun",
-							"module_radarnet"
-						  },
-						},
-					},
+					commander = false,
 					startUnits = {
-						{
+						{	-- corresponds to Team 1
 							name = "staticmex",
 							x = 7816,
 							z = 1032,
@@ -624,53 +637,7 @@ local function GetPlanet(planetUtilities)
 							facing = 3,
 							buildProgress = 0.108,
 						},
-					},
-				},
-				{
-					startX = 7700,
-					startZ = 2700,
-					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Ally #2",
-					bitDependant = true, -- Whether the AI name needs to be appended with 32bit or 64bit by the handler
-					commanderParameters = {
-						facplop = false,
-					},
-					allyTeam = 0,
-					unlocks = {
-						"factoryveh",
-						"turretlaser",
-						"turretmissile",
-						"turretriot",
-						"turretheavylaser",
-						"turretaalaser",
-						"staticradar",
-						"staticmex",
-						"staticcon",
-						"energysolar",
-						"vehcon",
-						"vehscout",
-						"vehraid",
-						"vehassault",
-						"vehriot",
-						"vehsupport",
-						"veharty",
-						"vehheavyarty",
-						"vehaa",
-					},
-					commanderLevel = 2,
-					commander = {
-						name = "Queen",
-						chassis = "engineer",
-						decorations = {},
-						modules = {
-						  {
-							"commweapon_shotgun",
-							"module_radarnet"
-						  },
-						},
-					},
-					startUnits = {
-						{
+						{	-- corresponds to Team 2
 							name = "staticmex",
 							x = 7912,
 							z = 2840,
@@ -1063,51 +1030,7 @@ local function GetPlanet(planetUtilities)
 							facing = 2,
 							buildProgress = 0.1166,
 						},
-					},
-				},
-				{
-					startX = 7700,
-					startZ = 4600,
-					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Ally #3",
-					bitDependant = true, -- Whether the AI name needs to be appended with 32bit or 64bit by the handler
-					commanderParameters = {
-						facplop = false,
-					},
-					allyTeam = 0,
-					unlocks = {
-						"factoryhover",
-						"turretlaser",
-						"turretmissile",
-						"turretriot",
-						"turretheavylaser",
-						"turretaalaser",
-						"staticradar",
-						"staticmex",
-						"staticcon",
-						"energysolar",
-						"hovercon",
-						"hoverraid",
-						"hoverriot",
-						"hoverskirm",
-						"hoverassault",
-						"hoverarty",
-						"hoveraa",
-					},
-					commanderLevel = 2,
-					commander = {
-						name = "Jack",
-						chassis = "engineer",
-						decorations = {},
-						modules = {
-						  {
-							"commweapon_shotgun",
-							"module_radarnet"
-						  },
-						},
-					},
-					startUnits = {
-						{
+						{	-- corresponds to Team 3
 							name = "staticmex",
 							x = 7880,
 							z = 4568,
@@ -1519,52 +1442,7 @@ local function GetPlanet(planetUtilities)
 							facing = 0,
 							buildProgress = 0.0333,
 						},
-					},
-				},
-				{
-					startX = 6000,
-					startZ = 6000,
-					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Ally #4",
-					bitDependant = true, -- Whether the AI name needs to be appended with 32bit or 64bit by the handler
-					commanderParameters = {
-						facplop = false,
-					},
-					allyTeam = 0,
-					unlocks = {
-						"factoryspider",
-						"turretlaser",
-						"turretmissile",
-						"turretriot",
-						"turretheavylaser",
-						"turretaalaser",
-						"staticradar",
-						"staticmex",
-						"staticcon",
-						"energysolar",
-						"spidercon",
-						"spiderscout",
-						"spiderskirm",
-						"spideremp",
-						"spiderriot",
-						"spiderassault",
-						"spidercrabe",
-						"spideraa",
-					},
-					commanderLevel = 2,
-					commander = {
-						name = "Dunce",
-						chassis = "engineer",
-						decorations = {},
-						modules = {
-						  {
-							"commweapon_shotgun",
-							"module_radarnet"
-						  },
-						},
-					},
-					startUnits = {
-						{
+						{	-- corresponds to Team 4
 							name = "staticmex",
 							x = 5880,
 							z = 6200,
@@ -2008,16 +1886,15 @@ local function GetPlanet(planetUtilities)
 				},
 				{
 					startX = 1200,
-					startZ = 7700,
+					startZ = 1200,
 					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Enemy #1",
+					humanName = "Enemy",
 					bitDependant = true, -- Whether the AI name needs to be appended with 32bit or 64bit by the handler
 					commanderParameters = {
 						facplop = false,
 					},
 					allyTeam = 1,
 					unlocks = {
-						"factorygunship",
 						"turretlaser",
 						"turretmissile",
 						"turretriot",
@@ -2027,6 +1904,7 @@ local function GetPlanet(planetUtilities)
 						"staticmex",
 						"staticcon",
 						"energysolar",
+						"factorygunship",
 						"gunshipcon",
 						"gunshipbomb",
 						"gunshipemp",
@@ -2034,9 +1912,36 @@ local function GetPlanet(planetUtilities)
 						"gunshipraid",
 						"gunshipassault",
 						"gunshipaa",
-						"gunshipskirm"
+						"gunshipskirm",
+						"factoryveh",
+						"vehcon",
+						"vehscout",
+						"vehraid",
+						"vehassault",
+						"vehriot",
+						"vehsupport",
+						"veharty",
+						"vehheavyarty",
+						"vehaa",
+						"factoryshield",
+						"shieldcon",
+						"shieldraid",
+						"shieldassault",
+						"shieldskirm",
+						"shieldarty",
+						"shieldfelon",
+						"shieldaa",
+						"factorytank",
+						"tankcon",
+						"tankraid",
+						"tankheavyraid",
+						"tankriot",
+						"tankassault",
+						"tankheavyassault",
+						"tankarty",
+						"tankaa"
 					},
-					commanderLevel = 2,
+					commanderLevel = 1,
 					commander = {
 						name = "Labrador",
 						chassis = "engineer",
@@ -2049,7 +1954,7 @@ local function GetPlanet(planetUtilities)
 						},
 					},
 					startUnits = {
-						{
+						{	-- corresponds to Team 5
 							name = "factorygunship",
 							x = 1240,
 							z = 6936,
@@ -2314,53 +2219,7 @@ local function GetPlanet(planetUtilities)
 							facing = 0,
 							buildProgress = 0.0361,
 						},
-					},
-				},
-				{
-					startX = 600,
-					startZ = 4500,
-					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Enemy #2",
-					bitDependant = true, -- Whether the AI name needs to be appended with 32bit or 64bit by the handler
-					commanderParameters = {
-						facplop = false,
-					},
-					allyTeam = 1,
-					unlocks = {
-						"factoryveh",
-						"turretlaser",
-						"turretmissile",
-						"turretriot",
-						"turretheavylaser",
-						"turretaalaser",
-						"staticradar",
-						"staticmex",
-						"staticcon",
-						"energysolar",
-						"vehcon",
-						"vehscout",
-						"vehraid",
-						"vehassault",
-						"vehriot",
-						"vehsupport",
-						"veharty",
-						"vehheavyarty",
-						"vehaa",
-					},
-					commanderLevel = 2,
-					commander = {
-						name = "Beagle",
-						chassis = "engineer",
-						decorations = {},
-						modules = {
-						  {
-							"commweapon_shotgun",
-							"module_radarnet"
-						  },
-						},
-					},
-					startUnits = {
-						{
+						{	-- corresponds to Team 6
 							name = "staticmex",
 							x = 664,
 							z = 4760,
@@ -2697,52 +2556,7 @@ local function GetPlanet(planetUtilities)
 							facing = 1,
 							buildProgress = 0.65460002,
 						},
-					},
-				},
-				{
-					startX = 600,
-					startZ = 2700,
-					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Enemy #3",
-					bitDependant = true, -- Whether the AI name needs to be appended with 32bit or 64bit by the handler
-					commanderParameters = {
-						facplop = false,
-					},
-					allyTeam = 1,
-					unlocks = {
-						"factorytank",
-						"turretlaser",
-						"turretmissile",
-						"turretriot",
-						"turretheavylaser",
-						"turretaalaser",
-						"staticradar",
-						"staticmex",
-						"staticcon",
-						"energysolar",
-						"tankcon",
-						"tankraid",
-						"tankheavyraid",
-						"tankriot",
-						"tankassault",
-						"tankheavyassault",
-						"tankarty",
-						"tankaa"
-					},
-					commanderLevel = 2,
-					commander = {
-						name = "Mutt",
-						chassis = "engineer",
-						decorations = {},
-						modules = {
-						  {
-							"commweapon_shotgun",
-							"module_radarnet"
-						  },
-						},
-					},
-					startUnits = {
-						{
+						{	-- Corresponds to Team 7
 							name = "factorytank",
 							x = 672,
 							z = 2736,
@@ -3027,56 +2841,7 @@ local function GetPlanet(planetUtilities)
 							facing = 1,
 							buildProgress = 0,
 						},
-					},
-				},
-				{
-					startX = 700,
-					startZ = 700,
-					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Enemy #4",
-					bitDependant = true, -- Whether the AI name needs to be appended with 32bit or 64bit by the handler
-					commanderParameters = {
-						facplop = false,
-					},
-					allyTeam = 1,
-					unlocks = {
-						"factoryshield",
-						"turretlaser",
-						"turretmissile",
-						"turretriot",
-						"turretheavylaser",
-						"turretaalaser",
-						"staticradar",
-						"staticmex",
-						"staticcon",
-						"energysolar",
-						"shieldcon",
-						"shieldraid",
-						"shieldassault",
-						"shieldskirm",
-						"shieldarty",
-						"shieldfelon",
-						"shieldaa",
-					},
-					difficultyDependantUnlocks = { -- these units make sneaking with Scythes more difficult
-						[1] = {},
-						[2] = {"shieldriot"},
-						[3] = {"shieldbomb"},
-					},
-					commanderLevel = 2,
-					commander = {
-						name = "Wolfhound",
-						chassis = "engineer",
-						decorations = {},
-						modules = {
-						  {
-							"commweapon_shotgun",
-							"module_radarnet"
-						  },
-						}
-					},
-					startUnits = {
-						{
+						{	-- Corresponds to Team 8
 							name = "staticmex",
 							x = 888,
 							z = 728,
@@ -3513,7 +3278,7 @@ local function GetPlanet(planetUtilities)
 							facing = 0,
 							difficultyAtLeast = 3,
 						},
-					}
+					},
 				},
 			},
 			defeatConditionConfig = {
@@ -3559,9 +3324,10 @@ local function GetPlanet(planetUtilities)
 					description = "Win by 10:00",
 					experience = 10,
 				},
-				[3] = { -- Make the enemy have no more than one Sunlance
+				[3] = { -- Make the enemy have no more than one Sunlance by 8:00
 					satisfyOnce = true,
 					onlyCountRemovedUnits = true,
+					satisfyByTime = 480,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 1,
 					enemyUnitTypes = {
@@ -3569,13 +3335,13 @@ local function GetPlanet(planetUtilities)
 					},
 					image = planetUtilities.ICON_DIR .. "turretsunlance.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Destroy one of the enemy Sunlance turrets.",
+					description = "Destroy one of the enemy Sunlance turrets by 8:00.",
 					experience = 20,
 				},
 			}
 		},
 		completionReward = {
-			experience = 60,
+			experience = 80,
 			units = {
 				"cloakheavyraid",
 			},
