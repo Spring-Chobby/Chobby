@@ -102,7 +102,7 @@ local function GetPlanet(planetUtilities)
 						  "skin_support_dark",
 						  icon_overhead = { image = "UW" }
 						},
-						modules = { }
+						modules = {}
 					},
 					startUnits = {
 						{

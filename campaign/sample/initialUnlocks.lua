@@ -6,6 +6,7 @@ return {
 		"energysolar",
 	},
 	modules = {
+		"commweapon_beamlaser",
 	},
 	codexEntries = {
 		"character_promethean",

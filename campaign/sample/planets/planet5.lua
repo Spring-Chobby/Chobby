@@ -260,7 +260,7 @@ local function GetPlanet(planetUtilities)
 						[2] = {},
 						[3] = {"shieldriot"},
 					},
-					commanderLevel = 2,
+					commanderLevel = 1,
 					commander = {
 						name = "Porcupine",
 						chassis = "engineer",
@@ -268,9 +268,7 @@ local function GetPlanet(planetUtilities)
 						  icon_overhead = { image = "UW" }
 						},
 						modules = {
-						  {
 							"commweapon_shotgun",
-						  }
 						}
 					},
 					startUnits = {

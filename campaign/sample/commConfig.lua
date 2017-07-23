@@ -11,7 +11,7 @@ local moduleDefs = {
 		name = "nullmodule",
 		humanName = "No Module",
 		description = "No Module",
-		image = "LuaUI/Images/dynamic_comm_menu/cross.png",
+		image = moduleImagePath .. "module_none.png.png",
 		limit = false,
 		emptyModule = true,
 		cost = 0,
@@ -22,7 +22,7 @@ local moduleDefs = {
 		name = "nullbasicweapon",
 		humanName = "No Weapon",
 		description = "No Weapon",
-		image = "LuaUI/Images/dynamic_comm_menu/cross.png",
+		image = moduleImagePath .. "module_none.png.png",
 		limit = false,
 		emptyModule = true,
 		cost = 0,
@@ -33,7 +33,7 @@ local moduleDefs = {
 		name = "nulladvweapon",
 		humanName = "No Weapon",
 		description = "No Weapon",
-		image = "LuaUI/Images/dynamic_comm_menu/cross.png",
+		image = moduleImagePath .. "module_none.png.png",
 		limit = false,
 		emptyModule = true,
 		cost = 0,
@@ -810,7 +810,7 @@ local chassisDef = {
 		[3] = {
 			upgradeSlots = {
 				{
-					defaultModule = moduleDefNames.commweapon_beamlaser,
+					defaultModule = moduleDefNames.nullbasicweapon,
 					slotAllows = {"adv_weapon", "basic_weapon"},
 				},
 				{
@@ -855,7 +855,7 @@ local chassisDef = {
 				},
 			},
 		},
-	}
+	},
 }
 
 ------------------------------------------------------------------------
@@ -944,16 +944,14 @@ end
 -- Commander Configuration
 ------------------------------------------------------------------------
 
-local chassis = "knight"
-
-local function GetLevelUpRequirement(level)
+local function GetLevelRequirement(level)
 	return 100*level^2 + 300*level + 200
 end
 
 return {
-	chassis = chassis,
 	moduleDefs = moduleDefs,
 	moduleDefNames = moduleDefNames,
 	ModuleIsValid = ModuleIsValid,
-	GetLevelUpRequirement = GetLevelUpRequirement,
+	chassisDef = chassisDef,
+	GetLevelRequirement = GetLevelRequirement,
 }

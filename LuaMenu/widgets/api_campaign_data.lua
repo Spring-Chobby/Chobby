@@ -134,8 +134,9 @@ local function ResetGamedata()
 		planetsCaptured = {map = {}, list = {}},
 		commanderExperience = 0,
 		difficultySetting = 1, -- 1,2,3 -> easy/medium/hard
-		commanderLevel = 1,
+		commanderLevel = 0,
 		commanderName = "Commander",
+		commanderChassis = "knight",
 		commanderLoadout = {},
 		retinue = {}, -- Unused
 	}
@@ -162,13 +163,23 @@ local function GainExperience(newExperience)
 	local oldLevel = gamedata.commanderLevel
 	gamedata.commanderExperience = gamedata.commanderExperience + newExperience
 	for i = 1, 50 do
-		if Configuration.campaignConfig.commConfig.GetLevelUpRequirement(gamedata.commanderLevel) > gamedata.commanderExperience then
+		if Configuration.campaignConfig.commConfig.GetLevelRequirement(gamedata.commanderLevel + 1) > gamedata.commanderExperience then
 			break
 		end
 		gamedata.commanderLevel = gamedata.commanderLevel + 1
 	end
 	
 	CallListeners("GainExperience", oldExperience, oldLevel, gamedata.commanderExperience, gamedata.commanderLevel)
+end
+
+local function SetupInitialCommander(commanderDef)
+	gamedata.commanderChassis = commanderDef.chassis
+	gamedata.commanderLoadout[0] = {}
+	
+	local initalModules = commanderDef.levelDefs[0].upgradeSlots
+	for i = 1, #initalModules do
+		commanderLoadout[0][i] = initalModules[i].defaultModule
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -246,14 +257,15 @@ local function LoadGame(saveData, refreshGUI)
 end
 
 local function StartNewGame()
-	local Configuration = WG.Chobby.Configuration
+	local campaignConfig = WG.Chobby.Configuration.campaignConfig
 	ResetGamedata()
 	
-	local planets = Configuration.campaignConfig.planetDefs.initialPlanets
-	UnlockRewardSet(Configuration.campaignConfig.initialUnlocks)
+	local planets = campaignConfig.planetDefs.initialPlanets
+	UnlockRewardSet(campaignConfig.initialUnlocks)
 	for i = 1, #planets do
 		externalFunctions.CapturePlanet(planets[i])
 	end
+	SetupInitialCommander(campaignConfig.commConfig.chassisDef)
 	SaveGame()
 	
 	CallListeners("CampaignLoaded")

@@ -147,12 +147,8 @@ local function GetPlanet(planetUtilities)
 						  icon_overhead = { image = "UW" }
 						},
 						modules = {
-						  {
-							"commweapon_heavymachinegun", "module_radarnet"
-						  },
-						  {
-							--empty
-						  },
+							"commweapon_heavymachinegun", 
+							"module_radarnet",
 						}
 					},
 					startUnits = {

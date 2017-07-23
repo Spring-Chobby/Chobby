@@ -162,6 +162,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		local commanderName, noCommander
 		if aiData.commander then
 			commanderName = "ai_commander_" .. aiCount
+			aiData.commander.modules = {[0] = aiData.commander.modules}
 			commanderTypes[commanderName] = aiData.commander
 		else
 			noCommander = 1
@@ -175,7 +176,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 			start_z = aiData.startZ,
 			nocommander = noCommander,
 			staticcomm = commanderName,
-			static_level = aiData.commanderLevel or 1,
+			static_level = (aiData.commanderLevel or 1) - 1, -- Comm level is 0 indexed but on the UI it is 1 indexed.
 			campaignunlocks = TableToBase64(availibleUnits),
 			commanderparameters = TableToBase64(aiData.commanderParameters),
 			extrastartunits = TableToBase64(aiData.startUnits),

@@ -206,8 +206,8 @@ planetData = {
 							image = "UW"
 						},
 					},
-					-- Just a list of modules, no fancy module slot setup.
-					modules = { 
+					-- This is just a list of modules. It does not care about slots or levels.
+					modules = {
 						"commweapon_shotgun",
 					}
 				},

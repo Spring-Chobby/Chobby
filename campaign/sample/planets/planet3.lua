@@ -193,9 +193,7 @@ local function GetPlanet(planetUtilities)
 						  icon_overhead = { image = "UW" }
 						},
 						modules = {
-						  {
 							"commweapon_shotgun",
-						  }
 						}
 					},
 					startUnits = {
