@@ -15,6 +15,11 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+
+local SAVE_SCRIPT = false
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Downloads
 
 local function MaybeDownloadArchive(archiveName, archiveType)
@@ -230,6 +235,11 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 	end
 
 	local scriptString = localLobby:MakeScriptTXT(script)
+	if SAVE_SCRIPT then
+		local scriptFileName = "scriptFile.txt"
+		local scriptFile = io.open(scriptFileName, "w")
+		scriptFile:write(scriptString)
+	end
 	--Spring.Echo("scriptString", scriptString)
 	localLobby:StartGameFromString(scriptString)
 end
