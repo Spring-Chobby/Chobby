@@ -251,8 +251,14 @@ local function GetPlanet(planetUtilities)
 						"shieldcon",
 						"shieldraid",
 						"shieldassault",
+						"shieldriot",
 						"turretmissile",
 						"turretlaser",
+					},
+					difficultyDependantUnlocks = {
+						[1] = {"shieldscout"},
+						[2] = {},
+						[3] = {"shieldriot"},
 					},
 					commanderLevel = 2,
 					commander = {

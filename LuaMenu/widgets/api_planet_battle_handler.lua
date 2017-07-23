@@ -84,6 +84,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 	local localLobby = WG.LibLobby.localLobby
 	local Configuration = WG.Chobby.Configuration
 	local playerName = Configuration.userName or Configuration.suggestedNameFromSteam or "Player"
+	local missionDifficulty = WG.CampaignData.GetDifficultySetting()
 	local bitExtension = (Configuration:GetIsRunning64Bit() and "64") or "32"
 
 	-- Add the player, this is to make the player team 0.
@@ -136,6 +137,14 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 			shortName = shortName .. bitExtension
 		end
 		
+		local availibleUnits = aiData.unlocks or {}
+		local extraUnits = aiData.difficultyDependantUnlocks and aiData.difficultyDependantUnlocks[missionDifficulty]
+		if extraUnits then
+			for i = 1, #extraUnits do
+				availibleUnits[#availibleUnits + 1] = extraUnits[i]
+			end
+		end
+		
 		ais[aiCount] = {
 			Name = aiData.humanName,
 			Team = teamCount,
@@ -145,7 +154,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 			Host = 0,
 			Options = {
 				comm_merge = 0,
-				disabledunits = MakeCircuitDisableString(aiData.unlocks)
+				disabledunits = MakeCircuitDisableString(availibleUnits)
 			}
 		}
 		aiCount = aiCount + 1
@@ -167,7 +176,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 			nocommander = noCommander,
 			staticcomm = commanderName,
 			static_level = aiData.commanderLevel or 1,
-			campaignunlocks = TableToBase64(aiData.unlocks),
+			campaignunlocks = TableToBase64(availibleUnits),
 			commanderparameters = TableToBase64(aiData.commanderParameters),
 			extrastartunits = TableToBase64(aiData.startUnits),
 		}
@@ -200,7 +209,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 			objectiveconfig = TableToBase64(gameConfig.objectiveConfig),
 			bonusobjectiveconfig = TableToBase64(gameConfig.bonusObjectiveConfig),
 			fixedstartpos = 1,
-			planetmissiondifficulty = WG.CampaignData.GetDifficultySetting(),
+			planetmissiondifficulty = missionDifficulty,
 			singleplayercampaignsavename = WG.Chobby.Configuration.campaignSaveFile,
 			singleplayercampaignbattleid = planetID
 		},

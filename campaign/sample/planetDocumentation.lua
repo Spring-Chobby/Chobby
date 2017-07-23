@@ -186,6 +186,13 @@ planetData = {
 					"cloakraid",
 				},
 				
+				-- Additional that the AI can build at particular difficulty levels. Indexed by difficulty, don't need to set empty entries.
+				-- Don't double up entries with the standard unlocks table or I'll be annoyed.
+				difficultyDependantUnlocks = {
+					[1] = {"cloakarty"},
+					[3] = {"cloakskirm"},
+				},
+				
 				-- Level of the AI commander, if it exists
 				commanderLevel = 2,
 				
