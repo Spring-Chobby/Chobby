@@ -297,7 +297,7 @@ local function GetPlanet(planetUtilities)
 					},
 					image = planetUtilities.ICON_DIR .. "cloakcon.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
-					description = "Don't lose any Conjurors.",
+					description = "Don't lose any Conjurers.",
 					experience = 10,
 				},
 				[3] = { -- Kill enemy commander in 7:30

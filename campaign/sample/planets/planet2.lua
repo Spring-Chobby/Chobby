@@ -318,7 +318,7 @@ local function GetPlanet(planetUtilities)
 				[1] = { -- plop your factory
 					satisfyOnce = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 10,
+					targetNumber = 1,
 					unitTypes = {
 						"factorycloak",
 					},

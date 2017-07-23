@@ -154,12 +154,6 @@ local function GetPlanet(planetUtilities)
 					},
 					{
 						name = "staticmex",
-						x = 2060,
-						z = 330,
-						facing = 0, 
-					},
-					{
-						name = "staticmex",
 						x = 2620,
 						z = 330,
 						facing = 0, 
@@ -375,7 +369,7 @@ local function GetPlanet(planetUtilities)
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Destroy the enemy Shield Bot Factory",
+					description = "Destroy the enemy Commander and Shield Bot Factory",
 				},
 				[2] = {
 					description = "Protect your Commander",
