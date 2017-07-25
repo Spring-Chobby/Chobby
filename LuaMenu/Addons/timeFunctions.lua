@@ -5,6 +5,10 @@ Spring.Utilities = Spring.Utilities or {}
 -------------------------------------------------------------------------------------
 
 function Spring.Utilities.FormatTime(seconds, includeSeconds)
+	if seconds < 0 then
+		return (includeSeconds and "0s") or "0m"
+	end
+	
 	local hours = math.floor(seconds/3600)
 	local minutes = math.floor(seconds/60)%60
 	local seconds = math.floor(seconds)%60
