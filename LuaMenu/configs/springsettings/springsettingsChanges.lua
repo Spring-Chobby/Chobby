@@ -4,5 +4,6 @@ local settings = {
 	HangTimeout = 5,
 	ROAM = 1,
 	SplashScreenDir = "./MenuLoadscreens",
+	UseDistToGroundForIcons = 1.1,
 }
 return settings

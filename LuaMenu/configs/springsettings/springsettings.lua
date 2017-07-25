@@ -55,6 +55,7 @@ local settings = {
 	TreeRadius = 1000,
 	UnitIconDist = 151,
 	UnitLodDist = 9999,
+	UseDistToGroundForIcons = 1.1,
 	UsePBO = 0,
 	VerboseLevel = 10,
 	Version = 2,
