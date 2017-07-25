@@ -250,7 +250,16 @@ function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, scriptPas
 	end
 
 	if engineName and not WG.Chobby.Configuration:IsValidEngineVersion(engineName) then
-		WG.Chobby.InformationPopup("Cannont start game: wrong Spring engine version. The required version is '" .. engineName .. "', your version is '" .. Spring.Utilities.GetEngineVersion() .. "'.", 420, 260)
+		if WG.WrapperLoopback and WG.WrapperLoopback.StartNewSpring and WG.SettingsWindow and WG.SettingsWindow.GetSettingsString then
+			local params = {
+				StartScriptContent = GenerateScriptTxt(battleIp, battlePort, scriptPassword),
+				Engine = engineName,
+				SpringSettings = WG.SettingsWindow.GetSettingsString(),
+			}
+			WG.WrapperLoopback.StartNewSpring(params) 
+		else
+			WG.Chobby.InformationPopup("Cannont start game: wrong Spring engine version. The required version is '" .. engineName .. "', your version is '" .. Spring.Utilities.GetEngineVersion() .. "'.", 420, 260)
+		end
 		return
 	end
 
