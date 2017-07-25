@@ -210,6 +210,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		numusers = playerCount + aiCount,
 		startpostype = 0, -- Fixed
 		modoptions = {
+			--crashcircuit = 1, -- Don't crash circuit
 			commandertypes = TableToBase64(commanderTypes),
 			defeatconditionconfig = TableToBase64(gameConfig.defeatConditionConfig),
 			objectiveconfig = TableToBase64(gameConfig.objectiveConfig),

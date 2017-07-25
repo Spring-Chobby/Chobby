@@ -314,6 +314,13 @@
          "VersionNumber":1,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/sqlite3.dll",
          "TargetPath":"sqlite3.dll"
+      },
+	  
+      {
+         "Platform":null,
+         "VersionNumber":1,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/MenuLoadscreens/loadscreen.png",
+         "TargetPath":"MenuLoadscreens/loadscreen.png"
       }
    ]
 }

@@ -51,6 +51,7 @@ local settings = {
 	Shadows = 1,
 	ShowClock = 0,
 	SmoothLines = 1,
+	SplashScreenDir = "./MenuLoadscreens",
 	TreeRadius = 1000,
 	UnitIconDist = 151,
 	UnitLodDist = 9999,

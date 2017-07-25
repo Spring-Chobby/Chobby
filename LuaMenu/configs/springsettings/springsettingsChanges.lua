@@ -3,5 +3,6 @@ local settings = {
 	OverheadMaxHeightFactor = 1.4,
 	HangTimeout = 5,
 	ROAM = 1,
+	SplashScreenDir = "./MenuLoadscreens",
 }
 return settings
