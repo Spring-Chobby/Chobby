@@ -194,17 +194,20 @@ local bugLines = {
 			WG.WrapperLoopback.OpenUrl("https://github.com/ZeroK-RTS/Zero-K-Infrastructure/issues/new")
 		end
 	},
-	--{
-	--	"Run a benchmark game.",
-	--	"Benchmark",
-	--	function ()
-	--		local localLobby = WG.LibLobby and WG.LibLobby.localLobby
-	--		if localLobby then
-	--			localLobby:StartGameFromString(VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/benchmarkFile.lua"))
-	--		end
-	--	end
-	--},
 }
+
+if VFS.HasArchive("Zero-K $VERSION") then
+	bugLines[#bugLines + 1] = {
+		"Run a benchmark game.",
+		"Benchmark",
+		function ()
+			local localLobby = WG.LibLobby and WG.LibLobby.localLobby
+			if localLobby then
+				localLobby:StartGameFromString(VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/benchmarkFile.lua"))
+			end
+		end
+	}
+end
 
 local firstBugParent = true
 local bugControl = Control:New {
