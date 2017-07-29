@@ -149,8 +149,11 @@ function SteamHandler.GetIsSteamFriend(steamID)
 	return steamID and steamFriendByID[steamID]
 end
 
-function SteamHandler.SteamOverlayChanged(isActive) 
-	Spring.Echo("OVERLAY CHANGE", isActive)
+function SteamHandler.SteamOverlayChanged(isActive)
+	WG.LimitFps.SetSteamFastUpdate(isActive)
+	if not isActive then
+		WG.LimitFps.ForceRedrawPeriod(3)
+	end
 end
 
 --------------------------------------------------------------------------------

@@ -22,6 +22,7 @@ local lastTimer
 local forceRedraw = false
 local constantRedrawSeconds = false
 local fastRedraw = false
+local steamFastRedraw = false
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -35,6 +36,10 @@ end
 
 function LimitFps.ForceRedrawPeriod(seconds)
 	constantRedrawSeconds = math.max(seconds, constantRedrawSeconds or 0)
+end
+
+function LimitFps.SetSteamFastUpdate(enabled)
+	steamFastRedraw = enabled
 end
 
 --------------------------------------------------------------------------------
@@ -58,7 +63,7 @@ end
 
 function widget:AllowDraw()
 	local config = WG.Chobby.Configuration
-	if config.drawAtFullSpeed then
+	if config.drawAtFullSpeed or steamFastRedraw then
 		return true
 	end
 	if forceRedraw then
