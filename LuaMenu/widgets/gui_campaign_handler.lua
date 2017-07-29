@@ -42,8 +42,8 @@ local currentWinPopup
 --------------------------------------------------------------------------------
 -- Rewards panels
 
-local function MakeRewardList(holder, bottom, name, rewardList, cullUnlocked, tooltipFunction, alreadyUnlockedCheck, widthMult, stackHeight, overrideTooltip)
-	if (not rewardList) or #rewardList == 0 then
+local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, widthMult, stackHeight)
+	if (not rewardsTypes) or #rewardsTypes == 0 then
 		return false
 	end
 	
@@ -55,93 +55,98 @@ local function MakeRewardList(holder, bottom, name, rewardList, cullUnlocked, to
 	local scroll, rewardsHolder
 	
 	local position = 0
-	for i = 1, #rewardList do
-		local alreadyUnlocked = alreadyUnlockedCheck(rewardList[i])
-		if not (cullUnlocked and alreadyUnlocked) then
-			if not rewardsHolder then
-				rewardsHolder = Control:New {
-					x = 10,
-					right = 10,
-					bottom = bottom,
-					height = 94,
-					padding = {0, 0, 0, 0},
-					parent = holder,
-				}
-				
-				TextBox:New {
-					x = 4,
-					y = 2,
-					right = 4,
-					height = 30,
-					text = name,
-					font = Configuration:GetFont(2),
-					parent = rewardsHolder
-				}
-				
-				scroll = ScrollPanel:New {
-					classname = "scrollpanel_borderless",
-					x = 3,
-					y = 18,
-					right = 3,
-					bottom = 2,
-					scrollbarSize = 12,
-					padding = {0, 0, 0, 0},
-					parent = rewardsHolder,
-				}
-			end
-			
-			local info, imageFile, imageOverlay, count = tooltipFunction(rewardList[i])
-			
-			local x, y = (REWARD_ICON_SIZE*widthMult + 4)*math.floor(position/stackHeight), (position%stackHeight)*REWARD_ICON_SIZE/stackHeight
-			if imageFile then
-				local color = nil
-				local statusString = ""
-				if alreadyUnlocked then
-					color = {0.5, 0.5, 0.5, 0.5}
-					statusString = " (already unlocked)"
+	for t = 1, #rewardsTypes do
+		local rewardList, tooltipFunction, alreadyUnlockedCheck,  overrideTooltip = rewardsTypes[t][1], rewardsTypes[t][2], rewardsTypes[t][3], rewardsTypes[t][4]
+		if rewardList then
+			for i = 1, #rewardList do
+				local alreadyUnlocked = alreadyUnlockedCheck(rewardList[i])
+				if not (cullUnlocked and alreadyUnlocked) then
+					if not rewardsHolder then
+						rewardsHolder = Control:New {
+							x = 10,
+							right = 10,
+							bottom = bottom,
+							height = 94,
+							padding = {0, 0, 0, 0},
+							parent = holder,
+						}
+						
+						TextBox:New {
+							x = 4,
+							y = 2,
+							right = 4,
+							height = 30,
+							text = name,
+							font = Configuration:GetFont(2),
+							parent = rewardsHolder
+						}
+						
+						scroll = ScrollPanel:New {
+							classname = "scrollpanel_borderless",
+							x = 3,
+							y = 18,
+							right = 3,
+							bottom = 2,
+							scrollbarSize = 12,
+							padding = {0, 0, 0, 0},
+							parent = rewardsHolder,
+						}
+					end
+					
+					local info, imageFile, imageOverlay, count = tooltipFunction(rewardList[i])
+					
+					local x, y = (REWARD_ICON_SIZE*widthMult + 4)*math.floor(position/stackHeight), (position%stackHeight)*REWARD_ICON_SIZE/stackHeight
+					if imageFile then
+						local color = nil
+						local statusString = ""
+						if alreadyUnlocked then
+							color = {0.5, 0.5, 0.5, 0.5}
+							statusString = " (already unlocked)"
+						end
+						local tooltip = (overrideTooltip and info) or ((info.humanName or "???") .. statusString .. "\n " .. (info.description or ""))
+						
+						local image = Image:New{
+							x = x,
+							y = y,
+							width = REWARD_ICON_SIZE*widthMult,
+							height = REWARD_ICON_SIZE/stackHeight,
+							keepAspect = true,
+							color = color,
+							tooltip = tooltip,
+							file = imageOverlay or imageFile,
+							file2 = imageOverlay and imageFile,
+							parent = scroll,
+						}
+						if count then
+							Label:New {
+								x = 2,
+								y = "50%",
+								right = 4,
+								bottom = 6,
+								align = "right",
+								fontsize = Configuration:GetFont(3).size,
+								caption = count,
+								parent = image,
+							}
+						end
+						function image:HitTest(x,y) return self end
+					else
+						local tooltip = (overrideTooltip and info) or (info.name or "???")
+						
+						Button:New {
+							x = x,
+							y = y,
+							width = REWARD_ICON_SIZE*widthMult,
+							height = REWARD_ICON_SIZE/stackHeight,
+							caption = tooltip,
+							font = Configuration:GetFont(2),
+							parent = scroll
+						}
+					end
+					
+					position = position + 1
 				end
-				local tooltip = (overrideTooltip and info) or ((info.humanName or "???") .. statusString .. "\n " .. (info.description or ""))
-				
-				local image = Image:New{
-					x = x,
-					y = y,
-					width = REWARD_ICON_SIZE*widthMult,
-					height = REWARD_ICON_SIZE/stackHeight,
-					keepAspect = true,
-					color = color,
-					tooltip = tooltip,
-					file = imageOverlay or imageFile,
-					file2 = imageOverlay and imageFile,
-					parent = scroll,
-				}
-				if count then
-					Label:New {
-						x = 2,
-						y = "50%",
-						right = 4,
-						bottom = 6,
-						align = "right",
-						fontsize = Configuration:GetFont(3).size,
-						caption = count,
-						parent = image,
-					}
-				end
-				function image:HitTest(x,y) return self end
-			else
-				local tooltip = (overrideTooltip and info) or (info.name or "???")
-				
-				Button:New {
-					x = x,
-					y = y,
-					width = REWARD_ICON_SIZE*widthMult,
-					height = REWARD_ICON_SIZE/stackHeight,
-					caption = tooltip,
-					font = Configuration:GetFont(2),
-					parent = scroll
-				}
 			end
-			
-			position = position + 1
 		end
 	end
 	
@@ -174,7 +179,7 @@ local function MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjective
 		for i = 1, #objectiveConfig do
 			objectiveList[i] = i
 		end
-		if MakeRewardList(parent, bottom, "Bonus Objectives", objectiveList, false, GetObjectiveInfo, IsObjectiveUnlocked, nil, nil, true) then
+		if MakeRewardList(parent, bottom, "Bonus Objectives", {{objectiveList, GetObjectiveInfo, IsObjectiveUnlocked, true}}, false) then
 			return bottom + 98
 		end
 	else
@@ -189,7 +194,7 @@ local function MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjective
 		for i = 1, #objectiveConfig do
 			objectiveList[i] = i
 		end
-		if MakeRewardList(parent, bottom, "Bonus Objectives", objectiveList, false, GetObjectiveInfo, IsObjectiveUnlocked, nil, nil, true) then
+		if MakeRewardList(parent, bottom, "Bonus Objectives", {{objectiveList, GetObjectiveInfo, IsObjectiveUnlocked, true}}, false) then
 			return bottom + 98
 		end
 	end
@@ -203,20 +208,18 @@ local function MakeRewardsPanel(parent, planetData, cullUnlocked, showCodex, bon
 	rewards = planetData.completionReward
 	
 	if showCodex then
-		if MakeRewardList(parent, bottom, "Codex", rewards.codexEntries, cullUnlocked, WG.CampaignData.GetCodexEntryInfo, WG.CampaignData.GetCodexEntryIsUnlocked, 3.96, 2) then
+		if MakeRewardList(parent, bottom, "Codex", {{rewards.codexEntries, WG.CampaignData.GetCodexEntryInfo, WG.CampaignData.GetCodexEntryIsUnlocked}}, cullUnlocked, 3.96, 2) then
 			bottom = bottom + 98
 		end
 	end
 	
-	if MakeRewardList(parent, bottom, "Abilities", rewards.abilities, cullUnlocked, WG.CampaignData.GetAbilityInfo, WG.CampaignData.GetAbilityIsUnlocked) then
-		bottom = bottom + 98
-	end
+	local unlockRewards = {
+		{rewards.units, WG.CampaignData.GetUnitInfo, WG.CampaignData.GetUnitIsUnlocked},
+		{rewards.modules, WG.CampaignData.GetModuleInfo, WG.CampaignData.GetModuleIsUnlocked},
+		{rewards.abilities, WG.CampaignData.GetAbilityInfo, WG.CampaignData.GetAbilityIsUnlocked}
+	}
 	
-	if MakeRewardList(parent, bottom, "Modules", rewards.modules, cullUnlocked, WG.CampaignData.GetModuleInfo, WG.CampaignData.GetModuleIsUnlocked) then
-		bottom = bottom + 98
-	end
-	
-	if MakeRewardList(parent, bottom, "Units", rewards.units, cullUnlocked, WG.CampaignData.GetUnitInfo, WG.CampaignData.GetUnitIsUnlocked) then
+	if MakeRewardList(parent, bottom, "Unlocks", unlockRewards, cullUnlocked) then
 		bottom = bottom + 98
 	end
 	
