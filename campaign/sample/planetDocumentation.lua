@@ -161,7 +161,7 @@ planetData = {
 				startZ = 75,
 				
 				-- ai library to use to run the AI. Can be any valid AI name string which player are sure to have. See LuaAI.lua in the root directory
-				-- of the Zero-K game repository for availible lua AIs, "Null AI" is an entry where which creates a completely passive AI.
+				-- of the Zero-K game repository for availible lua AIs, "Null AI" is an entry where which creates a completely passive AI. (For Null AI bitDependant should be set to false.)
 				-- If aiLib is a key found in campaignData.aiConfig.aiLibFunctions then it had better be a function that returns an AI appropriate for the
 				-- difficulty level. 'Circuit_difficulty_autofill' is one such entry, see aiConfig.lua.
 				aiLib = "Circuit_difficulty_autofill",

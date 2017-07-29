@@ -387,7 +387,7 @@ local function GetPlanet(planetUtilities)
 					},
 					image = planetUtilities.ICON_DIR .. "cloakarty.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build 12 Hammers.",
+					description = "Build 12 Hammers",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { -- Win in 10 minutes
@@ -406,7 +406,7 @@ local function GetPlanet(planetUtilities)
 					},
 					image = planetUtilities.ICON_DIR .. "staticmex.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
-					description = "Don't lose any Metal Extractors.",
+					description = "Don't lose any Metal Extractors",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			},

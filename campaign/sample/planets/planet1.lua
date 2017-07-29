@@ -94,6 +94,9 @@ local function GetPlanet(planetUtilities)
 					unlocks = {
 						"cloakraid",
 					},
+					-- difficultyDependantUnlocks = {
+						-- [3] = {"staticmex"}, -- test this sometime
+					-- },
 					commanderLevel = 2,
 					commander = {
 						name = "Most Loyal Opposition",
@@ -191,7 +194,7 @@ local function GetPlanet(planetUtilities)
 					},
 					image = planetUtilities.ICON_DIR .. "staticmex.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Have 3 Metal Extractors by 1:00.",
+					description = "Have 3 Metal Extractors by 1:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Have 3 solar by 2 minute.
@@ -203,7 +206,7 @@ local function GetPlanet(planetUtilities)
 					},
 					image = planetUtilities.ICON_DIR .. "energysolar.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Have 3 Solar Generators by 2:00.",
+					description = "Have 3 Solar Generators by 2:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { -- Build a radar
@@ -216,7 +219,7 @@ local function GetPlanet(planetUtilities)
 					},
 					image = planetUtilities.ICON_DIR .. "staticradar.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build a Radar Tower.",
+					description = "Build a Radar Tower",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[4] = { -- Build 5 Glaives
@@ -229,7 +232,7 @@ local function GetPlanet(planetUtilities)
 					},
 					image = planetUtilities.ICON_DIR .. "cloakraid.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build 5 Glaives.",
+					description = "Build at least 5 Glaives",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[5] = { -- Kill 10 Glaives
@@ -242,7 +245,7 @@ local function GetPlanet(planetUtilities)
 					},
 					image = planetUtilities.ICON_DIR .. "cloakraid.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Kill 10 Glaives.",
+					description = "Kill at least 10 Glaives",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[6] = {
