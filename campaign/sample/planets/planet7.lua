@@ -613,7 +613,6 @@ local function GetPlanet(planetUtilities)
 			},
 			bonusObjectiveConfig = {
 				[1] = { -- Make the enemy lose eight mex by 1:30
-					satisfyOnce = true,
 					onlyCountRemovedUnits = true,
 					satisfyByTime = 90,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,

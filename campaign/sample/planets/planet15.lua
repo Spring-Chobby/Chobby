@@ -87,7 +87,6 @@ local function GetPlanet(planetUtilities)
 			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"shieldscout",
-				"shieldaa",
 			},
 			modules = {
 			},

@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[something weird]]
+			text = [[Unlock Sniper]]
 		},
 		gameConfig = {
 			missionStartscript = false,
@@ -39,6 +39,7 @@ local function GetPlanet(planetUtilities)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
+					"cloaksnipe",
 				},
 				startUnits = {
 				}
@@ -83,6 +84,7 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
+				"cloaksnipe",
 			},
 			modules = {
 			},
