@@ -355,7 +355,7 @@ local function GetPlanet(planetUtilities)
 					},
 					image = planetUtilities.ICON_DIR .. "cloakcon.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build 4 Conjurers.",
+					description = "Build 4 Conjurers",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Destroy the Impaler
@@ -364,7 +364,7 @@ local function GetPlanet(planetUtilities)
 					-- See bonusObjectiveID in units table
 					image = planetUtilities.ICON_DIR .. "vehheavyarty.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Destroy the enemy Impaler.",
+					description = "Destroy the enemy Impaler",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { 

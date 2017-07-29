@@ -161,6 +161,9 @@ local function GetPlanet(planetUtilities)
 						"cloakraid", --maybe remove or (if possible) deprioritise this?
 						"cloakriot",
 					},
+					-- difficultyDependantUnlocks = {
+						-- [3] = {"staticmex"}, -- test this sometime
+					-- },
 					commanderLevel = 2,
 					commander = {
 						name = "Wub Wub Wub",
@@ -324,7 +327,7 @@ local function GetPlanet(planetUtilities)
 					},
 					image = planetUtilities.ICON_DIR .. "factorycloak.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build a Cloaky Factory.",
+					description = "Build a Cloaky Factory",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Have 10 mex
@@ -336,7 +339,7 @@ local function GetPlanet(planetUtilities)
 					},
 					image = planetUtilities.ICON_DIR .. "staticmex.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Have 10 Metal Extractors.",
+					description = "Have 10 Metal Extractors",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { -- Build 10 Rockos
@@ -349,7 +352,7 @@ local function GetPlanet(planetUtilities)
 					},
 					image = planetUtilities.ICON_DIR .. "cloakskirm.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build 10 Rockos.",
+					description = "Build 10 Rockos",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[4] = { -- Kill enemy Stardusts in 8 minutes.
@@ -359,7 +362,7 @@ local function GetPlanet(planetUtilities)
 					-- See bonusObjectiveID in units table
 					image = planetUtilities.ICON_DIR .. "turretriot.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Kill all five enemy Stardust turrets before 8:00.",
+					description = "Kill all five enemy Stardust turrets before 8:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			},

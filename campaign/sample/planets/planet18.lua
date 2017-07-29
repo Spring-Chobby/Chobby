@@ -2006,6 +2006,10 @@ local function GetPlanet(planetUtilities)
 						"tankarty",
 						"tankaa"
 					},
+					difficultyDependantUnlocks = {
+						[2] = {"shieldriot"},
+						[3] = {"shieldbomb"},
+					},
 					commanderLevel = 1,
 					commander = {
 						name = "Labrador",
@@ -3458,7 +3462,7 @@ local function GetPlanet(planetUtilities)
 					},
 					image = planetUtilities.ICON_DIR .. "cloakheavyraid.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build 12 Scythes.",
+					description = "Build 12 Scythes",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = {
@@ -3467,7 +3471,7 @@ local function GetPlanet(planetUtilities)
 					description = "Win by 10:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[3] = { -- Make the enemy have no more than one Sunlance by 8:00
+				[3] = { -- Make the enemy lose one Sunlance by 8:00
 					satisfyOnce = true,
 					onlyCountRemovedUnits = true,
 					satisfyByTime = 480,
@@ -3478,7 +3482,7 @@ local function GetPlanet(planetUtilities)
 					},
 					image = planetUtilities.ICON_DIR .. "turretsunlance.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Destroy one of the enemy Sunlance turrets by 8:00.",
+					description = "Destroy one of the enemy Sunlance turrets by 8:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			}
