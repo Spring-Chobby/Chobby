@@ -769,6 +769,7 @@ end
 local chassisDef = {
 	name = "knight",
 	humanName = "Knight",
+	image = LUA_DIRNAME .. "images/chassis_cremcom.png",
 	secondPeashooter = true,
 	highestDefinedLevel = 5,
 	levelDefs = {

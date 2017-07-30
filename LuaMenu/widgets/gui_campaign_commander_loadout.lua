@@ -20,6 +20,8 @@ end
 local TOP_HEIGHT = 200
 local HEADING_OFFSET = 36
 local BUTTON_SIZE = 50
+local COMMANDER_IMAGE_WIDTH = 120
+local COMMANDER_IMAGE_HEIGHT = 160
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -185,7 +187,7 @@ local function GetExperienceDisplay(parentControl, barHeight, fancy)
 	local experienceToApply, bonusToApply, totalExperienceToApply, totalBonusToApply
 	local function FancyExperienceUpdate()
 		local sumToApply = ((experienceToApply or 0) + (bonusToApply or 0))
-		local newExperience = math.min(sumToApply, 1 + math.floor(sumToApply/15))
+		local newExperience = math.min(sumToApply, 1 + math.floor(sumToApply/9))
 		AddExperience(newExperience)
 		
 		if experienceToApply then
@@ -465,6 +467,7 @@ end
 
 local function InitializeControls(parentControl)
 	local Configuration = WG.Chobby.Configuration
+	local commConfig = Configuration.campaignConfig.commConfig
 	
 	Label:New {
 		x = 20,
@@ -500,22 +503,36 @@ local function InitializeControls(parentControl)
 		horizontalScrollbar = false,
 		padding = {4, 4, 4, 4},
 		borderColor = {0,0,0,0},
-		OnResize = {
-			function(self, xSize, ySize)
-				if ResizeFunction then
-					ResizeFunction(xSize)
-				end
-			end
-		},
 		parent = parentControl,
 	}
 	
 	local experienceHolder = Control:New {
-		x = 20,
-		y = 58,
+		x = COMMANDER_IMAGE_WIDTH + 8,
+		y = 56,
 		right = 20,
 		height = 100,
 		padding = {0, 0, 0, 0},
+		parent = informationPanel,
+	}
+	
+	local commanderLabel = Label:New {
+		x = COMMANDER_IMAGE_WIDTH + 12,
+		y = 15,
+		right = 5,
+		height = 18,
+		align = "left",
+		font = WG.Chobby.Configuration:GetFont(4),
+		caption = "",
+		parent = informationPanel
+	}
+	
+	local commanderImage = Image:New{
+		x = 5,
+		y = 5,
+		width = COMMANDER_IMAGE_WIDTH,
+		height = COMMANDER_IMAGE_HEIGHT,
+		keepAspect = true,
+		file = commConfig.chassisDef.image,
 		parent = informationPanel,
 	}
 	
@@ -557,6 +574,12 @@ local function InitializeControls(parentControl)
 		end
 	end
 	
+	local function UpdateCommanderName(_, newName)
+		commanderLabel:SetCaption(newName)
+	end
+	UpdateCommanderName(_, WG.CampaignData.GetPlayerCommander().name)
+	
+	WG.CampaignData.AddListener("CommanderNameUpdate", UpdateCommanderName)
 	WG.CampaignData.AddListener("CampaignLoaded", UpdateCommanderDisplay)
 	WG.CampaignData.AddListener("GainExperience", GainExperience)
 end
