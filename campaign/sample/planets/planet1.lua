@@ -268,6 +268,9 @@ local function GetPlanet(planetUtilities)
 				"module_ablative_armor_LIMIT_B_1",
 			},
 			abilities = {
+			},
+			codexEntries = {
+				"character_sophia"
 			}
 		},
 	}

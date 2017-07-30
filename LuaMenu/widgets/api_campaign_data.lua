@@ -269,7 +269,7 @@ local function SetupInitialCommander()
 	UnlockModuleSlots(0)
 end
 
-local function GainExperience(newExperience)
+local function GainExperience(newExperience, gainedBonusExperience)
 	local Configuration = WG.Chobby.Configuration
 	local oldExperience = gamedata.commanderExperience
 	local oldLevel = gamedata.commanderLevel
@@ -285,7 +285,7 @@ local function GainExperience(newExperience)
 		UpdateCommanderModuleCounts()
 	end
 	
-	CallListeners("GainExperience", oldExperience, oldLevel, gamedata.commanderExperience, gamedata.commanderLevel)
+	CallListeners("GainExperience", oldExperience, oldLevel, gamedata.commanderExperience, gamedata.commanderLevel, gainedBonusExperience)
 end
 
 --------------------------------------------------------------------------------
@@ -373,6 +373,8 @@ function externalFunctions.CapturePlanet(planetID, bonusObjectives)
 	local planet = WG.Chobby.Configuration.campaignConfig.planetDefs.planets[planetID]
 	local saveRequired = false
 	local gainedExperience = 0
+	local gainedBonusExperience = 0
+	
 	if UnlockThing(gamedata.planetsCaptured, planetID) then
 		UnlockRewardSet(planet.completionReward)
 		CallListeners("RewardGained", planet.completionReward)
@@ -387,13 +389,14 @@ function externalFunctions.CapturePlanet(planetID, bonusObjectives)
 			for i = 1, #bonusObjectives do
 				if bonusObjectives[i] and bonusConfig[i] and UnlockThing(gamedata.bonusObjectivesComplete, planetID .. "_" .. i) then
 					gainedExperience = gainedExperience + bonusConfig[i].experience
+					gainedBonusExperience = gainedBonusExperience + bonusConfig[i].experience
 					saveRequired = true
 				end
 			end
 		end
 	end
 	
-	GainExperience(gainedExperience)
+	GainExperience(gainedExperience, gainedBonusExperience)
 	
 	if saveRequired then
 		SaveGame()
@@ -505,7 +508,7 @@ function externalFunctions.GetPlayerCommander()
 end
 
 function externalFunctions.GetPlayerCommanderInformation()
-	return gamedata.commanderLevel, gamedata.commanderName, gamedata.commanderLoadout
+	return gamedata.commanderLevel, gamedata.commanderExperience, gamedata.commanderName, gamedata.commanderLoadout
 end
 
 function externalFunctions.GetSaves()

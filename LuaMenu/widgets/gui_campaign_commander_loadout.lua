@@ -78,7 +78,7 @@ local function GetValidReplacementModuleSlot(moduleName, level, slot)
 	local moduleDefs = commConfig.moduleDefs
 	local moduleDefNames = commConfig.moduleDefNames
 	
-	local _, _, commanderLoadout = WG.CampaignData.GetPlayerCommanderInformation()
+	local _, _, _, commanderLoadout = WG.CampaignData.GetPlayerCommanderInformation()
 	local loadoutModuleCounts = WG.CampaignData.GetCommanderModuleCounts()
 	local moduleList, moduleLimit = WG.CampaignData.GetModuleListAndLimit()
 	
@@ -100,6 +100,136 @@ local function GetValidReplacementModuleSlot(moduleName, level, slot)
 	end
 	
 	return validList
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Experience display
+
+local function GetExperienceDisplay(parentControl, barHeight, fancyExperienceUpdate)
+	local commLevel, commExperience = WG.CampaignData.GetPlayerCommanderInformation()
+	local commConfig = WG.Chobby.Configuration.campaignConfig.commConfig
+	
+	local levelExperience = commConfig.GetLevelRequirement(commLevel)
+	local nextExperiece = commConfig.GetLevelRequirement(commLevel + 1)
+	
+	local currentProgress = commExperience - levelExperience
+	local progressGoal = nextExperiece - levelExperience
+	
+	local experienceBar = Progressbar:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		height = barHeight or 32,
+		value = currentProgress/progressGoal,
+		max = 1,
+		caption = "Level " .. (commLevel + 1),
+		font = WG.Chobby.Configuration:GetFont(3),
+		parent = parentControl,
+	}
+	
+	local progressLabel = Label:New {
+		y = barHeight + 3,
+		right = 5,
+		width = 90,
+		height = 22,
+		align = "right",
+		font = WG.Chobby.Configuration:GetFont(3),
+		caption = commExperience .. " / " .. nextExperiece,
+		parent = parentControl
+	}
+	
+	local newExperienceLabel, newBonusExperienceLabel
+	if fancyExperienceUpdate then
+		newExperienceLabel = Label:New {
+			y = barHeight + 3,
+			x = 5,
+			width = 90,
+			height = 22,
+			align = "left",
+			font = WG.Chobby.Configuration:GetFont(3),
+			caption = "",
+			parent = parentControl
+		}
+		newBonusExperienceLabel = Label:New {
+			y = barHeight + 27,
+			x = 5,
+			width = 90,
+			height = 22,
+			align = "left",
+			font = WG.Chobby.Configuration:GetFont(3),
+			caption = "",
+			parent = parentControl
+		}
+	end
+	
+	local function SetExperience(newExperience)
+		commExperience = newExperience
+		
+		if commExperience >= nextExperiece then
+			while commExperience >= nextExperiece do
+				commLevel = commLevel + 1
+				nextExperiece = commConfig.GetLevelRequirement(commLevel + 1)
+			end
+			
+			levelExperience = commConfig.GetLevelRequirement(commLevel)
+			experienceBar:SetCaption("Level " .. (commLevel + 1))
+			progressGoal = nextExperiece - levelExperience
+		end
+		
+		currentProgress = commExperience - levelExperience
+		experienceBar:SetValue(currentProgress/progressGoal)
+		progressLabel:SetCaption(commExperience .. " / " .. nextExperiece)
+	end
+	
+	local experienceToApply, bonusToApply, totalExperienceToApply, totalBonusToApply
+	local function FancyExperienceUpdate()
+		local sumToApply = ((experienceToApply or 0) + (bonusToApply or 0))
+		local newExperience = math.min(sumToApply, 1 + math.floor(sumToApply/15))
+		SetExperience(commExperience + newExperience)
+		
+		if experienceToApply then
+			experienceToApply = experienceToApply - newExperience
+			if experienceToApply <= 0 then
+				newExperience = newExperience - experienceToApply
+				experienceToApply = false
+			end
+			newExperienceLabel:SetCaption("Experience: " .. (totalExperienceToApply - (experienceToApply or 0)))
+		end
+		
+		if bonusToApply and (not experienceToApply) then
+			bonusToApply = bonusToApply - newExperience
+			if bonusToApply <= 0 then
+				newExperience = newExperience - bonusToApply
+				bonusToApply = false
+			end
+			newBonusExperienceLabel:SetCaption("Bonus: " .. (totalBonusToApply - (bonusToApply or 0)))
+		end
+		
+		if experienceToApply or bonusToApply then
+			WG.Delay(FancyExperienceUpdate, 0.03)
+		end
+		WG.LimitFps.ForceRedraw()
+	end
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.UpdateExperience(gainedExperience, gainedBonusExperience)
+		if fancyExperienceUpdate then
+			experienceToApply = (experienceToApply or 0) + gainedExperience - gainedBonusExperience
+			totalExperienceToApply = experienceToApply
+			
+			bonusToApply = (bonusToApply or 0) + gainedBonusExperience
+			totalBonusToApply = bonusToApply
+			
+			WG.Delay(FancyExperienceUpdate, 0.2)
+		else
+			SetExperience(commExperience + gainedExperience)
+			WG.LimitFps.ForceRedraw()
+		end
+	end
+	
+	return externalFunctions
 end
 
 --------------------------------------------------------------------------------
@@ -385,7 +515,7 @@ local function InitializeControls(parentControl)
 	local modulePanelHandler = MakeModulePanelHandler(modulePanel)
 	
 	local function UpdateCommanderDisplay()
-		local commanderLevel, commanderName, commanderLoadout = WG.CampaignData.GetPlayerCommanderInformation()
+		local commanderLevel, _, commanderName, commanderLoadout = WG.CampaignData.GetPlayerCommanderInformation()
 		
 		modulePanelHandler.UpdateLoadoutDisplay(commanderLevel, commanderName, commanderLoadout)
 	end
@@ -426,6 +556,8 @@ function CommanderHandler.GetControl()
 	}
 	return window
 end
+
+CommanderHandler.GetExperienceDisplay = GetExperienceDisplay
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------

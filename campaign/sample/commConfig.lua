@@ -912,7 +912,10 @@ end
 ------------------------------------------------------------------------
 
 local function GetLevelRequirement(level)
-	return (100*level^2 + 300*level + 200)
+	if level > 0 then
+		return (100*level^2 + 300*level + 200)
+	end
+	return 0
 end
 
 return {

@@ -224,6 +224,8 @@ local function MakeRewardsPanel(parent, planetData, cullUnlocked, showCodex, bon
 	end
 	
 	bottom = MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjectiveSuccess)
+	
+	return bottom
 end
 
 --------------------------------------------------------------------------------
@@ -236,7 +238,7 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess)
 		name = "victoryWindow",
 		parent = WG.Chobby.lobbyInterfaceHolder,
 		width = 520,
-		height = 480,
+		height = 560,
 		resizable = false,
 		draggable = false,
 		classname = "main_window",
@@ -255,7 +257,20 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess)
 		parent = victoryWindow
 	}
 	
-	MakeRewardsPanel(victoryWindow, planetData, true, true, bonusObjectiveSuccess)
+	local experienceHolder = Control:New {
+		x = 20,
+		y = 58,
+		right = 20,
+		height = 100,
+		padding = {0, 0, 0, 0},
+		parent = victoryWindow,
+	}
+	
+	local experienceDisplay = WG.CommanderHandler.GetExperienceDisplay(experienceHolder, 38, true)
+	
+	local rewardsHeight = MakeRewardsPanel(victoryWindow, planetData, true, true, bonusObjectiveSuccess)
+	
+	victoryWindow:SetPos(nil, nil, nil, 200 + rewardsHeight)
 	
 	local function CloseFunc()
 		victoryWindow:Dispose()
@@ -281,17 +296,8 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess)
 	
 	local externalFunctions = {}
 	
-	function externalFunctions.UpdateExperience(oldExperience, oldLevel, newExperience, newLevel)
-		Label:New {
-			x = 0,
-			y = 38,
-			width = childWidth,
-			height = 24,
-			align = "center",
-			caption = "Level: " .. oldLevel .. " -> " .. newLevel .. ". Experience: " .. oldExperience .. " -> " .. newExperience,
-			font = WG.Chobby.Configuration:GetFont(3),
-			parent = victoryWindow
-		}
+	function externalFunctions.UpdateExperience(oldExperience, oldLevel, newExperience, newLevel, gainedBonusExperience)
+		experienceDisplay.UpdateExperience(newExperience - oldExperience, gainedBonusExperience)
 	end
 	
 	return externalFunctions
@@ -844,9 +850,9 @@ function widget:Initialize()
 	end
 	WG.CampaignData.AddListener("CampaignLoaded", CampaignLoaded)
 	
-	local function GainExperience(listener, oldExperience, oldLevel, newExperience, newLevel)
+	local function GainExperience(listener, oldExperience, oldLevel, newExperience, newLevel, gainedBonusExperience)
 		if currentWinPopup then
-			currentWinPopup.UpdateExperience(oldExperience, oldLevel, newExperience, newLevel)
+			currentWinPopup.UpdateExperience(oldExperience, oldLevel, newExperience, newLevel, gainedBonusExperience)
 		end
 	end
 	WG.CampaignData.AddListener("GainExperience", GainExperience)
