@@ -319,7 +319,7 @@ local function ProcessPlanetDefeat(planetID)
 		selectedPlanet.Close()
 		selectedPlanet = nil
 	end
-	WG.Chobby.InformationPopup("Battle for " .. planetConfig[planetID].name .. " lost.")
+	WG.Chobby.InformationPopup("Battle for " .. planetConfig[planetID].name .. " lost.", nil, nil, "Defeat")
 end
 
 --------------------------------------------------------------------------------
