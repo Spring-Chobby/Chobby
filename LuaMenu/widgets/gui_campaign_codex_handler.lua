@@ -181,9 +181,9 @@ local function InitializeControls(parentControl)
 	local codexTextScroll = ScrollPanel:New{
 		parent = parentControl,
 		x = "40%",
-		y = IMAGE_SIZE + 48 + 8,
-		bottom = 4,
-		right = 4,
+		y = IMAGE_SIZE + 54 + 8,
+		bottom = 14,
+		right = 12,
 		orientation = "vertical",
 		children = {}
 	}
@@ -200,7 +200,7 @@ local function InitializeControls(parentControl)
 	local codexImagePanel = Panel:New{
 		parent = parentControl,
 		x = "41%",
-		y = 48,
+		y = 54,
 		height = IMAGE_SIZE,
 		width = IMAGE_SIZE,
 	}
@@ -214,9 +214,9 @@ local function InitializeControls(parentControl)
 	
 	local codexTreeScroll = ScrollPanel:New{
 		parent = parentControl,
-		x = 4,
-		y = 48,
-		bottom = 4,
+		x = 12,
+		y = 54,
+		bottom = 14,
 		right = "60%",
 		orientation = "vertical",
 		children = {}

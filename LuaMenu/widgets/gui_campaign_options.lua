@@ -100,10 +100,10 @@ local function InitializeControls(window)
 	}
 	
 	local tabPanel = Chili.DetachableTabPanel:New {
-		x = 5,
-		right = 5,
-		y = 45,
-		bottom = 1,
+		x = 7,
+		right = 7,
+		y = 50,
+		bottom = 6,
 		padding = {0, 0, 0, 0},
 		minTabWidth = 120,
 		tabs = tabs,
@@ -114,9 +114,9 @@ local function InitializeControls(window)
 
 	local tabBarHolder = Control:New {
 		name = "tabBarHolder",
-		x = 0,
-		y = 0,
-		right = 90,
+		x = 6,
+		y = 5,
+		right = 65,
 		height = 55,
 		resizable = false,
 		draggable = false,
@@ -138,10 +138,11 @@ function CampaignOptionsWindow.GetControl()
 
 	local window = Control:New {
 		name = "campaignOptionsWindow",
-		x = "0%",
-		y = "0%",
-		width = "100%",
-		height = "100%",
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		padding = {0, 0, 0, 0},
 		OnParentPost = {
 			function(obj)
 				if obj:IsEmpty() then
