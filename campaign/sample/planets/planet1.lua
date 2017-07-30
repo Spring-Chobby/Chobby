@@ -149,7 +149,11 @@ local function GetPlanet(planetUtilities)
 							name = "factorycloak",
 							x = 3750,
 							z = 340,
-							facing = 4, 
+							facing = 4,
+							mapMarker = {
+								text = "Destroy",
+								color = "red"
+							}
 						},
 					
 					}
