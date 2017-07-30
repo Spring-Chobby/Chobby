@@ -20,7 +20,7 @@ local moduleDefs = {
 	},
 	{
 		name = "nullbasicweapon",
-		humanName = "Empty Slot",
+		humanName = "Empty Weapon Slot",
 		description = "Put a weapon in this slot.",
 		image = moduleImagePath .. "module_none.png",
 		limit = false,
@@ -31,7 +31,7 @@ local moduleDefs = {
 	},
 	{
 		name = "nulladvweapon",
-		humanName = "Empty Slot",
+		humanName = "Empty Weapon Slot",
 		description = "Put a weapon in this slot.",
 		image = moduleImagePath .. "module_none.png",
 		limit = false,
