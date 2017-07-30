@@ -186,20 +186,17 @@ local function GetExperienceDisplay(parentControl, barHeight, fancy)
 	
 	local experienceToApply, bonusToApply, totalExperienceToApply, totalBonusToApply
 	local function FancyExperienceUpdate()
-		local sumToApply = ((experienceToApply or 0) + (bonusToApply or 0))
-		local newExperience = math.min(sumToApply, 1 + math.floor(sumToApply/9))
-		AddExperience(newExperience)
-		
 		if experienceToApply then
+			local newExperience = math.min(experienceToApply, 1 + math.floor(experienceToApply/9))
+			AddExperience(newExperience)
 			experienceToApply = experienceToApply - newExperience
 			if experienceToApply <= 0 then
-				newExperience = newExperience - experienceToApply
 				experienceToApply = false
 			end
 			newExperienceLabel:SetCaption("Experience: " .. (totalExperienceToApply - (experienceToApply or 0)))
-		end
-		
-		if bonusToApply and (not experienceToApply) then
+		elseif bonusToApply then
+			local newExperience = math.min(bonusToApply, 1 + math.floor(bonusToApply/9))
+			AddExperience(newExperience)
 			bonusToApply = bonusToApply - newExperience
 			if bonusToApply <= 0 then
 				newExperience = newExperience - bonusToApply
