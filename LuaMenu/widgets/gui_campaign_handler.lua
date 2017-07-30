@@ -297,7 +297,7 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess)
 	local externalFunctions = {}
 	
 	function externalFunctions.UpdateExperience(oldExperience, oldLevel, newExperience, newLevel, gainedBonusExperience)
-		experienceDisplay.UpdateExperience(newExperience - oldExperience, gainedBonusExperience)
+		experienceDisplay.AddFancyExperience(newExperience - oldExperience, gainedBonusExperience)
 	end
 	
 	return externalFunctions

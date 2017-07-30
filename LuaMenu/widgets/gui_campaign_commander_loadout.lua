@@ -106,7 +106,7 @@ end
 --------------------------------------------------------------------------------
 -- Experience display
 
-local function GetExperienceDisplay(parentControl, barHeight, fancyExperienceUpdate)
+local function GetExperienceDisplay(parentControl, barHeight, fancy)
 	local commLevel, commExperience = WG.CampaignData.GetPlayerCommanderInformation()
 	local commConfig = WG.Chobby.Configuration.campaignConfig.commConfig
 	
@@ -140,7 +140,7 @@ local function GetExperienceDisplay(parentControl, barHeight, fancyExperienceUpd
 	}
 	
 	local newExperienceLabel, newBonusExperienceLabel
-	if fancyExperienceUpdate then
+	if fancy then
 		newExperienceLabel = Label:New {
 			y = barHeight + 3,
 			x = 5,
@@ -163,8 +163,8 @@ local function GetExperienceDisplay(parentControl, barHeight, fancyExperienceUpd
 		}
 	end
 	
-	local function SetExperience(newExperience)
-		commExperience = newExperience
+	local function AddExperience(newExperience)
+		commExperience = commExperience + newExperience
 		
 		if commExperience >= nextExperiece then
 			while commExperience >= nextExperiece do
@@ -186,7 +186,7 @@ local function GetExperienceDisplay(parentControl, barHeight, fancyExperienceUpd
 	local function FancyExperienceUpdate()
 		local sumToApply = ((experienceToApply or 0) + (bonusToApply or 0))
 		local newExperience = math.min(sumToApply, 1 + math.floor(sumToApply/15))
-		SetExperience(commExperience + newExperience)
+		AddExperience(newExperience)
 		
 		if experienceToApply then
 			experienceToApply = experienceToApply - newExperience
@@ -214,19 +214,35 @@ local function GetExperienceDisplay(parentControl, barHeight, fancyExperienceUpd
 	
 	local externalFunctions = {}
 	
-	function externalFunctions.UpdateExperience(gainedExperience, gainedBonusExperience)
-		if fancyExperienceUpdate then
-			experienceToApply = (experienceToApply or 0) + gainedExperience - gainedBonusExperience
+	function externalFunctions.AddFancyExperience(gainedExperience, gainedBonusExperience)
+		if fancy then
+			experienceToApply = (experienceToApply or 0) + gainedExperience - (gainedBonusExperience or 0)
 			totalExperienceToApply = experienceToApply
 			
 			bonusToApply = (bonusToApply or 0) + gainedBonusExperience
 			totalBonusToApply = bonusToApply
 			
 			WG.Delay(FancyExperienceUpdate, 0.2)
-		else
-			SetExperience(commExperience + gainedExperience)
-			WG.LimitFps.ForceRedraw()
 		end
+	end
+	
+	function externalFunctions.SetExperience(newExperience, newCommLevel)
+		commExperience = newExperience
+		
+		if commLevel ~= newCommLevel then
+			commLevel = newCommLevel
+			
+			nextExperiece = commConfig.GetLevelRequirement(commLevel + 1)
+			levelExperience = commConfig.GetLevelRequirement(commLevel)
+			experienceBar:SetCaption("Level " .. (commLevel + 1))
+			progressGoal = nextExperiece - levelExperience
+		end
+		
+		currentProgress = commExperience - levelExperience
+		experienceBar:SetValue(currentProgress/progressGoal)
+		progressLabel:SetCaption(commExperience .. " / " .. nextExperiece)
+		
+		WG.LimitFps.ForceRedraw()
 	end
 	
 	return externalFunctions
@@ -494,6 +510,17 @@ local function InitializeControls(parentControl)
 		parent = parentControl,
 	}
 	
+	local experienceHolder = Control:New {
+		x = 20,
+		y = 58,
+		right = 20,
+		height = 100,
+		padding = {0, 0, 0, 0},
+		parent = informationPanel,
+	}
+	
+	local experienceDisplay = GetExperienceDisplay(experienceHolder, 38)
+	
 	local modulePanel = Control:New {
 		x = 12,
 		right = 12,
@@ -515,15 +542,18 @@ local function InitializeControls(parentControl)
 	local modulePanelHandler = MakeModulePanelHandler(modulePanel)
 	
 	local function UpdateCommanderDisplay()
-		local commanderLevel, _, commanderName, commanderLoadout = WG.CampaignData.GetPlayerCommanderInformation()
+		local commanderLevel, commanderExperience, commanderName, commanderLoadout = WG.CampaignData.GetPlayerCommanderInformation()
 		
 		modulePanelHandler.UpdateLoadoutDisplay(commanderLevel, commanderName, commanderLoadout)
+		experienceDisplay.SetExperience(commanderExperience, commanderLevel)
 	end
 	UpdateCommanderDisplay()
 	
 	local function GainExperience(_, oldExperience, oldLevel, newExperience, newLevel)
 		if oldLevel ~= newLevel then
 			UpdateCommanderDisplay()
+		else
+			experienceDisplay.SetExperience(newExperience, newLevel)
 		end
 	end
 	
