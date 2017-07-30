@@ -209,6 +209,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		numplayers = playerCount,
 		numusers = playerCount + aiCount,
 		startpostype = 0, -- Fixed
+		GameStartDelay = 0,
 		modoptions = {
 			--crashcircuit = 1, -- Don't crash circuit
 			commandertypes = TableToBase64(commanderTypes),

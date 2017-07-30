@@ -385,6 +385,8 @@ planetData = {
 			--      objective "Make 20 Glaives" which doesn't care what happens to each Glaive after it is built.
 			--  * If 'onlyCountRemovedUnits = true' then the objective only counts those units that were relevant units before they died. Set
 			--      this to create an objective "Kill 5 Glaive" by making the objective only count removed enemy glaives.
+			--  * If 'capturedUnitsSatisfy = true' then captured units can count towards objection completion. Usually only built units count, and
+			--      only when on their origional ally team.
 			
 			[1] = {
 				satisfyForever = true,
