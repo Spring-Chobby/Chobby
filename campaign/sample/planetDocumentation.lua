@@ -97,6 +97,19 @@ planetData = {
 						z = 1200,
 						radius = 100,
 						objectiveID = 5,
+						
+						-- Map marker will appear at the victory location. Only set for one unit otherwise duplicates will appear.
+						mapMarker = {
+							text = "Walk Here",
+							color = "green"
+						},
+					},
+					
+					-- mapMarker can be set for allied or enemy start units with arbitrary text. The marker is removed on death.
+					-- It does not follow the unit so only makes sense on stuctures.
+					mapMarker = {
+						text = "Protect",
+						color = "green"
 					},
 					
 					-- ObjectiveID is for mission UI. See objectiveConfig
@@ -328,6 +341,7 @@ planetData = {
 			--  * lockUnitsOnSatisfy - true/false
 			--  * countRemovedUnits - true/false
 			--  * onlyCountRemovedUnits - true/false
+			--  * capturedUnitsSatisfy - true/false
 			--
 			-- Bonus objectives work on the same system. They compare a number of units to their targetNumber and are satisfied based on their
 			-- satisfaction type. Ingame, an objective is either satisfied or not satisfied from second to second. It succeeds or failed based on
