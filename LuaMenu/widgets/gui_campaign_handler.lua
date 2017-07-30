@@ -340,38 +340,38 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 		children = {
 			-- title
 			Label:New{
-				x = textX,
+				x = 8,
 				y = 12,
 				caption = string.upper(planetData.name),
 				font = Configuration:GetFont(4),
 			},
 			-- grid of details
 			Grid:New{
-				x = 4,
-				y = 72,
+				x = 8,
+				y = 60,
 				right = 4,
-				bottom = "60%",
+				bottom = "72%",
 				columns = 2,
-				rows = 4,
+				rows = 2,
 				children = {
-					Label:New{caption = "Type", font = Configuration:GetFont(3)},
-					Label:New{caption = planetData.infoDisplay.terrainType or "<UNKNOWN>", font = Configuration:GetFont(3)},
-					Label:New{caption = "Radius", font = Configuration:GetFont(3)},
-					Label:New{caption = planetData.infoDisplay.radius or "<UNKNOWN>", font = Configuration:GetFont(3)},
 					Label:New{caption = "Primary", font = Configuration:GetFont(3)},
 					Label:New{caption = planetData.infoDisplay.primary .. " (" .. planetData.infoDisplay.primaryType .. ") ", font = Configuration:GetFont(3)},
-					Label:New{caption = "Military rating", font = Configuration:GetFont(3)},
-					Label:New{caption = tostring(planetData.infoDisplay.milRating or "<UNKNOWN>"), font = Configuration:GetFont(3)},
+					Label:New{caption = "Type", font = Configuration:GetFont(3)},
+					Label:New{caption = planetData.infoDisplay.terrainType or "<UNKNOWN>", font = Configuration:GetFont(3)},
+					--Label:New{caption = "Radius", font = Configuration:GetFont(3)},
+					--Label:New{caption = planetData.infoDisplay.radius or "<UNKNOWN>", font = Configuration:GetFont(3)},
+					--Label:New{caption = "Military rating", font = Configuration:GetFont(3)},
+					--Label:New{caption = tostring(planetData.infoDisplay.milRating or "<UNKNOWN>"), font = Configuration:GetFont(3)},
 				},
 			},
 			-- desc text
 			TextBox:New {
-				x = 4,
-				y = "45%",
+				x = 8,
+				y = "30%",
 				right = 4,
 				bottom = "25%",
 				text = planetData.infoDisplay.text,
-				font = Configuration:GetFont(0),
+				font = Configuration:GetFont(3),
 			},
 		}
 	}
