@@ -216,6 +216,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 			defeatconditionconfig = TableToBase64(gameConfig.defeatConditionConfig),
 			objectiveconfig = TableToBase64(gameConfig.objectiveConfig),
 			bonusobjectiveconfig = TableToBase64(gameConfig.bonusObjectiveConfig),
+			neutralunitstospawn = TableToBase64(gameConfig.neutralUnits),
 			fixedstartpos = 1,
 			planetmissiondifficulty = missionDifficulty,
 			singleplayercampaignsavename = WG.Chobby.Configuration.campaignSaveFile,

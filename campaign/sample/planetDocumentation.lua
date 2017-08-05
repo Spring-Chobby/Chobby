@@ -148,6 +148,11 @@ planetData = {
 					-- Units with difficultyAtMost and difficultyAtLeast can have bonusObjectiveID but be careful to make sure that objective makes sense.
 					-- See bonusObjectiveConfig
 					bonusObjectiveID = false,
+					
+					-- 'notAutoAttacked = true' makes the unit not automatically targeted by anything. Mainly useful for neutral units.
+					notAutoAttacked = false,
+					-- Invicible units cannot die. They automatically have 'notAutoAttacked = true' 
+					invincible = false,
 				},
 				{
 					name = "turretlaser", 
@@ -164,6 +169,17 @@ planetData = {
 				},
 				-- etc...
 			}
+		},
+		
+		-- Set of neutral units to spawn. Same format as startUnits
+		neutralUnits = {
+			{
+				name = "turretlaser",
+				x = 32,
+				z = 32,
+				facing = 2,
+				invincible = true,
+			},
 		},
 		
 		-- Configuration for all the AI teams in the game. These are mostly the same as player config.
