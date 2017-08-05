@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[Finish the Behemoth artillery cannon and link it to Geothermal energy plants. It will do the rest of the work for you.]]
+			text = [[Finish the Behemoth static artillery and link it to your allies' power plants. This will break the enemy's defensive line and allow you to destroy their base.]]
 		},
 		gameConfig = {
 			missionStartscript = false,
@@ -40,7 +40,7 @@ local function GetPlanet(planetUtilities)
 				},
 				extraUnlocks = {
 					"staticcon",
-					"energygeo",
+					"energypylon",
 				},
 				startUnits = {
 				}
@@ -86,7 +86,7 @@ local function GetPlanet(planetUtilities)
 			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"staticcon",
-				"energygeo",
+				"energypylon",
 			},
 			modules = {
 			},

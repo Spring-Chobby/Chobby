@@ -359,6 +359,7 @@ local function GetPlanet(planetUtilities)
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Destroy the Impaler
+					satisfyOnce = true,
 					comparisionType = planetUtilities.COMPARE.AT_MOST,
 					targetNumber = 0,
 					-- See bonusObjectiveID in units table

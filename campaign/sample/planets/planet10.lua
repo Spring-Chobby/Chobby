@@ -44,7 +44,10 @@ local function GetPlanet(planetUtilities)
 					"vehheavyarty",
 					"vehaa",
 					"turretaalaser",
-					"turrettorp"
+					"turrettorp",
+					"vehraid",
+					"vehriot",
+					"vehassault",
 				},
 				startUnits = {
 					{

@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.35,
-			y = 0.54,
+			x = 0.33,
+			y = 0.53,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -39,11 +39,11 @@ local function GetPlanet(planetUtilities)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"factoryamph",
-					"amphcon",
-					"amphimpulse",
-					"amphtele",
-					"amphaa",
+					"factoryshield",
+					"shieldaa",
+					"shieldskirm",
+					"shieldraid",
+					"shieldriot"
 				},
 				startUnits = {
 				}
@@ -53,14 +53,14 @@ local function GetPlanet(planetUtilities)
 					startX = 4000,
 					startZ = 75,
 					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Enemy",
 					bitDependant = true,
+					humanName = "Enemy",
 					commanderParameters = {
 						facplop = false,
 					},
 					allyTeam = 1,
 					unlocks = {
-						"cloakraid",
+						
 					},
 					commanderLevel = 2,
 					commander = {
@@ -88,9 +88,11 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"amphimpulse",
-				"amphtele",
-				"amphaa",
+				"factoryshield",
+				"shieldraid",
+				"shieldriot",
+				"shieldaa",
+				"shieldskirm",
 			},
 			modules = {
 			},
