@@ -274,17 +274,18 @@ local function GetPlanet(planetUtilities)
 							z = 1968,
 							facing = 0,
 						},
-						{
-							name = "pw_interception",
-							x = 5952,
-							z = 2896,
-							facing = 0,
-							invincible = true,
-						},
 					}
 				},
 			},
 			neutralUnits = {
+				{
+				name = "pw_interception",
+				x = 5952,
+				z = 2896,
+				facing = 0,
+				invincible = true,
+				ignoredByAI = true,
+				},
 			},
 			defeatConditionConfig = {
 				-- Indexed by allyTeam.
