@@ -3472,7 +3472,6 @@ local function GetPlanet(planetUtilities)
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { -- Make the enemy lose one Sunlance by 8:00
-					satisfyOnce = true,
 					onlyCountRemovedUnits = true,
 					satisfyByTime = 480,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
