@@ -213,6 +213,7 @@ local function GetPlanet(planetUtilities)
 				"cloakassault",
 			},
 			modules = {
+				"commweapon_lightninggun",
 			},
 			codexEntries = {
 			},

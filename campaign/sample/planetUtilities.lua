@@ -39,8 +39,8 @@ planetUtilities.backgroundImages = {
 	LUA_DIRNAME .. "images/starbackgrounds/4.jpg",
 }
 
-planetUtilities.MAIN_EXP = 80
-planetUtilities.BONUS_EXP = 15
+planetUtilities.MAIN_EXP = 100
+planetUtilities.BONUS_EXP = 25
 
 planetUtilities.PLANET_SIZE_MAP = 36
 planetUtilities.PLANET_SIZE_INFO = 240

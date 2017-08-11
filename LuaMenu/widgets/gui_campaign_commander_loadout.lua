@@ -186,6 +186,10 @@ local function GetExperienceDisplay(parentControl, barHeight, fancy)
 	
 	local experienceToApply, bonusToApply, totalExperienceToApply, totalBonusToApply
 	local function FancyExperienceUpdate()
+		if Spring.GetGameName() ~= "" then
+			WG.Delay(FancyExperienceUpdate, 0.2)
+			return
+		end
 		if experienceToApply then
 			local newExperience = math.min(experienceToApply, 1 + math.floor(experienceToApply/9))
 			AddExperience(newExperience)

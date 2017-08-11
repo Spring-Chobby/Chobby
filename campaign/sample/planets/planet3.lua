@@ -383,7 +383,7 @@ local function GetPlanet(planetUtilities)
 				"turretmissile"
 			},
 			modules = {
-				"module_ablative_armor_LIMIT_D_1",
+				"module_autorepair_LIMIT_A_2",
 			},
 			codexEntries = {
 			},

@@ -392,6 +392,7 @@ local function GetPlanet(planetUtilities)
 				"staticstorage",
 			},
 			modules = {
+				"commweapon_personal_shield",
 			},
 			abilities = {
 			}

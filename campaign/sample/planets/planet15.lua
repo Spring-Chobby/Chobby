@@ -89,6 +89,7 @@ local function GetPlanet(planetUtilities)
 				"shieldscout",
 			},
 			modules = {
+				"module_adv_nano_LIMIT_B_2",
 			},
 			abilities = {
 				"terraform",

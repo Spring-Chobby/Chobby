@@ -418,6 +418,7 @@ local function GetPlanet(planetUtilities)
 				"turretmissile",
 			},
 			modules = {
+				"module_adv_targeting_LIMIT_A_2",
 			},
 		},
 	}

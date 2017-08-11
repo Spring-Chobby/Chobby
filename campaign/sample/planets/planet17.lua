@@ -681,6 +681,7 @@ local function GetPlanet(planetUtilities)
 				"energypylon",
 			},
 			modules = {
+				"module_adv_nano_LIMIT_A_2",
 			},
 			abilities = {
 			}

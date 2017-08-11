@@ -87,6 +87,7 @@ local function GetPlanet(planetUtilities)
 				"cloaksnipe",
 			},
 			modules = {
+				"module_adv_targeting_LIMIT_B_2",
 			},
 			abilities = {
 			}

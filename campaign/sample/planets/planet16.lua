@@ -768,6 +768,7 @@ local function GetPlanet(planetUtilities)
 				"energygeo",
 			},
 			modules = {
+				"module_jammer",
 			},
 			abilities = {
 			}

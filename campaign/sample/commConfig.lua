@@ -914,7 +914,7 @@ end
 
 local function GetLevelRequirement(level)
 	if level > 0 then
-		return (100*level^2 + 300*level + 200)
+		return (100*level^2 + 300*level)
 	end
 	return 0
 end

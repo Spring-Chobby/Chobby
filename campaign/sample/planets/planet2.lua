@@ -373,7 +373,8 @@ local function GetPlanet(planetUtilities)
 				"cloakskirm",
 			},
 			modules = {
-				"module_ablative_armor_LIMIT_C_1",
+				"commweapon_heavymachinegun",
+				"module_dmg_booster_LIMIT_A_2",
 			},
 		},
 	}

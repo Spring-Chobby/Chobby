@@ -95,6 +95,7 @@ local function GetPlanet(planetUtilities)
 				"shieldskirm",
 			},
 			modules = {
+				"commweapon_rocketlauncher",
 			},
 			abilities = {
 			}
