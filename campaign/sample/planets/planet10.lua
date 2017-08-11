@@ -939,8 +939,6 @@ local function GetPlanet(planetUtilities)
 				"turretaalaser",
 			},
 			modules = {
-				"module_ablative_armor_LIMIT_A_1",
-				"module_dmg_booster",
 			},
 			abilities = {
 			}

@@ -61,7 +61,6 @@ local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, 
 			for i = 1, #rewardList do
 				local alreadyUnlocked = alreadyUnlockedCheck(rewardList[i])
 				if not (cullUnlocked and alreadyUnlocked) then
-					alreadyUnlocked = cullUnlocked -- It is treated as unlocked now that the cull is past.
 					if not rewardsHolder then
 						rewardsHolder = Control:New {
 							x = 10,
@@ -102,6 +101,8 @@ local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, 
 						local statusString = ""
 						if alreadyUnlocked then
 							statusString = " (already unlocked)"
+						elseif cullUnlocked then
+							statusString = " (newly unlocked)"
 						else
 							color = {0.5, 0.5, 0.5, 0.5}
 						end
