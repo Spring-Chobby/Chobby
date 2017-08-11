@@ -88,10 +88,12 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 	
 	local localLobby = WG.LibLobby.localLobby
 	local Configuration = WG.Chobby.Configuration
-	local playerName = Configuration.userName or Configuration.suggestedNameFromSteam or "Player"
 	local missionDifficulty = WG.CampaignData.GetDifficultySetting()
 	local bitExtension = (Configuration:GetIsRunning64Bit() and "64") or "32"
 
+	commanderTypes.player_commander = WG.CampaignData.GetPlayerCommander()
+	local playerName = commanderTypes.player_commander.name
+	
 	-- Add the player, this is to make the player team 0.
 	local playerCount = 1
 	local players = {
@@ -115,8 +117,6 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 			end
 		end
 	end
-	
-	commanderTypes.player_commander = WG.CampaignData.GetPlayerCommander()
 	
 	teams[teamCount] = {
 		TeamLeader = 0,

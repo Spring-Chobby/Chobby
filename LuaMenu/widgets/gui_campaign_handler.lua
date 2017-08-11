@@ -61,6 +61,7 @@ local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, 
 			for i = 1, #rewardList do
 				local alreadyUnlocked = alreadyUnlockedCheck(rewardList[i])
 				if not (cullUnlocked and alreadyUnlocked) then
+					alreadyUnlocked = cullUnlocked -- It is treated as unlocked now that the cull is past.
 					if not rewardsHolder then
 						rewardsHolder = Control:New {
 							x = 10,
@@ -100,8 +101,9 @@ local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, 
 						local color = nil
 						local statusString = ""
 						if alreadyUnlocked then
-							color = {0.5, 0.5, 0.5, 0.5}
 							statusString = " (already unlocked)"
+						else
+							color = {0.5, 0.5, 0.5, 0.5}
 						end
 						local tooltip = (overrideTooltip and info) or ((info.humanName or "???") .. statusString .. "\n " .. (info.description or ""))
 						
@@ -162,7 +164,7 @@ local function MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjective
 	
 	if bonusObjectiveSuccess then
 		local function IsObjectiveUnlocked(objectiveID)
-			return not bonusObjectiveSuccess[objectiveID]
+			return bonusObjectiveSuccess[objectiveID]
 		end
 		local function GetObjectiveInfo(objectiveID)
 			local tooltip = objectiveConfig[objectiveID].description
@@ -184,7 +186,7 @@ local function MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjective
 		end
 	else
 		local function IsObjectiveUnlocked(objectiveID)
-			return not WG.CampaignData.GetBonusObjectiveComplete(planetData.index, objectiveID)
+			return WG.CampaignData.GetBonusObjectiveComplete(planetData.index, objectiveID)
 		end
 		local function GetObjectiveInfo(objectiveID)
 			local tooltip = objectiveConfig[objectiveID].description
