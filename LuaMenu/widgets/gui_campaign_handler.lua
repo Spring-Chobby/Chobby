@@ -351,7 +351,7 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 			Label:New{
 				x = 8,
 				y = 12,
-				caption = string.upper(planetData.name),
+				caption = string.upper(planetData.name) .. " - " .. planetID,
 				font = Configuration:GetFont(4),
 			},
 			-- grid of details
@@ -636,8 +636,28 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		end
 	end
 	
+	function externalFunctions.DownloadMapIfClose()
+		if startable or captured then
+			WG.MaybeDownloadMap(planetData.gameConfig.mapName)
+			return
+		end
+		for i = 1, #adjacency do
+			if adjacency[i] then
+				if planetList[i].GetCapturedOrStarableUnsafe() then
+					WG.MaybeDownloadMap(planetData.gameConfig.mapName)
+					return
+				end
+			end
+		end
+	end
+	
 	function externalFunctions.GetCaptured()
 		return WG.CampaignData.IsPlanetCaptured(planetID)
+	end
+	
+	function externalFunctions.GetCapturedOrStarableUnsafe()
+		-- Unsafe because an update may be required before the return value is valid
+		return startable or captured
 	end
 	
 	return externalFunctions
@@ -670,6 +690,12 @@ local function UpdateAllStartable()
 	end
 end
 
+local function DownloadNearbyMaps()
+	for i = 1, #planetList do
+		planetList[i].DownloadMapIfClose()
+	end
+end
+
 local function InitializePlanetHandler(parent)
 	local Configuration = WG.Chobby.Configuration
 	
@@ -698,6 +724,7 @@ local function InitializePlanetHandler(parent)
 	
 	UpdateAllStartable()
 	UpdateEdgeList()
+	DownloadNearbyMaps()
 	
 	local graph = Chili.Control:New{
 		x       = 0,
@@ -724,8 +751,9 @@ local function InitializePlanetHandler(parent)
 	
 	local function PlanetCaptured(listener, planetID)
 		planetList[planetID].UpdateStartable()
-		UpdateAllStartable(planetList)
+		UpdateAllStartable()
 		UpdateEdgeList()
+		DownloadNearbyMaps()
 	end
 	WG.CampaignData.AddListener("PlanetCaptured", PlanetCaptured)
 	
