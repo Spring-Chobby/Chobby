@@ -7,7 +7,7 @@ local function GetPlanet(planetUtilities)
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
 	local planetData = {
-		name = "Blank",
+		name = "Jochia",
 		startingPlanet = false,
 		mapDisplay = {
 			x = 0.33,
@@ -19,19 +19,19 @@ local function GetPlanet(planetUtilities)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Terran",
-			radius = "6550 km",
-			primary = "Blank",
-			primaryType = "G8V",
+			terrainType = "Desert",
+			radius = "4410 km",
+			primary = "Ushasis",
+			primaryType = "F9V",
 			milRating = 1,
-			text = [[something weird leading into hover]]
+			text = [[Your opponent will start with Hovercraft and then transition to Gunships. Build Rogue skirmishers to defeat the hovercraft, then Vandal AA bots to defeat the gunships.]]
 		},
 		gameConfig = {
 			missionStartscript = false,
-			mapName = "Crubick Plains v1.2",
+			mapName = "DunePatrol_wip_v03",
 			playerConfig = {
-				startX = 100,
-				startZ = 100,
+				startX = 2816,
+				startZ = 616,
 				allyTeam = 0,
 				facplop = false,
 				commanderParameters = {
@@ -46,53 +46,350 @@ local function GetPlanet(planetUtilities)
 					"shieldriot"
 				},
 				startUnits = {
+					{
+						name = "staticmex",
+						x = 3688,
+						z = 840,
+						facing = 0,
+					},
+					{
+						name = "staticmex",
+						x = 2216,
+						z = 872,
+						facing = 0,
+					},
+					{
+						name = "staticmex",
+						x = 2568,
+						z = 920,
+						facing = 0,
+					},
+					{
+						name = "staticmex",
+						x = 3512,
+						z = 488,
+						facing = 0,
+					},
+					{
+						name = "energysolar",
+						x = 2584,
+						z = 984,
+						facing = 0,
+					},
+					{
+						name = "staticradar",
+						x = 2860,
+						z = 500,
+						facing = 0,
+					},
+					{
+						name = "factoryshield",
+						x = 2960,
+						z = 608,
+						facing = 0,
+					},
+					{
+						name = "energysolar",
+						x = 2200,
+						z = 936,
+						facing = 0,
+					},
+					{
+						name = "energysolar",
+						x = 3576,
+						z = 472,
+						facing = 0,
+					},
+					{
+						name = "energysolar",
+						x = 3704,
+						z = 904,
+						facing = 0,
+					},
+					{
+						name = "turretlaser",
+						x = 3760,
+						z = 640,
+						facing = 1,
+					},
+					{
+						name = "turretmissile",
+						x = 2656,
+						z = 1152,
+						facing = 0,
+					},
+					{
+						name = "turretmissile",
+						x = 3552,
+						z = 1088,
+						facing = 0,
+					},
+					{
+						name = "turretlaser",
+						x = 3072,
+						z = 1104,
+						facing = 0,
+					},
+					{
+						name = "turretlaser",
+						x = 2368,
+						z = 816,
+						facing = 3,
+					},
+					{
+						name = "shieldcon",
+						x = 3097,
+						z = 625,
+						facing = 0,
+						commands = {
+							{cmdID = planetUtilities.COMMAND.GUARD, atPosition = {2960, 608}},
+						},
+					},
+					{
+						name = "shieldskirm",
+						x = 2898,
+						z = 767,
+						facing = 0,
+					},
+					{
+						name = "shieldskirm",
+						x = 2984,
+						z = 762,
+						facing = 0,
+					},
+					{
+						name = "shieldraid",
+						x = 2899,
+						z = 835,
+						facing = 0,
+					},
+					{
+						name = "shieldraid",
+						x = 2984,
+						z = 826,
+						facing = 0,
+					},
 				}
 			},
 			aiConfig = {
 				{
-					startX = 4000,
-					startZ = 75,
+					startX = 2970,
+					startZ = 3500,
 					aiLib = "Circuit_difficulty_autofill",
 					bitDependant = true,
-					humanName = "Enemy",
+					--aiLib = "Null AI",
+					--bitDependant = false,
+					humanName = "Avroka",
 					commanderParameters = {
 						facplop = false,
 					},
 					allyTeam = 1,
 					unlocks = {
-						
+						"staticcon",
+						"staticradar",
+						"staticmex",
+						"energysolar",
+						"hovercon",
+						"hoverraid",
+						"hoverriot",
+						"hoverskirm",
+						"factorygunship",
+						"gunshipraid",
+						"gunshipskirm",
+					},
+					difficultyDependantUnlocks = {
+						[3] = {"hoverassault"},
 					},
 					commanderLevel = 2,
 					commander = {
-						name = "Most Loyal Opposition",
-						chassis = "engineer",
+						name = "Chera",
+						chassis = "recon",
 						decorations = {
-						  "skin_support_dark",
 						  icon_overhead = { image = "UW" }
 						},
-						modules = { }
+						modules = { 
+							"commweapon_lightninggun", 
+							"module_radarnet",
+							"module_ablative_armor",
+							"module_autorepair",
+						}
 					},
 					startUnits = {
+						{
+							name = "staticmex",
+							x = 2456,
+							z = 3256,
+							facing = 0,
+						},
+						{
+							name = "staticmex",
+							x = 2648,
+							z = 3624,
+							facing = 0,
+						},
+						{
+							name = "staticmex",
+							x = 3592,
+							z = 3176,
+							facing = 0,
+						},
+						{
+							name = "staticmex",
+							x = 3944,
+							z = 3240,
+							facing = 0,
+						},
+						{
+							name = "energysolar",
+							x = 3912,
+							z = 3144,
+							facing = 0,
+						},
+						{
+							name = "energysolar",
+							x = 3608,
+							z = 3080,
+							facing = 0,
+						},
+						{
+							name = "energysolar",
+							x = 2472,
+							z = 3144,
+							facing = 0,
+						},
+						{
+							name = "energysolar",
+							x = 2552,
+							z = 3592,
+							facing = 0,
+						},
+						{
+							name = "turretlaser",
+							x = 2352,
+							z = 3392,
+							facing = 3,
+						},
+						{
+							name = "turretlaser",
+							x = 3776,
+							z = 3248,
+							facing = 2,
+						},
+						{
+							name = "turretlaser",
+							x = 3152,
+							z = 2832,
+							facing = 2,
+						},
+						{
+							name = "turretmissile",
+							x = 2832,
+							z = 3040,
+							facing = 2,
+						},
+						{
+							name = "turretmissile",
+							x = 3392,
+							z = 2960,
+							facing = 2,
+						},
+						{
+							name = "factoryhover",
+							x = 3120,
+							z = 3408,
+							facing = 2,
+						},
+						{
+							name = "hovercon",
+							x = 3278,
+							z = 3445,
+							facing = 0,
+						},
+						{
+							name = "hoverskirm",
+							x = 3030,
+							z = 3221,
+							facing = 2,
+						},
+						{
+							name = "hoverraid",
+							x = 3111,
+							z = 3266,
+							facing = 0,
+						},
+						{
+							name = "hoverraid",
+							x = 3112,
+							z = 3193,
+							facing = 0,
+						},
 					}
 				},
 			},
 			defeatConditionConfig = {
-
+				-- Indexed by allyTeam.
+				[0] = { },
+				[1] = {
+					ignoreUnitLossDefeat = false,
+					vitalCommanders = true,
+					vitalUnitTypes = {
+						"factoryhover",
+						"factorygunship",
+					},
+					loseAfterSeconds = false,
+					allyTeamLossObjectiveID = 1,
+				},
 			},
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
+				[1] = {
+					description = "Destroy the enemy Commander and all enemy factories",
+				},
+				[2] = {
+					description = "Protect your Commander",
+				},
 			},
 			bonusObjectiveConfig = {
-			}
+				[1] = { -- Have 20 Rogues
+					satisfyOnce = true,
+					comparisionType = planetUtilities.COMPARE.AT_LEAST,
+					targetNumber = 20,
+					unitTypes = {
+						"shieldskirm",
+					},
+					image = planetUtilities.ICON_DIR .. "shieldskirm.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
+					description = "Have 20 Rogues",
+					experience = planetUtilities.BONUS_EXP,
+				},
+				[2] = { -- Win by 10:00
+					victoryByTime = 600,
+					image = planetUtilities.ICON_OVERLAY.CLOCK,
+					description = "Win by 10:00",
+					experience = planetUtilities.BONUS_EXP,
+				},
+				[3] = { -- Prevent the enemy having more than twelve mex
+					satisfyForever = true,
+					comparisionType = planetUtilities.COMPARE.AT_MOST,
+					targetNumber = 12,
+					enemyUnitTypes = {
+						"staticmex",
+					},
+					image = planetUtilities.ICON_DIR .. "staticmex.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
+					description = "Prevent the enemy from building more than twelve Metal Extractors",
+					experience = planetUtilities.BONUS_EXP,
+				},
+			},
 		},
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"factoryshield",
-				"shieldraid",
-				"shieldriot",
-				"shieldaa",
+				--"factoryshield",
+				--"shieldraid",
+				--"shieldriot",
 				"shieldskirm",
+				"shieldaa",
 			},
 			modules = {
 				"commweapon_rocketlauncher",

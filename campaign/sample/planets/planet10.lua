@@ -899,7 +899,6 @@ local function GetPlanet(planetUtilities)
 			},
 			bonusObjectiveConfig = {
 				[1] = { -- Have 30 Metal Extractors by 9:00
-					satisfyOnce = true,
 					satisfyByTime = 540,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 30,
