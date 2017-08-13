@@ -18,6 +18,7 @@ local skirmishSetupData = {
 				"Easy",
 				"Medium",
 				"Hard",
+				"Brutal",
 			},
 		},
 		{
@@ -39,12 +40,14 @@ local chickenDifficulty = {
 	"Chicken: Easy",
 	"Chicken: Normal",
 	"Chicken: Hard",
+	"Chicken: Suicidal",
 }
 local aiDifficultyMap = {
 	"CircuitAIVeryEasy",
 	"CircuitAIEasy",
 	"CircuitAIMedium",
 	"CircuitAIHard",
+	"CircuitAIBrutal",
 }
 
 function skirmishSetupData.ApplyFunction(battleLobby, pageChoices)

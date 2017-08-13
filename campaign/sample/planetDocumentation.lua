@@ -141,7 +141,7 @@ planetData = {
 					-- Whether the unit spawns can be conditional on the difficulty setting. 
 					-- Both 'at most' and 'at least' are availible and the usual usage would be to
 					-- give allied units 'at most' and enemy units 'at least'.
-					-- 1 = Easy, 2 = Medium, 3 = Hard
+					-- 1 = Easy, 2 = Medium, 3 = Hard, 4 = Brutal
 					difficultyAtMost = nil,
 					difficultyAtLeast = nil,
 					

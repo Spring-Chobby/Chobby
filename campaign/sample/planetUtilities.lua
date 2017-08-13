@@ -124,6 +124,7 @@ planetUtilities.DIFFICULTY = {
 	EASY = 1,
 	MEDIUM = 2,
 	HARD = 3,
+	BRUTAL = 4,
 }
 
 planetUtilities.COMPARE = {

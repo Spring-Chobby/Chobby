@@ -4,6 +4,7 @@ local subnameMap = {
 	{"CircuitAIEasy", "AI: Easy"},
 	{"CircuitAIMedium", "AI: Medium"},
 	{"CircuitAIHard", "AI: Hard"},
+	{"CircuitAIBrutal", "AI: Brutal"},
 }
 
 local function GetAiSimpleName(name)
@@ -26,13 +27,14 @@ local simpleAiOrder = {
 	["AI: Easy"] = 2,
 	["AI: Medium"] = 3,
 	["AI: Hard"] = 4,
-	["Inactive AI"] = 5,
-	["Chicken: Very Easy"] = 6,
-	["Chicken: Easy"] = 7,
-	["Chicken: Normal"] = 8,
-	["Chicken: Hard"] = 9,
-	["Chicken: Suicidal"] = 10,
-	["Chicken: Custom"] = 11,
+	["AI: Brutal"] = 5,
+	["Inactive AI"] = 6,
+	["Chicken: Very Easy"] = 7,
+	["Chicken: Easy"] = 8,
+	["Chicken: Normal"] = 9,
+	["Chicken: Hard"] = 10,
+	["Chicken: Suicidal"] = 11,
+	["Chicken: Custom"] = 12,
 }
 
 return {

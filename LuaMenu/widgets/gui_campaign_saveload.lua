@@ -141,7 +141,7 @@ local function PromptNewSave(backOnFail)
 		y = offset,
 		height = 35,
 		text = "",
-		items = {"Easy", "Medium", "Hard"},
+		items = {"Easy", "Medium", "Hard", "Brutal"},
 		font = Configuration:GetFont(3),
 		itemFontSize = Configuration:GetFont(3).size,
 		selected = 2,
