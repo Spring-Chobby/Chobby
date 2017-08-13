@@ -28,7 +28,7 @@
          "Platform":null,
          "VersionNumber":112,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAIVeryEasy/stable/config/circuit.json",
-         "TargetPath":"AI/Skirmish/CircuitAIVeryEasy/stable/config/circuit.json"
+         "TargetPath":"AI/Skirmish/CircuitAIVeryEasy32/stable/config/circuit.json"
       },
       {
          "Platform":null,
@@ -40,7 +40,7 @@
          "Platform":null,
          "VersionNumber":112,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAIVeryEasy/stable/AIOptions.lua",
-         "TargetPath":"AI/Skirmish/CircuitAIVeryEasy/stable/AIOptions.lua"
+         "TargetPath":"AI/Skirmish/CircuitAIVeryEasy32/stable/AIOptions.lua"
       },
       {
          "Platform":null,
@@ -58,7 +58,7 @@
          "Platform":null,
          "VersionNumber":112,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAIEasy/stable/config/circuit.json",
-         "TargetPath":"AI/Skirmish/CircuitAIEasy/stable/config/circuit.json"
+         "TargetPath":"AI/Skirmish/CircuitAIEasy32/stable/config/circuit.json"
       },
       {
          "Platform":null,
@@ -70,7 +70,7 @@
          "Platform":null,
          "VersionNumber":112,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAIEasy/stable/AIOptions.lua",
-         "TargetPath":"AI/Skirmish/CircuitAIEasy/stable/AIOptions.lua"
+         "TargetPath":"AI/Skirmish/CircuitAIEasy32/stable/AIOptions.lua"
       },
       {
          "Platform":null,
@@ -88,7 +88,7 @@
          "Platform":null,
          "VersionNumber":112,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAIMedium/stable/config/circuit.json",
-         "TargetPath":"AI/Skirmish/CircuitAIMedium/stable/config/circuit.json"
+         "TargetPath":"AI/Skirmish/CircuitAIMedium32/stable/config/circuit.json"
       },
       {
          "Platform":null,
@@ -100,7 +100,7 @@
          "Platform":null,
          "VersionNumber":112,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAIMedium/stable/AIOptions.lua",
-         "TargetPath":"AI/Skirmish/CircuitAIMedium/stable/AIOptions.lua"
+         "TargetPath":"AI/Skirmish/CircuitAIMedium32/stable/AIOptions.lua"
       },
       {
          "Platform":null,
@@ -118,7 +118,7 @@
          "Platform":null,
          "VersionNumber":112,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAIHard/stable/config/circuit.json",
-         "TargetPath":"AI/Skirmish/CircuitAIHard/stable/config/circuit.json"
+         "TargetPath":"AI/Skirmish/CircuitAIHard32/stable/config/circuit.json"
       },
       {
          "Platform":null,
@@ -130,7 +130,7 @@
          "Platform":null,
          "VersionNumber":112,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAIHard/stable/AIOptions.lua",
-         "TargetPath":"AI/Skirmish/CircuitAIHard/stable/AIOptions.lua"
+         "TargetPath":"AI/Skirmish/CircuitAIHard32/stable/AIOptions.lua"
       },
       {
          "Platform":null,
@@ -148,7 +148,7 @@
          "Platform":null,
          "VersionNumber":112,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAIBrutal/stable/config/circuit.json",
-         "TargetPath":"AI/Skirmish/CircuitAIBrutal/stable/config/circuit.json"
+         "TargetPath":"AI/Skirmish/CircuitAIBrutal32/stable/config/circuit.json"
       },
       {
          "Platform":null,
@@ -160,7 +160,7 @@
          "Platform":null,
          "VersionNumber":112,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAIBrutal/stable/AIOptions.lua",
-         "TargetPath":"AI/Skirmish/CircuitAIBrutal/stable/AIOptions.lua"
+         "TargetPath":"AI/Skirmish/CircuitAIBrutal32/stable/AIOptions.lua"
       },
       {
          "Platform":null,
@@ -178,7 +178,7 @@
          "Platform":null,
          "VersionNumber":112,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAIVeryEasy/stable/config/circuit.json",
-         "TargetPath":"AI/Skirmish/CircuitAIVeryEasy/stable/config/circuit.json"
+         "TargetPath":"AI/Skirmish/CircuitAIVeryEasy64/stable/config/circuit.json"
       },
       {
          "Platform":null,
@@ -190,7 +190,7 @@
          "Platform":null,
          "VersionNumber":112,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAIVeryEasy/stable/AIOptions.lua",
-         "TargetPath":"AI/Skirmish/CircuitAIVeryEasy/stable/AIOptions.lua"
+         "TargetPath":"AI/Skirmish/CircuitAIVeryEasy64/stable/AIOptions.lua"
       },
       {
          "Platform":null,
@@ -208,7 +208,7 @@
          "Platform":null,
          "VersionNumber":112,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAIEasy/stable/config/circuit.json",
-         "TargetPath":"AI/Skirmish/CircuitAIEasy/stable/config/circuit.json"
+         "TargetPath":"AI/Skirmish/CircuitAIEasy64/stable/config/circuit.json"
       },
       {
          "Platform":null,
@@ -220,7 +220,7 @@
          "Platform":null,
          "VersionNumber":112,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAIEasy/stable/AIOptions.lua",
-         "TargetPath":"AI/Skirmish/CircuitAIEasy/stable/AIOptions.lua"
+         "TargetPath":"AI/Skirmish/CircuitAIEasy64/stable/AIOptions.lua"
       },
       {
          "Platform":null,
@@ -238,7 +238,7 @@
          "Platform":null,
          "VersionNumber":112,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAIMedium/stable/config/circuit.json",
-         "TargetPath":"AI/Skirmish/CircuitAIMedium/stable/config/circuit.json"
+         "TargetPath":"AI/Skirmish/CircuitAIMedium64/stable/config/circuit.json"
       },
       {
          "Platform":null,
@@ -250,7 +250,7 @@
          "Platform":null,
          "VersionNumber":112,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAIMedium/stable/AIOptions.lua",
-         "TargetPath":"AI/Skirmish/CircuitAIMedium/stable/AIOptions.lua"
+         "TargetPath":"AI/Skirmish/CircuitAIMedium64/stable/AIOptions.lua"
       },
       {
          "Platform":null,
@@ -268,7 +268,7 @@
          "Platform":null,
          "VersionNumber":112,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAIHard/stable/config/circuit.json",
-         "TargetPath":"AI/Skirmish/CircuitAIHard/stable/config/circuit.json"
+         "TargetPath":"AI/Skirmish/CircuitAIHard64/stable/config/circuit.json"
       },
       {
          "Platform":null,
@@ -280,7 +280,7 @@
          "Platform":null,
          "VersionNumber":112,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAIHard/stable/AIOptions.lua",
-         "TargetPath":"AI/Skirmish/CircuitAIHard/stable/AIOptions.lua"
+         "TargetPath":"AI/Skirmish/CircuitAIHard64/stable/AIOptions.lua"
       },
       {
          "Platform":null,
@@ -298,7 +298,7 @@
          "Platform":null,
          "VersionNumber":112,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAIBrutal/stable/config/circuit.json",
-         "TargetPath":"AI/Skirmish/CircuitAIBrutal/stable/config/circuit.json"
+         "TargetPath":"AI/Skirmish/CircuitAIBrutal64/stable/config/circuit.json"
       },
       {
          "Platform":null,
@@ -310,7 +310,7 @@
          "Platform":null,
          "VersionNumber":112,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/AI/Skirmish/CircuitAIBrutal/stable/AIOptions.lua",
-         "TargetPath":"AI/Skirmish/CircuitAIBrutal/stable/AIOptions.lua"
+         "TargetPath":"AI/Skirmish/CircuitAIBrutal64/stable/AIOptions.lua"
       },
       {
          "Platform":null,
