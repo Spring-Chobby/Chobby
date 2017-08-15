@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.05,
-			y = 0.05,
+			x = 0.57,
+			y = 0.28,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[...]]
+			text = [[find scorpi, infi scorpi, kill scorpi]]
 		},
 		gameConfig = {
 			missionStartscript = false,
@@ -39,7 +39,13 @@ local function GetPlanet(planetUtilities)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"factorycloak",
+					"factoryspider",
+					"spidercon",
+					"spideremp",
+					"spiderriot",
+					"spiderskirm",
+					"spiderscout",
+					"spiderantiheavy",
 				},
 				startUnits = {
 				}
@@ -84,6 +90,8 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
+				"spiderscout",
+				"spiderantiheavy",
 			},
 			modules = {
 			},

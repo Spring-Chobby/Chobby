@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.05,
-			y = 0.05,
+			x = 0.51,
+			y = 0.63,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -39,7 +39,13 @@ local function GetPlanet(planetUtilities)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"factorycloak",
+					"factoryhover",
+					"hovercon",
+					"hoverraid",
+					"hoverriot",
+					"hoverskirm",
+					"hoverassault",
+					"hoverarty",
 				},
 				startUnits = {
 				}
@@ -84,6 +90,8 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
+				"hoverassault",
+				"hoverarty",
 			},
 			modules = {
 			},

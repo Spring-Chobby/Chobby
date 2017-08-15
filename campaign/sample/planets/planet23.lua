@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.26,
-			y = 0.07,
+			x = 0.37,
+			y = 0.96,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[gunships]]
+			text = [[Grizzly and Gauss]]
 		},
 		gameConfig = {
 			missionStartscript = false,
@@ -39,7 +39,10 @@ local function GetPlanet(planetUtilities)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"factorygunship",
+					"factoryamph",
+					"amphcon",
+					"amphassault",
+					"turretgauss",
 				},
 				startUnits = {
 				}
@@ -84,7 +87,8 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"factorygunship",
+				"amphassault",
+				"turretgauss",
 			},
 			modules = {
 			},

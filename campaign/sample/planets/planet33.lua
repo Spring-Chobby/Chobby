@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.05,
-			y = 0.05,
+			x = 0.55,
+			y = 0.78,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -39,7 +39,12 @@ local function GetPlanet(planetUtilities)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"factorycloak",
+					"factoryplane",
+					"planecon",
+					"planefighter",
+					"planescout",
+					"bomberprec",
+					"staticrearm",
 				},
 				startUnits = {
 				}
@@ -84,6 +89,12 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
+				"factoryplane",
+				"planecon",
+				"planefighter",
+				"planescout",
+				"bomberprec",
+				"staticrearm",
 			},
 			modules = {
 			},
