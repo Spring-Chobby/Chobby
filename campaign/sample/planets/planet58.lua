@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.05,
-			y = 0.05,
+			x = 0.74,
+			y = 0.32,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -39,7 +39,8 @@ local function GetPlanet(planetUtilities)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"factorycloak",
+					"turretheavy",
+					"turretantiheavy",
 				},
 				startUnits = {
 				}
@@ -84,6 +85,8 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
+				"turretheavy",
+				"turretantiheavy",
 			},
 			modules = {
 			},

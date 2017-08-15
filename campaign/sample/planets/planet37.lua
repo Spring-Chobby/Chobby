@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.05,
-			y = 0.05,
+			x = 0.36,
+			y = 0.12,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -39,7 +39,12 @@ local function GetPlanet(planetUtilities)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"factorycloak",
+					"factorygunship",
+					"gunshipcon",
+					"gunshipraid",
+					"gunshipemp",
+					"gunshiptrans",
+					"gunshipheavytrans",
 				},
 				startUnits = {
 				}
@@ -84,6 +89,9 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
+				"gunshipemp",
+				"gunshiptrans",
+				"gunshipheavytrans",
 			},
 			modules = {
 			},

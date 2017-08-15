@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.29,
-			y = 0.93,
+			x = 0.35,
+			y = 0.80,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -24,11 +24,11 @@ local function GetPlanet(planetUtilities)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[You currently control two hills on opposite sides of the battlefield, but your opponent will attack them both. Use the Djinn teleporters to move your army where it is needed most.]]
+			text = [[The water on this map would pose difficulties for most factories, but the Amphibious factory is right at home here.]]
 		},
 		gameConfig = {
 			missionStartscript = false,
-			mapName = "Crubick Plains v1.2",
+			mapName = "LowTideV3",
 			playerConfig = {
 				startX = 100,
 				startZ = 100,
@@ -41,9 +41,10 @@ local function GetPlanet(planetUtilities)
 				extraUnlocks = {
 					"factoryamph",
 					"amphcon",
-					"amphimpulse",
-					"amphtele",
-					"amphaa",
+					"amphraid",
+					"amphriot",
+					"amphfloater",
+					"turrettorp",
 				},
 				startUnits = {
 				}
@@ -88,9 +89,12 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"amphimpulse",
-				"amphtele",
-				"amphaa",
+				"factoryamph",
+				"amphcon",
+				"amphraid",
+				"amphriot",
+				"amphfloater",
+				"turrettorp",
 			},
 			modules = {
 			},

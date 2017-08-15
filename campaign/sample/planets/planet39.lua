@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.05,
-			y = 0.05,
+			x = 0.52,
+			y = 0.04,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[...]]
+			text = [[The enemy is about to finish a Krow heavy gunship. Quickly build anti-air units and turrets to defeat it, then build your own Krow and return the favour.]]
 		},
 		gameConfig = {
 			missionStartscript = false,
@@ -39,7 +39,12 @@ local function GetPlanet(planetUtilities)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"factorycloak",
+					"factorygunship",
+					"gunshipcon",
+					"gunshipraid",
+					"gunshipaa",
+					"gunshipkrow",
+					"turretaafar",
 				},
 				startUnits = {
 				}
@@ -84,6 +89,8 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
+				"gunshipkrow",
+				"turretaafar",
 			},
 			modules = {
 			},

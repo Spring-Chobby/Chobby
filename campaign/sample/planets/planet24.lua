@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.33,
-			y = 0.19,
+			x = 0.45,
+			y = 0.95,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[tanks]]
+			text = [[You currently control two hills on opposite sides of the battlefield, but your opponent will attack them both. Use the Djinn teleporters to move your army where it is needed most.]]
 		},
 		gameConfig = {
 			missionStartscript = false,
@@ -39,7 +39,11 @@ local function GetPlanet(planetUtilities)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"factorytank"
+					"factoryamph",
+					"amphcon",
+					"amphimpulse",
+					"amphtele",
+					"amphaa",
 				},
 				startUnits = {
 				}
@@ -84,7 +88,8 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"factorytank",
+				"amphtele",
+				"amphaa",
 			},
 			modules = {
 			},
