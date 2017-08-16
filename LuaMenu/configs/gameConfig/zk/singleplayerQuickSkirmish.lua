@@ -45,7 +45,7 @@ local skirmishSetupData = {
 }
 
 local chickenDifficulty = {
-	"Chicken: Very Easy",
+	"Chicken: Beginner",
 	"Chicken: Very Easy",
 	"Chicken: Easy",
 	"Chicken: Normal",
