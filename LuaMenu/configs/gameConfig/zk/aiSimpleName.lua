@@ -47,11 +47,11 @@ local aiTooltip = {
 	["AI: Hard"] = "Recommended for veteran strategy gamers who aren't afraid of losing.",
 	["AI: Brutal"] = "Recommended for veterans of Zero-K.",
 	["Inactive AI"] = "This AI does absolutely nothing after spawning.",
-	["Chicken: Very Easy"] = "Easiest ",
-	["Chicken: Easy"] = "8",
-	["Chicken: Normal"] = "9",
-	["Chicken: Hard"] = "10",
-	["Chicken: Suicidal"] = "Good luck.",
+	["Chicken: Very Easy"] = "Defeat waves of aliens.",
+	["Chicken: Easy"] = "Defeat waves of aliens.",
+	["Chicken: Normal"] = "Defeat waves of aliens.",
+	["Chicken: Hard"] = "Defeat waves of aliens.",
+	["Chicken: Suicidal"] = "Defeat waves of aliens. Good luck.",
 	["Chicken: Custom"] = "Customizable chicken defense. Look in Adv Options.",
 }
 
