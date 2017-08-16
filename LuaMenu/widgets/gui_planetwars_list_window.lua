@@ -691,7 +691,7 @@ local function MakePlanetControl(planetData, DeselectOtherFunc, attacking, defen
 				end
 				
 				if not HaveRightGameVersion() then
-					WG.Chobby.InformationPopup("Cersion update required, restart the game to apply.")
+					WG.Chobby.InformationPopup("Version update required, restart the game to apply.")
 					return
 				end
 				
