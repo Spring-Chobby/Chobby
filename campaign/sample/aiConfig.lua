@@ -1,9 +1,9 @@
 local aiLibFunctions = {}
 
 local circuitDifficulties = {
-	"CircuitAIEasy",
-	"CircuitAIMedium",
+	"CircuitAINormal",
 	"CircuitAIHard",
+	"CircuitAIInsane",
 	"CircuitAIBrutal",
 }
 

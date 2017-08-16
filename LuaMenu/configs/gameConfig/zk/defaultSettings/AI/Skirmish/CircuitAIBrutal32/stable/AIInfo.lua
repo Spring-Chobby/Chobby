@@ -25,7 +25,7 @@ local infos = {
 	},
 	{
 		key    = 'name',
-		value  = 'CircuitAIBrutal32',
+		value  = 'Circuit Brutal',
 		desc   = 'human readable name.',
 	},
 	{

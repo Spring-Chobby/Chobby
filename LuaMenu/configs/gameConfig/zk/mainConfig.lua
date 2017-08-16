@@ -64,6 +64,7 @@ local externalFuncAndData = {
 	aiBlacklist             = aiBlacklist,
 	GetAiSimpleName         = aiSimpleNames.GetAiSimpleName,
 	simpleAiOrder           = aiSimpleNames.simpleAiOrder,
+	aiTooltip               = aiSimpleNames.aiTooltip,
 	oldAiVersions           = oldAiVersions,
 	settingsConfig          = settingsConfig,
 	settingsNames           = settingsNames,

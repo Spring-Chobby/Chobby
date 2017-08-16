@@ -16,7 +16,7 @@
 local infos = {
 	{
 		key    = 'shortName',
-		value  = 'CircuitAIMedium32', -- AI name - !This comment is used for parsing!
+		value  = 'CircuitAIInsane64', -- AI name - !This comment is used for parsing!
 		desc   = 'machine conform name.',
 	},
 	{
@@ -25,7 +25,7 @@ local infos = {
 	},
 	{
 		key    = 'name',
-		value  = 'CircuitAIMedium32',
+		value  = 'Circuit Insane',
 		desc   = 'human readable name.',
 	},
 	{

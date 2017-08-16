@@ -15,12 +15,20 @@ local skirmishSetupData = {
 			name = "difficulty",
 			options = {
 				"Beginner",
-				"Very Easy",
 				"Easy",
-				"Medium",
+				"Normal",
 				"Hard",
 				"Brutal",
+				"Insane",
 			},
+			optionTooltip = {
+				"Recommended for players with no strategy game experience.",
+				"Recommended for players with some strategy game experience, or experience with related games (such as MOBA).",
+				"Recommended for experienced strategy gamers with some experience of streaming economy.",
+				"Recommended for veteran strategy gamers.",
+				"Recommended for veteran strategy gamers who aren't afraid of losing.",
+				"Recommended for veterans of Zero-K.",
+			}
 		},
 		{
 			humanName = "Select Map",
