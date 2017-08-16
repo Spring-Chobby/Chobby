@@ -14,6 +14,7 @@ local skirmishSetupData = {
 			humanName = "Select Difficulty",
 			name = "difficulty",
 			options = {
+				"Beginner",
 				"Very Easy",
 				"Easy",
 				"Medium",
@@ -43,6 +44,7 @@ local chickenDifficulty = {
 	"Chicken: Suicidal",
 }
 local aiDifficultyMap = {
+	"CircuitAIBeginner",
 	"CircuitAIVeryEasy",
 	"CircuitAIEasy",
 	"CircuitAIMedium",

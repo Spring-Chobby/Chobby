@@ -1,5 +1,6 @@
 
 local subnameMap = {
+	{"CircuitAIBeginner", "AI: Beginner"},
 	{"CircuitAIVeryEasy", "AI: Very Easy"},
 	{"CircuitAIEasy", "AI: Easy"},
 	{"CircuitAIMedium", "AI: Medium"},
@@ -23,6 +24,7 @@ local function GetAiSimpleName(name)
 end
 
 local simpleAiOrder = {
+	["AI: Beginner"] = 0,
 	["AI: Very Easy"] = 1,
 	["AI: Easy"] = 2,
 	["AI: Medium"] = 3,
@@ -37,7 +39,24 @@ local simpleAiOrder = {
 	["Chicken: Custom"] = 12,
 }
 
+local aiTooltip = {
+	["AI: Beginner"] = 0,
+	["AI: Very Easy"] = 1,
+	["AI: Easy"] = 2,
+	["AI: Medium"] = 3,
+	["AI: Hard"] = 4,
+	["AI: Brutal"] = 5,
+	["Inactive AI"] = "This AI does nothing after spawning.",
+	["Chicken: Very Easy"] = "Easiest ",
+	["Chicken: Easy"] = 8,
+	["Chicken: Normal"] = 9,
+	["Chicken: Hard"] = 10,
+	["Chicken: Suicidal"] = 11,
+	["Chicken: Custom"] = 12,
+}
+
 return {
 	GetAiSimpleName = GetAiSimpleName,
-	simpleAiOrder = simpleAiOrder
+	simpleAiOrder = simpleAiOrder,
+	aiTooltip = aiTooltip
 }
