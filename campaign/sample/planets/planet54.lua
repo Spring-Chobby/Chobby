@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.63,
-			y = 0.36,
+			x = 0.465,
+			y = 0.10,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -39,8 +39,8 @@ local function GetPlanet(planetUtilities)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"striderhub",
-					"striderantiheavy",
+					"factoryjump",
+					"jumpbomb",
 				},
 				startUnits = {
 				}
@@ -85,8 +85,7 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"striderhub",
-				"striderantiheavy",
+				"jumpbomb",
 			},
 			modules = {
 			},

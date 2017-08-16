@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.45,
-			y = 0.95,
+			x = 0.37,
+			y = 0.96,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[You currently control two hills on opposite sides of the battlefield, but your opponent will attack them both. Use the Djinn teleporters to move your army where it is needed most.]]
+			text = [[Grizzly and Gauss]]
 		},
 		gameConfig = {
 			missionStartscript = false,
@@ -41,9 +41,8 @@ local function GetPlanet(planetUtilities)
 				extraUnlocks = {
 					"factoryamph",
 					"amphcon",
-					"amphimpulse",
-					"amphtele",
-					"amphaa",
+					"amphassault",
+					"turretgauss",
 				},
 				startUnits = {
 				}
@@ -88,8 +87,8 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"amphtele",
-				"amphaa",
+				"amphassault",
+				"turretgauss",
 			},
 			modules = {
 			},

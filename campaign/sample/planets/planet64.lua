@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.98,
-			y = 0.16,
+			x = 0.835,
+			y = 0.32,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[Construct your choice of superweapon - the Zenith or Disco Rave Party - and annihilate the enemy.]]
+			text = [[...]]
 		},
 		gameConfig = {
 			missionStartscript = false,
@@ -39,8 +39,9 @@ local function GetPlanet(planetUtilities)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"zenith",
-					"raveparty",
+					"striderhub",
+					"striderbantha",
+					"energysingu",
 				},
 				startUnits = {
 				}
@@ -85,8 +86,9 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"zenith",
-				"raveparty",
+				"striderhub",
+				"striderbantha",
+				"energysingu",
 			},
 			modules = {
 			},

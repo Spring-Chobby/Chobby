@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.87,
-			y = 0.46,
+			x = 0.77,
+			y = 0.78,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -40,7 +40,8 @@ local function GetPlanet(planetUtilities)
 				},
 				extraUnlocks = {
 					"striderhub",
-					"striderarty",
+					"subtacmissile",
+					"shipcarrier",
 				},
 				startUnits = {
 				}
@@ -86,7 +87,8 @@ local function GetPlanet(planetUtilities)
 			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"striderhub",
-				"striderarty",
+				"subtacmissile",
+				"shipcarrier",
 			},
 			modules = {
 			},

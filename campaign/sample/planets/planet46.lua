@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.67,
-			y = 0.225,
+			x = 0.61,
+			y = 0.18,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -41,11 +41,8 @@ local function GetPlanet(planetUtilities)
 				extraUnlocks = {
 					"factoryspider",
 					"spidercon",
-					"spideremp",
 					"spiderriot",
 					"spiderskirm",
-					"spidercrabe",
-					"spiderassault",
 				},
 				startUnits = {
 				}
@@ -90,8 +87,10 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"spiderassault",
-				"spidercrabe",
+				"factoryspider",
+				"spidercon",
+				"spiderriot",
+				"spiderskirm",
 			},
 			modules = {
 			},

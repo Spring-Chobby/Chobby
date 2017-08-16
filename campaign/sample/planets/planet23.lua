@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.37,
-			y = 0.96,
+			x = 0.29,
+			y = 0.93,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[Grizzly and Gauss]]
+			text = [[Archer and Limpet]]
 		},
 		gameConfig = {
 			missionStartscript = false,
@@ -41,8 +41,8 @@ local function GetPlanet(planetUtilities)
 				extraUnlocks = {
 					"factoryamph",
 					"amphcon",
-					"amphassault",
-					"turretgauss",
+					"amphimpulse",
+					"amphbomb",
 				},
 				startUnits = {
 				}
@@ -87,10 +87,11 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"amphassault",
-				"turretgauss",
+				"amphimpulse",
+				"amphbomb",
 			},
 			modules = {
+				"commweapon_rocketlauncher",
 			},
 			abilities = {
 			}

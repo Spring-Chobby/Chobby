@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.65,
-			y = 0.06,
+			x = 0.24,
+			y = 0.33,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -39,7 +39,8 @@ local function GetPlanet(planetUtilities)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"athena",
+					"factoryjump",
+					"jumpblackhole",
 				},
 				startUnits = {
 				}
@@ -84,7 +85,7 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"athena",
+				"jumpblackhole",
 			},
 			modules = {
 			},

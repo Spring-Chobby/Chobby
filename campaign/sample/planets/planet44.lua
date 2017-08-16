@@ -41,7 +41,6 @@ local function GetPlanet(planetUtilities)
 				extraUnlocks = {
 					"factoryspider",
 					"spidercon",
-					"spideremp",
 					"spiderriot",
 					"spiderskirm",
 				},
@@ -90,7 +89,6 @@ local function GetPlanet(planetUtilities)
 			units = {
 				"factoryspider",
 				"spidercon",
-				"spideremp",
 				"spiderriot",
 				"spiderskirm",
 			},
