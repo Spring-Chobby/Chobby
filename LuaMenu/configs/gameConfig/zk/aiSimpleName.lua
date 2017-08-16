@@ -41,7 +41,7 @@ local simpleAiOrder = {
 
 local aiTooltip = {
 	["AI: Beginner"] = "Recommended for players with no strategy game experience.",
-	["AI: Very Easy"] = "Recommended for players with some strategy game experience, or experience with related games (such as MOBA).",
+	["AI: Very Easy"] = "Recommended for players with some strategy game experience, or experience with related genres (such as MOBA).",
 	["AI: Easy"] = "Recommended for experienced strategy gamers with some experience of streaming economy.",
 	["AI: Normal"] = "Recommended for veteran strategy gamers.",
 	["AI: Hard"] = "Recommended for veteran strategy gamers who aren't afraid of losing.",

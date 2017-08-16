@@ -65,7 +65,7 @@ local function InitWindow()
 		name   = TOOLTIP_TEXT_NAME,
 		x      = 2,
 		y      = 3,
-		width  = MAX_WIDTH - 4,
+		width  = MAX_WIDTH - 12,
 		parent = tipWindow,
 		autoHeight = true,
 		margin = {0,0,0,0},
