@@ -467,6 +467,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"vehcapture",
 			},
 			modules = {
+				"module_high_power_servos_LIMIT_A_2",
 			},
 			abilities = {
 			}

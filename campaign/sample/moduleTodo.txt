@@ -1,37 +1,37 @@
 Placed modules are indented
 
 	commweapon_beamlaser
-commweapon_flamethrower
-commweapon_heatray
+	commweapon_flamethrower
+	commweapon_heatray
 	commweapon_heavymachinegun
 	commweapon_lightninggun
-commweapon_lparticlebeam
-commweapon_missilelauncher
+	commweapon_lparticlebeam
+	commweapon_missilelauncher
 	commweapon_riotcannon
 	commweapon_rocketlauncher
-commweapon_shotgun
+	commweapon_shotgun
 commweapon_hparticlebeam -- Reconsider
 commweapon_shockrifle -- Reconsider
-commweapon_clusterbomb
-commweapon_concussion
-commweapon_disintegrator
-commweapon_disruptorbomb
-commweapon_multistunner
-commweapon_napalmgrenade
-commweapon_slamrocket
+	commweapon_clusterbomb
+	commweapon_concussion
+	commweapon_disintegrator
+	commweapon_disruptorbomb
+	commweapon_multistunner
+	commweapon_napalmgrenade
+	commweapon_slamrocket
 
 	commweapon_personal_shield
-commweapon_areashield
+	commweapon_areashield
 
 -- Consider adding some of the conversions. Standoff rocket etc..
-weaponmod_napalm_warhead
-conversion_disruptor
-weaponmod_stun_booster
+	weaponmod_napalm_warhead
+	conversion_disruptor
+	weaponmod_stun_booster
 	module_jammer
-module_radarnet
+	module_radarnet
 	module_personal_cloak
-module_cloak_field
-module_resurrect
+	module_cloak_field
+	module_resurrect
 
 The number is how many times the module has been placed. Each can go up to 8.
 	module_companion_drone
@@ -41,5 +41,5 @@ The number is how many times the module has been placed. Each can go up to 8.
 	module_heavy_armor
 2	module_dmg_booster
 2	module_high_power_servos
-4	module_adv_targeting
+2	module_adv_targeting
 2	module_adv_nano

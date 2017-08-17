@@ -94,6 +94,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"gunshipassault",
 			},
 			modules = {
+				"conversion_disruptor",
 			},
 			abilities = {
 			}

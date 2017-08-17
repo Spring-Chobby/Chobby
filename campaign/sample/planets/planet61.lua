@@ -89,6 +89,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"striderfunnelweb",
 			},
 			modules = {
+				"commweapon_areashield",
 			},
 			abilities = {
 			}

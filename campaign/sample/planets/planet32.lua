@@ -40,12 +40,9 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				extraUnlocks = {
 					"factoryship",
-					"shiptorpraider",
-					"shipriot",
+					"shipcon",
 					"shipskirm",
-					"shipaa",
-					"shipscout",
-					"shiparty",
+					"shipassault",
 				},
 				startUnits = {
 				}
@@ -90,8 +87,8 @@ local function GetPlanet(planetUtilities, planetID)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"shipscout",
-				"shiparty",
+				"shipskirm",
+				"shipassault",
 			},
 			modules = {
 			},

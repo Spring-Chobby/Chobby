@@ -89,6 +89,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"energyfusion",
 			},
 			modules = {
+				"module_radarnet"
 			},
 			abilities = {
 			}

@@ -392,6 +392,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"shieldaa",
 			},
 			modules = {
+				"commweapon_rocketlauncher",
 			},
 			abilities = {
 			}

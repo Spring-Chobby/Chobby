@@ -41,8 +41,8 @@ local function GetPlanet(planetUtilities, planetID)
 				extraUnlocks = {
 					"factoryamph",
 					"amphcon",
-					"amphimpulse",
-					"amphbomb",
+					"amphassault",
+					"turretgauss",
 				},
 				startUnits = {
 				}
@@ -87,11 +87,10 @@ local function GetPlanet(planetUtilities, planetID)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"amphimpulse",
-				"amphbomb",
+				"amphassault",
+				"turretgauss",
 			},
 			modules = {
-				"commweapon_rocketlauncher",
 			},
 			abilities = {
 			}

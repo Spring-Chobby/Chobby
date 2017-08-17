@@ -3492,7 +3492,6 @@ local function GetPlanet(planetUtilities, planetID)
 				"cloakheavyraid",
 			},
 			modules = {
-				"module_personal_cloak",
 			},
 			abilities = {
 			}

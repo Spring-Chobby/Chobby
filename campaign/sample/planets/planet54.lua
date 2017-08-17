@@ -43,6 +43,7 @@ local function GetPlanet(planetUtilities, planetID)
 					"jumpbomb",
 				},
 				startUnits = {
+					"commweapon_clusterbomb",
 				}
 			},
 			aiConfig = {
@@ -88,6 +89,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"jumpbomb",
 			},
 			modules = {
+				"commweapon_clusterbomb",
 			},
 			abilities = {
 			}

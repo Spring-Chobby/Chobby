@@ -89,6 +89,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"turretaaflak",
 			},
 			modules = {
+				"commweapon_disruptorbomb",
 			},
 			abilities = {
 			}

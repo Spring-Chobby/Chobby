@@ -89,6 +89,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"striderantiheavy",
 			},
 			modules = {
+				"commweapon_disintegrator",
 			},
 			abilities = {
 			}

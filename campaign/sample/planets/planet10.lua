@@ -481,7 +481,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"veharty",
 			},
 			modules = {
-				"commweapon_riotcannon",
+				"commweapon_missilelauncher",
 			},
 			codexEntries = {
 			},

@@ -88,6 +88,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"jumpblackhole",
 			},
 			modules = {
+				"commweapon_flamethrower",
 			},
 			abilities = {
 			}
