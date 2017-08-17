@@ -69,6 +69,23 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Save planet positions
+
+local function EchoPlanetPositionAndEdges()
+	Spring.Echo("planetEdgeList = {")
+	for i = 1, #planetEdgeList do
+		Spring.Echo("\t{" .. planetEdgeList[i][1] .. ", " .. planetEdgeList[i][2] .. "},")
+	end
+	Spring.Echo("}")
+	Spring.Echo("planetPositions = {")
+	for i = 1, #planetConfig do
+		Spring.Echo(string.format("\t[%01d] = {%03f, %03f},", i, math.floor(planetConfig[i].mapDisplay.x*1000), math.floor(planetConfig[i].mapDisplay.y*1000)))
+	end
+	Spring.Echo("}")
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Rewards panels
 
 local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, widthMult, stackHeight)
@@ -807,6 +824,7 @@ local function InitializePlanetHandler(parent)
 				if mouseButton == 3 then
 					debugPlanetSelected = nil
 					debugPlanetSelectedName = nil
+					EchoPlanetPositionAndEdges()
 					return true
 				end
 				local hovered = WG.Chili.Screen0.hoveredControl

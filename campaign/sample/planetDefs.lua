@@ -124,7 +124,7 @@ end
 local planets = {}
 local planetUtilities = VFS.Include("campaign/" .. shortname .. "/planetUtilities.lua")
 for i = 1, N_PLANETS do
-	planets[i] = VFS.Include("campaign/" .. shortname .. "/planets/planet" .. i .. ".lua")(planetUtilities)
+	planets[i] = VFS.Include("campaign/" .. shortname .. "/planets/planet" .. i .. ".lua")(planetUtilities, i)
 	planets[i].index = i
 end
 
