@@ -52,6 +52,7 @@ local function InitializeControls(parent)
 		width = COMBO_WIDTH,
 		height = 30,
 		items = {"Normal", "Hard", "Brutal", "Insane"},
+		selected = 1,
 		font = Configuration:GetFont(2),
 		itemFontSize = Configuration:GetFont(2).size,
 		selected = WG.CampaignData.GetDifficultySetting(),
