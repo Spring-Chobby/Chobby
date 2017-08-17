@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities, planetID)
 		name = "Zooph V",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.325,
-			y = 0.31,
+			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.325,
+			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.31,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},

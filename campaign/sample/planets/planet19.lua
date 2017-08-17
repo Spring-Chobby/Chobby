@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities, planetID)
 		name = "Yeta",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.185,
-			y = 0.45,
+			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.185,
+			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.45,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},

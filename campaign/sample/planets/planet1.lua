@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities, planetID)
 		name = "Im Jaleth",
 		startingPlanet = true,
 		mapDisplay = {
-			x = 0.05,
-			y = 0.87,
+			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.05,
+			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.87,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},

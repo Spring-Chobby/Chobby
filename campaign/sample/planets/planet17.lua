@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities, planetID)
 		name = "Sammara",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.36,
-			y = 0.41,
+			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.36,
+			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.41,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},

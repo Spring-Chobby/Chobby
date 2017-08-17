@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities, planetID)
 		name = "Cadentem",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.17,
-			y = 0.28,
+			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.17,
+			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.28,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},

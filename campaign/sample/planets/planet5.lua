@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities, planetID)
 		name = "Cygnet",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.13,
-			y = 0.63,
+			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.13,
+			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.63,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},

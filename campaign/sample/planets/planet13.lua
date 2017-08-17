@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities, planetID)
 		name = "Phisnet-3617",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.215,
-			y = 0.545,
+			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.215,
+			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.545,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
