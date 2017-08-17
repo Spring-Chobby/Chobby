@@ -148,6 +148,8 @@ function Configuration:init()
 	self.planetwarsNotifications = false -- Possibly too intrusive? See how it goes.
 	self.simplifiedSkirmishSetup = true
 	self.debugMode = false
+	self.showPlanetUnlocks = false
+	self.editCampaign = false
 	self.activeDebugConsole = false
 	self.onlyShowFeaturedMaps = true
 	self.simpleAiList = true
@@ -370,6 +372,8 @@ function Configuration:GetConfigData()
 		planetwarsNotifications = self.planetwarsNotifications,
 		simplifiedSkirmishSetup = self.simplifiedSkirmishSetup,
 		debugMode = self.debugMode,
+		showPlanetUnlocks = self.showPlanetUnlocks,
+		editCampaign = self.editCampaign,
 		confirmation_mainMenuFromBattle = self.confirmation_mainMenuFromBattle,
 		confirmation_battleFromBattle = self.confirmation_battleFromBattle,
 		drawAtFullSpeed = self.drawAtFullSpeed,

@@ -748,6 +748,8 @@ local function GetVoidTabControls()
 	offset = offset + 65
 
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("debugMode"), "debugMode", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, "Show Planet Unlocks", "showPlanetUnlocks", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, "Edit Campaign", "editCampaign", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Debug server messages", "activeDebugConsole", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Show channel bots", "displayBots", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Show wrong engines", "displayBadEngines", false)
