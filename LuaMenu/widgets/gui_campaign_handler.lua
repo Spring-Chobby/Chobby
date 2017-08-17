@@ -74,7 +74,7 @@ end
 local function EchoPlanetPositionAndEdges()
 	Spring.Echo("planetEdgeList = {")
 	for i = 1, #planetEdgeList do
-		Spring.Echo("\t{" .. planetEdgeList[i][1] .. ", " .. planetEdgeList[i][2] .. "},")
+		Spring.Echo(string.format("\t{%02d, %02d},", planetEdgeList[i][1], planetEdgeList[i][2]))
 	end
 	Spring.Echo("}")
 	Spring.Echo("planetPositions = {")
