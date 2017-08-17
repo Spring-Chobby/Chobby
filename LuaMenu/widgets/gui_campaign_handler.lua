@@ -33,6 +33,8 @@ local PLANET_NO_START_COLOR = {0.5, 0.5, 0.5, 1}
 local TARGET_IMAGE = LUA_DIRNAME .. "images/niceCircle.png"
 
 local REWARD_ICON_SIZE = 58
+local DEBUG_UNLOCKS_SIZE = 26
+local DEBUG_UNLOCK_COLUMNS = 4
 
 local planetList
 local selectedPlanet
@@ -513,6 +515,26 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 	return externalFunctions
 end
 
+local function AddDebugUnlocks(parent, unlockList, unlockInfo, offset)
+	if unlockList then
+		for i = 1, #unlockList do
+			local info, imageFile, imageOverlay, count = unlockInfo(unlockList[i])
+			local image = Image:New{
+				x = (offset%DEBUG_UNLOCK_COLUMNS) * DEBUG_UNLOCKS_SIZE,
+				y = math.floor(offset/DEBUG_UNLOCK_COLUMNS) * DEBUG_UNLOCKS_SIZE,
+				width = DEBUG_UNLOCKS_SIZE - 1,
+				height = DEBUG_UNLOCKS_SIZE - 1,
+				keepAspect = true,
+				file = imageOverlay or imageFile,
+				file2 = imageOverlay and imageFile,
+				parent = parent,
+			}
+			offset = offset + 1
+		end
+	end
+	return offset
+end
+
 local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 	local Configuration = WG.Chobby.Configuration
 	
@@ -534,6 +556,23 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		padding = {0, 0, 0, 0},
 		parent = galaxyHolder,
 	}
+	local debugHolder
+	if Configuration.debugMode then
+		debugHolder = Control:New{
+			x = 0,
+			y = 0,
+			width = targetSize*3,
+			height = targetSize,
+			padding = {1, 1, 1, 1},
+			parent = galaxyHolder,
+		}
+		
+		local rewards = planetData.completionReward
+		local offset = 0
+		offset = AddDebugUnlocks(debugHolder, rewards.units, WG.CampaignData.GetUnitInfo, offset)
+		offset = AddDebugUnlocks(debugHolder, rewards.modules, WG.CampaignData.GetModuleInfo, offset)
+		offset = AddDebugUnlocks(debugHolder, rewards.abilities, WG.CampaignData.GetAbilityInfo, offset)
+	end
 	
 	local button = Button:New{
 		x = planetOffset,
@@ -593,6 +632,10 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		local x = math.max(0, math.min(xSize - targetSize, xPos*xSize - targetSize/2))
 		local y = math.max(0, math.min(ySize - targetSize, yPos*ySize - targetSize/2))
 		planetHolder:SetPos(x, y, targetSize, targetSize)
+		
+		if debugHolder then
+			debugHolder:SetPos(x, y + planetSize, DEBUG_UNLOCK_COLUMNS*DEBUG_UNLOCKS_SIZE + 2, 2*DEBUG_UNLOCKS_SIZE + 2)
+		end
 	end
 	
 	function externalFunctions.UpdateStartable()
