@@ -89,6 +89,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"striderscorpion",
 			},
 			modules = {
+				"commweapon_multistunner",
 			},
 			abilities = {
 			}

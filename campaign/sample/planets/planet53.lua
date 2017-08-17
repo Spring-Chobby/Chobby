@@ -88,6 +88,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"jumparty",
 			},
 			modules = {
+				"commweapon_napalmgrenade",
 			},
 			abilities = {
 			}

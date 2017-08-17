@@ -96,6 +96,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"turretimpulse",
 			},
 			modules = {
+				
 			},
 			abilities = {
 			}

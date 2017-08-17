@@ -86,9 +86,10 @@ local function GetPlanet(planetUtilities, planetID)
 			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"striderhub",
-					"striderdante",
+				"striderdante",
 			},
 			modules = {
+				"weaponmod_napalm_warhead",
 			},
 			abilities = {
 			}

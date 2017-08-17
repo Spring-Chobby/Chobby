@@ -459,10 +459,6 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 344,
 							facing = 0,
 							bonusObjectiveID = 1,
-							mapMarker = {
-								text = "Singularity Reactors",
-								color = "red"
-							},
 						},
 						{
 							name = "energysingu",
@@ -470,6 +466,10 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 344,
 							facing = 0,
 							bonusObjectiveID = 1,
+							mapMarker = {
+								text = "Singularity Reactors",
+								color = "red"
+							},
 						},
 						{
 							name = "energysingu",
@@ -805,13 +805,7 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 0,
 						},
 						{
-							name = "turretheavylaser",
-							x = 4936,
-							z = 5128,
-							facing = 3,
-						},
-						{
-							name = "turretheavylaser",
+							name = "turretheavy",
 							x = 4920,
 							z = 6184,
 							facing = 3,
@@ -1350,6 +1344,73 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 2880,
 							facing = 1,
 						},
+						{
+							name = "turretheavy",
+							x = 4930,
+							z = 5132,
+							facing = 3,
+						},
+						{
+							name = "turrettorp",
+							x = 3135,
+							z = 2500,
+							facing = 3,
+						},
+						{
+							name = "turrettorp",
+							x = 3195,
+							z = 2920,
+							facing = 3,
+						},
+						{
+							name = "turrettorp",
+							x = 3735,
+							z = 3800,
+							facing = 3,
+						},
+						{
+							name = "turrettorp",
+							x = 3795,
+							z = 4220,
+							facing = 3,
+						},
+						-- consider these
+						-- },
+							-- name = "turretantiheavy",
+							-- x = 6000,
+							-- z = 1950,
+							-- facing = 0,
+						-- },
+						-- {
+							-- name = "turretgauss",
+							-- x = 5800,
+							-- z = 1950,
+							-- facing = 3,
+						-- },
+						-- {
+							-- name = "turretgauss",
+							-- x = 6200,
+							-- z = 1950,
+							-- facing = 1,
+						-- },
+						-- {
+							-- name = "energypylon",
+							-- x = 7410,
+							-- z = 2200,
+							-- facing = 0,
+						-- },
+						-- {
+							-- name = "energypylon",
+							-- x = 7410,
+							-- z = 2900,
+							-- facing = 0,
+						-- },
+						-- {
+							-- name = "energypylon",
+							-- x = 6100,
+							-- z = 1760,
+							-- facing = 0,
+						-- },
 					}
 				},
 			},
@@ -1611,7 +1672,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"cloaksnipe",
 			},
 			modules = {
-				"module_adv_targeting_LIMIT_B_2",
+				"module_personal_cloak",
 			},
 			abilities = {
 			}

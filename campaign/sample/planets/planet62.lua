@@ -89,6 +89,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"striderarty",
 			},
 			modules = {
+				"module_cloak_field"
 			},
 			abilities = {
 			}

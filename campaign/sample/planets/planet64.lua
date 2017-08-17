@@ -91,6 +91,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"energysingu",
 			},
 			modules = {
+				"weaponmod_stun_booster",
 			},
 			abilities = {
 			}

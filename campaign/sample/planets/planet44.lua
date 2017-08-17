@@ -87,8 +87,6 @@ local function GetPlanet(planetUtilities, planetID)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"factoryspider",
-				"spidercon",
 				"spiderassault",
 				"spideremp",
 			},

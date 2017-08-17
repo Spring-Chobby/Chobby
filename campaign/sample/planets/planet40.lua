@@ -88,13 +88,12 @@ local function GetPlanet(planetUtilities, planetID)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"factorytank",
-				"tankcon",
 				"tankassault",
 				"tankarty",
 				"tankaa",
 			},
 			modules = {
+				"commweapon_heatray",
 			},
 			abilities = {
 			}

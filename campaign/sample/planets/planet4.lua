@@ -319,6 +319,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"turretaaclose",
 			},
 			modules = {
+				"commweapon_lparticlebeam"
 			},
 			codexEntries = {
 			},

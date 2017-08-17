@@ -87,6 +87,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"athena",
 			},
 			modules = {
+				"module_resurrect"
 			},
 			abilities = {
 			}

@@ -41,10 +41,6 @@ local function GetPlanet(planetUtilities, planetID)
 				extraUnlocks = {
 					"factoryspider",
 					"spidercon",
-					"spideremp",
-					"spiderriot",
-					"spiderskirm",
-					"spiderassault",
 					"spidercrabe",
 				},
 				startUnits = {
@@ -90,7 +86,8 @@ local function GetPlanet(planetUtilities, planetID)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"spideraa",
+				"factoryspider",
+				"spidercon",
 				"spidercrabe",
 			},
 			modules = {

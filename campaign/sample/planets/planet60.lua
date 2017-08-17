@@ -89,6 +89,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"shipheavyarty",
 			},
 			modules = {
+				"commweapon_concussion",
 			},
 			abilities = {
 			}

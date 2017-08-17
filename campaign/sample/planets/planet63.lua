@@ -41,6 +41,7 @@ local function GetPlanet(planetUtilities, planetID)
 				extraUnlocks = {
 					"turretheavy",
 					"turretantiheavy",
+					"energyheavygeo",
 				},
 				startUnits = {
 				}
@@ -87,6 +88,7 @@ local function GetPlanet(planetUtilities, planetID)
 			units = {
 				"turretheavy",
 				"turretantiheavy",
+				"energyheavygeo",
 			},
 			modules = {
 			},

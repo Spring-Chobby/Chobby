@@ -41,8 +41,8 @@ local function GetPlanet(planetUtilities, planetID)
 				extraUnlocks = {
 					"factoryamph",
 					"amphcon",
-					"amphraid",
-					"amphriot",
+					"amphimpulse",
+					"amphbomb",
 					"amphfloater",
 					"turrettorp",
 				},
@@ -91,8 +91,8 @@ local function GetPlanet(planetUtilities, planetID)
 			units = {
 				"factoryamph",
 				"amphcon",
-				"amphraid",
-				"amphriot",
+				"amphimpulse",
+				"amphbomb",
 				"amphfloater",
 				"turrettorp",
 			},

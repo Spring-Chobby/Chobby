@@ -94,6 +94,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"hoveraa",
 			},
 			modules = {
+				"commweapon_riotcannon",
 			},
 			abilities = {
 			}
