@@ -89,8 +89,8 @@ local function GetPlanet(planetUtilities)
 			units = {
 				"factoryspider",
 				"spidercon",
-				"spiderriot",
-				"spiderskirm",
+				"spiderassault",
+				"spideremp",
 			},
 			modules = {
 			},
