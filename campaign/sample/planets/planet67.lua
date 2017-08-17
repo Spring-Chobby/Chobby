@@ -10,10 +10,10 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.53,
-			y = 0.19,
+			x = 0.80,
+			y = 0.94,
 			image = image,
-			size = planetUtilities.PLANET_SIZE_MAP,
+			size = planetUtilities.PLANET_SIZE_MAP * 1.25,
 		},
 		infoDisplay = {
 			image = image,
@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[...]]
+			text = [[You are facing a massive fleet of capital ships. Ensure your complete domination of the seas with the Disco Rave Party superweapon.]]
 		},
 		gameConfig = {
 			missionStartscript = false,
@@ -39,13 +39,7 @@ local function GetPlanet(planetUtilities)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"factorytank",
-					"tankcon",
-					"tankassault",
-					"tankriot",
-					"tankarty",
-					"tankheavyassault",
-					"tankheavyarty",
+					"raveparty"
 				},
 				startUnits = {
 				}
@@ -90,8 +84,7 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"tankheavyassault",
-				"tankheavyarty",
+				"raveparty",
 			},
 			modules = {
 			},

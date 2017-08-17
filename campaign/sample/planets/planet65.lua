@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.97,
-			y = 0.03,
+			x = 0.895,
+			y = 0.20,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[Your opponent is already conducting a victory celebration with their Disco Rave Party. Hold off the assault until your Starlight orbital chisel is complete, then demonstrate that their revels are premature.]]
+			text = [[...]]
 		},
 		gameConfig = {
 			missionStartscript = false,
@@ -39,7 +39,8 @@ local function GetPlanet(planetUtilities)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"mahlazer"
+					"striderdetriment",
+					"turretaaheavy",
 				},
 				startUnits = {
 				}
@@ -84,7 +85,8 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"mahlazer",
+				"striderdetriment",
+				"turretaaheavy",
 			},
 			modules = {
 			},

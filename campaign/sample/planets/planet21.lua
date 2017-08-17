@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.35,
-			y = 0.80,
+			x = 0.50,
+			y = 0.49,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -24,11 +24,11 @@ local function GetPlanet(planetUtilities)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[The water on this map would pose difficulties for most factories, but the Amphibious factory is right at home here.]]
+			text = [[DANTE]]
 		},
 		gameConfig = {
 			missionStartscript = false,
-			mapName = "LowTideV3",
+			mapName = "Crubick Plains v1.2",
 			playerConfig = {
 				startX = 100,
 				startZ = 100,
@@ -39,12 +39,8 @@ local function GetPlanet(planetUtilities)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"factoryamph",
-					"amphcon",
-					"amphraid",
-					"amphriot",
-					"amphfloater",
-					"turrettorp",
+					"striderhub",
+					"striderdante",
 				},
 				startUnits = {
 				}
@@ -89,12 +85,8 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"factoryamph",
-				"amphcon",
-				"amphraid",
-				"amphriot",
-				"amphfloater",
-				"turrettorp",
+				"striderhub",
+					"striderdante",
 			},
 			modules = {
 			},

@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.86,
-			y = 0.64,
+			x = 0.605,
+			y = 0.06,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -39,8 +39,7 @@ local function GetPlanet(planetUtilities)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"striderhub",
-					"shipheavyarty",
+					"athena",
 				},
 				startUnits = {
 				}
@@ -85,8 +84,7 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"striderhub",
-				"shipheavyarty",
+				"athena",
 			},
 			modules = {
 			},

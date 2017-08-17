@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.74,
-			y = 0.32,
+			x = 0.675,
+			y = 0.235,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -39,8 +39,8 @@ local function GetPlanet(planetUtilities)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"turretheavy",
-					"turretantiheavy",
+					"striderhub",
+					"striderscorpion",
 				},
 				startUnits = {
 				}
@@ -85,8 +85,8 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"turretheavy",
-				"turretantiheavy",
+				"striderhub",
+				"striderscorpion",
 			},
 			modules = {
 			},

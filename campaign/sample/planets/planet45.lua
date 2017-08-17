@@ -44,8 +44,8 @@ local function GetPlanet(planetUtilities)
 					"spideremp",
 					"spiderriot",
 					"spiderskirm",
-					"spiderscout",
-					"spiderantiheavy",
+					"spiderassault",
+					"spidercrabe",
 				},
 				startUnits = {
 				}
@@ -90,8 +90,7 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"spiderscout",
-				"spiderantiheavy",
+				"spidercrabe",
 			},
 			modules = {
 			},

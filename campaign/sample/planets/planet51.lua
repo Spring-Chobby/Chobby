@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.765,
-			y = 0.58,
+			x = 0.755,
+			y = 0.49,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -42,8 +42,11 @@ local function GetPlanet(planetUtilities)
 					"factoryjump",
 					"jumpcon",
 					"jumpraid",
-					"jumpblackhole",
-					"jumparty",
+					"jumpskirm",
+					"jumpassault",
+					"jumpaa",
+					"jumpsumo",
+					"turretimpulse",
 				},
 				startUnits = {
 				}
@@ -88,8 +91,9 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"jumpblackhole",
-				"jumparty",
+				"jumpaa",
+				"jumpsumo",
+				"turretimpulse",
 			},
 			modules = {
 			},

@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.53,
-			y = 0.40,
+			x = 0.615,
+			y = 0.375,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -39,8 +39,13 @@ local function GetPlanet(planetUtilities)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"turretemp",
-					"turretaaflak",
+					"factoryspider",
+					"spidercon",
+					"spideremp",
+					"spiderriot",
+					"spiderskirm",
+					"spiderscout",
+					"spiderantiheavy",
 				},
 				startUnits = {
 				}
@@ -85,8 +90,8 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"turretemp",
-				"turretaaflak",
+				"spiderscout",
+				"spiderantiheavy",
 			},
 			modules = {
 			},
