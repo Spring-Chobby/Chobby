@@ -41,7 +41,6 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				extraUnlocks = {
 					"cloakarty",
-					"turretmissile",
 				},
 				startUnits = {
 					{
@@ -415,7 +414,6 @@ local function GetPlanet(planetUtilities, planetID)
 			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"cloakarty",
-				"turretmissile",
 			},
 			modules = {
 				"module_adv_targeting_LIMIT_A_2",

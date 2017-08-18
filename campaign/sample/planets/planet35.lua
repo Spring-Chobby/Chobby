@@ -93,6 +93,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"bomberheavy",
 			},
 			modules = {
+				"module_battle_drone_LIMIT_A_2",
 			},
 			abilities = {
 			}

@@ -94,6 +94,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"gunshipheavytrans",
 			},
 			modules = {
+				"module_high_power_servos_LIMIT_A_2",
 			},
 			abilities = {
 			}

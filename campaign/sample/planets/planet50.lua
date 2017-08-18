@@ -95,6 +95,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"jumpassault",
 			},
 			modules = {
+				"module_adv_nano_LIMIT_A_1",
 			},
 			abilities = {
 			}

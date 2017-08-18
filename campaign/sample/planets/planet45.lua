@@ -91,6 +91,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"spidercrabe",
 			},
 			modules = {
+				"module_adv_nano_LIMIT_A_1",
 			},
 			abilities = {
 			}
