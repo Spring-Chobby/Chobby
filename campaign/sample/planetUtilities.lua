@@ -203,6 +203,24 @@ planetUtilities.DIFFICULTY = {
 	BRUTAL = 4,
 }
 
+planetUtilities.TERRAFORM_SHAPE = {
+	RECTANGLE = 1,
+	LINE = 2,
+	RAMP = 3,
+}
+
+planetUtilities.TERRAFORM_TYPE = {
+	LEVEL = 1,
+	RAISE = 2,
+	SMOOTH = 3,
+}
+
+planetUtilities.TERRAFORM_VOLUME = {
+	NONE = 0,
+	RAISE_ONLY = 1,
+	LOWER_ONLY = 2,
+}
+
 planetUtilities.COMPARE = {
 	AT_LEAST = 1,
 	AT_MOST = 2

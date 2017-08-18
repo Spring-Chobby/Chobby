@@ -286,6 +286,41 @@ planetData = {
 			-- etc..
 		},
 		
+		-- A list of terraforms to apply to the map prior to the game starting
+		terraform = {
+			-- Terraforms have:
+			--  * terraformShape: This is required. Either RECTANGLE, LINE or RAMP
+			--  * terraformType: Required for RECTANGLE and LINE. Either LEVEL, RAISE or SMOOTH
+			--  * position:
+			--    * RECTANGLE - {left, top, right, bottom}
+			--    * LINE      - {x1, z1, x2, z2}
+			--    * RAMP      - {x1, y1, z1, x2, y2, z2}
+			--  * height: Required for LEVEL and RAISE. Absolute for the former and relative for the latter.
+			--  * width: Required for RAMP.
+			--  * volumeSelection: NONE, RAISE_ONLY or LOWER_ONLY
+			-- Note that terraform has all the restrictions of terraform that occurs during a game. Shapes such
+			-- as very thin walls cannot be created.
+			{
+				terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
+				terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
+				position = {3808, 2544, 3808 + 48, 2544 + 48}, 
+				height = 130,
+				volumeSelection = planetUtilities.TERRAFORM_VOLUME.RAISE_ONLY,
+			},
+			{
+				terraformShape = planetUtilities.TERRAFORM_SHAPE.RAMP,
+				position = {290, 300, 3900, 765, 103, 3870}, 
+				width = 200,
+				volumeSelection = planetUtilities.TERRAFORM_VOLUME.LOWER_ONLY,
+			},
+			{
+				terraformShape = planetUtilities.TERRAFORM_SHAPE.LINE,
+				terraformType = planetUtilities.TERRAFORM_TYPE.RAISE,
+				position = {400, 90, 556, 120}, 
+				height = 20,
+			},
+		},
+		
 		-- Configuration for what causes defeat for each allyTeam. Indexed by allyTeam.
 		defeatConditionConfig = {
 			[0] = { 

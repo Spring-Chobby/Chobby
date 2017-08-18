@@ -220,7 +220,8 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 			fixedstartpos = 1,
 			planetmissiondifficulty = missionDifficulty,
 			singleplayercampaignsavename = WG.Chobby.Configuration.campaignSaveFile,
-			singleplayercampaignbattleid = planetID
+			singleplayercampaignbattleid = planetID,
+			initalterraform = TableToBase64(gameConfig.terraform),
 		},
 	}
 

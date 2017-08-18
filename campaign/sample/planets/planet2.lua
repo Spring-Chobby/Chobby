@@ -294,6 +294,15 @@ local function GetPlanet(planetUtilities, planetID)
 					}
 				},
 			},
+			terraform = {
+				{
+					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
+					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
+					position = {3808, 2544, 3808 + 48, 2544 + 48}, 
+					height = 130,
+					volumeSelection = planetUtilities.TERRAFORM_VOLUME.RAISE_ONLY,
+				},
+			},
 			defeatConditionConfig = {
 				-- Indexed by allyTeam.
 				[0] = { },
