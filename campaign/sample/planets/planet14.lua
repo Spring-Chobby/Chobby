@@ -392,7 +392,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"staticstorage",
 			},
 			modules = {
-				"commweapon_personal_shield",
+				"module_autorepair_LIMIT_A_2",
 			},
 			abilities = {
 			}

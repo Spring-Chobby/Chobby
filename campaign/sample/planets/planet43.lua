@@ -39,11 +39,8 @@ local function GetPlanet(planetUtilities, planetID)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"staticmissilesilo",
-					"tacnuke",
-					"napalmmissile",
-					"empmissile",
-					"seismic",
+					"turretemp",
+					"turretaaflak",
 				},
 				startUnits = {
 				}
@@ -88,13 +85,11 @@ local function GetPlanet(planetUtilities, planetID)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"staticmissilesilo",
-				"tacnuke",
-				"napalmmissile",
-				"empmissile",
-				"seismic",
+				"turretemp",
+				"turretaaflak",
 			},
 			modules = {
+				"module_dmg_booster_LIMIT_A_2",
 			},
 			abilities = {
 			}

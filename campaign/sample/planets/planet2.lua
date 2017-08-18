@@ -384,6 +384,7 @@ local function GetPlanet(planetUtilities, planetID)
 			modules = {
 				"commweapon_heavymachinegun",
 				"module_dmg_booster_LIMIT_A_2",
+				"module_high_power_servos_LIMIT_A_2",
 			},
 		},
 	}

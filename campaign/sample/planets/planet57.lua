@@ -91,7 +91,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"shipcarrier",
 			},
 			modules = {
-				"commweapon_slamrocket",
+				"commweapon_disruptorbomb",
 			},
 			abilities = {
 			}

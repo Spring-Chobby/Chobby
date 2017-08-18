@@ -91,6 +91,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"shipassault",
 			},
 			modules = {
+				"module_battle_drone_LIMIT_A_2",
 			},
 			abilities = {
 			}

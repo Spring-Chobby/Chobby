@@ -89,6 +89,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"staticheavyarty",
 			},
 			modules = {
+				"module_dmg_booster_LIMIT_A_2",
 			},
 			abilities = {
 			}

@@ -96,7 +96,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"turretimpulse",
 			},
 			modules = {
-				
+				"module_heavy_armor_LIMIT_A_2",
 			},
 			abilities = {
 			}

@@ -89,6 +89,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"turretaaheavy",
 			},
 			modules = {
+				"module_battle_drone_LIMIT_A_2",
 			},
 			abilities = {
 			}

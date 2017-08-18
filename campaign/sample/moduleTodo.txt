@@ -34,12 +34,12 @@ commweapon_shockrifle -- Reconsider
 	module_resurrect
 
 The number is how many times the module has been placed. Each can go up to 8.
-	module_companion_drone
-	module_battle_drone
-2	module_autorepair
-2	module_ablative_armor
-	module_heavy_armor
-2	module_dmg_booster
-2	module_high_power_servos
-2	module_adv_targeting
-2	module_adv_nano
+8	module_companion_drone
+8	module_battle_drone
+4	module_autorepair
+4	module_ablative_armor
+8	module_heavy_armor
+4	module_dmg_booster
+8	module_high_power_servos
+4	module_adv_targeting
+8	module_adv_nano

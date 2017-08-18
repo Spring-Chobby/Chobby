@@ -881,6 +881,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"turretriot",
 			},
 			modules = {
+				"module_ablative_armor_LIMIT_A_2",
 			},
 			abilities = {
 			}

@@ -1399,7 +1399,8 @@ local function GetPlanet(planetUtilities, planetID)
 				"shieldshield",
 				"staticshield",
 			},
-			modules = {
+			modules = {	
+				"commweapon_personal_shield",
 			},
 			abilities = {
 			}

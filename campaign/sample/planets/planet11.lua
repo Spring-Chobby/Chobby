@@ -938,6 +938,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"turretaalaser",
 			},
 			modules = {
+				"module_adv_targeting_LIMIT_A_2",
 			},
 			abilities = {
 			}

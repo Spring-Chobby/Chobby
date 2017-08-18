@@ -655,7 +655,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"vehassault",
 			},
 			modules = {
-				--"commweapon_riotcannon",
+				"module_adv_nano_LIMIT_A_1",
 			},
 			codexEntries = {
 			},

@@ -94,6 +94,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"hoverarty",
 			},
 			modules = {
+				"module_adv_targeting_LIMIT_A_2",
 			},
 			abilities = {
 			}
