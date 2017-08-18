@@ -232,6 +232,49 @@ local function UpdateCommanderModuleCounts()
 	end
 end
 
+local function IsModuleRequirementMet(data)
+	if data.requireOneOf then
+		local foundRequirement = false
+		for j = 1, #data.requireOneOf do
+			local reqDefName = data.requireOneOf[j]
+			if (commanderModuleCounts[reqDefName] or 0) > 0 then
+				foundRequirement = true
+				break
+			end
+		end
+		if not foundRequirement then
+			return false
+		end
+	end
+	return true
+end
+
+local function UpdateModuleRequirements()
+	local loadout = gamedata.commanderLoadout
+	
+	local commConfig = WG.Chobby.Configuration.campaignConfig.commConfig
+	local chassisDef = commConfig.chassisDef
+	local moduleDefs = commConfig.moduleDefs
+	local moduleDefNames = commConfig.moduleDefNames
+	
+	local level = 0
+	while loadout[level] do
+		for slot = 1, #loadout[level] do
+			local oldModuleName = loadout[level][slot]
+			local moduleData = moduleDefs[moduleDefNames[oldModuleName]]
+			if not IsModuleRequirementMet(moduleData) then
+				local newModule = chassisDef.levelDefs[level].upgradeSlots[slot].defaultModule
+				loadout[level][slot] = newModule
+				UpdateCommanderModuleCounts()
+				CallListeners("ModulePutInSlot", newModule, oldModuleName, level, slot)
+				level = -1
+				break
+			end
+		end
+		level = level + 1
+	end
+end
+
 local function SelectCommanderModule(level, slot, moduleName, supressEvent)
 	if not gamedata.commanderLoadout[level] then
 		gamedata.commanderLoadout[level] = {}
@@ -248,6 +291,9 @@ local function SelectCommanderModule(level, slot, moduleName, supressEvent)
 	
 	if not supressEvent then
 		UpdateCommanderModuleCounts()
+		if not commanderModuleCounts[oldModule] then
+			UpdateModuleRequirements()
+		end
 		CallListeners("ModulePutInSlot", moduleName, oldModule, level, slot)
 	end
 	

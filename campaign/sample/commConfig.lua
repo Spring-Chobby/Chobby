@@ -879,33 +879,33 @@ local chassisDef = {
 ------------------------------------------------------------------------
 
 -- Transform from human readable format into number indexed format
-for i = 1, #moduleDefs do
-	local data = moduleDefs[i]
-	
-	-- Required modules are a list of moduleDefIDs
-	if data.requireOneOf then
-		local newRequire = {}
-		for j = 1, #data.requireOneOf do
-			local reqModuleID = moduleDefNames[data.requireOneOf[j]]
-			if reqModuleID then
-				newRequire[#newRequire + 1] = reqModuleID
-			end
-		end
-		data.requireOneOf = newRequire
-	end
-	
-	-- Prohibiting modules are a list of moduleDefIDs too
-	if data.prohibitingModules then
-		local newProhibit = {}
-		for j = 1, #data.prohibitingModules do
-			local reqModuleID = moduleDefNames[data.prohibitingModules[j]]
-			if reqModuleID then
-				newProhibit[#newProhibit + 1] = reqModuleID
-			end
-		end
-		data.prohibitingModules = newProhibit
-	end
-end
+--for i = 1, #moduleDefs do
+--	local data = moduleDefs[i]
+--	
+--	-- Required modules are a list of moduleDefIDs
+--	if data.requireOneOf then
+--		local newRequire = {}
+--		for j = 1, #data.requireOneOf do
+--			local reqModuleID = moduleDefNames[data.requireOneOf[j]]
+--			if reqModuleID then
+--				newRequire[#newRequire + 1] = reqModuleID
+--			end
+--		end
+--		data.requireOneOf = newRequire
+--	end
+--	
+--	-- Prohibiting modules are a list of moduleDefIDs too
+--	if data.prohibitingModules then
+--		local newProhibit = {}
+--		for j = 1, #data.prohibitingModules do
+--			local reqModuleID = moduleDefNames[data.prohibitingModules[j]]
+--			if reqModuleID then
+--				newProhibit[#newProhibit + 1] = reqModuleID
+--			end
+--		end
+--		data.prohibitingModules = newProhibit
+--	end
+--end
 
 for i = 0, chassisDef.highestDefinedLevel do
 	local slots = chassisDef.levelDefs[i].upgradeSlots
