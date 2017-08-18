@@ -627,6 +627,20 @@ local moduleDefs = {
 			sharedData.canResurrect = true
 		end
 	},
+	{
+		name = "module_jumpjet",
+		humanName = "Jumpjets",
+		description = "Jumpjets - Leap over obstacles and out of danger.",
+		image = moduleImagePath .. "module_radarnet2.png",
+		limit = 1,
+		cost = 400,
+		requireChassis = {"knight"},
+		requireLevel = 3,
+		slotType = "module",
+		applicationFunction = function (modules, sharedData)
+			sharedData.canJump = true
+		end
+	},
 	
 	-- Repeat Modules
 	{
