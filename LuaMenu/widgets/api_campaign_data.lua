@@ -456,6 +456,7 @@ end
 function externalFunctions.SetCommanderName(newName)
 	gamedata.commanderName = newName
 	CallListeners("CommanderNameUpdate", newName)
+	SaveGame()
 end
 
 function externalFunctions.GetPlanetDefs()

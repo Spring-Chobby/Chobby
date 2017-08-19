@@ -342,7 +342,7 @@ local function InitializeControls(parent, saveMode)
 	-------------------------
 	local listHolder = Control:New {
 		x = 12,
-		right = 15,
+		right = 6,
 		y = 60,
 		bottom = 15,
 		parent = parent,

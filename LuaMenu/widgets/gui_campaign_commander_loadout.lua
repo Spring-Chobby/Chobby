@@ -447,7 +447,7 @@ local function MakeModulePanelHandler(parentControl)
 	
 	local externalFunctions = {}
 	
-	function externalFunctions.UpdateLoadoutDisplay(commanderLevel, commanderName, commanderLoadout)
+	function externalFunctions.UpdateLoadoutDisplay(commanderLevel, commanderLoadout)
 		moduleSelector.SetVisibility(false)
 		currentLoadout.Clear()
 		
@@ -575,7 +575,8 @@ local function InitializeControls(parentControl)
 	local function UpdateCommanderDisplay()
 		local commanderLevel, commanderExperience, commanderName, commanderLoadout = WG.CampaignData.GetPlayerCommanderInformation()
 		
-		modulePanelHandler.UpdateLoadoutDisplay(commanderLevel, commanderName, commanderLoadout)
+		commanderLabel:SetCaption(commanderName)
+		modulePanelHandler.UpdateLoadoutDisplay(commanderLevel, commanderLoadout)
 		experienceDisplay.SetExperience(commanderExperience, commanderLevel)
 	end
 	UpdateCommanderDisplay()

@@ -60,6 +60,7 @@ local function MakeTab(name, children)
 		y = 10,
 		bottom = 8,
 		horizontalScrollbar = false,
+		verticalScrollbar = false,
 		children = children
 	}
 	
