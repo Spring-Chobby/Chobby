@@ -222,7 +222,6 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "Betty Botty",
 						chassis = "strike",
 						decorations = {
-						  icon_overhead = { image = "UW" }
 						},
 						modules = { 
 							"commweapon_beamlaser", 

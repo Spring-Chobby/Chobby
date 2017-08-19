@@ -40,6 +40,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				extraUnlocks = {
 					"factoryjump",
+					"jumpscout",
 					"jumpblackhole",
 				},
 				startUnits = {
@@ -85,6 +86,7 @@ local function GetPlanet(planetUtilities, planetID)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
+				"jumpscout",
 				"jumpblackhole",
 			},
 			modules = {

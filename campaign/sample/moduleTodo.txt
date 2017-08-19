@@ -43,3 +43,13 @@ The number is how many times the module has been placed. Each can go up to 8.
 8	module_high_power_servos
 4	module_adv_targeting
 8	module_adv_nano
+
+Putting this here so I can find it for AI coms
+skin_support_dark
+skin_support_hotrod
+skin_support_green
+skin_support_zebra
+skin_recon_red
+skin_recon_dark
+skin_recon_leopard
+skin_bombard_steel

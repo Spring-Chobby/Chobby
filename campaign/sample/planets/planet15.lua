@@ -205,7 +205,6 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "Chera",
 						chassis = "recon",
 						decorations = {
-						  icon_overhead = { image = "UW" }
 						},
 						modules = { 
 							"commweapon_lightninggun", 

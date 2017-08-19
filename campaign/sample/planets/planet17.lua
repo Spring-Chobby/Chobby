@@ -650,7 +650,6 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "recon",
 						decorations = {
 						  "skin_recon_red",
-						  icon_overhead = { image = "UW" }
 						},
 						modules = { 
 							"commweapon_heavymachinegun",

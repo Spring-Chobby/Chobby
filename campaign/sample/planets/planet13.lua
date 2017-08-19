@@ -174,7 +174,6 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "Panopticon",
 						chassis = "engineer",
 						decorations = {
-						  icon_overhead = { image = "UW" }
 						},
 						modules = { 
 							"commweapon_lparticlebeam",
