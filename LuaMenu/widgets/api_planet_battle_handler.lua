@@ -92,7 +92,8 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 	local bitExtension = (Configuration:GetIsRunning64Bit() and "64") or "32"
 
 	commanderTypes.player_commander = WG.CampaignData.GetPlayerCommander()
-	local playerName = commanderTypes.player_commander.name
+	
+	local playerName = string.gsub(commanderTypes.player_commander.name, " ", "")
 	
 	-- Add the player, this is to make the player team 0.
 	local playerCount = 1
