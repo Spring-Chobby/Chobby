@@ -91,7 +91,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"energyheavygeo",
 			},
 			modules = {
-				"module_battle_drone_LIMIT_A_2",
+				"module_battle_drone_LIMIT_C_2",
 			},
 			abilities = {
 			}

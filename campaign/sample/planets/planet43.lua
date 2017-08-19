@@ -89,7 +89,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"turretaaflak",
 			},
 			modules = {
-				"module_dmg_booster_LIMIT_A_2",
+				"module_dmg_booster_LIMIT_B_2",
 			},
 			abilities = {
 			}

@@ -94,7 +94,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"tankheavyarty",
 			},
 			modules = {
-				"module_heavy_armor_LIMIT_A_2",
+				"module_heavy_armor_LIMIT_C_2",
 			},
 			abilities = {
 			}

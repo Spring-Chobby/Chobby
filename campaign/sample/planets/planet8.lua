@@ -3492,7 +3492,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"cloakheavyraid",
 			},
 			modules = {
-				"module_high_power_servos_LIMIT_A_2",
+				"module_high_power_servos_LIMIT_D_2",
 			},
 			abilities = {
 			}
