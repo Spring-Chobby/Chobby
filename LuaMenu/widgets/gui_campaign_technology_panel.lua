@@ -18,6 +18,8 @@ end
 -- Local Variables
 
 local REWARD_ICON_SIZE = 58
+local MAIN_TITLE_HEIGHT = 28
+local PARAGRAPH_TITLE_HEIGHT = 28
 
 local unitRewardList, moduleRewardList, abilityRewardList
 
@@ -25,37 +27,48 @@ local unitRewardList, moduleRewardList, abilityRewardList
 --------------------------------------------------------------------------------
 -- Utilities
 
-local function GetIconPosition(index, iconsAcross)
-	index = index - 1
-	return index%iconsAcross*(REWARD_ICON_SIZE + 4), 26 + math.floor(index/iconsAcross)*(REWARD_ICON_SIZE + 4)
+local function GetIconPosition(index, iconsAcross, paragraphOffset)
+	if index%iconsAcross == 0 then
+		paragraphOffset = paragraphOffset + (REWARD_ICON_SIZE + 4)
+	end
+	Spring.Echo("paragraphOffset", index, paragraphOffset, iconsAcross)
+	local x = index%iconsAcross*(REWARD_ICON_SIZE + 4)
+	local y = paragraphOffset - REWARD_ICON_SIZE - 4
+	return x, y, paragraphOffset
 end
 
-local function MakeRewardList(holder, name, rewardsList, tooltipFunction, UnlockedCheck, GetPosition)
+local function MakeRewardList(holder, name, rewardsList, tooltipFunction, UnlockedCheck, SortFunction, GetPosition)
 	local Configuration = WG.Chobby.Configuration
 	
 	local unlockList = {}
 	local iconsAcross = math.floor((holder.width - 16)/(REWARD_ICON_SIZE + 4))
 	
 	local position = (GetPosition and GetPosition()) or 5
-	local height = 30 + math.ceil(#rewardsList/iconsAcross)*(REWARD_ICON_SIZE + 4)
+	
+	local x, y, paragraphOffset = 0, 0, 0
+	local posIndex = 0
 	
 	local rewardsHolder = Control:New {
 		x = 10,
 		y = position,
 		right = 10,
-		height = height,
+		height = 10,
 		padding = {0, 0, 0, 0},
 		parent = holder,
 	}
-	TextBox:New {
-		x = 4,
-		y = 2,
-		right = 4,
-		height = 30,
-		text = name,
-		font = Configuration:GetFont(3),
-		parent = rewardsHolder
-	}
+	
+	if name then
+		TextBox:New {
+			x = 4,
+			y = 2,
+			right = 4,
+			height = 30,
+			text = name,
+			font = Configuration:GetFont(3),
+			parent = rewardsHolder
+		}
+		paragraphOffset = MAIN_TITLE_HEIGHT
+	end
 	
 	local function GetCountLabel(imageControl, count)
 		return Label:New {
@@ -70,8 +83,31 @@ local function MakeRewardList(holder, name, rewardsList, tooltipFunction, Unlock
 		}
 	end
 	
+	if SortFunction then
+		table.sort(rewardsList, SortFunction)
+	end
+	
+	local prevCategory
+	local paragraphLabels = {}
+	
 	for i = 1, #rewardsList do
-		local info, imageFile = tooltipFunction(rewardsList[i])
+		local info, imageFile, _, _, categories = tooltipFunction(rewardsList[i])
+		if prevCategory ~= info.category then
+			paragraphLabels[i] = TextBox:New {
+				x = 4,
+				y = paragraphOffset + 2,
+				right = 4,
+				height = 30,
+				text = categories[info.category].name,
+				font = Configuration:GetFont(3),
+				parent = rewardsHolder
+			}
+			
+			prevCategory = info.category
+			paragraphOffset = paragraphOffset + PARAGRAPH_TITLE_HEIGHT
+			posIndex = 0
+		end
+		
 		local unlocked, count = UnlockedCheck(rewardsList[i])
 		local statusString = ""
 		local color
@@ -80,7 +116,8 @@ local function MakeRewardList(holder, name, rewardsList, tooltipFunction, Unlock
 			statusString = " (locked)"
 		end
 		
-		local x, y = GetIconPosition(i, iconsAcross)
+		x, y, paragraphOffset = GetIconPosition(posIndex, iconsAcross, paragraphOffset)
+		
 		local imageControl = Image:New{
 			x = x,
 			y = y,
@@ -105,7 +142,11 @@ local function MakeRewardList(holder, name, rewardsList, tooltipFunction, Unlock
 			unlocked = unlocked,
 			count = count,
 		}
+		
+		posIndex = posIndex + 1
 	end
+	
+	rewardsHolder:SetPos(nil, position, nil, paragraphOffset)
 	
 	local function UpdateUnlocked(index)
 		local data = unlockList[index]
@@ -145,12 +186,24 @@ local function MakeRewardList(holder, name, rewardsList, tooltipFunction, Unlock
 		if GetPosition then
 			position = GetPosition()
 		end
-		height = 30 + math.ceil(#unlockList/iconsAcross)*(REWARD_ICON_SIZE + 4)
-		rewardsHolder:SetPos(nil, position, nil, height)
+		
+		paragraphOffset = (name and MAIN_TITLE_HEIGHT) or 0
+		posIndex = 0
+		
 		for i = 1, #unlockList do
-			local x, y = GetIconPosition(i, iconsAcross)
+			if paragraphLabels[i] then
+				paragraphLabels[i]:SetPos(nil, paragraphOffset + 2)
+				paragraphOffset = paragraphOffset + PARAGRAPH_TITLE_HEIGHT
+				posIndex = 0
+			end
+			
+			x, y, paragraphOffset = GetIconPosition(posIndex, iconsAcross, paragraphOffset)
 			unlockList[i].image:SetPos(x, y)
+			
+			posIndex = posIndex + 1
 		end
+		
+		rewardsHolder:SetPos(nil, position, nil, paragraphOffset)
 	end
 	
 	function externalFunctions.UpdateUnlockedList()
@@ -159,7 +212,7 @@ local function MakeRewardList(holder, name, rewardsList, tooltipFunction, Unlock
 		end
 	end
 	function externalFunctions.GetBottom()
-		return position + height + 18
+		return position + paragraphOffset + REWARD_ICON_SIZE
 	end
 	
 	return externalFunctions
@@ -231,9 +284,23 @@ local function InitializeControls(parentControl)
 	}
 	
 	local unlockList = Configuration.campaignConfig.unlocksList
-	unitRewardList = MakeRewardList(scrollPanel, "Units", unlockList.units.list, WG.CampaignData.GetUnitInfo, WG.CampaignData.GetUnitIsUnlocked)
-	moduleRewardList = MakeRewardList(scrollPanel, "Modules", unlockList.modules.list, WG.CampaignData.GetModuleInfo, WG.CampaignData.GetModuleIsUnlocked, unitRewardList.GetBottom)
-	abilityRewardList = MakeRewardList(scrollPanel, "Abilities", unlockList.abilities.list, WG.CampaignData.GetAbilityInfo, WG.CampaignData.GetAbilityIsUnlocked, moduleRewardList.GetBottom)
+	unitRewardList = MakeRewardList(scrollPanel, nil, unlockList.units.list, 
+		WG.CampaignData.GetUnitInfo, 
+		WG.CampaignData.GetUnitIsUnlocked, 
+		WG.Chobby.Configuration.gameConfig.gameUnitInformation.UnitOrder
+	)
+	moduleRewardList = MakeRewardList(scrollPanel, nil, unlockList.modules.list,
+		WG.CampaignData.GetModuleInfo,
+		WG.CampaignData.GetModuleIsUnlocked,
+		WG.Chobby.Configuration.campaignConfig.commConfig.ModuleOrder,
+		unitRewardList.GetBottom
+	)
+	abilityRewardList = MakeRewardList(scrollPanel, "Abilities", unlockList.abilities.list, 
+		WG.CampaignData.GetAbilityInfo, 
+		WG.CampaignData.GetAbilityIsUnlocked, 
+		nil,
+		moduleRewardList.GetBottom
+	)
 	
 	function ResizeFunction(xSize)
 		unitRewardList.ResizeFunction(xSize)

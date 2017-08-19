@@ -518,7 +518,8 @@ function externalFunctions.GetBonusObjectiveComplete(planetID, objectiveID)
 end
 
 function externalFunctions.GetUnitInfo(unitName)
-	return WG.Chobby.Configuration.gameConfig.gameUnitInformation.humanNames[unitName] or {}, ICONS_DIR .. unitName .. ".png"
+	local unitInformation = WG.Chobby.Configuration.gameConfig.gameUnitInformation
+	return unitInformation.humanNames[unitName] or {}, ICONS_DIR .. unitName .. ".png", nil, nil, unitInformation.categories
 end
 
 function externalFunctions.GetAbilityInfo(abilityName)
@@ -528,8 +529,9 @@ end
 
 function externalFunctions.GetModuleInfo(moduleName)
 	local parsedName, limit = TranslateModule(moduleName)
-	local index = WG.Chobby.Configuration.campaignConfig.commConfig.moduleDefNames[parsedName]
-	return index and WG.Chobby.Configuration.campaignConfig.commConfig.moduleDefs[index] or {}, ICONS_DIR .. parsedName .. ".png", nil, limit and ("\255\0\255\0x" .. limit)
+	local commConfig = WG.Chobby.Configuration.campaignConfig.commConfig
+	local index = commConfig.moduleDefNames[parsedName]
+	return index and commConfig.moduleDefs[index] or {}, ICONS_DIR .. parsedName .. ".png", nil, limit and ("\255\0\255\0x" .. limit), commConfig.categories
 end
 
 function externalFunctions.GetCodexEntryInfo(codexEntryName)

@@ -923,6 +923,42 @@ for i = 0, chassisDef.highestDefinedLevel do
 end
 
 ------------------------------------------------------------------------
+-- Module Ordering
+------------------------------------------------------------------------
+
+for i = 1, #moduleDefs do
+	local data = moduleDefs[i]
+	data.category = (data.slotType == "module" and "module") or "weapon"
+	data.order = i
+end
+
+local categories = {
+	module = {
+		name = "Modules",
+		order = 1
+	},
+	weapon = {
+		name = "Weapons",
+		order = 2
+	}
+}
+
+local function ModuleOrder(name1, name2)
+	local data1 = name1 and moduleDefNames[name1] and moduleDefs[moduleDefNames[name1]]
+	local data2 = name1 and moduleDefNames[name2] and moduleDefs[moduleDefNames[name2]]
+	if not data1 then
+		return (data2 and true)
+	end
+	if not data2 then
+		return true
+	end
+	
+	local category1 = categories[data1.category].order
+	local category2 = categories[data2.category].order
+	return category1 < category2 or (category1 == category2 and data1.order < data2.order)
+end
+
+------------------------------------------------------------------------
 -- Commander Configuration
 ------------------------------------------------------------------------
 
@@ -938,4 +974,6 @@ return {
 	moduleDefNames = moduleDefNames,
 	chassisDef = chassisDef,
 	GetLevelRequirement = GetLevelRequirement,
+	categories = categories,
+	ModuleOrder = ModuleOrder,
 }
