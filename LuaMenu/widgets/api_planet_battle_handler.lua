@@ -166,9 +166,16 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		
 		local commanderName, noCommander
 		if aiData.commander then
+			local commander = aiData.commander
 			commanderName = "ai_commander_" .. aiCount
-			aiData.commander.modules = {[0] = Spring.Utilities.CopyTable(aiData.commander.modules)}
-			commanderTypes[commanderName] = aiData.commander
+			commanderTypes[commanderName] = {
+				name = commander.name,
+				chassis = commander.chassis,
+				decorations = commander.decorations,
+				modules = {
+					[0] = commander.modules
+				},
+			}
 		else
 			noCommander = 1
 		end
