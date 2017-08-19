@@ -278,7 +278,7 @@ local function GetModuleButton(parentControl, ClickFunc, moduleName, level, slot
 	}
 	local nameBox = TextBox:New{
 		x = BUTTON_SIZE + 4,
-		y = 14,
+		y = 18,
 		right = 4,
 		height = BUTTON_SIZE,
 		text = moduleData.humanName,
@@ -290,6 +290,18 @@ local function GetModuleButton(parentControl, ClickFunc, moduleName, level, slot
 		},
 		parent = button
 	}
+	
+	local function UpdateNameBoxPosition()
+		if nameBox.physicalLines and #nameBox.physicalLines > 1 then
+			nameBox:SetPos(nil, 9)
+		else
+			nameBox:SetPos(nil, 17)
+		end
+	end
+	
+	parentControl.OnResize = parentControl.OnResize or {}
+	parentControl.OnResize[#parentControl.OnResize + 1] = UpdateNameBoxPosition
+	
 	local image = Image:New{
 		x = 4,
 		y = 4,
@@ -311,6 +323,7 @@ local function GetModuleButton(parentControl, ClickFunc, moduleName, level, slot
 		button.tooltip = moduleData.description
 		button:Invalidate()
 		nameBox:SetText(moduleData.humanName)
+		UpdateNameBoxPosition()
 		image.file = moduleData.image
 		image:Invalidate()
 	end
