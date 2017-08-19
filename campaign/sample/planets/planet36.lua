@@ -95,7 +95,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"gunshipheavyskirm",
 			},
 			modules = {
-				"module_adv_nano_LIMIT_A_1",
+				"module_adv_nano_LIMIT_E_1",
 			},
 			abilities = {
 			}

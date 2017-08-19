@@ -382,7 +382,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"turretmissile"
 			},
 			modules = {
-				"module_autorepair_LIMIT_A_2",
+				"module_autorepair_LIMIT_C_2",
 			},
 			codexEntries = {
 			},

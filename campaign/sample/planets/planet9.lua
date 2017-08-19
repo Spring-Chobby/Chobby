@@ -654,7 +654,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"vehassault",
 			},
 			modules = {
-				"module_adv_nano_LIMIT_A_1",
+				"module_adv_nano_LIMIT_I_1",
 			},
 			codexEntries = {
 			},

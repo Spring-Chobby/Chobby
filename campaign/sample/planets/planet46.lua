@@ -91,7 +91,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"spiderskirm",
 			},
 			modules = {
-				"module_adv_targeting_LIMIT_A_2",
+				"module_adv_targeting_LIMIT_C_2",
 			},
 			abilities = {
 			}

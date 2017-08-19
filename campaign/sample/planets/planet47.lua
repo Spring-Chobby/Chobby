@@ -94,7 +94,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"spiderantiheavy",
 			},
 			modules = {
-				"module_autorepair_LIMIT_A_2",
+				"module_autorepair_LIMIT_D_2",
 			},
 			abilities = {
 			}

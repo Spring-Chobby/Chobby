@@ -93,7 +93,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"turretaafar",
 			},
 			modules = {
-				"module_companion_drone_LIMIT_A_2",
+				"module_companion_drone_LIMIT_D_2",
 			},
 			abilities = {
 			}

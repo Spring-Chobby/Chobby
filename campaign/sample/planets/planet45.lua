@@ -93,7 +93,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"spideraa",
 			},
 			modules = {
-				"module_adv_nano_LIMIT_A_1",
+				"module_adv_nano_LIMIT_G_1",
 			},
 			abilities = {
 			}

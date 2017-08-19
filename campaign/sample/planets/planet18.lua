@@ -88,7 +88,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"shieldscout",
 			},
 			modules = {
-				"module_ablative_armor_LIMIT_A_2",
+				"module_ablative_armor_LIMIT_B_2",
 			},
 			abilities = {
 				"terraform",

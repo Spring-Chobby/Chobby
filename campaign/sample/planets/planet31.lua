@@ -93,7 +93,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"subraider",
 			},
 			modules = {
-				"module_companion_drone_LIMIT_A_2",
+				"module_companion_drone_LIMIT_B_2",
 			},
 			abilities = {
 			}

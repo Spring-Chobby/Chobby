@@ -379,7 +379,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"turrettorp",
 			},
 			modules = {
-				"module_adv_nano_LIMIT_A_1",
+				"module_adv_nano_LIMIT_B_1",
 			},
 			abilities = {
 			}

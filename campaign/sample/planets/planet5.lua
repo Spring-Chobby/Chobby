@@ -415,7 +415,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"cloakarty",
 			},
 			modules = {
-				"module_adv_targeting_LIMIT_A_2",
+				"module_adv_targeting_LIMIT_D_2",
 			},
 		},
 	}

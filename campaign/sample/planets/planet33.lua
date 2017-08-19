@@ -93,7 +93,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"bomberprec",
 			},
 			modules = {
-				"module_companion_drone_LIMIT_A_2",
+				"module_companion_drone_LIMIT_C_2",
 			},
 			abilities = {
 			}

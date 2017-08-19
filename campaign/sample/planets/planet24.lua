@@ -91,7 +91,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"amphtele",
 			},
 			modules = {
-				"module_autorepair_LIMIT_A_2",
+				"module_autorepair_LIMIT_B_2",
 			},
 			abilities = {
 			}
