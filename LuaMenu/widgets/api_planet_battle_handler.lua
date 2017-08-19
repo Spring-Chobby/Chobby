@@ -124,6 +124,8 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		rgbcolor = '0 0 0',
 		start_x = gameConfig.playerConfig.startX,
 		start_z = gameConfig.playerConfig.startZ,
+		start_metal = gameConfig.playerConfig.startMetal,
+		start_energy = gameConfig.playerConfig.startEnergy,
 		staticcomm = "player_commander",
 		static_level = WG.CampaignData.GetPlayerCommanderInformation(),
 		campaignunlocks = TableToBase64(fullPlayerUnlocks),
@@ -188,6 +190,8 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 			start_z = aiData.startZ,
 			nocommander = noCommander,
 			staticcomm = commanderName,
+			start_metal = aiData.startMetal,
+			start_energy = aiData.startEnergy,
 			static_level = (aiData.commanderLevel or 1) - 1, -- Comm level is 0 indexed but on the UI it is 1 indexed.
 			campaignunlocks = TableToBase64(availibleUnits),
 			commanderparameters = TableToBase64(aiData.commanderParameters),

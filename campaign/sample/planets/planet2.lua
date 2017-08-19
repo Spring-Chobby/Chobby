@@ -35,6 +35,8 @@ local function GetPlanet(planetUtilities, planetID)
 				allyTeam = 0,
 				useUnlocks = true,
 				facplop = true,
+				startMetal = 250,
+				startEnergy = 250,
 				commanderParameters = {
 					facplop = true,
 					defeatIfDestroyedObjectiveID = 2,
@@ -155,6 +157,8 @@ local function GetPlanet(planetUtilities, planetID)
 					humanName = "Wubrior Master",
 					bitDependant = true,
 					facplop = false,
+					startMetal = 250,
+					startEnergy = 250,
 					allyTeam = 1,
 					unlocks = {
 						--"cloakcon", --add this back in if the mission is too easy

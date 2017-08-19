@@ -52,6 +52,10 @@ planetData = {
 				-- Whether the commander starts with facplop
 				facplop = false,
 				
+				-- Override start metal or energy, otherwise the default will be used.
+				startMetal = 250,
+				startEnergy = 250,
+				
 				-- Contributed to allyTeam defeat if the unit is destroyed. The objectiveID is purely for UI.
 				-- Defeat if destroyed also triggers if the unit is captured.
 				defeatIfDestroyedObjectiveID = 2,
