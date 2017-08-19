@@ -513,7 +513,7 @@ local function InitializeControls(parentControl)
 		x = 12,
 		right = 12,
 		y = 57,
-		height = TOP_HEIGHT,
+		bottom = 8,
 		horizontalScrollbar = false,
 		padding = {4, 4, 4, 4},
 		borderColor = {0,0,0,0},
@@ -555,8 +555,8 @@ local function InitializeControls(parentControl)
 	local modulePanel = Control:New {
 		x = 12,
 		right = 12,
-		y = 57 + TOP_HEIGHT + 4,
-		bottom = 14,
+		y = TOP_HEIGHT + 4,
+		bottom = 2,
 		horizontalScrollbar = false,
 		padding = {0, 0, 0, 0},
 		borderColor = {0,0,0,0},
@@ -567,7 +567,7 @@ local function InitializeControls(parentControl)
 				end
 			end
 		},
-		parent = parentControl,
+		parent = informationPanel,
 	}
 	
 	local modulePanelHandler = MakeModulePanelHandler(modulePanel)
