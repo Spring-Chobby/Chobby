@@ -45,11 +45,11 @@ local function MakeRewardList(holder, name, rewardsList, tooltipFunction, Unlock
 	
 	local position = (GetPosition and GetPosition()) or 5
 	
-	local x, y, paragraphOffset = 0, 0, 0
+	local x, y, paragraphOffset = 0, 0, -3
 	local posIndex = 0
 	
 	local rewardsHolder = Control:New {
-		x = 10,
+		x = 13,
 		y = position,
 		right = 10,
 		height = 10,
@@ -59,8 +59,8 @@ local function MakeRewardList(holder, name, rewardsList, tooltipFunction, Unlock
 	
 	if name then
 		TextBox:New {
-			x = 4,
-			y = 2,
+			x = 1,
+			y = paragraphOffset + 5,
 			right = 4,
 			height = 30,
 			text = name,
@@ -94,8 +94,8 @@ local function MakeRewardList(holder, name, rewardsList, tooltipFunction, Unlock
 		local info, imageFile, _, _, categories = tooltipFunction(rewardsList[i])
 		if prevCategory ~= info.category then
 			paragraphLabels[i] = TextBox:New {
-				x = 4,
-				y = paragraphOffset + 2,
+				x = 1,
+				y = paragraphOffset + 5,
 				right = 4,
 				height = 30,
 				text = categories[info.category].name,
@@ -192,7 +192,7 @@ local function MakeRewardList(holder, name, rewardsList, tooltipFunction, Unlock
 		
 		for i = 1, #unlockList do
 			if paragraphLabels[i] then
-				paragraphLabels[i]:SetPos(nil, paragraphOffset + 2)
+				paragraphLabels[i]:SetPos(nil, paragraphOffset + 5)
 				paragraphOffset = paragraphOffset + PARAGRAPH_TITLE_HEIGHT
 				posIndex = 0
 			end
