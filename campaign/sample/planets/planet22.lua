@@ -363,7 +363,7 @@ local function GetPlanet(planetUtilities, planetID)
 				[3] = { -- Complete all bonus objectives
 					completeAllBonusObjectives = true,
 					image = planetUtilities.ICON_OVERLAY.ALL,
-					description = "Complete the above optional objectives in the same battle",
+					description = "Complete all other optional objectives in the same battle",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			}
