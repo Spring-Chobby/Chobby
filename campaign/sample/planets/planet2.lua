@@ -169,7 +169,6 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "Wub Wub Wub",
 						chassis = "guardian",
 						decorations = {
-						  icon_overhead = { image = "UW" }
 						},
 						modules = {
 						  {

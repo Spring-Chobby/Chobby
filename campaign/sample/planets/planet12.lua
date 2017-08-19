@@ -175,7 +175,6 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "Schmuck",
 						chassis = "engineer",
 						decorations = {
-						  icon_overhead = { image = "UW" }
 						},
 						modules = { 
 							"commweapon_lparticlebeam", 

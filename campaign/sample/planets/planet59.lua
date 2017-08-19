@@ -39,7 +39,6 @@ local function GetPlanet(planetUtilities, planetID)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"striderhub",
 					"striderantiheavy",
 				},
 				startUnits = {
@@ -85,7 +84,6 @@ local function GetPlanet(planetUtilities, planetID)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"striderhub",
 				"striderantiheavy",
 			},
 			modules = {

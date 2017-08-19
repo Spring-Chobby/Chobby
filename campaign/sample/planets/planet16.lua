@@ -348,7 +348,6 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "Doof",
 						chassis = "guardian",
 						decorations = {
-						  icon_overhead = { image = "UW" }
 						},
 						modules = { "commweapon_riotcannon",
 									"commweapon_riotcannon",

@@ -258,7 +258,6 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "Porcupine",
 						chassis = "engineer",
 						decorations = {
-						  icon_overhead = { image = "UW" }
 						},
 						modules = {
 							"commweapon_shotgun",

@@ -66,7 +66,6 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "engineer",
 						decorations = {
 						  "skin_support_dark",
-						  icon_overhead = { image = "UW" }
 						},
 						modules = { }
 					},

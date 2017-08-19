@@ -256,7 +256,6 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "Ugly",
 						chassis = "strike",
 						decorations = {
-						  icon_overhead = { image = "UW" }
 						},
 						modules = { }
 					},

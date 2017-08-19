@@ -534,7 +534,6 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "Most Loyal Opposition",
 						chassis = "recon",
 						decorations = {
-						  icon_overhead = { image = "UW" }
 						},
 						modules = { "commweapon_lparticlebeam",
 									"module_ablative_armor",

@@ -103,7 +103,6 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "Firelord",
 						chassis = "recon",
 						decorations = {
-						  icon_overhead = { image = "UW" }
 						},
 						modules = {
 							"commweapon_flamethrower",

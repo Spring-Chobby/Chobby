@@ -42,6 +42,7 @@ local function GetPlanet(planetUtilities, planetID)
 					"factoryspider",
 					"spidercon",
 					"spidercrabe",
+					"spideraa",
 				},
 				startUnits = {
 				}
@@ -89,6 +90,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"factoryspider",
 				"spidercon",
 				"spidercrabe",
+				"spideraa",
 			},
 			modules = {
 				"module_adv_nano_LIMIT_A_1",

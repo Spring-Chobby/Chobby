@@ -305,7 +305,6 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "Big Boy",
 						chassis = "assault",
 						decorations = {
-						  icon_overhead = { image = "UW" }
 						},
 						modules = { 
 							"commweapon_heavymachinegun", 

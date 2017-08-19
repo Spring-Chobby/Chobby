@@ -318,7 +318,6 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "Maginot",
 						chassis = "engineer",
 						decorations = {
-						  icon_overhead = { image = "UW" }
 						},
 						modules = {
 							"commweapon_shotgun",

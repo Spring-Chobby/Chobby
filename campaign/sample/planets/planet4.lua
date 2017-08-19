@@ -144,7 +144,6 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "Top_Gun",
 						chassis = "strike",
 						decorations = {
-						  icon_overhead = { image = "UW" }
 						},
 						modules = {
 							"commweapon_heavymachinegun", 
