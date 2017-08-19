@@ -1360,6 +1360,10 @@ function NCHitTestWithPadding(obj,mx,my)
   elseif (draggable) then
     return obj
   end
+  
+  if obj.noClickThrough then
+    return obj
+  end
 end
 
 function WindowNCMouseDown(obj,x,y)
@@ -1399,6 +1403,9 @@ function WindowNCMouseDownPostChildren(obj,x,y)
 
   if (draggable and not dragUseGrip) then
     obj:StartDragging()
+    return obj
+  end
+  if obj.noClickThrough then
     return obj
   end
 end

@@ -381,6 +381,7 @@ skin.window = {
   NCHitTest = NCHitTestWithPadding,
   NCMouseDown = WindowNCMouseDown,
   NCMouseDownPostChildren = WindowNCMouseDownPostChildren,
+  noClickThrough = true,
 
   DrawControl = DrawWindow,
   DrawDragGrip = function() end,
@@ -404,6 +405,7 @@ skin.main_window = {
   NCHitTest = NCHitTestWithPadding,
   NCMouseDown = WindowNCMouseDown,
   NCMouseDownPostChildren = WindowNCMouseDownPostChildren,
+  noClickThrough = true,
 
   DrawControl = DrawWindow,
   DrawDragGrip = function() end,
@@ -427,6 +429,7 @@ skin.main_window_small = {
   NCHitTest = NCHitTestWithPadding,
   NCMouseDown = WindowNCMouseDown,
   NCMouseDownPostChildren = WindowNCMouseDownPostChildren,
+  noClickThrough = true,
 
   DrawControl = DrawWindow,
   DrawDragGrip = function() end,
