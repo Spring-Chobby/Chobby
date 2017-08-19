@@ -42,11 +42,11 @@ local simpleAiOrder = {
 
 local aiTooltip = {
 	["AI: Beginner"] = "Recommended for players with no strategy game experience.",
-	["AI: Very Easy"] = "Recommended for players with some strategy game experience, or experience with related genres (such as MOBA).",
-	["AI: Easy"] = "Recommended for experienced strategy gamers with some experience of streaming economy.",
-	["AI: Normal"] = "Recommended for veteran strategy gamers.",
-	["AI: Hard"] = "Recommended for veteran strategy gamers who aren't afraid of losing.",
-	["AI: Brutal"] = "Recommended for veterans of Zero-K.",
+	["AI: Easy"] = "Recommended for players with some strategy game experience, or experience with related genres (such as MOBA).",
+	["AI: Normal"] = "Recommended for experienced strategy gamers with some experience of streaming economy.",
+	["AI: Hard"] = "Recommended for veteran strategy gamers.",
+	["AI: Brutal"] = "Recommended for veteran strategy gamers who aren't afraid of losing.",
+	["AI: Insane"] = "Recommended for veterans of Zero-K.",
 	["Inactive AI"] = "This AI does absolutely nothing after spawning.",
 	["Chicken: Beginner"] = "Defeat waves of aliens.",
 	["Chicken: Very Easy"] = "Defeat waves of aliens.",
