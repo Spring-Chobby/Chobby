@@ -782,6 +782,7 @@ end
 
 local chassisDef = {
 	name = "knight",
+	chassis = "knight",
 	humanName = "Knight",
 	image = LUA_DIRNAME .. "images/chassis_cremcom.png",
 	secondPeashooter = true,
