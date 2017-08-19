@@ -31,7 +31,7 @@ local function GetIconPosition(index, iconsAcross, paragraphOffset)
 	if index%iconsAcross == 0 then
 		paragraphOffset = paragraphOffset + (REWARD_ICON_SIZE + 4)
 	end
-	Spring.Echo("paragraphOffset", index, paragraphOffset, iconsAcross)
+	
 	local x = index%iconsAcross*(REWARD_ICON_SIZE + 4)
 	local y = paragraphOffset - REWARD_ICON_SIZE - 4
 	return x, y, paragraphOffset
