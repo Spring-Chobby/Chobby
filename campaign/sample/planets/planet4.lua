@@ -34,7 +34,6 @@ local function GetPlanet(planetUtilities, planetID)
 				startZ = 3500,
 				allyTeam = 0,
 				useUnlocks = true,
-				facplop = false,
 				commanderParameters = {
 					facplop = false,
 					defeatIfDestroyedObjectiveID = 2,
@@ -125,7 +124,6 @@ local function GetPlanet(planetUtilities, planetID)
 					aiLib = "Circuit_difficulty_autofill",
 					humanName = "_birdies_",
 					bitDependant = true,
-					facplop = false,
 					allyTeam = 1,
 					unlocks = {
 						"planecon",
