@@ -24,6 +24,7 @@ local commanderModuleCounts = {}
 local externalFunctions = {}
 
 local SAVE_DIR = "Saves/campaign/"
+local SAVE_NAME = "saveFile"
 local ICONS_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/unitpics/"
 local LOAD_CAMPAIGN_STRING = "Campaign_LoadCampaign"
 
@@ -175,14 +176,20 @@ local function GetSaves()
 	return saves
 end
 
-local function SaveGame(fileName)
-	if fileName then
-		WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", fileName)
-	else
-		fileName = WG.Chobby.Configuration.campaignSaveFile
-	end
+local function SaveGame()
+	local fileName = WG.Chobby.Configuration.campaignSaveFile
 	if not fileName then
-		return false
+		local number = WG.Chobby.Configuration.nextCampaignSaveNumber or 1
+		for i = 1, 1000 do
+			if VFS.FileExists(SAVE_DIR .. SAVE_NAME .. number .. ".lua") then
+				number = number + 1
+			else
+				break
+			end
+		end
+		fileName = SAVE_NAME .. number
+		WG.Chobby.Configuration:SetConfigValue("nextCampaignSaveNumber", number + 1)
+		WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", fileName)
 	end
 	local success, err = pcall(function()
 		Spring.CreateDir(SAVE_DIR)

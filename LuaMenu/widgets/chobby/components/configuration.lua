@@ -121,6 +121,7 @@ function Configuration:init()
 	self.campaignConfigName = "sample"
 	self.campaignConfig = VFS.Include("campaign/sample/mainConfig.lua")
 	self.campaignSaveFile = nil -- Set by user
+	self.nextCampaignSaveNumber = 1
 
 	-- TODO, generate this from directory structure
 	local gameConfigOptions = {
@@ -403,6 +404,7 @@ function Configuration:GetConfigData()
 		window_XResolutionWindowed = self.window_XResolutionWindowed,
 		window_YResolutionWindowed = self.window_YResolutionWindowed,
 		campaignSaveFile = self.campaignSaveFile,
+		nextCampaignSaveNumber = self.nextCampaignSaveNumber,
 	}
 end
 

@@ -90,16 +90,12 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 	local Configuration = WG.Chobby.Configuration
 	local missionDifficulty = WG.CampaignData.GetDifficultySetting()
 	local bitExtension = (Configuration:GetIsRunning64Bit() and "64") or "32"
-
-	commanderTypes.player_commander = WG.CampaignData.GetPlayerCommander()
-	
-	local playerName = string.gsub(commanderTypes.player_commander.name, " ", "")
 	
 	-- Add the player, this is to make the player team 0.
 	local playerCount = 1
 	local players = {
 		[0] = {
-			Name = playerName,
+			Name = "Player",
 			Team = teamCount,
 			IsFromDemo = 0,
 			rank = 0,
@@ -109,7 +105,9 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 	local playerUnlocks = WG.CampaignData.GetUnitsUnlocks()
 	local playerAbilities = WG.CampaignData.GetAbilityUnlocks()
 	local fullPlayerUnlocks = Spring.Utilities.CopyTable(playerUnlocks.list)
-
+	
+	commanderTypes.player_commander = WG.CampaignData.GetPlayerCommander()
+	
 	if gameConfig.playerConfig.extraUnlocks then
 		local extra = gameConfig.playerConfig.extraUnlocks
 		for i = 1, #extra do
@@ -216,7 +214,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		hostport = 0,
 		ishost = 1,
 		mapname = gameConfig.mapName,
-		myplayername = playerName,
+		myplayername = "Player",
 		nohelperais = 0,
 		numplayers = playerCount,
 		numusers = playerCount + aiCount,
