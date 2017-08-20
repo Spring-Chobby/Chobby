@@ -461,7 +461,7 @@ function externalFunctions.PutModuleInSlot(moduleName, level, slot)
 end
 
 function externalFunctions.SetCommanderName(newName)
-	gamedata.commanderName = newName
+	gamedata.commanderName = string.gsub(newName,[["]], [[']])
 	CallListeners("CommanderNameUpdate", newName)
 	SaveGame()
 end
