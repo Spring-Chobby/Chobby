@@ -1,4 +1,5 @@
 local RANK_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/rankImages/"
+local LARGE_RANK_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/rankImagesLarge/"
 local IMAGE_DIR          = LUA_DIRNAME .. "images/"
 
 local IMAGE_AUTOHOST     = IMAGE_DIR .. "ranks/robot.png"
@@ -27,4 +28,24 @@ local function GetImageFunction(icon, level, skill, isBot, isModerator)
 	return IMAGE_PLAYER
 end
 
-return GetImageFunction
+local function GetLargeImageFunction(icon, level, skill, isBot, isModerator)
+	if icon then
+		return LARGE_RANK_DIR .. icon .. ".png"
+	end
+	if isBot then
+		return IMAGE_AUTOHOST
+	elseif level and skill then
+		local levelBracket = 1
+		while levelBracket <= rankCount and rankUnlocks[levelBracket] <= level do
+			levelBracket = levelBracket + 1
+		end
+		levelBracket = levelBracket - 1
+		
+		local skillBracket = math.max(0, math.min(7, math.floor((skill-1000)/200)))
+		
+		return LARGE_RANK_DIR .. levelBracket .. "_" .. skillBracket .. ".png"
+	end
+	return IMAGE_PLAYER
+end
+
+return GetImageFunction, GetLargeImageFunction
