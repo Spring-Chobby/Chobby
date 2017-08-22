@@ -51,7 +51,7 @@ local function InitializeControls(parent)
 		y = offset,
 		width = COMBO_WIDTH,
 		height = 30,
-		items = {"Normal", "Hard", "Brutal", "Insane"},
+		items = {"Easy", "Normal", "Hard", "Brutal"},
 		selected = 1,
 		font = Configuration:GetFont(2),
 		itemFontSize = Configuration:GetFont(2).size,

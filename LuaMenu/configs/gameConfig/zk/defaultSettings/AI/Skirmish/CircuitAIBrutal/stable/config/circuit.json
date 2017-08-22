@@ -29,13 +29,13 @@
 
 		"land": {
 			// 0-8m Opening - Glaives & Warriors most important for scouting, map control and defence.
-			"tier0": [ 0.10,       0.84,        0.06,             0.00,         0.00,        0.00,           0.00,        0.00,         0.00,        0.00,          0.00],
+			"tier0": [ 0.10,       0.81,        0.06,             0.00,         0.06,        0.00,           0.00,        0.00,         0.00,        0.00,          0.00],
 
 			// 9-16m Early Game - Map control still important but move towards Scythe raiding and Riot defense from raider balls.
-			"tier1": [ 0.10,       0.48,        0.06,             0.30,         0.06,        0.00,           0.00,        0.00,         0.00,        0.00,          0.00],
+			"tier1": [ 0.10,       0.34,        0.06,             0.38,         0.09,        0.02,           0.00,        0.01,         0.00,        0.00,          0.00],
 
 			// 17-24m Expanding - Good size terriotiry now, so less scouting and begin producing a little assault/arty on the side.
-			"tier2": [ 0.10,       0.28,        0.10,             0.31,         0.08,        0.08,           0.00,        0.00,         0.00,        0.05,          0.00]
+			"tier2": [ 0.10,       0.18,        0.14,             0.20,         0.13,        0.10,           0.00,        0.04,         0.00,        0.11,          0.00]
 
 			// 25-32m Expansions meet - Economy can afford to begin producing in bulk so unit compositions alter.
 	//		"tier3": [ 0.10,       0.40,        0.05,             0.30,         0.00,        0.10,           0.00,        0.00,         0.00,        0.05,          0.00],
@@ -386,8 +386,8 @@
 	"attack": 6.0,  // min power of attack group
 	"def_rad": 475,  // defence radius
 	"thr_mod": {
-		"attack": [1.00, 1.10],  // [<min>, <max>] enemy threat modifier for target selection of attack task
-		"defence": [0.85, 0.9]  // [<min>, <max>] enemy threat modifier for group size calculation of defence task
+		"attack": [1.05, 1.15],  // [<min>, <max>] enemy threat modifier for target selection of attack task
+		"defence": [1.00, 1.00]  // [<min>, <max>] enemy threat modifier for group size calculation of defence task
 	},
 	"aa_threat": 80.0,  // anti-air threat threshold, air factories will stop production when AA threat exceeds
 	"slack_mod": 3
@@ -395,7 +395,7 @@
 
 // If unit's health drops below specified percent it will retreat
 "retreat": {
-	"builder": 0.75,  // default value for all builders
+	"builder": 0.9,  // default value for all builders
 	"fighter": 0.45,  // default value for all not-builder units
 	"shield": [0.25, 0.4]  // [<empty>, <full>] shield power
 },
@@ -446,34 +446,33 @@
 		"role": ["raider"],
 		"attribute": ["scout"],
 		"retreat": 0.1,
-		"pwr_mod": 1.4,
-		"thr_mod": 1.3
+		"pwr_mod": 1.09,
+		"thr_mod": 1.1
 	},
 	"cloakheavyraid": {
 		"role": ["raider"],
 		"limit": 4,
-		"pwr_mod": 1.1,
+		"pwr_mod": 1.0,
 		"thr_mod": 0.1,
 		"retreat": 0.25
 	},
 	"cloakskirm": {
 		"role": ["assault", "skirmish"],
-		"pwr_mod": 1.00,
-		"limit": 16,
-		"retreat": 0.25  // mostly disposable
+		"pwr_mod": 0.80,
+		"limit": 12,
+		"retreat": 0.35  // mostly disposable
 	},
 	"cloakriot": {
 		"role": ["riot"],
 		"attribute": ["support"],
-		"retreat": 0.65,
-		"pwr_mod": 1.8,
+		"retreat": 0.55,
+		"pwr_mod": 1.0,
 		"thr_mod": 2.0
 	},
 	"cloakassault": {
 		"role": ["skirmish", "riot", "heavy"],
-		"attribute": ["support"],
-		"retreat": 0.55,  // assaults need to assault
-		"pwr_mod": 1.1,
+		"retreat": 0.45,  // assaults need to assault
+		"pwr_mod": 0.8,
 		"thr_mod": 1.29
 	},
 	"cloakarty": {
@@ -482,10 +481,10 @@
 		"thr_mod": 0.1
 	},
 	"cloaksnipe": {
-		"role": ["anti_heavy"],
+		"role": ["artillery"],
 		"pwr_mod": 3.0,
 		"thr_mod": 0.1,
-		"retreat": 0.99
+		"retreat": 0.69
 	},
 	"cloakbomb": {
 		"role": ["mine"],
@@ -493,7 +492,7 @@
 	},
 	"cloakjammer": {
 		"role": ["support"],
-		"retreat": 0.9,
+		"retreat": 0.5,
 		"limit": 1
 	},
 	"cloakaa": {
@@ -525,7 +524,7 @@
 	},
 	"gunshipskirm": {
 		"role": ["air"],
-		"retreat": 0.75,
+		"retreat": 0.65,
 		"pwr_mod": 1.5,
 		"thr_mod": 1.4
 	},
@@ -539,7 +538,7 @@
 	"gunshipheavyskirm": {
 		"role": ["air"],
 		"attribute": ["no_strafe", "siege"],
-		"retreat": 0.55,
+		"retreat": 0.65,
 		"pwr_mod": 1.25,
 		"thr_mod": 1.00
 	},
@@ -547,7 +546,7 @@
 		"role": ["anti_heavy", "air"],
 		"fire_state": "return",
 		"limit": 3,
-		"retreat": 0.7,
+		"retreat": 0.5,
 		"pwr_mod": 1.65,
 		"thr_mod": 1.00
 	},
@@ -581,29 +580,29 @@
 		"attribute": ["scout"],
 		"pwr_mod": 1.6,
 		"thr_mod": 1.5,
-		"retreat": 0.35  // pretty disposable
+		"retreat": 0.25  // pretty disposable
 	},
 	"amphimpulse": {
 		"role": ["riot"],
 		"attribute": ["support"],
-		"retreat": 0.66,
+		"retreat": 0.36,
 		"pwr_mod": 2.0,
 		"thr_mod": 2.0
 	},
 	"amphfloater": {
 		"role": ["assault"],
-		"retreat": 0.5, // too slow to be retreating all the time
+		"retreat": 0.25, // too slow to be retreating all the time
 		"pwr_mod": 1.6,
 		"thr_mod": 1.6
 	},
 	"amphriot": {
 		"role": ["riot"],
 		"attribute": ["melee", "support"],
-		"retreat": 0.5  // too slow to be retreating all the time
+		"retreat": 0.3 // too slow to be retreating all the time
 	},
 	"amphassault": {
 		"role": ["heavy"],
-		"retreat": 0.63,
+		"retreat": 0.33,
 		"pwr_mod": 0.7,
 		"thr_mod": 1.0
 	},
@@ -613,7 +612,7 @@
 	"amphaa": {
 		"role": ["anti_air"],
 		"attribute": ["melee"],
-		"retreat": 0.5,
+		"retreat": 0.3,
 		"pwr_mod": 2.5,
 		"thr_mod": 1.5
 	},
@@ -631,7 +630,7 @@
 		"role": ["skirmish"],
 		"limit": 14,
 		"pwr_mod": 1.15,
-		"retreat": 0.45
+		"retreat": 0.35
 	},
 	"spideremp": {
 		"role": ["riot"],
@@ -644,18 +643,18 @@
 		"role": ["riot"],
 		"pwr_mod": 2.0,
 		"attribute": ["support"],
-		"retreat": 0.55
+		"retreat": 0.35
 	},
 	"spiderskirm": {
 		"role": ["assault"],
 		"pwr_mod": 2.0,
 		"limit": 7,
-		"retreat": 0.5
+		"retreat": 0.4
 	},
 	"spidercrabe": {
 		"role": ["heavy"],
 		"attribute": ["siege", "ret_fight", "support"],
-		"retreat": 0.6,
+		"retreat": 0.5,
 		"pwr_mod": 1.0,
 		"thr_mod": 1.0
 	},
@@ -668,7 +667,7 @@
 	},
 	"spideraa": {
 		"role": ["anti_air"],
-		"retreat": 0.9,
+		"retreat": 0.6,
 		"pwr_mod": 2.0,
 		"thr_mod": 1.2
 	},
@@ -686,38 +685,38 @@
 	"shieldraid": {
 		"role": ["raider"],
 		"attribute": ["scout"],
-		"retreat": 0.35,
+		"retreat": 0.25,
 		"pwr_mod": 1.7,
 		"thr_mod": 1.68
 	},
 	"shieldskirm": {
 		"role": ["skirmish"],
 		"limit": 15,
-		"retreat": 0.4
+		"retreat": 0.3
 	},
 	"shieldassault": {
 		"role": ["assault", "support"],
 		"attribute": ["support"],
-		"retreat": 0.5,
+		"retreat": 0.3,
 		"pwr_mod": 1.2,
 		"thr_mod": 1.2
 	},
 	"shieldriot": {
 		"role": ["riot"],
 		"attribute": ["support"],
-		"retreat": 0.7,
+		"retreat": 0.3,
 		"pwr_mod": 1.7,
 		"thr_mod": 1.7
 	},
 	"shieldfelon": {
 		"role": ["heavy", "support"],
-		"retreat": 0.55,
+		"retreat": 0.35,
 		"pwr_mod": 1.5,
 		"thr_mod": 2.5
 	},
 	"shieldarty": {
 		"role": ["anti_heavy", "support"],
-		"retreat": 0.8,
+		"retreat": 0.3,
 		"pwr_mod": 1.5,
 		"thr_mod": 1.5
 	},
@@ -727,7 +726,7 @@
 	"shieldshield": {
 		"role": ["super", "heavy"],
 		"attribute": ["support"],
-		"retreat": 0.66
+		"retreat": 0.36
 	},
 	"shieldaa": {
 		"role": ["anti_air"],
@@ -757,26 +756,26 @@
 		"role": ["skirmish", "riot", "static"],
 		"attribute": ["support"],
 		"pwr_mod": 1.0,
-		"thr_mod": 0.35,
-		"retreat": 0.6  // cannot retreat
+		"retreat": 0.3  // cannot retreat
 	},
 	"vehriot": {
 		"role": ["riot"],
-		"attribute": ["support"],
-		"retreat": 0.65,
+		"retreat": 0.35,
 		"pwr_mod": 1.0,
 		"thr_mod": 1.0
 	},
 	"vehassault": {
 		"role": ["assault"],
-		"retreat": 0.65,  // slow to turn around
-		"pwr_mod": 1.0,
-		"thr_mod": 1.0
+		"retreat": 0.35,  // slow to turn around
+		"pwr_mod": 0.9,
+		"thr_mod": 0.89
 	},
 	"vehcapture": {
-		"role": ["skirmish", "mine", "heavy"],
-		"retreat": 0.9,
-		"limit": 1
+		"role": ["support", "mine", "heavy"],
+		"attribute": ["support"],
+		"pwr_mod": 1.0,
+		"thr_mod": 2.0,
+		"retreat": 0.6
 	},
 	"veharty": {
 		"role": ["support", "heavy"],
@@ -813,24 +812,24 @@
 	"jumpraid": {
 		"role": ["raider"],
 		"attribute": ["scout", "siege"],  // jump on attack
-		"retreat": 0.6,
+		"retreat": 0.65,
 		"pwr_mod": 1.6,
 		"limit": 4,
 		"thr_mod": 1.5
 	},
 	"jumpblackhole": {
 		"role": ["support"],
-		"retreat": 0.66
+		"retreat": 0.36
 	},
 	"jumpskirm": {
 		"role": ["skirmish"],
-		"retreat": 0.66,
+		"retreat": 0.36,
 		"attribute": ["support"]
 	},
 	"jumpassault": {
 		"role": ["assault"],
 		"attribute": ["melee", "siege", "ret_fight"],
-		"retreat": 0.45,
+		"retreat": 0.4,
 		"pwr_mod": 1.35,
 		"thr_mod": 0.9
 	},
@@ -873,11 +872,11 @@
 		"pwr_mod": 0.8,
 		"limit": 10,
 		"attribute": ["scout"],
-		"retreat": 0.8
+		"retreat": 0.5
 	},
 	"hoverskirm": {
 		"role": ["assault", "skirmish"],
-		"retreat": 0.6,
+		"retreat": 0.3,
 		"limit": 16,
 		"pwr_mod": 2.4,
 		"thr_mod": 1.4
@@ -885,7 +884,7 @@
 	"hoverassault": {
 		"role": ["raider", "assault"],
 		"attribute": ["melee", "ret_hold"],
-		"retreat": 0.45,
+		"retreat": 0.4,
 		"pwr_mod": 1.5,
 		"thr_mod": 1.5
 	},
@@ -897,7 +896,7 @@
 	"hoverriot": {
 		"role": ["riot"],
 		"attribute": ["support"],
-		"retreat": 0.66,
+		"retreat": 0.4,
 		"limit": 2,
 		"pwr_mod": 1.25,
 		"thr_mod": 1.25
@@ -926,6 +925,7 @@
 		"role": ["anti_air", "air"],
 		"attribute": ["boost"],
 		"pwr_mod": 2.0,
+		"limit": 0,
 		"thr_mod": 1.5,
 		"retreat": 0.8
 	},
@@ -940,7 +940,7 @@
 	"bomberprec": {
 		"role": ["bomber", "air"],
 		"attribute": ["siege"],
-		"limit": 3,
+		"limit": 1,
 		"retreat": 0.9,
 		"pwr_mod": 0.1,
 		"thr_mod": 0.1
@@ -974,39 +974,39 @@
 	"tankcon": {
 		"role": ["builder"],
 		"pwr_mod": 0.40,
-		"retreat": 0.7
+		"retreat": 0.9
 	},
 	"tankraid": {
 		"role": ["scout"],
+		"limit": 3,
 		"thr_mod": 1.0,
 		"pwr_mod": 2.50,
-		"retreat": 0.95
+		"retreat": 0.45
 	},
 	"tankheavyraid": {
 		"role": ["raider"],
 		"limit": 0,
 		"thr_mod": 1.0,
 		"pwr_mod": 0.85,
-		"retreat": 0.85
+		"retreat": 0.65
 	},
 	"tankriot": {
 		"role": ["riot"],
 		"attribute": ["support"],
-		"limit": 1,
-		"retreat": 0.7
+		"retreat": 0.5
 	},
 	"tankassault": {
 		"role": ["assault", "heavy"],
 		"attribute": ["melee"],
 		"retreat": 0.6,
-		"pwr_mod": 0.8,
-		"thr_mod": 0.7
+		"pwr_mod": 0.7,
+		"thr_mod": 0.34
 	},
 	"tankheavyassault": {
 		"role": ["heavy", "anti_heavy"],
-		"pwr_mod": 0.8,
-		"thr_mod": 0.65,
-		"retreat": 0.55
+		"pwr_mod": 0.75,
+		"thr_mod": 0.6,
+		"retreat": 0.35
 	},
 	"tankarty": {
 		"role": ["artillery", "heavy"],
@@ -1071,7 +1071,7 @@
 		"role": ["anti_heavy", "heavy"],
 		"limit": 1,
 		"fire_state": "return",
-		"retreat": 0.6,
+		"retreat": 0.45,
 		"pwr_mod": 0.8,
 		"thr_mod": 0.75
 	},
@@ -1079,7 +1079,7 @@
 		"role": ["heavy"],
 		"attribute": ["melee"],
 		"limit": 2,
-		"retreat": 0.65,
+		"retreat": 0.45,
 		"pwr_mod": 0.8,
 		"thr_mod": 0.75
 	},
@@ -1098,7 +1098,7 @@
 	"striderbantha": {
 		"role": ["heavy", "support", "heavy"],
 		"attribute": ["melee"],
-		"retreat": 0.66,
+		"retreat": 0.6,
 		"pwr_mod": 0.5,
 		"thr_mod": 0.5
 	},
@@ -1188,15 +1188,15 @@
 	},
 	"turretlaser": {
 		"role": ["static"],
-		"thr_mod": 2.0
+		"thr_mod": 2.5
 	},
 	"turretmissile": {
 		"role": ["static"],
-		"thr_mod": 1.5
+		"thr_mod": 3.0
 	},
 	"turretriot": {
 		"role": ["static"],
-		"thr_mod": 3.5
+		"thr_mod": 4.0
 	},
 	"turretaafar": {
 		"role": ["anti_air", "heavy"],
@@ -1384,10 +1384,10 @@
 	},
 	"raider": {
 		"vs":         ["builder", "anti_air", "scout", "raider", "anti_heavy", "mine", "skirmish", "heavy"],
-		"ratio":      [ 0.5,       0.33,       1.50,    1.50,     0.33,         1.0,    0.5,        0.20],
+		"ratio":      [ 0.5,       0.33,       1.50,    1.75,     0.33,         1.0,    0.5,        0.20],
 		"importance": [ 200.0,     35.0,       30.0,    200.0,    70.0,         200.0,  200.0,      300.00],
 		"max_percent": 0.80,
-		"eps_step": 0.03
+		"eps_step": 0.035
 	},
 	"riot": {
 		"vs":         ["raider"],
@@ -1412,8 +1412,8 @@
 	},
 	"anti_air": {
 		"vs":         ["air"],
-		"ratio":      [ 0.90 ],
-		"importance": [ 400.0],
+		"ratio":      [ 1.00 ],
+		"importance": [ 600.0],
 		"max_percent": 0.66,
 		"eps_step": 0.01
 	},
@@ -1426,8 +1426,8 @@
 	},
 	"anti_heavy": {
 		"vs":         ["heavy", "artillery", "support", "anti_heavy", "commander", "super"],
-		"ratio":      [ 0.66,    1.0,         1.00,       1.0,          0.45,       2.00],
-		"importance": [ 150.0,   80.0,        100.0,      80.0,         80.0,       150.0],
+		"ratio":      [ 0.66,    1.0,         1.00,       1.0,          0.40,       2.00],
+		"importance": [ 150.0,   80.0,        100.0,      80.0,         150.0,       150.0],
 		"max_percent": 0.50,
 		"eps_step": 0.00
 	},
@@ -1502,7 +1502,7 @@
 			// "<energy_def>": [<lower limit>, <upper limit>]
 			// limit = random(<lower limit>..<upper limit>)
 			"energysingu": [1, 3],
-			"energyfusion": [3, 6],
+			"energyfusion": [6, 10],
 			"energysolar": [20, 20]
 		},
 		"water": {
@@ -1510,7 +1510,7 @@
 			"energyfusion": [4],
 			"energywind": [20]
 		},
-		"factor": 0.625,  // income factor for energy
+		"factor": 0.64,  // income factor for energy
 
 		"pylon": ["energypylon", "energysolar", "energywind"]
 	},
@@ -1524,7 +1524,7 @@
 	// Metal excess to income ratio, -1 to disable
 	"excess": -1.0,
 	// Mobile to static metal pull ratio
-	"ms_pull": 0.58,
+	"ms_pull": 0.56,
 	// Max percent of mexes circuit team allowed to take.
 	// If its <1.0 then expansion obeys ms_pull rule, if >=1.0 then ms_pull doesn't affect expansion (mex, pylon).
 	"mex_max": 1.0,  // 100%
@@ -1542,27 +1542,27 @@
 },
 
 "porcupine": {
-	//        0              1                2             3                   4             5                6            7              8               9            10                 11            12             13               14
-	"unit": ["turretlaser", "turretmissile", "turretriot", "turretheavylaser", "turrettorp", "turretaalaser", "staticcon", "turretheavy", "staticshield", "turretemp", "turretantiheavy", "staticarty", "turretaafar", "turretaaheavy", "turretgauss"],
+	//        0              1                2             3                   4             5                6            7              8               9            10                 11            12             13               14				15				 16
+	"unit": ["turretlaser", "turretmissile", "turretriot", "turretheavylaser", "turrettorp", "turretaalaser", "staticcon", "turretheavy", "staticshield", "turretemp", "turretantiheavy", "staticarty", "turretaafar", "turretaaheavy", "turretgauss", "staticantinuke", "energysingu"],
 	// Actual number of defences per cluster bounded by income
-	"land":  [0, 1, 0, 3, 5, 1, 2, 1, 5, 0, 14, 1, 3, 6, 12, 11, 13],
+	"land":  [0, 1, 0, 3, 5, 1, 2, 1, 5, 0, 8, 14, 1, 3, 6, 12, 11, 13],
 	"water": [4, 1, 6, 4, 4, 3, 5],
 	"prevent": 1,  // number of preventive defences
 	"amount": {  // income bound factor
 		"offset": [-0.40, 0.20],
 		// Amount factor: 8x8 ~ 1.15, 20x20 ~ 0.95
-		"factor": [1.15, 0.95],
+		"factor": [1.20, 0.90],
 		"map": [8, 20]
 	},
 
 	// Base defence and time to build it, in seconds
-	"base": [[0, 20], [0, 120], [0, 360], [1, 400], [0, 500], [5, 660], [5, 860],[1, 980], [5, 1160], [1, 1380], [2, 1680], [13, 1800], [7, 2400]],
+	"base": [[0, 20], [0, 120], [0, 360], [1, 400], [0, 500], [5, 660], [5, 860],[1, 980], [5, 1160], [1, 1380], [2, 1680], [15, 1800], [13, 2400], [16, 2400], [16, 3300], [16, 3900], [16, 4500]],
 
 	"superweapon": {
 		"unit":   ["raveparty", "staticnuke", "staticheavyarty", "zenith"],
-		"weight": [ 0.3,         0.2,          0.4,               0.1],
+		"weight": [ 0.4,         0.2,          0.4,               0.5],
 
-		"condition": [35, 600]  // [<Minimum income>, <maximum seconds to build>]
+		"condition": [30, 600]  // [<Minimum income>, <maximum seconds to build>]
 	},
 
 	// Fallback defence
@@ -1817,7 +1817,7 @@
 			"upgrade": {
 				"time": 120,  // Force-morph delay, in seconds
 				"module": [  // List of dynamic module IDs
-					[11],  // Riot
+					[13],  // shotgun
 					[24, 37],  // shield, health
 					[11, 41, 41],  // Double Riot, range
 					[38, 41, 41],  // high density, range
@@ -1955,7 +1955,7 @@
 		// <UnitDef>: {<elements>}
 		"energysingu": {
 			// Available elements:
-			// "energy": [max energy income, <"mex"|true|false>]
+			// "energy": mex or <boolean>
 			// "pylon": <boolean>
 			// "porc": <boolean>
 			// "terra": <boolean>
@@ -1975,12 +1975,15 @@
 			// Build pylon in direction of nearby mex cluster
 			"pylon": true,
 
-			// Build chain of units
+			// Build chain of units staticstorage
 			"hub": [
 				[  // chain1
 					{"unit": "turretlaser", "category": "defence", "offset": [-80, -80]},
 					{"unit": "turretmissile", "category": "defence", "offset": [-70, 70]},
 					{"unit": "turretmissile", "category": "defence", "offset": [-80, 80]},
+					{"unit": "staticshield", "category": "defence", "offset": [10, 10]},
+					{"unit": "staticshield", "category": "defence", "offset": [-10, -10]},
+					{"unit": "staticstorage", "category": "defence", "offset": [-10, -10]},
 					{"unit": "turretaafar", "category": "defence", "offset": {"front": 120}, "condition": "air"},
 					{"unit": "turretaaflak", "category": "defence", "offset": {"front": 120}, "condition": "no_air"}
 				],
@@ -1989,6 +1992,9 @@
 					{"unit": "turretemp", "category": "defence", "offset": {"right": 80}},
 					{"unit": "turretmissile", "category": "defence", "offset": [70, -70]},
 					{"unit": "turretmissile", "category": "defence", "offset": [80, -80]},
+					{"unit": "staticshield", "category": "defence", "offset": [10, 10]},
+					{"unit": "staticshield", "category": "defence", "offset": [-10, -10]},
+					{"unit": "staticstorage", "category": "defence", "offset": [-10, -10]},
 					{"unit": "turretaafar", "category": "defence", "offset": {"front": 120}, "condition": "air"},
 					{"unit": "turretaaflak", "category": "defence", "offset": {"front": 120}, "condition": "no_air"}
 				]
@@ -1998,6 +2004,7 @@
 			"pylon": true,
 			"hub": [[
 					{"unit": "turretlaser", "category": "defence", "offset": [80, -80]},
+					{"unit": "staticstorage", "category": "defence", "offset": [-10, -10]},
 					{"unit": "turretriot", "category": "defence", "offset": [-80, 80]}
 				]]
 		}
@@ -2024,6 +2031,8 @@
 					{"unit": "turretaafar", "category": "defence", "offset": {"left": 120}, "condition": "air"},
 					{"unit": "turretlaser", "category": "defence", "offset": [-80, 80]},
 					{"unit": "turretmissile", "category": "defence", "offset": [80, 80]},
+					{"unit": "staticshield", "category": "defence", "offset": [-10, -10]},
+					{"unit": "staticstorage", "category": "defence", "offset": [-10, -10]},
 					{"unit": "turretriot", "category": "defence", "offset": [80, -80]},
 					{"unit": "turretmissile", "category": "defence", "offset": [-80, -80]}
 				]]
@@ -2031,52 +2040,30 @@
 		"raveparty": {
 			"hub": [[
 					{"unit": "staticradar", "category": "radar", "offset": {"back": 40}},
-					{"unit": "turretaafar", "category": "defence", "offset": {"left": -220}, "condition": "air"},
-					{"unit": "turretlaser", "category": "defence", "offset": [-80, 180]},
+					{"unit": "turretaafar", "category": "defence", "offset": {"left": 120}, "condition": "air"},
+					{"unit": "turretlaser", "category": "defence", "offset": [-80, 80]},
+					{"unit": "turretlaser", "category": "defence", "offset": [80, -80]},
 					{"unit": "turretmissile", "category": "defence", "offset": [80, 80]},
-					{"unit": "turretaafar", "category": "defence", "offset": {"front": -120}, "condition": "air"},
-					{"unit": "turretriot", "category": "defence", "offset": [180, -80]},
-					{"unit": "turretheavy", "category": "defence", "offset": [-80, -80]},
-					{"unit": "turretmissile", "category": "defence", "offset": [-70, 170]},
-					{"unit": "turretmissile", "category": "defence", "offset": [80, 80]},
-					{"unit": "turretlaser", "category": "defence", "offset": [-80, 180]},
-					{"unit": "turretriot", "category": "defence", "offset": [180, -80]},
-					{"unit": "turretlaser", "category": "defence", "offset": [-80, -80]},
-					{"unit": "turretaafar", "category": "defence", "offset": {"front": 220}, "condition": "air"},
-					{"unit": "turretheavy", "category": "defence", "offset": [180, -80]},
-					{"unit": "turretmissile", "category": "defence", "offset": [-70, 170]},
-					{"unit": "turretmissile", "category": "defence", "offset": [80, 80]},
-					{"unit": "turretlaser", "category": "defence", "offset": [-80, 180]},
-					{"unit": "turretmissile", "category": "defence", "offset": [-70, 70]},
-					{"unit": "turretriot", "category": "defence", "offset": [180, -80]},
-					{"unit": "turretaafar", "category": "defence", "offset": {"front": -230}, "condition": "air"},
-					{"unit": "turretmissile", "category": "defence", "offset": [180, 80]},
+					{"unit": "staticshield", "category": "defence", "offset": [-10, -10]},
+					{"unit": "staticshield", "category": "defence", "offset": [10, 10]},
+					{"unit": "staticstorage", "category": "defence", "offset": [-10, -10]},
+					{"unit": "turretriot", "category": "defence", "offset": [80, 80]},
+					{"unit": "turretriot", "category": "defence", "offset": [-80, -80]},
 					{"unit": "turretmissile", "category": "defence", "offset": [-80, -80]}
 				]]
 		},
 		"mahlazer": {
 			"hub": [[
 					{"unit": "staticradar", "category": "radar", "offset": {"back": 40}},
-					{"unit": "turretaafar", "category": "defence", "offset": {"left": -220}, "condition": "air"},
-					{"unit": "turretlaser", "category": "defence", "offset": [-80, 180]},
+					{"unit": "turretaafar", "category": "defence", "offset": {"left": 120}, "condition": "air"},
+					{"unit": "turretlaser", "category": "defence", "offset": [-80, 80]},
+					{"unit": "turretlaser", "category": "defence", "offset": [80, -80]},
 					{"unit": "turretmissile", "category": "defence", "offset": [80, 80]},
-					{"unit": "turretaafar", "category": "defence", "offset": {"front": -120}, "condition": "air"},
-					{"unit": "turretriot", "category": "defence", "offset": [180, -80]},
-					{"unit": "turretlaser", "category": "defence", "offset": [-80, -80]},
-					{"unit": "turretheavy", "category": "defence", "offset": [-70, 170]},
-					{"unit": "turretmissile", "category": "defence", "offset": [80, 80]},
-					{"unit": "turretlaser", "category": "defence", "offset": [-80, 180]},
-					{"unit": "turretriot", "category": "defence", "offset": [180, -80]},
-					{"unit": "turretlaser", "category": "defence", "offset": [-80, -80]},
-					{"unit": "turretaafar", "category": "defence", "offset": {"front": 220}, "condition": "air"},
-					{"unit": "turretriot", "category": "defence", "offset": [180, -80]},
-					{"unit": "turretmissile", "category": "defence", "offset": [-70, 170]},
-					{"unit": "turretmissile", "category": "defence", "offset": [80, 80]},
-					{"unit": "turretlaser", "category": "defence", "offset": [-80, 180]},
-					{"unit": "turretmissile", "category": "defence", "offset": [-70, 70]},
-					{"unit": "turretriot", "category": "defence", "offset": [180, -80]},
-					{"unit": "turretheavy", "category": "defence", "offset": {"front": -230}, "condition": "air"},
-					{"unit": "turretmissile", "category": "defence", "offset": [180, 80]},
+					{"unit": "staticshield", "category": "defence", "offset": [-10, -10]},
+					{"unit": "staticshield", "category": "defence", "offset": [10, 10]},
+					{"unit": "staticstorage", "category": "defence", "offset": [-10, -10]},
+					{"unit": "turretriot", "category": "defence", "offset": [80, 80]},
+					{"unit": "turretriot", "category": "defence", "offset": [-80, -80]},
 					{"unit": "turretmissile", "category": "defence", "offset": [-80, -80]}
 				]]
 		},
@@ -2087,6 +2074,8 @@
 					{"unit": "turretlaser", "category": "defence", "offset": [-80, 80]},
 					{"unit": "turretmissile", "category": "defence", "offset": [80, 80]},
 					{"unit": "turretriot", "category": "defence", "offset": [80, -80]},
+					{"unit": "staticshield", "category": "defence", "offset": [10, 10]},
+					{"unit": "staticstorage", "category": "defence", "offset": [-10, -10]},
 					{"unit": "turretmissile", "category": "defence", "offset": [-80, -80]}
 				]]
 		},
@@ -2098,6 +2087,8 @@
 					{"unit": "turretlaser", "category": "defence", "offset": [-80, 80]},
 					{"unit": "turretmissile", "category": "defence", "offset": [80, 80]},
 					{"unit": "turretriot", "category": "defence", "offset": [80, -80]},
+					{"unit": "staticshield", "category": "defence", "offset": [10, 10]},
+					{"unit": "staticstorage", "category": "defence", "offset": [-10, -10]},
 					{"unit": "turretmissile", "category": "defence", "offset": [-80, -80]}
 				]]
 		}

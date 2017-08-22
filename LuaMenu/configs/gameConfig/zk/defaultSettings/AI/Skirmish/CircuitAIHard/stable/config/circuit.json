@@ -395,9 +395,9 @@
 
 // If unit's health drops below specified percent it will retreat
 "retreat": {
-	"builder": 0.4,  // default value for all builders
-	"fighter": 0.25,  // default value for all not-builder units
-	"shield": [0.15, 0.25]  // [<empty>, <full>] shield power
+	"builder": 0.75,  // default value for all builders
+	"fighter": 0.45,  // default value for all not-builder units
+	"shield": [0.25, 0.4]  // [<empty>, <full>] shield power
 },
 
 "behaviour": {
@@ -445,7 +445,7 @@
 	"cloakraid": {
 		"role": ["raider"],
 		"attribute": ["scout"],
-		"retreat": 0.05,
+		"retreat": 0.1,
 		"pwr_mod": 1.4,
 		"thr_mod": 1.3
 	},
@@ -454,52 +454,52 @@
 		"limit": 4,
 		"pwr_mod": 1.1,
 		"thr_mod": 0.1,
-		"retreat": 0.12
+		"retreat": 0.25
 	},
 	"cloakskirm": {
 		"role": ["assault", "skirmish"],
 		"pwr_mod": 1.00,
 		"limit": 16,
-		"retreat": 0.12  // mostly disposable
+		"retreat": 0.25  // mostly disposable
 	},
 	"cloakriot": {
 		"role": ["riot"],
 		"attribute": ["support"],
-		"retreat": 0.35,
+		"retreat": 0.65,
 		"pwr_mod": 1.8,
 		"thr_mod": 2.0
 	},
 	"cloakassault": {
 		"role": ["skirmish", "riot", "heavy"],
 		"attribute": ["support"],
-		"retreat": 0.3,  // assaults need to assault
+		"retreat": 0.55,  // assaults need to assault
 		"pwr_mod": 1.1,
 		"thr_mod": 1.29
 	},
 	"cloakarty": {
 		"role": ["artillery"],
-		"retreat": 0.4,
+		"retreat": 0.9,
 		"thr_mod": 0.1
 	},
 	"cloaksnipe": {
 		"role": ["anti_heavy"],
 		"pwr_mod": 3.0,
 		"thr_mod": 0.1,
-		"retreat": 0.5
+		"retreat": 0.99
 	},
 	"cloakbomb": {
 		"role": ["mine"],
-		"retreat": 0
+		"retreat": 0.01
 	},
 	"cloakjammer": {
 		"role": ["support"],
-		"retreat": 0.4,
+		"retreat": 0.9,
 		"limit": 1
 	},
 	"cloakaa": {
 		"role": ["anti_air"],
 		"attribute": ["melee"],
-		"retreat": 0.3,
+		"retreat": 0.7,
 		"pwr_mod": 2.0,
 		"thr_mod": 1.2
 	},
@@ -514,25 +514,25 @@
 		"role": ["mine"],
 		"limit": 10,
 		"thr_mod": 0.1,
-		"retreat": 0
+		"retreat": 0.01
 	},
 	"gunshipemp": {
 		"role": ["anti_heavy", "air"],
 		"thr_mod": 0.1,
 		"pwr_mod": 0.1,
 		"limit": 5,
-		"retreat": 0.4
+		"retreat": 0.9
 	},
 	"gunshipskirm": {
 		"role": ["air"],
-		"retreat": 0.35,
+		"retreat": 0.75,
 		"pwr_mod": 1.5,
 		"thr_mod": 1.4
 	},
 	"gunshipraid": {
 		"role": ["scout", "air"],
 		"limit": 3,
-		"retreat": 0.5,
+		"retreat": 0.9,
 		"pwr_mod": 3,
 		"thr_mod": 1
 	},
@@ -547,14 +547,14 @@
 		"role": ["anti_heavy", "air"],
 		"fire_state": "return",
 		"limit": 3,
-		"retreat": 0.35,
+		"retreat": 0.7,
 		"pwr_mod": 1.65,
 		"thr_mod": 1.00
 	},
 	"gunshipkrow": {
 		"role": ["anti_heavy", "air"],
 		"attribute": ["melee"],
-		"retreat": 0.3,
+		"retreat": 0.66,
 		"pwr_mod": 0.66,
 		"thr_mod": 0.34
 	},
@@ -567,7 +567,7 @@
 	"gunshipaa": {
 		"role": ["anti_air", "air"],
 		"limit": 6,
-		"retreat": 0.45,
+		"retreat": 0.95,
 		"pwr_mod": 2.0,
 		"thr_mod": 1.2
 	},
@@ -581,29 +581,29 @@
 		"attribute": ["scout"],
 		"pwr_mod": 1.6,
 		"thr_mod": 1.5,
-		"retreat": 0.15  // pretty disposable
+		"retreat": 0.35  // pretty disposable
 	},
 	"amphimpulse": {
 		"role": ["riot"],
 		"attribute": ["support"],
-		"retreat": 0.25,
+		"retreat": 0.66,
 		"pwr_mod": 2.0,
 		"thr_mod": 2.0
 	},
 	"amphfloater": {
 		"role": ["assault"],
-		"retreat": 0.25, // too slow to be retreating all the time
+		"retreat": 0.5, // too slow to be retreating all the time
 		"pwr_mod": 1.6,
 		"thr_mod": 1.6
 	},
 	"amphriot": {
 		"role": ["riot"],
 		"attribute": ["melee", "support"],
-		"retreat": 0.25  // too slow to be retreating all the time
+		"retreat": 0.5  // too slow to be retreating all the time
 	},
 	"amphassault": {
 		"role": ["heavy"],
-		"retreat": 0.3,
+		"retreat": 0.63,
 		"pwr_mod": 0.7,
 		"thr_mod": 1.0
 	},
@@ -613,7 +613,7 @@
 	"amphaa": {
 		"role": ["anti_air"],
 		"attribute": ["melee"],
-		"retreat": 0.25,
+		"retreat": 0.5,
 		"pwr_mod": 2.5,
 		"thr_mod": 1.5
 	},
@@ -625,50 +625,50 @@
 	"spiderscout": {
 		"role": ["scout"],
 		"limit": 16,
-		"retreat": 0
+		"retreat": 0.01
 	},
 	"spiderassault": {
 		"role": ["skirmish"],
 		"limit": 14,
 		"pwr_mod": 1.15,
-		"retreat": 0.2
+		"retreat": 0.45
 	},
 	"spideremp": {
 		"role": ["riot"],
 		"limit": 3,
 		"attribute": ["support"],
 		"pwr_mod": 1.25,
-		"retreat": 0.2
+		"retreat": 0.5
 	},
 	"spiderriot": {
 		"role": ["riot"],
 		"pwr_mod": 2.0,
 		"attribute": ["support"],
-		"retreat": 0.25
+		"retreat": 0.55
 	},
 	"spiderskirm": {
 		"role": ["assault"],
 		"pwr_mod": 2.0,
 		"limit": 7,
-		"retreat": 0.25
+		"retreat": 0.5
 	},
 	"spidercrabe": {
 		"role": ["heavy"],
 		"attribute": ["siege", "ret_fight", "support"],
-		"retreat": 0.3,
+		"retreat": 0.6,
 		"pwr_mod": 1.0,
 		"thr_mod": 1.0
 	},
 	"spiderantiheavy": {
 		"role": ["anti_heavy", "mine"],
-		"retreat": 0.5,
+		"retreat": 0.99,
 		"pwr_mod": 2.0,
 		"thr_mod": 0.1,
 		"limit": 3
 	},
 	"spideraa": {
 		"role": ["anti_air"],
-		"retreat": 0.4,
+		"retreat": 0.9,
 		"pwr_mod": 2.0,
 		"thr_mod": 1.2
 	},
@@ -676,48 +676,48 @@
 	// factoryshield
 	"shieldcon": {
 		"role": ["builder", "static"],
-		"retreat": 0.7
+		"retreat": 1.3
 	},
 	"shieldscout": {
 		"role": ["anti_heavy"],
 		"attribute": ["support", "melee"],
-		"retreat": 0
+		"retreat": 0.0
 	},
 	"shieldraid": {
 		"role": ["raider"],
 		"attribute": ["scout"],
-		"retreat": 0.2,
+		"retreat": 0.35,
 		"pwr_mod": 1.7,
 		"thr_mod": 1.68
 	},
 	"shieldskirm": {
 		"role": ["skirmish"],
 		"limit": 15,
-		"retreat": 0.2
+		"retreat": 0.4
 	},
 	"shieldassault": {
 		"role": ["assault", "support"],
 		"attribute": ["support"],
-		"retreat": 0.25,
+		"retreat": 0.5,
 		"pwr_mod": 1.2,
 		"thr_mod": 1.2
 	},
 	"shieldriot": {
 		"role": ["riot"],
 		"attribute": ["support"],
-		"retreat": 0.35,
+		"retreat": 0.7,
 		"pwr_mod": 1.7,
 		"thr_mod": 1.7
 	},
 	"shieldfelon": {
 		"role": ["heavy", "support"],
-		"retreat": 0,
+		"retreat": 0.55,
 		"pwr_mod": 1.5,
 		"thr_mod": 2.5
 	},
 	"shieldarty": {
 		"role": ["anti_heavy", "support"],
-		"retreat": 0.4,
+		"retreat": 0.8,
 		"pwr_mod": 1.5,
 		"thr_mod": 1.5
 	},
@@ -727,12 +727,12 @@
 	"shieldshield": {
 		"role": ["super", "heavy"],
 		"attribute": ["support"],
-		"retreat": 0.3
+		"retreat": 0.66
 	},
 	"shieldaa": {
 		"role": ["anti_air"],
 		"attribute": ["melee"],
-		"retreat": 0.35,
+		"retreat": 0.7,
 		"pwr_mod": 2.0,
 		"thr_mod": 1.2
 	},
@@ -744,12 +744,12 @@
 	"vehscout": {
 		"role": ["scout"],
 		"limit": 8,
-		"retreat": 0
+		"retreat": 0.01
 	},
 	"vehraid": {
 		"role": ["raider"],
 		"attribute": ["melee"],
-		"retreat": 0.15,
+		"retreat": 0.3,
 		"pwr_mod": 1.4,
 		"thr_mod": 1.35
 	},
@@ -758,24 +758,24 @@
 		"attribute": ["support"],
 		"pwr_mod": 1.0,
 		"thr_mod": 0.35,
-		"retreat": 0.3
+		"retreat": 0.6  // cannot retreat
 	},
 	"vehriot": {
 		"role": ["riot"],
 		"attribute": ["support"],
-		"retreat": 0.3,
+		"retreat": 0.65,
 		"pwr_mod": 1.0,
 		"thr_mod": 1.0
 	},
 	"vehassault": {
 		"role": ["assault"],
-		"retreat": 0.3,
+		"retreat": 0.65,  // slow to turn around
 		"pwr_mod": 1.0,
 		"thr_mod": 1.0
 	},
 	"vehcapture": {
 		"role": ["skirmish", "mine", "heavy"],
-		"retreat": 0.4,
+		"retreat": 0.9,
 		"limit": 1
 	},
 	"veharty": {
@@ -783,18 +783,18 @@
 		"limit": 6,
 		"pwr_mod": 1.0,
 		"thr_mod": 0.01,
-		"retreat": 0.35
+		"retreat": 0.8
 	},
 	"vehheavyarty": {
 		"role": ["artillery", "artillery", "heavy"],
-		"retreat": 0.5,
+		"retreat": 0.99,
 		"pwr_mod": 1.0,
 		"thr_mod": 0.01
 	},
 	"vehaa": {
 		"role": ["anti_air"],
 		"attribute": ["melee"],
-		"retreat": 0.3,
+		"retreat": 0.75,
 		"pwr_mod": 2.0,
 		"thr_mod": 1.2
 	},
@@ -813,24 +813,24 @@
 	"jumpraid": {
 		"role": ["raider"],
 		"attribute": ["scout", "siege"],  // jump on attack
-		"retreat": 0.3,
+		"retreat": 0.6,
 		"pwr_mod": 1.6,
 		"limit": 4,
 		"thr_mod": 1.5
 	},
 	"jumpblackhole": {
 		"role": ["support"],
-		"retreat": 0.3
+		"retreat": 0.66
 	},
 	"jumpskirm": {
 		"role": ["skirmish"],
-		"retreat": 0.3,
+		"retreat": 0.66,
 		"attribute": ["support"]
 	},
 	"jumpassault": {
 		"role": ["assault"],
 		"attribute": ["melee", "siege", "ret_fight"],
-		"retreat": 0.2,
+		"retreat": 0.45,
 		"pwr_mod": 1.35,
 		"thr_mod": 0.9
 	},
@@ -844,21 +844,21 @@
 		"pwr_mod": 1.0,
 		"limit": 2,
 		"thr_mod": 0.01,
-		"retreat": 0.5
+		"retreat": 0.99
 	},
 	"jumpbomb": {
 		"role": ["anti_heavy"],
 		"attribute": ["melee", "mine"],
 		"fire_state": "open",
 		"limit": 2,
-		"retreat": 0,
+		"retreat": 0.01,
 		"pwr_mod": 3.0,
 		"thr_mod": 0.01
 	},
 	"jumpaa": {
 		"role": ["anti_air"],
 		"attribute": ["melee"],
-		"retreat": 0.35,
+		"retreat": 0.8,
 		"pwr_mod": 2.0,
 		"thr_mod": 1.2
 	},
@@ -873,11 +873,11 @@
 		"pwr_mod": 0.8,
 		"limit": 10,
 		"attribute": ["scout"],
-		"retreat": 0.4
+		"retreat": 0.8
 	},
 	"hoverskirm": {
 		"role": ["assault", "skirmish"],
-		"retreat": 0.3,
+		"retreat": 0.6,
 		"limit": 16,
 		"pwr_mod": 2.4,
 		"thr_mod": 1.4
@@ -885,19 +885,19 @@
 	"hoverassault": {
 		"role": ["raider", "assault"],
 		"attribute": ["melee", "ret_hold"],
-		"retreat": 0.2,
+		"retreat": 0.45,
 		"pwr_mod": 1.5,
 		"thr_mod": 1.5
 	},
 	"hoverdepthcharge": {
 		"role": ["anti_sub", "riot"],
 		"attribute": ["melee"],
-		"retreat": 0.3
+		"retreat": 0.6
 	},
 	"hoverriot": {
 		"role": ["riot"],
 		"attribute": ["support"],
-		"retreat": 0.3,
+		"retreat": 0.66,
 		"limit": 2,
 		"pwr_mod": 1.25,
 		"thr_mod": 1.25
@@ -905,13 +905,13 @@
 	"hoverarty": {
 		"role": ["anti_heavy", "heavy"],
 		"attribute": ["siege"],
-		"retreat": 0.5,
+		"retreat": 0.99,
 		"pwr_mod": 1.5,
 		"thr_mod": 0.01
 	},
 	"hoveraa": {
 		"role": ["anti_air"],
-		"retreat": 0.3,
+		"retreat": 0.7,
 		"pwr_mod": 2.0,
 		"thr_mod": 1.2
 	},
@@ -920,20 +920,20 @@
 	"planecon": {
 		"role": ["builder", "air"],
 		"limit": 2,
-		"retreat": 0.5
+		"retreat": 0.99
 	},
 	"planefighter": {
 		"role": ["anti_air", "air"],
 		"attribute": ["boost"],
 		"pwr_mod": 2.0,
 		"thr_mod": 1.5,
-		"retreat": 0.35
+		"retreat": 0.8
 	},
 	"planeheavyfighter": {
 		"role": ["anti_air", "air"],
 		"attribute": ["siege"],
 		"limit": 7,
-		"retreat": 0.3,
+		"retreat": 0.6,
 		"pwr_mod": 3.0,
 		"thr_mod": 2.0
 	},
@@ -941,64 +941,64 @@
 		"role": ["bomber", "air"],
 		"attribute": ["siege"],
 		"limit": 3,
-		"retreat": 0.4,
+		"retreat": 0.9,
 		"pwr_mod": 0.1,
 		"thr_mod": 0.1
 	},
 	"bomberriot": {
 		"role": ["bomber", "air"],
 		"limit": 0,
-		"retreat": 0.3
+		"retreat": 0.6
 	},
 	"bomberdisarm": {
 		"role": ["support", "air"],
 		"limit": 2,
-		"retreat": 0.5,
+		"retreat": 0.99,
 		"pwr_mod": 0.01,
 		"thr_mod": 0.01
 	},
 	"bomberheavy": {
 		"role": ["bomber", "air"],
 		"limit": 4,
-		"retreat": 0.5,
+		"retreat": 0.99,
 		"pwr_mod": 0.5,
 		"thr_mod": 0.1
 	},
 	"planescout": {
 		"role": ["scout", "air"],
 		"limit": 1,
-		"retreat": 0.35
+		"retreat": 0.8
 	},
 
 	// factorytank
 	"tankcon": {
 		"role": ["builder"],
 		"pwr_mod": 0.40,
-		"retreat": 0.3
+		"retreat": 0.7
 	},
 	"tankraid": {
 		"role": ["scout"],
 		"thr_mod": 1.0,
 		"pwr_mod": 2.50,
-		"retreat": 0.4
+		"retreat": 0.95
 	},
 	"tankheavyraid": {
 		"role": ["raider"],
 		"limit": 0,
 		"thr_mod": 1.0,
 		"pwr_mod": 0.85,
-		"retreat": 0.4
+		"retreat": 0.85
 	},
 	"tankriot": {
 		"role": ["riot"],
 		"attribute": ["support"],
 		"limit": 1,
-		"retreat": 0.3
+		"retreat": 0.7
 	},
 	"tankassault": {
 		"role": ["assault", "heavy"],
 		"attribute": ["melee"],
-		"retreat": 0.3,
+		"retreat": 0.6,
 		"pwr_mod": 0.8,
 		"thr_mod": 0.7
 	},
@@ -1006,13 +1006,13 @@
 		"role": ["heavy", "anti_heavy"],
 		"pwr_mod": 0.8,
 		"thr_mod": 0.65,
-		"retreat": 0.25
+		"retreat": 0.55
 	},
 	"tankarty": {
 		"role": ["artillery", "heavy"],
 		"attribute": ["siege"],
 		"limit": 1,
-		"retreat": 0.5,
+		"retreat": 0.99,
 		"pwr_mod": 1.0,
 		"thr_mod": 0.1
 	},
@@ -1020,14 +1020,14 @@
 		"role": ["support"],
 		"attribute": ["siege"],
 		"limit": 1,
-		"retreat": 0.5,
+		"retreat": 0.99,
 		"pwr_mod": 0.5,
 		"thr_mod": 0.1
 	},
 	"tankaa": {
 		"role": ["anti_air"],
 		"attribute": ["melee", "support"],
-		"retreat": 0.35,
+		"retreat": 0.8,
 		"pwr_mod": 2.0,
 		"thr_mod": 1.2
 	},
@@ -1065,13 +1065,13 @@
 	"striderantiheavy": {
 		"role": ["anti_heavy", "heavy"],
 		"attribute": ["melee"],
-		"retreat": 0.3
+		"retreat": 0.7
 	},
 	"striderscorpion": {
 		"role": ["anti_heavy", "heavy"],
 		"limit": 1,
 		"fire_state": "return",
-		"retreat": 0.25,
+		"retreat": 0.6,
 		"pwr_mod": 0.8,
 		"thr_mod": 0.75
 	},
@@ -1079,33 +1079,33 @@
 		"role": ["heavy"],
 		"attribute": ["melee"],
 		"limit": 2,
-		"retreat": 0.3,
+		"retreat": 0.65,
 		"pwr_mod": 0.8,
 		"thr_mod": 0.75
 	},
 	"striderarty": {
 		"role": ["anti_heavy", "heavy"],
 		"pwr_mod": 5.0,
-		"retreat": 0.4
+		"retreat": 0.9
 	},
 	"striderfunnelweb": {
 		"role": ["heavy", "support", "air"],
 		"attribute": ["support", "siege"],
-		"retreat": 0.7,
+		"retreat": 1.4,
 		"pwr_mod": 15.0,
 		"thr_mod": 15.0
 	},
 	"striderbantha": {
 		"role": ["heavy", "support", "heavy"],
 		"attribute": ["melee"],
-		"retreat": 0.3,
+		"retreat": 0.66,
 		"pwr_mod": 0.5,
 		"thr_mod": 0.5
 	},
 	"striderdetriment": {
 		"role": ["heavy", "support", "heavy"],
 		"attribute": ["melee"],
-		"retreat": 0.25,
+		"retreat": 0.50,  // deffo retreat, running into nab annihlator farm and sploding is silly :)
 		"pwr_mod": 0.34,
 		"thr_mod": 0.34
 	},
@@ -1178,7 +1178,7 @@
 	"turretaalaser": {
 		"role": ["anti_air"],
 		"attribute": ["siege", "ret_hold"],
-		"retreat": 0.2,  // FIXME: Bunker up turret when it's on low health, doesn't work for statics atm
+		"retreat": 0.4,  // FIXME: Bunker up turret when it's on low health, doesn't work for statics atm
 		"thr_mod": 2.0
 	},
 	"turretaaheavy": {
@@ -1213,7 +1213,7 @@
 	"turretgauss": {
 		"role": ["static"],
 		"attribute": ["siege", "ret_hold"],
-		"retreat": 0.2,  // FIXME: Bunker up turret when it's on low health, doesn't work for statics atm
+		"retreat": 0.4,  // FIXME: Bunker up turret when it's on low health, doesn't work for statics atm
 		"thr_mod": 1.5
 	},
 	"turretemp": {
@@ -1527,11 +1527,9 @@
 	"ms_pull": 0.58,
 	// Max percent of mexes circuit team allowed to take.
 	// If its <1.0 then expansion obeys ms_pull rule, if >=1.0 then ms_pull doesn't affect expansion (mex, pylon).
-	// "mex_max": 1.0,  // 100%
-	"mex_max": 0.60,
+	"mex_max": 1.0,  // 100%
 	// Construction order delay in seconds, -1 to disable
-	// "build_delay": -1.0,
-	"build_delay": 10.0,
+	"build_delay": -1.0,
 
 	// New factory switch interval, in seconds
 	"switch": 780,
@@ -1633,7 +1631,32 @@
 				"module": [  // List of dynamic module IDs
 					[13],  // shotgun
 					[31, 42],  // Cloak, Nano
-					[15, 41, 37]  // sniper, range, health
+					[15, 41, 37],  // sniper, range, health
+					[34, 34, 34],  // companion drones
+					[35, 35, 35],  // battle drones
+					[35, 35, 35],  // battle drones
+					[35, 35, 34],  // battle drones, companion drones
+					[34, 34, 34],  // companion drones
+					[34, 40, 40],  // companion drones, speed
+					[40, 40, 40],  // speed
+					[40, 40, 40],  // speed
+					[37, 37, 37],  // health
+					[37, 37, 37],  // health
+					[37, 36, 36],  // health, regen
+					[36, 36, 36],  // regen
+					[36, 36, 36],  // regen
+					[42, 42, 42],  // nano
+					[42, 42, 42],  // nano
+					[42, 27, 29],  // nano, disruptor ammo, jammer
+					[32, 33, 30],  // area cloak, lazarus, radar
+					[41, 41, 41],  // range
+					[41, 41, 41],  // range
+					[41, 38, 38],  // range, high density
+					[38, 38, 38],  // high density
+					[38, 38, 38],  // high density
+					[39, 39, 39],  // damage
+					[39, 39, 39],  // damage
+					[39, 39]  // damage
 				]
 			},
 
@@ -1703,7 +1726,29 @@
 				"module": [  // List of dynamic module IDs
 					[7],  // Machinegun
 					[31, 36],  // Cloak, Regen
-					[19, 38, 39]  // disruptor bomb, high density, damage boost
+					[19, 38, 39],  // disruptor bomb, high density, damage boost
+					[34, 34, 34],  // companion drones
+					[34, 34, 34],  // companion drones
+					[34, 34, 40],  // companion drones, speed
+					[40, 40, 40],  // speed
+					[40, 40, 40],  // speed
+					[40, 37, 37],  // speed, health
+					[37, 37, 37],  // health
+					[37, 37, 37],  // health
+					[36, 36, 36],  // regen
+					[36, 36, 36],  // regen
+					[36, 42, 42],  // regen, builder
+					[42, 42, 42],  // builder
+					[42, 42, 42],  // builder
+					[30, 27, 29],  // radar, disruptor ammo, jammer
+					[41, 41, 41],  // range
+					[41, 41, 41],  // range
+					[41, 41, 39],  // range, damage
+					[39, 39, 39],  // damage
+					[39, 39, 39],  // damage
+					[38, 38, 38],  // high density
+					[38, 38, 38],  // high density
+					[38]  // high density
 				]
 			},
 
@@ -1774,7 +1819,29 @@
 				"module": [  // List of dynamic module IDs
 					[11],  // Riot
 					[24, 37],  // shield, health
-					[11, 41, 41]  // Double Riot, range
+					[11, 41, 41],  // Double Riot, range
+					[38, 41, 41],  // high density, range
+					[36, 41, 36],  // regen, range, regen
+					[41, 41, 41],  // range
+					[39, 39, 39],  // damage
+					[39, 39, 39],  // damage
+					[39, 39, 25],  // damage, area shield
+					[26, 29, 30],  // napalm, jammer, radar
+					[34, 34, 34],  // companion drones
+					[34, 34, 34],  // companion drones
+					[34, 34, 40],  // companion drones, speed
+					[40, 40, 40],  // speed
+					[40, 40, 40],  // speed
+					[40, 36, 36],  // speed, regen
+					[36, 36, 36],  // regen
+					[36, 42, 42],  // regen, nano
+					[42, 42, 42],  // nano
+					[42, 42, 42],  // nano
+					[37, 37, 37],  // health
+					[37, 37, 37],  // health
+					[37, 38, 38],  // health, high density
+					[38, 38, 38],  // high density
+					[38, 38]  // high density
 				]
 			},
 
@@ -1844,7 +1911,29 @@
 				"module": [  // List of dynamic module IDs
 					[4],  // beam laser
 					[31, 36],  // cloak, regen
-					[8, 40, 36]  // lightning, speed, regen
+					[8, 40, 36],  // lightning, speed, regen
+					[37, 40, 36],  // health, speed, regen
+					[37, 40, 36],  // health, speed, regen
+					[37, 40, 36],  // health, speed, regen
+					[37, 40, 36],  // health, speed, regen
+					[40, 40, 40],  // speed
+					[28, 29, 30],  // flux, jammer, radar
+					[36, 36, 37],  // regen, health
+					[37, 37, 37],  // health
+					[32, 41, 41],  // area cloak, range
+					[41, 41, 41],  // range
+					[41, 41, 41],  // range
+					[34, 34, 34],  // companion drones
+					[34, 34, 34],  // companion drones
+					[34, 34, 42],  // companion drones, nano
+					[42, 42, 42],  // nano
+					[42, 42, 42],  // nano
+					[42, 39, 39],  // nano, damage
+					[39, 39, 39],  // damage
+					[39, 39, 39],  // damage
+					[38, 38, 38],  // high density
+					[38, 38, 38],  // high density
+					[38, 38]  // high density
 				]
 			},
 

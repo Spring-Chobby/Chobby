@@ -15,11 +15,11 @@ local skirmishSetupData = {
 			name = "difficulty",
 			options = {
 				"Beginner",
+				"Novice",
 				"Easy",
 				"Normal",
 				"Hard",
 				"Brutal",
-				"Insane",
 			},
 			optionTooltip = {
 				"Recommended for players with no strategy game experience.",
@@ -54,11 +54,11 @@ local chickenDifficulty = {
 }
 local aiDifficultyMap = {
 	"CircuitAIBeginner",
+	"CircuitAINovice",
 	"CircuitAIEasy",
 	"CircuitAINormal",
 	"CircuitAIHard",
 	"CircuitAIBrutal",
-	"CircuitAIInsane",
 }
 
 function skirmishSetupData.ApplyFunction(battleLobby, pageChoices)
