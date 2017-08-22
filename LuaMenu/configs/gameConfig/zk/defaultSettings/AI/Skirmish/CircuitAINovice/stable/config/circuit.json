@@ -62,7 +62,7 @@
 			// 17-24m Expanding - Good size terriotiry now, so less scouting and begin producing a little assault/arty on the side.
 			"tier2": [ 0.10,       0.20,        0.10,             0.33,         0.00,        0.12,           0.00,        0.00,         0.00,        0.05,          0.10]
 		},
-		"caretaker": 1
+		"caretaker": 4
 	},
 
 	"factorygunship": {
@@ -95,7 +95,7 @@
 	},
 
 	"factoryamph": {
-		"importance": [0.0, 0.0],
+		"importance": [1.0, 0.1],
 		"require_energy": false,
 
 		"income_tier": [8, 16, 24, 32, 40, 56, 72],
@@ -137,11 +137,11 @@
 			// 72m - inf+ Late late Game - SPAM GRIZZLY
 			"tier7": [ 0.10,      0.18,       0.02,          0.41,          0.02,       0.22,          0.00,       0.05]
 		},
-		"caretaker": 1
+		"caretaker": 4
 	},
 
 	"factoryspider": {
-		"importance": [0.0, 0.0],
+		"importance": [1.0, 0.1],
 		"require_energy": false,
 
 		"income_tier": [8, 16, 24, 32, 40, 56, 72],
@@ -166,7 +166,7 @@
 			"tier7": [ 0.10,        0.35,          0.20,            0.20,        0.01,         0.01,          0.13,          0.00,              0.00]
 		},
 
-		"caretaker": 1
+		"caretaker": 4
 	},
 
 	"factoryveh": {
@@ -212,7 +212,7 @@
 			// 72m - inf+ Late late Game - Maximum Artillery
 			"tier7": [ 0.10,     0.10,       0.12,      0.02,         0.06,      0.43,         0.05,         0.00,      0.07,           0.05]
 		},
-		"caretaker": 1
+		"caretaker": 4
 	},
 
 	"factoryhover": {
@@ -247,7 +247,7 @@
 			"tier5": [ 0.00,       0.24,        0.05,         0.41,           0.20,               0.05,        0.05,        0.00]
 		},
 
-		"caretaker": 1
+		"caretaker": 4
 	},
 
 	"factoryplane": {
@@ -298,7 +298,7 @@
 			"tier7": [ 0.32,      0.10,       0.00,            0.02,       0.36,          0.20,               0.00,       0.00,            0.00]
 		},
 
-		"caretaker": 1
+		"caretaker": 4
 	},
 
 	"factoryjump": {
@@ -313,7 +313,7 @@
 			"tier1": [ 0.10,      0.20,        0.25,       0.05,            0.10,        0.15,          0.03,       0.12,       0.00,       0.00]
 		},
 
-		"caretaker": 1
+		"caretaker": 4
 	},
 
 	"factoryshield": {
@@ -330,7 +330,7 @@
 			"tier3": [ 0.10,        0.07,          0.00,         0.19,          0.31,            0.04,         0.08,          0.09,         0.00,         0.12,           0.00]
 		},
 
-		"caretaker": 1
+		"caretaker": 4
 	},
 
 	"factoryship": {
@@ -811,7 +811,7 @@
 		"attribute": ["scout"],  // jump on attack
 		"limit": 3,
 		"pwr_mod": 1.6,
-		"limit": 3,
+		"limit": 2,
 		"thr_mod": 1.5
 	},
 	"jumpblackhole": {
@@ -825,7 +825,7 @@
 	},
 	"jumpassault": {
 		"role": ["raider"],
-		"limit": 1,
+		"limit": 0,
 		"attribute": ["melee", "ret_fight"],
 		"pwr_mod": 1.35,
 		"thr_mod": 0.9
