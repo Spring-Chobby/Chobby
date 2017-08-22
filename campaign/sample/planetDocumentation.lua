@@ -361,6 +361,11 @@ planetData = {
 		
 		-- Objective config is pure UI. The descriptions should be filled with text which relates to the objective. Note that, as per the config,
 		-- there are three victory conditions in objective 5.
+		-- Objectives can have the following:
+		--  * description: The text of the objective on the invasion screen and ingame.
+		--  * satisfyCount: The number of sucesses required to satisfy the objective. Only use this for objectives that do not fail. For example 
+		--                  if there is 4-way FFA then an objective could be "defeat all opponents", to make it tick when all three are defeated
+		--                  set allyTeamLossObjectiveID for all opponents and set satisfyCount to 3. 
 		objectiveConfig = {
 			[1] = {
 				description = "Win before 1:00",
