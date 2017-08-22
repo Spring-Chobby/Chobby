@@ -171,7 +171,11 @@ function Control:Dispose(...)
   end
 
   inherited.Dispose(self,...)
-  self.font:SetParent()
+  if self.font.SetParent then
+    self.font:SetParent()
+  else
+    Spring.Echo("nil self.font:SetParent", self.name)
+  end
 end
 
 --//=============================================================================

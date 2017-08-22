@@ -14,11 +14,21 @@ local skirmishSetupData = {
 			humanName = "Select Difficulty",
 			name = "difficulty",
 			options = {
-				"Very Easy",
+				"Beginner",
+				"Novice",
 				"Easy",
-				"Medium",
+				"Normal",
 				"Hard",
+				"Brutal",
 			},
+			optionTooltip = {
+				"Recommended for players with no strategy game experience.",
+				"Recommended for players with some strategy game experience, or experience with related genres (such as MOBA).",
+				"Recommended for experienced strategy gamers with some experience of streaming economy.",
+				"Recommended for veteran strategy gamers.",
+				"Recommended for veteran strategy gamers who aren't afraid of losing.",
+				"Recommended for veterans of Zero-K.",
+			}
 		},
 		{
 			humanName = "Select Map",
@@ -35,16 +45,20 @@ local skirmishSetupData = {
 }
 
 local chickenDifficulty = {
+	"Chicken: Beginner",
 	"Chicken: Very Easy",
 	"Chicken: Easy",
 	"Chicken: Normal",
 	"Chicken: Hard",
+	"Chicken: Suicidal",
 }
 local aiDifficultyMap = {
-	"CircuitAIVeryEasy",
+	"CircuitAIBeginner",
+	"CircuitAINovice",
 	"CircuitAIEasy",
-	"CircuitAIMedium",
+	"CircuitAINormal",
 	"CircuitAIHard",
+	"CircuitAIBrutal",
 }
 
 function skirmishSetupData.ApplyFunction(battleLobby, pageChoices)

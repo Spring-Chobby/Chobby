@@ -2,7 +2,7 @@
 --------------------------------------------------------------------------------
 -- Planet config
 
-local function GetPlanet(planetUtilities)
+local function GetPlanet(planetUtilities, planetID)
 	
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Myror",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.06,
-			y = 0.56,
+			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.06,
+			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.56,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -34,7 +34,6 @@ local function GetPlanet(planetUtilities)
 				startZ = 1050,
 				allyTeam = 0,
 				useUnlocks = true,
-				facplop = false,
 				commanderParameters = {
 					facplop = false,
 					defeatIfDestroyedObjectiveID = 2,
@@ -190,7 +189,6 @@ local function GetPlanet(planetUtilities)
 						name = "BusDriver22",
 						chassis = "recon",
 						decorations = {
-						  icon_overhead = { image = "UW" }
 						},
 						modules = {
 							"commweapon_shotgun",
@@ -383,7 +381,7 @@ local function GetPlanet(planetUtilities)
 				"turretmissile"
 			},
 			modules = {
-				"module_ablative_armor_LIMIT_D_1",
+				"module_autorepair_LIMIT_C_2",
 			},
 			codexEntries = {
 			},

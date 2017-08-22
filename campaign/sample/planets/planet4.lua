@@ -2,7 +2,7 @@
 --------------------------------------------------------------------------------
 -- Planet config
 
-local function GetPlanet(planetUtilities)
+local function GetPlanet(planetUtilities, planetID)
 	
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Tremontane",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.02,
-			y = 0.40,
+			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.02,
+			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.40,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -34,7 +34,6 @@ local function GetPlanet(planetUtilities)
 				startZ = 3500,
 				allyTeam = 0,
 				useUnlocks = true,
-				facplop = false,
 				commanderParameters = {
 					facplop = false,
 					defeatIfDestroyedObjectiveID = 2,
@@ -125,7 +124,6 @@ local function GetPlanet(planetUtilities)
 					aiLib = "Circuit_difficulty_autofill",
 					humanName = "_birdies_",
 					bitDependant = true,
-					facplop = false,
 					allyTeam = 1,
 					unlocks = {
 						"planecon",
@@ -144,7 +142,6 @@ local function GetPlanet(planetUtilities)
 						name = "Top_Gun",
 						chassis = "strike",
 						decorations = {
-						  icon_overhead = { image = "UW" }
 						},
 						modules = {
 							"commweapon_heavymachinegun", 
@@ -319,6 +316,7 @@ local function GetPlanet(planetUtilities)
 				"turretaaclose",
 			},
 			modules = {
+				"commweapon_lparticlebeam"
 			},
 			codexEntries = {
 			},

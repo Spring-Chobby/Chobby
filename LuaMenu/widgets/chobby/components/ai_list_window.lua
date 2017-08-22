@@ -72,6 +72,7 @@ function AiListWindow:AddAiToList(ai, blackList, oldAiVersions, isRunning64Bit)
 		height = "100%",
 		caption = displayName,
 		font = Configuration:GetFont(3),
+		tooltip = Configuration.gameConfig.aiTooltip[displayName],
 		OnClick = {
 			function()
 				self:AddAi(displayName, shortName, ai.version)

@@ -2,8 +2,9 @@ local aiLibFunctions = {}
 
 local circuitDifficulties = {
 	"CircuitAIEasy",
-	"CircuitAIMedium",
+	"CircuitAINormal",
 	"CircuitAIHard",
+	"CircuitAIBrutal",
 }
 
 function aiLibFunctions.Circuit_difficulty_autofill(difficultySetting)

@@ -2,7 +2,7 @@
 --------------------------------------------------------------------------------
 -- Planet config
 
-local function GetPlanet(planetUtilities)
+local function GetPlanet(planetUtilities, planetID)
 	
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Pong",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.22,
-			y = 0.1,
+			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.22,
+			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.1,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},

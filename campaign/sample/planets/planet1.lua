@@ -2,7 +2,7 @@
 --------------------------------------------------------------------------------
 -- Planet config
 
-local function GetPlanet(planetUtilities)
+local function GetPlanet(planetUtilities, planetID)
 	
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Im Jaleth",
 		startingPlanet = true,
 		mapDisplay = {
-			x = 0.05,
-			y = 0.87,
+			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.05,
+			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.87,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -33,7 +33,6 @@ local function GetPlanet(planetUtilities)
 				startX = 300,
 				startZ = 3800,
 				allyTeam = 0,
-				facplop = false,
 				commanderParameters = {
 					facplop = false,
 					defeatIfDestroyedObjectiveID = 2,
@@ -103,7 +102,6 @@ local function GetPlanet(planetUtilities)
 						chassis = "engineer",
 						decorations = {
 						  "skin_support_dark",
-						  icon_overhead = { image = "UW" }
 						},
 						modules = {}
 					},
@@ -269,7 +267,7 @@ local function GetPlanet(planetUtilities)
 				"cloakcon"
 			},
 			modules = {
-				"module_ablative_armor_LIMIT_B_1",
+				"module_ablative_armor_LIMIT_A_2",
 			},
 			abilities = {
 			},

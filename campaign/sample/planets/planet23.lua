@@ -2,7 +2,7 @@
 --------------------------------------------------------------------------------
 -- Planet config
 
-local function GetPlanet(planetUtilities)
+local function GetPlanet(planetUtilities, planetID)
 	
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.26,
-			y = 0.07,
+			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.29,
+			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.93,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[gunships]]
+			text = [[Archer and Limpet]]
 		},
 		gameConfig = {
 			missionStartscript = false,
@@ -33,13 +33,15 @@ local function GetPlanet(planetUtilities)
 				startX = 100,
 				startZ = 100,
 				allyTeam = 0,
-				facplop = false,
 				commanderParameters = {
 					facplop = false,
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"factorygunship",
+					"factoryamph",
+					"amphcon",
+					"amphassault",
+					"turretgauss",
 				},
 				startUnits = {
 				}
@@ -84,9 +86,11 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"factorygunship",
+				"amphassault",
+				"turretgauss",
 			},
 			modules = {
+				"module_heavy_armor_LIMIT_B_2",
 			},
 			abilities = {
 			}

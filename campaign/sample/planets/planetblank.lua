@@ -2,7 +2,7 @@
 --------------------------------------------------------------------------------
 -- Planet config
 
-local function GetPlanet(planetUtilities)
+local function GetPlanet(planetUtilities, planetID)
 	
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.05,
-			y = 0.05,
+			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.05,
+			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.05,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -84,7 +84,6 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"factorycloak",
 			},
 			modules = {
 			},

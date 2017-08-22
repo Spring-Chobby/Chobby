@@ -56,7 +56,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		OnClick = {
 			function(obj)
 				if not HaveRightEngineVersion() then
-					WG.Chobby.InformationPopup("Game engine update required, restart the menu to apply.")
+					WG.Chobby.InformationPopup("Engine update required, restart the game to apply.")
 					return
 				end
 				if requiredResourceCount ~= 0 then

@@ -186,6 +186,10 @@ local function GetExperienceDisplay(parentControl, barHeight, fancy)
 	
 	local experienceToApply, bonusToApply, totalExperienceToApply, totalBonusToApply
 	local function FancyExperienceUpdate()
+		if Spring.GetGameName() ~= "" then
+			WG.Delay(FancyExperienceUpdate, 0.2)
+			return
+		end
 		if experienceToApply then
 			local newExperience = math.min(experienceToApply, 1 + math.floor(experienceToApply/9))
 			AddExperience(newExperience)
@@ -274,7 +278,7 @@ local function GetModuleButton(parentControl, ClickFunc, moduleName, level, slot
 	}
 	local nameBox = TextBox:New{
 		x = BUTTON_SIZE + 4,
-		y = 14,
+		y = 18,
 		right = 4,
 		height = BUTTON_SIZE,
 		text = moduleData.humanName,
@@ -286,6 +290,18 @@ local function GetModuleButton(parentControl, ClickFunc, moduleName, level, slot
 		},
 		parent = button
 	}
+	
+	local function UpdateNameBoxPosition()
+		if nameBox.physicalLines and #nameBox.physicalLines > 1 then
+			nameBox:SetPos(nil, 9)
+		else
+			nameBox:SetPos(nil, 17)
+		end
+	end
+	
+	parentControl.OnResize = parentControl.OnResize or {}
+	parentControl.OnResize[#parentControl.OnResize + 1] = UpdateNameBoxPosition
+	
 	local image = Image:New{
 		x = 4,
 		y = 4,
@@ -307,6 +323,7 @@ local function GetModuleButton(parentControl, ClickFunc, moduleName, level, slot
 		button.tooltip = moduleData.description
 		button:Invalidate()
 		nameBox:SetText(moduleData.humanName)
+		UpdateNameBoxPosition()
 		image.file = moduleData.image
 		image:Invalidate()
 	end
@@ -430,7 +447,7 @@ local function MakeModulePanelHandler(parentControl)
 	
 	local externalFunctions = {}
 	
-	function externalFunctions.UpdateLoadoutDisplay(commanderLevel, commanderName, commanderLoadout)
+	function externalFunctions.UpdateLoadoutDisplay(commanderLevel, commanderLoadout)
 		moduleSelector.SetVisibility(false)
 		currentLoadout.Clear()
 		
@@ -496,7 +513,7 @@ local function InitializeControls(parentControl)
 		x = 12,
 		right = 12,
 		y = 57,
-		height = TOP_HEIGHT,
+		bottom = 8,
 		horizontalScrollbar = false,
 		padding = {4, 4, 4, 4},
 		borderColor = {0,0,0,0},
@@ -538,8 +555,8 @@ local function InitializeControls(parentControl)
 	local modulePanel = Control:New {
 		x = 12,
 		right = 12,
-		y = 57 + TOP_HEIGHT + 4,
-		bottom = 14,
+		y = TOP_HEIGHT + 4,
+		bottom = 2,
 		horizontalScrollbar = false,
 		padding = {0, 0, 0, 0},
 		borderColor = {0,0,0,0},
@@ -550,7 +567,7 @@ local function InitializeControls(parentControl)
 				end
 			end
 		},
-		parent = parentControl,
+		parent = informationPanel,
 	}
 	
 	local modulePanelHandler = MakeModulePanelHandler(modulePanel)
@@ -558,7 +575,8 @@ local function InitializeControls(parentControl)
 	local function UpdateCommanderDisplay()
 		local commanderLevel, commanderExperience, commanderName, commanderLoadout = WG.CampaignData.GetPlayerCommanderInformation()
 		
-		modulePanelHandler.UpdateLoadoutDisplay(commanderLevel, commanderName, commanderLoadout)
+		commanderLabel:SetCaption(commanderName)
+		modulePanelHandler.UpdateLoadoutDisplay(commanderLevel, commanderLoadout)
 		experienceDisplay.SetExperience(commanderExperience, commanderLevel)
 	end
 	UpdateCommanderDisplay()

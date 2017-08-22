@@ -1396,6 +1396,7 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 			caption = caption,
 			tooltip = tooltip,
 			font = Configuration:GetFont(4),
+			tooltip = pageConfig.optionTooltip and pageConfig.optionTooltip[i],
 			OnClick = {
 				function(obj)
 					for j = 1, #buttons do

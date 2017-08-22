@@ -2,7 +2,7 @@
 --------------------------------------------------------------------------------
 -- Planet config
 
-local function GetPlanet(planetUtilities)
+local function GetPlanet(planetUtilities, planetID)
 	
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Blank",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.33,
-			y = 0.19,
+			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.37,
+			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.96,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[tanks]]
+			text = [[Grizzly and Gauss]]
 		},
 		gameConfig = {
 			missionStartscript = false,
@@ -33,13 +33,15 @@ local function GetPlanet(planetUtilities)
 				startX = 100,
 				startZ = 100,
 				allyTeam = 0,
-				facplop = false,
 				commanderParameters = {
 					facplop = false,
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"factorytank"
+					"factoryamph",
+					"amphcon",
+					"amphaa",
+					"amphtele",
 				},
 				startUnits = {
 				}
@@ -84,9 +86,11 @@ local function GetPlanet(planetUtilities)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"factorytank",
+				"amphaa",
+				"amphtele",
 			},
 			modules = {
+				"module_autorepair_LIMIT_B_2",
 			},
 			abilities = {
 			}

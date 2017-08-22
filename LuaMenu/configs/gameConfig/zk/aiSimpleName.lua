@@ -1,9 +1,11 @@
 
 local subnameMap = {
-	{"CircuitAIVeryEasy", "AI: Very Easy"},
+	{"CircuitAIBeginner", "AI: Beginner"},
+	{"CircuitAINovice", "AI: Novice"},
 	{"CircuitAIEasy", "AI: Easy"},
-	{"CircuitAIMedium", "AI: Medium"},
+	{"CircuitAINormal", "AI: Normal"},
 	{"CircuitAIHard", "AI: Hard"},
+	{"CircuitAIBrutal", "AI: Brutal"},
 }
 
 local function GetAiSimpleName(name)
@@ -22,20 +24,41 @@ local function GetAiSimpleName(name)
 end
 
 local simpleAiOrder = {
-	["AI: Very Easy"] = 1,
+	["AI: Beginner"] = 0,
+	["AI: Novice"] = 1,
 	["AI: Easy"] = 2,
-	["AI: Medium"] = 3,
+	["AI: Normal"] = 3,
 	["AI: Hard"] = 4,
-	["Inactive AI"] = 5,
-	["Chicken: Very Easy"] = 6,
-	["Chicken: Easy"] = 7,
-	["Chicken: Normal"] = 8,
-	["Chicken: Hard"] = 9,
-	["Chicken: Suicidal"] = 10,
-	["Chicken: Custom"] = 11,
+	["AI: Brutal"] = 5,
+	["Inactive AI"] = 6,
+	["Chicken: Beginner"] = 6.5,
+	["Chicken: Very Easy"] = 7,
+	["Chicken: Easy"] = 8,
+	["Chicken: Normal"] = 9,
+	["Chicken: Hard"] = 10,
+	["Chicken: Suicidal"] = 11,
+	["Chicken: Custom"] = 12,
+}
+
+local aiTooltip = {
+	["AI: Beginner"] = "Recommended for players with no strategy game experience.",
+	["AI: Novice"] = "Recommended for players with some strategy game experience, or experience with related genres (such as MOBA).",
+	["AI: Easy"] = "Recommended for experienced strategy gamers with some experience of streaming economy.",
+	["AI: Normal"] = "Recommended for veteran strategy gamers.",
+	["AI: Hard"] = "Recommended for veteran strategy gamers who aren't afraid of losing.",
+	["AI: Brutal"] = "Recommended for veterans of Zero-K.",
+	["Inactive AI"] = "This AI does absolutely nothing after spawning.",
+	["Chicken: Beginner"] = "Defeat waves of aliens.",
+	["Chicken: Very Easy"] = "Defeat waves of aliens.",
+	["Chicken: Easy"] = "Defeat waves of aliens.",
+	["Chicken: Normal"] = "Defeat waves of aliens.",
+	["Chicken: Hard"] = "Defeat waves of aliens.",
+	["Chicken: Suicidal"] = "Defeat waves of aliens. Good luck.",
+	["Chicken: Custom"] = "Customizable chicken defense. Look in Adv Options.",
 }
 
 return {
 	GetAiSimpleName = GetAiSimpleName,
-	simpleAiOrder = simpleAiOrder
+	simpleAiOrder = simpleAiOrder,
+	aiTooltip = aiTooltip
 }

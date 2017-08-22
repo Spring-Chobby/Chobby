@@ -121,6 +121,7 @@ function Configuration:init()
 	self.campaignConfigName = "sample"
 	self.campaignConfig = VFS.Include("campaign/sample/mainConfig.lua")
 	self.campaignSaveFile = nil -- Set by user
+	self.nextCampaignSaveNumber = 1
 
 	-- TODO, generate this from directory structure
 	local gameConfigOptions = {
@@ -148,6 +149,8 @@ function Configuration:init()
 	self.planetwarsNotifications = false -- Possibly too intrusive? See how it goes.
 	self.simplifiedSkirmishSetup = true
 	self.debugMode = false
+	self.showPlanetUnlocks = false
+	self.editCampaign = false
 	self.activeDebugConsole = false
 	self.onlyShowFeaturedMaps = true
 	self.simpleAiList = true
@@ -370,6 +373,8 @@ function Configuration:GetConfigData()
 		planetwarsNotifications = self.planetwarsNotifications,
 		simplifiedSkirmishSetup = self.simplifiedSkirmishSetup,
 		debugMode = self.debugMode,
+		showPlanetUnlocks = self.showPlanetUnlocks,
+		editCampaign = self.editCampaign,
 		confirmation_mainMenuFromBattle = self.confirmation_mainMenuFromBattle,
 		confirmation_battleFromBattle = self.confirmation_battleFromBattle,
 		drawAtFullSpeed = self.drawAtFullSpeed,
@@ -399,6 +404,7 @@ function Configuration:GetConfigData()
 		window_XResolutionWindowed = self.window_XResolutionWindowed,
 		window_YResolutionWindowed = self.window_YResolutionWindowed,
 		campaignSaveFile = self.campaignSaveFile,
+		nextCampaignSaveNumber = self.nextCampaignSaveNumber,
 	}
 end
 

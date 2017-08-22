@@ -24,6 +24,7 @@ local commanderModuleCounts = {}
 local externalFunctions = {}
 
 local SAVE_DIR = "Saves/campaign/"
+local SAVE_NAME = "saveFile"
 local ICONS_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/unitpics/"
 local LOAD_CAMPAIGN_STRING = "Campaign_LoadCampaign"
 
@@ -175,14 +176,20 @@ local function GetSaves()
 	return saves
 end
 
-local function SaveGame(fileName)
-	if fileName then
-		WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", fileName)
-	else
-		fileName = WG.Chobby.Configuration.campaignSaveFile
-	end
+local function SaveGame()
+	local fileName = WG.Chobby.Configuration.campaignSaveFile
 	if not fileName then
-		return false
+		local number = WG.Chobby.Configuration.nextCampaignSaveNumber or 1
+		for i = 1, 1000 do
+			if VFS.FileExists(SAVE_DIR .. SAVE_NAME .. number .. ".lua") then
+				number = number + 1
+			else
+				break
+			end
+		end
+		fileName = SAVE_NAME .. number
+		WG.Chobby.Configuration:SetConfigValue("nextCampaignSaveNumber", number + 1)
+		WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", fileName)
 	end
 	local success, err = pcall(function()
 		Spring.CreateDir(SAVE_DIR)
@@ -232,6 +239,49 @@ local function UpdateCommanderModuleCounts()
 	end
 end
 
+local function IsModuleRequirementMet(data)
+	if data.requireOneOf then
+		local foundRequirement = false
+		for j = 1, #data.requireOneOf do
+			local reqDefName = data.requireOneOf[j]
+			if (commanderModuleCounts[reqDefName] or 0) > 0 then
+				foundRequirement = true
+				break
+			end
+		end
+		if not foundRequirement then
+			return false
+		end
+	end
+	return true
+end
+
+local function UpdateModuleRequirements()
+	local loadout = gamedata.commanderLoadout
+	
+	local commConfig = WG.Chobby.Configuration.campaignConfig.commConfig
+	local chassisDef = commConfig.chassisDef
+	local moduleDefs = commConfig.moduleDefs
+	local moduleDefNames = commConfig.moduleDefNames
+	
+	local level = 0
+	while loadout[level] do
+		for slot = 1, #loadout[level] do
+			local oldModuleName = loadout[level][slot]
+			local moduleData = moduleDefs[moduleDefNames[oldModuleName]]
+			if not IsModuleRequirementMet(moduleData) then
+				local newModule = chassisDef.levelDefs[level].upgradeSlots[slot].defaultModule
+				loadout[level][slot] = newModule
+				UpdateCommanderModuleCounts()
+				CallListeners("ModulePutInSlot", newModule, oldModuleName, level, slot)
+				level = -1
+				break
+			end
+		end
+		level = level + 1
+	end
+end
+
 local function SelectCommanderModule(level, slot, moduleName, supressEvent)
 	if not gamedata.commanderLoadout[level] then
 		gamedata.commanderLoadout[level] = {}
@@ -248,6 +298,9 @@ local function SelectCommanderModule(level, slot, moduleName, supressEvent)
 	
 	if not supressEvent then
 		UpdateCommanderModuleCounts()
+		if not commanderModuleCounts[oldModule] then
+			UpdateModuleRequirements()
+		end
 		CallListeners("ModulePutInSlot", moduleName, oldModule, level, slot)
 	end
 	
@@ -408,8 +461,9 @@ function externalFunctions.PutModuleInSlot(moduleName, level, slot)
 end
 
 function externalFunctions.SetCommanderName(newName)
-	gamedata.commanderName = newName
+	gamedata.commanderName = string.gsub(newName,[["]], [[']])
 	CallListeners("CommanderNameUpdate", newName)
+	SaveGame()
 end
 
 function externalFunctions.GetPlanetDefs()
@@ -472,7 +526,8 @@ function externalFunctions.GetBonusObjectiveComplete(planetID, objectiveID)
 end
 
 function externalFunctions.GetUnitInfo(unitName)
-	return WG.Chobby.Configuration.gameConfig.gameUnitInformation.humanNames[unitName] or {}, ICONS_DIR .. unitName .. ".png"
+	local unitInformation = WG.Chobby.Configuration.gameConfig.gameUnitInformation
+	return unitInformation.humanNames[unitName] or {}, ICONS_DIR .. unitName .. ".png", nil, nil, unitInformation.categories
 end
 
 function externalFunctions.GetAbilityInfo(abilityName)
@@ -482,8 +537,9 @@ end
 
 function externalFunctions.GetModuleInfo(moduleName)
 	local parsedName, limit = TranslateModule(moduleName)
-	local index = WG.Chobby.Configuration.campaignConfig.commConfig.moduleDefNames[parsedName]
-	return index and WG.Chobby.Configuration.campaignConfig.commConfig.moduleDefs[index] or {}, ICONS_DIR .. parsedName .. ".png", nil, limit and ("\255\0\255\0x" .. limit)
+	local commConfig = WG.Chobby.Configuration.campaignConfig.commConfig
+	local index = commConfig.moduleDefNames[parsedName]
+	return index and commConfig.moduleDefs[index] or {}, ICONS_DIR .. parsedName .. ".png", nil, limit and ("\255\0\255\0x" .. limit), commConfig.categories
 end
 
 function externalFunctions.GetCodexEntryInfo(codexEntryName)

@@ -2,7 +2,7 @@
 --------------------------------------------------------------------------------
 -- Planet config
 
-local function GetPlanet(planetUtilities)
+local function GetPlanet(planetUtilities, planetID)
 	
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Zooph V",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.325,
-			y = 0.31,
+			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.325,
+			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.31,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -33,7 +33,6 @@ local function GetPlanet(planetUtilities)
 				startX = 1000,
 				startZ = 1700,
 				allyTeam = 0,
-				facplop = false,
 				commanderParameters = {
 					facplop = false,
 					defeatIfDestroyedObjectiveID = 2,
@@ -348,7 +347,6 @@ local function GetPlanet(planetUtilities)
 						name = "Doof",
 						chassis = "guardian",
 						decorations = {
-						  icon_overhead = { image = "UW" }
 						},
 						modules = { "commweapon_riotcannon",
 									"commweapon_riotcannon",
@@ -768,6 +766,7 @@ local function GetPlanet(planetUtilities)
 				"energygeo",
 			},
 			modules = {
+				"module_jammer",
 			},
 			abilities = {
 			}

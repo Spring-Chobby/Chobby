@@ -15,6 +15,8 @@ local spGetGameFrame            = Spring.GetGameFrame
 local spGetMouseState           = Spring.GetMouseState
 local screenWidth, screenHeight = Spring.GetWindowGeometry()
 
+local MAX_WIDTH = 320
+
 local BATTLE_TOOLTIP_PREFIX = "battle_tooltip_"
 local USER_TOOLTIP_PREFIX = "user_"
 local USER_SP_TOOLTIP_PREFIX = "user_single_"
@@ -53,6 +55,7 @@ local function InitWindow()
 		width     = 75,
 		height    = 75,
 		minHeight = 1,
+		maxWidth = MAX_WIDTH,
 		resizable = false,
 		draggable = false,
 		padding   = {5,4,4,4},
@@ -60,11 +63,11 @@ local function InitWindow()
 	}
 	tipTextDisplay = Chili.TextBox:New{
 		name   = TOOLTIP_TEXT_NAME,
-		x      = 0,
-		y      = 0,
-		right  = 0,
-		bottom = 0,
+		x      = 2,
+		y      = 3,
+		width  = MAX_WIDTH - 12,
 		parent = tipWindow,
+		autoHeight = true,
 		margin = {0,0,0,0},
 		font = {
 			outline          = true,
@@ -769,15 +772,17 @@ local function SetTooltipPos()
 
 	if tooltipChild.name == TOOLTIP_TEXT_NAME then
 		local text = tipTextDisplay.text
-		local _, _, numLines = tipTextDisplay.font:GetTextHeight(text)
-
 		width  = tipTextDisplay.font:GetTextWidth(text) + 10
-		height = numLines * 14 + 8 + 7
+		height = tooltipChild.height + 14 
 	else
 		-- Fudge numbers correspond to padding
 		width, height = tooltipChild.width + 9, tooltipChild.height + 8
 	end
 
+	if width > MAX_WIDTH then
+		width = MAX_WIDTH
+	end
+	
 	x = x + 20
 	y = screenHeight - y -- Spring y is from the bottom, chili is from the top
 

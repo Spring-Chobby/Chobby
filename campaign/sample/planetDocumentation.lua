@@ -52,6 +52,10 @@ planetData = {
 				-- Whether the commander starts with facplop
 				facplop = false,
 				
+				-- Override start metal or energy, otherwise the default will be used.
+				startMetal = 250,
+				startEnergy = 250,
+				
 				-- Contributed to allyTeam defeat if the unit is destroyed. The objectiveID is purely for UI.
 				-- Defeat if destroyed also triggers if the unit is captured.
 				defeatIfDestroyedObjectiveID = 2,
@@ -141,7 +145,7 @@ planetData = {
 					-- Whether the unit spawns can be conditional on the difficulty setting. 
 					-- Both 'at most' and 'at least' are availible and the usual usage would be to
 					-- give allied units 'at most' and enemy units 'at least'.
-					-- 1 = Easy, 2 = Medium, 3 = Hard
+					-- 1 = Easy, 2 = Medium, 3 = Hard, 4 = Brutal
 					difficultyAtMost = nil,
 					difficultyAtLeast = nil,
 					
@@ -286,6 +290,41 @@ planetData = {
 			-- etc..
 		},
 		
+		-- A list of terraforms to apply to the map prior to the game starting
+		terraform = {
+			-- Terraforms have:
+			--  * terraformShape: This is required. Either RECTANGLE, LINE or RAMP
+			--  * terraformType: Required for RECTANGLE and LINE. Either LEVEL, RAISE or SMOOTH
+			--  * position:
+			--    * RECTANGLE - {left, top, right, bottom}
+			--    * LINE      - {x1, z1, x2, z2}
+			--    * RAMP      - {x1, y1, z1, x2, y2, z2}
+			--  * height: Required for LEVEL and RAISE. Absolute for the former and relative for the latter.
+			--  * width: Required for RAMP.
+			--  * volumeSelection: NONE, RAISE_ONLY or LOWER_ONLY
+			-- Note that terraform has all the restrictions of terraform that occurs during a game. Shapes such
+			-- as very thin walls cannot be created.
+			{
+				terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
+				terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
+				position = {3808, 2544, 3808 + 48, 2544 + 48}, 
+				height = 130,
+				volumeSelection = planetUtilities.TERRAFORM_VOLUME.RAISE_ONLY,
+			},
+			{
+				terraformShape = planetUtilities.TERRAFORM_SHAPE.RAMP,
+				position = {290, 300, 3900, 765, 103, 3870}, 
+				width = 200,
+				volumeSelection = planetUtilities.TERRAFORM_VOLUME.LOWER_ONLY,
+			},
+			{
+				terraformShape = planetUtilities.TERRAFORM_SHAPE.LINE,
+				terraformType = planetUtilities.TERRAFORM_TYPE.RAISE,
+				position = {400, 90, 556, 120}, 
+				height = 20,
+			},
+		},
+		
 		-- Configuration for what causes defeat for each allyTeam. Indexed by allyTeam.
 		defeatConditionConfig = {
 			[0] = { 
@@ -322,6 +361,11 @@ planetData = {
 		
 		-- Objective config is pure UI. The descriptions should be filled with text which relates to the objective. Note that, as per the config,
 		-- there are three victory conditions in objective 5.
+		-- Objectives can have the following:
+		--  * description: The text of the objective on the invasion screen and ingame.
+		--  * satisfyCount: The number of sucesses required to satisfy the objective. Only use this for objectives that do not fail. For example 
+		--                  if there is 4-way FFA then an objective could be "defeat all opponents", to make it tick when all three are defeated
+		--                  set allyTeamLossObjectiveID for all opponents and set satisfyCount to 3. 
 		objectiveConfig = {
 			[1] = {
 				description = "Win before 1:00",

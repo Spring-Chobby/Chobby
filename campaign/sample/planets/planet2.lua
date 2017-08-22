@@ -2,7 +2,7 @@
 --------------------------------------------------------------------------------
 -- Planet config
 
-local function GetPlanet(planetUtilities)
+local function GetPlanet(planetUtilities, planetID)
 	
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Beth XVII",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.04,
-			y = 0.73,
+			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.04,
+			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.73,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -34,7 +34,8 @@ local function GetPlanet(planetUtilities)
 				startZ = 3700,
 				allyTeam = 0,
 				useUnlocks = true,
-				facplop = true,
+				startMetal = 250,
+				startEnergy = 250,
 				commanderParameters = {
 					facplop = true,
 					defeatIfDestroyedObjectiveID = 2,
@@ -154,7 +155,8 @@ local function GetPlanet(planetUtilities)
 					aiLib = "Circuit_difficulty_autofill",
 					humanName = "Wubrior Master",
 					bitDependant = true,
-					facplop = false,
+					startMetal = 250,
+					startEnergy = 250,
 					allyTeam = 1,
 					unlocks = {
 						--"cloakcon", --add this back in if the mission is too easy
@@ -169,7 +171,6 @@ local function GetPlanet(planetUtilities)
 						name = "Wub Wub Wub",
 						chassis = "guardian",
 						decorations = {
-						  icon_overhead = { image = "UW" }
 						},
 						modules = {
 						  {
@@ -294,6 +295,15 @@ local function GetPlanet(planetUtilities)
 					}
 				},
 			},
+			terraform = {
+				{
+					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
+					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
+					position = {3808, 2544, 3808 + 48, 2544 + 48}, 
+					height = 130,
+					volumeSelection = planetUtilities.TERRAFORM_VOLUME.RAISE_ONLY,
+				},
+			},
 			defeatConditionConfig = {
 				-- Indexed by allyTeam.
 				[0] = { },
@@ -373,7 +383,9 @@ local function GetPlanet(planetUtilities)
 				"cloakskirm",
 			},
 			modules = {
-				"module_ablative_armor_LIMIT_C_1",
+				"commweapon_heavymachinegun",
+				"module_dmg_booster_LIMIT_A_2",
+				"module_high_power_servos_LIMIT_A_2",
 			},
 		},
 	}

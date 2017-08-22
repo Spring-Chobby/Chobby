@@ -16,7 +16,7 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
-local SAVE_SCRIPT = false
+local SAVE_SCRIPT = true
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -88,15 +88,14 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 	
 	local localLobby = WG.LibLobby.localLobby
 	local Configuration = WG.Chobby.Configuration
-	local playerName = Configuration.userName or Configuration.suggestedNameFromSteam or "Player"
 	local missionDifficulty = WG.CampaignData.GetDifficultySetting()
 	local bitExtension = (Configuration:GetIsRunning64Bit() and "64") or "32"
-
+	
 	-- Add the player, this is to make the player team 0.
 	local playerCount = 1
 	local players = {
 		[0] = {
-			Name = playerName,
+			Name = "Player",
 			Team = teamCount,
 			IsFromDemo = 0,
 			rank = 0,
@@ -106,7 +105,9 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 	local playerUnlocks = WG.CampaignData.GetUnitsUnlocks()
 	local playerAbilities = WG.CampaignData.GetAbilityUnlocks()
 	local fullPlayerUnlocks = Spring.Utilities.CopyTable(playerUnlocks.list)
-
+	
+	commanderTypes.player_commander = WG.CampaignData.GetPlayerCommander()
+	
 	if gameConfig.playerConfig.extraUnlocks then
 		local extra = gameConfig.playerConfig.extraUnlocks
 		for i = 1, #extra do
@@ -116,14 +117,14 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		end
 	end
 	
-	commanderTypes.player_commander = WG.CampaignData.GetPlayerCommander()
-	
 	teams[teamCount] = {
 		TeamLeader = 0,
 		AllyTeam = gameConfig.playerConfig.allyTeam,
 		rgbcolor = '0 0 0',
 		start_x = gameConfig.playerConfig.startX,
 		start_z = gameConfig.playerConfig.startZ,
+		start_metal = gameConfig.playerConfig.startMetal,
+		start_energy = gameConfig.playerConfig.startEnergy,
 		staticcomm = "player_commander",
 		static_level = WG.CampaignData.GetPlayerCommanderInformation(),
 		campaignunlocks = TableToBase64(fullPlayerUnlocks),
@@ -166,9 +167,16 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		
 		local commanderName, noCommander
 		if aiData.commander then
+			local commander = aiData.commander
 			commanderName = "ai_commander_" .. aiCount
-			aiData.commander.modules = {[0] = aiData.commander.modules}
-			commanderTypes[commanderName] = aiData.commander
+			commanderTypes[commanderName] = {
+				name = commander.name,
+				chassis = commander.chassis,
+				decorations = commander.decorations,
+				modules = {
+					[0] = commander.modules
+				},
+			}
 		else
 			noCommander = 1
 		end
@@ -181,6 +189,8 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 			start_z = aiData.startZ,
 			nocommander = noCommander,
 			staticcomm = commanderName,
+			start_metal = aiData.startMetal,
+			start_energy = aiData.startEnergy,
 			static_level = (aiData.commanderLevel or 1) - 1, -- Comm level is 0 indexed but on the UI it is 1 indexed.
 			campaignunlocks = TableToBase64(availibleUnits),
 			commanderparameters = TableToBase64(aiData.commanderParameters),
@@ -204,7 +214,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		hostport = 0,
 		ishost = 1,
 		mapname = gameConfig.mapName,
-		myplayername = playerName,
+		myplayername = "Player",
 		nohelperais = 0,
 		numplayers = playerCount,
 		numusers = playerCount + aiCount,
@@ -220,7 +230,8 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 			fixedstartpos = 1,
 			planetmissiondifficulty = missionDifficulty,
 			singleplayercampaignsavename = WG.Chobby.Configuration.campaignSaveFile,
-			singleplayercampaignbattleid = planetID
+			singleplayercampaignbattleid = planetID,
+			initalterraform = TableToBase64(gameConfig.terraform),
 		},
 	}
 
@@ -295,6 +306,7 @@ end
 
 function widget:Initialize()
 	WG.PlanetBattleHandler = PlanetBattleHandler
+	WG.MaybeDownloadMap = MaybeDownloadMap
 end
 
 --------------------------------------------------------------------------------

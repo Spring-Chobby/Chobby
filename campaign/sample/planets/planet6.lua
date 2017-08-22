@@ -2,7 +2,7 @@
 --------------------------------------------------------------------------------
 -- Planet config
 
-local function GetPlanet(planetUtilities)
+local function GetPlanet(planetUtilities, planetID)
 	
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Hebat",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.22,
-			y = 0.68,
+			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.22,
+			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.68,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -34,7 +34,6 @@ local function GetPlanet(planetUtilities)
 				startZ = 3500,
 				allyTeam = 0,
 				useUnlocks = true,
-				facplop = true,
 				commanderParameters = {
 					facplop = true,
 					defeatIfDestroyedObjectiveID = 2,
@@ -90,7 +89,6 @@ local function GetPlanet(planetUtilities)
 					aiLib = "Circuit_difficulty_autofill",
 					humanName = "BurnForever",
 					bitDependant = true,
-					facplop = false,
 					allyTeam = 1,
 					unlocks = {
 						"staticmex",
@@ -103,7 +101,6 @@ local function GetPlanet(planetUtilities)
 						name = "Firelord",
 						chassis = "recon",
 						decorations = {
-						  icon_overhead = { image = "UW" }
 						},
 						modules = {
 							"commweapon_flamethrower",
@@ -184,6 +181,7 @@ local function GetPlanet(planetUtilities)
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Destroy the Placeholders
+					satisfyOnce = true,
 					comparisionType = planetUtilities.COMPARE.AT_MOST,
 					targetNumber = 0,
 					-- See bonusObjectiveID in units table
@@ -213,6 +211,7 @@ local function GetPlanet(planetUtilities)
 				"cloakassault",
 			},
 			modules = {
+				"commweapon_lightninggun",
 			},
 			codexEntries = {
 			},

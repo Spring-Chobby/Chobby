@@ -33,10 +33,56 @@ local PLANET_NO_START_COLOR = {0.5, 0.5, 0.5, 1}
 local TARGET_IMAGE = LUA_DIRNAME .. "images/niceCircle.png"
 
 local REWARD_ICON_SIZE = 58
+local DEBUG_UNLOCKS_SIZE = 26
+local DEBUG_UNLOCK_COLUMNS = 4
+
+local debugPlanetSelected, debugPlanetSelectedName
 
 local planetList
 local selectedPlanet
 local currentWinPopup
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Edge Drawing
+
+local function DrawEdgeLines()
+	for i = 1, #planetEdgeList do
+		for p = 1, 2 do
+			local pid = planetEdgeList[i][p]
+			local planetData = planetList[pid]
+			local x, y = planetConfig[pid].mapDisplay.x, planetConfig[pid].mapDisplay.y
+			gl.Color((planetData.GetCaptured() and ACTIVE_COLOR) or INACTIVE_COLOR)
+			gl.Vertex(x, y)
+		end
+	end
+end
+
+local function CreateEdgeList()
+	gl.BeginEnd(GL.LINES, DrawEdgeLines)
+end
+
+local function UpdateEdgeList()
+	gl.DeleteList(edgeDrawList)
+	edgeDrawList = gl.CreateList(CreateEdgeList)
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Save planet positions
+
+local function EchoPlanetPositionAndEdges()
+	Spring.Echo("planetEdgeList = {")
+	for i = 1, #planetEdgeList do
+		Spring.Echo(string.format("\t{%02d, %02d},", planetEdgeList[i][1], planetEdgeList[i][2]))
+	end
+	Spring.Echo("}")
+	Spring.Echo("planetPositions = {")
+	for i = 1, #planetConfig do
+		Spring.Echo(string.format("\t[%01d] = {%03f, %03f},", i, math.floor(planetConfig[i].mapDisplay.x*1000), math.floor(planetConfig[i].mapDisplay.y*1000)))
+	end
+	Spring.Echo("}")
+end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -100,8 +146,11 @@ local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, 
 						local color = nil
 						local statusString = ""
 						if alreadyUnlocked then
-							color = {0.5, 0.5, 0.5, 0.5}
 							statusString = " (already unlocked)"
+						elseif cullUnlocked then
+							statusString = " (newly unlocked)"
+						else
+							color = {0.5, 0.5, 0.5, 0.5}
 						end
 						local tooltip = (overrideTooltip and info) or ((info.humanName or "???") .. statusString .. "\n " .. (info.description or ""))
 						
@@ -162,7 +211,7 @@ local function MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjective
 	
 	if bonusObjectiveSuccess then
 		local function IsObjectiveUnlocked(objectiveID)
-			return not bonusObjectiveSuccess[objectiveID]
+			return bonusObjectiveSuccess[objectiveID]
 		end
 		local function GetObjectiveInfo(objectiveID)
 			local tooltip = objectiveConfig[objectiveID].description
@@ -184,7 +233,7 @@ local function MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjective
 		end
 	else
 		local function IsObjectiveUnlocked(objectiveID)
-			return not WG.CampaignData.GetBonusObjectiveComplete(planetData.index, objectiveID)
+			return WG.CampaignData.GetBonusObjectiveComplete(planetData.index, objectiveID)
 		end
 		local function GetObjectiveInfo(objectiveID)
 			local tooltip = objectiveConfig[objectiveID].description
@@ -348,7 +397,7 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 			Label:New{
 				x = 8,
 				y = 12,
-				caption = string.upper(planetData.name),
+				caption = string.upper(planetData.name) .. " - " .. planetID,
 				font = Configuration:GetFont(4),
 			},
 			-- grid of details
@@ -510,6 +559,30 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 	return externalFunctions
 end
 
+local function AddDebugUnlocks(parent, unlockList, unlockInfo, offset)
+	if unlockList then
+		for i = 1, #unlockList do
+			local info, imageFile, imageOverlay, count = unlockInfo(unlockList[i])
+			local image = Image:New{
+				x = (offset%DEBUG_UNLOCK_COLUMNS) * DEBUG_UNLOCKS_SIZE,
+				y = math.floor(offset/DEBUG_UNLOCK_COLUMNS) * DEBUG_UNLOCKS_SIZE,
+				width = DEBUG_UNLOCKS_SIZE - 1,
+				height = DEBUG_UNLOCKS_SIZE - 1,
+				keepAspect = true,
+				file = imageOverlay or imageFile,
+				file2 = imageOverlay and imageFile,
+				parent = parent,
+			}
+			offset = offset + 1
+		end
+	end
+	return offset
+end
+
+local function EnablePlanetClick()
+	planetClickEnabled = true
+end
+
 local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 	local Configuration = WG.Chobby.Configuration
 	
@@ -531,6 +604,23 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		padding = {0, 0, 0, 0},
 		parent = galaxyHolder,
 	}
+	local debugHolder
+	if Configuration.debugMode and Configuration.showPlanetUnlocks then
+		debugHolder = Control:New{
+			x = 0,
+			y = 0,
+			width = targetSize*3,
+			height = targetSize,
+			padding = {1, 1, 1, 1},
+			parent = galaxyHolder,
+		}
+		
+		local rewards = planetData.completionReward
+		local offset = 0
+		offset = AddDebugUnlocks(debugHolder, rewards.units, WG.CampaignData.GetUnitInfo, offset)
+		offset = AddDebugUnlocks(debugHolder, rewards.modules, WG.CampaignData.GetModuleInfo, offset)
+		offset = AddDebugUnlocks(debugHolder, rewards.abilities, WG.CampaignData.GetAbilityInfo, offset)
+	end
 	
 	local button = Button:New{
 		x = planetOffset,
@@ -540,7 +630,34 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		classname = "button_planet",
 		caption = "",
 		OnClick = { 
-			function(self)
+			function(self, x, y, mouseButton)
+				if Configuration.editCampaign and Configuration.debugMode then
+					if debugPlanetSelected and planetID ~= debugPlanetSelected then
+						local adjacent = planetAdjacency[debugPlanetSelected][planetID]
+						if adjacent then
+							for i = 1, #planetEdgeList do
+								local edge = planetEdgeList[i]
+								if (edge[1] == planetID and edge[2] == debugPlanetSelected) or (edge[2] == planetID and edge[1] == debugPlanetSelected) then
+									table.remove(planetEdgeList, i)
+									break
+								end
+							end
+						else
+							planetEdgeList[#planetEdgeList + 1] = {planetID, debugPlanetSelected}
+						end
+						
+						planetAdjacency[debugPlanetSelected][planetID] = not adjacent
+						planetAdjacency[planetID][debugPlanetSelected] = not adjacent
+						UpdateEdgeList()
+						debugPlanetSelectedName = nil
+						debugPlanetSelected = nil
+						return
+					end
+					debugPlanetSelectedName = self.name
+					debugPlanetSelected = planetID
+					return
+				end
+				
 				if selectedPlanet then
 					selectedPlanet.Close()
 					selectedPlanet = nil
@@ -590,6 +707,16 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		local x = math.max(0, math.min(xSize - targetSize, xPos*xSize - targetSize/2))
 		local y = math.max(0, math.min(ySize - targetSize, yPos*ySize - targetSize/2))
 		planetHolder:SetPos(x, y, targetSize, targetSize)
+		
+		if debugHolder then
+			debugHolder:SetPos(x, y + planetSize, DEBUG_UNLOCK_COLUMNS*DEBUG_UNLOCKS_SIZE + 2, 2*DEBUG_UNLOCKS_SIZE + 2)
+		end
+	end
+	
+	function externalFunctions.SetPosition(newX, newY)
+		xPos, yPos = newX, newY
+		planetConfig[planetID].mapDisplay.x, planetConfig[planetID].mapDisplay.y = newX, newY
+		UpdateEdgeList()
 	end
 	
 	function externalFunctions.UpdateStartable()
@@ -633,37 +760,42 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		end
 	end
 	
+	function externalFunctions.DownloadMapIfClose()
+		if startable or captured then
+			WG.MaybeDownloadMap(planetData.gameConfig.mapName)
+			return
+		end
+		for i = 1, #adjacency do
+			if adjacency[i] then
+				if planetList[i].GetCapturedOrStarableUnsafe() then
+					WG.MaybeDownloadMap(planetData.gameConfig.mapName)
+					return
+				end
+			end
+		end
+	end
+	
 	function externalFunctions.GetCaptured()
 		return WG.CampaignData.IsPlanetCaptured(planetID)
+	end
+	
+	function externalFunctions.GetCapturedOrStarableUnsafe()
+		-- Unsafe because an update may be required before the return value is valid
+		return startable or captured
 	end
 	
 	return externalFunctions
 end
 
-local function DrawEdgeLines()
-	for i = 1, #planetEdgeList do
-		for p = 1, 2 do
-			local pid = planetEdgeList[i][p]
-			local planetData = planetList[pid]
-			local x, y = planetConfig[pid].mapDisplay.x, planetConfig[pid].mapDisplay.y
-			gl.Color((planetData.GetCaptured() and ACTIVE_COLOR) or INACTIVE_COLOR)
-			gl.Vertex(x, y)
-		end
-	end
-end
-
-local function CreateEdgeList()
-	gl.BeginEnd(GL.LINES, DrawEdgeLines)
-end
-
-local function UpdateEdgeList()
-	gl.DeleteList(edgeDrawList)
-	edgeDrawList = gl.CreateList(CreateEdgeList)
-end
-
 local function UpdateAllStartable()
 	for i = 1, #planetList do
 		planetList[i].UpdateStartable()
+	end
+end
+
+local function DownloadNearbyMaps()
+	for i = 1, #planetList do
+		planetList[i].DownloadMapIfClose()
 	end
 end
 
@@ -685,6 +817,27 @@ local function InitializePlanetHandler(parent)
 		parent = window,
 	}
 	
+	if Configuration.debugMode then
+		planetWindow.OnMouseDown = planetWindow.OnMouseDown or {}
+		planetWindow.OnMouseDown[#planetWindow.OnMouseDown + 1] = function(self, x, y, mouseButton) 
+			if Configuration.editCampaign and debugPlanetSelected then
+				if mouseButton == 3 then
+					debugPlanetSelected = nil
+					debugPlanetSelectedName = nil
+					EchoPlanetPositionAndEdges()
+					return true
+				end
+				local hovered = WG.Chili.Screen0.hoveredControl
+				if hovered and (hovered.name == "planetWindow" or hovered.name == debugPlanetSelectedName) then
+					planetList[debugPlanetSelected].SetPosition(x/planetWindow.width, y/planetWindow.height)
+					planetList[debugPlanetSelected].UpdatePosition(planetWindow.width, planetWindow.height)
+				end
+			end
+			return false
+		end
+		--function planetWindow:HitTest(x,y) return self end
+	end
+	
 	local planetData = Configuration.campaignConfig.planetDefs
 	planetConfig, planetAdjacency, planetEdgeList = planetData.planets, planetData.planetAdjacency, planetData.planetEdgeList
 	
@@ -695,6 +848,7 @@ local function InitializePlanetHandler(parent)
 	
 	UpdateAllStartable()
 	UpdateEdgeList()
+	DownloadNearbyMaps()
 	
 	local graph = Chili.Control:New{
 		x       = 0,
@@ -721,8 +875,9 @@ local function InitializePlanetHandler(parent)
 	
 	local function PlanetCaptured(listener, planetID)
 		planetList[planetID].UpdateStartable()
-		UpdateAllStartable(planetList)
+		UpdateAllStartable()
 		UpdateEdgeList()
+		DownloadNearbyMaps()
 	end
 	WG.CampaignData.AddListener("PlanetCaptured", PlanetCaptured)
 	

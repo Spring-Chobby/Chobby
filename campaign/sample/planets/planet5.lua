@@ -2,7 +2,7 @@
 --------------------------------------------------------------------------------
 -- Planet config
 
-local function GetPlanet(planetUtilities)
+local function GetPlanet(planetUtilities, planetID)
 	
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
@@ -10,8 +10,8 @@ local function GetPlanet(planetUtilities)
 		name = "Cygnet",
 		startingPlanet = false,
 		mapDisplay = {
-			x = 0.13,
-			y = 0.63,
+			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.13,
+			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.63,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
 		},
@@ -34,14 +34,12 @@ local function GetPlanet(planetUtilities)
 				startZ = 550,
 				allyTeam = 0,
 				useUnlocks = true,
-				facplop = false,
 				commanderParameters = {
 					facplop = false,
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
 					"cloakarty",
-					"turretmissile",
 				},
 				startUnits = {
 					{
@@ -58,7 +56,7 @@ local function GetPlanet(planetUtilities)
 						commands = {
 							{unitName = "cloakarty", options = {"shift", "ctrl"}},
 							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2560, 1200}},
-							{cmdID = planetUtilities.COMMAND.PATROL, pos = {2160, 1200}, options = {"shift"}},
+							--{cmdID = planetUtilities.COMMAND.PATROL, pos = {2160, 1200}, options = {"shift"}},
 						},
 					},
 					{
@@ -134,11 +132,11 @@ local function GetPlanet(planetUtilities)
 						x =2700,
 						z =1100,
 						facing = 0, 
-						commands = {
-							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2700, 900}},
-							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2500, 1100}, options = {"shift"}},
-							{cmdID = planetUtilities.COMMAND.REPEAT, params = {1}}, -- Watch out, start state widget may override this?
-						},
+						-- commands = {
+							-- {cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2700, 900}},
+							-- {cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2500, 1100}, options = {"shift"}},
+							-- {cmdID = planetUtilities.COMMAND.REPEAT, params = {1}}, -- Watch out, start state widget may override this?
+						-- },
 					},
 					{
 						name = "cloakriot",
@@ -239,7 +237,6 @@ local function GetPlanet(planetUtilities)
 					aiLib = "Circuit_difficulty_autofill",
 					humanName = "Sentinels",
 					bitDependant = true,
-					facplop = false,
 					allyTeam = 1,
 					unlocks = {
 						"shieldcon",
@@ -259,7 +256,6 @@ local function GetPlanet(planetUtilities)
 						name = "Porcupine",
 						chassis = "engineer",
 						decorations = {
-						  icon_overhead = { image = "UW" }
 						},
 						modules = {
 							"commweapon_shotgun",
@@ -415,9 +411,9 @@ local function GetPlanet(planetUtilities)
 			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"cloakarty",
-				"turretmissile",
 			},
 			modules = {
+				"module_adv_targeting_LIMIT_D_2",
 			},
 		},
 	}

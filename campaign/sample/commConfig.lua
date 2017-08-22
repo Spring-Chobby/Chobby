@@ -47,7 +47,7 @@ local moduleDefs = {
 		humanName = "Beam Laser",
 		description = "Beam Laser",
 		image = moduleImagePath .. "commweapon_beamlaser.png",
-		limit = 2,
+		limit = 1,
 		cost = 50,
 		requireChassis = {"recon", "assault", "support", "strike"},
 		requireLevel = 0,
@@ -68,7 +68,7 @@ local moduleDefs = {
 		humanName = "Flamethrower",
 		description = "Flamethrower",
 		image = moduleImagePath .. "commweapon_flamethrower.png",
-		limit = 2,
+		limit = 1,
 		cost = 50,
 		requireChassis = {"recon", "assault"},
 		requireLevel = 0,
@@ -89,7 +89,7 @@ local moduleDefs = {
 		humanName = "Heatray",
 		description = "Heatray",
 		image = moduleImagePath .. "commweapon_heatray.png",
-		limit = 2,
+		limit = 1,
 		cost = 50,
 		requireChassis = {"assault"},
 		requireLevel = 0,
@@ -110,7 +110,7 @@ local moduleDefs = {
 		humanName = "Machine Gun",
 		description = "Machine Gun",
 		image = moduleImagePath .. "commweapon_heavymachinegun.png",
-		limit = 2,
+		limit = 1,
 		cost = 50,
 		requireChassis = {"recon", "assault", "strike"},
 		requireLevel = 0,
@@ -132,7 +132,7 @@ local moduleDefs = {
 	--	humanName = "Plasma Artillery",
 	--	description = "Plasma Artillery",
 	--	image = moduleImagePath .. "commweapon_assaultcannon.png",
-	--	limit = 2,
+	--	limit = 1,
 	--	cost = 300,
 	--	requireChassis = {"assault"},
 	--	requireLevel = 3,
@@ -154,7 +154,7 @@ local moduleDefs = {
 		humanName = "Lightning Rifle",
 		description = "Lightning Rifle",
 		image = moduleImagePath .. "commweapon_lightninggun.png",
-		limit = 2,
+		limit = 1,
 		cost = 50,
 		requireChassis = {"recon", "support", "strike"},
 		requireLevel = 0,
@@ -176,7 +176,7 @@ local moduleDefs = {
 		humanName = "Light Particle Beam",
 		description = "Light Particle Beam",
 		image = moduleImagePath .. "commweapon_lparticlebeam.png",
-		limit = 2,
+		limit = 1,
 		cost = 50,
 		requireChassis = {"support", "recon", "strike"},
 		requireLevel = 0,
@@ -198,7 +198,7 @@ local moduleDefs = {
 		humanName = "Missile Launcher",
 		description = "Missile Launcher",
 		image = moduleImagePath .. "commweapon_missilelauncher.png",
-		limit = 2,
+		limit = 1,
 		cost = 50,
 		requireChassis = {"support", "strike"},
 		requireLevel = 0,
@@ -219,7 +219,7 @@ local moduleDefs = {
 		humanName = "Riot Cannon",
 		description = "Riot Cannon",
 		image = moduleImagePath .. "commweapon_riotcannon.png",
-		limit = 2,
+		limit = 1,
 		cost = 50,
 		requireChassis = {"assault"},
 		requireLevel = 0,
@@ -241,7 +241,7 @@ local moduleDefs = {
 		humanName = "Rocket Launcher",
 		description = "Rocket Launcher",
 		image = moduleImagePath .. "commweapon_rocketlauncher.png",
-		limit = 2,
+		limit = 1,
 		cost = 50,
 		requireChassis = {"assault"},
 		requireLevel = 0,
@@ -263,7 +263,7 @@ local moduleDefs = {
 		humanName = "Shotgun",
 		description = "Shotgun",
 		image = moduleImagePath .. "commweapon_shotgun.png",
-		limit = 2,
+		limit = 1,
 		cost = 50,
 		requireChassis = {"recon", "support", "strike"},
 		requireLevel = 0,
@@ -627,6 +627,20 @@ local moduleDefs = {
 			sharedData.canResurrect = true
 		end
 	},
+	{
+		name = "module_jumpjet",
+		humanName = "Jumpjets",
+		description = "Jumpjets - Leap over obstacles and out of danger.",
+		image = moduleImagePath .. "module_radarnet2.png",
+		limit = 1,
+		cost = 400,
+		requireChassis = {"knight"},
+		requireLevel = 3,
+		slotType = "module",
+		applicationFunction = function (modules, sharedData)
+			sharedData.canJump = true
+		end
+	},
 	
 	-- Repeat Modules
 	{
@@ -768,6 +782,7 @@ end
 
 local chassisDef = {
 	name = "knight",
+	chassis = "knight",
 	humanName = "Knight",
 	image = LUA_DIRNAME .. "images/chassis_cremcom.png",
 	secondPeashooter = true,
@@ -865,33 +880,33 @@ local chassisDef = {
 ------------------------------------------------------------------------
 
 -- Transform from human readable format into number indexed format
-for i = 1, #moduleDefs do
-	local data = moduleDefs[i]
-	
-	-- Required modules are a list of moduleDefIDs
-	if data.requireOneOf then
-		local newRequire = {}
-		for j = 1, #data.requireOneOf do
-			local reqModuleID = moduleDefNames[data.requireOneOf[j]]
-			if reqModuleID then
-				newRequire[#newRequire + 1] = reqModuleID
-			end
-		end
-		data.requireOneOf = newRequire
-	end
-	
-	-- Prohibiting modules are a list of moduleDefIDs too
-	if data.prohibitingModules then
-		local newProhibit = {}
-		for j = 1, #data.prohibitingModules do
-			local reqModuleID = moduleDefNames[data.prohibitingModules[j]]
-			if reqModuleID then
-				newProhibit[#newProhibit + 1] = reqModuleID
-			end
-		end
-		data.prohibitingModules = newProhibit
-	end
-end
+--for i = 1, #moduleDefs do
+--	local data = moduleDefs[i]
+--	
+--	-- Required modules are a list of moduleDefIDs
+--	if data.requireOneOf then
+--		local newRequire = {}
+--		for j = 1, #data.requireOneOf do
+--			local reqModuleID = moduleDefNames[data.requireOneOf[j]]
+--			if reqModuleID then
+--				newRequire[#newRequire + 1] = reqModuleID
+--			end
+--		end
+--		data.requireOneOf = newRequire
+--	end
+--	
+--	-- Prohibiting modules are a list of moduleDefIDs too
+--	if data.prohibitingModules then
+--		local newProhibit = {}
+--		for j = 1, #data.prohibitingModules do
+--			local reqModuleID = moduleDefNames[data.prohibitingModules[j]]
+--			if reqModuleID then
+--				newProhibit[#newProhibit + 1] = reqModuleID
+--			end
+--		end
+--		data.prohibitingModules = newProhibit
+--	end
+--end
 
 for i = 0, chassisDef.highestDefinedLevel do
 	local slots = chassisDef.levelDefs[i].upgradeSlots
@@ -909,12 +924,48 @@ for i = 0, chassisDef.highestDefinedLevel do
 end
 
 ------------------------------------------------------------------------
+-- Module Ordering
+------------------------------------------------------------------------
+
+for i = 1, #moduleDefs do
+	local data = moduleDefs[i]
+	data.category = (data.slotType == "module" and "module") or "weapon"
+	data.order = i
+end
+
+local categories = {
+	module = {
+		name = "Modules",
+		order = 1
+	},
+	weapon = {
+		name = "Weapons",
+		order = 2
+	}
+}
+
+local function ModuleOrder(name1, name2)
+	local data1 = name1 and moduleDefNames[name1] and moduleDefs[moduleDefNames[name1]]
+	local data2 = name1 and moduleDefNames[name2] and moduleDefs[moduleDefNames[name2]]
+	if not data1 then
+		return (data2 and true)
+	end
+	if not data2 then
+		return true
+	end
+	
+	local category1 = categories[data1.category].order
+	local category2 = categories[data2.category].order
+	return category1 < category2 or (category1 == category2 and data1.order < data2.order)
+end
+
+------------------------------------------------------------------------
 -- Commander Configuration
 ------------------------------------------------------------------------
 
 local function GetLevelRequirement(level)
 	if level > 0 then
-		return (100*level^2 + 300*level + 200)
+		return (100*level^2 + 300*level)
 	end
 	return 0
 end
@@ -924,4 +975,6 @@ return {
 	moduleDefNames = moduleDefNames,
 	chassisDef = chassisDef,
 	GetLevelRequirement = GetLevelRequirement,
+	categories = categories,
+	ModuleOrder = ModuleOrder,
 }

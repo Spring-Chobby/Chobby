@@ -33,6 +33,8 @@ local function LoadRankEffects()
 	ChiliFX:AddEffectDef(rankEffectDef)
 end
 
+local RANK_SIZE = 185
+
 local function IconToLevelRank(icon)
 	local split = icon:find("_")
 	return tonumber(icon:sub(1, split-1)), tonumber(icon:sub(split+1))
@@ -41,31 +43,23 @@ end
 local function CreateRankUpdateWindow(oldIcon, newIcon)
 	local Configuration = WG.Chobby.Configuration
 
-	if Configuration.menuNotificationVolume ~= 0 then
-	end
-
 	local oldRank, oldLevel = IconToLevelRank(oldIcon)
 	local newRank, newLevel = IconToLevelRank(newIcon)
 	local isRankUp = newLevel > oldLevel or newRank > oldRank
 
-	local titleOffset
-	local caption
-	if isRankUp then
-		caption = i18n("rank_gained")
-		titleOffset = 45
-	else
-		titleOffset = 70
-		caption = i18n("rank_lost")
+	if not isRankUp then 
+		-- Seems like this is poor feedback?
+		return
 	end
-
-	local rankFile = Configuration.gameConfig.rankFunction(newIcon)
+	
+	local rankFile = Configuration.gameConfig.largeRankFunction(newIcon)
 
 	rankUpdateWindow = Window:New {
 		caption = "",
 		name = "rankUpdateWindow",
 		parent = screen0,
-		width = 310,
-		height = 310,
+		width = 280,
+		height = 330,
 		resizable = false,
 		draggable = false,
 		classname = "main_window",
@@ -77,32 +71,34 @@ local function CreateRankUpdateWindow(oldIcon, newIcon)
 	end
 
 	local lblTitle = Label:New {
-		x = titleOffset,
-		right = 0,
+		x = 0,
 		y = 15,
+		width = rankUpdateWindow.width - rankUpdateWindow.padding[1] - rankUpdateWindow.padding[3],
 		height = 35,
-		caption = caption,
+		align = "center",
 		font = Configuration:GetFont(4),
+		caption = (isRankUp and i18n("rank_gained")) or i18n("rank_lost"),
 		parent = rankUpdateWindow,
 	}
 
 	local btnClose = Button:New {
-		x = 76,
-		width = 135,
+		x = "25%",
+		right = "25%",
 		bottom = 1,
-		height = 40,
+		height = 60, -- standard height is 70
 		caption = i18n("close"),
-		font = Configuration:GetFont(2),
-		parent = rankUpdateWindow,
+		font = Configuration:GetFont(3),
 		classname = "action_button",
 		OnClick = { CloseFunction },
+		parent = rankUpdateWindow,
 	}
 
 	local imRankImage = Image:New {
-		x = 80,
-		right = 80,
-		y = 80,
-		height = 100,
+		x = (rankUpdateWindow.width - rankUpdateWindow.padding[1] - rankUpdateWindow.padding[3] - RANK_SIZE)/2,
+		y = 45,
+		width = RANK_SIZE,
+		height = RANK_SIZE,
+		keepAspect = true,
 		file = rankFile,
 		tex0 = rankFile,
 		parent = rankUpdateWindow,
@@ -147,8 +143,7 @@ function DelayedInitialize()
 	end
 
 	lobby:AddListener("OnUpdateUserStatus", OnUpdateUserStatus)
-	
-	--WG.Delay(function() OnUpdateUserStatus(nil, "YourName", { icon = "5_5"}) end, 5)
+	--WG.Delay(function() OnUpdateUserStatus(nil, lobby:GetMyUserName(), { icon = "5_5"}) end, 2)
 end
 
 

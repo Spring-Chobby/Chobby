@@ -39,12 +39,88 @@ planetUtilities.backgroundImages = {
 	LUA_DIRNAME .. "images/starbackgrounds/4.jpg",
 }
 
-planetUtilities.MAIN_EXP = 80
-planetUtilities.BONUS_EXP = 15
+planetUtilities.MAIN_EXP = 100
+planetUtilities.BONUS_EXP = 25
 
 planetUtilities.PLANET_SIZE_MAP = 36
 planetUtilities.PLANET_SIZE_INFO = 240
 planetUtilities.ICON_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/unitpics/"
+
+planetUtilities.planetPositions = {
+	[1] = {68, 822},
+	[2] = {47, 680},
+	[3] = {46, 541},
+	[4] = {28, 400},
+	[5] = {145, 605},
+	[6] = {235, 694},
+	[7] = {59, 268},
+	[8] = {257, 849},
+	[9] = {101, 415},
+	[10] = {177, 268},
+	[11] = {186, 98},
+	[12] = {252, 212},
+	[13] = {230, 543},
+	[14] = {270, 408},
+	[15] = {318, 518},
+	[16] = {327, 319},
+	[17] = {368, 416},
+	[18] = {411, 515},
+	[19] = {177, 436},
+	[20] = {302, 653},
+	[21] = {500, 514},
+	[22] = {330, 775},
+	[23] = {335, 940},
+	[24] = {440, 953},
+	[25] = {400, 843},
+	[26] = {391, 618},
+	[27] = {412, 725},
+	[28] = {485, 636},
+	[29] = {111, 156},
+	[30] = {481, 836},
+	[31] = {595, 928},
+	[32] = {695, 893},
+	[33] = {571, 792},
+	[34] = {572, 605},
+	[35] = {671, 730},
+	[36] = {274, 55},
+	[37] = {327, 122},
+	[38] = {384, 29},
+	[39] = {492, 37},
+	[40] = {337, 230},
+	[41] = {414, 200},
+	[42] = {507, 174},
+	[43] = {409, 305},
+	[44] = {494, 299},
+	[45] = {570, 280},
+	[46] = {602, 174},
+	[47] = {617, 365},
+	[48] = {535, 403},
+	[49] = {612, 492},
+	[50] = {665, 593},
+	[51] = {753, 480},
+	[52] = {245, 314},
+	[53] = {500, 724},
+	[54] = {429, 107},
+	[55] = {754, 652},
+	[56] = {580, 59},
+	[57] = {792, 770},
+	[58] = {675, 235},
+	[59] = {665, 86},
+	[60] = {863, 853},
+	[61] = {846, 514},
+	[62] = {688, 430},
+	[63] = {756, 339},
+	[64] = {850, 356},
+	[65] = {905, 197},
+	[66] = {761, 150},
+	[67] = {932, 701},
+	[68] = {926, 50},
+}
+
+for i = 1, #planetUtilities.planetPositions do
+	local planet = planetUtilities.planetPositions[i]
+	planet[1], planet[2] = planet[1]/1000, planet[2]/1000
+end
 
 planetUtilities.COMMAND = {
 	CAPTURE = 130,
@@ -124,6 +200,25 @@ planetUtilities.DIFFICULTY = {
 	EASY = 1,
 	MEDIUM = 2,
 	HARD = 3,
+	BRUTAL = 4,
+}
+
+planetUtilities.TERRAFORM_SHAPE = {
+	RECTANGLE = 1,
+	LINE = 2,
+	RAMP = 3,
+}
+
+planetUtilities.TERRAFORM_TYPE = {
+	LEVEL = 1,
+	RAISE = 2,
+	SMOOTH = 3,
+}
+
+planetUtilities.TERRAFORM_VOLUME = {
+	NONE = 0,
+	RAISE_ONLY = 1,
+	LOWER_ONLY = 2,
 }
 
 planetUtilities.COMPARE = {
