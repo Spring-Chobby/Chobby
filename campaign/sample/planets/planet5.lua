@@ -56,7 +56,7 @@ local function GetPlanet(planetUtilities, planetID)
 						commands = {
 							{unitName = "cloakarty", options = {"shift", "ctrl"}},
 							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2560, 1200}},
-							{cmdID = planetUtilities.COMMAND.PATROL, pos = {2160, 1200}, options = {"shift"}},
+							--{cmdID = planetUtilities.COMMAND.PATROL, pos = {2160, 1200}, options = {"shift"}},
 						},
 					},
 					{
@@ -132,11 +132,11 @@ local function GetPlanet(planetUtilities, planetID)
 						x =2700,
 						z =1100,
 						facing = 0, 
-						commands = {
-							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2700, 900}},
-							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2500, 1100}, options = {"shift"}},
-							{cmdID = planetUtilities.COMMAND.REPEAT, params = {1}}, -- Watch out, start state widget may override this?
-						},
+						-- commands = {
+							-- {cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2700, 900}},
+							-- {cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2500, 1100}, options = {"shift"}},
+							-- {cmdID = planetUtilities.COMMAND.REPEAT, params = {1}}, -- Watch out, start state widget may override this?
+						-- },
 					},
 					{
 						name = "cloakriot",
