@@ -34,7 +34,6 @@ local function GetPlanet(planetUtilities, planetID)
 				startZ = 400,
 				allyTeam = 0,
 				useUnlocks = true,
-				facplop = false,
 				commanderParameters = {
 					facplop = false,
 					facing = 0,

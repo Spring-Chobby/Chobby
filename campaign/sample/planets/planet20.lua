@@ -33,7 +33,6 @@ local function GetPlanet(planetUtilities, planetID)
 				startX = 3000,
 				startZ = 3300,
 				allyTeam = 0,
-				facplop = true,
 				commanderParameters = {
 					facplop = true,
 					defeatIfDestroyedObjectiveID = 2,

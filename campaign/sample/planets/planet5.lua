@@ -34,7 +34,6 @@ local function GetPlanet(planetUtilities, planetID)
 				startZ = 550,
 				allyTeam = 0,
 				useUnlocks = true,
-				facplop = false,
 				commanderParameters = {
 					facplop = false,
 					defeatIfDestroyedObjectiveID = 2,
@@ -57,7 +56,7 @@ local function GetPlanet(planetUtilities, planetID)
 						commands = {
 							{unitName = "cloakarty", options = {"shift", "ctrl"}},
 							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2560, 1200}},
-							{cmdID = planetUtilities.COMMAND.PATROL, pos = {2160, 1200}, options = {"shift"}},
+							--{cmdID = planetUtilities.COMMAND.PATROL, pos = {2160, 1200}, options = {"shift"}},
 						},
 					},
 					{
@@ -133,11 +132,11 @@ local function GetPlanet(planetUtilities, planetID)
 						x =2700,
 						z =1100,
 						facing = 0, 
-						commands = {
-							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2700, 900}},
-							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2500, 1100}, options = {"shift"}},
-							{cmdID = planetUtilities.COMMAND.REPEAT, params = {1}}, -- Watch out, start state widget may override this?
-						},
+						-- commands = {
+							-- {cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2700, 900}},
+							-- {cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2500, 1100}, options = {"shift"}},
+							-- {cmdID = planetUtilities.COMMAND.REPEAT, params = {1}}, -- Watch out, start state widget may override this?
+						-- },
 					},
 					{
 						name = "cloakriot",
@@ -238,7 +237,6 @@ local function GetPlanet(planetUtilities, planetID)
 					aiLib = "Circuit_difficulty_autofill",
 					humanName = "Sentinels",
 					bitDependant = true,
-					facplop = false,
 					allyTeam = 1,
 					unlocks = {
 						"shieldcon",

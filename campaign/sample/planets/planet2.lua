@@ -34,7 +34,6 @@ local function GetPlanet(planetUtilities, planetID)
 				startZ = 3700,
 				allyTeam = 0,
 				useUnlocks = true,
-				facplop = true,
 				startMetal = 250,
 				startEnergy = 250,
 				commanderParameters = {
@@ -156,7 +155,6 @@ local function GetPlanet(planetUtilities, planetID)
 					aiLib = "Circuit_difficulty_autofill",
 					humanName = "Wubrior Master",
 					bitDependant = true,
-					facplop = false,
 					startMetal = 250,
 					startEnergy = 250,
 					allyTeam = 1,
