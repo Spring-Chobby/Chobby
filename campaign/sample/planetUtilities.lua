@@ -122,6 +122,11 @@ for i = 1, #planetUtilities.planetPositions do
 	planet[1], planet[2] = planet[1]/1000, planet[2]/1000
 end
 
+planetUtilities.DEFAULT_RESOURCES = {
+	metal = 0,
+	energy = 100,
+}
+
 planetUtilities.COMMAND = {
 	CAPTURE = 130,
 	GROUPADD = 36,

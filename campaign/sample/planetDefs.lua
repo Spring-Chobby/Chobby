@@ -132,6 +132,29 @@ for i = 1, N_PLANETS do
 	planets[i].index = i
 end
 
+-- Apply Defaults
+local function ApplyDefaults(teamData)
+	if not teamData.startMetal then
+		teamData.startMetal = planetUtilities.DEFAULT_RESOURCES.metal
+	end
+	if not teamData.startEnergy then
+		teamData.startEnergy = planetUtilities.DEFAULT_RESOURCES.energy
+	end
+end
+
+for i = 1, #planets do
+	local planetData = planets[i]
+	
+	-- Player defaults
+	ApplyDefaults(planetData.gameConfig.playerConfig)
+	
+	-- AI defaults
+	local aiConfig = planetData.gameConfig.aiConfig
+	for j = 1, #aiConfig do
+		ApplyDefaults(aiConfig[j])
+	end
+end
+
 local initialPlanets = {}
 
 for i = 1, #planets do
