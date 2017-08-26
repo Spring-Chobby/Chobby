@@ -187,11 +187,13 @@ planetUtilities.COMMAND = {
 	WAITCODE_TIME = 1,
 	WAITCODE_SQUAD = 3,
 	ATTACK = 20,
-	TRANSFER_UNIT = 38292,
 	
 	-- Custom commands
 	RAW_MOVE = 31109,
 	AREA_GUARD = 13922, -- Don't use, causes recursion
+	TRANSFER_UNIT = 38292,
+	PLACE_BEACON = 35170,
+	WAIT_AT_BEACON = 35171,
 }
 
 planetUtilities.ICON_OVERLAY = {
