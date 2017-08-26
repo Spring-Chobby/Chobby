@@ -208,6 +208,13 @@ planetUtilities.DIFFICULTY = {
 	BRUTAL = 4,
 }
 
+planetUtilities.FACING = {
+	SOUTH = 0,
+	EAST = 1,
+	NORTH = 2,
+	WEST = 3,
+}
+
 planetUtilities.TERRAFORM_SHAPE = {
 	RECTANGLE = 1,
 	LINE = 2,

@@ -45,9 +45,9 @@ local function GetPlanet(planetUtilities, planetID)
 				startUnits = {
 					{
 						name = "factorycloak",
-						x = 3550,
-						z = 1300,
-						facing = 3,
+						x = 3276,
+						z = 1138,
+						facing = 0,
 					}, 
 					{
 						name = "staticradar",
