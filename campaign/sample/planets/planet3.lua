@@ -50,6 +50,15 @@ local function GetPlanet(planetUtilities, planetID)
 						facing = 0,
 					}, 
 					{
+						name = "cloakcon",
+						x = 3376,
+						z = 1138,
+						facing = 0,
+						commands = {
+							{cmdID = planetUtilities.COMMAND.GUARD, atPosition = {3276, 1138}},
+						},
+					},
+					{
 						name = "staticradar",
 						x = 3820,
 						z = 2880,
@@ -126,19 +135,41 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 2050,
 						z = 1700,
 						facing = 0,
+						commands = {
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2050, 1720}},
+						},
 					},
+					
 					{
 						name = "cloakbomb",
 						x = 3000,
 						z = 3000,
 						facing = 3,
+						commands = {
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3000, 3020}},
+						},
 					},
+					{
+						name = "turretmissile",
+						x = 1187,
+						z = 890,
+						facing = 0,
+					}, 
 					{
 						name = "cloakbomb",
 						x = 1200,
 						z = 1200,
 						facing = 3,
+						commands = {
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1200, 1220}},
+						},
 					},
+					{
+						name = "turretmissile",
+						x = 1187,
+						z = 890,
+						facing = 0,
+					}, 
 					{
 						name = "turretmissile",
 						x = 3300,
@@ -182,7 +213,8 @@ local function GetPlanet(planetUtilities, planetID)
 					allyTeam = 1,
 					unlocks = {
 						"vehraid",
-						"vehscout",
+						--"vehscout",
+						"vehriot",
 					},
 					commanderLevel = 2,
 					commander = {
@@ -198,6 +230,12 @@ local function GetPlanet(planetUtilities, planetID)
 						{
 							name = "factoryveh",
 							x = 500,
+							z = 2700,
+							facing = 1, 
+						},
+						{
+							name = "staticcon",
+							x = 300,
 							z = 2700,
 							facing = 1, 
 						},
@@ -227,8 +265,8 @@ local function GetPlanet(planetUtilities, planetID)
 						},
 						{
 							name = "staticmex",
-							x = 420,
-							z = 3070,
+							x = 424,
+							z = 3270,
 							facing = 0, 
 						},
 						{
@@ -247,12 +285,6 @@ local function GetPlanet(planetUtilities, planetID)
 							name = "vehraid",
 							x = 262,
 							z = 2220,
-							facing = 0, 
-						},
-						{
-							name = "vehscout",
-							x = 262,
-							z = 2420,
 							facing = 0, 
 						},
 						{

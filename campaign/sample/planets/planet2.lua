@@ -42,12 +42,19 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				extraUnlocks = {
 					"cloakskirm",
+					"cloakriot",
 				},
 				startUnits = {
 					{
 						name = "staticradar",
 						x = 3730,
 						z = 3625,
+						facing = 3, 
+					},
+					{
+						name = "staticradar",
+						x = 3010,
+						z = 2540,
 						facing = 3, 
 					},
 					{
@@ -74,24 +81,24 @@ local function GetPlanet(planetUtilities, planetID)
 						z = 3200,
 						facing = 0, 
 					},
-					{
-						name = "cloakskirm",
-						x = 3400,
-						z = 3190,
-						facing = 0, 
-					},
+					-- {
+						-- name = "cloakskirm",
+						-- x = 3400,
+						-- z = 3190,
+						-- facing = 0, 
+					-- },
 					{
 						name = "cloakskirm",
 						x = 3460,
 						z = 3180,
 						facing = 0, 
 					},
-					{
-						name = "cloakskirm",
-						x = 3520,
-						z = 3190,
-						facing = 0, 
-					},
+					-- {
+						-- name = "cloakskirm",
+						-- x = 3520,
+						-- z = 3190,
+						-- facing = 0, 
+					-- },
 					{
 						name = "cloakskirm",
 						x = 3580,
@@ -102,12 +109,6 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "cloakriot",
 						x = 3380,
 						z = 3280,
-						facing = 0, 
-					},
-					{
-						name = "cloakriot",
-						x = 3460,
-						z = 3260,
 						facing = 0, 
 					},
 					{
@@ -178,45 +179,52 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					startUnits = {
 						{
-							name = "turretriot",
-							x = 540,
-							z = 3270,
-							facing = 1, 
-							bonusObjectiveID = 4,
-						},
-						{
-							name = "turretriot",
-							x = 2000,
-							z = 2300,
+							name = "staticradar",
+							x = 1300,
+							z = 1014,
 							facing = 0, 
-							bonusObjectiveID = 4,
 						},
 						{
 							name = "turretriot",
-							x = 670,
-							z = 1540,
+							x = 2770,
+							z = 1880,
 							facing = 0, 
-							bonusObjectiveID = 4,
 						},
 						{
 							name = "turretriot",
-							x = 3560,
-							z = 800,
+							x = 850,
+							z = 1660,
 							facing = 0, 
-							bonusObjectiveID = 4,
 						},
 						{
 							name = "turretriot",
-							x = 1975,
-							z = 475,
-							facing = 1, 
-							bonusObjectiveID = 4,
+							x = 1830,
+							z = 1230,
+							facing = 0, 
+						},
+						{
+							name = "turretriot",
+							x = 3177,
+							z = 330,
+							facing = 0, 
 						},
 						{
 							name = "factorycloak",
 							x = 660,
 							z = 770,
-							facing = 2, 
+							facing = 0, 
+						},
+						{
+							name = "cloakriot",
+							x = 660,
+							z = 900,
+							facing = 0, 
+						},
+						{
+							name = "cloakriot",
+							x = 660,
+							z = 1000,
+							facing = 0, 
 						},
 						{
 							name = "staticmex",
@@ -367,10 +375,12 @@ local function GetPlanet(planetUtilities, planetID)
 					satisfyByTime = 480,
 					comparisionType = planetUtilities.COMPARE.AT_MOST,
 					targetNumber = 0,
-					-- See bonusObjectiveID in units table
+					enemyUnitTypes = {
+						"turretriot",
+					},
 					image = planetUtilities.ICON_DIR .. "turretriot.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Kill all five enemy Stardust turrets before 8:00",
+					description = "Destroy all enemy Stardust turrets before 8:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			},
@@ -379,6 +389,7 @@ local function GetPlanet(planetUtilities, planetID)
 			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"cloakskirm",
+				"cloakriot",
 			},
 			modules = {
 				"commweapon_heavymachinegun",
