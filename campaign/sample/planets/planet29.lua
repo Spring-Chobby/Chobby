@@ -1251,7 +1251,7 @@ local function GetPlanet(planetUtilities, planetID)
 					loseAfterSeconds = false,
 					allyTeamLossObjectiveID = 1,
 				},
-				[1] = {
+				[2] = {
 					ignoreUnitLossDefeat = false,
 					vitalCommanders = true,
 					vitalUnitTypes = {
@@ -1285,25 +1285,25 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Have 6 Fusion Reactors by 10:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[2] = { -- Win by 30:00
-					victoryByTime = 1800,
-					image = planetUtilities.ICON_OVERLAY.CLOCK,
-					description = "Win by 30:00",
-					experience = planetUtilities.BONUS_EXP,
-				},
-				[3] = { -- Protect all mex
-					satisfyForever = true,
-					failOnUnitLoss = true, -- Fails the objective if any units being used to satisfy the objective are lost.
+				[2] = { -- Have 11 mex at all times after 10 minutes
+					satisfyAfterTime = 600,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 0,
+					targetNumber = 11,
 					unitTypes = {
 						"staticmex",
 					},
 					image = planetUtilities.ICON_DIR .. "staticmex.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
-					description = "Don't lose any Metal Extractors",
+					description = "Always have 11 Metal Extractors after 10:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
+				[3] = { -- Win by 30:00
+					victoryByTime = 1800,
+					image = planetUtilities.ICON_OVERLAY.CLOCK,
+					description = "Win by 30:00",
+					experience = planetUtilities.BONUS_EXP,
+				},
+				
 			}
 		},
 		completionReward = {
