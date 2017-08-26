@@ -132,6 +132,10 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 		end
 		return false
 	end
+	
+	local function IsTabSelectedByIndex(index, tabName)
+		return tabs[index].control and tabs[index].control.parent and ((not tabName) or tabName == tabs[index].name)
+	end
 
 	-------------------------------------------------------------------
 	-- External Functions
@@ -167,7 +171,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 
 	function externalFunctions.IsTabSelected(tabName)
 		for i = 1, #tabs do
-			if tabs[i].control and tabs[i].control.parent and ((not tabName) or tabName == tabs[i].name)then
+			if IsTabSelectedByIndex(i, tabName) then
 				return true
 			end
 		end
@@ -232,6 +236,14 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 		end
 	end
 
+	function externalFunctions.GetSubmenuByName(tabName)
+		for i = 1, #tabs do
+			if tabs[i].name == tabName then
+				return tabs[i].panelHandler
+			end
+		end
+	end
+
 	function externalFunctions.GetManagedControlByName(controlName)
 		for i = 1, #tabs do
 			if tabs[i].control and tabs[i].control.name == controlName then
@@ -274,12 +286,12 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 		end
 	end
 
-	function externalFunctions.SetActivity(name, activityCount, priorityLevel)
+	function externalFunctions.SetActivity(tabName, activityCount, priorityLevel)
 		priorityLevel = priorityLevel or 1
 		activityCount = activityCount or 0
 		for i = 1, #tabs do
 			local tab = tabs[i]
-			if tab.name == name and tab.activityLabel then
+			if tab.name == tabName and tab.activityLabel then
 				local activityLabel
 				if activityCount > 0 then
 					tab.priorityLevel = math.max(priorityLevel, tab.priorityLevel or 1)
@@ -302,6 +314,15 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 					tab.activityLabel.font.color = {0.8,1,0,1}
 				end
 				tab.activityLabel:SetCaption(activityLabel)
+			end
+		end
+	end
+
+	function externalFunctions.SetTabHighlighted(tabName, onlyIfNotSelected)
+		for i = 1, #tabs do
+			local tab = tabs[i]
+			if tab.name == tabName and not (onlyIfNotSelected and IsTabSelectedByIndex(i, tabName)) then
+				ButtonUtilities.SetButtonHighlighted(tab.button)
 			end
 		end
 	end

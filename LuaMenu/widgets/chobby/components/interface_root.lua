@@ -939,6 +939,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		mainWindowHandler.OpenSubmenu(SINGLEPLAYER_INDEX, name)
 	end
 	
+	function externalFunctions.GetSingleplayerSubmenu()
+		return mainWindowHandler.GetPanelHander(SINGLEPLAYER_INDEX)
+	end
+	
 	function externalFunctions.SetPanelDisplayMode(newAutodetectDoublePanel, newDoublePanel)
 		autodetectDoublePanel = newAutodetectDoublePanel
 		local screenWidth, screenHeight = Spring.GetViewGeometry()

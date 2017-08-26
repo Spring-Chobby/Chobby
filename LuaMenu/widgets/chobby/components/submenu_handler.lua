@@ -91,6 +91,10 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 		end
 	end
 	
+	function externalFunctions.GetPanelHander(index)
+		return submenus[index].panelHandler
+	end
+	
 	function externalFunctions.SetBackAtMainMenu(submenuName)
 		if submenuName then
 			local index = externalFunctions.GetCurrentSubmenu()

@@ -1009,6 +1009,15 @@ function widget:Initialize()
 		if currentWinPopup then
 			currentWinPopup.UpdateExperience(oldExperience, oldLevel, newExperience, newLevel, gainedBonusExperience)
 		end
+		if oldExperience == 0 or (oldLevel ~= newLevel) then
+			local singleplayerMenu = WG.Chobby.interfaceRoot.GetSingleplayerSubmenu()
+			if singleplayerMenu then
+				local campaignMenu = singleplayerMenu.GetSubmenuByName("campaign")
+				if campaignMenu then
+					campaignMenu.SetTabHighlighted("commander", true)
+				end
+			end
+		end
 	end
 	WG.CampaignData.AddListener("GainExperience", GainExperience)
 	
