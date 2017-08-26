@@ -144,7 +144,7 @@ local function PromptNewSave(backOnFail)
 		items = {"Easy", "Normal", "Hard", "Brutal"},
 		font = Configuration:GetFont(3),
 		itemFontSize = Configuration:GetFont(3).size,
-		selected = 1,
+		selected = 2,
 		parent = newSaveWindow,
 	}
 	offset = offset + 52
