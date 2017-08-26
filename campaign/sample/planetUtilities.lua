@@ -187,6 +187,7 @@ planetUtilities.COMMAND = {
 	WAITCODE_TIME = 1,
 	WAITCODE_SQUAD = 3,
 	ATTACK = 20,
+	TRANSFER_UNIT = 38292,
 	
 	-- Custom commands
 	RAW_MOVE = 31109,
