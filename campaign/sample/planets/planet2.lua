@@ -173,9 +173,7 @@ local function GetPlanet(planetUtilities, planetID)
 						decorations = {
 						},
 						modules = {
-						  {
 							"commweapon_beamlaser",
-						  }
 						}
 					},
 					startUnits = {
