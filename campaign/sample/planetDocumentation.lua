@@ -32,8 +32,8 @@ planetData = {
 	
 	-- Configuration for everything related to playing the battle
 	gameConfig = {
-		-- Startscript, if the mission is scripted. Not yet implemented. Would override everything almost everything else in this table
-		missionStartscript = false, 
+		-- Name of the mutator to use. For scripted missions.
+		gameName = false, 
 		
 		-- Map name, be careful of spaces.
 		mapName = "Living Lands v2.03",

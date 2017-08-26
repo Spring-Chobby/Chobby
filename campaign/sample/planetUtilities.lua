@@ -47,11 +47,11 @@ planetUtilities.PLANET_SIZE_INFO = 240
 planetUtilities.ICON_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/unitpics/"
 
 planetUtilities.planetPositions = {
-	[1] = {68, 822},
-	[2] = {47, 680},
-	[3] = {46, 541},
+	[1] = {33, 800},
+	[2] = {58, 666},
+	[3] = {42, 535},
 	[4] = {28, 400},
-	[5] = {145, 605},
+	[5] = {150, 598},
 	[6] = {235, 694},
 	[7] = {59, 268},
 	[8] = {257, 849},
@@ -115,6 +115,7 @@ planetUtilities.planetPositions = {
 	[66] = {761, 150},
 	[67] = {932, 701},
 	[68] = {926, 50},
+	[69] = {65, 911},
 }
 
 for i = 1, #planetUtilities.planetPositions do
