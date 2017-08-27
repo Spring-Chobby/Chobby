@@ -26,8 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[Archer and Limpet]]
 		},
-		gameConfig = {
-			missionStartscript = false,
+		gameConfig = {
 			mapName = "Crubick Plains v1.2",
 			playerConfig = {
 				startX = 100,

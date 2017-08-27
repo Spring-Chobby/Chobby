@@ -38,6 +38,12 @@ planetData = {
 		-- Map name, be careful of spaces.
 		mapName = "Living Lands v2.03",
 		
+		-- List of modoptions to apply.
+		-- Note that 1 is true and 0 is false for boolean modoptions.
+		modoptions = {
+			zombies = 1
+		},
+		
 		-- Configuration for everything owned by the player.
 		playerConfig = {
 			-- start coordinates of the players commander

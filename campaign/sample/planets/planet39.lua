@@ -27,7 +27,6 @@ local function GetPlanet(planetUtilities, planetID)
 			text = [[The enemy is about to finish a Krow heavy gunship. Quickly build anti-air units and turrets to defeat it, then build your own Krow and return the favour.]]
 		},
 		gameConfig = {
-			missionStartscript = false,
 			mapName = "LowTideV3",
 			playerConfig = {
 				startX = 100,

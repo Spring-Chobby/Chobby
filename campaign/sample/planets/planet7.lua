@@ -26,8 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[The Artefact on this planet contains invaluable information, but it is protected by a large automated defence network. Infiltrate the defences with Spectre sniper bots and destroy the Singularity Plants to deactivate the heavier defences.]]
 		},
-		gameConfig = {
-			missionStartscript = false,
+		gameConfig = {
 			mapName = "The river Nix 20",
 			playerConfig = {
 				startX = 1000,

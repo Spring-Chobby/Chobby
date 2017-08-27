@@ -27,7 +27,6 @@ local function GetPlanet(planetUtilities, planetID)
 			text = [[...]]
 		},
 		gameConfig = {
-			missionStartscript = false,
 			mapName = "LowTideV3",
 			playerConfig = {
 				startX = 100,

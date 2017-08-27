@@ -26,8 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[Finish the Behemoth artillery piece and link it to your ally's power plants. This cannon will break the enemy's defensive line and allow you to destroy their base.]]
 		},
-		gameConfig = {
-			missionStartscript = false,
+		gameConfig = {
 			mapName = "Tombstone Desert V2",
 			playerConfig = {
 				startX = 3435,

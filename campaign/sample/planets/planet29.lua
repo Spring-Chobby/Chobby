@@ -27,7 +27,6 @@ local function GetPlanet(planetUtilities, planetID)
 			text = [[The enemy of my enemy... is at least useful. Build up your economy with Fusion Generators while the two opposing factions fight, then eradicate them both. Advanced Radars will keep you informed on the overall battle state.]]
 		},
 		gameConfig = {
-			missionStartscript = false,
 			mapName = "La Isla Bonita v1.1",
 			playerConfig = {
 				startX = 1016,

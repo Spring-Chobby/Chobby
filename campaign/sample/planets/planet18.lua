@@ -26,8 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[something something terraform something dirtbag something]]
 		},
-		gameConfig = {
-			missionStartscript = false,
+		gameConfig = {
 			mapName = "LowTideV3",
 			playerConfig = {
 				startX = 100,

@@ -26,8 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[The bodies of water on this battlefield would pose difficulties for most factories, but the Amphibious factory can take advantage of them instead.]]
 		},
-		gameConfig = {
-			missionStartscript = false,
+		gameConfig = {
 			mapName = "Iced Coffee v4.3",
 			playerConfig = {
 				startX = 2830,

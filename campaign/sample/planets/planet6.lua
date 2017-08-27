@@ -26,8 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[This battlefield is at a high altitude, so deploy Wind Generators to provide cheap and efficient energy income. Zeus assault bots will crush any opposition you will face here.]]
 		},
-		gameConfig = {
-			missionStartscript = false,
+		gameConfig = {
 			mapName = "Fairyland v1.0",
 			playerConfig = {
 				startX = 370,

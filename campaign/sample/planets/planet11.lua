@@ -26,8 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[On this planet your opponent sends gunships out from behind a formidable defensive array. Use Crasher AA vehicles to shoot down the gunships, then Impaler artillery to tear down the base.]]
 		},
-		gameConfig = {
-			missionStartscript = false,
+		gameConfig = {
 			mapName = "BlueBend-v01",
 			playerConfig = {
 				startX = 3550,

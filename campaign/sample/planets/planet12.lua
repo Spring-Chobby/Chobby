@@ -26,8 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[The enemy Tanks will be difficult to defeat in direct combat. Instead, build Dominatrix vehicles to turn your opponent's units against each other.]]
 		},
-		gameConfig = {
-			missionStartscript = false,
+		gameConfig = {
 			mapName = "Red Comet v1.3",
 			playerConfig = {
 				startX = 5319,

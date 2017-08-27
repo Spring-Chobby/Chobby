@@ -27,7 +27,6 @@ local function GetPlanet(planetUtilities, planetID)
 			text = [[Two duelling Zenith meteor controllers threaten to reduce this planet to space dust. Sneak into the enemy base and destroy their Zenith so you'll at least have the satisfaction of being the owner of that space dust.]]
 		},
 		gameConfig = {
-			missionStartscript = false,
 			mapName = "LowTideV3",
 			playerConfig = {
 				startX = 100,

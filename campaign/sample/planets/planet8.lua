@@ -26,8 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 2,
 			text = [[The enemy Big Bertha cannon is dominating the battlefield. Sneak into their base with Scythes and eliminate this threat.]]
 		},
-		gameConfig = {
-			missionStartscript = false,
+		gameConfig = {
 			mapName = "Tabula-v6.1",
 			playerConfig = {
 				startX = 7500,

@@ -26,8 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[The enemy surrounds you on all sides; construct Stinger and Stardust defence structures and hold out for 15 minutes.]]
 		},
-		gameConfig = {
-			missionStartscript = false,
+		gameConfig = {
 			mapName = "Archers_Valley_v6",
 			playerConfig = {
 				startX = 3000,

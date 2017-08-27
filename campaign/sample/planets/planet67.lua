@@ -27,7 +27,6 @@ local function GetPlanet(planetUtilities, planetID)
 			text = [[You are facing a massive fleet of capital ships. Ensure your complete domination of the seas with the Disco Rave Party superweapon.]]
 		},
 		gameConfig = {
-			missionStartscript = false,
 			mapName = "LowTideV3",
 			playerConfig = {
 				startX = 100,

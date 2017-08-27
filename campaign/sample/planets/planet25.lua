@@ -26,8 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[You currently control two hills on opposite sides of the battlefield, but your opponent will attack them both. Use the Djinn teleporters to move your army where it is needed most.]]
 		},
-		gameConfig = {
-			missionStartscript = false,
+		gameConfig = {
 			mapName = "Crubick Plains v1.2",
 			playerConfig = {
 				startX = 100,

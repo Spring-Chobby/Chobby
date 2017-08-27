@@ -26,8 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[Your opponent has taken to the air in this battle. Construct the anti-air Gremlin bot and Hacksaw defensive emplacements to bring them back to the ground. Remember the Defender is also effective as an anti-air defence.]]
 		},
-		gameConfig = {
-			missionStartscript = false,
+		gameConfig = {
 			mapName = "Avalanche-v2",
 			playerConfig = {
 				startX = 580,

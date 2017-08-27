@@ -27,7 +27,6 @@ local function GetPlanet(planetUtilities, planetID)
 			text = [[Use the Hammer artillery bots to weaken your opponent's defences and shields before you commit to an assault.]]
 		},
 		gameConfig = {
-			missionStartscript = false,
 			mapName = "Wanderlust v03",
 			playerConfig = {
 				startX = 2600,

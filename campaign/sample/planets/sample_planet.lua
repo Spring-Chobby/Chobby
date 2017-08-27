@@ -30,7 +30,6 @@ local function GetPlanet(planetUtilities, planetID)
 			Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.]]
 		},
 		gameConfig = {
-			missionStartscript = false,
 			mapName = "TitanDuel",
 			playerConfig = {
 				startX = 1800,

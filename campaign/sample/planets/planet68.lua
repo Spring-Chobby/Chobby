@@ -27,7 +27,6 @@ local function GetPlanet(planetUtilities, planetID)
 			text = [[Your opponent is already conducting a victory celebration with their Disco Rave Party. Hold off their assault until your Starlight orbital chisel is complete, then demonstrate that their revels are premature.]]
 		},
 		gameConfig = {
-			missionStartscript = false,
 			mapName = "LowTideV3",
 			playerConfig = {
 				startX = 100,

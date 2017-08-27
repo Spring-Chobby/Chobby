@@ -27,7 +27,6 @@ local function GetPlanet(planetUtilities, planetID)
 			text = [[Shut down the enemy Tidal Generator operation on this sunny coastline with the Hovercraft factory.]]
 		},
 		gameConfig = {
-			missionStartscript = false,
 			mapName = "Malibu Beach v1",
 			playerConfig = {
 				startX = 1200,

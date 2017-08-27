@@ -26,8 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[Your opponent will use Scorcher vehicle raiders in this battle. Shut them down with Tick EMP bombs.]]
 		},
-		gameConfig = {
-			missionStartscript = false,
+		gameConfig = {
 			mapName = "Adamantine_Mountian-V1",
 			playerConfig = {
 				startX = 3550,

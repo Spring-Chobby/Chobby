@@ -26,8 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[Besides the occasional strange hills dotting the landscape, this is a smooth and level battlefield. Your opponent has arrived before you and has begun expanding their economy. Use your Scorchers to punish their greed.]]
 		},
-		gameConfig = {
-			missionStartscript = false,
+		gameConfig = {
 			mapName = "AlienDesert",
 			playerConfig = {
 				startX = 1475,

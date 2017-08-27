@@ -26,8 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[Abuse the combination of Roach mobile bombs and Eraser area cloakers to decimate enemy tank formations in this battle. Build some Geothermal Generators to power your Erasers.]]
 		},
-		gameConfig = {
-			missionStartscript = false,
+		gameConfig = {
 			mapName = "Fields_Of_Isis",
 			playerConfig = {
 				startX = 1000,

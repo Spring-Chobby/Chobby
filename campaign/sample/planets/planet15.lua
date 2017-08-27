@@ -26,8 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[Your opponent will start with Hovercraft and then transition to Gunships. Build Rogue skirmishers to defeat the hovercraft, then Vandal AA bots to defeat the gunships.]]
 		},
-		gameConfig = {
-			missionStartscript = false,
+		gameConfig = {
 			mapName = "DunePatrol_wip_v03",
 			playerConfig = {
 				startX = 2816,

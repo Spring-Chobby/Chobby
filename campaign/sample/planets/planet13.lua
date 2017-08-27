@@ -26,8 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[This isolated asteroid is being used by the enemy as an observation and command post. Use Shieldbots to conquer the rough terrain, then bring your Commander to the Interception Network structure to download important strategic data.]]
 		},
-		gameConfig = {
-			missionStartscript = false,
+		gameConfig = {
 			mapName = "Apophis v2_3",
 			playerConfig = {
 				startX = 2300,

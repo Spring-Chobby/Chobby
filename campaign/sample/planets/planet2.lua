@@ -27,7 +27,6 @@ local function GetPlanet(planetUtilities, planetID)
 			text = [[Glaives served you well in the previous battle, but on this planet your opponent has prepared Warrior riot bots and Stardust turrets to counter them. Retaliate with Rockos and your own Warriors to achieve victory.]]
 		},
 		gameConfig = {
-			missionStartscript = false,
 			mapName = "Battle for PlanetXVII-v01",
 			playerConfig = {
 				startX = 3700,

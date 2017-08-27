@@ -26,8 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 2,
 			text = [[Help your ally to push across the map with Slasher trucks and Wolverine mine artillery. Grind your opponent into dust.]]
 		},
-		gameConfig = {
-			missionStartscript = false,
+		gameConfig = {
 			mapName = "TandemCraters",
 			playerConfig = {
 				startX = 400,

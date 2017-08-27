@@ -26,8 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[You will face the fearsome, fire-spewing Dante strider in this battle. Use Aspis area shields to deflect the assault, and Racketeer artillery to disarm the Dante.]]
 		},
-		gameConfig = {
-			missionStartscript = false,
+		gameConfig = {
 			mapName = "Violence_4.2",
 			playerConfig = {
 				startX = 4100,

@@ -208,6 +208,25 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		end
 	end
 	
+	local modoptions = {
+		commandertypes = TableToBase64(commanderTypes),
+		defeatconditionconfig = TableToBase64(gameConfig.defeatConditionConfig),
+		objectiveconfig = TableToBase64(gameConfig.objectiveConfig),
+		bonusobjectiveconfig = TableToBase64(gameConfig.bonusObjectiveConfig),
+		neutralunitstospawn = TableToBase64(gameConfig.neutralUnits),
+		fixedstartpos = 1,
+		planetmissiondifficulty = missionDifficulty,
+		singleplayercampaignsavename = WG.Chobby.Configuration.campaignSaveFile,
+		singleplayercampaignbattleid = planetID,
+		initalterraform = TableToBase64(gameConfig.terraform),
+	}
+	
+	if gameConfig.modoptions then
+		for key, value in pairs(gameConfig.modoptions) do
+			modoptions[key] = value
+		end
+	end
+	
 	local script = {
 		gametype =  gameConfig.gameName or gameName,
 		hostip = '127.0.0.1',
@@ -220,19 +239,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		numusers = playerCount + aiCount,
 		startpostype = 0, -- Fixed
 		GameStartDelay = 0,
-		modoptions = {
-			--crashcircuit = 1, -- Don't crash circuit
-			commandertypes = TableToBase64(commanderTypes),
-			defeatconditionconfig = TableToBase64(gameConfig.defeatConditionConfig),
-			objectiveconfig = TableToBase64(gameConfig.objectiveConfig),
-			bonusobjectiveconfig = TableToBase64(gameConfig.bonusObjectiveConfig),
-			neutralunitstospawn = TableToBase64(gameConfig.neutralUnits),
-			fixedstartpos = 1,
-			planetmissiondifficulty = missionDifficulty,
-			singleplayercampaignsavename = WG.Chobby.Configuration.campaignSaveFile,
-			singleplayercampaignbattleid = planetID,
-			initalterraform = TableToBase64(gameConfig.terraform),
-		},
+		modoptions = modoptions,
 	}
 
 	for i, ai in pairs(ais) do
