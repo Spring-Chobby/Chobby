@@ -192,6 +192,24 @@ planetData = {
 			},
 		},
 		
+		-- List of wrecks to spawn. Names tend to be "_dead" and "_heap". Actually spawns any feature.
+		initialWrecks = {
+			{
+				-- Feature def name
+				name = "factorycloak_dead",
+				
+				-- Position and facing. Leave out facing for a random facing.
+				x = 1300,
+				z = 3750,
+				facing = 2,
+				
+				-- Whether the feature spawns can be conditional on the difficulty setting. Not sure why.
+				-- 1 = Easy, 2 = Medium, 3 = Hard, 4 = Brutal
+				difficultyAtMost = nil,
+				difficultyAtLeast = nil,
+			},
+		}
+		
 		-- Configuration for all the AI teams in the game. These are mostly the same as player config.
 		aiConfig = {
 			{
