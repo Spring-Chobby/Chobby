@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Origin",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[Your first battle will be straightforward. You have been provided with a starting base. Construct an army of Glaives and Warriors and overwhelm your enemy.]]
+			text = [[This battle will be straightforward. You have been provided with a starting base. Construct an army of Glaives and overwhelm your enemy.]]
 		},
 		gameConfig = {
 			missionStartscript = false,
@@ -40,9 +40,7 @@ local function GetPlanet(planetUtilities, planetID)
 				extraUnlocks = {
 					"factorycloak",
 					"cloakraid",
-					"cloakriot",
-					"staticmex",
-					"energysolar",
+					--"cloakriot",
 					"cloakcon",
 				},
 				startUnits = {
@@ -237,17 +235,16 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Build at least 5 Glaives",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[5] = { -- Kill 10 Glaives
+				[5] = { -- Kill all enemy mexes
 					satisfyOnce = true,
-					onlyCountRemovedUnits = true, -- Only count units that died
-					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 10,
+					comparisionType = planetUtilities.COMPARE.AT_MOST,
+					targetNumber = 0,
 					enemyUnitTypes = {
-						"cloakraid",
+						"staticmex",
 					},
-					image = planetUtilities.ICON_DIR .. "cloakraid.png",
+					image = planetUtilities.ICON_DIR .. "staticmex.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Kill at least 10 Glaives",
+					description = "Destroy all enemy Metal Extractors",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[6] = {
@@ -263,7 +260,7 @@ local function GetPlanet(planetUtilities, planetID)
 			units = {
 				"factorycloak",
 				"cloakraid",
-				"cloakriot",
+				--"cloakriot",
 				"cloakcon"
 			},
 			modules = {

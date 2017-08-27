@@ -49,6 +49,12 @@ local function GetPlanet(planetUtilities, planetID)
 						facing = 0, 
 					},
 					{
+						name = "staticradar",
+						x = 2925,
+						z = 1605,
+						facing = 0, 
+					},
+					{
 						name = "factorycloak",
 						x = 2560,
 						z = 800,
@@ -66,8 +72,8 @@ local function GetPlanet(planetUtilities, planetID)
 						facing = 0,
 						commands = {
 							{cmdID = planetUtilities.COMMAND.GUARD, atPosition = {2560, 800}},
-							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1560, 800}, options = {"shift"}},
-							{unitName = "turretmissile", pos = {64, 64}, facing = 3, options = {"shift"}},
+							--{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1560, 800}, options = {"shift"}},
+							--{unitName = "turretmissile", pos = {64, 64}, facing = 3, options = {"shift"}},
 						},
 					},
 					{
@@ -77,6 +83,15 @@ local function GetPlanet(planetUtilities, planetID)
 						facing = 0, 
 						commands = {
 							{cmdID = planetUtilities.COMMAND.GUARD, atPosition = {2560, 800}},
+						},
+					},
+					{
+						name = "cloakcon",
+						x = 2327,
+						z = 1400,
+						facing = 0, 
+						commands = {
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2410, 2580}},
 						},
 					},
 					{
@@ -97,47 +112,36 @@ local function GetPlanet(planetUtilities, planetID)
 						z =1150,
 						facing = 0, 
 					},
-					{
-						name = "cloakarty",
-						x =2400,
-						z =1100,
-						facing = 0, 
-					},
-					{
-						name = "cloakarty",
-						x =2440,
-						z =1080,
-						facing = 0, 
-					},
-					{
-						name = "cloakarty",
-						x =2480,
-						z =1060,
-						facing = 0, 
-					},
-					{
-						name = "cloakarty",
-						x =2520,
-						z =1040,
-						facing = 0, 
-					},
-					{
-						name = "cloakarty",
-						x =2560,
-						z =1020,
-						facing = 0, 
-					},
-					{
-						name = "cloakriot",
-						x =2700,
-						z =1100,
-						facing = 0, 
-						-- commands = {
-							-- {cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2700, 900}},
-							-- {cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2500, 1100}, options = {"shift"}},
-							-- {cmdID = planetUtilities.COMMAND.REPEAT, params = {1}}, -- Watch out, start state widget may override this?
-						-- },
-					},
+					-- {
+						-- name = "cloakarty",
+						-- x =2400,
+						-- z =1100,
+						-- facing = 0, 
+					-- },
+					-- {
+						-- name = "cloakarty",
+						-- x =2440,
+						-- z =1080,
+						-- facing = 0, 
+					-- },
+					-- {
+						-- name = "cloakarty",
+						-- x =2480,
+						-- z =1060,
+						-- facing = 0, 
+					-- },
+					-- {
+						-- name = "cloakarty",
+						-- x =2520,
+						-- z =1040,
+						-- facing = 0, 
+					-- },
+					-- {
+						-- name = "cloakarty",
+						-- x =2560,
+						-- z =1020,
+						-- facing = 0, 
+					-- },
 					{
 						name = "cloakriot",
 						x =2650,
@@ -281,15 +285,39 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 2, 
 						},
 						{
-							name = "turretriot",
+							name = "turretheavylaser",
 							x =2280,
 							z =3000,
+							facing = 2, 
+						},
+						{
+							name = "turretheavylaser",
+							x =2750,
+							z =2990,
+							facing = 2, 
+						},
+						{
+							name = "turretriot",
+							x =2460,
+							z =2800,
+							facing = 2, 
+						},
+						{
+							name = "turretriot",
+							x =3068,
+							z =2565,
 							facing = 2, 
 						},
 						{
 							name = "turretriot",
 							x =4750,
 							z =2280,
+							facing = 2, 
+						},
+						{
+							name = "turretriot",
+							x = 2910,
+							z = 3500,
 							facing = 2, 
 						},
 						{
