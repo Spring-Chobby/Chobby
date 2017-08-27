@@ -442,43 +442,6 @@ local function GetLobbyTabControls()
 		x = 20,
 		y = offset + TEXT_OFFSET,
 		width = 90,
-		height = 30,
-		valign = "top",
-		align = "left",
-		font = Configuration:GetFont(2),
-		caption = "Lobby Display Mode",
-	}
-	children[#children + 1] = ComboBox:New {
-		x = COMBO_X,
-		y = offset,
-		width = COMBO_WIDTH,
-		height = 30,
-		items = {"Borderless Window", "Windowed", "Fullscreen", "Manual Borderless"},
-		font = Configuration:GetFont(2),
-		itemFontSize = Configuration:GetFont(2).size,
-		selected = Configuration.lobby_fullscreen or 1,
-		OnSelect = {
-			function (obj)
-				if freezeSettings then
-					return
-				end
-				if obj.selected == 4 then
-					ShowManualBorderlessEntryWindow("lobby")
-				elseif Spring.GetGameName() == "" then
-					SetLobbyFullscreenMode(obj.selected)
-				end
-
-				lobbyFullscreen = obj.selected
-				Configuration.lobby_fullscreen = obj.selected
-			end
-		},
-	}
-	offset = offset + ITEM_OFFSET
-
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
 		height = 40,
 		valign = "top",
 		align = "left",
@@ -1073,15 +1036,25 @@ local function ProcessScreenSizeOption(data, offset)
 				if freezeSettings then
 					return
 				end
+				if data.lobbyDisplayModeToggle then
+					if obj.selected == 4 then
+						ShowManualBorderlessEntryWindow("lobby")
+					elseif Spring.GetGameName() == "" then
+						SetLobbyFullscreenMode(obj.selected)
+					end
 
-				if obj.selected == 4 then
-					ShowManualBorderlessEntryWindow("game")
-				elseif Spring.GetGameName() ~= "" then
-					SetLobbyFullscreenMode(obj.selected)
+					lobbyFullscreen = obj.selected
+					Configuration.lobby_fullscreen = obj.selected
+				else
+					if obj.selected == 4 then
+						ShowManualBorderlessEntryWindow("game")
+					elseif Spring.GetGameName() ~= "" then
+						SetLobbyFullscreenMode(obj.selected)
+					end
+
+					battleStartDisplay = obj.selected
+					Configuration.game_fullscreen = obj.selected
 				end
-
-				battleStartDisplay = obj.selected
-				Configuration.game_fullscreen = obj.selected
 			end
 		},
 	}
@@ -1225,7 +1198,7 @@ local function PopulateTab(settingPresets, settingOptions, settingsDefault)
 
 	for i = 1, #settingOptions do
 		local data = settingOptions[i]
-		if data.displayModeToggle then
+		if data.displayModeToggle or data.lobbyDisplayModeToggle then
 			label, list, offset = ProcessScreenSizeOption(data, offset)
 		elseif data.isNumberSetting then
 			label, list, offset = ProcessSettingsNumber(data, offset, settingsDefault, customSettingsSwitch)

@@ -134,8 +134,13 @@ local settingsConfig = {
 		settings = {
 			{
 				name = "DisplayMode",
-				humanName = "Game Display Mode",
+				humanName = "Ingame Display Mode",
 				displayModeToggle = true,
+			},
+			{
+				name = "LobbyDisplayMode",
+				humanName = "Menu Display Mode",
+				lobbyDisplayModeToggle = true,
 			},
 			{
 				name = "WaterType",
