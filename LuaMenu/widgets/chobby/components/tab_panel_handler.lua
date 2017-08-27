@@ -218,6 +218,14 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 			ToggleShow(tabs[tabIndex].button, tabs[tabIndex], true)
 		end
 	end
+	
+	function externalFunctions.CloseTabs()
+		for i = 1, #tabs do
+			if IsTabSelectedByIndex(i, tabs[i].name) then
+				ToggleShow(tabs[i].button, tabs[i])
+			end
+		end
+	end
 
 	function externalFunctions.OpenTabByName(tabName)
 		for i = 1, #tabs do

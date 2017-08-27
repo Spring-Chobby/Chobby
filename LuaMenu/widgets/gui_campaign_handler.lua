@@ -961,6 +961,7 @@ function externalFunctions.GetControl()
 				planetsHandler.UpdatePosition(x, y, width, height)
 				
 				obj:UpdateClientArea()
+				WG.Chobby.interfaceRoot.GetRightPanelHandler().CloseTabs()
 			end
 		},
 		OnOrphan = {
