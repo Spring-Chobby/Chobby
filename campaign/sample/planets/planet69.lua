@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Origin",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[Your first battle will be straightforward. You have been provided with a starting base. Construct an army of Glaives and Warriors and overwhelm your enemy.]]
+			text = [[Engage in a simple tutorial to familiarize yourself with the basic controls.]]
 		},
 		gameConfig = {
 			gameName = "Quick Tutorial",
@@ -35,14 +35,12 @@ local function GetPlanet(planetUtilities, planetID)
 				allyTeam = 0,
 				commanderParameters = {
 					facplop = false,
-					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
 					"factorycloak",
 					"cloakraid",
 					"staticmex",
 					"energysolar",
-					"staticradar",
 				},
 			},
 			aiConfig = {
@@ -70,33 +68,19 @@ local function GetPlanet(planetUtilities, planetID)
 				[0] = {},
 				[1] = {
 					ignoreUnitLossDefeat = true,
-					allyTeamLossObjectiveID = 1,
 				},
 			},
 			objectiveConfig = {
-				-- This is just related to displaying objectives on the UI.
-				[1] = {
-					description = "Destroy the enemy Commander and Cloaky Bot Factory",
-				},
-				[2] = {
-					description = "Protect your Commander",
-				},
 			},
 			bonusObjectiveConfig = {
 			}
 		},
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
-			units = {
-				"factorycloak",
-				"cloakraid"
-			},
-			modules = {
-			},
-			abilities = {
-			},
-			codexEntries = {
-			}
+			units = {},
+			modules = {},
+			abilities = {},
+			codexEntries = {}
 		},
 	}
 	
