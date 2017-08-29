@@ -386,6 +386,7 @@ function Configuration:GetConfigData()
 		useSpringRestart = self.useSpringRestart,
 		displayBots = self.displayBots,
 		displayBadEngines = self.displayBadEngines,
+		useWrongEngine = self.useWrongEngine,
 		doNotSetAnySpringSettings = self.doNotSetAnySpringSettings,
 		agressivelySetBorderlessWindowed = self.agressivelySetBorderlessWindowed,
 		atiIntelCompat = self.atiIntelCompat,

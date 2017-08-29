@@ -249,7 +249,7 @@ function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, scriptPas
 		return
 	end
 
-	if engineName and not WG.Chobby.Configuration:IsValidEngineVersion(engineName) then
+	if engineName and not WG.Chobby.Configuration:IsValidEngineVersion(engineName) and not WG.Chobby.Configuration.useWrongEngine then
 		if WG.WrapperLoopback and WG.WrapperLoopback.StartNewSpring and WG.SettingsWindow and WG.SettingsWindow.GetSettingsString then
 			local params = {
 				StartScriptContent = GenerateScriptTxt(battleIp, battlePort, scriptPassword),

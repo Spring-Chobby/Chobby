@@ -98,7 +98,11 @@ end
 ------------------------
 
 function Interface:RejoinBattle(battleID)
-	self:ConnectToBattle()
+	local battle = self:GetBattle(battleID)
+	if battle then
+		self:ConnectToBattle(self.useSpringRestart, battle.ip, battle.port, self:GetScriptPassword())
+	end
+
 	return self
 end
 
@@ -364,7 +368,7 @@ Interface.commands["REMOVEUSER"] = Interface._OnRemoveUser
 Interface.commandPattern["REMOVEUSER"] = "(%S+)"
 
 function Interface:_OnClientStatus(userName, status)
-	self:_OnUpdateUserStatus(userName, {
+	status = {
 		isInGame = (status%2 == 1),
 		isAway = (status%4 >= 2),
 		isAdmin = rshift(status, 5) % 2 == 1,
@@ -372,7 +376,8 @@ function Interface:_OnClientStatus(userName, status)
 
 		-- level is rank in Spring terminology
 		level = rshift(status, 2) % 8 + 1,
-	})
+	}
+	self:_OnUpdateUserStatus(userName, status)
 
 	if status.isInGame ~= nil then
 		local battleID = self:GetBattleFoundedBy(userName)
