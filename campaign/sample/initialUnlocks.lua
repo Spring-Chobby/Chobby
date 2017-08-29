@@ -1,9 +1,5 @@
 return {
 	units = {
-		"staticmex",
-		"staticradar",
-		"turretlaser",
-		"energysolar",
 	},
 	modules = {
 		"commweapon_beamlaser",

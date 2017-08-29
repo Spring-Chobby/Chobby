@@ -8,7 +8,6 @@ local function GetPlanet(planetUtilities, planetID)
 	
 	local planetData = {
 		name = "Im Jaleth",
-		startingPlanet = true,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.05,
 			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.87,
@@ -38,10 +37,10 @@ local function GetPlanet(planetUtilities, planetID)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"factorycloak",
-					"cloakraid",
-					--"cloakriot",
+					"cloakriot",
 					"cloakcon",
+					"turretlaser",
+					"staticradar",
 				},
 				startUnits = {
 					{
@@ -258,13 +257,13 @@ local function GetPlanet(planetUtilities, planetID)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"factorycloak",
-				"cloakraid",
-				--"cloakriot",
-				"cloakcon"
+				"cloakriot",
+				"cloakcon",
+				"turretlaser",
+				"staticradar",
 			},
 			modules = {
-				"module_ablative_armor_LIMIT_A_2",
+				"module_dmg_booster_LIMIT_A_2",
 			},
 			abilities = {
 			},

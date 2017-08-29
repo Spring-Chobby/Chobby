@@ -41,7 +41,13 @@ local function GetPlanet(planetUtilities, planetID)
 					"cloakraid",
 					"staticmex",
 					"energysolar",
+					"turretlaser",
+					"staticradar",
 				},
+			},
+			modoptions = {
+				integral_disable_defence = 1,
+				integral_disable_special = 1,
 			},
 			aiConfig = {
 				{
@@ -77,8 +83,15 @@ local function GetPlanet(planetUtilities, planetID)
 		},
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
-			units = {},
-			modules = {},
+			units = {
+				"factorycloak",
+				"cloakraid",
+				"staticmex",
+				"energysolar",
+			},
+			modules = {
+				"module_ablative_armor_LIMIT_A_2",
+			},
 			abilities = {},
 			codexEntries = {}
 		},

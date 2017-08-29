@@ -128,7 +128,8 @@ function Configuration:init()
 		"zk",
 		"generic",
 		"zkdev",
-		"evorts"
+		"evorts",
+		"evortsdev",
 	}
 
 	self.gameConfigOptions = {}
