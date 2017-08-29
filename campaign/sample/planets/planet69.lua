@@ -41,8 +41,8 @@ local function GetPlanet(planetUtilities, planetID)
 					"cloakraid",
 					"staticmex",
 					"energysolar",
-					"turretlaser",
-					"staticradar",
+					"turretlaser", -- This is here so the tab exists
+					"staticradar", -- This is here so the tab exists
 				},
 			},
 			modoptions = {
