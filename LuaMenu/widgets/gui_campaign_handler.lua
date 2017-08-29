@@ -378,12 +378,16 @@ end
 local function SelectPlanet(planetHandler, planetID, planetData, startable)
 	local Configuration = WG.Chobby.Configuration
 	
-	local starmapInfoPanel = Panel:New{
+	local starmapInfoPanel = Window:New{
+		classname = "main_window",
 		parent = planetHandler,
 		x = 32,
 		y = 32,
 		right = 32,
 		bottom = 32,
+		resizable = false,
+		draggable = false,
+		padding = {12, 7, 12, 7},
 	}
 	
 	local subPanel = Panel:New{
@@ -527,8 +531,6 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 	}
 	
 	-- background
-	local overflowX = (starmapInfoPanel.width - starmapInfoPanel.width) / 2
-	local overflowY = (starmapInfoPanel.width - starmapInfoPanel.height) / 2
 	local bg = Image:New{
 		parent = starmapInfoPanel,
 		x = 0,
@@ -539,8 +541,10 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 		keepAspect = false,
 	}
 	-- force offscreen position
-	bg.x = -overflowX
-	bg.y = -overflowY
+	--local overflowX = (starmapInfoPanel.width - starmapInfoPanel.width) / 2
+	--local overflowY = (starmapInfoPanel.width - starmapInfoPanel.height) / 2
+	--bg.x = -overflowX
+	--bg.y = -overflowY
 	bg:Invalidate()
 	
 	starmapInfoPanel:SetLayer(1)
