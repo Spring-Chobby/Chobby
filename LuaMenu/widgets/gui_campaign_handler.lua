@@ -966,6 +966,7 @@ function externalFunctions.GetControl()
 				
 				obj:UpdateClientArea()
 				WG.Chobby.interfaceRoot.GetRightPanelHandler().CloseTabs()
+				WG.Chobby.interfaceRoot.GetMainWindowHandler().CloseTabs()
 			end
 		},
 		OnOrphan = {
@@ -990,6 +991,15 @@ function externalFunctions.GetControl()
 		},
 	}
 	return window
+end
+
+function externalFunctions.CloseSelectedPlanet()
+	if selectedPlanet then
+		selectedPlanet.Close()
+		selectedPlanet = nil
+		return true
+	end
+	return false
 end
 
 --------------------------------------------------------------------------------

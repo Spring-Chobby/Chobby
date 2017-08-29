@@ -1032,6 +1032,13 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			end
 			return true
 		end
+		if key == Spring.GetKeyCode("esc") then
+			if not rightPanelHandler.CloseTabs() then
+				if not mainWindowHandler.CloseTabs() then
+				
+				end
+			end
+		end
 		return false
 	end
 

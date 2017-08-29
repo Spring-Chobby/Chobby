@@ -126,6 +126,22 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 		end
 	end
 	
+	function externalFunctions.CloseTabs()
+		for i = 1, #submenus do
+			local panelHandler = submenus[i].panelHandler
+			if panelHandler.IsVisible() then
+				return panelHandler.CloseTabs()
+			end
+		end
+		for i = 1, #submenus do
+			local isSelected, tabsClosed = submenus[i].panelHandler.CloseSubTabs()
+			if isSelected then
+				return tabsClosed
+			end
+		end
+		return false
+	end
+	
 	function externalFunctions.ReplaceSubmenu(index, newTabs, newCleanupFunction)
 		externalFunctions.SetBackAtMainMenu()
 		submenus[index].panelHandler.Destroy()
