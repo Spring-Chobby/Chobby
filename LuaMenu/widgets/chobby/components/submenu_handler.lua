@@ -75,6 +75,19 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 		return false
 	end
 	
+	function externalFunctions.BackOneLevel()
+		if externalFunctions.GetCurrentSubmenu() then
+			externalFunctions.SetBackAtMainMenu()
+			return true
+		end
+		for i = 1, #submenus do
+			if submenus[i].panelHandler.BackOneLevel() then
+				return true
+			end
+		end
+		return false
+	end
+	
 	function externalFunctions.OpenSubmenu(index, tabName)
 		if buttonsHolder.visible then
 			buttonsHolder:Hide()

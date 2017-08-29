@@ -476,6 +476,19 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 		return closedSubmenu
 	end
 	
+	function externalFunctions.BackOneLevel()
+		if externalFunctions.IsVisible() then
+			backFunction(externalFunctions)
+			return true
+		end
+		for i = 1, #tabs do
+			if tabs[i].panelHandler and tabs[i].panelHandler.BackOneLevel() then
+				return true
+			end
+		end
+		return false
+	end
+	
 	-------------------------------------------------------------------
 	-- Initialization
 	-------------------------------------------------------------------

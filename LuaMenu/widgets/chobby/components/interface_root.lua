@@ -3,6 +3,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local externalFunctions = {}
 
 	local globalKeyListener = false
+	local backgroundCloseListener = false
 
 	local titleWidthRel = 28
 	local panelWidthRel = 42
@@ -1033,11 +1034,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			return true
 		end
 		if key == Spring.GetKeyCode("esc") then
-			if not rightPanelHandler.CloseTabs() then
-				if not mainWindowHandler.CloseTabs() then
-				
-				end
-			end
+			return rightPanelHandler.CloseTabs() or mainWindowHandler.CloseTabs() or (backgroundCloseListener and backgroundCloseListener()) or mainWindowHandler.BackOneLevel()
 		end
 		return false
 	end
@@ -1046,6 +1043,12 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		-- This is intentially set up such that there is only one global key
 		-- listener at a time. This is indended for popups that monopolise input.
 		globalKeyListener = newListenerFunc
+	end
+
+	function externalFunctions.SetBackgroundCloseListener(newListenerFunc)
+		-- This is intentially set up such that there is only one global key
+		-- listener at a time. This is indended for popups that monopolise input.
+		backgroundCloseListener = newListenerFunc
 	end
 
 	function externalFunctions.GetIngameInterfaceHolder()

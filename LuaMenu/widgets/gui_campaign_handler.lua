@@ -377,6 +377,9 @@ end
 
 local function SelectPlanet(planetHandler, planetID, planetData, startable)
 	local Configuration = WG.Chobby.Configuration
+
+	WG.Chobby.interfaceRoot.GetRightPanelHandler().CloseTabs()
+	WG.Chobby.interfaceRoot.GetMainWindowHandler().CloseTabs()
 	
 	local starmapInfoPanel = Window:New{
 		classname = "main_window",
@@ -489,6 +492,15 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 	end
 	
 	-- close button
+	local function CloseFunc()
+		if starmapInfoPanel then
+			starmapInfoPanel:Dispose() 
+			starmapInfoPanel = nil
+			return true
+		end
+		return false
+	end
+	
 	Button:New{
 		parent = starmapInfoPanel,
 		y = 3,
@@ -499,11 +511,11 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 		caption = i18n("close"),
 		font = Configuration:GetFont(3),
 		OnClick = {
-			function(self) 
-				self.parent:Dispose() 
-			end
-		}
+			CloseFunc
+		},
 	}
+	
+	WG.Chobby.interfaceRoot.SetBackgroundCloseListener(CloseFunc)
 	
 	-- list of missions on this planet
 	--local missionsStack = StackPanel:New {
@@ -556,9 +568,7 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 	
 	local externalFunctions = {}
 	
-	function externalFunctions.Close()
-		starmapInfoPanel:Dispose() 
-	end
+	externalFunctions.Close = CloseFunc
 	
 	return externalFunctions
 end
