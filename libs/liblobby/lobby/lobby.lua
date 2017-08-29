@@ -256,7 +256,7 @@ function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, scriptPas
 				Engine = engineName,
 				SpringSettings = WG.SettingsWindow.GetSettingsString(),
 			}
-			WG.WrapperLoopback.StartNewSpring(params) 
+			WG.WrapperLoopback.StartNewSpring(params)
 		else
 			WG.Chobby.InformationPopup("Cannont start game: wrong Spring engine version. The required version is '" .. engineName .. "', your version is '" .. Spring.Utilities.GetEngineVersion() .. "'.", 420, 260)
 		end

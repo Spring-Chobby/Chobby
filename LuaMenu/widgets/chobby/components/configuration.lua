@@ -39,12 +39,12 @@ function Configuration:init()
 	self.steamLinkComplete = false
 	self.alreadySeenFactionPopup2 = false
 	self.channels = {}
-	
+
 	self.manualBorderless = {
 		game = {},
 		lobby = {},
 	}
-	
+
 	self.ignoreLevel = false
 
 	self.errorColor = "\255\255\0\0"
@@ -181,7 +181,7 @@ function Configuration:init()
 	for _, param in pairs(Spring.GetConfigParams()) do
 		self.configParamTypes[param.name] = param.type
 	end
-	
+
 	self.AtiIntelSettingsOverride = nil
 	self.fixedSettingsOverride = AtiIntelSettingsOverride
 
@@ -192,7 +192,7 @@ function Configuration:init()
 	self.settingsMenuValues = self.gameConfig.settingsDefault
 
 	self.animate_lobby = gl.CreateShader ~= nil
-	
+
 	self:UpdateFixedSettings()
 end
 
@@ -204,16 +204,16 @@ function Configuration:SetSpringsettingsValue(key, value, compatOverride)
 	if self.doNotSetAnySpringSettings then
 		return
 	end
-	
+
 	if not compatOverride then
 		local compatProfile = self.forcedCompatibilityProfile
 		if compatProfile and compatProfile[key] then
 			return
 		end
 	end
-	
+
 	value = (self.fixedSettingsOverride and self.fixedSettingsOverride[key]) or value
-	
+
 	local configType = self.configParamTypes[key]
 	if configType == "int" then
 		Spring.Echo("SetSettings Int", key, value)
@@ -232,7 +232,7 @@ end
 
 function Configuration:UpdateFixedSettings(newOverride)
 	local gameSettings = self.game_settings
-	
+
 	-- Reset old
 	local oldOverride = self.fixedSettingsOverride
 	self.fixedSettingsOverride = nil
@@ -243,7 +243,7 @@ function Configuration:UpdateFixedSettings(newOverride)
 			end
 		end
 	end
-	
+
 	-- Apply new
 	self.fixedSettingsOverride = newOverride
 	if newOverride then
@@ -258,7 +258,7 @@ function Configuration:SetSettingsConfigOption(name, newValue)
 	if not setting then
 		return false
 	end
-	
+
 	self.settingsMenuValues[name] = newValue
 
 	if setting.isNumberSetting then
@@ -325,21 +325,21 @@ function Configuration:SetConfigData(data)
 			self.channels[key] = nil
 		end
 	end
-	
+
 	self.game_settings.XResolutionWindowed = nil
 	self.game_settings.YResolutionWindowed = nil
 	self.game_settings.WindowPosX = nil
 	self.game_settings.WindowPosY = nil
 	self.game_settings.WindowBorderless = nil
 	self.game_settings.Fullscreen = nil
-	
+
 	local newSpringsettings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettingsChanges.lua")
 	for key, value in pairs(newSpringsettings) do
 		self.game_settings[key] = value
 	end
-	
+
 	self.forcedCompatibilityProfile = VFS.Include(LUA_DIRNAME .. "configs/springsettings/forcedCompatibilityProfile.lua")
-	
+
 	self.defaultSettingsPreset = data.defaultSettingsPreset
 	if (not self.defaultSettingsPreset) and self.gameConfig.SettingsPresetFunc then
 		self.defaultSettingsPreset = self.gameConfig.SettingsPresetFunc()
