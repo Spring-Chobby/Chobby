@@ -345,23 +345,23 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Build at least 10 Buoys",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[2] = { -- Don't lose any Buoys
+				[2] = { -- Don't lose any mexes
 					satisfyForever = true,
 					failOnUnitLoss = true, -- Fails the objective if any units being used to satisfy the objective are lost.
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 0,
 					unitTypes = {
-						"amphfloater",
+						"staticmex",
 					},
-					image = planetUtilities.ICON_DIR .. "amphfloater.png",
+					image = planetUtilities.ICON_DIR .. "staticmex.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
-					description = "Don't lose any Buoys",
+					description = "Don't lose any Metal Extractors",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[3] = { -- Complete all bonus objectives
-					completeAllBonusObjectives = true,
-					image = planetUtilities.ICON_OVERLAY.ALL,
-					description = "Complete all other optional objectives in the same battle",
+				[3] = { -- Win by 10:00
+					victoryByTime = 600,
+					image = planetUtilities.ICON_OVERLAY.CLOCK,
+					description = "Win by 10:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			}
