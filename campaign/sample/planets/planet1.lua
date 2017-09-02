@@ -246,19 +246,19 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Build at least 3 Warriors",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[5] = { -- Kill all enemy mexes
-					satisfyOnce = true,
-					comparisionType = planetUtilities.COMPARE.AT_MOST,
-					targetNumber = 0,
-					enemyUnitTypes = {
-						"staticmex",
-					},
-					image = planetUtilities.ICON_DIR .. "staticmex.png",
-					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Destroy all enemy Metal Extractors",
-					experience = planetUtilities.BONUS_EXP,
-				},
-				[6] = {
+				--[5] = { -- Kill all enemy mexes
+				--	satisfyOnce = true,
+				--	comparisionType = planetUtilities.COMPARE.AT_MOST,
+				--	targetNumber = 0,
+				--	enemyUnitTypes = {
+				--		"staticmex",
+				--	},
+				--	image = planetUtilities.ICON_DIR .. "staticmex.png",
+				--	imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
+				--	description = "Destroy all enemy Metal Extractors",
+				--	experience = planetUtilities.BONUS_EXP,
+				--},
+				[5] = {
 					victoryByTime = 480,
 					image = planetUtilities.ICON_OVERLAY.CLOCK,
 					description = "Win by 8:00",

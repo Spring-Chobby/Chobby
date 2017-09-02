@@ -57,12 +57,7 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "factorycloak",
 						x = 2560,
 						z = 800,
-						facing = 0, 
-						commands = {
-							{unitName = "cloakarty", options = {"shift", "ctrl"}},
-							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2560, 1200}},
-							--{cmdID = planetUtilities.COMMAND.PATROL, pos = {2160, 1200}, options = {"shift"}},
-						},
+						facing = 0,
 					},
 					{
 						name = "cloakcon",
