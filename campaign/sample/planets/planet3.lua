@@ -135,17 +135,17 @@ local function GetPlanet(planetUtilities, planetID)
 						z = 1700,
 						facing = 0,
 						commands = {
-							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2050, 1720}},
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2000, 1720}},
 						},
 					},
 					
 					{
 						name = "cloakbomb",
-						x = 3000,
-						z = 3000,
+						x = 3080,
+						z = 2800,
 						facing = 3,
 						commands = {
-							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3000, 3020}},
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3060, 2520}},
 						},
 					},
 					{
@@ -160,7 +160,7 @@ local function GetPlanet(planetUtilities, planetID)
 						z = 1200,
 						facing = 3,
 						commands = {
-							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1200, 1220}},
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1130, 1200}},
 						},
 					},
 					{
