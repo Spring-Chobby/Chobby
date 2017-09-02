@@ -7,7 +7,7 @@ local function GetPlanet(planetUtilities, planetID)
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
 	local planetData = {
-		name = "Blank",
+		name = "Altaris",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.28,
@@ -20,9 +20,9 @@ local function GetPlanet(planetUtilities, planetID)
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
 			terrainType = "Terran",
-			radius = "6550 km",
-			primary = "Blank",
-			primaryType = "G8V",
+			radius = "6510 km",
+			primary = "Snoloz",
+			primaryType = "G1V",
 			milRating = 1,
 			text = [[You're outnumbered on this small battlefield, but your Felon shield bots will allow you to fight efficiently and minimise losses. Expand aggressively and reclaim the nearby rocks and trees to build up your army and economy, then push forward and destroy both enemies.]]
 		},
