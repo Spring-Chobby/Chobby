@@ -731,17 +731,17 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Build an Eraser",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[2] = { -- Kill enemy commander
-					satisfyOnce = true,
-					comparisionType = planetUtilities.COMPARE.AT_MOST,
-					targetNumber = 0,
-					-- See bonusObjectiveID in units table
-					image = planetUtilities.ICON_DIR .. "strike.png",
-					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Kill the enemy Commander",
-					experience = planetUtilities.BONUS_EXP,
-				},
-				[3] = { -- Destroy 20 enemy mex
+				-- [2] = { -- Kill enemy commander
+					-- satisfyOnce = true,
+					-- comparisionType = planetUtilities.COMPARE.AT_MOST,
+					-- targetNumber = 0,
+					-- -- See bonusObjectiveID in units table
+					-- image = planetUtilities.ICON_DIR .. "strike.png",
+					-- imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
+					-- description = "Kill the enemy Commander",
+					-- experience = planetUtilities.BONUS_EXP,
+				-- },
+				[2] = { -- Destroy 20 enemy mex
 					satisfyOnce = true,
 					onlyCountRemovedUnits = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
