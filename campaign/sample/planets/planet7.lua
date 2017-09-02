@@ -239,7 +239,6 @@ local function GetPlanet(planetUtilities, planetID)
 					humanName = "Interlopers",
 					commanderParameters = {
 						facplop = false,
-						bonusObjectiveID = 3,
 					},
 					allyTeam = 1,
 					unlocks = {
@@ -311,6 +310,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 5936,
 							z = 11872,
 							facing = 2,
+							bonusObjectiveID = 3,
 						},
 						{
 							name = "staticheavyradar",
@@ -1658,7 +1658,7 @@ local function GetPlanet(planetUtilities, planetID)
 					-- See bonusObjectiveID in units table
 					image = planetUtilities.ICON_DIR .. "strike.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Kill the Interloper Commander",
+					description = "Destroy the Interlopers' Shield Bot Factory",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			},
