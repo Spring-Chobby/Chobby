@@ -24,12 +24,13 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[You currently control two hills on opposite sides of the battlefield, but your opponent will attack them both. Use the Djinn teleporters to move your army where it is needed most.]]
+			text = [[Launch an attack across the river with an army capable of fighting underwater - the amphibious Duck raider and Scallop riot bots.]]
 		},
-		gameConfig = {
-			mapName = "Crubick Plains v1.2",
+		gameConfig = {
+
+			mapName = "Rapids_v1",
 			playerConfig = {
-				startX = 100,
+				startX = 3570,
 				startZ = 100,
 				allyTeam = 0,
 				commanderParameters = {
@@ -43,43 +44,365 @@ local function GetPlanet(planetUtilities, planetID)
 					"amphriot",
 				},
 				startUnits = {
+					{
+						name = "staticmex",
+						x = 3704,
+						z = 472,
+						facing = 1,
+					},
+					{
+						name = "factoryamph",
+						x = 3464,
+						z = 664,
+						facing = 0,
+					},
+					{
+						name = "staticmex",
+						x = 3272,
+						z = 520,
+						facing = 1,
+					},
+					{
+						name = "staticmex",
+						x = 3608,
+						z = 856,
+						facing = 1,
+					},
+					{
+						name = "energysolar",
+						x = 3656,
+						z = 760,
+						facing = 1,
+					},
+					{
+						name = "energysolar",
+						x = 3656,
+						z = 584,
+						facing = 1,
+					},
+					{
+						name = "energysolar",
+						x = 3544,
+						z = 504,
+						facing = 1,
+					},
+					{
+						name = "energysolar",
+						x = 3384,
+						z = 504,
+						facing = 1,
+					},
+					{
+						name = "staticmex",
+						x = 3880,
+						z = 1688,
+						facing = 1,
+					},
+					{
+						name = "amphraid",
+						x = 3464,
+						z = 907,
+						facing = 1,
+					},
+					{
+						name = "amphraid",
+						x = 3324,
+						z = 736,
+						facing = 1,
+					},
+					{
+						name = "amphraid",
+						x = 3251,
+						z = 666,
+						facing = 2,
+					},
+					{
+						name = "staticcon",
+						x = 3592,
+						z = 680,
+						facing = 1,
+						commands = {
+							{cmdID = planetUtilities.COMMAND.PATROL, pos = {3464, 472}},
+						},
+					},
+					{
+						name = "amphraid",
+						x = 3409,
+						z = 833,
+						facing = 3,
+					},
+					{
+						name = "amphcon",
+						x = 3327,
+						z = 818,
+						facing = 3,
+					},
+					{
+						name = "turretlaser",
+						x = 2544,
+						z = 384,
+						facing = 0,
+					},
+					{
+						name = "turretlaser",
+						x = 3072,
+						z = 1072,
+						facing = 0,
+					},
+					{
+						name = "turretlaser",
+						x = 3680,
+						z = 1504,
+						facing = 0,
+					},
+					{
+						name = "staticradar",
+						x = 3520,
+						z = 1040,
+						facing = 0,
+					},
 				}
 			},
 			aiConfig = {
 				{
-					startX = 4000,
-					startZ = 75,
+					startX = 100,
+					startZ = 3570,
+					humanName = "Allegro",
+					--aiLib = "Null AI",
+					--bitDependant = false,
 					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Enemy",
 					bitDependant = true,
 					commanderParameters = {
 						facplop = false,
 					},
 					allyTeam = 1,
 					unlocks = {
-						"cloakraid",
+						"staticcon",
+						"staticmex",
+						"energywind",
+						"energysolar",
+						"turretlaser",
+						"turretmissile",
+						"turrettorp",
+						"amphaa",
+						"amphbomb",
+						"amphcon",
+						"amphfloater",
+						"amphimpulse",
+						"amphraid",
+						"amphriot",
 					},
-					commanderLevel = 2,
+					commanderLevel = 3,
 					commander = {
-						name = "Most Loyal Opposition",
+						name = "Platypus",
 						chassis = "engineer",
 						decorations = {
-						  "skin_support_dark",
-						  icon_overhead = { image = "UW" }
+						  "skin_support_zebra",
 						},
-						modules = { }
+						modules = { 
+							"commweapon_shotgun",
+							"module_autorepair",
+							"module_ablative_armor",
+							"module_high_power_servos",
+							"module_adv_nano",
+						}
 					},
 					startUnits = {
+						{
+							name = "factoryamph",
+							x = 670,
+							z = 3420,
+							facing = 2, 
+						},
+						{
+							name = "staticmex",
+							x = 520,
+							z = 3288,
+							facing = 0,
+						},
+						{
+							name = "staticmex",
+							x = 840,
+							z = 3640,
+							facing = 0,
+						},
+						{
+							name = "staticmex",
+							x = 440,
+							z = 3704,
+							facing = 0,
+						},
+						{
+							name = "staticmex",
+							x = 232,
+							z = 2424,
+							facing = 0,
+						},
+						{
+							name = "energysolar",
+							x = 552,
+							z = 3720,
+							facing = 0,
+						},
+						{
+							name = "energysolar",
+							x = 728,
+							z = 3688,
+							facing = 0,
+						},
+						{
+							name = "energysolar",
+							x = 488,
+							z = 3384,
+							facing = 0,
+						},
+						{
+							name = "energysolar",
+							x = 488,
+							z = 3560,
+							facing = 0,
+						},
+						{
+							name = "energysolar",
+							x = 312,
+							z = 2520,
+							facing = 0,
+						},
+						{
+							name = "energysolar",
+							x = 120,
+							z = 2456,
+							facing = 0,
+						},
+						{
+							name = "turretlaser",
+							x = 800,
+							z = 2416,
+							facing = 2,
+						},
+						{
+							name = "amphriot",
+							x = 840,
+							z = 3455,
+							facing = 0,
+						},
+						{
+							name = "turretlaser",
+							x = 1024,
+							z = 2544,
+							facing = 2,
+						},
+						{
+							name = "turrettorp",
+							x = 376,
+							z = 1880,
+							facing = 2,
+						},
+						{
+							name = "amphriot",
+							x = 926,
+							z = 3465,
+							facing = 0,
+						},
+						{
+							name = "turrettorp",
+							x = 1496,
+							z = 2712,
+							facing = 2,
+						},
+						{
+							name = "turrettorp",
+							x = 2408,
+							z = 3576,
+							facing = 1,
+						},
+						{
+							name = "turretlaser",
+							x = 1520,
+							z = 3008,
+							facing = 1,
+						},
+						{
+							name = "turretlaser",
+							x = 1648,
+							z = 3392,
+							facing = 1,
+						},
+						{
+							name = "turretlaser",
+							x = 1952,
+							z = 1952,
+							facing = 2,
+						},
+						{
+							name = "turretlaser",
+							x = 2176,
+							z = 2112,
+							facing = 1,
+						},
+						{
+							name = "staticcon",
+							x = 648,
+							z = 3592,
+							facing = 1,
+						},
+						{
+							name = "staticradar",
+							x = 688,
+							z = 3152,
+							facing = 0,
+						},
 					}
 				},
 			},
 			defeatConditionConfig = {
-
+				-- Indexed by allyTeam.
+				[0] = { },
+				[1] = {
+					ignoreUnitLossDefeat = false,
+					vitalCommanders = false,
+					vitalUnitTypes = {
+						"factoryamph",
+					},
+					loseAfterSeconds = false,
+					allyTeamLossObjectiveID = 1,
+				},
 			},
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
+				[1] = {
+					description = "Destroy the enemy Amphibious Factory",
+				},
+				[2] = {
+					description = "Protect your Commander",
+				},
 			},
 			bonusObjectiveConfig = {
+				[1] = { -- Make five Scallops
+					satisfyOnce = true,
+					countRemovedUnits = true, -- count units that previously died.
+					comparisionType = planetUtilities.COMPARE.AT_LEAST,
+					targetNumber = 5,
+					unitTypes = {
+						"amphriot",
+					},
+					image = planetUtilities.ICON_DIR .. "amphriot.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
+					description = "Build five Scallops",
+					experience = planetUtilities.BONUS_EXP,
+				},
+				[2] = { -- Own nine mex by 5:00
+					satisfyByTime = 300,
+					comparisionType = planetUtilities.COMPARE.AT_LEAST,
+					targetNumber = 9,
+					unitTypes = {
+						"staticmex",
+					},
+					image = planetUtilities.ICON_DIR .. "staticmex.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
+					description = "Have nine Metal Extractors before 5:00",
+					experience = planetUtilities.BONUS_EXP,
+				},
 			}
 		},
 		completionReward = {
