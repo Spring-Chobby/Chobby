@@ -1018,10 +1018,13 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	end
 
 	function externalFunctions.KeyPressed(key, mods, isRepeat, label, unicode)
+		if not lobbyInterfaceHolder.visible then
+			return false
+		end
 		if globalKeyListener then
 			return globalKeyListener(key, mods, isRepeat, label, unicode)
 		end
-		if (not isRepeat) and lobbyInterfaceHolder.visible and showTopBar and key == Spring.GetKeyCode("f11") then
+		if (not isRepeat) and showTopBar and key == Spring.GetKeyCode("f11") then
 			SetMainInterfaceVisible(false)
 			return true
 		end
