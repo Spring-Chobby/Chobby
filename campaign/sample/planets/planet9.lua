@@ -394,7 +394,7 @@ local function GetPlanet(planetUtilities, planetID)
 							name = "factoryveh",
 							x = 4904,
 							z = 3640,
-							facing = 0,
+							facing = 2,
 						},
 						{
 							name = "turretlaser",

@@ -802,7 +802,7 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 0,
 						},
 						{
-							name = "turretheavy",
+							name = "turretheavylaser",
 							x = 4920,
 							z = 6184,
 							facing = 3,
@@ -1342,7 +1342,7 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 1,
 						},
 						{
-							name = "turretheavy",
+							name = "turretheavylaser",
 							x = 4930,
 							z = 5132,
 							facing = 3,
@@ -1517,7 +1517,6 @@ local function GetPlanet(planetUtilities, planetID)
 					x = 10472,
 					z = 5800,
 					facing = 0,
-					invincible = true,
 					ignoredByAI = true,
 				},
 				{
@@ -1525,7 +1524,6 @@ local function GetPlanet(planetUtilities, planetID)
 					x = 10760,
 					z = 5640,
 					facing = 0,
-					invincible = true,
 					ignoredByAI = true,
 				},
 				{
@@ -1533,7 +1531,6 @@ local function GetPlanet(planetUtilities, planetID)
 					x = 10728,
 					z = 5928,
 					facing = 0,
-					invincible = true,
 					ignoredByAI = true,
 				},
 				{
@@ -1541,7 +1538,6 @@ local function GetPlanet(planetUtilities, planetID)
 					x = 11400,
 					z = 5032,
 					facing = 0,
-					invincible = true,
 					ignoredByAI = true,
 				},
 				{
@@ -1549,7 +1545,6 @@ local function GetPlanet(planetUtilities, planetID)
 					x = 11640,
 					z = 4792,
 					facing = 0,
-					invincible = true,
 					ignoredByAI = true,
 				},
 				{
@@ -1557,7 +1552,6 @@ local function GetPlanet(planetUtilities, planetID)
 					x = 11704,
 					z = 5080,
 					facing = 0,
-					invincible = true,
 					ignoredByAI = true,
 				},
 				{
@@ -1565,7 +1559,6 @@ local function GetPlanet(planetUtilities, planetID)
 					x = 11384,
 					z = 6648,
 					facing = 0,
-					invincible = true,
 					ignoredByAI = true,
 				},
 				{
@@ -1573,7 +1566,6 @@ local function GetPlanet(planetUtilities, planetID)
 					x = 11688,
 					z = 6600,
 					facing = 0,
-					invincible = true,
 					ignoredByAI = true,
 				},
 				{
@@ -1581,7 +1573,6 @@ local function GetPlanet(planetUtilities, planetID)
 					x = 11624,
 					z = 6888,
 					facing = 0,
-					invincible = true,
 					ignoredByAI = true,
 				},
 				{
