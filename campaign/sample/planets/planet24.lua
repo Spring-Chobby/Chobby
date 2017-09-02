@@ -7,7 +7,7 @@ local function GetPlanet(planetUtilities, planetID)
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
 	local planetData = {
-		name = "Blank",
+		name = "Hiasjulo",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.37,
@@ -30,7 +30,7 @@ local function GetPlanet(planetUtilities, planetID)
 			mapName = "Crubick Plains v1.2",
 			playerConfig = {
 				startX = 6880,
-				startZ = 6919,
+				startZ = 7100,
 				allyTeam = 0,
 				commanderParameters = {
 					facplop = false,
@@ -48,6 +48,9 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 1372,
 						z = 1265,
 						facing = 2,
+						commands = {
+							{cmdID = planetUtilities.COMMAND.PLACE_BEACON, pos = {6854, 6866}},
+						},
 					},
 					{
 						name = "staticmex",
@@ -60,6 +63,9 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 6717,
 						z = 6871,
 						facing = 0,
+						commands = {
+							{cmdID = planetUtilities.COMMAND.PLACE_BEACON, pos = {1524, 1304}},
+						},
 					},
 					{
 						name = "staticmex",
@@ -134,12 +140,6 @@ local function GetPlanet(planetUtilities, planetID)
 						facing = 0,
 					},
 					{
-						name = "tele_beacon",
-						x = 1520,
-						z = 1280,
-						facing = 1,
-					},
-					{
 						name = "staticheavyradar",
 						x = 2224,
 						z = 1632,
@@ -180,6 +180,9 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 1880,
 						z = 1288,
 						facing = 0,
+						commands = {
+							{cmdID = planetUtilities.COMMAND.PATROL, pos = {1720, 1288}},
+						},
 					},
 					{
 						name = "factoryamph",
@@ -302,10 +305,10 @@ local function GetPlanet(planetUtilities, planetID)
 					startX = 4986,
 					startZ = 1084,
 					humanName = "Nohow",
-					aiLib = "Null AI",
-					bitDependant = false,
-					--aiLib = "Circuit_difficulty_autofill",
-					--bitDependant = true,
+					--aiLib = "Null AI",
+					--==bitDependant = false,
+					aiLib = "Circuit_difficulty_autofill",
+					bitDependant = true,
 					commanderParameters = {
 						facplop = false,
 						bonusObjectiveID = 3,
@@ -526,10 +529,10 @@ local function GetPlanet(planetUtilities, planetID)
 					startX = 3256,
 					startZ = 6952,
 					humanName = "Contrariwise",
-					aiLib = "Null AI",
-					bitDependant = false,
-					--aiLib = "Circuit_difficulty_autofill",
-					--bitDependant = true,
+					--aiLib = "Null AI",
+					--bitDependant = false,
+					aiLib = "Circuit_difficulty_autofill",
+					bitDependant = true,
 					commanderParameters = {
 						facplop = false,
 						bonusObjectiveID = 3,
@@ -779,13 +782,13 @@ local function GetPlanet(planetUtilities, planetID)
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { -- Kill both enemy commanders in 10:00
-					satisfyByTime = 600,
+					satisfyByTime = 900,
 					comparisionType = planetUtilities.COMPARE.AT_MOST,
 					targetNumber = 0,
 					-- See bonusObjectiveID in units table
 					image = planetUtilities.ICON_DIR .. "strike.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Kill both enemy commanders before 10:00",
+					description = "Kill both enemy commanders before 15:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			},
