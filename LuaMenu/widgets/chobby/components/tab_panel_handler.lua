@@ -41,28 +41,34 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 		panelHandler.Show()
 	end
 	
-	local function ToggleShow(obj, tab, openOnly)
+	local function ToggleShow(obj, tab, openOnly, closeOnly)
 		if analyticsName then
 			WG.Analytics.SendOnetimeEvent(analyticsName .. ":" .. tab.name)
 		end
 		if tab.panelHandler then
 			OpenSubmenu(tab.panelHandler)
-			return
+			return true
 		end
 		
 		local control = tab.control
 		if not control then
-			return
+			return false
 		end
 
 		if displayPanel.visible then
 			if displayPanel:GetChildByName(control.name) then
 				if not openOnly then
 					displayPanel:ClearChildren()
+					return true
 				end
-				return
+				return false
 			end
 		end
+		
+		if closeOnly then
+			return false
+		end
+		
 		displayPanel:ClearChildren()
 		displayPanel:AddChild(control)
 		if not displayPanel.visible then
@@ -70,6 +76,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 		end
 
 		ButtonUtilities.SetButtonSelected(obj)
+		return true
 	end
 
 	local function SetButtonPositionAndSize(index)
@@ -222,8 +229,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 	function externalFunctions.CloseTabs()
 		for i = 1, #tabs do
 			if IsTabSelectedByIndex(i, tabs[i].name) then
-				ToggleShow(tabs[i].button, tabs[i])
-				return true
+				return ToggleShow(tabs[i].button, tabs[i], nil, true)
 			end
 		end
 		return false
