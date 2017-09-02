@@ -907,13 +907,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Have 30 Metal Extractors by 9:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[2] = { -- Win by 15:00
-					victoryByTime = 900,
-					image = planetUtilities.ICON_OVERLAY.CLOCK,
-					description = "Win by 15:00",
-					experience = planetUtilities.BONUS_EXP,
-				},
-				[3] = { -- Destroy all three DDMs
+				[2] = { -- Destroy all three DDMs
 					satisfyOnce = true,
 					comparisionType = planetUtilities.COMPARE.AT_MOST,
 					targetNumber = 0,
@@ -925,6 +919,12 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Destroy all enemy Doomsday Machines",
 					experience = planetUtilities.BONUS_EXP,
 				},
+				-- [3] = { -- Win by 15:00
+					-- victoryByTime = 900,
+					-- image = planetUtilities.ICON_OVERLAY.CLOCK,
+					-- description = "Win by 15:00",
+					-- experience = planetUtilities.BONUS_EXP,
+				-- },
 			},
 		},
 		completionReward = {

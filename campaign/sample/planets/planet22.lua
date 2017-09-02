@@ -358,12 +358,6 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Don't lose any Metal Extractors",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[3] = { -- Win by 10:00
-					victoryByTime = 600,
-					image = planetUtilities.ICON_OVERLAY.CLOCK,
-					description = "Win by 10:00",
-					experience = planetUtilities.BONUS_EXP,
-				},
 			}
 		},
 		completionReward = {

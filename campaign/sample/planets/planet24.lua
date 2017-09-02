@@ -785,7 +785,7 @@ local function GetPlanet(planetUtilities, planetID)
 					-- See bonusObjectiveID in units table
 					image = planetUtilities.ICON_DIR .. "strike.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Kill the enemy commander before 7:30",
+					description = "Kill both enemy commanders before 10:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			},

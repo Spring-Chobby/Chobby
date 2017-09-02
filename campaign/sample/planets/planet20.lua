@@ -842,20 +842,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Have 12 Metal Extractors",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[2] = { -- Do not lose any Stingers
-					satisfyForever = true,
-					onlyCountRemovedUnits = true,
-					comparisionType = planetUtilities.COMPARE.AT_MOST,
-					targetNumber = 0,
-					unitTypes = {
-						"turretheavylaser",
-					},
-					image = planetUtilities.ICON_DIR .. "turretheavylaser.png",
-					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
-					description = "Do not lose any Stingers",
-					experience = planetUtilities.BONUS_EXP,
-				},
-				[3] = { -- Destroy an enemy factory
+				[2] = { -- Destroy an enemy factory
 					satisfyOnce = true,
 					onlyCountRemovedUnits = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
@@ -870,6 +857,19 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Destroy one of the enemy factories",
 					experience = planetUtilities.BONUS_EXP,
 				},
+				-- [3] = { -- Do not lose any Stingers
+					-- satisfyForever = true,
+					-- onlyCountRemovedUnits = true,
+					-- comparisionType = planetUtilities.COMPARE.AT_MOST,
+					-- targetNumber = 0,
+					-- unitTypes = {
+						-- "turretheavylaser",
+					-- },
+					-- image = planetUtilities.ICON_DIR .. "turretheavylaser.png",
+					-- imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
+					-- description = "Do not lose any Stingers",
+					-- experience = planetUtilities.BONUS_EXP,
+				-- },
 			},
 		},
 		completionReward = {
