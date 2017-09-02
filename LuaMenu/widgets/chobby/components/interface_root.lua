@@ -759,6 +759,12 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		local topOffset = (showTopBar and topBarHeight) or 0
 		local titleOffset = (doublePanelMode and titleHeight) or titleHeightSmall
 
+		if doublePanelMode then
+			holder_submenuWindow:SetPos(nil, titleHeight + topOffset)
+		else
+			holder_submenuWindow:SetPos(nil, titleHeightSmall + topOffset + chatTabHolderHeight)
+		end
+
 		holder_rightPanel:SetPos(nil, titleOffset + topOffset)
 		holder_rightPanel._relativeBounds.bottom = 0
 		holder_rightPanel:UpdateClientArea()
