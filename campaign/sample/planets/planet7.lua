@@ -230,16 +230,11 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			aiConfig = {
 				{
-					startX = 6000,
-					startZ = 12000,
 					--aiLib = "Null AI",
 					--bitDependant = false,
 					aiLib = "Circuit_difficulty_autofill",
 					bitDependant = true,
 					humanName = "Interlopers",
-					commanderParameters = {
-						facplop = false,
-					},
 					allyTeam = 1,
 					unlocks = {
 						"shieldraid",
@@ -248,14 +243,7 @@ local function GetPlanet(planetUtilities, planetID)
 						[2] = {"shieldassault"},
 						[3] = {"shieldskirm"},
 					},
-					commanderLevel = 1,
-					commander = {
-						name = "Ugly",
-						chassis = "strike",
-						decorations = {
-						},
-						modules = { }
-					},
+					commander = false,
 					startUnits = {
 						{
 							name = "staticmex",
@@ -311,6 +299,12 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 11872,
 							facing = 2,
 							bonusObjectiveID = 3,
+						},
+						{
+							name = "staticstorage",
+							x = 5936,
+							z = 12072,
+							facing = 2,
 						},
 						{
 							name = "staticheavyradar",
@@ -394,6 +388,48 @@ local function GetPlanet(planetUtilities, planetID)
 							name = "shieldskirm",
 							x = 5686,
 							z = 11900,
+							facing = 2,
+						},
+						{
+							name = "staticmex",
+							x = 9530,
+							z = 10770,
+							facing = 2,
+						},
+						{
+							name = "staticmex",
+							x = 9791,
+							z = 10914,
+							facing = 2,
+						},
+						{
+							name = "staticmex",
+							x = 9824,
+							z = 10612,
+							facing = 2,
+						},
+						{
+							name = "energywind",
+							x = 9600,
+							z = 10770,
+							facing = 2,
+						},
+						{
+							name = "energywind",
+							x = 9773,
+							z = 10844,
+							facing = 2,
+						},
+						{
+							name = "energywind",
+							x = 9773,
+							z = 10671,
+							facing = 2,
+						},
+						{
+							name = "energywind",
+							x = 9870,
+							z = 10940,
 							facing = 2,
 						},
 					}
