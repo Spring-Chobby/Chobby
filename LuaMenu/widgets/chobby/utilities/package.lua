@@ -1,4 +1,5 @@
 Package = {}
+WG.Package = Package -- I hate this global variable system.
 
 local RAPID_PREFIX = "rapid://"
 local IGNORED_DEPS = {

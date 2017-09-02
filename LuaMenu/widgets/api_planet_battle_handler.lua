@@ -29,7 +29,8 @@ local function MaybeDownloadArchive(archiveName, archiveType)
 end
 
 local function MaybeDownloadGame(gameName)
-	MaybeDownloadArchive(gameName, "game")
+	WG.Package.DownloadWithDeps(gameName, "game")
+	--MaybeDownloadArchive(gameName, "game")
 end
 
 local function MaybeDownloadMap(mapName)
@@ -281,7 +282,7 @@ function PlanetBattleHandler.StartBattle(planetID, planetData)
 	end
 	
 	local gameName = Configuration:GetDefaultGameName()
-	local haveGame = VFS.HasArchive(gameName)
+	local haveGame = WG.Package.ArchiveExists(gameName)
 	if not haveGame then
 		WG.Chobby.InformationPopup("You do not have the game file required. It will now be downloaded.")
 		MaybeDownloadGame(gameName)
