@@ -23,7 +23,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Origin",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[This battle will be straightforward. You have been provided with a starting base. Construct an army of Glaives and overwhelm your enemy.]]
+			text = [[This battle will be straightforward. Construct an army of Glaives and Warriors to overwhelm your enemy.]]
 		},
 		gameConfig = {
 			missionStartscript = false,
@@ -67,6 +67,18 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 100,
 						z = 3800,
 						facing = 2, 
+					},
+					{
+						name = "cloakraid",
+						x = 760,
+						z = 3500,
+						facing = planetUtilities.FACING.NORTH, 
+					},
+					{
+						name = "cloakraid",
+						x = 840,
+						z = 3500,
+						facing = planetUtilities.FACING.NORTH,
 					},
 					{
 						name = "factorycloak",
@@ -221,17 +233,17 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Build a Radar Tower",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[4] = { -- Build 5 Glaives
+				[4] = { -- Build 3 Warriors
 					satisfyOnce = true,
 					countRemovedUnits = true, -- count units that previously died.
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 5,
+					targetNumber = 3,
 					unitTypes = {
-						"cloakraid",
+						"cloakriot",
 					},
-					image = planetUtilities.ICON_DIR .. "cloakraid.png",
+					image = planetUtilities.ICON_DIR .. "cloakriot.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build at least 5 Glaives",
+					description = "Build at least 3 Warriors",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[5] = { -- Kill all enemy mexes
