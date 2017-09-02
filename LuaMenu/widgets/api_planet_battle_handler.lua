@@ -239,7 +239,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		nohelperais = 0,
 		numplayers = playerCount,
 		numusers = playerCount + aiCount,
-		startpostype = 0, -- Fixed
+		startpostype = 2, -- Choose is required to make maps not crash due to undefined start positions.
 		GameStartDelay = 0,
 		modoptions = modoptions,
 	}
