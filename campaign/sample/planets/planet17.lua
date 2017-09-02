@@ -982,7 +982,7 @@ local function GetPlanet(planetUtilities, planetID)
 							bonusObjectiveID = 3,
 							mapMarker = {
 								text = "Metal Storage Depot",
-								color = "red"
+								color = "red_small"
 							},
 						},
 						{
@@ -993,7 +993,7 @@ local function GetPlanet(planetUtilities, planetID)
 							bonusObjectiveID = 3,
 							mapMarker = {
 								text = "Metal Storage Depot",
-								color = "red"
+								color = "red_small"
 							},
 						},
 						{
