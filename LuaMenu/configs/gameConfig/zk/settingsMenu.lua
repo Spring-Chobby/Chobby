@@ -30,7 +30,7 @@ local settingsConfig = {
 		name = "Graphics",
 		presets = {
 			{
-				name = "Minimal",
+				name = "Compat.",
 				settings = {
 					WaterType = "Basic",
 					WaterQuality = "Low",
@@ -38,7 +38,7 @@ local settingsConfig = {
 					UnitReflections = "Off",
 					Shadows = "None",
 					ShadowDetail = "Low",
-					ParticleLimit = "Minimal",
+					ParticleLimit = "2000",
 					TerrainDetail = "Minimal",
 					VegetationDetail = "Minimal",
 					CompatibilityMode = "On",
@@ -50,7 +50,7 @@ local settingsConfig = {
 				}
 			},
 			{
-				name = "Low",
+				name = "Lowest",
 				settings = {
 					WaterType = "Reflective",
 					WaterQuality = "Low",
@@ -58,7 +58,27 @@ local settingsConfig = {
 					UnitReflections = "Low",
 					Shadows = "Units Only",
 					ShadowDetail = "Low",
-					ParticleLimit = "Low",
+					ParticleLimit = "6000",
+					TerrainDetail = "Low",
+					VegetationDetail = "Low",
+					CompatibilityMode = "Off",
+					AntiAliasing = "Low",
+					ShaderDetail = "Low",
+					LupsAirJet = "Off",
+					LupsRibbon = "Off",
+					FancySky = "Off",
+				}
+			},
+			{
+				name = "Low",
+				settings = {
+					WaterType = "Bumpmapped",
+					WaterQuality = "Low",
+					DeferredRendering = "Off",
+					UnitReflections = "Low",
+					Shadows = "Units and Terrain",
+					ShadowDetail = "Medium",
+					ParticleLimit = "12000",
 					TerrainDetail = "Low",
 					VegetationDetail = "Low",
 					CompatibilityMode = "Off",
@@ -78,7 +98,7 @@ local settingsConfig = {
 					UnitReflections = "Medium",
 					Shadows = "Units and Terrain",
 					ShadowDetail = "Medium",
-					ParticleLimit = "Medium",
+					ParticleLimit = "15000",
 					TerrainDetail = "Medium",
 					VegetationDetail = "Medium",
 					CompatibilityMode = "Off",
@@ -98,7 +118,7 @@ local settingsConfig = {
 					UnitReflections = "High",
 					Shadows = "Units and Terrain",
 					ShadowDetail = "Medium",
-					ParticleLimit = "High",
+					ParticleLimit = "25000",
 					TerrainDetail = "High",
 					VegetationDetail = "High",
 					CompatibilityMode = "Off",
@@ -118,7 +138,7 @@ local settingsConfig = {
 					UnitReflections = "Ultra",
 					Shadows = "Units and Terrain",
 					ShadowDetail = "Ultra",
-					ParticleLimit = "Ultra",
+					ParticleLimit = "50000",
 					TerrainDetail = "Ultra",
 					VegetationDetail = "Ultra",
 					CompatibilityMode = "Off",
@@ -352,31 +372,61 @@ local settingsConfig = {
 				humanName = "Particle Limit",
 				options = {
 					{
-						name = "Minimal",
+						name = "2000",
 						apply = {
 							MaxParticles = 2000
 						}
 					},
 					{
-						name = "Low",
+						name = "4000",
 						apply = {
-							MaxParticles = 5000
+							MaxParticles = 4000
 						}
 					},
 					{
-						name = "Medium",
+						name = "6000",
+						apply = {
+							MaxParticles = 6000
+						}
+					},
+					{
+						name = "9000",
+						apply = {
+							MaxParticles = 9000
+						}
+					},
+					{
+						name = "12000",
+						apply = {
+							MaxParticles = 12000
+						}
+					},
+					{
+						name = "15000",
 						apply = {
 							MaxParticles = 15000
 						}
 					},
 					{
-						name = "High",
+						name = "20000",
+						apply = {
+							MaxParticles = 15000
+						}
+					},
+					{
+						name = "25000",
 						apply = {
 							MaxParticles = 25000
 						}
 					},
 					{
-						name = "Ultra",
+						name = "35000",
+						apply = {
+							MaxParticles = 25000
+						}
+					},
+					{
+						name = "50000",
 						apply = {
 							MaxParticles = 50000
 						}
@@ -771,7 +821,7 @@ local settingsDefault = {
 	DeferredRendering = "On",
 	Shadows = "Units and Terrain",
 	ShadowDetail = "Medium",
-	ParticleLimit = "High",
+	ParticleLimit = "12000",
 	TerrainDetail = "High",
 	VegetationDetail = "High",
 	CompatibilityMode = "Off",
