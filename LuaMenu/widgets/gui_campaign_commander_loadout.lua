@@ -515,6 +515,7 @@ local function InitializeControls(parentControl)
 		y = 57,
 		bottom = 8,
 		horizontalScrollbar = false,
+		verticalScrollbar = false,
 		padding = {4, 4, 4, 4},
 		borderColor = {0,0,0,0},
 		parent = parentControl,
