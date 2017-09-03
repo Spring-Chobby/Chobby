@@ -352,6 +352,26 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess)
 	return externalFunctions
 end
 
+local function MakeRandomBonusVictoryList(winChance, length)
+	local list = {}
+	for i = 1, length do
+		list[i] = (math.random() < winChance)
+	end
+	return list
+end
+
+local function MakeBonusObjectivesList(bonusObjectivesString)
+	if not bonusObjectivesString then
+		return false
+	end
+	local list = {}
+	local length = string.len(bonusObjectivesString)
+	for i = 1, length do
+		list[i] = (string.sub(bonusObjectivesString, i, i) == "1")
+	end
+	return list
+end
+
 local function ProcessPlanetVictory(planetID, bonusObjectives)
 	if selectedPlanet then
 		selectedPlanet.Close()
@@ -469,7 +489,7 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 				font = Configuration:GetFont(4),
 				OnClick = {
 					function(self)
-						ProcessPlanetVictory(planetID)
+						ProcessPlanetVictory(planetID, MakeRandomBonusVictoryList(0.75, 8))
 					end
 				}
 			}
@@ -915,18 +935,6 @@ end
 
 local BATTLE_WON_STRING = "Campaign_PlanetBattleWon"
 local BATTLE_LOST_STRING = "Campaign_PlanetBattleLost"
-
-local function MakeBonusObjectivesList(bonusObjectives)
-	if not bonusObjectives then
-		return false
-	end
-	local list = {}
-	local length = string.len(bonusObjectives)
-	for i = 1, length do
-		list[i] = (string.sub(bonusObjectives, i, i) == "1")
-	end
-	return list
-end
 
 function widget:RecvLuaMsg(msg)
 	if string.find(msg, BATTLE_WON_STRING) then
