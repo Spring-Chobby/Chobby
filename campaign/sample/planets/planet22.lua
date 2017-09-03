@@ -19,7 +19,7 @@ local function GetPlanet(planetUtilities, planetID)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Terran",
+			terrainType = "Arctic",
 			radius = "3430 km",
 			primary = "Tsuz",
 			primaryType = "F3V",
