@@ -262,16 +262,16 @@ local function GetPlanet(planetUtilities, planetID)
 								color = "green",
 							},
 						},
-						{
-							name = "staticantinuke",
-							x = 3000,
-							z = 2750,
-							facing = 0,
-							mapMarker = {
-								text = "Defend",
-								color = "green",
-							},
-						},
+						--{
+						--	name = "staticantinuke",
+						--	x = 3000,
+						--	z = 2750,
+						--	facing = 0,
+						--	mapMarker = {
+						--		text = "Defend",
+						--		color = "green",
+						--	},
+						--},
 						{
 							name = "staticantinuke",
 							x = 2130,
@@ -1472,6 +1472,12 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 1232,
 							facing = 0,
 						},
+						{
+							name = "turretlaser",
+							x = 2030,
+							z = 4960,
+							facing = 0,
+						},
 					}
 				},
 				{
@@ -2094,6 +2100,18 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 7480,
 							z = 600,
 							facing = 3,
+						},
+						{
+							name = "turretheavy",
+							x = 8960,
+							z = 4480,
+							facing = 3,
+						},
+						{
+							name = "turretheavy",
+							x = 9000,
+							z = 5920,
+							facing = 2,
 						},
 						{
 							name = "turretheavy",
@@ -2769,9 +2787,38 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 6587,
 							facing = 0,
 						},
+						{
+							name = "spiderscout",
+							x = 2280,
+							z = 290,
+							facing = 0,
+						},
+						{
+							name = "spiderscout",
+							x = 2980,
+							z = 3050,
+							facing = 0,
+						},
+						{
+							name = "spiderscout",
+							x = 1830,
+							z = 5170,
+							facing = 0,
+						},
+						{
+							name = "turretaafar",
+							x = 8624,
+							z = 5852,
+							facing = 3,
+						},
+						{
+							name = "turretaafar",
+							x = 7960,
+							z = 2816,
+							facing = 3,
+						},
 					}
 				},
-				
 			},
 			defeatConditionConfig = {
 				-- Indexed by allyTeam.
@@ -2800,13 +2847,13 @@ local function GetPlanet(planetUtilities, planetID)
 					satisfyOnce = true,
 					countRemovedUnits = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 12,
+					targetNumber = 12, -- You start with 5.
 					unitTypes = {
 						"tankassault",
 					},
 					image = planetUtilities.ICON_DIR .. "tankassault.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build twelve Reapers",
+					description = "Build 7 Reapers",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { 
