@@ -1612,7 +1612,7 @@ local function GetPlanet(planetUtilities, planetID)
 					ignoredByAI = true,
 				},
 				{
-					name = "pw_metal",
+					name = "pw_mine",
 					x = 11528,
 					z = 6728,
 					facing = 0,
@@ -1620,7 +1620,7 @@ local function GetPlanet(planetUtilities, planetID)
 					ignoredByAI = true,
 				},
 				{
-					name = "pw_metal",
+					name = "pw_mine",
 					x = 11560,
 					z = 4968,
 					facing = 0,
@@ -1628,7 +1628,7 @@ local function GetPlanet(planetUtilities, planetID)
 					ignoredByAI = true,
 				},
 				{
-					name = "pw_mine2",
+					name = "pw_metal",
 					x = 10656,
 					z = 5760,
 					facing = 0,
