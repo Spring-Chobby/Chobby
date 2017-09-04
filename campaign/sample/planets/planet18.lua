@@ -52,6 +52,9 @@ local function GetPlanet(planetUtilities, planetID)
 					aiLib = "NullAI",
 					humanName = "Ally",
 					allyTeam = 0,
+					unlocks = {
+						"shieldscout",
+					},
 					startUnits = {
 						{
 							name = "factoryshield",
@@ -59,12 +62,18 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 208,
 							facing = 1,
 							commands = {
-								{unitName = "shieldscout", options = {}},
-								--{cmdID = planetUtilities.COMMAND.REPEAT, params = {1}, options = {"shift"}},
-								--{cmdID = planetUtilities.COMMAND.RAW_MOVE, atPosition = {1300, 180}, options = {"shift"}},
-								--{cmdID = planetUtilities.COMMAND.GATHERWAIT, params = {10}, options = {"shift"}},
-								--{cmdID = planetUtilities.COMMAND.TRANSFER_UNIT, params = {0}, options = {"shift"}},
+								{unitName = "shieldscout"},
+								{cmdID = planetUtilities.COMMAND.REPEAT, params = {1}},
+								{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1300, 180}},
+								{cmdID = planetUtilities.COMMAND.WAIT, params = {planetUtilities.COMMAND.WAITCODE_SQUAD, 20}, options = {"shift"}},
+								{cmdID = planetUtilities.COMMAND.TRANSFER_UNIT, params = {0}, options = {"shift"}},
 							},
+						},
+						{
+							name = "shieldcon",
+							x = 286,
+							z = 263,
+							facing = 1,
 						},
 						{
 							name = "staticmex",
@@ -136,12 +145,6 @@ local function GetPlanet(planetUtilities, planetID)
 							name = "energywind",
 							x = 1528,
 							z = 120,
-							facing = 1,
-						},
-						{
-							name = "shieldcon",
-							x = 286,
-							z = 263,
 							facing = 1,
 						},
 						{
@@ -261,6 +264,12 @@ local function GetPlanet(planetUtilities, planetID)
 					humanName = "Turrets",
 					allyTeam = 1,
 					startUnits = {
+						{
+							name = "energywind",
+							x = 3656,
+							z = 344,
+							facing = 1,
+						},
 					},
 				},
 				{
@@ -303,7 +312,11 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 			},
 			defeatConditionConfig = {
-
+				[0] = {
+				},
+				[1] = {
+					ignoreUnitLossDefeat = true,
+				},
 			},
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
