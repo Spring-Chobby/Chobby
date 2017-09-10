@@ -2,6 +2,8 @@
 --------------------------------------------------------------------------------
 -- Planet config
 
+local WATER_LEVEL = 0
+
 local function GetPlanet(planetUtilities, planetID)
 	
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
@@ -29,7 +31,11 @@ local function GetPlanet(planetUtilities, planetID)
 		gameConfig = {
 			mapName = "IsisDelta_v02",
 			modoptions = {
-				waterlevel = -160
+				--waterlevel = WATER_LEVEL
+				integral_disable_economy = 1,
+				integral_disable_defence = 1,
+				integral_disable_factory = 1,
+				campaign_disable_share_marker = 1,
 			},
 			playerConfig = {
 				startX = 1500,
@@ -41,6 +47,15 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				extraUnlocks = {
 					"shieldscout",
+				},
+				unitWhitelist = {
+					 -- These keep the tabs existing
+					staticmex = true,
+					factorycloak = true,
+					turretlaser = true,
+				},
+				extraAbilities = {
+					"terraform",
 				},
 				startUnits = {
 				}
@@ -64,16 +79,21 @@ local function GetPlanet(planetUtilities, planetID)
 							commands = {
 								{unitName = "shieldscout"},
 								{cmdID = planetUtilities.COMMAND.REPEAT, params = {1}},
-								{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1300, 180}},
-								{cmdID = planetUtilities.COMMAND.WAIT, params = {planetUtilities.COMMAND.WAITCODE_SQUAD, 20}, options = {"shift"}},
+								{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1300, 208}},
 								{cmdID = planetUtilities.COMMAND.TRANSFER_UNIT, params = {0}, options = {"shift"}},
 							},
 						},
+						--{
+						--	name = "shieldcon",
+						--	x = 286,
+						--	z = 263,
+						--	facing = 1,
+						--},
 						{
-							name = "shieldcon",
-							x = 286,
-							z = 263,
-							facing = 1,
+							name = "staticstorage",
+							x = 164,
+							z = 108,
+							facing = 0,
 						},
 						{
 							name = "staticmex",
@@ -296,18 +316,18 @@ local function GetPlanet(planetUtilities, planetID)
 					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
 					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
 					position = {240, 240, 370, 370}, 
-					height = 468,
+					height = 308 - WATER_LEVEL,
 				},
 				{
 					terraformShape = planetUtilities.TERRAFORM_SHAPE.RAMP,
-					position = {260, 468, 204, 900, 468, 206},
+					position = {260, 308 - WATER_LEVEL, 204, 900, 308 - WATER_LEVEL, 206},
 					width = 100
 				},
 				{
 					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
 					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
 					position = {608, 250, 772, 424}, 
-					height = 330,
+					height = 170 - WATER_LEVEL,
 					volumeSelection = planetUtilities.TERRAFORM_VOLUME.LOWER_ONLY,
 				},
 			},

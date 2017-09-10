@@ -88,6 +88,19 @@ planetData = {
 				"cloakcon",
 			},
 			
+			-- Extra abilities that are availbile to the player
+			extraAbilities = {
+				"terraform",
+			}
+			
+			-- The whitelist is a list of units that are not disabled for the mission.
+			-- The blacklist is a list of units that are disabled for the mission.
+			-- These tables are maps, leave them nil to not use them.
+			unitWhitelist = nil
+			unitBlacklist = {
+				turretlaser = true,
+			}
+			
 			-- Units that spawn at the start of the game.
 			startUnits = {
 				{

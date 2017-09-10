@@ -73,6 +73,18 @@ local function MakeCircuitDisableString(unlockedUnits)
 	return disabled
 end
 
+local function AddToList(list, inclusionMap, listToAppend)
+	if listToAppend then
+		for i = 1, #listToAppend do
+			if not inclusionMap[listToAppend[i]] then
+				list[#list + 1] = listToAppend[i]
+			end
+		end
+	end
+	
+	return list
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Start Game
@@ -105,15 +117,34 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 	
 	local playerUnlocks = WG.CampaignData.GetUnitsUnlocks()
 	local playerAbilities = WG.CampaignData.GetAbilityUnlocks()
-	local fullPlayerUnlocks = Spring.Utilities.CopyTable(playerUnlocks.list)
 	
 	commanderTypes.player_commander = WG.CampaignData.GetPlayerCommander()
 	
-	if gameConfig.playerConfig.extraUnlocks then
-		local extra = gameConfig.playerConfig.extraUnlocks
-		for i = 1, #extra do
-			if not playerUnlocks.map[extra[i]] then
-				fullPlayerUnlocks[#fullPlayerUnlocks + 1] = extra[i]
+	local fullPlayerUnlocks = AddToList(Spring.Utilities.CopyTable(playerUnlocks.list), playerUnlocks.map, gameConfig.playerConfig.extraUnlocks)
+	local fullAbilitiesList = AddToList(Spring.Utilities.CopyTable(playerAbilities.list), playerAbilities.map, gameConfig.playerConfig.extraAbilities) 
+	
+	if gameConfig.playerConfig.unitWhitelist then
+		local map = gameConfig.playerConfig.unitWhitelist
+		local i = 1
+		while i <= #fullPlayerUnlocks do
+			if not map[fullPlayerUnlocks[i]] then
+				fullPlayerUnlocks[i] = fullPlayerUnlocks[#fullPlayerUnlocks]
+				fullPlayerUnlocks[#fullPlayerUnlocks] = nil
+			else
+				i = i + 1
+			end
+		end
+	end
+	
+	if gameConfig.playerConfig.unitBlacklist then
+		local map = gameConfig.playerConfig.unitBlacklist
+		local i = 1
+		while i <= #fullPlayerUnlocks do
+			if map[fullPlayerUnlocks[i]] then
+				fullPlayerUnlocks[i] = fullPlayerUnlocks[#fullPlayerUnlocks]
+				fullPlayerUnlocks[#fullPlayerUnlocks] = nil
+			else
+				i = i + 1
 			end
 		end
 	end
@@ -129,7 +160,9 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		staticcomm = "player_commander",
 		static_level = WG.CampaignData.GetPlayerCommanderInformation(),
 		campaignunlocks = TableToBase64(fullPlayerUnlocks),
-		campaignabilities = TableToBase64(playerAbilities.list),
+		campaignabilities = TableToBase64(fullAbilitiesList),
+		campaignunitwhitelist = TableToBase64(gameConfig.playerConfig.unitWhitelist),
+		campaignunitblacklist = TableToBase64(gameConfig.playerConfig.unitBlacklist),
 		commanderparameters = TableToBase64(gameConfig.playerConfig.commanderParameters),
 		extrastartunits = TableToBase64(gameConfig.playerConfig.startUnits),
 		retinuestartunits = TableToBase64(WG.CampaignData.GetActiveRetinue()),
