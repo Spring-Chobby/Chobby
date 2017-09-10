@@ -75,7 +75,7 @@ local function GetPlanet(planetUtilities, planetID)
 						z = 180,
 						facing = 0,
 						commands = {
-							{cmdID = planetUtilities.COMMAND.REPAIR, atPosition = {1536, 410}},
+							{cmdID = planetUtilities.COMMAND.REPAIR, atPosition = {1833, 361}},
 						},
 					},
 					{
@@ -84,7 +84,16 @@ local function GetPlanet(planetUtilities, planetID)
 						z = 180,
 						facing = 0,
 						commands = {
-							{cmdID = planetUtilities.COMMAND.REPAIR, atPosition = {1536, 410}},
+							{cmdID = planetUtilities.COMMAND.REPAIR, atPosition = {1833, 361}},
+						},
+					},
+					{
+						name = "staticcon",
+						x = 1540,
+						z = 620,
+						facing = 0,
+						commands = {
+							{cmdID = planetUtilities.COMMAND.PATROL, pos = {1600, 560}},
 						},
 					},
 					{
@@ -1973,8 +1982,8 @@ local function GetPlanet(planetUtilities, planetID)
 						},
 						{
 							name = "turretriot",
-							x = 2136,
-							z = 1288,
+							x = 2100,
+							z = 1396,
 							facing = 2,
 						},
 						{
@@ -2226,6 +2235,12 @@ local function GetPlanet(planetUtilities, planetID)
 							name = "turretheavylaser",
 							x = 4008,
 							z = 120,
+							facing = 0,
+						},
+						{
+							name = "turretriot",
+							x = 4127,
+							z = 65,
 							facing = 0,
 						},
 						{
@@ -3160,8 +3175,8 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				{
 					terraformShape = planetUtilities.TERRAFORM_SHAPE.RAMP,
-					position = {1538, 308, 412, 1665, 218, 555},
-					width = 100,
+					position = {1835, 308, 391, 1844, 218, 529},
+					width = 120,
 					needConstruction = true,
 					teamID = 0,
 				},
@@ -3196,12 +3211,12 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			bonusObjectiveConfig = {
 				[1] = {
+					satisfyOnce = true,
 					comparisionType = planetUtilities.COMPARE.AT_MOST,
 					targetNumber = 0,
-					-- See bonusObjectiveID in units table
 					image = planetUtilities.ICON_DIR .. "energysingu.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Destroy the enemy Singularity Reactors",
+					description = "Destroy both Singularity Reactors",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Win by 15:00
