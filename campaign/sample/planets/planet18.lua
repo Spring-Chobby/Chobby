@@ -33,7 +33,7 @@ local function GetPlanet(planetUtilities, planetID)
 				integral_disable_defence = 1,
 				integral_disable_factory = 1,
 				campaign_disable_share_marker = 1,
-				campaign_debug_units = 1,
+				--campaign_debug_units = 1,
 			},
 			playerConfig = {
 				startX = 1500,
