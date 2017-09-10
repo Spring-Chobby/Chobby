@@ -770,7 +770,7 @@ local function GetPlanet(planetUtilities, planetID)
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Have 20 Metal Extractors
-					satisfyOnce = true,
+					satisfyByTime = 900,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 20,
 					unitTypes = {
@@ -778,10 +778,10 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "staticmex.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Have 20 Metal Extractors",
+					description = "Have 20 Metal Extractors before 15:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[3] = { -- Kill both enemy commanders in 10:00
+				[3] = { -- Kill both enemy commanders in 15:00
 					satisfyByTime = 900,
 					comparisionType = planetUtilities.COMPARE.AT_MOST,
 					targetNumber = 0,

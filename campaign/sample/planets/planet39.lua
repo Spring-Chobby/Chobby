@@ -52,8 +52,10 @@ local function GetPlanet(planetUtilities, planetID)
 				{
 					startX = 4000,
 					startZ = 75,
-					aiLib = "Circuit_difficulty_autofill",
 					humanName = "Enemy",
+					--aiLib = "Null AI",
+					--bitDependant = false,
+					aiLib = "Circuit_difficulty_autofill",
 					bitDependant = true,
 					commanderParameters = {
 						facplop = false,
@@ -73,6 +75,7 @@ local function GetPlanet(planetUtilities, planetID)
 						modules = { }
 					},
 					startUnits = {
+						
 					}
 				},
 			},
@@ -88,6 +91,7 @@ local function GetPlanet(planetUtilities, planetID)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
+				"gunshipaa",
 				"gunshipkrow",
 				"turretaafar",
 			},

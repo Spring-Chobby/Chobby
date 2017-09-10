@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Taoune",
 			primaryType = "F2III",
 			milRating = 1,
-			text = [[Your opponent has taken to the air in this battle. Construct the anti-air Gremlin bot and Hacksaw defensive emplacements to bring them back to the ground. Remember the Defender is also effective as an anti-air defence.]]
+			text = [[Your opponent has taken to the air with Gunships in this battle. Construct the anti-air Gremlin bot and Hacksaw defensive emplacements to bring them back to the ground. Remember the Defender is also effective as an anti-air defence.]]
 		},
 		gameConfig = {
 			mapName = "Avalanche-v2",
@@ -121,16 +121,20 @@ local function GetPlanet(planetUtilities, planetID)
 					startX = 3800,
 					startZ = 200,
 					aiLib = "Circuit_difficulty_autofill",
-					humanName = "_birdies_",
+					humanName = "_Havoc",
 					bitDependant = true,
 					allyTeam = 1,
 					unlocks = {
-						"planecon",
-						"planefighter",
-						"bomberprec",
-						"bomberriot",
+						"gunshipcon",
+						"gunshipraid",
+						"gunshipemp",
+						"gunshipbomb",
+						"gunshipskirm",
 						"staticmex",
-						"planescout",
+					},
+					difficultyDependantUnlocks = {
+						[3] = {"gunshipheavyskirm"},
+						[4] = {"gunshipassault"},
 					},
 					commanderParameters = {
 						facplop = false,
@@ -149,25 +153,25 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					startUnits = {
 						{
-							name = "factoryplane",
+							name = "factorygunship",
 							x = 3980,
 							z = 110,
 							facing = 0, 
 						},
 						{
-							name = "bomberprec",
+							name = "gunshipraid",
 							x = 3000,
 							z = 1000,
 							facing = 0, 
 						},
 						{
-							name = "bomberriot",
+							name = "gunshipskirm",
 							x = 3000,
 							z = 1200,
 							facing = 0, 
 						},
 						{
-							name = "planefighter",
+							name = "gunshipemp",
 							x = 3200,
 							z = 1400,
 							facing = 0, 
@@ -254,7 +258,7 @@ local function GetPlanet(planetUtilities, planetID)
 					ignoreUnitLossDefeat = false,
 					vitalCommanders = false,
 					vitalUnitTypes = {
-						"factoryplane",
+						"factorygunship",
 					},
 					loseAfterSeconds = false,
 					allyTeamLossObjectiveID = 1,
@@ -263,7 +267,7 @@ local function GetPlanet(planetUtilities, planetID)
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Destroy the enemy Airplane Factory",
+					description = "Destroy the enemy Gunship Factory",
 				},
 				[2] = {
 					description = "Protect your Commander",
@@ -303,7 +307,7 @@ local function GetPlanet(planetUtilities, planetID)
 					-- See bonusObjectiveID in units table
 					image = planetUtilities.ICON_DIR .. "strike.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Kill the enemy commander before 7:30",
+					description = "Destroy the enemy commander before 7:30",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			},

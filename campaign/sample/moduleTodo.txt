@@ -36,12 +36,12 @@ commweapon_shockrifle -- Reconsider
 The number is how many times the module has been placed. Each can go up to 8.
 8	module_companion_drone
 8	module_battle_drone
-4	module_autorepair
-4	module_ablative_armor
+8	module_autorepair
+8	module_ablative_armor
 8	module_heavy_armor
-4	module_dmg_booster
+8	module_dmg_booster
 8	module_high_power_servos
-4	module_adv_targeting
+8	module_adv_targeting
 8	module_adv_nano
 
 Putting this here so I can find it for AI coms
