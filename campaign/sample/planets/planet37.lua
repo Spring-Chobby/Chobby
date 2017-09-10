@@ -43,8 +43,6 @@ local function GetPlanet(planetUtilities, planetID)
 					"gunshipemp",
 					"gunshiptrans",
 					"gunshipheavytrans",
-					"factoryveh",
-					"vehcapture",
 					"energygeo",
 				},
 				startUnits = {
@@ -90,18 +88,18 @@ local function GetPlanet(planetUtilities, planetID)
 						z = 7625,
 						facing = 0,
 					},
-					-- {
-						-- name = "cloakriot",
-						-- x = 3080,
-						-- z = 7600,
-						-- facing = 0,
-					-- },
-					-- {
-						-- name = "cloakriot",
-						-- x = 3280,
-						-- z = 7600,
-						-- facing = 0,
-					-- },
+					{
+						 name = "vehcapture",
+						 x = 3080,
+						 z = 7600,
+						 facing = 0,
+					 },
+					 {
+						 name = "vehcapture",
+						 x = 3280,
+						 z = 7600,
+						 facing = 0,
+					 },
 					{
 						name = "gunshiptrans",
 						x = 3030,
@@ -126,18 +124,18 @@ local function GetPlanet(planetUtilities, planetID)
 						z = 7525,
 						facing = 0,
 					},
-					-- {
-						-- name = "gunshiptrans",
-						-- x = 3080,
-						-- z = 7550,
-						-- facing = 0,
-					-- },
-					-- {
-						-- name = "gunshiptrans",
-						-- x = 3280,
-						-- z = 7550,
-						-- facing = 0,
-					-- },
+					{
+						name = "gunshiptrans",
+						x = 3080,
+						z = 7550,
+						facing = 0,
+					},
+					{
+						name = "gunshiptrans",
+						x = 3280,
+						z = 7550,
+						facing = 0,
+					},
 					{
 						name = "gunshipcon",
 						x = 3080,
