@@ -112,6 +112,9 @@ planetData = {
 					z = 850,
 					facing = 0,
 					
+					-- Set terraform height to make a Skydust
+					terraformHeight = 30,
+					
 					-- Units have victoryAtLocation and defeatIfDestroyedObjectiveID identical to commanderParameters.
 					-- Please do not set difficultyAtMost or difficultyAtLeast for initial units with victory/defeat parameters,
 					-- who knows what would happen.
@@ -160,6 +163,20 @@ planetData = {
 						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1560, 800}, options = {"shift"}},
 						{unitName = "turretmissile", pos = {64, 64}, facing = 3, options = {"shift"}},
 					},
+					
+					-- patrolRoute is a condensed way of issuing commands to patrol in a route. Do not use it and commands at the same time.
+					patrolRoute = {
+						{2236, 1635},
+						{2742, 1521},
+						{3369, 1548},
+						{3305, 1691},
+						{2767, 1602},
+						{2420, 1671},
+						{2240, 2052},
+						{2477, 2432},
+						{2286, 2570},
+						{2077, 2102},
+					}
 					
 					-- Whether the unit spawns can be conditional on the difficulty setting. 
 					-- Both 'at most' and 'at least' are availible and the usual usage would be to
@@ -339,6 +356,8 @@ planetData = {
 			--  * height: Required for LEVEL and RAISE. Absolute for the former and relative for the latter.
 			--  * width: Required for RAMP.
 			--  * volumeSelection: NONE, RAISE_ONLY or LOWER_ONLY
+			--  * needConstruction: boolean. Set to true to create a terraunit.
+			--  * teamID: number. This is for use with needConstruction.
 			-- Note that terraform has all the restrictions of terraform that occurs during a game. Shapes such
 			-- as very thin walls cannot be created.
 			{
@@ -428,6 +447,8 @@ planetData = {
 			--  * image, imageOverlay - The image used for the objective in the invasion and victory screens.
 			--  * description - The text that appears with the objective for the ingame UI and the invasion and victory screens.
 			--
+			-- Set completeAllBonusObjectives to true to make the bonus objective that is "Complete all objectives".
+			--
 			-- Not so simple paramters, to be covered later (in order).
 			--  * <all the satisfication types>
 			--  * victoryByTime - A number of seconds, often false.
@@ -499,6 +520,12 @@ planetData = {
 				image = planetUtilities.ICON_OVERLAY.CLOCK,
 				description = "Win by 8:00",
 				experience = 10,
+			},
+			[3] = { -- Complete all bonus objectives
+				completeAllBonusObjectives = true,
+				image = planetUtilities.ICON_OVERLAY.ALL,
+				description = "Complete all bonus objectives (in one battle).",
+				experience = planetUtilities.BONUS_EXP,
 			},
 			-- See planet definitions for many more examples.
 		}

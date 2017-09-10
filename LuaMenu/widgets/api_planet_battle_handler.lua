@@ -17,6 +17,7 @@ end
 --------------------------------------------------------------------------------
 
 local SAVE_SCRIPT = true
+local START_UNITS_BLOCK_SIZE = 40
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -83,6 +84,22 @@ local function AddToList(list, inclusionMap, listToAppend)
 	end
 	
 	return list
+end
+
+local function AddStartUnits(teamTable, unitList, prefix)
+	if not (unitList and unitList[1]) then
+		return
+	end
+	local block = 1
+	while unitList[(block - 1)*START_UNITS_BLOCK_SIZE + 1] do
+		local unitsTable = {}
+		local offset = (block - 1)*START_UNITS_BLOCK_SIZE
+		for i = 1, START_UNITS_BLOCK_SIZE do
+			unitsTable[i] = unitList[offset + i]
+		end
+		teamTable[prefix .. block] = TableToBase64(unitsTable)
+		block = block + 1
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -164,9 +181,10 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		campaignunitwhitelist = TableToBase64(gameConfig.playerConfig.unitWhitelist),
 		campaignunitblacklist = TableToBase64(gameConfig.playerConfig.unitBlacklist),
 		commanderparameters = TableToBase64(gameConfig.playerConfig.commanderParameters),
-		extrastartunits = TableToBase64(gameConfig.playerConfig.startUnits),
 		retinuestartunits = TableToBase64(WG.CampaignData.GetActiveRetinue()),
 	}
+	AddStartUnits(teams[teamCount], gameConfig.playerConfig.startUnits, "extrastartunits_")
+	
 	teamCount = teamCount + 1
 	
 	-- Add the AIs
@@ -228,8 +246,8 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 			static_level = (aiData.commanderLevel or 1) - 1, -- Comm level is 0 indexed but on the UI it is 1 indexed.
 			campaignunlocks = TableToBase64(availibleUnits),
 			commanderparameters = TableToBase64(aiData.commanderParameters),
-			extrastartunits = TableToBase64(aiData.startUnits),
 		}
+		AddStartUnits(teams[teamCount], aiData.startUnits, "extrastartunits_")
 		teamCount = teamCount + 1
 	end
 	
@@ -247,7 +265,6 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		defeatconditionconfig = TableToBase64(gameConfig.defeatConditionConfig),
 		objectiveconfig = TableToBase64(gameConfig.objectiveConfig),
 		bonusobjectiveconfig = TableToBase64(gameConfig.bonusObjectiveConfig),
-		neutralunitstospawn = TableToBase64(gameConfig.neutralUnits),
 		featurestospawn = TableToBase64(gameConfig.initialWrecks),
 		fixedstartpos = 1,
 		planetmissiondifficulty = missionDifficulty,
@@ -255,6 +272,7 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		singleplayercampaignbattleid = planetID,
 		initalterraform = TableToBase64(gameConfig.terraform),
 	}
+	AddStartUnits(modoptions, gameConfig.neutralUnits, "neutralstartunits_")
 	
 	if gameConfig.modoptions then
 		for key, value in pairs(gameConfig.modoptions) do

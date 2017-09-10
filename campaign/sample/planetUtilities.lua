@@ -191,6 +191,7 @@ planetUtilities.COMMAND = {
 	
 	-- Custom commands
 	RAW_MOVE = 31109,
+	JUMP = 38521,
 	AREA_GUARD = 13922, -- Don't use, causes recursion
 	TRANSFER_UNIT = 38292,
 	PLACE_BEACON = 35170,
