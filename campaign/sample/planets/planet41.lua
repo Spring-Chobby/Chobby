@@ -7,7 +7,7 @@ local function GetPlanet(planetUtilities, planetID)
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
 	local planetData = {
-		name = "Blank",
+		name = "Aspiris",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.435,
@@ -19,18 +19,18 @@ local function GetPlanet(planetUtilities, planetID)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Terran",
-			radius = "6550 km",
-			primary = "Blank",
-			primaryType = "G8V",
+			terrainType = "Barren",
+			radius = "5350 km",
+			primary = "Ahdas Las",
+			primaryType = "K4III",
 			milRating = 1,
-			text = [[...]]
+			text = [[In the Heavy Tank factory, even the constructors and raiders are tough - but they're also more expensive. You'll have less units than your Cloaky Bot opponent, so you'll need to be careful to avoid losses if you want to win here.]]
 		},
 		gameConfig = {
-			mapName = "LowTideV3",
+			mapName = "TitanDuel 2",
 			playerConfig = {
-				startX = 100,
-				startZ = 100,
+				startX = 3600,
+				startZ = 1000,
 				allyTeam = 0,
 				facplop = false,
 				commanderParameters = {
@@ -46,43 +46,354 @@ local function GetPlanet(planetUtilities, planetID)
 					"tankheavyraid",
 				},
 				startUnits = {
+					{
+						name = "factorytank",
+						x = 4112,
+						z = 544,
+						facing = 0,
+					},
+ 					{
+						name = "staticmex",
+						x = 3816,
+						z = 504,
+						facing = 0,
+					},
+ 					{
+						name = "staticmex",
+						x = 3624,
+						z = 632,
+						facing = 0,
+					},
+ 					{
+						name = "staticmex",
+						x = 4408,
+						z = 920,
+						facing = 0,
+					},
+ 					{
+						name = "staticradar",
+						x = 3888,
+						z = 896,
+						facing = 0,
+					},
+ 					{
+						name = "energysolar",
+						x = 3720,
+						z = 568,
+						facing = 1,
+					},
+ 					{
+						name = "energysolar",
+						x = 4296,
+						z = 952,
+						facing = 1,
+					},
+ 					{
+						name = "energysolar",
+						x = 4408,
+						z = 1048,
+						facing = 1,
+					},
+ 					{
+						name = "turretlaser",
+						x = 4192,
+						z = 1248,
+						facing = 0,
+					},
+ 					{
+						name = "turretlaser",
+						x = 3536,
+						z = 928,
+						facing = 0,
+					},
+ 					{
+						name = "tankcon",
+						x = 4077,
+						z = 795,
+						facing = 0,
+					},
+ 					{
+						name = "tankheavyraid",
+						x = 3984,
+						z = 765,
+						facing = 0,
+					},
+ 					{
+						name = "tankraid",
+						x = 4183,
+						z = 780,
+						facing = 0,
+					},
 				}
 			},
 			aiConfig = {
 				{
-					startX = 4000,
-					startZ = 75,
+					startX = 1562,
+					startZ = 4000,
 					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Enemy",
 					bitDependant = true,
+					--aiLib = "Null AI",
+					--bitDependant = false,
+					humanName = "Spurs",
 					commanderParameters = {
 						facplop = false,
+						bonusObjectiveID = 1,
 					},
 					allyTeam = 1,
 					unlocks = {
+						"staticcon",
+						"staticradar",
+						"staticmex",
+						"energysolar",
+						"energygeo",
+						"factorycloak",
+						"cloakcon",
 						"cloakraid",
+						"cloakriot",
+						"cloakassault",
+						"cloakskirm",
+						"cloakarty",
+						"cloakbomb",
+						"factoryveh",
+						"vehcon",
+						"vehraid",
+						"vehriot",
+						"vehassault",
 					},
-					commanderLevel = 2,
+					commanderLevel = 4,
 					commander = {
-						name = "Most Loyal Opposition",
-						chassis = "engineer",
+						name = "Hawker",
+						chassis = "strike",
 						decorations = {
-						  "skin_support_dark",
-						  icon_overhead = { image = "UW" }
 						},
-						modules = { }
+						modules = { 
+							"commweapon_shotgun",
+							"commweapon_multistunner",
+							"module_heavy_armor",
+							"module_high_power_servos",
+							"module_high_power_servos",
+							"module_adv_nano",
+							"module_adv_nano",
+							"module_jammer",
+							"module_adv_targeting",
+							"module_autorepair",
+						}
 					},
 					startUnits = {
+						{
+							name = "pw_warpgate",
+							x = 1280,
+							z = 3992,
+							facing = 0,
+							terraformHeight = 121,
+							mapMarker = {
+								text = "Warp Gate",
+								color = "red"
+							},
+						},
+						{
+							name = "staticmex",
+							x = 808,
+							z = 4456,
+							facing = 0,
+						},
+ 						{
+							name = "staticmex",
+							x = 1656,
+							z = 4152,
+							facing = 0,
+						},
+ 						{
+							name = "staticmex",
+							x = 1816,
+							z = 4280,
+							facing = 0,
+						},
+ 						{
+							name = "factorycloak",
+							x = 768,
+							z = 4136,
+							facing = 1,
+						},
+ 						{
+							name = "turretriot",
+							x = 776,
+							z = 3560,
+							facing = 1,
+						},
+ 						{
+							name = "turretlaser",
+							x = 1280,
+							z = 3648,
+							facing = 2,
+						},
+ 						{
+							name = "turretlaser",
+							x = 1904,
+							z = 3968,
+							facing = 1,
+						},
+ 						{
+							name = "cloakcon",
+							x = 1075,
+							z = 4248,
+							facing = 2,
+						},
+ 						{
+							name = "cloakriot",
+							x = 923,
+							z = 3874,
+							facing = 2,
+						},
+ 						{
+							name = "cloakraid",
+							x = 1111,
+							z = 3868,
+							facing = 2,
+						},
+ 						{
+							name = "cloakraid",
+							x = 1017,
+							z = 3870,
+							facing = 2,
+						},
+ 						{
+							name = "cloakraid",
+							x = 845,
+							z = 3826,
+							facing = 2,
+						},
+ 						{
+							name = "energysolar",
+							x = 1784,
+							z = 4184,
+							facing = 0,
+						},
+ 						{
+							name = "turretaalaser",
+							x = 1032,
+							z = 3944,
+							facing = 0,
+						},
+ 						{
+							name = "turretaalaser",
+							x = 1496,
+							z = 4280,
+							facing = 0,
+						},
+ 						{
+							name = "energysolar",
+							x = 712,
+							z = 4408,
+							facing = 0,
+						},
+ 						{
+							name = "energysolar",
+							x = 904,
+							z = 4408,
+							facing = 0,
+						},
+ 						{
+							name = "cloakcon",
+							x = 1004,
+							z = 4066,
+							facing = 1,
+						},
+ 						{
+							name = "cloakraid",
+							x = 942,
+							z = 3946,
+							facing = 2,
+						},
+ 						{
+							name = "cloakraid",
+							x = 896,
+							z = 3924,
+							facing = 2,
+						},
+ 						{
+							name = "cloakassault",
+							x = 802,
+							z = 4013,
+							facing = 2,
+						},
+ 						{
+							name = "turretriot",
+							x = 1528,
+							z = 3880,
+							facing = 2,
+						},
+ 						{
+							name = "turretmissile",
+							x = 928,
+							z = 4224,
+							facing = 2,
+						},
+ 						{
+							name = "turretmissile",
+							x = 1184,
+							z = 4592,
+							facing = 2,
+						},
 					}
 				},
 			},
 			defeatConditionConfig = {
-
+				-- Indexed by allyTeam.
+				[0] = { },
+				[1] = {
+					ignoreUnitLossDefeat = false,
+					vitalCommanders = false,
+					vitalUnitTypes = {
+						"pw_warpgate",
+					},
+					loseAfterSeconds = false,
+					allyTeamLossObjectiveID = 1,
+				},
 			},
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
+				[1] = {
+					description = "Destroy the enemy Warp Gate",
+				},
+				[2] = {
+					description = "Protect your Commander",
+				},
 			},
 			bonusObjectiveConfig = {
+				[1] = {
+					victoryByTime = 600,
+					image = planetUtilities.ICON_OVERLAY.CLOCK,
+					description = "Win by 10:00",
+					experience = planetUtilities.BONUS_EXP,
+				},
+				[2] = { -- Lose no more than 5 tanks
+					onlyCountRemovedUnits = true,
+					satisfyForever = true,
+					comparisionType = planetUtilities.COMPARE.AT_MOST,
+					targetNumber = 5,
+					unitTypes = {
+						"tankcon",
+						"tankraid",
+						"tankheavyraid",
+						"tankriot",
+						"tankassault",
+						"tankheavyassault",
+						"tankarty",
+						"tankheavyarty",
+						"tankaa",
+					},
+					image = planetUtilities.ICON_DIR .. "tankriot.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
+					description = "Do not lose more than 5 Tanks",
+					experience = planetUtilities.BONUS_EXP,
+				},
+				[3] = { -- Complete all bonus objectives
+					completeAllBonusObjectives = true,
+					image = planetUtilities.ICON_OVERLAY.ALL,
+					description = "Complete all bonus objectives (in one battle)",
+					experience = planetUtilities.BONUS_EXP,
+				},
 			}
 		},
 		completionReward = {

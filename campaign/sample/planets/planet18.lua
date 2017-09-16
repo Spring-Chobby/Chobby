@@ -7,7 +7,7 @@ local function GetPlanet(planetUtilities, planetID)
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
 	local planetData = {
-		name = "Dirtbags",
+		name = "Kirdipude",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.43,
@@ -19,10 +19,10 @@ local function GetPlanet(planetUtilities, planetID)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Terran",
-			radius = "6550 km",
-			primary = "Dirtbags",
-			primaryType = "G8V",
+			terrainType = "Arid",
+			radius = "5410 km",
+			primary = "Iersag",
+			primaryType = "K1V",
 			milRating = 1,
 			text = [[something something terraform something dirtbag something]]
 		},
