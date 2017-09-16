@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[...]]
+			text = [[Your ally can take care of any surface targets, but you'll need to support them with Claymore depth charge and Flail AA hovercraft against underwater and aerial threats.]]
 		},
 		gameConfig = {
 			mapName = "LowTideV3",

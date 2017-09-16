@@ -41,7 +41,7 @@ local function GetPlanet(planetUtilities, planetID)
 					"vehcon",
 					"vehheavyarty",
 					"vehaa",
-					"turretaalaser",
+					"vehscout",
 					"turrettorp",
 					"vehraid",
 					"vehriot",
@@ -932,7 +932,7 @@ local function GetPlanet(planetUtilities, planetID)
 			units = {
 				"vehheavyarty",
 				"vehaa",
-				"turretaalaser",
+				"vehscout",
 			},
 			modules = {
 				"module_adv_targeting_LIMIT_A_2",

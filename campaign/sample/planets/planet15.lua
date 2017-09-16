@@ -7,7 +7,7 @@ local function GetPlanet(planetUtilities, planetID)
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
 	local planetData = {
-		name = "Jochig",
+		name = "Jochu",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.33,
@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Ushasis",
 			primaryType = "F9V",
 			milRating = 1,
-			text = [[Your opponent will start with Hovercraft and then transition to Gunships. Build Rogue skirmishers to defeat the hovercraft, then Vandal AA bots to defeat the gunships.]]
+			text = [[Your opponent starts with Hovercraft but will also build Gunships. Build Rogue skirmishers to defeat the hovercraft, then Vandal AA bots to defeat the gunships.]]
 		},
 		gameConfig = {
 			mapName = "DunePatrol_wip_v03",
@@ -41,7 +41,8 @@ local function GetPlanet(planetUtilities, planetID)
 					"shieldaa",
 					"shieldskirm",
 					"shieldraid",
-					"shieldriot"
+					"shieldriot",
+					"turretaalaser",
 				},
 				startUnits = {
 					{
@@ -167,6 +168,12 @@ local function GetPlanet(planetUtilities, planetID)
 						z = 826,
 						facing = 0,
 					},
+					{
+						name = "turretaalaser",
+						x = 3200,
+						z = 800,
+						facing = 0,
+					},
 				}
 			},
 			aiConfig = {
@@ -191,12 +198,12 @@ local function GetPlanet(planetUtilities, planetID)
 						"hoverraid",
 						"hoverriot",
 						"hoverskirm",
-						"factorygunship",
 						"gunshipraid",
 						"gunshipskirm",
 					},
 					difficultyDependantUnlocks = {
 						[3] = {"hoverassault"},
+						[4] = {"gunshipheavyskirm","gunshipassault"},
 					},
 					commanderLevel = 2,
 					commander = {
@@ -297,6 +304,18 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 2,
 						},
 						{
+							name = "factorygunship",
+							x = 3500,
+							z = 3700,
+							facing = 2,
+						},
+						{
+							name = "turretriot",
+							x = 3800,
+							z = 3700,
+							facing = 1,
+						},
+						{
 							name = "hovercon",
 							x = 3278,
 							z = 3445,
@@ -385,6 +404,7 @@ local function GetPlanet(planetUtilities, planetID)
 				--"factoryshield",
 				--"shieldraid",
 				--"shieldriot",
+				"turretaalaser",
 				"shieldskirm",
 				"shieldaa",
 			},
