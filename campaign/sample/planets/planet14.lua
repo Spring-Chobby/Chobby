@@ -353,7 +353,7 @@ local function GetPlanet(planetUtilities, planetID)
 				[1] = { -- Have 12 Convicts
 					satisfyOnce = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 20,
+					targetNumber = 12,
 					unitTypes = {
 						"shieldcon",
 					},
