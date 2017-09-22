@@ -1,4 +1,4 @@
 return {
 	map = "TitanDuel",
-	enemyAI = "CAI",
+	enemyAI = "CircuitAIEasy" .. ((Configuration:GetIsRunning64Bit() and "64") or "32"),
 }
