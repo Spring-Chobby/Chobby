@@ -39,7 +39,6 @@ local function GetPlanet(planetUtilities, planetID)
 				extraUnlocks = {
 					"factoryveh",
 					"vehcon",
-					"vehscout",
 					"vehcapture",
 				},
 				startUnits = {
@@ -460,7 +459,6 @@ local function GetPlanet(planetUtilities, planetID)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"vehscout",
 				"vehcapture",
 			},
 			modules = {

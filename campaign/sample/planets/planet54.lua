@@ -47,14 +47,26 @@ local function GetPlanet(planetUtilities, planetID)
 						z = 2280,
 						facing = 0,
 					},
+					{
+						name = "jumpraid",
+						x = 2235,
+						z = 2040,
+						facing = 0,
+					},
  					{
 						name = "jumpraid",
+						x = 2422,
+						z = 2030,
+						facing = 0,
+					},
+ 					{
+						name = "jumpbomb",
 						x = 2235,
 						z = 2093,
 						facing = 0,
 					},
  					{
-						name = "jumpraid",
+						name = "jumpbomb",
 						x = 2422,
 						z = 2082,
 						facing = 0,
