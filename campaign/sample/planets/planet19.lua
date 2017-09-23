@@ -57,9 +57,10 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					{
 						name = "staticcon",
-						x = 3320,
-						z = 3080,
+						x = 3245,
+						z = 3000,
 						facing = 3,
+						selfPatrol = true,
 					},
 				}
 			},
