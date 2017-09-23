@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Chukon",
 			primaryType = "G1V",
 			milRating = 1,
-			text = [[The enemy surrounds you on all sides; construct Stinger and Stardust defence structures and hold out for 15 minutes.]]
+			text = [[You have secured a Tech Lab but the enemy surrounds you on all sides. Construct Stinger and Stardust defence structures and hold out for 15 minutes.]]
 		},
 		gameConfig = {
 			mapName = "Archers_Valley_v6",
@@ -41,6 +41,13 @@ local function GetPlanet(planetUtilities, planetID)
 					"turretriot",
 				},
 				startUnits = {
+					{
+						name = "pw_techlab",
+						x = 3090,
+						z = 2874,
+						facing = 1,
+						defeatIfDestroyedObjectiveID = 1,
+					},
 					{
 						name = "staticmex",
 						x = 2856,
@@ -208,6 +215,12 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 2296,
 						z = 2488,
 						facing = 2,
+					},
+					{
+						name = "turretheavylaser",
+						x = 3518,
+						z = 2704,
+						facing = 1,
 					},
 					{
 						name = "turretriot",
@@ -823,7 +836,7 @@ local function GetPlanet(planetUtilities, planetID)
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Survive for 15 minutes",
+					description = "Protect the Tech Lab for 15 minutes.",
 				},
 				[2] = {
 					description = "Protect your Commander",
@@ -857,19 +870,19 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Destroy one of the enemy factories",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				-- [3] = { -- Do not lose any Stingers
-					-- satisfyForever = true,
-					-- onlyCountRemovedUnits = true,
-					-- comparisionType = planetUtilities.COMPARE.AT_MOST,
-					-- targetNumber = 0,
-					-- unitTypes = {
-						-- "turretheavylaser",
-					-- },
-					-- image = planetUtilities.ICON_DIR .. "turretheavylaser.png",
-					-- imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
-					-- description = "Do not lose any Stingers",
-					-- experience = planetUtilities.BONUS_EXP,
-				-- },
+				[3] = { -- Do not lose any Solars
+					satisfyForever = true,
+					onlyCountRemovedUnits = true,
+					comparisionType = planetUtilities.COMPARE.AT_MOST,
+					targetNumber = 0,
+					unitTypes = {
+						"turretheavylaser",
+					},
+					image = planetUtilities.ICON_DIR .. "energysolar.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
+					description = "Do not lose any Solar Collectors",
+					experience = planetUtilities.BONUS_EXP,
+				},
 			},
 		},
 		completionReward = {
