@@ -28,6 +28,15 @@ local function GetPlanet(planetUtilities, planetID)
 		},
 		gameConfig = {
 			mapName = "Cattle and Loveplay NO WORMS 1",
+			modoptions = {
+				chicken_nominiqueen = 1,
+				chicken_minaggro = 0,	-- aggro influences chicken tech-up rate (and queen time reduction from killing burrows, but queens are disabled here)
+				chicken_maxaggro = 0,
+				chicken_maxtech = 30*60,	-- stops before Sporeshooter/Talon
+				chicken_endless = 1,
+				chicken_hidepanel = 1,
+				chicken_nowavemessages = 1,
+			},
 			playerConfig = {
 				startX = 1415,
 				startZ = 1970,
