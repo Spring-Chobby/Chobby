@@ -308,18 +308,30 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 5352,
 							z = 1656,
 							facing = 0,
+							mapMarker = {
+								text = "Adv. Geo",
+								color = "red_small"
+							},
 						},
  						{
 							name = "energyheavygeo",
 							x = 6072,
 							z = 5896,
 							facing = 0,
+							mapMarker = {
+								text = "Adv. Geo",
+								color = "red_small"
+							},
 						},
  						{
 							name = "energyheavygeo",
 							x = 2872,
 							z = 6536,
 							facing = 0,
+							mapMarker = {
+								text = "Adv. Geo",
+								color = "red_small"
+							},
 						},
  						{
 							name = "turretlaser",
@@ -646,7 +658,6 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 4720,
 							z = 5104,
 							facing = 3,
-							terraformHeight = 50,
 							commands = {
 								{cmdID = planetUtilities.COMMAND.PATROL, pos = {4720, 5104}},
 								{cmdID = planetUtilities.COMMAND.PATROL, pos = {4695, 5079}, options = {"shift"}},
@@ -657,7 +668,6 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 4824,
 							z = 5032,
 							facing = 3,
-							terraformHeight = 51,
 							commands = {
 								{cmdID = planetUtilities.COMMAND.PATROL, pos = {4824, 5032}},
 								{cmdID = planetUtilities.COMMAND.PATROL, pos = {4799, 5007}, options = {"shift"}},

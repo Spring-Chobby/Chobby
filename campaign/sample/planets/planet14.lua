@@ -326,6 +326,18 @@ local function GetPlanet(planetUtilities, planetID)
 					}
 				},
 			},
+			terraform = {
+				{
+					terraformShape = planetUtilities.TERRAFORM_SHAPE.RAMP,
+					position = {3659, 285, 3707, 3790, 387, 3778},
+					width = 110
+				},
+				{
+					terraformShape = planetUtilities.TERRAFORM_SHAPE.RAMP,
+					position = {280, 389, 185, 458, 280, 240},
+					width = 110
+				},
+			},
 			defeatConditionConfig = {
 				-- Indexed by allyTeam.
 				[0] = { },

@@ -729,6 +729,10 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 7568,
 							z = 7648,
 							facing = 3,
+							mapMarker = {
+								text = "Strider Hub",
+								color = "red"
+							},
 						},
 						{
 							name = "energysolar",
