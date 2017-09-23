@@ -115,7 +115,7 @@ local function GetPlanet(planetUtilities, planetID)
 					{
 						name = "factorycloak",
 						x = 1544,
-						z = 1960,
+						z = 1880,
 						facing = 1,
 					},
 					{
@@ -211,7 +211,7 @@ local function GetPlanet(planetUtilities, planetID)
 					{
 						name = "factoryshield",
 						x = 1552,
-						z = 2064,
+						z = 2120,
 						facing = 1,
 					},
 					{
