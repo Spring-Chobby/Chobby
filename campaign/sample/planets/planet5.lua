@@ -24,7 +24,18 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Adimasi",
 			primaryType = "G7V",
 			milRating = 1,
-			text = [[Use the Hammer artillery bots to weaken your opponent's defences and shields before you commit to an assault.]]
+			text = [[Use the Hammer artillery bots to weaken your opponent's defences and shields before you commit to an assault.]],
+			extendedText = [[This text is longer. Use the Hammer artillery bots to weaken your opponent's defences and shields before you commit to an assault.]]
+		},
+		tips = {
+			{
+				image = "unitpics/cloakarty.png",
+				text = [[The Hammer cannon has the range to shoot turrets from safety but the Hammer itself has a short sight range. Use other units such as Glaives or cloaked Conjurors to spot for your Hammers.]]
+			},
+			{
+				image = "unitpics/shieldraid.png",
+				text = [[Watch out for flanks by Bandits.]]
+			},
 		},
 		gameConfig = {
 			mapName = "Wanderlust v03",

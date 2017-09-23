@@ -28,6 +28,21 @@ planetData = {
 		primaryType = "G8V",
 		milRating = 1,
 		text = [[Your first battle will be straightforward. You have been provided with a starting base. Construct an army of Glaives and Warriors and overwhelm your enemy.]]
+		-- extendedText is optional and used as the text for the ingame briefing.
+		extendedText = [[Something else]],
+	},
+	
+	-- Tips are displayed on the ingame briefing screen
+	tips = {
+		-- Each tip can have an image which is a path in the zk game itself.
+		{
+			image = "unitpics/cloakarty.png",
+			text = [[The Hammer cannon has the range to shoot turrets from safety but the Hammer itself has a short sight range. Use other units such as Glaives or cloaked Conjurors to spot for your Hammers.]]
+		},
+		{
+			image = "unitpics/shieldraid.png",
+			text = [[Watch out for flanks by Bandits.]]
+		},
 	},
 	
 	-- Configuration for everything related to playing the battle

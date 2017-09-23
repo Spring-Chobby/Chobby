@@ -106,7 +106,9 @@ end
 --------------------------------------------------------------------------------
 -- Start Game
 
-local function StartBattleForReal(planetID, gameConfig, gameName)
+local function StartBattleForReal(planetID, planetData, gameName)
+	gameConfig = planetData.gameConfig
+	
 	local allyTeams = {}
 	local allyTeamCount = 0
 	local teams = {}
@@ -260,12 +262,20 @@ local function StartBattleForReal(planetID, gameConfig, gameName)
 		end
 	end
 	
+	-- Briefing screen information
+	local informationText = {
+		name = planetData.name,
+		description = planetData.infoDisplay.extendedText or planetData.infoDisplay.text,
+		tips = planetData.tips,
+	}
+	
 	local modoptions = {
 		commandertypes = TableToBase64(commanderTypes),
 		defeatconditionconfig = TableToBase64(gameConfig.defeatConditionConfig),
 		objectiveconfig = TableToBase64(gameConfig.objectiveConfig),
 		bonusobjectiveconfig = TableToBase64(gameConfig.bonusObjectiveConfig),
 		featurestospawn = TableToBase64(gameConfig.initialWrecks),
+		planetmissioninformationtext = TableToBase64(informationText),
 		fixedstartpos = 1,
 		planetmissiondifficulty = missionDifficulty,
 		singleplayercampaignsavename = WG.Chobby.Configuration.campaignSaveFile,
@@ -348,7 +358,7 @@ function PlanetBattleHandler.StartBattle(planetID, planetData)
 	end
 	
 	local function StartBattleFunc()
-		if StartBattleForReal(planetID, gameConfig, gameName) then
+		if StartBattleForReal(planetID, planetData, gameName) then
 			Spring.Echo("Start battle success!")
 		end
 	end
