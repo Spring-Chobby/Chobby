@@ -152,6 +152,7 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 472,
 						z = 744,
 						facing = 0,
+						selfPatrol = true,
 					},
 					{
 						name = "energywind",
