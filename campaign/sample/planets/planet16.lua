@@ -43,6 +43,7 @@ local function GetPlanet(planetUtilities, planetID)
 					"shieldbomb",
 					"cloakjammer",
 					"staticjammer",
+					"energygeo",
 				},
 				startUnits = {
 					{
