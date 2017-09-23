@@ -178,6 +178,9 @@ planetData = {
 						{2077, 2102},
 					}
 					
+					-- selfPatrol makes units patrol on the spot. Use for Caretakers
+					selfPatrol = false,
+					
 					-- Whether the unit spawns can be conditional on the difficulty setting. 
 					-- Both 'at most' and 'at least' are availible and the usual usage would be to
 					-- give allied units 'at most' and enemy units 'at least'.

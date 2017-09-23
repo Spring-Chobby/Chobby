@@ -128,6 +128,7 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 4456,
 						z = 2856,
 						facing = 3,
+						selfPatrol = true,
 					},
 					{
 						name = "gunshipraid",
