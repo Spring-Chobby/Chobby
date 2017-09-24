@@ -27,6 +27,16 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[Besides the occasional strange hills dotting the landscape, this is a smooth and level battlefield. Your opponent has arrived before you and has begun expanding their economy. Use your Scorchers to punish their greed.]]
 		},
+		tips = {
+			{
+				image = "unitpics/vehriot.png",
+				text = [[Ripper riot vehicles are not especially strong on their own, but they are very effective as escorts for other Vehicles against raiders.]]
+			},
+			{
+				image = "unitpics/vehassault.png",
+				text = [[Ravager assault vehicles are not the toughest assaults in the game, but they make up for that with greater speed.]]
+			},
+		},
 		gameConfig = {
 			mapName = "AlienDesert",
 			playerConfig = {

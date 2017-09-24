@@ -27,6 +27,20 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[This island is blessed with strong geothermal activity, allowing easy and cheap energy generation. Unfortunately your enemy got here first. Sabotage their operation with Skuttle jumping bombs.]]
 		},
+		tips = {
+			{
+				image = "unitpics/jumpbomb.png",
+				text = [[The Skuttle bomb can jump on a single target and deal exceptional damage to it. The Skuttle cannot cloak while jumping and its decloak radius is quite large, so be careful how you deliver it to the target.]]
+			},
+			{
+				image = "unitpics/striderdante.png",
+				text = [[Heavier units and Commanders are especially vulnerable to the Skuttle, although particularly tough units like the Dante might require two Skuttles to put down for good.]]
+			},
+			{
+				image = "unitpics/energyheavygeo.png",
+				text = [[The Advanced Geothermal generator is comparatively cheap and provides a lot of energy. If it's destroyed it will unleash a large explosion, so don't put your Commander nearby!]]
+			},
+		},
 		gameConfig = {
 			mapName = "Calamity 1.1",
 			playerConfig = {

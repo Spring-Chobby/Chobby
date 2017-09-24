@@ -27,6 +27,16 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[This terrain is better suited for the enemy Spiders than your Tanks. To change that flatten the hills with Tremor heavy artillery, then finish the job with the super-heavy Goliath assault tank.]]
 		},
+		tips = {
+			{
+				image = "unitpics/tankheavyarty.png",
+				text = [[The Tremor heavy artillery is exceptionally inaccurate and will only hit any given unit by chance. On the other hand, it can fairly reliably hit a hill.]]
+			},
+			{
+				image = "unitpics/tankheavyassault.png",
+				text = [[The Cyclops super-heavy assault tank is even tougher than the Beast and also comes equipped with a medium-range slowbeam, which should prevent the enemy Spiders from escaping to the hills.]]
+			},
+		},
 		gameConfig = {
 			mapName = "Desert_Plateaus",
 			playerConfig = {

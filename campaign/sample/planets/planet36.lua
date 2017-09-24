@@ -25,7 +25,21 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Jazada",
 			primaryType = "G4V",
 			milRating = 1,
-			text = [[Use the fast-moving Banshee raider gunships to curtail your opponent's expansion, then Brawlers to finish them off.]]
+			text = [[Use the fast-moving Locust raider gunships to curtail your opponent's expansion, then Gargoyle long-range gunships to finish them off.]]
+		},
+		tips = {
+			{
+				image = "unitpics/gunshipcon.png",
+				text = [[The Gunships are flying units which can hover in place. Anti-air units and turrets are the biggest threat to Gunships, but most units with a fast-moving or laser-like projectile may be able to hit them.]]
+			},
+			{
+				image = "unitpics/gunshipraid.png",
+				text = [[The Locust raider gunships will repair themselves if left alone for a little while, so try to retreat them when they become damaged.]]
+			},
+			{
+				image = "unitpics/gunshipheavyskirm.png",
+				text = [[If the automatic strafing of your Locusts and Gargoyles is causing them to stray into range of enemy AA, you can disable this behaviour with the corresponding unit toggle.]]
+			},
 		},
 		gameConfig = {
 			mapName = "Trojan Hills v03",
@@ -410,7 +424,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "gunshipraid.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Have 12 Banshees",
+					description = "Have 12 Locusts",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = {

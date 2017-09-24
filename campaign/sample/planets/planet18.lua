@@ -27,6 +27,12 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[something something terraform something dirtbag something]]
 		},
+		tips = {
+			{
+				image = "unitpics/shieldscout.png",
+				text = [[Dirtbags are curious scout bots which can jump up or down hills, and release a pile of dirt upon death to hinder enemies (and possibly friends).]]
+			},
+		},
 		gameConfig = {
 			mapName = "IsisDelta_v02",
 			modoptions = {

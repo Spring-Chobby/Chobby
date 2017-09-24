@@ -27,6 +27,20 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[Shut down the enemy Tidal Generator operation on this sunny coastline with the Hovercraft factory.]]
 		},
+		tips = {
+			{
+				image = "unitpics/hoverraid.png",
+				text = [[Hovercraft can move quickly over flat terrain and water surfaces. The Dagger effortlessly outruns most raiders and slowly chips away at them with its Gauss gun, which is effective against underwater targets. Don't get caught in a static fight, though, since Daggers are very flimsy.]]
+			},
+			{
+				image = "unitpics/hoverskirm.png",
+				text = [[Scalpels fire a pair of strong, guided missiles at medium range. You'll need to take out the enemy with the first volley or bring an escort, though, because they are helpless during their long reload time between shots.]]
+			},
+			{
+				image = "unitpics/energywind.png",
+				text = [[When built in water, Wind Generators become Tidal Generators, which generate a constant amount of energy rather than the variable amount of Wind Generators.]]
+			},
+		},
 		gameConfig = {
 			mapName = "Malibu Beach v1",
 			playerConfig = {

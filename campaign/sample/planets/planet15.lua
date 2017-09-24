@@ -27,6 +27,20 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[Your opponent starts with Hovercraft but will also build Gunships. Build Rogue skirmishers to defeat the hovercraft, then Vandal AA bots to defeat the gunships.]]
 		},
+		tips = {
+			{
+				image = "unitpics/shieldskirm.png",
+				text = [[Since their rockets curve through the air, instead of travelling in a straight line, Rogue skirmisher bots are a bit worse at hitting mobile targets than Rockos. They inflict significantly more damage when they do hit.]]
+			},
+			{
+				image = "unitpics/shieldraid.png",
+				text = [[A combination of steady pressure with Rogues and raiding parties of Bandits will keep your opponent's expansion under control.]]
+			},
+			{
+				image = "unitpics/gunshipraid.png",
+				text = [[Some of your other units are able to hit Gunships such as the Locust, but dedicated AA like the Vandal bot and Razor turret will be most effective.]]
+			},
+		},
 		gameConfig = {
 			mapName = "DunePatrol_wip_v03",
 			playerConfig = {

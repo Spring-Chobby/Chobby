@@ -27,6 +27,20 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[Enter this active battle and dominate the low ground with the raw power of the Tank factory. Destroy the enemy Nuclear Silo while protecting your own team's Anti-Nukes.]]
 		},
+		tips = {
+			{
+				image = "unitpics/tankassault.png",
+				text = [[The Beast assault tank is one of the toughest units in the game for its moderate price. Use it to brute-force your way through enemy positions.]]
+			},
+			{
+				image = "unitpics/tankarty.png",
+				text = [[If the enemy is too strong for a direct assault even by Tanks, use the Emissary artillery tank to weaken them first.]]
+			},
+			{
+				image = "unitpics/factorycloak.png",
+				text = [[Remember that you can build a second factory to supplement your Tanks with faster, lighter units.]]
+			},
+		},
 		gameConfig = {
 			mapName = "DeltaSiegeDry Deluxe V3",
 			playerConfig = {
@@ -2854,7 +2868,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "tankassault.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build 7 Reapers",
+					description = "Build 7 Beasts",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { 

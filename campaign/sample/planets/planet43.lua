@@ -27,6 +27,20 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[This planet is covered by a sprawling metropolis, built by nano-machines... which nobody remembered to turn off. Any destroyed units or buildings will be rebuilt, but they won't be friendly to you any more. Hold off the 'zombies' for long enough to reach the Artefact.]]
 		},
+		tips = {
+			{
+				image = "unitpics/module_resurrect.png",
+				text = [[In this mission, any wrecked units will eventually become alive again, as slower 'zombie' versions of themselves. The zombies will be hostile to all players. Reclaim or destroy the wrecks to prevent this from happening.]]
+			},
+			{
+				image = "unitpics/turretemp.png",
+				text = [[The Faraday EMP turret can stun most enemy units (especially when built in groups) but cannot deal any direct damage. Have a few other turrets or units standing by to clean up.]]
+			},
+			{
+				image = "unitpics/turretaaflak.png",
+				text = [[The Mattock Flak AA turret will make short work of any light flying units. It is especially effective against large groups of fliers.]]
+			},
+		},
 		gameConfig = {
 			mapName = "Intersection v4.1",
 			
@@ -213,10 +227,10 @@ local function GetPlanet(planetUtilities, planetID)
 					startX = 100,
 					startZ = 100,
 					humanName = "Paolaza",
-					aiLib = "Null AI",
-					bitDependant = false,
-					--aiLib = "Circuit_difficulty_autofill",
-					--bitDependant = true,
+					--aiLib = "Null AI",
+					--bitDependant = false,
+					aiLib = "Circuit_difficulty_autofill",
+					bitDependant = true,
 					commanderParameters = {
 						facplop = false,
 					},

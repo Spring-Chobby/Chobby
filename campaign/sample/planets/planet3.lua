@@ -25,7 +25,21 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Magus",
 			primaryType = "K4VI",
 			milRating = 1,
-			text = [[Your opponent will use Scorcher vehicle raiders in this battle. Shut them down with Tick EMP bombs.]]
+			text = [[Your opponent will use Scorcher vehicle raiders in this battle. Shut them down with Imp EMP bombs.]]
+		},
+		tips = {
+			{
+				image = "unitpics/turretmissile.png",
+				text = [[The Picket missile turret is very cheap, and in large numbers they are effective against both ground and air targets. Their low HP makes them weak against anything which can survive their initial volley.]]
+			},
+			{
+				image = "unitpics/cloakbomb.png",
+				text = [[Imp EMP bombs are capable of stunning large numbers of light-weight units (friend or foe) in a large radius. The EMP does not inflict long-term damage so make sure you have combat units standing by to take advantage in the moment.]]
+			},
+			{
+				image = "unitpics/vehraid.png",
+				text = [[The heat ray weapon of Scorcher vehicles is incredibly lethal at point-blank range. Destroy them from a distance or stun them with Imps before engaging.]]
+			},
 		},
 		gameConfig = {
 			mapName = "Adamantine_Mountian-V1",

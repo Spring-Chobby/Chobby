@@ -27,6 +27,20 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[This isolated asteroid is being used by the enemy as an observation and command post. Use Shieldbots to conquer the rough terrain, then bring your Commander to the Interception Network structure to download important strategic data.]]
 		},
+		tips = {
+			{
+				image = "unitpics/shieldcon.png",
+				text = [[The Shieldbots' Convict constructor and Thug assault bot are equipped with small shields, which protect both themselves and nearby units. If one shield has suffered damage, then shield power will be taken from other nearby shields to compensate.]]
+			},
+			{
+				image = "unitpics/shieldraid.png",
+				text = [[The Bandit raider is a bit slower than the Glaive and does not autorepair, but compensates with more health and range. It is an exceptionally versatile unit.]]
+			},
+			{
+				image = "unitpics/shieldriot.png",
+				text = [[The Outlaw riot bot wields an unconventional weapon: it sends out disrupting pulses which damage and slow enemies (but not allies) in a wide radius. Compared to most riots it is very poor against single targets but exceptional when used to protect other units against raider assault.]]
+			},
+		},
 		gameConfig = {
 			mapName = "Apophis v2_3",
 			playerConfig = {

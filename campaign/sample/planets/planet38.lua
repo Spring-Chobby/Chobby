@@ -27,6 +27,20 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[In addition to your opponent, this time you'll have to deal with the charming local fauna as well - this planet is infested with chickens. You'll have to manage both threats to be victorious.]]
 		},
+		tips = {
+			{
+				image = "unitpics/chicken.png",
+				text = [[On this planet 'Chickens' will periodically spawn from their roosts and attack you (and your opponent). You can't stop them from spawning but you can limit the damage with well-placed turrets.]]
+			},
+			{
+				image = "unitpics/roost.png",
+				text = [[Destroying Chicken Roosts will prevent chickens from spawning at that location, and will set back their evolution. However it will also make the hive angrier, and more Roosts will be spawned elsewhere.]]
+			},
+			{
+				image = "unitpics/gunshipskirm.png",
+				text = [[The Harpy skirmisher gunship will slow down both the chickens and your opponent's units with disruptor missiles. Their conventional damage output is average at best but once the enemy is crippled and slow they can be dispatched at leisure.]]
+			},
+		},
 		gameConfig = {
 			mapName = "Cattle and Loveplay NO WORMS 1",
 			modoptions = {

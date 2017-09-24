@@ -27,6 +27,20 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[The bodies of water on this battlefield would pose difficulties for most factories, but the Amphibious factory can take advantage of them instead.]]
 		},
+		tips = {
+			{
+				image = "unitpics/amphfloater.png",
+				text = [[All amphibious units can walk beneath water, and regenerate HP when they do. The Buoy can also float to the surface and fire its slowing disruption cannon from there. Of course, it can also fire while on land.]]
+			},
+			{
+				image = "unitpics/amphimpulse.png",
+				text = [[The Archer also floats to fire, and its water jets can push light-to-medium enemies away. The water jets will become weaker over time unless the Archer is in a body of water and can refill its water tanks.]]
+			},
+			{
+				image = "unitpics/amphbomb.png",
+				text = [[The Limpet bomb doesn't float at all, but its large slowing explosion can reach surface targets even from the seafloor.]]
+			},
+		},
 		gameConfig = {
 			mapName = "Iced Coffee v4.3",
 			playerConfig = {
