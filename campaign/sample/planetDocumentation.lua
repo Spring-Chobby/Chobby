@@ -415,6 +415,9 @@ planetData = {
 				-- If ignoreUnitLossDefeat is true then the defeault defeat condition, lose all units, is disabled.
 				ignoreUnitLossDefeat = false,
 				
+				-- This is a list of allyTeams to defeat when this allyTeam is defeated.
+				defeatOtherAllyTeamsOnLoss = {2},
+				
 				-- If at least one of vitalCommanders or vitalUnitTypes is set then losing all vital unit types
 				-- causes defeat.
 				-- * If 'vitalCommanders = true' then commanders are vital unit types.
@@ -430,6 +433,8 @@ planetData = {
 				
 				-- ObjectiveID is purely for the objectives UI. Sets the objective to mark as complete.
 				allyTeamLossObjectiveID = 5,
+			},
+			[2] = {
 			},
 		},
 		

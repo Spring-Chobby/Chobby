@@ -318,6 +318,7 @@ local function GetPlanet(planetUtilities, planetID)
 				[0] = { },
 				[1] = {
 					ignoreUnitLossDefeat = false,
+					defeatOtherAllyTeamsOnLoss = {2},
 					vitalCommanders = true,
 					vitalUnitTypes = {
 						"factoryamph",
@@ -326,7 +327,7 @@ local function GetPlanet(planetUtilities, planetID)
 					allyTeamLossObjectiveID = 1,
 				},
 				[2] = {
-					
+					ignoreUnitLossDefeat = true,
 				},
 			},
 			objectiveConfig = {

@@ -26,7 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[You have secured a Tech Lab but the enemy surrounds you on all sides. Construct Stinger and Stardust defence structures and hold out for 15 minutes.]]
 		},
-		gameConfig = {
+		gameConfig = {
 			mapName = "Archers_Valley_v6",
 			playerConfig = {
 				startX = 3000,
