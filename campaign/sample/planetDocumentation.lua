@@ -418,6 +418,9 @@ planetData = {
 				-- This is a list of allyTeams to defeat when this allyTeam is defeated.
 				defeatOtherAllyTeamsOnLoss = {2},
 				
+				-- Stops units on the allyTeam exploding, as they usually do.
+				doNotExplodeOnLoss = false,
+				
 				-- If at least one of vitalCommanders or vitalUnitTypes is set then losing all vital unit types
 				-- causes defeat.
 				-- * If 'vitalCommanders = true' then commanders are vital unit types.
