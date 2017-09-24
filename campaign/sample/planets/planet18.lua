@@ -29,7 +29,6 @@ local function GetPlanet(planetUtilities, planetID)
 		gameConfig = {
 			mapName = "IsisDelta_v02",
 			modoptions = {
-				integral_disable_economy = 1,
 				integral_disable_defence = 1,
 				integral_disable_factory = 1,
 				campaign_disable_share_marker = 1,
@@ -58,11 +57,11 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				unitWhitelist = {
 					 -- These keep the tabs existing
-					staticmex = true,
 					factorycloak = true,
 					turretlaser = true,
 					
-					-- For scouting
+					-- For scouting and to avoid area mex complications
+					staticmex = true,
 					staticradar = true,
 				},
 				extraAbilities = {
