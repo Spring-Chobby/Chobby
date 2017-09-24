@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/tundra02.png"
 	
 	local planetData = {
 		name = "Tremontane",
@@ -19,7 +20,7 @@ local function GetPlanet(planetUtilities, planetID)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Arctic",
+			terrainType = "Tundra",
 			radius = "4400 km",
 			primary = "Taoune",
 			primaryType = "F2III",

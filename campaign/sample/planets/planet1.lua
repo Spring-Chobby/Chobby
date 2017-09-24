@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/14.png"
 	
 	local planetData = {
 		name = "Im Jaleth",
@@ -20,7 +21,7 @@ local function GetPlanet(planetUtilities, planetID)
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
 			terrainType = "Terran",
 			radius = "6550 km",
-			primary = "Origin",
+			primary = "Privni",
 			primaryType = "G8V",
 			milRating = 1,
 			text = [[This battle will be straightforward. Construct an army of Glaives and Warriors to overwhelm your enemy.]]

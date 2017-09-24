@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/tundra02.png"
 	
 	local planetData = {
 		name = "Rosnek",
@@ -19,7 +20,7 @@ local function GetPlanet(planetUtilities, planetID)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Subarctic",
+			terrainType = "Tundra",
 			radius = "5174 km",
 			primary = "Rirnef",
 			primaryType = "G6V",

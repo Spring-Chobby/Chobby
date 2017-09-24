@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/77.png"
 	
 	local planetData = {
 		name = "Hebat",
@@ -24,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Voblaka",
 			primaryType = "F9V",
 			milRating = 1,
-			text = [[This battlefield is at a high altitude, so deploy Wind Generators to provide cheap and efficient energy income. Zeus assault bots will crush any opposition you will face here.]]
+			text = [[This battle is taking place at high altitude, so deploy Wind Generators for cheap and efficient energy income. Zeus assault bots will crush any opposition you will face here.]]
 		},
 		gameConfig = {
 			mapName = "Fairyland v1.0",

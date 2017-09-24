@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/11.png"
 	
 	local planetData = {
 		name = "Tobok",
@@ -382,12 +383,6 @@ local function GetPlanet(planetUtilities, planetID)
 							},
 						},
  						{
-							name = "gunshipcon",
-							x = 1788,
-							z = 1165,
-							facing = 1,
-						},
- 						{
 							name = "turretheavylaser",
 							x = 1896,
 							z = 1896,
@@ -411,6 +406,12 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 1920,
 							facing = 0,
 						},
+						{
+							name = "turretlaser",
+							x = 1920,
+							z = 1408,
+							facing = 1,
+						},
  						{
 							name = "turretaaflak",
 							x = 1464,
@@ -418,16 +419,28 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 0,
 						},
  						{
-							name = "turretmissile",
+							name = "turretheavylaser",
 							x = 1664,
 							z = 1152,
+							facing = 1,
+						},
+						{
+							name = "turretheavylaser",
+							x = 1152,
+							z = 1664,
 							facing = 0,
 						},
- 						{
-							name = "turretmissile",
+						{
+							name = "turretemp",
+							x = 1152,
+							z = 1920,
+							facing = 1,
+						},
+						{
+							name = "turretemp",
 							x = 1920,
 							z = 1152,
-							facing = 0,
+							facing = 1,
 						},
 					}
 				},
@@ -770,6 +783,44 @@ local function GetPlanet(planetUtilities, planetID)
 					x = 4675,
 					z = 589,
 					facing = 0,
+				},
+			},
+			terraform = {
+				{
+					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
+					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
+					position = {1536, 2000, 2032, 2048}, 
+					height = 2,
+				},
+				{
+					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
+					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
+					position = {2000, 1536, 2048, 2032}, 
+					height = 2,
+				},
+				{
+					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
+					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
+					position = {1536, 1760, 1584, 2032}, 
+					height = 2,
+				},
+				{
+					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
+					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
+					position = {1760, 1536, 2032, 1584}, 
+					height = 2,
+				},
+				{
+					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
+					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
+					position = {1330, 1760, 1570, 1808}, 
+					height = 2,
+				},
+				{
+					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
+					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
+					position = {1760, 1330, 1808, 1570}, 
+					height = 2,
 				},
 			},
 			defeatConditionConfig = {
