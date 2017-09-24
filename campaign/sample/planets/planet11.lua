@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/79.png"
 	
 	local planetData = {
 		name = "Hyacin",
@@ -25,6 +26,20 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G8V",
 			milRating = 1,
 			text = [[On this planet your opponent sends gunships out from behind a formidable defensive array. Use Crasher AA vehicles to shoot down the gunships, then Impaler artillery to tear down the base.]]
+		},
+		tips = {
+			{
+				image = "unitpics/turretheavy.png",
+				text = [[It would be sheer folly to directly attack the defensive positions your opponent has laid out here. Wear them down from long range instead.]]
+			},
+			{
+				image = "unitpics/vehscout.png",
+				text = [[Dart scouts are not very useful in combat, but they are very cheap, fast and can see a long way, so they are ideal for discovering enemy locations and identifying radar dots.]]
+			},
+			{
+				image = "unitpics/vehheavyarty.png",
+				text = [[The Impaler artillery vehicle fires long-range cruise missiles which inflict considerable damage on a single stationary target. They are practically useless against mobile targets so make sure they are well escorted against land and air threats.]]
+			},
 		},
 		gameConfig = {
 			mapName = "BlueBend-v01",
@@ -916,7 +931,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "turretheavy.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Destroy all enemy Doomsday Machines",
+					description = "Destroy all enemy Desolator turrets",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				-- [3] = { -- Win by 15:00

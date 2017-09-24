@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/terran03.png"
 	
 	local planetData = {
 		name = "Kirdipude",
@@ -25,6 +26,12 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "K1V",
 			milRating = 1,
 			text = [[something something terraform something dirtbag something]]
+		},
+		tips = {
+			{
+				image = "unitpics/shieldscout.png",
+				text = [[Dirtbags are curious scout bots which can jump up or down hills, and release a pile of dirt upon death to hinder enemies (and possibly friends).]]
+			},
 		},
 		gameConfig = {
 			mapName = "IsisDelta_v02",

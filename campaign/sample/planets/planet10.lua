@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/ocean02.png"
 	
 	local planetData = {
 		name = "Cadentem",
@@ -24,7 +25,21 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Sop",
 			primaryType = "G2VI",
 			milRating = 2,
-			text = [[Help your ally to push across the island with Slasher trucks and Wolverine mine artillery. Grind your opponent into dust. If you feel like going for a swim, don't: the water is not good for your health here.]]
+			text = [[Help your ally to push across the island with Fencer missile trucks and Badger mine artillery. Grind your opponent into dust. If you feel like going for a swim, don't: the water is not good for your health here.]]
+		},
+		tips = {
+			{
+				image = "unitpics/vehsupport.png",
+				text = [[Between their long range and guided missiles the Fencer missile trucks are exceptional on defence. However, given the time they need to set up to fire, a clever opponent will take them out in transit before they can be used effectively in attack.]]
+			},
+			{
+				image = "unitpics/veharty.png",
+				text = [[Badger mine artillery is very good at grinding out a victory - if you can control what directions the enemy approaches from, the mines they fire make a group of Badgers almost impossible to approach for all but the heaviest of units. If Badgers are flanked, on the other hand, they can be very vulnerable.]]
+			},
+			{
+				image = "unitpics/spidercrabe.png",
+				text = [[Your ally's Spiders can climb up sheer cliffs, so there are some parts of the map which they will be better at fighting over. The heavy Crab spider in particular is a potent fighting force even when alone.]]
+			},
 		},
 		gameConfig = {
 			mapName = "Quicksilver 1.1",
@@ -654,7 +669,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "veharty.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Have 10 Wolverines",
+					description = "Have 10 Badgers",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Kill the enemy Stinger by 12:00

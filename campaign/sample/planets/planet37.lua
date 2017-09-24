@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/tundra03.png"
 	
 	local planetData = {
 		name = "Prasten",
@@ -24,7 +25,21 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Wipapra",
 			primaryType = "G7V",
 			milRating = 1,
-			text = [[Move to the main continent from your small island using Valkyrie and Vindicator transports, then build a second factory and expand quickly.]]
+			text = [[Move to the main continent from your small island using Charon and Argos transports, then build a second factory and expand quickly.]]
+		},
+		tips = {
+			{
+				image = "unitpics/gunshiptrans.png",
+				text = [[The Charon can only transport light units but it is cheap and fast. Use them to reposition your slower, high-damage units (like Warriors) as required.]]
+			},
+			{
+				image = "unitpics/gunshipheavytrans.png",
+				text = [[An Argos can transport any land unit in the game. The online manual contains more tips and tricks for commanding Tranports effectively using Embark, area commands and ferry routes.]]
+			},
+			{
+				image = "unitpics/gunshipemp.png",
+				text = [[Gnat EMP gunships are too inaccurate to hit raiders all the time, but they are very effective at stunlocking medium-to-heavy units like Commanders.]]
+			},
 		},
 		gameConfig = {
 			mapName = "Iceland_v1",

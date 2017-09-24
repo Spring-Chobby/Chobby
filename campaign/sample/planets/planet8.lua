@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/terran01.png"
 	
 	local planetData = {
 		name = "Thibella Delta",
@@ -25,6 +26,16 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G3V",
 			milRating = 2,
 			text = [[The enemy Big Bertha cannon is dominating the battlefield. Sneak into their base with Scythes and eliminate this threat.]]
+		},
+		tips = {
+			{
+				image = "unitpics/cloakheavyraid.png",
+				text = [[The Scythe cloaked raiders are very effective at picking off high-value targets, especially those which are not closely defended. The Scythes will be decloaked if they attack, if they are damaged, or if they get too close to enemy units.]]
+			},
+			{
+				image = "unitpics/module_personal_cloak.png",
+				text = [[Use the "Draw decloak radius" option to get an idea of how close you can get to enemies without your Scythes decloaking.]]
+			},
 		},
 		gameConfig = {
 			mapName = "Tabula-v6.1",

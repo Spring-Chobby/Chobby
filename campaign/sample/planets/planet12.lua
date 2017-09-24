@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/inferno04.png"
 	
 	local planetData = {
 		name = "Borzalon",
@@ -25,6 +26,20 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G8V",
 			milRating = 1,
 			text = [[The enemy Tanks will be difficult to defeat in direct combat. Instead, build Dominatrix vehicles to turn your opponent's units against each other.]]
+		},
+		tips = {
+			{
+				image = "unitpics/vehcapture.png",
+				text = [[The Dominatrix fires a beam at enemy units which will, given time, turn them to your side. Multiple Dominatrices makes the capture go faster. Once a unit is captured it is assigned to a capturing Dominatrix; that Dominatrix cannot do any more capturing for a while, and if it is destroyed the captured units will revert to enemy control.]]
+			},
+			{
+				image = "unitpics/tankassault.png",
+				text = [[Since capture time is based on cost rather than hit points, Dominatrices are especially effective against the heavy Tanks.]]
+			},
+			{
+				image = "unitpics/factorytank.png",
+				text = [[Dominatrices can also capture buildings and Commanders.]]
+			},
 		},
 		gameConfig = {
 			mapName = "Red Comet v1.3",
@@ -438,7 +453,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "tankassault.png",
 					--imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Control 3 Reapers",
+					description = "Control 3 Beasts",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { -- Have a Tank Factory

@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/tundra02.png"
 	
 	local planetData = {
 		name = "Rosnek",
@@ -19,12 +20,22 @@ local function GetPlanet(planetUtilities, planetID)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Subarctic",
+			terrainType = "Tundra",
 			radius = "5174 km",
 			primary = "Rirnef",
 			primaryType = "G6V",
 			milRating = 1,
-			text = [[The enemy is about to finish a Krow heavy gunship. Quickly build Trident AA gunships and Chainsaw long-range AA turrets to defeat it, then build your own Krows and return the favour.]]
+			text = [[The enemy is about to finish a Nimbus heavy gunship. Quickly build Trident AA gunships and Chainsaw long-range AA turrets to defeat it, then build your own Nimbuses and return the favour.]]
+		},
+		tips = {
+			{
+				image = "unitpics/gunshipaa.png",
+				text = [[Tridents should be your first line of defence against any aerial threat; their long-range AA missiles are effective against all flying targets, and unlike static turrets they can retreat easily if threatened by ground forces.]]
+			},
+			{
+				image = "unitpics/gunshipkrow.png",
+				text = [[Make sure your own units are well out of the way when you use the manual fire weapon of the Nimbus (default hotkey D). Its massive barrage of Cluster Bombs do not distinguish between friend and foe.]]
+			},
 		},
 		gameConfig = {
 			mapName = "FrostBiteV2",
@@ -388,6 +399,42 @@ local function GetPlanet(planetUtilities, planetID)
 					commanderLevel = 2,
 					commander = false,
 					startUnits = {
+						{
+							name = "turrettorp",
+							x = 7350,
+							z = 1600,
+							facing = 3,
+						},
+						{
+							name = "turrettorp",
+							x = 7350,
+							z = 1700,
+							facing = 3,
+						},
+						{
+							name = "turrettorp",
+							x = 7350,
+							z = 2200,
+							facing = 3,
+						},
+						{
+							name = "turrettorp",
+							x = 7350,
+							z = 2300,
+							facing = 3,
+						},
+						{
+							name = "turrettorp",
+							x = 8000,
+							z = 1900,
+							facing = 3,
+						},
+						{
+							name = "turrettorp",
+							x = 8000,
+							z = 2000,
+							facing = 3,
+						},
 						{
 							name = "staticmex",
 							x = 7160,
@@ -2387,7 +2434,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "gunshipkrow.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Destroy the enemy Krow before 5:00",
+					description = "Destroy the enemy Nimbus before 5:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Have a Krow by 5 minutes
@@ -2399,7 +2446,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "gunshipkrow.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build a Krow before 5:00",
+					description = "Build a Nimbus before 5:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { -- Complete all bonus objectives

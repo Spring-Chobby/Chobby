@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/terran03_damaged.png"
 	
 	local planetData = {
 		name = "Hiasjulo",
@@ -25,6 +26,16 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "F9IV",
 			milRating = 1,
 			text = [[You have two starting bases on opposite sides of this island. Use Djinn teleporters to move your army where it is needed most.]]
+		},
+		tips = {
+			{
+				image = "unitpics/amphtele.png",
+				text = [[To use the Djinn, first command it to place a lantern somewhere, then have your units use the lantern. After some time they will be relocated next to the Djinn. A more expensive unit will need longer to teleport.]]
+			},
+			{
+				image = "unitpics/tele_beacon.png",
+				text = [[The Djinn lantern can be placed anywhere on the map, and you don't need constructors to build it. Besides using the Djinn for defence, you can also use it to recover units deep inside enemy territory, or (if you can sneak the Djinn behind the enemy) to launch a sneak attack.]]
+			},
 		},
 		gameConfig = {
 			mapName = "Crubick Plains v1.2",

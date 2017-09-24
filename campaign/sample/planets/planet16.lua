@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/desert01.png"
 	
 	local planetData = {
 		name = "Zooph V",
@@ -24,7 +25,21 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Zooph",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[Abuse the combination of Roach mobile bombs and Eraser area cloakers to decimate enemy tank formations in this battle. Build some Geothermal Generators to power your Erasers.]]
+			text = [[Abuse the combination of Snitch mobile bombs and Iris or Shroud area cloakers to decimate enemy tank formations in this battle. Build some Geothermal Generators to power your area cloakers.]]
+		},
+		tips = {
+			{
+				image = "unitpics/shieldbomb.png",
+				text = [[Snitches are very simple; they burrow into the ground, become cloaked, then explode when enemies get close. With an area cloaker Snitches can remain cloaked even on the move, making them a potent offensive weapon as well.]]
+			},
+			{
+				image = "unitpics/cloakjammer.png",
+				text = [[An Iris bot cloaks and jams the radar signature of all friendly units in the surrounding area, including itself. It is fragile and unarmed so keep it away from any enemy units that might discover it. Combine with powerful short range units like riots or bombs for best effect.]]
+			},
+			{
+				image = "unitpics/staticjammer.png",
+				text = [[The Iris mobile cloaker and Shroud static jammer can morph back and forth. The static Shroud has slightly lower energy cost and larger cloak radius. This also allows you to build an Iris without having a Cloakybot Factory.]]
+			},
 		},
 		gameConfig = {
 			mapName = "Fields_Of_Isis",
@@ -729,7 +744,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "cloakjammer.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build an Eraser",
+					description = "Build an Iris",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				-- [2] = { -- Kill enemy commander

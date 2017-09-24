@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/terran04.png"
 	
 	local planetData = {
 		name = "Falsell",
@@ -24,7 +25,17 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Omis",
 			primaryType = "G7V",
 			milRating = 1,
-			text = [[The Artefact on this planet contains invaluable information, but it is protected by a large automated defence network. Infiltrate the defences with Spectre sniper bots and destroy the Singularity Plants to deactivate the heavier defences.]]
+			text = [[The Artefact on this planet contains invaluable information, but it is protected by a large automated defence network. Infiltrate the defences with Phantom sniper bots and destroy the Singularity Plants to deactivate the heavier defences.]]
+		},
+		tips = {
+			{
+				image = "unitpics/cloaksnipe.png",
+				text = [[Unlike all other cloaked units, the Phantom can fire its weapon without dropping its cloak. Use this to sneak into the defence network, destroying what you need to without blowing your cover.]]
+			},
+			{
+				image = "unitpics/shieldraid.png",
+				text = [[Make sure you defend your southern flank against Shieldbot attacks.]]
+			},
 		},
 		gameConfig = {
 			mapName = "The river Nix 20",
@@ -1678,7 +1689,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Win by 10:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[3] = { -- Kill enemy commander
+				[3] = { -- Kill enemy fac
 					satisfyOnce = true,
 					comparisionType = planetUtilities.COMPARE.AT_MOST,
 					targetNumber = 0,

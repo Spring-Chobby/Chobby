@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/terran01.png"
 	
 	local planetData = {
 		name = "Walchice",
@@ -26,8 +27,17 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[You have secured a Tech Lab but the enemy surrounds you on all sides. Construct Stinger and Stardust defence structures and hold out for 15 minutes.]]
 		},
-		gameConfig = {
-			mapName = "Archers_Valley_v6",
+		tips = {
+			{
+				image = "unitpics/turretriot.png",
+				text = [[Stardust turrets only have a short range, but their sheer damage output and area of effect makes them very effective against large numbers of smaller enemies.]]
+			},
+			{
+				image = "unitpics/turretheavylaser.png",
+				text = [[By comparison, the Stinger heavy laser turret can only fire on a single target, but it has a much longer range, making it effective against single larger enemies.]]
+			},
+		},
+		gameConfig = {			mapName = "Archers_Valley_v6",
 			playerConfig = {
 				startX = 3000,
 				startZ = 3300,

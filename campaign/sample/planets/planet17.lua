@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/inferno01.png"
 	
 	local planetData = {
 		name = "Sammara",
@@ -25,6 +26,20 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G5IV",
 			milRating = 1,
 			text = [[You will face the fearsome, fire-spewing Dante strider in this battle. Use Aspis area shields to deflect the assault, and Racketeer artillery to disarm the Dante.]]
+		},
+		tips = {
+			{
+				image = "unitpics/shieldarty.png",
+				text = [[Racketeers disarm single targets with guided missiles. They don't do any real damage so make sure you have other units standing by to destroy the helpless enemy. They are most effective when used against high-value targets like Commanders and Striders.]]
+			},
+			{
+				image = "unitpics/shieldshield.png",
+				text = [[The Aspis area shield protects your army from anything outside the shield. Make sure the enemy stays outside. The Aegis is a slightly more efficient static version of the Aspis that is buildable by constructors. Remember the static and mobile versions can morph into each other.]]
+			},
+			{
+				image = "unitpics/striderdante.png",
+				text = [[The Dante's heatrays and napalm rockets are most lethal at close range. Keep your distance until the Dante is disarmed or dead.]]
+			},
 		},
 		gameConfig = {
 			mapName = "Violence_4.2",
@@ -638,7 +653,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"jumpcon",
 						"jumpraid",
 						"jumparty",
-						"striderhub",
+						--"striderhub",
 						"striderdante",
 						"staticcon",
 					},

@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/42.png"
 	
 	local planetData = {
 		name = "Falloway",
@@ -25,6 +26,20 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G9V",
 			milRating = 1,
 			text = [[Your ally can take care of any surface targets, but you'll need to support them with Claymore depth charge and Flail AA hovercraft against underwater and aerial threats.]]
+		},
+		tips = {
+			{
+				image = "unitpics/hoverdepthcharge.png",
+				text = [[The Claymore is a strange unit; its weapon is a depth charge which remains in place for a few seconds, then explodes immediately (on land) or tracks the enemy it was fired at (on water). The explosion is quite large so try to stay away once the depth charge is launched. Press D to manually drop a depth charge.]]
+			},
+			{
+				image = "unitpics/hoveraa.png",
+				text = [[The Flail AA hovercraft is fast and fires a strong guided missile. It's most effective against planes but it will also get the job done against gunships.]]
+			},
+			{
+				image = "unitpics/energyfusion.png",
+				text = [[Destroying the opposition's energy production might slow them down a bit.]]
+			},
 		},
 		gameConfig = {
 			mapName = "Cull",

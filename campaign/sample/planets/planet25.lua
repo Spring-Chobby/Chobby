@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/2.png"
 	
 	local planetData = {
 		name = "Junras Zeta",
@@ -25,6 +26,20 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "M0VI",
 			milRating = 1,
 			text = [[Launch an attack across the river with an army capable of fighting underwater - the amphibious Duck raider and Scallop riot bots.]]
+		},
+		tips = {
+			{
+				image = "unitpics/amphraid.png",
+				text = [[The Duck is slower than most raiders, but its ability to move and heal underwater is invaluable on some maps. Also unlike most raiders its weapon takes a few seconds to reload, but deals a lot of damage up front. Use it in hit and run fights for best effect.]]
+			},
+			{
+				image = "unitpics/amphriot.png",
+				text = [[The Scallop is also slow, even by the standards of riots, but on land its shotgun is an incredibly damaging weapon. Its underwater armament of depth charges is a bit less impressive but most enemies are completely unable to target it there.]]
+			},
+			{
+				image = "unitpics/energywind.png",
+				text = [[When built in water, Wind Generators become Tidal Generators, which generate a constant amount of energy rather than the variable amount of Wind Generators.]]
+			},
 		},
 		gameConfig = {
 

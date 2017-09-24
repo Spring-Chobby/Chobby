@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/radiated01.png"
 	
 	local planetData = {
 		name = "Aspiris",
@@ -25,6 +26,20 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "K4III",
 			milRating = 1,
 			text = [[In the Heavy Tank factory, even the constructors and raiders are tough - but they're also more expensive. You'll have less units than your Cloaky Bot opponent, so you'll need to be careful to avoid losses if you want to win here.]]
+		},
+		tips = {
+			{
+				image = "unitpics/tankcon.png",
+				text = [[Unlike all other constructors, the Welder is armed and can fend off a raider or two on its own while building a turret to deal with more.]]
+			},
+			{
+				image = "unitpics/tankheavyraid.png",
+				text = [[The Blitz heavy tank raider will go toe-to-toe with any other raider in the game - its high HP and stunning EMP attack give it a significant edge. However, if one Blitz dies, it releases an EMP explosion which might stun your other units, so only take fights that you will win.]]
+			},
+			{
+				image = "unitpics/module_autorepair.png",
+				text = [[To achieve the second optional objective, make sure to repair your Tanks when they are partially damaged.]]
+			},
 		},
 		gameConfig = {
 			mapName = "TitanDuel 2",

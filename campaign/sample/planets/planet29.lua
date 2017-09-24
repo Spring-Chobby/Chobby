@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/ocean01.png"
 	
 	local planetData = {
 		name = "Jammus III",
@@ -25,6 +26,20 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G6V",
 			milRating = 1,
 			text = [[The enemy of my enemy... is at least useful. Build up your economy with Fusion Generators while the two opposing factions fight, then eradicate them both. Advanced Radars will keep you informed on the overall battle state.]]
+		},
+		tips = {
+			{
+				image = "unitpics/energyfusion.png",
+				text = [[The Fusion Reactor isn't all that much better for cost than Solar Generators or Wind Turbines but it takes up much less space. Fusions are a bit volatile when destroyed, but if you don't build right next to them you should be fine.]]
+			},
+			{
+				image = "unitpics/module_energy_cell.png",
+				text = [[Once you've built one or more Fusion Reactors, connect them to your Metal Extractors to get more metal income from overdrive using your excess energy.]]
+			},
+			{
+				image = "unitpics/staticheavyradar.png",
+				text = [[In a battle with more than two sides it pays to be aware of what's happening all over the map, not just on your front. The Advanced Radar has exceptional range and will keep you informed.]]
+			},
 		},
 		gameConfig = {
 			mapName = "La Isla Bonita v1.1",

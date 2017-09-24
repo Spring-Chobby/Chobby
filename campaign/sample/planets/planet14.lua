@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/swamp03.png"
 	
 	local planetData = {
 		name = "Altaris",
@@ -25,6 +26,20 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G1V",
 			milRating = 1,
 			text = [[You're outnumbered on this small battlefield, but your Felon shield bots will allow you to fight efficiently and minimise losses. Expand aggressively and reclaim the nearby rocks and trees to build up your army and economy, then push forward and destroy both enemies.]]
+		},
+		tips = {
+			{
+				image = "unitpics/shieldfelon.png",
+				text = [[The Felon's lightning weapon is exceptionally powerful, but comes with a catch; the weapon drains power from its own shields, and therefore any surrounding shields as well. Make sure you have enough shield power available to destroy whatever you're facing, or your Felons will become weaponless and defenceless.]]
+			},
+			{
+				image = "unitpics/module_adv_nano.png",
+				text = [[To keep up with the production of two enemies you'll need an edge. Reclaim the rocks and trees on this map to give yourself an economic boost.]]
+			},
+			{
+				image = "unitpics/staticstorage.png",
+				text = [[Reclaiming goes to waste if you have reached your maximum resource storage limit. Build additional Storages to cope with the sudden influx.]]
+			},
 		},
 		gameConfig = {
 			mapName = "Altair_Crossing_v3",

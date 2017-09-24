@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/14.png"
 	
 	local planetData = {
 		name = "Im Jaleth",
@@ -20,10 +21,24 @@ local function GetPlanet(planetUtilities, planetID)
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
 			terrainType = "Terran",
 			radius = "6550 km",
-			primary = "Origin",
+			primary = "Privni",
 			primaryType = "G8V",
 			milRating = 1,
 			text = [[This battle will be straightforward. Construct an army of Glaives and Warriors to overwhelm your enemy.]]
+		},
+		tips = {
+			{
+				image = "unitpics/staticmex.png",
+				text = [[Metal Extractors give you the resources to build an army and crush your opponent. Take metal spots and build as many as you can.]]
+			},
+			{
+				image = "unitpics/energysolar.png",
+				text = [[Metal isn't very useful unless you also have energy - build Solar Collectors to deal with this need.]]
+			},
+			{
+				image = "unitpics/cloakriot.png",
+				text = [[Warriors are slower than Glaives, but their heavy machine guns means they can fight Glaives even when greatly outnumbered.]]
+			},
 		},
 		gameConfig = {
 			missionStartscript = false,

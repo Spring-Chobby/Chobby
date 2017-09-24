@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/77.png"
 	
 	local planetData = {
 		name = "Hebat",
@@ -24,7 +25,21 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Voblaka",
 			primaryType = "F9V",
 			milRating = 1,
-			text = [[This battlefield is at a high altitude, so deploy Wind Generators to provide cheap and efficient energy income. Zeus assault bots will crush any opposition you will face here.]]
+			text = [[This battle is taking place at high altitude, so deploy Wind Generators for cheap and efficient energy income. Jolt assault bots will crush any opposition you will face here.]]
+		},
+		tips = {
+			{
+				image = "unitpics/energywind.png",
+				text = [[Wind Generators generate an amount of energy that varies over time from 0 to 2.5 at sea level. If built at higher altitudes the worst-case outcome becomes better.]]
+			},
+			{
+				image = "unitpics/cloakassault.png",
+				text = [[Jolt assault bots are much tougher than the other Cloakybots, and uses a lightning gun to damage and stun enemy units. They're effective in attacking medium-density defences.]]
+			},
+			{
+				image = "unitpics/jumpraid.png",
+				text = [[The Pyro raiders you'll be fighting here use flamethrowers to set your units on fire, and can jump over holes and cliffs.]]
+			},
 		},
 		gameConfig = {
 			mapName = "Fairyland v1.0",

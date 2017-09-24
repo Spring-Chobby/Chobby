@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/tundra02.png"
 	
 	local planetData = {
 		name = "Tremontane",
@@ -19,12 +20,26 @@ local function GetPlanet(planetUtilities, planetID)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Arctic",
+			terrainType = "Tundra",
 			radius = "4400 km",
 			primary = "Taoune",
 			primaryType = "F2III",
 			milRating = 1,
 			text = [[Your opponent has taken to the air with Gunships in this battle. Construct the anti-air Gremlin bot and Hacksaw defensive emplacements to bring them back to the ground. Remember the Defender is also effective as an anti-air defence.]]
+		},
+		tips = {
+			{
+				image = "unitpics/turretaaclose.png",
+				text = [[The Hacksaw fires two powerful anti-air missiles at any flying target. It's defenceless against ground units and can be easily baited by cheap fliers, so they should be used in conjunction with other AA and land units.]]
+			},
+			{
+				image = "unitpics/cloakaa.png",
+				text = [[Gremlin AA bots cloak while they are not firing, so they have a secondary purpose as scouts.]]
+			},
+			{
+				image = "unitpics/strike.png",
+				text = [[Don't over-commit to anti-air units: the enemy Commander and defensive turrets still present a significant land-based threat.]]
+			},
 		},
 		gameConfig = {
 			mapName = "Avalanche-v2",

@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/desert03.png"
 	
 	local planetData = {
 		name = "Beth XVII",
@@ -24,7 +25,21 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Beth",
 			primaryType = "G4V",
 			milRating = 1,
-			text = [[Glaives served you well in the previous battle, but on this planet your opponent has prepared Warrior riot bots and Stardust turrets to counter them. Retaliate with Rockos and your own Warriors to achieve victory.]]
+			text = [[Glaives served you well in the previous battle, but on this planet your opponent has prepared Brute riot bots and Stardust turrets to counter them. Retaliate with Ronin skirmisher bots and your own Warriors to achieve victory.]]
+		},
+		tips = {
+			{
+				image = "unitpics/turretriot.png",
+				text = [[The Stardusts will shred any unit which gets into its range - but your Ronins can attack from outside the Stardusts' range.]]
+			},
+			{
+				image = "unitpics/cloakskirm.png",
+				text = [[The Ronins are also faster and longer-ranged than Brutes and can destroy them without taking any damage at all. Glaives can dodge the slow Ronin rockets and pose a much bigger threat.]]
+			},
+			{
+				image = "unitpics/energysolar.png",
+				text = [[Don't forget to build Metal Extractors and Solar Collectors to power your economy and build up a large army.]]
+			},
 		},
 		gameConfig = {
 			mapName = "Battle for PlanetXVII-v01",

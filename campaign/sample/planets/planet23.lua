@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/terran03.png"
 	
 	local planetData = {
 		name = "Hatau Coh",
@@ -25,6 +26,20 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G8V",
 			milRating = 1,
 			text = [[Launch an amphibious attack on the beach with heavy Grizzly assault walkers. You have 30 minutes to push past the Gauss defensive emplacements and secure a beachhead by destroying the Garrisons.]]
+		},
+		tips = {
+			{
+				image = "unitpics/turretgauss.png",
+				text = [[The Gauss turret fires with an eponymous Gauss gun, and its projectiles can hit underwater targets as well as those on the surface. The Gauss can also retreat inside an armoured shell to repair and protect itself from artillery.]]
+			},
+			{
+				image = "unitpics/amphassault.png",
+				text = [[Grizzlies are armed with two heavy laser turrets similar to those of the Stinger. Despite their strong armour their single-target weapon makes them vulnerable to raiders, so protect them with raiders or riots of your own.]]
+			},
+			{
+				image = "unitpics/dronelight.png",
+				text = [[The Garrisons on this beach are protected by light drones. They fly low enough that most weapons can target them (not just anti-air), but the Garrisons will keep rebuilding them. Destroy the source to get rid of the drones.]]
+			},
 		},
 		gameConfig = {
 

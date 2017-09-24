@@ -4,7 +4,8 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/swamp02.png"
 	
 	local planetData = {
 		name = "Cygnet",
@@ -24,13 +25,13 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Adimasi",
 			primaryType = "G7V",
 			milRating = 1,
-			text = [[Use the Hammer artillery bots to weaken your opponent's defences and shields before you commit to an assault.]],
-			extendedText = [[This text is longer. Use the Hammer artillery bots to weaken your opponent's defences and shields before you commit to an assault.]]
+			text = [[Use the Sling artillery bots to weaken your opponent's defences and shields before you commit to an assault.]],
+			extendedText = [[Use the Sling artillery bots to weaken your opponent's defences and shields before you commit to an assault.]]
 		},
 		tips = {
 			{
 				image = "unitpics/cloakarty.png",
-				text = [[The Hammer cannon has the range to shoot turrets from safety but the Hammer itself has a short sight range. Use other units such as Glaives or cloaked Conjurors to spot for your Hammers.]]
+				text = [[The Hammer cannon has the range to shoot turrets from safety but the Sling itself has a short sight range. Use other units such as Glaives or cloaked Conjurors to spot for your Slings.]]
 			},
 			{
 				image = "unitpics/shieldraid.png",
@@ -416,7 +417,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "cloakarty.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build 12 Hammers",
+					description = "Build 12 Slings",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { -- Win in 10 minutes
