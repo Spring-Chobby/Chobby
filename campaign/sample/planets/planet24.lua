@@ -52,6 +52,7 @@ local function GetPlanet(planetUtilities, planetID)
 					"amphcon",
 					"amphaa",
 					"amphtele",
+					"turretaafar",
 				},
 				startUnits = {
 					{
@@ -809,6 +810,7 @@ local function GetPlanet(planetUtilities, planetID)
 			units = {
 				"amphaa",
 				"amphtele",
+				"turretaafar",
 			},
 			modules = {
 				"module_autorepair_LIMIT_B_2",

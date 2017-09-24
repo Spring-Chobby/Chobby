@@ -36,6 +36,10 @@ local function GetPlanet(planetUtilities, planetID)
 				image = "unitpics/turretheavylaser.png",
 				text = [[By comparison, the Stinger heavy laser turret can only fire on a single target, but it has a much longer range, making it effective against single larger enemies.]]
 			},
+			{
+				image = "unitpics/spideremp.png",
+				text = [[You have a pair of Venom EMP spiders and Redback riot spiders to defend against initial raids.]]
+			},
 		},
 		gameConfig = {			mapName = "Archers_Valley_v6",
 			playerConfig = {
