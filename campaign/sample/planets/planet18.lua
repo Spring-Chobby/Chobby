@@ -573,6 +573,12 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 2,
 						},
 						{
+							name = "energysolar",
+							x = 5256,
+							z = 3630,
+							facing = 2,
+						},
+						{
 							name = "turretemp",
 							x = 5936,
 							z = 1024,
@@ -591,6 +597,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "amphraid",
@@ -605,6 +612,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "amphraid",
@@ -619,6 +627,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "amphraid",
@@ -633,6 +642,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "energysolar",
@@ -700,8 +710,7 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 3688,
 							facing = 3,
 							commands = {
-								{cmdID = planetUtilities.COMMAND.PATROL, pos = {5480, 3688}},
-								{cmdID = planetUtilities.COMMAND.PATROL, pos = {5455, 3663}, options = {"shift"}},
+								{cmdID = planetUtilities.COMMAND.REPAIR, pos = {5412, 3616}, radius = 360, options = {"alt"}},
 							},
 						},
 						{
@@ -775,6 +784,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "amphraid",
@@ -789,6 +799,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "amphraid",
@@ -803,6 +814,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "amphraid",
@@ -817,6 +829,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "amphraid",
@@ -859,6 +872,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "amphraid",
@@ -873,6 +887,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "amphraid",
@@ -887,6 +902,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{5978, 2447},
 								{5575, 2347},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "amphraid",
@@ -901,6 +917,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{5575, 2347},
 								{4497, 3865},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "amphraid",
@@ -915,6 +932,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{5575, 2347},
 								{4497, 3865},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "amphraid",
@@ -957,13 +975,20 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "turretheavy",
 							x = 4072,
-							z = 3240,
+							z = 3320,
 							facing = 3,
 							terraformHeight = 242,
+						},
+						{
+							name = "energypylon",
+							x = 4192,
+							z = 2932,
+							facing = 3,
 						},
 						{
 							name = "staticmex",
@@ -1007,8 +1032,7 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 3544,
 							facing = 2,
 							commands = {
-								{cmdID = planetUtilities.COMMAND.PATROL, pos = {5336, 3544}},
-								{cmdID = planetUtilities.COMMAND.PATROL, pos = {5311, 3519}, options = {"shift"}},
+								{cmdID = planetUtilities.COMMAND.REPAIR, pos = {5412, 3616}, radius = 360, options = {"alt"}},
 							},
 						},
 						{
@@ -1142,6 +1166,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{5575, 2347},
 								{4497, 3865},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "amphraid",
@@ -1156,6 +1181,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{5575, 2347},
 								{4497, 3865},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "amphraid",
@@ -1170,6 +1196,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{4604, 4016},
 								{5978, 2447},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "amphraid",
@@ -1184,6 +1211,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "amphraid",
@@ -1198,6 +1226,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "amphraid",
@@ -1256,6 +1285,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{5575, 2347},
 								{4497, 3865},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "amphraid",
@@ -1270,6 +1300,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{5978, 2447},
 								{5575, 2347},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "amphraid",
@@ -1284,6 +1315,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "amphraid",
@@ -1298,6 +1330,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "amphraid",
@@ -1326,6 +1359,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{5575, 2347},
 								{4497, 3865},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "amphraid",
@@ -1340,6 +1374,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{5978, 2447},
 								{5575, 2347},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "amphraid",
@@ -1354,6 +1389,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{5575, 2347},
 								{4497, 3865},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "amphraid",
@@ -1396,6 +1432,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "amphraid",
@@ -1410,6 +1447,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "amphraid",
@@ -1424,6 +1462,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{4604, 4016},
 								{5978, 2447},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "amphraid",
@@ -1438,6 +1477,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "amphraid",
@@ -1452,6 +1492,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{5978, 2447},
 								{5575, 2347},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "amphraid",
@@ -1466,6 +1507,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "amphraid",
@@ -1494,6 +1536,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{5978, 2447},
 								{5575, 2347},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "amphraid",
@@ -1508,6 +1551,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "amphraid",
@@ -1522,6 +1566,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "amphraid",
@@ -1564,6 +1609,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "vehassault",
@@ -1600,6 +1646,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{1729, 2337},
 								{1343, 1632},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "vehassault",
@@ -1612,6 +1659,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{626, 2411},
 								{1254, 2832},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "vehassault",
@@ -1624,6 +1672,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{1343, 1632},
 								{626, 2411},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "vehassault",
@@ -1660,6 +1709,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{1729, 2337},
 								{1343, 1632},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "vehassault",
@@ -1672,6 +1722,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{626, 2411},
 								{1254, 2832},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "vehassault",
@@ -1684,6 +1735,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{1254, 2832},
 								{1729, 2337},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "vehassault",
@@ -1720,6 +1772,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{626, 2411},
 								{1254, 2832},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "vehassault",
@@ -1732,6 +1785,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{626, 2411},
 								{1254, 2832},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "vehassault",
@@ -1744,6 +1798,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{1254, 2832},
 								{1729, 2337},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "vehassault",
@@ -1780,6 +1835,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{1343, 1632},
 								{626, 2411},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "vehassault",
@@ -1792,6 +1848,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{626, 2411},
 								{1254, 2832},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "vehassault",
@@ -1804,6 +1861,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{626, 2411},
 								{1254, 2832},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "vehassault",
@@ -1828,6 +1886,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{1343, 1632},
 								{626, 2411},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "staticmex",
@@ -2344,6 +2403,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{3859, 1957},
 								{3220, 3367},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "tankheavyassault",
@@ -2356,6 +2416,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{5479, 1439},
 								{3859, 1957},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "tankheavyassault",
@@ -2368,6 +2429,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{3220, 3367},
 								{4676, 2077},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "tankheavyassault",
@@ -2380,6 +2442,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{5479, 1439},
 								{3859, 1957},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "amphriot",
@@ -2416,6 +2479,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2240, 2052},
 								{2477, 2432},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "amphriot",
@@ -2434,6 +2498,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2077, 2102},
 								{2236, 1635},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "amphriot",
@@ -2452,6 +2517,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2236, 1635},
 								{2742, 1521},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "amphriot",
@@ -2488,6 +2554,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2077, 2102},
 								{2236, 1635},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "amphriot",
@@ -2506,6 +2573,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2286, 2570},
 								{2077, 2102},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "amphriot",
@@ -2524,6 +2592,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2420, 1671},
 								{2240, 2052},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "amphriot",
@@ -2560,6 +2629,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2240, 2052},
 								{2477, 2432},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "amphriot",
@@ -2578,6 +2648,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2286, 2570},
 								{2077, 2102},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "amphriot",
@@ -2596,6 +2667,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2240, 2052},
 								{2477, 2432},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "amphriot",
@@ -2632,6 +2704,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2286, 2570},
 								{2077, 2102},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "amphriot",
@@ -2650,6 +2723,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2286, 2570},
 								{2077, 2102},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "amphraid",
@@ -2686,6 +2760,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{3369, 1548},
 								{3305, 1691},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "amphraid",
@@ -2704,6 +2779,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2420, 1671},
 								{2240, 2052},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "amphraid",
@@ -2722,6 +2798,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{3369, 1548},
 								{3305, 1691},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "amphraid",
@@ -2776,6 +2853,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2240, 2052},
 								{2477, 2432},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "amphraid",
@@ -2794,6 +2872,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2420, 1671},
 								{2240, 2052},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "amphriot",
@@ -2812,6 +2891,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2767, 1602},
 								{2420, 1671},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "staticmex",
@@ -2838,16 +2918,9 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 2,
 						},
 						{
-							name = "turretantiheavy",
-							x = 5248,
-							z = 3664,
-							facing = 3,
-							terraformHeight = 182,
-						},
-						{
 							name = "turretheavy",
-							x = 5304,
-							z = 3768,
+							x = 5288,
+							z = 3736,
 							facing = 3,
 						},
 						{
@@ -3089,6 +3162,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{5479, 1439},
 								{3859, 1957},
 							},
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "tankheavyassault",
@@ -3101,6 +3175,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{3859, 1957},
 								{3220, 3367},
 							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "tankheavyassault",
@@ -3113,6 +3188,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{4676, 2077},
 								{5479, 1439},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "staticmex",
@@ -3160,7 +3236,7 @@ local function GetPlanet(planetUtilities, planetID)
 				{
 					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
 					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
-					position = {240, 240, 370, 370}, 
+					position = {240, 240, 354, 386}, 
 					height = 308,
 				},
 				{
@@ -3180,13 +3256,13 @@ local function GetPlanet(planetUtilities, planetID)
 					needConstruction = true,
 					teamID = 0,
 				},
-				{
-					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
-					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
-					position = {608, 250, 772, 424}, 
-					height = 170,
-					volumeSelection = planetUtilities.TERRAFORM_VOLUME.LOWER_ONLY,
-				},
+				--{
+				--	terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
+				--	terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
+				--	position = {608, 250, 772, 424}, 
+				--	height = 170,
+				--	volumeSelection = planetUtilities.TERRAFORM_VOLUME.LOWER_ONLY,
+				--},
 				{
 					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
 					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
