@@ -280,6 +280,26 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 264,
 							facing = 1,
 						},
+						{
+							name = "turretriot",
+							x = 1700,
+							z = 2130,
+							facing = 0,
+							terraformHeight = 90,
+						},
+						{
+							name = "turretriot",
+							x = 2130,
+							z = 1700,
+							facing = 1,
+							terraformHeight = 90,
+						},
+						{
+							name = "turretemp",
+							x = 1562,
+							z = 1562,
+							facing = 0,
+						},
  						{
 							name = "turretriot",
 							x = 1000,

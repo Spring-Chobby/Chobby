@@ -25,16 +25,16 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Beth",
 			primaryType = "G4V",
 			milRating = 1,
-			text = [[Glaives served you well in the previous battle, but on this planet your opponent has prepared Brute riot bots and Stardust turrets to counter them. Retaliate with Ronin skirmisher bots and your own Warriors to achieve victory.]]
+			text = [[Glaives and Brutes served you well in the previous battle, but on this planet your opponent has prepared their own Brutes and Stardust turrets to counter them. Build a Cloakybot Factory, then retaliate with Ronin skirmisher bots to secure victory.]]
 		},
 		tips = {
 			{
 				image = "unitpics/turretriot.png",
-				text = [[The Stardusts will shred any unit which gets into its range - but your Ronins can attack from outside the Stardusts' range.]]
+				text = [[Stardust turrets will shred any unit which gets into its range. Your Ronins can instead attack from outside the Stardusts' range.]]
 			},
 			{
 				image = "unitpics/cloakskirm.png",
-				text = [[The Ronins are also faster and longer-ranged than Brutes and can destroy them without taking any damage at all. Glaives can dodge the slow Ronin rockets and pose a much bigger threat.]]
+				text = [[As skirmishers, Ronins are also faster and longer-ranged than Brutes and can destroy them without taking any damage at all. Glaives can dodge the slow Ronin rockets and pose a much bigger threat.]]
 			},
 			{
 				image = "unitpics/energysolar.png",
@@ -340,7 +340,7 @@ local function GetPlanet(planetUtilities, planetID)
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Destroy the enemy Commander and Cloaky Bot Factory",
+					description = "Destroy the enemy Commander and Cloakybot Factory",
 				},
 				[2] = {
 					description = "Protect your Commander",
@@ -357,7 +357,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "factorycloak.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build a Cloaky Factory",
+					description = "Build a Cloakybot Factory",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Have 10 mex
@@ -382,7 +382,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "cloakskirm.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build 10 Rockos",
+					description = "Build 10 Ronins",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[4] = { -- Kill enemy Stardusts in 8 minutes.
@@ -394,7 +394,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "turretriot.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Destroy all enemy Stardust turrets before 8:00",
+					description = "Find and destroy all 4 enemy Stardust turrets before 8:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			},

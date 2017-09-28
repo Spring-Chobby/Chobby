@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Rirnef",
 			primaryType = "G6V",
 			milRating = 1,
-			text = [[The enemy is about to finish a Nimbus heavy gunship. Quickly build Trident AA gunships and Chainsaw long-range AA turrets to defeat it, then build your own Nimbuses and return the favour.]]
+			text = [[The enemy is about to finish a Nimbus heavy gunship. Quickly build Trident AA gunships to defeat it, then build your own Nimbuses and return the favour.]]
 		},
 		tips = {
 			{
@@ -54,7 +54,6 @@ local function GetPlanet(planetUtilities, planetID)
 					"gunshipraid",
 					"gunshipaa",
 					"gunshipkrow",
-					"turretaafar",
 					"turrettorp",
 				},
 				startUnits = {
@@ -2462,7 +2461,6 @@ local function GetPlanet(planetUtilities, planetID)
 			units = {
 				"gunshipaa",
 				"gunshipkrow",
-				"turretaafar",
 			},
 			modules = {
 				"module_companion_drone_LIMIT_D_2",

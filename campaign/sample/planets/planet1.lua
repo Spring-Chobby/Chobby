@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Privni",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[This battle will be straightforward. Construct an army of Glaives and Warriors to overwhelm your enemy.]]
+			text = [[This battle will be straightforward. Construct an army of Glaive raider and Brute riot bots to overwhelm your enemy.]]
 		},
 		tips = {
 			{
@@ -33,11 +33,11 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/energysolar.png",
-				text = [[Metal isn't very useful unless you also have energy - build Solar Collectors to deal with this need.]]
+				text = [[Metal isn't very useful unless you also have energy. Solar Collectors will provide energy for you.]]
 			},
 			{
 				image = "unitpics/cloakriot.png",
-				text = [[Warriors are slower than Glaives, but their heavy machine guns means they can fight Glaives even when greatly outnumbered.]]
+				text = [[Brutes are slower than Glaives, but their heavy machine guns allow them to fight Glaives efficiently even when outnumbered.]]
 			},
 		},
 		gameConfig = {
@@ -68,7 +68,7 @@ local function GetPlanet(planetUtilities, planetID)
 					{
 						name = "turretlaser",
 						x = 1000,
-						z = 3600,
+						z = 3750,
 						facing = 1,
 					},
 					{
@@ -203,7 +203,7 @@ local function GetPlanet(planetUtilities, planetID)
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Destroy the enemy Commander and Cloaky Bot Factory",
+					description = "Destroy the enemy Commander and Cloakybot Factory",
 				},
 				[2] = {
 					description = "Protect your Commander",
@@ -258,7 +258,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "cloakriot.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build at least 3 Warriors",
+					description = "Build at least 3 Brutes",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				--[5] = { -- Kill all enemy mexes
@@ -295,7 +295,6 @@ local function GetPlanet(planetUtilities, planetID)
 			abilities = {
 			},
 			codexEntries = {
-				"character_sophia"
 			}
 		},
 	}
