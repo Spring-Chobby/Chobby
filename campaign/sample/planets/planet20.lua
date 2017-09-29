@@ -334,6 +334,8 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					difficultyDependantUnlocks = {
 						[2] = {"amphfloater"},
+						[3] = {"amphfloater"},
+						[4] = {"amphfloater"},
 					},
 					commander = false,
 					startUnits = {
@@ -850,7 +852,7 @@ local function GetPlanet(planetUtilities, planetID)
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Protect the Tech Lab for 15 minutes.",
+					description = "Protect the Tech Lab for 15 minutes",
 				},
 				[2] = {
 					description = "Protect your Commander",
@@ -890,7 +892,7 @@ local function GetPlanet(planetUtilities, planetID)
 					comparisionType = planetUtilities.COMPARE.AT_MOST,
 					targetNumber = 0,
 					unitTypes = {
-						"turretheavylaser",
+						"energysolar",
 					},
 					image = planetUtilities.ICON_DIR .. "energysolar.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,

@@ -1251,7 +1251,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					difficultyDependantUnlocks = {
 						[3] = {"shieldaa"},
-						[4] = {"shieldshield"},
+						[4] = {"shieldaa","shieldshield"},
 					},
 					commanderLevel = 5,
 					commander = {

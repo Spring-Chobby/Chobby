@@ -172,6 +172,8 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					difficultyDependantUnlocks = {
 						 [2] = {"veharty"},
+						 [3] = {"veharty"},
+						 [4] = {"veharty"},
 					},
 					commanderLevel = 3,
 					commander = {

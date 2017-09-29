@@ -540,7 +540,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					difficultyDependantUnlocks = {
 						[2] = {"amphimpulse","amphriot","gunshipassault","turretriot"},
-						[3] = {"amphfloater","gunshipkrow","turretheavylaser"},
+						[3] = {"amphimpulse","amphriot","gunshipassault","turretriot","amphfloater","gunshipkrow","turretheavylaser"},
 					},
 					commanderLevel = 2,
 					commander = {

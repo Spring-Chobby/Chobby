@@ -149,7 +149,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					difficultyDependantUnlocks = {
 						[3] = {"gunshipheavyskirm"},
-						[4] = {"gunshipassault"},
+						[4] = {"gunshipheavyskirm","gunshipassault"},
 					},
 					commanderParameters = {
 						facplop = false,

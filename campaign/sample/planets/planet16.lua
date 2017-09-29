@@ -356,6 +356,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					difficultyDependantUnlocks = {
 						[3] = {"factoryplane","planecon","bomberriot","planescout",},
+						[4] = {"factoryplane","planecon","bomberriot","planescout",},
 					},
 					commanderLevel = 3,
 					commander = {

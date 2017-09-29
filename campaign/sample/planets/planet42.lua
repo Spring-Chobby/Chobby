@@ -227,6 +227,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					difficultyDependantUnlocks = {
 						[3] = {"spiderantiheavy"},
+						[4] = {"spiderantiheavy"},
 					},
 					commanderLevel = 4,
 					commander = {

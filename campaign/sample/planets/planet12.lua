@@ -180,7 +180,8 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					difficultyDependantUnlocks = {
 						[2] = {"factoryveh","vehraid","vehsupport","vehassault","vehriot"},
-						[3] = {"veharty","vehscout"}, --kek 
+						[3] = {"factoryveh","vehraid","vehsupport","vehassault","vehriot","veharty","vehscout"},
+						[4] = {"factoryveh","vehraid","vehsupport","vehassault","vehriot","veharty","vehscout"},
 					},
 					commanderLevel = 2,
 					commander = {

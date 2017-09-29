@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Privni",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[This battle will be straightforward. Construct an army of Glaive raider and Brute riot bots to overwhelm your enemy.]]
+			text = [[This battle will be straightforward. Construct an army of Glaive raider and Reaver riot bots to overwhelm your enemy.]]
 		},
 		tips = {
 			{
@@ -37,7 +37,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/cloakriot.png",
-				text = [[Brutes are slower than Glaives, but their heavy machine guns allow them to fight Glaives efficiently even when outnumbered.]]
+				text = [[Reavers are slower than Glaives, but their heavy machine guns allow them to fight Glaives efficiently even when outnumbered.]]
 			},
 		},
 		gameConfig = {

@@ -2017,7 +2017,8 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					difficultyDependantUnlocks = {
 						[2] = {"shieldriot"},
-						[3] = {"shieldbomb"},
+						[3] = {"shieldriot","shieldbomb"},
+						[4] = {"shieldriot","shieldbomb"},
 					},
 					commanderLevel = 1,
 					commander = {

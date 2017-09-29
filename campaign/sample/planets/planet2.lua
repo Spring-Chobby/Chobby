@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Beth",
 			primaryType = "G4V",
 			milRating = 1,
-			text = [[Glaives and Brutes served you well in the previous battle, but on this planet your opponent has prepared their own Brutes and Stardust turrets to counter them. Build a Cloakybot Factory, then retaliate with Ronin skirmisher bots to secure victory.]]
+			text = [[Glaives and Reavers served you well in the previous battle, but on this planet your opponent has prepared their own Reavers and Stardust turrets to counter them. Build a Cloakybot Factory, then retaliate with Ronin skirmisher bots to secure victory.]]
 		},
 		tips = {
 			{
@@ -34,7 +34,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/cloakskirm.png",
-				text = [[As skirmishers, Ronins are also faster and longer-ranged than Brutes and can destroy them without taking any damage at all. Glaives can dodge the slow Ronin rockets and pose a much bigger threat.]]
+				text = [[As skirmishers, Ronins are also faster and longer-ranged than Reavers and can destroy them without taking any damage at all. Glaives can dodge the slow Ronin rockets and pose a much bigger threat.]]
 			},
 			{
 				image = "unitpics/energysolar.png",
