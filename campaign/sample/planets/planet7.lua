@@ -252,7 +252,8 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					difficultyDependantUnlocks = {
 						[2] = {"shieldassault"},
-						[3] = {"shieldskirm"},
+						[3] = {"shieldassault","shieldskirm"},
+						[4] = {"shieldassault","shieldskirm"},
 					},
 					commander = false,
 					startUnits = {

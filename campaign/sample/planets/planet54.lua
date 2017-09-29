@@ -53,6 +53,8 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				extraUnlocks = {
 					"factoryjump",
+					"jumpcon",
+					"jumpraid",
 					"jumpbomb",
 				},
 				startUnits = {

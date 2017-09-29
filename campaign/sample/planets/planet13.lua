@@ -180,7 +180,8 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					difficultyDependantUnlocks = {
 						[2] = {"cloakassault"},
-						[3] = {"cloakcon"},
+						[3] = {"cloakassault","cloakcon"},
+						[4] = {"cloakassault","cloakcon"},
 					},
 					commanderLevel = 2,
 					commander = {

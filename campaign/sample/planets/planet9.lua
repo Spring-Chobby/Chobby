@@ -307,7 +307,8 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					difficultyDependantUnlocks = {
 						[2] = {"staticmex"},
-						[3] = {"turretlaser"},
+						[3] = {"staticmex","turretlaser"},
+						[4] = {"staticmex","turretlaser"},
 					},
 					commanderLevel = 3,
 					commander = {

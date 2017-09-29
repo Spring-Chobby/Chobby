@@ -8,7 +8,7 @@ local function GetPlanet(planetUtilities, planetID)
 	local image = LUA_DIRNAME .. "images/planets/inferno01.png"
 	
 	local planetData = {
-		name = "Sammara",
+		name = "Ogurlo",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.36,
@@ -22,8 +22,8 @@ local function GetPlanet(planetUtilities, planetID)
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
 			terrainType = "Volcanic",
 			radius = "5840 km",
-			primary = "Lioa",
-			primaryType = "G5IV",
+			primary = "Lia-1616",
+			primaryType = "L9V",
 			milRating = 1,
 			text = [[You will face the fearsome, fire-spewing Dante strider in this battle. Use Aspis area shields to deflect the assault, and Racketeer artillery to disarm the Dante.]]
 		},

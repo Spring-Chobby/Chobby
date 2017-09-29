@@ -160,7 +160,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					difficultyDependantUnlocks = {
 						[2] = {"turretriot"},
-						[3] = {"cloaksnipe"}
+						[3] = {"turretriot","cloaksnipe"}
 					},
 					commanderLevel = 2,
 					commander = {
@@ -263,7 +263,8 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					difficultyDependantUnlocks = {
 						[2] = {"vehassault"},
-						[3] = {"vehheavyarty"}
+						[3] = {"vehassault","vehheavyarty"},
+						[4] = {"vehassault","vehheavyarty"},
 					},
 					commanderLevel = 2,
 					commander = {

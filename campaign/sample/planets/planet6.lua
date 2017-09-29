@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Voblaka",
 			primaryType = "F9V",
 			milRating = 1,
-			text = [[This battle is taking place at high altitude, so deploy Wind Generators for cheap and efficient energy income. Jolt assault bots will crush any opposition you will face here.]]
+			text = [[This battle is taking place at high altitude, so deploy Wind Generators for cheap and efficient energy income. Knight assault bots will crush any opposition you will face here.]]
 		},
 		tips = {
 			{
@@ -34,7 +34,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/cloakassault.png",
-				text = [[Jolt assault bots are much tougher than the other Cloakybots, and uses a lightning gun to damage and stun enemy units. They're effective in attacking medium-density defences.]]
+				text = [[Knight assault bots are much tougher than the other Cloakybots, and uses a lightning gun to damage and stun enemy units. They're effective in attacking medium-density defences.]]
 			},
 			{
 				image = "unitpics/jumpraid.png",

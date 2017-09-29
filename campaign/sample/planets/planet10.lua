@@ -318,7 +318,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					difficultyDependantUnlocks = {
 						[3] = {"cloakarty"},
-						[4] = {"cloakheavyraid"},
+						[4] = {"cloakarty","cloakheavyraid"},
 					},
 					
 					startUnits = {

@@ -502,7 +502,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					difficultyDependantUnlocks = {
 						[3] = {"cloakheavyraid","tankheavyassault"},
-						[4] = {"cloaksnipe","striderdante"},
+						[4] = {"cloakheavyraid","tankheavyassault","cloaksnipe","striderdante"},
 					},
 					commanderLevel = 3,
 					commander = {
