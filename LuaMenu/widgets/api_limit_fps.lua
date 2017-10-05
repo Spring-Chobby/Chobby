@@ -23,6 +23,7 @@ local forceRedraw = false
 local constantRedrawSeconds = false
 local fastRedraw = false
 local steamFastRedraw = false
+local framesInBuffer = 0
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -62,6 +63,8 @@ local function IsMousePressed()
 end
 
 function widget:AllowDraw()
+	local oldFramesInBuffer = framesInBuffer
+	framesInBuffer = 1
 	local config = WG.Chobby.Configuration
 	if config.drawAtFullSpeed or steamFastRedraw then
 		return true
@@ -87,6 +90,10 @@ function widget:AllowDraw()
 		lastTimer = timer
 		return true
 	end
+	if oldFramesInBuffer < 3 then
+ 		framesInBuffer = oldFramesInBuffer + 1
+ 		return true
+ 	end
 	return false
 end
 
