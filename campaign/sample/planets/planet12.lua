@@ -393,12 +393,6 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 1,
 						},
 						{
-							name = "turretemp",
-							x = 1712,
-							z = 880,
-							facing = 1,
-						},
-						{
 							name = "energypylon",
 							x = 6000,
 							z = 1700,
