@@ -305,10 +305,7 @@ local function GetPlanet(planetUtilities, planetID)
 					commanderLevel = 3,
 					commander = {
 						name = "Barasogus",
-						chassis = "recon",
-						decorations = {
-							"skin_recon_red",
-						},
+						chassis = "guardian",
 						modules = { 
 							"commweapon_flamethrower",
 							"module_autorepair",
