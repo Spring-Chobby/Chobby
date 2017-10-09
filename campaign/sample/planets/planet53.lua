@@ -3266,7 +3266,7 @@ local function GetPlanet(planetUtilities, planetID)
 				[0] = { },
 				[1] = {
 					ignoreUnitLossDefeat = false,
-					vitalCommanders = true,
+					vitalCommanders = false,
 					vitalUnitTypes = {
 						"pw_warpjammer",
 					},

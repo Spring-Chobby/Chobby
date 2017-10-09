@@ -297,10 +297,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"vehsupport",
 						"vehaa",
 						"spiderassault",
-					},
-					difficultyDependantUnlocks = {
-						[3] = {"spiderskirm"},
-						[4] = {"spiderskirm"},
+						"spiderskirm",
 					},
 					commanderLevel = 3,
 					commander = {
@@ -345,6 +342,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 3912,
 							z = 3768,
 							facing = 2,
+							difficultyAtLeast = 2,
 						},
  						{
 							name = "energywind",
@@ -381,6 +379,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 3784,
 							z = 504,
 							facing = 1,
+							difficultyAtLeast = 3,
 						},
  						{
 							name = "energysolar",
@@ -423,18 +422,21 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 3000,
 							z = 1100,
 							facing = 0,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "vehraid",
 							x = 3000,
 							z = 1200,
 							facing = 0,
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "vehraid",
 							x = 3000,
 							z = 1300,
 							facing = 0,
+							difficultyAtLeast = 4,
 						},
  						{
 							name = "energywind",
@@ -531,30 +533,35 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 4071,
 							z = 3696,
 							facing = 1,
+							difficultyAtLeast = 2,
 						},
  						{
 							name = "spiderassault",
 							x = 3971,
 							z = 3752,
 							facing = 1,
+							difficultyAtLeast = 3,
 						},
  						{
 							name = "spiderassault",
 							x = 4078,
 							z = 3776,
 							facing = 0,
+							difficultyAtLeast = 4,
 						},
  						{
 							name = "spiderskirm",
 							x = 4023,
 							z = 3682,
 							facing = 3,
+							difficultyAtLeast = 3,
 						},
  						{
 							name = "spiderskirm",
 							x = 4036,
 							z = 3768,
 							facing = 1,
+							difficultyAtLeast = 4,
 						},
  						{
 							name = "vehsupport",
@@ -567,18 +574,21 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 3017,
 							z = 850,
 							facing = 3,
+							difficultyAtLeast = 2,
 						},
  						{
 							name = "vehsupport",
 							x = 3041,
 							z = 936,
 							facing = 3,
+							difficultyAtLeast = 3,
 						},
  						{
 							name = "vehcon",
 							x = 3624,
 							z = 1034,
 							facing = 0,
+							difficultyAtLeast = 3,
 						},
 					}
 				},

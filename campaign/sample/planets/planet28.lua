@@ -2249,11 +2249,11 @@ local function GetPlanet(planetUtilities, planetID)
 			defeatConditionConfig = {
 				[0] = { },
 				[1] = {
-					ignoreUnitLossDefeat = false,
+					ignoreUnitLossDefeat = true,
 					loseAfterSeconds = false,
 				},
 				[2] = {
-					ignoreUnitLossDefeat = false,
+					ignoreUnitLossDefeat = true,
 					loseAfterSeconds = false,
 				},
 			},

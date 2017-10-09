@@ -1658,9 +1658,6 @@ local function GetPlanet(planetUtilities, planetID)
 				[2] = {
 					ignoreUnitLossDefeat = true,
 					vitalCommanders = false,
-					vitalUnitTypes = {
-						"energysingu",
-					},
 					loseAfterSeconds = false,
 				},
 			},
