@@ -103,11 +103,10 @@ local function DownloadQueueUpdate()
 	if not front.active then
 		if USE_WRAPPER_DOWNLOAD and WG.WrapperLoopback then
 			WG.WrapperLoopback.DownloadFile(front.name, typeMap[front.fileType])
+			CallListeners("DownloadStarted", front.id, front.name, front.fileType)
 		else
-			Spring.Echo("DownloadArchive", front.id, front.name, front.fileType)
 			VFS.DownloadArchive(front.name, front.fileType)
 		end
-		CallListeners("DownloadStarted", front.id, front.name, front.fileType)
 	end
 	
 	CallListeners("DownloadQueueUpdate", downloadQueue, removedDownloads)
@@ -290,7 +289,6 @@ end
 
 function widget:DownloadProgress(downloadID, downloaded, total)
 	local index = GetDownloadBySpringDownloadID(downloadQueue, downloadID)
-	Spring.Echo("DownloadProgress", downloadID, downloaded, total, index)
 	if not index then
 		return
 	end
@@ -299,7 +297,13 @@ function widget:DownloadProgress(downloadID, downloaded, total)
 end
 
 function widget:DownloadStarted(downloadID)
-
+	local index = GetDownloadBySpringDownloadID(downloadQueue, downloadID)
+	if not index then
+		return
+	end
+	local data = downloadQueue[index]
+	
+	CallListeners("DownloadStarted", data.id, data.name, data.fileType)
 end
 
 function widget:DownloadFinished(downloadID)
