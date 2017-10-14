@@ -108,13 +108,6 @@ local function SocketConnect(host, port)
 	return true
 end
 
-function widget:Initialize()
-	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
-	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	url = VFS.Include("libs/neturl/url.lua")
-	lobby:AddListener("OnLaunchRemoteReplay", onLaunchReplay)
-end
-
 function onLaunchReplay(wtf, replay, game, map, engine)
 	Echo("Getting data...")
 	--Echo("url: ".. replay)
@@ -234,44 +227,6 @@ local function SocketClosed(sock)
 	end
 end
 
-function widget:DownloadQueued(downloadID, archiveName, archiveType)
-	--Echo("Download "..downloadID.." queued")
-	--Echo("name = "..archiveName..", type = "..archiveType)
-	if (archiveName == replayMap and archiveType == "map") then
-		--Echo("Queued map donwload")
-		downloads.map = downloadID
-	end
-
-	if (archiveName == replayGame and archiveType == "game") then
-		--Echo("Queued game download")
-		downloads["game"] = downloadID
-	end
-end
-
-function widget:DownloadFailed(downloadID)
-	if(downloads.map == downloadID) then
-		Abort("Map download failed")
-	end
-
-	if(downloads.game == downloadID) then
-		Abort("Game download failed")
-	end
-end
-
-function widget:DownloadFinished(downloadID)
-	if(downloads.map == downloadID) then
-		hasMap = true
-		Echo("Map download complete")
-		AttemptStart()
-	end
-
-	if(downloads.game == downloadID) then
-		hasGame = true
-		Echo("Game download complete")
-		AttemptStart()
-	end
-end
-
 function widget:Update()
 	if set==nil or #set<=0 then
 		return
@@ -306,4 +261,53 @@ function widget:Update()
 	for __, output in ipairs(writeable) do
 		SocketWriteAble(output)
 	end
+end
+
+
+function widget:Initialize()
+	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
+	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
+	url = VFS.Include("libs/neturl/url.lua")
+	lobby:AddListener("OnLaunchRemoteReplay", onLaunchReplay)
+	
+	local function downloadQueued(listener, downloadID, archiveName, archiveType)
+		--Echo("Download "..downloadID.." queued")
+		--Echo("name = "..archiveName..", type = "..archiveType)
+		if (archiveName == replayMap and archiveType == "map") then
+			--Echo("Queued map donwload")
+			downloads.map = downloadID
+		end
+
+		if (archiveName == replayGame and archiveType == "game") then
+			--Echo("Queued game download")
+			downloads["game"] = downloadID
+		end
+	end
+	WG.DownloadHandler.AddListener("DownloadQueued", downloadQueued)
+
+	local function downloadFailed(listener, downloadID)
+		if(downloads.map == downloadID) then
+			Abort("Map download failed")
+		end
+
+		if(downloads.game == downloadID) then
+			Abort("Game download failed")
+		end
+	end
+	WG.DownloadHandler.AddListener("DownloadFailed", downloadFailed)
+
+	local function downloadFinished(listener, downloadID)
+		if(downloads.map == downloadID) then
+			hasMap = true
+			Echo("Map download complete")
+			AttemptStart()
+		end
+
+		if(downloads.game == downloadID) then
+			hasGame = true
+			Echo("Game download complete")
+			AttemptStart()
+		end
+	end
+	WG.DownloadHandler.AddListener("downloadFinished", DownloadFinished)
 end

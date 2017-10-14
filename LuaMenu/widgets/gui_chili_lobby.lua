@@ -119,26 +119,6 @@ function widget:DrawScreen()
 	WG.Chobby:_DrawScreen()
 end
 
-function widget:DownloadStarted(...)
-	WG.Chobby:_DownloadStarted(...)
-end
-
-function widget:DownloadFinished(...)
-	WG.Chobby:_DownloadFinished(...)
-end
-
-function widget:DownloadFailed(...)
-	WG.Chobby:_DownloadFailed(...)
-end
-
-function widget:DownloadProgress(...)
-	WG.Chobby:_DownloadProgress(...)
-end
-
-function widget:DownloadQueued(...)
-	WG.Chobby:_DownloadQueued(...)
-end
-
 function widget:GetConfigData()
 	return WG.Chobby:_GetConfigData()
 end

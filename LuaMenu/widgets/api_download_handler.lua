@@ -3,7 +3,7 @@
 function widget:GetInfo()
 	return {
 		name      = "Download Handler",
-		desc      = "Part of a mess of code that handles downloads",
+		desc      = "Handles downloads",
 		author    = "GoogleFrog",
 		date      = "10 April 2017",
 		license   = "GPL-v2",
@@ -25,10 +25,16 @@ local removedDownloads = {}
 
 local requestUpdate = false
 
+local USE_WRAPPER_DOWNLOAD = false
+
 -- Wrapper types are RAPID, MAP, MISSION, DEMO, ENGINE, NOTKNOWN
 local typeMap = {
 	game = "RAPID",
 	map = "MAP",
+}
+local reverseTypeMap = {
+	RAPID = "game",
+	MAP = "map",
 }
 
 --------------------------------------------------------------------------------
@@ -81,28 +87,30 @@ end
 -- Utilities
 
 local function DownloadSortFunc(a, b)
-	return a.priority > b.priority or (a.priority == b.priority and a.index < b.index)
+	return a.priority > b.priority or (a.priority == b.priority and a.id < b.id)
 end
 
 local function DownloadQueueUpdate()
 	requestUpdate = false
 	
 	if #downloadQueue == 0 then
-		CallListeners("DownloadUpdate", downloadQueue, removedDownloads)
+		CallListeners("DownloadQueueUpdate", downloadQueue, removedDownloads)
 		return
 	end
 	table.sort(downloadQueue, DownloadSortFunc)
 	
 	local front = downloadQueue[1]
 	if not front.active then
-		if WG.WrapperLoopback then
+		if USE_WRAPPER_DOWNLOAD and WG.WrapperLoopback then
 			WG.WrapperLoopback.DownloadFile(front.name, typeMap[front.fileType])
 		else
+			Spring.Echo("DownloadArchive", front.id, front.name, front.fileType)
 			VFS.DownloadArchive(front.name, front.fileType)
 		end
+		CallListeners("DownloadStarted", front.id, front.name, front.fileType)
 	end
 	
-	CallListeners("DownloadUpdate", downloadQueue, removedDownloads)
+	CallListeners("DownloadQueueUpdate", downloadQueue, removedDownloads)
 end
 
 local function GetDownloadIndex(downloadList, name, fileType)
@@ -115,10 +123,47 @@ local function GetDownloadIndex(downloadList, name, fileType)
 	return nil
 end
 
-local function RemoveDownload(name, fileType, putInRemoveList, removalType)
+local function GetDownloadBySpringDownloadID(downloadList, springDownloadID)
+	for i = 1, #downloadList do
+		local data = downloadList[i]
+		if data.springDownloadID == springDownloadID then
+			return i
+		end
+	end
+	return nil
+end
+
+local function AssociatedSpringDownloadID(springDownloadID, name, fileType)
 	local index = GetDownloadIndex(downloadQueue, name, fileType)
 	if not index then
 		return false
+	end
+	downloadQueue[index].springDownloadID = springDownloadID
+end
+
+local function RemoveDownload(name, fileType, putInRemoveList, removalType, delayListener)
+
+	local index = GetDownloadIndex(downloadQueue, name, fileType)
+	if not index then
+		return false
+	end
+	
+	if delayListener then
+		local id = downloadQueue[index].id
+		local function DelayedListener()
+			if removalType == "success" then
+				CallListeners("DownloadFinished", id, name, fileType)
+			else
+				CallListeners("DownloadFailed", id, removalType, name, fileType)
+			end
+		end
+		WG.Delay(DelayedListener, 1)
+	else
+		if removalType == "success" then
+			CallListeners("DownloadFinished", downloadQueue[index].id, name, fileType)
+		else
+			CallListeners("DownloadFailed", downloadQueue[index].id, removalType, name, fileType)
+		end
 	end
 	
 	if putInRemoveList then
@@ -135,10 +180,10 @@ end
 --------------------------------------------------------------------------------
 -- Externals Functions
 
-function externalFunctions.QueueDownload(name, fileType, priorty)
-	priorty = priorty or 1
-	if priorty == -1 then
-		priorty = topPriority + 1
+function externalFunctions.QueueDownload(name, fileType, priority)
+	priority = priority or 1
+	if priority == -1 then
+		priority = topPriority + 1
 	end
 	if topPriority < priority then
 		topPriority = priority
@@ -158,10 +203,11 @@ function externalFunctions.QueueDownload(name, fileType, priorty)
 	downloadQueue[#downloadQueue + 1] = {
 		name = name,
 		fileType = fileType,
-		priorty = priorty,
+		priority = priority,
 		id = downloadCount,
 	}
 	requestUpdate = true
+	CallListeners("DownloadQueued", downloadCount, name, fileType)
 end
 
 function externalFunctions.SetDownloadTopPriority(name, fileType)
@@ -206,9 +252,9 @@ function externalFunctions.RemoveRemovedDownload(name, fileType)
 end
 
 
-function externalFunctions.MaybeDownloadArchive(name, archiveType, priorty)
+function externalFunctions.MaybeDownloadArchive(name, archiveType, priority)
 	if not VFS.HasArchive(name) then
-		externalFunctions.QueueDownload(name, archiveType, priorty)
+		externalFunctions.QueueDownload(name, archiveType, priority)
 	end
 end
 
@@ -217,13 +263,67 @@ end
 -- Wrapper Interface
 
 function wrapperFunctions.DownloadFinished(name, fileType, success)
-	RemoveDownload(name, fileType, true, (success and "success") or "fail")
+	fileType = fileType and reverseTypeMap[fileType]
+	if VFS.HasArchive(name) then
+		RemoveDownload(name, fileType, true, (success and "success") or "fail")
+	elseif fileType then
+		-- Do an inbuilt download to make VFS realize that the file exists.
+		VFS.DownloadArchive(name, fileType)
+		RemoveDownload(name, fileType, true, (success and "success") or "fail", true)
+	end
 	
-	Spring.Echo("Backup Download Finished", name, fileType, success)
 	Chotify:Post({
 		title = "Download " .. ((success and "Finished") or "Failed"),
 		body = (name or "???") .. " of type " .. (fileType or "???"),
 	})
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Widget Interface
+
+function widget:Update()
+	if requestUpdate then
+		DownloadQueueUpdate()
+	end
+end
+
+function widget:DownloadProgress(downloadID, downloaded, total)
+	local index = GetDownloadBySpringDownloadID(downloadQueue, downloadID)
+	Spring.Echo("DownloadProgress", downloadID, downloaded, total, index)
+	if not index then
+		return
+	end
+	
+	CallListeners("DownloadProgress", downloadQueue[index].id, downloaded, total)
+end
+
+function widget:DownloadStarted(downloadID)
+
+end
+
+function widget:DownloadFinished(downloadID)
+	local index = GetDownloadBySpringDownloadID(downloadQueue, downloadID)
+	if not index then
+		return
+	end
+	local data = downloadQueue[index]
+	
+	RemoveDownload(data.name, data.fileType, true, "success")
+end
+
+function widget:DownloadFailed(downloadID, errorID)
+	local index = GetDownloadBySpringDownloadID(downloadQueue, downloadID)
+	if not index then
+		return
+	end
+	local data = downloadQueue[index]
+	
+	RemoveDownload(data.name, data.fileType, true, "fail")
+end
+
+function widget:DownloadQueued(downloadID, archiveName, archiveType)
+	AssociatedSpringDownloadID(downloadID, archiveName, archiveType)
 end
 
 --------------------------------------------------------------------------------
@@ -239,17 +339,12 @@ local function TestDownload()
 	})
 end
 
+-- Allow for earling listener registration.
+WG.DownloadHandler = externalFunctions
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 	
 	WG.DownloadWrapperInterface = wrapperFunctions
-	WG.DownloadHandler = externalFunctions
 	--WG.Delay(TestDownload, 2)
-end
-
-function widget:Update()
-	if requestUpdate then
-		DownloadQueueUpdate()
-	end
 end

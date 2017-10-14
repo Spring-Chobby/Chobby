@@ -1399,19 +1399,20 @@ function widget:Update()
 	end
 end
 
-function widget:DownloadFinished()
-	if panelInterface then
-		panelInterface.CheckDownload()
-	end
-	if queuePlanetJoin then
-		TryToJoinPlanet(queuePlanetJoin)
-	end
-end
-
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 	WG.Delay(DelayedInitialize, 0.3)
+	
+	local function downloadFinished()
+		if panelInterface then
+			panelInterface.CheckDownload()
+		end
+		if queuePlanetJoin then
+			TryToJoinPlanet(queuePlanetJoin)
+		end
+	end
+	WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
 	
 	WG.PlanetwarsListWindow = PlanetwarsListWindow
 end

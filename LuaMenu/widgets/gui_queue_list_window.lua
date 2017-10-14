@@ -623,20 +623,6 @@ function widget:Update()
 	end
 end
 
-function widget:DownloadFinished()
-	for resourceName,_ in pairs(requiredResources) do
-		local haveResource = VFS.HasArchive(resourceName)
-		if haveResource then
-			requiredResources[resourceName] = nil
-			requiredResourceCount = requiredResourceCount - 1
-		end
-	end
-	
-	if panelInterface then
-		panelInterface.UpdateRequirementText()
-	end
-end
-
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
@@ -672,6 +658,21 @@ function widget:Initialize()
 	end
 	
 	WG.LibLobby.lobby:AddListener("OnQueueOpened", AddQueue)
+	
+	local function downloadFinished()
+		for resourceName,_ in pairs(requiredResources) do
+			local haveResource = VFS.HasArchive(resourceName)
+			if haveResource then
+				requiredResources[resourceName] = nil
+				requiredResourceCount = requiredResourceCount - 1
+			end
+		end
+		
+		if panelInterface then
+			panelInterface.UpdateRequirementText()
+		end
+	end
+	WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
 	
 	WG.QueueListWindow = QueueListWindow
 end

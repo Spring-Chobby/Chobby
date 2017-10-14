@@ -51,6 +51,13 @@ function BattleWatchListWindow:init(parent)
 		end
 	end
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
+
+	local function downloadFinished(listener, downloadID)
+		for battleID,_ in pairs(lobby:GetBattles()) do
+			self:UpdateSync(battleID)
+		end
+	end
+	WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
 	
 	local function UpdateTimersDelay()
 		self:UpdateTimers()
@@ -208,12 +215,6 @@ function BattleWatchListWindow:CompareItems(id1, id2)
 		Spring.Echo("battle1", id1, battle1, battle1 and battle1.users)
 		Spring.Echo("battle2", id2, battle2, battle2 and battle2.users)
 		return false
-	end
-end
-
-function BattleWatchListWindow:DownloadFinished(downloadID, bla, moredata, thing)
-	for battleID,_ in pairs(lobby:GetBattles()) do
-		self:UpdateSync(battleID)
 	end
 end
 

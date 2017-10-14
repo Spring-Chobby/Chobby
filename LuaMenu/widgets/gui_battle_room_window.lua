@@ -82,10 +82,6 @@ local function MaybeDownloadMap(battle)
 	WG.DownloadHandler.MaybeDownloadArchive(battle.mapName, "map", -1)
 end
 
-function widget:DownloadFinished()
-	UpdateArchiveStatus(true)
-end
-
 local OpenNewTeam
 
 --------------------------------------------------------------------------------
@@ -1942,6 +1938,11 @@ function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
+	local function downloadFinished()
+		UpdateArchiveStatus(true)
+	end
+	WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
+	
 	WG.BattleRoomWindow = BattleRoomWindow
 end
 

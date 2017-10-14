@@ -72,6 +72,12 @@ function Downloader:init(tbl, timeout, updateListener, completeListener, queueFo
 	self.updateListener = updateListener
 	self.completeListener = completeListener
 	self.visibleListener = visibleListener
+	
+	WG.DownloadHandler.AddListener("DownloadProgress", function (...) self:DownloadProgress(...) end)
+	WG.DownloadHandler.AddListener("DownloadStarted", function (...) self:DownloadStarted(...) end)
+	WG.DownloadHandler.AddListener("DownloadFinished", function (...) self:DownloadFinished(...) end)
+	WG.DownloadHandler.AddListener("DownloadFailed", function (...) self:DownloadFailed(...) end)
+	WG.DownloadHandler.AddListener("DownloadQueued", function (...) self:DownloadQueued(...) end)
 end
 
 function Downloader:UpdateQueue()
@@ -161,7 +167,7 @@ function round2(num, idp)
   return string.format("%." .. (idp or 0) .. "f", num)
 end
 
-function Downloader:DownloadProgress(downloadID, downloaded, total)
+function Downloader:DownloadProgress(listener, downloadID, downloaded, total)
 	if not self.downloads[downloadID] then
 		return
 	end
@@ -210,7 +216,7 @@ function Downloader:DownloadProgress(downloadID, downloaded, total)
 	self.prDownload:SetValue(100 * doneRatio)
 end
 
-function Downloader:DownloadStarted(downloadID)
+function Downloader:DownloadStarted(listener, downloadID)
 	if not self.downloads[downloadID] then
 		return
 	end
@@ -225,7 +231,7 @@ function Downloader:DownloadStarted(downloadID)
 	self:UpdateQueue()
 end
 
-function Downloader:DownloadFinished(downloadID)
+function Downloader:DownloadFinished(listener, downloadID)
 	if not (downloadID and self.downloads[downloadID]) then
 		return
 	end
@@ -258,7 +264,7 @@ function Downloader:DownloadFinished(downloadID)
 	self:UpdateQueue()
 end
 
-function Downloader:DownloadFailed(downloadID, errorID)
+function Downloader:DownloadFailed(listener, downloadID, errorID)
 	if not (downloadID and self.downloads[downloadID]) then
 		return
 	end
@@ -288,7 +294,7 @@ function Downloader:DownloadFailed(downloadID, errorID)
 	self:UpdateQueue()
 end
 
-function Downloader:DownloadQueued(downloadID, archiveName, archiveType)
+function Downloader:DownloadQueued(listener, downloadID, archiveName, archiveType)
 	self.downloads[downloadID] = { archiveName = archiveName, archiveType = archiveType, startTime = os.clock() }
 	self:UpdateQueue()
 end

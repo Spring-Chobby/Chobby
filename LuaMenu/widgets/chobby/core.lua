@@ -104,46 +104,6 @@ function Chobby:_ViewResize(sw, sh)
 	end)
 end
 
-function Chobby:_DownloadStarted(id)
-	self:WrapCall(function()
-		for i, comp in pairs(self:GetRegisteredComponents()) do
-			comp:DownloadStarted(id)
-		end
-	end)
-end
-
-function Chobby:_DownloadFinished(id)
-	self:WrapCall(function()
-		for i, comp in pairs(self:GetRegisteredComponents()) do
-			comp:DownloadFinished(id)
-		end
-	end)
-end
-
-function Chobby:_DownloadFailed(id, errorId)
-	self:WrapCall(function()
-		for i, comp in pairs(self:GetRegisteredComponents()) do
-			comp:DownloadFailed(id, errorId)
-		end
-	end)
-end
-
-function Chobby:_DownloadProgress(id, downloaded, total)
-	self:WrapCall(function()
-		for i, comp in pairs(self:GetRegisteredComponents()) do
-			comp:DownloadProgress(id, downloaded, total)
-		end
-	end)
-end
-
-function Chobby:_DownloadQueued(id, archiveName, archiveType)
-	self:WrapCall(function()
-		for i, comp in pairs(self:GetRegisteredComponents()) do
-			comp:DownloadQueued(id, archiveName, archiveType)
-		end
-	end)
-end
-
 function Chobby:WrapCall(func)
 	xpcall(function() func() end,
 		function(err) self:_PrintError(err) end )
