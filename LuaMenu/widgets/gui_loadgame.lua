@@ -146,13 +146,13 @@ local function LoadGameByFilename(filename)
 	local hasGame = true
 	
 	if not VFS.HasArchive(game) then
-		VFS.DownloadArchive(game, "game")
+		WG.DownloadHandler.MaybeDownloadArchive(game, "game", -1)
 		Notify("Downloading game...", "Retry when complete")
 		hasGame = false
 	end
 
 	if not VFS.HasArchive(map) then
-		VFS.DownloadArchive(map, "map")
+		WG.DownloadHandler.MaybeDownloadArchive(map, "map", -1)
 		Notify("Downloading map...", "Retry when complete")
 		return
 	end

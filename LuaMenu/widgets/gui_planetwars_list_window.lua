@@ -43,16 +43,6 @@ local DoUnMatchedActivityUpdate -- Activity update function
 --------------------------------------------------------------------------------
 -- Utilities
 
-local function MaybeDownloadArchive(archiveName, archiveType)
-	if not VFS.HasArchive(archiveName) then
-		VFS.DownloadArchive(archiveName, archiveType)
-	end
-end
-
-local function MaybeDownloadMap(mapName)
-	MaybeDownloadArchive(mapName, "map")
-end
-
 local function HaveRightEngineVersion()
 	local configuration = WG.Chobby.Configuration
 	if configuration.useWrongEngine then
@@ -76,7 +66,7 @@ local function TryToJoinPlanet(planetData)
 	local mapName = planetData.Map
 	if not VFS.HasArchive(mapName) then
 		queuePlanetJoin = planetData
-		MaybeDownloadMap(mapName)
+		WG.DownloadHandler.MaybeDownloadArchive(mapName, "map", -1)
 		WG.Chobby.InformationPopup("Map download required to attack planet. Please wait.")
 		return
 	end
@@ -678,7 +668,7 @@ local function MakePlanetControl(planetData, DeselectOtherFunc, attacking, defen
 			function(obj)
 				if not VFS.HasArchive(mapName) then
 					if not downloading then
-						MaybeDownloadMap(mapName)
+						WG.DownloadHandler.MaybeDownloadArchive(mapName, "map", -1)
 						downloading = true
 						UpdateJoinButton()
 					end

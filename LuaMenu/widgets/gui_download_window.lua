@@ -51,11 +51,7 @@ local function DownloadCompleteFunction(name, archiveType, success)
 			parent = completed,
 			OnClick = {
 				function ()
-					if archiveType == "map" then
-						VFS.DownloadArchive(name, "map")
-					elseif archiveType == "game" then
-						VFS.DownloadArchive(name, "game")
-					end
+					WG.DownloadHandler.RetryDownload(name, archiveType, -1)
 				end
 			}
 		}

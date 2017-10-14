@@ -74,18 +74,12 @@ local function UpdateArchiveStatus(updateSync)
 	end
 end
 
-local function MaybeDownloadArchive(archiveName, archiveType)
-	if not VFS.HasArchive(archiveName) then
-		VFS.DownloadArchive(archiveName, archiveType)
-	end
-end
-
 local function MaybeDownloadGame(battle)
-	MaybeDownloadArchive(battle.gameName, "game")
+	WG.DownloadHandler.MaybeDownloadArchive(battle.gameName, "game", -1)
 end
 
 local function MaybeDownloadMap(battle)
-	MaybeDownloadArchive(battle.mapName, "map")
+	WG.DownloadHandler.MaybeDownloadArchive(battle.mapName, "map", -1)
 end
 
 function widget:DownloadFinished()

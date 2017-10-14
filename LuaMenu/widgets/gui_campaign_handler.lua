@@ -796,13 +796,13 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 	
 	function externalFunctions.DownloadMapIfClose()
 		if startable or captured then
-			WG.MaybeDownloadMap(planetData.gameConfig.mapName)
+			WG.DownloadHandler.MaybeDownloadArchive(planetData.gameConfig.mapName, "map", 2)
 			return
 		end
 		for i = 1, #adjacency do
 			if adjacency[i] then
-				if planetList[i].GetCapturedOrStarableUnsafe() then
-					WG.MaybeDownloadMap(planetData.gameConfig.mapName)
+				if not planetList[i].GetCapturedOrStarableUnsafe() then
+					WG.DownloadHandler.MaybeDownloadArchive(planetData.gameConfig.mapName, "map", 1)
 					return
 				end
 			end

@@ -111,13 +111,13 @@ function BattleListWindow:MakeWatchBattle(battleID, battle)
 	local function RejoinBattleFunc()
 		if not VFS.HasArchive(battle.mapName) then
 			WG.Chobby.InformationPopup("Map download required. Wait for the download to complete and try again.")
-			VFS.DownloadArchive(battle.mapName, "map")
+			WG.DownloadHandler.MaybeDownloadArchive(battle.mapName, "map", -1)
 			return
 		end
 		
 		if not VFS.HasArchive(battle.gameName) then
 			WG.Chobby.InformationPopup("Game update required. Wait for the download to complete or restart the game.")
-			VFS.DownloadArchive(battle.gameName, "game")
+			WG.DownloadHandler.MaybeDownloadArchive(battle.gameName, "game", -1)
 			return
 		end
 		

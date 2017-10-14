@@ -21,25 +21,6 @@ local START_UNITS_BLOCK_SIZE = 40
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Downloads
-
-local function MaybeDownloadArchive(archiveName, archiveType)
-	if not VFS.HasArchive(archiveName) then
-		VFS.DownloadArchive(archiveName, archiveType)
-	end
-end
-
-local function MaybeDownloadGame(gameName)
-	WG.Package.DownloadWithDeps(gameName, "game")
-	--MaybeDownloadArchive(gameName, "game")
-end
-
-local function MaybeDownloadMap(mapName)
-	MaybeDownloadArchive(mapName, "map")
-end
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
 -- Encording
 
 local function TableToBase64(inputTable)
@@ -346,14 +327,14 @@ function PlanetBattleHandler.StartBattle(planetID, planetData)
 	local haveGame = WG.Package.ArchiveExists(gameName)
 	if not haveGame then
 		WG.Chobby.InformationPopup("You do not have the game file required. It will now be downloaded.")
-		MaybeDownloadGame(gameName)
+		WG.DownloadHandler.MaybeDownloadArchive(gameName, "game", -1)
 		return
 	end
 	
 	local haveMap = VFS.HasArchive(gameConfig.mapName)
 	if not haveMap then
 		WG.Chobby.InformationPopup("You do not have the map file required. It will now be downloaded.")
-		MaybeDownloadMap(gameConfig.mapName)
+		WG.DownloadHandler.MaybeDownloadArchive(gameConfig.mapName, "map", -1)
 		return
 	end
 	
@@ -376,7 +357,6 @@ end
 
 function widget:Initialize()
 	WG.PlanetBattleHandler = PlanetBattleHandler
-	WG.MaybeDownloadMap = MaybeDownloadMap
 end
 
 --------------------------------------------------------------------------------

@@ -649,8 +649,7 @@ function widget:Initialize()
 				if not haveMap then
 					requiredResources[mapName] = true
 					requiredResourceCount = requiredResourceCount + 1
-					
-					VFS.DownloadArchive(mapName, "map")
+					WG.DownloadHandler.MaybeDownloadArchive(mapName, "map", 1)
 				end
 			end
 		end
@@ -662,8 +661,7 @@ function widget:Initialize()
 				if not haveGame then
 					requiredResources[gameName] = true
 					requiredResourceCount = requiredResourceCount + 1
-					
-					VFS.DownloadArchive(gameName, "game")
+					WG.DownloadHandler.MaybeDownloadArchive(gameName, "game", 1)
 				end
 			end
 		end

@@ -60,7 +60,7 @@ end
 
 -- reports that download has ended/was aborted
 local function DownloadFileDone(args)
-	WG.DownloadHandler.DownloadFinished(args.Name, args.FileType, args.IsSuccess)
+	WG.DownloadWrapperInterface.DownloadFinished(args.Name, args.FileType, args.IsSuccess)
 end
 
 -- notifies that steam is online

@@ -134,14 +134,14 @@ function onLaunchReplay(wtf, replay, game, map, engine)
 		hasGame = true
 	else
 		Echo("Downloading game...")
-		VFS.DownloadArchive(game, "game")
+		WG.DownloadHandler.MaybeDownloadArchive(game, "game", -1)
 	end
 
 	if(VFS.HasArchive(map)) then
 		hasMap = true
 	else
 		Echo("Downloading map...")
-		VFS.DownloadArchive(map, "map")
+		WG.DownloadHandler.MaybeDownloadArchive(map, "map", -1)
 	end
 
 	-- somehow check for engine? or check if current = required, and use that

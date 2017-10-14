@@ -37,32 +37,18 @@ end
 
 local alreadyDownloaded = {}
 
-local function MaybeDownloadArchive(archiveName, archiveType)
-	if not VFS.HasArchive(archiveName) then
-		VFS.DownloadArchive(archiveName, archiveType)
-	end
-end
-
-local function MaybeDownloadGame(gameName)
-	MaybeDownloadArchive(gameName, "game")
-end
-
-local function MaybeDownloadMap(mapName)
-	MaybeDownloadArchive(mapName, "map")
-end
-
 local function DownloadRequirements()
 	local config = WG.Chobby.Configuration
 	local gameName = config:GetDefaultGameName()
 	if not alreadyDownloaded[gameName] then
-		MaybeDownloadGame(gameName)
+		WG.DownloadHandler.MaybeDownloadArchive(gameName, "game", 1)
 		alreadyDownloaded[gameName] = true
 	end
 	local missions = LoadMissions()
 	if missions ~= nil then
 		for i = 1, #missions do
 			if not alreadyDownloaded[missions[i].Map] then
-				MaybeDownloadMap(missions[i].Map)
+				WG.DownloadHandler.MaybeDownloadArchive(missions[i].Map, "map", 1)
 				alreadyDownloaded[missions[i].Map] = true
 			end
 		end
@@ -123,14 +109,14 @@ local function CreateMissionEntry(missionData)
 				local haveGame = VFS.HasArchive(gameName)
 				if not haveGame then
 					WG.Chobby.InformationPopup("You do not have the game file required. It will now be downloaded.")
-					MaybeDownloadGame(gameName)
+					WG.DownloadHandler.MaybeDownloadArchive(gameName, "game", -1)
 					return
 				end
 				
 				local haveMap = VFS.HasArchive(missionData.Map)
 				if not haveMap then
 					WG.Chobby.InformationPopup("You do not have the map file required. It will now be downloaded.")
-					MaybeDownloadMap(missionData.Map)
+					WG.DownloadHandler.MaybeDownloadArchive(missionData.Map, "map", -1)
 					return
 				end
 				
