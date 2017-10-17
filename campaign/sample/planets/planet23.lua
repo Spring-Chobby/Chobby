@@ -57,6 +57,7 @@ local function GetPlanet(planetUtilities, planetID)
 					"amphcon",
 					"amphassault",
 					"turretgauss",
+					"energywind",
 				},
 				startUnits = {
 					{

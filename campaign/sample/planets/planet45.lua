@@ -19,18 +19,18 @@ local function GetPlanet(planetUtilities, planetID)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Terran",
+			terrainType = "Radiated",
 			radius = "6550 km",
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[find scorpi, infi scorpi, kill scorpi]]
+			text = [[In this battle you start at a large numerical and economical disadvantage. However, the high plateaus on this map will give your Spiders an edge, especially the heavy Crab riot/skirmisher.]]
 		},
 		gameConfig = {
-			mapName = "LowTideV3",
+			mapName = "Aetherian Void 1.2",
 			playerConfig = {
-				startX = 100,
-				startZ = 100,
+				startX = 7600,
+				startZ = 3300,
 				allyTeam = 0,
 				facplop = false,
 				commanderParameters = {
@@ -41,6 +41,8 @@ local function GetPlanet(planetUtilities, planetID)
 					"factoryspider",
 					"spidercon",
 					"spidercrabe",
+					"spiderassault",
+					"spiderriot",
 					"spideraa",
 				},
 				startUnits = {
@@ -48,11 +50,13 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			aiConfig = {
 				{
-					startX = 4000,
-					startZ = 75,
-					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Enemy",
-					bitDependant = true,
+					startX = 2600,
+					startZ = 6800,
+					humanName = "Mzabuagi",
+					aiLib = "Null AI",
+					bitDependant = false,
+					--aiLib = "Circuit_difficulty_autofill",
+					--bitDependant = true,
 					commanderParameters = {
 						facplop = false,
 					},

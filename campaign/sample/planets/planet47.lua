@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[...]]
+			text = [[You're up against a vicious strider combo - the cloaked Scorpions stun your units, then the Merlin artillery walkers rain rockets on them. Find the enemy striders with the ultra-cheap Flea scout, then disable them in turn with the Widow's anti-heavy stungun.]]
 		},
 		gameConfig = {
 			mapName = "LowTideV3",
@@ -40,9 +40,8 @@ local function GetPlanet(planetUtilities, planetID)
 				extraUnlocks = {
 					"factoryspider",
 					"spidercon",
-					"spideremp",
 					"spiderriot",
-					"spiderskirm",
+					"spiderassault",
 					"spiderscout",
 					"spiderantiheavy",
 				},
@@ -78,10 +77,28 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 			},
 			defeatConditionConfig = {
-
+				-- Indexed by allyTeam.
+				[0] = { },
+				[1] = {
+					ignoreUnitLossDefeat = false,
+					vitalCommanders = false,
+					vitalUnitTypes = {
+						"striderhub",
+						"striderscorpion",
+						"stridercatapult",
+					},
+					loseAfterSeconds = false,
+					allyTeamLossObjectiveID = 1,
+				},
 			},
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
+				[1] = {
+					description = "Destroy all enemy Scorpions, Catapults and Strider Hubs",
+				},
+				[2] = {
+					description = "Protect your Commander",
+				},
 			},
 			bonusObjectiveConfig = {
 			}
