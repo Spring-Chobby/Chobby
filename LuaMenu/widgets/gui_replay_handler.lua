@@ -25,7 +25,7 @@ local function CreateReplayEntry(replayPath)
 	local Configuration = WG.Chobby.Configuration
 	
 	local fileName = string.sub(replayPath, 7)
-	fileName = string.gsub(fileName, " develop", "")
+	fileName = string.gsub(string.gsub(fileName, " maintenance", ""), " develop", "")
 	fileName = string.gsub(fileName, "%.sdfz", "")
 	local engineStart = string.find(string.reverse(fileName), "_")
 	

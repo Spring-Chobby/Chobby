@@ -568,7 +568,7 @@ function Configuration:GetEngineVersion()
 		-- Add as required.
 		return (Spring.Utilities.GetEngineVersion() .. ".0")
 	else
-		return string.gsub(Spring.Utilities.GetEngineVersion(), " develop", "")
+		return string.gsub(string.gsub(Spring.Utilities.GetEngineVersion(), " maintenance", ""), " develop", "")
 	end
 end
 
