@@ -4,7 +4,7 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/desert01.png"
 	
 	local planetData = {
 		name = "Hastus",
@@ -27,7 +27,6 @@ local function GetPlanet(planetUtilities, planetID)
 			text = [[This battlefield is exceptionally mountainous; your opponent will field Spiders and it would be advisable for you to do the same. Force your opponent to give you access to the Interception Network with Venom EMP and Hermit assault spiders.]]
 		},
 		tips = {
-			
 			{
 				image = "unitpics/spiderassault.png",
 				text = [[The Hermit isn't the strongest assault unit out there, but it is very cheap. The Hermit's plasma cannon is ballistic, so it has much longer range when firing down a hill.]]
