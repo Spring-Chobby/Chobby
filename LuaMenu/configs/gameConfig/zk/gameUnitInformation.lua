@@ -423,13 +423,13 @@ local humanNames = {
 		category = "veh",
 		order = 5,
 		description = "Deployable Missile Rover (must stop to fire)",
-		humanName = "Slasher",
+		humanName = "Fencer",
 	},
 	vehriot = {
 		category = "veh",
 		order = 6,
 		description = "Riot Rover",
-		humanName = "Leveler",
+		humanName = "Ripper",
 	},
 	vehassault = {
 		category = "veh",
@@ -441,7 +441,7 @@ local humanNames = {
 		category = "veh",
 		order = 8,
 		description = "Artillery Minelayer Rover",
-		humanName = "Wolverine",
+		humanName = "Badger",
 	},
 	vehheavyarty = {
 		category = "veh",
@@ -565,7 +565,7 @@ local humanNames = {
 		category = "hover",
 		order = 7,
 		description = "Anti-Heavy Artillery Hovercraft",
-		humanName = "Penetrator",
+		humanName = "Lance",
 	},
 	hoveraa = {
 		category = "hover",
@@ -1302,7 +1302,7 @@ local humanNames = {
 	wolverine_mine = {
 		category = "drone",
 		order = 1,
-		description = "Wolverine Mine",
+		description = "Badger Mine",
 		humanName = "Claw",
 	},
 	dronelight = {
