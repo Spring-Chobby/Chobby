@@ -29,11 +29,11 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/staticmex.png",
-				text = [[Metal Extractors give you the resources to build an army and crush your opponent. Take metal spots and build as many as you can.]]
+				text = [[Metal Extractors gather the metal required to build an army and crush your opponent. Take metal spots and build as many as you can.]]
 			},
 			{
 				image = "unitpics/energysolar.png",
-				text = [[Metal isn't very useful unless you also have energy. Solar Collectors will provide energy for you.]]
+				text = [[Metal is useless without energy as everything costs both metal and energy. Build Solar Collectors to gather energy.]]
 			},
 			{
 				image = "unitpics/cloakriot.png",

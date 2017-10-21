@@ -30,11 +30,11 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/turretriot.png",
-				text = [[Stardust turrets will shred any unit which gets into its range. Your Ronins can instead attack from outside the Stardusts' range.]]
+				text = [[Stardusts will shred any unit which gets into its range. Your Ronins can avoid this fate by attacking from just outside the Stardusts' range.]]
 			},
 			{
 				image = "unitpics/cloakskirm.png",
-				text = [[As skirmishers, Ronins are also faster and longer-ranged than Reavers and can destroy them without taking any damage at all. Glaives can dodge the slow Ronin rockets and pose a much bigger threat.]]
+				text = [[As skirmishers, Ronins are faster than and outrange Reavers so can destroy them without losses. Glaives can dodge the slow Ronin rockets and pose a much bigger threat.]]
 			},
 			{
 				image = "unitpics/energysolar.png",

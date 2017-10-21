@@ -35,7 +35,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/cloakcon.png",
-				text = [[The Conjurers ability to cloak makes it an ideal spotter for Slings. Beware, cloak is fragile and disrupted by both proximity to enemy units and the use of most abilities.]]
+				text = [[The Conjurers ability to cloak makes it an ideal spotter for Sling. Be carefuly moving around enemy territory as cloak is disrupted by proximity to enemy units and the use of most abilities.]]
 			},
 			{
 				image = "unitpics/staticradar.png",

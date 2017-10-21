@@ -30,7 +30,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/turretmissile.png",
-				text = [[The Picket missile turret is very cheap, and in large numbers they are effective against both ground and air targets. Their low HP makes them weak against anything which can survive their initial volley.]]
+				text = [[The Picket missile turret is very cheap, and in large numbers they are effective against both ground and air targets. Their fragility makes them a poor choice against anything which can survive their initial volley.]]
 			},
 			{
 				image = "unitpics/cloakbomb.png",
@@ -38,7 +38,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/vehraid.png",
-				text = [[The heat ray weapon of Scorcher vehicles is incredibly lethal at point-blank range. Destroy them from a distance or stun them with Imps before engaging.]]
+				text = [[The Scorchers heat ray weapon is incredibly lethal at point-blank range. Destroy them from a distance or stun them with Imps before engaging.]]
 			},
 		},
 		gameConfig = {
