@@ -526,6 +526,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"staticmex",
 						"energywind",
 						"staticradar",
+						"staticcon",
 						"gunshipcon",
 						"gunshipbomb",
 						"gunshipemp",

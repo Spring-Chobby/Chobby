@@ -58,6 +58,8 @@ local function GetPlanet(planetUtilities, planetID)
 					"spiderassault",
 					"spiderriot",
 					"spideraa",
+				},
+				extraAbilities = {
 					"terraform",
 				},
 				startUnits = {

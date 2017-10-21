@@ -171,6 +171,7 @@ local function GetPlanet(planetUtilities, planetID)
 					allyTeam = 1,
 					unlocks = {
 						"staticmex",
+						"staticcon",
 						"energysolar",
 						"energygeo",
 						"staticradar",
@@ -343,7 +344,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				[2] = {
 					ignoreUnitLossDefeat = true,
-					doNotExplodeOnLoss = true, -- It would look a bit wierd for the chickens to explode when the robots lose.
+					doNotExplodeOnLoss = true, -- It would look a bit weird for the chickens to explode when the robots lose.
 				},
 			},
 			objectiveConfig = {
