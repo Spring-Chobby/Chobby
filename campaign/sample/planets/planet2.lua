@@ -174,13 +174,13 @@ local function GetPlanet(planetUtilities, planetID)
 					startEnergy = 250,
 					allyTeam = 1,
 					unlocks = {
-						--"cloakcon", --add this back in if the mission is too easy
-						"cloakraid", --maybe remove or (if possible) deprioritise this?
+						"cloakraid",
 						"cloakriot",
 					},
-					-- difficultyDependantUnlocks = {
-						-- [3] = {"staticmex"}, -- test this sometime
-					-- },
+					 difficultyDependantUnlocks = {
+						 [3] = {"staticmex","energysolar"},
+						 [3] = {"cloakcon","staticmex","energysolar"},
+					 },
 					commanderLevel = 2,
 					commander = {
 						name = "Wub Wub Wub",
