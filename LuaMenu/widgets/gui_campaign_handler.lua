@@ -90,7 +90,6 @@ local function MakeFeedbackWindow(parent, feedbackLink)
 		draggable = false,
 		parent = parent,
 	}
-	textWindow:SendToBack()
 	
 	TextBox:New {
 		x = 60,
@@ -106,7 +105,7 @@ local function MakeFeedbackWindow(parent, feedbackLink)
 		right = 15,
 		y = 58,
 		height = 35,
-		text = "Welcome to the alpha test of the campaign. Missions will be released weekly in order to focus polish and feedback. Please post your thoughts, feedback and issues on the forum.",
+		text = "Welcome to the alpha test of the campaign. New missions will be released weekly in order to focus our polish and your feedback. Please post your thoughts, feedback and issues on the forum.",
 		fontsize = Configuration:GetFont(2).size,
 		parent = textWindow,
 	}
@@ -911,15 +910,16 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 	
 	local debugMode = Configuration.debugMode and (not LIVE_TESTING)
 	
+	if feedbackLink then
+		MakeFeedbackWindow(parent, feedbackLink)
+	end
+	
 	local window = ((debugMode and Panel) or Control):New {
 		name = "planetsHolder",
 		padding = {0,0,0,0},
 		parent = parent,
 	}
-	
-	if feedbackLink then
-		MakeFeedbackWindow(parent, feedbackLink)
-	end
+	window:BringToFront()
 	
 	local planetWindow = Control:New {
 		name = "planetWindow",
