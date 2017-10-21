@@ -24,8 +24,9 @@ local IMAGE_BOUNDS = {
 local edgeDrawList = 0
 local planetConfig, planetAdjacency, planetEdgeList
 
-local ACTIVE_COLOR = {0,1,0,0.7}
-local INACTIVE_COLOR = {0.3, 0.3, 0.3, 0.7}
+local ACTIVE_COLOR = {0,1,0,0.75}
+local INACTIVE_COLOR = {0.2, 0.2, 0.2, 0.75}
+local HIDDEN_COLOR = {0.2, 0.2, 0.2, 0}
 
 local PLANET_START_COLOR = {1, 1, 1, 1}
 local PLANET_NO_START_COLOR = {0.5, 0.5, 0.5, 1}
@@ -52,12 +53,12 @@ local currentWinPopup
 
 local function DrawEdgeLines()
 	for i = 1, #planetEdgeList do
-		if (not PLANET_WHITELIST) or (PLANET_WHITELIST[planetEdgeList[i][1]] and PLANET_WHITELIST[planetEdgeList[i][2]]) then
+		if (not PLANET_WHITELIST) or PLANET_WHITELIST[planetEdgeList[i][1]] or PLANET_WHITELIST[planetEdgeList[i][2]] then
 			for p = 1, 2 do
 				local pid = planetEdgeList[i][p]
 				local planetData = planetList[pid]
 				local x, y = planetConfig[pid].mapDisplay.x, planetConfig[pid].mapDisplay.y
-				gl.Color((planetData.GetCaptured() and ACTIVE_COLOR) or INACTIVE_COLOR)
+				gl.Color((PLANET_WHITELIST and not PLANET_WHITELIST[pid] and HIDDEN_COLOR) or (planetData.GetCaptured() and ACTIVE_COLOR) or INACTIVE_COLOR)
 				gl.Vertex(x, y)
 			end
 		end
