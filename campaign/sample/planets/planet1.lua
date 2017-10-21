@@ -5,7 +5,7 @@
 local function GetPlanet(planetUtilities, planetID)
 	
 	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
-	local image = LUA_DIRNAME .. "images/planets/14.png"
+	local image = LUA_DIRNAME .. "images/planets/swamp03.png"
 	
 	local planetData = {
 		name = "Im Jaleth",
