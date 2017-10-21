@@ -689,7 +689,7 @@ local humanNames = {
 		category = "jump",
 		order = 8,
 		description = "Heavy Riot Jumper - On to Repulse, Off to Attract",
-		humanName = "Sumo",
+		humanName = "Jugglenaut",
 	},
 	jumparty = {
 		category = "jump",
@@ -701,7 +701,7 @@ local humanNames = {
 		category = "jump",
 		order = 10,
 		description = "Heavy Anti-Air Jumper",
-		humanName = "Archangel",
+		humanName = "Toad",
 	},
 	jumpbomb = {
 		category = "jump",
@@ -757,7 +757,7 @@ local humanNames = {
 		category = "spider",
 		order = 8,
 		description = "Heavy Riot/Skirmish Spider - Curls into Armored Form When Stationary",
-		humanName = "Crabe",
+		humanName = "Crab",
 	},
 	spideraa = {
 		category = "spider",
@@ -769,7 +769,7 @@ local humanNames = {
 		category = "spider",
 		order = 10,
 		description = "Cloaked Scout/Anti-Heavy",
-		humanName = "Infiltrator",
+		humanName = "Widow",
 	},
 	
 	-- Gunship
@@ -801,19 +801,19 @@ local humanNames = {
 		category = "gunship",
 		order = 5,
 		description = "Multi-Role Support Gunship",
-		humanName = "Rapier",
+		humanName = "Harpy",
 	},
 	gunshipheavyskirm = {
 		category = "gunship",
 		order = 6,
 		description = "Fire Support Gunship",
-		humanName = "Brawler",
+		humanName = "Nimbus",
 	},
 	gunshipassault = {
 		category = "gunship",
 		order = 7,
 		description = "Heavy Raider/Assault Gunship",
-		humanName = "Black Dawn",
+		humanName = "Revenant",
 	},
 	gunshipkrow = {
 		category = "gunship",
@@ -837,13 +837,13 @@ local humanNames = {
 		category = "gunship",
 		order = 11,
 		description = "Air Transport",
-		humanName = "Valkyrie",
+		humanName = "Charon",
 	},
 	gunshipheavytrans = {
 		category = "gunship",
 		order = 12,
 		description = "Armed Heavy Air Transport",
-		humanName = "Vindicator",
+		humanName = "Hercules",
 	},
 	
 	-- Plane
@@ -869,7 +869,7 @@ local humanNames = {
 		category = "plane",
 		order = 4,
 		description = "Air Superiority Fighter",
-		humanName = "Hawk",
+		humanName = "Raptor",
 	},
 	bomberriot = {
 		category = "plane",
@@ -893,7 +893,7 @@ local humanNames = {
 		category = "plane",
 		order = 8,
 		description = "Singularity Bomber",
-		humanName = "Wyvern",
+		humanName = "Likho",
 	},
 	planescout = {
 		category = "plane",
