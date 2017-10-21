@@ -1,7 +1,41 @@
+local planetWhitelist = {
+	[69] = true,
+	[1] = true,
+	[2] = true,
+	[3] = true,
+	[5] = true,
+}
+
 return {
 	{
 		name = "tutorials", 
 		control = WG.MissionHandler.GetControl(),
+	},
+	{
+		name = "campaign",
+		entryCheck = WG.CampaignSaveWindow.PromptInitialSaveName,
+		entryCheckBootMode = true,
+		submenuData = {
+			submenuControl = WG.CampaignHandler.GetControl(true, planetWhitelist),
+			tabs = {
+				{
+					name = "technology", 
+					control = WG.TechnologyHandler.GetControl(),
+				},
+				{
+					name = "commander", 
+					control = WG.CommanderHandler.GetControl(),
+				},
+				--{
+				--	name = "codex", 
+				--	control = WG.CodexHandler.GetControl(),
+				--},
+				{
+					name = "options", 
+					control = WG.CampaignOptionsWindow.GetControl(),
+				},
+			},
+		},
 	},
 	{
 		name = "skirmish", 

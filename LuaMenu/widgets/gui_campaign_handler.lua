@@ -36,6 +36,10 @@ local REWARD_ICON_SIZE = 58
 local DEBUG_UNLOCKS_SIZE = 26
 local DEBUG_UNLOCK_COLUMNS = 4
 
+local LIVE_TESTING
+local PLANET_WHITELIST
+local PLANET_COUNT = 0
+
 local debugPlanetSelected, debugPlanetSelectedName
 
 local planetList
@@ -48,12 +52,14 @@ local currentWinPopup
 
 local function DrawEdgeLines()
 	for i = 1, #planetEdgeList do
-		for p = 1, 2 do
-			local pid = planetEdgeList[i][p]
-			local planetData = planetList[pid]
-			local x, y = planetConfig[pid].mapDisplay.x, planetConfig[pid].mapDisplay.y
-			gl.Color((planetData.GetCaptured() and ACTIVE_COLOR) or INACTIVE_COLOR)
-			gl.Vertex(x, y)
+		if (not PLANET_WHITELIST) or (PLANET_WHITELIST[planetEdgeList[i][1]] and PLANET_WHITELIST[planetEdgeList[i][2]]) then
+			for p = 1, 2 do
+				local pid = planetEdgeList[i][p]
+				local planetData = planetList[pid]
+				local x, y = planetConfig[pid].mapDisplay.x, planetConfig[pid].mapDisplay.y
+				gl.Color((planetData.GetCaptured() and ACTIVE_COLOR) or INACTIVE_COLOR)
+				gl.Vertex(x, y)
+			end
 		end
 	end
 end
@@ -413,6 +419,11 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 		padding = {12, 7, 12, 7},
 	}
 	
+	local planetName = string.upper(planetData.name)
+	if not LIVE_TESTING then
+		planetName = planetName .. " - " .. planetID
+	end
+	
 	local subPanel = Panel:New{
 		parent = starmapInfoPanel,
 		x = "50%",
@@ -424,7 +435,7 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 			Label:New{
 				x = 8,
 				y = 12,
-				caption = string.upper(planetData.name) .. " - " .. planetID,
+				caption = planetName,
 				font = Configuration:GetFont(4),
 			},
 			-- grid of details
@@ -477,7 +488,7 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 			}
 		}
 		
-		if Configuration.debugMode then
+		if (not LIVE_TESTING) and Configuration.debugMode then
 			local autoWinButton = Button:New{
 				right = 150,
 				bottom = 10,
@@ -639,7 +650,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		parent = galaxyHolder,
 	}
 	local debugHolder
-	if Configuration.debugMode and Configuration.showPlanetUnlocks then
+	if (not LIVE_TESTING) and Configuration.debugMode and Configuration.showPlanetUnlocks then
 		debugHolder = Control:New{
 			x = 0,
 			y = 0,
@@ -665,7 +676,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		caption = "",
 		OnClick = { 
 			function(self, x, y, mouseButton)
-				if Configuration.editCampaign and Configuration.debugMode then
+				if (not LIVE_TESTING) and Configuration.editCampaign and Configuration.debugMode then
 					if debugPlanetSelected and planetID ~= debugPlanetSelected then
 						local adjacent = planetAdjacency[debugPlanetSelected][planetID]
 						if adjacent then
@@ -712,7 +723,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		parent = button,
 	}
 	
-	if Configuration.debugMode then
+	if (not LIVE_TESTING) and Configuration.debugMode then
 		local number = Label:New {
 			x = 3,
 			y = 3,
@@ -759,7 +770,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		if not startable then
 			for i = 1, #adjacency do
 				if adjacency[i] then
-					if planetList[i].GetCaptured() then
+					if ((not PLANET_WHITELIST) or PLANET_WHITELIST[i]) and planetList[i].GetCaptured() then
 						startable = true
 						break
 					end
@@ -801,7 +812,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		end
 		for i = 1, #adjacency do
 			if adjacency[i] then
-				if not planetList[i].GetCapturedOrStarableUnsafe() then
+				if ((not PLANET_WHITELIST) or PLANET_WHITELIST[i]) and not planetList[i].GetCapturedOrStarableUnsafe() then
 					WG.DownloadHandler.MaybeDownloadArchive(planetData.gameConfig.mapName, "map", 1)
 					return
 				end
@@ -822,21 +833,30 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 end
 
 local function UpdateAllStartable()
-	for i = 1, #planetList do
-		planetList[i].UpdateStartable()
+	for i = 1, PLANET_COUNT do
+		if (not PLANET_WHITELIST) or PLANET_WHITELIST[i] then
+			planetList[i].UpdateStartable()
+		end
 	end
 end
 
 local function DownloadNearbyMaps()
-	for i = 1, #planetList do
-		planetList[i].DownloadMapIfClose()
+	for i = 1, PLANET_COUNT do
+		if (not PLANET_WHITELIST) or PLANET_WHITELIST[i] then
+			planetList[i].DownloadMapIfClose()
+		end
 	end
 end
 
-local function InitializePlanetHandler(parent)
+local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhitelist)
+	LIVE_TESTING = newLiveTestingMode
+	PLANET_WHITELIST = newPlanetWhitelist
+	
 	local Configuration = WG.Chobby.Configuration
 	
-	local window = ((Configuration.debugMode and Panel) or Control):New {
+	local debugMode = Configuration.debugMode and (not LIVE_TESTING)
+	
+	local window = ((debugMode and Panel) or Control):New {
 		name = "planetsHolder",
 		padding = {0,0,0,0},
 		parent = parent,
@@ -851,7 +871,7 @@ local function InitializePlanetHandler(parent)
 		parent = window,
 	}
 	
-	if Configuration.debugMode then
+	if debugMode then
 		planetWindow.OnMouseDown = planetWindow.OnMouseDown or {}
 		planetWindow.OnMouseDown[#planetWindow.OnMouseDown + 1] = function(self, x, y, mouseButton) 
 			if Configuration.editCampaign and debugPlanetSelected then
@@ -876,8 +896,11 @@ local function InitializePlanetHandler(parent)
 	planetConfig, planetAdjacency, planetEdgeList = planetData.planets, planetData.planetAdjacency, planetData.planetEdgeList
 	
 	planetList = {}
-	for i = 1, #planetConfig do
-		planetList[i] = GetPlanet(planetWindow, i, planetConfig[i], planetAdjacency[i])
+	PLANET_COUNT = #planetConfig
+	for i = 1, PLANET_COUNT do
+		if (not PLANET_WHITELIST) or PLANET_WHITELIST[i] then
+			planetList[i] = GetPlanet(planetWindow, i, planetConfig[i], planetAdjacency[i])
+		end
 	end
 	
 	UpdateAllStartable()
@@ -908,10 +931,12 @@ local function InitializePlanetHandler(parent)
 	}
 	
 	local function PlanetCaptured(listener, planetID)
-		planetList[planetID].UpdateStartable()
-		UpdateAllStartable()
-		UpdateEdgeList()
-		DownloadNearbyMaps()
+		if (not PLANET_WHITELIST) or PLANET_WHITELIST[planetID] then
+			planetList[planetID].UpdateStartable()
+			UpdateAllStartable()
+			UpdateEdgeList()
+			DownloadNearbyMaps()
+		end
 	end
 	WG.CampaignData.AddListener("PlanetCaptured", PlanetCaptured)
 	
@@ -920,8 +945,10 @@ local function InitializePlanetHandler(parent)
 	function externalFunctions.UpdatePosition(x, y, width, height)
 		window:SetPos(x, y, width, height)
 		if x then
-			for i = 1, #planetList do
-				planetList[i].UpdatePosition(width, height)
+			for i = 1, PLANET_COUNT do
+				if (not PLANET_WHITELIST) or PLANET_WHITELIST[i] then
+					planetList[i].UpdatePosition(width, height)
+				end
 			end
 		end
 	end
@@ -960,7 +987,7 @@ end
 
 local externalFunctions = {}
 
-function externalFunctions.GetControl()
+function externalFunctions.GetControl(newLiveTestingMode, newPlanetWhitelist)
 	
 	local planetsHandler = {}
 	
@@ -974,7 +1001,7 @@ function externalFunctions.GetControl()
 		OnParentPost = {
 			function(obj, parent)
 				if obj:IsEmpty() then
-					planetsHandler = InitializePlanetHandler(obj)
+					planetsHandler = InitializePlanetHandler(obj, newLiveTestingMode, newPlanetWhitelist)
 				end
 				
 				local background = WG.Chobby.interfaceRoot.GetBackgroundHolder()
