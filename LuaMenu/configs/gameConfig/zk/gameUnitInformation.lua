@@ -200,7 +200,7 @@ local categories = {
 		order = 6,
 	},
 	jump = {
-		name = "Jump Bots",
+		name = "Jumpbots",
 		order = 7,
 	},
 	spider = {
@@ -466,8 +466,8 @@ local humanNames = {
 	factorytank = {
 		category = "tank",
 		order = 1,
-		description = "Produces Heavy and Specialized Vehicles, Builds at 10 m/s",
-		humanName = "Heavy Tank Factory",
+		description = "Produces Heavy Tracked Vehicles, Builds at 10 m/s",
+		humanName = "Tank Foundry",
 	},
 	tankcon = {
 		category = "tank",
@@ -646,8 +646,8 @@ local humanNames = {
 	factoryjump = {
 		category = "jump",
 		order = 1,
-		description = "Produces Jumpjets and Special Walkers, Builds at 10 m/s",
-		humanName = "Jump/Specialist Plant",
+		description = "Produces Jumphet Equipped Robots, Builds at 10 m/s",
+		humanName = "Jumpbot Factory",
 	},
 	jumpcon = {
 		category = "jump",

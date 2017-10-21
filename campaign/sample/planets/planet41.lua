@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Ahdas Las",
 			primaryType = "K4III",
 			milRating = 1,
-			text = [[In the Heavy Tank factory, even the constructors and raiders are tough - but they're also more expensive. You'll have less units than your Cloakbot opponent, so you'll need to be careful to avoid losses if you want to win here.]]
+			text = [[Among the heavy Tanks, even the constructors and raiders are tough - but they're also more expensive. You'll have less units than your Cloakbot opponent, so you'll need to be careful to avoid losses if you want to win here.]]
 		},
 		tips = {
 			{

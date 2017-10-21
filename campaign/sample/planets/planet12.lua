@@ -451,7 +451,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Control 3 Beasts",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[3] = { -- Have a Tank Factory
+				[3] = { -- Have a Tank Foundry
 					satisfyOnce = true,
 					capturedUnitsSatisfy = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
@@ -461,7 +461,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "factorytank.png",
 					--imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Control a Tank Factory",
+					description = "Control a Tank Foundry",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			},
