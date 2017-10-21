@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Zamuot",
 			primaryType = "G0V",
 			milRating = 1,
-			text = [[This terrain is better suited for the enemy Spiders than your Tanks. To change that flatten the hills with Tremor heavy artillery, then finish the job with the super-heavy Goliath assault tank.]]
+			text = [[This terrain is better suited for the enemy Spiders than your Tanks. To change that flatten the hills with Tremor heavy artillery, then finish the job with the super-heavy Cyclops assault tank.]]
 		},
 		tips = {
 			{
@@ -545,7 +545,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "tankheavyassault.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Have two Goliaths",
+					description = "Have two Cyclops tanks",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Don't lose any Tremors

@@ -485,13 +485,13 @@ local humanNames = {
 		category = "tank",
 		order = 3,
 		description = "Lightning Assault/Raider Tank",
-		humanName = "Panther",
+		humanName = "Blitz",
 	},
 	tankriot = {
 		category = "tank",
 		order = 5,
 		description = "Heavy Riot Support Tank",
-		humanName = "Banisher",
+		humanName = "Ogre",
 	},
 	tankassault = {
 		category = "tank",
@@ -503,13 +503,13 @@ local humanNames = {
 		category = "tank",
 		order = 7,
 		description = "Very Heavy Tank Buster",
-		humanName = "Goliath",
+		humanName = "Cyclops",
 	},
 	tankarty = {
 		category = "tank",
 		order = 8,
 		description = "General-Purpose Artillery",
-		humanName = "Pillager",
+		humanName = "Emissary",
 	},
 	tankheavyarty = {
 		category = "tank",
@@ -521,7 +521,7 @@ local humanNames = {
 		category = "tank",
 		order = 10,
 		description = "Flak Anti-Air Tank",
-		humanName = "Copperhead",
+		humanName = "Minotaur",
 	},
 	
 	-- Hover
@@ -999,7 +999,7 @@ local humanNames = {
 		category = "strider",
 		order = 6,
 		description = "Heavy Saturation Artillery Strider",
-		humanName = "Catapult",
+		humanName = "Merlin",
 	},
 	striderfunnelweb = {
 		category = "strider",
@@ -1011,7 +1011,7 @@ local humanNames = {
 		category = "strider",
 		order = 8,
 		description = "Ranged Support Strider",
-		humanName = "Bantha",
+		humanName = "Paladin",
 	},
 	striderdetriment = {
 		category = "strider",
@@ -1103,7 +1103,7 @@ local humanNames = {
 		category = "econ",
 		order = 11,
 		description = "Repairs and Rearms Aircraft, repairs at 2.5 e/s per pad",
-		humanName = "Air Repair/Rearm Pad",
+		humanName = "Airpad",
 	},
 	
 	-- Defence
@@ -1117,7 +1117,7 @@ local humanNames = {
 		category = "defence",
 		order = 2,
 		description = "Light Missile Tower",
-		humanName = "Defender",
+		humanName = "Picket",
 	},
 	turretriot = {
 		category = "defence",
@@ -1215,7 +1215,7 @@ local humanNames = {
 		category = "special",
 		order = 2,
 		description = "Area Cloaker/Jammer",
-		humanName = "Sneaky Pete",
+		humanName = "Cornea",
 	},
 	staticheavyradar = {
 		category = "special",
@@ -1227,13 +1227,13 @@ local humanNames = {
 		category = "special",
 		order = 4,
 		description = "Strategic Nuke Interception System",
-		humanName = "Protector",
+		humanName = "Antinuke",
 	},
 	staticarty = {
 		category = "special",
 		order = 5,
 		description = "Plasma Artillery Battery - Requires connection to a 50 energy grid",
-		humanName = "Behemoth",
+		humanName = "Tyrant",
 	},
 	staticheavyarty = {
 		category = "special",
@@ -1245,7 +1245,7 @@ local humanNames = {
 		category = "special",
 		order = 7,
 		description = "Strategic Nuclear Launcher, Drains 18 m/s, 3 minute stockpile",
-		humanName = "Silencer",
+		humanName = "Trinity",
 	},
 	zenith = {
 		category = "special",
