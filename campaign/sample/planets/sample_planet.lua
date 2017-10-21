@@ -392,7 +392,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "factorycloak.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Have at least one cloaky factory once you do.",
+					description = "Have at least one Cloakybot Factory once you do.",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[7] = { -- Have 5 Glaives at any one time
@@ -430,7 +430,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "factorycloak.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build and protect a cloaky factory.",
+					description = "Build and protect a Cloakybot factory.",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[10] = { -- Protect all Warriors

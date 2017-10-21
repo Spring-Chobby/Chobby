@@ -203,7 +203,7 @@ local function GetPlanet(planetUtilities, planetID)
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Destroy the enemy Commander and Cloakybot Factory",
+					description = "Destroy the enemy Commander and Cloakbot Factory",
 				},
 				[2] = {
 					description = "Protect your Commander",

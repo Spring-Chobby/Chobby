@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Purlie",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[The enemy Tanks will be difficult to defeat in direct combat. Instead, build Dominatrix vehicles to turn your opponent's units against each other.]]
+			text = [[The enemy Tanks will be difficult to defeat in direct combat. Instead, build Dominatrix capture rovers to turn your opponent's units against each other.]]
 		},
 		tips = {
 			{

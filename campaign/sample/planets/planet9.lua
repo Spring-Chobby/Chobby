@@ -30,11 +30,11 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/vehriot.png",
-				text = [[Ripper riot vehicles are not especially strong on their own, but they are very effective as escorts for other Vehicles against raiders.]]
+				text = [[Ripper riot rovers are not especially strong on their own, but they are very effective as escorts for other Rovers against raiders.]]
 			},
 			{
 				image = "unitpics/vehassault.png",
-				text = [[Ravager assault vehicles are not the toughest assaults in the game, but they make up for that with greater speed.]]
+				text = [[Ravager assault rovers are not the toughest assault units in the game, but they make up for that with greater speed.]]
 			},
 		},
 		gameConfig = {

@@ -176,15 +176,15 @@ local nameList = {
 
 local categories = {
 	cloak = {
-		name = "Cloaky Bots",
+		name = "Cloakbots",
 		order = 1,
 	},
 	shield = {
-		name = "Shield Bots",
+		name = "Shieldbots",
 		order = 2,
 	},
 	veh = {
-		name = "Vehicles",
+		name = "Rovers",
 		order = 3,
 	},
 	tank = {
@@ -250,8 +250,8 @@ local humanNames = {
 	factorycloak = {
 		category = "cloak",
 		order = 1,
-		description = "Produces Cloaky Robots, Builds at 10 m/s",
-		humanName = "Cloaky Bot Factory",
+		description = "Produces Cloakbots, Builds at 10 m/s",
+		humanName = "Cloakbot Factory",
 	},
 	cloakcon = {
 		category = "cloak",
@@ -398,67 +398,67 @@ local humanNames = {
 	factoryveh = {
 		category = "veh",
 		order = 1,
-		description = "Produces Wheeled Vehicles, Builds at 10 m/s",
-		humanName = "Light Vehicle Factory",
+		description = "Produces Light Wheeled Vehicles, Builds at 10 m/s",
+		humanName = "Rover Assembly",
 	},
 	vehcon = {
 		category = "veh",
 		order = 2,
-		description = "Construction Vehicle, Builds at 5 m/s",
+		description = "Construction Rover, Builds at 5 m/s",
 		humanName = "Mason",
 	},
 	vehscout = {
 		category = "veh",
 		order = 3,
-		description = "Raider/Scout Vehicle",
+		description = "Raider/Scout Rover",
 		humanName = "Dart",
 	},
 	vehraid = {
 		category = "veh",
 		order = 4,
-		description = "Raider Vehicle",
+		description = "Raider Rover",
 		humanName = "Scorcher",
 	},
 	vehsupport = {
 		category = "veh",
 		order = 5,
-		description = "Deployable Missile Vehicle (must stop to fire)",
+		description = "Deployable Missile Rover (must stop to fire)",
 		humanName = "Slasher",
 	},
 	vehriot = {
 		category = "veh",
 		order = 6,
-		description = "Riot Vehicle",
+		description = "Riot Rover",
 		humanName = "Leveler",
 	},
 	vehassault = {
 		category = "veh",
 		order = 7,
-		description = "Assault Vehicle",
+		description = "Assault Rover",
 		humanName = "Ravager",
 	},
 	veharty = {
 		category = "veh",
 		order = 8,
-		description = "Artillery Minelayer Vehicle",
+		description = "Artillery Minelayer Rover",
 		humanName = "Wolverine",
 	},
 	vehheavyarty = {
 		category = "veh",
 		order = 9,
-		description = "Precision Artillery Vehicle",
+		description = "Precision Artillery Rover",
 		humanName = "Impaler",
 	},
 	vehaa = {
 		category = "veh",
 		order = 10,
-		description = "Fast Anti-Air Vehicle",
+		description = "Fast Anti-Air Rover",
 		humanName = "Crasher",
 	},
 	vehcapture = {
 		category = "veh",
 		order = 11,
-		description = "Capture Vehicle",
+		description = "Capture Rover",
 		humanName = "Dominatrix",
 	},
 	
