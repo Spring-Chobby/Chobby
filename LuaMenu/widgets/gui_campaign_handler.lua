@@ -76,6 +76,60 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Feedback/testing warning window
+
+local function MakeFeedbackWindow(parent, feedbackLink)
+	local Configuration = WG.Chobby.Configuration
+	local textWindow = Window:New{
+		classname = "main_window_small",
+		right = 60,
+		y = 40,
+		width = 410,
+		height = 250,
+		resizable = false,
+		draggable = false,
+		parent = parent,
+	}
+	textWindow:SendToBack()
+	
+	TextBox:New {
+		x = 60,
+		right = 15,
+		y = 15,
+		height = 35,
+		text = "Campaign Testing",
+		fontsize = Configuration:GetFont(4).size,
+		parent = textWindow,
+	}
+	TextBox:New {
+		x = 15,
+		right = 15,
+		y = 58,
+		height = 35,
+		text = "Welcome to the alpha test of the campaign. Missions will be released weekly in order to focus polish and feedback. Please post your thoughts, feedback and issues on the forum.",
+		fontsize = Configuration:GetFont(2).size,
+		parent = textWindow,
+	}
+	
+	Button:New {
+		x = 100,
+		right = 100,
+		bottom = 12,
+		height = 45,
+		caption = "Post Feedback",
+		classname = "action_button",
+		font = WG.Chobby.Configuration:GetFont(3),
+		OnClick = {
+			function ()
+				WG.WrapperLoopback.OpenUrl(feedbackLink)
+			end
+		},
+		parent = textWindow,
+	}
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Save planet positions
 
 local function EchoPlanetPositionAndEdges()
@@ -849,7 +903,7 @@ local function DownloadNearbyMaps()
 	end
 end
 
-local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhitelist)
+local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhitelist, feedbackLink)
 	LIVE_TESTING = newLiveTestingMode
 	PLANET_WHITELIST = newPlanetWhitelist
 	
@@ -862,6 +916,11 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 		padding = {0,0,0,0},
 		parent = parent,
 	}
+	
+	if feedbackLink then
+		MakeFeedbackWindow(parent, feedbackLink)
+	end
+	
 	local planetWindow = Control:New {
 		name = "planetWindow",
 		x = 0,
@@ -988,7 +1047,7 @@ end
 
 local externalFunctions = {}
 
-function externalFunctions.GetControl(newLiveTestingMode, newPlanetWhitelist)
+function externalFunctions.GetControl(newLiveTestingMode, newPlanetWhitelist, feedbackLink)
 	
 	local planetsHandler = {}
 	
@@ -1002,7 +1061,7 @@ function externalFunctions.GetControl(newLiveTestingMode, newPlanetWhitelist)
 		OnParentPost = {
 			function(obj, parent)
 				if obj:IsEmpty() then
-					planetsHandler = InitializePlanetHandler(obj, newLiveTestingMode, newPlanetWhitelist)
+					planetsHandler = InitializePlanetHandler(obj, newLiveTestingMode, newPlanetWhitelist, feedbackLink)
 				end
 				
 				local background = WG.Chobby.interfaceRoot.GetBackgroundHolder()

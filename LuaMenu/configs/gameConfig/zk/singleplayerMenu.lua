@@ -16,7 +16,7 @@ return {
 		entryCheck = WG.CampaignSaveWindow.PromptInitialSaveName,
 		entryCheckBootMode = true,
 		submenuData = {
-			submenuControl = WG.CampaignHandler.GetControl(true, planetWhitelist),
+			submenuControl = WG.CampaignHandler.GetControl(true, planetWhitelist, "http://zero-k.info/Battles"),
 			tabs = {
 				{
 					name = "technology", 
