@@ -372,7 +372,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Have 10 Metal Extractors",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[3] = { -- Build 10 Rockos
+				[3] = { -- Build 10 Ronins
 					satisfyOnce = true,
 					countRemovedUnits = true, -- count units that previously died.
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,

@@ -275,7 +275,7 @@ local humanNames = {
 		category = "cloak",
 		order = 5,
 		description = "Skirmisher Bot (Direct-Fire)",
-		humanName = "Rocko",
+		humanName = "Ronin",
 	},
 	cloakriot = {
 		category = "cloak",
@@ -899,7 +899,7 @@ local humanNames = {
 		category = "plane",
 		order = 9,
 		description = "Area Jammer, Radar/Sonar Plane",
-		humanName = "Vulture",
+		humanName = "Owl",
 	},
 	
 	-- Ship
