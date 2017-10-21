@@ -258,7 +258,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "cloakriot.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build at least 3 Brutes",
+					description = "Build at least 3 Reavers",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				--[5] = { -- Kill all enemy mexes
