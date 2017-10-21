@@ -267,7 +267,7 @@ local function StartBattleForReal(planetID, planetData, gameName)
 	
 	if gameConfig.modoptions then
 		for key, value in pairs(gameConfig.modoptions) do
-			modoptions[key] = value
+			modoptions[key] = (type(value) == "table" and TableToBase64(value)) or value
 		end
 	end
 	

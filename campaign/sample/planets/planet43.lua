@@ -49,6 +49,7 @@ local function GetPlanet(planetUtilities, planetID)
 				zombies_delay = 10,
 				zombies_rezspeed = 100,
 				zombies_permaslow = 1,
+				zombies_partial_reclaim = 1,
 			},
 			
 			playerConfig = {
