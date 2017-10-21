@@ -179,7 +179,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					 difficultyDependantUnlocks = {
 						 [3] = {"staticmex","energysolar"},
-						 [3] = {"cloakcon","staticmex","energysolar"},
+						 [4] = {"cloakcon","staticmex","energysolar"},
 					 },
 					commanderLevel = 2,
 					commander = {

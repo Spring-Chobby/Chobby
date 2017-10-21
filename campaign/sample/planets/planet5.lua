@@ -35,11 +35,11 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/cloakcon.png",
-				text = [[The Conjurers ability to cloak makes it an ideal spotter for Sling. Be carefuly moving around enemy territory as cloak is disrupted by proximity to enemy units and the use of most abilities.]]
+				text = [[The Conjurer's ability to cloak makes it an ideal spotter for Slings. Be carefuly moving around enemy territory as cloak is disrupted by proximity to enemy units and the use of most abilities.]]
 			},
 			{
 				image = "unitpics/staticradar.png",
-				text = [[Radar only reveals the approximate location of enemy forces so, in order to consistently hit their target, most artillery  units require a spotter. Once a radar signature is identified as a structure it will no longer wobble.]]
+				text = [[Radar only reveals the approximate location of enemy forces so, in order to consistently hit their target, most artillery units require a spotter. Once a radar signature is identified as a structure it will no longer wobble.]]
 			},
 			--{
 			--	image = "unitpics/shieldraid.png",
@@ -126,36 +126,6 @@ local function GetPlanet(planetUtilities, planetID)
 						z =1150,
 						facing = 0, 
 					},
-					-- {
-						-- name = "cloakarty",
-						-- x =2400,
-						-- z =1100,
-						-- facing = 0, 
-					-- },
-					-- {
-						-- name = "cloakarty",
-						-- x =2440,
-						-- z =1080,
-						-- facing = 0, 
-					-- },
-					-- {
-						-- name = "cloakarty",
-						-- x =2480,
-						-- z =1060,
-						-- facing = 0, 
-					-- },
-					-- {
-						-- name = "cloakarty",
-						-- x =2520,
-						-- z =1040,
-						-- facing = 0, 
-					-- },
-					-- {
-						-- name = "cloakarty",
-						-- x =2560,
-						-- z =1020,
-						-- facing = 0, 
-					-- },
 					{
 						name = "cloakriot",
 						x =2650,
@@ -260,14 +230,13 @@ local function GetPlanet(planetUtilities, planetID)
 						"shieldcon",
 						"shieldraid",
 						"shieldassault",
-						"shieldriot",
 						"turretmissile",
 						"turretlaser",
 					},
 					difficultyDependantUnlocks = {
-						[1] = {"shieldscout"},
-						[2] = {},
-						[3] = {"shieldriot"},
+						[2] = {"staticmex","energysolar"},
+						[3] = {"staticmex","energysolar","shieldskirm"},
+						[4] = {"staticmex","energysolar","shieldriot","shieldskirm"},
 					},
 					commanderLevel = 1,
 					commander = {
@@ -280,6 +249,62 @@ local function GetPlanet(planetUtilities, planetID)
 						}
 					},
 					startUnits = {
+						{
+							name = "shieldcon",
+							x = 2860,
+							z = 3800,
+							facing = 2, 
+							difficultyAtLeast = 2,
+						},
+						{
+							name = "shieldskirm",
+							x = 2860,
+							z = 3700,
+							facing = 2, 
+							difficultyAtLeast = 2,
+						},
+						{
+							name = "staticmex",
+							x = 250,
+							z = 3880,
+							facing = 2, 
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "shieldcon",
+							x = 2890,
+							z = 3800,
+							facing = 2, 
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "shieldassault",
+							x = 2890,
+							z = 3700,
+							facing = 2, 
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "staticmex",
+							x = 4910,
+							z = 3760,
+							facing = 2, 
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "shieldskirm",
+							x = 2830,
+							z = 3700,
+							facing = 2, 
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "shieldassault",
+							x = 2830,
+							z = 3700,
+							facing = 2, 
+							difficultyAtLeast = 4,
+						},
 						{
 							name = "factoryshield",
 							x = 2860,
