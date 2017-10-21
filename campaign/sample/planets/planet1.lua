@@ -248,7 +248,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Build a Radar Tower",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[4] = { -- Build 3 Warriors
+				[4] = { -- Build 3 Reavers
 					satisfyOnce = true,
 					countRemovedUnits = true, -- count units that previously died.
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,

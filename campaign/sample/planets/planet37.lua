@@ -30,7 +30,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/gunshiptrans.png",
-				text = [[The Charon can only transport light units but it is cheap and fast. Use them to reposition your slower, high-damage units (like Warriors) as required.]]
+				text = [[The Charon can only transport light units but it is cheap and fast. Use them to reposition your slower, high-damage units (like Reavers) as required.]]
 			},
 			{
 				image = "unitpics/gunshipheavytrans.png",

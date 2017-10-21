@@ -440,7 +440,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			bonusObjectiveConfig = {
 				-- Indexed by bonusObjectiveID
-				[1] = { -- Build 12 Hammers
+				[1] = { -- Build 12 Slings
 					satisfyOnce = true,
 					countRemovedUnits = true, -- count units that previously died.
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,

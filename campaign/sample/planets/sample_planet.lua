@@ -363,14 +363,14 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Have 3 Glaives by 0:35.",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[4] = { -- Keep a particular Warrior alive for 30 seconds.
+				[4] = { -- Keep a particular Reaver alive for 30 seconds.
 					satisfyUntilTime = 30,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 1,
 					-- See bonusObjectiveID in units table
 					image = planetUtilities.ICON_DIR .. "armwar.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
-					description = "Keep your Warrior alive until 0:30.",
+					description = "Keep your Reaver alive until 0:30.",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[5] = { -- Kill enemy commander in 30 seconds.
@@ -433,7 +433,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Build and protect a Cloakybot factory.",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[10] = { -- Protect all Warriors
+				[10] = { -- Protect all Reavers
 					satisfyForever = true,
 					failOnUnitLoss = true, -- Fails the objective if any units being used to satisfy the objective are lost.
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
@@ -443,7 +443,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "armwar.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
-					description = "Don't lose any Warriors.",
+					description = "Don't lose any Reavers.",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[11] = { -- Make the enemy have no more than 3 LLT at 40 seconds.

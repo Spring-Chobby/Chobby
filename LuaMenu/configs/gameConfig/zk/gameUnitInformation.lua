@@ -281,25 +281,25 @@ local humanNames = {
 		category = "cloak",
 		order = 6,
 		description = "Riot Bot",
-		humanName = "Warrior",
+		humanName = "Reaver",
 	},
 	cloakassault = {
 		category = "cloak",
 		order = 7,
 		description = "Lightning Assault Bot",
-		humanName = "Zeus",
+		humanName = "Knight",
 	},
 	cloakarty = {
 		category = "cloak",
 		order = 8,
 		description = "Light Artillery Bot",
-		humanName = "Hammer",
+		humanName = "Sling",
 	},
 	cloaksnipe = {
 		category = "cloak",
 		order = 9,
 		description = "Cloaked Skirmish/Anti-Heavy Artillery Bot",
-		humanName = "Spectre",
+		humanName = "Phantom",
 	},
 	cloakaa = {
 		category = "cloak",
@@ -311,13 +311,13 @@ local humanNames = {
 		category = "cloak",
 		order = 11,
 		description = "All Terrain EMP Bomb (Burrows)",
-		humanName = "Tick",
+		humanName = "Imp",
 	},
 	cloakjammer = {
 		category = "cloak",
 		order = 12,
 		description = "Area Cloaker/Jammer Walker",
-		humanName = "Eraser",
+		humanName = "Iris",
 	},
 	
 	-- Shield
@@ -385,7 +385,7 @@ local humanNames = {
 		category = "shield",
 		order = 11,
 		description = "Crawling Bomb (Burrows)",
-		humanName = "Roach",
+		humanName = "Snitch",
 	},
 	shieldshield = {
 		category = "shield",

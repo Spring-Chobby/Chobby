@@ -27,7 +27,7 @@ planetData = {
 		primary = "Origin",
 		primaryType = "G8V",
 		milRating = 1,
-		text = [[Your first battle will be straightforward. You have been provided with a starting base. Construct an army of Glaives and Warriors and overwhelm your enemy.]]
+		text = [[Your first battle will be straightforward. You have been provided with a starting base. Construct an army of Glaives and Reavers and overwhelm your enemy.]]
 		-- extendedText is optional and used as the text for the ingame briefing.
 		extendedText = [[Something else]],
 	},
@@ -37,7 +37,7 @@ planetData = {
 		-- Each tip can have an image which is a path in the zk game itself.
 		{
 			image = "unitpics/cloakarty.png",
-			text = [[The Hammer cannon has the range to shoot turrets from safety but the Hammer itself has a short sight range. Use other units such as Glaives or cloaked Conjurors to spot for your Hammers.]]
+			text = [[The Sling's cannon has the range to shoot turrets from safety but the Sling itself has a short sight range. Use other units such as Glaives or cloaked Conjurors to spot for your Slings.]]
 		},
 		{
 			image = "unitpics/shieldraid.png",
@@ -538,7 +538,7 @@ planetData = {
 				targetNumber = 1,
 				image = planetUtilities.ICON_DIR .. "cloakriot.png",
 				imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
-				description = "Keep your Warrior alive.",
+				description = "Keep your Reaver alive.",
 				experience = 10,
 			},
 			[2] = {
