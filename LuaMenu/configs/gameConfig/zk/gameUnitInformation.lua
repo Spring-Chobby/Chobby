@@ -955,7 +955,7 @@ local humanNames = {
 		category = "ship",
 		order = 9,
 		description = "Cruiser (Artillery)",
-		humanName = "Ronin",
+		humanName = "Envoy",
 	},
 	shipaa = {
 		category = "ship",
