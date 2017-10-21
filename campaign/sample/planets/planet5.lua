@@ -31,12 +31,20 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/cloakarty.png",
-				text = [[The Hammer cannon has the range to shoot turrets from safety but the Sling itself has a short sight range. Use other units such as Glaives or cloaked Conjurors to spot for your Slings.]]
+				text = [[The Sling cannon has the range to shoot turrets from safety but the Sling itself is weak and has short sight range. Keep out of direct combat.]]
 			},
 			{
-				image = "unitpics/shieldraid.png",
-				text = [[Watch out for flanks by Bandits.]]
+				image = "unitpics/cloakcon.png",
+				text = [[The Conjurers ability to cloak makes it an ideal spotter for Slings. Beware, cloak is fragile and disrupted by both proximity to enemy units and the use of most abilities.]]
 			},
+			{
+				image = "unitpics/staticradar.png",
+				text = [[Radar only reveals the approximate location of enemy forces so, in order to consistently hit their target, most artillery  units require a spotter. Once a radar signature is identified as a structure it will no longer wobble.]]
+			},
+			--{
+			--	image = "unitpics/shieldraid.png",
+			--	text = [[Watch out for flanks by Bandits.]]
+			--},
 		},
 		gameConfig = {
 			mapName = "Wanderlust v03",
