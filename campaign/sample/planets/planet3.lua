@@ -45,7 +45,7 @@ local function GetPlanet(planetUtilities, planetID)
 			mapName = "Adamantine_Mountian-V1",
 			playerConfig = {
 				startX = 3550,
-				startZ = 1050,
+				startZ = 1150,
 				allyTeam = 0,
 				useUnlocks = true,
 				commanderParameters = {
@@ -180,12 +180,6 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					{
 						name = "turretmissile",
-						x = 1187,
-						z = 890,
-						facing = 0,
-					}, 
-					{
-						name = "turretmissile",
 						x = 3300,
 						z = 2360,
 						facing = 0,
@@ -221,14 +215,18 @@ local function GetPlanet(planetUtilities, planetID)
 					startX = 500,
 					startZ = 2500,
 					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Clown Cars",
+					humanName = "Clowncaps",
 					bitDependant = true,
 					facplop = false,
 					allyTeam = 1,
 					unlocks = {
 						"vehraid",
 						--"vehscout",
-						"vehriot",
+					},
+					difficultyDependantUnlocks = {
+						[2] = {"vehriot",},
+						[3] = {"vehriot","staticmex", "energysolar"},
+						[3] = {"vehriot","staticmex", "energysolar", "vehcon", "vehassault"},
 					},
 					commanderLevel = 2,
 					commander = {
@@ -242,10 +240,58 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					startUnits = {
 						{
+							name = "turretriot",
+							x = 340,
+							z = 3380,
+							facing = 0, 
+							difficultyAtLeast = 2,
+						},
+						{
+							name = "staticmex",
+							x = 2710,
+							z = 3600,
+							facing = 1, 
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "turretlaser",
+							x = 2710,
+							z = 3500,
+							facing = 2, 
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "staticmex",
+							x = 2900,
+							z = 3750,
+							facing = 1, 
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "staticmex",
+							x = 2660,
+							z = 3880,
+							facing = 1, 
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "turretriot",
+							x = 3000,
+							z = 3700,
+							facing = 1, 
+							difficultyAtLeast = 4,
+						},
+						{
 							name = "factoryveh",
 							x = 500,
 							z = 2700,
 							facing = 1, 
+						},
+						{
+							name = "turretlaser",
+							x = 500,
+							z = 2500,
+							facing = 2, 
 						},
 						{
 							name = "staticcon",

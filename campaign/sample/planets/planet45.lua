@@ -4,10 +4,10 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/radiated02.png"
 	
 	local planetData = {
-		name = "Blank",
+		name = "Old Falsell",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.57,
@@ -19,18 +19,32 @@ local function GetPlanet(planetUtilities, planetID)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Terran",
-			radius = "6550 km",
+			terrainType = "Radiated",
+			radius = "8390 km",
 			primary = "Blank",
-			primaryType = "G8V",
+			primaryType = "K1VI",
 			milRating = 1,
-			text = [[find scorpi, infi scorpi, kill scorpi]]
+			text = [[In this battle you start at a large numerical and economical disadvantage. However, the high plateaus on this map will give your Spiders an edge, especially the heavy Crab riot/skirmisher.]]
+		},
+		tips = {
+			{
+				image = "unitpics/spidercrabe.png",
+				text = [[The Crab is armed with a heavy plasma cannon which is especially effective against clusters of lighter units. It also curls up into a heavily-armoured form when stationary.]]
+			},
+			{
+				image = "unitpics/terraunit.png",
+				text = [[Crabs benefit from high altitude; they are harder for the enemy to attack, and their plasma cannon gains extra range. If no hills are available in an important area, use Terraforming to create one.]]
+			},
+			{
+				image = "unitpics/spidercon.png",
+				text = [[The Spider factory's Weaver constructors are slow, but they have high buildpower, all-terrain movement (obviously), and a short-range radar.]]
+			},
 		},
 		gameConfig = {
-			mapName = "LowTideV3",
+			mapName = "Aetherian Void 1.2",
 			playerConfig = {
-				startX = 100,
-				startZ = 100,
+				startX = 7600,
+				startZ = 3300,
 				allyTeam = 0,
 				facplop = false,
 				commanderParameters = {
@@ -41,34 +55,88 @@ local function GetPlanet(planetUtilities, planetID)
 					"factoryspider",
 					"spidercon",
 					"spidercrabe",
+					"spiderassault",
+					"spiderriot",
 					"spideraa",
+				},
+				extraAbilities = {
+					"terraform",
 				},
 				startUnits = {
 				}
 			},
 			aiConfig = {
 				{
-					startX = 4000,
-					startZ = 75,
-					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Enemy",
-					bitDependant = true,
+					startX = 2600,
+					startZ = 6800,
+					humanName = "Geode Hunters",
+					aiLib = "Null AI",
+					bitDependant = false,
+					--aiLib = "Circuit_difficulty_autofill",
+					--bitDependant = true,
 					commanderParameters = {
 						facplop = false,
 					},
 					allyTeam = 1,
 					unlocks = {
-						"cloakraid",
+						"staticcon",
+						"staticradar",
+						"staticmex",
+						"energysolar",
+						"energywind",
+						"turretmissile",
+						"turretlaser",
+						"turretaalaser",
+						"turretaaclose",
+						"turretriot",
+						"turretemp",
+						"factoryveh",
+						"vehcon",
+						"vehraid",
+						"vehriot",
+						"vehassault",
+						"vehsupport",
+						"veharty",
+						"vehaa",
+						"factorygunship",
+						"gunshipcon",
+						"gunshipraid",
+						"gunshipbomb",
+						"gunshipemp",
+						"gunshipskirm",
+						"gunshipaa",
+						"factoryamph",
+						"amphraid",
+						"amphriot",
+						"amphimpulse",
+						"amphfloater",
+						"amphaa",
 					},
-					commanderLevel = 2,
+					difficultyDependantUnlocks = {
+						[2] = {"gunshipassault"},
+						[3] = {"gunshipassault","vehheavyarty"},
+						[4] = {"gunshipassault","vehheavyarty","gunshipheavyskirm","gunshipheavytrans"}, --maybe someday circuit will learn to crabenap? lol
+					},
+					commanderLevel = 5,
 					commander = {
-						name = "Most Loyal Opposition",
+						name = "Yarral",
 						chassis = "engineer",
 						decorations = {
-						  "skin_support_dark",
-						  icon_overhead = { image = "UW" }
+						  "skin_support_zebra",
 						},
-						modules = { }
+						modules = { 
+							"commweapon_missilelauncher",
+							"module_ablative_armor",
+							"module_ablative_armor",
+							"module_high_power_servos",
+							"module_high_power_servos",
+							"module_battle_drone",
+							"module_battle_drone",
+							"module_adv_nano",
+							"module_adv_nano",
+							"module_adv_nano",
+							"commweapon_personal_shield",
+						}
 					},
 					startUnits = {
 					}

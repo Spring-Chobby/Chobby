@@ -20,7 +20,7 @@ local function GetPlanet(planetUtilities, planetID)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Tropical",
+			terrainType = "Terran",
 			radius = "6700 km",
 			primary = "Misir",
 			primaryType = "G9V",

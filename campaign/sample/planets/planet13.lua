@@ -52,7 +52,7 @@ local function GetPlanet(planetUtilities, planetID)
 					victoryAtLocation = {
 						x = 5952,
 						z = 2896,
-						radius = 200,
+						radius = 120,
 						objectiveID = 1,
 					},
 					defeatIfDestroyedObjectiveID = 3,
@@ -329,7 +329,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "shieldassault.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build six Thugs",
+					description = "Build 6 Thugs",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { 
@@ -345,7 +345,7 @@ local function GetPlanet(planetUtilities, planetID)
 					-- See bonusObjectiveID in units table
 					image = planetUtilities.ICON_DIR .. "engineer.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Kill the enemy Commander",
+					description = "Destroy the enemy Commander",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			},

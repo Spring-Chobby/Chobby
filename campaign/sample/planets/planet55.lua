@@ -24,7 +24,21 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[...]]
+			text = [[All previous attempts to defeat the enemy's large clusters of Funnelweb support striders and Big Bertha static artillery have failed. It falls to you to deploy the nuclear option.]]
+		},
+		tips = {
+			{
+				image = "unitpics/staticnuke.png",
+				text = [[The Trinity nuclear silo builds a nuclear missile every 3 minutes (assuming you provide it with metal). It can stockpile many missiles at once - save them until you are sure no anti-nukes will spoil the show.]]
+			},
+			{
+				image = "unitpics/staticantinuke.png",
+				text = [[The Antithesis Anti-Nukes are typically the best-defended thing your enemy possesses. If their anti-air defence is poor destroy the anti-nuke with bombers. Otherwise, a Shockley EMP missile will disable the anti-nuke for a while.]]
+			},
+			{
+				image = "unitpics/striderfunnelweb.png",
+				text = [[Funnelweb support striders are armed with a flock of drones and a strong area shield. A single Funnelweb is fairly easy to kill, but in large numbers they are almost impervious to conventional attacks.]]
+			},
 		},
 		gameConfig = {
 			mapName = "LowTideV3",
@@ -40,6 +54,8 @@ local function GetPlanet(planetUtilities, planetID)
 				extraUnlocks = {
 					"staticnuke",
 					"staticantinuke",
+					"staticmissilesilo",
+					"empmissile",
 				},
 				startUnits = {
 				}
@@ -73,10 +89,29 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 			},
 			defeatConditionConfig = {
-
+				-- Indexed by allyTeam.
+				[0] = { },
+				[1] = {
+					ignoreUnitLossDefeat = false,
+					vitalCommanders = false,
+					vitalUnitTypes = {
+						"striderhub",
+						"striderfunnelweb",
+						"staticnuke",
+						"staticantinuke",
+					},
+					loseAfterSeconds = false,
+					allyTeamLossObjectiveID = 1,
+				},
 			},
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
+				[1] = {
+					description = "Destroy all enemy Funnelwebs, Strider Hubs, and Big Berthas",
+				},
+				[2] = {
+					description = "Protect your Commander",
+				},
 			},
 			bonusObjectiveConfig = {
 			}

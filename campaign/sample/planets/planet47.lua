@@ -4,10 +4,10 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/swamp02.png"
 	
 	local planetData = {
-		name = "Blank",
+		name = "Romolis",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.615,
@@ -20,14 +20,14 @@ local function GetPlanet(planetUtilities, planetID)
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
 			terrainType = "Terran",
-			radius = "6550 km",
-			primary = "Blank",
-			primaryType = "G8V",
+			radius = "6880 km",
+			primary = "Kaoloria",
+			primaryType = "G4V",
 			milRating = 1,
-			text = [[...]]
+			text = [[You're up against a vicious strider combo - the cloaked Scorpions stun your units, then the Merlin artillery walkers rain rockets on them. Find the enemy striders with the ultra-cheap Flea scout, then disable them in turn with the Widow's anti-heavy stungun.]]
 		},
 		gameConfig = {
-			mapName = "LowTideV3",
+			mapName = "Sierra-v2",
 			playerConfig = {
 				startX = 100,
 				startZ = 100,
@@ -40,9 +40,8 @@ local function GetPlanet(planetUtilities, planetID)
 				extraUnlocks = {
 					"factoryspider",
 					"spidercon",
-					"spideremp",
 					"spiderriot",
-					"spiderskirm",
+					"spiderassault",
 					"spiderscout",
 					"spiderantiheavy",
 				},
@@ -78,10 +77,28 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 			},
 			defeatConditionConfig = {
-
+				-- Indexed by allyTeam.
+				[0] = { },
+				[1] = {
+					ignoreUnitLossDefeat = false,
+					vitalCommanders = false,
+					vitalUnitTypes = {
+						"striderhub",
+						"striderscorpion",
+						"stridercatapult",
+					},
+					loseAfterSeconds = false,
+					allyTeamLossObjectiveID = 1,
+				},
 			},
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
+				[1] = {
+					description = "Destroy all enemy Scorpions, Catapults and Strider Hubs",
+				},
+				[2] = {
+					description = "Protect your Commander",
+				},
 			},
 			bonusObjectiveConfig = {
 			}

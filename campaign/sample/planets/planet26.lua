@@ -58,6 +58,7 @@ local function GetPlanet(planetUtilities, planetID)
 					"hoverriot",
 					"hoverskirm",
 					"turrettorp",
+					"energywind",
 				},
 				startUnits = {
 					{

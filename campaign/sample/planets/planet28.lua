@@ -66,6 +66,7 @@ local function GetPlanet(planetUtilities, planetID)
 					"hoverassault",
 					"hoverarty",
 					"energygeo",
+					"energywind",
 				},
 				startUnits = {
 					{

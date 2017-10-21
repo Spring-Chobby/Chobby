@@ -8,7 +8,7 @@ local function GetPlanet(planetUtilities, planetID)
 	local image = LUA_DIRNAME .. "images/planets/2.png"
 	
 	local planetData = {
-		name = "Junras Zeta",
+		name = "Junras-Z",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.45,
@@ -57,6 +57,7 @@ local function GetPlanet(planetUtilities, planetID)
 					"amphcon",
 					"amphraid",
 					"amphriot",
+					"energywind",
 				},
 				startUnits = {
 					{
