@@ -906,7 +906,7 @@ local humanNames = {
 	factoryship = {
 		category = "ship",
 		order = 1,
-		description = "Produces Ships, Builds at 10 m/s",
+		description = "Produces Naval Units, Builds at 10 m/s",
 		humanName = "Shipyard",
 	},
 	shipcon = {
