@@ -439,7 +439,7 @@ local function GetPlanet(planetUtilities, planetID)
 					satisfyOnce = true,
 					countRemovedUnits = true, -- count units that previously died.
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 4,
+					targetNumber = 5, -- The player starts with a Conjurer
 					unitTypes = {
 						"cloakcon",
 					},
