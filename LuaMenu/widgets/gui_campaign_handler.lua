@@ -1204,10 +1204,12 @@ function widget:Initialize()
 	VFS.Include("LuaMenu/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 	
 	local function CampaignLoaded(listener)
-		UpdateGalaxy()
-		if selectedPlanet then
-			selectedPlanet.Close()
-			selectedPlanet = nil
+		if planetList then
+			UpdateGalaxy()
+			if selectedPlanet then
+				selectedPlanet.Close()
+				selectedPlanet = nil
+			end
 		end
 	end
 	WG.CampaignData.AddListener("CampaignLoaded", CampaignLoaded)

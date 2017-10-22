@@ -137,7 +137,7 @@ local function ResetGamedata()
 		commanderExperience = 0,
 		difficultySetting = 1, -- 1,2,3 -> easy/medium/hard
 		commanderLevel = 0,
-		commanderName = "Commander",
+		commanderName = "New Save",
 		commanderChassis = "knight",
 		commanderLoadout = {},
 		retinue = {}, -- Unused
@@ -204,7 +204,7 @@ local function SaveGame()
 	if (not success) then
 		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error saving game: " .. err)
 	end
-	return success
+	return success, WG.Chobby.Configuration.campaignSaveFile
 end
 
 --------------------------------------------------------------------------------
@@ -374,12 +374,13 @@ local function StartNewGame()
 	end
 	SetupInitialCommander()
 	UpdateCommanderModuleCounts()
-	SaveGame()
+	local success, saveName = SaveGame()
 	
 	CallListeners("CampaignLoaded")
+	return success and saveName
 end
 
-local function LoadCampaignData(noCreateNew)
+local function LoadCampaignData()
 	local Configuration = WG.Chobby.Configuration
 	if Configuration.campaignSaveFile then
 		local saves = GetSaves()
@@ -389,14 +390,13 @@ local function LoadCampaignData(noCreateNew)
 			return
 		end
 	end
-	if (not noCreateNew) then
-		StartNewGame()
-	end
+	WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", nil)
+	--StartNewGame()
 end
 
 local function LoadGameByFilename(filename)
 	WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", filename)
-	LoadCampaignData(true)
+	LoadCampaignData()
 end
 
 --------------------------------------------------------------------------------
@@ -583,7 +583,7 @@ function externalFunctions.LoadGameByFilename(filename)
 	end
 end
 
-function externalFunctions.DeleteSave(filename)
+function externalFunctions.DeleteSave(filename, supressLastSavePrompt)
 	local Configuration = WG.Chobby.Configuration
 	
 	local success, err = pcall(function()
@@ -600,7 +600,7 @@ function externalFunctions.DeleteSave(filename)
 				break
 			end
 			WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", newName)
-			if not newName then
+			if not (newName or supressLastSavePrompt) then
 				WG.CampaignSaveWindow.PromptInitialSaveName()
 			end
 		end

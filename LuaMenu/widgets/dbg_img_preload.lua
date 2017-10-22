@@ -44,7 +44,6 @@ function widget:DrawGenesis()
 	else
 		for i = 1, BATCH_SIZE do
 			local file = files[index]
-			Spring.Echo("DrawGenesis", file)
 			if file then
 				gl.Texture(7, file)
 				gl.Texture(7, false)
