@@ -94,15 +94,15 @@ local function MakeFeedbackWindow(parent, feedbackLink)
 		classname = "main_window_small",
 		right = 60,
 		y = 40,
-		width = 410,
-		height = 250,
+		width = 390,
+		height = 240,
 		resizable = false,
 		draggable = false,
 		parent = parent,
 	}
 	
 	TextBox:New {
-		x = 60,
+		x = 55,
 		right = 15,
 		y = 15,
 		height = 35,
@@ -115,14 +115,15 @@ local function MakeFeedbackWindow(parent, feedbackLink)
 		right = 15,
 		y = 58,
 		height = 35,
-		text = "Welcome to the alpha test of the campaign. New missions will be released weekly in order to focus our polish and your feedback. Please post your thoughts, feedback and issues on the forum.",
+		lineSpacing = 1,
+		text = "Welcome to the alpha test of the Zero-K campaign. New missions will be released every Sunday. Please post your thoughts, feedback and issues on the forum.",
 		fontsize = Configuration:GetFont(2).size,
 		parent = textWindow,
 	}
 	
 	Button:New {
-		x = 100,
-		right = 100,
+		x = 95,
+		right = 95,
 		bottom = 12,
 		height = 45,
 		caption = "Post Feedback",
