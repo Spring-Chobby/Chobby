@@ -38,13 +38,6 @@ local function AddDir(path)
 	end]]--
 end 
 
-function widget:Initialize()
-	if Spring.GetGameFrame() > 0 then
-	      Spring.Log(widget:GetInfo().name, LOG.INFO, "Game has started. Widget removed.")
-	      widgetHandler:RemoveWidget()
-	end
-end
-
 function widget:DrawGenesis()
 	if files == nil then
 		files = {}

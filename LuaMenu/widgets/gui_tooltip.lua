@@ -10,8 +10,6 @@ function widget:GetInfo()
 	}
 end
 
-
-local spGetGameFrame            = Spring.GetGameFrame
 local spGetMouseState           = Spring.GetMouseState
 local screenWidth, screenHeight = Spring.GetWindowGeometry()
 
