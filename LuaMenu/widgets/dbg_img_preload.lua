@@ -17,9 +17,9 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
-local i = 1
-local v = 1
+local index = 1
 local files = nil
+local BATCH_SIZE = 5
 
 local function MaybeAddFile(fileName)
 	if string.find(fileName, "%.dds") or string.find(fileName, "%.png") or string.find(fileName, "%.jpg") then
@@ -36,8 +36,23 @@ end
 function widget:DrawGenesis()
 	if files == nil then
 		files = {}
-		AddDir("LuaMenu/Images")
 		AddDir("LuaMenu/Widgets/chili/Skins/Evolved")
+		AddDir("LuaMenu/Images")
+		AddDir("LuaMenu/Images/starbackgrounds")
+		--AddDir("LuaMenu/configs/gameConfig/zk/unitpics")
+	else
+		for i = 1, BATCH_SIZE do
+			local file = files[index]
+			Spring.Echo("DrawGenesis", file)
+			if file then
+				gl.Texture(7, file)
+				gl.Texture(7, false)
+				index = index + 1
+			else 
+				widgetHandler:RemoveWidget()
+				return
+			end
+		end
 	end
 end
 

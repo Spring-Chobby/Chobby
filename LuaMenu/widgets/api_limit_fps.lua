@@ -49,7 +49,8 @@ end
 
 function widget:Initialize()
 	lastTimer = Spring.GetTimer();
-
+	LimitFps.ForceRedrawPeriod(4)
+	
 	WG.LimitFps = LimitFps
 end
 
@@ -112,13 +113,13 @@ end
 
 function widget:MousePress()
 	forceRedraw = true
-	LimitFps.ForceRedrawPeriod(0.2)
+	LimitFps.ForceRedrawPeriod(0.5)
 	return false
 end
 
 function widget:MouseRelease()
 	forceRedraw = true
-	LimitFps.ForceRedrawPeriod(0.2)
+	LimitFps.ForceRedrawPeriod(0.5)
 	return false
 end
 

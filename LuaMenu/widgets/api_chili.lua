@@ -68,7 +68,18 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
+firstDraw = true
+local hideInterface = false
+local function ShowInterface()
+	hideInterface = false
+end
+
 function widget:DrawScreen()
+	if firstDraw then
+		WG.Delay(ShowInterface, 0.1)
+		hideInterface = true
+		firstDraw = false
+	end
 	if WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.hideInterface then
 		return
 	end
@@ -77,8 +88,13 @@ function widget:DrawScreen()
 	if (not screen0:IsEmpty()) then
 		gl.PushMatrix()
 			local vsx,vsy = gl.GetViewSizes()
-			gl.Translate(0,vsy,0)
-			gl.Scale(1,-1,1)
+			if hideInterface then
+				gl.Translate(0,0,0)
+				gl.Scale(1,-1,1)
+			else
+				gl.Translate(0,vsy,0)
+				gl.Scale(1,-1,1)
+			end
 			screen0:Draw()
 		gl.PopMatrix()
 	end
