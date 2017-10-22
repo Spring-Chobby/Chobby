@@ -104,6 +104,8 @@ local function StartBattleForReal(planetID, planetData, gameName)
 	local missionDifficulty = WG.CampaignData.GetDifficultySetting()
 	local bitExtension = (Configuration:GetIsRunning64Bit() and "64") or "32"
 	
+	WG.Analytics.SendIndexedRepeatEvent("campaign:planet_" .. planetID .. ":difficulty_" .. missionDifficulty .. ":started")
+	
 	-- Add the player, this is to make the player team 0.
 	local playerCount = 1
 	local players = {

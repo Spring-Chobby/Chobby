@@ -19,12 +19,14 @@ end
 -- Vars
 
 local onetimeEvents = {}
+local indexedRepeatEvents = {}
 
 local ANALYTICS_EVENT = "analyticsEvent_"
 local ANALYTICS_EVENT_ERROR = "analyticsEventError_"
 
 -- Do not send analytics for dev versions as they will likely be nonsense.
 local ACTIVE = not VFS.HasArchive("Zero-K $VERSION") 
+local VERSION = "events_22_10_2017:"
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -33,6 +35,7 @@ local ACTIVE = not VFS.HasArchive("Zero-K $VERSION")
 local Analytics = {}
 
 function Analytics.SendOnetimeEvent(eventName, value)
+	eventName = VERSION .. eventName
 	if onetimeEvents[eventName] then
 		return
 	end
@@ -44,7 +47,23 @@ function Analytics.SendOnetimeEvent(eventName, value)
 	end
 end
 
+function Analytics.SendIndexedRepeatEvent(eventName, value, suffix)
+	eventName = VERSION .. eventName
+	indexedRepeatEvents[eventName] = (indexedRepeatEvents[eventName] or 0) + 1
+	
+	eventName = eventName .. "_" .. indexedRepeatEvents[eventName]
+	if suffix then
+		eventName = eventName .. suffix
+	end
+	if ACTIVE and WG.WrapperLoopback then
+		WG.WrapperLoopback.GaAddDesignEvent(eventName, value)
+	else
+		Spring.Echo("DesignEvent", eventName, value)
+	end
+end
+
 function Analytics.SendErrorEvent(eventName, severity)
+	eventName = VERSION .. eventName
 	if onetimeEvents[eventName] then
 		return
 	end
@@ -118,9 +137,18 @@ function widget:Initialize()
 end
 
 function widget:GetConfigData()
-	return onetimeEvents
+	return {
+		onetimeEvents = onetimeEvents,
+		indexedRepeatEvents = indexedRepeatEvents,
+	}
 end
 
 function widget:SetConfigData(data)
-	onetimeEvents = data
+	-- Reverse compatibility with onetimeEvents = data
+	if data["lobby:started"] then
+		onetimeEvents = data
+		return
+	end
+	onetimeEvents = data.onetimeEvents
+	indexedRepeatEvents = data.indexedRepeatEvents
 end

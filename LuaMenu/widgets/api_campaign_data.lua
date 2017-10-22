@@ -141,6 +141,8 @@ local function ResetGamedata()
 		commanderChassis = "knight",
 		commanderLoadout = {},
 		retinue = {}, -- Unused
+		totalPlayFrames = 0,
+		totalVictoryPlayFrames = 0,
 	}
 end
 
@@ -456,6 +458,16 @@ function externalFunctions.CapturePlanet(planetID, bonusObjectives)
 	end
 end
 
+function externalFunctions.AddPlayTime(battleFrames, missionLost)
+	gamedata.totalPlayFrames = (gamedata.totalPlayFrames or 0) + (battleFrames or 0)
+	if not missionLost then
+		gamedata.totalVictoryPlayFrames = (gamedata.totalVictoryPlayFrames or 0) + (battleFrames or 0)
+	end
+	if (battleFrames or 0) > 0 then
+		SaveGame()
+	end
+end
+
 function externalFunctions.PutModuleInSlot(moduleName, level, slot)
 	SelectCommanderModule(level, slot, moduleName)
 end
@@ -476,6 +488,14 @@ end
 
 function externalFunctions.IsPlanetCaptured(planetID)
 	return gamedata.planetsCaptured.map[planetID]
+end
+
+function externalFunctions.GetCapturedPlanetCount()
+	return #gamedata.planetsCaptured.list
+end
+
+function externalFunctions.GetPlayTime()
+	return gamedata.totalPlayFrames, gamedata.totalVictoryPlayFrames
 end
 
 function externalFunctions.GetRetinue()

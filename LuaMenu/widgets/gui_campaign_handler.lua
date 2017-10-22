@@ -453,7 +453,7 @@ local function MakeBonusObjectivesList(bonusObjectivesString)
 	return list
 end
 
-local function ProcessPlanetVictory(planetID, bonusObjectives)
+local function ProcessPlanetVictory(planetID, battleFrames, bonusObjectives, bonusObjectiveString)
 	if selectedPlanet then
 		selectedPlanet.Close()
 		selectedPlanet = nil
@@ -461,15 +461,27 @@ local function ProcessPlanetVictory(planetID, bonusObjectives)
 	-- It is important to popup before capturing the planet to filter out the
 	-- already unlocked rewards.
 	currentWinPopup = MakeWinPopup(planetConfig[planetID], bonusObjectives)
+	WG.CampaignData.AddPlayTime(battleFrames)
 	WG.CampaignData.CapturePlanet(planetID, bonusObjectives)
+	
+	WG.Analytics.SendIndexedRepeatEvent("campaign:planet_" .. planetID .. ":difficulty_" .. WG.CampaignData.GetDifficultySetting() .. ":win", math.floor(battleFrames/30), ":bonus_" .. (bonusObjectiveString or ""))
+	WG.Analytics.SendOnetimeEvent("campaign:planets_owned_" .. WG.CampaignData.GetCapturedPlanetCount(), math.floor(WG.CampaignData.GetPlayTime()/30))
 end
 
-local function ProcessPlanetDefeat(planetID)
+local function ProcessPlanetDefeat(planetID, battleFrames)
 	if selectedPlanet then
 		selectedPlanet.Close()
 		selectedPlanet = nil
 	end
 	WG.Chobby.InformationPopup("Battle for " .. planetConfig[planetID].name .. " lost.", nil, nil, "Defeat")
+	WG.CampaignData.AddPlayTime(battleFrames, true)
+	
+	WG.Analytics.SendIndexedRepeatEvent("campaign:planet_" .. planetID .. ":difficulty_" .. WG.CampaignData.GetDifficultySetting() .. ":lose", math.floor(battleFrames/30), ":defeat")
+end
+
+local function ProcessPlanetResign(planetID, battleFrames)
+	WG.CampaignData.AddPlayTime(battleFrames, true)
+	WG.Analytics.SendIndexedRepeatEvent("campaign:planet_" .. planetID .. ":difficulty_" .. WG.CampaignData.GetDifficultySetting() .. ":lose", math.floor(battleFrames/30), ":resign")
 end
 
 --------------------------------------------------------------------------------
@@ -575,7 +587,7 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 				font = Configuration:GetFont(4),
 				OnClick = {
 					function(self)
-						ProcessPlanetVictory(planetID, MakeRandomBonusVictoryList(0.75, 8))
+						ProcessPlanetVictory(planetID, 352, MakeRandomBonusVictoryList(0.75, 8))
 					end
 				}
 			}
@@ -590,7 +602,7 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 				font = Configuration:GetFont(4),
 				OnClick = {
 					function(self)
-						ProcessPlanetDefeat(planetID)
+						ProcessPlanetDefeat(planetID, 351)
 					end
 				}
 			}
@@ -1101,21 +1113,49 @@ end
 
 local BATTLE_WON_STRING = "Campaign_PlanetBattleWon"
 local BATTLE_LOST_STRING = "Campaign_PlanetBattleLost"
+local BATTLE_RESIGN_STRING = "Campaign_PlanetBattleResign"
+
+function string:split(delimiter)
+	local result = {}
+	local from  = 1
+	local delim_from, delim_to = string.find(self, delimiter, from)
+	while delim_from do
+		table.insert(result, string.sub(self, from , delim_from - 1))
+		from = delim_to + 1
+		delim_from, delim_to = string.find( self, delimiter, from)
+	end
+	table.insert(result, string.sub(self, from))
+	return result
+end
 
 function widget:RecvLuaMsg(msg)
 	if string.find(msg, BATTLE_WON_STRING) then
-		local endOfID = string.find(msg, " ")
-		local planetID = tonumber(string.sub(msg, 25, endOfID))
-		local bonusObjectives = string.sub(msg, endOfID + 1)
+		Spring.Echo("msg", msg)
+		local data = msg:split(" ")
+		Spring.Utilities.TableEcho(data, "data")
+		local planetID = tonumber(data[2])
+		local battleFrames = tonumber(data[3])
+		local bonusObjectives = data[4]
 		if planetID and planetConfig and planetConfig[planetID] then
-			ProcessPlanetVictory(planetID, MakeBonusObjectivesList(bonusObjectives))
+			ProcessPlanetVictory(planetID, battleFrames, MakeBonusObjectivesList(bonusObjectives), bonusObjectives)
 		end
-	end
-	if string.find(msg, BATTLE_LOST_STRING) then
-		msg = string.sub(msg, 26)
-		local planetID = tonumber(msg)
+	elseif string.find(msg, BATTLE_LOST_STRING) then
+		Spring.Echo("msg", msg)
+		local data = msg:split(" ")
+		Spring.Utilities.TableEcho(data, "data")
+		local planetID = tonumber(data[2])
+		local battleFrames = tonumber(data[3])
 		if planetID and planetConfig and planetConfig[planetID] then
-			ProcessPlanetDefeat(planetID)
+			ProcessPlanetDefeat(planetID, battleFrames)
+		end
+	elseif string.find(msg, BATTLE_RESIGN_STRING) then
+		Spring.Echo("msg", msg)
+		local data = msg:split(" ")
+		Spring.Utilities.TableEcho(data, "data")
+		local planetID = tonumber(data[2])
+		local battleFrames = tonumber(data[3])
+		if planetID and planetConfig and planetConfig[planetID] then
+			ProcessPlanetResign(planetID, battleFrames)
 		end
 	end
 end
