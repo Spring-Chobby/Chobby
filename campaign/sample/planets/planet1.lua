@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Privni",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[This battle will be straightforward. Construct an army of Glaive raider and Reaver riot bots to overwhelm your enemy.]]
+			text = [[This battle will be straightforward. Construct an army of Glaives and Reavers to overwhelm your enemy.]]
 		},
 		tips = {
 			{

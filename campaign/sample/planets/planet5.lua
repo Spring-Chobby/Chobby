@@ -25,13 +25,12 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Adimasi",
 			primaryType = "G7V",
 			milRating = 1,
-			text = [[Use the Sling artillery bots to weaken your opponent's defences and shields before you commit to an assault.]],
-			extendedText = [[Use the Sling artillery bots to weaken your opponent's defences and shields before you commit to an assault.]]
+			text = [[Your opponent is relying on a network of defensive turrets and shielded bots to keep them safe. Use Slings to weaken your opponent's defences and shields before you commit to an assault.]],
 		},
 		tips = {
 			{
 				image = "unitpics/cloakarty.png",
-				text = [[The Sling cannon has the range to shoot turrets from safety but the Sling itself is weak and has short sight range. Keep out of direct combat.]]
+				text = [[The Sling's cannon has the range to shoot turrets from safety but the Sling itself is weak and has short sight range. Keep out of direct combat.]]
 			},
 			{
 				image = "unitpics/cloakcon.png",

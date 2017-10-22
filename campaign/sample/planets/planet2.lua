@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Beth",
 			primaryType = "G4V",
 			milRating = 1,
-			text = [[Glaives and Reavers served you well in the previous battle, but on this planet your opponent has prepared their own Reavers and Stardust turrets to counter them. Build a Cloakbot Factory, then retaliate with Ronin skirmisher bots to secure victory.]]
+			text = [[Glaives and Reavers served you well in the previous battle, but on this planet your opponent has prepared their own Reavers and Stardust turrets to counter them. Build a Cloakbot Factory, then counter them with longer-ranged Ronins to secure victory.]]
 		},
 		tips = {
 			{
