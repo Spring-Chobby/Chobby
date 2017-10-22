@@ -31,14 +31,15 @@ local function AddDir(path)
 	for _, f in ipairs(VFS.DirList(path)) do
 		MaybeAddFile(f)
 	end
-end 
+end
 
 function widget:DrawGenesis()
 	if files == nil then
 		files = {}
+		MaybeAddFile(LUA_DIRNAME .. "images/heic1403aDowngrade.jpg")
 		AddDir("LuaMenu/Widgets/chili/Skins/Evolved")
-		AddDir("LuaMenu/Images")
-		AddDir("LuaMenu/Images/starbackgrounds")
+		--AddDir("LuaMenu/Images")
+		--AddDir("LuaMenu/Images/starbackgrounds")
 		--AddDir("LuaMenu/configs/gameConfig/zk/unitpics")
 	else
 		for i = 1, BATCH_SIZE do

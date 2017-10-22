@@ -113,13 +113,13 @@ end
 
 function widget:MousePress()
 	forceRedraw = true
-	LimitFps.ForceRedrawPeriod(0.5)
+	LimitFps.ForceRedrawPeriod(2)
 	return false
 end
 
 function widget:MouseRelease()
 	forceRedraw = true
-	LimitFps.ForceRedrawPeriod(0.5)
+	LimitFps.ForceRedrawPeriod(2)
 	return false
 end
 

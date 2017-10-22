@@ -1134,7 +1134,6 @@ function externalFunctions.GetControl(newLiveTestingMode, newPlanetWhitelist, fe
 				end
 				
 				local background = WG.Chobby.interfaceRoot.GetBackgroundHolder()
-				local background = WG.Chobby.interfaceRoot.GetBackgroundHolder()
 				local x, y, width, height = background:SetOverride(GALAXY_IMAGE, IMAGE_BOUNDS)
 				planetsHandler.UpdatePosition(x, y, width, height)
 				
