@@ -1222,6 +1222,7 @@ local function MakeTab(name, children)
 		right = 5,
 		y = 10,
 		bottom = 8,
+		padding = {0,0,0,10},
 		horizontalScrollbar = false,
 		children = children
 	}
