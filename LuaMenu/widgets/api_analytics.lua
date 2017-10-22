@@ -23,6 +23,9 @@ local onetimeEvents = {}
 local ANALYTICS_EVENT = "analyticsEvent_"
 local ANALYTICS_EVENT_ERROR = "analyticsEventError_"
 
+-- Do not send analytics for dev versions as they will likely be nonsense.
+local ACTIVE = not VFS.HasArchive("Zero-K $VERSION") 
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface
@@ -34,9 +37,10 @@ function Analytics.SendOnetimeEvent(eventName, value)
 		return
 	end
 	onetimeEvents[eventName] = true
-	--Spring.Echo("DesignEvent", eventName, value)
-	if WG.WrapperLoopback then
+	if ACTIVE and WG.WrapperLoopback then
 		WG.WrapperLoopback.GaAddDesignEvent(eventName, value)
+	else
+		Spring.Echo("DesignEvent", eventName, value)
 	end
 end
 
@@ -45,9 +49,10 @@ function Analytics.SendErrorEvent(eventName, severity)
 		return
 	end
 	severity = severity or "Info"
-	--Spring.Echo("ErrorEvent", eventName, severity)
-	if WG.WrapperLoopback then
+	if ACTIVE and WG.WrapperLoopback then
 		WG.WrapperLoopback.GaAddErrorEvent(severity, eventName)
+	else
+		Spring.Echo("ErrorEvent", eventName, severity)
 	end
 end
 
