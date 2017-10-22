@@ -196,7 +196,7 @@ local categories = {
 		order = 5,
 	},
 	amph = {
-		name = "Amphibious Bots",
+		name = "Amphbots",
 		order = 6,
 	},
 	jump = {
