@@ -497,7 +497,7 @@ local humanNames = {
 		category = "tank",
 		order = 6,
 		description = "Assault Tank",
-		humanName = "Reaper",
+		humanName = "Minotaur",
 	},
 	tankheavyassault = {
 		category = "tank",
@@ -521,7 +521,7 @@ local humanNames = {
 		category = "tank",
 		order = 10,
 		description = "Flak Anti-Air Tank",
-		humanName = "Minotaur",
+		humanName = "Ettin",
 	},
 	
 	-- Hover
@@ -585,7 +585,7 @@ local humanNames = {
 		category = "amph",
 		order = 1,
 		description = "Produces Amphibious Bots, Builds at 10 m/s",
-		humanName = "Amphibious Bot Plant",
+		humanName = "Amphbot Factory",
 	},
 	amphcon = {
 		category = "amph",
@@ -795,7 +795,7 @@ local humanNames = {
 		category = "gunship",
 		order = 4,
 		description = "Raider Gunship",
-		humanName = "Banshee",
+		humanName = "Locust",
 	},
 	gunshipskirm = {
 		category = "gunship",
@@ -1159,7 +1159,7 @@ local humanNames = {
 		category = "defence",
 		order = 9,
 		description = "Anti-Air Flak Gun",
-		humanName = "Cobra",
+		humanName = "Thresher",
 	},
 	turretaafar = {
 		category = "defence",
@@ -1171,7 +1171,7 @@ local humanNames = {
 		category = "defence",
 		order = 11,
 		description = "Very Long-Range Anti-Air Missile Tower",
-		humanName = "Screamer",
+		humanName = "Artemis",
 	},
 	turretimpulse = {
 		category = "defence",
@@ -1189,13 +1189,13 @@ local humanNames = {
 		category = "defence",
 		order = 14,
 		description = "Medium Range Defense Fortress - Requires connection to a 50 energy grid",
-		humanName = "Doomsday Machine",
+		humanName = "Desolator",
 	},
 	turretantiheavy = {
 		category = "defence",
 		order = 15,
 		description = "Tachyon Projector - Requires connection to a 50 energy grid",
-		humanName = "Annihilator",
+		humanName = "Lucifer",
 	},
 	staticshield = {
 		category = "defence",
@@ -1233,7 +1233,7 @@ local humanNames = {
 		category = "special",
 		order = 5,
 		description = "Plasma Artillery Battery - Requires connection to a 50 energy grid",
-		humanName = "Tyrant",
+		humanName = "Cerberus",
 	},
 	staticheavyarty = {
 		category = "special",

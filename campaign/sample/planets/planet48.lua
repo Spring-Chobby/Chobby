@@ -3005,7 +3005,7 @@ local function GetPlanet(planetUtilities, planetID)
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Destroy all Tyrant artillery batteries and Singularity Reactors",
+					description = "Destroy all Cerberus artillery batteries and Singularity Reactors",
 				},
 				[2] = {
 					description = "Protect your Commander",

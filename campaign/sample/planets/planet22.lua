@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Tsuz",
 			primaryType = "F3V",
 			milRating = 1,
-			text = [[The bodies of water on this battlefield would pose difficulties for most factories, but the Amphibious factory can take advantage of them instead.]]
+			text = [[The bodies of water on this battlefield would pose difficulties for most factories, but the Amphbot Factory can take advantage of them instead.]]
 		},
 		tips = {
 			{

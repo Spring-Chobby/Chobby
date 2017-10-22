@@ -30,7 +30,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/tankassault.png",
-				text = [[The Beast assault tank is one of the toughest units in the game for its moderate price. Use it to brute-force your way through enemy positions.]]
+				text = [[The Minotaur assault tank is one of the toughest units in the game for its moderate price. Use it to brute-force your way through enemy positions.]]
 			},
 			{
 				image = "unitpics/tankarty.png",

@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Alain Anora",
 			primaryType = "G4V",
 			milRating = 1,
-			text = [[Finish the Tyrant artillery piece and link it to your ally's power plants. This cannon will break the enemy's defensive line and allow you to destroy their base.]]
+			text = [[Finish the Cerberus artillery piece and link it to your ally's power plants. This cannon will break the enemy's defensive line and allow you to destroy their base.]]
 		},
 		tips = {
 			{
@@ -34,11 +34,11 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/staticarty.png",
-				text = [[The Tyrant is a long-range artillery structure capable of outranging and destroying almost all other statics, and suppressing the movement of mobile units. Toggle it into high-trajectory mode to fire over hills.]]
+				text = [[The Cerberus is a long-range artillery structure capable of outranging and destroying almost all other statics, and suppressing the movement of mobile units. Toggle it into high-trajectory mode to fire over hills.]]
 			},
 			{
 				image = "unitpics/energypylon.png",
-				text = [[Your Tyrant won't fire unless it is connected to buildings producing at least 50 energy, although it does not consume this energy. Energy Pylons are the easiest way to do this. Pylons can also be used to connect Metal Extractors to the grid for overdrive.]]
+				text = [[Your Cerberus won't fire unless it is connected to buildings producing at least 50 energy, although it does not consume this energy. Energy Pylons are the easiest way to do this. Pylons can also be used to connect Metal Extractors to the grid for overdrive.]]
 			},
 		},
 		gameConfig = {

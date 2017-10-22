@@ -349,7 +349,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			objectiveConfig = {
 				[1] = {
-					description = "Destroy the enemy Commander and Amphibious Bot Factory",
+					description = "Destroy the enemy Commander and Amphbot Factory",
 				},
 				[2] = {
 					description = "Protect your Commander",
