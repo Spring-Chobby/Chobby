@@ -90,15 +90,25 @@ end
 
 local function MakeFeedbackWindow(parent, feedbackLink)
 	local Configuration = WG.Chobby.Configuration
-	local textWindow = Window:New{
-		classname = "main_window_small",
+	
+	local holder = Control:New {
 		right = 60,
 		y = 40,
 		width = 390,
 		height = 240,
+		padding = {0,0,0,0},
+		parent = parent,
+	}
+	
+	local textWindow = Window:New{
+		classname = "main_window_small",
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
 		resizable = false,
 		draggable = false,
-		parent = parent,
+		parent = holder,
 	}
 	
 	TextBox:New {
