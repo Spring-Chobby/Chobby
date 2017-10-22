@@ -274,7 +274,7 @@ local function StartBattleForReal(planetID, planetData, gameName)
 	end
 	
 	local script = {
-		gametype =  gameConfig.gameName or gameName,
+		gametype = gameConfig.gameName or gameName,
 		hostip = '127.0.0.1',
 		hostport = 0,
 		ishost = 1,
