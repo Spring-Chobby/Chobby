@@ -126,7 +126,7 @@ local function MakeRewardList(holder, name, rewardsList, tooltipFunction, Unlock
 			height = REWARD_ICON_SIZE,
 			keepAspect = true,
 			color = color,
-			tooltip = string.gsub(rawTooltip, "_COUNT_", count or "0"),
+			tooltip = string.gsub(rawTooltip, "_COUNT_", " Limit: " .. (count or "0")),
 			file = imageFile,
 			parent = rewardsHolder,
 		}
@@ -168,7 +168,7 @@ local function MakeRewardList(holder, name, rewardsList, tooltipFunction, Unlock
 		elseif data.countLabel then
 			data.countLabel:SetCaption("")
 		end
-		data.image.tooltip = string.gsub(data.rawTooltip, "_COUNT_", count or "0")
+		data.image.tooltip = string.gsub(data.rawTooltip, "_COUNT_", " Limit: " .. (count or "0"))
 		
 		local statusString = ""
 		if unlocked then

@@ -275,7 +275,7 @@ local function GetModuleButton(parentControl, ClickFunc, moduleName, level, slot
 				ClickFunc(self, moduleName, level, slot)
 			end 
 		},
-		tooltip = string.gsub(moduleData.description, "_COUNT_", count or "0"),
+		tooltip = string.gsub(moduleData.description, "_COUNT_", " Limit: " .. (count or "0")),
 		parent = parentControl
 	}
 	local nameBox = TextBox:New{
@@ -324,7 +324,7 @@ local function GetModuleButton(parentControl, ClickFunc, moduleName, level, slot
 		moduleName = newModuleName
 		moduleData = moduleDefs[moduleDefNames[moduleName]]
 		
-		button.tooltip = string.gsub(moduleData.description, "_COUNT_", count or "0")
+		button.tooltip = string.gsub(moduleData.description, "_COUNT_", " Limit: " .. (count or "0"))
 		button:Invalidate()
 		nameBox:SetText(moduleData.humanName)
 		UpdateNameBoxPosition()
