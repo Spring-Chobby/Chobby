@@ -33,7 +33,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/energysolar.png",
-				text = [[Metal is useless without energy as everything costs both metal and energy. Build Solar Collectors to gather energy.]]
+				text = [[Metal is useless without a supply of energy. Build Solar Collectors to gather energy.]]
 			},
 			{
 				image = "unitpics/cloakriot.png",

@@ -1078,6 +1078,10 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 		end
 	end
 	
+	function externalFunctions.GetParent()
+		return parent
+	end
+	
 	return externalFunctions
 end
 
@@ -1172,9 +1176,29 @@ function externalFunctions.CloseSelectedPlanet()
 	return false
 end
 
+
 --------------------------------------------------------------------------------
 -- Callins
 --------------------------------------------------------------------------------
+
+local function DelayedViewResize()
+	if not planetsHandler then
+		return
+	end
+	local window = planetsHandler.GetParent()
+	if not (window and window.parent) then
+		return
+	end
+	local background = WG.Chobby.interfaceRoot.GetBackgroundHolder()
+	local x, y = window:LocalToScreen(0, 0)
+	
+	local x, y, width, height = background:ResizeAspectWindow(x, y, xSize, ySize)
+	planetsHandler.UpdatePosition(x, y, width, height)
+end
+
+function widget:ViewResize(vsx, vsy)
+	WG.Delay(DelayedViewResize, 0.8)
+end
 
 function widget:Initialize()
 	CHOBBY_DIR = "LuaMenu/widgets/chobby/"
