@@ -117,9 +117,10 @@ local function GetPlanet(planetUtilities, planetID)
 					unlocks = {
 						"cloakraid",
 					},
-					-- difficultyDependantUnlocks = {
-						-- [3] = {"staticmex"}, -- test this sometime
-					-- },
+					difficultyDependantUnlocks = {
+						 [3] = {"staticmex","energysolar"},
+						 [4] = {"staticmex","energysolar","cloakcon"},
+					 },
 					commanderLevel = 2,
 					commander = {
 						name = "Most Loyal Opposition",
@@ -144,10 +145,24 @@ local function GetPlanet(planetUtilities, planetID)
 						},
 						{
 							name = "turretlaser",
-							x = 3300,
-							z = 300,
-							facing = 1,
+							x = 3500,
+							z = 200,
+							facing = 3,
+							difficultyAtLeast = 2,
+						},
+						{
+							name = "turretlaser",
+							x = 3700,
+							z = 700,
+							facing = 0,
 							difficultyAtLeast = 3,
+						},
+						{
+							name = "turretemp",
+							x = 3400,
+							z = 600,
+							facing = 1,
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "staticmex",
