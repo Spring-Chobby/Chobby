@@ -118,6 +118,7 @@ local function MakeRewardList(holder, name, rewardsList, tooltipFunction, Unlock
 		
 		x, y, paragraphOffset = GetIconPosition(posIndex, iconsAcross, paragraphOffset)
 		
+		local rawTooltip = (info.humanName or "???") .. statusString .. "\n " .. (info.description or "")
 		local imageControl = Image:New{
 			x = x,
 			y = y,
@@ -125,7 +126,7 @@ local function MakeRewardList(holder, name, rewardsList, tooltipFunction, Unlock
 			height = REWARD_ICON_SIZE,
 			keepAspect = true,
 			color = color,
-			tooltip = (info.humanName or "???") .. statusString .. "\n " .. (info.description or ""),
+			tooltip = string.gsub(rawTooltip, "_COUNT_", count or "0"),
 			file = imageFile,
 			parent = rewardsHolder,
 		}
@@ -141,6 +142,7 @@ local function MakeRewardList(holder, name, rewardsList, tooltipFunction, Unlock
 			description = info.description or "",
 			unlocked = unlocked,
 			count = count,
+			rawTooltip = rawTooltip
 		}
 		
 		posIndex = posIndex + 1
@@ -166,6 +168,7 @@ local function MakeRewardList(holder, name, rewardsList, tooltipFunction, Unlock
 		elseif data.countLabel then
 			data.countLabel:SetCaption("")
 		end
+		data.image.tooltip = string.gsub(data.rawTooltip, "_COUNT_", count or "0")
 		
 		local statusString = ""
 		if unlocked then
@@ -291,7 +294,7 @@ local function InitializeControls(parentControl)
 	)
 	moduleRewardList = MakeRewardList(scrollPanel, nil, unlockList.modules.list,
 		WG.CampaignData.GetModuleInfo,
-		WG.CampaignData.GetModuleIsUnlocked,
+		WG.CampaignData.GetModuleIsUnlocked, 
 		WG.Chobby.Configuration.campaignConfig.commConfig.ModuleOrder,
 		unitRewardList.GetBottom
 	)

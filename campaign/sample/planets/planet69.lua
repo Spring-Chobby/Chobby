@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Origin",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[Engage in a simple tutorial to familiarize yourself with the basic controls.]]
+			text = [[Familiarize yourself with command by establishing a foothold on a critical piece of infrastructure. The abandoned tools of war the previous owners left behind will serve as good practice for the tougher challenges ahead.]]
 		},
 		gameConfig = {
 			gameName = "Quick Tutorial",

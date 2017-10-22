@@ -261,6 +261,8 @@ local function GetModuleButton(parentControl, ClickFunc, moduleName, level, slot
 	
 	local moduleData = moduleDefs[moduleDefNames[moduleName]]
 	
+	local count = select(2,  WG.CampaignData.GetModuleIsUnlocked(moduleName))
+	
 	local button = Button:New{
 		x = 5,
 		y = position,
@@ -273,7 +275,7 @@ local function GetModuleButton(parentControl, ClickFunc, moduleName, level, slot
 				ClickFunc(self, moduleName, level, slot)
 			end 
 		},
-		tooltip = moduleData.description,
+		tooltip = string.gsub(moduleData.description, "_COUNT_", count or "0"),
 		parent = parentControl
 	}
 	local nameBox = TextBox:New{
@@ -314,13 +316,15 @@ local function GetModuleButton(parentControl, ClickFunc, moduleName, level, slot
 	
 	local externalFunctions = {}
 	function externalFunctions.SetModuleName(newModuleName)
-		if newModuleName == moduleName then
+		newCount = select(2,  WG.CampaignData.GetModuleIsUnlocked(newModuleName))
+		if newCount == count and newModuleName == moduleName then
 			return
 		end
+		count = newCount
 		moduleName = newModuleName
 		moduleData = moduleDefs[moduleDefNames[moduleName]]
 		
-		button.tooltip = moduleData.description
+		button.tooltip = string.gsub(moduleData.description, "_COUNT_", count or "0")
 		button:Invalidate()
 		nameBox:SetText(moduleData.humanName)
 		UpdateNameBoxPosition()

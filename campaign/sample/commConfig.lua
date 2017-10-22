@@ -597,7 +597,7 @@ local moduleDefs = {
 	{
 		name = "module_cloak_field",
 		humanName = "Cloaking Field",
-		description = "Cloaking Field - Cloaks all nearby units.",
+		description = "Cloaking Field - Cloaks all nearby units. Requires Radar Jammer.",
 		image = moduleImagePath .. "module_cloak_field.png",
 		limit = 1,
 		cost = 600,
@@ -646,7 +646,7 @@ local moduleDefs = {
 	{
 		name = "module_companion_drone",
 		humanName = "Companion Drone",
-		description = "Companion Drone - Commander spawns protective drones. Limit: 8",
+		description = "Companion Drone - Commander spawns protective drones. Limit: _COUNT_",
 		image = moduleImagePath .. "module_companion_drone.png",
 		limit = 8,
 		cost = 300,
@@ -659,7 +659,7 @@ local moduleDefs = {
 	{
 		name = "module_battle_drone",
 		humanName = "Battle Drone",
-		description = "Battle Drone - Commander spawns heavy drones. Limit: 8, Requires Companion Drone",
+		description = "Battle Drone - Commander spawns heavy drones. Limit: _COUNT_, Requires Companion Drone",
 		image = moduleImagePath .. "module_battle_drone.png",
 		limit = 8,
 		cost = 500,
@@ -674,7 +674,7 @@ local moduleDefs = {
 	{
 		name = "module_autorepair",
 		humanName = "Autorepair",
-		description = "Autorepair - Commander self-repairs at +10 hp/s. Reduces Health by. Limit: 8",
+		description = "Autorepair - Commander self-repairs at +10 hp/s at the cost of 100 health. Limit: _COUNT_",
 		image = moduleImagePath .. "module_autorepair.png",
 		limit = 8,
 		cost = 150,
@@ -688,7 +688,7 @@ local moduleDefs = {
 	{
 		name = "module_ablative_armor",
 		humanName = "Ablative Armour Plates",
-		description = "Ablative Armour Plates - Provides health. Limit: 8",
+		description = "Ablative Armour Plates - Provides 600 health. Limit: _COUNT_",
 		image = moduleImagePath .. "module_ablative_armor.png",
 		limit = 8,
 		cost = 150,
@@ -701,8 +701,7 @@ local moduleDefs = {
 	{
 		name = "module_heavy_armor",
 		humanName = "High Density Plating",
-		description = "High Density Plating - Provides health but reduces movement by 10%. " .. 
-		"Limit: 8, Requires Ablative Armour Plates",
+		description = "High Density Plating - Provides 1600 health but reduces speed by 10%. Limit: _COUNT_, Requires Ablative Armour Plates",
 		image = moduleImagePath .. "module_heavy_armor.png",
 		limit = 8,
 		cost = 400,
@@ -717,7 +716,7 @@ local moduleDefs = {
 	{
 		name = "module_dmg_booster",
 		humanName = "Damage Booster",
-		description = "Damage Booster - Increases damage by 10%, increased weapon weight reduces speed by 2.5%.  Limit: 8",
+		description = "Damage Booster - Increases damage by 10%, increased weapon weight reduces speed by 2.5%. Limit: _COUNT_",
 		image = moduleImagePath .. "module_dmg_booster.png",
 		limit = 8,
 		cost = 150,
@@ -732,7 +731,7 @@ local moduleDefs = {
 	{
 		name = "module_high_power_servos",
 		humanName = "High Power Servos",
-		description = "High Power Servos - Increases speed by 10%. Limit: 8",
+		description = "High Power Servos - Increases speed by 10%. Limit: _COUNT_",
 		image = moduleImagePath .. "module_high_power_servos.png",
 		limit = 8,
 		cost = 150,
@@ -745,7 +744,7 @@ local moduleDefs = {
 	{
 		name = "module_adv_targeting",
 		humanName = "Adv. Targeting System",
-		description = "Advanced Targeting System - Increases range by 7.5%, increased weapon weight reduces speed by 2.5%. Limit: 8",
+		description = "Advanced Targeting System - Increases range by 7.5%, increased weapon weight reduces speed by 2.5%. Limit: _COUNT_",
 		image = moduleImagePath .. "module_adv_targeting.png",
 		limit = 8,
 		cost = 150,
@@ -759,7 +758,7 @@ local moduleDefs = {
 	{
 		name = "module_adv_nano",
 		humanName = "CarRepairer's Nanolathe",
-		description = "CarRepairer's Nanolathe - Increases build power by 5. Limit: 8",
+		description = "CarRepairer's Nanolathe - Increases build power by 5. Limit: _COUNT_",
 		image = moduleImagePath .. "module_adv_nano.png",
 		limit = 8,
 		cost = 150,
