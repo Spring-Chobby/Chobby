@@ -100,7 +100,7 @@ return {
 	["TheRockFinal"] = true,
 	["TheRockJungle"] = true,
 	["Titan-v2"] = true,
-	["TitanDuel"] = true,
+	["TitanDuel 2"] = true,
 	["Tombstone Desert V2"] = true,
 	["Torn Islands Remake"] = true,
 	["Tumult"] = true,
