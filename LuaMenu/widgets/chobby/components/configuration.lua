@@ -73,7 +73,7 @@ function Configuration:init()
 	self.useWrongEngine = false
 
 	self.atiIntelCompat = self:GetIsNotRunningNvidia()
-	Spring.Echo("ATI/intel/other non-nvidia compatibility state:", self.atiIntelCompat)
+	Spring.Echo("Initialize ATI/intel/other non-nvidia compatibility state:", self.atiIntelCompat)
 
 	self.myAccountID = false
 	self.lastAddedAiName = false
@@ -182,8 +182,11 @@ function Configuration:init()
 		self.configParamTypes[param.name] = param.type
 	end
 
-	self.AtiIntelSettingsOverride = nil
-	self.fixedSettingsOverride = AtiIntelSettingsOverride
+	self.AtiIntelSettingsOverride = {
+		Water = 1,
+		AdvSky = 0,
+		UsePBO = 0,
+	}
 
 	self.countryShortnames = VFS.Include(LUA_DIRNAME .. "configs/countryShortname.lua")
 
@@ -192,8 +195,6 @@ function Configuration:init()
 	self.settingsMenuValues = self.gameConfig.settingsDefault
 
 	self.animate_lobby = gl.CreateShader ~= nil
-
-	self:UpdateFixedSettings()
 end
 
 ---------------------------------------------------------------------------------
@@ -332,7 +333,7 @@ function Configuration:SetConfigData(data)
 	self.game_settings.WindowPosY = nil
 	self.game_settings.WindowBorderless = nil
 	self.game_settings.Fullscreen = nil
-
+	
 	local newSpringsettings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettingsChanges.lua")
 	for key, value in pairs(newSpringsettings) do
 		self.game_settings[key] = value
@@ -390,6 +391,7 @@ function Configuration:GetConfigData()
 		doNotSetAnySpringSettings = self.doNotSetAnySpringSettings,
 		agressivelySetBorderlessWindowed = self.agressivelySetBorderlessWindowed,
 		atiIntelCompat = self.atiIntelCompat,
+		fixedSettingsOverride = self.fixedSettingsOverride,
 		settingsMenuValues = self.settingsMenuValues,
 		menuMusicVolume = self.menuMusicVolume,
 		menuNotificationVolume = self.menuNotificationVolume,
@@ -432,6 +434,7 @@ function Configuration:SetConfigValue(key, value)
 		else
 			self:UpdateFixedSettings()
 		end
+		Spring.Echo("Set ATI/intel/other non-nvidia compatibility state:", value)
 	end
 	self:_CallListeners("OnConfigurationChange", key, value)
 end
