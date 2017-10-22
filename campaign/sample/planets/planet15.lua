@@ -30,7 +30,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/shieldskirm.png",
-				text = [[Since their rockets curve through the air, instead of travelling in a straight line, Rogue skirmisher bots are a bit worse at hitting mobile targets than Rockos. They inflict significantly more damage when they do hit.]]
+				text = [[Since their rockets curve through the air, instead of travelling in a straight line, Rogue skirmisher bots are a bit worse at hitting mobile targets than Ronins. They inflict significantly more damage when they do hit.]]
 			},
 			{
 				image = "unitpics/shieldraid.png",

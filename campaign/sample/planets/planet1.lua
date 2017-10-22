@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Privni",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[This battle will be straightforward. Construct an army of Glaive raider and Reaver riot bots to overwhelm your enemy.]]
+			text = [[This battle will be straightforward. Construct an army of Glaives and Reavers to overwhelm your enemy.]]
 		},
 		tips = {
 			{
@@ -203,7 +203,7 @@ local function GetPlanet(planetUtilities, planetID)
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Destroy the enemy Commander and Cloakybot Factory",
+					description = "Destroy the enemy Commander and Cloakbot Factory",
 				},
 				[2] = {
 					description = "Protect your Commander",
@@ -248,7 +248,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Build a Radar Tower",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[4] = { -- Build 3 Warriors
+				[4] = { -- Build 3 Reavers
 					satisfyOnce = true,
 					countRemovedUnits = true, -- count units that previously died.
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
@@ -258,7 +258,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "cloakriot.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build at least 3 Brutes",
+					description = "Build at least 3 Reavers",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				--[5] = { -- Kill all enemy mexes

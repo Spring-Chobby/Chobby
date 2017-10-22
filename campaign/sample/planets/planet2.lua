@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Beth",
 			primaryType = "G4V",
 			milRating = 1,
-			text = [[Glaives and Reavers served you well in the previous battle, but on this planet your opponent has prepared their own Reavers and Stardust turrets to counter them. Build a Cloakybot Factory, then retaliate with Ronin skirmisher bots to secure victory.]]
+			text = [[Glaives and Reavers served you well in the previous battle, but on this planet your opponent has prepared their own Reavers and Stardust turrets to counter them. Build a Cloakbot Factory, then counter them with longer-ranged Ronins to secure victory.]]
 		},
 		tips = {
 			{
@@ -340,7 +340,7 @@ local function GetPlanet(planetUtilities, planetID)
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Destroy the enemy Commander and Cloakybot Factory",
+					description = "Destroy the enemy Commander and Cloakbot Factory",
 				},
 				[2] = {
 					description = "Protect your Commander",
@@ -357,7 +357,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "factorycloak.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build a Cloakybot Factory",
+					description = "Build a Cloakbot Factory",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Have 10 mex
@@ -372,7 +372,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Have 10 Metal Extractors",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[3] = { -- Build 10 Rockos
+				[3] = { -- Build 10 Ronins
 					satisfyOnce = true,
 					countRemovedUnits = true, -- count units that previously died.
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,

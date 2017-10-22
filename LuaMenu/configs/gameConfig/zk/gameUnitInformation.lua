@@ -176,15 +176,15 @@ local nameList = {
 
 local categories = {
 	cloak = {
-		name = "Cloaky Bots",
+		name = "Cloakbots",
 		order = 1,
 	},
 	shield = {
-		name = "Shield Bots",
+		name = "Shieldbots",
 		order = 2,
 	},
 	veh = {
-		name = "Vehicles",
+		name = "Rovers",
 		order = 3,
 	},
 	tank = {
@@ -200,7 +200,7 @@ local categories = {
 		order = 6,
 	},
 	jump = {
-		name = "Jump Bots",
+		name = "Jumpbots",
 		order = 7,
 	},
 	spider = {
@@ -250,8 +250,8 @@ local humanNames = {
 	factorycloak = {
 		category = "cloak",
 		order = 1,
-		description = "Produces Cloaky Robots, Builds at 10 m/s",
-		humanName = "Cloaky Bot Factory",
+		description = "Produces Cloakbots, Builds at 10 m/s",
+		humanName = "Cloakbot Factory",
 	},
 	cloakcon = {
 		category = "cloak",
@@ -275,31 +275,31 @@ local humanNames = {
 		category = "cloak",
 		order = 5,
 		description = "Skirmisher Bot (Direct-Fire)",
-		humanName = "Rocko",
+		humanName = "Ronin",
 	},
 	cloakriot = {
 		category = "cloak",
 		order = 6,
 		description = "Riot Bot",
-		humanName = "Warrior",
+		humanName = "Reaver",
 	},
 	cloakassault = {
 		category = "cloak",
 		order = 7,
 		description = "Lightning Assault Bot",
-		humanName = "Zeus",
+		humanName = "Knight",
 	},
 	cloakarty = {
 		category = "cloak",
 		order = 8,
 		description = "Light Artillery Bot",
-		humanName = "Hammer",
+		humanName = "Sling",
 	},
 	cloaksnipe = {
 		category = "cloak",
 		order = 9,
 		description = "Cloaked Skirmish/Anti-Heavy Artillery Bot",
-		humanName = "Spectre",
+		humanName = "Phantom",
 	},
 	cloakaa = {
 		category = "cloak",
@@ -311,13 +311,13 @@ local humanNames = {
 		category = "cloak",
 		order = 11,
 		description = "All Terrain EMP Bomb (Burrows)",
-		humanName = "Tick",
+		humanName = "Imp",
 	},
 	cloakjammer = {
 		category = "cloak",
 		order = 12,
 		description = "Area Cloaker/Jammer Walker",
-		humanName = "Eraser",
+		humanName = "Iris",
 	},
 	
 	-- Shield
@@ -385,7 +385,7 @@ local humanNames = {
 		category = "shield",
 		order = 11,
 		description = "Crawling Bomb (Burrows)",
-		humanName = "Roach",
+		humanName = "Snitch",
 	},
 	shieldshield = {
 		category = "shield",
@@ -398,67 +398,67 @@ local humanNames = {
 	factoryveh = {
 		category = "veh",
 		order = 1,
-		description = "Produces Wheeled Vehicles, Builds at 10 m/s",
-		humanName = "Light Vehicle Factory",
+		description = "Produces Light Wheeled Vehicles, Builds at 10 m/s",
+		humanName = "Rover Assembly",
 	},
 	vehcon = {
 		category = "veh",
 		order = 2,
-		description = "Construction Vehicle, Builds at 5 m/s",
+		description = "Construction Rover, Builds at 5 m/s",
 		humanName = "Mason",
 	},
 	vehscout = {
 		category = "veh",
 		order = 3,
-		description = "Raider/Scout Vehicle",
+		description = "Raider/Scout Rover",
 		humanName = "Dart",
 	},
 	vehraid = {
 		category = "veh",
 		order = 4,
-		description = "Raider Vehicle",
+		description = "Raider Rover",
 		humanName = "Scorcher",
 	},
 	vehsupport = {
 		category = "veh",
 		order = 5,
-		description = "Deployable Missile Vehicle (must stop to fire)",
-		humanName = "Slasher",
+		description = "Deployable Missile Rover (must stop to fire)",
+		humanName = "Fencer",
 	},
 	vehriot = {
 		category = "veh",
 		order = 6,
-		description = "Riot Vehicle",
-		humanName = "Leveler",
+		description = "Riot Rover",
+		humanName = "Ripper",
 	},
 	vehassault = {
 		category = "veh",
 		order = 7,
-		description = "Assault Vehicle",
+		description = "Assault Rover",
 		humanName = "Ravager",
 	},
 	veharty = {
 		category = "veh",
 		order = 8,
-		description = "Artillery Minelayer Vehicle",
-		humanName = "Wolverine",
+		description = "Artillery Minelayer Rover",
+		humanName = "Badger",
 	},
 	vehheavyarty = {
 		category = "veh",
 		order = 9,
-		description = "Precision Artillery Vehicle",
+		description = "Precision Artillery Rover",
 		humanName = "Impaler",
 	},
 	vehaa = {
 		category = "veh",
 		order = 10,
-		description = "Fast Anti-Air Vehicle",
+		description = "Fast Anti-Air Rover",
 		humanName = "Crasher",
 	},
 	vehcapture = {
 		category = "veh",
 		order = 11,
-		description = "Capture Vehicle",
+		description = "Capture Rover",
 		humanName = "Dominatrix",
 	},
 	
@@ -466,8 +466,8 @@ local humanNames = {
 	factorytank = {
 		category = "tank",
 		order = 1,
-		description = "Produces Heavy and Specialized Vehicles, Builds at 10 m/s",
-		humanName = "Heavy Tank Factory",
+		description = "Produces Heavy Tracked Vehicles, Builds at 10 m/s",
+		humanName = "Tank Foundry",
 	},
 	tankcon = {
 		category = "tank",
@@ -485,13 +485,13 @@ local humanNames = {
 		category = "tank",
 		order = 3,
 		description = "Lightning Assault/Raider Tank",
-		humanName = "Panther",
+		humanName = "Blitz",
 	},
 	tankriot = {
 		category = "tank",
 		order = 5,
 		description = "Heavy Riot Support Tank",
-		humanName = "Banisher",
+		humanName = "Ogre",
 	},
 	tankassault = {
 		category = "tank",
@@ -503,13 +503,13 @@ local humanNames = {
 		category = "tank",
 		order = 7,
 		description = "Very Heavy Tank Buster",
-		humanName = "Goliath",
+		humanName = "Cyclops",
 	},
 	tankarty = {
 		category = "tank",
 		order = 8,
 		description = "General-Purpose Artillery",
-		humanName = "Pillager",
+		humanName = "Emissary",
 	},
 	tankheavyarty = {
 		category = "tank",
@@ -521,7 +521,7 @@ local humanNames = {
 		category = "tank",
 		order = 10,
 		description = "Flak Anti-Air Tank",
-		humanName = "Copperhead",
+		humanName = "Minotaur",
 	},
 	
 	-- Hover
@@ -565,7 +565,7 @@ local humanNames = {
 		category = "hover",
 		order = 7,
 		description = "Anti-Heavy Artillery Hovercraft",
-		humanName = "Penetrator",
+		humanName = "Lance",
 	},
 	hoveraa = {
 		category = "hover",
@@ -646,8 +646,8 @@ local humanNames = {
 	factoryjump = {
 		category = "jump",
 		order = 1,
-		description = "Produces Jumpjets and Special Walkers, Builds at 10 m/s",
-		humanName = "Jump/Specialist Plant",
+		description = "Produces Jumphet Equipped Robots, Builds at 10 m/s",
+		humanName = "Jumpbot Factory",
 	},
 	jumpcon = {
 		category = "jump",
@@ -689,7 +689,7 @@ local humanNames = {
 		category = "jump",
 		order = 8,
 		description = "Heavy Riot Jumper - On to Repulse, Off to Attract",
-		humanName = "Sumo",
+		humanName = "Jugglenaut",
 	},
 	jumparty = {
 		category = "jump",
@@ -701,7 +701,7 @@ local humanNames = {
 		category = "jump",
 		order = 10,
 		description = "Heavy Anti-Air Jumper",
-		humanName = "Archangel",
+		humanName = "Toad",
 	},
 	jumpbomb = {
 		category = "jump",
@@ -757,7 +757,7 @@ local humanNames = {
 		category = "spider",
 		order = 8,
 		description = "Heavy Riot/Skirmish Spider - Curls into Armored Form When Stationary",
-		humanName = "Crabe",
+		humanName = "Crab",
 	},
 	spideraa = {
 		category = "spider",
@@ -769,7 +769,7 @@ local humanNames = {
 		category = "spider",
 		order = 10,
 		description = "Cloaked Scout/Anti-Heavy",
-		humanName = "Infiltrator",
+		humanName = "Widow",
 	},
 	
 	-- Gunship
@@ -801,19 +801,19 @@ local humanNames = {
 		category = "gunship",
 		order = 5,
 		description = "Multi-Role Support Gunship",
-		humanName = "Rapier",
+		humanName = "Harpy",
 	},
 	gunshipheavyskirm = {
 		category = "gunship",
 		order = 6,
 		description = "Fire Support Gunship",
-		humanName = "Brawler",
+		humanName = "Nimbus",
 	},
 	gunshipassault = {
 		category = "gunship",
 		order = 7,
 		description = "Heavy Raider/Assault Gunship",
-		humanName = "Black Dawn",
+		humanName = "Revenant",
 	},
 	gunshipkrow = {
 		category = "gunship",
@@ -837,13 +837,13 @@ local humanNames = {
 		category = "gunship",
 		order = 11,
 		description = "Air Transport",
-		humanName = "Valkyrie",
+		humanName = "Charon",
 	},
 	gunshipheavytrans = {
 		category = "gunship",
 		order = 12,
 		description = "Armed Heavy Air Transport",
-		humanName = "Vindicator",
+		humanName = "Hercules",
 	},
 	
 	-- Plane
@@ -869,7 +869,7 @@ local humanNames = {
 		category = "plane",
 		order = 4,
 		description = "Air Superiority Fighter",
-		humanName = "Hawk",
+		humanName = "Raptor",
 	},
 	bomberriot = {
 		category = "plane",
@@ -893,20 +893,20 @@ local humanNames = {
 		category = "plane",
 		order = 8,
 		description = "Singularity Bomber",
-		humanName = "Wyvern",
+		humanName = "Likho",
 	},
 	planescout = {
 		category = "plane",
 		order = 9,
 		description = "Area Jammer, Radar/Sonar Plane",
-		humanName = "Vulture",
+		humanName = "Owl",
 	},
 	
 	-- Ship
 	factoryship = {
 		category = "ship",
 		order = 1,
-		description = "Produces Ships, Builds at 10 m/s",
+		description = "Produces Naval Units, Builds at 10 m/s",
 		humanName = "Shipyard",
 	},
 	shipcon = {
@@ -955,7 +955,7 @@ local humanNames = {
 		category = "ship",
 		order = 9,
 		description = "Cruiser (Artillery)",
-		humanName = "Ronin",
+		humanName = "Envoy",
 	},
 	shipaa = {
 		category = "ship",
@@ -999,7 +999,7 @@ local humanNames = {
 		category = "strider",
 		order = 6,
 		description = "Heavy Saturation Artillery Strider",
-		humanName = "Catapult",
+		humanName = "Merlin",
 	},
 	striderfunnelweb = {
 		category = "strider",
@@ -1011,7 +1011,7 @@ local humanNames = {
 		category = "strider",
 		order = 8,
 		description = "Ranged Support Strider",
-		humanName = "Bantha",
+		humanName = "Paladin",
 	},
 	striderdetriment = {
 		category = "strider",
@@ -1103,7 +1103,7 @@ local humanNames = {
 		category = "econ",
 		order = 11,
 		description = "Repairs and Rearms Aircraft, repairs at 2.5 e/s per pad",
-		humanName = "Air Repair/Rearm Pad",
+		humanName = "Airpad",
 	},
 	
 	-- Defence
@@ -1117,7 +1117,7 @@ local humanNames = {
 		category = "defence",
 		order = 2,
 		description = "Light Missile Tower",
-		humanName = "Defender",
+		humanName = "Picket",
 	},
 	turretriot = {
 		category = "defence",
@@ -1215,7 +1215,7 @@ local humanNames = {
 		category = "special",
 		order = 2,
 		description = "Area Cloaker/Jammer",
-		humanName = "Sneaky Pete",
+		humanName = "Cornea",
 	},
 	staticheavyradar = {
 		category = "special",
@@ -1227,13 +1227,13 @@ local humanNames = {
 		category = "special",
 		order = 4,
 		description = "Strategic Nuke Interception System",
-		humanName = "Protector",
+		humanName = "Antinuke",
 	},
 	staticarty = {
 		category = "special",
 		order = 5,
 		description = "Plasma Artillery Battery - Requires connection to a 50 energy grid",
-		humanName = "Behemoth",
+		humanName = "Tyrant",
 	},
 	staticheavyarty = {
 		category = "special",
@@ -1245,7 +1245,7 @@ local humanNames = {
 		category = "special",
 		order = 7,
 		description = "Strategic Nuclear Launcher, Drains 18 m/s, 3 minute stockpile",
-		humanName = "Silencer",
+		humanName = "Trinity",
 	},
 	zenith = {
 		category = "special",
@@ -1302,7 +1302,7 @@ local humanNames = {
 	wolverine_mine = {
 		category = "drone",
 		order = 1,
-		description = "Wolverine Mine",
+		description = "Badger Mine",
 		humanName = "Claw",
 	},
 	dronelight = {

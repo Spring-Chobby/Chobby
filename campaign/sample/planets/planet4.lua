@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Taoune",
 			primaryType = "F2III",
 			milRating = 1,
-			text = [[Your opponent has taken to the air with Gunships in this battle. Construct the anti-air Gremlin bot and Hacksaw defensive emplacements to bring them back to the ground. Remember the Defender is also effective as an anti-air defence.]]
+			text = [[Your opponent has taken to the air with Gunships in this battle. Construct the anti-air Gremlin bot and Hacksaw defensive emplacements to bring them back to the ground. Remember the Picket is also effective as an anti-air defence.]]
 		},
 		tips = {
 			{

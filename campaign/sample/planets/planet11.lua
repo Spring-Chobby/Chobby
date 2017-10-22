@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "EL-5591",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[On this planet your opponent sends gunships out from behind a formidable defensive array. Use Crasher AA vehicles to shoot down the gunships, then Impaler artillery to tear down the base.]]
+			text = [[On this planet your opponent sends gunships out from behind a formidable defensive array. Use Crasher AA rovers to shoot down the gunships, then Impaler artillery to tear down the base.]]
 		},
 		tips = {
 			{
@@ -38,7 +38,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/vehheavyarty.png",
-				text = [[The Impaler artillery vehicle fires long-range cruise missiles which inflict considerable damage on a single stationary target. They are practically useless against mobile targets so make sure they are well escorted against land and air threats.]]
+				text = [[The Impaler artillery rover fires long-range cruise missiles which inflict considerable damage on a single stationary target. They are practically useless against mobile targets so make sure they are well escorted against land and air threats.]]
 			},
 		},
 		gameConfig = {

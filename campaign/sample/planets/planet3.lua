@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Magus",
 			primaryType = "K4VI",
 			milRating = 1,
-			text = [[Your opponent will use Scorcher vehicle raiders in this battle. Shut them down with Imp EMP bombs.]]
+			text = [[Your opponent will use raiding squads of Scorchers against you in this battle. Shut them down with Imp EMP bombs.]]
 		},
 		tips = {
 			{
@@ -427,7 +427,7 @@ local function GetPlanet(planetUtilities, planetID)
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Destroy the enemy Commander and Vehicle Factory",
+					description = "Destroy the enemy Commander and Rover Assembly",
 				},
 				[2] = {
 					description = "Protect your Commander",

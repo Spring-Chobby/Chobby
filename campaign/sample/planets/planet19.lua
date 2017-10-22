@@ -667,7 +667,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Destroy all enemy Desolator turrets",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[2] = { -- Build two Behemoths
+				[2] = { -- Build two Tyrants
 					satisfyOnce = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 2,

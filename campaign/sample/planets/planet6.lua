@@ -34,7 +34,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/cloakassault.png",
-				text = [[Knight assault bots are much tougher than the other Cloakybots, and uses a lightning gun to damage and stun enemy units. They're effective in attacking medium-density defences.]]
+				text = [[Knight assault bots are much tougher than the other Cloakbots, and uses a lightning gun to damage and stun enemy units. They're effective in attacking medium-density defences.]]
 			},
 			{
 				image = "unitpics/jumpraid.png",

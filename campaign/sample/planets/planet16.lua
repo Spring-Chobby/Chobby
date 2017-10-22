@@ -38,7 +38,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/staticjammer.png",
-				text = [[The Iris mobile cloaker and Shroud static jammer can morph back and forth. The static Shroud has slightly lower energy cost and larger cloak radius. This also allows you to build an Iris without having a Cloakybot Factory.]]
+				text = [[The Iris mobile cloaker and Cornea static jammer can morph back and forth. The static Cornea has slightly lower energy cost and larger cloak radius. This also allows you to build an Iris without having a Cloakbot Factory.]]
 			},
 		},
 		gameConfig = {

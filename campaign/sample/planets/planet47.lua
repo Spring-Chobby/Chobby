@@ -94,7 +94,7 @@ local function GetPlanet(planetUtilities, planetID)
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Destroy all enemy Scorpions, Catapults and Strider Hubs",
+					description = "Destroy all enemy Scorpions, Merlins and Strider Hubs",
 				},
 				[2] = {
 					description = "Protect your Commander",
