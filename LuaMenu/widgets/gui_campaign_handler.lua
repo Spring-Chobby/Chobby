@@ -37,6 +37,8 @@ local REWARD_ICON_SIZE = 58
 local DEBUG_UNLOCKS_SIZE = 26
 local DEBUG_UNLOCK_COLUMNS = 4
 
+local VISIBILITY_DISTANCE = 2 -- Distance from captured at which planets are visible.
+
 local LIVE_TESTING
 local PLANET_WHITELIST
 local PLANET_COUNT = 0
@@ -51,14 +53,22 @@ local currentWinPopup
 --------------------------------------------------------------------------------
 -- Edge Drawing
 
+local function IsEdgeVisible(p1, p2)
+	if PLANET_WHITELIST and ((not PLANET_WHITELIST[p1]) or (not PLANET_WHITELIST[p2])) then
+		return false
+	end
+	return (planetList[p1] and planetList[p1].GetVisible()) or (planetList[p2] and planetList[p2].GetVisible())
+end
+
 local function DrawEdgeLines()
 	for i = 1, #planetEdgeList do
-		if (not PLANET_WHITELIST) or PLANET_WHITELIST[planetEdgeList[i][1]] or PLANET_WHITELIST[planetEdgeList[i][2]] then
+		if IsEdgeVisible(planetEdgeList[i][1], planetEdgeList[i][2]) then
 			for p = 1, 2 do
 				local pid = planetEdgeList[i][p]
 				local planetData = planetList[pid]
+				local hidden = not (planetData and planetData.GetVisible()) -- Note that planets not in the whitelist have planetData = nil
 				local x, y = planetConfig[pid].mapDisplay.x, planetConfig[pid].mapDisplay.y
-				gl.Color((PLANET_WHITELIST and not PLANET_WHITELIST[pid] and HIDDEN_COLOR) or (planetData.GetCaptured() and ACTIVE_COLOR) or INACTIVE_COLOR)
+				gl.Color((hidden and HIDDEN_COLOR) or (planetData.GetCaptured() and ACTIVE_COLOR) or INACTIVE_COLOR)
 				gl.Vertex(x, y)
 			end
 		end
@@ -690,6 +700,8 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 	
 	local captured = WG.CampaignData.IsPlanetCaptured(planetID)
 	local startable
+	local visible = false
+	local distance = false
 	
 	local target
 	local targetSize = math.ceil(math.floor(planetSize*1.35)/2)*2
@@ -703,6 +715,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		padding = {0, 0, 0, 0},
 		parent = galaxyHolder,
 	}
+	
 	local debugHolder
 	if (not LIVE_TESTING) and Configuration.debugMode and Configuration.showPlanetUnlocks then
 		debugHolder = Control:New{
@@ -766,6 +779,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		},
 		parent = planetHolder,
 	}
+	button:SetVisibility(false)
 	
 	local image = Image:New {
 		x = 3,
@@ -839,6 +853,14 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		end
 		image:Invalidate()
 		
+		if captured then
+			distance = 0
+		elseif startable then
+			distance = 1
+		else
+			distance = false
+		end
+		
 		local targetable = startable and not captured
 		if target then
 			if not targetable then
@@ -857,6 +879,25 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 			}
 			target:SendToBack()
 		end
+	end
+	
+	-- Only call this after calling UpdateStartable for all planets. Call at least (VISIBILITY_DISTANCE - 1) times.
+	function externalFunctions.UpdateDistance()
+		if distance then
+			return
+		end
+		for i = 1, #adjacency do
+			if adjacency[i] then
+				if ((not PLANET_WHITELIST) or PLANET_WHITELIST[i]) and planetList[i].GetDistance() then
+					distance = planetList[i].GetDistance() + 1
+					return
+				end
+			end
+		end
+	end
+	function externalFunctions.UpdateVisible()
+		visible = (distance and distance <= VISIBILITY_DISTANCE) or ((not LIVE_TESTING) and Configuration.debugMode)
+		button:SetVisibility(visible)
 	end
 	
 	function externalFunctions.DownloadMapIfClose()
@@ -883,13 +924,34 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		return startable or captured
 	end
 	
+	function externalFunctions.GetVisible()
+		return visible
+	end
+	
+	function externalFunctions.GetDistance()
+		return distance
+	end
+	
 	return externalFunctions
 end
 
-local function UpdateAllStartable()
+local function UpdateStartableAndVisible()
 	for i = 1, PLANET_COUNT do
 		if (not PLANET_WHITELIST) or PLANET_WHITELIST[i] then
 			planetList[i].UpdateStartable()
+		end
+	end
+	if VISIBILITY_DISTANCE > 2 then
+		for i = 1, VISIBILITY_DISTANCE - 2 do
+			if (not PLANET_WHITELIST) or PLANET_WHITELIST[i] then
+				planetList[i].UpdateDistance()
+			end
+		end
+	end
+	for i = 1, PLANET_COUNT do
+		if (not PLANET_WHITELIST) or PLANET_WHITELIST[i] then
+			planetList[i].UpdateDistance()
+			planetList[i].UpdateVisible()
 		end
 	end
 end
@@ -900,6 +962,12 @@ local function DownloadNearbyMaps()
 			planetList[i].DownloadMapIfClose()
 		end
 	end
+end
+
+local function UpdateGalaxy()
+	UpdateStartableAndVisible()
+	UpdateEdgeList()
+	DownloadNearbyMaps()
 end
 
 local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhitelist, feedbackLink)
@@ -963,9 +1031,7 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 		end
 	end
 	
-	UpdateAllStartable()
-	UpdateEdgeList()
-	DownloadNearbyMaps()
+	UpdateGalaxy()
 	
 	local graph = Chili.Control:New{
 		x       = 0,
@@ -993,9 +1059,7 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 	local function PlanetCaptured(listener, planetID)
 		if (not PLANET_WHITELIST) or PLANET_WHITELIST[planetID] then
 			planetList[planetID].UpdateStartable()
-			UpdateAllStartable()
-			UpdateEdgeList()
-			DownloadNearbyMaps()
+			UpdateGalaxy()
 		end
 	end
 	WG.CampaignData.AddListener("PlanetCaptured", PlanetCaptured)
@@ -1116,8 +1180,7 @@ function widget:Initialize()
 	VFS.Include("LuaMenu/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 	
 	local function CampaignLoaded(listener)
-		UpdateAllStartable()
-		UpdateEdgeList()
+		UpdateGalaxy()
 		if selectedPlanet then
 			selectedPlanet.Close()
 			selectedPlanet = nil

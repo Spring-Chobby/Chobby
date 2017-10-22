@@ -97,7 +97,7 @@ local function InitializeControls(window)
 	
 	local tabs = {
 		MakeTab("Save/Load", {WG.CampaignSaveWindow.GetControl()}),
-		MakeTab("Settings", {WG.CampaignSettingsWindow.GetControl()}),
+		MakeTab("Difficulty", {WG.CampaignSettingsWindow.GetControl()}),
 	}
 	
 	local tabPanel = Chili.DetachableTabPanel:New {
