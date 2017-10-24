@@ -28,6 +28,14 @@ local TRANSFORM_BOUNDS = {
 	bottom = 1,
 }
 
+local difficultyNames = {
+	[0] = "Unknown",
+	[1] = "Easy",
+	[2] = "Normal",
+	[3] = "Hard",
+	[4] = "Brutal",
+}
+
 local edgeDrawList = 0
 local planetConfig, planetAdjacency, planetEdgeList
 
@@ -291,12 +299,14 @@ local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, 
 	return (rewardsHolder and true) or false
 end
 
-local function MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjectiveSuccess)
+local function MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjectiveSuccess, difficulty)
 
 	local objectiveConfig = planetData.gameConfig.bonusObjectiveConfig
 	if not objectiveConfig then
 		return bottom
 	end
+	
+	local difficultyName = difficultyNames[difficulty or 0]
 	
 	if bonusObjectiveSuccess then
 		local function IsObjectiveUnlocked(objectiveID)
@@ -304,10 +314,15 @@ local function MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjective
 		end
 		local function GetObjectiveInfo(objectiveID)
 			local tooltip = objectiveConfig[objectiveID].description
-			if WG.CampaignData.GetBonusObjectiveComplete(planetData.index, objectiveID) then
-				tooltip = tooltip .. " \n(Previously complete)"
+			local complete, oldDifficulty = WG.CampaignData.GetBonusObjectiveComplete(planetData.index, objectiveID)
+			if complete then
+				if bonusObjectiveSuccess[objectiveID] and ((difficulty or 0) > (oldDifficulty or 0)) then
+					tooltip = tooltip .. " \n(Improved difficulty from " .. difficultyNames[oldDifficulty or 0] .. " to " .. difficultyName .. ")"
+				else
+					tooltip = tooltip .. " \n(Previously complete on " .. difficultyNames[oldDifficulty or 0] .. ")"
+				end
 			elseif bonusObjectiveSuccess[objectiveID] then
-				tooltip = tooltip .. " \n(Newly complete)"
+				tooltip = tooltip .. " \n(Newly completed on " .. difficultyName .. ")"
 			else
 				tooltip = tooltip .. " \n(Incomplete)"
 			end 
@@ -325,7 +340,11 @@ local function MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjective
 			return WG.CampaignData.GetBonusObjectiveComplete(planetData.index, objectiveID)
 		end
 		local function GetObjectiveInfo(objectiveID)
+			local complete, oldDifficulty = WG.CampaignData.GetBonusObjectiveComplete(planetData.index, objectiveID)
 			local tooltip = objectiveConfig[objectiveID].description
+			if complete then
+				tooltip = tooltip .. "\nHighest difficulty: " .. difficultyNames[oldDifficulty or 0]
+			end
 			return tooltip, objectiveConfig[objectiveID].image, objectiveConfig[objectiveID].imageOverlay
 		end
 		local objectiveList = {}
@@ -340,7 +359,7 @@ local function MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjective
 	return bottom
 end
 
-local function MakeRewardsPanel(parent, planetData, cullUnlocked, showCodex, bonusObjectiveSuccess)
+local function MakeRewardsPanel(parent, planetData, cullUnlocked, showCodex, bonusObjectiveSuccess, difficulty)
 	local bottom = 82
 	
 	rewards = planetData.completionReward
@@ -361,7 +380,7 @@ local function MakeRewardsPanel(parent, planetData, cullUnlocked, showCodex, bon
 		bottom = bottom + 98
 	end
 	
-	bottom = MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjectiveSuccess)
+	bottom = MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjectiveSuccess, difficulty)
 	
 	return bottom
 end
@@ -399,7 +418,7 @@ end
 --------------------------------------------------------------------------------
 -- Planet capturing
 
-local function MakeWinPopup(planetData, bonusObjectiveSuccess)
+local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty)
 	local victoryWindow = Window:New {
 		caption = "",
 		name = "victoryWindow",
@@ -435,7 +454,7 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess)
 	
 	local experienceDisplay = WG.CommanderHandler.GetExperienceDisplay(experienceHolder, 38, true)
 	
-	local rewardsHeight = MakeRewardsPanel(victoryWindow, planetData, true, true, bonusObjectiveSuccess)
+	local rewardsHeight = MakeRewardsPanel(victoryWindow, planetData, true, true, bonusObjectiveSuccess, difficulty)
 	
 	victoryWindow:SetPos(nil, nil, nil, 200 + rewardsHeight)
 	
@@ -490,18 +509,22 @@ local function MakeBonusObjectivesList(bonusObjectivesString)
 	return list
 end
 
-local function ProcessPlanetVictory(planetID, battleFrames, bonusObjectives, bonusObjectiveString)
+local function ProcessPlanetVictory(planetID, battleFrames, bonusObjectives, bonusObjectiveString, difficulty)
+	if not planetID then
+		Spring.Echo("ProcessPlanetVictory error")
+		return
+	end
 	if selectedPlanet then
 		selectedPlanet.Close()
 		selectedPlanet = nil
 	end
 	-- It is important to popup before capturing the planet to filter out the
 	-- already unlocked rewards.
-	currentWinPopup = MakeWinPopup(planetConfig[planetID], bonusObjectives)
+	currentWinPopup = MakeWinPopup(planetConfig[planetID], bonusObjectives, difficulty)
 	WG.CampaignData.AddPlayTime(battleFrames)
-	WG.CampaignData.CapturePlanet(planetID, bonusObjectives)
+	WG.CampaignData.CapturePlanet(planetID, bonusObjectives, difficulty)
 	
-	WG.Analytics.SendIndexedRepeatEvent("campaign:planet_" .. planetID .. ":difficulty_" .. WG.CampaignData.GetDifficultySetting() .. ":win", math.floor(battleFrames/30), ":bonus_" .. (bonusObjectiveString or ""))
+	WG.Analytics.SendIndexedRepeatEvent("campaign:planet_" .. planetID .. ":difficulty_" .. difficulty .. ":win", math.floor(battleFrames/30), ":bonus_" .. (bonusObjectiveString or ""))
 	WG.Analytics.SendOnetimeEvent("campaign:planets_owned_" .. WG.CampaignData.GetCapturedPlanetCount(), math.floor(WG.CampaignData.GetPlayTime()/30))
 end
 
@@ -624,7 +647,7 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 				font = Configuration:GetFont(4),
 				OnClick = {
 					function(self)
-						ProcessPlanetVictory(planetID, 352, MakeRandomBonusVictoryList(0.75, 8))
+						ProcessPlanetVictory(planetID, 352, MakeRandomBonusVictoryList(0.75, 8), nil, WG.CampaignData.GetDifficultySetting())
 					end
 				}
 			}
@@ -978,6 +1001,10 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		end
 	end
 	
+	function externalFunctions.UpdateInformation()
+		-- Update tooltips, bonus objectives etc..
+	end
+	
 	-- Only call this after calling UpdateStartable for all planets. Call at least (VISIBILITY_DISTANCE - 1) times.
 	function externalFunctions.UpdateDistance()
 		if distance then
@@ -1168,6 +1195,13 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 	end
 	WG.CampaignData.AddListener("PlanetCaptured", PlanetCaptured)
 	
+	local function PlanetUpdate(listener, planetID)
+		if (not PLANET_WHITELIST) or PLANET_WHITELIST[planetID] then
+			planetList[planetID].UpdateInformation()
+		end
+	end
+	WG.CampaignData.AddListener("PlanetUpdate", PlanetCaptured)
+	
 	local externalFunctions = {}
 	
 	function externalFunctions.UpdatePosition(x, y, width, height)
@@ -1289,8 +1323,9 @@ function widget:RecvLuaMsg(msg)
 		local planetID = tonumber(data[2])
 		local battleFrames = tonumber(data[3])
 		local bonusObjectives = data[4]
+		local difficulty = tonumber(data[5]) or 0
 		if planetID and planetConfig and planetConfig[planetID] then
-			ProcessPlanetVictory(planetID, battleFrames, MakeBonusObjectivesList(bonusObjectives), bonusObjectives)
+			ProcessPlanetVictory(planetID, battleFrames, MakeBonusObjectivesList(bonusObjectives), bonusObjectives, difficulty)
 		end
 	elseif string.find(msg, BATTLE_LOST_STRING) then
 		Spring.Echo("msg", msg)

@@ -133,6 +133,7 @@ local function ResetGamedata()
 		codexEntriesUnlocked = {map = {}, list = {}},
 		codexEntryRead = {},
 		bonusObjectivesComplete = {map = {}, list = {}},
+		completionDifficulty = {}, -- Highest difficulty of completion for planets and bonus objectives.
 		planetsCaptured = {map = {}, list = {}},
 		commanderExperience = 0,
 		difficultySetting = 1, -- 1,2,3 -> easy/medium/hard
@@ -431,7 +432,7 @@ function externalFunctions.SetDifficultySetting(newDifficulty)
 	SaveGame()
 end
 
-function externalFunctions.CapturePlanet(planetID, bonusObjectives)
+function externalFunctions.CapturePlanet(planetID, bonusObjectives, difficulty)
 	local planet = WG.Chobby.Configuration.campaignConfig.planetDefs.planets[planetID]
 	local saveRequired = false
 	local gainedExperience = 0
@@ -444,15 +445,26 @@ function externalFunctions.CapturePlanet(planetID, bonusObjectives)
 		gainedExperience = gainedExperience + (planet.completionReward.experience or 0)
 		saveRequired = true
 	end
+	if difficulty > (gamedata.completionDifficulty[planetID] or 0) then
+		gamedata.completionDifficulty[planetID] = difficulty
+		saveRequired = true
+	end
 	
 	if bonusObjectives then
 		local bonusConfig = planet.gameConfig.bonusObjectiveConfig
 		if bonusConfig then
 			for i = 1, #bonusObjectives do
-				if bonusObjectives[i] and bonusConfig[i] and UnlockThing(gamedata.bonusObjectivesComplete, planetID .. "_" .. i) then
-					gainedExperience = gainedExperience + bonusConfig[i].experience
-					gainedBonusExperience = gainedBonusExperience + bonusConfig[i].experience
-					saveRequired = true
+				if bonusObjectives[i] and bonusConfig[i] then
+					local bonusIndex = planetID .. "_" .. i
+					if UnlockThing(gamedata.bonusObjectivesComplete, bonusIndex) then
+						gainedExperience = gainedExperience + bonusConfig[i].experience
+						gainedBonusExperience = gainedBonusExperience + bonusConfig[i].experience
+						saveRequired = true
+					end
+					if difficulty > (gamedata.completionDifficulty[bonusIndex] or 0) then
+						gamedata.completionDifficulty[bonusIndex] = difficulty
+						saveRequired = true
+					end
 				end
 			end
 		end
@@ -461,6 +473,7 @@ function externalFunctions.CapturePlanet(planetID, bonusObjectives)
 	GainExperience(gainedExperience, gainedBonusExperience)
 	
 	if saveRequired then
+		CallListeners("PlanetUpdate", planetID)
 		SaveGame()
 	end
 end
@@ -506,7 +519,7 @@ function externalFunctions.GetPlanetDefs()
 end
 
 function externalFunctions.IsPlanetCaptured(planetID)
-	return gamedata.planetsCaptured.map[planetID]
+	return gamedata.planetsCaptured.map[planetID], gamedata.completionDifficulty[planetID]
 end
 
 function externalFunctions.GetCapturedPlanetCount()
@@ -561,7 +574,8 @@ function externalFunctions.GetCodexEntryIsUnlocked(entryName)
 end
 
 function externalFunctions.GetBonusObjectiveComplete(planetID, objectiveID)
-	return gamedata.bonusObjectivesComplete.map[planetID .. "_" .. objectiveID]
+	local index = planetID .. "_" .. objectiveID
+	return gamedata.bonusObjectivesComplete.map[index], gamedata.completionDifficulty[index]
 end
 
 function externalFunctions.GetUnitInfo(unitName)

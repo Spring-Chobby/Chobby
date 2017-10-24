@@ -56,15 +56,16 @@ local function InitWindow()
 		maxWidth = MAX_WIDTH,
 		resizable = false,
 		draggable = false,
-		padding   = {5,4,4,4},
+		padding   = {5,4,6,2},
 		classname = "overlay_window",
 	}
 	tipTextDisplay = Chili.TextBox:New{
 		name   = TOOLTIP_TEXT_NAME,
 		x      = 2,
-		y      = 3,
-		width  = MAX_WIDTH - 12,
+		y      = 4,
+		width  = MAX_WIDTH,
 		parent = tipWindow,
+		lineSpacing = 1,
 		autoHeight = true,
 		margin = {0,0,0,0},
 		font = {
@@ -770,7 +771,7 @@ local function SetTooltipPos()
 
 	if tooltipChild.name == TOOLTIP_TEXT_NAME then
 		local text = tipTextDisplay.text
-		width  = tipTextDisplay.font:GetTextWidth(text) + 10
+		width  = tipTextDisplay.font:GetTextWidth(text) + 13
 		height = tooltipChild.height + 14 
 	else
 		-- Fudge numbers correspond to padding
