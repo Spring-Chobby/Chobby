@@ -26,7 +26,7 @@ end
 local _DrawTextureAspect = _DrawTextureAspect
 
 
-function _DrawTiledTexture(x,y,w,h, skLeft,skTop,skRight,skBottom, texw,texh, texIndex)
+function _DrawTiledTexture(x,y,w,h, skLeft,skTop,skRight,skBottom, texw,texh, texIndex, disableTiling)
     texIndex = texIndex or 0
 
     local txLeft   = skLeft/texw
@@ -39,7 +39,7 @@ function _DrawTiledTexture(x,y,w,h, skLeft,skTop,skRight,skBottom, texw,texh, te
     local scaleY = h/(skTop+skBottom)
     local scaleX = w/(skLeft+skRight)
     local scale = (scaleX < scaleY) and scaleX or scaleY
-    if (scale<1) then
+    if disableTiling or (scale<1) then
       skTop = skTop * scale
       skBottom = skBottom * scale
       skLeft = skLeft * scale
@@ -529,7 +529,7 @@ function DrawButton(obj)
     local texInfo = gl.TextureInfo(obj.TileImageBK) or {xsize=1, ysize=1}
     local tw,th = texInfo.xsize, texInfo.ysize
 
-    gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, 0,0,w,h, skLeft,skTop,skRight,skBottom, tw,th, 0)
+    gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, 0,0,w,h, skLeft,skTop,skRight,skBottom, tw,th, 0, obj.disableTiling)
   --gl.Texture(0,false)
 
   local fgcolor = obj.borderColor
@@ -544,7 +544,7 @@ function DrawButton(obj)
     local texInfo = gl.TextureInfo(obj.TileImageFG) or {xsize=1, ysize=1}
     local tw,th = texInfo.xsize, texInfo.ysize
 
-    gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, 0,0,w,h, skLeft,skTop,skRight,skBottom, tw,th, 0)
+    gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, 0,0,w,h, skLeft,skTop,skRight,skBottom, tw,th, 0, obj.disableTiling)
   gl.Texture(0,false)
 
   if (obj.caption) then
