@@ -898,7 +898,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		UpdateEdgeList()
 	end
 	
-	function externalFunctions.UpdateStartable()
+	function externalFunctions.UpdateStartable(disableStartable)
 		captured = WG.CampaignData.IsPlanetCaptured(planetID)
 		startable = captured or planetData.startingPlanet
 		if not startable then
@@ -912,13 +912,6 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 			end
 		end
 		
-		if startable then
-			image.color = PLANET_START_COLOR
-		else
-			image.color = PLANET_NO_START_COLOR
-		end
-		image:Invalidate()
-		
 		if captured then
 			distance = 0
 		elseif startable then
@@ -926,6 +919,17 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		else
 			distance = false
 		end
+		
+		if disableStartable then
+			startable = false
+		end
+		
+		if startable then
+			image.color = PLANET_START_COLOR
+		else
+			image.color = PLANET_NO_START_COLOR
+		end
+		image:Invalidate()
 		
 		local targetable = startable and not captured
 		if target then
@@ -1035,7 +1039,7 @@ end
 local function UpdateStartableAndVisible()
 	for i = 1, PLANET_COUNT do
 		if (not PLANET_WHITELIST) or PLANET_WHITELIST[i] then
-			planetList[i].UpdateStartable()
+			planetList[i].UpdateStartable(not WG.CampaignData.GetCampaignInitializationComplete())
 		end
 	end
 	if VISIBILITY_DISTANCE > 2 then
@@ -1158,7 +1162,7 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 	
 	local function PlanetCaptured(listener, planetID)
 		if (not PLANET_WHITELIST) or PLANET_WHITELIST[planetID] then
-			planetList[planetID].UpdateStartable()
+			planetList[planetID].UpdateStartable(not WG.CampaignData.GetCampaignInitializationComplete())
 			UpdateGalaxy()
 		end
 	end
@@ -1398,7 +1402,7 @@ function widget:Initialize()
 	VFS.Include("LuaMenu/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 	
 	local function CampaignLoaded(listener)
-		if planetList then
+		if planetList and planetHandler then
 			UpdateGalaxy()
 			if selectedPlanet then
 				selectedPlanet.Close()
@@ -1407,6 +1411,7 @@ function widget:Initialize()
 		end
 	end
 	WG.CampaignData.AddListener("CampaignLoaded", CampaignLoaded)
+	WG.CampaignData.AddListener("InitializationComplete", CampaignLoaded)
 	
 	local function GainExperience(listener, oldExperience, oldLevel, newExperience, newLevel, gainedBonusExperience)
 		if currentWinPopup then

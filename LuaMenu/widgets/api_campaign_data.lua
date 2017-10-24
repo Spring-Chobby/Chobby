@@ -143,6 +143,7 @@ local function ResetGamedata()
 		retinue = {}, -- Unused
 		totalPlayFrames = 0,
 		totalVictoryPlayFrames = 0,
+		initializationComplete = falsem
 	}
 end
 
@@ -164,7 +165,9 @@ local function GetSave(filepath)
 end
 
 local function ValidSave(saveData)
-	return saveData and type(saveData) == "table" and saveData.name and saveData.commanderName and saveData.commanderLevel and saveData.date
+	return saveData and type(saveData) == "table" and 
+		saveData.name and saveData.commanderName and saveData.commanderLevel and 
+		saveData.date and saveData.initializationComplete
 end
 
 -- Loads the list of save files and their contents
@@ -480,6 +483,17 @@ function externalFunctions.SetCommanderName(newName)
 	gamedata.commanderName = string.gsub(newName,[["]], [[']])
 	CallListeners("CommanderNameUpdate", newName)
 	SaveGame()
+end
+
+function externalFunctions.SetCampaignInitializationComplete()
+	if not gamedata.initializationComplete then
+		gamedata.initializationComplete = true
+		CallListeners("InitializationComplete")
+	end
+end
+
+function externalFunctions.GetCampaignInitializationComplete()
+	return gamedata.initializationComplete
 end
 
 function externalFunctions.GetPlanetDefs()

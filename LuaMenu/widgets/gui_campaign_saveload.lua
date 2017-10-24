@@ -166,6 +166,7 @@ local function PromptNewSave(backOnFail)
 			end
 			WG.CampaignData.SetCommanderName(ebSaveName.text)
 			WG.CampaignData.SetDifficultySetting(comboDifficulty.selected)
+			WG.CampaignData.SetCampaignInitializationComplete()
 			newSaveWindow:Dispose()
 			if WG.CampaignSaveWindow.PopulateSaveList then
 				WG.CampaignSaveWindow.PopulateSaveList()
