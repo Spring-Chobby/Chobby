@@ -143,7 +143,7 @@ local function ResetGamedata()
 		retinue = {}, -- Unused
 		totalPlayFrames = 0,
 		totalVictoryPlayFrames = 0,
-		initializationComplete = falsem
+		initializationComplete = false,
 	}
 end
 
@@ -489,6 +489,7 @@ function externalFunctions.SetCampaignInitializationComplete()
 	if not gamedata.initializationComplete then
 		gamedata.initializationComplete = true
 		CallListeners("InitializationComplete")
+		SaveGame()
 	end
 end
 
