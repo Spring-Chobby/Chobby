@@ -49,7 +49,10 @@ function Background:SetImageOverride(imageOverride)
 end
 
 function Background:SetBoundOverride(imageBoundOverride)
-	self.imageBoundOverride = imageBoundOverride
+	-- Only set bounds if the image is overridden, otherwise the default image can behave weirdly.
+	if self.imageOverride then
+		self.imageBoundOverride = imageBoundOverride
+	end
 end
 
 function Background:RemoveOverride()
