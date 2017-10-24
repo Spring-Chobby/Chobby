@@ -1251,7 +1251,6 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 		end
 		
 		transX, transY, transScale = left, top, 1/(right - left)
-		Spring.Echo("transX, transY, transScale", transX, transY, transScale)
 	end
 	
 	function externalFunctions.GetParent()

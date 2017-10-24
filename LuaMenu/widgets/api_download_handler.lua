@@ -334,6 +334,7 @@ end
 --------------------------------------------------------------------------------
 -- Initialization
 
+
 local function TestDownload()
 	WG.WrapperLoopback.DownloadFile("Sands of Time v1.0", "MAP")
 	Spring.Echo("TestDownload")
@@ -343,6 +344,17 @@ local function TestDownload()
 	})
 end
 
+local function GetRequiredDownloads()
+	local Configuration = WG.Chobby.Configuration
+	local campaignStartMaps = Configuration.campaignConfig and Configuration.campaignConfig.planetDefs
+	if campaignStartMaps then
+		campaignStartMaps = campaignStartMaps.startingPlanetMaps or {}
+		for i = 1, #campaignStartMaps do
+			externalFunctions.MaybeDownloadArchive(campaignStartMaps[i], "map", 1.5)
+		end
+	end
+end
+
 -- Allow for earling listener registration.
 WG.DownloadHandler = externalFunctions
 function widget:Initialize()
@@ -350,5 +362,5 @@ function widget:Initialize()
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 	
 	WG.DownloadWrapperInterface = wrapperFunctions
-	--WG.Delay(TestDownload, 2)
+	WG.Delay(GetRequiredDownloads, 1)
 end

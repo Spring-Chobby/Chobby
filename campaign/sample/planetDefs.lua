@@ -155,10 +155,16 @@ for i = 1, #planets do
 end
 
 local initialPlanets = {}
-
 for i = 1, #planets do
 	if planets[i].startingPlanetCaptured then
 		initialPlanets[#initialPlanets + 1] = i
+	end
+end
+
+local startingPlanetMaps = {}
+for i = 1, #planets do
+	if planets[i].startingPlanet or planets[i].startingPlanetCaptured then
+		startingPlanetMaps[#startingPlanetMaps + 1] = planets[i].gameConfig.mapName
 	end
 end
 
@@ -167,6 +173,7 @@ local retData = {
 	planetAdjacency = planetAdjacency,
 	planetEdgeList = planetEdgeList,
 	initialPlanets = initialPlanets,
+	startingPlanetMaps = startingPlanetMaps,
 }
 
 return retData
