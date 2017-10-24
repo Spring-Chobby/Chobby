@@ -921,6 +921,27 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		UpdateEdgeList()
 	end
 	
+	
+	function externalFunctions.UpdateInformation()
+		local bonusCount, maxBonus = 0, 0
+		local objectiveConfig = planetData.gameConfig.bonusObjectiveConfig
+		if objectiveConfig then
+			maxBonus = #objectiveConfig
+			for i = 1, #objectiveConfig do
+				if WG.CampaignData.GetBonusObjectiveComplete(planetID, i) then
+					bonusCount = bonusCount + 1
+				end
+			end
+		end
+		local conquerString
+		local cap, difficulty = WG.CampaignData.IsPlanetCaptured(planetID)
+		if cap then
+			conquerString = "Conquered on " .. difficultyNameMap[difficulty or 0] .. "\n"
+		end
+		button.tooltip = "Planet " .. planetData.name .. "\n" .. (conquerString or "") .. "Bonus objectives: " .. bonusCount .. " / " .. maxBonus
+	end
+	externalFunctions.UpdateInformation()
+	
 	function externalFunctions.UpdateStartable(disableStartable)
 		captured = WG.CampaignData.IsPlanetCaptured(planetID)
 		startable = captured or planetData.startingPlanet
@@ -999,27 +1020,9 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 				parent = tipHolder,
 			}
 		end
+		
+		externalFunctions.UpdateInformation()
 	end
-	
-	function externalFunctions.UpdateInformation()
-		local bonusCount, maxBonus = 0, 0
-		local objectiveConfig = planetData.gameConfig.bonusObjectiveConfig
-		if objectiveConfig then
-			maxBonus = #objectiveConfig
-			for i = 1, #objectiveConfig do
-				if WG.CampaignData.GetBonusObjectiveComplete(planetID, i) then
-					bonusCount = bonusCount + 1
-				end
-			end
-		end
-		local conquerString
-		local cap, difficulty = WG.CampaignData.IsPlanetCaptured(planetID)
-		if cap then
-			conquerString = "Conquered on " .. difficultyNameMap[difficulty or 0] .. "\n"
-		end
-		button.tooltip = "Planet " .. planetData.name .. "\n" .. (conquerString or "") .. "Bonus objectives: " .. bonusCount .. " / " .. maxBonus
-	end
-	externalFunctions.UpdateInformation()
 	
 	-- Only call this after calling UpdateStartable for all planets. Call at least (VISIBILITY_DISTANCE - 1) times.
 	function externalFunctions.UpdateDistance()
