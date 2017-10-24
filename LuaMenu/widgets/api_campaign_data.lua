@@ -163,6 +163,10 @@ local function GetSave(filepath)
 	end
 end
 
+local function ValidSave(saveData)
+	return saveData and type(saveData) == "table" and saveData.name and saveData.commanderName and saveData.commanderLevel and saveData.date
+end
+
 -- Loads the list of save files and their contents
 local function GetSaves()
 	Spring.CreateDir(SAVE_DIR)
@@ -171,7 +175,7 @@ local function GetSaves()
 	for i = 1, #savefiles do
 		local filepath = savefiles[i]
 		local saveData = GetSave(filepath)
-		if saveData then
+		if ValidSave(saveData) then
 			saves[saveData.name] = saveData
 		end
 	end

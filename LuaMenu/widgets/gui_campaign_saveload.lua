@@ -224,9 +224,6 @@ end
 
 -- Makes a button for a save game on the save/load screen
 local function AddSaveEntryButton(saveFile, saveList)
-	if not (saveFile and saveFile.name and saveFile.commanderName and saveFile.commanderLevel and saveFile.date) then
-		return
-	end
 	local Configuration = WG.Chobby.Configuration
 	local current = (saveFile.name == Configuration.campaignSaveFile)
 
