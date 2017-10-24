@@ -771,7 +771,7 @@ local function SetTooltipPos()
 
 	if tooltipChild.name == TOOLTIP_TEXT_NAME then
 		local text = tipTextDisplay.text
-		width  = tipTextDisplay.font:GetTextWidth(text) + 13
+		width  = tipTextDisplay.font:GetTextWidth(text) + 15
 		height = tooltipChild.height + 14 
 	else
 		-- Fudge numbers correspond to padding

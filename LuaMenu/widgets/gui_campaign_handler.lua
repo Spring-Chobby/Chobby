@@ -28,7 +28,7 @@ local TRANSFORM_BOUNDS = {
 	bottom = 1,
 }
 
-local difficultyNames = {
+local difficultyNameMap = {
 	[0] = "Unknown",
 	[1] = "Easy",
 	[2] = "Normal",
@@ -306,7 +306,7 @@ local function MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjective
 		return bottom
 	end
 	
-	local difficultyName = difficultyNames[difficulty or 0]
+	local difficultyName = difficultyNameMap[difficulty or 0]
 	
 	if bonusObjectiveSuccess then
 		local function IsObjectiveUnlocked(objectiveID)
@@ -317,9 +317,9 @@ local function MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjective
 			local complete, oldDifficulty = WG.CampaignData.GetBonusObjectiveComplete(planetData.index, objectiveID)
 			if complete then
 				if bonusObjectiveSuccess[objectiveID] and ((difficulty or 0) > (oldDifficulty or 0)) then
-					tooltip = tooltip .. " \n(Improved difficulty from " .. difficultyNames[oldDifficulty or 0] .. " to " .. difficultyName .. ")"
+					tooltip = tooltip .. " \n(Improved difficulty from " .. difficultyNameMap[oldDifficulty or 0] .. " to " .. difficultyName .. ")"
 				else
-					tooltip = tooltip .. " \n(Previously complete on " .. difficultyNames[oldDifficulty or 0] .. ")"
+					tooltip = tooltip .. " \n(Previously complete on " .. difficultyNameMap[oldDifficulty or 0] .. ")"
 				end
 			elseif bonusObjectiveSuccess[objectiveID] then
 				tooltip = tooltip .. " \n(Newly completed on " .. difficultyName .. ")"
@@ -343,7 +343,7 @@ local function MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjective
 			local complete, oldDifficulty = WG.CampaignData.GetBonusObjectiveComplete(planetData.index, objectiveID)
 			local tooltip = objectiveConfig[objectiveID].description
 			if complete then
-				tooltip = tooltip .. "\nHighest difficulty: " .. difficultyNames[oldDifficulty or 0]
+				tooltip = tooltip .. "\nHighest difficulty: " .. difficultyNameMap[oldDifficulty or 0]
 			end
 			return tooltip, objectiveConfig[objectiveID].image, objectiveConfig[objectiveID].imageOverlay
 		end
@@ -1002,8 +1002,24 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 	end
 	
 	function externalFunctions.UpdateInformation()
-		-- Update tooltips, bonus objectives etc..
+		local bonusCount, maxBonus = 0, 0
+		local objectiveConfig = planetData.gameConfig.bonusObjectiveConfig
+		if objectiveConfig then
+			maxBonus = #objectiveConfig
+			for i = 1, #objectiveConfig do
+				if WG.CampaignData.GetBonusObjectiveComplete(planetID, i) then
+					bonusCount = bonusCount + 1
+				end
+			end
+		end
+		local conquerString
+		local cap, difficulty = WG.CampaignData.IsPlanetCaptured(planetID)
+		if cap then
+			conquerString = "Conquered on " .. difficultyNameMap[difficulty or 0] .. "\n"
+		end
+		button.tooltip = "Planet " .. planetData.name .. "\n" .. (conquerString or "") .. "Bonus objectives: " .. bonusCount .. " / " .. maxBonus
 	end
+	externalFunctions.UpdateInformation()
 	
 	-- Only call this after calling UpdateStartable for all planets. Call at least (VISIBILITY_DISTANCE - 1) times.
 	function externalFunctions.UpdateDistance()
@@ -1200,7 +1216,7 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 			planetList[planetID].UpdateInformation()
 		end
 	end
-	WG.CampaignData.AddListener("PlanetUpdate", PlanetCaptured)
+	WG.CampaignData.AddListener("PlanetUpdate", PlanetUpdate)
 	
 	local externalFunctions = {}
 	
