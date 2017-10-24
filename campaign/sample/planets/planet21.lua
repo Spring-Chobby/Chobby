@@ -70,6 +70,16 @@ local function GetPlanet(planetUtilities, planetID)
 				unitBlacklist = {
 					striderhub = true, --you start with one that you should protect
 				},
+				typeVictoryAtLocation = {
+					striderdante = {
+						{
+							x = 8256,
+							z = 3680,
+							radius = 400,
+							objectiveID = 1,
+						},
+					}
+				},
 				startUnits = {
 					{
 						name = "staticmex",
@@ -182,13 +192,6 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 1403,
 						z = 5089,
 						facing = 0,
-						defeatIfDestroyedObjectiveID = 2,
-						victoryAtLocation = {
-							x = 8256,
-							z = 3680,
-							radius = 400,
-							objectiveID = 1,
-						},
 					},
  					{
 						name = "turretlaser",
@@ -1337,13 +1340,10 @@ local function GetPlanet(planetUtilities, planetID)
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Bring the Dante to the Dropship Factory",
+					description = "Bring a Dante to the Dropship Factory",
 				},
 				[2] = {
 					description = "Protect your Commander",
-				},
-				[3] = {
-					description = "Do not lose your starting Dante",
 				},
 			},
 			bonusObjectiveConfig = {

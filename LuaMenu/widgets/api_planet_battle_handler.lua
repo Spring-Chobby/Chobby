@@ -167,6 +167,7 @@ local function StartBattleForReal(planetID, planetData, gameName)
 		campaignunitblacklist = TableToBase64(gameConfig.playerConfig.unitBlacklist),
 		commanderparameters = TableToBase64(gameConfig.playerConfig.commanderParameters),
 		retinuestartunits = TableToBase64(WG.CampaignData.GetActiveRetinue()),
+		typevictorylocation = TableToBase64(gameConfig.playerConfig.typeVictoryAtLocation)
 	}
 	AddStartUnits(teams[teamCount], gameConfig.playerConfig.startUnits, "extrastartunits_")
 	
@@ -231,6 +232,7 @@ local function StartBattleForReal(planetID, planetData, gameName)
 			static_level = (aiData.commanderLevel or 1) - 1, -- Comm level is 0 indexed but on the UI it is 1 indexed.
 			campaignunlocks = TableToBase64(availibleUnits),
 			commanderparameters = TableToBase64(aiData.commanderParameters),
+			typevictorylocation = TableToBase64(aiData.typeVictoryAtLocation)
 		}
 		AddStartUnits(teams[teamCount], aiData.startUnits, "extrastartunits_")
 		teamCount = teamCount + 1
@@ -264,6 +266,7 @@ local function StartBattleForReal(planetID, planetData, gameName)
 		singleplayercampaignsavename = WG.Chobby.Configuration.campaignSaveFile,
 		singleplayercampaignbattleid = planetID,
 		initalterraform = TableToBase64(gameConfig.terraform),
+		planetmissionmapmarkers = TableToBase64(gameConfig.mapMarkers),
 	}
 	AddStartUnits(modoptions, gameConfig.neutralUnits, "neutralstartunits_")
 	

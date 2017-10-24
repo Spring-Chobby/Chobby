@@ -63,6 +63,16 @@ planetData = {
 			zombies = 1
 		},
 		
+		-- Add arbitrary map markers
+		mapMarkers = {
+			{
+				x = 600,
+				z = 1200,
+				text = "Walk Here",
+				color = "green"
+			},
+		},
+		
 		-- Configuration for everything owned by the player.
 		playerConfig = {
 			-- start coordinates of the players commander
@@ -119,6 +129,19 @@ planetData = {
 			unitBlacklist = {
 				turretlaser = true,
 			}
+			
+			-- Win by moving particular unit types to one or more locations.
+			typeVictoryAtLocation = {
+				cloakraid = {
+					{
+						x = 600,
+						z = 1200,
+						radius = 100,
+						objectiveID = 5,
+						-- Map markers added in map marker table.
+					},
+				}
+			},
 			
 			-- Units that spawn at the start of the game.
 			startUnits = {
