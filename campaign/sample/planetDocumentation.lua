@@ -15,6 +15,10 @@ planetData = {
 		
 		-- Size to display on the galaxy map. It is somewhat scaled by the size of the chobby window.
 		size = planetUtilities.PLANET_SIZE_MAP, 
+		
+		-- Text to display to the right of the planet when it is targeted.
+		hintText = "Continue to the next planet",
+		hintSize = {400, 200}, -- Size of the hint box
 	},
 	
 	-- Information displayed on the invasion selection screen.

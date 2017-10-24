@@ -21,6 +21,13 @@ local IMAGE_BOUNDS = {
 	height = 1500/2602,
 }
 
+local TRANSFORM_BOUNDS = {
+	left = -0.03,
+	top = 0,
+	right = 1,
+	bottom = 1,
+}
+
 local edgeDrawList = 0
 local planetConfig, planetAdjacency, planetEdgeList
 
@@ -45,6 +52,7 @@ local PLANET_COUNT = 0
 
 local debugPlanetSelected, debugPlanetSelectedName
 
+local planetHandler
 local planetList
 local selectedPlanet
 local currentWinPopup
@@ -67,7 +75,7 @@ local function DrawEdgeLines()
 				local pid = planetEdgeList[i][p]
 				local planetData = planetList[pid]
 				local hidden = not (planetData and planetData.GetVisible()) -- Note that planets not in the whitelist have planetData = nil
-				local x, y = planetConfig[pid].mapDisplay.x, planetConfig[pid].mapDisplay.y
+				local x, y = planetHandler.GetZoomTransform(planetConfig[pid].mapDisplay.x, planetConfig[pid].mapDisplay.y)
 				gl.Color((hidden and HIDDEN_COLOR) or (planetData.GetCaptured() and ACTIVE_COLOR) or INACTIVE_COLOR)
 				gl.Vertex(x, y)
 			end
@@ -360,6 +368,35 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Zooming
+
+local windowX, windowY, windowWidth, windowHeight
+local function RepositionBackgroundAndPlanets(newX, newY, newWidth, newHeight)
+	windowX = newX or windowX
+	windowY = newY or windowY
+	windowWidth = newWidth or windowWidth
+	windowHeight = newHeight or windowHeight
+	
+	planetHandler.UpdateVisiblePlanetBounds()
+	
+	local tX, tY, tScale = planetHandler.GetZoomTransformValues()
+	local transformedImageBounds = {
+		x = IMAGE_BOUNDS.x + tX*IMAGE_BOUNDS.width,
+		y = IMAGE_BOUNDS.y + tY*IMAGE_BOUNDS.height,
+		width = IMAGE_BOUNDS.width/tScale,
+		height = IMAGE_BOUNDS.height/tScale,
+	}
+	
+	local background = WG.Chobby.interfaceRoot.GetBackgroundHolder()
+	background:SetBoundOverride(transformedImageBounds)
+	
+	local x, y, width, height = background:ResizeAspectWindow(windowX, windowY, windowWidth, windowHeight)
+	planetHandler.UpdatePosition(x, y, width, height)
+	UpdateEdgeList()
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Planet capturing
 
 local function MakeWinPopup(planetData, bonusObjectiveSuccess)
@@ -575,7 +612,7 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 			}
 		}
 		
-		if (not LIVE_TESTING) and Configuration.debugMode then
+		if (not LIVE_TESTING) and (Configuration.debugAutoWin or Configuration.debugMode) then
 			local autoWinButton = Button:New{
 				right = 150,
 				bottom = 10,
@@ -725,6 +762,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 	local startable
 	local visible = false
 	local distance = false
+	local tipHolder
 	
 	local target
 	local targetSize = math.ceil(math.floor(planetSize*1.35)/2)*2
@@ -807,8 +845,8 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 	local image = Image:New {
 		x = 3,
 		y = 3,
-		right = 2,
-		bottom = 2,
+		right = 3,
+		bottom = 3,
 		file = planetData.mapDisplay.image,
 		keepAspect = true,
 		parent = button,
@@ -839,10 +877,15 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 	local externalFunctions = {}
 	
 	function externalFunctions.UpdatePosition(xSize, ySize)
-		UpdateSize(math.max(1, xSize/1050))
-		local x = math.max(0, math.min(xSize - targetSize, xPos*xSize - targetSize/2))
-		local y = math.max(0, math.min(ySize - targetSize, yPos*ySize - targetSize/2))
+		local tX, tY, tSize = planetHandler.GetZoomTransform(xPos, yPos, math.max(1, xSize/1050))
+		UpdateSize(tSize)
+		local x = math.max(0, math.min(xSize - targetSize, tX*xSize - targetSize/2))
+		local y = math.max(0, math.min(ySize - targetSize, tY*ySize - targetSize/2))
 		planetHolder:SetPos(x, y, targetSize, targetSize)
+		
+		if tipHolder then
+			tipHolder:SetPos(x + targetSize, y - 5 + (targetSize - planetData.mapDisplay.hintSize[2])/2)
+		end
 		
 		if debugHolder then
 			debugHolder:SetPos(x, y + planetSize, DEBUG_UNLOCK_COLUMNS*DEBUG_UNLOCKS_SIZE + 2, 2*DEBUG_UNLOCKS_SIZE + 2)
@@ -902,6 +945,33 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 			}
 			target:SendToBack()
 		end
+		
+		if tipHolder then
+			if not targetable then
+				tipHolder:Dispose()
+				tipHolder = nil
+			end
+		elseif targetable and planetData.mapDisplay.hintText then
+			tipHolder = Window:New{
+				classname = "main_window_small",
+				x = planetHolder.x + planetHolder.width,
+				y = planetHolder.y - 5 + (planetHolder.height - planetData.mapDisplay.hintSize[2])/2,
+				width = planetData.mapDisplay.hintSize[1],
+				height = planetData.mapDisplay.hintSize[2],
+				resizable = false,
+				draggable = false,
+				parent = galaxyHolder,
+			}
+			TextBox:New {
+				x = 12,
+				right = 12,
+				y = 8,
+				bottom = 8,
+				font = Configuration:GetFont(4),
+				text = planetData.mapDisplay.hintText,
+				parent = tipHolder,
+			}
+		end
 	end
 	
 	-- Only call this after calling UpdateStartable for all planets. Call at least (VISIBILITY_DISTANCE - 1) times.
@@ -951,6 +1021,10 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		return visible
 	end
 	
+	function externalFunctions.GetVisibleEdge() -- Whether an edge to this planet is visible.
+		return (distance and distance <= (VISIBILITY_DISTANCE + 1)) or ((not LIVE_TESTING) and Configuration.debugMode)
+	end
+	
 	function externalFunctions.GetDistance()
 		return distance
 	end
@@ -965,7 +1039,7 @@ local function UpdateStartableAndVisible()
 		end
 	end
 	if VISIBILITY_DISTANCE > 2 then
-		for i = 1, VISIBILITY_DISTANCE - 2 do
+		for i = 1, VISIBILITY_DISTANCE - 1 do
 			if (not PLANET_WHITELIST) or PLANET_WHITELIST[i] then
 				planetList[i].UpdateDistance()
 			end
@@ -977,6 +1051,7 @@ local function UpdateStartableAndVisible()
 			planetList[i].UpdateVisible()
 		end
 	end
+	RepositionBackgroundAndPlanets()
 end
 
 local function DownloadNearbyMaps()
@@ -1046,6 +1121,8 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 	local planetData = Configuration.campaignConfig.planetDefs
 	planetConfig, planetAdjacency, planetEdgeList = planetData.planets, planetData.planetAdjacency, planetData.planetEdgeList
 	
+	local transX, transY, transScale = 0, 0, 1
+	
 	planetList = {}
 	PLANET_COUNT = #planetConfig
 	for i = 1, PLANET_COUNT do
@@ -1053,8 +1130,6 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 			planetList[i] = GetPlanet(planetWindow, i, planetConfig[i], planetAdjacency[i])
 		end
 	end
-	
-	UpdateGalaxy()
 	
 	local graph = Chili.Control:New{
 		x       = 0,
@@ -1069,10 +1144,12 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 			local w = obj.width
 			local h = obj.height
 			
+			local _,_,scale = planetHandler.GetZoomTransformValues()
+			
 			gl.PushMatrix()
 			gl.Translate(x, y, 0)
 			gl.Scale(w, h, 1)
-			gl.LineWidth(3)
+			gl.LineWidth(3 * scale)
 			gl.CallList(edgeDrawList)
 			gl.PopMatrix()
 		end,
@@ -1098,6 +1175,79 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 				end
 			end
 		end
+	end
+	
+	function externalFunctions.GetZoomTransform(x, y, size)
+		x = (x - transX)*transScale
+		y = (y - transY)*transScale
+		return x, y, (size or 1)*transScale
+	end
+	
+	function externalFunctions.GetZoomTransformValues()
+		return transX, transY, transScale
+	end
+	
+	function externalFunctions.UpdateVisiblePlanetBounds()
+		local left, top, right, bottom
+		local padding = 0.05
+		for i = 1, PLANET_COUNT do
+			if ((not PLANET_WHITELIST) or PLANET_WHITELIST[i]) and planetList[i].GetVisibleEdge() then
+				local xPos, yPos = planetConfig[i].mapDisplay.x, planetConfig[i].mapDisplay.y
+				if planetList[i].GetVisible() then
+					left = math.min(left or (xPos - padding), (xPos - padding))
+					top = math.min(top or (yPos - padding), (yPos - padding))
+					right = math.max(right or (xPos + padding), (xPos + padding))
+					bottom = math.max(bottom or (yPos + padding), (yPos + padding))
+				else
+					left = math.min(left or xPos, xPos)
+					top = math.min(top or yPos, yPos)
+					right = math.max(right or xPos, xPos)
+					bottom = math.max(bottom or yPos, yPos)
+				end
+			end
+		end
+		
+		if not left then
+			transX, transY, transScale = 0, 0, 1
+			return
+		end
+		
+		left = math.max(left, TRANSFORM_BOUNDS.left)
+		top = math.max(top, TRANSFORM_BOUNDS.top)
+		right = math.min(right, TRANSFORM_BOUNDS.right)
+		bottom = math.min(bottom, TRANSFORM_BOUNDS.bottom)
+		
+		-- Make square
+		local width = right - left
+		local height = bottom - top
+		if width > height then
+			local mid = top + height/2
+			top = mid - width/2
+			bottom = mid + width/2
+			
+			if top < TRANSFORM_BOUNDS.top then
+				bottom = bottom + (TRANSFORM_BOUNDS.top - top)
+				top = TRANSFORM_BOUNDS.top
+			elseif bottom > TRANSFORM_BOUNDS.bottom then
+				top = top + (TRANSFORM_BOUNDS.bottom - bottom)
+				bottom = TRANSFORM_BOUNDS.bottom
+			end
+		else
+			local mid = left + width/2
+			left = mid - height/2
+			right = mid + height/2
+			
+			if left < TRANSFORM_BOUNDS.left then
+				right = right + (TRANSFORM_BOUNDS.left - left)
+				left = TRANSFORM_BOUNDS.left
+			elseif right > TRANSFORM_BOUNDS.right then
+				left = left + (TRANSFORM_BOUNDS.right - right)
+				right = TRANSFORM_BOUNDS.right
+			end
+		end
+		
+		transX, transY, transScale = left, top, 1/(right - left)
+		Spring.Echo("transX, transY, transScale", transX, transY, transScale)
 	end
 	
 	function externalFunctions.GetParent()
@@ -1167,9 +1317,6 @@ end
 local externalFunctions = {}
 
 function externalFunctions.GetControl(newLiveTestingMode, newPlanetWhitelist, feedbackLink)
-	
-	local planetsHandler = {}
-	
 	local window = Control:New {
 		name = "campaignHandler",
 		x = "0%",
@@ -1180,12 +1327,15 @@ function externalFunctions.GetControl(newLiveTestingMode, newPlanetWhitelist, fe
 		OnParentPost = {
 			function(obj, parent)
 				if obj:IsEmpty() then
-					planetsHandler = InitializePlanetHandler(obj, newLiveTestingMode, newPlanetWhitelist, feedbackLink)
+					planetHandler = InitializePlanetHandler(obj, newLiveTestingMode, newPlanetWhitelist, feedbackLink)
+					
+					local x, y = obj:LocalToScreen(0, 0)
+					RepositionBackgroundAndPlanets(x, y, obj.width, obj.height)
+					UpdateGalaxy()
 				end
 				
 				local background = WG.Chobby.interfaceRoot.GetBackgroundHolder()
-				local x, y, width, height = background:SetOverride(GALAXY_IMAGE, IMAGE_BOUNDS)
-				planetsHandler.UpdatePosition(x, y, width, height)
+				background:SetImageOverride(GALAXY_IMAGE)
 				
 				obj:UpdateClientArea()
 				WG.Chobby.interfaceRoot.GetRightPanelHandler().CloseTabs()
@@ -1205,11 +1355,8 @@ function externalFunctions.GetControl(newLiveTestingMode, newPlanetWhitelist, fe
 				if not obj.parent then
 					return
 				end
-				local background = WG.Chobby.interfaceRoot.GetBackgroundHolder()
 				local x, y = obj:LocalToScreen(0, 0)
-				
-				local x, y, width, height = background:ResizeAspectWindow(x, y, xSize, ySize)
-				planetsHandler.UpdatePosition(x, y, width, height)
+				RepositionBackgroundAndPlanets(x, y, xSize, ySize)
 			end
 		},
 	}
@@ -1231,18 +1378,15 @@ end
 --------------------------------------------------------------------------------
 
 local function DelayedViewResize()
-	if not planetsHandler then
+	if not planetHandler then
 		return
 	end
-	local window = planetsHandler.GetParent()
+	local window = planetHandler.GetParent()
 	if not (window and window.parent) then
 		return
 	end
-	local background = WG.Chobby.interfaceRoot.GetBackgroundHolder()
 	local x, y = window:LocalToScreen(0, 0)
-	
-	local x, y, width, height = background:ResizeAspectWindow(x, y, xSize, ySize)
-	planetsHandler.UpdatePosition(x, y, width, height)
+	RepositionBackgroundAndPlanets(x, y, window.xSize, window.ySize)
 end
 
 function widget:ViewResize(vsx, vsy)

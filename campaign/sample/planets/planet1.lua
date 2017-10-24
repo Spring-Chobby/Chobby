@@ -14,6 +14,8 @@ local function GetPlanet(planetUtilities, planetID)
 			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.87,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
+			hintText = "Keep taking planets until you conquer the galaxy.",
+			hintSize = {402, 100},
 		},
 		infoDisplay = {
 			image = image,

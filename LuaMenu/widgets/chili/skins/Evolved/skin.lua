@@ -86,10 +86,11 @@ skin.button_square = {
 }
 
 skin.button_planet = {
-  TileImageBK = ":cl:tech_button_circle_bk.png",
+  TileImageBK = ":cl:tech_button_circle_fg.png",
   TileImageFG = ":cl:tech_button_circle_fg.png",
-  tiles = {32, 32, 32, 32}, --// tile widths: left,top,right,bottom
+  tiles = {64, 64, 64, 64}, --// tile widths: left,top,right,bottom
   padding = {0, 0, 0, 0},
+  disableTiling = true,
   
   backgroundColor = {0, 0, 0, 0},
   focusColor  = {0.94, 0.50, 0.23, 0.4},

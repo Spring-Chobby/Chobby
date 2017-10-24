@@ -15,6 +15,8 @@ local function GetPlanet(planetUtilities, planetID)
 			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.87,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
+			hintText = "Click this planet to begin.",
+			hintSize = {410, 66},
 		},
 		infoDisplay = {
 			image = image,

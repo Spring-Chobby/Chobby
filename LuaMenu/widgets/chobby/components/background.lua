@@ -39,14 +39,17 @@ function Background:SetAlpha(newAlpha)
 	end
 end
 
-function Background:SetOverride(imageOverride, imageBoundOverride)
+function Background:SetImageOverride(imageOverride)
 	self.imageOverride = imageOverride
 	self.backgroundImage.file = imageOverride
-	self.imageBoundOverride = imageBoundOverride
 	
 	local texInfo = gl.TextureInfo(imageOverride)
 	self.width, self.height = texInfo.xsize, texInfo.ysize
 	self.backgroundControl:Invalidate()
+end
+
+function Background:SetBoundOverride(imageBoundOverride)
+	self.imageBoundOverride = imageBoundOverride
 end
 
 function Background:RemoveOverride()
