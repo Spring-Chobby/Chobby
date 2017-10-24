@@ -255,9 +255,10 @@ end
 --------------------------------------------------------------------------------
 -- Components
 
-local function GetModuleButton(parentControl, ClickFunc, moduleName, level, slot, position)
-	local moduleDefs = WG.Chobby.Configuration.campaignConfig.commConfig.moduleDefs
-	local moduleDefNames = WG.Chobby.Configuration.campaignConfig.commConfig.moduleDefNames
+local function GetModuleButton(parentControl, ClickFunc, moduleName, level, slot, position, hightlightEmpty)
+	local Configuration = WG.Chobby.Configuration
+	local moduleDefs = Configuration.campaignConfig.commConfig.moduleDefs
+	local moduleDefNames = Configuration.campaignConfig.commConfig.moduleDefNames
 	
 	local moduleData = moduleDefs[moduleDefNames[moduleName]]
 	
@@ -278,13 +279,14 @@ local function GetModuleButton(parentControl, ClickFunc, moduleName, level, slot
 		tooltip = string.gsub(moduleData.description, "_COUNT_", " Limit: " .. (count or "0")),
 		parent = parentControl
 	}
+	
 	local nameBox = TextBox:New{
 		x = BUTTON_SIZE + 4,
 		y = 18,
 		right = 4,
 		height = BUTTON_SIZE,
-		text = moduleData.humanName,
-		fontsize = WG.Chobby.Configuration:GetFont(2).size,
+		text = ((hightlightEmpty and moduleData.emptyModule and Configuration:GetHighlightedColor()) or "") .. moduleData.humanName,
+		fontsize = Configuration:GetFont(2).size,
 		OnClick = { 
 			function(self) 
 				ClickFunc(self, moduleName, level, slot)
@@ -326,7 +328,7 @@ local function GetModuleButton(parentControl, ClickFunc, moduleName, level, slot
 		
 		button.tooltip = string.gsub(moduleData.description, "_COUNT_", " Limit: " .. (count or "0"))
 		button:Invalidate()
-		nameBox:SetText(moduleData.humanName)
+		nameBox:SetText(((hightlightEmpty and moduleData.emptyModule and Configuration:GetHighlightedColor()) or "") .. moduleData.humanName)
 		UpdateNameBoxPosition()
 		image.file = moduleData.image
 		image:Invalidate()
@@ -353,6 +355,7 @@ local function GetModuleList(parentControl, ClickFunc, left, right)
 	}
 	
 	local offset = 0
+	local hightlightEmpty = false
 	local buttonList = {}
 	
 	local externalFunctions = {}
@@ -372,7 +375,7 @@ local function GetModuleList(parentControl, ClickFunc, left, right)
 	end
 	
 	function externalFunctions.AddModule(moduleName, level, slot)
-		local button = GetModuleButton(listScroll, ClickFunc, moduleName, level, slot, offset)
+		local button = GetModuleButton(listScroll, ClickFunc, moduleName, level, slot, offset, hightlightEmpty)
 		if slot then
 			buttonList[level] = buttonList[level] or {}
 			buttonList[level][slot] = button
@@ -422,6 +425,10 @@ local function GetModuleList(parentControl, ClickFunc, left, right)
 		listScroll:ClearChildren()
 	end
 	
+	function externalFunctions.SetHighlightEmpty(newHightlightEmpty)
+		hightlightEmpty = newHightlightEmpty
+	end
+	
 	return externalFunctions
 end
 
@@ -451,9 +458,10 @@ local function MakeModulePanelHandler(parentControl)
 	
 	local externalFunctions = {}
 	
-	function externalFunctions.UpdateLoadoutDisplay(commanderLevel, commanderLoadout)
+	function externalFunctions.UpdateLoadoutDisplay(commanderLevel, commanderLoadout, highlightEmpty)
 		moduleSelector.SetVisibility(false)
 		currentLoadout.Clear()
+		currentLoadout.SetHighlightEmpty(highlightEmpty)
 		
 		for level = 0, commanderLevel do
 			local slots = commanderLoadout[level]
@@ -581,13 +589,13 @@ local function InitializeControls(parentControl)
 		local commanderLevel, commanderExperience, commanderName, commanderLoadout = WG.CampaignData.GetPlayerCommanderInformation()
 		
 		commanderLabel:SetCaption(commanderName)
-		modulePanelHandler.UpdateLoadoutDisplay(commanderLevel, commanderLoadout)
+		modulePanelHandler.UpdateLoadoutDisplay(commanderLevel, commanderLoadout, commanderExperience > 0)
 		experienceDisplay.SetExperience(commanderExperience, commanderLevel)
 	end
 	UpdateCommanderDisplay()
 	
 	local function GainExperience(_, oldExperience, oldLevel, newExperience, newLevel)
-		if oldLevel ~= newLevel then
+		if (oldLevel ~= newLevel) or oldExperience == 0 then
 			UpdateCommanderDisplay()
 		else
 			experienceDisplay.SetExperience(newExperience, newLevel)
