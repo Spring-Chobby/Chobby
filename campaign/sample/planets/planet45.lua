@@ -41,7 +41,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 		},
 		gameConfig = {
-			mapName = "Aetherian Void 1.2",
+			mapName = "Aetherian Void 1.3",
 			playerConfig = {
 				startX = 7600,
 				startZ = 3300,

@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Omis",
 			primaryType = "G7V",
 			milRating = 1,
-			text = [[The Artefact on this planet contains invaluable information, but it is protected by a large automated defence network. Infiltrate the defences with Phantom sniper bots and destroy the Singularity Plants to deactivate the heavier defences.]]
+			text = [[The Artefact on this planet contains invaluable information, but it is protected by a large automated defence network. Infiltrate the Automaton base with Phantom sniper bots and destroy the Singularity Plants to deactivate the heavier defences.]]
 		},
 		tips = {
 			{
@@ -33,8 +33,12 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[Unlike all other cloaked units, the Phantom can fire its weapon without dropping its cloak. Use this to sneak into the defence network, destroying what you need to without blowing your cover.]]
 			},
 			{
+				image = "unitpics/turretheavy.png",
+				text = [[Heavier turrets cannot fire unless they are connected to energy-producing buildings. Deactivate them by destroying Energy Pylons or the energy producers themselves.]]
+			},
+			{
 				image = "unitpics/shieldraid.png",
-				text = [[Make sure you defend your southern flank against Shieldbot attacks.]]
+				text = [[You will need to defend your southern flank against Interloper Shieldbot attacks.]]
 			},
 		},
 		gameConfig = {
@@ -1678,7 +1682,7 @@ local function GetPlanet(planetUtilities, planetID)
 					-- See bonusObjectiveID in units table
 					image = planetUtilities.ICON_DIR .. "energysingu.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Kill the Automaton Singularity Reactors",
+					description = "Destroy the Automaton Singularity Reactors",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Win by 10:00

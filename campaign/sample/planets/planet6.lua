@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Voblaka",
 			primaryType = "F9V",
 			milRating = 1,
-			text = [[This battle is taking place at high altitude, so deploy Wind Generators for cheap and efficient energy income. Knight assault bots will crush any opposition you will face here.]]
+			text = [[This battle is taking place at high altitude, so deploy Wind Generators for cheap and efficient energy income. Use the Knight's lightning gun to eliminate the enemy Jumpbots.]]
 		},
 		tips = {
 			{
@@ -34,11 +34,11 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/cloakassault.png",
-				text = [[Knight assault bots are much tougher than the other Cloakbots, and uses a lightning gun to damage and stun enemy units. They're effective in attacking medium-density defences.]]
+				text = [[Knights are much tougher than the other Cloakbots, and use a lightning gun to damage and stun enemy units. They're effective against medium-weight units and defences.]]
 			},
 			{
 				image = "unitpics/jumpraid.png",
-				text = [[The Pyro raiders you'll be fighting here use flamethrowers to set your units on fire, and can jump over holes and cliffs.]]
+				text = [[The enemy will use Pyros against you - they have flamethrowers to set your units on fire, and can jump over holes and cliffs.]]
 			},
 		},
 		gameConfig = {
