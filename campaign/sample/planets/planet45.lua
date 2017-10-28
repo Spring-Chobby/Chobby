@@ -29,11 +29,11 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/spidercrabe.png",
-				text = [[The Crab is armed with a heavy plasma cannon which is especially effective against clusters of lighter units. It also curls up into a heavily-armoured form when stationary.]]
+				text = [[The Crab curls up into a much more durable form when stationary. Do not move Crabs when they are attacked.]]
 			},
 			{
 				image = "unitpics/terraunit.png",
-				text = [[Crabs benefit from high altitude; they are harder for the enemy to attack, and their plasma cannon gains extra range. If no hills are available in an important area, use Terraforming to create one.]]
+				text = [[Use terraforming to build high hills for your Crabes to fire from, and to block the movement of your opponent's units.]]
 			},
 			{
 				image = "unitpics/spidercon.png",

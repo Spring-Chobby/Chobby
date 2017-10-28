@@ -1799,10 +1799,86 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					startUnits = {
 						{
+							name = "staticarty",
+							x = 4056,
+							z = 1112,
+							facing = 3,
+						},
+						{
+							name = "staticarty",
+							x = 5208,
+							z = 4552,
+							facing = 3,
+						},
+						{
+							name = "staticarty",
+							x = 4584,
+							z = 7672,
+							facing = 2,
+						},
+						{
+							name = "staticarty",
+							x = 6220,
+							z = 5412,
+							facing = 3,
+							terraformHeight = 320,
+						},
+						{
+							name = "staticarty",
+							x = 6150,
+							z = 3780,
+							facing = 3,
+							terraformHeight = 320,
+						},
+						{
+							name = "staticarty",
+							x = 6400,
+							z = 2200,
+							facing = 3,
+							terraformHeight = 320,
+						},
+						{
+							name = "staticshield",
+							x = 6320,
+							z = 5412,
+							facing = 3,
+						},
+						{
+							name = "staticshield",
+							x = 6250,
+							z = 3780,
+							facing = 3,
+						},
+						{
+							name = "staticshield",
+							x = 6500,
+							z = 2200,
+							facing = 3,
+						},
+						{
+							name = "turretantiheavy",
+							x = 7250,
+							z = 3320,
+							facing = 3,
+						},
+						{
+							name = "turretantiheavy",
+							x = 6350,
+							z = 4500,
+							facing = 3,
+						},
+						{
+							name = "turretantiheavy",
+							x = 6240,
+							z = 2600,
+							facing = 3,
+						},
+						{
 							name = "striderhub",
 							x = 7792,
 							z = 4000,
 							facing = 3,
+							difficultyAtLeast = 4,
 						},
  						{
 							name = "factoryspider",
@@ -1810,12 +1886,7 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 4040,
 							facing = 3,
 						},
- 						{
-							name = "staticarty",
-							x = 4056,
-							z = 1112,
-							facing = 3,
-						},
+ 						
  						{
 							name = "staticcon",
 							x = 7240,
@@ -1828,24 +1899,14 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 4088,
 							facing = 3,
 						},
- 						{
-							name = "staticarty",
-							x = 5208,
-							z = 4552,
-							facing = 3,
-						},
+ 						
  						{
 							name = "staticshield",
 							x = 5392,
 							z = 4656,
 							facing = 3,
 						},
- 						{
-							name = "staticarty",
-							x = 4584,
-							z = 7672,
-							facing = 2,
-						},
+ 						
  						{
 							name = "energysingu",
 							x = 7560,
@@ -1971,7 +2032,7 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 3,
 						},
  						{
-							name = "staticjammer",
+							name = "staticshield",
 							x = 4784,
 							z = 7792,
 							facing = 3,
@@ -3012,6 +3073,38 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 			},
 			bonusObjectiveConfig = {
+				[1] = { -- Build another silo
+					satisfyOnce = true,
+					countRemovedUnits = true, -- count units that previously died.
+					comparisionType = planetUtilities.COMPARE.AT_LEAST,
+					targetNumber = 2,
+					unitTypes = {
+						"staticmissilesilo",
+					},
+					image = planetUtilities.ICON_DIR .. "staticmissilesilo.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
+					description = "Build a second Missile Silo",
+					experience = planetUtilities.BONUS_EXP,
+				},
+				[2] = { -- Make the enemy lose two Lucifers by 8:00
+					onlyCountRemovedUnits = true,
+					satisfyByTime = 300,
+					comparisionType = planetUtilities.COMPARE.AT_LEAST,
+					targetNumber = 2,
+					enemyUnitTypes = {
+						"turretantiheavy",
+					},
+					image = planetUtilities.ICON_DIR .. "turretantiheavy.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
+					description = "Destroy two Lucifer turrets by 5:00",
+					experience = planetUtilities.BONUS_EXP,
+				},
+				[3] = { -- Win by 12:30
+					victoryByTime = 750,
+					image = planetUtilities.ICON_OVERLAY.CLOCK,
+					description = "Win by 12:30",
+					experience = planetUtilities.BONUS_EXP,
+				},
 			}
 		},
 		completionReward = {
