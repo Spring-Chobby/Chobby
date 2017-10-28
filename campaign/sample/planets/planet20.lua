@@ -30,15 +30,15 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/turretriot.png",
-				text = [[Stardust turrets only have a short range, but their sheer damage output and area of effect makes them very effective against large numbers of smaller enemies.]]
+				text = [[Stardust turrets are very effective against large groups of raiders. They have short range and are vulnerable to skirmishers because of this.]]
 			},
 			{
 				image = "unitpics/turretheavylaser.png",
-				text = [[By comparison, the Stinger heavy laser turret can only fire on a single target, but it has a much longer range, making it effective against single larger enemies.]]
+				text = [[Stinger turrets have far longer range but can only fire on a single target. Stingers are vulnerable to raiders and artillery that outranges them.]]
 			},
 			{
 				image = "unitpics/spideremp.png",
-				text = [[You have a pair of Venom EMP spiders and Redback riot spiders to defend against initial raids.]]
+				text = [[Use your Venom EMP spiders to defend against initial raids.]]
 			},
 		},
 		gameConfig = {			mapName = "Archers_Valley_v6",
@@ -285,13 +285,13 @@ local function GetPlanet(planetUtilities, planetID)
 						facing = 0,
 					},
 					{
-						name = "spiderriot",
+						name = "spideremp",
 						x = 2666,
 						z = 3500,
 						facing = 0,
 					},
 					{
-						name = "spiderriot",
+						name = "spideremp",
 						x = 2777,
 						z = 3500,
 						facing = 0,
@@ -334,10 +334,24 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					difficultyDependantUnlocks = {
 						[2] = {"amphfloater"},
-						[3] = {"amphfloater"},
-						[4] = {"amphfloater"},
+						[3] = {"amphfloater","cloakcon"},
+						[4] = {"amphfloater","cloakcon","shieldarty"},
 					},
-					commander = false,
+					startX = 800,
+					startZ = 4800,
+					commanderLevel = 2,
+					commander = {
+						name = "Bast",
+						chassis = "engineer",
+						decorations = {
+						},
+						modules = {
+							"commweapon_lparticlebeam",
+							"module_autorepair",
+							"module_high_power_servos",
+							"module_ablative_armor",
+						}
+					},
 					startUnits = {
 						{
 							name = "turretriot",
@@ -883,7 +897,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "factoryamph.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Destroy one of the enemy factories",
+					description = "Destroy one of the enemy Factories",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { -- Do not lose any Solars
