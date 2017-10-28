@@ -45,16 +45,37 @@ local function GetPlanet(planetUtilities, planetID)
 			mapName = "Otago",
 			modoptions = {
 				chickenspawnrate = 30,
-				burrowspawnrate = 30,
+				burrowspawnrate = 40,
 				graceperiod = 0.5, -- =30s, which is the minimum
-				techtimemult = 0.25,
+				--techtimemult = 0.25,
 				chicken_nominiqueen = 1,
 				chicken_minaggro = 5,	-- aggro influences chicken tech-up rate (and queen time reduction from killing burrows, but queens are disabled here)
 				chicken_maxaggro = 5,
-				chicken_maxtech = 24*60,	-- stops before Sporeshooter/Talon
+				--chicken_maxtech = 24*60,	-- stops before Sporeshooter/Talon
 				chicken_endless = 1,
 				chicken_hidepanel = 1,
 				chicken_nowavemessages = 1,
+				campaign_chicken_types_offense = {
+					chicken				=  {time = -4,  squadSize = 5},
+					chicken_pigeon		=  {time = 5,  squadSize = 1.4},
+					chickens			=  {time = 1,  squadSize = 1.0}, --spiker
+					chickena			=  {time = 3,  squadSize = 0.5}, --cockatrice
+					chicken_sporeshooter=  {time = 5,  squadSize = 0.5},
+					chicken_leaper	=  {time = 10,  squadSize = 0.8},  
+					chickenr			=  {time = 9,  squadSize = 1.2}, -- lobber
+					chickenc			=  {time = 13,  squadSize = 0.5}, -- basilisk
+					chicken_tiamat		=  {time = 16,  squadSize = 0.2},
+				},
+				campaign_chicken_types_defense = {
+					chickend = {time = 4, squadSize = 0.6, cost = 1 },
+					chicken_rafflesia =  {time = 8, squadSize = 0.4, cost = 2 },
+				},
+				campaign_chicken_types_support = {
+					chicken_shield =  {time = 12, squadSize = 0.4},
+					chicken_dodo = {time = 4, squadSize = 2},
+					chicken_spidermonkey =  {time = 12, squadSize = 0.6},
+				},
+				campaign_chicken_types_special = {},
 			},
 			playerConfig = {
 				startX = 1100,
@@ -81,6 +102,24 @@ local function GetPlanet(planetUtilities, planetID)
 					}
 				},
 				startUnits = {
+					{
+						name = "shieldcon",
+						x = 1000,
+						z = 4700,
+						facing = 0,
+					},
+					{
+						name = "shieldcon",
+						x = 1100,
+						z = 4700,
+						facing = 0,
+					},
+					{
+						name = "shieldcon",
+						x = 1200,
+						z = 4700,
+						facing = 0,
+					},
 					{
 						name = "staticmex",
 						x = 408,
@@ -277,7 +316,7 @@ local function GetPlanet(planetUtilities, planetID)
 				{
 					startX = 6500,
 					startZ = 3000,
-					humanName = "Enemy",
+					humanName = "Hastur3",
 					aiLib = "Circuit_difficulty_autofill",
 					bitDependant = true,
 					--aiLib = "Null AI",
@@ -295,7 +334,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"staticradar",
 						"turretlaser",
 						"turretmissile",
-						"turretheavylaser",
+						--"turretheavylaser", a bit too good against Dante
 						"turretriot",
 						"turretaaclose",
 						"turretaalaser",
@@ -322,13 +361,23 @@ local function GetPlanet(planetUtilities, planetID)
 						[3] = {"shieldarty"},
 						[4] = {"shieldarty","spiderantiheavy"},
 					},
-					commanderLevel = 2,
+					commanderLevel = 4,
 					commander = {
-						name = "Most Loyal Opposition",
+						name = "Firekeeper",
 						chassis = "guardian",
 						decorations = {
 						},
-						modules = { }
+						modules = { 
+							"weaponmod_napalm_warhead",
+							"commweapon_riotcannon",
+							"commweapon_rocketlauncher",
+							"module_ablative_armor",							
+							"module_ablative_armor",
+							"module_autorepair",
+							"module_autorepair",
+							"module_high_power_servos",
+							"module_high_power_servos",
+						}
 					},
 					startUnits = {
  						{
@@ -1327,7 +1376,16 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			defeatConditionConfig = {
 				-- Indexed by allyTeam.
-				[0] = { },
+				[0] = { 
+					ignoreUnitLossDefeat = false,
+					vitalCommanders = false,
+					vitalUnitTypes = {
+						"striderhub",
+						"striderdante",
+					},
+					loseAfterSeconds = false,
+					allyTeamLossObjectiveID = 3,
+				},
 				[1] = {
 					ignoreUnitLossDefeat = false,
 					loseAfterSeconds = false,
@@ -1345,8 +1403,50 @@ local function GetPlanet(planetUtilities, planetID)
 				[2] = {
 					description = "Protect your Commander",
 				},
+				[3] = {
+					description = "Do not lose your Strider Hub and all Dantes",
+				},
 			},
 			bonusObjectiveConfig = {
+				[1] = { -- Protect the Strider Hub
+					satisfyForever = true,
+					failOnUnitLoss = true, -- Fails the objective if any units being used to satisfy the objective are lost.
+					comparisionType = planetUtilities.COMPARE.AT_LEAST,
+					targetNumber = 0,
+					unitTypes = {
+						"striderhub",
+					},
+					image = planetUtilities.ICON_DIR .. "striderhub.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
+					description = "Don't lose the Strider Hub",
+					experience = planetUtilities.BONUS_EXP,
+				},
+				[2] = { -- Make the enemy lose seven roosts
+					onlyCountRemovedUnits = true,
+					satisfyOnce = true,
+					comparisionType = planetUtilities.COMPARE.AT_LEAST,
+					targetNumber = 7,
+					enemyUnitTypes = {
+						"roost",
+					},
+					image = planetUtilities.ICON_DIR .. "roost.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
+					description = "Destroy 7 Chicken Roosts",
+					experience = planetUtilities.BONUS_EXP,
+				},
+				[3] = { -- Protect all Dantes
+					satisfyForever = true,
+					failOnUnitLoss = true, -- Fails the objective if any units being used to satisfy the objective are lost.
+					comparisionType = planetUtilities.COMPARE.AT_LEAST,
+					targetNumber = 0,
+					unitTypes = {
+						"striderdante",
+					},
+					image = planetUtilities.ICON_DIR .. "striderdante.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
+					description = "Don't lose any Dantes",
+					experience = planetUtilities.BONUS_EXP,
+				},
 			}
 		},
 		completionReward = {
