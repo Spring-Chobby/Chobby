@@ -48,9 +48,11 @@ local function GetPlanet(planetUtilities, planetID)
 				{
 					startX = 4000,
 					startZ = 75,
-					aiLib = "Circuit_difficulty_autofill",
 					humanName = "Enemy",
-					bitDependant = true,
+					--aiLib = "Circuit_difficulty_autofill",
+					--bitDependant = true,
+					aiLib = "Null AI",
+					bitDependant = false,
 					commanderParameters = {
 						facplop = false,
 					},
@@ -63,8 +65,6 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "Most Loyal Opposition",
 						chassis = "engineer",
 						decorations = {
-						  "skin_support_dark",
-						  icon_overhead = { image = "UW" }
 						},
 						modules = { }
 					},
