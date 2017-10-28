@@ -276,6 +276,13 @@ local function StartBattleForReal(planetID, planetData, gameName)
 		end
 	end
 	
+	local difficultyModoptions = gameConfig.modoptionDifficulties and gameConfig.modoptionDifficulties[missionDifficulty]
+	if difficultyModoptions then
+		for key, value in pairs(difficultyModoptions) do
+			modoptions[key] = (type(value) == "table" and TableToBase64(value)) or value
+		end
+	end
+	
 	local script = {
 		gametype = gameConfig.gameName or gameName,
 		hostip = '127.0.0.1',

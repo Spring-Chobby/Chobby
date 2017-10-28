@@ -63,6 +63,13 @@ planetData = {
 			zombies = 1
 		},
 		
+		-- Map of modoptions for particular difficulty levels. Duplicate keys override the general modoptions table.
+		modoptionDifficulties = {
+			[1] = {
+				zombies = 0,
+			},
+		}
+		
 		-- Add arbitrary map markers
 		mapMarkers = {
 			{
