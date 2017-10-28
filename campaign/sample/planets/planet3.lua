@@ -42,7 +42,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 		},
 		gameConfig = {
-			mapName = "Adamantine_Mountian-V1",
+			mapName = "Adamantine Mountain 2",
 			playerConfig = {
 				startX = 3550,
 				startZ = 1150,

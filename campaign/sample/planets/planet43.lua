@@ -8,7 +8,7 @@ local function GetPlanet(planetUtilities, planetID)
 	local image = LUA_DIRNAME .. "images/planets/11.png"
 	
 	local planetData = {
-		name = "Tobok",
+		name = "Estann All",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.41,

@@ -31,7 +31,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/staticmex.png",
-				text = [[Metal Extractors gather the metal required to build an army and crush your opponent. Take metal spots and build as many as you can.]]
+				text = [[Metal Extractors gather the metal required to build an army and crush your opponent. Take mex spots and build as many as you can. Press F4 to highlight mex spots and display their value.]]
 			},
 			{
 				image = "unitpics/energysolar.png",

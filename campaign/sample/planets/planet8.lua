@@ -8,7 +8,7 @@ local function GetPlanet(planetUtilities, planetID)
 	local image = LUA_DIRNAME .. "images/planets/terran01.png"
 	
 	local planetData = {
-		name = "Thibella-Δ",
+		name = "Thibella",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.29,
@@ -25,12 +25,20 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Thibella",
 			primaryType = "G3V",
 			milRating = 2,
-			text = [[The enemy Big Bertha cannon is dominating the battlefield. Sneak into their base with Scythes and eliminate this threat.]]
+			text = [[The enemy has a Big Bertha cannon which is dominating the battlefield. Sneak into their base with Scythes and eliminate the threat.]]
 		},
 		tips = {
 			{
 				image = "unitpics/cloakheavyraid.png",
-				text = [[The Scythe cloaked raiders are very effective at picking off high-value targets, especially those which are not closely defended. The Scythes will be decloaked if they attack, if they are damaged, or if they get too close to enemy units.]]
+				text = [[Scythes are very good for picking off poorly defended high-value targets behind enemy lines. The Scythes will be decloaked if they attack, if they are damaged, or if they get too close to enemy units.]]
+			},
+			{
+				image = "unitpics/staticheavyarty.png",
+				text = [[The Big Bertha cannon wins battles by attrition. It's too inaccurate to hit a single target reliably, but in a large battle it will probably hit something with each shot. Watch the shell trajectory to work out where the Bertha is.]]
+			},
+			{
+				image = "unitpics/turretsunlance.png",
+				text = [[Sunlances are special turrets which cannot be built in a normal game. They fire a high-power disruptor beam which slows whatever they hit.]]
 			},
 		},
 		gameConfig = {
@@ -218,7 +226,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"vehriot",
 						"vehsupport",
 						"veharty",
-						"vehheavyarty",
+						--"vehheavyarty", might destroy a Sunlance
 						"vehaa",
 						"factoryhover",
 						"hovercon",
@@ -226,7 +234,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"hoverriot",
 						"hoverskirm",
 						"hoverassault",
-						"hoverarty",
+						"hoverarty", -- probably won't destroy a Sunlance
 						"hoveraa",
 						"factoryspider",
 						"spidercon",
@@ -2062,7 +2070,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 1964,
 							z = 2336,
 							facing = 2,
-							difficultyAtMost = 2,
+							difficultyAtMost = 3,
 							difficultyAtLeast = 2,
 						},
 						{
@@ -2077,7 +2085,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 1964,
 							z = 2336,
 							facing = 2,
-							difficultyAtLeast = 3,
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "staticstorage",
