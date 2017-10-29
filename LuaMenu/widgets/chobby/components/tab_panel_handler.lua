@@ -141,7 +141,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 	end
 	
 	local function IsTabSelectedByIndex(index, tabName)
-		return tabs[index].control and tabs[index].control.parent and ((not tabName) or tabName == tabs[index].name)
+		return tabs[index].control and tabs[index].control.parent and tabs[index].control.visible and ((not tabName) or tabName == tabs[index].name)
 	end
 
 	-------------------------------------------------------------------
