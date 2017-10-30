@@ -434,6 +434,9 @@
 		// Limits number of units
 //		"limit": 10,
 
+		// Unit can be built only since specific time in seconds
+//		"since": 60,
+
 		// Minimum hp percent before retreat
 //		"retreat": 0.8,
 
