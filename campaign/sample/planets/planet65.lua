@@ -39,7 +39,6 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				extraUnlocks = {
 					"striderdetriment",
-					"turretaaheavy",
 				},
 				startUnits = {
 				}
@@ -85,7 +84,6 @@ local function GetPlanet(planetUtilities, planetID)
 			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"striderdetriment",
-				"turretaaheavy",
 			},
 			modules = {
 				"module_battle_drone_LIMIT_D_2",

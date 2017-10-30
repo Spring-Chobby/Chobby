@@ -40,7 +40,7 @@ local function GetPlanet(planetUtilities, planetID)
 				extraUnlocks = {
 					"turretheavy",
 					"turretantiheavy",
-					"energyheavygeo",
+					"energysingu",
 				},
 				startUnits = {
 				}
@@ -87,7 +87,7 @@ local function GetPlanet(planetUtilities, planetID)
 			units = {
 				"turretheavy",
 				"turretantiheavy",
-				"energyheavygeo",
+				"energysingu",
 			},
 			modules = {
 				"module_battle_drone_LIMIT_C_2",

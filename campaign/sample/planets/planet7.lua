@@ -37,8 +37,8 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[Heavier turrets cannot fire unless they are connected to energy-producing buildings. Deactivate them by destroying Energy Pylons or the energy producers themselves.]]
 			},
 			{
-				image = "unitpics/shieldraid.png",
-				text = [[You will need to defend your southern flank against Interloper Shieldbot attacks.]]
+				image = "unitpics/shieldfelon.png",
+				text = [[You will need to defend your southern flank against Interloper Shieldbot attacks. The Felon is a dangerous opponent but a Sniper can easily pierce its shields.]]
 			},
 		},
 		gameConfig = {
@@ -182,12 +182,6 @@ local function GetPlanet(planetUtilities, planetID)
 						facing = 0,
 					},
 					{
-						name = "cloaksnipe",
-						x = 1325,
-						z = 6869,
-						facing = 1,
-					},
-					{
 						name = "cloakcon",
 						x = 1124,
 						z = 6918,
@@ -195,15 +189,21 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					{
 						name = "cloaksnipe",
-						x = 1316,
-						z = 7017,
+						x = 3060,
+						z = 5780,
 						facing = 1,
 					},
 					{
 						name = "cloaksnipe",
-						x = 1325,
-						z = 6713,
+						x = 3060,
+						z = 6040,
 						facing = 1,
+					},
+					{
+						name = "cloaksnipe",
+						x = 2200,
+						z = 8960,
+						facing = 0,
 					},
 					{
 						name = "turretlaser",
@@ -252,19 +252,72 @@ local function GetPlanet(planetUtilities, planetID)
 					humanName = "Interlopers",
 					allyTeam = 1,
 					unlocks = {
-						"shieldraid",
+						"shieldfelon",
+						"shieldassault",
 					},
 					difficultyDependantUnlocks = {
-						[2] = {"shieldassault"},
-						[3] = {"shieldassault","shieldskirm"},
-						[4] = {"shieldassault","shieldskirm"},
+						[4] = {"shieldarty"},
 					},
 					commander = false,
 					startUnits = {
 						{
 							name = "staticmex",
-							x = 6168,
-							z = 11784,
+							x = 5050,
+							z = 8960,
+							facing = 1,
+						},
+						{
+							name = "energywind",
+							x = 5090,
+							z = 8960,
+							facing = 1,
+						},
+						{
+							name = "energywind",
+							x = 5010,
+							z = 8960,
+							facing = 1,
+						},
+						{
+							name = "staticmex",
+							x = 5662,
+							z = 9380,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 5662,
+							z = 9330,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 5662,
+							z = 9430,
+							facing = 0,
+						},
+						{
+							name = "staticmex",
+							x = 6756,
+							z = 9400,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6756,
+							z = 9350,
+							facing = 0,
+						},
+						{
+							name = "staticmex",
+							x = 7511,
+							z = 8902,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7561,
+							z = 8902,
 							facing = 0,
 						},
 						{
@@ -311,10 +364,70 @@ local function GetPlanet(planetUtilities, planetID)
 						},
 						{
 							name = "factoryshield",
-							x = 5936,
-							z = 11872,
+							x = 5070,
+							z = 11080,
 							facing = 2,
 							bonusObjectiveID = 3,
+						},
+						{
+							name = "staticcon",
+							x = 5200,
+							z = 11080,
+							facing = 2,
+						},
+						{
+							name = "shieldfelon",
+							x = 5200,
+							z = 10950,
+							facing = 2,
+						},
+						{
+							name = "shieldassault",
+							x = 5150,
+							z = 10950,
+							facing = 2,
+						},
+						{
+							name = "shieldassault",
+							x = 5100,
+							z = 10950,
+							facing = 2,
+							difficultyAtLeast = 2.
+						},
+						{
+							name = "shieldassault",
+							x = 5050,
+							z = 10950,
+							facing = 2,
+							difficultyAtLeast = 2.
+						},
+						{
+							name = "shieldskirm",
+							x = 5050,
+							z = 11500,
+							facing = 2,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "shieldskirm",
+							x = 5100,
+							z = 11500,
+							facing = 2,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "shieldfelon",
+							x = 5150,
+							z = 11500,
+							facing = 2,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "shieldarty",
+							x = 5200,
+							z = 11500,
+							facing = 2,
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "staticstorage",
@@ -374,36 +487,6 @@ local function GetPlanet(planetUtilities, planetID)
 							name = "turrettorp",
 							x = 4696,
 							z = 9384,
-							facing = 2,
-						},
-						{
-							name = "shieldraid",
-							x = 5803,
-							z = 11699,
-							facing = 0,
-						},
-						{
-							name = "shieldassault",
-							x = 5898,
-							z = 11732,
-							facing = 0,
-						},
-						{
-							name = "shieldraid",
-							x = 5650,
-							z = 11783,
-							facing = 0,
-						},
-						{
-							name = "shieldraid",
-							x = 5715,
-							z = 11734,
-							facing = 0,
-						},
-						{
-							name = "shieldskirm",
-							x = 5686,
-							z = 11900,
 							facing = 2,
 						},
 						{
@@ -1652,6 +1735,31 @@ local function GetPlanet(planetUtilities, planetID)
 					ignoredByAI = true,
 				},
 			},
+			terraform = {
+				{
+					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
+					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
+					position = {3416, 5700, 4740, 5990}, 
+					height = 6,
+				},
+				{
+					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
+					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
+					position = {7700, 9780, 9400, 9820}, 
+					height = -40,
+				},
+				{
+					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
+					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
+					position = {9360, 9800, 9420, 11340}, 
+					height = -40,
+				},
+				{
+					terraformShape = planetUtilities.TERRAFORM_SHAPE.RAMP,
+					position = {4040, 6, 10470, 3604, 6, 9857},
+					width = 500
+				},
+			},
 			defeatConditionConfig = {
 				-- Indexed by allyTeam.
 				[0] = { },
@@ -1698,7 +1806,7 @@ local function GetPlanet(planetUtilities, planetID)
 					-- See bonusObjectiveID in units table
 					image = planetUtilities.ICON_DIR .. "strike.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Destroy the Interlopers' Shield Bot Factory",
+					description = "Destroy the Interlopers' Shieldbot Factory",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			},

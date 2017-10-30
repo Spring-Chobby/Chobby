@@ -56,6 +56,8 @@ local function GetPlanet(planetUtilities, planetID)
 					"jumpcon",
 					"jumpraid",
 					"jumpbomb",
+					"energygeo",
+					"energyheavygeo",
 				},
 				startUnits = {
 					 {
@@ -907,6 +909,7 @@ local function GetPlanet(planetUtilities, planetID)
 			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"jumpbomb",
+				"energyheavygeo",
 			},
 			modules = {
 				"commweapon_clusterbomb",

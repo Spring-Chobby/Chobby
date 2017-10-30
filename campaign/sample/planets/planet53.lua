@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Oeva Pristia",
 			primaryType = "K2V",
 			milRating = 1,
-			text = [[Your allies are struggling against cloaked skirmishers and artillery attacking them at range. Use Firewalker napalm artillery to find and destroy the hidden enemies.]]
+			text = [[Your allies are struggling against cloaked skirmishers and artillery attacking them at range. Use Firewalker napalm artillery and jumping Jack assaults to find and destroy the hidden enemies.]]
 		},
 		tips = {
 			{
@@ -3324,6 +3324,7 @@ local function GetPlanet(planetUtilities, planetID)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
+				"jumpassault",
 				"jumparty",
 			},
 			modules = {
