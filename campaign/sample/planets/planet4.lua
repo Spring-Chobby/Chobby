@@ -42,7 +42,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 		},
 		gameConfig = {
-			mapName = "Avalanche-v2",
+			mapName = "Avalanche v3.1",
 			playerConfig = {
 				startX = 580,
 				startZ = 3500,
