@@ -110,6 +110,11 @@ local function GetPlanet(planetUtilities, planetID)
 						"jumpscout",
 						"jumpraid",
 					},
+					difficultyDependantUnlocks = {
+						 [2] = {"jumpcon"},
+						 [3] = {"jumpcon","jumpassault"},
+						 [4] = {"jumpcon","jumpassault"},
+					 },
 					commanderLevel = 2,
 					commander = {
 						name = "Firelord",
@@ -134,11 +139,25 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 0, 
 						},
 						{
+							name = "jumpassault",
+							x = 4200,
+							z = 1400,
+							facing = 0, 
+							difficultyAtLeast = 4,
+						},
+						{
 							name = "jumpblackhole",
 							x = 4200,
 							z = 2000,
 							facing = 0, 
 							bonusObjectiveID = 2,
+						}, 
+						{
+							name = "jumpraid",
+							x = 4200,
+							z = 2100,
+							facing = 0, 
+							difficultyAtLeast = 2,
 						}, 
 						{
 							name = "jumpblackhole",
@@ -148,11 +167,39 @@ local function GetPlanet(planetUtilities, planetID)
 							bonusObjectiveID = 2,
 						}, 
 						{
+							name = "jumpraid",
+							x = 4200,
+							z = 2100,
+							facing = 0, 
+							difficultyAtLeast = 3,
+						}, 
+						{
 							name = "jumpblackhole",
 							x = 2620,
 							z = 500,
 							facing = 0, 
 							bonusObjectiveID = 2,
+						}, 
+						{
+							name = "staticmex",
+							x = 4646,
+							z = 250,
+							facing = 0, 
+							difficultyAtLeast = 2,
+						}, 
+						{
+							name = "energysolar",
+							x = 4750,
+							z = 325,
+							facing = 0, 
+							difficultyAtLeast = 2,
+						},
+						{
+							name = "staticmex",
+							x = 4860,
+							z = 410,
+							facing = 0, 
+							difficultyAtLeast = 4,
 						}, 
 					}
 				},
