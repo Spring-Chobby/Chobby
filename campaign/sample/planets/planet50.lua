@@ -42,7 +42,7 @@ local function GetPlanet(planetUtilities, planetID)
 					"jumpcon",
 					"jumpraid",
 					"jumpskirm",
-					"jumpassault",
+					"jumpaa",
 				},
 				startUnits = {
 				}
@@ -91,7 +91,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"jumpcon",
 				"jumpraid",
 				"jumpskirm",
-				"jumpassault",
+				"jumpaa",
 			},
 			modules = {
 				"module_adv_nano_LIMIT_H_1",

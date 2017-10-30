@@ -40,7 +40,7 @@ local function GetPlanet(planetUtilities, planetID)
 				extraUnlocks = {
 					"striderhub",
 					"striderbantha",
-					"energysingu",
+					"turretaaheavy",
 				},
 				startUnits = {
 				}
@@ -86,7 +86,7 @@ local function GetPlanet(planetUtilities, planetID)
 			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"striderbantha",
-				"energysingu",
+				"turretaaheavy",
 			},
 			modules = {
 				"weaponmod_stun_booster",

@@ -41,8 +41,6 @@ local function GetPlanet(planetUtilities, planetID)
 					"factoryjump",
 					"jumpcon",
 					"jumpraid",
-					"jumpskirm",
-					"jumpassault",
 					"jumpaa",
 					"jumpsumo",
 					"turretimpulse",
@@ -90,7 +88,6 @@ local function GetPlanet(planetUtilities, planetID)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"jumpaa",
 				"jumpsumo",
 				"turretimpulse",
 			},
