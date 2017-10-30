@@ -166,6 +166,7 @@ local function StartBattleForReal(planetID, planetData, gameName)
 		campaignunitwhitelist = TableToBase64(gameConfig.playerConfig.unitWhitelist),
 		campaignunitblacklist = TableToBase64(gameConfig.playerConfig.unitBlacklist),
 		commanderparameters = TableToBase64(gameConfig.playerConfig.commanderParameters),
+		midgameunits = TableToBase64(gameConfig.playerConfig.midgameUnits),
 		retinuestartunits = TableToBase64(WG.CampaignData.GetActiveRetinue()),
 		typevictorylocation = TableToBase64(gameConfig.playerConfig.typeVictoryAtLocation)
 	}
@@ -232,6 +233,7 @@ local function StartBattleForReal(planetID, planetData, gameName)
 			static_level = (aiData.commanderLevel or 1) - 1, -- Comm level is 0 indexed but on the UI it is 1 indexed.
 			campaignunlocks = TableToBase64(availibleUnits),
 			commanderparameters = TableToBase64(aiData.commanderParameters),
+			midgameunits = TableToBase64(aiData.midgameUnits),
 			typevictorylocation = TableToBase64(aiData.typeVictoryAtLocation)
 		}
 		AddStartUnits(teams[teamCount], aiData.startUnits, "extrastartunits_")
