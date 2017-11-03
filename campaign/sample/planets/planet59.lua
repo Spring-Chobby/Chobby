@@ -4,7 +4,7 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/desert02.png"
 	
 	local planetData = {
 		name = "Blank",
@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[...]]
+			text = [[Fighting an active opponent armed with heavy Tanks and Striders calls for special weapons and tactics, which describes the cloaked Ultimatum's Disintegrator Gun. Even the strongest Striders cannot withstand this weapon.]]
 		},
 		gameConfig = {
 			mapName = "LowTideV3",
