@@ -30,7 +30,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/shieldfelon.png",
-				text = [[The Felon's lightning weapon is exceptionally powerful, but comes with a catch; the weapon drains power from its own shields, and therefore any surrounding shields as well. Make sure you have enough shield power available to destroy whatever you're facing, or your Felons will become weaponless and defenceless.]]
+				text = [[The Felon's lightning weapon is very powerful, but comes with a catch; the weapon drains power from its own shields, and any surrounding shields as well. Make sure you have enough shield power available to destroy whatever you're facing, or your Felons will become weaponless and defenceless.]]
 			},
 			{
 				image = "unitpics/module_adv_nano.png",
@@ -159,8 +159,8 @@ local function GetPlanet(planetUtilities, planetID)
 						"turretmissile",
 					},
 					difficultyDependantUnlocks = {
-						[2] = {"turretriot"},
-						[3] = {"turretriot","cloaksnipe"}
+						[3] = {"turretriot"},
+						[4] = {"turretriot","cloaksnipe"}
 					},
 					commanderLevel = 2,
 					commander = {
@@ -221,7 +221,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 705,
 							z = 734,
 							facing = 1,
-							difficultyAtLeast = 3,
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "turretlaser",
@@ -294,7 +294,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 120,
 							z = 3992,
 							facing = 0,
-							difficultyAtLeast = 3,
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "energysolar",

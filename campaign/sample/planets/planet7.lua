@@ -1764,12 +1764,11 @@ local function GetPlanet(planetUtilities, planetID)
 				-- Indexed by allyTeam.
 				[0] = { },
 				[1] = {
-					ignoreUnitLossDefeat = false,
+					ignoreUnitLossDefeat = true,
 					loseAfterSeconds = false,
 				},
 				[2] = {
 					ignoreUnitLossDefeat = true,
-					vitalCommanders = false,
 					loseAfterSeconds = false,
 				},
 			},

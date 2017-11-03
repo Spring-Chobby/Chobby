@@ -5,7 +5,7 @@
 local function GetPlanet(planetUtilities, planetID)
 	
 	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
-	local image = LUA_DIRNAME .. "images/planets/76.png"
+	local image = LUA_DIRNAME .. "images/planets/terran02.png"
 	
 	local planetData = {
 		name = "Yeta",
@@ -326,6 +326,11 @@ local function GetPlanet(planetUtilities, planetID)
 						"shieldriot",
 						"shieldskirm",
 						"shieldaa",
+					},
+					difficultyDependantUnlocks = {
+						[2] = {"shieldfelon"},
+						[3] = {"shieldfelon","shieldarty"},
+						[4] = {"shieldfelon","shieldarty","vehheavyarty",},
 					},
 					commanderLevel = 2,
 					commander = {

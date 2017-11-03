@@ -25,12 +25,12 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Ushasis",
 			primaryType = "F9V",
 			milRating = 1,
-			text = [[Your opponent starts with Hovercraft but will also build Gunships. Build Rogue skirmishers to defeat the hovercraft, then Vandal AA bots to defeat the gunships.]]
+			text = [[Your opponent will build Hovercraft and Gunships to cross the oasis which separates you. Build Rogue skirmishers to defeat the hovercraft, then Vandal AA bots to defeat the gunships.]]
 		},
 		tips = {
 			{
 				image = "unitpics/shieldskirm.png",
-				text = [[Since their rockets curve through the air, instead of travelling in a straight line, Rogue skirmisher bots are a bit worse at hitting mobile targets than Ronins. They inflict significantly more damage when they do hit.]]
+				text = [[Since their rockets curve through the air, Rogues are a bit worse at hitting mobile targets than Ronins. They inflict more damage if they do hit.]]
 			},
 			{
 				image = "unitpics/shieldraid.png",
@@ -353,6 +353,62 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 3112,
 							z = 3193,
 							facing = 0,
+						},
+						{
+							name = "staticmex",
+							x = 4744,
+							z = 3513,
+							facing = 0,
+							difficultyAtLeast = 2,
+						},
+						{
+							name = "energysolar",
+							x = 4744,
+							z = 3370,
+							facing = 0,
+							difficultyAtLeast = 2,
+						},
+						{
+							name = "turretlaser",
+							x = 4800,
+							z = 3600,
+							facing = 2,
+							difficultyAtLeast = 2,
+						},
+						{
+							name = "staticmex",
+							x = 1112,
+							z = 3736,
+							facing = 0,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "energysolar",
+							x = 1112,
+							z = 3600,
+							facing = 0,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "turretlaser",
+							x = 1200,
+							z = 3700,
+							facing = 2,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "staticmex",
+							x = 630,
+							z = 3700,
+							facing = 0,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "staticmex",
+							x = 5114,
+							z = 3594,
+							facing = 0,
+							difficultyAtLeast = 4,
 						},
 					}
 				},

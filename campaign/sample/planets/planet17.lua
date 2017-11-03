@@ -202,12 +202,18 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 4296,
 						z = 2952,
 						facing = 0,
+						commands = {
+							{cmdID = planetUtilities.COMMAND.PATROL, pos = {4296, 3000}},
+						},
 					},
 					{
 						name = "staticcon",
 						x = 4376,
 						z = 2952,
 						facing = 0,
+						commands = {
+							{cmdID = planetUtilities.COMMAND.PATROL, pos = {4376, 3000}},
+						},
 					},
 					{
 						name = "shieldarty",
@@ -673,6 +679,42 @@ local function GetPlanet(planetUtilities, planetID)
 						}	
 					},
 					startUnits = {
+						{
+							name = "striderdante",
+							x = 7470,
+							z = 7640,
+							facing = 0,
+							buildProgress = 0.10,
+							difficultyAtLeast = 1,
+							difficultyAtMost = 1,
+						},
+						{
+							name = "striderdante",
+							x = 7470,
+							z = 7640,
+							facing = 0,
+							buildProgress = 0.35,
+							difficultyAtLeast = 2,
+							difficultyAtMost = 2,
+						},
+						{
+							name = "striderdante",
+							x = 7470,
+							z = 7640,
+							facing = 0,
+							buildProgress = 0.60,
+							difficultyAtLeast = 3,
+							difficultyAtMost = 3,
+						},
+						{
+							name = "striderdante",
+							x = 7470,
+							z = 7640,
+							facing = 0,
+							buildProgress = 0.85,
+							difficultyAtLeast = 4,
+							difficultyAtMost = 4,
+						},
 						{
 							name = "turretlaser",
 							x = 3900,

@@ -39,7 +39,8 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				extraUnlocks = {
 					"striderhub",
-					"striderarty",
+					"striderscorpion",
+					
 				},
 				startUnits = {
 				}
@@ -85,10 +86,10 @@ local function GetPlanet(planetUtilities, planetID)
 			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"striderhub",
-				"striderarty",
+				"striderscorpion",
 			},
 			modules = {
-				"module_cloak_field"
+				"commweapon_multistunner",
 			},
 			abilities = {
 			}

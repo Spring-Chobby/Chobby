@@ -181,7 +181,7 @@ local function GetPlanet(planetUtilities, planetID)
 					difficultyDependantUnlocks = {
 						[2] = {"cloakassault"},
 						[3] = {"cloakassault","cloakcon"},
-						[4] = {"cloakassault","cloakcon"},
+						[4] = {"cloakassault","cloakcon","cloakarty"},
 					},
 					commanderLevel = 2,
 					commander = {
@@ -197,6 +197,55 @@ local function GetPlanet(planetUtilities, planetID)
 						}
 					},
 					startUnits = {
+						{
+							name = "energysolar",
+							x = 2722,
+							z = 2302,
+							facing = 0,
+							difficultyAtLeast = 2,
+						},
+						{
+							name = "staticmex",
+							x = 2746,
+							z = 2215,
+							facing = 0,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "staticmex",
+							x = 5594,
+							z = 2728,
+							facing = 0,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "energysolar",
+							x = 5574,
+							z = 2836,
+							facing = 0,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "cloakraid",
+							x = 3864,
+							z = 1750,
+							facing = 0,
+							difficultyAtLeast = 2,
+						},
+						{
+							name = "cloakraid",
+							x = 3864,
+							z = 1775,
+							facing = 0,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "cloakraid",
+							x = 3864,
+							z = 1799,
+							facing = 0,
+							difficultyAtLeast = 4,
+						},
 						{
 							name = "factorycloak",
 							x = 3864,

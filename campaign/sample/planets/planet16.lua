@@ -25,16 +25,16 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Zooph",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[Abuse the combination of Snitch mobile bombs and Iris or Shroud area cloakers to decimate enemy tank formations in this battle. Build some Geothermal Generators to power your area cloakers.]]
+			text = [[Abuse the combination of Snitch mobile bombs and Iris area cloakers to decimate enemy formations in this battle. Build some Geothermal Generators to power your area cloakers.]]
 		},
 		tips = {
 			{
 				image = "unitpics/shieldbomb.png",
-				text = [[Snitches are very simple; they burrow into the ground, become cloaked, then explode when enemies get close. With an area cloaker Snitches can remain cloaked even on the move, making them a potent offensive weapon as well.]]
+				text = [[Snitches burrow into the ground, become cloaked, then explode when enemies get close. With an area cloaker Snitches can remain cloaked even on the move, making them a potent offensive weapon as well.]]
 			},
 			{
 				image = "unitpics/cloakjammer.png",
-				text = [[An Iris bot cloaks and jams the radar signature of all friendly units in the surrounding area, including itself. It is fragile and unarmed so keep it away from any enemy units that might discover it. Combine with powerful short range units like riots or bombs for best effect.]]
+				text = [[An Iris cloaks and jams the radar signature of all friendly units in the surrounding area, including itself. It is fragile and unarmed so keep it away from any enemy units that might discover it. Combine with powerful short range units like riots or bombs for best effect.]]
 			},
 			{
 				image = "unitpics/staticjammer.png",
@@ -342,8 +342,21 @@ local function GetPlanet(planetUtilities, planetID)
 						"energywind",
 						"energygeo",
 						"staticradar",
+						"staticcon",
 						"turretlaser",
 						"turretmissile",
+						"factoryshield",
+						"shieldcon",
+						"shieldraid",
+						"shieldskirm",
+						"shieldassault",
+						"shieldfelon",
+						"factoryamph",
+						"amphcon",
+						"amphraid",
+						"amphimpulse",
+						"amphfloater",
+						"amphriot",
 						"factorytank",
 						"tankcon",
 						"tankraid",
@@ -540,9 +553,53 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 0,
 						},
 						{
-							name = "factorytank",
+							name = "factoryamph",
 							x = 5696,
-							z = 1984,
+							z = 1880,
+							facing = 3,
+						},
+						{
+							name = "amphcon",
+							x = 5650,
+							z = 1880,
+							facing = 3,
+						},
+						{
+							name = "amphcon",
+							x = 5625,
+							z = 1880,
+							facing = 3,
+						},
+						{
+							name = "amphcon",
+							x = 5600,
+							z = 1880,
+							facing = 3,
+						},
+						{
+							name = "amphriot",
+							x = 5650,
+							z = 1830,
+							facing = 3,
+						},
+						{
+							name = "amphriot",
+							x = 5625,
+							z = 1830,
+							facing = 3,
+							difficultyAtLeast = 2,
+						},
+						{
+							name = "amphriot",
+							x = 5600,
+							z = 1830,
+							facing = 3,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "factoryshield",
+							x = 5696,
+							z = 2100,
 							facing = 3,
 						},
 						{
@@ -642,25 +699,25 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 3,
 						},
 						{
-							name = "tankraid",
+							name = "amphimpulse",
 							x = 5245,
 							z = 1808,
 							facing = 3,
 						},
 						{
-							name = "tankraid",
+							name = "shieldassault",
 							x = 4813,
 							z = 2992,
 							facing = 3,
 						},
 						{
-							name = "tankheavyraid",
+							name = "shieldfloater",
 							x = 5143,
 							z = 2175,
 							facing = 3,
 						},
 						{
-							name = "tankheavyraid",
+							name = "shieldskirm",
 							x = 4428,
 							z = 604,
 							facing = 3,
@@ -670,7 +727,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 6953,
 							z = 1125,
 							facing = 3,
-							difficultyAtMost = 2,
+							difficultyAtLeast = 3,
 							
 						},
 						{
@@ -678,7 +735,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 6949,
 							z = 2754,
 							facing = 3,
-							difficultyAtMost = 2,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "tankcon",
@@ -709,6 +766,34 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 4656,
 							z = 3152,
 							facing = 3,
+						},
+						{
+							name = "staticmex",
+							x = 4673,
+							z = 3890,
+							facing = 3,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "staticmex",
+							x = 4855,
+							z = 3975,
+							facing = 3,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "staticmex",
+							x = 4780,
+							z = 392,
+							facing = 3,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "staticmex",
+							x = 5000,
+							z = 150,
+							facing = 3,
+							difficultyAtLeast = 4,
 						},
 					}
 				},
@@ -748,27 +833,23 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Build an Iris",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				-- [2] = { -- Kill enemy commander
-					-- satisfyOnce = true,
-					-- comparisionType = planetUtilities.COMPARE.AT_MOST,
-					-- targetNumber = 0,
-					-- -- See bonusObjectiveID in units table
-					-- image = planetUtilities.ICON_DIR .. "strike.png",
-					-- imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					-- description = "Kill the enemy Commander",
-					-- experience = planetUtilities.BONUS_EXP,
-				-- },
-				[2] = { -- Destroy 20 enemy mex
+				[2] = { -- Lose 25 Snitches
 					satisfyOnce = true,
 					onlyCountRemovedUnits = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 20,
-					enemyUnitTypes = {
-						"staticmex",
+					targetNumber = 25,
+					unitTypes = {
+						"shieldbomb",
 					},
-					image = planetUtilities.ICON_DIR .. "staticmex.png",
+					image = planetUtilities.ICON_DIR .. "shieldbomb.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Destroy 20 enemy Metal Extractors",
+					description = "Lose 25 or more Snitches",
+					experience = planetUtilities.BONUS_EXP,
+				},
+				[3] = { -- Win by 20:00
+					victoryByTime = 1200,
+					image = planetUtilities.ICON_OVERLAY.CLOCK,
+					description = "Win by 20:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			},
