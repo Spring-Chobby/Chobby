@@ -30,11 +30,11 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/shieldarty.png",
-				text = [[Racketeers disarm single targets with guided missiles. They don't do any real damage so make sure you have other units standing by to destroy the helpless enemy. They are most effective when used against high-value targets like Commanders and Striders.]]
+				text = [[Racketeers use long range disarm missiles to disable the weapons and abilities of single enemy units. They don't do any real damage so make sure you have other units standing by to destroy the helpless enemy.]]
 			},
 			{
 				image = "unitpics/shieldshield.png",
-				text = [[The Aspis area shield protects your army from anything outside the shield. Make sure the enemy stays outside. The Aegis is a slightly more efficient static version of the Aspis that is buildable by constructors. Remember the static and mobile versions can morph into each other.]]
+				text = [[The Aspis area shield projects a larger and more powerful shield than those carried by other Shieldbots. Shields only destroy projectiles that cross their surface so make sure to maintain a safe distance from enemy units. Aspis can morph to and from the Aegis, a slightly more efficient static version.]]
 			},
 			{
 				image = "unitpics/striderdante.png",

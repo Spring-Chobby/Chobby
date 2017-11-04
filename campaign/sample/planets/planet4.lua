@@ -34,7 +34,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/cloakaa.png",
-				text = [[Gremlin AA bots cloak while they are not firing, so they have a secondary purpose as scouts.]]
+				text = [[Gremlin anti-air bots cloak while they are not firing, so they have a secondary purpose as scouts.]]
 			},
 			{
 				image = "unitpics/strike.png",

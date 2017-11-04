@@ -25,20 +25,20 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Alain Anora",
 			primaryType = "G4V",
 			milRating = 1,
-			text = [[Finish the Cerberus artillery piece and link it to your ally's power plants. This cannon will break the enemy's defensive line and allow you to destroy their base.]]
+			text = [[Finish the Cerberus artillery piece and link it to your ally's power plants. This cannon will break the enemy's defensive line and allow you to destroy their base.]],
 		},
 		tips = {
 			{
-				image = "unitpics/staticcon.png",
-				text = [[Caretakers are stationary constructors, with high build power for their cost and long build range. They can't start projects on their own, though.]]
-			},
-			{
 				image = "unitpics/staticarty.png",
-				text = [[The Cerberus is a long-range artillery structure capable of outranging and destroying almost all other statics, and suppressing the movement of mobile units. Toggle it into high-trajectory mode to fire over hills.]]
+				text = [[The Cerberus is a long-range artillery structure capable of outranging and destroying the enemies defense as well as suppressing the movement of their mobile units. Toggle it into high-trajectory mode to fire over hills.]]
 			},
 			{
 				image = "unitpics/energypylon.png",
-				text = [[Your Cerberus won't fire unless it is connected to buildings producing at least 50 energy, although it does not consume this energy. Energy Pylons are the easiest way to do this. Pylons can also be used to connect Metal Extractors to the grid for overdrive.]]
+				text = [[In order to fire, your Cerberus needs to be connected to a power grid with at least 50 energy, although it does not consume this energy. Use Energy Pylons to extend the grid from your ally's Fusions. The grid can also be connected to Metal Extractors to overdrive them for increased metal production.]]
+			},
+			{
+				image = "unitpics/staticcon.png",
+				text = [[Caretakers are stationary constructors with large build range and high build power for their cost. They are limited by their inability to initiate construction.]]
 			},
 		},
 		gameConfig = {

@@ -30,15 +30,15 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/shieldcon.png",
-				text = [[The Shieldbots' Convict constructor and Thug assault bot are equipped with small shields, which protect both themselves and nearby units. If one shield has suffered damage, then shield power will be taken from other nearby shields to compensate.]]
+				text = [[The Shieldbot constructor and assault, Convict and Thug, are equipped with small shields which block incoming projectiles at the cost of shield power. Nearby shields share power, a shield that has recently sustained damage will take power from other nearby shields to compensate.]]
 			},
 			{
 				image = "unitpics/shieldraid.png",
-				text = [[The Bandit raider is a bit slower than the Glaive and does not autorepair, but compensates with more health and range. It is an exceptionally versatile unit.]]
+				text = [[Bandits are a somewhat slower raiders than Glaives but compensate with superior health and range. They are exceptionally versatile units and are particularly effective while sheltered under the shield of a Convict or Thug.]]
 			},
 			{
 				image = "unitpics/shieldriot.png",
-				text = [[The Outlaw riot bot wields an unconventional weapon: it sends out disrupting pulses which damage and slow enemies (but not allies) in a wide radius. Compared to most riots it is very poor against single targets but exceptional when used to protect other units against raider assault.]]
+				text = [[Outlaws wield an unconventional weapon: a disrupting pulse which damage and slow enemies (but not allies) in a wide radius. Compared to most riots it is very poor against single targets but exceptional when used to protect other units against raider assault.]]
 			},
 		},
 		gameConfig = {

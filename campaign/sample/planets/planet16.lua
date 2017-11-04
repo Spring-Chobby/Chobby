@@ -25,20 +25,20 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Zooph",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[Abuse the combination of Snitch mobile bombs and Iris area cloakers to decimate enemy formations in this battle. Build some Geothermal Generators to power your area cloakers.]]
+			text = [[Use a combination of Snitch mobile bombs and Iris area cloakers to decimate enemy formations in this battle. Build some Geothermal Generators to provide the energy for your area cloakers.]]
 		},
 		tips = {
 			{
 				image = "unitpics/shieldbomb.png",
-				text = [[Snitches burrow into the ground, become cloaked, then explode when enemies get close. With an area cloaker Snitches can remain cloaked even on the move, making them a potent offensive weapon as well.]]
+				text = [[Snitches burrow into the ground, cloaking themselves at the cost of movement, then explode when enemies get close. With an area cloaker Snitches can are free to move while cloaked, transforming them into a potent offensive weapon. Manually detonate Snitches with 'D'.]]
 			},
 			{
 				image = "unitpics/cloakjammer.png",
-				text = [[An Iris cloaks and jams the radar signature of all friendly units in the surrounding area, including itself. It is fragile and unarmed so keep it away from any enemy units that might discover it. Combine with powerful short range units like riots or bombs for best effect.]]
+				text = [[The Iris area cloaker grants cloaking to all friendly units in the surrounding area, including itself. It is fragile and has a large decloak radius so keep it away from enemy spotters. Combine with high damage short range units like riots, raiders or bombs for best effect.]]
 			},
 			{
 				image = "unitpics/staticjammer.png",
-				text = [[The Iris mobile cloaker and Cornea static jammer can morph back and forth. The static Cornea has slightly lower energy cost and larger cloak radius. This also allows you to build an Iris without having a Cloakbot Factory.]]
+				text = [[The Iris mobile cloaker can morph to an from a static version - the Cornea. The Cornea cloaks units in a larger radius and is much harder to spot due it's reduced decloak radius. Cornea can be built by all standard constructors so Iris is avalible even without a Cloakbot Factory.]]
 			},
 		},
 		gameConfig = {

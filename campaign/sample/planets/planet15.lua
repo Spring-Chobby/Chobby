@@ -25,20 +25,20 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Ushasis",
 			primaryType = "F9V",
 			milRating = 1,
-			text = [[Your opponent will build Hovercraft and Gunships to cross the oasis which separates you. Build Rogue skirmishers to defeat the hovercraft, then Vandal AA bots to defeat the gunships.]]
+			text = [[Your opponent will field Hovercraft and Gunships to cross the oasis which separates your bases. Build Rogues to defeat the hovercraft and Vandals to defeat the gunships.]]
 		},
 		tips = {
 			{
 				image = "unitpics/shieldskirm.png",
-				text = [[Since their rockets curve through the air, Rogues are a bit worse at hitting mobile targets than Ronins. They inflict more damage if they do hit.]]
+				text = [[Since their rockets curve through the air, Rogues are a bit worse at hitting mobile targets than other skirmishers. On the upside they outrange most other skirmishers and inflict more damage if they do hit.]]
 			},
 			{
 				image = "unitpics/shieldraid.png",
-				text = [[A combination of steady pressure with Rogues and raiding parties of Bandits will keep your opponent's expansion under control.]]
+				text = [[A combination of steady pressure with Rogues and raiding parties of Bandits will keep your opponent's expansion under control. Remember to secure Metal Extractors of your own.]]
 			},
 			{
 				image = "unitpics/gunshipraid.png",
-				text = [[Some of your other units are able to hit Gunships such as the Locust, but dedicated AA like the Vandal bot and Razor turret will be most effective.]]
+				text = [[Most units will attempt to fire at low-flying aircraft and some, such as Bandits, are even good at the task. However, dedicated anti-air such as Vandals or Razor turrets are significantly more effective and have a significant range advantage.]]
 			},
 		},
 		gameConfig = {

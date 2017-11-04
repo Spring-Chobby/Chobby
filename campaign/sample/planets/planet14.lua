@@ -30,15 +30,15 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/shieldfelon.png",
-				text = [[The Felon's lightning weapon is very powerful, but comes with a catch; the weapon drains power from its own shields, and any surrounding shields as well. Make sure you have enough shield power available to destroy whatever you're facing, or your Felons will become weaponless and defenceless.]]
+				text = [[The Felon's discharge gun is very powerful, but comes with a catch; the weapon drains power from its own shields and the shields of nearby allies. Make sure you have enough shield power available to destroy whatever you're facing, or your Felons will become weaponless and defenceless.]]
 			},
 			{
-				image = "unitpics/module_adv_nano.png",
-				text = [[To keep up with the production of two enemies you'll need an edge. Reclaim the rocks and trees on this map to give yourself an economic boost.]]
+				image = "luaui/images/commands/bold/reclaim.png",
+				text = [[To keep up with the production capacity of your two opponents you'll need an edge. Reclaim the rocks and trees near your base to secure an early economic boost.]]
 			},
 			{
 				image = "unitpics/staticstorage.png",
-				text = [[Reclaiming goes to waste if you have reached your maximum resource storage limit. Build additional Storages to cope with the sudden influx.]]
+				text = [[Reclaimed resources go to waste if you have reached your maximum resource storage limit. Build additional Storages to cope with a sudden influx. Beware of overproducing storage as they are a waste of resources when empty.]]
 			},
 		},
 		gameConfig = {
