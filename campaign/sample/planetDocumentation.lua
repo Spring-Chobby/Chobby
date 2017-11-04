@@ -260,34 +260,34 @@ planetData = {
 					bonusObjectiveID = 1,
 				},
 				-- etc...
-			}
-		},
-		-- Reinforcements that occur midgame.
-		midgameUnits = {
-			-- Share all keys with startUnits except terraformHeight
-			-- Midgame units automatically check their spawn location for terrain and structure blockages.
-			--  * delay - Time, in frames, into the mission that the unit is spawned. Required.
-			--  * spawnRadius - Spawn the unit in a random location in a square with sidelength 2*spawnRadius. 
-			--  * orbitalDrop - Set to true to use the orbital drop effect. This can also be set for initial units.
-			{
-				name = "cloakriot",
-				x = 2400,
-				z = 460,
-				facing = 1,
-				spawnRadius = 50,
-				
-				delay = 4*30,
-				orbitalDrop = true,
 			},
-			{
-				name = "cloakriot",
-				x = 2500,
-				z = 300,
-				facing = 1,
-				spawnRadius = 50,
-				
-				delay = 4*30,
-				orbitalDrop = true,
+			-- Reinforcements that occur midgame.
+			midgameUnits = {
+				-- Share all keys with startUnits except terraformHeight
+				-- Midgame units automatically check their spawn location for terrain and structure blockages.
+				--  * delay - Time, in frames, into the mission that the unit is spawned. Required.
+				--  * spawnRadius - Spawn the unit in a random location in a square with sidelength 2*spawnRadius. 
+				--  * orbitalDrop - Set to true to use the orbital drop effect. This can also be set for initial units.
+				{
+					name = "cloakriot",
+					x = 2400,
+					z = 460,
+					facing = 1,
+					spawnRadius = 50,
+					
+					delay = 4*30,
+					orbitalDrop = true,
+				},
+				{
+					name = "cloakriot",
+					x = 2500,
+					z = 300,
+					facing = 1,
+					spawnRadius = 50,
+					
+					delay = 4*30,
+					orbitalDrop = true,
+				},
 			},
 		},
 		
