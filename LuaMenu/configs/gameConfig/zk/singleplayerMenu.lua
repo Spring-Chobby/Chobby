@@ -1,14 +1,23 @@
 local planetWhitelist = {
+	-- Tutorial Cloaky
 	[69] = true,
 	[1] = true,
 	[2] = true,
 	[3] = true,
-	[4] = true,
 	[5] = true,
+	-- Adv. Cloaky
+	[4] = true,
 	[6] = true,
 	[7] = true,
 	[8] = true,
 	[20] = true,
+	-- Shield
+	[13] = true,
+	[14] = true,
+	[15] = true,
+	[16] = true,
+	[17] = true,
+	[19] = true,
 }
 
 return {
