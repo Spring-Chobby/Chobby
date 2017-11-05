@@ -681,7 +681,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "staticarty.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build two Tyrants",
+					description = "Build two Cerberi",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { -- Win in 12 minutes
