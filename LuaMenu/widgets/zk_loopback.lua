@@ -63,6 +63,12 @@ local function DownloadFileDone(args)
 	WG.DownloadWrapperInterface.DownloadFinished(args.Name, args.FileType, args.IsSuccess)
 end
 
+-- reports download progress. 100 might not indicate complation, wait for downloadfiledone
+local function DownloadFileProgress(args)
+	WG.DownloadWrapperInterface.DownloadFileProgress(args.Name, args.FileType, args.Progress, args.SecondsRemaining)
+end
+
+
 -- notifies that steam is online
 local function SteamOnline(args)
 	WG.SteamHandler.SteamOnline(args.AuthToken, args.FriendSteamID, args.Friends, args.SuggestedName)
@@ -148,6 +154,7 @@ commands["SteamHostGameSuccess"] = SteamHostGameSuccess
 commands["SteamHostGameFailed"] = SteamHostGameFailed
 commands["SteamConnectSpring"] = SteamConnectSpring
 commands["DownloadImageDone"] = DownloadImageDone
+commands["DownloadFileProgress"] = DownloadFileProgress
 
 
 --------------------------------------------------------------------------------
@@ -191,6 +198,12 @@ end
 function WrapperLoopback.DownloadFile(name, fileType) 
 	SendCommand("DownloadFile", {Name = name, FileType = fileType})
 end
+
+--  aborts existing file download
+function WrapperLoopback.AbortDownload(name, fileType) 
+	SendCommand("AbortDownload", {Name = name, FileType = fileType})
+end
+
 
 
 function WrapperLoopback.StartNewSpring(args) 
