@@ -327,13 +327,17 @@ local function GetPlanet(planetUtilities, planetID)
 						"veharty",
 						"vehheavyarty",
 						"vehaa",
-						"factoryplane",
 						"planefighter",
 						"planeheavyfighter",
 						"planescout",
 						"bomberprec",
 						"bomberriot",
 						"bomberdisarm",
+					},
+					difficultyDependantUnlocks = {
+						[2] = {"staticcon"},
+						[3] = {"staticcon","factoryamph","factoryveh"},
+						[4] = {"staticcon","factoryamph","factoryveh"},
 					},
 					commander = false,
 					startUnits = {
@@ -661,7 +665,11 @@ local function GetPlanet(planetUtilities, planetID)
 						"jumparty",
 						--"striderhub",
 						"striderdante",
-						"staticcon",
+					},
+					difficultyDependantUnlocks = {
+						[2] = {"staticcon"},
+						[3] = {"staticcon","factoryjump"},
+						[4] = {"staticcon","factoryjump"},
 					},
 					commanderLevel = 3,
 					commander = {
@@ -679,10 +687,22 @@ local function GetPlanet(planetUtilities, planetID)
 						}	
 					},
 					startUnits = {
+						-- Strider Hub and Dante on easy/normal is further forward, hopefully making it more killable.
+						{
+							name = "striderhub",
+							x = 7200,
+							z = 7300,
+							facing = 3,
+							mapMarker = {
+								text = "Strider Hub",
+								color = "red"
+							},
+							difficultyAtMost = 2,
+						},
 						{
 							name = "striderdante",
-							x = 7470,
-							z = 7640,
+							x = 7050,
+							z = 7300,
 							facing = 0,
 							buildProgress = 0.10,
 							difficultyAtLeast = 1,
@@ -690,12 +710,31 @@ local function GetPlanet(planetUtilities, planetID)
 						},
 						{
 							name = "striderdante",
-							x = 7470,
-							z = 7640,
+							x = 7050,
+							z = 7300,
 							facing = 0,
 							buildProgress = 0.35,
 							difficultyAtLeast = 2,
 							difficultyAtMost = 2,
+						},
+						{
+							name = "turretgauss",
+							x = 7000,
+							z = 7200,
+							facing = 3,
+							difficultyAtMost = 2,
+						},
+						-- Strider Hub and Dante on hard/brutal is further back, and near a Caretaker.
+						{
+							name = "striderhub",
+							x = 7568,
+							z = 7648,
+							facing = 3,
+							mapMarker = {
+								text = "Strider Hub",
+								color = "red"
+							},
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "striderdante",
@@ -714,6 +753,20 @@ local function GetPlanet(planetUtilities, planetID)
 							buildProgress = 0.85,
 							difficultyAtLeast = 4,
 							difficultyAtMost = 4,
+						},
+						{
+							name = "turretgauss",
+							x = 7496,
+							z = 7496,
+							facing = 0,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "turretgauss",
+							x = 7320,
+							z = 7656,
+							facing = 3,
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "turretlaser",
@@ -780,16 +833,6 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 7960,
 							z = 7992,
 							facing = 3,
-						},
-						{
-							name = "striderhub",
-							x = 7568,
-							z = 7648,
-							facing = 3,
-							mapMarker = {
-								text = "Strider Hub",
-								color = "red"
-							},
 						},
 						{
 							name = "energysolar",
@@ -880,18 +923,6 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 5008,
 							z = 8304,
 							facing = 0,
-						},
-						{
-							name = "turretgauss",
-							x = 7496,
-							z = 7496,
-							facing = 0,
-						},
-						{
-							name = "turretgauss",
-							x = 7320,
-							z = 7656,
-							facing = 3,
 						},
 						{
 							name = "jumpcon",

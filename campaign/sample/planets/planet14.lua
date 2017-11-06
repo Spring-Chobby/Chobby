@@ -190,6 +190,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 456,
 							z = 904,
 							facing = 0,
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "staticmex",
@@ -230,10 +231,18 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 1,
 						},
 						{
+							name = "turretlaser",
+							x = 808,
+							z = 1000,
+							facing = 1,
+							difficultyAtMost = 3,
+						},
+						{
 							name = "turretgauss",
 							x = 808,
 							z = 1000,
 							facing = 1,
+							difficultyAtLeast = 4,
 						},
 					}
 				},
@@ -301,6 +310,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 440,
 							z = 3112,
 							facing = 0,
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "energywind",
@@ -334,10 +344,18 @@ local function GetPlanet(planetUtilities, planetID)
 							difficultyAtLeast = 3,
 						},
 						{
+							name = "turretlaser",
+							x = 680,
+							z = 3160,
+							facing = 1,
+							difficultyAtMost = 3,
+						},
+						{
 							name = "turretgauss",
 							x = 680,
 							z = 3160,
 							facing = 1,
+							difficultyAtLeast = 4,
 						},
 					}
 				},
