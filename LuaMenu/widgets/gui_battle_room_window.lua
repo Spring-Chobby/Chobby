@@ -1249,30 +1249,17 @@ local function SetupVotePanel(votePanel, battle, battleID)
 	return externalFunctions
 end
 
-local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOptions, firstPage, ApplyFunction)
+local function InitializeSetupPage(subPanel, screenHeight, pageConfig, nextPage, prevPage, selectedOptions, ApplyFunction)
 	local Configuration = WG.Chobby.Configuration
 
-	local _, screenHeight = Spring.GetWindowGeometry()
 	local buttonScale, buttonHeight, buttonFont = 70, 64, 4
-	
 	if screenHeight < 900 then
 		buttonScale = 60
 		buttonHeight = 56
 		buttonFont = 4
 	end
-	local panelOffset = math.max(8, math.min(60, ((screenHeight - 768)*0.16 + 8)))
 	
-	local subPanel = Control:New {
-		x = 0,
-		y = panelOffset,
-		right = 0,
-		bottom = 0,
-		padding = {0, 0, 0, 0},
-		parent = mainWindow,
-	}
-	if not firstPage then
-		subPanel:Hide()
-	end
+	subPanel:SetVisibility(not prevPage)
 
 	local lblBattleTitle = Label:New {
 		x = "40%",
@@ -1287,8 +1274,6 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 	}
 
 	local buttons = {}
-
-	local advButton
 
 	local nextButton = Button:New {
 		x = "36%",
@@ -1315,7 +1300,7 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 	}
 	nextButton:Hide()
 
-	advButton = Button:New {
+	local advButton = Button:New {
 		x = "78%",
 		right = "5%",
 		bottom = "4%",
@@ -1333,7 +1318,26 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 		},
 		parent = subPanel,
 	}
-
+	
+	if prevPage then
+		Button:New {
+			x = "5%",
+			right = "78%",
+			bottom = "4%",
+			height = 48,
+			classname = "option_button",
+			caption = "Back",
+			font = Configuration:GetFont(2),
+			OnClick = {
+				function(obj)
+					subPanel:SetVisibility(false)
+					prevPage:SetVisibility(true)
+				end
+			},
+			parent = subPanel,
+		}
+	end
+	
 	for i = 1, #pageConfig.options do
 		local x, y, right, height, caption, tooltip
 		if pageConfig.minimap then
@@ -1371,12 +1375,6 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 					if advButton then
 						advButton:SetVisibility(true)
 					end
-					if lichoButton then
-						lichoButton:SetVisibility(true)
-					end
-					if googleFrogButton then
-						googleFrogButton:SetVisibility(true)
-					end
 				end
 			},
 			parent = subPanel,
@@ -1400,7 +1398,6 @@ end
 
 local function SetupEasySetupPanel(mainWindow, standardSubPanel, setupData)
 	local pageConfigs = setupData.pages
-	local nextPage
 	local selectedOptions = {} -- Passed and modified by reference
 
 	local function ApplyFunction(startGame)
@@ -1417,8 +1414,23 @@ local function SetupEasySetupPanel(mainWindow, standardSubPanel, setupData)
 		standardSubPanel:SetVisibility(true)
 	end
 
-	for i = #pageConfigs, 1, -1 do
-		nextPage = InitializeSetupPage(mainWindow, pageConfigs[i], nextPage, selectedOptions, i == 1, ApplyFunction)
+	local _, screenHeight = Spring.GetWindowGeometry()
+	local panelOffset = math.max(8, math.min(60, ((screenHeight - 768)*0.16 + 8)))
+	
+	local pages = {}
+	for i = 1, #pageConfigs do
+		pages[i] = Control:New {
+			x = 0,
+			y = panelOffset,
+			right = 0,
+			bottom = 0,
+			padding = {0, 0, 0, 0},
+			parent = mainWindow,
+		}
+	end
+	
+	for i = 1, #pages do
+		InitializeSetupPage(pages[i], screenHeight, pageConfigs[i], pages[i + 1], pages[i - 1], selectedOptions, ApplyFunction)
 	end
 end
 
