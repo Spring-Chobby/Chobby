@@ -3,6 +3,8 @@ Downloader = Component:extends{}
 function Downloader:init(tbl, timeout, updateListener, completeListener, queueFont, visibleListener)
 	self:super("init")
 
+	self.wrapperAsFallback = false
+	
 	queueFont = queueFont or 1
 	self.lblDownload = Label:New {
 		x = 20,
@@ -273,7 +275,7 @@ function Downloader:DownloadFailed(listener, downloadID, errorID)
 		self.completeListener(self.downloads[downloadID].archiveName, self.downloads[downloadID].archiveType, false)
 	end
 
-	if WG.WrapperLoopback and WG.WrapperLoopback.DownloadFile then
+	if self.wrapperAsFallback and WG.WrapperLoopback and WG.WrapperLoopback.DownloadFile then
 		WG.WrapperLoopback.DownloadFile(self.downloads[downloadID].archiveName, ((self.downloads[downloadID].archiveType == "map") and "MAP") or "RAPID")
 		Chotify:Post({
 			title = "Download Failed",
