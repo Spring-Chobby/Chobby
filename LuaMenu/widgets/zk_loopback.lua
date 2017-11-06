@@ -65,7 +65,7 @@ end
 
 -- reports download progress. 100 might not indicate complation, wait for downloadfiledone
 local function DownloadFileProgress(args)
-	WG.DownloadWrapperInterface.DownloadFileProgress(args.Name, args.FileType, args.Progress, args.SecondsRemaining)
+	WG.DownloadWrapperInterface.DownloadFileProgress(args.Name, args.FileType, args.Progress, args.SecondsRemaining, args.TotalLength, args.CurrentSpeed)
 end
 
 
