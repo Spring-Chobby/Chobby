@@ -247,6 +247,26 @@ local function GetPlanet(planetUtilities, planetID)
 							difficultyAtLeast = 4,
 						},
 						{
+							name = "turretlaser",
+							x = 5823,
+							z = 3039,
+							facing = 0,
+							difficultyAtMost = 2,
+						},
+						{
+							name = "turretheavylaser",
+							x = 5823,
+							z = 3039,
+							facing = 0,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "turretlaser",
+							x = 5909 ,
+							z = 3270,
+							facing = 0,
+						},
+						{
 							name = "factorycloak",
 							x = 3864,
 							z = 1656,
