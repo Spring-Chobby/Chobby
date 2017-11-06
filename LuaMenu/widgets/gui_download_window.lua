@@ -132,6 +132,7 @@ function DownloadWindow.GetControl()
 	}
 
 	local downloader = WG.Chobby.Downloader(
+		true,
 		{
 			x = 20,
 			height = 260,

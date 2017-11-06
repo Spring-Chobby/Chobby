@@ -448,7 +448,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		parent = leftInfo,
 	}
 
-	local downloader = WG.Chobby.Downloader(downloaderPos, 8, nil, nil, nil, OnDownloaderVisibility)
+	local downloader = WG.Chobby.Downloader(false, downloaderPos, 8, nil, nil, nil, OnDownloaderVisibility)
 	leftOffset = leftOffset + 120
 
 	
@@ -1249,25 +1249,22 @@ local function SetupVotePanel(votePanel, battle, battleID)
 	return externalFunctions
 end
 
-local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOptions, firstPage, ApplyFunction)
+local function InitializeSetupPage(subPanel, screenHeight, pageConfig, nextPage, prevPage, selectedOptions, ApplyFunction)
 	local Configuration = WG.Chobby.Configuration
 
-	local subPanel = Control:New {
-		x = 0,
-		y = 47,
-		right = 0,
-		bottom = 0,
-		padding = {0, 0, 0, 0},
-		parent = mainWindow,
-	}
-	if not firstPage then
-		subPanel:Hide()
+	local buttonScale, buttonHeight, buttonFont = 70, 64, 4
+	if screenHeight < 900 then
+		buttonScale = 60
+		buttonHeight = 56
+		buttonFont = 4
 	end
+	
+	subPanel:SetVisibility(not prevPage)
 
 	local lblBattleTitle = Label:New {
 		x = "40%",
 		right = "40%",
-		y = 70,
+		y = buttonScale,
 		height = 30,
 		font = Configuration:GetFont(4),
 		align = "center",
@@ -1278,16 +1275,14 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 
 	local buttons = {}
 
-	local advButton, lichoButton, googleFrogButton
-
 	local nextButton = Button:New {
 		x = "36%",
 		right = "36%",
-		y = 150 + (#pageConfig.options)*70,
-		height = 64,
+		y = 2*buttonScale + 5 + (#pageConfig.options)*buttonScale,
+		height = buttonHeight,
 		classname = "action_button",
 		caption = (nextPage and "Next") or i18n("start"),
-		font = Configuration:GetFont(4),
+		font = Configuration:GetFont(buttonFont),
 		OnClick = {
 			function(obj)
 				subPanel:SetVisibility(false)
@@ -1305,7 +1300,7 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 	}
 	nextButton:Hide()
 
-	advButton = Button:New {
+	local advButton = Button:New {
 		x = "78%",
 		right = "5%",
 		bottom = "4%",
@@ -1323,58 +1318,38 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 		},
 		parent = subPanel,
 	}
-
-	if not nextPage then
-
-		if Configuration.canAuthenticateWithSteam and false then
-			lichoButton = Button:New {
-				x = "36%",
-				right = "36%",
-				y = 150 + (#pageConfig.options + 1)*70,
-				height = 64,
-				classname = "option_button",
-				caption = "Invite Licho",
-				font = Configuration:GetFont(3),
-				OnClick = {
-					function(obj)
-						WG.SteamCoopHandler.InviteLichoToGame()
-					end
-				},
-				parent = subPanel,
-			}
-			lichoButton:Hide()
-
-			googleFrogButton = Button:New {
-				x = "36%",
-				right = "36%",
-				y = 150 + (#pageConfig.options + 2)*70,
-				height = 64,
-				classname = "option_button",
-				caption = "Invite GoogleFrog",
-				font = Configuration:GetFont(3),
-				OnClick = {
-					function(obj)
-						WG.SteamCoopHandler.InviteGoogleFrogToGame()
-					end
-				},
-				parent = subPanel,
-			}
-			googleFrogButton:Hide()
-		end
+	
+	if prevPage then
+		Button:New {
+			x = "5%",
+			right = "78%",
+			bottom = "4%",
+			height = 48,
+			classname = "option_button",
+			caption = "Back",
+			font = Configuration:GetFont(2),
+			OnClick = {
+				function(obj)
+					subPanel:SetVisibility(false)
+					prevPage:SetVisibility(true)
+				end
+			},
+			parent = subPanel,
+		}
 	end
-
+	
 	for i = 1, #pageConfig.options do
 		local x, y, right, height, caption, tooltip
 		if pageConfig.minimap then
 			if i%2 == 1 then
-				x, y, right, height = "25%", ((i + 1)/2)*140 - 10, "51%", 128
+				x, y, right, height = "25%", (i + 1)*buttonScale - 10, "51%", 2*buttonHeight
 			else
-				x, y, right, height = "51%", (i/2)*140 - 10, "25%", 128
+				x, y, right, height = "51%", i*buttonScale - 10, "25%", 2*buttonHeight
 			end
 			tooltip = pageConfig.options[i]
 			caption = ""
 		else
-			x, y, right, height = "36%", 60 + i*70, "36%", 64
+			x, y, right, height = "36%", buttonHeight - 4 + i*buttonScale, "36%", buttonHeight
 			caption = pageConfig.options[i]
 		end
 		buttons[i] = Button:New {
@@ -1385,7 +1360,7 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 			classname = "button_highlight",
 			caption = caption,
 			tooltip = tooltip,
-			font = Configuration:GetFont(4),
+			font = Configuration:GetFont(buttonFont),
 			tooltip = pageConfig.optionTooltip and pageConfig.optionTooltip[i],
 			OnClick = {
 				function(obj)
@@ -1399,12 +1374,6 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 					nextButton:SetVisibility(true)
 					if advButton then
 						advButton:SetVisibility(true)
-					end
-					if lichoButton then
-						lichoButton:SetVisibility(true)
-					end
-					if googleFrogButton then
-						googleFrogButton:SetVisibility(true)
 					end
 				end
 			},
@@ -1429,7 +1398,6 @@ end
 
 local function SetupEasySetupPanel(mainWindow, standardSubPanel, setupData)
 	local pageConfigs = setupData.pages
-	local nextPage
 	local selectedOptions = {} -- Passed and modified by reference
 
 	local function ApplyFunction(startGame)
@@ -1446,8 +1414,23 @@ local function SetupEasySetupPanel(mainWindow, standardSubPanel, setupData)
 		standardSubPanel:SetVisibility(true)
 	end
 
-	for i = #pageConfigs, 1, -1 do
-		nextPage = InitializeSetupPage(mainWindow, pageConfigs[i], nextPage, selectedOptions, i == 1, ApplyFunction)
+	local _, screenHeight = Spring.GetWindowGeometry()
+	local panelOffset = math.max(8, math.min(60, ((screenHeight - 768)*0.16 + 8)))
+	
+	local pages = {}
+	for i = 1, #pageConfigs do
+		pages[i] = Control:New {
+			x = 0,
+			y = panelOffset,
+			right = 0,
+			bottom = 0,
+			padding = {0, 0, 0, 0},
+			parent = mainWindow,
+		}
+	end
+	
+	for i = 1, #pages do
+		InitializeSetupPage(pages[i], screenHeight, pageConfigs[i], pages[i + 1], pages[i - 1], selectedOptions, ApplyFunction)
 	end
 end
 

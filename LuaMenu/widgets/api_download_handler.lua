@@ -25,7 +25,7 @@ local removedDownloads = {}
 
 local requestUpdate = false
 
-local USE_WRAPPER_DOWNLOAD = false
+local USE_WRAPPER_DOWNLOAD = true
 
 -- Wrapper types are RAPID, MAP, MISSION, DEMO, ENGINE, NOTKNOWN
 local typeMap = {
@@ -132,6 +132,16 @@ local function GetDownloadBySpringDownloadID(downloadList, springDownloadID)
 	return nil
 end
 
+local function GetDownloadIndexByName(downloadList, downloadName)
+	for i = 1, #downloadList do
+		local data = downloadList[i]
+		if data.name == downloadName then
+			return i
+		end
+	end
+	return nil
+end
+
 local function AssociatedSpringDownloadID(springDownloadID, name, fileType)
 	local index = GetDownloadIndex(downloadQueue, name, fileType)
 	if not index then
@@ -147,12 +157,17 @@ local function RemoveDownload(name, fileType, putInRemoveList, removalType, dela
 		return false
 	end
 	
+	if removalType == "cancel" then
+		WG.WrapperLoopback.AbortDownload(name, typeMap[fileType])
+		return
+	end
+	
 	if delayListener then
 		local id = downloadQueue[index].id
 		local function DelayedListener()
 			if removalType == "success" then
 				CallListeners("DownloadFinished", id, name, fileType)
-			else
+			elseif removalType == "fail" then
 				CallListeners("DownloadFailed", id, removalType, name, fileType)
 			end
 		end
@@ -160,7 +175,7 @@ local function RemoveDownload(name, fileType, putInRemoveList, removalType, dela
 	else
 		if removalType == "success" then
 			CallListeners("DownloadFinished", downloadQueue[index].id, name, fileType)
-		else
+		elseif removalType == "fail" then
 			CallListeners("DownloadFailed", downloadQueue[index].id, removalType, name, fileType)
 		end
 	end
@@ -250,7 +265,6 @@ function externalFunctions.RemoveRemovedDownload(name, fileType)
 	return true
 end
 
-
 function externalFunctions.MaybeDownloadArchive(name, archiveType, priority)
 	if not VFS.HasArchive(name) then
 		externalFunctions.QueueDownload(name, archiveType, priority)
@@ -266,15 +280,28 @@ function wrapperFunctions.DownloadFinished(name, fileType, success)
 	if VFS.HasArchive(name) then
 		RemoveDownload(name, fileType, true, (success and "success") or "fail")
 	elseif fileType then
-		-- Do an inbuilt download to make VFS realize that the file exists.
-		VFS.DownloadArchive(name, fileType)
+		if success then
+			-- Do an inbuilt download to make VFS realize that the file exists.
+			VFS.DownloadArchive(name, fileType)
+			--VFS.ScanAllDirs() -- Find downloaded file
+		end
 		RemoveDownload(name, fileType, true, (success and "success") or "fail", true)
 	end
 	
-	Chotify:Post({
-		title = "Download " .. ((success and "Finished") or "Failed"),
-		body = (name or "???") .. " of type " .. (fileType or "???"),
-	})
+	--Chotify:Post({
+	--	title = "Download " .. ((success and "Finished") or "Failed"),
+	--	body = (name or "???") .. " of type " .. (fileType or "???"),
+	--})
+end
+
+function wrapperFunctions.DownloadFileProgress(name, fileType, progress, secondsRemaining)
+	Spring.Echo("DownloadFileProgress", fileType, progress, secondsRemaining)
+	local index = GetDownloadIndexByName(downloadQueue, name)
+	if not index then
+		return
+	end
+	
+	CallListeners("DownloadProgress", downloadQueue[index].id, progress, 100)
 end
 
 --------------------------------------------------------------------------------

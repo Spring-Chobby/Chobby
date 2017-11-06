@@ -370,7 +370,11 @@ local function CommandReceived(command)
 	end
 	
 	local commandFunc = commands[cmdName]
-	Spring.Echo("LoopbackCommandReceived", cmdName)
+	if string.find(cmdName, "Download") then
+		Spring.Echo("LoopbackCommandReceived", cmdName, arguments)
+	else
+		Spring.Echo("LoopbackCommandReceived", cmdName)
+	end
 	if commandFunc ~= nil then
 		local success, obj = pcall(json.decode, arguments)
 		if not success then
