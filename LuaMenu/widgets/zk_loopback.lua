@@ -91,6 +91,7 @@ local function WrapperOnline(args)
 		config.DefaultServerPort = args.DefaultServerPort
 		config.DefaultServerHost = args.DefaultServerHost
 		config.UserID = args.UserID
+		config.IsSteamFolder = args.IsSteamFolder
 	end
 end
 
