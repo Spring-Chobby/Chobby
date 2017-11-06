@@ -448,7 +448,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		parent = leftInfo,
 	}
 
-	local downloader = WG.Chobby.Downloader(downloaderPos, 8, nil, nil, nil, OnDownloaderVisibility)
+	local downloader = WG.Chobby.Downloader(false, downloaderPos, 8, nil, nil, nil, OnDownloaderVisibility)
 	leftOffset = leftOffset + 120
 
 	

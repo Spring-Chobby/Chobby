@@ -157,12 +157,17 @@ local function RemoveDownload(name, fileType, putInRemoveList, removalType, dela
 		return false
 	end
 	
+	if removalType == "cancel" then
+		WG.WrapperLoopback.AbortDownload(name, typeMap[fileType])
+		return
+	end
+	
 	if delayListener then
 		local id = downloadQueue[index].id
 		local function DelayedListener()
 			if removalType == "success" then
 				CallListeners("DownloadFinished", id, name, fileType)
-			else
+			elseif removalType == "fail" then
 				CallListeners("DownloadFailed", id, removalType, name, fileType)
 			end
 		end
@@ -170,7 +175,7 @@ local function RemoveDownload(name, fileType, putInRemoveList, removalType, dela
 	else
 		if removalType == "success" then
 			CallListeners("DownloadFinished", downloadQueue[index].id, name, fileType)
-		else
+		elseif removalType == "fail" then
 			CallListeners("DownloadFailed", downloadQueue[index].id, removalType, name, fileType)
 		end
 	end
@@ -260,7 +265,6 @@ function externalFunctions.RemoveRemovedDownload(name, fileType)
 	return true
 end
 
-
 function externalFunctions.MaybeDownloadArchive(name, archiveType, priority)
 	if not VFS.HasArchive(name) then
 		externalFunctions.QueueDownload(name, archiveType, priority)
@@ -276,7 +280,11 @@ function wrapperFunctions.DownloadFinished(name, fileType, success)
 	if VFS.HasArchive(name) then
 		RemoveDownload(name, fileType, true, (success and "success") or "fail")
 	elseif fileType then
-		VFS.ScanAllDirs() -- Find downloaded file
+		if success then
+			-- Do an inbuilt download to make VFS realize that the file exists.
+			VFS.DownloadArchive(name, fileType)
+			--VFS.ScanAllDirs() -- Find downloaded file
+		end
 		RemoveDownload(name, fileType, true, (success and "success") or "fail", true)
 	end
 	

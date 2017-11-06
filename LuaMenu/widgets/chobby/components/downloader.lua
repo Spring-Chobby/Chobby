@@ -1,14 +1,14 @@
 Downloader = Component:extends{}
 
-function Downloader:init(tbl, timeout, updateListener, completeListener, queueFont, visibleListener)
+function Downloader:init(buttonsMode, tbl, timeout, updateListener, completeListener, queueFont, visibleListener)
 	self:super("init")
 
 	self.wrapperAsFallback = false
 	
 	queueFont = queueFont or 1
 	self.lblDownload = Label:New {
-		x = 20,
-		y = 0,
+		x = 20 + ((buttonsMode and 75) or 0),
+		y = 0 + ((buttonsMode and 8) or 0),
 		right = 0,
 		height = 20,
 		align = "left",
@@ -19,7 +19,7 @@ function Downloader:init(tbl, timeout, updateListener, completeListener, queueFo
 
 	self.prDownload = Progressbar:New {
 		x = 0,
-		y = 24,
+		y = 24 + ((buttonsMode and 8) or 0),
 		right = 0,
 		height = 30,
 		value = 0,
@@ -27,7 +27,7 @@ function Downloader:init(tbl, timeout, updateListener, completeListener, queueFo
 
 	self.queueLabel = Label:New {
 		x = 0,
-		y = 60,
+		y = 60 + ((buttonsMode and 8) or 0),
 		right = 0,
 		height = 16,
 		align = "left",
@@ -38,7 +38,7 @@ function Downloader:init(tbl, timeout, updateListener, completeListener, queueFo
 
 	self.queueList = Label:New {
 		x = 5,
-		y = 80,
+		y = 80 + ((buttonsMode and 8) or 0),
 		right = 0,
 		bottom = 0,
 		align = "left",
@@ -60,6 +60,32 @@ function Downloader:init(tbl, timeout, updateListener, completeListener, queueFo
 		},
 	}, tbl))
 
+	self.buttonsMode = buttonsMode
+	if buttonsMode then
+		local function CancelFunc()
+			if not (self.startedDownload and self.downloads[self.startedDownload]) then
+				return
+			end
+			local download = self.downloads[self.startedDownload]
+			WG.DownloadHandler.CancelDownload(download.archiveName, download.archiveType)
+		end
+		
+		self.cancelButton = Button:New {
+			x = 1,
+			y = 1,
+			height = 30,
+			width = 85,
+			caption = "Cancel",
+			classname = "negative_button",
+			font = Configuration:GetFont(2),
+			OnClick = {
+				CancelFunc
+			},
+			parent = self.window,
+		}
+		self.cancelButton:Hide()
+	end
+	
 	self.lblDownload:Hide()
 	self.prDownload:Hide()
 	self.queueLabel:Hide()
@@ -153,11 +179,10 @@ function Downloader:_CleanupDownload(myDelayID)
 -- 	if window.disposed then
 -- 		return
 -- 	end
-	if not self.prDownload.hidden then
-		self.prDownload:Hide()
-	end
-	if not self.lblDownload.hidden then
-		self.lblDownload:Hide()
+	self.prDownload:SetVisibility(false)
+	self.lblDownload:SetVisibility(false)
+	if self.cancelButton then
+		self.cancelButton:SetVisibility(false)
 	end
 	if self.visibleListener then
 		self.visibleListener(false)
@@ -222,14 +247,14 @@ function Downloader:DownloadStarted(listener, downloadID)
 	if not self.downloads[downloadID] then
 		return
 	end
-	if self.prDownload.hidden then
-		self.prDownload:Show()
-	end
-	if self.lblDownload.hidden then
-		self.lblDownload:Show()
+	self.prDownload:SetVisibility(true)
+	self.lblDownload:SetVisibility(true)
+	if self.cancelButton then
+		self.cancelButton:SetVisibility(true)
 	end
 	self.lblDownload:SetCaption(self.downloads[downloadID].archiveName)
 	self.downloads[downloadID].started = true
+	self.startedDownload = downloadID
 	self:UpdateQueue()
 end
 
