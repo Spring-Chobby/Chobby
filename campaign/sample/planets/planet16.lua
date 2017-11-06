@@ -50,7 +50,6 @@ local function GetPlanet(planetUtilities, planetID)
 				commanderParameters = {
 					facplop = false,
 					defeatIfDestroyedObjectiveID = 2,
-					commands = {{cmdID = planetUtilities.COMMAND.PATROL, pos = {950, 1600}}},
 				},
 				extraUnlocks = {
 					"factoryshield",
@@ -101,14 +100,14 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 1137,
 						z = 1555,
 						facing = 1,
-						commands = {{cmdID = planetUtilities.COMMAND.PATROL, pos = {1000, 1530}}},
+						selfPatrol = true,
 					},
 					{
 						name = "shieldcon",
 						x = 1076,
 						z = 1621,
 						facing = 3,
-						commands = {{cmdID = planetUtilities.COMMAND.PATROL, pos = {900, 1550}}},
+						selfPatrol = true,
 					},
 					{
 						name = "staticmex",
@@ -120,13 +119,25 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "turretmissile",
 						x = 720,
 						z = 3696,
-						facing = 0,
+						facing = 1,
 					},
 					{
 						name = "turretmissile",
 						x = 688,
 						z = 288,
-						facing = 0,
+						facing = 1,
+					},
+					{
+						name = "turretlaser",
+						x = 1775,
+						z = 1430,
+						facing = 1,
+					},
+					{
+						name = "turretlaser",
+						x = 1775,
+						z = 2520,
+						facing = 1,
 					},
 					{
 						name = "factorycloak",
@@ -186,13 +197,13 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "turretriot",
 						x = 1736,
 						z = 1752,
-						facing = 0,
+						facing = 1,
 					},
 					{
 						name = "turretriot",
 						x = 1736,
 						z = 2232,
-						facing = 0,
+						facing = 1,
 					},
 					{
 						name = "staticmex",
@@ -390,11 +401,21 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 1544,
 							facing = 0,
 						},
+						-- The AI only starts with one finished geo on Hard+ now.
 						{
 							name = "energygeo",
 							x = 6280,
 							z = 2488,
 							facing = 0,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "energygeo",
+							x = 6280,
+							z = 2488,
+							facing = 0,
+							buildProgress = 0.5,
+							difficultyAtMost = 2,
 						},
 						{
 							name = "turretlaser",
@@ -443,6 +464,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 6952,
 							z = 3912,
 							facing = 0,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "staticmex",
@@ -467,6 +489,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 6920,
 							z = 200,
 							facing = 0,
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "turretlaser",
@@ -563,18 +586,21 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 5650,
 							z = 1880,
 							facing = 3,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "amphcon",
 							x = 5625,
 							z = 1880,
 							facing = 3,
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "amphcon",
 							x = 5600,
 							z = 1880,
 							facing = 3,
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "amphriot",
@@ -742,6 +768,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 5935,
 							z = 2085,
 							facing = 3,
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "turretlaser",
