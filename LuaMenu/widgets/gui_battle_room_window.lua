@@ -1252,9 +1252,19 @@ end
 local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOptions, firstPage, ApplyFunction)
 	local Configuration = WG.Chobby.Configuration
 
+	local _, screenHeight = Spring.GetWindowGeometry()
+	local buttonScale, buttonHeight, buttonFont = 70, 64, 4
+	
+	if screenHeight < 900 then
+		buttonScale = 60
+		buttonHeight = 56
+		buttonFont = 4
+	end
+	local panelOffset = math.max(8, math.min(60, ((screenHeight - 768)*0.16 + 8)))
+	
 	local subPanel = Control:New {
 		x = 0,
-		y = 47,
+		y = panelOffset,
 		right = 0,
 		bottom = 0,
 		padding = {0, 0, 0, 0},
@@ -1267,7 +1277,7 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 	local lblBattleTitle = Label:New {
 		x = "40%",
 		right = "40%",
-		y = 70,
+		y = buttonScale,
 		height = 30,
 		font = Configuration:GetFont(4),
 		align = "center",
@@ -1278,16 +1288,16 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 
 	local buttons = {}
 
-	local advButton, lichoButton, googleFrogButton
+	local advButton
 
 	local nextButton = Button:New {
 		x = "36%",
 		right = "36%",
-		y = 150 + (#pageConfig.options)*70,
-		height = 64,
+		y = 2*buttonScale + 5 + (#pageConfig.options)*buttonScale,
+		height = buttonHeight,
 		classname = "action_button",
 		caption = (nextPage and "Next") or i18n("start"),
-		font = Configuration:GetFont(4),
+		font = Configuration:GetFont(buttonFont),
 		OnClick = {
 			function(obj)
 				subPanel:SetVisibility(false)
@@ -1324,57 +1334,18 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 		parent = subPanel,
 	}
 
-	if not nextPage then
-
-		if Configuration.canAuthenticateWithSteam and false then
-			lichoButton = Button:New {
-				x = "36%",
-				right = "36%",
-				y = 150 + (#pageConfig.options + 1)*70,
-				height = 64,
-				classname = "option_button",
-				caption = "Invite Licho",
-				font = Configuration:GetFont(3),
-				OnClick = {
-					function(obj)
-						WG.SteamCoopHandler.InviteLichoToGame()
-					end
-				},
-				parent = subPanel,
-			}
-			lichoButton:Hide()
-
-			googleFrogButton = Button:New {
-				x = "36%",
-				right = "36%",
-				y = 150 + (#pageConfig.options + 2)*70,
-				height = 64,
-				classname = "option_button",
-				caption = "Invite GoogleFrog",
-				font = Configuration:GetFont(3),
-				OnClick = {
-					function(obj)
-						WG.SteamCoopHandler.InviteGoogleFrogToGame()
-					end
-				},
-				parent = subPanel,
-			}
-			googleFrogButton:Hide()
-		end
-	end
-
 	for i = 1, #pageConfig.options do
 		local x, y, right, height, caption, tooltip
 		if pageConfig.minimap then
 			if i%2 == 1 then
-				x, y, right, height = "25%", ((i + 1)/2)*140 - 10, "51%", 128
+				x, y, right, height = "25%", (i + 1)*buttonScale - 10, "51%", 2*buttonHeight
 			else
-				x, y, right, height = "51%", (i/2)*140 - 10, "25%", 128
+				x, y, right, height = "51%", i*buttonScale - 10, "25%", 2*buttonHeight
 			end
 			tooltip = pageConfig.options[i]
 			caption = ""
 		else
-			x, y, right, height = "36%", 60 + i*70, "36%", 64
+			x, y, right, height = "36%", buttonHeight - 4 + i*buttonScale, "36%", buttonHeight
 			caption = pageConfig.options[i]
 		end
 		buttons[i] = Button:New {
@@ -1385,7 +1356,7 @@ local function InitializeSetupPage(mainWindow, pageConfig, nextPage, selectedOpt
 			classname = "button_highlight",
 			caption = caption,
 			tooltip = tooltip,
-			font = Configuration:GetFont(4),
+			font = Configuration:GetFont(buttonFont),
 			tooltip = pageConfig.optionTooltip and pageConfig.optionTooltip[i],
 			OnClick = {
 				function(obj)
