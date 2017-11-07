@@ -60,7 +60,7 @@ end
 
 -- reports that download has ended/was aborted
 local function DownloadFileDone(args)
-	WG.DownloadWrapperInterface.DownloadFinished(args.Name, args.FileType, args.IsSuccess)
+	WG.DownloadWrapperInterface.DownloadFinished(args.Name, args.FileType, args.IsSuccess, args.IsAborted)
 end
 
 -- reports download progress. 100 might not indicate complation, wait for downloadfiledone
