@@ -38,7 +38,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/energysolar.png",
-				text = [[Don't forget to build Metal Extractors and Solar Collectors to power your economy and build up a large army.]]
+				text = [[Don't forget to build Metal Extractors and Solar Collectors to power your economy and build up a large army. Connect energy generators to your Mexes to overdrive them, giving you more metal income. (See the manual for more about overdrive.)]]
 			},
 		},
 		gameConfig = {

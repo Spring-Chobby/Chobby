@@ -33,9 +33,13 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[Since their rockets curve through the air, Rogues are a bit worse at hitting mobile targets than other skirmishers. On the upside they outrange most other skirmishers and inflict more damage if they do hit.]]
 			},
 			{
-				image = "unitpics/shieldraid.png",
-				text = [[A combination of steady pressure with Rogues and raiding parties of Bandits will keep your opponent's expansion under control. Remember to secure Metal Extractors of your own.]]
+				image = "unitpics/shieldaa.png",
+				text = [[Use anti-air units like Vandals to protect your other units from Gunships. Holding Ctrl when giving an order makes all of your units move at the same speed, so your army is not separated from its Vandal escort.]]
 			},
+			-- {
+				-- image = "unitpics/shieldraid.png",
+				-- text = [[A combination of steady pressure with Rogues and raiding parties of Bandits will keep your opponent's expansion under control. Remember to secure Metal Extractors of your own.]]
+			-- },
 			{
 				image = "unitpics/gunshipraid.png",
 				text = [[Most units will attempt to fire at low-flying aircraft and some, such as Bandits, are even good at the task. However, dedicated anti-air such as Vandals or Razor turrets are significantly more effective and have a significant range advantage.]]

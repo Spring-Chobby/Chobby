@@ -129,7 +129,31 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "cloakriot",
 						x =2650,
 						z =1150,
-						facing = 1, 
+						facing = 0, 
+					},
+					{
+						name = "cloakraid",
+						x =2550,
+						z =1180,
+						facing = 0, 
+					},
+					{
+						name = "cloakraid",
+						x =2520,
+						z =1195,
+						facing = 0, 
+					},
+					{
+						name = "cloakarty",
+						x =2640,
+						z =1050,
+						facing = 0, 
+					},
+					{
+						name = "cloakarty",
+						x =2540,
+						z =1080,
+						facing = 0, 
 					},
 					{
 						name = "staticmex",
@@ -219,23 +243,23 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			aiConfig = {
 				{
-					startX = 500,
-					startZ = 2500,
+					startX = 2300,
+					startZ = 3800,
 					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Sentinels",
+					humanName = "Targe Solus",
 					bitDependant = true,
 					allyTeam = 1,
 					unlocks = {
 						"shieldcon",
-						"shieldraid",
+						--"shieldraid",
 						"shieldassault",
 						"turretmissile",
 						"turretlaser",
 					},
 					difficultyDependantUnlocks = {
 						[2] = {"staticmex","energysolar"},
-						[3] = {"staticmex","energysolar","shieldskirm"},
-						[4] = {"staticmex","energysolar","shieldriot","shieldskirm"},
+						[3] = {"staticmex","energysolar","shieldraid"},
+						[4] = {"staticmex","energysolar","shieldraid","shieldskirm"},
 					},
 					commanderLevel = 1,
 					commander = {
@@ -332,6 +356,12 @@ local function GetPlanet(planetUtilities, planetID)
 							name = "turretheavylaser",
 							x =2750,
 							z =2990,
+							facing = 2, 
+						},
+						{
+							name = "turretheavylaser",
+							x =4400,
+							z =2500,
 							facing = 2, 
 						},
 						{
