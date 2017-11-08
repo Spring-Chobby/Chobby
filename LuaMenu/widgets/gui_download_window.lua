@@ -18,7 +18,7 @@ end
 -- Configuration
 
 local STATUS_POSITION = 390
-local BUTTON_WIDTH = 85
+local BUTTON_WIDTH = 82
 
 local STATUS_PRIORITY = {
 	active = 1,
@@ -50,6 +50,8 @@ local BUTTON_MAP = {
 local downloads = {}
 local downloadList
 
+local completedDownloads = 1
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
@@ -59,8 +61,9 @@ local function CreateDownloadEntry(downloadData)
 	
 	local fileName = downloadData.name
 	local fileType = downloadData.fileType
+	local completionOrder = false
 	
-	local sortData = {downloadData.priority, downloadData.name, statusPriority}
+	local sortData = {downloadData.priority - downloadData.id/100000, downloadData.name, statusPriority}
 	
 	local progressBar
 	local statusPriority = 1
@@ -80,6 +83,7 @@ local function CreateDownloadEntry(downloadData)
 		bottom = 3,
 		width = BUTTON_WIDTH,
 		caption = i18n("retry"),
+		font = WG.Chobby.Configuration:GetFont(2),
 		classname = "action_button",
 		OnClick = {
 			function ()
@@ -95,6 +99,7 @@ local function CreateDownloadEntry(downloadData)
 		bottom = 3,
 		width = BUTTON_WIDTH,
 		caption = i18n("cancel"),
+		font = WG.Chobby.Configuration:GetFont(2),
 		classname = "negative_button",
 		OnClick = {
 			function ()
@@ -109,7 +114,8 @@ local function CreateDownloadEntry(downloadData)
 		y = 3,
 		bottom = 3,
 		width = BUTTON_WIDTH,
-		caption = i18n("move_up"),
+		caption = i18n("to_front"),
+		font = WG.Chobby.Configuration:GetFont(2),
 		classname = "action_button",
 		OnClick = {
 			function ()
@@ -148,7 +154,12 @@ local function CreateDownloadEntry(downloadData)
 				progressBar:Dispose()
 				progressBar = nil
 			end
+			if not completionOrder then
+				completionOrder = completedDownloads - 1000000
+				completedDownloads = completedDownloads + 1
+			end
 		else
+			completionOrder = false
 			if progressBar or downloadData.active then
 				statusString = "active"
 			else
@@ -198,7 +209,7 @@ local function CreateDownloadEntry(downloadData)
 		downloadData = newData
 		UpdateStatus()
 		
-		sortData[1] = downloadData.priority
+		sortData[1] = (completionOrder or downloadData.priority) - downloadData.id/100000
 		sortData[3] = statusPriority
 		
 		return sortData
@@ -207,7 +218,7 @@ local function CreateDownloadEntry(downloadData)
 	return externalFunctions
 end
 
-local function DownloadUpdateFunction(downloadCount)
+local function DownloadNumberUpdate(downloadCount)
 	local interfaceRoot = WG.Chobby and WG.Chobby.interfaceRoot
 	if not interfaceRoot then
 		return
@@ -233,7 +244,10 @@ local function UpdateOrAddDownloadEntry(data)
 	if downloads[name] then
 		downloadList:UpdateItemSorting(name, downloads[name].UpdateAndGetSortOrder(data), true)
 	else
-		AddDownloadEntry(queue[i])
+		local entry = AddDownloadEntry(data)
+		if entry then
+			downloadList:AddItem(entry[1], entry[2], entry[3])
+		end
 	end
 end
 
@@ -307,8 +321,6 @@ local function InitializeControls(window)
 			UpdateOrAddDownloadEntry(finished[i])
 		end
 		downloadList:UpdateOrder(items)
-		
-		DownloadUpdateFunction((queue and #queue) or 0)
 	end
 	
 	WG.DownloadHandler.AddListener("DownloadQueueUpdate", DownloadQueueUpdate)
@@ -344,6 +356,12 @@ function DownloadWindow.GetControl()
 			end
 		},
 	}
+	
+	local function DownloadQueueUpdateAlways(_, queue, finished)
+		DownloadNumberUpdate((queue and #queue) or 0)
+	end
+	
+	WG.DownloadHandler.AddListener("DownloadQueueUpdate", DownloadQueueUpdateAlways)
 	
 	return window
 end

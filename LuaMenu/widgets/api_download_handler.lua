@@ -182,6 +182,7 @@ function externalFunctions.QueueDownload(name, fileType, priority)
 	if priority == -1 then
 		priority = topPriority + 1
 	end
+	
 	if topPriority < priority then
 		topPriority = priority
 	end

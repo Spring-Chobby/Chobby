@@ -4,7 +4,7 @@ return {
 		-- general
 		ok = "OK",
 		cancel = "Cancel",
-		move_up = "Move Up",
+		to_front = "To Front",
 		retry = "Retry",
 		reset = "Reset",
 		close = "Close",

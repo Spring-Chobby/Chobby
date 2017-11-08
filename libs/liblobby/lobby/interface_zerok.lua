@@ -1252,11 +1252,13 @@ Interface.jsonCommands["ChangeTopic"] = Interface._ChangeTopic
 
 function Interface:_MatchMakerSetup(data)
 	local queues = data.PossibleQueues
-	self.queueCount = 0
-	self.queues = {}
-	for i = 1, #queues do
-		local queue = queues[i]
-		self:_OnQueueOpened(queue.Name, queue.Description, queue.Maps, queue.MaxPartySize, {queue.Game})
+	if queues then
+		self.queueCount = 0
+		self.queues = {}
+		for i = 1, #queues do
+			local queue = queues[i]
+			self:_OnQueueOpened(queue.Name, queue.Description, queue.Maps, queue.MaxPartySize, {queue.Game})
+		end
 	end
 	self:_OnLoginInfoEnd()
 end
