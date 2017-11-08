@@ -25,16 +25,20 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Sop",
 			primaryType = "G2VI",
 			milRating = 2,
-			text = [[Help your ally to push across the island with Fencer missile trucks and Badger mine artillery. Grind your opponent into dust. If you feel like going for a swim, don't: the water is not good for your health here.]]
+			text = [[Help your ally to push across the island with Fencer missile trucks and Badger mine artillery. A slow but inevitable push will bring you victory just as surely as a lightning assault.]]
 		},
 		tips = {
 			{
 				image = "unitpics/vehsupport.png",
-				text = [[Between their long range and guided missiles the Fencer missile trucks are exceptional on defence. However, given the time they need to set up to fire, a clever opponent will take them out in transit before they can be used effectively in attack.]]
+				text = [[Fencers need to remain stationary and set up before they can fire, making them better at defence than offence. Their guided missiles inflict reliable damage at range.]]
 			},
 			{
 				image = "unitpics/veharty.png",
-				text = [[Badger mine artillery is very good at grinding out a victory - if you can control what directions the enemy approaches from, the mines they fire make a group of Badgers almost impossible to approach for all but the heaviest of units. If Badgers are flanked, on the other hand, they can be very vulnerable.]]
+				text = [[Badgers are very good for grinding out a win. They fire mines which can make a region practically impassable for the enemy. They are weak at short range so make sure they don't get flanked.]]
+			},
+			{
+				image = "unitpics/module_dmg_booster.png",
+				text = [[The water on this planet is acidic. Don't move your Commander into it.]]
 			},
 			{
 				image = "unitpics/spidercrabe.png",
@@ -323,6 +327,27 @@ local function GetPlanet(planetUtilities, planetID)
 					
 					startUnits = {
 						{
+							name = "staticmex",
+							x = 760,
+							z = 4440,
+							facing = 0,
+							difficultyAtLeast = 2,
+						},
+						{
+							name = "staticmex",
+							x = 2950,
+							z = 5420,
+							facing = 3,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "staticmex",
+							x = 760,
+							z = 2380,
+							facing = 3,
+							difficultyAtLeast = 4,
+						},
+						{
 							name = "staticradar",
 							x = 1840,
 							z = 4512,
@@ -396,7 +421,7 @@ local function GetPlanet(planetUtilities, planetID)
 							bonusObjectiveID = 2,
 							mapMarker = {
 								text = "Stinger",
-								color = "red"
+								color = "red_small"
 							},
 						},
 						{
@@ -481,12 +506,6 @@ local function GetPlanet(planetUtilities, planetID)
 							name = "staticmex",
 							x = 1256,
 							z = 5176,
-							facing = 0,
-						},
-						{
-							name = "staticmex",
-							x = 760,
-							z = 4440,
 							facing = 0,
 						},
 						{

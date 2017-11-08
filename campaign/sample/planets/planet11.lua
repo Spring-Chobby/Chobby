@@ -540,8 +540,9 @@ local function GetPlanet(planetUtilities, planetID)
 						"turretmissile"
 					},
 					difficultyDependantUnlocks = {
-						[2] = {"amphimpulse","amphriot","gunshipassault","turretriot"},
-						[3] = {"amphimpulse","amphriot","gunshipassault","turretriot","amphfloater","gunshipkrow","turretheavylaser"},
+						[2] = {"amphimpulse","amphriot","gunshipassault"},
+						[3] = {"amphimpulse","amphriot","gunshipassault","turretriot","turretheavylaser"},
+						[4] = {"amphimpulse","amphriot","gunshipassault","turretriot","amphfloater","turretheavylaser"},
 					},
 					commanderLevel = 2,
 					commander = {
@@ -560,6 +561,10 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 5336,
 							facing = 0,
 							difficultyAtMost = 2,
+							mapMarker = {
+								text = "Gunship Plant",
+								color = "red"
+							},
 						},
 						{
 							name = "factorygunship",
@@ -567,6 +572,10 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 6168,
 							facing = 0,
 							difficultyAtLeast = 3,
+							mapMarker = {
+								text = "Gunship Plant",
+								color = "red"
+							},
 						},
 						{
 							name = "staticcon",
@@ -904,7 +913,7 @@ local function GetPlanet(planetUtilities, planetID)
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Destroy the enemy Gunship Factory",
+					description = "Destroy the enemy Gunship Plant",
 				},
 				[2] = {
 					description = "Protect your Commander",

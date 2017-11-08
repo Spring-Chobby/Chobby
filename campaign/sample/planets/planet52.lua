@@ -30,11 +30,11 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/jumpraid.png",
-				text = [[The Constable constructor and Pyro raider have jumpjets to get over obstacles and move around more quickly. The default jump hotkey is J.]]
+				text = [[The Constable and Pyro have jumpjets to get over obstacles and move around more quickly. The default jump hotkey is J.]]
 			},
 			{
 				image = "unitpics/jumpscout.png",
-				text = [[Puppy scout bots are suicidal missiles on legs. If a Puppy stands next to a unit wreck, it will convert the wreck into more Puppies. Use the Economy view (default hotkey F4) to highlight wrecks.]]
+				text = [[Puppies are suicidal missiles on legs. If a Puppy stands next to a unit wreck, it will convert the wreck into more Puppies. Use the Economy view (default hotkey F4) to highlight wrecks.]]
 			},
 			{
 				image = "unitpics/jumpblackhole.png",
@@ -947,16 +947,17 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 			},
 			bonusObjectiveConfig = {
-				[1] = { -- Have 70 Puppies by 3:00
-					satisfyByTime = 180,
+				[1] = { -- Have 100 Puppies by 3:00
+					satisfyByTime = 4*60,
+					countRemovedUnits = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 70,
+					targetNumber = 100,
 					unitTypes = {
 						"jumpscout",
 					},
 					image = planetUtilities.ICON_DIR .. "jumpscout.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Have 70 Puppies by 3:00",
+					description = "Build 100 Puppies before 4:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Make the enemy lose one factory by 6:00
