@@ -567,7 +567,7 @@ function Configuration:GetHeadingImage(fullscreenMode, title)
 	end
 end
 
-function Configuration:GetEngineVersion()
+function Configuration:GetTruncatedEngineVersion()
 	if tonumber(Spring.Utilities.GetEngineVersion()) then
 		-- Master releases lack the '.0' at the end. Who knows what other cases are wrong.
 		-- Add as required.
@@ -578,7 +578,7 @@ function Configuration:GetEngineVersion()
 end
 
 function Configuration:IsValidEngineVersion(engineVersion)
-	return engineVersion == self:GetEngineVersion()
+	return engineVersion == Spring.Utilities.GetEngineVersion() or engineVersion == self:GetTruncatedEngineVersion()
 end
 
 function Configuration:GetDefaultGameName()
