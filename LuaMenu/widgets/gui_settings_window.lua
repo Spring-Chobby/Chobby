@@ -644,6 +644,7 @@ local function GetLobbyTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("simple_ai_list"), "simpleAiList", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("login_with_steam"), "wantAuthenticateWithSteam", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("animate_lobby"), "animate_lobby", true)
+	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("drawFullSpeed"), "drawAtFullSpeed", false)
 
 	children[#children + 1] = Label:New {
 		x = 20,
@@ -723,7 +724,6 @@ local function GetVoidTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Agressive Set Borderless", "agressivelySetBorderlessWindowed", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Use wrong engine", "useWrongEngine", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Show old AI versions", "showOldAiVersions", false)
-	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("drawFullSpeed"), "drawAtFullSpeed", false)
 
 	children[#children + 1] = Label:New {
 		x = 20,
@@ -1251,8 +1251,10 @@ local function InitializeControls(window)
 		tabs[#tabs + 1] = MakeTab(data.name, PopulateTab(data.presets, data.settings, settingsDefault))
 	end
 
-	tabs[#tabs + 1] = MakeTab("Developer", GetVoidTabControls())
-
+	if WG.Chobby.Configuration.devMode then
+		tabs[#tabs + 1] = MakeTab("Developer", GetVoidTabControls())
+	end
+	
 	local tabPanel = Chili.DetachableTabPanel:New {
 		x = 5,
 		right = 5,

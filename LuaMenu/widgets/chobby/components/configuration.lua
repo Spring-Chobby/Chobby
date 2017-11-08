@@ -150,6 +150,7 @@ function Configuration:init()
 	self.planetwarsNotifications = false -- Possibly too intrusive? See how it goes.
 	self.simplifiedSkirmishSetup = true
 	self.debugMode = false
+	self.devMode = (VFS.FileExists("devmode.txt") and true) or false
 	self.debugAutoWin = false
 	self.showPlanetUnlocks = false
 	self.editCampaign = false
