@@ -4,6 +4,8 @@ return {
 		-- general
 		ok = "OK",
 		cancel = "Cancel",
+		move_up = "Move Up",
+		retry = "Retry",
 		reset = "Reset",
 		close = "Close",
 		continue = "Continue",

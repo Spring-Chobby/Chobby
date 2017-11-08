@@ -104,6 +104,18 @@ function SortableList:AddItem(id, control, sorting)
 	self:UpdateOrder()
 end
 
+function SortableList:UpdateItemSorting(id, sorting, supressResort)
+	if not self.controlById[id] then
+		Spring.Echo("ListWindow missing item", id)
+		return
+	end
+	
+	self.sortDataById[id] = sorting
+	if not supressResort then
+		self:UpdateOrder()
+	end
+end
+
 function SortableList:AddItems(items)
 	local id, control, sorting
 	for i = 1, #items do

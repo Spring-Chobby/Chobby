@@ -15,18 +15,199 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Configuration
+
+local STATUS_POSITION = 390
+local BUTTON_WIDTH = 85
+
+local STATUS_PRIORITY = {
+	active = 1,
+	pending = 2,
+	cancelled = 3,
+	failed = 4,
+	success = 5,
+}
+
+local NAME_MAP = {
+	active = "",
+	pending = "Queued",
+	cancel = "\255\255\255\0Cancelled",
+	fail = "\255\255\0\0Failed",
+	success = "\255\0\255\0Complete",
+}
+
+local BUTTON_MAP = {
+	active = {cancel = true},
+	pending = {cancel = true, priority = true},
+	cancel = {retry = true},
+	fail = {retry = true},
+}
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Local Variables
 
-local completedDownloadPosition = 0
-local itemSpacing = 28
-local parentWindow
-local completed
+local downloads = {}
+local downloadList
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
 
-local function DownloadUpdateFunction(downloadCount, failure)
+local function CreateDownloadEntry(downloadData)
+	local Configuration = WG.Chobby.Configuration
+	
+	local fileName = downloadData.name
+	local fileType = downloadData.fileType
+	
+	local sortData = {downloadData.priority, downloadData.name, statusPriority}
+	
+	local progressBar
+	local statusPriority = 1
+	
+	local holder = Panel:New {
+		x = 0,
+		y = 0,
+		width = "100%",
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+	}
+	
+	local retryButton = Button:New {
+		x = 7 + BUTTON_WIDTH,
+		y = 3,
+		bottom = 3,
+		width = BUTTON_WIDTH,
+		caption = i18n("retry"),
+		classname = "action_button",
+		OnClick = {
+			function ()
+				WG.DownloadHandler.RetryDownload(fileName, fileType)
+			end
+		},
+		parent = holder,
+	}
+	
+	local cancelButton = Button:New {
+		x = 7 + BUTTON_WIDTH,
+		y = 3,
+		bottom = 3,
+		width = BUTTON_WIDTH,
+		caption = i18n("cancel"),
+		classname = "negative_button",
+		OnClick = {
+			function ()
+				WG.DownloadHandler.CancelDownload(fileName, fileType)
+			end
+		},
+		parent = holder,
+	}
+	
+	local priorityButton = Button:New {
+		x = 3,
+		y = 3,
+		bottom = 3,
+		width = BUTTON_WIDTH,
+		caption = i18n("move_up"),
+		classname = "action_button",
+		OnClick = {
+			function ()
+				WG.DownloadHandler.SetDownloadTopPriority(fileName, fileType)
+			end
+		},
+		parent = holder,
+	}
+	
+	TextBox:New {
+		x = 15 + BUTTON_WIDTH*2,
+		y = 12,
+		right = 0,
+		height = 20,
+		valign = 'center',
+		fontsize = Configuration:GetFont(2).size,
+		text = downloadData.name,
+		parent = holder,
+	}
+	
+	local statusBox = TextBox:New {
+		x = STATUS_POSITION + 22,
+		y = 12,
+		right = 0,
+		height = 20,
+		valign = 'center',
+		fontsize = Configuration:GetFont(2).size,
+		text = downloadData.removalType or "pending",
+		parent = holder,
+	}
+	
+	local function UpdateStatus()
+		local statusString = downloadData.removalType
+		if statusString then
+			if progressBar then
+				progressBar:Dispose()
+				progressBar = nil
+			end
+		else
+			if progressBar or downloadData.active then
+				statusString = "active"
+			else
+				statusString = "pending"
+			end
+		end
+		
+		statusPriority = STATUS_PRIORITY[statusString] or 1
+		statusBox:SetText(NAME_MAP[statusString] or "")
+		
+		local buttons = BUTTON_MAP[statusString]
+		
+		retryButton:SetVisibility((buttons and buttons.retry) or false)
+		priorityButton:SetVisibility((buttons and buttons.priority) or false)
+		cancelButton:SetVisibility((buttons and buttons.cancel) or false)
+	end
+	
+	UpdateStatus()
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.SetProgress(sizeCurrent, sizeTotal)
+		if not progressBar then
+			progressBar = Progressbar:New {
+				x = STATUS_POSITION,
+				y = 2,
+				right = 2,
+				bottom = 2,
+				value = 0,
+				parent = holder,
+			}
+		end
+		progressBar:SetCaption(string.format("%.1f", sizeCurrent) .. "/" .. string.format("%.1f", sizeTotal) .. " MB")
+		progressBar:SetValue(100*sizeCurrent/sizeTotal)
+		
+		UpdateStatus()
+	end
+	
+	function externalFunctions.GetHolder()
+		return holder
+	end
+	
+	function externalFunctions.UpdateAndGetSortOrder(newData)
+		if not newData then
+			return sortData
+		end
+		downloadData = newData
+		UpdateStatus()
+		
+		sortData[1] = downloadData.priority
+		sortData[3] = statusPriority
+		
+		return sortData
+	end
+	
+	return externalFunctions
+end
+
+local function DownloadUpdateFunction(downloadCount)
 	local interfaceRoot = WG.Chobby and WG.Chobby.interfaceRoot
 	if not interfaceRoot then
 		return
@@ -34,50 +215,29 @@ local function DownloadUpdateFunction(downloadCount, failure)
 	interfaceRoot.GetRightPanelHandler().SetActivity("downloads", downloadCount)
 end
 
-local function DownloadCompleteFunction(name, archiveType, success)
-	local text = name
-	
-	if not success then
-		text = text .. WG.Chobby.Configuration:GetErrorColor() .. " Failed"
-		
-		Button:New {
-			right = 20,
-			y = completedDownloadPosition,
-			width = 60,
-			height = 30,
-			caption = "Retry",
-			tooltip = "Try to download this item again",
-			font = WG.Chobby.Configuration:GetFont(2),
-			parent = completed,
-			OnClick = {
-				function ()
-					WG.DownloadHandler.RetryDownload(name, archiveType, -1)
-				end
-			}
-		}
-	end
-
-	Label:New {
-		x = 15,
-		y = completedDownloadPosition,
-		width = 180,
-		height = 30,
-		parent = completed,
-		font = WG.Chobby.Configuration:GetFont(2),
-		caption = text,
-	}
-	completedDownloadPosition = completedDownloadPosition + itemSpacing
-end
-
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Initialization
 
-local initialized = false
+local function AddDownloadEntry(data)
+	local name = data.name
+	downloads[name] = CreateDownloadEntry(data)
+	local control = downloads[name].GetHolder()
+	if control then
+		return {name, control, downloads[name].UpdateAndGetSortOrder()}
+	end
+end
+
+local function UpdateOrAddDownloadEntry(data)
+	local name = data.name
+	if downloads[name] then
+		downloadList:UpdateItemSorting(name, downloads[name].UpdateAndGetSortOrder(data), true)
+	else
+		AddDownloadEntry(queue[i])
+	end
+end
 
 local function InitializeControls(window)
-	initialized = true
-
 	Label:New {
 		x = 15,
 		y = 11,
@@ -87,27 +247,79 @@ local function InitializeControls(window)
 		font = WG.Chobby.Configuration:GetFont(3),
 		caption = "Downloads",
 	}
-
-	Label:New {
-		x = 15,
-		y = 360,
-		width = 180,
-		height = 30,
+	
+	-------------------------
+	-- Download List
+	-------------------------
+	
+	local listHolder = Control:New {
+		x = 12,
+		right = 15,
+		y = 52,
+		bottom = 15,
 		parent = window,
-		font = WG.Chobby.Configuration:GetFont(3),
-		caption = "Complete",
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
 	}
 	
-	completed = ScrollPanel:New {
-		x = 5,
-		right = 5,
-		y = 395,
-		bottom = 8,
-		borderColor = {0, 0, 0, 0},
-		horizontalScrollbar = false,
-		parent = window,
+	local headings = {
+		{name = "Order", x = 5, width = 2*BUTTON_WIDTH + 7},
+		{name = "Name", x = 2*BUTTON_WIDTH + 12, width = STATUS_POSITION - 2*BUTTON_WIDTH - 9},
+		{name = "Status", x = STATUS_POSITION + 3, right = 5},
 	}
-
+	
+	downloadList = WG.Chobby.SortableList(listHolder, headings, nil, nil, false)
+	
+	local function AddCurrentDownloads()
+		local queue, finished = WG.DownloadHandler.GetDownloadQueue()
+		
+		local items = {}
+		for i = 1, #queue do
+			local entry = AddDownloadEntry(queue[i])
+			if entry then
+				items[#items + 1] = entry
+			end
+		end
+		
+		for i = 1, #finished do
+			local entry = AddDownloadEntry(finished[i])
+			if entry then
+				items[#items + 1] = entry
+			end
+		end
+		
+		downloadList:AddItems(items)
+	end
+	
+	AddCurrentDownloads()
+	
+	-------------------------
+	-- Listeners
+	-------------------------
+	
+	local function DownloadQueueUpdate(_, queue, finished)
+		for i = 1, #queue do
+			UpdateOrAddDownloadEntry(queue[i])
+		end
+		
+		for i = 1, #finished do
+			UpdateOrAddDownloadEntry(finished[i])
+		end
+		downloadList:UpdateOrder(items)
+		
+		DownloadUpdateFunction((queue and #queue) or 0)
+	end
+	
+	WG.DownloadHandler.AddListener("DownloadQueueUpdate", DownloadQueueUpdate)
+	
+	local function DownloadProgress(_, _, sizeCurrent, sizeTotal, name)
+		if downloads[name] then
+			downloads[name].SetProgress(sizeCurrent, sizeTotal)
+		end
+	end
+	
+	WG.DownloadHandler.AddListener("DownloadProgress", DownloadProgress)
 end
 
 --------------------------------------------------------------------------------
@@ -116,6 +328,7 @@ end
 
 local DownloadWindow = {}
 
+local initialized = false
 function DownloadWindow.GetControl()
 	local window = Control:New {
 		x = "0%",
@@ -125,29 +338,13 @@ function DownloadWindow.GetControl()
 		OnParent = {
 			function(obj)
 				if not initialized then
+					initialized = true
 					InitializeControls(obj)
 				end
 			end
 		},
 	}
-
-	local downloader = WG.Chobby.Downloader(
-		true,
-		{
-			x = 20,
-			height = 260,
-			right = 40,
-			y = 85,
-			parent = window,
-		},
-		false,
-		DownloadUpdateFunction,
-		DownloadCompleteFunction,
-		2
-	)
-
-	parentWindow = window
-
+	
 	return window
 end
 
@@ -165,12 +362,6 @@ function widget:Initialize()
 	WG.Delay(DelayedInitialize, 1)
 
 	WG.DownloadWindow = DownloadWindow
-end
-
-function widget:Shutdown()
-	if WG.LibLobby then
-		-- RemoveListener
-	end
 end
 
 --------------------------------------------------------------------------------

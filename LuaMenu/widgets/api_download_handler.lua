@@ -107,6 +107,7 @@ local function DownloadQueueUpdate()
 		else
 			VFS.DownloadArchive(front.name, front.fileType)
 		end
+		front.active = true
 	end
 	
 	CallListeners("DownloadQueueUpdate", downloadQueue, removedDownloads)
@@ -150,34 +151,16 @@ local function AssociatedSpringDownloadID(springDownloadID, name, fileType)
 	downloadQueue[index].springDownloadID = springDownloadID
 end
 
-local function RemoveDownload(name, fileType, putInRemoveList, removalType, delayListener)
-
+local function RemoveDownload(name, fileType, putInRemoveList, removalType)
 	local index = GetDownloadIndex(downloadQueue, name, fileType)
 	if not index then
 		return false
 	end
 	
-	if removalType == "cancel" then
-		WG.WrapperLoopback.AbortDownload(name, typeMap[fileType])
-		return
-	end
-	
-	if delayListener then
-		local id = downloadQueue[index].id
-		local function DelayedListener()
-			if removalType == "success" then
-				CallListeners("DownloadFinished", id, name, fileType)
-			elseif removalType == "fail" then
-				CallListeners("DownloadFailed", id, removalType, name, fileType)
-			end
-		end
-		WG.Delay(DelayedListener, 1)
+	if removalType == "success" then
+		CallListeners("DownloadFinished", downloadQueue[index].id, name, fileType)
 	else
-		if removalType == "success" then
-			CallListeners("DownloadFinished", downloadQueue[index].id, name, fileType)
-		elseif removalType == "fail" then
-			CallListeners("DownloadFailed", downloadQueue[index].id, removalType, name, fileType)
-		end
+		CallListeners("DownloadFailed", downloadQueue[index].id, removalType, name, fileType)
 	end
 	
 	if putInRemoveList then
@@ -237,7 +220,22 @@ function externalFunctions.SetDownloadTopPriority(name, fileType)
 end
 
 function externalFunctions.CancelDownload(name, fileType)
-	RemoveDownload(name, fileType, true, "cancel")
+	local index = GetDownloadIndex(downloadQueue, name, fileType)
+	if not index then
+		return false
+	end
+	
+	if downloadQueue[index].active then
+		WG.WrapperLoopback.AbortDownload(name, typeMap[fileType])
+		return
+	end
+	
+	downloadQueue[index].removalType = "cancel"
+	removedDownloads[#removedDownloads + 1] = downloadQueue[index]
+	
+	downloadQueue[index] = downloadQueue[#downloadQueue]
+	downloadQueue[#downloadQueue] = nil
+	requestUpdate = true
 end
 
 function externalFunctions.RetryDownload(name, fileType)
@@ -271,21 +269,25 @@ function externalFunctions.MaybeDownloadArchive(name, archiveType, priority)
 	end
 end
 
+function externalFunctions.GetDownloadQueue()
+	return downloadQueue, removedDownloads
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Wrapper Interface
 
-function wrapperFunctions.DownloadFinished(name, fileType, success)
+function wrapperFunctions.DownloadFinished(name, fileType, success, aborted)
 	fileType = fileType and reverseTypeMap[fileType]
 	if VFS.HasArchive(name) then
-		RemoveDownload(name, fileType, true, (success and "success") or "fail")
+		RemoveDownload(name, fileType, true, (aborted and "cancel") or (success and "success") or "fail")
 	elseif fileType then
 		if success then
 			-- Do an inbuilt download to make VFS realize that the file exists.
 			VFS.DownloadArchive(name, fileType)
 			--VFS.ScanAllDirs() -- Find downloaded file
 		end
-		RemoveDownload(name, fileType, true, (success and "success") or "fail", true)
+		RemoveDownload(name, fileType, true, (aborted and "cancel") or (success and "success") or "fail")
 	end
 	
 	--Chotify:Post({
@@ -294,14 +296,14 @@ function wrapperFunctions.DownloadFinished(name, fileType, success)
 	--})
 end
 
-function wrapperFunctions.DownloadFileProgress(name, fileType, progress, secondsRemaining)
-	Spring.Echo("DownloadFileProgress", fileType, progress, secondsRemaining)
+function wrapperFunctions.DownloadFileProgress(name, fileType, progress, secondsRemaining, totalLength, currentSpeed)
 	local index = GetDownloadIndexByName(downloadQueue, name)
 	if not index then
 		return
 	end
 	
-	CallListeners("DownloadProgress", downloadQueue[index].id, progress, 100)
+	totalLength = totalLength/1023^2
+	CallListeners("DownloadProgress", downloadQueue[index].id, totalLength*math.min(1, progress/100), totalLength, name)
 end
 
 --------------------------------------------------------------------------------
