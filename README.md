@@ -38,5 +38,4 @@ For development version of Chobby (obtained from Github), you can launch Chobby 
 If you are using `chobby:test` from rapid, you can specify rapid directly, instead of setting the version manually.
 e.g. `spring --menu 'rapid://chobby:test'` and `DefaultLuaMenu = rapid://chobby:test`
 
-[![Join the chat at https://gitter.im/Spring-Chobby/Chobby](https://badges.gitter.im/Spring-Chobby/Chobby.svg)](https://gitter.im/Spring-Chobby/Chobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
+See the [wiki](https://github.com/Spring-Chobby/Chobby/wiki) for more details, including [Game Customization](https://github.com/Spring-Chobby/Chobby/wiki/Game-Customization)
