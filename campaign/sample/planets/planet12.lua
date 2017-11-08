@@ -166,6 +166,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"staticmex",
 						"energysolar",
 						"staticradar",
+						"staticstorage",
 						"tankcon",
 						"tankassault",
 						"tankheavyraid",

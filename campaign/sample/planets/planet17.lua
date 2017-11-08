@@ -306,6 +306,7 @@ local function GetPlanet(planetUtilities, planetID)
 					unlocks = {
 						"staticmex",
 						"staticradar",
+						"staticstorage",
 						"energysolar",
 						"energygeo",
 						"staticcon",
@@ -336,11 +337,17 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					difficultyDependantUnlocks = {
 						[2] = {"staticcon"},
-						[3] = {"staticcon","factoryamph","factoryveh"},
-						[4] = {"staticcon","factoryamph","factoryveh"},
+						[3] = {"staticcon"},
+						[4] = {"staticcon"},
 					},
 					commander = false,
 					startUnits = {
+						{
+							name = "staticstorage",
+							x = 5600,
+							z = 2400,
+							facing = 0,
+						},
 						{
 							name = "factoryplane",
 							x = 2016,
@@ -653,6 +660,7 @@ local function GetPlanet(planetUtilities, planetID)
 					unlocks = {
 						"staticmex",
 						"staticradar",
+						"staticstorage",
 						"energysolar",
 						"energygeo",
 						"staticcon",
@@ -1035,6 +1043,7 @@ local function GetPlanet(planetUtilities, planetID)
 					unlocks = {
 						"staticmex",
 						"staticradar",
+						"staticstorage",
 						"energysolar",
 						"energygeo",
 						"staticcon",
@@ -1087,6 +1096,12 @@ local function GetPlanet(planetUtilities, planetID)
 								text = "Metal Storage Depot",
 								color = "red_small"
 							},
+						},
+						{
+							name = "staticstorage",
+							x = 4900,
+							z = 7000,
+							facing = 0,
 						},
 						{
 							name = "turretheavylaser",
