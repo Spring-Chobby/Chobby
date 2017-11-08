@@ -4,11 +4,10 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
-	local image = LUA_DIRNAME .. "images/planets/79.png"
+	local image = LUA_DIRNAME .. "images/planets/ocean03.png"
 	
 	local planetData = {
-		name = "Hyacin",
+		name = "Baosezu",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.165,
