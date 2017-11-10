@@ -172,17 +172,15 @@ local function GetPlanet(planetUtilities, planetID)
 						"tankheavyraid",
 						"tankarty",
 						"tankaa",
-						"tankheavyassault",
 						"tankriot",
 						"turretlaser",
 						"turretriot",
 						"turretmissile",
-						"turretheavylaser"
 					},
 					difficultyDependantUnlocks = {
 						[2] = {"staticcon","factoryveh","vehraid","vehsupport","vehassault","vehriot"},
-						[3] = {"staticcon","factoryveh","vehraid","vehsupport","vehassault","vehriot","veharty"},
-						[4] = {"staticcon","factoryveh","vehraid","vehsupport","vehassault","vehriot","veharty","vehscout"},
+						[3] = {"staticcon","factoryveh","vehraid","vehsupport","vehassault","vehriot","veharty","tankheavyassault","turretheavylaser"},
+						[4] = {"staticcon","factoryveh","vehraid","vehsupport","vehassault","vehriot","veharty","vehscout","tankheavyassault","turretheavylaser"},
 					},
 					commanderLevel = 2,
 					commander = {
