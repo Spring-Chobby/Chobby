@@ -493,17 +493,26 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 2952,
 						z = 2424,
 						facing = 0,
+						selfPatrol = true,
 					},
 					{
 						name = "staticcon",
 						x = 2952,
 						z = 2328,
 						facing = 0,
+						selfPatrol = true,
 					},
 					{
 						name = "staticcon",
 						x = 3016,
 						z = 2248,
+						facing = 0,
+						selfPatrol = true,
+					},
+					{
+						name = "staticstorage",
+						x = 2700,
+						z = 2400,
 						facing = 0,
 					},
 				}
