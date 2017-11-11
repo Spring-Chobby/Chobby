@@ -1022,6 +1022,14 @@ local function ProcessScreenSizeOption(data, offset)
 		font = Configuration:GetFont(2),
 		tooltip = data.desc,
 	}
+	
+	local selectedOption
+	if data.lobbyDisplayModeToggle then
+		selectedOption = Configuration.lobby_fullscreen or 1
+	else
+		selectedOption = Configuration.game_fullscreen or 1
+	end
+	
 	local list = ComboBox:New {
 		name = data.name .. "_combo",
 		x = COMBO_X,
@@ -1031,7 +1039,7 @@ local function ProcessScreenSizeOption(data, offset)
 		items = {"Borderless Window", "Windowed", "Fullscreen", "Manual Borderless"},
 		font = Configuration:GetFont(2),
 		itemFontSize = Configuration:GetFont(2).size,
-		selected = Configuration.game_fullscreen or 1,
+		selected = selectedOption,
 		OnSelect = {
 			function (obj)
 				if freezeSettings then
