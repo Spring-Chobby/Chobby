@@ -141,7 +141,6 @@ local function GetPlanet(planetUtilities, planetID)
 						"tankcon",
 						"tankassault",
 						"tankheavyraid",
-						"tankarty",
 						"tankaa",
 						"tankriot",
 						"turretlaser",
@@ -150,9 +149,9 @@ local function GetPlanet(planetUtilities, planetID)
 						"vehassault",
 					},
 					difficultyDependantUnlocks = {
-						[2] = {"staticcon"},
-						[3] = {"staticcon","tankheavyassault","turretheavylaser"},
-						[4] = {"staticcon","tankheavyassault","turretheavylaser"},
+						[2] = {"staticcon", "tankarty",},
+						[3] = {"staticcon", "tankarty", "turretheavylaser"},
+						[4] = {"staticcon", "tankarty", "tankheavyassault", "turretheavylaser"},
 					},
 					commanderLevel = 2,
 					commander = {
@@ -173,6 +172,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 6018,
 							z = 219,
 							facing = 2,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "energywind",
@@ -191,12 +191,14 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 5960,
 							z = 3000,
 							facing = 0,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "staticmex",
 							x = 5880,
 							z = 1192,
 							facing = 0,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "energysolar",
@@ -286,6 +288,7 @@ local function GetPlanet(planetUtilities, planetID)
 							name = "turretlaser",
 							x = 352,
 							z = 2800,
+							difficultyAtLeast = 2,
 							facing = 1,
 						},
 						{
@@ -299,6 +302,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 1840,
 							z = 2960,
 							facing = 1,
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "staticmex",
@@ -311,6 +315,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 816,
 							z = 2096,
 							facing = 0,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "staticradar",
@@ -503,6 +508,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 2224,
 							z = 1568,
 							facing = 0,
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "energysolar",
@@ -557,6 +563,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 6127,
 							z = 426,
 							facing = 2,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "energysolar",
@@ -762,36 +769,56 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 6103,
 							z = 223,
 							facing = 2,
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "tankassault",
 							x = 6107,
 							z = 342,
 							facing = 1,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "tankheavyraid",
 							x = 6068,
 							z = 281,
 							facing = 2,
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "tankassault",
 							x = 6072,
 							z = 85,
 							facing = 2,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "tankassault",
+							x = 5892,
+							z = 85,
+							facing = 2,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "tankassault",
+							x = 5772,
+							z = 85,
+							facing = 2,
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "tankcon",
 							x = 6087,
 							z = 533,
 							facing = 1,
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "vehassault",
 							x = 850,
 							z = 2562,
 							facing = 2,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "vehcon",
@@ -804,6 +831,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 6077,
 							z = 415,
 							facing = 1,
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "turretriot",
@@ -811,6 +839,7 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 856,
 							facing = 3,
 							terraformHeight = 239,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "energysolar",
@@ -860,6 +889,7 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 2216,
 							facing = 3,
 							terraformHeight = 259,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "energysolar",
@@ -938,6 +968,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 4744,
 							z = 1464,
 							facing = 3,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "turretlaser",
@@ -951,6 +982,7 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 1672,
 							facing = 0,
 							terraformHeight = 259,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "energysolar",
@@ -993,12 +1025,14 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 5632,
 							z = 2048,
 							facing = 3,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "staticmex",
 							x = 1832,
 							z = 2152,
 							facing = 0,
+							difficultyAtLeast = 2,
 						},
 					}
 				},
