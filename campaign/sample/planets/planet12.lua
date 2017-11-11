@@ -1066,6 +1066,12 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Control a Tank Foundry",
 					experience = planetUtilities.BONUS_EXP,
 				},
+				[4] = { -- Win by 8:00
+					victoryByTime = 480,
+					image = planetUtilities.ICON_OVERLAY.CLOCK,
+					description = "Win by 8:00",
+					experience = planetUtilities.BONUS_EXP,
+				},
 			},
 		},
 		completionReward = {
