@@ -283,11 +283,7 @@ function wrapperFunctions.DownloadFinished(name, fileType, success, aborted)
 	if VFS.HasArchive(name) then
 		RemoveDownload(name, fileType, true, (aborted and "cancel") or (success and "success") or "fail")
 	elseif fileType then
-		if success then
-			-- Do an inbuilt download to make VFS realize that the file exists.
-			VFS.DownloadArchive(name, fileType)
-			--VFS.ScanAllDirs() -- Find downloaded file
-		end
+		VFS.ScanAllDirs() -- Find downloaded file (if it exists).
 		RemoveDownload(name, fileType, true, (aborted and "cancel") or (success and "success") or "fail")
 	end
 	
