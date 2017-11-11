@@ -8,7 +8,7 @@ local function GetPlanet(planetUtilities, planetID)
 	local image = LUA_DIRNAME .. "images/planets/tundra01.png"
 	
 	local planetData = {
-		name = "Sprallis",
+		name = "Blackmire",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.35,

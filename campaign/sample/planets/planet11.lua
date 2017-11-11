@@ -4,11 +4,10 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
-	local image = LUA_DIRNAME .. "images/planets/79.png"
+	local image = LUA_DIRNAME .. "images/planets/ocean03.png"
 	
 	local planetData = {
-		name = "Hyacin",
+		name = "Baosezu",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.165,
@@ -25,7 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "EL-5591",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[On this planet your opponent sends gunships out from behind a formidable defensive array. Use Crasher AA rovers to shoot down the gunships, then Impaler artillery to tear down the base.]]
+			text = [[Your opponent is sending gunships out from behind a formidable defensive array. Use Crasher AA rovers to shoot down the gunships, then Impaler artillery to tear down the base.]]
 		},
 		tips = {
 			{
@@ -34,11 +33,11 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/vehscout.png",
-				text = [[Dart scouts are not very useful in combat, but they are very cheap, fast and can see a long way, so they are ideal for discovering enemy locations and identifying radar dots.]]
+				text = [[Darts are not very useful in combat, but they are very cheap, fast and can see a long way, so they are ideal for discovering enemy locations and identifying radar dots.]]
 			},
 			{
 				image = "unitpics/vehheavyarty.png",
-				text = [[The Impaler artillery rover fires long-range cruise missiles which inflict considerable damage on a single stationary target. They are practically useless against mobile targets so make sure they are well escorted against land and air threats.]]
+				text = [[Impalers fire long-range cruise missiles which are very effective against turrets. They are practically useless against mobile targets so make sure they are well escorted against land and air threats.]]
 			},
 		},
 		gameConfig = {
@@ -304,19 +303,19 @@ local function GetPlanet(planetUtilities, planetID)
 						facing = 0,
 					},
 					{
-						name = "vehraid",
+						name = "vehscout",
 						x = 3450,
 						z = 2030,
 						facing = 0,
 					},
 					{
-						name = "vehraid",
+						name = "vehscout",
 						x = 3550,
 						z = 2030,
 						facing = 0,
 					},
 					{
-						name = "vehraid",
+						name = "vehscout",
 						x = 3650,
 						z = 2030,
 						facing = 0,
@@ -494,17 +493,26 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 2952,
 						z = 2424,
 						facing = 0,
+						selfPatrol = true,
 					},
 					{
 						name = "staticcon",
 						x = 2952,
 						z = 2328,
 						facing = 0,
+						selfPatrol = true,
 					},
 					{
 						name = "staticcon",
 						x = 3016,
 						z = 2248,
+						facing = 0,
+						selfPatrol = true,
+					},
+					{
+						name = "staticstorage",
+						x = 2700,
+						z = 2400,
 						facing = 0,
 					},
 				}
@@ -526,7 +534,8 @@ local function GetPlanet(planetUtilities, planetID)
 						"staticmex",
 						"energywind",
 						"staticradar",
-						"staticcon",
+						"staticstorage",
+						--"staticcon",
 						"gunshipcon",
 						"gunshipbomb",
 						"gunshipemp",
@@ -540,8 +549,10 @@ local function GetPlanet(planetUtilities, planetID)
 						"turretmissile"
 					},
 					difficultyDependantUnlocks = {
-						[2] = {"amphimpulse","amphriot","gunshipassault","turretriot"},
-						[3] = {"amphimpulse","amphriot","gunshipassault","turretriot","amphfloater","gunshipkrow","turretheavylaser"},
+						[1] = {"staticcon"},
+						[2] = {"staticcon","amphimpulse","amphriot","gunshipassault"},
+						[3] = {"staticcon","amphimpulse","amphriot","gunshipassault","turretriot","turretheavylaser"},
+						[4] = {"amphimpulse","amphriot","gunshipassault","turretriot","amphfloater","turretheavylaser"}, --leaving out caretaker makes the mission *harder* - go figure
 					},
 					commanderLevel = 2,
 					commander = {
@@ -560,6 +571,10 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 5336,
 							facing = 0,
 							difficultyAtMost = 2,
+							mapMarker = {
+								text = "Gunship Plant",
+								color = "red"
+							},
 						},
 						{
 							name = "factorygunship",
@@ -567,6 +582,10 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 6168,
 							facing = 0,
 							difficultyAtLeast = 3,
+							mapMarker = {
+								text = "Gunship Plant",
+								color = "red"
+							},
 						},
 						{
 							name = "staticcon",
@@ -596,6 +615,89 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 6168,
 							facing = 0,
 							difficultyAtLeast = 3,
+						},
+						{
+							name = "gunshipcon",
+							x = 6000,
+							z = 6000,
+							facing = 0,
+						},
+						{
+							name = "gunshipcon",
+							x = 5900,
+							z = 6000,
+							facing = 0,
+							difficultyAtLeast = 2,
+						},
+						{
+							name = "gunshipcon",
+							x = 5800,
+							z = 6000,
+							facing = 0,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "gunshipcon",
+							x = 5700,
+							z = 6000,
+							facing = 0,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "staticmex",
+							x = 4520,
+							z = 5830,
+							facing = 0,
+							difficultyAtLeast = 2,
+						},
+						{
+							name = "staticmex",
+							x = 5990,
+							z = 4390,
+							facing = 0,
+							difficultyAtLeast = 2,
+						},
+						{
+							name = "staticmex",
+							x = 3190,
+							z = 6530,
+							facing = 0,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "staticmex",
+							x = 6300,
+							z = 3020,
+							facing = 0,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "staticmex",
+							x = 6935,
+							z = 233,
+							facing = 0,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "staticmex",
+							x = 6900,
+							z = 500,
+							facing = 0,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "turretlaser",
+							x = 6800,
+							z = 400,
+							facing = 3,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "staticmex",
+							x = 1800,
+							z = 6855,
+							facing = 0,
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "staticmex",
@@ -904,14 +1006,27 @@ local function GetPlanet(planetUtilities, planetID)
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Destroy the enemy Gunship Factory",
+					description = "Destroy the enemy Gunship Plant",
 				},
 				[2] = {
 					description = "Protect your Commander",
 				},
 			},
 			bonusObjectiveConfig = {
-				[1] = { -- Have 30 Metal Extractors by 9:00
+				[1] = { 
+					satisfyOnce = true,
+					countRemovedUnits = true, -- count units that previously died.
+					comparisionType = planetUtilities.COMPARE.AT_LEAST,
+					targetNumber = 6,
+					unitTypes = {
+						"vehheavyarty",
+					},
+					image = planetUtilities.ICON_DIR .. "vehheavyarty.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
+					description = "Build at least 6 Impalers",
+					experience = planetUtilities.BONUS_EXP,
+				},
+				[2] = { -- Have 30 Metal Extractors by 9:00
 					satisfyByTime = 540,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 30,
@@ -923,7 +1038,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Have 30 Metal Extractors by 9:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[2] = { -- Destroy all three DDMs
+				[3] = { -- Destroy all three DDMs
 					satisfyOnce = true,
 					comparisionType = planetUtilities.COMPARE.AT_MOST,
 					targetNumber = 0,

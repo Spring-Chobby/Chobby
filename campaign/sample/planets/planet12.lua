@@ -8,7 +8,7 @@ local function GetPlanet(planetUtilities, planetID)
 	local image = LUA_DIRNAME .. "images/planets/inferno04.png"
 	
 	local planetData = {
-		name = "Borzalon",
+		name = "Ganong",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.24,
@@ -30,7 +30,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/vehcapture.png",
-				text = [[The Dominatrix fires a beam at enemy units which will, given time, turn them to your side. Multiple Dominatrices makes the capture go faster. Once a unit is captured it is assigned to a capturing Dominatrix; that Dominatrix cannot do any more capturing for a while, and if it is destroyed the captured units will revert to enemy control.]]
+				text = [[The Dominatrix fires a beam at enemy units which will turn them to your side. Multiple Dominatrices makes the capture go faster. If the capturing Dominatrix is destroyed the unit reverts to enemy control.]]
 			},
 			{
 				image = "unitpics/tankassault.png",
@@ -166,22 +166,21 @@ local function GetPlanet(planetUtilities, planetID)
 						"staticmex",
 						"energysolar",
 						"staticradar",
+						"staticstorage",
 						"tankcon",
 						"tankassault",
 						"tankheavyraid",
 						"tankarty",
 						"tankaa",
-						"tankheavyassault",
 						"tankriot",
 						"turretlaser",
 						"turretriot",
 						"turretmissile",
-						"turretheavylaser"
 					},
 					difficultyDependantUnlocks = {
-						[2] = {"factoryveh","vehraid","vehsupport","vehassault","vehriot"},
-						[3] = {"factoryveh","vehraid","vehsupport","vehassault","vehriot","veharty","vehscout"},
-						[4] = {"factoryveh","vehraid","vehsupport","vehassault","vehriot","veharty","vehscout"},
+						[2] = {"staticcon","factoryveh","vehraid","vehsupport","vehassault","vehriot"},
+						[3] = {"staticcon","factoryveh","vehraid","vehsupport","vehassault","vehriot","veharty","tankheavyassault","turretheavylaser"},
+						[4] = {"staticcon","factoryveh","vehraid","vehsupport","vehassault","vehriot","veharty","vehscout","tankheavyassault","turretheavylaser"},
 					},
 					commanderLevel = 2,
 					commander = {
@@ -200,12 +199,6 @@ local function GetPlanet(planetUtilities, planetID)
 						{
 							name = "tankheavyraid",
 							x = 1900,
-							z = 1000,
-							facing = 0,
-						},
-						{
-							name = "tankheavyraid",
-							x = 1900,
 							z = 800,
 							facing = 0,
 							difficultyAtLeast = 2,
@@ -219,16 +212,57 @@ local function GetPlanet(planetUtilities, planetID)
 						},
 						{
 							name = "tankriot",
-							x = 2000,
-							z = 100,
-							facing = 0,
-						},
-						{
-							name = "tankriot",
 							x = 1950,
 							z = 800,
 							facing = 0,
 							difficultyAtLeast = 3,
+						},
+						{
+							name = "staticmex",
+							x = 524,
+							z = 1832,
+							facing = 0,
+							difficultyAtLeast = 2,
+						},
+						{
+							name = "staticmex",
+							x = 730,
+							z = 2100,
+							facing = 0,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "energysolar",
+							x = 640,
+							z = 1890,
+							facing = 0,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "staticmex",
+							x = 280,
+							z = 2900,
+							facing = 0,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "tankcon",
+							x = 320,
+							z = 2900,
+							facing = 0,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "tankheavyraid",
+							x = 1900,
+							z = 1000,
+							facing = 0,
+						},
+						{
+							name = "tankriot",
+							x = 2000,
+							z = 100,
+							facing = 0,
 						},
 						{
 							name = "factorytank",
@@ -392,12 +426,6 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 880,
 							facing = 1,
 						},
-						{
-							name = "energypylon",
-							x = 6000,
-							z = 1700,
-							facing = 3,
-						},
 					}
 				},
 			},
@@ -448,7 +476,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "tankassault.png",
 					--imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Control 3 Beasts",
+					description = "Control 3 Minotaurs",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { -- Have a Tank Foundry

@@ -8,7 +8,7 @@ local function GetPlanet(planetUtilities, planetID)
 	local image = LUA_DIRNAME .. "images/planets/desert02.png"
 	
 	local planetData = {
-		name = "Arodis",
+		name = "Happika",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.11,
@@ -29,12 +29,20 @@ local function GetPlanet(planetUtilities, planetID)
 		},
 		tips = {
 			{
+				image = "unitpics/vehcon.png",
+				text = [[Assist your factory with constructors like the Mason to build units more quickly and use your resources.]]
+			},
+			{
+				image = "unitpics/vehraid.png",
+				text = [[Move your Scorchers right next to enemy structures to deal maximum damage. Their heat rays become less effective at long range.]]
+			},
+			{
 				image = "unitpics/vehriot.png",
-				text = [[Ripper riot rovers are not especially strong on their own, but they are very effective as escorts for other Rovers against raiders.]]
+				text = [[Rippers are not particularly strong when used alone, but they are very effective as escorts for other Rovers against raiders.]]
 			},
 			{
 				image = "unitpics/vehassault.png",
-				text = [[Ravager assault rovers are not the toughest assault units in the game, but they make up for that with greater speed.]]
+				text = [[Ravagers are the fastest assault units in the game, though they give up some toughness to achieve this.]]
 			},
 		},
 		gameConfig = {
@@ -79,7 +87,7 @@ local function GetPlanet(planetUtilities, planetID)
 						z = 550,
 						facing = 0,
 						commands = {
-							{cmdID = planetUtilities.COMMAND.FIGHT, pos = {200, 2300}},
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {200, 2300}},
 						},
 					},
 					{
@@ -88,7 +96,7 @@ local function GetPlanet(planetUtilities, planetID)
 						z = 550,
 						facing = 0,
 						commands = {
-							{cmdID = planetUtilities.COMMAND.FIGHT, pos = {300, 2300}},
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {300, 2300}},
 						},
 					},
 					{
@@ -97,7 +105,7 @@ local function GetPlanet(planetUtilities, planetID)
 						z = 650,
 						facing = 0,
 						commands = {
-							{cmdID = planetUtilities.COMMAND.FIGHT, pos = {400, 2300}},
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {400, 2300}},
 						},
 					},
 					{
@@ -106,7 +114,7 @@ local function GetPlanet(planetUtilities, planetID)
 						z = 650,
 						facing = 0,
 						commands = {
-							{cmdID = planetUtilities.COMMAND.FIGHT, pos = {500, 2300}},
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {500, 2300}},
 						},
 					},
 					{
@@ -115,7 +123,7 @@ local function GetPlanet(planetUtilities, planetID)
 						z = 550,
 						facing = 1,
 						commands = {
-							{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4300,800}},
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4300,800}},
 						},
 					},
 					{
@@ -124,7 +132,7 @@ local function GetPlanet(planetUtilities, planetID)
 						z = 650,
 						facing = 1,
 						commands = {
-							{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4300,900}},
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4300,900}},
 						},
 					},
 					{
@@ -133,7 +141,7 @@ local function GetPlanet(planetUtilities, planetID)
 						z = 550,
 						facing = 1,
 						commands = {
-							{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4300,1000}},
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4300,1000}},
 						},
 					},
 					{
@@ -142,19 +150,13 @@ local function GetPlanet(planetUtilities, planetID)
 						z = 650,
 						facing = 1,
 						commands = {
-							{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4300,1100}},
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4300,1100}},
 						},
 					},
 					{
 						name = "staticradar",
 						x = 2016,
 						z = 928,
-						facing = 0,
-					},
-					{
-						name = "vehcon",
-						x = 284,
-						z = 1585,
 						facing = 0,
 					},
 					{
@@ -290,7 +292,7 @@ local function GetPlanet(planetUtilities, planetID)
 					startX = 4904,
 					startZ = 3500,
 					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Greedo",
+					humanName = "Chamagut",
 					bitDependant = true,
 					commanderParameters = {
 						facplop = false,
@@ -312,7 +314,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					commanderLevel = 3,
 					commander = {
-						name = "Big Boy",
+						name = "Yuni Sellis",
 						chassis = "assault",
 						decorations = {
 						},
@@ -592,6 +594,20 @@ local function GetPlanet(planetUtilities, planetID)
 							name = "staticstorage",
 							x = 4952,
 							z = 3992,
+							facing = 0,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "staticcon",
+							x = 5050,
+							z = 3700,
+							facing = 0,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "vehcon",
+							x = 5050,
+							z = 3600,
 							facing = 0,
 							difficultyAtLeast = 3,
 						},

@@ -4,8 +4,7 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
-	local image = LUA_DIRNAME .. "images/planets/11.png"
+	local image = LUA_DIRNAME .. "images/planets/tundra02.png"
 	
 	local planetData = {
 		name = "Estann All",
@@ -38,7 +37,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/turretaaflak.png",
-				text = [[The Mattock Flak AA turret will make short work of any light flying units. It is especially effective against large groups of fliers.]]
+				text = [[The Thresher Flak AA turret will make short work of any light flying units. It is especially effective against large groups of fliers.]]
 			},
 		},
 		gameConfig = {
@@ -76,6 +75,7 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 4300,
 						z = 4300,
 						facing = 2,
+						selfPatrol = true,
 					},
 					{
 						name = "turretemp",
@@ -263,6 +263,34 @@ local function GetPlanet(planetUtilities, planetID)
 						modules = { }
 					},
 					startUnits = {
+						
+						{
+							name = "turretemp",
+							x = 1562,
+							z = 1562,
+							facing = 0,
+						},
+						{
+							name = "turretemp",
+							x = 1920,
+							z = 1664,
+							facing = 1,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "turretemp",
+							x = 1152,
+							z = 1920,
+							facing = 1,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "turretemp",
+							x = 1920,
+							z = 1152,
+							facing = 1,
+							difficultyAtLeast = 4,
+						},
 						{
 							name = "staticmex",
 							x = 264,
@@ -295,12 +323,6 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 1,
 							terraformHeight = 90,
 						},
-						{
-							name = "turretemp",
-							x = 1562,
-							z = 1562,
-							facing = 0,
-						},
  						{
 							name = "turretriot",
 							x = 1000,
@@ -308,13 +330,13 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 1,
 							terraformHeight = 346,
 						},
- 						{
-							name = "staticmex",
-							x = 776,
-							z = 760,
+						{
+							name = "turretemp",
+							x = 1000,
+							z = 680,
 							facing = 1,
 						},
- 						{
+						{
 							name = "turretriot",
 							x = 1000,
 							z = 536,
@@ -328,12 +350,24 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 0,
 							terraformHeight = 346,
 						},
+						{
+							name = "turretemp",
+							x = 680,
+							z = 1000,
+							facing = 0,
+						},
  						{
 							name = "turretriot",
 							x = 840,
 							z = 1000,
 							facing = 0,
 							terraformHeight = 346,
+						},
+ 						{
+							name = "staticmex",
+							x = 776,
+							z = 760,
+							facing = 1,
 						},
  						{
 							name = "energysolar",
@@ -424,12 +458,6 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 1,
 						},
  						{
-							name = "turretemp",
-							x = 1920,
-							z = 1664,
-							facing = 1,
-						},
- 						{
 							name = "turretlaser",
 							x = 1792,
 							z = 1920,
@@ -464,18 +492,6 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 1152,
 							z = 1664,
 							facing = 0,
-						},
-						{
-							name = "turretemp",
-							x = 1152,
-							z = 1920,
-							facing = 1,
-						},
-						{
-							name = "turretemp",
-							x = 1920,
-							z = 1152,
-							facing = 1,
 						},
 					}
 				},
