@@ -929,9 +929,9 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		local conquerString
 		local cap, difficulty = WG.CampaignData.IsPlanetCaptured(planetID)
 		if cap then
-			conquerString = "Conquered on " .. difficultyNameMap[difficulty or 0] .. "\n"
+			conquerString = "\nConquered on " .. difficultyNameMap[difficulty or 0] 
 		end
-		button.tooltip = "Planet " .. planetData.name .. "\n" .. (conquerString or "") .. "Bonus objectives: " .. bonusCount .. " / " .. maxBonus
+		button.tooltip = "Planet " .. planetData.name .. (conquerString or "") .. ((maxBonus > 0 and "\nBonus objectives: " .. bonusCount .. " / " .. maxBonus) or "")
 	end
 	externalFunctions.UpdateInformation()
 	
