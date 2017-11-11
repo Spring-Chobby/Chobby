@@ -25,20 +25,20 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Purlie",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[The enemy Tanks will be difficult to defeat in direct combat. Instead, build Dominatrix capture rovers to turn your opponent's units against each other.]]
+			text = [[The enemy is well entrenched but, luckilly for you, they have a poorly defended outpost and you have a squard of Dominatrix. Capture the outpost to gain a production base then amass an army of captured Tanks and march on their main base.]]
 		},
 		tips = {
 			{
 				image = "unitpics/vehcapture.png",
-				text = [[The Dominatrix fires a beam at enemy units which will turn them to your side. Multiple Dominatrices makes the capture go faster. If the capturing Dominatrix is destroyed the unit reverts to enemy control.]]
+				text = [[The Dominatrix hacks into enemy units to turn them to your side. Multiple Dominatrices increases the rate of capture and the Dominatrix that dealt the final blow will need serveral seconds to reload. A Dominatrix must maintain continuous control, if they are destroyed then all captured units revert to their original side.]]
 			},
 			{
 				image = "unitpics/tankassault.png",
-				text = [[Since capture time is based on cost rather than hit points, Dominatrices are especially effective against the heavy Tanks.]]
+				text = [[The time taken to capture a unit is based on cost instead of health. This makes Dominatrices particularly effective against assaults.]]
 			},
 			{
 				image = "unitpics/factorytank.png",
-				text = [[Dominatrices can also capture buildings and Commanders.]]
+				text = [[Dominatrices can capture everything. Capture an enemy factory to use their technology (in addition to your own).]]
 			},
 		},
 		gameConfig = {
@@ -1040,17 +1040,17 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Build 10 Dominatrices",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[2] = { -- Have four Reapers
+				[2] = { -- Have five Reapers
 					satisfyOnce = true,
 					capturedUnitsSatisfy = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 4,
+					targetNumber = 5,
 					unitTypes = {
 						"tankassault",
 					},
 					image = planetUtilities.ICON_DIR .. "tankassault.png",
 					--imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Control 3 Minotaurs",
+					description = "Control 5 Minotaurs",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { -- Have a Tank Foundry

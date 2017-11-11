@@ -24,20 +24,20 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "EL-5591",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[Your opponent is sending gunships out from behind a formidable defensive array. Use Crasher AA rovers to shoot down the gunships, then Impaler artillery to tear down the base.]]
+			text = [[Your opponent is sending gunships out from behind a formidable defensive array. Use Crasher anti-air rovers to shoot down the gunships, then Impaler artillery to tear down the base.]]
 		},
 		tips = {
 			{
-				image = "unitpics/turretheavy.png",
-				text = [[It would be sheer folly to directly attack the defensive positions your opponent has laid out here. Wear them down from long range instead.]]
+				image = "unitpics/vehheavyarty.png",
+				text = [[Impalers fire long-range cruise missiles which are very effective against turrets. They are practically useless against mobile targets so make sure they are well escorted against land and air threats.]]
 			},
 			{
 				image = "unitpics/vehscout.png",
 				text = [[Darts are not very useful in combat, but they are very cheap, fast and can see a long way, so they are ideal for discovering enemy locations and identifying radar dots.]]
 			},
 			{
-				image = "unitpics/vehheavyarty.png",
-				text = [[Impalers fire long-range cruise missiles which are very effective against turrets. They are practically useless against mobile targets so make sure they are well escorted against land and air threats.]]
+				image = "unitpics/turretheavy.png",
+				text = [[It would be sheer folly to directly attack the defensive positions your opponent has laid out here. Wear them down from long range instead.]]
 			},
 		},
 		gameConfig = {

@@ -33,7 +33,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/veharty.png",
-				text = [[Badgers are very good for grinding out a win. They fire mines which can make a region practically impassable for the enemy. They are weak at short range so make sure they don't get flanked.]]
+				text = [[Badgers are very good for grinding down your opposition. They fire mines which can make a region practically impassable for the enemy. They are almost defenseless unless you plan ahead with some well placed mines, so make sure they don't get flanked. Force Fire the ground with Alt + Left Click with a group of Badgers to make a line of mines.]]
 			},
 			{
 				image = "unitpics/module_dmg_booster.png",
@@ -41,7 +41,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/spidercrabe.png",
-				text = [[Your ally's Spiders can climb up sheer cliffs, so there are some parts of the map which they will be better at fighting over. The heavy Crab spider in particular is a potent fighting force even when alone.]]
+				text = [[Your ally's Spiders can climb up sheer cliffs, so there are some parts of the battlefield which they will be better at fighting over. The heavy Crab spider in particular is a potent fighting force even when alone.]]
 			},
 		},
 		gameConfig = {

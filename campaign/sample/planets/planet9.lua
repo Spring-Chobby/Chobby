@@ -30,19 +30,19 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/vehcon.png",
-				text = [[Assist your factory with constructors like the Mason to build units more quickly and use your resources.]]
+				text = [[Assist factories with constructors, such as the Mason, to speed up unit production. Assisting is more flexible and efficient than constructing additional factories.]]
 			},
 			{
 				image = "unitpics/vehraid.png",
-				text = [[Move your Scorchers right next to enemy structures to deal maximum damage. Their heat rays become less effective at long range.]]
+				text = [[The heatray weapon of the Scorcher does little damage at a distance and massive damage at close range. Move them right next to an enemy unit and watch it melt.]]
 			},
 			{
 				image = "unitpics/vehriot.png",
-				text = [[Rippers are not particularly strong when used alone, but they are very effective as escorts for other Rovers against raiders.]]
+				text = [[Rippers have low damage for a riot but make up for it with impressive speed and area of effect. They are very effective as escorts for other Rovers against raiders.]]
 			},
 			{
 				image = "unitpics/vehassault.png",
-				text = [[Ravagers are the fastest assault units in the game, though they give up some toughness to achieve this.]]
+				text = [[Ravagers are a fast assault unit that are even capable of outrunning some factory's raiders. They give up some of their toughness to achieve this.]]
 			},
 		},
 		gameConfig = {
@@ -77,8 +77,8 @@ local function GetPlanet(planetUtilities, planetID)
 						z = 550,
 						facing = 0,
 						commands = {
-							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1550, 300}},
-							{cmdID = planetUtilities.COMMAND.PATROL, pos = {1550, 270}, options = {"shift"}}
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1550, 270}},
+							{cmdID = planetUtilities.COMMAND.GUARD, atPosition = {1688, 312}, options = {"shift"}}
 						},
 					},
 					{
