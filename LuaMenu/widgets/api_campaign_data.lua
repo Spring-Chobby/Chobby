@@ -137,6 +137,7 @@ local function ResetGamedata()
 		planetsCaptured = {map = {}, list = {}},
 		commanderExperience = 0,
 		difficultySetting = 1, -- 1,2,3 -> easy/medium/hard
+		leastDifficulty = false,
 		commanderLevel = 0,
 		commanderName = "New Save",
 		commanderChassis = "knight",
@@ -438,6 +439,10 @@ function externalFunctions.CapturePlanet(planetID, bonusObjectives, difficulty)
 	local gainedExperience = 0
 	local gainedBonusExperience = 0
 	
+	if difficulty < (gamedata.leastDifficulty or 0) then
+		gamedata.leastDifficulty = difficulty
+	end
+	
 	if UnlockThing(gamedata.planetsCaptured, planetID) then
 		UnlockRewardSet(planet.completionReward)
 		CallListeners("RewardGained", planet.completionReward)
@@ -486,6 +491,7 @@ function externalFunctions.AddPlayTime(battleFrames, missionLost)
 	if (battleFrames or 0) > 0 then
 		SaveGame()
 	end
+	CallListeners("PlayTimeAdded", battleFrames, missionLost)
 end
 
 function externalFunctions.PutModuleInSlot(moduleName, level, slot)
@@ -597,6 +603,10 @@ end
 
 function externalFunctions.GetCodexEntryInfo(codexEntryName)
 	return WG.Chobby.Configuration.campaignConfig.codex[codexEntryName] or {}
+end
+
+function externalFunctions.GetGamedataInATroublingWay()
+	return gamedata
 end
 
 function externalFunctions.GetActiveRetinue()
