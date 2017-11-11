@@ -379,13 +379,15 @@ planetData = {
 					}
 				},
 				
-				-- Start units are identical to playerConfig
+				-- Start units are mostly identical to player config. Exceptions:
+				--  * noControl - Set to true to make circuitAI not give any commands to the unit.
 				startUnits = {
 					{
 						name = "staticmex",
 						x = 3630,
 						z = 220,
 						facing = 2, 
+						noControl = true,
 					},
 					{
 						name = "factorycloak",
