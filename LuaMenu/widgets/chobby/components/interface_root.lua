@@ -764,6 +764,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		else
 			holder_submenuWindow:SetPos(nil, titleHeightSmall + topOffset + chatTabHolderHeight)
 		end
+		holder_submenuWindow._relativeBounds.right = 0
+		holder_submenuWindow._relativeBounds.bottom = 0
+		holder_submenuWindow:UpdateClientArea()
 
 		holder_rightPanel:SetPos(nil, titleOffset + topOffset)
 		holder_rightPanel._relativeBounds.bottom = 0

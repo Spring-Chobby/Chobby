@@ -359,9 +359,7 @@ local function MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjective
 	return bottom
 end
 
-local function MakeRewardsPanel(parent, planetData, cullUnlocked, showCodex, bonusObjectiveSuccess, difficulty)
-	local bottom = 82
-	
+local function MakeRewardsPanel(parent, bottom, planetData, cullUnlocked, showCodex, bonusObjectiveSuccess, difficulty)
 	rewards = planetData.completionReward
 	
 	if showCodex then
@@ -454,7 +452,7 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty)
 	
 	local experienceDisplay = WG.CommanderHandler.GetExperienceDisplay(experienceHolder, 38, true)
 	
-	local rewardsHeight = MakeRewardsPanel(victoryWindow, planetData, true, true, bonusObjectiveSuccess, difficulty)
+	local rewardsHeight = MakeRewardsPanel(victoryWindow, 82, planetData, true, true, bonusObjectiveSuccess, difficulty)
 	
 	victoryWindow:SetPos(nil, nil, nil, 200 + rewardsHeight)
 	
@@ -571,61 +569,61 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 		planetName = planetName .. " - " .. planetID
 	end
 	
+	local nameLabel = Label:New{
+		x = 8,
+		y = 8,
+		caption = planetName,
+		font = Configuration:GetFont(4),
+	}
+	
+	local fluffLabels = {
+		Label:New{caption = "Primary", font = Configuration:GetFont(3)},
+		Label:New{caption = planetData.infoDisplay.primary .. " (" .. planetData.infoDisplay.primaryType .. ") ", font = Configuration:GetFont(3)},
+		Label:New{caption = "Type", font = Configuration:GetFont(3)},
+		Label:New{caption = planetData.infoDisplay.terrainType or "<UNKNOWN>", font = Configuration:GetFont(3)},
+	}
+	fluffGrid = Grid:New{
+		x = 8,
+		y = 60,
+		right = 4,
+		bottom = "72%",
+		columns = 2,
+		rows = 2,
+		children = fluffLabels,
+	}
+	
+	local planetDesc = TextBox:New {
+		x = 8,
+		y = "30%",
+		right = 4,
+		bottom = "25%",
+		text = planetData.infoDisplay.text,
+		font = Configuration:GetFont(3),
+	}
+	
 	local subPanel = Panel:New{
 		parent = starmapInfoPanel,
-		x = "50%",
-		y = "10%",
-		right = "5%",
-		bottom = "5%",
+		x = "3%",
+		y = "4%",
+		right = "50%",
+		bottom = "4%",
 		children = {
-			-- title
-			Label:New{
-				x = 8,
-				y = 12,
-				caption = planetName,
-				font = Configuration:GetFont(4),
-			},
-			-- grid of details
-			Grid:New{
-				x = 8,
-				y = 60,
-				right = 4,
-				bottom = "72%",
-				columns = 2,
-				rows = 2,
-				children = {
-					Label:New{caption = "Primary", font = Configuration:GetFont(3)},
-					Label:New{caption = planetData.infoDisplay.primary .. " (" .. planetData.infoDisplay.primaryType .. ") ", font = Configuration:GetFont(3)},
-					Label:New{caption = "Type", font = Configuration:GetFont(3)},
-					Label:New{caption = planetData.infoDisplay.terrainType or "<UNKNOWN>", font = Configuration:GetFont(3)},
-					--Label:New{caption = "Radius", font = Configuration:GetFont(3)},
-					--Label:New{caption = planetData.infoDisplay.radius or "<UNKNOWN>", font = Configuration:GetFont(3)},
-					--Label:New{caption = "Military rating", font = Configuration:GetFont(3)},
-					--Label:New{caption = tostring(planetData.infoDisplay.milRating or "<UNKNOWN>"), font = Configuration:GetFont(3)},
-				},
-			},
-			-- desc text
-			TextBox:New {
-				x = 8,
-				y = "30%",
-				right = 4,
-				bottom = "25%",
-				text = planetData.infoDisplay.text,
-				font = Configuration:GetFont(3),
-			},
+			nameLabel,
+			fluffGrid,
+			planetDesc
 		}
 	}
 	
-	MakeRewardsPanel(subPanel, planetData)
+	MakeRewardsPanel(subPanel, 16, planetData)
 	
 	if startable then
 		local startButton = Button:New{
-			right = 10,
-			bottom = 10,
+			right = "3%",
+			bottom = "4%",
 			width = 135,
 			height = 70,
 			classname = "action_button",
-			parent = subPanel,
+			parent = starmapInfoPanel,
 			caption = i18n("start"),
 			font = Configuration:GetFont(4),
 			OnClick = {
@@ -637,12 +635,12 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 		
 		if (not LIVE_TESTING) and (Configuration.debugAutoWin or Configuration.debugMode) then
 			local autoWinButton = Button:New{
-				right = 150,
-				bottom = 10,
+				right = 200,
+				bottom = "4%",
 				width = 150,
 				height = 70,
 				classname = "action_button",
-				parent = subPanel,
+				parent = starmapInfoPanel,
 				caption = "Auto Win",
 				font = Configuration:GetFont(4),
 				OnClick = {
@@ -652,12 +650,12 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 				}
 			}
 			local autoLostButton = Button:New{
-				right = 305,
-				bottom = 10,
+				right = 355,
+				bottom = "4%",
 				width = 175,
 				height = 70,
 				classname = "action_button",
-				parent = subPanel,
+				parent = starmapInfoPanel,
 				caption = "Auto Lose",
 				font = Configuration:GetFont(4),
 				OnClick = {
@@ -681,8 +679,8 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 	
 	Button:New{
 		parent = starmapInfoPanel,
-		y = 3,
-		right = 3,
+		y = "4%",
+		right = "3%",
 		width = 80,
 		height = 45,
 		classname = "negative_button",
@@ -694,26 +692,12 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 	}
 	
 	WG.Chobby.interfaceRoot.SetBackgroundCloseListener(CloseFunc)
-	
-	-- list of missions on this planet
-	--local missionsStack = StackPanel:New {
-	--	parent = starmapInfoPanel,
-	--	orientation = "vertical",
-	--	x = 4,
-	--	right = 4,
-	--	height = "25%",
-	--	bottom = 0,
-	--	resizeItems = false,
-	--	autoArrangeV = false,
-	--}
-	--for i=1,#planetDef.missions do
-	--end
-	
+
 	-- planet image
 	local planetImage = Image:New{
 		parent = starmapInfoPanel,
-		x = 0,
-		right = "50%",
+		x = "50%",
+		right = "2%",
 		y = (starmapInfoPanel.height - planetData.infoDisplay.size) / 2,
 		height = planetData.infoDisplay.size,
 		keepAspect = true,
@@ -730,11 +714,6 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 		file = planetData.infoDisplay.backgroundImage,
 		keepAspect = false,
 	}
-	-- force offscreen position
-	--local overflowX = (starmapInfoPanel.width - starmapInfoPanel.width) / 2
-	--local overflowY = (starmapInfoPanel.width - starmapInfoPanel.height) / 2
-	--bg.x = -overflowX
-	--bg.y = -overflowY
 	bg:Invalidate()
 	
 	starmapInfoPanel:SetLayer(1)
@@ -744,9 +723,24 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 		planetImage:SetPos(nil, math.floor((ySize - planetData.infoDisplay.size)/2))
 	end
 	
-	local externalFunctions = {}
+	local function SizeUpdate()
+		local font = Configuration:GetFont(((planetHandler.height < 680) and 2) or 3)
+		
+		planetDesc.font.size = font.size
+		planetDesc:Invalidate()
+		
+		for i = 1, 4 do
+			fluffLabels[i].font.size = font.size
+			fluffLabels[i]:Invalidate()
+		end
+		fluffGrid:Invalidate()
+	end
+	SizeUpdate()
 	
-	externalFunctions.Close = CloseFunc
+	local externalFunctions = {
+		Close = CloseFunc,
+		SizeUpdate = SizeUpdate,
+	}
 	
 	return externalFunctions
 end
@@ -920,7 +914,6 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		planetConfig[planetID].mapDisplay.x, planetConfig[planetID].mapDisplay.y = newX, newY
 		UpdateEdgeList()
 	end
-	
 	
 	function externalFunctions.UpdateInformation()
 		local bonusCount, maxBonus = 0, 0
@@ -1429,7 +1422,6 @@ function externalFunctions.CloseSelectedPlanet()
 	return false
 end
 
-
 --------------------------------------------------------------------------------
 -- Callins
 --------------------------------------------------------------------------------
@@ -1444,6 +1436,9 @@ local function DelayedViewResize()
 	end
 	local x, y = window:LocalToScreen(0, 0)
 	RepositionBackgroundAndPlanets(x, y, window.xSize, window.ySize)
+	if selectedPlanet then
+		selectedPlanet.SizeUpdate()
+	end
 end
 
 function widget:ViewResize(vsx, vsy)
@@ -1453,7 +1448,6 @@ end
 function widget:Initialize()
 	CHOBBY_DIR = "LuaMenu/widgets/chobby/"
 	VFS.Include("LuaMenu/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	
 	local function CampaignLoaded(listener)
 		if planetList and planetHandler then
 			UpdateGalaxy()
