@@ -163,7 +163,7 @@ local function InitializeStatsWindow(parent)
 		totalVictoryTime:SetText(Spring.Utilities.FormatTime((gamedata.totalVictoryPlayFrames or 0)/30, true))
 		planets:SetText(tostring(#(gamedata.planetsCaptured.list or {})))
 		bonusObjectives:SetText(tostring(#(gamedata.bonusObjectivesComplete.list or {})))
-		level:SetText(tostring(gamedata.commanderLevel or 0) + 1)
+		level:SetText(tostring((gamedata.commanderLevel or 0) + 1))
 		experience:SetText(tostring(gamedata.commanderExperience or 0))
 	end
 	
