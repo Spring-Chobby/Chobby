@@ -793,7 +793,7 @@ local function GetPlanet(planetUtilities, planetID)
 							difficultyAtLeast = 4,
 						},
 						{
-							name = "tankassault",
+							name = "tankriot",
 							x = 5892,
 							z = 85,
 							facing = 2,
@@ -1071,7 +1071,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "vehcapture.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build 10 Dominatrices",
+					description = "Build 6 Dominatrices",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Have five Reapers
