@@ -439,7 +439,7 @@ function externalFunctions.CapturePlanet(planetID, bonusObjectives, difficulty)
 	local gainedExperience = 0
 	local gainedBonusExperience = 0
 	
-	if difficulty < (gamedata.leastDifficulty or 0) then
+	if (not gamedata.leastDifficulty) or (difficulty < gamedata.leastDifficulty) then
 		gamedata.leastDifficulty = difficulty
 	end
 	
