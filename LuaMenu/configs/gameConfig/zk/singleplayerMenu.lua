@@ -18,6 +18,13 @@ local planetWhitelist = {
 	[16] = true,
 	[17] = true,
 	[19] = true,
+	-- Rover
+	[9] = true,
+	[10] = true,
+	[11] = true,
+	[12] = true,
+	[43] = true,
+	[52] = true,
 }
 
 return {
