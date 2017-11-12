@@ -25,12 +25,12 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Purlie",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[The enemy is well entrenched but, luckilly for you, they have a poorly defended outpost and you have a squard of Dominatrix. Capture the outpost to gain a production base then amass an army of captured Tanks and march on their main base.]]
+			text = [[The enemy is well entrenched but, luckily for you, they have a poorly defended outpost and you have a squad of Dominatrices. Capture the outpost to gain a production base, then steal an army of Tanks and march on their main base.]]
 		},
 		tips = {
 			{
 				image = "unitpics/vehcapture.png",
-				text = [[The Dominatrix hacks into enemy units to turn them to your side. Multiple Dominatrices increases the rate of capture and the Dominatrix that dealt the final blow will need serveral seconds to reload. A Dominatrix must maintain continuous control, if they are destroyed then all captured units revert to their original side.]]
+				text = [[The Dominatrix hacks into enemy units to turn them to your side. Multiple Dominatrices increases the rate of capture and the Dominatrix that dealt the final blow will need several seconds to reload. If a Dominatrix is destroyed then all units controlled by that Dominatrix revert to their original side.]]
 			},
 			{
 				image = "unitpics/tankassault.png",

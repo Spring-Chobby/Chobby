@@ -1023,7 +1023,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "vehheavyarty.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build at least 6 Impalers",
+					description = "Build 6 Impalers",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Have 30 Metal Extractors by 9:00
