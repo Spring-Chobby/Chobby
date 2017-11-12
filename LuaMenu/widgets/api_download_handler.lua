@@ -300,7 +300,7 @@ function wrapperFunctions.DownloadFileProgress(name, fileType, progress, seconds
 	end
 	
 	totalLength = totalLength/1023^2
-	CallListeners("DownloadProgress", downloadQueue[index].id, totalLength*math.min(1, progress/100), totalLength, name)
+	CallListeners("DownloadProgress", downloadQueue[index].id, totalLength*math.min(1, tonumber(progress)/100), totalLength, name)
 end
 
 --------------------------------------------------------------------------------
