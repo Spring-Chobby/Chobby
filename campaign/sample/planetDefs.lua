@@ -164,7 +164,7 @@ end
 
 local startingPlanetMaps = {}
 for i = 1, #planets do
-	if planets[i].startingPlanet or planets[i].startingPlanetCaptured then
+	if planets[i].predownloadMap then
 		startingPlanetMaps[#startingPlanetMaps + 1] = planets[i].gameConfig.mapName
 	end
 end
