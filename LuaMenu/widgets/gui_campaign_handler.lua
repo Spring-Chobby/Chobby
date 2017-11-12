@@ -1043,7 +1043,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		end
 		for i = 1, #adjacency do
 			if adjacency[i] then
-				if ((not PLANET_WHITELIST) or PLANET_WHITELIST[i]) and not planetList[i].GetCapturedOrStarableUnsafe() then
+				if ((not PLANET_WHITELIST) or PLANET_WHITELIST[i]) and planetList[i].GetCapturedOrStarable_Unsafe() then
 					WG.DownloadHandler.MaybeDownloadArchive(planetData.gameConfig.mapName, "map", 1)
 					return
 				end
@@ -1055,7 +1055,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		return WG.CampaignData.IsPlanetCaptured(planetID)
 	end
 	
-	function externalFunctions.GetCapturedOrStarableUnsafe()
+	function externalFunctions.GetCapturedOrStarable_Unsafe()
 		-- Unsafe because an update may be required before the return value is valid
 		return startable or captured
 	end
