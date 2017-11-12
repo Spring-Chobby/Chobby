@@ -280,10 +280,10 @@ end
 
 function wrapperFunctions.DownloadFinished(name, fileType, success, aborted)
 	fileType = fileType and reverseTypeMap[fileType]
-	if VFS.HasArchive(name) then
-		RemoveDownload(name, fileType, true, (aborted and "cancel") or (success and "success") or "fail")
-	elseif fileType then
-		VFS.ScanAllDirs() -- Find downloaded file (if it exists).
+	if fileType then
+		if not VFS.HasArchive(name) then
+			VFS.ScanAllDirs() -- Find downloaded file (if it exists).
+		end
 		RemoveDownload(name, fileType, true, (aborted and "cancel") or (success and "success") or "fail")
 	end
 	

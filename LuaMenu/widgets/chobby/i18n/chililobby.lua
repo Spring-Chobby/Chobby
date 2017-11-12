@@ -45,6 +45,7 @@ return {
 		download_maps = "Download Maps",
 		download_replays = "Download Replays",
 		refresh = "Refresh",
+		rescan_files = "Rescan Files",
 		more = "More",
 		--
 		start_download = 'Start download',

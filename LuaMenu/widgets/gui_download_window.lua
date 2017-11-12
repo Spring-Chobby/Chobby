@@ -30,6 +30,7 @@ local STATUS_PRIORITY = {
 
 local NAME_MAP = {
 	active = "",
+	connecting = "Finding mirror...",
 	pending = "Queued",
 	cancel = "\255\255\255\0Cancelled",
 	fail = "\255\255\0\0Failed",
@@ -38,6 +39,7 @@ local NAME_MAP = {
 
 local BUTTON_MAP = {
 	active = {cancel = true},
+	connecting = {cancel = true},
 	pending = {cancel = true, priority = true},
 	cancel = {retry = true},
 	fail = {retry = true},
@@ -160,7 +162,9 @@ local function CreateDownloadEntry(downloadData)
 			end
 		else
 			completionOrder = false
-			if progressBar or downloadData.active then
+			if downloadData.active and not progressBar then
+				statusString = "connecting"
+			elseif progressBar then
 				statusString = "active"
 			else
 				statusString = "pending"
@@ -182,6 +186,10 @@ local function CreateDownloadEntry(downloadData)
 	local externalFunctions = {}
 	
 	function externalFunctions.SetProgress(sizeCurrent, sizeTotal)
+		if sizeCurrent == 0 then
+			return
+		end
+		
 		if not progressBar then
 			progressBar = Progressbar:New {
 				x = STATUS_POSITION,
@@ -307,6 +315,25 @@ local function InitializeControls(window)
 	end
 	
 	AddCurrentDownloads()
+		-------------------------
+	-- Buttons
+	-------------------------
+	
+	Button:New {
+		right = 8,
+		y = 5,
+		width = 165,
+		height = 38,
+		caption = i18n("rescan_files"),
+		font = WG.Chobby.Configuration:GetFont(3),
+		classname = "option_button",
+		parent = window,
+		OnClick = {
+			function ()
+				VFS.ScanAllDirs()
+			end
+		},
+	}
 	
 	-------------------------
 	-- Listeners

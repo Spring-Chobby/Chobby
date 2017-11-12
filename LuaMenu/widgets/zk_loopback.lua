@@ -20,6 +20,8 @@ local client
 local buffer = ""
 local commands = {} -- table with possible commands
 
+local PRINT_DEBUG = false
+
 -- debug message/popup
 local function Echo(stuff)
 	Chotify:Post({
@@ -38,6 +40,10 @@ function SendCommand(cmdName, args)
 		client:send(cmdName .. " {}\n")
 	else
 		client:send(cmdName .. " " ..json.encode(args).."\n")
+	end
+	
+	if PRINT_DEBUG then
+		Spring.Echo("SendCommand", cmdName .. " " .. ((args and json.encode(args)) or "{}"))
 	end
 end
 
@@ -196,7 +202,7 @@ function WrapperLoopback.TtsSay(name, text)
 end
 
 -- downloads a file, fileType can be any of RAPID, MAP, MISSION, DEMO, ENGINE, NOTKNOWN
-function WrapperLoopback.DownloadFile(name, fileType) 
+function WrapperLoopback.DownloadFile(name, fileType)
 	SendCommand("DownloadFile", {Name = name, FileType = fileType})
 end
 
@@ -371,11 +377,13 @@ local function CommandReceived(command)
 	end
 	
 	local commandFunc = commands[cmdName]
-	--if string.find(cmdName, "Download") then
-	--	Spring.Echo("LoopbackCommandReceived", cmdName, arguments)
-	--else
-	--	Spring.Echo("LoopbackCommandReceived", cmdName)
-	--end
+	if PRINT_DEBUG then
+		if string.find(cmdName, "Download") then
+			Spring.Echo("LoopbackCommandReceived", cmdName, arguments)
+		else
+			Spring.Echo("LoopbackCommandReceived", cmdName)
+		end
+	end
 	if commandFunc ~= nil then
 		local success, obj = pcall(json.decode, arguments)
 		if not success then
