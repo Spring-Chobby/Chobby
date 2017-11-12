@@ -47,7 +47,7 @@ local function DownloadRequirements()
 	local missions = LoadMissions()
 	if missions ~= nil then
 		for i = 1, #missions do
-			if not alreadyDownloaded[missions[i].Map] then
+			if string.find(missions[i].DisplayName, "Tutorial") and not alreadyDownloaded[missions[i].Map] then
 				WG.DownloadHandler.MaybeDownloadArchive(missions[i].Map, "map", 1)
 				alreadyDownloaded[missions[i].Map] = true
 			end

@@ -18,7 +18,7 @@ end
 -- Configuration
 
 local STATUS_POSITION = 390
-local BUTTON_WIDTH = 82
+local BUTTON_WIDTH = 78
 
 local STATUS_PRIORITY = {
 	active = 1,
@@ -30,7 +30,7 @@ local STATUS_PRIORITY = {
 
 local NAME_MAP = {
 	active = "",
-	connecting = "Finding mirror...",
+	connecting = "Connecting...",
 	pending = "Queued",
 	cancel = "\255\255\255\0Cancelled",
 	fail = "\255\255\0\0Failed",
@@ -80,10 +80,10 @@ local function CreateDownloadEntry(downloadData)
 	}
 	
 	local retryButton = Button:New {
-		x = 7 + BUTTON_WIDTH,
+		x = 7 + BUTTON_WIDTH + 4,
 		y = 3,
 		bottom = 3,
-		width = BUTTON_WIDTH,
+		width = BUTTON_WIDTH - 4,
 		caption = i18n("retry"),
 		font = WG.Chobby.Configuration:GetFont(2),
 		classname = "action_button",
@@ -96,10 +96,10 @@ local function CreateDownloadEntry(downloadData)
 	}
 	
 	local cancelButton = Button:New {
-		x = 7 + BUTTON_WIDTH,
+		x = 7 + BUTTON_WIDTH + 4,
 		y = 3,
 		bottom = 3,
-		width = BUTTON_WIDTH,
+		width = BUTTON_WIDTH - 4,
 		caption = i18n("cancel"),
 		font = WG.Chobby.Configuration:GetFont(2),
 		classname = "negative_button",
@@ -115,7 +115,7 @@ local function CreateDownloadEntry(downloadData)
 		x = 3,
 		y = 3,
 		bottom = 3,
-		width = BUTTON_WIDTH,
+		width = BUTTON_WIDTH + 4,
 		caption = i18n("to_front"),
 		font = WG.Chobby.Configuration:GetFont(2),
 		classname = "action_button",
@@ -139,7 +139,7 @@ local function CreateDownloadEntry(downloadData)
 	}
 	
 	local statusBox = TextBox:New {
-		x = STATUS_POSITION + 22,
+		x = STATUS_POSITION + 12,
 		y = 12,
 		right = 0,
 		height = 20,

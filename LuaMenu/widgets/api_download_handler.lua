@@ -379,6 +379,18 @@ local function GetRequiredDownloads()
 			externalFunctions.MaybeDownloadArchive(campaignStartMaps[i], "map", 1.5)
 		end
 	end
+	
+	local skirmishPages = Configuration.gameConfig and Configuration.gameConfig.skirmishSetupData and Configuration.gameConfig.skirmishSetupData.pages
+	if skirmishPages then
+		for i = 1, #skirmishPages do
+			local pageData = skirmishPages[i]
+			if pageData.name == "map" and pageData.options then
+				for j = 1, #pageData.options do
+					externalFunctions.MaybeDownloadArchive(pageData.options[j], "map", 2)
+				end
+			end
+		end
+	end
 end
 
 -- Allow for earling listener registration.
