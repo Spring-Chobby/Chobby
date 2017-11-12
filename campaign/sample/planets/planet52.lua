@@ -951,7 +951,7 @@ local function GetPlanet(planetUtilities, planetID)
 					satisfyByTime = 4*60,
 					countRemovedUnits = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 100,
+					targetNumber = 105,
 					unitTypes = {
 						"jumpscout",
 					},

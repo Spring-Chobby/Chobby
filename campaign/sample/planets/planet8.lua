@@ -3470,7 +3470,7 @@ local function GetPlanet(planetUtilities, planetID)
 					satisfyOnce = true,
 					countRemovedUnits = true, -- count units that previously died.
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 12,
+					targetNumber = 18,
 					unitTypes = {
 						"cloakheavyraid",
 					},

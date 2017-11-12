@@ -95,24 +95,12 @@ local function GetPlanet(planetUtilities, planetID)
 						z = 3200,
 						facing = 0, 
 					},
-					-- {
-						-- name = "cloakskirm",
-						-- x = 3400,
-						-- z = 3190,
-						-- facing = 0, 
-					-- },
 					{
 						name = "cloakskirm",
 						x = 3460,
 						z = 3180,
 						facing = 0, 
 					},
-					-- {
-						-- name = "cloakskirm",
-						-- x = 3520,
-						-- z = 3190,
-						-- facing = 0, 
-					-- },
 					{
 						name = "cloakskirm",
 						x = 3580,
@@ -376,7 +364,7 @@ local function GetPlanet(planetUtilities, planetID)
 					satisfyOnce = true,
 					countRemovedUnits = true, -- count units that previously died.
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 10,
+					targetNumber = 13,
 					unitTypes = {
 						"cloakskirm",
 					},

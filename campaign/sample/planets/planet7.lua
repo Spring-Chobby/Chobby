@@ -1803,7 +1803,7 @@ local function GetPlanet(planetUtilities, planetID)
 					comparisionType = planetUtilities.COMPARE.AT_MOST,
 					targetNumber = 0,
 					-- See bonusObjectiveID in units table
-					image = planetUtilities.ICON_DIR .. "strike.png",
+					image = planetUtilities.ICON_DIR .. "factoryshield.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
 					description = "Destroy the Interlopers' Shieldbot Factory",
 					experience = planetUtilities.BONUS_EXP,
