@@ -14,11 +14,13 @@ local function UpdateLups()
 	local lupsFileName = settings.ShaderDetail_file or "LuaMenu/configs/gameConfig/zk/lups/lups3.cfg"
 	local lupsAirJetDisabled = ((settings.LupsAirJet == "On") and FALSE) or TRUE
 	local lupsRibbonDisabled = ((settings.LupsRibbon == "On") and FALSE) or TRUE
+	local lupsShieldSphereColorDisabled = ((settings.LupsShieldSphereColor == "On") and FALSE) or TRUE
 	
 	local sourceFile = VFS.LoadFile(lupsFileName)
 	
 	sourceFile = sourceFile:gsub("__AIR_JET__", lupsAirJetDisabled)
 	sourceFile = sourceFile:gsub("__RIBBON__", lupsRibbonDisabled)
+	sourceFile = sourceFile:gsub("__SHIELD_SPHERE_COLOR__", lupsShieldSphereColorDisabled)
 	
 	local settingsFile = io.open(lupsFileTarget, "w")
 	settingsFile:write(sourceFile)
@@ -46,6 +48,7 @@ local settingsConfig = {
 					ShaderDetail = "Minimal",
 					LupsAirJet = "Off",
 					LupsRibbon = "Off",
+					LupsShieldSphereColor = "Off",
 					FancySky = "Off",
 				}
 			},
@@ -66,6 +69,7 @@ local settingsConfig = {
 					ShaderDetail = "Low",
 					LupsAirJet = "Off",
 					LupsRibbon = "Off",
+					LupsShieldSphereColor = "Off",
 					FancySky = "Off",
 				}
 			},
@@ -86,6 +90,7 @@ local settingsConfig = {
 					ShaderDetail = "Low",
 					LupsAirJet = "Off",
 					LupsRibbon = "On",
+					LupsShieldSphereColor = "On",
 					FancySky = "Off",
 				}
 			},
@@ -106,6 +111,7 @@ local settingsConfig = {
 					ShaderDetail = "Medium",
 					LupsAirJet = "On",
 					LupsRibbon = "On",
+					LupsShieldSphereColor = "On",
 					FancySky = "Off",
 				}
 			},
@@ -126,6 +132,7 @@ local settingsConfig = {
 					ShaderDetail = "High",
 					LupsAirJet = "On",
 					LupsRibbon = "On",
+					LupsShieldSphereColor = "On",
 					FancySky = "Off",
 				}
 			},
@@ -146,6 +153,7 @@ local settingsConfig = {
 					ShaderDetail = "Ultra",
 					LupsAirJet = "On",
 					LupsRibbon = "On",
+					LupsShieldSphereColor = "On",
 					FancySky = "On",
 				}
 			},
@@ -478,6 +486,20 @@ local settingsConfig = {
 			{
 				name = "LupsRibbon",
 				humanName = "Aircraft Wing Trails",
+				options = {
+					{
+						name = "On",
+						applyFunction = UpdateLups,
+					},
+					{
+						name = "Off",
+						applyFunction = UpdateLups,
+					},
+				},
+			},
+			{
+				name = "LupsShieldSphereColor",
+				humanName = "Shield Effect Shader",
 				options = {
 					{
 						name = "On",
@@ -830,6 +852,7 @@ local settingsDefault = {
 	ShaderDetail = "High",
 	LupsAirJet = "On",
 	LupsRibbon = "On",
+	LupsShieldSphereColor = "On",
 	FancySky = "Off",
 	IconDistance = 151,
 	MouseZoomSpeed = 25,
