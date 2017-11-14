@@ -105,9 +105,9 @@
 			// 0-8m Opening - Ducks and Archers
 			"tier0": [ 0.00,      0.73,       0.25,          0.00,          0.02,       0.00,          0.00,       0.00],
 			// 9-16m Early Game - Still mostly Ducks, Ducks are amazing
-			"tier1": [ 0.05,      0.50,       0.16,          0.10,          0.19,       0.00,          0.00,       0.00],
+			"tier1": [ 0.05,      0.40,       0.16,          0.17,          0.22,       0.00,          0.00,       0.00],
 			// 17-24m Expanding - Less Ducks, more Scallop/Bouy
-			"tier2": [ 0.10,      0.31,       0.09,          0.33,          0.12,       0.05,          0.00,       0.00],
+			"tier2": [ 0.10,      0.28,       0.09,          0.33,          0.15,       0.05,          0.00,       0.00],
 			// 25-32m Expansions meet - Time to start producing Bouy
 			"tier3": [ 0.10,      0.21,       0.02,          0.42,          0.12,       0.13,          0.00,       0.00],
 			// 33m -40m Solid Fronts - Time to start producing even more Bouy
@@ -388,8 +388,10 @@
 	"attack": 6.0,  // min power of attack group
 	"def_rad": 475,  // defence radius
 	"thr_mod": {
-		"attack": [1.05, 1.15],  // [<min>, <max>] enemy threat modifier for target selection of attack task
-		"defence": [1.00, 1.00]  // [<min>, <max>] enemy threat modifier for group size calculation of defence task
+		"attack": [1.00, 1.10],  // [<min>, <max>] enemy threat modifier for target selection of attack task
+		"defence": [1.00, 1.00],  // [<min>, <max>] enemy threat modifier for group size calculation of defence task
+		"mobile": 0.35,  // initial modifier for power of attack group based on mobile enemy threat
+		"static": 0.075  // initial modifier for power of attack group based on static enemy threat
 	},
 	"aa_threat": 80.0,  // anti-air threat threshold, air factories will stop production when AA threat exceeds
 	"slack_mod": 3
@@ -397,7 +399,7 @@
 
 // If unit's health drops below specified percent it will retreat
 "retreat": {
-	"builder": 0.95,  // default value for all builders
+	"builder": 0.75,  // default value for all builders
 	"fighter": 0.45,  // default value for all not-builder units
 	"shield": [0.25, 0.4]  // [<empty>, <full>] shield power
 },
@@ -613,8 +615,8 @@
 	},
 	"amphassault": {
 		"role": ["heavy"],
-		"attribute": ["support"],
-		"retreat": 0.5,
+		"retreat": 0.66,
+		"since": 520,
 		"pwr_mod": 0.7,
 		"thr_mod": 1.0
 	},
@@ -624,7 +626,7 @@
 	},
 	"amphaa": {
 		"role": ["anti_air"],
-		"attribute": ["melee"],
+		"attribute": ["melee", "support"],
 		"retreat": 0.3,
 		"limit": 5,
 		"pwr_mod": 2.5,
@@ -663,6 +665,7 @@
 		"role": ["skirmish"],
 		"attribute": ["siege"],
 		"pwr_mod": 2.0,
+		"since": 240,
 		"limit": 7,
 		"retreat": 0.4
 	},
@@ -671,6 +674,7 @@
 		"attribute": ["siege", "ret_fight", "support"],
 		"retreat": 0.5,
 		"pwr_mod": 1.0,
+		"since": 300,
 		"thr_mod": 1.0
 	},
 	"spiderantiheavy": {
@@ -678,7 +682,7 @@
 		"retreat": 0.99,
 		"pwr_mod": 2.0,
 		"thr_mod": 0.1,
-		"since": 520,
+		"since": 600,
 		"limit": 4
 	},
 	"spideraa": {
@@ -830,16 +834,16 @@
 	},
 	"jumpscout": {
 		"role": ["riot"],
-		"attribute": ["scout"],
 		"limit": 15,
-		"attribute": ["scout", "support"],
+		"attribute": ["support"],
 		"retreat": 0
 	},
 	"jumpraid": {
 		"role": ["raider", "anti_sub"],
+		"attribute": ["scout"],
 		"retreat": 0.65,
 		"limit": 8,
-		"pwr_mod": 1.06,
+		"pwr_mod": 2.4,
 		"thr_mod": 1.05
 	},
 	"jumpblackhole": {
@@ -886,7 +890,7 @@
 	},
 	"jumpaa": {
 		"role": ["anti_air"],
-		"attribute": ["melee"],
+		"attribute": ["melee", "support"],
 		"retreat": 0.8,
 		"pwr_mod": 2.0,
 		"thr_mod": 1.2
@@ -905,11 +909,12 @@
 		"retreat": 0.5
 	},
 	"hoverskirm": {
-		"role": ["skirmish"],
+		"role": ["skirmish", "support"],
 		"retreat": 0.3,
 		"limit": 12,
-		"pwr_mod": 2.4,
-		"thr_mod": 1.4
+		"reload": 4.0,
+		"pwr_mod": 1.8,
+		"thr_mod": 1.2
 	},
 	"hoverassault": {
 		"role": ["raider"],
@@ -1029,13 +1034,14 @@
 	"tankassault": {
 		"role": ["assault", "heavy", "anti_sub"],
 		"retreat": 0.6,
-		"pwr_mod": 0.7,
+		"pwr_mod": 0.66,
 		"thr_mod": 0.50
 	},
 	"tankheavyassault": {
 		"role": ["heavy", "anti_heavy", "super"],
 		"pwr_mod": 0.75,
 		"thr_mod": 0.6,
+		"since": 480,
 		"retreat": 0.35
 	},
 	"tankarty": {
@@ -1048,7 +1054,7 @@
 	},
 	"tankheavyarty": {
 		"role": ["transport"],
-		"attribute": ["siege"],
+		"attribute": ["siege", "support"],
 		"since": 1000,
 		"limit": 1,
 		"retreat": 0.99,
@@ -1104,7 +1110,8 @@
 		"role": ["anti_heavy", "heavy"],
 		"limit": 1,
 		"fire_state": "return",
-		"retreat": 0.45,
+		"attribute": ["ret_fight"],
+		"retreat": 0.6,
 		"pwr_mod": 0.5,
 		"thr_mod": 0.5
 	},
@@ -1416,20 +1423,27 @@
 		"ratio":      [ 1.50,   4.00,     1.50,      1.50,      2.00,    2.00,         1.00,		2.00],
 		"importance": [ 70.0,   52.0,     90.0,      30.0,      40.0,    40.0,         35.0,		800.0],
 		"max_percent": 0.75,
-		"eps_step": 0.00
+		"eps_step": 0.01
 	},
 	"raider": {
 		"vs":         ["anti_air", "scout", "raider", "anti_heavy", "mine", "skirmish", "heavy"],
 		"ratio":      [ 0.6,       0.33,       1.50,    1.5,     0.75,         2.0,        0.20],
 		"importance": [ 35.0,       400.0,    500.0,    70.0,    200.0,        200.0,      200.00],
 		"max_percent": 1.00,
-		"eps_step": 0.04
+		"eps_step": 0.05
 	},
 	"riot": {
 		"vs":         ["raider"],
 		"ratio":      [ 1.2],
 		"importance": [ 300.0],
 		"max_percent": 0.5,
+		"eps_step": 0.01
+	},
+	"builder": {
+		"vs":         ["mine"],
+		"ratio":      [ 3.0],
+		"importance": [ 300.0],
+		"max_percent": 0.15,
 		"eps_step": 0.01
 	},
 	"transport": {
@@ -1476,8 +1490,8 @@
 	},
 	"heavy": {
 		"vs":         ["heavy", "static", "support", "skirmish", "super"],
-		"ratio":      [ 1.00,    0.65,     2.0,       1.25,       1.50],
-		"importance": [ 150.0,   60.0,     65.0,      50.0,       100.0],
+		"ratio":      [ 1.15,    0.65,     2.0,       1.25,       1.50],
+		"importance": [ 150.0,   60.0,     65.0,      50.0,       150.0],
 		"max_percent": 0.66,
 		"eps_step": 0.00
 	},
@@ -1553,21 +1567,21 @@
 			"energyfusion": [4],
 			"energywind": [20]
 		},
-		"factor": 0.64,  // income factor for energy
+		"factor": 0.6,  // income factor for energy
 
 		"pylon": ["energypylon", "energysolar", "energywind"]
 	},
 
 	// Scales metal income
 	// ecoFactor = teamSize*eps_step+(1-eps_step)
-	"eps_step": 0.25,
+	"eps_step": 0.15,
 
 	// Mobile buildpower to metal income ratio
 	"buildpower": 1.17,
 	// Metal excess to income ratio, -1 to disable
 	"excess": -1.0,
 	// Mobile to static metal pull ratio
-	"ms_pull": 0.48,
+	"ms_pull": 0.6,
 	// Max percent of mexes circuit team allowed to take.
 	// If its <1.0 then expansion obeys ms_pull rule, if >=1.0 then ms_pull doesn't affect expansion (mex, pylon).
 	"mex_max": 1.0,  // 100%
@@ -1588,7 +1602,7 @@
 	//        0              1                2             3                   4             5                6            7              8               9            10                 11            12             13               14				15				 16
 	"unit": ["turretlaser", "turretmissile", "turretriot", "turretheavylaser", "turrettorp", "turretaalaser", "staticcon", "turretheavy", "staticshield", "turretemp", "turretantiheavy", "staticarty", "turretaafar", "turretaaheavy", "turretgauss", "energysingu", "staticradar"],
 	// Actual number of defences per cluster bounded by income
-	"land":  [0, 1, 16, 1, 3, 5, 2, 6, 3, 2, 5, 0, 8, 14, 1, 3, 6, 12, 11, 13],
+	"land":  [0, 1, 16, 1, 0,  5, 3, 2, 6, 14, 2, 5, 0, 8, 14, 1, 3, 6, 12, 11, 13],
 	"water": [4, 1, 6, 16, 4, 4, 3, 5],
 	"prevent": 1,  // number of preventive defences
 	"amount": {  // income bound factor
@@ -1603,7 +1617,7 @@
 
 	"superweapon": {
 		"unit":   ["raveparty", "staticnuke", "staticheavyarty", "zenith", "staticantinuke", "staticheavyradar"],
-		"weight": [ 0.4,         0.15,          0.4,               0.5,			0.3,			0.2],
+		"weight": [ 0.4,         0.15,          0.4,               0.5,			0.3,			0.5],
 
 		"condition": [18, 1600]  // [<Minimum income>, <maximum seconds to build>]
 	},
