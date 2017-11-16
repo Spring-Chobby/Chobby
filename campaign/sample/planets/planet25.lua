@@ -30,11 +30,15 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/amphraid.png",
-				text = [[The Duck is slower than most raiders, but its ability to move and heal underwater is invaluable on some maps. Also unlike most raiders its weapon takes a few seconds to reload, but deals a lot of damage up front. Use it in hit and run fights for best effect.]]
+				text = [[Ducks are slower than most raiders but they can move and heal underwater. Their missiles need a few second to reload, so use them in hit-and-run attacks.]]
 			},
 			{
 				image = "unitpics/amphriot.png",
-				text = [[The Scallop is also slow, even by the standards of riots, but on land its shotgun is an incredibly damaging weapon. Its underwater armament of depth charges is a bit less impressive but most enemies are completely unable to target it there.]]
+				text = [[Scallops are armed with depth charges for underwater targets, and a shotgun for use on land. Both weapons are lethal up close.]]
+			},
+			{
+				image = "unitpics/turrettorp.png",
+				text = [[Urchin torpedo launchers are a cheap and reliable solution to underwater threats.]]
 			},
 			{
 				image = "unitpics/energywind.png",
@@ -194,6 +198,7 @@ local function GetPlanet(planetUtilities, planetID)
 					allyTeam = 1,
 					unlocks = {
 						"staticcon",
+						"staticstorage",
 						"staticmex",
 						"energywind",
 						"energysolar",
@@ -223,7 +228,53 @@ local function GetPlanet(planetUtilities, planetID)
 							"module_adv_nano",
 						}
 					},
+					midgameUnits = {
+						{
+							name = "amphassault",
+							x = 350,
+							z = 3800,
+							facing = 2,
+							difficultyAtLeast = 4,
+							spawnRadius = 50,
+							delay = 6*30*60,
+							orbitalDrop = true,
+						},
+						{
+							name = "amphassault",
+							x = 350,
+							z = 3800,
+							facing = 2,
+							difficultyAtLeast = 4,
+							spawnRadius = 50,
+							delay = 9*30*60,
+							orbitalDrop = true,
+						},
+						{
+							name = "amphassault",
+							x = 350,
+							z = 3800,
+							facing = 2,
+							difficultyAtLeast = 4,
+							spawnRadius = 50,
+							delay = 12*30*60,
+							orbitalDrop = true,
+						},
+					},
 					startUnits = {
+						{
+							name = "amphriot",
+							x = 840,
+							z = 3455,
+							facing = 0,
+							difficultyAtLeast = 2,
+						},
+						{
+							name = "staticmex",
+							x = 2075,
+							z = 2055,
+							facing = 0,
+							difficultyAtLeast = 3,
+						},
 						{
 							name = "factoryamph",
 							x = 670,
@@ -295,12 +346,6 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 800,
 							z = 2416,
 							facing = 2,
-						},
-						{
-							name = "amphriot",
-							x = 840,
-							z = 3455,
-							facing = 0,
 						},
 						{
 							name = "turretlaser",
@@ -404,7 +449,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "amphriot.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build five Scallops",
+					description = "Build 5 Scallops",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Own nine mex by 5:00
@@ -416,7 +461,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "staticmex.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Have nine Metal Extractors before 5:00",
+					description = "Have 9 Metal Extractors before 5:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			}

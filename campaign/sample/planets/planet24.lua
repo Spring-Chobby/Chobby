@@ -34,7 +34,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/tele_beacon.png",
-				text = [[The Djinn lantern can be placed anywhere on the map, and you don't need constructors to build it. Besides using the Djinn for defence, you can also use it to recover units deep inside enemy territory, or (if you can sneak the Djinn behind the enemy) to launch a sneak attack.]]
+				text = [[The Djinn lantern can be placed anywhere on the map. Besides using the Djinn for defence, you can also use it to recover units deep inside enemy territory, or to launch a sneak attack.]]
 			},
 			{
 				image = "unitpics/turretaafar.png",
@@ -59,6 +59,12 @@ local function GetPlanet(planetUtilities, planetID)
 					"turretaafar",
 				},
 				startUnits = {
+					{
+						name = "amphtele",
+						x = 2000,
+						z = 7000,
+						facing = 0,
+					},
 					{
 						name = "amphtele",
 						x = 7767,
@@ -499,7 +505,7 @@ local function GetPlanet(planetUtilities, planetID)
 					difficultyDependantUnlocks = {
 						[2] = {"shieldarty"},
 						[3] = {"shieldarty","bomberheavy"},
-						[4] = {"shieldarty","bomberheavy","cloaksnipe"},
+						[4] = {"shieldarty","bomberheavy","cloaksnipe","shieldassault"},
 					},
 					commanderLevel = 2,
 					commander = {
@@ -558,6 +564,48 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 200,
 							facing = 2,
 							difficultyAtLeast = 4,
+						},
+						{
+							name = "turretaafar",
+							x = 5452,
+							z = 8130,
+							facing = 3,
+						},
+						{
+							name = "turretaafar",
+							x = 5068,
+							z = 6850,
+							facing = 3,
+						},
+						{
+							name = "turretaafar",
+							x = 2500,
+							z = 4000 ,
+							facing = 0,
+						},
+						{
+							name = "turretaafar",
+							x = 1300,
+							z = 4000 ,
+							facing = 0,
+						},
+						{
+							name = "turretheavylaser",
+							x = 4910,
+							z = 6646 ,
+							facing = 3,
+						},
+						{
+							name = "turretheavylaser",
+							x = 2350,
+							z = 4228 ,
+							facing = 0,
+						},
+						{
+							name = "turretheavylaser",
+							x = 4060,
+							z = 4950 ,
+							facing = 0,
 						},
 						{
 							name = "turretmissile",
