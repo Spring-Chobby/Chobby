@@ -16,7 +16,7 @@ local modinfo = {
 		"Spring content v1",
 	},
 	onlyLocal       = true,
-	engine          = "103.0.1-289-gc90ca9b",
+	engine          = "104.0.1-92-g4409317",
 }
 
 return modinfo
