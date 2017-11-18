@@ -8,7 +8,7 @@ local function GetPlanet(planetUtilities, planetID)
 	local image = LUA_DIRNAME .. "images/planets/swamp01.png"
 	
 	local planetData = {
-		name = "Lovchi Jeer",
+		name = "Lovaza Jira",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.485,
@@ -30,11 +30,11 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/hoverarty.png",
-				text = [[The Lance anti-heavy artillery fires an exceptionally powerful beam, capable of destroying even striders in only a few hits. Setting Lances to hold-fire will ensure they do not waste precious shots on low-value targets.]]
+				text = [[Lances fire an exceptionally powerful beam, capable of destroying even striders in only a few hits. Setting Lances to hold-fire will ensure they do not waste precious shots on low-value targets.]]
 			},
 			{
 				image = "unitpics/hoverassault.png",
-				text = [[The Halberd can retract its weapon and armor up, making it much more resistant to damage. This is especially useful for spotting artillery targets, or running past static defences to destroy the economy structures hiding behind them.]]
+				text = [[Halberds can retract their weapon and armor up, making them much more resistant to damage. Use this to scout for artillery targets or bypass static defences.]]
 			},
 			{
 				image = "LuaUI/Images/commands/Bold/reclaim.png",
@@ -304,6 +304,19 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					commander = false,
 					startUnits = {
+						{
+							name = "turretheavylaser",
+							x = 410,
+							z = 7910,
+							facing = 2,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "turretaafar",
+							x = 3470,
+							z = 2500,
+							facing = 0,
+						},
 						{
 							name = "staticstorage",
 							x = 488,
@@ -1347,6 +1360,18 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					commander = false,
 					startUnits = {
+						{
+							name = "turretaafar",
+							x = 5050,
+							z = 6100,
+							facing = 2,
+						},
+						{
+							name = "turretaafar",
+							x = 4390,
+							z = 5350,
+							facing = 2,
+						},
 						{
 							name = "turretheavyassault",
 							x = 4880,

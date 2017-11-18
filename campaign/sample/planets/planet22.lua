@@ -30,15 +30,15 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/amphfloater.png",
-				text = [[All amphibious units can walk beneath water, and regenerate HP when they do. The Buoy can also float to the surface and fire its slowing disruption cannon from there. Of course, it can also fire while on land.]]
+				text = [[Amphibious units walk on the land beneath the water, and regenerate HP while underwater. Buoys surface to fire their slowing weapon.]]
 			},
 			{
 				image = "unitpics/amphimpulse.png",
-				text = [[The Archer also floats to fire, and its water jets can push light-to-medium enemies away. The water jets will become weaker over time unless the Archer is in a body of water and can refill its water tanks.]]
+				text = [[The water cannon of Archers is replenished by contact with water. It can be used to push enemy units away and into holes.]]
 			},
 			{
 				image = "unitpics/amphbomb.png",
-				text = [[The Limpet bomb doesn't float at all, but its large slowing explosion can reach surface targets even from the seafloor.]]
+				text = [[Limpets do not float, but its large slowing explosion can reach surface targets even from the seafloor.]]
 			},
 		},
 		gameConfig = {
@@ -192,9 +192,96 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					startUnits = {
 						{
+							name = "staticmex",
+							x = 1226,
+							z = 902,
+							facing = 0,
+							difficultyAtLeast = 2,
+						},
+						{
+							name = "staticmex",
+							x = 536,
+							z = 136,
+							facing = 0,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "staticmex",
+							x = 166,
+							z = 326,
+							facing = 0,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "energysolar",
+							x = 240,
+							z = 200,
+							facing = 0,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "energysolar",
+							x = 415,
+							z = 120,
+							facing = 0,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "staticmex",
+							x = 182,
+							z = 2054,
+							facing = 0,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "energyfusion",
+							x = 2346,
+							z = 560,
+							facing = 0,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "turretheavylaser",
+							x = 540,
+							z = 2090,
+							facing = 1,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "turretriot",
+							x = 520,
+							z = 2200,
+							facing = 0,
+							difficultyAtLeast = 4,
+						},
+						{
 							name = "factoryveh",
 							x = 1320,
 							z = 520,
+							facing = 0,
+						},
+						{
+							name = "turretaaclose",
+							x = 1100,
+							z = 520,
+							facing = 0,
+						},
+						{
+							name = "turretaaclose",
+							x = 1320,
+							z = 300,
+							facing = 0,
+						},
+						{
+							name = "turretaalaser",
+							x = 2350,
+							z = 890,
+							facing = 0,
+						},
+						{
+							name = "staticmex",
+							x = 2312,
+							z = 712,
 							facing = 0,
 						},
 						{
@@ -353,13 +440,13 @@ local function GetPlanet(planetUtilities, planetID)
 					satisfyOnce = true,
 					countRemovedUnits = true, -- count units that previously died.
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 5,
+					targetNumber = 10,
 					unitTypes = {
 						"amphfloater",
 					},
 					image = planetUtilities.ICON_DIR .. "amphfloater.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build at least 10 Buoys",
+					description = "Build 10 Buoys",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Don't lose any mexes

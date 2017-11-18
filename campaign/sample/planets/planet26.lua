@@ -30,15 +30,19 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/hoverraid.png",
-				text = [[Hovercraft can move quickly over flat terrain and water surfaces. The Dagger effortlessly outruns most raiders and slowly chips away at them with its Gauss gun, which is effective against underwater targets. Don't get caught in a static fight, though, since Daggers are very flimsy.]]
+				text = [[Hovercraft move quickly over flat terrain and water surfaces. Daggers are very fast and armed with a Gauss gun for hit-and-run attacks against surface and underwater targets.]]
 			},
 			{
 				image = "unitpics/hoverskirm.png",
-				text = [[Scalpels fire a pair of strong, guided missiles at medium range. You'll need to take out the enemy with the first volley or bring an escort, though, because they are helpless during their long reload time between shots.]]
+				text = [[Scalpels fire a pair of guided missiles at medium range. They are helpless during their long reload time - either bring an escort or destroy the enemy with the first salvo.]]
 			},
 			{
 				image = "unitpics/energywind.png",
 				text = [[When built in water, Wind Generators become Tidal Generators, which generate a constant amount of energy rather than the variable amount of Wind Generators.]]
+			},
+			{
+				image = "unitpics/turrettorp.png",
+				text = [[Urchin torpedo launchers are a cheap and reliable solution to underwater threats.]]
 			},
 		},
 		gameConfig = {
@@ -104,9 +108,29 @@ local function GetPlanet(planetUtilities, planetID)
 						facing = 0,
 					},
 					{
+						name = "staticcon",
+						x = 1600,
+						z = 1200,
+						facing = 0,
+						selfPatrol = true,
+					},
+					{
+						name = "staticcon",
+						x = 1680,
+						z = 1200,
+						facing = 0,
+						selfPatrol = true,
+					},
+					{
+						name = "staticstorage",
+						x = 1300,
+						z = 1500,
+						facing = 0,
+					},
+					{
 						name = "factoryhover",
-						x = 528,
-						z = 912,
+						x = 1500,
+						z = 1500,
 						facing = 0,
 					},
 					{
@@ -162,13 +186,6 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 600,
 						z = 408,
 						facing = 1,
-					},
-					{
-						name = "staticcon",
-						x = 472,
-						z = 744,
-						facing = 0,
-						selfPatrol = true,
 					},
 					{
 						name = "energywind",
@@ -394,8 +411,8 @@ local function GetPlanet(planetUtilities, planetID)
 						"energysolar",
 						"staticradar",
 						"turretlaser",
-						"turretmissile",
-						"turrettorp",
+						--"turretmissile",
+						--"turrettorp",
 						"shieldcon",
 						"shieldraid",
 						"shieldskirm",
@@ -404,6 +421,14 @@ local function GetPlanet(planetUtilities, planetID)
 						"hoverraid",
 						"hoverriot",
 						"hoverskirm",
+						"shipscout",
+						"shipriot",
+						"subraider"
+					},
+					difficultyDependantUnlocks = {
+						[2] = {"shipskirm"},
+						[3] = {"shipskirm","shipcon"},
+						[4] = {"shipskirm","shipcon","shipassault"},
 					},
 					commanderLevel = 3,
 					commander = {
@@ -416,6 +441,7 @@ local function GetPlanet(planetUtilities, planetID)
 							"commweapon_rocketlauncher",
 							"commweapon_rocketlauncher",
 							"module_heavy_armor",
+							"module_heavy_armor",
 							"module_adv_targeting",
 						}
 					},
@@ -424,6 +450,12 @@ local function GetPlanet(planetUtilities, planetID)
 							name = "factoryshield",
 							x = 10080,
 							z = 2152,
+							facing = 0,
+						},
+						{
+							name = "factoryship",
+							x = 9900,
+							z = 4600,
 							facing = 0,
 						},
 						{
@@ -1074,13 +1106,13 @@ local function GetPlanet(planetUtilities, planetID)
 					satisfyOnce = true,
 					countRemovedUnits = true, -- count units that previously died.
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 5,
+					targetNumber = 23,
 					unitTypes = {
 						"hoverskirm",
 					},
 					image = planetUtilities.ICON_DIR .. "hoverskirm.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build at least 10 Scalpels",
+					description = "Build 20 Scalpels",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Destroy all enemy factories
@@ -1089,7 +1121,8 @@ local function GetPlanet(planetUtilities, planetID)
 					targetNumber = 0,
 					enemyUnitTypes = {
 						"factoryshield",
-						"factoryhover"
+						"factoryhover",
+						"factoryship",
 					},
 					image = planetUtilities.ICON_DIR .. "factoryshield.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,

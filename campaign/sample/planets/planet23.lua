@@ -8,7 +8,7 @@ local function GetPlanet(planetUtilities, planetID)
 	local image = LUA_DIRNAME .. "images/planets/terran03.png"
 	
 	local planetData = {
-		name = "Co Hatau",
+		name = "Sirlanna",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.29,
@@ -30,15 +30,15 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/turretgauss.png",
-				text = [[The Gauss turret fires with an eponymous Gauss gun, and its projectiles can hit underwater targets as well as those on the surface. The Gauss can also retreat inside an armoured shell to repair and protect itself from artillery.]]
+				text = [[Gauss turrets can fire at underwater targets. They may also retreat within an armoured shell to repair and hide from artillery attacks.]]
 			},
 			{
 				image = "unitpics/amphassault.png",
-				text = [[Grizzlies are armed with two heavy laser turrets similar to those of the Stinger. Despite their strong armour their single-target weapon makes them vulnerable to raiders, so protect them with raiders or riots of your own.]]
+				text = [[Grizzlies are armed with two heavy laser turrets similar to those of the Stinger. This weapon is generally bad against raiders but good against most other things. Protect your Grizzlies with riots to get around this.]]
 			},
 			{
 				image = "unitpics/dronelight.png",
-				text = [[The Garrisons on this beach are protected by light drones. They fly low enough that most weapons can target them (not just anti-air), but the Garrisons will keep rebuilding them. Destroy the source to get rid of the drones.]]
+				text = [[The Garrisons on this beach are protected by light drones. They fly low enough that most weapons can target them (not just anti-air), but the Garrisons will keep rebuilding them. Destroy the Garrisons to get rid of the drones.]]
 			},
 		},
 		gameConfig = {
@@ -1503,7 +1503,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "turretgauss.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build six Gauss turrets",
+					description = "Build 6 Gauss turrets",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Don't lose any Grizzlies

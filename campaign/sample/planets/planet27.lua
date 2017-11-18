@@ -30,11 +30,11 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/hoverdepthcharge.png",
-				text = [[The Claymore is a strange unit; its weapon is a depth charge which remains in place for a few seconds, then explodes immediately (on land) or tracks the enemy it was fired at (on water). The explosion is quite large so try to stay away once the depth charge is launched. Press D to manually drop a depth charge.]]
+				text = [[Claymores fire depth charges which inflict large area-of-effect damage. By default they will track a target in the water but explode in place on land. Press D to manually drop a depth charge.]]
 			},
 			{
 				image = "unitpics/hoveraa.png",
-				text = [[The Flail AA hovercraft is fast and fires a strong guided missile. It's most effective against planes but it will also get the job done against gunships.]]
+				text = [[Flails fire guided missiles at enemy air units. It's most effective against planes but it will also get the job done against gunships.]]
 			},
 			{
 				image = "unitpics/energyfusion.png",
@@ -1251,13 +1251,13 @@ local function GetPlanet(planetUtilities, planetID)
 					satisfyOnce = true,
 					countRemovedUnits = true, -- count units that previously died.
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 12,
+					targetNumber = 14,
 					unitTypes = {
 						"hoveraa",
 					},
 					image = planetUtilities.ICON_DIR .. "hoveraa.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build at least 12 Flails",
+					description = "Build 12 Flails",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Win by 20:00
