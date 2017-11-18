@@ -68,11 +68,7 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 4568,
 						z = 728,
 						facing = 0,
-						commands = {
-							{cmdID = planetUtilities.COMMAND.PATROL, pos = {4576, 860}, options = {"shift"}},
-							{cmdID = planetUtilities.COMMAND.PATROL, pos = {4568, 728}, options = {"shift"}},
-							{cmdID = planetUtilities.COMMAND.PATROL, pos = {4576, 830}, options = {"shift"}},
-						},
+						selfPatrol = true,
 					},
  					{
 						name = "staticmex",
@@ -142,8 +138,8 @@ local function GetPlanet(planetUtilities, planetID)
 					},
  					{
 						name = "factoryhover",
-						x = 4576,
-						z = 864,
+						x = 4900,
+						z = 900,
 						facing = 0,
 					},
  					{
