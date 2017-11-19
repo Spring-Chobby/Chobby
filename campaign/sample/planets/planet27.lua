@@ -30,7 +30,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/hoverdepthcharge.png",
-				text = [[Claymores fire depth charges which inflict large area-of-effect damage. By default they will track a target in the water but explode in place on land. Press D to manually drop a depth charge.]]
+				text = [[Claymores fire depth charges at short range for large area-of-effect damage. To make this less of a suicide mission the depth charge floats for a few seconds before tracking its target. Depth charges can also be dropped as short-lived mines, even on land, press D to drop a mine manually.]]
 			},
 			{
 				image = "unitpics/hoveraa.png",
@@ -38,7 +38,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/energyfusion.png",
-				text = [[Destroying the opposition's energy production might slow them down a bit.]]
+				text = [[Destroying the opposition's energy production will slow them down.]]
 			},
 		},
 		gameConfig = {

@@ -25,6 +25,14 @@ local planetWhitelist = {
 	[12] = true,
 	[43] = true,
 	[52] = true,
+	-- Amph and Hover
+	[22] = true,
+	[23] = true,
+	[24] = true,
+	[25] = true,
+	[26] = true,
+	[27] = true,
+	[28] = true,
 }
 
 return {

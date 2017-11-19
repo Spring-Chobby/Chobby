@@ -30,11 +30,11 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/hoverarty.png",
-				text = [[Lances fire an exceptionally powerful beam, capable of destroying even striders in only a few hits. Setting Lances to hold-fire will ensure they do not waste precious shots on low-value targets.]]
+				text = [[Lances fire an exceptionally powerful beam, capable of destroying even striders in only a few hits. Set Lances to hold-fire when it is particularly important to avoid wasting precious shots on low-value targets.]]
 			},
 			{
 				image = "unitpics/hoverassault.png",
-				text = [[Halberds can retract their weapon and armor up, making them much more resistant to damage. Use this to scout for artillery targets or bypass static defences.]]
+				text = [[Halberds can employ armor when not firing, reducing all incoming damage by a factor of four. Use this to scout for artillery targets or bypass static defences.]]
 			},
 			{
 				image = "LuaUI/Images/commands/Bold/reclaim.png",

@@ -30,7 +30,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/amphraid.png",
-				text = [[Ducks are slower than most raiders but they can move and heal underwater. Their missiles need a few second to reload, so use them in hit-and-run attacks.]]
+				text = [[Ducks are slower than most raiders but they can move and heal underwater. They are armed with a dual purpose torpedo mission which allows them to fight both above and below the water.]]
 			},
 			{
 				image = "unitpics/amphriot.png",

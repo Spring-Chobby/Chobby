@@ -34,11 +34,11 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/amphassault.png",
-				text = [[Grizzlies are armed with two heavy laser turrets similar to those of the Stinger. This weapon is generally bad against raiders but good against most other things. Protect your Grizzlies with riots to get around this.]]
+				text = [[Grizzlies are armed with two heavy laser turrets similar to those of the Stinger. This weapon is generally bad against raiders but good against most other targets. Protect your Grizzlies with riots to get around this limitation.]]
 			},
 			{
 				image = "unitpics/dronelight.png",
-				text = [[The Garrisons on this beach are protected by light drones. They fly low enough that most weapons can target them (not just anti-air), but the Garrisons will keep rebuilding them. Destroy the Garrisons to get rid of the drones.]]
+				text = [[The Garrisons on this beach are protected by light drones. They fly low enough to be killed by most weaponary (not just anti-air), but the Garrisons will keep rebuilding them. Destroy the Garrisons to get rid of the drones.]]
 			},
 		},
 		gameConfig = {

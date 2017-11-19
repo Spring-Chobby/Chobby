@@ -30,15 +30,15 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/amphfloater.png",
-				text = [[Amphibious units walk on the land beneath the water, and regenerate HP while underwater. Buoys surface to fire their disruptor weapon.]]
+				text = [[Amphibious units walk on the land beneath the water, and regenerate HP while underwater. Buoys surface to fire their disruption cannon.]]
 			},
 			{
 				image = "unitpics/amphimpulse.png",
-				text = [[The water cannon of Archers is replenished by contact with water. It can be used to push enemy units away and into holes.]]
+				text = [[The water cannon of Archers is rapidly replenished by contact with water, augmenting their natural slow regeneration. It can be used to push enemy units away and into holes.]]
 			},
 			{
 				image = "unitpics/amphbomb.png",
-				text = [[Limpets do not float, but its large disruptor explosion can reach surface targets even from the seafloor.]]
+				text = [[Limpets do not float, but its large disruption pulse can reach surface targets even from the seafloor.]]
 			},
 		},
 		gameConfig = {
