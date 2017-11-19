@@ -454,9 +454,9 @@ local function GetPlanet(planetUtilities, planetID)
 						},
 						{
 							name = "factoryship",
-							x = 9900,
-							z = 4600,
-							facing = 0,
+							x = 8000,
+							z = 4200,
+							facing = 3,
 						},
 						{
 							name = "energywind",

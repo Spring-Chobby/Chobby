@@ -30,11 +30,11 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/amphtele.png",
-				text = [[To use the Djinn, first command it to place a lantern somewhere, then have your units use the lantern. After some time they will be relocated next to the Djinn. A more expensive unit will need longer to teleport.]]
+				text = [[To use the Djinn, first command it to place a lamp somewhere, then have your units use the lamp. After some time they will be relocated next to the Djinn. A more expensive unit will need longer to teleport.]]
 			},
 			{
 				image = "unitpics/tele_beacon.png",
-				text = [[The Djinn lantern can be placed anywhere on the map. Besides using the Djinn for defence, you can also use it to recover units deep inside enemy territory, or to launch a sneak attack.]]
+				text = [[The Djinn lamp can be placed anywhere on the map. Besides using the Djinn for defence, you can also use it to recover units deep inside enemy territory, or to launch a sneak attack.]]
 			},
 			{
 				image = "unitpics/turretaafar.png",

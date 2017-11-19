@@ -30,7 +30,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/amphfloater.png",
-				text = [[Amphibious units walk on the land beneath the water, and regenerate HP while underwater. Buoys surface to fire their slowing weapon.]]
+				text = [[Amphibious units walk on the land beneath the water, and regenerate HP while underwater. Buoys surface to fire their disruptor weapon.]]
 			},
 			{
 				image = "unitpics/amphimpulse.png",
@@ -38,7 +38,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/amphbomb.png",
-				text = [[Limpets do not float, but its large slowing explosion can reach surface targets even from the seafloor.]]
+				text = [[Limpets do not float, but its large disruptor explosion can reach surface targets even from the seafloor.]]
 			},
 		},
 		gameConfig = {
