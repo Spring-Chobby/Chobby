@@ -170,10 +170,11 @@ end
 function SortableList:UpdateOrder()
 	
 	local function SortFunction(a, b)
+		local noNil = self.sortDataById[a] and self.sortDataById[b] and self.sortDataById[a][self.sortBy] and self.sortDataById[b][self.sortBy]
 		if self.smallToLarge then
-			return self.sortDataById[a] and self.sortDataById[b] and self.sortDataById[a][self.sortBy] < self.sortDataById[b][self.sortBy]
+			return noNil and self.sortDataById[a][self.sortBy] < self.sortDataById[b][self.sortBy]
 		else
-			return self.sortDataById[a] and self.sortDataById[b] and self.sortDataById[a][self.sortBy] > self.sortDataById[b][self.sortBy]
+			return noNil and self.sortDataById[a][self.sortBy] > self.sortDataById[b][self.sortBy]
 		end
 	end
 	
