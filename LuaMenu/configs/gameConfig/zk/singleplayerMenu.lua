@@ -1,3 +1,5 @@
+local FEEDBACK_LINK = "http://zero-k.info/Forum/Thread/24469"
+
 local planetWhitelist = {
 	-- Tutorial Cloaky
 	[69] = true,
@@ -45,7 +47,7 @@ return {
 		entryCheck = WG.CampaignSaveWindow.PromptInitialSaveName,
 		entryCheckBootMode = true,
 		submenuData = {
-			submenuControl = WG.CampaignHandler.GetControl(true, planetWhitelist, "http://zero-k.info/Forum/Thread/24457"),
+			submenuControl = WG.CampaignHandler.GetControl(true, planetWhitelist, FEEDBACK_LINK),
 			tabs = {
 				{
 					name = "technology", 

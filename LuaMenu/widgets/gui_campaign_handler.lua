@@ -142,7 +142,7 @@ local function MakeFeedbackWindow(parent, feedbackLink)
 		y = 58,
 		height = 35,
 		lineSpacing = 1,
-		text = "Welcome to the alpha test of the Zero-K campaign. New missions will be released every Sunday. Please post your thoughts, feedback and issues on the forum.",
+		text = "New missions are released every Sunday. Currently there are 29 missions. Please post your thoughts, feedback and issues on the forum.",
 		fontsize = Configuration:GetFont(2).size,
 		parent = textWindow,
 	}
