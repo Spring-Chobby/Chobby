@@ -41,7 +41,6 @@ local function GetPlanet(planetUtilities, planetID)
 					"factoryplane",
 					"planecon",
 					"planefighter",
-					"planeheavyfighter",
 					"bomberheavy",
 					"staticrearm",
 				},
@@ -88,7 +87,6 @@ local function GetPlanet(planetUtilities, planetID)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"planeheavyfighter",
 				"bomberheavy",
 			},
 			modules = {
