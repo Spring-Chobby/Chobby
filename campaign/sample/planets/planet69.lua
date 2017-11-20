@@ -11,6 +11,7 @@ local function GetPlanet(planetUtilities, planetID)
 		name = "Folsom",
 		startingPlanet = true,
 		predownloadMap = true, 
+		tutorialSkip = true,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.05,
 			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.87,

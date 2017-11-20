@@ -4,6 +4,7 @@ planetData = {
 	name = "Pong", -- The name of the planet
 	startingPlanet = false, -- Whether the planet is availible to be invaded at the start of the campaign.
 	predownloadMap = false, -- Whether to have the lobby download this map as soon as it can.
+	tutorialSkip = false, -- Whether to allow players to skip this planet as a tutorial.
 	
 	-- Position and image to be used on the map
 	mapDisplay = {
