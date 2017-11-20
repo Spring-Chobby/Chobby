@@ -548,7 +548,7 @@ function DrawButton(obj)
   gl.Texture(0,false)
 
   if (obj.caption) then
-    obj.font:Print(obj.caption, w*0.5, h*0.5, "center", "center")
+    obj.font:Print(obj.caption, w*0.5, math.floor(h*0.5 - obj.font.size*0.35), "center", "linecenter")
   end
 end
 
@@ -611,7 +611,7 @@ function DrawEditBox(obj)
 		local clientX,clientY,clientWidth,clientHeight = unpack4(obj.clientArea)
 
 		if not obj.multiline then
-      --// make cursor pos always visible (when text is longer than editbox!)
+			--// make cursor pos always visible (when text is longer than editbox!)
 			repeat
 				local txt = text:sub(obj.offset, obj.cursor)
 				local wt = font:GetTextWidth(txt)
@@ -620,15 +620,15 @@ function DrawEditBox(obj)
 				end
 				obj.offset = obj.offset + 1
 			until (false)
-      --// but also automatically always show the maximum amount of text (scroll left on deletion)
-      repeat
-        local txt = text:sub(obj.offset-1)
-        local wt = font:GetTextWidth(txt)
-        if wt > clientWidth or obj.offset < 1 then
-          break
-        end
-        obj.offset = obj.offset - 1
-      until (false)
+			--// but also automatically always show the maximum amount of text (scroll left on deletion)
+			repeat
+				local txt = text:sub(obj.offset-1)
+				local wt = font:GetTextWidth(txt)
+				if wt > clientWidth or obj.offset < 1 then
+					break
+				end
+				obj.offset = obj.offset - 1
+			until (false)
 		end
 
 		local txt = text:sub(obj.offset)
@@ -997,7 +997,7 @@ function DrawCheckbox(obj)
 
   gl.Color(1,1,1,1)
   if (obj.caption) then
-    obj.font:Print(obj.caption, tx, ty, nil, "center")
+    obj.font:Print(obj.caption, tx, ty - obj.font.size*0.35, nil, "linecenter")
   end
 end
 
@@ -1031,7 +1031,7 @@ function DrawProgressbar(obj)
   gl.Texture(0,false)
 
   if (obj.caption) then
-    (obj.font):Print(obj.caption, w*0.5, h*0.5, "center", "center")
+    (obj.font):Print(obj.caption, w*0.5, h*0.5 - obj.font.size*0.35 , "center", "linecenter")
   end
 end
 
