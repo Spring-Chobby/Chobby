@@ -617,13 +617,22 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 	MakeRewardsPanel(subPanel, 16, planetData)
 	
 	if startable then
-		local startButton = Button:New{
+		local buttonHolder = Control:New{
 			right = "3%",
 			bottom = "4%",
-			width = 135,
-			height = 70,
-			classname = "action_button",
+			x = "50%",
+			height = 200,
+			padding = {0,0,0,0},
 			parent = starmapInfoPanel,
+		}
+	
+		local startButton = Button:New{
+			right = 0,
+			bottom = 0,
+			width = 135,
+			height = 65,
+			classname = "action_button",
+			parent = buttonHolder,
 			caption = i18n("start"),
 			font = Configuration:GetFont(4),
 			OnClick = {
@@ -633,14 +642,36 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 			}
 		}
 		
+		if planetData.tutorialSkip then
+			local startButton = Button:New{
+				right = 140,
+				bottom = 0,
+				width = 220,
+				height = 65,
+				classname = "option_button",
+				parent = buttonHolder,
+				caption = i18n("skip_tutorial"),
+				tooltip = "Skip quick tutorial. Only recommended for Zero-K veterans or players who have completed Tutorials 1 and 2.",
+				font = Configuration:GetFont(4),
+				OnClick = {
+					function(self)
+						local function SkipFunc()
+							ProcessPlanetVictory(planetID, 0, {}, nil, WG.CampaignData.GetDifficultySetting())
+						end
+						WG.Chobby.ConfirmationPopup(SkipFunc, "Are you sure you want to skip the quick tutorial? Remeber to come back later if you need help.", nil, 315, 220)
+					end
+				}
+			}
+		end
+		
 		if (not LIVE_TESTING) and (Configuration.debugAutoWin or Configuration.debugMode) then
 			local autoWinButton = Button:New{
-				right = 200,
-				bottom = "4%",
+				right = 0,
+				bottom = 100,
 				width = 150,
-				height = 70,
+				height = 65,
 				classname = "action_button",
-				parent = starmapInfoPanel,
+				parent = buttonHolder,
 				caption = "Auto Win",
 				font = Configuration:GetFont(4),
 				OnClick = {
@@ -650,12 +681,12 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 				}
 			}
 			local autoLostButton = Button:New{
-				right = 355,
-				bottom = "4%",
+				right = 155,
+				bottom = 100,
 				width = 175,
-				height = 70,
+				height = 65,
 				classname = "action_button",
-				parent = starmapInfoPanel,
+				parent = buttonHolder,
 				caption = "Auto Lose",
 				font = Configuration:GetFont(4),
 				OnClick = {

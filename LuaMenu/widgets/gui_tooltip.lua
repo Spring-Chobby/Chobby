@@ -14,6 +14,7 @@ local spGetMouseState           = Spring.GetMouseState
 local screenWidth, screenHeight = Spring.GetWindowGeometry()
 
 local MAX_WIDTH = 320
+local MAX_WINDOW_WIDTH = MAX_WIDTH + 11
 
 local BATTLE_TOOLTIP_PREFIX = "battle_tooltip_"
 local USER_TOOLTIP_PREFIX = "user_"
@@ -53,7 +54,7 @@ local function InitWindow()
 		width     = 75,
 		height    = 75,
 		minHeight = 1,
-		maxWidth = MAX_WIDTH,
+		maxWidth  = MAX_WINDOW_WIDTH,
 		resizable = false,
 		draggable = false,
 		padding   = {5,4,6,2},
@@ -778,8 +779,8 @@ local function SetTooltipPos()
 		width, height = tooltipChild.width + 9, tooltipChild.height + 8
 	end
 
-	if width > MAX_WIDTH then
-		width = MAX_WIDTH
+	if width > MAX_WINDOW_WIDTH then
+		width = MAX_WINDOW_WIDTH
 	end
 	
 	x = x + 20

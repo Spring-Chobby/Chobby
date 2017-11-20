@@ -114,6 +114,7 @@ return {
 		have_game = "Have game",
 		have_map = "Have map",
 		start = "Start",
+		skip_tutorial = "Skip Tutorial",
 		rejoin = "Rejoin",
 		abandon = "Abandon",
 		spectate = "Spectate",
