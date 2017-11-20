@@ -146,9 +146,9 @@ end
 function widget:SetConfigData(data)
 	-- Reverse compatibility with onetimeEvents = data
 	if data["lobby:started"] then
-		onetimeEvents = data
+		onetimeEvents = data or {}
 		return
 	end
-	onetimeEvents = data.onetimeEvents
-	indexedRepeatEvents = data.indexedRepeatEvents
+	onetimeEvents = data.onetimeEvents or {}
+	indexedRepeatEvents = data.indexedRepeatEvents or {}
 end
