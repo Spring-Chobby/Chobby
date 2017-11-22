@@ -296,6 +296,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"spiderassault",
 						"spidercrabe",
 						"spideraa",
+						"staticantinuke",
 					},
 					difficultyDependantUnlocks = {
 						[2] = {"spiderantiheavy"},
@@ -310,6 +311,12 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 7910,
 							facing = 2,
 							difficultyAtLeast = 4,
+						},
+						{
+							name = "staticantinuke",
+							x = 1110,
+							z = 1990,
+							facing = 2,
 						},
 						{
 							name = "turretaafar",
@@ -1351,6 +1358,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"tankcon",
 						"tankriot",
 						"tankassault",
+						"staticantinuke",
 						--"tankheavyassault",
 					},
 					difficultyDependantUnlocks = {
@@ -1361,6 +1369,12 @@ local function GetPlanet(planetUtilities, planetID)
 					commander = false,
 					startUnits = {
 						{
+							{
+								name = "staticantinuke",
+								x = 7500,
+								z = 7100,
+								facing = 2,
+							},
 							name = "turretaafar",
 							x = 5050,
 							z = 6100,

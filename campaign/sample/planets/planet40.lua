@@ -1600,6 +1600,18 @@ local function GetPlanet(planetUtilities, planetID)
 							},
 						},
 						{
+							name = "staticantinuke",
+							x = 8900,
+							z = 1300,
+							facing = 0,
+						},
+						{
+							name = "staticantinuke",
+							x = 10000,
+							z = 4700,
+							facing = 0,
+						},
+						{
 							name = "vehassault",
 							x = 8800,
 							z = 4700,

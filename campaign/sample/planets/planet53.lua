@@ -1602,6 +1602,12 @@ local function GetPlanet(planetUtilities, planetID)
 							},
 						},
 						{
+							name = "staticantinuke",
+							x = 6950,
+							z = 2850,
+							facing = 2,
+						},
+						{
 							name = "turretriot",
 							x = 6296,
 							z = 1688,

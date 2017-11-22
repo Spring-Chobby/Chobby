@@ -7,7 +7,7 @@ local function GetPlanet(planetUtilities, planetID)
 	local image = LUA_DIRNAME .. "images/planets/ocean01.png"
 	
 	local planetData = {
-		name = "Blank",
+		name = "Harsar Lief",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.46,

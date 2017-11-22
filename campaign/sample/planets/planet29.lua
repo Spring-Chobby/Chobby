@@ -277,6 +277,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"planecon",
 						"planefighter",
 						"bomberriot",
+						"staticantinuke",
 					},
 					difficultyDependantUnlocks = {
 						[4] = {"bomberdisarm"},
@@ -766,6 +767,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"jumpcon",
 						"jumpraid",
 						"jumpskirm",
+						"staticantinuke",
 					},
 					difficultyDependantUnlocks = {
 						[4] = {"jumpblackhole"},

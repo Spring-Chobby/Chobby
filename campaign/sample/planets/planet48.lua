@@ -179,6 +179,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"staticcon",
 						"staticmex",
 						"staticradar",
+						"staticantinuke",
 						"energysolar",
 						"energywind",
 						"energypylon",
@@ -1756,6 +1757,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"staticcon",
 						"staticmex",
 						"staticradar",
+						"staticantinuke",
 						"energysolar",
 						"energywind",
 						"energypylon",
@@ -1779,7 +1781,7 @@ local function GetPlanet(planetUtilities, planetID)
 					difficultyDependantUnlocks = {
 						[2] = {"spidercrabe"},
 						[3] = {"spidercrabe","spiderantiheavy"},
-						[3] = {"striderhub","striderfunnelweb","spidercrabe","spiderantiheavy"},
+						[3] = {"striderhub","striderfunnelweb","spidercrabe","spiderantiheavy","staticantinuke",},
 					},
 					commanderLevel = 5,
 					commander = {
@@ -1837,6 +1839,12 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 2200,
 							facing = 3,
 							terraformHeight = 320,
+						},
+						{
+							name = "staticantinuke",
+							x = 7628,
+							z = 4400,
+							facing = 3,
 						},
 						{
 							name = "staticshield",

@@ -1283,6 +1283,12 @@ local function GetPlanet(planetUtilities, planetID)
 							buildProgress = 0.85,
 						},
 						{
+							name = "staticantinuke",
+							x = 580,
+							z = 1380,
+							facing = 0,
+						},
+						{
 							name = "turretaaflak",
 							x = 3300,
 							z = 1200,

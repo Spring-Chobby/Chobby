@@ -7,7 +7,7 @@ local function GetPlanet(planetUtilities, planetID)
 	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
 	
 	local planetData = {
-		name = "Blank",
+		name = "Bavhakya",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.66,
@@ -41,7 +41,6 @@ local function GetPlanet(planetUtilities, planetID)
 					"factoryplane",
 					"planecon",
 					"planefighter",
-					"planeheavyfighter",
 					"bomberheavy",
 					"staticrearm",
 				},
@@ -88,7 +87,6 @@ local function GetPlanet(planetUtilities, planetID)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"planeheavyfighter",
 				"bomberheavy",
 			},
 			modules = {
