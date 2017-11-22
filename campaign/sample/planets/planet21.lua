@@ -34,7 +34,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/chickens.png",
-				text = [[The Chicken Hive has been thoroughly agitated, and it's sending out some nasty critters - get your business on this planet done as quickly as possible.]]
+				text = [[The Chicken Hive has been thoroughly agitated, and it's sending out some nasty critters - get your business on this planet done as quickly as possible. Reclaim chicken eggs to build up quickly.]]
 			},
 			{
 				image = "unitpics/guardian.png",
@@ -44,8 +44,6 @@ local function GetPlanet(planetUtilities, planetID)
 		gameConfig = {
 			mapName = "Otago",
 			modoptions = {
-				chickenspawnrate = 30,
-				burrowspawnrate = 40,
 				graceperiod = 0.5, -- =30s, which is the minimum
 				--techtimemult = 0.25,
 				chicken_nominiqueen = 1,
@@ -55,27 +53,105 @@ local function GetPlanet(planetUtilities, planetID)
 				chicken_endless = 1,
 				chicken_hidepanel = 1,
 				chicken_nowavemessages = 1,
-				campaign_chicken_types_offense = {
-					chicken				=  {time = -4,  squadSize = 5},
-					chicken_pigeon		=  {time = 5,  squadSize = 1.4},
-					chickens			=  {time = 1,  squadSize = 1.0}, --spiker
-					chickena			=  {time = 3,  squadSize = 0.5}, --cockatrice
-					chicken_sporeshooter=  {time = 5,  squadSize = 0.5},
-					chicken_leaper	=  {time = 10,  squadSize = 0.8},  
-					chickenr			=  {time = 9,  squadSize = 1.2}, -- lobber
-					chickenc			=  {time = 13,  squadSize = 0.5}, -- basilisk
-					chicken_tiamat		=  {time = 16,  squadSize = 0.2},
-				},
-				campaign_chicken_types_defense = {
-					chickend = {time = 4, squadSize = 0.6, cost = 1 },
-					chicken_rafflesia =  {time = 8, squadSize = 0.4, cost = 2 },
-				},
-				campaign_chicken_types_support = {
-					chicken_shield =  {time = 12, squadSize = 0.4},
-					chicken_dodo = {time = 4, squadSize = 2},
-					chicken_spidermonkey =  {time = 12, squadSize = 0.6},
-				},
 				campaign_chicken_types_special = {},
+			},
+			modoptionDifficulties = {
+				[1] = {
+					chickenspawnrate = 60,
+					burrowspawnrate = 90,
+					campaign_chicken_types_offense = {
+						chicken				=  {time = -4,  squadSize = 5},
+						chicken_pigeon		=  {time = 5,  squadSize = 1.4},
+						chickens			=  {time = 1,  squadSize = 1.0}, --spiker
+						chickena			=  {time = 3,  squadSize = 0.5}, --cockatrice
+						chicken_sporeshooter=  {time = 5,  squadSize = 0.5},
+						chicken_leaper	=  {time = 10,  squadSize = 0.8},  
+						chickenr			=  {time = 13,  squadSize = 1.2}, -- lobber
+						chickenc			=  {time = 20,  squadSize = 0.5}, -- basilisk
+						chicken_tiamat		=  {time = 25,  squadSize = 0.2},
+					},
+					campaign_chicken_types_defense = {
+						chickend = {time = 4, squadSize = 0.6, cost = 1 },
+						chicken_rafflesia =  {time = 8, squadSize = 0.4, cost = 2 },
+					},
+					campaign_chicken_types_support = {
+						chicken_shield =  {time = 18, squadSize = 0.4},
+						chicken_dodo = {time = 4, squadSize = 2},
+						chicken_spidermonkey =  {time = 18, squadSize = 0.6},
+					},
+				},
+				[2] = {
+					chickenspawnrate = 50,
+					burrowspawnrate = 70,
+					campaign_chicken_types_offense = {
+						chicken				=  {time = -4,  squadSize = 5},
+						chicken_pigeon		=  {time = 5,  squadSize = 1.4},
+						chickens			=  {time = 1,  squadSize = 1.0}, --spiker
+						chickena			=  {time = 3,  squadSize = 0.5}, --cockatrice
+						chicken_sporeshooter=  {time = 5,  squadSize = 0.5},
+						chicken_leaper	=  {time = 10,  squadSize = 0.8},  
+						chickenr			=  {time = 11,  squadSize = 1.2}, -- lobber
+						chickenc			=  {time = 15,  squadSize = 0.5}, -- basilisk
+						chicken_tiamat		=  {time = 20,  squadSize = 0.2},
+					},
+					campaign_chicken_types_defense = {
+						chickend = {time = 4, squadSize = 0.6, cost = 1 },
+						chicken_rafflesia =  {time = 8, squadSize = 0.4, cost = 2 },
+					},
+					campaign_chicken_types_support = {
+						chicken_shield =  {time = 16, squadSize = 0.4},
+						chicken_dodo = {time = 4, squadSize = 2},
+						chicken_spidermonkey =  {time = 16, squadSize = 0.6},
+					},
+				},
+				[3] = {
+					chickenspawnrate = 38,
+					burrowspawnrate = 60,
+					campaign_chicken_types_offense = {
+						chicken				=  {time = -4,  squadSize = 6},
+						chicken_pigeon		=  {time = 5,  squadSize = 1.4},
+						chickens			=  {time = 1,  squadSize = 1.6}, --spiker
+						chickena			=  {time = 3,  squadSize = 1.2}, --cockatrice
+						chicken_sporeshooter=  {time = 5,  squadSize = 0.8},
+						chicken_leaper	=  {time = 10,  squadSize = 0.8},  
+						chickenr			=  {time = 10,  squadSize = 1.2}, -- lobber
+						chickenc			=  {time = 13,  squadSize = 0.5}, -- basilisk
+						chicken_tiamat		=  {time = 16,  squadSize = 0.2},
+					},
+					campaign_chicken_types_defense = {
+						chickend = {time = 4, squadSize = 0.6, cost = 1 },
+						chicken_rafflesia =  {time = 8, squadSize = 0.4, cost = 2 },
+					},
+					campaign_chicken_types_support = {
+						chicken_shield =  {time = 14, squadSize = 0.4},
+						chicken_dodo = {time = 4, squadSize = 2},
+						chicken_spidermonkey =  {time = 14, squadSize = 0.6},
+					},
+				},
+				[4] = {
+					chickenspawnrate = 30,
+					burrowspawnrate = 40,
+					campaign_chicken_types_offense = {
+						chicken				=  {time = -4,  squadSize = 6},
+						chicken_pigeon		=  {time = 5,  squadSize = 1.4},
+						chickens			=  {time = 1,  squadSize = 1.6}, --spiker
+						chickena			=  {time = 3,  squadSize = 1.2}, --cockatrice
+						chicken_sporeshooter=  {time = 5,  squadSize = 0.8},
+						chicken_leaper	=  {time = 10,  squadSize = 0.8},  
+						chickenr			=  {time = 9,  squadSize = 1.4}, -- lobber
+						chickenc			=  {time = 11,  squadSize = 0.6}, -- basilisk
+						chicken_tiamat		=  {time = 13,  squadSize = 0.2},
+					},
+					campaign_chicken_types_defense = {
+						chickend = {time = 4, squadSize = 0.6, cost = 1 },
+						chicken_rafflesia =  {time = 8, squadSize = 0.4, cost = 2 },
+					},
+					campaign_chicken_types_support = {
+						chicken_shield =  {time = 12, squadSize = 0.4},
+						chicken_dodo = {time = 4, squadSize = 2},
+						chicken_spidermonkey =  {time = 12, squadSize = 0.6},
+					},
+				},
 			},
 			playerConfig = {
 				startX = 1100,
@@ -332,8 +408,6 @@ local function GetPlanet(planetUtilities, planetID)
 						"energygeo",
 						"staticcon",
 						"staticradar",
-						"turretlaser",
-						"turretmissile",
 						--"turretheavylaser", a bit too good against Dante
 						"turretriot",
 						"turretaaclose",
@@ -358,8 +432,8 @@ local function GetPlanet(planetUtilities, planetID)
 						"vehassault",
 					},
 					difficultyDependantUnlocks = {
-						[3] = {"shieldarty"},
-						[4] = {"shieldarty","spiderantiheavy"},
+						[3] = {"turretmissile"},
+						[4] = {"spiderantiheavy","turretmissile","turretlaser"},
 					},
 					commanderLevel = 4,
 					commander = {
@@ -592,13 +666,13 @@ local function GetPlanet(planetUtilities, planetID)
 						},
  						{
 							name = "factoryshield",
-							x = 8272,
+							x = 5000,
 							z = 4616,
 							facing = 2,
 						},
  						{
 							name = "staticcon",
-							x = 8264,
+							x = 5000,
 							z = 4744,
 							facing = 2,
 							commands = {
@@ -1176,6 +1250,18 @@ local function GetPlanet(planetUtilities, planetID)
 					unlocks = {
 					},
 					commander = false,
+					midgameUnits = {
+						{
+							name = "chicken_dragon",
+							x = 7650,
+							z = 300,
+							facing = 0,
+							spawnRadius = 100,
+							delay = 14*30*60,
+							orbitalDrop = true,
+							difficultyAtLeast = 4,
+						},
+					},
 					startUnits = {
 						{
 							name = "roost",
@@ -1370,7 +1456,7 @@ local function GetPlanet(planetUtilities, planetID)
 					ignoredByAI = true,
 					mapMarker = {
 						text = "Dropship Factory",
-						color = "green"
+						color = "green_small"
 					},
 				},
 			},
@@ -1434,17 +1520,17 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Destroy 7 Chicken Roosts",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[3] = { -- Protect all Dantes
+				[3] = { -- Lose no more than 1 dante
+					onlyCountRemovedUnits = true,
 					satisfyForever = true,
-					failOnUnitLoss = true, -- Fails the objective if any units being used to satisfy the objective are lost.
-					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 0,
+					comparisionType = planetUtilities.COMPARE.AT_MOST,
+					targetNumber = 1,
 					unitTypes = {
-						"striderdante",
+						"striderdante"
 					},
 					image = planetUtilities.ICON_DIR .. "striderdante.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
-					description = "Don't lose any Dantes",
+					description = "Do not lose more than 1 Dante",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			}
