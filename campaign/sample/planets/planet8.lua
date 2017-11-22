@@ -2038,6 +2038,12 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					startUnits = {
 						{
+							name = "staticantinuke",
+							x = 730,
+							z = 1535,
+							facing = 0,
+						},
+						{
 							name = "staticheavyradar",
 							x = 2208,
 							z = 2192,
