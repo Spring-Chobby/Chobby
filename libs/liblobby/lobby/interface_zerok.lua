@@ -1156,6 +1156,8 @@ function Interface:ProcessVote(data, battle, duplicateMessageTime)
 		mapStart = mapStart + 14
 		pollParameter = string.sub(voteMessage, mapStart, lasturl - 1)
 		pollType = "map"
+	elseif string.find(voteMessage, "start the game?") then
+		pollType = "start"
 	end
 	
 	self:_OnVoteUpdate(voteMessage, yesVotes, noVotes, votesNeeded, pollType, pollParameter)
