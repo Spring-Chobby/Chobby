@@ -1175,6 +1175,10 @@ function Interface:_Say(data)
 		self.duplicateMessageTimes[data.Time] = data.Text
 	end
 	
+	if data.Ring then
+		self:_OnRung(data.User, data.Text, data.Time, data.Source)
+	end
+	
 	if AUTOHOST_SUPRESSION[data.Text] then
 		if data.User and self.users[data.User] and self.users[data.User].isBot then
 			return

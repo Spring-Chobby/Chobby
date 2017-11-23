@@ -969,6 +969,10 @@ function Lobby:_OnLeft(chanName, userName, reason)
 	self:_CallListeners("OnLeft", chanName, userName, reason)
 end
 
+function Lobby:_OnRung(userName, message, sayTime, source)
+	self:_CallListeners("OnRung", userName, message, sayTime, source)
+end
+
 function Lobby:_OnSaid(chanName, userName, message, sayTime, source)
 	self:_CallListeners("OnSaid", chanName, userName, message, sayTime, source)
 end
