@@ -451,7 +451,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 	local downloader = WG.Chobby.Downloader(false, downloaderPos, 8, nil, nil, nil, OnDownloaderVisibility)
 	leftOffset = leftOffset + 120
 
-	
+
 	-- Example downloads
 	--MaybeDownloadArchive("Titan-v2", "map")
 	--MaybeDownloadArchive("tinyskirmishredux1.1", "map")
@@ -479,7 +479,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		lblHaveMap:SetPos(nil, offset)
 	end
 	externalFunctions.UpdateBattleMode(battle.disallowCustomTeams)
-	
+
 	function externalFunctions.SetHaveGame(newHaveGame)
 		if newHaveGame then
 			imHaveGame.file = IMG_READY
@@ -1258,7 +1258,7 @@ local function InitializeSetupPage(subPanel, screenHeight, pageConfig, nextPage,
 		buttonHeight = 56
 		buttonFont = 4
 	end
-	
+
 	subPanel:SetVisibility(not prevPage)
 
 	local lblBattleTitle = Label:New {
@@ -1318,7 +1318,7 @@ local function InitializeSetupPage(subPanel, screenHeight, pageConfig, nextPage,
 		},
 		parent = subPanel,
 	}
-	
+
 	if prevPage then
 		Button:New {
 			x = "5%",
@@ -1337,7 +1337,7 @@ local function InitializeSetupPage(subPanel, screenHeight, pageConfig, nextPage,
 			parent = subPanel,
 		}
 	end
-	
+
 	for i = 1, #pageConfig.options do
 		local x, y, right, height, caption, tooltip
 		if pageConfig.minimap then
@@ -1416,7 +1416,7 @@ local function SetupEasySetupPanel(mainWindow, standardSubPanel, setupData)
 
 	local _, screenHeight = Spring.GetWindowGeometry()
 	local panelOffset = math.max(8, math.min(60, ((screenHeight - 768)*0.16 + 8)))
-	
+
 	local pages = {}
 	for i = 1, #pageConfigs do
 		pages[i] = Control:New {
@@ -1428,7 +1428,7 @@ local function SetupEasySetupPanel(mainWindow, standardSubPanel, setupData)
 			parent = mainWindow,
 		}
 	end
-	
+
 	for i = 1, #pages do
 		InitializeSetupPage(pages[i], screenHeight, pageConfigs[i], pages[i + 1], pages[i - 1], selectedOptions, ApplyFunction)
 	end
@@ -1587,7 +1587,13 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 			return
 		end
 		if Configuration:IsValidEngineVersion(battle.engineVersion) then
-			battleTitle = i18n(Configuration.battleTypeToName[battle.battleMode]) .. ": " .. tostring(battle.title)
+			local battleTypeName = Configuration.battleTypeToName[battle.battleMode]
+			if battleTypeName then
+				battleTitle = i18n(battleTypeName) .. ": " .. tostring(battle.title)
+			else
+				battleTitle = tostring(battle.title)
+			end
+
 			local truncatedTitle = StringUtilities.GetTruncatedStringWithDotDot(battleTitle, lblBattleTitle.font, lblBattleTitle.width)
 			lblBattleTitle:SetCaption(truncatedTitle)
 		else
@@ -1925,7 +1931,7 @@ function widget:Initialize()
 		UpdateArchiveStatus(true)
 	end
 	WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
-	
+
 	WG.BattleRoomWindow = BattleRoomWindow
 end
 
