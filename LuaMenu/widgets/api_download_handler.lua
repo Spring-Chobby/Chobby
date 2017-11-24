@@ -92,13 +92,13 @@ end
 
 local function DownloadQueueUpdate()
 	requestUpdate = false
-	
+
 	if #downloadQueue == 0 then
 		CallListeners("DownloadQueueUpdate", downloadQueue, removedDownloads)
 		return
 	end
 	table.sort(downloadQueue, DownloadSortFunc)
-	
+
 	local front = downloadQueue[1]
 	if not front.active then
 		if USE_WRAPPER_DOWNLOAD and WG.WrapperLoopback then
@@ -109,7 +109,7 @@ local function DownloadQueueUpdate()
 		end
 		front.active = true
 	end
-	
+
 	CallListeners("DownloadQueueUpdate", downloadQueue, removedDownloads)
 end
 
@@ -156,13 +156,13 @@ local function RemoveDownload(name, fileType, putInRemoveList, removalType)
 	if not index then
 		return false
 	end
-	
+
 	if removalType == "success" then
 		CallListeners("DownloadFinished", downloadQueue[index].id, name, fileType)
 	else
 		CallListeners("DownloadFailed", downloadQueue[index].id, removalType, name, fileType)
 	end
-	
+
 	if putInRemoveList then
 		downloadQueue[index].removalType = removalType
 		removedDownloads[#removedDownloads + 1] = downloadQueue[index]
@@ -182,11 +182,11 @@ function externalFunctions.QueueDownload(name, fileType, priority)
 	if priority == -1 then
 		priority = topPriority + 1
 	end
-	
+
 	if topPriority < priority then
 		topPriority = priority
 	end
-	
+
 	local index = GetDownloadIndex(downloadQueue, name, fileType)
 	if index then
 		local data = downloadQueue[index]
@@ -196,7 +196,7 @@ function externalFunctions.QueueDownload(name, fileType, priority)
 		end
 		return
 	end
-	
+
 	downloadCount = downloadCount + 1
 	downloadQueue[#downloadQueue + 1] = {
 		name = name,
@@ -213,7 +213,7 @@ function externalFunctions.SetDownloadTopPriority(name, fileType)
 	if not index then
 		return
 	end
-	
+
 	topPriority = topPriority + 1
 	downloadQueue[index].priority = topPriority
 	requestUpdate = true
@@ -225,15 +225,15 @@ function externalFunctions.CancelDownload(name, fileType)
 	if not index then
 		return false
 	end
-	
+
 	if downloadQueue[index].active then
 		WG.WrapperLoopback.AbortDownload(name, typeMap[fileType])
 		return
 	end
-	
+
 	downloadQueue[index].removalType = "cancel"
 	removedDownloads[#removedDownloads + 1] = downloadQueue[index]
-	
+
 	downloadQueue[index] = downloadQueue[#downloadQueue]
 	downloadQueue[#downloadQueue] = nil
 	requestUpdate = true
@@ -244,7 +244,7 @@ function externalFunctions.RetryDownload(name, fileType)
 	if not index then
 		return false
 	end
-	
+
 	externalFunctions.QueueDownload(name, fileType, removedDownloads[index].priority)
 	removedDownloads[index] = removedDownloads[#removedDownloads]
 	removedDownloads[#removedDownloads] = nil
@@ -257,7 +257,7 @@ function externalFunctions.RemoveRemovedDownload(name, fileType)
 	if not index then
 		return false
 	end
-	
+
 	removedDownloads[index] = removedDownloads[#removedDownloads]
 	removedDownloads[#removedDownloads] = nil
 	requestUpdate = true
@@ -286,7 +286,7 @@ function wrapperFunctions.DownloadFinished(name, fileType, success, aborted)
 		end
 		RemoveDownload(name, fileType, true, (aborted and "cancel") or (success and "success") or "fail")
 	end
-	
+
 	--Chotify:Post({
 	--	title = "Download " .. ((success and "Finished") or "Failed"),
 	--	body = (name or "???") .. " of type " .. (fileType or "???"),
@@ -298,7 +298,7 @@ function wrapperFunctions.DownloadFileProgress(name, fileType, progress, seconds
 	if not index then
 		return
 	end
-	
+
 	totalLength = (tonumber(totalLength or 0) or 0)/1023^2
 	CallListeners("DownloadProgress", downloadQueue[index].id, totalLength*math.min(1, (tonumber(progress or 0) or 0)/100), totalLength, name)
 end
@@ -318,8 +318,7 @@ function widget:DownloadProgress(downloadID, downloaded, total)
 	if not index then
 		return
 	end
-	
-	CallListeners("DownloadProgress", downloadQueue[index].id, downloaded, total)
+	CallListeners("DownloadProgress", downloadQueue[index].id, downloaded, total, downloadQueue[index].name)
 end
 
 function widget:DownloadStarted(downloadID)
@@ -328,7 +327,7 @@ function widget:DownloadStarted(downloadID)
 		return
 	end
 	local data = downloadQueue[index]
-	
+
 	CallListeners("DownloadStarted", data.id, data.name, data.fileType)
 end
 
@@ -338,7 +337,7 @@ function widget:DownloadFinished(downloadID)
 		return
 	end
 	local data = downloadQueue[index]
-	
+
 	RemoveDownload(data.name, data.fileType, true, "success")
 end
 
@@ -348,7 +347,7 @@ function widget:DownloadFailed(downloadID, errorID)
 		return
 	end
 	local data = downloadQueue[index]
-	
+
 	RemoveDownload(data.name, data.fileType, true, "fail")
 end
 
@@ -379,7 +378,7 @@ local function GetRequiredDownloads()
 			externalFunctions.MaybeDownloadArchive(campaignStartMaps[i], "map", 1.5)
 		end
 	end
-	
+
 	local skirmishPages = Configuration.gameConfig and Configuration.gameConfig.skirmishSetupData and Configuration.gameConfig.skirmishSetupData.pages
 	if skirmishPages then
 		for i = 1, #skirmishPages do
@@ -398,7 +397,7 @@ WG.DownloadHandler = externalFunctions
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	
+
 	WG.DownloadWrapperInterface = wrapperFunctions
 	WG.Delay(GetRequiredDownloads, 1)
 end
