@@ -1,6 +1,6 @@
 local shortname = "sample"
 
-local N_PLANETS = 70
+local N_PLANETS = 71
 
 planetEdgeList = {
 	{01, 02},
@@ -78,6 +78,7 @@ planetEdgeList = {
 	{40, 41},
 	{41, 29},
 	{41, 42},
+	{41, 71},
 	{42, 46},
 	{42, 54},
 	{44, 45},
