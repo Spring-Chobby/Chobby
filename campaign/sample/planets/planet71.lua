@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Edo",
 			primaryType = "K1",
 			milRating = 1,
-			text = [[This asteroid was used for widely broadcast rally races in a bygone age. A classic challenge now awaits all comers: the Super Extreme Kodachi Rally (SEEKeR)!]]
+			text = [[This remote moon was used for widely broadcast rally races in a bygone age. A classic challenge now awaits all comers: the Super Extreme Kodachi Rally!]]
 		},
 		tips = {
 			{
@@ -119,7 +119,9 @@ local function GetPlanet(planetUtilities, planetID)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			modules = {},
-			abilities = {},
+			units = {
+				"tankraid"
+			},
 			codexEntries = {}
 		},
 	}
