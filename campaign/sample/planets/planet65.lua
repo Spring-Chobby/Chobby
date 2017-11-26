@@ -86,7 +86,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"striderdetriment",
 			},
 			modules = {
-				"module_battle_drone_LIMIT_D_2",
+				
 			},
 			abilities = {
 			}
