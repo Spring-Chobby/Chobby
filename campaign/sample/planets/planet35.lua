@@ -26,6 +26,12 @@ local function GetPlanet(planetUtilities, planetID)
 			milRating = 1,
 			text = [[...]]
 		},
+		tips = {
+			{
+				image = "unitpics/bomberheavy.png",
+				text = [[The Likho...]]
+			},
+		},
 		gameConfig = {
 			mapName = "LowTideV3",
 			playerConfig = {
