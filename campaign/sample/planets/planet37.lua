@@ -713,7 +713,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"gunshipheavytrans",
 			},
 			modules = {
-				"module_high_power_servos_LIMIT_C_2",
+				"module_battle_drone_LIMIT_D_2",
 			},
 			abilities = {
 			}

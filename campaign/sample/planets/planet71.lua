@@ -118,7 +118,9 @@ local function GetPlanet(planetUtilities, planetID)
 		},
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
-			modules = {},
+			modules = {
+				"module_high_power_servos_LIMIT_C_2",
+			},
 			units = {
 				"tankraid"
 			},

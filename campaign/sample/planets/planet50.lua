@@ -94,7 +94,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"jumpaa",
 			},
 			modules = {
-				"module_adv_nano_LIMIT_H_1",
+				
 			},
 			abilities = {
 			}

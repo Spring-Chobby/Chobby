@@ -1132,7 +1132,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"staticrearm",
 			},
 			modules = {
-				"module_high_power_servos_LIMIT_B_2",
+				"module_adv_nano_LIMIT_H_1",
 			},
 			abilities = {
 			}
