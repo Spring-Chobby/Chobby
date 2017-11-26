@@ -34,7 +34,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/shieldscout.png",
-				text = [[Dirtbags are curious bots with many unfulfilled aspirations. They want to scout and fight but are almost blind and all they can muster is a headbutt. They to terraform but all they manage is to drop a little pile of dirt upon their death. They make up for this by being extremely cheap and fairly tough.]]
+				text = [[Dirtbags are curious bots with many unfulfilled aspirations. They want to scout and fight but are almost blind and all they can muster is a headbutt. They try to terraform but all they manage is to drop a little pile of dirt upon their death. They make up for this by being extremely cheap and fairly tough.]]
 			},
 			{
 				image = "LuaUI/Images/commands/Bold/jump.png",
