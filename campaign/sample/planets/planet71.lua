@@ -25,10 +25,21 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Edo",
 			primaryType = "K1",
 			milRating = 1,
-			text = [[This asteroid was used for widely broadcast rally races in a bygone age. A classic challenge now awaits all comers.]]
+			text = [[This asteroid was used for widely broadcast rally races in a bygone age. A classic challenge now awaits all comers: the Super Extreme Kodachi Rally (SEEKeR)!]]
 		},
 		tips = {
-			
+			{
+				image = "unitpics/staticmex.png",
+				text = [[Your objective in each round is to destroy all the mexes, while killing enemy raiders who give chase and outsmarting fixed defenses. Each level adds increasingly deadlier challenges, so stay on your toes!]]
+			},
+			{
+				image = "unitpics/shieldscout.png",
+				text = [[To help you out, there are powerups scattered around the map. Touch them with a Kodachi to activate them.  More powerups will spawn at regular intervals.]]
+			},
+			{
+				image = "unitpics/tankraid.png",
+				text = [[If all your Kodachis are dead, you lose the round. Don't worry, you get to try again!]]
+			},
 		},
 		gameConfig = {
 			gameName = "Super Extreme Kodachi Rally",
