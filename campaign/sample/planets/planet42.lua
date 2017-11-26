@@ -38,7 +38,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "LuaUI/Images/commands/Bold/attack.png",
-				text = [[The Tremor fires seismic shells which gradually smooth and flatten terrain. .]]
+				text = [[The Tremor fires seismic shells which gradually smooth and flatten terrain. Half a minute of Force Firing at a hill will deprive spiders of a safe hiding place. Terrain modification is only visible in line of sight so remember to use spotters.]]
 			},
 		},
 		gameConfig = {

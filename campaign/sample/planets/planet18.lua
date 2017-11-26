@@ -25,12 +25,20 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Iersag",
 			primaryType = "K1V",
 			milRating = 1,
-			text = [[something something terraform something dirtbag something]]
+			text = [[Automated defenses are usually easily overcome, if only you hadn't deleted most of your construction blueprints to make room for your recently unearthed discovery - terrain manipulation technology. Use terraforming to clog up or bypass the automated defenses surrounding the Interception Network to make your escape.]]
 		},
 		tips = {
 			{
+				image = "LuaUI/Images/commands/level.png",
+				text = [[Every constructor is a powerful terraformer with access to five commands: Ramp, Level, Raise, Restore and Smooth. Read the tooltips and experiment with the commands as each has quite a few modifers and options. Consult the online manual for more details.]]
+			},
+			{
 				image = "unitpics/shieldscout.png",
-				text = [[Dirtbags are curious scout bots which can jump up or down hills, and release a pile of dirt upon death to hinder enemies (and possibly friends).]]
+				text = [[Dirtbags are curious bots with many unfulfilled aspirations. They want to scout and fight but are almost blind and all they can muster is a headbutt. They to terraform but all they manage is to drop a little pile of dirt upon their death. They make up for this by being extremely cheap and fairly tough.]]
+			},
+			{
+				image = "LuaUI/Images/commands/Bold/jump.png",
+				text = [[Dirtbags can jump small distances. This ability can be used for 'precision' terraforming. First issue a line-jump command by holding the left mouse button and then shift queue the a detonate order.]]
 			},
 		},
 		gameConfig = {
