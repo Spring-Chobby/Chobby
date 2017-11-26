@@ -136,13 +136,21 @@ local function MakeFeedbackWindow(parent, feedbackLink)
 		fontsize = Configuration:GetFont(4).size,
 		parent = textWindow,
 	}
+	
+	local missionCount = 0
+	if PLANET_WHITELIST then
+		for _,_ in pairs(PLANET_WHITELIST) do
+			missionCount = missionCount + 1
+		end
+	end
+	
 	TextBox:New {
 		x = 15,
 		right = 15,
 		y = 58,
 		height = 35,
 		lineSpacing = 1,
-		text = "New missions are released every Sunday. Currently there are 29 missions. Please post your thoughts, feedback and issues on the forum.",
+		text = "New missions are released every Sunday. Currently there are " .. (missionCount or "??") .. " missions. Please post your thoughts, feedback and issues on the forum.",
 		fontsize = Configuration:GetFont(2).size,
 		parent = textWindow,
 	}
