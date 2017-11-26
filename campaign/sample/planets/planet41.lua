@@ -25,20 +25,20 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Ahdas Las",
 			primaryType = "K4III",
 			milRating = 1,
-			text = [[Among the heavy Tanks, even the constructors and raiders are tough - but they're also more expensive. You'll have less units than your Cloakbot opponent, so you'll need to be careful to avoid losses if you want to win here.]]
+			text = [[Among the heavy Tanks, even the constructors and raiders are tough - but they're also more expensive. You'll have less units than your Cloakbot opponent, so you'll need to be efficient. Retreat and repair damaged tanks to avoid losses.]]
 		},
 		tips = {
 			{
 				image = "unitpics/tankcon.png",
-				text = [[Unlike all other constructors, the Welder is armed and can fend off a raider or two on its own while building a turret to deal with more.]]
+				text = [[Unlike all other constructors, the Welder is armed and sturdy. It is better able to weather raids until reinforcements arrive and can even beat a small number of Glaives in a fight.]]
 			},
 			{
 				image = "unitpics/tankheavyraid.png",
-				text = [[The Blitz heavy tank raider will go toe-to-toe with any other raider in the game - its high HP and stunning EMP attack give it a significant edge. However, if one Blitz dies, it releases an EMP explosion which might stun your other units, so only take fights that you will win.]]
+				text = [[The Blitz heavy tank raider will go toe-to-toe with any other raider - its high HP and lightning weaponary give it a significant edge. However, if one Blitz dies, it releases an EMP explosion which might stun your other units, so only take fights that you will win.]]
 			},
 			{
-				image = "unitpics/module_autorepair.png",
-				text = [[To achieve the second optional objective, make sure to repair your Tanks when they are partially damaged.]]
+				image = "LuaUI/Images/commands/Bold/repair.png",
+				text = [[To minimize losses, make sure to repair your Tanks when they are partially damaged.]]
 			},
 		},
 		gameConfig = {

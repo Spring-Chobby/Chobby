@@ -36,6 +36,10 @@ local function GetPlanet(planetUtilities, planetID)
 				image = "unitpics/tankheavyassault.png",
 				text = [[The Cyclops super-heavy assault tank is even tougher than the Minotaur and also comes equipped with a medium-range slowbeam, which should prevent the enemy Spiders from escaping to the hills.]]
 			},
+			{
+				image = "LuaUI/Images/commands/Bold/attack.png",
+				text = [[The Tremor fires seismic shells which gradually smooth and flatten terrain. .]]
+			},
 		},
 		gameConfig = {
 			mapName = "Desert_Plateaus",

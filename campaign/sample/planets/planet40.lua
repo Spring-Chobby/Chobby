@@ -25,16 +25,16 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Seraz",
 			primaryType = "G9V",
 			milRating = 1,
-			text = [[Enter this active battle and dominate the low ground with the raw power of the Tank factory. Destroy the enemy Nuclear Silo while protecting your own team's Anti-Nukes.]]
+			text = [[Enter this active battle and dominate the low ground with the raw power of the Tank factory. Push through the enemy defenses to destroy their Nuclear Silo while protecting your own team's Anti-Nukes.]]
 		},
 		tips = {
 			{
 				image = "unitpics/tankassault.png",
-				text = [[The Minotaur assault tank is one of the toughest units in the game for its moderate price. Use it to brute-force your way through enemy positions.]]
+				text = [[The Minotaur assault tank is a very tough units considering its affordable price. Use it to brute-force your way through enemy positions.]]
 			},
 			{
 				image = "unitpics/tankarty.png",
-				text = [[If the enemy is too strong for a direct assault even by Tanks, use the Emissary artillery tank to weaken them first.]]
+				text = [[Yse the Emissary artillery tank to weaken defenses that would otherwise be inefficient to assault directly with Minotaurs.]]
 			},
 			{
 				image = "unitpics/factorycloak.png",
