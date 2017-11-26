@@ -117,6 +117,7 @@ planetUtilities.planetPositions = {
 	[68] = {929, 104},
 	[69] = {55, 890},
 	[70] = {666, 678},
+	[71] = {480, 230},
 }
 
 for i = 1, #planetUtilities.planetPositions do
