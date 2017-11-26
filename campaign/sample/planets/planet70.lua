@@ -4,27 +4,28 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/terran03_damaged.png"
 	
 	local planetData = {
-		name = "Blank",
+		name = "Onsally",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.77,
 			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.13,
 			image = image,
-			size = planetUtilities.PLANET_SIZE_MAP * 1.25,
+			size = planetUtilities.PLANET_SIZE_MAP,
 		},
 		infoDisplay = {
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Terran",
-			radius = "6550 km",
-			primary = "Blank",
-			primaryType = "G8V",
+			terrainType = "Igneous",
+			radius = "6370 km",
+			primary = "Easnor",
+			primaryType = "A4IV",
 			milRating = 1,
-			text = [[Two duelling Zenith meteor controllers threaten to reduce this planet to space dust. Sneak into the enemy base and destroy their Zenith so you'll at least have the satisfaction of being the owner of that space dust.]]
+			text = [[Phoenix blah]]
 		},
 		gameConfig = {
 			mapName = "LowTideV3",
@@ -38,7 +39,9 @@ local function GetPlanet(planetUtilities, planetID)
 					defeatIfDestroyedObjectiveID = 2,
 				},
 				extraUnlocks = {
-					"zenith"
+					"factoryplane",
+					"bomberriot",
+					"planeheavyfighter",
 				},
 				startUnits = {
 				}
@@ -83,7 +86,8 @@ local function GetPlanet(planetUtilities, planetID)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
-				"zenith",
+				"bomberriot",
+				"planeheavyfighter",
 			},
 			modules = {
 			},
