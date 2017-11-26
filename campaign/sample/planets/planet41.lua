@@ -57,7 +57,6 @@ local function GetPlanet(planetUtilities, planetID)
 					"tankcon",
 					"tankassault",
 					"tankriot",
-					"tankraid",
 					"tankheavyraid",
 				},
 				startUnits = {
@@ -131,12 +130,6 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "tankheavyraid",
 						x = 3984,
 						z = 765,
-						facing = 0,
-					},
- 					{
-						name = "tankraid",
-						x = 4183,
-						z = 780,
 						facing = 0,
 					},
 				}
@@ -417,7 +410,6 @@ local function GetPlanet(planetUtilities, planetID)
 				"factorytank",
 				"tankcon",
 				"tankriot",
-				"tankraid",
 				"tankheavyraid",
 			},
 			modules = {

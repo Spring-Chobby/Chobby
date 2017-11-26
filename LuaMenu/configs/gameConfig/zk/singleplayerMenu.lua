@@ -35,6 +35,13 @@ local planetWhitelist = {
 	[26] = true,
 	[27] = true,
 	[28] = true,
+	-- Tank, Terraform, Dante
+	[18] = true,
+	[21] = true,
+	[29] = true,
+	[40] = true,
+	[41] = true,
+	[42] = true,
 }
 
 return {
