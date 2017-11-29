@@ -529,9 +529,16 @@ end
 Interface.commands["LEFTBATTLE"] = Interface._OnLeftBattle
 Interface.commandPattern["LEFTBATTLE"] = "(%d+)%s+(%S+)"
 
-function Interface:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)
+function Interface:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash, mapName)
 	battleID = tonumber(battleID)
-	self:super("_OnUpdateBattleInfo", battleID, spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode)
+
+	local battleInfo = {
+		passworded = (locked == "1"),
+		mapName = mapName,
+		spectatorCount = tonumber(spectatorCount)
+	}
+
+	self:super("_OnUpdateBattleInfo", battleID, battleInfo)
 end
 Interface.commands["UPDATEBATTLEINFO"] = Interface._OnUpdateBattleInfo
 Interface.commandPattern["UPDATEBATTLEINFO"] = "(%d+)%s+(%S+)%s+(%S+)%s+(%S+)%s+([^\t]+)"
