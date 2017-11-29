@@ -82,3 +82,7 @@ function FontHandler.LoadFont(fontname,size,outwidth,outweight)
   refCounts[idx] = 1
   return font
 end
+
+function FontHandler.InvalidateFontCache()
+  loadedFonts = {}
+end
