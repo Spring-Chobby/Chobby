@@ -13,7 +13,7 @@ local refCounts = {}
 --//  maximum fontsize difference
 --// when we don't find the wanted font rendered with the wanted fontsize
 --// (in respect to this threshold) then recreate a new one
-local fontsize_threshold = 2
+local fontsize_threshold = 0 -- who thought this was ever a good idea?
 
 --//=============================================================================
 --// Destroy
