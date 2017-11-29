@@ -222,6 +222,7 @@ function Interface:SayBattleEx(message)
 end
 
 function Interface:AddAi(aiName, aiLib, allyNumber, version)
+	aiName = aiName:gsub(" ", "")
 	local battleStatusString = tostring(
 		2 +
 		lshift(allyNumber, 2) +
@@ -559,10 +560,10 @@ end
 Interface.commands["CLIENTBATTLESTATUS"] = Interface._OnClientBattleStatus
 Interface.commandPattern["CLIENTBATTLESTATUS"] = "(%S+)%s+(%S+)%s+(%S+)"
 
-function Interface:_OnAddBot(battleID, name, owner, foobar, battleStatus, teamColor, aiDll)
+function Interface:_OnAddBot(battleID, name, owner, battleStatus, teamColor, aiDll)
 	battleID = tonumber(battleID)
 	-- local ai, dll = unpack(explode("\t", aiDll)))
-	Spring.Echo(battleID, name, owner, foobar, battleStatus, teamColor, aiDll)
+	Spring.Echo(battleID, name, owner, battleStatus, teamColor, aiDll)
 	Spring.Echo(battleStatus)
 	battleStatus = tonumber(battleStatus)
 	Spring.Echo(battleStatus)
@@ -578,7 +579,7 @@ function Interface:_OnAddBot(battleID, name, owner, foobar, battleStatus, teamCo
 	self:_OnAddAi(battleID, name, status)
 end
 Interface.commands["ADDBOT"] = Interface._OnAddBot
-Interface.commandPattern["ADDBOT"] = "(%d+)%s+(%S+)%s+(%S+)%s+(%S+)%s+(%S+)%s+(%S+)%s+(.*)"
+Interface.commandPattern["ADDBOT"] = "(%d+)%s+(%S+)%s+(%S+)%s+(%S+)%s+(%S+)%s+(.*)"
 
 function Interface:_OnRemoveBot(battleID, name)
 	battleID = tonumber(battleID)
