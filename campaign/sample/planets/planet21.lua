@@ -45,11 +45,9 @@ local function GetPlanet(planetUtilities, planetID)
 			mapName = "Otago",
 			modoptions = {
 				graceperiod = 0.5, -- =30s, which is the minimum
-				--techtimemult = 0.25,
 				chicken_nominiqueen = 1,
 				chicken_minaggro = 5,	-- aggro influences chicken tech-up rate (and queen time reduction from killing burrows, but queens are disabled here)
 				chicken_maxaggro = 5,
-				--chicken_maxtech = 24*60,	-- stops before Sporeshooter/Talon
 				chicken_endless = 1,
 				chicken_hidepanel = 1,
 				chicken_nowavemessages = 1,
