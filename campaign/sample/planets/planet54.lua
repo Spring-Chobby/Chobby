@@ -346,8 +346,8 @@ local function GetPlanet(planetUtilities, planetID)
 						},
 						{
 							name = "shipassault",
-							x = 7500,
-							z = 6500,
+							x = 7800,
+							z = 6000,
 							facing = 2,
 							difficultyAtLeast = 4,
 							spawnRadius = 100,
@@ -355,9 +355,9 @@ local function GetPlanet(planetUtilities, planetID)
 							orbitalDrop = true,
 						},
 						{
-							name = "shipheavyarty",
-							x = 7500,
-							z = 6500,
+							name = "shipassault",
+							x = 7800,
+							z = 5500,
 							facing = 2,
 							difficultyAtLeast = 4,
 							spawnRadius = 100,

@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Wipapra",
 			primaryType = "G7V",
 			milRating = 1,
-			text = [[Move to the main continent from your small island using Charon and Argos transports, then build a second factory and expand quickly.]]
+			text = [[Move to the main continent from your small island using Charon and Hercules transports, then build a second factory and expand quickly.]]
 		},
 		tips = {
 			{
@@ -34,7 +34,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/gunshipheavytrans.png",
-				text = [[An Argos can transport any land unit in the game. The online manual contains more tips and tricks for commanding Tranports effectively using Embark, area commands and ferry routes.]]
+				text = [[A Hercules can transport any land unit in the game. The online manual contains more tips and tricks for commanding Tranports effectively using Embark, area commands and ferry routes.]]
 			},
 			{
 				image = "unitpics/gunshipemp.png",

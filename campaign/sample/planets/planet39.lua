@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Rirnef",
 			primaryType = "G6V",
 			milRating = 1,
-			text = [[The enemy is about to finish a Nimbus heavy gunship. Quickly build Trident AA gunships to defeat it, then build your own Nimbuses and return the favour.]]
+			text = [[The enemy is about to finish a Krow heavy gunship. Quickly build Tridents to defeat it, then build your own Krows and return the favour.]]
 		},
 		tips = {
 			{
@@ -34,7 +34,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/gunshipkrow.png",
-				text = [[Make sure your own units are well out of the way when you use the manual fire weapon of the Nimbus (default hotkey D). Its massive barrage of Cluster Bombs do not distinguish between friend and foe.]]
+				text = [[Make sure your own units are well out of the way when you use the manual fire weapon of the Krow (default hotkey D). Its massive barrage of Cluster Bombs do not distinguish between friend and foe.]]
 			},
 		},
 		gameConfig = {
@@ -1274,6 +1274,45 @@ local function GetPlanet(planetUtilities, planetID)
 							"commweapon_personal_shield",
 						}
 					},
+					midgameUnits = {
+						{
+							name = "gunshipkrow",
+							x = 200,
+							z = 800,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 6*30*60,
+							difficultyAtLeast = 4,
+							orbitalDrop = false,
+						},
+						{
+							name = "gunshipaa",
+							x = 200,
+							z = 800,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 6*30*60,
+							orbitalDrop = false,
+						},
+						{
+							name = "gunshipaa",
+							x = 200,
+							z = 800,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 6*30*60,
+							orbitalDrop = false,
+						},
+						{
+							name = "gunshipaa",
+							x = 200,
+							z = 800,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 6*30*60,
+							orbitalDrop = false,
+						},
+					},
 					startUnits = {
 						{
 							name = "gunshipkrow",
@@ -2439,7 +2478,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "gunshipkrow.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Destroy the enemy Nimbus before 5:00",
+					description = "Destroy an enemy Krow before 5:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Have a Krow by 5 minutes
@@ -2451,7 +2490,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "gunshipkrow.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build a Nimbus before 5:00",
+					description = "Build a Krow before 5:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { -- Complete all bonus objectives
