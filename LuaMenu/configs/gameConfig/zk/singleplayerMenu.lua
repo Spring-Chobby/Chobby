@@ -43,6 +43,14 @@ local planetWhitelist = {
 	[41] = true,
 	[42] = true,
 	[71] = true,
+	-- Gunship, Firewalker, Skuttle, Athena
+	[36] = true,
+	[37] = true,
+	[38] = true,
+	[39] = true,
+	[53] = true,
+	[54] = true,
+	[56] = true,
 }
 
 return {
