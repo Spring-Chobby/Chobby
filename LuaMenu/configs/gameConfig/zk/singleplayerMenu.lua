@@ -1,4 +1,4 @@
-local FEEDBACK_LINK = "http://zero-k.info/Forum/Thread/24489"
+local FEEDBACK_LINK = "http://zero-k.info/Forum/Thread/24510"
 
 local planetWhitelist = {
 	-- Tutorial Cloaky
