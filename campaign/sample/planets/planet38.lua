@@ -30,7 +30,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/chicken.png",
-				text = [[On this planet 'Chickens' will periodically spawn from their roosts and attack you (and your opponent). You can't stop them from spawning but you can limit the damage with well-placed turrets.]]
+				text = [[On this planet 'Chickens' will spawn from roosts to roam the battlefield and attack anything they encounter. They cannot be completely stopped but you can limit the damage with well-placed turrets.]]
 			},
 			{
 				image = "unitpics/roost.png",

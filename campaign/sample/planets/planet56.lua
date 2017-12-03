@@ -33,7 +33,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/module_resurrect.png",
-				text = [[Previous attempts to take this planet have left many unit wrecks. Athenas can resurrect these wrecks and add them to your army.]]
+				text = [[Previous attempts to take this planet have left many wreckages. Athenas can resurrect these wrecks and add them to your army.]]
 			},
 			{
 				image = "unitpics/striderdetriment.png",

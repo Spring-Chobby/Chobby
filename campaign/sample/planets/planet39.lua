@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Rirnef",
 			primaryType = "G6V",
 			milRating = 1,
-			text = [[The enemy is about to finish a Krow heavy gunship. Quickly build Tridents to defeat it, then build your own Krows and return the favour.]]
+			text = [[The enemy is about to complete a Krow heavy gunship. Quickly build Tridents to defeat it, then build your own Krows and return the favour.]]
 		},
 		tips = {
 			{

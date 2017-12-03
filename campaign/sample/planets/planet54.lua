@@ -25,12 +25,12 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Aioa",
 			primaryType = "G8V",
 			milRating = 1,
-			text = [[This island is blessed with strong geothermal activity, allowing easy and cheap energy generation. Unfortunately your enemy got here first. Sabotage their operation with Skuttle jumping bombs.]]
+			text = [[This island is blessed with strong geothermal activity, allowing cheap and easy energy generation. Unfortunately your enemy got here first. Sabotage their operation with Skuttle jumping bombs.]]
 		},
 		tips = {
 			{
 				image = "unitpics/jumpbomb.png",
-				text = [[The Skuttle bomb can jump on a single target and deal exceptional damage to it. The Skuttle cannot cloak while jumping and its decloak radius is quite large, so be careful how you deliver it to the target.]]
+				text = [[The Skuttle can jump on a single target and deal exceptional damage to it. The Skuttle cannot cloak while jumping and its decloak radius is quite large, so be careful how you deliver it to the target.]]
 			},
 			{
 				image = "unitpics/striderdante.png",

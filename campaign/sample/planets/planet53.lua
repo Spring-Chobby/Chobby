@@ -30,11 +30,11 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/jumparty.png",
-				text = [[Firewalkers are essentially cannons on legs, firing napalm over a large area. Firewalkers do not inflict much damage against single targets, but they are very effective against large numbers of weak enemies.]]
+				text = [[Firewalkers are essentially cannons on legs, firing napalm over a large area. Firewalkers do not inflict much damage against single targets, but they are very effective against large numbers of weak units and turrets.]]
 			},
 			{
 				image = "unitpics/cloakjammer.png",
-				text = [[The enemy is using Iris area-cloaker bots to hide their armies. The flames left behind after a Firewalker attack are particularly useful for decloaking enemy units.]]
+				text = [[The enemy is using Iris area-cloaker bots to hide their armies. The flames left behind after a Firewalker volley are particularly useful for decloaking enemy units.]]
 			},
 			{
 				image = "unitpics/jumpassault.png",

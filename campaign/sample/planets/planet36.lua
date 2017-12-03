@@ -25,16 +25,16 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Jazada",
 			primaryType = "G4V",
 			milRating = 1,
-			text = [[Use the fast-moving Locust raider gunships to curtail your opponent's expansion, then Nimbus long-range gunships to finish them off.]]
+			text = [[Use the fast-moving Locust raider gunships to curtail your opponent's expansion, then Nimbus support gunships to finish them off.]]
 		},
 		tips = {
 			{
 				image = "unitpics/gunshipcon.png",
-				text = [[The Gunships are flying units which can hover in place. Anti-air units and turrets are the biggest threat to Gunships, but most units with a fast-moving or laser-like projectile may be able to hit them.]]
+				text = [[Gunships are flying units which can hover in place and tend to move faster than land units. Anti-air units and turrets are most effective against Gunships, but most units with a fast-moving or projectile or laser will also pose a threat.]]
 			},
 			{
 				image = "unitpics/gunshipraid.png",
-				text = [[The Locust raider gunships will repair themselves if left alone for a little while, so try to retreat them when they become damaged.]]
+				text = [[The Locust raider gunships will repair themselves if left alone for a little while, so try to retreat them when they become damaged. They are particularly vulnerable to enemy riots due to their low range.]]
 			},
 			{
 				image = "unitpics/gunshipheavyskirm.png",
