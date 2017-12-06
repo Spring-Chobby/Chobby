@@ -51,6 +51,7 @@ local externalFuncAndData = {
 	background             = background,
 	minimapOverridePath    = minimapOverridePath,
 	minimapThumbnailPath   = minimapThumbnailPath,
+	ignoreServerVersion    = true,
 }
 
 function externalFuncAndData.CheckAvailability()

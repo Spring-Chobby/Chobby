@@ -94,6 +94,7 @@ local externalFuncAndData = {
 	link_replays            = link_replays,
 	link_maps               = link_maps,
 	link_particularMapPage  = link_particularMapPage,
+	ignoreServerVersion     = false,
 }
 
 function externalFuncAndData.CheckAvailability()
