@@ -81,7 +81,11 @@ function widget:Initialize()
 	Chobby.lobbyInterfaceHolder = lobbyInterfaceHolder
 	Chobby.interfaceRoot = interfaceRoot
 
-	Spring.SetWMCaption("Zero-K", "Zero-K")
+	local taskbarTitle = Chobby.Configuration.gameConfig.taskbarTitle
+	local taskbarTitleShort = Chobby.Configuration.gameConfig.taskbarTitleShort or taskbarTitle
+	if taskbarTitle then
+		Spring.SetWMCaption(taskbarTitle, taskbarTitleShort)
+	end
 	local taskbarIcon = Chobby.Configuration.gameConfig.taskbarIcon
 	if taskbarIcon then
 		Spring.SetWMIcon(taskbarIcon)
@@ -95,6 +99,11 @@ function widget:Initialize()
 
 	local function onConfigurationChange(listener, key, value)
 		if key == "gameConfigName" then
+			local taskbarTitle = Chobby.Configuration.gameConfig.taskbarTitle
+			local taskbarTitleShort = Chobby.Configuration.gameConfig.taskbarTitleShort or taskbarTitle
+			if taskbarTitle then
+				Spring.SetWMCaption(taskbarTitle, taskbarTitleShort)
+			end
 			local taskbarIcon = Chobby.Configuration.gameConfig.taskbarIcon
 			if taskbarIcon then
 				Spring.SetWMIcon(taskbarIcon)
