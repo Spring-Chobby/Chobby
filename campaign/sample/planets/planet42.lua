@@ -36,6 +36,10 @@ local function GetPlanet(planetUtilities, planetID)
 				image = "unitpics/tankheavyassault.png",
 				text = [[The Cyclops super-heavy assault tank is even tougher than the Minotaur and also comes equipped with a medium-range slowbeam, which should prevent the enemy Spiders from escaping to the hills.]]
 			},
+			{
+				image = "LuaUI/Images/commands/Bold/attack.png",
+				text = [[The Tremor fires seismic shells which gradually smooth and flatten terrain. Half a minute of Force Firing at a hill will deprive spiders of a safe hiding place. Terrain modification is only visible in line of sight so remember to use spotters.]]
+			},
 		},
 		gameConfig = {
 			mapName = "Desert_Plateaus",
@@ -204,6 +208,7 @@ local function GetPlanet(planetUtilities, planetID)
 					allyTeam = 1,
 					unlocks = {
 						"staticradar",
+						"staticstorage",
 						"staticmex",
 						"energysolar",
 						"energywind",
@@ -229,7 +234,7 @@ local function GetPlanet(planetUtilities, planetID)
 						[3] = {"spiderantiheavy"},
 						[4] = {"spiderantiheavy"},
 					},
-					commanderLevel = 4,
+					commanderLevel = 5,
 					commander = {
 						name = "Dory",
 						chassis = "recon",
@@ -237,6 +242,7 @@ local function GetPlanet(planetUtilities, planetID)
 						},
 						modules = { 
 							"commweapon_shotgun",
+							"commweapon_concussion",
 							"module_heavy_armor",
 							"module_heavy_armor",
 							"module_autorepair",
@@ -244,6 +250,8 @@ local function GetPlanet(planetUtilities, planetID)
 							"commweapon_personal_shield",
 							"module_dmg_booster",
 							"module_dmg_booster",
+							"module_high_power_servos",
+							"module_high_power_servos",
 							"module_high_power_servos",
 						}
 					},
@@ -273,6 +281,27 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 2360,
 							z = 4824,
 							facing = 3,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "staticmex",
+							x = 1030,
+							z = 4888,
+							facing = 3,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "staticmex",
+							x = 220,
+							z = 4840,
+							facing = 3,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "turretheavylaser",
+							x = 875,
+							z = 4270,
+							facing = 2,
 							difficultyAtLeast = 4,
 						},
 						{

@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Wipapra",
 			primaryType = "G7V",
 			milRating = 1,
-			text = [[Move to the main continent from your small island using Charon and Argos transports, then build a second factory and expand quickly.]]
+			text = [[Expand to the mainland from your resource-poor island using Charon and Hercules transports, then use transports to create a highly mobile land army.]]
 		},
 		tips = {
 			{
@@ -34,11 +34,11 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/gunshipheavytrans.png",
-				text = [[An Argos can transport any land unit in the game. The online manual contains more tips and tricks for commanding Tranports effectively using Embark, area commands and ferry routes.]]
+				text = [[A Hercules can transport any land unit and all but the largest ships. The online manual contains more tips and tricks for commanding Tranports effectively using Embark, area commands and ferry routes.]]
 			},
 			{
 				image = "unitpics/gunshipemp.png",
-				text = [[Gnat EMP gunships are too inaccurate to hit raiders all the time, but they are very effective at stunlocking medium-to-heavy units like Commanders.]]
+				text = [[Gnat EMP gunships are too inaccurate to reliably hit raiders, but they are very effective at stunlocking medium-to-heavy units like Commanders.]]
 			},
 		},
 		gameConfig = {
@@ -713,7 +713,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"gunshipheavytrans",
 			},
 			modules = {
-				"module_high_power_servos_LIMIT_C_2",
+				"module_battle_drone_LIMIT_D_2",
 			},
 			abilities = {
 			}

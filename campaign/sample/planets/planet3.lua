@@ -226,7 +226,7 @@ local function GetPlanet(planetUtilities, planetID)
 					difficultyDependantUnlocks = {
 						[2] = {"vehriot",},
 						[3] = {"vehriot","staticmex", "energysolar"},
-						[3] = {"vehriot","staticmex", "energysolar", "vehcon", "vehassault"},
+						[4] = {"vehriot","staticmex", "energysolar", "vehcon", "vehassault"},
 					},
 					commanderLevel = 2,
 					commander = {

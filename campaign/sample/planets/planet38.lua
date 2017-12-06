@@ -30,7 +30,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/chicken.png",
-				text = [[On this planet 'Chickens' will periodically spawn from their roosts and attack you (and your opponent). You can't stop them from spawning but you can limit the damage with well-placed turrets.]]
+				text = [[On this planet 'Chickens' will spawn from roosts to roam the battlefield and attack anything they encounter. They cannot be completely stopped but you can limit the damage with well-placed turrets.]]
 			},
 			{
 				image = "unitpics/roost.png",
@@ -203,6 +203,73 @@ local function GetPlanet(planetUtilities, planetID)
 							"module_high_power_servos",
 							"module_adv_nano"
 						}
+					},
+					midgameUnits = {
+						{
+							name = "amphfloater",
+							x = 8100,
+							z = 1800,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 3*30*60,
+							orbitalDrop = true,
+						},
+						{
+							name = "amphfloater",
+							x = 8100,
+							z = 1800,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 3*30*60,
+							orbitalDrop = true,
+						},
+						{
+							name = "amphfloater",
+							x = 8100,
+							z = 1800,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 3*30*60,
+							orbitalDrop = true,
+						},
+						{
+							name = "amphaa",
+							x = 8100,
+							z = 1800,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 6*30*60,
+							orbitalDrop = true,
+						},
+						{
+							name = "amphaa",
+							x = 8100,
+							z = 1800,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 6*30*60,
+							orbitalDrop = true,
+						},
+						{
+							name = "amphassault",
+							x = 8100,
+							z = 1800,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 6*30*60,
+							difficultyAtLeast = 3,
+							orbitalDrop = true,
+						},
+						{
+							name = "amphassault",
+							x = 8100,
+							z = 1800,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 6*30*60,
+							difficultyAtLeast = 4,
+							orbitalDrop = true,
+						},
 					},
 					startUnits = {
 						{

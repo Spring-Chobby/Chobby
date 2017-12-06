@@ -1,4 +1,4 @@
-local FEEDBACK_LINK = "http://zero-k.info/Forum/Thread/24469"
+local FEEDBACK_LINK = "http://zero-k.info/Forum/Thread/24510"
 
 local planetWhitelist = {
 	-- Tutorial Cloaky
@@ -35,6 +35,22 @@ local planetWhitelist = {
 	[26] = true,
 	[27] = true,
 	[28] = true,
+	-- Tank, Terraform, Dante
+	[18] = true,
+	[21] = true,
+	[29] = true,
+	[40] = true,
+	[41] = true,
+	[42] = true,
+	[71] = true,
+	-- Gunship, Firewalker, Skuttle, Athena
+	[36] = true,
+	[37] = true,
+	[38] = true,
+	[39] = true,
+	[53] = true,
+	[54] = true,
+	[56] = true,
 }
 
 return {

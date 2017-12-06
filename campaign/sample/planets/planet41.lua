@@ -25,20 +25,20 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Ahdas Las",
 			primaryType = "K4III",
 			milRating = 1,
-			text = [[Among the heavy Tanks, even the constructors and raiders are tough - but they're also more expensive. You'll have less units than your Cloakbot opponent, so you'll need to be careful to avoid losses if you want to win here.]]
+			text = [[Among the heavy Tanks, even the constructors and raiders are tough - but they're also more expensive. You'll have less units than your Cloakbot opponent, so you'll need to be efficient. Retreat and repair damaged tanks to avoid losses.]]
 		},
 		tips = {
 			{
 				image = "unitpics/tankcon.png",
-				text = [[Unlike all other constructors, the Welder is armed and can fend off a raider or two on its own while building a turret to deal with more.]]
+				text = [[Unlike all other constructors, the Welder is armed and sturdy. It is better able to weather raids until reinforcements arrive and can even beat a small number of Glaives in a fight.]]
 			},
 			{
 				image = "unitpics/tankheavyraid.png",
-				text = [[The Blitz heavy tank raider will go toe-to-toe with any other raider in the game - its high HP and stunning EMP attack give it a significant edge. However, if one Blitz dies, it releases an EMP explosion which might stun your other units, so only take fights that you will win.]]
+				text = [[The Blitz heavy tank raider will go toe-to-toe with any other raider - its high HP and lightning weaponry give it a significant edge. However, if one Blitz dies, it releases an EMP explosion which might stun your other units, so only take fights that you will win.]]
 			},
 			{
-				image = "unitpics/module_autorepair.png",
-				text = [[To achieve the second optional objective, make sure to repair your Tanks when they are partially damaged.]]
+				image = "LuaUI/Images/commands/Bold/repair.png",
+				text = [[To minimize losses, make sure to repair your Tanks when they are partially damaged.]]
 			},
 		},
 		gameConfig = {
@@ -57,7 +57,6 @@ local function GetPlanet(planetUtilities, planetID)
 					"tankcon",
 					"tankassault",
 					"tankriot",
-					"tankraid",
 					"tankheavyraid",
 				},
 				startUnits = {
@@ -133,12 +132,6 @@ local function GetPlanet(planetUtilities, planetID)
 						z = 765,
 						facing = 0,
 					},
- 					{
-						name = "tankraid",
-						x = 4183,
-						z = 780,
-						facing = 0,
-					},
 				}
 			},
 			aiConfig = {
@@ -175,7 +168,11 @@ local function GetPlanet(planetUtilities, planetID)
 						"vehriot",
 						"vehassault",
 					},
-					commanderLevel = 4,
+					difficultyDependantUnlocks = {
+						[3] = {"cloakheavyraid"},
+						[4] = {"cloakheavyraid"},
+					},
+					commanderLevel = 5,
 					commander = {
 						name = "Hawker",
 						chassis = "strike",
@@ -192,6 +189,7 @@ local function GetPlanet(planetUtilities, planetID)
 							"module_jammer",
 							"module_adv_targeting",
 							"module_autorepair",
+							"module_autorepair",
 						}
 					},
 					startUnits = {
@@ -203,8 +201,128 @@ local function GetPlanet(planetUtilities, planetID)
 							terraformHeight = 121,
 							mapMarker = {
 								text = "Warp Gate",
-								color = "red"
+								color = "red_small"
 							},
+						},
+						{
+							name = "staticmex",
+							x = 1606,
+							z = 3250,
+							facing = 0,
+							difficultyAtLeast = 2,
+						},
+						{
+							name = "turretriot",
+							x = 1606,
+							z = 3100,
+							facing = 2,
+							difficultyAtLeast = 2,
+						},
+						{
+							name = "energygeo",
+							x = 195,
+							z = 4940,
+							facing = 0,
+							difficultyAtLeast = 3,
+							difficultyAtMost = 3,
+						},
+						{
+							name = "energypylon",
+							x = 550,
+							z = 4600,
+							facing = 0,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "energypylon",
+							x = 1421,
+							z = 4421,
+							facing = 0,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "turretriot",
+							x = 195,
+							z = 4740,
+							facing = 2,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "turretriot",
+							x = 416,
+							z = 4942,
+							facing = 2,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "energyheavygeo",
+							x = 195,
+							z = 4940,
+							facing = 0,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "staticmex",
+							x = 2820,
+							z = 3700,
+							facing = 2,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "turretriot",
+							x = 770,
+							z = 3900,
+							facing = 0,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "staticmex",
+							x = 770,
+							z = 2720,
+							facing = 0,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "turretriot",
+							x = 890,
+							z = 2720,
+							facing = 1,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "staticmex",
+							x = 770,
+							z = 2720,
+							facing = 0,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "cloakassault",
+							x = 2170,
+							z = 3800,
+							facing = 0,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "cloakassault",
+							x = 2270,
+							z = 3800,
+							facing = 0,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "cloakassault",
+							x = 2370,
+							z = 3800,
+							facing = 0,
+							difficultyAtLeast = 4,
+						},
+						{
+							name = "cloakcon",
+							x = 2470,
+							z = 3800,
+							facing = 0,
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "staticmex",
@@ -417,7 +535,6 @@ local function GetPlanet(planetUtilities, planetID)
 				"factorytank",
 				"tankcon",
 				"tankriot",
-				"tankraid",
 				"tankheavyraid",
 			},
 			modules = {

@@ -33,7 +33,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/module_resurrect.png",
-				text = [[Previous attempts to take this planet have left many unit wrecks. Athenas can resurrect these wrecks and add them to your army.]]
+				text = [[Previous attempts to take this planet have left many wreckages. Athenas can resurrect these wrecks and add them to your army.]]
 			},
 			{
 				image = "unitpics/striderdetriment.png",
@@ -100,8 +100,8 @@ local function GetPlanet(planetUtilities, planetID)
 					},
  					{
 						name = "energypylon",
-						x = 72,
-						z = 88,
+						x = 150,
+						z = 130,
 						facing = 0,
 					},
  					{
@@ -1385,6 +1385,8 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					loseAfterSeconds = false,
 					allyTeamLossObjectiveID = 1,
+					defeatOtherAllyTeamsOnLoss = {1},
+					doNotExplodeOnLoss = true,
 				},
 			},
 			objectiveConfig = {
@@ -1434,7 +1436,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "factoryspider.png",
 					--imageOverlay = planetUtilities.ICON_DIR .. "module_none",
-					description = "Don't build any Factories",
+					description = "Don't have any Factories",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			},

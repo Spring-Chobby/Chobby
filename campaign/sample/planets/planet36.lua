@@ -25,20 +25,20 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Jazada",
 			primaryType = "G4V",
 			milRating = 1,
-			text = [[Use the fast-moving Locust raider gunships to curtail your opponent's expansion, then Gargoyle long-range gunships to finish them off.]]
+			text = [[Use the fast-moving Locust raider gunships to curtail your opponent's expansion, then Nimbus support gunships to finish them off.]]
 		},
 		tips = {
 			{
 				image = "unitpics/gunshipcon.png",
-				text = [[The Gunships are flying units which can hover in place. Anti-air units and turrets are the biggest threat to Gunships, but most units with a fast-moving or laser-like projectile may be able to hit them.]]
+				text = [[Gunships are flying units which can hover in place and tend to move faster than land units. Anti-air units and turrets are most effective against Gunships, but most units with a fast-moving or projectile or laser will also pose a threat.]]
 			},
 			{
 				image = "unitpics/gunshipraid.png",
-				text = [[The Locust raider gunships will repair themselves if left alone for a little while, so try to retreat them when they become damaged.]]
+				text = [[The Locust raider gunships will repair themselves if left alone for a little while, so try to retreat them when they become damaged. They are particularly vulnerable to enemy riots due to their low range.]]
 			},
 			{
 				image = "unitpics/gunshipheavyskirm.png",
-				text = [[If the automatic strafing of your Locusts and Gargoyles is causing them to stray into range of enemy AA, you can disable this behaviour with the corresponding unit toggle.]]
+				text = [[If the automatic strafing of your Locusts and Nimbuses is causing them to stray into range of enemy AA, you can disable this behaviour with the corresponding unit toggle.]]
 			},
 		},
 		gameConfig = {
@@ -201,6 +201,127 @@ local function GetPlanet(planetUtilities, planetID)
 							"module_high_power_servos",
 							"module_adv_targeting",
 						}
+					},
+					midgameUnits = {
+						{
+							name = "shieldfelon",
+							x = 700,
+							z = 3600,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 2*30*60,
+							orbitalDrop = true,
+						},
+						{
+							name = "shieldaa",
+							x = 700,
+							z = 3600,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 2*30*60,
+							orbitalDrop = true,
+						},
+						{
+							name = "shieldaa",
+							x = 700,
+							z = 3600,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 2*30*60,
+							difficultyAtLeast = 3,
+							orbitalDrop = true,
+						},
+						{
+							name = "shieldaa",
+							x = 700,
+							z = 3600,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 2*30*60,
+							difficultyAtLeast = 3,
+							orbitalDrop = true,
+						},
+						{
+							name = "shieldfelon",
+							x = 700,
+							z = 3600,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 5*30*60,
+							orbitalDrop = true,
+						},
+						{
+							name = "shieldaa",
+							x = 700,
+							z = 3600,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 5*30*60,
+							orbitalDrop = true,
+						},
+						{
+							name = "shieldaa",
+							x = 700,
+							z = 3600,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 5*30*60,
+							orbitalDrop = true,
+						},
+						{
+							name = "shieldaa",
+							x = 700,
+							z = 3600,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 5*30*60,
+							orbitalDrop = true,
+						},
+						{
+							name = "shieldfelon",
+							x = 700,
+							z = 3600,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 8*30*60,
+							orbitalDrop = true,
+						},
+						{
+							name = "shieldaa",
+							x = 700,
+							z = 3600,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 8*30*60,
+							orbitalDrop = true,
+						},
+						{
+							name = "shieldaa",
+							x = 700,
+							z = 3600,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 8*30*60,
+							orbitalDrop = true,
+						},
+						{
+							name = "shieldassault",
+							x = 700,
+							z = 3600,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 8*30*60,
+							orbitalDrop = true,
+						},
+						{
+							name = "shieldassault",
+							x = 700,
+							z = 3600,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 8*30*60,
+							orbitalDrop = true,
+						},
 					},
 					startUnits = {
 						{

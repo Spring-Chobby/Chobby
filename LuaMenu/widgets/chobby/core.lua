@@ -47,6 +47,9 @@ for _, file in ipairs(includes) do
 end
 
 function Chobby:_Initialize()
+	-- Invalidate the chili font cache. Without this certain font sizes
+	-- will be invisible after Spring.Reload on many systems.
+	Chili.FontHandler.InvalidateFontCache()
 	self:WrapCall(function()
 		WG.Delay(function()
 			lobby:AddListener("OnJoinBattle",
