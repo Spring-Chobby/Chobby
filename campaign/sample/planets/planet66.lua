@@ -4,7 +4,7 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/desert02.png"
 	
 	local planetData = {
 		name = "Ulka Cadere",
@@ -19,15 +19,15 @@ local function GetPlanet(planetUtilities, planetID)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Terran",
-			radius = "6550 km",
-			primary = "Blank",
-			primaryType = "G8V",
+			terrainType = "Desert",
+			radius = "8400 km",
+			primary = "Taolis",
+			primaryType = "G4V",
 			milRating = 1,
 			text = [[Two duelling Zenith meteor controllers threaten to reduce this planet to space dust. Sneak into the enemy base and destroy their Zenith so you'll at least have the satisfaction of being the owner of that space dust.]]
 		},
 		gameConfig = {
-			mapName = "LowTideV3",
+			mapName = "Lost_v2",
 			playerConfig = {
 				startX = 100,
 				startZ = 100,

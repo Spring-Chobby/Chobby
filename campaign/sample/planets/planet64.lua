@@ -4,7 +4,7 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/barren03.png"
 	
 	local planetData = {
 		name = "Taufsan",
@@ -19,15 +19,15 @@ local function GetPlanet(planetUtilities, planetID)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Terran",
-			radius = "6550 km",
-			primary = "Blank",
-			primaryType = "G8V",
+			terrainType = "Barren",
+			radius = "6900 km",
+			primary = "Vallaf",
+			primaryType = "G4V",
 			milRating = 1,
 			text = [[...]]
 		},
 		gameConfig = {
-			mapName = "LowTideV3",
+			mapName = "Valiant_Saltscape",
 			playerConfig = {
 				startX = 100,
 				startZ = 100,

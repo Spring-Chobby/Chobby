@@ -4,7 +4,7 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = LUA_DIRNAME .. "images/planets/swamp02.png"
+	local image = LUA_DIRNAME .. "images/planets/swamp01.png"
 	
 	local planetData = {
 		name = "Romolis",

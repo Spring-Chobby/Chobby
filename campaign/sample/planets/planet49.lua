@@ -4,7 +4,7 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/swamp03.png"
 	
 	local planetData = {
 		name = "Ungtaint",
@@ -21,13 +21,13 @@ local function GetPlanet(planetUtilities, planetID)
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
 			terrainType = "Terran",
 			radius = "6550 km",
-			primary = "Blank",
-			primaryType = "G8V",
+			primary = "Ballis",
+			primaryType = "G6VI",
 			milRating = 1,
 			text = [[...]]
 		},
 		gameConfig = {
-			mapName = "HighGroundsDeltaV1",
+			mapName = "TheRockJungle",
 			playerConfig = {
 				startX = 100,
 				startZ = 100,

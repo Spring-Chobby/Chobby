@@ -4,7 +4,7 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/terran03.png"
 	
 	local planetData = {
 		name = "Bavhakya",
@@ -20,9 +20,9 @@ local function GetPlanet(planetUtilities, planetID)
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
 			terrainType = "Terran",
-			radius = "6550 km",
-			primary = "Blank",
-			primaryType = "G8V",
+			radius = "6080 km",
+			primary = "Topps",
+			primaryType = "G2V",
 			milRating = 1,
 			text = [[...]]
 		},
@@ -33,7 +33,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 		},
 		gameConfig = {
-			mapName = "LowTideV3",
+			mapName = "Colorado_v1",
 			playerConfig = {
 				startX = 100,
 				startZ = 100,
