@@ -42,7 +42,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 		},
 		gameConfig = {
-			mapName = "Otago",
+			mapName = "Otago 1.1",
 			modoptions = {
 				graceperiod = 0.5, -- =30s, which is the minimum
 				chicken_nominiqueen = 1,
