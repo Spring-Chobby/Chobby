@@ -38,7 +38,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/dronelight.png",
-				text = [[The Garrisons on this beach are protected by light drones. They fly low enough to be killed by most weaponary (not just anti-air), but the Garrisons will keep rebuilding them. Destroy the Garrisons to get rid of the drones.]]
+				text = [[The Garrisons on this beach are protected by light drones. They fly low enough to be killed by most weaponry (not just anti-air), but the Garrisons will keep rebuilding them. Destroy the Garrisons to get rid of the drones.]]
 			},
 		},
 		gameConfig = {
