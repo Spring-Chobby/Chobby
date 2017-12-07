@@ -4,7 +4,7 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/terran02.png"
 	
 	local planetData = {
 		name = "Nashpvos",
@@ -20,9 +20,9 @@ local function GetPlanet(planetUtilities, planetID)
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
 			terrainType = "Terran",
-			radius = "6550 km",
-			primary = "Blank",
-			primaryType = "G8V",
+			radius = "7130 km",
+			primary = "Rawol",
+			primaryType = "G6V",
 			milRating = 1,
 			text = [[All previous attempts to defeat the enemy's large clusters of Funnelweb support striders and Big Bertha static artillery have failed. It falls to you to deploy the nuclear option.]]
 		},
@@ -33,7 +33,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/staticantinuke.png",
-				text = [[The Antithesis Anti-Nukes are typically the best-defended thing your enemy possesses. If their anti-air defence is poor destroy the anti-nuke with bombers. Otherwise, a Shockley EMP missile will disable the anti-nuke for a while.]]
+				text = [[Antinukes are typically the best-defended thing your enemy possesses. If their anti-air defence is poor destroy the Antinuke with bombers. Otherwise, a Shockley EMP missile will disable the Antinuke for a while.]]
 			},
 			{
 				image = "unitpics/striderfunnelweb.png",
@@ -41,7 +41,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 		},
 		gameConfig = {
-			mapName = "LowTideV3",
+			mapName = "DigSite",
 			playerConfig = {
 				startX = 100,
 				startZ = 100,

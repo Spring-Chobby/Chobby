@@ -4,7 +4,7 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = LUA_DIRNAME .. "images/planets/ocean03.png"
+	local image = LUA_DIRNAME .. "images/planets/terran01.png"
 	
 	local planetData = {
 		name = "Kayvillon",
@@ -27,7 +27,7 @@ local function GetPlanet(planetUtilities, planetID)
 			text = [[...]]
 		},
 		gameConfig = {
-			mapName = "LowTideV3",
+			mapName = "Paradise Lost v2",
 			playerConfig = {
 				startX = 100,
 				startZ = 100,
