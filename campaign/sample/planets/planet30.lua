@@ -2162,7 +2162,7 @@ local function GetPlanet(planetUtilities, planetID)
 					-- See bonusObjectiveID in units table
 					image = planetUtilities.ICON_DIR .. "turretsunlance.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Destroy all four enemy Sunlances before 10:00",
+					description = "Destroy all 4 enemy Sunlances before 10:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			}
