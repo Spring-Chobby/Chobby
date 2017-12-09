@@ -27,7 +27,7 @@ local function GetPlanet(planetUtilities, planetID)
 			text = [[Your opponent is already conducting a victory celebration with their Disco Rave Party. Hold off their assault until your Starlight orbital chisel is complete, then demonstrate that their revels are premature.]]
 		},
 		gameConfig = {
-			mapName = "Lost_v2",
+			mapName = "FrozenFortress_v2",
 			playerConfig = {
 				startX = 100,
 				startZ = 100,

@@ -563,7 +563,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "staticmex.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Prevent the enemy from building more than twelve Metal Extractors",
+					description = "Prevent the enemy from having more than 12 Metal Extractors",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			}
