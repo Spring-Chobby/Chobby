@@ -19,9 +19,9 @@ local function GetPlanet(planetUtilities, planetID)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Terran",
-			radius = "6550 km",
-			primary = "Blank",
+			terrainType = "Coastal",
+			radius = "6270 km",
+			primary = "Yastras",
 			primaryType = "G8V",
 			milRating = 1,
 			text = [[This planet is largely covered by water, making it ideal for the deployment of ships and submarines. Move fast to take control of this resource-rich archipelago.]]
@@ -36,7 +36,7 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[The Seawolf is good for picking off isolated ships and economy structures. Being underwater protects them from many attacks, but they don't have much HP so keep them away from torpedo boats and turrets.]]
 			},
 			{
-				image = "unitpics/subraider.png",
+				image = "unitpics/staticmex.png",
 				text = [[This is a large map with a lot of metal. Expand quickly to secure an advantage.]]
 			},
 		},
