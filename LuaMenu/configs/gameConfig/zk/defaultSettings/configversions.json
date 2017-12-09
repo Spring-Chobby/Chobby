@@ -478,6 +478,13 @@
       },	  
 	  
       {
+         "Platform":"null",
+         "VersionNumber":1,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/discord/discord-rpc.dll",
+         "TargetPath":"discord-rpc.dll"
+      },
+	  
+      {
          "Platform":null,
          "VersionNumber":1,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/sqlite3.dll",
