@@ -108,6 +108,19 @@ end
 --------------------------------------------------------------------------------
 -- Experience display
 
+local function GetProgress(commExperience, levelExperience, nextExperiece)
+	if not (commExperience and levelExperience) then
+		return 0, "?? / ??"
+	end
+	if not nextExperiece then
+		return 1, commExperience  .. " / " .. levelExperience
+	end
+	
+	local currentProgress = commExperience - levelExperience
+	local progressGoal = nextExperiece - levelExperience
+	return currentProgress/progressGoal, commExperience  .. " / " .. nextExperiece
+end
+
 local function GetExperienceDisplay(parentControl, barHeight, fancy)
 	local commLevel, commExperience = WG.CampaignData.GetPlayerCommanderInformation()
 	local commConfig = WG.Chobby.Configuration.campaignConfig.commConfig
@@ -115,15 +128,14 @@ local function GetExperienceDisplay(parentControl, barHeight, fancy)
 	local levelExperience = commConfig.GetLevelRequirement(commLevel)
 	local nextExperiece = commConfig.GetLevelRequirement(commLevel + 1)
 	
-	local currentProgress = commExperience - levelExperience
-	local progressGoal = nextExperiece - levelExperience
+	local progressProportion, progressCaption = GetProgress(commExperience, levelExperience, nextExperiece)
 	
 	local experienceBar = Progressbar:New {
 		x = 0,
 		y = 0,
 		right = 0,
 		height = barHeight or 32,
-		value = currentProgress/progressGoal,
+		value = progressProportion,
 		max = 1,
 		caption = "Level " .. (commLevel + 1),
 		font = WG.Chobby.Configuration:GetFont(3),
@@ -137,7 +149,7 @@ local function GetExperienceDisplay(parentControl, barHeight, fancy)
 		height = 22,
 		align = "right",
 		font = WG.Chobby.Configuration:GetFont(3),
-		caption = commExperience .. " / " .. nextExperiece,
+		caption = progressCaption,
 		parent = parentControl
 	}
 	
@@ -168,20 +180,18 @@ local function GetExperienceDisplay(parentControl, barHeight, fancy)
 	local function AddExperience(newExperience)
 		commExperience = commExperience + newExperience
 		
-		if commExperience >= nextExperiece then
-			while commExperience >= nextExperiece do
+		if nextExperiece and commExperience >= nextExperiece then
+			while nextExperiece and commExperience >= nextExperiece do
 				commLevel = commLevel + 1
 				nextExperiece = commConfig.GetLevelRequirement(commLevel + 1)
 			end
-			
 			levelExperience = commConfig.GetLevelRequirement(commLevel)
 			experienceBar:SetCaption("Level " .. (commLevel + 1))
-			progressGoal = nextExperiece - levelExperience
 		end
 		
-		currentProgress = commExperience - levelExperience
-		experienceBar:SetValue(currentProgress/progressGoal)
-		progressLabel:SetCaption(commExperience .. " / " .. nextExperiece)
+		progressProportion, progressCaption = GetProgress(commExperience, levelExperience, nextExperiece)
+		experienceBar:SetValue(progressProportion)
+		progressLabel:SetCaption(progressCaption)
 	end
 	
 	local experienceToApply, bonusToApply, totalExperienceToApply, totalBonusToApply
@@ -238,12 +248,11 @@ local function GetExperienceDisplay(parentControl, barHeight, fancy)
 			nextExperiece = commConfig.GetLevelRequirement(commLevel + 1)
 			levelExperience = commConfig.GetLevelRequirement(commLevel)
 			experienceBar:SetCaption("Level " .. (commLevel + 1))
-			progressGoal = nextExperiece - levelExperience
 		end
 		
-		currentProgress = commExperience - levelExperience
-		experienceBar:SetValue(currentProgress/progressGoal)
-		progressLabel:SetCaption(commExperience .. " / " .. nextExperiece)
+		progressProportion, progressCaption = GetProgress(commExperience, levelExperience, nextExperiece)
+		experienceBar:SetValue(progressProportion)
+		progressLabel:SetCaption(progressCaption)
 		
 		WG.LimitFps.ForceRedraw()
 	end

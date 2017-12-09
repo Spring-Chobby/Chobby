@@ -779,7 +779,7 @@ end
 -- Chassis Definition
 ------------------------------------------------------------------------
 
-local highestDefinedLevel = 12
+local highestDefinedLevel = 7
 local levelDefs = {
 	[0] = {
 		upgradeSlots = {
@@ -951,12 +951,18 @@ end
 ------------------------------------------------------------------------
 -- Commander Configuration
 ------------------------------------------------------------------------
+local levelRequirement = {
+	[0] = 0,
+	[1] = 500,
+	[2] = 1200,
+	[3] = 2500,
+	[4] = 5000,
+	[5] = 8500,
+	[6] = 12000,
+}
 
 local function GetLevelRequirement(level)
-	if level > 0 then
-		return (100*level^2 + 300*level)
-	end
-	return 0
+	return levelRequirement[level]
 end
 
 return {
