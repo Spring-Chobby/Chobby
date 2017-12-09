@@ -95,17 +95,17 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 			},
 			bonusObjectiveConfig = {
-				[1] = { -- Lose no more than 40 Kodachis
+				[1] = { -- Lose no more than 50 Kodachis
 					onlyCountRemovedUnits = true,
 					satisfyForever = true,
 					comparisionType = planetUtilities.COMPARE.AT_MOST,
-					targetNumber = 40,
+					targetNumber = 50,
 					unitTypes = {
 						"tankraid",
 					},
 					image = planetUtilities.ICON_DIR .. "tankraid.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
-					description = "Do not lose more than 40 Kodachis",
+					description = "Do not lose more than 50 Kodachis",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Win by 30:00
