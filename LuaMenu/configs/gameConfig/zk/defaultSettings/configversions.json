@@ -478,12 +478,33 @@
       },	  
 	  
       {
-         "Platform":"null",
+         "Platform":"win32",
          "VersionNumber":1,
-         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/discord/discord-rpc.dll",
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/discord/32bit/discord-rpc.dll",
+         "TargetPath":"discord-rpc.dll"
+      },
+
+      {
+         "Platform":"win64",
+         "VersionNumber":1,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/discord/32bit/discord-rpc.dll",
          "TargetPath":"discord-rpc.dll"
       },
 	  
+      {
+         "Platform":"linux32",
+         "VersionNumber":1,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/discord/32bit/libdiscord-rpc.so",
+         "TargetPath":"libdiscord-rpc.so"
+      },
+	  
+      {
+         "Platform":"linux64",
+         "VersionNumber":1,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/discord/64bit/libdiscord-rpc.so",
+         "TargetPath":"libdiscord-rpc.so"
+      },
+
       {
          "Platform":null,
          "VersionNumber":1,
