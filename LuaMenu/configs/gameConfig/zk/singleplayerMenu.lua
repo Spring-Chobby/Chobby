@@ -1,4 +1,4 @@
-local FEEDBACK_LINK = "http://zero-k.info/Forum/Thread/24510"
+local FEEDBACK_LINK = "http://zero-k.info/Forum/Thread/24530"
 
 local planetWhitelist = {
 	-- Tutorial Cloaky
@@ -51,6 +51,14 @@ local planetWhitelist = {
 	[53] = true,
 	[54] = true,
 	[56] = true,
+	-- Spider and Ships
+	[30] = true,
+	[31] = true,
+	[32] = true,
+	[44] = true,
+	[45] = true,
+	[46] = true,
+	[47] = true,
 }
 
 return {
