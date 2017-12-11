@@ -39,3 +39,4 @@ If you are using `chobby:test` from rapid, you can specify rapid directly, inste
 e.g. `spring --menu 'rapid://chobby:test'` and `DefaultLuaMenu = rapid://chobby:test`
 
 See the [wiki](https://github.com/Spring-Chobby/Chobby/wiki) for more details, including [Game Customization](https://github.com/Spring-Chobby/Chobby/wiki/Game-Customization)
+
