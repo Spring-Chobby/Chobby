@@ -2789,7 +2789,7 @@ local function GetPlanet(planetUtilities, planetID)
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = {
-					satisfyByTime = 9*60,
+					satisfyByTime = 10*60,
 					comparisionType = planetUtilities.COMPARE.AT_MOST,
 					targetNumber = 0,
 					-- See bonusObjectiveID in units table
