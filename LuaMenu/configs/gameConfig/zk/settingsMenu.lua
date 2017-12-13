@@ -43,6 +43,7 @@ local settingsConfig = {
 					ParticleLimit = "2000",
 					TerrainDetail = "Minimal",
 					VegetationDetail = "Minimal",
+					FeatureFade = "On",
 					CompatibilityMode = "On",
 					AntiAliasing = "Off",
 					ShaderDetail = "Minimal",
@@ -64,6 +65,7 @@ local settingsConfig = {
 					ParticleLimit = "6000",
 					TerrainDetail = "Low",
 					VegetationDetail = "Low",
+					FeatureFade = "Off",
 					CompatibilityMode = "Off",
 					AntiAliasing = "Low",
 					ShaderDetail = "Low",
@@ -85,6 +87,7 @@ local settingsConfig = {
 					ParticleLimit = "12000",
 					TerrainDetail = "Low",
 					VegetationDetail = "Low",
+					FeatureFade = "Off",
 					CompatibilityMode = "Off",
 					AntiAliasing = "Low",
 					ShaderDetail = "Low",
@@ -106,6 +109,7 @@ local settingsConfig = {
 					ParticleLimit = "15000",
 					TerrainDetail = "Medium",
 					VegetationDetail = "Medium",
+					FeatureFade = "Off",
 					CompatibilityMode = "Off",
 					AntiAliasing = "Low",
 					ShaderDetail = "Medium",
@@ -127,6 +131,7 @@ local settingsConfig = {
 					ParticleLimit = "25000",
 					TerrainDetail = "High",
 					VegetationDetail = "High",
+					FeatureFade = "Off",
 					CompatibilityMode = "Off",
 					AntiAliasing = "High",
 					ShaderDetail = "High",
@@ -148,6 +153,7 @@ local settingsConfig = {
 					ParticleLimit = "50000",
 					TerrainDetail = "Ultra",
 					VegetationDetail = "Ultra",
+					FeatureFade = "Off",
 					CompatibilityMode = "Off",
 					AntiAliasing = "High",
 					ShaderDetail = "Ultra",
@@ -619,6 +625,26 @@ local settingsConfig = {
 				},
 			},
 			{
+				name = "FeatureFade",
+				humanName = "Rock and Wreck Fade",
+				options = {
+					{
+						name = "On",
+						apply = {
+							FeatureDrawDistance = 6000,
+							FeatureFadeDistance = 4500,
+						}
+					},
+					{
+						name = "Off",
+						apply = {
+							FeatureDrawDistance = 600000,
+							FeatureFadeDistance = 600000,
+						}
+					},
+				},
+			},
+			{
 				name = "CompatibilityMode",
 				humanName = "Compatibility Mode",
 				options = {
@@ -718,7 +744,7 @@ local settingsConfig = {
 			{
 				name = "Default",
 				settings = {
-					IconDistance = 151,
+					--IconDistance = 151,
 					MouseZoomSpeed = 25,
 					InvertZoom = "Off",
 					TextToSpeech = "On",
@@ -728,17 +754,17 @@ local settingsConfig = {
 			},
 		},
 		settings = {
-			{
-				name = "IconDistance",
-				humanName = "Icon Distance",
-				isNumberSetting = true,
-				applyName = "UnitIconDist",
-				minValue = 0,
-				maxValue = 10000,
-				springConversion = function(value)
-					return value
-				end,
-			},
+			--{
+			--	name = "IconDistance",
+			--	humanName = "Icon Distance",
+			--	isNumberSetting = true,
+			--	applyName = "UnitIconDist",
+			--	minValue = 0,
+			--	maxValue = 10000,
+			--	springConversion = function(value)
+			--		return value
+			--	end,
+			--},
 			{
 				name = "MouseZoomSpeed",
 				humanName = "Mouse Zoom Speed",
@@ -846,6 +872,7 @@ local settingsDefault = {
 	ParticleLimit = "12000",
 	TerrainDetail = "High",
 	VegetationDetail = "High",
+	FeatureFade = "Off",
 	CompatibilityMode = "Off",
 	AtiIntelCompatibility = "On",
 	AntiAliasing = "Low",
@@ -854,7 +881,7 @@ local settingsDefault = {
 	LupsRibbon = "On",
 	LupsShieldSphereColor = "On",
 	FancySky = "Off",
-	IconDistance = 151,
+	--IconDistance = 151,
 	MouseZoomSpeed = 25,
 	InvertZoom = "Off",
 	TextToSpeech = "On",
