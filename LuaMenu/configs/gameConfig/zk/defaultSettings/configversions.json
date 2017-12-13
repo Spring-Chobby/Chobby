@@ -450,7 +450,7 @@
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/Steam/x86/steam_api.dll",
          "TargetPath":"steam_api.dll"
       },
-	  
+      
       {
          "Platform":"linux32",
          "VersionNumber":1,
@@ -462,9 +462,9 @@
          "VersionNumber":1,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/Steam/x86/libsteam_api.so",
          "TargetPath":"libsteam_api.so"
-      },	  
+      },      
 
-	  {
+      {
          "Platform":"linux64",
          "VersionNumber":1,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/Steam/x64/libCSteamworks.so",
@@ -475,8 +475,8 @@
          "VersionNumber":1,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/Steam/x64/libsteam_api.so",
          "TargetPath":"libsteam_api.so"
-      },	  
-	  
+      },      
+      
       {
          "Platform":"win32",
          "VersionNumber":1,
@@ -490,14 +490,14 @@
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/discord/32bit/discord-rpc.dll",
          "TargetPath":"discord-rpc.dll"
       },
-	  
+      
       {
          "Platform":"linux32",
          "VersionNumber":1,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/discord/32bit/libdiscord-rpc.so",
          "TargetPath":"libdiscord-rpc.so"
       },
-	  
+      
       {
          "Platform":"linux64",
          "VersionNumber":1,
@@ -511,26 +511,31 @@
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/sqlite3.dll",
          "TargetPath":"sqlite3.dll"
       },
-	  
+      
       {
          "Platform":null,
          "VersionNumber":1,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/MenuLoadscreens/loadscreen.png",
          "TargetPath":"MenuLoadscreens/loadscreen.png"
       },
-	  
+      
       {
          "Platform":null,
          "VersionNumber":7,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/games/quicktutorial.sdz",
          "TargetPath":"games/quicktutorial.sdz"
       },
-      
       {
          "Platform":null,
          "VersionNumber":2,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/games/seeker.sdz",
          "TargetPath":"games/seeker.sdz"
+      },
+      {  
+         "Platform":null,
+         "VersionNumber":1,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/chobby_config.json",
+         "TargetPath":"chobby_config.json"
       }
    ]
 }
