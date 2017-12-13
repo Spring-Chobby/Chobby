@@ -14,6 +14,19 @@ function widget:GetInfo()
 	}
 end
 
+function string:split(delimiter)
+	local result = {}
+	local from  = 1
+	local delim_from, delim_to = string.find(self, delimiter, from)
+	while delim_from do
+		table.insert(result, string.sub(self, from , delim_from - 1))
+		from = delim_to + 1
+		delim_from, delim_to = string.find( self, delimiter, from)
+	end
+	table.insert(result, string.sub(self, from))
+	return result
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Externals Functions
@@ -36,6 +49,7 @@ local TTT_SAY = "textToSpeechSay_"
 local TTS_VOLUME = "textToSpeechVolume_"
 local REMOVE_BUTTON = "disableLobbyButton"
 local ENABLE_OVERLAY = "showLobby"
+local LUAMENU_SETTING = "changeSetting "
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -85,6 +99,23 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Settings
+
+local function HandleSettingsChange(msg)
+	if string.find(msg, LUAMENU_SETTING) ~= 1 then
+		return
+	end
+	local Configuration = WG.Chobby.Configuration
+	if Configuration then
+		local data = msg:split(" ")
+		if data[2] and data[3] then
+			Configuration:SetSettingsConfigOption(data[2], tonumber(data[3]) or data[3])
+		end
+	end
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Callins
 
 function widget:RecvLuaMsg(msg)
@@ -92,6 +123,9 @@ function widget:RecvLuaMsg(msg)
 		return
 	end
 	if HandleTextToSpeech(msg) then
+		return
+	end
+	if HandleSettingsChange(msg) then
 		return
 	end
 end
