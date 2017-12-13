@@ -1444,7 +1444,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					commanderLevel = 6,
 					commander = {
-						name = "Most Loyal Opposition",
+						name = "Demoman",
 						chassis = "strike",
 						decorations = {
 						},
