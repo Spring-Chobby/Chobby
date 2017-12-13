@@ -48,6 +48,7 @@ local function GetNewLoginWindow(failFunc)
 	end
 	local Configuration = WG.Chobby.Configuration
 	local steamMode = Configuration.canAuthenticateWithSteam and Configuration.wantAuthenticateWithSteam
+	Spring.Echo("steamMode", Configuration.canAuthenticateWithSteam, Configuration.wantAuthenticateWithSteam)
 	if steamMode then
 		currentLoginWindow = WG.Chobby.SteamLoginWindow(failFunc, nil, "main_window")
 	else
@@ -202,6 +203,13 @@ function LoginWindowHandler.TryLogin()
 	end
 end
 
+local function CheckFirstTimeRegister()
+	local Configuration = WG.Chobby.Configuration
+	if Configuration.firstLoginEver then
+		LoginWindowHandler.TryLogin()
+	end
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface
@@ -213,8 +221,13 @@ function widget:Initialize()
 	LoginWindowHandler.TrySimpleSteamLogin = TrySimpleSteamLogin
 
 	WG.Delay(InitializeListeners, 0.1)
-	WG.Delay(CheckAutologin, 0.1)
 	WG.LoginWindowHandler = LoginWindowHandler
+end
+
+function widget:Update()
+	WG.Delay(CheckAutologin, 1)
+	WG.Delay(CheckFirstTimeRegister, 1.2)
+	widgetHandler:RemoveCallIn("Update")
 end
 
 function widget:Shutdown()

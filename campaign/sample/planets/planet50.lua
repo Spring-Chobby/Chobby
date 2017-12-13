@@ -4,7 +4,7 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/barren02.png"
 	
 	local planetData = {
 		name = "Ounlele",
@@ -19,15 +19,15 @@ local function GetPlanet(planetUtilities, planetID)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Terran",
-			radius = "6550 km",
-			primary = "Blank",
-			primaryType = "G8V",
+			terrainType = "Radiated",
+			radius = "2545 km",
+			primary = "Pollizoa",
+			primaryType = "A2III",
 			milRating = 1,
 			text = [[...]]
 		},
 		gameConfig = {
-			mapName = "LowTideV3",
+			mapName = "Aetherian Void 1.5",
 			playerConfig = {
 				startX = 100,
 				startZ = 100,

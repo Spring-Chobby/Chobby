@@ -339,7 +339,8 @@ local function GainExperience(newExperience, gainedBonusExperience)
 	local oldLevel = gamedata.commanderLevel
 	gamedata.commanderExperience = gamedata.commanderExperience + newExperience
 	for i = 1, 50 do
-		if Configuration.campaignConfig.commConfig.GetLevelRequirement(gamedata.commanderLevel + 1) > gamedata.commanderExperience then
+		local requirement = Configuration.campaignConfig.commConfig.GetLevelRequirement(gamedata.commanderLevel + 1) 
+		if (not requirement) or (requirement > gamedata.commanderExperience) then
 			break
 		end
 		gamedata.commanderLevel = gamedata.commanderLevel + 1
@@ -356,12 +357,56 @@ end
 --------------------------------------------------------------------------------
 -- Load or start new game
 
+local function RecalculateCommanderLevel()
+	Spring.Echo("RecalculateCommanderLevel", gamedata.commanderLevel, gamedata.commanderExperience)
+	local oldExperience = gamedata.commanderExperience
+	local loadout = Spring.Utilities.CopyTable(gamedata.commanderLoadout, true)
+	gamedata.commanderLevel = 0
+	gamedata.commanderExperience = 0
+	GainExperience(oldExperience)
+	
+	local level = 0
+	while loadout[level] do
+		if level > gamedata.commanderLevel then
+			gamedata.commanderLoadout[level] = nil
+		else
+			for slot = 1, #loadout[level] do
+				SelectCommanderModule(level, slot, loadout[level][slot], true)
+			end
+		end
+		level = level + 1
+	end
+	UpdateModuleRequirements()
+end
+
+local function SanityCheckCommanderLevel()
+	local conf = WG.Chobby.Configuration.campaignConfig.commConfig
+	local levelExperience = conf.GetLevelRequirement(gamedata.commanderLevel)
+	local nextExperiece = conf.GetLevelRequirement(gamedata.commanderLevel + 1)
+	
+	if not (levelExperience and nextExperiece and gamedata.commanderExperience) then
+		RecalculateCommanderLevel()
+		return false
+	end
+	
+	if (gamedata.commanderExperience < levelExperience) or (nextExperiece < gamedata.commanderExperience) then
+		RecalculateCommanderLevel()
+		return false
+	end
+	
+	return true
+end
+
 local function LoadGame(saveData, refreshGUI)
 	local success, err = pcall(function()
 		Spring.CreateDir(SAVE_DIR)
 		ResetGamedata()
 		gamedata = Spring.Utilities.MergeTable(saveData, gamedata, true)
-		UpdateCommanderModuleCounts()
+		if SanityCheckCommanderLevel() then
+			UpdateCommanderModuleCounts()
+		else
+			SaveGame()
+		end
 		if refreshGUI then
 			CallListeners("CampaignLoaded")
 		end

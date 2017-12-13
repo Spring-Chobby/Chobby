@@ -4,7 +4,7 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/terran03.png"
 	
 	local planetData = {
 		name = "Huanshi",
@@ -20,14 +20,14 @@ local function GetPlanet(planetUtilities, planetID)
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
 			terrainType = "Terran",
-			radius = "6550 km",
-			primary = "Blank",
-			primaryType = "G8V",
+			radius = "4910 km",
+			primary = "Pallis",
+			primaryType = "G4V",
 			milRating = 1,
 			text = [[You are facing a massive fleet of capital ships. Ensure your complete domination of the seas with the Disco Rave Party superweapon.]]
 		},
 		gameConfig = {
-			mapName = "LowTideV3",
+			mapName = "Porky_Islands",
 			playerConfig = {
 				startX = 100,
 				startZ = 100,

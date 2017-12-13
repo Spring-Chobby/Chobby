@@ -151,6 +151,34 @@ local function DownloadImageDone(args)
 	]]--
 end
 
+local function DiscordOnReady(args)
+end
+
+local function DiscordOnSpectate(args)
+ -- args.Secret
+end 
+
+local function DiscordOnJoin(args)
+ -- args.Secret
+end
+
+local function DiscordOnError(args) 
+ -- args.Message 
+ -- args.ErrorCode
+end
+
+local function DiscordOnDisconnected(args) 
+  -- args.Message
+  -- args.ErrorCode
+end 
+
+local function DiscordOnJoinRequest(args) 
+ -- args.userId 
+ -- args.username 
+ -- args.discriminator
+ -- args.avatar
+end 
+
 commands["DownloadFileDone"] = DownloadFileDone
 commands["SteamOnline"] = SteamOnline
 commands["SteamJoinFriend"] = SteamJoinFriend
@@ -163,6 +191,12 @@ commands["SteamConnectSpring"] = SteamConnectSpring
 commands["DownloadImageDone"] = DownloadImageDone
 commands["DownloadFileProgress"] = DownloadFileProgress
 
+commands["DiscordOnReady"] = DiscordOnReady
+commands["DiscordOnSpectate"] = DiscordOnSpectate
+commands["DiscordOnJoin"] = DiscordOnJoin
+commands["DiscordOnError"] = DiscordOnError
+commands["DiscordOnDisconnected"] = DiscordOnDisconnected
+commands["DiscordOnJoinRequest"] = DiscordOnJoinRequest
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -288,6 +322,40 @@ function WrapperLoopback.SteamHostGameRequest(args)
 	]]--
 	SendCommand("SteamHostGameRequest", args)
 end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Discord
+
+function WrapperLoopback.DiscordUpdatePresence(args)
+	--[[
+        public string state; /* max 128 bytes */
+        public string details; /* max 128 bytes */
+        public long startTimestamp;
+        public long endTimestamp;
+        public string largeImageKey; /* max 32 bytes */
+        public string largeImageText; /* max 128 bytes */
+        public string smallImageKey; /* max 32 bytes */
+        public string smallImageText; /* max 128 bytes */
+        public string partyId; /* max 128 bytes */
+        public int partySize;
+        public int partyMax;
+        public string matchSecret; /* max 128 bytes */
+        public string joinSecret; /* max 128 bytes */
+        public string spectateSecret; /* max 128 bytes */
+        public bool instance;	
+	]]--
+	SendCommand("DiscordUpdatePresence", args)
+end 
+
+function WrapperLoopback.DiscordRespond(args)
+	--[[
+	public string UserId { get; set; }
+          public int Reply { get; set; }
+	]]--
+	SendCommand("DiscordRespond", args)
+end 
+
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------

@@ -779,99 +779,89 @@ end
 -- Chassis Definition
 ------------------------------------------------------------------------
 
+local highestDefinedLevel = 7
+local levelDefs = {
+	[0] = {
+		upgradeSlots = {
+			{
+				defaultModule = "commweapon_beamlaser",
+				slotAllows = "basic_weapon",
+			},
+			{
+				defaultModule = "nullmodule",
+				slotAllows = "module",
+			},
+		},
+	},
+	[1] = {
+		upgradeSlots = {
+			{
+				defaultModule = "nullmodule",
+				slotAllows = "module",
+			},
+			{
+				defaultModule = "nullmodule",
+				slotAllows = "module",
+			},
+		},
+	},
+	[2] = {
+		upgradeSlots = {
+			{
+				defaultModule = "nullmodule",
+				slotAllows = "module",
+			},
+			{
+				defaultModule = "nullmodule",
+				slotAllows = "module",
+			},
+		},
+	},
+	[3] = {
+		upgradeSlots = {
+			{
+				defaultModule = "nullbasicweapon",
+				slotAllows = {"adv_weapon", "basic_weapon"},
+			},
+			{
+				defaultModule = "nullmodule",
+				slotAllows = "module",
+			},
+			{
+				defaultModule = "nullmodule",
+				slotAllows = "module",
+			},
+		},
+	},
+}
+
+for i = 4, highestDefinedLevel do
+	levelDefs[i] = {
+		upgradeSlots = {
+			{
+				defaultModule = "nullmodule",
+				slotAllows = "module",
+			},
+			{
+				defaultModule = "nullmodule",
+				slotAllows = "module",
+			},
+			{
+				defaultModule = "nullmodule",
+				slotAllows = "module",
+			},
+		},
+	}
+end
+
 local chassisDef = {
 	name = "knight",
 	chassis = "knight",
 	humanName = "Knight",
 	image = LUA_DIRNAME .. "images/chassis_cremcom.png",
 	secondPeashooter = true,
-	highestDefinedLevel = 5,
-	levelDefs = {
-		[0] = {
-			upgradeSlots = {
-				{
-					defaultModule = "commweapon_beamlaser",
-					slotAllows = "basic_weapon",
-				},
-				{
-					defaultModule = "nullmodule",
-					slotAllows = "module",
-				},
-			},
-		},
-		[1] = {
-			upgradeSlots = {
-				{
-					defaultModule = "nullmodule",
-					slotAllows = "module",
-				},
-				{
-					defaultModule = "nullmodule",
-					slotAllows = "module",
-				},
-			},
-		},
-		[2] = {
-			upgradeSlots = {
-				{
-					defaultModule = "nullmodule",
-					slotAllows = "module",
-				},
-				{
-					defaultModule = "nullmodule",
-					slotAllows = "module",
-				},
-			},
-		},
-		[3] = {
-			upgradeSlots = {
-				{
-					defaultModule = "nullbasicweapon",
-					slotAllows = {"adv_weapon", "basic_weapon"},
-				},
-				{
-					defaultModule = "nullmodule",
-					slotAllows = "module",
-				},
-				{
-					defaultModule = "nullmodule",
-					slotAllows = "module",
-				},
-			},
-		},
-		[4] = {
-			upgradeSlots = {
-				{
-					defaultModule = "nullmodule",
-					slotAllows = "module",
-				},
-				{
-					defaultModule = "nullmodule",
-					slotAllows = "module",
-				},
-				{
-					defaultModule = "nullmodule",
-					slotAllows = "module",
-				},
-			},
-		},
-		[5] = {
-			upgradeSlots = {
-				{
-					defaultModule = "nullmodule",
-					slotAllows = "module",
-				},
-				{
-					defaultModule = "nullmodule",
-					slotAllows = "module",
-				},
-				{
-					defaultModule = "nullmodule",
-					slotAllows = "module",
-				},
-			},
-		},
-	},
+	highestDefinedLevel = highestDefinedLevel,
+	levelDefs = levelDefs 
 }
 
 ------------------------------------------------------------------------
@@ -961,12 +951,18 @@ end
 ------------------------------------------------------------------------
 -- Commander Configuration
 ------------------------------------------------------------------------
+local levelRequirement = {
+	[0] = 0,
+	[1] = 500,
+	[2] = 1200,
+	[3] = 2500,
+	[4] = 5000,
+	[5] = 8500,
+	[6] = 12000,
+}
 
 local function GetLevelRequirement(level)
-	if level > 0 then
-		return (100*level^2 + 300*level)
-	end
-	return 0
+	return levelRequirement[level]
 end
 
 return {

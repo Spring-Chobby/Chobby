@@ -30,7 +30,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/hoverraid.png",
-				text = [[Hovercraft move quickly over flat terrain as well as the surface of bodies of waer. Daggers are very fast and armed with a gauss gun which passes through units and water.]]
+				text = [[Hovercraft move quickly over flat terrain as well as the surface of bodies of water. Daggers are very fast and armed with a gauss gun which passes through units and water.]]
 			},
 			{
 				image = "unitpics/hoverskirm.png",

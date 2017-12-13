@@ -4,7 +4,7 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = LUA_DIRNAME .. "images/planets/desert02.png"
+	local image = LUA_DIRNAME .. "images/planets/barren03.png"
 	
 	local planetData = {
 		name = "Quasisar",
@@ -19,15 +19,15 @@ local function GetPlanet(planetUtilities, planetID)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Terran",
-			radius = "6550 km",
-			primary = "Blank",
-			primaryType = "G8V",
+			terrainType = "Artifical",
+			radius = "5470 km",
+			primary = "Jaas Non",
+			primaryType = "G9VI",
 			milRating = 1,
-			text = [[Fighting an active opponent armed with heavy Tanks and Striders calls for special weapons and tactics, which describes the cloaked Ultimatum's Disintegrator Gun. Even the strongest Striders cannot withstand this weapon.]]
+			text = [[Intact unit wrecks on this planet will come back to life as zombies. Reduce your foes to scrap and put them all the way down with the Ultimatum's Disintegration Gun.]]
 		},
 		gameConfig = {
-			mapName = "LowTideV3",
+			mapName = "EvoRTS-New_Iammas-v05",
 			playerConfig = {
 				startX = 100,
 				startZ = 100,

@@ -19,22 +19,16 @@ local function LoadConfig(filePath)
 end
 
 local function GetFallback()
-return {
-		-- FIXME: Temporary until ZK's wrapper implements the above config file
-	server = {
-			address = "zero-k.info",
-			port = 8200,
-			serverName = "Zero-K",
-			protocol = "zks"
-	}
-		-- Will be replaced with these lines
-		-- server = {
-		-- 	address = "springrts.com",
-		-- 	port = 8200,
-		-- 	serverName = "Spring",
-		-- 	protocol = "spring"
-		-- }
-}
+	Spring.Echo("Error: chobby_config.json failed to deploy.")
+	--return {
+	--	server = {
+	--		address = "zero-k.info",
+	--		port = 8200,
+	--		serverName = "Zero-K",
+	--		protocol = "zks"
+	--	},
+	--	game = "zk",
+	--}
 end
 
 local config = LoadConfig(CONFIG_FILE)

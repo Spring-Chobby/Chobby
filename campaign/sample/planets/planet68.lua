@@ -4,7 +4,7 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
+	local image = LUA_DIRNAME .. "images/planets/tundra01.png"
 	
 	local planetData = {
 		name = "Kufihay",
@@ -19,15 +19,15 @@ local function GetPlanet(planetUtilities, planetID)
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Terran",
-			radius = "6550 km",
-			primary = "Blank",
-			primaryType = "G8V",
+			terrainType = "Tundra",
+			radius = "7650 km",
+			primary = "Fili Enso",
+			primaryType = "G1V",
 			milRating = 1,
 			text = [[Your opponent is already conducting a victory celebration with their Disco Rave Party. Hold off their assault until your Starlight orbital chisel is complete, then demonstrate that their revels are premature.]]
 		},
 		gameConfig = {
-			mapName = "LowTideV3",
+			mapName = "FrozenFortress_v2",
 			playerConfig = {
 				startX = 100,
 				startZ = 100,
