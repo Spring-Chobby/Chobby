@@ -94,6 +94,10 @@ function AiListWindow:AddAi(displayName, shortName, version)
 	while found do
 		found = false
 		aiName = displayName .. " (" .. tostring(counter) .. ")"
+		-- Ubserver AI names cannot include whitespace
+		if WG.Server.protocol == "spring" then
+			aiName = aiName:gsub(" ", "")
+		end
 		for _, userName in pairs(self.lobby.battleAis) do
 			if aiName == userName then
 				found = true

@@ -1,4 +1,4 @@
-local zkBaseConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/evorts/mainConfig.lua")
+local evoBaseConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/evorts/mainConfig.lua")
 local shortname = "evortsdev"
 
 local skirmishDefault    = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skirmishDefault.lua")
@@ -7,10 +7,12 @@ local skirmishDefault    = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. s
 -- Getters
 ---------------------------------------------------------------------------------
 
-zkBaseConfig.dirName                 = "evortsdev"
-zkBaseConfig.name                    = "EvoRTS Dev"
-zkBaseConfig._defaultGameArchiveName = "Evolution RTS - $VERSION"
-zkBaseConfig._defaultGameRapidTag    = nil
-zkBaseConfig.skirmishDefault         = skirmishDefault
+evoBaseConfig.dirName                 = "evortsdev"
+evoBaseConfig.name                    = "EvoRTS Dev"
+evoBaseConfig.taskbarTitle            = "Evolution RTS Dev"
+evoBaseConfig.taskbarTitleShort       = "Evo RTS Dev"
+evoBaseConfig._defaultGameArchiveName = "Evolution RTS - $VERSION"
+evoBaseConfig._defaultGameRapidTag    = nil
+evoBaseConfig.skirmishDefault         = skirmishDefault
 
-return zkBaseConfig
+return evoBaseConfig

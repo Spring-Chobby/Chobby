@@ -10,6 +10,8 @@ local skirmishDefault    = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. s
 
 zkBaseConfig.dirName                 = "zkdev"
 zkBaseConfig.name                    = "Zero-K Dev"
+zkBaseConfig.taskbarTitle            = "Zero-K Dev"
+zkBaseConfig.taskbarTitleShort       = "Zero-K Dev"
 zkBaseConfig._defaultGameArchiveName = "Zero-K $VERSION"
 zkBaseConfig._defaultGameRapidTag    = nil
 zkBaseConfig.singleplayerConfig      = singleplayerConfig

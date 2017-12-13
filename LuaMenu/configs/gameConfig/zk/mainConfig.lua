@@ -81,17 +81,20 @@ local externalFuncAndData = {
 	headingLarge            = headingLarge,
 	headingSmall            = headingSmall,
 	subheadings             = subheadings,
+	taskbarTitle            = "Zero-K",
+	taskbarTitleShort       = "Zero-K",
 	taskbarIcon             = taskbarIcon,
 	background              = background,
 	minimapOverridePath     = minimapOverridePath,
 	minimapThumbnailPath    = minimapThumbnailPath,
 	gameUnitInformation     = gameUnitInformation,
-	link_reportPlayer       = link_reportPlayer, 
-	link_userPage           = link_userPage, 
+	link_reportPlayer       = link_reportPlayer,
+	link_userPage           = link_userPage,
 	link_homePage           = link_homePage,
 	link_replays            = link_replays,
 	link_maps               = link_maps,
 	link_particularMapPage  = link_particularMapPage,
+	ignoreServerVersion     = false,
 }
 
 function externalFuncAndData.CheckAvailability()
