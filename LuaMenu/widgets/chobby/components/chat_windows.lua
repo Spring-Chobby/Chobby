@@ -748,8 +748,14 @@ function ChatWindows:GetChannelConsole(chanName)
 		self.userListPanels[chanName] = userListPanel
 
 		local caption = "#" .. chanName
-		local myFont = Font:New(Configuration:GetFont(1))
+		local tooltip = nil
+		local origCaption = caption
+		local fontSize = 1
+		local myFont = Font:New(Configuration:GetFont(fontSize))
 		caption = StringUtilities.GetTruncatedStringWithDotDot(caption, myFont, 70)
+		if origCaption ~= caption then
+			tooltip = origCaption
+		end
 
 		local closeChannelButton = Button:New {
 			width = 24, height = 24, y = 5, right = Configuration.userListWidth + 18,
@@ -770,7 +776,8 @@ function ChatWindows:GetChannelConsole(chanName)
 			{
 				name = chanName,
 				caption = caption,
-				font = Configuration:GetFont(1),
+				font = Configuration:GetFont(fontSize),
+				tooltip = tooltip,
 				children = {
 					Control:New {
 						x = 0, y = 0, right = Configuration.userListWidth, bottom = 0,
@@ -825,8 +832,14 @@ function ChatWindows:GetPrivateChatConsole(userName, switchTo)
 		self.privateChatConsoles[chanName] = privateChatConsole
 
 		local caption = "@" .. userName
-		local myFont = Font:New(Configuration:GetFont(1))
+		local tooltip = nil
+		local origCaption = caption
+		local fontSize = 1
+		local myFont = Font:New(Configuration:GetFont(fontSize))
 		caption = StringUtilities.GetTruncatedStringWithDotDot(caption, myFont, 70)
+		if origCaption ~= caption then
+			tooltip = origCaption
+		end
 
 		local closeChannelButton = Button:New {
 			width = 24, height = 24, y = 5, right = 18,
@@ -845,7 +858,8 @@ function ChatWindows:GetPrivateChatConsole(userName, switchTo)
 			{
 				name = chanName,
 				caption = caption,
-				font = Configuration:GetFont(1),
+				tooltip = tooltip,
+				font = Configuration:GetFont(fontSize),
 				children = {
 					privateChatConsole.panel,
 					closeChannelButton
