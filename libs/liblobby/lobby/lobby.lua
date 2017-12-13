@@ -859,10 +859,7 @@ function Lobby:_OnVoteResponse(isYesVote)
 end
 
 function Lobby:_OnSetModOptions(data)
-	for key, value in pairs(data) do
-		self.modoptions[key] = value
-	end
-
+	self.modoptions = value
 	self:_CallListeners("OnSetModOptions", data)
 end
 
