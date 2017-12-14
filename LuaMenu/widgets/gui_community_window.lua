@@ -17,6 +17,34 @@ end
 --------------------------------------------------------------------------------
 -- Initialization
 
+local function InitializeControls(window)
+	Label:New {
+		x = 15,
+		y = 11,
+		width = 180,
+		height = 30,
+		parent = window,
+		font = WG.Chobby.Configuration:GetFont(3),
+		caption = "Community",
+	}
+	
+	-------------------------
+	-- Download List
+	-------------------------
+	
+	local mainHolder = Control:New {
+		x = 12,
+		right = 15,
+		y = 52,
+		bottom = 15,
+		parent = window,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+	}
+	
+end
+
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -35,7 +63,7 @@ function CommunityWindow.GetControl()
 		OnParent = {
 			function(obj)
 				if obj:IsEmpty() then
-					--InitializeControls(obj)
+					InitializeControls(obj)
 				end
 			end
 		},

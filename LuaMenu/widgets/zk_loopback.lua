@@ -205,7 +205,7 @@ commands["DiscordOnJoinRequest"] = DiscordOnJoinRequest
 local WrapperLoopback = {}
 
 -- opens URL
-function WrapperLoopback.OpenUrl(url) 
+function WrapperLoopback.OpenUrl(url)
 	Spring.Echo("Opening URL", url)
 	SendCommand("OpenUrl", {Url = url})
 end

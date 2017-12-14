@@ -54,70 +54,70 @@ local communityLines = {
 		"Site home page.",
 		"Home",
 		function ()
-			WG.WrapperLoopback.OpenUrl("http://zero-k.info/")
+			WG.BrowserHandler.OpenUrl("http://zero-k.info/")
 		end
 	},
 	{
 		"Community forums.",
 		"Forums",
 		function ()
-			WG.WrapperLoopback.OpenUrl("http://zero-k.info/Forum")
+			WG.BrowserHandler.OpenUrl("http://zero-k.info/Forum")
 		end
 	},
 	{
 		"Discord chat server.",
 		"Discord",
 		function ()
-			WG.WrapperLoopback.OpenUrl("https://discord.gg/aab63Vt")
+			WG.BrowserHandler.OpenUrl("https://discord.gg/aab63Vt")
 		end
 	},
 	{
 		"Shadowfury333's Youtube channel.",
 		"Youtube",
 		function ()
-			WG.WrapperLoopback.OpenUrl("https://www.youtube.com/user/Shadowfury333")
+			WG.BrowserHandler.OpenUrl("https://www.youtube.com/user/Shadowfury333")
 		end
 	},
 	{
 		"Shadowfury333's Twitch stream.",
 		"Twitch",
 		function ()
-			WG.WrapperLoopback.OpenUrl("https://www.twitch.tv/shadowfury333")
+			WG.BrowserHandler.OpenUrl("https://www.twitch.tv/shadowfury333")
 		end
 	},
 	{
 		"Shadowfury333's Hitbox stream.",
 		"Hitbox",
 		function ()
-			WG.WrapperLoopback.OpenUrl("http://www.hitbox.tv/shadowfury333")
+			WG.BrowserHandler.OpenUrl("http://www.hitbox.tv/shadowfury333")
 		end
 	},
 	{
 		"Zero-K facebook page.",
 		"Facebook",
 		function ()
-			WG.WrapperLoopback.OpenUrl("https://www.facebook.com/ZeroK.RTS/")
+			WG.BrowserHandler.OpenUrl("https://www.facebook.com/ZeroK.RTS/")
 		end
 	},
 	{
 		"Top 50 players.",
 		"Ladder",
 		function ()
-			WG.WrapperLoopback.OpenUrl("http://zero-k.info/Ladders")
+			WG.BrowserHandler.OpenUrl("http://zero-k.info/Ladders")
 		end
 	},
 	{
 		"Browse and download maps.",
 		"Maps",
 		function ()
-			WG.WrapperLoopback.OpenUrl("http://zero-k.info/Maps")
+			WG.BrowserHandler.OpenUrl("http://zero-k.info/Maps")
 		end
 	},
 	{
 		"Browse and download replays.",
 		"Replays",
 		function ()
-			WG.WrapperLoopback.OpenUrl("http://zero-k.info/Battles")
+			WG.BrowserHandler.OpenUrl("http://zero-k.info/Battles")
 		end
 	},
 }
@@ -163,42 +163,42 @@ local bugLines = {
 		"Open game data folder to find settings, infolog etc...",
 		"Local Data",
 		function ()
-			WG.WrapperLoopback.OpenFolder()
+			WG.BrowserHandler.OpenFolder()
 		end
 	},
 	{
 		"A useful site for uploading infologs.",
 		"Pastebin",
 		function ()
-			WG.WrapperLoopback.OpenUrl("https://www.pastebin.com")
+			WG.BrowserHandler.OpenUrl("https://www.pastebin.com")
 		end
 	},
 	{
 		"Report the bug on the forum.",
 		"Forum",
 		function ()
-			WG.WrapperLoopback.OpenUrl("http://zero-k.info/Forum/NewPost?categoryID=3")
+			WG.BrowserHandler.OpenUrl("http://zero-k.info/Forum/NewPost?categoryID=3")
 		end
 	},
 	{
 		"Report an ingame bug on GitHub. This requires a GitHub account.",
 		"Game Bug",
 		function ()
-			WG.WrapperLoopback.OpenUrl("https://github.com/ZeroK-RTS/Zero-K/issues/new")
+			WG.BrowserHandler.OpenUrl("https://github.com/ZeroK-RTS/Zero-K/issues/new")
 		end
 	},
 	{
 		"Report a game menu bug on GitHub. This requires a GitHub account.",
 		"Menu Bug",
 		function ()
-			WG.WrapperLoopback.OpenUrl("https://github.com/ZeroK-RTS/Chobby/issues/new")
+			WG.BrowserHandler.OpenUrl("https://github.com/ZeroK-RTS/Chobby/issues/new")
 		end
 	},
 	{
 		"Report a site bug on GitHub. This requires a GitHub account.",
 		"Site Bug",
 		function ()
-			WG.WrapperLoopback.OpenUrl("https://github.com/ZeroK-RTS/Zero-K-Infrastructure/issues/new")
+			WG.BrowserHandler.OpenUrl("https://github.com/ZeroK-RTS/Zero-K-Infrastructure/issues/new")
 		end
 	},
 }

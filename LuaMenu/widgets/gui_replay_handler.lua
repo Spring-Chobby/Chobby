@@ -286,7 +286,7 @@ local function InitializeControls(parentControl)
 	--	parent = parentControl
 	--}
 	
-	if WG.WrapperLoopback and Configuration.gameConfig.link_replays then
+	if WG.BrowserHandler and Configuration.gameConfig.link_replays then
 		Button:New {
 			x = 220,
 			y = 7,
@@ -298,7 +298,7 @@ local function InitializeControls(parentControl)
 			parent = parentControl,
 			OnClick = {
 				function ()
-					WG.WrapperLoopback.OpenUrl(Configuration.gameConfig.link_replays())
+					WG.BrowserHandler.OpenUrl(Configuration.gameConfig.link_replays())
 				end
 			},
 		}

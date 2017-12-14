@@ -37,25 +37,25 @@ end
 
 local function ApplySessionToken(urlString)
 	if not IsZkSiteUrl(urlString) then
-		return urlString
+		return urlString, false
 	end
 	local lobby = WG.LibLobby.lobby
 	if lobby:GetMyIsAdmin() then
-		return urlString -- Don't use tokens for admins
+		return urlString, false -- Don't use tokens for admins
 	end
 	local token = lobby:GetMySessionToken()
 	if not token then
-		return urlString
+		return urlString, true
 	end
 	local alreadyAddedPos = string.find(urlString, "%?asmallcake=")
 	if alreadyAddedPos then
-		return string.sub(urlString, 0, alreadyAddedPos) .. token
+		return string.sub(urlString, 0, alreadyAddedPos) .. token, false
 	end
 	local hasQuestionMark = string.find(urlString, "%?")
 	if hasQuestionMark then
-		return urlString .. "&asmallcake=" .. token
+		return urlString .. "&asmallcake=" .. token, false
 	end
-	return urlString .. "?asmallcake=" .. token
+	return urlString .. "?asmallcake=" .. token, false
 end
 
 --------------------------------------------------------------------------------
@@ -63,10 +63,26 @@ end
 -- External Functions
 local BrowserHandler = {}
 
-function BrowserHandler.OpenUrl(urlString)
-	urlString = ApplySessionToken(urlString)
+function BrowserHandler.OpenUrl(rawUrlString)
+	local urlString, needLogin = ApplySessionToken(rawUrlString)
 	if WG.WrapperLoopback then
-		WG.WrapperLoopback.OpenUrl(urlString)
+		if needLogin then
+			local function TryClickAgain()
+				WG.BrowserHandler.OpenUrl(rawUrlString)
+			end
+			local function DelayedTryClickAgain()
+				WG.Delay(TryClickAgain, 1)
+			end
+			local function LoginFunc()
+				WG.LoginWindowHandler.TryLogin(DelayedTryClickAgain)
+			end
+			local function GoAnywayFunc()
+				WG.WrapperLoopback.OpenUrl(urlString)
+			end
+			WG.Chobby.ConfirmationPopup(LoginFunc, "Log in first to access more site features.", nil, 315, 200, "Log In", "Not Now", GoAnywayFunc)
+		else
+			WG.WrapperLoopback.OpenUrl(urlString)
+		end
 	else
 		Spring.SetClipboard(urlString)
 		WG.TooltipHandler.TooltipOverride("URL copied " .. urlString, 1)

@@ -165,7 +165,7 @@ local function MakeFeedbackWindow(parent, feedbackLink)
 		font = WG.Chobby.Configuration:GetFont(3),
 		OnClick = {
 			function ()
-				WG.WrapperLoopback.OpenUrl(feedbackLink)
+				WG.BrowserHandler.OpenUrl(feedbackLink)
 			end
 		},
 		parent = textWindow,
