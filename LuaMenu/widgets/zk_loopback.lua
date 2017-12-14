@@ -236,8 +236,8 @@ function WrapperLoopback.TtsSay(name, text)
 end
 
 -- downloads a file, fileType can be any of RAPID, MAP, MISSION, DEMO, ENGINE, NOTKNOWN
-function WrapperLoopback.DownloadFile(name, fileType, force)
-	SendCommand("DownloadFile", {Name = name, FileType = fileType, ForceRetry = force})
+function WrapperLoopback.DownloadFile(name, fileType)
+	SendCommand("DownloadFile", {Name = name, FileType = fileType})
 end
 
 --  aborts existing file download
