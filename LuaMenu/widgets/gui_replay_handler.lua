@@ -170,7 +170,7 @@ local function InitializeControls(parentControl)
 	local listHolder = Control:New {
 		x = 12,
 		right = 15,
-		y = 52,
+		y = 60,
 		bottom = 15,
 		parent = parentControl,
 		resizable = false,
@@ -239,9 +239,9 @@ local function InitializeControls(parentControl)
 	
 	Button:New {
 		x = 100,
-		y = 5,
-		width = 100,
-		height = 38,
+		y = 7,
+		width = 110,
+		height = 45,
 		caption = i18n("refresh"),
 		font = Configuration:GetFont(3),
 		classname = "option_button",
@@ -254,10 +254,10 @@ local function InitializeControls(parentControl)
 	}
 	
 	moreButton = Button:New {
-		x = 430,
-		y = 5,
-		width = 85,
-		height = 38,
+		x = 340,
+		y = 7,
+		width = 110,
+		height = 45,
 		caption = i18n("more"),
 		font = Configuration:GetFont(3),
 		classname = "option_button",
@@ -270,14 +270,29 @@ local function InitializeControls(parentControl)
 			end
 		},
 	}
+	--local btnClose = Button:New {
+	--	right = 11,
+	--	y = 7,
+	--	width = 80,
+	--	height = 45,
+	--	caption = i18n("close"),
+	--	font = Configuration:GetFont(3),
+	--	classname = "negative_button",
+	--	OnClick = {
+	--		function()
+	--			parentControl:Hide()
+	--		end
+	--	},
+	--	parent = parentControl
+	--}
 	
 	if WG.WrapperLoopback and Configuration.gameConfig.link_replays then
 		Button:New {
-			x = 210,
-			y = 5,
-			width = 210,
-			height = 38,
-			caption = i18n("download_replays"),
+			x = 220,
+			y = 7,
+			width = 110,
+			height = 45,
+			caption = i18n("download"),
 			font = Configuration:GetFont(3),
 			classname = "option_button",
 			parent = parentControl,

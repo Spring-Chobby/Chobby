@@ -160,7 +160,20 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 		submenus[index].panelHandler.Destroy()
 		submenus[index].analyticsName = "lobby:" .. submenus[index].name
 		
-		local newPanelHandler = GetTabPanelHandler(submenus[index].name, buttonWindow, panelWindow, submenuPanelWindow, newTabs, true, BackToMainMenu, newCleanupFunction, fontSizeScale, nil, nil, nil, SetTitle, "lobby:" .. submenus[index].name)
+		local conf = {
+			buttonWindow        = buttonWindow,
+			displayPanel        = panelWindow,
+			submenuDisplayPanel = submenuPanelWindow,
+			initialTabs         = newTabs,
+			tabsVertical        = true,
+			backFunction        = BackToMainMenu,
+			cleanupFunction     = newCleanupFunction,
+			fontSizeScale       = fontSizeScale,
+			titleUpdateFunction = SetTitle,
+			analyticsName       = "lobby:" .. submenus[index].name
+		}
+		
+		local newPanelHandler = GetTabPanelHandler(submenus[index].name, conf)
 		newPanelHandler.Rescale(fontSizeScale, buttonHeight, nil, buttonOffset, buttonSpacing)
 		newPanelHandler.Hide()
 		submenus[index].panelHandler = newPanelHandler
@@ -197,7 +210,23 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 	for i = 1, #submenus do
 		
 		submenus[i].analyticsName = "lobby:" .. submenus[i].name
-		local panelHandler = GetTabPanelHandler(submenus[i].name, buttonWindow, panelWindow, submenuPanelWindow, submenus[i].tabs, true, BackToMainMenu, submenus[i].cleanupFunction, fontSizeScale, submenus[i].submenuControl, nil, nil, SetTitle, submenus[i].analyticsName)
+		
+		local conf = {
+			buttonWindow = buttonWindow,
+			displayPanel = panelWindow,
+			submenuDisplayPanel = submenuPanelWindow,
+			initialTabs = submenus[i].tabs,
+			tabsVertical = true,
+			backFunction = BackToMainMenu,
+			cleanupFunction = submenus[i].cleanupFunction,
+			fontSizeScale = fontSizeScale,
+			submenuControl = submenus[i].submenuControl,
+			titleUpdateFunction = SetTitle,
+			analyticsName = submenus[i].analyticsName,
+			startOpenAndHidden = submenus[i].startOpenAndHidden
+		}
+		
+		local panelHandler = GetTabPanelHandler(submenus[i].name, conf)
 		panelHandler.Hide()
 		
 		submenuPanelNames[submenus[i].name] = panelHandler

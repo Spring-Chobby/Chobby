@@ -421,7 +421,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local rightPanelTabs = {
 		{name = "chat", control = chatWindows.window},
 		{name = "friends", control = WG.FriendWindow.GetControl()},
-		{name = "replays", control = WG.ReplayHandler.GetControl()},
 		{name = "settings", control = WG.SettingsWindow.GetControl()},
 		{name = "downloads", control = WG.DownloadWindow.GetControl()},
 	}
@@ -432,6 +431,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local SINGLEPLAYER_INDEX = 1
 	local MULTIPLAYER_INDEX = 2
+	local HELP_INDEX = 4
 	local submenus = {
 		{
 			name = "singleplayer",
@@ -446,6 +446,13 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				--{name = "planetwars", control = planetwarsListWindow},
 			},
 			cleanupFunction = Configuration.leaveMultiplayerOnMainMenu and CleanMultiplayerState or nil
+		},
+		{
+			name = "replays", 
+			tabs = {
+				{name = "replays", control = WG.ReplayHandler.GetControl()},
+			},
+			startOpenAndHidden = true,
 		},
 		{
 			name = "help",
@@ -470,13 +477,22 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		heading_image:Invalidate()
 	end
 
-	local battleStatusPanelHandler = GetTabPanelHandler(
-		"myBattlePanel", battleTabHolder, mainContent_window, nil, {}, nil, nil, nil, nil,
-		statusButtonWidth, battleStatusTabControls, nil, nil, "lobby:battle"
+	local battleStatusPanelHandler = GetTabPanelHandler("myBattlePanel", {
+			buttonWindow        = battleTabHolder,
+			displayPanel        = mainContent_window,
+			initialTabs         = {},
+			tabWidth            = statusButtonWidth,
+			tabControlOverride  = battleStatusTabControls,
+			analyticsName       = "lobby:battle"
+		}
 	)
-
-	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons_buttons, rightPanel_window,
-		nil, rightPanelTabs, nil, nil, nil, nil, nil, nil, nil, nil, "lobby:panel"
+	
+	local rightPanelHandler = GetTabPanelHandler("panelTabs", {
+			buttonWindow = panelButtons_buttons,
+			displayPanel = rightPanel_window,
+			initialTabs = rightPanelTabs, 
+			analyticsName = "lobby:panel"
+		}
 	)
 
 	mainWindowHandler = GetSubmenuHandler(buttonsHolder_buttons, mainContent_window, submenuWindow_mainContent, submenus, UpdateTitle)
@@ -1110,8 +1126,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			local replacementHelpTabs = Configuration.gameConfig.helpSubmenuConfig
 
 			WG.BattleRoomWindow.LeaveBattle(false, true)
-			mainWindowHandler.ReplaceSubmenu(1, replacementTabs)
-			mainWindowHandler.ReplaceSubmenu(3, replacementHelpTabs)
+			mainWindowHandler.ReplaceSubmenu(SINGLEPLAYER_INDEX, replacementTabs)
+			mainWindowHandler.ReplaceSubmenu(HELP_INDEX, replacementHelpTabs)
 		end
 	end
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
