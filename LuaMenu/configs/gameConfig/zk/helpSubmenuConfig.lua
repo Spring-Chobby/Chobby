@@ -65,6 +65,13 @@ local communityLines = {
 		end
 	},
 	{
+		"Discord chat server.",
+		"Discord",
+		function ()
+			WG.WrapperLoopback.OpenUrl("https://discord.gg/aab63Vt")
+		end
+	},
+	{
 		"Shadowfury333's Youtube channel.",
 		"Youtube",
 		function ()

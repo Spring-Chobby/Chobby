@@ -11,7 +11,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local userStatusPanelWidth = 250
 
 	local battleStatusWidth = 480
-	local panelButtonsWidth = 538
+	local panelButtonsWidth = 578
 	local panelButtonsHeight = 42
 	local statusWindowGapSmall = 44
 
@@ -419,6 +419,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	end
 
 	local rightPanelTabs = {
+		{name = "community", control = WG.CommunityWindow.GetControl()},
 		{name = "chat", control = chatWindows.window},
 		{name = "friends", control = WG.FriendWindow.GetControl()},
 		{name = "settings", control = WG.SettingsWindow.GetControl()},
@@ -670,7 +671,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local function UpdatePadding(screenWidth, screenHeight)
 		local leftPad, rightPad, bottomPad, middlePad
-		if screenWidth < 1366 or (not doublePanelMode) then
+		if screenWidth < 1400 or (not doublePanelMode) then
 			leftButtonPad = 0
 			leftPad = 0
 			rightPad = 0
