@@ -38,15 +38,6 @@ local friendsInGame, friendsInGameSteamID, hostPort
 -- External functions
 
 local SteamCoopHandler = {}
-
-function SteamCoopHandler.InviteLichoToGame()
-	WG.WrapperLoopback.SteamInviteFriendToGame("76561197962341674") 
-end
-
-function SteamCoopHandler.InviteGoogleFrogToGame()
-	WG.WrapperLoopback.SteamInviteFriendToGame("76561198005614529") 
-end
-
 function SteamCoopHandler.GetHostPort()
 	return hostPort
 end

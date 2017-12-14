@@ -164,6 +164,10 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 				comboOptions[#comboOptions + 1] = "Invite to Party"
 			end
 		end
+		
+		if Configuration.canAuthenticateWithSteam and userControl.steamInvite and userInfo.steamID then
+			comboOptions[#comboOptions + 1] = "Invite to Campaign"
+		end
 
 		if userInfo.accountID and Configuration.gameConfig.link_userPage then
 			comboOptions[#comboOptions + 1] = "User Page"
@@ -446,6 +450,8 @@ local function GetUserControls(userName, opts)
 	userControls.isInBattle = isInBattle
 	userControls.lobby = (isSingleplayer and WG.LibLobby.localLobby) or lobby
 	userControls.isSingleplayer = isSingleplayer
+	userControls.steamInvite = opts.steamInvite
+	Spring.Echo("opts.steamInvite", opts.steamInvite)
 
 	if reinitialize then
 		userControls.mainControl:ClearChildren()
@@ -480,7 +486,7 @@ local function GetUserControls(userName, opts)
 			itemFontSize = Configuration:GetFont(2).size,
 			itemHeight = 30,
 			selected = 0,
-			maxDropDownWidth = 150,
+			maxDropDownWidth = large and 220 or 150,
 			minDropDownHeight = 0,
 			maxDropDownHeight = 300,
 			items = GetUserComboBoxOptions(userName, isInBattle, userControls),
@@ -523,6 +529,11 @@ local function GetUserControls(userName, opts)
 						local userInfo = userControls.lobby:GetUser(userName)
 						if WG.SteamHandler.GetIsSteamFriend(userInfo.steamID) and userInfo.isOffline then
 							WG.SteamHandler.InviteUserViaSteam(userName, userInfo.steamID)
+						end
+					elseif selectedName == "Invite to Campaign" then
+						local userInfo = userControls.lobby:GetUser(userName)
+						if userInfo.steamID then
+							WG.WrapperLoopback.SteamInviteFriendToGame(userInfo.steamID)
 						end
 					elseif selectedName == "Join Battle" then
 						local userInfo = userControls.lobby:GetUser(userName) or {}
@@ -819,6 +830,7 @@ function userHandler.GetFriendUser(userName)
 		offsetY        = 6,
 		height         = 80,
 		maxNameLength  = WG.Chobby.Configuration.friendMaxNameLength,
+		steamInvite    = true,
 	})
 end
 

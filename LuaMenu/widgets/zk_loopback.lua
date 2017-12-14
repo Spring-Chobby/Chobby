@@ -111,7 +111,7 @@ local function SteamFriendJoinedMe(args)
 end
 
 
--- TODO wrapper will send this to indiciate P2P host request is ok and this chobby should start hosting asap, using the given local port
+-- TODO wrapper will send this to indicate P2P host request is ok and this chobby should start hosting asap, using the given local port
 local function SteamHostGameSuccess(args) 
 	WG.SteamCoopHandler.SteamHostGameSuccess(args.HostPort)
 	-- args.HostPort
