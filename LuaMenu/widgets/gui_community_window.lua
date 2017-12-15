@@ -15,7 +15,13 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Initialization
+-- Vars 
+
+local globalSizeMode = 2
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Controls
 
 local function GetScroll(window, x, right, y, bottom, verticalScrollbar)
 	local holder = Control:New {
@@ -43,19 +49,50 @@ local function GetScroll(window, x, right, y, bottom, verticalScrollbar)
 	}
 end
 
-local function LeaveIntentionallyBlank(scroll)
+local function LeaveIntentionallyBlank(scroll, caption)
 	Label:New {
-		x = 0,
-		y = 12,
+		x = 12,
+		y = 10,
 		width = 120,
 		height = 20,
 		align = "left",
-		valign = "center",
-		font = WG.Chobby.Configuration:GetFont(0),
-		caption = "(intentionally blank)",
+		valign = "tp",
+		font = WG.Chobby.Configuration:GetFont(1),
+		caption = caption,
 		parent = scroll
 	}
 end
+
+local function AddLinkButton(scroll, name, link, x, right, y, bottom)
+	local button = Button:New {
+		x = x,
+		y = y,
+		right = right,
+		bottom = bottom,
+		caption = name,
+		classname = "action_button",
+		font = WG.Chobby.Configuration:GetFont(3),
+		OnClick = {
+			function ()
+				WG.BrowserHandler.OpenUrl(link)
+			end
+		},
+		OnResize = {
+			function(obj, xSize, ySize)
+				if globalSizeMode == 2 then
+					ButtonUtilities.SetFontSizeScale(obj, 4)
+				else
+					ButtonUtilities.SetFontSizeScale(obj, 3)
+				end
+			end
+		},
+		parent = scroll,
+	}
+	ButtonUtilities.SetFontSizeScale(button, 3)
+end
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Initialization
 
 local function InitializeControls(window)
 	-- Save space
@@ -76,10 +113,15 @@ local function InitializeControls(window)
 	local leftLower   = GetScroll(window, 0, "33.4%", "69%", 0, false)
 	local rightLower  = GetScroll(window, "66.6%", 0, "69%", 0, false)
 	
-	LeaveIntentionallyBlank(midCenter)
-	LeaveIntentionallyBlank(rightCenter)
-	LeaveIntentionallyBlank(leftLower)
-	LeaveIntentionallyBlank(rightLower)
+	LeaveIntentionallyBlank(midCenter, "Forum activity")
+	LeaveIntentionallyBlank(rightCenter, "Ladder")
+	LeaveIntentionallyBlank(leftLower, "Profile")
+	LeaveIntentionallyBlank(rightLower, "(reserved)")
+	
+	AddLinkButton(leftCenter, "Discord", "https://discord.gg/aab63Vt", 0, 0, 0, "75%")
+	AddLinkButton(leftCenter, "Forums",  "http://zero-k.info/Forum",   0, 0, "25%", "50%")
+	AddLinkButton(leftCenter, "Manual",  "http://zero-k.info/mediawiki/index.php?title=Manual", 0, 0, "50%", "25%")
+	AddLinkButton(leftCenter, "Replays", "http://zero-k.info/Battles", 0, 0, "75%", 0)
 	
 end
 
@@ -105,6 +147,15 @@ function CommunityWindow.GetControl()
 				end
 			end
 		},
+		OnResize = {
+			function(obj, xSize, ySize)
+				if ySize < 680 then
+					globalSizeMode = 1
+				else
+					globalSizeMode = 2
+				end
+			end
+		}
 	}
 	return window
 end
