@@ -136,6 +136,10 @@ function Spring.Utilities.FormatTime(seconds, includeSeconds)
 end
 
 function Spring.Utilities.ArchaicFormatDate(timeTable, translator)
+	if not timeTable then
+		return false
+	end
+
 	local daySuffix
 	if timeTable[4]%10 == 1 and timeTable[4]%100 ~= 11 then
 		daySuffix = "st"
@@ -338,5 +342,5 @@ function Spring.Utilities.UtcToLocal(utcTimeString)
 end
 
 function Spring.Utilities.ArchaicUtcToLocal(utcTimeString, translator)
-	return Spring.Utilities.ArchaicFormatDate(Spring.Utilities.UtcToLocal(utcTimeString), translator) or "??"
+	return Spring.Utilities.ArchaicFormatDate(Spring.Utilities.UtcToLocal(utcTimeString), translator)
 end

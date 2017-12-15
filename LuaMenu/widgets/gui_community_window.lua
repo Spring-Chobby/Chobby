@@ -41,7 +41,7 @@ local function GetScroll(window, x, right, y, bottom, verticalScrollbar)
 		horizontalScrollbar = false,
 		verticalScrollbar = verticalScrollbar,
 		padding = {4, 4, 4, 4},
-		--borderColor = {0,0,0,0},
+		--borderColor = hideBorder and {0,0,0,0},
 		--OnResize = {
 		--	function()
 		--	end
@@ -64,14 +64,15 @@ local function LeaveIntentionallyBlank(scroll, caption)
 	}
 end
 
-local function AddLinkButton(scroll, name, link, x, right, y, bottom)
+local function AddLinkButton(scroll, name, tooltip, link, x, right, y, bottom)
 	local button = Button:New {
 		x = x,
 		y = y,
 		right = right,
 		bottom = bottom,
 		caption = name,
-		classname = "action_button",
+		tooltip = tooltip,
+		classname = "option_button",
 		font = WG.Chobby.Configuration:GetFont(3),
 		OnClick = {
 			function ()
@@ -99,7 +100,12 @@ end
 local function GetDateTimeDisplay(parentControl, xPosition, yPosition, timeString)
 	local difference, inTheFuture = Spring.Utilities.GetTimeDifference(timeString)
 	
-	local localTimeString = Spring.Utilities.ArchaicUtcToLocal(timeString, i18n) .. " local time."
+	local localTimeString = Spring.Utilities.ArchaicUtcToLocal(timeString, i18n)
+	if localTimeString then
+		localTimeString = localTimeString .. " local time."
+	end
+	local utcTimeString = string.gsub(timeString, "T", " at ") .. " UTC"
+	
 	local localStart = TextBox:New{
 		x = xPosition,
 		y = yPosition + 6,
@@ -107,7 +113,7 @@ local function GetDateTimeDisplay(parentControl, xPosition, yPosition, timeStrin
 		height = 22,
 		align = "left",
 		valign = "top",
-		text = localTimeString,
+		text = localTimeString or utcTimeString, -- Fallback
 		tooltip = string.gsub(timeString, "T", " at ") .. " UTC",
 		fontsize = WG.Chobby.Configuration:GetFont(2).size,
 		parent = parentControl,
@@ -120,7 +126,7 @@ local function GetDateTimeDisplay(parentControl, xPosition, yPosition, timeStrin
 		height = 22,
 		align = "left",
 		valign = "top",
-		tooltip = string.gsub(timeString, "T", " at ") .. " UTC",
+		tooltip = utcTimeString,
 		fontsize = WG.Chobby.Configuration:GetFont(2).size,
 		parent = parentControl,
 	}
@@ -170,7 +176,7 @@ local function GetNewsHandler(parentControl)
 			else
 				controls.heading:SetPos(nil, offset + 12)
 			end
-			offset = offset + 40
+			offset = offset + 44
 			
 			if controls.image then
 				controls.image:SetPos(nil, offset + 6)
@@ -202,7 +208,7 @@ local function GetNewsHandler(parentControl)
 				x = 2,
 				y = offset + 5,
 				right = 2,
-				height = 38,
+				height = 40,
 				classname = "button_square",
 				caption = "",
 				padding = {0, 0, 0, 0},
@@ -226,9 +232,10 @@ local function GetNewsHandler(parentControl)
 				parent = controls.linkButton,
 			}
 			
+			-- Possibly looks nicer without link image.
 			local linkImage = Image:New {
 				x = 0,
-				y = 4,
+				y = 5,
 				width = 28,
 				height = 28,
 				keepAspect = true,
@@ -237,7 +244,7 @@ local function GetNewsHandler(parentControl)
 			}
 			
 			local length = controls.heading.font:GetTextWidth(entryData.heading)
-			linkImage:SetPos(length + 7)
+			linkImage:SetPos(length + 8)
 		else
 			controls.heading = TextBox:New{
 				x = textPos,
@@ -251,7 +258,7 @@ local function GetNewsHandler(parentControl)
 				parent = holder,
 			}
 		end
-		offset = offset + 40
+		offset = offset + 44
 		
 		if entryData.imageFile then
 			textPos = imageSize + 12
@@ -319,15 +326,15 @@ local function InitializeControls(window)
 	local leftLower   = GetScroll(window, 0, "33.4%", "69%", 0, false)
 	local rightLower  = GetScroll(window, "66.6%", 0, "69%", 0, false)
 	
-	LeaveIntentionallyBlank(midCenter, "Forum (coming soon)")
-	LeaveIntentionallyBlank(rightCenter, "Ladder (coming soon)")
-	LeaveIntentionallyBlank(leftLower, "Profile (coming soon)")
+	LeaveIntentionallyBlank(midCenter, "Forum (TODO)")
+	LeaveIntentionallyBlank(rightCenter, "Ladder (TODO)")
+	LeaveIntentionallyBlank(leftLower, "Profile (TODO)")
 	LeaveIntentionallyBlank(rightLower, "(reserved)")
 	
-	AddLinkButton(leftCenter, "Discord", "https://discord.gg/aab63Vt", 0, 0, 0, "75%")
-	AddLinkButton(leftCenter, "Forum",  "http://zero-k.info/Forum",   0, 0, "25%", "50%")
-	AddLinkButton(leftCenter, "Manual",  "http://zero-k.info/mediawiki/index.php?title=Manual", 0, 0, "50%", "25%")
-	AddLinkButton(leftCenter, "Replays", "http://zero-k.info/Battles", 0, 0, "75%", 0)
+	AddLinkButton(leftCenter, "Discord", "Chat on the Zero-K Discord server.", "https://discord.gg/aab63Vt", 0, 0, 0, "75.5%")
+	AddLinkButton(leftCenter, "Forum",   "Browse or post on the forums.", "http://zero-k.info/Forum",   0, 0, "25.5%", "50.5%")
+	AddLinkButton(leftCenter, "Manual",  "Read the manual and unit guide.", "http://zero-k.info/mediawiki/index.php?title=Manual", 0, 0, "50.5%", "25.5%")
+	AddLinkButton(leftCenter, "Replays", "Watch replays of online games.", "http://zero-k.info/Battles", 0, 0, "75.5%", 0)
 	
 	local newsDefs = {
 		{
@@ -335,13 +342,18 @@ local function InitializeControls(window)
 			heading = "December 1v1 Tournament",
 			link = "http://zero-k.info/Forum/Thread/24531",
 			atTime = "2017-12-16T10:00:00",
-			text = "There will be a 1v1 tournament this weekend. Every will play 7 games in a Swiss stage, followed by elimination to determine the winner from the top 4. Click the above link to sign up in the forum thread.",
+			text = "There will be a 1v1 tournament this weekend. All participants will play seven rounds of Swiss, followed by elimination amoung the top four to determine an overall winner. Click the link above to sign up in the forum thread.",
 		},
 		{
 			imageFile = LUA_DIRNAME .. "images/news/newRating.png",
 			heading = "New Rating System",
 			link = "http://zero-k.info/Forum/Thread/24536",
-			text = "We have recently switched to a new rating system. Elo is being replaced by Whole history rating. Although generally very similar to the old ratings, this means that rating values have changed for every player. See the main newspost for more information.",
+			text = "We have recently switched to a new rating system. Elo is being replaced by Whole History Rating. Although generally very similar to the old ratings, this means that rating values have changed for every player. See the full thread for more information.",
+		},
+		{
+			imageFile = LUA_DIRNAME .. "images/news/communityNews.png",
+			heading = "New Community Tab",
+			text = "By scrolling down to the bottom of the news window you have explored the entirety of the current community tab. The aim of the tab is to get people move involved in events, forums and chat, all in the name of community building. The remaining panels are a work in progress so feel free to suggest a panel that you would like to see here.",
 		},
 	}
 	
@@ -366,6 +378,7 @@ function CommunityWindow.GetControl()
 		y = "0%",
 		width = "100%",
 		height = "100%",
+		padding = {8, 8, 8, 12},
 		OnParent = {
 			function(obj)
 				if obj:IsEmpty() then
