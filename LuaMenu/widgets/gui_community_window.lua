@@ -17,8 +17,9 @@ end
 --------------------------------------------------------------------------------
 -- Vars 
 
-local globalSizeMode = 2
+local IMG_LINK = LUA_DIRNAME .. "images/link.png"
 
+local globalSizeMode = 2
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Controls
@@ -90,6 +91,211 @@ local function AddLinkButton(scroll, name, link, x, right, y, bottom)
 	}
 	ButtonUtilities.SetFontSizeScale(button, 3)
 end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- News
+
+local function GetDateTimeDisplay(parentControl, xPosition, yPosition, timeString)
+	local difference, inTheFuture = Spring.Utilities.GetTimeDifference(timeString)
+	
+	local localTimeString = Spring.Utilities.ArchaicUtcToLocal(timeString, i18n) .. " local time."
+	local localStart = TextBox:New{
+		x = xPosition,
+		y = yPosition + 6,
+		right = 4,
+		height = 22,
+		align = "left",
+		valign = "top",
+		text = localTimeString,
+		tooltip = string.gsub(timeString, "T", " at ") .. " UTC",
+		fontsize = WG.Chobby.Configuration:GetFont(2).size,
+		parent = parentControl,
+	}
+	
+	local countdown = TextBox:New{
+		x = xPosition,
+		y = yPosition + 26,
+		right = 4,
+		height = 22,
+		align = "left",
+		valign = "top",
+		tooltip = string.gsub(timeString, "T", " at ") .. " UTC",
+		fontsize = WG.Chobby.Configuration:GetFont(2).size,
+		parent = parentControl,
+	}
+	
+	local function UpdateCountdown()
+		difference, inTheFuture = Spring.Utilities.GetTimeDifference(timeString)
+		countdown:SetText((inTheFuture and "Starting in " or "Started ") .. difference .. (inTheFuture and "." or " ago. "))
+		WG.Delay(UpdateCountdown, 60)
+	end
+	UpdateCountdown()
+	
+	-- Activate the tooltip.
+	function localStart:HitTest(x,y) return self end
+	function countdown:HitTest(x,y) return self end
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.SetPosition(newY)
+		localStart:SetPos(nil, newY + 6)
+		countdown:SetPos(nil, newY + 26)
+	end
+	
+	return externalFunctions
+end
+
+local function GetNewsHandler(parentControl)
+	local offset = 0
+	local imageSize = 120
+	local paragraphSpacing = 30
+	
+	local holder = Control:New{
+		x = 0,
+		y = 0,
+		right = 0,
+		padding = {0,0,0,0},
+		parent = parentControl,
+	}
+	
+	local newsControls = {}
+	
+	local function DoResize()
+		offset = 0
+		for i = 1, #newsControls do
+			local controls = newsControls[i]
+			if controls.linkButton then
+				controls.linkButton:SetPos(nil, offset + 5)
+			else
+				controls.heading:SetPos(nil, offset + 12)
+			end
+			offset = offset + 40
+			
+			if controls.image then
+				controls.image:SetPos(nil, offset + 6)
+			end
+			if controls.dateTime then
+				controls.dateTime.SetPosition(offset)
+				offset = offset + 46
+			end
+			controls.text:SetPos(nil, offset + 6)
+			
+			local offsetSize = (#controls.text.physicalLines)*18
+			if controls.image and (offsetSize < imageSize - (controls.dateTime and 46 or 0)) then
+				offsetSize = imageSize - (controls.dateTime and 46 or 0)
+			end
+			
+			offset = offset + offsetSize + paragraphSpacing
+		end
+		holder:SetPos(nil, nil, nil, offset - paragraphSpacing/2)
+	end
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.AddEntry(entryData)
+		local controls = {}
+		local textPos = 6
+		
+		if entryData.link then
+			controls.linkButton = Button:New {
+				x = 2,
+				y = offset + 5,
+				right = 2,
+				height = 38,
+				classname = "button_square",
+				caption = "",
+				padding = {0, 0, 0, 0},
+				parent = holder,
+				OnClick = {
+					function ()
+						WG.BrowserHandler.OpenUrl(entryData.link)
+					end
+				}
+			}
+
+			controls.heading = TextBox:New{
+				x = 4,
+				y = 7,
+				right = 4,
+				height = 34,
+				align = "left",
+				valign = "top",
+				text = entryData.heading,
+				fontsize = WG.Chobby.Configuration:GetFont(4).size,
+				parent = controls.linkButton,
+			}
+			
+			local linkImage = Image:New {
+				x = 0,
+				y = 4,
+				width = 28,
+				height = 28,
+				keepAspect = true,
+				file = IMG_LINK,
+				parent = controls.linkButton,
+			}
+			
+			local length = controls.heading.font:GetTextWidth(entryData.heading)
+			linkImage:SetPos(length + 7)
+		else
+			controls.heading = TextBox:New{
+				x = textPos,
+				y = offset + 12,
+				right = 4,
+				height = 34,
+				align = "left",
+				valign = "top",
+				text = entryData.heading,
+				fontsize = WG.Chobby.Configuration:GetFont(4).size,
+				parent = holder,
+			}
+		end
+		offset = offset + 40
+		
+		if entryData.imageFile then
+			textPos = imageSize + 12
+			
+			controls.image = Image:New{
+				x = 4,
+				y = offset + 6,
+				width = imageSize,
+				height = imageSize,
+				keepAspect = true,
+				file = entryData.imageFile,
+				parent = holder
+			}
+		end
+		
+		if entryData.atTime then
+			controls.dateTime = GetDateTimeDisplay(holder, textPos, offset, entryData.atTime)
+			offset = offset + 45
+		end
+		
+		controls.text = TextBox:New{
+			x = textPos,
+			y = offset + 6,
+			right = 4,
+			height = 120,
+			align = "left",
+			valign = "top",
+			text = entryData.text,
+			fontsize = WG.Chobby.Configuration:GetFont(2).size,
+			parent = holder,
+		}
+		
+		newsControls[#newsControls + 1] = controls
+		DoResize()
+	end
+	
+	parentControl.OnResize = parentControl.OnResize or {}
+	parentControl.OnResize[#parentControl.OnResize + 1] = function ()
+		WG.Delay(DoResize, 0.01)
+	end
+	
+	return externalFunctions
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Initialization
@@ -106,23 +312,43 @@ local function InitializeControls(window)
 	--	caption = "Community",
 	--}
 	
-	local newsHolder  = GetScroll(window, 0, 0, 0, "62%", true)
-	local leftCenter  = GetScroll(window, 0, "66.6%", "38%", "31%", false)
-	local midCenter   = GetScroll(window, "33.4%", "33.4%", "38%", "31%", false)
-	local rightCenter = GetScroll(window, "66.6%", 0, "38%", "31%", false)
+	local newsHolder  = GetScroll(window, 0, 0, 0, "60%", true)
+	local leftCenter  = GetScroll(window, 0, "66.6%", "40%", "31%", false)
+	local midCenter   = GetScroll(window, "33.4%", "33.4%", "40%", "31%", false)
+	local rightCenter = GetScroll(window, "66.6%", 0, "40%", "31%", false)
 	local leftLower   = GetScroll(window, 0, "33.4%", "69%", 0, false)
 	local rightLower  = GetScroll(window, "66.6%", 0, "69%", 0, false)
 	
-	LeaveIntentionallyBlank(midCenter, "Forum activity")
-	LeaveIntentionallyBlank(rightCenter, "Ladder")
-	LeaveIntentionallyBlank(leftLower, "Profile")
+	LeaveIntentionallyBlank(midCenter, "Forum (coming soon)")
+	LeaveIntentionallyBlank(rightCenter, "Ladder (coming soon)")
+	LeaveIntentionallyBlank(leftLower, "Profile (coming soon)")
 	LeaveIntentionallyBlank(rightLower, "(reserved)")
 	
 	AddLinkButton(leftCenter, "Discord", "https://discord.gg/aab63Vt", 0, 0, 0, "75%")
-	AddLinkButton(leftCenter, "Forums",  "http://zero-k.info/Forum",   0, 0, "25%", "50%")
+	AddLinkButton(leftCenter, "Forum",  "http://zero-k.info/Forum",   0, 0, "25%", "50%")
 	AddLinkButton(leftCenter, "Manual",  "http://zero-k.info/mediawiki/index.php?title=Manual", 0, 0, "50%", "25%")
 	AddLinkButton(leftCenter, "Replays", "http://zero-k.info/Battles", 0, 0, "75%", 0)
 	
+	local newsDefs = {
+		{
+			imageFile = LUA_DIRNAME .. "images/news/tournmentNews.png",
+			heading = "December 1v1 Tournament",
+			link = "http://zero-k.info/Forum/Thread/24531",
+			atTime = "2017-12-16T10:00:00",
+			text = "There will be a 1v1 tournament this weekend. Every will play 7 games in a Swiss stage, followed by elimination to determine the winner from the top 4. Click the above link to sign up in the forum thread.",
+		},
+		{
+			imageFile = LUA_DIRNAME .. "images/news/newRating.png",
+			heading = "New Rating System",
+			link = "http://zero-k.info/Forum/Thread/24536",
+			text = "We have recently switched to a new rating system. Elo is being replaced by Whole history rating. Although generally very similar to the old ratings, this means that rating values have changed for every player. See the main newspost for more information.",
+		},
+	}
+	
+	local newsHandler = GetNewsHandler(newsHolder)
+	for i = 1, #newsDefs do
+		newsHandler.AddEntry(newsDefs[i])
+	end
 end
 
 
@@ -149,7 +375,7 @@ function CommunityWindow.GetControl()
 		},
 		OnResize = {
 			function(obj, xSize, ySize)
-				if ySize < 680 then
+				if ySize < 650 then
 					globalSizeMode = 1
 				else
 					globalSizeMode = 2

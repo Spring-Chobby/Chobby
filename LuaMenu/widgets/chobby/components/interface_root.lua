@@ -672,7 +672,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local function UpdatePadding(screenWidth, screenHeight)
 		local leftPad, rightPad, bottomPad, middlePad
-		if screenWidth < 1400 or (not doublePanelMode) then
+		if screenWidth < 1460 or (not doublePanelMode) then
 			leftButtonPad = 0
 			leftPad = 0
 			rightPad = 0
