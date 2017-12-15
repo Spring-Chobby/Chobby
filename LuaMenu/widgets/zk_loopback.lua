@@ -145,8 +145,8 @@ local function DownloadImageDone(args)
     public class DownloadImageDone
     {
         public string RequestToken { get; set; } // client can set token to track multiple responses/requests
-        public string ImageType { get; set; }
-        public string Name { get; set; }
+        public string ImageUrl
+        public string TargetPath
     }
 	]]--
 end
@@ -274,8 +274,8 @@ function WrapperLoopback.DownloadImage(args)
     public class DownloadImage
     {
         public string RequestToken { get; set; } // client can set token to track multiple responses/requests
-        public string ImageType { get; set; }  // "Avatars" or "Clans"
-        public string Name { get; set; }
+        public string ImageUrl { get; set; }  
+        public string TargetPath { get; set; }
     }
 ]]--
 	SendCommand("DownloadImage", args)
