@@ -13,7 +13,8 @@ function GetTabPanelHandler(name, conf)
 	local submenuControl      = conf.submenuControl
 	local titleUpdateFunction = conf.titleUpdateFunction
 	local analyticsName       = conf.analyticsName
-	local startOpenAndHidden  = conf.startOpenAndHidden
+	local hideMyButtons       = conf.hideMyButtons
+	local startWithTabOpen    = conf.startWithTabOpen
 
 	local externalFunctions = {}
 
@@ -185,8 +186,8 @@ function GetTabPanelHandler(name, conf)
 		if titleUpdateFunction then
 			titleUpdateFunction(name)
 		end
-		if startOpenAndHidden then
-			externalFunctions.OpenTab(1)
+		if startWithTabOpen then
+			externalFunctions.OpenTab(startWithTabOpen)
 		end
 	end
 
@@ -407,7 +408,7 @@ function GetTabPanelHandler(name, conf)
 			}
 		end
 
-		if not startOpenAndHidden then
+		if not hideMyButtons then
 			buttonsHolder:AddChild(button)
 		end
 		ButtonUtilities.SetFontSizeScale(button, fontSizeScale)
@@ -452,7 +453,9 @@ function GetTabPanelHandler(name, conf)
 				tabControlOverride = tabControlOverride,
 				submenuControl = submenuData.submenuControl,
 				titleUpdateFunction = titleUpdateFunction,
-				analyticsName = (analyticsName and (analyticsName .. ":" .. name)) or nil
+				analyticsName = (analyticsName and (analyticsName .. ":" .. name)) or nil,
+				hideMyButtons = submenuData.hideMyButtons,
+				startWithTabOpen = submenuData.startWithTabOpen,
 			}
 			
 			local panelHandler = GetTabPanelHandler(name, subConfg)
@@ -593,8 +596,7 @@ function GetTabPanelHandler(name, conf)
 			initialTabs[i].name,
 			i18n(initialTabs[i].name),
 			initialTabs[i].control,
-			nil, nil, 
-			startOpenAndHidden,
+			nil, nil, nil,
 			initialTabs[i].entryCheck,
 			initialTabs[i].submenuData,
 			initialTabs[i].entryCheckBootMode

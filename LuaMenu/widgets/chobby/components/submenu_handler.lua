@@ -223,7 +223,8 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 			submenuControl = submenus[i].submenuControl,
 			titleUpdateFunction = SetTitle,
 			analyticsName = submenus[i].analyticsName,
-			startOpenAndHidden = submenus[i].startOpenAndHidden
+			hideMyButtons = submenus[i].hideMyButtons,
+			startWithTabOpen = submenus[i].startWithTabOpen,
 		}
 		
 		local panelHandler = GetTabPanelHandler(submenus[i].name, conf)

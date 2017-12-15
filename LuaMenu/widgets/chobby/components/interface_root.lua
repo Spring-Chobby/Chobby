@@ -453,7 +453,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			tabs = {
 				{name = "replays", control = WG.ReplayHandler.GetControl()},
 			},
-			startOpenAndHidden = true,
+			startWithTabOpen = 1,
+			hideMyButtons = true,
 		},
 		{
 			name = "help",
@@ -492,7 +493,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			buttonWindow = panelButtons_buttons,
 			displayPanel = rightPanel_window,
 			initialTabs = rightPanelTabs, 
-			analyticsName = "lobby:panel"
+			analyticsName = "lobby:panel",
 		}
 	)
 
@@ -1145,6 +1146,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	externalFunctions.ViewResize(screenWidth, screenHeight)
 	UpdatePadding(screenWidth, screenHeight)
 	UpdateChildLayout()
+	rightPanelHandler.OpenTab(1)
 
 	return externalFunctions
 end
