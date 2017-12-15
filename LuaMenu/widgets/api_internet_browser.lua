@@ -71,7 +71,7 @@ function BrowserHandler.OpenUrl(rawUrlString)
 				WG.BrowserHandler.OpenUrl(rawUrlString)
 			end
 			local function DelayedTryClickAgain()
-				WG.Delay(TryClickAgain, 1)
+				WG.Delay(TryClickAgain, 0.05)
 			end
 			local function LoginFunc()
 				WG.LoginWindowHandler.TryLogin(DelayedTryClickAgain)
