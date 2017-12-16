@@ -1012,6 +1012,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		rightPanelHandler.OpenTabByName("chat")
 	end
 
+	function externalFunctions.OpenRightPanelTab(tabName)
+		rightPanelHandler.OpenTabByName(tabName)
+	end
+
 	function externalFunctions.GetContentPlace()
 		return mainContent_window
 	end

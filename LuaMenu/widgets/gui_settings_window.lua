@@ -34,6 +34,8 @@ local COMBO_WIDTH = 235
 local CHECK_WIDTH = 230
 local TEXT_OFFSET = 6
 
+local settingsWindowHandler
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
@@ -1290,6 +1292,14 @@ local function InitializeControls(window)
 			tabPanel.tabBar
 		}
 	}
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.OpenTab(tabName)
+		tabPanel.tabBar:Select(tabName)
+	end
+	
+	return externalFunctions
 end
 
 --------------------------------------------------------------------------------
@@ -1309,12 +1319,18 @@ function SettingsWindow.GetControl()
 		OnParent = {
 			function(obj)
 				if obj:IsEmpty() then
-					InitializeControls(obj)
+					settingsWindowHandler = InitializeControls(obj)
 				end
 			end
 		},
 	}
 	return window
+end
+
+function SettingsWindow.OpenTab(tabName)
+	if settingsWindowHandler then
+		settingsWindowHandler.OpenTab(tabName)
+	end
 end
 
 function SettingsWindow.WriteGameSpringsettings(fileName)

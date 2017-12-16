@@ -50,6 +50,7 @@ local TTS_VOLUME = "textToSpeechVolume_"
 local REMOVE_BUTTON = "disableLobbyButton"
 local ENABLE_OVERLAY = "showLobby"
 local LUAMENU_SETTING = "changeSetting "
+local OPEN_SETTINGS_TAB = "openSettingsTab "
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -114,6 +115,19 @@ local function HandleSettingsChange(msg)
 	end
 end
 
+local function HandleSettingsOpenTab(msg)
+	if string.find(msg, OPEN_SETTINGS_TAB) ~= 1 then
+		return
+	end
+	local data = msg:split(" ")
+	if WG.Chobby.interfaceRoot then
+		WG.Chobby.interfaceRoot.OpenRightPanelTab("settings")
+		WG.Chobby.interfaceRoot.SetMainInterfaceVisible(true)
+		if data[2] and WG.SettingsWindow then
+			WG.SettingsWindow.OpenTab(data[2])
+		end
+	end
+end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Callins
@@ -126,6 +140,9 @@ function widget:RecvLuaMsg(msg)
 		return
 	end
 	if HandleSettingsChange(msg) then
+		return
+	end
+	if HandleSettingsOpenTab(msg) then
 		return
 	end
 end
