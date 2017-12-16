@@ -98,8 +98,6 @@ end
 -- News
 
 local function GetDateTimeDisplay(parentControl, xPosition, yPosition, timeString)
-	local difference, inTheFuture = Spring.Utilities.GetTimeDifference(timeString)
-	
 	local localTimeString = Spring.Utilities.ArchaicUtcToLocal(timeString, i18n)
 	if localTimeString then
 		localTimeString = localTimeString .. " local time."
@@ -132,8 +130,15 @@ local function GetDateTimeDisplay(parentControl, xPosition, yPosition, timeStrin
 	}
 	
 	local function UpdateCountdown()
-		difference, inTheFuture = Spring.Utilities.GetTimeDifference(timeString)
-		countdown:SetText((inTheFuture and "Starting in " or "Started ") .. difference .. (inTheFuture and "." or " ago. "))
+		local difference, inTheFuture, isNow = Spring.Utilities.GetTimeDifference(timeString)
+		if isNow then
+			countdown:SetText("Starting " .. difference .. ".")
+		elseif inTheFuture then
+			countdown:SetText("Starting in " .. difference .. ".")
+		else
+			countdown:SetText( "Started " .. difference .. " ago.")
+		end
+		
 		WG.Delay(UpdateCountdown, 60)
 	end
 	UpdateCountdown()

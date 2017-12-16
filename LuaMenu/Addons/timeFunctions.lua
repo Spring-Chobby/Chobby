@@ -166,6 +166,9 @@ function Spring.Utilities.FormatRelativeTime(timeTable)
 			timeText = string.format((timeText or "") .. (timeText and ", " or "") .. "%d" .. " " .. baseName[i] .. (timeTable[i] == 1 and "" or "s"), timeTable[i])
 		end
 	end
+	if not timeText then
+		return "now", true
+	end
 	return timeText
 end
 
@@ -299,7 +302,8 @@ function Spring.Utilities.GetTimeDifference(targetTimeString)
 	end
 	
 	local difference, targetInTheFuture = Spring.Utilities.GetTimeDifferenceTable(targetTime)
-	return Spring.Utilities.FormatRelativeTime(difference) or "??", targetInTheFuture
+	local timeText, isNow = Spring.Utilities.FormatRelativeTime(difference, targetInTheFuture)
+	return timeText, targetInTheFuture, isNow
 end
 
 function Spring.Utilities.UtcToLocal(utcTimeString)
