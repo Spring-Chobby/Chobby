@@ -748,8 +748,8 @@ local settingsConfig = {
 					MouseZoomSpeed = 25,
 					InvertZoom = "Off",
 					TextToSpeech = "On",
-					MiddlePanSpeed = 10,
-					CameraPanSpeed = 10,
+					MiddlePanSpeed = 15,
+					CameraPanSpeed = 50,
 				}
 			},
 		},
@@ -885,7 +885,7 @@ local settingsDefault = {
 	MouseZoomSpeed = 25,
 	InvertZoom = "Off",
 	TextToSpeech = "On",
-	MiddlePanSpeed = 10,
+	MiddlePanSpeed = 15,
 	CameraPanSpeed = 50,
 }
 
