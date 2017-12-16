@@ -336,9 +336,14 @@ function Configuration:SetConfigData(data)
 	self.game_settings.WindowBorderless = nil
 	self.game_settings.Fullscreen = nil
 	
-	local newSpringsettings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettingsChanges.lua")
+	local newSpringsettings, onlyIfMissingSettings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettingsChanges.lua")
 	for key, value in pairs(newSpringsettings) do
 		self.game_settings[key] = value
+	end
+	for key, value in pairs(onlyIfMissingSettings) do
+		if self.game_settings[key] == nil then
+			self.game_settings[key] = value
+		end
 	end
 
 	self.forcedCompatibilityProfile = VFS.Include(LUA_DIRNAME .. "configs/springsettings/forcedCompatibilityProfile.lua")
