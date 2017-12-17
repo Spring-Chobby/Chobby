@@ -1404,6 +1404,26 @@ function Interface:_PwAttackingPlanet(data)
 end
 Interface.jsonCommands["PwAttackingPlanet"] = Interface._PwAttackingPlanet
 
+------------------------
+-- News and community commands
+------------------------
+
+function Interface:_NewsList(data)
+end
+Interface.jsonCommands["NewsList"] = Interface._NewsList
+
+function Interface:_LadderList(data)
+end
+Interface.jsonCommands["LadderList"] = Interface._LadderList
+
+function Interface:_ForumList(data)
+end
+Interface.jsonCommands["ForumList"] = Interface._ForumList
+
+function Interface:_UserProfile(data)
+end
+Interface.jsonCommands["UserProfile"] = Interface._UserProfile
+
 -------------------
 -- Unimplemented --
 
