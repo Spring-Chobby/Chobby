@@ -30,15 +30,15 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/bomberriot.png",
-				text = [[The Phoenix bomber drops a bundle of napalm on each bombing run. This fiery attack is most effective against large numbers of weak units. ]]
+				text = [[The Phoenix saturation bomber drops a bundle of napalm on each bombing run. This fiery attack is most effective against large numbers of weak units. ]]
+			},
+			{
+				image = "luaui/images/commands/bold/attack.png",
+				text = [[A Pheonix strike is most effective when spread over a large area. Hold Ctrl then click and drag Force Fire to give each Pheonix a distinct target in the area. Hold Alt then click and drag Force Fire to draw a line of positions to target.]]
 			},
 			{
 				image = "unitpics/planeheavyfighter.png",
-				text = [[The twin anti-air lasers of Raptors are very effective against gunships.. Be aware that the Raptor must slow down to fire and cannot shoot behind itself. Be sure to cover your Raptors from behind.]]
-			},
-			{
-				image = "unitpics/energywind.png",
-				text = [[Wind Generators are exceptionally vulnerable to Phoenixes since they have low HP and are generally built together.]]
+				text = [[The twin anti-air lasers of Raptors are very effective against gunships. Be aware that the Raptor must slow down to fire and cannot shoot behind itself. Be sure to cover your Raptors from behind.]]
 			},
 		},
 		gameConfig = {
@@ -5102,13 +5102,13 @@ local function GetPlanet(planetUtilities, planetID)
 					onlyCountRemovedUnits = true,
 					satisfyByTime = 10*60,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 300,
+					targetNumber = 250,
 					enemyUnitTypes = {
 						"energywind",
 					},
 					image = planetUtilities.ICON_DIR .. "energywind.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Destroy 300 enemy Wind Generators by 10:00",
+					description = "Destroy 250 enemy Wind Generators by 10:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = {
