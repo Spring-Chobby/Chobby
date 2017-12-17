@@ -337,6 +337,10 @@ function Configuration:SetConfigData(data)
 	self.game_settings.WindowBorderless = nil
 	self.game_settings.Fullscreen = nil
 	
+	if self.serverAddress == "zero-k.com" then
+		self.serverAddress = "zero-k.info"
+	end
+	
 	local newSpringsettings, onlyIfMissingSettings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettingsChanges.lua")
 	for key, value in pairs(newSpringsettings) do
 		self.game_settings[key] = value
