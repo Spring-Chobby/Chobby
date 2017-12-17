@@ -19,6 +19,7 @@ end
 
 local IMG_LINK = LUA_DIRNAME .. "images/link.png"
 local IMG_MISSING = LUA_DIRNAME .. "images/minimapNotFound1.png"
+local IMG_BULLET = LUA_DIRNAME .. "images/bullet.png"
 
 local globalSizeMode = 2
 
@@ -180,10 +181,35 @@ local function GetDateTimeDisplay(parentControl, xPosition, yPosition, timeStrin
 	return externalFunctions
 end
 
-local function GetNewsHandler(parentControl)
-	local offset = 0
+local headingFormats = {
+	[2] = {
+		buttonSize = 28,
+		height = 24,
+		linkSize = 16,
+		spacing = 2,
+		buttonPos = 2,
+		inButton = 4,
+		paragraphSpacing = 1,
+		topHeadingOffset = 30,
+	},
+	[4] = {
+		buttonSize = 40,
+		height = 34,
+		linkSize = 28,
+		spacing = 10,
+		buttonPos = 5,
+		inButton = 7,
+		paragraphSpacing = 30,
+		topHeadingOffset = 50,
+	},
+}
+
+local function GetNewsHandler(parentControl, headingSize, timeAsTooltip, topHeading, showBulletHeading)
 	local imageSize = 120
-	local paragraphSpacing = 30
+	local headFormat = headingFormats[headingSize]
+	headFormat.fontSize = WG.Chobby.Configuration:GetFont(headingSize).size
+	
+	local offset = topHeading and headFormat.topHeadingOffset or 0
 	
 	local holder = Control:New{
 		x = 0,
@@ -193,18 +219,37 @@ local function GetNewsHandler(parentControl)
 		parent = parentControl,
 	}
 	
+	local topHeadingLabel = topHeading and TextBox:New{
+		x = 4,
+		y = 7,
+		right = 4,
+		height = headFormat.height,
+		align = "left",
+		valign = "top",
+		text = topHeading,
+		fontsize = WG.Chobby.Configuration:GetFont(3).size,
+		parent = holder,
+	}
+	
 	local newsControls = {}
 	
 	local function DoResize()
-		offset = 0
+		offset = topHeading and headFormat.topHeadingOffset or 0
 		for i = 1, #newsControls do
 			local controls = newsControls[i]
-			if controls.linkButton then
-				controls.linkButton:SetPos(nil, offset + 5)
-			else
-				controls.heading:SetPos(nil, offset + 12)
+			
+			if controls.bullet then
+				controls.bullet:SetPos(nil, offset + 5)
 			end
-			offset = offset + 44
+			
+			local headingSize = (#controls.heading.physicalLines)*headFormat.fontSize
+			if controls.linkButton then
+				controls.linkButton:SetPos(nil, offset + headFormat.buttonPos, nil, headingSize + 4)
+				controls.heading:SetPos(nil, nil, nil, headingSize)
+			else
+				controls.heading:SetPos(nil, offset + 12, nil, headingSize)
+			end
+			offset = offset + headingSize + headFormat.spacing
 			
 			if controls.image then
 				controls.image:SetPos(nil, offset + 6)
@@ -213,16 +258,18 @@ local function GetNewsHandler(parentControl)
 				controls.dateTime.SetPosition(offset) 
 				offset = offset + 46
 			end
-			controls.text:SetPos(nil, offset + 6)
+			if controls.text then
+				controls.text:SetPos(nil, offset + 6)
+			end
 			
-			local offsetSize = (#controls.text.physicalLines)*18
-			if controls.image and (offsetSize < imageSize - (controls.dateTime and 46 or 0)) then
+			local offsetSize = (controls.text and (#controls.text.physicalLines)*18) or 6
+			if controls.image and ((not controls.text) or (offsetSize < imageSize - (controls.dateTime and 46 or 0))) then
 				offsetSize = imageSize - (controls.dateTime and 46 or 0)
 			end
 			
-			offset = offset + offsetSize + paragraphSpacing
+			offset = offset + offsetSize + headFormat.paragraphSpacing
 		end
-		holder:SetPos(nil, nil, nil, offset - paragraphSpacing/2)
+		holder:SetPos(nil, nil, nil, offset - headFormat.paragraphSpacing/2)
 	end
 	
 	local function UpdateCountdown()
@@ -240,13 +287,26 @@ local function GetNewsHandler(parentControl)
 	function externalFunctions.AddEntry(entryData)
 		local controls = {}
 		local textPos = 6
+		local headingPos = 2
+		
+		if showBulletHeading then
+			controls.bullet = Image:New{
+				x = 2,
+				y = offset + 5,
+				width = 16,
+				height = 16,
+				file = IMG_BULLET,
+				parent = holder,
+			}
+			headingPos = 18
+		end
 		
 		if entryData.link then
 			controls.linkButton = Button:New {
-				x = 2,
+				x = headingPos,
 				y = offset + 5,
 				right = 2,
-				height = 40,
+				height = headFormat.buttonSize,
 				classname = "button_square",
 				caption = "",
 				padding = {0, 0, 0, 0},
@@ -260,35 +320,37 @@ local function GetNewsHandler(parentControl)
 
 			controls.heading = TextBox:New{
 				x = 4,
-				y = 7,
+				y = headFormat.inButton,
 				right = 4,
-				height = 34,
+				height = headFormat.height,
 				align = "left",
 				valign = "top",
 				text = entryData.heading,
-				fontsize = WG.Chobby.Configuration:GetFont(4).size,
+				fontsize = WG.Chobby.Configuration:GetFont(headingSize).size,
 				parent = controls.linkButton,
 			}
 			
 			-- Possibly looks nicer without link image.
-			local linkImage = Image:New {
-				x = 0,
-				y = 5,
-				width = 28,
-				height = 28,
-				keepAspect = true,
-				file = IMG_LINK,
-				parent = controls.linkButton,
-			}
-			
-			local length = controls.heading.font:GetTextWidth(entryData.heading)
-			linkImage:SetPos(length + 8)
+			if not showBulletHeading then
+				local linkImage = Image:New {
+					x = 0,
+					y = 5,
+					width = headFormat.linkSize,
+					height = headFormat.linkSize,
+					keepAspect = true,
+					file = IMG_LINK,
+					parent = controls.linkButton,
+				}
+				
+				local length = controls.heading.font:GetTextWidth(entryData.heading)
+				linkImage:SetPos(length + 8)
+			end
 		else
 			controls.heading = TextBox:New{
-				x = textPos,
+				x = headingPos + 4,
 				y = offset + 12,
 				right = 4,
-				height = 34,
+				height = headFormat.height,
 				align = "left",
 				valign = "top",
 				text = entryData.heading,
@@ -296,7 +358,7 @@ local function GetNewsHandler(parentControl)
 				parent = holder,
 			}
 		end
-		offset = offset + 44
+		offset = offset + 40
 		
 		if entryData.imageFile then
 			textPos = imageSize + 12
@@ -316,22 +378,24 @@ local function GetNewsHandler(parentControl)
 			}
 		end
 		
-		if entryData.atTime then
+		if entryData.atTime and not timeAsTooltip then
 			controls.dateTime = GetDateTimeDisplay(holder, textPos, offset, entryData.atTime)
 			offset = offset + 45
 		end
 		
-		controls.text = TextBox:New{
-			x = textPos,
-			y = offset + 6,
-			right = 4,
-			height = 120,
-			align = "left",
-			valign = "top",
-			text = entryData.text,
-			fontsize = WG.Chobby.Configuration:GetFont(2).size,
-			parent = holder,
-		}
+		if entryData.text then
+			controls.text = TextBox:New{
+				x = textPos,
+				y = offset + 6,
+				right = 4,
+				height = 120,
+				align = "left",
+				valign = "top",
+				text = entryData.text,
+				fontsize = WG.Chobby.Configuration:GetFont(2).size,
+				parent = holder,
+			}
+		end
 		
 		newsControls[#newsControls + 1] = controls
 		DoResize()
@@ -340,6 +404,9 @@ local function GetNewsHandler(parentControl)
 	function externalFunctions.Clear()
 		-- Hopefully this eventually disposes of the controls.
 		holder:ClearChildren()
+		if topHeadingLabel then
+			holder:AddChild(topHeadingLabel)
+		end
 		newsControls = {}
 	end
 	
@@ -361,7 +428,7 @@ local function GetNewsHandler(parentControl)
 				heading = items[i].Header,
 				link = items[i].Url,
 				atTime = items[i].Time,
-				text = items[i].Text or "No Text",
+				text = items[i].Text,
 			}
 			if items[i].Image then
 				local imagePos = string.find(items[i].Image, "news")
@@ -409,14 +476,13 @@ local function InitializeControls(window)
 	local lobby = WG.LibLobby.lobby
 	local staticCommunityData = LoadStaticCommunityData()
 	
-	local newsHolder  = GetScroll(window, 0, 0, 0, "60%", true)
+	local topWide     = GetScroll(window, 0, 0, 0, "60%", true)
 	local leftCenter  = GetScroll(window, 0, "66.6%", "40%", "31%", false)
-	local midCenter   = GetScroll(window, "33.4%", "33.4%", "40%", "31%", false)
+	local midCenter   = GetScroll(window, "33.4%", "33.4%", "40%", "31%", true)
 	local rightCenter = GetScroll(window, "66.6%", 0, "40%", "31%", false)
 	local leftLower   = GetScroll(window, 0, "33.4%", "69%", 0, false)
 	local rightLower  = GetScroll(window, "66.6%", 0, "69%", 0, false)
 	
-	LeaveIntentionallyBlank(midCenter, "Forum (TODO)")
 	LeaveIntentionallyBlank(rightCenter, "Ladder (TODO)")
 	LeaveIntentionallyBlank(leftLower, "Profile (TODO)")
 	LeaveIntentionallyBlank(rightLower, "(reserved)")
@@ -427,8 +493,8 @@ local function InitializeControls(window)
 	AddLinkButton(leftCenter, "Manual",  "Read the manual and unit guide.", "http://zero-k.info/mediawiki/index.php?title=Manual", 0, 0, "50.5%", "25.5%")
 	AddLinkButton(leftCenter, "Replays", "Watch replays of online games.", "http://zero-k.info/Battles", 0, 0, "75.5%", 0)
 	
-	-- News handler
-	local newsHandler = GetNewsHandler(newsHolder)
+	-- News Handler
+	local newsHandler = GetNewsHandler(topWide, 4)
 	if staticCommunityData and staticCommunityData.NewsItems then
 		newsHandler.ReplaceNews(staticCommunityData.NewsItems)
 	end
@@ -438,6 +504,21 @@ local function InitializeControls(window)
 	end
 	
 	lobby:AddListener("OnNewsList", OnNewsList)
+	
+	-- Forum Handler
+	local forumHandler = GetNewsHandler(midCenter, 2, true, "Recent Posts", true)
+	if staticCommunityData and staticCommunityData.ForumItems then
+		forumHandler.ReplaceNews(staticCommunityData.ForumItems)
+	end
+	
+	local function OnForumList(_, forumItems)
+		forumHandler.ReplaceNews(forumItems)
+	end
+	
+	lobby:AddListener("OnForumList", OnForumList)
+	
+	-- Ladder Handler
+	
 end
 
 --------------------------------------------------------------------------------
