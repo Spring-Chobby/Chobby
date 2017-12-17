@@ -159,11 +159,19 @@ local function GetDateTimeDisplay(parentControl, xPosition, yPosition, timeStrin
 	function localStart:HitTest(x,y) return self end
 	function countdown:HitTest(x,y) return self end
 	
-	local externalFunctions = {}
+	local externalFunctions = {
+		visible = true
+	}
 	
 	function externalFunctions.SetPosition(newY)
 		localStart:SetPos(nil, newY + 6)
 		countdown:SetPos(nil, newY + 26)
+	end
+	
+	function externalFunctions.SetVisibility(visible)
+		localStart:SetVisibility(visible)
+		countdown:SetVisibility(visible)
+		externalFunctions.visible = visible
 	end
 	
 	function externalFunctions.UpdateCountdown()
@@ -191,6 +199,7 @@ local headingFormats = {
 		inButton = 4,
 		paragraphSpacing = 1,
 		topHeadingOffset = 30,
+		imageSize = 120,
 	},
 	[4] = {
 		buttonSize = 40,
@@ -201,15 +210,257 @@ local headingFormats = {
 		inButton = 7,
 		paragraphSpacing = 30,
 		topHeadingOffset = 50,
+		imageSize = 120,
 	},
 }
 
+local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, topHeading, showBulletHeading)
+	local linkString
+	local controls = {}
+	
+	local headFormat = headingFormats[headingSize]
+	
+	local holder = Control:New{
+		x = 0,
+		y = 0,
+		right = 0,
+		height = 500,
+		padding = {0,0,0,0},
+		parent = parentHolder,
+	}
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.AddEntry(entryData, parentPosition)
+		local textPos = 6
+		local headingPos = 2
+		local offset = 0
+		
+		if showBulletHeading then
+			if not controls.bullet then
+				controls.bullet = Image:New{
+					x = 2,
+					y = offset + 5,
+					width = 16,
+					height = 16,
+					file = IMG_BULLET,
+					parent = holder,
+				}
+			end
+			headingPos = 18
+		end
+		
+		if entryData.link then
+			linkString = entryData.link
+			if not controls.linkButton then
+				controls.linkButton = Button:New {
+					x = headingPos,
+					y = offset + 5,
+					right = 2,
+					height = headFormat.buttonSize,
+					classname = "button_square",
+					caption = "",
+					padding = {0, 0, 0, 0},
+					parent = holder,
+					OnClick = {
+						function ()
+							WG.BrowserHandler.OpenUrl(linkString)
+						end
+					}
+				}
+			else
+				controls.linkButton:SetVisibility(true)
+			end
+			
+			if not controls.heading then
+				controls.heading = TextBox:New{
+					x = 4,
+					y = headFormat.inButton,
+					right = 4,
+					height = headFormat.height,
+					align = "left",
+					valign = "top",
+					text = entryData.heading,
+					fontsize = WG.Chobby.Configuration:GetFont(headingSize).size,
+					parent = controls.linkButton,
+				}
+			else
+				controls.heading:SetText(entryData.heading)
+			end
+			
+			-- Possibly looks nicer without link image.
+			if not showBulletHeading then
+				if not controls.linkImage then
+					controls.linkImage = Image:New {
+						x = 0,
+						y = 5,
+						width = headFormat.linkSize,
+						height = headFormat.linkSize,
+						keepAspect = true,
+						file = IMG_LINK,
+						parent = controls.linkButton,
+					}
+				end
+				
+				local length = controls.heading.font:GetTextWidth(entryData.heading)
+				controls.linkImage:SetPos(length + 8)
+			end
+			
+			if controls.freeHeading then
+				controls.freeHeading:SetVisibility(false)
+			end
+		else
+			if not controls.freeHeading then
+				controls.freeHeading = TextBox:New{
+					x = headingPos + 4,
+					y = offset + 12,
+					right = 4,
+					height = headFormat.height,
+					align = "left",
+					valign = "top",
+					text = entryData.heading,
+					fontsize = WG.Chobby.Configuration:GetFont(4).size,
+					parent = holder,
+				}
+			else
+				controls.freeHeading:SetText(entryData.heading)
+				controls.freeHeading:SetVisibility(true)
+			end
+			
+			if controls.linkButton then
+				controls.linkButton:SetVisibility(false)
+			end
+		end
+		offset = offset + 40
+		
+		if entryData.imageFile then
+			textPos = headFormat.imageSize + 12
+			local imagePath = entryData.imageFile
+			if not VFS.FileExists(imagePath) then
+				controls.wantImage = imagePath
+				imagePath = IMG_MISSING
+			end
+			if not controls.image then
+				controls.image = Image:New{
+					x = 4,
+					y = offset + 6,
+					width = headFormat.imageSize,
+					height = headFormat.imageSize,
+					keepAspect = true,
+					file = imagePath,
+					parent = holder
+				}
+			else
+				controls.image.file = imagePath
+				controls.image:Invalidate()
+				controls.image:SetVisibility(true)
+			end
+		elseif controls.image then
+			controls.image:SetVisibility(false)
+		end
+		
+		if entryData.atTime and not timeAsTooltip then
+			if not controls.dateTime then
+				controls.dateTime = GetDateTimeDisplay(holder, textPos, offset, entryData.atTime)
+			else
+				controls.dateTime.SetVisibility(true)
+			end
+			offset = offset + 45
+		elseif controls.dateTime then
+			controls.dateTime.SetVisibility(false)
+		end
+		
+		if entryData.text then
+			if not controls.text then
+				controls.text = TextBox:New{
+					x = textPos,
+					y = offset + 6,
+					right = 4,
+					height = 120,
+					align = "left",
+					valign = "top",
+					text = entryData.text,
+					fontsize = WG.Chobby.Configuration:GetFont(2).size,
+					parent = holder,
+				}
+			else
+				controls.text:SetText(entryData.text)
+				controls.text:SetVisibility(true)
+			end
+		elseif controls.text then
+			controls.text:SetVisibility(false)
+		end
+		
+		return parentPosition + offset
+	end
+	
+	function externalFunctions.DoResize(parentPosition, numberVisible)
+		if numberVisible < index then
+			holder:SetVisibility(false)
+			return parentPosition
+		end
+		holder:SetVisibility(true)
+		
+		local offset = 0
+		
+		if controls.bullet then
+			controls.bullet:SetPos(nil, offset + 5)
+		end
+		
+		local headingSize
+		if controls.linkButton and controls.linkButton.visible then
+			headingSize = (#controls.heading.physicalLines)*headFormat.fontSize
+			controls.linkButton:SetPos(nil, offset + headFormat.buttonPos, nil, headingSize + 4)
+			controls.heading:SetPos(nil, nil, nil, headingSize)
+		elseif controls.freeHeading then
+			headingSize = (#controls.freeHeading.physicalLines)*headFormat.fontSize
+			controls.freeHeading:SetPos(nil, offset + 12, nil, headingSize)
+		end
+		offset = offset + headingSize + headFormat.spacing
+		
+		if controls.image and controls.image.visible then
+			controls.image:SetPos(nil, offset + 6)
+		end
+		if controls.dateTime and controls.dateTime.visible then
+			controls.dateTime.SetPosition(offset) 
+			offset = offset + 46
+		end
+		if controls.text and controls.text.visible then
+			controls.text:SetPos(nil, offset + 6)
+		end
+		
+		local offsetSize = (controls.text and (#controls.text.physicalLines)*18) or 6
+		if controls.image and controls.image.visible and ((not controls.text) or (offsetSize < headFormat.imageSize - (controls.dateTime and 46 or 0))) then
+			offsetSize = headFormat.imageSize - (controls.dateTime and 46 or 0)
+		end
+
+		holder:SetPos(nil, parentPosition, nil, offset + offsetSize + 10)
+		return parentPosition + offset + offsetSize + headFormat.paragraphSpacing
+	end
+	
+	function externalFunctions.UpdateCountdown()
+		if controls.dateTime then
+			controls.dateTime.UpdateCountdown() 
+		end
+	end
+	
+	function externalFunctions.UpdateDownloadedImage()
+		if controls.wantImage and controls.image and VFS.FileExists(controls.wantImage) then
+			controls.wantImage = nil
+			controls.image.file = controls.wantImage
+			controls.image:Invalidate()
+		end
+	end
+	
+	return externalFunctions
+end
+
 local function GetNewsHandler(parentControl, headingSize, timeAsTooltip, topHeading, showBulletHeading)
-	local imageSize = 120
 	local headFormat = headingFormats[headingSize]
 	headFormat.fontSize = WG.Chobby.Configuration:GetFont(headingSize).size
 	
 	local offset = topHeading and headFormat.topHeadingOffset or 0
+	local visibleItems = 0
 	
 	local holder = Control:New{
 		x = 0,
@@ -231,198 +482,33 @@ local function GetNewsHandler(parentControl, headingSize, timeAsTooltip, topHead
 		parent = holder,
 	}
 	
-	local newsControls = {}
+	local newsEntries = {}
 	
 	local function DoResize()
 		offset = topHeading and headFormat.topHeadingOffset or 0
-		for i = 1, #newsControls do
-			local controls = newsControls[i]
-			
-			if controls.bullet then
-				controls.bullet:SetPos(nil, offset + 5)
-			end
-			
-			local headingSize = (#controls.heading.physicalLines)*headFormat.fontSize
-			if controls.linkButton then
-				controls.linkButton:SetPos(nil, offset + headFormat.buttonPos, nil, headingSize + 4)
-				controls.heading:SetPos(nil, nil, nil, headingSize)
-			else
-				controls.heading:SetPos(nil, offset + 12, nil, headingSize)
-			end
-			offset = offset + headingSize + headFormat.spacing
-			
-			if controls.image then
-				controls.image:SetPos(nil, offset + 6)
-			end
-			if controls.dateTime then
-				controls.dateTime.SetPosition(offset) 
-				offset = offset + 46
-			end
-			if controls.text then
-				controls.text:SetPos(nil, offset + 6)
-			end
-			
-			local offsetSize = (controls.text and (#controls.text.physicalLines)*18) or 6
-			if controls.image and ((not controls.text) or (offsetSize < imageSize - (controls.dateTime and 46 or 0))) then
-				offsetSize = imageSize - (controls.dateTime and 46 or 0)
-			end
-			
-			offset = offset + offsetSize + headFormat.paragraphSpacing
+		for i = 1, #newsEntries do
+			offset = newsEntries[i].DoResize(offset, visibleItems)
 		end
 		holder:SetPos(nil, nil, nil, offset - headFormat.paragraphSpacing/2)
 	end
 	
 	local function UpdateCountdown()
-		for i = 1, #newsControls do
-			local controls = newsControls[i]
-			if controls.dateTime then
-				controls.dateTime.UpdateCountdown() 
-			end
+		for i = 1, #newsEntries do
+			newsEntries[i].UpdateCountdown()
 		end
 		WG.Delay(UpdateCountdown, 60)
 	end
 	
+	local function ReloadImages()
+		for i = 1, #newsEntries do
+			local controls = newsEntries[i]
+			newsEntries[i].UpdateDownloadedImage()
+		end
+	end
+	
 	local externalFunctions = {}
 	
-	function externalFunctions.AddEntry(entryData)
-		local controls = {}
-		local textPos = 6
-		local headingPos = 2
-		
-		if showBulletHeading then
-			controls.bullet = Image:New{
-				x = 2,
-				y = offset + 5,
-				width = 16,
-				height = 16,
-				file = IMG_BULLET,
-				parent = holder,
-			}
-			headingPos = 18
-		end
-		
-		if entryData.link then
-			controls.linkButton = Button:New {
-				x = headingPos,
-				y = offset + 5,
-				right = 2,
-				height = headFormat.buttonSize,
-				classname = "button_square",
-				caption = "",
-				padding = {0, 0, 0, 0},
-				parent = holder,
-				OnClick = {
-					function ()
-						WG.BrowserHandler.OpenUrl(entryData.link)
-					end
-				}
-			}
-
-			controls.heading = TextBox:New{
-				x = 4,
-				y = headFormat.inButton,
-				right = 4,
-				height = headFormat.height,
-				align = "left",
-				valign = "top",
-				text = entryData.heading,
-				fontsize = WG.Chobby.Configuration:GetFont(headingSize).size,
-				parent = controls.linkButton,
-			}
-			
-			-- Possibly looks nicer without link image.
-			if not showBulletHeading then
-				local linkImage = Image:New {
-					x = 0,
-					y = 5,
-					width = headFormat.linkSize,
-					height = headFormat.linkSize,
-					keepAspect = true,
-					file = IMG_LINK,
-					parent = controls.linkButton,
-				}
-				
-				local length = controls.heading.font:GetTextWidth(entryData.heading)
-				linkImage:SetPos(length + 8)
-			end
-		else
-			controls.heading = TextBox:New{
-				x = headingPos + 4,
-				y = offset + 12,
-				right = 4,
-				height = headFormat.height,
-				align = "left",
-				valign = "top",
-				text = entryData.heading,
-				fontsize = WG.Chobby.Configuration:GetFont(4).size,
-				parent = holder,
-			}
-		end
-		offset = offset + 40
-		
-		if entryData.imageFile then
-			textPos = imageSize + 12
-			local imagePath = entryData.imageFile
-			if not VFS.FileExists(imagePath) then
-				controls.wantImage = imagePath
-				imagePath = IMG_MISSING
-			end
-			controls.image = Image:New{
-				x = 4,
-				y = offset + 6,
-				width = imageSize,
-				height = imageSize,
-				keepAspect = true,
-				file = imagePath,
-				parent = holder
-			}
-		end
-		
-		if entryData.atTime and not timeAsTooltip then
-			controls.dateTime = GetDateTimeDisplay(holder, textPos, offset, entryData.atTime)
-			offset = offset + 45
-		end
-		
-		if entryData.text then
-			controls.text = TextBox:New{
-				x = textPos,
-				y = offset + 6,
-				right = 4,
-				height = 120,
-				align = "left",
-				valign = "top",
-				text = entryData.text,
-				fontsize = WG.Chobby.Configuration:GetFont(2).size,
-				parent = holder,
-			}
-		end
-		
-		newsControls[#newsControls + 1] = controls
-		DoResize()
-	end
-	
-	function externalFunctions.Clear()
-		-- Hopefully this eventually disposes of the controls.
-		holder:ClearChildren()
-		if topHeadingLabel then
-			holder:AddChild(topHeadingLabel)
-		end
-		newsControls = {}
-	end
-	
-	function externalFunctions.ReloadImages()
-		for i = 1, #newsControls do
-			local controls = newsControls[i]
-			if controls.wantImage and controls.image and VFS.FileExists(controls.wantImage) then
-				controls.image.file = controls.wantImage
-				controls.image:Invalidate()
-			end
-		end
-	end
-	
 	function externalFunctions.ReplaceNews(items)
-		externalFunctions.Clear()
-		
 		for i = 1, #items do
 			local entry = {
 				heading = items[i].Header,
@@ -432,21 +518,30 @@ local function GetNewsHandler(parentControl, headingSize, timeAsTooltip, topHead
 			}
 			if items[i].Image then
 				local imagePos = string.find(items[i].Image, "news")
-				local imagePath = string.sub(items[i].Image, imagePos)
-				if not VFS.FileExists(imagePath) then
-					WG.WrapperLoopback.DownloadImage({ImageUrl = items[i].Image, TargetPath = imagePath})
+				if imagePos then
+					local imagePath = string.sub(items[i].Image, imagePos)
+					if not VFS.FileExists(imagePath) then
+						WG.WrapperLoopback.DownloadImage({ImageUrl = items[i].Image, TargetPath = imagePath})
+					end
+					entry.imageFile = imagePath
 				end
-				entry.imageFile = imagePath
 			end
-			externalFunctions.AddEntry(entry)
+			
+			if not newsEntries[i] then
+				newsEntries[i] = GetNewsEntry(holder, i, headingSize, timeAsTooltip, topHeading, showBulletHeading)
+			end
+			offset = newsEntries[i].AddEntry(entry, offset)
 		end
+		
+		visibleItems = #items
+		DoResize()
 	end
 	
 	-- Initialization
 	UpdateCountdown()
 	
 	local function ImageDownloadFinished()
-		WG.Delay(newsHandler.ReloadImages, 2)
+		WG.Delay(ReloadImages, 2)
 	end
 	WG.DownloadHandler.AddListener("ImageDownloadFinished", ImageDownloadFinished)
 	
