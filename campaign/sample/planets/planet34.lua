@@ -833,7 +833,7 @@ local function GetPlanet(planetUtilities, planetID)
 						decorations = {
 						},
 						modules = { 
-							"commweapon_shotgungun",
+							"commweapon_shotgun",
 							"commweapon_concussion",
 							"module_autorepair",
 							"module_autorepair",
