@@ -533,7 +533,7 @@
       },
       {  
          "Platform":null,
-         "VersionNumber":1,
+         "VersionNumber":2,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/chobby_config.json",
          "TargetPath":"chobby_config.json"
       }

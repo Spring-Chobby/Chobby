@@ -1,4 +1,4 @@
-local FEEDBACK_LINK = "http://zero-k.info/Forum/Thread/24530"
+local FEEDBACK_LINK = "http://zero-k.info/Forum/Thread/24566"
 
 local planetWhitelist = {
 	-- Tutorial Cloaky
@@ -59,6 +59,14 @@ local planetWhitelist = {
 	[45] = true,
 	[46] = true,
 	[47] = true,
+	-- Planes, Behemoth, Bertha, Missile Silo, Scorpion
+	[33] = true,
+	[34] = true,
+	[35] = true,
+	[48] = true,
+	[49] = true,
+	[62] = true,
+	[70] = true,
 }
 
 return {
