@@ -5087,36 +5087,35 @@ local function GetPlanet(planetUtilities, planetID)
 			bonusObjectiveConfig = {
 					-- Indexed by bonusObjectiveID
 				[1] = {
-					satisfyOnce = true,
-					countRemovedUnits = true, -- count units that previously died.
+					satisfyByTime = 10*60,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 10, -- The player starts with a Conjurer
+					targetNumber = 12, -- The player starts with a Conjurer
 					unitTypes = {
 						"planeheavyfighter",
 					},
 					image = planetUtilities.ICON_DIR .. "planeheavyfighter.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build 10 Raptors",
+					description = "Have 12 Raptors before 10:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = {
 					onlyCountRemovedUnits = true,
 					satisfyByTime = 10*60,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 100,
+					targetNumber = 300,
 					enemyUnitTypes = {
 						"energywind",
 					},
 					image = planetUtilities.ICON_DIR .. "energywind.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Destroy 100 enemy Wind Generators by 12:00",
+					description = "Destroy 300 enemy Wind Generators by 10:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = {
 					satisfyOnce = true,
 					countRemovedUnits = true, -- count units that previously died.
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 3,
+					targetNumber = 3, -- Player starts with one.
 					unitTypes = {
 						"staticrearm",
 					},
