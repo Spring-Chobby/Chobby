@@ -1942,9 +1942,9 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			bonusObjectiveConfig = {
 				[1] = {
-					victoryByTime = 15*60,
+					victoryByTime = 20*60,
 					image = planetUtilities.ICON_OVERLAY.CLOCK,
-					description = "Win by 15:00",
+					description = "Win by 20:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = {
