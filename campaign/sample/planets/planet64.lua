@@ -29,8 +29,8 @@ local function GetPlanet(planetUtilities, planetID)
 		gameConfig = {
 			mapName = "Valiant_Saltscape",
 			playerConfig = {
-				startX = 100,
-				startZ = 100,
+				startX = 2500,
+				startZ = 3500,
 				allyTeam = 0,
 				facplop = false,
 				commanderParameters = {
@@ -85,6 +85,7 @@ local function GetPlanet(planetUtilities, planetID)
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
 			units = {
+				"striderhub",
 				"striderbantha",
 				"turretaaheavy",
 			},
