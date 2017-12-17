@@ -1089,25 +1089,12 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			bonusObjectiveConfig = {
 				[1] = {
-					satisfyOnce = true,
-					countRemovedUnits = true, -- count units that previously died.
-					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 2,
-					unitTypes = {
-						"staticrearm",
-					},
-					image = planetUtilities.ICON_DIR .. "staticrearm.png",
-					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build 2 Airpads",
-					experience = planetUtilities.BONUS_EXP,
-				},
-				[2] = {
 					victoryByTime = 15*60,
 					image = planetUtilities.ICON_OVERLAY.CLOCK,
 					description = "Win by 15:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[3] = {
+				[2] = {
 					onlyCountRemovedUnits = true,
 					satisfyByTime = 6*60,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
@@ -1129,7 +1116,6 @@ local function GetPlanet(planetUtilities, planetID)
 				"planecon",
 				"planefighter",
 				"bomberdisarm",
-				"staticrearm",
 			},
 			modules = {
 				"module_adv_nano_LIMIT_H_1",
