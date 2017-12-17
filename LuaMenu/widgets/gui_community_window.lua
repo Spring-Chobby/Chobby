@@ -18,8 +18,33 @@ end
 -- Vars 
 
 local IMG_LINK = LUA_DIRNAME .. "images/link.png"
+local IMG_MISSING = LUA_DIRNAME .. "images/minimapNotFound1.png"
 
 local globalSizeMode = 2
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- News Update
+local NEWS_FILE = "news/community.json"
+
+local function LoadStaticCommunityData()
+	if not VFS.FileExists(NEWS_FILE) then
+		return
+	end
+	local data
+	xpcall(
+		function()
+			data = Spring.Utilities.json.decode(VFS.LoadFile(NEWS_FILE))
+		end, 
+		function(err)
+			Spring.Log("community", LOG.ERROR, err)
+			Spring.Log("community", LOG.ERROR, debug.traceback(err))
+		end
+	)
+	return data
+end
+
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Controls
@@ -129,20 +154,6 @@ local function GetDateTimeDisplay(parentControl, xPosition, yPosition, timeStrin
 		parent = parentControl,
 	}
 	
-	local function UpdateCountdown()
-		local difference, inTheFuture, isNow = Spring.Utilities.GetTimeDifference(timeString)
-		if isNow then
-			countdown:SetText("Starting " .. difference .. ".")
-		elseif inTheFuture then
-			countdown:SetText("Starting in " .. difference .. ".")
-		else
-			countdown:SetText( "Started " .. difference .. " ago.")
-		end
-		
-		WG.Delay(UpdateCountdown, 60)
-	end
-	UpdateCountdown()
-	
 	-- Activate the tooltip.
 	function localStart:HitTest(x,y) return self end
 	function countdown:HitTest(x,y) return self end
@@ -153,6 +164,18 @@ local function GetDateTimeDisplay(parentControl, xPosition, yPosition, timeStrin
 		localStart:SetPos(nil, newY + 6)
 		countdown:SetPos(nil, newY + 26)
 	end
+	
+	function externalFunctions.UpdateCountdown()
+		local difference, inTheFuture, isNow = Spring.Utilities.GetTimeDifference(timeString)
+		if isNow then
+			countdown:SetText("Starting " .. difference .. ".")
+		elseif inTheFuture then
+			countdown:SetText("Starting in " .. difference .. ".")
+		else
+			countdown:SetText( "Started " .. difference .. " ago.")
+		end
+	end
+	externalFunctions.UpdateCountdown()
 	
 	return externalFunctions
 end
@@ -187,7 +210,7 @@ local function GetNewsHandler(parentControl)
 				controls.image:SetPos(nil, offset + 6)
 			end
 			if controls.dateTime then
-				controls.dateTime.SetPosition(offset)
+				controls.dateTime.SetPosition(offset) 
 				offset = offset + 46
 			end
 			controls.text:SetPos(nil, offset + 6)
@@ -200,6 +223,16 @@ local function GetNewsHandler(parentControl)
 			offset = offset + offsetSize + paragraphSpacing
 		end
 		holder:SetPos(nil, nil, nil, offset - paragraphSpacing/2)
+	end
+	
+	local function UpdateCountdown()
+		for i = 1, #newsControls do
+			local controls = newsControls[i]
+			if controls.dateTime then
+				controls.dateTime.UpdateCountdown() 
+			end
+		end
+		WG.Delay(UpdateCountdown, 60)
 	end
 	
 	local externalFunctions = {}
@@ -267,14 +300,18 @@ local function GetNewsHandler(parentControl)
 		
 		if entryData.imageFile then
 			textPos = imageSize + 12
-			
+			local imagePath = entryData.imageFile
+			if not VFS.FileExists(imagePath) then
+				controls.wantImage = imagePath
+				imagePath = IMG_MISSING
+			end
 			controls.image = Image:New{
 				x = 4,
 				y = offset + 6,
 				width = imageSize,
 				height = imageSize,
 				keepAspect = true,
-				file = entryData.imageFile,
+				file = imagePath,
 				parent = holder
 			}
 		end
@@ -300,6 +337,52 @@ local function GetNewsHandler(parentControl)
 		DoResize()
 	end
 	
+	function externalFunctions.Clear()
+		-- Hopefully this eventually disposes of the controls.
+		holder:ClearChildren()
+		newsControls = {}
+	end
+	
+	function externalFunctions.ReloadImages()
+		for i = 1, #newsControls do
+			local controls = newsControls[i]
+			if controls.wantImage and controls.image and VFS.FileExists(controls.wantImage) then
+				controls.image.file = controls.wantImage
+				controls.image:Invalidate()
+			end
+		end
+	end
+	
+	function externalFunctions.ReplaceNews(items)
+		externalFunctions.Clear()
+		
+		for i = 1, #items do
+			local entry = {
+				heading = items[i].Header,
+				link = items[i].Url,
+				atTime = items[i].Time,
+				text = items[i].Text or "No Text",
+			}
+			if items[i].Image then
+				local imagePos = string.find(items[i].Image, "news")
+				local imagePath = string.sub(items[i].Image, imagePos)
+				if not VFS.FileExists(imagePath) then
+					WG.WrapperLoopback.DownloadImage({ImageUrl = items[i].Image, TargetPath = imagePath})
+				end
+				entry.imageFile = imagePath
+			end
+			externalFunctions.AddEntry(entry)
+		end
+	end
+	
+	-- Initialization
+	UpdateCountdown()
+	
+	local function ImageDownloadFinished()
+		WG.Delay(newsHandler.ReloadImages, 2)
+	end
+	WG.DownloadHandler.AddListener("ImageDownloadFinished", ImageDownloadFinished)
+	
 	parentControl.OnResize = parentControl.OnResize or {}
 	parentControl.OnResize[#parentControl.OnResize + 1] = function ()
 		WG.Delay(DoResize, 0.01)
@@ -322,7 +405,9 @@ local function InitializeControls(window)
 	--	parent = window,
 	--	font = WG.Chobby.Configuration:GetFont(3),
 	--	caption = "Community",
-	--}
+	
+	local lobby = WG.LibLobby.lobby
+	local staticCommunityData = LoadStaticCommunityData()
 	
 	local newsHolder  = GetScroll(window, 0, 0, 0, "60%", true)
 	local leftCenter  = GetScroll(window, 0, "66.6%", "40%", "31%", false)
@@ -336,38 +421,24 @@ local function InitializeControls(window)
 	LeaveIntentionallyBlank(leftLower, "Profile (TODO)")
 	LeaveIntentionallyBlank(rightLower, "(reserved)")
 	
+	-- Populate link panel
 	AddLinkButton(leftCenter, "Discord", "Chat on the Zero-K Discord server.", "https://discord.gg/aab63Vt", 0, 0, 0, "75.5%")
 	AddLinkButton(leftCenter, "Forum",   "Browse or post on the forums.", "http://zero-k.info/Forum",   0, 0, "25.5%", "50.5%")
 	AddLinkButton(leftCenter, "Manual",  "Read the manual and unit guide.", "http://zero-k.info/mediawiki/index.php?title=Manual", 0, 0, "50.5%", "25.5%")
 	AddLinkButton(leftCenter, "Replays", "Watch replays of online games.", "http://zero-k.info/Battles", 0, 0, "75.5%", 0)
 	
-	local newsDefs = {
-		{
-			imageFile = LUA_DIRNAME .. "images/news/tournmentNews.png",
-			heading = "December 1v1 Tournament",
-			link = "http://zero-k.info/Forum/Thread/24531",
-			atTime = "2017-12-16T10:00:00",
-			text = "There will be a 1v1 tournament this weekend. All participants will play seven rounds of Swiss, followed by elimination amoung the top four to determine an overall winner. Click the link above to sign up in the forum thread.",
-		},
-		{
-			imageFile = LUA_DIRNAME .. "images/news/newRating.png",
-			heading = "New Rating System",
-			link = "http://zero-k.info/Forum/Thread/24536",
-			text = "We have recently switched to a new rating system. Elo is being replaced by Whole History Rating. Although generally very similar to the old ratings, this means that rating values have changed for every player. See the full thread for more information.",
-		},
-		{
-			imageFile = LUA_DIRNAME .. "images/news/communityNews.png",
-			heading = "New Community Tab",
-			text = "By scrolling down to the bottom of the news window you have explored the entirety of the current community tab. The aim of the tab is to get people move involved in events, forums and chat, all in the name of community building. The remaining panels are a work in progress so feel free to suggest a panel that you would like to see here.",
-		},
-	}
-	
+	-- News handler
 	local newsHandler = GetNewsHandler(newsHolder)
-	for i = 1, #newsDefs do
-		newsHandler.AddEntry(newsDefs[i])
+	if staticCommunityData and staticCommunityData.NewsItems then
+		newsHandler.ReplaceNews(staticCommunityData.NewsItems)
 	end
+	
+	local function OnNewsList(_, newsItems)
+		newsHandler.ReplaceNews(newsItems)
+	end
+	
+	lobby:AddListener("OnNewsList", OnNewsList)
 end
-
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------

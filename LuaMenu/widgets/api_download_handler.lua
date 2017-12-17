@@ -303,6 +303,9 @@ function wrapperFunctions.DownloadFileProgress(name, fileType, progress, seconds
 	CallListeners("DownloadProgress", downloadQueue[index].id, totalLength*math.min(1, (tonumber(progress or 0) or 0)/100), totalLength, name)
 end
 
+function wrapperFunctions.ImageDownloadFinished(requestToken, imageUrl, imagePath)
+	CallListeners("ImageDownloadFinished", requestToken, imageUrl, imagePath)
+end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface

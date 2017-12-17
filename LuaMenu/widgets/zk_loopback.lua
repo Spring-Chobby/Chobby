@@ -149,6 +149,7 @@ local function DownloadImageDone(args)
         public string TargetPath
     }
 	]]--
+	WG.DownloadWrapperInterface.ImageDownloadFinished(args.RequestToken, args.ImageUrl, args.TargetPath)
 end
 
 local function DiscordOnReady(args)
