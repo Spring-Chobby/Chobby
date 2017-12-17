@@ -27,7 +27,7 @@ local function GetPlanet(planetUtilities, planetID)
 			text = [[Intact unit wrecks on this planet will come back to life as zombies. Reduce your foes to scrap and put them all the way down with the Ultimatum's Disintegration Gun.]]
 		},
 		gameConfig = {
-			mapName = "EvoRTS-New_Iammas-v05",
+			mapName = "StormSiege_v3",
 			playerConfig = {
 				startX = 100,
 				startZ = 100,

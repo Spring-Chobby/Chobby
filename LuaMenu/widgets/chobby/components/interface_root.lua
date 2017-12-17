@@ -11,7 +11,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local userStatusPanelWidth = 250
 
 	local battleStatusWidth = 480
-	local panelButtonsWidth = 538
+	local panelButtonsWidth = 578
 	local panelButtonsHeight = 42
 	local statusWindowGapSmall = 44
 
@@ -419,9 +419,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	end
 
 	local rightPanelTabs = {
+		{name = "community", control = WG.CommunityWindow.GetControl()},
 		{name = "chat", control = chatWindows.window},
 		{name = "friends", control = WG.FriendWindow.GetControl()},
-		{name = "replays", control = WG.ReplayHandler.GetControl()},
 		{name = "settings", control = WG.SettingsWindow.GetControl()},
 		{name = "downloads", control = WG.DownloadWindow.GetControl()},
 	}
@@ -432,6 +432,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local SINGLEPLAYER_INDEX = 1
 	local MULTIPLAYER_INDEX = 2
+	local HELP_INDEX = 4
 	local submenus = {
 		{
 			name = "singleplayer",
@@ -446,6 +447,14 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				--{name = "planetwars", control = planetwarsListWindow},
 			},
 			cleanupFunction = Configuration.leaveMultiplayerOnMainMenu and CleanMultiplayerState or nil
+		},
+		{
+			name = "replays", 
+			tabs = {
+				{name = "replays", control = WG.ReplayHandler.GetControl()},
+			},
+			startWithTabOpen = 1,
+			hideMyButtons = true,
 		},
 		{
 			name = "help",
@@ -470,13 +479,22 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		heading_image:Invalidate()
 	end
 
-	local battleStatusPanelHandler = GetTabPanelHandler(
-		"myBattlePanel", battleTabHolder, mainContent_window, nil, {}, nil, nil, nil, nil,
-		statusButtonWidth, battleStatusTabControls, nil, nil, "lobby:battle"
+	local battleStatusPanelHandler = GetTabPanelHandler("myBattlePanel", {
+			buttonWindow        = battleTabHolder,
+			displayPanel        = mainContent_window,
+			initialTabs         = {},
+			tabWidth            = statusButtonWidth,
+			tabControlOverride  = battleStatusTabControls,
+			analyticsName       = "lobby:battle"
+		}
 	)
-
-	local rightPanelHandler = GetTabPanelHandler("panelTabs", panelButtons_buttons, rightPanel_window,
-		nil, rightPanelTabs, nil, nil, nil, nil, nil, nil, nil, nil, "lobby:panel"
+	
+	local rightPanelHandler = GetTabPanelHandler("panelTabs", {
+			buttonWindow = panelButtons_buttons,
+			displayPanel = rightPanel_window,
+			initialTabs = rightPanelTabs, 
+			analyticsName = "lobby:panel",
+		}
 	)
 
 	mainWindowHandler = GetSubmenuHandler(buttonsHolder_buttons, mainContent_window, submenuWindow_mainContent, submenus, UpdateTitle)
@@ -654,7 +672,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local function UpdatePadding(screenWidth, screenHeight)
 		local leftPad, rightPad, bottomPad, middlePad
-		if screenWidth < 1366 or (not doublePanelMode) then
+		if screenWidth < 1460 or (not doublePanelMode) then
 			leftButtonPad = 0
 			leftPad = 0
 			rightPad = 0
@@ -994,6 +1012,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		rightPanelHandler.OpenTabByName("chat")
 	end
 
+	function externalFunctions.OpenRightPanelTab(tabName)
+		rightPanelHandler.OpenTabByName(tabName)
+	end
+
 	function externalFunctions.GetContentPlace()
 		return mainContent_window
 	end
@@ -1046,7 +1068,13 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			return true
 		end
 		if key == Spring.GetKeyCode("esc") then
-			return rightPanelHandler.CloseTabs() or mainWindowHandler.CloseTabs() or (backgroundCloseListener and backgroundCloseListener()) or mainWindowHandler.BackOneLevel()
+			if rightPanelHandler.CloseTabs() or mainWindowHandler.CloseTabs() or (backgroundCloseListener and backgroundCloseListener()) or mainWindowHandler.BackOneLevel() then
+				return true
+			end
+			if showTopBar then
+				SetMainInterfaceVisible(false)
+				return true
+			end
 		end
 		return false
 	end
@@ -1110,8 +1138,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			local replacementHelpTabs = Configuration.gameConfig.helpSubmenuConfig
 
 			WG.BattleRoomWindow.LeaveBattle(false, true)
-			mainWindowHandler.ReplaceSubmenu(1, replacementTabs)
-			mainWindowHandler.ReplaceSubmenu(3, replacementHelpTabs)
+			mainWindowHandler.ReplaceSubmenu(SINGLEPLAYER_INDEX, replacementTabs)
+			mainWindowHandler.ReplaceSubmenu(HELP_INDEX, replacementHelpTabs)
 		end
 	end
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
@@ -1128,6 +1156,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	externalFunctions.ViewResize(screenWidth, screenHeight)
 	UpdatePadding(screenWidth, screenHeight)
 	UpdateChildLayout()
+	rightPanelHandler.OpenTab(1)
 
 	return externalFunctions
 end

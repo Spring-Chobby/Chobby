@@ -34,6 +34,8 @@ local COMBO_WIDTH = 235
 local CHECK_WIDTH = 230
 local TEXT_OFFSET = 6
 
+local settingsWindowHandler
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
@@ -714,6 +716,7 @@ local function GetVoidTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("debugMode"), "debugMode", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Debug Auto Win", "debugAutoWin", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Show Planet Unlocks", "showPlanetUnlocks", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, "Campaign Spawn Debug", "campaignSpawnDebug", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Edit Campaign", "editCampaign", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Debug server messages", "activeDebugConsole", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Show channel bots", "displayBots", false)
@@ -1290,6 +1293,14 @@ local function InitializeControls(window)
 			tabPanel.tabBar
 		}
 	}
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.OpenTab(tabName)
+		tabPanel.tabBar:Select(tabName)
+	end
+	
+	return externalFunctions
 end
 
 --------------------------------------------------------------------------------
@@ -1309,12 +1320,18 @@ function SettingsWindow.GetControl()
 		OnParent = {
 			function(obj)
 				if obj:IsEmpty() then
-					InitializeControls(obj)
+					settingsWindowHandler = InitializeControls(obj)
 				end
 			end
 		},
 	}
 	return window
+end
+
+function SettingsWindow.OpenTab(tabName)
+	if settingsWindowHandler then
+		settingsWindowHandler.OpenTab(tabName)
+	end
 end
 
 function SettingsWindow.WriteGameSpringsettings(fileName)

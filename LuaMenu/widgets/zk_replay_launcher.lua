@@ -296,7 +296,7 @@ function widget:Initialize()
 	end
 	WG.DownloadHandler.AddListener("DownloadFailed", downloadFailed)
 
-	local function downloadFinished(listener, downloadID)
+	local function DownloadFinished(listener, downloadID)
 		if(downloads.map == downloadID) then
 			hasMap = true
 			Echo("Map download complete")

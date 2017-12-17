@@ -165,7 +165,7 @@ local function MakeFeedbackWindow(parent, feedbackLink)
 		font = WG.Chobby.Configuration:GetFont(3),
 		OnClick = {
 			function ()
-				WG.WrapperLoopback.OpenUrl(feedbackLink)
+				WG.BrowserHandler.OpenUrl(feedbackLink)
 			end
 		},
 		parent = textWindow,
@@ -464,8 +464,18 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty)
 	
 	victoryWindow:SetPos(nil, nil, nil, 200 + rewardsHeight)
 	
+	local openCommanderWindowOnContinue = false
 	local function CloseFunc()
 		victoryWindow:Dispose()
+		if openCommanderWindowOnContinue then
+			local singleplayerMenu = WG.Chobby.interfaceRoot.GetSingleplayerSubmenu()
+			if singleplayerMenu then
+				local campaignMenu = singleplayerMenu.GetSubmenuByName("campaign")
+				if campaignMenu then
+					campaignMenu.OpenTabByName("commander", true)
+				end
+			end
+		end
 	end
 	
 	local buttonClose = Button:New {
@@ -490,6 +500,9 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty)
 	
 	function externalFunctions.UpdateExperience(oldExperience, oldLevel, newExperience, newLevel, gainedBonusExperience)
 		experienceDisplay.AddFancyExperience(newExperience - oldExperience, gainedBonusExperience)
+		if oldExperience == 0 or (oldLevel ~= newLevel) then
+			openCommanderWindowOnContinue = true
+		end
 	end
 	
 	return externalFunctions
@@ -1502,15 +1515,6 @@ function widget:Initialize()
 	local function GainExperience(listener, oldExperience, oldLevel, newExperience, newLevel, gainedBonusExperience)
 		if currentWinPopup then
 			currentWinPopup.UpdateExperience(oldExperience, oldLevel, newExperience, newLevel, gainedBonusExperience)
-		end
-		if oldExperience == 0 or (oldLevel ~= newLevel) then
-			local singleplayerMenu = WG.Chobby.interfaceRoot.GetSingleplayerSubmenu()
-			if singleplayerMenu then
-				local campaignMenu = singleplayerMenu.GetSubmenuByName("campaign")
-				if campaignMenu then
-					campaignMenu.SetTabHighlighted("commander", true)
-				end
-			end
 		end
 	end
 	WG.CampaignData.AddListener("GainExperience", GainExperience)

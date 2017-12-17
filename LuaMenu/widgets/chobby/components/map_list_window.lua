@@ -5,7 +5,7 @@ function MapListWindow:init(lobby, zoomToMap)
 	self:super('init', WG.Chobby.lobbyInterfaceHolder, "Select Map", false, "main_window", nil, {6, 7, 7, 4})
 	self.window:SetPos(nil, nil, 500, 700)
 
-	if WG.WrapperLoopback and Configuration.gameConfig.link_maps then
+	if WG.BrowserHandler and Configuration.gameConfig.link_maps then
 		self.btnOnlineMaps = Button:New {
 			right = 95,
 			y = 7,
@@ -17,7 +17,7 @@ function MapListWindow:init(lobby, zoomToMap)
 			parent = self.window,
 			OnClick = {
 				function ()
-					WG.WrapperLoopback.OpenUrl(Configuration.gameConfig.link_maps())
+					WG.BrowserHandler.OpenUrl(Configuration.gameConfig.link_maps())
 				end
 			},
 		}

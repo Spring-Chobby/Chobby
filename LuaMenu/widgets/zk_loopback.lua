@@ -111,7 +111,7 @@ local function SteamFriendJoinedMe(args)
 end
 
 
--- TODO wrapper will send this to indiciate P2P host request is ok and this chobby should start hosting asap, using the given local port
+-- TODO wrapper will send this to indicate P2P host request is ok and this chobby should start hosting asap, using the given local port
 local function SteamHostGameSuccess(args) 
 	WG.SteamCoopHandler.SteamHostGameSuccess(args.HostPort)
 	-- args.HostPort
@@ -145,10 +145,11 @@ local function DownloadImageDone(args)
     public class DownloadImageDone
     {
         public string RequestToken { get; set; } // client can set token to track multiple responses/requests
-        public string ImageType { get; set; }
-        public string Name { get; set; }
+        public string ImageUrl
+        public string TargetPath
     }
 	]]--
+	WG.DownloadWrapperInterface.ImageDownloadFinished(args.RequestToken, args.ImageUrl, args.TargetPath)
 end
 
 local function DiscordOnReady(args)
@@ -205,7 +206,7 @@ commands["DiscordOnJoinRequest"] = DiscordOnJoinRequest
 local WrapperLoopback = {}
 
 -- opens URL
-function WrapperLoopback.OpenUrl(url) 
+function WrapperLoopback.OpenUrl(url)
 	Spring.Echo("Opening URL", url)
 	SendCommand("OpenUrl", {Url = url})
 end
@@ -274,8 +275,8 @@ function WrapperLoopback.DownloadImage(args)
     public class DownloadImage
     {
         public string RequestToken { get; set; } // client can set token to track multiple responses/requests
-        public string ImageType { get; set; }  // "Avatars" or "Clans"
-        public string Name { get; set; }
+        public string ImageUrl { get; set; }  
+        public string TargetPath { get; set; }
     }
 ]]--
 	SendCommand("DownloadImage", args)

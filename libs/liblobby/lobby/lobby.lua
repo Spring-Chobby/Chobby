@@ -859,7 +859,7 @@ function Lobby:_OnVoteResponse(isYesVote)
 end
 
 function Lobby:_OnSetModOptions(data)
-	self.modoptions = value
+	self.modoptions = data
 	self:_CallListeners("OnSetModOptions", data)
 end
 
@@ -1156,6 +1156,26 @@ function Lobby:_OnPwFactionUpdate(factionData)
 	for i = 1, #factionData do
 		self.planetwarsData.factionMap[factionData[i].Shortcut] = true
 	end
+end
+
+------------------------
+-- News and community commands
+------------------------
+
+function Lobby:_OnNewsList(newsItems)
+	self:_CallListeners("OnNewsList", newsItems)
+end
+
+function Lobby:_OnLadderList(ladderItems)
+	self:_CallListeners("OnLadderList", ladderItems)
+end
+
+function Lobby:_OnForumList(forumItems)
+	self:_CallListeners("OnForumList", forumItems)
+end
+
+function Lobby:_OnUserProfile(data)
+	self:_CallListeners("OnUserProfile", data)
 end
 
 ------------------------

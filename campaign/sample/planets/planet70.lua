@@ -30,15 +30,15 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/bomberriot.png",
-				text = [[The Phoenix bomber drops a bundle of napalm on each bombing run. This fiery attack is most effective against large numbers of weak units. ]]
+				text = [[The Phoenix saturation bomber drops a bundle of napalm on each bombing run. This fiery attack is most effective against large numbers of weak units. ]]
+			},
+			{
+				image = "luaui/images/commands/bold/attack.png",
+				text = [[A Pheonix strike is most effective when spread over a large area. Hold Ctrl then click and drag Force Fire to give each Pheonix a distinct target in the area. Hold Alt then click and drag Force Fire to draw a line of positions to target.]]
 			},
 			{
 				image = "unitpics/planeheavyfighter.png",
-				text = [[The twin anti-air lasers of Raptors are very effective against gunships.. Be aware that the Raptor must slow down to fire and cannot shoot behind itself. Be sure to cover your Raptors from behind.]]
-			},
-			{
-				image = "unitpics/energywind.png",
-				text = [[Wind Generators are exceptionally vulnerable to Phoenixes since they have low HP and are generally built together.]]
+				text = [[The twin anti-air lasers of Raptors are very effective against gunships. Be aware that the Raptor must slow down to fire and cannot shoot behind itself. Be sure to cover your Raptors from behind.]]
 			},
 		},
 		gameConfig = {
@@ -108,6 +108,33 @@ local function GetPlanet(planetUtilities, planetID)
 						facing = 0,
 						commands = {
 							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1300, 1800}},
+						},
+					},
+					{
+						name = "bomberriot",
+						x = 1400,
+						z = 50,
+						facing = 0,
+						commands = {
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1400, 1800}},
+						},
+					},
+					{
+						name = "bomberriot",
+						x = 1500,
+						z = 50,
+						facing = 0,
+						commands = {
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1500, 1800}},
+						},
+					},
+					{
+						name = "bomberriot",
+						x = 1600,
+						z = 50,
+						facing = 0,
+						commands = {
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1600, 1800}},
 						},
 					},
 					{
@@ -1089,6 +1116,12 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 0,
 							buildProgress = 0.4666,
 						},
+ 						{
+							name = "turretheavylaser",
+							x = 4040,
+							z = 2050,
+							facing = 0,
+						},
 					}
 				},
 				{
@@ -1107,8 +1140,8 @@ local function GetPlanet(planetUtilities, planetID)
 						"staticmex",
 						"staticradar",
 						"staticstorage",
-						"energywind",
-						"energypylon",
+						--"energywind",
+						--"energypylon",
 						"staticcon",
 						"factoryspider",
 						"spidercon",
@@ -1150,248 +1183,188 @@ local function GetPlanet(planetUtilities, planetID)
 						}
 					},
 					startUnits = {
-						 						{
+												{
 							name = "staticmex",
 							x = 4312,
 							z = 5064,
 							facing = 0,
 						},
- 						{
+						{
 							name = "staticmex",
 							x = 4072,
 							z = 5768,
 							facing = 0,
 						},
- 						{
+						{
 							name = "staticmex",
 							x = 3816,
 							z = 6472,
 							facing = 0,
 						},
- 						{
-							name = "energysolar",
-							x = 3832,
-							z = 6408,
-							facing = 3,
-						},
- 						{
-							name = "staticcon",
-							x = 3672,
-							z = 6504,
-							facing = 3,
-						},
- 						{
-							name = "staticcon",
-							x = 5960,
-							z = 4152,
-							facing = 3,
-						},
- 						{
-							name = "factoryspider",
-							x = 5832,
-							z = 4136,
-							facing = 3,
-						},
- 						{
-							name = "energysolar",
-							x = 4136,
-							z = 5784,
-							facing = 2,
-						},
- 						{
-							name = "energysolar",
-							x = 4056,
-							z = 5832,
-							facing = 1,
-						},
- 						{
-							name = "energysolar",
-							x = 4008,
-							z = 5752,
-							facing = 0,
-						},
- 						{
-							name = "energysolar",
-							x = 4088,
-							z = 5704,
-							facing = 3,
-						},
- 						{
-							name = "energysolar",
-							x = 3896,
-							z = 5640,
-							facing = 3,
-						},
- 						{
-							name = "energysolar",
-							x = 3880,
-							z = 6488,
-							facing = 2,
-						},
- 						{
-							name = "energysolar",
-							x = 3800,
-							z = 6536,
-							facing = 1,
-						},
- 						{
-							name = "energysolar",
-							x = 3752,
-							z = 6456,
-							facing = 0,
-						},
- 						{
-							name = "factorycloak",
-							x = 3536,
-							z = 6536,
-							facing = 3,
-						},
- 						{
-							name = "turretaaclose",
-							x = 5960,
-							z = 4008,
-							facing = 1,
-						},
- 						{
-							name = "turretaalaser",
-							x = 5784,
-							z = 4424,
-							facing = 1,
-						},
- 						{
-							name = "turretaaclose",
-							x = 3688,
-							z = 6312,
-							facing = 1,
-						},
- 						{
-							name = "turretaalaser",
-							x = 3496,
-							z = 6728,
-							facing = 1,
-						},
- 						{
-							name = "turretaalaser",
-							x = 4456,
-							z = 5240,
-							facing = 1,
-						},
- 						{
-							name = "energywind",
-							x = 4296,
-							z = 5112,
-							facing = 2,
-						},
- 						{
-							name = "spiderskirm",
-							x = 4543,
-							z = 3576,
-							facing = 3,
-						},
- 						{
-							name = "spiderscout",
-							x = 3953,
-							z = 1347,
-							facing = 0,
-						},
- 						{
-							name = "spiderscout",
-							x = 5529,
-							z = 1308,
-							facing = 1,
-						},
- 						{
-							name = "spiderassault",
-							x = 3751,
-							z = 3670,
-							facing = 3,
-						},
- 						{
-							name = "spiderscout",
-							x = 4558,
-							z = 2209,
-							facing = 3,
-						},
- 						{
-							name = "cloakskirm",
-							x = 3466,
-							z = 3984,
-							facing = 3,
-						},
- 						{
-							name = "spiderskirm",
-							x = 5311,
-							z = 3543,
-							facing = 2,
-						},
- 						{
-							name = "cloakraid",
-							x = 3632,
-							z = 4934,
-							facing = 2,
-						},
- 						{
+						{
 							name = "cloakraid",
 							x = 3764,
 							z = 4959,
 							facing = 3,
 						},
- 						{
+						{
+							name = "staticcon",
+							x = 3672,
+							z = 6504,
+							facing = 3,
+						},
+						{
+							name = "staticcon",
+							x = 5960,
+							z = 4152,
+							facing = 3,
+						},
+						{
+							name = "factoryspider",
+							x = 5832,
+							z = 4136,
+							facing = 3,
+						},
+						{
 							name = "cloakcon",
 							x = 3526,
 							z = 6536,
 							facing = 3,
 							buildProgress = 0.87849998,
 						},
- 						{
+						{
 							name = "spiderassault",
 							x = 5796,
 							z = 4136,
 							facing = 3,
 							buildProgress = 0.52289999,
 						},
- 						{
+						{
+							name = "gunshipskirm",
+							x = 5958,
+							z = 4451,
+							facing = 0,
+						},
+						{
+							name = "gunshipskirm",
+							x = 4693,
+							z = 5758,
+							facing = 0,
+						},
+						{
 							name = "staticmex",
 							x = 4712,
 							z = 3208,
 							facing = 0,
 						},
- 						{
+						{
+							name = "gunshipskirm",
+							x = 2997,
+							z = 6447,
+							facing = 0,
+						},
+						{
 							name = "staticradar",
 							x = 4528,
 							z = 3328,
 							facing = 3,
 						},
- 						{
+						{
+							name = "gunshipskirm",
+							x = 6808,
+							z = 2491,
+							facing = 0,
+						},
+						{
+							name = "factorycloak",
+							x = 3536,
+							z = 6536,
+							facing = 3,
+						},
+						{
+							name = "turretaaclose",
+							x = 4584,
+							z = 5016,
+							facing = 1,
+						},
+						{
+							name = "turretaalaser",
+							x = 5784,
+							z = 4424,
+							facing = 1,
+						},
+						{
+							name = "turretaaclose",
+							x = 6072,
+							z = 4232,
+							facing = 1,
+						},
+						{
+							name = "turretaalaser",
+							x = 3576,
+							z = 6744,
+							facing = 1,
+						},
+						{
+							name = "turretaalaser",
+							x = 4456,
+							z = 5240,
+							facing = 1,
+						},
+						{
 							name = "staticcon",
 							x = 4600,
 							z = 3144,
 							facing = 3,
 							buildProgress = 0.4136,
 						},
- 						{
-							name = "gunshipskirm",
-							x = 5958,
-							z = 4451,
+						{
+							name = "spiderskirm",
+							x = 4543,
+							z = 3576,
+							facing = 3,
+						},
+						{
+							name = "spiderscout",
+							x = 3953,
+							z = 1347,
 							facing = 0,
 						},
- 						{
-							name = "gunshipskirm",
-							x = 4693,
-							z = 5758,
-							facing = 0,
+						{
+							name = "spiderscout",
+							x = 5529,
+							z = 1308,
+							facing = 1,
 						},
- 						{
-							name = "gunshipskirm",
-							x = 2997,
-							z = 6447,
-							facing = 0,
+						{
+							name = "spiderassault",
+							x = 3751,
+							z = 3670,
+							facing = 3,
 						},
- 						{
-							name = "gunshipskirm",
-							x = 6808,
-							z = 2491,
-							facing = 0,
+						{
+							name = "spiderscout",
+							x = 4558,
+							z = 2209,
+							facing = 3,
+						},
+						{
+							name = "cloakskirm",
+							x = 3466,
+							z = 3984,
+							facing = 3,
+						},
+						{
+							name = "spiderskirm",
+							x = 5311,
+							z = 3543,
+							facing = 2,
+						},
+						{
+							name = "cloakraid",
+							x = 3632,
+							z = 4934,
+							facing = 2,
 						},
 					}
 				},
@@ -1406,14 +1379,14 @@ local function GetPlanet(planetUtilities, planetID)
 						"staticmex",
 						"staticradar",
 						"staticstorage",
-						"energywind",
-						"energypylon",
+						--"energywind",
+						--"energypylon",
 						"staticcon",
 						"factorygunship",
 						"gunshipcon",
 						"gunshipbomb",
 						"gunshipemp",
-						"gunshipaa",
+						--"gunshipaa",
 						"gunshipskirm",
 						"gunshipheavyskirm",
 						"factoryjump",
@@ -1497,1121 +1470,3594 @@ local function GetPlanet(planetUtilities, planetID)
 					startUnits = {
 						{
 							name = "pw_metal",
-							x = 4300,
+							x = 4288,
 							z = 6400,
 							facing = 3,
 						},
-						 {
+						{
 							name = "energywind",
 							x = 7128,
 							z = 1880,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 7048,
 							z = 1880,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6968,
 							z = 1880,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6888,
 							z = 1864,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 1960,
 							z = 7112,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6808,
 							z = 1864,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 2008,
 							z = 7032,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 2056,
 							z = 6952,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6728,
 							z = 1864,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 2104,
 							z = 6872,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6664,
 							z = 1880,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 2152,
 							z = 6792,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6584,
 							z = 1912,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 2200,
-							z = 6712,
+							z = 6728,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6504,
 							z = 1944,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
-							x = 2072,
-							z = 7112,
+							x = 2344,
+							z = 6696,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6424,
 							z = 1960,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
-							x = 2120,
-							z = 7032,
+							x = 2264,
+							z = 6712,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6344,
 							z = 1992,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 2168,
 							z = 6952,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6264,
 							z = 2056,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 2216,
 							z = 6872,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6216,
-							z = 2136,
+							z = 2088,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 2264,
 							z = 6792,
 							facing = 3,
 						},
- 						{
+						{
+							name = "energysolar",
+							x = 6312,
+							z = 664,
+							facing = 0,
+						},
+						{
 							name = "energywind",
-							x = 6168,
-							z = 2216,
+							x = 2200,
+							z = 6664,
 							facing = 3,
 						},
- 						{
-							name = "energywind",
-							x = 2184,
-							z = 7128,
-							facing = 3,
+						{
+							name = "energypylon",
+							x = 4056,
+							z = 4632,
+							facing = 0,
 						},
- 						{
-							name = "energywind",
-							x = 6120,
-							z = 2296,
-							facing = 3,
-						},
- 						{
+						{
 							name = "energywind",
 							x = 2232,
 							z = 7048,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 2264,
 							z = 6968,
 							facing = 3,
 						},
- 						{
-							name = "energywind",
-							x = 6088,
-							z = 2408,
-							facing = 3,
+						{
+							name = "turretriot",
+							x = 4216,
+							z = 3912,
+							facing = 0,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 2312,
 							z = 6888,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
-							x = 6120,
-							z = 2488,
+							x = 6552,
+							z = 584,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6088,
+							z = 2552,
 							facing = 3,
 						},
- 						{
+						{
+							name = "energywind",
+							x = 6104,
+							z = 2616,
+							facing = 3,
+						},
+						{
 							name = "energywind",
 							x = 6136,
-							z = 2568,
+							z = 2680,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
-							x = 6168,
-							z = 2648,
-							facing = 3,
-						},
- 						{
-							name = "energywind",
-							x = 6184,
-							z = 2728,
-							facing = 3,
-						},
- 						{
-							name = "energywind",
-							x = 6248,
+							x = 6232,
 							z = 2808,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
-							x = 6328,
-							z = 2872,
-							facing = 3,
-						},
- 						{
-							name = "energywind",
-							x = 6408,
+							x = 6376,
 							z = 2920,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
-							x = 6488,
-							z = 2984,
+							x = 6424,
+							z = 2968,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6568,
-							z = 3048,
+							z = 3032,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
-							x = 6664,
-							z = 3112,
+							x = 6616,
+							z = 3080,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
-							x = 6744,
-							z = 3160,
+							x = 6680,
+							z = 3128,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
-							x = 6904,
+							x = 6760,
+							z = 3176,
+							facing = 3,
+						},
+						{
+							name = "energywind",
+							x = 6888,
 							z = 3240,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6824,
-							z = 3192,
+							z = 3208,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
-							x = 6088,
-							z = 6648,
+							x = 6072,
+							z = 6616,
 							facing = 3,
 						},
- 						{
+						{
 							name = "turretriot",
-							x = 1800,
+							x = 1720,
 							z = 6968,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
-							x = 6984,
+							x = 6952,
 							z = 3272,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 7064,
 							z = 3320,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 5880,
 							z = 6728,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 5960,
 							z = 6728,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6040,
 							z = 6744,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6120,
 							z = 6744,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6488,
 							z = 6712,
 							facing = 3,
 						},
- 						{
+						{
 							name = "turretriot",
-							x = 2088,
-							z = 6600,
+							x = 2072,
+							z = 6632,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6200,
 							z = 6760,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6280,
 							z = 6760,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6360,
 							z = 6760,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6440,
 							z = 6776,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6472,
 							z = 24,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6536,
 							z = 104,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6520,
 							z = 6776,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6584,
 							z = 184,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 5944,
 							z = 6792,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6648,
 							z = 264,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6024,
 							z = 6792,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
-							x = 6712,
-							z = 328,
+							x = 6424,
+							z = 424,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6104,
 							z = 6808,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6184,
 							z = 6808,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6792,
 							z = 376,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6264,
 							z = 6824,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6872,
 							z = 408,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6344,
 							z = 6824,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6952,
 							z = 456,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6424,
 							z = 6840,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 7032,
 							z = 504,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 7112,
 							z = 552,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
-							x = 5928,
+							x = 5880,
+							z = 6600,
+							facing = 3,
+						},
+						{
+							name = "energywind",
+							x = 5992,
+							z = 6600,
+							facing = 3,
+						},
+						{
+							name = "energywind",
+							x = 6168,
 							z = 6632,
 							facing = 3,
 						},
- 						{
-							name = "energywind",
-							x = 6008,
-							z = 6648,
-							facing = 3,
-						},
- 						{
-							name = "energywind",
-							x = 6168,
-							z = 6664,
-							facing = 3,
-						},
- 						{
+						{
 							name = "turretriot",
-							x = 6904,
-							z = 648,
+							x = 6776,
+							z = 808,
 							facing = 0,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6248,
 							z = 6680,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6328,
 							z = 6696,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6408,
 							z = 6696,
 							facing = 3,
 						},
- 						{
+						{
 							name = "turretriot",
-							x = 6344,
-							z = 264,
+							x = 6296,
+							z = 248,
 							facing = 0,
 						},
- 						{
+						{
 							name = "turretlaser",
-							x = 6672,
-							z = 1744,
+							x = 6448,
+							z = 1760,
 							facing = 2,
 						},
- 						{
+						{
 							name = "turretriot",
 							x = 2440,
 							z = 6856,
 							facing = 1,
 						},
- 						{
-							name = "turretheavy",
-							x = 6120,
-							z = 1960,
-							facing = 3,
+						{
+							name = "turretriot",
+							x = 3784,
+							z = 4232,
+							facing = 0,
 						},
- 						{
+						{
 							name = "energypylon",
 							x = 6344,
 							z = 2296,
 							facing = 3,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 2360,
 							z = 6984,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 2312,
 							z = 7064,
 							facing = 1,
 						},
- 						{
-							name = "turretlaser",
-							x = 5920,
-							z = 2464,
-							facing = 3,
+						{
+							name = "energysolar",
+							x = 6584,
+							z = 680,
+							facing = 0,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 2264,
 							z = 7144,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 2360,
 							z = 7144,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 2408,
 							z = 7064,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 2456,
 							z = 7144,
 							facing = 1,
 						},
- 						{
+						{
 							name = "turretlaser",
 							x = 6160,
 							z = 2960,
 							facing = 3,
 						},
- 						{
+						{
 							name = "turretlaser",
-							x = 6576,
-							z = 3296,
+							x = 6624,
+							z = 3360,
 							facing = 0,
 						},
- 						{
+						{
 							name = "turretlaser",
-							x = 7056,
-							z = 3472,
+							x = 7040,
+							z = 3584,
 							facing = 0,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6600,
 							z = 5448,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6680,
 							z = 5512,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6760,
 							z = 5576,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6840,
 							z = 5640,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6920,
 							z = 5704,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energypylon",
-							x = 2776,
-							z = 6728,
+							x = 2712,
+							z = 6440,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 7000,
 							z = 5768,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 7080,
 							z = 5832,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6600,
 							z = 5544,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6680,
 							z = 5608,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energypylon",
-							x = 3288,
-							z = 6088,
-							facing = 1,
+							x = 3400,
+							z = 4920,
+							facing = 0,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6760,
 							z = 5688,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6840,
 							z = 5752,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6920,
 							z = 5816,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 7000,
 							z = 5896,
 							facing = 1,
 						},
- 						{
-							name = "energypylon",
-							x = 3496,
-							z = 5272,
-							facing = 1,
+						{
+							name = "energywind",
+							x = 6872,
+							z = 4936,
+							facing = 0,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6680,
 							z = 5384,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6760,
 							z = 5464,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6840,
 							z = 5528,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 6920,
 							z = 5608,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energypylon",
-							x = 3928,
-							z = 4712,
+							x = 3608,
+							z = 4600,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 7000,
 							z = 5672,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energywind",
 							x = 7080,
 							z = 5752,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energypylon",
-							x = 4520,
-							z = 4360,
+							x = 4392,
+							z = 4328,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energypylon",
-							x = 5016,
-							z = 4920,
-							facing = 1,
+							x = 3384,
+							z = 6728,
+							facing = 0,
 						},
- 						{
+						{
 							name = "staticmex",
 							x = 6904,
 							z = 6424,
 							facing = 0,
 						},
- 						{
+						{
 							name = "energypylon",
-							x = 5368,
-							z = 5784,
+							x = 5480,
+							z = 5848,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energypylon",
-							x = 6808,
-							z = 3704,
-							facing = 1,
+							x = 6888,
+							z = 2152,
+							facing = 0,
 						},
- 						{
+						{
 							name = "staticmex",
 							x = 5912,
 							z = 5816,
 							facing = 0,
 						},
- 						{
+						{
 							name = "energypylon",
 							x = 6072,
 							z = 5704,
 							facing = 1,
 						},
- 						{
+						{
 							name = "energypylon",
-							x = 6536,
-							z = 4616,
-							facing = 1,
+							x = 6424,
+							z = 2664,
+							facing = 0,
 						},
- 						{
+						{
 							name = "staticmex",
 							x = 5688,
 							z = 6072,
 							facing = 0,
 						},
- 						{
-							name = "energypylon",
-							x = 5736,
-							z = 4328,
-							facing = 1,
+						{
+							name = "turretriot",
+							x = 4568,
+							z = 3752,
+							facing = 0,
 						},
- 						{
+						{
 							name = "energypylon",
-							x = 5640,
-							z = 3640,
-							facing = 1,
+							x = 6664,
+							z = 360,
+							facing = 0,
 						},
- 						{
+						{
 							name = "energypylon",
 							x = 6712,
 							z = 6280,
 							facing = 1,
 						},
- 						{
+						{
 							name = "staticmex",
 							x = 7000,
 							z = 4968,
 							facing = 0,
 						},
- 						{
+						{
 							name = "staticstorage",
 							x = 5512,
 							z = 6600,
 							facing = 1,
 						},
- 						{
+						{
 							name = "factorygunship",
 							x = 5512,
 							z = 6232,
 							facing = 1,
 						},
- 						{
+						{
 							name = "staticmex",
 							x = 6584,
 							z = 3896,
 							facing = 0,
 						},
- 						{
+						{
 							name = "staticcon",
 							x = 5624,
 							z = 6200,
 							facing = 1,
 						},
- 						{
+						{
 							name = "staticcon",
 							x = 5624,
 							z = 6280,
 							facing = 1,
 						},
- 						{
+						{
 							name = "staticmex",
 							x = 5912,
 							z = 4360,
 							facing = 0,
 						},
- 						{
+						{
 							name = "turretantiheavy",
-							x = 2768,
-							z = 6192,
+							x = 2816,
+							z = 6048,
 							facing = 3,
 						},
- 						{
-							name = "turretheavy",
-							x = 5512,
-							z = 3352,
-							facing = 2,
+						{
+							name = "energywind",
+							x = 3080,
+							z = 5592,
+							facing = 0,
 						},
- 						{
+						{
 							name = "turretlaser",
 							x = 5120,
 							z = 3648,
 							facing = 2,
 						},
- 						{
+						{
 							name = "turretlaser",
 							x = 5312,
 							z = 3472,
 							facing = 2,
 						},
- 						{
+						{
 							name = "turretlaser",
 							x = 5696,
 							z = 3120,
 							facing = 3,
 						},
- 						{
-							name = "energypylon",
-							x = 5144,
-							z = 4072,
-							facing = 3,
+						{
+							name = "turretheavylaser",
+							x = 1864,
+							z = 6792,
+							facing = 0,
 						},
- 						{
+						{
 							name = "turretlaser",
-							x = 5808,
-							z = 2864,
+							x = 6656,
+							z = 1616,
 							facing = 3,
 						},
- 						{
+						{
 							name = "turretantiheavy",
-							x = 4688,
-							z = 3888,
+							x = 6384,
+							z = 672,
 							facing = 2,
 						},
- 						{
-							name = "turretheavy",
-							x = 4024,
+						{
+							name = "energywind",
+							x = 6760,
+							z = 3608,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6312,
 							z = 4200,
-							facing = 2,
+							facing = 0,
 						},
- 						{
-							name = "turretheavy",
-							x = 3400,
-							z = 4616,
-							facing = 3,
+						{
+							name = "turretaaclose",
+							x = 3896,
+							z = 5704,
+							facing = 0,
 						},
- 						{
-							name = "turretheavy",
-							x = 3096,
-							z = 5608,
-							facing = 3,
-						},
- 						{
+						{
 							name = "energypylon",
-							x = 5624,
-							z = 6408,
+							x = 5560,
+							z = 6440,
 							facing = 3,
 						},
- 						{
+						{
 							name = "staticarty",
 							x = 5320,
 							z = 5480,
 							facing = 3,
 						},
- 						{
+						{
 							name = "turretheavy",
 							x = 5992,
 							z = 5320,
 							facing = 2,
 						},
- 						{
+						{
 							name = "turretheavy",
 							x = 5112,
 							z = 6216,
 							facing = 3,
 						},
- 						{
+						{
 							name = "turretheavylaser",
 							x = 5192,
 							z = 5640,
 							facing = 3,
 						},
- 						{
+						{
 							name = "turretheavylaser",
 							x = 5496,
 							z = 5400,
 							facing = 2,
 						},
- 						{
+						{
 							name = "turretriot",
 							x = 5448,
 							z = 6712,
 							facing = 3,
 						},
- 						{
+						{
 							name = "turretaaflak",
 							x = 5704,
 							z = 5352,
 							facing = 2,
 						},
- 						{
+						{
 							name = "turretaaflak",
 							x = 5080,
 							z = 5928,
 							facing = 3,
 						},
- 						{
-							name = "energypylon",
-							x = 7096,
-							z = 984,
-							facing = 3,
+						{
+							name = "staticstorage",
+							x = 5784,
+							z = 6056,
+							facing = 0,
 						},
- 						{
-							name = "energypylon",
-							x = 7080,
-							z = 1576,
-							facing = 3,
+						{
+							name = "staticstorage",
+							x = 5912,
+							z = 5912,
+							facing = 0,
 						},
- 						{
+						{
 							name = "turretmissile",
 							x = 6848,
 							z = 1024,
 							facing = 3,
 						},
- 						{
+						{
 							name = "turretmissile",
 							x = 6832,
 							z = 1360,
 							facing = 3,
 						},
- 						{
+						{
 							name = "staticradar",
 							x = 2880,
 							z = 6016,
 							facing = 3,
 						},
- 						{
-							name = "staticradar",
-							x = 6128,
-							z = 2224,
-							facing = 3,
+						{
+							name = "energysolar",
+							x = 6408,
+							z = 504,
+							facing = 0,
 						},
- 						{
+						{
 							name = "staticradar",
 							x = 4512,
 							z = 3952,
 							facing = 3,
 						},
- 						{
+						{
 							name = "staticradar",
 							x = 5840,
 							z = 5312,
 							facing = 3,
 						},
- 						{
+						{
 							name = "turretaalaser",
 							x = 5736,
 							z = 6712,
 							facing = 1,
 						},
- 						{
-							name = "energypylon",
+						{
+							name = "turretheavylaser",
+							x = 6152,
+							z = 1848,
+							facing = 0,
+							terraformHeight = 734,
+						},
+						{
+							name = "turretantiheavy",
+							x = 3184,
+							z = 4848,
+							facing = 0,
+						},
+						{
+							name = "turretaaclose",
+							x = 3896,
+							z = 6008,
+							facing = 2,
+						},
+						{
+							name = "turretaaclose",
+							x = 3512,
+							z = 6264,
+							facing = 2,
+						},
+						{
+							name = "turretaaclose",
 							x = 3992,
-							z = 6488,
-							facing = 1,
+							z = 6728,
+							facing = 2,
 						},
- 						{
-							name = "energypylon",
-							x = 4792,
-							z = 6696,
-							facing = 1,
-						},
- 						{
+						{
 							name = "turretaaclose",
-							x = 3848,
-							z = 4600,
+							x = 4552,
+							z = 5480,
 							facing = 2,
 						},
- 						{
-							name = "turretaaclose",
-							x = 3384,
-							z = 5240,
-							facing = 2,
+						{
+							name = "energywind",
+							x = 2872,
+							z = 5960,
+							facing = 0,
 						},
- 						{
-							name = "turretaaclose",
-							x = 3096,
-							z = 6088,
-							facing = 2,
-						},
- 						{
-							name = "turretaaclose",
-							x = 3432,
-							z = 5896,
-							facing = 2,
-						},
- 						{
-							name = "energypylon",
-							x = 4200,
-							z = 5416,
-							facing = 2,
-							buildProgress = 0.94,
-						},
- 						{
+						{
 							name = "gunshipskirm",
 							x = 5513,
 							z = 6232,
 							facing = 0,
 							buildProgress = 0.9788,
 						},
- 						{
+						{
 							name = "staticcon",
 							x = 5368,
 							z = 6216,
 							facing = 2,
 						},
- 						{
+						{
 							name = "gunshipcon",
-							x = 4333,
-							z = 5503,
+							x = 4353,
+							z = 5512,
 							facing = 3,
 						},
- 						{
+						{
 							name = "gunshipcon",
-							x = 4328,
-							z = 5501,
+							x = 4319,
+							z = 5499,
 							facing = 3,
 						},
- 						{
+						{
 							name = "gunshipemp",
-							x = 3827,
-							z = 4254,
+							x = 3688,
+							z = 4186,
 							facing = 3,
 						},
- 						{
+						{
 							name = "gunshipemp",
-							x = 3776,
-							z = 4218,
+							x = 3777,
+							z = 4123,
 							facing = 3,
 						},
- 						{
+						{
 							name = "gunshipemp",
-							x = 3786,
-							z = 4221,
+							x = 3867,
+							z = 4123,
 							facing = 3,
 						},
- 						{
+						{
 							name = "gunshipemp",
-							x = 3800,
+							x = 3688,
+							z = 4187,
+							facing = 3,
+						},
+						{
+							name = "gunshipemp",
+							x = 3710,
+							z = 4160,
+							facing = 3,
+						},
+						{
+							name = "energywind",
+							x = 6520,
+							z = 1880,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6360,
+							z = 1944,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6856,
+							z = 1912,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6984,
+							z = 1800,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6840,
+							z = 1800,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6936,
+							z = 1928,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6760,
+							z = 1736,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7016,
+							z = 1720,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6456,
+							z = 1912,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6904,
+							z = 1784,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6920,
+							z = 1720,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7096,
+							z = 1672,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7112,
+							z = 1800,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7096,
+							z = 1752,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6840,
+							z = 1640,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6728,
+							z = 1800,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6600,
+							z = 1864,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7000,
+							z = 1928,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6920,
+							z = 1640,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6776,
+							z = 1912,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7048,
+							z = 1672,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6792,
+							z = 1800,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6968,
+							z = 1656,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7064,
+							z = 1944,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6664,
+							z = 1816,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7112,
+							z = 1944,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7048,
+							z = 1800,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6280,
+							z = 1992,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6760,
+							z = 1672,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6824,
+							z = 1720,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4152,
+							z = 4040,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6936,
+							z = 5512,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6776,
+							z = 5336,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 5784,
+							z = 6872,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 5944,
+							z = 6856,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4824,
+							z = 4104,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6536,
+							z = 6856,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6920,
+							z = 5464,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6712,
+							z = 552,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6808,
+							z = 296,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 5864,
+							z = 6856,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7096,
+							z = 5592,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6904,
+							z = 3304,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4760,
+							z = 4104,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4712,
+							z = 4312,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4712,
+							z = 4152,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6024,
+							z = 2568,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4856,
+							z = 4456,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4968,
+							z = 4440,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4840,
+							z = 4040,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4824,
+							z = 4168,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 1992,
+							z = 6904,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 5080,
+							z = 4488,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4632,
+							z = 4088,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4584,
+							z = 4024,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6376,
+							z = 6904,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2088,
+							z = 6776,
+							facing = 0,
+						},
+						{
+							name = "energysolar",
+							x = 6456,
+							z = 680,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6760,
+							z = 3256,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7112,
+							z = 376,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4600,
+							z = 4264,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6008,
+							z = 6856,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6296,
+							z = 2840,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6312,
+							z = 2040,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6312,
+							z = 6904,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7032,
+							z = 5528,
+							facing = 0,
+						},
+						{
+							name = "energypylon",
+							x = 6872,
+							z = 2888,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4584,
+							z = 3976,
+							facing = 0,
+						},
+						{
+							name = "energysolar",
+							x = 6392,
+							z = 600,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 1768,
+							z = 7064,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6984,
+							z = 5592,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4792,
+							z = 4328,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4920,
+							z = 4392,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 1768,
+							z = 7128,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4648,
+							z = 3976,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6744,
+							z = 5384,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7016,
+							z = 3256,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6200,
+							z = 6888,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7112,
+							z = 3432,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7096,
+							z = 5480,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6984,
+							z = 5480,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4744,
+							z = 4376,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7000,
+							z = 3336,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4792,
+							z = 3992,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 5880,
+							z = 6776,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 5032,
+							z = 4408,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6984,
+							z = 5416,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6120,
+							z = 2760,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6184,
+							z = 2744,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4712,
+							z = 4040,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4648,
+							z = 4328,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4536,
+							z = 4152,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2008,
+							z = 6888,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4520,
+							z = 3992,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 1928,
+							z = 7032,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2120,
+							z = 6728,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7144,
+							z = 3272,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 1864,
+							z = 7000,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 1880,
+							z = 7128,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4984,
+							z = 4360,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6456,
+							z = 3048,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4760,
+							z = 4152,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6040,
+							z = 2632,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4728,
+							z = 4248,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4904,
+							z = 4264,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7048,
+							z = 5432,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6152,
+							z = 2824,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 1704,
+							z = 7064,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4600,
+							z = 4200,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7128,
+							z = 5704,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6056,
+							z = 6872,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 1656,
+							z = 7112,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6504,
+							z = 3000,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6168,
+							z = 2056,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7144,
+							z = 3208,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4664,
+							z = 4264,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6584,
+							z = 3128,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6984,
+							z = 3384,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4248,
+							z = 4008,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4856,
+							z = 4296,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4680,
+							z = 4200,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4776,
+							z = 4056,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 5816,
+							z = 6808,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4808,
+							z = 4280,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4360,
+							z = 3960,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6520,
+							z = 3080,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6696,
+							z = 3208,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6472,
+							z = 6920,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4760,
+							z = 4216,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2280,
+							z = 6632,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4776,
+							z = 4440,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4984,
+							z = 4280,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6648,
+							z = 3176,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 5800,
+							z = 6728,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4888,
+							z = 4136,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6392,
+							z = 3032,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4552,
+							z = 4088,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6424,
+							z = 6904,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6856,
+							z = 5464,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6952,
+							z = 328,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6856,
+							z = 5304,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4472,
+							z = 4104,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7080,
+							z = 3256,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4696,
+							z = 4104,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6344,
+							z = 2984,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6072,
+							z = 2696,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 1992,
+							z = 6776,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2056,
+							z = 6808,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4936,
+							z = 4200,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6600,
+							z = 6808,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4872,
+							z = 4216,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 1944,
+							z = 6824,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7032,
+							z = 5608,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7048,
+							z = 3384,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6136,
+							z = 6872,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6952,
+							z = 3336,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4488,
+							z = 4056,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6248,
+							z = 6888,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6280,
+							z = 2952,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7080,
+							z = 5672,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 1848,
+							z = 7080,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 5032,
+							z = 4344,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4440,
+							z = 3944,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4728,
+							z = 3976,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7064,
+							z = 5368,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6904,
+							z = 5384,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6712,
+							z = 24,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7128,
+							z = 3336,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4536,
 							z = 4232,
-							facing = 3,
+							facing = 0,
 						},
- 						{
-							name = "gunshipemp",
-							x = 3768,
-							z = 4204,
-							facing = 3,
+						{
+							name = "energywind",
+							x = 6312,
+							z = 2904,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6232,
+							z = 2888,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4632,
+							z = 4152,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4648,
+							z = 4024,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7000,
+							z = 680,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4808,
+							z = 4232,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6824,
+							z = 3272,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6824,
+							z = 5400,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 1960,
+							z = 6968,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4936,
+							z = 4312,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 1896,
+							z = 6904,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6392,
+							z = 8,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6776,
+							z = 504,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7080,
+							z = 504,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6632,
+							z = 536,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6760,
+							z = 584,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6856,
+							z = 552,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6472,
+							z = 72,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7000,
+							z = 744,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6712,
+							z = 408,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6472,
+							z = 536,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6328,
+							z = 8,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6456,
+							z = 104,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6728,
+							z = 328,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7144,
+							z = 616,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6888,
+							z = 600,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6680,
+							z = 88,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6680,
+							z = 152,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6952,
+							z = 568,
+							facing = 0,
+						},
+						{
+							name = "turretriot",
+							x = 5192,
+							z = 4712,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7128,
+							z = 488,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6024,
+							z = 6680,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6936,
+							z = 712,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6104,
+							z = 6680,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6504,
+							z = 408,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6568,
+							z = 248,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6920,
+							z = 648,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6792,
+							z = 424,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6584,
+							z = 312,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6872,
+							z = 360,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6616,
+							z = 8,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7016,
+							z = 360,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6520,
+							z = 152,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6584,
+							z = 88,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6664,
+							z = 40,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6392,
+							z = 184,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7000,
+							z = 616,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6872,
+							z = 680,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6664,
+							z = 472,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6232,
+							z = 2008,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7128,
+							z = 696,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6872,
+							z = 280,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7112,
+							z = 440,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6504,
+							z = 488,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 5960,
+							z = 6664,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6184,
+							z = 6696,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6728,
+							z = 664,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7064,
+							z = 712,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 5864,
+							z = 6680,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7096,
+							z = 792,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6984,
+							z = 424,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6776,
+							z = 216,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7048,
+							z = 424,
+							facing = 0,
+						},
+						{
+							name = "energysolar",
+							x = 6376,
+							z = 744,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6104,
+							z = 2040,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6600,
+							z = 120,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6808,
+							z = 632,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6728,
+							z = 264,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6936,
+							z = 504,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6584,
+							z = 488,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6376,
+							z = 1880,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7064,
+							z = 648,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6920,
+							z = 392,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7080,
+							z = 584,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6216,
+							z = 1944,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6472,
+							z = 280,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6584,
+							z = 408,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6392,
+							z = 120,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6744,
+							z = 136,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6376,
+							z = 56,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6296,
+							z = 1928,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6680,
+							z = 616,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6536,
+							z = 40,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6680,
+							z = 200,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7016,
+							z = 552,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6856,
+							z = 488,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6104,
+							z = 2504,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4088,
+							z = 4296,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4168,
+							z = 4312,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4472,
+							z = 4184,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 5144,
+							z = 4632,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 5944,
+							z = 4296,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4696,
+							z = 4408,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 5880,
+							z = 4296,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4600,
+							z = 4392,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4328,
+							z = 4184,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6968,
+							z = 3208,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6104,
+							z = 2232,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4536,
+							z = 4360,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 5112,
+							z = 4552,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 5976,
+							z = 4360,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4392,
+							z = 4088,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6088,
+							z = 2296,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4248,
+							z = 4136,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4552,
+							z = 4296,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4264,
+							z = 4216,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6152,
+							z = 2184,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6168,
+							z = 2136,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6152,
+							z = 2232,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6072,
+							z = 2472,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4536,
+							z = 4440,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 5880,
+							z = 4424,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4216,
+							z = 4360,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6072,
+							z = 2408,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6088,
+							z = 2120,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6168,
+							z = 1992,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4312,
+							z = 4104,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4280,
+							z = 4424,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4248,
+							z = 4280,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4136,
+							z = 4392,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 5944,
+							z = 4424,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 5848,
+							z = 4360,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4168,
+							z = 4232,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6008,
+							z = 2504,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6056,
+							z = 2168,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4408,
+							z = 4168,
+							facing = 0,
+						},
+						{
+							name = "staticradar",
+							x = 6064,
+							z = 2352,
+							facing = 0,
+						},
+						{
+							name = "turretriot",
+							x = 5896,
+							z = 2504,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6936,
+							z = 5256,
+							facing = 0,
+						},
+						{
+							name = "turretantiheavy",
+							x = 5984,
+							z = 2336,
+							facing = 0,
+						},
+						{
+							name = "turretantiheavy",
+							x = 4576,
+							z = 3904,
+							facing = 0,
+						},
+						{
+							name = "turretriot",
+							x = 4824,
+							z = 3784,
+							facing = 0,
+						},
+						{
+							name = "turretriot",
+							x = 5032,
+							z = 3992,
+							facing = 0,
+						},
+						{
+							name = "turretriot",
+							x = 5160,
+							z = 4248,
+							facing = 0,
+						},
+						{
+							name = "energypylon",
+							x = 2104,
+							z = 7112,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3320,
+							z = 4840,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3400,
+							z = 4696,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2840,
+							z = 6136,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3416,
+							z = 4552,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3576,
+							z = 4440,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3320,
+							z = 4664,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3128,
+							z = 5016,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2360,
+							z = 6632,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3128,
+							z = 5080,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4056,
+							z = 4296,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3208,
+							z = 4952,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3864,
+							z = 4312,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3272,
+							z = 4728,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3592,
+							z = 4376,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3352,
+							z = 4760,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3512,
+							z = 4440,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3544,
+							z = 4520,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2936,
+							z = 6024,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 4056,
+							z = 4296,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3112,
+							z = 5144,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3400,
+							z = 4840,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2920,
+							z = 5928,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2904,
+							z = 6088,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3272,
+							z = 4792,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3464,
+							z = 4520,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3464,
+							z = 4696,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3656,
+							z = 4456,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3448,
+							z = 4616,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3432,
+							z = 4760,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3048,
+							z = 5704,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2968,
+							z = 5944,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3016,
+							z = 5800,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2824,
+							z = 6056,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3096,
+							z = 5224,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3288,
+							z = 5016,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3160,
+							z = 4968,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3352,
+							z = 4600,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3976,
+							z = 4296,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3384,
+							z = 4648,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3272,
+							z = 4904,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2952,
+							z = 5864,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2616,
+							z = 6280,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2424,
+							z = 6472,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2776,
+							z = 6120,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2680,
+							z = 6232,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2312,
+							z = 6568,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2344,
+							z = 6792,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2360,
+							z = 6520,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2744,
+							z = 6184,
+							facing = 0,
+						},
+						{
+							name = "turretriot",
+							x = 5976,
+							z = 2104,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6344,
+							z = 4136,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6408,
+							z = 4136,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6408,
+							z = 4264,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6440,
+							z = 4200,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6344,
+							z = 4264,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6520,
+							z = 4376,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6968,
+							z = 5032,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6168,
+							z = 4264,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6888,
+							z = 3352,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6872,
+							z = 3672,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6904,
+							z = 3480,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6456,
+							z = 4296,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6600,
+							z = 4648,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6376,
+							z = 4200,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6792,
+							z = 3672,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6920,
+							z = 3416,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6456,
+							z = 4088,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6520,
+							z = 4456,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6680,
+							z = 4824,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6632,
+							z = 4744,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6744,
+							z = 3736,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6696,
+							z = 3800,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7000,
+							z = 3448,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6504,
+							z = 4024,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6568,
+							z = 4552,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6552,
+							z = 3960,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6648,
+							z = 3848,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6904,
+							z = 3608,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6808,
+							z = 4904,
+							facing = 0,
+						},
+						{
+							name = "turretheavylaser",
+							x = 5976,
+							z = 2840,
+							facing = 0,
+							terraformHeight = 746,
+						},
+						{
+							name = "energywind",
+							x = 6840,
+							z = 3608,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6744,
+							z = 4872,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6808,
+							z = 3544,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6872,
+							z = 3544,
+							facing = 0,
+						},
+						{
+							name = "turretheavy",
+							x = 2904,
+							z = 4760,
+							facing = 0,
+						},
+						{
+							name = "turretaaclose",
+							x = 4088,
+							z = 5192,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3112,
+							z = 5304,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3112,
+							z = 5400,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 3096,
+							z = 5496,
+							facing = 0,
+						},
+						{
+							name = "energypylon",
+							x = 2744,
+							z = 6888,
+							facing = 0,
+						},
+						{
+							name = "turretriot",
+							x = 2632,
+							z = 6104,
+							facing = 0,
+						},
+						{
+							name = "turretriot",
+							x = 2824,
+							z = 5864,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6968,
+							z = 4904,
+							facing = 0,
+						},
+						{
+							name = "energypylon",
+							x = 4552,
+							z = 5816,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7032,
+							z = 5032,
+							facing = 0,
+						},
+						{
+							name = "energypylon",
+							x = 6216,
+							z = 536,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6040,
+							z = 4328,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6936,
+							z = 5112,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6936,
+							z = 5192,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7032,
+							z = 4904,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7000,
+							z = 5352,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 7064,
+							z = 4968,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6936,
+							z = 5320,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6936,
+							z = 4968,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6104,
+							z = 4296,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 6232,
+							z = 4232,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2488,
+							z = 6408,
+							facing = 0,
+						},
+						{
+							name = "energywind",
+							x = 2552,
+							z = 6344,
+							facing = 0,
 						},
 					}
 				},
@@ -2623,10 +5069,7 @@ local function GetPlanet(planetUtilities, planetID)
 					ignoreUnitLossDefeat = false,
 					vitalCommanders = false,
 					vitalUnitTypes = {
-						"factorygunship",
-						"factorycloak",
-						"factoryspider",
-						"factoryjump",
+						"energywind",
 					},
 					loseAfterSeconds = false,
 					allyTeamLossObjectiveID = 1,
@@ -2635,7 +5078,7 @@ local function GetPlanet(planetUtilities, planetID)
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Destroy all enemy Factories",
+					description = "Destroy all enemy Wind Generators",
 				},
 				[2] = {
 					description = "Protect your Commander",
@@ -2644,29 +5087,41 @@ local function GetPlanet(planetUtilities, planetID)
 			bonusObjectiveConfig = {
 					-- Indexed by bonusObjectiveID
 				[1] = {
-					satisfyOnce = true,
-					countRemovedUnits = true, -- count units that previously died.
+					satisfyByTime = 10*60,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 10, -- The player starts with a Conjurer
+					targetNumber = 12, -- The player starts with a Conjurer
 					unitTypes = {
 						"planeheavyfighter",
 					},
 					image = planetUtilities.ICON_DIR .. "planeheavyfighter.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build 10 Raptors",
+					description = "Have 12 Raptors before 10:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = {
 					onlyCountRemovedUnits = true,
 					satisfyByTime = 10*60,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 100,
+					targetNumber = 250,
 					enemyUnitTypes = {
 						"energywind",
 					},
 					image = planetUtilities.ICON_DIR .. "energywind.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Destroy 100 enemy Wind Generators by 12:00",
+					description = "Destroy 250 enemy Wind Generators by 10:00",
+					experience = planetUtilities.BONUS_EXP,
+				},
+				[3] = {
+					satisfyOnce = true,
+					countRemovedUnits = true, -- count units that previously died.
+					comparisionType = planetUtilities.COMPARE.AT_LEAST,
+					targetNumber = 3, -- Player starts with one.
+					unitTypes = {
+						"staticrearm",
+					},
+					image = planetUtilities.ICON_DIR .. "staticrearm.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
+					description = "Build 2 Airpads",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			},
@@ -2676,6 +5131,7 @@ local function GetPlanet(planetUtilities, planetID)
 			units = {
 				"bomberriot",
 				"planeheavyfighter",
+				"staticrearm",
 			},
 			modules = {
 				"module_high_power_servos_LIMIT_B_2",

@@ -1,4 +1,20 @@
-function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPanel, initialTabs, tabsVertical, backFunction, cleanupFunction, fontSizeScale, tabWidth, tabControlOverride, submenuControl, titleUpdateFunction, analyticsName)
+function GetTabPanelHandler(name, conf)
+
+	local buttonWindow        = conf.buttonWindow
+	local displayPanel        = conf.displayPanel
+	local submenuDisplayPanel = conf.submenuDisplayPanel
+	local initialTabs         = conf.initialTabs
+	local tabsVertical        = conf.tabsVertical
+	local backFunction        = conf.backFunction
+	local cleanupFunction     = conf.cleanupFunction
+	local fontSizeScale       = conf.fontSizeScale
+	local tabWidth            = conf.tabWidth
+	local tabControlOverride  = conf.tabControlOverride
+	local submenuControl      = conf.submenuControl
+	local titleUpdateFunction = conf.titleUpdateFunction
+	local analyticsName       = conf.analyticsName
+	local hideMyButtons       = conf.hideMyButtons
+	local startWithTabOpen    = conf.startWithTabOpen
 
 	local externalFunctions = {}
 
@@ -169,6 +185,9 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 		buttonsHolder:SetVisibility(true)
 		if titleUpdateFunction then
 			titleUpdateFunction(name)
+		end
+		if startWithTabOpen then
+			externalFunctions.OpenTab(startWithTabOpen)
 		end
 	end
 
@@ -389,7 +408,9 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 			}
 		end
 
-		buttonsHolder:AddChild(button)
+		if not hideMyButtons then
+			buttonsHolder:AddChild(button)
+		end
 		ButtonUtilities.SetFontSizeScale(button, fontSizeScale)
 		
 		button.OnClick = button.OnClick or {}
@@ -418,8 +439,26 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 					end
 				end
 			end
-		
-			local panelHandler = GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPanel, submenuData.tabs, tabsVertical, BackToSubmenu, submenuData.cleanupFunction, fontSizeScale, tabWidth, tabControlOverride, submenuData.submenuControl, titleUpdateFunction, (analyticsName and (analyticsName .. ":" .. name)) or nil)
+			
+			local subConfg = {
+				buttonWindow = buttonWindow,
+				displayPanel = displayPanel,
+				submenuDisplayPanel = submenuDisplayPanel,
+				initialTabs = submenuData.tabs,
+				tabsVertical = tabsVertical,
+				backFunction = BackToSubmenu,
+				cleanupFunction = submenuData.cleanupFunction,
+				fontSizeScale = fontSizeScale,
+				tabWidth = tabWidth,
+				tabControlOverride = tabControlOverride,
+				submenuControl = submenuData.submenuControl,
+				titleUpdateFunction = titleUpdateFunction,
+				analyticsName = (analyticsName and (analyticsName .. ":" .. name)) or nil,
+				hideMyButtons = submenuData.hideMyButtons,
+				startWithTabOpen = submenuData.startWithTabOpen,
+			}
+			
+			local panelHandler = GetTabPanelHandler(name, subConfg)
 			panelHandler.Hide()
 			newTab.panelHandler = panelHandler
 		end
@@ -551,7 +590,7 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 			},
 		}
 	end
-
+	
 	for i = 1, #initialTabs do
 		externalFunctions.AddTab(
 			initialTabs[i].name,
@@ -565,6 +604,6 @@ function GetTabPanelHandler(name, buttonWindow, displayPanel, submenuDisplayPane
 	end
 	
 	externalFunctions.Rescale()
-
+	
 	return externalFunctions
 end

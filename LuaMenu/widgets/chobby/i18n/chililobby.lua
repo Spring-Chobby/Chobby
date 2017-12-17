@@ -102,6 +102,9 @@ return {
 		queues = "Queues",
 		custom_games = "Custom games",
 		spectate_running_games = "Select a game to watch",
+		community = "Community",
+		social = "Social",
+		hub = "Hub",
 		download = "Download",
 		downloads = "Downloads",
 		friend_list = "Friend list",
@@ -217,6 +220,20 @@ return {
 		rank_lost = "Rank Lost",
 		
 		advanced_button_tooltip = [[Fully configure game settings. Activate automatic advanced mode by disabling "Simple skirmish setup" in lobby settings.]],
+		
+		-- Months
+		month_1 = "January",
+		month_2 = "February",
+		month_3 = "March",
+		month_4 = "April",
+		month_5 = "May",
+		month_6 = "June",
+		month_7 = "July",
+		month_8 = "August",
+		month_9 = "September",
+		month_10 = "October",
+		month_11 = "November",
+		month_12 = "December",
 	},
 	sr = {
 		connect_to_spring_server = 'Prijavljivanje na Spring lobi server',

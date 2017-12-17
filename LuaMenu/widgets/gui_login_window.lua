@@ -20,6 +20,7 @@ end
 local registerName, registerPassword
 
 local currentLoginWindow
+local loginAcceptedFunction
 
 local registerRecieved = false
 
@@ -132,6 +133,10 @@ local function InitializeListeners()
 		for channelName, _ in pairs(Configuration:GetChannels()) do
 			lobby:Join(channelName)
 		end
+		
+		if loginAcceptedFunction then
+			loginAcceptedFunction()
+		end
 	end
 
 	local function OnLoginDenied(listener, err)
@@ -196,7 +201,8 @@ function LoginWindowHandler.TryLoginMultiplayer(name, password)
 	end
 end
 
-function LoginWindowHandler.TryLogin()
+function LoginWindowHandler.TryLogin(newLoginAcceptedFunction)
+	loginAcceptedFunction = newLoginAcceptedFunction
 	if not TrySimpleSteamLogin() then
 		local loginWindow = GetNewLoginWindow()
 		local popup = WG.Chobby.PriorityPopup(loginWindow.window, loginWindow.CancelFunc, loginWindow.AcceptFunc)

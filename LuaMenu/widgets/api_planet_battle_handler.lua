@@ -272,6 +272,10 @@ local function StartBattleForReal(planetID, planetData, gameName)
 	}
 	AddStartUnits(modoptions, gameConfig.neutralUnits, "neutralstartunits_")
 	
+	if WG.Chobby.Configuration.campaignSpawnDebug then
+		modoptions.campaign_spawn_debug = 1
+	end
+	
 	if gameConfig.modoptions then
 		for key, value in pairs(gameConfig.modoptions) do
 			modoptions[key] = (type(value) == "table" and TableToBase64(value)) or value

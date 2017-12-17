@@ -6,4 +6,10 @@ local settings = {
 	SplashScreenDir = "./MenuLoadscreens",
 	UseDistToGroundForIcons = 1.1,
 }
-return settings
+
+local onlyIfMissingSettings = {
+	FeatureDrawDistance = 600000,
+	FeatureFadeDistance = 600000,
+}
+
+return settings, onlyIfMissingSettings
