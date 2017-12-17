@@ -153,6 +153,7 @@ function Configuration:init()
 	self.devMode = (VFS.FileExists("devmode.txt") and true) or false
 	self.debugAutoWin = false
 	self.showPlanetUnlocks = false
+	self.campaignSpawnDebug = false
 	self.editCampaign = false
 	self.activeDebugConsole = false
 	self.onlyShowFeaturedMaps = true
@@ -384,6 +385,7 @@ function Configuration:GetConfigData()
 		debugMode = self.debugMode,
 		debugAutoWin = self.debugAutoWin,
 		showPlanetUnlocks = self.showPlanetUnlocks,
+		campaignSpawnDebug = self.campaignSpawnDebug,
 		editCampaign = self.editCampaign,
 		confirmation_mainMenuFromBattle = self.confirmation_mainMenuFromBattle,
 		confirmation_battleFromBattle = self.confirmation_battleFromBattle,
