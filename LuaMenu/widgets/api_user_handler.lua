@@ -205,6 +205,17 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 		comboOptions[#comboOptions + 1] = "Kick"
 	end
 
+	local whitelist = userControl.dropdownWhitelist
+	if whitelist then
+		local culled = {}
+		for i = 1, #comboOptions do
+			if whitelist[comboOptions[i]] then
+				culled[#culled + 1] = comboOptions[i]
+			end
+		end
+		comboOptions = culled
+	end
+	
 	if #comboOptions == 0 then
 		comboOptions[1] = Label:New {
 			x = 0,
@@ -215,7 +226,6 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 			caption = "No Actions",
 		}
 	end
-
 	return comboOptions
 end
 
@@ -451,13 +461,14 @@ local function GetUserControls(userName, opts)
 
 	local Configuration = WG.Chobby.Configuration
 
-	userControls.showFounder    = showFounder
-	userControls.showModerator  = showModerator
-	userControls.isInBattle     = isInBattle
-	userControls.lobby          = (isSingleplayer and WG.LibLobby.localLobby) or lobby
-	userControls.isSingleplayer = isSingleplayer
-	userControls.steamInvite    = opts.steamInvite
-	userControls.hideStatus     = opts.hideStatus
+	userControls.showFounder       = showFounder
+	userControls.showModerator     = showModerator
+	userControls.isInBattle        = isInBattle
+	userControls.lobby             = (isSingleplayer and WG.LibLobby.localLobby) or lobby
+	userControls.isSingleplayer    = isSingleplayer
+	userControls.steamInvite       = opts.steamInvite
+	userControls.hideStatus        = opts.hideStatus
+	userControls.dropdownWhitelist = opts.dropdownWhitelist
 
 	if reinitialize then
 		userControls.mainControl:ClearChildren()
@@ -832,6 +843,9 @@ end
 function userHandler.GetLadderUser(userName)
 	return _GetUser(statusUsers, userName, {
 		hideStatus          = true,
+		dropdownWhitelist   = {
+			["User Page"] = true,
+		},
 	})
 end
 
