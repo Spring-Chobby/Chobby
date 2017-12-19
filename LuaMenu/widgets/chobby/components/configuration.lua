@@ -255,7 +255,7 @@ end
 
 function Configuration:SetSettingsConfigOption(name, newValue)
 	local setting = self.gameConfig.settingsNames[name]
-	if not setting then
+	if not (setting and setting.optionNames[newValue]) then
 		return false
 	end
 
@@ -292,7 +292,7 @@ function Configuration:SetSettingsConfigOption(name, newValue)
 		else
 			local applyData = selectedOption.apply or (selectedOption.applyFunction and selectedOption.applyFunction(nil, self))
 			if not applyData then
-				return
+				return true
 			end
 			for applyName, value in pairs(applyData) do
 				self.game_settings[applyName] = value
@@ -300,6 +300,7 @@ function Configuration:SetSettingsConfigOption(name, newValue)
 			end
 		end
 	end
+	return true
 end
 
 function Configuration:ApplySettingsConfigPreset(preset)
@@ -349,13 +350,16 @@ function Configuration:SetConfigData(data)
 
 	self.forcedCompatibilityProfile = VFS.Include(LUA_DIRNAME .. "configs/springsettings/forcedCompatibilityProfile.lua")
 
-	self.defaultSettingsPreset = data.defaultSettingsPreset
-	if (not self.defaultSettingsPreset) and self.gameConfig.SettingsPresetFunc then
-		self.defaultSettingsPreset = self.gameConfig.SettingsPresetFunc()
-	end
+	local default = self.gameConfig.SettingsPresetFunc and self.gameConfig.SettingsPresetFunc()
+	self.defaultSettingsPreset = data.defaultSettingsPreset or {}
 
-	if self.defaultSettingsPreset then
-		self:ApplySettingsConfigPreset(self.defaultSettingsPreset)
+	if self.defaultSettingsPreset and default then
+		for name, value in pairs(default) do
+			if not (self.defaultSettingsPreset[name] and self:SetSettingsConfigOption(name, myValue)) then
+				self.defaultSettingsPreset[name] = value
+				self:SetSettingsConfigOption(name, value)
+			end
+		end
 	end
 end
 
