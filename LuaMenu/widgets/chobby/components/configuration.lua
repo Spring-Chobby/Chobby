@@ -71,10 +71,6 @@ function Configuration:init()
 	self.agressivelySetBorderlessWindowed = false
 
 	self.useWrongEngine = false
-
-	self.atiIntelCompat_2 = "auto"
-	Spring.Echo("Initialize ATI/intel/other non-nvidia compatibility state:", self.atiIntelCompat)
-
 	self.myAccountID = false
 	self.lastAddedAiName = false
 
@@ -268,7 +264,7 @@ function Configuration:SetSettingsConfigOption(name, newValue)
 	if setting.isNumberSetting then
 		local applyFunction = setting.applyFunction
 		if applyFunction then
-			local applyData = applyFunction(newValue)
+			local applyData = applyFunction(newValue, self)
 			if applyData then
 				for applyName, value in pairs(applyData) do
 					self.game_settings[applyName] = value
@@ -286,7 +282,7 @@ function Configuration:SetSettingsConfigOption(name, newValue)
 		if setting.fileTarget then
 			self.settingsMenuValues[name .. "_file"] = selectedOption.file
 			if setting.applyFunction then
-				setting.applyFunction(selectedOption.file)
+				setting.applyFunction(selectedOption.file, self)
 			else
 				local sourceFile = VFS.LoadFile(selectedOption.file)
 				local settingsFile = io.open(setting.fileTarget, "w")
@@ -294,7 +290,7 @@ function Configuration:SetSettingsConfigOption(name, newValue)
 				settingsFile:close()
 			end
 		else
-			local applyData = selectedOption.apply or (selectedOption.applyFunction and selectedOption.applyFunction())
+			local applyData = selectedOption.apply or (selectedOption.applyFunction and selectedOption.applyFunction(nil, self))
 			if not applyData then
 				return
 			end
@@ -356,9 +352,10 @@ function Configuration:SetConfigData(data)
 	self.defaultSettingsPreset = data.defaultSettingsPreset
 	if (not self.defaultSettingsPreset) and self.gameConfig.SettingsPresetFunc then
 		self.defaultSettingsPreset = self.gameConfig.SettingsPresetFunc()
-		if self.defaultSettingsPreset then
-			self:ApplySettingsConfigPreset(self.defaultSettingsPreset)
-		end
+	end
+
+	if self.defaultSettingsPreset then
+		self:ApplySettingsConfigPreset(self.defaultSettingsPreset)
 	end
 end
 
@@ -404,7 +401,6 @@ function Configuration:GetConfigData()
 		useWrongEngine = self.useWrongEngine,
 		doNotSetAnySpringSettings = self.doNotSetAnySpringSettings,
 		agressivelySetBorderlessWindowed = self.agressivelySetBorderlessWindowed,
-		atiIntelCompat_2 = self.atiIntelCompat_2,
 		fixedSettingsOverride = self.fixedSettingsOverride,
 		settingsMenuValues = self.settingsMenuValues,
 		menuMusicVolume = self.menuMusicVolume,
@@ -441,14 +437,6 @@ function Configuration:SetConfigValue(key, value)
 	end
 	if key == "gameConfigName" then
 		self.gameConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. value .. "/mainConfig.lua")
-	end
-	if key == "atiIntelCompat_2" then
-		if (value == "on") or (value == "auto" and self:GetIsNotRunningNvidia()) then
-			self:UpdateFixedSettings(self.AtiIntelSettingsOverride)
-		else
-			self:UpdateFixedSettings()
-		end
-		Spring.Echo("Set ATI/intel/other non-nvidia compatibility state:", value)
 	end
 	self:_CallListeners("OnConfigurationChange", key, value)
 end

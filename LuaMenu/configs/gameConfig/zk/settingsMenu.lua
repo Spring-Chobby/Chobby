@@ -45,7 +45,7 @@ local settingsConfig = {
 					VegetationDetail = "Minimal",
 					FeatureFade = "On",
 					CompatibilityMode = "On",
-					AtiIntelCompatibility_2 = "Auto",
+					AtiIntelCompatibility_2 = "Automatic",
 					AntiAliasing = "Off",
 					ShaderDetail = "Minimal",
 					LupsAirJet = "Off",
@@ -68,7 +68,7 @@ local settingsConfig = {
 					VegetationDetail = "Low",
 					FeatureFade = "Off",
 					CompatibilityMode = "Off",
-					AtiIntelCompatibility_2 = "Auto",
+					AtiIntelCompatibility_2 = "Automatic",
 					AntiAliasing = "Low",
 					ShaderDetail = "Low",
 					LupsAirJet = "Off",
@@ -91,7 +91,7 @@ local settingsConfig = {
 					VegetationDetail = "Low",
 					FeatureFade = "Off",
 					CompatibilityMode = "Off",
-					AtiIntelCompatibility_2 = "Auto",
+					AtiIntelCompatibility_2 = "Automatic",
 					AntiAliasing = "Low",
 					ShaderDetail = "Low",
 					LupsAirJet = "Off",
@@ -114,7 +114,7 @@ local settingsConfig = {
 					VegetationDetail = "Medium",
 					FeatureFade = "Off",
 					CompatibilityMode = "Off",
-					AtiIntelCompatibility_2 = "Auto",
+					AtiIntelCompatibility_2 = "Automatic",
 					AntiAliasing = "Low",
 					ShaderDetail = "Medium",
 					LupsAirJet = "On",
@@ -137,7 +137,7 @@ local settingsConfig = {
 					VegetationDetail = "High",
 					FeatureFade = "Off",
 					CompatibilityMode = "Off",
-					AtiIntelCompatibility_2 = "Auto",
+					AtiIntelCompatibility_2 = "Automatic",
 					AntiAliasing = "High",
 					ShaderDetail = "High",
 					LupsAirJet = "On",
@@ -160,7 +160,7 @@ local settingsConfig = {
 					VegetationDetail = "Ultra",
 					FeatureFade = "Off",
 					CompatibilityMode = "Off",
-					AtiIntelCompatibility_2 = "Auto",
+					AtiIntelCompatibility_2 = "Automatic",
 					AntiAliasing = "High",
 					ShaderDetail = "Ultra",
 					LupsAirJet = "On",
@@ -692,22 +692,29 @@ local settingsConfig = {
 				options = {
 					{
 						name = "On",
-						applyFunction = function()
-							WG.Chobby.Configuration:SetConfigValue("atiIntelCompat_2", "on")
+						applyFunction = function(_, conf)
+							conf:UpdateFixedSettings(conf.AtiIntelSettingsOverride)
+							Spring.Echo("Set ATI/intel/other non-nvidia compatibility state: Enabled")
 							return
 						end
 					},
 					{
 						name = "Automatic",
-						applyFunction = function()
-							WG.Chobby.Configuration:SetConfigValue("atiIntelCompat_2", "auto")
+						applyFunction = function(_, conf)
+							if conf:GetIsNotRunningNvidia() then
+								conf:UpdateFixedSettings(conf.AtiIntelSettingsOverride)
+								Spring.Echo("Set ATI/intel/other non-nvidia compatibility state: Enabled")
+								return
+							end
+							Spring.Echo("Set ATI/intel/other non-nvidia compatibility state: Disabled")
 							return
 						end
 					},
 					{
 						name = "Off",
-						applyFunction = function()
-							WG.Chobby.Configuration:SetConfigValue("atiIntelCompat_2", "off")
+						applyFunction = function(_, conf)
+							conf:UpdateFixedSettings()
+							Spring.Echo("Set ATI/intel/other non-nvidia compatibility state: Enabled")
 							return
 						end
 					},
@@ -885,7 +892,7 @@ local settingsDefault = {
 	VegetationDetail = "High",
 	FeatureFade = "Off",
 	CompatibilityMode = "Off",
-	AtiIntelCompatibility_2 = "Auto",
+	AtiIntelCompatibility_2 = "Automatic",
 	AntiAliasing = "High",
 	ShaderDetail = "High",
 	LupsAirJet = "On",
