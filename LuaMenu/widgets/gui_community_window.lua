@@ -541,7 +541,7 @@ local function GetNewsHandler(parentControl, headingSize, timeAsTooltip, topHead
 	UpdateCountdown()
 	
 	local function ImageDownloadFinished()
-		WG.Delay(ReloadImages, 2)
+		WG.Delay(ReloadImages, 4)
 	end
 	WG.DownloadHandler.AddListener("ImageDownloadFinished", ImageDownloadFinished)
 	
