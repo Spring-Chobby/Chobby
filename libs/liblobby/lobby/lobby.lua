@@ -1322,12 +1322,27 @@ function Lobby:TryGetUser(userName)
 	end
 	return userInfo
 end
+
+function Lobby:LearnAboutOfflineUser(userName, data)
+	local userInfo = self:TryGetUser(userName)
+	
+	if not userInfo.isOffline then
+		return
+	end
+	
+	for key, value in pairs(data) do
+		userInfo[key] = value
+	end
+end
+
 function Lobby:GetUser(userName)
 	return self.users[userName]
 end
+
 function Lobby:GetUserBattleStatus(userName)
 	return self.userBattleStatus[userName]
 end
+
 -- returns users table (not necessarily an array)
 function Lobby:GetUsers()
 	return ShallowCopy(self.users)

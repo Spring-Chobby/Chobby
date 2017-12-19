@@ -59,6 +59,7 @@ local IMAGE_ONLINE       = IMAGE_DIR .. "online.png"
 local IMAGE_OFFLINE      = IMAGE_DIR .. "offline.png"
 
 local IMAGE_CLAN_PATH    = "LuaUI/Configs/Clans/"
+local RANK_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/rankImages/"
 
 local USER_SP_TOOLTIP_PREFIX = "user_single_"
 local USER_MP_TOOLTIP_PREFIX = "user_battle_"
@@ -80,6 +81,8 @@ end
 local function UserLevelToImage(icon, level, skill, isBot, isAdmin)
 	if UserLevelToImageConfFunction then
 		return UserLevelToImageConfFunction(icon, level, skill, isBot, isAdmin)
+	elseif icon then
+		return RANK_DIR .. icon .. ".png"
 	end
 	return IMAGE_PLAYER
 end
@@ -217,13 +220,13 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 end
 
 local function GetUserRankImageName(userName, userControl)
-
 	local userInfo = userControl.lobby:GetUser(userName) or {}
 	local userBattleInfo = userControl.lobby:GetUserBattleStatus(userName) or {}
 
 	if userControl.isSingleplayer and not userBattleInfo.aiLib then
 		return IMAGE_PLAYER
 	end
+	
 	local image = GetUserRankImage(userInfo, userInfo.isBot or userBattleInfo.aiLib)
 	return image
 end
@@ -288,6 +291,9 @@ local function GetUserStatus(userName, isInBattle, userControl)
 end
 
 local function UpdateUserControlStatus(userName, userControls)
+	if userControls.hideStatus then
+		return
+	end
 	if userControls.imStatusLarge then
 		local imgFile, status, fontColor = GetUserStatus(userName, isInBattle, userControls)
 		userControls.tbName.font.color = fontColor
@@ -445,12 +451,13 @@ local function GetUserControls(userName, opts)
 
 	local Configuration = WG.Chobby.Configuration
 
-	userControls.showFounder = showFounder
-	userControls.showModerator = showModerator
-	userControls.isInBattle = isInBattle
-	userControls.lobby = (isSingleplayer and WG.LibLobby.localLobby) or lobby
+	userControls.showFounder    = showFounder
+	userControls.showModerator  = showModerator
+	userControls.isInBattle     = isInBattle
+	userControls.lobby          = (isSingleplayer and WG.LibLobby.localLobby) or lobby
 	userControls.isSingleplayer = isSingleplayer
-	userControls.steamInvite = opts.steamInvite
+	userControls.steamInvite    = opts.steamInvite
+	userControls.hideStatus     = opts.hideStatus
 
 	if reinitialize then
 		userControls.mainControl:ClearChildren()
@@ -588,7 +595,7 @@ local function GetUserControls(userName, opts)
 		userControls.imCountry = Image:New {
 			name = "imCountry",
 			x = offset + 2,
-			y = offsetY + 3,
+			y = offsetY + 4,
 			width = 16,
 			height = 11,
 			parent = userControls.mainControl,
@@ -822,6 +829,12 @@ function userHandler.GetStatusUser(userName)
 	})
 end
 
+function userHandler.GetLadderUser(userName)
+	return _GetUser(statusUsers, userName, {
+		hideStatus          = true,
+	})
+end
+
 function userHandler.GetFriendUser(userName)
 	return _GetUser(friendUsers, userName, {
 		large          = true,
@@ -909,7 +922,7 @@ function widget:Initialize()
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
 	AddListeners()
-	WG.Delay(DelayedInitialize, 1)
+	WG.Delay(DelayedInitialize, 0.1)
 
 	WG.UserHandler = userHandler
 end
