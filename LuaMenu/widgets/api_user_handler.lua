@@ -25,6 +25,7 @@ local debriefingUsers = {}
 local partyUsers = {}
 local popupUsers = {}
 local statusUsers = {}
+local ladderUsers = {}
 local friendUsers = {}
 local friendRequestUsers = {}
 local notificationUsers = {}
@@ -38,6 +39,7 @@ local userListList = {
 	partyUsers,
 	popupUsers,
 	statusUsers,
+	ladderUsers,
 	friendUsers,
 	friendRequestUsers,
 	notificationUsers,
@@ -841,7 +843,7 @@ function userHandler.GetStatusUser(userName)
 end
 
 function userHandler.GetLadderUser(userName)
-	return _GetUser(statusUsers, userName, {
+	return _GetUser(ladderUsers, userName, {
 		hideStatus          = true,
 		dropdownWhitelist   = {
 			["User Page"] = true,
