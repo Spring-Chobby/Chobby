@@ -45,6 +45,7 @@ local settingsConfig = {
 					VegetationDetail = "Minimal",
 					FeatureFade = "On",
 					CompatibilityMode = "On",
+					AtiIntelCompatibility_2 = "Auto",
 					AntiAliasing = "Off",
 					ShaderDetail = "Minimal",
 					LupsAirJet = "Off",
@@ -67,6 +68,7 @@ local settingsConfig = {
 					VegetationDetail = "Low",
 					FeatureFade = "Off",
 					CompatibilityMode = "Off",
+					AtiIntelCompatibility_2 = "Auto",
 					AntiAliasing = "Low",
 					ShaderDetail = "Low",
 					LupsAirJet = "Off",
@@ -89,6 +91,7 @@ local settingsConfig = {
 					VegetationDetail = "Low",
 					FeatureFade = "Off",
 					CompatibilityMode = "Off",
+					AtiIntelCompatibility_2 = "Auto",
 					AntiAliasing = "Low",
 					ShaderDetail = "Low",
 					LupsAirJet = "Off",
@@ -111,6 +114,7 @@ local settingsConfig = {
 					VegetationDetail = "Medium",
 					FeatureFade = "Off",
 					CompatibilityMode = "Off",
+					AtiIntelCompatibility_2 = "Auto",
 					AntiAliasing = "Low",
 					ShaderDetail = "Medium",
 					LupsAirJet = "On",
@@ -133,6 +137,7 @@ local settingsConfig = {
 					VegetationDetail = "High",
 					FeatureFade = "Off",
 					CompatibilityMode = "Off",
+					AtiIntelCompatibility_2 = "Auto",
 					AntiAliasing = "High",
 					ShaderDetail = "High",
 					LupsAirJet = "On",
@@ -155,6 +160,7 @@ local settingsConfig = {
 					VegetationDetail = "Ultra",
 					FeatureFade = "Off",
 					CompatibilityMode = "Off",
+					AtiIntelCompatibility_2 = "Auto",
 					AntiAliasing = "High",
 					ShaderDetail = "Ultra",
 					LupsAirJet = "On",
@@ -681,27 +687,31 @@ local settingsConfig = {
 				},
 			},
 			{
-				name = "AtiIntelCompatibility",
+				name = "AtiIntelCompatibility_2",
 				humanName = "ATI/Intel Compatibility",
 				options = {
 					{
 						name = "On",
 						applyFunction = function()
-							WG.Chobby.Configuration:SetConfigValue("atiIntelCompat", true)
+							WG.Chobby.Configuration:SetConfigValue("atiIntelCompat_2", "on")
+							return
+						end
+					},
+					{
+						name = "Automatic",
+						applyFunction = function()
+							WG.Chobby.Configuration:SetConfigValue("atiIntelCompat_2", "auto")
 							return
 						end
 					},
 					{
 						name = "Off",
 						applyFunction = function()
-							WG.Chobby.Configuration:SetConfigValue("atiIntelCompat", false)
+							WG.Chobby.Configuration:SetConfigValue("atiIntelCompat_2", "off")
 							return
 						end
 					},
 				},
-				defaultFunction = function ()
-					return (WG.Chobby.Configuration.atiIntelCompat and "On") or "Off"
-				end,
 			},
 			{
 				name = "AntiAliasing",
@@ -875,6 +885,7 @@ local settingsDefault = {
 	VegetationDetail = "High",
 	FeatureFade = "Off",
 	CompatibilityMode = "Off",
+	AtiIntelCompatibility_2 = "Auto",
 	AntiAliasing = "High",
 	ShaderDetail = "High",
 	LupsAirJet = "On",

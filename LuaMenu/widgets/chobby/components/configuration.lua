@@ -72,7 +72,7 @@ function Configuration:init()
 
 	self.useWrongEngine = false
 
-	self.atiIntelCompat = self:GetIsNotRunningNvidia()
+	self.atiIntelCompat_2 = "auto"
 	Spring.Echo("Initialize ATI/intel/other non-nvidia compatibility state:", self.atiIntelCompat)
 
 	self.myAccountID = false
@@ -404,7 +404,7 @@ function Configuration:GetConfigData()
 		useWrongEngine = self.useWrongEngine,
 		doNotSetAnySpringSettings = self.doNotSetAnySpringSettings,
 		agressivelySetBorderlessWindowed = self.agressivelySetBorderlessWindowed,
-		atiIntelCompat = self.atiIntelCompat,
+		atiIntelCompat_2 = self.atiIntelCompat_2,
 		fixedSettingsOverride = self.fixedSettingsOverride,
 		settingsMenuValues = self.settingsMenuValues,
 		menuMusicVolume = self.menuMusicVolume,
@@ -442,8 +442,8 @@ function Configuration:SetConfigValue(key, value)
 	if key == "gameConfigName" then
 		self.gameConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. value .. "/mainConfig.lua")
 	end
-	if key == "atiIntelCompat" then
-		if value then
+	if key == "atiIntelCompat_2" then
+		if (value == "on") or (value == "auto" and self:GetIsNotRunningNvidia()) then
 			self:UpdateFixedSettings(self.AtiIntelSettingsOverride)
 		else
 			self:UpdateFixedSettings()
