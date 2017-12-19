@@ -4450,11 +4450,11 @@ local function GetPlanet(planetUtilities, planetID)
 				[1] = { -- Have 3 Berthas
 					satisfyOnce = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 12,
+					targetNumber = 3,
 					unitTypes = {
-						"staticmex",
+						"staticheavyarty",
 					},
-					image = planetUtilities.ICON_DIR .. "staticmex.png",
+					image = planetUtilities.ICON_DIR .. "staticheavyarty.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
 					description = "Have 3 Big Berthas",
 					experience = planetUtilities.BONUS_EXP,
