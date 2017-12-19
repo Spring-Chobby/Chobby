@@ -451,7 +451,6 @@ local function GetUserControls(userName, opts)
 	userControls.lobby = (isSingleplayer and WG.LibLobby.localLobby) or lobby
 	userControls.isSingleplayer = isSingleplayer
 	userControls.steamInvite = opts.steamInvite
-	Spring.Echo("opts.steamInvite", opts.steamInvite)
 
 	if reinitialize then
 		userControls.mainControl:ClearChildren()

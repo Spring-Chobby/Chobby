@@ -324,7 +324,7 @@ local function StartBattleForReal(planetID, planetData, gameName)
 		scriptFile:write(scriptString)
 	end
 	--Spring.Echo("scriptString", scriptString)
-	localLobby:StartGameFromString(scriptString)
+	localLobby:StartGameFromString(scriptString, "campaign" .. planetID)
 end
 
 --------------------------------------------------------------------------------

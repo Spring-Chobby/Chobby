@@ -238,7 +238,7 @@ function Lobby:SayBattleEx(message)
 	return self
 end
 
-function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, scriptPassword, gameName, mapName, engineName)
+function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, scriptPassword, gameName, mapName, engineName, battleType)
 	if gameName and not VFS.HasArchive(gameName) then
 		WG.Chobby.InformationPopup("Cannont start game: missing game file '" .. gameName .. "'.")
 		return
@@ -263,7 +263,7 @@ function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, scriptPas
 		return
 	end
 
-	self:_CallListeners("OnBattleAboutToStart")
+	self:_CallListeners("OnBattleAboutToStart", battleType)
 
 	Spring.Echo("Game starts!")
 	if useSpringRestart then
