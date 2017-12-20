@@ -37,6 +37,15 @@ local function GetPlanet(planetUtilities, planetID)
 					facplop = false,
 					defeatIfDestroyedObjectiveID = 2,
 				},
+				-- Extra commander modules.
+				extraModules = {
+					{name = "module_jumpjet", count = 1, add = false},
+					-- List of:
+					--  * name - Module name. See commConfig.lua.
+					--  * count - Number of copies of the module.
+					--  * add - Boolean controlling whether count adds to the number of modules of 
+					--          the type the player has equiped or overwrites the number.
+				},
 				extraUnlocks = {
 					"factoryjump",
 					"jumpcon",
@@ -94,7 +103,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"jumpaa",
 			},
 			modules = {
-				
+				"module_jumpjet",
 			},
 			abilities = {
 			}

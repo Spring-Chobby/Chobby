@@ -83,6 +83,41 @@ local function AddStartUnits(teamTable, unitList, prefix)
 	end
 end
 
+local function GetPlayerCommWithExtra(playerComm, extraModules)
+	local replaceModules = {}
+	for i = 1, #extraModules do
+		if not extraModules[i].add then
+			replaceModules[extraModules[i].name] = true
+		end
+	end
+	
+	local flatModules = {} -- Much simpler
+	local modules = playerComm.modules
+	for level = 1, #modules do
+		for slot = 1, #modules[level] do
+			local entry = modules[level][slot]
+			if not replaceModules[entry] then
+				flatModules[#flatModules + 1] = entry
+			end
+		end
+	end
+	
+	for i = 1, #extraModules do
+		local extra = extraModules[i]
+		for j = 1, extra.count do
+			flatModules[#flatModules + 1] = extra.name
+		end
+	end
+	
+	return {
+		name = playerComm.name,
+		chassis = playerComm.chassis,
+		modules = {
+			[0] = flatModules,
+		},
+	}
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Start Game
@@ -121,6 +156,10 @@ local function StartBattleForReal(planetID, planetData, gameName)
 	local playerAbilities = WG.CampaignData.GetAbilityUnlocks()
 	
 	commanderTypes.player_commander = WG.CampaignData.GetPlayerCommander()
+	
+	if gameConfig.playerConfig.extraModules then
+		commanderTypes.player_commander = GetPlayerCommWithExtra(commanderTypes.player_commander, gameConfig.playerConfig.extraModules)
+	end
 	
 	local fullPlayerUnlocks = AddToList(Spring.Utilities.CopyTable(playerUnlocks.list), playerUnlocks.map, gameConfig.playerConfig.extraUnlocks)
 	local fullAbilitiesList = AddToList(Spring.Utilities.CopyTable(playerAbilities.list), playerAbilities.map, gameConfig.playerConfig.extraAbilities) 

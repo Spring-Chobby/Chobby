@@ -116,6 +116,16 @@ planetData = {
 				bonusObjectiveID = false,
 			},
 			
+			-- Extra commander modules.
+			extraModules = {
+				{name = "module_jumpjet", count = 1, add = false},
+				-- List of:
+				--  * name - Module name. See commConfig.lua.
+				--  * count - Number of copies of the module.
+				--  * add - Boolean controlling whether count adds to the number of modules of 
+				--          the type the player has equiped or overwrites the number.
+			},
+			
 			-- Extra unit unlocks that are availible to the player for the duration of the mission.
 			extraUnlocks = {
 				"factorycloak",
