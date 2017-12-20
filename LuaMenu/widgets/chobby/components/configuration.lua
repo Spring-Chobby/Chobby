@@ -191,7 +191,7 @@ function Configuration:init()
 
 	self.game_settings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings.lua")
 
-	self.settingsMenuValues = self.gameConfig.settingsDefault
+	self.settingsMenuValues = self.gameConfig.settingsDefault -- Only until configuration data is loaded.
 
 	self.animate_lobby = gl.CreateShader ~= nil
 end
@@ -351,13 +351,15 @@ function Configuration:SetConfigData(data)
 	self.forcedCompatibilityProfile = VFS.Include(LUA_DIRNAME .. "configs/springsettings/forcedCompatibilityProfile.lua")
 
 	local default = self.gameConfig.SettingsPresetFunc and self.gameConfig.SettingsPresetFunc()
-	self.defaultSettingsPreset = data.defaultSettingsPreset or {}
-
-	if self.defaultSettingsPreset and default then
-		for name, value in pairs(default) do
-			if not (self.defaultSettingsPreset[name] and self:SetSettingsConfigOption(name, myValue)) then
-				self.defaultSettingsPreset[name] = value
-				self:SetSettingsConfigOption(name, value)
+	if default then
+		if not data.settingsMenuValues then
+			data.settingsMenuValues = {} -- Override generic default that is set for safety on initialize.
+		end
+		
+		-- Set defaults for missing values.
+		for name, defValue in pairs(default) do
+			if not (self.settingsMenuValues[name] and self:SetSettingsConfigOption(name, self.settingsMenuValues[name])) then
+				self:SetSettingsConfigOption(name, defValue)
 			end
 		end
 	end
@@ -383,7 +385,6 @@ function Configuration:GetConfigData()
 		manualBorderless = self.manualBorderless,
 		animate_lobby = self.animate_lobby,
 		game_settings = self.game_settings,
-		defaultSettingsPreset = self.defaultSettingsPreset,
 		notifyForAllChat = self.notifyForAllChat,
 		planetwarsNotifications = self.planetwarsNotifications,
 		simplifiedSkirmishSetup = self.simplifiedSkirmishSetup,
