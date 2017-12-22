@@ -28,6 +28,10 @@ local function GetPlanet(planetUtilities, planetID)
 		},
 		tips = {
 			{
+				image = "unitpics/module_jumpjet.png",
+				text = [[Your Commander has been equipped with an experimental jumpjet module for this mission (default hotkey J).]]
+			},
+			{
 				image = "unitpics/factoryjump.png",
 				text = [[Many Jumpbot units are unlocked by missions earlier in the campaign. If you're finding this mission too difficult, try backtracking to make sure you didn't miss any.]]
 			},
@@ -271,10 +275,10 @@ local function GetPlanet(planetUtilities, planetID)
 					startX = 400,
 					startZ = 7700,
 					humanName = "Pulmox",
-					aiLib = "Null AI",
-					bitDependant = false,
-					--aiLib = "Circuit_difficulty_autofill",
-					--bitDependant = true,
+					--aiLib = "Null AI",
+					--bitDependant = false,
+					aiLib = "Circuit_difficulty_autofill",
+					bitDependant = true,
 					commanderParameters = {
 						facplop = false,
 						bonusObjectiveID = 1,
@@ -531,10 +535,10 @@ local function GetPlanet(planetUtilities, planetID)
 					startX = 5400,
 					startZ = 7300,
 					humanName = "Umbilis",
-					aiLib = "Null AI",
-					bitDependant = false,
-					--aiLib = "Circuit_difficulty_autofill",
-					--bitDependant = true,
+					--aiLib = "Null AI",
+					--bitDependant = false,
+					aiLib = "Circuit_difficulty_autofill",
+					bitDependant = true,
 					commanderParameters = {
 						facplop = false,
 						bonusObjectiveID = 1,

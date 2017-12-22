@@ -1372,7 +1372,7 @@ local function GetPlanet(planetUtilities, planetID)
 				[2] = {
 					victoryByTime = 12*60,
 					image = planetUtilities.ICON_OVERLAY.CLOCK,
-					description = "Win by 10:00",
+					description = "Win by 12:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { 
