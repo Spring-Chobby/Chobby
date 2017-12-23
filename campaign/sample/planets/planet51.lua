@@ -1926,7 +1926,7 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 1600,
 							facing = 1,
 							spawnRadius = 350,
-							delay = 15*60*30,
+							delay = 20*60*30,
 							difficultyAtLeast = 4,
 							orbitalDrop = true,
 							commands = {
@@ -1939,7 +1939,7 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 1600,
 							facing = 1,
 							spawnRadius = 350,
-							delay = 15*60*30,
+							delay = 20*60*30,
 							difficultyAtLeast = 3,
 							orbitalDrop = true,
 							commands = {
@@ -1952,7 +1952,7 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 1600,
 							facing = 1,
 							spawnRadius = 350,
-							delay = 15*60*30,
+							delay = 20*60*30,
 							difficultyAtLeast = 2,
 							orbitalDrop = true,
 							commands = {
@@ -1965,7 +1965,7 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 1600,
 							facing = 1,
 							spawnRadius = 350,
-							delay = 15*60*30,
+							delay = 20*60*30,
 							orbitalDrop = true,
 							commands = {
 								{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3620, 1000}},

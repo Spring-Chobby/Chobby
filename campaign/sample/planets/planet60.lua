@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Narlapa",
 			primaryType = "G7V",
 			milRating = 1,
-			text = [[...]]
+			text = [[Take control of the sea and then the enemy shoreline with Shogun battleships. You'd best hurry - if they finish their Zenith meteor controller, things will become a lot more difficult...]]
 		},
 		gameConfig = {
 			mapName = "Downs_of_Destruction_Fix",
