@@ -7,7 +7,7 @@ local function GetPlanet(planetUtilities, planetID)
 	local image = LUA_DIRNAME .. "images/planets/terran04.png"
 	
 	local planetData = {
-		name = "Kar Imaku",
+		name = "Rockbar",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.77,
@@ -1348,7 +1348,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			aiConfig = {
 				{
-					humanName = "Ally",
+					humanName = "Uba Rassa",
 					aiLib = "Circuit_difficulty_autofill",
 					bitDependant = true,
 					--aiLib = "Null AI",
@@ -3070,7 +3070,7 @@ local function GetPlanet(planetUtilities, planetID)
 				{
 					startX = 3300,
 					startZ = 700,
-					humanName = "Enemy 1",
+					humanName = "Xill",
 					aiLib = "Circuit_difficulty_autofill",
 					bitDependant = true,
 					--aiLib = "Null AI",
@@ -4026,7 +4026,7 @@ local function GetPlanet(planetUtilities, planetID)
 					}
 				},
 				{
-					humanName = "Enemy 2",
+					humanName = "Rapla IV",
 					aiLib = "Circuit_difficulty_autofill",
 					bitDependant = true,
 					--aiLib = "Null AI",

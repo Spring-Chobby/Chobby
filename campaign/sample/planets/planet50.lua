@@ -7,7 +7,7 @@ local function GetPlanet(planetUtilities, planetID)
 	local image = LUA_DIRNAME .. "images/planets/swamp02.png"
 	
 	local planetData = {
-		name = "Arteria",
+		name = "Arteri",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.68,
@@ -21,7 +21,7 @@ local function GetPlanet(planetUtilities, planetID)
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
 			terrainType = "Terran",
 			radius = "2545 km",
-			primary = "Vein",
+			primary = "Varis",
 			primaryType = "G4V",
 			milRating = 1,
 			text = [[You are without allies on this large battlefield, so you'll have to rely on your Jumpbots' inherent advantage on rough terrain to win instead.]]
