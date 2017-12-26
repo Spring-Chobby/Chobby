@@ -255,7 +255,7 @@ end
 
 function Configuration:SetSettingsConfigOption(name, newValue)
 	local setting = self.gameConfig.settingsNames[name]
-	if not (setting and setting.optionNames[newValue]) then
+	if not setting then
 		return false
 	end
 
@@ -277,6 +277,10 @@ function Configuration:SetSettingsConfigOption(name, newValue)
 			self:SetSpringsettingsValue(setting.applyName, springValue)
 		end
 	else
+		if (not setting.optionNames[newValue]) then
+			return false
+		end
+		
 		-- Selection from multiple options
 		local selectedOption = setting.optionNames[newValue]
 		if setting.fileTarget then
