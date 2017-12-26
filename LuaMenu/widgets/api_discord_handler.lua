@@ -39,7 +39,7 @@ local function DelayedInitialize()
 	SetDiscordPlaying("In Menu")
 	
 	local function OnBattleAboutToStart(_, battleType)
-		if string.find(battleType, "campaign") then
+		if battleType and string.find(battleType, "campaign") then
 			SetDiscordPlaying("Playing Campaign")
 		elseif battleType == "tutorial" then
 			SetDiscordPlaying("Playing Tutorial")
