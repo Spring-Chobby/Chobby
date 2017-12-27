@@ -77,6 +77,7 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 3720,
 						z = 750,
 						facing = 0,
+						defeatIfDestroyedObjectiveID = 1,
 					},
 					-- Newton cannon
 					{
@@ -2095,7 +2096,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"staticmex",
 					},
 					loseAfterSeconds = 30*60,
-					allyTeamLossObjectiveID = 2,
+					allyTeamLossObjectiveID = 1,
 				},
 			},
 			objectiveConfig = {

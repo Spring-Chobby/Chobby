@@ -582,7 +582,7 @@ local function GetPlanet(planetUtilities, planetID)
 						--"bomberheavy",
 					},
 					difficultyDependantUnlocks = {
-						[3] = {"shieldarty"},
+						[2] = {"shieldarty"},
 						[3] = {"shieldarty","shieldriot"},
 						[4] = {"shieldarty","shieldriot","bomberheavy"},
 					},
