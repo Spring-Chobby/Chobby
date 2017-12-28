@@ -4694,7 +4694,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Have 3 Big Berthas",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[2] = { -- Destroy all enemy Geos before 20:00
+				[2] = { -- Destroy all enemy Geos before 25:00
 					satisfyByTime = 25*60,
 					comparisionType = planetUtilities.COMPARE.AT_MOST,
 					targetNumber = 0,
