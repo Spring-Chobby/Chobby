@@ -2127,7 +2127,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				[2] = {
 					onlyCountRemovedUnits = true,
-					satisfyForever = true,
+					satisfyUntilTime = 3*60,
 					comparisionType = planetUtilities.COMPARE.AT_MOST,
 					targetNumber = 0,
 					unitTypes = {

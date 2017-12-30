@@ -40,7 +40,6 @@ local function GetPlanet(planetUtilities, planetID)
 				extraUnlocks = {
 					"striderhub",
 					"striderbantha",
-					"turretaaheavy",
 				},
 				startUnits = {
 				}
@@ -87,7 +86,6 @@ local function GetPlanet(planetUtilities, planetID)
 			units = {
 				"striderhub",
 				"striderbantha",
-				"turretaaheavy",
 			},
 			modules = {
 				"weaponmod_stun_booster",

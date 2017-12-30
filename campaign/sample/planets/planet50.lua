@@ -272,7 +272,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			aiConfig = {
 				{
-					startX = 400,
+					startX = 410,
 					startZ = 7700,
 					humanName = "Pulmox",
 					--aiLib = "Null AI",
