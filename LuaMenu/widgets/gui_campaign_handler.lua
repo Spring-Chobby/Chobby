@@ -679,7 +679,7 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 						local function SkipFunc()
 							ProcessPlanetVictory(planetID, 0, {}, nil, WG.CampaignData.GetDifficultySetting())
 						end
-						WG.Chobby.ConfirmationPopup(SkipFunc, "Are you sure you want to skip the quick tutorial? Remeber to come back later if you need help.", nil, 315, 220)
+						WG.Chobby.ConfirmationPopup(SkipFunc, "Are you sure you want to skip the quick tutorial? Remember to come back later if you need help.", nil, 315, 220)
 					end
 				}
 			}
