@@ -2135,7 +2135,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "jumpsumo.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
-					description = "Do not lose any Jugglenauts",
+					description = "Do not lose any Jugglenauts before 3:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = {
