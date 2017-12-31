@@ -83,75 +83,51 @@ local function GetPlanet(planetUtilities, planetID)
 					-- Newton cannon
 					{
 						name = "turretimpulse",
-						x = 7936,
-						z = 3888,
-						facing = 2,
-					},
- 					{
-						name = "turretimpulse",
-						x = 8000,
-						z = 3920,
-						facing = 2,
-					},
- 					{
-						name = "turretimpulse",
-						x = 7936,
-						z = 3952,
-						facing = 2,
-					},
- 					{
-						name = "turretimpulse",
-						x = 8064,
-						z = 3728,
+						x = 8112,
+						z = 3694,
 						facing = 3,
 					},
- 					{
-						name = "turretimpulse",
-						x = 8064,
-						z = 3776,
-						facing = 3,
-					},
- 					{
+					{
 						name = "turretimpulse",
 						x = 8112,
-						z = 3760,
+						z = 3694 + 1*48,
 						facing = 3,
 					},
- 					{
+					{
 						name = "turretimpulse",
 						x = 8112,
-						z = 3824,
+						z = 3694 + 2*48,
 						facing = 3,
 					},
 					{
 						name = "turretimpulse",
-						x = 8000,
-						z = 3984,
+						x = 8112,
+						z = 3694 + 3*48,
+						facing = 3,
+					},
+					{
+						name = "turretimpulse",
+						x = 7872,
+						z = 3932,
 						facing = 2,
 					},
 					{
 						name = "turretimpulse",
-						x = 8192,
-						z = 3872,
-						facing = 3,
-					},
- 					{
-						name = "turretimpulse",
-						x = 8048,
-						z = 3952,
+						x = 7872 + 1*48,
+						z = 3932,
 						facing = 2,
 					},
 					{
 						name = "turretimpulse",
-						x = 8160,
-						z = 3840,
-						facing = 3,
+						x = 7872 + 2*48,
+						z = 3932,
+						facing = 2,
 					},
 					{
 						name = "turretimpulse",
-						x = 8160,
-						z = 3792,
-						facing = 3,
+						x = 7872 + 3*48,
+						z = 3932,
+						facing = 2,
 					},
 					-- Newton cannonballs
 					{
@@ -2071,12 +2047,17 @@ local function GetPlanet(planetUtilities, planetID)
 			terraform = {
 				{
 					terraformShape = planetUtilities.TERRAFORM_SHAPE.RAMP,
-					position = {8000, 293, 3800, 7780, 425, 3650},
+					position = {8000, 293, 3800, 7780, 485, 3650},
 					width = 220,
 				},
+				--{
+				--	terraformShape = planetUtilities.TERRAFORM_SHAPE.RAMP,
+				--	position = {8000, 293, 3800, 7890, 362, 3725},
+				--	width = 220,
+				--},
 				{
 					terraformShape = planetUtilities.TERRAFORM_SHAPE.RAMP,
-					position = {8000, 293, 3800, 7890, 362, 3725},
+					position = {8000, 292, 3800, 7780, 484, 3650},
 					width = 220,
 				},
 				{
