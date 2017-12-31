@@ -67,6 +67,7 @@ local function GetPlanet(planetUtilities, planetID)
 					"jumpaa",
 					"jumpsumo",
 					"turretimpulse",
+					"jumpassault",
 				},
 				extraAbilities = {
 					"terraform",
