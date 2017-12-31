@@ -2388,13 +2388,13 @@ local function GetPlanet(planetUtilities, planetID)
 					onlyCountRemovedUnits = true,
 					satisfyForever = true,
 					comparisionType = planetUtilities.COMPARE.AT_MOST,
-					targetNumber = 0,
+					targetNumber = 1,
 					unitTypes = {
 						"striderarty"
 					},
 					image = planetUtilities.ICON_DIR .. "striderarty.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
-					description = "Do not lose any Merlins",
+					description = "Do not lose more than 1 Merlin",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { 
