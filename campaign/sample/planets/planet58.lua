@@ -1322,7 +1322,7 @@ local function GetPlanet(planetUtilities, planetID)
 					commanderParameters = {
 						facplop = false,
 					},
-					allyTeam = 1,
+					allyTeam = 2,
 					unlocks = {
 						"staticmex",
 						"energysolar",
