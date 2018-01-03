@@ -1544,7 +1544,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"shieldarty",
 						"shieldaa",
 						"hovercon",
-						"hoverraider",
+						"hoverraid",
 						"hoverriot",
 						"hoverskirm",
 						"cloakcon",

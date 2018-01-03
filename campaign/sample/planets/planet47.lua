@@ -1427,7 +1427,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"spideremp",
 						"spiderriot",
 						"spiderskirm",
-						"spiderassualt",
+						"spiderassault",
 						"spidercrabe",
 						"spideraa",
 					},
