@@ -16,7 +16,6 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
-local SAVE_SCRIPT = true
 local START_UNITS_BLOCK_SIZE = 40
 
 --------------------------------------------------------------------------------
@@ -93,7 +92,7 @@ local function GetPlayerCommWithExtra(playerComm, extraModules)
 	
 	local flatModules = {} -- Much simpler
 	local modules = playerComm.modules
-	for level = 1, #modules do
+	for level = 0, #modules do
 		for slot = 1, #modules[level] do
 			local entry = modules[level][slot]
 			if not replaceModules[entry] then
@@ -357,7 +356,7 @@ local function StartBattleForReal(planetID, planetData, gameName)
 	end
 
 	local scriptString = localLobby:MakeScriptTXT(script)
-	if SAVE_SCRIPT then
+	if Configuration.devMode then
 		local scriptFileName = "scriptFile.txt"
 		local scriptFile = io.open(scriptFileName, "w")
 		scriptFile:write(scriptString)
