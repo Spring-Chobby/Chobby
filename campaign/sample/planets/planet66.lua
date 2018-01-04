@@ -24,7 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Taolis",
 			primaryType = "G4V",
 			milRating = 1,
-			text = [[Two duelling Zenith meteor controllers threaten to reduce this planet to space dust. Sneak into the enemy base and destroy their Zenith so you'll at least have the satisfaction of being the owner of that space dust.]]
+			text = [[Two duelling Zenith meteor controllers threaten to reduce this planet to space dust. If you can destroy the enemy Zenith, you'll at least have the satisfaction of being the owner of that space dust.]]
 		},
 		gameConfig = {
 			mapName = "Lost_v2",

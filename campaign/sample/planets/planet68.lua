@@ -7,7 +7,7 @@ local function GetPlanet(planetUtilities, planetID)
 	local image = LUA_DIRNAME .. "images/planets/tundra01.png"
 	
 	local planetData = {
-		name = "Kufihay",
+		name = "Cipher",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.955,
@@ -21,7 +21,7 @@ local function GetPlanet(planetUtilities, planetID)
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
 			terrainType = "Tundra",
 			radius = "7650 km",
-			primary = "Fili Enso",
+			primary = "Endofili",
 			primaryType = "G1V",
 			milRating = 1,
 			text = [[Your opponent is already conducting a victory celebration with their Disco Rave Party. Hold off their assault until your Starlight orbital chisel is complete, then demonstrate that their revels are premature.]]
