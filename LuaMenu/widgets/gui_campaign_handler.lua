@@ -49,7 +49,7 @@ local PLANET_NO_START_COLOR = {0.5, 0.5, 0.5, 1}
 local TARGET_IMAGE = LUA_DIRNAME .. "images/niceCircle.png"
 
 local REWARD_ICON_SIZE = 58
-local DEBUG_UNLOCKS_SIZE = 26
+local DEBUG_UNLOCK_SIZE = 26
 local DEBUG_UNLOCK_COLUMNS = 4
 
 local VISIBILITY_DISTANCE = 2 -- Distance from captured at which planets are visible.
@@ -797,15 +797,15 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 	return externalFunctions
 end
 
-local function AddDebugUnlocks(parent, unlockList, unlockInfo, offset)
+local function AddDebugUnlocks(parent, unlockList, unlockInfo, offset, columns, unlockSize)
 	if unlockList then
 		for i = 1, #unlockList do
 			local info, imageFile, imageOverlay, count = unlockInfo(unlockList[i])
 			local image = Image:New{
-				x = (offset%DEBUG_UNLOCK_COLUMNS) * DEBUG_UNLOCKS_SIZE,
-				y = math.floor(offset/DEBUG_UNLOCK_COLUMNS) * DEBUG_UNLOCKS_SIZE,
-				width = DEBUG_UNLOCKS_SIZE - 1,
-				height = DEBUG_UNLOCKS_SIZE - 1,
+				x = (offset%columns) * unlockSize,
+				y = math.floor(offset/columns) * unlockSize,
+				width = unlockSize - 1,
+				height = unlockSize - 1,
 				keepAspect = true,
 				file = imageOverlay or imageFile,
 				file2 = imageOverlay and imageFile,
@@ -815,6 +815,51 @@ local function AddDebugUnlocks(parent, unlockList, unlockInfo, offset)
 		end
 	end
 	return offset
+end
+
+local filter = {
+	{"cloak", "cloakraid"},
+	{"shield", "shieldraid"},
+	{"spider", "spideremp"},
+	{"jump", "jumpraid"},
+	{"amph", "amphraid"},
+	{"hover", "hoverraid"},
+	{"veh", "vehraid"},
+	{"tank", "tankassault"},
+	{"plane", "planefighter"},
+	{"bomber", "planefighter"},
+	{"gunship", "gunshipraid"},
+	{"strider", "striderdante"},
+	{"ship", "shipriot"},
+	{"sub", "shipriot"},
+}
+
+local function ProcessAiUnlockDebugView(debugHolder, map, aiConfig, unlockInfo, offset)
+	if aiConfig.allyTeam == 0 then
+		return offset, map
+	end
+	local unlocks = aiConfig.unlocks
+	if not unlocks then
+		return offset, map
+	end
+	
+	local unlockList = {}
+	for i = 1, #unlocks do
+		local name = unlocks[i]
+		for j = 1, #filter do
+			if string.find(name, filter[j][1]) then
+				local item = filter[j][2]
+				if not map[item] then
+					unlockList[#unlockList + 1] = item
+					map[item] = true
+				end
+				break
+			end
+		end
+	end
+	
+	offset = AddDebugUnlocks(debugHolder, unlockList, unlockInfo, offset, DEBUG_UNLOCK_COLUMNS, DEBUG_UNLOCK_SIZE)
+	return offset, map
 end
 
 local function EnablePlanetClick()
@@ -847,21 +892,39 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 	}
 	
 	local debugHolder
-	if (not LIVE_TESTING) and Configuration.debugMode and Configuration.showPlanetUnlocks then
-		debugHolder = Control:New{
-			x = 0,
-			y = 0,
-			width = targetSize*3,
-			height = targetSize,
-			padding = {1, 1, 1, 1},
-			parent = galaxyHolder,
-		}
-		
-		local rewards = planetData.completionReward
-		local offset = 0
-		offset = AddDebugUnlocks(debugHolder, rewards.units, WG.CampaignData.GetUnitInfo, offset)
-		offset = AddDebugUnlocks(debugHolder, rewards.modules, WG.CampaignData.GetModuleInfo, offset)
-		offset = AddDebugUnlocks(debugHolder, rewards.abilities, WG.CampaignData.GetAbilityInfo, offset)
+	if (not LIVE_TESTING) and Configuration.debugMode then
+		if Configuration.showPlanetUnlocks then
+			debugHolder = Control:New{
+				x = 0,
+				y = 0,
+				width = targetSize*3,
+				height = targetSize,
+				padding = {1, 1, 1, 1},
+				parent = galaxyHolder,
+			}
+			
+			local rewards = planetData.completionReward
+			local offset = 0
+			offset = AddDebugUnlocks(debugHolder, rewards.units, WG.CampaignData.GetUnitInfo, offset, DEBUG_UNLOCK_COLUMNS, DEBUG_UNLOCK_SIZE)
+			offset = AddDebugUnlocks(debugHolder, rewards.modules, WG.CampaignData.GetModuleInfo, offset, DEBUG_UNLOCK_COLUMNS, DEBUG_UNLOCK_SIZE)
+			offset = AddDebugUnlocks(debugHolder, rewards.abilities, WG.CampaignData.GetAbilityInfo, offset, DEBUG_UNLOCK_COLUMNS, DEBUG_UNLOCK_SIZE)
+		elseif Configuration.showPlanetEnemyUnits then
+			debugHolder = Control:New{
+				x = 0,
+				y = 0,
+				width = targetSize*3,
+				height = targetSize,
+				padding = {1, 1, 1, 1},
+				parent = galaxyHolder,
+			}
+			
+			local aiConfig = planetData.gameConfig.aiConfig
+			local offset = 0
+			local map = {}, {}
+			for i = 1, #aiConfig do
+				offset, map = ProcessAiUnlockDebugView(debugHolder, map, aiConfig[i],  WG.CampaignData.GetUnitInfo, offset)
+			end
+		end
 	end
 	
 	local button = Button:New{
@@ -957,7 +1020,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		end
 		
 		if debugHolder then
-			debugHolder:SetPos(x, y + planetSize, DEBUG_UNLOCK_COLUMNS*DEBUG_UNLOCKS_SIZE + 2, 2*DEBUG_UNLOCKS_SIZE + 2)
+			debugHolder:SetPos(x, y + planetSize, DEBUG_UNLOCK_COLUMNS*DEBUG_UNLOCK_SIZE + 2, 3*DEBUG_UNLOCK_SIZE + 2)
 		end
 	end
 	
