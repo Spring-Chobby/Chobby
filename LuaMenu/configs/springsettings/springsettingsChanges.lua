@@ -5,6 +5,7 @@ local settings = {
 	ROAM = 1,
 	SplashScreenDir = "./MenuLoadscreens",
 	UseDistToGroundForIcons = 1.1,
+	UseLuaMemPools = 0,
 }
 
 local onlyIfMissingSettings = {
