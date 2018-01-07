@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Nassia",
 			primaryType = "G4V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24510",
 			text = [[Many raiders have tried - and failed - to take the ancient technology on this planet by brute force. The automated defence system has decayed over time but a Detriment crushes any attempt to build a base. Stay on the move with Athena mobile constructors, building up an army to destroy the Detriment.]]
 		},
 		tips = {

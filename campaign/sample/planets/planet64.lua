@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Vallaf",
 			primaryType = "G4V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24642",
 			text = [[This battle will take place on a massive salt plain, littered with sharp spikes. Use Paladin striders to dominate all aspects of the fight.]]
 		},
 		tips = {

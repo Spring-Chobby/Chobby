@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Adimasi",
 			primaryType = "G7V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24417",
 			text = [[Your opponent is relying on a network of defensive turrets and shielded bots to keep them safe. Use Slings to weaken your opponent's defences and shields before you commit to an assault.]],
 		},
 		tips = {

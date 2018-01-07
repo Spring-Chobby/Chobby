@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Halio Raba",
 			primaryType = "K1VI",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24614",
 			text = [[Two enemy groups are already engaged on this icy planet. Defeat them both at a safe distance with the Merlin artillery strider.]]
 		},
 		tips = {

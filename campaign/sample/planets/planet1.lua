@@ -27,6 +27,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Privni",
 			primaryType = "G8V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24417",
 			text = [[This battle will be straightforward. Construct an army of Glaives and Reavers to overwhelm your enemy.]]
 		},
 		tips = {

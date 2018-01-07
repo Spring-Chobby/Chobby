@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Sop",
 			primaryType = "G2VI",
 			milRating = 2,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24457",
 			text = [[Help your ally to push across the island with Fencer missile trucks and Badger mine artillery. A slow but inevitable push will bring you victory just as surely as a lightning assault.]]
 		},
 		tips = {

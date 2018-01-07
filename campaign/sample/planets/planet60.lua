@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Narlapa",
 			primaryType = "G7V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24594",
 			text = [[Take control of the sea and then the enemy shoreline with Shogun battleships. You'd better hurry - if they finish their Zenith meteor controller, things will become a lot more difficult...]]
 		},
 		tips = {

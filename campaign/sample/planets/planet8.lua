@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Thibella",
 			primaryType = "G3V",
 			milRating = 2,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24429",
 			text = [[The enemy has a Big Bertha cannon which is dominating the battlefield. Sneak into their base with Scythes and eliminate the threat.]]
 		},
 		tips = {

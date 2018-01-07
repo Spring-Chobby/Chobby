@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Yasta",
 			primaryType = "M0VI",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24469",
 			text = [[Launch an attack across the river with an army capable of fighting underwater - the amphibious Duck raider and Scallop riot bots.]]
 		},
 		tips = {

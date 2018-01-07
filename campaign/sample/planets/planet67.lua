@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Pallis",
 			primaryType = "G4V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24642",
 			text = [[You are facing a massive fleet of capital ships. Ensure your complete domination of the seas with the Disco Rave Party superweapon.]]
 		},
 		tips = {

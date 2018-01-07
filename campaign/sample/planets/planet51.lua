@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Yapp",
 			primaryType = "G0V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24594",
 			text = [[Your Tech Lab is about to be overrun by enemy forces! Your base is too far away to reinforce the Lab in time... unless you employ an unconventional means of transport.]]
 		},
 		tips = {

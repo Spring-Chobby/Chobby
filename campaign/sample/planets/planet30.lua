@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Blank",
 			primaryType = "G8V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24530",
 			text = [[Crossing a river under enemy fire is a daunting prospect, but it becomes easier when you control the water. Bombard the shoreline with Envoy cruisers to force passage through the shallows.]]
 		},
 		tips = {

@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Magus",
 			primaryType = "K4VI",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24417",
 			text = [[Your opponent will use raiding squads of Scorchers against you in this battle. Shut them down with Imp EMP bombs.]]
 		},
 		tips = {

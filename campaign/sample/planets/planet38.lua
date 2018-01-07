@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Jassa Minor",
 			primaryType = "M2V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24510",
 			text = [[In addition to your opponent, this time you'll have to deal with the charming local fauna as well - this planet is infested with chickens. You'll have to manage both threats to be victorious.]]
 		},
 		tips = {

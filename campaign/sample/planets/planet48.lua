@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Nataa",
 			primaryType = "G1V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24566",
 			text = [[Your enemy's defences on this level are dependent on a few critical structures, but the rough terrain will make it very difficult to get close enough to destroy them. The Tactical Missile Silo provides a much more practical solution to this problem.]]
 		},
 		tips = {

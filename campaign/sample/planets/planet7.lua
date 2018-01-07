@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Omis",
 			primaryType = "G7V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24429",
 			text = [[The Artefact on this planet contains invaluable information, but it is protected by a large automated defence network. Infiltrate the Automaton base with Phantom sniper bots and destroy the Singularity Plants to deactivate the heavier defences.]]
 		},
 		tips = {

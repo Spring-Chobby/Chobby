@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Ahdas Las",
 			primaryType = "K4III",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24489",
 			text = [[Among the heavy Tanks, even the constructors and raiders are tough - but they're also more expensive. You'll have less units than your Cloakbot opponent, so you'll need to be efficient. Retreat and repair damaged tanks to avoid losses.]]
 		},
 		tips = {

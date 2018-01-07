@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Wabloz Met",
 			primaryType = "G8V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24642",
 			text = [[The deep water channels and hills of this battleground present a challenging tactical landscape. The ultra-heavy amphibious Detriment strider is ideally suited to such mixed terrain.]]
 		},
 		tips = {

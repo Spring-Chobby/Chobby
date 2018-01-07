@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Varis",
 			primaryType = "G4V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24594",
 			text = [[You are without allies on this large battlefield, so you'll have to rely on your Jumpbots' inherent advantage on rough terrain to win instead.]]
 		},
 		tips = {

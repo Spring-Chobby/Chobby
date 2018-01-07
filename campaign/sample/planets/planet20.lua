@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Chukon",
 			primaryType = "G1V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24429",
 			text = [[You have secured a Tech Lab but the enemy surrounds you on all sides. Construct Stinger and Stardust defence structures and hold out for 15 minutes.]]
 		},
 		tips = {

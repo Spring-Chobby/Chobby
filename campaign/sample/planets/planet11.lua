@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "EL-5591",
 			primaryType = "G8V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24457",
 			text = [[Your opponent is sending gunships out from behind a formidable defensive array. Use Crasher anti-air rovers to shoot down the gunships, then Impaler artillery to tear down the base.]]
 		},
 		tips = {

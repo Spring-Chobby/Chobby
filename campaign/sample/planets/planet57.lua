@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Eox Tallis",
 			primaryType = "G4V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24594",
 			text = [[So far this naval battle has been evenly matched, but the Detriment your opponent is about to deploy could change that in a hurry.]]
 		},
 		tips = {

@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Near Varra",
 			primaryType = "K3VI",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24566",
 			text = [[If you want to control the sea, it's also important to control the air above it. Use Owl scout planes to find underwater units, then Raven precision bombers to destroy those underwater units and any other high-value targets.]]
 		},
 		tips = {

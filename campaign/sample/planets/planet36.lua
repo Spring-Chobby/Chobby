@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Jazada",
 			primaryType = "G4V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24510",
 			text = [[Use the fast-moving Locust raider gunships to curtail your opponent's expansion, then Nimbus support gunships to finish them off.]]
 		},
 		tips = {

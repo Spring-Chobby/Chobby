@@ -47,6 +47,7 @@ local PLANET_START_COLOR = {1, 1, 1, 1}
 local PLANET_NO_START_COLOR = {0.5, 0.5, 0.5, 1}
 
 local TARGET_IMAGE = LUA_DIRNAME .. "images/niceCircle.png"
+local IMG_LINK     = LUA_DIRNAME .. "images/link.png"
 
 local REWARD_ICON_SIZE = 58
 local DEBUG_UNLOCK_SIZE = 26
@@ -169,6 +170,38 @@ local function MakeFeedbackWindow(parent, feedbackLink)
 			end
 		},
 		parent = textWindow,
+	}
+end
+
+local function MakeFeedbackButton(parentControl, link, x, y, right, bottom, width, height)
+	local feedbackButton = Button:New {
+		x = x,
+		y = y,
+		right = right,
+		bottom = bottom,
+		width = 116,
+		height = 32,
+		padding = {0, 0, 0, 0},
+		caption = "Feedback   ",
+		classname = "action_button",
+		font = WG.Chobby.Configuration:GetFont(2),
+		tooltip = "Post feedback on the forum",
+		OnClick = {
+			function ()
+				WG.BrowserHandler.OpenUrl(link)
+			end
+		},
+		parent = parentControl,
+	}
+		
+	local imMapLink = Image:New {
+		right = 6,
+		y = 7,
+		width = 16,
+		height = 16,
+		keepAspect = true,
+		file = IMG_LINK,
+		parent = feedbackButton,
 	}
 end
 
@@ -494,6 +527,10 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty)
 		},
 	}
 	
+	if planetData.infoDisplay.feedbackLink then
+		MakeFeedbackButton(victoryWindow, planetData.infoDisplay.feedbackLink, nil, nil, 2, 1)
+	end
+	
 	local popupHolder = WG.Chobby.PriorityPopup(victoryWindow, CloseFunc, CloseFunc)
 	
 	local externalFunctions = {}
@@ -646,6 +683,10 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 			padding = {0,0,0,0},
 			parent = starmapInfoPanel,
 		}
+		
+		if planetData.infoDisplay.feedbackLink then
+			MakeFeedbackButton(buttonHolder, planetData.infoDisplay.feedbackLink, 2, nil, nil, 1)
+		end
 	
 		local startButton = Button:New{
 			right = 0,

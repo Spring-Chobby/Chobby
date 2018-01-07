@@ -33,6 +33,7 @@ planetData = {
 		primary = "Origin",
 		primaryType = "G8V",
 		milRating = 1,
+		feedbackLink = "http://zero-k.info/Forum/Thread/24489",
 		text = [[Your first battle will be straightforward. You have been provided with a starting base. Construct an army of Glaives and Reavers and overwhelm your enemy.]]
 		-- extendedText is optional and used as the text for the ingame briefing.
 		extendedText = [[Something else]],

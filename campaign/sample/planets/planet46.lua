@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Banbawe",
 			primaryType = "G3V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24530",
 			text = [[This battlefield is exceptionally mountainous; your opponent will field Spiders and it would be advisable for you to do the same. Force your opponent to give you access to the Interception Network with Venom EMP and Hermit assault spiders.]]
 		},
 		tips = {

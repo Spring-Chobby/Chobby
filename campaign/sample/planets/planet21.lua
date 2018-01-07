@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Laria",
 			primaryType = "G9V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24489",
 			text = [[You've captured a Strider Hub capable of building the heavy Dante riot strider, but the incoming waves of Chickens will make the task of retrieving a prototype from the surface much more difficult...]]
 		},
 		tips = {

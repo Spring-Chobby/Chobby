@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Tsuz",
 			primaryType = "F3V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24469",
 			text = [[The bodies of water on this battlefield would pose difficulties for most factories, but the Amphbot Factory can take advantage of them instead.]]
 		},
 		tips = {

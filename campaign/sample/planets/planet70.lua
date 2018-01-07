@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Easnor",
 			primaryType = "A4IV",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24566",
 			text = [[Burn out forests of Wind Generators with Phoenixes to cripple your enemy and allow the land units of your ally to make progress. Protect your bombers against enemy air with Raptors.]]
 		},
 		tips = {

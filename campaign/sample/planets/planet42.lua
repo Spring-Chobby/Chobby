@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Zamuot",
 			primaryType = "G0V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24489",
 			text = [[This terrain is better suited for the enemy Spiders than your Tanks. To change that flatten the hills with Tremor heavy artillery, then finish the job with the super-heavy Cyclops assault tank.]]
 		},
 		tips = {

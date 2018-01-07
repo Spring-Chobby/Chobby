@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Xar",
 			primaryType = "B2Ia",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24457",
 			text = [[Besides the occasional strange hills dotting the landscape, this is a smooth and level battlefield. Your opponent has arrived before you and has begun expanding their economy. Use your Scorchers to punish their greed.]]
 		},
 		tips = {

@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Rawol",
 			primaryType = "G6V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24594",
 			text = [[All previous attempts to defeat the enemy's large cluster of Funnelweb support striders and Big Bertha static artillery have failed. It falls to you to deploy the nuclear option.]]
 		},
 		tips = {

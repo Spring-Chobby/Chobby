@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Jayadu A/B",
 			primaryType = "F9V/F9V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24457",
 			text = [[Despite its unappealing environment, this planet has been the focus of many battles, and it is littered with scrap. The self-replicating Puppy walking bombs can quickly turn these wrecks into a new army for you.]]
 		},
 		tips = {

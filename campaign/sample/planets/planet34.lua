@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Woondai",
 			primaryType = "G8V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24566",
 			text = [[The enemy has dug into a reasonable defensive position, assisted by aircraft. Supplement your ground forces with Thunderbirds to disarm enemy defences and Swifts to shoot down their planes.]]
 		},
 		tips = {

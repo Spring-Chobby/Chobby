@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Royal",
 			primaryType = "F9IV",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24469",
 			text = [[You've discovered some Ancient Fabricators capable of generating metal from nothing. A rival faction is eager to claim your prize, and they have surrounded your base. Use Djinn teleporters to attack them from behind.]]
 		},
 		tips = {

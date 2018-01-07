@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Taolis",
 			primaryType = "G4V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24642",
 			text = [[Two duelling Zenith meteor controllers threaten to reduce this planet to space dust. If you can destroy the enemy Zenith, you'll at least have the satisfaction of being the owner of that space dust.]]
 		},
 		tips = {

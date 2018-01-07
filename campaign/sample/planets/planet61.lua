@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Toque",
 			primaryType = "F9IV",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24614",
 			text = [[The high mountains of this battlefield, and the enemy's defensive bastions seated upon them, have so far resisted assault. The Funnelweb strider is well equipped to dislodge them.]]
 		},
 		tips = {

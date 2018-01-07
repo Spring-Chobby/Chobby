@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Jaas Non",
 			primaryType = "G9VI",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24614",
 			text = [[Provoked by a rival salvager, the Artefact on this planet has released an automatic defensive measure - nanobots convert any destroyed unit wrecks into zombies, hostile to all intruders. Use the Ultimatum's Disintegrator Gun to put them all the way down, then get away before the Artefact does something even nastier.]]
 		},
 		tips = {

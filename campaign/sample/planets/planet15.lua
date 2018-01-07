@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Ushasis",
 			primaryType = "F9V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24441",
 			text = [[Your opponent will field Hovercraft and Gunships to cross the oasis which separates your bases. Build Rogues to defeat the hovercraft and Vandals to defeat the gunships.]]
 		},
 		tips = {

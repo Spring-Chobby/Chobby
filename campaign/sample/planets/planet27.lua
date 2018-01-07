@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Misir",
 			primaryType = "G9V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24469",
 			text = [[Your ally can take care of any surface targets, but you'll need to support them with Claymore depth charge and Flail AA hovercraft against underwater and aerial threats.]]
 		},
 		tips = {

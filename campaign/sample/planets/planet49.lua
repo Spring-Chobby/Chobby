@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Ballis",
 			primaryType = "G6VI",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24566",
 			text = [[The artillery cannons of your enemies' battleships are pretty big, but the Big Bertha plasma cannon is positively humongous. Use your static artillery to suppress the enemy until reinforcements arrive.]]
 		},
 		tips = {
