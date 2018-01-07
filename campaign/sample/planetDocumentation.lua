@@ -173,6 +173,9 @@ planetData = {
 					z = 850,
 					facing = 0,
 					
+					-- Duration of stun (in seconds) applied to the unit at the start of the game.
+					stunTime = 2,
+					
 					-- Set terraform height to make a Skydust
 					terraformHeight = 30,
 					

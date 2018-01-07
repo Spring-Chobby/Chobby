@@ -90,7 +90,7 @@ return {
 		entryCheck = WG.CampaignSaveWindow.PromptInitialSaveName,
 		entryCheckBootMode = true,
 		submenuData = {
-			submenuControl = WG.CampaignHandler.GetControl(true, planetWhitelist, FEEDBACK_LINK),
+			submenuControl = WG.CampaignHandler.GetControl(true),
 			tabs = {
 				{
 					name = "technology", 

@@ -406,6 +406,14 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 2431,
 						z = 100,
 						facing = 1,
+						stunTime = 10,
+					},
+ 					{
+						name = "jumpsumo",
+						x = 2330,
+						z = 390,
+						facing = 0,
+						stunTime = 10,
 					},
  					{
 						name = "staticmex",
@@ -442,12 +450,6 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 7344,
 						z = 4000,
 						facing = 3,
-					},
- 					{
-						name = "jumpsumo",
-						x = 2330,
-						z = 390,
-						facing = 0,
 					},
  					{
 						name = "factoryjump",
