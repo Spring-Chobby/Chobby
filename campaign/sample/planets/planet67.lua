@@ -7,7 +7,7 @@ local function GetPlanet(planetUtilities, planetID)
 	local image = LUA_DIRNAME .. "images/planets/terran03.png"
 	
 	local planetData = {
-		name = "Huanshi",
+		name = "Zhurou",
 		startingPlanet = false,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.80,
@@ -2807,19 +2807,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 			},
 			bonusObjectiveConfig = {
-				[1] = { 
-					satisfyOnce = true,
-					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 1,
-					unitTypes = {
-						"raveparty",
-					},
-					image = planetUtilities.ICON_DIR .. "raveparty.png",
-					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build a Disco Rave Party",
-					experience = planetUtilities.BONUS_EXP,
-				},
-				[2] = { -- Make the enemy lose one Sunlance by 8:00
+				[1] = {
 					onlyCountRemovedUnits = true,
 					satisfyByTime = 5*60,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
@@ -2832,10 +2820,10 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Destroy 3 enemy Shoguns before 5:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[3] = {
-					victoryByTime = 25*60,
+				[2] = {
+					victoryByTime = 30*60,
 					image = planetUtilities.ICON_OVERLAY.CLOCK,
-					description = "Win by 25:00",
+					description = "Win by 30:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			}

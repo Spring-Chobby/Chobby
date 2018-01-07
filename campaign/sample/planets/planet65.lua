@@ -6153,31 +6153,19 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			bonusObjectiveConfig = {
 				[1] = {
-					satisfyOnce = true,
+					satisfyForever = true,
+					failOnUnitLoss = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 2,
+					targetNumber = 0,
 					unitTypes = {
 						"striderdetriment",
 					},
 					image = planetUtilities.ICON_DIR .. "striderdetriment.png",
-					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Have 2 Detriments",
+					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
+					description = "Don't lose any Detriments",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = {
-					onlyCountRemovedUnits = true,
-					satisfyForever = true,
-					comparisionType = planetUtilities.COMPARE.AT_MOST,
-					targetNumber = 0,
-					unitTypes = {
-						"striderdetriment"
-					},
-					image = planetUtilities.ICON_DIR .. "striderdetriment.png",
-					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
-					description = "Do not lose any Detriments",
-					experience = planetUtilities.BONUS_EXP,
-				},
-				[3] = {
 					victoryByTime = 30*60,
 					image = planetUtilities.ICON_OVERLAY.CLOCK,
 					description = "Win by 30:00",
