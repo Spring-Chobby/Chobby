@@ -46,7 +46,7 @@ local function GetPlanet(planetUtilities, planetID)
 		},
 		gameConfig = {
 			missionStartscript = false,
-			mapName = "Living Lands v2.03",
+			mapName = "Living Lands 3.2",
 			playerConfig = {
 				startX = 300,
 				startZ = 3800,
