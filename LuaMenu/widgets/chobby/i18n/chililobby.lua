@@ -63,6 +63,7 @@ return {
 		apply = "Apply",
 		enter_battle_password = "Enter Battle Password",
 		set_window_position = "Set Window Position",
+		set_resolution = "Set Resolution",
 		game_name = "Game Name",
 		password_optional = "Password (Optional)",
 		game_type = "Game Type",
