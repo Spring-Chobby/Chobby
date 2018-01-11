@@ -204,7 +204,7 @@ local function InitializeControls(parentControl)
 		height = 20,
 		parent = parentControl,
 		font = Configuration:GetFont(3),
-		caption = "Select Tutorial",
+		caption = "Learn advanced techniques in these tutorials",
 	}
 	
 	local btnLeaveScreen = Button:New {

@@ -81,6 +81,8 @@ return {
 		links = "Links",
 		missions = "Missions",
 		tutorials = "Tutorials",
+		training = "Training",
+		instruction = "Instruction",
 		community = "Community",
 		report_a_bug = "Report A Bug",
 		skirmish = "Skirmish",
