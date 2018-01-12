@@ -343,6 +343,9 @@ function Configuration:SetConfigData(data)
 	self.game_settings.WindowBorderless = nil
 	self.game_settings.Fullscreen = nil
 	
+	-- Fix old memory
+	self.game_settings.UnitIconDist = nil
+	
 	if self.serverAddress == "zero-k.com" then
 		self.serverAddress = "zero-k.info"
 	end
