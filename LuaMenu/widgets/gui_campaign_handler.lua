@@ -453,6 +453,21 @@ local function RepositionBackgroundAndPlanets(newX, newY, newWidth, newHeight)
 	UpdateEdgeList()
 end
 
+local function DelayedViewResize()
+	if not planetHandler then
+		return
+	end
+	local window = planetHandler.GetParent()
+	if not (window and window.parent) then
+		return
+	end
+	local x, y = window:LocalToScreen(0, 0)
+	RepositionBackgroundAndPlanets(x, y, window.xSize, window.ySize)
+	if selectedPlanet then
+		selectedPlanet.SizeUpdate()
+	end
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Planet capturing
@@ -1459,6 +1474,9 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 		return parent
 	end
 	
+	-- Make sure everything loads in the right positions
+	DelayedViewResize()
+	WG.Delay(DelayedViewResize, 0.8)
 	return externalFunctions
 end
 
@@ -1582,20 +1600,6 @@ end
 -- Callins
 --------------------------------------------------------------------------------
 
-local function DelayedViewResize()
-	if not planetHandler then
-		return
-	end
-	local window = planetHandler.GetParent()
-	if not (window and window.parent) then
-		return
-	end
-	local x, y = window:LocalToScreen(0, 0)
-	RepositionBackgroundAndPlanets(x, y, window.xSize, window.ySize)
-	if selectedPlanet then
-		selectedPlanet.SizeUpdate()
-	end
-end
 
 function widget:ViewResize(vsx, vsy)
 	WG.Delay(DelayedViewResize, 0.8)
