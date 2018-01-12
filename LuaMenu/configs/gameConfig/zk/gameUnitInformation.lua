@@ -172,6 +172,7 @@ local nameList = {
 	[171] = "shieldarty",
 	[172] = "shieldaa",
 	[173] = "shieldbomb",
+	[174] = "amphlaunch",
 }
 
 local categories = {
@@ -623,21 +624,27 @@ local humanNames = {
 		description = "Heavy Amphibious Assault Walker",
 		humanName = "Grizzly",
 	},
-	amphaa = {
+	amphlaunch = {
 		category = "amph",
 		order = 8,
+		description = "Amphibious Launcher Bot",
+		humanName = "Lobster",
+	},
+	amphaa = {
+		category = "amph",
+		order = 9,
 		description = "Amphibious Anti-Air Bot",
 		humanName = "Angler",
 	},
 	amphbomb = {
 		category = "amph",
-		order = 9,
+		order = 10,
 		description = "Amphibious Slow Bomb",
 		humanName = "Limpet",
 	},
 	amphtele = {
 		category = "amph",
-		order = 10,
+		order = 11,
 		description = "Amphibious Teleport Bridge",
 		humanName = "Djinn",
 	},
