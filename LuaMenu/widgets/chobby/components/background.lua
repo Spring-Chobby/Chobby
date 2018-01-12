@@ -56,9 +56,6 @@ function Background:SetBoundOverride(imageBoundOverride)
 end
 
 function Background:RemoveOverride()
-	if not self.imageBoundOverride then
-		return
-	end
 	self.imageOverride = nil
 	self.imageBoundOverride = nil
 	self:SetDefaultImage()
