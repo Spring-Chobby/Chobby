@@ -35,11 +35,11 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/amphimpulse.png",
-				text = [[The water cannon of Archers is rapidly replenished by contact with water, augmenting their natural slow regeneration. It can be used to push enemy units away and into holes.]]
+				text = [[Archers fire water jets which push enemy units away. If a non-amphibious unit is pushed into water it will become helpless - keep this in mind!]]
 			},
 			{
 				image = "unitpics/amphbomb.png",
-				text = [[Limpets do not float, but its large disruption pulse can reach surface targets even from the seafloor.]]
+				text = [[Limpets do not float, but its large disruption pulse can reach surface targets even from the seafloor. The Limpet's slowbomb does not affect allies so you can use it within your army.]]
 			},
 		},
 		gameConfig = {

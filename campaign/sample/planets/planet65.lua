@@ -33,10 +33,6 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[Detriments are the ultimate assault strider, armed with laser beams, ground-smoothing missiles, an anti-air battery, and multiple massive Gauss cannons on each arm. They are effective on land and sea and generally end battles very quickly.]]
 			},
 			{
-				image = "luaui/images/commands/bold/reclaim.png",
-				text = [[The underwater rocks in the rivers are exceptionally metal-rich. Be sure to take advantage of this natural resource.]]
-			},
-			{
 				image = "unitpics/striderbantha.png",
 				text = [[Insofar as the Detriment has a weakness at all, it is heavy hitters which can strike from outside the Detriment's range, like the Paladin and Shogun.]]
 			},
