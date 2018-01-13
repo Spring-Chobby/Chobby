@@ -695,7 +695,7 @@ local humanNames = {
 	jumpsumo = {
 		category = "jump",
 		order = 8,
-		description = "Heavy Riot Jumper - On to Repulse, Off to Attract",
+		description = "Heavy Riot Jumper",
 		humanName = "Jugglenaut",
 	},
 	jumparty = {
@@ -1183,7 +1183,7 @@ local humanNames = {
 	turretimpulse = {
 		category = "defence",
 		order = 12,
-		description = "Gravity Turret - On to Repulse, Off to Attract",
+		description = "Gravity Turret",
 		humanName = "Newton",
 	},
 	turrettorp = {
