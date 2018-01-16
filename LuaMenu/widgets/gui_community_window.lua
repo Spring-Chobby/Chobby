@@ -166,6 +166,7 @@ local function GetLadderHandler(parentControl)
 			local lobbyData = {
 				accountID = data.AccountID,
 				icon = data.Icon,
+				country = data.Country,
 				clan = data.Clan
 			}
 			lobby:LearnAboutOfflineUser(data.Name, lobbyData)
