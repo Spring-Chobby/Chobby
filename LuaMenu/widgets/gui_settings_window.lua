@@ -30,9 +30,9 @@ local currentManualBorderless = false
 
 local ITEM_OFFSET = 38
 
-local COMBO_X = 230
+local COMBO_X = 280
 local COMBO_WIDTH = 235
-local CHECK_WIDTH = 230
+local CHECK_WIDTH = 280
 local TEXT_OFFSET = 6
 
 local settingsWindowHandler
@@ -752,6 +752,8 @@ local function GetLobbyTabControls()
 	offset = offset + ITEM_OFFSET
 
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("planetwars_notifications"), "planetwarsNotifications", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("ingame_notifcations"), "ingameNotifcations", true)
+	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("non_friend_notifications"), "nonFriendNotifications", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("simplifiedSkirmishSetup"), "simplifiedSkirmishSetup", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("notifyForAllChat"), "notifyForAllChat", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("only_featured_maps"), "onlyShowFeaturedMaps", true)

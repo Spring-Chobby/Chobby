@@ -44,7 +44,7 @@ end
 
 function FriendListWindow:OnAddUser(userName)
 	local userInfo = lobby:TryGetUser(userName)
-	if userInfo.isFriend then
+	if userInfo.isFriend and WG.Chobby.Configuration:AllowNotification(userName) then
 		local userControl = WG.UserHandler.GetNotificationUser(userName)
 		userControl:SetPos(30, 30, 250, 20)
 		Chotify:Post({
@@ -59,7 +59,7 @@ function FriendListWindow:OnRemoveUser(userName)
 		return
 	end
 	local userInfo = lobby:TryGetUser(userName)
-	if userInfo and userInfo.isFriend then
+	if userInfo and userInfo.isFriend and WG.Chobby.Configuration:AllowNotification(userName) then
 		local userControl = WG.UserHandler.GetNotificationUser(userName)
 		userControl:SetPos(30, 30, 250, 20)
 		Chotify:Post({
@@ -144,13 +144,15 @@ end
 
 function FriendListWindow:OnFriendRequest(userName)
 -- 	interfaceRoot.GetRightPanelHandler().SetActivity("friends", lobby:GetFriendRequestCount())
-	local userControl = WG.UserHandler.GetNotificationUser(userName)
-	userControl:SetPos(20, 40, 250, 20)
-	Chotify:Post({
-		title = i18n("New friend request"),
-		body  = userControl,
-	})
-	self:AddFriendRequest(userName)
+	if WG.Chobby.Configuration:AllowNotification() then -- Do not filter out friends here, otherwise nothing makes sense.
+		local userControl = WG.UserHandler.GetNotificationUser(userName)
+		userControl:SetPos(20, 40, 250, 20)
+		Chotify:Post({
+			title = i18n("New friend request"),
+			body  = userControl,
+		})
+		self:AddFriendRequest(userName)
+	end
 end
 
 function FriendListWindow:OnFriendRequestList(friendRequests)

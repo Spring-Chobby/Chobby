@@ -556,7 +556,7 @@ function ChatWindows:_NotifyTab(tabName, userName, chanName, nameMentioned, mess
 			interfaceRoot.GetRightPanelHandler().SetActivity("chat", self.totalNewMessages, 2 - mentionNumber)
 		end
 
-		if nameMentioned then
+		if nameMentioned and WG.Chobby.Configuration:AllowNotification(userName) then
 			Chotify:Post({
 				title = userName .. " in " .. chanName .. ":",
 				body = message,

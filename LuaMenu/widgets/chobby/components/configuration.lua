@@ -148,6 +148,8 @@ function Configuration:init()
 	self.lastLoginChatLength = 25
 	self.notifyForAllChat = true
 	self.planetwarsNotifications = false -- Possibly too intrusive? See how it goes.
+	self.ingameNotifcations = true -- Party, chat
+	self.nonFriendNotifications = true -- Party, chat
 	self.simplifiedSkirmishSetup = true
 	self.debugMode = false
 	self.devMode = (VFS.FileExists("devmode.txt") and true) or false
@@ -400,6 +402,8 @@ function Configuration:GetConfigData()
 		game_settings = self.game_settings,
 		notifyForAllChat = self.notifyForAllChat,
 		planetwarsNotifications = self.planetwarsNotifications,
+		ingameNotifcations = self.ingameNotifcations,
+		nonFriendNotifications = self.nonFriendNotifications,
 		simplifiedSkirmishSetup = self.simplifiedSkirmishSetup,
 		debugMode = self.debugMode,
 		debugAutoWin = self.debugAutoWin,
@@ -542,6 +546,35 @@ function Configuration:GetFont(sizeScale)
 		size = self.font[sizeScale].size,
 		shadow = self.font[sizeScale].shadow,
 	}
+end
+
+function Configuration:AllowNotification(playerName, playerList)
+	if (not self.ingameNotifcations) and (Spring.GetGameName() ~= "") then
+		return false
+	end
+	if lobby and not self.nonFriendNotifications then
+		if playerName then
+			local userInfo = lobby:TryGetUser(playerName)
+			if not userInfo.isFriend then
+				return false
+			end
+		end
+		
+		if playerList then
+			local foundFriend = false
+			for i = 1, #playerList do
+				local userInfo = lobby:TryGetUser(playerList[i])
+				if userInfo.isFriend then
+					foundFriend = true
+					break
+				end
+			end
+			if not foundFriend then
+				return false
+			end
+		end
+	end
+	return true
 end
 
 function Configuration:GetMinimapSmallImage(mapName)

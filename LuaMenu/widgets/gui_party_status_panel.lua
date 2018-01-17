@@ -308,7 +308,7 @@ function DelayedInitialize()
 	end
 	
 	local function OnPartyInviteRecieved(_, partyID, partyUsers, secondsRemaining)
-		if not invitePopup then
+		if WG.Chobby.Configuration:AllowNotification(nil, partyUsers) and not invitePopup then
 			invitePopup = CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, DestroyInvitePopup)
 		end
 	end

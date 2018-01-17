@@ -153,6 +153,8 @@ return {
 
 		-- Settings
 		planetwars_notifications = "Planetwars notifications",
+		ingame_notifcations = "Notifications while ingame",
+		non_friend_notifications = "Non-friend notifications",
 		notifyForAllChat = "Notify for all chat",
 		drawFullSpeed = "Full speed draw updates",
 		simplifiedSkirmishSetup = "Simple skirmish setup",
