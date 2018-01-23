@@ -590,6 +590,9 @@ function DrawEditBox(obj)
 	gl.Texture(0,false)
 
 	local text = obj.text
+    if text and obj.textEditing then
+        text = text .. obj.textEditing
+    end
 	local font = obj.font
 	local displayHint = false
 
@@ -604,8 +607,12 @@ function DrawEditBox(obj)
             text = string.rep("*", #text)
         end
 
-		if (obj.offset > obj.cursor) and not obj.multiline then
-			obj.offset = obj.cursor
+        local cursor = obj.cursor
+        if obj.textEditing then
+            cursor = cursor + #obj.textEditing
+        end
+		if (obj.offset > cursor) and not obj.multiline then
+			obj.offset = cursor
 		end
 
 		local clientX,clientY,clientWidth,clientHeight = unpack4(obj.clientArea)
@@ -613,9 +620,9 @@ function DrawEditBox(obj)
 		if not obj.multiline then
 			--// make cursor pos always visible (when text is longer than editbox!)
 			repeat
-				local txt = text:sub(obj.offset, obj.cursor)
+				local txt = text:sub(obj.offset, cursor)
 				local wt = font:GetTextWidth(txt)
-				if wt <= clientWidth or obj.offset >= obj.cursor then
+				if wt <= clientWidth or obj.offset >= cursor then
 					break
 				end
 				obj.offset = obj.offset + 1
@@ -674,7 +681,7 @@ function DrawEditBox(obj)
 		end
 
 		if obj.state.focused and obj.editable then
-			local cursorTxt = text:sub(obj.offset, obj.cursor - 1)
+			local cursorTxt = text:sub(obj.offset, cursor - 1)
 			local cursorX = font:GetTextWidth(cursorTxt)
 
 			local dt = Spring.DiffTimers(Spring.GetTimer(), obj._interactedTime)
@@ -1360,7 +1367,7 @@ function NCHitTestWithPadding(obj,mx,my)
   elseif (draggable) then
     return obj
   end
-  
+
   if obj.noClickThrough then
     return obj
   end

@@ -425,6 +425,21 @@ function EditBox:Update(...)
 	end
 end
 
+function EditBox:FocusUpdate()
+    if not Spring.SDLStartTextInput then
+        return
+    end
+
+    if not self.state.focused then
+        self.textEditing = ""
+        Spring.SDLStopTextInput()
+    else
+        Spring.SDLStartTextInput()
+        local x, y = self:CorrectlyImplementedLocalToScreen(self.x, self.y)
+        Spring.SDLSetTextInputRect(x, y, 30, 1000)
+    end
+end
+
 function EditBox:_GetCursorByMousePos(x, y)
 	local retVal = {
 		offset = self.offset,
@@ -814,6 +829,7 @@ function EditBox:TextInput(utf8char, ...)
 	if not self.editable then
 		return false
 	end
+    self.textEditing = ""
 	local unicode = utf8char
 
 	if unicode then
@@ -834,6 +850,15 @@ function EditBox:TextInput(utf8char, ...)
 	self:UpdateLayout()
 	self:Invalidate()
 	return self
+end
+
+function EditBox:TextEditing(utf8, start, length)
+    if not self.editable then
+        return false
+    end
+
+    self.textEditing = utf8
+    return true
 end
 
 --//=============================================================================

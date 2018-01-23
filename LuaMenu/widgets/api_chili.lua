@@ -106,7 +106,7 @@ function widget:DrawLoadScreen()
 	if WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.hideInterface then
 		return
 	end
-	
+
 	gl.Color(1,1,1,1)
 	if (not screen0:IsEmpty()) then
 		gl.PushMatrix()
@@ -125,7 +125,7 @@ function widget:TweakDrawScreen()
 	if WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.hideInterface then
 		return
 	end
-	
+
 	gl.Color(1,1,1,1)
 	if (not screen0:IsEmpty()) then
 		gl.PushMatrix()
@@ -143,7 +143,7 @@ function widget:DrawGenesis()
 	if WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.hideInterface then
 		return
 	end
-	
+
 	gl.Color(1,1,1,1)
 	tf.Update()
 	th.Update()
@@ -218,6 +218,12 @@ function widget:TextInput(utf8, ...)
 	if Spring.IsGUIHidden() then return false end
 
 	return screen0:TextInput(utf8, ...)
+end
+
+function widget:TextEditing(utf8, start, length, ...)
+	if Spring.IsGUIHidden() then return false end
+
+	return screen0:TextEditing(utf8, start, length, ...)
 end
 
 

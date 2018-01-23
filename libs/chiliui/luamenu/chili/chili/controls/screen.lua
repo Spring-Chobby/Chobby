@@ -164,7 +164,7 @@ end
 
 function Screen:IsAbove(x,y,...)
   if select(6, Spring.GetMouseState()) then
-    -- Do not register hits for offscreen mouse. 
+    -- Do not register hits for offscreen mouse.
     -- See https://springrts.com/mantis/view.php?id=5671 for the good solution.
     return
   end
@@ -326,4 +326,11 @@ function Screen:TextInput(...)
 end
 
 
+function Screen:TextEditing(...)
+        local focusedControl = UnlinkSafe(self.focusedControl)
+        if focusedControl then
+                return (not not focusedControl:TextEditing(...))
+        end
+        return (not not inherited:TextEditing(...))
+end
 --//=============================================================================
