@@ -454,7 +454,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				{name = "replays", control = WG.ReplayHandler.GetControl()},
 			},
 			startWithTabOpen = 1,
-			hideMyButtons = true,
 		},
 		{
 			name = "help",
