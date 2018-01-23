@@ -33,6 +33,7 @@ planetData = {
 		primary = "Origin",
 		primaryType = "G8V",
 		milRating = 1,
+		feedbackLink = "http://zero-k.info/Forum/Thread/24489",
 		text = [[Your first battle will be straightforward. You have been provided with a starting base. Construct an army of Glaives and Reavers and overwhelm your enemy.]]
 		-- extendedText is optional and used as the text for the ingame briefing.
 		extendedText = [[Something else]],
@@ -116,6 +117,16 @@ planetData = {
 				bonusObjectiveID = false,
 			},
 			
+			-- Extra commander modules.
+			extraModules = {
+				{name = "module_jumpjet", count = 1, add = false},
+				-- List of:
+				--  * name - Module name. See commConfig.lua.
+				--  * count - Number of copies of the module.
+				--  * add - Boolean controlling whether count adds to the number of modules of 
+				--          the type the player has equiped or overwrites the number.
+			},
+			
 			-- Extra unit unlocks that are availible to the player for the duration of the mission.
 			extraUnlocks = {
 				"factorycloak",
@@ -162,6 +173,9 @@ planetData = {
 					x = 900,
 					z = 850,
 					facing = 0,
+					
+					-- Duration of stun (in seconds) applied to the unit at the start of the game.
+					stunTime = 2,
 					
 					-- Set terraform height to make a Skydust
 					terraformHeight = 30,

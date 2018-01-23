@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Wipapra",
 			primaryType = "G7V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24510",
 			text = [[Expand to the mainland from your resource-poor island using Charon and Hercules transports, then use transports to create a highly mobile land army.]]
 		},
 		tips = {

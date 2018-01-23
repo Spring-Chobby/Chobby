@@ -44,6 +44,10 @@ function Configuration:init()
 		game = {},
 		lobby = {},
 	}
+	self.manualFullscreen = {
+		game = {},
+		lobby = {},
+	}
 
 	self.ignoreLevel = false
 
@@ -71,10 +75,6 @@ function Configuration:init()
 	self.agressivelySetBorderlessWindowed = false
 
 	self.useWrongEngine = false
-
-	self.atiIntelCompat = self:GetIsNotRunningNvidia()
-	Spring.Echo("Initialize ATI/intel/other non-nvidia compatibility state:", self.atiIntelCompat)
-
 	self.myAccountID = false
 	self.lastAddedAiName = false
 
@@ -148,11 +148,14 @@ function Configuration:init()
 	self.lastLoginChatLength = 25
 	self.notifyForAllChat = true
 	self.planetwarsNotifications = false -- Possibly too intrusive? See how it goes.
+	self.ingameNotifcations = true -- Party, chat
+	self.nonFriendNotifications = true -- Party, chat
 	self.simplifiedSkirmishSetup = true
 	self.debugMode = false
 	self.devMode = (VFS.FileExists("devmode.txt") and true) or false
 	self.debugAutoWin = false
 	self.showPlanetUnlocks = false
+	self.showPlanetEnemyUnits = false
 	self.campaignSpawnDebug = false
 	self.editCampaign = false
 	self.activeDebugConsole = false
@@ -195,7 +198,7 @@ function Configuration:init()
 
 	self.game_settings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings.lua")
 
-	self.settingsMenuValues = self.gameConfig.settingsDefault
+	self.settingsMenuValues = self.gameConfig.settingsDefault -- Only until configuration data is loaded.
 
 	self.animate_lobby = gl.CreateShader ~= nil
 end
@@ -268,7 +271,7 @@ function Configuration:SetSettingsConfigOption(name, newValue)
 	if setting.isNumberSetting then
 		local applyFunction = setting.applyFunction
 		if applyFunction then
-			local applyData = applyFunction(newValue)
+			local applyData = applyFunction(newValue, self)
 			if applyData then
 				for applyName, value in pairs(applyData) do
 					self.game_settings[applyName] = value
@@ -281,12 +284,16 @@ function Configuration:SetSettingsConfigOption(name, newValue)
 			self:SetSpringsettingsValue(setting.applyName, springValue)
 		end
 	else
+		if (not setting.optionNames[newValue]) then
+			return false
+		end
+		
 		-- Selection from multiple options
 		local selectedOption = setting.optionNames[newValue]
 		if setting.fileTarget then
 			self.settingsMenuValues[name .. "_file"] = selectedOption.file
 			if setting.applyFunction then
-				setting.applyFunction(selectedOption.file)
+				setting.applyFunction(selectedOption.file, self)
 			else
 				local sourceFile = VFS.LoadFile(selectedOption.file)
 				local settingsFile = io.open(setting.fileTarget, "w")
@@ -294,9 +301,9 @@ function Configuration:SetSettingsConfigOption(name, newValue)
 				settingsFile:close()
 			end
 		else
-			local applyData = selectedOption.apply or (selectedOption.applyFunction and selectedOption.applyFunction())
+			local applyData = selectedOption.apply or (selectedOption.applyFunction and selectedOption.applyFunction(nil, self))
 			if not applyData then
-				return
+				return true
 			end
 			for applyName, value in pairs(applyData) do
 				self.game_settings[applyName] = value
@@ -304,6 +311,7 @@ function Configuration:SetSettingsConfigOption(name, newValue)
 			end
 		end
 	end
+	return true
 end
 
 function Configuration:ApplySettingsConfigPreset(preset)
@@ -337,6 +345,9 @@ function Configuration:SetConfigData(data)
 	self.game_settings.WindowBorderless = nil
 	self.game_settings.Fullscreen = nil
 	
+	-- Fix old memory
+	self.game_settings.UnitIconDist = nil
+	
 	if self.serverAddress == "zero-k.com" then
 		self.serverAddress = "zero-k.info"
 	end
@@ -353,11 +364,17 @@ function Configuration:SetConfigData(data)
 
 	self.forcedCompatibilityProfile = VFS.Include(LUA_DIRNAME .. "configs/springsettings/forcedCompatibilityProfile.lua")
 
-	self.defaultSettingsPreset = data.defaultSettingsPreset
-	if (not self.defaultSettingsPreset) and self.gameConfig.SettingsPresetFunc then
-		self.defaultSettingsPreset = self.gameConfig.SettingsPresetFunc()
-		if self.defaultSettingsPreset then
-			self:ApplySettingsConfigPreset(self.defaultSettingsPreset)
+	local default = self.gameConfig.SettingsPresetFunc and self.gameConfig.SettingsPresetFunc()
+	if default then
+		if not data.settingsMenuValues then
+			data.settingsMenuValues = {} -- Override generic default that is set for safety on initialize.
+		end
+		
+		-- Set defaults for missing values.
+		for name, defValue in pairs(default) do
+			if not (self.settingsMenuValues[name] and self:SetSettingsConfigOption(name, self.settingsMenuValues[name])) then
+				self:SetSettingsConfigOption(name, defValue)
+			end
 		end
 	end
 end
@@ -380,15 +397,18 @@ function Configuration:GetConfigData()
 		panel_layout = self.panel_layout,
 		lobby_fullscreen = self.lobby_fullscreen,
 		manualBorderless = self.manualBorderless,
+		manualFullscreen = self.manualFullscreen,
 		animate_lobby = self.animate_lobby,
 		game_settings = self.game_settings,
-		defaultSettingsPreset = self.defaultSettingsPreset,
 		notifyForAllChat = self.notifyForAllChat,
 		planetwarsNotifications = self.planetwarsNotifications,
+		ingameNotifcations = self.ingameNotifcations,
+		nonFriendNotifications = self.nonFriendNotifications,
 		simplifiedSkirmishSetup = self.simplifiedSkirmishSetup,
 		debugMode = self.debugMode,
 		debugAutoWin = self.debugAutoWin,
 		showPlanetUnlocks = self.showPlanetUnlocks,
+		showPlanetEnemyUnits = self.showPlanetEnemyUnits,
 		campaignSpawnDebug = self.campaignSpawnDebug,
 		editCampaign = self.editCampaign,
 		confirmation_mainMenuFromBattle = self.confirmation_mainMenuFromBattle,
@@ -404,7 +424,6 @@ function Configuration:GetConfigData()
 		useWrongEngine = self.useWrongEngine,
 		doNotSetAnySpringSettings = self.doNotSetAnySpringSettings,
 		agressivelySetBorderlessWindowed = self.agressivelySetBorderlessWindowed,
-		atiIntelCompat = self.atiIntelCompat,
 		fixedSettingsOverride = self.fixedSettingsOverride,
 		settingsMenuValues = self.settingsMenuValues,
 		menuMusicVolume = self.menuMusicVolume,
@@ -441,14 +460,6 @@ function Configuration:SetConfigValue(key, value)
 	end
 	if key == "gameConfigName" then
 		self.gameConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. value .. "/mainConfig.lua")
-	end
-	if key == "atiIntelCompat" then
-		if value then
-			self:UpdateFixedSettings(self.AtiIntelSettingsOverride)
-		else
-			self:UpdateFixedSettings()
-		end
-		Spring.Echo("Set ATI/intel/other non-nvidia compatibility state:", value)
 	end
 	self:_CallListeners("OnConfigurationChange", key, value)
 end
@@ -535,6 +546,35 @@ function Configuration:GetFont(sizeScale)
 		size = self.font[sizeScale].size,
 		shadow = self.font[sizeScale].shadow,
 	}
+end
+
+function Configuration:AllowNotification(playerName, playerList)
+	if (not self.ingameNotifcations) and (Spring.GetGameName() ~= "") then
+		return false
+	end
+	if lobby and not self.nonFriendNotifications then
+		if playerName then
+			local userInfo = lobby:TryGetUser(playerName)
+			if not userInfo.isFriend then
+				return false
+			end
+		end
+		
+		if playerList then
+			local foundFriend = false
+			for i = 1, #playerList do
+				local userInfo = lobby:TryGetUser(playerList[i])
+				if userInfo.isFriend then
+					foundFriend = true
+					break
+				end
+			end
+			if not foundFriend then
+				return false
+			end
+		end
+	end
+	return true
 end
 
 function Configuration:GetMinimapSmallImage(mapName)

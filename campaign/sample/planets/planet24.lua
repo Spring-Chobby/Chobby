@@ -25,7 +25,8 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Royal",
 			primaryType = "F9IV",
 			milRating = 1,
-			text = [[You've discovered some Ancient Fabricators capable of generating metal from nothing. A rival faction is eager to claim your prize, and they have surrounded your base. Use Djinn teleporters to attack them from behind.]]
+			feedbackLink = "http://zero-k.info/Forum/Thread/24469",
+			text = [[You've discovered some Ancient Fabricators capable of generating metal from nothing. A rival faction is eager to claim your prize, and they have surrounded your base. Use Djinn teleporters and Lobsters to launch an attack from behind.]]
 		},
 		tips = {
 			{
@@ -34,7 +35,11 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/tele_beacon.png",
-				text = [[Djinn can place Lamps anywhere on the map, at global range. Besides using the Djinn for defence, you can also use it to recover units deep inside enemy territory, or to launch a sneak attack.]]
+				text = [[Djinni can place Lamps anywhere on the map, at global range. Besides using the Djinn for defence, you can also use it to recover units deep inside enemy territory, or to launch a sneak attack.]]
+			},
+			{
+				image = "unitpics/amphlaunch.png",
+				text = [[Lobsters propel nearby units through the air towards a nearby target. You can use this ability to deploy your own army or relocate enemies - experiment for best results. Unless they splash into water, thrown units are likely to take damage on landing.]]
 			},
 			{
 				image = "unitpics/turretaafar.png",
@@ -56,14 +61,41 @@ local function GetPlanet(planetUtilities, planetID)
 					"amphcon",
 					"amphaa",
 					"amphtele",
+					"amphlaunch",
 					"turretaafar",
 				},
 				startUnits = {
 					{
-						name = "amphtele",
-						x = 2000,
-						z = 7000,
+						name = "amphlaunch",
+						x = 1950,
+						z = 7090,
+						facing = 2,
+						commands = {
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1950, 6980}},
+							{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1950, 6650}, options = {"shift"}},
+						},
+					},
+					{
+						name = "amphlaunch",
+						x = 1950,
+						z = 6140,
 						facing = 0,
+						commands = {
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1950, 6420}},
+							{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1950, 6750}, options = {"shift"}},
+						},
+					},
+					{
+						name = "amphriot",
+						x = 1950,
+						z = 6960,
+						facing = 0,
+					},
+					{
+						name = "amphtele",
+						x = 2225,
+						z = 6775,
+						facing = 1,
 					},
 					{
 						name = "amphtele",
@@ -1664,6 +1696,7 @@ local function GetPlanet(planetUtilities, planetID)
 			units = {
 				"amphaa",
 				"amphtele",
+				"amphlaunch",
 				"turretaafar",
 			},
 			modules = {

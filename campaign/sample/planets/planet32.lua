@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Vark-Absur",
 			primaryType = "G5VI",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24530",
 			text = [[An enemy artillery piece is dominating this island chain. Assault it directly or cut off its energy supply, then clear out any lingering opposition.]]
 		},
 		tips = {

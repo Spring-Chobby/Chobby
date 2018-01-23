@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Taoune",
 			primaryType = "F2III",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24429",
 			text = [[Your opponent has taken to the air with Gunships in this battle. Construct the anti-air Gremlins and Hacksaw missile turrets to bring them down.]]
 		},
 		tips = {

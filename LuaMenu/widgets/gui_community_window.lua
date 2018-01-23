@@ -121,6 +121,85 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Ladder Handler
+
+local function GetLadderHandler(parentControl)
+	local lobby = WG.LibLobby.lobby
+	
+	local holder = Control:New{
+		x = 0,
+		y = 0,
+		right = 0,
+		padding = {0,0,0,0},
+		parent = parentControl,
+	}
+	local playerHolder = Control:New{
+		x = 38,
+		y = 30,
+		right = 0,
+		bottom = 0,
+		padding = {0,0,0,0},
+		parent = holder,
+	}
+	
+	local heading = TextBox:New{
+		x = 4,
+		y = 7,
+		right = 4,
+		height = 24,
+		align = "left",
+		valign = "top",
+		text = "Ladder",
+		fontsize = WG.Chobby.Configuration:GetFont(3).size,
+		parent = holder,
+	}
+	
+	local numberBox = {}
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.UpdateLadder(ladderEntries)
+		local offset = 2
+		playerHolder:ClearChildren()
+		for i = 1, #ladderEntries do
+			local data = ladderEntries[i]
+			local lobbyData = {
+				accountID = data.AccountID,
+				icon = data.Icon,
+				country = data.Country,
+				clan = data.Clan
+			}
+			lobby:LearnAboutOfflineUser(data.Name, lobbyData)
+			local user = WG.UserHandler.GetLadderUser(data.Name)
+			
+			user:SetPos(nil, offset)
+			playerHolder:AddChild(user)
+			
+			if not numberBox[i] then
+				numberBox[i] = Label:New{
+					x = 2,
+					y = offset + 32,
+					width = 36,
+					height = 24,
+					align = "right",
+					valign = "top",
+					caption = i .. " - ",
+					font = WG.Chobby.Configuration:GetFont(2),
+					parent = holder,
+				}
+			end
+			
+			offset = offset + 26
+		end
+		
+		holder:SetPos(nil, nil, nil, offset + 34)
+	end
+	
+	return externalFunctions
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- News
 
 local function GetDateTimeDisplay(parentControl, xPosition, yPosition, timeString)
@@ -197,20 +276,22 @@ local headingFormats = {
 		spacing = 2,
 		buttonPos = 2,
 		inButton = 4,
-		paragraphSpacing = 1,
+		paragraphSpacing = 0,
 		topHeadingOffset = 30,
 		imageSize = 120,
+		buttonBot = 6,
 	},
 	[4] = {
 		buttonSize = 40,
 		height = 34,
 		linkSize = 28,
-		spacing = 10,
+		spacing = 16,
 		buttonPos = 5,
 		inButton = 7,
 		paragraphSpacing = 30,
 		topHeadingOffset = 50,
 		imageSize = 120,
+		buttonBot = 10,
 	},
 }
 
@@ -410,7 +491,7 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, top
 		local headingSize
 		if controls.linkButton and controls.linkButton.visible then
 			headingSize = (#controls.heading.physicalLines)*headFormat.fontSize
-			controls.linkButton:SetPos(nil, offset + headFormat.buttonPos, nil, headingSize + 4)
+			controls.linkButton:SetPos(nil, offset + headFormat.buttonPos, nil, headingSize + headFormat.buttonBot)
 			controls.heading:SetPos(nil, nil, nil, headingSize)
 		elseif controls.freeHeading then
 			headingSize = (#controls.freeHeading.physicalLines)*headFormat.fontSize
@@ -541,7 +622,7 @@ local function GetNewsHandler(parentControl, headingSize, timeAsTooltip, topHead
 	UpdateCountdown()
 	
 	local function ImageDownloadFinished()
-		WG.Delay(ReloadImages, 2)
+		WG.Delay(ReloadImages, 4)
 	end
 	WG.DownloadHandler.AddListener("ImageDownloadFinished", ImageDownloadFinished)
 	
@@ -574,11 +655,10 @@ local function InitializeControls(window)
 	local topWide     = GetScroll(window, 0, 0, 0, "60%", true)
 	local leftCenter  = GetScroll(window, 0, "66.6%", "40%", "31%", false)
 	local midCenter   = GetScroll(window, "33.4%", "33.4%", "40%", "31%", true)
-	local rightCenter = GetScroll(window, "66.6%", 0, "40%", "31%", false)
+	local rightCenter = GetScroll(window, "66.6%", 0, "40%", "31%", true)
 	local leftLower   = GetScroll(window, 0, "33.4%", "69%", 0, false)
 	local rightLower  = GetScroll(window, "66.6%", 0, "69%", 0, false)
 	
-	LeaveIntentionallyBlank(rightCenter, "Ladder (TODO)")
 	LeaveIntentionallyBlank(leftLower, "Profile (TODO)")
 	LeaveIntentionallyBlank(rightLower, "(reserved)")
 	
@@ -613,6 +693,16 @@ local function InitializeControls(window)
 	lobby:AddListener("OnForumList", OnForumList)
 	
 	-- Ladder Handler
+	local ladderHandler = GetLadderHandler(rightCenter)
+	if staticCommunityData and staticCommunityData.LadderItems then
+		ladderHandler.UpdateLadder(staticCommunityData.LadderItems)
+	end
+	
+	local function OnLadderList(_, ladderItems)
+		ladderHandler.UpdateLadder(ladderItems)
+	end
+	
+	lobby:AddListener("OnLadderList", OnLadderList)
 	
 end
 
@@ -663,7 +753,7 @@ function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
-	WG.Delay(DelayedInitialize, 1)
+	WG.Delay(DelayedInitialize, 0.2) -- After user handler
 
 	WG.CommunityWindow = CommunityWindow
 end

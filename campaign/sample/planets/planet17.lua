@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Lia-1616",
 			primaryType = "L9V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24441",
 			text = [[You will face the fearsome, fire-spewing Dante strider in this battle. Use Aspis area shields to deflect the assault, and Racketeer artillery to disarm the Dante.]]
 		},
 		tips = {

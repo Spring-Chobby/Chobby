@@ -304,7 +304,7 @@ function Control:GetRelativeBox(savespace)
   end
 
   local p = self.parent
-  if (not p) then
+  if not p or not UnlinkSafe(p) then
     return t
   end
 
@@ -921,7 +921,7 @@ end
 
 
 function Control:_UpdateOwnDList()
-	if not self.parent then return end
+	if not self.parent or not UnlinkSafe(self.parent) then return end
 	if not self:IsInView() then return end
 	if not self.useDLists then return end
 
@@ -931,7 +931,7 @@ end
 
 
 function Control:_UpdateChildrenDList()
-	if not self.parent then return end
+	if not self.parent or not UnlinkSafe(self.parent) then return end
 	if not self:IsInView() then return end
 
 	if self:InheritsFrom("scrollpanel") and not self._cantUseRTT then
@@ -948,7 +948,7 @@ end
 
 
 function Control:_UpdateAllDList()
-	if not self.parent then return end
+	if not self.parent or not UnlinkSafe(self.parent) then return end
 	if not self:IsInView() then return end
 
 	local RTT = self:_CheckIfRTTisAppreciated()
@@ -1138,7 +1138,7 @@ end
 
 
 function Control:IsRectInView(x,y,w,h)
-	if (not self.parent) then
+	if not self.parent or not UnlinkSafe(self.parent) then
 		return false
 	end
 

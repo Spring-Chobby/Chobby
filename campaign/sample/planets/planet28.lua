@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Glava",
 			primaryType = "G4V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24469",
 			text = [[The Artefact on this planet is already hotly contested by two opposing factions, and they're bringing heavy units and striders into play. Use the Halberd armoured assault hovercraft and Lance anti-heavy artillery to cross the battlefield and reach the Artefact.]]
 		},
 		tips = {

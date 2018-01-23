@@ -174,6 +174,18 @@ for i = 1, #planets do
 	end
 end
 
+-- Sum Experience
+--local xpSum = 0
+--local bonusSum = 0
+--for i = 1, #planets do
+--	xpSum = xpSum + planets[i].completionReward.experience
+--	local bonus = planets[i].gameConfig.bonusObjectiveConfig or {}
+--	for i = 1, #bonus do
+--		bonusSum = bonusSum + bonus[i].experience
+--	end
+--end
+--Spring.Echo("Total Experience", xpSum + bonusSum, "Main", xpSum, "Bonus", bonusSum)
+
 local retData = {
 	planets = planets,
 	planetAdjacency = planetAdjacency,

@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Doyaz",
 			primaryType = "F3VII",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24457",
 			text = [[This planet is covered by a sprawling metropolis, built by nano-machines... which nobody remembered to turn off. Any destroyed units or buildings will be rebuilt, but they won't be friendly to you any more. Hold off the 'zombies' for long enough to reach the Artefact.]]
 		},
 		tips = {

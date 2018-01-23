@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Hassex",
 			primaryType = "G9V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24469",
 			text = [[Shut down the enemy Tidal Generator operation on this sunny coastline with the Hovercraft factory.]]
 		},
 		tips = {

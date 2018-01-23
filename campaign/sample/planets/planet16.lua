@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Zooph",
 			primaryType = "G8V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24441",
 			text = [[Use a combination of Snitch mobile bombs and Iris area cloakers to decimate enemy formations in this battle. Build some Geothermal Generators to provide the energy for your area cloakers.]]
 		},
 		tips = {

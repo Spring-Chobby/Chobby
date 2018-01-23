@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Blank",
 			primaryType = "K1VI",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24530",
 			text = [[In this battle you start at a large numerical and economical disadvantage. However, the high plateaus on this map will give your Spiders an edge, especially the heavy Crab riot/skirmisher.]]
 		},
 		tips = {

@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Kaoloria",
 			primaryType = "G4V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24530",
 			text = [[Your ally's Dantes are struggling in the hills against enemy Scorpions and Merlins. Use Fleas and Widows to decloak, stun and destroy them.]]
 		},
 		tips = {
@@ -1427,7 +1428,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"spideremp",
 						"spiderriot",
 						"spiderskirm",
-						"spiderassualt",
+						"spiderassault",
 						"spidercrabe",
 						"spideraa",
 					},

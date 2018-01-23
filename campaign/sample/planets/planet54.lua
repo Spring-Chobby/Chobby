@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Aioa",
 			primaryType = "G8V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24510",
 			text = [[This island is blessed with strong geothermal activity, allowing cheap and easy energy generation. Unfortunately your enemy got here first. Sabotage their operation with Skuttle jumping bombs.]]
 		},
 		tips = {

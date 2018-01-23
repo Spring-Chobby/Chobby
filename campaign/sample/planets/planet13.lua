@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "None",
 			primaryType = "N/A",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24441",
 			text = [[This isolated asteroid is being used by the enemy as an observation and command post. Use Shieldbots to conquer the rough terrain, then bring your Commander to the Interception Network structure to download important strategic data.]]
 		},
 		tips = {

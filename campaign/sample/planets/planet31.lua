@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Yastras",
 			primaryType = "G8V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24530",
 			text = [[This planet is largely covered by water, making it ideal for the deployment of ships and submarines. Move fast to take control of this resource-rich archipelago.]]
 		},
 		tips = {

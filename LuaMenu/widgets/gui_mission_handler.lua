@@ -130,7 +130,7 @@ local function CreateMissionEntry(missionData)
 				startScript = startScript:gsub("%%NAME%%", WG.Chobby.localLobby:GetMyUserName())
 				
 				WG.Analytics.SendOnetimeEvent("lobby:singleplayer:missions:start_" .. missionData.DisplayName)
-				WG.Chobby.localLobby:StartGameFromString(startScript)
+				WG.Chobby.localLobby:StartGameFromString(startScript, "tutorial")
 			end
 		},
 		parent = holder,
@@ -204,7 +204,7 @@ local function InitializeControls(parentControl)
 		height = 20,
 		parent = parentControl,
 		font = Configuration:GetFont(3),
-		caption = "Select Tutorial",
+		caption = "Learn advanced techniques in these tutorials",
 	}
 	
 	local btnLeaveScreen = Button:New {

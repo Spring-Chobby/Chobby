@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Ilvasia",
 			primaryType = "G7V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24566",
 			text = [[Your enemy is causing trouble with a collection of heavy units, including large Paladin striders. Ambush and destroy their heavies in the mountains with Scorpions.]]
 		},
 		tips = {
@@ -3897,7 +3898,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 			},
 			bonusObjectiveConfig = {
-				[1] = { -- Make twelve Hermits
+				[1] = {
 					satisfyOnce = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 5,

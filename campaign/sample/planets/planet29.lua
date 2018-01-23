@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Ghas",
 			primaryType = "G6V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24489",
 			text = [[The enemy of my enemy... is at least useful. Build up your economy with Fusion Generators while the two opposing factions fight, then eradicate them both. Advanced Radars will keep you informed on the overall battle state.]]
 		},
 		tips = {

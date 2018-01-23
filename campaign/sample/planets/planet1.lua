@@ -27,6 +27,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Privni",
 			primaryType = "G8V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24417",
 			text = [[This battle will be straightforward. Construct an army of Glaives and Reavers to overwhelm your enemy.]]
 		},
 		tips = {
@@ -45,7 +46,7 @@ local function GetPlanet(planetUtilities, planetID)
 		},
 		gameConfig = {
 			missionStartscript = false,
-			mapName = "Living Lands v2.03",
+			mapName = "Living Lands 3.2",
 			playerConfig = {
 				startX = 300,
 				startZ = 3800,
@@ -279,18 +280,6 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Build 3 Reavers",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				--[5] = { -- Kill all enemy mexes
-				--	satisfyOnce = true,
-				--	comparisionType = planetUtilities.COMPARE.AT_MOST,
-				--	targetNumber = 0,
-				--	enemyUnitTypes = {
-				--		"staticmex",
-				--	},
-				--	image = planetUtilities.ICON_DIR .. "staticmex.png",
-				--	imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-				--	description = "Destroy all enemy Metal Extractors",
-				--	experience = planetUtilities.BONUS_EXP,
-				--},
 				[5] = {
 					victoryByTime = 480,
 					image = planetUtilities.ICON_OVERLAY.CLOCK,

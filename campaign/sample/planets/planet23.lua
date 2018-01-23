@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Neacahamo",
 			primaryType = "G8V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24469",
 			text = [[Launch an amphibious attack on the beach with heavy Grizzly assault walkers. You have 25 minutes to push past the Gauss defensive emplacements and secure a beachhead by destroying the Garrisons.]]
 		},
 		tips = {

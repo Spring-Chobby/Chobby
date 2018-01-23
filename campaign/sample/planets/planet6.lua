@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Voblaka",
 			primaryType = "F9V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24429",
 			text = [[This battle is taking place at high altitude, so deploy Wind Generators for cheap and efficient energy income. Use the Knight's lightning gun to eliminate the enemy Jumpbots.]]
 		},
 		tips = {

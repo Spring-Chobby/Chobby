@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Iersag",
 			primaryType = "K1V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24489",
 			text = [[Automated defenses are usually easily overcome, if only you hadn't deleted most of your construction blueprints to make room for your recently unearthed discovery - terrain manipulation technology. Use terraforming to clog up or bypass the automated defenses surrounding the Interception Network to make your escape.]]
 		},
 		tips = {

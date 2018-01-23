@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Alain Anora",
 			primaryType = "G4V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24441",
 			text = [[Finish the Cerberus artillery piece and link it to your ally's power plants. This cannon will break the enemy's defensive line and allow you to destroy their base.]],
 		},
 		tips = {

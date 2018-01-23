@@ -238,7 +238,7 @@ function Lobby:SayBattleEx(message)
 	return self
 end
 
-function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, scriptPassword, gameName, mapName, engineName)
+function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, scriptPassword, gameName, mapName, engineName, battleType)
 	if gameName and not VFS.HasArchive(gameName) then
 		WG.Chobby.InformationPopup("Cannont start game: missing game file '" .. gameName .. "'.")
 		return
@@ -263,7 +263,7 @@ function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, scriptPas
 		return
 	end
 
-	self:_CallListeners("OnBattleAboutToStart")
+	self:_CallListeners("OnBattleAboutToStart", battleType)
 
 	Spring.Echo("Game starts!")
 	if useSpringRestart then
@@ -1322,12 +1322,27 @@ function Lobby:TryGetUser(userName)
 	end
 	return userInfo
 end
+
+function Lobby:LearnAboutOfflineUser(userName, data)
+	local userInfo = self:TryGetUser(userName)
+	
+	if not userInfo.isOffline then
+		return
+	end
+	
+	for key, value in pairs(data) do
+		userInfo[key] = value
+	end
+end
+
 function Lobby:GetUser(userName)
 	return self.users[userName]
 end
+
 function Lobby:GetUserBattleStatus(userName)
 	return self.userBattleStatus[userName]
 end
+
 -- returns users table (not necessarily an array)
 function Lobby:GetUsers()
 	return ShallowCopy(self.users)

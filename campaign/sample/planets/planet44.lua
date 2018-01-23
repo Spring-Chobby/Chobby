@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Nadstan",
 			primaryType = "G9V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24530",
 			text = [[Your ally's bots aren't going to cut it alone on a battlefield this mountainous. The Redback riot and Recluse skirmish spiders will take control of the high ground, and rain death upon your enemies in the valley below.]]
 		},
 		tips = {

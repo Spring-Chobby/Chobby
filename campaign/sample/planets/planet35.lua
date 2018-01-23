@@ -24,6 +24,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Topps",
 			primaryType = "G2V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24566",
 			text = [[Since your allies have built a few strong anti-air bastions, the enemy has chosen to rely on ground-to-air emplacements of their own rather than attempt to contest air control with fighters. Show them the deficiencies of this strategy with the resilient and deadly Likho.]]
 		},
 		tips = {

@@ -25,6 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primary = "Oeva Pristia",
 			primaryType = "K2V",
 			milRating = 1,
+			feedbackLink = "http://zero-k.info/Forum/Thread/24510",
 			text = [[Your allies are struggling against cloaked skirmishers and artillery attacking them at range. Use Firewalker napalm artillery and jumping Jacks to find and destroy the hidden enemies.]]
 		},
 		tips = {
@@ -1544,7 +1545,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"shieldarty",
 						"shieldaa",
 						"hovercon",
-						"hoverraider",
+						"hoverraid",
 						"hoverriot",
 						"hoverskirm",
 						"cloakcon",

@@ -63,6 +63,7 @@ return {
 		apply = "Apply",
 		enter_battle_password = "Enter Battle Password",
 		set_window_position = "Set Window Position",
+		set_resolution = "Set Resolution",
 		game_name = "Game Name",
 		password_optional = "Password (Optional)",
 		game_type = "Game Type",
@@ -80,6 +81,8 @@ return {
 		links = "Links",
 		missions = "Missions",
 		tutorials = "Tutorials",
+		training = "Training",
+		instruction = "Instruction",
 		community = "Community",
 		report_a_bug = "Report A Bug",
 		skirmish = "Skirmish",
@@ -150,6 +153,8 @@ return {
 
 		-- Settings
 		planetwars_notifications = "Planetwars notifications",
+		ingame_notifcations = "Notifications while ingame",
+		non_friend_notifications = "Non-friend notifications",
 		notifyForAllChat = "Notify for all chat",
 		drawFullSpeed = "Full speed draw updates",
 		simplifiedSkirmishSetup = "Simple skirmish setup",

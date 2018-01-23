@@ -233,21 +233,21 @@ function InterfaceSkirmish:StartReplay(replayFilename)
 ]]
 
 	scriptTxt = scriptTxt:gsub("__FILE__", replayFilename)
-	self:_CallListeners("OnBattleAboutToStart")
+	self:_CallListeners("OnBattleAboutToStart", "replay")
 
 	Spring.Echo("starting game", scriptTxt)
 	Spring.Reload(scriptTxt)
 	return false
 end
 
-function InterfaceSkirmish:StartGameFromString(scriptString)
-	self:_CallListeners("OnBattleAboutToStart")
+function InterfaceSkirmish:StartGameFromString(scriptString, gameType)
+	self:_CallListeners("OnBattleAboutToStart", gameType)
 	Spring.Reload(scriptString)
 	return false
 end
 
-function InterfaceSkirmish:StartGameFromFile(scriptFileName)
-	self:_CallListeners("OnBattleAboutToStart")
+function InterfaceSkirmish:StartGameFromFile(scriptFileName, gameType)
+	self:_CallListeners("OnBattleAboutToStart", gameType)
 	if self.useSpringRestart then
 		Spring.Restart(scriptFileName, "")
 	else
@@ -257,7 +257,7 @@ function InterfaceSkirmish:StartGameFromFile(scriptFileName)
 end
 
 -- TODO: Needs clean implementation in lobby.lua
-function InterfaceSkirmish:StartBattle(extraFriends, friendsReplaceAI, hostPort)
+function InterfaceSkirmish:StartBattle(gameType, extraFriends, friendsReplaceAI, hostPort)
 	local battle = self:GetBattle(self:GetMyBattleID())
 	if not battle.gameName then
 		Spring.Log(LOG_SECTION, LOG.ERROR, "Missing battle.gameName. Game cannot start")
@@ -268,7 +268,7 @@ function InterfaceSkirmish:StartBattle(extraFriends, friendsReplaceAI, hostPort)
 		return self
 	end
 
-	self:_CallListeners("OnBattleAboutToStart")
+	self:_CallListeners("OnBattleAboutToStart", gameType)
 	self:_OnSaidBattleEx("Battle", "about to start", battle.gameName, battle.mapName, self:GetMyUserName() or "noname")
 	self:_StartScript(battle.gameName, battle.mapName, self:GetMyUserName() or "noname", extraFriends, friendsReplaceAI, hostPort)
 	return self
