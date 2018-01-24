@@ -301,6 +301,7 @@ local function StartBattleForReal(planetID, planetData, gameName)
 		bonusobjectiveconfig = TableToBase64(gameConfig.bonusObjectiveConfig),
 		featurestospawn = TableToBase64(gameConfig.initialWrecks),
 		planetmissioninformationtext = TableToBase64(informationText),
+		planetmissionnewtonfirezones = TableToBase64(gameConfig.playerConfig.newtonFirezones),
 		fixedstartpos = 1,
 		planetmissiondifficulty = missionDifficulty,
 		singleplayercampaignsavename = WG.Chobby.Configuration.campaignSaveFile,

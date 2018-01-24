@@ -117,6 +117,25 @@ planetData = {
 				bonusObjectiveID = false,
 			},
 			
+			-- A list of newton firezones. 
+			newtonFirezones = {
+				{
+					-- All newtons in this rectangle are grouped and given the firezone.
+					newtons = {
+						x1 = 7800,
+						z1 = 3600,
+						x2 = 8200,
+						z2 = 4000,
+					},
+					firezone = {
+						x1 = 7800,
+						z1 = 3660,
+						x2 = 8000,
+						z2 = 3800,
+					}
+				}
+			},
+			
 			-- Extra commander modules.
 			extraModules = {
 				{name = "module_jumpjet", count = 1, add = false},
