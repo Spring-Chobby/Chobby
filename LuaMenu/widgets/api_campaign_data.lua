@@ -709,7 +709,7 @@ function externalFunctions.DeleteSave(filename, supressLastSavePrompt)
 			end
 			WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", newName)
 			if not (newName or supressLastSavePrompt) then
-				WG.CampaignSaveWindow.PromptInitialSaveName()
+				WG.CampaignSaveWindow.PromptPickNewSaveName()
 			end
 		end
 	end)

@@ -552,7 +552,8 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty)
 	
 	function externalFunctions.UpdateExperience(oldExperience, oldLevel, newExperience, newLevel, gainedBonusExperience)
 		experienceDisplay.AddFancyExperience(newExperience - oldExperience, gainedBonusExperience)
-		if oldExperience == 0 or (oldLevel ~= newLevel) then
+		if oldExperience == 100 or (oldLevel ~= newLevel) then
+			-- 100 is a crazy hack to open the commander loadout screen on the completion of the second mission.
 			openCommanderWindowOnContinue = true
 		end
 	end
