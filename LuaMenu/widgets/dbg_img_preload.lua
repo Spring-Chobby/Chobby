@@ -19,7 +19,8 @@ end
 
 local index = 1
 local files = nil
-local BATCH_SIZE = 5
+local BATCH_SIZE = 50
+local holder
 
 local function MaybeAddFile(fileName)
 	if string.find(fileName, "%.dds") or string.find(fileName, "%.png") or string.find(fileName, "%.jpg") then
@@ -33,28 +34,78 @@ local function AddDir(path)
 	end
 end
 
-function widget:DrawGenesis()
+function widget:Update()
 	if files == nil then
 		files = {}
 		MaybeAddFile(LUA_DIRNAME .. "images/heic1403aDowngrade.jpg")
 		AddDir("LuaMenu/Widgets/chili/Skins/Evolved")
-		--AddDir("LuaMenu/Images")
+		AddDir("LuaMenu/Images")
+		AddDir("LuaMenu/configs/gameConfig/zk/unitpics")
+		AddDir("LuaMenu/configs/gameConfig/zk/rankimages")
 		--AddDir("LuaMenu/Images/starbackgrounds")
-		--AddDir("LuaMenu/configs/gameConfig/zk/unitpics")
-	else
+	elseif index then
+		if not holder then
+			holder = WG.Chili.Control:New {
+				right = 2,
+				bottom = 2,
+				width = 2,
+				height = 2,
+				padding = {0, 0, 0, 0},
+				parent = WG.Chili.Screen0,
+			}
+		end
+		
 		for i = 1, BATCH_SIZE do
 			local file = files[index]
+			holder:BringToFront()
+			Spring.Echo("parent", holder.parent)
 			if file then
-				gl.Texture(7, file)
-				gl.Texture(7, false)
+				Spring.Echo("load file", file, index)
+				WG.Chili.Image:New {
+					x = 0,
+					y = 0,
+					width = 2,
+					height = 2,
+					file = file,
+					parent = holder,
+				}
 				index = index + 1
-			else 
-				widgetHandler:RemoveWidget()
+			else
+				index = false
 				return
 			end
 		end
+	else
+		holder:Dispose()
+		holder = nil
+		widgetHandler:RemoveWidget()
 	end
 end
+
+--function widget:DrawGenesis()
+--	if files == nil then
+--		files = {}
+--		MaybeAddFile(LUA_DIRNAME .. "images/heic1403aDowngrade.jpg")
+--		AddDir("LuaMenu/Widgets/chili/Skins/Evolved")
+--		AddDir("LuaMenu/Images")
+--		AddDir("LuaMenu/configs/gameConfig/zk/unitpics")
+--		AddDir("LuaMenu/configs/gameConfig/zk/rankimages")
+--		--AddDir("LuaMenu/Images/starbackgrounds")
+--	else
+--		Spring.Utilities.TableEcho(files, "files")
+--		for i = 1, BATCH_SIZE do
+--			local file = files[index]
+--			if file then
+--				gl.Texture(7, file)
+--				gl.Texture(7, false)
+--				index = index + 1
+--			else 
+--				widgetHandler:RemoveWidget()
+--				return
+--			end
+--		end
+--	end
+--end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
