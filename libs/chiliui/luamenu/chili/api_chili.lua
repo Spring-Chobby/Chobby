@@ -193,6 +193,12 @@ function widget:TextInput(utf8, ...)
 	return screen0:TextInput(utf8, ...)
 end
 
+function widget:TextEditing(utf8, start, length, ...)
+	if Spring.IsGUIHidden() then return false end
+
+	return screen0:TextEditing(utf8, start, length, ...)
+end
+
 
 function widget:ViewResize(vsx, vsy)
 	screen0:Resize(vsx, vsy)
