@@ -253,6 +253,10 @@ return {
 		control = communityControl,
 	},
 	{
+		name = "tutorials", 
+		control = WG.MissionHandler.GetControl(),
+	},
+	{
 		name = "report_a_bug",
 		control = bugControl,
 	},
