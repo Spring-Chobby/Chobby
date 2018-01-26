@@ -26,9 +26,10 @@ function TabBar:New(obj)
 	if (obj.tabs) then
 		for i=1,#obj.tabs do
 			obj:AddChild(
-				TabBarItem:New{
+				TabBarItem:New {
 					name = obj.tabs[i].name,
 					caption = obj.tabs[i].caption or obj.tabs[i].name,
+					tooltip = obj.tabs[i].tooltip,
 					font = obj.tabs[i].font,
 					defaultWidth = obj.minItemWidth,
 					defaultHeight = obj.minItemHeight,

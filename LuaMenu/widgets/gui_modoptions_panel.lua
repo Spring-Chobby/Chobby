@@ -41,7 +41,7 @@ local function UpdateControlValue(key, value)
 	end
 end
 
-	
+
 local function ResetToDefault()
 	if not (modoptionDefaults and modoptionChanges) then
 		return
@@ -67,10 +67,10 @@ local function ProcessListOption(data, index)
 		font = WG.Chobby.Configuration:GetFont(2),
 		tooltip = data.desc,
 	}
-	
+
 	local defaultItem = 1
-	local defaultKey = modoptionChanges[data.key] or data.def 
-	
+	local defaultKey = modoptionChanges[data.key] or data.def
+
 	local items = {}
 	local itemNameToKey = {}
 	local itemKeyToName = {}
@@ -78,12 +78,12 @@ local function ProcessListOption(data, index)
 		items[i] = itemData.name
 		itemNameToKey[itemData.name] = itemData.key
 		itemKeyToName[itemData.key] = itemData.name
-		
+
 		if itemData.key == defaultKey then
 			defaultItem = i
 		end
 	end
-	
+
 	local list = ComboBox:New {
 		x = 340,
 		y = 1,
@@ -102,7 +102,7 @@ local function ProcessListOption(data, index)
 		itemKeyToName = itemKeyToName -- Not a chili key
 	}
 	modoptionControlNames[data.key] = list
-	
+
 	return Control:New {
 		x = 0,
 		y = index*32,
@@ -125,7 +125,7 @@ local function ProcessBoolOption(data, index)
 	elseif modoptionChanges[data.key] == "1" then
 		checked = true
 	end
-	
+
 	local checkBox = Checkbox:New {
 		x = 5,
 		y = index*32,
@@ -137,7 +137,7 @@ local function ProcessBoolOption(data, index)
 		checked = checked,
 		font = WG.Chobby.Configuration:GetFont(2),
 		tooltip = data.desc,
-		
+
 		OnChange = {
 			function (obj, newState)
 				modoptionLocalChanges[data.key] = tostring((newState and 1) or 0)
@@ -145,12 +145,12 @@ local function ProcessBoolOption(data, index)
 		},
 	}
 	modoptionControlNames[data.key] = checkBox
-	
+
 	return checkBox
 end
 
 local function ProcessNumberOption(data, index)
-	
+
 	local label = Label:New {
 		x = 5,
 		y = 0,
@@ -162,9 +162,9 @@ local function ProcessNumberOption(data, index)
 		font = WG.Chobby.Configuration:GetFont(2),
 		tooltip = data.desc,
 	}
-	
+
 	local oldText = modoptionChanges[data.key] or modoptionDefaults[data.key]
-	
+
 	local numberBox = EditBox:New {
 		x = 340,
 		y = 1,
@@ -177,14 +177,14 @@ local function ProcessNumberOption(data, index)
 				if obj.focused then
 					return
 				end
-				
+
 				local newValue = tonumber(obj.text)
-				
+
 				if not newValue then
 					obj:SetText(oldText)
 					return
 				end
-				
+
 				local places = 0
 				if data.step < 0.01  then
 					places = 3
@@ -193,26 +193,26 @@ local function ProcessNumberOption(data, index)
 				elseif data.step < 1 then
 					places = 3
 				end
-				
+
 				-- Bound the number
 				newValue = math.min(data.max, math.max(data.min, newValue))
 				-- Round to step size
 				newValue = math.floor(newValue/data.step)*data.step + 0.01*data.step
-				
+
 				-- Remove excess accuracy
 				oldText = string.format("%." .. places .. "f", newValue)
 				-- Remove trailing zeros
 				while oldText:find("%.") and (oldText:find("0", oldText:len()) or oldText:find("%.", oldText:len())) do
 					oldText = oldText:sub(0, oldText:len() - 1)
 				end
-				
+
 				modoptionLocalChanges[data.key] = oldText
 				obj:SetText(oldText)
 			end
 		}
 	}
 	modoptionControlNames[data.key] = numberBox
-	
+
 	return Control:New {
 		x = 0,
 		y = index*32,
@@ -227,7 +227,7 @@ local function ProcessNumberOption(data, index)
 end
 
 local function ProcessStringOption(data, index)
-	
+
 	local label = Label:New {
 		x = 5,
 		y = 0,
@@ -239,9 +239,9 @@ local function ProcessStringOption(data, index)
 		font = WG.Chobby.Configuration:GetFont(2),
 		tooltip = data.desc,
 	}
-	
+
 	local oldText = modoptionChanges[data.key] or modoptionDefaults[data.key]
-	
+
 	local textBox = EditBox:New {
 		x = 340,
 		y = 1,
@@ -259,7 +259,7 @@ local function ProcessStringOption(data, index)
 		}
 	}
 	modoptionControlNames[data.key] = textBox
-	
+
 	return Control:New {
 		x = 0,
 		y = index*32,
@@ -278,7 +278,7 @@ local function PopulateTab(options)
 	-- bool = tickbox
 	-- number = sliderbar (with label)
 	-- string = editBox
-	
+
 	local contentsPanel = ScrollPanel:New {
 		x = 6,
 		right = 5,
@@ -286,7 +286,7 @@ local function PopulateTab(options)
 		bottom = 8,
 		horizontalScrollbar = false,
 	}
-	
+
 	for i = 1, #options do
 		local data = options[i]
 		if data.type == "list" then
@@ -317,17 +317,28 @@ local function CreateModoptionWindow()
 		draggable = false,
 		classname = "main_window",
 	}
-	
+
 	modoptionLocalChanges = Spring.Utilities.CopyTable(modoptionChanges)
 	modoptionControlNames = {}
 
 	local tabs = {}
 
+	local tabWidth = 120
+
 	for key, data in pairs(modoptionStructure.sections) do
+		local caption = modoptionStructure.sectionTitles[data.title] or data.title
+		local fontSize = 2
+		local tooltip = nil
+		local origCaption = caption
+		caption = StringUtilities.GetTruncatedStringWithDotDot(caption, Font:New(WG.Chobby.Configuration:GetFont(fontSize)), tabWidth)
+		if origCaption ~= caption then
+			tooltip = origCaption
+		end
 		tabs[#tabs + 1] = {
 			name = key,
-			caption = modoptionStructure.sectionTitles[data.title] or data.title,
-			font = WG.Chobby.Configuration:GetFont(2),
+			caption = caption,
+			tooltip = tooltip,
+			font = WG.Chobby.Configuration:GetFont(fontSize),
 			children = PopulateTab(data.options)
 		}
 	end
@@ -338,7 +349,7 @@ local function CreateModoptionWindow()
 		y = 49,
 		bottom = 75,
 		padding = {0, 0, 0, 0},
-		minTabWidth = 120,
+		minTabWidth = tabWidth,
 		tabs = tabs,
 		parent = modoptionsSelectionWindow,
 		OnTabChange = {
@@ -371,7 +382,7 @@ local function CreateModoptionWindow()
 	end
 
 	local buttonAccept
-	
+
 	local function AcceptFunc()
 		screen0:FocusControl(buttonAccept) -- Defocus the text entry
 		battleLobby:SetModOptions(modoptionLocalChanges)
@@ -393,7 +404,7 @@ local function CreateModoptionWindow()
 			end
 		},
 	}
-	
+
 	buttonAccept = Button:New {
 		right = 150,
 		width = 135,
@@ -459,7 +470,7 @@ local function InitializeModoptionsDisplay()
 				text = text .. "\255\120\120\120" .. tostring(key) .. " = \255\255\255\255" .. tostring(value) .. "\n"
 				empty = false
 			end
-			
+
 			UpdateControlValue(key, value)
 		end
 		for key, value in pairs(modoptionChanges) do
@@ -468,7 +479,7 @@ local function InitializeModoptionsDisplay()
 			end
 		end
 		modoptionChanges = modoptions
-		
+
 		lblText:SetText(text)
 
 		if mainScrollPanel.parent then

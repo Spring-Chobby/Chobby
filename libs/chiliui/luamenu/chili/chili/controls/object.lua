@@ -49,6 +49,7 @@ Object = {
   OnMouseOut      = {},
   OnKeyPress      = {},
   OnTextInput     = {},
+  OnTextEditing   = {},
   OnFocusUpdate   = {},
   OnHide          = {},
   OnShow          = {},
@@ -57,7 +58,7 @@ Object = {
   OnParentPost    = {}, -- Called after parent is set
 
   disableChildrenHitTest = false, --// if set childrens are not clickable/draggable etc - their mouse events are not processed
-} 
+}
 
 do
   local __lowerkeys = {}
@@ -75,7 +76,7 @@ local inherited = this.inherited
 --//=============================================================================
 --// used to generate unique objects names
 
-local cic = {} 
+local cic = {}
 local function GetUniqueId(classname)
   local ci = cic[classname] or 0
   cic[classname] = ci + 1
@@ -172,7 +173,7 @@ function Object:Dispose(_internal)
         end
       end
     end
- 
+
     self:CallListeners(self.OnDispose)
 
     self.disposed = true
@@ -247,18 +248,18 @@ function Object:SetParent(obj)
     self:CallListeners(self.OnOrphan, self)
     return
   end
-  
+
   self:CallListeners(self.OnParent, self)
-  
+
   -- Children always appear to visible when they recieve new parents because they
   -- are added to the visible child list.
   self.visible = true
   self.hidden = false
-  
+
   self.parent = MakeWeakLink(obj, self.parent)
 
   self:Invalidate()
-  
+
   self:CallListeners(self.OnParentPost, self)
 end
 
@@ -359,7 +360,7 @@ function Object:ClearChildren()
   local old = self.preserveChildrenOrder
   self.preserveChildrenOrder = false
 
-  --// remove all children  
+  --// remove all children
     for c in pairs(self.children_hidden) do
       self:ShowChild(c)
     end
@@ -505,7 +506,7 @@ function Object:SetChildLayer(child,layer)
   if layer < 0 then
     layer = layer + #children + 1
   end
-  
+
   layer = math.min(layer, #children)
 
   --// it isn't at the same pos anymore, search it!
@@ -602,14 +603,14 @@ function Object:GetObjectByName(name)
 end
 
 
---// Climbs the family tree and returns the first parent that satisfies a 
+--// Climbs the family tree and returns the first parent that satisfies a
 --// predicate function or inherites the given class.
 --// Returns nil if not found.
 function Object:FindParent(predicate)
   if not self.parent then
     return -- not parent with such class name found, return nil
   elseif (type(predicate) == "string" and (self.parent):InheritsFrom(predicate)) or
-         (type(predicate) == "function" and predicate(self.parent)) then 
+         (type(predicate) == "function" and predicate(self.parent)) then
     return self.parent
   else
     return self.parent:FindParent(predicate)
@@ -809,7 +810,7 @@ function Object:LocalToClient(x,y)
   return x,y
 end
 
--- LocalToScreen does not do what it says it does because 
+-- LocalToScreen does not do what it says it does because
 -- self:LocalToParent(x,y) = 2*self.x, 2*self.y
 -- However, too much chili depends on the current LocalToScreen
 -- so this working version exists for widgets.
@@ -883,7 +884,7 @@ end
 
 
 function Object:HitTest(x,y)
-  if not self.disableChildrenHitTest then 
+  if not self.disableChildrenHitTest then
     local children = self.children
     for i=1,#children do
       local c = children[i]
@@ -897,7 +898,7 @@ function Object:HitTest(x,y)
         end
       end
     end
-  end 
+  end
 
   return false
 end
@@ -994,6 +995,15 @@ function Object:TextInput(...)
 end
 
 
+function Object:TextEditing(...)
+  if (self:CallListeners(self.OnTextEditing, ...)) then
+    return self
+  end
+
+  return false
+end
+
+
 function Object:FocusUpdate(...)
   if (self:CallListeners(self.OnFocusUpdate, ...)) then
     return self
@@ -1003,4 +1013,3 @@ function Object:FocusUpdate(...)
 end
 
 --//=============================================================================
-
