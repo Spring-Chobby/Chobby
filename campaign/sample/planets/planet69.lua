@@ -11,7 +11,7 @@ local function GetPlanet(planetUtilities, planetID)
 		name = "Folsom",
 		startingPlanet = true,
 		predownloadMap = true, 
-		tutorialSkip = true,
+		--tutorialSkip = true,
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.05,
 			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.87,
@@ -33,7 +33,7 @@ local function GetPlanet(planetUtilities, planetID)
 			text = [[Familiarize yourself with command by establishing a foothold on a critical piece of infrastructure. The abandoned tools of war the previous owners left behind will serve as good practice for the tougher challenges ahead.]]
 		},
 		gameConfig = {
-			gameName = "Quick Tutorial",
+			gameName = "Epic Tutorial",
 			mapName = "FolsomDamDeluxeV4",
 			playerConfig = {
 				startX = 300,

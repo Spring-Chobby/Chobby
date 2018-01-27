@@ -533,6 +533,12 @@
       },
       {
          "Platform":null,
+         "VersionNumber":1,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/games/quickrockettutorial.sdz",
+         "TargetPath":"games/quickrockettutorial.sdz"
+      },
+      {
+         "Platform":null,
          "VersionNumber":3,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/games/seeker.sdz",
          "TargetPath":"games/seeker.sdz"
