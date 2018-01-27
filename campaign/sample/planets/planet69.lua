@@ -62,7 +62,6 @@ local function GetPlanet(planetUtilities, planetID)
 					aiLib = "NullAI",
 					humanName = "Ally",
 					allyTeam = 0,
-					unlocks = {},
 					commander = false,
 				},
 				{
@@ -71,7 +70,6 @@ local function GetPlanet(planetUtilities, planetID)
 					aiLib = "NullAI",
 					humanName = "Enemy",
 					allyTeam = 1,
-					unlocks = {},
 					commander = false,
 				},
 			},

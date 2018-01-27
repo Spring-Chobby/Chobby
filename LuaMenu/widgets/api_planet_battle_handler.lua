@@ -220,9 +220,9 @@ local function StartBattleForReal(planetID, planetData, gameName)
 			shortName = shortName .. bitExtension
 		end
 		
-		local availibleUnits = aiData.unlocks or {}
+		local availibleUnits = aiData.unlocks
 		local extraUnits = aiData.difficultyDependantUnlocks and aiData.difficultyDependantUnlocks[missionDifficulty]
-		if extraUnits then
+		if availibleUnits and extraUnits then
 			for i = 1, #extraUnits do
 				availibleUnits[#availibleUnits + 1] = extraUnits[i]
 			end
