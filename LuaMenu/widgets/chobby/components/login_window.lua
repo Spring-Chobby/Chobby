@@ -42,6 +42,12 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		return
 	end
 	
+	self.ResetText = function()
+		if self.txtError then
+			self.txtError:SetText("")
+		end
+	end
+	
 	self.CancelFunc = function ()
 		self.window:Dispose()
 		if failFunction then
@@ -100,6 +106,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		height = 35,
 		text = Configuration.password or "",
 		passwordInput = true,
+		hint = "Enter password",
 		font = Configuration:GetFont(3),
 		OnKeyPress = {
 			function(obj, key, mods, ...)
@@ -114,10 +121,38 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		},
 	}
 	
+	self.txtConfirmPassword = TextBox:New {
+		x = 15,
+		width = 170,
+		y = 140,
+		height = 70,
+		text = i18n("confirm") .. ":",
+		fontsize = Configuration:GetFont(3).size,
+	}
+	self.ebConfirmPassword = EditBox:New {
+		x = 135,
+		width = 200,
+		y = 131,
+		height = 35,
+		text = "",
+		hint = "Confirm password",
+		passwordInput = true,
+		font = Configuration:GetFont(3),
+		OnKeyPress = {
+			function(obj, key, mods, ...)
+				if key == Spring.GetKeyCode("enter") or key == Spring.GetKeyCode("numpad_enter") then
+					if self.tabPanel.tabBar:IsSelected("register") then
+						self:tryRegister()
+					end
+				end
+			end
+		},
+	}
+	
 	self.cbAutoLogin = Checkbox:New {
 		x = 15,
 		width = 215,
-		y = 135,
+		y = 210,
 		height = 35,
 		boxalign = "right",
 		boxsize = 15,
@@ -132,7 +167,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	self.txtError = TextBox:New {
 		x = 15,
 		right = 15,
-		y = 198,
+		y = 182,
 		height = 90,
 		text = "",
 		fontsize = Configuration:GetFont(3).size,
@@ -141,7 +176,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	self.btnLogin = Button:New {
 		right = 140,
 		width = 130,
-		y = 237,
+		y = 247,
 		height = 70,
 		caption = i18n("login_verb"),
 		font = Configuration:GetFont(3),
@@ -156,7 +191,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	self.btnRegister = Button:New {
 		right = 140,
 		width = 130,
-		y = 237,
+		y = 247,
 		height = 70,
 		caption = i18n("register_verb"),
 		font = Configuration:GetFont(3),
@@ -171,7 +206,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	self.btnCancel = Button:New {
 		right = 2,
 		width = 130,
-		y = 237,
+		y = 247,
 		height = 70,
 		caption = i18n(cancelText or "cancel"),
 		font = Configuration:GetFont(3),
@@ -184,7 +219,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	}
 	
 	local ww, wh = Spring.GetWindowGeometry()
-	local w, h = 430, 380
+	local width, height = 430, 390
 	if self.steamMode then
 	
 	end
@@ -193,12 +228,12 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		x = 0,
 		right = 0,
 		y = 0,
-		minTabWidth = w/2 - 20,
+		minTabWidth = width/2 - 20,
 		bottom = 0,
 		padding = {0, 0, 0, 0},
 		tabs = {
 			[1] = { name = "login", caption = i18n("login"), children = {self.btnLogin, self.lblLoginInstructions}, font = Configuration:GetFont(2)},
-			[2] = { name = "register", caption = i18n("register_verb"), children = {self.btnRegister, self.lblRegisterInstructions}, font = Configuration:GetFont(2)},
+			[2] = { name = "register", caption = i18n("register_verb"), children = {self.btnRegister, self.lblRegisterInstructions, self.txtConfirmPassword, self.ebConfirmPassword}, font = Configuration:GetFont(2)},
 		},
 	}
 	
@@ -240,10 +275,10 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	}
 	
 	self.window = Window:New {
-		x = math.floor((ww - w) / 2),
-		y = math.floor((wh - h) / 2),
-		width = w,
-		height = h,
+		x = math.floor((ww - width) / 2),
+		y = math.floor((wh - height) / 2),
+		width = width,
+		height = height,
 		caption = "",
 		resizable = false,
 		draggable = false,
@@ -328,6 +363,11 @@ function LoginWindow:tryLogin()
 end
 
 function LoginWindow:tryRegister()
+	if self.ebPassword.text ~= self.ebConfirmPassword.text then
+		self.txtError:SetText(Configuration:GetErrorColor() .. "Passwords do not match.")
+		return
+	end
+	
 	WG.Analytics.SendOnetimeEvent("lobby:try_register")
 	self.txtError:SetText("")
 

@@ -23,6 +23,7 @@ return {
 		connect_to_spring_server = 'Connect to the lobby server',
 		username = 'Username',
 		password = 'Password',
+		confirm = 'Confirm',
 		login_noun = 'Login',
 		login_verb = 'Login',
 		profile = 'Profile',
