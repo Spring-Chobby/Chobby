@@ -20,6 +20,7 @@ end
 local index = 1
 local files = nil
 local BATCH_SIZE = 50
+local SCALE = 1
 local holder
 
 local function MaybeAddFile(fileName)
@@ -46,10 +47,10 @@ function widget:Update()
 	elseif index then
 		if not holder then
 			holder = WG.Chili.Control:New {
-				right = 2,
-				bottom = 2,
-				width = 2,
-				height = 2,
+				right = -20,
+				bottom = 0,
+				width = SCALE,
+				height = SCALE,
 				padding = {0, 0, 0, 0},
 				parent = WG.Chili.Screen0,
 			}
@@ -62,10 +63,10 @@ function widget:Update()
 			if file then
 				Spring.Echo("load file", file, index)
 				WG.Chili.Image:New {
-					x = 0,
-					y = 0,
-					width = 2,
-					height = 2,
+					x = SCALE/50*(index%50),
+					y = SCALE/50*math.floor(index/50),
+					width = SCALE/50,
+					height = SCALE/50,
 					file = file,
 					parent = holder,
 				}
