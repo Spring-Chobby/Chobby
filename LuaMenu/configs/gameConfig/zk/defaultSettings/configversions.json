@@ -527,7 +527,7 @@
       
       {
          "Platform":null,
-         "VersionNumber":9,
+         "VersionNumber":10,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/games/quicktutorial.sdz",
          "TargetPath":"games/quicktutorial.sdz"
       },
