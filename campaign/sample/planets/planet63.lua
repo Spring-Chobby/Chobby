@@ -187,6 +187,12 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				startUnits = {
 					{
+						name = "staticantinuke",
+						x = 8200,
+						z = 2300,
+						facing = 1,
+					},
+					{
 						name = "staticmex",
 						x = 8552,
 						z = 1048,
