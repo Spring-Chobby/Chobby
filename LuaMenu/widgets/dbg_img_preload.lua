@@ -19,7 +19,7 @@ end
 
 local index = 1
 local files = nil
-local BATCH_SIZE = 50
+local BATCH_SIZE = 60
 local SCALE = 1
 local holder
 
@@ -59,9 +59,7 @@ function widget:Update()
 		for i = 1, BATCH_SIZE do
 			local file = files[index]
 			holder:BringToFront()
-			Spring.Echo("parent", holder.parent)
 			if file then
-				Spring.Echo("load file", file, index)
 				WG.Chili.Image:New {
 					x = SCALE/50*(index%50),
 					y = SCALE/50*math.floor(index/50),
