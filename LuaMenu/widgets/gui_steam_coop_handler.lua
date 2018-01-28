@@ -9,7 +9,7 @@ function widget:GetInfo()
 		date      = "25 February 2017",
 		license   = "GNU LGPL, v2.1 or later",
 		layer     = 0,
-		enabled   = true  --  loaded by default?
+		enabled   = false  --  loaded by default?
 	}
 end
 
@@ -44,6 +44,7 @@ end
 
 function SteamCoopHandler.NotifyFriendJoined(steamID, userName)
 	friendsInGame = friendsInGame or {}
+	friendsInGameSteamID = friendsInGameSteamID or {}
 	friendsInGame[#friendsInGame + 1] = userName
 	friendsInGameSteamID[#friendsInGameSteamID + 1] = steamID
 	WG.Chobby.InformationPopup((userName or "???") .. " joined your coop game.")
