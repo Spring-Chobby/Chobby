@@ -30,7 +30,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G8V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24417",
-			text = [[Familiarize yourself with command by establishing a foothold on a critical piece of infrastructure. The abandoned tools of war the previous owners left behind will serve as good practice for the tougher challenges ahead.]]
+			text = [[Use a nimble force of Glaives to penetrate the enemy lines and rescue your commander from the local automatons. Once activated, construct an army and storm the enemy base as retribution.]]
 		},
 		gameConfig = {
 			gameName = "Quick Rocket Tutorial",
@@ -61,6 +61,7 @@ local function GetPlanet(planetUtilities, planetID)
 					startZ = 75,
 					aiLib = "NullAI",
 					humanName = "Ally",
+					unlocks = {},
 					allyTeam = 0,
 					commander = false,
 				},
@@ -69,6 +70,7 @@ local function GetPlanet(planetUtilities, planetID)
 					startZ = 75,
 					aiLib = "NullAI",
 					humanName = "Enemy",
+					unlocks = {},
 					allyTeam = 1,
 					commander = false,
 				},
