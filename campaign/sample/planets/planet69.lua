@@ -33,7 +33,7 @@ local function GetPlanet(planetUtilities, planetID)
 			text = [[Familiarize yourself with command by establishing a foothold on a critical piece of infrastructure. The abandoned tools of war the previous owners left behind will serve as good practice for the tougher challenges ahead.]]
 		},
 		gameConfig = {
-			gameName = "Epic Tutorial",
+			gameName = "Quick Rocket Tutorial",
 			mapName = "FolsomDamDeluxeV4",
 			playerConfig = {
 				startX = 300,
