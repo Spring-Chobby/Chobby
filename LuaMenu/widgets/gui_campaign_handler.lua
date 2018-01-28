@@ -1477,6 +1477,7 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 	
 	-- Make sure everything loads in the right positions
 	DelayedViewResize()
+	WG.Delay(DelayedViewResize, 0.1)
 	WG.Delay(DelayedViewResize, 0.8)
 	return externalFunctions
 end
@@ -1603,6 +1604,7 @@ end
 
 
 function widget:ViewResize(vsx, vsy)
+	WG.Delay(DelayedViewResize, 0.1)
 	WG.Delay(DelayedViewResize, 0.8)
 end
 
@@ -1612,6 +1614,7 @@ function widget:Initialize()
 	local function CampaignLoaded(listener)
 		if planetList and planetHandler then
 			UpdateGalaxy()
+			WG.Delay(DelayedViewResize, 0.1)
 			if selectedPlanet then
 				selectedPlanet.Close()
 				selectedPlanet = nil
