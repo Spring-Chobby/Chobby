@@ -66,6 +66,7 @@ function SteamLoginWindow:init(failFunction, cancelText, windowClassname)
 		height = 35,
 		text = Configuration.userName or Configuration.suggestedNameFromSteam or "",
 		font = Configuration:GetFont(3),
+		useIME = false,
 		parent = self.window
 	}
 	
@@ -85,6 +86,7 @@ function SteamLoginWindow:init(failFunction, cancelText, windowClassname)
 		text = Configuration.password or "",
 		passwordInput = true,
 		font = Configuration:GetFont(3),
+		useIME = false,
 		OnKeyPress = {
 			function(obj, key, mods, ...)
 				if key == Spring.GetKeyCode("enter") or key == Spring.GetKeyCode("numpad_enter") then

@@ -89,6 +89,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		height = 35,
 		text = Configuration.userName or Configuration.suggestedNameFromSteam or "",
 		font = Configuration:GetFont(3),
+		useIME = false,
 	}
 
 	self.txtPassword = TextBox:New {
@@ -108,6 +109,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		passwordInput = true,
 		hint = "Enter password",
 		font = Configuration:GetFont(3),
+		useIME = false,
 		OnKeyPress = {
 			function(obj, key, mods, ...)
 				if key == Spring.GetKeyCode("enter") or key == Spring.GetKeyCode("numpad_enter") then
@@ -128,6 +130,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		height = 70,
 		text = i18n("confirm") .. ":",
 		fontsize = Configuration:GetFont(3).size,
+		useIME = false,
 	}
 	self.ebConfirmPassword = EditBox:New {
 		x = 135,

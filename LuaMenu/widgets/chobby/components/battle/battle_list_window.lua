@@ -655,6 +655,7 @@ function BattleListWindow:OpenHostWindow()
 		height = 35,
 		text = "",
 		font = Configuration:GetFont(3),
+		useIME = false,
 		parent = hostBattleWindow,
 	}
 
@@ -799,6 +800,7 @@ function BattleListWindow:JoinBattle(battle)
 			hint = i18n("password"),
 			fontsize = Configuration:GetFont(3).size,
 			passwordInput = true,
+			useIME = false,
 			parent = passwordWindow,
 		}
 

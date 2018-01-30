@@ -276,6 +276,7 @@ local function GetValueEntryBox(parent, name, position, currentValue)
 		height = 35,
 		text = tostring(currentValue),
 		font = Configuration:GetFont(3),
+		useIME = false,
 		parent = parent,
 		OnFocusUpdate = {
 			function (obj)
@@ -913,6 +914,7 @@ local function GetVoidTabControls()
 		height = 30,
 		text = Configuration.serverAddress,
 		font = Configuration:GetFont(2),
+		useIME = false,
 		OnFocusUpdate = {
 			function (obj)
 				if obj.focused then
@@ -943,6 +945,7 @@ local function GetVoidTabControls()
 		height = 30,
 		text = tostring(Configuration.serverPort),
 		font = Configuration:GetFont(2),
+		useIME = false,
 		OnFocusUpdate = {
 			function (obj)
 				if obj.focused then
@@ -1301,6 +1304,7 @@ local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitc
 		height = 30,
 		text = tostring(Configuration.settingsMenuValues[data.name] or defaults[data.name]),
 		font = Configuration:GetFont(2),
+		useIME = false,
 		OnFocusUpdate = {
 			function (obj)
 				if obj.focused or freezeSettings then
