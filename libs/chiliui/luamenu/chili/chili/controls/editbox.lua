@@ -42,6 +42,7 @@ EditBox = Control:Inherit{
   selectable = true,
   multiline = false,
   subTooltips = false,
+  useIME = true,
 
   passwordInput = false,
   lines = {},
@@ -425,19 +426,18 @@ function EditBox:Update(...)
 	end
 end
 
-function EditBox:FocusUpdate()
-    if not Spring.SDLStartTextInput then
-        return
-    end
-
-    if not self.state.focused then
-        self.textEditing = ""
-        Spring.SDLStopTextInput()
-    else
-        Spring.SDLStartTextInput()
-        local x, y = self:CorrectlyImplementedLocalToScreen(self.x, self.y)
-        Spring.SDLSetTextInputRect(x, y, 30, 1000)
-    end
+function EditBox:FocusUpdate(...)
+	if self.useIME and Spring.SDLStartTextInput then
+		if not self.state.focused then
+			self.textEditing = ""
+			Spring.SDLStopTextInput()
+		else
+			Spring.SDLStartTextInput()
+			local x, y = self:CorrectlyImplementedLocalToScreen(self.x, self.y)
+			Spring.SDLSetTextInputRect(x, y, 30, 1000)
+		end
+	end
+	return inherited.FocusUpdate(self, ...)
 end
 
 function EditBox:_GetCursorByMousePos(x, y)
