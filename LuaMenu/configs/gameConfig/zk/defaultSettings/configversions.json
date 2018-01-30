@@ -548,19 +548,19 @@
          "Platform":null,
          "VersionNumber":1,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/placeholder.txt",
-         "TargetPath":"LuaMenu/images/minimaps"
+         "TargetPath":"LuaMenu/images/minimaps/placeholder.txt"
       },
       {  
          "Platform":null,
          "VersionNumber":1,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/placeholder.txt",
-         "TargetPath":"LuaMenu/images/minimapThumbnails"
+         "TargetPath":"LuaMenu/images/minimapThumbnails/placeholder.txt"
       },
       {  
          "Platform":null,
          "VersionNumber":1,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/placeholder.txt",
-         "TargetPath":"LuaUI/Configs/Clans"
+         "TargetPath":"LuaUI/Configs/Clans/placeholder.txt"
       }
    ]
 }
