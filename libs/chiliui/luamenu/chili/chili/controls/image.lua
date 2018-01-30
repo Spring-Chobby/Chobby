@@ -29,7 +29,7 @@ Image = Button:Inherit{
   
   checkFileExists = false;
   fallbackFile = false;
-  imageLoadTime = 2; -- Seconds
+  imageLoadTime = 3.5; -- Seconds
 
   useRTT = false;
 
