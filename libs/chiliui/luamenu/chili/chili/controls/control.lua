@@ -118,6 +118,10 @@ function Control:New(obj)
     end
   end
 
+  if obj.checkFileExists and ((not obj.file) or VFS.FileExists(obj.file)) and ((not obj.file2) or VFS.FileExists(obj.file2)) then
+    obj.checkFileExists = false
+  end
+  
   local p = obj.padding
   if (obj.clientWidth) then
     obj.width = obj.clientWidth + p[1] + p[3]

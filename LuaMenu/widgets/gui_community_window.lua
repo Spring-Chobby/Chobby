@@ -417,17 +417,16 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, top
 		if entryData.imageFile then
 			textPos = headFormat.imageSize + 12
 			local imagePath = entryData.imageFile
-			if not VFS.FileExists(imagePath) then
-				controls.wantImage = imagePath
-				imagePath = IMG_MISSING
-			end
 			if not controls.image then
 				controls.image = Image:New{
+					name = "news" .. index,
 					x = 4,
 					y = offset + 6,
 					width = headFormat.imageSize,
 					height = headFormat.imageSize,
 					keepAspect = true,
+					checkFileExists = true,
+					fallbackFile = IMG_MISSING,
 					file = imagePath,
 					parent = holder
 				}
@@ -525,14 +524,6 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, top
 		end
 	end
 	
-	function externalFunctions.UpdateDownloadedImage()
-		if controls.wantImage and controls.image and VFS.FileExists(controls.wantImage) then
-			controls.wantImage = nil
-			controls.image.file = controls.wantImage
-			controls.image:Invalidate()
-		end
-	end
-	
 	return externalFunctions
 end
 
@@ -580,13 +571,6 @@ local function GetNewsHandler(parentControl, headingSize, timeAsTooltip, topHead
 		WG.Delay(UpdateCountdown, 60)
 	end
 	
-	local function ReloadImages()
-		for i = 1, #newsEntries do
-			local controls = newsEntries[i]
-			newsEntries[i].UpdateDownloadedImage()
-		end
-	end
-	
 	local externalFunctions = {}
 	
 	function externalFunctions.ReplaceNews(items)
@@ -620,11 +604,6 @@ local function GetNewsHandler(parentControl, headingSize, timeAsTooltip, topHead
 	
 	-- Initialization
 	UpdateCountdown()
-	
-	local function ImageDownloadFinished()
-		WG.Delay(ReloadImages, 4)
-	end
-	WG.DownloadHandler.AddListener("ImageDownloadFinished", ImageDownloadFinished)
 	
 	parentControl.OnResize = parentControl.OnResize or {}
 	parentControl.OnResize[#parentControl.OnResize + 1] = function ()
