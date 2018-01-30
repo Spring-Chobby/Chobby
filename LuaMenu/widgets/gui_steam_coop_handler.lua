@@ -9,7 +9,7 @@ function widget:GetInfo()
 		date      = "25 February 2017",
 		license   = "GNU LGPL, v2.1 or later",
 		layer     = 0,
-		enabled   = false  --  loaded by default?
+		enabled   = true  --  loaded by default?
 	}
 end
 
@@ -47,7 +47,7 @@ function SteamCoopHandler.NotifyFriendJoined(steamID, userName)
 	friendsInGameSteamID = friendsInGameSteamID or {}
 	friendsInGame[#friendsInGame + 1] = userName
 	friendsInGameSteamID[#friendsInGameSteamID + 1] = steamID
-	WG.Chobby.InformationPopup((userName or "???") .. " joined your coop game.")
+	--WG.Chobby.InformationPopup((userName or "???") .. " joined your coop game.")
 end
 
 function SteamCoopHandler.GetCoopFriendList()
@@ -55,12 +55,12 @@ function SteamCoopHandler.GetCoopFriendList()
 end
 
 function SteamCoopHandler.SteamHostGameSuccess(newHostPort)
-	WG.Chobby.InformationPopup("Ready to start coop game.")
+	--WG.Chobby.InformationPopup("Ready to start coop game.")
 	hostPort = newHostPort
 end
 
 function SteamCoopHandler.SteamHostGameFailed(steamCaused, reason)
-	WG.Chobby.InformationPopup("Coop failed " .. (reason or "???") .. ". " .. (steamCaused or "???"))
+	--WG.Chobby.InformationPopup("Coop failed " .. (reason or "???") .. ". " .. (steamCaused or "???"))
 	hostPort = nil
 end
 
@@ -78,12 +78,16 @@ function DelayedInitialize()
 		end
 		
 		local players = {}
+		local alreadyIn = {}
 		for i = 1, #friendsInGame do
-			players[i] = {
-				SteamID = friendsInGameSteamID[i],
-				Name = friendsInGame[i],
-				ScriptPassword = "12345",
-			}
+			if not alreadyIn[friendsInGameSteamID[i]] then
+				players[#players + 1] = {
+					SteamID = friendsInGameSteamID[i],
+					Name = friendsInGame[i],
+					ScriptPassword = "12345",
+				}
+				alreadyIn[friendsInGameSteamID[i]] = true
+			end
 		end
 		
 		local args = {
