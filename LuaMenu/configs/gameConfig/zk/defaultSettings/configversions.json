@@ -542,25 +542,6 @@
          "VersionNumber":2,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/chobby_config.json",
          "TargetPath":"chobby_config.json"
-      },
-      
-      {  
-         "Platform":null,
-         "VersionNumber":1,
-         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/placeholder.txt",
-         "TargetPath":"LuaMenu/images/minimaps/placeholder.txt"
-      },
-      {  
-         "Platform":null,
-         "VersionNumber":1,
-         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/placeholder.txt",
-         "TargetPath":"LuaMenu/images/minimapThumbnails/placeholder.txt"
-      },
-      {  
-         "Platform":null,
-         "VersionNumber":1,
-         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/placeholder.txt",
-         "TargetPath":"LuaUI/Configs/Clans/placeholder.txt"
       }
    ]
 }

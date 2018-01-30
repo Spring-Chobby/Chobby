@@ -586,6 +586,7 @@ local function GetNewsHandler(parentControl, headingSize, timeAsTooltip, topHead
 				if imagePos then
 					local imagePath = string.sub(items[i].Image, imagePos)
 					if not VFS.FileExists(imagePath) then
+						Spring.CreateDir("news")
 						WG.WrapperLoopback.DownloadImage({ImageUrl = items[i].Image, TargetPath = imagePath})
 					end
 					entry.imageFile = imagePath

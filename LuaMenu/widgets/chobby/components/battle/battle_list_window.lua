@@ -176,6 +176,8 @@ function BattleListWindow:MakeWatchBattle(battleID, battle)
 		padding = {1,1,1,1},
 		parent = parentButton,
 	}
+	
+	local mapImageFile, needDownload = Configuration:GetMinimapSmallImage(battle.mapName)
 	local minimapImage = Image:New {
 		name = "minimapImage",
 		x = 0,
@@ -183,7 +185,9 @@ function BattleListWindow:MakeWatchBattle(battleID, battle)
 		right = 0,
 		bottom = 0,
 		keepAspect = true,
-		file = Configuration:GetMinimapSmallImage(battle.mapName),
+		file = mapImageFile,
+		fallbackFile = Configuration:GetLoadingImage(2),
+		checkFileExists = needDownload,
 		parent = minimap,
 	}
 	local runningImage = Image:New {
@@ -288,6 +292,8 @@ function BattleListWindow:MakeJoinBattle(battleID, battle)
 		padding = {1,1,1,1},
 		parent = parentButton,
 	}
+	
+	local mapImageFile, needDownload = Configuration:GetMinimapSmallImage(battle.mapName)
 	local minimapImage = Image:New {
 		name = "minimapImage",
 		x = 0,
@@ -295,7 +301,9 @@ function BattleListWindow:MakeJoinBattle(battleID, battle)
 		right = 0,
 		bottom = 0,
 		keepAspect = true,
-		file = Configuration:GetMinimapSmallImage(battle.mapName),
+		file = mapImageFile,
+		fallbackFile = Configuration:GetLoadingImage(2),
+		checkFileExists = needDownload,
 		parent = minimap,
 	}
 	local runningImage = Image:New {
@@ -539,7 +547,7 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 		-- Resets title and truncates.
 		lblTitle.OnResize[1](lblTitle)
 		
-		minimapImage.file = Configuration:GetMinimapImage(battle.mapName)
+		minimapImage.file, minimapImage.checkFileExists = Configuration:GetMinimapSmallImage(battle.mapName)
 		minimapImage:Invalidate()
 		
 		mapCaption:SetCaption(battle.mapName:gsub("_", " "))
@@ -564,7 +572,7 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 		lblTitle.OnResize[1](lblTitle)
 		
 		local minimapImage = items.battleButton:GetChildByName("minimap"):GetChildByName("minimapImage")
-		minimapImage.file = Configuration:GetMinimapImage(battle.mapName)
+		minimapImage.file, minimapImage.checkFileExists = Configuration:GetMinimapSmallImage(battle.mapName)
 		minimapImage:Invalidate()
 		
 		local playersOnMapCaption = items.battleButton:GetChildByName("playersOnMapCaption")

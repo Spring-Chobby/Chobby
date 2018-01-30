@@ -175,13 +175,17 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 			end
 		},
 	}
+	
+	local mapImageFile, needDownload = config:GetMinimapImage(battle.mapName)
 	local imMinimap = Image:New {
 		x = 0,
 		y = 0,
 		right = 0,
 		bottom = 0,
 		keepAspect = true,
-		file = config:GetMinimapImage(battle.mapName),
+		file = mapImageFile,
+		fallbackFile = config:GetLoadingImage(3),
+		checkFileExists = needDownload,
 		parent = btnMinimap,
 	}
 
@@ -537,7 +541,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		end
 		if battleInfo.mapName then
 			SetMapName(battleInfo.mapName, mapLinkWidth)
-			imMinimap.file = config:GetMinimapImage(battleInfo.mapName)
+			imMinimap.file, imMinimap.checkFileExists  = config:GetMinimapImage(battleInfo.mapName)
 			imMinimap:Invalidate()
 
 			-- TODO: Bit lazy here, seeing as we only need to update the map
@@ -1210,7 +1214,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 			activePanel._relativeBounds.right = 0
 			activePanel:UpdateClientArea()
 			if pollParameter then
-				imMinimap.file = config:GetMinimapImage(pollParameter)
+				imMinimap.file, imMinimap.checkFileExists = config:GetMinimapSmallImage(pollParameter)
 				imMinimap:Invalidate()
 				currentMapName = pollParameter
 			end
@@ -1380,13 +1384,16 @@ local function InitializeSetupPage(subPanel, screenHeight, pageConfig, nextPage,
 			parent = subPanel,
 		}
 		if pageConfig.minimap then
+			local mapImageFile, needDownload = Configuration:GetMinimapImage(pageConfig.options[i])
 			local imMinimap = Image:New {
 				x = 0,
 				y = 0,
 				right = 0,
 				bottom = 0,
 				keepAspect = true,
-				file = Configuration:GetMinimapImage(pageConfig.options[i]),
+				file = mapImageFile,
+				fallbackFile = Configuration:GetLoadingImage(2),
+				checkFileExists = needDownload,
 				parent = buttons[i],
 			}
 		end

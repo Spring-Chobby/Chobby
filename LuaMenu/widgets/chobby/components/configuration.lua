@@ -200,7 +200,9 @@ function Configuration:init()
 
 	self.settingsMenuValues = self.gameConfig.settingsDefault -- Only until configuration data is loaded.
 
-	self.animate_lobby = gl.CreateShader ~= nil
+	self.animate_lobby = (gl.CreateShader ~= nil)
+	self.minimapDownloads = {}
+	self.minimapThumbDownloads = {}
 end
 
 ---------------------------------------------------------------------------------
@@ -584,8 +586,15 @@ function Configuration:GetMinimapSmallImage(mapName)
 	mapName = string.gsub(mapName, " ", "_")
 	local filePath = self.gameConfig.minimapThumbnailPath .. mapName .. ".png"
 	if not VFS.FileExists(filePath) then
-		Log.Warning("Missing minimap image for", mapName)
-		return LUA_DIRNAME .. "images/minimapNotFound1.png"
+		filePath = "LuaMenu/Images/MinimapThumbnails" .. mapName .. ".jpg"
+	end
+	if WG.WrapperLoopback and WG.WrapperLoopback.DownloadImage and (not VFS.FileExists(filePath)) then
+		if not self.minimapThumbDownloads[mapName] then
+			Spring.CreateDir("LuaMenu/Images/MinimapThumbnails")
+			WG.WrapperLoopback.DownloadImage({ImageUrl = "http://zero-k.info/Resources/" .. mapName .. ".thumbnail.jpg", TargetPath = filePath})
+			self.minimapThumbDownloads[mapName] = true
+		end
+		return filePath, true
 	end
 	return filePath
 end
@@ -597,10 +606,28 @@ function Configuration:GetMinimapImage(mapName)
 	mapName = string.gsub(mapName, " ", "_")
 	local filePath = self.gameConfig.minimapOverridePath .. mapName .. ".jpg"
 	if not VFS.FileExists(filePath) then
-		Log.Warning("Missing minimap image for", mapName)
-		return LUA_DIRNAME .. "images/minimapNotFound1.png"
+		filePath = "LuaMenu/Images/Minimaps/" .. mapName .. ".jpg"
+	end
+	if WG.WrapperLoopback and WG.WrapperLoopback.DownloadImage and (not VFS.FileExists(filePath)) then
+		if not self.minimapDownloads[mapName] then
+			Spring.CreateDir("LuaMenu/Images/Minimaps")
+			WG.WrapperLoopback.DownloadImage({ImageUrl = "http://zero-k.info/Resources/" .. mapName .. ".minimap.jpg", TargetPath = filePath})
+			self.minimapDownloads[mapName] = true
+		end
+		return filePath, true
 	end
 	return filePath
+end
+
+function Configuration:GetLoadingImage(size)
+	if size == 1 then
+		return LUA_DIRNAME .. "images/load_img_32.png"
+	elseif size == 2 then
+		return LUA_DIRNAME .. "images/load_img_128.png"
+	elseif size == 3 then
+		return LUA_DIRNAME .. "images/load_img_512.png"
+	end
+	return LUA_DIRNAME .. "images/load_img_128.png"
 end
 
 function Configuration:GetCountryLongname(shortname)

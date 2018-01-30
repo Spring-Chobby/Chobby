@@ -157,6 +157,8 @@ function BattleWatchListWindow:AddBattle(battleID)
 		padding = {1,1,1,1},
 		parent = parentButton,
 	}
+	
+	local mapImageFile, needDownload = Configuration:GetMinimapSmallImage(battle.mapName)
 	local minimapImage = Image:New {
 		name = "minimapImage",
 		x = 0,
@@ -164,7 +166,9 @@ function BattleWatchListWindow:AddBattle(battleID)
 		right = 0,
 		bottom = 0,
 		keepAspect = true,
-		file = Configuration:GetMinimapSmallImage(battle.mapName),
+		file = mapImageFile,
+		fallbackFile = Configuration:GetLoadingImage(2),
+		checkFileExists = needDownload,
 		parent = minimap,
 	}
 	local runningImage = Image:New {
@@ -293,7 +297,7 @@ function BattleWatchListWindow:OnUpdateBattleInfo(battleID)
 	lblTitle.OnResize[1](lblTitle)
 	
 	local minimapImage = items.battleButton:GetChildByName("minimap"):GetChildByName("minimapImage")
-	minimapImage.file = Configuration:GetMinimapImage(battle.mapName)
+	minimapImage.file, minimapImage.checkFileExists = Configuration:GetMinimapSmallImage(battle.mapName)
 	minimapImage:Invalidate()
 	
 	local playersOnMapCaption = items.battleButton:GetChildByName("playersOnMapCaption")

@@ -56,6 +56,8 @@ function MapListWindow:init(lobby, zoomToMap)
 				padding = {1,1,1,1},
 				parent = pickMapButton,
 			}
+			
+			local mapImageFile, needDownload = Configuration:GetMinimapSmallImage(info.name)
 			local minimapImage = Image:New {
 				name = "minimapImage",
 				x = 0,
@@ -63,7 +65,9 @@ function MapListWindow:init(lobby, zoomToMap)
 				right = 0,
 				bottom = 0,
 				keepAspect = true,
-				file = Configuration:GetMinimapSmallImage(info.name),
+				file = mapImageFile,
+				fallbackFile = Configuration:GetLoadingImage(2),
+				checkFileExists = needDownload,
 				parent = minimap,
 			}
 			self:AddRow({pickMapButton}, info.name)

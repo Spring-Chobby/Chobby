@@ -30,6 +30,8 @@ local friendUsers = {}
 local friendRequestUsers = {}
 local notificationUsers = {}
 
+local clanDownloadBegun = {}
+
 local userListList = {
 	battleUsers,
 	tooltipUsers,
@@ -61,7 +63,7 @@ local IMAGE_ONLINE       = IMAGE_DIR .. "online.png"
 local IMAGE_OFFLINE      = IMAGE_DIR .. "offline.png"
 
 local IMAGE_CLAN_PATH    = "LuaUI/Configs/Clans/"
-local RANK_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/rankImages/"
+local RANK_DIR           = LUA_DIRNAME .. "configs/gameConfig/zk/rankImages/"
 
 local USER_SP_TOOLTIP_PREFIX = "user_single_"
 local USER_MP_TOOLTIP_PREFIX = "user_battle_"
@@ -96,7 +98,19 @@ end
 local function GetClanImage(clanName)
 	if clanName then
 		local clanFile = IMAGE_CLAN_PATH .. clanName .. ".png"
-		return VFS.FileExists(clanFile) and clanFile
+		if (not VFS.FileExists(clanFile)) then
+			if WG.WrapperLoopback and WG.WrapperLoopback.DownloadImage then
+				if not clanDownloadBegun[clanName] then
+					Spring.CreateDir("LuaUI/Configs/Clans")
+					WG.WrapperLoopback.DownloadImage({ImageUrl = "https://zero-k.info/img/clans/" .. clanName .. ".png", TargetPath = clanFile})
+					clanDownloadBegun[clanName] = true
+				end
+				return clanFile, true
+			else
+				return false
+			end
+		end
+		return clanFile
 	end
 end
 
@@ -129,7 +143,8 @@ end
 
 local function GetUserClanImage(userName, userControl)
 	local userInfo = userControl.lobby:GetUser(userName) or {}
-	return GetClanImage(userInfo.clan)
+	local file, needDownload = GetClanImage(userInfo.clan)
+	return file, needDownload
 end
 
 local function GetUserComboBoxOptions(userName, isInBattle, userControl)
@@ -631,7 +646,7 @@ local function GetUserControls(userName, opts)
 	}
 	offset = offset + 23
 
-	local clanImage = GetUserClanImage(userName, userControls)
+	local clanImage, needDownload = GetUserClanImage(userName, userControls)
 	if clanImage then
 		offset = offset + 1
 		userControls.imClan = Image:New {
@@ -643,6 +658,8 @@ local function GetUserControls(userName, opts)
 			parent = userControls.mainControl,
 			keepAspect = true,
 			file = clanImage,
+			fallbackFile = Configuration:GetLoadingImage(1),
+			checkFileExists = needDownload,
 		}
 		offset = offset + 23
 	end

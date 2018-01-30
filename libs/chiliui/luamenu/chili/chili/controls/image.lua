@@ -28,6 +28,7 @@ Image = Button:Inherit{
   keepAspect = true;
   
   checkFileExists = false;
+  fallbackFile = false;
   imageLoadTime = 2; -- Seconds
 
   useRTT = false;

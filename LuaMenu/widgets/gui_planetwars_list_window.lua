@@ -555,13 +555,17 @@ local function MakePlanetControl(planetData, DeselectOtherFunc, attacking, defen
 			end
 		},
 	}
+	
+	local mapImageFile, needDownload = config:GetMinimapSmallImage(mapName)
 	local imMinimap = Image:New {
 		x = 0,
 		y = 0,
 		right = 0,
 		bottom = 0,
 		keepAspect = true,
-		file = config:GetMinimapImage(mapName),
+		file = mapImageFile,
+		fallbackFile = Configuration:GetLoadingImage(2),
+		checkFileExists = needDownload,
 		parent = btnMinimap,
 	}
 	
@@ -716,7 +720,7 @@ local function MakePlanetControl(planetData, DeselectOtherFunc, attacking, defen
 			planetImage:Dispose()
 			planetImage = GetPlanetImage(holder, 2, 2, 86, newPlanetData.PlanetImage, newPlanetData.StructureImages)
 			
-			imMinimap.file = config:GetMinimapImage(mapName)
+			imMinimap.file, imMinimap.checkFileExists = config:GetMinimapSmallImage(mapName)
 			imMinimap:Invalidate()
 			
 			SetPlanetName(newPlanetData.PlanetName)
