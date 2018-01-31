@@ -660,6 +660,10 @@ function Configuration:IsValidEngineVersion(engineVersion)
 	return engineVersion == Spring.Utilities.GetEngineVersion() or engineVersion == self:GetTruncatedEngineVersion()
 end
 
+function Configuration:GetPlayerName(allowBlank)
+	return (lobby and lobby.myUserName) or self.suggestedNameFromSteam or (allowBlank and "") or "Player"
+end	
+
 function Configuration:GetDefaultGameName()
 	if not self.gameConfig then
 		return false

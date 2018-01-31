@@ -49,7 +49,8 @@ function SteamCoopHandler.SteamHostGameSuccess(hostPort)
 	if attemptScriptTable then
 		WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, attemptScriptTable, friendsInGame, hostPort)
 	else
-		WG.LibLobby.localLobby:StartBattle(attemptGameType or "skirmish", friendsInGame, true, hostPort)
+		local myName = WG.Chobby.Configuration:GetPlayerName()
+		WG.LibLobby.localLobby:StartBattle(attemptGameType or "skirmish", myName, friendsInGame, true, hostPort)
 	end
 end
 
@@ -58,7 +59,11 @@ function SteamCoopHandler.SteamHostGameFailed(steamCaused, reason)
 end
 
 function SteamCoopHandler.SteamConnectSpring(hostIP, hostPort, clientPort, myName, scriptPassword, map, game, engine)
-	WG.LibLobby.localLobby:ConnectToBattle(false, hostIP, hostPort, clientPort, scriptPassword, myName, game, map, engine, "coop")
+	WG.Chobby.InformationPopup("Starting game in 20s...")
+	local function Start()
+		WG.LibLobby.localLobby:ConnectToBattle(false, hostIP, hostPort, clientPort, scriptPassword, myName, game, map, engine, "coop")
+	end
+	WG.Delay(Start, 20)
 end
 
 --------------------------------------------------------------------------------
@@ -72,7 +77,7 @@ function SteamCoopHandler.AttemptGameStart(gameType, scriptTable)
 		if scriptTable then
 			WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, scriptTable)
 		else
-			WG.LibLobby.localLobby:StartBattle(gameType)
+			WG.LibLobby.localLobby:StartBattle(gameType, WG.Chobby.Configuration:GetPlayerName())
 		end
 		return
 	end

@@ -95,7 +95,7 @@ local function PromptNewSave(backOnFail)
 	
 	local Configuration = WG.Chobby.Configuration
 	local lobby = WG.LibLobby.lobby
-	local defaultCommName = (lobby and lobby.myUserName) or Configuration.suggestedNameFromSteam or ""
+	local defaultCommName = Configuration:GetPlayerName(true)
 	
 	local newSaveWindow = Window:New {
 		x = 700,

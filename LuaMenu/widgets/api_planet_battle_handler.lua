@@ -133,7 +133,6 @@ local function StartBattleForReal(planetID, planetData, gameName)
 	local aiCount = 0
 	local commanderTypes = {}
 	
-	local localLobby = WG.LibLobby.localLobby
 	local Configuration = WG.Chobby.Configuration
 	local missionDifficulty = WG.CampaignData.GetDifficultySetting()
 	local bitExtension = (Configuration:GetIsRunning64Bit() and "64") or "32"
@@ -144,7 +143,7 @@ local function StartBattleForReal(planetID, planetData, gameName)
 	local playerCount = 1
 	local players = {
 		[0] = {
-			Name = "Player",
+			Name = Configuration:GetPlayerName(),
 			Team = teamCount,
 			IsFromDemo = 0,
 			rank = 0,

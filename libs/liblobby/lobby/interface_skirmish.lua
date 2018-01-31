@@ -257,7 +257,7 @@ function InterfaceSkirmish:StartGameFromLuaScript(gameType, scriptTable, friendL
 	end
 	
 	if hostPort then
-		scriptTable.hostip = hostPort
+		scriptTable.hostport = hostPort
 	end
 	
 	local scriptTxt = self:MakeScriptTXT(scriptTable)
@@ -288,7 +288,7 @@ function InterfaceSkirmish:StartGameFromFile(scriptFileName, gameType)
 end
 
 -- TODO: Needs clean implementation in lobby.lua
-function InterfaceSkirmish:StartBattle(gameType, friendList, friendsReplaceAI, hostPort)
+function InterfaceSkirmish:StartBattle(gameType, myName, friendList, friendsReplaceAI, hostPort)
 	local battle = self:GetBattle(self:GetMyBattleID())
 	if not battle.gameName then
 		Spring.Log(LOG_SECTION, LOG.ERROR, "Missing battle.gameName. Game cannot start")
@@ -301,7 +301,7 @@ function InterfaceSkirmish:StartBattle(gameType, friendList, friendsReplaceAI, h
 
 	self:_CallListeners("OnBattleAboutToStart", gameType, battle.gameName, battle.mapName)
 	self:_OnSaidBattleEx("Battle", "about to start", battle.gameName, battle.mapName, self:GetMyUserName() or "noname")
-	self:_StartScript(battle.gameName, battle.mapName, self:GetMyUserName() or "noname", friendList, friendsReplaceAI, hostPort)
+	self:_StartScript(battle.gameName, battle.mapName, myName, friendList, friendsReplaceAI, hostPort)
 	return self
 end
 
