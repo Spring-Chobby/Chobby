@@ -136,6 +136,7 @@ local function StartBattleForReal(planetID, planetData, gameName)
 	local Configuration = WG.Chobby.Configuration
 	local missionDifficulty = WG.CampaignData.GetDifficultySetting()
 	local bitExtension = (Configuration:GetIsRunning64Bit() and "64") or "32"
+	local playerName = Configuration:GetPlayerName()
 	
 	WG.Analytics.SendIndexedRepeatEvent("campaign:planet_" .. planetID .. ":difficulty_" .. missionDifficulty .. ":started")
 	
@@ -143,7 +144,7 @@ local function StartBattleForReal(planetID, planetData, gameName)
 	local playerCount = 1
 	local players = {
 		[0] = {
-			Name = Configuration:GetPlayerName(),
+			Name = playerName,
 			Team = teamCount,
 			IsFromDemo = 0,
 			rank = 0,
@@ -333,7 +334,7 @@ local function StartBattleForReal(planetID, planetData, gameName)
 		hostport = 0,
 		ishost = 1,
 		mapname = gameConfig.mapName,
-		myplayername = "Player",
+		myplayername = playerName,
 		nohelperais = 0,
 		numplayers = playerCount,
 		numusers = playerCount + aiCount,

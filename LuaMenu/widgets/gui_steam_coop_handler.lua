@@ -59,11 +59,11 @@ function SteamCoopHandler.SteamHostGameFailed(steamCaused, reason)
 end
 
 function SteamCoopHandler.SteamConnectSpring(hostIP, hostPort, clientPort, myName, scriptPassword, map, game, engine)
-	WG.Chobby.InformationPopup("Starting game in 20s...")
+	WG.Chobby.InformationPopup("Starting game...")
 	local function Start()
 		WG.LibLobby.localLobby:ConnectToBattle(false, hostIP, hostPort, clientPort, scriptPassword, myName, game, map, engine, "coop")
 	end
-	WG.Delay(Start, 20)
+	WG.Delay(Start, 5)
 end
 
 --------------------------------------------------------------------------------

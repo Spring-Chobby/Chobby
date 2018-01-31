@@ -256,6 +256,9 @@ function InterfaceSkirmish:StartGameFromLuaScript(gameType, scriptTable, friendL
 		playerCount = playerCount + 1
 	end
 	
+	scriptTable.numplayers = playerCount
+	scriptTable.numusers = (playerCount - 2) + scriptTable.numusers
+	
 	if hostPort then
 		scriptTable.hostport = hostPort
 	end
