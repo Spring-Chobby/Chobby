@@ -151,7 +151,7 @@ end
 
 function SteamCoopHandler.SteamHostGameSuccess(hostPort)
 	if closePopup then
-		closePopup()
+		closePopup:Close()
 	end
 	if attemptScriptTable then
 		WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, attemptScriptTable, friendsInGame, hostPort)
@@ -163,7 +163,7 @@ end
 
 function SteamCoopHandler.SteamHostGameFailed(steamCaused, reason)
 	if closePopup then
-		closePopup()
+		closePopup:Close()
 	end
 	WG.Chobby.InformationPopup("Coop connection failed. " .. (reason or "???") .. ". " .. (steamCaused or "???"))
 end

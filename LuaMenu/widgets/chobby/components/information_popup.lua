@@ -5,7 +5,7 @@ function InformationPopup:init(infoText, width, height, heading, caption, button
 	width = width or 320
 	height = height or 220
 	
-	local mainWindow = Window:New {
+	self.mainWindow = Window:New {
 		x = 700,
 		y = 300,
 		width = width,
@@ -18,22 +18,19 @@ function InformationPopup:init(infoText, width, height, heading, caption, button
 	}
 	
 	local function DoneFunc()
-		if closeFunc then
-			closeFunc()
-		end
-		mainWindow:Dispose()
+		self:Close()
 	end
 	
 	if heading then
 		Label:New {
 			x = 0,
 			y = 15,
-			width = width - mainWindow.padding[1] - mainWindow.padding[3],
+			width = width - self.mainWindow.padding[1] - self.mainWindow.padding[3],
 			height = 35,
 			align = "center",
 			font = Configuration:GetFont(4),
 			caption = heading,
-			parent = mainWindow,
+			parent = self.mainWindow,
 		}
 	end
 	
@@ -44,7 +41,7 @@ function InformationPopup:init(infoText, width, height, heading, caption, button
 		bottom = 75,
 		font = Configuration:GetFont(3),
 		text = infoText,
-		parent = mainWindow,
+		parent = self.mainWindow,
 	}
 	
 	local btnAccept = Button:New {
@@ -60,10 +57,15 @@ function InformationPopup:init(infoText, width, height, heading, caption, button
 				DoneFunc()
 			end
 		},
-		parent = mainWindow,
+		parent = self.mainWindow,
 	}
 	
-	local popupHolder = PriorityPopup(mainWindow, DoneFunc, DoneFunc)
-	
-	return DoneFunc
+	local popupHolder = PriorityPopup(self.mainWindow, DoneFunc, DoneFunc)
+end
+
+function InformationPopup:Close()
+	if self.closeFunc then
+		self.closeFunc()
+	end
+	self.mainWindow:Dispose()
 end
