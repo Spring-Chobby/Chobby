@@ -209,18 +209,15 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFrie
 		script["allyTeam" .. i] = allyTeam
 	end
 
-	-- local scriptFileName = "scriptFile.txt"
-	-- local scriptFile = io.open(scriptFileName, "w")
 	local scriptTxt = self:MakeScriptTXT(script)
-	--Spring.Echo(scriptTxt)
+	
+	Spring.Echo(scriptTxt)
+	local scriptFileName = "scriptFile.txt"
+	local scriptFile = io.open(scriptFileName, "w")
+	scriptFile:write(scriptTxt)
+	scriptFile:close()
+	
 	Spring.Reload(scriptTxt)
-	-- scriptFile:write(scriptTxt)
-	-- scriptFile:close()
-	-- if self.useSpringRestart then
-		-- Spring.Restart(scriptFileName, "")
-	-- else
-		-- Spring.Start(scriptFileName, "")
-	-- end
 end
 
 function InterfaceSkirmish:StartReplay(replayFilename)
@@ -268,7 +265,7 @@ function InterfaceSkirmish:StartBattle(gameType, extraFriends, friendsReplaceAI,
 		return self
 	end
 
-	self:_CallListeners("OnBattleAboutToStart", gameType)
+	self:_CallListeners("OnBattleAboutToStart", gameType, battle.gameName, battle.mapName)
 	self:_OnSaidBattleEx("Battle", "about to start", battle.gameName, battle.mapName, self:GetMyUserName() or "noname")
 	self:_StartScript(battle.gameName, battle.mapName, self:GetMyUserName() or "noname", extraFriends, friendsReplaceAI, hostPort)
 	return self

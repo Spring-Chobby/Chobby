@@ -103,7 +103,7 @@ end
 
 -- TODO wrapper will send this to confirm friend join on steam (either invite or self join) use to auto accept party join request and to notify player when joining "offline" COOP 
 local function SteamFriendJoinedMe(args) 
-	WG.SteamCoopHandler.NotifyFriendJoined(args.FriendSteamID, args.FriendSteamName)
+	WG.SteamCoopHandler.SteamFriendJoinedMe(args.FriendSteamID, args.FriendSteamName)
 	--[[ 
 	    public string FriendSteamID { get; set; }
         public string FriendSteamName { get; set; }

@@ -273,6 +273,13 @@ function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, clientPor
 		Spring.Restart(springURL, "")
 	else
 		local scriptTxt = GenerateScriptTxt(battleIp, battlePort, clientPort, scriptPassword, myName)
+		
+		Spring.Echo(scriptTxt)
+		local scriptFileName = "scriptFile.txt"
+		local scriptFile = io.open(scriptFileName, "w")
+		scriptFile:write(scriptTxt)
+		scriptFile:close()
+		
 		Spring.Reload(scriptTxt)
 	end
 end
