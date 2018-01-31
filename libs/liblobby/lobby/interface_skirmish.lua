@@ -184,7 +184,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 
 	local script = {
 		gametype = gameName,
-		hostip = "localhost",
+		hostip = "",
 		hostport = hostPort or 0,
 		ishost = 1,
 		mapname = mapName,
