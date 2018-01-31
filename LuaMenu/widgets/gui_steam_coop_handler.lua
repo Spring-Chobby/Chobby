@@ -23,15 +23,105 @@ end
 
 local friendsInGame, friendsInGameSteamID
 
+local attemptGameType, attemptScriptTable
+local inCoop = false
+
+local coopPanel, coopHostPanel, closePopup
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
 
+local function LeaveCoopFunc()
+	inCoop = false
+end
 
---local IterableMap = VFS.Include("LuaRules/Gadgets/Include/IterableMap.lua")
+local function LeaveHostCoopFunc()
+	friendsInGame = nil
+	friendsInGameSteamID = nil
+end
 
-local attemptGameType, attemptScriptTable
-local inCoop = false
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Top Notification
+
+local function InitializeCoopStatusHandler(name, text, leaveFunc, statusAndInvitesPanel)
+	local panelHolder = Panel:New {
+		name = name,
+		x = 8,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		classname = "overlay_panel",
+		width = pos and pos.width,
+		height = pos and pos.height,
+		padding = {0,0,0,0},
+		caption = "",
+		resizable = false,
+		draggable = false,
+		parent = parent
+	}
+	
+	local rightBound = "50%"
+	local bottomBound = 12
+	local bigMode = true
+
+	local statusText = TextBox:New {
+		x = 22,
+		y = 18,
+		right = rightBound,
+		bottom = bottomBound,
+		fontsize = WG.Chobby.Configuration:GetFont(3).size,
+		text = text,
+		parent = panelHolder,
+	}
+	
+	local button = Button:New {
+		name = "leaveCoop",
+		x = "70%",
+		right = 4,
+		y = 4,
+		bottom = 4,
+		padding = {0,0,0,0},
+		caption = i18n("leave"),
+		font = WG.Chobby.Configuration:GetFont(3),
+		classname = "negative_button",
+		OnClick = {
+			function()
+				leaveFunc()
+				statusAndInvitesPanel.RemoveControl(name)
+			end
+		},
+		parent = panelHolder,
+	}
+	
+	local function Resize(obj, xSize, ySize)
+		statusText._relativeBounds.right = rightBound
+		statusText._relativeBounds.bottom = bottomBound
+		statusText:UpdateClientArea()
+		if ySize < 60 then
+			statusText:SetPos(xSize/4 - 52, 2)
+			statusText.font.size = WG.Chobby.Configuration:GetFont(2).size
+			statusText:Invalidate()
+			bigMode = false
+		else
+			statusText:SetPos(xSize/4 - 62, 18)
+			statusText.font.size = WG.Chobby.Configuration:GetFont(3).size
+			statusText:Invalidate()
+			bigMode = true
+		end
+	end
+	
+	panelHolder.OnResize = {Resize}
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.GetHolder()
+		return panelHolder
+	end
+	
+	return externalFunctions
+end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -43,18 +133,26 @@ function SteamCoopHandler.SteamFriendJoinedMe(steamID, userName)
 	friendsInGameSteamID = friendsInGameSteamID or {}
 	friendsInGame[#friendsInGame + 1] = userName
 	friendsInGameSteamID[#friendsInGameSteamID + 1] = steamID
-	WG.Chobby.InformationPopup((userName or "???") .. " has joined your Steam party. Play P2P Coop by starting any game via the Singleplayer menu.")
+	WG.Chobby.InformationPopup((userName or "???") .. " has joined your P2P cooperative mode party. Play a coop game by starting any game via the Singleplayer menu.")
+	
+	local statusAndInvitesPanel = WG.Chobby.interfaceRoot.GetStatusAndInvitesPanel()
+	coopHostPanel = coopHostPanel or InitializeCoopStatusHandler("coopHostPanel", "Hosting Coop\nParty", LeaveHostCoopFunc, statusAndInvitesPanel)
+	statusAndInvitesPanel.RemoveControl("coopPanel")
+	statusAndInvitesPanel.AddControl(coopHostPanel.GetHolder(), 4.5)
 end
 
 function SteamCoopHandler.SteamJoinFriend(joinFriendID)
 	inCoop = true
-	local function CloseFunc()
-		inCoop = false
-	end
-	WG.Chobby.InformationPopup("Waiting for the host to start a coop game.", nil, nil, nil, i18n("cancel"), "negative_button", CloseFunc)
+	local statusAndInvitesPanel = WG.Chobby.interfaceRoot.GetStatusAndInvitesPanel()
+	coopPanel = coopPanel or InitializeCoopStatusHandler("coopPanel", "In Coop Party\nWaiting on Host", LeaveCoopFunc, statusAndInvitesPanel)
+	statusAndInvitesPanel.RemoveControl("coopHostPanel")
+	statusAndInvitesPanel.AddControl(coopPanel.GetHolder(), 4.5)
 end
 
 function SteamCoopHandler.SteamHostGameSuccess(hostPort)
+	if closePopup then
+		closePopup()
+	end
 	if attemptScriptTable then
 		WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, attemptScriptTable, friendsInGame, hostPort)
 	else
@@ -64,10 +162,17 @@ function SteamCoopHandler.SteamHostGameSuccess(hostPort)
 end
 
 function SteamCoopHandler.SteamHostGameFailed(steamCaused, reason)
+	if closePopup then
+		closePopup()
+	end
 	WG.Chobby.InformationPopup("Coop connection failed. " .. (reason or "???") .. ". " .. (steamCaused or "???"))
 end
 
 function SteamCoopHandler.SteamConnectSpring(hostIP, hostPort, clientPort, myName, scriptPassword, map, game, engine)
+	if not inCoop then
+		-- Do not get forced into a coop game if you cancel.
+		return
+	end
 	local function Start()
 		WG.LibLobby.localLobby:ConnectToBattle(false, hostIP, hostPort, clientPort, scriptPassword, myName, game, map, engine, "coop")
 	end
@@ -94,7 +199,7 @@ function SteamCoopHandler.AttemptGameStart(gameType, scriptTable)
 		return
 	end
 	
-	WG.Chobby.InformationPopup("Starting game.")
+	closePopup = WG.Chobby.InformationPopup("Starting game.")
 	
 	local players = {}
 	local alreadyIn = {}
@@ -125,9 +230,7 @@ end
 
 function widget:Initialize()
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	
 	WG.SteamCoopHandler = SteamCoopHandler
-	WG.Delay(DelayedInitialize, 1)
 end
 
 --------------------------------------------------------------------------------

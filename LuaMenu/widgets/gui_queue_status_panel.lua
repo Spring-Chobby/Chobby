@@ -208,7 +208,7 @@ local function InitializeInstantQueueHandler()
 	local bigMode = true
 
 	local queueStatusText = TextBox:New {
-		x = 20,
+		x = 22,
 		y = 18,
 		right = rightBound,
 		bottom = bottomBound,

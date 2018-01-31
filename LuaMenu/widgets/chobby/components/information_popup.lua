@@ -64,4 +64,6 @@ function InformationPopup:init(infoText, width, height, heading, caption, button
 	}
 	
 	local popupHolder = PriorityPopup(mainWindow, DoneFunc, DoneFunc)
+	
+	return DoneFunc
 end
