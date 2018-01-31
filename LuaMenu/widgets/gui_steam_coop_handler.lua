@@ -47,7 +47,7 @@ function SteamCoopHandler.NotifyFriendJoined(steamID, userName)
 	friendsInGameSteamID = friendsInGameSteamID or {}
 	friendsInGame[#friendsInGame + 1] = userName
 	friendsInGameSteamID[#friendsInGameSteamID + 1] = steamID
-	--WG.Chobby.InformationPopup((userName or "???") .. " joined your coop game.")
+	WG.Chobby.InformationPopup((userName or "???") .. " joined your coop game.")
 end
 
 function SteamCoopHandler.GetCoopFriendList()
@@ -60,8 +60,12 @@ function SteamCoopHandler.SteamHostGameSuccess(newHostPort)
 end
 
 function SteamCoopHandler.SteamHostGameFailed(steamCaused, reason)
-	--WG.Chobby.InformationPopup("Coop failed " .. (reason or "???") .. ". " .. (steamCaused or "???"))
+	WG.Chobby.InformationPopup("Coop failed " .. (reason or "???") .. ". " .. (steamCaused or "???"))
 	hostPort = nil
+end
+
+function SteamCoopHandler.SteamConnectSpring(hostIP, hostPort, clientPort, myName, scriptPassword, map, game, engine)
+	localLobby:ConnectToBattle(false, hostIP, hostPort, clientPort, scriptPassword, myName, game, map, engine, "coop")
 end
 
 --------------------------------------------------------------------------------

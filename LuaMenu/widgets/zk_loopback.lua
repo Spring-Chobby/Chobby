@@ -126,6 +126,7 @@ end
 
 -- TODO when client receives this he should connect given game, it MUST use the passed ClientPort for local game
 local function SteamConnectSpring(args)
+	WG.SteamCoopHandler.SteamConnectSpring(args.HostIP, args.HostPort, args.ClientPort, args.Name, args.ScriptPassword, args.Map, args.Game, args.Engine)
 	--[[
         public string HostIP { get; set; }
         public int HostPort { get; set; }
