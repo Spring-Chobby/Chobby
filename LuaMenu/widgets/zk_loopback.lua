@@ -74,21 +74,20 @@ local function DownloadFileProgress(args)
 	WG.DownloadWrapperInterface.DownloadFileProgress(args.Name, args.FileType, args.Progress, args.SecondsRemaining, args.TotalLength, args.CurrentSpeed)
 end
 
-
 -- notifies that steam is online
 local function SteamOnline(args)
 	WG.SteamHandler.SteamOnline(args.AuthToken, args.FriendSteamID, args.Friends, args.SuggestedName)
 end
 
--- requests to join a friend's game/party
+-- Join friend upon receiving notification that your acceptance of their invite was accepted.
 local function SteamJoinFriend(args)
 	WG.SteamHandler.SteamJoinFriend(args.FriendSteamID)
+	WG.SteamCoopHandler.SteamJoinFriend(args.FriendSteamID)
 end
 
 local function SteamOverlayChanged(args) 
 	WG.SteamHandler.SteamOverlayChanged(args.IsActive)
 end
-
 
 -- TODO wire this to set initial stuff and pass userid to ZKLS
 local function WrapperOnline(args)
@@ -303,14 +302,6 @@ end
 -- invites friend to a game, even offline
 function WrapperLoopback.SteamInviteFriendToGame(steamID) 
 	SendCommand("SteamInviteFriendToGame", {SteamID = steamID})
-end
-
--- invites a friend to offline coop game
-function WrapperLoopback.SteamJoinFriend(steamID)
-	--[[
-		public string FriendSteamID { get; set; }
-	]]--
-	SendCommand("SteamJoinFriend", {SteamID = steamID})
 end
 
 -- TODO instructs wrapper to establish p2p, punch ports and start clients 

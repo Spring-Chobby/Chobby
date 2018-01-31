@@ -31,6 +31,7 @@ local friendsInGame, friendsInGameSteamID
 --local IterableMap = VFS.Include("LuaRules/Gadgets/Include/IterableMap.lua")
 
 local attemptGameType, attemptScriptTable
+local inCoop = false
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -42,7 +43,15 @@ function SteamCoopHandler.SteamFriendJoinedMe(steamID, userName)
 	friendsInGameSteamID = friendsInGameSteamID or {}
 	friendsInGame[#friendsInGame + 1] = userName
 	friendsInGameSteamID[#friendsInGameSteamID + 1] = steamID
-	WG.Chobby.InformationPopup((userName or "???") .. " joined your coop game.")
+	WG.Chobby.InformationPopup((userName or "???") .. " has joined your Steam party. Play P2P Coop by starting any game via the Singleplayer menu.")
+end
+
+function SteamCoopHandler.SteamJoinFriend(joinFriendID)
+	inCoop = true
+	local function CloseFunc()
+		inCoop = false
+	end
+	WG.Chobby.InformationPopup("Waiting for the host to start a coop game.", nil, nil, nil, i18n("cancel"), "negative_button", CloseFunc)
 end
 
 function SteamCoopHandler.SteamHostGameSuccess(hostPort)
@@ -55,15 +64,18 @@ function SteamCoopHandler.SteamHostGameSuccess(hostPort)
 end
 
 function SteamCoopHandler.SteamHostGameFailed(steamCaused, reason)
-	WG.Chobby.InformationPopup("Coop failed " .. (reason or "???") .. ". " .. (steamCaused or "???"))
+	WG.Chobby.InformationPopup("Coop connection failed. " .. (reason or "???") .. ". " .. (steamCaused or "???"))
 end
 
 function SteamCoopHandler.SteamConnectSpring(hostIP, hostPort, clientPort, myName, scriptPassword, map, game, engine)
-	WG.Chobby.InformationPopup("Starting game...")
 	local function Start()
 		WG.LibLobby.localLobby:ConnectToBattle(false, hostIP, hostPort, clientPort, scriptPassword, myName, game, map, engine, "coop")
 	end
-	WG.Delay(Start, 5)
+	if (WG.Chobby.Configuration.coopConnectDelay or 0) > 0 then
+		WG.Delay(Start, WG.Chobby.Configuration.coopConnectDelay)
+	else
+		Start()
+	end
 end
 
 --------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 InformationPopup = LCS.class{}
 
-function InformationPopup:init(infoText, width, height, heading)
+function InformationPopup:init(infoText, width, height, heading, caption, buttonClass, closeFunc)
 	
 	width = width or 320
 	height = height or 220
@@ -18,6 +18,9 @@ function InformationPopup:init(infoText, width, height, heading)
 	}
 	
 	local function DoneFunc()
+		if closeFunc then
+			closeFunc()
+		end
 		mainWindow:Dispose()
 	end
 	
@@ -49,9 +52,9 @@ function InformationPopup:init(infoText, width, height, heading)
 		right = "25%",
 		bottom = 1,
 		height = 70,
-		caption = i18n("ok"),
+		caption = caption or i18n("ok"),
 		font = Configuration:GetFont(3),
-		classname = "action_button",
+		classname = buttonClass or "action_button",
 		OnClick = {
 			function()
 				DoneFunc()

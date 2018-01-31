@@ -166,6 +166,7 @@ function Configuration:init()
 	self.menuNotificationVolume = 0.8
 	self.menuBackgroundBrightness = 1
 	self.gameOverlayOpacity = 0.5
+	self.coopConnectDelay = 0
 	self.showMatchMakerBattles = false
 	self.hideInterface = false
 	self.enableTextToSpeech = true

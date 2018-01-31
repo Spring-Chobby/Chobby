@@ -733,6 +733,37 @@ local function GetLobbyTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 
+	children[#children + 1] = Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(2),
+		caption = "Coop Connection Delay",
+		tooltip = "Hosts with poor internet may require their clients to add a delay in order to connect.",
+	}
+	children[#children + 1] = Trackbar:New {
+		x = COMBO_X,
+		y = offset,
+		width  = COMBO_WIDTH,
+		height = 30,
+		value  = Configuration.coopConnectDelay or 0,
+		min    = 0,
+		max    = 30,
+		step   = 1,
+		OnChange = {
+			function(obj, value)
+				if freezeSettings then
+					return
+				end
+				Configuration:SetConfigValue("coopConnectDelay", value)
+			end
+		}
+	}
+	offset = offset + ITEM_OFFSET
+	
 	local autoLogin = Checkbox:New {
 		x = 20,
 		width = CHECK_WIDTH,
