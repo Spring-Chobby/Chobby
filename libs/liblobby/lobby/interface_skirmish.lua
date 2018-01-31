@@ -38,7 +38,7 @@ function InterfaceSkirmish:MakeScriptTXT(script)
 	return str
 end
 
-function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFriends, friendsReplaceAI, hostPort)
+function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendList, friendsReplaceAI, hostPort)
 	local allyTeams = {}
 	local allyTeamCount = 0
 	local teams = {}
@@ -49,7 +49,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFrie
 	local ais = {}
 	local aiCount = 0
 
-	extraFriends = extraFriends or {}
+	friendList = friendList or {}
 
 	-- Add the player, this is to make the player team 0.
 	for userName, data in pairs(self.userBattleStatus) do
@@ -63,13 +63,14 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFrie
 			}
 			playerCount = playerCount + 1
 
-			for i = 1, #extraFriends do
-				local friendName = extraFriends[i]
+			for i = 1, #friendList do
+				local friendName = friendList[i]
 				players[playerCount] = {
 					Name = friendName,
 					Team = teamCount,
 					IsFromDemo = 0,
 					Spectator = (data.isSpectator and 1) or nil,
+					Password = "12345",
 					rank = 0,
 				}
 				playerCount = playerCount + 1
@@ -183,7 +184,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFrie
 
 	local script = {
 		gametype = gameName,
-		hostip = '127.0.0.1',
+		hostip = "localhost",
 		hostport = hostPort or 0,
 		ishost = 1,
 		mapname = mapName,
@@ -254,7 +255,7 @@ function InterfaceSkirmish:StartGameFromFile(scriptFileName, gameType)
 end
 
 -- TODO: Needs clean implementation in lobby.lua
-function InterfaceSkirmish:StartBattle(gameType, extraFriends, friendsReplaceAI, hostPort)
+function InterfaceSkirmish:StartBattle(gameType, friendList, friendsReplaceAI, hostPort)
 	local battle = self:GetBattle(self:GetMyBattleID())
 	if not battle.gameName then
 		Spring.Log(LOG_SECTION, LOG.ERROR, "Missing battle.gameName. Game cannot start")
@@ -267,7 +268,7 @@ function InterfaceSkirmish:StartBattle(gameType, extraFriends, friendsReplaceAI,
 
 	self:_CallListeners("OnBattleAboutToStart", gameType, battle.gameName, battle.mapName)
 	self:_OnSaidBattleEx("Battle", "about to start", battle.gameName, battle.mapName, self:GetMyUserName() or "noname")
-	self:_StartScript(battle.gameName, battle.mapName, self:GetMyUserName() or "noname", extraFriends, friendsReplaceAI, hostPort)
+	self:_StartScript(battle.gameName, battle.mapName, self:GetMyUserName() or "noname", friendList, friendsReplaceAI, hostPort)
 	return self
 end
 

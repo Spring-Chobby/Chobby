@@ -47,9 +47,7 @@ function SteamCoopHandler.SteamFriendJoinedMe(steamID, userName)
 end
 
 function SteamCoopHandler.SteamHostGameSuccess(hostPort)
-	--WG.Chobby.InformationPopup("Ready to start coop game.")
-	hostPort = newHostPort
-	battleLobby:StartBattle("skirmish", friendNames, true, hostPort)
+	localLobby:StartBattle("skirmish", friendsInGame, true, hostPort)
 end
 
 function SteamCoopHandler.SteamHostGameFailed(steamCaused, reason)
@@ -70,6 +68,8 @@ function SteamCoopHandler.AttemptGameStart()
 		battleLobby:StartBattle("skirmish")
 		return
 	end
+	
+	WG.Chobby.InformationPopup("Starting game.")
 	
 	local players = {}
 	local alreadyIn = {}
