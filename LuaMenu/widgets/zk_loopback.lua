@@ -305,6 +305,13 @@ function WrapperLoopback.SteamInviteFriendToGame(steamID)
 	SendCommand("SteamInviteFriendToGame", {SteamID = steamID})
 end
 
+-- invites a friend to offline coop game
+function WrapperLoopback.SteamJoinFriend(steamID)
+	--[[
+		public string FriendSteamID { get; set; }
+	]]--
+	SendCommand("SteamJoinFriend", {SteamID = steamID})
+end
 
 -- TODO instructs wrapper to establish p2p, punch ports and start clients 
 function WrapperLoopback.SteamHostGameRequest(args)

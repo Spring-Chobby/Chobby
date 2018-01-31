@@ -563,6 +563,7 @@ local function GetUserControls(userName, opts)
 						local userInfo = userControls.lobby:GetUser(userName)
 						if WG.SteamHandler.GetIsSteamFriend(userInfo.steamID) and userInfo.isOffline then
 							WG.SteamHandler.InviteUserViaSteam(userName, userInfo.steamID)
+							WG.SteamHandler.SteamJoinFriend(userInfo.steamID)
 						end
 					elseif selectedName == "Invite to Campaign" then
 						local userInfo = userControls.lobby:GetUser(userName)
