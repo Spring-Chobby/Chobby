@@ -17,8 +17,6 @@ end
 --------------------------------------------------------------------------------
 -- Globals
 
-local localLobby
-
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Variables
@@ -29,9 +27,8 @@ local friendsInGame, friendsInGameSteamID
 --------------------------------------------------------------------------------
 -- Utilities
 
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
--- Initialization
+
+--local IterableMap = VFS.Include("LuaRules/Gadgets/Include/IterableMap.lua")
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -47,7 +44,7 @@ function SteamCoopHandler.SteamFriendJoinedMe(steamID, userName)
 end
 
 function SteamCoopHandler.SteamHostGameSuccess(hostPort)
-	localLobby:StartBattle("skirmish", friendsInGame, true, hostPort)
+	WG.LibLobby.localLobby:StartBattle("skirmish", friendsInGame, true, hostPort)
 end
 
 function SteamCoopHandler.SteamHostGameFailed(steamCaused, reason)
@@ -55,7 +52,7 @@ function SteamCoopHandler.SteamHostGameFailed(steamCaused, reason)
 end
 
 function SteamCoopHandler.SteamConnectSpring(hostIP, hostPort, clientPort, myName, scriptPassword, map, game, engine)
-	localLobby:ConnectToBattle(false, hostIP, hostPort, clientPort, scriptPassword, myName, game, map, engine, "coop")
+	WG.LibLobby.localLobby:ConnectToBattle(false, hostIP, hostPort, clientPort, scriptPassword, myName, game, map, engine, "coop")
 end
 
 --------------------------------------------------------------------------------
@@ -97,16 +94,6 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface
-
-function DelayedInitialize()
-	local Configuration = WG.Chobby.Configuration
-	localLobby = WG.LibLobby.localLobby
-	
-	local function OnBattleAboutToStart(_,gameType, gameName, mapName)
-		
-	end
-	localLobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
-end
 
 function widget:Initialize()
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
