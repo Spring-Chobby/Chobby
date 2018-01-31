@@ -47,7 +47,7 @@ end
 
 function SteamCoopHandler.SteamHostGameSuccess(hostPort)
 	if attemptScriptTable then
-		WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, scriptTable, friendsInGame, hostPort)
+		WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, attemptScriptTable, friendsInGame, hostPort)
 	else
 		WG.LibLobby.localLobby:StartBattle(attemptGameType or "skirmish", friendsInGame, true, hostPort)
 	end
