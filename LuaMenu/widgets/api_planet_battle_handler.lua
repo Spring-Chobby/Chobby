@@ -330,7 +330,7 @@ local function StartBattleForReal(planetID, planetData, gameName)
 	
 	local script = {
 		gametype = gameConfig.gameName or gameName,
-		hostip = '127.0.0.1',
+		hostip = "",
 		hostport = 0,
 		ishost = 1,
 		mapname = gameConfig.mapName,
@@ -356,14 +356,7 @@ local function StartBattleForReal(planetID, planetData, gameName)
 		script["allyTeam" .. i] = allyTeam
 	end
 
-	local scriptString = localLobby:MakeScriptTXT(script)
-	if Configuration.devMode then
-		local scriptFileName = "scriptFile.txt"
-		local scriptFile = io.open(scriptFileName, "w")
-		scriptFile:write(scriptString)
-	end
-	--Spring.Echo("scriptString", scriptString)
-	localLobby:StartGameFromString(scriptString, "campaign" .. planetID)
+	WG.SteamCoopHandler.AttemptGameStart("campaign" .. planetID, script)
 end
 
 --------------------------------------------------------------------------------

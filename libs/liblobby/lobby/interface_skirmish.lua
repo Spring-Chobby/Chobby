@@ -238,6 +238,39 @@ function InterfaceSkirmish:StartReplay(replayFilename)
 	return false
 end
 
+function InterfaceSkirmish:StartGameFromLuaScript(gameType, scriptTable, friendList, hostPort)
+	self:_CallListeners("OnBattleAboutToStart", gameType)
+	
+	friendList = friendList or {}
+	playerCount = 1 -- Local player is already present
+
+	for i = 1, #friendList do
+		local friendName = friendList[i]
+		scriptTable["player" .. i] = {
+			Name = friendName,
+			Team = 0, -- Player is always team 0 (I hope)
+			IsFromDemo = 0,
+			Password = "12345",
+			rank = 0,
+		}
+		playerCount = playerCount + 1
+	end
+	
+	if hostPort then
+		scriptTable.hostip = hostPort
+	end
+	
+	local scriptTxt = self:MakeScriptTXT(scriptTable)
+	
+	Spring.Echo(scriptTxt)
+	local scriptFileName = "scriptFile.txt"
+	local scriptFile = io.open(scriptFileName, "w")
+	scriptFile:write(scriptTxt)
+	scriptFile:close()
+	
+	Spring.Reload(scriptTxt)
+end
+
 function InterfaceSkirmish:StartGameFromString(scriptString, gameType)
 	self:_CallListeners("OnBattleAboutToStart", gameType)
 	Spring.Reload(scriptString)

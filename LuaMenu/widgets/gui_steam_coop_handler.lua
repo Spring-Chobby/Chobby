@@ -30,6 +30,8 @@ local friendsInGame, friendsInGameSteamID
 
 --local IterableMap = VFS.Include("LuaRules/Gadgets/Include/IterableMap.lua")
 
+local attemptGameType, attemptScriptTable
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- External functions: Wrapper
@@ -44,7 +46,11 @@ function SteamCoopHandler.SteamFriendJoinedMe(steamID, userName)
 end
 
 function SteamCoopHandler.SteamHostGameSuccess(hostPort)
-	WG.LibLobby.localLobby:StartBattle("skirmish", friendsInGame, true, hostPort)
+	if attemptScriptTable then
+		WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, scriptTable, friendsInGame, hostPort)
+	else
+		WG.LibLobby.localLobby:StartBattle(attemptGameType or "skirmish", friendsInGame, true, hostPort)
+	end
 end
 
 function SteamCoopHandler.SteamHostGameFailed(steamCaused, reason)
@@ -59,9 +65,15 @@ end
 --------------------------------------------------------------------------------
 -- External functions: Widget <-> Widget
 
-function SteamCoopHandler.AttemptGameStart()
+function SteamCoopHandler.AttemptGameStart(gameType, scriptTable)
+	attemptGameType = gameType
+	attemptScriptTable = scriptTable
 	if not friendsInGame then
-		WG.LibLobby.localLobby:StartBattle("skirmish")
+		if scriptTable then
+			WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, scriptTable)
+		else
+			WG.LibLobby.localLobby:StartBattle(gameType)
+		end
 		return
 	end
 	
