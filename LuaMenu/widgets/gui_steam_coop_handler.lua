@@ -61,8 +61,7 @@ end
 
 function SteamCoopHandler.AttemptGameStart()
 	if not friendsInGame then
-		Spring.Echo("no friends")
-		battleLobby:StartBattle("skirmish")
+		WG.LibLobby.localLobby:StartBattle("skirmish")
 		return
 	end
 	
