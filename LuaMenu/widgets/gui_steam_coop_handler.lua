@@ -24,7 +24,7 @@ end
 local friendsInGame, friendsInGameSteamID
 local alreadyIn = {}
 
-local attemptGameType, attemptScriptTable
+local attemptGameType, attemptScriptTable, startReplayFile
 local inCoop = false
 local friendsReplaceAI = false
 
@@ -42,6 +42,11 @@ local function LeaveHostCoopFunc()
 	friendsInGame = nil
 	friendsInGameSteamID = nil
 	alreadyIn = {}
+end
+
+local function ResetHostData()
+	attemptScriptTable = nil
+	startReplayFile = nil
 end
 
 --------------------------------------------------------------------------------
@@ -161,12 +166,15 @@ function SteamCoopHandler.SteamHostGameSuccess(hostPort)
 	if closePopup then
 		closePopup:Close()
 	end
-	if attemptScriptTable then
+	if startReplayFile then
+		WG.Chobby.localLobby:StartReplay(startReplayFile, hostPort)
+	elseif attemptScriptTable then
 		WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, attemptScriptTable, friendsInGame, hostPort)
 	else
 		local myName = WG.Chobby.Configuration:GetPlayerName()
 		WG.LibLobby.localLobby:StartBattle(attemptGameType or "skirmish", myName, friendsInGame, friendsReplaceAI, hostPort)
 	end
+	ResetHostData()
 end
 
 function SteamCoopHandler.SteamHostGameFailed(steamCaused, reason)
@@ -174,6 +182,7 @@ function SteamCoopHandler.SteamHostGameFailed(steamCaused, reason)
 		closePopup:Close()
 	end
 	WG.Chobby.InformationPopup("Coop connection failed. " .. (reason or "???") .. ". " .. (steamCaused or "???"))
+	ResetHostData()
 end
 
 function SteamCoopHandler.SteamConnectSpring(hostIP, hostPort, clientPort, myName, scriptPassword, map, game, engine)
@@ -195,13 +204,16 @@ end
 --------------------------------------------------------------------------------
 -- External functions: Widget <-> Widget
 
-function SteamCoopHandler.AttemptGameStart(gameType, scriptTable, newFriendsReplaceAI)
+function SteamCoopHandler.AttemptGameStart(gameType, scriptTable, newFriendsReplaceAI, newReplayFile)
 	attemptGameType = gameType
 	attemptScriptTable = scriptTable
 	friendsReplaceAI = newFriendsReplaceAI
+	startReplayFile = newReplayFile
 	
 	if not friendsInGame then
-		if scriptTable then
+		if startReplayFile then
+			WG.Chobby.localLobby:StartReplay(startReplayFile)
+		elseif scriptTable then
 			WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, scriptTable)
 		else
 			WG.LibLobby.localLobby:StartBattle(gameType, WG.Chobby.Configuration:GetPlayerName())
@@ -222,8 +234,8 @@ function SteamCoopHandler.AttemptGameStart(gameType, scriptTable, newFriendsRepl
 	
 	local args = {
 		Players = players,
-		Map = mapName,
-		Game = gameName,
+		--Map = mapName,
+		--Game = gameName,
 		Engine = Spring.Utilities.GetEngineVersion()
 	}
 	

@@ -93,10 +93,10 @@ local function GenerateScriptTxt(battleIp, battlePort, clientPort, scriptPasswor
 }]]
 
 	scriptTxt = scriptTxt:gsub("__IP__", battleIp)
-						:gsub("__PORT__", battlePort)
-						:gsub("__CLIENT_PORT__", clientPort or 0)
-						:gsub("__MY_PLAYER_NAME__", myName or lobby:GetMyUserName() or "noname")
-						:gsub("__MY_PASSWD__", scriptPassword)
+                         :gsub("__PORT__", battlePort)
+                         :gsub("__CLIENT_PORT__", clientPort or 0)
+                         :gsub("__MY_PLAYER_NAME__", myName or lobby:GetMyUserName() or "noname")
+                         :gsub("__MY_PASSWD__", scriptPassword)
 	return scriptTxt
 end
 

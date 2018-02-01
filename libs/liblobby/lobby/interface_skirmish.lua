@@ -238,16 +238,21 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 	Spring.Reload(scriptTxt)
 end
 
-function InterfaceSkirmish:StartReplay(replayFilename)
+function InterfaceSkirmish:StartReplay(replayFilename, hostPort)
 	local scriptTxt =
 [[
 [GAME]
 {
 	DemoFile=__FILE__;
+	HostIP=__IP__;
+	HostPort=__PORT__;
+	IsHost=1;
 }
 ]]
 
 	scriptTxt = scriptTxt:gsub("__FILE__", replayFilename)
+                         :gsub("__IP__", "127.0.0.1")
+                         :gsub("__PORT__", hostPort or 0)
 	self:_CallListeners("OnBattleAboutToStart", "replay")
 
 	Spring.Echo("starting game", scriptTxt)
