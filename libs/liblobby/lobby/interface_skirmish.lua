@@ -303,7 +303,7 @@ function InterfaceSkirmish:StartBattle(gameType, myName, friendList, friendsRepl
 	end
 
 	self:_CallListeners("OnBattleAboutToStart", gameType, battle.gameName, battle.mapName)
-	self:_OnSaidBattleEx("Battle", "about to start", battle.gameName, battle.mapName, self:GetMyUserName() or "noname")
+	self:_OnSaidBattleEx("Battle", "about to start", battle.gameName, battle.mapName, myName)
 	self:_StartScript(battle.gameName, battle.mapName, myName, friendList, friendsReplaceAI, hostPort)
 	return self
 end

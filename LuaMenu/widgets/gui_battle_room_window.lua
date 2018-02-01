@@ -1846,7 +1846,7 @@ function BattleRoomWindow.GetSingleplayerControl(setupData)
 				end
 
 				battleLobby = WG.LibLobby.localLobby
-				battleLobby:SetBattleState(lobby:GetMyUserName() or "Player", singleplayerGame, defaultMap, "Skirmish Battle")
+				battleLobby:SetBattleState(WG.Chobby.Configuration:GetPlayerName(), singleplayerGame, defaultMap, "Skirmish Battle")
 
 				wrapperControl = obj
 
