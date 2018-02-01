@@ -232,15 +232,15 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 	local scriptTxt = self:MakeScriptTXT(script)
 	
 	Spring.Echo(scriptTxt)
-	local scriptFileName = "scriptFile.txt"
-	local scriptFile = io.open(scriptFileName, "w")
-	scriptFile:write(scriptTxt)
-	scriptFile:close()
+	--local scriptFileName = "scriptFile.txt"
+	--local scriptFile = io.open(scriptFileName, "w")
+	--scriptFile:write(scriptTxt)
+	--scriptFile:close()
 	
 	Spring.Reload(scriptTxt)
 end
 
-function InterfaceSkirmish:StartReplay(replayFilename, hostPort)
+function InterfaceSkirmish:StartReplay(replayFilename, myName, hostPort)
 	local scriptTxt =
 [[
 [GAME]
@@ -248,16 +248,23 @@ function InterfaceSkirmish:StartReplay(replayFilename, hostPort)
 	DemoFile=__FILE__;
 	HostIP=__IP__;
 	HostPort=__PORT__;
+	MyPlayerName=__MY_PLAYER_NAME__;
 	IsHost=1;
 }
 ]]
 
 	scriptTxt = scriptTxt:gsub("__FILE__", replayFilename)
                          :gsub("__IP__", "127.0.0.1")
+                         :gsub("__MY_PLAYER_NAME__", myName or "(spec)")
                          :gsub("__PORT__", hostPort or 0)
 	self:_CallListeners("OnBattleAboutToStart", "replay")
 
-	Spring.Echo("starting game", scriptTxt)
+	Spring.Echo(scriptTxt)
+	--local scriptFileName = "scriptFile.txt"
+	--local scriptFile = io.open(scriptFileName, "w")
+	--scriptFile:write(scriptTxt)
+	--scriptFile:close()
+	
 	Spring.Reload(scriptTxt)
 	return false
 end
@@ -290,10 +297,10 @@ function InterfaceSkirmish:StartGameFromLuaScript(gameType, scriptTable, friendL
 	local scriptTxt = self:MakeScriptTXT(scriptTable)
 	
 	Spring.Echo(scriptTxt)
-	local scriptFileName = "scriptFile.txt"
-	local scriptFile = io.open(scriptFileName, "w")
-	scriptFile:write(scriptTxt)
-	scriptFile:close()
+	--local scriptFileName = "scriptFile.txt"
+	--local scriptFile = io.open(scriptFileName, "w")
+	--scriptFile:write(scriptTxt)
+	--scriptFile:close()
 	
 	Spring.Reload(scriptTxt)
 end

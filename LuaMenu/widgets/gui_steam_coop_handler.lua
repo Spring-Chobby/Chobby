@@ -179,12 +179,12 @@ end
 
 function SteamCoopHandler.SteamHostGameSuccess(hostPort)
 	CloseExclusivePopup()
+	local myName = WG.Chobby.Configuration:GetPlayerName()
 	if startReplayFile then
-		WG.Chobby.localLobby:StartReplay(startReplayFile, hostPort)
+		WG.Chobby.localLobby:StartReplay(startReplayFile, myName .. "(spec)", hostPort)
 	elseif attemptScriptTable then
 		WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, attemptScriptTable, friendsInGame, hostPort)
 	else
-		local myName = WG.Chobby.Configuration:GetPlayerName()
 		WG.LibLobby.localLobby:StartBattle(attemptGameType or "skirmish", myName, friendsInGame, friendsReplaceAI, hostPort)
 	end
 	ResetHostData()
@@ -231,7 +231,8 @@ function SteamCoopHandler.AttemptGameStart(gameType, scriptTable, newFriendsRepl
 	
 	if not friendsInGame then
 		if startReplayFile then
-			WG.Chobby.localLobby:StartReplay(startReplayFile)
+			local myName = WG.Chobby.Configuration:GetPlayerName()
+			WG.Chobby.localLobby:StartReplay(startReplayFile, myName .. "(spec)")
 		elseif scriptTable then
 			WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, scriptTable)
 		else
@@ -242,11 +243,16 @@ function SteamCoopHandler.AttemptGameStart(gameType, scriptTable, newFriendsRepl
 	
 	MakeExclusivePopup("Starting game.")
 	
+	local appendName = ""
+	if startReplayFile then
+		appendName = "(spec)"
+	end
+	
 	local players = {}
 	for i = 1, #friendsInGame do
 		players[#players + 1] = {
 			SteamID = friendsInGameSteamID[i],
-			Name = friendsInGame[i],
+			Name = friendsInGame[i] .. appendName,
 			ScriptPassword = "12345",
 		}
 	end
