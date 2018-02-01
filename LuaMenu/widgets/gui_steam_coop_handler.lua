@@ -27,6 +27,7 @@ local alreadyIn = {}
 local attemptGameType, attemptScriptTable, startReplayFile
 local inCoop = false
 local friendsReplaceAI = false
+local doDelayedConnection = true
 
 local coopPanel, coopHostPanel, replacablePopup
 
@@ -49,11 +50,11 @@ local function ResetHostData()
 	startReplayFile = nil
 end
 
-local function MakeExclusivePopup(text)
+local function MakeExclusivePopup(text, ClickFunc)
 	if replacablePopup then
 		replacablePopup:Close()
 	end
-	replacablePopup = WG.Chobby.InformationPopup(text)
+	replacablePopup = WG.Chobby.InformationPopup(text, nil, nil, nil, nil, nil, ClickFunc)
 end
 
 local function CloseExclusivePopup()
@@ -199,11 +200,15 @@ function SteamCoopHandler.SteamConnectSpring(hostIP, hostPort, clientPort, myNam
 		-- Do not get forced into a coop game if you cancel.
 		return
 	end
-	MakeExclusivePopup("Starting coop game.")
+	doDelayedConnection = true
 	local function Start()
 		CloseExclusivePopup()
-		WG.LibLobby.localLobby:ConnectToBattle(false, hostIP, hostPort, clientPort, scriptPassword, myName, game, map, engine, "coop")
+		if doDelayedConnection then
+			doDelayedConnection = false
+			WG.LibLobby.localLobby:ConnectToBattle(false, hostIP, hostPort, clientPort, scriptPassword, myName, game, map, engine, "coop")
+		end
 	end
+	MakeExclusivePopup("Starting coop game.", Start)
 	if (WG.Chobby.Configuration.coopConnectDelay or 0) > 0 then
 		WG.Delay(Start, WG.Chobby.Configuration.coopConnectDelay)
 	else

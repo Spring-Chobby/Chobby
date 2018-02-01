@@ -423,6 +423,7 @@ function Configuration:GetConfigData()
 		activeDebugConsole = self.activeDebugConsole,
 		onlyShowFeaturedMaps = self.onlyShowFeaturedMaps,
 		simpleAiList = self.simpleAiList,
+		coopConnectDelay = self.coopConnectDelay,
 		useSpringRestart = self.useSpringRestart,
 		displayBots = self.displayBots,
 		displayBadEngines = self.displayBadEngines,

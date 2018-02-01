@@ -63,33 +63,6 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 				Spectator = (data.isSpectator and 1) or nil,
 				rank = 0,
 			}
-			playerCount = playerCount + 1
-
-			for i = 1, #friendList do
-				local friendName = friendList[i]
-				if not data.isSpectator then
-					teamCount = teamCount + 1
-					teams[teamCount] = {
-						TeamLeader = playerCount,
-						AllyTeam = data.allyNumber,
-						rgbcolor = '0.99609375 0.546875 0',
-					}
-					if friendsReplaceAI then
-						friendAllyTeam = data.allyNumber
-						aiReplaceCount = aiReplaceCount + 1
-					end
-				end
-				
-				players[playerCount] = {
-					Name = friendName,
-					Team = teamCount,
-					IsFromDemo = 0,
-					Spectator = (data.isSpectator and 1) or nil,
-					Password = "12345",
-					rank = 0,
-				}
-				playerCount = playerCount + 1
-			end
 
 			if not data.isSpectator then
 				teams[teamCount] = {
@@ -99,6 +72,34 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 				}
 				maxAllyTeamID = math.max(maxAllyTeamID, data.allyNumber)
 				teamCount = teamCount + 1
+			end
+			playerCount = playerCount + 1
+
+			for i = 1, #friendList do
+				local friendName = friendList[i]
+				
+				players[playerCount] = {
+					Name = friendName,
+					Team = teamCount,
+					IsFromDemo = 0,
+					Spectator = (data.isSpectator and 1) or nil,
+					Password = "12345",
+					rank = 0,
+				}
+				
+				if not data.isSpectator then
+					teams[teamCount] = {
+						TeamLeader = playerCount,
+						AllyTeam = data.allyNumber,
+						rgbcolor = '0.99609375 0.546875 0',
+					}
+					teamCount = teamCount + 1
+					if friendsReplaceAI then
+						friendAllyTeam = data.allyNumber
+						aiReplaceCount = aiReplaceCount + 1
+					end
+				end
+				playerCount = playerCount + 1
 			end
 		end
 	end
@@ -136,7 +137,6 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 						Host = 0,
 					}
 				end
-				aiCount = aiCount + 1
 
 				teams[teamCount] = {
 					TeamLeader = 0,
@@ -144,7 +144,9 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 					rgbcolor = '0.99609375 0.546875 0',
 				}
 				maxAllyTeamID = math.max(maxAllyTeamID, data.allyNumber)
+				
 				teamCount = teamCount + 1
+				aiCount = aiCount + 1
 			end
 		end
 	end
