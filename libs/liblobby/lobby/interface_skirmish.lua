@@ -50,6 +50,8 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 	local aiCount = 0
 
 	friendList = friendList or {}
+	local friendAllyTeam
+	local aiReplaceCount = 0
 
 	-- Add the player, this is to make the player team 0.
 	for userName, data in pairs(self.userBattleStatus) do
@@ -65,6 +67,19 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 
 			for i = 1, #friendList do
 				local friendName = friendList[i]
+				if not data.isSpectator then
+					teamCount = teamCount + 1
+					teams[teamCount] = {
+						TeamLeader = playerCount,
+						AllyTeam = data.allyNumber,
+						rgbcolor = '0.99609375 0.546875 0',
+					}
+					if friendsReplaceAI then
+						friendAllyTeam = data.allyNumber
+						aiReplaceCount = aiReplaceCount + 1
+					end
+				end
+				
 				players[playerCount] = {
 					Name = friendName,
 					Team = teamCount,
@@ -98,29 +113,31 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 	local chickenAdded = false
 	for userName, data in pairs(self.userBattleStatus) do
 		if data.allyNumber and data.aiLib then
-			if chickenName and string.find(data.aiLib, "Chicken") then
-				-- Override chicken AI if difficulty modoption is present
-				ais[aiCount] = {
-					Name = chickenName,
-					Team = teamCount,
-					IsFromDemo = 0,
-					ShortName = chickenName,
-					Host = 0,
-				}
-				chickenAdded = true
+			if friendAllyTeam == data.allyNumber and aiReplaceCount > 0 and not string.find(data.aiLib, "Chicken") then
+				aiReplaceCount = aiReplaceCount - 1
 			else
-				ais[aiCount] = {
-					Name = userName,
-					Team = teamCount,
-					IsFromDemo = 0,
-					ShortName = data.aiLib,
-					Version = data.aiVersion,
-					Host = 0,
-				}
-			end
-			aiCount = aiCount + 1
+				if chickenName and string.find(data.aiLib, "Chicken") then
+					-- Override chicken AI if difficulty modoption is present
+					ais[aiCount] = {
+						Name = chickenName,
+						Team = teamCount,
+						IsFromDemo = 0,
+						ShortName = chickenName,
+						Host = 0,
+					}
+					chickenAdded = true
+				else
+					ais[aiCount] = {
+						Name = userName,
+						Team = teamCount,
+						IsFromDemo = 0,
+						ShortName = data.aiLib,
+						Version = data.aiVersion,
+						Host = 0,
+					}
+				end
+				aiCount = aiCount + 1
 
-			if not data.IsSpectator then
 				teams[teamCount] = {
 					TeamLeader = 0,
 					AllyTeam = data.allyNumber,

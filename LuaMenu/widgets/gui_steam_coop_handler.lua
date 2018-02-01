@@ -26,6 +26,7 @@ local alreadyIn = {}
 
 local attemptGameType, attemptScriptTable
 local inCoop = false
+local friendsReplaceAI = false
 
 local coopPanel, coopHostPanel, closePopup
 
@@ -164,7 +165,7 @@ function SteamCoopHandler.SteamHostGameSuccess(hostPort)
 		WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, attemptScriptTable, friendsInGame, hostPort)
 	else
 		local myName = WG.Chobby.Configuration:GetPlayerName()
-		WG.LibLobby.localLobby:StartBattle(attemptGameType or "skirmish", myName, friendsInGame, true, hostPort)
+		WG.LibLobby.localLobby:StartBattle(attemptGameType or "skirmish", myName, friendsInGame, friendsReplaceAI, hostPort)
 	end
 end
 
@@ -194,9 +195,11 @@ end
 --------------------------------------------------------------------------------
 -- External functions: Widget <-> Widget
 
-function SteamCoopHandler.AttemptGameStart(gameType, scriptTable)
+function SteamCoopHandler.AttemptGameStart(gameType, scriptTable, newFriendsReplaceAI)
 	attemptGameType = gameType
 	attemptScriptTable = scriptTable
+	friendsReplaceAI = newFriendsReplaceAI
+	
 	if not friendsInGame then
 		if scriptTable then
 			WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, scriptTable)
