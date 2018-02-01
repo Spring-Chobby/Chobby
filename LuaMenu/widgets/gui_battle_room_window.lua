@@ -214,10 +214,11 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 					else
 						if battleLobby.name == "singleplayer" then
 							WG.Analytics.SendOnetimeEvent("lobby:singleplayer:skirmish:start")
+							WG.SteamCoopHandler.AttemptGameStart("skirmish")
 						else
 							WG.Analytics.SendOnetimeEvent("lobby:multiplayer:custom:start")
+							battleLobby:StartBattle("skirmish")
 						end
-						WG.SteamCoopHandler.AttemptGameStart("skirmish")
 					end
 				else
 					Spring.Echo("Do something if map or game is missing")
