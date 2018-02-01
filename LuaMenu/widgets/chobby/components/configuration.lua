@@ -38,6 +38,7 @@ function Configuration:init()
 	self.wantAuthenticateWithSteam = true
 	self.steamLinkComplete = false
 	self.alreadySeenFactionPopup2 = false
+	self.firstBattleStarted = false
 	self.channels = {}
 
 	self.manualBorderless = {
@@ -394,6 +395,7 @@ function Configuration:GetConfigData()
 		wantAuthenticateWithSteam = self.wantAuthenticateWithSteam,
 		steamLinkComplete = self.steamLinkComplete,
 		alreadySeenFactionPopup2 = self.alreadySeenFactionPopup2,
+		firstBattleStarted = self.firstBattleStarted,
 		channels = self.channels,
 		gameConfigName = self.gameConfigName,
 		game_fullscreen = self.game_fullscreen,

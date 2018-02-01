@@ -1155,8 +1155,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	externalFunctions.ViewResize(screenWidth, screenHeight)
 	UpdatePadding(screenWidth, screenHeight)
 	UpdateChildLayout()
-	rightPanelHandler.OpenTab(1)
-
+	
 	return externalFunctions
 end
 

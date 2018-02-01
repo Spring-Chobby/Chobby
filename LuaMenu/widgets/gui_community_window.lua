@@ -725,8 +725,16 @@ end
 --------------------------------------------------------------------------------
 -- Widget Interface
 
+function widget:ActivateGame()
+	if not WG.Chobby.Configuration.firstBattleStarted then
+		WG.Chobby.Configuration:SetConfigValue("firstBattleStarted", true)
+	end
+end
+
 local function DelayedInitialize()
-	
+	if WG.Chobby.Configuration.firstBattleStarted then
+		WG.Chobby.interfaceRoot.OpenRightPanelTab("community")
+	end
 end
 
 function widget:Initialize()
