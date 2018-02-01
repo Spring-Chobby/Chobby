@@ -21,7 +21,7 @@ end
 --------------------------------------------------------------------------------
 -- Variables
 
-local friendsInGame, friendsInGameSteamID
+local friendsInGame, saneFriendsInGame, friendsInGameSteamID
 local alreadyIn = {}
 
 local attemptGameType, attemptScriptTable, startReplayFile
@@ -41,6 +41,7 @@ end
 
 local function LeaveHostCoopFunc()
 	friendsInGame = nil
+	saneFriendsInGame = nil
 	friendsInGameSteamID = nil
 	alreadyIn = {}
 end
@@ -154,6 +155,7 @@ local SteamCoopHandler = {}
 function SteamCoopHandler.SteamFriendJoinedMe(steamID, userName)
 	if not alreadyIn[steamID] then
 		friendsInGame = friendsInGame or {}
+		saneFriendsInGame = saneFriendsInGame or {}
 		friendsInGameSteamID = friendsInGameSteamID or {}
 		
 		friendsInGame[#friendsInGame + 1] = userName
@@ -183,9 +185,9 @@ function SteamCoopHandler.SteamHostGameSuccess(hostPort)
 	if startReplayFile then
 		WG.Chobby.localLobby:StartReplay(startReplayFile, myName, hostPort)
 	elseif attemptScriptTable then
-		WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, attemptScriptTable, friendsInGame, hostPort)
+		WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, attemptScriptTable, saneFriendsInGame, hostPort)
 	else
-		WG.LibLobby.localLobby:StartBattle(attemptGameType or "skirmish", myName, friendsInGame, friendsReplaceAI, hostPort)
+		WG.LibLobby.localLobby:StartBattle(attemptGameType or "skirmish", myName, saneFriendsInGame, friendsReplaceAI, hostPort)
 	end
 	ResetHostData()
 end
@@ -229,17 +231,23 @@ function SteamCoopHandler.AttemptGameStart(gameType, scriptTable, newFriendsRepl
 	friendsReplaceAI = newFriendsReplaceAI
 	startReplayFile = newReplayFile
 	
+	local Configuration = WG.Chobby.Configuration
+	
 	if not friendsInGame then
 		if startReplayFile then
-			local myName = WG.Chobby.Configuration:GetPlayerName()
+			local myName = Configuration:GetPlayerName()
 			WG.Chobby.localLobby:StartReplay(startReplayFile, myName)
 		elseif scriptTable then
 			WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, scriptTable)
 		else
-			WG.LibLobby.localLobby:StartBattle(gameType, WG.Chobby.Configuration:GetPlayerName())
+			WG.LibLobby.localLobby:StartBattle(gameType, Configuration:GetPlayerName())
 		end
 		return
 	end
+	
+	local usedNames = {
+		[myName] = true,
+	}
 	
 	MakeExclusivePopup("Starting game.")
 	
@@ -250,9 +258,10 @@ function SteamCoopHandler.AttemptGameStart(gameType, scriptTable, newFriendsRepl
 	
 	local players = {}
 	for i = 1, #friendsInGame do
+		saneFriendsInGame[i] = Configuration:SanitizeName(friendsInGame[i], usedNames) .. appendName
 		players[#players + 1] = {
 			SteamID = friendsInGameSteamID[i],
-			Name = friendsInGame[i] .. appendName,
+			Name = saneFriendsInGame[i],
 			ScriptPassword = "12345",
 		}
 	end

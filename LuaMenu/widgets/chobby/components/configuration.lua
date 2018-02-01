@@ -205,6 +205,12 @@ function Configuration:init()
 	self.animate_lobby = (gl.CreateShader ~= nil)
 	self.minimapDownloads = {}
 	self.minimapThumbDownloads = {}
+	
+	self.saneCharacters = {
+		"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
+		"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+		"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "[", "]", "_",
+	}
 end
 
 ---------------------------------------------------------------------------------
@@ -664,8 +670,35 @@ function Configuration:IsValidEngineVersion(engineVersion)
 	return engineVersion == Spring.Utilities.GetEngineVersion() or engineVersion == self:GetTruncatedEngineVersion()
 end
 
+function Configuration:SanitizeName(name, usedNames)
+	local ret = ""
+	local length = string.len(name)
+	for i = 1, length do
+		local c = string.sub(name, i, i)
+		if self.saneCharacters[c] then
+			ret = ret .. c
+		end
+	end
+	
+	if ret == "" then
+		ret = "Player"
+	end
+	if usedNames then
+		while usedNames[ret] do
+			ret = ret .. "1"
+		end
+		usedNames[ret] = true
+	end
+	
+	return ret, usedNames
+end
+
 function Configuration:GetPlayerName(allowBlank)
-	return (lobby and lobby.myUserName) or self.suggestedNameFromSteam or (allowBlank and "") or "Player"
+	local suggest = (lobby and lobby.myUserName) or self.suggestedNameFromSteam or (allowBlank and "") or "Player"
+	if (not allowBlank) and suggest == "" then
+		return "Player"
+	end
+	return suggest
 end	
 
 function Configuration:GetDefaultGameName()
