@@ -184,7 +184,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 
 	local script = {
 		gametype = gameName,
-		hostip = "",
+		hostip = "127.0.0.1",
 		hostport = hostPort or 0,
 		ishost = 1,
 		mapname = mapName,
@@ -259,9 +259,9 @@ function InterfaceSkirmish:StartGameFromLuaScript(gameType, scriptTable, friendL
 	scriptTable.numplayers = playerCount
 	scriptTable.numusers = (playerCount - 2) + scriptTable.numusers
 	
-	if hostPort then
-		scriptTable.hostport = hostPort
-	end
+	scriptTable.hostip = "127.0.0.1"
+	scriptTable.hostport = hostPort or 0
+	scriptTable.ishost = 1
 	
 	local scriptTxt = self:MakeScriptTXT(scriptTable)
 	

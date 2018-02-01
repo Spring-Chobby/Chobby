@@ -330,9 +330,6 @@ local function StartBattleForReal(planetID, planetData, gameName)
 	
 	local script = {
 		gametype = gameConfig.gameName or gameName,
-		hostip = "",
-		hostport = 0,
-		ishost = 1,
 		mapname = gameConfig.mapName,
 		myplayername = playerName,
 		nohelperais = 0,
