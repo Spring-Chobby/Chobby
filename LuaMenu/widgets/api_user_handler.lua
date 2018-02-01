@@ -615,7 +615,7 @@ local function GetUserControls(userName, opts)
 			keepAspect = true,
 			file = GetUserSyncStatus(userName, userControls),
 		}
-		offset = offset + 23
+		offset = offset + 21
 	end
 
 	if not isSingleplayer then
@@ -630,7 +630,7 @@ local function GetUserControls(userName, opts)
 			keepAspect = true,
 			file = GetUserCountryImage(userName, userControls),
 		}
-		offset = offset + 23
+		offset = offset + 21
 	end
 
 	offset = offset + 1
@@ -644,7 +644,7 @@ local function GetUserControls(userName, opts)
 		keepAspect = false,
 		file = GetUserRankImageName(userName, userControls),
 	}
-	offset = offset + 23
+	offset = offset + 21
 
 	local clanImage, needDownload = GetUserClanImage(userName, userControls)
 	if clanImage then
@@ -661,10 +661,10 @@ local function GetUserControls(userName, opts)
 			fallbackFile = Configuration:GetLoadingImage(1),
 			checkFileExists = needDownload,
 		}
-		offset = offset + 23
+		offset = offset + 21
 	end
 
-	offset = offset + 1
+	offset = offset + 2
 	userControls.tbName = TextBox:New {
 		name = "tbName",
 		x = offset,
@@ -672,6 +672,7 @@ local function GetUserControls(userName, opts)
 		right = 0,
 		bottom = 4,
 		align = "left",
+		multiline = false,
 		parent = userControls.mainControl,
 		fontsize = Configuration:GetFont(2).size,
 		text = userName,

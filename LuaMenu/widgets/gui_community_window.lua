@@ -134,7 +134,7 @@ local function GetLadderHandler(parentControl)
 		parent = parentControl,
 	}
 	local playerHolder = Control:New{
-		x = 38,
+		x = 28,
 		y = 30,
 		right = 0,
 		bottom = 0,
@@ -177,13 +177,13 @@ local function GetLadderHandler(parentControl)
 			
 			if not numberBox[i] then
 				numberBox[i] = Label:New{
-					x = 2,
+					x = 1,
 					y = offset + 32,
-					width = 36,
+					width = 30,
 					height = 24,
 					align = "right",
 					valign = "top",
-					caption = i .. " - ",
+					caption = i .. ". ",
 					font = WG.Chobby.Configuration:GetFont(2),
 					parent = holder,
 				}
