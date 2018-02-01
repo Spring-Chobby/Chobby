@@ -304,10 +304,10 @@ local function StartBattleForReal(planetID, planetData, gameName)
 		planetmissionnewtonfirezones = TableToBase64(gameConfig.playerConfig.newtonFirezones),
 		fixedstartpos = 1,
 		planetmissiondifficulty = missionDifficulty,
-		singleplayercampaignsavename = WG.Chobby.Configuration.campaignSaveFile,
 		singleplayercampaignbattleid = planetID,
 		initalterraform = TableToBase64(gameConfig.terraform),
 		planetmissionmapmarkers = TableToBase64(gameConfig.mapMarkers),
+		campaignpartialsavedata = TableToBase64(WG.CampaignData.GetCampaignPartialSaveData()),
 	}
 	AddStartUnits(modoptions, gameConfig.neutralUnits, "neutralstartunits_")
 	

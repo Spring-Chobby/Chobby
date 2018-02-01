@@ -29,7 +29,7 @@ local TRANSFORM_BOUNDS = {
 }
 
 local difficultyNameMap = {
-	[0] = "Unknown",
+	[0] = "Import",
 	[1] = "Easy",
 	[2] = "Normal",
 	[3] = "Hard",
@@ -1489,6 +1489,7 @@ end
 local BATTLE_WON_STRING = "Campaign_PlanetBattleWon"
 local BATTLE_LOST_STRING = "Campaign_PlanetBattleLost"
 local BATTLE_RESIGN_STRING = "Campaign_PlanetBattleResign"
+local LOAD_CAMPAIGN_STRING = "Campaign_LoadCampaign"
 
 function string:split(delimiter)
 	local result = {}
@@ -1503,8 +1504,16 @@ function string:split(delimiter)
 	return result
 end
 
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
 function widget:RecvLuaMsg(msg)
-	if string.find(msg, BATTLE_WON_STRING) then
+	if string.find(msg, LOAD_CAMPAIGN_STRING) then
+		local encoded = string.sub(msg, string.len(LOAD_CAMPAIGN_STRING) + 1)
+		local saveData = Spring.Utilities.CustomKeyToUsefulTable(encoded)
+		WG.CampaignData.ApplyCampaignPartialSaveData(saveData)
+	elseif string.find(msg, BATTLE_WON_STRING) then
 		Spring.Echo("msg", msg)
 		local data = msg:split(" ")
 		Spring.Utilities.TableEcho(data, "data")

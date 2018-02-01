@@ -26,7 +26,6 @@ local externalFunctions = {}
 local SAVE_DIR = "Saves/campaign/"
 local SAVE_NAME = "saveFile"
 local ICONS_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/unitpics/"
-local LOAD_CAMPAIGN_STRING = "Campaign_LoadCampaign"
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -397,11 +396,21 @@ local function SanityCheckCommanderLevel()
 	return true
 end
 
+local function GenerateCampaignID()
+	gamedata.campaignID = tostring(math.random())
+end
+
 local function LoadGame(saveData, refreshGUI)
 	local success, err = pcall(function()
 		Spring.CreateDir(SAVE_DIR)
 		ResetGamedata()
 		gamedata = Spring.Utilities.MergeTable(saveData, gamedata, true)
+		
+		if not gamedata.campaignID then
+			GenerateCampaignID()
+			SaveGame()
+		end
+		
 		if SanityCheckCommanderLevel() then
 			UpdateCommanderModuleCounts()
 		else
@@ -422,6 +431,7 @@ end
 local function StartNewGame()
 	local campaignConfig = WG.Chobby.Configuration.campaignConfig
 	ResetGamedata()
+	GenerateCampaignID()
 	
 	local planets = campaignConfig.planetDefs.initialPlanets
 	UnlockRewardSet(campaignConfig.initialUnlocks)
@@ -434,6 +444,18 @@ local function StartNewGame()
 	
 	CallListeners("CampaignLoaded")
 	return success and saveName
+end
+
+local function SetupNewSave(commName, difficulty, overrideCampaignID)
+	WG.CampaignData.SetCommanderName(commName)
+	WG.CampaignData.SetDifficultySetting(difficulty)
+	WG.CampaignData.SetCampaignInitializationComplete()
+	if WG.CampaignSaveWindow.PopulateSaveList then
+		WG.CampaignSaveWindow.PopulateSaveList()
+	end
+	if overrideCampaignID then
+		gamedata.campaignID = overrideCampaignID
+	end
 end
 
 local function LoadCampaignData()
@@ -453,6 +475,91 @@ end
 local function LoadGameByFilename(filename)
 	WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", filename)
 	LoadCampaignData()
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Partial save/load
+
+local function FindMatchingSave(campaignID, commName)
+	-- Check whether the save is already loaded
+	if campaignID == gamedata.campaignID and commName == gamedata.commanderName then
+		return false
+	end
+	
+	local saveFiles = GetSaves()
+	for name, save in pairs(saveFiles) do
+		if campaignID == save.campaignID and commName == save.commanderName then
+			return true, name
+		end
+	end
+	
+	return true
+end
+
+function externalFunctions.ApplyCampaignPartialSaveData(saveData)
+	if not saveData then
+		return
+	end
+	
+	local commander = saveData.commander
+	local planets = saveData.planets
+	if not (commander and planets) then
+		return
+	end
+	
+	local needLoad, existingSave = FindMatchingSave(saveData.campaignID, commander.name)
+	if needLoad then
+		if existingSave then
+			LoadGameByFilename(existingSave)
+		else
+			StartNewGame()
+			SetupNewSave(commander.name, saveData.difficultySetting, saveData.campaignID)
+		end
+	end
+	WG.CampaignData.SetDifficultySetting(saveData.difficultySetting)
+	
+	local CapturePlanet = WG.CampaignData.CapturePlanet
+	for i = 1, #planets do
+		local planet = planets[i]
+		CapturePlanet(planet.planetID, planet.bonusObjStatus, 0)
+	end
+	
+	gamedata.commanderLoadout = commander.modules or {}
+	CallListeners("UpdateCommanderLoadout")
+	SaveGame()
+end
+
+function externalFunctions.GetCampaignPartialSaveData()
+	local planetList = gamedata.planetsCaptured.list
+	local bonusMap = gamedata.bonusObjectivesComplete.map
+	
+	local planetDefs = WG.Chobby.Configuration.campaignConfig.planetDefs.planets
+	
+	local captureData = {}
+	for i = 1, #planetList do
+		local planetID = planetList[i]
+		local bonusConfig = planetDefs[planetID].gameConfig.bonusObjectiveConfig
+		
+		local bonusObjStatus = {}
+		if bonusConfig then
+			for j = 1, #bonusConfig do
+				bonusObjStatus[j] = (bonusMap[planetID .. "_" .. j] and true) or false
+			end
+		end
+		
+		captureData[#captureData + 1] = {
+			planetID = planetID,
+			bonusObjStatus = bonusObjStatus,
+		}
+	end
+	
+	return {
+		campaignID = gamedata.campaignID,
+		commander = externalFunctions.GetPlayerCommander(),
+		difficultySetting = gamedata.difficultySetting,
+		planets = captureData,
+	}
 end
 
 --------------------------------------------------------------------------------
@@ -483,10 +590,6 @@ function externalFunctions.CapturePlanet(planetID, bonusObjectives, difficulty)
 	local saveRequired = false
 	local gainedExperience = 0
 	local gainedBonusExperience = 0
-	
-	if (not gamedata.leastDifficulty) or (difficulty < gamedata.leastDifficulty) then
-		gamedata.leastDifficulty = difficulty
-	end
 	
 	if UnlockThing(gamedata.planetsCaptured, planetID) then
 		UnlockRewardSet(planet.completionReward)
@@ -523,6 +626,10 @@ function externalFunctions.CapturePlanet(planetID, bonusObjectives, difficulty)
 	GainExperience(gainedExperience, gainedBonusExperience)
 	
 	if saveRequired then
+		-- Only update lowest difficulty if something was achieved. Do not set lowest difficulty for Imported victories (they are shown on planets anyway).
+		if difficulty > 0 and ((not gamedata.leastDifficulty) or (difficulty < gamedata.leastDifficulty)) then
+			gamedata.leastDifficulty = difficulty
+		end
 		CallListeners("PlanetUpdate", planetID)
 		SaveGame()
 	end
@@ -720,19 +827,7 @@ function externalFunctions.DeleteSave(filename, supressLastSavePrompt)
 end
 
 externalFunctions.StartNewGame = StartNewGame
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
-function widget:RecvLuaMsg(msg)
-	if string.find(msg, LOAD_CAMPAIGN_STRING) then
-		local filename = string.sub(msg, string.len(LOAD_CAMPAIGN_STRING) + 1)
-		Spring.Log(widget:GetInfo().name, LOG.INFO, "Loading campaign " .. filename)
-		if filename == WG.Chobby.Configuration.campaignSaveFile then
-			return -- already loaded, do nothing
-		end
-		LoadGameByFilename(filename)
-	end
-end
+externalFunctions.SetupNewSave = SetupNewSave
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------

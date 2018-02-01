@@ -24,7 +24,7 @@ local COMBO_WIDTH = 235
 local CHECK_WIDTH = 230
 local TEXT_OFFSET = 6
 
-local DIFFICULTY_NAME_MAP = {"Easy", "Normal", "Hard", "Brutal", "None"}
+local DIFFICULTY_NAME_MAP = {"Imported", "Easy", "Normal", "Hard", "Brutal", "None"}
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
