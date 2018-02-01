@@ -50,11 +50,11 @@ local function ResetHostData()
 	startReplayFile = nil
 end
 
-local function MakeExclusivePopup(text, ClickFunc)
+local function MakeExclusivePopup(text, buttonText, ClickFunc)
 	if replacablePopup then
 		replacablePopup:Close()
 	end
-	replacablePopup = WG.Chobby.InformationPopup(text, nil, nil, nil, nil, nil, ClickFunc)
+	replacablePopup = WG.Chobby.InformationPopup(text, nil, nil, nil, buttonText, nil, ClickFunc)
 end
 
 local function CloseExclusivePopup()
@@ -202,17 +202,20 @@ function SteamCoopHandler.SteamConnectSpring(hostIP, hostPort, clientPort, myNam
 	end
 	doDelayedConnection = true
 	local function Start()
-		CloseExclusivePopup()
 		if doDelayedConnection then
 			doDelayedConnection = false
 			WG.LibLobby.localLobby:ConnectToBattle(false, hostIP, hostPort, clientPort, scriptPassword, myName, game, map, engine, "coop")
 		end
 	end
-	MakeExclusivePopup("Starting coop game.", Start)
-	if (WG.Chobby.Configuration.coopConnectDelay or 0) > 0 then
-		WG.Delay(Start, WG.Chobby.Configuration.coopConnectDelay)
-	else
+	local function StartAndClose()
+		CloseExclusivePopup()
 		Start()
+	end
+	MakeExclusivePopup("Starting coop game.", "Force", Start)
+	if (WG.Chobby.Configuration.coopConnectDelay or 0) > 0 then
+		WG.Delay(StartAndClose, WG.Chobby.Configuration.coopConnectDelay)
+	else
+		StartAndClose()
 	end
 end
 

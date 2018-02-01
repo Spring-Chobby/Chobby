@@ -751,7 +751,7 @@ local function GetLobbyTabControls()
 		height = 30,
 		value  = Configuration.coopConnectDelay or 0,
 		min    = 0,
-		max    = 180,
+		max    = 100,
 		step   = 1,
 		OnChange = {
 			function(obj, value)

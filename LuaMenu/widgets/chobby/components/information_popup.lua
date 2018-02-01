@@ -4,6 +4,7 @@ function InformationPopup:init(infoText, width, height, heading, caption, button
 	
 	width = width or 320
 	height = height or 220
+	self.closeFunc = closeFunc
 	
 	self.mainWindow = Window:New {
 		x = 700,
