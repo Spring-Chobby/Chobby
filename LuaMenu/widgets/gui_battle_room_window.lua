@@ -1569,23 +1569,22 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		parent = mainWindow,
 	}
 	
-	if Configuration.canAuthenticateWithSteam then
-		local btnInviteFriends = Button:New {
-			right = 101,
-			y = 7,
-			width = 180,
-			height = 45,
-			font = Configuration:GetFont(3),
-			caption = i18n("invite_friends"),
-			classname = "option_button",
-			OnClick = {
-				function()
-					WG.WrapperLoopback.SteamOpenOverlaySection()
-				end
-			},
-			parent = mainWindow,
-		}
-	end
+	local btnInviteFriends = Button:New {
+		right = 101,
+		y = 7,
+		width = 180,
+		height = 45,
+		font = Configuration:GetFont(3),
+		caption = i18n("invite_friends"),
+		classname = "option_button",
+		OnClick = {
+			function()
+				WG.WrapperLoopback.SteamOpenOverlaySection()
+			end
+		},
+		parent = mainWindow,
+	}
+	btnInviteFriends:SetVisibility(Configuration.canAuthenticateWithSteam)
 	
 	local battleTitle = ""
 	local lblBattleTitle = Label:New {
@@ -1675,6 +1674,10 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		return infoHandler
 	end
 
+	function externalFunctions.UpdateInviteButton(newVisibile)
+		btnInviteFriends:SetVisibility(newVisibile)
+	end
+	
 	-- Lobby interface
 	local function OnUpdateUserTeamStatus(listener, userName, allyNumber, isSpectator)
 		infoHandler.UpdateUserTeamStatus(userName, allyNumber, isSpectator)
@@ -1946,17 +1949,26 @@ function BattleRoomWindow.ClearChatHistory()
 		mainWindowFunctions.ClearChatHistory()
 	end
 end
-
+local function DelayedInitialize()
+	local function onConfigurationChange(listener, key, value)
+		if mainWindowFunctions and key == "canAuthenticateWithSteam" then
+			mainWindowFunctions.UpdateInviteButton(value)
+		end
+	end
+	WG.Chobby.Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
+end
+	
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-
+	
 	local function downloadFinished()
 		UpdateArchiveStatus(true)
 	end
 	WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
 
 	WG.BattleRoomWindow = BattleRoomWindow
+	WG.Delay(DelayedInitialize, 0.5)
 end
 
 --------------------------------------------------------------------------------

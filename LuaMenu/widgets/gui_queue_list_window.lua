@@ -401,23 +401,22 @@ local function InitializeControls(window)
 		parent = window
 	}
 
-	if Configuration.canAuthenticateWithSteam then
-		local btnInviteFriends = Button:New {
-			right = 101,
-			y = 7,
-			width = 180,
-			height = 45,
-			font = Configuration:GetFont(3),
-			caption = i18n("invite_friends"),
-			classname = "option_button",
-			OnClick = {
-				function()
-					WG.WrapperLoopback.SteamOpenOverlaySection()
-				end
-			},
-			parent = window,
-		}
-	end
+	local btnInviteFriends = Button:New {
+		right = 101,
+		y = 7,
+		width = 180,
+		height = 45,
+		font = Configuration:GetFont(3),
+		caption = i18n("invite_friends"),
+		classname = "option_button",
+		OnClick = {
+			function()
+				WG.WrapperLoopback.SteamOpenOverlaySection()
+			end
+		},
+		parent = window,
+	}
+	btnInviteFriends:SetVisibility(Configuration.canAuthenticateWithSteam)
 	
 	local listPanel = ScrollPanel:New {
 		x = 5,
@@ -531,6 +530,13 @@ local function InitializeControls(window)
 	lobby:AddListener("OnPartyUpdate", OnPartyUpdate)
 	lobby:AddListener("OnPartyDestroy", OnPartyUpdate)
 	lobby:AddListener("OnPartyLeft", OnPartyLeft)
+	
+	local function onConfigurationChange(listener, key, value)
+		if key == "canAuthenticateWithSteam" then
+			btnInviteFriends:SetVisibility(value)
+		end
+	end
+	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 	
 	-- Initialization
 	if lobby.matchMakerBannedTime then
