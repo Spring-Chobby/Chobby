@@ -28,7 +28,7 @@ local attemptGameType, attemptScriptTable, startReplayFile
 local inCoop = false
 local friendsReplaceAI = false
 
-local coopPanel, coopHostPanel, closePopup
+local coopPanel, coopHostPanel, replacablePopup
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -47,6 +47,20 @@ end
 local function ResetHostData()
 	attemptScriptTable = nil
 	startReplayFile = nil
+end
+
+local function MakeExclusivePopup(text)
+	if replacablePopup then
+		replacablePopup:Close()
+	end
+	replacablePopup = WG.Chobby.InformationPopup(text)
+end
+
+local function CloseExclusivePopup()
+	if replacablePopup then
+		replacablePopup:Close()
+		replacablePopup = nil
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -163,9 +177,7 @@ function SteamCoopHandler.SteamJoinFriend(joinFriendID)
 end
 
 function SteamCoopHandler.SteamHostGameSuccess(hostPort)
-	if closePopup then
-		closePopup:Close()
-	end
+	CloseExclusivePopup()
 	if startReplayFile then
 		WG.Chobby.localLobby:StartReplay(startReplayFile, hostPort)
 	elseif attemptScriptTable then
@@ -178,10 +190,7 @@ function SteamCoopHandler.SteamHostGameSuccess(hostPort)
 end
 
 function SteamCoopHandler.SteamHostGameFailed(steamCaused, reason)
-	if closePopup then
-		closePopup:Close()
-	end
-	WG.Chobby.InformationPopup("Coop connection failed. " .. (reason or "???") .. ". " .. (steamCaused or "???"))
+	MakeExclusivePopup("Coop connection failed. " .. (reason or "???") .. ". " .. (steamCaused or "???"))
 	ResetHostData()
 end
 
@@ -190,7 +199,9 @@ function SteamCoopHandler.SteamConnectSpring(hostIP, hostPort, clientPort, myNam
 		-- Do not get forced into a coop game if you cancel.
 		return
 	end
+	MakeExclusivePopup("Starting coop game.")
 	local function Start()
+		CloseExclusivePopup()
 		WG.LibLobby.localLobby:ConnectToBattle(false, hostIP, hostPort, clientPort, scriptPassword, myName, game, map, engine, "coop")
 	end
 	if (WG.Chobby.Configuration.coopConnectDelay or 0) > 0 then
@@ -221,6 +232,8 @@ function SteamCoopHandler.AttemptGameStart(gameType, scriptTable, newFriendsRepl
 		return
 	end
 	
+	MakeExclusivePopup("Starting game.")
+	
 	local players = {}
 	for i = 1, #friendsInGame do
 		players[#players + 1] = {
@@ -229,8 +242,6 @@ function SteamCoopHandler.AttemptGameStart(gameType, scriptTable, newFriendsRepl
 			ScriptPassword = "12345",
 		}
 	end
-	
-	closePopup = WG.Chobby.InformationPopup("Starting game.")
 	
 	local args = {
 		Players = players,
