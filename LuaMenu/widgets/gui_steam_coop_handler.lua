@@ -181,7 +181,7 @@ function SteamCoopHandler.SteamHostGameSuccess(hostPort)
 	CloseExclusivePopup()
 	local myName = WG.Chobby.Configuration:GetPlayerName()
 	if startReplayFile then
-		WG.Chobby.localLobby:StartReplay(startReplayFile, myName .. "(spec)", hostPort)
+		WG.Chobby.localLobby:StartReplay(startReplayFile, myName, hostPort)
 	elseif attemptScriptTable then
 		WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, attemptScriptTable, friendsInGame, hostPort)
 	else
@@ -197,7 +197,7 @@ end
 
 function SteamCoopHandler.SteamConnectSpring(hostIP, hostPort, clientPort, myName, scriptPassword, map, game, engine)
 	if not inCoop then
-		-- Do not get forced into a coop game if you cancel.
+		-- Do not get forced into a coop game if you have left the coop party.
 		return
 	end
 	doDelayedConnection = true
@@ -232,7 +232,7 @@ function SteamCoopHandler.AttemptGameStart(gameType, scriptTable, newFriendsRepl
 	if not friendsInGame then
 		if startReplayFile then
 			local myName = WG.Chobby.Configuration:GetPlayerName()
-			WG.Chobby.localLobby:StartReplay(startReplayFile, myName .. "(spec)")
+			WG.Chobby.localLobby:StartReplay(startReplayFile, myName)
 		elseif scriptTable then
 			WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, scriptTable)
 		else

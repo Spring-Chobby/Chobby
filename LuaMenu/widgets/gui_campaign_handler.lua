@@ -690,18 +690,18 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 	
 	MakeRewardsPanel(subPanel, 16, planetData)
 	
+	local buttonHolder = Control:New{
+		x = "50%",
+		y = "4%",
+		right = "3%",
+		bottom = "4%",
+		padding = {0,0,0,0},
+		parent = starmapInfoPanel,
+	}
+	
 	if startable then
-		local buttonHolder = Control:New{
-			right = "3%",
-			bottom = "4%",
-			x = "50%",
-			height = 200,
-			padding = {0,0,0,0},
-			parent = starmapInfoPanel,
-		}
-		
 		if planetData.infoDisplay.feedbackLink then
-			MakeFeedbackButton(buttonHolder, planetData.infoDisplay.feedbackLink, 2, nil, nil, 1)
+			MakeFeedbackButton(buttonHolder, planetData.infoDisplay.feedbackLink, nil, 2, 85, nil)
 		end
 	
 		local startButton = Button:New{
@@ -719,6 +719,24 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 				end
 			}
 		}
+		
+		if Configuration.canAuthenticateWithSteam then
+			local btnInviteFriends = Button:New {
+				right = 140,
+				bottom = 0,
+				width = 220,
+				height = 65,
+				font = Configuration:GetFont(4),
+				caption = i18n("invite_friends"),
+				classname = "option_button",
+				OnClick = {
+					function()
+						WG.WrapperLoopback.SteamOpenOverlaySection()
+					end
+				},
+				parent = buttonHolder,
+			}
+		end
 		
 		if planetData.tutorialSkip then
 			local startButton = Button:New{
@@ -787,9 +805,8 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 	end
 	
 	Button:New{
-		parent = starmapInfoPanel,
-		y = "4%",
-		right = "3%",
+		y = 0,
+		right = 0,
 		width = 80,
 		height = 45,
 		classname = "negative_button",
@@ -798,7 +815,9 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 		OnClick = {
 			CloseFunc
 		},
+		parent = buttonHolder,
 	}
+	
 	
 	WG.Chobby.interfaceRoot.SetBackgroundCloseListener(CloseFunc)
 

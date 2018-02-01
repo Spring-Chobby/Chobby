@@ -1568,7 +1568,25 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		},
 		parent = mainWindow,
 	}
-
+	
+	if Configuration.canAuthenticateWithSteam then
+		local btnInviteFriends = Button:New {
+			right = 101,
+			y = 7,
+			width = 180,
+			height = 45,
+			font = Configuration:GetFont(3),
+			caption = i18n("invite_friends"),
+			classname = "option_button",
+			OnClick = {
+				function()
+					WG.WrapperLoopback.SteamOpenOverlaySection()
+				end
+			},
+			parent = mainWindow,
+		}
+	end
+	
 	local battleTitle = ""
 	local lblBattleTitle = Label:New {
 		x = 20,

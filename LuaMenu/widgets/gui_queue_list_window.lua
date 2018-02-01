@@ -401,6 +401,24 @@ local function InitializeControls(window)
 		parent = window
 	}
 
+	if Configuration.canAuthenticateWithSteam then
+		local btnInviteFriends = Button:New {
+			right = 101,
+			y = 7,
+			width = 180,
+			height = 45,
+			font = Configuration:GetFont(3),
+			caption = i18n("invite_friends"),
+			classname = "option_button",
+			OnClick = {
+				function()
+					WG.WrapperLoopback.SteamOpenOverlaySection()
+				end
+			},
+			parent = window,
+		}
+	end
+	
 	local listPanel = ScrollPanel:New {
 		x = 5,
 		right = 5,

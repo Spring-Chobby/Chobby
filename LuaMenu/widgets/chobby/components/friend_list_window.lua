@@ -13,7 +13,7 @@ function FriendListWindow:init(parent)
 		y = 7,
 		width = 180,
 		height = 45,
-		caption = i18n("steam_friends"),
+		caption = i18n("invite_friends"),
 		font = Configuration:GetFont(3),
 		classname = "option_button",
 		parent = self.window,
