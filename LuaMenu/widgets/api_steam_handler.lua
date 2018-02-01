@@ -107,15 +107,12 @@ function SteamHandler.SteamOnline(authToken, joinFriendID, friendList, suggested
 	
 	WG.LoginWindowHandler.TrySimpleSteamLogin()
 	
-	if lobby.status ~= "connected" then
-		storedJoinFriendID = joinFriendID
+	if lobby.status == "connected" then
+		AddSteamFriends(storedFriendList)
+	else
 		storedFriendList = friendList
-		InitializeListeners()
-		return
 	end
-	
-	AddSteamFriends(storedFriendList)
-	JoinFriend(joinFriendID)
+
 end
 
 function SteamHandler.SteamJoinFriend(joinFriendID)
@@ -125,12 +122,11 @@ function SteamHandler.SteamJoinFriend(joinFriendID)
 		return
 	end
 	
-	if lobby.status ~= "connected" then
+	if lobby.status == "connected" then
+		JoinFriend(joinFriendID) 
+	else
 		storedJoinFriendID = joinFriendID
-		InitializeListeners()
-		return
 	end
-	JoinFriend(joinFriendID) 
 end
 
 function SteamHandler.InviteUserViaSteam(userName, steamID)
@@ -158,6 +154,11 @@ end
 --------------------------------------------------------------------------------
 -- Initialization
 
+function DelayedInitialize()
+	InitializeListeners()
+end
+
 function widget:Initialize() 
 	WG.SteamHandler = SteamHandler
+	WG.Delay(DelayedInitialize, 0.1)
 end

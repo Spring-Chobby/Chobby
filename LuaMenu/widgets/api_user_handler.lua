@@ -672,7 +672,6 @@ local function GetUserControls(userName, opts)
 		right = 0,
 		bottom = 4,
 		align = "left",
-		multiline = false,
 		parent = userControls.mainControl,
 		fontsize = Configuration:GetFont(2).size,
 		text = userName,

@@ -77,6 +77,10 @@ end
 -- notifies that steam is online
 local function SteamOnline(args)
 	WG.SteamHandler.SteamOnline(args.AuthToken, args.FriendSteamID, args.Friends, args.SuggestedName)
+	if args.FriendSteamID then
+		WG.SteamHandler.SteamJoinFriend(args.FriendSteamID)
+		WG.SteamCoopHandler.SteamJoinFriend(args.FriendSteamID)
+	end
 end
 
 -- Join friend upon receiving notification that your acceptance of their invite was accepted.
