@@ -22,6 +22,7 @@ end
 -- Variables
 
 local friendsInGame, friendsInGameSteamID
+local alreadyIn = {}
 
 local attemptGameType, attemptScriptTable
 local inCoop = false
@@ -39,6 +40,7 @@ end
 local function LeaveHostCoopFunc()
 	friendsInGame = nil
 	friendsInGameSteamID = nil
+	alreadyIn = {}
 end
 
 --------------------------------------------------------------------------------
@@ -129,11 +131,16 @@ end
 
 local SteamCoopHandler = {}
 function SteamCoopHandler.SteamFriendJoinedMe(steamID, userName)
-	friendsInGame = friendsInGame or {}
-	friendsInGameSteamID = friendsInGameSteamID or {}
-	friendsInGame[#friendsInGame + 1] = userName
-	friendsInGameSteamID[#friendsInGameSteamID + 1] = steamID
-	WG.Chobby.InformationPopup((userName or "???") .. " has joined your P2P cooperative mode party. Play a coop game by starting any game via the Singleplayer menu.")
+	if not alreadyIn[steamID] then
+		friendsInGame = friendsInGame or {}
+		friendsInGameSteamID = friendsInGameSteamID or {}
+		
+		friendsInGame[#friendsInGame + 1] = userName
+		friendsInGameSteamID[#friendsInGameSteamID + 1] = steamID
+		alreadyIn[steamID] = true
+	end
+	
+	WG.Chobby.InformationPopup((userName or "???") .. " has joined your P2P party. Play a coop game by starting any game via the Singleplayer menu.")
 	
 	local statusAndInvitesPanel = WG.Chobby.interfaceRoot.GetStatusAndInvitesPanel()
 	coopHostPanel = coopHostPanel or InitializeCoopStatusHandler("coopHostPanel", "Hosting Coop\nParty", LeaveHostCoopFunc, statusAndInvitesPanel)
@@ -199,20 +206,16 @@ function SteamCoopHandler.AttemptGameStart(gameType, scriptTable)
 		return
 	end
 	
-	closePopup = WG.Chobby.InformationPopup("Starting game.")
-	
 	local players = {}
-	local alreadyIn = {}
 	for i = 1, #friendsInGame do
-		if not alreadyIn[friendsInGameSteamID[i]] then
-			players[#players + 1] = {
-				SteamID = friendsInGameSteamID[i],
-				Name = friendsInGame[i],
-				ScriptPassword = "12345",
-			}
-			alreadyIn[friendsInGameSteamID[i]] = true
-		end
+		players[#players + 1] = {
+			SteamID = friendsInGameSteamID[i],
+			Name = friendsInGame[i],
+			ScriptPassword = "12345",
+		}
 	end
+	
+	closePopup = WG.Chobby.InformationPopup("Starting game.")
 	
 	local args = {
 		Players = players,
