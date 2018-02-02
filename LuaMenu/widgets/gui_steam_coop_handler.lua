@@ -210,6 +210,7 @@ function SteamCoopHandler.SteamConnectSpring(hostIP, hostPort, clientPort, myNam
 		end
 	end
 	local function StartAndClose()
+		WG.Analytics.SendOnetimeEvent("lobby:steamcoop:starting")
 		CloseExclusivePopup()
 		Start()
 	end
@@ -232,15 +233,15 @@ function SteamCoopHandler.AttemptGameStart(gameType, scriptTable, newFriendsRepl
 	startReplayFile = newReplayFile
 	
 	local Configuration = WG.Chobby.Configuration
+	local myName = Configuration:GetPlayerName()
 	
 	if not friendsInGame then
 		if startReplayFile then
-			local myName = Configuration:GetPlayerName()
 			WG.Chobby.localLobby:StartReplay(startReplayFile, myName)
 		elseif scriptTable then
 			WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, scriptTable)
 		else
-			WG.LibLobby.localLobby:StartBattle(gameType, Configuration:GetPlayerName())
+			WG.LibLobby.localLobby:StartBattle(gameType, myName)
 		end
 		return
 	end
@@ -255,7 +256,7 @@ function SteamCoopHandler.AttemptGameStart(gameType, scriptTable, newFriendsRepl
 	if startReplayFile then
 		appendName = "(spec)"
 	end
-	
+	WG.Analytics.SendOnetimeEvent("lobby:steamcoop:attemptgamestart")
 	local players = {}
 	for i = 1, #friendsInGame do
 		saneFriendsInGame[i] = Configuration:SanitizeName(friendsInGame[i], usedNames) .. appendName

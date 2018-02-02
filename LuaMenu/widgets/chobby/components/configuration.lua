@@ -206,11 +206,15 @@ function Configuration:init()
 	self.minimapDownloads = {}
 	self.minimapThumbDownloads = {}
 	
-	self.saneCharacters = {
+	local saneCharacterList = {
 		"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
 		"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
 		"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "[", "]", "_",
 	}
+	self.saneCharacters = {}
+	for i = 1, #saneCharacterList do
+		self.saneCharacters[saneCharacterList[i]] = true
+	end
 end
 
 ---------------------------------------------------------------------------------
@@ -673,6 +677,7 @@ end
 function Configuration:SanitizeName(name, usedNames)
 	local ret = ""
 	local length = string.len(name)
+	Spring.Echo("SanitizeName", name)
 	for i = 1, length do
 		local c = string.sub(name, i, i)
 		if self.saneCharacters[c] then
