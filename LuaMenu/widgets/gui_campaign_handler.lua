@@ -586,6 +586,8 @@ local function ProcessPlanetVictory(planetID, battleFrames, bonusObjectives, bon
 		Spring.Echo("ProcessPlanetVictory error")
 		return
 	end
+	
+	WG.Chobby.interfaceRoot.OpenSingleplayerTabByName("campaign")
 	if selectedPlanet then
 		selectedPlanet.Close()
 		selectedPlanet = nil
@@ -601,6 +603,7 @@ local function ProcessPlanetVictory(planetID, battleFrames, bonusObjectives, bon
 end
 
 local function ProcessPlanetDefeat(planetID, battleFrames)
+	WG.Chobby.interfaceRoot.OpenSingleplayerTabByName("campaign")
 	if selectedPlanet then
 		selectedPlanet.Close()
 		selectedPlanet = nil
