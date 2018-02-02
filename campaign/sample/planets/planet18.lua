@@ -72,10 +72,6 @@ local function GetPlanet(planetUtilities, planetID)
 					"shieldscout",
 				},
 				unitWhitelist = {
-					 -- These keep the tabs existing
-					factorycloak = true,
-					turretlaser = true,
-					
 					-- For scouting and to avoid area mex complications
 					staticmex = true,
 					staticradar = true,
