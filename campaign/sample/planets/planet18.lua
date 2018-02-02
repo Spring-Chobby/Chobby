@@ -38,8 +38,12 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[Dirtbags are curious bots with many unfulfilled aspirations. They want to scout and fight but are almost blind and all they can muster is a headbutt. They try to terraform but all they manage is to drop a little pile of dirt upon their death. They make up for this by being extremely cheap and fairly tough.]]
 			},
 			{
+				image = "unitpics/staticmissilesilo.png",
+				text = [[Missile Silos can usually produce a variety of missiles for varied situations. This one, however, only remembers how to make the Quake. This missile smooths terrain in a large area. Select a missile to target it.]]
+			},
+			{
 				image = "LuaUI/Images/commands/Bold/jump.png",
-				text = [[Dirtbags can jump small distances. This ability can be used for 'precision' terraforming. First issue a line-jump command by holding the left mouse button and then shift queue the a detonate order.]]
+				text = [[Dirtbags can jump small distances. This ability can be used to precisely terraform walls by issuing a line jump command followed by a queued detonate command.]]
 			},
 		},
 		gameConfig = {
@@ -70,16 +74,27 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				extraUnlocks = {
 					"shieldscout",
+					"seismic",
 				},
 				unitWhitelist = {
 					-- For scouting and to avoid area mex complications
 					staticmex = true,
 					staticradar = true,
+					seismic = true,
 				},
 				extraAbilities = {
 					"terraform",
 				},
 				startUnits = {
+					{
+						name = "staticmissilesilo",
+						x = 1670,
+						z = 580,
+						facing = 0,
+						commands = {
+							{unitName = "seismic"},
+						},
+					},
 					{
 						name = "amphcon",
 						x = 1460,
@@ -491,6 +506,18 @@ local function GetPlanet(planetUtilities, planetID)
 					humanName = "Turrets",
 					allyTeam = 1,
 					startUnits = {
+						{
+							name = "tankarty",
+							x = 4320,
+							z = 3936,
+							facing = 3,
+						},
+						{
+							name = "tankarty",
+							x = 4384,
+							z = 3936,
+							facing = 3,
+						},
 						{
 							name = "spidercrabe",
 							x = 3613,
@@ -3251,6 +3278,12 @@ local function GetPlanet(planetUtilities, planetID)
 					height = 308,
 				},
 				{
+					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
+					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
+					position = {4300, 3910, 4418, 3975}, 
+					height = 9,
+				},
+				{
 					terraformShape = planetUtilities.TERRAFORM_SHAPE.RAMP,
 					position = {260, 308, 204, 900, 308, 206},
 					width = 100
@@ -3324,6 +3357,7 @@ local function GetPlanet(planetUtilities, planetID)
 			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"shieldscout",
+				"seismic",
 			},
 			modules = {
 				"module_ablative_armor_LIMIT_B_2",
