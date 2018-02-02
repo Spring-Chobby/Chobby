@@ -121,7 +121,7 @@ end
 --------------------------------------------------------------------------------
 -- Start Game
 
-local function StartBattleForReal(planetID, planetData, gameName)
+local function StartBattleForReal(planetID, planetData)
 	gameConfig = planetData.gameConfig
 	
 	local allyTeams = {}
@@ -134,6 +134,7 @@ local function StartBattleForReal(planetID, planetData, gameName)
 	local commanderTypes = {}
 	
 	local Configuration = WG.Chobby.Configuration
+	local gameName = Configuration:GetDefaultGameName()
 	local missionDifficulty = WG.CampaignData.GetDifficultySetting()
 	local bitExtension = (Configuration:GetIsRunning64Bit() and "64") or "32"
 	local playerName = Configuration:GetPlayerName()
@@ -353,7 +354,7 @@ local function StartBattleForReal(planetID, planetData, gameName)
 		script["allyTeam" .. i] = allyTeam
 	end
 
-	WG.SteamCoopHandler.AttemptGameStart("campaign" .. planetID, script)
+	WG.SteamCoopHandler.AttemptGameStart("campaign" .. planetID, script.gametype, script.mapname, script)
 end
 
 --------------------------------------------------------------------------------
@@ -364,29 +365,9 @@ local PlanetBattleHandler = {}
 function PlanetBattleHandler.StartBattle(planetID, planetData)
 	local Configuration = WG.Chobby.Configuration
 	local gameConfig = planetData.gameConfig
-
-	if gameConfig.missionStartscript then
-		Spring.Echo("PlanetBattleHandler implement missionStartscript.")
-		return false
-	end
-	
-	local gameName = Configuration:GetDefaultGameName()
-	local haveGame = WG.Package.ArchiveExists(gameName)
-	if not haveGame then
-		WG.Chobby.InformationPopup("You do not have the game file required. It will now be downloaded.")
-		WG.DownloadHandler.MaybeDownloadArchive(gameName, "game", -1)
-		return
-	end
-	
-	local haveMap = VFS.HasArchive(gameConfig.mapName)
-	if not haveMap then
-		WG.Chobby.InformationPopup("You do not have the map file required. It will now be downloaded.")
-		WG.DownloadHandler.MaybeDownloadArchive(gameConfig.mapName, "map", -1)
-		return
-	end
 	
 	local function StartBattleFunc()
-		if StartBattleForReal(planetID, planetData, gameName) then
+		if StartBattleForReal(planetID, planetData) then
 			Spring.Echo("Start battle success!")
 		end
 	end

@@ -1,16 +1,17 @@
 InformationPopup = LCS.class{}
 
-function InformationPopup:init(infoText, width, height, heading, caption, buttonClass, closeFunc)
+function InformationPopup:init(infoText, extras)
 	
-	width = width or 320
-	height = height or 220
-	self.closeFunc = closeFunc
+	extras = extras or {}
+	extras.width = extras.width or 320
+	extras.height = extras.height or 220
+	self.closeFunc = extras.closeFunc
 	
 	self.mainWindow = Window:New {
 		x = 700,
 		y = 300,
-		width = width,
-		height = height,
+		width = extras.width,
+		height = extras.height,
 		caption = "",
 		resizable = false,
 		draggable = false,
@@ -22,15 +23,15 @@ function InformationPopup:init(infoText, width, height, heading, caption, button
 		self:Close()
 	end
 	
-	if heading then
+	if extras.heading then
 		Label:New {
 			x = 0,
 			y = 15,
-			width = width - self.mainWindow.padding[1] - self.mainWindow.padding[3],
+			width = extras.width - self.mainWindow.padding[1] - self.mainWindow.padding[3],
 			height = 35,
 			align = "center",
 			font = Configuration:GetFont(4),
-			caption = heading,
+			caption = extras.heading,
 			parent = self.mainWindow,
 		}
 	end
@@ -38,7 +39,7 @@ function InformationPopup:init(infoText, width, height, heading, caption, button
 	local lblText = TextBox:New {
 		x = 15,
 		right = 15,
-		y = (heading and 65) or 15,
+		y = (extras.heading and 65) or 15,
 		bottom = 75,
 		font = Configuration:GetFont(3),
 		text = infoText,
@@ -50,9 +51,9 @@ function InformationPopup:init(infoText, width, height, heading, caption, button
 		right = "25%",
 		bottom = 1,
 		height = 70,
-		caption = caption or i18n("ok"),
+		caption = extras.caption or i18n("ok"),
 		font = Configuration:GetFont(3),
-		classname = buttonClass or "action_button",
+		classname = extras.buttonClass or "action_button",
 		OnClick = {
 			function()
 				DoneFunc()

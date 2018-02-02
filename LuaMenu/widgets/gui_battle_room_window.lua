@@ -214,7 +214,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 					else
 						if battleLobby.name == "singleplayer" then
 							WG.Analytics.SendOnetimeEvent("lobby:singleplayer:skirmish:start")
-							WG.SteamCoopHandler.AttemptGameStart("skirmish")
+							WG.SteamCoopHandler.AttemptGameStart("skirmish", battle.gameName, battle.mapName)
 						else
 							WG.Analytics.SendOnetimeEvent("lobby:multiplayer:custom:start")
 							battleLobby:StartBattle("skirmish")
@@ -1409,10 +1409,11 @@ local function SetupEasySetupPanel(mainWindow, standardSubPanel, setupData)
 	local selectedOptions = {} -- Passed and modified by reference
 
 	local function ApplyFunction(startGame)
+		local battle = battleLobby:GetBattle(battleLobby:GetMyBattleID())
 		setupData.ApplyFunction(battleLobby, selectedOptions)
 		if startGame then
 			if haveMapAndGame then
-				WG.SteamCoopHandler.AttemptGameStart("skirmish", nil, true)
+				WG.SteamCoopHandler.AttemptGameStart("skirmish", battle.gameName, battle.mapName, nil, true)
 			else
 				Spring.Echo("Do something if map or game is missing")
 			end

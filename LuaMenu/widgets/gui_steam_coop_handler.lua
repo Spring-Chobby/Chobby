@@ -24,7 +24,7 @@ end
 local friendsInGame, saneFriendsInGame, friendsInGameSteamID
 local alreadyIn = {}
 
-local attemptGameType, attemptScriptTable, startReplayFile
+local attemptGameType, attemptScriptTable, startReplayFile, DownloadUpdateFunction
 local inCoop = false
 local friendsReplaceAI = false
 local doDelayedConnection = true
@@ -43,19 +43,21 @@ local function LeaveHostCoopFunc()
 	friendsInGame = nil
 	saneFriendsInGame = nil
 	friendsInGameSteamID = nil
+	DownloadUpdateFunction = nil
 	alreadyIn = {}
 end
 
 local function ResetHostData()
 	attemptScriptTable = nil
 	startReplayFile = nil
+	DownloadUpdateFunction = nil
 end
 
-local function MakeExclusivePopup(text, buttonText, ClickFunc)
+local function MakeExclusivePopup(text, buttonText, ClickFunc, buttonClass)
 	if replacablePopup then
 		replacablePopup:Close()
 	end
-	replacablePopup = WG.Chobby.InformationPopup(text, nil, nil, nil, buttonText, nil, ClickFunc)
+	replacablePopup = WG.Chobby.InformationPopup(text, {caption = buttonText, closeFunc = ClickFunc, buttonClass = buttonClass})
 end
 
 local function CloseExclusivePopup()
@@ -149,6 +151,41 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Downloading
+
+local function CheckDownloads(gameName, mapName, DoneFunc)
+	local haveGame = (not gameName) or WG.Package.ArchiveExists(gameName)
+	if not haveGame then
+		WG.DownloadHandler.MaybeDownloadArchive(gameName, "game", -1)
+	end
+	
+	local haveMap = (not mapName) or VFS.HasArchive(mapName)
+	if not haveMap then
+		WG.DownloadHandler.MaybeDownloadArchive(mapName, "map", -1)
+	end
+	
+	if haveGame and haveMap then
+		return true
+	end
+	
+	local function Update()
+		if ((not gameName) or WG.Package.ArchiveExists(gameName)) and ((not mapName) or VFS.HasArchive(mapName)) then
+			DoneFunc()
+			DownloadUpdateFunction = nil
+		end		
+	end
+	
+	local function CancelFunc()
+		DownloadUpdateFunction = nil
+	end
+	
+	DownloadUpdateFunction = Update
+	MakeExclusivePopup("Waiting on conent: " .. ((not haveGame) and ("\n > " .. gameName) or "") .. ((not haveMap) and ("\n > " .. mapName) or ""), "Cancel", CancelFunc, "negative_button")
+end
+
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- External functions: Wrapper
 
 local SteamCoopHandler = {}
@@ -197,28 +234,38 @@ function SteamCoopHandler.SteamHostGameFailed(steamCaused, reason)
 	ResetHostData()
 end
 
-function SteamCoopHandler.SteamConnectSpring(hostIP, hostPort, clientPort, myName, scriptPassword, map, game, engine)
+function SteamCoopHandler.SteamConnectSpring(hostIP, hostPort, clientPort, myName, scriptPassword, mapName, gameName, engine)
 	if not inCoop then
 		-- Do not get forced into a coop game if you have left the coop party.
 		return
 	end
-	doDelayedConnection = true
-	local function Start()
-		if doDelayedConnection then
-			doDelayedConnection = false
-			WG.LibLobby.localLobby:ConnectToBattle(false, hostIP, hostPort, clientPort, scriptPassword, myName, game, map, engine, "coop")
+	
+	local connectionDelay = WG.Chobby.Configuration.coopConnectDelay or 0
+	local function DownloadsComplete()
+		doDelayedConnection = true
+		local function Start()
+			if doDelayedConnection then
+				doDelayedConnection = false
+				WG.LibLobby.localLobby:ConnectToBattle(false, hostIP, hostPort, clientPort, scriptPassword, myName, game, map, engine, "coop")
+			end
+		end
+		local function StartAndClose()
+			WG.Analytics.SendOnetimeEvent("lobby:steamcoop:starting")
+			CloseExclusivePopup()
+			Start()
+		end
+		MakeExclusivePopup("Starting coop game.", "Force", Start)
+		if connectionDelay > 0 then
+			WG.Delay(StartAndClose, WG.Chobby.Configuration.coopConnectDelay)
+		else
+			StartAndClose()
 		end
 	end
-	local function StartAndClose()
-		WG.Analytics.SendOnetimeEvent("lobby:steamcoop:starting")
-		CloseExclusivePopup()
-		Start()
-	end
-	MakeExclusivePopup("Starting coop game.", "Force", Start)
-	if (WG.Chobby.Configuration.coopConnectDelay or 0) > 0 then
-		WG.Delay(StartAndClose, WG.Chobby.Configuration.coopConnectDelay)
+	
+	if CheckDownloads(gameName, mapName, DownloadsComplete) then
+		DownloadsComplete()
 	else
-		StartAndClose()
+		connectionDelay = 0 -- Downloading resources
 	end
 end
 
@@ -226,64 +273,79 @@ end
 --------------------------------------------------------------------------------
 -- External functions: Widget <-> Widget
 
-function SteamCoopHandler.AttemptGameStart(gameType, scriptTable, newFriendsReplaceAI, newReplayFile)
-	attemptGameType = gameType
-	attemptScriptTable = scriptTable
-	friendsReplaceAI = newFriendsReplaceAI
-	startReplayFile = newReplayFile
-	
-	local Configuration = WG.Chobby.Configuration
-	local myName = Configuration:GetPlayerName()
-	
-	if not friendsInGame then
-		if startReplayFile then
-			WG.Chobby.localLobby:StartReplay(startReplayFile, myName)
-		elseif scriptTable then
-			WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, scriptTable)
-		else
-			WG.LibLobby.localLobby:StartBattle(gameType, myName)
+function SteamCoopHandler.AttemptGameStart(gameType, gameName, mapName, scriptTable, newFriendsReplaceAI, newReplayFile)
+	local function DownloadsComplete()
+		attemptGameType = gameType
+		attemptScriptTable = scriptTable
+		friendsReplaceAI = newFriendsReplaceAI
+		startReplayFile = newReplayFile
+		
+		local Configuration = WG.Chobby.Configuration
+		local myName = Configuration:GetPlayerName()
+		
+		if not friendsInGame then
+			if startReplayFile then
+				WG.Chobby.localLobby:StartReplay(startReplayFile, myName)
+			elseif scriptTable then
+				WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, scriptTable)
+			else
+				WG.LibLobby.localLobby:StartBattle(gameType, myName)
+			end
+			return
 		end
-		return
-	end
-	
-	local usedNames = {
-		[myName] = true,
-	}
-	
-	MakeExclusivePopup("Starting game.")
-	
-	local appendName = ""
-	if startReplayFile then
-		appendName = "(spec)"
-	end
-	WG.Analytics.SendOnetimeEvent("lobby:steamcoop:attemptgamestart")
-	local players = {}
-	for i = 1, #friendsInGame do
-		saneFriendsInGame[i] = Configuration:SanitizeName(friendsInGame[i], usedNames) .. appendName
-		players[#players + 1] = {
-			SteamID = friendsInGameSteamID[i],
-			Name = saneFriendsInGame[i],
-			ScriptPassword = "12345",
+		
+		local usedNames = {
+			[myName] = true,
 		}
+		
+		MakeExclusivePopup("Starting game.")
+		
+		local appendName = ""
+		if startReplayFile then
+			appendName = "(spec)"
+		end
+		WG.Analytics.SendOnetimeEvent("lobby:steamcoop:attemptgamestart")
+		local players = {}
+		for i = 1, #friendsInGame do
+			saneFriendsInGame[i] = Configuration:SanitizeName(friendsInGame[i], usedNames) .. appendName
+			players[#players + 1] = {
+				SteamID = friendsInGameSteamID[i],
+				Name = saneFriendsInGame[i],
+				ScriptPassword = "12345",
+			}
+		end
+		
+		local args = {
+			Players = players,
+			Map = mapName,
+			Game = gameName,
+			Engine = Spring.Utilities.GetEngineVersion()
+		}
+		
+		WG.WrapperLoopback.SteamHostGameRequest(args)
 	end
 	
-	local args = {
-		Players = players,
-		--Map = mapName,
-		--Game = gameName,
-		Engine = Spring.Utilities.GetEngineVersion()
-	}
-	
-	WG.WrapperLoopback.SteamHostGameRequest(args)
+	if CheckDownloads(gameName, mapName, DownloadsComplete) then
+		DownloadsComplete()
+	end
 end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface
+function DelayedInitialize()
+	local function downloadFinished()
+		if DownloadUpdateFunction then
+			DownloadUpdateFunction()
+		end
+	end
+	WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
+end
 
 function widget:Initialize()
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 	WG.SteamCoopHandler = SteamCoopHandler
+	WG.Delay(DelayedInitialize, 0.2)
 end
 
 --------------------------------------------------------------------------------

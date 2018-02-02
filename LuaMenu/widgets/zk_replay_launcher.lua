@@ -188,7 +188,7 @@ local function AttemptStart(saveFilename)
 	
 	Echo("Starting Spring")
 	if not restartEngine then
-		WG.SteamCoopHandler.AttemptGameStart(nil, nil, nil, saveFilename)
+		WG.SteamCoopHandler.AttemptGameStart("replay", replayGame, replayMap, nil, nil, saveFilename)
 	elseif WG.WrapperLoopback then
 		local params = {
 			StartDemoName = string.sub(saveFilename, 7),

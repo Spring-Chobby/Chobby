@@ -159,7 +159,7 @@ function SteamLoginWindow:ShowPassword()
 	self.window:AddChild(self.txtPassword)
 	self.window:AddChild(self.ebPassword)
 	
-	WG.Chobby.InformationPopup("This account already exists.\n\nIf this is your account then enter your password to link it to Steam.\n\nOtherwise, leave the password blank and try a different name.", 390, 290)
+	WG.Chobby.InformationPopup("This account already exists.\n\nIf this is your account then enter your password to link it to Steam.\n\nOtherwise, leave the password blank and try a different name.", {width = 390, height = 290})
 	
 	if string.len(self.ebPassword.text) == 0 then
 		self.btnRegister:SetCaption(i18n("register_verb"))

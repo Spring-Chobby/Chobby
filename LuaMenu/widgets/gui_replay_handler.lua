@@ -63,7 +63,7 @@ local function CreateReplayEntry(replayPath)
 					return
 				end
 				if WG.Chobby.Configuration:IsValidEngineVersion(engineName) then
-					WG.SteamCoopHandler.AttemptGameStart(nil, nil, nil, replayPath)
+					WG.SteamCoopHandler.AttemptGameStart(nil, nil, nil, nil, nil, replayPath)
 				elseif WG.WrapperLoopback then
 					local params = {
 						StartDemoName = string.sub(replayPath, 7),

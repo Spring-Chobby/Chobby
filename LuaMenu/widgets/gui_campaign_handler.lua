@@ -605,7 +605,7 @@ local function ProcessPlanetDefeat(planetID, battleFrames)
 		selectedPlanet.Close()
 		selectedPlanet = nil
 	end
-	WG.Chobby.InformationPopup("Battle for " .. planetConfig[planetID].name .. " lost.", nil, nil, "Defeat")
+	WG.Chobby.InformationPopup("Battle for " .. planetConfig[planetID].name .. " lost.", {caption = "Defeat"})
 	WG.CampaignData.AddPlayTime(battleFrames, true)
 	
 	WG.Analytics.SendIndexedRepeatEvent("campaign:planet_" .. planetID .. ":difficulty_" .. WG.CampaignData.GetDifficultySetting() .. ":lose", math.floor(battleFrames/30), ":defeat")
