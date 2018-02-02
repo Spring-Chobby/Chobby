@@ -587,7 +587,6 @@ local function ProcessPlanetVictory(planetID, battleFrames, bonusObjectives, bon
 		return
 	end
 	
-	WG.Chobby.interfaceRoot.OpenSingleplayerTabByName("campaign")
 	if selectedPlanet then
 		selectedPlanet.Close()
 		selectedPlanet = nil
@@ -603,7 +602,6 @@ local function ProcessPlanetVictory(planetID, battleFrames, bonusObjectives, bon
 end
 
 local function ProcessPlanetDefeat(planetID, battleFrames)
-	WG.Chobby.interfaceRoot.OpenSingleplayerTabByName("campaign")
 	if selectedPlanet then
 		selectedPlanet.Close()
 		selectedPlanet = nil
@@ -1535,6 +1533,7 @@ function widget:RecvLuaMsg(msg)
 		local encoded = string.sub(msg, string.len(LOAD_CAMPAIGN_STRING) + 1)
 		local saveData = Spring.Utilities.CustomKeyToUsefulTable(encoded)
 		WG.CampaignData.ApplyCampaignPartialSaveData(saveData)
+		WG.Chobby.interfaceRoot.OpenSingleplayerTabByName("campaign")
 	elseif string.find(msg, BATTLE_WON_STRING) then
 		Spring.Echo("msg", msg)
 		local data = msg:split(" ")

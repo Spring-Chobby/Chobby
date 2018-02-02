@@ -180,7 +180,7 @@ local function CheckDownloads(gameName, mapName, DoneFunc)
 	end
 	
 	DownloadUpdateFunction = Update
-	MakeExclusivePopup("Waiting on conent: " .. ((not haveGame) and ("\n > " .. gameName) or "") .. ((not haveMap) and ("\n > " .. mapName) or ""), "Cancel", CancelFunc, "negative_button")
+	MakeExclusivePopup("Waiting on content: " .. ((not haveGame) and ("\n > " .. gameName) or "") .. ((not haveMap) and ("\n > " .. mapName) or ""), "Cancel", CancelFunc, "negative_button")
 end
 
 
