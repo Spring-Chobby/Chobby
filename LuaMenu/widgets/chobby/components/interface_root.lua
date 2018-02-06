@@ -436,7 +436,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local submenus = {
 		{
 			name = "singleplayer",
-			tabs = Configuration.gameConfig.singleplayerConfig
+			tabs = Configuration.gameConfig.singleplayerConfig,
+			titleText = i18n("singleplayercoop"),
+			twoline = true,
 		},
 		{
 			name = "multiplayer",
