@@ -1211,14 +1211,20 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 	
 	-- Only call this after calling UpdateStartable for all planets. Call at least (VISIBILITY_DISTANCE - 1) times.
 	function externalFunctions.UpdateDistance()
-		if distance then
+		if distance and (distance <= 1) then
 			return
 		end
 		for i = 1, #adjacency do
 			if adjacency[i] then
 				if ((not PLANET_WHITELIST) or PLANET_WHITELIST[i]) and planetList[i].GetDistance() then
-					distance = planetList[i].GetDistance() + 1
-					return
+					local newDist = planetList[i].GetDistance() + 1 
+					if distance then
+						if distance > newDist then
+							distance = newDist
+						end
+					else
+						distance = newDist
+					end
 				end
 			end
 		end
@@ -1274,9 +1280,11 @@ local function UpdateStartableAndVisible()
 		end
 	end
 	if VISIBILITY_DISTANCE > 2 then
-		for i = 1, VISIBILITY_DISTANCE - 1 do
-			if (not PLANET_WHITELIST) or PLANET_WHITELIST[i] then
-				planetList[i].UpdateDistance()
+		for j = 1, VISIBILITY_DISTANCE - 1 do
+			for i = 1, PLANET_COUNT do
+				if (not PLANET_WHITELIST) or PLANET_WHITELIST[i] then
+					planetList[i].UpdateDistance()
+				end
 			end
 		end
 	end
