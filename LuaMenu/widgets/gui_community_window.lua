@@ -466,6 +466,9 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, top
 			else
 				controls.text:SetText(entryData.text)
 				controls.text:SetVisibility(true)
+				controls.text:SetPos(textPos, offset + 6)
+				controls.text._relativeBounds.right = 4
+				controls.text:UpdateClientArea(false)
 			end
 		elseif controls.text then
 			controls.text:SetVisibility(false)
