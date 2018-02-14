@@ -335,13 +335,13 @@ local function InitializeControls(parent)
 	Configuration = WG.Chobby.Configuration
 	
 	Label:New {
-		x = 15,
-		y = 11,
-		width = 180,
-		height = 30,
+		x = 20,
+		right = 5,
+		y = 17,
+		height = 20,
 		parent = parent,
 		font = Configuration:GetFont(3),
-		caption = string.upper(i18n("load")),
+		caption = i18n("load_saved_game"),
 	}
 	
 	-------------------------

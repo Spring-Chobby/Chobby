@@ -82,6 +82,7 @@ return {
 		help = "Help",
 		about = "About",
 		links = "Links",
+		load_saved_game = "Load saved game",
 		missions = "Missions",
 		tutorials = "Tutorials",
 		training = "Training",
