@@ -23,6 +23,8 @@ end
 
 local friendsInGame, saneFriendsInGame, friendsInGameSteamID
 local alreadyIn = {}
+local lastStart = {}
+local currentStart = {}
 
 local attemptGameType, attemptScriptTable, startReplayFile, DownloadUpdateFunction
 local inCoop = false
@@ -172,7 +174,7 @@ local function CheckDownloads(gameName, mapName, DoneFunc)
 		if ((not gameName) or WG.Package.ArchiveExists(gameName)) and ((not mapName) or VFS.HasArchive(mapName)) then
 			DoneFunc()
 			DownloadUpdateFunction = nil
-		end		
+		end
 	end
 	
 	local function CancelFunc()
@@ -217,6 +219,13 @@ function SteamCoopHandler.SteamJoinFriend(joinFriendID)
 end
 
 function SteamCoopHandler.SteamHostGameSuccess(hostPort)
+	lastStart.gameType            = currentStart.gameType
+	lastStart.gameName            = currentStart.gameName
+	lastStart.mapName             = currentStart.mapName
+	lastStart.scriptTable         = currentStart.scriptTable
+	lastStart.newFriendsReplaceAI = currentStart.newFriendsReplaceAI
+	lastStart.newReplayFile       = currentStart.newReplayFile
+
 	CloseExclusivePopup()
 	local myName = WG.Chobby.Configuration:GetPlayerName()
 	if startReplayFile then
@@ -274,6 +283,13 @@ end
 -- External functions: Widget <-> Widget
 
 function SteamCoopHandler.AttemptGameStart(gameType, gameName, mapName, scriptTable, newFriendsReplaceAI, newReplayFile)
+	currentStart.gameType            = gameType
+	currentStart.gameName            = gameName
+	currentStart.mapName             = mapName
+	currentStart.scriptTable         = scriptTable
+	currentStart.newFriendsReplaceAI = newFriendsReplaceAI
+	currentStart.newReplayFile       = newReplayFile
+	
 	local function DownloadsComplete()
 		attemptGameType = gameType
 		attemptScriptTable = scriptTable
@@ -284,6 +300,13 @@ function SteamCoopHandler.AttemptGameStart(gameType, gameName, mapName, scriptTa
 		local myName = Configuration:GetPlayerName()
 		
 		if not friendsInGame then
+			lastStart.gameType            = currentStart.gameType
+			lastStart.gameName            = currentStart.gameName
+			lastStart.mapName             = currentStart.mapName
+			lastStart.scriptTable         = currentStart.scriptTable
+			lastStart.newFriendsReplaceAI = currentStart.newFriendsReplaceAI
+			lastStart.newReplayFile       = currentStart.newReplayFile
+			
 			if startReplayFile then
 				WG.Chobby.localLobby:StartReplay(startReplayFile, myName)
 			elseif scriptTable then
@@ -330,6 +353,12 @@ function SteamCoopHandler.AttemptGameStart(gameType, gameName, mapName, scriptTa
 	end
 end
 
+function SteamCoopHandler.RestartGame()
+	if lastStart.gameType then
+		SteamCoopHandler.AttemptGameStart(lastStart.gameType, lastStart.gameName, lastStart.mapName, lastStart.scriptTable, lastStart.newFriendsReplaceAI, lastStart.newReplayFile)
+	end
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface
@@ -340,6 +369,10 @@ function DelayedInitialize()
 		end
 	end
 	WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
+end
+
+function widget:ActivateMenu()
+	lastStart.gameType = nil
 end
 
 function widget:Initialize()

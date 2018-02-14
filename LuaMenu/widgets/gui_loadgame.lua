@@ -433,8 +433,12 @@ function widget:Initialize()
 		ingame = true
 	end
 	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
+	
+	WG.LoadGame = {
+		LoadGameByFilename = LoadGameByFilename,
+	}
 end
 
 function widget:Shutdown()
-	WG.LoadWindow = nil
+	WG.LoadGame = nil
 end

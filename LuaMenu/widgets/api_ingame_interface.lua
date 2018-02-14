@@ -51,6 +51,8 @@ local REMOVE_BUTTON = "disableLobbyButton"
 local ENABLE_OVERLAY = "showLobby"
 local LUAMENU_SETTING = "changeSetting "
 local OPEN_SETTINGS_TAB = "openSettingsTab "
+local LOAD_FILENAME = "loadFilename "
+local RESTART_GAME = "restartGame"
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -128,6 +130,29 @@ local function HandleSettingsOpenTab(msg)
 		end
 	end
 end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Load and Restart
+
+local function HandleLoadGame(msg)
+	if string.find(msg, LOAD_FILENAME) ~= 1 then
+		return
+	end
+	local data = msg:split(" ")
+	if WG.LoadGame and data and data[2] then
+		WG.LoadGame.LoadGameByFilename(data[2])
+	end
+end
+
+local function HandleRestartGame(msg)
+	if string.find(msg, RESTART_GAME) ~= 1 then
+		return
+	end
+	WG.SteamCoopHandler.RestartGame()
+end
+
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Callins
@@ -143,6 +168,12 @@ function widget:RecvLuaMsg(msg)
 		return
 	end
 	if HandleSettingsOpenTab(msg) then
+		return
+	end
+	if HandleLoadGame(msg) then
+		return
+	end
+	if HandleRestartGame(msg) then
 		return
 	end
 end
