@@ -608,6 +608,13 @@ local settingsConfig = {
 							GrassDetail = 16,
 						}
 					},
+					{
+						name = "Ridiculous",
+						apply = {
+							TreeRadius = 2500,
+							GrassDetail = 100,
+						}
+					},
 				},
 			},
 			{
