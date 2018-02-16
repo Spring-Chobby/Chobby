@@ -42,6 +42,7 @@ local inherited = this.inherited
 
 function Screen:New(obj)
   local vsx,vsy = gl.GetViewSizes()
+  
   if ((obj.width or -1) <= 0) then
     obj.width = vsx
   end
@@ -101,12 +102,12 @@ end
 
 
 function Screen:ScreenToClient(x,y)
-  return x, y
+  return x/scaler.scale, y/scaler.scale
 end
 
 
 function Screen:ClientToScreen(x,y)
-  return x, y
+  return x*scaler.scale, y*scaler.scale
 end
 
 

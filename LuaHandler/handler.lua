@@ -12,6 +12,26 @@
 --------------------------------------------------------------------------------
 --FIXME name widgets & gadgets AddOns internally
 
+-- hack window geometry
+
+scaler = {}
+
+scaler.GetWindowGeometry = Spring.GetWindowGeometry
+scaler.GetViewSizes = gl.GetViewSizes
+
+scaler.scale = 0.5
+
+
+Spring.GetWindowGeometry = function() 
+  vsx, vsy = scaler.GetWindowGeometry()
+  return vsx/scaler.scale, vsy/scaler.scale
+end 
+
+
+
+
+
+
 --// Note: all here included modules/utilities are auto exposed to the addons, too!
 require "setupdefs.lua"
 require "savetable.lua"
@@ -40,6 +60,8 @@ local pcall  = pcall
 local pairs  = pairs
 local ipairs = ipairs
 local emptyTable = {}
+
+
 
 
 --------------------------------------------------------------------------------

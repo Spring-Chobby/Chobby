@@ -95,6 +95,7 @@ function widget:DrawScreen()
 				gl.Translate(0,vsy,0)
 				gl.Scale(1,-1,1)
 			end
+			gl.Scale(scaler.scale,scaler.scale,1)
 			screen0:Draw()
 		gl.PopMatrix()
 	end
@@ -183,6 +184,8 @@ function widget:MouseMove(x,y,dx,dy,button)
 
 	local alt, ctrl, meta, shift = Spring.GetModKeyState()
 	mods.alt=alt; mods.ctrl=ctrl; mods.meta=meta; mods.shift=shift;
+	
+	
 	return screen0:MouseMove(x,y,dx,dy,button,mods)
 end
 
