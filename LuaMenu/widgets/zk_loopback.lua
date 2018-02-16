@@ -64,6 +64,31 @@ end
 
 -- Use listener interface from configuration when implementing this
 
+-- replay info read
+local function ReadReplayInfoDone(args)
+	--[[ 
+	    public class ReadReplayInfoDone {
+                    public string RelativePath { get; set; }
+                   public ReplayReader.ReplayInfo ReplayInfo { get; set; }
+				   
+        public class ReplayInfo
+        {
+            public string Engine { get; set; }
+            public string Game { get; set; }
+            public string Map { get; set; }
+            public string StartScript { get; set; }
+        }
+
+		ReplayInfo is nil in case of failure
+				   
+             }
+
+	]]--
+	
+end
+
+
+
 -- reports that download has ended/was aborted
 local function DownloadFileDone(args)
 	WG.DownloadWrapperInterface.DownloadFinished(args.Name, args.FileType, args.IsSuccess, args.IsAborted)
@@ -195,6 +220,7 @@ commands["SteamHostGameFailed"] = SteamHostGameFailed
 commands["SteamConnectSpring"] = SteamConnectSpring
 commands["DownloadImageDone"] = DownloadImageDone
 commands["DownloadFileProgress"] = DownloadFileProgress
+commands["ReadReplayInfoDone"] = ReadReplayInfoDone
 
 commands["DiscordOnReady"] = DiscordOnReady
 commands["DiscordOnSpectate"] = DiscordOnSpectate
@@ -208,6 +234,11 @@ commands["DiscordOnJoinRequest"] = DiscordOnJoinRequest
 -- Callout Functions
 
 local WrapperLoopback = {}
+
+function WrapperLoopback.ReadReplayInfo(relativePath) 
+	SendCommand("ReadReplayInfo", {RelativePath = relativePath})
+end 
+
 
 -- opens URL
 function WrapperLoopback.OpenUrl(url)
