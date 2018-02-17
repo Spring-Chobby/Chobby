@@ -84,7 +84,10 @@ local function ReadReplayInfoDone(args)
              }
 
 	]]--
-	
+	local data = args.ReplayInfo
+	if data then
+		WG.ReplayHandler.ReadReplayInfoDone(args.RelativePath, data.Engine, data.Game, data.Map, data.StartScript)
+	end
 end
 
 

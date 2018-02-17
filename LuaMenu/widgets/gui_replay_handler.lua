@@ -17,26 +17,19 @@ end
 --------------------------------------------------------------------------------
 -- Local Variables
 
+local replayListWindow
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
 
-local function CreateReplayEntry(replayPath)
+local function CreateReplayEntry(replayPath, engineName, gameName, mapName)
 	local Configuration = WG.Chobby.Configuration
 	
 	local fileName = string.sub(replayPath, 7)
 	fileName = string.gsub(string.gsub(fileName, " maintenance", ""), " develop", "")
 	fileName = string.gsub(fileName, "%.sdfz", "")
-	local engineStart = string.find(string.reverse(fileName), "_")
 	
-	if not engineStart then
-		-- Don't show replays of the wrong engine
-		return
-	end
-	engineStart = string.len(fileName) - engineStart + 2
-	local engineName = string.sub(fileName, engineStart)
-	
-	local mapName = string.gsub(string.sub(fileName, 17, engineStart - 2), "_", " ")
 	local replayTime = string.sub(fileName, 0, 15)
 	replayTime = string.sub(fileName, 0, 4) .. "-" .. string.sub(fileName, 5, 6) .. "-" .. string.sub(fileName, 7, 8) .. " at " .. string.sub(fileName, 10, 11) .. ":" .. string.sub(fileName, 12, 13) .. ":" .. string.sub(fileName, 14, 15)
 	
@@ -63,7 +56,7 @@ local function CreateReplayEntry(replayPath)
 					return
 				end
 				if WG.Chobby.Configuration:IsValidEngineVersion(engineName) then
-					WG.SteamCoopHandler.AttemptGameStart(nil, nil, nil, nil, nil, replayPath)
+					WG.SteamCoopHandler.AttemptGameStart("replay", gameName, mapName, nil, nil, replayPath)
 				elseif WG.WrapperLoopback then
 					local params = {
 						StartDemoName = string.sub(replayPath, 7),
@@ -99,9 +92,20 @@ local function CreateReplayEntry(replayPath)
 		text = mapName,
 		parent = replayPanel,
 	}
+	local replayVersion = TextBox:New {
+		name = "replayVersion",
+		x = 535,
+		y = 12,
+		right = 0,
+		height = 20,
+		valign = 'center',
+		fontsize = Configuration:GetFont(2).size,
+		text = gamename,
+		parent = replayPanel,
+	}
 	local replayEngine = TextBox:New {
 		name = "replayEngine",
-		x = 535,
+		x = 740,
 		y = 12,
 		right = 0,
 		height = 20,
@@ -110,19 +114,18 @@ local function CreateReplayEntry(replayPath)
 		text = engineName,
 		parent = replayPanel,
 	}
-	local replayName = TextBox:New {
-		name = "replayName",
-		x = 740,
-		y = 5,
-		right = 0,
-		height = 20,
-		valign = 'center',
-		fontsize = Configuration:GetFont(2).size,
-		text = fileName,
-		parent = replayPanel,
-	}
 	
-	return replayPanel, {replayTime, string.lower(mapName), engineName, fileName}
+	local externalFunctions = {}
+	
+	function externalFunctions.GetControl()
+		return replayPanel
+	end
+	
+	function externalFunctions.GetSortData()
+		return replayPanel
+	end
+	
+	return replayPanel, {replayTime, string.lower(mapName), gameName, engineName}
 end
 
 --------------------------------------------------------------------------------
@@ -181,8 +184,8 @@ local function InitializeControls(parentControl)
 	local headings = {
 		{name = "Time", x = 88, width = 207},
 		{name = "Map", x = 300, width = 225},
-		{name = "Engine", x = 530, width = 215},
-		{name = "Name", x = 750, right = 5},
+		{name = "Version", x = 530, width = 215},
+		{name = "Engine", x = 750, right = 5},
 	}
 	
 	local replayList = WG.Chobby.SortableList(listHolder, headings, nil, nil, false)
@@ -206,8 +209,6 @@ local function InitializeControls(parentControl)
 			local items = {}
 			for i = 1, 20 do
 				if index < 1 then
-					replayList:AddItems(items)
-					Spring.Echo("replayList adding", #items, "replays.")
 					if moreButton then
 						moreButton:SetVisibility(false)
 					end
@@ -215,17 +216,11 @@ local function InitializeControls(parentControl)
 					return
 				end
 				local replayPath = replays[index]
-				local control, sortData = CreateReplayEntry(replayPath)
-				if control then
-					items[#items + 1] = {replayPath, control, sortData}
-				end
-				
+				WG.WrapperLoopback.ReadReplayInfo(replayPath)
 				index = index - 1
 			end
-			Spring.Echo("replayList adding", #items, "replays.")
 			
 			loadingPanel:SetVisibility(false)
-			replayList:AddItems(items)
 		end
 		
 		PartialAddReplays()
@@ -304,6 +299,14 @@ local function InitializeControls(parentControl)
 		}
 	end
 	
+	local externalFunctions = {}
+	
+	function externalFunctions.AddReplay(replayPath, engine, game, map, script)
+		local control, sortData = CreateReplayEntry(replayPath, engine, game, map)
+		replayList:AddItem(replayPath, control, sortData)
+	end
+	
+	return externalFunctions
 end
 
 --------------------------------------------------------------------------------
@@ -323,12 +326,19 @@ function ReplayHandler.GetControl()
 		OnParent = {
 			function(obj)
 				if obj:IsEmpty() then
-					InitializeControls(obj)
+					replayListWindow = InitializeControls(obj)
 				end
 			end
 		},
 	}
 	return window
+end
+
+function ReplayHandler.ReadReplayInfoDone(path, engine, game, map, script)
+	if not replayListWindow then
+		return
+	end
+	replayListWindow.AddReplay(path, engine, game, map, script)
 end
 
 --------------------------------------------------------------------------------
