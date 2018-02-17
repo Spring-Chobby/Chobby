@@ -243,7 +243,7 @@ end
 
 local oldSizeX, oldSizeY
 function widget:ViewResize(vsx, vsy)
-	oldSizeX, oldSizeY = vsx, vsy
+	oldSizeX, oldSizeY = vsx/(WG.uiScale or 1), vsy/(WG.uiScale or 1)
 	screen0:Resize(vsx, vsy)
 end
 
