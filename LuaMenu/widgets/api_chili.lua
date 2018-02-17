@@ -243,12 +243,13 @@ end
 
 local oldSizeX, oldSizeY
 function widget:ViewResize(vsx, vsy)
-	oldSizeX, oldSizeY = vsx/(WG.uiScale or 1), vsy/(WG.uiScale or 1)
+	vsx, vsy = vsx/(WG.uiScale or 1), vsy/(WG.uiScale or 1)
+	oldSizeX, oldSizeY = vsx, vsy
 	screen0:Resize(vsx, vsy)
 end
 
 function widget:Update()
-	local screenWidth, screenHeight = Spring.GetWindowGeometry()
+	local screenWidth, screenHeight = Spring.Orig.GetViewSizes()
 	if screenWidth ~= oldSizeX or screenHeight ~= oldSizeY then
 		widget:ViewResize(screenWidth, screenHeight)
 	end

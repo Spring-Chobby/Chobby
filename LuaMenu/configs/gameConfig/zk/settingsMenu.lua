@@ -28,9 +28,7 @@ local function UpdateLups()
 end
 
 local function GetUiScaleParameters()
-	local realWidth, realHeight = Spring.GetScreenGeometry() -- Screen allows for window size changes.
-	local winWidth, winHeight = Spring.Orig.GetWindowGeometry() -- Get both for crazy multi-screen setups.
-	realWidth, realHeight = math.max(realWidth, winWidth), math.max(realHeight, winHeight)
+	local realWidth, realHeight = Spring.Orig.GetViewSizes()
 	local defaultUiScale = math.floor(math.max(1, realHeight/1080))*100
 	local maxUiScale = math.max(2, realWidth/1000)*100
 	local minUiScale = math.min(0.5, realWidth/4000)*100
