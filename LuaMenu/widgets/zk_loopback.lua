@@ -71,14 +71,28 @@ local function ReadReplayInfoDone(args)
                     public string RelativePath { get; set; }
                    public ReplayReader.ReplayInfo ReplayInfo { get; set; }
 				   
-        public class ReplayInfo
+  public class ReplayInfo
         {
             public string Engine { get; set; }
             public string Game { get; set; }
             public string Map { get; set; }
             public string StartScript { get; set; }
-        }
+            public DateTime Date { get; set; }
+            public int GameLengthRealtime { get; set; }
+            public int GameLengthIngameTime { get; set; }
+            public string GameID { get; set; }
+            public List<PlayerEntry> Players { get; set; } = new List<PlayerEntry>();
 
+            public class PlayerEntry
+            {
+                public bool IsSpectator { get; set; }
+                public bool IsBot { get; set; }
+                public string Name { get; set; }
+                public int? AllyTeam { get; set; }
+            }
+        }
+		
+		
 		ReplayInfo is nil in case of failure
 				   
              }
@@ -90,6 +104,25 @@ local function ReadReplayInfoDone(args)
 	end
 end
 
+
+local function GetSpringBattleInfoDone(args) 
+--[[
+   [ChobbyMessage]
+    public class GetSpringBattleInfoDone
+    {
+        public string GameID { get; set; }
+        public SpringBattleInfo SpringBattleInfo { get; set; }
+    }
+	    public class SpringBattleInfo
+    {
+        public int SpringBattleID { get; set; }
+        public AutohostMode AutohostMode { get; set; }
+        public bool IsMatchMaker { get; set; }
+        public string Title { get; set; }
+    }
+]]--
+
+end
 
 
 -- reports that download has ended/was aborted
@@ -224,6 +257,7 @@ commands["SteamConnectSpring"] = SteamConnectSpring
 commands["DownloadImageDone"] = DownloadImageDone
 commands["DownloadFileProgress"] = DownloadFileProgress
 commands["ReadReplayInfoDone"] = ReadReplayInfoDone
+commands["GetSpringBattleInfoDone"] = GetSpringBattleInfoDone
 
 commands["DiscordOnReady"] = DiscordOnReady
 commands["DiscordOnSpectate"] = DiscordOnSpectate
@@ -240,6 +274,10 @@ local WrapperLoopback = {}
 
 function WrapperLoopback.ReadReplayInfo(relativePath) 
 	SendCommand("ReadReplayInfo", {RelativePath = relativePath})
+end 
+
+function WrapperLoopback.GetSpringBattleInfo(gameId) 
+	SendCommand("GetSpringBattleInfo", {GameID = gameID})
 end 
 
 
