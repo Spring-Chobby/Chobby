@@ -775,11 +775,12 @@ local settingsConfig = {
 		},
 	},
 	{
-		name = "Interface",
+		name = "Game",
 		presets = {
 			{
 				name = "Default",
 				settings = {
+					InterfaceScale = defaultUiScale,
 					--IconDistance = 151,
 					MouseZoomSpeed = 25,
 					InvertZoom = "Off",
