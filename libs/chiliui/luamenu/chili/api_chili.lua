@@ -191,14 +191,13 @@ end
 
 function widget:MouseMove(x,y,dx,dy,button)
 	if WG.uiScale and WG.uiScale ~= 1 then
-		x, y, dx, dy = x/WG.uiScale, y/WG.uiScale, dx/WG.uiScale, dy/WG.uiScale
+		-- Why is this not done? Caused issues!
+		--x, y, dx, dy = x/WG.uiScale, y/WG.uiScale, dx/WG.uiScale, dy/WG.uiScale
 	end
 	if Spring.IsGUIHidden() then return false end
 
 	local alt, ctrl, meta, shift = Spring.GetModKeyState()
 	mods.alt=alt; mods.ctrl=ctrl; mods.meta=meta; mods.shift=shift;
-	
-	
 	return screen0:MouseMove(x,y,dx,dy,button,mods)
 end
 
@@ -261,7 +260,6 @@ widget.TweakMousePress   = widget.MousePress
 widget.TweakMouseRelease = widget.MouseRelease
 widget.TweakMouseMove    = widget.MouseMove
 widget.TweakMouseWheel   = widget.MouseWheel
-
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------

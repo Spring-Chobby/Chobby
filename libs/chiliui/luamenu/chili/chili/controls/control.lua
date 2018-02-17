@@ -829,6 +829,7 @@ end
 
 function Control:ParentToClient(x,y)
   local ca = self.clientArea
+  Spring.Echo("ParentToClient", self.name, x, y, "area", ca[1], ca[2])
   return x - self.x - ca[1], y - self.y - ca[2]
 end
 
@@ -1115,7 +1116,7 @@ function Control:_DrawInClientArea(fnc,...)
 	gl.PushMatrix()
 	gl.Translate(clientX, clientY, 0)
 
-	local sx,sy = self:LocalToScreen(clientX,clientY)
+	local sx,sy = self:UnscaledLocalToScreen(clientX,clientY)
 	sy = select(2,gl.GetViewSizes()) - (sy + clientHeight)
 
 	if PushLimitRenderRegion(self, sx, sy, clientWidth, clientHeight) then

@@ -197,8 +197,6 @@ function widget:MouseMove(x,y,dx,dy,button)
 
 	local alt, ctrl, meta, shift = Spring.GetModKeyState()
 	mods.alt=alt; mods.ctrl=ctrl; mods.meta=meta; mods.shift=shift;
-	
-	
 	return screen0:MouseMove(x,y,dx,dy,button,mods)
 end
 
@@ -261,7 +259,6 @@ widget.TweakMousePress   = widget.MousePress
 widget.TweakMouseRelease = widget.MouseRelease
 widget.TweakMouseMove    = widget.MouseMove
 widget.TweakMouseWheel   = widget.MouseWheel
-
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------

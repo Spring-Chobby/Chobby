@@ -17,7 +17,6 @@ Spring.GetWindowGeometry = function()
 	return vsx/(WG.uiScale or 1), vsy/(WG.uiScale or 1), vx, vy
 end
 
-
 Spring.GetMouseState = function()
 	local mx, my, left, right, mid, offscreen = Spring.Orig.GetMouseState()
 	return mx/(WG.uiScale or 1), my/(WG.uiScale or 1), left, right, mid, offscreen

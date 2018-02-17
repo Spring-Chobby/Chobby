@@ -277,7 +277,7 @@ function ScrollPanel:_DrawInClientArea(fnc,...)
 	gl.PushMatrix()
 	gl.Translate(clientX - self.scrollPosX, clientY - self.scrollPosY, 0)
 
-	local sx,sy = self:LocalToScreen(clientX,clientY)
+	local sx,sy = self:UnscaledLocalToScreen(clientX,clientY)
 	sy = select(2,gl.GetViewSizes()) - (sy + clientHeight)
 
 	if PushLimitRenderRegion(self, sx, sy, clientWidth, clientHeight) then
@@ -336,19 +336,16 @@ end
 
 
 function ScrollPanel:MouseMove(x, y, dx, dy, ...)
-  local clientArea = self.clientArea
-  local clientWidth, clientHeight = clientArea[3], clientArea[4]
-  if WG.uiScale and WG.uiScale ~= 1 then
-    clientWidth, clientHeight = clientWidth*WG.uiScale, clientHeight*WG.uiScale
-  end
   if self._vscrolling then
+    local clientArea = self.clientArea
     local cy = y - clientArea[2]
-    self:SetScrollPos(nil, (cy/clientHeight)*clientHeight, true, false)
+    self:SetScrollPos(nil, (cy/clientArea[4])*self.contentArea[4], true, false)
     return self
   end
   if self._hscrolling then
+    local clientArea = self.clientArea
     local cx = x - clientArea[1]
-    self:SetScrollPos((cx/clientWidth)*clientWidth, nil, true, false)
+    self:SetScrollPos((cx/clientArea[3])*self.contentArea[3], nil, true, false)
     return self
   end
 

@@ -102,12 +102,16 @@ end
 
 
 function Screen:ScreenToClient(x,y)
-  return x/WG.uiScale, y/WG.uiScale
+  return x, y
 end
 
 
-function Screen:ClientToScreen(x,y)
+function Screen:UnscaledClientToScreen(x,y)
   return x*WG.uiScale, y*WG.uiScale
+end
+
+function Screen:ClientToScreen(x,y)
+  return x, y
 end
 
 
@@ -274,6 +278,7 @@ function Screen:MouseMove(x,y,dx,dy,...)
   local activeControl = UnlinkSafe(self.activeControl)
   if activeControl then
     local cx,cy = activeControl:ScreenToLocal(x,y)
+	local sx, sy = activeControl:LocalToScreen(cx,cy)
     local obj = activeControl:MouseMove(cx,cy,dx,-dy,...)
     if (obj==false) then
       self.activeControl = nil
