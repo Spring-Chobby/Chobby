@@ -36,7 +36,7 @@ function InformationPopup:init(infoText, extras)
 		}
 	end
 	
-	local lblText = TextBox:New {
+	self.lblText = TextBox:New {
 		x = 15,
 		right = 15,
 		y = (extras.heading and 65) or 15,
@@ -63,6 +63,10 @@ function InformationPopup:init(infoText, extras)
 	}
 	
 	local popupHolder = PriorityPopup(self.mainWindow, DoneFunc, DoneFunc)
+end
+
+function InformationPopup:SetText(newText)
+	self.lblText:SetText(newText)
 end
 
 function InformationPopup:Close()

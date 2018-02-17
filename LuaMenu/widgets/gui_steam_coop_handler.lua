@@ -30,6 +30,7 @@ local attemptGameType, attemptScriptTable, startReplayFile, startEngineVersion, 
 local inCoop = false
 local friendsReplaceAI = false
 local doDelayedConnection = true
+local downloadPopup = false
 
 local coopPanel, coopHostPanel, replacablePopup
 
@@ -67,6 +68,7 @@ local function CloseExclusivePopup()
 	if replacablePopup then
 		replacablePopup:Close()
 		replacablePopup = nil
+		downloadPopup = false
 	end
 end
 
@@ -183,7 +185,24 @@ local function CheckDownloads(gameName, mapName, DoneFunc)
 	end
 	
 	DownloadUpdateFunction = Update
-	MakeExclusivePopup("Waiting on content: " .. ((not haveGame) and ("\n > " .. gameName) or "") .. ((not haveMap) and ("\n > " .. mapName) or ""), "Cancel", CancelFunc, "negative_button")
+	local dlString = "Waiting on content: " .. ((not haveGame) and ("\n - " .. gameName .. ": %d%%") or "") .. ((not haveMap) and ("\n - " .. mapName .. ": %d%%") or "")
+	MakeExclusivePopup(string.format(dlString, 0, 0), "Cancel", CancelFunc, "negative_button")
+	downloading = {
+		downloads = {
+		},
+		progress = {
+		},
+		dlString = dlString,
+	}
+	
+	if not haveGame then
+		downloading.progress[#downloading.progress + 1] = 0
+		downloading.downloads[gameName] = #downloading.progress
+	end
+	if not haveMap then
+		downloading.progress[#downloading.progress + 1] = 0
+		downloading.downloads[mapName] = #downloading.progress
+	end
 end
 
 
@@ -390,12 +409,30 @@ end
 --------------------------------------------------------------------------------
 -- Widget Interface
 function DelayedInitialize()
-	local function downloadFinished()
+	local function downloadFinished(_, name)
 		if DownloadUpdateFunction then
 			DownloadUpdateFunction()
+			
+			local index = downloading and downloading.downloads[name]
+			if not index then
+				return
+			end
+			downloading.progress[index] = 100
+			replacablePopup:SetText(string.format(downloading.dlString, downloading.progress[1] or 0, downloading.progress[2] or 0))
 		end
 	end
 	WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
+	
+	local function DownloadProgress(_, _, sizeCurrent, sizeTotal, name)
+		local index = downloading and downloading.downloads[name]
+		if not index then
+			return
+		end
+		downloading.progress[index] = (sizeCurrent < sizeTotal*2) and math.ceil(100*sizeCurrent/sizeTotal)
+		replacablePopup:SetText(string.format(downloading.dlString, downloading.progress[1] or 0, downloading.progress[2] or 0))
+	end
+	
+	WG.DownloadHandler.AddListener("DownloadProgress", DownloadProgress)
 end
 
 function widget:ActivateMenu()
