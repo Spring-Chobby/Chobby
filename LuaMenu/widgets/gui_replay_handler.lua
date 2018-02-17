@@ -55,16 +55,8 @@ local function CreateReplayEntry(replayPath, engineName, gameName, mapName)
 				if not replayPath then
 					return
 				end
-				if WG.Chobby.Configuration:IsValidEngineVersion(engineName) then
-					WG.SteamCoopHandler.AttemptGameStart("replay", gameName, mapName, nil, nil, replayPath)
-				elseif WG.WrapperLoopback then
-					local params = {
-						StartDemoName = string.sub(replayPath, 7),
-						Engine = engineName,
-						SpringSettings = WG.SettingsWindow.GetSettingsString(),
-					}
-					WG.WrapperLoopback.StartNewSpring(params) 
-				end
+				local offEngine = not WG.Chobby.Configuration:IsValidEngineVersion(engineName)
+				WG.SteamCoopHandler.AttemptGameStart("replay", gameName, mapName, nil, nil, replayPath, offEngine and engineName)
 			end
 		},
 		parent = replayPanel,
@@ -96,36 +88,26 @@ local function CreateReplayEntry(replayPath, engineName, gameName, mapName)
 		name = "replayVersion",
 		x = 535,
 		y = 12,
-		right = 0,
+		width = 400,
 		height = 20,
 		valign = 'center',
 		fontsize = Configuration:GetFont(2).size,
-		text = gamename,
+		text = gameName,
 		parent = replayPanel,
 	}
-	local replayEngine = TextBox:New {
-		name = "replayEngine",
-		x = 740,
-		y = 12,
-		right = 0,
-		height = 20,
-		valign = 'center',
-		fontsize = Configuration:GetFont(2).size,
-		text = engineName,
-		parent = replayPanel,
-	}
+	--local replayEngine = TextBox:New {
+	--	name = "replayEngine",
+	--	x = 535,
+	--	y = 16,
+	--	width = 400,
+	--	height = 20,
+	--	valign = 'center',
+	--	fontsize = Configuration:GetFont(2).size,
+	--	text = engineName,
+	--	parent = replayPanel,
+	--}
 	
-	local externalFunctions = {}
-	
-	function externalFunctions.GetControl()
-		return replayPanel
-	end
-	
-	function externalFunctions.GetSortData()
-		return replayPanel
-	end
-	
-	return replayPanel, {replayTime, string.lower(mapName), gameName, engineName}
+	return replayPanel, {replayTime, string.lower(mapName), gameName}
 end
 
 --------------------------------------------------------------------------------
@@ -184,8 +166,7 @@ local function InitializeControls(parentControl)
 	local headings = {
 		{name = "Time", x = 88, width = 207},
 		{name = "Map", x = 300, width = 225},
-		{name = "Version", x = 530, width = 215},
-		{name = "Engine", x = 750, right = 5},
+		{name = "Version", x = 530, right = 5},
 	}
 	
 	local replayList = WG.Chobby.SortableList(listHolder, headings, nil, nil, false)

@@ -26,7 +26,7 @@ local alreadyIn = {}
 local lastStart = {}
 local currentStart = {}
 
-local attemptGameType, attemptScriptTable, startReplayFile, DownloadUpdateFunction
+local attemptGameType, attemptScriptTable, startReplayFile, startEngineVersion, DownloadUpdateFunction
 local inCoop = false
 local friendsReplaceAI = false
 local doDelayedConnection = true
@@ -52,6 +52,7 @@ end
 local function ResetHostData()
 	attemptScriptTable = nil
 	startReplayFile = nil
+	startEngineVersion = nil
 	DownloadUpdateFunction = nil
 end
 
@@ -282,30 +283,56 @@ end
 --------------------------------------------------------------------------------
 -- External functions: Widget <-> Widget
 
-function SteamCoopHandler.AttemptGameStart(gameType, gameName, mapName, scriptTable, newFriendsReplaceAI, newReplayFile)
+function SteamCoopHandler.AttemptGameStart(gameType, gameName, mapName, scriptTable, newFriendsReplaceAI, newReplayFile, newEngineVersion)
 	currentStart.gameType            = gameType
 	currentStart.gameName            = gameName
 	currentStart.mapName             = mapName
 	currentStart.scriptTable         = scriptTable
 	currentStart.newFriendsReplaceAI = newFriendsReplaceAI
 	currentStart.newReplayFile       = newReplayFile
+	currentStart.newEngineVersion    = newEngineVersion
 	
 	local function DownloadsComplete()
 		attemptGameType = gameType
 		attemptScriptTable = scriptTable
 		friendsReplaceAI = newFriendsReplaceAI
 		startReplayFile = newReplayFile
+		startEngineVersion = newEngineVersion
+		
+		CloseExclusivePopup()
 		
 		local Configuration = WG.Chobby.Configuration
 		local myName = Configuration:GetPlayerName()
 		
-		if not friendsInGame then
+		if startEngineVersion or (not friendsInGame) then
+			if friendsInGame then
+				-- Off-engine replays with friends are not yet supported.
+				MakeExclusivePopup("Coop with old engine versions is not yet supported.")
+				return
+			end
 			lastStart.gameType            = currentStart.gameType
 			lastStart.gameName            = currentStart.gameName
 			lastStart.mapName             = currentStart.mapName
 			lastStart.scriptTable         = currentStart.scriptTable
 			lastStart.newFriendsReplaceAI = currentStart.newFriendsReplaceAI
 			lastStart.newReplayFile       = currentStart.newReplayFile
+			lastStart.newEngineVersion    = currentStart.newEngineVersion
+			
+			if startEngineVersion then
+				-- Only replay so far.
+				if not WG.WrapperLoopback then
+					MakeExclusivePopup("Wrapper is required to watch replays with old engine versions.")
+					return
+				end
+				local engine = string.gsub(string.gsub(startEngineVersion, " maintenance", ""), " develop", "")
+				local params = {
+					StartDemoName = string.sub(startReplayFile, 7),
+					Engine = engine,
+					SpringSettings = WG.SettingsWindow.GetSettingsString(),
+				}
+				WG.WrapperLoopback.StartNewSpring(params) 
+				return
+			end
 			
 			if startReplayFile then
 				WG.Chobby.localLobby:StartReplay(startReplayFile, myName)
