@@ -41,7 +41,7 @@ local inherited = this.inherited
 --//=============================================================================
 
 function Screen:New(obj)
-  local vsx,vsy = gl.GetViewSizes()
+  local vsx,vsy = Spring.GetWindowGeometry()
   
   if ((obj.width or -1) <= 0) then
     obj.width = vsx
