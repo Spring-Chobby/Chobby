@@ -1108,6 +1108,10 @@ end
 function Control:_DrawInClientArea(fnc,...)
 	local clientX,clientY,clientWidth,clientHeight = unpack4(self.clientArea)
 
+	if WG.uiScale and WG.uiScale ~= 1 then
+		clientWidth, clientHeight = clientWidth*WG.uiScale, clientHeight*WG.uiScale
+	end
+	
 	gl.PushMatrix()
 	gl.Translate(clientX, clientY, 0)
 
@@ -1251,6 +1255,10 @@ function Control:DrawForList()
 	end
 
 	local clientX,clientY,clientWidth,clientHeight = unpack4(self.clientArea)
+	if WG.uiScale and WG.uiScale ~= 1 then
+		clientWidth, clientHeight = clientWidth*WG.uiScale, clientHeight*WG.uiScale
+	end
+	
 	if (clientWidth > 0)and(clientHeight > 0) then
 		if (self._tex_children) then
 			gl.BlendFuncSeparate(GL.ONE, GL.SRC_ALPHA, GL.ZERO, GL.SRC_ALPHA)

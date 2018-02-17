@@ -270,6 +270,10 @@ end
 function ScrollPanel:_DrawInClientArea(fnc,...)
 	local clientX,clientY,clientWidth,clientHeight = unpack4(self.clientArea)
 
+	if WG.uiScale and WG.uiScale ~= 1 then
+		clientWidth, clientHeight = clientWidth*WG.uiScale, clientHeight*WwG.uiScale
+	end
+	
 	gl.PushMatrix()
 	gl.Translate(clientX - self.scrollPosX, clientY - self.scrollPosY, 0)
 

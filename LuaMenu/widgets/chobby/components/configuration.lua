@@ -480,6 +480,8 @@ function Configuration:SetConfigValue(key, value)
 	end
 	if key == "uiScale" then
 		WG.uiScale = value
+		local screenWidth, screenHeight = Spring.GetViewGeometry()
+		screen0:Resize(screenWidth, screenHeight)
 	end
 	if key == "gameConfigName" then
 		self.gameConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. value .. "/mainConfig.lua")
