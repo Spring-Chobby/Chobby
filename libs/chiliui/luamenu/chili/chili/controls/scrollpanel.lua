@@ -270,10 +270,14 @@ end
 function ScrollPanel:_DrawInClientArea(fnc,...)
 	local clientX,clientY,clientWidth,clientHeight = unpack4(self.clientArea)
 
+	if WG.uiScale and WG.uiScale ~= 1 then
+		clientWidth, clientHeight = clientWidth*WG.uiScale, clientHeight*WG.uiScale
+	end
+
 	gl.PushMatrix()
 	gl.Translate(clientX - self.scrollPosX, clientY - self.scrollPosY, 0)
 
-	local sx,sy = self:LocalToScreen(clientX,clientY)
+	local sx,sy = self:UnscaledLocalToScreen(clientX,clientY)
 	sy = select(2,gl.GetViewSizes()) - (sy + clientHeight)
 
 	if PushLimitRenderRegion(self, sx, sy, clientWidth, clientHeight) then

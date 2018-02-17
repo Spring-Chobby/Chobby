@@ -43,19 +43,19 @@ function PriorityPopup:init(mainWindow, cancelFunction, acceptFunction, parentCo
 
 				gl.BeginEnd(GL.QUADS,
 					function()
-						local w, h = Spring.GetScreenGeometry()
+						local w, h = gl.GetViewSizes()
 
 						gl.TexCoord(0, 1)
 						gl.Vertex(0, 0)
 
 						gl.TexCoord(0, 0)
-						gl.Vertex(0, h)
+						gl.Vertex(0, h/(WG.uiScale or 1))
 
 						gl.TexCoord(1, 0)
-						gl.Vertex(w, h)
+						gl.Vertex(w/(WG.uiScale or 1), h/(WG.uiScale or 1))
 
 						gl.TexCoord(1, 1)
-						gl.Vertex(w, 0)
+						gl.Vertex(w/(WG.uiScale or 1), 0)
 					end
 				)
 				gl.PopMatrix()
@@ -71,19 +71,19 @@ function PriorityPopup:init(mainWindow, cancelFunction, acceptFunction, parentCo
 
 				gl.BeginEnd(GL.QUADS,
 					function()
-						local w, h = Spring.GetScreenGeometry()
+						local w, h = gl.GetViewSizes()
 
 						gl.TexCoord(0, 1)
 						gl.Vertex(0, 0)
 
 						gl.TexCoord(0, 0)
-						gl.Vertex(0, h)
+						gl.Vertex(0, h/(WG.uiScale or 1))
 
 						gl.TexCoord(1, 0)
-						gl.Vertex(w, h)
+						gl.Vertex(w/(WG.uiScale or 1), h/(WG.uiScale or 1))
 
 						gl.TexCoord(1, 1)
-						gl.Vertex(w, 0)
+						gl.Vertex(w/(WG.uiScale or 1), 0)
 					end
 				)
 				gl.PopMatrix()

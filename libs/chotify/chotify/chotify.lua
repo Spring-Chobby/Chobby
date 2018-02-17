@@ -11,7 +11,7 @@ function Chotify:init()
     self.totalNotifications = 0
     self._idCounter = 0
 
-    vsx, vsy = Spring.GetViewGeometry()
+    vsx, vsy = Spring.GetWindowGeometry()
 end
 
 -- this receives the widget:Update callins

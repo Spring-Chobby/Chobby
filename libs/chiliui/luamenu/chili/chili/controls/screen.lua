@@ -41,7 +41,8 @@ local inherited = this.inherited
 --//=============================================================================
 
 function Screen:New(obj)
-  local vsx,vsy = gl.GetViewSizes()
+  local vsx,vsy = Spring.GetWindowGeometry()
+  
   if ((obj.width or -1) <= 0) then
     obj.width = vsx
   end
@@ -105,6 +106,10 @@ function Screen:ScreenToClient(x,y)
 end
 
 
+function Screen:UnscaledClientToScreen(x,y)
+  return x*WG.uiScale, y*WG.uiScale
+end
+
 function Screen:ClientToScreen(x,y)
   return x, y
 end
@@ -155,7 +160,7 @@ function Screen:Update(...)
 			end
 			return
 		end
-		y = select(2,gl.GetViewSizes()) - y
+		y = select(2,Spring.GetWindowGeometry()) - y
 		local cx,cy = hoveredControl:ScreenToLocal(x, y)
 		hoveredControl:MouseMove(cx, cy, 0, 0)
 	end
@@ -168,7 +173,7 @@ function Screen:IsAbove(x,y,...)
     -- See https://springrts.com/mantis/view.php?id=5671 for the good solution.
     return
   end
-  y = select(2,gl.GetViewSizes()) - y
+  y = select(2,Spring.GetWindowGeometry()) - y
   local hoveredControl = inherited.IsAbove(self,x,y,...)
 
   --// tooltip
@@ -217,7 +222,7 @@ function Screen:FocusControl(control)
 end
 
 function Screen:MouseDown(x,y,btn,...)
-  y = select(2,gl.GetViewSizes()) - y
+  y = select(2,Spring.GetWindowGeometry()) - y
 
   local activeControl = inherited.MouseDown(self,x,y,btn,...)
   local oldActiveControl = UnlinkSafe(self.activeControl)
@@ -233,7 +238,7 @@ end
 
 
 function Screen:MouseUp(x,y,...)
-  y = select(2,gl.GetViewSizes()) - y
+  y = select(2,Spring.GetWindowGeometry()) - y
 
   local activeControl = UnlinkSafe(self.activeControl)
   if activeControl then
@@ -269,10 +274,11 @@ end
 
 
 function Screen:MouseMove(x,y,dx,dy,...)
-  y = select(2,gl.GetViewSizes()) - y
+  y = select(2,Spring.GetWindowGeometry()) - y
   local activeControl = UnlinkSafe(self.activeControl)
   if activeControl then
     local cx,cy = activeControl:ScreenToLocal(x,y)
+	local sx, sy = activeControl:LocalToScreen(cx,cy)
     local obj = activeControl:MouseMove(cx,cy,dx,-dy,...)
     if (obj==false) then
       self.activeControl = nil
@@ -289,7 +295,7 @@ end
 
 
 function Screen:MouseWheel(x,y,...)
-  y = select(2,gl.GetViewSizes()) - y
+  y = select(2,Spring.GetWindowGeometry()) - y
   local activeControl = UnlinkSafe(self.activeControl)
   if activeControl then
     local cx,cy = activeControl:ScreenToLocal(x,y)

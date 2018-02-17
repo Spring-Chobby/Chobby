@@ -58,6 +58,10 @@ local function DisableAllWidgets()
 	DisableWidget("Delay API")
 end
 
+local function ToPercent(value)
+	return tostring(math.floor(0.5 + value)) .. "%"
+end
+
 local function ToggleFullscreenOff()
 	Spring.SetConfigInt("Fullscreen", 1, false)
 	Spring.SetConfigInt("Fullscreen", 0, false)
@@ -544,6 +548,59 @@ local function AddCheckboxSetting(offset, caption, key, default)
 	return control, offset + ITEM_OFFSET
 end
 
+local function AddNumberSetting(offset, caption, desc, key, default, minVal, maxVal, isPercent)
+	local Configuration = WG.Chobby.Configuration
+
+	local label = Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 350,
+		height = 30,
+		valign = "top",
+		align = "left",
+		caption = caption,
+		font = Configuration:GetFont(2),
+		tooltip = desc,
+	}
+
+	local function SetEditboxValue(obj, newValue)
+		newValue = string.gsub(newValue, "%%", "")
+		newValue = tonumber(newValue)
+
+		if not newValue then
+			obj:SetText(ToPercent(Configuration[key]*100))
+			return
+		end
+
+		local newValue = math.max(minVal, math.min(maxVal, math.floor(0.5 + newValue)))
+		obj:SetText(newValue .. "%")
+		
+		Configuration:SetConfigValue(key, newValue/100)
+	end
+
+	local freezeSettings = true
+	local numberInput = EditBox:New {
+		x = COMBO_X,
+		y = offset,
+		width = COMBO_WIDTH,
+		height = 30,
+		text = ToPercent(default*100),
+		font = Configuration:GetFont(2),
+		useIME = false,
+		OnFocusUpdate = {
+			function (obj)
+				if obj.focused or freezeSettings then
+					return
+				end
+				SetEditboxValue(obj, obj.text)
+			end
+		}
+	}
+	freezeSettings = false
+
+	return label, numberInput, offset + ITEM_OFFSET
+end
+
 local function GetLobbyTabControls()
 	local freezeSettings = true
 
@@ -582,6 +639,9 @@ local function GetLobbyTabControls()
 		},
 	}
 	offset = offset + ITEM_OFFSET
+
+	children[#children + 1], children[#children + 2], offset = AddNumberSetting(offset, "Lobby Interface Scale", "Increase or decrease interface size, for accessibility and 4k screens.", 
+		"uiScale", Configuration.uiScale, Configuration.minUiScale*100, Configuration.maxUiScale*100, true)
 
 	children[#children + 1] = Label:New {
 		x = 20,
@@ -1295,6 +1355,8 @@ end
 local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitch)
 	local Configuration = WG.Chobby.Configuration
 
+	local FormatFunc = (data.isPercent and ToPercent) or tostring
+	
 	local label = Label:New {
 		name = data.name .. "_label",
 		x = 20,
@@ -1309,10 +1371,11 @@ local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitc
 	}
 
 	local function SetEditboxValue(obj, newValue)
+		newValue = string.gsub(newValue, "%%", "")
 		newValue = tonumber(newValue)
 
 		if not newValue then
-			obj:SetText(tostring(Configuration.settingsMenuValues[data.name]))
+			obj:SetText(FormatFunc(Configuration.settingsMenuValues[data.name]))
 			return
 		end
 
@@ -1321,7 +1384,7 @@ local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitc
 		end
 
 		local newValue = math.floor(0.5 + math.max(data.minValue, math.min(data.maxValue, newValue)))
-		obj:SetText(tostring(newValue))
+		obj:SetText(FormatFunc(newValue))
 		
 		Configuration:SetSettingsConfigOption(data.name, newValue)
 	end
@@ -1333,7 +1396,7 @@ local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitc
 		y = offset,
 		width = COMBO_WIDTH,
 		height = 30,
-		text = tostring(Configuration.settingsMenuValues[data.name] or defaults[data.name]),
+		text = FormatFunc(Configuration.settingsMenuValues[data.name] or defaults[data.name]),
 		font = Configuration:GetFont(2),
 		useIME = false,
 		OnFocusUpdate = {

@@ -31,14 +31,9 @@ local tf
 --------------------------------------------------------------------------------
 -- Chili's location
 
-local function GetDirectory(filepath)
-	return filepath and filepath:gsub("(.*/)(.*)", "%1")
-end
-
-assert(debug)
-local source = debug and debug.getinfo(1).source
-local DIR = GetDirectory(source) or (LUA_DIRNAME .."Widgets/")
-CHILI_DIRNAME = DIR .. "chili/"
+CHILI_DIRNAME = "libs/chiliui/" .. LUA_DIRNAME .. "chili/chili/"
+SKIN_DIRNAME = LUA_DIRNAME .. "widgets/chili/skins/"
+THEME_DIRNAME = LUA_DIRNAME .. "widgets/chili/themes/"
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -73,13 +68,34 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
+firstDraw = true
+local hideInterface = false
+local function ShowInterface()
+	hideInterface = false
+end
+
 function widget:DrawScreen()
+	if firstDraw then
+		WG.Delay(ShowInterface, 0.1)
+		hideInterface = true
+		firstDraw = false
+	end
+	if WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.hideInterface then
+		return
+	end
+
 	gl.Color(1,1,1,1)
 	if (not screen0:IsEmpty()) then
 		gl.PushMatrix()
 			local vsx,vsy = gl.GetViewSizes()
-			gl.Translate(0,vsy,0)
-			gl.Scale(1,-1,1)
+			if hideInterface then
+				gl.Translate(0,0,0)
+				gl.Scale(1,-1,1)
+			else
+				gl.Translate(0,vsy,0)
+				gl.Scale(1,-1,1)
+			end
+			gl.Scale(WG.uiScale,WG.uiScale,1)
 			screen0:Draw()
 		gl.PopMatrix()
 	end
@@ -88,6 +104,10 @@ end
 
 
 function widget:DrawLoadScreen()
+	if WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.hideInterface then
+		return
+	end
+
 	gl.Color(1,1,1,1)
 	if (not screen0:IsEmpty()) then
 		gl.PushMatrix()
@@ -103,6 +123,10 @@ end
 
 
 function widget:TweakDrawScreen()
+	if WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.hideInterface then
+		return
+	end
+
 	gl.Color(1,1,1,1)
 	if (not screen0:IsEmpty()) then
 		gl.PushMatrix()
@@ -117,6 +141,10 @@ end
 
 
 function widget:DrawGenesis()
+	if WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.hideInterface then
+		return
+	end
+
 	gl.Color(1,1,1,1)
 	tf.Update()
 	th.Update()
@@ -126,6 +154,10 @@ end
 
 
 function widget:IsAbove(x,y)
+	if WG.uiScale and WG.uiScale ~= 1 then
+		x, y = x/WG.uiScale, y/WG.uiScale
+	end
+	
 	if Spring.IsGUIHidden() then return false end
 
 	return screen0:IsAbove(x,y)
@@ -134,6 +166,9 @@ end
 
 local mods = {}
 function widget:MousePress(x,y,button)
+	if WG.uiScale and WG.uiScale ~= 1 then
+		x, y = x/WG.uiScale, y/WG.uiScale
+	end
 	if Spring.IsGUIHidden() then return false end
 
 	local alt, ctrl, meta, shift = Spring.GetModKeyState()
@@ -143,6 +178,9 @@ end
 
 
 function widget:MouseRelease(x,y,button)
+	if WG.uiScale and WG.uiScale ~= 1 then
+		x, y = x/WG.uiScale, y/WG.uiScale
+	end
 	if Spring.IsGUIHidden() then return false end
 
 	local alt, ctrl, meta, shift = Spring.GetModKeyState()
@@ -152,6 +190,10 @@ end
 
 
 function widget:MouseMove(x,y,dx,dy,button)
+	if WG.uiScale and WG.uiScale ~= 1 then
+		-- Why is this not done? Caused issues!
+		--x, y, dx, dy = x/WG.uiScale, y/WG.uiScale, dx/WG.uiScale, dy/WG.uiScale
+	end
 	if Spring.IsGUIHidden() then return false end
 
 	local alt, ctrl, meta, shift = Spring.GetModKeyState()
@@ -200,8 +242,17 @@ function widget:TextEditing(utf8, start, length, ...)
 end
 
 
+local oldSizeX, oldSizeY
 function widget:ViewResize(vsx, vsy)
+	oldSizeX, oldSizeY = vsx, vsy
 	screen0:Resize(vsx, vsy)
+end
+
+function widget:Update()
+	local screenWidth, screenHeight = Spring.GetWindowGeometry()
+	if screenWidth ~= oldSizeX or screenHeight ~= oldSizeY then
+		widget:ViewResize(screenWidth, screenHeight)
+	end
 end
 
 widget.TweakIsAbove      = widget.IsAbove
