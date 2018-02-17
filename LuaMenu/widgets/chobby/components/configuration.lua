@@ -24,7 +24,7 @@ function Configuration:init()
 	self.serverPort =  WG.Server.port
 
 	local realWidth, realHeight = Spring.Orig.GetViewSizes()
-	self.uiScale = math.floor(math.max(1, realHeight/1080))
+	self.uiScale = math.floor(math.max(1, realHeight/950))
 	self.defaultUiScale = self.uiScale
 	self.maxUiScale = math.max(2, realWidth/1000)
 	self.minUiScale = math.min(0.5, realWidth/4000)

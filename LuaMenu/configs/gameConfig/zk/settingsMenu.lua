@@ -29,7 +29,7 @@ end
 
 local function GetUiScaleParameters()
 	local realWidth, realHeight = Spring.Orig.GetViewSizes()
-	local defaultUiScale = math.floor(math.max(1, realHeight/1080))*100
+	local defaultUiScale = math.floor(math.max(1, realHeight/950))*100
 	local maxUiScale = math.max(2, realWidth/1000)*100
 	local minUiScale = math.min(0.5, realWidth/4000)*100
 	return defaultUiScale, maxUiScale, minUiScale
