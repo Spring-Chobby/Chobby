@@ -26,7 +26,7 @@ function Configuration:init()
 	local realWidth, realHeight = Spring.GetScreenGeometry() -- Screen allows for window size changes.
 	local winWidth, winHeight = Spring.Orig.GetWindowGeometry() -- Get both for crazy multi-screen setups.
 	realWidth, realHeight = math.max(realWidth, winWidth), math.max(realHeight, winHeight)
-	self.uiScale = floor(max(1, realHeight/1080))
+	self.uiScale = math.floor(math.max(1, realHeight/1080))
 	self.defaultUiScale = self.uiScale
 	self.maxUiScale = math.max(2, realWidth/1000)
 	self.minUiScale = math.min(0.5, realWidth/4000)
@@ -356,7 +356,7 @@ function Configuration:SetConfigData(data)
 
 	-- Fix old channel memory.
 	for key, value in pairs(self.channels) do
-		if string.find(key, "debriefing") then
+		if string.find(key, "debriefing") or string.find(key, "party_") then
 			self.channels[key] = nil
 		end
 	end
