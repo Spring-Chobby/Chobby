@@ -23,6 +23,9 @@ function Configuration:init()
 	self.serverAddress = WG.Server.address
 	self.serverPort =  WG.Server.port
 
+	self.uiScale = 1
+	WG.uiScale = self.uiScale
+	
 	self.userListWidth = 205 -- Main user list width. Possibly configurable in the future.
 	self.chatMaxNameLength = 185 -- Pixels
 	self.statusMaxNameLength = 185
@@ -399,6 +402,7 @@ function Configuration:GetConfigData()
 		serverPort = self.serverPort,
 		userName = self.userName,
 		suggestedNameFromSteam = self.suggestedNameFromSteam,
+		uiScale = self.uiScale,
 		password = self.password,
 		autoLogin = self.autoLogin,
 		firstLoginEver = self.firstLoginEver,
@@ -473,6 +477,9 @@ function Configuration:SetConfigValue(key, value)
 	if key == "useSpringRestart" then
 		lobby.useSpringRestart = value
 		localLobby.useSpringRestart = value
+	end
+	if key == "uiScale" then
+		WG.uiScale = value
 	end
 	if key == "gameConfigName" then
 		self.gameConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. value .. "/mainConfig.lua")
