@@ -26,11 +26,7 @@ function Configuration:init()
 	local realWidth, realHeight = Spring.GetScreenGeometry() -- Screen allows for window size changes.
 	local winWidth, winHeight = Spring.Orig.GetWindowGeometry() -- Get both for crazy multi-screen setups.
 	realWidth, realHeight = math.max(realWidth, winWidth), math.max(realHeight, winHeight)
-	if realHeight > 1080 then
-		self.uiScale = realHeight/1080
-	else
-		self.uiScale = 1
-	end
+	self.uiScale = floor(max(1, realHeight/1080))
 	self.defaultUiScale = self.uiScale
 	self.maxUiScale = math.max(2, realWidth/1000)
 	self.minUiScale = math.min(0.5, realWidth/4000)
