@@ -10,10 +10,16 @@
 -- gl.GetViewSizes intentionally not overridden
 Spring.Orig = Spring.Orig or {}
 Spring.Orig.GetWindowGeometry = Spring.GetWindowGeometry
+Spring.Orig.GetViewGeometry = Spring.GetViewGeometry
 Spring.Orig.GetMouseState = Spring.GetMouseState
 
 Spring.GetWindowGeometry = function()
 	local vsx, vsy, vx, vy = Spring.Orig.GetWindowGeometry()
+	return vsx/(WG.uiScale or 1), vsy/(WG.uiScale or 1), vx, vy
+end
+
+Spring.GetViewGeometry = function()
+	local vsx, vsy, vx, vy = Spring.Orig.GetViewGeometry()
 	return vsx/(WG.uiScale or 1), vsy/(WG.uiScale or 1), vx, vy
 end
 

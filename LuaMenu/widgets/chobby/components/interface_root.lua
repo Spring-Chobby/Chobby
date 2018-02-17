@@ -335,6 +335,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		Spring.Quit()
 	end
 
+	local function MakeExitPopup()
+		ConfirmationPopup(ExitSpring, "Are you sure you want to quit?", nil, 315, 200)
+	end
+
 	local buttons_exit = Button:New {
 		x = BUTTON_SIDE_SPACING,
 		bottom = 0,
@@ -343,11 +347,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		caption = i18n("exit"),
 		font = Configuration:GetFont(3),
 		parent = buttonsHolder_buttons,
-		OnClick = {
-			function(self)
-				ConfirmationPopup(ExitSpring, "Are you sure you want to quit?", nil, 315, 200)
-			end
-		},
+		OnClick = {MakeExitPopup},
 	}
 
 	-----------------------------------
@@ -813,12 +813,12 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			holder_topImage:Invalidate()
 		end
 
-		local screenWidth, screenHeight = Spring.GetViewGeometry()
+		local screenWidth, screenHeight = Spring.GetWindowGeometry()
 		screen0:Resize(screenWidth, screenHeight)
 	end
 
 	local function UpdateStatusAndInvitesHolderPosition()
-		local screenWidth, screenHeight = Spring.GetViewGeometry()
+		local screenWidth, screenHeight = Spring.GetWindowGeometry()
 
 		local xPos, yPos, width, height
 		local controlCount = statusAndInvitesPanel.GetControlCount()
@@ -974,7 +974,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	function externalFunctions.SetPanelDisplayMode(newAutodetectDoublePanel, newDoublePanel)
 		autodetectDoublePanel = newAutodetectDoublePanel
-		local screenWidth, screenHeight = Spring.GetViewGeometry()
+		local screenWidth, screenHeight = Spring.GetWindowGeometry()
 		if autodetectDoublePanel then
 			UpdateDoublePanel(screenWidth > minScreenWidth)
 		else
@@ -1070,7 +1070,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		end
 		if key == Spring.GetKeyCode("esc") then
 			if rightPanelHandler.CloseTabs() or mainWindowHandler.CloseTabs() or (backgroundCloseListener and backgroundCloseListener()) or mainWindowHandler.BackOneLevel() then
-				return true
+				MakeExitPopup()
+				return false
 			end
 			if showTopBar then
 				SetMainInterfaceVisible(false)

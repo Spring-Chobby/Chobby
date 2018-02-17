@@ -27,6 +27,18 @@ local function UpdateLups()
 	settingsFile:close()
 end
 
+local function GetUiScaleParameters()
+	local realWidth, realHeight = Spring.GetScreenGeometry() -- Screen allows for window size changes.
+	local winWidth, winHeight = Spring.Orig.GetWindowGeometry() -- Get both for crazy multi-screen setups.
+	realWidth, realHeight = math.max(realWidth, winWidth), math.max(realHeight, winHeight)
+	local defaultUiScale = math.max(1, realHeight/1080)*100
+	local maxUiScale = math.max(2, realWidth/1000)*100
+	local minUiScale = math.min(0.5, realWidth/4000)*100
+	return defaultUiScale, maxUiScale, minUiScale
+end
+
+local defaultUiScale, maxUiScale, minUiScale = GetUiScaleParameters()
+
 local settingsConfig = {
 	{
 		name = "Graphics",
@@ -790,6 +802,22 @@ local settingsConfig = {
 			--	end,
 			--},
 			{
+				name = "InterfaceScale",
+				humanName = "Game Interface Scale",
+				isNumberSetting = true,
+				minValue = minUiScale,
+				maxValue = maxUiScale,
+				isPercent = true,
+				applyFunction = function(value)
+					if Spring.GetGameName() ~= "" then
+						Spring.SendLuaUIMsg("SetInterfaceScale " .. value)
+					end
+					return {
+						interfaceScale = value,
+					}
+				end,
+			},
+			{
 				name = "MouseZoomSpeed",
 				humanName = "Mouse Zoom Speed",
 				isNumberSetting = true,
@@ -907,6 +935,7 @@ local settingsDefault = {
 	LupsShieldSphereColor = "On",
 	FancySky = "Off",
 	--IconDistance = 151,
+	InterfaceScale = defaultUiScale,
 	MouseZoomSpeed = 25,
 	InvertZoom = "Off",
 	TextToSpeech = "On",

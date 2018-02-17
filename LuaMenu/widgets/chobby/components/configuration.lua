@@ -23,7 +23,17 @@ function Configuration:init()
 	self.serverAddress = WG.Server.address
 	self.serverPort =  WG.Server.port
 
-	self.uiScale = 1
+	local realWidth, realHeight = Spring.GetScreenGeometry() -- Screen allows for window size changes.
+	local winWidth, winHeight = Spring.Orig.GetWindowGeometry() -- Get both for crazy multi-screen setups.
+	realWidth, realHeight = math.max(realWidth, winWidth), math.max(realHeight, winHeight)
+	if realHeight > 1080 then
+		self.uiScale = realHeight/1080
+	else
+		self.uiScale = 1
+	end
+	self.defaultUiScale = self.uiScale
+	self.maxUiScale = math.max(2, realWidth/1000)
+	self.minUiScale = math.min(0.5, realWidth/4000)
 	WG.uiScale = self.uiScale
 	
 	self.userListWidth = 205 -- Main user list width. Possibly configurable in the future.
@@ -479,8 +489,9 @@ function Configuration:SetConfigValue(key, value)
 		localLobby.useSpringRestart = value
 	end
 	if key == "uiScale" then
-		WG.uiScale = value
-		local screenWidth, screenHeight = Spring.GetViewGeometry()
+		self[key] = math.max(self.minUiScale, math.min(self.maxUiScale, value))
+		WG.uiScale = self[key]
+		local screenWidth, screenHeight = Spring.GetWindowGeometry()
 		screen0:Resize(screenWidth, screenHeight)
 	end
 	if key == "gameConfigName" then

@@ -829,7 +829,6 @@ end
 
 function Control:ParentToClient(x,y)
   local ca = self.clientArea
-  Spring.Echo("ParentToClient", self.name, x, y, "area", ca[1], ca[2])
   return x - self.x - ca[1], y - self.y - ca[2]
 end
 
