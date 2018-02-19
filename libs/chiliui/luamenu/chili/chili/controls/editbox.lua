@@ -100,7 +100,12 @@ end
 --//=============================================================================
 
 local function explode(div,str) -- credit: http://richard.warburton.it
-  if (div=='') then return false end
+  if (div=='') then
+    return false
+  end
+  if not str then
+    return {}
+  end
   local pos,arr = 0,{}
   -- for each divider found
   for st,sp in function() return string.find(str,div,pos,true) end do
