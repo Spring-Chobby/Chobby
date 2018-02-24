@@ -102,7 +102,6 @@ end
 
 -- TODO: This doesn't belong in the API. Battleroom chat commands are not part of the protocol (yet), and will cause issues with rooms where !start doesn't do anything.
 function Lobby:StartBattle()
-	self:SayBattle("!poll start")
 	return self
 end
 

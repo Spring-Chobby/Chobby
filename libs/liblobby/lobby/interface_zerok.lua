@@ -362,6 +362,19 @@ function Interface:SetModOptions(data)
 	--self:_SendCommand("SetModOptions {\"Options\":{}}")
 end
 
+function Interface:StartBattle()
+	if self:GetMyIsAdmin() then
+		local myBattle = self:GetBattle(self:GetMyBattleID())
+		if myBattle and (myBattle.founder ~= self:GetMyUserName()) then
+			self:SayBattle("!poll start")
+			return self
+		end
+	end
+
+	self:SayBattle("!start")
+	return self
+end
+
 ------------------------
 -- Channel & private chat commands
 ------------------------
