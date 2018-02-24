@@ -337,6 +337,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local function MakeExitPopup()
 		ConfirmationPopup(ExitSpring, "Are you sure you want to quit?", nil, 315, 200)
+		return true
 	end
 
 	local buttons_exit = Button:New {
@@ -1069,8 +1070,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			return true
 		end
 		if key == Spring.GetKeyCode("esc") then
-			if rightPanelHandler.CloseTabs() or mainWindowHandler.CloseTabs() or (backgroundCloseListener and backgroundCloseListener()) or mainWindowHandler.BackOneLevel() then
-				MakeExitPopup()
+			if rightPanelHandler.CloseTabs() or mainWindowHandler.CloseTabs() or 
+					(backgroundCloseListener and backgroundCloseListener()) or 
+					mainWindowHandler.BackOneLevel() or MakeExitPopup() then
 				return false
 			end
 			if showTopBar then
