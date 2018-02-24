@@ -442,6 +442,7 @@ function EditBox:FocusUpdate(...)
 			Spring.SDLSetTextInputRect(x, y, 30, 1000)
 		end
 	end
+	self:InvalidateSelf()
 	return inherited.FocusUpdate(self, ...)
 end
 
