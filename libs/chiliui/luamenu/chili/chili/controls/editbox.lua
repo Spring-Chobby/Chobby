@@ -42,7 +42,7 @@ EditBox = Control:Inherit{
   selectable = true,
   multiline = false,
   subTooltips = false,
-  useIME = true,
+  useIME = true, -- Currently broken, so every text box is set to use IME.
 
   passwordInput = false,
   lines = {},
@@ -432,7 +432,7 @@ function EditBox:Update(...)
 end
 
 function EditBox:FocusUpdate(...)
-	if self.useIME and Spring.SDLStartTextInput then
+	if Spring.SDLStartTextInput then
 		if not self.state.focused then
 			self.textEditing = ""
 			Spring.SDLStopTextInput()
