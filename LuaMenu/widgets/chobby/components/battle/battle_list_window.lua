@@ -120,7 +120,6 @@ function BattleListWindow:init(parent)
 	}
 	
 	local function UpdateCheckboxes()
-		Spring.Echo("UpdateCheckboxes", UpdateCheckboxes)
 		checkPassworded:SetToggle(Configuration.battleFilterPassworded)
 		checkNonFriend:SetToggle(Configuration.battleFilterNonFriend)
 		checkRunning:SetToggle(Configuration.battleFilterRunning)
@@ -203,7 +202,6 @@ function BattleListWindow:Update()
 	self:Clear()
 
 	local battles = lobby:GetBattles()
-	Spring.Echo("Number of battles: " .. lobby:GetBattleCount())
 	local tmp = {}
 	for _, battle in pairs(battles) do
 		table.insert(tmp, battle)
