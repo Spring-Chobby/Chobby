@@ -47,6 +47,10 @@ function Configuration:init()
 	self.alreadySeenFactionPopup2 = false
 	self.firstBattleStarted = false
 	self.channels = {}
+	
+	self.battleFilterPassworded = false
+	self.battleFilterNonFriend = false
+	self.battleFilterRunning = false
 
 	self.manualBorderless = {
 		game = {},
@@ -78,7 +82,7 @@ function Configuration:init()
 
 	self.loadLocalWidgets = false
 	self.displayBots = false
-	self.displayBadEngines = false
+	self.displayBadEngines2 = true
 	self.doNotSetAnySpringSettings = false
 	self.agressivelySetBorderlessWindowed = false
 
@@ -414,6 +418,9 @@ function Configuration:GetConfigData()
 		steamLinkComplete = self.steamLinkComplete,
 		alreadySeenFactionPopup2 = self.alreadySeenFactionPopup2,
 		firstBattleStarted = self.firstBattleStarted,
+		battleFilterPassworded = self.battleFilterPassworded,
+		battleFilterNonFriend = self.battleFilterNonFriend,
+		battleFilterRunning = self.battleFilterRunning,
 		channels = self.channels,
 		gameConfigName = self.gameConfigName,
 		game_fullscreen = self.game_fullscreen,
@@ -444,7 +451,7 @@ function Configuration:GetConfigData()
 		coopConnectDelay = self.coopConnectDelay,
 		useSpringRestart = self.useSpringRestart,
 		displayBots = self.displayBots,
-		displayBadEngines = self.displayBadEngines,
+		displayBadEngines2 = self.displayBadEngines2,
 		useWrongEngine = self.useWrongEngine,
 		doNotSetAnySpringSettings = self.doNotSetAnySpringSettings,
 		agressivelySetBorderlessWindowed = self.agressivelySetBorderlessWindowed,

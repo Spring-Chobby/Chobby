@@ -1392,6 +1392,18 @@ function Lobby:GetBattle(battleID)
 	return self.battles[battleID]
 end
 
+function Lobby:GetBattleHasFriend(battleID)
+	local battle = self.battles[battleID]
+	if battle and battle.users then
+		for i = 1, #battle.users do
+			if (self:TryGetUser(battle.users[i]) or {}).isFriend then
+				return true
+			end
+		end
+	end
+	return false
+end
+
 function Lobby:GetBattlePlayerCount(battleID)
 	local battle = self:GetBattle(battleID)
 	if not battle then
