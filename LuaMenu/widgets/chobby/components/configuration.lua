@@ -43,6 +43,7 @@ function Configuration:init()
 	self.firstLoginEver = true
 	self.canAuthenticateWithSteam = false
 	self.wantAuthenticateWithSteam = true
+	self.useSteamBrowser = true
 	self.steamLinkComplete = false
 	self.alreadySeenFactionPopup2 = false
 	self.firstBattleStarted = false
@@ -415,6 +416,7 @@ function Configuration:GetConfigData()
 		autoLogin = self.autoLogin,
 		firstLoginEver = self.firstLoginEver,
 		wantAuthenticateWithSteam = self.wantAuthenticateWithSteam,
+		useSteamBrowser = self.useSteamBrowser,
 		steamLinkComplete = self.steamLinkComplete,
 		alreadySeenFactionPopup2 = self.alreadySeenFactionPopup2,
 		firstBattleStarted = self.firstBattleStarted,

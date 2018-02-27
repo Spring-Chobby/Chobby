@@ -43,6 +43,7 @@ return {
 		only_featured_maps = "Only featured maps",
 		simple_ai_list = "Simplified AI list",
 		login_with_steam = "Login with Steam",
+		use_steam_browser = "Use Steam browser",
 		download_maps = "Download Maps",
 		download_replays = "Download Replays",
 		refresh = "Refresh",
