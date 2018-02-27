@@ -980,8 +980,10 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 	end
 
 	OpenNewTeam = function ()
-		GetTeam(emptyTeamIndex)
-		PositionChildren(mainStackPanel, mainScrollPanel.height)
+		if emptyTeamIndex < 254 then
+			GetTeam(emptyTeamIndex)
+			PositionChildren(mainStackPanel, mainScrollPanel.height)
+		end
 	end
 
 	mainScrollPanel.OnResize = {
