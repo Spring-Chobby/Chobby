@@ -66,6 +66,7 @@ function SteamLoginWindow:init(failFunction, cancelText, windowClassname)
 		height = 35,
 		text = Configuration.userName or Configuration.suggestedNameFromSteam or "",
 		font = Configuration:GetFont(3),
+		useIME = false,
 		parent = self.window
 	}
 	
@@ -85,6 +86,7 @@ function SteamLoginWindow:init(failFunction, cancelText, windowClassname)
 		text = Configuration.password or "",
 		passwordInput = true,
 		font = Configuration:GetFont(3),
+		useIME = false,
 		OnKeyPress = {
 			function(obj, key, mods, ...)
 				if key == Spring.GetKeyCode("enter") or key == Spring.GetKeyCode("numpad_enter") then
@@ -157,7 +159,7 @@ function SteamLoginWindow:ShowPassword()
 	self.window:AddChild(self.txtPassword)
 	self.window:AddChild(self.ebPassword)
 	
-	WG.Chobby.InformationPopup("This account already exists.\n\nIf this is your account then enter your password to link it to Steam.\n\nOtherwise, leave the password blank and try a different name.", 390, 290)
+	WG.Chobby.InformationPopup("This account already exists.\n\nIf this is your account then enter your password to link it to Steam.\n\nOtherwise, leave the password blank and try a different name.", {width = 390, height = 290})
 	
 	if string.len(self.ebPassword.text) == 0 then
 		self.btnRegister:SetCaption(i18n("register_verb"))

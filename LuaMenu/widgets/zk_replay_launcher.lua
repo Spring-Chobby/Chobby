@@ -30,18 +30,10 @@ local replaydata = ""
 local replayMap = ""
 local replayGame = ""
 
-local downloads = {}
 local url
 
-local hasMap = false
 local restartEngine = false
-local hasGame = false
 local hasFile = false
-
-local downloads = {
-	map = false,
-	game = false
-}
 
 local function dumpConfig()
 	-- dump all luasocket related config settings to console
@@ -84,9 +76,7 @@ end
 
 local function Abort(reason)
 	hasFile = false
-	hasGame = false
 	restartEngine = false
-	hasMap = false
 
 	Chotify:Post({
 		title = "Replay Failed",
@@ -114,28 +104,12 @@ function onLaunchReplay(wtf, replay, game, map, engine)
 	--Echo("game: ".. game)
 	--Echo('map: '.. map)
 	--Echo('engine: '.. engine)
-
-	hasGame = false
-	hasMap = false
+	
 	restartEngine = (not WG.Chobby.Configuration:IsValidEngineVersion(engine)) and engine
 	hasFile = false
 	
 	replayMap = map
 	replayGame = game
-
-	if(VFS.HasArchive(game)) then
-		hasGame = true
-	else
-		Echo("Downloading game...")
-		WG.DownloadHandler.MaybeDownloadArchive(game, "game", -1)
-	end
-
-	if(VFS.HasArchive(map)) then
-		hasMap = true
-	else
-		Echo("Downloading map...")
-		WG.DownloadHandler.MaybeDownloadArchive(map, "map", -1)
-	end
 
 	-- somehow check for engine? or check if current = required, and use that
 	local parsed = url.parse(replay)
@@ -147,7 +121,7 @@ function onLaunchReplay(wtf, replay, game, map, engine)
 
 	replaydata = ""
 
-	Echo("Downloading replay file")
+	--Echo("Downloading replay file")
 	SocketConnect(host, port)
 end
 
@@ -162,7 +136,8 @@ local function SocketWriteAble(sock)
 	if headersent==nil then
 		-- socket is writeable
 		headersent=1
-		Echo("sending http request".." GET " .. path .. " HTTP/1.0\r\nHost: " .. siteName ..  " \r\n\r\n")
+		--Echo("sending http request".." GET " .. path .. " HTTP/1.0\r\nHost: " .. siteName ..  " \r\n\r\n")
+		Echo("Downloading replay file.")
 		sock:send("GET " .. path .. " HTTP/1.0\r\nHost: " .. siteName ..  " \r\n\r\n")
 	end
 end
@@ -174,29 +149,12 @@ local function AttemptStart(saveFilename)
 		return -- Echo("Weird attempt to start without demofile")
 	end
 
-	if not hasMap then
-		return Echo("Downloading map ...")
-	end
-
-	if not hasGame then
-		return Echo("Downloading game...")
-	end
-
 	if not saveFilename then
 		return
 	end
 	
-	Echo("Starting Spring")
-	if not restartEngine then
-		WG.Chobby.localLobby:StartReplay(saveFilename)
-	elseif WG.WrapperLoopback then
-		local params = {
-			StartDemoName = string.sub(saveFilename, 7),
-			Engine = restartEngine,
-			SpringSettings = WG.SettingsWindow.GetSettingsString(),
-		}
-		WG.WrapperLoopback.StartNewSpring(params) 
-	end
+	Echo("Replay download complete.")
+	WG.SteamCoopHandler.AttemptGameStart("replay", replayGame, replayMap, nil, nil, saveFilename, restartEngine)
 end
 
 -- called when a connection is closed
@@ -269,45 +227,4 @@ function widget:Initialize()
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 	url = VFS.Include("libs/neturl/url.lua")
 	lobby:AddListener("OnLaunchRemoteReplay", onLaunchReplay)
-	
-	local function downloadQueued(listener, downloadID, archiveName, archiveType)
-		--Echo("Download "..downloadID.." queued")
-		--Echo("name = "..archiveName..", type = "..archiveType)
-		if (archiveName == replayMap and archiveType == "map") then
-			--Echo("Queued map donwload")
-			downloads.map = downloadID
-		end
-
-		if (archiveName == replayGame and archiveType == "game") then
-			--Echo("Queued game download")
-			downloads["game"] = downloadID
-		end
-	end
-	WG.DownloadHandler.AddListener("DownloadQueued", downloadQueued)
-
-	local function downloadFailed(listener, downloadID)
-		if(downloads.map == downloadID) then
-			Abort("Map download failed")
-		end
-
-		if(downloads.game == downloadID) then
-			Abort("Game download failed")
-		end
-	end
-	WG.DownloadHandler.AddListener("DownloadFailed", downloadFailed)
-
-	local function DownloadFinished(listener, downloadID)
-		if(downloads.map == downloadID) then
-			hasMap = true
-			Echo("Map download complete")
-			AttemptStart()
-		end
-
-		if(downloads.game == downloadID) then
-			hasGame = true
-			Echo("Game download complete")
-			AttemptStart()
-		end
-	end
-	WG.DownloadHandler.AddListener("downloadFinished", DownloadFinished)
 end

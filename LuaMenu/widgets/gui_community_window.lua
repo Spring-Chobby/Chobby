@@ -134,7 +134,7 @@ local function GetLadderHandler(parentControl)
 		parent = parentControl,
 	}
 	local playerHolder = Control:New{
-		x = 38,
+		x = 28,
 		y = 30,
 		right = 0,
 		bottom = 0,
@@ -177,13 +177,13 @@ local function GetLadderHandler(parentControl)
 			
 			if not numberBox[i] then
 				numberBox[i] = Label:New{
-					x = 2,
+					x = 1,
 					y = offset + 32,
-					width = 36,
+					width = 30,
 					height = 24,
 					align = "right",
 					valign = "top",
-					caption = i .. " - ",
+					caption = i .. ". ",
 					font = WG.Chobby.Configuration:GetFont(2),
 					parent = holder,
 				}
@@ -417,17 +417,16 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, top
 		if entryData.imageFile then
 			textPos = headFormat.imageSize + 12
 			local imagePath = entryData.imageFile
-			if not VFS.FileExists(imagePath) then
-				controls.wantImage = imagePath
-				imagePath = IMG_MISSING
-			end
 			if not controls.image then
 				controls.image = Image:New{
+					name = "news" .. index,
 					x = 4,
 					y = offset + 6,
 					width = headFormat.imageSize,
 					height = headFormat.imageSize,
 					keepAspect = true,
+					checkFileExists = true,
+					fallbackFile = IMG_MISSING,
 					file = imagePath,
 					parent = holder
 				}
@@ -467,6 +466,9 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, top
 			else
 				controls.text:SetText(entryData.text)
 				controls.text:SetVisibility(true)
+				controls.text:SetPos(textPos, offset + 6)
+				controls.text._relativeBounds.right = 4
+				controls.text:UpdateClientArea(false)
 			end
 		elseif controls.text then
 			controls.text:SetVisibility(false)
@@ -525,14 +527,6 @@ local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, top
 		end
 	end
 	
-	function externalFunctions.UpdateDownloadedImage()
-		if controls.wantImage and controls.image and VFS.FileExists(controls.wantImage) then
-			controls.wantImage = nil
-			controls.image.file = controls.wantImage
-			controls.image:Invalidate()
-		end
-	end
-	
 	return externalFunctions
 end
 
@@ -580,13 +574,6 @@ local function GetNewsHandler(parentControl, headingSize, timeAsTooltip, topHead
 		WG.Delay(UpdateCountdown, 60)
 	end
 	
-	local function ReloadImages()
-		for i = 1, #newsEntries do
-			local controls = newsEntries[i]
-			newsEntries[i].UpdateDownloadedImage()
-		end
-	end
-	
 	local externalFunctions = {}
 	
 	function externalFunctions.ReplaceNews(items)
@@ -602,6 +589,7 @@ local function GetNewsHandler(parentControl, headingSize, timeAsTooltip, topHead
 				if imagePos then
 					local imagePath = string.sub(items[i].Image, imagePos)
 					if not VFS.FileExists(imagePath) then
+						Spring.CreateDir("news")
 						WG.WrapperLoopback.DownloadImage({ImageUrl = items[i].Image, TargetPath = imagePath})
 					end
 					entry.imageFile = imagePath
@@ -620,11 +608,6 @@ local function GetNewsHandler(parentControl, headingSize, timeAsTooltip, topHead
 	
 	-- Initialization
 	UpdateCountdown()
-	
-	local function ImageDownloadFinished()
-		WG.Delay(ReloadImages, 4)
-	end
-	WG.DownloadHandler.AddListener("ImageDownloadFinished", ImageDownloadFinished)
 	
 	parentControl.OnResize = parentControl.OnResize or {}
 	parentControl.OnResize[#parentControl.OnResize + 1] = function ()
@@ -745,8 +728,16 @@ end
 --------------------------------------------------------------------------------
 -- Widget Interface
 
+function widget:ActivateGame()
+	if not WG.Chobby.Configuration.firstBattleStarted then
+		WG.Chobby.Configuration:SetConfigValue("firstBattleStarted", true)
+	end
+end
+
 local function DelayedInitialize()
-	
+	if WG.Chobby.Configuration.firstBattleStarted then
+		WG.Chobby.interfaceRoot.OpenRightPanelTab("community")
+	end
 end
 
 function widget:Initialize()

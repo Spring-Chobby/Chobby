@@ -23,6 +23,13 @@ function Configuration:init()
 	self.serverAddress = WG.Server.address
 	self.serverPort =  WG.Server.port
 
+	local realWidth, realHeight = Spring.Orig.GetViewSizes()
+	self.uiScale = math.floor(math.max(1, realHeight/950))
+	self.defaultUiScale = self.uiScale
+	self.maxUiScale = math.max(2, realWidth/1000)
+	self.minUiScale = math.min(0.5, realWidth/4000)
+	WG.uiScale = self.uiScale
+	
 	self.userListWidth = 205 -- Main user list width. Possibly configurable in the future.
 	self.chatMaxNameLength = 185 -- Pixels
 	self.statusMaxNameLength = 185
@@ -36,9 +43,15 @@ function Configuration:init()
 	self.firstLoginEver = true
 	self.canAuthenticateWithSteam = false
 	self.wantAuthenticateWithSteam = true
+	self.useSteamBrowser = true
 	self.steamLinkComplete = false
 	self.alreadySeenFactionPopup2 = false
+	self.firstBattleStarted = false
 	self.channels = {}
+	
+	self.battleFilterPassworded = false
+	self.battleFilterNonFriend = false
+	self.battleFilterRunning = false
 
 	self.manualBorderless = {
 		game = {},
@@ -70,7 +83,7 @@ function Configuration:init()
 
 	self.loadLocalWidgets = false
 	self.displayBots = false
-	self.displayBadEngines = false
+	self.displayBadEngines2 = true
 	self.doNotSetAnySpringSettings = false
 	self.agressivelySetBorderlessWindowed = false
 
@@ -84,6 +97,13 @@ function Configuration:init()
 		[3] = "oneVsOne",
 		[4] = "freeForAll",
 		[0] = "custom",
+	}
+	self.battleTypeToHumanName = {
+		[5] = "Coop",
+		[6] = "Team",
+		[3] = "1v1",
+		[4] = "FFA",
+		[0] = "Custom",
 	}
 
 	-- Do not ask again tests.
@@ -166,6 +186,7 @@ function Configuration:init()
 	self.menuNotificationVolume = 0.8
 	self.menuBackgroundBrightness = 1
 	self.gameOverlayOpacity = 0.5
+	self.coopConnectDelay = 5
 	self.showMatchMakerBattles = false
 	self.hideInterface = false
 	self.enableTextToSpeech = true
@@ -200,7 +221,19 @@ function Configuration:init()
 
 	self.settingsMenuValues = self.gameConfig.settingsDefault -- Only until configuration data is loaded.
 
-	self.animate_lobby = gl.CreateShader ~= nil
+	self.animate_lobby = (gl.CreateShader ~= nil)
+	self.minimapDownloads = {}
+	self.minimapThumbDownloads = {}
+	
+	local saneCharacterList = {
+		"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
+		"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+		"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "[", "]", "_",
+	}
+	self.saneCharacters = {}
+	for i = 1, #saneCharacterList do
+		self.saneCharacters[saneCharacterList[i]] = true
+	end
 end
 
 ---------------------------------------------------------------------------------
@@ -333,7 +366,7 @@ function Configuration:SetConfigData(data)
 
 	-- Fix old channel memory.
 	for key, value in pairs(self.channels) do
-		if string.find(key, "debriefing") then
+		if string.find(key, "debriefing") or string.find(key, "party_") then
 			self.channels[key] = nil
 		end
 	end
@@ -385,12 +418,18 @@ function Configuration:GetConfigData()
 		serverPort = self.serverPort,
 		userName = self.userName,
 		suggestedNameFromSteam = self.suggestedNameFromSteam,
+		uiScale = self.uiScale,
 		password = self.password,
 		autoLogin = self.autoLogin,
 		firstLoginEver = self.firstLoginEver,
 		wantAuthenticateWithSteam = self.wantAuthenticateWithSteam,
+		useSteamBrowser = self.useSteamBrowser,
 		steamLinkComplete = self.steamLinkComplete,
 		alreadySeenFactionPopup2 = self.alreadySeenFactionPopup2,
+		firstBattleStarted = self.firstBattleStarted,
+		battleFilterPassworded = self.battleFilterPassworded,
+		battleFilterNonFriend = self.battleFilterNonFriend,
+		battleFilterRunning = self.battleFilterRunning,
 		channels = self.channels,
 		gameConfigName = self.gameConfigName,
 		game_fullscreen = self.game_fullscreen,
@@ -418,9 +457,10 @@ function Configuration:GetConfigData()
 		activeDebugConsole = self.activeDebugConsole,
 		onlyShowFeaturedMaps = self.onlyShowFeaturedMaps,
 		simpleAiList = self.simpleAiList,
+		coopConnectDelay = self.coopConnectDelay,
 		useSpringRestart = self.useSpringRestart,
 		displayBots = self.displayBots,
-		displayBadEngines = self.displayBadEngines,
+		displayBadEngines2 = self.displayBadEngines2,
 		useWrongEngine = self.useWrongEngine,
 		doNotSetAnySpringSettings = self.doNotSetAnySpringSettings,
 		agressivelySetBorderlessWindowed = self.agressivelySetBorderlessWindowed,
@@ -457,6 +497,12 @@ function Configuration:SetConfigValue(key, value)
 	if key == "useSpringRestart" then
 		lobby.useSpringRestart = value
 		localLobby.useSpringRestart = value
+	end
+	if key == "uiScale" then
+		self[key] = math.max(self.minUiScale, math.min(self.maxUiScale, value))
+		WG.uiScale = self[key]
+		local screenWidth, screenHeight = Spring.GetViewSizes()
+		screen0:Resize(screenWidth, screenHeight)
 	end
 	if key == "gameConfigName" then
 		self.gameConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. value .. "/mainConfig.lua")
@@ -584,8 +630,15 @@ function Configuration:GetMinimapSmallImage(mapName)
 	mapName = string.gsub(mapName, " ", "_")
 	local filePath = self.gameConfig.minimapThumbnailPath .. mapName .. ".png"
 	if not VFS.FileExists(filePath) then
-		Log.Warning("Missing minimap image for", mapName)
-		return LUA_DIRNAME .. "images/minimapNotFound1.png"
+		filePath = "LuaMenu/Images/MinimapThumbnails" .. mapName .. ".jpg"
+	end
+	if WG.WrapperLoopback and WG.WrapperLoopback.DownloadImage and (not VFS.FileExists(filePath)) then
+		if not self.minimapThumbDownloads[mapName] then
+			Spring.CreateDir("LuaMenu/Images/MinimapThumbnails")
+			WG.WrapperLoopback.DownloadImage({ImageUrl = "http://zero-k.info/Resources/" .. mapName .. ".thumbnail.jpg", TargetPath = filePath})
+			self.minimapThumbDownloads[mapName] = true
+		end
+		return filePath, true
 	end
 	return filePath
 end
@@ -597,10 +650,28 @@ function Configuration:GetMinimapImage(mapName)
 	mapName = string.gsub(mapName, " ", "_")
 	local filePath = self.gameConfig.minimapOverridePath .. mapName .. ".jpg"
 	if not VFS.FileExists(filePath) then
-		Log.Warning("Missing minimap image for", mapName)
-		return LUA_DIRNAME .. "images/minimapNotFound1.png"
+		filePath = "LuaMenu/Images/Minimaps/" .. mapName .. ".jpg"
+	end
+	if WG.WrapperLoopback and WG.WrapperLoopback.DownloadImage and (not VFS.FileExists(filePath)) then
+		if not self.minimapDownloads[mapName] then
+			Spring.CreateDir("LuaMenu/Images/Minimaps")
+			WG.WrapperLoopback.DownloadImage({ImageUrl = "http://zero-k.info/Resources/" .. mapName .. ".minimap.jpg", TargetPath = filePath})
+			self.minimapDownloads[mapName] = true
+		end
+		return filePath, true
 	end
 	return filePath
+end
+
+function Configuration:GetLoadingImage(size)
+	if size == 1 then
+		return LUA_DIRNAME .. "images/load_img_32.png"
+	elseif size == 2 then
+		return LUA_DIRNAME .. "images/load_img_128.png"
+	elseif size == 3 then
+		return LUA_DIRNAME .. "images/load_img_512.png"
+	end
+	return LUA_DIRNAME .. "images/load_img_128.png"
 end
 
 function Configuration:GetCountryLongname(shortname)
@@ -632,6 +703,38 @@ end
 function Configuration:IsValidEngineVersion(engineVersion)
 	return engineVersion == Spring.Utilities.GetEngineVersion() or engineVersion == self:GetTruncatedEngineVersion()
 end
+
+function Configuration:SanitizeName(name, usedNames)
+	local ret = ""
+	local length = string.len(name)
+	Spring.Echo("SanitizeName", name)
+	for i = 1, length do
+		local c = string.sub(name, i, i)
+		if self.saneCharacters[c] then
+			ret = ret .. c
+		end
+	end
+	
+	if ret == "" then
+		ret = "Player"
+	end
+	if usedNames then
+		while usedNames[ret] do
+			ret = ret .. "1"
+		end
+		usedNames[ret] = true
+	end
+	
+	return ret, usedNames
+end
+
+function Configuration:GetPlayerName(allowBlank)
+	local suggest = (lobby and lobby.myUserName) or self.suggestedNameFromSteam or (allowBlank and "") or "Player"
+	if (not allowBlank) and suggest == "" then
+		return "Player"
+	end
+	return suggest
+end	
 
 function Configuration:GetDefaultGameName()
 	if not self.gameConfig then

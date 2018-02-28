@@ -56,7 +56,7 @@ local function InitializePartyStatusHandler(name)
 	}
 	
 	local partyTitle = TextBox:New {
-		x = "73%",
+		x = "75%",
 		y = 12,
 		fontsize = WG.Chobby.Configuration:GetFont(3).size,
 		text = i18n("party"),

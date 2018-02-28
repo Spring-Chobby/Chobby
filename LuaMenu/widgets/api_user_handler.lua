@@ -30,6 +30,8 @@ local friendUsers = {}
 local friendRequestUsers = {}
 local notificationUsers = {}
 
+local clanDownloadBegun = {}
+
 local userListList = {
 	battleUsers,
 	tooltipUsers,
@@ -61,7 +63,7 @@ local IMAGE_ONLINE       = IMAGE_DIR .. "online.png"
 local IMAGE_OFFLINE      = IMAGE_DIR .. "offline.png"
 
 local IMAGE_CLAN_PATH    = "LuaUI/Configs/Clans/"
-local RANK_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/rankImages/"
+local RANK_DIR           = LUA_DIRNAME .. "configs/gameConfig/zk/rankImages/"
 
 local USER_SP_TOOLTIP_PREFIX = "user_single_"
 local USER_MP_TOOLTIP_PREFIX = "user_battle_"
@@ -96,7 +98,19 @@ end
 local function GetClanImage(clanName)
 	if clanName then
 		local clanFile = IMAGE_CLAN_PATH .. clanName .. ".png"
-		return VFS.FileExists(clanFile) and clanFile
+		if (not VFS.FileExists(clanFile)) then
+			if WG.WrapperLoopback and WG.WrapperLoopback.DownloadImage then
+				if not clanDownloadBegun[clanName] then
+					Spring.CreateDir("LuaUI/Configs/Clans")
+					WG.WrapperLoopback.DownloadImage({ImageUrl = "https://zero-k.info/img/clans/" .. clanName .. ".png", TargetPath = clanFile})
+					clanDownloadBegun[clanName] = true
+				end
+				return clanFile, true
+			else
+				return false
+			end
+		end
+		return clanFile
 	end
 end
 
@@ -129,7 +143,8 @@ end
 
 local function GetUserClanImage(userName, userControl)
 	local userInfo = userControl.lobby:GetUser(userName) or {}
-	return GetClanImage(userInfo.clan)
+	local file, needDownload = GetClanImage(userInfo.clan)
+	return file, needDownload
 end
 
 local function GetUserComboBoxOptions(userName, isInBattle, userControl)
@@ -247,11 +262,11 @@ local function GetUserStatusImages(userName, isInBattle, userControl)
 	local userInfo = userControl.lobby:GetUser(userName) or {}
 	local images = {}
 
-	if userInfo.pendingPartyInvite then
+	if userInfo.pendingPartyInvite and not userControl.hideStatusInvite then
 		images[#images + 1] = IMAGE_PARTY_INVITE
 	end
 
-	if userInfo.isInGame or (userInfo.battleID and not isInBattle) then
+	if userInfo.isInGame or (userInfo.battleID and not isInBattle) and not userControl.hideStatusIngame then
 		if userInfo.isInGame then
 			images[#images + 1] = IMAGE_INGAME
 		else
@@ -259,7 +274,7 @@ local function GetUserStatusImages(userName, isInBattle, userControl)
 		end
 	end
 
-	if userInfo.isAway then
+	if userInfo.isAway and not userControl.hideStatusAway then
 		images[#images + 1] = IMAGE_AFK
 	end
 
@@ -314,7 +329,6 @@ local function UpdateUserControlStatus(userName, userControls)
 		userControls.imStatusLarge:Invalidate()
 		userControls.lblStatusLarge.font.color = fontColor
 		userControls.lblStatusLarge:SetCaption(i18n(status .. "_status"))
-		return
 	elseif not userControls.statusImages then
 		return
 	end
@@ -470,6 +484,9 @@ local function GetUserControls(userName, opts)
 	userControls.isSingleplayer    = isSingleplayer
 	userControls.steamInvite       = opts.steamInvite
 	userControls.hideStatus        = opts.hideStatus
+	userControls.hideStatusInvite  = opts.hideStatusInvite
+	userControls.hideStatusIngame  = opts.hideStatusIngame
+	userControls.hideStatusAway    = opts.hideStatusAway
 	userControls.dropdownWhitelist = opts.dropdownWhitelist
 
 	if reinitialize then
@@ -540,7 +557,6 @@ local function GetUserControls(userName, opts)
 						if userInfo and userInfo.hasFriendRequest then
 							userControls.lobby:AcceptFriendRequest(userName)
 						else
-
 							userControls.lobby:FriendRequest(userName)
 						end
 					elseif selectedName == "Join Party" or selectedName == "Invite to Party" then
@@ -600,7 +616,7 @@ local function GetUserControls(userName, opts)
 			keepAspect = true,
 			file = GetUserSyncStatus(userName, userControls),
 		}
-		offset = offset + 23
+		offset = offset + 21
 	end
 
 	if not isSingleplayer then
@@ -615,7 +631,7 @@ local function GetUserControls(userName, opts)
 			keepAspect = true,
 			file = GetUserCountryImage(userName, userControls),
 		}
-		offset = offset + 23
+		offset = offset + 21
 	end
 
 	offset = offset + 1
@@ -629,9 +645,9 @@ local function GetUserControls(userName, opts)
 		keepAspect = false,
 		file = GetUserRankImageName(userName, userControls),
 	}
-	offset = offset + 23
+	offset = offset + 21
 
-	local clanImage = GetUserClanImage(userName, userControls)
+	local clanImage, needDownload = GetUserClanImage(userName, userControls)
 	if clanImage then
 		offset = offset + 1
 		userControls.imClan = Image:New {
@@ -643,11 +659,13 @@ local function GetUserControls(userName, opts)
 			parent = userControls.mainControl,
 			keepAspect = true,
 			file = clanImage,
+			fallbackFile = Configuration:GetLoadingImage(1),
+			checkFileExists = needDownload,
 		}
-		offset = offset + 23
+		offset = offset + 21
 	end
 
-	offset = offset + 1
+	offset = offset + 2
 	userControls.tbName = TextBox:New {
 		name = "tbName",
 		x = offset,
@@ -677,10 +695,9 @@ local function GetUserControls(userName, opts)
 	offset = offset + userControls.nameActualLength
 
 	if not hideStatus then
-		if not large then
-			userControls.statusImages = {}
-			UpdateUserControlStatus(userName, userControls)
-		else
+		userControls.statusImages = {}
+		UpdateUserControlStatus(userName, userControls)
+		if large then
 			offsetY = offsetY + 35
 			offset = 5
 			local imgFile, status, fontColor = GetUserStatus(userName, isInBattle, userControls)
@@ -853,12 +870,14 @@ end
 
 function userHandler.GetFriendUser(userName)
 	return _GetUser(friendUsers, userName, {
-		large          = true,
-		offset         = 5,
-		offsetY        = 6,
-		height         = 80,
-		maxNameLength  = WG.Chobby.Configuration.friendMaxNameLength,
-		steamInvite    = true,
+		large            = true,
+		hideStatusAway   = true,
+		hideStatusIngame = true,
+		offset           = 5,
+		offsetY          = 6,
+		height           = 80,
+		maxNameLength    = WG.Chobby.Configuration.friendMaxNameLength,
+		steamInvite      = true,
 	})
 end
 

@@ -64,6 +64,34 @@ end
 
 -- Use listener interface from configuration when implementing this
 
+-- replay info read
+local function ReadReplayInfoDone(args)
+	--[[ 
+	    public class ReadReplayInfoDone {
+                    public string RelativePath { get; set; }
+                   public ReplayReader.ReplayInfo ReplayInfo { get; set; }
+				   
+        public class ReplayInfo
+        {
+            public string Engine { get; set; }
+            public string Game { get; set; }
+            public string Map { get; set; }
+            public string StartScript { get; set; }
+        }
+
+		ReplayInfo is nil in case of failure
+				   
+             }
+
+	]]--
+	local data = args.ReplayInfo
+	if data then
+		WG.ReplayHandler.ReadReplayInfoDone(args.RelativePath, data.Engine, data.Game, data.Map, data.StartScript)
+	end
+end
+
+
+
 -- reports that download has ended/was aborted
 local function DownloadFileDone(args)
 	WG.DownloadWrapperInterface.DownloadFinished(args.Name, args.FileType, args.IsSuccess, args.IsAborted)
@@ -74,21 +102,24 @@ local function DownloadFileProgress(args)
 	WG.DownloadWrapperInterface.DownloadFileProgress(args.Name, args.FileType, args.Progress, args.SecondsRemaining, args.TotalLength, args.CurrentSpeed)
 end
 
-
 -- notifies that steam is online
 local function SteamOnline(args)
 	WG.SteamHandler.SteamOnline(args.AuthToken, args.FriendSteamID, args.Friends, args.SuggestedName)
+	if args.FriendSteamID then
+		WG.SteamHandler.SteamJoinFriend(args.FriendSteamID)
+		WG.SteamCoopHandler.SteamJoinFriend(args.FriendSteamID)
+	end
 end
 
--- requests to join a friend's game/party
+-- Join friend upon receiving notification that your acceptance of their invite was accepted.
 local function SteamJoinFriend(args)
 	WG.SteamHandler.SteamJoinFriend(args.FriendSteamID)
+	WG.SteamCoopHandler.SteamJoinFriend(args.FriendSteamID)
 end
 
 local function SteamOverlayChanged(args) 
 	WG.SteamHandler.SteamOverlayChanged(args.IsActive)
 end
-
 
 -- TODO wire this to set initial stuff and pass userid to ZKLS
 local function WrapperOnline(args)
@@ -103,7 +134,7 @@ end
 
 -- TODO wrapper will send this to confirm friend join on steam (either invite or self join) use to auto accept party join request and to notify player when joining "offline" COOP 
 local function SteamFriendJoinedMe(args) 
-	WG.SteamCoopHandler.NotifyFriendJoined(args.FriendSteamID, args.FriendSteamName)
+	WG.SteamCoopHandler.SteamFriendJoinedMe(args.FriendSteamID, args.FriendSteamName)
 	--[[ 
 	    public string FriendSteamID { get; set; }
         public string FriendSteamName { get; set; }
@@ -126,6 +157,7 @@ end
 
 -- TODO when client receives this he should connect given game, it MUST use the passed ClientPort for local game
 local function SteamConnectSpring(args)
+	WG.SteamCoopHandler.SteamConnectSpring(args.HostIP, args.HostPort, args.ClientPort, args.Name, args.ScriptPassword, args.Map, args.Game, args.Engine)
 	--[[
         public string HostIP { get; set; }
         public int HostPort { get; set; }
@@ -191,6 +223,7 @@ commands["SteamHostGameFailed"] = SteamHostGameFailed
 commands["SteamConnectSpring"] = SteamConnectSpring
 commands["DownloadImageDone"] = DownloadImageDone
 commands["DownloadFileProgress"] = DownloadFileProgress
+commands["ReadReplayInfoDone"] = ReadReplayInfoDone
 
 commands["DiscordOnReady"] = DiscordOnReady
 commands["DiscordOnSpectate"] = DiscordOnSpectate
@@ -204,6 +237,11 @@ commands["DiscordOnJoinRequest"] = DiscordOnJoinRequest
 -- Callout Functions
 
 local WrapperLoopback = {}
+
+function WrapperLoopback.ReadReplayInfo(relativePath) 
+	SendCommand("ReadReplayInfo", {RelativePath = relativePath})
+end 
+
 
 -- opens URL
 function WrapperLoopback.OpenUrl(url)
@@ -303,7 +341,6 @@ end
 function WrapperLoopback.SteamInviteFriendToGame(steamID) 
 	SendCommand("SteamInviteFriendToGame", {SteamID = steamID})
 end
-
 
 -- TODO instructs wrapper to establish p2p, punch ports and start clients 
 function WrapperLoopback.SteamHostGameRequest(args)

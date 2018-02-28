@@ -10,14 +10,15 @@ function widget:GetInfo()
 	}
 end
 
-local battleLobby
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Structure
 local modoptionDefaults = {}
-local modoptionChanges = {}
-local modoptionLocalChanges = {}
 local modoptionStructure = {}
 
-local modoptionListenerLobby
-
+-- Variables
+local battleLobby
+local localModoptions = {}
 local modoptionControlNames = {}
 
 --------------------------------------------------------------------------------
@@ -40,17 +41,6 @@ local function UpdateControlValue(key, value)
 		end
 	end
 end
-
-
-local function ResetToDefault()
-	if not (modoptionDefaults and modoptionChanges) then
-		return
-	end
-	for key, value in pairs(modoptionChanges) do
-		UpdateControlValue(key, modoptionDefaults[key])
-	end
-end
-
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Option Control Handling
@@ -69,7 +59,7 @@ local function ProcessListOption(data, index)
 	}
 
 	local defaultItem = 1
-	local defaultKey = modoptionChanges[data.key] or data.def
+	local defaultKey = localModoptions[data.key] or data.def
 
 	local items = {}
 	local itemNameToKey = {}
@@ -96,7 +86,7 @@ local function ProcessListOption(data, index)
 		selected = defaultItem,
 		OnSelectName = {
 			function (obj, selectedName)
-				modoptionLocalChanges[data.key] = itemNameToKey[selectedName]
+				localModoptions[data.key] = itemNameToKey[selectedName]
 			end
 		},
 		itemKeyToName = itemKeyToName -- Not a chili key
@@ -118,11 +108,11 @@ end
 
 local function ProcessBoolOption(data, index)
 	local checked = false
-	if modoptionChanges[data.key] == nil then
+	if localModoptions[data.key] == nil then
 		if modoptionDefaults[data.key] == "1" then
 			checked = true
 		end
-	elseif modoptionChanges[data.key] == "1" then
+	elseif localModoptions[data.key] == "1" then
 		checked = true
 	end
 
@@ -140,7 +130,7 @@ local function ProcessBoolOption(data, index)
 
 		OnChange = {
 			function (obj, newState)
-				modoptionLocalChanges[data.key] = tostring((newState and 1) or 0)
+				localModoptions[data.key] = tostring((newState and 1) or 0)
 			end
 		},
 	}
@@ -163,7 +153,7 @@ local function ProcessNumberOption(data, index)
 		tooltip = data.desc,
 	}
 
-	local oldText = modoptionChanges[data.key] or modoptionDefaults[data.key]
+	local oldText = localModoptions[data.key] or modoptionDefaults[data.key]
 
 	local numberBox = EditBox:New {
 		x = 340,
@@ -171,6 +161,7 @@ local function ProcessNumberOption(data, index)
 		width = 180,
 		height = 30,
 		text   = oldText,
+		useIME = false,
 		fontSize = WG.Chobby.Configuration:GetFont(2).size,
 		OnFocusUpdate = {
 			function (obj)
@@ -206,7 +197,7 @@ local function ProcessNumberOption(data, index)
 					oldText = oldText:sub(0, oldText:len() - 1)
 				end
 
-				modoptionLocalChanges[data.key] = oldText
+				localModoptions[data.key] = oldText
 				obj:SetText(oldText)
 			end
 		}
@@ -240,7 +231,7 @@ local function ProcessStringOption(data, index)
 		tooltip = data.desc,
 	}
 
-	local oldText = modoptionChanges[data.key] or modoptionDefaults[data.key]
+	local oldText = localModoptions[data.key] or modoptionDefaults[data.key]
 
 	local textBox = EditBox:New {
 		x = 340,
@@ -248,13 +239,14 @@ local function ProcessStringOption(data, index)
 		width = 180,
 		height = 30,
 		text   = oldText,
+		useIME = false,
 		fontSize = WG.Chobby.Configuration:GetFont(2).size,
 		OnFocusUpdate = {
 			function (obj)
 				if obj.focused then
 					return
 				end
-				modoptionLocalChanges[data.key] = obj.text
+				localModoptions[data.key] = obj.text
 			end
 		}
 	}
@@ -318,7 +310,7 @@ local function CreateModoptionWindow()
 		classname = "main_window",
 	}
 
-	modoptionLocalChanges = Spring.Utilities.CopyTable(modoptionChanges)
+	localModoptions = Spring.Utilities.CopyTable(battleLobby:GetMyBattleModoptions() or {})
 	modoptionControlNames = {}
 
 	local tabs = {}
@@ -385,10 +377,21 @@ local function CreateModoptionWindow()
 
 	local function AcceptFunc()
 		screen0:FocusControl(buttonAccept) -- Defocus the text entry
-		battleLobby:SetModOptions(modoptionLocalChanges)
+		battleLobby:SetModOptions(localModoptions)
 		modoptionsSelectionWindow:Dispose()
 	end
 
+	local function ResetFunc()
+		local currentModoptions = battleLobby:GetMyBattleModoptions() or {}
+		localModoptions = {}
+		for key,_ in pairs(currentModoptions) do
+			if modoptionDefaults[key] then
+				localModoptions[key] = modoptionDefaults[key]
+				UpdateControlValue(key, modoptionDefaults[key])
+			end
+		end
+	end
+	
 	buttonReset = Button:New {
 		right = 294,
 		width = 135,
@@ -400,7 +403,7 @@ local function CreateModoptionWindow()
 		classname = "option_button",
 		OnClick = {
 			function()
-				ResetToDefault()
+				ResetFunc()
 			end
 		},
 	}
@@ -441,6 +444,7 @@ local function CreateModoptionWindow()
 end
 
 local function InitializeModoptionsDisplay()
+	local currentLobby = battleLobby
 
 	local mainScrollPanel = ScrollPanel:New {
 		x = 0,
@@ -460,26 +464,16 @@ local function InitializeModoptionsDisplay()
 		parent = mainScrollPanel,
 	}
 
-	modoptionListenerLobby = battleLobby
-	local function OnSetModOptions(listener, data)
-		local modoptions = battleLobby:GetMyBattleModoptions()
+	local function OnSetModOptions(listener, modoptions)
 		local text = ""
 		local empty = true
+		modoptions = modoptions or {}
 		for key, value in pairs(modoptions) do
 			if modoptionDefaults[key] == nil or modoptionDefaults[key] ~= value then
 				text = text .. "\255\120\120\120" .. tostring(key) .. " = \255\255\255\255" .. tostring(value) .. "\n"
 				empty = false
 			end
-
-			UpdateControlValue(key, value)
 		end
-		for key, value in pairs(modoptionChanges) do
-			if not modoptions[key] then
-				UpdateControlValue(key, modoptionDefaults[key])
-			end
-		end
-		modoptionChanges = modoptions
-
 		lblText:SetText(text)
 
 		if mainScrollPanel.parent then
@@ -497,12 +491,13 @@ local function InitializeModoptionsDisplay()
 	local externalFunctions = {}
 
 	function externalFunctions.Update()
-		if modoptionListenerLobby then
-			modoptionListenerLobby:RemoveListener("OnSetModOptions", OnSetModOptions)
-			modoptionListenerLobby:RemoveListener("OnResetModOptions", OnSetModOptions)
+		if currentLobby then
+			currentLobby:RemoveListener("OnSetModOptions", OnSetModOptions)
+			currentLobby:RemoveListener("OnResetModOptions", OnSetModOptions)
 		end
 		battleLobby:AddListener("OnSetModOptions", OnSetModOptions)
 		battleLobby:RemoveListener("OnResetModOptions", OnSetModOptions)
+		currentLobby = battleLobby
 
 		OnSetModOptions()
 	end
@@ -527,7 +522,6 @@ function ModoptionsPanel.LoadModotpions(gameName, newBattleLobby)
 
 	modoptions = WG.Chobby.Configuration.gameConfig.defaultModoptions
 	modoptionDefaults = {}
-	modoptionChanges = {}
 	modoptionStructure = {
 		sectionTitles = {},
 		sections = {}

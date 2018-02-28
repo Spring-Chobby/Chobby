@@ -42,6 +42,8 @@ EditBox = Control:Inherit{
   selectable = true,
   multiline = false,
   subTooltips = false,
+  useIME = true, -- Disabling is broken, so every text box is set to use IME.
+  useSDLStartTextInput = true,
 
   passwordInput = false,
   lines = {},
@@ -99,7 +101,12 @@ end
 --//=============================================================================
 
 local function explode(div,str) -- credit: http://richard.warburton.it
-  if (div=='') then return false end
+  if (div=='') then
+    return false
+  end
+  if not str then
+    return {}
+  end
   local pos,arr = 0,{}
   -- for each divider found
   for st,sp in function() return string.find(str,div,pos,true) end do
@@ -425,19 +432,19 @@ function EditBox:Update(...)
 	end
 end
 
-function EditBox:FocusUpdate()
-    if not Spring.SDLStartTextInput then
-        return
-    end
-
-    if not self.state.focused then
-        self.textEditing = ""
-        Spring.SDLStopTextInput()
-    else
-        Spring.SDLStartTextInput()
-        local x, y = self:CorrectlyImplementedLocalToScreen(self.x, self.y)
-        Spring.SDLSetTextInputRect(x, y, 30, 1000)
-    end
+function EditBox:FocusUpdate(...)
+	if Spring.SDLStartTextInput and self.useSDLStartTextInput then
+		if not self.state.focused then
+			self.textEditing = ""
+			Spring.SDLStopTextInput()
+		else
+			Spring.SDLStartTextInput()
+			local x, y = self:CorrectlyImplementedLocalToScreen(self.x, self.y)
+			Spring.SDLSetTextInputRect(x, y, 30, 1000)
+		end
+	end
+	self:InvalidateSelf()
+	return inherited.FocusUpdate(self, ...)
 end
 
 function EditBox:_GetCursorByMousePos(x, y)

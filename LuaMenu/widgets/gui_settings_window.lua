@@ -58,6 +58,10 @@ local function DisableAllWidgets()
 	DisableWidget("Delay API")
 end
 
+local function ToPercent(value)
+	return tostring(math.floor(0.5 + value)) .. "%"
+end
+
 local function ToggleFullscreenOff()
 	Spring.SetConfigInt("Fullscreen", 1, false)
 	Spring.SetConfigInt("Fullscreen", 0, false)
@@ -276,6 +280,7 @@ local function GetValueEntryBox(parent, name, position, currentValue)
 		height = 35,
 		text = tostring(currentValue),
 		font = Configuration:GetFont(3),
+		useIME = false,
 		parent = parent,
 		OnFocusUpdate = {
 			function (obj)
@@ -543,6 +548,59 @@ local function AddCheckboxSetting(offset, caption, key, default)
 	return control, offset + ITEM_OFFSET
 end
 
+local function AddNumberSetting(offset, caption, desc, key, default, minVal, maxVal, isPercent)
+	local Configuration = WG.Chobby.Configuration
+
+	local label = Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 350,
+		height = 30,
+		valign = "top",
+		align = "left",
+		caption = caption,
+		font = Configuration:GetFont(2),
+		tooltip = desc,
+	}
+
+	local function SetEditboxValue(obj, newValue)
+		newValue = string.gsub(newValue, "%%", "")
+		newValue = tonumber(newValue)
+
+		if not newValue then
+			obj:SetText(ToPercent(Configuration[key]*100))
+			return
+		end
+
+		local newValue = math.max(minVal, math.min(maxVal, math.floor(0.5 + newValue)))
+		obj:SetText(newValue .. "%")
+		
+		Configuration:SetConfigValue(key, newValue/100)
+	end
+
+	local freezeSettings = true
+	local numberInput = EditBox:New {
+		x = COMBO_X,
+		y = offset,
+		width = COMBO_WIDTH,
+		height = 30,
+		text = ToPercent(default*100),
+		font = Configuration:GetFont(2),
+		useIME = false,
+		OnFocusUpdate = {
+			function (obj)
+				if obj.focused or freezeSettings then
+					return
+				end
+				SetEditboxValue(obj, obj.text)
+			end
+		}
+	}
+	freezeSettings = false
+
+	return label, numberInput, offset + ITEM_OFFSET
+end
+
 local function GetLobbyTabControls()
 	local freezeSettings = true
 
@@ -581,6 +639,9 @@ local function GetLobbyTabControls()
 		},
 	}
 	offset = offset + ITEM_OFFSET
+
+	children[#children + 1], children[#children + 2], offset = AddNumberSetting(offset, "Lobby Interface Scale", "Increase or decrease interface size, for accessibility and 4k screens.", 
+		"uiScale", Configuration.uiScale, Configuration.minUiScale*100, Configuration.maxUiScale*100, true)
 
 	children[#children + 1] = Label:New {
 		x = 20,
@@ -732,6 +793,37 @@ local function GetLobbyTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 
+	children[#children + 1] = Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(2),
+		caption = "Coop Connection Delay",
+		tooltip = "Hosts with poor internet may require their clients to add a delay in order to connect.",
+	}
+	children[#children + 1] = Trackbar:New {
+		x = COMBO_X,
+		y = offset,
+		width  = COMBO_WIDTH,
+		height = 30,
+		value  = Configuration.coopConnectDelay or 0,
+		min    = 0,
+		max    = 100,
+		step   = 1,
+		OnChange = {
+			function(obj, value)
+				if freezeSettings then
+					return
+				end
+				Configuration:SetConfigValue("coopConnectDelay", value)
+			end
+		}
+	}
+	offset = offset + ITEM_OFFSET
+	
 	local autoLogin = Checkbox:New {
 		x = 20,
 		width = CHECK_WIDTH,
@@ -759,6 +851,7 @@ local function GetLobbyTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("only_featured_maps"), "onlyShowFeaturedMaps", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("simple_ai_list"), "simpleAiList", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("login_with_steam"), "wantAuthenticateWithSteam", true)
+	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("use_steam_browser"), "useSteamBrowser", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("animate_lobby"), "animate_lobby", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("drawFullSpeed"), "drawAtFullSpeed", false)
 
@@ -835,7 +928,7 @@ local function GetVoidTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Edit Campaign", "editCampaign", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Debug server messages", "activeDebugConsole", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Show channel bots", "displayBots", false)
-	children[#children + 1], offset = AddCheckboxSetting(offset, "Show wrong engines", "displayBadEngines", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, "Show wrong engines", "displayBadEngines2", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Debug for MatchMaker", "showMatchMakerBattles", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Hide interface", "hideInterface", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Neuter Settings", "doNotSetAnySpringSettings", false)
@@ -913,6 +1006,7 @@ local function GetVoidTabControls()
 		height = 30,
 		text = Configuration.serverAddress,
 		font = Configuration:GetFont(2),
+		useIME = false,
 		OnFocusUpdate = {
 			function (obj)
 				if obj.focused then
@@ -943,6 +1037,7 @@ local function GetVoidTabControls()
 		height = 30,
 		text = tostring(Configuration.serverPort),
 		font = Configuration:GetFont(2),
+		useIME = false,
 		OnFocusUpdate = {
 			function (obj)
 				if obj.focused then
@@ -1261,6 +1356,8 @@ end
 local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitch)
 	local Configuration = WG.Chobby.Configuration
 
+	local FormatFunc = (data.isPercent and ToPercent) or tostring
+	
 	local label = Label:New {
 		name = data.name .. "_label",
 		x = 20,
@@ -1275,10 +1372,11 @@ local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitc
 	}
 
 	local function SetEditboxValue(obj, newValue)
+		newValue = string.gsub(newValue, "%%", "")
 		newValue = tonumber(newValue)
 
 		if not newValue then
-			obj:SetText(tostring(Configuration.settingsMenuValues[data.name]))
+			obj:SetText(FormatFunc(Configuration.settingsMenuValues[data.name]))
 			return
 		end
 
@@ -1287,7 +1385,7 @@ local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitc
 		end
 
 		local newValue = math.floor(0.5 + math.max(data.minValue, math.min(data.maxValue, newValue)))
-		obj:SetText(tostring(newValue))
+		obj:SetText(FormatFunc(newValue))
 		
 		Configuration:SetSettingsConfigOption(data.name, newValue)
 	end
@@ -1299,8 +1397,9 @@ local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitc
 		y = offset,
 		width = COMBO_WIDTH,
 		height = 30,
-		text = tostring(Configuration.settingsMenuValues[data.name] or defaults[data.name]),
+		text = FormatFunc(Configuration.settingsMenuValues[data.name] or defaults[data.name]),
 		font = Configuration:GetFont(2),
+		useIME = false,
 		OnFocusUpdate = {
 			function (obj)
 				if obj.focused or freezeSettings then

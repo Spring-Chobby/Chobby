@@ -29,7 +29,7 @@ local TRANSFORM_BOUNDS = {
 }
 
 local difficultyNameMap = {
-	[0] = "Unknown",
+	[0] = "Import",
 	[1] = "Easy",
 	[2] = "Normal",
 	[3] = "Hard",
@@ -552,7 +552,8 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty)
 	
 	function externalFunctions.UpdateExperience(oldExperience, oldLevel, newExperience, newLevel, gainedBonusExperience)
 		experienceDisplay.AddFancyExperience(newExperience - oldExperience, gainedBonusExperience)
-		if oldExperience == 0 or (oldLevel ~= newLevel) then
+		if (oldExperience == 100 and newExperience > 100) or (oldLevel ~= newLevel) then
+			-- 100 is a crazy hack to open the commander loadout screen on the first completion of the second mission.
 			openCommanderWindowOnContinue = true
 		end
 	end
@@ -585,6 +586,7 @@ local function ProcessPlanetVictory(planetID, battleFrames, bonusObjectives, bon
 		Spring.Echo("ProcessPlanetVictory error")
 		return
 	end
+	
 	if selectedPlanet then
 		selectedPlanet.Close()
 		selectedPlanet = nil
@@ -604,7 +606,7 @@ local function ProcessPlanetDefeat(planetID, battleFrames)
 		selectedPlanet.Close()
 		selectedPlanet = nil
 	end
-	WG.Chobby.InformationPopup("Battle for " .. planetConfig[planetID].name .. " lost.", nil, nil, "Defeat")
+	WG.Chobby.InformationPopup("Battle for " .. planetConfig[planetID].name .. " lost.", {caption = "Defeat"})
 	WG.CampaignData.AddPlayTime(battleFrames, true)
 	
 	WG.Analytics.SendIndexedRepeatEvent("campaign:planet_" .. planetID .. ":difficulty_" .. WG.CampaignData.GetDifficultySetting() .. ":lose", math.floor(battleFrames/30), ":defeat")
@@ -689,18 +691,18 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 	
 	MakeRewardsPanel(subPanel, 16, planetData)
 	
+	local buttonHolder = Control:New{
+		x = "50%",
+		y = "4%",
+		right = "3%",
+		bottom = "4%",
+		padding = {0,0,0,0},
+		parent = starmapInfoPanel,
+	}
+	
 	if startable then
-		local buttonHolder = Control:New{
-			right = "3%",
-			bottom = "4%",
-			x = "50%",
-			height = 200,
-			padding = {0,0,0,0},
-			parent = starmapInfoPanel,
-		}
-		
 		if planetData.infoDisplay.feedbackLink then
-			MakeFeedbackButton(buttonHolder, planetData.infoDisplay.feedbackLink, 2, nil, nil, 1)
+			MakeFeedbackButton(buttonHolder, planetData.infoDisplay.feedbackLink, nil, 2, 85, nil)
 		end
 	
 		local startButton = Button:New{
@@ -718,6 +720,24 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 				end
 			}
 		}
+		
+		if Configuration.canAuthenticateWithSteam then
+			local btnInviteFriends = Button:New {
+				right = 140,
+				bottom = 0,
+				width = 220,
+				height = 65,
+				font = Configuration:GetFont(4),
+				caption = i18n("invite_friends"),
+				classname = "option_button",
+				OnClick = {
+					function()
+						WG.WrapperLoopback.SteamOpenOverlaySection()
+					end
+				},
+				parent = buttonHolder,
+			}
+		end
 		
 		if planetData.tutorialSkip then
 			local startButton = Button:New{
@@ -786,9 +806,8 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 	end
 	
 	Button:New{
-		parent = starmapInfoPanel,
-		y = "4%",
-		right = "3%",
+		y = 0,
+		right = 0,
 		width = 80,
 		height = 45,
 		classname = "negative_button",
@@ -797,7 +816,9 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 		OnClick = {
 			CloseFunc
 		},
+		parent = buttonHolder,
 	}
+	
 	
 	WG.Chobby.interfaceRoot.SetBackgroundCloseListener(CloseFunc)
 
@@ -1190,14 +1211,20 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 	
 	-- Only call this after calling UpdateStartable for all planets. Call at least (VISIBILITY_DISTANCE - 1) times.
 	function externalFunctions.UpdateDistance()
-		if distance then
+		if distance and (distance <= 1) then
 			return
 		end
 		for i = 1, #adjacency do
 			if adjacency[i] then
 				if ((not PLANET_WHITELIST) or PLANET_WHITELIST[i]) and planetList[i].GetDistance() then
-					distance = planetList[i].GetDistance() + 1
-					return
+					local newDist = planetList[i].GetDistance() + 1 
+					if distance then
+						if distance > newDist then
+							distance = newDist
+						end
+					else
+						distance = newDist
+					end
 				end
 			end
 		end
@@ -1253,9 +1280,11 @@ local function UpdateStartableAndVisible()
 		end
 	end
 	if VISIBILITY_DISTANCE > 2 then
-		for i = 1, VISIBILITY_DISTANCE - 1 do
-			if (not PLANET_WHITELIST) or PLANET_WHITELIST[i] then
-				planetList[i].UpdateDistance()
+		for j = 1, VISIBILITY_DISTANCE - 1 do
+			for i = 1, PLANET_COUNT do
+				if (not PLANET_WHITELIST) or PLANET_WHITELIST[i] then
+					planetList[i].UpdateDistance()
+				end
 			end
 		end
 	end
@@ -1476,6 +1505,7 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 	
 	-- Make sure everything loads in the right positions
 	DelayedViewResize()
+	WG.Delay(DelayedViewResize, 0.1)
 	WG.Delay(DelayedViewResize, 0.8)
 	return externalFunctions
 end
@@ -1487,6 +1517,7 @@ end
 local BATTLE_WON_STRING = "Campaign_PlanetBattleWon"
 local BATTLE_LOST_STRING = "Campaign_PlanetBattleLost"
 local BATTLE_RESIGN_STRING = "Campaign_PlanetBattleResign"
+local LOAD_CAMPAIGN_STRING = "Campaign_LoadCampaign"
 
 function string:split(delimiter)
 	local result = {}
@@ -1501,8 +1532,17 @@ function string:split(delimiter)
 	return result
 end
 
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
 function widget:RecvLuaMsg(msg)
-	if string.find(msg, BATTLE_WON_STRING) then
+	if string.find(msg, LOAD_CAMPAIGN_STRING) then
+		local encoded = string.sub(msg, string.len(LOAD_CAMPAIGN_STRING) + 1)
+		local saveData = Spring.Utilities.CustomKeyToUsefulTable(encoded)
+		WG.CampaignData.ApplyCampaignPartialSaveData(saveData)
+		WG.Chobby.interfaceRoot.OpenSingleplayerTabByName("campaign")
+	elseif string.find(msg, BATTLE_WON_STRING) then
 		Spring.Echo("msg", msg)
 		local data = msg:split(" ")
 		Spring.Utilities.TableEcho(data, "data")
@@ -1602,6 +1642,7 @@ end
 
 
 function widget:ViewResize(vsx, vsy)
+	WG.Delay(DelayedViewResize, 0.1)
 	WG.Delay(DelayedViewResize, 0.8)
 end
 
@@ -1611,6 +1652,7 @@ function widget:Initialize()
 	local function CampaignLoaded(listener)
 		if planetList and planetHandler then
 			UpdateGalaxy()
+			WG.Delay(DelayedViewResize, 0.1)
 			if selectedPlanet then
 				selectedPlanet.Close()
 				selectedPlanet = nil

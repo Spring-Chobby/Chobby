@@ -34,7 +34,6 @@ local IMG_READY    = LUA_DIRNAME .. "images/ready.png"
 local IMG_UNREADY  = LUA_DIRNAME .. "images/unready.png"
 local IMG_LINK     = LUA_DIRNAME .. "images/link.png"
 
-
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Download management
@@ -175,13 +174,17 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 			end
 		},
 	}
+	
+	local mapImageFile, needDownload = config:GetMinimapImage(battle.mapName)
 	local imMinimap = Image:New {
 		x = 0,
 		y = 0,
 		right = 0,
 		bottom = 0,
 		keepAspect = true,
-		file = config:GetMinimapImage(battle.mapName),
+		file = mapImageFile,
+		fallbackFile = config:GetLoadingImage(3),
+		checkFileExists = needDownload,
 		parent = btnMinimap,
 	}
 
@@ -210,10 +213,11 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 					else
 						if battleLobby.name == "singleplayer" then
 							WG.Analytics.SendOnetimeEvent("lobby:singleplayer:skirmish:start")
+							WG.SteamCoopHandler.AttemptGameStart("skirmish", battle.gameName, battle.mapName)
 						else
 							WG.Analytics.SendOnetimeEvent("lobby:multiplayer:custom:start")
+							battleLobby:StartBattle("skirmish")
 						end
-						battleLobby:StartBattle("skirmish")
 					end
 				else
 					Spring.Echo("Do something if map or game is missing")
@@ -537,7 +541,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		end
 		if battleInfo.mapName then
 			SetMapName(battleInfo.mapName, mapLinkWidth)
-			imMinimap.file = config:GetMinimapImage(battleInfo.mapName)
+			imMinimap.file, imMinimap.checkFileExists  = config:GetMinimapImage(battleInfo.mapName)
 			imMinimap:Invalidate()
 
 			-- TODO: Bit lazy here, seeing as we only need to update the map
@@ -975,8 +979,10 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 	end
 
 	OpenNewTeam = function ()
-		GetTeam(emptyTeamIndex)
-		PositionChildren(mainStackPanel, mainScrollPanel.height)
+		if emptyTeamIndex < 254 then
+			GetTeam(emptyTeamIndex)
+			PositionChildren(mainStackPanel, mainScrollPanel.height)
+		end
 	end
 
 	mainScrollPanel.OnResize = {
@@ -1210,7 +1216,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 			activePanel._relativeBounds.right = 0
 			activePanel:UpdateClientArea()
 			if pollParameter then
-				imMinimap.file = config:GetMinimapImage(pollParameter)
+				imMinimap.file, imMinimap.checkFileExists = config:GetMinimapSmallImage(pollParameter)
 				imMinimap:Invalidate()
 				currentMapName = pollParameter
 			end
@@ -1380,13 +1386,16 @@ local function InitializeSetupPage(subPanel, screenHeight, pageConfig, nextPage,
 			parent = subPanel,
 		}
 		if pageConfig.minimap then
+			local mapImageFile, needDownload = Configuration:GetMinimapImage(pageConfig.options[i])
 			local imMinimap = Image:New {
 				x = 0,
 				y = 0,
 				right = 0,
 				bottom = 0,
 				keepAspect = true,
-				file = Configuration:GetMinimapImage(pageConfig.options[i]),
+				file = mapImageFile,
+				fallbackFile = Configuration:GetLoadingImage(2),
+				checkFileExists = needDownload,
 				parent = buttons[i],
 			}
 		end
@@ -1401,12 +1410,11 @@ local function SetupEasySetupPanel(mainWindow, standardSubPanel, setupData)
 	local selectedOptions = {} -- Passed and modified by reference
 
 	local function ApplyFunction(startGame)
+		local battle = battleLobby:GetBattle(battleLobby:GetMyBattleID())
 		setupData.ApplyFunction(battleLobby, selectedOptions)
 		if startGame then
 			if haveMapAndGame then
-				local hostPort = WG.SteamCoopHandler and WG.SteamCoopHandler.GetHostPort()
-				local friendNames = hostPort and WG.SteamCoopHandler.GetCoopFriendList()
-				battleLobby:StartBattle("skirmish", friendNames, true, hostPort)
+				WG.SteamCoopHandler.AttemptGameStart("skirmish", battle.gameName, battle.mapName, nil, true)
 			else
 				Spring.Echo("Do something if map or game is missing")
 			end
@@ -1448,6 +1456,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 	end
 
 	local isSingleplayer = (battleLobby.name == "singleplayer")
+	local isHost = (not isSingleplayer) and (battleLobby:GetMyUserName() == battle.founder)
 
 	local EXTERNAL_PAD_VERT = 9
 	local EXTERNAL_PAD_HOR = 12
@@ -1562,7 +1571,24 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		},
 		parent = mainWindow,
 	}
-
+	
+	local btnInviteFriends = Button:New {
+		right = 101,
+		y = 7,
+		width = 180,
+		height = 45,
+		font = Configuration:GetFont(3),
+		caption = i18n("invite_friends"),
+		classname = "option_button",
+		OnClick = {
+			function()
+				WG.WrapperLoopback.SteamOpenOverlaySection()
+			end
+		},
+		parent = mainWindow,
+	}
+	btnInviteFriends:SetVisibility(Configuration.canAuthenticateWithSteam)
+	
 	local battleTitle = ""
 	local lblBattleTitle = Label:New {
 		x = 20,
@@ -1578,7 +1604,34 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 			end
 		}
 	}
-
+	
+	local battleTypeCombo
+	if isHost then
+		battleTypeCombo = ComboBox:New {
+			x = 13,
+			width = 125,
+			y = 12,
+			height = 35,
+			itemHeight = 22,
+			selectByName = true,
+			captionHorAlign = -12,
+			text = "",
+			font = Configuration:GetFont(3),
+			items = {"Coop", "Team", "1v1", "FFA", "Custom"},
+			itemFontSize = Configuration:GetFont(3).size,
+			selected = Configuration.battleTypeToHumanName[battle.battleMode or 0],
+			OnSelectName = {
+				function (obj, selectedName)
+					if battleTypeCombo then
+						battleLobby:SetBattleType(selectedName)
+					end
+				end
+			},
+			parent = mainWindow,
+		}
+		lblBattleTitle:BringToFront()
+	end
+	
 	local function UpdateBattleTitle()
 		if isSingleplayer then
 			battleTitle = tostring(battle.title)
@@ -1587,8 +1640,21 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 			return
 		end
 		if Configuration:IsValidEngineVersion(battle.engineVersion) then
+			if battleTypeCombo then
+				lblBattleTitle:SetPos(143)
+				lblBattleTitle._relativeBounds.right = 100
+				lblBattleTitle:UpdateClientArea()
+				
+				battleTypeCombo:SetVisibility(true)
+				battleTypeCombo.selected = Configuration.battleTypeToHumanName[battle.battleMode or 0]
+				battleTypeCombo.caption = Configuration.battleTypeToHumanName[battle.battleMode or 0]
+				battleTypeCombo:Invalidate()
+			end
+			
 			local battleTypeName = Configuration.battleTypeToName[battle.battleMode]
-			if battleTypeName then
+			if isHost then
+				battleTitle = ": " .. tostring(battle.title)
+			elseif battleTypeName then
 				battleTitle = i18n(battleTypeName) .. ": " .. tostring(battle.title)
 			else
 				battleTitle = tostring(battle.title)
@@ -1598,6 +1664,12 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 			lblBattleTitle:SetCaption(truncatedTitle)
 		else
 			battleTitle = "\255\255\0\0Warning: Restart to get correct engine version"
+			if battleTypeCombo then
+				lblBattleTitle:SetPos(20)
+				lblBattleTitle._relativeBounds.right = 100
+				lblBattleTitle:UpdateClientArea()
+				battleTypeCombo:SetVisibility(false)
+			end
 			local truncatedTitle = StringUtilities.GetTruncatedStringWithDotDot(battleTitle, lblBattleTitle.font, lblBattleTitle.width)
 			lblBattleTitle:SetCaption(truncatedTitle)
 		end
@@ -1651,6 +1723,10 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		return infoHandler
 	end
 
+	function externalFunctions.UpdateInviteButton(newVisibile)
+		btnInviteFriends:SetVisibility(newVisibile)
+	end
+	
 	-- Lobby interface
 	local function OnUpdateUserTeamStatus(listener, userName, allyNumber, isSpectator)
 		infoHandler.UpdateUserTeamStatus(userName, allyNumber, isSpectator)
@@ -1841,7 +1917,7 @@ function BattleRoomWindow.GetSingleplayerControl(setupData)
 				end
 
 				battleLobby = WG.LibLobby.localLobby
-				battleLobby:SetBattleState(lobby:GetMyUserName() or "Player", singleplayerGame, defaultMap, "Skirmish Battle")
+				battleLobby:SetBattleState(WG.Chobby.Configuration:GetPlayerName(), singleplayerGame, defaultMap, "Skirmish Battle")
 
 				wrapperControl = obj
 
@@ -1922,17 +1998,26 @@ function BattleRoomWindow.ClearChatHistory()
 		mainWindowFunctions.ClearChatHistory()
 	end
 end
-
+local function DelayedInitialize()
+	local function onConfigurationChange(listener, key, value)
+		if mainWindowFunctions and key == "canAuthenticateWithSteam" then
+			mainWindowFunctions.UpdateInviteButton(value)
+		end
+	end
+	WG.Chobby.Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
+end
+	
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-
+	
 	local function downloadFinished()
 		UpdateArchiveStatus(true)
 	end
 	WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
 
 	WG.BattleRoomWindow = BattleRoomWindow
+	WG.Delay(DelayedInitialize, 0.5)
 end
 
 --------------------------------------------------------------------------------

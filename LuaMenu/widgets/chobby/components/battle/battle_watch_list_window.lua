@@ -46,7 +46,7 @@ function BattleWatchListWindow:init(parent)
 	lobby:AddListener("OnBattleIngameUpdate", self.onBattleIngameUpdate)
 
 	local function onConfigurationChange(listener, key, value)
-		if key == "displayBadEngines" then
+		if key == "displayBadEngines2" then
 			update()
 		end
 	end
@@ -104,7 +104,7 @@ function BattleWatchListWindow:AddBattle(battleID)
 		return
 	end
 	
-	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
+	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	
@@ -157,6 +157,8 @@ function BattleWatchListWindow:AddBattle(battleID)
 		padding = {1,1,1,1},
 		parent = parentButton,
 	}
+	
+	local mapImageFile, needDownload = Configuration:GetMinimapSmallImage(battle.mapName)
 	local minimapImage = Image:New {
 		name = "minimapImage",
 		x = 0,
@@ -164,7 +166,9 @@ function BattleWatchListWindow:AddBattle(battleID)
 		right = 0,
 		bottom = 0,
 		keepAspect = true,
-		file = Configuration:GetMinimapSmallImage(battle.mapName),
+		file = mapImageFile,
+		fallbackFile = Configuration:GetLoadingImage(2),
+		checkFileExists = needDownload,
 		parent = minimap,
 	}
 	local runningImage = Image:New {
@@ -220,7 +224,7 @@ end
 
 function BattleWatchListWindow:UpdateSync(battleID)
 	local battle = lobby:GetBattle(battleID)
-	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
+	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	local items = self:GetRowItems(battleID)
@@ -274,7 +278,7 @@ end
 
 function BattleWatchListWindow:OnUpdateBattleInfo(battleID)
 	local battle = lobby:GetBattle(battleID)
-	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
+	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	local items = self:GetRowItems(battleID)
@@ -293,7 +297,7 @@ function BattleWatchListWindow:OnUpdateBattleInfo(battleID)
 	lblTitle.OnResize[1](lblTitle)
 	
 	local minimapImage = items.battleButton:GetChildByName("minimap"):GetChildByName("minimapImage")
-	minimapImage.file = Configuration:GetMinimapImage(battle.mapName)
+	minimapImage.file, minimapImage.checkFileExists = Configuration:GetMinimapSmallImage(battle.mapName)
 	minimapImage:Invalidate()
 	
 	local playersOnMapCaption = items.battleButton:GetChildByName("playersOnMapCaption")
@@ -305,7 +309,7 @@ end
 
 function BattleWatchListWindow:OnBattleIngameUpdate(battleID, isRunning)
 	local battle = lobby:GetBattle(battleID)
-	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
+	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	if isRunning then

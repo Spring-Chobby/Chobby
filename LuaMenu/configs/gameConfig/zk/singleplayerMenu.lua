@@ -119,8 +119,9 @@ return {
 		entryCheck = WG.BattleRoomWindow.SetSingleplayerGame,
 	},
 	{
-		name = "instruction", 
-		control = WG.MissionHandler.GetControl(),
+		name = "load",
+		control = WG.LoadGameWindow.GetControl(),
+		entryCheck = WG.BattleRoomWindow.SetSingleplayerGame,
 	},
 }
 

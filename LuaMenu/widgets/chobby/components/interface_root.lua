@@ -335,6 +335,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		Spring.Quit()
 	end
 
+	local function MakeExitPopup()
+		ConfirmationPopup(ExitSpring, "Are you sure you want to quit?", nil, 315, 200)
+		return true
+	end
+
 	local buttons_exit = Button:New {
 		x = BUTTON_SIDE_SPACING,
 		bottom = 0,
@@ -343,11 +348,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		caption = i18n("exit"),
 		font = Configuration:GetFont(3),
 		parent = buttonsHolder_buttons,
-		OnClick = {
-			function(self)
-				ConfirmationPopup(ExitSpring, "Are you sure you want to quit?", nil, 315, 200)
-			end
-		},
+		OnClick = {MakeExitPopup},
 	}
 
 	-----------------------------------
@@ -436,7 +437,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local submenus = {
 		{
 			name = "singleplayer",
-			tabs = Configuration.gameConfig.singleplayerConfig
+			tabs = Configuration.gameConfig.singleplayerConfig,
+			titleText = i18n("singleplayercoop"),
+			twoline = true,
 		},
 		{
 			name = "multiplayer",
@@ -454,7 +457,6 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 				{name = "replays", control = WG.ReplayHandler.GetControl()},
 			},
 			startWithTabOpen = 1,
-			hideMyButtons = true,
 		},
 		{
 			name = "help",
@@ -812,12 +814,12 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			holder_topImage:Invalidate()
 		end
 
-		local screenWidth, screenHeight = Spring.GetViewGeometry()
+		local screenWidth, screenHeight = Spring.GetViewSizes()
 		screen0:Resize(screenWidth, screenHeight)
 	end
 
 	local function UpdateStatusAndInvitesHolderPosition()
-		local screenWidth, screenHeight = Spring.GetViewGeometry()
+		local screenWidth, screenHeight = Spring.GetViewSizes()
 
 		local xPos, yPos, width, height
 		local controlCount = statusAndInvitesPanel.GetControlCount()
@@ -973,7 +975,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	function externalFunctions.SetPanelDisplayMode(newAutodetectDoublePanel, newDoublePanel)
 		autodetectDoublePanel = newAutodetectDoublePanel
-		local screenWidth, screenHeight = Spring.GetViewGeometry()
+		local screenWidth, screenHeight = Spring.GetViewSizes()
 		if autodetectDoublePanel then
 			UpdateDoublePanel(screenWidth > minScreenWidth)
 		else
@@ -1068,8 +1070,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			return true
 		end
 		if key == Spring.GetKeyCode("esc") then
-			if rightPanelHandler.CloseTabs() or mainWindowHandler.CloseTabs() or (backgroundCloseListener and backgroundCloseListener()) or mainWindowHandler.BackOneLevel() then
-				return true
+			if rightPanelHandler.CloseTabs() or mainWindowHandler.CloseTabs() or 
+					(backgroundCloseListener and backgroundCloseListener()) or 
+					mainWindowHandler.BackOneLevel() or MakeExitPopup() then
+				return false
 			end
 			if showTopBar then
 				SetMainInterfaceVisible(false)
@@ -1147,7 +1151,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-------------------------------------------------------------------
 	-- Initialization
 	-------------------------------------------------------------------
-	local screenWidth, screenHeight = Spring.GetWindowGeometry()
+	local screenWidth, screenHeight = Spring.GetViewSizes()
 
 	battleStatusPanelHandler.Rescale(3, 70)
 	rightPanelHandler.Rescale(2, 70)
@@ -1156,8 +1160,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	externalFunctions.ViewResize(screenWidth, screenHeight)
 	UpdatePadding(screenWidth, screenHeight)
 	UpdateChildLayout()
-	rightPanelHandler.OpenTab(1)
-
+	
 	return externalFunctions
 end
 

@@ -731,7 +731,7 @@ local moduleDefs = {
 	{
 		name = "module_high_power_servos",
 		humanName = "High Power Servos",
-		description = "High Power Servos - Increases speed by 10%._COUNT_",
+		description = "High Power Servos - Increases speed by 8%._COUNT_",
 		image = moduleImagePath .. "module_high_power_servos.png",
 		limit = 8,
 		cost = 150,

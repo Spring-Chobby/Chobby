@@ -79,35 +79,39 @@ function Lobby:_PreserveData()
 	}
 end
 
-local function GenerateScriptTxt(battleIp, battlePort, scriptPassword)
+local function GenerateScriptTxt(battleIp, battlePort, clientPort, scriptPassword, myName)
 	local scriptTxt =
 [[
 [GAME]
 {
 	HostIP=__IP__;
 	HostPort=__PORT__;
+	SourcePort=__CLIENT_PORT__;
 	IsHost=0;
 	MyPlayerName=__MY_PLAYER_NAME__;
 	MyPasswd=__MY_PASSWD__;
-}
-]]
+}]]
 
 	scriptTxt = scriptTxt:gsub("__IP__", battleIp)
-						:gsub("__PORT__", battlePort)
-						:gsub("__MY_PLAYER_NAME__", lobby:GetMyUserName())
-						:gsub("__MY_PASSWD__", scriptPassword)
+                         :gsub("__PORT__", battlePort)
+                         :gsub("__CLIENT_PORT__", clientPort or 0)
+                         :gsub("__MY_PLAYER_NAME__", myName or lobby:GetMyUserName() or "noname")
+                         :gsub("__MY_PASSWD__", scriptPassword)
 	return scriptTxt
 end
 
 -- TODO: This doesn't belong in the API. Battleroom chat commands are not part of the protocol (yet), and will cause issues with rooms where !start doesn't do anything.
 function Lobby:StartBattle()
-	self:SayBattle("!poll start")
 	return self
 end
 
 -- TODO: Provide clean implementation/specification
 function Lobby:SelectMap(mapName)
 	self:SayBattle("!map " .. mapName)
+end
+
+function Lobby:SetBattleType(typeName)
+	self:SayBattle("!type " .. typeName)
 end
 
 -------------------------------------------------
@@ -238,7 +242,7 @@ function Lobby:SayBattleEx(message)
 	return self
 end
 
-function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, scriptPassword, gameName, mapName, engineName, battleType)
+function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, clientPort, scriptPassword, myName, gameName, mapName, engineName, battleType)
 	if gameName and not VFS.HasArchive(gameName) then
 		WG.Chobby.InformationPopup("Cannont start game: missing game file '" .. gameName .. "'.")
 		return
@@ -252,13 +256,13 @@ function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, scriptPas
 	if engineName and not WG.Chobby.Configuration:IsValidEngineVersion(engineName) and not WG.Chobby.Configuration.useWrongEngine then
 		if WG.WrapperLoopback and WG.WrapperLoopback.StartNewSpring and WG.SettingsWindow and WG.SettingsWindow.GetSettingsString then
 			local params = {
-				StartScriptContent = GenerateScriptTxt(battleIp, battlePort, scriptPassword),
+				StartScriptContent = GenerateScriptTxt(battleIp, battlePort, clientPort, scriptPassword, myName),
 				Engine = engineName,
 				SpringSettings = WG.SettingsWindow.GetSettingsString(),
 			}
 			WG.WrapperLoopback.StartNewSpring(params)
 		else
-			WG.Chobby.InformationPopup("Cannont start game: wrong Spring engine version. The required version is '" .. engineName .. "', your version is '" .. Spring.Utilities.GetEngineVersion() .. "'.", 420, 260)
+			WG.Chobby.InformationPopup("Cannont start game: wrong Spring engine version. The required version is '" .. engineName .. "', your version is '" .. Spring.Utilities.GetEngineVersion() .. "'.", {width = 420, height = 260})
 		end
 		return
 	end
@@ -271,17 +275,16 @@ function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, scriptPas
 		Spring.Echo(springURL)
 		Spring.Restart(springURL, "")
 	else
-		local scriptTxt = GenerateScriptTxt(battleIp, battlePort, scriptPassword)
+		local scriptTxt = GenerateScriptTxt(battleIp, battlePort, clientPort, scriptPassword, myName)
+		
+		Spring.Echo(scriptTxt)
+		--local scriptFileName = "scriptFile.txt"
+		--local scriptFile = io.open(scriptFileName, "w")
+		--scriptFile:write(scriptTxt)
+		--scriptFile:close()
+		
 		Spring.Reload(scriptTxt)
 	end
-	--local scriptFileName = "scriptFile.txt"
-	--local scriptFile = io.open(scriptFileName, "w")
-	--local scriptTxt = GenerateScriptTxt(battleID)
-	--Spring.Echo(scriptTxt)
-	--scriptFile:write(scriptTxt)
-	--scriptFile:close()
-	--Spring.Restart(scriptFileName, "")
-	--Spring.Restart("", scriptTxt)
 end
 
 function Lobby:VoteYes()
@@ -1391,6 +1394,18 @@ end
 
 function Lobby:GetBattle(battleID)
 	return self.battles[battleID]
+end
+
+function Lobby:GetBattleHasFriend(battleID)
+	local battle = self.battles[battleID]
+	if battle and battle.users then
+		for i = 1, #battle.users do
+			if (self:TryGetUser(battle.users[i]) or {}).isFriend then
+				return true
+			end
+		end
+	end
+	return false
 end
 
 function Lobby:GetBattlePlayerCount(battleID)

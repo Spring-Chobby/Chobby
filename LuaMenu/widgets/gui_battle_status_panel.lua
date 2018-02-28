@@ -100,6 +100,8 @@ local function GetBattleInfoHolder(parent, battleID)
 		padding = {1,1,1,1},
 		parent = mainControl,
 	}
+	
+	local mapImageFile, needDownload = Configuration:GetMinimapSmallImage(battle.mapName)
 	local minimapImage = Image:New {
 		name = "minimapImage",
 		x = 0,
@@ -107,7 +109,9 @@ local function GetBattleInfoHolder(parent, battleID)
 		right = 0,
 		bottom = 0,
 		keepAspect = true,
-		file = Configuration:GetMinimapImage(battle.mapName),
+		file = mapImageFile,
+		fallbackFile = Configuration:GetLoadingImage(2),
+		checkFileExists = needDownload,
 		parent = minimap,
 	}
 	local runningImage = Image:New {
@@ -176,7 +180,7 @@ local function GetBattleInfoHolder(parent, battleID)
 			mainControl:Show()
 		end
 
-		minimapImage.file = Configuration:GetMinimapImage(battle.mapName)
+		minimapImage.file, minimapImage.checkFileExists = Configuration:GetMinimapSmallImage(battle.mapName)
 		minimapImage:Invalidate()
 
 		runningImage.file = (battle.isRunning and IMG_BATTLE_RUNNING) or IMG_BATTLE_NOT_RUNNING
@@ -187,7 +191,8 @@ local function GetBattleInfoHolder(parent, battleID)
 		if updatedBattleID ~= battleID then
 			return
 		end
-		minimapImage.file = Configuration:GetMinimapImage(battle.mapName)
+		
+		minimapImage.file, minimapImage.checkFileExists = Configuration:GetMinimapSmallImage(battle.mapName)
 		minimapImage:Invalidate()
 
 		externalFunctions.Resize(currentSmallMode)

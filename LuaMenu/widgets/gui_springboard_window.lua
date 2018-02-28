@@ -72,7 +72,7 @@ local function LaunchSpringBoard(opts)
 	})
 	localLobby:SetBattleState("Developer", Configuration.gameConfig.editor, opts.mapName, "SpringBoard")
 	localLobby:SelectMap(opts.mapName)
-	localLobby:StartBattle()
+	localLobby:StartBattle("springboard", Configuration:GetPlayerName())
 end
 
 function SpringBoard:SelectMap(mapName)
@@ -90,7 +90,7 @@ function SpringBoard:SelectMap(mapName)
     tbMapName:SetText(mapHumanName)
     local length = tbMapName.font:GetTextWidth(mapHumanName)
     --imMapLink:SetPos(length + 5)
-    imMinimap.file = Configuration:GetMinimapImage(mapName)
+    imMinimap.file, imMinimap.checkFileExists = Configuration:GetMinimapImage(mapName)
     imMinimap:Invalidate()
 end
 

@@ -26,6 +26,10 @@ Image = Button:Inherit{
   flip2 = true;
 
   keepAspect = true;
+  
+  checkFileExists = false;
+  fallbackFile = false;
+  imageLoadTime = 3.5; -- Seconds
 
   useRTT = false;
 
@@ -62,32 +66,53 @@ local function _DrawTextureAspect(x,y,w,h ,tw,th, flipy)
 end
 
 function Image:DrawControl()
-  if (not (self.file or self.file2)) then return end
-
+  local file = self.file
+  local file2 = self.file2
+  if (not (file or file2)) then 
+    return
+  end
+  
+  if self.checkFileExists then
+	if self._loadTimer then
+	  if Spring.DiffTimers(Spring.GetTimer(), self._loadTimer) > self.imageLoadTime then
+	    self.checkFileExists = false
+	  end
+	elseif ((not file) or VFS.FileExists(file)) and ((not file2) or VFS.FileExists(file2)) then
+      self._loadTimer = Spring.GetTimer()
+	end
+	
+	if self.fallbackFile then
+      file = self.fallbackFile
+      file2 = nil
+    else
+      return
+    end
+  end
+  
   if (self.keepAspect) then
-    if (self.file2) then
+    if (file2) then
       gl.Color(self.color2 or self.color)
-      TextureHandler.LoadTexture(0,self.file2,self)
-      local texInfo = gl.TextureInfo(self.file2) or {xsize=1, ysize=1}
+      TextureHandler.LoadTexture(0,file2,self)
+      local texInfo = gl.TextureInfo(file2) or {xsize=1, ysize=1}
       local tw,th = texInfo.xsize, texInfo.ysize
       _DrawTextureAspect(0,0,self.width,self.height, tw,th, self.flip2)
     end
-    if (self.file) then
+    if (file) then
       gl.Color(self.color)
-      TextureHandler.LoadTexture(0,self.file,self)
-      local texInfo = gl.TextureInfo(self.file) or {xsize=1, ysize=1}
+      TextureHandler.LoadTexture(0,file,self)
+      local texInfo = gl.TextureInfo(file) or {xsize=1, ysize=1}
       local tw,th = texInfo.xsize, texInfo.ysize
       _DrawTextureAspect(0,0,self.width,self.height, tw,th, self.flip)
     end
   else
-    if (self.file2) then
+    if (file2) then
       gl.Color(self.color2 or self.color)
-      TextureHandler.LoadTexture(0,self.file2,self)
+      TextureHandler.LoadTexture(0,file2,self)
       gl.TexRect(0,0,self.width,self.height,false,self.flip2)
     end
-    if (self.file) then
+    if (file) then
       gl.Color(self.color)
-      TextureHandler.LoadTexture(0,self.file,self)
+      TextureHandler.LoadTexture(0,file,self)
       gl.TexRect(0,0,self.width,self.height,false,self.flip)
     end
   end

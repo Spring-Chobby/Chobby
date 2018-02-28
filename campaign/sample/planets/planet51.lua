@@ -52,6 +52,22 @@ local function GetPlanet(planetUtilities, planetID)
 					facplop = false,
 					defeatIfDestroyedObjectiveID = 2,
 				},
+				newtonFirezones = {
+					{
+						newtons = {
+							x1 = 7800,
+							z1 = 3600,
+							x2 = 8200,
+							z2 = 4000,
+						},
+						firezone = {
+							x1 = 7820,
+							z1 = 3600,
+							x2 = 8000,
+							z2 = 3800,
+						}
+					}
+				},
 				-- Extra commander modules.
 				extraModules = {
 					{name = "module_jumpjet", count = 1, add = false},
@@ -82,6 +98,12 @@ local function GetPlanet(planetUtilities, planetID)
 						defeatIfDestroyedObjectiveID = 1,
 					},
 					-- Newton cannon
+					{
+						name = "turretimpulse",
+						x = 8112,
+						z = 3694 - 1*48,
+						facing = 3,
+					},
 					{
 						name = "turretimpulse",
 						x = 8112,
@@ -133,9 +155,12 @@ local function GetPlanet(planetUtilities, planetID)
 					-- Newton cannonballs
 					{
 						name = "jumpcon",
-						x = 7973,
-						z = 3800,
+						x = 7970,
+						z = 3750,
 						facing = 0,
+						commands = {
+							{cmdID = planetUtilities.COMMAND.JUMP, pos = {2900, 380},}
+						},
 					},
 					{
 						name = "jumpcon",

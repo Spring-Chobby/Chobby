@@ -1,6 +1,6 @@
 ListWindow = Component:extends{}
 
-function ListWindow:init(parent, title, noWindow, windowClassname, noClose, customPadding)
+function ListWindow:init(parent, title, noWindow, windowClassname, noClose, customPadding, bottomSpacing)
 	self:DoInit() -- Lack of inheritance strikes again.
 
 	self.CancelFunc = function ()
@@ -63,7 +63,7 @@ function ListWindow:init(parent, title, noWindow, windowClassname, noClose, cust
 		x = 12,
 		right = 12,
 		y = 57,
-		bottom = 16,
+		bottom = bottomSpacing or 16,
 		horizontalScrollbar = false,
 		padding = {4, 4, 4, 4},
 		borderColor = {0,0,0,0},
@@ -74,6 +74,7 @@ function ListWindow:init(parent, title, noWindow, windowClassname, noClose, cust
 		},
 		parent = self.window
 	}
+	self.scrollChildren = 0
 
 	self.columns = 1
 	self.itemHeight = 60
@@ -116,6 +117,7 @@ end
 
 function ListWindow:Clear()
 	self.listPanel:ClearChildren()
+	self.scrollChildren = 0
 	self.itemNames = {}
 	self.itemPanelMapping = {}
 	self.orderPanelMapping = {}
@@ -153,7 +155,7 @@ function ListWindow:AddRow(items, id)
 		children = { container },
 	}
 
-	local index = #self.listPanel.children + 1
+	local index = self.scrollChildren + 1
 	local x,y,width,height = self:CalulatePosition(index)
 	local w = Control:New {
 		x = x,
@@ -167,10 +169,12 @@ function ListWindow:AddRow(items, id)
 		id = id,
 		index = index
 	}
+	self.scrollChildren = index
 	self.listPanel:AddChild(w)
 	self.itemPanelMapping[id] = w
 	self.orderPanelMapping[index] = w
 
+	w.inFilter = self:ItemInFilter(id)
 	self:RecalculateOrder(id)
 end
 
@@ -211,6 +215,19 @@ function ListWindow:CompareItems(id1, id2)
 	return true
 end
 
+function ListWindow:ItemInFilter(id)
+	return true
+end
+
+function ListWindow:UpdateFilters()
+	for i = 1, self.scrollChildren do
+		self.orderPanelMapping[i].inFilter = self:ItemInFilter(self.orderPanelMapping[i].id)
+	end
+	for id, _ in pairs(self.itemPanelMapping) do
+		self:RecalculateOrder(id)
+	end
+end
+
 function ListWindow:SwapPlaces(panel1, panel2)
 	tmp = panel1.index
 
@@ -237,21 +254,28 @@ end
 
 function ListWindow:RecalculateOrder(id)
 	local panel = self.itemPanelMapping[id]
+	if not panel then
+		return
+	end
 	local index = panel.index
-
+	panel:SetVisibility(panel.inFilter)
+	
 	-- move panel up if needed
-	while panel.index > 1 do
-		local prevPanel = self.orderPanelMapping[panel.index - 1]
-		if not self:CompareItems(panel.id, prevPanel.id) then
-			self:SwapPlaces(panel, prevPanel)
-		else
-			break
+	if panel.inFilter then
+		while panel.index > 1 do
+			local prevPanel = self.orderPanelMapping[panel.index - 1]
+			if (not prevPanel.inFilter) or self:CompareItems(panel.id, prevPanel.id) then
+				self:SwapPlaces(panel, prevPanel)
+			else
+				break
+			end
 		end
 	end
+	
 	-- move panel down if needed
-	while panel.index < #self.listPanel.children - 1 do
+	while panel.index < self.scrollChildren do
 		local nextPanel = self.orderPanelMapping[panel.index + 1]
-		if self:CompareItems(panel.id, nextPanel.id) then
+		if (not panel.inFilter) or (nextPanel.inFilter and not self:CompareItems(panel.id, nextPanel.id)) then
 			self:SwapPlaces(panel, nextPanel)
 		else
 			break
@@ -268,7 +292,7 @@ function ListWindow:RemoveRow(id)
 	local index = panel.index
 
 	-- move elements up
-	while index < #self.listPanel.children do
+	while index < self.scrollChildren do
 		local panel1 = self.orderPanelMapping[index]
 		local panel2 = self.orderPanelMapping[index + 1]
 		self:SwapPlaces(panel1, panel2)
@@ -277,6 +301,7 @@ function ListWindow:RemoveRow(id)
 	self.orderPanelMapping[index] = nil
 
 	self.listPanel:RemoveChild(panel)
+	self.scrollChildren = self.scrollChildren - 1
 	self.itemNames[id] = nil
 	self.itemPanelMapping[id] = nil
 end

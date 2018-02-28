@@ -50,6 +50,9 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 			nil, 
 			buttonHeight
 		)
+		if submenus[index].twoline then
+			submenus[index].button.captionAlign = -math.ceil(buttonHeight/7)
+		end
 		submenus[index].button._relativeBounds.right = BUTTON_SIDE_SPACING
 		submenus[index].button:UpdateClientArea()
 	end
@@ -238,7 +241,8 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 			y = (i - 1) * (buttonHeight + buttonSpacing) + buttonOffset - buttonSpacing,
 			right = BUTTON_SIDE_SPACING,
 			height = buttonHeight,
-			caption = i18n(submenus[i].name),
+			caption = submenus[i].titleText or i18n(submenus[i].name),
+			captionAlign = (submenus[i].twoline and -10) or nil,
 			font = { size = 20},
 			parent = buttonsHolder,
 			OnClick = {

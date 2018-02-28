@@ -62,6 +62,15 @@ function Analytics.SendIndexedRepeatEvent(eventName, value, suffix)
 	end
 end
 
+function Analytics.SendRepeatEvent(eventName, value)
+	eventName = VERSION .. eventName
+	if ACTIVE and WG.WrapperLoopback then
+		WG.WrapperLoopback.GaAddDesignEvent(eventName, value)
+	else
+		Spring.Echo("DesignEvent", eventName, value)
+	end
+end
+
 function Analytics.SendErrorEvent(eventName, severity)
 	eventName = VERSION .. eventName
 	if onetimeEvents[eventName] then
@@ -102,13 +111,15 @@ end
 function DelayedInitialize()
 	local function OnBattleStartSingleplayer()
 		Analytics.SendOnetimeEvent("lobby:singleplayer:game_loading")
+		-- Singleplayer events have their own, better, handling.
 	end
-	local function OnBattleStartMultiplayer()
+	local function OnBattleStartMultiplayer(_, battleType)
 		Analytics.SendOnetimeEvent("lobby:multiplayer:game_loading")
+		Analytics.SendRepeatEvent("game_start:multiplayer:connecting_" .. (battleType or "unknown"))
 	end
 	
-	WG.LibLobby.lobby:AddListener("OnBattleAboutToStart", OnBattleStartSingleplayer)
-	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", OnBattleStartMultiplayer)
+	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", OnBattleStartSingleplayer)
+	WG.LibLobby.lobby:AddListener("OnBattleAboutToStart", OnBattleStartMultiplayer)
 	
 	Analytics.SendOnetimeEvent("lobby:started")
 	if Platform and Platform.glVersionShort and type(Platform.glVersionShort) == "string" then

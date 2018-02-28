@@ -163,7 +163,7 @@ local bugLines = {
 		"Open game data folder to find settings, infolog etc...",
 		"Local Data",
 		function ()
-			WG.BrowserHandler.OpenFolder()
+			WG.WrapperLoopback.OpenFolder()
 		end
 	},
 	{
@@ -251,6 +251,10 @@ return {
 	{
 		name = "links",
 		control = communityControl,
+	},
+	{
+		name = "tutorials", 
+		control = WG.MissionHandler.GetControl(),
 	},
 	{
 		name = "report_a_bug",

@@ -100,7 +100,7 @@ end
 function Interface:RejoinBattle(battleID)
 	local battle = self:GetBattle(battleID)
 	if battle then
-		self:ConnectToBattle(self.useSpringRestart, battle.ip, battle.port, self:GetScriptPassword())
+		self:ConnectToBattle(self.useSpringRestart, battle.ip, battle.port, nil, self:GetScriptPassword())
 	end
 
 	return self
@@ -389,7 +389,7 @@ function Interface:_OnClientStatus(userName, status)
 			local myBattle = self:GetBattle(self.myBattleID)
 			if myBattle and myBattle.founder == userName then
 				local battle = self:GetBattle(self.myBattleID)
-				self:ConnectToBattle(self.useSpringRestart, battle.ip, battle.port, self:GetScriptPassword())
+				self:ConnectToBattle(self.useSpringRestart, battle.ip, battle.port, nil, self:GetScriptPassword())
 			end
 		end
 	end

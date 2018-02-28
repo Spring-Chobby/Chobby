@@ -38,7 +38,7 @@ function InterfaceSkirmish:MakeScriptTXT(script)
 	return str
 end
 
-function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFriends, friendsReplaceAI, hostPort)
+function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendList, friendsReplaceAI, hostPort)
 	local allyTeams = {}
 	local allyTeamCount = 0
 	local teams = {}
@@ -49,7 +49,9 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFrie
 	local ais = {}
 	local aiCount = 0
 
-	extraFriends = extraFriends or {}
+	friendList = friendList or {}
+	local friendAllyTeam
+	local aiReplaceCount = 0
 
 	-- Add the player, this is to make the player team 0.
 	for userName, data in pairs(self.userBattleStatus) do
@@ -61,19 +63,6 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFrie
 				Spectator = (data.isSpectator and 1) or nil,
 				rank = 0,
 			}
-			playerCount = playerCount + 1
-
-			for i = 1, #extraFriends do
-				local friendName = extraFriends[i]
-				players[playerCount] = {
-					Name = friendName,
-					Team = teamCount,
-					IsFromDemo = 0,
-					Spectator = (data.isSpectator and 1) or nil,
-					rank = 0,
-				}
-				playerCount = playerCount + 1
-			end
 
 			if not data.isSpectator then
 				teams[teamCount] = {
@@ -83,6 +72,34 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFrie
 				}
 				maxAllyTeamID = math.max(maxAllyTeamID, data.allyNumber)
 				teamCount = teamCount + 1
+			end
+			playerCount = playerCount + 1
+
+			for i = 1, #friendList do
+				local friendName = friendList[i]
+				
+				players[playerCount] = {
+					Name = friendName,
+					Team = teamCount,
+					IsFromDemo = 0,
+					Spectator = (data.isSpectator and 1) or nil,
+					Password = "12345",
+					rank = 0,
+				}
+				
+				if not data.isSpectator then
+					teams[teamCount] = {
+						TeamLeader = playerCount,
+						AllyTeam = data.allyNumber,
+						rgbcolor = '0.99609375 0.546875 0',
+					}
+					teamCount = teamCount + 1
+					if friendsReplaceAI then
+						friendAllyTeam = data.allyNumber
+						aiReplaceCount = aiReplaceCount + 1
+					end
+				end
+				playerCount = playerCount + 1
 			end
 		end
 	end
@@ -97,36 +114,39 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFrie
 	local chickenAdded = false
 	for userName, data in pairs(self.userBattleStatus) do
 		if data.allyNumber and data.aiLib then
-			if chickenName and string.find(data.aiLib, "Chicken") then
-				-- Override chicken AI if difficulty modoption is present
-				ais[aiCount] = {
-					Name = chickenName,
-					Team = teamCount,
-					IsFromDemo = 0,
-					ShortName = chickenName,
-					Host = 0,
-				}
-				chickenAdded = true
+			if friendAllyTeam == data.allyNumber and aiReplaceCount > 0 and not string.find(data.aiLib, "Chicken") then
+				aiReplaceCount = aiReplaceCount - 1
 			else
-				ais[aiCount] = {
-					Name = userName,
-					Team = teamCount,
-					IsFromDemo = 0,
-					ShortName = data.aiLib,
-					Version = data.aiVersion,
-					Host = 0,
-				}
-			end
-			aiCount = aiCount + 1
+				if chickenName and string.find(data.aiLib, "Chicken") then
+					-- Override chicken AI if difficulty modoption is present
+					ais[aiCount] = {
+						Name = chickenName,
+						Team = teamCount,
+						IsFromDemo = 0,
+						ShortName = chickenName,
+						Host = 0,
+					}
+					chickenAdded = true
+				else
+					ais[aiCount] = {
+						Name = userName,
+						Team = teamCount,
+						IsFromDemo = 0,
+						ShortName = data.aiLib,
+						Version = data.aiVersion,
+						Host = 0,
+					}
+				end
 
-			if not data.IsSpectator then
 				teams[teamCount] = {
 					TeamLeader = 0,
 					AllyTeam = data.allyNumber,
 					rgbcolor = '0.99609375 0.546875 0',
 				}
 				maxAllyTeamID = math.max(maxAllyTeamID, data.allyNumber)
+				
 				teamCount = teamCount + 1
+				aiCount = aiCount + 1
 			end
 		end
 	end
@@ -183,7 +203,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFrie
 
 	local script = {
 		gametype = gameName,
-		hostip = '127.0.0.1',
+		hostip = "127.0.0.1",
 		hostport = hostPort or 0,
 		ishost = 1,
 		mapname = mapName,
@@ -209,35 +229,80 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, extraFrie
 		script["allyTeam" .. i] = allyTeam
 	end
 
-	-- local scriptFileName = "scriptFile.txt"
-	-- local scriptFile = io.open(scriptFileName, "w")
 	local scriptTxt = self:MakeScriptTXT(script)
-	--Spring.Echo(scriptTxt)
+	
+	Spring.Echo(scriptTxt)
+	--local scriptFileName = "scriptFile.txt"
+	--local scriptFile = io.open(scriptFileName, "w")
+	--scriptFile:write(scriptTxt)
+	--scriptFile:close()
+	
 	Spring.Reload(scriptTxt)
-	-- scriptFile:write(scriptTxt)
-	-- scriptFile:close()
-	-- if self.useSpringRestart then
-		-- Spring.Restart(scriptFileName, "")
-	-- else
-		-- Spring.Start(scriptFileName, "")
-	-- end
 end
 
-function InterfaceSkirmish:StartReplay(replayFilename)
+function InterfaceSkirmish:StartReplay(replayFilename, myName, hostPort)
 	local scriptTxt =
 [[
 [GAME]
 {
 	DemoFile=__FILE__;
+	HostIP=__IP__;
+	HostPort=__PORT__;
+	MyPlayerName=__MY_PLAYER_NAME__;
+	IsHost=1;
 }
 ]]
 
 	scriptTxt = scriptTxt:gsub("__FILE__", replayFilename)
+                         :gsub("__IP__", "127.0.0.1")
+                         :gsub("__MY_PLAYER_NAME__", myName or "(spec)")
+                         :gsub("__PORT__", hostPort or 0)
 	self:_CallListeners("OnBattleAboutToStart", "replay")
 
-	Spring.Echo("starting game", scriptTxt)
+	Spring.Echo(scriptTxt)
+	--local scriptFileName = "scriptFile.txt"
+	--local scriptFile = io.open(scriptFileName, "w")
+	--scriptFile:write(scriptTxt)
+	--scriptFile:close()
+	
 	Spring.Reload(scriptTxt)
 	return false
+end
+
+function InterfaceSkirmish:StartGameFromLuaScript(gameType, scriptTable, friendList, hostPort)
+	self:_CallListeners("OnBattleAboutToStart", gameType)
+	
+	friendList = friendList or {}
+	playerCount = 1 -- Local player is already present
+
+	for i = 1, #friendList do
+		local friendName = friendList[i]
+		scriptTable["player" .. i] = {
+			Name = friendName,
+			Team = 0, -- Player is always team 0 (I hope)
+			IsFromDemo = 0,
+			Password = "12345",
+			rank = 0,
+		}
+		playerCount = playerCount + 1
+	end
+	
+	scriptTable.numplayers = playerCount
+	scriptTable.numusers = (playerCount - 2) + scriptTable.numusers
+	
+	scriptTable.hostip = "127.0.0.1"
+	scriptTable.hostport = hostPort or 0
+	scriptTable.ishost = 1
+	
+	local scriptTxt = self:MakeScriptTXT(scriptTable)
+	
+	Spring.Echo(scriptTxt)
+	--local scriptFileName = "scriptFile.txt"
+	--local scriptFile = io.open(scriptFileName, "w")
+	--scriptFile:write(scriptTxt)
+	--scriptFile:close()
+	
+	Spring.Reload(scriptTxt)
 end
 
 function InterfaceSkirmish:StartGameFromString(scriptString, gameType)
@@ -257,7 +322,7 @@ function InterfaceSkirmish:StartGameFromFile(scriptFileName, gameType)
 end
 
 -- TODO: Needs clean implementation in lobby.lua
-function InterfaceSkirmish:StartBattle(gameType, extraFriends, friendsReplaceAI, hostPort)
+function InterfaceSkirmish:StartBattle(gameType, myName, friendList, friendsReplaceAI, hostPort)
 	local battle = self:GetBattle(self:GetMyBattleID())
 	if not battle.gameName then
 		Spring.Log(LOG_SECTION, LOG.ERROR, "Missing battle.gameName. Game cannot start")
@@ -268,9 +333,9 @@ function InterfaceSkirmish:StartBattle(gameType, extraFriends, friendsReplaceAI,
 		return self
 	end
 
-	self:_CallListeners("OnBattleAboutToStart", gameType)
-	self:_OnSaidBattleEx("Battle", "about to start", battle.gameName, battle.mapName, self:GetMyUserName() or "noname")
-	self:_StartScript(battle.gameName, battle.mapName, self:GetMyUserName() or "noname", extraFriends, friendsReplaceAI, hostPort)
+	self:_CallListeners("OnBattleAboutToStart", gameType, battle.gameName, battle.mapName)
+	self:_OnSaidBattleEx("Battle", "about to start", battle.gameName, battle.mapName, myName)
+	self:_StartScript(battle.gameName, battle.mapName, myName, friendList, friendsReplaceAI, hostPort)
 	return self
 end
 

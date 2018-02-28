@@ -121,7 +121,7 @@ end
 --------------------------------------------------------------------------------
 -- Start Game
 
-local function StartBattleForReal(planetID, planetData, gameName)
+local function StartBattleForReal(planetID, planetData)
 	gameConfig = planetData.gameConfig
 	
 	local allyTeams = {}
@@ -133,10 +133,11 @@ local function StartBattleForReal(planetID, planetData, gameName)
 	local aiCount = 0
 	local commanderTypes = {}
 	
-	local localLobby = WG.LibLobby.localLobby
 	local Configuration = WG.Chobby.Configuration
+	local gameName = Configuration:GetDefaultGameName()
 	local missionDifficulty = WG.CampaignData.GetDifficultySetting()
 	local bitExtension = (Configuration:GetIsRunning64Bit() and "64") or "32"
+	local playerName = Configuration:GetPlayerName()
 	
 	WG.Analytics.SendIndexedRepeatEvent("campaign:planet_" .. planetID .. ":difficulty_" .. missionDifficulty .. ":started")
 	
@@ -144,7 +145,7 @@ local function StartBattleForReal(planetID, planetData, gameName)
 	local playerCount = 1
 	local players = {
 		[0] = {
-			Name = "Player",
+			Name = playerName,
 			Team = teamCount,
 			IsFromDemo = 0,
 			rank = 0,
@@ -220,9 +221,9 @@ local function StartBattleForReal(planetID, planetData, gameName)
 			shortName = shortName .. bitExtension
 		end
 		
-		local availibleUnits = aiData.unlocks or {}
+		local availibleUnits = aiData.unlocks
 		local extraUnits = aiData.difficultyDependantUnlocks and aiData.difficultyDependantUnlocks[missionDifficulty]
-		if extraUnits then
+		if availibleUnits and extraUnits then
 			for i = 1, #extraUnits do
 				availibleUnits[#availibleUnits + 1] = extraUnits[i]
 			end
@@ -301,12 +302,13 @@ local function StartBattleForReal(planetID, planetData, gameName)
 		bonusobjectiveconfig = TableToBase64(gameConfig.bonusObjectiveConfig),
 		featurestospawn = TableToBase64(gameConfig.initialWrecks),
 		planetmissioninformationtext = TableToBase64(informationText),
+		planetmissionnewtonfirezones = TableToBase64(gameConfig.playerConfig.newtonFirezones),
 		fixedstartpos = 1,
 		planetmissiondifficulty = missionDifficulty,
-		singleplayercampaignsavename = WG.Chobby.Configuration.campaignSaveFile,
 		singleplayercampaignbattleid = planetID,
 		initalterraform = TableToBase64(gameConfig.terraform),
 		planetmissionmapmarkers = TableToBase64(gameConfig.mapMarkers),
+		campaignpartialsavedata = TableToBase64(WG.CampaignData.GetCampaignPartialSaveData()),
 	}
 	AddStartUnits(modoptions, gameConfig.neutralUnits, "neutralstartunits_")
 	
@@ -329,11 +331,8 @@ local function StartBattleForReal(planetID, planetData, gameName)
 	
 	local script = {
 		gametype = gameConfig.gameName or gameName,
-		hostip = '127.0.0.1',
-		hostport = 0,
-		ishost = 1,
 		mapname = gameConfig.mapName,
-		myplayername = "Player",
+		myplayername = playerName,
 		nohelperais = 0,
 		numplayers = playerCount,
 		numusers = playerCount + aiCount,
@@ -355,14 +354,7 @@ local function StartBattleForReal(planetID, planetData, gameName)
 		script["allyTeam" .. i] = allyTeam
 	end
 
-	local scriptString = localLobby:MakeScriptTXT(script)
-	if Configuration.devMode then
-		local scriptFileName = "scriptFile.txt"
-		local scriptFile = io.open(scriptFileName, "w")
-		scriptFile:write(scriptString)
-	end
-	--Spring.Echo("scriptString", scriptString)
-	localLobby:StartGameFromString(scriptString, "campaign" .. planetID)
+	WG.SteamCoopHandler.AttemptGameStart("campaign" .. planetID, script.gametype, script.mapname, script)
 end
 
 --------------------------------------------------------------------------------
@@ -373,29 +365,9 @@ local PlanetBattleHandler = {}
 function PlanetBattleHandler.StartBattle(planetID, planetData)
 	local Configuration = WG.Chobby.Configuration
 	local gameConfig = planetData.gameConfig
-
-	if gameConfig.missionStartscript then
-		Spring.Echo("PlanetBattleHandler implement missionStartscript.")
-		return false
-	end
-	
-	local gameName = Configuration:GetDefaultGameName()
-	local haveGame = WG.Package.ArchiveExists(gameName)
-	if not haveGame then
-		WG.Chobby.InformationPopup("You do not have the game file required. It will now be downloaded.")
-		WG.DownloadHandler.MaybeDownloadArchive(gameName, "game", -1)
-		return
-	end
-	
-	local haveMap = VFS.HasArchive(gameConfig.mapName)
-	if not haveMap then
-		WG.Chobby.InformationPopup("You do not have the map file required. It will now be downloaded.")
-		WG.DownloadHandler.MaybeDownloadArchive(gameConfig.mapName, "map", -1)
-		return
-	end
 	
 	local function StartBattleFunc()
-		if StartBattleForReal(planetID, planetData, gameName) then
+		if StartBattleForReal(planetID, planetData) then
 			Spring.Echo("Start battle success!")
 		end
 	end

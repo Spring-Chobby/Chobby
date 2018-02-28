@@ -115,6 +115,7 @@ local function GetTooltipLine(parent, hasImage, fontSize, xOffset)
 			parent = parent,
 			keepAspect = true,
 			file = nil,
+			fallbackFile = WG.Chobby.Configuration:GetLoadingImage(1),
 		}
 	end
 
@@ -129,7 +130,7 @@ local function GetTooltipLine(parent, hasImage, fontSize, xOffset)
 		text = "",
 	}
 
-	function externalFunctions.Update(newPosition, newText, newImage, newColor)
+	function externalFunctions.Update(newPosition, newText, newImage, newColor, needDownload)
 		if not textDisplay.visible then
 			textDisplay:Show()
 		end
@@ -146,6 +147,7 @@ local function GetTooltipLine(parent, hasImage, fontSize, xOffset)
 				imageDisplay:Show()
 			end
 			imageDisplay.file = newImage
+			imageDisplay.checkFileExists = needDownload
 			imageDisplay:SetPos(nil, newPosition - 4)
 			imageDisplay:Invalidate()
 		end
@@ -224,6 +226,8 @@ local function GetBattleInfoHolder(parent, offset, battleID)
 			end
 		}
 	}
+	
+	local mapImageFile, needDownload = Configuration:GetMinimapSmallImage(battle.mapName)
 	local minimapImage = Image:New {
 		name = "minimapImage",
 		x = 6,
@@ -231,7 +235,9 @@ local function GetBattleInfoHolder(parent, offset, battleID)
 		width = 70,
 		height = 70,
 		keepAspect = true,
-		file = Configuration:GetMinimapImage(battle.mapName),
+		file = mapImageFile,
+		fallbackFile = Configuration:GetLoadingImage(2),
+		checkFileExists = needDownload,
 		parent = mainControl,
 	}
 	local runningImage = Image:New {
@@ -336,7 +342,7 @@ local function GetBattleInfoHolder(parent, offset, battleID)
 			imgPassworded:Hide()
 		end
 
-		minimapImage.file = Configuration:GetMinimapImage(battle.mapName)
+		minimapImage.file, minimapImage.checkFileExists = Configuration:GetMinimapSmallImage(battle.mapName)
 		minimapImage:Invalidate()
 
 		runningImage.file = (battle.isRunning and BATTLE_RUNNING) or BATTLE_NOT_RUNNING
@@ -560,11 +566,9 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 		if not userTooltip.clan then
 			userTooltip.clan = GetTooltipLine(userTooltip.mainControl, true)
 		end
-		userTooltip.clan.Update(
-			offset,
-			"Clan: " .. userInfo.clan,
-			WG.UserHandler.GetClanImage(userInfo.clan)
-		)
+		
+		local clanFile, needDownload = WG.UserHandler.GetClanImage(userInfo.clan)
+		userTooltip.clan.Update(offset, "Clan: " .. userInfo.clan, clanFile, nil, needDownload)
 		offset = offset + 20
 	elseif userTooltip.clan then
 		userTooltip.clan.Hide()

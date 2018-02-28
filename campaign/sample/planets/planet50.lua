@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G4V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24594",
-			text = [[You are without allies on this large battlefield, so you'll have to rely on your Jumpbots' inherent advantage on rough terrain to win instead.]]
+			text = [[Your ally on this planet is vulnerable and weak, so you'll have to rely on your Jumpbots' inherent advantage on rough terrain to win despite this disadvantage. Either strike quickly to take out one opponent or prepare for a long game of attrition.]]
 		},
 		tips = {
 			{
@@ -34,7 +34,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/factoryjump.png",
-				text = [[Many Jumpbot units are unlocked by missions earlier in the campaign. If you're finding this mission too difficult, try backtracking to make sure you didn't miss any.]]
+				text = [[Many Jumpbot units are unlocked by missions earlier in the campaign. If you're finding this mission too difficult, try backtracking to make sure you didn't miss any. Switching to another factory later might also be helpful.]]
 			},
 			{
 				image = "unitpics/jumpcon.png",
@@ -275,6 +275,148 @@ local function GetPlanet(planetUtilities, planetID)
 				{
 					startX = 410,
 					startZ = 7700,
+					humanName = "Marillia",
+					--aiLib = "Null AI",
+					--bitDependant = false,
+					aiLib = "Circuit_difficulty_autofill",
+					bitDependant = true,
+					allyTeam = 0,
+					unlocks = {
+						"staticmex",
+						"energysolar",
+						"energywind",
+						"energypylon",
+						"staticstorage",
+						"turretlaser",
+						"turretmissile",
+						"turretriot",
+						"turretaalaser",
+						"turretaaclose",
+						"staticradar",
+						--"staticcon",
+						--"factoryspider",
+						--"spidercon",
+						"spiderscout",
+						"spideremp",
+						"spiderskirm",
+						"spiderriot",
+						"spiderassault",
+					},
+					difficultyDependantUnlocks = {
+						[4] = {"cloakheavyraid"},
+					},
+					commander = false,
+					startUnits = {
+						{
+							name = "factoryspider",
+							x = 4100,
+							z = 4100,
+							facing = 0,
+							bonusObjectiveID = 2,
+						},
+						{
+							name = "spiderskirm",
+							x = 4100,
+							z = 4200,
+							facing = 0,
+						},
+						{
+							name = "spideremp",
+							x = 4000,
+							z = 4200,
+							facing = 0,
+						},
+						{
+							name = "spiderriot",
+							x = 4200,
+							z = 4200,
+							facing = 0,
+						},
+						-- {
+							-- name = "staticcon",
+							-- x = 4100,
+							-- z = 3900,
+							-- facing = 0,
+						-- }, 
+						{
+							name = "staticstorage",
+							x = 3900,
+							z = 3900,
+							facing = 0,
+						},
+						{
+							name = "staticmex",
+							x = 4000,
+							z = 3750,
+							facing = 0,
+						},
+						{
+							name = "staticmex",
+							x = 4444,
+							z = 4100,
+							facing = 0,
+						},
+						{
+							name = "staticmex",
+							x = 3980,
+							z = 4400,
+							facing = 0,
+						},
+						{
+							name = "energysolar",
+							x = 3860,
+							z = 3780,
+							facing = 0,
+						},
+						{
+							name = "energysolar",
+							x = 4040,
+							z = 3600,
+							facing = 0,
+						},
+						{
+							name = "energysolar",
+							x = 4460,
+							z = 4220,
+							facing = 0,
+						},
+						{
+							name = "energysolar",
+							x = 3870,
+							z = 4480,
+							facing = 0,
+						},
+						{
+							name = "turretheavylaser",
+							x = 4080,
+							z = 4280,
+							facing = 0,
+							difficultyAtMost = 2,
+						},
+						{
+							name = "turretlaser",
+							x = 4080,
+							z = 4280,
+							facing = 0,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "turretlaser",
+							x = 4100,
+							z = 3700,
+							facing = 2,
+						},
+						{
+							name = "turretlaser",
+							x = 4400,
+							z = 4400,
+							facing = 1,
+						},
+					}
+				},
+				{
+					startX = 410,
+					startZ = 7700,
 					humanName = "Pulmox",
 					--aiLib = "Null AI",
 					--bitDependant = false,
@@ -308,12 +450,14 @@ local function GetPlanet(planetUtilities, planetID)
 						"cloakskirm",
 						"cloakassault",
 						"cloakaa",
-						"cloakarty",
-						"cloaksnipe",
-						"cloakheavyraid",
+						--"cloakarty",
+						--"cloaksnipe",
 						"cloakbomb",
-						"striderhub",
-						"striderscorpion",
+						--"striderhub",
+						--"striderscorpion",
+					},
+					difficultyDependantUnlocks = {
+						[4] = {"cloakheavyraid"},
 					},
 					commanderLevel = 5,
 					commander = {
@@ -339,22 +483,39 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					startUnits = {
 						{
+							name = "cloakcon",
+							x = 303,
+							z = 7344,
+							facing = 3,
+							difficultyAtLeast = 3,
+						},
+ 						{
+							name = "cloakcon",
+							x = 412,
+							z = 7412,
+							facing = 0,
+							difficultyAtLeast = 4,
+						},
+						{
 							name = "staticmex",
 							x = 248,
 							z = 7176,
 							facing = 0,
+							difficultyAtLeast = 2,
 						},
  						{
 							name = "staticmex",
 							x = 632,
 							z = 7560,
 							facing = 0,
+							difficultyAtLeast = 3,
 						},
  						{
 							name = "staticmex",
 							x = 216,
 							z = 8008,
 							facing = 0,
+							difficultyAtLeast = 4,
 						},
  						{
 							name = "energysolar",
@@ -483,18 +644,6 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 1,
 						},
  						{
-							name = "cloakcon",
-							x = 303,
-							z = 7344,
-							facing = 3,
-						},
- 						{
-							name = "cloakcon",
-							x = 412,
-							z = 7412,
-							facing = 0,
-						},
- 						{
 							name = "cloakraid",
 							x = 552,
 							z = 7350,
@@ -566,26 +715,18 @@ local function GetPlanet(planetUtilities, planetID)
 						"shieldcon",
 						"shieldraid",
 						"shieldassault",
-						"shieldriot",
 						"shieldskirm",
-						"shieldbomb",
+						--"shieldbomb",
 						"shieldaa",
-						"shieldfelon",
-						"shieldshield",
-						--"shieldarty",
-						"factoryplane",
-						"planecon",
-						"planescout",
-						"planefighter",
-						"planeheavyfighter",
-						"bomberprec",
-						"bomberdisarm",
-						--"bomberheavy",
+						--"shieldfelon",
+						"factorygunship",
+						"gunshipraid",
+						"gunshipskirm",
 					},
 					difficultyDependantUnlocks = {
 						[2] = {"shieldarty"},
 						[3] = {"shieldarty","shieldriot"},
-						[4] = {"shieldarty","shieldriot","bomberheavy"},
+						[4] = {"shieldarty","shieldriot","shieldfelon","shieldshield"},
 					},
 					commanderLevel = 5,
 					commander = {
@@ -599,46 +740,49 @@ local function GetPlanet(planetUtilities, planetID)
 							"commweapon_lparticlebeam",
 							"module_battle_drone",
 							"module_battle_drone",
-							"module_battle_drone",
-							"module_battle_drone",
-							"module_battle_drone",
+							"module_companion_drone",
+							"module_companion_drone",
 							"module_heavy_armor",
 							"module_heavy_armor",
-							"module_autorepair",
 							"module_adv_nano",
 							"module_adv_nano",
 						}
 					},
 					startUnits = {
-						 						{
+						{
+							name = "shieldcon",
+							x = 5545,
+							z = 7324,
+							facing = 0,
+							difficultyAtLeast = 4,
+						},
+						{
 							name = "turretlaser",
 							x = 5200,
 							z = 7312,
 							facing = 3,
 						},
- 						{
-							name = "shieldcon",
-							x = 5545,
-							z = 7324,
-							facing = 0,
-						},
+ 						
  						{
 							name = "staticmex",
 							x = 5608,
 							z = 7752,
 							facing = 2,
+							difficultyAtLeast = 2,
 						},
  						{
 							name = "staticmex",
 							x = 5032,
 							z = 7736,
 							facing = 2,
+							difficultyAtLeast = 3,
 						},
  						{
 							name = "staticmex",
 							x = 5928,
 							z = 7160,
 							facing = 2,
+							difficultyAtLeast = 4,
 						},
  						{
 							name = "energysolar",
@@ -737,13 +881,6 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 2,
 						},
  						{
-							name = "factoryplane",
-							x = 5376,
-							z = 8024,
-							facing = 2,
-							buildProgress = 0.1,
-						},
- 						{
 							name = "factoryshield",
 							x = 5488,
 							z = 7448,
@@ -802,8 +939,6 @@ local function GetPlanet(planetUtilities, planetID)
 					vitalCommanders = false,
 					vitalUnitTypes = {
 						"factoryshield",
-						"factoryplane",
-						"striderhub",
 						"factorycloak",
 					},
 					loseAfterSeconds = false,
@@ -813,7 +948,7 @@ local function GetPlanet(planetUtilities, planetID)
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Destroy all enemy Factories and Strider Hubs",
+					description = "Destroy all enemy Factories",
 				},
 				[2] = {
 					description = "Protect your Commander",
@@ -830,31 +965,29 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Destroy both enemy Commanders",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[2] = { -- Have 20 Metal Extractors by 10:00
+				[2] = {
+					satisfyForever = true,
+					comparisionType = planetUtilities.COMPARE.AT_LEAST,
+					targetNumber = 1,
+					-- See bonusObjectiveID in units table
+					image = planetUtilities.ICON_DIR .. "factoryspider.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.GUARD,
+					description = "Protect your ally's Spider Factory",
+					experience = planetUtilities.BONUS_EXP,
+				},
+				[3] = { 
 					satisfyByTime = 10*60,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 20,
+					targetNumber = 24,
 					unitTypes = {
 						"staticmex",
 					},
 					image = planetUtilities.ICON_DIR .. "staticmex.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Have 20 Metal Extractors by 10:00",
+					description = "Have 24 Metal Extractors (including allies) by 10:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[3] = { -- Prevent the enemy having more than twelve mex
-					satisfyForever = true,
-					comparisionType = planetUtilities.COMPARE.AT_MOST,
-					targetNumber = 0,
-					enemyUnitTypes = {
-						"energygeo",
-					},
-					image = planetUtilities.ICON_DIR .. "energygeo.png",
-					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Prevent the enemy from building any Geothermal Generators",
-					experience = planetUtilities.BONUS_EXP,
-				},
-			},
+			},	
 		},
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,

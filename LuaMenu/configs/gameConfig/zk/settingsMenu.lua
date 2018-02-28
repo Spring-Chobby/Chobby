@@ -27,6 +27,16 @@ local function UpdateLups()
 	settingsFile:close()
 end
 
+local function GetUiScaleParameters()
+	local realWidth, realHeight = Spring.Orig.GetViewSizes()
+	local defaultUiScale = math.floor(math.max(1, realHeight/950))*100
+	local maxUiScale = math.max(2, realWidth/1000)*100
+	local minUiScale = math.min(0.5, realWidth/4000)*100
+	return defaultUiScale, maxUiScale, minUiScale
+end
+
+local defaultUiScale, maxUiScale, minUiScale = GetUiScaleParameters()
+
 local settingsConfig = {
 	{
 		name = "Graphics",
@@ -608,6 +618,13 @@ local settingsConfig = {
 							GrassDetail = 16,
 						}
 					},
+					{
+						name = "Ridiculous",
+						apply = {
+							TreeRadius = 2500,
+							GrassDetail = 100,
+						}
+					},
 				},
 			},
 			{
@@ -756,11 +773,12 @@ local settingsConfig = {
 		},
 	},
 	{
-		name = "Interface",
+		name = "Game",
 		presets = {
 			{
 				name = "Default",
 				settings = {
+					InterfaceScale = defaultUiScale,
 					--IconDistance = 151,
 					MouseZoomSpeed = 25,
 					InvertZoom = "Off",
@@ -782,6 +800,22 @@ local settingsConfig = {
 			--		return value
 			--	end,
 			--},
+			{
+				name = "InterfaceScale",
+				humanName = "Game Interface Scale",
+				isNumberSetting = true,
+				minValue = minUiScale,
+				maxValue = maxUiScale,
+				isPercent = true,
+				applyFunction = function(value)
+					if Spring.GetGameName() ~= "" then
+						Spring.SendLuaUIMsg("SetInterfaceScale " .. value)
+					end
+					return {
+						interfaceScale = value,
+					}
+				end,
+			},
 			{
 				name = "MouseZoomSpeed",
 				humanName = "Mouse Zoom Speed",
@@ -900,6 +934,7 @@ local settingsDefault = {
 	LupsShieldSphereColor = "On",
 	FancySky = "Off",
 	--IconDistance = 151,
+	InterfaceScale = defaultUiScale,
 	MouseZoomSpeed = 25,
 	InvertZoom = "Off",
 	TextToSpeech = "On",

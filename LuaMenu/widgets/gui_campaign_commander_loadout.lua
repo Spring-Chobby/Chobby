@@ -618,6 +618,7 @@ local function InitializeControls(parentControl)
 	
 	WG.CampaignData.AddListener("CommanderNameUpdate", UpdateCommanderName)
 	WG.CampaignData.AddListener("CampaignLoaded", UpdateCommanderDisplay)
+	WG.CampaignData.AddListener("UpdateCommanderLoadout", UpdateCommanderDisplay)
 	WG.CampaignData.AddListener("GainExperience", GainExperience)
 end
 
