@@ -259,24 +259,23 @@ function ListWindow:RecalculateOrder(id)
 	end
 	local index = panel.index
 	panel:SetVisibility(panel.inFilter)
-	if not panel.inFilter then
-		return
-	end
 	
 	-- move panel up if needed
-	while panel.index > 1 do
-		local prevPanel = self.orderPanelMapping[panel.index - 1]
-		if (not prevPanel.inFilter) or self:CompareItems(panel.id, prevPanel.id) then
-			self:SwapPlaces(panel, prevPanel)
-		else
-			break
+	if panel.inFilter then
+		while panel.index > 1 do
+			local prevPanel = self.orderPanelMapping[panel.index - 1]
+			if (not prevPanel.inFilter) or self:CompareItems(panel.id, prevPanel.id) then
+				self:SwapPlaces(panel, prevPanel)
+			else
+				break
+			end
 		end
 	end
 	
 	-- move panel down if needed
 	while panel.index < self.scrollChildren do
 		local nextPanel = self.orderPanelMapping[panel.index + 1]
-		if nextPanel.inFilter and not self:CompareItems(panel.id, nextPanel.id) then
+		if (not panel.inFilter) or (nextPanel.inFilter and not self:CompareItems(panel.id, nextPanel.id)) then
 			self:SwapPlaces(panel, nextPanel)
 		else
 			break
