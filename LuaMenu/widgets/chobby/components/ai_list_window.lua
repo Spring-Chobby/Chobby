@@ -24,7 +24,7 @@ function AiListWindow:CompareItems(id1, id2)
 	if order then
 		local pos1 = order[id1]
 		local pos2 = order[id2]
-		return pos1 and pos2 and pos1 > pos2
+		return pos1 and pos2 and pos1 < pos2
 	end
 	return true
 end
