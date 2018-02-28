@@ -110,6 +110,10 @@ function Lobby:SelectMap(mapName)
 	self:SayBattle("!map " .. mapName)
 end
 
+function Lobby:SetBattleType(typeName)
+	self:SayBattle("!type " .. typeName)
+end
+
 -------------------------------------------------
 -- BEGIN Client commands
 -------------------------------------------------

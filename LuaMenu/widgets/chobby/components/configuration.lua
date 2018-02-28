@@ -98,6 +98,13 @@ function Configuration:init()
 		[4] = "freeForAll",
 		[0] = "custom",
 	}
+	self.battleTypeToHumanName = {
+		[5] = "Coop",
+		[6] = "Team",
+		[3] = "1v1",
+		[4] = "FFA",
+		[0] = "Custom",
+	}
 
 	-- Do not ask again tests.
 	self.confirmation_mainMenuFromBattle = false
