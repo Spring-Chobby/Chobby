@@ -43,7 +43,7 @@ EditBox = Control:Inherit{
   multiline = false,
   subTooltips = false,
   useIME = true, -- Disabling is broken, so every text box is set to use IME.
-  useSDLStartTextInput = false, -- Breaks ingame editbox when enabled.
+  useSDLStartTextInput = true,
 
   passwordInput = false,
   lines = {},
