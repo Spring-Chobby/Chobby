@@ -189,7 +189,7 @@ for i, v in pairs(modeToName) do
 	nameToMode[v] = i
 end
 
-function Interface:HostBattle(battleTitle, password, modeName)
+function Interface:HostBattle(battleTitle, password, modeName, mapName)
 	--OpenBattle {"Header":{"Mode":6,"Password":"bla","Title":"GoogleFrog's Teams"}}
 	-- Mode:
 	-- 5 = Cooperative
@@ -209,7 +209,8 @@ function Interface:HostBattle(battleTitle, password, modeName)
 			Title = battleTitle,
 			Mode = (modeName and nameToMode[modeName]) or 0,
 			Password = password,
-			Engine = engineName
+			Engine = engineName,
+			Map = mapName,
 		}
 	}
 	
@@ -1530,7 +1531,12 @@ function Interface:_OnSiteToLobbyCommand(msg)
 	
 	s,e = springLink:find('@select_map:') 
 	if s then
-		self:SelectMap(springLink:sub(e + 1))
+		local mapName = springLink:sub(e + 1)
+		if self:GetMyBattleID() then
+			self:SelectMap(mapName)
+		else
+			self:HostBattle((self:GetMyUserName() or "Player") .. "'s Battle", nil, nameToMode["Custom"], mapName)
+		end
 		return
 	end
 	

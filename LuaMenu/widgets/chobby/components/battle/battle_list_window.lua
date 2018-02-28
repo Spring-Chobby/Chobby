@@ -101,7 +101,7 @@ function BattleListWindow:init(parent)
 		parent = self.window,
 	}
 	local checkRunning = Checkbox:New {
-		x = 430,
+		x = 435,
 		width = 21,
 		bottom = 4,
 		height = 30,
