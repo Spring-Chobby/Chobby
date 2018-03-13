@@ -65,6 +65,7 @@ local BrowserHandler = {}
 
 function BrowserHandler.OpenUrl(rawUrlString)
 	local urlString, needLogin = ApplySessionToken(rawUrlString)
+	local Configuration = WG.Chobby.Configuration
 	if WG.WrapperLoopback then
 		if needLogin then
 			local function TryClickAgain()
@@ -77,11 +78,19 @@ function BrowserHandler.OpenUrl(rawUrlString)
 				WG.LoginWindowHandler.TryLogin(DelayedTryClickAgain)
 			end
 			local function GoAnywayFunc()
-				WG.WrapperLoopback.OpenUrl(urlString)
+				if Configuration.canAuthenticateWithSteam and Configuration.useSteamBrowser then
+					WG.WrapperLoopback.SteamOpenWebsite(urlString)
+				else
+					WG.WrapperLoopback.OpenUrl(urlString)
+				end
 			end
 			WG.Chobby.ConfirmationPopup(LoginFunc, "Log in first to access more site features.", nil, 315, 200, "Log In", "Not Now", GoAnywayFunc)
 		else
-			WG.WrapperLoopback.OpenUrl(urlString)
+			if Configuration.canAuthenticateWithSteam and Configuration.useSteamBrowser then
+				WG.WrapperLoopback.SteamOpenWebsite(urlString)
+			else
+				WG.WrapperLoopback.OpenUrl(urlString)
+			end
 		end
 	else
 		Spring.SetClipboard(urlString)

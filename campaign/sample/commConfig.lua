@@ -731,7 +731,7 @@ local moduleDefs = {
 	{
 		name = "module_high_power_servos",
 		humanName = "High Power Servos",
-		description = "High Power Servos - Increases speed by 10%._COUNT_",
+		description = "High Power Servos - Increases speed by 8%._COUNT_",
 		image = moduleImagePath .. "module_high_power_servos.png",
 		limit = 8,
 		cost = 150,
@@ -758,7 +758,7 @@ local moduleDefs = {
 	{
 		name = "module_adv_nano",
 		humanName = "CarRepairer's Nanolathe",
-		description = "CarRepairer's Nanolathe - Increases build power by 5._COUNT_",
+		description = "CarRepairer's Nanolathe - Increases build power by 4._COUNT_",
 		image = moduleImagePath .. "module_adv_nano.png",
 		limit = 8,
 		cost = 150,
@@ -766,7 +766,7 @@ local moduleDefs = {
 		slotType = "module",
 		applicationFunction = function (modules, sharedData)
 			-- All comms have 10 BP in their unitDef (even support)
-			sharedData.bonusBuildPower = (sharedData.bonusBuildPower or 0) + 5
+			sharedData.bonusBuildPower = (sharedData.bonusBuildPower or 0) + 4
 		end
 	},
 }

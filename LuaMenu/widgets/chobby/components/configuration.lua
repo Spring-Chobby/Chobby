@@ -23,10 +23,8 @@ function Configuration:init()
 	self.serverAddress = WG.Server.address
 	self.serverPort =  WG.Server.port
 
-	local realWidth, realHeight = Spring.GetScreenGeometry() -- Screen allows for window size changes.
-	local winWidth, winHeight = Spring.Orig.GetWindowGeometry() -- Get both for crazy multi-screen setups.
-	realWidth, realHeight = math.max(realWidth, winWidth), math.max(realHeight, winHeight)
-	self.uiScale = math.floor(math.max(1, realHeight/1080))
+	local realWidth, realHeight = Spring.Orig.GetViewSizes()
+	self.uiScale = math.floor(math.max(1, realHeight/950))
 	self.defaultUiScale = self.uiScale
 	self.maxUiScale = math.max(2, realWidth/1000)
 	self.minUiScale = math.min(0.5, realWidth/4000)
@@ -45,10 +43,15 @@ function Configuration:init()
 	self.firstLoginEver = true
 	self.canAuthenticateWithSteam = false
 	self.wantAuthenticateWithSteam = true
+	self.useSteamBrowser = true
 	self.steamLinkComplete = false
 	self.alreadySeenFactionPopup2 = false
 	self.firstBattleStarted = false
 	self.channels = {}
+	
+	self.battleFilterPassworded = false
+	self.battleFilterNonFriend = false
+	self.battleFilterRunning = false
 
 	self.manualBorderless = {
 		game = {},
@@ -80,7 +83,7 @@ function Configuration:init()
 
 	self.loadLocalWidgets = false
 	self.displayBots = false
-	self.displayBadEngines = false
+	self.displayBadEngines2 = true
 	self.doNotSetAnySpringSettings = false
 	self.agressivelySetBorderlessWindowed = false
 
@@ -94,6 +97,13 @@ function Configuration:init()
 		[3] = "oneVsOne",
 		[4] = "freeForAll",
 		[0] = "custom",
+	}
+	self.battleTypeToHumanName = {
+		[5] = "Coop",
+		[6] = "Team",
+		[3] = "1v1",
+		[4] = "FFA",
+		[0] = "Custom",
 	}
 
 	-- Do not ask again tests.
@@ -413,9 +423,13 @@ function Configuration:GetConfigData()
 		autoLogin = self.autoLogin,
 		firstLoginEver = self.firstLoginEver,
 		wantAuthenticateWithSteam = self.wantAuthenticateWithSteam,
+		useSteamBrowser = self.useSteamBrowser,
 		steamLinkComplete = self.steamLinkComplete,
 		alreadySeenFactionPopup2 = self.alreadySeenFactionPopup2,
 		firstBattleStarted = self.firstBattleStarted,
+		battleFilterPassworded = self.battleFilterPassworded,
+		battleFilterNonFriend = self.battleFilterNonFriend,
+		battleFilterRunning = self.battleFilterRunning,
 		channels = self.channels,
 		gameConfigName = self.gameConfigName,
 		game_fullscreen = self.game_fullscreen,
@@ -446,7 +460,7 @@ function Configuration:GetConfigData()
 		coopConnectDelay = self.coopConnectDelay,
 		useSpringRestart = self.useSpringRestart,
 		displayBots = self.displayBots,
-		displayBadEngines = self.displayBadEngines,
+		displayBadEngines2 = self.displayBadEngines2,
 		useWrongEngine = self.useWrongEngine,
 		doNotSetAnySpringSettings = self.doNotSetAnySpringSettings,
 		agressivelySetBorderlessWindowed = self.agressivelySetBorderlessWindowed,
@@ -487,7 +501,7 @@ function Configuration:SetConfigValue(key, value)
 	if key == "uiScale" then
 		self[key] = math.max(self.minUiScale, math.min(self.maxUiScale, value))
 		WG.uiScale = self[key]
-		local screenWidth, screenHeight = Spring.GetWindowGeometry()
+		local screenWidth, screenHeight = Spring.GetViewSizes()
 		screen0:Resize(screenWidth, screenHeight)
 	end
 	if key == "gameConfigName" then

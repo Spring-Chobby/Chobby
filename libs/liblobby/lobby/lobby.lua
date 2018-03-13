@@ -102,13 +102,16 @@ end
 
 -- TODO: This doesn't belong in the API. Battleroom chat commands are not part of the protocol (yet), and will cause issues with rooms where !start doesn't do anything.
 function Lobby:StartBattle()
-	self:SayBattle("!poll start")
 	return self
 end
 
 -- TODO: Provide clean implementation/specification
 function Lobby:SelectMap(mapName)
 	self:SayBattle("!map " .. mapName)
+end
+
+function Lobby:SetBattleType(typeName)
+	self:SayBattle("!type " .. typeName)
 end
 
 -------------------------------------------------
@@ -1391,6 +1394,18 @@ end
 
 function Lobby:GetBattle(battleID)
 	return self.battles[battleID]
+end
+
+function Lobby:GetBattleHasFriend(battleID)
+	local battle = self.battles[battleID]
+	if battle and battle.users then
+		for i = 1, #battle.users do
+			if (self:TryGetUser(battle.users[i]) or {}).isFriend then
+				return true
+			end
+		end
+	end
+	return false
 end
 
 function Lobby:GetBattlePlayerCount(battleID)

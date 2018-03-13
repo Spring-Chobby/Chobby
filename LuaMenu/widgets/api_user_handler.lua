@@ -262,11 +262,11 @@ local function GetUserStatusImages(userName, isInBattle, userControl)
 	local userInfo = userControl.lobby:GetUser(userName) or {}
 	local images = {}
 
-	if userInfo.pendingPartyInvite then
+	if userInfo.pendingPartyInvite and not userControl.hideStatusInvite then
 		images[#images + 1] = IMAGE_PARTY_INVITE
 	end
 
-	if userInfo.isInGame or (userInfo.battleID and not isInBattle) then
+	if userInfo.isInGame or (userInfo.battleID and not isInBattle) and not userControl.hideStatusIngame then
 		if userInfo.isInGame then
 			images[#images + 1] = IMAGE_INGAME
 		else
@@ -274,7 +274,7 @@ local function GetUserStatusImages(userName, isInBattle, userControl)
 		end
 	end
 
-	if userInfo.isAway then
+	if userInfo.isAway and not userControl.hideStatusAway then
 		images[#images + 1] = IMAGE_AFK
 	end
 
@@ -329,7 +329,6 @@ local function UpdateUserControlStatus(userName, userControls)
 		userControls.imStatusLarge:Invalidate()
 		userControls.lblStatusLarge.font.color = fontColor
 		userControls.lblStatusLarge:SetCaption(i18n(status .. "_status"))
-		return
 	elseif not userControls.statusImages then
 		return
 	end
@@ -485,6 +484,9 @@ local function GetUserControls(userName, opts)
 	userControls.isSingleplayer    = isSingleplayer
 	userControls.steamInvite       = opts.steamInvite
 	userControls.hideStatus        = opts.hideStatus
+	userControls.hideStatusInvite  = opts.hideStatusInvite
+	userControls.hideStatusIngame  = opts.hideStatusIngame
+	userControls.hideStatusAway    = opts.hideStatusAway
 	userControls.dropdownWhitelist = opts.dropdownWhitelist
 
 	if reinitialize then
@@ -555,7 +557,6 @@ local function GetUserControls(userName, opts)
 						if userInfo and userInfo.hasFriendRequest then
 							userControls.lobby:AcceptFriendRequest(userName)
 						else
-
 							userControls.lobby:FriendRequest(userName)
 						end
 					elseif selectedName == "Join Party" or selectedName == "Invite to Party" then
@@ -694,10 +695,9 @@ local function GetUserControls(userName, opts)
 	offset = offset + userControls.nameActualLength
 
 	if not hideStatus then
-		if not large then
-			userControls.statusImages = {}
-			UpdateUserControlStatus(userName, userControls)
-		else
+		userControls.statusImages = {}
+		UpdateUserControlStatus(userName, userControls)
+		if large then
 			offsetY = offsetY + 35
 			offset = 5
 			local imgFile, status, fontColor = GetUserStatus(userName, isInBattle, userControls)
@@ -870,12 +870,14 @@ end
 
 function userHandler.GetFriendUser(userName)
 	return _GetUser(friendUsers, userName, {
-		large          = true,
-		offset         = 5,
-		offsetY        = 6,
-		height         = 80,
-		maxNameLength  = WG.Chobby.Configuration.friendMaxNameLength,
-		steamInvite    = true,
+		large            = true,
+		hideStatusAway   = true,
+		hideStatusIngame = true,
+		offset           = 5,
+		offsetY          = 6,
+		height           = 80,
+		maxNameLength    = WG.Chobby.Configuration.friendMaxNameLength,
+		steamInvite      = true,
 	})
 end
 

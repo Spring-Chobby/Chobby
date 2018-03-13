@@ -7,7 +7,7 @@ local IMG_READY    = LUA_DIRNAME .. "images/ready.png"
 local IMG_UNREADY  = LUA_DIRNAME .. "images/unready.png"
 
 function BattleListWindow:init(parent)
-	self:super("init", parent, "Play or watch a game", true)
+	self:super("init", parent, "Play or watch a game", true, nil, nil, nil, 34)
 
 	self.btnNewBattle = Button:New {
 		x = 260,
@@ -24,6 +24,107 @@ function BattleListWindow:init(parent)
 			end
 		},
 	}
+	
+	local function SoftUpdate()
+		self:UpdateFilters()
+		self:UpdateInfoPanel()
+	end
+	
+	local function update()
+		self:Update()
+	end
+	
+	self.infoPanel = Panel:New {
+		classname = "overlay_window",
+		x = "15%",
+		y = "45%",
+		right = "15%",
+		bottom = "45%",
+		parent = self.window,
+	}
+	self.infoLabel = Label:New {
+		x = "5%",
+		y = "5%",
+		width = "90%",
+		height = "90%",
+		align = "center",
+		valign = "center",
+		parent = self.infoPanel,
+		font = Configuration:GetFont(3),
+	}
+	self.infoPanel:SetVisibility(false)
+	
+	Label:New {
+		x = 20,
+		right = 5,
+		bottom = 11,
+		height = 20,
+		font = Configuration:GetFont(2),
+		caption = "Filter out:",
+		parent = self.window
+	}
+	
+	local checkPassworded = Checkbox:New {
+		x = 110,
+		width = 21,
+		bottom = 4,
+		height = 30,
+		boxalign = "left",
+		boxsize = 20,
+		caption = " Passworded",
+		checked = Configuration.battleFilterPassworded or false,
+		font = Configuration:GetFont(2),
+		OnChange = {
+			function (obj, newState)
+				Configuration:SetConfigValue("battleFilterPassworded", newState)
+				SoftUpdate()
+			end
+		},
+		parent = self.window,
+	}
+	local checkNonFriend = Checkbox:New {
+		x = 280,
+		width = 21,
+		bottom = 4,
+		height = 30,
+		boxalign = "left",
+		boxsize = 20,
+		caption = " Non-friend",
+		checked = Configuration.battleFilterNonFriend or false,
+		font = Configuration:GetFont(2),
+		OnChange = {
+			function (obj, newState)
+				Configuration:SetConfigValue("battleFilterNonFriend", newState)
+				SoftUpdate()
+			end
+		},
+		parent = self.window,
+	}
+	local checkRunning = Checkbox:New {
+		x = 435,
+		width = 21,
+		bottom = 4,
+		height = 30,
+		boxalign = "left",
+		boxsize = 20,
+		caption = " Running",
+		checked = Configuration.battleFilterRunning or false,
+		font = Configuration:GetFont(2),
+		OnChange = {
+			function (obj, newState)
+				Configuration:SetConfigValue("battleFilterRunning", newState)
+				SoftUpdate()
+			end
+		},
+		parent = self.window,
+	}
+	
+	local function UpdateCheckboxes()
+		checkPassworded:SetToggle(Configuration.battleFilterPassworded)
+		checkNonFriend:SetToggle(Configuration.battleFilterNonFriend)
+		checkRunning:SetToggle(Configuration.battleFilterRunning)
+	end
+	WG.Delay(UpdateCheckboxes, 0.2)
 
 	self:SetMinItemWidth(320)
 	self.columns = 3
@@ -35,41 +136,45 @@ function BattleListWindow:init(parent)
 		WG.Delay(UpdateTimersDelay, 30)
 	end
 	WG.Delay(UpdateTimersDelay, 30)
-
-	local update = function() self:Update() end
-
+	
 	self.onBattleOpened = function(listener, battleID)
 		self:AddBattle(battleID, lobby:GetBattle(battleID))
+		SoftUpdate()
 	end
 	lobby:AddListener("OnBattleOpened", self.onBattleOpened)
 
 	self.onBattleClosed = function(listener, battleID)
 		self:RemoveRow(battleID)
+		SoftUpdate()
 	end
 	lobby:AddListener("OnBattleClosed", self.onBattleClosed)
 
 	self.onJoinedBattle = function(listener, battleID)
 		self:JoinedBattle(battleID)
+		SoftUpdate()
 	end
 	lobby:AddListener("OnJoinedBattle", self.onJoinedBattle)
 
 	self.onLeftBattle = function(listener, battleID)
 		self:LeftBattle(battleID)
+		SoftUpdate()
 	end
 	lobby:AddListener("OnLeftBattle", self.onLeftBattle)
 
 	self.onUpdateBattleInfo = function(listener, battleID)
 		self:OnUpdateBattleInfo(battleID)
+		SoftUpdate()
 	end
 	lobby:AddListener("OnUpdateBattleInfo", self.onUpdateBattleInfo)
 
 	self.onBattleIngameUpdate = function(listener, battleID, isRunning)
 		self:OnBattleIngameUpdate(battleID, isRunning)
+		SoftUpdate()
 	end
 	lobby:AddListener("OnBattleIngameUpdate", self.onBattleIngameUpdate)
 
 	local function onConfigurationChange(listener, key, value)
-		if key == "displayBadEngines" then
+		if key == "displayBadEngines2" then
 			update()
 		end
 	end
@@ -97,21 +202,49 @@ function BattleListWindow:Update()
 	self:Clear()
 
 	local battles = lobby:GetBattles()
-	Spring.Echo("Number of battles: " .. lobby:GetBattleCount())
 	local tmp = {}
 	for _, battle in pairs(battles) do
 		table.insert(tmp, battle)
 	end
 	battles = tmp
-	table.sort(battles,
-		function(a, b)
-			return lobby:GetBattlePlayerCount(a.battleID) > lobby:GetBattlePlayerCount(b.battleID)
-		end
-	)
 
 	for _, battle in pairs(battles) do
 		self:AddBattle(battle.battleID, battle)
 	end
+	self:UpdateFilters()
+	self:UpdateInfoPanel()
+end
+
+function BattleListWindow:UpdateInfoPanel()
+	local battles = lobby:GetBattles()
+	local noBattles = true
+	for _, battle in pairs(battles) do
+		noBattles = false
+	end
+	if noBattles then
+		self.infoPanel:SetVisibility(true)
+		self.infoPanel:BringToFront()
+		self.infoLabel:SetCaption("No games, check your connection.")
+		return
+	end
+	
+	local firstPanel = self.orderPanelMapping[1]
+	if firstPanel then
+		if not firstPanel.inFilter then
+			self.infoPanel:SetVisibility(true)
+			self.infoPanel:BringToFront()
+			self.infoLabel:SetCaption("No games in filter")
+			return
+		end
+	else
+		-- Must have hidden games
+		self.infoPanel:SetVisibility(true)
+		self.infoPanel:BringToFront()
+		self.infoLabel:SetCaption("Games are hidden, unsure why.")
+		return
+	end
+	
+	self.infoPanel:SetVisibility(false)
 end
 
 function BattleListWindow:MakeWatchBattle(battleID, battle)
@@ -392,7 +525,7 @@ end
 
 function BattleListWindow:AddBattle(battleID, battle)
 	battle = battle or lobby:GetBattle(battleID)
-	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
+	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	
@@ -410,6 +543,20 @@ function BattleListWindow:AddBattle(battleID, battle)
 	self:AddRow({button}, battle.battleID)
 end
 
+function BattleListWindow:ItemInFilter(id)
+	local battle = lobby:GetBattle(id)
+	if Configuration.battleFilterPassworded and battle.passworded then
+		return false
+	end
+	if Configuration.battleFilterNonFriend and not lobby:GetBattleHasFriend(id) then
+		return false
+	end
+	if Configuration.battleFilterRunning and battle.isRunning then
+		return false
+	end
+	return true
+end
+
 function BattleListWindow:CompareItems(id1, id2)
 	local battle1, battle2 = lobby:GetBattle(id1), lobby:GetBattle(id2)
 	if id1 and id2 then
@@ -417,9 +564,14 @@ function BattleListWindow:CompareItems(id1, id2)
 			return false
 		end
 		if battle1.isMatchMaker ~= battle2.isMatchMaker then
-			return battle1.isMatchMaker
+			return battle2.isMatchMaker
 		end
-		return lobby:GetBattlePlayerCount(id1) > lobby:GetBattlePlayerCount(id2)
+		local countOne = lobby:GetBattlePlayerCount(id1)
+		local countTwo = lobby:GetBattlePlayerCount(id2)
+		if countOne ~= countTwo then
+			return countOne > countTwo
+		end
+		return id1 > id2 -- stabalize the sort.
 	else
 		Spring.Echo("battle1", id1, battle1, battle1 and battle1.users)
 		Spring.Echo("battle2", id2, battle2, battle2 and battle2.users)
@@ -429,7 +581,7 @@ end
 
 function BattleListWindow:UpdateSync(battleID)
 	local battle = lobby:GetBattle(battleID)
-	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
+	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	
@@ -465,7 +617,7 @@ end
 
 function BattleListWindow:JoinedBattle(battleID)
 	local battle = lobby:GetBattle(battleID)
-	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
+	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	
@@ -488,7 +640,7 @@ end
 
 function BattleListWindow:LeftBattle(battleID)
 	local battle = lobby:GetBattle(battleID)
-	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
+	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	
@@ -511,7 +663,7 @@ end
 
 function BattleListWindow:OnUpdateBattleInfo(battleID)
 	local battle = lobby:GetBattle(battleID)
-	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
+	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	
@@ -584,7 +736,7 @@ end
 
 function BattleListWindow:OnBattleIngameUpdate(battleID, isRunning)
 	local battle = lobby:GetBattle(battleID)
-	if not (Configuration.displayBadEngines or Configuration:IsValidEngineVersion(battle.engineVersion)) then
+	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	

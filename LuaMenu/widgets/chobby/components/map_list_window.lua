@@ -83,3 +83,7 @@ function MapListWindow:init(lobby, zoomToMap)
 
 	self.popupHolder = PriorityPopup(self.window, self.CancelFunc)
 end
+
+function MapListWindow:CompareItems(id1, id2)
+	return id1 < id2
+end

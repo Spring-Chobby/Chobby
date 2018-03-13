@@ -259,7 +259,7 @@ local function InitializeControls(window)
 	
 	local tabs = {
 		MakeTab("Save/Load", {WG.CampaignSaveWindow.GetControl()}),
-		MakeStandardTab("Difficulty", InitializeDifficultyWindow),
+		--MakeStandardTab("Difficulty", InitializeDifficultyWindow),
 		MakeStandardTab("Stats", InitializeStatsWindow),
 	}
 	

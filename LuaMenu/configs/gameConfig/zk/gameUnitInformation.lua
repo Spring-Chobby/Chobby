@@ -411,7 +411,7 @@ local humanNames = {
 	vehscout = {
 		category = "veh",
 		order = 3,
-		description = "Raider/Scout Rover",
+		description = "Disruptor Raider/Scout Rover",
 		humanName = "Dart",
 	},
 	vehraid = {

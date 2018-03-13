@@ -34,7 +34,6 @@ local IMG_READY    = LUA_DIRNAME .. "images/ready.png"
 local IMG_UNREADY  = LUA_DIRNAME .. "images/unready.png"
 local IMG_LINK     = LUA_DIRNAME .. "images/link.png"
 
-
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Download management
@@ -980,8 +979,10 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 	end
 
 	OpenNewTeam = function ()
-		GetTeam(emptyTeamIndex)
-		PositionChildren(mainStackPanel, mainScrollPanel.height)
+		if emptyTeamIndex < 254 then
+			GetTeam(emptyTeamIndex)
+			PositionChildren(mainStackPanel, mainScrollPanel.height)
+		end
 	end
 
 	mainScrollPanel.OnResize = {
@@ -1455,6 +1456,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 	end
 
 	local isSingleplayer = (battleLobby.name == "singleplayer")
+	local isHost = (not isSingleplayer) and (battleLobby:GetMyUserName() == battle.founder)
 
 	local EXTERNAL_PAD_VERT = 9
 	local EXTERNAL_PAD_HOR = 12
@@ -1602,7 +1604,34 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 			end
 		}
 	}
-
+	
+	local battleTypeCombo
+	if isHost then
+		battleTypeCombo = ComboBox:New {
+			x = 13,
+			width = 125,
+			y = 12,
+			height = 35,
+			itemHeight = 22,
+			selectByName = true,
+			captionHorAlign = -12,
+			text = "",
+			font = Configuration:GetFont(3),
+			items = {"Coop", "Team", "1v1", "FFA", "Custom"},
+			itemFontSize = Configuration:GetFont(3).size,
+			selected = Configuration.battleTypeToHumanName[battle.battleMode or 0],
+			OnSelectName = {
+				function (obj, selectedName)
+					if battleTypeCombo then
+						battleLobby:SetBattleType(selectedName)
+					end
+				end
+			},
+			parent = mainWindow,
+		}
+		lblBattleTitle:BringToFront()
+	end
+	
 	local function UpdateBattleTitle()
 		if isSingleplayer then
 			battleTitle = tostring(battle.title)
@@ -1611,8 +1640,21 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 			return
 		end
 		if Configuration:IsValidEngineVersion(battle.engineVersion) then
+			if battleTypeCombo then
+				lblBattleTitle:SetPos(143)
+				lblBattleTitle._relativeBounds.right = 100
+				lblBattleTitle:UpdateClientArea()
+				
+				battleTypeCombo:SetVisibility(true)
+				battleTypeCombo.selected = Configuration.battleTypeToHumanName[battle.battleMode or 0]
+				battleTypeCombo.caption = Configuration.battleTypeToHumanName[battle.battleMode or 0]
+				battleTypeCombo:Invalidate()
+			end
+			
 			local battleTypeName = Configuration.battleTypeToName[battle.battleMode]
-			if battleTypeName then
+			if isHost then
+				battleTitle = ": " .. tostring(battle.title)
+			elseif battleTypeName then
 				battleTitle = i18n(battleTypeName) .. ": " .. tostring(battle.title)
 			else
 				battleTitle = tostring(battle.title)
@@ -1622,6 +1664,12 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 			lblBattleTitle:SetCaption(truncatedTitle)
 		else
 			battleTitle = "\255\255\0\0Warning: Restart to get correct engine version"
+			if battleTypeCombo then
+				lblBattleTitle:SetPos(20)
+				lblBattleTitle._relativeBounds.right = 100
+				lblBattleTitle:UpdateClientArea()
+				battleTypeCombo:SetVisibility(false)
+			end
 			local truncatedTitle = StringUtilities.GetTruncatedStringWithDotDot(battleTitle, lblBattleTitle.font, lblBattleTitle.width)
 			lblBattleTitle:SetCaption(truncatedTitle)
 		end

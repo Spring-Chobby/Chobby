@@ -130,6 +130,7 @@ local function CreateMissionEntry(missionData)
 				startScript = startScript:gsub("%%NAME%%", WG.Chobby.localLobby:GetMyUserName())
 				
 				WG.Analytics.SendOnetimeEvent("lobby:singleplayer:missions:start_" .. missionData.DisplayName)
+				WG.Analytics.SendRepeatEvent("game_start:tutorial:" .. missionData.DisplayName, 1)
 				WG.Chobby.localLobby:StartGameFromString(startScript, "tutorial")
 			end
 		},

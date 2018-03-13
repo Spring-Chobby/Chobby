@@ -337,6 +337,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local function MakeExitPopup()
 		ConfirmationPopup(ExitSpring, "Are you sure you want to quit?", nil, 315, 200)
+		return true
 	end
 
 	local buttons_exit = Button:New {
@@ -813,12 +814,12 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			holder_topImage:Invalidate()
 		end
 
-		local screenWidth, screenHeight = Spring.GetWindowGeometry()
+		local screenWidth, screenHeight = Spring.GetViewSizes()
 		screen0:Resize(screenWidth, screenHeight)
 	end
 
 	local function UpdateStatusAndInvitesHolderPosition()
-		local screenWidth, screenHeight = Spring.GetWindowGeometry()
+		local screenWidth, screenHeight = Spring.GetViewSizes()
 
 		local xPos, yPos, width, height
 		local controlCount = statusAndInvitesPanel.GetControlCount()
@@ -974,7 +975,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	function externalFunctions.SetPanelDisplayMode(newAutodetectDoublePanel, newDoublePanel)
 		autodetectDoublePanel = newAutodetectDoublePanel
-		local screenWidth, screenHeight = Spring.GetWindowGeometry()
+		local screenWidth, screenHeight = Spring.GetViewSizes()
 		if autodetectDoublePanel then
 			UpdateDoublePanel(screenWidth > minScreenWidth)
 		else
@@ -1069,8 +1070,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			return true
 		end
 		if key == Spring.GetKeyCode("esc") then
-			if rightPanelHandler.CloseTabs() or mainWindowHandler.CloseTabs() or (backgroundCloseListener and backgroundCloseListener()) or mainWindowHandler.BackOneLevel() then
-				MakeExitPopup()
+			if rightPanelHandler.CloseTabs() or mainWindowHandler.CloseTabs() or 
+					(backgroundCloseListener and backgroundCloseListener()) or 
+					mainWindowHandler.BackOneLevel() or MakeExitPopup() then
 				return false
 			end
 			if showTopBar then
@@ -1149,7 +1151,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-------------------------------------------------------------------
 	-- Initialization
 	-------------------------------------------------------------------
-	local screenWidth, screenHeight = Spring.GetWindowGeometry()
+	local screenWidth, screenHeight = Spring.GetViewSizes()
 
 	battleStatusPanelHandler.Rescale(3, 70)
 	rightPanelHandler.Rescale(2, 70)

@@ -437,6 +437,30 @@ skin.main_window_small = {
   DrawResizeGrip = DrawResizeGrip,
 }
 
+skin.tech_mainwindow_very_small = {
+  TileImage = ":c:tech_mainwindow_very_small.png",
+  tiles = {40, 30, 38, 38}, --// tile widths: left,top,right,bottom
+  padding = {10, 6, 10, 6},
+  hitpadding = {4, 4, 4, 4},
+
+  captionColor = {1, 1, 1, 0.45},
+  backgroundColor = {0.1, 0.1, 0.1, 0.7},
+
+  boxes = {
+    resize = {-23, -19, -12, -8},
+    drag = {0, 0, "100%", 10},
+  },
+
+  NCHitTest = NCHitTestWithPadding,
+  NCMouseDown = WindowNCMouseDown,
+  NCMouseDownPostChildren = WindowNCMouseDownPostChildren,
+  noClickThrough = true,
+
+  DrawControl = DrawWindow,
+  DrawDragGrip = function() end,
+  DrawResizeGrip = DrawResizeGrip,
+}
+
 skin.overlay_window = {
   TileImage = ":c:tech_overlaywindow.png",
   tiles = {2, 2, 2, 2}, --// tile widths: left,top,right,bottom

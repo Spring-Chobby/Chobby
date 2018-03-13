@@ -17,6 +17,8 @@ end
 --------------------------------------------------------------------------------
 -- Variables
 
+local PLANETWARS_ENABLED = false
+
 local IMG_LINK     = LUA_DIRNAME .. "images/link.png"
 
 local panelInterface
@@ -1309,16 +1311,16 @@ function DelayedInitialize()
 	end
 	lobby:AddListener("OnQueueOpened", AddQueue)
 	
-	if not Configuration.alreadySeenFactionPopup2 then
+	if not Configuration.alreadySeenFactionPopup3 then
 		local function OnLoginInfoEnd()
 			local myInfo = lobby:GetMyInfo()
-			if Configuration.alreadySeenFactionPopup2 then
+			if Configuration.alreadySeenFactionPopup3 then
 				return
 			end
 			if (not Configuration.ignoreLevel) and not (myInfo and myInfo.level and myInfo.level >= 2) then
 				return
 			end
-			Configuration.alreadySeenFactionPopup2 = true
+			Configuration.alreadySeenFactionPopup3 = true
 			if lobby:GetFactionData(myInfo.faction) then
 				return
 			end
@@ -1387,6 +1389,9 @@ end
 -- Widget Interface
 
 function widget:Update()
+	if not PLANETWARS_ENABLED then
+		return
+	end
 	updates = updates + 1 -- Random number
 	if panelInterface then
 		panelInterface.UpdateTimer()
@@ -1406,17 +1411,19 @@ end
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	WG.Delay(DelayedInitialize, 0.3)
-	
-	local function downloadFinished()
-		if panelInterface then
-			panelInterface.CheckDownload()
+	if PLANETWARS_ENABLED then
+		WG.Delay(DelayedInitialize, 0.3)
+		
+		local function downloadFinished()
+			if panelInterface then
+				panelInterface.CheckDownload()
+			end
+			if queuePlanetJoin then
+				TryToJoinPlanet(queuePlanetJoin)
+			end
 		end
-		if queuePlanetJoin then
-			TryToJoinPlanet(queuePlanetJoin)
-		end
+		WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
 	end
-	WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
 	
 	WG.PlanetwarsListWindow = PlanetwarsListWindow
 end

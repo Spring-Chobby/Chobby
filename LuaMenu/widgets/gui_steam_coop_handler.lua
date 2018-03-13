@@ -249,10 +249,18 @@ function SteamCoopHandler.SteamHostGameSuccess(hostPort)
 	CloseExclusivePopup()
 	local myName = WG.Chobby.Configuration:GetPlayerName()
 	if startReplayFile then
+		WG.Analytics.SendRepeatEvent("game_start:singleplayer:coop_host_replay", (saneFriendsInGame and #saneFriendsInGame) or 1)
 		WG.Chobby.localLobby:StartReplay(startReplayFile, myName, hostPort)
 	elseif attemptScriptTable then
+		local planetID = (attemptScriptTable.modoptions or {}).singleplayercampaignbattleid
+		if planetID then
+			WG.Analytics.SendRepeatEvent("game_start:singleplayer:coop_host_campaign_" .. planetID, (saneFriendsInGame and #saneFriendsInGame) or 1)
+		else
+			WG.Analytics.SendRepeatEvent("game_start:singleplayer:coop_host_campaign_unknown", (saneFriendsInGame and #saneFriendsInGame) or 1)
+		end
 		WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, attemptScriptTable, saneFriendsInGame, hostPort)
 	else
+		WG.Analytics.SendRepeatEvent("game_start:singleplayer:coop_host_other_" .. (attemptGameType or "skirmish"), (saneFriendsInGame and #saneFriendsInGame) or 1)
 		WG.LibLobby.localLobby:StartBattle(attemptGameType or "skirmish", myName, saneFriendsInGame, friendsReplaceAI, hostPort)
 	end
 	ResetHostData()
@@ -280,6 +288,7 @@ function SteamCoopHandler.SteamConnectSpring(hostIP, hostPort, clientPort, myNam
 		end
 		local function StartAndClose()
 			WG.Analytics.SendOnetimeEvent("lobby:steamcoop:starting")
+			WG.Analytics.SendRepeatEvent("game_start:singleplayer:coop_connecting", 1)
 			CloseExclusivePopup()
 			Start()
 		end
@@ -354,10 +363,18 @@ function SteamCoopHandler.AttemptGameStart(gameType, gameName, mapName, scriptTa
 			end
 			
 			if startReplayFile then
+				WG.Analytics.SendRepeatEvent("game_start:singleplayer:lone_replay", 1)
 				WG.Chobby.localLobby:StartReplay(startReplayFile, myName)
 			elseif scriptTable then
+				local planetID = (scriptTable.modoptions or {}).singleplayercampaignbattleid
+				if planetID then
+					WG.Analytics.SendRepeatEvent("game_start:singleplayer:lone_campaign_" .. planetID, 1)
+				else
+					WG.Analytics.SendRepeatEvent("game_start:singleplayer:lone_campaign_unknown", 1)
+				end
 				WG.LibLobby.localLobby:StartGameFromLuaScript(gameType, scriptTable)
 			else
+				WG.Analytics.SendRepeatEvent("game_start:singleplayer:lone_other_" .. (gameType or "skirmish"), 1)
 				WG.LibLobby.localLobby:StartBattle(gameType, myName)
 			end
 			return

@@ -189,7 +189,7 @@ for i, v in pairs(modeToName) do
 	nameToMode[v] = i
 end
 
-function Interface:HostBattle(battleTitle, password, modeName)
+function Interface:HostBattle(battleTitle, password, modeName, mapName)
 	--OpenBattle {"Header":{"Mode":6,"Password":"bla","Title":"GoogleFrog's Teams"}}
 	-- Mode:
 	-- 5 = Cooperative
@@ -209,7 +209,8 @@ function Interface:HostBattle(battleTitle, password, modeName)
 			Title = battleTitle,
 			Mode = (modeName and nameToMode[modeName]) or 0,
 			Password = password,
-			Engine = engineName
+			Engine = engineName,
+			Map = mapName,
 		}
 	}
 	
@@ -360,6 +361,19 @@ function Interface:SetModOptions(data)
 	
 	-- Don't send anything, server thinks it means reset to default
 	--self:_SendCommand("SetModOptions {\"Options\":{}}")
+end
+
+function Interface:StartBattle()
+	if self:GetMyIsAdmin() then
+		local myBattle = self:GetBattle(self:GetMyBattleID())
+		if myBattle and (myBattle.founder ~= self:GetMyUserName()) then
+			self:SayBattle("!poll start")
+			return self
+		end
+	end
+
+	self:SayBattle("!start")
+	return self
 end
 
 ------------------------
@@ -870,7 +884,7 @@ Interface.jsonCommands["IgnoreList"] = Interface._IgnoreList
 function Interface:_ConnectSpring(data)
 	if data.Ip and data.Port and data.ScriptPassword then
 		Spring.Echo("Connecting to battle", data.Game, data.Map, data.Engine)
-		self:ConnectToBattle(self.useSpringRestart, data.Ip, data.Port, nil, data.ScriptPassword, nil, data.Game, data.Map, data.Engine)
+		self:ConnectToBattle(self.useSpringRestart, data.Ip, data.Port, nil, data.ScriptPassword, nil, data.Game, data.Map, data.Engine, (data.Mode and (modeToName[data.Mode] or data.Mode)) or "unknown")
 	end
 end
 Interface.jsonCommands["ConnectSpring"] = Interface._ConnectSpring
@@ -1517,7 +1531,12 @@ function Interface:_OnSiteToLobbyCommand(msg)
 	
 	s,e = springLink:find('@select_map:') 
 	if s then
-		self:SelectMap(springLink:sub(e + 1))
+		local mapName = springLink:sub(e + 1)
+		if self:GetMyBattleID() then
+			self:SelectMap(mapName)
+		else
+			self:HostBattle((self:GetMyUserName() or "Player") .. "'s Battle", nil, nameToMode["Custom"], mapName)
+		end
 		return
 	end
 	
