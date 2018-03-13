@@ -224,6 +224,69 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Difficulty Setting
+
+local function InitializeDifficultySetting(parent)
+	local Configuration = WG.Chobby.Configuration
+	
+	local difficultyWindow = Window:New{
+		classname = "tech_mainwindow_very_small",
+		x = 6,
+		y = 6,
+		width = 128,
+		height = 76,
+		resizable = false,
+		draggable = false,
+		parent = parent,
+	}
+	local freezeSettings = true
+	
+	Label:New {
+		x = 20,
+		y = 10,
+		width = 50,
+		height = 30,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(2),
+		caption = "Difficulty",
+		parent = difficultyWindow,
+	}
+	local comboDifficulty = ComboBox:New {
+		x = 4,
+		right = 4,
+		bottom = 4,
+		height = 28,
+		items = {"Easy", "Normal", "Hard", "Brutal"},
+		selected = 2,
+		font = Configuration:GetFont(2),
+		itemFontSize = Configuration:GetFont(2).size,
+		selected = WG.CampaignData.GetDifficultySetting(),
+		OnSelect = {
+			function (obj)
+				if freezeSettings then
+					return
+				end
+				WG.CampaignData.SetDifficultySetting(obj.selected)
+			end
+		},
+		parent = difficultyWindow,
+	}
+	
+	local function UpdateSettings()
+		freezeSettings = true
+		comboDifficulty:Select(WG.CampaignData.GetDifficultySetting())
+		freezeSettings = false
+	end
+	WG.CampaignData.AddListener("CampaignSettingsUpdate", UpdateSettings)
+	WG.CampaignData.AddListener("CampaignLoaded", UpdateSettings)
+	
+	freezeSettings = false
+
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Rewards panels
 
 local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, widthMult, stackHeight)
@@ -621,7 +684,7 @@ end
 --------------------------------------------------------------------------------
 -- TODO: use shader animation to ease info panel in
 
-local function SelectPlanet(planetHandler, planetID, planetData, startable)
+local function SelectPlanet(galaxyHolder, planetHandler, planetID, planetData, startable)
 	local Configuration = WG.Chobby.Configuration
 
 	WG.Chobby.interfaceRoot.GetRightPanelHandler().CloseTabs()
@@ -638,6 +701,7 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 		draggable = false,
 		padding = {12, 7, 12, 7},
 	}
+	galaxyHolder:BringToFront()
 	
 	local planetName = string.upper(planetData.name)
 	if not LIVE_TESTING then
@@ -800,6 +864,7 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 		if starmapInfoPanel then
 			starmapInfoPanel:Dispose() 
 			starmapInfoPanel = nil
+			galaxyHolder:SendToBack()
 			return true
 		end
 		return false
@@ -943,7 +1008,7 @@ local function EnablePlanetClick()
 	planetClickEnabled = true
 end
 
-local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
+local function GetPlanet(galaxyHolder, planetListHolder, planetID, planetData, adjacency)
 	local Configuration = WG.Chobby.Configuration
 	
 	local planetSize = planetData.mapDisplay.size
@@ -965,7 +1030,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		width = targetSize,
 		height = targetSize,
 		padding = {0, 0, 0, 0},
-		parent = galaxyHolder,
+		parent = planetListHolder,
 	}
 	
 	local debugHolder
@@ -977,7 +1042,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 				width = targetSize*3,
 				height = targetSize,
 				padding = {1, 1, 1, 1},
-				parent = galaxyHolder,
+				parent = planetListHolder,
 			}
 			
 			local rewards = planetData.completionReward
@@ -992,7 +1057,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 				width = targetSize*3,
 				height = targetSize,
 				padding = {1, 1, 1, 1},
-				parent = galaxyHolder,
+				parent = planetListHolder,
 			}
 			
 			local aiConfig = planetData.gameConfig.aiConfig
@@ -1044,7 +1109,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 					selectedPlanet.Close()
 					selectedPlanet = nil
 				end
-				selectedPlanet = SelectPlanet(galaxyHolder, planetID, planetData, startable)
+				selectedPlanet = SelectPlanet(galaxyHolder, planetListHolder, planetID, planetData, startable)
 			end
 		},
 		parent = planetHolder,
@@ -1370,7 +1435,7 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 	PLANET_COUNT = #planetConfig
 	for i = 1, PLANET_COUNT do
 		if (not PLANET_WHITELIST) or PLANET_WHITELIST[i] then
-			planetList[i] = GetPlanet(planetWindow, i, planetConfig[i], planetAdjacency[i])
+			planetList[i] = GetPlanet(window, planetWindow, i, planetConfig[i], planetAdjacency[i])
 		end
 	end
 	
@@ -1591,6 +1656,7 @@ function externalFunctions.GetControl(newLiveTestingMode, newPlanetWhitelist, fe
 		OnParentPost = {
 			function(obj, parent)
 				if obj:IsEmpty() then
+					InitializeDifficultySetting(obj)
 					planetHandler = InitializePlanetHandler(obj, newLiveTestingMode, newPlanetWhitelist, feedbackLink)
 					
 					local x, y = obj:LocalToScreen(0, 0)
