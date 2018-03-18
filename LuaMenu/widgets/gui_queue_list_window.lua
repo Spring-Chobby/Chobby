@@ -298,7 +298,7 @@ local function SetupDebriefingTracker(window)
 	end
 	
 	local function OnJoin(listener, chanName)
-		if (not string.find(chanName, DEBRIEFING_CHANNEL)) or ignoredChannels[chanName] or chanName == debriefingChannelName then
+		if (not string.find(chanName, DEBRIEFING_CHANNEL, 1, true)) or ignoredChannels[chanName] or chanName == debriefingChannelName then
 			return
 		end
 		if debriefingChannelName then
@@ -337,7 +337,7 @@ local function SetupDebriefingTracker(window)
 		if not (chanName == debriefingChannelName and debriefingChat) then
 			return
 		end
-		local iAmMentioned = (string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName())
+		local iAmMentioned = (string.find(message, lobby:GetMyUserName(), 1, true) and userName ~= lobby:GetMyUserName())
 		debriefingChat.AddMessage(message, userName, msgDate, iAmMentioned and CHAT_MENTION)
 	end
 	lobby:AddListener("OnSaid", OnSaid)
@@ -346,7 +346,7 @@ local function SetupDebriefingTracker(window)
 		if not (chanName == debriefingChannelName and debriefingChat) then
 			return
 		end
-		local iAmMentioned = (string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName())
+		local iAmMentioned = (string.find(message, lobby:GetMyUserName(), 1, true) and userName ~= lobby:GetMyUserName())
 		debriefingChat.AddMessage(message, userName, msgDate, (iAmMentioned and CHAT_MENTION) or Configuration.meColor, true)
 	end
 	lobby:AddListener("OnSaidEx", OnSaidEx)
@@ -356,7 +356,7 @@ local function SetupDebriefingTracker(window)
 		if debriefingChannelName == chanName and debriefingChat then
 			debriefingChat.SetTopic("Post game chat") -- URL doesn't work on line one.
 			debriefingChat.SetTopic(debriefTopic)
-		elseif chanName and string.find(chanName, DEBRIEFING_CHANNEL) then
+		elseif chanName and string.find(chanName, DEBRIEFING_CHANNEL, 1, true) then
 			channelTopics[debriefingChannelName] = debriefTopic
 		end
 	end
