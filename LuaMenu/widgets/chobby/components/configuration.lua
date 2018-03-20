@@ -173,7 +173,7 @@ function Configuration:init()
 	self.simplifiedSkirmishSetup = true
 	self.debugMode = false
 	self.devMode = (VFS.FileExists("devmode.txt") and true) or false
-	self.debugAutoWin = false
+	self.enableProfiler = false
 	self.showPlanetUnlocks = false
 	self.showPlanetEnemyUnits = false
 	self.campaignSpawnDebug = false
@@ -446,6 +446,7 @@ function Configuration:GetConfigData()
 		simplifiedSkirmishSetup = self.simplifiedSkirmishSetup,
 		debugMode = self.debugMode,
 		debugAutoWin = self.debugAutoWin,
+		enableProfiler = self.enableProfiler,
 		showPlanetUnlocks = self.showPlanetUnlocks,
 		showPlanetEnemyUnits = self.showPlanetEnemyUnits,
 		campaignSpawnDebug = self.campaignSpawnDebug,

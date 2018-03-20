@@ -50,6 +50,7 @@ local tooltipOverride = nil
 
 local function InitWindow()
 	tipWindow = Chili.Window:New{
+		name      = "tooltipWindow",
 		parent    = screen0,
 		width     = 75,
 		height    = 75,

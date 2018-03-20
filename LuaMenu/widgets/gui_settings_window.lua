@@ -522,7 +522,7 @@ end
 --------------------------------------------------------------------------------
 -- Lobby Settings
 
-local function AddCheckboxSetting(offset, caption, key, default)
+local function AddCheckboxSetting(offset, caption, key, default, clickFunc)
 	local Configuration = WG.Chobby.Configuration
 
 	local checked = Configuration[key]
@@ -542,6 +542,9 @@ local function AddCheckboxSetting(offset, caption, key, default)
 		font = Configuration:GetFont(2),
 		OnChange = {function (obj, newState)
 			Configuration:SetConfigValue(key, newState)
+			if clickFunc then
+				clickFunc(newState)
+			end
 		end},
 	}
 
@@ -919,9 +922,18 @@ local function GetVoidTabControls()
 		text = "Warning: These settings are experimental and not officially supported, proceed at your own risk.",
 	}
 	offset = offset + 65
+	
+	local function EnableProfilerFunc(newState)
+		if newState then
+			WG.WidgetProfiler.Enable()
+		else
+			WG.WidgetProfiler.Disable()
+		end
+	end
 
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("debugMode"), "debugMode", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Debug Auto Win", "debugAutoWin", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, "Enable Profiler", "enableProfiler", false, EnableProfilerFunc)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Show Planet Unlocks", "showPlanetUnlocks", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Show Planet Enemy Units", "showPlanetEnemyUnits", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Campaign Spawn Debug", "campaignSpawnDebug", false)

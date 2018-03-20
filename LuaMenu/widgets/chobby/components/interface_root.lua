@@ -1147,6 +1147,28 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		end
 	end
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
+	
+	local function CheckHideInterface()
+		if #(screen0.children or {}) > 3 then
+			-- The three children are two background holders and either the lobby or ingame interface holder.
+			-- If there are more than three children then a global popup has appeared.
+			return false
+		end
+		if not ingameInterfaceHolder.visible then
+			return false
+		end
+		return #(ingameInterfaceHolder.children or {}) == 0
+	end
+	
+	local oldTotalHideInterface = false
+	function WG.CheckTotalHideInterface()
+		local newHide = CheckHideInterface()
+		if newHide ~= oldTotalHideInterface then
+			Spring.Echo("TotalHideLobbyInterface", newHide)
+			oldTotalHideInterface = newHide
+		end
+		return newHide
+	end
 
 	-------------------------------------------------------------------
 	-- Initialization
