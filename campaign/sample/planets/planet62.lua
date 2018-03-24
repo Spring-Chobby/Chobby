@@ -38,7 +38,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/staticnuke.png",
-				text = [[Your ally is building a Trinity nuclear silo but the enemy is well protected by Antinukes. Destroy the Antinukes to give your team the upper hand.]]
+				text = [[Your ally has constructed a Trinity nuclear silo but the enemy is well protected by Antinukes. Destroy the Antinukes to give your team the upper hand.]]
 			},
 		},
 		gameConfig = {
@@ -57,6 +57,36 @@ local function GetPlanet(planetUtilities, planetID)
 					
 				},
 				startUnits = {
+					{
+						name = "striderscorpion",
+						x = 1300,
+						z = 3800,
+						facing = 1,
+					},
+					{
+						name = "striderscorpion",
+						x = 1300,
+						z = 4000,
+						facing = 1,
+					},
+					{
+						name = "striderscorpion",
+						x = 1500,
+						z = 3900,
+						facing = 1,
+					},
+					{
+						name = "energyfusion",
+						x = 630,
+						z = 4260,
+						facing = 0,
+					},
+					{
+						name = "energyfusion",
+						x = 800,
+						z = 4420,
+						facing = 0,
+					},
 					{
 						name = "staticmex",
 						x = 920,
@@ -172,18 +202,6 @@ local function GetPlanet(planetUtilities, planetID)
 							{cmdID = planetUtilities.COMMAND.PATROL, pos = {1209, 3879}, options = {"shift"}},
 						},
 					},
-					{
-						name = "striderscorpion",
-						x = 1300,
-						z = 3800,
-						facing = 1,
-					},
-					{
-						name = "striderscorpion",
-						x = 1300,
-						z = 4000,
-						facing = 1,
-					},
  					{
 						name = "staticstorage",
 						x = 1048,
@@ -298,7 +316,6 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 496,
 							z = 1776,
 							facing = 1,
-							buildProgress = 0.5,
 						},
 						{
 							name = "staticstorage",
@@ -1561,7 +1578,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"energygeo",
 						"energypylon",
 						"staticstorage",
-						"turretmissile",
+						--"turretmissile",
 						"staticradar",
 						"staticcon",
 						"staticrearm",
@@ -1589,8 +1606,11 @@ local function GetPlanet(planetUtilities, planetID)
 						"planefighter",
 						"planeheavyfighter",
 						"bomberprec",
-						"bomberheavy",
+						--"bomberheavy",
 						"bomberdisarm",
+					},
+					difficultyDependantUnlocks = {
+						[4] = {"bomberheavy"},
 					},
 					commander = false,
 					startUnits = {
@@ -2828,7 +2848,7 @@ local function GetPlanet(planetUtilities, planetID)
 					}
 				},
 				{
-					humanName = "Enemy #2",
+					humanName = "Chevalier",
 					aiLib = "Circuit_difficulty_autofill",
 					bitDependant = true,
 					--aiLib = "Null AI",
@@ -2841,8 +2861,38 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 1500,
 							facing = 2,
 							spawnRadius = 50,
-							delay = 7.5*30*60,
+							delay = 6*30*60,
 							orbitalDrop = true,
+							difficultyAtLeast = 3,
+						},
+						{
+							name = "striderbantha",
+							x = 8700,
+							z = 1500,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 13*30*60,
+							orbitalDrop = true,
+							difficultyAtLeast = 2,
+						},
+						{
+							name = "striderbantha",
+							x = 8700,
+							z = 1500,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 19*30*60,
+							orbitalDrop = true,
+						},
+						{
+							name = "striderbantha",
+							x = 8700,
+							z = 1500,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 19*30*60,
+							orbitalDrop = true,
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "striderarty",
@@ -2859,7 +2909,7 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 1500,
 							facing = 2,
 							spawnRadius = 50,
-							delay = 2*30*60,
+							delay = 4*30*60,
 							orbitalDrop = true,
 							difficultyAtLeast = 3,
 						},
@@ -2869,7 +2919,7 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 1500,
 							facing = 2,
 							spawnRadius = 50,
-							delay = 3.5*30*60,
+							delay = 8*30*60,
 							orbitalDrop = true,
 						},
 						{
@@ -2878,7 +2928,7 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 1500,
 							facing = 2,
 							spawnRadius = 50,
-							delay = 9*30*60,
+							delay = 12*30*60,
 							orbitalDrop = true,
 						},
 					},
@@ -2890,7 +2940,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"energygeo",
 						"energypylon",
 						"staticstorage",
-						"turretmissile",
+						--"turretmissile",
 						"staticradar",
 						"staticcon",
 						"staticrearm",
@@ -2917,10 +2967,13 @@ local function GetPlanet(planetUtilities, planetID)
 						"tankheavyarty",
 						"tankaa",
 						"tankriot",
-						"striderhub",
+						--"striderhub",
 						"striderdante",
-						"striderarty",
-						"striderbantha",
+						--"striderarty",
+						--"striderbantha",
+					},
+					difficultyDependantUnlocks = {
+						[4] = {"striderhub",}
 					},
 					commander = false,
 					startUnits = {
@@ -2959,7 +3012,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 8340,
 							z = 6024,
 							facing = 3,
-							buildProgress = 0.2,
+							buildProgress = 0.1,
 							difficultyAtLeast = 1,
 							difficultyAtMost = 1,
 						},
@@ -2968,7 +3021,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 8340,
 							z = 6024,
 							facing = 3,
-							buildProgress = 0.4,
+							buildProgress = 0.2,
 							difficultyAtLeast = 2,
 							difficultyAtMost = 2,
 						},
@@ -2977,7 +3030,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 8340,
 							z = 6024,
 							facing = 3,
-							buildProgress = 0.6,
+							buildProgress = 0.3,
 							difficultyAtLeast = 3,
 							difficultyAtMost = 3,
 						},
@@ -2986,7 +3039,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 8340,
 							z = 6024,
 							facing = 3,
-							buildProgress = 0.8,
+							buildProgress = 0.4,
 							difficultyAtLeast = 4,
 							difficultyAtMost = 4,
 						},
@@ -3901,13 +3954,13 @@ local function GetPlanet(planetUtilities, planetID)
 				[1] = {
 					satisfyOnce = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 5,
+					targetNumber = 6,
 					unitTypes = {
 						"striderscorpion",
 					},
 					image = planetUtilities.ICON_DIR .. "striderscorpion.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Have 5 Scorpions",
+					description = "Have 6 Scorpions",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = {
