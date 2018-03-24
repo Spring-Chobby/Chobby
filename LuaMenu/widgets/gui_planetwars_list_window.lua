@@ -350,7 +350,7 @@ local function InitializeActivityPromptHandler()
 		y = 18,
 		width = 195,
 		height = 20,
-		fontsize = Configuration:GetFont(3).size,
+		fontsize = Configuration:GetFont(2).size,
 		text = "",
 		parent = holder
 	}
@@ -359,7 +359,7 @@ local function InitializeActivityPromptHandler()
 		y = 18,
 		width = 195,
 		height = 20,
-		fontsize = Configuration:GetFont(3).size,
+		fontsize = Configuration:GetFont(2).size,
 		text = "",
 		parent = holder
 	}
