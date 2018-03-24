@@ -1,14 +1,9 @@
 LoginWindow = LCS.class{}
 
 --TODO: make this a util function, maybe even add this support to chili as a whole?
-function createTabGroup(ctrls)
+function createTabGroup(ctrls, visibleFunc)
 	for i = 1, #ctrls do
 		local ctrl1 = ctrls[i]
-		local ctrl2 = ctrls[i + 1]
-		if ctrl2 == nil then
-			ctrl2 = ctrls[1]
-		end
-
 		if ctrl1.OnKeyPress == nil then
 			ctrl1.OnKeyPress = {}
 		end
@@ -16,14 +11,25 @@ function createTabGroup(ctrls)
 		table.insert(ctrl1.OnKeyPress,
 			function(obj, key, mods, ...)
 				if key == Spring.GetKeyCode("tab") then
-					screen0:FocusControl(ctrl2)
-					if ctrl2.classname == "editbox" then
--- 						ctrl2:Select(1, #ctrl2.text + 1)
-						-- HACK
-						ctrl2.selStart = 1
-						ctrl2.selStartPhysical = 1
-						ctrl2.selEnd = #ctrl2.text + 1
-						ctrl2.selEndPhysical = #ctrl2.text + 1
+					local nextIndex = i%(#ctrls) + 1
+					local ctrl2
+					while (not ctrl2) and nextIndex ~= i do
+						if (not visibleFunc[nextIndex]) or visibleFunc[nextIndex]() then
+							ctrl2 = ctrls[nextIndex]
+						end
+						nextIndex = nextIndex%(#ctrls) + 1
+					end
+					
+					if ctrl2 then
+						screen0:FocusControl(ctrl2)
+						if ctrl2.classname == "editbox" then
+	-- 						ctrl2:Select(1, #ctrl2.text + 1)
+							-- HACK
+							ctrl2.selStart = 1
+							ctrl2.selStartPhysical = 1
+							ctrl2.selEnd = #ctrl2.text + 1
+							ctrl2.selEndPhysical = #ctrl2.text + 1
+						end
 					end
 				end
 			end
@@ -305,7 +311,11 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	
 	self.window:BringToFront()
 	
-	createTabGroup({self.ebUsername, self.ebPassword})
+	local function IsConfirmPasswordVisible()
+		return self.tabPanel.tabBar.selected == 2
+	end
+	
+	createTabGroup({self.ebUsername, self.ebPassword, self.ebConfirmPassword}, {false, false, IsConfirmPasswordVisible})
 	screen0:FocusControl(self.ebUsername)
 	-- FIXME: this should probably be moved to the lobby wrapper
 	self.loginAttempts = 0

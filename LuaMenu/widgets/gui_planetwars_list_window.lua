@@ -1422,6 +1422,11 @@ function DelayedInitialize()
 	lobby:AddListener("OnPwJoinPlanetSuccess", UnMatchedActivityUpdate)
 	lobby:AddListener("OnPwAttackingPlanet", UnMatchedActivityUpdate)
 	lobby:AddListener("OnLoginInfoEnd", UnMatchedActivityUpdate)
+	
+	local function OnDisconnected()
+		UpdateActivity({}, {}, false, {})
+	end
+	lobby:AddListener("OnDisconnected", OnDisconnected)
 
 	DoUnMatchedActivityUpdate = UnMatchedActivityUpdate
 	
