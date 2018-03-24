@@ -1123,6 +1123,10 @@ end
 -- Planetwars Commands
 ------------------------
 
+function Lobby:_OnPwStatus(planetWarsMode, minLevel)
+	self:_CallListeners("OnPwStatus", planetWarsMode, minLevel)
+end
+
 function Lobby:_OnPwMatchCommand(attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds)
 	local modeSwitched = (self.planetwarsData.currentMode ~= currentMode) or (self.planetwarsData.attackerFaction ~= attackerFaction)
 	self.planetwarsData.attackerFaction  = attackerFaction

@@ -1392,6 +1392,17 @@ Interface.jsonCommands["OnPartyStatus"] = Interface._OnPartyStatus
 -- Planetwars commands
 ------------------------
 
+function Interface:_PwStatus(data)
+	if not self.PW_DISABLED then
+		self.PW_OFFLINE = 0
+		self.PW_PREGAME = 1
+		self.PW_ENABLED = 2
+	end
+	--PwStatus {"PlanetWarsMode":2,"MinLevel":5}
+	self:_OnPwStatus(data.PlanetWarsMode, data.MinLevel)
+end
+Interface.jsonCommands["PwStatus"] = Interface._PwStatus
+
 function Interface:_PwMatchCommand(data)
 	if not self.PW_DEFEND then
 		self.PW_ATTACK = 1

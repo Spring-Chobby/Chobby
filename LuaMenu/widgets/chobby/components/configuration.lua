@@ -45,7 +45,7 @@ function Configuration:init()
 	self.wantAuthenticateWithSteam = true
 	self.useSteamBrowser = true
 	self.steamLinkComplete = false
-	self.alreadySeenFactionPopup2 = false
+	self.alreadySeenFactionPopup4 = false
 	self.firstBattleStarted = false
 	self.channels = {}
 	
@@ -425,7 +425,7 @@ function Configuration:GetConfigData()
 		wantAuthenticateWithSteam = self.wantAuthenticateWithSteam,
 		useSteamBrowser = self.useSteamBrowser,
 		steamLinkComplete = self.steamLinkComplete,
-		alreadySeenFactionPopup2 = self.alreadySeenFactionPopup2,
+		alreadySeenFactionPopup4 = self.alreadySeenFactionPopup4,
 		firstBattleStarted = self.firstBattleStarted,
 		battleFilterPassworded = self.battleFilterPassworded,
 		battleFilterNonFriend = self.battleFilterNonFriend,

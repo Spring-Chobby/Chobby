@@ -447,7 +447,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			tabs = {
 				{name = "matchmaking", control = queueListWindow},
 				{name = "battle_list", control = battleListWindow.window},
-				--{name = "planetwars", control = planetwarsListWindow},
+				{name = "planetwars", control = planetwarsListWindow},
 			},
 			cleanupFunction = Configuration.leaveMultiplayerOnMainMenu and CleanMultiplayerState or nil
 		},
