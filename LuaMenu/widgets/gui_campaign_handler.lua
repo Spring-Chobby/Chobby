@@ -1670,6 +1670,9 @@ function externalFunctions.GetControl(newLiveTestingMode, newPlanetWhitelist, fe
 				obj:UpdateClientArea()
 				WG.Chobby.interfaceRoot.GetRightPanelHandler().CloseTabs()
 				WG.Chobby.interfaceRoot.GetMainWindowHandler().CloseTabs()
+				if WG.LibLobby.lobby and WG.LibLobby.lobby:GetMyBattleID() then
+					WG.LibLobby.lobby:LeaveBattle()
+				end
 			end
 		},
 		OnOrphan = {
