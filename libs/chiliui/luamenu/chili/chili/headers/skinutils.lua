@@ -1038,7 +1038,7 @@ function DrawProgressbar(obj)
   gl.Texture(0,false)
 
   if (obj.caption) then
-    (obj.font):Print(obj.caption, w*0.5, h*0.5 - obj.font.size*0.35 , "center", "linecenter")
+    (obj.font):Print(obj.caption, w*0.5, h*0.5 - obj.font.size*0.35 + (obj.fontOffset or 0), "center", "linecenter")
   end
 end
 
