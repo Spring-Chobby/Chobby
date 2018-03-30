@@ -99,6 +99,7 @@ end
 local function UpdateEdgeList()
 	gl.DeleteList(edgeDrawList)
 	edgeDrawList = gl.CreateList(CreateEdgeList)
+	planetHandler.SendEdgesToBack()
 end
 
 --------------------------------------------------------------------------------
@@ -1562,6 +1563,12 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 		end
 		
 		transX, transY, transScale = left, top, 1/(right - left)
+	end
+	
+	function externalFunctions.SendEdgesToBack()
+		if graph then
+			graph:SendToBack()
+		end
 	end
 	
 	function externalFunctions.GetParent()
