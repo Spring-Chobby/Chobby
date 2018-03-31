@@ -449,7 +449,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_slamrocket",
 		humanName = "S.L.A.M. Rocket",
-		description = "S.L.A.M. Rocket - Manually fired minature tactical nuke. Requires level 4 weapon slot.",
+		description = "S.L.A.M. Rocket - Manually fired miniature tactical nuke. Requires level 4 weapon slot.",
 		image = moduleImagePath .. "commweapon_slamrocket.png",
 		limit = 1,
 		cost = 200,
