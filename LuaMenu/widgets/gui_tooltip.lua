@@ -99,7 +99,7 @@ end
 --------------------------------------------------------------------------
 -- Specific tooltip type utilities
 
-local function GetTooltipLine(parent, hasImage, fontSize, xOffset)
+local function GetTooltipLine(parent, hasImage, fontSize, xOffset, imageWidth)
 	local textDisplay, imageDisplay
 
 	fontSize = fontSize or 2
@@ -111,7 +111,7 @@ local function GetTooltipLine(parent, hasImage, fontSize, xOffset)
 		imageDisplay = Image:New {
 			x = xOffset,
 			y = 0,
-			width = 19,
+			width = imageWidth or 19,
 			height = 19,
 			parent = parent,
 			keepAspect = true,
@@ -121,7 +121,7 @@ local function GetTooltipLine(parent, hasImage, fontSize, xOffset)
 	end
 
 	textDisplay = TextBox:New {
-		x = (hasImage and (23 + xOffset)) or xOffset,
+		x = (hasImage and ((imageWidth or 19) + 4 + xOffset)) or xOffset,
 		y = 0,
 		right = 0,
 		height = 20,
@@ -655,6 +655,42 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 		offset = offset + 20
 	elseif userTooltip.level then
 		userTooltip.level:Hide()
+	end
+
+
+	if userInfo.badges and Configuration.gameConfig.badges then
+		if not userTooltip.badge then
+			userTooltip.badge = {}
+		end	
+		local badgeDecs = Configuration.gameConfig.badges
+		local i = 1
+		while i <= #userInfo.badges do
+			if not userTooltip.badge[i] then
+				userTooltip.badge[i] = GetTooltipLine(userTooltip.mainControl, true, nil, nil, 46)
+			end
+			local badgeData = badgeDecs[userInfo.badges[i]]
+			if badgeData then
+				userTooltip.badge[i].Update(
+					offset,
+					badgeData.text,
+					badgeData.image
+				)
+				offset = offset + 20
+			else
+				userTooltip.badge[i]:Hide()
+			end
+			i = i + 1
+		end
+		while userTooltip.badge[i] do
+			userTooltip.badge[i]:Hide()
+			i = i + 1
+		end
+	elseif userTooltip.badge then
+		local i = 1
+		while userTooltip.badge[i] do
+			userTooltip.badge[i]:Hide()
+			i = i + 1
+		end
 	end
 
 	-- InGameSince

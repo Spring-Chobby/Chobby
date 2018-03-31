@@ -773,6 +773,8 @@ function Interface:_User(data)
 		country = data.Country or false,
 		isAdmin = data.IsAdmin,
 		level = data.Level or false,
+		avatar = data.Avatar,
+		badges = data.Badges,
 		-- transient
 		lobby = data.LobbyVersion,
 		isInGame = data.IsInGame,

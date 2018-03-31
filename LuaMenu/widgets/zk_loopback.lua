@@ -274,12 +274,15 @@ local WrapperLoopback = {}
 
 function WrapperLoopback.ReadReplayInfo(relativePath) 
 	SendCommand("ReadReplayInfo", {RelativePath = relativePath})
-end 
+end
 
 function WrapperLoopback.GetSpringBattleInfo(gameId) 
 	SendCommand("GetSpringBattleInfo", {GameID = gameID})
-end 
+end
 
+function WrapperLoopback.SendBugReport(title, description) 
+	SendCommand("SendBugReport", {Title  = title, Description = description})
+end
 
 -- opens URL
 function WrapperLoopback.OpenUrl(url)

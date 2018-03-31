@@ -11,6 +11,7 @@ local defaultModoptions               = VFS.Include(LUA_DIRNAME .. "configs/game
 local rankFunction, largeRankFunction = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/rankFunction.lua")
 local backgroundConfig                = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/skinConfig.lua")
 local gameUnitInformation             = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/gameUnitInformation.lua")
+local badges                          = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/badges.lua")
 
 local link_reportPlayer, link_userPage, link_homePage, link_replays, link_maps, link_particularMapPage = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/linkFunctions.lua")
 
@@ -86,6 +87,7 @@ local externalFuncAndData = {
 	minimapOverridePath     = minimapOverridePath,
 	minimapThumbnailPath    = minimapThumbnailPath,
 	gameUnitInformation     = gameUnitInformation,
+	badges                  = badges,
 	link_reportPlayer       = link_reportPlayer,
 	link_userPage           = link_userPage,
 	link_homePage           = link_homePage,
