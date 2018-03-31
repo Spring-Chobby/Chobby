@@ -283,7 +283,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_hparticlebeam",
 		humanName = "Heavy Particle Beam",
-		description = "Heavy Particle Beam - Replaces other weapons.",
+		description = "Heavy Particle Beam - Replaces other weapons. Requires level 4 weapon slot.",
 		image = moduleImagePath .. "conversion_hparticlebeam.png",
 		limit = 1,
 		cost = 150,
@@ -303,7 +303,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_shockrifle",
 		humanName = "Shock Rifle",
-		description = "Shock Rifle - Replaces other weapons.",
+		description = "Shock Rifle - Replaces other weapons. Requires level 4 weapon slot.",
 		image = moduleImagePath .. "conversion_shockrifle.png",
 		limit = 1,
 		cost = 150,
@@ -322,7 +322,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_clusterbomb",
 		humanName = "Cluster Bomb",
-		description = "Cluster Bomb",
+		description = "Cluster Bomb - Manually fired burst of bombs. Requires level 4 weapon slot.",
 		image = moduleImagePath .. "commweapon_clusterbomb.png",
 		limit = 1,
 		cost = 150,
@@ -343,7 +343,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_concussion",
 		humanName = "Concussion Shell",
-		description = "Concussion Shell",
+		description = "Concussion Shell - Manually fired high impulse projectile. Requires level 4 weapon slot.",
 		image = moduleImagePath .. "commweapon_concussion.png",
 		limit = 1,
 		cost = 150,
@@ -364,7 +364,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_disintegrator",
 		humanName = "Disintegrator",
-		description = "Disintegrator",
+		description = "Disintegrator - Manually fired weapon that destroys almost everything it touches. Requires level 4 weapon slot.",
 		image = moduleImagePath .. "commweapon_disintegrator.png",
 		limit = 1,
 		cost = 150,
@@ -385,7 +385,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_disruptorbomb",
 		humanName = "Disruptor Bomb",
-		description = "Disruptor Bomb",
+		description = "Disruptor Bomb - Manually fired bomb that slows enemies in a large area. Requires level 4 weapon slot.",
 		image = moduleImagePath .. "commweapon_disruptorbomb.png",
 		limit = 1,
 		cost = 150,
@@ -406,7 +406,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_multistunner",
 		humanName = "Multistunner",
-		description = "Multistunner",
+		description = "Multistunner - Manually fired sustained burst of lightning. Requires level 4 weapon slot.",
 		image = moduleImagePath .. "commweapon_multistunner.png",
 		limit = 1,
 		cost = 150,
@@ -428,7 +428,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_napalmgrenade",
 		humanName = "Hellfire Grenade",
-		description = "Hellfire Grenade",
+		description = "Hellfire Grenade - Manually fired bomb that inflames a large area. Requires level 4 weapon slot.",
 		image = moduleImagePath .. "commweapon_napalmgrenade.png",
 		limit = 1,
 		cost = 150,
@@ -449,7 +449,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_slamrocket",
 		humanName = "S.L.A.M. Rocket",
-		description = "S.L.A.M. Rocket - Minature tactical nuke.",
+		description = "S.L.A.M. Rocket - Manually fired minature tactical nuke. Requires level 4 weapon slot.",
 		image = moduleImagePath .. "commweapon_slamrocket.png",
 		limit = 1,
 		cost = 200,
@@ -487,7 +487,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_personal_shield",
 		humanName = "Personal Shield",
-		description = "Personal Shield - A small, protective bubble shield.",
+		description = "Personal Shield - A small, protective bubble shield. Cannot be used with cloak. Requires at least a level 2 module slot.",
 		image = moduleImagePath .. "module_personal_shield.png",
 		limit = 1,
 		cost = 300,
@@ -502,7 +502,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_areashield",
 		humanName = "Area Shield",
-		description = "Area Shield - Projects a large shield. Replaces Personal Shield.",
+		description = "Area Shield - Projects a large shield. Requires and replaced an installed Personal Shield. Requires at least a level 4 module slot.",
 		image = moduleImagePath .. "module_areashield.png",
 		limit = 1,
 		cost = 250,
@@ -518,7 +518,7 @@ local moduleDefs = {
 	{
 		name = "weaponmod_napalm_warhead",
 		humanName = "Napalm Warhead",
-		description = "Napalm Warhead - Riot Cannon, Rocket Launcher and Plasma Artillery set targets on fire. Reduced direct damage.",
+		description = "Napalm Warhead - Riot Cannon, Rocket Launcher and Plasma Artillery set targets on fire. Reduced direct damage. Requires at least a level 3 module slot.",
 		image = moduleImagePath .. "weaponmod_napalm_warhead.png",
 		limit = 1,
 		cost = 350,
@@ -530,7 +530,7 @@ local moduleDefs = {
 	{
 		name = "conversion_disruptor",
 		humanName = "Disruptor Ammo",
-		description = "Disruptor Ammo - Heavy Machine Gun, Shotgun and Particle Beams deal slow damage. Reduced direct damage.",
+		description = "Disruptor Ammo - Heavy Machine Gun, Shotgun and Particle Beams deal slow damage. Reduced direct damage. Requires at least a level 3 module slot.",
 		image = moduleImagePath .. "weaponmod_disruptor_ammo.png",
 		limit = 1,
 		cost = 450,
@@ -542,7 +542,7 @@ local moduleDefs = {
 	{
 		name = "weaponmod_stun_booster",
 		humanName = "Flux Amplifier",
-		description = "Flux Amplifier - Improves EMP duration and strength of Lightning Rifle and Multistunner.",
+		description = "Flux Amplifier - Improves EMP duration and strength of Lightning Rifle and Multistunner. Requires at least a level 3 module slot.",
 		image = moduleImagePath .. "weaponmod_stun_booster.png",
 		limit = 1,
 		cost = 300,
@@ -554,7 +554,7 @@ local moduleDefs = {
 	{
 		name = "module_jammer",
 		humanName = "Radar Jammer",
-		description = "Radar Jammer - Hide the radar signals of nearby units.",
+		description = "Radar Jammer - Hide the radar signals of nearby units. Requires at least a level 2 module slot.",
 		image = moduleImagePath .. "module_jammer.png",
 		limit = 1,
 		cost = 200,
@@ -569,7 +569,7 @@ local moduleDefs = {
 	{
 		name = "module_radarnet",
 		humanName = "Field Radar",
-		description = "Field Radar - Attaches a basic radar system to the Commander.",
+		description = "Field Radar - Attaches a basic radar system to the Commander. Requires at least a level 2 module slot.",
 		image = moduleImagePath .. "module_fieldradar.png",
 		limit = 1,
 		cost = 75,
@@ -582,7 +582,7 @@ local moduleDefs = {
 	{
 		name = "module_personal_cloak",
 		humanName = "Personal Cloak",
-		description = "Personal Cloak - A personal cloaking device for the Commander.",
+		description = "Personal Cloak - A personal cloaking device for the Commander. Cannot be used with shields. Requires at least a level 2 module slot.",
 		image = moduleImagePath .. "module_personal_cloak.png",
 		limit = 1,
 		cost = 400,
@@ -597,7 +597,7 @@ local moduleDefs = {
 	{
 		name = "module_cloak_field",
 		humanName = "Cloaking Field",
-		description = "Cloaking Field - Cloaks all nearby units. Requires Radar Jammer.",
+		description = "Cloaking Field - Cloaks all nearby units. Requires Radar Jammer. Requires at least a level 4 module slot.",
 		image = moduleImagePath .. "module_cloak_field.png",
 		limit = 1,
 		cost = 600,
@@ -616,7 +616,7 @@ local moduleDefs = {
 	{
 		name = "module_resurrect",
 		humanName = "Lazarus Device",
-		description = "Lazarus Device - Upgrade nanolathe to allow resurrection.",
+		description = "Lazarus Device - Upgrade nanolathe to allow resurrection. Requires at least a level 3 module slot.",
 		image = moduleImagePath .. "module_resurrect.png",
 		limit = 1,
 		cost = 400,
@@ -630,7 +630,7 @@ local moduleDefs = {
 	{
 		name = "module_jumpjet",
 		humanName = "Jumpjets",
-		description = "Jumpjets - Leap over obstacles and out of danger.",
+		description = "Jumpjets - Leap over obstacles and out of danger. Requires at least a level 4 module slot.",
 		image = moduleImagePath .. "module_jumpjet.png",
 		limit = 1,
 		cost = 400,
@@ -646,7 +646,7 @@ local moduleDefs = {
 	{
 		name = "module_companion_drone",
 		humanName = "Companion Drone",
-		description = "Companion Drone - Commander spawns protective drones._COUNT_",
+		description = "Companion Drone - Commander spawns protective drones. Requires at least a level 3 module slot._COUNT_",
 		image = moduleImagePath .. "module_companion_drone.png",
 		limit = 8,
 		cost = 300,
@@ -659,7 +659,7 @@ local moduleDefs = {
 	{
 		name = "module_battle_drone",
 		humanName = "Battle Drone",
-		description = "Battle Drone - Commander spawns heavy drones. Requires Companion Drone._COUNT_",
+		description = "Battle Drone - Commander spawns heavy drones. Requires Companion Drone and at least a level 4 module slot._COUNT_",
 		image = moduleImagePath .. "module_battle_drone.png",
 		limit = 8,
 		cost = 500,
@@ -701,7 +701,7 @@ local moduleDefs = {
 	{
 		name = "module_heavy_armor",
 		humanName = "High Density Plating",
-		description = "High Density Plating - Provides 1600 health but reduces speed by 10%. Requires Ablative Armour Plates._COUNT_",
+		description = "High Density Plating - Provides 1600 health but reduces speed by 10%. Requires Ablative Armour Plates and  at least a level 3 module slot._COUNT_",
 		image = moduleImagePath .. "module_heavy_armor.png",
 		limit = 8,
 		cost = 400,
@@ -716,7 +716,7 @@ local moduleDefs = {
 	{
 		name = "module_dmg_booster",
 		humanName = "Damage Booster",
-		description = "Damage Booster - Increases damage by 10%, increased weapon weight reduces speed by 2.5%._COUNT_",
+		description = "Damage Booster - Increases damage by 10% but reduces speed by 2.5%._COUNT_",
 		image = moduleImagePath .. "module_dmg_booster.png",
 		limit = 8,
 		cost = 150,
@@ -744,7 +744,7 @@ local moduleDefs = {
 	{
 		name = "module_adv_targeting",
 		humanName = "Adv. Targeting System",
-		description = "Advanced Targeting System - Increases range by 7.5%, increased weapon weight reduces speed by 2.5%._COUNT_",
+		description = "Advanced Targeting System - Increases range by 7.5% but reduces speed by 2.5%._COUNT_",
 		image = moduleImagePath .. "module_adv_targeting.png",
 		limit = 8,
 		cost = 150,
