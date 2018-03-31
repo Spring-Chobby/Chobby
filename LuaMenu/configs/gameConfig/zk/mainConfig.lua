@@ -1,6 +1,5 @@
 local shortname = "zk"
 
-local mapWhitelist                    = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/mapWhitelist.lua")
 local aiBlacklist                     = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/aiBlacklist.lua")
 local aiSimpleNames                   = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/aiSimpleName.lua")
 local oldAiVersions                   = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/oldAiVersions.lua")
@@ -61,7 +60,6 @@ local externalFuncAndData = {
 	_defaultGameArchiveName = "Zero-K v1.5.2.5", -- Do not read directly
 	_defaultGameRapidTag    = "zk:stable", -- Do not read directly
 	aiVersion               = "stable",
-	mapWhitelist            = mapWhitelist,
 	aiBlacklist             = aiBlacklist,
 	GetAiSimpleName         = aiSimpleNames.GetAiSimpleName,
 	simpleAiOrder           = aiSimpleNames.simpleAiOrder,

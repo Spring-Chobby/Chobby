@@ -170,7 +170,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		padding = {2,2,2,2},
 		OnClick = {
 			function()
-				WG.Chobby.MapListWindow(battleLobby, battle.mapName)
+				WG.MapListPanel.Show(battleLobby, battle.mapName)
 			end
 		},
 	}
@@ -342,7 +342,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		font =  config:GetFont(2),
 		OnClick = {
 			function()
-				WG.Chobby.MapListWindow(battleLobby, battle.mapName)
+				WG.MapListPanel.Show(battleLobby, battle.mapName)
 			end
 		},
 		parent = leftInfo,

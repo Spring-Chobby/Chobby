@@ -724,6 +724,8 @@ function CommunityWindow.GetControl()
 	return window
 end
 
+CommunityWindow.LoadStaticCommunityData = LoadStaticCommunityData
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface

@@ -30,6 +30,7 @@ function SortableList:init(holder, headings, itemHeight, defaultSort, sortDirect
 				height = 38,
 				caption = heading.name,
 				font = Configuration:GetFont(3),
+				tooltip = heading.tooltip,
 				--classname = "option_button",
 				parent = self.holder,
 				OnClick = {
@@ -44,6 +45,17 @@ function SortableList:init(holder, headings, itemHeight, defaultSort, sortDirect
 					end
 				},
 			}
+			if heading.image then
+				Image:New {
+					x = 0,
+					y = 0,
+					right = 0,
+					bottom = 0,
+					keepAspect = true,
+					file = heading.image,
+					parent = self.headingButtons[i],
+				}
+			end
 		end
 	end
 	
@@ -153,6 +165,16 @@ function SortableList:RemoveItem(id)
 	self.sortDataById[id] = nil
 	
 	self:UpdateOrder()
+end
+
+function SortableList:ScrollToItem(id)
+	if not self.controlById[id] then
+		Spring.Echo("SortableList tried to scroll to non-existent item", id)
+		return
+	end
+	
+	local zoomY = self.controlById[id].y or 0
+	self.listPanel:SetScrollPos(0, zoomY, false, false)
 end
 
 function SortableList:RecalculatePosition(index)
