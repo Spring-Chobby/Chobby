@@ -309,13 +309,26 @@ local bugControl = Control:New {
 			}
 			offset = offset + 36
 			
+			offset = offset + 8
+			TextBox:New {
+				x = 24,
+				right = 24,
+				y = offset,
+				height = 35,
+				text = "Using Spring engine version " .. Spring.Utilities.GetEngineVersion() .. " " .. ((WG.Chobby.Configuration:GetIsRunning64Bit() and "64-bit.") or "32-bit."),
+				fontsize = Configuration:GetFont(2).size,
+				parent = obj,
+			}
+			offset = offset + 36
+			
+			
 			Button:New {
 				x = "35%",
 				right = "35%",
 				bottom = 15,
 				height = 80,
 				caption = "Submit",
-				tooltip = "Closes the game and submits the report.",
+				tooltip = "Closes the game and submits the report. Click OK to the resulting pop-up.",
 				font = Configuration:GetFont(4),
 				classname = "action_button",
 				OnClick = {
