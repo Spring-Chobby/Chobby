@@ -120,91 +120,24 @@ local communityLines = {
 			WG.BrowserHandler.OpenUrl("http://zero-k.info/Battles")
 		end
 	},
-}
-
-local firstCommunityParent = true
-local communityControl = Control:New {
-	x = 0,
-	y = 0,
-	right = 0,
-	bottom = 0,
-	padding = {12, 12, 15, 15},
-	OnParent = {
-		function (obj)
-			if not firstCommunityParent then
-				return
-			end
-			firstCommunityParent = false
-
-			local list = SortableList(obj)
-
-			local items = {}
-			for i = 1, #communityLines do
-				local data = communityLines[i]
-				items[#items + 1] = {#items, CreateLine(data[1], data[2], data[3])}
-			end
-
-			list:AddItems(items)
+	{
+		"View source code on GitHub.",
+		"Source",
+		function ()
+			WG.BrowserHandler.OpenUrl("https://github.com/ZeroK-RTS")
 		end
 	},
-}
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
--- Bug Reporting
-
-local bugLines = {
 	{
-		textFunction = function ()
-			return "Using engine " .. Spring.Utilities.GetEngineVersion() .. " " .. ((WG.Chobby.Configuration:GetIsRunning64Bit() and "64-bit.") or "32-bit.")
-		end,
-	},
-	{
-		"Open game data folder to find settings, infolog etc...",
-		"Local Data",
+		"Open game data folder to find config files and logs.",
+		"Game Data",
 		function ()
 			WG.WrapperLoopback.OpenFolder()
-		end
-	},
-	{
-		"A useful site for uploading infologs.",
-		"Pastebin",
-		function ()
-			WG.BrowserHandler.OpenUrl("https://www.pastebin.com")
-		end
-	},
-	{
-		"Report the bug on the forum.",
-		"Forum",
-		function ()
-			WG.BrowserHandler.OpenUrl("http://zero-k.info/Forum/NewPost?categoryID=3")
-		end
-	},
-	{
-		"Report an ingame bug on GitHub. This requires a GitHub account.",
-		"Game Bug",
-		function ()
-			WG.BrowserHandler.OpenUrl("https://github.com/ZeroK-RTS/Zero-K/issues/new")
-		end
-	},
-	{
-		"Report a game menu bug on GitHub. This requires a GitHub account.",
-		"Menu Bug",
-		function ()
-			WG.BrowserHandler.OpenUrl("https://github.com/ZeroK-RTS/Chobby/issues/new")
-		end
-	},
-	{
-		"Report a site bug on GitHub. This requires a GitHub account.",
-		"Site Bug",
-		function ()
-			WG.BrowserHandler.OpenUrl("https://github.com/ZeroK-RTS/Zero-K-Infrastructure/issues/new")
 		end
 	},
 }
 
 if VFS.HasArchive("Zero-K $VERSION") then
-	bugLines[#bugLines + 1] = {
+	communityLines[#communityLines + 1] = {
 		"Run a benchmark game.",
 		"Benchmark",
 		function ()
@@ -217,7 +150,7 @@ if VFS.HasArchive("Zero-K $VERSION") then
 end
 
 if VFS.HasArchive("CAI Fight 2017 06 fix") then
-	bugLines[#bugLines + 1] = {
+	communityLines[#communityLines + 1] = {
 		"Run a benchmark game.",
 		"CAI Fight",
 		function ()
@@ -229,29 +162,169 @@ if VFS.HasArchive("CAI Fight 2017 06 fix") then
 	}
 end
 
+local firstCommunityParent = true
+local communityControl = Control:New {
+	x = 0,
+	y = 0,
+	right = 0,
+	bottom = 0,
+	padding = {0, 0, 0, 0},
+	OnParent = {
+		function (obj)
+			if not firstCommunityParent then
+				return
+			end
+			firstCommunityParent = false
+
+			Label:New {
+				x = 20,
+				right = 5,
+				y = 17,
+				height = 20,
+				parent = obj,
+				font = WG.Chobby.Configuration:GetFont(3),
+				caption = "Community and development links",
+			}
+			
+			Button:New {
+				right = 11,
+				y = 7,
+				width = 80,
+				height = 45,
+				font = WG.Chobby.Configuration:GetFont(3),
+				caption = i18n("close"),
+				classname = "negative_button",
+				OnClick = {
+					function()
+						obj:Hide()
+					end
+				},
+				parent = obj,
+			}
+			
+			local listHolder = Control:New {
+				x = 12,
+				right = 15,
+				y = 52,
+				bottom = 15,
+				parent = obj,
+				resizable = false,
+				draggable = false,
+				padding = {0, 0, 0, 0},
+			}
+			local list = SortableList(listHolder)
+
+			local items = {}
+			for i = 1, #communityLines do
+				local data = communityLines[i]
+				items[#items + 1] = {i, CreateLine(data[1], data[2], data[3]), {i}}
+			end
+
+			list:AddItems(items)
+		end
+	},
+}
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Bug Reporting
+
 local firstBugParent = true
 local bugControl = Control:New {
 	x = 0,
 	y = 0,
 	right = 0,
 	bottom = 0,
-	padding = {12, 12, 15, 15},
+	padding = {0, 0, 0, 0},
 	OnParent = {
 		function (obj)
-			if not firstBugParent then
-				return
-			end
-			firstBugParent = false
-
-			local list = SortableList(obj, nil, 70)
-
-			local items = {}
-			for i = 1, #bugLines do
-				local data = bugLines[i]
-				items[#items + 1] = {#items, CreateLine(data[1] or data.textFunction(), data[2], data[3])}
-			end
-
-			list:AddItems(items)
+			local Configuration = WG.Chobby.Configuration
+			Label:New {
+				x = 20,
+				right = 5,
+				y = 17,
+				height = 20,
+				parent = obj,
+				font = Configuration:GetFont(3),
+				caption = "Send a bug report",
+			}
+			
+			Button:New {
+				right = 11,
+				y = 7,
+				width = 80,
+				height = 45,
+				font = Configuration:GetFont(3),
+				caption = i18n("close"),
+				classname = "negative_button",
+				OnClick = {
+					function()
+						obj:Hide()
+					end
+				},
+				parent = obj,
+			}
+			
+			local offset = 70
+			TextBox:New {
+				x = 21,
+				width = 170,
+				y = offset,
+				height = 35,
+				text ="Title:",
+				fontsize = Configuration:GetFont(3).size,
+				parent = obj,
+			}
+			offset = offset + 36
+			local titleBox = EditBox:New {
+				x = 24,
+				right = 20,
+				y = offset - 9,
+				height = 35,
+				text = "",
+				font = Configuration:GetFont(3),
+				parent = obj,
+			}
+			offset = offset + 36
+			
+			offset = offset + 8
+			TextBox:New {
+				x = 21,
+				width = 170,
+				y = offset,
+				height = 35,
+				text ="Description:",
+				fontsize = Configuration:GetFont(3).size,
+				parent = obj,
+			}
+			offset = offset + 36
+			local descBox = EditBox:New {
+				x = 24,
+				right = 20,
+				y = offset - 9,
+				height = 35,
+				text = "",
+				font = Configuration:GetFont(3),
+				parent = obj,
+			}
+			offset = offset + 36
+			
+			Button:New {
+				x = "35%",
+				right = "35%",
+				bottom = 15,
+				height = 80,
+				caption = "Submit",
+				tooltip = "Closes the game and submits the report.",
+				font = Configuration:GetFont(4),
+				classname = "action_button",
+				OnClick = {
+					function()
+						WG.WrapperLoopback.SendBugReport(titleBox.text, descBox.text)
+					end
+				},
+				parent = obj,
+			}
 		end
 	},
 }
