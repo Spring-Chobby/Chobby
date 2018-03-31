@@ -23,8 +23,10 @@ local IMG_UNREADY  = LUA_DIRNAME .. "images/unready.png"
 --------------------------------------------------------------------------------
 -- Utilities
 
-local function GetMapType(is1v1, isTeam, isFFA, isChicken)
-	if isChicken then
+local function GetMapType(is1v1, isTeam, isFFA, isChicken, isSpecial)
+	if isSpecial then
+		return "Special"
+	elseif isChicken then
 		return "Chicken"
 	elseif isFFA then
 		return "FFA"
@@ -135,7 +137,7 @@ local function CreateMapEntry(mapName, mapData, CloseFunc)--{"ResourceID":7098,"
 			parent = mapButton,
 		}
 		
-		local mapType = GetMapType(mapData.Is1v1, mapData.IsTeams, mapData.IsFFA, mapData.IsChickens)
+		local mapType = GetMapType(mapData.Is1v1, mapData.IsTeams, mapData.IsFFA, mapData.IsChickens, mapData.IsSpecial)
 		TextBox:New {
 			x = 356,
 			y = 12,
