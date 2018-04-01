@@ -84,6 +84,7 @@ return {
 		about = "About",
 		links = "Links",
 		load_saved_game = "Load saved game",
+		time_ingame = "Time ingame",
 		missions = "Missions",
 		tutorials = "Tutorials",
 		training = "Training",

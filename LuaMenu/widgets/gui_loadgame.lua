@@ -123,7 +123,7 @@ local function GetSaveDescText(saveFile)
 	if not saveFile then return "" end
 	return (saveFile.description or "no description")
 		.. "\n" .. saveFile.map
-		.. "\n" .. i18n("time_ingame") .. ": " .. SecondsToClock(saveFile.gameframe/30)
+		.. "\n" .. i18n("time_ingame") .. ": " .. SecondsToClock(saveFile.totalGameframe/30)
 end
 
 --------------------------------------------------------------------------------
