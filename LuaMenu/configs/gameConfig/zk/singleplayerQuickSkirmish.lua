@@ -37,7 +37,7 @@ local skirmishSetupData = {
 			options = {
 				"TitanDuel 2.2",
 				"Onyx Cauldron 1.9",
-				"Fairyland v1.3",
+				"Fairyland 1.3",
 				"Calamity 1.1",
 			},
 		},
