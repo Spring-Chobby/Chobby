@@ -661,7 +661,7 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 	if userInfo.badges and Configuration.gameConfig.badges then
 		if not userTooltip.badge then
 			userTooltip.badge = {}
-		end	
+		end
 		local badgeDecs = Configuration.gameConfig.badges
 		local i = 1
 		while i <= #userInfo.badges do

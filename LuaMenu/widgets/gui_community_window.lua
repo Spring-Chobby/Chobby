@@ -623,14 +623,7 @@ end
 
 --{"Name":"GoogleFrog","Awards":[{"AwardKey":"cap","Collected":51},{"AwardKey":"reclaim","Collected":977},{"AwardKey":"pwn","Collected":1824},{"AwardKey":"vet","Collected":362},{"AwardKey":"kam","Collected":70},{"AwardKey":"ouch","Collected":952},{"AwardKey":"shell","Collected":267},{"AwardKey":"terra","Collected":278},{"AwardKey":"navy","Collected":77},{"AwardKey":"nux","Collected":16},{"AwardKey":"fire","Collected":133},{"AwardKey":"air","Collected":74},{"AwardKey":"emp","Collected":112},{"AwardKey":"share","Collected":4},{"AwardKey":"mex","Collected":758},{"AwardKey":"comm","Collected":84},{"AwardKey":"rezz","Collected":3},{"AwardKey":"friend","Collected":1},{"AwardKey":"head","Collected":8},{"AwardKey":"dragon","Collected":2},{"AwardKey":"sweeper","Collected":2},{"AwardKey":"heart","Collected":2},{"AwardKey":"mexkill","Collected":142},{"AwardKey":"slow","Collected":156},{"AwardKey":"silver","Collected":6},{"AwardKey":"bronze","Collected":3},{"AwardKey":"gold","Collected":1}],"Badges":["dev_adv","donator_0"],"Level":133,"LevelUpRatio":"0.69","EffectiveElo":2312,"EffectiveMmElo":2234,"EffectivePwElo":1670,"Kudos":724,"PwMetal":"5105.00","PwDropships":"74.00","PwBombers":"17.00","PwWarpcores":"0.00"}
 
-local AWARD_ICON_SIZE = 44
-
-local function GetAwardsHandler(parentControl)
-	local GetAwardImage = WG.Chobby.Configuration.gameConfig.GetAward
-	if not GetAwardImage then
-		return false
-	end
-	
+local function GetAwardsHandler(parentControl, iconWidth, iconHeight, GetEntryData)
 	local fontsize = WG.Chobby.Configuration:GetFont(2).size
 	local imageList
 	local externalFunctions = {}
@@ -640,13 +633,13 @@ local function GetAwardsHandler(parentControl)
 			return
 		end
 		
-		local gridWidth = math.floor(parentControl.width/(AWARD_ICON_SIZE + 2))
+		local gridWidth = math.floor(parentControl.width/(iconWidth + 2))
 		if gridWidth < 1 then
 			return
 		end
 		
 		for i = 1, #imageList do
-			local x, y = (AWARD_ICON_SIZE + 2)*((i - 1)%gridWidth), (AWARD_ICON_SIZE + 2)*math.floor((i - 1)/gridWidth)
+			local x, y = (iconWidth + 2)*((i - 1)%gridWidth), (iconHeight + 2)*math.floor((i - 1)/gridWidth)
 			imageList[i]:SetPos(x, y)
 		end
 	end
@@ -655,14 +648,15 @@ local function GetAwardsHandler(parentControl)
 		parentControl:ClearChildren()
 		imageList = {}
 		for i = 1, #awardsList do
+			local imageName, count = GetEntryData(awardsList[i])
 			imageList[i] = Image:New{
-				width = AWARD_ICON_SIZE,
-				height = AWARD_ICON_SIZE,
+				width = iconWidth,
+				height = iconHeight,
 				keepAspect = true,
-				file = GetAwardImage(awardsList[i].AwardKey),
+				file = imageName,
 				parent = parentControl,
 			}
-			if awardsList[i].Collected > 1 then
+			if count and count > 1 then
 				Label:New {
 					x = 2,
 					y = "60%",
@@ -670,7 +664,7 @@ local function GetAwardsHandler(parentControl)
 					bottom = 6,
 					align = "right",
 					fontsize = fontsize,
-					caption = awardsList[i].Collected,
+					caption = count,
 					parent = imageList[i],
 				}
 			end
@@ -692,30 +686,54 @@ local function GetProfileHandler(parentControl)
 	}
 	local nameHolder = Control:New{
 		x = "39%",
-		y = "10%",
+		y = "7%",
 		right = 0,
 		height = 28,
 		padding = {0,0,0,0},
 		parent = holder,
 	}
-	local awardsHolder = Control:New{
-		x = 10,
-		y = "48%",
-		right = 6,
-		bottom = 0,
-		padding = {0,0,0,0},
-		parent = holder,
-	}
-	local awardsHandler = GetAwardsHandler(awardsHolder)
-	local awardsLabel
+	
+	local awardsHandler, awardsLabel
+	local GetAwardImage = WG.Chobby.Configuration.gameConfig.GetAward
+	if GetAwardImage then
+		local awardsHolder = Control:New{
+			x = 10,
+			y = "50%",
+			right = 6,
+			bottom = 0,
+			padding = {0,0,0,0},
+			parent = holder,
+		}
+		local function GetAwardInfo(entry)
+			return GetAwardImage(entry.AwardKey), entry.Collected
+		end
+		awardsHandler = GetAwardsHandler(awardsHolder, 44, 44, GetAwardInfo)
+	end
+	
+	local badgesHandler
+	local badgeDecs = WG.Chobby.Configuration.gameConfig.badges
+	if badgeDecs then
+		local badgeHolder = Control:New{
+			x = "39%",
+			y = "36%",
+			right = 0,
+			height = 22,
+			padding = {0,0,0,0},
+			parent = holder,
+		}
+		local function GetBadgeInfo(entry)
+			return (badgeDecs[entry] or {}).image
+		end
+		badgesHandler = GetAwardsHandler(badgeHolder, 46, 19, GetBadgeInfo)
+	end
 	
 	local experienceBar, progressLabel
 	local function MakeProgressBar()
 		experienceBar = Progressbar:New {
 			x = "24%",
-			y = "23.5%",
+			y = "22%",
 			right = "24%",
-			height = 22,
+			height = 20,
 			value = 0,
 			max = 1,
 			caption = "Level " .. 2,
@@ -748,13 +766,13 @@ local function GetProfileHandler(parentControl)
 		experienceBar:SetCaption("Level " .. (level or "??"))
 		experienceBar:SetValue(levelProgress)
 		
-		if awardsHandler then
+		if awardsHandler and profileData.Awards then
 			awardsHandler.SetAwards(profileData.Awards)
 			awardsHandler.PositionAwards()
 			if not awardsLabel then
 				awardsLabel = Label:New {
 					x = 5,
-					y = "36%",
+					y = "38%",
 					width = 80,
 					height = 22,
 					align = "right",
@@ -763,6 +781,10 @@ local function GetProfileHandler(parentControl)
 					parent = holder,
 				}
 			end
+		end
+		if badgesHandler and profileData.Badges then
+			badgesHandler.SetAwards(profileData.Badges)
+			badgesHandler.PositionAwards()
 		end
 	end
 	
