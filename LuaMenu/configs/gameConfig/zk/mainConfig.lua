@@ -55,6 +55,11 @@ local minimapThumbnailPath = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .
 -- Getters
 ---------------------------------------------------------------------------------
 
+local awardDir = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/awards/trophy_"
+local function GetAward(name)
+	return awardDir .. name .. ".png"
+end
+
 local externalFuncAndData = {
 	dirName                 = "zk",
 	name                    = "Zero-K",
@@ -88,6 +93,7 @@ local externalFuncAndData = {
 	minimapThumbnailPath    = minimapThumbnailPath,
 	gameUnitInformation     = gameUnitInformation,
 	badges                  = badges,
+	GetAward                = GetAward,
 	link_reportPlayer       = link_reportPlayer,
 	link_userPage           = link_userPage,
 	link_homePage           = link_homePage,
