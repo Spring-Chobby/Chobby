@@ -15,12 +15,16 @@ local function UpdateLups()
 	local lupsAirJetDisabled = ((settings.LupsAirJet == "On") and FALSE) or TRUE
 	local lupsRibbonDisabled = ((settings.LupsRibbon == "On") and FALSE) or TRUE
 	local lupsShieldSphereColorDisabled = ((settings.LupsShieldSphereColor == "On") and FALSE) or TRUE
+	local lupsWaterRefractEnabled = ((settings.LupsWaterSettings == "Refraction" or settings.LupsWaterSettings == "Refract and Reflect") and 1) or 0
+	local lupsWaterReflectEnabled = ((settings.LupsWaterSettings == "Reflection" or settings.LupsWaterSettings == "Refract and Reflect") and 1) or 0
 	
 	local sourceFile = VFS.LoadFile(lupsFileName)
 	
 	sourceFile = sourceFile:gsub("__AIR_JET__", lupsAirJetDisabled)
 	sourceFile = sourceFile:gsub("__RIBBON__", lupsRibbonDisabled)
 	sourceFile = sourceFile:gsub("__SHIELD_SPHERE_COLOR__", lupsShieldSphereColorDisabled)
+	sourceFile = sourceFile:gsub("__ENABLE_REFRACT__", lupsWaterRefractEnabled)
+	sourceFile = sourceFile:gsub("__ENABLE_REFLECT__", lupsWaterReflectEnabled)
 	
 	local settingsFile = io.open(lupsFileTarget, "w")
 	settingsFile:write(sourceFile)
@@ -61,6 +65,7 @@ local settingsConfig = {
 					LupsAirJet = "Off",
 					LupsRibbon = "Off",
 					LupsShieldSphereColor = "Off",
+					LupsWaterSettings = "Off",
 					FancySky = "Off",
 				}
 			},
@@ -84,6 +89,7 @@ local settingsConfig = {
 					LupsAirJet = "Off",
 					LupsRibbon = "Off",
 					LupsShieldSphereColor = "Off",
+					LupsWaterSettings = "Off",
 					FancySky = "Off",
 				}
 			},
@@ -107,6 +113,7 @@ local settingsConfig = {
 					LupsAirJet = "Off",
 					LupsRibbon = "On",
 					LupsShieldSphereColor = "On",
+					LupsWaterSettings = "Off",
 					FancySky = "Off",
 				}
 			},
@@ -130,6 +137,7 @@ local settingsConfig = {
 					LupsAirJet = "On",
 					LupsRibbon = "On",
 					LupsShieldSphereColor = "On",
+					LupsWaterSettings = "Off",
 					FancySky = "Off",
 				}
 			},
@@ -153,6 +161,7 @@ local settingsConfig = {
 					LupsAirJet = "On",
 					LupsRibbon = "On",
 					LupsShieldSphereColor = "On",
+					LupsWaterSettings = "Off",
 					FancySky = "Off",
 				}
 			},
@@ -176,6 +185,7 @@ local settingsConfig = {
 					LupsAirJet = "On",
 					LupsRibbon = "On",
 					LupsShieldSphereColor = "On",
+					LupsWaterSettings = "Refract and Reflect",
 					FancySky = "On",
 				}
 			},
@@ -529,6 +539,28 @@ local settingsConfig = {
 					},
 					{
 						name = "Off",
+						applyFunction = UpdateLups,
+					},
+				},
+			},
+			{
+				name = "LupsWaterSettings",
+				humanName = "Shaders Affected by Water",
+				options = {
+					{
+						name = "Off",
+						applyFunction = UpdateLups,
+					},
+					{
+						name = "Refraction",
+						applyFunction = UpdateLups,
+					},
+					{
+						name = "Reflection",
+						applyFunction = UpdateLups,
+					},
+					{
+						name = "Refract and Reflect",
 						applyFunction = UpdateLups,
 					},
 				},
@@ -932,6 +964,7 @@ local settingsDefault = {
 	LupsAirJet = "On",
 	LupsRibbon = "On",
 	LupsShieldSphereColor = "On",
+	LupsWaterSettings = "Off",
 	FancySky = "Off",
 	--IconDistance = 151,
 	InterfaceScale = defaultUiScale,
