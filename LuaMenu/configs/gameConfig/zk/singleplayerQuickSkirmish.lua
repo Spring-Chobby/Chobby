@@ -36,8 +36,8 @@ local skirmishSetupData = {
 			minimap = true,
 			options = {
 				"TitanDuel 2.2",
-				"Onyx Cauldron 1.9",
-				"Fairyland 1.3",
+				"Obsidian_1.5",
+				"Fairyland 1.31",
 				"Calamity 1.1",
 			},
 		},

@@ -43,7 +43,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 		},
 		gameConfig = {
-			mapName = "TitanDuel 2",
+			mapName = "TitanDuel 2.2",
 			playerConfig = {
 				startX = 3600,
 				startZ = 1000,

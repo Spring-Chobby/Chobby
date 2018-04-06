@@ -47,7 +47,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 		},
 		gameConfig = {
-			mapName = "Onyx Cauldron 1.8",
+			mapName = "Onyx Cauldron 1.9",
 			playerConfig = {
 				startX = 2400,
 				startZ = 6800,

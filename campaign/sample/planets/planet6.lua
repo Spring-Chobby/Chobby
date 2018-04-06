@@ -43,7 +43,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 		},
 		gameConfig = {
-			mapName = "Fairyland v1.0",
+			mapName = "Fairyland 1.31",
 			playerConfig = {
 				startX = 370,
 				startZ = 3500,

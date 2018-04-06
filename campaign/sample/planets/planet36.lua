@@ -43,7 +43,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 		},
 		gameConfig = {
-			mapName = "Trojan Hills v03",
+			mapName = "Trojan Hills v05",
 			playerConfig = {
 				startX = 4220,
 				startZ = 2300,

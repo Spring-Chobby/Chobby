@@ -27,8 +27,8 @@
       {  
          "Platform":null,
          "VersionNumber":1,
-         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/maps/fairyland_1.3.sd7",
-         "TargetPath":"maps/fairyland_1.3.sd7"
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/maps/fairyland_1.31.sd7",
+         "TargetPath":"maps/fairyland_1.31.sd7"
       },
       {  
          "Platform":null,
@@ -51,14 +51,14 @@
 	  {  
          "Platform":null,
          "VersionNumber":1,
-         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/maps/living_lands_3.2.sd7",
-         "TargetPath":"maps/living_lands_3.2.sd7"
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/maps/living_lands_4.1.sd7",
+         "TargetPath":"maps/living_lands_4.1.sd7"
       },
       {  
          "Platform":null,
          "VersionNumber":1,
-         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/maps/onyx_cauldron_1.9.sd7",
-         "TargetPath":"maps/onyx_cauldron_1.9.sd7"
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/maps/obsidian_1.5.sd7",
+         "TargetPath":"maps/obsidian_1.5.sd7"
       },
       {  
          "Platform":null,
