@@ -385,6 +385,11 @@ function Lobby:SetSteamAuthToken(steamAuthToken)
 	return self
 end
 
+function Lobby:SetSteamDlc(steamDlc)
+	self.steamDlc = steamDlc
+	return self
+end
+
 -------------------------------------------------
 -- END Client commands
 -------------------------------------------------

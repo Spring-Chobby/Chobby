@@ -79,7 +79,7 @@ end
 
 local SteamHandler = {}
 
-function SteamHandler.SteamOnline(authToken, joinFriendID, friendList, suggestedNameFromSteam)
+function SteamHandler.SteamOnline(authToken, joinFriendID, friendList, suggestedNameFromSteam, myDlc)
 	local Configuration = WG.Chobby.Configuration
 	if not Configuration then
 		Spring.Echo("Loopback error: Sent steam before Configuration initialization")
@@ -97,6 +97,9 @@ function SteamHandler.SteamOnline(authToken, joinFriendID, friendList, suggested
 	
 	if authToken then
 		lobby:SetSteamAuthToken(authToken)
+	end
+	if myDlc then
+		lobby:SetSteamDlc(myDlc)
 	end
 	
 	if storedFriendList then

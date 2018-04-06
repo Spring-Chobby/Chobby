@@ -41,7 +41,7 @@ function Interface:Register(userName, password, email, useSteamLogin)
 	local sendData = {
 		Name = userName,
 		PasswordHash = password,
-		SteamAuthToken = steamToken
+		SteamAuthToken = steamToken,
 	}
 	self:_SendCommand("Register " .. json.encode(sendData))
 	return self
@@ -66,6 +66,7 @@ function Interface:Login(user, password, cpu, localIP, lobbyVersion, useSteamLog
 			ClientType = 1,
 			LobbyVersion = lobbyVersion,
 			SteamAuthToken = steamToken,
+			Dlc = self.steamDlc,
 		}
 	else
 		sendData = {
@@ -75,6 +76,7 @@ function Interface:Login(user, password, cpu, localIP, lobbyVersion, useSteamLog
 			ClientType = 1,
 			LobbyVersion = lobbyVersion,
 			SteamAuthToken = steamToken,
+			Dlc = self.steamDlc,
 		}
 	end
 	self:_SendCommand("Login " .. json.encode(sendData))

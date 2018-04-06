@@ -137,7 +137,7 @@ end
 
 -- notifies that steam is online
 local function SteamOnline(args)
-	WG.SteamHandler.SteamOnline(args.AuthToken, args.FriendSteamID, args.Friends, args.SuggestedName)
+	WG.SteamHandler.SteamOnline(args.AuthToken, args.FriendSteamID, args.Friends, args.SuggestedName, args.Dlc)
 	if args.FriendSteamID then
 		WG.SteamHandler.SteamJoinFriend(args.FriendSteamID)
 		WG.SteamCoopHandler.SteamJoinFriend(args.FriendSteamID)
