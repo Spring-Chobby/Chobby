@@ -58,6 +58,7 @@ function Lobby:_Clean()
 	self.latency = 0 -- in ms
 
 	self.loginData = nil
+	self.loginSent = nil
 	self.myUserName = nil
 	self.myChannels = {}
 	self.myBattleID = nil
@@ -135,6 +136,7 @@ end
 function Lobby:Login(user, password, cpu, localIP, lobbyVersion)
 	self.myUserName = user
 	self.loginData = {user, password, cpu, localIP, lobbyVersion}
+	self.loginSent = true
 	return self
 end
 

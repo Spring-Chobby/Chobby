@@ -95,6 +95,10 @@ end
 ------------------------
 
 function Interface:SetIngameStatus(isInGame)
+	if not self.loginSent then
+		return self
+	end
+
 	local sendData = {
 		IsInGame = isInGame,
 	}
@@ -104,6 +108,10 @@ function Interface:SetIngameStatus(isInGame)
 end
 
 function Interface:SetAwayStatus(isAway)
+	if not self.loginSent then
+		return self
+	end
+
 	local sendData = {
 		IsAfk = isAway,
 	}
