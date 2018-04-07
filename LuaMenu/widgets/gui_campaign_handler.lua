@@ -685,7 +685,7 @@ end
 --------------------------------------------------------------------------------
 -- TODO: use shader animation to ease info panel in
 
-local function SelectPlanet(galaxyHolder, planetHandler, planetID, planetData, startable)
+local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, startable)
 	local Configuration = WG.Chobby.Configuration
 
 	WG.Chobby.interfaceRoot.GetRightPanelHandler().CloseTabs()
@@ -702,7 +702,6 @@ local function SelectPlanet(galaxyHolder, planetHandler, planetID, planetData, s
 		draggable = false,
 		padding = {12, 7, 12, 7},
 	}
-	galaxyHolder:BringToFront()
 	
 	local planetName = string.upper(planetData.name)
 	if not LIVE_TESTING then
@@ -865,7 +864,6 @@ local function SelectPlanet(galaxyHolder, planetHandler, planetID, planetData, s
 		if starmapInfoPanel then
 			starmapInfoPanel:Dispose() 
 			starmapInfoPanel = nil
-			galaxyHolder:SendToBack()
 			return true
 		end
 		return false
@@ -1009,7 +1007,7 @@ local function EnablePlanetClick()
 	planetClickEnabled = true
 end
 
-local function GetPlanet(galaxyHolder, planetListHolder, planetID, planetData, adjacency)
+local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, adjacency)
 	local Configuration = WG.Chobby.Configuration
 	
 	local planetSize = planetData.mapDisplay.size
@@ -1110,7 +1108,7 @@ local function GetPlanet(galaxyHolder, planetListHolder, planetID, planetData, a
 					selectedPlanet.Close()
 					selectedPlanet = nil
 				end
-				selectedPlanet = SelectPlanet(galaxyHolder, planetListHolder, planetID, planetData, startable)
+				selectedPlanet = SelectPlanet(popupOverlay, planetListHolder, planetID, planetData, startable)
 			end
 		},
 		parent = planetHolder,
@@ -1259,7 +1257,7 @@ local function GetPlanet(galaxyHolder, planetListHolder, planetID, planetData, a
 				height = planetData.mapDisplay.hintSize[2],
 				resizable = false,
 				draggable = false,
-				parent = galaxyHolder,
+				parent = planetListHolder,
 			}
 			TextBox:New {
 				x = 12,
@@ -1406,6 +1404,17 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 		parent = window,
 	}
 	
+	local popupOverlay = Control:New {
+		name = "popupOverlay",
+		x = 0,
+		y = 0,
+		width = "100%",
+		height = "100%",
+		padding = {0,0,0,0},
+		parent = window,
+	}
+	popupOverlay:BringToFront()
+	
 	if debugMode then
 		planetWindow.OnMouseDown = planetWindow.OnMouseDown or {}
 		planetWindow.OnMouseDown[#planetWindow.OnMouseDown + 1] = function(self, x, y, mouseButton) 
@@ -1436,7 +1445,7 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 	PLANET_COUNT = #planetConfig
 	for i = 1, PLANET_COUNT do
 		if (not PLANET_WHITELIST) or PLANET_WHITELIST[i] then
-			planetList[i] = GetPlanet(window, planetWindow, i, planetConfig[i], planetAdjacency[i])
+			planetList[i] = GetPlanet(popupOverlay, planetWindow, i, planetConfig[i], planetAdjacency[i])
 		end
 	end
 	
