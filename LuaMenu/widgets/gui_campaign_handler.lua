@@ -1674,14 +1674,13 @@ function externalFunctions.GetControl(newLiveTestingMode, newPlanetWhitelist, fe
 				if obj:IsEmpty() then
 					InitializeDifficultySetting(obj)
 					planetHandler = InitializePlanetHandler(obj, newLiveTestingMode, newPlanetWhitelist, feedbackLink)
-					
-					local x, y = obj:LocalToScreen(0, 0)
-					RepositionBackgroundAndPlanets(x, y, obj.width, obj.height)
 					UpdateGalaxy()
 				end
 				
 				local background = WG.Chobby.interfaceRoot.GetBackgroundHolder()
 				background:SetImageOverride(GALAXY_IMAGE)
+				local x, y = obj:LocalToScreen(0, 0)
+				RepositionBackgroundAndPlanets(x, y, obj.width, obj.height)
 				
 				obj:UpdateClientArea()
 				WG.Chobby.interfaceRoot.GetRightPanelHandler().CloseTabs()
