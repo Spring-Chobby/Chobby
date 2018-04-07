@@ -32,6 +32,8 @@ function Interface:init()
 end
 
 function Interface:Connect(host, port, user, password, cpu, localIP, lobbyVersion)
+--host = "test.zero-k.info"
+--port = 8202
 	self:super("Connect", host, port)
 	if self.client then
 		self.client:close()

@@ -19,6 +19,10 @@ local badges = {
 		text = "Gold donator",
 		image = "LuaMenu/configs/gameConfig/zk/badges/donator_2.png",
 	},
+	donator_3 = {
+		text = "Diamond donator",
+		image = "LuaMenu/configs/gameConfig/zk/badges/donator_3.png",
+	},
 	dev_content = {
 		text = "External developer",
 		image = "LuaMenu/configs/gameConfig/zk/badges/dev_content.png",
