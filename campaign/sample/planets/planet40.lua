@@ -26,7 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G9V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24489",
-			text = [[Enter this active battle and dominate the low ground with the raw power of the Tank factory. Push through the enemy defenses to destroy their Nuclear Silo while protecting your own team's Anti-Nukes.]]
+			text = [[Enter this active battle and dominate the low ground with the raw power of the Tank Foundry. Push through the enemy defenses to destroy their Nuclear Silo while protecting your own team's Anti-Nukes.]]
 		},
 		tips = {
 			{

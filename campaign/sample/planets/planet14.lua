@@ -26,7 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G1V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24441",
-			text = [[You're outnumbered on this small battlefield, but your Felon shield bots will allow you to fight efficiently and minimise losses. Expand aggressively and reclaim the nearby rocks and trees to build up your army and economy, then push forward and destroy both enemies.]]
+			text = [[You're outnumbered on this small battlefield, but your Felon shieldbots will allow you to fight efficiently and minimise losses. Expand aggressively and reclaim the nearby rocks and trees to build up your army and economy, then push forward and destroy both enemies.]]
 		},
 		tips = {
 			{
