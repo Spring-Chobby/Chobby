@@ -40,9 +40,9 @@ local function ApplySessionToken(urlString)
 		return urlString, false
 	end
 	local lobby = WG.LibLobby.lobby
-	if lobby:GetMyIsAdmin() then
-		return urlString, false -- Don't use tokens for admins
-	end
+	--if lobby:GetMyIsAdmin() then
+	--	return urlString, false -- Don't use tokens for admins
+	--end
 	local token = lobby:GetMySessionToken()
 	if not token then
 		return urlString, not string.find(urlString, "/mediawiki/") -- MediaWiki does not need token.
