@@ -81,6 +81,9 @@ local function TrySimpleLogin()
 end
 
 local function CheckAutologin()
+	if lobby.userCountLimited then
+		return
+	end
 	local Configuration = WG.Chobby.Configuration
 	if not TrySimpleSteamLogin() then
 		if Configuration.autoLogin and Configuration.userName then
@@ -173,7 +176,7 @@ local function InitializeListeners()
 			Configuration.password = registerPassword
 			registerName = nil
 		end
-		if Configuration.userName then
+		if Configuration.userName and not lobby.userCountLimited then
 			lobby:Login(Configuration.userName, Configuration.password, 3, nil, "Chobby", steamMode)
 		end
 	end

@@ -674,8 +674,8 @@ local registerResponseCodes = {
 	[3] = "Invalid characters in password",
 	[4] = "Banned",
 	[5] = "Invalid characters in name",
-	[6] = "Invalid Steam token",
-	[7] = "Steam already linked",
+	[6] = "Invalid Steam token, are you in offline mode?",
+	[7] = "Steam already registered",
 	[8] = "Missing password and token",
 	[9] = "Too many connection attempts",
 	[10] = "Already linked steam, connecting",
@@ -687,11 +687,11 @@ local loginResponseCodes = {
 	[2] = "Invalid characters in name",
 	[3] = "Incorrect password",
 	[4] = "Banned",
-	[5] = "Invalid Steam token",
+	[5] = "Invalid Steam token, are you in offline mode?",
 	[6] = "Too many connection attempts",
 	[7] = "Steam account not yet linked. Re-register.",
-	[8] = "Your Steam account is not linked.",
-	[9] = "Your Steam account is already linked to a different username.",
+	[8] = "Your steam account is already linked to a different account.",
+	[9] = "Sorry, the server is full, please retry later.",
 }
 
 function Interface:_Welcome(data)
@@ -702,7 +702,8 @@ function Interface:_Welcome(data)
 	self.REVERSE_COMPAT = (data.Version == "1.4.9.26")
 	self:_OnConnect(4, data.Engine, 2, 1)
 	self:_OnUserCount(data.UserCount)
-	
+	self.userCountLimited = data.UserCountLimited
+
 	if data.Factions then
 		self:_OnPwFactionUpdate(data.Factions)
 	end

@@ -31,6 +31,7 @@ function Lobby:_Clean()
 	self.ignoredCount = 0
 	self.ignoreListRecieved = false
 	self.loginInfoEndSent = false
+	self.userCountLimited = false
 
 	self.channels = {}
 	self.channelCount = 0
