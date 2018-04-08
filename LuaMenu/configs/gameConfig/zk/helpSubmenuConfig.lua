@@ -72,6 +72,13 @@ local communityLines = {
 		end
 	},
 	{
+		"Contributors and developers.",
+		"Credits",
+		function ()
+			WG.BrowserHandler.OpenUrl("http://zero-k.info/mediawiki/index.php?title=Credits")
+		end
+	},
+	{
 		"Shadowfury333's Youtube channel.",
 		"Youtube",
 		function ()

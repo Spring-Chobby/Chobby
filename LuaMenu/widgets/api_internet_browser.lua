@@ -44,8 +44,9 @@ local function ApplySessionToken(urlString)
 	--	return urlString, false -- Don't use tokens for admins
 	--end
 	local token = lobby:GetMySessionToken()
-	if not token then
-		return urlString, not string.find(urlString, "/mediawiki/") -- MediaWiki does not need token.
+	local isWiki = string.find(urlString, "/mediawiki/")
+	if isWiki or (not token) then
+		return urlString, not isWiki -- MediaWiki does not need token.
 	end
 	local alreadyAddedPos = string.find(urlString, "%?asmallcake=")
 	if alreadyAddedPos then
