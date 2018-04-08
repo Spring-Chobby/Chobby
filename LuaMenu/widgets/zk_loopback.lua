@@ -21,6 +21,7 @@ local buffer = ""
 local commands = {} -- table with possible commands
 
 local PRINT_DEBUG = false
+local STEAM_OVERLAY_USABLE = (Platform.osFamily ~= "Linux" and Platform.osFamily ~= "FreeBSD")
 
 -- debug message/popup
 local function Echo(stuff)
@@ -368,6 +369,10 @@ end
 -- opens steam section, default = "LobbyInvite"
 -- WARNING: FPS needs to be increased, overlay works at chobby FPS
 function WrapperLoopback.SteamOpenOverlaySection(name)
+	if not STEAM_OVERLAY_USABLE then
+		WG.Chobby.InformationPopup("Steam overlay is currently broken on linux. Play coop with friends by inviting via Steam.")
+		return
+	end
 	SendCommand("SteamOpenOverlaySection", {Option = name or "LobbyInvite"})
 end
 
