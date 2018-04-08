@@ -38,9 +38,13 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[As skirmishers, Ronins are faster than and outrange Reavers so can destroy them without losses. Glaives can dodge the slow Ronin rockets and pose a much bigger threat.]]
 			},
 			{
-				image = "unitpics/energysolar.png",
-				text = [[Don't forget to build Metal Extractors and Solar Collectors to power your economy and build up a large army. Connect energy generators to your Mexes to overdrive them, giving you more metal income. (See the manual for more about overdrive.)]]
-			},
+				image = "unitpics/cloakcon.png",
+				text = [[Instead of making a second factory, use constructors to assist your first one - it's more cost efficient.]]
+			}
+			-- {
+				-- image = "unitpics/energysolar.png",
+				-- text = [[Don't forget to build Metal Extractors and Solar Collectors to power your economy and build up a large army. Connect energy generators to your Mexes to overdrive them, giving you more metal income. (See the manual for more about overdrive.)]]
+			-- },
 		},
 		gameConfig = {
 			mapName = "Battle for PlanetXVII-v01",

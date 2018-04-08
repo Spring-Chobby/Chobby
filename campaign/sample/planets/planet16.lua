@@ -39,7 +39,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/staticjammer.png",
-				text = [[The Iris mobile cloaker can morph to an from a static version - the Cornea. The Cornea cloaks units in a larger radius and is much harder to spot due it's reduced decloak radius. Cornea can be built by all standard constructors so Iris is avalible even without a Cloakbot Factory.]]
+				text = [[The Iris mobile cloaker can morph to and from a static version - the Cornea. The Cornea cloaks units in a larger radius and is much harder to spot due it's reduced decloak radius. Cornea can be built by all standard constructors so Iris is avalible even without a Cloakbot Factory.]]
 			},
 		},
 		gameConfig = {
