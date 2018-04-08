@@ -118,6 +118,7 @@ return {
 		online = "Online",
 		offline = "Offline",
 		connecting = "Connecting",
+		connect = "Connect",
 		battle = "Battle",
 		dont_have_map = "Don't have map",
 		dont_have_game = "Don't have game",

@@ -117,7 +117,7 @@ function SteamLoginWindow:init(failFunction, cancelText, windowClassname)
 		width = 130,
 		bottom = 2,
 		height = 70,
-		caption = i18n("register_verb"),
+		caption = i18n("connect"),
 		font = Configuration:GetFont(3),
 		classname = "action_button",
 		OnClick = {
