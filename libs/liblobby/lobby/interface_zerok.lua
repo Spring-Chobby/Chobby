@@ -700,9 +700,9 @@ function Interface:_Welcome(data)
 	-- Version of Game
 	-- REVERSE COMPAT
 	self.REVERSE_COMPAT = (data.Version == "1.4.9.26")
+	self.userCountLimited = data.UserCountLimited
 	self:_OnConnect(4, data.Engine, 2, 1)
 	self:_OnUserCount(data.UserCount)
-	self.userCountLimited = data.UserCountLimited
 
 	if data.Factions then
 		self:_OnPwFactionUpdate(data.Factions)
