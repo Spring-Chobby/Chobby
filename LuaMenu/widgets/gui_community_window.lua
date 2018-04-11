@@ -827,10 +827,11 @@ local function InitializeControls(window)
 	LeaveIntentionallyBlank(rightLower, "(reserved)")
 	
 	-- Populate link panel
-	AddLinkButton(leftCenter, "Discord", "Chat on the Zero-K Discord server.", "https://discord.gg/aab63Vt", 0, 0, 0, "75.5%")
+	AddLinkButton(leftCenter, "Zero-K", "Visit your home page at Zero-K", "http://zero-k.info/", 0, 0, "75.5%", 0)
 	AddLinkButton(leftCenter, "Forum",   "Browse or post on the forums.", "http://zero-k.info/Forum",   0, 0, "25.5%", "50.5%")
 	AddLinkButton(leftCenter, "Manual",  "Read the manual and unit guide.", "http://zero-k.info/mediawiki/index.php?title=Manual", 0, 0, "50.5%", "25.5%")
-	AddLinkButton(leftCenter, "Replays", "Watch replays of online games.", "http://zero-k.info/Battles", 0, 0, "75.5%", 0)
+	AddLinkButton(leftCenter, "Discord", "Chat on the Zero-K Discord server.", "https://discord.gg/aab63Vt", 0, 0, 0, "75.5%")
+	
 	
 	-- News Handler
 	local newsHandler = GetNewsHandler(topWide, 4)
