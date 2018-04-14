@@ -948,19 +948,19 @@ local settingsConfig = {
 
 local settingsDefault = {
 	WaterType = "Bumpmapped",
-	WaterQuality = "High",
+	WaterQuality = "Medium",
 	DeferredRendering = "On",
 	UnitReflections = "Medium",
 	Shadows = "Units and Terrain",
-	ShadowDetail = "Ultra",
-	ParticleLimit = "25000",
-	TerrainDetail = "High",
-	VegetationDetail = "High",
+	ShadowDetail = "Medium",
+	ParticleLimit = "15000",
+	TerrainDetail = "Medium",
+	VegetationDetail = "Medium",
 	FeatureFade = "Off",
 	CompatibilityMode = "Off",
 	AtiIntelCompatibility_2 = "Automatic",
-	AntiAliasing = "High",
-	ShaderDetail = "High",
+	AntiAliasing = "Low",
+	ShaderDetail = "Medium",
 	LupsAirJet = "On",
 	LupsRibbon = "On",
 	LupsShieldSphereColor = "On",
@@ -992,23 +992,43 @@ end
 
 local function DefaultPresetFunc()
 	if Platform then
-		local gpuMemorySize = Platform.gpuMemorySize
-		if gpuMemorySize then
-			if gpuMemorySize < 1024 then
-				-- Minimal
-				return settingsConfig[1].presets[1].settings
-			elseif gpuMemorySize < 2048 then
-				-- Low
-				return settingsConfig[1].presets[2].settings
-			elseif gpuMemorySize == 2048 then
+		local gpuMemorySize = Platform.gpuMemorySize or 0
+		if gpuMemorySize == 0 then
+			-- Apparently gpuMemorySize only exists on nvidia
+			if Platform.glVersionShort and string.sub(Platform.glVersionShort or "3", 1, 1) ~= "3" then
 				-- Medium
+				Spring.Echo("Medium settings preset", Platform.glVersionShort)
+				return settingsConfig[1].presets[4].settings
+			else
+				-- Default to Low
+				Spring.Echo("Low settings preset", Platform.glVersionShort)
 				return settingsConfig[1].presets[3].settings
 			end
+		else
+			-- gpuMemorySize is in KB even though wiki claims MB.
+			if gpuMemorySize < 1024*1024 then
+				-- Minimal
+				Spring.Echo("Minimal settings preset", gpuMemorySize)
+				return settingsConfig[1].presets[2].settings
+			elseif gpuMemorySize < 2048*1024 then
+				-- Low
+				Spring.Echo("Low settings preset", gpuMemorySize)
+				return settingsConfig[1].presets[3].settings
+			elseif gpuMemorySize == 2048*1024 then
+				-- Medium
+				Spring.Echo("Medium settings preset", gpuMemorySize)
+				return settingsConfig[1].presets[4].settings
+			else
+				-- High
+				Spring.Echo("High settings preset", gpuMemorySize)
+				return settingsConfig[1].presets[5].settings
+			end
 		end
-		-- High
-		return settingsConfig[1].presets[4].settings
 	end
-	return false
+	
+	-- Default to Medium
+	Spring.Echo("Medium settings preset", Platform, (Platform or {}).gpuMemorySize, (Platform or {}).glVersionShort)
+	return settingsConfig[1].presets[4].settings
 end
 
 return settingsConfig, settingsNames, settingsDefault, DefaultPresetFunc

@@ -218,8 +218,17 @@ function Configuration:init()
 	self.countryShortnames = VFS.Include(LUA_DIRNAME .. "configs/countryShortname.lua")
 
 	self.game_settings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings.lua")
+	self.forcedCompatibilityProfile = VFS.Include(LUA_DIRNAME .. "configs/springsettings/forcedCompatibilityProfile.lua")
 
-	self.settingsMenuValues = self.gameConfig.settingsDefault -- Only until configuration data is loaded.
+	local default = self.gameConfig.SettingsPresetFunc and self.gameConfig.SettingsPresetFunc()
+	if default then
+		self.settingsMenuValues = {}
+		for name, defValue in pairs(default) do
+			self:SetSettingsConfigOption(name, defValue)
+		end
+	else
+		self.settingsMenuValues = self.gameConfig.settingsDefault -- Only until configuration data is loaded.
+	end
 
 	self.animate_lobby = (gl.CreateShader ~= nil)
 	self.minimapDownloads = {}
@@ -395,19 +404,9 @@ function Configuration:SetConfigData(data)
 		end
 	end
 
-	self.forcedCompatibilityProfile = VFS.Include(LUA_DIRNAME .. "configs/springsettings/forcedCompatibilityProfile.lua")
-
-	local default = self.gameConfig.SettingsPresetFunc and self.gameConfig.SettingsPresetFunc()
-	if default then
-		if not data.settingsMenuValues then
-			data.settingsMenuValues = {} -- Override generic default that is set for safety on initialize.
-		end
-		
-		-- Set defaults for missing values.
-		for name, defValue in pairs(default) do
-			if not (self.settingsMenuValues[name] and self:SetSettingsConfigOption(name, self.settingsMenuValues[name])) then
-				self:SetSettingsConfigOption(name, defValue)
-			end
+	if data.settingsMenuValues then
+		for name, value in pairs(data.settingsMenuValues) do
+			self:SetSettingsConfigOption(name, value)
 		end
 	end
 end
