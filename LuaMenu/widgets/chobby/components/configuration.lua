@@ -192,9 +192,6 @@ function Configuration:init()
 	self.enableTextToSpeech = true
 	self.showOldAiVersions = false
 	self.drawAtFullSpeed = false
-	
-	self.lobby_fullscreen = 3
-	self.game_fullscreen = 3
 
 	self.chatFontSize = 18
 
