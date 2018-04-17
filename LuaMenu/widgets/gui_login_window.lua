@@ -81,14 +81,28 @@ local function TrySimpleLogin()
 end
 
 local function CheckAutologin()
-	--if lobby.userCountLimited then
-	--	return
-	--end
+	local UserCountLimited = WG.CommunityWindow.LoadStaticCommunityData().UserCountLimited
+	if UserCountLimited then
+		Spring.Echo("No automatic login - UserCountLimited")
+		return
+	end
 	local Configuration = WG.Chobby.Configuration
 	if not TrySimpleSteamLogin() then
 		if Configuration.autoLogin and Configuration.userName then
 			TrySimpleLogin()
 		end
+	end
+end
+
+local function CheckFirstTimeRegister()
+	local UserCountLimited = WG.CommunityWindow.LoadStaticCommunityData().UserCountLimited
+	if UserCountLimited then
+		Spring.Echo("No automatic login - UserCountLimited")
+		return
+	end
+	local Configuration = WG.Chobby.Configuration
+	if Configuration.firstLoginEver then
+		LoginWindowHandler.TryLogin()
 	end
 end
 
@@ -176,7 +190,6 @@ local function InitializeListeners()
 			Configuration.password = registerPassword
 			registerName = nil
 		end
-		--if Configuration.userName and not lobby.userCountLimited then
 		if Configuration.userName then
 			lobby:Login(Configuration.userName, Configuration.password, 3, nil, "Chobby", steamMode)
 		end
@@ -210,13 +223,6 @@ function LoginWindowHandler.TryLogin(newLoginAcceptedFunction)
 	if not TrySimpleSteamLogin() then
 		local loginWindow = GetNewLoginWindow()
 		local popup = WG.Chobby.PriorityPopup(loginWindow.window, loginWindow.CancelFunc, loginWindow.AcceptFunc)
-	end
-end
-
-local function CheckFirstTimeRegister()
-	local Configuration = WG.Chobby.Configuration
-	if Configuration.firstLoginEver then
-		LoginWindowHandler.TryLogin()
 	end
 end
 

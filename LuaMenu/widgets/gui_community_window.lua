@@ -30,7 +30,7 @@ local NEWS_FILE = "news/community.json"
 
 local function LoadStaticCommunityData()
 	if not VFS.FileExists(NEWS_FILE) then
-		return
+		return {}
 	end
 	local data
 	xpcall(
@@ -42,7 +42,7 @@ local function LoadStaticCommunityData()
 			Spring.Log("community", LOG.ERROR, debug.traceback(err))
 		end
 	)
-	return data
+	return data or {}
 end
 
 

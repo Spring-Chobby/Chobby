@@ -253,7 +253,7 @@ local function InitializeControls()
 		{name = "", tooltip = "Downloaded", x = 610, width = 40, image = "LuaMenu/images/download.png"},
 	}
 	
-	local featuredMapList = WG.CommunityWindow.LoadStaticCommunityData().MapItems
+	local featuredMapList = WG.CommunityWindow.LoadStaticCommunityData().MapItems or {}
 	local mapFuncs = {}
 	
 	local mapList = WG.Chobby.SortableList(listHolder, headings, 60)
