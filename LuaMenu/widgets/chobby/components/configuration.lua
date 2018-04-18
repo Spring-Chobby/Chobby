@@ -193,8 +193,8 @@ function Configuration:init()
 	self.showOldAiVersions = false
 	self.drawAtFullSpeed = false
 	
-	self.lobby_fullscreen = 3
-	self.game_fullscreen = 3
+	self.lobby_fullscreen = 1
+	self.game_fullscreen = 1
 
 	self.chatFontSize = 18
 
