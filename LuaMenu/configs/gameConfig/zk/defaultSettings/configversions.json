@@ -533,7 +533,7 @@
       },
       {
          "Platform":null,
-         "VersionNumber":3,
+         "VersionNumber":4,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/games/seeker.sdz",
          "TargetPath":"games/seeker.sdz"
       },
