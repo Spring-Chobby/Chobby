@@ -753,10 +753,11 @@ local settingsConfig = {
 						applyFunction = function(_, conf)
 							if conf:GetIsNotRunningNvidia() then
 								conf:UpdateFixedSettings(conf.AtiIntelSettingsOverride)
-								Spring.Echo("Set ATI/intel/other non-nvidia compatibility state: Enabled")
+								Spring.Echo("Set ATI/intel/other non-nvidia compatibility state: Enabled (Automatic)")
 								return
 							end
-							Spring.Echo("Set ATI/intel/other non-nvidia compatibility state: Disabled")
+							conf:UpdateFixedSettings()
+							Spring.Echo("Set ATI/intel/other non-nvidia compatibility state: Disabled (Automatic)")
 							return
 						end
 					},
@@ -764,7 +765,7 @@ local settingsConfig = {
 						name = "Off",
 						applyFunction = function(_, conf)
 							conf:UpdateFixedSettings()
-							Spring.Echo("Set ATI/intel/other non-nvidia compatibility state: Enabled")
+							Spring.Echo("Set ATI/intel/other non-nvidia compatibility state: Disabled")
 							return
 						end
 					},

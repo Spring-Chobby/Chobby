@@ -24,6 +24,9 @@ local loginAcceptedFunction
 
 local registerRecieved = false
 
+-- WG interface
+local LoginWindowHandler = {}
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Initialization
@@ -201,8 +204,6 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- External Functions
-
-local LoginWindowHandler = {}
 
 function LoginWindowHandler.QueueRegister(name, password)
 	registerName = name
