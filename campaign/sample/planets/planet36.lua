@@ -31,7 +31,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/gunshipcon.png",
-				text = [[Gunships are flying units which can hover in place and tend to move faster than land units. Anti-air units and turrets are most effective against Gunships, but most units with a fast-moving or projectile or laser will also pose a threat.]]
+				text = [[Gunships are flying units which can hover in place and tend to move faster than land units. Anti-air units and turrets are most effective against Gunships, but most units with a fast-moving projectile or laser will also pose a threat.]]
 			},
 			{
 				image = "unitpics/gunshipraid.png",
