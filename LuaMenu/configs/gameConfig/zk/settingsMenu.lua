@@ -5,8 +5,9 @@ local FALSE = "false"
 
 local lupsFileTarget = "lups.cfg"
 
-local function UpdateLups()
-	local settings = WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.settingsMenuValues
+local function UpdateLups(_, conf)
+	conf = conf or (WG.Chobby and WG.Chobby.Configuration)
+	local settings = conf and conf.settingsMenuValues
 	if not settings then
 		return
 	end
@@ -810,8 +811,8 @@ local settingsConfig = {
 			{
 				name = "Default",
 				settings = {
-					InterfaceScale = defaultUiScale,
 					--IconDistance = 151,
+					InterfaceScale = defaultUiScale,
 					MouseZoomSpeed = 25,
 					InvertZoom = "Off",
 					TextToSpeech = "On",
@@ -865,9 +866,13 @@ local settingsConfig = {
 				options = {
 					{
 						name = "On",
-						applyFunction = function()
+						applyFunction = function(_, conf)
+							conf = conf or (WG.Chobby and WG.Chobby.Configuration)
+							if not conf then
+								return {}
+							end
 							invertZoomMult = 1
-							local currentZoom = WG.Chobby.Configuration.settingsMenuValues["MouseZoomSpeed"] or 25
+							local currentZoom = conf.settingsMenuValues["MouseZoomSpeed"] or 25
 							return {
 								ScrollWheelSpeed = currentZoom,
 							}
@@ -875,9 +880,13 @@ local settingsConfig = {
 					},
 					{
 						name = "Off",
-						applyFunction = function()
+						applyFunction = function(_, conf)
+							conf = conf or (WG.Chobby and WG.Chobby.Configuration)
+							if not conf then
+								return {}
+							end
 							invertZoomMult = -1
-							local currentZoom = WG.Chobby.Configuration.settingsMenuValues["MouseZoomSpeed"] or 25
+							local currentZoom = conf.settingsMenuValues["MouseZoomSpeed"] or 25
 							return {
 								ScrollWheelSpeed = currentZoom * -1,
 							}
@@ -891,17 +900,23 @@ local settingsConfig = {
 				options = {
 					{
 						name = "On",
-						applyFunction = function()
-							local Configuration = WG.Chobby.Configuration
-							Configuration:SetConfigValue("enableTextToSpeech", true)
+						applyFunction = function(_, conf)
+							conf = conf or (WG.Chobby and WG.Chobby.Configuration)
+							if not conf then
+								return {}
+							end
+							conf:SetConfigValue("enableTextToSpeech", true)
 							return false
 						end
 					},
 					{
 						name = "Off",
-						applyFunction = function()
-							local Configuration = WG.Chobby.Configuration
-							Configuration:SetConfigValue("enableTextToSpeech", false)
+						applyFunction = function(_, conf)
+							conf = conf or (WG.Chobby and WG.Chobby.Configuration)
+							if not conf then
+								return false
+							end
+							conf:SetConfigValue("enableTextToSpeech", false)
 							return false
 						end
 					},
@@ -913,10 +928,11 @@ local settingsConfig = {
 				isNumberSetting = true,
 				minValue = 0,
 				maxValue = 1000,
-				applyFunction = function(value)
+				applyFunction = function(value, conf)
+					conf = conf or (WG.Chobby and WG.Chobby.Configuration)
 					local camPan = 50
-					if WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.game_settings then
-						camPan = WG.Chobby.Configuration.game_settings.OverheadScrollSpeed or camPan
+					if conf and conf.game_settings then
+						camPan = conf.game_settings.OverheadScrollSpeed or camPan
 					end
 					value = value*(-1/200)
 					return {
@@ -930,10 +946,11 @@ local settingsConfig = {
 				isNumberSetting = true,
 				minValue = 0,
 				maxValue = 1000,
-				applyFunction = function(value)
+				applyFunction = function(value, conf)
+					conf = conf or (WG.Chobby and WG.Chobby.Configuration)
 					local middleScroll = 10
-					if WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.settingsMenuValues then
-						middleScroll = WG.Chobby.Configuration.settingsMenuValues.MiddlePanSpeed or middleScroll
+					if conf and conf.settingsMenuValues then
+						middleScroll = conf.settingsMenuValues.MiddlePanSpeed or middleScroll
 					end
 					middleScroll = middleScroll*(-1/200)
 					return {
@@ -991,6 +1008,8 @@ for i = 1, #settingsConfig do
 end
 
 local function DefaultPresetFunc()
+	local gameDefault = settingsConfig[2].presets[1].settings
+	
 	if Platform then
 		local gpuMemorySize = Platform.gpuMemorySize or 0
 		if gpuMemorySize == 0 then
@@ -998,37 +1017,37 @@ local function DefaultPresetFunc()
 			if Platform.glVersionShort and string.sub(Platform.glVersionShort or "3", 1, 1) ~= "3" then
 				-- Medium
 				Spring.Echo("Medium settings preset", Platform.glVersionShort)
-				return settingsConfig[1].presets[4].settings
+				return Spring.Utilities.MergeTable(gameDefault, settingsConfig[1].presets[4].settings, true)
 			else
 				-- Default to Low
 				Spring.Echo("Low settings preset", Platform.glVersionShort)
-				return settingsConfig[1].presets[3].settings
+				return Spring.Utilities.MergeTable(gameDefault, settingsConfig[1].presets[3].settings, true)
 			end
 		else
 			-- gpuMemorySize is in KB even though wiki claims MB.
 			if gpuMemorySize < 1024*1024 then
 				-- Minimal
 				Spring.Echo("Minimal settings preset", gpuMemorySize)
-				return settingsConfig[1].presets[2].settings
+				return Spring.Utilities.MergeTable(gameDefault, settingsConfig[1].presets[2].settings, true)
 			elseif gpuMemorySize < 2048*1024 then
 				-- Low
 				Spring.Echo("Low settings preset", gpuMemorySize)
-				return settingsConfig[1].presets[3].settings
+				return Spring.Utilities.MergeTable(gameDefault, settingsConfig[1].presets[3].settings, true)
 			elseif gpuMemorySize == 2048*1024 then
 				-- Medium
 				Spring.Echo("Medium settings preset", gpuMemorySize)
-				return settingsConfig[1].presets[4].settings
+				return Spring.Utilities.MergeTable(gameDefault, settingsConfig[1].presets[4].settings, true)
 			else
 				-- High
 				Spring.Echo("High settings preset", gpuMemorySize)
-				return settingsConfig[1].presets[5].settings
+				return Spring.Utilities.MergeTable(gameDefault, settingsConfig[1].presets[5].settings, true)
 			end
 		end
 	end
 	
 	-- Default to Medium
 	Spring.Echo("Medium settings preset", Platform, (Platform or {}).gpuMemorySize, (Platform or {}).glVersionShort)
-	return settingsConfig[1].presets[4].settings
+	return Spring.Utilities.MergeTable(gameDefault, settingsConfig[1].presets[4].settings, true)
 end
 
 return settingsConfig, settingsNames, settingsDefault, DefaultPresetFunc

@@ -519,6 +519,9 @@ local settings = {
 					{
 						name = "On",
 						applyFunction = function()
+							if not WG.Chobby then
+								return
+							end
 							invertZoomMult = 1
 							local currentZoom = WG.Chobby.Configuration.settingsMenuValues["MouseZoomSpeed"] or 25
 							return {
@@ -529,6 +532,9 @@ local settings = {
 					{
 						name = "Off",
 						applyFunction = function()
+							if not WG.Chobby then
+								return
+							end
 							invertZoomMult = -1
 							local currentZoom = WG.Chobby.Configuration.settingsMenuValues["MouseZoomSpeed"] or 25
 							return {
