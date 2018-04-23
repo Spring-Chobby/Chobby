@@ -485,6 +485,7 @@ function Configuration:GetConfigData()
 		window_YResolutionWindowed = self.window_YResolutionWindowed,
 		campaignSaveFile = self.campaignSaveFile,
 		nextCampaignSaveNumber = self.nextCampaignSaveNumber,
+		steamReleasePopupSeen = self.steamReleasePopupSeen,
 	}
 end
 

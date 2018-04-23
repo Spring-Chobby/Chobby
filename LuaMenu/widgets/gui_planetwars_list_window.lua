@@ -21,7 +21,7 @@ local planetwarsSoon = false
 local planetwarsEnabled = false
 local planetwarsLevelRequired = false
 
-local IMG_LINK     = LUA_DIRNAME .. "images/link.png"
+local IMG_LINK = LUA_DIRNAME .. "images/link.png"
 
 local panelInterface
 local PLANET_NAME_LENGTH = 210

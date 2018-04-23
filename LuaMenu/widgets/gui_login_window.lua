@@ -242,8 +242,8 @@ function widget:Initialize()
 end
 
 function widget:Update()
-	WG.Delay(CheckAutologin, 1)
-	WG.Delay(CheckFirstTimeRegister, 1.2)
+	WG.Delay(CheckAutologin, 1.5)
+	WG.Delay(CheckFirstTimeRegister, 1.8)
 	widgetHandler:RemoveCallIn("Update")
 end
 
