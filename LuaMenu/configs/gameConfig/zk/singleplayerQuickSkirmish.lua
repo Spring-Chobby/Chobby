@@ -33,6 +33,7 @@ local skirmishSetupData = {
 		{
 			humanName = "Select Map",
 			name = "map",
+			tipText = "Click 'Advanced' for more maps and game modes.",
 			minimap = true,
 			options = {
 				"TitanDuel 2.2",

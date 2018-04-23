@@ -1305,6 +1305,21 @@ local function InitializeSetupPage(subPanel, screenHeight, pageConfig, nextPage,
 		parent = subPanel,
 	}
 	nextButton:Hide()
+	
+	local tipTextBox
+	if pageConfig.tipText then
+		tipTextBox = TextBox:New {
+			x = "26%",
+			y = 3*buttonScale + 20 + (#pageConfig.options)*buttonScale,
+			right = "26%",
+			height = 200,
+			align = "left",
+			fontsize = Configuration:GetFont(2).size,
+			text = pageConfig.tipText,
+			parent = subPanel,
+		}
+		tipTextBox:Hide()
+	end
 
 	local advButton = Button:New {
 		x = "78%",
@@ -1378,6 +1393,9 @@ local function InitializeSetupPage(subPanel, screenHeight, pageConfig, nextPage,
 					ButtonUtilities.SetButtonSelected(obj)
 					selectedOptions[pageConfig.name] = i
 					nextButton:SetVisibility(true)
+					if tipTextBox then
+						tipTextBox:SetVisibility(true)
+					end
 					if advButton then
 						advButton:SetVisibility(true)
 					end
