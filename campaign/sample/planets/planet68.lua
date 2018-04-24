@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G1V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24642",
-			text = [[Your opponent is already conducting a victory dance with their Disco Rave Party. Hold off their assault until your Starlight orbital chisel is complete, then demonstrate that their celebration is premature.]]
+			text = [[Your opponent is already conducting a victory dance with their Disco Rave Party cannon. Hold off their assault until your Starlight orbital chisel is complete, then demonstrate that their celebration is premature.]]
 		},
 		tips = {
 			{
