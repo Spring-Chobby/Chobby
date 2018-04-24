@@ -39,7 +39,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/vehraid.png",
-				text = [[The Scorchers heat ray weapon is incredibly lethal at point-blank range. Destroy them from a distance or stun them with Imps before engaging.]]
+				text = [[The Scorchers' heat ray weapon is incredibly lethal at point-blank range. Destroy them from a distance or stun them with Imps before engaging.]]
 			},
 		},
 		gameConfig = {
@@ -58,6 +58,13 @@ local function GetPlanet(planetUtilities, planetID)
 					"turretmissile"
 				},
 				startUnits = {
+					{
+						name = "cloakriot",
+						x = 3550,
+						z = 1250,
+						facing = 0,
+						difficultyAtMost = 2,
+					}, 
 					{
 						name = "factorycloak",
 						x = 3276,

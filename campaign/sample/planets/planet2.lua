@@ -26,16 +26,16 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G4V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24417",
-			text = [[Glaives and Reavers served you well in the previous battle, but on this planet your opponent has prepared their own Reavers and Stardust turrets to counter them. Build a Cloakbot Factory, then counter them with longer-ranged Ronins to secure victory.]]
+			text = [[Your opponent has prepared powerful close-range Stardust turrets and Reavers to defeat your raiders. Build a Cloakbot Factory, then counter their strategy with longer-ranged Ronins to secure victory.]]
 		},
 		tips = {
 			{
 				image = "unitpics/turretriot.png",
-				text = [[Stardusts will shred any unit which gets into its range. Your Ronins can avoid this fate by attacking from just outside the Stardusts' range.]]
+				text = [[Stardusts are riot turrets which will shred any nearby units. Your Ronins can avoid this fate by attacking from just outside the Stardusts' range.]]
 			},
 			{
 				image = "unitpics/cloakskirm.png",
-				text = [[As skirmishers, Ronins are faster than and outrange Reavers so can destroy them without losses. Glaives can dodge the slow Ronin rockets and pose a much bigger threat.]]
+				text = [[Ronins are skirmishers which can safely destroy Reavers from long range. Glaives are fast enough to close the distance while avoiding Ronin rockets.]]
 			},
 			{
 				image = "unitpics/cloakcon.png",
