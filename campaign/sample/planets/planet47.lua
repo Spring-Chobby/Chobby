@@ -2520,6 +2520,7 @@ local function GetPlanet(planetUtilities, planetID)
 			bonusObjectiveConfig = {
 				[1] = { -- Make six Widows
 					satisfyOnce = true,
+					countRemovedUnits = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 9,
 					unitTypes = {
