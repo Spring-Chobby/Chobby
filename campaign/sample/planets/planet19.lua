@@ -39,7 +39,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/staticmex.png",
-				text = [[Connecting Metal Extractors to your energy production structures can give you more metal income through Overdrive. Check the wiki for more information about how Overdrive works.]]
+				text = [[Connecting Metal Extractors to your energy production structures can give you more metal income through Overdrive. Check the online manual for more information about how Overdrive works.]]
 			},
 			{
 				image = "unitpics/staticcon.png",
