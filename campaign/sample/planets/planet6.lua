@@ -119,10 +119,11 @@ local function GetPlanet(planetUtilities, planetID)
 					commanderLevel = 2,
 					commander = {
 						name = "Firelord",
-						chassis = "recon",
+						chassis = "guardian",
 						decorations = {
 						},
 						modules = {
+							"commweapon_flamethrower",
 							"commweapon_flamethrower",
 						}
 					},
