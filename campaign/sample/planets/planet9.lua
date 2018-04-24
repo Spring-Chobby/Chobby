@@ -30,10 +30,6 @@ local function GetPlanet(planetUtilities, planetID)
 		},
 		tips = {
 			{
-				image = "unitpics/vehcon.png",
-				text = [[Assist factories with constructors, such as the Mason, to speed up unit production. Assisting is more flexible and efficient than constructing additional factories.]]
-			},
-			{
 				image = "unitpics/vehraid.png",
 				text = [[The heatray weapon of the Scorcher does little damage at a distance and massive damage at close range. Move them right next to an enemy unit and watch it melt.]]
 			},

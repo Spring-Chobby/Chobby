@@ -26,7 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G8V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24457",
-			text = [[The enemy is well entrenched but, luckily for you, they have a poorly defended outpost and you have a squad of Dominatrices. Capture the outpost to gain a production base, then steal an army of Tanks and march on their main base.]]
+			text = [[The enemy is well entrenched but, luckily for you, they have a poorly defended outpost and you have a squad of Dominatrices. Capture the outpost to get a head start, then steal an army of Tanks and march on their main base.]]
 		},
 		tips = {
 			{

@@ -34,7 +34,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/veharty.png",
-				text = [[Badgers are very good for grinding down your opposition. They fire mines which can make a region practically impassable for the enemy. They are almost defenseless unless you plan ahead with some well placed mines, so make sure they don't get flanked. Force Fire the ground with Alt + Left Click with a group of Badgers to make a line of mines.]]
+				text = [[Badgers are very good for grinding down your opposition. They fire mines which can make a region practically impassable for the enemy. They are almost defenseless unless you plan ahead with some well placed mines, so make sure they don't get flanked. Press F to force your Badgers to fire at a given location.]]
 			},
 			{
 				image = "unitpics/module_dmg_booster.png",

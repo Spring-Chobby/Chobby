@@ -35,11 +35,11 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/shieldraid.png",
-				text = [[Bandits are a somewhat slower raiders than Glaives but compensate with superior health and range. They are exceptionally versatile units and are particularly effective while sheltered under the shield of a Convict or Thug.]]
+				text = [[Bandits are slower raiders than Glaives but compensate with superior health and range. They are exceptionally versatile units and are particularly effective while sheltered under the shield of a Convict or Thug.]]
 			},
 			{
 				image = "unitpics/shieldriot.png",
-				text = [[Outlaws wield an unconventional weapon: a disrupting pulse which damage and slow enemies (but not allies) in a wide radius. Compared to most riots it is very poor against single targets but exceptional when used to protect other units against raider assault.]]
+				text = [[Outlaws wield an unconventional weapon: a disrupting pulse which damages and slows enemies (but not allies) in a wide radius. Compared to most riots it is very poor against single targets but exceptional when used to protect other units against raider assault.]]
 			},
 		},
 		gameConfig = {
