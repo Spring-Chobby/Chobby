@@ -39,7 +39,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/amphbomb.png",
-				text = [[Limpets do not float, but its large disruption pulse can reach surface targets even from the seafloor. The Limpet's slowbomb does not affect allies so you can use it within your army.]]
+				text = [[The Limpet does not float, but its large disruption pulse can reach surface targets even from the seafloor. The Limpet's explosion does not damage or slow friendly units, so it is safer to use than other bombs.]]
 			},
 		},
 		gameConfig = {

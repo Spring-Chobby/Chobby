@@ -31,11 +31,11 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/tankassault.png",
-				text = [[The Minotaur assault tank is a very tough unit considering its affordable price. Use it to brute-force your way through enemy positions.]]
+				text = [[The Minotaur assault tank is a very tough unit for a relatively affordable price. Use it to brute-force your way through enemy positions.]]
 			},
 			{
 				image = "unitpics/tankarty.png",
-				text = [[Use the Emissary artillery tank to weaken defenses that would otherwise be inefficient to assault directly with Minotaurs.]]
+				text = [[Use the Emissary artillery tank to weaken defenses that are too dangerous to attack directly with Minotaurs.]]
 			},
 			{
 				image = "unitpics/factorycloak.png",

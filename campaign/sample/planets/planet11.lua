@@ -34,7 +34,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/vehscout.png",
-				text = [[Darts are not very useful in combat, but they are very cheap, fast and can see a long way, so they are ideal for discovering enemy locations and identifying radar dots.]]
+				text = [[Darts are equipped with a disruptor beam to harass and slow enemies. Their main use is as disposable scouts, discovering enemy locations and identifying radar dots.]]
 			},
 			{
 				image = "unitpics/turretheavy.png",

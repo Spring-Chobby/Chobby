@@ -35,11 +35,11 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/energypylon.png",
-				text = [[In order to fire, your Cerberus needs to be connected to a power grid with at least 50 energy, although it does not consume this energy. Use Energy Pylons to extend the grid from your ally's Fusions.]]
+				text = [[In order to fire, your Cerberus needs to be connected to a power grid with at least 50 energy, although it does not consume this energy. Use Energy Pylons to extend the grid from your ally's Fusions. The Economy view (F4) displays your power grid as coloured circles.]]
 			},
 			{
 				image = "unitpics/staticmex.png",
-				text = [[Connecting Metal Extractors to your energy production structures can give you more metal income through Overdrive. Check the wiki for more information about how Overdrive works.]]
+				text = [[Connecting Metal Extractors to your energy production structures can give you more metal income through Overdrive. Check the online manual for more information about how Overdrive works.]]
 			},
 			{
 				image = "unitpics/staticcon.png",
@@ -686,7 +686,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "staticarty.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build two Cerberi",
+					description = "Build two Cerberuses",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { -- Win in 12 minutes

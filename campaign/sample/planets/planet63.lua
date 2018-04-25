@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "B5II",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24614",
-			text = [[Your Tech Lab is attempting to discover how the hostiles on this planet have subjugated a hive of Chickens. Protect the Lab until the research is complete.]]
+			text = [[Your Tech Lab is attempting to discover how the hostiles on this planet have subjugated a hive of Chickens. Protect the Tech Lab until its research is complete.]]
 		},
 		tips = {
 			{

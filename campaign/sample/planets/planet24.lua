@@ -26,7 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "F9IV",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24469",
-			text = [[You've discovered some Ancient Fabricators capable of generating metal from nothing. A rival faction is eager to claim your prize, and they have surrounded your base. Use Djinn teleporters and Lobsters to launch an attack from behind.]]
+			text = [[You've discovered some Ancient Fabricators capable of generating metal from nothing. A rival faction is eager to claim your prize, and they have surrounded your base. Use Djinn teleporters and Lobsters to launch an attack from behind and break the siege.]]
 		},
 		tips = {
 			{
@@ -81,8 +81,8 @@ local function GetPlanet(planetUtilities, planetID)
 						z = 6140,
 						facing = 0,
 						commands = {
-							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1950, 6420}},
-							{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1950, 6750}, options = {"shift"}},
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1950, 6540}},
+							{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1950, 6870}, options = {"shift"}},
 						},
 					},
 					{

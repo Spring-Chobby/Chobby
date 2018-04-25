@@ -35,7 +35,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/hoverskirm.png",
-				text = [[Scalpels fire a pair of guided missiles at medium range. They are helpless during their long reload time - either bring an escort or destroy the enemy with the first salvo.]]
+				text = [[Scalpels fire a pair of guided missiles at medium range. They are helpless during their long reload time - either destroy the enemy with the first salvo or bring an escort. Maces are good at cleaning up after a Scalpel volley.]]
 			},
 			{
 				image = "unitpics/energywind.png",
