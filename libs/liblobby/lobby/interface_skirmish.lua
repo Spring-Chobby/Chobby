@@ -287,10 +287,6 @@ function InterfaceSkirmish:StartGameFromLuaScript(gameType, scriptTable, friendL
 		playerCount = playerCount + 1
 	end
 	
-	if playerCount > 1 and (scriptTable.modoptions or {}).singleplayercampaignbattleid then
-		scriptTable.modoptions.coopcampaignenabled = "true"
-	end
-	
 	scriptTable.numplayers = playerCount
 	scriptTable.numusers = (playerCount - 2) + scriptTable.numusers
 	
