@@ -709,7 +709,7 @@ local function GetPlanet(planetUtilities, planetID)
 					unitTypes = {
 						"spiderskirm",
 					},
-					image = planetUtilities.ICON_DIR .. "cloakskirm.png",
+					image = planetUtilities.ICON_DIR .. "spiderskirm.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
 					description = "Build 10 Recluses",
 					experience = planetUtilities.BONUS_EXP,
