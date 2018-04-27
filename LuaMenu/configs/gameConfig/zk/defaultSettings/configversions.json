@@ -15,6 +15,12 @@
       {  
          "Platform":null,
          "VersionNumber":1,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/cmdcolors.txt",
+         "TargetPath":"cmdcolors.txt"
+      },
+      {  
+         "Platform":null,
+         "VersionNumber":1,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/maps/aquatic_divide_revised_v02.sd7",
          "TargetPath":"maps/aquatic_divide_revised_v02.sd7"
       },
