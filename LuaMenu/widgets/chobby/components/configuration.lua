@@ -50,7 +50,7 @@ function Configuration:init()
 	self.lobbyTimeoutTime = 40 -- Seconds
 	self.channels = {}
 	
-	self.battleFilterPassworded = false
+	self.battleFilterPassworded2 = true
 	self.battleFilterNonFriend = false
 	self.battleFilterRunning = false
 
@@ -430,7 +430,7 @@ function Configuration:GetConfigData()
 		steamLinkComplete = self.steamLinkComplete,
 		alreadySeenFactionPopup4 = self.alreadySeenFactionPopup4,
 		firstBattleStarted = self.firstBattleStarted,
-		battleFilterPassworded = self.battleFilterPassworded,
+		battleFilterPassworded2 = self.battleFilterPassworded2,
 		battleFilterNonFriend = self.battleFilterNonFriend,
 		battleFilterRunning = self.battleFilterRunning,
 		channels = self.channels,

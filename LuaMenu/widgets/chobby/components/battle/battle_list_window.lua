@@ -72,11 +72,11 @@ function BattleListWindow:init(parent)
 		boxalign = "left",
 		boxsize = 20,
 		caption = " Passworded",
-		checked = Configuration.battleFilterPassworded or false,
+		checked = Configuration.battleFilterPassworded2 or false,
 		font = Configuration:GetFont(2),
 		OnChange = {
 			function (obj, newState)
-				Configuration:SetConfigValue("battleFilterPassworded", newState)
+				Configuration:SetConfigValue("battleFilterPassworded2", newState)
 				SoftUpdate()
 			end
 		},
@@ -120,7 +120,7 @@ function BattleListWindow:init(parent)
 	}
 	
 	local function UpdateCheckboxes()
-		checkPassworded:SetToggle(Configuration.battleFilterPassworded)
+		checkPassworded:SetToggle(Configuration.battleFilterPassworded2)
 		checkNonFriend:SetToggle(Configuration.battleFilterNonFriend)
 		checkRunning:SetToggle(Configuration.battleFilterRunning)
 	end
@@ -545,11 +545,13 @@ end
 
 function BattleListWindow:ItemInFilter(id)
 	local battle = lobby:GetBattle(id)
-	if Configuration.battleFilterPassworded and battle.passworded then
-		return false
-	end
-	if Configuration.battleFilterNonFriend and not lobby:GetBattleHasFriend(id) then
-		return false
+	if not lobby:GetBattleHasFriend(id) then
+		if Configuration.battleFilterPassworded2 and battle.passworded then
+			return false
+		end
+		if Configuration.battleFilterNonFriend then
+			return false
+		end
 	end
 	if Configuration.battleFilterRunning and battle.isRunning then
 		return false
