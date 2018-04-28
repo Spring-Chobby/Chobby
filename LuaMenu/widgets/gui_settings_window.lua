@@ -22,7 +22,7 @@ local battleStartDisplay = 1
 local lobbyFullscreen = 1
 
 local FUDGE = 0
-local USE_CONFIG_FULLSCREEN = false
+local USE_CONFIG_FULLSCREEN = true
 
 local inLobby = true
 local currentMode = false
@@ -223,7 +223,12 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 		Spring.SetConfigInt("WindowBorderless", 1, false)
 		Spring.SetConfigInt("Fullscreen", 0, false)
 	elseif mode == 5 then -- Manual Fullscreen
-		local resolution = WG.Chobby.Configuration.manualFullscreen[name] or {}
+		local resolution
+		if inLobby then
+			resolution = WG.Chobby.Configuration.manualFullscreen.lobby or {}
+		else
+			resolution = WG.Chobby.Configuration.manualFullscreen.game or {}
+		end
 		Spring.SetConfigInt("XResolution", resolution.width or screenX, false)
 		Spring.SetConfigInt("YResolution", resolution.height or screenY, false)
 		Spring.SetConfigInt("Fullscreen", 1, false)
