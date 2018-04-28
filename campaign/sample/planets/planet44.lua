@@ -226,7 +226,7 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 1,
 						},
  						{
-							name = "turretruit",
+							name = "turretriot",
 							x = 272,
 							z = 3488,
 							facing = 0,
