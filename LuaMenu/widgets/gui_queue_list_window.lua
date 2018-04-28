@@ -633,7 +633,9 @@ end
 
 local lobbyTimeoutTime = false
 local function ResetLobbyTimeout()
-	lobbyTimeoutTime = Spring.GetTimer()
+	if WG.LibLobby and WG.LibLobby.lobby and (WG.LibLobby.lobby.status == "connected") then
+		lobbyTimeoutTime = Spring.GetTimer()
+	end
 end
 
 local function TryLogin()
@@ -741,7 +743,7 @@ function widget:Initialize()
 	
 	WG.QueueListWindow = QueueListWindow
 	
-	WG.LibLobby.lobby:AddListener("OnMatchMakerStatus", ResetLobbyTimeout)
+	WG.LibLobby.lobby:AddListener("OnCommandReceived", ResetLobbyTimeout)
 end
 
 --------------------------------------------------------------------------------
