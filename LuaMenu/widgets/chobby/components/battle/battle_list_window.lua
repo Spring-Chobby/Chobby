@@ -568,6 +568,9 @@ function BattleListWindow:CompareItems(id1, id2)
 		if battle1.isMatchMaker ~= battle2.isMatchMaker then
 			return battle2.isMatchMaker
 		end
+		if battle1.isRunning ~= battle2.isRunning then
+			return battle2.isRunning
+		end
 		local countOne = lobby:GetBattlePlayerCount(id1)
 		local countTwo = lobby:GetBattlePlayerCount(id2)
 		if countOne ~= countTwo then
