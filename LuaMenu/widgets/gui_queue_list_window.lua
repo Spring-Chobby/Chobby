@@ -637,7 +637,10 @@ local function ResetLobbyTimeout()
 end
 
 local function TryLogin()
-	WG.LoginWindowHandler.TryLogin()
+	local lobbyStatus = WG.LibLobby.lobby.status
+	if (not lobbyStatus) or lobbyStatus == "offline" or lobbyStatus == "disconnected" then
+		WG.LoginWindowHandler.TryLogin()
+	end
 end
 
 local function UpdateLobbyTimeout()
