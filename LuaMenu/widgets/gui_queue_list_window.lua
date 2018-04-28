@@ -654,7 +654,7 @@ local function UpdateLobbyTimeout()
 		Spring.Echo("Lost connection - Automatic logout.")
 		WG.Chobby.interfaceRoot.CleanMultiplayerState()
 		WG.LibLobby.lobby:Disconnect()
-		WG.Delay(TryLogin, 3)
+		WG.Delay(TryLogin, 2 + math.random()*60)
 		lobbyTimeoutTime = false
 	end
 end
