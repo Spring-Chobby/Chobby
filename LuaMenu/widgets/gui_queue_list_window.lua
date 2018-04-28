@@ -629,6 +629,34 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Timeout
+
+local lobbyTimeoutTime = false
+local function ResetLobbyTimeout()
+	lobbyTimeoutTime = Spring.GetTimer()
+end
+
+local function TryLogin()
+	WG.LoginWindowHandler.TryLogin()
+end
+
+local function UpdateLobbyTimeout()
+	local Configuration = WG.Chobby.Configuration
+	if not (lobbyTimeoutTime and Configuration.lobbyTimeoutTime) then
+		return
+	end
+	
+	if Spring.DiffTimers(Spring.GetTimer(), lobbyTimeoutTime) or 0 > Configuration.lobbyTimeoutTime then
+		Spring.Echo("Lost connection - Automatic logout.")
+		WG.Chobby.interfaceRoot.CleanMultiplayerState()
+		WG.LibLobby.lobby:Disconnect()
+		WG.Delay(TryLogin, 3)
+		lobbyTimeoutTime = false
+	end
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Widget Interface
 
 function widget:ActivateGame()
@@ -645,6 +673,7 @@ function widget:Update()
 	if panelInterface then
 		panelInterface.UpdateBanTimer()
 	end
+	UpdateLobbyTimeout()
 end
 
 function widget:Initialize()
@@ -699,6 +728,8 @@ function widget:Initialize()
 	WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
 	
 	WG.QueueListWindow = QueueListWindow
+	
+	lobby:AddListener("OnMatchMakerStatus", ResetLobbyTimeout)
 end
 
 --------------------------------------------------------------------------------

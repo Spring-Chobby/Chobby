@@ -47,6 +47,7 @@ function Configuration:init()
 	self.steamLinkComplete = false
 	self.alreadySeenFactionPopup4 = false
 	self.firstBattleStarted = false
+	self.lobbyTimeoutTime = 70 -- Seconds
 	self.channels = {}
 	
 	self.battleFilterPassworded = false
