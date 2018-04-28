@@ -19,7 +19,7 @@ function SteamLoginWindow:init(failFunction, cancelText, windowClassname)
 	end
 	
 	local ww, wh = Spring.GetWindowGeometry()
-	local w, h = 386, 288
+	local w, h = 386, 304
 	
 	self.passwordShown = false
 	
@@ -105,7 +105,7 @@ function SteamLoginWindow:init(failFunction, cancelText, windowClassname)
 	self.txtError = TextBox:New {
 		x = 15,
 		right = 15,
-		bottom = 88,
+		bottom = 60,
 		height = 90,
 		text = "",
 		fontsize = Configuration:GetFont(3).size,
