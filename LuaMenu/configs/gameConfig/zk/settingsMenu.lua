@@ -192,6 +192,7 @@ local settingsConfig = {
 			},
 		},
 		
+		-- FIXME: this list is in dire need of resorting
 		settings = {
 			{
 				name = "DisplayMode",
@@ -800,6 +801,30 @@ local settingsConfig = {
 							FSAA = 1,
 							SmoothLines = 3,
 							SmoothPoints = 3,
+						}
+					},
+				},
+			},
+			{
+				name = "VSync",
+				humanName = "Vertical Sync",
+				options = {
+					{
+						name = "Standard",
+						apply = {
+							VSync = 1,
+						}
+					},
+					{
+						name = "Adaptive",
+						apply = {
+							VSync = -1,
+						}
+					},
+					{
+						name = "Off",
+						apply = {
+							VSync = 0,
 						}
 					},
 				},
