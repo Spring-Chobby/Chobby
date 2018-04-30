@@ -1506,8 +1506,9 @@
 			"energyfusion": [4],
 			"energywind": [20]
 		},
-		// "factor": 0.625,  // income factor for energy
-		"factor": 6.25,  // make lots of fusion and singus so they go boom
+		// income factor for energy, time is in seconds
+		// [[<start_factor>, <start_time>], [<end_factor>, <end_time>]]
+		"factor": [[6.25, 0], [6.25, 60]],  // make lots of fusion and singus so they go boom
 
 		"pylon": ["energypylon", "energysolar", "energywind"]
 	},
@@ -1520,8 +1521,9 @@
 	"buildpower": 1.075,
 	// Metal excess to income ratio, -1 to disable
 	"excess": -1.0,
-	// Mobile to static metal pull ratio
-	"ms_pull": 0.58,
+	// Mobile constructor to static constructor metal pull ratio
+	// [[<value>, <start_mex_percent>], [<value>, <end_mex_percent>]]
+	"ms_pull": [[0.58, 0.0], [0.58, 1.0]],
 	// Max percent of mexes circuit team allowed to take.
 	// If its <1.0 then expansion obeys ms_pull rule, if >=1.0 then ms_pull doesn't affect expansion (mex, pylon).
 	// "mex_max": 1.0,  // 100%
