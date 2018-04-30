@@ -704,6 +704,10 @@ function Lobby:_OnJoinBattle(battleID, hashCode)
 end
 
 function Lobby:_OnJoinedBattle(battleID, userName, scriptPassword)
+	if not self.battles[battleID] then
+		Spring.Log(LOG_SECTION, "warning", "_OnJoinedBattle nonexistent battle.")
+		return
+	end
 	local found = false
 	local users = self.battles[battleID].users
 	for i = 1, #users do
@@ -759,7 +763,11 @@ end
 -- spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker, maxPlayers, title, playerCount, passworded
 function Lobby:_OnUpdateBattleInfo(battleID, battleInfo)
 	local battle = self.battles[battleID]
-
+	if not battle then
+		Spring.Log(LOG_SECTION, "warning", "_OnUpdateBattleInfo nonexistent battle.")
+		return
+	end
+	
 	battle.maxPlayers = battleInfo.maxPlayers or battle.maxPlayers
 	if battleInfo.passworded ~= nil then
 		battle.passworded = battleInfo.passworded
