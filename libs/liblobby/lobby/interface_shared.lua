@@ -86,28 +86,65 @@ function Interface:SendCustomCommand(command)
 	self:_SendCommand(command, false)
 end
 
+function Interface:ProcessBuffer()
+	if not self.commandBuffer then
+		return false
+	end
+	
+	self.bufferExecutionPos = self.bufferExecutionPos + 1
+	local command = self.commandBuffer[self.bufferExecutionPos]
+	if not command then
+		self.commandBuffer = false
+		return false
+	end
+	self:CommandReceived(command)
+	return true
+end
+
+function Interface:SendCommandToBuffer(cmdName)
+	if not self.bufferBypass then
+		return true
+	end
+	return not self.bufferBypass[cmdName]
+end
+
 function Interface:CommandReceived(command)
 	local cmdId, cmdName, arguments
+	local argumentsPos = false
 	if command:sub(1,1) == "#" then
 		i = command:find(" ")
 		cmdId = command:sub(2, i - 1)
-		j = command:find(" ", i + 1)
-		if j ~= nil then
-			cmdName = command:sub(i + 1, j - 1)
-			arguments = command:sub(j + 1)
+		argumentsPos = command:find(" ", i + 1)
+		if argumentsPos ~= nil then
+			cmdName = command:sub(i + 1, argumentsPos - 1)
 		else
 			cmdName = command:sub(i + 1)
 		end
 	else
-		i = command:find(" ")
-		if i ~= nil then
-			cmdName = command:sub(1, i - 1)
-			arguments = command:sub(i + 1)
+		argumentsPos = command:find(" ")
+		if argumentsPos ~= nil then
+			cmdName = command:sub(1, argumentsPos - 1)
 		else
 			cmdName = command
 		end
 	end
 
+	if self.bufferCommandsEnabled and self:SendCommandToBuffer(cmdName) then
+		if not self.commandBuffer then
+			self.commandBuffer = {}
+			self.commandsInBuffer = 0
+			self.bufferExecutionPos = 0
+		end
+		self.commandsInBuffer = self.commandsInBuffer + 1
+		self.commandBuffer[self.commandsInBuffer] = command
+		self:_CallListeners("OnCommandBuffered", command)
+		return
+	end
+	
+	if argumentsPos then
+		arguments = command:sub(argumentsPos + 1)
+	end
+	
 	self:_OnCommandReceived(cmdName, arguments, cmdId)
 end
 

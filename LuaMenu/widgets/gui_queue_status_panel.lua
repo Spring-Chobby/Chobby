@@ -589,7 +589,7 @@ function DelayedInitialize()
 	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", SaveQueues)
 end
 
-function widget:Update(dt)
+function widget:Update()
 	if findingMatch then
 		if statusQueueLobby then
 			statusQueueLobby.UpdateTimer()

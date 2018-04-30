@@ -320,7 +320,7 @@ function DelayedInitialize()
 	lobby:AddListener("OnDisconnected", OnPartyLeft)
 end
 
-function widget:Update(dt)
+function widget:Update()
 	if invitePopup then
 		invitePopup.UpdateTimer()
 	end

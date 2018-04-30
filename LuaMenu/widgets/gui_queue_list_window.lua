@@ -744,6 +744,7 @@ function widget:Initialize()
 	WG.QueueListWindow = QueueListWindow
 	
 	WG.LibLobby.lobby:AddListener("OnCommandReceived", ResetLobbyTimeout)
+	WG.LibLobby.lobby:AddListener("OnCommandBuffered", ResetLobbyTimeout)
 end
 
 --------------------------------------------------------------------------------
