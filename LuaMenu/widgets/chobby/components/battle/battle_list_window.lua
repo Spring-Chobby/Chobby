@@ -30,10 +30,6 @@ function BattleListWindow:init(parent)
 		self:UpdateInfoPanel()
 	end
 	
-	local function update()
-		self:Update()
-	end
-	
 	self.infoPanel = Panel:New {
 		classname = "overlay_window",
 		x = "15%",
@@ -136,42 +132,6 @@ function BattleListWindow:init(parent)
 		WG.Delay(UpdateTimersDelay, 30)
 	end
 	WG.Delay(UpdateTimersDelay, 30)
-	
-	self.onBattleOpened = function(listener, battleID)
-		self:AddBattle(battleID, lobby:GetBattle(battleID))
-		SoftUpdate()
-	end
-	lobby:AddListener("OnBattleOpened", self.onBattleOpened)
-
-	self.onBattleClosed = function(listener, battleID)
-		self:RemoveRow(battleID)
-		SoftUpdate()
-	end
-	lobby:AddListener("OnBattleClosed", self.onBattleClosed)
-
-	self.onJoinedBattle = function(listener, battleID)
-		self:JoinedBattle(battleID)
-		SoftUpdate()
-	end
-	lobby:AddListener("OnJoinedBattle", self.onJoinedBattle)
-
-	self.onLeftBattle = function(listener, battleID)
-		self:LeftBattle(battleID)
-		SoftUpdate()
-	end
-	lobby:AddListener("OnLeftBattle", self.onLeftBattle)
-
-	self.onUpdateBattleInfo = function(listener, battleID)
-		self:OnUpdateBattleInfo(battleID)
-		SoftUpdate()
-	end
-	lobby:AddListener("OnUpdateBattleInfo", self.onUpdateBattleInfo)
-
-	self.onBattleIngameUpdate = function(listener, battleID, isRunning)
-		self:OnBattleIngameUpdate(battleID, isRunning)
-		SoftUpdate()
-	end
-	lobby:AddListener("OnBattleIngameUpdate", self.onBattleIngameUpdate)
 
 	local function onConfigurationChange(listener, key, value)
 		if key == "displayBadEngines2" then
@@ -186,8 +146,64 @@ function BattleListWindow:init(parent)
 		end
 	end
 	WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
+
+	-- Lobby interface listeners.
+	self.listenerUpdateDisabled = false
+	self.onBattleOpened = function(listener, battleID)
+		if self.listenerUpdateDisabled then
+			return
+		end
+		self:AddBattle(battleID, lobby:GetBattle(battleID))
+		SoftUpdate()
+	end
+	self.onBattleClosed = function(listener, battleID)
+		if self.listenerUpdateDisabled then
+			return
+		end
+		self:RemoveRow(battleID)
+		SoftUpdate()
+	end
+	self.onJoinedBattle = function(listener, battleID)
+		if self.listenerUpdateDisabled then
+			return
+		end
+		self:JoinedBattle(battleID)
+		SoftUpdate()
+	end
+	self.onLeftBattle = function(listener, battleID)
+		if self.listenerUpdateDisabled then
+			return
+		end
+		self:LeftBattle(battleID)
+		SoftUpdate()
+	end
+	self.onUpdateBattleInfo = function(listener, battleID)
+		if self.listenerUpdateDisabled then
+			return
+		end
+		self:OnUpdateBattleInfo(battleID)
+		SoftUpdate()
+	end
+	self.onBattleIngameUpdate = function(listener, battleID, isRunning)
+		if self.listenerUpdateDisabled then
+			return
+		end
+		self:OnBattleIngameUpdate(battleID, isRunning)
+		SoftUpdate()
+	end
+
+	self:AddListeners()
+end
+
+function BattleListWindow:AddListeners()
+	lobby:AddListener("OnBattleOpened", self.onBattleOpened)
+	lobby:AddListener("OnBattleClosed", self.onBattleClosed)
+	lobby:AddListener("OnJoinedBattle", self.onJoinedBattle)
+	lobby:AddListener("OnLeftBattle", self.onLeftBattle)
+	lobby:AddListener("OnUpdateBattleInfo", self.onUpdateBattleInfo)
+	lobby:AddListener("OnBattleIngameUpdate", self.onBattleIngameUpdate)
 	
-	update()
+	self:Update()
 end
 
 function BattleListWindow:RemoveListeners()
@@ -196,6 +212,7 @@ function BattleListWindow:RemoveListeners()
 	lobby:RemoveListener("OnJoinedBattle", self.onJoinedBattle)
 	lobby:RemoveListener("OnLeftBattle", self.onLeftBattle)
 	lobby:RemoveListener("OnUpdateBattleInfo", self.onUpdateBattleInfo)
+	lobby:RemoveListener("OnBattleIngameUpdate", self.onBattleIngameUpdate)
 end
 
 function BattleListWindow:Update()
@@ -966,6 +983,14 @@ function BattleListWindow:JoinBattle(battle)
 			parent = passwordWindow,
 		}
 
+		local function onJoinBattleFailed(listener, reason)
+			lblError:SetCaption(reason)
+		end
+		
+		local function onJoinBattle(listener)
+			passwordWindow:Dispose()
+		end
+		
 		passwordWindow = Window:New {
 			x = 700,
 			y = 300,
@@ -984,13 +1009,6 @@ function BattleListWindow:JoinBattle(battle)
 			},
 		}
 		
-		local function onJoinBattleFailed(listener, reason)
-			lblError:SetCaption(reason)
-		end
-		
-		local function onJoinBattle(listener)
-			passwordWindow:Dispose()
-		end
 
 		local lblPassword = Label:New {
 			x = 25,

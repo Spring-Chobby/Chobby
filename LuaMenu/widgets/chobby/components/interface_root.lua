@@ -428,7 +428,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	}
 
 	local queueListWindow = WG.QueueListWindow.GetControl()
-	local battleListWindow = BattleListWindow()
+	local battleListWindow = WG.BattleListWindowHolder.GetControl()
 	local planetwarsListWindow = WG.PlanetwarsListWindow.GetControl()
 
 	local SINGLEPLAYER_INDEX = 1
@@ -446,7 +446,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			entryCheck = WG.LoginWindowHandler.TryLoginMultiplayer,
 			tabs = {
 				{name = "matchmaking", control = queueListWindow},
-				{name = "battle_list", control = battleListWindow.window},
+				{name = "battle_list", control = battleListWindow},
 				{name = "planetwars", control = planetwarsListWindow},
 			},
 			cleanupFunction = Configuration.leaveMultiplayerOnMainMenu and CleanMultiplayerState or nil
@@ -971,6 +971,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	
 	function externalFunctions.GetSingleplayerSubmenu()
 		return mainWindowHandler.GetPanelHander(SINGLEPLAYER_INDEX)
+	end
+	
+	function externalFunctions.GetMultiplayerSubmenu()
+		return mainWindowHandler.GetPanelHander(MULTIPLAYER_INDEX)
 	end
 	
 	function externalFunctions.SetPanelDisplayMode(newAutodetectDoublePanel, newDoublePanel)

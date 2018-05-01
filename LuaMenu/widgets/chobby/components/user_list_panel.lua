@@ -83,12 +83,27 @@ local function CompareUsers(userName, otherName)
 end
 
 function UserListPanel:Update()
+	if lobby.commandBuffer then
+		if not self.checkingUpdate then
+			local CheckUpdate
+			function CheckUpdate()
+				if lobby.commandBuffer then
+					WG.Delay(CheckUpdate, 5)
+				else
+					self.checkingUpdate = false
+					self:Update()
+				end
+			end
+			self.checkingUpdate = true
+			WG.Delay(CheckUpdate, 5)
+		end
+		return
+	end
+
 	self.userPanel:ClearChildren()
 	local users = self:GetUsers()
-	
-	if not lobby.commandBuffer then
-		table.sort(users, CompareUsers)
-	end
+
+	table.sort(users, CompareUsers)
 	
 	for i = 1, #users do
 		self:AddUser(users[i])

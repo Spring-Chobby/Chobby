@@ -41,6 +41,7 @@ EditBox = Control:Inherit{
   editable = true,
   selectable = true,
   multiline = false,
+  maxLines = false,
   subTooltips = false,
   useIME = true, -- Disabling is broken, so every text box is set to use IME.
   useSDLStartTextInput = true,
@@ -308,6 +309,17 @@ function EditBox:_GeneratePhysicalLines(logicalLineID)
 	end
 end
 
+function EditBox:RemoveLine(logicalLineID)
+	if not self.lines[logicalLineID] then
+		return
+	end
+	local line = self.lines[logicalLineID]
+	table.remove(self.lines, logicalLineID)
+	for i = 1, #line.pls do
+		self.physicalLines[line.pls[i]] = nil
+	end
+end
+
 -- will automatically wrap into multiple lines if too long
 function EditBox:AddLine(text, tooltips, OnTextClick)
 	-- add logical line
@@ -336,6 +348,12 @@ function EditBox:AddLine(text, tooltips, OnTextClick)
 --
 --     self:Resize(nil, textHeight, true, true)
 --   end
+	if self.maxLines then
+		while #self.lines > self.maxLines do
+			self:RemoveLine(1)
+		end
+	end
+
 	self._inRequestUpdate = true
 	self:RequestUpdate()
 	self:Invalidate()
@@ -499,7 +517,7 @@ function EditBox:_GetCursorByMousePos(x, y)
 
 		-- find the X coordinate
 		retVal.physicalCursor = #selLine
-		if retVal.physicalCursorY == logicalLine.pls[#logicalLine.pls] then
+		if logicalLine and retVal.physicalCursorY == logicalLine.pls[#logicalLine.pls] then
 			retVal.physicalCursor = retVal.physicalCursor + 1
 		end
 		local isStartLine = true

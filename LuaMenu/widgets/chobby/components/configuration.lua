@@ -48,6 +48,7 @@ function Configuration:init()
 	self.alreadySeenFactionPopup4 = false
 	self.firstBattleStarted = false
 	self.lobbyTimeoutTime = 60 -- Seconds
+	self.maxChatLines = 200
 	self.channels = {}
 	
 	self.battleFilterPassworded2 = true
