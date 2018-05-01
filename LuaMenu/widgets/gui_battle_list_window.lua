@@ -54,8 +54,6 @@ function widget:Update()
 		end
 	end
 	
-	Spring.Echo("GetLobbyInterfaceHolder", visible)
-	
 	if visible == oldVisible then
 		return
 	end

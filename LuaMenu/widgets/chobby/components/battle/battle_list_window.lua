@@ -567,7 +567,6 @@ function BattleListWindow:MakeJoinBattle(battleID, battle)
 end
 
 function BattleListWindow:AddBattle(battleID, battle)
-	Spring.Echo("BattleListWindowAddBattle", battleID)
 	battle = battle or lobby:GetBattle(battleID)
 	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
