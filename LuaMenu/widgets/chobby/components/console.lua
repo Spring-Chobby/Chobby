@@ -32,7 +32,6 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 		right = 0,
 		y = 0,
 -- 		maxHeight = 500,
-		maxLines = Configuration.maxChatLines,
 		lineSpacing = 2,
 		bottom = 0,
 		text = "",

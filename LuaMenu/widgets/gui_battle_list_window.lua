@@ -28,7 +28,10 @@ local battleListWindow
 local BattleListWindowHolder = {}
 function BattleListWindowHolder.GetControl()
 	battleListWindow = WG.Chobby.BattleListWindow()
-	return battleListWindow.window
+	local function JoinBattleFunc(battle)
+		battleListWindow:JoinBattle(battle)
+	end
+	return battleListWindow.window, JoinBattleFunc
 end
 
 --------------------------------------------------------------------------------
@@ -51,16 +54,18 @@ function widget:Update()
 		end
 	end
 	
+	Spring.Echo("GetLobbyInterfaceHolder", visible)
+	
 	if visible == oldVisible then
 		return
 	end
 	oldVisible = visible
 	
 	if visible then
-		battleListWindow.listenerUpdateDisabled = true
-	elseif battleListWindow then
 		battleListWindow.listenerUpdateDisabled = false
 		battleListWindow:Update()
+	elseif battleListWindow then
+		battleListWindow.listenerUpdateDisabled = true
 	end
 end
 

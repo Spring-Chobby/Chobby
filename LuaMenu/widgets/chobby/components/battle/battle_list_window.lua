@@ -30,6 +30,10 @@ function BattleListWindow:init(parent)
 		self:UpdateInfoPanel()
 	end
 	
+	local function update()
+		self:Update()
+	end
+	
 	self.infoPanel = Panel:New {
 		classname = "overlay_window",
 		x = "15%",
@@ -132,6 +136,61 @@ function BattleListWindow:init(parent)
 		WG.Delay(UpdateTimersDelay, 30)
 	end
 	WG.Delay(UpdateTimersDelay, 30)
+	
+	self.listenerUpdateDisabled = false
+	self.onBattleOpened = function(listener, battleID)
+		if self.listenerUpdateDisabled then
+			return
+		end
+		self:AddBattle(battleID, lobby:GetBattle(battleID))
+		SoftUpdate()
+	end
+	lobby:AddListener("OnBattleOpened", self.onBattleOpened)
+
+	self.onBattleClosed = function(listener, battleID)
+		if self.listenerUpdateDisabled then
+			return
+		end
+		self:RemoveRow(battleID)
+		SoftUpdate()
+	end
+	lobby:AddListener("OnBattleClosed", self.onBattleClosed)
+
+	self.onJoinedBattle = function(listener, battleID)
+		if self.listenerUpdateDisabled then
+			return
+		end
+		self:JoinedBattle(battleID)
+		SoftUpdate()
+	end
+	lobby:AddListener("OnJoinedBattle", self.onJoinedBattle)
+
+	self.onLeftBattle = function(listener, battleID)
+		if self.listenerUpdateDisabled then
+			return
+		end
+		self:LeftBattle(battleID)
+		SoftUpdate()
+	end
+	lobby:AddListener("OnLeftBattle", self.onLeftBattle)
+
+	self.onUpdateBattleInfo = function(listener, battleID)
+		if self.listenerUpdateDisabled then
+			return
+		end
+		self:OnUpdateBattleInfo(battleID)
+		SoftUpdate()
+	end
+	lobby:AddListener("OnUpdateBattleInfo", self.onUpdateBattleInfo)
+
+	self.onBattleIngameUpdate = function(listener, battleID, isRunning)
+		if self.listenerUpdateDisabled then
+			return
+		end
+		self:OnBattleIngameUpdate(battleID, isRunning)
+		SoftUpdate()
+	end
+	lobby:AddListener("OnBattleIngameUpdate", self.onBattleIngameUpdate)
 
 	local function onConfigurationChange(listener, key, value)
 		if key == "displayBadEngines2" then
@@ -146,64 +205,8 @@ function BattleListWindow:init(parent)
 		end
 	end
 	WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
-
-	-- Lobby interface listeners.
-	self.listenerUpdateDisabled = false
-	self.onBattleOpened = function(listener, battleID)
-		if self.listenerUpdateDisabled then
-			return
-		end
-		self:AddBattle(battleID, lobby:GetBattle(battleID))
-		SoftUpdate()
-	end
-	self.onBattleClosed = function(listener, battleID)
-		if self.listenerUpdateDisabled then
-			return
-		end
-		self:RemoveRow(battleID)
-		SoftUpdate()
-	end
-	self.onJoinedBattle = function(listener, battleID)
-		if self.listenerUpdateDisabled then
-			return
-		end
-		self:JoinedBattle(battleID)
-		SoftUpdate()
-	end
-	self.onLeftBattle = function(listener, battleID)
-		if self.listenerUpdateDisabled then
-			return
-		end
-		self:LeftBattle(battleID)
-		SoftUpdate()
-	end
-	self.onUpdateBattleInfo = function(listener, battleID)
-		if self.listenerUpdateDisabled then
-			return
-		end
-		self:OnUpdateBattleInfo(battleID)
-		SoftUpdate()
-	end
-	self.onBattleIngameUpdate = function(listener, battleID, isRunning)
-		if self.listenerUpdateDisabled then
-			return
-		end
-		self:OnBattleIngameUpdate(battleID, isRunning)
-		SoftUpdate()
-	end
-
-	self:AddListeners()
-end
-
-function BattleListWindow:AddListeners()
-	lobby:AddListener("OnBattleOpened", self.onBattleOpened)
-	lobby:AddListener("OnBattleClosed", self.onBattleClosed)
-	lobby:AddListener("OnJoinedBattle", self.onJoinedBattle)
-	lobby:AddListener("OnLeftBattle", self.onLeftBattle)
-	lobby:AddListener("OnUpdateBattleInfo", self.onUpdateBattleInfo)
-	lobby:AddListener("OnBattleIngameUpdate", self.onBattleIngameUpdate)
 	
-	self:Update()
+	update()
 end
 
 function BattleListWindow:RemoveListeners()
@@ -213,6 +216,8 @@ function BattleListWindow:RemoveListeners()
 	lobby:RemoveListener("OnLeftBattle", self.onLeftBattle)
 	lobby:RemoveListener("OnUpdateBattleInfo", self.onUpdateBattleInfo)
 	lobby:RemoveListener("OnBattleIngameUpdate", self.onBattleIngameUpdate)
+	lobby:RemoveListener("OnConfigurationChange", self.onConfigurationChange)
+	lobby:RemoveListener("DownloadFinished", self.downloadFinished)
 end
 
 function BattleListWindow:Update()
@@ -562,6 +567,7 @@ function BattleListWindow:MakeJoinBattle(battleID, battle)
 end
 
 function BattleListWindow:AddBattle(battleID, battle)
+	Spring.Echo("BattleListWindowAddBattle", battleID)
 	battle = battle or lobby:GetBattle(battleID)
 	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return

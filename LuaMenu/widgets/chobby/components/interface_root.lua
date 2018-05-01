@@ -428,7 +428,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	}
 
 	local queueListWindow = WG.QueueListWindow.GetControl()
-	local battleListWindow = WG.BattleListWindowHolder.GetControl()
+	local battleListWindow, battleListWindowJoinBattle = WG.BattleListWindowHolder.GetControl()
 	local planetwarsListWindow = WG.PlanetwarsListWindow.GetControl()
 
 	local SINGLEPLAYER_INDEX = 1
@@ -1123,7 +1123,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	function externalFunctions.TryToJoinBattle(battleID)
 		local battle = battleID and lobby:GetBattle(battleID)
 		if battle then
-			battleListWindow:JoinBattle(battle)
+			battleListWindowJoinBattle(battle)
 		end
 	end
 	-------------------------------------------------------------------
