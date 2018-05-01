@@ -27,6 +27,9 @@ local bufferBypass = {
 	MatchMakerQueueRequestFailed = true,
 	SiteToLobbyCommand = true,
 	ConnectSpring = true,
+	BattleUpdate = true,
+	BattleAdded = true,
+	BattleRemoved = true,
 }
 
 local CMD_PER_UPDATE = 10
