@@ -41,6 +41,8 @@ EditBox = Control:Inherit{
   editable = true,
   selectable = true,
   multiline = false,
+  agressiveMaxLines = false,
+  agressiveMaxLinesPreserve = false,
   subTooltips = false,
   useIME = true, -- Disabling is broken, so every text box is set to use IME.
   useSDLStartTextInput = true,
@@ -310,6 +312,40 @@ end
 
 -- will automatically wrap into multiple lines if too long
 function EditBox:AddLine(text, tooltips, OnTextClick)
+	if self.agressiveMaxLines and #self.lines > self.agressiveMaxLines then
+		local preserve = {}
+		for i = math.max(1, #self.lines - self.agressiveMaxLinesPreserve), #self.lines do
+			preserve[#preserve + 1] = self.lines[i].text
+		end
+		self.lines = {}
+		self.physicalLines = {}
+		
+		for i = 1, #preserve do
+			local line = {
+				text = preserve[i],
+				pls = {}, -- indexes of physical lines
+			}
+			table.insert(self.lines, line)
+			local lineID = #self.lines
+			self:_GeneratePhysicalLines(lineID)
+		end
+		
+		local line = {
+			text = text,
+			tooltips = tooltips,
+			OnTextClick = OnTextClick,
+			pls = {}, -- indexes of physical lines
+		}
+		table.insert(self.lines, line)
+		local lineID = #self.lines
+		self:_GeneratePhysicalLines(lineID)
+		
+		self._inRequestUpdate = true
+		self:RequestUpdate()
+		self:Invalidate()
+		return
+	end
+	
 	-- add logical line
 	local line = {
 		text = text,
