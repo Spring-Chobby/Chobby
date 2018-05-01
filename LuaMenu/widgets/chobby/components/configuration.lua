@@ -134,35 +134,42 @@ function Configuration:init()
 		singleplayer = {
 		}
 	}
+	local gameConfPath = LUA_DIRNAME .. "configs/gameConfig/"
 
 	self.gameConfigName = fileConfig.game
-	self.gameConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. self.gameConfigName .. "/mainConfig.lua")
+	self.gameConfig = VFS.Include(gameConfPath .. self.gameConfigName .. "/mainConfig.lua")
 
 	self.campaignPath = "campaign/sample"
 	self.campaignConfigName = "sample"
 	self.campaignConfig = VFS.Include("campaign/sample/mainConfig.lua")
 	self.campaignSaveFile = nil -- Set by user
 	self.nextCampaignSaveNumber = 1
-
-	-- TODO, generate this from directory structure
-	local gameConfigOptions = {
-		"zk",
-		"generic",
-		"zkdev",
-		"evorts",
-		"evortsdev",
-	}
+	
+	local gameConfigOptions = {}
+	local subdirs = VFS.SubDirs(gameConfPath)
+	for index, subdir in ipairs(subdirs) do
+		-- get just the folder name
+		subdir = string.gsub(subdir, gameConfPath, "")
+		subdir = string.sub(subdir, 1, -2)	-- truncate trailing slash
+		
+		Spring.Log(LOG_SECTION, LOG.NOTICE, "Detected game config", subdir)
+		gameConfigOptions[#gameConfigOptions+1] = subdir	
+	end
 
 	self.gameConfigOptions = {}
 	self.gameConfigHumanNames = {}
 	for i = 1, #gameConfigOptions do
-		local fileName = LUA_DIRNAME .. "configs/gameConfig/" .. gameConfigOptions[i] .. "/mainConfig.lua"
+		local fileName = gameConfPath .. gameConfigOptions[i] .. "/mainConfig.lua"
+		Spring.Log(LOG_SECTION, LOG.INFO, "Attempting to load game config: " .. fileName)
 		if VFS.FileExists(fileName) then
-			local gameConfig = VFS.Include(fileName)
+			Spring.Log(LOG_SECTION, LOG.INFO, "Game config found:" .. fileName)
+			local gameConfig = VFS.Include(fileName, nil, VFS.RAW_FIRST)
 			if gameConfig.CheckAvailability() then
 				self.gameConfigHumanNames[#self.gameConfigHumanNames + 1] = gameConfig.name
 				self.gameConfigOptions[#self.gameConfigOptions + 1] = gameConfigOptions[i]
 			end
+		else
+			Spring.Log(LOG_SECTION, LOG.WARNING, "Game config not found: " .. fileName)
 		end
 	end
 
