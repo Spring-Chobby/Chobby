@@ -210,503 +210,7 @@ local settingsConfig = {
 				humanName = "Menu Display Mode",
 				lobbyDisplayModeToggle = true,
 			},
-			{
-				name = "WaterType",
-				humanName = "Water Type",
-				options = {
-					{
-						name = "Basic",
-						apply = {
-							Water = 0,
-						}
-					},
-					{
-						name = "Reflective",
-						apply = {
-							Water = 1,
-						}
-					},
-					{
-						name = "Refractive",
-						apply = {
-							Water = 2,
-						}
-					},
-					{
-						name = "Dynamic",
-						apply = {
-							Water = 3,
-						}
-					},
-					{
-						name = "Bumpmapped",
-						apply = {
-							Water = 4,
-						}
-					},
-				},
-			},
-			{
-				name = "WaterQuality",
-				humanName = "Water Quality",
-				options = {
-					{
-						name = "Low",
-						apply = {
-							BumpWaterAnisotropy = 0,
-							BumpWaterBlurReflection = 0,
-							BumpWaterReflection = 0,
-							BumpWaterRefraction = 0,
-							BumpWaterDepthBits = 16,
-							BumpWaterShoreWaves = 0,
-							BumpWaterTexSizeReflection = 64,
-						}
-					},
-					{
-						name = "Medium",
-						apply = {
-							BumpWaterAnisotropy = 0,
-							BumpWaterBlurReflection = 1,
-							BumpWaterReflection = 1,
-							BumpWaterRefraction = 1,
-							BumpWaterDepthBits = 24,
-							BumpWaterShoreWaves = 1,
-							BumpWaterTexSizeReflection = 128,
-						}
-					},
-					{
-						name = "High",
-						apply = {
-							BumpWaterAnisotropy = 2,
-							BumpWaterBlurReflection = 1,
-							BumpWaterReflection = 2,
-							BumpWaterRefraction = 1,
-							BumpWaterDepthBits = 32,
-							BumpWaterShoreWaves = 1,
-							BumpWaterTexSizeReflection = 256,
-						}
-					},
-					{
-						name = "Ultra",
-						apply = {
-							BumpWaterAnisotropy = 2,
-							BumpWaterBlurReflection = 1,
-							BumpWaterReflection = 2,
-							BumpWaterRefraction = 2,
-							BumpWaterDepthBits = 32,
-							BumpWaterShoreWaves = 1,
-							BumpWaterTexSizeReflection = 1024,
-						}
-					},
-				},
-			},
-			{
-				name = "DeferredRendering",
-				humanName = "Deferred Rendering",
-				options = {
-					{
-						name = "On",
-						apply = {
-							AllowDeferredModelRendering = 1,
-							AllowDeferredMapRendering = 1,
-						}
-					},
-					{
-						name = "Off",
-						apply = {
-							AllowDeferredModelRendering = 0,
-							AllowDeferredMapRendering = 0,
-						}
-					},
-				},
-			},
-			{
-				name = "UnitReflections",
-				humanName = "Unit Reflection Quality",
-				options = {
-					{
-						name="Off",
-						apply = {
-							CubeTexSizeReflection = 1,
-							CubeTexSizeSpecular = 1,
-						}
-					},
-					{
-						name="Low",
-						apply = {
-							CubeTexSizeReflection = 64,
-							CubeTexSizeSpecular = 64,
-						}
-					},
-					{
-						name="Medium",
-						apply = {
-							CubeTexSizeReflection = 128,
-							CubeTexSizeSpecular = 128,
-						}
-					},
-					{
-						name="High",
-						apply = {
-							CubeTexSizeReflection = 256,
-							CubeTexSizeSpecular = 256,
-						}
-					},
-					{
-						name="Ultra",
-						apply = {
-							CubeTexSizeReflection = 1024,
-							CubeTexSizeSpecular = 1024,
-						}
-					},
-				},
-			},
-			{
-				name = "Shadows",
-				humanName = "Shadows",
-				options = {
-					{
-						name = "None",
-						apply = {
-							Shadows = 0
-						}
-					},
-					{
-						name = "Units Only",
-						apply = {
-							Shadows = 2
-						}
-					},
-					{
-						name = "Units and Terrain",
-						apply = {
-							Shadows = 1
-						}
-					},
-				},
-			},
-			{
-				name = "ShadowDetail",
-				humanName = "Shadow Detail",
-				options = {
-					{
-						name = "Low",
-						apply = {
-							ShadowMapSize = 1024
-						}
-					},
-					{
-						name = "Medium",
-						apply = {
-							ShadowMapSize = 2048
-						}
-					},
-					{
-						name = "High",
-						apply = {
-							ShadowMapSize = 4096
-						}
-					},
-					{
-						name = "Ultra",
-						apply = {
-							ShadowMapSize = 8192
-						}
-					},
-				},
-			},
-			{
-				name = "ParticleLimit",
-				humanName = "Particle Limit",
-				options = {
-					{
-						name = "2000",
-						apply = {
-							MaxParticles = 2000
-						}
-					},
-					{
-						name = "4000",
-						apply = {
-							MaxParticles = 4000
-						}
-					},
-					{
-						name = "6000",
-						apply = {
-							MaxParticles = 6000
-						}
-					},
-					{
-						name = "9000",
-						apply = {
-							MaxParticles = 9000
-						}
-					},
-					{
-						name = "12000",
-						apply = {
-							MaxParticles = 12000
-						}
-					},
-					{
-						name = "15000",
-						apply = {
-							MaxParticles = 15000
-						}
-					},
-					{
-						name = "20000",
-						apply = {
-							MaxParticles = 15000
-						}
-					},
-					{
-						name = "25000",
-						apply = {
-							MaxParticles = 25000
-						}
-					},
-					{
-						name = "35000",
-						apply = {
-							MaxParticles = 25000
-						}
-					},
-					{
-						name = "50000",
-						apply = {
-							MaxParticles = 50000
-						}
-					},
-				},
-			},
-			{
-				name = "ShaderDetail",
-				humanName = "Shader Detail",
-				fileTarget = lupsFileTarget,
-				applyFunction = UpdateLups,
-				options = {
-					{
-						name = "Minimal",
-						file = "LuaMenu/configs/gameConfig/zk/lups/lups0.cfg"
-					},
-					{
-						name = "Low",
-						file = "LuaMenu/configs/gameConfig/zk/lups/lups1.cfg"
-					},
-					{
-						name = "Medium",
-						file = "LuaMenu/configs/gameConfig/zk/lups/lups2.cfg"
-					},
-					{
-						name = "High",
-						file = "LuaMenu/configs/gameConfig/zk/lups/lups3.cfg"
-					},
-					{
-						name = "Ultra",
-						file = "LuaMenu/configs/gameConfig/zk/lups/lups4.cfg"
-					},
-				},
-			},
-			{
-				name = "LupsAirJet",
-				humanName = "Aircraft Jets",
-				options = {
-					{
-						name = "On",
-						applyFunction = UpdateLups,
-					},
-					{
-						name = "Off",
-						applyFunction = UpdateLups,
-					},
-				},
-			},
-			{
-				name = "LupsRibbon",
-				humanName = "Aircraft Wing Trails",
-				options = {
-					{
-						name = "On",
-						applyFunction = UpdateLups,
-					},
-					{
-						name = "Off",
-						applyFunction = UpdateLups,
-					},
-				},
-			},
-			{
-				name = "LupsShieldSphereColor",
-				humanName = "Shield Effect Shader",
-				options = {
-					{
-						name = "On",
-						applyFunction = UpdateLups,
-					},
-					{
-						name = "Off",
-						applyFunction = UpdateLups,
-					},
-				},
-			},
-			{
-				name = "LupsWaterSettings",
-				humanName = "Shaders Affected by Water",
-				options = {
-					{
-						name = "Off",
-						applyFunction = UpdateLups,
-					},
-					{
-						name = "Refraction",
-						applyFunction = UpdateLups,
-					},
-					{
-						name = "Reflection",
-						applyFunction = UpdateLups,
-					},
-					{
-						name = "Refract and Reflect",
-						applyFunction = UpdateLups,
-					},
-				},
-			},
-			{
-				name = "TerrainDetail",
-				humanName = "Terrain Detail",
-				options = {
-					{
-						name = "Minimal",
-						apply = {
-							GroundScarAlphaFade = 1,
-							GroundDecals = 0,
-							GroundDetail = 50,
-						}
-					},
-					{
-						name = "Low",
-						apply = {
-							GroundScarAlphaFade = 0,
-							GroundDecals = 1,
-							GroundDetail = 70,
-						}
-					},
-					{
-						name = "Medium",
-						apply = {
-							GroundScarAlphaFade = 1,
-							GroundDecals = 2,
-							GroundDetail = 90,
-						}
-					},
-					{
-						name = "High",
-						apply = {
-							GroundScarAlphaFade = 1,
-							GroundDecals = 5,
-							GroundDetail = 120,
-						}
-					},
-					{
-						name = "Ultra",
-						apply = {
-							GroundScarAlphaFade = 1,
-							GroundDecals = 10,
-							GroundDetail = 180,
-						}
-					},
-				},
-			},
-			{
-				name = "VegetationDetail",
-				humanName = "Vegetation Detail",
-				options = {
-					{
-						name = "Minimal",
-						apply = {
-							TreeRadius = 1000,
-							GrassDetail = 0,
-						}
-					},
-					{
-						name = "Low",
-						apply = {
-							TreeRadius = 1000,
-							GrassDetail = 1,
-						}
-					},
-					{
-						name = "Medium",
-						apply = {
-							TreeRadius = 1200,
-							GrassDetail = 4,
-						}
-					},
-					{
-						name = "High",
-						apply = {
-							TreeRadius = 1500,
-							GrassDetail = 9,
-						}
-					},
-					{
-						name = "Ultra",
-						apply = {
-							TreeRadius = 2500,
-							GrassDetail = 16,
-						}
-					},
-					{
-						name = "Ridiculous",
-						apply = {
-							TreeRadius = 2500,
-							GrassDetail = 100,
-						}
-					},
-				},
-			},
-			{
-				name = "FancySky",
-				humanName = "Fancy Sky",
-				options = {
-					{
-						name = "On",
-						apply = {
-							DynamicSky = 1,
-							AdvSky = 1,
-						}
-					},
-					{
-						name = "Off",
-						apply = {
-							DynamicSky = 0,
-							AdvSky = 0,
-						}
-					},
-				},
-			},
-			{
-				name = "FeatureFade",
-				humanName = "Rock and Wreck Fade",
-				options = {
-					{
-						name = "On",
-						apply = {
-							FeatureDrawDistance = 6000,
-							FeatureFadeDistance = 4500,
-						}
-					},
-					{
-						name = "Off",
-						apply = {
-							FeatureDrawDistance = 600000,
-							FeatureFadeDistance = 600000,
-						}
-					},
-				},
-			},
+			
 			{
 				name = "CompatibilityMode",
 				humanName = "Compatibility Mode",
@@ -812,6 +316,383 @@ local settingsConfig = {
 				},
 			},
 			{
+				name = "LupsAirJet",
+				humanName = "Aircraft Jets",
+				options = {
+					{
+						name = "On",
+						applyFunction = UpdateLups,
+					},
+					{
+						name = "Off",
+						applyFunction = UpdateLups,
+					},
+				},
+			},
+			{
+				name = "LupsRibbon",
+				humanName = "Aircraft Wing Trails",
+				options = {
+					{
+						name = "On",
+						applyFunction = UpdateLups,
+					},
+					{
+						name = "Off",
+						applyFunction = UpdateLups,
+					},
+				},
+			},
+			{
+				name = "DeferredRendering",
+				humanName = "Deferred Rendering",
+				options = {
+					{
+						name = "On",
+						apply = {
+							AllowDeferredModelRendering = 1,
+							AllowDeferredMapRendering = 1,
+						}
+					},
+					{
+						name = "Off",
+						apply = {
+							AllowDeferredModelRendering = 0,
+							AllowDeferredMapRendering = 0,
+						}
+					},
+				},
+			},
+			{
+				name = "FancySky",
+				humanName = "Fancy Sky",
+				options = {
+					{
+						name = "On",
+						apply = {
+							DynamicSky = 1,
+							AdvSky = 1,
+						}
+					},
+					{
+						name = "Off",
+						apply = {
+							DynamicSky = 0,
+							AdvSky = 0,
+						}
+					},
+				},
+			},
+			{
+				name = "ParticleLimit",
+				humanName = "Particle Limit",
+				options = {
+					{
+						name = "2000",
+						apply = {
+							MaxParticles = 2000
+						}
+					},
+					{
+						name = "4000",
+						apply = {
+							MaxParticles = 4000
+						}
+					},
+					{
+						name = "6000",
+						apply = {
+							MaxParticles = 6000
+						}
+					},
+					{
+						name = "9000",
+						apply = {
+							MaxParticles = 9000
+						}
+					},
+					{
+						name = "12000",
+						apply = {
+							MaxParticles = 12000
+						}
+					},
+					{
+						name = "15000",
+						apply = {
+							MaxParticles = 15000
+						}
+					},
+					{
+						name = "20000",
+						apply = {
+							MaxParticles = 15000
+						}
+					},
+					{
+						name = "25000",
+						apply = {
+							MaxParticles = 25000
+						}
+					},
+					{
+						name = "35000",
+						apply = {
+							MaxParticles = 25000
+						}
+					},
+					{
+						name = "50000",
+						apply = {
+							MaxParticles = 50000
+						}
+					},
+				},
+			},
+			{
+				name = "FeatureFade",
+				humanName = "Rock and Wreck Fade",
+				options = {
+					{
+						name = "On",
+						apply = {
+							FeatureDrawDistance = 6000,
+							FeatureFadeDistance = 4500,
+						}
+					},
+					{
+						name = "Off",
+						apply = {
+							FeatureDrawDistance = 600000,
+							FeatureFadeDistance = 600000,
+						}
+					},
+				},
+			},
+			{
+				name = "ShaderDetail",
+				humanName = "Shader Detail",
+				fileTarget = lupsFileTarget,
+				applyFunction = UpdateLups,
+				options = {
+					{
+						name = "Minimal",
+						file = "LuaMenu/configs/gameConfig/zk/lups/lups0.cfg"
+					},
+					{
+						name = "Low",
+						file = "LuaMenu/configs/gameConfig/zk/lups/lups1.cfg"
+					},
+					{
+						name = "Medium",
+						file = "LuaMenu/configs/gameConfig/zk/lups/lups2.cfg"
+					},
+					{
+						name = "High",
+						file = "LuaMenu/configs/gameConfig/zk/lups/lups3.cfg"
+					},
+					{
+						name = "Ultra",
+						file = "LuaMenu/configs/gameConfig/zk/lups/lups4.cfg"
+					},
+				},
+			},
+			{
+				name = "LupsWaterSettings",
+				humanName = "Shaders Affected by Water",
+				options = {
+					{
+						name = "Off",
+						applyFunction = UpdateLups,
+					},
+					{
+						name = "Refraction",
+						applyFunction = UpdateLups,
+					},
+					{
+						name = "Reflection",
+						applyFunction = UpdateLups,
+					},
+					{
+						name = "Refract and Reflect",
+						applyFunction = UpdateLups,
+					},
+				},
+			},
+			{
+				name = "LupsShieldSphereColor",
+				humanName = "Shield Effect Shader",
+				options = {
+					{
+						name = "On",
+						applyFunction = UpdateLups,
+					},
+					{
+						name = "Off",
+						applyFunction = UpdateLups,
+					},
+				},
+			},
+			{
+				name = "Shadows",
+				humanName = "Shadows",
+				options = {
+					{
+						name = "None",
+						apply = {
+							Shadows = 0
+						}
+					},
+					{
+						name = "Units Only",
+						apply = {
+							Shadows = 2
+						}
+					},
+					{
+						name = "Units and Terrain",
+						apply = {
+							Shadows = 1
+						}
+					},
+				},
+			},
+			{
+				name = "TerrainDetail",
+				humanName = "Terrain Detail",
+				options = {
+					{
+						name = "Minimal",
+						apply = {
+							GroundScarAlphaFade = 1,
+							GroundDecals = 0,
+							GroundDetail = 50,
+						}
+					},
+					{
+						name = "Low",
+						apply = {
+							GroundScarAlphaFade = 0,
+							GroundDecals = 1,
+							GroundDetail = 70,
+						}
+					},
+					{
+						name = "Medium",
+						apply = {
+							GroundScarAlphaFade = 1,
+							GroundDecals = 2,
+							GroundDetail = 90,
+						}
+					},
+					{
+						name = "High",
+						apply = {
+							GroundScarAlphaFade = 1,
+							GroundDecals = 5,
+							GroundDetail = 120,
+						}
+					},
+					{
+						name = "Ultra",
+						apply = {
+							GroundScarAlphaFade = 1,
+							GroundDecals = 10,
+							GroundDetail = 180,
+						}
+					},
+				},
+			},
+			{
+				name = "UnitReflections",
+				humanName = "Unit Reflection Quality",
+				options = {
+					{
+						name="Off",
+						apply = {
+							CubeTexSizeReflection = 1,
+							CubeTexSizeSpecular = 1,
+						}
+					},
+					{
+						name="Low",
+						apply = {
+							CubeTexSizeReflection = 64,
+							CubeTexSizeSpecular = 64,
+						}
+					},
+					{
+						name="Medium",
+						apply = {
+							CubeTexSizeReflection = 128,
+							CubeTexSizeSpecular = 128,
+						}
+					},
+					{
+						name="High",
+						apply = {
+							CubeTexSizeReflection = 256,
+							CubeTexSizeSpecular = 256,
+						}
+					},
+					{
+						name="Ultra",
+						apply = {
+							CubeTexSizeReflection = 1024,
+							CubeTexSizeSpecular = 1024,
+						}
+					},
+				},
+			},
+			{
+				name = "VegetationDetail",
+				humanName = "Vegetation Detail",
+				options = {
+					{
+						name = "Minimal",
+						apply = {
+							TreeRadius = 1000,
+							GrassDetail = 0,
+						}
+					},
+					{
+						name = "Low",
+						apply = {
+							TreeRadius = 1000,
+							GrassDetail = 1,
+						}
+					},
+					{
+						name = "Medium",
+						apply = {
+							TreeRadius = 1200,
+							GrassDetail = 4,
+						}
+					},
+					{
+						name = "High",
+						apply = {
+							TreeRadius = 1500,
+							GrassDetail = 9,
+						}
+					},
+					{
+						name = "Ultra",
+						apply = {
+							TreeRadius = 2500,
+							GrassDetail = 16,
+						}
+					},
+					{
+						name = "Ridiculous",
+						apply = {
+							TreeRadius = 2500,
+							GrassDetail = 100,
+						}
+					},
+				},
+			},
+			{
 				name = "VSync",
 				humanName = "Vertical Sync",
 				options = {
@@ -831,6 +712,97 @@ local settingsConfig = {
 						name = "Off",
 						apply = {
 							VSync = 0,
+						}
+					},
+				},
+			},
+			
+			{
+				name = "WaterType",
+				humanName = "Water Type",
+				options = {
+					{
+						name = "Basic",
+						apply = {
+							Water = 0,
+						}
+					},
+					{
+						name = "Reflective",
+						apply = {
+							Water = 1,
+						}
+					},
+					{
+						name = "Refractive",
+						apply = {
+							Water = 2,
+						}
+					},
+					{
+						name = "Dynamic",
+						apply = {
+							Water = 3,
+						}
+					},
+					{
+						name = "Bumpmapped",
+						apply = {
+							Water = 4,
+						}
+					},
+				},
+			},
+			{
+				name = "WaterQuality",
+				humanName = "Water Quality",
+				options = {
+					{
+						name = "Low",
+						apply = {
+							BumpWaterAnisotropy = 0,
+							BumpWaterBlurReflection = 0,
+							BumpWaterReflection = 0,
+							BumpWaterRefraction = 0,
+							BumpWaterDepthBits = 16,
+							BumpWaterShoreWaves = 0,
+							BumpWaterTexSizeReflection = 64,
+						}
+					},
+					{
+						name = "Medium",
+						apply = {
+							BumpWaterAnisotropy = 0,
+							BumpWaterBlurReflection = 1,
+							BumpWaterReflection = 1,
+							BumpWaterRefraction = 1,
+							BumpWaterDepthBits = 24,
+							BumpWaterShoreWaves = 1,
+							BumpWaterTexSizeReflection = 128,
+						}
+					},
+					{
+						name = "High",
+						apply = {
+							BumpWaterAnisotropy = 2,
+							BumpWaterBlurReflection = 1,
+							BumpWaterReflection = 2,
+							BumpWaterRefraction = 1,
+							BumpWaterDepthBits = 32,
+							BumpWaterShoreWaves = 1,
+							BumpWaterTexSizeReflection = 256,
+						}
+					},
+					{
+						name = "Ultra",
+						apply = {
+							BumpWaterAnisotropy = 2,
+							BumpWaterBlurReflection = 1,
+							BumpWaterReflection = 2,
+							BumpWaterRefraction = 2,
+							BumpWaterDepthBits = 32,
+							BumpWaterShoreWaves = 1,
+							BumpWaterTexSizeReflection = 1024,
 						}
 					},
 				},
