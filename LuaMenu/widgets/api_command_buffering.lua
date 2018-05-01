@@ -32,7 +32,7 @@ local bufferBypass = {
 	BattleRemoved = true,
 }
 
-local CMD_PER_UPDATE = 12
+local CMD_PER_UPDATE = 14
 
 function widget:ActivateGame()
 	local lobby = WG.LibLobby.lobby
