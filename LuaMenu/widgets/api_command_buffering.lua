@@ -29,7 +29,7 @@ local bufferBypass = {
 	ConnectSpring = true,
 }
 
-local CMD_PER_UPDATE = 24
+local CMD_PER_UPDATE = 10
 
 function widget:ActivateGame()
 	local lobby = WG.LibLobby.lobby
