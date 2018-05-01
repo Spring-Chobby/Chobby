@@ -605,6 +605,13 @@ function BattleListWindow:CompareItems(id1, id2)
 	end
 end
 
+function BattleListWindow:RecalculateOrder(id)
+	if lobby.commandBuffer then
+		return
+	end
+	self:super("RecalculateOrder", id)
+end
+
 function BattleListWindow:UpdateSync(battleID)
 	local battle = lobby:GetBattle(battleID)
 	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then

@@ -93,7 +93,7 @@ function Interface:ProcessBuffer()
 	
 	self.bufferExecutionPos = self.bufferExecutionPos + 1
 	local command = self.commandBuffer[self.bufferExecutionPos]
-	if not command then
+	if not command[self.bufferExecutionPos + 1] then
 		self.commandBuffer = false
 		return false
 	end

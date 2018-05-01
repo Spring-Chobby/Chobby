@@ -86,7 +86,9 @@ function UserListPanel:Update()
 	self.userPanel:ClearChildren()
 	local users = self:GetUsers()
 	
-	table.sort(users, CompareUsers)
+	if not lobby.commandBuffer then
+		table.sort(users, CompareUsers)
+	end
 	
 	for i = 1, #users do
 		self:AddUser(users[i])
