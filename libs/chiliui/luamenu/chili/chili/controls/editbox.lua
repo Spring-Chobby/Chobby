@@ -315,14 +315,16 @@ function EditBox:AddLine(text, tooltips, OnTextClick)
 	if self.agressiveMaxLines and #self.lines > self.agressiveMaxLines then
 		local preserve = {}
 		for i = math.max(1, #self.lines - self.agressiveMaxLinesPreserve), #self.lines do
-			preserve[#preserve + 1] = self.lines[i].text
+			preserve[#preserve + 1] = {self.lines[i].text, self.lines[i].tooltips, self.lines[i].OnTextClick}
 		end
 		self.lines = {}
 		self.physicalLines = {}
 		
 		for i = 1, #preserve do
 			local line = {
-				text = preserve[i],
+				text = preserve[i][1],
+				tooltips = preserve[i][2],
+				OnTextClick = preserve[i][3],
 				pls = {}, -- indexes of physical lines
 			}
 			table.insert(self.lines, line)
