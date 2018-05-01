@@ -37,7 +37,7 @@ end
 --------------------------------------------------------------------------------
 -- Initialization
 
-local function MakeQueueControl(parentControl, queueName, queueDescription, players, waiting, maxPartySize)
+local function MakeQueueControl(parentControl, queueName, queueDescription, players, waiting, maxPartySize, GetBanTime)
 	local Configuration = WG.Chobby.Configuration
 	local lobby = WG.LibLobby.lobby
 	local btnLeave, btnJoin
@@ -55,6 +55,11 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		classname = "option_button",
 		OnClick = {
 			function(obj)
+				local banTime = GetBanTime()
+				if banTime then
+					WG.Chobby.InformationPopup("You are currently banned from matchmaking.\n" .. banTime .. " seconds remaining.")
+					return
+				end
 				if not HaveRightEngineVersion() then
 					WG.Chobby.InformationPopup("Engine update required, restart the game to apply.")
 					return
@@ -448,6 +453,13 @@ local function InitializeControls(window)
 		parent = window
 	}
 	
+	local function GetBanTime()
+		if banStart and banDuration then
+			return (banDuration or 0) - math.ceil(Spring.DiffTimers(Spring.GetTimer(), banStart))
+		end
+		return false
+	end
+	
 	local queues = 0
 	local queueHolders = {}
 	local function AddQueue(_, queueName, queueDescription, mapNames, maxPartySize)
@@ -468,7 +480,7 @@ local function InitializeControls(window)
 			draggable = false,
 			padding = {0, 0, 0, 0},
 		}
-		queueHolders[queueName] = MakeQueueControl(queueHolder, queueName, queueDescription, queueData.playersIngame or "?", queueData.playersWaiting or "?", maxPartySize)
+		queueHolders[queueName] = MakeQueueControl(queueHolder, queueName, queueDescription, queueData.playersIngame or "?", queueData.playersWaiting or "?", maxPartySize, GetBanTime)
 		queues = queues + 1
 	end
 	
@@ -505,6 +517,11 @@ local function InitializeControls(window)
 			statusText:SetText("You are banned from matchmaking for " .. bannedTime .. " seconds")
 			banStart = Spring.GetTimer()
 			banDuration = bannedTime
+			for queueName, queueHolder in pairs(queueHolders) do
+				queueHolder.SetInQueue(false)
+			end
+		else
+			banDuration = false
 		end
 	end
 	
@@ -558,7 +575,7 @@ local function InitializeControls(window)
 		if not banStart then
 			return
 		end
-		local timeRemaining = banDuration - math.ceil(Spring.DiffTimers(Spring.GetTimer(), banStart))
+		local timeRemaining = (banDuration or 0) - math.ceil(Spring.DiffTimers(Spring.GetTimer(), banStart))
 		if timeRemaining < 0 then
 			banStart = false
 			statusText:SetText("")
