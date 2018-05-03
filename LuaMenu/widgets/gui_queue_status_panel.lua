@@ -220,7 +220,7 @@ local function InitializeInstantQueueHandler()
 
 	local function UpdateQueueText()
 		if queueName then
-			queueStatusText:SetText(queueName .. " Available\nClick to Join")
+			queueStatusText:SetText(queueName .. " Available\nClick to Play now")
 		end
 	end
 
