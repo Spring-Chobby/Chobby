@@ -20,6 +20,7 @@ local statusQueueLobby -- global for timer update
 local statusQueueIngame
 local readyCheckPopup
 local findingMatch = false
+local ALLOW_REJECT = false
 
 local instantStartQueuePriority = {
 	["Teams"] = 3,
@@ -373,12 +374,13 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 	end
 
 	local buttonAccept = Button:New {
-		right = 150,
-		width = 135,
+		x = (not ALLOW_REJECT) and "20%",
+		right = (ALLOW_REJECT and 150) or "20%",
+		width = (ALLOW_REJECT and 135),
 		bottom = 1,
 		height = 70,
-		caption = i18n("accept"),
-		font = Configuration:GetFont(3),
+		caption = (ALLOW_REJECT and i18n("accept")) or i18n("ready"),
+		font = Configuration:GetFont((ALLOW_REJECT and 3) or 4),
 		parent = readyCheckWindow,
 		classname = "action_button",
 		OnClick = {
@@ -388,7 +390,7 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 		},
 	}
 
-	local buttonReject = Button:New {
+	local buttonReject = ALLOW_REJECT and Button:New {
 		right = 1,
 		width = 135,
 		bottom = 1,
@@ -404,7 +406,7 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 		},
 	}
 
-	local popupHolder = WG.Chobby.PriorityPopup(readyCheckWindow, CancelFunc, AcceptFunc, screen0)
+	local popupHolder = WG.Chobby.PriorityPopup(readyCheckWindow, ALLOW_REJECT and CancelFunc, AcceptFunc, screen0)
 
 	local externalFunctions = {}
 
@@ -437,10 +439,12 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 
 		buttonAccept:Hide()
 
-		buttonReject:SetPos(nil, nil, 90, 60)
-		buttonReject._relativeBounds.right = 1
-		buttonReject._relativeBounds.bottom = 1
-		buttonReject:UpdateClientArea()
+		if ALLOW_REJECT then
+			buttonReject:SetPos(nil, nil, 90, 60)
+			buttonReject._relativeBounds.right = 1
+			buttonReject._relativeBounds.bottom = 1
+			buttonReject:UpdateClientArea()
+		end
 	end
 
 	function externalFunctions.MatchMakingComplete(success)
