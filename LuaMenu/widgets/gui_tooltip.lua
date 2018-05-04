@@ -724,7 +724,7 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 	end
 
 	-- In Battle
-	if (not inBattleroom) and userInfo.battleID then
+	if (not inBattleroom) and userInfo.battleID and lobby:GetBattle(userInfo.battleID) then
 		if not userTooltip.battleInfoHolder then
 			userTooltip.battleInfoHolder = GetBattleInfoHolder(userTooltip.mainControl, offset, userInfo.battleID)
 		else
