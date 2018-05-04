@@ -664,7 +664,7 @@ function BattleListWindow:UpdateTimers()
 		
 		local battle = lobby:GetBattle(battleID)
 		local runningTimeCaption = items.battleButton:GetChildByName("runningTimeCaption")
-		if runningTimeCaption then
+		if battle and runningTimeCaption then
 			local modeName = battle.battleMode and Configuration.battleTypeToHumanName[battle.battleMode]
 			if modeName then
 				modeName = modeName .. " - "
