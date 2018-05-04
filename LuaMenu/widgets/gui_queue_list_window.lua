@@ -650,7 +650,7 @@ end
 
 local lobbyTimeoutTime = false
 local function ResetLobbyTimeout()
-	if WG.LibLobby and WG.LibLobby.lobby and (WG.LibLobby.lobby.status == "connected") then
+	if WG.LibLobby and WG.LibLobby.lobby and (WG.LibLobby.lobby.status == "connected" or WG.LibLobby.lobby.status == "connecting") then
 		lobbyTimeoutTime = Spring.GetTimer()
 	end
 end
