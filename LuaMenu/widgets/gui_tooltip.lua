@@ -828,7 +828,7 @@ local function SetTooltipPos()
 	y = screenHeight - y -- Spring y is from the bottom, chili is from the top
 
 	-- Making sure the tooltip is within the boundaries of the screen
-	if y + height > screenHeight then
+	if y + height + 20 > screenHeight then
 		if y > height then
 			y = y - height
 		else
