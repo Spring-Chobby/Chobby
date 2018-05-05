@@ -681,6 +681,12 @@ local function UpdateLobbyTimeout()
 	end
 end
 
+local function OnDisconnected(_, reason, intentional)
+	if intentional then
+		lobbyTimeoutTime = false
+	end
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface
@@ -760,6 +766,7 @@ function widget:Initialize()
 	
 	WG.QueueListWindow = QueueListWindow
 	
+	WG.LibLobby.lobby:AddListener("OnDisconnected", OnDisconnected)
 	WG.LibLobby.lobby:AddListener("OnCommandReceived", ResetLobbyTimeout)
 	WG.LibLobby.lobby:AddListener("OnCommandBuffered", ResetLobbyTimeout)
 end

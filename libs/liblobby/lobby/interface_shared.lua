@@ -62,7 +62,7 @@ function Interface:Disconnect()
 	if self.client then
 		self.client:close()
 	end
-	self:_OnDisconnected()
+	self:_OnDisconnected(nil, true)
 end
 
 function Interface:_SendCommand(command, sendMessageCount)

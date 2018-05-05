@@ -1251,8 +1251,8 @@ end
 -- BEGIN Connection handling TODO: This might be better to move into the shared interface
 -------------------------------------------------
 
-function Lobby:_OnDisconnected(...)
-	self:_CallListeners("OnDisconnected")
+function Lobby:_OnDisconnected(reason, intentional)
+	self:_CallListeners("OnDisconnected", reason, intentional)
 
 	for userName,_ in pairs(self.users) do
 		self:_OnRemoveUser(userName)
