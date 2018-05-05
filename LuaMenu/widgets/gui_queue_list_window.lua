@@ -650,7 +650,8 @@ end
 
 local lobbyTimeoutTime = false
 local function ResetLobbyTimeout()
-	if WG.LibLobby and WG.LibLobby.lobby and (WG.LibLobby.lobby.status == "connected" or WG.LibLobby.lobby.status == "connecting") then
+	local lobbyStatus = WG.LibLobby.lobby.status
+	if WG.LibLobby and WG.LibLobby.lobby and (lobbyStatus == "connected" or lobbyStatus == "connecting") then
 		lobbyTimeoutTime = Spring.GetTimer()
 	end
 end
@@ -670,6 +671,12 @@ local function UpdateLobbyTimeout()
 	local logoutTime = Configuration.lobbyTimeoutTime
 	if Spring.GetGameName() ~= "" then
 		logoutTime = 180 -- Possibility of long load times.
+	end
+	
+	local lobbyStatus = WG.LibLobby.lobby.status
+	if lobbyStatus == "connecting" then
+		lobbyTimeoutTime = Spring.GetTimer()
+		return
 	end
 	
 	if (Spring.DiffTimers(Spring.GetTimer(), lobbyTimeoutTime) or 0) > logoutTime then
