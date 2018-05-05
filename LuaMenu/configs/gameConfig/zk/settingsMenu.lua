@@ -15,7 +15,8 @@ local function UpdateLups(_, conf)
 	local lupsFileName = settings.ShaderDetail_file or "LuaMenu/configs/gameConfig/zk/lups/lups3.cfg"
 	local lupsAirJetDisabled = ((settings.LupsAirJet == "On") and FALSE) or TRUE
 	local lupsRibbonDisabled = ((settings.LupsRibbon == "On") and FALSE) or TRUE
-	local lupsShieldSphereColorDisabled = ((settings.LupsShieldSphereColor == "On") and FALSE) or TRUE
+	local LupsShieldShaderDisabled = ((settings.LupsShieldShader == "Off") and TRUE) or FALSE
+	local LupsShieldHighQualityDisabled = ((settings.LupsShieldShader == "Default") and FALSE) or TRUE
 	local lupsWaterRefractEnabled = ((settings.LupsWaterSettings == "Refraction" or settings.LupsWaterSettings == "Refract and Reflect") and 1) or 0
 	local lupsWaterReflectEnabled = ((settings.LupsWaterSettings == "Reflection" or settings.LupsWaterSettings == "Refract and Reflect") and 1) or 0
 	
@@ -23,7 +24,8 @@ local function UpdateLups(_, conf)
 	
 	sourceFile = sourceFile:gsub("__AIR_JET__", lupsAirJetDisabled)
 	sourceFile = sourceFile:gsub("__RIBBON__", lupsRibbonDisabled)
-	sourceFile = sourceFile:gsub("__SHIELD_SPHERE_COLOR__", lupsShieldSphereColorDisabled)
+	sourceFile = sourceFile:gsub("__SHIELD_SPHERE_COLOR__", LupsShieldShaderDisabled)
+	sourceFile = sourceFile:gsub("__SHIELD_SPHERE_HIGH_QUALITY__", LupsShieldHighQualityDisabled)
 	sourceFile = sourceFile:gsub("__ENABLE_REFRACT__", lupsWaterRefractEnabled)
 	sourceFile = sourceFile:gsub("__ENABLE_REFLECT__", lupsWaterReflectEnabled)
 	
@@ -66,7 +68,7 @@ local settingsConfig = {
 					ShaderDetail = "Minimal",
 					LupsAirJet = "Off",
 					LupsRibbon = "Off",
-					LupsShieldSphereColor = "Off",
+					LupsShieldShader = "Off",
 					LupsWaterSettings = "Off",
 					FancySky = "Off",
 				}
@@ -91,7 +93,7 @@ local settingsConfig = {
 					ShaderDetail = "Minimal",
 					LupsAirJet = "Off",
 					LupsRibbon = "Off",
-					LupsShieldSphereColor = "Off",
+					LupsShieldShader = "Off",
 					LupsWaterSettings = "Off",
 					FancySky = "Off",
 				}
@@ -116,7 +118,7 @@ local settingsConfig = {
 					ShaderDetail = "Low",
 					LupsAirJet = "Off",
 					LupsRibbon = "On",
-					LupsShieldSphereColor = "On",
+					LupsShieldShader = "Default",
 					LupsWaterSettings = "Off",
 					FancySky = "Off",
 				}
@@ -141,7 +143,7 @@ local settingsConfig = {
 					ShaderDetail = "Medium",
 					LupsAirJet = "On",
 					LupsRibbon = "On",
-					LupsShieldSphereColor = "On",
+					LupsShieldShader = "Default",
 					LupsWaterSettings = "Off",
 					FancySky = "Off",
 				}
@@ -166,7 +168,7 @@ local settingsConfig = {
 					ShaderDetail = "High",
 					LupsAirJet = "On",
 					LupsRibbon = "On",
-					LupsShieldSphereColor = "On",
+					LupsShieldShader = "Default",
 					LupsWaterSettings = "Off",
 					FancySky = "Off",
 				}
@@ -191,7 +193,7 @@ local settingsConfig = {
 					ShaderDetail = "Ultra",
 					LupsAirJet = "On",
 					LupsRibbon = "On",
-					LupsShieldSphereColor = "On",
+					LupsShieldShader = "Default",
 					LupsWaterSettings = "Refract and Reflect",
 					FancySky = "On",
 				}
@@ -538,11 +540,15 @@ local settingsConfig = {
 				},
 			},
 			{
-				name = "LupsShieldSphereColor",
+				name = "LupsShieldShader",
 				humanName = "Shield Effect Shader",
 				options = {
 					{
-						name = "On",
+						name = "Default",
+						applyFunction = UpdateLups,
+					},
+					{
+						name = "Simple",
 						applyFunction = UpdateLups,
 					},
 					{
@@ -1013,7 +1019,7 @@ local settingsDefault = {
 	ShaderDetail = "Medium",
 	LupsAirJet = "On",
 	LupsRibbon = "On",
-	LupsShieldSphereColor = "On",
+	LupsShieldShader = "Default",
 	LupsWaterSettings = "Off",
 	FancySky = "Off",
 	--IconDistance = 151,
