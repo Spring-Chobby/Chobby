@@ -33,6 +33,40 @@ local function HaveRightEngineVersion()
 	return (not engineVersion) or configuration:IsValidEngineVersion(engineVersion)
 end
 
+local BAN_TIME_FORGET_SECONDS = 60*15
+local BAN_BASE = 60 -- From match proposed, not from timeout.
+local BAN_ADD = 60
+local BAN_MAX_COUNT = 5
+
+local function GetCombinedBannedTime(banTimeFromServer)
+	local configuration = WG.Chobby.Configuration
+	local rejectTime = configuration.matchmakerRejectTime
+	local rejectCount = configuration.matchmakerRejectCount
+	if not (rejectTime and rejectCount) then
+		return banTimeFromServer
+	end
+	local timeDiff, inFuture = Spring.Utilities.GetTimeDifferenceTable(Spring.Utilities.TimeStringToTable(rejectTime))
+	if inFuture or (not timeDiff) then
+		configuration:SetConfigValue("matchmakerRejectTime", false)
+		configuration:SetConfigValue("matchmakerRejectCount", false)
+		return banTimeFromServer
+	end
+	timeDiff = Spring.Utilities.TimeToSeconds(timeDiff)
+	if timeDiff > BAN_TIME_FORGET_SECONDS then
+		configuration:SetConfigValue("matchmakerRejectTime", false)
+		configuration:SetConfigValue("matchmakerRejectCount", false)
+		return banTimeFromServer
+	end
+	
+	local banTime = BAN_BASE + BAN_ADD*(math.min(rejectCount, BAN_MAX_COUNT) - 1) - timeDiff
+	if banTimeFromServer and (banTimeFromServer > banTime) then
+		banTime = banTimeFromServer
+	end
+	return (banTime > 0) and banTime
+end
+
+WG.GetCombinedBannedTime = GetCombinedBannedTime
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Initialization
@@ -489,6 +523,19 @@ local function InitializeControls(window)
 		AddQueue(_, data.name, data.description, data.mapNames, data.maxPartySize)
 	end
 	
+	local function UpdateBannedTime(bannedTime)
+		bannedTime = GetCombinedBannedTime(bannedTime)
+		if bannedTime then
+			statusText:SetText("You are banned from matchmaking for " .. bannedTime .. " seconds")
+			banStart = Spring.GetTimer()
+			banDuration = bannedTime
+			for queueName, queueHolder in pairs(queueHolders) do
+				queueHolder.SetInQueue(false)
+			end
+			return true
+		end
+	end
+	
 	local function UpdateQueueStatus(listener, inMatchMaking, joinedQueueList, queueCounts, ingameCounts, _, _, _, bannedTime)
 		local joinedQueueNames = {}
 		if joinedQueueList then
@@ -513,14 +560,7 @@ local function InitializeControls(window)
 			end
 		end
 		
-		if bannedTime then
-			statusText:SetText("You are banned from matchmaking for " .. bannedTime .. " seconds")
-			banStart = Spring.GetTimer()
-			banDuration = bannedTime
-			for queueName, queueHolder in pairs(queueHolders) do
-				queueHolder.SetInQueue(false)
-			end
-		else
+		if not UpdateBannedTime(bannedTime) then
 			banDuration = false
 		end
 	end
@@ -552,15 +592,14 @@ local function InitializeControls(window)
 		if key == "canAuthenticateWithSteam" then
 			btnInviteFriends:SetVisibility(value)
 		end
+		if key == "matchmakerRejectTime" then
+			UpdateBannedTime(banDuration)
+		end
 	end
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 	
 	-- Initialization
-	if lobby.matchMakerBannedTime then
-		statusText:SetText("You are banned from matchmaking for " .. lobby.matchMakerBannedTime .. " seconds")
-		banStart = Spring.GetTimer()
-		banDuration = lobby.matchMakerBannedTime
-	end
+	UpdateBannedTime(lobby.matchMakerBannedTime)
 	
 	if lobby:GetMyPartyID() then
 		OnPartyUpdate(_, lobby:GetMyPartyID(), lobby:GetMyParty())
