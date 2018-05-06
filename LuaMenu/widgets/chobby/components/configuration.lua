@@ -92,6 +92,10 @@ function Configuration:init()
 	self.myAccountID = false
 	self.lastAddedAiName = false
 
+	self.noNaiveConfigOverride = {
+		settingsMenuValues = true,
+	}
+
 	self.battleTypeToName = {
 		[5] = "cooperative",
 		[6] = "team",
@@ -380,7 +384,9 @@ end
 function Configuration:SetConfigData(data)
 	if data ~= nil then
 		for k, v in pairs(data) do
-			self:SetConfigValue(k, v)
+			if not self.noNaiveConfigOverride[k] then
+				self:SetConfigValue(k, v)
+			end
 		end
 	end
 
