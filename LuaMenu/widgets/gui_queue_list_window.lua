@@ -34,7 +34,7 @@ local function HaveRightEngineVersion()
 end
 
 local BAN_TIME_FORGET_SECONDS = 60*15
-local BAN_BASE = 60 -- From match proposed, not from timeout.
+local BAN_BASE = 90 -- From match proposed, not from timeout.
 local BAN_ADD = 60
 local BAN_MAX_COUNT = 5
 

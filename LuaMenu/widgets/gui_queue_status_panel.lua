@@ -359,6 +359,7 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 	}
 
 	local acceptAcknowledged = false
+	local acceptClicked = false
 	local rejectedMatch = false
 	local displayTimer = true
 	local startTimer = Spring.GetTimer()
@@ -381,6 +382,8 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 	end
 
 	local function AcceptFunc()
+		acceptClicked = true
+		Configuration:SetConfigValue("matchmakerPopupTime", nil)
 		lobby:AcceptMatchMakingMatch()
 	end
 
@@ -419,7 +422,7 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 
 	local banChecked = false
 	local function CheckBan()
-		if acceptAcknowledged or banChecked then
+		if acceptAcknowledged or banChecked or acceptClicked then
 			return
 		end
 		SetBanFrom(Configuration.matchmakerPopupTime, 1)
@@ -612,7 +615,8 @@ function DelayedInitialize()
 
 	local function OnDisconnected()
 		if readyCheckPopup then
-			readyCheckPopup.DisconnectedRudely()
+			-- Safety
+			--readyCheckPopup.DisconnectedRudely()
 		end
 		OnMatchMakerStatus(false, false)
 	end
