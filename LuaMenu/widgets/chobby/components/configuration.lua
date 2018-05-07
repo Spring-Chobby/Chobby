@@ -536,10 +536,16 @@ end
 ---------------------------------------------------------------------------------
 
 function Configuration:GetServerAddress()
+	if self.ForceDefaultServer then
+		return self.DefaultServerHost
+	end
 	return self.serverAddress
 end
 
 function Configuration:GetServerPort()
+	if self.ForceDefaultServer then
+		return self.DefaultServerPort
+	end
 	return self.serverPort
 end
 

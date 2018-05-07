@@ -163,6 +163,9 @@ local function WrapperOnline(args)
 		config.DefaultServerHost = args.DefaultServerHost
 		config.UserID = args.UserID
 		config.IsSteamFolder = args.IsSteamFolder
+		if config.DefaultServerPort == 8202 and config.DefaultServerHost == "test.zero-k.info" then
+			config.ForceDefaultServer = true
+		end
 	end
 end
 
