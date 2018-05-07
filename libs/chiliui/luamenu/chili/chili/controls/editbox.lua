@@ -319,6 +319,8 @@ function EditBox:AddLine(text, tooltips, OnTextClick)
 		end
 		self.lines = {}
 		self.physicalLines = {}
+		
+		self.forgetMouseMove = true
 		self.selStart = nil
 		self.selStartY = nil
 		self.selEnd = nil
@@ -604,6 +606,7 @@ end
 
 
 function EditBox:MouseDown(x, y, ...)
+	self.forgetMouseMove = nil
 	-- FIXME: didn't feel like reimplementing Screen:MouseDown to capture MouseClick correctly, so clicking on text items is triggered in MouseDown
 	-- handle clicking on text items
 	local retVal = self:_GetCursorByMousePos(x, y)
@@ -675,6 +678,10 @@ function EditBox:MouseMove(x, y, dx, dy, button)
 		return inherited.MouseMove(self, x, y, dx, dy, button)
 	end
 
+	if self.forgetMouseMove then
+		return self
+	end
+	
 	local _, _, _, shift = Spring.GetModKeyState()
 	local cp, cpy = self.cursor, self.cursorY
 	self:_SetCursorByMousePos(x, y)
