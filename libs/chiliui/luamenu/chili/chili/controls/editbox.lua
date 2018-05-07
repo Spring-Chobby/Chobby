@@ -319,6 +319,10 @@ function EditBox:AddLine(text, tooltips, OnTextClick)
 		end
 		self.lines = {}
 		self.physicalLines = {}
+		self.selStart = nil
+		self.selStartY = nil
+		self.selEnd = nil
+		self.selEndY = nil
 		
 		for i = 1, #preserve do
 			local line = {
