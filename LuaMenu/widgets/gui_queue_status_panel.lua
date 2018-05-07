@@ -490,6 +490,12 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 		WG.Delay(DoDispose, 3)
 	end
 
+	function externalFunctions.Destroy()
+		acceptAcknowledged = true
+		Configuration:SetConfigValue("matchmakerPopupTime", nil)
+		DoDispose()
+	end
+
 	return externalFunctions
 end
 
@@ -580,9 +586,10 @@ function DelayedInitialize()
 	end
 
 	local function OnMatchMakerReadyCheck(_, secondsRemaining)
-		if not readyCheckPopup then
-			readyCheckPopup = CreateReadyCheckWindow(secondsRemaining, DestroyReadyCheckPopup)
+		if readyCheckPopup then
+			readyCheckPopup.Destroy()
 		end
+		readyCheckPopup = CreateReadyCheckWindow(secondsRemaining, DestroyReadyCheckPopup)
 	end
 
 	local function OnMatchMakerReadyUpdate(_, readyAccepted, likelyToPlay, queueReadyCounts, battleSize, readyPlayers)
@@ -616,7 +623,7 @@ function DelayedInitialize()
 	local function OnDisconnected()
 		if readyCheckPopup then
 			-- Safety
-			--readyCheckPopup.DisconnectedRudely()
+			readyCheckPopup.DisconnectedRudely()
 		end
 		OnMatchMakerStatus(false, false)
 	end
