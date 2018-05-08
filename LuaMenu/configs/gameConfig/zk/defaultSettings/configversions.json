@@ -18,60 +18,6 @@
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/cmdcolors.txt",
          "TargetPath":"cmdcolors.txt"
       },
-      {  
-         "Platform":null,
-         "VersionNumber":1,
-         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/maps/aquatic_divide_revised_v02.sd7",
-         "TargetPath":"maps/aquatic_divide_revised_v02.sd7"
-      },
-      {  
-         "Platform":null,
-         "VersionNumber":1,
-         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/maps/calamity_1.1.sd7",
-         "TargetPath":"maps/calamity_1.1.sd7"
-      },
-      {  
-         "Platform":null,
-         "VersionNumber":1,
-         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/maps/fairyland_1.31.sd7",
-         "TargetPath":"maps/fairyland_1.31.sd7"
-      },
-      {  
-         "Platform":null,
-         "VersionNumber":1,
-         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/maps/folsomdamdeluxev4.sd7",
-         "TargetPath":"maps/folsomdamdeluxev4.sd7"
-      },
-      {  
-         "Platform":null,
-         "VersionNumber":1,
-         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/maps/glacies_1.3.sd7",
-         "TargetPath":"maps/glacies_1.3.sd7"
-      },
-      {  
-         "Platform":null,
-         "VersionNumber":1,
-         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/maps/la_isla_bonita_v1.1.sd7",
-         "TargetPath":"maps/la_isla_bonita_v1.1.sd7"
-      },
-	  {  
-         "Platform":null,
-         "VersionNumber":1,
-         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/maps/living_lands_4.1.sd7",
-         "TargetPath":"maps/living_lands_4.1.sd7"
-      },
-      {  
-         "Platform":null,
-         "VersionNumber":1,
-         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/maps/obsidian_1.5.sd7",
-         "TargetPath":"maps/obsidian_1.5.sd7"
-      },
-      {  
-         "Platform":null,
-         "VersionNumber":1,
-         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/maps/titanduel_2.2.sd7",
-         "TargetPath":"maps/titanduel_2.2.sd7"
-      },
       {
          "Platform":null,
          "VersionNumber":131,
