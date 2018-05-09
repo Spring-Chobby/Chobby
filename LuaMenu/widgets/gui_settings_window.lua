@@ -858,16 +858,16 @@ local function GetLobbyTabControls()
 	}
 	children[#children + 1] = autoLogin
 	offset = offset + ITEM_OFFSET
-
+	
+	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("login_with_steam"), "wantAuthenticateWithSteam", true)
+	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("use_steam_browser"), "useSteamBrowser", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("planetwars_notifications"), "planetwarsNotifications", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("ingame_notifcations"), "ingameNotifcations", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("non_friend_notifications"), "nonFriendNotifications", true)
-	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("simplifiedSkirmishSetup"), "simplifiedSkirmishSetup", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("notifyForAllChat"), "notifyForAllChat", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("only_featured_maps"), "onlyShowFeaturedMaps", true)
+	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("simplifiedSkirmishSetup"), "simplifiedSkirmishSetup", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("simple_ai_list"), "simpleAiList", true)
-	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("login_with_steam"), "wantAuthenticateWithSteam", true)
-	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("use_steam_browser"), "useSteamBrowser", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("animate_lobby"), "animate_lobby", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("drawFullSpeed"), "drawAtFullSpeed", false)
 
