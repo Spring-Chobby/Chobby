@@ -994,6 +994,9 @@ local settingsConfig = {
 					return {
 						MiddleClickScrollSpeed = middleScroll/value,
 						OverheadScrollSpeed = value,
+						RotOverheadScrollSpeed = value,
+						CamFreeScrollSpeed = value,
+						FPSScrollSpeed = value,
 					}
 				end,
 			},
