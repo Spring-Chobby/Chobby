@@ -18,6 +18,18 @@
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/cmdcolors.txt",
          "TargetPath":"cmdcolors.txt"
       },
+      {  
+         "Platform":null,
+         "VersionNumber":1,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/maps/fairyland_1.31.sd7",
+         "TargetPath":"maps/fairyland_1.31.sd7"
+      },
+      {  
+         "Platform":null,
+         "VersionNumber":1,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/maps/living_lands_4.1.sd7",
+         "TargetPath":"maps/living_lands_4.1.sd7"
+      },
       {
          "Platform":null,
          "VersionNumber":131,
