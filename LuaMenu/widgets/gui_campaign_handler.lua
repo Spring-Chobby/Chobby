@@ -1618,6 +1618,10 @@ end
 --------------------------------------------------------------------------------
 
 function widget:RecvLuaMsg(msg)
+	if not msg then
+		Spring.Echo("LUA_ERR", "Bad campaign message", msg)
+		return
+	end
 	if string.find(msg, LOAD_CAMPAIGN_STRING) then
 		local encoded = string.sub(msg, string.len(LOAD_CAMPAIGN_STRING) + 1)
 		local saveData = Spring.Utilities.CustomKeyToUsefulTable(encoded)
