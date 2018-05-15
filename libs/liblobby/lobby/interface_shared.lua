@@ -195,7 +195,9 @@ function Interface:_OnCommandReceived(cmdName, arguments, cmdId)
 			if not success then
 				Spring.Log(LOG_SECTION, LOG.ERROR, "Failed to parse JSON: " .. tostring(arguments))
 			end
-			jsonCommandFunction(self, obj)
+			if obj then
+				jsonCommandFunction(self, obj)
+			end
 		else
 			Spring.Log(LOG_SECTION, LOG.ERROR, "No such function: " .. cmdName .. ", for command: " .. fullCmd)
 		end
