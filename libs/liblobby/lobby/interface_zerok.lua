@@ -997,6 +997,10 @@ function Interface:_BattleUpdate(data)
 	-- BattleUpdate {"Header":{"BattleID":362,"Map":"Quicksilver 1.1"}
 	-- BattleUpdate {"Header":{"BattleID":21,"Engine":"103.0.1-88-g1a9cfdd"}
 	local header = data.Header
+	if not header then
+		Spring.Log(LOG_SECTION, LOG.ERROR, "Interface:_BattleUpdate no header")
+		return
+	end
 	--Spring.Utilities.TableEcho(header, "header")
 	if not self.battles[header.BattleID] then
 		Spring.Log(LOG_SECTION, LOG.ERROR, "Interface:_BattleUpdate no such battle with ID: " .. tostring(header.BattleID))
