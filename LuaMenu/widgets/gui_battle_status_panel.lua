@@ -310,10 +310,11 @@ local function InitializeControls(parentControl)
 
 	local function OnSaidBattle(listeners, userName, message)
 		local userInfo = lobby:TryGetUser(userName)
+		local myUserName = lobby:GetMyUserName()
 		if userInfo.isBot then
 			return
 		end
-		local iAmMentioned = (string.find(message, lobby:GetMyUserName(), 1, true) and userName ~= lobby:GetMyUserName())
+		local iAmMentioned = myUserName and (string.find(message, myUserName, 1, true) and userName ~= myUserName)
 		if statusWindowHandler.IsTabSelected("myBattle") then
 			voting = false
 			if unreadMessages > 0 then
