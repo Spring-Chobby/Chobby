@@ -6,6 +6,7 @@ local subnameMap = {
 	{"CircuitAINormal", "AI: Normal"},
 	{"CircuitAIHard", "AI: Hard"},
 	{"CircuitAIBrutal", "AI: Brutal"},
+	{"CAI", "AI: Legacy"},
 }
 
 local function GetAiSimpleName(name)
@@ -38,6 +39,7 @@ local simpleAiOrder = {
 	["Chicken: Hard"] = 10,
 	["Chicken: Suicidal"] = 11,
 	["Chicken: Custom"] = 12,
+	["AI: Legacy"] = 13,
 }
 
 local aiTooltip = {
@@ -47,6 +49,7 @@ local aiTooltip = {
 	["AI: Normal"] = "Recommended for veteran strategy gamers.",
 	["AI: Hard"] = "Recommended for veteran strategy gamers who aren't afraid of losing.",
 	["AI: Brutal"] = "Recommended for veterans of Zero-K.",
+	["AI: Legacy"] = "Older unsupported AI, still potentially challenging.",
 	["Inactive AI"] = "This AI does absolutely nothing after spawning.",
 	["Chicken: Beginner"] = "Defeat waves of aliens.",
 	["Chicken: Very Easy"] = "Defeat waves of aliens.",
