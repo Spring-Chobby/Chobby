@@ -89,6 +89,7 @@ function Configuration:init()
 	self.agressivelySetBorderlessWindowed = false
 
 	self.useWrongEngine = false
+	self.multiplayerLaunchNewSpring = false
 	self.myAccountID = false
 	self.lastAddedAiName = false
 
@@ -479,6 +480,7 @@ function Configuration:GetConfigData()
 		displayBots = self.displayBots,
 		displayBadEngines2 = self.displayBadEngines2,
 		useWrongEngine = self.useWrongEngine,
+		multiplayerLaunchNewSpring = self.multiplayerLaunchNewSpring,
 		doNotSetAnySpringSettings = self.doNotSetAnySpringSettings,
 		agressivelySetBorderlessWindowed = self.agressivelySetBorderlessWindowed,
 		fixedSettingsOverride = self.fixedSettingsOverride,

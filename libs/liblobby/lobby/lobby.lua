@@ -255,8 +255,9 @@ function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, clientPor
 		WG.Chobby.InformationPopup("Cannont start game: missing map file '" .. mapName .. "'.")
 		return
 	end
+	local Config = WG.Chobby.Configuration
 
-	if engineName and not WG.Chobby.Configuration:IsValidEngineVersion(engineName) and not WG.Chobby.Configuration.useWrongEngine then
+	if engineName and (Config.multiplayerLaunchNewSpring or not Config:IsValidEngineVersion(engineName)) and not Config.useWrongEngine then
 		if WG.WrapperLoopback and WG.WrapperLoopback.StartNewSpring and WG.SettingsWindow and WG.SettingsWindow.GetSettingsString then
 			local params = {
 				StartScriptContent = GenerateScriptTxt(battleIp, battlePort, clientPort, scriptPassword, myName),
