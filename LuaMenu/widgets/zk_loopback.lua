@@ -351,6 +351,10 @@ function WrapperLoopback.StartNewSpring(args)
 	SendCommand("StartNewSpring", args)
 end
 
+function WrapperLoopback.DownloadSpring(args)
+	--args = {Engine = versionString}
+	SendCommand("DownloadSpring", args)
+end
 
 function WrapperLoopback.DownloadImage(args)
 --[[
