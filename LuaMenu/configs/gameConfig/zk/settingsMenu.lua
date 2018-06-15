@@ -826,6 +826,7 @@ local settingsConfig = {
 					MouseZoomSpeed = 25,
 					InvertZoom = "Off",
 					TextToSpeech = "On",
+					EdgeScroll = "On",
 					MiddlePanSpeed = 15,
 					CameraPanSpeed = 50,
 				}
@@ -933,6 +934,26 @@ local settingsConfig = {
 				},
 			},
 			{
+				name = "EdgeScroll",
+				humanName = "Screen Edge Scroll",
+				options = {
+					{
+						name = "On",
+						apply = {
+							FullscreenEdgeMove = 1,
+							WindowedEdgeMove = 1,
+						}
+					},
+					{
+						name = "Off",
+						apply = {
+							FullscreenEdgeMove = 0,
+							WindowedEdgeMove = 0,
+						}
+					},
+				},
+			},
+			{
 				name = "MiddlePanSpeed",
 				humanName = "Middle Click Pan Speed",
 				isNumberSetting = true,
@@ -1002,6 +1023,7 @@ local settingsDefault = {
 	MouseZoomSpeed = 25,
 	InvertZoom = "Off",
 	TextToSpeech = "On",
+	EdgeScroll = "On",
 	MiddlePanSpeed = 15,
 	CameraPanSpeed = 50,
 }
