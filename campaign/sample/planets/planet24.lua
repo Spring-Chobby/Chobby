@@ -39,7 +39,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/amphlaunch.png",
-				text = [[Lobsters propel nearby units through the air towards a nearby target. You can use this ability to deploy your own army or relocate enemies - experiment for best results. Unless they splash into water, thrown units are likely to take damage on landing.]]
+				text = [[Lobsters propel nearby units through the air towards a nearby target. You can use this ability to deploy your own army or relocate enemies - experiment for best results. The units do not fly especially fast so they may be vulnerable while in transit.]]
 			},
 			{
 				image = "unitpics/turretaafar.png",
