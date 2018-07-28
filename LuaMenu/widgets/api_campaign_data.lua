@@ -460,15 +460,34 @@ local function SetupNewSave(commName, difficulty, overrideCampaignID)
 end
 
 local function LoadCampaignData()
+	Spring.Log(widget:GetInfo().name, LOG.INFO, "Loading campaign data")
 	local Configuration = WG.Chobby.Configuration
+	local saves = GetSaves()
+	
+	-- try loading save whose name is stored in config (this should be the last save we played)
 	if Configuration.campaignSaveFile then
-		local saves = GetSaves()
+		Spring.Log(widget:GetInfo().name, LOG.INFO, "Config save file: " .. Configuration.campaignSaveFile)
 		local saveData = saves[Configuration.campaignSaveFile]
 		if saveData then
+			Spring.Log(widget:GetInfo().name, LOG.INFO, "Save data found, loading")
 			LoadGame(saveData, true)
-			return
+			return true
+		else
+			Spring.Log(widget:GetInfo().name, LOG.WARNING, "Save data not found")
 		end
+	else
+		Spring.Log(widget:GetInfo().name, LOG.INFO, "No configured save data")
 	end
+	
+	-- Configuration.campaignSaveFile does not point to a valid save
+	-- pick the first save that actually exists (if there's one)
+	for savename,saveData in pairs(saves) do
+		WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", savename)
+		LoadGame(saveData, true)
+		return true
+	end
+	
+	-- we got nothing
 	WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", nil)
 end
 
