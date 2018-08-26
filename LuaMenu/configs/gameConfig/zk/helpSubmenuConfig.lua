@@ -54,14 +54,28 @@ local communityLines = {
 		"Site home page.",
 		"Home",
 		function ()
-			WG.BrowserHandler.OpenUrl("http://zero-k.info/")
+			WG.BrowserHandler.OpenUrl("https://zero-k.info/")
 		end
 	},
 	{
 		"Community forums.",
 		"Forums",
 		function ()
-			WG.BrowserHandler.OpenUrl("http://zero-k.info/Forum")
+			WG.BrowserHandler.OpenUrl("https://zero-k.info/Forum")
+		end
+	},
+	{
+		"Wiki manual.",
+		"Manual",
+		function ()
+			WG.BrowserHandler.OpenUrl("https://zero-k.info/mediawiki/index.php?title=Manual")
+		end
+	},
+	{
+		"Wiki FAQ.",
+		"FAQ",
+		function ()
+			WG.BrowserHandler.OpenUrl("https://zero-k.info/mediawiki/index.php?title=FAQ")
 		end
 	},
 	{
@@ -75,7 +89,14 @@ local communityLines = {
 		"Contributors and developers.",
 		"Credits",
 		function ()
-			WG.BrowserHandler.OpenUrl("http://zero-k.info/mediawiki/index.php?title=Credits")
+			WG.BrowserHandler.OpenUrl("https://zero-k.info/mediawiki/index.php?title=Credits")
+		end
+	},
+	{
+		"Zero-K streams on Twitch.",
+		"Twitch",
+		function ()
+			WG.BrowserHandler.OpenUrl("https://www.twitch.tv/directory/game/Zero-K")
 		end
 	},
 	{
@@ -83,13 +104,6 @@ local communityLines = {
 		"Youtube",
 		function ()
 			WG.BrowserHandler.OpenUrl("https://www.youtube.com/user/Shadowfury333")
-		end
-	},
-	{
-		"Shadowfury333's Twitch stream.",
-		"Twitch",
-		function ()
-			WG.BrowserHandler.OpenUrl("https://www.twitch.tv/shadowfury333")
 		end
 	},
 	{
@@ -110,21 +124,21 @@ local communityLines = {
 		"Top 50 players.",
 		"Ladder",
 		function ()
-			WG.BrowserHandler.OpenUrl("http://zero-k.info/Ladders")
+			WG.BrowserHandler.OpenUrl("https://zero-k.info/Ladders")
 		end
 	},
 	{
 		"Browse and download maps.",
 		"Maps",
 		function ()
-			WG.BrowserHandler.OpenUrl("http://zero-k.info/Maps")
+			WG.BrowserHandler.OpenUrl("https://zero-k.info/Maps")
 		end
 	},
 	{
 		"Browse and download replays.",
 		"Replays",
 		function ()
-			WG.BrowserHandler.OpenUrl("http://zero-k.info/Battles")
+			WG.BrowserHandler.OpenUrl("https://zero-k.info/Battles")
 		end
 	},
 	{
