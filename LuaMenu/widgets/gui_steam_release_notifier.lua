@@ -23,7 +23,7 @@ local releaseDate = {0, 15, 8, 27, 4, 2018} -- second, minute, hour, day, month,
 local function SteamCheckPopup()
 	local Configuration = WG.Chobby.Configuration
 	if Configuration.canAuthenticateWithSteam or Configuration[doNotAskAgainKey] then
-		return
+		--return
 	end
 	
 	local _, timeIsInTheFuture = Spring.Utilities.GetTimeDifferenceTable(releaseDate)
@@ -31,9 +31,11 @@ local function SteamCheckPopup()
 		return
 	end
 	
+	local width, height = Spring.GetViewSizes()
+	
 	local steamWindow = Window:New {
-		x = 700,
-		y = 300,
+		x = (width-460)/2,
+		y = (height-470)/2,
 		width = 460,
 		height = 470,
 		caption = "",
