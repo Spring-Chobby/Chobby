@@ -23,7 +23,7 @@ local releaseDate = {0, 15, 8, 27, 4, 2018} -- second, minute, hour, day, month,
 local function SteamCheckPopup()
 	local Configuration = WG.Chobby.Configuration
 	if Configuration.canAuthenticateWithSteam or Configuration[doNotAskAgainKey] then
-		--return
+		return
 	end
 	
 	local _, timeIsInTheFuture = Spring.Utilities.GetTimeDifferenceTable(releaseDate)
