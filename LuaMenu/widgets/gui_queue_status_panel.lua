@@ -20,7 +20,7 @@ local statusQueueLobby -- global for timer update
 local statusQueueIngame
 local readyCheckPopup
 local findingMatch = false
-local ALLOW_REJECT = false
+local ALLOW_REJECT = true
 
 local instantStartQueuePriority = {
 	["Teams"] = 3,
