@@ -20,7 +20,8 @@ local statusQueueLobby -- global for timer update
 local statusQueueIngame
 local readyCheckPopup
 local findingMatch = false
-local ALLOW_REJECT = true
+local ALLOW_REJECT_QUICKPLAY = true
+local ALLOW_REJECT_REGULAR = false
 
 local instantStartQueuePriority = {
 	["Teams"] = 3,
@@ -295,7 +296,7 @@ end
 --------------------------------------------------------------------------------
 -- Ready Check Popup
 
-local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
+local function CreateReadyCheckWindow(DestroyFunc, secondsRemaining, minWinChance, isQuickPlay)
 	local Configuration = WG.Chobby.Configuration
 
 	local snd_volui = Spring.GetConfigString("snd_volui")
@@ -316,6 +317,8 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 	if WG.WrapperLoopback then
 		WG.WrapperLoopback.Alert("Match found")
 	end
+
+	local ALLOW_REJECT = (isQuickPlay and ALLOW_REJECT_QUICKPLAY) or (not isQuickPlay and ALLOW_REJECT_REGULAR)
 
 	local readyCheckWindow = Window:New {
 		caption = "",
@@ -585,11 +588,11 @@ function DelayedInitialize()
 		readyCheckPopup = nil
 	end
 
-	local function OnMatchMakerReadyCheck(_, secondsRemaining)
+	local function OnMatchMakerReadyCheck(_, secondsRemaining, minWinChance, isQuickPlay)
 		if readyCheckPopup then
 			readyCheckPopup.Destroy()
 		end
-		readyCheckPopup = CreateReadyCheckWindow(secondsRemaining, DestroyReadyCheckPopup)
+		readyCheckPopup = CreateReadyCheckWindow(DestroyReadyCheckPopup, secondsRemaining, minWinChance, isQuickPlay)
 	end
 
 	local function OnMatchMakerReadyUpdate(_, readyAccepted, likelyToPlay, queueReadyCounts, battleSize, readyPlayers)

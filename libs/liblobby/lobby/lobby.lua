@@ -1079,8 +1079,8 @@ function Lobby:_OnMatchMakerStatus(inMatchMaking, joinedQueueList, queueCounts, 
 	self:_CallListeners("OnMatchMakerStatus", inMatchMaking, joinedQueueList, queueCounts, ingameCounts, instantStartQueues, currentEloWidth, joinedTime, bannedTime)
 end
 
-function Lobby:_OnMatchMakerReadyCheck(secondsRemaining)
-	self:_CallListeners("OnMatchMakerReadyCheck", secondsRemaining)
+function Lobby:_OnMatchMakerReadyCheck(secondsRemaining, minWinChance, isQuickPlay)
+	self:_CallListeners("OnMatchMakerReadyCheck", secondsRemaining, minWinChance, isQuickPlay)
 end
 
 function Lobby:_OnMatchMakerReadyUpdate(readyAccepted, likelyToPlay, queueReadyCounts, myBattleSize, myBattleReadyCount)

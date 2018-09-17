@@ -1313,7 +1313,7 @@ end
 Interface.jsonCommands["MatchMakerQueueRequestFailed"] = Interface._MatchMakerQueueRequestFailed
 
 function Interface:_AreYouReady(data)
-	self:_OnMatchMakerReadyCheck(data.SecondsRemaining)
+	self:_OnMatchMakerReadyCheck(data.SecondsRemaining, data.MinimumWinChance, data.QuickPlay)
 end
 Interface.jsonCommands["AreYouReady"] = Interface._AreYouReady
 
