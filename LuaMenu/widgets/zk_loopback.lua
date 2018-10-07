@@ -249,6 +249,10 @@ local function DiscordOnJoinRequest(args)
  -- args.avatar
 end 
 
+local function UserActivity(args)
+	-- args.IdleSeconds
+end
+
 commands["DownloadFileDone"] = DownloadFileDone
 commands["SteamOnline"] = SteamOnline
 commands["SteamJoinFriend"] = SteamJoinFriend
@@ -269,6 +273,8 @@ commands["DiscordOnJoin"] = DiscordOnJoin
 commands["DiscordOnError"] = DiscordOnError
 commands["DiscordOnDisconnected"] = DiscordOnDisconnected
 commands["DiscordOnJoinRequest"] = DiscordOnJoinRequest
+
+commands["UserActivity"] = UserActivity
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
