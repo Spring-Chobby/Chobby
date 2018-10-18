@@ -330,13 +330,18 @@ local function CreateReadyCheckWindow(DestroyFunc, secondsRemaining, minWinChanc
 		draggable = false,
 		classname = "main_window",
 	}
+	
+	local invitationText = i18n("match_found")
+	if isQuickPlay then
+		invitationText = i18n("match_found_quickplay")
+	end
 
 	local title = Label:New {
 		x = 40,
 		right = 0,
 		y = 15,
 		height = 35,
-		caption = i18n("match_found"),
+		caption = invitationText,
 		font = Configuration:GetFont(4),
 		parent = readyCheckWindow,
 	}
