@@ -204,7 +204,7 @@ local function InitializeInstantQueueHandler()
 		y = 4,
 		bottom = 4,
 		padding = {0,0,0,0},
-		caption = "Join",
+		caption = "Play",
 		font = WG.Chobby.Configuration:GetFont(3),
 		classname = "action_button",
 		OnClick = {
