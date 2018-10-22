@@ -21,7 +21,7 @@ local statusQueueIngame
 local readyCheckPopup
 local findingMatch = false
 local ALLOW_REJECT_QUICKPLAY = true
-local ALLOW_REJECT_REGULAR = false
+local ALLOW_REJECT_REGULAR = true
 
 local instantStartQueuePriority = {
 	["Teams"] = 3,
