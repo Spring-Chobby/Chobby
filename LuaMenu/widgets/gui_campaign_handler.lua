@@ -796,7 +796,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 				classname = "option_button",
 				OnClick = {
 					function()
-						WG.WrapperLoopback.SteamOpenOverlaySection()
+						WG.SteamHandler.OpenFriendList()
 					end
 				},
 				parent = buttonHolder,

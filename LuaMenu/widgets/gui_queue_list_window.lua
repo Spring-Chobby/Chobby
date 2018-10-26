@@ -450,7 +450,7 @@ local function InitializeControls(window)
 		classname = "option_button",
 		OnClick = {
 			function()
-				WG.WrapperLoopback.SteamOpenOverlaySection()
+				WG.SteamHandler.OpenFriendList()
 			end
 		},
 		parent = window,

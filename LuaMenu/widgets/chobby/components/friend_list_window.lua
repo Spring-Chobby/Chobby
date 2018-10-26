@@ -19,7 +19,7 @@ function FriendListWindow:init(parent)
 		parent = self.window,
 		OnClick = {
 			function ()
-				WG.WrapperLoopback.SteamOpenOverlaySection()
+				WG.SteamHandler.OpenFriendList()
 			end
 		},
 	}

@@ -14,7 +14,6 @@ function widget:GetInfo()
 end
 
 local urlPattern = "https?://[%w-_%.%?%.:/%+=&]+"
-local STEAM_OVERLAY_USABLE = (Platform.osFamily ~= "Linux" and Platform.osFamily ~= "FreeBSD")
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -80,19 +79,11 @@ function BrowserHandler.OpenUrl(rawUrlString)
 				WG.LoginWindowHandler.TryLogin(DelayedTryClickAgain)
 			end
 			local function GoAnywayFunc()
-				if STEAM_OVERLAY_USABLE and Configuration.canAuthenticateWithSteam and Configuration.useSteamBrowser then
-					WG.WrapperLoopback.SteamOpenWebsite(urlString)
-				else
-					WG.WrapperLoopback.OpenUrl(urlString)
-				end
+				WG.SteamHandler.OpenUrlIfActive(urlString)
 			end
 			WG.Chobby.ConfirmationPopup(LoginFunc, "Log in first to access more site features.", nil, 315, 200, "Log In", "Not Now", GoAnywayFunc)
 		else
-			if STEAM_OVERLAY_USABLE and Configuration.canAuthenticateWithSteam and Configuration.useSteamBrowser then
-				WG.WrapperLoopback.SteamOpenWebsite(urlString)
-			else
-				WG.WrapperLoopback.OpenUrl(urlString)
-			end
+			WG.SteamHandler.OpenUrlIfActive(urlString)
 		end
 	else
 		Spring.SetClipboard(urlString)

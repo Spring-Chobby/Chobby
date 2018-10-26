@@ -1600,7 +1600,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		classname = "option_button",
 		OnClick = {
 			function()
-				WG.WrapperLoopback.SteamOpenOverlaySection()
+				WG.SteamHandler.OpenFriendList()
 			end
 		},
 		parent = mainWindow,
