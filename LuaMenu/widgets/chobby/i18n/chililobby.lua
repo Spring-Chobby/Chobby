@@ -92,6 +92,7 @@ return {
 		instruction = "Instruction",
 		community = "Community",
 		report_a_bug = "Report A Bug",
+		benchmark = "Benchmark",
 		["exit"] = "Exit",
 		matchMaking = "Matchmaking",
 		finding_match = "Finding Match",

@@ -157,33 +157,32 @@ local communityLines = {
 	},
 }
 
-if VFS.HasArchive("Zero-K $VERSION") then
-	communityLines[#communityLines + 1] = {
-		"Run a benchmark game.",
-		"Benchmark",
-		function ()
-			local localLobby = WG.LibLobby and WG.LibLobby.localLobby
-			if localLobby then
-				localLobby:StartGameFromString(VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/benchmarkFile.lua"))
-			end
-		end
-	}
-end
+--if VFS.HasArchive("Zero-K $VERSION") then
+--	communityLines[#communityLines + 1] = {
+--		"Run a benchmark game.",
+--		"Benchmark",
+--		function ()
+--			local localLobby = WG.LibLobby and WG.LibLobby.localLobby
+--			if localLobby then
+--				localLobby:StartGameFromString(VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/benchmarkFile.lua"))
+--			end
+--		end
+--	}
+--end
+--
+--if VFS.HasArchive("CAI Fight 2017 06 fix") then
+--	communityLines[#communityLines + 1] = {
+--		"Run a benchmark game.",
+--		"CAI Fight",
+--		function ()
+--			local localLobby = WG.LibLobby and WG.LibLobby.localLobby
+--			if localLobby then
+--				localLobby:StartGameFromString(VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/benchmarkFileCAIfight.lua"))
+--			end
+--		end
+--	}
+--end
 
-if VFS.HasArchive("CAI Fight 2017 06 fix") then
-	communityLines[#communityLines + 1] = {
-		"Run a benchmark game.",
-		"CAI Fight",
-		function ()
-			local localLobby = WG.LibLobby and WG.LibLobby.localLobby
-			if localLobby then
-				localLobby:StartGameFromString(VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/benchmarkFileCAIfight.lua"))
-			end
-		end
-	}
-end
-
-local firstCommunityParent = true
 local communityControl = Control:New {
 	x = 0,
 	y = 0,
@@ -192,16 +191,15 @@ local communityControl = Control:New {
 	padding = {0, 0, 0, 0},
 	OnParent = {
 		function (obj)
-			if not firstCommunityParent then
+			if not obj:IsEmpty() then
 				return
 			end
-			firstCommunityParent = false
 
 			Label:New {
-				x = 20,
-				right = 5,
-				y = 17,
-				height = 20,
+				x = 15,
+				y = 11,
+				width = 180,
+				height = 30,
 				parent = obj,
 				font = WG.Chobby.Configuration:GetFont(3),
 				caption = "Community and development links",
@@ -259,12 +257,16 @@ local bugControl = Control:New {
 	padding = {0, 0, 0, 0},
 	OnParent = {
 		function (obj)
+			if not obj:IsEmpty() then
+				return
+			end
+			
 			local Configuration = WG.Chobby.Configuration
 			Label:New {
-				x = 20,
-				right = 5,
-				y = 17,
-				height = 20,
+				x = 15,
+				y = 11,
+				width = 180,
+				height = 30,
 				parent = obj,
 				font = Configuration:GetFont(3),
 				caption = "Send a bug report",
@@ -379,5 +381,9 @@ return {
 	{
 		name = "report_a_bug",
 		control = bugControl,
+	},
+	{
+		name = "benchmark",
+		control = WG.BenchmarkHandler.GetControl(),
 	},
 }

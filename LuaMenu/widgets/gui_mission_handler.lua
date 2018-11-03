@@ -199,10 +199,10 @@ local function InitializeControls(parentControl)
 	local Configuration = WG.Chobby.Configuration
 	
 	Label:New {
-		x = 20,
-		right = 5,
-		y = 17,
-		height = 20,
+		x = 15,
+		y = 11,
+		width = 180,
+		height = 30,
 		parent = parentControl,
 		font = Configuration:GetFont(3),
 		caption = "Learn advanced techniques in these tutorials",

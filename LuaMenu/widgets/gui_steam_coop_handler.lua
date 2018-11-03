@@ -210,7 +210,10 @@ end
 --------------------------------------------------------------------------------
 -- External functions: Wrapper
 
-local SteamCoopHandler = {}
+local SteamCoopHandler = {
+	CheckDownloads = CheckDownloads,
+}
+
 function SteamCoopHandler.SteamFriendJoinedMe(steamID, userName)
 	if not alreadyIn[steamID] then
 		friendsInGame = friendsInGame or {}

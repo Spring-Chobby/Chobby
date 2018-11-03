@@ -381,3 +381,16 @@ function Spring.Utilities.GetCurrentUtc()
 	
 	return string.format("%04d-%02d-%02dT%02d:%02d:%02d", t[6], t[5], t[4], t[3], t[2], t[1])
 end
+
+function Spring.Utilities.GetCompactCurrentUtc()
+	local t = {
+		tonumber(os.date("!%S")),
+		tonumber(os.date("!%M")),
+		tonumber(os.date("!%H")),
+		tonumber(os.date("!%d")),
+		tonumber(os.date("!%m")),
+		tonumber(os.date("!%Y")),
+	}
+	
+	return string.format("%04d%02d%02d_%02d%02d%02d", t[6], t[5], t[4], t[3], t[2], t[1])
+end
