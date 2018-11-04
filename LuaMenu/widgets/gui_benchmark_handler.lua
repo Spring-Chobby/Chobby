@@ -82,7 +82,7 @@ local function RunBenchmark(config)
 	local perm = (config.fixedOrder and GetIdentityPermutation(totalRuns)) or GetRandomPermutation(totalRuns)
 	
 	local function DownloadsComplete()
-		WG.Chobby.InformationPopup("Running the benchmark. It may take several seconds to launch each test case. Zero-K will close when the benchmark is complete. Submit the result by allowing the upload of an automated crash report.", {caption = "Abort", closeFunc = CancelFunc, buttonClass = "negative_button", width = 524, height = 260})
+		WG.Chobby.InformationPopup("Running the benchmark. It may take a few minutes to launch each test case. Zero-K will close when the benchmark is complete. Submit the result by allowing the upload of an automated crash report.", {caption = "Abort", closeFunc = CancelFunc, buttonClass = "negative_button", width = 524, height = 260})
 		
 		local runData = config.runs
 		local dataFile = io.open(dataFilePath, "w")

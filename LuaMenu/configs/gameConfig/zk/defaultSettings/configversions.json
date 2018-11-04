@@ -528,6 +528,12 @@
       {  
          "Platform":null,
          "VersionNumber":2,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/demos/hide_benchmark_v1_104.0.1-309-ga8b5ffc maintenance.sdfz",
+         "TargetPath":"demos/hide_benchmark_v1_104.0.1-309-ga8b5ffc maintenance.sdfz"
+      },
+      {  
+         "Platform":null,
+         "VersionNumber":2,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/games/zerokBenchmark.sdz",
          "TargetPath":"games/zerokBenchmark.sdz"
       }
