@@ -379,11 +379,11 @@ return {
 		control = WG.MissionHandler.GetControl(),
 	},
 	{
-		name = "report_a_bug",
-		control = bugControl,
-	},
-	{
 		name = "benchmark",
 		control = WG.BenchmarkHandler.GetControl(),
+	},
+	{
+		name = "report_a_bug",
+		control = bugControl,
 	},
 }

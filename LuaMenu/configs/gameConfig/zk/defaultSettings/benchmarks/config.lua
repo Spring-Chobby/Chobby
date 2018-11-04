@@ -123,7 +123,7 @@ local data = {
 	},
 	{
 		humanName = "Benchmark x20",
-		name = "GCBenchmarkv1",
+		name = "GCBenchmark20v1",
 		decription = "Run and log the framerate for three different engine versions in a five minute battle, repeated 20 times each. Expected run time of 7 hours.",
 		map = "Comet Catcher Redux v3.1",
 		game = "Zero-K v1.6.11.1",
