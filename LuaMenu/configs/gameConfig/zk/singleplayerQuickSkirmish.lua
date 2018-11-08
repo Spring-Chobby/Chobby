@@ -54,14 +54,13 @@ local chickenDifficulty = {
 	"Chicken: Suicidal",
 }
 
-local devString = ((WG.Chobby.Configuration:GetIsDevEngine() and "Dev") or "")
 local aiDifficultyMap = {
-	devString .. "CircuitAIBeginner",
-	devString .. "CircuitAINovice",
-	devString .. "CircuitAIEasy",
-	devString .. "CircuitAINormal",
-	devString .. "CircuitAIHard",
-	devString .. "CircuitAIBrutal",
+	"CircuitAIBeginner",
+	"CircuitAINovice",
+	"CircuitAIEasy",
+	"CircuitAINormal",
+	"CircuitAIHard",
+	"CircuitAIBrutal",
 }
 
 function skirmishSetupData.ApplyFunction(battleLobby, pageChoices)
@@ -85,7 +84,8 @@ function skirmishSetupData.ApplyFunction(battleLobby, pageChoices)
 	end
 	
 	local bitAppend = (Configuration:GetIsRunning64Bit() and "64") or "32"
-	local aiName = aiDifficultyMap[difficulty] .. bitAppend
+	local devString = ((Configuration:GetIsDevEngine() and "Dev") or "")
+	local aiName = devString .. aiDifficultyMap[difficulty] .. bitAppend
 	local displayName = aiName
 	
 	if Configuration.gameConfig.GetAiSimpleName then

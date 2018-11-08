@@ -1,13 +1,20 @@
+local stableSubnameMap = {
+	{"CircuitAIBeginner", "AI: Beginner"},
+	{"CircuitAINovice", "AI: Novice"},
+	{"CircuitAIEasy", "AI: Easy"},
+	{"CircuitAINormal", "AI: Normal"},
+	{"CircuitAIHard", "AI: Hard"},
+	{"CircuitAIBrutal", "AI: Brutal"},
+	{"CAI", "AI: Legacy"},
+}
 
-local devString = ((WG.Chobby.Configuration:GetIsDevEngine() and " (dev)") or "")
-local devPrefix = ((WG.Chobby.Configuration:GetIsDevEngine() and "Dev") or "")
-local subnameMap = {
-	{devPrefix .. "CircuitAIBeginner", "AI: Beginner" .. devString},
-	{devPrefix .. "CircuitAINovice", "AI: Novice" .. devString},
-	{devPrefix .. "CircuitAIEasy", "AI: Easy" .. devString},
-	{devPrefix .. "CircuitAINormal", "AI: Normal" .. devString},
-	{devPrefix .. "CircuitAIHard", "AI: Hard" .. devString},
-	{devPrefix .. "CircuitAIBrutal", "AI: Brutal" .. devString},
+local devSubnameMap = {
+	{"DevCircuitAIBeginner", "AI: Beginner (dev)"},
+	{"DevCircuitAINovice", "AI: Novice (dev)"},
+	{"DevCircuitAIEasy", "AI: Easy (dev)"},
+	{"DevCircuitAINormal", "AI: Normal (dev)"},
+	{"DevCircuitAIHard", "AI: Hard (dev)"},
+	{"DevCircuitAIBrutal", "AI: Brutal (dev)"},
 	{"CAI", "AI: Legacy"},
 }
 
@@ -18,6 +25,7 @@ local function GetAiSimpleName(name)
 	if string.find(name, "Chicken") then
 		return name
 	end
+	local subnameMap = (WG.Chobby.Configuration:GetIsDevEngine() and devSubnameMap) or stableSubnameMap
 	for i = 1, #subnameMap do
 		if string.find(name, subnameMap[i][1]) then
 			return subnameMap[i][2]
@@ -27,12 +35,18 @@ local function GetAiSimpleName(name)
 end
 
 local simpleAiOrder = {
-	["AI: Beginner" .. devString] = 0,
-	["AI: Novice" .. devString] = 1,
-	["AI: Easy" .. devString] = 2,
-	["AI: Normal" .. devString] = 3,
-	["AI: Hard" .. devString] = 4,
-	["AI: Brutal" .. devString] = 5,
+	["AI: Beginner (dev)"] = -6,
+	["AI: Novice (dev)"] = -5,
+	["AI: Easy (dev)"] = -4,
+	["AI: Normal (dev)"] = -3,
+	["AI: Hard (dev)"] = -2,
+	["AI: Brutal (dev)"] = -1,
+	["AI: Beginner"] = 0,
+	["AI: Novice"] = 1,
+	["AI: Easy"] = 2,
+	["AI: Normal"] = 3,
+	["AI: Hard"] = 4,
+	["AI: Brutal"] = 5,
 	["Inactive AI"] = 6,
 	["Chicken: Beginner"] = 6.5,
 	["Chicken: Very Easy"] = 7,
@@ -45,12 +59,18 @@ local simpleAiOrder = {
 }
 
 local aiTooltip = {
-	["AI: Beginner" .. devString] = "Recommended for players with no strategy game experience.",
-	["AI: Novice" .. devString] = "Recommended for players with some strategy game experience, or experience with related genres (such as MOBA).",
-	["AI: Easy" .. devString] = "Recommended for experienced strategy gamers with some experience of streaming economy.",
-	["AI: Normal" .. devString] = "Recommended for veteran strategy gamers.",
-	["AI: Hard" .. devString] = "Recommended for veteran strategy gamers who aren't afraid of losing.",
-	["AI: Brutal" .. devString] = "Recommended for veterans of Zero-K.",
+	["AI: Beginner (dev)"] = "Recommended for players with no strategy game experience.",
+	["AI: Novice (dev)"] = "Recommended for players with some strategy game experience, or experience with related genres (such as MOBA).",
+	["AI: Easy (dev)"] = "Recommended for experienced strategy gamers with some experience of streaming economy.",
+	["AI: Normal (dev)"] = "Recommended for veteran strategy gamers.",
+	["AI: Hard (dev)"] = "Recommended for veteran strategy gamers who aren't afraid of losing.",
+	["AI: Brutal (dev)"] = "Recommended for veterans of Zero-K.",
+	["AI: Beginner"] = "Recommended for players with no strategy game experience.",
+	["AI: Novice"] = "Recommended for players with some strategy game experience, or experience with related genres (such as MOBA).",
+	["AI: Easy"] = "Recommended for experienced strategy gamers with some experience of streaming economy.",
+	["AI: Normal"] = "Recommended for veteran strategy gamers.",
+	["AI: Hard"] = "Recommended for veteran strategy gamers who aren't afraid of losing.",
+	["AI: Brutal"] = "Recommended for veterans of Zero-K.",
 	["AI: Legacy"] = "Older unsupported AI, still potentially challenging.",
 	["Inactive AI"] = "This AI does absolutely nothing after spawning.",
 	["Chicken: Beginner"] = "Defeat waves of aliens.",
