@@ -25,7 +25,7 @@ local infos = {
 	},
 	{
 		key    = 'name',
-		value  = 'CircuitAIBeginner64',
+		value  = 'Circuit Beginner',
 		desc   = 'human readable name.',
 	},
 	{

@@ -19,7 +19,8 @@ end
 
 local function UploadBenchmarkFile(config, dataFilePath)
 	local dataFile = io.open(dataFilePath, "r")
-	local output = "Benchmark by " .. WG.Chobby.Configuration:GetPlayerName() .. "\n```"
+	local playerName = WG.Chobby.Configuration:GetPlayerName()
+	local output = "Benchmark by " .. playerName .. "\n```"
 	local sortedLines = {}
 	local topLine
 	local line = dataFile:read()
@@ -35,7 +36,7 @@ local function UploadBenchmarkFile(config, dataFilePath)
 	table.sort(sortedLines)
 	
 	Spring.Echo(topLine or "no top line")
-	output = output .. (topLine or "no top line") .. "```\n```"
+	output = output .. playerName .. (topLine or ",no top line") .. "```\n```"
 	for i = 1, #sortedLines do
 		Spring.Echo(sortedLines[i])
 		output = output .. sortedLines[i] .. "```\n```"
