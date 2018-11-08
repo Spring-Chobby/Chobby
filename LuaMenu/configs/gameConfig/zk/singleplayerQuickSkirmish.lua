@@ -53,13 +53,15 @@ local chickenDifficulty = {
 	"Chicken: Hard",
 	"Chicken: Suicidal",
 }
+
+local devString = ((WG.Chobby.Configuration:GetIsDevEngine() and "Dev") or "")
 local aiDifficultyMap = {
-	"CircuitAIBeginner",
-	"CircuitAINovice",
-	"CircuitAIEasy",
-	"CircuitAINormal",
-	"CircuitAIHard",
-	"CircuitAIBrutal",
+	devString .. "CircuitAIBeginner",
+	devString .. "CircuitAINovice",
+	devString .. "CircuitAIEasy",
+	devString .. "CircuitAINormal",
+	devString .. "CircuitAIHard",
+	devString .. "CircuitAIBrutal",
 }
 
 function skirmishSetupData.ApplyFunction(battleLobby, pageChoices)

@@ -1,6 +1,7 @@
 local planetUtilities = VFS.Include("campaign/sample/planetUtilities.lua")
 local AI_NAME = "CircuitAIBrutal"
 local AI_BIT = true
+local AI_ENGINE = true
 
 --local AI_NAME = "CAI"
 --local AI_BIT = false
