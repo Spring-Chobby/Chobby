@@ -1657,7 +1657,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 			lblBattleTitle:SetCaption(truncatedTitle)
 			return
 		end
-		if Configuration:IsValidEngineVersion(battle.engineVersion) then
+		if Configuration.allEnginesRunnable or Configuration:IsValidEngineVersion(battle.engineVersion) then
 			if battleTypeCombo then
 				lblBattleTitle:SetPos(143)
 				lblBattleTitle._relativeBounds.right = 100

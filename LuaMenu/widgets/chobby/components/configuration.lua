@@ -86,6 +86,7 @@ function Configuration:init()
 	self.loadLocalWidgets = false
 	self.displayBots = false
 	self.displayBadEngines2 = true
+	self.allEnginesRunnable = true
 	self.doNotSetAnySpringSettings = false
 	self.agressivelySetBorderlessWindowed = false
 
