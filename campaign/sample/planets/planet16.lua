@@ -31,7 +31,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/shieldbomb.png",
-				text = [[Snitches burrow into the ground, cloaking themselves at the cost of movement, then explode when enemies get close. With an area cloaker Snitches can are free to move while cloaked, transforming them into a potent offensive weapon. Manually detonate Snitches with 'D'.]]
+				text = [[Snitches burrow into the ground, cloaking themselves while remaining stationary, then explode when enemies get close. An area cloakers will make Snitches invisible even while moving, transforming them into a potent offensive weapon. Manually detonate Snitches by pressing D.]]
 			},
 			{
 				image = "unitpics/cloakjammer.png",
@@ -39,10 +39,11 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/staticjammer.png",
-				text = [[The Iris mobile cloaker can morph to an from a static version - the Cornea. The Cornea cloaks units in a larger radius and is much harder to spot due it's reduced decloak radius. Cornea can be built by all standard constructors so Iris is avalible even without a Cloakbot Factory.]]
+				text = [[The Iris mobile cloaker can morph to and from a static version - the Cornea. The Cornea cloaks units in a larger radius and is much harder to spot due it's reduced decloak radius. Cornea can be built by all standard constructors, so area cloakers are avalible even without a Cloakbot Factory.]]
 			},
 		},
-		gameConfig = {
+		gameConfig = {
+
 			mapName = "Fields_Of_Isis",
 			playerConfig = {
 				startX = 1000,

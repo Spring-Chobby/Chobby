@@ -26,7 +26,7 @@ local ANALYTICS_EVENT_ERROR = "analyticsEventError_"
 
 -- Do not send analytics for dev versions as they will likely be nonsense.
 local ACTIVE = not VFS.HasArchive("Zero-K $VERSION") 
-local VERSION = "events_22_10_2017:"
+local VERSION = "events_2018_04_25:"
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------

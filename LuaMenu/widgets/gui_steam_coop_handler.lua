@@ -27,7 +27,7 @@ local lastStart = {}
 local currentStart = {}
 
 local attemptGameType, attemptScriptTable, startReplayFile, startEngineVersion, DownloadUpdateFunction
-local inCoop = false
+local coopClient = false
 local friendsReplaceAI = false
 local doDelayedConnection = true
 local downloadPopup = false
@@ -39,7 +39,7 @@ local coopPanel, coopHostPanel, replacablePopup
 -- Utilities
 
 local function LeaveCoopFunc()
-	inCoop = false
+	coopClient = false
 end
 
 local function LeaveHostCoopFunc()
@@ -210,7 +210,10 @@ end
 --------------------------------------------------------------------------------
 -- External functions: Wrapper
 
-local SteamCoopHandler = {}
+local SteamCoopHandler = {
+	CheckDownloads = CheckDownloads,
+}
+
 function SteamCoopHandler.SteamFriendJoinedMe(steamID, userName)
 	if not alreadyIn[steamID] then
 		friendsInGame = friendsInGame or {}
@@ -224,6 +227,7 @@ function SteamCoopHandler.SteamFriendJoinedMe(steamID, userName)
 	
 	WG.Chobby.InformationPopup((userName or "???") .. " has joined your P2P party. Play a coop game by starting any game via the Singleplayer menu.")
 	
+	coopClient = false
 	local statusAndInvitesPanel = WG.Chobby.interfaceRoot.GetStatusAndInvitesPanel()
 	coopHostPanel = coopHostPanel or InitializeCoopStatusHandler("coopHostPanel", "Hosting Coop\nParty", LeaveHostCoopFunc, statusAndInvitesPanel)
 	statusAndInvitesPanel.RemoveControl("coopPanel")
@@ -231,7 +235,7 @@ function SteamCoopHandler.SteamFriendJoinedMe(steamID, userName)
 end
 
 function SteamCoopHandler.SteamJoinFriend(joinFriendID)
-	inCoop = true
+	coopClient = true
 	local statusAndInvitesPanel = WG.Chobby.interfaceRoot.GetStatusAndInvitesPanel()
 	coopPanel = coopPanel or InitializeCoopStatusHandler("coopPanel", "In Coop Party\nWaiting on Host", LeaveCoopFunc, statusAndInvitesPanel)
 	statusAndInvitesPanel.RemoveControl("coopHostPanel")
@@ -272,7 +276,7 @@ function SteamCoopHandler.SteamHostGameFailed(steamCaused, reason)
 end
 
 function SteamCoopHandler.SteamConnectSpring(hostIP, hostPort, clientPort, myName, scriptPassword, mapName, gameName, engine)
-	if not inCoop then
+	if not coopClient then
 		-- Do not get forced into a coop game if you have left the coop party.
 		return
 	end
@@ -292,7 +296,7 @@ function SteamCoopHandler.SteamConnectSpring(hostIP, hostPort, clientPort, myNam
 			CloseExclusivePopup()
 			Start()
 		end
-		MakeExclusivePopup("Starting coop game.", "Force", Start)
+		MakeExclusivePopup("Starting coop game.", "Cancel", Start)
 		if connectionDelay > 0 then
 			WG.Delay(StartAndClose, WG.Chobby.Configuration.coopConnectDelay)
 		else
@@ -312,6 +316,15 @@ end
 -- External functions: Widget <-> Widget
 
 function SteamCoopHandler.AttemptGameStart(gameType, gameName, mapName, scriptTable, newFriendsReplaceAI, newReplayFile, newEngineVersion)
+	if coopClient then
+		local statusAndInvitesPanel = WG.Chobby.interfaceRoot.GetStatusAndInvitesPanel()
+		if statusAndInvitesPanel and statusAndInvitesPanel.GetChildByName("coopPanel") then
+			WG.Chobby.InformationPopup("Only the host of the coop party can launch games.")
+			return
+		end
+		Spring.Echo("LUA_ERRRUN", "coopClient set without visible coop panel.")
+	end
+	
 	currentStart.gameType            = gameType
 	currentStart.gameName            = gameName
 	currentStart.mapName             = mapName
@@ -417,7 +430,7 @@ function SteamCoopHandler.AttemptGameStart(gameType, gameName, mapName, scriptTa
 end
 
 function SteamCoopHandler.RestartGame()
-	if lastStart.gameType then
+	if lastStart.gameType and not coopClient then
 		SteamCoopHandler.AttemptGameStart(lastStart.gameType, lastStart.gameName, lastStart.mapName, lastStart.scriptTable, lastStart.newFriendsReplaceAI, lastStart.newReplayFile)
 	end
 end

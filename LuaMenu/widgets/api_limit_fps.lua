@@ -102,7 +102,7 @@ end
 --------------------------------------------------------------------------------
 -- Force redraw on input or screen resize
 
-function widget:Update(dt)
+function widget:Update()
 	local x, y = Spring.GetMouseState()
 	--Spring.Echo("Mouse", x, oldX, y, oldY)
 	if x ~= oldX or y ~= oldY then

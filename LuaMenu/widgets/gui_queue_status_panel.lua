@@ -20,6 +20,8 @@ local statusQueueLobby -- global for timer update
 local statusQueueIngame
 local readyCheckPopup
 local findingMatch = false
+local ALLOW_REJECT_QUICKPLAY = true
+local ALLOW_REJECT_REGULAR = false
 
 local instantStartQueuePriority = {
 	["Teams"] = 3,
@@ -37,6 +39,16 @@ local function SecondsToMinutes(seconds)
 	end
 	local modSeconds = (seconds%60)
 	return math.floor(seconds/60) .. ":" .. ((modSeconds < 10 and "0") or "") .. modSeconds
+end
+
+local function SetBanFrom(fromTime, increment)
+	local conf = WG.Chobby.Configuration
+	fromTime = fromTime or Spring.Utilities.GetCurrentUtc()
+	local count = (conf.matchmakerRejectCount or 0) + (increment or 0)
+	
+	-- Order is important due to event listeners triggering on changes to matchmakerRejectTime
+	conf:SetConfigValue("matchmakerRejectCount", count)
+	conf:SetConfigValue("matchmakerRejectTime", fromTime)
 end
 
 --------------------------------------------------------------------------------
@@ -192,7 +204,7 @@ local function InitializeInstantQueueHandler()
 		y = 4,
 		bottom = 4,
 		padding = {0,0,0,0},
-		caption = "Join",
+		caption = "Play",
 		font = WG.Chobby.Configuration:GetFont(3),
 		classname = "action_button",
 		OnClick = {
@@ -219,7 +231,7 @@ local function InitializeInstantQueueHandler()
 
 	local function UpdateQueueText()
 		if queueName then
-			queueStatusText:SetText(queueName .. " Available\nClick to Join")
+			queueStatusText:SetText(queueName .. " Available\nClick to Play")
 		end
 	end
 
@@ -284,26 +296,29 @@ end
 --------------------------------------------------------------------------------
 -- Ready Check Popup
 
-local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
+local function CreateReadyCheckWindow(DestroyFunc, secondsRemaining, minWinChance, isQuickPlay)
 	local Configuration = WG.Chobby.Configuration
 
 	local snd_volui = Spring.GetConfigString("snd_volui")
 	local snd_volmaster = Spring.GetConfigString("snd_volmaster")
+	
 	-- These are defaults. Should be audible enough.
 	Spring.SetConfigString("snd_volui", 100)
 	Spring.SetConfigString("snd_volmaster", 60)
 	if Configuration.menuNotificationVolume ~= 0 then
-	    Spring.PlaySoundFile("sounds/matchFound.wav", Configuration.menuNotificationVolume or 1, "ui")
+		Spring.PlaySoundFile("sounds/matchFound.wav", Configuration.menuNotificationVolume or 1, "ui")
 	end
 	WG.Delay(function()
-	    Spring.SetConfigString("snd_volui", snd_volui)
-	    Spring.SetConfigString("snd_volmaster", snd_volmaster)
+		Spring.SetConfigString("snd_volui", snd_volui)
+		Spring.SetConfigString("snd_volmaster", snd_volmaster)
 	end, 10)
 
-
+	Configuration:SetConfigValue("matchmakerPopupTime", Spring.Utilities.GetCurrentUtc())
 	if WG.WrapperLoopback then
 		WG.WrapperLoopback.Alert("Match found")
 	end
+
+	local ALLOW_REJECT = (isQuickPlay and ALLOW_REJECT_QUICKPLAY) or (not isQuickPlay and ALLOW_REJECT_REGULAR)
 
 	local readyCheckWindow = Window:New {
 		caption = "",
@@ -346,7 +361,8 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 		parent = readyCheckWindow,
 	}
 
-	local acceptRegistered = false
+	local acceptAcknowledged = false
+	local acceptClicked = false
 	local rejectedMatch = false
 	local displayTimer = true
 	local startTimer = Spring.GetTimer()
@@ -369,16 +385,19 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 	end
 
 	local function AcceptFunc()
+		acceptClicked = true
+		Configuration:SetConfigValue("matchmakerPopupTime", nil)
 		lobby:AcceptMatchMakingMatch()
 	end
 
 	local buttonAccept = Button:New {
-		right = 150,
-		width = 135,
+		x = (not ALLOW_REJECT) and "20%",
+		right = (ALLOW_REJECT and 150) or "20%",
+		width = (ALLOW_REJECT and 135),
 		bottom = 1,
 		height = 70,
-		caption = i18n("accept"),
-		font = Configuration:GetFont(3),
+		caption = (ALLOW_REJECT and i18n("accept")) or i18n("ready"),
+		font = Configuration:GetFont((ALLOW_REJECT and 3) or 4),
 		parent = readyCheckWindow,
 		classname = "action_button",
 		OnClick = {
@@ -388,7 +407,7 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 		},
 	}
 
-	local buttonReject = Button:New {
+	local buttonReject = ALLOW_REJECT and Button:New {
 		right = 1,
 		width = 135,
 		bottom = 1,
@@ -404,14 +423,23 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 		},
 	}
 
-	local popupHolder = WG.Chobby.PriorityPopup(readyCheckWindow, CancelFunc, AcceptFunc, screen0)
+	local banChecked = false
+	local function CheckBan()
+		if acceptAcknowledged or banChecked or acceptClicked then
+			return
+		end
+		SetBanFrom(Configuration.matchmakerPopupTime, 1)
+		banChecked = true
+	end
 
+	local popupHolder = WG.Chobby.PriorityPopup(readyCheckWindow, ALLOW_REJECT and CancelFunc, AcceptFunc, screen0)
 	local externalFunctions = {}
 
 	function externalFunctions.UpdateTimer()
 		local newTimeRemaining = secondsRemaining - math.ceil(Spring.DiffTimers(Spring.GetTimer(), startTimer))
 		if newTimeRemaining < 0 then
-			DoDispose()
+			CheckBan()
+			WG.Delay(DoDispose, 0.1)
 		end
 		if not displayTimer then
 			return
@@ -420,7 +448,7 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 			return
 		end
 		timeRemaining = newTimeRemaining
-		statusLabel:SetText(((acceptRegistered and "Waiting for players ") or "Accept in ") .. SecondsToMinutes(timeRemaining))
+		statusLabel:SetText(((acceptAcknowledged and "Waiting for players ") or "Accept in ") .. SecondsToMinutes(timeRemaining))
 	end
 
 	function externalFunctions.UpdatePlayerCount(readyPlayers)
@@ -429,30 +457,46 @@ local function CreateReadyCheckWindow(secondsRemaining, DestroyFunc)
 	end
 
 	function externalFunctions.AcceptRegistered()
-		if acceptRegistered then
+		if acceptAcknowledged then
 			return
 		end
-		acceptRegistered = true
+		acceptAcknowledged = true
+		Configuration:SetConfigValue("matchmakerPopupTime", nil)
 		statusLabel:SetText("Waiting for players " .. (timeRemaining or "time error") .. "s")
 
 		buttonAccept:Hide()
 
-		buttonReject:SetPos(nil, nil, 90, 60)
-		buttonReject._relativeBounds.right = 1
-		buttonReject._relativeBounds.bottom = 1
-		buttonReject:UpdateClientArea()
+		if ALLOW_REJECT then
+			buttonReject:SetPos(nil, nil, 90, 60)
+			buttonReject._relativeBounds.right = 1
+			buttonReject._relativeBounds.bottom = 1
+			buttonReject:UpdateClientArea()
+		end
+	end
+
+	function externalFunctions.DisconnectedRudely()
+		CheckBan()
 	end
 
 	function externalFunctions.MatchMakingComplete(success)
 		if success then
 			statusLabel:SetText(Configuration:GetSuccessColor() .. "Battle starting")
-		elseif (not rejectedMatch) then
-			-- If we rejected the match then this message is not useful.
-			statusLabel:SetText(Configuration:GetWarningColor() .. "Match rejected by another player")
+		else
+			CheckBan()
+			if acceptAcknowledged and not rejectedMatch then
+				-- If we rejected the match then this message is not useful.
+				statusLabel:SetText(Configuration:GetWarningColor() .. "Match rejected by another player")
+			end
 		end
 		Spring.Echo("MatchMakingComplete", success)
 		displayTimer = false
 		WG.Delay(DoDispose, 3)
+	end
+
+	function externalFunctions.Destroy()
+		acceptAcknowledged = true
+		Configuration:SetConfigValue("matchmakerPopupTime", nil)
+		DoDispose()
 	end
 
 	return externalFunctions
@@ -499,6 +543,10 @@ function DelayedInitialize()
 	statusQueueLobby = InitializeQueueStatusHandler("lobbyQueue")
 	instantQueueHandler = InitializeInstantQueueHandler()
 
+	if WG.Chobby.Configuration.matchmakerPopupTime then
+		SetBanFrom(WG.Chobby.Configuration.matchmakerPopupTime)
+	end
+	
 	local previouslyInMatchMaking = false
 	local previousInstantStart = false
 	local function OnMatchMakerStatus(listener, inMatchMaking, joinedQueueList, queueCounts, ingameCounts, instantStartQueues, currentEloWidth, joinedTime, bannedTime)
@@ -525,7 +573,7 @@ function DelayedInitialize()
 		end
 		previouslyInMatchMaking = inMatchMaking
 
-		local instantStart = ((not bannedTime) and WG.QueueListWindow.HaveMatchMakerResources() and instantQueueHandler.ProcessInstantStartQueue(instantStartQueues))
+		local instantStart = ((not WG.GetCombinedBannedTime(bannedTime)) and WG.QueueListWindow.HaveMatchMakerResources() and instantQueueHandler.ProcessInstantStartQueue(instantStartQueues))
 		if previousInstantStart then
 			if not instantStart then
 				statusAndInvitesPanel.RemoveControl(instantQueueHandler.GetHolder().name)
@@ -540,10 +588,11 @@ function DelayedInitialize()
 		readyCheckPopup = nil
 	end
 
-	local function OnMatchMakerReadyCheck(_, secondsRemaining)
-		if not readyCheckPopup then
-			readyCheckPopup = CreateReadyCheckWindow(secondsRemaining, DestroyReadyCheckPopup)
+	local function OnMatchMakerReadyCheck(_, secondsRemaining, minWinChance, isQuickPlay)
+		if readyCheckPopup then
+			readyCheckPopup.Destroy()
 		end
+		readyCheckPopup = CreateReadyCheckWindow(DestroyReadyCheckPopup, secondsRemaining, minWinChance, isQuickPlay)
 	end
 
 	local function OnMatchMakerReadyUpdate(_, readyAccepted, likelyToPlay, queueReadyCounts, battleSize, readyPlayers)
@@ -559,7 +608,6 @@ function DelayedInitialize()
 	end
 
 	local function OnMatchMakerReadyResult(_, isBattleStarting, areYouBanned)
-		Spring.Echo("OnMatchMakerReadyResult", isBattleStarting, areYouBanned)
 		if not readyCheckPopup then
 			return
 		end
@@ -576,6 +624,10 @@ function DelayedInitialize()
 	end
 
 	local function OnDisconnected()
+		if readyCheckPopup then
+			-- Safety
+			readyCheckPopup.DisconnectedRudely()
+		end
 		OnMatchMakerStatus(false, false)
 	end
 
@@ -589,7 +641,7 @@ function DelayedInitialize()
 	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", SaveQueues)
 end
 
-function widget:Update(dt)
+function widget:Update()
 	if findingMatch then
 		if statusQueueLobby then
 			statusQueueLobby.UpdateTimer()

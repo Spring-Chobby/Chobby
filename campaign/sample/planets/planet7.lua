@@ -31,11 +31,11 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/cloaksnipe.png",
-				text = [[Unlike all other cloaked units, the Phantom can fire its weapon without dropping its cloak. Use this to sneak into the defence network, destroying what you need to without blowing your cover.]]
+				text = [[Unlike all other cloaked units, the Phantom can fire its weapon without becoming visible. Use this to sneak into the defence network, destroying what you need to without blowing your cover.]]
 			},
 			{
 				image = "unitpics/turretheavy.png",
-				text = [[Heavier turrets cannot fire unless they are connected to energy-producing buildings. Deactivate them by destroying Energy Pylons or the energy producers themselves.]]
+				text = [[Heavier turrets cannot fire unless they are connected to energy-producing buildings. Deactivate them by destroying the connecting Energy Pylons or the energy producers themselves.]]
 			},
 			{
 				image = "unitpics/shieldfelon.png",

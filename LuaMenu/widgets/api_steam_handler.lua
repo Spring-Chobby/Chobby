@@ -17,6 +17,7 @@ local storedFriendList
 local storedJoinFriendID
 
 local steamFriendByID = {}
+local overlayActive = false
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -79,7 +80,7 @@ end
 
 local SteamHandler = {}
 
-function SteamHandler.SteamOnline(authToken, joinFriendID, friendList, suggestedNameFromSteam)
+function SteamHandler.SteamOnline(authToken, joinFriendID, friendList, suggestedNameFromSteam, myDlc)
 	local Configuration = WG.Chobby.Configuration
 	if not Configuration then
 		Spring.Echo("Loopback error: Sent steam before Configuration initialization")
@@ -97,6 +98,9 @@ function SteamHandler.SteamOnline(authToken, joinFriendID, friendList, suggested
 	
 	if authToken then
 		lobby:SetSteamAuthToken(authToken)
+	end
+	if myDlc then
+		lobby:SetSteamDlc(myDlc)
 	end
 	
 	if storedFriendList then
@@ -144,9 +148,40 @@ function SteamHandler.GetIsSteamFriend(steamID)
 end
 
 function SteamHandler.SteamOverlayChanged(isActive)
+	overlayActive = isActive
 	WG.LimitFps.SetSteamFastUpdate(isActive)
 	if not isActive then
 		WG.LimitFps.ForceRedrawPeriod(3)
+	end
+end
+
+function SteamHandler.OpenUrlIfActive(urlString)
+	local Configuration = WG.Chobby.Configuration
+	if Configuration.steamOverlayEnablable and Configuration.canAuthenticateWithSteam and Configuration.useSteamBrowser then
+		WG.WrapperLoopback.SteamOpenWebsite(urlString)
+		local function EnableFallback()
+			if not overlayActive then
+				WG.WrapperLoopback.OpenUrl(urlString)
+			end
+		end
+		WG.Delay(EnableFallback, 0.5)
+	else
+		WG.WrapperLoopback.OpenUrl(urlString)
+	end
+end
+
+function SteamHandler.OpenFriendList()
+	local Configuration = WG.Chobby.Configuration
+	if Configuration.steamOverlayEnablable and Configuration.canAuthenticateWithSteam then
+		WG.WrapperLoopback.SteamOpenOverlaySection("LobbyInvite")
+		local function EnableFallback()
+			if not overlayActive then
+				WG.Chobby.InformationPopup("The Steam overlay is currently disabled. You must invite friends through the standalone Steam application.", {width = 380, height = 220})
+			end
+		end
+		WG.Delay(EnableFallback, 0.5)
+	else
+		WG.Chobby.InformationPopup("The Steam overlay is currently disabled. You must invite friends through the standalone Steam application.", {width = 380, height = 220})
 	end
 end
 

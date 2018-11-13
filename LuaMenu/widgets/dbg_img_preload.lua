@@ -47,6 +47,7 @@ function widget:Update()
 	elseif index then
 		if not holder then
 			holder = WG.Chili.Control:New {
+				name = "imagePreloadHolder",
 				right = -20,
 				bottom = 0,
 				width = SCALE,

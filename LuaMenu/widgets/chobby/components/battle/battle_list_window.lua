@@ -72,11 +72,11 @@ function BattleListWindow:init(parent)
 		boxalign = "left",
 		boxsize = 20,
 		caption = " Passworded",
-		checked = Configuration.battleFilterPassworded or false,
+		checked = Configuration.battleFilterPassworded2 or false,
 		font = Configuration:GetFont(2),
 		OnChange = {
 			function (obj, newState)
-				Configuration:SetConfigValue("battleFilterPassworded", newState)
+				Configuration:SetConfigValue("battleFilterPassworded2", newState)
 				SoftUpdate()
 			end
 		},
@@ -120,7 +120,7 @@ function BattleListWindow:init(parent)
 	}
 	
 	local function UpdateCheckboxes()
-		checkPassworded:SetToggle(Configuration.battleFilterPassworded)
+		checkPassworded:SetToggle(Configuration.battleFilterPassworded2)
 		checkNonFriend:SetToggle(Configuration.battleFilterNonFriend)
 		checkRunning:SetToggle(Configuration.battleFilterRunning)
 	end
@@ -137,37 +137,56 @@ function BattleListWindow:init(parent)
 	end
 	WG.Delay(UpdateTimersDelay, 30)
 	
+	self.listenerUpdateDisabled = false
 	self.onBattleOpened = function(listener, battleID)
+		if self.listenerUpdateDisabled then
+			return
+		end
 		self:AddBattle(battleID, lobby:GetBattle(battleID))
 		SoftUpdate()
 	end
 	lobby:AddListener("OnBattleOpened", self.onBattleOpened)
 
 	self.onBattleClosed = function(listener, battleID)
+		if self.listenerUpdateDisabled then
+			return
+		end
 		self:RemoveRow(battleID)
 		SoftUpdate()
 	end
 	lobby:AddListener("OnBattleClosed", self.onBattleClosed)
 
 	self.onJoinedBattle = function(listener, battleID)
+		if self.listenerUpdateDisabled then
+			return
+		end
 		self:JoinedBattle(battleID)
 		SoftUpdate()
 	end
 	lobby:AddListener("OnJoinedBattle", self.onJoinedBattle)
 
 	self.onLeftBattle = function(listener, battleID)
+		if self.listenerUpdateDisabled then
+			return
+		end
 		self:LeftBattle(battleID)
 		SoftUpdate()
 	end
 	lobby:AddListener("OnLeftBattle", self.onLeftBattle)
 
 	self.onUpdateBattleInfo = function(listener, battleID)
+		if self.listenerUpdateDisabled then
+			return
+		end
 		self:OnUpdateBattleInfo(battleID)
 		SoftUpdate()
 	end
 	lobby:AddListener("OnUpdateBattleInfo", self.onUpdateBattleInfo)
 
 	self.onBattleIngameUpdate = function(listener, battleID, isRunning)
+		if self.listenerUpdateDisabled then
+			return
+		end
 		self:OnBattleIngameUpdate(battleID, isRunning)
 		SoftUpdate()
 	end
@@ -196,6 +215,9 @@ function BattleListWindow:RemoveListeners()
 	lobby:RemoveListener("OnJoinedBattle", self.onJoinedBattle)
 	lobby:RemoveListener("OnLeftBattle", self.onLeftBattle)
 	lobby:RemoveListener("OnUpdateBattleInfo", self.onUpdateBattleInfo)
+	lobby:RemoveListener("OnBattleIngameUpdate", self.onBattleIngameUpdate)
+	lobby:RemoveListener("OnConfigurationChange", self.onConfigurationChange)
+	lobby:RemoveListener("DownloadFinished", self.downloadFinished)
 end
 
 function BattleListWindow:Update()
@@ -348,6 +370,16 @@ function BattleListWindow:MakeWatchBattle(battleID, battle)
 		parent = parentButton,
 	}
 
+	local modeName = battle.battleMode and Configuration.battleTypeToHumanName[battle.battleMode]
+	if battle.isRunning then
+		if modeName then
+			modeName = modeName .. " - "
+		else
+			modeName = ""
+		end
+		modeName = modeName .. "Running for " .. Spring.Utilities.GetTimeToPast(battle.runningSince)
+	end
+	
 	local lblRunningTime = Label:New {
 		name = "runningTimeCaption",
 		x = height + 3,
@@ -356,7 +388,7 @@ function BattleListWindow:MakeWatchBattle(battleID, battle)
 		height = 15,
 		valign = 'center',
 		font = Configuration:GetFont(1),
-		caption = "Running for " .. Spring.Utilities.GetTimeToPast(battle.runningSince),
+		caption = modeName,
 		parent = parentButton,
 	}
 	
@@ -455,9 +487,9 @@ function BattleListWindow:MakeJoinBattle(battleID, battle)
 		name = "playersCaption",
 		x = height + 3,
 		width = 50,
-		y = 12,
-		height = height - 10,
-		valign = 'center',
+		y = 18,
+		height = 22,
+		valign = 'bottom',
 		font = Configuration:GetFont(2),
 		caption = lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers,
 		parent = parentButton,
@@ -466,41 +498,52 @@ function BattleListWindow:MakeJoinBattle(battleID, battle)
 	if battle.passworded then
 		local imgPassworded = Image:New {
 			name = "password",
-			x = height + 48,
-			y = 22,
-			height = 30,
-			width = 30,
+			x = height + 50,
+			width = 15,
+			height = 15,
+			y = 20,
+			height = 15,
 			margin = {0, 0, 0, 0},
 			file = CHOBBY_IMG_DIR .. "lock.png",
 			parent = parentButton,
 		}
 	end
 
-	local imHaveGame = Image:New {
-		name = "imHaveGame",
-		x = height + 80,
-		width = 15,
-		height = 15,
-		y = 20,
-		height = 15,
-		file = (VFS.HasArchive(battle.gameName) and IMG_READY or IMG_UNREADY),
-		parent = parentButton,
-	}
+	--local imHaveGame = Image:New {
+	--	name = "imHaveGame",
+	--	x = height + 50,
+	--	width = 15,
+	--	height = 15,
+	--	y = 20,
+	--	height = 15,
+	--	file = (VFS.HasArchive(battle.gameName) and IMG_READY or IMG_UNREADY),
+	--	parent = parentButton,
+	--}
+	local modeName = battle.battleMode and Configuration.battleTypeToHumanName[battle.battleMode]
+	if battle.isRunning then
+		if modeName then
+			modeName = modeName .. " - "
+		else
+			modeName = ""
+		end
+		modeName = modeName .. "Running for " .. Spring.Utilities.GetTimeToPast(battle.runningSince)
+	end
+	
 	local lblGame = Label:New {
 		name = "gameCaption",
-		x = height + 100,
+		x = height + 70,
 		right = 0,
 		y = 20,
 		height = 15,
 		valign = 'center',
-		caption = battle.gameName:sub(1, 22),
+		caption = modeName, --battle.gameName:sub(1, 22),
 		font = Configuration:GetFont(1),
 		parent = parentButton,
 	}
 
 	local imHaveMap = Image:New {
 		name = "imHaveMap",
-		x = height + 80,
+		x = height + 50,
 		width = 15,
 		height = 15,
 		y = 36,
@@ -510,7 +553,7 @@ function BattleListWindow:MakeJoinBattle(battleID, battle)
 	}
 	local lblMap = Label:New {
 		name = "mapCaption",
-		x = height + 100,
+		x = height + 70,
 		right = 0,
 		y = 36,
 		height = 15,
@@ -545,11 +588,13 @@ end
 
 function BattleListWindow:ItemInFilter(id)
 	local battle = lobby:GetBattle(id)
-	if Configuration.battleFilterPassworded and battle.passworded then
-		return false
-	end
-	if Configuration.battleFilterNonFriend and not lobby:GetBattleHasFriend(id) then
-		return false
+	if not lobby:GetBattleHasFriend(id) then
+		if Configuration.battleFilterPassworded2 and battle.passworded then
+			return false
+		end
+		if Configuration.battleFilterNonFriend then
+			return false
+		end
 	end
 	if Configuration.battleFilterRunning and battle.isRunning then
 		return false
@@ -566,6 +611,9 @@ function BattleListWindow:CompareItems(id1, id2)
 		if battle1.isMatchMaker ~= battle2.isMatchMaker then
 			return battle2.isMatchMaker
 		end
+		if battle1.isRunning ~= battle2.isRunning then
+			return battle2.isRunning
+		end
 		local countOne = lobby:GetBattlePlayerCount(id1)
 		local countTwo = lobby:GetBattlePlayerCount(id2)
 		if countOne ~= countTwo then
@@ -577,6 +625,13 @@ function BattleListWindow:CompareItems(id1, id2)
 		Spring.Echo("battle2", id2, battle2, battle2 and battle2.users)
 		return false
 	end
+end
+
+function BattleListWindow:RecalculateOrder(id)
+	if lobby.commandBuffer then
+		return
+	end
+	self:super("RecalculateOrder", id)
 end
 
 function BattleListWindow:UpdateSync(battleID)
@@ -592,10 +647,10 @@ function BattleListWindow:UpdateSync(battleID)
 	end
 	
 	local imHaveMap = items.battleButton:GetChildByName("imHaveMap")
-	local imHaveGame = items.battleButton:GetChildByName("imHaveGame")
+	--local imHaveGame = items.battleButton:GetChildByName("imHaveGame")
 	
 	if imHaveMap then
-		imHaveGame.file = (VFS.HasArchive(battle.gameName) and IMG_READY or IMG_UNREADY)
+		--imHaveGame.file = (VFS.HasArchive(battle.gameName) and IMG_READY or IMG_UNREADY)
 		imHaveMap.file = (VFS.HasArchive(battle.mapName) and IMG_READY or IMG_UNREADY)
 	end
 end
@@ -609,8 +664,14 @@ function BattleListWindow:UpdateTimers()
 		
 		local battle = lobby:GetBattle(battleID)
 		local runningTimeCaption = items.battleButton:GetChildByName("runningTimeCaption")
-		if runningTimeCaption then
-			runningTimeCaption:SetCaption("Running for " .. Spring.Utilities.GetTimeToPast(battle.runningSince))
+		if battle and runningTimeCaption then
+			local modeName = battle.battleMode and Configuration.battleTypeToHumanName[battle.battleMode]
+			if modeName then
+				modeName = modeName .. " - "
+			else
+				modeName = ""
+			end
+			runningTimeCaption:SetCaption(modeName .. "Running for " .. Spring.Utilities.GetTimeToPast(battle.runningSince))
 		end
 	end
 end
@@ -710,12 +771,24 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 		end
 		imHaveMap:Invalidate()
 		
+		
+		--local imHaveGame = items.battleButton:GetChildByName("imHaveGame")
+		--imHaveGame.file = (VFS.HasArchive(battle.gameName) and IMG_READY or IMG_UNREADY)
+		--gameCaption:SetCaption(battle.gameName:gsub("_", " "))
+		
 		local gameCaption = items.battleButton:GetChildByName("gameCaption")
-		local imHaveGame = items.battleButton:GetChildByName("imHaveGame")
-		
-		imHaveGame.file = (VFS.HasArchive(battle.gameName) and IMG_READY or IMG_UNREADY)
-		gameCaption:SetCaption(battle.gameName:gsub("_", " "))
-		
+		local modeName = battle.battleMode and Configuration.battleTypeToHumanName[battle.battleMode]
+		if battle.isRunning then
+			if modeName then
+				modeName = modeName .. " - "
+			else
+				modeName = ""
+			end
+			gameCaption:SetCaption(modeName .. "Running for " .. Spring.Utilities.GetTimeToPast(battle.runningSince))
+		else
+			gameCaption:SetCaption(modeName)
+		end
+
 		local playersCaption = items.battleButton:GetChildByName("playersCaption")
 		playersCaption:SetCaption(lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers)
 	else
@@ -915,6 +988,14 @@ function BattleListWindow:JoinBattle(battle)
 			parent = passwordWindow,
 		}
 
+		local function onJoinBattleFailed(listener, reason)
+			lblError:SetCaption(reason)
+		end
+		
+		local function onJoinBattle(listener)
+			passwordWindow:Dispose()
+		end
+		
 		passwordWindow = Window:New {
 			x = 700,
 			y = 300,
@@ -933,13 +1014,6 @@ function BattleListWindow:JoinBattle(battle)
 			},
 		}
 		
-		local function onJoinBattleFailed(listener, reason)
-			lblError:SetCaption(reason)
-		end
-		
-		local function onJoinBattle(listener)
-			passwordWindow:Dispose()
-		end
 
 		local lblPassword = Label:New {
 			x = 25,

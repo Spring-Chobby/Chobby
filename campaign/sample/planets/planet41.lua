@@ -35,7 +35,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/tankheavyraid.png",
-				text = [[The Blitz heavy tank raider will go toe-to-toe with any other raider - its high HP and lightning weaponry give it a significant edge. However, if one Blitz dies, it releases an EMP explosion which might stun your other units, so only take fights that you will win.]]
+				text = [[The Blitz heavy tank raider will go toe-to-toe with any other raider - its high HP and lightning weaponry give it a significant edge. However, it is fairly inefficient due to its comparatively high cost.]]
 			},
 			{
 				image = "LuaUI/Images/commands/Bold/repair.png",
@@ -43,7 +43,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 		},
 		gameConfig = {
-			mapName = "TitanDuel 2",
+			mapName = "TitanDuel 2.2",
 			playerConfig = {
 				startX = 3600,
 				startZ = 1000,

@@ -35,11 +35,15 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/energypylon.png",
-				text = [[In order to fire, your Cerberus needs to be connected to a power grid with at least 50 energy, although it does not consume this energy. Use Energy Pylons to extend the grid from your ally's Fusions. The grid can also be connected to Metal Extractors to overdrive them for increased metal production.]]
+				text = [[In order to fire, your Cerberus needs to be connected to a power grid with at least 50 energy, although it does not consume this energy. Use Energy Pylons to extend the grid from your ally's Fusions. The Economy view (F4) displays your power grid as coloured circles.]]
+			},
+			{
+				image = "unitpics/staticmex.png",
+				text = [[Connecting Metal Extractors to your energy production structures can give you more metal income through Overdrive. Check the online manual for more information about how Overdrive works.]]
 			},
 			{
 				image = "unitpics/staticcon.png",
-				text = [[Caretakers are stationary constructors with large build range and high build power for their cost. They are limited by their inability to initiate construction.]]
+				text = [[Caretakers are stationary constructors with large build range and high build power for their cost. They are limited by their inability to initiate construction, but they are the most cost-efficient way to get more production out of a factory.]]
 			},
 		},
 		gameConfig = {
@@ -653,7 +657,7 @@ local function GetPlanet(planetUtilities, planetID)
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Destroy the enemy Shieldbot and Vehicle Factories",
+					description = "Destroy the enemy Shieldbot Factory and Rover Assembly",
 				},
 				[2] = {
 					description = "Protect your Commander",
@@ -682,7 +686,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					image = planetUtilities.ICON_DIR .. "staticarty.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build two Cerberi",
+					description = "Build two Cerberuses",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { -- Win in 12 minutes

@@ -35,7 +35,7 @@ end
 -- Connectivity and sending
 
 -- sends command to wrapper
-function SendCommand(cmdName, args) 
+function SendCommand(cmdName, args)
 	if (args == nil) then
 		client:send(cmdName .. " {}\n")
 	else
@@ -71,14 +71,28 @@ local function ReadReplayInfoDone(args)
                     public string RelativePath { get; set; }
                    public ReplayReader.ReplayInfo ReplayInfo { get; set; }
 				   
-        public class ReplayInfo
+  public class ReplayInfo
         {
             public string Engine { get; set; }
             public string Game { get; set; }
             public string Map { get; set; }
             public string StartScript { get; set; }
-        }
+            public DateTime Date { get; set; }
+            public int GameLengthRealtime { get; set; }
+            public int GameLengthIngameTime { get; set; }
+            public string GameID { get; set; }
+            public List<PlayerEntry> Players { get; set; } = new List<PlayerEntry>();
 
+            public class PlayerEntry
+            {
+                public bool IsSpectator { get; set; }
+                public bool IsBot { get; set; }
+                public string Name { get; set; }
+                public int? AllyTeam { get; set; }
+            }
+        }
+		
+		
 		ReplayInfo is nil in case of failure
 				   
              }
@@ -90,6 +104,25 @@ local function ReadReplayInfoDone(args)
 	end
 end
 
+
+local function GetSpringBattleInfoDone(args)
+--[[
+   [ChobbyMessage]
+    public class GetSpringBattleInfoDone
+    {
+        public string GameID { get; set; }
+        public SpringBattleInfo SpringBattleInfo { get; set; }
+    }
+	    public class SpringBattleInfo
+    {
+        public int SpringBattleID { get; set; }
+        public AutohostMode AutohostMode { get; set; }
+        public bool IsMatchMaker { get; set; }
+        public string Title { get; set; }
+    }
+]]--
+
+end
 
 
 -- reports that download has ended/was aborted
@@ -104,7 +137,7 @@ end
 
 -- notifies that steam is online
 local function SteamOnline(args)
-	WG.SteamHandler.SteamOnline(args.AuthToken, args.FriendSteamID, args.Friends, args.SuggestedName)
+	WG.SteamHandler.SteamOnline(args.AuthToken, args.FriendSteamID, args.Friends, args.SuggestedName, args.Dlc)
 	if args.FriendSteamID then
 		WG.SteamHandler.SteamJoinFriend(args.FriendSteamID)
 		WG.SteamCoopHandler.SteamJoinFriend(args.FriendSteamID)
@@ -117,7 +150,7 @@ local function SteamJoinFriend(args)
 	WG.SteamCoopHandler.SteamJoinFriend(args.FriendSteamID)
 end
 
-local function SteamOverlayChanged(args) 
+local function SteamOverlayChanged(args)
 	WG.SteamHandler.SteamOverlayChanged(args.IsActive)
 end
 
@@ -129,11 +162,14 @@ local function WrapperOnline(args)
 		config.DefaultServerHost = args.DefaultServerHost
 		config.UserID = args.UserID
 		config.IsSteamFolder = args.IsSteamFolder
+		if config.DefaultServerPort == 8202 and config.DefaultServerHost == "test.zero-k.info" then
+			config.ForceDefaultServer = true
+		end
 	end
 end
 
 -- TODO wrapper will send this to confirm friend join on steam (either invite or self join) use to auto accept party join request and to notify player when joining "offline" COOP 
-local function SteamFriendJoinedMe(args) 
+local function SteamFriendJoinedMe(args)
 	WG.SteamCoopHandler.SteamFriendJoinedMe(args.FriendSteamID, args.FriendSteamName)
 	--[[ 
 	    public string FriendSteamID { get; set; }
@@ -143,7 +179,7 @@ end
 
 
 -- TODO wrapper will send this to indicate P2P host request is ok and this chobby should start hosting asap, using the given local port
-local function SteamHostGameSuccess(args) 
+local function SteamHostGameSuccess(args)
 	WG.SteamCoopHandler.SteamHostGameSuccess(args.HostPort)
 	-- args.HostPort
 end
@@ -195,22 +231,26 @@ local function DiscordOnJoin(args)
  -- args.Secret
 end
 
-local function DiscordOnError(args) 
+local function DiscordOnError(args)
  -- args.Message 
  -- args.ErrorCode
 end
 
-local function DiscordOnDisconnected(args) 
+local function DiscordOnDisconnected(args)
   -- args.Message
   -- args.ErrorCode
 end 
 
-local function DiscordOnJoinRequest(args) 
+local function DiscordOnJoinRequest(args)
  -- args.userId 
  -- args.username 
  -- args.discriminator
  -- args.avatar
 end 
+
+local function UserActivity(args)
+	-- args.IdleSeconds
+end
 
 commands["DownloadFileDone"] = DownloadFileDone
 commands["SteamOnline"] = SteamOnline
@@ -224,6 +264,7 @@ commands["SteamConnectSpring"] = SteamConnectSpring
 commands["DownloadImageDone"] = DownloadImageDone
 commands["DownloadFileProgress"] = DownloadFileProgress
 commands["ReadReplayInfoDone"] = ReadReplayInfoDone
+commands["GetSpringBattleInfoDone"] = GetSpringBattleInfoDone
 
 commands["DiscordOnReady"] = DiscordOnReady
 commands["DiscordOnSpectate"] = DiscordOnSpectate
@@ -232,16 +273,25 @@ commands["DiscordOnError"] = DiscordOnError
 commands["DiscordOnDisconnected"] = DiscordOnDisconnected
 commands["DiscordOnJoinRequest"] = DiscordOnJoinRequest
 
+commands["UserActivity"] = UserActivity
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Callout Functions
 
 local WrapperLoopback = {}
 
-function WrapperLoopback.ReadReplayInfo(relativePath) 
+function WrapperLoopback.ReadReplayInfo(relativePath)
 	SendCommand("ReadReplayInfo", {RelativePath = relativePath})
-end 
+end
 
+function WrapperLoopback.GetSpringBattleInfo(gameId)
+	SendCommand("GetSpringBattleInfo", {GameID = gameID})
+end
+
+function WrapperLoopback.SendBugReport(title, description)
+	SendCommand("SendBugReport", {Title  = title, Description = description})
+end
 
 -- opens URL
 function WrapperLoopback.OpenUrl(url)
@@ -250,12 +300,12 @@ function WrapperLoopback.OpenUrl(url)
 end
 
 -- opens folder (gamedata folder only technically)
-function WrapperLoopback.OpenFolder(folder) 
+function WrapperLoopback.OpenFolder(folder)
 	SendCommand("OpenFolder", nil)
 end
 
 -- restart chobby
-function WrapperLoopback.Restart() 
+function WrapperLoopback.Restart()
 	SendCommand("Restart", nil)
 end
 
@@ -265,12 +315,12 @@ function WrapperLoopback.Alert(message)
 end
 
 -- sets TTS volume
-function WrapperLoopback.TtsVolume(volume) 
+function WrapperLoopback.TtsVolume(volume)
 	SendCommand("TtsVolume", {Volume = volume})
 end
 
 -- speaks using TTS, send name of speaker for alternating speaker voices
-function WrapperLoopback.TtsSay(name, text) 
+function WrapperLoopback.TtsSay(name, text)
 	SendCommand("TtsSay", {Name = name, Text = text})
 end
 
@@ -280,13 +330,13 @@ function WrapperLoopback.DownloadFile(name, fileType)
 end
 
 --  aborts existing file download
-function WrapperLoopback.AbortDownload(name, fileType) 
+function WrapperLoopback.AbortDownload(name, fileType)
 	SendCommand("AbortDownload", {Name = name, FileType = fileType})
 end
 
 
 
-function WrapperLoopback.StartNewSpring(args) 
+function WrapperLoopback.StartNewSpring(args)
 --[[
     public class StartNewSpring
     {
@@ -302,12 +352,16 @@ function WrapperLoopback.StartNewSpring(args)
 														  // non-rapid entries will be always redownloaded, so check presence of map before requesting it, wrapper does not init unitsync 
     }
 ]]--
-	Spring.Utilities.TableEcho(args, "StartNewSpring")
+	--Spring.Utilities.TableEcho(args, "StartNewSpring")
 	SendCommand("StartNewSpring", args)
 end
 
+function WrapperLoopback.DownloadSpring(args)
+	--args = {Engine = versionString}
+	SendCommand("DownloadSpring", args)
+end
 
-function WrapperLoopback.DownloadImage(args) 
+function WrapperLoopback.DownloadImage(args)
 --[[
     [ChobbyMessage]
     public class DownloadImage
@@ -326,19 +380,24 @@ end
 
 -- opens steam section, default = "LobbyInvite"
 -- WARNING: FPS needs to be increased, overlay works at chobby FPS
-function WrapperLoopback.SteamOpenOverlaySection(name) 
+function WrapperLoopback.SteamOpenOverlaySection(name)
+	local config = WG.Chobby and WG.Chobby.Configuration
+	if not (config and config.steamOverlayEnablable) then
+		WG.Chobby.InformationPopup("Steam overlay is currently broken on linux. Play coop with friends by inviting via Steam.")
+		return
+	end
 	SendCommand("SteamOpenOverlaySection", {Option = name or "LobbyInvite"})
 end
 
 -- opens url in steam browser
 -- of overlay not available, opens ext. browser
 -- WARNING: FPS needs to be increased, overlay works at chobby FPS
-function WrapperLoopback.SteamOpenWebsite(url) 
+function WrapperLoopback.SteamOpenWebsite(url)
 	SendCommand("SteamOpenOverlayWebsite", {Url = url})
 end
 
 -- invites friend to a game, even offline
-function WrapperLoopback.SteamInviteFriendToGame(steamID) 
+function WrapperLoopback.SteamInviteFriendToGame(steamID)
 	SendCommand("SteamInviteFriendToGame", {SteamID = steamID})
 end
 
@@ -401,53 +460,53 @@ end
 
 
 -- sends error event to GA. Severity must be one of: Undefined, Debug, Info, Warning, Error,Critical,
-function WrapperLoopback.GaAddErrorEvent(severity, message) 
-	SendCommand("GaAddErrorEvent", {Severity = severity, Message = message}) 
+function WrapperLoopback.GaAddErrorEvent(severity, message)
+	SendCommand("GaAddErrorEvent", {Severity = severity, Message = message})
 end
 
 -- sends GA design event (for example gui actions). Value is optional, if sent must be double
-function WrapperLoopback.GaAddDesignEvent(eventID, value) 
-	SendCommand("GaAddDesignEvent", {EventID = eventID, Value = value}) 
+function WrapperLoopback.GaAddDesignEvent(eventID, value)
+	SendCommand("GaAddDesignEvent", {EventID = eventID, Value = value})
 end 
 
 -- sends GA progression event. Score is optional, if sent must be double. Level3 and 2 are optional but if 3 is sent then 2 and 1 must be set and if 2 is sent then 1 must be set.
-function WrapperLoopback.GaAddProgressionEvent(status, progression1, progression2, progression3, score) 
-	SendCommand("GaAddProgressionEvent", {Status = status, Progression1 = progression1, Progression2 = progression2, Progression3 = progression3, Score = score}) 
+function WrapperLoopback.GaAddProgressionEvent(status, progression1, progression2, progression3, score)
+	SendCommand("GaAddProgressionEvent", {Status = status, Progression1 = progression1, Progression2 = progression2, Progression3 = progression3, Score = score})
 end
 
 -- NOTE: amount must be whole number
-function WrapperLoopback.GaAddBusinessEvent(amount, cartType, currency, itemId, itemType) 
-	SendCommand("GaAddBusinessEvent", {Amount = amount, CartType= cartType, Currency = currency, ItemId = itemId, ItemType = itemType}) 
+function WrapperLoopback.GaAddBusinessEvent(amount, cartType, currency, itemId, itemType)
+	SendCommand("GaAddBusinessEvent", {Amount = amount, CartType= cartType, Currency = currency, ItemId = itemId, ItemType = itemType})
 end
 
 -- NOTE: flow type:  Undefined | Source | Sink
-function WrapperLoopback.GaAddResourceEvent(amount, currency, flowType, itemId, itemType) 
-	SendCommand("GaAddResourceEvent", {Amount = amount, Currency = currency, FlowType = flowType, ItemId = itemId, ItemType = itemType}) 
+function WrapperLoopback.GaAddResourceEvent(amount, currency, flowType, itemId, itemType)
+	SendCommand("GaAddResourceEvent", {Amount = amount, Currency = currency, FlowType = flowType, ItemId = itemId, ItemType = itemType})
 end
 
-function WrapperLoopback.GaConfigureResourceCurrencies(list) 
-	SendCommand("GaConfigureResourceCurrencies", {List = list}) 
+function WrapperLoopback.GaConfigureResourceCurrencies(list)
+	SendCommand("GaConfigureResourceCurrencies", {List = list})
 end
 
-function WrapperLoopback.GaConfigureResourceItemTypes(list) 
-	SendCommand("GaConfigureResourceItemTypes", {List = list}) 
-end
-
--- NOTE: level 1-3
-function WrapperLoopback.GaConfigureCustomDimensions(level, list) 
-	SendCommand("GaConfigureCustomDimensions", {Level = level, List = list}) 
+function WrapperLoopback.GaConfigureResourceItemTypes(list)
+	SendCommand("GaConfigureResourceItemTypes", {List = list})
 end
 
 -- NOTE: level 1-3
-function WrapperLoopback.GaSetCustomDimension(level, list) 
-	SendCommand("GaSetCustomDimension", {Level = level, List = list}) 
+function WrapperLoopback.GaConfigureCustomDimensions(level, list)
+	SendCommand("GaConfigureCustomDimensions", {Level = level, List = list})
+end
+
+-- NOTE: level 1-3
+function WrapperLoopback.GaSetCustomDimension(level, list)
+	SendCommand("GaSetCustomDimension", {Level = level, List = list})
 end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Data
 
-function WrapperLoopback.GetSteamAuthToken() 
+function WrapperLoopback.GetSteamAuthToken()
 
 end
 
@@ -473,7 +532,7 @@ function widget:Initialize()
 end
 
 -- pocesses raw string line and executes command
-local function CommandReceived(command) 
+local function CommandReceived(command)
 	i = command:find(" ")
 	if i ~= nil then
 		cmdName = command:sub(1, i - 1)

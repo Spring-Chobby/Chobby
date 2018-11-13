@@ -2407,7 +2407,7 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 1,
 						},
  						{
-							name = "dynstrike5_00",
+							name = "jumparty",
 							x = 1284,
 							z = 775,
 							facing = 3,

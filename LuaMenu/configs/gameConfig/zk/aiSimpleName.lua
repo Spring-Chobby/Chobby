@@ -1,11 +1,21 @@
-
-local subnameMap = {
+local stableSubnameMap = {
 	{"CircuitAIBeginner", "AI: Beginner"},
 	{"CircuitAINovice", "AI: Novice"},
 	{"CircuitAIEasy", "AI: Easy"},
 	{"CircuitAINormal", "AI: Normal"},
 	{"CircuitAIHard", "AI: Hard"},
 	{"CircuitAIBrutal", "AI: Brutal"},
+	{"CAI", "AI: Legacy"},
+}
+
+local devSubnameMap = {
+	{"DevCircuitAIBeginner", "AI: Beginner (dev)"},
+	{"DevCircuitAINovice", "AI: Novice (dev)"},
+	{"DevCircuitAIEasy", "AI: Easy (dev)"},
+	{"DevCircuitAINormal", "AI: Normal (dev)"},
+	{"DevCircuitAIHard", "AI: Hard (dev)"},
+	{"DevCircuitAIBrutal", "AI: Brutal (dev)"},
+	{"CAI", "AI: Legacy"},
 }
 
 local function GetAiSimpleName(name)
@@ -15,6 +25,7 @@ local function GetAiSimpleName(name)
 	if string.find(name, "Chicken") then
 		return name
 	end
+	local subnameMap = (WG.Chobby.Configuration:GetIsDevEngine() and devSubnameMap) or stableSubnameMap
 	for i = 1, #subnameMap do
 		if string.find(name, subnameMap[i][1]) then
 			return subnameMap[i][2]
@@ -24,6 +35,12 @@ local function GetAiSimpleName(name)
 end
 
 local simpleAiOrder = {
+	["AI: Beginner (dev)"] = -6,
+	["AI: Novice (dev)"] = -5,
+	["AI: Easy (dev)"] = -4,
+	["AI: Normal (dev)"] = -3,
+	["AI: Hard (dev)"] = -2,
+	["AI: Brutal (dev)"] = -1,
 	["AI: Beginner"] = 0,
 	["AI: Novice"] = 1,
 	["AI: Easy"] = 2,
@@ -38,15 +55,23 @@ local simpleAiOrder = {
 	["Chicken: Hard"] = 10,
 	["Chicken: Suicidal"] = 11,
 	["Chicken: Custom"] = 12,
+	["AI: Legacy"] = 13,
 }
 
 local aiTooltip = {
+	["AI: Beginner (dev)"] = "Recommended for players with no strategy game experience.",
+	["AI: Novice (dev)"] = "Recommended for players with some strategy game experience, or experience with related genres (such as MOBA).",
+	["AI: Easy (dev)"] = "Recommended for experienced strategy gamers with some experience of streaming economy.",
+	["AI: Normal (dev)"] = "Recommended for veteran strategy gamers.",
+	["AI: Hard (dev)"] = "Recommended for veteran strategy gamers who aren't afraid of losing.",
+	["AI: Brutal (dev)"] = "Recommended for veterans of Zero-K.",
 	["AI: Beginner"] = "Recommended for players with no strategy game experience.",
 	["AI: Novice"] = "Recommended for players with some strategy game experience, or experience with related genres (such as MOBA).",
 	["AI: Easy"] = "Recommended for experienced strategy gamers with some experience of streaming economy.",
 	["AI: Normal"] = "Recommended for veteran strategy gamers.",
 	["AI: Hard"] = "Recommended for veteran strategy gamers who aren't afraid of losing.",
 	["AI: Brutal"] = "Recommended for veterans of Zero-K.",
+	["AI: Legacy"] = "Older unsupported AI, still potentially challenging.",
 	["Inactive AI"] = "This AI does absolutely nothing after spawning.",
 	["Chicken: Beginner"] = "Defeat waves of aliens.",
 	["Chicken: Very Easy"] = "Defeat waves of aliens.",

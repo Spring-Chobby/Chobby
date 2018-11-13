@@ -24,6 +24,9 @@ local loginAcceptedFunction
 
 local registerRecieved = false
 
+-- WG interface
+local LoginWindowHandler = {}
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Initialization
@@ -81,11 +84,28 @@ local function TrySimpleLogin()
 end
 
 local function CheckAutologin()
+	local UserCountLimited = WG.CommunityWindow.LoadStaticCommunityData().UserCountLimited
+	if UserCountLimited then
+		Spring.Echo("No automatic login - UserCountLimited")
+		return
+	end
 	local Configuration = WG.Chobby.Configuration
 	if not TrySimpleSteamLogin() then
 		if Configuration.autoLogin and Configuration.userName then
 			TrySimpleLogin()
 		end
+	end
+end
+
+local function CheckFirstTimeRegister()
+	local UserCountLimited = WG.CommunityWindow.LoadStaticCommunityData().UserCountLimited
+	if UserCountLimited then
+		Spring.Echo("No automatic login - UserCountLimited")
+		return
+	end
+	local Configuration = WG.Chobby.Configuration
+	if Configuration.firstLoginEver then
+		LoginWindowHandler.TryLogin()
 	end
 end
 
@@ -185,8 +205,6 @@ end
 --------------------------------------------------------------------------------
 -- External Functions
 
-local LoginWindowHandler = {}
-
 function LoginWindowHandler.QueueRegister(name, password)
 	registerName = name
 	registerPassword = password
@@ -209,13 +227,6 @@ function LoginWindowHandler.TryLogin(newLoginAcceptedFunction)
 	end
 end
 
-local function CheckFirstTimeRegister()
-	local Configuration = WG.Chobby.Configuration
-	if Configuration.firstLoginEver then
-		LoginWindowHandler.TryLogin()
-	end
-end
-
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface
@@ -231,8 +242,8 @@ function widget:Initialize()
 end
 
 function widget:Update()
-	WG.Delay(CheckAutologin, 1)
-	WG.Delay(CheckFirstTimeRegister, 1.2)
+	WG.Delay(CheckAutologin, 1.5)
+	WG.Delay(CheckFirstTimeRegister, 1.8)
 	widgetHandler:RemoveCallIn("Update")
 end
 

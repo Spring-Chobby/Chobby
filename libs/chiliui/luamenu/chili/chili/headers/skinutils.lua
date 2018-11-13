@@ -589,7 +589,7 @@ function DrawEditBox(obj)
 	gl.BeginEnd(GL.TRIANGLE_STRIP, _DrawTiledTexture, 0, 0, obj.width, obj.height,  skLeft,skTop,skRight,skBottom, tw,th)
 	gl.Texture(0,false)
 
-	local text = obj.text
+	local text = obj.text and tostring(obj.text)
     if text and obj.textEditing then
         text = text .. obj.textEditing
     end
@@ -658,7 +658,7 @@ function DrawEditBox(obj)
 				local scrollPosY = obj.parent.scrollPosY
 				local scrollHeight = obj.parent.clientArea[4]
 
-				local h, d, numLines = obj.font:GetTextHeight(obj.text);
+				local h, d, numLines = obj.font:GetTextHeight(tostring(obj.text));
 				local minDrawY = scrollPosY - (h or 0)
 				local maxDrawY = scrollPosY + scrollHeight + (h or 0)
 
@@ -1038,7 +1038,7 @@ function DrawProgressbar(obj)
   gl.Texture(0,false)
 
   if (obj.caption) then
-    (obj.font):Print(obj.caption, w*0.5, h*0.5 - obj.font.size*0.35 , "center", "linecenter")
+    (obj.font):Print(obj.caption, w*0.5, h*0.5 - obj.font.size*0.35 + (obj.fontOffset or 0), "center", "linecenter")
   end
 end
 

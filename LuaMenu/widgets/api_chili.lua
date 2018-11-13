@@ -70,6 +70,7 @@ end
 
 firstDraw = true
 local hideInterface = false
+local totalHideInterface = falase
 local function ShowInterface()
 	hideInterface = false
 end
@@ -80,7 +81,7 @@ function widget:DrawScreen()
 		hideInterface = true
 		firstDraw = false
 	end
-	if WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.hideInterface then
+	if totalHideInterface or (WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.hideInterface) then
 		return
 	end
 
@@ -104,7 +105,7 @@ end
 
 
 function widget:DrawLoadScreen()
-	if WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.hideInterface then
+	if totalHideInterface or (WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.hideInterface) then
 		return
 	end
 
@@ -123,7 +124,7 @@ end
 
 
 function widget:TweakDrawScreen()
-	if WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.hideInterface then
+	if totalHideInterface or (WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.hideInterface) then
 		return
 	end
 
@@ -141,7 +142,7 @@ end
 
 
 function widget:DrawGenesis()
-	if WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.hideInterface then
+	if totalHideInterface or (WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.hideInterface) then
 		return
 	end
 
@@ -154,11 +155,12 @@ end
 
 
 function widget:IsAbove(x,y)
+	if Spring.IsGUIHidden() or totalHideInterface then
+		return false
+	end
 	if WG.uiScale and WG.uiScale ~= 1 then
 		x, y = x/WG.uiScale, y/WG.uiScale
 	end
-	
-	if Spring.IsGUIHidden() then return false end
 
 	return screen0:IsAbove(x,y)
 end
@@ -166,10 +168,12 @@ end
 
 local mods = {}
 function widget:MousePress(x,y,button)
+	if Spring.IsGUIHidden() or totalHideInterface then
+		return false
+	end
 	if WG.uiScale and WG.uiScale ~= 1 then
 		x, y = x/WG.uiScale, y/WG.uiScale
 	end
-	if Spring.IsGUIHidden() then return false end
 
 	local alt, ctrl, meta, shift = Spring.GetModKeyState()
 	mods.alt=alt; mods.ctrl=ctrl; mods.meta=meta; mods.shift=shift;
@@ -178,10 +182,12 @@ end
 
 
 function widget:MouseRelease(x,y,button)
+	if Spring.IsGUIHidden() or totalHideInterface then
+		return false
+	end
 	if WG.uiScale and WG.uiScale ~= 1 then
 		x, y = x/WG.uiScale, y/WG.uiScale
 	end
-	if Spring.IsGUIHidden() then return false end
 
 	local alt, ctrl, meta, shift = Spring.GetModKeyState()
 	mods.alt=alt; mods.ctrl=ctrl; mods.meta=meta; mods.shift=shift;
@@ -190,10 +196,12 @@ end
 
 
 function widget:MouseMove(x,y,dx,dy,button)
+	if Spring.IsGUIHidden() or totalHideInterface then
+		return false
+	end
 	if WG.uiScale and WG.uiScale ~= 1 then
 		x, y, dx, dy = x/WG.uiScale, y/WG.uiScale, dx/WG.uiScale, dy/WG.uiScale
 	end
-	if Spring.IsGUIHidden() then return false end
 
 	local alt, ctrl, meta, shift = Spring.GetModKeyState()
 	mods.alt=alt; mods.ctrl=ctrl; mods.meta=meta; mods.shift=shift;
@@ -202,7 +210,9 @@ end
 
 
 function widget:MouseWheel(up,value)
-	if Spring.IsGUIHidden() then return false end
+	if Spring.IsGUIHidden() or totalHideInterface then
+		return false
+	end
 
 	local x,y = Spring.GetMouseState()
 	local alt, ctrl, meta, shift = Spring.GetModKeyState()
@@ -213,7 +223,9 @@ end
 
 local keyPressed = true
 function widget:KeyPress(key, mods, isRepeat, label, unicode)
-	if Spring.IsGUIHidden() then return false end
+	if Spring.IsGUIHidden() or totalHideInterface then
+		return false
+	end
 
 	keyPressed = screen0:KeyPress(key, mods, isRepeat, label, unicode)
 	return keyPressed
@@ -221,7 +233,9 @@ end
 
 
 function widget:KeyRelease()
-	if Spring.IsGUIHidden() then return false end
+	if Spring.IsGUIHidden() or totalHideInterface then
+		return false
+	end
 
 	local _keyPressed = keyPressed
 	keyPressed = false
@@ -229,13 +243,17 @@ function widget:KeyRelease()
 end
 
 function widget:TextInput(utf8, ...)
-	if Spring.IsGUIHidden() then return false end
+	if Spring.IsGUIHidden() or totalHideInterface then
+		return false
+	end
 
 	return screen0:TextInput(utf8, ...)
 end
 
 function widget:TextEditing(utf8, start, length, ...)
-	if Spring.IsGUIHidden() then return false end
+	if Spring.IsGUIHidden() or totalHideInterface then
+		return false
+	end
 
 	return screen0:TextEditing(utf8, start, length, ...)
 end
@@ -243,12 +261,19 @@ end
 
 local oldSizeX, oldSizeY
 function widget:ViewResize(vsx, vsy)
+	if totalHideInterface then
+		return
+	end
 	vsx, vsy = vsx/(WG.uiScale or 1), vsy/(WG.uiScale or 1)
 	oldSizeX, oldSizeY = vsx, vsy
 	screen0:Resize(vsx, vsy)
 end
 
 function widget:Update()
+	totalHideInterface = WG.CheckTotalHideInterface and WG.CheckTotalHideInterface()
+	if totalHideInterface then
+		return
+	end
 	local screenWidth, screenHeight = Spring.Orig.GetViewSizes()
 	if screenWidth ~= oldSizeX or screenHeight ~= oldSizeY then
 		widget:ViewResize(screenWidth, screenHeight)

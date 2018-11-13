@@ -33,11 +33,45 @@ local function HaveRightEngineVersion()
 	return (not engineVersion) or configuration:IsValidEngineVersion(engineVersion)
 end
 
+local BAN_TIME_FORGET_SECONDS = 60*15
+local BAN_BASE = 90 -- From match proposed, not from timeout.
+local BAN_ADD = 60
+local BAN_MAX_COUNT = 5
+
+local function GetCombinedBannedTime(banTimeFromServer)
+	local configuration = WG.Chobby.Configuration
+	local rejectTime = configuration.matchmakerRejectTime
+	local rejectCount = configuration.matchmakerRejectCount
+	if not (rejectTime and rejectCount) then
+		return banTimeFromServer
+	end
+	local timeDiff, inFuture = Spring.Utilities.GetTimeDifferenceTable(Spring.Utilities.TimeStringToTable(rejectTime))
+	if inFuture or (not timeDiff) then
+		configuration:SetConfigValue("matchmakerRejectTime", false)
+		configuration:SetConfigValue("matchmakerRejectCount", false)
+		return banTimeFromServer
+	end
+	timeDiff = Spring.Utilities.TimeToSeconds(timeDiff)
+	if timeDiff > BAN_TIME_FORGET_SECONDS then
+		configuration:SetConfigValue("matchmakerRejectTime", false)
+		configuration:SetConfigValue("matchmakerRejectCount", false)
+		return banTimeFromServer
+	end
+	
+	local banTime = BAN_BASE + BAN_ADD*(math.min(rejectCount, BAN_MAX_COUNT) - 1) - timeDiff
+	if banTimeFromServer and (banTimeFromServer > banTime) then
+		banTime = banTimeFromServer
+	end
+	return (banTime > 0) and banTime
+end
+
+WG.GetCombinedBannedTime = GetCombinedBannedTime
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Initialization
 
-local function MakeQueueControl(parentControl, queueName, queueDescription, players, waiting, maxPartySize)
+local function MakeQueueControl(parentControl, queueName, queueDescription, players, waiting, maxPartySize, GetBanTime)
 	local Configuration = WG.Chobby.Configuration
 	local lobby = WG.LibLobby.lobby
 	local btnLeave, btnJoin
@@ -55,6 +89,11 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		classname = "option_button",
 		OnClick = {
 			function(obj)
+				local banTime = GetBanTime()
+				if banTime then
+					WG.Chobby.InformationPopup("You are currently banned from matchmaking.\n" .. banTime .. " seconds remaining.")
+					return
+				end
 				if not HaveRightEngineVersion() then
 					WG.Chobby.InformationPopup("Engine update required, restart the game to apply.")
 					return
@@ -298,7 +337,7 @@ local function SetupDebriefingTracker(window)
 	end
 	
 	local function OnJoin(listener, chanName)
-		if (not string.find(chanName, DEBRIEFING_CHANNEL)) or ignoredChannels[chanName] or chanName == debriefingChannelName then
+		if (not string.find(chanName, DEBRIEFING_CHANNEL, 1, true)) or ignoredChannels[chanName] or chanName == debriefingChannelName then
 			return
 		end
 		if debriefingChannelName then
@@ -337,7 +376,7 @@ local function SetupDebriefingTracker(window)
 		if not (chanName == debriefingChannelName and debriefingChat) then
 			return
 		end
-		local iAmMentioned = (string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName())
+		local iAmMentioned = (string.find(message, lobby:GetMyUserName(), 1, true) and userName ~= lobby:GetMyUserName())
 		debriefingChat.AddMessage(message, userName, msgDate, iAmMentioned and CHAT_MENTION)
 	end
 	lobby:AddListener("OnSaid", OnSaid)
@@ -346,7 +385,7 @@ local function SetupDebriefingTracker(window)
 		if not (chanName == debriefingChannelName and debriefingChat) then
 			return
 		end
-		local iAmMentioned = (string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName())
+		local iAmMentioned = (string.find(message, lobby:GetMyUserName(), 1, true) and userName ~= lobby:GetMyUserName())
 		debriefingChat.AddMessage(message, userName, msgDate, (iAmMentioned and CHAT_MENTION) or Configuration.meColor, true)
 	end
 	lobby:AddListener("OnSaidEx", OnSaidEx)
@@ -356,7 +395,7 @@ local function SetupDebriefingTracker(window)
 		if debriefingChannelName == chanName and debriefingChat then
 			debriefingChat.SetTopic("Post game chat") -- URL doesn't work on line one.
 			debriefingChat.SetTopic(debriefTopic)
-		elseif chanName and string.find(chanName, DEBRIEFING_CHANNEL) then
+		elseif chanName and string.find(chanName, DEBRIEFING_CHANNEL, 1, true) then
 			channelTopics[debriefingChannelName] = debriefTopic
 		end
 	end
@@ -411,7 +450,7 @@ local function InitializeControls(window)
 		classname = "option_button",
 		OnClick = {
 			function()
-				WG.WrapperLoopback.SteamOpenOverlaySection()
+				WG.SteamHandler.OpenFriendList()
 			end
 		},
 		parent = window,
@@ -448,6 +487,13 @@ local function InitializeControls(window)
 		parent = window
 	}
 	
+	local function GetBanTime()
+		if banStart and banDuration then
+			return (banDuration or 0) - math.ceil(Spring.DiffTimers(Spring.GetTimer(), banStart))
+		end
+		return false
+	end
+	
 	local queues = 0
 	local queueHolders = {}
 	local function AddQueue(_, queueName, queueDescription, mapNames, maxPartySize)
@@ -468,13 +514,26 @@ local function InitializeControls(window)
 			draggable = false,
 			padding = {0, 0, 0, 0},
 		}
-		queueHolders[queueName] = MakeQueueControl(queueHolder, queueName, queueDescription, queueData.playersIngame or "?", queueData.playersWaiting or "?", maxPartySize)
+		queueHolders[queueName] = MakeQueueControl(queueHolder, queueName, queueDescription, queueData.playersIngame or "?", queueData.playersWaiting or "?", maxPartySize, GetBanTime)
 		queues = queues + 1
 	end
 	
 	local possibleQueues = lobby:GetQueues()
 	for name, data in pairs(possibleQueues) do
 		AddQueue(_, data.name, data.description, data.mapNames, data.maxPartySize)
+	end
+	
+	local function UpdateBannedTime(bannedTime)
+		bannedTime = GetCombinedBannedTime(bannedTime)
+		if bannedTime then
+			statusText:SetText("You are banned from matchmaking for " .. bannedTime .. " seconds")
+			banStart = Spring.GetTimer()
+			banDuration = bannedTime
+			for queueName, queueHolder in pairs(queueHolders) do
+				queueHolder.SetInQueue(false)
+			end
+			return true
+		end
 	end
 	
 	local function UpdateQueueStatus(listener, inMatchMaking, joinedQueueList, queueCounts, ingameCounts, _, _, _, bannedTime)
@@ -501,10 +560,8 @@ local function InitializeControls(window)
 			end
 		end
 		
-		if bannedTime then
-			statusText:SetText("You are banned from matchmaking for " .. bannedTime .. " seconds")
-			banStart = Spring.GetTimer()
-			banDuration = bannedTime
+		if not UpdateBannedTime(bannedTime) then
+			banDuration = false
 		end
 	end
 	
@@ -535,15 +592,14 @@ local function InitializeControls(window)
 		if key == "canAuthenticateWithSteam" then
 			btnInviteFriends:SetVisibility(value)
 		end
+		if key == "matchmakerRejectTime" then
+			UpdateBannedTime(banDuration)
+		end
 	end
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 	
 	-- Initialization
-	if lobby.matchMakerBannedTime then
-		statusText:SetText("You are banned from matchmaking for " .. lobby.matchMakerBannedTime .. " seconds")
-		banStart = Spring.GetTimer()
-		banDuration = lobby.matchMakerBannedTime
-	end
+	UpdateBannedTime(lobby.matchMakerBannedTime)
 	
 	if lobby:GetMyPartyID() then
 		OnPartyUpdate(_, lobby:GetMyPartyID(), lobby:GetMyParty())
@@ -558,7 +614,7 @@ local function InitializeControls(window)
 		if not banStart then
 			return
 		end
-		local timeRemaining = banDuration - math.ceil(Spring.DiffTimers(Spring.GetTimer(), banStart))
+		local timeRemaining = (banDuration or 0) - math.ceil(Spring.DiffTimers(Spring.GetTimer(), banStart))
 		if timeRemaining < 0 then
 			banStart = false
 			statusText:SetText("")
@@ -629,6 +685,56 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Timeout
+
+local lobbyTimeoutTime = false
+local function ResetLobbyTimeout()
+	local lobbyStatus = WG.LibLobby.lobby.status
+	if WG.LibLobby and WG.LibLobby.lobby and (lobbyStatus == "connected" or lobbyStatus == "connecting") then
+		lobbyTimeoutTime = Spring.GetTimer()
+	end
+end
+
+local function TryLogin()
+	local lobbyStatus = WG.LibLobby.lobby.status
+	if (not lobbyStatus) or lobbyStatus == "offline" or lobbyStatus == "disconnected" then
+		WG.LoginWindowHandler.TryLogin()
+	end
+end
+
+local function UpdateLobbyTimeout()
+	local Configuration = WG.Chobby.Configuration
+	if not (lobbyTimeoutTime and Configuration.lobbyTimeoutTime) then
+		return
+	end
+	local logoutTime = Configuration.lobbyTimeoutTime
+	if Spring.GetGameName() ~= "" then
+		logoutTime = 180 -- Possibility of long load times.
+	end
+	
+	local lobbyStatus = WG.LibLobby.lobby.status
+	if lobbyStatus == "connecting" then
+		lobbyTimeoutTime = Spring.GetTimer()
+		return
+	end
+	
+	if (Spring.DiffTimers(Spring.GetTimer(), lobbyTimeoutTime) or 0) > logoutTime then
+		Spring.Echo("Lost connection - Automatic logout.")
+		WG.Chobby.interfaceRoot.CleanMultiplayerState()
+		WG.LibLobby.lobby:Disconnect()
+		WG.Delay(TryLogin, 2 + math.random()*60)
+		lobbyTimeoutTime = false
+	end
+end
+
+local function OnDisconnected(_, reason, intentional)
+	if intentional then
+		lobbyTimeoutTime = false
+	end
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Widget Interface
 
 function widget:ActivateGame()
@@ -641,9 +747,15 @@ function widget:ActivateGame()
 	panelInterface = InitializeControls(queueListWindowControl)
 end
 
-function widget:Update()
+local updateCheckTime = 0
+function widget:Update(dt)
 	if panelInterface then
 		panelInterface.UpdateBanTimer()
+	end
+	updateCheckTime = updateCheckTime + (dt or 1)
+	if updateCheckTime > 5 then
+		UpdateLobbyTimeout()
+		updateCheckTime = updateCheckTime - 5
 	end
 end
 
@@ -699,6 +811,10 @@ function widget:Initialize()
 	WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
 	
 	WG.QueueListWindow = QueueListWindow
+	
+	WG.LibLobby.lobby:AddListener("OnDisconnected", OnDisconnected)
+	WG.LibLobby.lobby:AddListener("OnCommandReceived", ResetLobbyTimeout)
+	WG.LibLobby.lobby:AddListener("OnCommandBuffered", ResetLobbyTimeout)
 end
 
 --------------------------------------------------------------------------------

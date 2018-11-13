@@ -17,9 +17,11 @@ end
 --------------------------------------------------------------------------------
 -- Variables
 
-local PLANETWARS_ENABLED = false
+local planetwarsSoon = false
+local planetwarsEnabled = false
+local planetwarsLevelRequired = false
 
-local IMG_LINK     = LUA_DIRNAME .. "images/link.png"
+local IMG_LINK = LUA_DIRNAME .. "images/link.png"
 
 local panelInterface
 local PLANET_NAME_LENGTH = 210
@@ -33,6 +35,7 @@ local attackUrgent = false
 
 local MISSING_ENGINE_TEXT = "Game engine update required, restart the menu to apply."
 local MISSING_GAME_TEXT = "Game version update required. Wait for a download or restart to apply it immediately."
+local PW_SOON_TEXT = "Planetwars is starting soon. "
 
 local updates = 0
 
@@ -352,7 +355,7 @@ local function InitializeActivityPromptHandler()
 		parent = holder
 	}
 	local battleStatusTextBox = TextBox:New {
-		x = 40,
+		x = 38,
 		y = 18,
 		width = 195,
 		height = 20,
@@ -1093,9 +1096,8 @@ local function InitializeControls(window)
 	
 	local function CheckPlanetwarsRequirements()
 		local myUserInfo = lobby:GetMyInfo()
-		
-		if not myUserInfo then
-			statusText:SetText("Error getting user info. Are you fully logged in?")
+		if not (planetwarsSoon or planetwarsEnabled) then
+			statusText:SetText("Planetwars is offline. Check back later.")
 			if factionLinkButton then
 				factionLinkButton:SetVisibility(false)
 			end
@@ -1103,8 +1105,17 @@ local function InitializeControls(window)
 			return false
 		end
 		
-		if (myUserInfo.level or 0) < 2 then
-			statusText:SetText("You need to be at least level 2 to participate in Planetwars.")
+		if not myUserInfo then
+			statusText:SetText(((planetwarsSoon and PW_SOON_TEXT) or "") .. "Error getting user info. Are you fully logged in?")
+			if factionLinkButton then
+				factionLinkButton:SetVisibility(false)
+			end
+			listHolder:SetVisibility(false)
+			return false
+		end
+		
+		if planetwarsLevelRequired and ((myUserInfo.level or 0) < planetwarsLevelRequired) then
+			statusText:SetText(((planetwarsSoon and PW_SOON_TEXT) or "") .. "You need to be at least level " .. (planetwarsLevelRequired or "??") .. " to participate in Planetwars.")
 			if factionLinkButton then
 				factionLinkButton:SetVisibility(false)
 			end
@@ -1113,7 +1124,7 @@ local function InitializeControls(window)
 		end
 		
 		if not lobby:GetFactionData(myUserInfo.faction) then
-			statusText:SetText("You need to join a faction.")
+			statusText:SetText(((planetwarsSoon and PW_SOON_TEXT) or "") .. "You need to join a faction.")
 			if not factionLinkButton then
 				factionLinkButton = MakeFactionSelector(window, 15, 80, nil, nil, 15, 52)
 			end
@@ -1127,8 +1138,16 @@ local function InitializeControls(window)
 			factionLinkButton = nil
 		end
 		
-		listHolder:SetVisibility(true)
+		if (not planetwarsEnabled) and planetwarsSoon then
+			statusText:SetText(PW_SOON_TEXT)
+			if factionLinkButton then
+				factionLinkButton:SetVisibility(false)
+			end
+			listHolder:SetVisibility(false)
+			return false
+		end
 		
+		listHolder:SetVisibility(true)
 		return true
 	end
 	
@@ -1220,8 +1239,7 @@ local function InitializeControls(window)
 	
 	local externalFunctions = {}
 	
-	function externalFunctions.CheckDownload()
-		
+	function externalFunctions.CheckDownloads()
 		planetList.CheckDownload()
 		if not HaveRightEngineVersion() then
 			if CheckPlanetwarsRequirements() then
@@ -1240,6 +1258,8 @@ local function InitializeControls(window)
 		missingResources = false
 	end
 	
+	externalFunctions.CheckPlanetwarsRequirements = CheckPlanetwarsRequirements
+	
 	function externalFunctions.UpdateTimer()
 		local timeRemaining = phaseTimer.GetTimeRemaining()
 		if timeRemaining then
@@ -1252,7 +1272,7 @@ local function InitializeControls(window)
 	end
 	
 	-- Initialization
-	externalFunctions.CheckDownload()
+	externalFunctions.CheckDownloads()
 	
 	local planetwarsData = lobby:GetPlanetwarsData()
 	OnPwMatchCommand(_, planetwarsData.attackerFaction, planetwarsData.defenderFactions, planetwarsData.currentMode, planetwarsData.planets, 457)
@@ -1306,28 +1326,11 @@ function DelayedInitialize()
 			requiredGame = gameNames[i]
 		end
 		if panelInterface then
-			panelInterface.CheckDownload()
+			panelInterface.CheckDownloads()
 		end
 	end
 	lobby:AddListener("OnQueueOpened", AddQueue)
 	
-	if not Configuration.alreadySeenFactionPopup3 then
-		local function OnLoginInfoEnd()
-			local myInfo = lobby:GetMyInfo()
-			if Configuration.alreadySeenFactionPopup3 then
-				return
-			end
-			if (not Configuration.ignoreLevel) and not (myInfo and myInfo.level and myInfo.level >= 2) then
-				return
-			end
-			Configuration.alreadySeenFactionPopup3 = true
-			if lobby:GetFactionData(myInfo.faction) then
-				return
-			end
-			MakeFactionSelectionPopup()
-		end
-		lobby:AddListener("OnLoginInfoEnd", OnLoginInfoEnd)
-	end
 	
 	local function UpdateActivity(attackerFaction, defenderFactions, currentMode, planets)
 		local planetData, isAttacker, alreadyJoined, waitingForAllies = GetActivityToPrompt(lobby, attackerFaction, defenderFactions, currentMode, planets)
@@ -1340,6 +1343,56 @@ function DelayedInitialize()
 		end
 	end
 	
+	local myLevel
+	local function CheckFactionPopupCreation(myInfo)
+		if not (planetwarsSoon or planetwarsEnabled) then
+			return
+		end
+		if Configuration.alreadySeenFactionPopup4 then
+			return
+		end
+		if planetwarsLevelRequired and (not Configuration.ignoreLevel) and not (myInfo and myInfo.level and myInfo.level >= planetwarsLevelRequired) then
+			return
+		end
+		Configuration.alreadySeenFactionPopup4 = true
+		if lobby:GetFactionData(myInfo.faction) then
+			return
+		end
+		MakeFactionSelectionPopup()
+	end
+	
+	local function OnPwStatus(_, enabledStatus, requiredLevel)
+		local myInfo = lobby:GetMyInfo()
+		myLevel = myInfo.level
+		planetwarsLevelRequired = requiredLevel
+		if enabledStatus == lobby.PW_PREGAME then
+			planetwarsSoon = true
+		elseif enabledStatus == lobby.PW_ENABLED then
+			planetwarsEnabled = true
+		end
+		if panelInterface then
+			panelInterface.CheckPlanetwarsRequirements()
+		end
+		CheckFactionPopupCreation(myInfo)
+		local planetwarsData = lobby:GetPlanetwarsData()
+		UpdateActivity(planetwarsData.attackerFaction, planetwarsData.defenderFactions, planetwarsData.currentMode, planetwarsData.planets)
+	end
+	lobby:AddListener("OnPwStatus", OnPwStatus)
+	
+	local function OnUpdateUserStatus(listener, userName, status)
+		if (lobby:GetMyUserName() ~= userName) or (myLevel and (myLevel == status.level)) then
+			return
+		end
+		myLevel = status.level
+		if panelInterface then
+			panelInterface.CheckPlanetwarsRequirements()
+		end
+		CheckFactionPopupCreation(status)
+		local planetwarsData = lobby:GetPlanetwarsData()
+		UpdateActivity(planetwarsData.attackerFaction, planetwarsData.defenderFactions, planetwarsData.currentMode, planetwarsData.planets)
+	end
+
+	lobby:AddListener("OnUpdateUserStatus", OnUpdateUserStatus)
 	-- Test data
 	--local TestAttack, TestDefend
 	--function TestAttack()
@@ -1368,7 +1421,13 @@ function DelayedInitialize()
 	end
 	lobby:AddListener("OnPwJoinPlanetSuccess", UnMatchedActivityUpdate)
 	lobby:AddListener("OnPwAttackingPlanet", UnMatchedActivityUpdate)
+	lobby:AddListener("OnLoginInfoEnd", UnMatchedActivityUpdate)
 	
+	local function OnDisconnected()
+		UpdateActivity({}, {}, false, {})
+	end
+	lobby:AddListener("OnDisconnected", OnDisconnected)
+
 	DoUnMatchedActivityUpdate = UnMatchedActivityUpdate
 	
 	local function OnPwRequestJoinPlanet(listener, joinPlanetID)
@@ -1389,7 +1448,7 @@ end
 -- Widget Interface
 
 function widget:Update()
-	if not PLANETWARS_ENABLED then
+	if not planetwarsEnabled then
 		return
 	end
 	updates = updates + 1 -- Random number
@@ -1411,19 +1470,19 @@ end
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	if PLANETWARS_ENABLED then
-		WG.Delay(DelayedInitialize, 0.3)
-		
-		local function downloadFinished()
+	WG.Delay(DelayedInitialize, 0.3)
+	
+	local function downloadFinished()
+		if planetwarsEnabled then
 			if panelInterface then
-				panelInterface.CheckDownload()
+				panelInterface.CheckDownloads()
 			end
 			if queuePlanetJoin then
 				TryToJoinPlanet(queuePlanetJoin)
 			end
 		end
-		WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
 	end
+	WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
 	
 	WG.PlanetwarsListWindow = PlanetwarsListWindow
 end

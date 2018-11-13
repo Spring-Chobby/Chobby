@@ -99,6 +99,7 @@ end
 local function UpdateEdgeList()
 	gl.DeleteList(edgeDrawList)
 	edgeDrawList = gl.CreateList(CreateEdgeList)
+	planetHandler.SendEdgesToBack()
 end
 
 --------------------------------------------------------------------------------
@@ -220,6 +221,69 @@ local function EchoPlanetPositionAndEdges()
 		Spring.Echo(string.format("\t[%01d] = {%03f, %03f},", i, math.floor(planetConfig[i].mapDisplay.x*1000), math.floor(planetConfig[i].mapDisplay.y*1000)))
 	end
 	Spring.Echo("}")
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Difficulty Setting
+
+local function InitializeDifficultySetting(parent)
+	local Configuration = WG.Chobby.Configuration
+	
+	local difficultyWindow = Window:New{
+		classname = "tech_mainwindow_very_small",
+		x = 6,
+		y = 6,
+		width = 128,
+		height = 76,
+		resizable = false,
+		draggable = false,
+		parent = parent,
+	}
+	local freezeSettings = true
+	
+	Label:New {
+		x = 20,
+		y = 10,
+		width = 50,
+		height = 30,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(2),
+		caption = "Difficulty",
+		parent = difficultyWindow,
+	}
+	local comboDifficulty = ComboBox:New {
+		x = 4,
+		right = 4,
+		bottom = 4,
+		height = 28,
+		items = {"Easy", "Normal", "Hard", "Brutal"},
+		selected = 2,
+		font = Configuration:GetFont(2),
+		itemFontSize = Configuration:GetFont(2).size,
+		selected = WG.CampaignData.GetDifficultySetting(),
+		OnSelect = {
+			function (obj)
+				if freezeSettings then
+					return
+				end
+				WG.CampaignData.SetDifficultySetting(obj.selected)
+			end
+		},
+		parent = difficultyWindow,
+	}
+	
+	local function UpdateSettings()
+		freezeSettings = true
+		comboDifficulty:Select(WG.CampaignData.GetDifficultySetting())
+		freezeSettings = false
+	end
+	WG.CampaignData.AddListener("CampaignSettingsUpdate", UpdateSettings)
+	WG.CampaignData.AddListener("CampaignLoaded", UpdateSettings)
+	
+	freezeSettings = false
+
 end
 
 --------------------------------------------------------------------------------
@@ -621,7 +685,7 @@ end
 --------------------------------------------------------------------------------
 -- TODO: use shader animation to ease info panel in
 
-local function SelectPlanet(planetHandler, planetID, planetData, startable)
+local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, startable)
 	local Configuration = WG.Chobby.Configuration
 
 	WG.Chobby.interfaceRoot.GetRightPanelHandler().CloseTabs()
@@ -732,7 +796,7 @@ local function SelectPlanet(planetHandler, planetID, planetData, startable)
 				classname = "option_button",
 				OnClick = {
 					function()
-						WG.WrapperLoopback.SteamOpenOverlaySection()
+						WG.SteamHandler.OpenFriendList()
 					end
 				},
 				parent = buttonHolder,
@@ -943,7 +1007,7 @@ local function EnablePlanetClick()
 	planetClickEnabled = true
 end
 
-local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
+local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, adjacency)
 	local Configuration = WG.Chobby.Configuration
 	
 	local planetSize = planetData.mapDisplay.size
@@ -965,7 +1029,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 		width = targetSize,
 		height = targetSize,
 		padding = {0, 0, 0, 0},
-		parent = galaxyHolder,
+		parent = planetListHolder,
 	}
 	
 	local debugHolder
@@ -977,7 +1041,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 				width = targetSize*3,
 				height = targetSize,
 				padding = {1, 1, 1, 1},
-				parent = galaxyHolder,
+				parent = planetListHolder,
 			}
 			
 			local rewards = planetData.completionReward
@@ -992,7 +1056,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 				width = targetSize*3,
 				height = targetSize,
 				padding = {1, 1, 1, 1},
-				parent = galaxyHolder,
+				parent = planetListHolder,
 			}
 			
 			local aiConfig = planetData.gameConfig.aiConfig
@@ -1044,7 +1108,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 					selectedPlanet.Close()
 					selectedPlanet = nil
 				end
-				selectedPlanet = SelectPlanet(galaxyHolder, planetID, planetData, startable)
+				selectedPlanet = SelectPlanet(popupOverlay, planetListHolder, planetID, planetData, startable)
 			end
 		},
 		parent = planetHolder,
@@ -1193,7 +1257,7 @@ local function GetPlanet(galaxyHolder, planetID, planetData, adjacency)
 				height = planetData.mapDisplay.hintSize[2],
 				resizable = false,
 				draggable = false,
-				parent = galaxyHolder,
+				parent = planetListHolder,
 			}
 			TextBox:New {
 				x = 12,
@@ -1340,6 +1404,17 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 		parent = window,
 	}
 	
+	local popupOverlay = Control:New {
+		name = "popupOverlay",
+		x = 0,
+		y = 0,
+		width = "100%",
+		height = "100%",
+		padding = {0,0,0,0},
+		parent = window,
+	}
+	popupOverlay:BringToFront()
+	
 	if debugMode then
 		planetWindow.OnMouseDown = planetWindow.OnMouseDown or {}
 		planetWindow.OnMouseDown[#planetWindow.OnMouseDown + 1] = function(self, x, y, mouseButton) 
@@ -1370,7 +1445,7 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 	PLANET_COUNT = #planetConfig
 	for i = 1, PLANET_COUNT do
 		if (not PLANET_WHITELIST) or PLANET_WHITELIST[i] then
-			planetList[i] = GetPlanet(planetWindow, i, planetConfig[i], planetAdjacency[i])
+			planetList[i] = GetPlanet(popupOverlay, planetWindow, i, planetConfig[i], planetAdjacency[i])
 		end
 	end
 	
@@ -1499,6 +1574,12 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 		transX, transY, transScale = left, top, 1/(right - left)
 	end
 	
+	function externalFunctions.SendEdgesToBack()
+		if graph then
+			graph:SendToBack()
+		end
+	end
+	
 	function externalFunctions.GetParent()
 		return parent
 	end
@@ -1537,6 +1618,10 @@ end
 --------------------------------------------------------------------------------
 
 function widget:RecvLuaMsg(msg)
+	if not msg then
+		Spring.Echo("LUA_ERR", "Bad campaign message", msg)
+		return
+	end
 	if string.find(msg, LOAD_CAMPAIGN_STRING) then
 		local encoded = string.sub(msg, string.len(LOAD_CAMPAIGN_STRING) + 1)
 		local saveData = Spring.Utilities.CustomKeyToUsefulTable(encoded)
@@ -1591,19 +1676,22 @@ function externalFunctions.GetControl(newLiveTestingMode, newPlanetWhitelist, fe
 		OnParentPost = {
 			function(obj, parent)
 				if obj:IsEmpty() then
+					InitializeDifficultySetting(obj)
 					planetHandler = InitializePlanetHandler(obj, newLiveTestingMode, newPlanetWhitelist, feedbackLink)
-					
-					local x, y = obj:LocalToScreen(0, 0)
-					RepositionBackgroundAndPlanets(x, y, obj.width, obj.height)
 					UpdateGalaxy()
 				end
 				
 				local background = WG.Chobby.interfaceRoot.GetBackgroundHolder()
 				background:SetImageOverride(GALAXY_IMAGE)
+				local x, y = obj:LocalToScreen(0, 0)
+				RepositionBackgroundAndPlanets(x, y, obj.width, obj.height)
 				
 				obj:UpdateClientArea()
 				WG.Chobby.interfaceRoot.GetRightPanelHandler().CloseTabs()
 				WG.Chobby.interfaceRoot.GetMainWindowHandler().CloseTabs()
+				if WG.LibLobby.lobby and WG.LibLobby.lobby:GetMyBattleID() then
+					WG.LibLobby.lobby:LeaveBattle()
+				end
 			end
 		},
 		OnOrphan = {

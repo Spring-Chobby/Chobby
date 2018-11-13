@@ -35,11 +35,11 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/cloakbomb.png",
-				text = [[Imp EMP bombs are capable of stunning large numbers of light-weight units (friend or foe) in a large radius. The EMP does not inflict long-term damage so make sure you have combat units standing by to take advantage in the moment.]]
+				text = [[Imp EMP bombs will stun any nearby units when they explode. They are mostly a defensive tool, and don't kill anything themselves, so make sure you have other units like Reavers to finish the job.]]
 			},
 			{
 				image = "unitpics/vehraid.png",
-				text = [[The Scorchers heat ray weapon is incredibly lethal at point-blank range. Destroy them from a distance or stun them with Imps before engaging.]]
+				text = [[The Scorchers' heat ray weapon is incredibly lethal at point-blank range. Destroy them from a distance or stun them with Imps before engaging.]]
 			},
 		},
 		gameConfig = {
@@ -58,6 +58,13 @@ local function GetPlanet(planetUtilities, planetID)
 					"turretmissile"
 				},
 				startUnits = {
+					{
+						name = "cloakriot",
+						x = 3550,
+						z = 1250,
+						facing = 0,
+						difficultyAtMost = 2,
+					}, 
 					{
 						name = "factorycloak",
 						x = 3276,

@@ -550,7 +550,30 @@ local function GetPlanet(planetUtilities, planetID)
 						"spideraa",
 					},
 					commander = false,
+					midgameUnits = {
+						{
+							name = "striderdante",
+							x = 200,
+							z = 7000,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 8*30*60,
+							orbitalDrop = true,
+						},
+					},
 					startUnits = {
+						{
+							name = "pw_metal",
+							x = 700,
+							z = 8000,
+							facing = 2,
+						},
+						{
+							name = "striderdante",
+							x = 200,
+							z = 7000,
+							facing = 2,
+						},
 						{
 							name = "staticmex",
 							x = 2456,
@@ -1301,7 +1324,51 @@ local function GetPlanet(planetUtilities, planetID)
 						"gunshipkrow",
 					},
 					commander = false,
+					midgameUnits = {
+						{
+							name = "gunshipkrow",
+							x = 6300,
+							z = 8000,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 2*30*60,
+							orbitalDrop = true,
+						},
+						{
+							name = "striderdante",
+							x = 8000,
+							z = 7000,
+							facing = 2,
+							spawnRadius = 50,
+							delay = 8*30*60,
+							orbitalDrop = true,
+						},
+					},
 					startUnits = {
+						{
+							name = "pw_metal",
+							x = 7300,
+							z = 8000,
+							facing = 2,
+						},
+						{
+							name = "striderdante",
+							x = 8000,
+							z = 7000,
+							facing = 2,
+						},
+						{
+							name = "energypylon",
+							x = 7650,
+							z = 6100,
+							facing = 2,
+						},
+						{
+							name = "turretheavy",
+							x = 7620,
+							z = 5730,
+							facing = 2,
+						},
 						{
 							name = "turretaaflak",
 							x = 6440,
@@ -2054,12 +2121,6 @@ local function GetPlanet(planetUtilities, planetID)
 						{
 							name = "striderfunnelweb",
 							x = 5200,
-							z = 700,
-							facing = 0,
-						},
-						{
-							name = "striderfunnelweb",
-							x = 5400,
 							z = 700,
 							facing = 0,
 						},

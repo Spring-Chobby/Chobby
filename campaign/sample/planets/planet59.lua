@@ -30,7 +30,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/module_resurrect.png",
-				text = [[In this mission, any wrecked units will eventually become alive again, as slower 'zombie' versions of themselves. The zombies will be hostile to all players. Reclaim or destroy the wrecks to prevent this from happening.]]
+				text = [[In this mission, any wrecked units will eventually become alive again, as slower 'zombie' versions of themselves. The zombies will be hostile to all player or AI factions. Reclaim or destroy the wrecks to prevent this from happening.]]
 			},
 			{
 				image = "unitpics/striderantiheavy.png",

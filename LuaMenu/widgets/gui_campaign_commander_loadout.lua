@@ -384,6 +384,9 @@ local function GetModuleList(parentControl, ClickFunc, left, right)
 	end
 	
 	function externalFunctions.AddModule(moduleName, level, slot)
+		if not moduleName then
+			moduleName = "nullmodule"
+		end
 		local button = GetModuleButton(listScroll, ClickFunc, moduleName, level, slot, offset, hightlightEmpty)
 		if slot then
 			buttonList[level] = buttonList[level] or {}
@@ -472,13 +475,14 @@ local function MakeModulePanelHandler(parentControl)
 		currentLoadout.Clear()
 		currentLoadout.SetHighlightEmpty(highlightEmpty)
 		
+		local chassisDef = WG.Chobby.Configuration.campaignConfig.commConfig.chassisDef
+		
 		for level = 0, commanderLevel do
 			local slots = commanderLoadout[level]
-			if slots then
-				currentLoadout.AddHeading("Level " .. (level + 1))
-				for i = 1, #slots do
-					currentLoadout.AddModule(slots[i], level, i)
-				end
+			currentLoadout.AddHeading("Level " .. (level + 1))
+			local numSlots = chassisDef.levelDefs[level] and #chassisDef.levelDefs[level].upgradeSlots or 0
+			for i = 1, numSlots do
+				currentLoadout.AddModule(slots and slots[i], level, i)
 			end
 		end
 	end

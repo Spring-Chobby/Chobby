@@ -22,11 +22,12 @@ local battleStartDisplay = 1
 local lobbyFullscreen = 1
 
 local FUDGE = 0
-local USE_CONFIG_FULLSCREEN = false
+local USE_CONFIG_FULLSCREEN = true
 
 local inLobby = true
 local currentMode = false
 local currentManualBorderless = false
+local delayedModeSet, delayedBorderOverride
 
 local ITEM_OFFSET = 38
 
@@ -129,6 +130,8 @@ local function ManualBorderlessChange()
 end
 
 local function SetLobbyFullscreenMode(mode, borderOverride)
+	mode = mode or delayedModeSet
+	borderOverride = borderOverride or delayedBorderOverride
 	if mode == currentMode and (not borderOverride) then
 		if not (mode == 4 and ManualBorderlessChange()) then
 			return
@@ -136,6 +139,7 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 	end
 
 	local Configuration = WG.Chobby.Configuration
+	local needAgressiveSetting = (mode ~= 2) and (currentMode ~= 2)
 
 	if (currentMode == 2 or not currentMode) and lobbyFullscreen == 2 then 
 		SaveWindowPos()
@@ -164,16 +168,13 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 	
 		Spring.SetConfigInt("WindowBorderless", 1, false)
 		Spring.SetConfigInt("Fullscreen", 0, false)
-
-		WG.Delay(ToggleFullscreenOff, 0.1)
-		if Configuration.agressivelySetBorderlessWindowed then
-			WG.Delay(ToggleFullscreenOff, 0.5)
-		end
 	elseif mode == 2 then -- Windowed
 		local winSizeX, winSizeY, winPosX, winPosY = Spring.GetWindowGeometry()
 		winPosX = Configuration.window_WindowPosX or winPosX
 		winSizeX = Configuration.window_XResolutionWindowed or winSizeX
 		winSizeY = Configuration.window_YResolutionWindowed or winSizeY
+		Spring.SetConfigInt("WindowBorderless", 0, false)
+		Spring.SetConfigInt("Fullscreen", 0)
 
 		if Configuration.window_WindowPosY then
 			winPosY = Configuration.window_WindowPosY
@@ -221,16 +222,28 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 	
 		Spring.SetConfigInt("WindowBorderless", 1, false)
 		Spring.SetConfigInt("Fullscreen", 0, false)
-
-		WG.Delay(ToggleFullscreenOff, 0.1)
-		if Configuration.agressivelySetBorderlessWindowed then
-			WG.Delay(ToggleFullscreenOff, 0.5)
-		end
 	elseif mode == 5 then -- Manual Fullscreen
-		local resolution = WG.Chobby.Configuration.manualFullscreen[name] or {}
+		local resolution
+		if inLobby then
+			resolution = WG.Chobby.Configuration.manualFullscreen.lobby or {}
+		else
+			resolution = WG.Chobby.Configuration.manualFullscreen.game or {}
+		end
 		Spring.SetConfigInt("XResolution", resolution.width or screenX, false)
 		Spring.SetConfigInt("YResolution", resolution.height or screenY, false)
 		Spring.SetConfigInt("Fullscreen", 1, false)
+	end
+	
+	if delayedModeSet == mode and delayedBorderOverride then
+		delayedModeSet = nil
+		delayedBorderOverride = nil
+	elseif needAgressiveSetting then
+		delayedModeSet = mode
+		delayedBorderOverride = borderOverride
+		currentMode = 2
+		Spring.SetConfigInt("WindowBorderless", 0, false)
+		Spring.SetConfigInt("Fullscreen", 0)
+		WG.Delay(SetLobbyFullscreenMode, 0.8)
 	end
 end
 
@@ -522,7 +535,7 @@ end
 --------------------------------------------------------------------------------
 -- Lobby Settings
 
-local function AddCheckboxSetting(offset, caption, key, default)
+local function AddCheckboxSetting(offset, caption, key, default, clickFunc)
 	local Configuration = WG.Chobby.Configuration
 
 	local checked = Configuration[key]
@@ -542,6 +555,9 @@ local function AddCheckboxSetting(offset, caption, key, default)
 		font = Configuration:GetFont(2),
 		OnChange = {function (obj, newState)
 			Configuration:SetConfigValue(key, newState)
+			if clickFunc then
+				clickFunc(newState)
+			end
 		end},
 	}
 
@@ -842,18 +858,46 @@ local function GetLobbyTabControls()
 	}
 	children[#children + 1] = autoLogin
 	offset = offset + ITEM_OFFSET
-
+	
+	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("login_with_steam"), "wantAuthenticateWithSteam", true)
+	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("use_steam_browser"), "useSteamBrowser", true)
+	children[#children + 1], offset = AddCheckboxSetting(offset, "Multiplayer in new window", "multiplayerLaunchNewSpring", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("planetwars_notifications"), "planetwarsNotifications", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("ingame_notifcations"), "ingameNotifcations", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("non_friend_notifications"), "nonFriendNotifications", true)
-	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("simplifiedSkirmishSetup"), "simplifiedSkirmishSetup", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("notifyForAllChat"), "notifyForAllChat", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("only_featured_maps"), "onlyShowFeaturedMaps", true)
+	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("simplifiedSkirmishSetup"), "simplifiedSkirmishSetup", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("simple_ai_list"), "simpleAiList", true)
-	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("login_with_steam"), "wantAuthenticateWithSteam", true)
-	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("use_steam_browser"), "useSteamBrowser", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("animate_lobby"), "animate_lobby", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("drawFullSpeed"), "drawAtFullSpeed", false)
+
+	children[#children + 1] = Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(2),
+		caption = "Clear Channel History",
+	}
+	children[#children + 1] = Button:New {
+		x = COMBO_X,
+		y = offset,
+		width = COMBO_WIDTH,
+		height = 30,
+		caption = "Apply",
+		tooltip = "Clears chat history displayed in the lobby, does not affect the chat history files saved to your computer.",
+		font = Configuration:GetFont(2),
+		OnClick = {
+			function (obj)
+				WG.Chobby.interfaceRoot.GetChatWindow():ClearHistory()
+				WG.BattleRoomWindow.ClearChatHistory()
+			end
+		}
+	}
+	offset = offset + ITEM_OFFSET
 
 	children[#children + 1] = Label:New {
 		x = 20,
@@ -919,9 +963,18 @@ local function GetVoidTabControls()
 		text = "Warning: These settings are experimental and not officially supported, proceed at your own risk.",
 	}
 	offset = offset + 65
+	
+	local function EnableProfilerFunc(newState)
+		if newState then
+			WG.WidgetProfiler.Enable()
+		else
+			WG.WidgetProfiler.Disable()
+		end
+	end
 
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("debugMode"), "debugMode", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Debug Auto Win", "debugAutoWin", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, "Enable Profiler", "enableProfiler", false, EnableProfilerFunc)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Show Planet Unlocks", "showPlanetUnlocks", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Show Planet Enemy Units", "showPlanetEnemyUnits", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Campaign Spawn Debug", "campaignSpawnDebug", false)
@@ -935,33 +988,6 @@ local function GetVoidTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Agressive Set Borderless", "agressivelySetBorderlessWindowed", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Use wrong engine", "useWrongEngine", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Show old AI versions", "showOldAiVersions", false)
-
-	children[#children + 1] = Label:New {
-		x = 20,
-		y = offset + TEXT_OFFSET,
-		width = 90,
-		height = 40,
-		valign = "top",
-		align = "left",
-		font = Configuration:GetFont(2),
-		caption = "Clear Channel History",
-	}
-	children[#children + 1] = Button:New {
-		x = COMBO_X,
-		y = offset,
-		width = COMBO_WIDTH,
-		height = 30,
-		caption = "Apply",
-		tooltip = "Clears chat history displayed in the lobby, does not affect the chat history files saved to your computer.",
-		font = Configuration:GetFont(2),
-		OnClick = {
-			function (obj)
-				WG.Chobby.interfaceRoot.GetChatWindow():ClearHistory()
-				WG.BattleRoomWindow.ClearChatHistory()
-			end
-		}
-	}
-	offset = offset + ITEM_OFFSET
 
 	children[#children + 1] = Label:New {
 		x = 20,

@@ -485,7 +485,7 @@ end
 
 --- Makes the object visible
 function Object:Show()
-  local wasVisible = self.hidden
+  local wasVisible = not self.hidden
   self:SetVisibility(true)
   if not wasVisible then
     self:CallListeners(self.OnShow, self)

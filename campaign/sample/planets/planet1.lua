@@ -37,7 +37,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/energysolar.png",
-				text = [[Metal is useless without a supply of energy. Build Solar Collectors to gather energy.]]
+				text = [[All construction requires equal amounts of metal and energy. Build Solar Collectors to gather energy.]]
 			},
 			{
 				image = "unitpics/cloakriot.png",
@@ -46,7 +46,7 @@ local function GetPlanet(planetUtilities, planetID)
 		},
 		gameConfig = {
 			missionStartscript = false,
-			mapName = "Living Lands 3.2",
+			mapName = "Living Lands 4.1",
 			playerConfig = {
 				startX = 300,
 				startZ = 3800,

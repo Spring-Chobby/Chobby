@@ -27,6 +27,10 @@ local function CreateReplayEntry(replayPath, engineName, gameName, mapName)
 	local Configuration = WG.Chobby.Configuration
 	
 	local fileName = string.sub(replayPath, 7)
+	if string.sub(fileName, 0, 4) == "hide" then
+		return
+	end
+	
 	fileName = string.gsub(string.gsub(fileName, " maintenance", ""), " develop", "")
 	fileName = string.gsub(fileName, "%.sdfz", "")
 	
@@ -284,7 +288,9 @@ local function InitializeControls(parentControl)
 	
 	function externalFunctions.AddReplay(replayPath, engine, game, map, script)
 		local control, sortData = CreateReplayEntry(replayPath, engine, game, map)
-		replayList:AddItem(replayPath, control, sortData)
+		if control then
+			replayList:AddItem(replayPath, control, sortData)
+		end
 	end
 	
 	return externalFunctions

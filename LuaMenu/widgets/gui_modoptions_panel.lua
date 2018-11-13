@@ -37,10 +37,32 @@ local function UpdateControlValue(key, value)
 		elseif control.Select and control.itemKeyToName then -- combobox
 			control:Select(control.itemKeyToName[value])
 		elseif control.SetToggle then -- checkbox
-			control:SetToggle(value == true or value == 1)
+			control:SetToggle(value == true or value == 1 or value == "1")
 		end
 	end
 end
+
+local function TextFromNum(num, step)
+
+	-- remove excess accuracy
+	local places = 0
+	if step < 0.01  then
+		places = 3
+	elseif step < 0.1 then
+		places = 2
+	elseif step < 1 then
+		places = 1
+	end
+	local text = string.format("%." .. places .. "f", num)
+
+	-- remove trailing 0s
+	while text:find("%.") and (text:find("0", text:len()) or text:find("%.", text:len())) do
+		text = text:sub(0, text:len() - 1)
+	end
+
+	return text
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Option Control Handling
@@ -176,27 +198,12 @@ local function ProcessNumberOption(data, index)
 					return
 				end
 
-				local places = 0
-				if data.step < 0.01  then
-					places = 3
-				elseif data.step < 0.1 then
-					places = 2
-				elseif data.step < 1 then
-					places = 3
-				end
-
 				-- Bound the number
 				newValue = math.min(data.max, math.max(data.min, newValue))
 				-- Round to step size
-				newValue = math.floor(newValue/data.step)*data.step + 0.01*data.step
+				newValue = math.floor(newValue/data.step + 0.5)*data.step + 0.01*data.step
 
-				-- Remove excess accuracy
-				oldText = string.format("%." .. places .. "f", newValue)
-				-- Remove trailing zeros
-				while oldText:find("%.") and (oldText:find("0", oldText:len()) or oldText:find("%.", oldText:len())) do
-					oldText = oldText:sub(0, oldText:len() - 1)
-				end
-
+				oldText = TextFromNum(newValue, data.step)
 				localModoptions[data.key] = oldText
 				obj:SetText(oldText)
 			end
@@ -382,14 +389,10 @@ local function CreateModoptionWindow()
 	end
 
 	local function ResetFunc()
-		local currentModoptions = battleLobby:GetMyBattleModoptions() or {}
-		localModoptions = {}
-		for key,_ in pairs(currentModoptions) do
-			if modoptionDefaults[key] then
-				localModoptions[key] = modoptionDefaults[key]
-				UpdateControlValue(key, modoptionDefaults[key])
-			end
+		for key, value in pairs(modoptionDefaults) do
+			UpdateControlValue(key, value)
 		end
+		localModoptions = {}
 	end
 	
 	buttonReset = Button:New {
@@ -536,6 +539,9 @@ function ModoptionsPanel.LoadModotpions(gameName, newBattleLobby)
 		if data.key and data.def ~= nil then
 			if type(data.def) == "boolean" then
 				modoptionDefaults[data.key] = tostring((data.def and 1) or 0)
+			elseif type(data.def) == "number" then
+				-- can't use tostring because of float inaccuracy, eg. 0.6 ends up as "0.6000000002"
+				modoptionDefaults[data.key] = TextFromNum(data.def, data.step)
 			else
 				modoptionDefaults[data.key] = tostring(data.def)
 			end

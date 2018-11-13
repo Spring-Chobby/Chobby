@@ -31,7 +31,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/striderdante.png",
-				text = [[The Dante likes to get up close and personal so its heatrays inflict maximum damage. Fire a large barrage of napalm rockets with manual fire (default hotkey D).]]
+				text = [[The Dante likes to get up close and personal so its heatrays can inflict maximum damage. Fire a large barrage of napalm rockets with manual fire (default hotkey D).]]
 			},
 			{
 				image = "unitpics/chickens.png",
@@ -39,7 +39,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/guardian.png",
-				text = [[The faction you stole the Strider Hub from is still pretty pissed as well. They're hard pressed by the chickens, but don't expect them to make your life easy.]]
+				text = [[The faction you stole the Strider Hub from is still pretty pissed as well. They're hard pressed by the chickens, but don't expect them to make your escape easy.]]
 			},
 		},
 		gameConfig = {

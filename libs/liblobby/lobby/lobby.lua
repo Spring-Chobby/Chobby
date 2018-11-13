@@ -31,6 +31,7 @@ function Lobby:_Clean()
 	self.ignoredCount = 0
 	self.ignoreListRecieved = false
 	self.loginInfoEndSent = false
+	self.userCountLimited = false
 
 	self.channels = {}
 	self.channelCount = 0
@@ -58,6 +59,7 @@ function Lobby:_Clean()
 	self.latency = 0 -- in ms
 
 	self.loginData = nil
+	self.loginSent = nil
 	self.myUserName = nil
 	self.myChannels = {}
 	self.myBattleID = nil
@@ -135,6 +137,7 @@ end
 function Lobby:Login(user, password, cpu, localIP, lobbyVersion)
 	self.myUserName = user
 	self.loginData = {user, password, cpu, localIP, lobbyVersion}
+	self.loginSent = true
 	return self
 end
 
@@ -252,8 +255,9 @@ function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, clientPor
 		WG.Chobby.InformationPopup("Cannont start game: missing map file '" .. mapName .. "'.")
 		return
 	end
+	local Config = WG.Chobby.Configuration
 
-	if engineName and not WG.Chobby.Configuration:IsValidEngineVersion(engineName) and not WG.Chobby.Configuration.useWrongEngine then
+	if engineName and (Config.multiplayerLaunchNewSpring or not Config:IsValidEngineVersion(engineName)) and not Config.useWrongEngine then
 		if WG.WrapperLoopback and WG.WrapperLoopback.StartNewSpring and WG.SettingsWindow and WG.SettingsWindow.GetSettingsString then
 			local params = {
 				StartScriptContent = GenerateScriptTxt(battleIp, battlePort, clientPort, scriptPassword, myName),
@@ -382,6 +386,11 @@ end
 
 function Lobby:SetSteamAuthToken(steamAuthToken)
 	self.steamAuthToken = steamAuthToken
+	return self
+end
+
+function Lobby:SetSteamDlc(steamDlc)
+	self.steamDlc = steamDlc
 	return self
 end
 
@@ -696,6 +705,10 @@ function Lobby:_OnJoinBattle(battleID, hashCode)
 end
 
 function Lobby:_OnJoinedBattle(battleID, userName, scriptPassword)
+	if not self.battles[battleID] then
+		Spring.Log(LOG_SECTION, "warning", "_OnJoinedBattle nonexistent battle.")
+		return
+	end
 	local found = false
 	local users = self.battles[battleID].users
 	for i = 1, #users do
@@ -751,7 +764,11 @@ end
 -- spectatorCount, locked, mapHash, mapName, engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker, maxPlayers, title, playerCount, passworded
 function Lobby:_OnUpdateBattleInfo(battleID, battleInfo)
 	local battle = self.battles[battleID]
-
+	if not battle then
+		Spring.Log(LOG_SECTION, "warning", "_OnUpdateBattleInfo nonexistent battle.")
+		return
+	end
+	
 	battle.maxPlayers = battleInfo.maxPlayers or battle.maxPlayers
 	if battleInfo.passworded ~= nil then
 		battle.passworded = battleInfo.passworded
@@ -1062,8 +1079,8 @@ function Lobby:_OnMatchMakerStatus(inMatchMaking, joinedQueueList, queueCounts, 
 	self:_CallListeners("OnMatchMakerStatus", inMatchMaking, joinedQueueList, queueCounts, ingameCounts, instantStartQueues, currentEloWidth, joinedTime, bannedTime)
 end
 
-function Lobby:_OnMatchMakerReadyCheck(secondsRemaining)
-	self:_CallListeners("OnMatchMakerReadyCheck", secondsRemaining)
+function Lobby:_OnMatchMakerReadyCheck(secondsRemaining, minWinChance, isQuickPlay)
+	self:_CallListeners("OnMatchMakerReadyCheck", secondsRemaining, minWinChance, isQuickPlay)
 end
 
 function Lobby:_OnMatchMakerReadyUpdate(readyAccepted, likelyToPlay, queueReadyCounts, myBattleSize, myBattleReadyCount)
@@ -1122,6 +1139,10 @@ end
 ------------------------
 -- Planetwars Commands
 ------------------------
+
+function Lobby:_OnPwStatus(planetWarsMode, minLevel)
+	self:_CallListeners("OnPwStatus", planetWarsMode, minLevel)
+end
 
 function Lobby:_OnPwMatchCommand(attackerFaction, defenderFactions, currentMode, planets, deadlineSeconds)
 	local modeSwitched = (self.planetwarsData.currentMode ~= currentMode) or (self.planetwarsData.attackerFaction ~= attackerFaction)
@@ -1231,8 +1252,8 @@ end
 -- BEGIN Connection handling TODO: This might be better to move into the shared interface
 -------------------------------------------------
 
-function Lobby:_OnDisconnected(...)
-	self:_CallListeners("OnDisconnected")
+function Lobby:_OnDisconnected(reason, intentional)
+	self:_CallListeners("OnDisconnected", reason, intentional)
 
 	for userName,_ in pairs(self.users) do
 		self:_OnRemoveUser(userName)

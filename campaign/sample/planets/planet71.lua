@@ -55,6 +55,7 @@ local function GetPlanet(planetUtilities, planetID)
 			modoptions = {
 				integral_disable_defence = 1,
 				integral_disable_special = 1,
+				cansavegame = 1,
 			},
 			aiConfig = {
 				{

@@ -4,7 +4,7 @@ local singleplayerConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. s
 local rankFunction       = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/rankFunction.lua")
 local backgroundConfig   = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/skinConfig.lua")
 
-local settingsConfig, settingsDefault = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/settingsMenu.lua")
+local settingsConfig, settingsNames, settingsDefault, SettingsPresetFunc = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/settingsMenu.lua")
 
 local headingLarge    = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingLarge.png"
 local headingSmall    = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingSmall.png"
@@ -28,7 +28,9 @@ local externalFuncAndData = {
 	editor                 = "rapid://sbc:test",
 	--editor                 = "SpringBoard Core $VERSION",
 	settingsConfig         = settingsConfig,
+	settingsNames          = settingsNames,
 	settingsDefault        = settingsDefault,
+	SettingsPresetFunc     = SettingsPresetFunc,
 	singleplayerConfig     = singleplayerConfig,
 	helpSubmenuConfig      = {},
 	rankFunction           = rankFunction,

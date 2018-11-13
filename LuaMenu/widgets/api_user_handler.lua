@@ -25,6 +25,7 @@ local debriefingUsers = {}
 local partyUsers = {}
 local popupUsers = {}
 local statusUsers = {}
+local profileUsers = {}
 local ladderUsers = {}
 local friendUsers = {}
 local friendRequestUsers = {}
@@ -41,6 +42,7 @@ local userListList = {
 	partyUsers,
 	popupUsers,
 	statusUsers,
+	profileUsers,
 	ladderUsers,
 	friendUsers,
 	friendRequestUsers,
@@ -854,6 +856,13 @@ end
 
 function userHandler.GetStatusUser(userName)
 	return _GetUser(statusUsers, userName, {
+		maxNameLength       = WG.Chobby.Configuration.statusMaxNameLength,
+		disableInteraction  = true,
+	})
+end
+
+function userHandler.GetCommunityProfileUser(userName)
+	return _GetUser(profileUsers, userName, {
 		maxNameLength       = WG.Chobby.Configuration.statusMaxNameLength,
 		disableInteraction  = true,
 	})

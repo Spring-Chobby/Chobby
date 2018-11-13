@@ -170,7 +170,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		padding = {2,2,2,2},
 		OnClick = {
 			function()
-				WG.Chobby.MapListWindow(battleLobby, battle.mapName)
+				WG.MapListPanel.Show(battleLobby, battle.mapName)
 			end
 		},
 	}
@@ -342,7 +342,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		font =  config:GetFont(2),
 		OnClick = {
 			function()
-				WG.Chobby.MapListWindow(battleLobby, battle.mapName)
+				WG.MapListPanel.Show(battleLobby, battle.mapName)
 			end
 		},
 		parent = leftInfo,
@@ -1305,6 +1305,21 @@ local function InitializeSetupPage(subPanel, screenHeight, pageConfig, nextPage,
 		parent = subPanel,
 	}
 	nextButton:Hide()
+	
+	local tipTextBox
+	if pageConfig.tipText then
+		tipTextBox = TextBox:New {
+			x = "26%",
+			y = 3*buttonScale + 20 + (#pageConfig.options)*buttonScale,
+			right = "26%",
+			height = 200,
+			align = "left",
+			fontsize = Configuration:GetFont(2).size,
+			text = pageConfig.tipText,
+			parent = subPanel,
+		}
+		tipTextBox:Hide()
+	end
 
 	local advButton = Button:New {
 		x = "78%",
@@ -1378,6 +1393,9 @@ local function InitializeSetupPage(subPanel, screenHeight, pageConfig, nextPage,
 					ButtonUtilities.SetButtonSelected(obj)
 					selectedOptions[pageConfig.name] = i
 					nextButton:SetVisibility(true)
+					if tipTextBox then
+						tipTextBox:SetVisibility(true)
+					end
 					if advButton then
 						advButton:SetVisibility(true)
 					end
@@ -1582,7 +1600,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		classname = "option_button",
 		OnClick = {
 			function()
-				WG.WrapperLoopback.SteamOpenOverlaySection()
+				WG.SteamHandler.OpenFriendList()
 			end
 		},
 		parent = mainWindow,
@@ -1639,7 +1657,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 			lblBattleTitle:SetCaption(truncatedTitle)
 			return
 		end
-		if Configuration:IsValidEngineVersion(battle.engineVersion) then
+		if Configuration.allEnginesRunnable or Configuration:IsValidEngineVersion(battle.engineVersion) then
 			if battleTypeCombo then
 				lblBattleTitle:SetPos(143)
 				lblBattleTitle._relativeBounds.right = 100

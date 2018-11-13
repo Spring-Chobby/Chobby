@@ -428,7 +428,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	}
 
 	local queueListWindow = WG.QueueListWindow.GetControl()
-	local battleListWindow = BattleListWindow()
+	local battleListWindow, battleListWindowJoinBattle = WG.BattleListWindowHolder.GetControl()
 	local planetwarsListWindow = WG.PlanetwarsListWindow.GetControl()
 
 	local SINGLEPLAYER_INDEX = 1
@@ -446,8 +446,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			entryCheck = WG.LoginWindowHandler.TryLoginMultiplayer,
 			tabs = {
 				{name = "matchmaking", control = queueListWindow},
-				{name = "battle_list", control = battleListWindow.window},
-				--{name = "planetwars", control = planetwarsListWindow},
+				{name = "battle_list", control = battleListWindow},
+				{name = "planetwars", control = planetwarsListWindow},
 			},
 			cleanupFunction = Configuration.leaveMultiplayerOnMainMenu and CleanMultiplayerState or nil
 		},
@@ -973,6 +973,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		return mainWindowHandler.GetPanelHander(SINGLEPLAYER_INDEX)
 	end
 	
+	function externalFunctions.GetMultiplayerSubmenu()
+		return mainWindowHandler.GetPanelHander(MULTIPLAYER_INDEX)
+	end
+	
 	function externalFunctions.SetPanelDisplayMode(newAutodetectDoublePanel, newDoublePanel)
 		autodetectDoublePanel = newAutodetectDoublePanel
 		local screenWidth, screenHeight = Spring.GetViewSizes()
@@ -1119,7 +1123,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	function externalFunctions.TryToJoinBattle(battleID)
 		local battle = battleID and lobby:GetBattle(battleID)
 		if battle then
-			battleListWindow:JoinBattle(battle)
+			battleListWindowJoinBattle(battle)
 		end
 	end
 	-------------------------------------------------------------------
@@ -1147,6 +1151,28 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		end
 	end
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
+	
+	local function CheckHideInterface()
+		if #(screen0.children or {}) > 3 then
+			-- The three children are two background holders and either the lobby or ingame interface holder.
+			-- If there are more than three children then a global popup has appeared.
+			return false
+		end
+		if not ingameInterfaceHolder.visible then
+			return false
+		end
+		return #(ingameInterfaceHolder.children or {}) == 0
+	end
+	
+	local oldTotalHideInterface = false
+	function WG.CheckTotalHideInterface()
+		local newHide = CheckHideInterface()
+		if newHide ~= oldTotalHideInterface then
+			Spring.Echo("TotalHideLobbyInterface", newHide)
+			oldTotalHideInterface = newHide
+		end
+		return newHide
+	end
 
 	-------------------------------------------------------------------
 	-- Initialization

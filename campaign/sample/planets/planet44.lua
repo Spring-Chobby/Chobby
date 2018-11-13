@@ -226,7 +226,7 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 1,
 						},
  						{
-							name = "turretruit",
+							name = "turretriot",
 							x = 272,
 							z = 3488,
 							facing = 0,
@@ -709,7 +709,7 @@ local function GetPlanet(planetUtilities, planetID)
 					unitTypes = {
 						"spiderskirm",
 					},
-					image = planetUtilities.ICON_DIR .. "cloakskirm.png",
+					image = planetUtilities.ICON_DIR .. "spiderskirm.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
 					description = "Build 10 Recluses",
 					experience = planetUtilities.BONUS_EXP,

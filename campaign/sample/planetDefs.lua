@@ -174,6 +174,25 @@ for i = 1, #planets do
 	end
 end
 
+-- Print Maps
+--local featuredMapList = WG.CommunityWindow.LoadStaticCommunityData().MapItems
+--local mapNameMap = {}
+--local subNameMap = {}
+--for i = 1, #featuredMapList do
+--	mapNameMap[featuredMapList[i].Name] = true
+--	subNameMap[featuredMapList[i].Name:sub(0, 8)] = featuredMapList[i].Name
+--end
+--for i = 1, #planets do
+--	local map = planets[i].gameConfig.mapName
+--	if mapNameMap[map] then
+--		Spring.Echo("planet map", i, map, "Featured")
+--	elseif subNameMap[map:sub(0, 8)] then
+--		Spring.Echo("planet map", i, map, "Unfeatured", subNameMap[map:sub(0, 8)])
+--	else
+--		Spring.Echo("planet map", i, map, "UnfeaturedNoReplace")
+--	end
+--end
+
 -- Sum Experience
 --local xpSum = 0
 --local bonusSum = 0

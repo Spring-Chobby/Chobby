@@ -24,7 +24,7 @@ local skirmishSetupData = {
 			optionTooltip = {
 				"Recommended for players with no strategy game experience.",
 				"Recommended for players with some strategy game experience, or experience with related genres (such as MOBA).",
-				"Recommended for experienced strategy gamers with some experience of streaming economy.",
+				"Recommended for experienced strategy gamers with some familiarity with streaming economy.",
 				"Recommended for veteran strategy gamers.",
 				"Recommended for veteran strategy gamers who aren't afraid of losing.",
 				"Recommended for veterans of Zero-K.",
@@ -33,11 +33,12 @@ local skirmishSetupData = {
 		{
 			humanName = "Select Map",
 			name = "map",
+			tipText = "Click 'Advanced' for more maps and game modes.",
 			minimap = true,
 			options = {
-				"TitanDuel 2",
-				"Onyx Cauldron 1.8",
-				"Fairyland v1.0",
+				"TitanDuel 2.2",
+				"Obsidian_1.5",
+				"Fairyland 1.31",
 				"Calamity 1.1",
 			},
 		},
@@ -52,6 +53,7 @@ local chickenDifficulty = {
 	"Chicken: Hard",
 	"Chicken: Suicidal",
 }
+
 local aiDifficultyMap = {
 	"CircuitAIBeginner",
 	"CircuitAINovice",
@@ -82,7 +84,8 @@ function skirmishSetupData.ApplyFunction(battleLobby, pageChoices)
 	end
 	
 	local bitAppend = (Configuration:GetIsRunning64Bit() and "64") or "32"
-	local aiName = aiDifficultyMap[difficulty] .. bitAppend
+	local devString = ((Configuration:GetIsDevEngine() and "Dev") or "")
+	local aiName = devString .. aiDifficultyMap[difficulty] .. bitAppend
 	local displayName = aiName
 	
 	if Configuration.gameConfig.GetAiSimpleName then

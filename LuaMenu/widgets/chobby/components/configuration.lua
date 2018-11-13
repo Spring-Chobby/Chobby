@@ -35,6 +35,7 @@ function Configuration:init()
 	self.statusMaxNameLength = 185
 	self.friendMaxNameLength = 230
 	self.notificationMaxNameLength = 230
+	self.steamOverlayEnablable = (Platform.osFamily ~= "Linux" and Platform.osFamily ~= "FreeBSD")
 
 	self.userName = false
 	self.suggestedNameFromSteam = false
@@ -45,11 +46,12 @@ function Configuration:init()
 	self.wantAuthenticateWithSteam = true
 	self.useSteamBrowser = true
 	self.steamLinkComplete = false
-	self.alreadySeenFactionPopup2 = false
+	self.alreadySeenFactionPopup4 = false
 	self.firstBattleStarted = false
+	self.lobbyTimeoutTime = 60 -- Seconds
 	self.channels = {}
 	
-	self.battleFilterPassworded = false
+	self.battleFilterPassworded2 = true
 	self.battleFilterNonFriend = false
 	self.battleFilterRunning = false
 
@@ -84,12 +86,18 @@ function Configuration:init()
 	self.loadLocalWidgets = false
 	self.displayBots = false
 	self.displayBadEngines2 = true
+	self.allEnginesRunnable = true
 	self.doNotSetAnySpringSettings = false
 	self.agressivelySetBorderlessWindowed = false
 
 	self.useWrongEngine = false
+	self.multiplayerLaunchNewSpring = false
 	self.myAccountID = false
 	self.lastAddedAiName = false
+
+	self.noNaiveConfigOverride = {
+		settingsMenuValues = true,
+	}
 
 	self.battleTypeToName = {
 		[5] = "cooperative",
@@ -133,35 +141,42 @@ function Configuration:init()
 		singleplayer = {
 		}
 	}
+	local gameConfPath = LUA_DIRNAME .. "configs/gameConfig/"
 
 	self.gameConfigName = fileConfig.game
-	self.gameConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. self.gameConfigName .. "/mainConfig.lua")
+	self.gameConfig = VFS.Include(gameConfPath .. self.gameConfigName .. "/mainConfig.lua")
 
 	self.campaignPath = "campaign/sample"
 	self.campaignConfigName = "sample"
 	self.campaignConfig = VFS.Include("campaign/sample/mainConfig.lua")
 	self.campaignSaveFile = nil -- Set by user
 	self.nextCampaignSaveNumber = 1
-
-	-- TODO, generate this from directory structure
-	local gameConfigOptions = {
-		"zk",
-		"generic",
-		"zkdev",
-		"evorts",
-		"evortsdev",
-	}
+	
+	local gameConfigOptions = {}
+	local subdirs = VFS.SubDirs(gameConfPath)
+	for index, subdir in ipairs(subdirs) do
+		-- get just the folder name
+		subdir = string.gsub(subdir, gameConfPath, "")
+		subdir = string.sub(subdir, 1, -2)	-- truncate trailing slash
+		
+		Spring.Log(LOG_SECTION, LOG.NOTICE, "Detected game config", subdir)
+		gameConfigOptions[#gameConfigOptions+1] = subdir	
+	end
 
 	self.gameConfigOptions = {}
 	self.gameConfigHumanNames = {}
 	for i = 1, #gameConfigOptions do
-		local fileName = LUA_DIRNAME .. "configs/gameConfig/" .. gameConfigOptions[i] .. "/mainConfig.lua"
+		local fileName = gameConfPath .. gameConfigOptions[i] .. "/mainConfig.lua"
+		Spring.Log(LOG_SECTION, LOG.INFO, "Attempting to load game config: " .. fileName)
 		if VFS.FileExists(fileName) then
-			local gameConfig = VFS.Include(fileName)
+			Spring.Log(LOG_SECTION, LOG.INFO, "Game config found:" .. fileName)
+			local gameConfig = VFS.Include(fileName, nil, VFS.RAW_FIRST)
 			if gameConfig.CheckAvailability() then
 				self.gameConfigHumanNames[#self.gameConfigHumanNames + 1] = gameConfig.name
 				self.gameConfigOptions[#self.gameConfigOptions + 1] = gameConfigOptions[i]
 			end
+		else
+			Spring.Log(LOG_SECTION, LOG.WARNING, "Game config not found: " .. fileName)
 		end
 	end
 
@@ -173,7 +188,7 @@ function Configuration:init()
 	self.simplifiedSkirmishSetup = true
 	self.debugMode = false
 	self.devMode = (VFS.FileExists("devmode.txt") and true) or false
-	self.debugAutoWin = false
+	self.enableProfiler = false
 	self.showPlanetUnlocks = false
 	self.showPlanetEnemyUnits = false
 	self.campaignSpawnDebug = false
@@ -192,6 +207,9 @@ function Configuration:init()
 	self.enableTextToSpeech = true
 	self.showOldAiVersions = false
 	self.drawAtFullSpeed = false
+	
+	self.lobby_fullscreen = 1
+	self.game_fullscreen = 1
 
 	self.chatFontSize = 18
 
@@ -218,8 +236,17 @@ function Configuration:init()
 	self.countryShortnames = VFS.Include(LUA_DIRNAME .. "configs/countryShortname.lua")
 
 	self.game_settings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings.lua")
+	self.forcedCompatibilityProfile = VFS.Include(LUA_DIRNAME .. "configs/springsettings/forcedCompatibilityProfile.lua")
 
-	self.settingsMenuValues = self.gameConfig.settingsDefault -- Only until configuration data is loaded.
+	local default = self.gameConfig.SettingsPresetFunc and self.gameConfig.SettingsPresetFunc()
+	if default then
+		self.settingsMenuValues = {}
+		for name, defValue in pairs(default) do
+			self:SetSettingsConfigOption(name, defValue)
+		end
+	else
+		self.settingsMenuValues = self.gameConfig.settingsDefault -- Only until configuration data is loaded.
+	end
 
 	self.animate_lobby = (gl.CreateShader ~= nil)
 	self.minimapDownloads = {}
@@ -360,7 +387,9 @@ end
 function Configuration:SetConfigData(data)
 	if data ~= nil then
 		for k, v in pairs(data) do
-			self:SetConfigValue(k, v)
+			if not self.noNaiveConfigOverride[k] then
+				self:SetConfigValue(k, v)
+			end
 		end
 	end
 
@@ -395,19 +424,9 @@ function Configuration:SetConfigData(data)
 		end
 	end
 
-	self.forcedCompatibilityProfile = VFS.Include(LUA_DIRNAME .. "configs/springsettings/forcedCompatibilityProfile.lua")
-
-	local default = self.gameConfig.SettingsPresetFunc and self.gameConfig.SettingsPresetFunc()
-	if default then
-		if not data.settingsMenuValues then
-			data.settingsMenuValues = {} -- Override generic default that is set for safety on initialize.
-		end
-		
-		-- Set defaults for missing values.
-		for name, defValue in pairs(default) do
-			if not (self.settingsMenuValues[name] and self:SetSettingsConfigOption(name, self.settingsMenuValues[name])) then
-				self:SetSettingsConfigOption(name, defValue)
-			end
+	if data.settingsMenuValues then
+		for name, value in pairs(data.settingsMenuValues) do
+			self:SetSettingsConfigOption(name, value)
 		end
 	end
 end
@@ -425,9 +444,9 @@ function Configuration:GetConfigData()
 		wantAuthenticateWithSteam = self.wantAuthenticateWithSteam,
 		useSteamBrowser = self.useSteamBrowser,
 		steamLinkComplete = self.steamLinkComplete,
-		alreadySeenFactionPopup2 = self.alreadySeenFactionPopup2,
+		alreadySeenFactionPopup4 = self.alreadySeenFactionPopup4,
 		firstBattleStarted = self.firstBattleStarted,
-		battleFilterPassworded = self.battleFilterPassworded,
+		battleFilterPassworded2 = self.battleFilterPassworded2,
 		battleFilterNonFriend = self.battleFilterNonFriend,
 		battleFilterRunning = self.battleFilterRunning,
 		channels = self.channels,
@@ -446,6 +465,7 @@ function Configuration:GetConfigData()
 		simplifiedSkirmishSetup = self.simplifiedSkirmishSetup,
 		debugMode = self.debugMode,
 		debugAutoWin = self.debugAutoWin,
+		enableProfiler = self.enableProfiler,
 		showPlanetUnlocks = self.showPlanetUnlocks,
 		showPlanetEnemyUnits = self.showPlanetEnemyUnits,
 		campaignSpawnDebug = self.campaignSpawnDebug,
@@ -462,6 +482,7 @@ function Configuration:GetConfigData()
 		displayBots = self.displayBots,
 		displayBadEngines2 = self.displayBadEngines2,
 		useWrongEngine = self.useWrongEngine,
+		multiplayerLaunchNewSpring = self.multiplayerLaunchNewSpring,
 		doNotSetAnySpringSettings = self.doNotSetAnySpringSettings,
 		agressivelySetBorderlessWindowed = self.agressivelySetBorderlessWindowed,
 		fixedSettingsOverride = self.fixedSettingsOverride,
@@ -471,6 +492,9 @@ function Configuration:GetConfigData()
 		menuBackgroundBrightness = self.menuBackgroundBrightness,
 		gameOverlayOpacity = self.gameOverlayOpacity,
 		showMatchMakerBattles = self.showMatchMakerBattles,
+		matchmakerRejectTime = self.matchmakerRejectTime,
+		matchmakerRejectCount = self.matchmakerRejectCount,
+		matchmakerPopupTime = self.matchmakerPopupTime,
 		enableTextToSpeech = self.enableTextToSpeech,
 		showOldAiVersions = self.showOldAiVersions,
 		chatFontSize = self.chatFontSize,
@@ -482,6 +506,7 @@ function Configuration:GetConfigData()
 		window_YResolutionWindowed = self.window_YResolutionWindowed,
 		campaignSaveFile = self.campaignSaveFile,
 		nextCampaignSaveNumber = self.nextCampaignSaveNumber,
+		steamReleasePopupSeen = self.steamReleasePopupSeen,
 	}
 end
 
@@ -515,10 +540,16 @@ end
 ---------------------------------------------------------------------------------
 
 function Configuration:GetServerAddress()
+	if self.ForceDefaultServer then
+		return self.DefaultServerHost
+	end
 	return self.serverAddress
 end
 
 function Configuration:GetServerPort()
+	if self.ForceDefaultServer then
+		return self.DefaultServerPort
+	end
 	return self.serverPort
 end
 
@@ -784,6 +815,28 @@ function Configuration:GetIsRunning64Bit()
 		line = infologFile:read()
 	end
 	infologFile:close()
+	return false
+end
+
+function string:split(delimiter)
+	local result = {}
+	local from  = 1
+	local delim_from, delim_to = string.find(self, delimiter, from)
+	while delim_from do
+		table.insert(result, string.sub(self, from , delim_from - 1))
+		from = delim_to + 1
+		delim_from, delim_to = string.find( self, delimiter, from)
+	end
+	table.insert(result, string.sub(self, from))
+	return result
+end
+
+function Configuration:GetIsDevEngine()
+	local engine = self:GetTruncatedEngineVersion()
+	local splits = engine:split("-")
+	if splits and splits[2] and tonumber(splits[2]) then
+		return tonumber(splits[2]) > 400
+	end
 	return false
 end
 

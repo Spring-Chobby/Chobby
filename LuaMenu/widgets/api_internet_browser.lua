@@ -40,12 +40,13 @@ local function ApplySessionToken(urlString)
 		return urlString, false
 	end
 	local lobby = WG.LibLobby.lobby
-	if lobby:GetMyIsAdmin() then
-		return urlString, false -- Don't use tokens for admins
-	end
+	--if lobby:GetMyIsAdmin() then
+	--	return urlString, false -- Don't use tokens for admins
+	--end
 	local token = lobby:GetMySessionToken()
-	if not token then
-		return urlString, not string.find(urlString, "/mediawiki/") -- MediaWiki does not need token.
+	local isWiki = string.find(urlString, "/mediawiki/")
+	if isWiki or (not token) then
+		return urlString, not isWiki -- MediaWiki does not need token.
 	end
 	local alreadyAddedPos = string.find(urlString, "%?asmallcake=")
 	if alreadyAddedPos then
@@ -78,19 +79,11 @@ function BrowserHandler.OpenUrl(rawUrlString)
 				WG.LoginWindowHandler.TryLogin(DelayedTryClickAgain)
 			end
 			local function GoAnywayFunc()
-				if Configuration.canAuthenticateWithSteam and Configuration.useSteamBrowser then
-					WG.WrapperLoopback.SteamOpenWebsite(urlString)
-				else
-					WG.WrapperLoopback.OpenUrl(urlString)
-				end
+				WG.SteamHandler.OpenUrlIfActive(urlString)
 			end
 			WG.Chobby.ConfirmationPopup(LoginFunc, "Log in first to access more site features.", nil, 315, 200, "Log In", "Not Now", GoAnywayFunc)
 		else
-			if Configuration.canAuthenticateWithSteam and Configuration.useSteamBrowser then
-				WG.WrapperLoopback.SteamOpenWebsite(urlString)
-			else
-				WG.WrapperLoopback.OpenUrl(urlString)
-			end
+			WG.SteamHandler.OpenUrlIfActive(urlString)
 		end
 	else
 		Spring.SetClipboard(urlString)

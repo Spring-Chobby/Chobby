@@ -228,7 +228,7 @@ function widget:Initialize()
 		OnKeyPress = {
 			function(obj, key, mods, isRepeat, label, unicode, ...)
 				if key == KEYSYMS.RETURN then
-					obj.parent:GetObjectByName("MyImageListView"):SetDir( obj.text )
+					obj.parent:GetObjectByName("MyImageListView"):SetDir(tostring(obj.text))
 					return obj
 				end
 			end,

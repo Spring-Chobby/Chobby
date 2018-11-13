@@ -43,7 +43,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 		},
 		gameConfig = {
-			mapName = "Fairyland v1.0",
+			mapName = "Fairyland 1.31",
 			playerConfig = {
 				startX = 370,
 				startZ = 3500,
@@ -119,10 +119,11 @@ local function GetPlanet(planetUtilities, planetID)
 					commanderLevel = 2,
 					commander = {
 						name = "Firelord",
-						chassis = "recon",
+						chassis = "guardian",
 						decorations = {
 						},
 						modules = {
+							"commweapon_flamethrower",
 							"commweapon_flamethrower",
 						}
 					},

@@ -26,16 +26,16 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G9V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24489",
-			text = [[Enter this active battle and dominate the low ground with the raw power of the Tank factory. Push through the enemy defenses to destroy their Nuclear Silo while protecting your own team's Anti-Nukes.]]
+			text = [[Enter this active battle and dominate the low ground with the raw power of the Tank Foundry. Push through the enemy defenses to destroy their Nuclear Silo while protecting your own team's Anti-Nukes.]]
 		},
 		tips = {
 			{
 				image = "unitpics/tankassault.png",
-				text = [[The Minotaur assault tank is a very tough unit considering its affordable price. Use it to brute-force your way through enemy positions.]]
+				text = [[The Minotaur assault tank is a very tough unit for a relatively affordable price. Use it to brute-force your way through enemy positions.]]
 			},
 			{
 				image = "unitpics/tankarty.png",
-				text = [[Use the Emissary artillery tank to weaken defenses that would otherwise be inefficient to assault directly with Minotaurs.]]
+				text = [[Use the Emissary artillery tank to weaken defenses that are too dangerous to attack directly with Minotaurs.]]
 			},
 			{
 				image = "unitpics/factorycloak.png",

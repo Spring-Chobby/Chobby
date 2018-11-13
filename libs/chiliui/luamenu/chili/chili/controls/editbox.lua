@@ -41,6 +41,8 @@ EditBox = Control:Inherit{
   editable = true,
   selectable = true,
   multiline = false,
+  agressiveMaxLines = false,
+  agressiveMaxLinesPreserve = false,
   subTooltips = false,
   useIME = true, -- Disabling is broken, so every text box is set to use IME.
   useSDLStartTextInput = true,
@@ -100,22 +102,29 @@ end
 
 --//=============================================================================
 
-local function explode(div,str) -- credit: http://richard.warburton.it
-  if (div=='') then
-    return false
-  end
-  if not str then
-    return {}
-  end
-  local pos,arr = 0,{}
-  -- for each divider found
-  for st,sp in function() return string.find(str,div,pos,true) end do
-    table.insert(arr,string.sub(str,pos,st-1)) -- Attach chars left of current divider
-    pos = sp + 1 -- Jump past current divider
-  end
-  table.insert(arr,string.sub(str,pos)) -- Attach chars right of last divider
-  return arr
-end
+local function explode(div, str)
+	str = tostring(str)
+	local arr = {}
+	local i, j = 1, 1
+	local N = str:len()
+
+	while j <= N do
+		local c = str:sub(j, j)
+		if c == '\255' then
+			j = j + 3
+		elseif c == div then
+			arr[#arr + 1] = str:sub(i, j - 1)
+			i = j + 1
+		end
+		j = j + 1
+	end
+
+	if i <= N then
+		arr[#arr + 1] = str:sub(i, N)
+	end
+
+	return arr
+ end
 
 --- Sets the EditBox text
 -- @string newtext text to be set
@@ -303,6 +312,48 @@ end
 
 -- will automatically wrap into multiple lines if too long
 function EditBox:AddLine(text, tooltips, OnTextClick)
+	if self.agressiveMaxLines and #self.lines > self.agressiveMaxLines then
+		local preserve = {}
+		for i = math.max(1, #self.lines - self.agressiveMaxLinesPreserve), #self.lines do
+			preserve[#preserve + 1] = {self.lines[i].text, self.lines[i].tooltips, self.lines[i].OnTextClick}
+		end
+		self.lines = {}
+		self.physicalLines = {}
+		
+		self.forgetMouseMove = true
+		self.selStart = nil
+		self.selStartY = nil
+		self.selEnd = nil
+		self.selEndY = nil
+		
+		for i = 1, #preserve do
+			local line = {
+				text = preserve[i][1],
+				tooltips = preserve[i][2],
+				OnTextClick = preserve[i][3],
+				pls = {}, -- indexes of physical lines
+			}
+			table.insert(self.lines, line)
+			local lineID = #self.lines
+			self:_GeneratePhysicalLines(lineID)
+		end
+		
+		local line = {
+			text = text,
+			tooltips = tooltips,
+			OnTextClick = OnTextClick,
+			pls = {}, -- indexes of physical lines
+		}
+		table.insert(self.lines, line)
+		local lineID = #self.lines
+		self:_GeneratePhysicalLines(lineID)
+		
+		self._inRequestUpdate = true
+		self:RequestUpdate()
+		self:Invalidate()
+		return
+	end
+	
 	-- add logical line
 	local line = {
 		text = text,
@@ -555,6 +606,7 @@ end
 
 
 function EditBox:MouseDown(x, y, ...)
+	self.forgetMouseMove = nil
 	-- FIXME: didn't feel like reimplementing Screen:MouseDown to capture MouseClick correctly, so clicking on text items is triggered in MouseDown
 	-- handle clicking on text items
 	local retVal = self:_GetCursorByMousePos(x, y)
@@ -626,6 +678,10 @@ function EditBox:MouseMove(x, y, dx, dy, button)
 		return inherited.MouseMove(self, x, y, dx, dy, button)
 	end
 
+	if self.forgetMouseMove then
+		return self
+	end
+	
 	local _, _, _, shift = Spring.GetModKeyState()
 	local cp, cpy = self.cursor, self.cursorY
 	self:_SetCursorByMousePos(x, y)

@@ -213,8 +213,11 @@ function Spring.Utilities.GetTimeToPast(pastTimeString, includeSeconds)
 	return Spring.Utilities.FormatTime(currentSeconds - pastSeconds, includeSeconds)
 end
 
-function Spring.Utilities.GetTimeDifferenceTable(targetTime)
-	local currentTime = {
+function Spring.Utilities.GetTimeDifferenceTable(targetTime, currentTime)
+	if not targetTime then
+		return false
+	end
+	currentTime = currentTime or {
 		tonumber(os.date("!%S")), -- Second
 		tonumber(os.date("!%M")), -- Minute
 		tonumber(os.date("!%H")), -- Hour
@@ -270,6 +273,16 @@ function Spring.Utilities.GetTimeDifferenceTable(targetTime)
 	return after, targetInTheFuture
 end
 
+function Spring.Utilities.TimeToSeconds(timeTable)
+	if not timeTable then
+		return
+	end
+	timeTable[3] = timeTable[3] + timeTable[4]*24
+	timeTable[2] = timeTable[2] + timeTable[3]*60
+	timeTable[1] = timeTable[1] + timeTable[2]*60
+	return timeTable[1]
+end
+
 function Spring.Utilities.TimeStringToTable(timeString)
 	if (not timeString) or (type(timeString) ~= "string") then
 		return false
@@ -295,13 +308,16 @@ function Spring.Utilities.TimeStringToTable(timeString)
 	return timeTable
 end
 
-function Spring.Utilities.GetTimeDifference(targetTimeString)
+function Spring.Utilities.GetTimeDifference(targetTimeString, otherTime)
 	local targetTime = Spring.Utilities.TimeStringToTable(targetTimeString)
 	if not targetTime then
 		return false
 	end
+	if otherTime then
+		otherTime = Spring.Utilities.TimeStringToTable(otherTime)
+	end
 	
-	local difference, targetInTheFuture = Spring.Utilities.GetTimeDifferenceTable(targetTime)
+	local difference, targetInTheFuture = Spring.Utilities.GetTimeDifferenceTable(targetTime, otherTime)
 	local timeText, isNow = Spring.Utilities.FormatRelativeTime(difference, targetInTheFuture)
 	return timeText, targetInTheFuture, isNow
 end
@@ -364,4 +380,17 @@ function Spring.Utilities.GetCurrentUtc()
 	}
 	
 	return string.format("%04d-%02d-%02dT%02d:%02d:%02d", t[6], t[5], t[4], t[3], t[2], t[1])
+end
+
+function Spring.Utilities.GetCompactCurrentUtc()
+	local t = {
+		tonumber(os.date("!%S")),
+		tonumber(os.date("!%M")),
+		tonumber(os.date("!%H")),
+		tonumber(os.date("!%d")),
+		tonumber(os.date("!%m")),
+		tonumber(os.date("!%Y")),
+	}
+	
+	return string.format("%04d%02d%02d_%02d%02d%02d", t[6], t[5], t[4], t[3], t[2], t[1])
 end

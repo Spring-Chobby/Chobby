@@ -161,7 +161,7 @@ local function InitializeControls(window)
 		caption = i18n("new_scenario"),
 		OnClick = {
 			function ()
-				WG.Chobby.MapListWindow(SpringBoard, SpringBoard.mapName)
+				WG.MapListPanel.Show(SpringBoard, SpringBoard.mapName)
 			end
 		},
 		font = Configuration:GetFont(3),
@@ -248,7 +248,7 @@ local function bla()
         padding = {2,2,2,2},
         OnClick = {
             function()
-                WG.Chobby.MapListWindow(SpringBoard, SpringBoard.mapName)
+				WG.MapListPanel.Show(SpringBoard, SpringBoard.mapName)
             end
         },
     }

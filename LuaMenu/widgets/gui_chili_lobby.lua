@@ -43,6 +43,14 @@ function widget:Update()
 	end
 end
 
+local function SetIngameTrue()
+	lobby:SetIngameStatus(true)
+end
+
+local function SetIngameFalse()
+	lobby:SetIngameStatus(false)
+end
+
 local ignoreFirstCall = true
 function widget:ActivateMenu()
 	if ignoreFirstCall then
@@ -50,11 +58,12 @@ function widget:ActivateMenu()
 		return
 	end
 	interfaceRoot.SetIngame(false)
-	lobby:SetIngameStatus(false)
+	WG.Delay(SetIngameFalse, 1)
 end
 
 function widget:ActivateGame()
 	interfaceRoot.SetIngame(true)
+	WG.Delay(SetIngameTrue, 1)
 end
 
 function widget:Initialize()

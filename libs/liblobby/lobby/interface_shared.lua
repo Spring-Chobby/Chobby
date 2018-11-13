@@ -32,6 +32,8 @@ function Interface:init()
 end
 
 function Interface:Connect(host, port, user, password, cpu, localIP, lobbyVersion)
+--host = "test.zero-k.info"
+--port = 8202
 	self:super("Connect", host, port)
 	if self.client then
 		self.client:close()
@@ -60,7 +62,7 @@ function Interface:Disconnect()
 	if self.client then
 		self.client:close()
 	end
-	self:_OnDisconnected()
+	self:_OnDisconnected(nil, true)
 end
 
 function Interface:_SendCommand(command, sendMessageCount)
@@ -84,28 +86,66 @@ function Interface:SendCustomCommand(command)
 	self:_SendCommand(command, false)
 end
 
+function Interface:ProcessBuffer()
+	if not self.commandBuffer then
+		return false
+	end
+	
+	self.bufferExecutionPos = self.bufferExecutionPos + 1
+	local command = self.commandBuffer[self.bufferExecutionPos]
+	if not self.commandBuffer[self.bufferExecutionPos + 1] then
+		self:CommandReceived(command)
+		self.commandBuffer = false
+		return false
+	end
+	self:CommandReceived(command)
+	return true
+end
+
+function Interface:SendCommandToBuffer(cmdName)
+	if not self.bufferBypass then
+		return true
+	end
+	return not self.bufferBypass[cmdName]
+end
+
 function Interface:CommandReceived(command)
 	local cmdId, cmdName, arguments
+	local argumentsPos = false
 	if command:sub(1,1) == "#" then
 		i = command:find(" ")
 		cmdId = command:sub(2, i - 1)
-		j = command:find(" ", i + 1)
-		if j ~= nil then
-			cmdName = command:sub(i + 1, j - 1)
-			arguments = command:sub(j + 1)
+		argumentsPos = command:find(" ", i + 1)
+		if argumentsPos ~= nil then
+			cmdName = command:sub(i + 1, argumentsPos - 1)
 		else
 			cmdName = command:sub(i + 1)
 		end
 	else
-		i = command:find(" ")
-		if i ~= nil then
-			cmdName = command:sub(1, i - 1)
-			arguments = command:sub(i + 1)
+		argumentsPos = command:find(" ")
+		if argumentsPos ~= nil then
+			cmdName = command:sub(1, argumentsPos - 1)
 		else
 			cmdName = command
 		end
 	end
 
+	if self.bufferCommandsEnabled and self:SendCommandToBuffer(cmdName) then
+		if not self.commandBuffer then
+			self.commandBuffer = {}
+			self.commandsInBuffer = 0
+			self.bufferExecutionPos = 0
+		end
+		self.commandsInBuffer = self.commandsInBuffer + 1
+		self.commandBuffer[self.commandsInBuffer] = command
+		self:_CallListeners("OnCommandBuffered", command)
+		return
+	end
+	
+	if argumentsPos then
+		arguments = command:sub(argumentsPos + 1)
+	end
+	
 	self:_OnCommandReceived(cmdName, arguments, cmdId)
 end
 
@@ -155,7 +195,9 @@ function Interface:_OnCommandReceived(cmdName, arguments, cmdId)
 			if not success then
 				Spring.Log(LOG_SECTION, LOG.ERROR, "Failed to parse JSON: " .. tostring(arguments))
 			end
-			jsonCommandFunction(self, obj)
+			if obj then
+				jsonCommandFunction(self, obj)
+			end
 		else
 			Spring.Log(LOG_SECTION, LOG.ERROR, "No such function: " .. cmdName .. ", for command: " .. fullCmd)
 		end

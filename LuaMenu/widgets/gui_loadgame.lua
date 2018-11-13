@@ -123,7 +123,7 @@ local function GetSaveDescText(saveFile)
 	if not saveFile then return "" end
 	return (saveFile.description or "no description")
 		.. "\n" .. saveFile.map
-		.. "\n" .. i18n("time_ingame") .. ": " .. SecondsToClock(saveFile.gameframe/30)
+		.. "\n" .. i18n("time_ingame") .. ": " .. SecondsToClock((saveFile.totalGameframe or saveFile.gameframe or 0)/30)
 end
 
 --------------------------------------------------------------------------------
@@ -224,7 +224,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 		x = 3,
 		y = 3,
 		bottom = 3,
-		width = 80,
+		width = 65,
 		caption = i18n("load"),
 		classname = "action_button",
 		font = WG.Chobby.Configuration:GetFont(2),
@@ -241,7 +241,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 	}
 	
 	-- save name
-	local x = 95
+	local x = 80
 	local saveName = TextBox:New {
 		name = "saveName",
 		x = x,
@@ -269,7 +269,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 	}
 	
 	-- save date
-	x = x + 220
+	x = x + 140
 	local saveDate = TextBox:New {
 		name = "saveDate",
 		x = x,
@@ -283,7 +283,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 	}
 	
 	-- save details
-	x = x + 140
+	x = x + 110
 	local details = TextBox:New {
 		name = "saveDetails",
 		x = x,
@@ -291,13 +291,13 @@ local function AddSaveEntryButton(saveFile, saveList)
 		right = 0,
 		height = 20,
 		valign = 'center',
-		fontsize = Configuration:GetFont(2).size,
+		fontsize = Configuration:GetFont(1).size,
 		text = GetSaveDescText(saveFile),
 		parent = container,
 	}
 	
 	-- delete button
-	x = x + 200
+	x = x + 180
 	local deleteButton = Button:New {
 		parent = container,
 		x = x,
@@ -349,8 +349,8 @@ local function InitializeControls(parent)
 	-------------------------
 	
 	local listHolder = Control:New {
-		x = 12,
-		right = 15,
+		x = 4,
+		right = 7,
 		y = 52,
 		bottom = 15,
 		parent = parent,
@@ -360,9 +360,9 @@ local function InitializeControls(parent)
 	}
 	
 	local headings = {
-		{name = "Name", x = 97, width = 200},
-		{name = "Game", x = 97 + 200, width = 220},
-		{name = "Date", x = 97 + 200 + 218, width = 140},
+		{name = "Name", x = 82, width = 200},
+		{name = "Game", x = 82 + 200, width = 140},
+		{name = "Date", x = 82 + 200 + 138, width = 110},
 	}
 
 	local saveList = WG.Chobby.SortableList(listHolder, headings, 80, 3)

@@ -104,7 +104,7 @@ function BattleWatchListWindow:AddBattle(battleID)
 		return
 	end
 	
-	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
+	if (not Configuration.allEnginesRunnable) and not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	
@@ -224,7 +224,7 @@ end
 
 function BattleWatchListWindow:UpdateSync(battleID)
 	local battle = lobby:GetBattle(battleID)
-	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
+	if (not Configuration.allEnginesRunnable) and not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	local items = self:GetRowItems(battleID)
@@ -278,7 +278,7 @@ end
 
 function BattleWatchListWindow:OnUpdateBattleInfo(battleID)
 	local battle = lobby:GetBattle(battleID)
-	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
+	if (not Configuration.allEnginesRunnable) and not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	local items = self:GetRowItems(battleID)
@@ -309,7 +309,7 @@ end
 
 function BattleWatchListWindow:OnBattleIngameUpdate(battleID, isRunning)
 	local battle = lobby:GetBattle(battleID)
-	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
+	if (not Configuration.allEnginesRunnable) and not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
 	if isRunning then

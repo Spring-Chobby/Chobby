@@ -31,7 +31,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/hoverdepthcharge.png",
-				text = [[Claymores fire depth charges at short range for large area-of-effect damage. To make this less of a suicide mission the depth charge floats for a few seconds before tracking its target. Depth charges can also be dropped as short-lived mines, even on land, press D to drop a mine manually.]]
+				text = [[Claymores fire depth charges at short range for large area-of-effect damage. To make this less of a suicide mission the depth charge floats for a few seconds before tracking its target. Depth charges can also be dropped as short-lived mines, even on land. Press D to drop a mine manually.]]
 			},
 			{
 				image = "unitpics/hoveraa.png",

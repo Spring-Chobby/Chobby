@@ -26,7 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "K1V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24489",
-			text = [[Automated defenses are usually easily overcome, if only you hadn't deleted most of your construction blueprints to make room for your recently unearthed discovery - terrain manipulation technology. Use terraforming to clog up or bypass the automated defenses surrounding the Interception Network to make your escape.]]
+			text = [[Automated defenses are usually easily overcome, if only you hadn't deleted most of your construction blueprints to make room for your recently unearthed discovery - terrain manipulation technology. Use terraforming (at a 50% discount) to clog up or bypass the automated defenses surrounding the Interception Network to make your escape.]]
 		},
 		tips = {
 			{
@@ -34,8 +34,12 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[Every constructor is a powerful terraformer with access to five commands: Ramp, Level, Raise, Restore and Smooth. Read the tooltips and experiment with the commands as each has quite a few modifers and options. Consult the online manual for more details.]]
 			},
 			{
+				image = "LuaUI/Images/commands/ramp.png",
+				text = [[In this mission only, your terraforming tools are half cost. Feel free to experiment.]]
+			},
+			{
 				image = "unitpics/shieldscout.png",
-				text = [[Dirtbags are curious bots with many unfulfilled aspirations. They want to scout and fight but are almost blind and all they can muster is a headbutt. They try to terraform but all they manage is to drop a little pile of dirt upon their death. They make up for this by being extremely cheap and fairly tough.]]
+				text = [[Dirtbags are curious bots with many unfulfilled aspirations. They want to scout and fight but are almost blind and their only attack is a headbutt. They try to terraform but all they manage is to drop a little pile of dirt upon their death. The good side is that they are very cheap and quite tough.]]
 			},
 			{
 				image = "unitpics/staticmissilesilo.png",
@@ -52,6 +56,7 @@ local function GetPlanet(planetUtilities, planetID)
 				integral_disable_defence = 1,
 				integral_disable_factory = 1,
 				campaign_disable_share_marker = 1,
+				terracostmult = 0.5,
 				--campaign_debug_units = 1,
 			},
 			playerConfig = {
@@ -86,6 +91,42 @@ local function GetPlanet(planetUtilities, planetID)
 					"terraform",
 				},
 				startUnits = {
+					{
+						name = "pw_metal",
+						x = 2140,
+						z = 120,
+						facing = 0,
+					},
+					{
+						name = "energyfusion",
+						x = 1240,
+						z = 70,
+						facing = 0,
+					},
+					{
+						name = "staticstorage",
+						x = 1800,
+						z = 120,
+						facing = 0,
+					},
+					{
+						name = "staticstorage",
+						x = 1900,
+						z = 120,
+						facing = 0,
+					},
+					{
+						name = "staticstorage",
+						x = 1800,
+						z = 30,
+						facing = 0,
+					},
+					{
+						name = "staticstorage",
+						x = 1900,
+						z = 30,
+						facing = 0,
+					},
 					{
 						name = "staticmissilesilo",
 						x = 1670,
@@ -574,6 +615,7 @@ local function GetPlanet(planetUtilities, planetID)
 						},
 						{
 							name = "amphraid",
+							difficultyAtLeast = 4,
 							x = 4094,
 							z = 4032,
 							facing = 1,
@@ -1383,6 +1425,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{5978, 2447},
 								{5575, 2347},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "amphraid",
@@ -1442,6 +1485,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{5575, 2347},
 								{4497, 3865},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "amphraid",
@@ -1560,6 +1604,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "amphraid",
@@ -1607,7 +1652,7 @@ local function GetPlanet(planetUtilities, planetID)
 							difficultyAtLeast = 4,
 						},
 						{
-							name = "amphraid",
+							name = "subraider",
 							x = 3234,
 							z = 4032,
 							facing = 1,
@@ -1633,6 +1678,7 @@ local function GetPlanet(planetUtilities, planetID)
 								{2755, 4041},
 								{4604, 4016},
 							},
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "amphraid",
@@ -2483,7 +2529,7 @@ local function GetPlanet(planetUtilities, planetID)
 							difficultyAtLeast = 4,
 						},
 						{
-							name = "amphriot",
+							name = "subraider",
 							x = 2193,
 							z = 1766,
 							facing = 2,
@@ -2501,7 +2547,7 @@ local function GetPlanet(planetUtilities, planetID)
 							},
 						},
 						{
-							name = "amphriot",
+							name = "subraider",
 							x = 2374,
 							z = 2318,
 							facing = 0,
@@ -2558,7 +2604,7 @@ local function GetPlanet(planetUtilities, planetID)
 							difficultyAtLeast = 4,
 						},
 						{
-							name = "amphriot",
+							name = "subraider",
 							x = 2080,
 							z = 2233,
 							facing = 2,
@@ -2576,7 +2622,7 @@ local function GetPlanet(planetUtilities, planetID)
 							},
 						},
 						{
-							name = "amphriot",
+							name = "subraider",
 							x = 2190,
 							z = 1803,
 							facing = 2,
@@ -2633,7 +2679,7 @@ local function GetPlanet(planetUtilities, planetID)
 							difficultyAtLeast = 4,
 						},
 						{
-							name = "amphriot",
+							name = "subraider",
 							x = 2128,
 							z = 2071,
 							facing = 1,
@@ -2651,7 +2697,7 @@ local function GetPlanet(planetUtilities, planetID)
 							},
 						},
 						{
-							name = "amphriot",
+							name = "subraider",
 							x = 2299,
 							z = 2218,
 							facing = 0,
@@ -2670,7 +2716,7 @@ local function GetPlanet(planetUtilities, planetID)
 							difficultyAtLeast = 2,
 						},
 						{
-							name = "amphriot",
+							name = "subraider",
 							x = 2245,
 							z = 2486,
 							facing = 2,
@@ -2708,7 +2754,7 @@ local function GetPlanet(planetUtilities, planetID)
 							difficultyAtLeast = 4,
 						},
 						{
-							name = "amphriot",
+							name = "subraider",
 							x = 2558,
 							z = 1600,
 							facing = 3,
@@ -2726,7 +2772,7 @@ local function GetPlanet(planetUtilities, planetID)
 							},
 						},
 						{
-							name = "amphriot",
+							name = "subraider",
 							x = 2215,
 							z = 2455,
 							facing = 2,
@@ -2745,7 +2791,7 @@ local function GetPlanet(planetUtilities, planetID)
 							difficultyAtLeast = 2,
 						},
 						{
-							name = "amphriot",
+							name = "subraider",
 							x = 2155,
 							z = 2411,
 							facing = 3,

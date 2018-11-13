@@ -41,7 +41,7 @@ function Interface:Register(userName, password, email, useSteamLogin)
 	local sendData = {
 		Name = userName,
 		PasswordHash = password,
-		SteamAuthToken = steamToken
+		SteamAuthToken = steamToken,
 	}
 	self:_SendCommand("Register " .. json.encode(sendData))
 	return self
@@ -66,6 +66,7 @@ function Interface:Login(user, password, cpu, localIP, lobbyVersion, useSteamLog
 			ClientType = 1,
 			LobbyVersion = lobbyVersion,
 			SteamAuthToken = steamToken,
+			Dlc = self.steamDlc,
 		}
 	else
 		sendData = {
@@ -75,6 +76,7 @@ function Interface:Login(user, password, cpu, localIP, lobbyVersion, useSteamLog
 			ClientType = 1,
 			LobbyVersion = lobbyVersion,
 			SteamAuthToken = steamToken,
+			Dlc = self.steamDlc,
 		}
 	end
 	self:_SendCommand("Login " .. json.encode(sendData))
@@ -93,6 +95,10 @@ end
 ------------------------
 
 function Interface:SetIngameStatus(isInGame)
+	if not self.loginSent then
+		return self
+	end
+
 	local sendData = {
 		IsInGame = isInGame,
 	}
@@ -102,6 +108,10 @@ function Interface:SetIngameStatus(isInGame)
 end
 
 function Interface:SetAwayStatus(isAway)
+	if not self.loginSent then
+		return self
+	end
+
 	local sendData = {
 		IsAfk = isAway,
 	}
@@ -664,8 +674,8 @@ local registerResponseCodes = {
 	[3] = "Invalid characters in password",
 	[4] = "Banned",
 	[5] = "Invalid characters in name",
-	[6] = "Invalid Steam token",
-	[7] = "Steam already linked",
+	[6] = "Steam linking error. Restart Steam and ensure it is in online mode.",
+	[7] = "Steam already registered",
 	[8] = "Missing password and token",
 	[9] = "Too many connection attempts",
 	[10] = "Already linked steam, connecting",
@@ -677,11 +687,11 @@ local loginResponseCodes = {
 	[2] = "Invalid characters in name",
 	[3] = "Incorrect password",
 	[4] = "Banned",
-	[5] = "Invalid Steam token",
+	[5] = "Steam linking error. Restart Steam and ensure it is in online mode.",
 	[6] = "Too many connection attempts",
 	[7] = "Steam account not yet linked. Re-register.",
-	[8] = "Your Steam account is not linked.",
-	[9] = "Your Steam account is already linked to a different username.",
+	[8] = "Your steam account is already linked to a different account.",
+	[9] = "Sorry, the server is full, please retry later.",
 }
 
 function Interface:_Welcome(data)
@@ -690,9 +700,10 @@ function Interface:_Welcome(data)
 	-- Version of Game
 	-- REVERSE COMPAT
 	self.REVERSE_COMPAT = (data.Version == "1.4.9.26")
+	self.userCountLimited = data.UserCountLimited
 	self:_OnConnect(4, data.Engine, 2, 1)
 	self:_OnUserCount(data.UserCount)
-	
+
 	if data.Factions then
 		self:_OnPwFactionUpdate(data.Factions)
 	end
@@ -773,6 +784,8 @@ function Interface:_User(data)
 		country = data.Country or false,
 		isAdmin = data.IsAdmin,
 		level = data.Level or false,
+		avatar = data.Avatar,
+		badges = data.Badges,
 		-- transient
 		lobby = data.LobbyVersion,
 		isInGame = data.IsInGame,
@@ -984,6 +997,10 @@ function Interface:_BattleUpdate(data)
 	-- BattleUpdate {"Header":{"BattleID":362,"Map":"Quicksilver 1.1"}
 	-- BattleUpdate {"Header":{"BattleID":21,"Engine":"103.0.1-88-g1a9cfdd"}
 	local header = data.Header
+	if not header then
+		Spring.Log(LOG_SECTION, LOG.ERROR, "Interface:_BattleUpdate no header")
+		return
+	end
 	--Spring.Utilities.TableEcho(header, "header")
 	if not self.battles[header.BattleID] then
 		Spring.Log(LOG_SECTION, LOG.ERROR, "Interface:_BattleUpdate no such battle with ID: " .. tostring(header.BattleID))
@@ -1296,7 +1313,7 @@ end
 Interface.jsonCommands["MatchMakerQueueRequestFailed"] = Interface._MatchMakerQueueRequestFailed
 
 function Interface:_AreYouReady(data)
-	self:_OnMatchMakerReadyCheck(data.SecondsRemaining)
+	self:_OnMatchMakerReadyCheck(data.SecondsRemaining, data.MinimumWinChance, data.QuickPlay)
 end
 Interface.jsonCommands["AreYouReady"] = Interface._AreYouReady
 
@@ -1391,6 +1408,17 @@ Interface.jsonCommands["OnPartyStatus"] = Interface._OnPartyStatus
 ------------------------
 -- Planetwars commands
 ------------------------
+
+function Interface:_PwStatus(data)
+	if not self.PW_DISABLED then
+		self.PW_OFFLINE = 0
+		self.PW_PREGAME = 1
+		self.PW_ENABLED = 2
+	end
+	--PwStatus {"PlanetWarsMode":2,"MinLevel":5}
+	self:_OnPwStatus(data.PlanetWarsMode, data.MinLevel)
+end
+Interface.jsonCommands["PwStatus"] = Interface._PwStatus
 
 function Interface:_PwMatchCommand(data)
 	if not self.PW_DEFEND then

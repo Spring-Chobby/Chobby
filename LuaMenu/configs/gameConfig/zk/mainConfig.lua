@@ -1,6 +1,5 @@
 local shortname = "zk"
 
-local mapWhitelist                    = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/mapWhitelist.lua")
 local aiBlacklist                     = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/aiBlacklist.lua")
 local aiSimpleNames                   = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/aiSimpleName.lua")
 local oldAiVersions                   = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/oldAiVersions.lua")
@@ -12,6 +11,8 @@ local defaultModoptions               = VFS.Include(LUA_DIRNAME .. "configs/game
 local rankFunction, largeRankFunction = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/rankFunction.lua")
 local backgroundConfig                = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/skinConfig.lua")
 local gameUnitInformation             = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/gameUnitInformation.lua")
+local badges                          = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/badges.lua")
+local GetRankAndImage                 = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/profilePage.lua")
 
 local link_reportPlayer, link_userPage, link_homePage, link_replays, link_maps, link_particularMapPage = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/linkFunctions.lua")
 
@@ -29,12 +30,14 @@ local subheadings = {
 		multiplayer  = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingMultiplayerLarge.png",
 		help         = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingHelpLarge.png",
 		campaign     = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingCampaignLarge.png",
+		replays      = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingReplaysLarge.png",
 	},
 	small = {
 		singleplayer = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingSingleplayerSmall.png",
 		multiplayer  = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingMultiplayerSmall.png",
 		help         = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingHelpSmall.png",
 		campaign     = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingCampaignSmall.png",
+		replays      = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingReplaysSmall.png",
 	},
 }
 
@@ -55,13 +58,17 @@ local minimapThumbnailPath = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .
 -- Getters
 ---------------------------------------------------------------------------------
 
+local awardDir = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/awards/trophy_"
+local function GetAward(name)
+	return awardDir .. name .. ".png"
+end
+
 local externalFuncAndData = {
 	dirName                 = "zk",
 	name                    = "Zero-K",
 	_defaultGameArchiveName = "Zero-K v1.5.2.5", -- Do not read directly
 	_defaultGameRapidTag    = "zk:stable", -- Do not read directly
 	aiVersion               = "stable",
-	mapWhitelist            = mapWhitelist,
 	aiBlacklist             = aiBlacklist,
 	GetAiSimpleName         = aiSimpleNames.GetAiSimpleName,
 	simpleAiOrder           = aiSimpleNames.simpleAiOrder,
@@ -88,6 +95,9 @@ local externalFuncAndData = {
 	minimapOverridePath     = minimapOverridePath,
 	minimapThumbnailPath    = minimapThumbnailPath,
 	gameUnitInformation     = gameUnitInformation,
+	badges                  = badges,
+	GetRankAndImage         = GetRankAndImage,
+	GetAward                = GetAward,
 	link_reportPlayer       = link_reportPlayer,
 	link_userPage           = link_userPage,
 	link_homePage           = link_homePage,
