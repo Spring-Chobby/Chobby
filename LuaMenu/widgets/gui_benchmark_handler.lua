@@ -170,7 +170,7 @@ local function InitializeControls(parentControl)
 		classname = "negative_button",
 		OnClick = {
 			function()
-				obj:Hide()
+				parentControl:Hide()
 			end
 		},
 		parent = parentControl,
