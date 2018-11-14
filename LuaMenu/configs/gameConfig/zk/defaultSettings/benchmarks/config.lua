@@ -90,63 +90,64 @@ XResolution = 1920
 YResolution = 1080
 WindowBorderless = 0
 Fullscreen = 1
-snd_volmaster = 5]]
+snd_volmaster = 2]]
 
 local data = {
 	{
 		humanName = "Run benchmark",
-		name = "GCBenchmarkv1",
-		decription = "Run and log the framerate for three different engine versions in a five minute battle. Expected run time of 20 minutes.",
+		name = "Benchmarkv2",
+		decription = "Compare three engine versions using six tests, each taking between 1 and 4 minutes. Expected run time of of 15 minutes. Last updated 14-11-2018.",
 		map = "Comet Catcher Redux v3.1",
-		game = "Zero-K v1.6.11.1",
-		topRow = ",average dt,min dt,max dt,dt_0,dt_3,dt_6,dt_9,dt_12,dt_15,dt_18,dt_21,dt_24,dt_27,dt_30,dt_33,dt_36,dt_39,dt_42,dt_45,average time,min time,max time,time_0,time_3,time_6,time_9,time_12,time_15,time_18,time_21,time_24,time_27,time_30,time_33,time_36,time_39,time_42,time_45,end unit count",
+		game = "Zero-K test-14830-12b7004",
+		duplicates = 2,
+		topRow = ",average up,sdev up,min up,max up,u_0,u_3,u_6,u_9,u_12,u_15,u_18,u_21,u_24,u_27,u_30,u_33,u_36,u_39,u_42,u_45,average gf,sdev gf,min gf,max gf,g_0,g_3,g_6,g_9,g_12,g_15,g_18,g_21,g_24,g_27,g_30,g_33,g_36,g_39,g_42,g_45,end unit count",
 		runs = {
 			{
-				file = "hide_benchmark_v1_104.0.1-287-gf7b0fcc maintenance.sdfz",
+				file = "hide_benchmark_v2_104.0.1-287-gf7b0fcc maintenance.sdfz",
 				engine = "104.0.1-287-gf7b0fcc",
 				settings = settings,
 				runName = "Engine 287",
 			},
 			{
-				file = "hide_benchmark_v1_104.0.1-308-g17ff6c0 maintenance.sdfz",
-				engine = "104.0.1-308-g17ff6c0",
+				file = "hide_benchmark_v2_104.0.1-527-gf2536df maintenance.sdfz",
+				engine = "104.0.1-527-gf2536df",
 				settings = settings,
-				runName = "Engine 308",
+				runName = "Engine 527",
 			},
 			{
-				file = "hide_benchmark_v1_104.0.1-309-ga8b5ffc maintenance.sdfz",
-				engine = "104.0.1-309-ga8b5ffc",
+				file = "hide_benchmark_v2_104.0.1-889-g0871f35 maintenance.sdfz",
+				engine = "104.0.1-889-g0871f35",
 				settings = settings,
-				runName = "Engine 309",
+				runName = "Engine 889",
 			},
 		}
 	},
 	{
 		humanName = "Benchmark x20",
-		name = "GCBenchmark20v1",
-		decription = "Run and log the framerate for three different engine versions in a five minute battle, repeated 20 times each. Expected run time of 7 hours.",
+		name = "Benchmark20v2",
+		decription = "Compare three engine versions using 120 tests, each taking between 1 and 4 minutes. Expected run time of of 5 hours. Last updated 14-11-2018.",
 		map = "Comet Catcher Redux v3.1",
-		game = "Zero-K v1.6.11.1",
-		duplicates = 20,
-		topRow = ",average dt,min dt,max dt,dt_0,dt_3,dt_6,dt_9,dt_12,dt_15,dt_18,dt_21,dt_24,dt_27,dt_30,dt_33,dt_36,dt_39,dt_42,dt_45,average time,min time,max time,time_0,time_3,time_6,time_9,time_12,time_15,time_18,time_21,time_24,time_27,time_30,time_33,time_36,time_39,time_42,time_45,end unit count",
+		game = "Zero-K test-14830-12b7004",
+		duplicates = 40,
+		topRow = ",average up,sdev up,min up,max up,u_0,u_3,u_6,u_9,u_12,u_15,u_18,u_21,u_24,u_27,u_30,u_33,u_36,u_39,u_42,u_45,average gf,sdev gf,min gf,max gf,g_0,g_3,g_6,g_9,g_12,g_15,g_18,g_21,g_24,g_27,g_30,g_33,g_36,g_39,g_42,g_45,end unit count",
 		runs = {
 			{
-				file = "hide_benchmark_v1_104.0.1-287-gf7b0fcc maintenance.sdfz",
+				file = "hide_benchmark_v2_104.0.1-287-gf7b0fcc maintenance.sdfz",
 				engine = "104.0.1-287-gf7b0fcc",
 				settings = settings,
 				runName = "Engine 287",
 			},
 			{
-				file = "hide_benchmark_v1_104.0.1-308-g17ff6c0 maintenance.sdfz",
-				engine = "104.0.1-308-g17ff6c0",
+				file = "hide_benchmark_v2_104.0.1-527-gf2536df maintenance.sdfz",
+				engine = "104.0.1-527-gf2536df",
 				settings = settings,
-				runName = "Engine 308",
+				runName = "Engine 527",
 			},
 			{
-				file = "hide_benchmark_v1_104.0.1-309-ga8b5ffc maintenance.sdfz",
-				engine = "104.0.1-309-ga8b5ffc",
+				file = "hide_benchmark_v2_104.0.1-889-g0871f35 maintenance.sdfz",
+				engine = "104.0.1-889-g0871f35",
 				settings = settings,
-				runName = "Engine 309",
+				runName = "Engine 889",
 			},
 		}
 	},

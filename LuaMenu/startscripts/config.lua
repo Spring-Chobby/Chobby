@@ -1,14 +1,15 @@
 local planetUtilities = VFS.Include("campaign/sample/planetUtilities.lua")
-local AI_NAME = "CircuitAIBrutal"
-local AI_BIT = true
-local AI_ENGINE = true
+--local AI_NAME = "CircuitAIBrutal"
+--local AI_BIT = true
 
---local AI_NAME = "CAI"
---local AI_BIT = false
+local AI_NAME = "NullAI"
+local AI_BIT = false
+
+-- Team pattern: 01011010
 
 local gameConfig = {
 	mapName = "Comet Catcher Redux v3.1",
-	gameName = "Zero-K Benchmark v1",
+	gameName = "Zero-K Benchmark v2",--"Zero-K v1.6.11.1",
 	playerConfig = {
 		startX = 1475,
 		startZ = 400,
@@ -31,12 +32,18 @@ local gameConfig = {
 					x = 2492,
 					z = 6919,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2681, 6919}},
+					},
 				},
 				{
 					name = "factoryveh",
 					x = 2624,
 					z = 6816,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2857, 6910}},
+					},
 				},
 				{
 					name = "energywind",
@@ -82,20 +89,18 @@ local gameConfig = {
 				},
 				{
 					name = "vehaa",
-					x = 568,
-					z = 4003,
-					facing = 2,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {480, 3808}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {416, 3616}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {480, 3616}, options = {"shift"}},
-					},
+					x = 495,
+					z = 3674,
+					facing = 1,
 				},
 				{
 					name = "turretlaser",
 					x = 2848,
 					z = 6816,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2756, 6817}},
+					},
 				},
 				{
 					name = "staticradar",
@@ -108,12 +113,18 @@ local gameConfig = {
 					x = 1744,
 					z = 7024,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1890, 7094}},
+					},
 				},
 				{
 					name = "turretlaser",
 					x = 2416,
 					z = 6752,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2798, 6906}},
+					},
 				},
 				{
 					name = "staticcon",
@@ -150,18 +161,27 @@ local gameConfig = {
 					x = 1744,
 					z = 6832,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1756, 6921}},
+					},
 				},
 				{
 					name = "turretlaser",
 					x = 2368,
 					z = 7376,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2187, 7408}},
+					},
 				},
 				{
 					name = "turretaalaser",
 					x = 2712,
 					z = 7096,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3169, 7078}},
+					},
 				},
 				{
 					name = "staticmex",
@@ -171,13 +191,11 @@ local gameConfig = {
 				},
 				{
 					name = "vehassault",
-					x = 619,
-					z = 5060,
+					x = 1502,
+					z = 5825,
 					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {864, 4960}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1056, 4768}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1248, 4576}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1501, 5982}},
 					},
 				},
 				{
@@ -206,7 +224,7 @@ local gameConfig = {
 				},
 				{
 					name = "energypylon",
-			x = 3544,
+					x = 3544,
 					z = 6936,
 					facing = 2,
 				},
@@ -215,6 +233,9 @@ local gameConfig = {
 					x = 3488,
 					z = 6720,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3163, 6791}},
+					},
 				},
 				{
 					name = "energypylon",
@@ -224,12 +245,11 @@ local gameConfig = {
 				},
 				{
 					name = "gunshipkrow",
-					x = 2222,
-					z = 5853,
-					facing = 0,
+					x = 2785,
+					z = 6624,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2336, 6240}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2400, 6688}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3174, 6559}},
 					},
 				},
 				{
@@ -237,6 +257,9 @@ local gameConfig = {
 					x = 2416,
 					z = 6928,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2425, 7089}},
+					},
 				},
 				{
 					name = "staticmex",
@@ -273,6 +296,9 @@ local gameConfig = {
 					x = 4560,
 					z = 5728,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4687, 5631}},
+					},
 				},
 				{
 					name = "turretmissile",
@@ -282,13 +308,11 @@ local gameConfig = {
 				},
 				{
 					name = "amphassault",
-					x = 585,
-					z = 3748,
+					x = 482,
+					z = 5335,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {672, 4000}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {864, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1056, 4192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {474, 5870}},
 					},
 				},
 				{
@@ -296,6 +320,9 @@ local gameConfig = {
 					x = 5352,
 					z = 5832,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5342, 5919}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -305,8 +332,8 @@ local gameConfig = {
 				},
 				{
 					name = "vehcon",
-					x = 1928,
-					z = 5367,
+					x = 1938,
+					z = 5396,
 					facing = 0,
 				},
 				{
@@ -320,6 +347,9 @@ local gameConfig = {
 					x = 4464,
 					z = 7520,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4318, 7420}},
+					},
 				},
 				{
 					name = "vehcon",
@@ -329,13 +359,11 @@ local gameConfig = {
 				},
 				{
 					name = "vehheavyarty",
-					x = 1974,
-					z = 5356,
-					facing = 3,
+					x = 1644,
+					z = 5162,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1888, 5216}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1760, 5024}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1568, 4832}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2042, 6353}},
 					},
 				},
 				{
@@ -376,13 +404,11 @@ local gameConfig = {
 				},
 				{
 					name = "vehraid",
-					x = 406,
-					z = 3644,
+					x = 548,
+					z = 5832,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {608, 3936}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {800, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {992, 4192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {634, 6039}},
 					},
 				},
 				{
@@ -402,12 +428,18 @@ local gameConfig = {
 					x = 3680,
 					z = 6144,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3789, 6177}},
+					},
 				},
 				{
 					name = "turretriot",
 					x = 4616,
 					z = 6104,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4837, 6233}},
+					},
 				},
 				{
 					name = "turretmissile",
@@ -444,6 +476,9 @@ local gameConfig = {
 					x = 3504,
 					z = 5872,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3839, 5768}},
+					},
 				},
 				{
 					name = "staticmex",
@@ -468,6 +503,9 @@ local gameConfig = {
 					x = 6024,
 					z = 5880,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {6040, 6337}},
+					},
 				},
 				{
 					name = "staticradar",
@@ -480,6 +518,9 @@ local gameConfig = {
 					x = 2008,
 					z = 7144,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3309, 7191}},
+					},
 				},
 				{
 					name = "vehcon",
@@ -498,12 +539,18 @@ local gameConfig = {
 					x = 3464,
 					z = 6040,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3806, 6120}},
+					},
 				},
 				{
 					name = "vehheavyarty",
-					x = 1906,
-					z = 5250,
-					facing = 1,
+					x = 1530,
+					z = 5792,
+					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2004, 7152}},
+					},
 				},
 				{
 					name = "turretlaser",
@@ -513,19 +560,17 @@ local gameConfig = {
 				},
 				{
 					name = "vehsupport",
-					x = 703,
-					z = 5006,
-					facing = 1,
+					x = 1479,
+					z = 5323,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {992, 4832}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1184, 4640}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1376, 4512}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1300, 5817}},
 					},
 				},
 				{
 					name = "vehcon",
 					x = 2191,
-					z = 5642,
+					z = 5647,
 					facing = 3,
 				},
 				{
@@ -539,22 +584,26 @@ local gameConfig = {
 					x = 2544,
 					z = 7072,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3071, 7010}},
+					},
 				},
 				{
 					name = "turretheavylaser",
 					x = 3384,
 					z = 6024,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3823, 6062}},
+					},
 				},
 				{
 					name = "amphassault",
-					x = 456,
-					z = 3641,
+					x = 558,
+					z = 5028,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {480, 3808}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {672, 4000}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {864, 4128}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {369, 5468}},
 					},
 				},
 				{
@@ -562,12 +611,18 @@ local gameConfig = {
 					x = 5800,
 					z = 6168,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5969, 6109}},
+					},
 				},
 				{
 					name = "turretgauss",
 					x = 3848,
 					z = 6088,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4065, 6224}},
+					},
 				},
 				{
 					name = "vehcon",
@@ -577,13 +632,11 @@ local gameConfig = {
 				},
 				{
 					name = "amphassault",
-					x = 542,
-					z = 3925,
-					facing = 1,
+					x = 589,
+					z = 5472,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {672, 4000}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {864, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1056, 4256}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {859, 5997}},
 					},
 				},
 				{
@@ -597,16 +650,17 @@ local gameConfig = {
 					x = 4544,
 					z = 5280,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4738, 5662}},
+					},
 				},
 				{
 					name = "vehraid",
-					x = 408,
-					z = 3737,
-					facing = 0,
+					x = 769,
+					z = 5807,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {608, 3936}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {800, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {992, 4192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {964, 5941}},
 					},
 				},
 				{
@@ -617,11 +671,11 @@ local gameConfig = {
 				},
 				{
 					name = "vehscout",
-					x = 2858,
-					z = 5630,
-					facing = 3,
+					x = 4179,
+					z = 5314,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2828, 5655}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4225, 5355}},
 					},
 				},
 				{
@@ -635,20 +689,26 @@ local gameConfig = {
 					x = 5720,
 					z = 5896,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5758, 5924}},
+					},
 				},
 				{
 					name = "turretheavylaser",
 					x = 5272,
 					z = 5816,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5285, 5900}},
+					},
 				},
 				{
 					name = "vehcapture",
-					x = 632,
-					z = 5343,
-					facing = 2,
+					x = 1113,
+					z = 6225,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {610, 5222}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1365, 6589}},
 					},
 				},
 				{
@@ -662,6 +722,9 @@ local gameConfig = {
 					x = 2840,
 					z = 7000,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3023, 6975}},
+					},
 				},
 				{
 					name = "turretheavylaser",
@@ -674,6 +737,9 @@ local gameConfig = {
 					x = 2800,
 					z = 6640,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2959, 6743}},
+					},
 				},
 				{
 					name = "vehcon",
@@ -683,24 +749,20 @@ local gameConfig = {
 				},
 				{
 					name = "vehassault",
-					x = 698,
-					z = 5139,
-					facing = 2,
+					x = 767,
+					z = 5343,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {800, 5024}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {992, 4832}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1184, 4640}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1762, 5680}},
 					},
 				},
 				{
 					name = "vehriot",
 					x = 659,
 					z = 5170,
-					facing = 2,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {672, 5152}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {864, 4960}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1056, 4768}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1445, 5714}},
 					},
 				},
 				{
@@ -708,27 +770,26 @@ local gameConfig = {
 					x = 3016,
 					z = 6616,
 					facing = 2,
-				},
-				{
-					name = "amphassault",
-					x = 775,
-					z = 4042,
-					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {864, 4128}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1056, 4256}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1248, 4448}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3231, 6572}},
 					},
 				},
 				{
 					name = "amphassault",
-					x = 406,
-					z = 3591,
+					x = 1379,
+					z = 6239,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {480, 3808}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {672, 4000}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {864, 4128}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1155, 6095}},
+					},
+				},
+				{
+					name = "amphassault",
+					x = 447,
+					z = 4826,
+					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {360, 5349}},
 					},
 				},
 				{
@@ -739,13 +800,11 @@ local gameConfig = {
 				},
 				{
 					name = "vehraid",
-					x = 307,
-					z = 3405,
-					facing = 0,
+					x = 640,
+					z = 5861,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {608, 3936}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {800, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {992, 4192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {751, 6046}},
 					},
 				},
 				{
@@ -753,6 +812,9 @@ local gameConfig = {
 					x = 4984,
 					z = 5352,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5059, 5823}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -765,7 +827,9 @@ local gameConfig = {
 					x = 4680,
 					z = 5832,
 					facing = 0,
-					terraformHeight = 169,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4897, 5746}},
+					},
 				},
 				{
 					name = "staticcon",
@@ -787,19 +851,17 @@ local gameConfig = {
 				},
 				{
 					name = "vehraid",
-					x = 539,
-					z = 3867,
-					facing = 1,
+					x = 1259,
+					z = 5794,
+					facing = 3,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {608, 3936}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {800, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {992, 4192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1077, 5902}},
 					},
 				},
 				{
 					name = "vehcon",
-					x = 2086,
-					z = 5363,
+					x = 2032,
+					z = 5530,
 					facing = 1,
 				},
 				{
@@ -813,22 +875,26 @@ local gameConfig = {
 					x = 4416,
 					z = 6048,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4190, 6160}},
+					},
 				},
 				{
 					name = "vehheavyarty",
-					x = 1905,
-					z = 4712,
+					x = 1408,
+					z = 4926,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2029, 5999}},
+					},
 				},
 				{
 					name = "vehassault",
-					x = 739,
-					z = 5113,
-					facing = 2,
+					x = 767,
+					z = 5343,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {800, 5024}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {992, 4832}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1184, 4640}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1658, 5627}},
 					},
 				},
 				{
@@ -837,6 +903,9 @@ local gameConfig = {
 					z = 5464,
 					facing = 2,
 					buildProgress = 0.1928,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3839, 5296}},
+					},
 				},
 				{
 					name = "staticcon",
@@ -846,13 +915,11 @@ local gameConfig = {
 				},
 				{
 					name = "vehheavyarty",
-					x = 1956,
-					z = 5250,
-					facing = 2,
+					x = 1702,
+					z = 4921,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1888, 5088}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1760, 4896}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1632, 4768}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2534, 6127}},
 					},
 				},
 				{
@@ -860,6 +927,9 @@ local gameConfig = {
 					x = 5640,
 					z = 5960,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5698, 5929}},
+					},
 				},
 				{
 					name = "staticmex",
@@ -878,6 +948,9 @@ local gameConfig = {
 					x = 5896,
 					z = 5576,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5870, 5962}},
+					},
 				},
 				{
 					name = "vehcon",
@@ -890,12 +963,18 @@ local gameConfig = {
 					x = 2760,
 					z = 6984,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2970, 6949}},
+					},
 				},
 				{
 					name = "turretmissile",
 					x = 4736,
 					z = 5680,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4789, 5693}},
+					},
 				},
 				{
 					name = "staticradar",
@@ -916,13 +995,10 @@ local gameConfig = {
 					facing = 2,
 				},
 				{
-					name = "vehscout",
-					x = 2895,
-					z = 5569,
+					name = "staticcon",
+					x = 4424,
+					z = 5128,
 					facing = 3,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2824, 5666}},
-					},
 				},
 				{
 					name = "energysingu",
@@ -949,16 +1025,17 @@ local gameConfig = {
 					x = 2760,
 					z = 7064,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3120, 7045}},
+					},
 				},
 				{
 					name = "amphassault",
-					x = 484,
-					z = 3885,
-					facing = 1,
+					x = 538,
+					z = 5511,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {672, 4000}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {864, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1056, 4256}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {807, 6026}},
 					},
 				},
 				{
@@ -978,6 +1055,9 @@ local gameConfig = {
 					x = 3320,
 					z = 5896,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3845, 5828}},
+					},
 				},
 				{
 					name = "turretheavylaser",
@@ -986,16 +1066,19 @@ local gameConfig = {
 					facing = 0,
 				},
 				{
-					name = "turretheavylaser",
-					x = 4392,
-					z = 5848,
-					facing = 0,
+					name = "vehcon",
+					x = 253,
+					z = 6120,
+					facing = 2,
 				},
 				{
 					name = "turretheavylaser",
 					x = 5192,
 					z = 5352,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5149, 5068}},
+					},
 				},
 				{
 					name = "staticcon",
@@ -1020,6 +1103,9 @@ local gameConfig = {
 					x = 4824,
 					z = 5416,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4951, 5772}},
+					},
 				},
 				{
 					name = "staticcon",
@@ -1032,16 +1118,17 @@ local gameConfig = {
 					x = 5416,
 					z = 5288,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5508, 5086}},
+					},
 				},
 				{
 					name = "vehraid",
-					x = 672,
-					z = 3954,
-					facing = 0,
+					x = 1382,
+					z = 6039,
+					facing = 3,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {800, 4128}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {992, 4192}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1184, 4192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1192, 5867}},
 					},
 				},
 				{
@@ -1049,6 +1136,9 @@ local gameConfig = {
 					x = 5032,
 					z = 5352,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5116, 5839}},
+					},
 				},
 				{
 					name = "turretlaser",
@@ -1061,6 +1151,9 @@ local gameConfig = {
 					x = 5896,
 					z = 6648,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {6066, 6514}},
+					},
 				},
 				{
 					name = "turretheavylaser",
@@ -1073,22 +1166,26 @@ local gameConfig = {
 					x = 4280,
 					z = 5080,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4484, 5503}},
+					},
 				},
 				{
 					name = "turretlaser",
 					x = 2624,
 					z = 6544,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2569, 6926}},
+					},
 				},
 				{
-					name = "gunshipraid",
-					x = 4985,
-					z = 3865,
-					facing = 0,
+					name = "turretheavylaser",
+					x = 5720,
+					z = 6152,
+					facing = 3,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4960, 4000}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {5024, 4256}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {5216, 4512}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5944, 6055}},
 					},
 				},
 				{
@@ -1096,22 +1193,26 @@ local gameConfig = {
 					x = 3304,
 					z = 5976,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3850, 5887}},
+					},
 				},
 				{
 					name = "turretheavylaser",
 					x = 5704,
 					z = 5448,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5815, 5938}},
+					},
 				},
 				{
 					name = "vehraid",
-					x = 586,
-					z = 3809,
+					x = 1607,
+					z = 5522,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {672, 4000}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {864, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1056, 4192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1598, 5628}},
 					},
 				},
 				{
@@ -1123,19 +1224,17 @@ local gameConfig = {
 				},
 				{
 					name = "vehraid",
-					x = 514,
-					z = 3845,
+					x = 615,
+					z = 5866,
 					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {608, 3936}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {800, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {992, 4192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {692, 6051}},
 					},
 				},
 				{
 					name = "vehcon",
-					x = 2112,
-					z = 5401,
+					x = 2213,
+					z = 5610,
 					facing = 3,
 				},
 				{
@@ -1149,24 +1248,9 @@ local gameConfig = {
 					x = 5864,
 					z = 6296,
 					facing = 3,
-				},
-				{
-					name = "vehcon",
-					x = 253,
-					z = 6120,
-					facing = 2,
-				},
-				{
-					name = "staticcon",
-					x = 4424,
-					z = 5128,
-					facing = 3,
-				},
-				{
-					name = "turretheavylaser",
-					x = 5720,
-					z = 6152,
-					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {6009, 6222}},
+					},
 				},
 			}
 		},
@@ -1179,9 +1263,12 @@ local gameConfig = {
 			startUnits = {
 				{
 					name = "dynrecon1_0",
-					x = 3737,
-					z = 1207,
+					x = 3240,
+					z = 1877,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3043, 1799}},
+					},
 				},
 				{
 					name = "factoryveh",
@@ -1242,16 +1329,17 @@ local gameConfig = {
 					x = 3744,
 					z = 880,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3738, 835}},
+					},
 				},
 				{
 					name = "vehraid",
-					x = 3239,
-					z = 3640,
-					facing = 2,
+					x = 3305,
+					z = 3121,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3552}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3360}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3168}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3532, 3066}},
 					},
 				},
 				{
@@ -1277,6 +1365,9 @@ local gameConfig = {
 					x = 4176,
 					z = 864,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4295, 482}},
+					},
 				},
 				{
 					name = "staticstorage",
@@ -1322,15 +1413,15 @@ local gameConfig = {
 				},
 				{
 					name = "vehcon",
-					x = 3921,
-					z = 1068,
+					x = 3894,
+					z = 1164,
 					facing = 0,
 				},
 				{
-					name = "staticradar",
-					x = 2640,
-					z = 3680,
-					facing = 1,
+					name = "energysingu",
+					x = 4376,
+					z = 696,
+					facing = 0,
 				},
 				{
 					name = "turretlaser",
@@ -1349,16 +1440,17 @@ local gameConfig = {
 					x = 4432,
 					z = 2016,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4406, 2300}},
+					},
 				},
 				{
 					name = "vehsupport",
-					x = 3487,
-					z = 2268,
-					facing = 0,
+					x = 3236,
+					z = 2651,
+					facing = 3,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3488, 2272}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3424, 2464}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 2656}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3502, 2140}},
 					},
 				},
 				{
@@ -1384,6 +1476,9 @@ local gameConfig = {
 					x = 4176,
 					z = 688,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4109, 599}},
+					},
 				},
 				{
 					name = "staticshield",
@@ -1405,15 +1500,18 @@ local gameConfig = {
 				},
 				{
 					name = "vehcon",
-					x = 3325,
-					z = 4230,
+					x = 3593,
+					z = 4056,
 					facing = 0,
 				},
 				{
-					name = "vehcon",
-					x = 2690,
-					z = 4180,
+					name = "turretriot",
+					x = 3720,
+					z = 3384,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4056, 3455}},
+					},
 				},
 				{
 					name = "energypylon",
@@ -1426,6 +1524,9 @@ local gameConfig = {
 					x = 2848,
 					z = 672,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2960, 520}},
+					},
 				},
 				{
 					name = "staticcon",
@@ -1441,8 +1542,8 @@ local gameConfig = {
 				},
 				{
 					name = "vehcon",
-					x = 3763,
-					z = 2194,
+					x = 3777,
+					z = 2256,
 					facing = 1,
 				},
 				{
@@ -1480,6 +1581,9 @@ local gameConfig = {
 					x = 3968,
 					z = 1072,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3925, 720}},
+					},
 				},
 				{
 					name = "staticmex",
@@ -1501,13 +1605,11 @@ local gameConfig = {
 				},
 				{
 					name = "vehraid",
-					x = 3251,
-					z = 3814,
+					x = 3370,
+					z = 2962,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3552}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3360}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3168}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3568, 2945}},
 					},
 				},
 				{
@@ -1515,28 +1617,35 @@ local gameConfig = {
 					x = 5312,
 					z = 3600,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5433, 3741}},
+					},
 				},
 				{
 					name = "turretlaser",
 					x = 5712,
 					z = 3568,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5772, 3502}},
+					},
 				},
 				{
 					name = "turretlaser",
 					x = 3328,
 					z = 2736,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3600, 2419}},
+					},
 				},
 				{
 					name = "veharty",
-					x = 3976,
-					z = 887,
+					x = 3482,
+					z = 1601,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3616, 1376}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3552, 1568}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3424, 1760}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3159, 2196}},
 					},
 				},
 				{
@@ -1551,10 +1660,8 @@ local gameConfig = {
 					z = 648,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4088, 648}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3968, 817}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3968, 817}},
 						{cmdID = planetUtilities.COMMAND.PATROL, pos = {4088, 648}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.PATROL, pos = {3968, 817}, options = {"shift"}},
 					},
 				},
 				{
@@ -1574,6 +1681,9 @@ local gameConfig = {
 					x = 1704,
 					z = 3128,
 					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1715, 2786}},
+					},
 				},
 				{
 					name = "energypylon",
@@ -1601,8 +1711,8 @@ local gameConfig = {
 				},
 				{
 					name = "staticmex",
-					x = 2824,
-					z = 3976,
+					x = 3528,
+					z = 3352,
 					facing = 0,
 				},
 				{
@@ -1613,13 +1723,11 @@ local gameConfig = {
 				},
 				{
 					name = "vehraid",
-					x = 3236,
-					z = 3725,
+					x = 3410,
+					z = 2891,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3552}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3360}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3168}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3585, 2885}},
 					},
 				},
 				{
@@ -1633,6 +1741,9 @@ local gameConfig = {
 					x = 3424,
 					z = 608,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3117, 673}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -1663,12 +1774,18 @@ local gameConfig = {
 					x = 1208,
 					z = 3416,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {912, 3330}},
+					},
 				},
 				{
 					name = "turretriot",
 					x = 712,
 					z = 2584,
 					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {962, 2815}},
+					},
 				},
 				{
 					name = "energywind",
@@ -1682,6 +1799,9 @@ local gameConfig = {
 					z = 2272,
 					facing = 0,
 					buildProgress = 0.145,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3351, 3713}},
+					},
 				},
 				{
 					name = "striderhub",
@@ -1724,6 +1844,9 @@ local gameConfig = {
 					x = 2232,
 					z = 3064,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2513, 2943}},
+					},
 				},
 				{
 					name = "turretemp",
@@ -1742,6 +1865,9 @@ local gameConfig = {
 					x = 2488,
 					z = 1736,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2319, 2274}},
+					},
 				},
 				{
 					name = "energypylon",
@@ -1757,8 +1883,8 @@ local gameConfig = {
 				},
 				{
 					name = "vehcon",
-					x = 2963,
-					z = 4295,
+					x = 2990,
+					z = 4210,
 					facing = 3,
 				},
 				{
@@ -1766,18 +1892,27 @@ local gameConfig = {
 					x = 5784,
 					z = 2952,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {6132, 2552}},
+					},
 				},
 				{
 					name = "turretlaser",
 					x = 3648,
 					z = 720,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3315, 764}},
+					},
 				},
 				{
 					name = "turretheavylaser",
 					x = 632,
 					z = 2584,
 					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {420, 2727}},
+					},
 				},
 				{
 					name = "turretmissile",
@@ -1799,12 +1934,11 @@ local gameConfig = {
 				},
 				{
 					name = "vehheavyarty",
-					x = 2589,
-					z = 3870,
+					x = 3272,
+					z = 4118,
 					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2720, 3872}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2784, 4064}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3615, 3972}},
 					},
 				},
 				{
@@ -1830,6 +1964,9 @@ local gameConfig = {
 					x = 880,
 					z = 2416,
 					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1030, 2319}},
+					},
 				},
 				{
 					name = "turretlaser",
@@ -1839,13 +1976,11 @@ local gameConfig = {
 				},
 				{
 					name = "vehraid",
-					x = 3239,
-					z = 3786,
+					x = 3345,
+					z = 3045,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3552}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3360}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3168}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3551, 3006}},
 					},
 				},
 				{
@@ -1853,6 +1988,9 @@ local gameConfig = {
 					x = 1016,
 					z = 2552,
 					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1238, 2518}},
+					},
 				},
 				{
 					name = "staticheavyarty",
@@ -1860,7 +1998,7 @@ local gameConfig = {
 					z = 2240,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5496, 7472}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3610, 2342}},
 					},
 				},
 				{
@@ -1889,10 +2027,12 @@ local gameConfig = {
 				},
 				{
 					name = "vehcapture",
-					x = 3968,
-					z = 817,
+					x = 3292,
+					z = 1938,
 					facing = 0,
-					buildProgress = 0.0912,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3040, 2291}},
+					},
 				},
 				{
 					name = "staticmex",
@@ -1913,10 +2053,10 @@ local gameConfig = {
 					z = 696,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4104, 696}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4104, 696}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.PATROL, pos = {3968, 817}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3968, 817}},
 						{cmdID = planetUtilities.COMMAND.PATROL, pos = {4104, 696}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {4104, 696}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {3968, 817}, options = {"shift"}},
 					},
 				},
 				{
@@ -1939,13 +2079,11 @@ local gameConfig = {
 				},
 				{
 					name = "vehraid",
-					x = 3196,
-					z = 3906,
+					x = 3218,
+					z = 3366,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3744}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3552}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3360}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3321, 3323}},
 					},
 				},
 				{
@@ -1965,16 +2103,17 @@ local gameConfig = {
 					x = 2528,
 					z = 2272,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2631, 2247}},
+					},
 				},
 				{
 					name = "vehaa",
-					x = 3494,
-					z = 4024,
-					facing = 0,
+					x = 4065,
+					z = 3935,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3680, 3936}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3872, 3936}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4064, 3936}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4380, 3613}},
 					},
 				},
 				{
@@ -1985,8 +2124,8 @@ local gameConfig = {
 				},
 				{
 					name = "vehcon",
-					x = 3802,
-					z = 1340,
+					x = 3834,
+					z = 1334,
 					facing = 3,
 				},
 				{
@@ -1997,22 +2136,20 @@ local gameConfig = {
 				},
 				{
 					name = "vehscout",
-					x = 2355,
-					z = 2548,
-					facing = 2,
+					x = 2516,
+					z = 2402,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2336, 2528}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2610, 2323}},
 					},
 				},
 				{
 					name = "vehraid",
-					x = 3208,
-					z = 3785,
+					x = 3438,
+					z = 2831,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3552}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3360}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3168}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3599, 2823}},
 					},
 				},
 				{
@@ -2029,8 +2166,8 @@ local gameConfig = {
 				},
 				{
 					name = "vehcon",
-					x = 3226,
-					z = 4273,
+					x = 3220,
+					z = 4255,
 					facing = 0,
 				},
 				{
@@ -2047,13 +2184,11 @@ local gameConfig = {
 				},
 				{
 					name = "vehraid",
-					x = 3247,
-					z = 3757,
+					x = 3327,
+					z = 3134,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3552}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3360}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3168}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3513, 3126}},
 					},
 				},
 				{
@@ -2063,10 +2198,13 @@ local gameConfig = {
 					facing = 0,
 				},
 				{
-					name = "vehcon",
-					x = 2253,
-					z = 3980,
-					facing = 0,
+					name = "vehriot",
+					x = 3419,
+					z = 1956,
+					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3226, 2155}},
+					},
 				},
 				{
 					name = "vehcon",
@@ -2079,6 +2217,9 @@ local gameConfig = {
 					x = 2464,
 					z = 2096,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2575, 2025}},
+					},
 				},
 				{
 					name = "energywind",
@@ -2088,11 +2229,11 @@ local gameConfig = {
 				},
 				{
 					name = "vehraid",
-					x = 3730,
-					z = 1293,
+					x = 3019,
+					z = 2468,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3744, 1312}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2856, 2636}},
 					},
 				},
 				{
@@ -2109,13 +2250,11 @@ local gameConfig = {
 				},
 				{
 					name = "vehraid",
-					x = 3217,
-					z = 3753,
+					x = 3441,
+					z = 2753,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3552}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3360}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3168}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3610, 2761}},
 					},
 				},
 				{
@@ -2124,12 +2263,18 @@ local gameConfig = {
 					z = 1344,
 					facing = 0,
 					buildProgress = 0.44209999,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2828, 2710}},
+					},
 				},
 				{
 					name = "turretlaser",
 					x = 3584,
 					z = 960,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3524, 830}},
+					},
 				},
 				{
 					name = "turretaalaser",
@@ -2145,13 +2290,11 @@ local gameConfig = {
 				},
 				{
 					name = "vehraid",
-					x = 3227,
-					z = 3857,
+					x = 3198,
+					z = 3383,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3744}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3552}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3360}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3340, 3247}},
 					},
 				},
 				{
@@ -2198,13 +2341,11 @@ local gameConfig = {
 				},
 				{
 					name = "vehraid",
-					x = 3221,
-					z = 3813,
+					x = 3230,
+					z = 3421,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3744}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3552}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3232, 3360}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3315, 3402}},
 					},
 				},
 				{
@@ -2236,14 +2377,17 @@ local gameConfig = {
 					x = 2688,
 					z = 2192,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2918, 2491}},
+					},
 				},
 				{
 					name = "vehscout",
-					x = 3269,
-					z = 2528,
+					x = 3405,
+					z = 2187,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3256, 2488}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3441, 2092}},
 					},
 				},
 				{
@@ -2252,6 +2396,9 @@ local gameConfig = {
 					z = 1960,
 					facing = 0,
 					buildProgress = 0.70670003,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2636, 2170}},
+					},
 				},
 				{
 					name = "vehcon",
@@ -2267,12 +2414,11 @@ local gameConfig = {
 				},
 				{
 					name = "vehscout",
-					x = 3167,
-					z = 3683,
-					facing = 2,
+					x = 3429,
+					z = 3178,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3168, 3488}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3168, 3296}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3492, 3186}},
 					},
 				},
 				{
@@ -2283,32 +2429,27 @@ local gameConfig = {
 				},
 				{
 					name = "vehassault",
-					x = 2762,
-					z = 4311,
-					facing = 0,
+					x = 3619,
+					z = 4135,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2784, 4384}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2784, 4576}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2784, 4768}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3848, 3950}},
 					},
 				},
 				{
 					name = "vehscout",
-					x = 3343,
-					z = 4122,
-					facing = 0,
+					x = 3616,
+					z = 4009,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3360, 4192}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3693, 3975}},
 					},
 				},
 				{
 					name = "vehcon",
-					x = 4080,
-					z = 475,
-					facing = 3,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3845, 379}},
-					},
+					x = 3844,
+					z = 383,
+					facing = 2,
 				},
 				{
 					name = "staticmex",
@@ -2327,34 +2468,63 @@ local gameConfig = {
 					x = 2624,
 					z = 2432,
 					facing = 0,
-				},
-				{
-					name = "staticmex",
-					x = 3528,
-					z = 3352,
-					facing = 0,
-				},
-				{
-					name = "turretriot",
-					x = 3720,
-					z = 3384,
-					facing = 0,
-				},
-				{
-					name = "energysingu",
-					x = 4376,
-					z = 696,
-					facing = 0,
-				},
-				{
-					name = "vehriot",
-					x = 3777,
-					z = 1299,
-					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3552, 1568}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3424, 1760}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2509, 2864}},
 					},
+				},
+				{
+					name = "wolverine_mine",
+					x = 3320,
+					z = 2280,
+					facing = 0,
+				},
+				{
+					name = "wolverine_mine",
+					x = 3064,
+					z = 2200,
+					facing = 0,
+				},
+				{
+					name = "wolverine_mine",
+					x = 3032,
+					z = 2136,
+					facing = 0,
+				},
+				{
+					name = "wolverine_mine",
+					x = 3000,
+					z = 2184,
+					facing = 0,
+				},
+				{
+					name = "wolverine_mine",
+					x = 3080,
+					z = 2152,
+					facing = 0,
+				},
+				{
+					name = "wolverine_mine",
+					x = 3192,
+					z = 2312,
+					facing = 0,
+				},
+				{
+					name = "wolverine_mine",
+					x = 3240,
+					z = 2296,
+					facing = 0,
+				},
+				{
+					name = "wolverine_mine",
+					x = 3112,
+					z = 2136,
+					facing = 0,
+				},
+				{
+					name = "wolverine_mine",
+					x = 3272,
+					z = 2120,
+					facing = 0,
 				},
 			}
 		},
@@ -2367,15 +2537,21 @@ local gameConfig = {
 			startUnits = {
 				{
 					name = "dynstrike1_00",
-					x = 5844,
-					z = 6983,
+					x = 5851,
+					z = 6965,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {6069, 6634}},
+					},
 				},
 				{
 					name = "factoryhover",
 					x = 5440,
 					z = 7056,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5702, 6889}},
+					},
 				},
 				{
 					name = "staticmex",
@@ -2412,7 +2588,6 @@ local gameConfig = {
 					x = 5848,
 					z = 6840,
 					facing = 2,
-					buildProgress = 0.92659998,
 				},
 				{
 					name = "staticcon",
@@ -2470,15 +2645,18 @@ local gameConfig = {
 				},
 				{
 					name = "hovercon",
-					x = 2002,
-					z = 5252,
+					x = 2000,
+					z = 5192,
 					facing = 1,
 				},
 				{
 					name = "hoverassault",
-					x = 1980,
-					z = 5463,
-					facing = 3,
+					x = 3861,
+					z = 5259,
+					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4002, 5270}},
+					},
 				},
 				{
 					name = "staticcon",
@@ -2486,10 +2664,10 @@ local gameConfig = {
 					z = 6872,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5464, 6872}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5464, 6872}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5888, 7304}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5888, 7304}},
 						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5464, 6872}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5464, 6872}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5888, 7304}, options = {"shift"}},
 					},
 				},
 				{
@@ -2503,16 +2681,17 @@ local gameConfig = {
 					x = 5216,
 					z = 7056,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5130, 7321}},
+					},
 				},
 				{
 					name = "hoverassault",
-					x = 526,
-					z = 3985,
-					facing = 1,
+					x = 822,
+					z = 5821,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {736, 4064}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {928, 4192}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1120, 4192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {909, 5964}},
 					},
 				},
 				{
@@ -2520,18 +2699,24 @@ local gameConfig = {
 					x = 5385,
 					z = 6978,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5470, 6943}},
+					},
 				},
 				{
-					name = "turretlaser",
-					x = 5392,
-					z = 7600,
-					facing = 2,
+					name = "hovercon",
+					x = 2391,
+					z = 5867,
+					facing = 3,
 				},
 				{
 					name = "hoverraid",
 					x = 4985,
 					z = 7199,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5353, 6969}},
+					},
 				},
 				{
 					name = "staticradar",
@@ -2547,13 +2732,11 @@ local gameConfig = {
 				},
 				{
 					name = "hoverassault",
-					x = 2033,
-					z = 5379,
-					facing = 2,
+					x = 2613,
+					z = 6047,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1952, 5280}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1888, 5088}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1888, 4896}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2703, 6181}},
 					},
 				},
 				{
@@ -2573,6 +2756,9 @@ local gameConfig = {
 					x = 5376,
 					z = 6816,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5337, 7254}},
+					},
 				},
 				{
 					name = "staticcon",
@@ -2591,26 +2777,27 @@ local gameConfig = {
 					x = 3503,
 					z = 6737,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3584, 7423}},
+					},
 				},
 				{
-					name = "hoverraid",
-					x = 1981,
-					z = 4197,
-					facing = 1,
+					name = "hoverskirm",
+					x = 2068,
+					z = 5928,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2080, 4128}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2272, 4000}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2464, 3872}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2212, 6294}},
 					},
 				},
 				{
 					name = "hoverassault",
-					x = 390,
-					z = 3524,
+					x = 398,
+					z = 3689,
 					facing = 0,
 					patrolRoute = {
-						{384, 3668},
 						{420, 3721},
+						{384, 3668},
 					},
 				},
 				{
@@ -2636,6 +2823,9 @@ local gameConfig = {
 					x = 5104,
 					z = 7200,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4928, 7405}},
+					},
 				},
 				{
 					name = "staticcon",
@@ -2654,12 +2844,18 @@ local gameConfig = {
 					x = 5000,
 					z = 7752,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5873, 6833}},
+					},
 				},
 				{
 					name = "turretlaser",
 					x = 5696,
 					z = 6320,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5990, 6165}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -2699,28 +2895,26 @@ local gameConfig = {
 				},
 				{
 					name = "hoverarty",
-					x = 2146,
-					z = 5367,
-					facing = 0,
+					x = 2976,
+					z = 5224,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2144, 5408}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3943, 5258}},
 					},
 				},
 				{
 					name = "hoverassault",
-					x = 341,
-					z = 3552,
+					x = 403,
+					z = 4896,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {416, 3616}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {480, 3808}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {672, 4000}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {317, 4992}},
 					},
 				},
 				{
 					name = "hovercon",
-					x = 1992,
-					z = 6718,
+					x = 1962,
+					z = 6900,
 					facing = 3,
 				},
 				{
@@ -2737,11 +2931,11 @@ local gameConfig = {
 				},
 				{
 					name = "hoverriot",
-					x = 1565,
-					z = 4697,
-					facing = 2,
+					x = 1672,
+					z = 6239,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1507, 4478}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1813, 6423}},
 					},
 				},
 				{
@@ -2761,6 +2955,9 @@ local gameConfig = {
 					x = 5256,
 					z = 7288,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5759, 6871}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -2770,12 +2967,11 @@ local gameConfig = {
 				},
 				{
 					name = "hoverarty",
-					x = 1804,
-					z = 4792,
-					facing = 3,
+					x = 1767,
+					z = 6292,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1804, 4792}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2223, 5203}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1726, 5883}},
 					},
 				},
 				{
@@ -2789,18 +2985,27 @@ local gameConfig = {
 					x = 5488,
 					z = 6672,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5676, 6680}},
+					},
 				},
 				{
 					name = "hoverraid",
 					x = 4519,
 					z = 6364,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4563, 7320}},
+					},
 				},
 				{
 					name = "turretlaser",
 					x = 5744,
 					z = 6768,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {6069, 6574}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -2810,13 +3015,11 @@ local gameConfig = {
 				},
 				{
 					name = "hoverarty",
-					x = 2135,
-					z = 5453,
-					facing = 0,
+					x = 2608,
+					z = 6098,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2144, 5664}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2336, 5920}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2656, 6112}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2879, 6215}},
 					},
 				},
 				{
@@ -2827,19 +3030,17 @@ local gameConfig = {
 				},
 				{
 					name = "hoverassault",
-					x = 579,
-					z = 3878,
-					facing = 0,
+					x = 1621,
+					z = 5688,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {672, 4000}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {864, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1056, 4192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1713, 5645}},
 					},
 				},
 				{
 					name = "hovercon",
-					x = 2103,
-					z = 5504,
+					x = 2064,
+					z = 5711,
 					facing = 0,
 				},
 				{
@@ -2850,13 +3051,11 @@ local gameConfig = {
 				},
 				{
 					name = "hoveraa",
-					x = 771,
-					z = 3923,
+					x = 1371,
+					z = 5824,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {800, 4128}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {992, 4256}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1184, 4320}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1541, 5646}},
 					},
 				},
 				{
@@ -2865,10 +3064,10 @@ local gameConfig = {
 					z = 6744,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5560, 6744}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5560, 6744}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5888, 7304}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5888, 7304}},
 						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5560, 6744}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5560, 6744}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5888, 7304}, options = {"shift"}},
 					},
 				},
 				{
@@ -2882,21 +3081,26 @@ local gameConfig = {
 					x = 5056,
 					z = 6960,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5060, 7027}},
+					},
 				},
 				{
 					name = "turretriot",
 					x = 5304,
 					z = 5624,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5230, 5878}},
+					},
 				},
 				{
 					name = "hoverraid",
-					x = 1852,
-					z = 4264,
-					facing = 1,
+					x = 1687,
+					z = 6903,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1888, 4256}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2080, 4128}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1670, 7057}},
 					},
 				},
 				{
@@ -2907,13 +3111,11 @@ local gameConfig = {
 				},
 				{
 					name = "hoveraa",
-					x = 620,
-					z = 3907,
+					x = 1456,
+					z = 5194,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {800, 4128}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {992, 4256}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1184, 4320}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1399, 5750}},
 					},
 				},
 				{
@@ -2927,12 +3129,15 @@ local gameConfig = {
 					x = 5024,
 					z = 6768,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4885, 7069}},
+					},
 				},
 				{
 					name = "bomberheavy",
-					x = 5830,
-					z = 4608,
-					facing = 2,
+					x = 5850,
+					z = 7283,
+					facing = 0,
 				},
 				{
 					name = "staticcon",
@@ -2940,10 +3145,10 @@ local gameConfig = {
 					z = 6776,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5464, 6776}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5464, 6776}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5888, 7304}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5888, 7304}},
 						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5464, 6776}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5464, 6776}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5888, 7304}, options = {"shift"}},
 					},
 				},
 				{
@@ -2951,25 +3156,27 @@ local gameConfig = {
 					x = 4920,
 					z = 7352,
 					facing = 2,
-				},
-				{
-					name = "hoverassault",
-					x = 448,
-					z = 3724,
-					facing = 1,
-					patrolRoute = {
-						{384, 3663},
-						{448, 3661},
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5644, 6906}},
 					},
 				},
 				{
 					name = "hoverassault",
-					x = 396,
-					z = 3681,
-					facing = 1,
+					x = 351,
+					z = 4795,
+					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {308, 4933}},
+					},
+				},
+				{
+					name = "hoverassault",
+					x = 387,
+					z = 3611,
+					facing = 2,
 					patrolRoute = {
-						{384, 3668},
 						{387, 3604},
+						{396, 3681},
 					},
 				},
 				{
@@ -2983,6 +3190,9 @@ local gameConfig = {
 					x = 5816,
 					z = 6952,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5927, 6808}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -2995,6 +3205,9 @@ local gameConfig = {
 					x = 5144,
 					z = 6616,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5001, 7040}},
+					},
 				},
 				{
 					name = "staticcon",
@@ -3007,8 +3220,8 @@ local gameConfig = {
 				},
 				{
 					name = "hovercon",
-					x = 2158,
-					z = 5508,
+					x = 2206,
+					z = 5518,
 					facing = 0,
 				},
 				{
@@ -3016,25 +3229,26 @@ local gameConfig = {
 					x = 5536,
 					z = 6224,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5909, 6006}},
+					},
 				},
 				{
 					name = "hoverassault",
-					x = 1897,
-					z = 5404,
-					facing = 2,
+					x = 2551,
+					z = 6033,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1952, 5280}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1888, 5088}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1888, 4896}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2644, 6169}},
 					},
 				},
 				{
 					name = "hoverriot",
-					x = 1580,
-					z = 4778,
+					x = 1811,
+					z = 6208,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1502, 4421}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1726, 5883}},
 					},
 				},
 				{
@@ -3048,14 +3262,17 @@ local gameConfig = {
 					x = 4928,
 					z = 7120,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5178, 7009}},
+					},
 				},
 				{
 					name = "hoverarty",
-					x = 1650,
-					z = 4768,
+					x = 1906,
+					z = 5517,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2223, 5203}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2099, 6334}},
 					},
 				},
 				{
@@ -3064,10 +3281,10 @@ local gameConfig = {
 					z = 6744,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5512, 6744}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5512, 6744}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5888, 7304}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5888, 7304}},
 						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5512, 6744}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5512, 6744}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5888, 7304}, options = {"shift"}},
 					},
 				},
 				{
@@ -3075,6 +3292,9 @@ local gameConfig = {
 					x = 5120,
 					z = 7472,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4738, 7512}},
+					},
 				},
 				{
 					name = "staticstorage",
@@ -3083,25 +3303,18 @@ local gameConfig = {
 					facing = 2,
 				},
 				{
-					name = "hoverraid",
-					x = 1745,
-					z = 4282,
-					facing = 1,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1888, 4256}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2080, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2272, 4000}, options = {"shift"}},
-					},
+					name = "hovercon",
+					x = 2235,
+					z = 5423,
+					facing = 3,
 				},
 				{
 					name = "hoverassault",
-					x = 588,
-					z = 3639,
+					x = 1488,
+					z = 5539,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {736, 4064}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {928, 4192}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1120, 4192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1488, 5671}},
 					},
 				},
 				{
@@ -3112,24 +3325,20 @@ local gameConfig = {
 				},
 				{
 					name = "hoverassault",
-					x = 171,
-					z = 3314,
+					x = 365,
+					z = 4687,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {160, 3424}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {224, 3616}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {416, 3808}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {289, 4815}},
 					},
 				},
 				{
 					name = "hoverassault",
-					x = 200,
-					z = 3356,
+					x = 365,
+					z = 4583,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {160, 3424}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {224, 3616}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {416, 3808}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {277, 4696}},
 					},
 				},
 				{
@@ -3137,74 +3346,68 @@ local gameConfig = {
 					x = 5808,
 					z = 6480,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {6052, 6396}},
+					},
 				},
 				{
-					name = "turretriot",
-					x = 3032,
-					z = 5560,
-					facing = 2,
+					name = "hoverraid",
+					x = 4976,
+					z = 7194,
+					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5295, 6983}},
+					},
 				},
 				{
 					name = "hoverarty",
-					x = 3030,
-					z = 5896,
-					facing = 1,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2965, 6085}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3011, 5875}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2223, 5203}, options = {"shift"}},
-					},
-				},
-				{
-					name = "hoverassault",
-					x = 546,
-					z = 3823,
-					facing = 0,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {736, 4064}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {928, 4192}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1120, 4192}, options = {"shift"}},
-					},
-				},
-				{
-					name = "hoverassault",
-					x = 160,
-					z = 3229,
-					facing = 0,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {160, 3424}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {224, 3616}, options = {"shift"}},
-					},
-				},
-				{
-					name = "hoverassault",
-					x = 2078,
-					z = 5428,
+					x = 3022,
+					z = 5954,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1952, 5280}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1888, 5088}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1888, 4896}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3743, 6286}},
+					},
+				},
+				{
+					name = "hoverassault",
+					x = 1341,
+					z = 5716,
+					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1247, 5845}},
+					},
+				},
+				{
+					name = "hoverassault",
+					x = 208,
+					z = 3638,
+					facing = 0,
+				},
+				{
+					name = "hoverassault",
+					x = 2088,
+					z = 7002,
+					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2063, 7141}},
 					},
 				},
 				{
 					name = "hoverriot",
-					x = 1501,
-					z = 4658,
-					facing = 2,
+					x = 1640,
+					z = 6175,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1504, 4409}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1482, 6140}},
 					},
 				},
 				{
 					name = "hoverskirm",
-					x = 1605,
-					z = 4349,
-					facing = 1,
+					x = 2022,
+					z = 5703,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1696, 4320}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1888, 4256}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2080, 4128}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2186, 6073}},
 					},
 				},
 				{
@@ -3227,11 +3430,11 @@ local gameConfig = {
 				},
 				{
 					name = "hoverriot",
-					x = 1642,
-					z = 4835,
-					facing = 2,
+					x = 1964,
+					z = 6060,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1508, 4516}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2156, 6315}},
 					},
 				},
 				{
@@ -3239,6 +3442,9 @@ local gameConfig = {
 					x = 3048,
 					z = 5752,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3312, 5494}},
+					},
 				},
 				{
 					name = "staticcon",
@@ -3251,36 +3457,35 @@ local gameConfig = {
 					x = 5888,
 					z = 7304,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {6059, 6692}},
+					},
 				},
 				{
 					name = "hoverriot",
-					x = 1551,
-					z = 4609,
-					facing = 2,
+					x = 1850,
+					z = 5975,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1508, 4552}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2075, 6036}},
 					},
 				},
 				{
 					name = "hoverarty",
-					x = 2050,
-					z = 5321,
+					x = 2370,
+					z = 5959,
 					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2144, 5600}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2272, 5920}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2592, 5984}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2759, 5835}},
 					},
 				},
 				{
-					name = "hoverraid",
-					x = 1954,
-					z = 4220,
-					facing = 1,
+					name = "hoverassault",
+					x = 390,
+					z = 4776,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2080, 4128}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2272, 4000}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2464, 3872}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {298, 4874}},
 					},
 				},
 				{
@@ -3288,12 +3493,18 @@ local gameConfig = {
 					x = 2824,
 					z = 5480,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2655, 5208}},
+					},
 				},
 				{
 					name = "turretlaser",
 					x = 5504,
 					z = 6496,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5078, 6478}},
+					},
 				},
 				{
 					name = "hovercon",
@@ -3302,21 +3513,19 @@ local gameConfig = {
 					facing = 0,
 				},
 				{
-					name = "hoverassault",
-					x = 612,
-					z = 3982,
-					facing = 1,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {800, 4128}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {992, 4192}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1184, 4192}, options = {"shift"}},
-					},
+					name = "hovercon",
+					x = 5785,
+					z = 6732,
+					facing = 0,
 				},
 				{
 					name = "turretriot",
 					x = 3320,
 					z = 5816,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3834, 5708}},
+					},
 				},
 				{
 					name = "staticstorage",
@@ -3329,84 +3538,17 @@ local gameConfig = {
 					x = 5896,
 					z = 7016,
 					facing = 2,
-				},
-				{
-					name = "hoverskirm",
-					x = 1555,
-					z = 4360,
-					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1696, 4320}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1888, 4256}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2080, 4128}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {6019, 6736}},
 					},
-				},
-				{
-					name = "hoverraid",
-					x = 1886,
-					z = 4256,
-					facing = 1,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1888, 4256}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2080, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2272, 4000}, options = {"shift"}},
-					},
-				},
-				{
-					name = "hoverraid",
-					x = 4976,
-					z = 7194,
-					facing = 0,
 				},
 				{
 					name = "hoverassault",
-					x = 496,
-					z = 3808,
-					facing = 0,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {672, 4000}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {864, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1056, 4192}, options = {"shift"}},
-					},
-				},
-				{
-					name = "hoverskirm",
-					x = 1533,
-					z = 4406,
-					facing = 1,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1696, 4320}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1888, 4256}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2080, 4128}, options = {"shift"}},
-					},
-				},
-				{
-					name = "hovercon",
-					x = 2390,
-					z = 5877,
+					x = 1199,
+					z = 5796,
 					facing = 3,
-				},
-				{
-					name = "hovercon",
-					x = 2221,
-					z = 5390,
-					facing = 3,
-				},
-				{
-					name = "hovercon",
-					x = 5785,
-					z = 6732,
-					facing = 0,
-				},
-				{
-					name = "hoverassault",
-					x = 274,
-					z = 3315,
-					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {288, 3424}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {416, 3616}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {480, 3808}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1134, 5884}},
 					},
 				},
 			}
@@ -3420,9 +3562,12 @@ local gameConfig = {
 			startUnits = {
 				{
 					name = "dynrecon1_0",
-					x = 551,
-					z = 1608,
-					facing = 3,
+					x = 1111,
+					z = 1871,
+					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1235, 1932}},
+					},
 				},
 				{
 					name = "factorytank",
@@ -3456,9 +3601,12 @@ local gameConfig = {
 				},
 				{
 					name = "tankcon",
-					x = 2580,
-					z = 3736,
-					facing = 2,
+					x = 2585,
+					z = 3072,
+					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2738, 2929}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -3474,9 +3622,12 @@ local gameConfig = {
 				},
 				{
 					name = "tankcon",
-					x = 2400,
-					z = 3558,
-					facing = 0,
+					x = 2551,
+					z = 3192,
+					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2379, 3154}},
+					},
 				},
 				{
 					name = "energywind",
@@ -3618,9 +3769,12 @@ local gameConfig = {
 				},
 				{
 					name = "tankcon",
-					x = 3269,
-					z = 4211,
-					facing = 0,
+					x = 3614,
+					z = 4092,
+					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3772, 3967}},
+					},
 				},
 				{
 					name = "staticcon",
@@ -3642,12 +3796,11 @@ local gameConfig = {
 				},
 				{
 					name = "tankassault",
-					x = 1398,
-					z = 2954,
-					facing = 0,
+					x = 1704,
+					z = 1999,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {100, 3027}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {128, 3042}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1954, 1769}},
 					},
 				},
 				{
@@ -3658,12 +3811,11 @@ local gameConfig = {
 				},
 				{
 					name = "tankassault",
-					x = 1511,
-					z = 3029,
-					facing = 3,
+					x = 2093,
+					z = 1994,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {115, 3071}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {128, 3042}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2314, 1734}},
 					},
 				},
 				{
@@ -3686,13 +3838,11 @@ local gameConfig = {
 				},
 				{
 					name = "tankheavyassault",
-					x = 3366,
-					z = 4037,
-					facing = 1,
+					x = 3154,
+					z = 4133,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3104, 4128}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2784, 4320}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2464, 4320}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3540, 3948}},
 					},
 				},
 				{
@@ -3718,10 +3868,6 @@ local gameConfig = {
 					x = 840,
 					z = 2391,
 					facing = 0,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {856, 2392}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1414, 2923}, options = {"shift"}},
-					},
 				},
 				{
 					name = "staticstorage",
@@ -3737,12 +3883,11 @@ local gameConfig = {
 				},
 				{
 					name = "tankassault",
-					x = 1368,
-					z = 2889,
-					facing = 3,
+					x = 1626,
+					z = 1997,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {159, 3052}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {128, 3042}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1879, 1794}},
 					},
 				},
 				{
@@ -3765,23 +3910,20 @@ local gameConfig = {
 				},
 				{
 					name = "tankheavyarty",
-					x = 80,
-					z = 1388,
+					x = 318,
+					z = 1550,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {80, 1387}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1440, 2912}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {63, 2695}},
 					},
 				},
 				{
 					name = "tankassault",
-					x = 3514,
-					z = 3952,
-					facing = 1,
+					x = 4675,
+					z = 4330,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3744, 4192}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4064, 4320}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4320, 4384}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4892, 4095}},
 					},
 				},
 				{
@@ -3810,12 +3952,11 @@ local gameConfig = {
 				},
 				{
 					name = "tankheavyassault",
-					x = 1306,
-					z = 2920,
-					facing = 0,
+					x = 1395,
+					z = 2138,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {150, 3018}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {128, 3042}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1529, 1820}},
 					},
 				},
 				{
@@ -3844,12 +3985,11 @@ local gameConfig = {
 				},
 				{
 					name = "tankassault",
-					x = 1641,
-					z = 3016,
-					facing = 2,
+					x = 2219,
+					z = 2108,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {155, 3059}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {128, 3042}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2485, 1897}},
 					},
 				},
 				{
@@ -3866,15 +4006,19 @@ local gameConfig = {
 				},
 				{
 					name = "tankaa",
-					x = 1512,
-					z = 2946,
-					facing = 1,
+					x = 1940,
+					z = 2397,
+					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2247, 1691}},
+					},
 				},
 				{
-					name = "staticmex",
-					x = 1704,
-					z = 2152,
+					name = "staticstorage",
+					x = 856,
+					z = 424,
 					facing = 0,
+					buildProgress = 0.0824,
 				},
 				{
 					name = "energysolar",
@@ -3908,11 +4052,11 @@ local gameConfig = {
 				},
 				{
 					name = "tankriot",
-					x = 3481,
-					z = 4079,
-					facing = 2,
+					x = 5192,
+					z = 2393,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3433, 3982}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5383, 2555}},
 					},
 				},
 				{
@@ -3959,12 +4103,11 @@ local gameConfig = {
 				},
 				{
 					name = "tankassault",
-					x = 1279,
-					z = 2859,
-					facing = 3,
+					x = 1318,
+					z = 2121,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {153, 3021}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {128, 3042}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1287, 1790}},
 					},
 				},
 				{
@@ -4011,13 +4154,11 @@ local gameConfig = {
 				},
 				{
 					name = "tankassault",
-					x = 238,
-					z = 1674,
+					x = 1102,
+					z = 2088,
 					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {544, 1952}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {864, 2144}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1184, 2464}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {956, 2249}},
 					},
 				},
 				{
@@ -4028,12 +4169,9 @@ local gameConfig = {
 				},
 				{
 					name = "bomberheavy",
-					x = 287,
-					z = 1905,
-					facing = 1,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {352, 1632}},
-					},
+					x = 640,
+					z = 1503,
+					facing = 2,
 				},
 				{
 					name = "staticcon",
@@ -4068,40 +4206,36 @@ local gameConfig = {
 				},
 				{
 					name = "tankcon",
-					x = 2464,
-					z = 3711,
+					x = 2614,
+					z = 3166,
 					facing = 2,
-				},
-				{
-					name = "tankraid",
-					x = 4468,
-					z = 3413,
-					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4512, 3488}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4704, 3616}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2689, 2990}},
 					},
 				},
 				{
 					name = "tankraid",
-					x = 4251,
-					z = 3863,
+					x = 6016,
+					z = 2584,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4256, 3872}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4320, 4064}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4512, 4064}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {6061, 2436}},
 					},
+				},
+				{
+					name = "energysingu",
+					x = 168,
+					z = 472,
+					facing = 0,
+					buildProgress = 0.0025,
 				},
 				{
 					name = "tankheavyassault",
-					x = 3434,
-					z = 4026,
-					facing = 2,
+					x = 4190,
+					z = 4306,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3744, 4192}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4064, 4320}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4320, 4384}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4507, 4012}},
 					},
 				},
 				{
@@ -4112,12 +4246,9 @@ local gameConfig = {
 				},
 				{
 					name = "bomberheavy",
-					x = 287,
-					z = 1982,
-					facing = 1,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {352, 1632}},
-					},
+					x = 272,
+					z = 1877,
+					facing = 2,
 				},
 				{
 					name = "staticrearm",
@@ -4136,6 +4267,9 @@ local gameConfig = {
 					x = 2616,
 					z = 3784,
 					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2390, 4012}},
+					},
 				},
 				{
 					name = "turretriot",
@@ -4145,13 +4279,11 @@ local gameConfig = {
 				},
 				{
 					name = "tankassault",
-					x = 3444,
-					z = 3959,
-					facing = 0,
+					x = 4927,
+					z = 4144,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3744, 4192}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4064, 4320}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4320, 4384}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5120, 3855}},
 					},
 				},
 				{
@@ -4168,13 +4300,11 @@ local gameConfig = {
 				},
 				{
 					name = "tankassault",
-					x = 2642,
-					z = 3922,
+					x = 3104,
+					z = 4031,
 					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3744, 4192}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4064, 4320}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4320, 4384}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3411, 3859}},
 					},
 				},
 				{
@@ -4189,20 +4319,9 @@ local gameConfig = {
 					z = 1124,
 					facing = 2,
 					buildProgress = 0.62129998,
-				},
-				{
-					name = "energysingu",
-					x = 168,
-					z = 472,
-					facing = 0,
-					buildProgress = 0.0025,
-				},
-				{
-					name = "staticstorage",
-					x = 856,
-					z = 424,
-					facing = 0,
-					buildProgress = 0.0824,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1533, 1971}},
+					},
 				},
 			}
 		},
@@ -4215,9 +4334,12 @@ local gameConfig = {
 			startUnits = {
 				{
 					name = "dynrecon1_0",
-					x = 4900,
-					z = 1207,
-					facing = 2,
+					x = 4832,
+					z = 1902,
+					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4636, 2252}},
+					},
 				},
 				{
 					name = "factoryshield",
@@ -4234,7 +4356,7 @@ local gameConfig = {
 				{
 					name = "shieldcon",
 					x = 1840,
-					z = 3007,
+					z = 3006,
 					facing = 2,
 				},
 				{
@@ -4281,8 +4403,8 @@ local gameConfig = {
 				},
 				{
 					name = "shieldcon",
-					x = 4342,
-					z = 4226,
+					x = 4359,
+					z = 4162,
 					facing = 3,
 				},
 				{
@@ -4302,6 +4424,9 @@ local gameConfig = {
 					x = 4736,
 					z = 1024,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4838, 1063}},
+					},
 				},
 				{
 					name = "turretlaser",
@@ -4323,11 +4448,11 @@ local gameConfig = {
 				},
 				{
 					name = "shieldarty",
-					x = 3315,
-					z = 4848,
-					facing = 0,
+					x = 4455,
+					z = 4367,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3296, 4896}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5199, 3846}},
 					},
 				},
 				{
@@ -4350,11 +4475,11 @@ local gameConfig = {
 				},
 				{
 					name = "shieldarty",
-					x = 3273,
-					z = 4874,
+					x = 4708,
+					z = 2449,
 					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3296, 4896}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5624, 2390}},
 					},
 				},
 				{
@@ -4386,6 +4511,9 @@ local gameConfig = {
 					x = 4624,
 					z = 864,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4903, 781}},
+					},
 				},
 				{
 					name = "staticmex",
@@ -4398,12 +4526,18 @@ local gameConfig = {
 					x = 1456,
 					z = 2864,
 					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1544, 2815}},
+					},
 				},
 				{
 					name = "turretlaser",
 					x = 4736,
 					z = 1200,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5029, 1096}},
+					},
 				},
 				{
 					name = "energywind",
@@ -4413,12 +4547,9 @@ local gameConfig = {
 				},
 				{
 					name = "shieldshield",
-					x = 3445,
-					z = 4474,
+					x = 3509,
+					z = 4465,
 					facing = 0,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3182, 4939}},
-					},
 				},
 				{
 					name = "staticcon",
@@ -4449,6 +4580,9 @@ local gameConfig = {
 					x = 1288,
 					z = 3000,
 					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {959, 3060}},
+					},
 				},
 				{
 					name = "staticcon",
@@ -4475,16 +4609,22 @@ local gameConfig = {
 					facing = 0,
 				},
 				{
-					name = "energysolar",
-					x = 5576,
-					z = 2296,
-					facing = 3,
+					name = "shieldassault",
+					x = 4105,
+					z = 4070,
+					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4367, 3943}},
+					},
 				},
 				{
 					name = "turretriot",
 					x = 3800,
 					z = 2696,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4138, 2752}},
+					},
 				},
 				{
 					name = "staticcon",
@@ -4497,26 +4637,29 @@ local gameConfig = {
 					x = 3551,
 					z = 4271,
 					facing = 2,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3183, 4937}},
-					},
 				},
 				{
 					name = "turretgauss",
 					x = 1656,
 					z = 3368,
 					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2113, 3456}},
+					},
 				},
 				{
 					name = "shieldscout",
-					x = 3320,
-					z = 4934,
-					facing = 3,
+					x = 4724,
+					z = 4075,
+					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4737, 4062}},
+					},
 				},
 				{
 					name = "shieldcon",
-					x = 449,
-					z = 2073,
+					x = 455,
+					z = 2050,
 					facing = 3,
 				},
 				{
@@ -4524,12 +4667,18 @@ local gameConfig = {
 					x = 6016,
 					z = 2896,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {6132, 2710}},
+					},
 				},
 				{
 					name = "turretlaser",
 					x = 3952,
 					z = 2864,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4108, 2906}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -4560,6 +4709,9 @@ local gameConfig = {
 					x = 1472,
 					z = 3216,
 					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1275, 3287}},
+					},
 				},
 				{
 					name = "turretmissile",
@@ -4587,11 +4739,11 @@ local gameConfig = {
 				},
 				{
 					name = "shieldarty",
-					x = 3352,
-					z = 4896,
-					facing = 3,
+					x = 3914,
+					z = 4608,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3296, 4896}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4659, 4052}},
 					},
 				},
 				{
@@ -4644,9 +4796,12 @@ local gameConfig = {
 				},
 				{
 					name = "shieldriot",
-					x = 4863,
-					z = 4607,
-					facing = 3,
+					x = 5336,
+					z = 3929,
+					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5486, 3725}},
+					},
 				},
 				{
 					name = "staticstorage",
@@ -4656,12 +4811,9 @@ local gameConfig = {
 				},
 				{
 					name = "shieldshield",
-					x = 3263,
-					z = 4901,
+					x = 3278,
+					z = 4870,
 					facing = 3,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3215, 4902}},
-					},
 				},
 				{
 					name = "energysolar",
@@ -4671,9 +4823,12 @@ local gameConfig = {
 				},
 				{
 					name = "shieldscout",
-					x = 4690,
-					z = 4609,
-					facing = 1,
+					x = 5136,
+					z = 4134,
+					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5126, 4118}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -4710,6 +4865,9 @@ local gameConfig = {
 					x = 4144,
 					z = 2624,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4163, 2677}},
+					},
 				},
 				{
 					name = "staticcon",
@@ -4722,23 +4880,26 @@ local gameConfig = {
 					x = 5720,
 					z = 3816,
 					facing = 3,
-				},
-				{
-					name = "shieldassault",
-					x = 4936,
-					z = 4526,
-					facing = 3,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4824, 4593}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5999, 3359}},
 					},
 				},
 				{
 					name = "shieldassault",
-					x = 4857,
-					z = 4517,
-					facing = 0,
+					x = 5409,
+					z = 3982,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4824, 4591}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5580, 3821}},
+					},
+				},
+				{
+					name = "shieldassault",
+					x = 5208,
+					z = 4188,
+					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5369, 4388}},
 					},
 				},
 				{
@@ -4752,6 +4913,9 @@ local gameConfig = {
 					x = 1400,
 					z = 3384,
 					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1578, 3592}},
+					},
 				},
 				{
 					name = "turretlaser",
@@ -4767,11 +4931,11 @@ local gameConfig = {
 				},
 				{
 					name = "shieldarty",
-					x = 3332,
-					z = 4867,
-					facing = 0,
+					x = 5582,
+					z = 3264,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3296, 4896}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {6078, 2504}},
 					},
 				},
 				{
@@ -4793,34 +4957,37 @@ local gameConfig = {
 					facing = 0,
 				},
 				{
-					name = "shieldassault",
-					x = 4894,
-					z = 4494,
-					facing = 0,
+					name = "shieldarty",
+					x = 3839,
+					z = 4689,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4824, 4593}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4432, 3987}},
 					},
 				},
 				{
 					name = "shieldcon",
-					x = 3012,
-					z = 3506,
+					x = 3009,
+					z = 3483,
 					facing = 3,
 				},
 				{
 					name = "shieldarty",
-					x = 3265,
-					z = 4822,
-					facing = 0,
+					x = 5516,
+					z = 3267,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3168, 4960}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5856, 2434}},
 					},
 				},
 				{
 					name = "shieldscout",
-					x = 4746,
-					z = 4519,
-					facing = 3,
+					x = 5322,
+					z = 3819,
+					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5350, 3805}},
+					},
 				},
 				{
 					name = "shieldcon",
@@ -4839,12 +5006,18 @@ local gameConfig = {
 					x = 1672,
 					z = 3208,
 					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2113, 3456}},
+					},
 				},
 				{
 					name = "turretgauss",
 					x = 5704,
 					z = 3976,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {6061, 3310}},
+					},
 				},
 				{
 					name = "staticmex",
@@ -4866,13 +5039,11 @@ local gameConfig = {
 				},
 				{
 					name = "shieldfelon",
-					x = 3490,
-					z = 4928,
-					facing = 3,
+					x = 4640,
+					z = 4291,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3040, 4960}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2912, 4960}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2784, 4960}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4968, 4113}},
 					},
 				},
 				{
@@ -4886,11 +5057,14 @@ local gameConfig = {
 					x = 1456,
 					z = 3040,
 					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1554, 2974}},
+					},
 				},
 				{
 					name = "shieldshield",
-					x = 3225,
-					z = 4890,
+					x = 3304,
+					z = 4751,
 					facing = 3,
 				},
 				{
@@ -4898,6 +5072,9 @@ local gameConfig = {
 					x = 3800,
 					z = 2776,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3850, 3254}},
+					},
 				},
 				{
 					name = "shieldcon",
@@ -4930,18 +5107,18 @@ local gameConfig = {
 					facing = 0,
 				},
 				{
-					name = "turretlaser",
-					x = 1648,
-					z = 2960,
+					name = "staticcon",
+					x = 1592,
+					z = 3208,
 					facing = 1,
 				},
 				{
 					name = "shieldassault",
-					x = 3152,
-					z = 4948,
+					x = 4024,
+					z = 3862,
 					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3205, 4902}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4301, 3804}},
 					},
 				},
 				{
@@ -4952,22 +5129,17 @@ local gameConfig = {
 				},
 				{
 					name = "shieldshield",
-					x = 3257,
-					z = 4848,
+					x = 3544,
+					z = 4462,
 					facing = 2,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3360, 4704}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3488, 4576}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3552, 4448}, options = {"shift"}},
-					},
 				},
 				{
 					name = "shieldriot",
-					x = 4792,
-					z = 4528,
-					facing = 1,
+					x = 5320,
+					z = 3979,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4824, 4593}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5419, 3766}},
 					},
 				},
 				{
@@ -4975,6 +5147,9 @@ local gameConfig = {
 					x = 1656,
 					z = 3288,
 					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1420, 3670}},
+					},
 				},
 				{
 					name = "turretaalaser",
@@ -4996,26 +5171,29 @@ local gameConfig = {
 				},
 				{
 					name = "shieldassault",
-					x = 4827,
-					z = 4558,
-					facing = 0,
-				},
-				{
-					name = "shieldarty",
-					x = 3246,
-					z = 4884,
-					facing = 1,
+					x = 5975,
+					z = 3244,
+					facing = 3,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3296, 4896}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {6131, 3026}},
 					},
 				},
 				{
 					name = "shieldarty",
-					x = 3286,
-					z = 4853,
-					facing = 0,
+					x = 3529,
+					z = 4340,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3296, 4896}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4323, 3878}},
+					},
+				},
+				{
+					name = "shieldarty",
+					x = 4071,
+					z = 4359,
+					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4810, 3806}},
 					},
 				},
 				{
@@ -5029,6 +5207,9 @@ local gameConfig = {
 					x = 1784,
 					z = 3112,
 					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1996, 3113}},
+					},
 				},
 				{
 					name = "staticcon",
@@ -5038,28 +5219,30 @@ local gameConfig = {
 				},
 				{
 					name = "hoverassault",
-					x = 4748,
-					z = 4026,
-					facing = 1,
+					x = 5790,
+					z = 3584,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4896, 4064}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {5088, 4000}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5873, 3455}},
 					},
 				},
 				{
 					name = "shieldassault",
-					x = 4858,
-					z = 4563,
-					facing = 3,
+					x = 5858,
+					z = 3664,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4824, 4593}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5936, 3406}},
 					},
 				},
 				{
 					name = "shieldscout",
-					x = 4685,
-					z = 4546,
+					x = 5011,
+					z = 4132,
 					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5047, 4118}},
+					},
 				},
 				{
 					name = "turretlaser",
@@ -5087,22 +5270,20 @@ local gameConfig = {
 				},
 				{
 					name = "shieldfelon",
-					x = 3533,
-					z = 4739,
-					facing = 0,
+					x = 4397,
+					z = 4042,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3040, 4960}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2912, 4960}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2784, 4960}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4735, 3782}},
 					},
 				},
 				{
 					name = "shieldassault",
-					x = 4698,
-					z = 4510,
-					facing = 0,
+					x = 5341,
+					z = 3848,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4767, 4614}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5548, 3676}},
 					},
 				},
 				{
@@ -5119,24 +5300,30 @@ local gameConfig = {
 				},
 				{
 					name = "shieldassault",
-					x = 4805,
-					z = 4472,
-					facing = 0,
+					x = 5047,
+					z = 4238,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4824, 4593}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5072, 4429}},
 					},
 				},
 				{
 					name = "shieldscout",
-					x = 3588,
-					z = 3368,
+					x = 4015,
+					z = 3512,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4045, 3534}},
+					},
 				},
 				{
 					name = "turretmissile",
 					x = 3456,
 					z = 3552,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3474, 3907}},
+					},
 				},
 				{
 					name = "turretriot",
@@ -5146,11 +5333,11 @@ local gameConfig = {
 				},
 				{
 					name = "shieldarty",
-					x = 3261,
-					z = 4930,
+					x = 3724,
+					z = 4146,
 					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3296, 4896}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4522, 3680}},
 					},
 				},
 				{
@@ -5158,35 +5345,33 @@ local gameConfig = {
 					x = 1736,
 					z = 3288,
 					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1733, 3623}},
+					},
 				},
 				{
 					name = "shieldassault",
-					x = 4877,
-					z = 4591,
-					facing = 3,
+					x = 5744,
+					z = 3947,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4824, 4591}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5984, 4100}},
 					},
 				},
 				{
-					name = "shieldskirm",
-					x = 3339,
-					z = 4918,
-					facing = 2,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3299, 4875}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3426, 4967}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3837, 5258}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3866, 5244}, options = {"shift"}},
-					},
+					name = "staticshield",
+					x = 1824,
+					z = 2912,
+					facing = 1,
+					buildProgress = 0.28600001,
 				},
 				{
 					name = "shieldarty",
-					x = 3303,
-					z = 4871,
-					facing = 0,
+					x = 4053,
+					z = 4566,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3296, 4896}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4815, 4077}},
 					},
 				},
 				{
@@ -5194,24 +5379,36 @@ local gameConfig = {
 					x = 5640,
 					z = 3864,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {6130, 3105}},
+					},
 				},
 				{
 					name = "shieldarty",
-					x = 3286,
-					z = 4919,
+					x = 4026,
+					z = 4405,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4667, 3744}},
+					},
 				},
 				{
-					name = "staticcon",
-					x = 1768,
-					z = 2984,
+					name = "turretlaser",
+					x = 1824,
+					z = 3456,
 					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2079, 3658}},
+					},
 				},
 				{
 					name = "shieldscout",
-					x = 4704,
-					z = 4561,
-					facing = 2,
+					x = 6098,
+					z = 2802,
+					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {6131, 2789}},
+					},
 				},
 				{
 					name = "shieldskirm",
@@ -5219,8 +5416,7 @@ local gameConfig = {
 					z = 3530,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3488, 3616}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3488, 3744}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3981, 3759}},
 					},
 				},
 				{
@@ -5231,11 +5427,11 @@ local gameConfig = {
 				},
 				{
 					name = "shieldarty",
-					x = 3237,
-					z = 4909,
-					facing = 1,
+					x = 3749,
+					z = 4233,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3296, 4896}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4454, 3642}},
 					},
 				},
 				{
@@ -5243,16 +5439,17 @@ local gameConfig = {
 					x = 3720,
 					z = 2776,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3640, 3248}},
+					},
 				},
 				{
 					name = "shieldaa",
-					x = 2603,
-					z = 3652,
+					x = 2961,
+					z = 3616,
 					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2720, 3616}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2848, 3616}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2976, 3616}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3330, 3638}},
 					},
 				},
 				{
@@ -5269,11 +5466,11 @@ local gameConfig = {
 				},
 				{
 					name = "shieldassault",
-					x = 4891,
-					z = 4543,
-					facing = 0,
+					x = 5749,
+					z = 4052,
+					facing = 3,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4822, 4618}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5701, 4318}},
 					},
 				},
 				{
@@ -5282,6 +5479,9 @@ local gameConfig = {
 					z = 2456,
 					facing = 0,
 					buildProgress = 0.23029999,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4208, 2525}},
+					},
 				},
 				{
 					name = "turretlaser",
@@ -5291,21 +5491,20 @@ local gameConfig = {
 				},
 				{
 					name = "shieldarty",
-					x = 3234,
-					z = 4864,
+					x = 5496,
+					z = 3288,
 					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3296, 4896}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5778, 2425}},
 					},
 				},
 				{
 					name = "hoverassault",
-					x = 4713,
-					z = 3987,
-					facing = 0,
+					x = 5162,
+					z = 3932,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4896, 4064}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {5088, 4000}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5277, 3833}},
 					},
 				},
 				{
@@ -5320,6 +5519,9 @@ local gameConfig = {
 					z = 3712,
 					facing = 0,
 					buildProgress = 0.36849999,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3946, 3830}},
+					},
 				},
 				{
 					name = "energysingu",
@@ -5330,9 +5532,12 @@ local gameConfig = {
 				},
 				{
 					name = "shieldarty",
-					x = 3295,
-					z = 4893,
-					facing = 0,
+					x = 3961,
+					z = 4674,
+					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4582, 4037}},
+					},
 				},
 				{
 					name = "turretlaser",
@@ -5357,17 +5562,17 @@ local gameConfig = {
 					x = 5608,
 					z = 3784,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5809, 3499}},
+					},
 				},
 				{
 					name = "shieldskirm",
-					x = 4742,
-					z = 4616,
-					facing = 3,
+					x = 4874,
+					z = 4517,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4752, 4573}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4640, 4640}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4512, 4640}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4384, 4768}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5203, 4105}},
 					},
 				},
 				{
@@ -5375,14 +5580,17 @@ local gameConfig = {
 					x = 3632,
 					z = 3536,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4016, 3688}},
+					},
 				},
 				{
 					name = "shieldassault",
-					x = 4854,
-					z = 4474,
-					facing = 0,
+					x = 5397,
+					z = 3792,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4824, 4593}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5610, 3627}},
 					},
 				},
 				{
@@ -5392,54 +5600,60 @@ local gameConfig = {
 					facing = 0,
 				},
 				{
-					name = "shieldskirm",
-					x = 3195,
-					z = 5066,
-					facing = 0,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3208, 5000}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3881, 5273}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3866, 5244}, options = {"shift"}},
-					},
+					name = "turretriot",
+					x = 488,
+					z = 2040,
+					facing = 1,
+					buildProgress = 0.63099998,
 				},
 				{
 					name = "shieldassault",
-					x = 4773,
-					z = 4509,
-					facing = 0,
+					x = 5470,
+					z = 3756,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4823, 4603}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5672, 3578}},
 					},
 				},
 				{
 					name = "shieldcon",
-					x = 4095,
-					z = 4117,
+					x = 4104,
+					z = 4118,
 					facing = 0,
 				},
 				{
-					name = "shieldcon",
-					x = 4148,
-					z = 2577,
-					facing = 2,
+					name = "turretgauss",
+					x = 4376,
+					z = 3000,
+					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4705, 3195}},
+					},
 				},
 				{
 					name = "shieldcon",
-					x = 3306,
-					z = 4196,
+					x = 3299,
+					z = 4188,
 					facing = 0,
 				},
 				{
-					name = "shieldcon",
-					x = 5695,
-					z = 4050,
-					facing = 2,
+					name = "shieldfelon",
+					x = 4544,
+					z = 1124,
+					facing = 0,
+					buildProgress = 0.0102,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4480, 2275}},
+					},
 				},
 				{
 					name = "turretgauss",
 					x = 3944,
 					z = 3048,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4079, 3141}},
+					},
 				},
 				{
 					name = "hoverraid",
@@ -5447,14 +5661,17 @@ local gameConfig = {
 					z = 1840,
 					facing = 0,
 					buildProgress = 0.70410001,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3313, 3481}},
+					},
 				},
 				{
 					name = "shieldassault",
-					x = 4753,
-					z = 4467,
-					facing = 0,
+					x = 5162,
+					z = 4234,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4824, 4593}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5227, 4436}},
 					},
 				},
 				{
@@ -5462,26 +5679,35 @@ local gameConfig = {
 					x = 3760,
 					z = 2944,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4083, 3062}},
+					},
 				},
 				{
 					name = "turretriot",
 					x = 3864,
 					z = 3112,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4075, 3220}},
+					},
 				},
 				{
 					name = "hoverriot",
-					x = 4056,
-					z = 1891,
-					facing = 2,
+					x = 3464,
+					z = 3279,
+					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3319, 3560}},
+					},
 				},
 				{
 					name = "shieldassault",
-					x = 4823,
-					z = 4510,
-					facing = 0,
+					x = 5336,
+					z = 4032,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4824, 4593}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5521, 4198}},
 					},
 				},
 				{
@@ -5498,42 +5724,35 @@ local gameConfig = {
 				},
 				{
 					name = "shieldraid",
-					x = 3004,
-					z = 2167,
-					facing = 3,
+					x = 2985,
+					z = 2209,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2912, 2208}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2784, 2272}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2952, 2420}},
 					},
 				},
 				{
 					name = "shieldshield",
-					x = 3208,
-					z = 4908,
+					x = 3274,
+					z = 4848,
 					facing = 3,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3198, 4906}},
-					},
 				},
 				{
 					name = "hoverassault",
-					x = 4784,
-					z = 3809,
+					x = 5931,
+					z = 2833,
 					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4960, 3808}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {5152, 3808}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {5344, 3872}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {6131, 2868}},
 					},
 				},
 				{
 					name = "shieldskirm",
-					x = 3186,
-					z = 4931,
+					x = 4103,
+					z = 3889,
 					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3874, 5275}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3866, 5244}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4595, 3712}},
 					},
 				},
 				{
@@ -5547,18 +5766,27 @@ local gameConfig = {
 					x = 3488,
 					z = 3376,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3379, 3787}},
+					},
 				},
 				{
 					name = "turretriot",
 					x = 4248,
 					z = 2984,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4541, 2863}},
+					},
 				},
 				{
 					name = "shieldscout",
-					x = 3150,
-					z = 4820,
-					facing = 0,
+					x = 5384,
+					z = 2323,
+					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5402, 2312}},
+					},
 				},
 				{
 					name = "staticstorage",
@@ -5574,19 +5802,21 @@ local gameConfig = {
 				},
 				{
 					name = "shieldscout",
-					x = 3123,
-					z = 4980,
-					facing = 0,
+					x = 5693,
+					z = 2431,
+					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5700, 2412}},
+					},
 				},
 				{
-					name = "shieldfelon",
-					x = 3184,
-					z = 5151,
+					name = "turretriot",
+					x = 5624,
+					z = 3960,
 					facing = 3,
+					buildProgress = 0.1568,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3168, 5024}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3168, 4896}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3296, 4768}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5791, 3721}},
 					},
 				},
 				{
@@ -5594,12 +5824,18 @@ local gameConfig = {
 					x = 4336,
 					z = 2816,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4546, 2815}},
+					},
 				},
 				{
 					name = "turretaalaser",
 					x = 5720,
 					z = 3896,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {6130, 3184}},
+					},
 				},
 				{
 					name = "turretmissile",
@@ -5609,11 +5845,11 @@ local gameConfig = {
 				},
 				{
 					name = "shieldarty",
-					x = 3326,
-					z = 4889,
-					facing = 0,
+					x = 4281,
+					z = 4400,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3296, 4896}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5042, 3854}},
 					},
 				},
 				{
@@ -5630,57 +5866,29 @@ local gameConfig = {
 				},
 				{
 					name = "shieldassault",
-					x = 3168,
-					z = 4900,
-					facing = 0,
+					x = 4087,
+					z = 3856,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3202, 4923}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4307, 3725}},
 					},
 				},
 				{
 					name = "shieldraid",
-					x = 3329,
+					x = 3330,
 					z = 3186,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3296, 3104}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3232, 2976}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3469, 3244}},
 					},
 				},
 				{
 					name = "shieldassault",
-					x = 3196,
-					z = 4861,
-					facing = 0,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3195, 4902}},
-					},
-				},
-				{
-					name = "turretmissile",
-					x = 4096,
-					z = 3136,
-					facing = 0,
-				},
-				{
-					name = "staticcon",
-					x = 1592,
-					z = 3208,
+					x = 4130,
+					z = 3853,
 					facing = 1,
-				},
-				{
-					name = "turretlaser",
-					x = 1824,
-					z = 3456,
-					facing = 1,
-				},
-				{
-					name = "shieldarty",
-					x = 3360,
-					z = 4868,
-					facing = 3,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3296, 4896}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4324, 3649}},
 					},
 				},
 				{
@@ -5688,55 +5896,9 @@ local gameConfig = {
 					x = 4272,
 					z = 3152,
 					facing = 0,
-				},
-				{
-					name = "shieldassault",
-					x = 3218,
-					z = 4944,
-					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3202, 4902}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4295, 3464}},
 					},
-				},
-				{
-					name = "shieldscout",
-					x = 3320,
-					z = 4912,
-					facing = 3,
-				},
-				{
-					name = "shieldfelon",
-					x = 4544,
-					z = 1124,
-					facing = 0,
-					buildProgress = 0.0102,
-				},
-				{
-					name = "turretgauss",
-					x = 4376,
-					z = 3000,
-					facing = 0,
-				},
-				{
-					name = "turretriot",
-					x = 488,
-					z = 2040,
-					facing = 1,
-					buildProgress = 0.63099998,
-				},
-				{
-					name = "staticshield",
-					x = 1824,
-					z = 2912,
-					facing = 1,
-					buildProgress = 0.28600001,
-				},
-				{
-					name = "turretriot",
-					x = 5624,
-					z = 3960,
-					facing = 3,
-					buildProgress = 0.1568,
 				},
 			}
 		},
@@ -5749,9 +5911,12 @@ local gameConfig = {
 			startUnits = {
 				{
 					name = "dynrecon1_0",
-					x = 920,
-					z = 7218,
+					x = 1958,
+					z = 7119,
 					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2350, 7059}},
+					},
 				},
 				{
 					name = "factorytank",
@@ -5761,8 +5926,8 @@ local gameConfig = {
 				},
 				{
 					name = "tankcon",
-					x = 1323,
-					z = 4405,
+					x = 1427,
+					z = 4633,
 					facing = 2,
 				},
 				{
@@ -5784,9 +5949,9 @@ local gameConfig = {
 					facing = 2,
 				},
 				{
-					name = "tankcon",
-					x = 641,
-					z = 3252,
+					name = "staticcon",
+					x = 632,
+					z = 7224,
 					facing = 2,
 				},
 				{
@@ -5800,6 +5965,9 @@ local gameConfig = {
 					x = 536,
 					z = 6344,
 					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1871, 6407}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -5839,13 +6007,11 @@ local gameConfig = {
 				},
 				{
 					name = "tankassault",
-					x = 705,
-					z = 3903,
-					facing = 1,
+					x = 1591,
+					z = 5625,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {864, 4192}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1184, 4192}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1504, 4320}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1349, 5783}},
 					},
 				},
 				{
@@ -5866,10 +6032,10 @@ local gameConfig = {
 					z = 7016,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {232, 7016}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {232, 7016}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.PATROL, pos = {485, 6529}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {485, 6529}},
 						{cmdID = planetUtilities.COMMAND.PATROL, pos = {232, 7016}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {232, 7016}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {485, 6529}, options = {"shift"}},
 					},
 				},
 				{
@@ -5919,6 +6085,9 @@ local gameConfig = {
 					x = 808,
 					z = 6824,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2122, 7131}},
+					},
 				},
 				{
 					name = "staticmex",
@@ -5944,20 +6113,19 @@ local gameConfig = {
 					z = 7080,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {200, 7080}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {200, 7080}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.PATROL, pos = {485, 6529}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {485, 6529}},
 						{cmdID = planetUtilities.COMMAND.PATROL, pos = {200, 7080}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {200, 7080}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {485, 6529}, options = {"shift"}},
 					},
 				},
 				{
 					name = "tankheavyarty",
-					x = 567,
-					z = 4490,
-					facing = 2,
+					x = 452,
+					z = 4736,
+					facing = 3,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {525, 4486}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {550, 4188}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1326, 4210}},
 					},
 				},
 				{
@@ -5980,8 +6148,8 @@ local gameConfig = {
 				},
 				{
 					name = "turretheavylaser",
-					x = 1656,
-					z = 7128,
+					x = 1992,
+					z = 6280,
 					facing = 2,
 				},
 				{
@@ -5989,12 +6157,18 @@ local gameConfig = {
 					x = 2744,
 					z = 5624,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2620, 5307}},
+					},
 				},
 				{
 					name = "tankcon",
-					x = 529,
-					z = 5086,
-					facing = 2,
+					x = 848,
+					z = 5781,
+					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1019, 5918}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -6004,13 +6178,11 @@ local gameConfig = {
 				},
 				{
 					name = "tankassault",
-					x = 610,
-					z = 4123,
-					facing = 1,
+					x = 1906,
+					z = 5659,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {864, 4192}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1184, 4192}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1504, 4320}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1989, 5954}},
 					},
 				},
 				{
@@ -6019,38 +6191,37 @@ local gameConfig = {
 					z = 7192,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {264, 7192}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {264, 7192}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.PATROL, pos = {485, 6529}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {485, 6529}},
 						{cmdID = planetUtilities.COMMAND.PATROL, pos = {264, 7192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {264, 7192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {485, 6529}, options = {"shift"}},
 					},
 				},
 				{
 					name = "tankassault",
-					x = 493,
-					z = 4343,
-					facing = 1,
+					x = 485,
+					z = 5648,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {864, 4192}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1184, 4192}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1504, 4320}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {542, 5969}},
 					},
 				},
 				{
 					name = "tankcon",
-					x = 1701,
-					z = 5811,
-					facing = 2,
+					x = 2815,
+					z = 6136,
+					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2975, 6280}},
+					},
 				},
 				{
 					name = "tankassault",
-					x = 518,
-					z = 3672,
-					facing = 3,
+					x = 544,
+					z = 5661,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {864, 4192}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1184, 4192}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1504, 4320}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {585, 6010}},
 					},
 				},
 				{
@@ -6065,10 +6236,10 @@ local gameConfig = {
 					z = 7080,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {152, 7080}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {152, 7080}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.PATROL, pos = {485, 6529}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {485, 6529}},
 						{cmdID = planetUtilities.COMMAND.PATROL, pos = {152, 7080}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {152, 7080}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {485, 6529}, options = {"shift"}},
 					},
 				},
 				{
@@ -6094,6 +6265,9 @@ local gameConfig = {
 					x = 4924,
 					z = 5281,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5005, 5798}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -6106,6 +6280,9 @@ local gameConfig = {
 					x = 1608,
 					z = 6056,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3001, 6333}},
+					},
 				},
 				{
 					name = "turretmissile",
@@ -6155,31 +6332,28 @@ local gameConfig = {
 					z = 7208,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {216, 7208}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {216, 7208}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.PATROL, pos = {485, 6529}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {485, 6529}},
 						{cmdID = planetUtilities.COMMAND.PATROL, pos = {216, 7208}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {216, 7208}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {485, 6529}, options = {"shift"}},
 					},
 				},
 				{
 					name = "tankassault",
-					x = 468,
-					z = 4189,
-					facing = 2,
+					x = 1455,
+					z = 6389,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {864, 4192}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1184, 4192}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1504, 4320}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1309, 6610}},
 					},
 				},
 				{
 					name = "tankarty",
 					x = 593,
 					z = 6546,
-					facing = 3,
-					patrolRoute = {
-						{584, 6504},
-						{315, 6720},
+					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2266, 6269}},
 					},
 				},
 				{
@@ -6195,16 +6369,22 @@ local gameConfig = {
 					facing = 2,
 				},
 				{
-					name = "tankcon",
-					x = 576,
-					z = 3211,
-					facing = 2,
+					name = "tankassault",
+					x = 1293,
+					z = 6363,
+					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1268, 6654}},
+					},
 				},
 				{
 					name = "tankcon",
-					x = 1756,
-					z = 6411,
-					facing = 3,
+					x = 3325,
+					z = 6373,
+					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3405, 6531}},
+					},
 				},
 				{
 					name = "staticstorage",
@@ -6237,10 +6417,11 @@ local gameConfig = {
 					facing = 2,
 				},
 				{
-					name = "tankcon",
-					x = 503,
-					z = 3217,
-					facing = 1,
+					name = "energyfusion",
+					x = 1016,
+					z = 7312,
+					facing = 2,
+					buildProgress = 0.94129997,
 				},
 				{
 					name = "energyfusion",
@@ -6250,20 +6431,18 @@ local gameConfig = {
 				},
 				{
 					name = "tankheavyassault",
-					x = 614,
-					z = 3057,
-					facing = 3,
+					x = 416,
+					z = 4336,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {480, 3424}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {416, 3744}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {736, 4064}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {283, 4755}},
 					},
 				},
 				{
-					name = "tankcon",
-					x = 690,
-					z = 3235,
-					facing = 2,
+					name = "turretmissile",
+					x = 496,
+					z = 6176,
+					facing = 1,
 				},
 				{
 					name = "energypylon",
@@ -6278,10 +6457,10 @@ local gameConfig = {
 					facing = 2,
 				},
 				{
-					name = "tankaa",
-					x = 630,
-					z = 3203,
-					facing = 2,
+					name = "tankriot",
+					x = 416,
+					z = 6982,
+					facing = 0,
 				},
 				{
 					name = "staticcon",
@@ -6315,13 +6494,11 @@ local gameConfig = {
 				},
 				{
 					name = "tankassault",
-					x = 605,
-					z = 4192,
-					facing = 1,
+					x = 1645,
+					z = 6110,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {864, 4192}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1184, 4192}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1504, 4320}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1486, 5942}},
 					},
 				},
 				{
@@ -6335,6 +6512,9 @@ local gameConfig = {
 					x = 5384,
 					z = 5592,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5401, 5930}},
+					},
 				},
 				{
 					name = "staticcon",
@@ -6359,17 +6539,23 @@ local gameConfig = {
 					x = 2824,
 					z = 5656,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2970, 5387}},
+					},
 				},
 				{
 					name = "turretriot",
 					x = 760,
 					z = 7416,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2294, 7079}},
+					},
 				},
 				{
 					name = "tankarty",
-					x = 504,
-					z = 6515,
+					x = 494,
+					z = 6521,
 					facing = 1,
 					patrolRoute = {
 						{327, 6728},
@@ -6378,13 +6564,11 @@ local gameConfig = {
 				},
 				{
 					name = "tankassault",
-					x = 355,
-					z = 6218,
-					facing = 2,
+					x = 1221,
+					z = 6589,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {544, 5984}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {608, 5664}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {672, 5344}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1361, 6883}},
 					},
 				},
 				{
@@ -6398,22 +6582,26 @@ local gameConfig = {
 					x = 600,
 					z = 6600,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2478, 6106}},
+					},
 				},
 				{
 					name = "turretriot",
 					x = 3832,
 					z = 5848,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4585, 5568}},
+					},
 				},
 				{
 					name = "tankraid",
-					x = 777,
-					z = 4179,
-					facing = 1,
+					x = 422,
+					z = 6315,
+					facing = 3,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {800, 4192}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {992, 4384}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1184, 4576}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {271, 6320}},
 					},
 				},
 				{
@@ -6423,21 +6611,19 @@ local gameConfig = {
 					facing = 2,
 				},
 				{
-					name = "tankcon",
-					x = 591,
-					z = 3258,
-					facing = 2,
+					name = "tankaa",
+					x = 501,
+					z = 4536,
+					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {346, 5170}},
+					},
 				},
 				{
 					name = "tankheavyassault",
-					x = 677,
-					z = 3143,
-					facing = 3,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {416, 3424}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {352, 3744}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {352, 4064}, options = {"shift"}},
-					},
+					x = 351,
+					z = 4053,
+					facing = 0,
 				},
 				{
 					name = "turretmissile",
@@ -6453,87 +6639,12 @@ local gameConfig = {
 				},
 				{
 					name = "tankaa",
-					x = 585,
-					z = 4271,
-					facing = 2,
-				},
-				{
-					name = "tankaa",
-					x = 537,
-					z = 4259,
-					facing = 2,
-				},
-				{
-					name = "energyfusion",
-					x = 1016,
-					z = 7312,
-					facing = 2,
-					buildProgress = 0.94129997,
-				},
-				{
-					name = "turretheavylaser",
-					x = 1992,
-					z = 6280,
-					facing = 2,
-				},
-				{
-					name = "tankcon",
-					x = 542,
-					z = 3248,
-					facing = 2,
-				},
-				{
-					name = "staticcon",
-					x = 632,
-					z = 7224,
-					facing = 2,
-				},
-				{
-					name = "tankassault",
-					x = 663,
-					z = 3782,
-					facing = 1,
+					x = 464,
+					z = 4558,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {864, 4192}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1184, 4192}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1504, 4320}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {355, 5289}},
 					},
-				},
-				{
-					name = "tankraid",
-					x = 159,
-					z = 2457,
-					facing = 2,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {160, 2336}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {160, 2144}, options = {"shift"}},
-					},
-				},
-				{
-					name = "turretmissile",
-					x = 496,
-					z = 6176,
-					facing = 1,
-				},
-				{
-					name = "turretriot",
-					x = 1960,
-					z = 6392,
-					facing = 2,
-				},
-				{
-					name = "tankriot",
-					x = 272,
-					z = 6900,
-					facing = 2,
-					buildProgress = 0.70060003,
-				},
-				{
-					name = "staticcon",
-					x = 1608,
-					z = 6424,
-					facing = 2,
-					buildProgress = 0.2454,
 				},
 			}
 		},
@@ -6546,9 +6657,12 @@ local gameConfig = {
 			startUnits = {
 				{
 					name = "dynrecon1_0",
-					x = 5511,
-					z = 323,
-					facing = 2,
+					x = 5383,
+					z = 1888,
+					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5184, 2220}},
+					},
 				},
 				{
 					name = "factoryamph",
@@ -6599,15 +6713,10 @@ local gameConfig = {
 					facing = 0,
 				},
 				{
-					name = "amphfloater",
-					x = 2395,
-					z = 3646,
+					name = "amphcon",
+					x = 3505,
+					z = 1428,
 					facing = 0,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2464, 3744}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2592, 3872}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2656, 4000}, options = {"shift"}},
-					},
 				},
 				{
 					name = "energysolar",
@@ -6623,13 +6732,11 @@ local gameConfig = {
 				},
 				{
 					name = "amphassault",
-					x = 3121,
-					z = 4248,
+					x = 3520,
+					z = 3775,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3168, 4128}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3360, 3936}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3552, 3744}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3905, 3895}},
 					},
 				},
 				{
@@ -6676,12 +6783,11 @@ local gameConfig = {
 				},
 				{
 					name = "amphraid",
-					x = 4988,
-					z = 866,
-					facing = 3,
+					x = 4699,
+					z = 2100,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4896, 864}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4768, 864}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4558, 2261}},
 					},
 				},
 				{
@@ -6689,6 +6795,9 @@ local gameConfig = {
 					x = 4912,
 					z = 720,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5271, 694}},
+					},
 				},
 				{
 					name = "energywind",
@@ -6714,10 +6823,8 @@ local gameConfig = {
 					z = 488,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5176, 488}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5128, 765}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5128, 765}},
 						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5176, 488}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5128, 765}, options = {"shift"}},
 					},
 				},
 				{
@@ -6732,10 +6839,8 @@ local gameConfig = {
 					z = 440,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5160, 440}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5128, 765}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5128, 765}},
 						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5160, 440}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5128, 765}, options = {"shift"}},
 					},
 				},
 				{
@@ -6749,6 +6854,9 @@ local gameConfig = {
 					x = 5584,
 					z = 1040,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5806, 894}},
+					},
 				},
 				{
 					name = "energywind",
@@ -6767,6 +6875,9 @@ local gameConfig = {
 					x = 4960,
 					z = 896,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5245, 929}},
+					},
 				},
 				{
 					name = "energypylon",
@@ -6776,8 +6887,8 @@ local gameConfig = {
 				},
 				{
 					name = "amphcon",
-					x = 3216,
-					z = 3604,
+					x = 3191,
+					z = 3567,
 					facing = 3,
 				},
 				{
@@ -6788,13 +6899,11 @@ local gameConfig = {
 				},
 				{
 					name = "amphraid",
-					x = 3155,
-					z = 1772,
-					facing = 2,
+					x = 3013,
+					z = 2147,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3232, 1696}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3360, 1568}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3488, 1440}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2991, 2351}},
 					},
 				},
 				{
@@ -6823,11 +6932,11 @@ local gameConfig = {
 				},
 				{
 					name = "amphaa",
-					x = 3175,
+					x = 3178,
 					z = 2712,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2784, 3744}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3363, 2083}},
 					},
 				},
 				{
@@ -6853,6 +6962,9 @@ local gameConfig = {
 					x = 4896,
 					z = 544,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5077, 545}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -6862,13 +6974,11 @@ local gameConfig = {
 				},
 				{
 					name = "amphfloater",
-					x = 2686,
-					z = 4884,
-					facing = 3,
+					x = 4999,
+					z = 1885,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2528, 4960}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2400, 5088}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2272, 5216}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4715, 2243}},
 					},
 				},
 				{
@@ -6877,10 +6987,8 @@ local gameConfig = {
 					z = 568,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4984, 568}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5128, 765}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5128, 765}},
 						{cmdID = planetUtilities.COMMAND.PATROL, pos = {4984, 568}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5128, 765}, options = {"shift"}},
 					},
 				},
 				{
@@ -6890,15 +6998,10 @@ local gameConfig = {
 					facing = 0,
 				},
 				{
-					name = "amphfloater",
-					x = 2825,
-					z = 4787,
+					name = "amphcon",
+					x = 4517,
+					z = 2359,
 					facing = 0,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2784, 4832}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2656, 4896}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2528, 4960}, options = {"shift"}},
-					},
 				},
 				{
 					name = "staticcon",
@@ -6908,13 +7011,11 @@ local gameConfig = {
 				},
 				{
 					name = "gunshipheavyskirm",
-					x = 65,
-					z = 2275,
+					x = 1678,
+					z = 2627,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {224, 2016}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {480, 2016}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {736, 2016}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1346, 2223}},
 					},
 				},
 				{
@@ -6924,16 +7025,22 @@ local gameConfig = {
 					facing = 0,
 				},
 				{
-					name = "turretriot",
-					x = 5528,
-					z = 3848,
-					facing = 3,
+					name = "amphraid",
+					x = 4208,
+					z = 2199,
+					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4273, 2382}},
+					},
 				},
 				{
 					name = "turretlaser",
 					x = 5968,
 					z = 1008,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {6052, 733}},
+					},
 				},
 				{
 					name = "amphcon",
@@ -6943,24 +7050,20 @@ local gameConfig = {
 				},
 				{
 					name = "amphassault",
-					x = 5218,
-					z = 1147,
+					x = 4935,
+					z = 1625,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {5088, 1184}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {5088, 1376}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4896, 1568}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4950, 2214}},
 					},
 				},
 				{
 					name = "amphraid",
-					x = 4411,
-					z = 1704,
-					facing = 3,
+					x = 4426,
+					z = 2117,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4320, 1760}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4192, 1888}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4064, 2016}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4335, 2334}},
 					},
 				},
 				{
@@ -6989,11 +7092,11 @@ local gameConfig = {
 				},
 				{
 					name = "amphimpulse",
-					x = 3027,
-					z = 3220,
-					facing = 0,
+					x = 3422,
+					z = 2433,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2211, 3569}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3597, 2265}},
 					},
 				},
 				{
@@ -7001,6 +7104,9 @@ local gameConfig = {
 					x = 5584,
 					z = 576,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5645, 427}},
+					},
 				},
 				{
 					name = "amphcon",
@@ -7040,13 +7146,11 @@ local gameConfig = {
 				},
 				{
 					name = "amphraid",
-					x = 4236,
-					z = 1840,
-					facing = 3,
+					x = 4199,
+					z = 2228,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4192, 1888}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4064, 2016}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3936, 2016}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4232, 2450}},
 					},
 				},
 				{
@@ -7061,10 +7165,8 @@ local gameConfig = {
 					z = 392,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5160, 392}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5128, 765}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5128, 765}},
 						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5160, 392}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5128, 765}, options = {"shift"}},
 					},
 				},
 				{
@@ -7073,10 +7175,8 @@ local gameConfig = {
 					z = 568,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4936, 568}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5128, 765}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {5128, 765}},
 						{cmdID = planetUtilities.COMMAND.PATROL, pos = {4936, 568}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5128, 765}, options = {"shift"}},
 					},
 				},
 				{
@@ -7099,30 +7199,26 @@ local gameConfig = {
 				},
 				{
 					name = "amphcon",
-					x = 3206,
-					z = 3633,
+					x = 3190,
+					z = 3601,
 					facing = 3,
 				},
 				{
 					name = "amphfloater",
-					x = 2334,
-					z = 3629,
+					x = 3232,
+					z = 2532,
 					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2400, 3616}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2464, 3744}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2592, 3872}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3554, 2200}},
 					},
 				},
 				{
 					name = "amphfloater",
-					x = 2286,
-					z = 3609,
-					facing = 1,
+					x = 2663,
+					z = 3274,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2400, 3616}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2464, 3744}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2592, 3872}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2770, 2857}},
 					},
 				},
 				{
@@ -7131,6 +7227,9 @@ local gameConfig = {
 					z = 2472,
 					facing = 2,
 					buildProgress = 0.30540001,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4793, 2231}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -7145,14 +7244,12 @@ local gameConfig = {
 					facing = 0,
 				},
 				{
-					name = "amphfloater",
-					x = 2778,
-					z = 4770,
+					name = "amphraid",
+					x = 5016,
+					z = 1966,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2656, 4896}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2528, 4960}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2400, 5088}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5028, 2206}},
 					},
 				},
 				{
@@ -7163,13 +7260,11 @@ local gameConfig = {
 				},
 				{
 					name = "amphassault",
-					x = 2235,
-					z = 3576,
-					facing = 1,
+					x = 3076,
+					z = 2813,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2336, 3616}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2464, 3744}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2592, 3936}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3574, 2494}},
 					},
 				},
 				{
@@ -7185,15 +7280,10 @@ local gameConfig = {
 					facing = 3,
 				},
 				{
-					name = "gunshipemp",
-					x = 2784,
-					z = 4469,
-					facing = 0,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2848, 4832}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2592, 4896}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2336, 5152}, options = {"shift"}},
-					},
+					name = "amphcon",
+					x = 5182,
+					z = 237,
+					facing = 3,
 				},
 				{
 					name = "staticstorage",
@@ -7212,6 +7302,9 @@ local gameConfig = {
 					x = 5792,
 					z = 544,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5867, 634}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -7224,6 +7317,9 @@ local gameConfig = {
 					x = 4005,
 					z = 2583,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4185, 2601}},
+					},
 				},
 				{
 					name = "amphcon",
@@ -7251,12 +7347,11 @@ local gameConfig = {
 				},
 				{
 					name = "amphfloater",
-					x = 2374,
-					z = 3601,
-					facing = 0,
+					x = 2629,
+					z = 3206,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2464, 3744}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2592, 3872}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2800, 2784}},
 					},
 				},
 				{
@@ -7267,13 +7362,11 @@ local gameConfig = {
 				},
 				{
 					name = "amphassault",
-					x = 3051,
-					z = 3542,
-					facing = 3,
+					x = 2535,
+					z = 3042,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2912, 3488}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2720, 3488}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2528, 3296}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2884, 2562}},
 					},
 				},
 				{
@@ -7293,15 +7386,17 @@ local gameConfig = {
 					x = 5296,
 					z = 1040,
 					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5527, 968}},
+					},
 				},
 				{
 					name = "gunshipraid",
-					x = 4127,
-					z = 2969,
-					facing = 1,
+					x = 5515,
+					z = 2158,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4384, 3168}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {4640, 3296}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5549, 2366}},
 					},
 				},
 				{
@@ -7312,13 +7407,11 @@ local gameConfig = {
 				},
 				{
 					name = "gunshipheavyskirm",
-					x = 148,
-					z = 2153,
+					x = 1115,
+					z = 2880,
 					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {224, 2016}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {480, 2016}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {736, 2016}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1281, 2367}},
 					},
 				},
 				{
@@ -7328,25 +7421,18 @@ local gameConfig = {
 					facing = 0,
 				},
 				{
-					name = "amphfloater",
-					x = 2738,
-					z = 4042,
+					name = "staticmex",
+					x = 3736,
+					z = 3784,
 					facing = 0,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2720, 4128}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2720, 4256}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2720, 4384}, options = {"shift"}},
-					},
 				},
 				{
 					name = "gunshipkrow",
-					x = 1438,
-					z = 2538,
-					facing = 1,
+					x = 2441,
+					z = 3325,
+					facing = 3,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1696, 2656}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1888, 3104}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2336, 3552}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2107, 3362}},
 					},
 				},
 				{
@@ -7354,53 +7440,6 @@ local gameConfig = {
 					x = 4728,
 					z = 616,
 					facing = 0,
-				},
-				{
-					name = "amphraid",
-					x = 4312,
-					z = 1767,
-					facing = 3,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4192, 1888}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {4064, 2016}, options = {"shift"}},
-					},
-				},
-				{
-					name = "amphcon",
-					x = 3512,
-					z = 1429,
-					facing = 0,
-				},
-				{
-					name = "staticmex",
-					x = 3736,
-					z = 3784,
-					facing = 0,
-				},
-				{
-					name = "amphcon",
-					x = 5182,
-					z = 237,
-					facing = 3,
-				},
-				{
-					name = "amphcon",
-					x = 4517,
-					z = 2359,
-					facing = 0,
-				},
-				{
-					name = "amphraid",
-					x = 5129,
-					z = 861,
-					facing = 0,
-				},
-				{
-					name = "amphfloater",
-					x = 5128,
-					z = 764,
-					facing = 0,
-					buildProgress = 0.2211,
 				},
 			}
 		},
@@ -7413,15 +7452,21 @@ local gameConfig = {
 			startUnits = {
 				{
 					name = "dynrecon1_0",
-					x = 3709,
-					z = 6887,
-					facing = 1,
+					x = 3680,
+					z = 7295,
+					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3872, 7636}},
+					},
 				},
 				{
 					name = "factoryamph",
 					x = 3832,
 					z = 6840,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4028, 7726}},
+					},
 				},
 				{
 					name = "staticmex",
@@ -7448,15 +7493,10 @@ local gameConfig = {
 					facing = 2,
 				},
 				{
-					name = "amphraid",
-					x = 692,
-					z = 4011,
-					facing = 0,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {736, 4064}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {864, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {992, 4192}, options = {"shift"}},
-					},
+					name = "dronelight",
+					x = 3460,
+					z = 6501,
+					facing = 1,
 				},
 				{
 					name = "energywind",
@@ -7487,6 +7527,9 @@ local gameConfig = {
 					x = 4552,
 					z = 6184,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4741, 6406}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -7517,12 +7560,19 @@ local gameConfig = {
 					x = 3896,
 					z = 7080,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {3896, 7080}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {3871, 7055}, options = {"shift"}},
+					},
 				},
 				{
 					name = "amphimpulse",
-					x = 1920,
-					z = 4365,
+					x = 2143,
+					z = 6190,
 					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2405, 6250}},
+					},
 				},
 				{
 					name = "energywind",
@@ -7577,12 +7627,20 @@ local gameConfig = {
 					x = 3880,
 					z = 7128,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {3880, 7128}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {3855, 7103}, options = {"shift"}},
+					},
 				},
 				{
 					name = "staticcon",
 					x = 4040,
 					z = 7064,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {4040, 7064}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {4015, 7039}, options = {"shift"}},
+					},
 				},
 				{
 					name = "staticmex",
@@ -7603,10 +7661,13 @@ local gameConfig = {
 					facing = 2,
 				},
 				{
-					name = "energywind",
-					x = 4216,
-					z = 7560,
-					facing = 2,
+					name = "droneheavyslow",
+					x = 3541,
+					z = 6490,
+					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3455, 6498}},
+					},
 				},
 				{
 					name = "energywind",
@@ -7631,6 +7692,9 @@ local gameConfig = {
 					x = 2968,
 					z = 5752,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4277, 5384}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -7649,6 +7713,10 @@ local gameConfig = {
 					x = 3944,
 					z = 7096,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {3944, 7096}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {3919, 7071}, options = {"shift"}},
+					},
 				},
 				{
 					name = "dronelight",
@@ -7657,7 +7725,7 @@ local gameConfig = {
 					facing = 3,
 					buildProgress = 0.7166,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3524, 6469}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3506, 6467}},
 					},
 				},
 				{
@@ -7677,6 +7745,10 @@ local gameConfig = {
 					x = 3928,
 					z = 7144,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {3928, 7144}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {3903, 7119}, options = {"shift"}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -7685,10 +7757,13 @@ local gameConfig = {
 					facing = 2,
 				},
 				{
-					name = "energysolar",
-					x = 2968,
-					z = 5368,
+					name = "dronelight",
+					x = 3400,
+					z = 7510,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3444, 7310}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -7701,6 +7776,10 @@ local gameConfig = {
 					x = 4040,
 					z = 6952,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {4040, 6952}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {4015, 6927}, options = {"shift"}},
+					},
 				},
 				{
 					name = "staticmex",
@@ -7713,16 +7792,17 @@ local gameConfig = {
 					x = 4128,
 					z = 7008,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4102, 7410}},
+					},
 				},
 				{
 					name = "amphassault",
-					x = 1809,
-					z = 4319,
-					facing = 1,
+					x = 1422,
+					z = 6438,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1765, 4308}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2394, 3896}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2378, 3923}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1504, 6989}},
 					},
 				},
 				{
@@ -7736,6 +7816,9 @@ local gameConfig = {
 					x = 3384,
 					z = 7384,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3537, 7385}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -7748,6 +7831,9 @@ local gameConfig = {
 					x = 3664,
 					z = 5968,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3855, 5947}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -7766,6 +7852,10 @@ local gameConfig = {
 					x = 2952,
 					z = 5528,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {2952, 5528}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {2977, 5503}, options = {"shift"}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -7778,6 +7868,9 @@ local gameConfig = {
 					x = 5496,
 					z = 5688,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5579, 5942}},
+					},
 				},
 				{
 					name = "energysolar",
@@ -7796,12 +7889,20 @@ local gameConfig = {
 					x = 4040,
 					z = 7016,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {4040, 7016}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {4015, 6991}, options = {"shift"}},
+					},
 				},
 				{
 					name = "staticcon",
 					x = 3992,
 					z = 7080,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {3992, 7080}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {3967, 7055}, options = {"shift"}},
+					},
 				},
 				{
 					name = "staticstorage",
@@ -7811,13 +7912,11 @@ local gameConfig = {
 				},
 				{
 					name = "amphraid",
-					x = 664,
-					z = 4002,
-					facing = 1,
+					x = 437,
+					z = 5554,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {736, 4064}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {864, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {992, 4192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {420, 5764}},
 					},
 				},
 				{
@@ -7825,29 +7924,38 @@ local gameConfig = {
 					x = 3704,
 					z = 5992,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3704, 5992}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3704, 5992}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {3679, 5967}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {3704, 5992}, options = {"shift"}},
+					},
 				},
 				{
-					name = "energysolar",
-					x = 2968,
-					z = 5448,
-					facing = 2,
+					name = "droneheavyslow",
+					x = 3608,
+					z = 6151,
+					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3557, 6436}},
+					},
 				},
 				{
 					name = "turretlaser",
 					x = 3616,
 					z = 7248,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3548, 7549}},
+					},
 				},
 				{
 					name = "amphassault",
-					x = 1992,
-					z = 4451,
+					x = 2052,
+					z = 7041,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1950, 4491}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1956, 4417}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2409, 3928}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2378, 3923}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2236, 7589}},
 					},
 				},
 				{
@@ -7855,6 +7963,9 @@ local gameConfig = {
 					x = 3544,
 					z = 6280,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3700, 6327}},
+					},
 				},
 				{
 					name = "energysingu",
@@ -7864,24 +7975,30 @@ local gameConfig = {
 					buildProgress = 0.24590001,
 				},
 				{
-					name = "energysolar",
-					x = 2888,
-					z = 5368,
-					facing = 2,
+					name = "dronelight",
+					x = 3877,
+					z = 7675,
+					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3724, 7535}},
+					},
 				},
 				{
 					name = "turretaalaser",
 					x = 4168,
 					z = 6680,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4392, 7565}},
+					},
 				},
 				{
 					name = "striderfunnelweb",
-					x = 3429,
-					z = 6487,
+					x = 3415,
+					z = 6493,
 					facing = 3,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3440, 6800}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3455, 6498}},
 					},
 				},
 				{
@@ -7897,26 +8014,30 @@ local gameConfig = {
 					facing = 2,
 				},
 				{
-					name = "turretlaser",
-					x = 4528,
-					z = 5104,
-					facing = 3,
+					name = "dronelight",
+					x = 3576,
+					z = 6532,
+					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3635, 6498}},
+					},
 				},
 				{
 					name = "turretaalaser",
 					x = 4296,
 					z = 5160,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4434, 5471}},
+					},
 				},
 				{
 					name = "amphraid",
-					x = 637,
-					z = 4014,
-					facing = 1,
+					x = 452,
+					z = 5210,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {736, 4064}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {864, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {992, 4192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {365, 5409}},
 					},
 				},
 				{
@@ -7927,14 +8048,11 @@ local gameConfig = {
 				},
 				{
 					name = "amphassault",
-					x = 1874,
-					z = 4344,
-					facing = 2,
+					x = 1720,
+					z = 6558,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1791, 4426}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1891, 4368}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2350, 3940}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2378, 3923}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2060, 6446}},
 					},
 				},
 				{
@@ -7942,22 +8060,27 @@ local gameConfig = {
 					x = 5584,
 					z = 4992,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5900, 4924}},
+					},
 				},
 				{
 					name = "staticcon",
 					x = 3976,
 					z = 7144,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {3976, 7144}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {3951, 7119}, options = {"shift"}},
+					},
 				},
 				{
 					name = "amphraid",
-					x = 685,
-					z = 3981,
+					x = 476,
+					z = 5507,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {736, 4064}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {864, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {992, 4192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {410, 5705}},
 					},
 				},
 				{
@@ -7968,12 +8091,11 @@ local gameConfig = {
 				},
 				{
 					name = "amphraid",
-					x = 1259,
-					z = 4296,
-					facing = 1,
+					x = 1457,
+					z = 6653,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1376, 4256}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1504, 4256}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1320, 6839}},
 					},
 				},
 				{
@@ -7987,44 +8109,41 @@ local gameConfig = {
 					x = 4200,
 					z = 5048,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4383, 5439}},
+					},
 				},
 				{
 					name = "amphraid",
-					x = 1308,
-					z = 4261,
+					x = 1354,
+					z = 6387,
 					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1440, 4256}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1568, 4256}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1696, 4256}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1527, 6513}},
 					},
 				},
 				{
 					name = "amphcon",
-					x = 1992,
-					z = 4587,
+					x = 1989,
+					z = 4593,
 					facing = 3,
 				},
 				{
 					name = "amphraid",
-					x = 701,
-					z = 4040,
-					facing = 1,
+					x = 1761,
+					z = 5688,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {864, 4128}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {992, 4192}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1120, 4192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1908, 5866}},
 					},
 				},
 				{
 					name = "amphraid",
-					x = 667,
-					z = 4031,
-					facing = 1,
+					x = 461,
+					z = 5167,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {736, 4064}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {864, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {992, 4192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {350, 5229}},
 					},
 				},
 				{
@@ -8035,12 +8154,11 @@ local gameConfig = {
 				},
 				{
 					name = "amphraid",
-					x = 1247,
-					z = 4268,
-					facing = 1,
+					x = 1509,
+					z = 6413,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1376, 4256}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1504, 4256}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1419, 6564}},
 					},
 				},
 				{
@@ -8048,50 +8166,54 @@ local gameConfig = {
 					x = 3800,
 					z = 7240,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {3800, 7240}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {3775, 7215}, options = {"shift"}},
+					},
 				},
 				{
 					name = "turretgauss",
 					x = 3832,
 					z = 6008,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3840, 6005}},
+					},
 				},
 				{
 					name = "turretgauss",
 					x = 4584,
 					z = 5896,
 					facing = 2,
-				},
-				{
-					name = "amphraid",
-					x = 604,
-					z = 3942,
-					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {736, 4064}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {864, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {992, 4192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4636, 7225}},
 					},
 				},
 				{
 					name = "amphraid",
-					x = 652,
-					z = 3976,
-					facing = 1,
+					x = 440,
+					z = 4887,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {736, 4064}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {864, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {992, 4192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {327, 5051}},
 					},
 				},
 				{
 					name = "amphraid",
-					x = 603,
-					z = 4062,
-					facing = 1,
+					x = 580,
+					z = 5515,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {736, 4064}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {864, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {992, 4192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {399, 5646}},
+					},
+				},
+				{
+					name = "amphraid",
+					x = 370,
+					z = 4889,
+					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {336, 5111}},
 					},
 				},
 				{
@@ -8099,22 +8221,23 @@ local gameConfig = {
 					x = 5336,
 					z = 6184,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5186, 6144}},
+					},
 				},
 				{
 					name = "amphassault",
-					x = 1852,
-					z = 4439,
-					facing = 1,
+					x = 1907,
+					z = 5597,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1888, 4500}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2400, 3900}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2378, 3923}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2246, 6068}},
 					},
 				},
 				{
 					name = "amphcon",
-					x = 2139,
-					z = 4863,
+					x = 2163,
+					z = 4868,
 					facing = 2,
 				},
 				{
@@ -8122,6 +8245,9 @@ local gameConfig = {
 					x = 4168,
 					z = 6600,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4464, 7470}},
+					},
 				},
 				{
 					name = "energyfusion",
@@ -8131,24 +8257,20 @@ local gameConfig = {
 				},
 				{
 					name = "amphraid",
-					x = 637,
-					z = 3948,
+					x = 576,
+					z = 5754,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {672, 4000}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {800, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {928, 4192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {507, 5921}},
 					},
 				},
 				{
 					name = "amphraid",
-					x = 1349,
-					z = 4272,
-					facing = 1,
+					x = 1431,
+					z = 6704,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1440, 4256}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1568, 4256}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1696, 4256}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1403, 6925}},
 					},
 				},
 				{
@@ -8159,19 +8281,20 @@ local gameConfig = {
 				},
 				{
 					name = "amphaa",
-					x = 1814,
-					z = 4394,
-					facing = 1,
+					x = 1609,
+					z = 6339,
+					facing = 0,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1614, 7037}},
+					},
 				},
 				{
 					name = "amphraid",
-					x = 588,
-					z = 3838,
+					x = 463,
+					z = 5420,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {736, 4064}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {864, 4128}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {992, 4192}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {389, 5586}},
 					},
 				},
 				{
@@ -8182,8 +8305,8 @@ local gameConfig = {
 				},
 				{
 					name = "amphcon",
-					x = 1886,
-					z = 4475,
+					x = 1784,
+					z = 4510,
 					facing = 2,
 				},
 				{
@@ -8191,74 +8314,81 @@ local gameConfig = {
 					x = 3976,
 					z = 6472,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4349, 7606}},
+					},
 				},
 				{
 					name = "staticcon",
 					x = 5448,
 					z = 6456,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5448, 6456}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {5423, 6431}, options = {"shift"}},
+					},
 				},
 				{
 					name = "turretaalaser",
 					x = 5496,
 					z = 5768,
 					facing = 3,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {5520, 5946}},
+					},
 				},
 				{
 					name = "turretlaser",
 					x = 3824,
 					z = 7344,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3736, 7644}},
+					},
 				},
 				{
 					name = "turretlaser",
 					x = 3184,
 					z = 6944,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3266, 6970}},
+					},
 				},
 				{
-					name = "amphfloater",
-					x = 1925,
-					z = 4306,
-					facing = 2,
+					name = "dronelight",
+					x = 3386,
+					z = 6465,
+					facing = 3,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1927, 4326}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2385, 3892}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2378, 3923}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3277, 6523}},
 					},
 				},
 				{
 					name = "amphfloater",
-					x = 1899,
-					z = 4398,
-					facing = 2,
+					x = 2495,
+					z = 5711,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2357, 3948}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2378, 3923}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2306, 6062}},
 					},
 				},
 				{
 					name = "amphassault",
-					x = 1969,
-					z = 4386,
+					x = 1686,
+					z = 6607,
 					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1904, 4477}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1951, 4355}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2409, 3930}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2378, 3923}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1994, 6808}},
 					},
 				},
 				{
-					name = "amphfloater",
-					x = 1970,
-					z = 4268,
-					facing = 1,
+					name = "dronelight",
+					x = 3669,
+					z = 7652,
+					facing = 2,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1906, 4318}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1956, 4289}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2379, 3955}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2378, 3923}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3630, 7461}},
 					},
 				},
 				{
@@ -8272,15 +8402,17 @@ local gameConfig = {
 					x = 3304,
 					z = 6024,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3771, 6234}},
+					},
 				},
 				{
 					name = "amphraid",
-					x = 1283,
-					z = 4278,
-					facing = 2,
+					x = 1567,
+					z = 6257,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1376, 4256}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1504, 4256}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1640, 6474}},
 					},
 				},
 				{
@@ -8291,46 +8423,45 @@ local gameConfig = {
 				},
 				{
 					name = "striderarty",
-					x = 1882,
-					z = 4600,
-					facing = 2,
+					x = 1911,
+					z = 5187,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {1952, 4448}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1031, 4260}},
 					},
 				},
 				{
 					name = "striderantiheavy",
-					x = 3515,
-					z = 5539,
+					x = 4086,
+					z = 5485,
 					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3680, 5536}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3808, 5536}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {3936, 5536}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4330, 5412}},
 					},
 				},
 				{
-					name = "amphraid",
-					x = 1333,
-					z = 4244,
-					facing = 1,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1440, 4256}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1568, 4256}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1696, 4256}, options = {"shift"}},
-					},
+					name = "dronelight",
+					x = 3449,
+					z = 6498,
+					facing = 0,
 				},
 				{
 					name = "turretriot",
 					x = 3496,
 					z = 5688,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3824, 5589}},
+					},
 				},
 				{
 					name = "turretriot",
 					x = 3128,
 					z = 7208,
 					facing = 2,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3354, 7231}},
+					},
 				},
 				{
 					name = "energyfusion",
@@ -8339,43 +8470,34 @@ local gameConfig = {
 					facing = 2,
 				},
 				{
-					name = "amphraid",
-					x = 1292,
-					z = 4234,
-					facing = 1,
+					name = "dronelight",
+					x = 3403,
+					z = 6558,
+					facing = 3,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1312, 4256}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1440, 4256}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1568, 4256}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3277, 6523}},
 					},
 				},
 				{
 					name = "amphraid",
-					x = 2038,
-					z = 5238,
-					facing = 3,
+					x = 3664,
+					z = 5199,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1568, 4896}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1440, 4768}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1376, 4704}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3885, 5259}},
 					},
 				},
 				{
 					name = "amphcon",
-					x = 3405,
-					z = 6530,
+					x = 3404,
+					z = 6532,
 					facing = 1,
 				},
 				{
-					name = "amphraid",
-					x = 1374,
-					z = 4253,
-					facing = 1,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1440, 4256}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1568, 4256}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1696, 4256}, options = {"shift"}},
-					},
+					name = "droneheavyslow",
+					x = 3329,
+					z = 6357,
+					facing = 2,
 				},
 				{
 					name = "turretmissile",
@@ -8385,13 +8507,11 @@ local gameConfig = {
 				},
 				{
 					name = "amphraid",
-					x = 1607,
-					z = 4935,
-					facing = 2,
+					x = 2211,
+					z = 5915,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1568, 4896}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1440, 4768}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1376, 4704}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2365, 6067}},
 					},
 				},
 				{
@@ -8399,46 +8519,45 @@ local gameConfig = {
 					x = 4224,
 					z = 7376,
 					facing = 2,
-				},
-				{
-					name = "amphraid",
-					x = 2385,
-					z = 5968,
-					facing = 3,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2272, 5856}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {2208, 5728}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {4224, 7376}},
+						{cmdID = planetUtilities.COMMAND.PATROL, pos = {4199, 7351}, options = {"shift"}},
 					},
 				},
 				{
 					name = "amphraid",
-					x = 1271,
-					z = 4252,
+					x = 2626,
+					z = 6137,
 					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1312, 4256}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1440, 4256}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1568, 4256}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {2821, 6202}},
+					},
+				},
+				{
+					name = "dronelight",
+					x = 3385,
+					z = 6551,
+					facing = 1,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3635, 6498}},
 					},
 				},
 				{
 					name = "amphraid",
-					x = 1246,
-					z = 4237,
-					facing = 1,
+					x = 1804,
+					z = 5618,
+					facing = 0,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1312, 4256}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1440, 4256}, options = {"shift"}},
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1568, 4256}, options = {"shift"}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {1871, 5819}},
 					},
 				},
 				{
 					name = "amphaa",
-					x = 2931,
-					z = 5916,
-					facing = 3,
+					x = 3148,
+					z = 5904,
+					facing = 1,
 					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {1952, 4384}},
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {3829, 5649}},
 					},
 				},
 				{
@@ -8452,47 +8571,15 @@ local gameConfig = {
 					x = 4224,
 					z = 7280,
 					facing = 0,
-					buildProgress = 0.30779999,
+					commands = {
+						{cmdID = planetUtilities.COMMAND.ATTACK, pos = {4303, 7645}},
+					},
 				},
 				{
 					name = "amphcon",
 					x = 3832,
 					z = 6804,
 					facing = 2,
-					buildProgress = 0.0037,
-				},
-				{
-					name = "dronelight",
-					x = 3548,
-					z = 6472,
-					facing = 0,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3568, 6480}},
-					},
-				},
-				{
-					name = "dronelight",
-					x = 3468,
-					z = 6492,
-					facing = 3,
-				},
-				{
-					name = "droneheavyslow",
-					x = 3842,
-					z = 6577,
-					facing = 3,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3448, 6480}},
-					},
-				},
-				{
-					name = "dronelight",
-					x = 3600,
-					z = 6491,
-					facing = 1,
-					commands = {
-						{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3647, 6504}},
-					},
 				},
 			}
 		},
