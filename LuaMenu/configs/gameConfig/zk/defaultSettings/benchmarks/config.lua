@@ -101,7 +101,7 @@ local data = {
 	{
 		humanName = "Run benchmark",
 		name = "Benchmarkv2",
-		decription = "Compare three engine versions using six tests, each taking between 2 and 4 minutes. Expected run time of of 15 minutes. Last updated 15-11-2018.",
+		decription = "Compare three engine versions using six tests, each taking between 2 and 4 minutes. Expected run time of 15 minutes. Last updated 15-11-2018.",
 		map = "Comet Catcher Redux v3.1",
 		game = "Zero-K test-14830-12b7004",
 		duplicates = 2,
@@ -146,9 +146,9 @@ local data = {
 		}
 	},
 	{
-		humanName = "Benchmark x20",
+		humanName = "Benchmark x25",
 		name = "Benchmark20v2",
-		decription = "Compare three engine versions using 150 tests, each taking between 1 and 4 minutes. Expected run time of of 8 hours. Last updated 15-11-2018.",
+		decription = "Compare three engine versions using 150 tests, each taking between 1 and 4 minutes. Expected run time of 8 hours. Last updated 15-11-2018.",
 		map = "Comet Catcher Redux v3.1",
 		game = "Zero-K test-14830-12b7004",
 		duplicates = 50,
