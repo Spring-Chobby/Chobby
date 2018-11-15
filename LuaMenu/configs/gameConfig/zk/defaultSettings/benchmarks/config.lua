@@ -90,18 +90,41 @@ XResolution = 1920
 YResolution = 1080
 WindowBorderless = 0
 Fullscreen = 1
-snd_volmaster = 2]]
+snd_volmaster = 2
+]]
+
+local gcSettings = settings .. [[
+LuaGarbageCollectionMemLoadMult = 100
+]]
 
 local data = {
 	{
 		humanName = "Run benchmark",
 		name = "Benchmarkv2",
-		decription = "Compare three engine versions using six tests, each taking between 1 and 4 minutes. Expected run time of of 15 minutes. Last updated 14-11-2018.",
+		decription = "Compare three engine versions using six tests, each taking between 2 and 4 minutes. Expected run time of of 15 minutes. Last updated 15-11-2018.",
 		map = "Comet Catcher Redux v3.1",
 		game = "Zero-K test-14830-12b7004",
 		duplicates = 2,
 		topRow = ",average up,sdev up,min up,max up,u_0,u_3,u_6,u_9,u_12,u_15,u_18,u_21,u_24,u_27,u_30,u_33,u_36,u_39,u_42,u_45,average gf,sdev gf,min gf,max gf,g_0,g_3,g_6,g_9,g_12,g_15,g_18,g_21,g_24,g_27,g_30,g_33,g_36,g_39,g_42,g_45,end unit count",
 		runs = {
+			--{
+			--	file = "hide_benchmark_v2_104.0.1-409-g07c2800 maintenance.sdfz",
+			--	engine = "104.0.1-483-g30d8543",
+			--	settings = settings,
+			--	runName = "Engine 483",
+			--},
+			--{
+			--	file = "hide_benchmark_v2_104.0.1-781-g80f9374 maintenance.sdfz",
+			--	engine = "104.0.1-781-g80f9374", -- Fails to benchmark nicely https://github.com/ZeroK-RTS/CrashReports/issues/16778
+			--	settings = settings,
+			--	runName = "Engine 781",
+			--},
+			--{
+			--	file = "hide_benchmark_v2_104.0.1-527-gf2536df maintenance.sdfz",
+			--	engine = "104.0.1-527-gf2536df",
+			--	settings = settings,
+			--	runName = "Engine 527",
+			--},
 			{
 				file = "hide_benchmark_v2_104.0.1-287-gf7b0fcc maintenance.sdfz",
 				engine = "104.0.1-287-gf7b0fcc",
@@ -109,26 +132,26 @@ local data = {
 				runName = "Engine 287",
 			},
 			{
-				file = "hide_benchmark_v2_104.0.1-527-gf2536df maintenance.sdfz",
-				engine = "104.0.1-527-gf2536df",
-				settings = settings,
-				runName = "Engine 527",
-			},
-			{
 				file = "hide_benchmark_v2_104.0.1-889-g0871f35 maintenance.sdfz",
 				engine = "104.0.1-889-g0871f35",
 				settings = settings,
 				runName = "Engine 889",
+			},
+			{
+				file = "hide_benchmark_v2_104.0.1-889-g0871f35 maintenance.sdfz",
+				engine = "104.0.1-889-g0871f35",
+				settings = gcSettings,
+				runName = "LoadMult 889",
 			},
 		}
 	},
 	{
 		humanName = "Benchmark x20",
 		name = "Benchmark20v2",
-		decription = "Compare three engine versions using 120 tests, each taking between 1 and 4 minutes. Expected run time of of 5 hours. Last updated 14-11-2018.",
+		decription = "Compare three engine versions using 150 tests, each taking between 1 and 4 minutes. Expected run time of of 8 hours. Last updated 15-11-2018.",
 		map = "Comet Catcher Redux v3.1",
 		game = "Zero-K test-14830-12b7004",
-		duplicates = 40,
+		duplicates = 50,
 		topRow = ",average up,sdev up,min up,max up,u_0,u_3,u_6,u_9,u_12,u_15,u_18,u_21,u_24,u_27,u_30,u_33,u_36,u_39,u_42,u_45,average gf,sdev gf,min gf,max gf,g_0,g_3,g_6,g_9,g_12,g_15,g_18,g_21,g_24,g_27,g_30,g_33,g_36,g_39,g_42,g_45,end unit count",
 		runs = {
 			{
@@ -138,16 +161,16 @@ local data = {
 				runName = "Engine 287",
 			},
 			{
-				file = "hide_benchmark_v2_104.0.1-527-gf2536df maintenance.sdfz",
-				engine = "104.0.1-527-gf2536df",
-				settings = settings,
-				runName = "Engine 527",
-			},
-			{
 				file = "hide_benchmark_v2_104.0.1-889-g0871f35 maintenance.sdfz",
 				engine = "104.0.1-889-g0871f35",
 				settings = settings,
 				runName = "Engine 889",
+			},
+			{
+				file = "hide_benchmark_v2_104.0.1-889-g0871f35 maintenance.sdfz",
+				engine = "104.0.1-889-g0871f35",
+				settings = gcSettings,
+				runName = "LoadMult 889",
 			},
 		}
 	},
