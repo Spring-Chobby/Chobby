@@ -8,7 +8,7 @@ local circuitDifficulties = {
 }
 
 function aiLibFunctions.Circuit_difficulty_autofill(difficultySetting)
-	return circuitDifficulties[difficultySetting]
+	return ((WG.Chobby.Configuration:GetIsDevEngine() and "Dev") or "") .. circuitDifficulties[difficultySetting]
 end
 
 return {

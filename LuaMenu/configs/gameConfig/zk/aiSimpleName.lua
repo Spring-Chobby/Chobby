@@ -1,20 +1,20 @@
 local stableSubnameMap = {
-	{"CircuitAIBeginner", "AI: Beginner (old)"},
-	{"CircuitAINovice", "AI: Novice (old)"},
-	{"CircuitAIEasy", "AI: Easy (old)"},
-	{"CircuitAINormal", "AI: Normal (old)"},
-	{"CircuitAIHard", "AI: Hard (old)"},
-	{"CircuitAIBrutal", "AI: Brutal (old)"},
+	{"CircuitAIBeginner", "AI: Beginner"},
+	{"CircuitAINovice", "AI: Novice"},
+	{"CircuitAIEasy", "AI: Easy"},
+	{"CircuitAINormal", "AI: Normal"},
+	{"CircuitAIHard", "AI: Hard"},
+	{"CircuitAIBrutal", "AI: Brutal"},
 	{"CAI", "AI: Legacy"},
 }
 
 local devSubnameMap = {
-	{"DevCircuitAIBeginner", "AI: Beginner"},
-	{"DevCircuitAINovice", "AI: Novice"},
-	{"DevCircuitAIEasy", "AI: Easy"},
-	{"DevCircuitAINormal", "AI: Normal"},
-	{"DevCircuitAIHard", "AI: Hard"},
-	{"DevCircuitAIBrutal", "AI: Brutal"},
+	{"DevCircuitAIBeginner", "AI: Beginner (dev)"},
+	{"DevCircuitAINovice", "AI: Novice (dev)"},
+	{"DevCircuitAIEasy", "AI: Easy (dev)"},
+	{"DevCircuitAINormal", "AI: Normal (dev)"},
+	{"DevCircuitAIHard", "AI: Hard (dev)"},
+	{"DevCircuitAIBrutal", "AI: Brutal (dev)"},
 	{"CAI", "AI: Legacy"},
 }
 
@@ -35,12 +35,12 @@ local function GetAiSimpleName(name)
 end
 
 local simpleAiOrder = {
-	["AI: Beginner (old)"] = -6,
-	["AI: Novice (old)"] = -5,
-	["AI: Easy (old)"] = -4,
-	["AI: Normal (old)"] = -3,
-	["AI: Hard (old)"] = -2,
-	["AI: Brutal (old)"] = -1,
+	["AI: Beginner (dev)"] = -6,
+	["AI: Novice (dev)"] = -5,
+	["AI: Easy (dev)"] = -4,
+	["AI: Normal (dev)"] = -3,
+	["AI: Hard (dev)"] = -2,
+	["AI: Brutal (dev)"] = -1,
 	["AI: Beginner"] = 0,
 	["AI: Novice"] = 1,
 	["AI: Easy"] = 2,
@@ -59,12 +59,12 @@ local simpleAiOrder = {
 }
 
 local aiTooltip = {
-	["AI: Beginner (old)"] = "Recommended for players with no strategy game experience.",
-	["AI: Novice (old)"] = "Recommended for players with some strategy game experience, or experience with related genres (such as MOBA).",
-	["AI: Easy (old)"] = "Recommended for experienced strategy gamers with some experience of streaming economy.",
-	["AI: Normal (old)"] = "Recommended for veteran strategy gamers.",
-	["AI: Hard (old)"] = "Recommended for veteran strategy gamers who aren't afraid of losing.",
-	["AI: Brutal (old)"] = "Recommended for veterans of Zero-K.",
+	["AI: Beginner (dev)"] = "Recommended for players with no strategy game experience.",
+	["AI: Novice (dev)"] = "Recommended for players with some strategy game experience, or experience with related genres (such as MOBA).",
+	["AI: Easy (dev)"] = "Recommended for experienced strategy gamers with some experience of streaming economy.",
+	["AI: Normal (dev)"] = "Recommended for veteran strategy gamers.",
+	["AI: Hard (dev)"] = "Recommended for veteran strategy gamers who aren't afraid of losing.",
+	["AI: Brutal (dev)"] = "Recommended for veterans of Zero-K.",
 	["AI: Beginner"] = "Recommended for players with no strategy game experience.",
 	["AI: Novice"] = "Recommended for players with some strategy game experience, or experience with related genres (such as MOBA).",
 	["AI: Easy"] = "Recommended for experienced strategy gamers with some experience of streaming economy.",

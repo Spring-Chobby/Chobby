@@ -235,6 +235,7 @@ local function StartBattleForReal(planetID, planetData)
 			IsFromDemo = 0,
 			ShortName = shortName,
 			comm_merge = 0,
+			version = "stable",
 			Host = 0,
 			Options = {
 				comm_merge = 0,
