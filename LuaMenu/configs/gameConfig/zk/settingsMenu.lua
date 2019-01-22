@@ -745,12 +745,12 @@ local settingsConfig = {
 							Water = 2,
 						}
 					},
-					{
-						name = "Dynamic",
-						apply = {
-							Water = 3,
-						}
-					},
+					--{
+					--	name = "Dynamic",
+					--	apply = {
+					--		Water = 3,
+					--	}
+					--},
 					{
 						name = "Bumpmapped",
 						apply = {

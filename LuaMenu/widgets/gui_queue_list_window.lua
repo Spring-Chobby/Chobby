@@ -65,6 +65,12 @@ local function GetCombinedBannedTime(banTimeFromServer)
 	return (banTime > 0) and banTime
 end
 
+local queueOrder = {
+	"Coop",
+	"Teams",
+	"1v1",
+}
+
 WG.GetCombinedBannedTime = GetCombinedBannedTime
 
 --------------------------------------------------------------------------------
@@ -518,9 +524,22 @@ local function InitializeControls(window)
 		queues = queues + 1
 	end
 	
-	local possibleQueues = lobby:GetQueues()
-	for name, data in pairs(possibleQueues) do
-		AddQueue(_, data.name, data.description, data.mapNames, data.maxPartySize)
+	local function InitializeQueues()
+		local possibleQueues = lobby:GetQueues()
+		local added = {}
+		for i = 1, #queueOrder do
+			local data = possibleQueues[queueOrder[i]]
+			if data then
+				added[queueOrder[i]] = true
+				AddQueue(_, data.name, data.description, data.mapNames, data.maxPartySize)
+			end
+		end
+		
+		for name, data in pairs(possibleQueues) do
+			if not added[name] then
+				AddQueue(_, data.name, data.description, data.mapNames, data.maxPartySize)
+			end
+		end
 	end
 	
 	local function UpdateBannedTime(bannedTime)
@@ -599,6 +618,7 @@ local function InitializeControls(window)
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 	
 	-- Initialization
+	InitializeQueues()
 	UpdateBannedTime(lobby.matchMakerBannedTime)
 	
 	if lobby:GetMyPartyID() then
