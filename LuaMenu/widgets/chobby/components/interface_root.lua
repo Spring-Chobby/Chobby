@@ -418,14 +418,25 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		end
 		WG.BattleRoomWindow.LeaveBattle(true)
 	end
-
-	local rightPanelTabs = {
-		{name = "community", control = WG.CommunityWindow.GetControl()},
-		{name = "chat", control = chatWindows.window},
-		{name = "friends", control = WG.FriendWindow.GetControl()},
-		{name = "settings", control = WG.SettingsWindow.GetControl()},
-		{name = "downloads", control = WG.DownloadWindow.GetControl()},
-	}
+	
+	local rightPanelTabs = {}
+	
+	if WG.Chobby.Configuration.gameConfig.disableCommunityWindow then 
+		rightPanelTabs = {
+			{name = "chat", control = chatWindows.window},
+			{name = "friends", control = WG.FriendWindow.GetControl()},
+			{name = "settings", control = WG.SettingsWindow.GetControl()},
+			{name = "downloads", control = WG.DownloadWindow.GetControl()},
+		}
+	else
+		rightPanelTabs = {
+			{name = "community", control = WG.CommunityWindow.GetControl()},
+			{name = "chat", control = chatWindows.window},
+			{name = "friends", control = WG.FriendWindow.GetControl()},
+			{name = "settings", control = WG.SettingsWindow.GetControl()},
+			{name = "downloads", control = WG.DownloadWindow.GetControl()},
+		}
+	end
 
 	local queueListWindow = WG.QueueListWindow.GetControl()
 	local battleListWindow, battleListWindowJoinBattle = WG.BattleListWindowHolder.GetControl()
@@ -434,6 +445,31 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local SINGLEPLAYER_INDEX = 1
 	local MULTIPLAYER_INDEX = 2
 	local HELP_INDEX = 4
+	
+	local multiPlayerTabs = {}
+	
+	if WG.Chobby.Configuration.gameConfig.disablePlanetwarsStuff and WG.Chobby.Configuration.gameConfig.disableMatchMaking then 
+		multiPlayerTabs = {
+			{name = "battle_list", control = battleListWindow},
+		}
+	elseif WG.Chobby.Configuration.gameConfig.disablePlanetwarsStuff then 
+		multiPlayerTabs = {
+				{name = "matchmaking", control = queueListWindow},
+				{name = "battle_list", control = battleListWindow},
+		}		
+	elseif WG.Chobby.Configuration.gameConfig.disableMatchMaking then 
+		multiPlayerTabs = {
+				{name = "battle_list", control = battleListWindow},
+				{name = "planetwars", control = planetwarsListWindow},
+		}
+	else
+		multiPlayerTabs = {
+				{name = "matchmaking", control = queueListWindow},
+				{name = "battle_list", control = battleListWindow},
+				{name = "planetwars", control = planetwarsListWindow},
+		}
+	end	
+	
 	local submenus = {
 		{
 			name = "singleplayer",
@@ -444,11 +480,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		{
 			name = "multiplayer",
 			entryCheck = WG.LoginWindowHandler.TryLoginMultiplayer,
-			tabs = {
-				{name = "matchmaking", control = queueListWindow},
-				{name = "battle_list", control = battleListWindow},
-				{name = "planetwars", control = planetwarsListWindow},
-			},
+			tabs = multiPlayerTabs,
 			cleanupFunction = Configuration.leaveMultiplayerOnMainMenu and CleanMultiplayerState or nil
 		},
 		{

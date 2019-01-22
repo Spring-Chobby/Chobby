@@ -414,52 +414,13 @@ local options={
 		step   = 1,  -- quantization is aligned to the def value
 		-- (step <= 0) means that there is no quantization
 	},
-
 -- End Control Victory Options  
-  
- ---- KING OF THE HILL OPTIONS ----
- --[[  {
-    key    = 'c_koth_section',
-    name   = 'King of the Hill Mode',
-    desc   = 'Settings for King of the Hill mode.',
-    type   = 'section',
-    },
-	{
-		key="koth",
-		name="Hold Time",
-		desc="The one with a unit closest to center for that many minutes win. A zero disables King of the Hill.",
-		type="number",
-		section= 'c_koth_section',		
-		min = 0,
-		max = 10080,
-		step = 1,
-		def = 0,
-	},
-	{
-		key="kothr",
-		name="Centre Radius",
-		desc="This defines the size of the centre area.",
-		type="number",
-		section= 'c_koth_section',		
-		min = 100,
-		max = 1000,
-		step = 50,
-		def = 300,
-	},
-	{
-		key		= "kothbase",
-		name	= "Start with bases",
-		desc	= "Players start with a small base.",
-		type	= "bool",
-		def		= true,
-		section	= 'c_koth_section',	
-	}, ]]--
 }
 
 --// add key-name to the description (so you can easier manage modoptions in springie)
---[[for i=1,#options do
+for i=1,#options do
   local opt = options[i]
   opt.desc = opt.desc .. '\nkey: ' .. opt.key
-end]]
+end
 
 return options

@@ -138,13 +138,13 @@ local bugLines = {
 			return "Using engine " .. Spring.Utilities.GetEngineVersion() .. " " .. ((WG.Chobby.Configuration:GetIsRunning64Bit() and "64-bit.") or "32-bit.")
 		end,
 	},
-	{
+--[[	{
 		"Open game data folder to find settings, infolog etc...",
 		"Local Data",
 		function ()
 			WG.WrapperLoopback.OpenFolder()
 		end
-	},
+	}, ]]--
 	{
 		"A useful site for uploading infologs.",
 		"Pastebin",

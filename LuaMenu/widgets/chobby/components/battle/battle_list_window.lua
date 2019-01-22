@@ -9,6 +9,7 @@ local IMG_UNREADY  = LUA_DIRNAME .. "images/unready.png"
 function BattleListWindow:init(parent)
 	self:super("init", parent, "Play or watch a game", true, nil, nil, nil, 34)
 
+if not Configuration.gameConfig.battleListDisableHostButton then
 	self.btnNewBattle = Button:New {
 		x = 260,
 		y = 7,
@@ -24,6 +25,7 @@ function BattleListWindow:init(parent)
 			end
 		},
 	}
+end
 	
 	local function SoftUpdate()
 		self:UpdateFilters()
@@ -226,7 +228,7 @@ function BattleListWindow:Update()
 	local battles = lobby:GetBattles()
 	local tmp = {}
 	for _, battle in pairs(battles) do
-		table.insert(tmp, battle)
+		table.insert(tmp, battle)		
 	end
 	battles = tmp
 
@@ -588,6 +590,13 @@ end
 
 function BattleListWindow:ItemInFilter(id)
 	local battle = lobby:GetBattle(id)
+	local filterString = Configuration.gameConfig.battleListOnlyShow
+	if (filterString ~= nil) then
+		local filterToGame = string.find(battle.gameName, filterString)
+		if (filterToGame == nil)  then
+			return false
+		end
+	end
 	if not lobby:GetBattleHasFriend(id) then
 		if Configuration.battleFilterPassworded2 and battle.passworded then
 			return false

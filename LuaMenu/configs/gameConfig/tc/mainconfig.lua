@@ -55,8 +55,8 @@ local minimapThumbnailPath = LUA_DIRNAME .. "configs/gameConfig/zk/minimapThumbn
 local externalFuncAndData = {
 	dirName                = "tc",
 	name                   = "The Cursed",
-	_defaultGameArchiveName = "The Cursed $VERSION",
-	_defaultGameRapidTag   = "thecursed:latest", -- Do not read directly
+	_defaultGameArchiveName = "The Cursed 1.442",
+	_defaultGameRapidTag   = "tc:latest", -- Do not read directly
 	aiVersion               = "stable",
 	mapWhitelist            = mapWhitelist,
 	aiBlacklist             = aiBlacklist,
@@ -88,6 +88,13 @@ local externalFuncAndData = {
 --	link_maps               = link_maps,
 --	link_particularMapPage  = link_particularMapPage,
 	ignoreServerVersion     = true,
+---- DISABLES / OVERWRIDES
+	battleListDisableHostButton = true, -- Hides "Host" button as this function is not working as one might imagine
+	battleListOnlyShow = "The Cursed", -- Filters battle list to autohost running with a game that contains only this string
+	disableSteamStuff = true, -- removes settings related to steam
+	disablePlanetwarsStuff = true, -- removes settings related to planetwars
+	disableMatchMaking = true, -- removes match making
+	disableCommunityWindow = true, -- removes Community Window
 }
 
 function externalFuncAndData.CheckAvailability()
