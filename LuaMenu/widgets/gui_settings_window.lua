@@ -859,13 +859,15 @@ local function GetLobbyTabControls()
 	children[#children + 1] = autoLogin
 	offset = offset + ITEM_OFFSET
 
-	if not Configuration.gameConfig.disableSteamStuff then	
+	if not Configuration.gameConfig.disableSteam then	
 		children[#children + 1], offset = AddCheckboxSetting(offset, i18n("login_with_steam"), "wantAuthenticateWithSteam", true)
 		children[#children + 1], offset = AddCheckboxSetting(offset, i18n("use_steam_browser"), "useSteamBrowser", true)
 	end
-	if not Configuration.gameConfig.disablePlanetwarsStuff then	
+	
+	if not Configuration.gameConfig.disablePlanetwars then	
 		children[#children + 1], offset = AddCheckboxSetting(offset, i18n("planetwars_notifications"), "planetwarsNotifications", false)	
 	end
+	
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Multiplayer in new window", "multiplayerLaunchNewSpring", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("ingame_notifcations"), "ingameNotifcations", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("non_friend_notifications"), "nonFriendNotifications", true)
