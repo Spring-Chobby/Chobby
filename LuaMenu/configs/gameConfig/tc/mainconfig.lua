@@ -9,6 +9,7 @@ local skirmishSetupData               = VFS.Include(LUA_DIRNAME .. "configs/game
 local defaultModoptions               = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/ModOptions.lua")
 local rankFunction, largeRankFunction = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/rankFunction.lua")
 local backgroundConfig                = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/skinConfig.lua")
+local gameUnitInformation             = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/gameUnitInformation.lua")
 
 -- local link_homePage, link_replays, link_maps = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/linkFunctions.lua")
 
@@ -55,7 +56,7 @@ local minimapThumbnailPath = LUA_DIRNAME .. "configs/gameConfig/zk/minimapThumbn
 local externalFuncAndData = {
 	dirName                = "tc",
 	name                   = "The Cursed",
-	_defaultGameArchiveName = "The Cursed 1.442",
+	_defaultGameArchiveName = "The Cursed $VERSION",
 	_defaultGameRapidTag   = "tc:latest", -- Do not read directly
 	aiVersion               = "stable",
 	mapWhitelist            = mapWhitelist,
@@ -89,12 +90,12 @@ local externalFuncAndData = {
 --	link_particularMapPage  = link_particularMapPage,
 	ignoreServerVersion     = true,
 ---- DISABLES / OVERWRIDES
-	battleListDisableHostButton = true, -- Hides "Host" button as this function is not working as one might imagine
-	battleListOnlyShow = "The Cursed", -- Filters battle list to autohost running with a game that contains only this string
-	disableSteamStuff = true, -- removes settings related to steam
-	disablePlanetwarsStuff = true, -- removes settings related to planetwars
-	disableMatchMaking = true, -- removes match making
-	disableCommunityWindow = true, -- removes Community Window
+	battleListOnlyShow 			= "The Cursed", -- Filters battle list to autohost running with a game that contains only this string
+	disableBattleListHostButton = true, -- Hides "Host" button as this function is not working as one might imagine
+	disableSteam 				= true, -- removes settings related to steam
+	disablePlanetwars 			= true, -- removes settings related to planetwars
+	disableMatchMaking 			= true, -- removes match making
+	disableCommunityWindow 		= true, -- removes Community Window
 }
 
 function externalFuncAndData.CheckAvailability()
