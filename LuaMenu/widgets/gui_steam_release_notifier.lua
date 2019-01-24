@@ -13,6 +13,7 @@ function widget:GetInfo()
 	}
 end
 
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Initialization
@@ -22,7 +23,8 @@ local releaseDate = {0, 15, 8, 27, 4, 2018} -- second, minute, hour, day, month,
 
 local function SteamCheckPopup()
 	local Configuration = WG.Chobby.Configuration
-	if Configuration.canAuthenticateWithSteam or Configuration[doNotAskAgainKey] then
+
+	if WG.Chobby.Configuration.gameConfig.disableSteam or Configuration.canAuthenticateWithSteam or Configuration[doNotAskAgainKey] then
 		return
 	end
 	
