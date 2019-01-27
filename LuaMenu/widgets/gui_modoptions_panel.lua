@@ -394,7 +394,7 @@ local function CreateModoptionWindow()
 		end
 		localModoptions = {}
 	end
-	
+
 	buttonReset = Button:New {
 		right = 294,
 		width = 135,
