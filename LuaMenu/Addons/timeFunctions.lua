@@ -68,8 +68,8 @@ local function FixTimeOutOfBounds(timeTable)
 		end
 	end
 	
-	local updated = false
-	while updated do
+	repeat
+		local updated = false
 		-- Overflow
 		local daysInThisMonth = monthDays[timeTable[5]] or 31
 		if timeTable[5] == 2 and IsLeapYear(timeTable[6]) then
@@ -99,7 +99,7 @@ local function FixTimeOutOfBounds(timeTable)
 			timeTable[6] = timeTable[6] - 1
 			updated = true
 		end
-	end
+	until (not updated)
 	
 	return timeTable
 end
