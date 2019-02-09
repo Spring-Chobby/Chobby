@@ -62,7 +62,7 @@ local function FixTimeOutOfBounds(timeTable)
 			timeTable[i] = timeTable[i] + base[i]
 			timeTable[i + 1] = timeTable[i + 1] - 1
 		end
-		while timeTable[i] > base[i] do
+		while timeTable[i] >= base[i] do
 			timeTable[i] = timeTable[i] - base[i]
 			timeTable[i + 1] = timeTable[i + 1] + 1
 		end
