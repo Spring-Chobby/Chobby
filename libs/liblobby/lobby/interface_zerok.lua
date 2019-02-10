@@ -966,6 +966,10 @@ function Interface:_JoinBattleSuccess(data)
 	self:_OnJoinBattle(data.BattleID, 0)
 	
 	local battle = self:GetBattle(data.BattleID)
+	if not battle then
+		-- Perhaps we need TryGetBattle.
+		return
+	end
 	
 	local newPlayers = data.Players
 	local newPlayerMap = {}
