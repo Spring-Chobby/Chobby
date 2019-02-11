@@ -221,6 +221,16 @@ function Interface:SayBattleEx(message)
 	return self
 end
 
+function Interface:SetModOptions(data)
+	for k, v in pairs(data) do
+		if self.modoptions[k] ~= v then
+			self:SayBattle("!bSet " .. tostring(k) .. " " .. tostring(v))
+		end
+		-- self:_SendCommand("SETSCRIPTTAGS game/modoptions/" .. k .. '=' .. v)
+	end
+	return self
+end
+
 function Interface:AddAi(aiName, aiLib, allyNumber, version)
 	aiName = aiName:gsub(" ", "")
 	local battleStatusString = tostring(
@@ -1315,12 +1325,30 @@ end
 Interface.commands["SERVERMSGBOX"] = Interface._OnServerMSGBox
 Interface.commandPattern["SERVERMSGBOX"] = "([^\t]+)\t+([^\t]+)"
 
-function Interface:_OnSetScriptTags(pairs)
-	pairs = explode(" ", pairs)
-	self:_CallListeners("OnSetScriptTags", pairs)
+local mod_opts_pre = "game/modoptions/"
+local mod_opts_pre_indx = #mod_opts_pre + 1
+local function string_starts(String, Start)
+	return string.sub(String, 1, string.len(Start)) == Start
+end
+function Interface:_OnSetScriptTags(tagsTxt)
+	local tags = explode("\t", tagsTxt)
+	if self.modoptions == nil then
+		self.modoptions = {}
+	end
+	for _, tag in pairs(tags) do
+		if string_starts(tag, mod_opts_pre) then
+			local kv = tag:sub(mod_opts_pre_indx)
+			local kvTable = explode("=", kv)
+			local k = kvTable[1]
+			local v = kvTable[2]
+			self.modoptions[k] = v
+		end
+	end
+	self:_OnSetModOptions(self.modoptions)
 end
 Interface.commands["SETSCRIPTTAGS"] = Interface._OnSetScriptTags
-Interface.commandPattern["SETSCRIPTTAGS"] = "([^\t]+)"
+Interface.commandPattern["SETSCRIPTTAGS"] = "(.*)"
+-- Interface.commandPattern["SETSCRIPTTAGS"] = "([^\t]+)"
 
 function Interface:_OnSetTeamLeader(obj)
 	local userName = obj.userName
