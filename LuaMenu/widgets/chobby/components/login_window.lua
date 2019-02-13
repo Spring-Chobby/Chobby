@@ -474,24 +474,30 @@ function LoginWindow:createAgreementWindow()
 		text = self.agreementText,
 		font = Configuration:GetFont(2),
 	}
-	self.txtVerif = TextBox:New {
-		x = 1,
-		width = 200,
-		y = 405,
-		height = 35,
-		text = i18n("Email Verification Code") .. ":",
-		fontsize = Configuration:GetFont(2).size,
-		useIME = false,
-	}
-	self.ebVerif = EditBox:New {
-		x = 200,
-		width = 650-250,
-		y = 395,
-		height = 35,
-		text = "",
-		font = Configuration:GetFont(2),
-		useIME = false,
-	}	
+	
+	if WG.Server.protocol=="spring" then
+		self.txtVerif = TextBox:New {
+			x = 1,
+			width = 200,
+			y = 405,
+			height = 35,
+			text = i18n("Email Verification Code") .. ":",
+			fontsize = Configuration:GetFont(2).size,
+			useIME = false,
+		}
+		self.ebVerif = EditBox:New {
+			x = 200,
+			width = 650-250,
+			y = 395,
+			height = 35,
+			text = "",
+			font = Configuration:GetFont(2),
+			useIME = false,
+		}	
+	else
+		self.txtVerif = Control:New {}
+		self.ebVerif = Control:New {}	
+	end
 	
 	self.btnYes = Button:New {
 		x = 1,
