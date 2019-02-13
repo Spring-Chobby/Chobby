@@ -158,34 +158,39 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		},
 	}
 	
-	self.txtEmail = TextBox:New {
-		x = 15,
-		width = 170,
-		y = 180,
-		height = 35,
-		text = i18n("Email") .. ":",
-		fontsize = Configuration:GetFont(3).size,
-		useIME = false,
-	}
-	self.ebEmail = EditBox:New {
-		x = 135,
-		width = 200,
-		y = 171,
-		height = 35,
-		text = "",
-		font = Configuration:GetFont(3),
-		useIME = false,
-		OnKeyPress = {
-			function(obj, key, mods, ...)
-				if key == Spring.GetKeyCode("enter") or key == Spring.GetKeyCode("numpad_enter") then
-					if self.tabPanel.tabBar:IsSelected("register") then
-						self:tryRegister()
+	if WG.Server.protocol=="spring" then 
+		self.txtEmail = TextBox:New {
+			x = 15,
+			width = 170,
+			y = 180,
+			height = 35,
+			text = i18n("Email") .. ":",
+			fontsize = Configuration:GetFont(3).size,
+			useIME = false,
+		}
+		self.ebEmail = EditBox:New {
+			x = 135,
+			width = 200,
+			y = 171,
+			height = 35,
+			text = "",
+			font = Configuration:GetFont(3),
+			useIME = false,
+			OnKeyPress = {
+				function(obj, key, mods, ...)
+					if key == Spring.GetKeyCode("enter") or key == Spring.GetKeyCode("numpad_enter") then
+						if self.tabPanel.tabBar:IsSelected("register") then
+							self:tryRegister()
+						end
 					end
 				end
-			end
-		},
-	}
-	
+			},
+		}
+	else
+		self.txtEmail = Control:New {}	
+		self.ebEmail = Control:New {}
+	end
+		
 	self.cbAutoLogin = Checkbox:New {
 		x = 15,
 		width = 215,
@@ -207,7 +212,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		y = 214,
 		height = 90,
 		text = "",
-		fontsize = Configuration:GetFont(3).size,
+		fontsize = Configuration:GetFont(2).size,
 	}
 	
 	self.btnLogin = Button:New {
