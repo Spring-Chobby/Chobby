@@ -17,7 +17,7 @@ end
 --------------------------------------------------------------------------------
 -- Local Variables
 
-local registerName, registerPassword
+local registerName, registerPassword, registerEmail
 
 local currentLoginWindow
 local loginAcceptedFunction
@@ -188,7 +188,7 @@ local function InitializeListeners()
 		local steamMode = Configuration.canAuthenticateWithSteam and Configuration.wantAuthenticateWithSteam
 		if registerName then
 			WG.Analytics.SendOnetimeEvent("lobby:send_register")
-			lobby:Register(registerName, registerPassword, nil, steamMode)
+			lobby:Register(registerName, registerPassword, registerEmail, steamMode)
 			Configuration.userName = registerName
 			Configuration.password = registerPassword
 			registerName = nil
@@ -205,9 +205,10 @@ end
 --------------------------------------------------------------------------------
 -- External Functions
 
-function LoginWindowHandler.QueueRegister(name, password)
+function LoginWindowHandler.QueueRegister(name, password, email)
 	registerName = name
 	registerPassword = password
+	registerEmail = email
 end
 
 function LoginWindowHandler.TryLoginMultiplayer(name, password)
