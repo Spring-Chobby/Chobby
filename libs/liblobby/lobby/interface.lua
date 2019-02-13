@@ -21,9 +21,8 @@ Interface.commandPattern = {}
 
 function Interface:Register(userName, password, email)
 	self:super("Register", userName, password, email)
-	-- FIXME: email argument is currently not sent to the server
 	password = VFS.CalculateHash(password, 0)
-	self:_SendCommand(concat("REGISTER", userName, password))
+	self:_SendCommand(concat("REGISTER", userName, password, email))
 	return self
 end
 
@@ -745,8 +744,8 @@ function Interface:CloseQueue(name)
 	return self
 end
 
-function Interface:ConfirmAgreement()
-	self:_SendCommand("CONFIRMAGREEMENT")
+function Interface:ConfirmAgreement(verif_code)
+	self:_SendCommand(concat("CONFIRMAGREEMENT", verif_code))
 	return self
 end
 
