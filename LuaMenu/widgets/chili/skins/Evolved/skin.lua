@@ -138,6 +138,19 @@ skin.negative_button = {
   DrawControl = DrawButton,
 }
 
+skin.positive_button = {
+  TileImageBK = ":cl:tech_button_bright_small_bk.png",
+  TileImageFG = ":cl:tech_button_bright_small_fg.png",
+  tiles = {20, 14, 20, 14}, --// tile widths: left,top,right,bottom
+  padding = {10, 10, 10, 10},
+  
+  backgroundColor = {0.05, 0.85, 0.25, 0.65},
+  focusColor  = {0.05, 0.85, 0.25, 0.9},
+  borderColor = {0.05, 0.85, 0.25, 0.15},
+
+  DrawControl = DrawButton,
+}
+
 skin.combobox = {
 	TileImageBK = ":cl:combobox_ctrl.png",
 	TileImageFG = ":cl:combobox_ctrl_fg.png",

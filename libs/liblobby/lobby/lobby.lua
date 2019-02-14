@@ -299,6 +299,10 @@ function Lobby:VoteNo()
 	return self
 end
 
+function Lobby:VoteOption(id)
+	return self
+end
+
 function Lobby:SetModOptions(data)
 	return self
 end
@@ -866,8 +870,8 @@ function Lobby:_OnSaidBattleEx(userName, message, sayTime)
 	self:_CallListeners("OnSaidBattleEx", userName, message, sayTime)
 end
 
-function Lobby:_OnVoteUpdate(message, yesVotes, noVotes, votesNeeded, pollType, pollParameter)
-	self:_CallListeners("OnVoteUpdate", message, yesVotes, noVotes, votesNeeded, pollType, pollParameter)
+function Lobby:_OnVoteUpdate(voteMessage, pollType, mapPoll, candidates, votesNeeded, pollUrl)
+	self:_CallListeners("OnVoteUpdate", voteMessage, pollType, mapPoll, candidates, votesNeeded, pollUrl)
 end
 
 function Lobby:_OnVoteEnd(message, success)

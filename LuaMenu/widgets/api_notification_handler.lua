@@ -27,7 +27,7 @@ local function AddListeners()
 	end
 	lobby:AddListener("OnRung", OnRung)
 	
-	local function OnVoteUpdate(listener, message, yesVotes, noVotes, votesNeeded, pollType, pollParameter)
+	local function OnVoteUpdate(listener, voteMessage, pollType, mapPoll, candidates, votesNeeded, pollUrl)
 		if pollType == "start" and not lobby:GetMyIsSpectator() and MouseOutside() then
 			WG.WrapperLoopback.Alert("Vote to start the battle.")
 		end

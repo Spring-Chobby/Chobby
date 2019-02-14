@@ -359,6 +359,19 @@ function Interface:VoteNo()
 	return self
 end
 
+function Interface:VoteOption(id)
+	local sendData = {
+		Place = 1, -- Battle?
+		User = self:GetMyUserName(),
+		IsEmote = false,
+		Text = "!vote " .. id,
+		Ring = false,
+		--Time = "2016-06-25T07:17:20.7548313Z",
+	}
+	self:_SendCommand("Say " .. json.encode(sendData))
+	return self
+end
+
 function Interface:SetModOptions(data)
 	for _,_ in pairs(data) do
 		local sendData = {
@@ -1183,21 +1196,63 @@ function Interface:ProcessVote(data, battle, duplicateMessageTime)
 	end
 	
 	-- Get poll type and parameters
-	local pollType = false
-	local pollParameter = false
+	local pollType = "boolean"
+	local mapPoll = false
+	local pollUrl = false
 	
 	local mapStart = string.find(voteMessage, "Change map to ")
 	if mapStart then
 		mapStart = mapStart + 14
-		pollParameter = string.sub(voteMessage, mapStart, lasturl - 1)
-		pollType = "map"
+		pollUrl = string.sub(voteMessage, mapStart, lasturl - 1)
+		mapPoll = true
 	elseif string.find(voteMessage, "start the game?") then
 		pollType = "start"
 	end
 	
-	self:_OnVoteUpdate(voteMessage, yesVotes, noVotes, votesNeeded, pollType, pollParameter)
+	local battlePollhandled = string.find(voteMessage, "(Yes)")
+	if battlePollhandled then
+		return true
+	end
+	
+	local candidates = {
+		{
+			id = 1, 
+			votes = yesVotes,
+		},
+		{
+			id = 2, 
+			votes = noVotes,
+		},
+	}
+	
+	self:_OnVoteUpdate(voteMessage, pollType, mapPoll, candidates, votesNeeded, pollUrl)
 	return true
 end
+
+function Interface:_BattlePoll(data)
+	-- {"Topic":"(Yes) Vittra v2.1 (No) Altair_Crossing_v3?","Options":[{"Name":"Vittra v2.1","Id":1,"Votes":0},{"Name":"Altair_Crossing_v3","Id":2,"Votes":0}],"VotesToWin":2,"DefaultPoll":true}
+	if not (data.Topic and string.find(data.Topic, "(Yes)")) then
+		return
+	end
+	
+	data.DefaultPoll = false
+	data.MapPoll = true
+	
+	local candidates = {}
+	for i = 1, #data.Options do
+		local opt = data.Options[i]
+		candidates[i] = {
+			id = opt.Id,
+			votes = opt.Votes,
+		}
+		if not data.DefaultPoll then
+			candidates[i].name = opt.Name
+		end
+	end
+	
+	self:_OnVoteUpdate(data.Topic, "multi", data.MapPoll, candidates, data.VotesToWin, false)
+end
+Interface.jsonCommands["BattlePoll"] = Interface._BattlePoll
 
 function Interface:_Say(data)
 	-- Say {"Place":0,"Target":"zk","User":"GoogleFrog","IsEmote":false,"Text":"bla","Ring":false,"Time":"2016-06-25T07:17:20.7548313Z}"
@@ -1250,10 +1305,13 @@ function Interface:_Say(data)
 		-- data.Place == 1 -> General battle chat
 		-- data.Place == 3 -> Battle chat directed at user
 		local battleID = self:GetMyBattleID()
+		
+		-- Chat poll parsing
 		local battle = battleID and self:GetBattle(battleID)
 		if self:ProcessVote(data, battle, duplicateMessageTime) then
 			return
 		end
+		
 		if emote then
 			self:_OnSaidBattleEx(data.User, data.Text, data.Time)
 		else

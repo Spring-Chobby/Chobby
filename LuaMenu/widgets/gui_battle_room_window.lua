@@ -1087,6 +1087,14 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		padding = {0, 0, 0, 0},
 		parent = votePanel,
 	}
+	local multiVotePanel = Control:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		bottom = 0,
+		padding = {0, 0, 0, 0},
+		parent = votePanel,
+	}
 
 	local buttonNo
 	local buttonYes = Button:New {
@@ -1095,6 +1103,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		bottom = 0,
 		width = height,
 		caption = "",
+		classname = "positive_button",
 		OnClick = {
 			function (obj)
 				ButtonUtilities.SetButtonSelected(obj)
@@ -1123,6 +1132,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		bottom = 0,
 		width = height,
 		caption = "",
+		classname = "negative_button",
 		OnClick = {
 			function (obj)
 				ButtonUtilities.SetButtonSelected(obj)
@@ -1175,9 +1185,58 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		caption = "20/50",
 		parent = activePanel,
 	}
-
-	if activePanel.visible then
-		activePanel:Hide()
+	
+	local MULTI_POLL_MAX = 4
+	local multiPollOpt = {}
+	
+	local function SetSelectedMultOpt(index)
+		for i = 1, MULTI_POLL_MAX do
+			if i == index then
+				ButtonUtilities.SetButtonSelected(multiPollOpt[i].button)
+			else
+				ButtonUtilities.SetButtonDeselected(multiPollOpt[i].button)
+			end
+		end
+	end
+	
+	for i = 1, MULTI_POLL_MAX do
+		local opt = {}
+		opt.id = i
+		opt.button = Button:New {
+			x = tostring(math.floor(100*(i - 1)/MULTI_POLL_MAX)) .. "%",
+			y = 0,
+			bottom = 0,
+			width = tostring(math.floor(100/MULTI_POLL_MAX)) .. "%",
+			caption = "",
+			classname = "option_button",
+			OnClick = {
+				function (obj)
+					SetSelectedMultOpt(i)
+					battleLobby:VoteOption(opt.id)
+				end
+			},
+			padding = {5,5,5,5},
+			parent = multiVotePanel,
+		}
+		opt.countLabel = Label:New {
+			right = 5,
+			y = 7,
+			width = 50,
+			bottom = 0,
+			align = "left",
+			font = config:GetFont(3),
+			caption = "20/50",
+			parent = opt.button,
+		}
+		opt.imMinimap = Image:New {
+			x = 0,
+			y = 0,
+			bottom = 0,
+			width = height,
+			keepAspect = true,
+			parent = opt.button,
+		}
+		multiPollOpt[i] = opt
 	end
 
 	local voteResultLabel = Label:New {
@@ -1191,9 +1250,10 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		parent = votePanel,
 	}
 
-	if voteResultLabel.visible then
-		voteResultLabel:Hide()
-	end
+	activePanel:SetVisibility(false)
+	multiVotePanel:SetVisibility(false)
+	minimapPanel:SetVisibility(false)
+	voteResultLabel:SetVisibility(false)
 
 	local function HideVoteResult()
 		if voteResultLabel.visible then
@@ -1203,42 +1263,73 @@ local function SetupVotePanel(votePanel, battle, battleID)
 
 	local externalFunctions = {}
 
-	local oldPollType, oldPollParameter
-	local function UpdatePollType(pollType, pollParameter)
-		if newPollType == pollType and newPollParameter == pollParameter then
+	local oldPollType, oldMapPoll, oldPollUrl
+	local function UpdatePollType(pollType, mapPoll, pollUrl)
+		if oldPollType == pollType and oldMapPoll == mapPoll and oldPollUrl == pollUrl then
 			return
 		end
-		oldPollType, oldPollParameter = pollType, pollParameter
-
-		if pollType == "map" then
-			minimapPanel:SetVisibility(true)
-			activePanel:SetPos(height + 2)
-			activePanel._relativeBounds.right = 0
-			activePanel:UpdateClientArea()
-			if pollParameter then
-				imMinimap.file, imMinimap.checkFileExists = config:GetMinimapSmallImage(pollParameter)
-				imMinimap:Invalidate()
-				currentMapName = pollParameter
+		oldPollType, oldMapPoll, oldPollUrl = pollType, mapPoll, pollUrl
+		
+		if pollType ~= "multi" then
+			if mapPoll then
+				minimapPanel:SetVisibility(true)
+				activePanel:SetPos(height + 2)
+				activePanel._relativeBounds.right = 0
+				activePanel:UpdateClientArea()
+				if pollUrl then
+					imMinimap.file, imMinimap.checkFileExists = config:GetMinimapSmallImage(pollUrl)
+					imMinimap:Invalidate()
+					currentMapName = pollUrl
+				end
+			else
+				minimapPanel:SetVisibility(false)
+				activePanel:SetPos(0)
+				activePanel._relativeBounds.right = 0
+				activePanel:UpdateClientArea()
 			end
-		else
-			minimapPanel:SetVisibility(false)
-			activePanel:SetPos(0)
-			activePanel._relativeBounds.right = 0
-			activePanel:UpdateClientArea()
+		end
+	end
+	
+	local function SetMultiPollCandidates(candidates)
+		for i = 1, MULTI_POLL_MAX do
+			if candidates[i] then
+				multiPollOpt[i].imMinimap.file, multiPollOpt[i].imMinimap.checkFileExists = config:GetMinimapSmallImage(candidates[i].name)
+				multiPollOpt[i].imMinimap:Invalidate()
+				multiPollOpt[i].button.tooltip = "Vote for " .. candidates[i].name
+			end
 		end
 	end
 
-	function externalFunctions.VoteUpdate(message, yesVotes, noVotes, votesNeeded, pollType, pollParameter)
-		UpdatePollType(pollType, pollParameter)
-		voteName:SetCaption(message)
-		voteCountLabel:SetCaption(yesVotes .. "/" .. votesNeeded)
-		voteProgress:SetValue(100 * yesVotes / votesNeeded)
-		activePanel:SetVisibility(true)
+	function externalFunctions.VoteUpdate(voteMessage, pollType, mapPoll, candidates, votesNeeded, pollUrl)
+		UpdatePollType(pollType, mapPoll, pollUrl)
+		-- Update votes
+		if pollType == "multi" then
+			SetMultiPollCandidates(candidates)
+			for i = 1, MULTI_POLL_MAX do
+				if candidates[i] then
+					multiPollOpt[i].countLabel:SetCaption(candidates[i].votes .. "/" .. votesNeeded)
+					multiPollOpt[i].button:SetVisibility(true)
+					multiPollOpt[i].id = candidates[i].id
+				else
+					multiPollOpt[i].button:SetVisibility(false)
+				end
+			end
+			activePanel:SetVisibility(false)
+			multiVotePanel:SetVisibility(true)
+		else
+			voteName:SetCaption(voteMessage)
+			voteCountLabel:SetCaption(candidates[1].votes .. "/" .. votesNeeded)
+			voteProgress:SetValue(100 * candidates[1].votes / votesNeeded)
+			activePanel:SetVisibility(true)
+			multiVotePanel:SetVisibility(false)
+		end
+		
 		HideVoteResult()
 	end
 
 	function externalFunctions.VoteEnd(message, success)
 		activePanel:SetVisibility(false)
+		multiVotePanel:SetVisibility(false)
 		minimapPanel:SetVisibility(false)
 		local text = ((success and WG.Chobby.Configuration:GetSuccessColor()) or WG.Chobby.Configuration:GetErrorColor()) .. message .. ((success and " Passed.") or " Failed.")
 		voteResultLabel:SetCaption(text)
@@ -1780,8 +1871,8 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		playerHandler.RemoveAi(botName)
 	end
 
-	local function OnVoteUpdate(listener, message, yesVotes, noVotes, votesNeeded, pollType, pollParameter)
-		votePanel.VoteUpdate(message, yesVotes, noVotes, votesNeeded, pollType, pollParameter)
+	local function OnVoteUpdate(listener, voteMessage, pollType, mapPoll, candidates, votesNeeded, pollUrl)
+		votePanel.VoteUpdate(voteMessage, pollType, mapPoll, candidates, votesNeeded, pollUrl)
 	end
 
 	local function OnVoteEnd(listener, message, success)
