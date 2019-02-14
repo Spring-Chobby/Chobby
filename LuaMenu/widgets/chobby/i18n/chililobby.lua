@@ -58,6 +58,7 @@ return {
 		steam_friends = "Steam Friends",
 		host = "Host",
 		match_found = "Match Found",
+		match_found_quickplay = "Small Teams available",
 		party_invite = "Party Invite",
 		party = "Party",
 		accept = "Accept",
