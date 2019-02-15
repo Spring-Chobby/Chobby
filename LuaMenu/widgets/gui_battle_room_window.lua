@@ -34,6 +34,8 @@ local IMG_READY    = LUA_DIRNAME .. "images/ready.png"
 local IMG_UNREADY  = LUA_DIRNAME .. "images/unready.png"
 local IMG_LINK     = LUA_DIRNAME .. "images/link.png"
 
+local MINIMUM_QUICKPLAY_PLAYERS = 6 -- Hax until the server tells me a number.
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Download management
@@ -1042,6 +1044,9 @@ local function SetupVotePanel(votePanel, battle, battleID)
 	local height = votePanel.clientHeight
 	local config = WG.Chobby.Configuration
 	local offset = 0
+	
+	local buttonYesClickOverride
+	local buttonNoClickOverride
 
 	local currentMapName
 
@@ -1108,7 +1113,11 @@ local function SetupVotePanel(votePanel, battle, battleID)
 			function (obj)
 				ButtonUtilities.SetButtonSelected(obj)
 				ButtonUtilities.SetButtonDeselected(buttonNo)
-				battleLobby:VoteYes()
+				if buttonYesClickOverride then
+					buttonYesClickOverride()
+				else
+					battleLobby:VoteYes()
+				end
 			end
 		},
 		padding = {10,10,10,10},
@@ -1137,7 +1146,11 @@ local function SetupVotePanel(votePanel, battle, battleID)
 			function (obj)
 				ButtonUtilities.SetButtonSelected(obj)
 				ButtonUtilities.SetButtonDeselected(buttonYes)
-				battleLobby:VoteNo()
+				if buttonNoClickOverride then
+					buttonNoClickOverride()
+				else
+					battleLobby:VoteNo()
+				end
 			end
 		},
 		padding = {10,10,10,10},
@@ -1197,6 +1210,12 @@ local function SetupVotePanel(votePanel, battle, battleID)
 				ButtonUtilities.SetButtonDeselected(multiPollOpt[i].button)
 			end
 		end
+	end
+	
+	local function ResetButtons()
+		ButtonUtilities.SetButtonDeselected(buttonYes)
+		ButtonUtilities.SetButtonDeselected(buttonNo)
+		SetSelectedMultOpt()
 	end
 	
 	for i = 1, MULTI_POLL_MAX do
@@ -1317,6 +1336,8 @@ local function SetupVotePanel(votePanel, battle, battleID)
 			activePanel:SetVisibility(false)
 			multiVotePanel:SetVisibility(true)
 		else
+			buttonYesClickOverride = candidates[1].clickFunc
+			buttonNoClickOverride = candidates[2].clickFunc
 			voteName:SetCaption(voteMessage)
 			voteCountLabel:SetCaption(candidates[1].votes .. "/" .. votesNeeded)
 			voteProgress:SetValue(100 * candidates[1].votes / votesNeeded)
@@ -1337,12 +1358,18 @@ local function SetupVotePanel(votePanel, battle, battleID)
 			voteResultLabel:Show()
 		end
 
-		ButtonUtilities.SetButtonDeselected(buttonYes)
-		ButtonUtilities.SetButtonDeselected(buttonNo)
-
+		ResetButtons()
 		WG.Delay(HideVoteResult, 5)
 	end
 
+	function externalFunctions.ImmediateVoteEnd()
+		activePanel:SetVisibility(false)
+		multiVotePanel:SetVisibility(false)
+		minimapPanel:SetVisibility(false)
+		ResetButtons()
+		HideVoteResult()
+	end
+	
 	return externalFunctions
 end
 
@@ -1879,6 +1906,47 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		votePanel.VoteEnd(message, success)
 	end
 
+	local matchmakerCandidates = {
+		{
+			clickFunc = function()
+				battleLobby:AcceptMatchMakingMatch()
+			end,
+			votes = 0,
+		},
+		{
+			clickFunc = function()
+				battleLobby:RejectMatchMakingMatch()
+				votePanel.ImmediateVoteEnd()
+			end,
+			votes = 0,
+		},
+	}
+	
+	local function OnMatchMakerReadyCheck(_, secondsRemaining, minWinChance, isQuickPlay)
+		if not isQuickPlay then
+			return -- Handled by MM popup
+		end
+		matchmakerCandidates[1].votes = 0
+		matchmakerCandidates[2].votes = 0
+		votePanel.VoteUpdate("", "quickplay", false, matchmakerCandidates, MINIMUM_QUICKPLAY_PLAYERS)
+	end
+
+	local function OnMatchMakerReadyUpdate(_, readyAccepted, likelyToPlay, queueReadyCounts, battleSize, readyPlayers)
+		if not votePanel.MatchmakerMode() then
+			return
+		end
+		matchmakerCandidates[1].votes = readyPlayers
+		matchmakerCandidates[2].votes = 0
+		votePanel.VoteUpdate("", "quickplay", false, matchmakerCandidates, MINIMUM_QUICKPLAY_PLAYERS)
+	end
+
+	local function OnMatchMakerReadyResult(_, isBattleStarting, areYouBanned)
+		if not votePanel.MatchmakerMode() then
+			return
+		end
+		votePanel.VoteEnd((isBattleStarting and "Match starting") or "Not enough players", isBattleStarting)
+	end
+
 	local function OnSaidBattle(listener, userName, message)
 		local myUserName = battleLobby:GetMyUserName()
 		local iAmMentioned = myUserName and userName ~= myUserName and string.find(message, myUserName)
@@ -1892,7 +1960,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		local chatColour = (iAmMentioned and CHAT_MENTION) or CHAT_ME
 		battleRoomConsole:AddMessage(message, userName, false, chatColour, true)
 	end
-
+	
 	battleLobby:AddListener("OnUpdateUserTeamStatus", OnUpdateUserTeamStatus)
 	battleLobby:AddListener("OnBattleIngameUpdate", OnBattleIngameUpdate)
 	battleLobby:AddListener("OnUpdateBattleInfo", OnUpdateBattleInfo)
@@ -1904,6 +1972,9 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 	battleLobby:AddListener("OnSaidBattle", OnSaidBattle)
 	battleLobby:AddListener("OnSaidBattleEx", OnSaidBattleEx)
 	battleLobby:AddListener("OnBattleClosed", externalFunctions.OnBattleClosed)
+	battleLobby:AddListener("OnMatchMakerReadyCheck", OnMatchMakerReadyCheck)
+	battleLobby:AddListener("OnMatchMakerReadyUpdate", OnMatchMakerReadyUpdate)
+	battleLobby:AddListener("OnMatchMakerReadyResult", OnMatchMakerReadyResult)
 
 	local function OnDisposeFunction()
 		emptyTeamIndex = 0
@@ -1919,6 +1990,9 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		oldLobby:RemoveListener("OnSaidBattle", OnSaidBattle)
 		oldLobby:RemoveListener("OnSaidBattleEx", OnSaidBattleEx)
 		oldLobby:RemoveListener("OnBattleClosed", externalFunctions.OnBattleClosed)
+		oldLobby:RemoveListener("OnMatchMakerReadyCheck", OnMatchMakerReadyCheck)
+		oldLobby:RemoveListener("OnMatchMakerReadyUpdate", OnMatchMakerReadyUpdate)
+		oldLobby:RemoveListener("OnMatchMakerReadyResult", OnMatchMakerReadyResult)
 	end
 
 	mainWindow.OnDispose = mainWindow.OnDispose or {}

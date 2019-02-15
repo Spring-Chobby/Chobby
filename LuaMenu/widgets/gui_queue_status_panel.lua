@@ -594,6 +594,9 @@ function DelayedInitialize()
 	end
 
 	local function OnMatchMakerReadyCheck(_, secondsRemaining, minWinChance, isQuickPlay)
+		if isQuickPlay then
+			return -- Handled in battle room.
+		end
 		if readyCheckPopup then
 			readyCheckPopup.Destroy()
 		end
