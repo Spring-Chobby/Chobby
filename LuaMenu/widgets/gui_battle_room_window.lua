@@ -34,7 +34,7 @@ local IMG_READY    = LUA_DIRNAME .. "images/ready.png"
 local IMG_UNREADY  = LUA_DIRNAME .. "images/unready.png"
 local IMG_LINK     = LUA_DIRNAME .. "images/link.png"
 
-local MINIMUM_QUICKPLAY_PLAYERS = 6 -- Hax until the server tells me a number.
+local MINIMUM_QUICKPLAY_PLAYERS = 4 -- Hax until the server tells me a number.
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -1047,6 +1047,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 	
 	local buttonYesClickOverride
 	local buttonNoClickOverride
+	local matchmakerModeEnabled = false
 
 	local currentMapName
 
@@ -1344,7 +1345,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 			activePanel:SetVisibility(true)
 			multiVotePanel:SetVisibility(false)
 		end
-		
+		matchmakerModeEnabled = (pollType == "quickplay")
 		HideVoteResult()
 	end
 
@@ -1357,7 +1358,8 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		if not voteResultLabel.visible then
 			voteResultLabel:Show()
 		end
-
+		
+		matchmakerModeEnabled = false
 		ResetButtons()
 		WG.Delay(HideVoteResult, 5)
 	end
@@ -1366,8 +1368,14 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		activePanel:SetVisibility(false)
 		multiVotePanel:SetVisibility(false)
 		minimapPanel:SetVisibility(false)
+		
+		matchmakerModeEnabled = false
 		ResetButtons()
 		HideVoteResult()
+	end
+	
+	function externalFunctions.GetMatchmakerMode()
+		return matchmakerModeEnabled
 	end
 	
 	return externalFunctions
@@ -1928,20 +1936,20 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		end
 		matchmakerCandidates[1].votes = 0
 		matchmakerCandidates[2].votes = 0
-		votePanel.VoteUpdate("", "quickplay", false, matchmakerCandidates, MINIMUM_QUICKPLAY_PLAYERS)
+		votePanel.VoteUpdate("Do you want to play a small team game with players of similar skill?", "quickplay", false, matchmakerCandidates, MINIMUM_QUICKPLAY_PLAYERS)
 	end
 
 	local function OnMatchMakerReadyUpdate(_, readyAccepted, likelyToPlay, queueReadyCounts, battleSize, readyPlayers)
-		if not votePanel.MatchmakerMode() then
+		if not votePanel.GetMatchmakerMode() then
 			return
 		end
 		matchmakerCandidates[1].votes = readyPlayers
 		matchmakerCandidates[2].votes = 0
-		votePanel.VoteUpdate("", "quickplay", false, matchmakerCandidates, MINIMUM_QUICKPLAY_PLAYERS)
+		votePanel.VoteUpdate("Do you want to play a small team game with players of similar skill?", "quickplay", false, matchmakerCandidates, MINIMUM_QUICKPLAY_PLAYERS)
 	end
 
 	local function OnMatchMakerReadyResult(_, isBattleStarting, areYouBanned)
-		if not votePanel.MatchmakerMode() then
+		if not votePanel.GetMatchmakerMode() then
 			return
 		end
 		votePanel.VoteEnd((isBattleStarting and "Match starting") or "Not enough players", isBattleStarting)

@@ -1254,6 +1254,11 @@ function Interface:_BattlePoll(data)
 end
 Interface.jsonCommands["BattlePoll"] = Interface._BattlePoll
 
+function Interface:_BattlePollOutcome(data)
+	
+end
+Interface.jsonCommands["BattlePollOutcome"] = Interface._BattlePollOutcome
+
 function Interface:_Say(data)
 	-- Say {"Place":0,"Target":"zk","User":"GoogleFrog","IsEmote":false,"Text":"bla","Ring":false,"Time":"2016-06-25T07:17:20.7548313Z}"
 	local duplicateMessageTime = false
