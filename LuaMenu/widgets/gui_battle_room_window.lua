@@ -1943,7 +1943,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		if not votePanel.GetMatchmakerMode() then
 			return
 		end
-		matchmakerCandidates[1].votes = readyPlayers
+		matchmakerCandidates[1].votes = queueReadyCounts.Teams
 		matchmakerCandidates[2].votes = 0
 		votePanel.VoteUpdate("Do you want to play a small team game with players of similar skill?", "quickplay", false, matchmakerCandidates, MINIMUM_QUICKPLAY_PLAYERS)
 	end
