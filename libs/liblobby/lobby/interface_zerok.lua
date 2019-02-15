@@ -1230,13 +1230,10 @@ function Interface:ProcessVote(data, battle, duplicateMessageTime)
 end
 
 function Interface:_BattlePoll(data)
-	-- {"Topic":"(Yes) Vittra v2.1 (No) Altair_Crossing_v3?","Options":[{"Name":"Vittra v2.1","Id":1,"Votes":0},{"Name":"Altair_Crossing_v3","Id":2,"Votes":0}],"VotesToWin":2,"DefaultPoll":true}
-	if not (data.Topic and string.find(data.Topic, "(Yes)")) then
+	-- BattlePoll {"Topic":"Choose the next map","Options":[{"Name":"IncultaV2","Id":1,"Votes":0,"URL":"http://test.zero-k.info/Maps/Detail/7514"},{"Name":"Otago 1.1","Id":2,"Votes":0,"URL":"http://test.zero-k.info/Maps/Detail/56587"},{"Name":"Wanderlust v03","Id":3,"Votes":0,"URL":"http://test.zero-k.info/Maps/Detail/55669"},{"Name":"DunePatrol_wip_v03","Id":4,"Votes":0,"URL":"http://test.zero-k.info/Maps/Detail/23549"}],"VotesToWin":3,"YesNoVote":false,"MapSelection":true}
+	if data.YesNoVote then
 		return
 	end
-	
-	data.DefaultPoll = false
-	data.MapPoll = true
 	
 	local candidates = {}
 	for i = 1, #data.Options do
@@ -1245,17 +1242,17 @@ function Interface:_BattlePoll(data)
 			id = opt.Id,
 			votes = opt.Votes,
 		}
-		if not data.DefaultPoll then
+		if not data.YesNoVote then
 			candidates[i].name = opt.Name
 		end
 	end
 	
-	self:_OnVoteUpdate(data.Topic, "multi", data.MapPoll, candidates, data.VotesToWin, false)
+	self:_OnVoteUpdate(data.Topic, "multi", data.MapSelection, candidates, data.VotesToWin, false)
 end
 Interface.jsonCommands["BattlePoll"] = Interface._BattlePoll
 
 function Interface:_BattlePollOutcome(data)
-	
+	-- BattlePollOutcome {"WinningOption":{"Name":"Yes","Id":1,"Votes":3},"Topic":"do you want to force start?","YesNoVote":true,"MapSelection":false}
 end
 Interface.jsonCommands["BattlePollOutcome"] = Interface._BattlePollOutcome
 
