@@ -250,6 +250,9 @@ end
 
 local function UserActivity(args)
 	-- args.IdleSeconds
+	if WG.AwayTracker_UserActivity then
+		WG.AwayTracker_UserActivity(args.IdleSeconds)
+	end
 end
 
 commands["DownloadFileDone"] = DownloadFileDone
