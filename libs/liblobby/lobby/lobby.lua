@@ -870,8 +870,8 @@ function Lobby:_OnSaidBattleEx(userName, message, sayTime)
 	self:_CallListeners("OnSaidBattleEx", userName, message, sayTime)
 end
 
-function Lobby:_OnVoteUpdate(voteMessage, pollType, mapPoll, candidates, votesNeeded, pollUrl)
-	self:_CallListeners("OnVoteUpdate", voteMessage, pollType, mapPoll, candidates, votesNeeded, pollUrl)
+function Lobby:_OnVoteUpdate(voteMessage, pollType, notify, mapPoll, candidates, votesNeeded, pollUrl)
+	self:_CallListeners("OnVoteUpdate", voteMessage, pollType, notify, mapPoll, candidates, votesNeeded, pollUrl)
 end
 
 function Lobby:_OnVoteEnd(message, success)

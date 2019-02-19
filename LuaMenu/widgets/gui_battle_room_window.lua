@@ -1906,7 +1906,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		playerHandler.RemoveAi(botName)
 	end
 
-	local function OnVoteUpdate(listener, voteMessage, pollType, mapPoll, candidates, votesNeeded, pollUrl)
+	local function OnVoteUpdate(listener, voteMessage, pollType, _, mapPoll, candidates, votesNeeded, pollUrl)
 		votePanel.VoteUpdate(voteMessage, pollType, mapPoll, candidates, votesNeeded, pollUrl)
 	end
 

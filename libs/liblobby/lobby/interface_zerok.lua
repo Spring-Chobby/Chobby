@@ -1199,6 +1199,7 @@ function Interface:ProcessVote(data, battle, duplicateMessageTime)
 	local pollType = "boolean"
 	local mapPoll = false
 	local pollUrl = false
+	local notify = false
 	
 	local mapStart = string.find(voteMessage, "Change map to ")
 	if mapStart then
@@ -1206,7 +1207,7 @@ function Interface:ProcessVote(data, battle, duplicateMessageTime)
 		pollUrl = string.sub(voteMessage, mapStart, lasturl - 1)
 		mapPoll = true
 	elseif string.find(voteMessage, "start the game?") then
-		pollType = "start"
+		notify = true
 	end
 	
 	local battlePollhandled = string.find(voteMessage, "(Yes)")
@@ -1225,15 +1226,12 @@ function Interface:ProcessVote(data, battle, duplicateMessageTime)
 		},
 	}
 	
-	self:_OnVoteUpdate(voteMessage, pollType, mapPoll, candidates, votesNeeded, pollUrl)
+	self:_OnVoteUpdate(voteMessage, pollType, notify, mapPoll, candidates, votesNeeded, pollUrl)
 	return true
 end
 
 function Interface:_BattlePoll(data)
 	-- BattlePoll {"Topic":"Choose the next map","Options":[{"Name":"IncultaV2","Id":1,"Votes":0,"URL":"http://test.zero-k.info/Maps/Detail/7514"},{"Name":"Otago 1.1","Id":2,"Votes":0,"URL":"http://test.zero-k.info/Maps/Detail/56587"},{"Name":"Wanderlust v03","Id":3,"Votes":0,"URL":"http://test.zero-k.info/Maps/Detail/55669"},{"Name":"DunePatrol_wip_v03","Id":4,"Votes":0,"URL":"http://test.zero-k.info/Maps/Detail/23549"}],"VotesToWin":3,"YesNoVote":false,"MapSelection":true}
-	if data.YesNoVote then
-		return
-	end
 	
 	local candidates = {}
 	for i = 1, #data.Options do
@@ -1241,18 +1239,32 @@ function Interface:_BattlePoll(data)
 		candidates[i] = {
 			id = opt.Id,
 			votes = opt.Votes,
+			url = opt.Url,
 		}
 		if not data.YesNoVote then
 			candidates[i].name = opt.Name
 		end
 	end
 	
-	self:_OnVoteUpdate(data.Topic, "multi", data.MapSelection, candidates, data.VotesToWin, false)
+	local voteMessage = data.Topic
+	
+	local pollType, notify
+	if data.YesNoVote then
+		pollType = "boolean"
+		if string.find(voteMessage, "start the game?") then
+			notify = true
+		end
+	else
+		pollType = "multi"
+	end
+	
+	self:_OnVoteUpdate(voteMessage, pollType, data.NotifyPoll, data.MapName or data.MapSelection, candidates, data.VotesToWin, data.Url)
 end
 Interface.jsonCommands["BattlePoll"] = Interface._BattlePoll
 
 function Interface:_BattlePollOutcome(data)
 	-- BattlePollOutcome {"WinningOption":{"Name":"Yes","Id":1,"Votes":3},"Topic":"do you want to force start?","YesNoVote":true,"MapSelection":false}
+	self:_OnVoteEnd(data.Message or "Bad vote message", data.Success)
 end
 Interface.jsonCommands["BattlePollOutcome"] = Interface._BattlePollOutcome
 
@@ -1308,11 +1320,11 @@ function Interface:_Say(data)
 		-- data.Place == 3 -> Battle chat directed at user
 		local battleID = self:GetMyBattleID()
 		
-		-- Chat poll parsing
-		local battle = battleID and self:GetBattle(battleID)
-		if self:ProcessVote(data, battle, duplicateMessageTime) then
-			return
-		end
+		-- Chat poll parsing. Replaced by BattlePoll
+		--local battle = battleID and self:GetBattle(battleID)
+		--if self:ProcessVote(data, battle, duplicateMessageTime) then
+		--	return
+		--end
 		
 		if emote then
 			self:_OnSaidBattleEx(data.User, data.Text, data.Time)
