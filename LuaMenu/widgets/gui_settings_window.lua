@@ -535,7 +535,7 @@ end
 --------------------------------------------------------------------------------
 -- Lobby Settings
 
-local function AddCheckboxSetting(offset, caption, key, default, clickFunc)
+local function AddCheckboxSetting(offset, caption, key, default, clickFunc, tooltip)
 	local Configuration = WG.Chobby.Configuration
 
 	local checked = Configuration[key]
@@ -552,6 +552,7 @@ local function AddCheckboxSetting(offset, caption, key, default, clickFunc)
 		boxsize = 20,
 		caption = caption,
 		checked = checked,
+		tooltip = tooltip,
 		font = Configuration:GetFont(2),
 		OnChange = {function (obj, newState)
 			Configuration:SetConfigValue(key, newState)
@@ -875,6 +876,7 @@ local function GetLobbyTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("simple_ai_list"), "simpleAiList", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("animate_lobby"), "animate_lobby", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("drawFullSpeed"), "drawAtFullSpeed", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("keep_queues"), "rememberQueuesOnStart", false, nil, "Stay in matchmaker queues when a battle is launched.")
 
 	children[#children + 1] = Label:New {
 		x = 20,

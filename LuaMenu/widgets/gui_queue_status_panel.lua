@@ -519,6 +519,10 @@ local function SaveQueues()
 end
 
 function widget:ActivateGame()
+	local config = WG.Chobby.Configuration
+	if not (config and config.rememberQueuesOnStart) then
+		return
+	end
 	if not savedQueues then
 		return
 	end
