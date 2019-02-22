@@ -32,7 +32,7 @@ function Interface:Login(user, password, cpu, localIP)
 		localIP = "*"
 	end
 	password = VFS.CalculateHash(password, 0)
-	self:_SendCommand(concat("LOGIN", user, password, cpu, localIP, "LuaLobby\t", "0\t", "a b m cl et p"))
+	self:_SendCommand(concat("LOGIN", user, password, cpu, localIP, "LuaLobby\t", "0\t", "l b m cl et p"))
 	return self
 end
 
@@ -358,10 +358,11 @@ Interface.commands["PONG"] = Interface._OnPong
 -- User commands
 ------------------------
 
-function Interface:_OnAddUser(userName, country, cpu, accountID)
+function Interface:_OnAddUser(userName, country, accountID, lobbyID)
 	local userTable = {
 		-- constant
 		accountID = tonumber(accountID),
+		lobbyID = lobbyID,
 		-- persistent
 		country = country,
 		--cpu = tonumber(cpu),
