@@ -32,7 +32,7 @@ function Interface:Login(user, password, cpu, localIP)
 		localIP = "*"
 	end
 	password = VFS.CalculateHash(password, 0)
-	self:_SendCommand(concat("LOGIN", user, password, cpu, localIP, "LuaLobby\t", "0\t", "l b cl"))
+	self:_SendCommand(concat("LOGIN", user, password, cpu, localIP, "LuaLobby\t", "0\t", "t l b cl"))
 	return self
 end
 
@@ -663,17 +663,12 @@ end
 Interface.commands["CHANNELMESSAGE"] = Interface._OnChannelMessage
 Interface.commandPattern["CHANNELMESSAGE"] = "(%S+)%s+(%S+)"
 
-function Interface:_OnChannelTopic(chanName, author, changedTime, topic)
-	self:super("_OnChannelTopic", chanName, author, changedTime, topic)
+function Interface:_OnChannelTopic(chanName, author, topic)
+	topic = topic and tostring(topic) or ""
+	self:super("_OnChannelTopic", chanName, author, 0, topic)
 end
 Interface.commands["CHANNELTOPIC"] = Interface._OnChannelTopic
-Interface.commandPattern["CHANNELTOPIC"] = "(%S+)%s+(%S+)%s+(%S+)%s+([^\t]+)"
-
-function Interface:_OnNoChannelTopic(chanName)
-	self:super("_OnNoChannelTopic", chanName)
-end
-Interface.commands["NOCHANNELTOPIC"] = Interface._OnNoChannelTopic
-Interface.commandPattern["NOCHANNELTOPIC"] = "(%S+)"
+Interface.commandPattern["CHANNELTOPIC"] = "(%S+)%s+(%S+)%s*(.*)"
 
 function Interface:_OnSaid(chanName, userName, message)
 	self:super("_OnSaid", chanName, userName, message)
