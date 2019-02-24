@@ -18,11 +18,13 @@ end
 -- Utilities
 
 local function SetDiscordPlaying(details)
-	WG.WrapperLoopback.DiscordUpdatePresence({
-		state = details,
-		--details = details,
-		--startTimestamp = Spring.Utilities.GetCurrentUtc(),
-	})
+	if WG.WrapperLoopback then
+		WG.WrapperLoopback.DiscordUpdatePresence({
+			state = details,
+			--details = details,
+			--startTimestamp = Spring.Utilities.GetCurrentUtc(),
+		})
+	end
 end
 
 --------------------------------------------------------------------------------

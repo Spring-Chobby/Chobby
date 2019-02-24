@@ -19,7 +19,7 @@ local skirmishSetupData = {
 			options = {
 				"Barren 2",
 				"Onyx Cauldron 1.9",
-				"ArcticPlainsV2.1",
+				"Titan v3.1",
 				"Ravaged_v2",
 				"Badlands 2.1",
 				"Iceland_v1",

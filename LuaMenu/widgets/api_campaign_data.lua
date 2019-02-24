@@ -25,7 +25,6 @@ local externalFunctions = {}
 
 local SAVE_DIR = "Saves/campaign/"
 local SAVE_NAME = "saveFile"
-local ICONS_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/unitpics/"
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -757,6 +756,7 @@ end
 
 function externalFunctions.GetUnitInfo(unitName)
 	local unitInformation = WG.Chobby.Configuration.gameConfig.gameUnitInformation
+	local ICONS_DIR = LUA_DIRNAME .. "configs/gameConfig/" .. WG.Chobby.Configuration.gameConfig.dirName .. "/unitpics/"	
 	return unitInformation.humanNames[unitName] or {}, ICONS_DIR .. unitName .. ".png", nil, nil, unitInformation.categories
 end
 
@@ -769,6 +769,7 @@ function externalFunctions.GetModuleInfo(moduleName)
 	local parsedName, limit = TranslateModule(moduleName)
 	local commConfig = WG.Chobby.Configuration.campaignConfig.commConfig
 	local index = commConfig.moduleDefNames[parsedName]
+	local ICONS_DIR = LUA_DIRNAME .. "configs/gameConfig/" .. WG.Chobby.Configuration.gameConfig.dirName .. "/unitpics/"	
 	return index and commConfig.moduleDefs[index] or {}, ICONS_DIR .. parsedName .. ".png", nil, limit and ("\255\0\255\0x" .. limit), commConfig.categories
 end
 
