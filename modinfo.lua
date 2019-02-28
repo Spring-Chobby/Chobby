@@ -2,11 +2,11 @@
 -- Authors: gajop
 
 local modinfo = {
-	name            = "TChobby",
-	shortName       = "TCL",
+	name            = "tchobby",
+	shortName       = "tcl",
 	version         = "$VERSION",
-	game            = "Chobby",
-	shortGame       = "TCL",
+	game            = "tchobby",
+	shortGame       = "tcl",
 	mutator         = "Official",
 	description     = "An in-game lobby (Chobby) for the Cursed",
 	modtype         = "5",
