@@ -127,7 +127,7 @@ function Interface:SetBattleStatus(status)
 	-- This function is invoked too many times (before an answer gets received),
 	-- so we're setting the values before
 	-- they get confirmed from the server, otherwise we end up sending different info
-	local myUserName = self:GetMyUserName()
+	local myUserName = self:GetMyUserName() or "Player"
 	if not self.userBattleStatus[myUserName] then
 		self.userBattleStatus[userName] = {}
 	end
