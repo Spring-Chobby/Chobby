@@ -11,7 +11,7 @@ local rankFunction, largeRankFunction = VFS.Include(LUA_DIRNAME .. "configs/game
 local backgroundConfig                = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/skinConfig.lua")
 local gameUnitInformation             = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/gameUnitInformation.lua")
 
--- local link_homePage, link_replays, link_maps = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/linkFunctions.lua")
+local link_homePage, link_replays, link_maps = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/linkFunctions.lua")
 
 local settingsConfig, settingsNames, settingsDefault, SettingsPresetFunc = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/settingsMenu.lua")
 
@@ -84,6 +84,9 @@ local externalFuncAndData = {
 	minimapThumbnailPath    = minimapThumbnailPath,
 	gameUnitInformation     = gameUnitInformation,
 	ignoreServerVersion     = true,
+	link_homePage           = link_homePage,
+	link_replays            = link_replays,
+	link_maps               = link_maps,
 ---- Campaign
 	customCampaignName			= "Cursed",
 	customCampaignID			= "tc", -- Campaign name that is used in configuration files and for the subfolder
