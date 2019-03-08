@@ -1602,8 +1602,9 @@ function SettingsWindow.WriteGameSpringsettings(fileName)
 	end
 	
 	local gameSettings = WG.Chobby.Configuration.game_settings
+	local settingsOverride = WG.Chobby.Configuration.fixedSettingsOverride
 	for key, value in pairs(gameSettings) do
-		WriteToFile(key, value)
+		WriteToFile(key, (settingsOverride and settingsOverride[key]) or value)
 	end
 	
 	local screenX, screenY = Spring.GetScreenGeometry()
@@ -1653,8 +1654,9 @@ function SettingsWindow.GetSettingsString()
 	end
 	
 	local gameSettings = WG.Chobby.Configuration.game_settings
+	local settingsOverride = WG.Chobby.Configuration.fixedSettingsOverride
 	for key, value in pairs(gameSettings) do
-		WriteSetting(key, value)
+		WriteSetting(key, (settingsOverride and settingsOverride[key]) or value)
 	end
 	
 	local screenX, screenY = Spring.GetScreenGeometry()
