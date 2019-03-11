@@ -71,6 +71,12 @@ local queueOrder = {
 	"1v1",
 }
 
+local posOverride = {
+	Coop = 0,
+	Teams = 1,
+	["1v1"] = 2,
+}
+
 WG.GetCombinedBannedTime = GetCombinedBannedTime
 
 --------------------------------------------------------------------------------
@@ -511,7 +517,7 @@ local function InitializeControls(window)
 	
 		local queueHolder = Control:New {
 			x = 10,
-			y = queues*55 + 15,
+			y = (posOverride[queueName] or queues)*55 + 15,
 			right = 0,
 			height = 45,
 			caption = "", -- Status Window
