@@ -26,13 +26,15 @@ function Interface:Register(userName, password, email)
 	return self
 end
 
-function Interface:Login(user, password, cpu, localIP)
-	self:super("Login", user, password, cpu, localIP)
+function Interface:Login(user, password, cpu, localIP, lobbyVersion)
+	self:super("Login", user, password, cpu, localIP, lobbyVersion)
 	if localIP == nil then
 		localIP = "*"
 	end
 	password = VFS.CalculateHash(password, 0)
-	self:_SendCommand(concat("LOGIN", user, password, cpu, localIP, "LuaLobby\t", "0\t", "t l b cl"))
+	sentence = "LuaLobby " .. lobbyVersion .. "\t" .. self.agent .. "\t" .. "t l b cl"
+	cmd = concat("LOGIN", user, password, "0", localIP, sentence)
+	self:_SendCommand(cmd)
 	return self
 end
 

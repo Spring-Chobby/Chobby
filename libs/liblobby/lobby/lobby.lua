@@ -64,7 +64,10 @@ function Lobby:_Clean()
 	self.myChannels = {}
 	self.myBattleID = nil
 	self.scriptPassword = nil
-	self.sessionToken = nil
+	self.sessionToken = nil	
+	am = Platform.macAddrHash or "0"
+	as = Platform.sysInfoHash or "0"
+	self.agent = tostring(tonumber(am,16)).." "..as:sub(1,16)
 
 	-- reconnection delay in seconds
 	self.reconnectionDelay = 15
