@@ -73,6 +73,7 @@ local settings = {
 	UsePBO = 0,
 	VerboseLevel = 10,
 	Version = 2,
+	VFSCacheArchiveFiles = 0,
 	Water = 4,
 	WorkerThreadSpinTime = 5,
 	snd_general = 100,

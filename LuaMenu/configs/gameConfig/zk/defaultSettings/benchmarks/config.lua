@@ -89,6 +89,7 @@ AllowDeferredModelRendering = 1
 XResolution = 1920
 YResolution = 1080
 WindowBorderless = 0
+VFSCacheArchiveFiles = 0
 Fullscreen = 1
 snd_volmaster = 2
 ]]

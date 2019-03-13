@@ -7,6 +7,7 @@ local settings = {
 	UseDistToGroundForIcons = 1.1,
 	UseLuaMemPools = 0,
 	LuaGarbageCollectionMemLoadMult = 100,
+	VFSCacheArchiveFiles = 0,
 }
 
 local onlyIfMissingSettings = {
