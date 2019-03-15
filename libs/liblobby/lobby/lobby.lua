@@ -67,7 +67,7 @@ function Lobby:_Clean()
 	self.sessionToken = nil	
 	am = Platform.macAddrHash or "0"
 	as = Platform.sysInfoHash or "0"
-	self.agent = tostring(tonumber(am,16)).." "..as:sub(1,16)
+	self.agent = am.." "..as:sub(1,16)
 
 	-- reconnection delay in seconds
 	self.reconnectionDelay = 15
