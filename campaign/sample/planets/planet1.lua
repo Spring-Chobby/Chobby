@@ -64,15 +64,34 @@ local function GetPlanet(planetUtilities, planetID)
 				startUnits = {
 					{
 						name = "turretlaser",
-						x = 300,
+						x = 250,
 						z = 3450,
+						facing = 2,
+					},
+					{
+						name = "turretlaser",
+						x = 550,
+						z = 3380,
 						facing = 2,
 						difficultyAtMost = 2,
 					},
 					{
 						name = "turretlaser",
 						x = 1000,
-						z = 3750,
+						z = 3550,
+						facing = 1,
+						difficultyAtMost = 3,
+					},
+					{
+						name = "turretlaser",
+						x = 1050,
+						z = 3850,
+						facing = 1,
+					},
+					{
+						name = "turretlaser",
+						x = 450,
+						z = 2200,
 						facing = 1,
 					},
 					{

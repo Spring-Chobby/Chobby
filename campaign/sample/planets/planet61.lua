@@ -30,7 +30,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/striderfunnelweb.png",
-				text = [[Funnelwebs have no direct weapon - instead they manufacture drones to attack enemies at long distance. An attack order given to a Funnelweb will be observed by its drones.]]
+				text = [[Funnelwebs have no direct weapon - instead they have a powerful nanolathe and high capacity shield. The shield recharges rapidly but cannot do so for 15s after taking damage.]]
 			},
 			{
 				image = "unitpics/energyfusion.png",
@@ -67,6 +67,12 @@ local function GetPlanet(planetUtilities, planetID)
  					{
 						name = "energyfusion",
 						x = 7032,
+						z = 6992,
+						facing = 0,
+					},
+ 					{
+						name = "energyfusion",
+						x = 7032,
 						z = 6848,
 						facing = 0,
 					},
@@ -75,12 +81,14 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 620,
 						z = 5950,
 						facing = 1,
+						shieldFactor = 1,
 					},
 					{
 						name = "striderfunnelweb",
 						x = 620,
 						z = 5750,
 						facing = 1,
+						shieldFactor = 1,
 					},
 				}
 			},

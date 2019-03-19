@@ -419,16 +419,14 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		WG.BattleRoomWindow.LeaveBattle(true)
 	end
 
-	local rightPanelTabs = {
-		{name = "chat", control = chatWindows.window},
-		{name = "friends", control = WG.FriendWindow.GetControl()},
-		{name = "settings", control = WG.SettingsWindow.GetControl()},
-		{name = "downloads", control = WG.DownloadWindow.GetControl()},
-	}
-
+	local rightPanelTabs = {}
 	if not WG.Chobby.Configuration.gameConfig.disableCommunityWindow then
-		table.insert(rightPanelTabs, 1, {name = "community", control = WG.CommunityWindow.GetControl()})
+		rightPanelTabs[#rightPanelTabs + 1] = {name = "community", control = WG.CommunityWindow.GetControl()}
 	end
+	rightPanelTabs[#rightPanelTabs + 1] = {name = "chat", control = chatWindows.window}
+	rightPanelTabs[#rightPanelTabs + 1] = {name = "friends", control = WG.FriendWindow.GetControl()}
+	rightPanelTabs[#rightPanelTabs + 1] = {name = "settings", control = WG.SettingsWindow.GetControl()}
+	rightPanelTabs[#rightPanelTabs + 1] = {name = "downloads", control = WG.DownloadWindow.GetControl()}
 
 	local queueListWindow = WG.QueueListWindow.GetControl()
 	local battleListWindow, battleListWindowJoinBattle = WG.BattleListWindowHolder.GetControl()
@@ -438,16 +436,13 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local MULTIPLAYER_INDEX = 2
 	local HELP_INDEX = 4
 	
-	local multiPlayerTabs = {
-		{name = "battle_list", control = battleListWindow},
-	}
-
-	if not WG.Chobby.Configuration.gameConfig.disablePlanetwars then
-		table.insert(multiPlayerTabs, 2, {name = "planetwars", control = planetwarsListWindow})
-	end
-
+	local multiPlayerTabs = {}
 	if not WG.Chobby.Configuration.gameConfig.disableMatchMaking then
-		table.insert(multiPlayerTabs, 1, {name = "matchmaking", control = queueListWindow})
+		multiPlayerTabs[#multiPlayerTabs + 1] = {name = "matchmaking", control = queueListWindow}
+	end
+	multiPlayerTabs[#multiPlayerTabs + 1] = {name = "battle_list", control = battleListWindow}
+	if not WG.Chobby.Configuration.gameConfig.disablePlanetwars then
+		multiPlayerTabs[#multiPlayerTabs + 1] = {name = "planetwars", control = planetwarsListWindow}
 	end
 	
 	local submenus = {

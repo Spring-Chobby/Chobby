@@ -535,7 +535,7 @@ end
 --------------------------------------------------------------------------------
 -- Lobby Settings
 
-local function AddCheckboxSetting(offset, caption, key, default, clickFunc)
+local function AddCheckboxSetting(offset, caption, key, default, clickFunc, tooltip)
 	local Configuration = WG.Chobby.Configuration
 
 	local checked = Configuration[key]
@@ -552,6 +552,7 @@ local function AddCheckboxSetting(offset, caption, key, default, clickFunc)
 		boxsize = 20,
 		caption = caption,
 		checked = checked,
+		tooltip = tooltip,
 		font = Configuration:GetFont(2),
 		OnChange = {function (obj, newState)
 			Configuration:SetConfigValue(key, newState)
@@ -863,12 +864,10 @@ local function GetLobbyTabControls()
 		children[#children + 1], offset = AddCheckboxSetting(offset, i18n("login_with_steam"), "wantAuthenticateWithSteam", true)
 		children[#children + 1], offset = AddCheckboxSetting(offset, i18n("use_steam_browser"), "useSteamBrowser", true)
 	end
-	
-	if not Configuration.gameConfig.disablePlanetwars then	
+	children[#children + 1], offset = AddCheckboxSetting(offset, "Multiplayer in new window", "multiplayerLaunchNewSpring", true)
+	if not Configuration.gameConfig.disablePlanetwars then
 		children[#children + 1], offset = AddCheckboxSetting(offset, i18n("planetwars_notifications"), "planetwarsNotifications", false)	
 	end
-	
-	children[#children + 1], offset = AddCheckboxSetting(offset, "Multiplayer in new window", "multiplayerLaunchNewSpring", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("ingame_notifcations"), "ingameNotifcations", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("non_friend_notifications"), "nonFriendNotifications", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("notifyForAllChat"), "notifyForAllChat", false)
@@ -877,6 +876,7 @@ local function GetLobbyTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("simple_ai_list"), "simpleAiList", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("animate_lobby"), "animate_lobby", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("drawFullSpeed"), "drawAtFullSpeed", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("keep_queues"), "rememberQueuesOnStart", false, nil, "Stay in matchmaker queues when a battle is launched.")
 
 	children[#children + 1] = Label:New {
 		x = 20,
@@ -1602,8 +1602,9 @@ function SettingsWindow.WriteGameSpringsettings(fileName)
 	end
 	
 	local gameSettings = WG.Chobby.Configuration.game_settings
+	local settingsOverride = WG.Chobby.Configuration.fixedSettingsOverride
 	for key, value in pairs(gameSettings) do
-		WriteToFile(key, value)
+		WriteToFile(key, (settingsOverride and settingsOverride[key]) or value)
 	end
 	
 	local screenX, screenY = Spring.GetScreenGeometry()
@@ -1653,8 +1654,9 @@ function SettingsWindow.GetSettingsString()
 	end
 	
 	local gameSettings = WG.Chobby.Configuration.game_settings
+	local settingsOverride = WG.Chobby.Configuration.fixedSettingsOverride
 	for key, value in pairs(gameSettings) do
-		WriteSetting(key, value)
+		WriteSetting(key, (settingsOverride and settingsOverride[key]) or value)
 	end
 	
 	local screenX, screenY = Spring.GetScreenGeometry()

@@ -207,6 +207,7 @@ function Configuration:init()
 	self.enableTextToSpeech = true
 	self.showOldAiVersions = false
 	self.drawAtFullSpeed = false
+	self.rememberQueuesOnStart = false
 	
 	self.lobby_fullscreen = 1
 	self.game_fullscreen = 1
@@ -473,6 +474,7 @@ function Configuration:GetConfigData()
 		confirmation_mainMenuFromBattle = self.confirmation_mainMenuFromBattle,
 		confirmation_battleFromBattle = self.confirmation_battleFromBattle,
 		drawAtFullSpeed = self.drawAtFullSpeed,
+		rememberQueuesOnStart = self.rememberQueuesOnStart,
 		loadLocalWidgets = self.loadLocalWidgets,
 		activeDebugConsole = self.activeDebugConsole,
 		onlyShowFeaturedMaps = self.onlyShowFeaturedMaps,

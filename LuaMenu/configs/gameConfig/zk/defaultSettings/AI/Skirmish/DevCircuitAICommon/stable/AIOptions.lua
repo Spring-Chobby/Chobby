@@ -15,30 +15,13 @@ local options = {
 		desc   = 'These settings may be relevant for both CPU usage and AI difficulty.',
 		type   = 'section',
 	},
-	{ -- list
-		key     = 'difficulty',
-		name    = 'Difficulty',
-		desc    = 'How tough the AI should be.\nkey: difficulty',
-		type    = 'list',
+	{ -- bool
+		key     = 'cheating',
+		name    = 'LOS cheating',
+		desc    = 'Enable LOS cheating',
+		type    = 'bool',
 		section = 'performance',
-		def     = 'normal',
-		items   = {
-			{
-				key  = 'easy',
-				name = 'Easy',
-				desc = 'Easy AI.',
-			},
-			{
-				key  = 'normal',
-				name = 'Normal',
-				desc = 'Casual AI.',
-			},
-			{
-				key  = 'hard',
-				name = 'Hard',
-				desc = 'Los-cheating AI.',
-			},
-		},
+		def     = false,
 	},
 	{ -- bool
 		key     = 'ally_aware',
@@ -56,6 +39,13 @@ local options = {
 		section = 'performance',
 		def     = true,
 	},
+-- 	{ -- number (int->uint)
+-- 		key     = 'random_seed',
+-- 		name    = 'Random seed',
+-- 		desc    = 'Seed for random number generator (int)',
+-- 		type    = 'number',
+-- 		def     = 1337
+-- 	},
 
 	{ -- string
 		key     = 'disabledunits',
@@ -66,10 +56,10 @@ local options = {
 	},
 	{ -- string
 		key     = 'config_file',
-		name    = 'Config file',
-		desc    = 'Play with arbitrary config of your choice.\nkey: config',
+		name    = 'Config file parts',
+		desc    = 'Load only specific config files, e.g. behaviour.json, economy.json, factory.json.\nSyntax: behaviour+economy+factory\nkey: config_file',
 		type    = 'string',
-		def     = '',
+		def     = 'behaviour+block_map+build_chain+commander+economy+factory+response',
 	},
 --	{ -- string
 --		key     = 'json',
@@ -80,7 +70,7 @@ local options = {
 --	},
 
 --	{ -- section
---		key    = 'config',
+--		key    = 'config_override',
 --		name   = 'Config parts',
 --		desc   = 'Overrides config elements.',
 --		type   = 'section',
@@ -90,7 +80,7 @@ local options = {
 --		name    = 'Factory config',
 --		desc    = 'Overrides factory part of config.',
 --		type    = 'string',
---		section = 'config',
+--		section = 'config_override',
 --		def     = '',
 --	},
 --	{ -- string
@@ -98,7 +88,7 @@ local options = {
 --		name    = 'Behaviour config',
 --		desc    = 'Overrides behaviour part of config.',
 --		type    = 'string',
---		section = 'config',
+--		section = 'config_override',
 --		def     = '',
 --	},
 }
