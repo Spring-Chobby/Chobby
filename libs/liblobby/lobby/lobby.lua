@@ -64,7 +64,10 @@ function Lobby:_Clean()
 	self.myChannels = {}
 	self.myBattleID = nil
 	self.scriptPassword = nil
-	self.sessionToken = nil
+	self.sessionToken = nil	
+	am = Platform.macAddrHash or "0"
+	as = Platform.sysInfoHash or "0"
+	self.agent = am.." "..as:sub(1,16)
 
 	-- reconnection delay in seconds
 	self.reconnectionDelay = 15
@@ -903,13 +906,13 @@ end
 
 function Lobby:_OnChannelTopic(chanName, author, changedTime, topic)
 	local channel = self:_GetChannel(chanName)
-	channel.topic = topic
-	self:_CallListeners("OnChannelTopic", chanName, author, changedTime, topic)
-end
-
--- FIXME: This method feels redundant, and could be implemented by allowing the author, changedTime and topic of _OnChannelTopic to be nil
-function Lobby:_OnNoChannelTopic(chanName)
-	self:_CallListeners("_OnNoChannelTopic", chanName)
+	if topic ~= "" then
+		channel.topic = topic
+		self:_CallListeners("OnChannelTopic", chanName, author, changedTime, topic)
+	else
+		channel.topic = nil
+		self:_CallListeners("_OnNoChannelTopic", chanName)
+	end
 end
 
 function Lobby:_OnClients(chanName, users)
