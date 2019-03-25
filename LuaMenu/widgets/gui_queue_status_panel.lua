@@ -318,7 +318,7 @@ local function CreateReadyCheckWindow(DestroyFunc, secondsRemaining, minWinChanc
 		WG.WrapperLoopback.Alert("Match found")
 	end
 
-	local ALLOW_REJECT = (isQuickPlay and ALLOW_REJECT_QUICKPLAY) or (not isQuickPlay and ALLOW_REJECT_REGULAR)
+	local allowReject = (isQuickPlay and ALLOW_REJECT_QUICKPLAY) or (not isQuickPlay and ALLOW_REJECT_REGULAR)
 
 	local readyCheckWindow = Window:New {
 		caption = "",
@@ -330,13 +330,18 @@ local function CreateReadyCheckWindow(DestroyFunc, secondsRemaining, minWinChanc
 		draggable = false,
 		classname = "main_window",
 	}
+	
+	local invitationText = i18n("match_found")
+	if isQuickPlay then
+		invitationText = i18n("match_found_quickplay")
+	end
 
 	local title = Label:New {
 		x = 40,
 		right = 0,
 		y = 15,
 		height = 35,
-		caption = i18n("match_found"),
+		caption = invitationText,
 		font = Configuration:GetFont(4),
 		parent = readyCheckWindow,
 	}
@@ -391,13 +396,13 @@ local function CreateReadyCheckWindow(DestroyFunc, secondsRemaining, minWinChanc
 	end
 
 	local buttonAccept = Button:New {
-		x = (not ALLOW_REJECT) and "20%",
-		right = (ALLOW_REJECT and 150) or "20%",
-		width = (ALLOW_REJECT and 135),
+		x = (not allowReject) and "20%",
+		right = (allowReject and 150) or "20%",
+		width = (allowReject and 135),
 		bottom = 1,
 		height = 70,
-		caption = (ALLOW_REJECT and i18n("accept")) or i18n("ready"),
-		font = Configuration:GetFont((ALLOW_REJECT and 3) or 4),
+		caption = (allowReject and i18n("accept")) or i18n("ready"),
+		font = Configuration:GetFont((allowReject and 3) or 4),
 		parent = readyCheckWindow,
 		classname = "action_button",
 		OnClick = {
@@ -407,7 +412,7 @@ local function CreateReadyCheckWindow(DestroyFunc, secondsRemaining, minWinChanc
 		},
 	}
 
-	local buttonReject = ALLOW_REJECT and Button:New {
+	local buttonReject = allowReject and Button:New {
 		right = 1,
 		width = 135,
 		bottom = 1,
@@ -432,7 +437,7 @@ local function CreateReadyCheckWindow(DestroyFunc, secondsRemaining, minWinChanc
 		banChecked = true
 	end
 
-	local popupHolder = WG.Chobby.PriorityPopup(readyCheckWindow, ALLOW_REJECT and CancelFunc, AcceptFunc, screen0)
+	local popupHolder = WG.Chobby.PriorityPopup(readyCheckWindow, allowReject and CancelFunc, AcceptFunc, screen0)
 	local externalFunctions = {}
 
 	function externalFunctions.UpdateTimer()
@@ -466,7 +471,7 @@ local function CreateReadyCheckWindow(DestroyFunc, secondsRemaining, minWinChanc
 
 		buttonAccept:Hide()
 
-		if ALLOW_REJECT then
+		if allowReject then
 			buttonReject:SetPos(nil, nil, 90, 60)
 			buttonReject._relativeBounds.right = 1
 			buttonReject._relativeBounds.bottom = 1
@@ -514,6 +519,10 @@ local function SaveQueues()
 end
 
 function widget:ActivateGame()
+	local config = WG.Chobby.Configuration
+	if not (config and config.rememberQueuesOnStart) then
+		return
+	end
 	if not savedQueues then
 		return
 	end
@@ -589,6 +598,9 @@ function DelayedInitialize()
 	end
 
 	local function OnMatchMakerReadyCheck(_, secondsRemaining, minWinChance, isQuickPlay)
+		if isQuickPlay then
+			return -- Handled in battle room.
+		end
 		if readyCheckPopup then
 			readyCheckPopup.Destroy()
 		end

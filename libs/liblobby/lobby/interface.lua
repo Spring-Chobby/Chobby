@@ -26,13 +26,15 @@ function Interface:Register(userName, password, email)
 	return self
 end
 
-function Interface:Login(user, password, cpu, localIP)
-	self:super("Login", user, password, cpu, localIP)
+function Interface:Login(user, password, cpu, localIP, lobbyVersion)
+	self:super("Login", user, password, cpu, localIP, lobbyVersion)
 	if localIP == nil then
 		localIP = "*"
 	end
 	password = VFS.CalculateHash(password, 0)
-	self:_SendCommand(concat("LOGIN", user, password, cpu, localIP, "LuaLobby\t", "0\t", "a b m cl et p"))
+	sentence = "LuaLobby " .. lobbyVersion .. "\t" .. self.agent .. "\t" .. "t l b cl"
+	cmd = concat("LOGIN", user, password, "0", localIP, sentence)
+	self:_SendCommand(cmd)
 	return self
 end
 
@@ -128,7 +130,7 @@ function Interface:SetBattleStatus(status)
 	-- so we're setting the values before
 	-- they get confirmed from the server, otherwise we end up sending different info
 	local myUserName = self:GetMyUserName()
-	if not self.userBattleStatus[myUserName] and userName then
+	if not self.userBattleStatus[myUserName] then
 		self.userBattleStatus[userName] = {}
 	end
 	local userData = self.userBattleStatus[myUserName]
@@ -358,10 +360,11 @@ Interface.commands["PONG"] = Interface._OnPong
 -- User commands
 ------------------------
 
-function Interface:_OnAddUser(userName, country, cpu, accountID)
+function Interface:_OnAddUser(userName, country, accountID, lobbyID)
 	local userTable = {
 		-- constant
 		accountID = tonumber(accountID),
+		lobbyID = lobbyID,
 		-- persistent
 		country = country,
 		--cpu = tonumber(cpu),
@@ -662,17 +665,12 @@ end
 Interface.commands["CHANNELMESSAGE"] = Interface._OnChannelMessage
 Interface.commandPattern["CHANNELMESSAGE"] = "(%S+)%s+(%S+)"
 
-function Interface:_OnChannelTopic(chanName, author, changedTime, topic)
-	self:super("_OnChannelTopic", chanName, author, changedTime, topic)
+function Interface:_OnChannelTopic(chanName, author, topic)
+	topic = topic and tostring(topic) or ""
+	self:super("_OnChannelTopic", chanName, author, 0, topic)
 end
 Interface.commands["CHANNELTOPIC"] = Interface._OnChannelTopic
-Interface.commandPattern["CHANNELTOPIC"] = "(%S+)%s+(%S+)%s+(%S+)%s+([^\t]+)"
-
-function Interface:_OnNoChannelTopic(chanName)
-	self:super("_OnNoChannelTopic", chanName)
-end
-Interface.commands["NOCHANNELTOPIC"] = Interface._OnNoChannelTopic
-Interface.commandPattern["NOCHANNELTOPIC"] = "(%S+)"
+Interface.commandPattern["CHANNELTOPIC"] = "(%S+)%s+(%S+)%s*(.*)"
 
 function Interface:_OnSaid(chanName, userName, message)
 	self:super("_OnSaid", chanName, userName, message)

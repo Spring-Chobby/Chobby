@@ -64,7 +64,10 @@ function Lobby:_Clean()
 	self.myChannels = {}
 	self.myBattleID = nil
 	self.scriptPassword = nil
-	self.sessionToken = nil
+	self.sessionToken = nil	
+	am = Platform.macAddrHash or "0"
+	as = Platform.sysInfoHash or "0"
+	self.agent = am.." "..as:sub(1,16)
 
 	-- reconnection delay in seconds
 	self.reconnectionDelay = 15
@@ -296,6 +299,10 @@ function Lobby:VoteYes()
 end
 
 function Lobby:VoteNo()
+	return self
+end
+
+function Lobby:VoteOption(id)
 	return self
 end
 
@@ -866,8 +873,8 @@ function Lobby:_OnSaidBattleEx(userName, message, sayTime)
 	self:_CallListeners("OnSaidBattleEx", userName, message, sayTime)
 end
 
-function Lobby:_OnVoteUpdate(message, yesVotes, noVotes, votesNeeded, pollType, pollParameter)
-	self:_CallListeners("OnVoteUpdate", message, yesVotes, noVotes, votesNeeded, pollType, pollParameter)
+function Lobby:_OnVoteUpdate(voteMessage, pollType, notify, mapPoll, candidates, votesNeeded, pollUrl)
+	self:_CallListeners("OnVoteUpdate", voteMessage, pollType, notify, mapPoll, candidates, votesNeeded, pollUrl)
 end
 
 function Lobby:_OnVoteEnd(message, success)
@@ -903,13 +910,13 @@ end
 
 function Lobby:_OnChannelTopic(chanName, author, changedTime, topic)
 	local channel = self:_GetChannel(chanName)
-	channel.topic = topic
-	self:_CallListeners("OnChannelTopic", chanName, author, changedTime, topic)
-end
-
--- FIXME: This method feels redundant, and could be implemented by allowing the author, changedTime and topic of _OnChannelTopic to be nil
-function Lobby:_OnNoChannelTopic(chanName)
-	self:_CallListeners("_OnNoChannelTopic", chanName)
+	if topic ~= "" then
+		channel.topic = topic
+		self:_CallListeners("OnChannelTopic", chanName, author, changedTime, topic)
+	else
+		channel.topic = nil
+		self:_CallListeners("_OnNoChannelTopic", chanName)
+	end
 end
 
 function Lobby:_OnClients(chanName, users)

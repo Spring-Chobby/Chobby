@@ -30,6 +30,7 @@ planetUtilities.planetImages = {
 	LUA_DIRNAME .. "images/planets/tundra01.png",
 	LUA_DIRNAME .. "images/planets/tundra02.png",
 	LUA_DIRNAME .. "images/planets/tundra03.png",
+	LUA_DIRNAME .. "images/planets/46.png",	
 }
 
 planetUtilities.backgroundImages = {
@@ -44,80 +45,15 @@ planetUtilities.BONUS_EXP = 25
 
 planetUtilities.PLANET_SIZE_MAP = 36
 planetUtilities.PLANET_SIZE_INFO = 240
-planetUtilities.ICON_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/unitpics/"
+planetUtilities.ICON_DIR = LUA_DIRNAME .. "configs/gameConfig/tc/unitpics/"
 
 planetUtilities.planetPositions = {
-	[1] = {34, 762},
-	[2] = {73, 636},
-	[3] = {44, 522},
-	[4] = {27, 379},
-	[5] = {166, 607},
-	[6] = {232, 703},
-	[7] = {256, 854},
-	[8] = {58, 247},
-	[9] = {101, 392},
-	[10] = {159, 264},
-	[11] = {205, 93},
-	[12] = {260, 211},
-	[13] = {238, 536},
-	[14] = {270, 408},
-	[15] = {321, 535},
-	[16] = {318, 312},
-	[17] = {368, 416},
-	[18] = {413, 515},
-	[19] = {177, 436},
-	[20] = {300, 662},
-	[21] = {504, 509},
-	[22] = {329, 795},
-	[23] = {337, 929},
-	[24] = {439, 954},
-	[25] = {416, 847},
-	[26] = {372, 644},
-	[27] = {429, 747},
-	[28] = {475, 608},
-	[29] = {409, 305},
-	[30] = {503, 850},
-	[31] = {586, 928},
-	[32] = {706, 910},
-	[33] = {603, 818},
-	[34] = {580, 644},
-	[35] = {690, 779},
-	[36] = {292, 55},
-	[37] = {351, 129},
-	[38] = {385, 37},
-	[39] = {510, 41},
-	[40] = {368, 225},
-	[41] = {451, 199},
-	[42] = {538, 217},
-	[43] = {120, 156},
-	[44] = {506, 301},
-	[45] = {591, 293},
-	[46] = {626, 186},
-	[47] = {635, 386},
-	[48] = {546, 420},
-	[49] = {606, 526},
-	[50] = {707, 578},
-	[51] = {762, 492},
-	[52] = {223, 327},
-	[53] = {521, 742},
-	[54] = {439, 111},
-	[55] = {773, 697},
-	[56] = {616, 63},
-	[57] = {771, 809},
-	[58] = {688, 255},
-	[59] = {704, 96},
-	[60] = {840, 867},
-	[61] = {842, 538},
-	[62] = {702, 422},
-	[63] = {797, 357},
-	[64] = {855, 384},
-	[65] = {894, 252},
-	[66] = {784, 139},
-	[67] = {898, 727},
-	[68] = {929, 104},
-	[69] = {55, 890},
-	[70] = {666, 678},
-	[71] = {539, 130},
+	[1] = {50, 400},
+	[2] = {30, 600},
+	[3] = {190, 720},
+	[4] = {230, 850},
+	[5] = {600, 290},
+	[6] = {670, 100},
 }
 
 for i = 1, #planetUtilities.planetPositions do
@@ -126,7 +62,7 @@ for i = 1, #planetUtilities.planetPositions do
 end
 
 planetUtilities.DEFAULT_RESOURCES = {
-	metal = 0,
+	metal = 100,
 	energy = 100,
 }
 
@@ -194,10 +130,6 @@ planetUtilities.COMMAND = {
 	-- Custom commands
 	RAW_MOVE = 31109,
 	JUMP = 38521,
-	AREA_GUARD = 13922, -- Don't use, causes recursion
-	TRANSFER_UNIT = 38292,
-	PLACE_BEACON = 35170,
-	WAIT_AT_BEACON = 35171,
 }
 
 planetUtilities.ICON_OVERLAY = {

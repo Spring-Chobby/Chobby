@@ -1,10 +1,8 @@
 local aiLibFunctions = {}
 
 local circuitDifficulties = {
-	"CircuitAIEasy",
-	"CircuitAINormal",
-	"CircuitAIHard",
-	"CircuitAIBrutal",
+	"NO AI",
+	"Skirmish AI",
 }
 
 function aiLibFunctions.Circuit_difficulty_autofill(difficultySetting)

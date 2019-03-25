@@ -145,24 +145,13 @@ function Configuration:init()
 
 	self.gameConfigName = fileConfig.game
 	self.gameConfig = VFS.Include(gameConfPath .. self.gameConfigName .. "/mainConfig.lua")
-	
-	if self.gameConfig.customCampaignID then
-		self.campaignPath = ("campaign/" .. self.gameConfig.customCampaignID)
-	else
-		self.campaignPath = "campaign/sample"
-	end
-	
-	self.campaignConfigName = self.gameConfig.customCampaignName or "sample"
 
-	local campaignConfigFile = "campaign/sample/mainConfig.lua"
-	if self.gameConfig.customCampaignID then
-		campaignConfigFile = "campaign/" .. self.gameConfig.customCampaignID .. "/mainConfig.lua"
-	end
-	self.campaignConfig = VFS.Include(campaignConfigFile)
-	
+	self.campaignPath = "campaign/sample"
+	self.campaignConfigName = "sample"
+	self.campaignConfig = VFS.Include("campaign/sample/mainConfig.lua")
 	self.campaignSaveFile = nil -- Set by user
 	self.nextCampaignSaveNumber = 1
-		
+	
 	local gameConfigOptions = {}
 	local subdirs = VFS.SubDirs(gameConfPath)
 	for index, subdir in ipairs(subdirs) do
@@ -218,6 +207,7 @@ function Configuration:init()
 	self.enableTextToSpeech = true
 	self.showOldAiVersions = false
 	self.drawAtFullSpeed = false
+	self.rememberQueuesOnStart = false
 	
 	self.lobby_fullscreen = 1
 	self.game_fullscreen = 1
@@ -484,6 +474,7 @@ function Configuration:GetConfigData()
 		confirmation_mainMenuFromBattle = self.confirmation_mainMenuFromBattle,
 		confirmation_battleFromBattle = self.confirmation_battleFromBattle,
 		drawAtFullSpeed = self.drawAtFullSpeed,
+		rememberQueuesOnStart = self.rememberQueuesOnStart,
 		loadLocalWidgets = self.loadLocalWidgets,
 		activeDebugConsole = self.activeDebugConsole,
 		onlyShowFeaturedMaps = self.onlyShowFeaturedMaps,

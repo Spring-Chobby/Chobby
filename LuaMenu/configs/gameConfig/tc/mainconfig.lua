@@ -87,10 +87,6 @@ local externalFuncAndData = {
 	link_homePage           = link_homePage,
 	link_replays            = link_replays,
 	link_maps               = link_maps,
----- Campaign
-	customCampaignName			= "Cursed",
-	customCampaignID			= "tc", -- Campaign name that is used in configuration files and for the subfolder
-	campaignBackgroundImage		= LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/galaxy.jpg", -- image for stars in the background of your campaign map
 ---- DISABLES / OVERWRIDES
 	battleListOnlyShow 			= "Cursed", -- Filters battle list to autohost running with a game that contains only this string
 	disableBattleListHostButton = true, -- Hides "Host" button as this function is not working as one might imagine

@@ -4,305 +4,186 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
-	local image = LUA_DIRNAME .. "images/planets/swamp03.png"
+	local image = LUA_DIRNAME .. "images/planets/46.png"
 	
 	local planetData = {
+		name = "Zeta Aurigae A",
+		startingPlanet = true,
 		predownloadMap = true, 
-		name = "Im Jaleth",
 		mapDisplay = {
-			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.05,
-			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.87,
+			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 1.00,
+			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 1.00,
 			image = image,
-			size = planetUtilities.PLANET_SIZE_MAP,
-			hintText = "Keep taking planets until you conquer the galaxy.",
-			hintSize = {402, 100},
+			size = planetUtilities.PLANET_SIZE_MAP*0.8,
+			hintText = "Click this planet to begin.",
+			hintSize = {400, 100}, -- Size of the hint box
 		},
 		infoDisplay = {
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
-			terrainType = "Terran",
-			radius = "6550 km",
-			primary = "Privni",
-			primaryType = "G8V",
+			terrainType = "Arid",
+			radius = "8050 km",
+			primary = "Zeta Aurigae",
+			primaryType = "MV",
 			milRating = 1,
-			feedbackLink = "http://zero-k.info/Forum/Thread/24417",
-			text = [[This battle will be straightforward. Construct an army of Glaives and Reavers to overwhelm your enemy.]]
+--			feedbackLink = "http://zero-k.info/Forum/Thread/24417",
+			text = [[The Xenosects are slowly becoming real trouble on this planet. We still do not know how these beast are able to infest new solar systems. It is time to eredicate the vermin, Exterminator!]]
 		},
 		tips = {
 			{
-				image = "unitpics/staticmex.png",
-				text = [[Metal Extractors gather the metal required to build an army and crush your opponent. Take mex spots and build as many as you can. Press F4 to highlight mex spots and display their value.]]
+				image = "unitpics/bug_med.png",
+				text = [[The Xenosects - a space bug race are terrorizing the galaxy.]]
+			},		
+			{
+				image = "unitpics/euf_sarge.png",
+				text = [[Sarge - your commander that is in charge of your troops. He will encourage and heal nearby units. Protect him at all costs.]]
 			},
 			{
-				image = "unitpics/energysolar.png",
-				text = [[All construction requires equal amounts of metal and energy. Build Solar Collectors to gather energy.]]
+				image = "unitpics/euf_marine.png",
+				text = [[Basic combat unit. It can shoot airborne targets.]]
 			},
-			{
-				image = "unitpics/cloakriot.png",
-				text = [[Reavers are slower than Glaives, but their heavy machine guns allow them to fight Glaives efficiently even when outnumbered.]]
-			},
-		},
+		},		
 		gameConfig = {
-			missionStartscript = false,
-			mapName = "Living Lands 4.1",
+--			gameName = "Quick Rocket Tutorial",
+			mapName = "Wanderlust v03",
+			missionStartscript = false,			
 			playerConfig = {
-				startX = 300,
-				startZ = 3800,
+				startX = 500,
+				startZ = 500,
 				allyTeam = 0,
-				commanderParameters = {
-					facplop = false,
-					defeatIfDestroyedObjectiveID = 2,
-				},
-				extraUnlocks = {
-					"cloakriot",
-					"cloakcon",
-					"turretlaser",
-					"staticradar",
-				},
+				startMetal = 10,
+				startEnergy = 10,
+				commanderParameters = {	},
+				extraUnlocks = { },
+				commander = false,
 				startUnits = {
 					{
-						name = "turretlaser",
-						x = 300,
-						z = 3450,
-						facing = 2,
-						difficultyAtMost = 2,
-					},
-					{
-						name = "turretlaser",
-						x = 1000,
-						z = 3750,
-						facing = 1,
-					},
-					{
-						name = "staticmex",
-						x = 170,
-						z = 3900,
-						facing = 2, 
-					},
-					{
-						name = "energysolar",
-						x = 100,
-						z = 3800,
-						facing = 2, 
-					},
-					{
-						name = "cloakraid",
-						x = 760,
+						name = "euf_sarge_lvl1",
+						x = 500,
 						z = 3500,
-						facing = planetUtilities.FACING.NORTH, 
-					},
-					{
-						name = "cloakraid",
-						x = 840,
-						z = 3500,
-						facing = planetUtilities.FACING.NORTH,
-					},
-					{
-						name = "factorycloak",
-						x = 800,
-						z = 3750,
-						facing = 2,
-					}, 
-				}
+						facing = 3,
+						defeatIfDestroyedObjectiveID = 1,				
+					},					
+				},
+				midgameUnits = {
+					{	name = "euf_transport_mis",	x = 800, z = 3600, facing = 0, spawnRadius = 25, delay = 4*30, orbitalDrop = false, },
+					{	name = "euf_transport_mis",	x = 2880, z = 180, facing = 2, spawnRadius = 25, delay = 90*30, orbitalDrop = false, },						
+				},
 			},
+			modoptions = { },
 			aiConfig = {
+				{
+					startX = 2000,
+					startZ = 200,
+					aiLib = "NO AI",
+					humanName = "Ally",
+					allyTeam = 0,
+					unlocks = {	},
+					startUnits = {
+						{ name = 'euf_metalextractor_lvl1', x = 136, z = 136, facing = 0, },
+						{ name = 'euf_metalextractor_lvl1', x = 168, z = 1784, facing = 0, },
+						{ name = 'euf_metalextractor_lvl1', x = 1848, z = 1912, facing = 0, },
+						{ name = 'euf_metalextractor_lvl1', x = 1928, z = 3848, facing = 0, },
+						{ name = 'euf_metalextractor_lvl1', x = 2056, z = 328, facing = 0, },
+						{ name = 'euf_metalextractor_lvl1', x = 2264, z = 1032, facing = 0, },
+						{ name = 'euf_metalextractor_lvl1', x = 232, z = 344, facing = 0, },
+						{ name = 'euf_metalextractor_lvl1', x = 2504, z = 3784, facing = 0, },
+						{ name = 'euf_metalextractor_lvl1', x = 2552, z = 2008, facing = 0, },
+						{ name = 'euf_metalextractor_lvl1', x = 2616, z = 312, facing = 0, },
+						{ name = 'euf_metalextractor_lvl1', x = 3112, z = 3752, facing = 0, },
+						{ name = 'euf_metalextractor_lvl1', x = 3224, z = 248, facing = 0, },
+						{ name = 'euf_metalextractor_lvl1', x = 344, z = 1576, facing = 0, },
+						{ name = 'euf_metalextractor_lvl1', x = 3560, z = 3480, facing = 0, },
+						{ name = 'euf_metalextractor_lvl1', x = 584, z = 2184, facing = 0, },
+						{ name = 'euf_metalextractor_lvl2', x = 2856, z = 3064, facing = 0, },
+						{ name = 'euf_metalextractor_lvl2', x = 872, z = 824, facing = 0, },
+						{ name = 'euf_radar_lvl2', x = 2600, z = 504, facing = 0, },
+						{ name = 'euf_solar', x = 2400, z = 80, facing = 0, },
+						{ name = 'euf_solar', x = 2400, z = 160, facing = 0, },
+						{ name = 'euf_solar', x = 2480, z = 80, facing = 0, },
+						{ name = 'euf_solar', x = 2480, z = 160, facing = 0, },	
+						{ name = 'euf_solar', x = 2560, z = 80, facing = 0, },
+						{ name = 'euf_solar', x = 2560, z = 160, facing = 0, },
+						{ name = 'euf_solar', x = 2640, z = 80, facing = 0, },
+						{ name = 'euf_solar', x = 2640, z = 160, facing = 0, },
+						{ name = 'euf_marine', x = 2150, z = 450, facing = 2, {cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {500, 3500}, options = {"shift"}}, },							
+						{ name = 'euf_marine', x = 2200, z = 500, facing = 2, {cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {500, 3500}, options = {"shift"}}, },						
+					}
+				},
 				{
 					startX = 4000,
 					startZ = 75,
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "NO AI",
 					humanName = "Enemy",
-					bitDependant = true,
-					commanderParameters = {
-						facplop = false,
-					},
+					unlocks = {},
 					allyTeam = 1,
-					unlocks = {
-						"cloakraid",
-					},
-					difficultyDependantUnlocks = {
-						 [3] = {"staticmex","energysolar"},
-						 [4] = {"staticmex","energysolar","cloakcon"},
-					 },
-					commanderLevel = 2,
-					commander = {
-						name = "Most Loyal Opposition",
-						chassis = "engineer",
-						decorations = {
-						  "skin_support_dark",
-						},
-						modules = {}
-					},
+					commander = false,
 					startUnits = {
-						{
-							name = "staticmex",
-							x = 3630,
-							z = 220,
-							facing = 2, 
-						},
-						{
-							name = "staticmex",
-							x = 3880,
-							z = 200,
-							facing = 2, 
-						},
-						{
-							name = "turretlaser",
-							x = 3500,
-							z = 200,
-							facing = 3,
-							difficultyAtLeast = 2,
-						},
-						{
-							name = "turretlaser",
-							x = 3700,
-							z = 700,
-							facing = 0,
-							difficultyAtLeast = 3,
-						},
-						{
-							name = "turretemp",
-							x = 3400,
-							z = 600,
-							facing = 1,
-							difficultyAtLeast = 4,
-						},
-						{
-							name = "staticmex",
-							x = 3880,
-							z = 520,
-							facing = 2, 
-						},
-						{
-							name = "energysolar",
-							x = 3745,
-							z = 185,
-							facing = 2, 
-						},
-						{
-							name = "energysolar",
-							x = 3960,
-							z = 600,
-							facing = 2, 
-						},
-						{
-							name = "factorycloak",
-							x = 3750,
-							z = 340,
-							facing = 4,
-							mapMarker = {
-								text = "Destroy",
-								color = "red"
-							}
-						},
-					
+						{ name = "bug_big", x = 4000,	z = 500, facing = 0, commands = { {cmdID = planetUtilities.COMMAND.PATROL, pos = {3900, 1200}},	}, },
+						{ name = "bug_big", x = 4350,	z = 800, facing = 0, commands = {{cmdID = planetUtilities.COMMAND.PATROL, pos = {4000, 1000}}, }, difficultyAtLeast = 2, },						
+						{ name = "bug_big", x = 4300,	z = 700, facing = 0, commands = {{cmdID = planetUtilities.COMMAND.PATROL, pos = {4200, 1200}}, }, difficultyAtLeast = 3, },
+						{ name = "bug_big", x = 4700,	z = 350, facing = 0, commands = {{cmdID = planetUtilities.COMMAND.PATROL, pos = {4360, 1200}}, }, difficultyAtLeast = 4, },						
+						{ name = "bug_med", x = 300, z = 3800, facing = 0, commands = {}, },	
+						{ name = "bug_med", x = 1300, z = 1500, facing = 1, commands = {}, },	
+						{ name = "bug_med", x = 1200, z = 1600, facing = 3, commands = {}, },	
+						{ name = "bug_larva", x = 700, z = 3000, facing = 2, commands = {}, },	
+						{ name = "bug_larva", x = 800, z = 3200, facing = 0, commands = {}, difficultyAtLeast = 3, },	
+						{ name = "bug_larva", x = 850, z = 3250, facing = 1, commands = {}, difficultyAtLeast = 4, },
+						{ name = 'bug_larva', x = 1247, z = 1130, facing = 0, difficultyAtLeast = 3, },
+						{ name = 'bug_larva', x = 1362, z = 963, facing = 0, },
+						{ name = 'bug_larva', x = 1429, z = 1190, facing = 0, },
+						{ name = 'bug_larva', x = 1607, z = 2455, facing = 0, },
+						{ name = 'bug_larva', x = 2709, z = 2692, facing = 0, difficultyAtLeast = 3, },
+						{ name = 'bug_larva', x = 2805, z = 2537, facing = 0, },
+						{ name = 'bug_larva', x = 2965, z = 2704, facing = 0, },
+						{ name = 'bug_larva', x = 3286, z = 1863, facing = 0, },
+						{ name = 'bug_larva', x = 4387, z = 2203, facing = 0, difficultyAtLeast = 3, },
+						{ name = 'bug_larva', x = 4630, z = 2291, facing = 0, },
+						{ name = 'bug_larva', x = 4719, z = 2100, facing = 0, },
+						{ name = 'bug_med', x = 2343, z = 3021, facing = 0, },
+						{ name = 'bug_med', x = 2406, z = 1398, facing = 0, },
+						{ name = 'bug_med', x = 3502, z = 2114, facing = 0, },
+						{ name = 'bug_med', x = 3535, z = 3629, facing = 0, },
+						{ name = 'bug_med', x = 4586, z = 3456, facing = 0, },
+						{ name = 'bug_med', x = 532, z = 1767, facing = 0, },
+						{ name = 'bug_med', x = 543, z = 328, facing = 0, },						
 					}
 				},
 			},
 			defeatConditionConfig = {
 				-- Indexed by allyTeam.
-				[0] = { },
+				[0] = {},
 				[1] = {
-					-- The default behaviour, if no parameters are set, is the defeat condition of an
-					-- ordinary game. 
-					-- If ignoreUnitLossDefeat is true then unit loss does not cause defeat.
-					-- If at least one of vitalCommanders or vitalUnitTypes is set then losing all 
-					-- commanders (if vitalCommanders is true) as well as all the unit types in 
-					-- vitalUnitTypes (if there are any in the list) causes defeat.
 					ignoreUnitLossDefeat = false,
-					vitalCommanders = true,
-					vitalUnitTypes = {
-						"factorycloak",
-					},
+					vitalCommanders = false,
 					loseAfterSeconds = false,
-					allyTeamLossObjectiveID = 1,
-				},
+					allyTeamLossObjectiveID = 2,
+				},				
 			},
-			objectiveConfig = {
-				-- This is just related to displaying objectives on the UI.
+				objectiveConfig = {
 				[1] = {
-					description = "Destroy the enemy Commander and Cloakbot Factory",
+					description = "Protect the Sarge",
 				},
 				[2] = {
-					description = "Protect your Commander",
-				},
+					description = "Hunt down all those Xenosects",
+				},				
 			},
 			bonusObjectiveConfig = {
-				-- Indexed by bonusObjectiveID
-				[1] = { -- Have 3 mex by 1 minute.
-					satisfyByTime = 60,
-					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 3,
-					unitTypes = {
-						"staticmex",
-					},
-					image = planetUtilities.ICON_DIR .. "staticmex.png",
-					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Have 3 Metal Extractors by 1:00",
-					experience = planetUtilities.BONUS_EXP,
-				},
-				[2] = { -- Have 3 solar by 2 minute.
-					satisfyByTime = 120,
-					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 3,
-					unitTypes = {
-						"energysolar",
-					},
-					image = planetUtilities.ICON_DIR .. "energysolar.png",
-					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Have 3 Solar Generators by 2:00",
-					experience = planetUtilities.BONUS_EXP,
-				},
-				[3] = { -- Build a radar
-					satisfyOnce = true,
-					countRemovedUnits = true, -- count units that previously died.
-					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 1,
-					unitTypes = {
-						"staticradar",
-					},
-					image = planetUtilities.ICON_DIR .. "staticradar.png",
-					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build a Radar Tower",
-					experience = planetUtilities.BONUS_EXP,
-				},
-				[4] = { -- Build 3 Reavers
-					satisfyOnce = true,
-					countRemovedUnits = true, -- count units that previously died.
-					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 3,
-					unitTypes = {
-						"cloakriot",
-					},
-					image = planetUtilities.ICON_DIR .. "cloakriot.png",
-					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build 3 Reavers",
-					experience = planetUtilities.BONUS_EXP,
-				},
-				[5] = {
-					victoryByTime = 480,
+				[1] = { -- Win by 10:00
+					victoryByTime = 600,
 					image = planetUtilities.ICON_OVERLAY.CLOCK,
-					description = "Win by 8:00",
+					description = "Win by 20:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
-			}
+			},
 		},
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
-			units = {
-				"cloakriot",
-				"cloakcon",
-				"turretlaser",
-				"staticradar",
-			},
-			modules = {
-				"module_dmg_booster_LIMIT_A_2",
-			},
-			abilities = {
-			},
-			codexEntries = {
-			}
+			units = {	},
+			modules = {},
+			abilities = {},
+			codexEntries = {}
 		},
 	}
 	

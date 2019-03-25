@@ -1682,9 +1682,6 @@ function externalFunctions.GetControl(newLiveTestingMode, newPlanetWhitelist, fe
 				end
 				
 				local background = WG.Chobby.interfaceRoot.GetBackgroundHolder()
-				if WG.Chobby.Configuration.gameConfig.campaignBackgroundImage then
-					GALAXY_IMAGE = WG.Chobby.Configuration.gameConfig.campaignBackgroundImage 
-				end
 				background:SetImageOverride(GALAXY_IMAGE)
 				local x, y = obj:LocalToScreen(0, 0)
 				RepositionBackgroundAndPlanets(x, y, obj.width, obj.height)

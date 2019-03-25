@@ -1,5 +1,5 @@
 local entries = {
-	character_ada = {
+--[[	character_ada = {
 		name = "Ada Caedmon",
 		category = "Characters",
 		text = "Ada Eveline Caedmon\nAge: 31\nType: Human (genemodded)\nAffiliation: Empire\nRole: Auxiliary cohort leader"
@@ -108,7 +108,7 @@ local entries = {
 		name = "Dropships 5",
 		category = "Technology",
 		text = ""
-	},
+	}, ]]
 }
 
 for i,v in pairs(entries) do

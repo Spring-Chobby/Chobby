@@ -47,6 +47,12 @@ function widget:Update()
 	end
 end
 
+local function AwayTracker_UserActivity(awaySeconds)
+	if awaySeconds < 20 then
+		SetNotAway()
+	end
+end
+
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
 
@@ -58,6 +64,10 @@ end
 function widget:KeyPress(key, mods, isRepeat, label, unicode)
 	SetNotAway()
 	return false
+end
+
+function widget:Initialize()
+	WG.AwayTracker_UserActivity = AwayTracker_UserActivity
 end
 
 --------------------------------------------------------------------------

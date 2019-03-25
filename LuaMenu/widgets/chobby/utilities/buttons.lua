@@ -13,6 +13,13 @@ local function GetFont(size)
 	}
 end
 
+local COLOR_CLASS = {
+	positive_button = true,
+	negative_button = true,
+	option_button = true,
+	action_button = true,
+}
+
 function ButtonUtilities.SetButtonSelected(button)
 	if button.selected then
 		return
@@ -31,7 +38,12 @@ function ButtonUtilities.SetButtonSelected(button)
 	button:SetCaption(Configuration:GetSelectedColor() .. button.oldCaption .. "\b")
 	button.font = Chili.Font:New(GetFont(button.oldFont.size - 2))
 	
-	button.backgroundColor = Configuration:GetButtonSelectedColor()
+	if COLOR_CLASS[button.classname] then
+		local col = button.backgroundColor
+		button.backgroundColor = {(1 + col[1])*0.5, (1 + col[2])*0.5, (1 + col[3])*0.5, (1 + col[4])*0.5}
+	else
+		button.backgroundColor = Configuration:GetButtonSelectedColor()
+	end
 	button:Invalidate()
 end
 

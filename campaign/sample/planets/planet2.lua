@@ -4,403 +4,129 @@
 
 local function GetPlanet(planetUtilities, planetID)
 	
-	--local image = planetUtilities.planetImages[math.floor(math.random()*#planetUtilities.planetImages) + 1]
-	local image = LUA_DIRNAME .. "images/planets/desert03.png"
+	local image = LUA_DIRNAME .. "images/planets/arid01.png"
 	
 	local planetData = {
-		name = "Beth XVII",
-		startingPlanet = false,
+		predownloadMap = true,	
+		name = "Zeta Aurigae C", 
 		mapDisplay = {
-			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.04,
-			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.73,
+			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 1.20,
+			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 1.00,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
+			hintText = "Click this planet to begin.",
+			hintSize = {402, 100},		
 		},
 		infoDisplay = {
 			image = image,
 			size = planetUtilities.PLANET_SIZE_INFO,
 			backgroundImage = planetUtilities.backgroundImages[math.floor(math.random()*#planetUtilities.backgroundImages) + 1],
 			terrainType = "Desert",
-			radius = "5950 km",
-			primary = "Beth",
-			primaryType = "G4V",
+			radius = "10200 km",
+			primary = "Zeta Aurigae",
+			primaryType = "MV",
 			milRating = 1,
-			feedbackLink = "http://zero-k.info/Forum/Thread/24417",
-			text = [[Your opponent has prepared powerful close-range Stardust turrets and Reavers to defeat your raiders. Build a Cloakbot Factory, then counter their strategy with longer-ranged Ronins to secure victory.]]
-		},
+--			feedbackLink = "http://zero-k.info/Forum/Thread/24417",
+			text = [[Construct solars, metal extractors and barracks, hire marines and hunt down all xenosects!]]		},
 		tips = {
 			{
-				image = "unitpics/turretriot.png",
-				text = [[Stardusts are riot turrets which will shred any nearby units. Your Ronins can avoid this fate by attacking from just outside the Stardusts' range.]]
+				image = "unitpics/euf_constructor.png",
+				text = [[This little robot is building all you tier 1 buildings.]]
+			},		
+			{
+				image = "unitpics/euf_barracks.png",
+				text = [[Your soldiers are trained here. Use the barracks to raise an army.]]
 			},
 			{
-				image = "unitpics/cloakskirm.png",
-				text = [[Ronins are skirmishers which can safely destroy Reavers from long range. Glaives are fast enough to close the distance while avoiding Ronin rockets.]]
+				image = "unitpics/euf_solar.png",
+				text = [[Solar collectors are your basic energy supply to power your metal extractors and any production.]]
 			},
 			{
-				image = "unitpics/cloakcon.png",
-				text = [[Instead of making a second factory, use constructors to assist your first one - it's more cost efficient.]]
-			}
-			-- {
-				-- image = "unitpics/energysolar.png",
-				-- text = [[Don't forget to build Metal Extractors and Solar Collectors to power your economy and build up a large army. Connect energy generators to your Mexes to overdrive them, giving you more metal income. (See the manual for more about overdrive.)]]
-			-- },
+				image = "unitpics/euf_metalextractor_lvl1.png",
+				text = [[Your metal extractors generate resources for production of units and buidlings. They needs sufficient energy to work efficiently.]]
+			},			
 		},
 		gameConfig = {
-			mapName = "Battle for PlanetXVII-v01",
+			mapName = "Badlands 2.1",
+			missionStartscript = false,			
 			playerConfig = {
-				startX = 3700,
-				startZ = 3700,
+				startX = 500,
+				startZ = 500,
 				allyTeam = 0,
-				useUnlocks = true,
-				startMetal = 250,
-				startEnergy = 250,
-				commanderParameters = {
-					facplop = true,
-					defeatIfDestroyedObjectiveID = 2,
-				},
+				startMetal = 1000,
+				startEnergy = 1000,
+				commanderParameters = {	},
 				extraUnlocks = {
-					"cloakskirm",
-					"cloakriot",
+					'euf_scoutdrone',
+					'euf_marine',
+					'euf_radar_lvl1',
 				},
+				commander = false,
 				startUnits = {
-					{
-						name = "staticradar",
-						x = 3730,
-						z = 3625,
-						facing = 3, 
-					},
-					{
-						name = "staticradar",
-						x = 3010,
-						z = 2540,
-						facing = 3, 
-					},
-					{
-						name = "turretriot",
-						x = 2540,
-						z = 3580,
-						facing = 2, 
-					},
-					{
-						name = "turretriot",
-						x = 3210,
-						z = 3060,
-						facing = 2, 
-					},
-					{
-						name = "turretriot",
-						x = 3840,
-						z = 2575,
-						facing = 3, 
-					},
-					{
-						name = "cloakskirm",
-						x = 3340,
-						z = 3200,
-						facing = 0, 
-					},
-					{
-						name = "cloakskirm",
-						x = 3460,
-						z = 3180,
-						facing = 0, 
-					},
-					{
-						name = "cloakskirm",
-						x = 3580,
-						z = 3200,
-						facing = 0, 
-					},
-					{
-						name = "cloakriot",
-						x = 3380,
-						z = 3280,
-						facing = 0, 
-					},
-					{
-						name = "cloakriot",
-						x = 3540,
-						z = 3280,
-						facing = 0, 
-					},
-					{
-						name = "staticmex",
-						x = 3960,
-						z = 3640,
-						facing = 0, 
-					},
-					{
-						name = "energysolar",
-						x = 3967,
-						z = 3800,
-						facing = 0, 
-					},
-					{
-						name = "staticmex",
-						x = 3975,
-						z = 4025,
-						facing = 0, 
-					},
-					{
-						name = "energysolar",
-						x = 3700,
-						z = 4000,
-						facing = 0, 
-					},
-					{
-						name = "staticmex",
-						x = 3575,
-						z = 3960,
-						facing = 0, 
-					},
-				},
+					{ name = 'euf_constructor', x = 388, z = 3604, facing = 0, },
+					{ name = 'euf_sarge', x = 622, z = 3693, facing = 2, },
+				}
 			},
+			modoptions = {	},
 			aiConfig = {
 				{
-					startX = 400,
-					startZ = 400,
-					aiLib = "Circuit_difficulty_autofill",
-					humanName = "Wubrior Master",
-					bitDependant = true,
-					startMetal = 250,
-					startEnergy = 250,
+					startX = 4000,
+					startZ = 75,
+					aiLib = "NO AI",
+					humanName = "Enemy",
+					unlocks = {},
 					allyTeam = 1,
-					unlocks = {
-						"cloakraid",
-						"cloakriot",
-					},
-					 difficultyDependantUnlocks = {
-						 [3] = {"staticmex","energysolar"},
-						 [4] = {"cloakcon","staticmex","energysolar"},
-					 },
-					commanderLevel = 2,
-					commander = {
-						name = "Wub Wub Wub",
-						chassis = "guardian",
-						decorations = {
-						},
-						modules = {
-							"commweapon_beamlaser",
-						}
-					},
+					commander = false,
 					startUnits = {
-						{
-							name = "staticradar",
-							x = 1300,
-							z = 1014,
-							facing = 0, 
-						},
-						{
-							name = "turretriot",
-							x = 2770,
-							z = 1880,
-							facing = 0, 
-						},
-						{
-							name = "turretriot",
-							x = 850,
-							z = 1660,
-							facing = 0, 
-						},
-						{
-							name = "turretriot",
-							x = 1830,
-							z = 1230,
-							facing = 0, 
-						},
-						{
-							name = "turretriot",
-							x = 3177,
-							z = 330,
-							facing = 0, 
-						},
-						{
-							name = "factorycloak",
-							x = 660,
-							z = 770,
-							facing = 0, 
-						},
-						{
-							name = "cloakriot",
-							x = 660,
-							z = 900,
-							facing = 0, 
-						},
-						{
-							name = "cloakriot",
-							x = 660,
-							z = 1000,
-							facing = 0, 
-						},
-						{
-							name = "staticmex",
-							x = 100,
-							z = 135,
-							facing = 2, 
-						},
-						{
-							name = "staticmex",
-							x = 610,
-							z = 500,
-							facing = 0, 
-						},
-						{
-							name = "staticmex",
-							x = 1300,
-							z = 135,
-							facing = 0, 
-						},
-						{
-							name = "staticmex",
-							x = 1510,
-							z = 350,
-							facing = 0, 
-						},
-						{
-							name = "staticmex",
-							x = 1800,
-							z = 90,
-							facing = 0, 
-						},
-						{
-							name = "energywind",
-							x = 2700,
-							z = 580,
-							facing = 2, 
-						},
-						{
-							name = "energywind",
-							x = 2675,
-							z = 700,
-							facing = 2, 
-						},
-						{
-							name = "energywind",
-							x = 2700,
-							z = 830,
-							facing = 2, 
-						},
-						{
-							name = "energywind",
-							x = 2650,
-							z = 950,
-							facing = 2, 
-						},
-						{
-							name = "energywind",
-							x = 2600,
-							z = 1070,
-							facing = 2, 
-						},
-						{
-							name = "energysolar",
-							x = 1450,
-							z = 200,
-							facing = 2, 
-						},
-						{
-							name = "energywind",
-							x = 220,
-							z = 130,
-							facing = 2, 
-						},
+						{ name = 'bug_big', x = 2164.32642, z = 323.036194, facing = 0, },
+						{ name = 'bug_big', x = 2205.52173, z = 1868.33545, facing = 1, },
+						{ name = 'bug_big', x = 2480.21924, z = 2146.74902, facing = 2, },
+						{ name = 'bug_big', x = 3410.6272, z = 2591.73169, facing = 3, },
+						{ name = 'bug_larva', x = 1229.11816, z = 762.821289, facing = 0, },
+						{ name = 'bug_larva', x = 1328.38171, z = 469.973755, facing = 2, },
+						{ name = 'bug_larva', x = 1533.21765, z = 1081.11816, facing = 1, },
+						{ name = 'bug_larva', x = 1534.24304, z = 573.374146, facing = 0, },
+						{ name = 'bug_larva', x = 2136.75269, z = 1930.5564, facing = 0, },
+						{ name = 'bug_larva', x = 2374.49487, z = 2960.31274, facing = 1, },
+						{ name = 'bug_larva', x = 2774.81299, z = 956.010498, facing = 0, },
+						{ name = 'bug_larva', x = 2991.02051, z = 581.429077, facing = 1, },
+						{ name = 'bug_larva', x = 3190.40039, z = 848.625244, facing = 0, },
+						{ name = 'bug_larva', x = 3240.5376, z = 1099.24463, facing = 0, },
+						{ name = 'bug_larva', x = 3389.70386, z = 547.272705, facing = 1, },
+						{ name = 'bug_larva', x = 3428.1853, z = 1392.87488, facing = 0, },
+						{ name = 'bug_larva', x = 3510.61401, z = 1055.91101, facing = 1, },
+						{ name = 'bug_larva', x = 3594.85596, z = 1291.42737, facing = 2, },
+						{ name = 'bug_larva', x = 3710.73901, z = 369.391235, facing = 3, },
+						{ name = 'bug_med', x = 1895.18726, z = 3882.18091, facing = 1, },
+						{ name = 'bug_med', x = 1928.56567, z = 2268.16504, facing = 0, },
+						{ name = 'bug_med', x = 2558.6001, z = 3624.72754, facing = 2, },
+						{ name = 'bug_med', x = 2918.83008, z = 926.624023, facing = 3, },
+						{ name = 'bug_med', x = 2981.69531, z = 1592.6344, facing = 0, },
+						{ name = 'bug_med', x = 3223.28369, z = 96.0878296, facing = 1, },
+						{ name = 'bug_med', x = 3242.14893, z = 1240.52551, facing = 3, },
+						{ name = 'bug_med', x = 3908.04395, z = 917.452515, facing = 2, },
+						{ name = 'bug_med', x = 463.322021, z = 1780.00317, facing = 0, },
 					}
-				},
-			},
-			terraform = {
-				{
-					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
-					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
-					position = {3808, 2544, 3808 + 48, 2544 + 48}, 
-					height = 130,
-					volumeSelection = planetUtilities.TERRAFORM_VOLUME.RAISE_ONLY,
 				},
 			},
 			defeatConditionConfig = {
 				-- Indexed by allyTeam.
-				[0] = { },
+				[0] = {},
 				[1] = {
 					ignoreUnitLossDefeat = false,
-					vitalCommanders = true,
-					vitalUnitTypes = {
-						"factorycloak",
-					},
-					loseAfterSeconds = false,
-					allyTeamLossObjectiveID = 1,
 				},
 			},
 			objectiveConfig = {
-				-- This is just related to displaying objectives on the UI.
-				[1] = {
-					description = "Destroy the enemy Commander and Cloakbot Factory",
-				},
-				[2] = {
-					description = "Protect your Commander",
-				},
 			},
 			bonusObjectiveConfig = {
-					-- Indexed by bonusObjectiveID
-				[1] = { -- plop your factory
-					satisfyOnce = true,
-					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 1,
-					unitTypes = {
-						"factorycloak",
-					},
-					image = planetUtilities.ICON_DIR .. "factorycloak.png",
-					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build a Cloakbot Factory",
-					experience = planetUtilities.BONUS_EXP,
-				},
-				[2] = { -- Have 10 mex
-					satisfyOnce = true,
-					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 10,
-					unitTypes = {
-						"staticmex",
-					},
-					image = planetUtilities.ICON_DIR .. "staticmex.png",
-					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Have 10 Metal Extractors",
-					experience = planetUtilities.BONUS_EXP,
-				},
-				[3] = { -- Build 10 Ronins
-					satisfyOnce = true,
-					countRemovedUnits = true, -- count units that previously died.
-					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 13,
-					unitTypes = {
-						"cloakskirm",
-					},
-					image = planetUtilities.ICON_DIR .. "cloakskirm.png",
-					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build 10 Ronins",
-					experience = planetUtilities.BONUS_EXP,
-				},
-				[4] = { -- Kill enemy Stardusts in 8 minutes.
-					satisfyByTime = 480,
-					comparisionType = planetUtilities.COMPARE.AT_MOST,
-					targetNumber = 0,
-					enemyUnitTypes = {
-						"turretriot",
-					},
-					image = planetUtilities.ICON_DIR .. "turretriot.png",
-					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Find and destroy all 4 enemy Stardust turrets before 8:00",
-					experience = planetUtilities.BONUS_EXP,
-				},
-			},
+			}
 		},
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
-			units = {
-				"cloakskirm",
-			},
-			modules = {
-				"commweapon_heavymachinegun",
-				"module_high_power_servos_LIMIT_A_2",
-			},
+			units = {},
+			modules = {},
+			abilities = {},
+			codexEntries = {}
 		},
 	}
 	

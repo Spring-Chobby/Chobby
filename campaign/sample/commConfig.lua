@@ -2,7 +2,7 @@
 -- Module Definitions
 ------------------------------------------------------------------------
 
-local moduleImagePath = "LuaMenu/configs/gameConfig/zk/unitpics/"
+local moduleImagePath = "LuaMenu/configs/gameConfig/tc/unitpics/"
 local moduleDefNames = {}
 
 local moduleDefs = {
@@ -779,7 +779,7 @@ end
 -- Chassis Definition
 ------------------------------------------------------------------------
 
-local highestDefinedLevel = 7
+local highestDefinedLevel = 10
 local levelDefs = {
 	[0] = {
 		upgradeSlots = {
@@ -953,12 +953,15 @@ end
 ------------------------------------------------------------------------
 local levelRequirement = {
 	[0] = 0,
-	[1] = 500,
-	[2] = 1200,
-	[3] = 2500,
-	[4] = 5000,
-	[5] = 8500,
-	[6] = 12000,
+	[1] = 100,
+	[2] = 200,
+	[3] = 300,
+	[4] = 400,
+	[5] = 500,
+	[6] = 600,
+	[7] = 700,
+	[8] = 800,
+	[9] = 900,	
 }
 
 local function GetLevelRequirement(level)

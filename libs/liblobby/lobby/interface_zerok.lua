@@ -359,6 +359,19 @@ function Interface:VoteNo()
 	return self
 end
 
+function Interface:VoteOption(id)
+	local sendData = {
+		Place = 1, -- Battle?
+		User = self:GetMyUserName(),
+		IsEmote = false,
+		Text = "!vote " .. id,
+		Ring = false,
+		--Time = "2016-06-25T07:17:20.7548313Z",
+	}
+	self:_SendCommand("Say " .. json.encode(sendData))
+	return self
+end
+
 function Interface:SetModOptions(data)
 	for _,_ in pairs(data) do
 		local sendData = {
@@ -700,6 +713,7 @@ function Interface:_Welcome(data)
 	-- Version of Game
 	-- REVERSE COMPAT
 	self.REVERSE_COMPAT = (data.Version == "1.4.9.26")
+	self.REVERSE_COMPAT_2 = (data.Version == "1.4.9.195")
 	self.userCountLimited = data.UserCountLimited
 	self:_OnConnect(4, data.Engine, 2, 1)
 	self:_OnUserCount(data.UserCount)
@@ -1183,21 +1197,82 @@ function Interface:ProcessVote(data, battle, duplicateMessageTime)
 	end
 	
 	-- Get poll type and parameters
-	local pollType = false
-	local pollParameter = false
+	local pollType = "boolean"
+	local mapPoll = false
+	local pollUrl = false
+	local notify = false
 	
 	local mapStart = string.find(voteMessage, "Change map to ")
 	if mapStart then
 		mapStart = mapStart + 14
-		pollParameter = string.sub(voteMessage, mapStart, lasturl - 1)
-		pollType = "map"
+		pollUrl = string.sub(voteMessage, mapStart, lasturl - 1)
+		mapPoll = true
 	elseif string.find(voteMessage, "start the game?") then
-		pollType = "start"
+		notify = true
 	end
 	
-	self:_OnVoteUpdate(voteMessage, yesVotes, noVotes, votesNeeded, pollType, pollParameter)
+	local battlePollhandled = string.find(voteMessage, "(Yes)")
+	if battlePollhandled then
+		return true
+	end
+	
+	local candidates = {
+		{
+			id = 1, 
+			votes = yesVotes,
+		},
+		{
+			id = 2, 
+			votes = noVotes,
+		},
+	}
+	
+	self:_OnVoteUpdate(voteMessage, pollType, notify, mapPoll, candidates, votesNeeded, pollUrl)
 	return true
 end
+
+function Interface:_BattlePoll(data)
+	-- BattlePoll {"Topic":"Choose the next map","Options":[{"Name":"IncultaV2","Id":1,"Votes":0,"URL":"http://test.zero-k.info/Maps/Detail/7514"},{"Name":"Otago 1.1","Id":2,"Votes":0,"URL":"http://test.zero-k.info/Maps/Detail/56587"},{"Name":"Wanderlust v03","Id":3,"Votes":0,"URL":"http://test.zero-k.info/Maps/Detail/55669"},{"Name":"DunePatrol_wip_v03","Id":4,"Votes":0,"URL":"http://test.zero-k.info/Maps/Detail/23549"}],"VotesToWin":3,"YesNoVote":false,"MapSelection":true}
+	
+	if self.REVERSE_COMPAT_2 and data.YesNoVote then
+		return
+	end
+	
+	local candidates = {}
+	for i = 1, #data.Options do
+		local opt = data.Options[i]
+		candidates[i] = {
+			id = opt.Id,
+			votes = opt.Votes,
+			url = opt.Url,
+		}
+		if not data.YesNoVote then
+			candidates[i].name = opt.Name
+		end
+	end
+	
+	local voteMessage = data.Topic
+	local pollType, notify
+	if data.YesNoVote then
+		pollType = "boolean"
+		if string.find(voteMessage, "start the game?") then
+			notify = true
+		end
+	else
+		pollType = "multi"
+	end
+	
+	self:_OnVoteUpdate(voteMessage, pollType, data.NotifyPoll, data.MapName or data.MapSelection, candidates, data.VotesToWin, data.Url)
+end
+Interface.jsonCommands["BattlePoll"] = Interface._BattlePoll
+
+function Interface:_BattlePollOutcome(data)
+	-- BattlePollOutcome {"WinningOption":{"Name":"Yes","Id":1,"Votes":3},"Topic":"do you want to force start?","YesNoVote":true,"MapSelection":false}
+	if not self.REVERSE_COMPAT_2 then
+		self:_OnVoteEnd(data.Message or "Bad vote message", data.Success)
+	end
+end
+Interface.jsonCommands["BattlePollOutcome"] = Interface._BattlePollOutcome
 
 function Interface:_Say(data)
 	-- Say {"Place":0,"Target":"zk","User":"GoogleFrog","IsEmote":false,"Text":"bla","Ring":false,"Time":"2016-06-25T07:17:20.7548313Z}"
@@ -1250,10 +1325,15 @@ function Interface:_Say(data)
 		-- data.Place == 1 -> General battle chat
 		-- data.Place == 3 -> Battle chat directed at user
 		local battleID = self:GetMyBattleID()
-		local battle = battleID and self:GetBattle(battleID)
-		if self:ProcessVote(data, battle, duplicateMessageTime) then
-			return
+		
+		if self.REVERSE_COMPAT_2 then
+			-- Chat poll parsing. Replaced by BattlePoll
+			local battle = battleID and self:GetBattle(battleID)
+			if self:ProcessVote(data, battle, duplicateMessageTime) then
+				return
+			end
 		end
+		
 		if emote then
 			self:_OnSaidBattleEx(data.User, data.Text, data.Time)
 		else
