@@ -49,12 +49,12 @@ planetUtilities.ICON_DIR = LUA_DIRNAME .. "configs/gameConfig/tc/unitpics/"
 
 planetUtilities.planetPositions = {
 [1] = {850, 800},
-[2] = {790, 900},
-[3] = {730, 850},
-[4] = {700, 700},
-[5] = {650, 950},
-[6] = {800, 400},
-[7] = {880, 300},
+[2] = {760, 900},
+[3] = {670, 850},
+[4] = {550, 950},
+[5] = {625, 700},
+[6] = {775, 400},
+[7] = {895, 300},
 }
 
 for i = 1, #planetUtilities.planetPositions do
