@@ -546,7 +546,7 @@ function Interface:_OnUpdateBattleInfo(battleID, spectatorCount, locked, mapHash
 	battleID = tonumber(battleID)
 
 	local battleInfo = {
-		passworded = (locked == "1"),
+		locked = (locked == "1"),
 		mapName = mapName,
 		spectatorCount = tonumber(spectatorCount)
 	}
