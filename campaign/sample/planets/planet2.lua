@@ -8,7 +8,7 @@ local function GetPlanet(planetUtilities, planetID)
 	
 	local planetData = {
 		predownloadMap = true,	
-		name = "Zeta Aurigae C", 
+		name = "Zeta Aurigae", 
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 1.20,
 			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 1.00,
@@ -51,7 +51,7 @@ local function GetPlanet(planetUtilities, planetID)
 			missionStartscript = false,			
 			playerConfig = {
 				startX = 500,
-				startZ = 500,
+				startZ = 3500,
 				allyTeam = 0,
 				startMetal = 1000,
 				startEnergy = 1000,
@@ -63,8 +63,8 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				commander = false,
 				startUnits = {
-					{ name = 'euf_constructor', x = 388, z = 3604, facing = 0, },
-					{ name = 'euf_sarge', x = 622, z = 3693, facing = 2, },
+					{ name = 'euf_constructor', x = 380, z = 3600, facing = 0, },
+					{ name = 'euf_sarge', x = 620, z = 3700, facing = 2, },
 				}
 			},
 			modoptions = {	},
@@ -106,7 +106,18 @@ local function GetPlanet(planetUtilities, planetID)
 						{ name = 'bug_med', x = 3242.14893, z = 1240.52551, facing = 3, },
 						{ name = 'bug_med', x = 3908.04395, z = 917.452515, facing = 2, },
 						{ name = 'bug_med', x = 463.322021, z = 1780.00317, facing = 0, },
-					}
+					},
+					midgameUnits = {
+						{	name = "bug_med",	x = 2500, z = 2000, facing = 0, spawnRadius = 25, delay = 2*60*30, orbitalDrop = false, commands = {{cmdID = planetUtilities.COMMAND.PATROL, pos = {620, 3700}}, }, },
+						{	name = "bug_med",	x = 2500, z = 2050, facing = 2, spawnRadius = 25, delay = 2*60*30, orbitalDrop = false, commands = {{cmdID = planetUtilities.COMMAND.PATROL, pos = {620, 3700}}, }, },
+						{	name = "bug_med",	x = 2500, z = 2000, facing = 0, spawnRadius = 25, delay = 4*60*30, orbitalDrop = false, commands = {{cmdID = planetUtilities.COMMAND.PATROL, pos = {620, 3700}}, }, },
+						{	name = "bug_med",	x = 2500, z = 2050, facing = 2, spawnRadius = 25, delay = 4*60*30, orbitalDrop = false, commands = {{cmdID = planetUtilities.COMMAND.PATROL, pos = {620, 3700}}, }, },
+						{	name = "bug_med",	x = 2500, z = 2000, facing = 0, spawnRadius = 25, delay = 5*60*30, orbitalDrop = false, commands = {{cmdID = planetUtilities.COMMAND.PATROL, pos = {620, 3700}}, }, },
+						{	name = "bug_med",	x = 2500, z = 2050, facing = 2, spawnRadius = 25, delay = 6*60*30, orbitalDrop = false, commands = {{cmdID = planetUtilities.COMMAND.PATROL, pos = {620, 3700}}, }, },
+						{	name = "bug_med",	x = 2500, z = 2000, facing = 0, spawnRadius = 25, delay = 6*60*30, orbitalDrop = false, commands = {{cmdID = planetUtilities.COMMAND.PATROL, pos = {620, 3700}}, }, },
+						{	name = "bug_med",	x = 2500, z = 2050, facing = 2, spawnRadius = 25, delay = 6*60*30, orbitalDrop = false, commands = {{cmdID = planetUtilities.COMMAND.PATROL, pos = {620, 3700}}, }, },
+						
+					},
 				},
 			},
 			defeatConditionConfig = {

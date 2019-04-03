@@ -7,7 +7,7 @@ local function GetPlanet(planetUtilities, planetID)
 	local image = LUA_DIRNAME .. "images/planets/46.png"
 	
 	local planetData = {
-		name = "Zeta Aurigae A",
+		name = "Zeta Aurigae",
 		startingPlanet = true,
 		predownloadMap = true, 
 		mapDisplay = {
@@ -72,6 +72,13 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 			},
 			modoptions = { },
+						
+			sinitialWrecks = {
+				{	name = "hall", x = 950, z = 3900, facing = 3, },			
+				{	name = "hall", x = 1300, z = 3450, facing = 4, },
+
+			},		
+
 			aiConfig = {
 				{
 					startX = 2000,

@@ -44,16 +44,17 @@ planetUtilities.MAIN_EXP = 100
 planetUtilities.BONUS_EXP = 25
 
 planetUtilities.PLANET_SIZE_MAP = 36
-planetUtilities.PLANET_SIZE_INFO = 240
+planetUtilities.PLANET_SIZE_INFO = 200 --240
 planetUtilities.ICON_DIR = LUA_DIRNAME .. "configs/gameConfig/tc/unitpics/"
 
 planetUtilities.planetPositions = {
-	[1] = {50, 400},
-	[2] = {30, 600},
-	[3] = {190, 720},
-	[4] = {230, 850},
-	[5] = {600, 290},
-	[6] = {670, 100},
+[1] = {850, 800},
+[2] = {790, 900},
+[3] = {730, 850},
+[4] = {700, 700},
+[5] = {650, 950},
+[6] = {800, 400},
+[7] = {880, 300},
 }
 
 for i = 1, #planetUtilities.planetPositions do
