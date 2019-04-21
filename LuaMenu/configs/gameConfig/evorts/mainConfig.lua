@@ -53,6 +53,11 @@ local externalFuncAndData = {
 	minimapOverridePath    = minimapOverridePath,
 	minimapThumbnailPath   = minimapThumbnailPath,
 	ignoreServerVersion    = true,
+	disableBattleListHostButton = true, -- Hides "Host" button as this function is not working as one might imagine
+	disableSteam 				= true, -- removes settings related to steam
+	disablePlanetwars 			= true, -- removes settings related to planetwars
+	disableMatchMaking 			= true, -- removes match making
+	disableCommunityWindow 		= true, -- removes Community Window
 }
 
 function externalFuncAndData.CheckAvailability()
