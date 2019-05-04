@@ -82,6 +82,18 @@ end
 -- Savegame utlity functions
 --------------------------------------------------------------------------------
 -- Returns the data stored in a save file
+local function GetSaveExtension(path)
+	if VFS.FileExists(path .. ".ssf") then
+		return ".ssf"
+	end
+	return VFS.FileExists(path .. ".slsf") and ".slsf"
+end
+
+local function GetSaveWithExtension(path)
+	local ext = GetSaveExtension(path)
+	return ext and path .. ext
+end
+
 local function GetSave(path)
 	local ret = nil
 	local success, err = pcall(function()
@@ -93,8 +105,8 @@ local function GetSave(path)
 	if (not success) then
 		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error getting save " .. path .. ": " .. err)
 	else
-		local engineSaveFilename = string.sub(path, 1, -5) .. ".slsf"
-		if not VFS.FileExists(engineSaveFilename) then
+		local engineSaveFilename = GetSaveWithExtension(string.sub(path, 1, -5))
+		if not engineSaveFilename then
 			--Spring.Log(widget:GetInfo().name, LOG.ERROR, "Save " .. engineSaveFilename .. " does not exist")
 			return nil
 		else
@@ -157,7 +169,14 @@ local function LoadGameByFilename(filename)
 		return
 	end
 	
+	local ext = GetSaveExtension(SAVE_DIR .. '/' .. filename)
+	if not ext then
+		Notify("Load error", "Cannot find save data file " .. SAVE_DIR .. '/' .. filename .. " (.ssf or .slsf).")
+		return
+	end
+	
 	if not hasGame then
+		Notify("Load error", "Cannot find game files.")
 		return
 	end
 
@@ -173,13 +192,15 @@ local function LoadGameByFilename(filename)
 		MyPlayerName=__PLAYERNAME__;
 	}
 	]]
-			script = script:gsub("__FILE__", filename .. ".slsf")
+			script = script:gsub("__FILE__", filename .. ext)
 			script = script:gsub("__PLAYERNAME__", saveData.playerName)
 			WG.Chobby.localLobby:StartGameFromString(script)
 		end
 	)
 	
-	if (not success) then
+	if success then
+		Notify("Loading save")
+	else
 		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error loading game: " .. err)
 	end
 end
@@ -188,7 +209,10 @@ local function DeleteSave(filename, saveList)
 	local success, err = pcall(function()
 		local pathNoExtension = SAVE_DIR .. "/" .. filename
 		os.remove(pathNoExtension .. ".lua")
-		os.remove(pathNoExtension .. ".slsf")
+		local saveFilePath = GetSaveWithExtension(pathNoExtension)
+		if saveFilePath then
+			os.remove(saveFilePath)
+		end
 		
 		saveList:RemoveItem(filename)
 	end)
