@@ -519,6 +519,7 @@ local function GetPlanet(planetUtilities, planetID)
 			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"cloakarty",
+				"planelightscout",
 			},
 			modules = {
 				"module_adv_targeting_LIMIT_D_2",
