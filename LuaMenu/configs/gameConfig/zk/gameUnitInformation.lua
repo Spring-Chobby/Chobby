@@ -902,9 +902,15 @@ local humanNames = {
 		description = "Singularity Bomber",
 		humanName = "Likho",
 	},
-	planescout = {
+	planelightscout = {
 		category = "plane",
 		order = 9,
+		description = "Light Scout Plane",
+		humanName = "Sparrow",
+	},
+	planescout = {
+		category = "plane",
+		order = 10,
 		description = "Area Jammer, Radar/Sonar Plane",
 		humanName = "Owl",
 	},
