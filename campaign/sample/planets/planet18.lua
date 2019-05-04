@@ -2352,8 +2352,8 @@ local function GetPlanet(planetUtilities, planetID)
 						},
 						{
 							name = "turretemp",
-							x = 3360,
-							z = 864,
+							x = 3376,
+							z = 896,
 							facing = 3,
 						},
 						{
