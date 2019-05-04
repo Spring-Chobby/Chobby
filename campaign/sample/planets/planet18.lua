@@ -3431,6 +3431,13 @@ local function GetPlanet(planetUtilities, planetID)
 		end
 	end
 	
+	local enemyStartUnits = planetData.gameConfig.aiConfig[2].startUnits
+	for i = 1, #enemyStartUnits do
+		local data = enemyStartUnits[i]
+		if data.patrolRoute then
+			data.movestate = 0
+		end
+	end
 	
 	return planetData
 end
