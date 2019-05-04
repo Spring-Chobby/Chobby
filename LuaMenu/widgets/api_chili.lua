@@ -264,9 +264,11 @@ function widget:ViewResize(vsx, vsy)
 	if totalHideInterface then
 		return
 	end
-	vsx, vsy = vsx/(WG.uiScale or 1), vsy/(WG.uiScale or 1)
-	oldSizeX, oldSizeY = vsx, vsy
-	screen0:Resize(vsx, vsy)
+	local ssx, ssy = vsx/(WG.uiScale or 1), vsy/(WG.uiScale or 1)
+	if oldSizeX ~= vsx or oldSizeY ~= vsy then
+		oldSizeX, oldSizeY = vsx, vsy
+		screen0:Resize(ssx, ssy)
+	end
 end
 
 function widget:Update()
