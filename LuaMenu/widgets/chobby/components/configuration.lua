@@ -29,7 +29,7 @@ function Configuration:init()
 	self.maxUiScale = math.max(2, realWidth/1000)
 	self.minUiScale = math.min(0.5, realWidth/4000)
 	WG.uiScale = self.uiScale
-	
+
 	self.userListWidth = 205 -- Main user list width. Possibly configurable in the future.
 	self.chatMaxNameLength = 185 -- Pixels
 	self.statusMaxNameLength = 185
@@ -50,7 +50,7 @@ function Configuration:init()
 	self.firstBattleStarted = false
 	self.lobbyTimeoutTime = 60 -- Seconds
 	self.channels = {}
-	
+
 	self.battleFilterPassworded2 = true
 	self.battleFilterNonFriend = false
 	self.battleFilterRunning = false
@@ -144,23 +144,23 @@ function Configuration:init()
 	local gameConfPath = LUA_DIRNAME .. "configs/gameConfig/"
 
 	self.gameConfigName = fileConfig.game
-	self.gameConfig = VFS.Include(gameConfPath .. self.gameConfigName .. "/mainConfig.lua")
+	self:LoadGameConfig(gameConfPath .. self.gameConfigName .. "/mainConfig.lua")
 
 	self.campaignPath = "campaign/sample"
 	self.campaignConfigName = "sample"
 	self.campaignConfig = VFS.Include("campaign/sample/mainConfig.lua")
 	self.campaignSaveFile = nil -- Set by user
 	self.nextCampaignSaveNumber = 1
-	
+
 	local gameConfigOptions = {}
 	local subdirs = VFS.SubDirs(gameConfPath)
 	for index, subdir in ipairs(subdirs) do
 		-- get just the folder name
 		subdir = string.gsub(subdir, gameConfPath, "")
 		subdir = string.sub(subdir, 1, -2)	-- truncate trailing slash
-		
+
 		Spring.Log(LOG_SECTION, LOG.NOTICE, "Detected game config", subdir)
-		gameConfigOptions[#gameConfigOptions+1] = subdir	
+		gameConfigOptions[#gameConfigOptions+1] = subdir
 	end
 
 	self.gameConfigOptions = {}
@@ -208,7 +208,7 @@ function Configuration:init()
 	self.showOldAiVersions = false
 	self.drawAtFullSpeed = false
 	self.rememberQueuesOnStart = false
-	
+
 	self.lobby_fullscreen = 1
 	self.game_fullscreen = 1
 
@@ -252,7 +252,7 @@ function Configuration:init()
 	self.animate_lobby = (gl.CreateShader ~= nil)
 	self.minimapDownloads = {}
 	self.minimapThumbDownloads = {}
-	
+
 	local saneCharacterList = {
 		"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
 		"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
@@ -267,6 +267,20 @@ end
 ---------------------------------------------------------------------------------
 -- Settings
 ---------------------------------------------------------------------------------
+
+function Configuration:LoadGameConfig(path)
+	self.gameConfig = VFS.Include(path)
+	if type(self.gameConfig) ~= 'table' then
+		Spring.Log("Settings", LOG.ERROR, 'Chobby configuration error. Returned game config is not a table: ' .. tostring(path))
+		return
+	end
+	local mandatoryFields = {"settingsNames"}
+	for _, mandatoryField in ipairs(mandatoryFields) do
+		if self.gameConfig[mandatoryField] == nil then
+			Spring.Log("Settings", LOG.ERROR, "Chobby configuration error. Mandatory field is missing: " .. mandatoryField .. ". Check your game settings")
+		end
+	end
+end
 
 function Configuration:SetSpringsettingsValue(key, value, compatOverride)
 	if self.doNotSetAnySpringSettings then
@@ -345,10 +359,10 @@ function Configuration:SetSettingsConfigOption(name, newValue)
 			self:SetSpringsettingsValue(setting.applyName, springValue)
 		end
 	else
-		if (not setting.optionNames[newValue]) then
+		if setting.optionNames == nil or (not setting.optionNames[newValue]) then
 			return false
 		end
-		
+
 		-- Selection from multiple options
 		local selectedOption = setting.optionNames[newValue]
 		if setting.fileTarget then
@@ -407,14 +421,14 @@ function Configuration:SetConfigData(data)
 	self.game_settings.WindowPosY = nil
 	self.game_settings.WindowBorderless = nil
 	self.game_settings.Fullscreen = nil
-	
+
 	-- Fix old memory
 	self.game_settings.UnitIconDist = nil
-	
+
 	if self.serverAddress == "zero-k.com" then
 		self.serverAddress = "zero-k.info"
 	end
-	
+
 	local newSpringsettings, onlyIfMissingSettings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettingsChanges.lua")
 	for key, value in pairs(newSpringsettings) do
 		self.game_settings[key] = value
@@ -532,7 +546,7 @@ function Configuration:SetConfigValue(key, value)
 		screen0:Resize(screenWidth, screenHeight)
 	end
 	if key == "gameConfigName" then
-		self.gameConfig = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. value .. "/mainConfig.lua")
+		self:LoadGameConfig(LUA_DIRNAME .. "configs/gameConfig/" .. value .. "/mainConfig.lua")
 	end
 	self:_CallListeners("OnConfigurationChange", key, value)
 end
@@ -638,7 +652,7 @@ function Configuration:AllowNotification(playerName, playerList)
 				return false
 			end
 		end
-		
+
 		if playerList then
 			local foundFriend = false
 			for i = 1, #playerList do
@@ -747,7 +761,7 @@ function Configuration:SanitizeName(name, usedNames)
 			ret = ret .. c
 		end
 	end
-	
+
 	if ret == "" then
 		ret = "Player"
 	end
@@ -757,7 +771,7 @@ function Configuration:SanitizeName(name, usedNames)
 		end
 		usedNames[ret] = true
 	end
-	
+
 	return ret, usedNames
 end
 
@@ -767,7 +781,7 @@ function Configuration:GetPlayerName(allowBlank)
 		return "Player"
 	end
 	return suggest
-end	
+end
 
 function Configuration:GetDefaultGameName()
 	if not self.gameConfig then
