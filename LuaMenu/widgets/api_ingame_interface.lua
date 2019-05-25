@@ -53,6 +53,23 @@ local LUAMENU_SETTING = "changeSetting "
 local OPEN_SETTINGS_TAB = "openSettingsTab "
 local LOAD_FILENAME = "loadFilename "
 local RESTART_GAME = "restartGame"
+local GAME_INIT = "ingameInfoInit"
+local GAME_START = "ingameInfoStart"
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Utilities
+
+local function StringToDataTable(msg)
+	local data = msg:split(" ")
+	local dataTable = {}
+	local index = 3
+	while data[index] do
+		dataTable[data[index - 1]] = data[index]
+		index = index + 2
+	end
+	return dataTable
+end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -152,6 +169,48 @@ local function HandleRestartGame(msg)
 	WG.SteamCoopHandler.RestartGame()
 end
 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Ingame Info
+
+local function MsgToDiscordData(msg)
+	local data = msg:split("_")
+	if tonumber(data[2]) then
+		return {
+			isPlayer = (data[2] == "1"),
+			playerCount = tonumber(data[3]) or 0,
+			teamOnePlayers = tonumber(data[4]) or 0,
+			teamTwoPlayers = tonumber(data[5]) or 0,
+			teamPlayers = tonumber(data[3]) or 0,
+			isFFA = (data[6] == "1"),
+			isReplay = (data[7] == "1"),
+			isAI = (data[8] == "1"),
+			isChicken = (data[9] == "1"),
+			isCampaign = (data[10] == "1"),
+			planetName = data[11],
+		}
+	end
+	
+	return StringToDataTable(msg)
+end
+
+local function HandleGameInfoInit(msg)
+	if string.find(msg, GAME_INIT) ~= 1 then
+		return
+	end
+	if WG.DiscordHandler then
+		WG.DiscordHandler.SetIngameInfo(MsgToDiscordData(msg))
+	end
+end
+
+local function HandleGameInfoStart(msg)
+	if string.find(msg, GAME_START) ~= 1 then
+		return
+	end
+	if WG.DiscordHandler then
+		WG.DiscordHandler.SetIngameInfo(MsgToDiscordData(msg))
+	end
+end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -174,6 +233,12 @@ function widget:RecvLuaMsg(msg)
 		return
 	end
 	if HandleRestartGame(msg) then
+		return
+	end
+	if HandleGameInfoInit(msg) then
+		return
+	end
+	if HandleGameInfoStart(msg) then
 		return
 	end
 end
