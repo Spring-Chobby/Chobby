@@ -61,7 +61,7 @@ local GAME_START = "ingameInfoStart"
 -- Utilities
 
 local function StringToDataTable(msg)
-	local data = msg:split(" ")
+	local data = msg:split("_")
 	local dataTable = {}
 	local index = 3
 	while data[index] do
