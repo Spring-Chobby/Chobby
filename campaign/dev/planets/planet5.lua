@@ -524,6 +524,10 @@ local function GetPlanet(planetUtilities, planetID)
 			modules = {
 				"module_adv_targeting_LIMIT_D_2",
 			},
+			codexEntries = {
+				"faction_valhalla",
+				"character_odin",
+			}
 		},
 	}
 	

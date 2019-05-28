@@ -99,7 +99,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_ablative_armor_LIMIT_A_2",
 			},
 			abilities = {},
-			codexEntries = {}
+			codexEntries = {"faction_chickens"}
 		},
 	}
 	
