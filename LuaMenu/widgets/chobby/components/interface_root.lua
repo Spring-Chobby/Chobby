@@ -1145,7 +1145,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			elseif value == 3 then
 				externalFunctions.SetPanelDisplayMode(false, false)
 			end
-		elseif key == "gameConfigName" then
+		elseif key == "gameConfigName" or key == "campaignConfigName" then
 			heading_image.file = Configuration:GetHeadingImage(doublePanelMode, mainWindowHandler.GetSubheadingName())
 			heading_image:Invalidate()
 
