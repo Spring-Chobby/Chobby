@@ -511,6 +511,7 @@ function Configuration:GetConfigData()
 		campaignSaveFile = self.campaignSaveFile,
 		nextCampaignSaveNumber = self.nextCampaignSaveNumber,
 		steamReleasePopupSeen = self.steamReleasePopupSeen,
+		campaignConfigName = self.campaignConfigName,
 	}
 end
 
@@ -539,7 +540,6 @@ function Configuration:SetConfigValue(key, value)
 	if key == "campaignConfigName" then
 		self.campaignPath = "campaign/" .. value
 		self.campaignConfig = VFS.Include("campaign/" .. value .. "/mainConfig.lua")
-		self.campaignSaveFile = nil -- Set by user
 	end
 	self:_CallListeners("OnConfigurationChange", key, value)
 end

@@ -26,7 +26,8 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G4V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24417",
-			text = [[Your opponent has prepared powerful close-range Stardust turrets and Reavers to defeat your raiders. Build a Cloakbot Factory, then counter their strategy with longer-ranged Ronins to secure victory.]]
+			text = "AAAA Your opponent has prepared powerful close-range Stardust turrets and Reavers to defeat your raiders. Build a Cloakbot Factory, then counter their strategy with longer-ranged Ronins to secure victory.\nbreak",
+			extendedText = [[AAAA Your opponent has prepared powerful close-range Stardust turrets and Reavers to defeat your raiders. Build a Cloakbot Factory, then counter their strategy with longer-ranged Ronins to secure victory.\nbreak]],
 		},
 		tips = {
 			{

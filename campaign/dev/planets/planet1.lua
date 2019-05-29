@@ -28,7 +28,8 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G8V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24417",
-			text = [[This battle will be straightforward. Construct an army of Glaives and Reavers to overwhelm your enemy.]]
+			text = [[AAAA This battle will be straightforward. Construct an army of Glaives and Reavers to overwhelm your enemy.]],
+			extendedText = [[This text is not the same as the campaign map text.\nbreak]],
 		},
 		tips = {
 			{
