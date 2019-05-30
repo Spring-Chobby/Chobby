@@ -26,7 +26,13 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "F9V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24429",
-			text = [[This battle is taking place at high altitude, so deploy Wind Generators for cheap and efficient energy income. Use the Knight's lightning gun to eliminate the enemy Jumpbots.]]
+			text = "This world is covered with islands, with a surprising variety of defences. Was it used for combat testing?"
+			.. "\n "
+			.. "\nMany of those islands seem isolated from each-other. I will only need to clear one, hopefully it won't contain any nasty experimental unit."
+			,
+			extendedText = "This battle is taking place at high altitude, I can use Wind Generators for cheap and efficient energy income."
+			.. "\n "
+			.. "\nThose Jumpbots I am up against seem rather strange. Not sure whta the best tactics are against them, but I hope my Knight's lightning gun will help."
 		},
 		tips = {
 			{

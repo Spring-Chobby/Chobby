@@ -26,7 +26,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G4V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24417",
-			text = [[Your opponent has prepared powerful close-range Stardust turrets and Reavers to defeat your raiders. Build a Cloakbot Factory, then counter their strategy with longer-ranged Ronins to secure victory.]]
+			text = "Where is everyone? Automated systems and non-sapient life are still there, but no trace of intelligent beings. No humans, no cyborgs, no free machines, nothing..."
+			.. "\n "
+			.. "\nMost of the unit blueprints are gone. I will need to find new copies on my way out of here."
+			,
+			extendedText = "There are powerful close-range Stardust turrets and Reavers protecting them from my raiders. Once I have a Cloakbot Factory up and running, I will have to counter them with loger-ranged Ronins and open the way for taking their production systems out."
 		},
 		tips = {
 			{
