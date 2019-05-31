@@ -26,7 +26,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G4V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24469",
-			text = [[The Artefact on this planet is already hotly contested by two opposing factions, and they're bringing heavy units and striders into play. Use the Halberd armoured assault hovercraft and Lance anti-heavy artillery to cross the battlefield and reach the Artefact.]]
+			text = "There is something valuable enough for someone to have put, not one, but two armies to guard it. Were they wary of a Commander betraying and stealing it?"
+			.. "\n "
+			.. "\nWhatever it is, I will have to find a way past those two armies."
+			,
+			extendedText = "I managed to trick those two armies to fight each-other thanks to an IFF glitch, but they are bringing heavy units and striders into play. I will need the Halberd armoured assault hovercraft and Lance anti-heavy artillery to cross the battlefield and reach that Artefact."
 		},
 		tips = {
 			{

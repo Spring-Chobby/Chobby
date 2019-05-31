@@ -26,7 +26,13 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G8V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24469",
-			text = [[Launch an amphibious attack on the beach with heavy Grizzly assault walkers. You have 25 minutes to push past the Gauss defensive emplacements and secure a beachhead by destroying the Garrisons.]]
+			text = "Immense armies cover those continents, waiting for an invasion that never came. They are so vast that they forewent Commanders for fixed C&C buildings."
+			.. "\n "
+			.. "\nThe oceans are poorly defended, though. Naval forces decayed faster, under the harsher maritime conditions. I can use this, take out those command structures, and find out what they were preparing for..."
+			,
+			extendedText = "Arriving in the ocean and launching an amphibious attack on the beach, with heavy Grizzly assault walkers, seemed a good idea at the time. I had underestimated how fast land forces can be redeployed, and how far I was from a massive counterattack."
+			.. "\n "
+			.. "\nNow, I only have 25 minutes to push past the Gauss defensive emplacements, secure a beachhead, repel waves of whatever they throw at me, and destroy those three Garrisons."
 		},
 		tips = {
 			{

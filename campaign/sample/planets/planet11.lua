@@ -25,7 +25,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G8V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24457",
-			text = [[Your opponent is sending gunships out from behind a formidable defensive array. Use Crasher anti-air rovers to shoot down the gunships, then Impaler artillery to tear down the base.]]
+			text = "This world seems to have rebelled against their Empire, while it was too busy fighting on other fronts. They built formidable defences, most of them still intact as the Empire cut them off instead of landing a punitive force."
+			.. "\n "
+			.. "\nSomehow, it has been enough to cripple them, and most of their mobile ground forces have disappeared."
+			,
+			extendedText = "Ground forces or not, they are sending Gunships out from behind a formidable defensive array. I have Crasher anti-air rovers to shoot down the gunships, then I can tear down their base with Impaler artillery."
 		},
 		tips = {
 			{

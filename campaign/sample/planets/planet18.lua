@@ -26,7 +26,13 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "K1V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24489",
-			text = [[Automated defenses are usually easily overcome, if only you hadn't deleted most of your construction blueprints to make room for your recently unearthed discovery - terrain manipulation technology. Use terraforming (at a 50% discount) to clog up or bypass the automated defenses surrounding the Interception Network to make your escape.]]
+			text = "This world was in the middle of being terraformed - or re-teraformed anyway, as it seems a long-forgotten catastrophe had reverted the first efforts. With no-one in command, the efforts are continuing with rather unfocused enthusiasm."
+			.. "\n "
+			.. "\nThis should be the right place to get terrain manipulation technology."
+			,
+			extendedText = "Simple automated defenses are usually easily overcome, if only I didn't have to compress most of my construction blueprints to make room for terrain manipulation technology. I really, really hope I can revert that compression later."
+			.. "\n "
+			.. "\nI will have to use terraforming (at a 50% discount) to clog up or bypass the defenses surrounding the Interception Network, so I can jam hostile units and make my escape."
 		},
 		tips = {
 			{

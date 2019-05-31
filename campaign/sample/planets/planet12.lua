@@ -26,7 +26,9 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G8V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24457",
-			text = [[The enemy is well entrenched but, luckily for you, they have a poorly defended outpost and you have a squad of Dominatrices. Capture the outpost to get a head start, then steal an army of Tanks and march on their main base.]]
+			text = "This rich industrial world is quite well-defended, but a dormant saboteur unit recognized my IFF and signaled me. I should be able to subvert those defences with its help."
+			.. "\n "
+			.. "\nAs far as I can tell, it identified me as allied to the rebels against whoever was the Empire controlling this world."
 		},
 		tips = {
 			{

@@ -25,7 +25,13 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G2VI",
 			milRating = 2,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24457",
-			text = [[Help your ally to push across the island with Fencer missile trucks and Badger mine artillery. A slow but inevitable push will bring you victory just as surely as a lightning assault.]]
+			text = "With the IFF codes I could scavenge on that last world, one of the armies down there is now recognizing me as an ally. This should be useful for fighting my way through here."
+			.. "\n "
+			.. "\nThis is a nasty world, with corrosive oceans. I wonder how local life adapted so well."
+			,
+			extendedText = "If I help my ally to push across the island with Fencer missile trucks and Badger mine artillery, a slow but inevitable push should work just as surely as a lightning assault."
+			.. "\n "
+			.. "\nThat said, I would prefer a lightning assault. I don't want to stay in a corrosive hydrosphere any longer than necessary."
 		},
 		tips = {
 			{
