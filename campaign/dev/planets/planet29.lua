@@ -50,7 +50,7 @@ local function GetPlanet(planetUtilities, planetID)
 				allyTeam = 0,
 				commanderParameters = {
 					facplop = true,
-					defeatIfDestroyedObjectiveID = 2,
+					defeatIfDestroyedObjectiveID = 3,
 				},
 				extraUnlocks = {
 					"staticheavyradar",
@@ -1267,6 +1267,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					loseAfterSeconds = false,
 					allyTeamLossObjectiveID = 1,
+					doNotExplodeOnLoss = true,
 				},
 				[2] = {
 					ignoreUnitLossDefeat = false,
@@ -1276,16 +1277,19 @@ local function GetPlanet(planetUtilities, planetID)
 						"factoryveh",
 					},
 					loseAfterSeconds = false,
-					allyTeamLossObjectiveID = 1,
+					allyTeamLossObjectiveID = 2,
+					doNotExplodeOnLoss = true,
 				},
 			},
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Destroy the Commanders and Factories of both enemies",
-					satisfyCount = 2,
+					description = "Destroy the Commander and Factories of the north-eastern enemy",
 				},
 				[2] = {
+					description = "Destroy the Commander and Factories of the southern enemy",
+				},
+				[3] = {
 					description = "Protect your Commander",
 				},
 			},

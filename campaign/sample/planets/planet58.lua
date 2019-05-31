@@ -49,7 +49,7 @@ local function GetPlanet(planetUtilities, planetID)
 				allyTeam = 0,
 				commanderParameters = {
 					facplop = true,
-					defeatIfDestroyedObjectiveID = 2,
+					defeatIfDestroyedObjectiveID = 3,
 				},
 				extraUnlocks = {
 					"striderhub",
@@ -2358,17 +2358,19 @@ local function GetPlanet(planetUtilities, planetID)
 						"factorycloak",
 					},
 					loseAfterSeconds = false,
-					allyTeamLossObjectiveID = 1,
+					allyTeamLossObjectiveID = 2,
 					doNotExplodeOnLoss = true,
 				},
 			},
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Destroy all enemy Commanders and Factories",
-					satisfyCount = 2,
+					description = "Destroy the Commander and Factories of the eastern enemy",
 				},
 				[2] = {
+					description = "Destroy the Commander and Factories of the western enemy",
+				},
+				[3] = {
 					description = "Protect your Commander",
 				},
 			},
