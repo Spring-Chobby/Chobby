@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "F9IV",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24614",
-			text = [[Your enemy controls more than half the map, with heavy defensive emplacements protecting his claim. Use the Funnelweb to protect your army on a series of strikes at enemy strongpoints. Be sure to retreat when your shields get low!]]
+			text = [[Your enemy controls more than half the map, with heavy defensive emplacements protecting his claim. Use the Funnelweb to protect your army on a series of strikes at enemy strongpoints, then destroy their artefacts. Be sure to retreat when your shields get low!]]
 		},
 		tips = {
 			{
@@ -407,7 +407,6 @@ local function GetPlanet(planetUtilities, planetID)
 						"staticradar",
 						"staticheavyradar",
 						"staticcon",
-						"staticantinuke",
 						"staticrearm",
 						"factoryjump",
 						"jumpaa",
@@ -1267,12 +1266,51 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 5688,
 							z = 4224,
 							facing = 0,
+							bonusObjectiveID = 1,
+							mapMarker = {
+								text = "Antinuke",
+								color = "red_small"
+							},
 						},
 						{
 							name = "staticarty",
 							x = 6168,
 							z = 3416,
 							facing = 0,
+						},
+						{
+							name = "energypylon",
+							x = 7304,
+							z = 2712,
+							facing = 0,
+						},
+						{
+							name = "turretheavy",
+							x = 7368,
+							z = 2584,
+							facing = 0,
+						},
+						{
+							name = "turretheavy",
+							x = 6952,
+							z = 2168,
+							facing = 0,
+						},
+						{
+							name = "energypylon",
+							x = 7256,
+							z = 2088,
+							facing = 0,
+						},
+						{
+							name = "pw_artefact",
+							x = 7232,
+							z = 2448,
+							facing = 0,
+							mapMarker = {
+								text = "Artefact",
+								color = "red"
+							},
 						},
 					},
 				},
@@ -1304,7 +1342,6 @@ local function GetPlanet(planetUtilities, planetID)
 						"staticradar",
 						"staticheavyradar",
 						"staticcon",
-						"staticantinuke",
 						"staticrearm",
 						"factorygunship",
 						"gunshipaa",
@@ -2142,7 +2179,6 @@ local function GetPlanet(planetUtilities, planetID)
 						"staticradar",
 						"staticheavyradar",
 						"staticcon",
-						"staticantinuke",
 						"staticrearm",
 						"factoryshield",
 						"shieldaa",
@@ -2861,7 +2897,6 @@ local function GetPlanet(planetUtilities, planetID)
 						"staticradar",
 						"staticheavyradar",
 						"staticcon",
-						"staticantinuke",
 						"staticrearm",
 						"factorycloak",
 						"cloakaa",
@@ -3776,10 +3811,21 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 0,
 						},
 						{
-							name = "staticantinuke",
-							x = 6872,
-							z = 1088,
+							name = "energypylon",
+							x = 7080,
+							z = 1368,
 							facing = 0,
+						},
+						{
+							name = "staticantinuke",
+							x = 5800,
+							z = 1888,
+							bonusObjectiveID = 1,
+							facing = 0,
+							mapMarker = {
+								text = "Antinuke",
+								color = "red_small"
+							},
 						},
 					},
 				},
@@ -3811,7 +3857,6 @@ local function GetPlanet(planetUtilities, planetID)
 						"staticradar",
 						"staticheavyradar",
 						"staticcon",
-						"staticantinuke",
 						"staticrearm",
 						"factorytank",
 						"tankaa",
@@ -4381,6 +4426,22 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 7464,
 							facing = 0,
 						},
+						{
+							name = "pw_artefact",
+							x = 7536,
+							z = 6560,
+							facing = 0,
+							mapMarker = {
+								text = "Artefact",
+								color = "red"
+							},
+						},
+						{
+							name = "turretheavylaser",
+							x = 7656,
+							z = 6104,
+							facing = 0,
+						},
 					}
 				},
 			},
@@ -4391,13 +4452,7 @@ local function GetPlanet(planetUtilities, planetID)
 					ignoreUnitLossDefeat = false,
 					vitalCommanders = false,
 					vitalUnitTypes = {
-						"factoryplane",
-						"factoryspider",
-						"factoryjump",
-						"factorycloak",
-						"factorytank",
-						"factoryamph",
-						"striderhub",
+						"pw_artefact",
 					},
 					loseAfterSeconds = false,
 					allyTeamLossObjectiveID = 1,
@@ -4406,7 +4461,7 @@ local function GetPlanet(planetUtilities, planetID)
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Destroy all enemy Factories and Strider Hubs",
+					description = "Destroy both enemy artefacts",
 				},
 				[2] = {
 					description = "Protect your Commander",
@@ -4415,14 +4470,11 @@ local function GetPlanet(planetUtilities, planetID)
 			bonusObjectiveConfig = {
 				[1] = {
 					satisfyOnce = true,
-					comparisionType = planetUtilities.COMPARE.AT_LEAST,
-					targetNumber = 4,
-					unitTypes = {
-						"striderfunnelweb",
-					},
-					image = planetUtilities.ICON_DIR .. "striderfunnelweb.png",
-					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Have 4 Funnelwebs",
+					comparisionType = planetUtilities.COMPARE.AT_MOST,
+					targetNumber = 0,
+					image = planetUtilities.ICON_DIR .. "staticantinuke.png",
+					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
+					description = "Destroy both enemy antinukes",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = {
@@ -4439,9 +4491,9 @@ local function GetPlanet(planetUtilities, planetID)
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = {
-					victoryByTime = 30*60,
+					victoryByTime = 20*60,
 					image = planetUtilities.ICON_OVERLAY.CLOCK,
-					description = "Win by 30:00",
+					description = "Win by 20:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
 			},
