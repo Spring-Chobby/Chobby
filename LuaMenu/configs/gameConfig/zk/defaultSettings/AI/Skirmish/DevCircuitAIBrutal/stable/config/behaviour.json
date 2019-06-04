@@ -855,7 +855,7 @@
 	},
 	"staticantinuke": {
 		"role": ["static", "heavy", "support"],
-		"limit": 1
+		"limit": 2
 	},
 	"turretheavylaser": {
 		"role": ["static", "static", "heavy"],
