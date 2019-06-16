@@ -44,8 +44,8 @@ local function GetPlanet(planetUtilities, planetID)
 		},
 		gameConfig = {			mapName = "Archers_Valley_v6",
 			playerConfig = {
-				startX = 3000,
-				startZ = 3300,
+				startX = 3075,
+				startZ = 3050,
 				allyTeam = 0,
 				commanderParameters = {
 					facplop = true,
@@ -238,9 +238,29 @@ local function GetPlanet(planetUtilities, planetID)
 						facing = 1,
 					},
 					{
+						name = "turretheavylaser",
+						x = 2190,
+						z = 3390,
+						facing = 3,
+						difficultyAtMost = 2,
+					},
+					{
+						name = "turretheavylaser",
+						x = 3430,
+						z = 3750,
+						facing = 4,
+						difficultyAtMost = 1,
+					},
+					{
 						name = "turretriot",
 						x = 3160,
 						z = 4072,
+						facing = 0,
+					},
+					{
+						name = "staticstorage",
+						x = 2820,
+						z = 2710,
 						facing = 0,
 					},
 					{
