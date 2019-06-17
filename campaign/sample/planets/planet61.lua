@@ -25,16 +25,16 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "F9IV",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24614",
-			text = [[Your enemy controls more than half the map, with heavy defensive emplacements protecting his claim. Use the Funnelweb to protect your army on a series of strikes at enemy strongpoints, then destroy their artefacts. Be sure to retreat when your shields get low!]]
+			text = [[Your enemy controls more than half the map, with heavy defensive emplacements protecting his claim. Use the Funnelweb to protect your army on a series of strikes at enemy strongpoints, then take command of their artefacts by destroying the defences around them.]]
 		},
 		tips = {
 			{
 				image = "unitpics/striderfunnelweb.png",
-				text = [[Funnelwebs have no weapons - instead they have a powerful shield to protect your army and a nanoturret to repair that army.]]
+				text = [[Funnelwebs have no weapons - instead they have a powerful shield to protect your army and a nanoturret to repair that army. Your Funnelwebs' shields will not recharge while under fire, nor can they share charge with connected shields, so be sure to retreat when their charge runs low!]]
 			},
 			{
 				image = "unitpics/striderantiheavy.png",
-				text = [[An ultimatum can walk right up to powerful units without fear if protected by a Funnelweb's shield.]]
+				text = [[A relatively fragile unit with short range but high-damage, such as an Ultimatum, can walk right up to powerful units without fear if protected by a Funnelweb's shield.]]
 			},
 			{
 				image = "unitpics/staticmex.png",
@@ -441,10 +441,10 @@ local function GetPlanet(planetUtilities, planetID)
 						--"striderarty",
 					},
 					difficultyDependantUnlocks = {
-						[4] = {"spiderantiheavy",
-							"striderdante",
-							"bomberheavy",
-							"striderarty"},
+						[3] = {"striderarty",
+							"spiderantiheavy"},
+						[4] = {"striderdante",
+							"bomberheavy"},
 					},
 					commanderLevel = 5,
 					commander = {
@@ -719,18 +719,21 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 7112,
 							z = 3184,
 							facing = 2,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "energyfusion",
 							x = 7000,
 							z = 2624,
 							facing = 2,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "energyfusion",
 							x = 7272,
 							z = 5152,
 							facing = 2,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "turretaaheavy",
@@ -1277,23 +1280,12 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 6168,
 							z = 3416,
 							facing = 0,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "energypylon",
 							x = 7304,
 							z = 2712,
-							facing = 0,
-						},
-						{
-							name = "turretheavy",
-							x = 7368,
-							z = 2584,
-							facing = 0,
-						},
-						{
-							name = "turretheavy",
-							x = 6952,
-							z = 2168,
 							facing = 0,
 						},
 						{
@@ -1303,14 +1295,52 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 0,
 						},
 						{
-							name = "pw_artefact",
-							x = 7232,
-							z = 2448,
+							name = "turretemp",
+							x = 7230,
+							z = 2580,
 							facing = 0,
-							mapMarker = {
-								text = "Artefact",
-								color = "red"
-							},
+						},
+						{
+							name = "turretemp",
+							x = 7100,
+							z = 2450,
+							facing = 0,
+						},
+						{
+							name = "turretemp",
+							x = 7360,
+							z = 2450,
+							facing = 0,
+						},
+						{
+							name = "turretemp",
+							x = 7230,
+							z = 2320,
+							facing = 0,
+						},
+						{
+							name = "turretriot",
+							x = 7100,
+							z = 2580,
+							facing = 0,
+						},
+						{
+							name = "turretsunlance",
+							x = 7100,
+							z = 2320,
+							facing = 0,
+						},
+						{
+							name = "turretsunlance",
+							x = 7360,
+							z = 2580,
+							facing = 0,
+						},
+						{
+							name = "turretriot",
+							x = 7360,
+							z = 2320,
+							facing = 0,
 						},
 					},
 				},
@@ -2149,6 +2179,20 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 5408,
 							facing = 0,
 						},
+						{
+							name = "turretheavy",
+							x = 1740,
+							z = 5000,
+							facing = 2,
+							difficultyAtMost = 1,
+						},
+						{
+							name = "turretantiheavy",
+							x = 1900,
+							z = 5400,
+							facing = 2,
+							difficultyAtMost = 1,
+						},
 					},
 				},
 				{
@@ -2850,18 +2894,28 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 1060,
 							z = 1044,
 							facing = 0,
+							difficultyAtMost = 3,
 						},
 						{
 							name = "turretheavylaser",
 							x = 1092,
 							z = 1808,
 							facing = 0,
+							difficultyAtMost = 3,
 						},
 						{
 							name = "turretlaser",
 							x = 1072,
 							z = 1376,
 							facing = 0,
+							difficultyAtMost = 3,
+						},
+						{
+							name = "turretheavylaser",
+							x = 1072,
+							z = 1376,
+							facing = 0,
+							difficultyAtLeast = 4,
 						},
 					},
 				},
@@ -2909,14 +2963,16 @@ local function GetPlanet(planetUtilities, planetID)
 						"cloakriot",
 						"cloakskirm",
 						"cloaksnipe",
-						"factoryamph",
-						"amphaa",
-						"amphassault",
-						"amphriot",
-						"amphcon",
-						"amphfloater",
-						"amphimpulse",
-						"amphraid",
+					},
+					difficultyDependantUnlocks = {
+						[2] = {"factoryamph",
+							"amphaa",
+							"amphassault",
+							"amphriot",
+							"amphcon",
+							"amphfloater",
+							"amphimpulse",
+							"amphraid",},
 					},
 					commanderLevel = 5,
 					commander = {
@@ -3791,6 +3847,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 5848,
 							z = 704,
 							facing = 3,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "turretemp",
@@ -3886,12 +3943,6 @@ local function GetPlanet(planetUtilities, planetID)
 							name = "staticcon",
 							x = 5000,
 							z = 7688,
-							facing = 3,
-						},
-						{
-							name = "energyfusion",
-							x = 7408,
-							z = 6072,
 							facing = 3,
 						},
 						{
@@ -4019,6 +4070,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 5842,
 							z = 6497,
 							facing = 1,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "staticmex",
@@ -4427,14 +4479,11 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 0,
 						},
 						{
-							name = "pw_artefact",
+							name = "energyfusion",
 							x = 7536,
 							z = 6560,
-							facing = 0,
-							mapMarker = {
-								text = "Artefact",
-								color = "red"
-							},
+							facing = 3,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "turretheavylaser",
@@ -4442,7 +4491,51 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 6104,
 							facing = 0,
 						},
+						{
+							name = "energypylon",
+							x = 7208,
+							z = 5928,
+							facing = 0,
+						},
+						{
+							name = "turretsunlance",
+							x = 7296,
+							z = 6192,
+							facing = 0,
+						},
+						{
+							name = "turretsunlance",
+							x = 7520,
+							z = 5936,
+							facing = 0,
+						},
 					}
+				},
+			},
+			neutralUnits = {
+				{
+					name = "pw_artefact",
+					x = 7408,
+					z = 6072,
+					facing = 0,
+					invincible = true,
+					ignoredByAI = true,
+					mapMarker = {
+						text = "Artefact",
+						color = "red"
+					},
+				},
+				{
+					name = "pw_artefact",
+					x = 7230,
+					z = 2450,
+					facing = 0,
+					invincible = true,
+					ignoredByAI = true,
+					mapMarker = {
+						text = "Artefact",
+						color = "red"
+					},
 				},
 			},
 			defeatConditionConfig = {
@@ -4452,7 +4545,7 @@ local function GetPlanet(planetUtilities, planetID)
 					ignoreUnitLossDefeat = false,
 					vitalCommanders = false,
 					vitalUnitTypes = {
-						"pw_artefact",
+						"turretsunlance",
 					},
 					loseAfterSeconds = false,
 					allyTeamLossObjectiveID = 1,
@@ -4461,7 +4554,7 @@ local function GetPlanet(planetUtilities, planetID)
 			objectiveConfig = {
 				-- This is just related to displaying objectives on the UI.
 				[1] = {
-					description = "Destroy both enemy artefacts",
+					description = "Destroy the Sunlances protecting both artefacts",
 				},
 				[2] = {
 					description = "Protect your Commander",
