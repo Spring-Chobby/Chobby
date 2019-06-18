@@ -71,6 +71,7 @@ local settingsConfig = {
 					LupsShieldShader = "Off",
 					LupsWaterSettings = "Off",
 					FancySky = "Off",
+					UseNewChili = "Off",
 				}
 			},
 			{
@@ -96,6 +97,7 @@ local settingsConfig = {
 					LupsShieldShader = "Off",
 					LupsWaterSettings = "Off",
 					FancySky = "Off",
+					UseNewChili = "Off",
 				}
 			},
 			{
@@ -121,6 +123,7 @@ local settingsConfig = {
 					LupsShieldShader = "Default",
 					LupsWaterSettings = "Off",
 					FancySky = "Off",
+					UseNewChili = "Off",
 				}
 			},
 			{
@@ -146,6 +149,7 @@ local settingsConfig = {
 					LupsShieldShader = "Default",
 					LupsWaterSettings = "Off",
 					FancySky = "Off",
+					UseNewChili = "Off",
 				}
 			},
 			{
@@ -171,6 +175,7 @@ local settingsConfig = {
 					LupsShieldShader = "Default",
 					LupsWaterSettings = "Off",
 					FancySky = "Off",
+					UseNewChili = "Off",
 				}
 			},
 			{
@@ -196,6 +201,7 @@ local settingsConfig = {
 					LupsShieldShader = "Default",
 					LupsWaterSettings = "Refract and Reflect",
 					FancySky = "On",
+					UseNewChili = "Off",
 				}
 			},
 		},
@@ -245,6 +251,24 @@ local settingsConfig = {
 							MaxDynamicMapLights = 1,
 							MaxDynamicModelLights = 1,
 							ROAM = 1, --Maybe ROAM = 0 when the new renderer is fully developed
+						}
+					},
+				},
+			},
+			{
+				name = "UseNewChili",
+				humanName = "Experimental Interface Renderer",
+				options = {
+					{
+						name = "Off",
+						apply = {
+							ZKUseNewChiliRTT = 0,
+						}
+					},
+					{
+						name = "On",
+						apply = {
+							ZKUseNewChiliRTT = 1,
 						}
 					},
 				},
@@ -1018,6 +1042,7 @@ local settingsDefault = {
 	LupsShieldShader = "Default",
 	LupsWaterSettings = "Off",
 	FancySky = "Off",
+	UseNewChili = "Off",
 	--IconDistance = 151,
 	InterfaceScale = defaultUiScale,
 	MouseZoomSpeed = 25,
