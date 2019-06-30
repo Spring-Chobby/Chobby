@@ -34,11 +34,11 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/striderantiheavy.png",
-				text = [[A relatively fragile unit with short range but high-damage, such as an Ultimatum, can walk right up to powerful units without fear if protected by a Funnelweb's shield.]]
+				text = [[A relatively fragile unit with short range but high-damage, such as an Ultimatum, can walk right up to powerful units without fear if protected by a Funnelweb's shield. Instruct your Funnelweb to guard your short ranged units to ensure they stay protected.]]
 			},
 			{
-				image = "unitpics/staticmex.png",
-				text = [[At the moment the enemy controls more of the map than your team does and is heavily entrenched. Push out with your starting army and take some ground.]]
+				image = "unitpics/staticstorage.png",
+				text = [[The Funnelweb's high build power allows it to quickly build defences, but only if it has a supply of metal available. Reserve some resources for their use by ctrl-clicking on the resource bars and setting Funnelweb build priority to High (see the online manual for more information).]]
 			},
 		},
 		gameConfig = {
