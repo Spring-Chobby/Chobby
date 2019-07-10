@@ -15,7 +15,7 @@ local settingsConfig = {
 					ParticleLimit = "Minimal",
 					TerrainDetail = "Minimal",
 					VegetationDetail = "Minimal",
-					CompatibilityMode = "On",
+					--CompatibilityMode = "On",
 					AntiAliasing = "Off",
 					ShaderDetail = "Minimal",
 					FancySky = "Off",
@@ -32,7 +32,7 @@ local settingsConfig = {
 					ParticleLimit = "Low",
 					TerrainDetail = "Low",
 					VegetationDetail = "Low",
-					CompatibilityMode = "Off",
+					--CompatibilityMode = "Off",
 					AntiAliasing = "Off",
 					ShaderDetail = "Low",
 					FancySky = "Off",
@@ -49,7 +49,7 @@ local settingsConfig = {
 					ParticleLimit = "Medium",
 					TerrainDetail = "Medium",
 					VegetationDetail = "Medium",
-					CompatibilityMode = "Off",
+					--CompatibilityMode = "Off",
 					AntiAliasing = "Off",
 					ShaderDetail = "Medium",
 					FancySky = "Off",
@@ -66,7 +66,7 @@ local settingsConfig = {
 					ParticleLimit = "High",
 					TerrainDetail = "High",
 					VegetationDetail = "High",
-					CompatibilityMode = "Off",
+					--CompatibilityMode = "Off",
 					AntiAliasing = "Low",
 					ShaderDetail = "High",
 					FancySky = "Off",
@@ -83,7 +83,7 @@ local settingsConfig = {
 					ParticleLimit = "Ultra",
 					TerrainDetail = "Ultra",
 					VegetationDetail = "Ultra",
-					CompatibilityMode = "Off",
+					--CompatibilityMode = "Off",
 					AntiAliasing = "High",
 					ShaderDetail = "Ultra",
 					FancySky = "On",
@@ -256,31 +256,31 @@ local settingsConfig = {
 					{
 						name = "Minimal",
 						apply = {
-							MaxParticles = 2000
+							MaxParticles = 10000
 						}
 					},
 					{
 						name = "Low",
 						apply = {
-							MaxParticles = 5000
+							MaxParticles = 15000
 						}
 					},
 					{
 						name = "Medium",
 						apply = {
-							MaxParticles = 15000
+							MaxParticles = 20000
 						}
 					},
 					{
 						name = "High",
 						apply = {
-							MaxParticles = 25000
+							MaxParticles = 30000
 						}
 					},
 					{
 						name = "Ultra",
 						apply = {
-							MaxParticles = 50000
+							MaxParticles = 40000
 						}
 					},
 				},
@@ -292,23 +292,23 @@ local settingsConfig = {
 				options = {
 					{
 						name = "Minimal",
-						file = "LuaMenu/configs/gameConfig/evorts/lups/lups0.cfg"
+						file = "LuaMenu/configs/gameConfig/byar/lups/lups0.cfg"
 					},
 					{
 						name = "Low",
-						file = "LuaMenu/configs/gameConfig/evorts/lups/lups1.cfg"
+						file = "LuaMenu/configs/gameConfig/byar/lups/lups1.cfg"
 					},
 					{
 						name = "Medium",
-						file = "LuaMenu/configs/gameConfig/evorts/lups/lups2.cfg"
+						file = "LuaMenu/configs/gameConfig/byar/lups/lups2.cfg"
 					},
 					{
 						name = "High",
-						file = "LuaMenu/configs/gameConfig/evorts/lups/lups3.cfg"
+						file = "LuaMenu/configs/gameConfig/byar/lups/lups3.cfg"
 					},
 					{
 						name = "Ultra",
-						file = "LuaMenu/configs/gameConfig/evorts/lups/lups4.cfg"
+						file = "LuaMenu/configs/gameConfig/byar/lups/lups4.cfg"
 					},
 				},
 			},
@@ -419,30 +419,30 @@ local settingsConfig = {
 					},
 				},
 			},
-			{
-				name = "CompatibilityMode",
-				humanName = "Compatibility Mode",
-				options = {
-					{
-						name = "On",
-						apply = {
-							LoadingMT = 0,
-							AdvUnitShading = 0,
-							LuaShaders = 0,
-							UsePBO = 0,
-						}
-					},
-					{
-						name = "Off",
-						apply = {
-							LoadingMT = 1,
-							AdvUnitShading = 1,
-							LuaShaders = 1,
-							UsePBO = 1,
-						}
-					},
-				},
-			},
+			--{
+			--	name = "CompatibilityMode",
+			--	humanName = "Compatibility Mode",
+			--	options = {
+			--		{
+			--			name = "On",
+			--			apply = {
+			--				LoadingMT = 0,
+			--				AdvUnitShading = 0,
+			--				LuaShaders = 0,
+			--				UsePBO = 0,
+			--			}
+			--		},
+			--		{
+			--			name = "Off",
+			--			apply = {
+			--				LoadingMT = 1,
+			--				AdvUnitShading = 1,
+			--				LuaShaders = 1,
+			--				UsePBO = 1,
+			--			}
+			--		},
+			--	},
+			--},
 			{
 				name = "AntiAliasing",
 				humanName = "Anti Aliasing",
@@ -450,7 +450,7 @@ local settingsConfig = {
 					{
 						name = "Off",
 						apply = {
-							FSAALevel = 2,
+							FSAALevel = 1,
 							FSAA = 0,
 							SmoothLines = 0,
 						}
@@ -458,19 +458,27 @@ local settingsConfig = {
 					{
 						name = "Low",
 						apply = {
-							FSAALevel = 2,
+							FSAALevel = 1,
 							FSAA = 1,
 							SmoothLines = 1,
 						}
 					},
-					{
-						name = "High",
-						apply = {
-							FSAALevel = 8,
-							FSAA = 1,
-							SmoothLines = 3,
-						}
-					},
+                    {
+                        name = "Medium",
+                        apply = {
+                            FSAALevel = 2,
+                            FSAA = 1,
+                            SmoothLines = 2,
+                        }
+                    },
+                    {
+                        name = "High",
+                        apply = {
+                            FSAALevel = 4,
+                            FSAA = 1,
+                            SmoothLines = 3,
+                        }
+                    },
 				},
 			},
 		},
@@ -579,7 +587,7 @@ local settingsDefault = {
 	ParticleLimit = "High",
 	TerrainDetail = "High",
 	VegetationDetail = "High",
-	CompatibilityMode = "Off",
+	--CompatibilityMode = "Off",
 	AntiAliasing = "Low",
 	ShaderDetail = "High",
 	FancySky = "Off",
