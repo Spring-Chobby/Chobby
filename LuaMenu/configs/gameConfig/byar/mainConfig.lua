@@ -52,6 +52,7 @@ local externalFuncAndData = {
 	rankFunction           = rankFunction,
 	headingLarge           = headingLarge,
 	headingSmall           = headingSmall,
+	skinName               = "EvolvedByar",
 	taskbarTitle           = "Beyond all Reason",
 	taskbarTitleShort      = "BAR",
 	taskbarIcon            = taskbarIcon,
@@ -64,6 +65,15 @@ local externalFuncAndData = {
 	disablePlanetwars 			= true, -- removes settings related to planetwars
 	disableMatchMaking 			= true, -- removes match making
 	disableCommunityWindow 		= true, -- removes Community Window
+	openTrack = '',
+	randomTrackList = {
+		"LuaMenu/configs/gameConfig/byar/lobbyMusic/ProfessorKliq-TensionGrowl.ogg",
+		"LuaMenu/configs/gameConfig/byar/lobbyMusic/RobRichert-AliasZero.ogg",
+	--	"sounds/lobbyMusic/A Magnificent Journey (Alternative Version).ogg",
+	--	"sounds/lobbyMusic/Dream Infinity.ogg",
+	--	"sounds/lobbyMusic/Interstellar.ogg",
+	--	"sounds/lobbyMusic/Tomorrow Landscape.ogg",
+	},
 }
 
 function externalFuncAndData.CheckAvailability()
