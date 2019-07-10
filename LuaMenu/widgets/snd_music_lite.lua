@@ -155,6 +155,7 @@ function widget:ActivateMenu()
 	ingame = false
 	if firstActivation then
 		StartTrack(OPEN_TRACK_NAME)
+		previousTrack = OPEN_TRACK_NAME
 		firstActivation = false
 		return
 	end
