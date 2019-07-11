@@ -26,6 +26,23 @@ local randomTrackList = {
 	"sounds/lobbyMusic/Interstellar.ogg",
 	"sounds/lobbyMusic/Tomorrow Landscape.ogg",
 }
+local OPEN_TRACK_NAME = 'sounds/lobbyMusic/The Secret of Ayers Rock.ogg'
+
+-- load custom game dependent music
+if WG.Chobby then
+	if WG.Chobby.Configuration.gameConfig.randomTrackList then
+		randomTrackList = WG.Chobby.Configuration.gameConfig.randomTrackList
+		if not randomTrackList[1] then
+			return
+		end
+	end
+	if WG.Chobby.Configuration.gameConfig.openTrack ~= nil then
+		OPEN_TRACK_NAME = WG.Chobby.Configuration.gameConfig.openTrack
+		if not OPEN_TRACK_NAME or OPEN_TRACK_NAME == '' then
+			OPEN_TRACK_NAME = randomTrackList[math.random(#randomTrackList)]
+		end
+	end
+end
 
 local function GetRandomTrack(previousTrack)
 	local trackCount = #randomTrackList
@@ -95,9 +112,9 @@ end
 
 local firstActivation = true
 local ingame = false
-local OPEN_TRACK_NAME = 'sounds/lobbyMusic/The Secret of Ayers Rock.ogg'
 
 function widget:Update()
+
 	if ingame or (WG.Chobby.Configuration.menuMusicVolume == 0 )then
 		return
 	end
@@ -138,6 +155,7 @@ function widget:ActivateMenu()
 	ingame = false
 	if firstActivation then
 		StartTrack(OPEN_TRACK_NAME)
+		previousTrack = OPEN_TRACK_NAME
 		firstActivation = false
 		return
 	end
@@ -148,6 +166,7 @@ function widget:ActivateMenu()
 end
 
 function widget:Initialize()
+
 	math.randomseed(os.clock() * 100)
 	
 	local Configuration = WG.Chobby.Configuration
