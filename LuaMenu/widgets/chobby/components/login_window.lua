@@ -41,12 +41,17 @@ local function GetLobbyName()
 	return 'Chobby'
 end
 
-function LoginWindow:init(failFunction, cancelText, windowClassname)
+function LoginWindow:init(failFunction, cancelText, windowClassname, params)
 
 	if WG.Chobby.lobbyInterfaceHolder:GetChildByName("loginWindow") then
 		Log.Error("Tried to spawn duplicate login window")
 		return
 	end
+	self.emailRequired = (params and params.emailRequired) or false
+	self.windowHeight = (params and params.windowHeight) or (self.emailRequired and 430) or 390
+	self.loginAfterRegister = (params and params.loginAfterRegister) or false
+	
+	local registerChildren = {}
 	
 	self.ResetText = function()
 		if self.txtError then
@@ -79,6 +84,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		caption = i18n("register_long"),
 		font = Configuration:GetFont(3),
 	}
+	registerChildren[#registerChildren + 1] = self.lblRegisterInstructions
 	
 	self.txtUsername = TextBox:New {
 		x = 15,
@@ -138,6 +144,8 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		fontsize = Configuration:GetFont(3).size,
 		useIME = false,
 	}
+	registerChildren[#registerChildren + 1] = self.txtConfirmPassword
+	
 	self.ebConfirmPassword = EditBox:New {
 		x = 135,
 		width = 200,
@@ -157,11 +165,45 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 			end
 		},
 	}
+	registerChildren[#registerChildren + 1] = self.ebConfirmPassword
+	
+	if self.emailRequired then
+		self.txtEmail = TextBox:New {
+			x = 15,
+			width = 170,
+			y = 180,
+			height = 35,
+			text = i18n("Email") .. ":",
+			fontsize = Configuration:GetFont(3).size,
+			useIME = false,
+		}
+		registerChildren[#registerChildren + 1] = self.txtEmail
+		
+		self.ebEmail = EditBox:New {
+			x = 135,
+			width = 200,
+			y = 171,
+			height = 35,
+			text = "",
+			font = Configuration:GetFont(3),
+			useIME = false,
+			OnKeyPress = {
+				function(obj, key, mods, ...)
+					if key == Spring.GetKeyCode("enter") or key == Spring.GetKeyCode("numpad_enter") then
+						if self.tabPanel.tabBar:IsSelected("register") then
+							self:tryRegister()
+						end
+					end
+				end
+			},
+		}
+		registerChildren[#registerChildren + 1] = self.ebEmail
+	end
 	
 	self.cbAutoLogin = Checkbox:New {
 		x = 15,
 		width = 215,
-		y = 210,
+		y = self.windowHeight - 180,
 		height = 35,
 		boxalign = "right",
 		boxsize = 15,
@@ -176,7 +218,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	self.txtError = TextBox:New {
 		x = 15,
 		right = 15,
-		y = 174,
+		y = self.windowHeight - 216,
 		height = 90,
 		text = "",
 		fontsize = Configuration:GetFont(3).size,
@@ -185,7 +227,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	self.btnLogin = Button:New {
 		right = 140,
 		width = 130,
-		y = 247,
+		y = self.windowHeight - 143,
 		height = 70,
 		caption = i18n("login_verb"),
 		font = Configuration:GetFont(3),
@@ -200,7 +242,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	self.btnRegister = Button:New {
 		right = 140,
 		width = 130,
-		y = 247,
+		y = self.windowHeight - 143,
 		height = 70,
 		caption = i18n("register_verb"),
 		font = Configuration:GetFont(3),
@@ -211,11 +253,12 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 			end
 		},
 	}
+	registerChildren[#registerChildren + 1] = self.btnRegister
 
 	self.btnCancel = Button:New {
 		right = 2,
 		width = 130,
-		y = 247,
+		y = self.windowHeight - 143,
 		height = 70,
 		caption = i18n(cancelText or "cancel"),
 		font = Configuration:GetFont(3),
@@ -228,10 +271,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	}
 	
 	local ww, wh = Spring.GetWindowGeometry()
-	local width, height = 430, 390
-	if self.steamMode then
-	
-	end
+	local width = 430
 
 	self.tabPanel = Chili.DetachableTabPanel:New {
 		x = 0,
@@ -242,7 +282,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 		padding = {0, 0, 0, 0},
 		tabs = {
 			[1] = { name = "login", caption = i18n("login"), children = {self.btnLogin, self.lblLoginInstructions}, font = Configuration:GetFont(2)},
-			[2] = { name = "register", caption = i18n("register_verb"), children = {self.btnRegister, self.lblRegisterInstructions, self.txtConfirmPassword, self.ebConfirmPassword}, font = Configuration:GetFont(2)},
+			[2] = { name = "register", caption = i18n("register_verb"), children = registerChildren, font = Configuration:GetFont(2)},
 		},
 	}
 	
@@ -285,9 +325,9 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	
 	self.window = Window:New {
 		x = math.floor((ww - width) / 2),
-		y = math.floor((wh - height) / 2),
+		y = math.floor((wh - self.windowHeight) / 2),
 		width = width,
-		height = height,
+		height = self.windowHeight,
 		caption = "",
 		resizable = false,
 		draggable = false,
@@ -311,11 +351,15 @@ function LoginWindow:init(failFunction, cancelText, windowClassname)
 	
 	self.window:BringToFront()
 	
-	local function IsConfirmPasswordVisible()
+	local function IsRegisterInfoVisible()
 		return self.tabPanel.tabBar.selected == 2
 	end
 	
-	createTabGroup({self.ebUsername, self.ebPassword, self.ebConfirmPassword}, {false, false, IsConfirmPasswordVisible})
+	if self.emailRequired then
+		createTabGroup({self.ebUsername, self.ebPassword, self.ebConfirmPassword, self.ebEmail}, {false, false, IsRegisterInfoVisible, IsRegisterInfoVisible})
+	else
+		createTabGroup({self.ebUsername, self.ebPassword, self.ebConfirmPassword}, {false, false, IsRegisterInfoVisible})
+	end
 	screen0:FocusControl(self.ebUsername)
 	-- FIXME: this should probably be moved to the lobby wrapper
 	self.loginAttempts = 0
@@ -386,6 +430,7 @@ function LoginWindow:tryRegister()
 
 	local username = self.ebUsername.text
 	local password = (self.ebPassword.visible and self.ebPassword.text) or nil
+	local email = (self.emailRequired and self.ebEmail.visible and self.ebEmail.text) or nil
 	if username == '' then
 		return
 	end
@@ -398,13 +443,15 @@ function LoginWindow:tryRegister()
 			lobby:RemoveListener("OnConnect", self.onConnectRegister)
 			self:OnConnected(listener)
 		end
-		WG.LoginWindowHandler.QueueRegister(username, password)
+		WG.LoginWindowHandler.QueueRegister(username, password, email)
 		lobby:AddListener("OnConnect", self.onConnectRegister)
 
-		lobby:Connect(Configuration:GetServerAddress(), Configuration:GetServerPort(), username, password, 3, nil, GetLobbyName())
+		lobby:Connect(Configuration:GetServerAddress(), Configuration:GetServerPort(), username, password, 3, email, GetLobbyName())
 	else
-		lobby:Register(username, password, "name@email.com")
-		lobby:Login(username, password, 3, nil, GetLobbyName())
+		lobby:Register(username, password, email)
+		if self.loginAfterRegister then
+			lobby:Login(username, password, 3, nil, GetLobbyName())
+		end
 	end
 
 	self.loginAttempts = self.loginAttempts + 1
@@ -415,10 +462,7 @@ function LoginWindow:OnConnected()
 	--self.txtError:SetText(Configuration:GetPartialColor() .. i18n("connecting"))
 
 	self.onAgreement = function(listener, line)
-		if self.agreementText == nil then
-			self.agreementText = ""
-		end
-		self.agreementText = self.agreementText .. line .. "\n"
+		self.agreementText = ((self.agreementText and (self.agreementText .. " \n")) or "") .. line
 	end
 	lobby:AddListener("OnAgreement", self.onAgreement)
 
@@ -431,31 +475,78 @@ function LoginWindow:OnConnected()
 end
 
 function LoginWindow:createAgreementWindow()
+	self.agreementWindow = Window:New {
+		x = 600,
+		y = 200,
+		width = 650,
+		height = 530,
+		caption = "User agreement",
+		resizable = false,
+		draggable = false,
+		parent = WG.Chobby.lobbyInterfaceHolder,
+	}
+	
 	self.tbAgreement = TextBox:New {
 		x = 1,
-		right = 1,
+		width = "100%",
 		y = 1,
 		height = "100%",
 		text = self.agreementText,
-		font = Configuration:GetFont(3),
+		font = Configuration:GetFont(2),
 	}
+	
+	ScrollPanel:New {
+		x = 1,
+		right = 7,
+		y = 1,
+		height = 390,
+		children = {
+			self.tbAgreement
+		},
+		parent = self.agreementWindow,
+	}
+	
+	if self.emailRequired then
+		self.txtVerif = TextBox:New {
+			x = 1,
+			width = 200,
+			y = 405,
+			height = 35,
+			text = i18n("Email Verification Code") .. ":",
+			fontsize = Configuration:GetFont(2).size,
+			useIME = false,
+			parent = self.agreementWindow,
+		}
+		self.ebVerif = EditBox:New {
+			x = 200,
+			width = 650-250,
+			y = 395,
+			height = 35,
+			text = "",
+			font = Configuration:GetFont(2),
+			useIME = false,
+			parent = self.agreementWindow,
+		}
+	end
+	
 	self.btnYes = Button:New {
 		x = 1,
 		width = 135,
-		bottom = 1,
+		y = 430,
 		height = 70,
 		caption = "Accept",
 		font = Configuration:GetFont(3),
 		OnClick = {
 			function()
-				self:acceptAgreement()
+				self:acceptAgreement(self.ebVerif.text)
 			end
 		},
+		parent = self.agreementWindow,
 	}
 	self.btnNo = Button:New {
 		x = 240,
 		width = 135,
-		bottom = 1,
+		y = 430,
 		height = 70,
 		caption = "Decline",
 		font = Configuration:GetFont(3),
@@ -464,35 +555,12 @@ function LoginWindow:createAgreementWindow()
 				self:declineAgreement()
 			end
 		},
-	}
-	self.agreementWindow = Window:New {
-		x = 600,
-		y = 200,
-		width = 350,
-		height = 450,
-		caption = "Use agreement",
-		resizable = false,
-		draggable = false,
-		children = {
-			ScrollPanel:New {
-				x = 1,
-				right = 7,
-				y = 1,
-				bottom = 42,
-				children = {
-					self.tbAgreement
-				},
-			},
-			self.btnYes,
-			self.btnNo,
-
-		},
-		parent = WG.Chobby.lobbyInterfaceHolder,
+		parent = self.agreementWindow,
 	}
 end
 
-function LoginWindow:acceptAgreement()
-	lobby:ConfirmAgreement()
+function LoginWindow:acceptAgreement(verif_code)
+	lobby:ConfirmAgreement(verif_code)
 	self.agreementWindow:Dispose()
 end
 
