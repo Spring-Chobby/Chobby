@@ -200,6 +200,39 @@ function LoginWindow:init(failFunction, cancelText, windowClassname, params)
 		registerChildren[#registerChildren + 1] = self.ebEmail
 	end
 	
+	if WG.Server.protocol=="spring" then 
+		self.txtEmail = TextBox:New {
+			x = 15,
+			width = 170,
+			y = 180,
+			height = 35,
+			text = i18n("Email") .. ":",
+			fontsize = Configuration:GetFont(3).size,
+			useIME = false,
+		}
+		self.ebEmail = EditBox:New {
+			x = 135,
+			width = 200,
+			y = 171,
+			height = 35,
+			text = "",
+			font = Configuration:GetFont(3),
+			useIME = false,
+			OnKeyPress = {
+				function(obj, key, mods, ...)
+					if key == Spring.GetKeyCode("enter") or key == Spring.GetKeyCode("numpad_enter") then
+						if self.tabPanel.tabBar:IsSelected("register") then
+							self:tryRegister()
+						end
+					end
+				end
+			},
+		}
+	else
+		self.txtEmail = Control:New {}	
+		self.ebEmail = Control:New {}
+	end
+		
 	self.cbAutoLogin = Checkbox:New {
 		x = 15,
 		width = 215,
@@ -221,7 +254,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname, params)
 		y = self.windowHeight - 216,
 		height = 90,
 		text = "",
-		fontsize = Configuration:GetFont(3).size,
+		fontsize = Configuration:GetFont(2).size,
 	}
 	
 	self.btnLogin = Button:New {
@@ -462,7 +495,12 @@ function LoginWindow:OnConnected()
 	--self.txtError:SetText(Configuration:GetPartialColor() .. i18n("connecting"))
 
 	self.onAgreement = function(listener, line)
-		self.agreementText = ((self.agreementText and (self.agreementText .. " \n")) or "") .. line
+		if self.agreementText == nil then
+			self.agreementText = ""
+		else 
+			self.agreementText = self.agreementText .. " \n"		
+		end
+		self.agreementText = self.agreementText .. line
 	end
 	lobby:AddListener("OnAgreement", self.onAgreement)
 
@@ -554,8 +592,35 @@ function LoginWindow:createAgreementWindow()
 			function()
 				self:declineAgreement()
 			end
+		}
+	}
+	
+
+	self.agreementWindow = Window:New {
+		x = 600,
+		y = 200,
+		width = 650,
+		height = 530,
+		caption = "User agreement",
+		resizable = false,
+		draggable = false,
+		children = {
+			ScrollPanel:New {
+				x = 1,
+				right = 7,
+				y = 1,
+				height = 390,
+				children = {
+					self.tbAgreement
+				},
+			},
+			self.txtVerif,
+			self.ebVerif,
+			self.btnYes,
+			self.btnNo,
+
 		},
-		parent = self.agreementWindow,
+		parent = WG.Chobby.lobbyInterfaceHolder,
 	}
 end
 
