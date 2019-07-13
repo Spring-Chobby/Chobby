@@ -237,6 +237,19 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 	--scriptFile:write(scriptTxt)
 	--scriptFile:close()
 	
+	local Config = WG.Chobby.Configuration
+	if Config.multiplayerLaunchNewSpring then
+		if WG.WrapperLoopback and WG.WrapperLoopback.StartNewSpring and WG.SettingsWindow and WG.SettingsWindow.GetSettingsString then
+			local params = {
+				StartScriptContent = scriptTxt,
+				Engine = Config:GetTruncatedEngineVersion(),
+				SpringSettings = WG.SettingsWindow.GetSettingsString(),
+			}
+			WG.WrapperLoopback.StartNewSpring(params)
+			return
+		end
+	end
+	
 	Spring.Reload(scriptTxt)
 end
 

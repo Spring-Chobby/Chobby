@@ -917,6 +917,9 @@ end
 Interface.jsonCommands["ConnectSpring"] = Interface._ConnectSpring
 
 function Interface:_LeftBattle(data)
+	if data.User == self:GetMyUserName() then
+		self:_OnLeaveBattle(data.BattleID)
+	end
 	self:_OnLeftBattle(data.BattleID, data.User)
 end
 Interface.jsonCommands["LeftBattle"] = Interface._LeftBattle

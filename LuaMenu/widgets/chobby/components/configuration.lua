@@ -151,14 +151,14 @@ function Configuration:init()
 	self.campaignConfig = VFS.Include("campaign/sample/mainConfig.lua")
 	self.campaignSaveFile = nil -- Set by user
 	self.nextCampaignSaveNumber = 1
-
+	self.campaignConfigOptions = {"sample", "dev"}
+	self.campaignConfigHumanNames = {"Sample", "Dev"}
 	local gameConfigOptions = {}
 	local subdirs = VFS.SubDirs(gameConfPath)
 	for index, subdir in ipairs(subdirs) do
 		-- get just the folder name
 		subdir = string.gsub(subdir, gameConfPath, "")
 		subdir = string.sub(subdir, 1, -2)	-- truncate trailing slash
-
 		Spring.Log(LOG_SECTION, LOG.NOTICE, "Detected game config", subdir)
 		gameConfigOptions[#gameConfigOptions+1] = subdir
 	end
@@ -523,6 +523,7 @@ function Configuration:GetConfigData()
 		campaignSaveFile = self.campaignSaveFile,
 		nextCampaignSaveNumber = self.nextCampaignSaveNumber,
 		steamReleasePopupSeen = self.steamReleasePopupSeen,
+		campaignConfigName = self.campaignConfigName,
 	}
 end
 
@@ -547,6 +548,10 @@ function Configuration:SetConfigValue(key, value)
 	end
 	if key == "gameConfigName" then
 		self:LoadGameConfig(LUA_DIRNAME .. "configs/gameConfig/" .. value .. "/mainConfig.lua")
+	end
+	if key == "campaignConfigName" then
+		self.campaignPath = "campaign/" .. value
+		self.campaignConfig = VFS.Include("campaign/" .. value .. "/mainConfig.lua")
 	end
 	self:_CallListeners("OnConfigurationChange", key, value)
 end

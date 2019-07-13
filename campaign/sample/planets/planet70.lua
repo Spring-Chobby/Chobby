@@ -67,6 +67,12 @@ local function GetPlanet(planetUtilities, planetID)
 						facing = 3,
 					},
 					{
+						name = "pw_metal",
+						x = 1640,
+						z = 760,
+						facing = 3,
+					},
+					{
 						name = "bomberriot",
 						x = 900,
 						z = 50,
@@ -158,6 +164,16 @@ local function GetPlanet(planetUtilities, planetID)
 						commands = {
 							{cmdID = planetUtilities.COMMAND.PATROL, pos = {1144, 1272}},
 							{cmdID = planetUtilities.COMMAND.PATROL, pos = {1169, 1297}, options = {"shift"}},
+						},
+					},
+ 					{
+						name = "staticcon",
+						x = 1044,
+						z = 1272,
+						facing = 0,
+						commands = {
+							{cmdID = planetUtilities.COMMAND.PATROL, pos = {1044, 1272}},
+							{cmdID = planetUtilities.COMMAND.PATROL, pos = {1069, 1297}, options = {"shift"}},
 						},
 					},
  					{
@@ -418,6 +434,18 @@ local function GetPlanet(planetUtilities, planetID)
 							name = "staticcon",
 							x = 3208,
 							z = 1544,
+							facing = 1,
+						},
+ 						{
+							name = "turretgauss",
+							x = 545,
+							z = 4055,
+							facing = 1,
+						},
+ 						{
+							name = "turretgauss",
+							x = 4955,
+							z = 486,
 							facing = 1,
 						},
  						{
@@ -1393,7 +1421,6 @@ local function GetPlanet(planetUtilities, planetID)
 						"factoryjump",
 						"jumpcon",
 						"jumpraid",
-						"jumpassault",
 						"jumparty",
 						"jumpblackhole",
 					},
@@ -1631,12 +1658,12 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 6664,
 							facing = 3,
 						},
-						{
-							name = "energypylon",
-							x = 4056,
-							z = 4632,
-							facing = 0,
-						},
+						--{
+						--	name = "energypylon",
+						--	x = 4056,
+						--	z = 4632,
+						--	facing = 0,
+						--},
 						{
 							name = "energywind",
 							x = 2232,
@@ -1746,7 +1773,7 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 3,
 						},
 						{
-							name = "turretriot",
+							name = "turretlaser",
 							x = 1720,
 							z = 6968,
 							facing = 3,
@@ -1997,12 +2024,12 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 4232,
 							facing = 0,
 						},
-						{
-							name = "energypylon",
-							x = 6344,
-							z = 2296,
-							facing = 3,
-						},
+						--{
+						--	name = "energypylon",
+						--	x = 6344,
+						--	z = 2296,
+						--	facing = 3,
+						--},
 						{
 							name = "energywind",
 							x = 2360,
@@ -2125,8 +2152,8 @@ local function GetPlanet(planetUtilities, planetID)
 						},
 						{
 							name = "energypylon",
-							x = 3400,
-							z = 4920,
+							x = 3280,
+							z = 5100,
 							facing = 0,
 						},
 						{
@@ -2183,12 +2210,12 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 5608,
 							facing = 1,
 						},
-						{
-							name = "energypylon",
-							x = 3608,
-							z = 4600,
-							facing = 1,
-						},
+						--{
+						--	name = "energypylon",
+						--	x = 3608,
+						--	z = 4600,
+						--	facing = 1,
+						--},
 						{
 							name = "energywind",
 							x = 7000,
@@ -2199,6 +2226,18 @@ local function GetPlanet(planetUtilities, planetID)
 							name = "energywind",
 							x = 7080,
 							z = 5752,
+							facing = 1,
+						},
+						{
+							name = "energywind",
+							x = 3764,
+							z = 4420,
+							facing = 1,
+						},
+						{
+							name = "energywind",
+							x = 3840,
+							z = 4400,
 							facing = 1,
 						},
 						{
@@ -2225,12 +2264,12 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 5848,
 							facing = 1,
 						},
-						{
-							name = "energypylon",
-							x = 6888,
-							z = 2152,
-							facing = 0,
-						},
+						--{
+						--	name = "energypylon",
+						--	x = 6888,
+						--	z = 2152,
+						--	facing = 0,
+						--},
 						{
 							name = "staticmex",
 							x = 5912,
@@ -2245,8 +2284,8 @@ local function GetPlanet(planetUtilities, planetID)
 						},
 						{
 							name = "energypylon",
-							x = 6424,
-							z = 2664,
+							x = 6236,
+							z = 2330,
 							facing = 0,
 						},
 						{
@@ -2261,12 +2300,12 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 3752,
 							facing = 0,
 						},
-						{
-							name = "energypylon",
-							x = 6664,
-							z = 360,
-							facing = 0,
-						},
+						--{
+						--	name = "energypylon",
+						--	x = 6664,
+						--	z = 360,
+						--	facing = 0,
+						--},
 						{
 							name = "energypylon",
 							x = 6712,
@@ -2515,7 +2554,7 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 2,
 						},
 						{
-							name = "turretaaclose",
+							name = "turretlaser",
 							x = 3992,
 							z = 6728,
 							facing = 2,
@@ -2983,12 +3022,12 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 5528,
 							facing = 0,
 						},
-						{
-							name = "energypylon",
-							x = 6872,
-							z = 2888,
-							facing = 0,
-						},
+						--{
+						--	name = "energypylon",
+						--	x = 6872,
+						--	z = 2888,
+						--	facing = 0,
+						--},
 						{
 							name = "energywind",
 							x = 4584,
@@ -4387,12 +4426,12 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 3904,
 							facing = 0,
 						},
-						{
-							name = "turretriot",
-							x = 4824,
-							z = 3784,
-							facing = 0,
-						},
+						--{
+						--	name = "turretriot",
+						--	x = 4824,
+						--	z = 3784,
+						--	facing = 0,
+						--},
 						{
 							name = "turretriot",
 							x = 5032,
@@ -4405,12 +4444,12 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 4248,
 							facing = 0,
 						},
-						{
-							name = "energypylon",
-							x = 2104,
-							z = 7112,
-							facing = 0,
-						},
+						--{
+						--	name = "energypylon",
+						--	x = 2104,
+						--	z = 7112,
+						--	facing = 0,
+						--},
 						{
 							name = "energywind",
 							x = 3320,
@@ -4706,7 +4745,7 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 0,
 						},
 						{
-							name = "turretriot",
+							name = "turretlaser",
 							x = 5976,
 							z = 2104,
 							facing = 0,
@@ -4946,12 +4985,12 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 5496,
 							facing = 0,
 						},
-						{
-							name = "energypylon",
-							x = 2744,
-							z = 6888,
-							facing = 0,
-						},
+						--{
+						--	name = "energypylon",
+						--	x = 2744,
+						--	z = 6888,
+						--	facing = 0,
+						--},
 						{
 							name = "turretriot",
 							x = 2632,
@@ -4959,7 +4998,7 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 0,
 						},
 						{
-							name = "turretriot",
+							name = "turretlaser",
 							x = 2824,
 							z = 5864,
 							facing = 0,
@@ -4982,12 +5021,12 @@ local function GetPlanet(planetUtilities, planetID)
 							z = 5032,
 							facing = 0,
 						},
-						{
-							name = "energypylon",
-							x = 6216,
-							z = 536,
-							facing = 0,
-						},
+						--{
+						--	name = "energypylon",
+						--	x = 6216,
+						--	z = 536,
+						--	facing = 0,
+						--},
 						{
 							name = "energywind",
 							x = 6040,

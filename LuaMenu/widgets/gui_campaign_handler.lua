@@ -232,8 +232,8 @@ local function InitializeDifficultySetting(parent)
 	
 	local difficultyWindow = Window:New{
 		classname = "tech_mainwindow_very_small",
-		x = 6,
-		y = 6,
+		x = 4,
+		y = 4,
 		width = 128,
 		height = 76,
 		resizable = false,
@@ -283,7 +283,7 @@ local function InitializeDifficultySetting(parent)
 	WG.CampaignData.AddListener("CampaignLoaded", UpdateSettings)
 	
 	freezeSettings = false
-
+	return difficultyWindow
 end
 
 --------------------------------------------------------------------------------
@@ -1401,6 +1401,7 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 		width = "100%",
 		height = "100%",
 		padding = {0,0,0,0},
+		hitTestAllowEmpty = true,
 		parent = window,
 	}
 	
@@ -1433,7 +1434,6 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 			end
 			return false
 		end
-		--function planetWindow:HitTest(x,y) return self end
 	end
 	
 	local planetData = Configuration.campaignConfig.planetDefs
@@ -1676,9 +1676,10 @@ function externalFunctions.GetControl(newLiveTestingMode, newPlanetWhitelist, fe
 		OnParentPost = {
 			function(obj, parent)
 				if obj:IsEmpty() then
-					InitializeDifficultySetting(obj)
+					local difficultyWindow = InitializeDifficultySetting(obj)
 					planetHandler = InitializePlanetHandler(obj, newLiveTestingMode, newPlanetWhitelist, feedbackLink)
 					UpdateGalaxy()
+					difficultyWindow:BringToFront()
 				end
 				
 				local background = WG.Chobby.interfaceRoot.GetBackgroundHolder()

@@ -56,20 +56,23 @@ local function UnlockThing(thingData, id)
 end
 
 local function UnlockListOfThings(unlockList, unlocksToAdd, translationFunc, unlockLimitTable)
+	local saveRequired = false
 	for i = 1, #unlocksToAdd do
 		if translationFunc then
 			local copyInstanceName = unlocksToAdd[i]
 			local unlockName, limit = translationFunc(copyInstanceName)
-			UnlockThing(unlockList, unlockName)
+			saveRequired = UnlockThing(unlockList, unlockName) or saveRequired
 			if limit then
 				if UnlockThing(unlockList, copyInstanceName) then
 					unlockLimitTable[unlockName] = (unlockLimitTable[unlockName] or 0) + (tonumber(limit) or 0)
+					saveRequired = true
 				end
 			end
 		else
-			UnlockThing(unlockList, unlocksToAdd[i])
+			saveRequired = UnlockThing(unlockList, unlocksToAdd[i]) or saveRequired
 		end
 	end
+	return saveRequired
 end
 
 --------------------------------------------------------------------------------
@@ -222,18 +225,20 @@ end
 -- Modules, Rewards
 
 local function UnlockRewardSet(rewardSet)
+	local saveRequired = false
 	if rewardSet.units then
-		UnlockListOfThings(gamedata.unitsUnlocked, rewardSet.units)
+		saveRequired = UnlockListOfThings(gamedata.unitsUnlocked, rewardSet.units) or saveRequired
 	end
 	if rewardSet.modules then
-		UnlockListOfThings(gamedata.modulesUnlocked, rewardSet.modules, TranslateModule, gamedata.modulesUnlockedLimit)
+		saveRequired = UnlockListOfThings(gamedata.modulesUnlocked, rewardSet.modules, TranslateModule, gamedata.modulesUnlockedLimit) or saveRequired
 	end
 	if rewardSet.abilities then
-		UnlockListOfThings(gamedata.abilitiesUnlocked, rewardSet.abilities)
+		saveRequired = UnlockListOfThings(gamedata.abilitiesUnlocked, rewardSet.abilities) or saveRequired
 	end
 	if rewardSet.codexEntries then
-		UnlockListOfThings(gamedata.codexEntriesUnlocked, rewardSet.codexEntries)
+		saveRequired = UnlockListOfThings(gamedata.codexEntriesUnlocked, rewardSet.codexEntries) or saveRequired
 	end
+	return saveRequired
 end
 
 local function UpdateCommanderModuleCounts()
@@ -611,12 +616,15 @@ function externalFunctions.CapturePlanet(planetID, bonusObjectives, difficulty)
 	local gainedBonusExperience = 0
 	
 	if UnlockThing(gamedata.planetsCaptured, planetID) then
-		UnlockRewardSet(planet.completionReward)
-		CallListeners("RewardGained", planet.completionReward)
-		CallListeners("PlanetCaptured", planetID)
 		gainedExperience = gainedExperience + (planet.completionReward.experience or 0)
 		saveRequired = true
 	end
+	saveRequired = UnlockRewardSet(planet.completionReward) or saveRequired
+	if saveRequired then
+		CallListeners("PlanetCaptured", planetID)
+		CallListeners("RewardGained", planet.completionReward)
+	end
+	
 	if difficulty > (gamedata.completionDifficulty[planetID] or 0) then
 		gamedata.completionDifficulty[planetID] = difficulty
 		saveRequired = true

@@ -740,6 +740,15 @@ function Lobby:_OnBattleScriptPassword(scriptPassword)
 	self:_CallListeners("OnBattleScriptPassword", scriptPassword)
 end
 
+function Lobby:_OnLeaveBattle(battleID)
+	self.myBattleID = nil
+	self.modoptions = {}
+	self.battleAis = {}
+	self.userBattleStatus = {}
+
+	self:_CallListeners("OnLeaveBattle", battleID)
+end
+
 function Lobby:_OnLeftBattle(battleID, userName)
 	if self:GetMyUserName() == userName then
 		self.myBattleID = nil

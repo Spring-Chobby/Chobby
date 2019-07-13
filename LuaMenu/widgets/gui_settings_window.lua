@@ -1132,6 +1132,49 @@ local function GetVoidTabControls()
 		},
 	}
 	offset = offset + ITEM_OFFSET
+	
+	children[#children + 1] = Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 30,
+		valign = "top",
+		align = "left",
+		parent = window,
+		font = Configuration:GetFont(2),
+		caption = "Campaign",
+	}
+	
+	local campaignSelectedName = Configuration.campaignConfigName
+	local campaignSelected = 1
+	for i = 1, #Configuration.campaignConfigOptions do
+		if Configuration.campaignConfigOptions[i] == campaignSelectedName then
+			campaignSelected = i
+			break
+		end
+	end
+
+	children[#children + 1] = ComboBox:New {
+		name = "campaignSelection",
+		x = COMBO_X,
+		y = offset,
+		width = COMBO_WIDTH,
+		height = 30,
+		parent = window,
+		items = Configuration.campaignConfigHumanNames,
+		font = Configuration:GetFont(2),
+		itemFontSize = Configuration:GetFont(2).size,
+		selected = campaignSelected,
+		OnSelect = {
+			function (obj)
+				if freezeSettings then
+					return
+				end
+				Configuration:SetConfigValue("campaignConfigName", Configuration.campaignConfigOptions[obj.selected])
+			end
+		},
+	}
+	offset = offset + ITEM_OFFSET
 
 	freezeSettings = false
 
@@ -1773,6 +1816,8 @@ function widget:Initialize()
 		elseif battleStartDisplay == 3 then -- Fullscreen
 			Configuration:SetSpringsettingsValue("XResolution", screenX)
 			Configuration:SetSpringsettingsValue("YResolution", screenY)
+			Configuration:SetSpringsettingsValue("WindowPosX", 0)
+			Configuration:SetSpringsettingsValue("WindowPosY", 0)
 			Configuration:SetSpringsettingsValue("Fullscreen", 1)
 		elseif battleStartDisplay == 4 then -- Manual Borderless
 			local borders = WG.Chobby.Configuration.manualBorderless.game or {}
@@ -1785,6 +1830,8 @@ function widget:Initialize()
 			local resolution = WG.Chobby.Configuration.manualFullscreen.game or {}
 			Configuration:SetSpringsettingsValue("XResolution", resolution.width or screenX)
 			Configuration:SetSpringsettingsValue("YResolution", resolution.height or screenY)
+			Configuration:SetSpringsettingsValue("WindowPosX", 0)
+			Configuration:SetSpringsettingsValue("WindowPosY", 0)
 			Configuration:SetSpringsettingsValue("Fullscreen", 1)
 		end
 

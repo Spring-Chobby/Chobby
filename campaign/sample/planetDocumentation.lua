@@ -196,6 +196,9 @@ planetData = {
 					-- Duration of stun (in seconds) applied to the unit at the start of the game.
 					stunTime = 2,
 					
+					-- Starting shield power as a factor of total shield capacity. Leave as nil for the default.
+					shieldFactor = 0.8
+					
 					-- Set terraform height to make a Skydust
 					terraformHeight = 30,
 					

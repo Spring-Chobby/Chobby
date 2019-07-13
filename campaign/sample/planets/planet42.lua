@@ -215,7 +215,6 @@ local function GetPlanet(planetUtilities, planetID)
 						"energywind",
 						"energypylon",
 						"staticcon",
-						"factoryspider",
 						"turretlaser",
 						"turretmissile",
 						"turretheavylaserlaser",
