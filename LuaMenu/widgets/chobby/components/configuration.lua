@@ -808,10 +808,10 @@ function Configuration:GetIsRunning64Bit()
 	if self.isRunning64Bit ~= nil then
 		return self.isRunning64Bit
 	end
-	if Platform then
+	-- if Platform then
 		-- osWordSize is not the same as spring bit version.
 		--return Platform.osWordSize == 64
-	end
+	-- end
 	local infologFile, err = io.open("infolog.txt", "r")
 	if not infologFile then
 		Spring.Echo("Error opening infolog.txt", err)

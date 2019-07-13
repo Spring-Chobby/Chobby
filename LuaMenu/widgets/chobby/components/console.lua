@@ -31,7 +31,7 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 		x = 0,
 		right = 0,
 		y = 0,
- 		agressiveMaxLines = 500,
+		agressiveMaxLines = 500,
 		agressiveMaxLinesPreserve = 100,
 		lineSpacing = 2,
 		bottom = 0,

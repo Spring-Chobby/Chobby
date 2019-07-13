@@ -126,7 +126,6 @@ local function GenerateScriptFromConfig(gameConfig)
 	local allyTeamCount = 0
 	local teams = {}
 	local teamCount = 0
-	local players = {}
 	local ais = {}
 	local aiCount = 0
 	local commanderTypes = {}

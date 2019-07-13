@@ -10,7 +10,7 @@ function TeamWindow:init()
 		OnClick = { function()
 			self:CreateInvitePlayerWindow()
 		end },
-	},
+	}
 
 	lobby:AddListener("OnJoinedTeam",
 		function(listner, ...)

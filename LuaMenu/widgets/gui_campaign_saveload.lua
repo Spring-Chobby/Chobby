@@ -264,7 +264,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 		height = 20,
 		valign = 'center',
 		fontsize = Configuration:GetFont(3).size,
-		text = saveFile.commanderName .. (current and " \255\0\255\255\(current)\008" or ""),
+		text = saveFile.commanderName .. (current and " \255\0\255\255(current)\008" or ""),
 		parent = container,
 	}
 
@@ -451,7 +451,6 @@ end
 function CampaignSaveWindow.PromptInitialSaveName()
 	local Configuration = WG.Chobby.Configuration
 	if not Configuration.campaignSaveFile then
-		local Configuration = WG.Chobby.Configuration
 		local lobby = WG.LibLobby.lobby
 		local commName = (lobby and lobby.myUserName) or Configuration.suggestedNameFromSteam
 		if commName then
