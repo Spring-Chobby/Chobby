@@ -24,7 +24,7 @@ local START_UNITS_BLOCK_SIZE = 40
 
 local function TableToBase64(inputTable)
 	if not inputTable then
-		return 
+		return
 	end
 	return Spring.Utilities.Base64Encode(Spring.Utilities.TableToString(inputTable))
 end
@@ -62,7 +62,7 @@ local function AddToList(list, inclusionMap, listToAppend)
 			end
 		end
 	end
-	
+
 	return list
 end
 
@@ -89,7 +89,7 @@ local function GetPlayerCommWithExtra(playerComm, extraModules)
 			replaceModules[extraModules[i].name] = true
 		end
 	end
-	
+
 	local flatModules = {} -- Much simpler
 	local modules = playerComm.modules
 	for level = 0, #modules do
@@ -100,14 +100,14 @@ local function GetPlayerCommWithExtra(playerComm, extraModules)
 			end
 		end
 	end
-	
+
 	for i = 1, #extraModules do
 		local extra = extraModules[i]
 		for j = 1, extra.count do
 			flatModules[#flatModules + 1] = extra.name
 		end
 	end
-	
+
 	return {
 		name = playerComm.name,
 		chassis = playerComm.chassis,
@@ -130,12 +130,12 @@ local function GenerateScriptFromConfig(gameConfig)
 	local ais = {}
 	local aiCount = 0
 	local commanderTypes = {}
-	
+
 	local Configuration = WG.Chobby.Configuration
 	local gameName = gameConfig.gameName or Configuration:GetDefaultGameName()
 	local bitExtension = (Configuration:GetIsRunning64Bit() and "64") or "32"
 	local playerName = Configuration:GetPlayerName()
-	
+
 	-- Add the player, this is to make the player team 0.
 	local playerCount = 1
 	local players = {
@@ -147,7 +147,7 @@ local function GenerateScriptFromConfig(gameConfig)
 			rank = 0,
 		},
 	}
-	
+
 	if not gameConfig.playerConfig.isSpectator then
 		local commanderName, noCommander
 		if gameConfig.playerConfig.commander then
@@ -165,7 +165,7 @@ local function GenerateScriptFromConfig(gameConfig)
 			noCommander = 1
 		end
 		commanderTypes.player_commander = gameConfig.playerConfig.commander
-		
+
 		teams[teamCount] = {
 			TeamLeader = 0,
 			AllyTeam = gameConfig.playerConfig.allyTeam,
@@ -182,20 +182,20 @@ local function GenerateScriptFromConfig(gameConfig)
 			typevictorylocation = TableToBase64(gameConfig.playerConfig.typeVictoryAtLocation)
 		}
 		AddStartUnits(teams[teamCount], gameConfig.playerConfig.startUnits, "extrastartunits_")
-		
+
 		teamCount = teamCount + 1
 	end
-	
+
 	-- Add the AIs
 	for i = 1, #gameConfig.aiConfig do
 		local aiData = gameConfig.aiConfig[i]
 		local shortName = WG.CampaignData.GetAI(aiData.aiLib)
 		local commanderName, noCommander
-		
+
 		if aiData.bitDependant then
 			shortName = shortName .. bitExtension
 		end
-		
+
 		ais[aiCount] = {
 			Name = aiData.humanName or ("AI " .. teamCount),
 			Team = teamCount,
@@ -209,7 +209,7 @@ local function GenerateScriptFromConfig(gameConfig)
 			}
 		}
 		aiCount = aiCount + 1
-		
+
 		if aiData.commander then
 			local commander = aiData.commander
 			commanderName = "ai_commander_" .. aiCount
@@ -224,7 +224,7 @@ local function GenerateScriptFromConfig(gameConfig)
 		else
 			noCommander = 1
 		end
-		
+
 		teams[teamCount] = {
 			TeamLeader = 0,
 			AllyTeam = aiData.allyTeam,
@@ -244,7 +244,7 @@ local function GenerateScriptFromConfig(gameConfig)
 		AddStartUnits(teams[teamCount], aiData.startUnits, "extrastartunits_")
 		teamCount = teamCount + 1
 	end
-	
+
 	-- Add allyTeams
 	for i, teamData in pairs(teams) do
 		if not allyTeams[teamData.AllyTeam] then
@@ -253,7 +253,7 @@ local function GenerateScriptFromConfig(gameConfig)
 			}
 		end
 	end
-	
+
 	local modoptions = {
 		commandertypes = TableToBase64(commanderTypes),
 		featurestospawn = TableToBase64(gameConfig.initialWrecks),
@@ -262,17 +262,17 @@ local function GenerateScriptFromConfig(gameConfig)
 		initalterraform = TableToBase64(gameConfig.terraform),
 	}
 	AddStartUnits(modoptions, gameConfig.neutralUnits, "neutralstartunits_")
-	
+
 	if WG.Chobby.Configuration.campaignSpawnDebug then
 		modoptions.campaign_spawn_debug = 1
 	end
-	
+
 	if gameConfig.modoptions then
 		for key, value in pairs(gameConfig.modoptions) do
 			modoptions[key] = (type(value) == "table" and TableToBase64(value)) or value
 		end
 	end
-	
+
 	local script = {
 		gametype = gameConfig.gameName or gameName,
 		mapname = gameConfig.mapName,

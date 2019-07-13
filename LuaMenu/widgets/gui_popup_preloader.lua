@@ -34,9 +34,9 @@ end
 -- Initialization
 
 local function InitializeListeners(battleLobby)
-	local function OnUpdateBattleInfo(listener, updatedBattleID, spectatorCount, locked, mapHash, mapName, 
+	local function OnUpdateBattleInfo(listener, updatedBattleID, spectatorCount, locked, mapHash, mapName,
 			engineVersion, runningSince, gameName, battleMode, disallowCustomTeams, disallowBots, isMatchMaker, newPlayerList, maxPlayers, title)
-		
+
 		if updatedBattleID ~= battleLobby:GetMyBattleID() then
 			return
 		end
@@ -44,7 +44,7 @@ local function InitializeListeners(battleLobby)
 		if newGameName == oldGameName then
 			return
 		end
-		
+
 		oldGameName = newGameName
 		UpdateAiListWindow(newGameName)
 	end
@@ -57,11 +57,11 @@ local function InitializeListeners(battleLobby)
 		if newGameName == oldGameName then
 			return
 		end
-		
+
 		oldGameName = newGameName
 		UpdateAiListWindow(newGameName)
 	end
-	
+
 	battleLobby:AddListener("OnUpdateBattleInfo", OnUpdateBattleInfo)
 	battleLobby:AddListener("OnJoinedBattle", OnJoinedBattle)
 end
@@ -80,12 +80,12 @@ function PopupPreloader.ShowAiListWindow(battleLobby, newGameName, teamIndex, qu
 		simpleAiList = conf.simpleAiList
 		UpdateAiListWindow(newGameName)
 	end
-	
+
 	aiListWindow:SetLobbyAndAllyTeam(battleLobby, teamIndex)
 	if quickAddAi and aiListWindow:QuickAdd(quickAddAi) then
 		return
 	end
-	
+
 	aiListWindow.window:Show()
 	aiListWindow.window:SetPos(nil, nil, 500, 700)
 	aiPopup = WG.Chobby.PriorityPopup(aiListWindow.window, nil, nil, nil, true)
@@ -104,6 +104,6 @@ function widget:Initialize()
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
 	WG.PopupPreloader = PopupPreloader
-	
+
 	WG.Delay(DelayedInitialize, 1)
 end

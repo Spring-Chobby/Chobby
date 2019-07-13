@@ -1,32 +1,32 @@
 function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submenus, titleUpdateFunction)
-	
+
 	local externalFunctions = {}
 	local submenuPanelNames = {}
-	
+
 	local buttonsHolder
-	
+
 	local fontSizeScale = 3
 	local buttonHeight = 70
-	
+
 	-- Matches interface root and submenu handler
 	local buttonSpacing = 4
 	local BUTTON_SIDE_SPACING = 1
-	
+
 	local buttonOffset = 50
 	local title
-	
+
 	-------------------------------------------------------------------
 	-- Local Functions
 	-------------------------------------------------------------------
-	local function BackToMainMenu(panelHandler) 
-		panelHandler.Hide() 
+	local function BackToMainMenu(panelHandler)
+		panelHandler.Hide()
 		if not buttonsHolder.visible then
 			buttonsHolder:Show()
 		end
-		
+
 		titleUpdateFunction()
 		title = nil
-		
+
 		if panelWindow.children[1] and panelHandler.GetManagedControlByName(panelWindow.children[1].name) then
 			panelWindow:ClearChildren()
 			if panelWindow.visible then
@@ -34,7 +34,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 			end
 		end
 	end
-	
+
 	local function SetTitle(newTitle)
 		if newTitle == title then
 			return
@@ -42,12 +42,12 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 		title = newTitle
 		titleUpdateFunction(title)
 	end
-	
+
 	local function SetButtonPositionAndSize(index)
 		submenus[index].button:SetPos(
-			BUTTON_SIDE_SPACING, 
-			(index - 1) * (buttonHeight + buttonSpacing) + buttonOffset - buttonSpacing, 
-			nil, 
+			BUTTON_SIDE_SPACING,
+			(index - 1) * (buttonHeight + buttonSpacing) + buttonOffset - buttonSpacing,
+			nil,
 			buttonHeight
 		)
 		if submenus[index].twoline then
@@ -56,18 +56,18 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 		submenus[index].button._relativeBounds.right = BUTTON_SIDE_SPACING
 		submenus[index].button:UpdateClientArea()
 	end
-	
+
 	-------------------------------------------------------------------
 	-- External Functions
 	-------------------------------------------------------------------
 	function externalFunctions.GetTabList(name)
 		return submenuPanelNames[name]
 	end
-	
+
 	function externalFunctions.GetSubheadingName()
 		return title
 	end
-	
+
 	function externalFunctions.GetCurrentSubmenu()
 		for i = 1, #submenus do
 			local panelHandler = submenus[i].panelHandler
@@ -77,7 +77,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 		end
 		return false
 	end
-	
+
 	function externalFunctions.BackOneLevel()
 		if externalFunctions.GetCurrentSubmenu() then
 			externalFunctions.SetBackAtMainMenu()
@@ -90,15 +90,15 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 		end
 		return false
 	end
-	
+
 	function externalFunctions.OpenSubmenu(index, tabName)
 		if buttonsHolder.visible then
 			buttonsHolder:Hide()
 		end
 		WG.Analytics.SendOnetimeEvent(submenus[index].analyticsName)
-		
+
 		submenus[index].panelHandler.Show()
-		
+
 		if submenus[index].entryCheck then
 			submenus[index].entryCheck()
 		end
@@ -106,11 +106,11 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 			submenus[index].panelHandler.OpenTabByName(tabName)
 		end
 	end
-	
+
 	function externalFunctions.GetPanelHander(index)
 		return submenus[index].panelHandler
 	end
-	
+
 	function externalFunctions.SetBackAtMainMenu(submenuName)
 		if submenuName then
 			local index = externalFunctions.GetCurrentSubmenu()
@@ -118,7 +118,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 				return
 			end
 		end
-		
+
 		local clearMainWindow = false
 		for i = 1, #submenus do
 			local panelHandler = submenus[i].panelHandler
@@ -126,14 +126,14 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 				clearMainWindow = panelHandler.CloseSubmenu() or clearMainWindow
 			end
 		end
-		
+
 		if not buttonsHolder.visible then
 			buttonsHolder:Show()
 		end
 		if titleUpdateFunction then
 			titleUpdateFunction()
 		end
-		
+
 		if clearMainWindow then
 			panelWindow:ClearChildren()
 			if panelWindow.visible then
@@ -141,7 +141,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 			end
 		end
 	end
-	
+
 	function externalFunctions.CloseTabs()
 		for i = 1, #submenus do
 			local panelHandler = submenus[i].panelHandler
@@ -157,12 +157,12 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 		end
 		return false
 	end
-	
+
 	function externalFunctions.ReplaceSubmenu(index, newTabs, newCleanupFunction)
 		externalFunctions.SetBackAtMainMenu()
 		submenus[index].panelHandler.Destroy()
 		submenus[index].analyticsName = "lobby:" .. submenus[index].name
-		
+
 		local conf = {
 			buttonWindow        = buttonWindow,
 			displayPanel        = panelWindow,
@@ -175,13 +175,13 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 			titleUpdateFunction = SetTitle,
 			analyticsName       = "lobby:" .. submenus[index].name
 		}
-		
+
 		local newPanelHandler = GetTabPanelHandler(submenus[index].name, conf)
 		newPanelHandler.Rescale(fontSizeScale, buttonHeight, nil, buttonOffset, buttonSpacing)
 		newPanelHandler.Hide()
 		submenus[index].panelHandler = newPanelHandler
 	end
-	
+
 	function externalFunctions.Rescale(newFontSize, newButtonHeight, newButtonOffset, newButtonSpacing)
 		fontSizeScale = newFontSize or fontSizeScale
 		buttonHeight = newButtonHeight or buttonHeight
@@ -195,7 +195,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 			SetButtonPositionAndSize(i)
 		end
 	end
-	
+
 	-------------------------------------------------------------------
 	-- Initialization
 	-------------------------------------------------------------------
@@ -209,11 +209,11 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-	
+
 	for i = 1, #submenus do
-		
+
 		submenus[i].analyticsName = "lobby:" .. submenus[i].name
-		
+
 		local conf = {
 			buttonWindow = buttonWindow,
 			displayPanel = panelWindow,
@@ -229,13 +229,13 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 			hideMyButtons = submenus[i].hideMyButtons,
 			startWithTabOpen = submenus[i].startWithTabOpen,
 		}
-		
+
 		local panelHandler = GetTabPanelHandler(submenus[i].name, conf)
 		panelHandler.Hide()
-		
+
 		submenuPanelNames[submenus[i].name] = panelHandler
 		submenus[i].panelHandler = panelHandler
-		
+
 		submenus[i].button = Button:New {
 			x = BUTTON_SIDE_SPACING,
 			y = (i - 1) * (buttonHeight + buttonSpacing) + buttonOffset - buttonSpacing,
@@ -246,12 +246,12 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 			font = { size = 20},
 			parent = buttonsHolder,
 			OnClick = {
-				function(self) 
+				function(self)
 					externalFunctions.OpenSubmenu(i)
 				end
 			},
 		}
 	end
-	
+
 	return externalFunctions
 end

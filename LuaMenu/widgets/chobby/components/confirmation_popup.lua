@@ -1,7 +1,7 @@
 ConfirmationPopup = LCS.class{}
 
 function ConfirmationPopup:init(successFunction, question, doNotAskAgainKey, width, height, yesText, noText, failureFunction, disableAcceptHotkey, failureTimeout)
-	
+
 	local mainWindow = Window:New {
 		x = 700,
 		y = 300,
@@ -13,9 +13,9 @@ function ConfirmationPopup:init(successFunction, question, doNotAskAgainKey, wid
 		parent = WG.Chobby.lobbyInterfaceHolder,
 		classname = "main_window_small",
 	}
-	
+
 	local applyTimeout = true
-	
+
 	local function CancelFunc()
 		applyTimeout = false
 		if failureFunction then
@@ -23,7 +23,7 @@ function ConfirmationPopup:init(successFunction, question, doNotAskAgainKey, wid
 		end
 		mainWindow:Dispose()
 	end
-	
+
 	local function AcceptFunc()
 		applyTimeout = false
 		if successFunction then
@@ -31,7 +31,7 @@ function ConfirmationPopup:init(successFunction, question, doNotAskAgainKey, wid
 		end
 		mainWindow:Dispose()
 	end
-	
+
 	if failureTimeout then
 		local function TimeoutFunc()
 			if applyTimeout then
@@ -40,7 +40,7 @@ function ConfirmationPopup:init(successFunction, question, doNotAskAgainKey, wid
 		end
 		WG.Delay(TimeoutFunc, failureTimeout)
 	end
-	
+
 	local lblText = TextBox:New {
 		x = 15,
 		right = 15,
@@ -50,7 +50,7 @@ function ConfirmationPopup:init(successFunction, question, doNotAskAgainKey, wid
 		text = question,
 		parent = mainWindow,
 	}
-	
+
 	local btnAccept = Button:New {
 		x = 5,
 		width = 135,
@@ -101,6 +101,6 @@ function ConfirmationPopup:init(successFunction, question, doNotAskAgainKey, wid
 			},
 		}
 	end
-	
+
 	local popupHolder = PriorityPopup(mainWindow, CancelFunc, AcceptFunc, nil, nil, disableAcceptHotkey)
 end

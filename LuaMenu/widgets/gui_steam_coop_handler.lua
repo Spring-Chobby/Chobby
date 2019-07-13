@@ -92,7 +92,7 @@ local function InitializeCoopStatusHandler(name, text, leaveFunc, statusAndInvit
 		draggable = false,
 		parent = parent
 	}
-	
+
 	local rightBound = "50%"
 	local bottomBound = 12
 	local bigMode = true
@@ -106,7 +106,7 @@ local function InitializeCoopStatusHandler(name, text, leaveFunc, statusAndInvit
 		text = text,
 		parent = panelHolder,
 	}
-	
+
 	local button = Button:New {
 		name = "leaveCoop",
 		x = "70%",
@@ -125,7 +125,7 @@ local function InitializeCoopStatusHandler(name, text, leaveFunc, statusAndInvit
 		},
 		parent = panelHolder,
 	}
-	
+
 	local function Resize(obj, xSize, ySize)
 		statusText._relativeBounds.right = rightBound
 		statusText._relativeBounds.bottom = bottomBound
@@ -142,15 +142,15 @@ local function InitializeCoopStatusHandler(name, text, leaveFunc, statusAndInvit
 			bigMode = true
 		end
 	end
-	
+
 	panelHolder.OnResize = {Resize}
-	
+
 	local externalFunctions = {}
-	
+
 	function externalFunctions.GetHolder()
 		return panelHolder
 	end
-	
+
 	return externalFunctions
 end
 
@@ -163,27 +163,27 @@ local function CheckDownloads(gameName, mapName, DoneFunc)
 	if not haveGame then
 		WG.DownloadHandler.MaybeDownloadArchive(gameName, "game", -1)
 	end
-	
+
 	local haveMap = (not mapName) or VFS.HasArchive(mapName)
 	if not haveMap then
 		WG.DownloadHandler.MaybeDownloadArchive(mapName, "map", -1)
 	end
-	
+
 	if haveGame and haveMap then
 		return true
 	end
-	
+
 	local function Update()
 		if ((not gameName) or WG.Package.ArchiveExists(gameName)) and ((not mapName) or VFS.HasArchive(mapName)) then
 			DoneFunc()
 			DownloadUpdateFunction = nil
 		end
 	end
-	
+
 	local function CancelFunc()
 		DownloadUpdateFunction = nil
 	end
-	
+
 	DownloadUpdateFunction = Update
 	local dlString = "Waiting on content: " .. ((not haveGame) and ("\n - " .. gameName .. ": %d%%") or "") .. ((not haveMap) and ("\n - " .. mapName .. ": %d%%") or "")
 	MakeExclusivePopup(string.format(dlString, 0, 0), "Cancel", CancelFunc, "negative_button")
@@ -194,7 +194,7 @@ local function CheckDownloads(gameName, mapName, DoneFunc)
 		},
 		dlString = dlString,
 	}
-	
+
 	if not haveGame then
 		downloading.progress[#downloading.progress + 1] = 0
 		downloading.downloads[gameName] = #downloading.progress
@@ -219,14 +219,14 @@ function SteamCoopHandler.SteamFriendJoinedMe(steamID, userName)
 		friendsInGame = friendsInGame or {}
 		saneFriendsInGame = saneFriendsInGame or {}
 		friendsInGameSteamID = friendsInGameSteamID or {}
-		
+
 		friendsInGame[#friendsInGame + 1] = userName
 		friendsInGameSteamID[#friendsInGameSteamID + 1] = steamID
 		alreadyIn[steamID] = true
 	end
-	
+
 	WG.Chobby.InformationPopup((userName or "???") .. " has joined your P2P party. Play a coop game by starting any game via the Singleplayer menu.")
-	
+
 	coopClient = false
 	local statusAndInvitesPanel = WG.Chobby.interfaceRoot.GetStatusAndInvitesPanel()
 	coopHostPanel = coopHostPanel or InitializeCoopStatusHandler("coopHostPanel", "Hosting Coop\nParty", LeaveHostCoopFunc, statusAndInvitesPanel)
@@ -280,7 +280,7 @@ function SteamCoopHandler.SteamConnectSpring(hostIP, hostPort, clientPort, myNam
 		-- Do not get forced into a coop game if you have left the coop party.
 		return
 	end
-	
+
 	local connectionDelay = WG.Chobby.Configuration.coopConnectDelay or 0
 	local function DownloadsComplete()
 		doDelayedConnection = true
@@ -303,7 +303,7 @@ function SteamCoopHandler.SteamConnectSpring(hostIP, hostPort, clientPort, myNam
 			StartAndClose()
 		end
 	end
-	
+
 	if CheckDownloads(gameName, mapName, DownloadsComplete) then
 		DownloadsComplete()
 	else
@@ -324,7 +324,7 @@ function SteamCoopHandler.AttemptGameStart(gameType, gameName, mapName, scriptTa
 		end
 		Spring.Echo("LUA_ERRRUN", "coopClient set without visible coop panel.")
 	end
-	
+
 	currentStart.gameType            = gameType
 	currentStart.gameName            = gameName
 	currentStart.mapName             = mapName
@@ -332,19 +332,19 @@ function SteamCoopHandler.AttemptGameStart(gameType, gameName, mapName, scriptTa
 	currentStart.newFriendsReplaceAI = newFriendsReplaceAI
 	currentStart.newReplayFile       = newReplayFile
 	currentStart.newEngineVersion    = newEngineVersion
-	
+
 	local function DownloadsComplete()
 		attemptGameType = gameType
 		attemptScriptTable = scriptTable
 		friendsReplaceAI = newFriendsReplaceAI
 		startReplayFile = newReplayFile
 		startEngineVersion = newEngineVersion
-		
+
 		CloseExclusivePopup()
-		
+
 		local Configuration = WG.Chobby.Configuration
 		local myName = Configuration:GetPlayerName()
-		
+
 		if startEngineVersion or (not friendsInGame) then
 			if friendsInGame then
 				-- Off-engine replays with friends are not yet supported.
@@ -358,7 +358,7 @@ function SteamCoopHandler.AttemptGameStart(gameType, gameName, mapName, scriptTa
 			lastStart.newFriendsReplaceAI = currentStart.newFriendsReplaceAI
 			lastStart.newReplayFile       = currentStart.newReplayFile
 			lastStart.newEngineVersion    = currentStart.newEngineVersion
-			
+
 			if startEngineVersion then
 				-- Only replay so far.
 				if not WG.WrapperLoopback then
@@ -371,10 +371,10 @@ function SteamCoopHandler.AttemptGameStart(gameType, gameName, mapName, scriptTa
 					Engine = engine,
 					SpringSettings = WG.SettingsWindow.GetSettingsString(),
 				}
-				WG.WrapperLoopback.StartNewSpring(params) 
+				WG.WrapperLoopback.StartNewSpring(params)
 				return
 			end
-			
+
 			if startReplayFile then
 				WG.Analytics.SendRepeatEvent("game_start:singleplayer:lone_replay", 1)
 				WG.Chobby.localLobby:StartReplay(startReplayFile, myName)
@@ -392,13 +392,13 @@ function SteamCoopHandler.AttemptGameStart(gameType, gameName, mapName, scriptTa
 			end
 			return
 		end
-		
+
 		local usedNames = {
 			[myName] = true,
 		}
-		
+
 		MakeExclusivePopup("Starting game.")
-		
+
 		local appendName = ""
 		if startReplayFile then
 			appendName = "(spec)"
@@ -413,17 +413,17 @@ function SteamCoopHandler.AttemptGameStart(gameType, gameName, mapName, scriptTa
 				ScriptPassword = "12345",
 			}
 		end
-		
+
 		local args = {
 			Players = players,
 			Map = mapName,
 			Game = gameName,
 			Engine = Spring.Utilities.GetEngineVersion()
 		}
-		
+
 		WG.WrapperLoopback.SteamHostGameRequest(args)
 	end
-	
+
 	if CheckDownloads(gameName, mapName, DownloadsComplete) then
 		DownloadsComplete()
 	end
@@ -442,7 +442,7 @@ function DelayedInitialize()
 	local function downloadFinished(_, name)
 		if DownloadUpdateFunction then
 			DownloadUpdateFunction()
-			
+
 			local index = downloading and downloading.downloads[name]
 			if not index then
 				return
@@ -452,7 +452,7 @@ function DelayedInitialize()
 		end
 	end
 	WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
-	
+
 	local function DownloadProgress(_, _, sizeCurrent, sizeTotal, name)
 		local index = downloading and downloading.downloads[name]
 		if not index then
@@ -461,7 +461,7 @@ function DelayedInitialize()
 		downloading.progress[index] = (sizeCurrent < sizeTotal*2) and math.ceil(100*sizeCurrent/sizeTotal)
 		replacablePopup:SetText(string.format(downloading.dlString, downloading.progress[1] or 0, downloading.progress[2] or 0))
 	end
-	
+
 	WG.DownloadHandler.AddListener("DownloadProgress", DownloadProgress)
 end
 

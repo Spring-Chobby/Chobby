@@ -4,7 +4,7 @@ function Downloader:init(buttonsMode, tbl, timeout, updateListener, completeList
 	self:super("init")
 
 	self.wrapperAsFallback = false
-	
+
 	queueFont = queueFont or 1
 	self.lblDownload = Label:New {
 		x = 20 + ((buttonsMode and 75) or 0),
@@ -69,7 +69,7 @@ function Downloader:init(buttonsMode, tbl, timeout, updateListener, completeList
 			local download = self.downloads[self.startedDownload]
 			WG.DownloadHandler.CancelDownload(download.archiveName, download.archiveType)
 		end
-		
+
 		self.cancelButton = Button:New {
 			x = 1,
 			y = 1,
@@ -85,12 +85,12 @@ function Downloader:init(buttonsMode, tbl, timeout, updateListener, completeList
 		}
 		self.cancelButton:Hide()
 	end
-	
+
 	self.lblDownload:Hide()
 	self.prDownload:Hide()
 	self.queueLabel:Hide()
 	self.queueList:Hide()
-	
+
 	self.duplicateDownloads = {}
 
 	self.downloads = {}
@@ -100,7 +100,7 @@ function Downloader:init(buttonsMode, tbl, timeout, updateListener, completeList
 	self.updateListener = updateListener
 	self.completeListener = completeListener
 	self.visibleListener = visibleListener
-	
+
 	WG.DownloadHandler.AddListener("DownloadProgress", function (...) self:DownloadProgress(...) end)
 	WG.DownloadHandler.AddListener("DownloadStarted", function (...) self:DownloadStarted(...) end)
 	WG.DownloadHandler.AddListener("DownloadFinished", function (...) self:DownloadFinished(...) end)
@@ -145,7 +145,7 @@ function Downloader:UpdateQueue()
 	if self.updateListener then
 		self.updateListener(downloadCount, failure)
 	end
-	
+
 	if self.visibleListener then
 		self.visibleListener(true)
 	end
@@ -307,7 +307,7 @@ function Downloader:DownloadFailed(listener, downloadID, errorID)
 			body = "Starting backup download for " .. (self.downloads[downloadID].archiveName or "???"),
 		})
 	end
-	
+
 	self.prDownload:SetCaption("\255\255\0\0Download failed [".. errorID .."].\b")
 
 	-- Effectively a reimplementation of SignalMask from LUS

@@ -186,7 +186,7 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 				comboOptions[#comboOptions + 1] = "Invite to Party"
 			end
 		end
-		
+
 		if Configuration.canAuthenticateWithSteam and userControl.steamInvite and userInfo.steamID then
 			comboOptions[#comboOptions + 1] = "Invite to Campaign"
 		end
@@ -234,7 +234,7 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 		end
 		comboOptions = culled
 	end
-	
+
 	if #comboOptions == 0 then
 		comboOptions[1] = Label:New {
 			x = 0,
@@ -255,7 +255,7 @@ local function GetUserRankImageName(userName, userControl)
 	if userControl.isSingleplayer and not userBattleInfo.aiLib then
 		return IMAGE_PLAYER
 	end
-	
+
 	local image = GetUserRankImage(userInfo, userInfo.isBot or userBattleInfo.aiLib)
 	return image
 end

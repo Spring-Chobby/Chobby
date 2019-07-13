@@ -52,11 +52,11 @@ local function GetRandomTrack(previousTrack)
 			if randomTrackList[i] == previousTrack then
 				trackCount = trackCount - 1
 				previousTrackIndex = i
-				break 
+				break
 			end
 		end
 	end
-	
+
 	local randomTrack = math.ceil(math.random()*trackCount)
 	if randomTrack == previousTrackIndex then
 		randomTrack = trackCount + 1
@@ -118,11 +118,11 @@ function widget:Update()
 	if ingame or (WG.Chobby.Configuration.menuMusicVolume == 0 )then
 		return
 	end
-	
+
 	if not playingTrack then
-		return	
+		return
 	end
-	
+
 	local playedTime, totalTime = Spring.GetSoundStreamTime()
 	playedTime = math.floor(playedTime)
 	totalTime = math.floor(totalTime)
@@ -168,7 +168,7 @@ end
 function widget:Initialize()
 
 	math.randomseed(os.clock() * 100)
-	
+
 	local Configuration = WG.Chobby.Configuration
 
 	local function onConfigurationChange(listener, key, value)
@@ -184,7 +184,7 @@ function widget:Initialize()
 	end
 	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
 	WG.LibLobby.lobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
-	
+
 	WG.MusicHandler = MusicHandler
 end
 

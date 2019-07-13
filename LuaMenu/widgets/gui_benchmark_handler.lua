@@ -32,16 +32,16 @@ local function UploadBenchmarkFile(config, dataFilePath)
 		end
 		line = dataFile:read()
 	end
-	
+
 	table.sort(sortedLines)
-	
+
 	Spring.Echo(topLine or "no top line")
 	output = output .. playerName .. (topLine or ",no top line") .. "```\n```"
 	for i = 1, #sortedLines do
 		Spring.Echo(sortedLines[i])
 		output = output .. sortedLines[i] .. "```\n```"
 	end
-	
+
 	WG.WrapperLoopback.SendBugReport(config.name, output)
 end
 
@@ -72,39 +72,39 @@ local function RunBenchmark(config)
 	local function CancelFunc()
 		aborted = true
 	end
-	
+
 	WG.BattleRoomWindow.LeaveBattle()
 	WG.LibLobby.lobby:LeaveMatchMakingAll()
-	
+
 	local duplicates = config.duplicates or 1
 	local runTypes = (#config.runs)
 	local totalRuns = runTypes * duplicates
-	
+
 	local perm = (config.fixedOrder and GetIdentityPermutation(totalRuns)) or GetRandomPermutation(totalRuns)
-	
+
 	local function DownloadsComplete()
 		WG.Chobby.InformationPopup("Running the benchmark. It may take a few minutes to launch each test case. Zero-K will close when the benchmark is complete. Submit the result by allowing the upload of an automated crash report.", {caption = "Abort", closeFunc = CancelFunc, buttonClass = "negative_button", width = 524, height = 260})
-		
+
 		local runData = config.runs
 		local dataFile = io.open(dataFilePath, "w")
 		dataFile:write(config.topRow)
 		dataFile:close()
-		
+
 		local index = 1
 		local realIndex, realName = 1, 1
 		local RunNext, CheckNextRun
-		
+
 		function RunNext()
 			if aborted then
 				return
 			end
 			realIndex = perm[index]%runTypes + 1
 			realName = runData[realIndex].runName .. " r" .. index
-			
+
 			local settings = runData[realIndex].settings
 			settings = settings .. "\nbenchmark_file_name = " .. dataFilePath
 			settings = settings .. "\nbenchmark_run_name = " .. realName
-			
+
 			local params = {
 				StartDemoName = runData[realIndex].file,
 				Engine = runData[realIndex].engine,
@@ -112,7 +112,7 @@ local function RunBenchmark(config)
 			}
 			WG.WrapperLoopback.StartNewSpring(params)
 		end
-		
+
 		function CheckNextRun()
 			if aborted then
 				return
@@ -133,11 +133,11 @@ local function RunBenchmark(config)
 			end
 			WG.Delay(CheckNextRun, 5)
 		end
-		
+
 		RunNext()
 		WG.Delay(CheckNextRun, 5)
 	end
-	
+
 	if WG.SteamCoopHandler.CheckDownloads(config.game, config.map, DownloadsComplete) then
 		DownloadsComplete()
 	end
@@ -149,7 +149,7 @@ end
 
 local function InitializeControls(parentControl)
 	local Configuration = WG.Chobby.Configuration
-	
+
 	Label:New {
 		x = 15,
 		y = 11,
@@ -159,7 +159,7 @@ local function InitializeControls(parentControl)
 		font = Configuration:GetFont(3),
 		caption = "Benchmarker",
 	}
-	
+
 	Button:New {
 		right = 11,
 		y = 7,
@@ -175,11 +175,11 @@ local function InitializeControls(parentControl)
 		},
 		parent = parentControl,
 	}
-	
+
 	local benchmarkData = VFS.Include("benchmarks/config.lua")
-	
+
 	local offset = 70
-	
+
 	for i = 1, #benchmarkData do
 		Button:New {
 			x = 10,
@@ -197,7 +197,7 @@ local function InitializeControls(parentControl)
 			},
 			parent = parentControl,
 		}
-		
+
 		TextBox:New {
 			x = 200,
 			right = 15,
@@ -209,7 +209,7 @@ local function InitializeControls(parentControl)
 		}
 		offset = offset + 90
 	end
-	
+
 	if VFS.HasArchive("Zero-K $VERSION") then
 		Button:New {
 			x = "35%",
@@ -234,7 +234,7 @@ local function InitializeControls(parentControl)
 		}
 		offset = offset + 90
 	end
-	
+
 	-- No external functions as yet.
 	--local externalFunctions = {}
 	--return externalFunctions
@@ -271,6 +271,6 @@ end
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	
+
 	WG.BenchmarkHandler = BenchmarkHandler
 end

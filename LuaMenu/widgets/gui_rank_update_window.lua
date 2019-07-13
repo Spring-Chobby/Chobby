@@ -47,11 +47,11 @@ local function CreateRankUpdateWindow(oldIcon, newIcon)
 	local newRank, newLevel = IconToLevelRank(newIcon)
 	local isRankUp = newLevel > oldLevel or newRank > oldRank
 
-	if not isRankUp then 
+	if not isRankUp then
 		-- Seems like this is poor feedback?
 		return
 	end
-	
+
 	local rankFile = Configuration.gameConfig.largeRankFunction(newIcon)
 
 	rankUpdateWindow = Window:New {

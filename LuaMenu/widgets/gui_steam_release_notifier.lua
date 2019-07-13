@@ -27,14 +27,14 @@ local function SteamCheckPopup()
 	if WG.Chobby.Configuration.gameConfig.disableSteam or Configuration.canAuthenticateWithSteam or Configuration[doNotAskAgainKey] then
 		return
 	end
-	
+
 	local _, timeIsInTheFuture = Spring.Utilities.GetTimeDifferenceTable(releaseDate)
 	if timeIsInTheFuture then
 		return
 	end
-	
+
 	local width, height = Spring.GetViewSizes()
-	
+
 	local steamWindow = Window:New {
 		x = (width-460)/2,
 		y = (height-470)/2,
@@ -46,7 +46,7 @@ local function SteamCheckPopup()
 		parent = WG.Chobby.lobbyInterfaceHolder,
 		classname = "main_window",
 	}
-	
+
 	TextBox:New {
 		x = 74,
 		right = 15,
@@ -56,7 +56,7 @@ local function SteamCheckPopup()
 		text = "Zero-K is on Steam!",
 		parent = steamWindow,
 	}
-	
+
 	TextBox:New {
 		x = 28,
 		right = 28,
@@ -66,11 +66,11 @@ local function SteamCheckPopup()
 		text = "You can help out by switching to the Steam version of Zero-K. This lets Steam know that people are interested in Zero-K which should, in turn, show the game to more potential players. See the settings guide for how to link your account and transfer your settings.",
 		parent = steamWindow,
 	}
-	
+
 	local function CancelFunc()
 		steamWindow:Dispose()
 	end
-	
+
 	local offset = 225
 	Button:New {
 		x = "26%",
@@ -89,7 +89,7 @@ local function SteamCheckPopup()
 		parent = steamWindow,
 	}
 	offset = offset + 74
-	
+
 	Button:New {
 		x = "27%",
 		y = offset,
@@ -116,7 +116,7 @@ local function SteamCheckPopup()
 			}
 		}
 	}
-	
+
 	Button:New {
 		right = 2,
 		bottom = 2,
@@ -130,7 +130,7 @@ local function SteamCheckPopup()
 		},
 		parent = steamWindow,
 	}
-	
+
 	Checkbox:New {
 		x = 15,
 		width = 130,
@@ -148,7 +148,7 @@ local function SteamCheckPopup()
 			end
 		},
 	}
-	
+
 	-- I do not know why this fails to bring the dark background to the front. Leave it.
 	--WG.Chobby.PriorityPopup(factionWindow, CancelFunc, CancelFunc)
 end

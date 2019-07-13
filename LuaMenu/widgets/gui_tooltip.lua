@@ -137,12 +137,12 @@ local function GetTooltipLine(parent, hasImage, fontSize, xOffset, imageWidth)
 		end
 		textDisplay:SetText(newText)
 		textDisplay:SetPos(nil, newPosition)
-		
+
 		if newColor then
 			textDisplay.font.color = newColor
 			textDisplay:Invalidate()
 		end
-		
+
 		if hasImage then
 			if not imageDisplay.visible then
 				imageDisplay:Show()
@@ -227,7 +227,7 @@ local function GetBattleInfoHolder(parent, offset, battleID)
 			end
 		}
 	}
-	
+
 	local mapImageFile, needDownload = Configuration:GetMinimapSmallImage(battle.mapName)
 	local minimapImage = Image:New {
 		name = "minimapImage",
@@ -402,7 +402,7 @@ local function GetBattleTooltip(battleID, battle)
 	elseif battleTooltip.battleMode then
 		battleTooltip.battleMode.Hide()
 	end
-	
+
 	-- Players and Spectators
 	if battle.spectatorCount and battle.maxPlayers and battle.users then
 		if not battleTooltip.playerCount then
@@ -567,7 +567,7 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 		if not userTooltip.clan then
 			userTooltip.clan = GetTooltipLine(userTooltip.mainControl, true)
 		end
-		
+
 		local clanFile, needDownload = WG.UserHandler.GetClanImage(userInfo.clan)
 		userTooltip.clan.Update(offset, "Clan: " .. userInfo.clan, clanFile, nil, needDownload)
 		offset = offset + 20
@@ -581,15 +581,15 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 			userTooltip.friendIgnore = GetTooltipLine(userTooltip.mainControl, true)
 		end
 		userTooltip.friendIgnore.Update(
-			offset, 
-			userInfo.isIgnored and "Ignored" or "Friend", 
+			offset,
+			userInfo.isIgnored and "Ignored" or "Friend",
 			userInfo.isIgnored and IMAGE_MUTE or IMAGE_FRIEND
 		)
 		offset = offset + 20
 	elseif userTooltip.friendIgnore then
 		userTooltip.friendIgnore:Hide()
 	end
-	
+
 	-- Country
 	if userInfo.country then
 		if not userTooltip.country then
@@ -814,7 +814,7 @@ local function SetTooltipPos()
 	if tooltipChild.name == TOOLTIP_TEXT_NAME then
 		local text = tipTextDisplay.text
 		width  = tipTextDisplay.font:GetTextWidth(text) + 15
-		height = tooltipChild.height + 14 
+		height = tooltipChild.height + 14
 	else
 		-- Fudge numbers correspond to padding
 		width, height = tooltipChild.width + 9, tooltipChild.height + 8
@@ -823,7 +823,7 @@ local function SetTooltipPos()
 	if width > MAX_WINDOW_WIDTH then
 		width = MAX_WINDOW_WIDTH
 	end
-	
+
 	x = x + 20
 	y = screenHeight - y -- Spring y is from the bottom, chili is from the top
 
@@ -837,7 +837,7 @@ local function SetTooltipPos()
 	else
 		y = y + 20
 	end
-	
+
 	if x + width > screenWidth then
 		x = screenWidth - width
 	end

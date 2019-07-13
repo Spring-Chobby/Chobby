@@ -42,7 +42,7 @@ local function TranslateModule(moduleName)
 	end
 	local limit = string.sub(moduleName, limitPos + 9)
 	moduleName = string.sub(moduleName, 0, limitPos - 1)
-	
+
 	return moduleName, limit
 end
 
@@ -169,8 +169,8 @@ local function GetSave(filepath)
 end
 
 local function ValidSave(saveData)
-	return saveData and type(saveData) == "table" and 
-		saveData.name and saveData.commanderName and saveData.commanderLevel and 
+	return saveData and type(saveData) == "table" and
+		saveData.name and saveData.commanderName and saveData.commanderLevel and
 		saveData.date and saveData.initializationComplete
 end
 
@@ -244,7 +244,7 @@ end
 local function UpdateCommanderModuleCounts()
 	local loadout = gamedata.commanderLoadout
 	commanderModuleCounts = {}
-	
+
 	local level = 0
 	while loadout[level] do
 		for i = 1, #loadout[level] do
@@ -273,12 +273,12 @@ end
 
 local function UpdateModuleRequirements()
 	local loadout = gamedata.commanderLoadout
-	
+
 	local commConfig = WG.Chobby.Configuration.campaignConfig.commConfig
 	local chassisDef = commConfig.chassisDef
 	local moduleDefs = commConfig.moduleDefs
 	local moduleDefNames = commConfig.moduleDefNames
-	
+
 	local level = 0
 	while loadout[level] do
 		for slot = 1, #loadout[level] do
@@ -301,7 +301,7 @@ local function SelectCommanderModule(level, slot, moduleName, supressEvent)
 	if not gamedata.commanderLoadout[level] then
 		gamedata.commanderLoadout[level] = {}
 	end
-	
+
 	local oldModule = gamedata.commanderLoadout[level][slot]
 	if moduleName == oldModule then
 		if not supressEvent then
@@ -310,7 +310,7 @@ local function SelectCommanderModule(level, slot, moduleName, supressEvent)
 		return
 	end
 	gamedata.commanderLoadout[level][slot] = moduleName
-	
+
 	if not supressEvent then
 		UpdateCommanderModuleCounts()
 		if not commanderModuleCounts[oldModule] then
@@ -318,13 +318,13 @@ local function SelectCommanderModule(level, slot, moduleName, supressEvent)
 		end
 		CallListeners("ModulePutInSlot", moduleName, oldModule, level, slot)
 	end
-	
+
 	SaveGame()
 end
 
 local function UnlockModuleSlots(level)
 	local chassisDef = WG.Chobby.Configuration.campaignConfig.commConfig.chassisDef
-	
+
 	level = math.min(level, chassisDef.highestDefinedLevel)
 	local initalModules = chassisDef.levelDefs[level].upgradeSlots
 	for i = 1, #initalModules do
@@ -343,7 +343,7 @@ local function GainExperience(newExperience, gainedBonusExperience)
 	local oldLevel = gamedata.commanderLevel
 	gamedata.commanderExperience = gamedata.commanderExperience + newExperience
 	for i = 1, 50 do
-		local requirement = Configuration.campaignConfig.commConfig.GetLevelRequirement(gamedata.commanderLevel + 1) 
+		local requirement = Configuration.campaignConfig.commConfig.GetLevelRequirement(gamedata.commanderLevel + 1)
 		if (not requirement) or (requirement > gamedata.commanderExperience) then
 			break
 		end
@@ -353,7 +353,7 @@ local function GainExperience(newExperience, gainedBonusExperience)
 	if oldLevel < gamedata.commanderLevel then
 		UpdateCommanderModuleCounts()
 	end
-	
+
 	CallListeners("GainExperience", oldExperience, oldLevel, gamedata.commanderExperience, gamedata.commanderLevel, gainedBonusExperience)
 end
 
@@ -368,7 +368,7 @@ local function RecalculateCommanderLevel()
 	gamedata.commanderLevel = 0
 	gamedata.commanderExperience = 0
 	GainExperience(oldExperience)
-	
+
 	local level = 0
 	while loadout[level] do
 		if level > gamedata.commanderLevel then
@@ -387,17 +387,17 @@ local function SanityCheckCommanderLevel()
 	local conf = WG.Chobby.Configuration.campaignConfig.commConfig
 	local levelExperience = conf.GetLevelRequirement(gamedata.commanderLevel)
 	local nextExperiece = conf.GetLevelRequirement(gamedata.commanderLevel + 1)
-	
+
 	if not (levelExperience and nextExperiece and gamedata.commanderExperience) then
 		RecalculateCommanderLevel()
 		return false
 	end
-	
+
 	if (gamedata.commanderExperience < levelExperience) or (nextExperiece < gamedata.commanderExperience) then
 		RecalculateCommanderLevel()
 		return false
 	end
-	
+
 	return true
 end
 
@@ -410,12 +410,12 @@ local function LoadGame(saveData, refreshGUI)
 		Spring.CreateDir(SAVE_DIR)
 		ResetGamedata()
 		gamedata = Spring.Utilities.MergeTable(saveData, gamedata, true)
-		
+
 		if not gamedata.campaignID then
 			GenerateCampaignID()
 			SaveGame()
 		end
-		
+
 		if SanityCheckCommanderLevel() then
 			UpdateCommanderModuleCounts()
 		else
@@ -425,7 +425,7 @@ local function LoadGame(saveData, refreshGUI)
 			CallListeners("CampaignLoaded")
 		end
 		WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", saveData.name)
-	
+
 		Spring.Log(widget:GetInfo().name, LOG.INFO, "Save file " .. saveData.name .. " loaded")
 	end)
 	if (not success) then
@@ -438,7 +438,7 @@ local function StartNewGame()
 	local campaignConfig = WG.Chobby.Configuration.campaignConfig
 	ResetGamedata()
 	GenerateCampaignID()
-	
+
 	local planets = campaignConfig.planetDefs.initialPlanets
 	UnlockRewardSet(campaignConfig.initialUnlocks)
 	for i = 1, #planets do
@@ -447,7 +447,7 @@ local function StartNewGame()
 	SetupInitialCommander()
 	UpdateCommanderModuleCounts()
 	local success, saveName = SaveGame()
-	
+
 	CallListeners("CampaignLoaded")
 	return success and saveName
 end
@@ -468,7 +468,7 @@ local function LoadCampaignData()
 	Spring.Log(widget:GetInfo().name, LOG.INFO, "Loading campaign data")
 	local Configuration = WG.Chobby.Configuration
 	local saves = GetSaves()
-	
+
 	-- try loading save whose name is stored in config (this should be the last save we played)
 	if Configuration.campaignSaveFile then
 		Spring.Log(widget:GetInfo().name, LOG.INFO, "Config save file: " .. Configuration.campaignSaveFile)
@@ -483,7 +483,7 @@ local function LoadCampaignData()
 	else
 		Spring.Log(widget:GetInfo().name, LOG.INFO, "No configured save data")
 	end
-	
+
 	-- Configuration.campaignSaveFile does not point to a valid save
 	-- pick the first save that actually exists (if there's one)
 	for savename,saveData in pairs(saves) do
@@ -491,7 +491,7 @@ local function LoadCampaignData()
 		LoadGame(saveData, true)
 		return true
 	end
-	
+
 	-- we got nothing
 	WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", nil)
 end
@@ -510,14 +510,14 @@ local function FindMatchingSave(campaignID, commName)
 	if campaignID == gamedata.campaignID and commName == gamedata.commanderName then
 		return false
 	end
-	
+
 	local saveFiles = GetSaves()
 	for name, save in pairs(saveFiles) do
 		if campaignID == save.campaignID and commName == save.commanderName then
 			return true, name
 		end
 	end
-	
+
 	return true
 end
 
@@ -525,13 +525,13 @@ function externalFunctions.ApplyCampaignPartialSaveData(saveData)
 	if not saveData then
 		return
 	end
-	
+
 	local commander = saveData.commander
 	local planets = saveData.planets
 	if not (commander and planets) then
 		return
 	end
-	
+
 	local needLoad, existingSave = FindMatchingSave(saveData.campaignID, commander.name)
 	if needLoad then
 		if existingSave then
@@ -542,13 +542,13 @@ function externalFunctions.ApplyCampaignPartialSaveData(saveData)
 		end
 	end
 	WG.CampaignData.SetDifficultySetting(saveData.difficultySetting)
-	
+
 	local CapturePlanet = WG.CampaignData.CapturePlanet
 	for i = 1, #planets do
 		local planet = planets[i]
 		CapturePlanet(planet.planetID, planet.bonusObjStatus, 0)
 	end
-	
+
 	gamedata.commanderLoadout = commander.modules or {}
 	CallListeners("UpdateCommanderLoadout")
 	SaveGame()
@@ -557,27 +557,27 @@ end
 function externalFunctions.GetCampaignPartialSaveData()
 	local planetList = gamedata.planetsCaptured.list
 	local bonusMap = gamedata.bonusObjectivesComplete.map
-	
+
 	local planetDefs = WG.Chobby.Configuration.campaignConfig.planetDefs.planets
-	
+
 	local captureData = {}
 	for i = 1, #planetList do
 		local planetID = planetList[i]
 		local bonusConfig = planetDefs[planetID].gameConfig.bonusObjectiveConfig
-		
+
 		local bonusObjStatus = {}
 		if bonusConfig then
 			for j = 1, #bonusConfig do
 				bonusObjStatus[j] = (bonusMap[planetID .. "_" .. j] and true) or false
 			end
 		end
-		
+
 		captureData[#captureData + 1] = {
 			planetID = planetID,
 			bonusObjStatus = bonusObjStatus,
 		}
 	end
-	
+
 	return {
 		campaignID = gamedata.campaignID,
 		commander = externalFunctions.GetPlayerCommander(),
@@ -604,7 +604,7 @@ function externalFunctions.SetDifficultySetting(newDifficulty)
 		return
 	end
 	gamedata.difficultySetting = newDifficulty
-	
+
 	CallListeners("CampaignSettingsUpdate")
 	SaveGame()
 end
@@ -614,7 +614,7 @@ function externalFunctions.CapturePlanet(planetID, bonusObjectives, difficulty)
 	local saveRequired = false
 	local gainedExperience = 0
 	local gainedBonusExperience = 0
-	
+
 	if UnlockThing(gamedata.planetsCaptured, planetID) then
 		gainedExperience = gainedExperience + (planet.completionReward.experience or 0)
 		saveRequired = true
@@ -624,12 +624,12 @@ function externalFunctions.CapturePlanet(planetID, bonusObjectives, difficulty)
 		CallListeners("PlanetCaptured", planetID)
 		CallListeners("RewardGained", planet.completionReward)
 	end
-	
+
 	if difficulty > (gamedata.completionDifficulty[planetID] or 0) then
 		gamedata.completionDifficulty[planetID] = difficulty
 		saveRequired = true
 	end
-	
+
 	if bonusObjectives then
 		local bonusConfig = planet.gameConfig.bonusObjectiveConfig
 		if bonusConfig then
@@ -649,9 +649,9 @@ function externalFunctions.CapturePlanet(planetID, bonusObjectives, difficulty)
 			end
 		end
 	end
-	
+
 	GainExperience(gainedExperience, gainedBonusExperience)
-	
+
 	if saveRequired then
 		-- Only update lowest difficulty if something was achieved. Do not set lowest difficulty for Imported victories (they are shown on planets anyway).
 		if difficulty > 0 and ((not gamedata.leastDifficulty) or (difficulty < gamedata.leastDifficulty)) then
@@ -814,7 +814,7 @@ function externalFunctions.GetSaves()
 	return GetSaves()
 end
 
-function externalFunctions.LoadGameByFilename(filename)	
+function externalFunctions.LoadGameByFilename(filename)
 	local saves = GetSaves()
 	local saveData = saves[filename]
 	if saveData then
@@ -827,7 +827,7 @@ end
 
 function externalFunctions.DeleteSave(filename, supressLastSavePrompt)
 	local Configuration = WG.Chobby.Configuration
-	
+
 	local success, err = pcall(function()
 		local pathNoExtension = SAVE_DIR .. "/" .. filename
 		os.remove(pathNoExtension .. ".lua")
@@ -863,9 +863,9 @@ externalFunctions.SetupNewSave = SetupNewSave
 function widget:Initialize()
 	CHOBBY_DIR = "LuaMenu/widgets/chobby/"
 	VFS.Include("LuaMenu/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	
+
 	WG.CampaignData = externalFunctions
-	
+
 	WG.Delay(LoadCampaignData, 0.1)
 end
 

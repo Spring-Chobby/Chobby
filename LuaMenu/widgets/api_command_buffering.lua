@@ -56,7 +56,7 @@ function widget:Update()
 		end
 		return
 	end
-	
+
 	lobby.bufferCommandsEnabled = false
 	local repetitions = 1
 	while repetitions <= CMD_PER_UPDATE and lobby:ProcessBuffer() do

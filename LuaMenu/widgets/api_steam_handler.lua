@@ -45,7 +45,7 @@ local function JoinFriend(friendID)
 		return
 	end
 	lobby:InviteToParty(userName)
-	
+
 	local userInfo = lobby:GetUser(userName) or {}
 	if userInfo.battleID then
 		WG.Chobby.interfaceRoot.TryToJoinBattle(userInfo.battleID)
@@ -59,7 +59,7 @@ local function InitializeListeners()
 		return
 	end
 	listenersInitialized = true
-	
+
 	local function OnUsersSent()
 		if storedFriendList then
 			AddSteamFriends(storedFriendList)
@@ -70,7 +70,7 @@ local function InitializeListeners()
 			storedJoinFriendID = nil
 		end
 	end
-	
+
 	lobby:AddListener("OnFriendList", OnUsersSent) -- All users are present before FriendList is recieved.
 end
 
@@ -89,28 +89,28 @@ function SteamHandler.SteamOnline(authToken, joinFriendID, friendList, suggested
 	Spring.Echo("SteamOnline", "Received")
 	Configuration:SetConfigValue("canAuthenticateWithSteam", true)
 	Configuration:SetConfigValue("suggestedNameFromSteam", suggestedNameFromSteam)
-	
+
 	local lobby = WG.LibLobby.lobby
 	if not lobby then
 		Spring.Echo("Loopback error: Sent steam before lobby initialization")
 		return
 	end
-	
+
 	if authToken then
 		lobby:SetSteamAuthToken(authToken)
 	end
 	if myDlc then
 		lobby:SetSteamDlc(myDlc)
 	end
-	
+
 	if storedFriendList then
 		for i = 1, #storedFriendList do
 			steamFriendByID[storedFriendList[i]] = true
 		end
 	end
-	
+
 	WG.LoginWindowHandler.TrySimpleSteamLogin()
-	
+
 	if lobby.status == "connected" then
 		AddSteamFriends(storedFriendList)
 	else
@@ -125,9 +125,9 @@ function SteamHandler.SteamJoinFriend(joinFriendID)
 		Spring.Echo("Loopback error: Sent steam before lobby initialization")
 		return
 	end
-	
+
 	if lobby.status == "connected" then
-		JoinFriend(joinFriendID) 
+		JoinFriend(joinFriendID)
 	else
 		storedJoinFriendID = joinFriendID
 	end
@@ -193,7 +193,7 @@ function DelayedInitialize()
 	InitializeListeners()
 end
 
-function widget:Initialize() 
+function widget:Initialize()
 	WG.SteamHandler = SteamHandler
 	WG.Delay(DelayedInitialize, 0.1)
 end

@@ -61,7 +61,7 @@ end
 
 local function CreateMissionEntry(missionData)
 	local Configuration = WG.Chobby.Configuration
-	
+
 	local holder = Panel:New {
 		x = 0,
 		y = 0,
@@ -70,7 +70,7 @@ local function CreateMissionEntry(missionData)
 		draggable = false,
 		padding = {0, 0, 0, 0},
 	}
-	
+
 	local imagePanel = Panel:New {
 		x = 2,
 		y = 2,
@@ -92,7 +92,7 @@ local function CreateMissionEntry(missionData)
 			parent = imagePanel,
 		}
 	end
-	
+
 	local startButton = Button:New {
 		x = 86,
 		y = 34,
@@ -104,7 +104,7 @@ local function CreateMissionEntry(missionData)
 		OnClick = {
 			function()
 				local startScript = missionData.Script
-				
+
 				local gameName = WG.Chobby.Configuration:GetDefaultGameName()
 				local haveGame = VFS.HasArchive(gameName)
 				if not haveGame then
@@ -112,23 +112,23 @@ local function CreateMissionEntry(missionData)
 					WG.DownloadHandler.MaybeDownloadArchive(gameName, "game", -1)
 					return
 				end
-				
+
 				local haveMap = VFS.HasArchive(missionData.Map)
 				if not haveMap then
 					WG.Chobby.InformationPopup("You do not have the map file required. It will now be downloaded.")
 					WG.DownloadHandler.MaybeDownloadArchive(missionData.Map, "map", -1)
 					return
 				end
-				
+
 				local gameName = WG.Chobby.Configuration:GetDefaultGameName()
 				if string.find(gameName, ":") then
 					gameName = "rapid://" .. gameName
 				end
-			
+
 				startScript = startScript:gsub("%%MAP%%",  missionData.Map)
 				startScript = startScript:gsub("%%MOD%%",  gameName)
 				startScript = startScript:gsub("%%NAME%%", WG.Chobby.localLobby:GetMyUserName())
-				
+
 				WG.Analytics.SendOnetimeEvent("lobby:singleplayer:missions:start_" .. missionData.DisplayName)
 				WG.Analytics.SendRepeatEvent("game_start:tutorial:" .. missionData.DisplayName, 1)
 				WG.Chobby.localLobby:StartGameFromString(startScript, "tutorial")
@@ -136,7 +136,7 @@ local function CreateMissionEntry(missionData)
 		},
 		parent = holder,
 	}
-	
+
 	--local missionOrder = TextBox:New {
 	--	name = "missionOrder",
 	--	x = 90,
@@ -148,12 +148,12 @@ local function CreateMissionEntry(missionData)
 	--	text = tostring(missionData.FeaturedOrder or ""),
 	--	parent = holder,
 	--}
-	
+
 	local missionName = missionData.DisplayName
 	if missionData.FeaturedOrder then
 		missionName = tostring(missionData.FeaturedOrder) .. ": " .. missionName
 	end
-	
+
 	local missionName = TextBox:New {
 		name = "missionName",
 		x = 90,
@@ -187,7 +187,7 @@ local function CreateMissionEntry(missionData)
 	--	text = missionData.Map,
 	--	parent = holder,
 	--}
-	
+
 	return holder, {missionData.FeaturedOrder or math.huge, missionData.DisplayName, missionData.Difficulty or 0, missionData.Map}
 end
 
@@ -197,7 +197,7 @@ end
 
 local function InitializeControls(parentControl)
 	local Configuration = WG.Chobby.Configuration
-	
+
 	Label:New {
 		x = 15,
 		y = 11,
@@ -207,7 +207,7 @@ local function InitializeControls(parentControl)
 		font = Configuration:GetFont(3),
 		caption = "Learn advanced techniques in these tutorials",
 	}
-	
+
 	local btnLeaveScreen = Button:New {
 		right = 11,
 		y = 7,
@@ -223,9 +223,9 @@ local function InitializeControls(parentControl)
 		},
 		parent = parentControl,
 	}
-	
+
 	local missions = LoadMissions()
-	
+
 	if not missions then
 		local missingPanel = Panel:New {
 			classname = "overlay_window",
@@ -235,7 +235,7 @@ local function InitializeControls(parentControl)
 			bottom = "44%",
 			parent = parentControl,
 		}
-		
+
 		local missingLabel = Label:New {
 			x = "5%",
 			y = "5%",
@@ -260,11 +260,11 @@ local function InitializeControls(parentControl)
 		}
 		return
 	end
-	
+
 	-------------------------
 	-- Generate List
 	-------------------------
-	
+
 	local listHolder = Control:New {
 		x = 12,
 		right = 15,
@@ -275,7 +275,7 @@ local function InitializeControls(parentControl)
 		draggable = false,
 		padding = {0, 0, 0, 0},
 	}
-	
+
 	--local headings = {
 	--	{name = "#", x = 88, width = 36},
 	--	{name = "Name", x = 124, width = 157},
@@ -283,7 +283,7 @@ local function InitializeControls(parentControl)
 	--	{name = "Map", x = 416, right = 5},
 	--}
 	--local missionList = WG.Chobby.SortableList(listHolder, headings, 80, 1)
-	
+
 	local missionList = WG.Chobby.SortableList(listHolder, nil, 80, 1)
 
 	local items = {}
@@ -293,7 +293,7 @@ local function InitializeControls(parentControl)
 			items[#items + 1] = {#items, controls, order}
 		end
 	end
-	
+
 	missionList:AddItems(items)
 end
 
@@ -320,7 +320,7 @@ function MissionHandler.GetControl()
 			end
 		},
 	}
-	
+
 	WG.Delay(DownloadRequirements, 0.1)
 	return window
 end

@@ -104,10 +104,10 @@ function onLaunchReplay(wtf, replay, game, map, engine)
 	--Echo("game: ".. game)
 	--Echo('map: '.. map)
 	--Echo('engine: '.. engine)
-	
+
 	restartEngine = (not WG.Chobby.Configuration:IsValidEngineVersion(engine)) and engine
 	hasFile = false
-	
+
 	replayMap = map
 	replayGame = game
 
@@ -152,7 +152,7 @@ local function AttemptStart(saveFilename)
 	if not saveFilename then
 		return
 	end
-	
+
 	Echo("Replay download complete.")
 	WG.SteamCoopHandler.AttemptGameStart("replay", replayGame, replayMap, nil, nil, saveFilename, restartEngine)
 end
@@ -215,7 +215,7 @@ function widget:Update()
 			set:remove(input)
 		end
 	end
-	
+
 	for __, output in ipairs(writeable) do
 		SocketWriteAble(output)
 	end

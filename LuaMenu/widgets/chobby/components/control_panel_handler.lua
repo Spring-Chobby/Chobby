@@ -10,13 +10,13 @@ function GetControlPanelHandler(panelHolder)
 	-------------------------------------------------------------------
 
 	local fontSizeScale = fontSizeScale or 3
-	
+
 	local controlWidth = 290
 	local controlHeight = 70
 	local columnCount = 2
-	
+
 	local updateFunction
-	
+
 	local controls = {}
 
 	-------------------------------------------------------------------
@@ -26,7 +26,7 @@ function GetControlPanelHandler(panelHolder)
 	local function SetControlPositionAndSize(index)
 		local row = math.floor((index - 1)/columnCount)
 		local column = (index - row*columnCount - 1)
-	
+
 		controls[index].control:SetPos(
 			column * (controlWidth + CONTROL_SIDE_SPACING),
 			row * (controlHeight + CONTROL_SPACING),
@@ -42,18 +42,18 @@ function GetControlPanelHandler(panelHolder)
 		if updateFunction then
 			updateFunction()
 		end
-		
+
 		if #controls > 2 then
 			controlHeight = 38
 		else
 			controlHeight = 79
 		end
-		
+
 		for i = 1, #controls do
 			SetControlPositionAndSize(i)
 		end
 	end
-	
+
 	function externalFunctions.GetControlCount()
 		return #controls
 	end
@@ -66,12 +66,12 @@ function GetControlPanelHandler(panelHolder)
 		return panelHolder:GetChildByName(name)
 	end
 
-	
+
 	function externalFunctions.RemoveControl(name)
 		if not panelHolder:GetChildByName(name) then
 			return
 		end
-		
+
 		local found = false
 		for i = 1, #controls do
 			if controls[i].control.name == name then
@@ -91,7 +91,7 @@ function GetControlPanelHandler(panelHolder)
 		if panelHolder:GetChildByName(control.name) then
 			return
 		end
-	
+
 		rank = rank or 0
 		local controlCount = externalFunctions.GetControlCount()
 		local addPosition = 1
@@ -101,18 +101,18 @@ function GetControlPanelHandler(panelHolder)
 			end
 			addPosition = addPosition + 1
 		end
-		
+
 		for i = controlCount, addPosition, -1 do
 			controls[i + 1] = controls[i]
 		end
-		
+
 		panelHolder:AddChild(control)
-		
+
 		controls[addPosition] = {
 			control = control,
 			rank = rank,
 		}
-		
+
 		externalFunctions.UpdateLayout()
 	end
 

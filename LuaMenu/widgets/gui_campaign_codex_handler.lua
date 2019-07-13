@@ -41,7 +41,7 @@ end
 
 local function LoadCodexEntries(path)
 	local codexEntries = WG.Chobby.Configuration.campaignConfig.codex
-	
+
 	local categories = {}
 	local categoriesOrdered = {}
 	for id, entry in pairs(codexEntries) do
@@ -49,7 +49,7 @@ local function LoadCodexEntries(path)
 		local cat = categories[entry.category]
 		cat[#cat + 1] = entry
 	end
-	
+
 	-- sort categories
 	for catID in pairs(categories) do
 		categoriesOrdered[#categoriesOrdered + 1] = catID
@@ -81,10 +81,10 @@ local function PopulateCodexTree(parent, codexText, codexImage)
 	if codexTree then
 		codexTree:Dispose()
 	end
-	
+
 	local nodes = {}
 	local codexEntries, categories, categoriesOrdered = LoadCodexEntries()
-	
+
 	-- make tree view nodes
 	for i = 1, #categoriesOrdered do
 		local catID = categoriesOrdered[i]
@@ -100,7 +100,7 @@ local function PopulateCodexTree(parent, codexText, codexImage)
 					name = entry.id,
 					height = 24,
 					caption = entry.name,
-					OnClick = { 
+					OnClick = {
 						function(self)
 							if selectedButton and selectedButton.name == self.name then
 								ButtonUtilities.SetButtonDeselected(selectedButton)
@@ -119,9 +119,9 @@ local function PopulateCodexTree(parent, codexText, codexImage)
 					},
 					font = WG.Chobby.Configuration:GetFont(BUTTON_FONT)
 				}
-				
+
 				ButtonUtilities.SetFontSizeScale(button, BUTTON_FONT)
-				
+
 				if not alreadyRead then
 					ButtonUtilities.SetButtonHighlighted(button)
 				end
@@ -130,7 +130,7 @@ local function PopulateCodexTree(parent, codexText, codexImage)
 		end
 		nodes[#nodes + 1] = node
 	end
-	
+
 	-- make treeview
 	for i = 1, #parent.children do
 		parent.children[i]:Dispose()
@@ -151,7 +151,7 @@ end
 
 local function InitializeControls(parentControl)
 	local Configuration = WG.Chobby.Configuration
-	
+
 	Label:New {
 		x = 20,
 		right = 5,
@@ -161,7 +161,7 @@ local function InitializeControls(parentControl)
 		caption = i18n("codex"),
 		parent = parentControl
 	}
-	
+
 	local btnClose = Button:New {
 		right = 11,
 		y = 7,
@@ -196,7 +196,7 @@ local function InitializeControls(parentControl)
 		text = "",
 		font = Configuration:GetFont(2),
 	}
-	
+
 	local codexImagePanel = Panel:New{
 		parent = parentControl,
 		x = "41%",
@@ -211,7 +211,7 @@ local function InitializeControls(parentControl)
 		width = "100%",
 		height = "100%",
 	}
-	
+
 	local codexTreeScroll = ScrollPanel:New{
 		parent = parentControl,
 		x = 12,
@@ -221,14 +221,14 @@ local function InitializeControls(parentControl)
 		orientation = "vertical",
 		children = {}
 	}
-	
+
 	local externalFunctions = {}
-	
+
 	function externalFunctions.PopulateCodexTree()
 		PopulateCodexTree(codexTreeScroll, codexText, codexImage)
 	end
 	externalFunctions.PopulateCodexTree()
-	
+
 	return externalFunctions
 end
 
@@ -264,14 +264,14 @@ end
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	
+
 	local function CampaignLoaded(listener)
 		if codexManagerStuff then
 			codexManagerStuff.PopulateCodexTree()
 		end
 	end
 	WG.CampaignData.AddListener("CampaignLoaded", CampaignLoaded)
-	
+
 	local function RewardGained(listener, reward)
 		if codexManagerStuff and reward.codexEntries then
 			-- Should really use Add here.
@@ -279,7 +279,7 @@ function widget:Initialize()
 		end
 	end
 	WG.CampaignData.AddListener("RewardGained", RewardGained)
-	
+
 	WG.CodexHandler = CodexHandler
 end
 
