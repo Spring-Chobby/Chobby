@@ -538,7 +538,11 @@ function LoginWindow:createAgreementWindow()
 		font = Configuration:GetFont(3),
 		OnClick = {
 			function()
-				self:acceptAgreement(self.ebVerif.text)
+				local verificationCode = ""
+				if self.emailRequired then
+					verificationCode = self.ebVerif.text
+				end
+				self:acceptAgreement(verificationCode)
 			end
 		},
 		parent = self.agreementWindow,
@@ -559,8 +563,8 @@ function LoginWindow:createAgreementWindow()
 	}
 end
 
-function LoginWindow:acceptAgreement(verif_code)
-	lobby:ConfirmAgreement(verif_code)
+function LoginWindow:acceptAgreement(verificationCode)
+	lobby:ConfirmAgreement(verificationCode)
 	self.agreementWindow:Dispose()
 end
 
