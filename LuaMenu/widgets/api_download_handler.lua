@@ -323,7 +323,7 @@ function widget:DownloadProgress(downloadID, downloaded, total)
 	if not index then
 		return
 	end
-	downloaded = download / 1024 / 1024
+	downloaded = downloaded / 1024 / 1024
 	total = total / 1024 / 1024
 	CallListeners("DownloadProgress", downloadQueue[index].id, downloaded, total, downloadQueue[index].name)
 end
