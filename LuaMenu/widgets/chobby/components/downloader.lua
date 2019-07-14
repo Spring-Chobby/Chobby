@@ -205,42 +205,12 @@ function Downloader:DownloadProgress(listener, downloadID, downloaded, total)
 
 	self._lastUpdate = currentTime
 
-	local elapsedTime = os.clock() - self.downloads[downloadID].startTime
-	local doneRatio = downloaded / total
-	local remainingSeconds = (1 - doneRatio) * elapsedTime / (doneRatio + 0.001)
-
-	-- calculate suffix
-	local suffix = "B"
-	if total > 1024 then
-		total = total / 1024
-		downloaded = downloaded / 1024
-		suffix = "KB"
-	end
-	if total > 1024 then
-		total = total / 1024
-		downloaded = downloaded / 1024
-		suffix = "MB"
-	end
-	local remainingTimeStr = ""
-	remainingSeconds = math.ceil(remainingSeconds)
-	if remainingSeconds > 60 then
-		local minutes = math.floor(remainingSeconds / 60)
-		remainingSeconds = remainingSeconds - minutes * 60
-		if minutes > 60 then
-			local hours = math.floor(minutes / 60)
-			minutes = minutes - hours * 60
-			remainingTimeStr = remainingTimeStr .. tostring(hours) .. "h"
-		end
-		remainingTimeStr = remainingTimeStr .. tostring(minutes) .. "m"
-	end
-	remainingTimeStr = remainingTimeStr .. tostring(remainingSeconds) .. "s"
 	-- round to one decimal
 	local totalStr = round2(total, 1)
 	local downloadedStr = round2(downloaded, 1)
 
-	--self.prDownload:SetCaption(remainingTimeStr .. " left: " .. downloadedStr .. "/" .. totalStr .. " MB")
 	self.prDownload:SetCaption(downloadedStr .. "/" .. totalStr .. " MB")
-	self.prDownload:SetValue(100 * doneRatio)
+	self.prDownload:SetValue(100 * downloaded / total)
 end
 
 function Downloader:DownloadStarted(listener, downloadID)
