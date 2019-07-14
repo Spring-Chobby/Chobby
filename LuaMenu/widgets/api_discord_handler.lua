@@ -140,6 +140,11 @@ end
 -- Initialization
 
 local function DelayedInitialize()
+	if WG.WrapperLoopback == nil or WG.WrapperLoopback.DiscordUpdatePresence == nil then
+		widgetHandler:RemoveWidget(widget)
+		return
+	end
+
 	SetDiscordPlaying("In menu")
 
 	local function OnBattleAboutToStart(_, battleType)
@@ -195,6 +200,10 @@ local function DelayedInitialize()
 end
 
 function widget:ActivateMenu()
+	if WG.WrapperLoopback == nil or WG.WrapperLoopback.DiscordUpdatePresence == nil then
+		widgetHandler:RemoveWidget(widget)
+		return
+	end
 	SetDiscordPlaying("In menu")
 end
 
