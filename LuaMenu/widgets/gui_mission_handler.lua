@@ -40,7 +40,7 @@ local alreadyDownloaded = {}
 local function DownloadRequirements()
 	local config = WG.Chobby.Configuration
 	local gameName = config:GetDefaultGameName()
-	if not alreadyDownloaded[gameName] then
+	if gameName ~= nil and not alreadyDownloaded[gameName] then
 		WG.DownloadHandler.MaybeDownloadArchive(gameName, "game", 1)
 		alreadyDownloaded[gameName] = true
 	end
