@@ -35,13 +35,13 @@ local function PopulateTab(settingPresets, settingOptions, settingsDefault)
 	local offset = 5
 	local customSettingsSwitch
 	local label, list
-	
+
 	if settingPresets then
 		label, list, customSettingsSwitch, offset = MakePresetsControl(settingPresets, offset)
 		children[#children + 1] = label
 		children[#children + 1] = list
 	end
-	
+
 	for i = 1, #settingOptions do
 		local data = settingOptions[i]
 		if data.displayModeToggle then
@@ -54,7 +54,7 @@ local function PopulateTab(settingPresets, settingOptions, settingsDefault)
 		children[#children + 1] = label
 		children[#children + 1] = list
 	end
-	
+
 	return children
 end
 
@@ -67,7 +67,7 @@ local function InitializeDifficultyWindow(parent)
 
 	local offset = 5
 	local freezeSettings = true
-	
+
 	Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -100,7 +100,7 @@ local function InitializeDifficultyWindow(parent)
 		parent = parent,
 	}
 	offset = offset + ITEM_OFFSET
-	
+
 	local function UpdateSettings()
 		freezeSettings = true
 		comboDifficulty:Select(WG.CampaignData.GetDifficultySetting())
@@ -108,7 +108,7 @@ local function InitializeDifficultyWindow(parent)
 	end
 	WG.CampaignData.AddListener("CampaignSettingsUpdate", UpdateSettings)
 	WG.CampaignData.AddListener("CampaignLoaded", UpdateSettings)
-	
+
 	freezeSettings = false
 end
 
@@ -118,7 +118,7 @@ end
 
 local function MakeStatLabel(parent, offset, name)
 	local fontSize = WG.Chobby.Configuration:GetFont(2).size
-	
+
 	TextBox:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -145,9 +145,9 @@ local function InitializeStatsWindow(parent)
 
 	local offset = 5
 	local freezeSettings = true
-	
+
 	local leastDifficulty, totalTime, totalVictoryTime, planets, bonusObjectives, level, experience
-	
+
 	offset, leastDifficulty  = MakeStatLabel(parent, offset, "Lowest difficulty")
 	offset, totalTime        = MakeStatLabel(parent, offset, "Ingame time")
 	offset, totalVictoryTime = MakeStatLabel(parent, offset, "Victory ingame time")
@@ -155,7 +155,7 @@ local function InitializeStatsWindow(parent)
 	offset, bonusObjectives  = MakeStatLabel(parent, offset, "Bonus objectives")
 	offset, level            = MakeStatLabel(parent, offset, "Commander level")
 	offset, experience       = MakeStatLabel(parent, offset, "Commander experience")
-	
+
 	local function UpdateStats()
 		local gamedata = WG.CampaignData.GetGamedataInATroublingWay()
 		leastDifficulty:SetText(DIFFICULTY_NAME_MAP[gamedata.leastDifficulty or 5])
@@ -166,14 +166,14 @@ local function InitializeStatsWindow(parent)
 		level:SetText(tostring((gamedata.commanderLevel or 0) + 1))
 		experience:SetText(tostring(gamedata.commanderExperience or 0))
 	end
-	
+
 	UpdateStats()
-	
+
 	WG.CampaignData.AddListener("CampaignLoaded", UpdateStats)
 	WG.CampaignData.AddListener("PlanetUpdate", UpdateStats)
 	WG.CampaignData.AddListener("PlayTimeAdded", UpdateStats)
 	WG.CampaignData.AddListener("GainExperience", UpdateStats)
-	
+
 	freezeSettings = false
 end
 
@@ -191,7 +191,7 @@ local function MakeTab(name, children)
 		verticalScrollbar = false,
 		children = children
 	}
-	
+
 	return {
 		name = name,
 		caption = name,
@@ -215,7 +215,7 @@ local function MakeStandardTab(name, ChildrenFunction)
 			end
 		},
 	}
-	
+
 	local contentsPanel = ScrollPanel:New {
 		x = 5,
 		right = 5,
@@ -225,7 +225,7 @@ local function MakeStandardTab(name, ChildrenFunction)
 		verticalScrollbar = false,
 		children = {window}
 	}
-	
+
 	return {
 		name = name,
 		caption = name,
@@ -240,7 +240,7 @@ end
 
 local function InitializeControls(window)
 	window.OnParent = nil
-	
+
 	local btnClose = Button:New {
 		right = 11,
 		y = 7,
@@ -256,13 +256,13 @@ local function InitializeControls(window)
 		},
 		parent = window
 	}
-	
+
 	local tabs = {
 		MakeTab("Save/Load", {WG.CampaignSaveWindow.GetControl()}),
 		--MakeStandardTab("Difficulty", InitializeDifficultyWindow),
 		MakeStandardTab("Stats", InitializeStatsWindow),
 	}
-	
+
 	local tabPanel = Chili.DetachableTabPanel:New {
 		x = 7,
 		right = 7,

@@ -97,7 +97,7 @@ local function InitializeControls(window)
 		font = WG.Chobby.Configuration:GetFont(3),
 		OnClick = {Logout}
 	}
-	
+
 	if WG.Chobby.Configuration.gameConfig.link_homePage then
 		btnProfile = Button:New {
 			y = 2,
@@ -122,7 +122,7 @@ local function InitializeControls(window)
 		fontsize = WG.Chobby.Configuration:GetFont(3).size,
 		parent = window,
 	}
-	
+
 	connectivityImage = Image:New {
 		name = "connectivityImage",
 		x = 15,
@@ -153,13 +153,13 @@ local function InitializeControls(window)
 	onPong = function(listener)
 		--UpdateLatency()
 	end
-	
+
 	local function onAddUser(listener, userName, status)
 		if userName == lobby:GetMyUserName() and status.accountID then
 			WG.Chobby.Configuration:SetConfigValue("myAccountID", status.accountID)
 		end
 	end
-	
+
 	lobby:AddListener("OnDisconnected", onDisconnected)
 	lobby:AddListener("OnAccepted", onAccepted)
 	lobby:AddListener("OnPong", onPong)

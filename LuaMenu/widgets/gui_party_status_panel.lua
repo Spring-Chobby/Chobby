@@ -38,7 +38,7 @@ end
 
 local function InitializePartyStatusHandler(name)
 	local lobby = WG.LibLobby.lobby
-	
+
 	local queuePanel = Panel:New {
 		name = name,
 		x = 8,
@@ -54,7 +54,7 @@ local function InitializePartyStatusHandler(name)
 		draggable = false,
 		parent = parent
 	}
-	
+
 	local partyTitle = TextBox:New {
 		x = "75%",
 		y = 12,
@@ -62,7 +62,7 @@ local function InitializePartyStatusHandler(name)
 		text = i18n("party"),
 		parent = queuePanel
 	}
-	
+
 	local button = Button:New {
 		name = "leaveParty",
 		x = "70%",
@@ -80,7 +80,7 @@ local function InitializePartyStatusHandler(name)
 		},
 		parent = queuePanel,
 	}
-	
+
 	local listPanel = ScrollPanel:New {
 		x = 4,
 		right = "32%",
@@ -90,7 +90,7 @@ local function InitializePartyStatusHandler(name)
 		horizontalScrollbar = false,
 		parent = queuePanel
 	}
-	
+
 	local function Resize(obj, xSize, ySize)
 		if ySize < 60 then
 			button._relativeBounds.top = 4
@@ -100,11 +100,11 @@ local function InitializePartyStatusHandler(name)
 		partyTitle:SetVisibility(ySize >= 60)
 		button:UpdateClientArea()
 	end
-	
+
 	queuePanel.OnResize = {Resize}
-	
+
 	local externalFunctions = {}
-	
+
 	function externalFunctions.UpdateParty(partyUsers)
 		listPanel:ClearChildren()
 		local position = 0
@@ -118,11 +118,11 @@ local function InitializePartyStatusHandler(name)
 			end
 		end
 	end
-	
+
 	function externalFunctions.GetHolder()
 		return queuePanel
 	end
-	
+
 	return externalFunctions
 end
 
@@ -132,12 +132,12 @@ end
 
 local function CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, DestroyFunc)
 	local Configuration = WG.Chobby.Configuration
-	
+
 	local MAX_USERS = 10
 	local USER_SPACE = 22
 	local BASE_HEIGHT = 175
 	local userHeight = math.max(60, USER_SPACE*math.min(#partyUsers, MAX_USERS))
-	
+
 	local partyInviteWindow = Window:New {
 		caption = "",
 		name = "partyInviteWindow",
@@ -148,7 +148,7 @@ local function CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, De
 		draggable = false,
 		classname = "main_window",
 	}
-	
+
 	local titleText = i18n("party_invite")
 	local title = Label:New {
 		x = 20,
@@ -169,7 +169,7 @@ local function CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, De
 		horizontalScrollbar = false,
 		parent = partyInviteWindow
 	}
-	
+
 	for i = 1, #partyUsers do
 		local userControl = WG.UserHandler.GetPopupUser(partyUsers[i])
 		listPanel:AddChild(userControl)
@@ -177,7 +177,7 @@ local function CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, De
 		userControl._relativeBounds.right = 1
 		userControl:UpdateClientArea(false)
 	end
-	
+
 	--local statusLabel = TextBox:New {
 	--	x = 160,
 	--	right = 0,
@@ -187,10 +187,10 @@ local function CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, De
 	--	fontsize = Configuration:GetFont(4).size,
 	--	parent = partyInviteWindow,
 	--}
-	
+
 	local startTimer = Spring.GetTimer()
 	local timeRemaining = secondsRemaining
-	
+
 	local function DoDispose()
 		if partyInviteWindow then
 			partyInviteWindow:Dispose()
@@ -198,7 +198,7 @@ local function CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, De
 			DestroyFunc()
 		end
 	end
-	
+
 	local function CancelFunc()
 		lobby:PartyInviteResponse(partyID, false)
 		WG.Delay(DoDispose, 0.1)
@@ -207,7 +207,7 @@ local function CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, De
 	local function AcceptFunc()
 		lobby:PartyInviteResponse(partyID, true)
 		WG.Delay(DoDispose, 0.1)
-		
+
 		-- Hack for testing until parties work.
 		--partyUsers[#partyUsers + 1] = lobby:GetMyUserName() -- Adding to table is highly dangerous
 		--lobby:_OnPartyStatus({PartyID = partyID, UserNames = partyUsers})
@@ -246,9 +246,9 @@ local function CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, De
 	}
 
 	local popupHolder = WG.Chobby.PriorityPopup(partyInviteWindow, CancelFunc, AcceptFunc, screen0)
-	
+
 	local externalFunctions = {}
-	
+
 	function externalFunctions.UpdateTimer()
 		local newTimeRemaining = secondsRemaining - math.ceil(Spring.DiffTimers(Spring.GetTimer(), startTimer))
 		if newTimeRemaining < 0 then
@@ -260,7 +260,7 @@ local function CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, De
 		timeRemaining = newTimeRemaining
 		title:SetCaption(titleText .. " (" .. SecondsToMinutes(timeRemaining) .. ")")
 	end
-	
+
 	return externalFunctions
 end
 
@@ -279,9 +279,9 @@ function DelayedInitialize()
 
 	local statusAndInvitesPanel = WG.Chobby.interfaceRoot.GetStatusAndInvitesPanel()
 	partyPanel = InitializePartyStatusHandler("partyPanel")
-	
+
 	local displayingParty = false
-	
+
 	local function OnPartyJoined(_, _, partyUsers)
 		if not displayingParty then
 			statusAndInvitesPanel.AddControl(partyPanel.GetHolder(), 4)
@@ -289,30 +289,30 @@ function DelayedInitialize()
 		displayingParty = true
 		partyPanel.UpdateParty(partyUsers)
 	end
-	
+
 	local function OnPartyLeft()
 		if displayingParty then
 			statusAndInvitesPanel.RemoveControl(partyPanel.GetHolder().name)
 		end
 		displayingParty = false
 	end
-	
+
 	local function OnPartyUpdate(_, partyID, partyUsers)
 		if partyID == lobby:GetMyPartyID() then
 			OnPartyJoined(_, _, partyUsers)
 		end
 	end
-	
+
 	local function DestroyInvitePopup()
 		invitePopup = nil
 	end
-	
+
 	local function OnPartyInviteRecieved(_, partyID, partyUsers, secondsRemaining)
 		if WG.Chobby.Configuration:AllowNotification(nil, partyUsers) and not invitePopup then
 			invitePopup = CreatePartyInviteWindow(partyID, partyUsers, secondsRemaining, DestroyInvitePopup)
 		end
 	end
-	
+
 	lobby:AddListener("OnPartyInviteRecieved", OnPartyInviteRecieved)
 	lobby:AddListener("OnPartyJoined", OnPartyJoined)
 	lobby:AddListener("OnPartyLeft", OnPartyLeft)

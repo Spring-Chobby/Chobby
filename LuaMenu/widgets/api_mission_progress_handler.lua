@@ -31,7 +31,7 @@ function externalFunctions.GetMissionCompletion(name)
 	progressData[name] = true
 end
 
-function widget:Initialize() 
+function widget:Initialize()
 	WG.MissionProgress = externalFunctions
 end
 

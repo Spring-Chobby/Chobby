@@ -45,7 +45,7 @@ local function SetBanFrom(fromTime, increment)
 	local conf = WG.Chobby.Configuration
 	fromTime = fromTime or Spring.Utilities.GetCurrentUtc()
 	local count = (conf.matchmakerRejectCount or 0) + (increment or 0)
-	
+
 	-- Order is important due to event listeners triggering on changes to matchmakerRejectTime
 	conf:SetConfigValue("matchmakerRejectCount", count)
 	conf:SetConfigValue("matchmakerRejectTime", fromTime)
@@ -301,7 +301,7 @@ local function CreateReadyCheckWindow(DestroyFunc, secondsRemaining, minWinChanc
 
 	local snd_volui = Spring.GetConfigString("snd_volui")
 	local snd_volmaster = Spring.GetConfigString("snd_volmaster")
-	
+
 	-- These are defaults. Should be audible enough.
 	Spring.SetConfigString("snd_volui", 100)
 	Spring.SetConfigString("snd_volmaster", 60)
@@ -330,7 +330,7 @@ local function CreateReadyCheckWindow(DestroyFunc, secondsRemaining, minWinChanc
 		draggable = false,
 		classname = "main_window",
 	}
-	
+
 	local invitationText = i18n("match_found")
 	if isQuickPlay then
 		invitationText = i18n("match_found_quickplay")
@@ -555,7 +555,7 @@ function DelayedInitialize()
 	if WG.Chobby.Configuration.matchmakerPopupTime then
 		SetBanFrom(WG.Chobby.Configuration.matchmakerPopupTime)
 	end
-	
+
 	local previouslyInMatchMaking = false
 	local previousInstantStart = false
 	local function OnMatchMakerStatus(listener, inMatchMaking, joinedQueueList, queueCounts, ingameCounts, instantStartQueues, currentEloWidth, joinedTime, bannedTime)

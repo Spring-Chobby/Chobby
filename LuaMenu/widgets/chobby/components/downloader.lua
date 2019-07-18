@@ -4,7 +4,7 @@ function Downloader:init(buttonsMode, tbl, timeout, updateListener, completeList
 	self:super("init")
 
 	self.wrapperAsFallback = false
-	
+
 	queueFont = queueFont or 1
 	self.lblDownload = Label:New {
 		x = 20 + ((buttonsMode and 75) or 0),
@@ -69,7 +69,7 @@ function Downloader:init(buttonsMode, tbl, timeout, updateListener, completeList
 			local download = self.downloads[self.startedDownload]
 			WG.DownloadHandler.CancelDownload(download.archiveName, download.archiveType)
 		end
-		
+
 		self.cancelButton = Button:New {
 			x = 1,
 			y = 1,
@@ -85,12 +85,12 @@ function Downloader:init(buttonsMode, tbl, timeout, updateListener, completeList
 		}
 		self.cancelButton:Hide()
 	end
-	
+
 	self.lblDownload:Hide()
 	self.prDownload:Hide()
 	self.queueLabel:Hide()
 	self.queueList:Hide()
-	
+
 	self.duplicateDownloads = {}
 
 	self.downloads = {}
@@ -100,7 +100,7 @@ function Downloader:init(buttonsMode, tbl, timeout, updateListener, completeList
 	self.updateListener = updateListener
 	self.completeListener = completeListener
 	self.visibleListener = visibleListener
-	
+
 	WG.DownloadHandler.AddListener("DownloadProgress", function (...) self:DownloadProgress(...) end)
 	WG.DownloadHandler.AddListener("DownloadStarted", function (...) self:DownloadStarted(...) end)
 	WG.DownloadHandler.AddListener("DownloadFinished", function (...) self:DownloadFinished(...) end)
@@ -145,7 +145,7 @@ function Downloader:UpdateQueue()
 	if self.updateListener then
 		self.updateListener(downloadCount, failure)
 	end
-	
+
 	if self.visibleListener then
 		self.visibleListener(true)
 	end
@@ -205,42 +205,12 @@ function Downloader:DownloadProgress(listener, downloadID, downloaded, total)
 
 	self._lastUpdate = currentTime
 
-	local elapsedTime = os.clock() - self.downloads[downloadID].startTime
-	local doneRatio = downloaded / total
-	local remainingSeconds = (1 - doneRatio) * elapsedTime / (doneRatio + 0.001)
-
-	-- calculate suffix
-	local suffix = "B"
-	if total > 1024 then
-		total = total / 1024
-		downloaded = downloaded / 1024
-		suffix = "KB"
-	end
-	if total > 1024 then
-		total = total / 1024
-		downloaded = downloaded / 1024
-		suffix = "MB"
-	end
-	local remainingTimeStr = ""
-	remainingSeconds = math.ceil(remainingSeconds)
-	if remainingSeconds > 60 then
-		local minutes = math.floor(remainingSeconds / 60)
-		remainingSeconds = remainingSeconds - minutes * 60
-		if minutes > 60 then
-			local hours = math.floor(minutes / 60)
-			minutes = minutes - hours * 60
-			remainingTimeStr = remainingTimeStr .. tostring(hours) .. "h"
-		end
-		remainingTimeStr = remainingTimeStr .. tostring(minutes) .. "m"
-	end
-	remainingTimeStr = remainingTimeStr .. tostring(remainingSeconds) .. "s"
 	-- round to one decimal
 	local totalStr = round2(total, 1)
 	local downloadedStr = round2(downloaded, 1)
 
-	--self.prDownload:SetCaption(remainingTimeStr .. " left: " .. downloadedStr .. "/" .. totalStr .. " MB")
 	self.prDownload:SetCaption(downloadedStr .. "/" .. totalStr .. " MB")
-	self.prDownload:SetValue(100 * doneRatio)
+	self.prDownload:SetValue(100 * downloaded / total)
 end
 
 function Downloader:DownloadStarted(listener, downloadID)
@@ -307,7 +277,7 @@ function Downloader:DownloadFailed(listener, downloadID, errorID)
 			body = "Starting backup download for " .. (self.downloads[downloadID].archiveName or "???"),
 		})
 	end
-	
+
 	self.prDownload:SetCaption("\255\255\0\0Download failed [".. errorID .."].\b")
 
 	-- Effectively a reimplementation of SignalMask from LUS

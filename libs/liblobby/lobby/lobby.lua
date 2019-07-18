@@ -64,7 +64,7 @@ function Lobby:_Clean()
 	self.myChannels = {}
 	self.myBattleID = nil
 	self.scriptPassword = nil
-	self.sessionToken = nil	
+	self.sessionToken = nil
 	am = Platform.macAddrHash or "0"
 	as = Platform.sysInfoHash or "0"
 	self.agent = am.." "..as:sub(1,16)
@@ -283,13 +283,13 @@ function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, clientPor
 		Spring.Restart(springURL, "")
 	else
 		local scriptTxt = GenerateScriptTxt(battleIp, battlePort, clientPort, scriptPassword, myName)
-		
+
 		Spring.Echo(scriptTxt)
 		--local scriptFileName = "scriptFile.txt"
 		--local scriptFile = io.open(scriptFileName, "w")
 		--scriptFile:write(scriptTxt)
 		--scriptFile:close()
-		
+
 		Spring.Reload(scriptTxt)
 	end
 end
@@ -740,6 +740,15 @@ function Lobby:_OnBattleScriptPassword(scriptPassword)
 	self:_CallListeners("OnBattleScriptPassword", scriptPassword)
 end
 
+function Lobby:_OnLeaveBattle(battleID)
+	self.myBattleID = nil
+	self.modoptions = {}
+	self.battleAis = {}
+	self.userBattleStatus = {}
+
+	self:_CallListeners("OnLeaveBattle", battleID)
+end
+
 function Lobby:_OnLeftBattle(battleID, userName)
 	if self:GetMyUserName() == userName then
 		self.myBattleID = nil
@@ -775,7 +784,7 @@ function Lobby:_OnUpdateBattleInfo(battleID, battleInfo)
 		Spring.Log(LOG_SECTION, "warning", "_OnUpdateBattleInfo nonexistent battle.")
 		return
 	end
-	
+
 	battle.maxPlayers = battleInfo.maxPlayers or battle.maxPlayers
 	if battleInfo.passworded ~= nil then
 		battle.passworded = battleInfo.passworded
@@ -1356,11 +1365,11 @@ end
 
 function Lobby:LearnAboutOfflineUser(userName, data)
 	local userInfo = self:TryGetUser(userName)
-	
+
 	if not userInfo.isOffline then
 		return
 	end
-	
+
 	for key, value in pairs(data) do
 		userInfo[key] = value
 	end

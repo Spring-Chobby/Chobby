@@ -77,7 +77,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 
 			for i = 1, #friendList do
 				local friendName = friendList[i]
-				
+
 				players[playerCount] = {
 					Name = friendName,
 					Team = teamCount,
@@ -86,7 +86,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 					Password = "12345",
 					rank = 0,
 				}
-				
+
 				if not data.isSpectator then
 					teams[teamCount] = {
 						TeamLeader = playerCount,
@@ -144,7 +144,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 					rgbcolor = '0.99609375 0.546875 0',
 				}
 				maxAllyTeamID = math.max(maxAllyTeamID, data.allyNumber)
-				
+
 				teamCount = teamCount + 1
 				aiCount = aiCount + 1
 			end
@@ -230,13 +230,26 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 	end
 
 	local scriptTxt = self:MakeScriptTXT(script)
-	
+
 	Spring.Echo(scriptTxt)
 	--local scriptFileName = "scriptFile.txt"
 	--local scriptFile = io.open(scriptFileName, "w")
 	--scriptFile:write(scriptTxt)
 	--scriptFile:close()
-	
+
+	local Config = WG.Chobby.Configuration
+	if Config.multiplayerLaunchNewSpring then
+		if WG.WrapperLoopback and WG.WrapperLoopback.StartNewSpring and WG.SettingsWindow and WG.SettingsWindow.GetSettingsString then
+			local params = {
+				StartScriptContent = scriptTxt,
+				Engine = Config:GetTruncatedEngineVersion(),
+				SpringSettings = WG.SettingsWindow.GetSettingsString(),
+			}
+			WG.WrapperLoopback.StartNewSpring(params)
+			return
+		end
+	end
+
 	Spring.Reload(scriptTxt)
 end
 
@@ -264,14 +277,14 @@ function InterfaceSkirmish:StartReplay(replayFilename, myName, hostPort)
 	--local scriptFile = io.open(scriptFileName, "w")
 	--scriptFile:write(scriptTxt)
 	--scriptFile:close()
-	
+
 	Spring.Reload(scriptTxt)
 	return false
 end
 
 function InterfaceSkirmish:StartGameFromLuaScript(gameType, scriptTable, friendList, hostPort)
 	self:_CallListeners("OnBattleAboutToStart", gameType)
-	
+
 	friendList = friendList or {}
 	playerCount = 1 -- Local player is already present
 
@@ -286,22 +299,22 @@ function InterfaceSkirmish:StartGameFromLuaScript(gameType, scriptTable, friendL
 		}
 		playerCount = playerCount + 1
 	end
-	
+
 	scriptTable.numplayers = playerCount
 	scriptTable.numusers = (playerCount - 2) + scriptTable.numusers
-	
+
 	scriptTable.hostip = "127.0.0.1"
 	scriptTable.hostport = hostPort or 0
 	scriptTable.ishost = 1
-	
+
 	local scriptTxt = self:MakeScriptTXT(scriptTable)
-	
+
 	Spring.Echo(scriptTxt)
 	--local scriptFileName = "scriptFile.txt"
 	--local scriptFile = io.open(scriptFileName, "w")
 	--scriptFile:write(scriptTxt)
 	--scriptFile:close()
-	
+
 	Spring.Reload(scriptTxt)
 end
 

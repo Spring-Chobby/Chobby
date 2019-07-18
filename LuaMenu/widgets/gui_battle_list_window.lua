@@ -53,12 +53,12 @@ function widget:Update()
 			end
 		end
 	end
-	
+
 	if visible == oldVisible then
 		return
 	end
 	oldVisible = visible
-	
+
 	if visible then
 		battleListWindow.listenerUpdateDisabled = false
 		battleListWindow:Update()

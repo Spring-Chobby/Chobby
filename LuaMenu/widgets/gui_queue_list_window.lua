@@ -57,7 +57,7 @@ local function GetCombinedBannedTime(banTimeFromServer)
 		configuration:SetConfigValue("matchmakerRejectCount", false)
 		return banTimeFromServer
 	end
-	
+
 	local banTime = BAN_BASE + BAN_ADD*(math.min(rejectCount, BAN_MAX_COUNT) - 1) - timeDiff
 	if banTimeFromServer and (banTimeFromServer > banTime) then
 		banTime = banTimeFromServer
@@ -87,10 +87,10 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 	local Configuration = WG.Chobby.Configuration
 	local lobby = WG.LibLobby.lobby
 	local btnLeave, btnJoin
-	
+
 	local currentPartySize = 1
 	local inQueue = false
-	
+
 	btnJoin = Button:New {
 		x = 0,
 		y = 0,
@@ -114,7 +114,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 					WG.Chobby.InformationPopup("All required maps and games must be downloaded before you can join matchmaking.")
 					return
 				end
-			
+
 				lobby:JoinMatchMaking(queueName)
 				obj:SetVisibility(false)
 				btnLeave:SetVisibility(true)
@@ -123,7 +123,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		},
 		parent = parentControl
 	}
-	
+
 	btnLeave = Button:New {
 		x = 0,
 		y = 0,
@@ -142,7 +142,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		parent = parentControl
 	}
 	btnLeave:SetVisibility(false)
-	
+
 	local labelDisabled = TextBox:New {
 		x = 0,
 		y = 18,
@@ -155,7 +155,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		parent = parentControl
 	}
 	labelDisabled:SetVisibility(false)
-	
+
 	local lblTitle = TextBox:New {
 		x = 105,
 		y = 15,
@@ -165,7 +165,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		text = queueName,
 		parent = parentControl
 	}
-	
+
 	local lblDescription = TextBox:New {
 		x = 180,
 		y = 8,
@@ -177,7 +177,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		text = queueDescription,
 		parent = parentControl
 	}
-	
+
 	local lblPlayers = TextBox:New {
 		x = 180,
 		y = 30,
@@ -189,7 +189,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		text = "Playing: " .. players,
 		parent = parentControl
 	}
-	
+
 	local lblWaiting = TextBox:New {
 		x = 280,
 		y = 30,
@@ -201,7 +201,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		text = "Waiting: " .. waiting,
 		parent = parentControl
 	}
-	
+
 	local function UpdateButton()
 		if maxPartySize and (currentPartySize > maxPartySize) then
 			btnJoin:SetVisibility(false)
@@ -213,9 +213,9 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 			labelDisabled:SetVisibility(false)
 		end
 	end
-	
+
 	local externalFunctions = {}
-	
+
 	function externalFunctions.SetInQueue(newInQueue)
 		if newInQueue == inQueue then
 			return
@@ -223,7 +223,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		inQueue = newInQueue
 		UpdateButton()
 	end
-	
+
 	function externalFunctions.UpdateCurrentPartySize(newCurrentPartySize)
 		if newCurrentPartySize == currentPartySize then
 			return
@@ -231,7 +231,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		currentPartySize = newCurrentPartySize
 		UpdateButton()
 	end
-	
+
 	function externalFunctions.UpdateQueueInformation(newName, newDescription, newPlayers, newWaiting, newMaxPartySize)
 		if newName then
 			lblTitle:SetText(newName)
@@ -246,14 +246,14 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 			lblWaiting:SetText("Waiting: " .. newWaiting)
 		end
 	end
-	
+
 	return externalFunctions
 end
 
 local function GetDebriefingChat(window, vertPos, channelName, RemoveFunction)
 	local Configuration = WG.Chobby.Configuration
 	local lobby = WG.LibLobby.lobby
-	
+
 	local function MessageListener(message)
 		if message:starts("/me ") then
 			lobby:SayEx(channelName, message:sub(5))
@@ -263,7 +263,7 @@ local function GetDebriefingChat(window, vertPos, channelName, RemoveFunction)
 	end
 	local debriefingConsole = WG.Chobby.Console("Debriefing Chat", MessageListener, true)
 	local userListPanel = WG.Chobby.UserListPanel(function() return lobby:GetChannel(channelName) end, 22, nil, WG.UserHandler.GetDebriefingUser)
-	
+
 	local chatPanel = Control:New {
 		x = 0,
 		y = vertPos,
@@ -289,9 +289,9 @@ local function GetDebriefingChat(window, vertPos, channelName, RemoveFunction)
 			userListPanel.panel
 		},
 	}
-	
+
 	local externalFunctions = {}
-	
+
 	local closeChannelButton = Button:New {
 		width = 24, height = 24, y = 5, right = 12,
 		caption = "x",
@@ -303,40 +303,40 @@ local function GetDebriefingChat(window, vertPos, channelName, RemoveFunction)
 		parent = chatPanel,
 	}
 	closeChannelButton:BringToFront()
-	
+
 	window:Invalidate()
-	
+
 	function externalFunctions.UpdateUsers()
 		userListPanel:Update()
 	end
-	
+
 	function externalFunctions.AddMessage(message, userName, msgDate, chatColour, thirdPerson)
 		debriefingConsole:AddMessage(message, userName, msgDate, chatColour, thirdPerson)
 	end
-	
+
 	function externalFunctions.SetTopic(message)
 		debriefingConsole:SetTopic(message)
 	end
-	
+
 	function externalFunctions.Delete()
 		debriefingConsole:Delete()
 		userListPanel:Delete()
 		chatPanel:Dispose()
 		spectatorPanel:Dispose()
 	end
-	
+
 	return externalFunctions
 end
 
 local function SetupDebriefingTracker(window)
 	local Configuration = WG.Chobby.Configuration
 	local lobby = WG.LibLobby.lobby
-	
+
 	local debriefingChat
 	local debriefingChannelName
 	local ignoredChannels = {}
 	local channelTopics = {}
-	
+
 	local function RemoveFunction()
 		if debriefingChannelName then
 			lobby:Leave(debriefingChannelName)
@@ -347,7 +347,7 @@ local function SetupDebriefingTracker(window)
 		debriefingChannelName = nil
 		debriefingChat = nil
 	end
-	
+
 	local function OnJoin(listener, chanName)
 		if (not string.find(chanName, DEBRIEFING_CHANNEL, 1, true)) or ignoredChannels[chanName] or chanName == debriefingChannelName then
 			return
@@ -362,7 +362,7 @@ local function SetupDebriefingTracker(window)
 		debriefingChannelName = chanName
 		debriefingChat = GetDebriefingChat(window, 430, debriefingChannelName, RemoveFunction)
 		WG.Chobby.interfaceRoot.OpenMultiplayerTabByName("matchmaking")
-		
+
 		if channelTopics[debriefingChannelName] then
 			debriefingChat.SetTopic("Post game chat")
 			debriefingChat.SetTopic(channelTopics[debriefingChannelName])
@@ -370,7 +370,7 @@ local function SetupDebriefingTracker(window)
 		end
 	end
 	lobby:AddListener("OnJoin", OnJoin)
-	
+
 	local function UpdateUsers(listener, chanName, userName)
 		if not (chanName == debriefingChannelName and debriefingChat) then
 			return
@@ -392,7 +392,7 @@ local function SetupDebriefingTracker(window)
 		debriefingChat.AddMessage(message, userName, msgDate, iAmMentioned and CHAT_MENTION)
 	end
 	lobby:AddListener("OnSaid", OnSaid)
-	
+
 	local function OnSaidEx(listener, chanName, userName, message, msgDate)
 		if not (chanName == debriefingChannelName and debriefingChat) then
 			return
@@ -401,7 +401,7 @@ local function SetupDebriefingTracker(window)
 		debriefingChat.AddMessage(message, userName, msgDate, (iAmMentioned and CHAT_MENTION) or Configuration.meColor, true)
 	end
 	lobby:AddListener("OnSaidEx", OnSaidEx)
-	
+
 	local function OnBattleDebriefing(listener, url, chanName, serverBattleID, userList)
 		local debriefTopic = "Battle link: " .. (url or "not found")
 		if debriefingChannelName == chanName and debriefingChat then
@@ -422,10 +422,10 @@ end
 local function InitializeControls(window)
 	local Configuration = WG.Chobby.Configuration
 	local lobby = WG.LibLobby.lobby
-	
+
 	local banStart
 	local banDuration
-	
+
 	local lblTitle = Label:New {
 		x = 20,
 		right = 5,
@@ -468,7 +468,7 @@ local function InitializeControls(window)
 		parent = window,
 	}
 	btnInviteFriends:SetVisibility(Configuration.canAuthenticateWithSteam)
-	
+
 	local listPanel = ScrollPanel:New {
 		x = 5,
 		right = 5,
@@ -478,7 +478,7 @@ local function InitializeControls(window)
 		horizontalScrollbar = false,
 		parent = window
 	}
-	
+
 	local statusText = TextBox:New {
 		x = 12,
 		right = 5,
@@ -488,7 +488,7 @@ local function InitializeControls(window)
 		text = "",
 		parent = window
 	}
-	
+
 	local requirementText = TextBox:New {
 		x = 12,
 		right = 5,
@@ -498,14 +498,14 @@ local function InitializeControls(window)
 		text = "",
 		parent = window
 	}
-	
+
 	local function GetBanTime()
 		if banStart and banDuration then
 			return (banDuration or 0) - math.ceil(Spring.DiffTimers(Spring.GetTimer(), banStart))
 		end
 		return false
 	end
-	
+
 	local queues = 0
 	local queueHolders = {}
 	local function AddQueue(_, queueName, queueDescription, mapNames, maxPartySize)
@@ -514,7 +514,7 @@ local function InitializeControls(window)
 			queueHolders[queueName].UpdateQueueInformation(queueName, queueDescription, queueData.playersIngame or "?", queueData.playersWaiting or "?", maxPartySize)
 			return
 		end
-	
+
 		local queueHolder = Control:New {
 			x = 10,
 			y = (posOverride[queueName] or queues)*55 + 15,
@@ -529,7 +529,7 @@ local function InitializeControls(window)
 		queueHolders[queueName] = MakeQueueControl(queueHolder, queueName, queueDescription, queueData.playersIngame or "?", queueData.playersWaiting or "?", maxPartySize, GetBanTime)
 		queues = queues + 1
 	end
-	
+
 	local function InitializeQueues()
 		local possibleQueues = lobby:GetQueues()
 		local added = {}
@@ -540,14 +540,14 @@ local function InitializeControls(window)
 				AddQueue(_, data.name, data.description, data.mapNames, data.maxPartySize)
 			end
 		end
-		
+
 		for name, data in pairs(possibleQueues) do
 			if not added[name] then
 				AddQueue(_, data.name, data.description, data.mapNames, data.maxPartySize)
 			end
 		end
 	end
-	
+
 	local function UpdateBannedTime(bannedTime)
 		bannedTime = GetCombinedBannedTime(bannedTime)
 		if bannedTime then
@@ -560,7 +560,7 @@ local function InitializeControls(window)
 			return true
 		end
 	end
-	
+
 	local function UpdateQueueStatus(listener, inMatchMaking, joinedQueueList, queueCounts, ingameCounts, _, _, _, bannedTime)
 		local joinedQueueNames = {}
 		if joinedQueueList then
@@ -572,24 +572,24 @@ local function InitializeControls(window)
 				end
 			end
 		end
-		
+
 		if queueCounts then
 			for queueName, waitingCount in pairs(queueCounts) do
 				queueHolders[queueName].UpdateQueueInformation(nil, nil, ingameCounts and ingameCounts[queueName], waitingCount)
 			end
 		end
-		
+
 		for queueName, queueHolder in pairs(queueHolders) do
 			if not joinedQueueNames[queueName] then
 				queueHolder.SetInQueue(false)
 			end
 		end
-		
+
 		if not UpdateBannedTime(bannedTime) then
 			banDuration = false
 		end
 	end
-	
+
 	local function OnPartyUpdate(listener, partyID, partyUsers)
 		if lobby:GetMyPartyID() ~= partyID then
 			return
@@ -598,21 +598,21 @@ local function InitializeControls(window)
 			queueHolder.UpdateCurrentPartySize(#partyUsers)
 		end
 	end
-		
+
 	local function OnPartyLeft(listener, partyID, partyUsers)
 		for name, queueHolder in pairs(queueHolders) do
 			queueHolder.UpdateCurrentPartySize(1)
 		end
 	end
-	
+
 	lobby:AddListener("OnQueueOpened", AddQueue)
 	lobby:AddListener("OnMatchMakerStatus", UpdateQueueStatus)
-	
+
 	lobby:AddListener("OnPartyCreate", OnPartyUpdate)
 	lobby:AddListener("OnPartyUpdate", OnPartyUpdate)
 	lobby:AddListener("OnPartyDestroy", OnPartyUpdate)
 	lobby:AddListener("OnPartyLeft", OnPartyLeft)
-	
+
 	local function onConfigurationChange(listener, key, value)
 		if key == "canAuthenticateWithSteam" then
 			btnInviteFriends:SetVisibility(value)
@@ -622,20 +622,20 @@ local function InitializeControls(window)
 		end
 	end
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
-	
+
 	-- Initialization
 	InitializeQueues()
 	UpdateBannedTime(lobby.matchMakerBannedTime)
-	
+
 	if lobby:GetMyPartyID() then
 		OnPartyUpdate(_, lobby:GetMyPartyID(), lobby:GetMyParty())
 	end
-	
+
 	SetupDebriefingTracker(window)
-	
+
 	-- External functions
 	local externalFunctions = {}
-		
+
 	function externalFunctions.UpdateBanTimer()
 		if not banStart then
 			return
@@ -648,7 +648,7 @@ local function InitializeControls(window)
 		end
 		statusText:SetText("You are banned from matchmaking for " .. timeRemaining .. " seconds")
 	end
-	
+
 	function externalFunctions.UpdateRequirementText()
 		local newText = ""
 		local firstEntry = true
@@ -661,7 +661,7 @@ local function InitializeControls(window)
 			firstEntry = false
 			newText = newText .. name
 		end
-		
+
 		if not HaveRightEngineVersion() then
 			if firstEntry then
 				newText = "Game engine update required, restart the menu to apply."
@@ -671,9 +671,9 @@ local function InitializeControls(window)
 		end
 		requirementText:SetText(newText)
 	end
-	
+
 	externalFunctions.UpdateRequirementText()
-	
+
 	return externalFunctions
 end
 
@@ -705,7 +705,7 @@ function QueueListWindow.GetControl()
 			end
 		},
 	}
-	
+
 	return queueListWindowControl
 end
 
@@ -737,13 +737,13 @@ local function UpdateLobbyTimeout()
 	if Spring.GetGameName() ~= "" then
 		logoutTime = 180 -- Possibility of long load times.
 	end
-	
+
 	local lobbyStatus = WG.LibLobby.lobby.status
 	if lobbyStatus == "connecting" then
 		lobbyTimeoutTime = Spring.GetTimer()
 		return
 	end
-	
+
 	if (Spring.DiffTimers(Spring.GetTimer(), lobbyTimeoutTime) or 0) > logoutTime then
 		Spring.Echo("Lost connection - Automatic logout.")
 		WG.Chobby.interfaceRoot.CleanMultiplayerState()
@@ -769,7 +769,7 @@ function widget:ActivateGame()
 	if not (queueListWindowControl and queueListWindowControl:IsEmpty()) then
 		return
 	end
-	
+
 	panelInterface = InitializeControls(queueListWindowControl)
 end
 
@@ -801,7 +801,7 @@ function widget:Initialize()
 				end
 			end
 		end
-		
+
 		for i = 1, #gameNames do
 			local gameName = gameNames[i]
 			if not requiredResources[gameName] then
@@ -813,14 +813,14 @@ function widget:Initialize()
 				end
 			end
 		end
-		
+
 		if panelInterface then
 			panelInterface.UpdateRequirementText()
 		end
 	end
-	
+
 	WG.LibLobby.lobby:AddListener("OnQueueOpened", AddQueue)
-	
+
 	local function downloadFinished()
 		for resourceName,_ in pairs(requiredResources) do
 			local haveResource = VFS.HasArchive(resourceName)
@@ -829,15 +829,15 @@ function widget:Initialize()
 				requiredResourceCount = requiredResourceCount - 1
 			end
 		end
-		
+
 		if panelInterface then
 			panelInterface.UpdateRequirementText()
 		end
 	end
 	WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
-	
+
 	WG.QueueListWindow = QueueListWindow
-	
+
 	WG.LibLobby.lobby:AddListener("OnDisconnected", OnDisconnected)
 	WG.LibLobby.lobby:AddListener("OnCommandReceived", ResetLobbyTimeout)
 	WG.LibLobby.lobby:AddListener("OnCommandBuffered", ResetLobbyTimeout)

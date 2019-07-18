@@ -3,9 +3,9 @@ PriorityPopup = Component:extends{}
 function PriorityPopup:init(mainWindow, cancelFunction, acceptFunction, parentControlOverride, hideWindow, disableAcceptHotkey)
 	local sentTime
 	local startTime
-	
+
 	self.mainWindow = mainWindow
-	
+
 	self.hideWindow = hideWindow
 
 	local function KeyListener(key)
@@ -17,9 +17,9 @@ function PriorityPopup:init(mainWindow, cancelFunction, acceptFunction, parentCo
 			return true
 		end
 	end
-	
+
 	interfaceRoot.SetGlobalKeyListener(KeyListener)
-	
+
 	self.background = Control:New {
 		x = 0,
 		y = 0,
@@ -33,7 +33,7 @@ function PriorityPopup:init(mainWindow, cancelFunction, acceptFunction, parentCo
 				startTime = os.clock()
 				WG.LimitFps.ForceRedrawPeriod(1)
 			end
-			
+
 			if not sentTime then
 				local diff = os.clock() - startTime
 				diff = math.min(0.1, diff) / 0.1
@@ -95,32 +95,32 @@ function PriorityPopup:init(mainWindow, cancelFunction, acceptFunction, parentCo
 			end
 		},
 	}
-	
+
 	screen0:FocusControl(self.background)
-	
+
 	local function HideDisposeFunc()
 		self:unregister()
 		self.background:Dispose()
 		interfaceRoot.SetGlobalKeyListener()
 	end
-	
+
 	self.mainWindow:BringToFront()
-	
+
 	self.mainWindow.OnDispose = self.mainWindow.OnDispose or {}
 	self.mainWindow.OnDispose[#self.mainWindow.OnDispose + 1] = HideDisposeFunc
 	self.mainWindow.OnHide = self.mainWindow.OnHide or {}
 	self.mainWindow.OnHide[#self.mainWindow.OnHide + 1] = HideDisposeFunc
-	
+
 	local sw, sh = Spring.GetWindowGeometry()
 	self:ViewResize(sw, sh)
-	
+
 	self:super('init')
 end
 
 function PriorityPopup:ViewResize(screenWidth, screenHeight)
 	self.background:BringToFront()
 	self.mainWindow:BringToFront()
-	
+
 	self.mainWindow:SetPos(
 		math.floor((screenWidth - self.mainWindow.width)/2),
 		math.floor((screenHeight - self.mainWindow.height)/2)

@@ -259,7 +259,7 @@ function ListWindow:RecalculateOrder(id)
 	end
 	local index = panel.index
 	panel:SetVisibility(panel.inFilter)
-	
+
 	-- move panel up if needed
 	if panel.inFilter then
 		while panel.index > 1 do
@@ -271,7 +271,7 @@ function ListWindow:RecalculateOrder(id)
 			end
 		end
 	end
-	
+
 	-- move panel down if needed
 	while panel.index < self.scrollChildren do
 		local nextPanel = self.orderPanelMapping[panel.index + 1]

@@ -257,7 +257,7 @@ function ChatWindows:init()
 				end
 			end
 		},
-	},
+	}
 
 	self.tabBarHolder:BringToFront()
 

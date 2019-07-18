@@ -19,7 +19,7 @@ function BattleWatchListWindow:init(parent)
 		self:AddBattle(battleID, lobby:GetBattle(battleID))
 	end
 	lobby:AddListener("OnBattleOpened", self.onBattleOpened)
-	
+
 	self.onBattleClosed = function(listener, battleID)
 		self:RemoveRow(battleID)
 	end
@@ -58,7 +58,7 @@ function BattleWatchListWindow:init(parent)
 		end
 	end
 	WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
-	
+
 	local function UpdateTimersDelay()
 		self:UpdateTimers()
 		WG.Delay(UpdateTimersDelay, 30)
@@ -103,11 +103,11 @@ function BattleWatchListWindow:AddBattle(battleID)
 	if (not battle) or battle.passworded or (not battle.isRunning) or (not VFS.HasArchive(battle.mapName)) or (not VFS.HasArchive(battle.gameName)) then
 		return
 	end
-	
+
 	if (not Configuration.allEnginesRunnable) and not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
-	
+
 	local function RejoinBattleFunc()
 		lobby:RejoinBattle(battleID)
 	end
@@ -157,7 +157,7 @@ function BattleWatchListWindow:AddBattle(battleID)
 		padding = {1,1,1,1},
 		parent = parentButton,
 	}
-	
+
 	local mapImageFile, needDownload = Configuration:GetMinimapSmallImage(battle.mapName)
 	local minimapImage = Image:New {
 		name = "minimapImage",
@@ -207,7 +207,7 @@ function BattleWatchListWindow:AddBattle(battleID)
 		caption = "Running for " .. Spring.Utilities.GetTimeToPast(battle.runningSince),
 		parent = parentButton,
 	}
-	
+
 	self:AddRow({parentButton}, battle.battleID)
 end
 
@@ -228,12 +228,12 @@ function BattleWatchListWindow:UpdateSync(battleID)
 		return
 	end
 	local items = self:GetRowItems(battleID)
-	
+
 	if not items then
 		self:AddBattle(battleID)
 		return
 	end
-	
+
 	if not (VFS.HasArchive(battle.mapName) and VFS.HasArchive(battle.gameName)) then
 		self:RemoveRow(battleID)
 	end
@@ -245,7 +245,7 @@ function BattleWatchListWindow:UpdateTimers()
 		if not items then
 			break
 		end
-		
+
 		local battle = lobby:GetBattle(battleID)
 		local runningTimeCaption = items.battleButton:GetChildByName("runningTimeCaption")
 		runningTimeCaption:SetCaption("Running for " .. Spring.Utilities.GetTimeToPast(battle.runningSince))
@@ -282,24 +282,24 @@ function BattleWatchListWindow:OnUpdateBattleInfo(battleID)
 		return
 	end
 	local items = self:GetRowItems(battleID)
-	
+
 	if not items then
 		self:AddBattle(battleID)
 		return
 	end
-	
+
 	if not (VFS.HasArchive(battle.mapName) and VFS.HasArchive(battle.gameName)) then
 		self:RemoveRow(battleID)
 	end
-	
+
 	-- Resets title and truncates.
 	local lblTitle = items.battleButton:GetChildByName("lblTitle")
 	lblTitle.OnResize[1](lblTitle)
-	
+
 	local minimapImage = items.battleButton:GetChildByName("minimap"):GetChildByName("minimapImage")
 	minimapImage.file, minimapImage.checkFileExists = Configuration:GetMinimapSmallImage(battle.mapName)
 	minimapImage:Invalidate()
-	
+
 	local playersOnMapCaption = items.battleButton:GetChildByName("playersOnMapCaption")
 	local playerCount = lobby:GetBattlePlayerCount(battleID)
 	playersOnMapCaption:SetCaption(playerCount .. ((playerCount == 1 and " player on " ) or " players on ") .. battle.mapName:gsub("_", " "))

@@ -29,7 +29,7 @@ local function MaybeAddFile(fileName)
 	end
 end
 
-local function AddDir(path) 
+local function AddDir(path)
 	for _, f in ipairs(VFS.DirList(path)) do
 		MaybeAddFile(f)
 	end
@@ -56,7 +56,7 @@ function widget:Update()
 				parent = WG.Chili.Screen0,
 			}
 		end
-		
+
 		for i = 1, BATCH_SIZE do
 			local file = files[index]
 			holder:BringToFront()
@@ -99,7 +99,7 @@ end
 --				gl.Texture(7, file)
 --				gl.Texture(7, false)
 --				index = index + 1
---			else 
+--			else
 --				widgetHandler:RemoveWidget()
 --				return
 --			end

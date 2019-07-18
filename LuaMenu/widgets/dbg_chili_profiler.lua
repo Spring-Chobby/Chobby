@@ -47,19 +47,19 @@ local function trace(event, line)
 		label0:SetCaption("Samples: " .. samples)
 		s = 0
 	end
-	
+
 	local j = 2
 	local i = 666
 	local top = true
 
 	local alreadySampled = {}
-	
+
 	while (i) do
-		repeat 
+		repeat
 			i = debug.getinfo(j, "nS")
 			j = j + 1
 			if (not i) then return end
-		until not((not i.name) or i.what == "C" or i.what == "main" or i.source:find("\n") or i.source:find("(tail call)")) 
+		until not((not i.name) or i.what == "C" or i.what == "main" or i.source:find("\n") or i.source:find("(tail call)"))
 
 		local s = i.source or "???"
 		local n = i.name or "???"

@@ -435,7 +435,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local SINGLEPLAYER_INDEX = 1
 	local MULTIPLAYER_INDEX = 2
 	local HELP_INDEX = 4
-	
+
 	local multiPlayerTabs = {}
 	if not WG.Chobby.Configuration.gameConfig.disableMatchMaking then
 		multiPlayerTabs[#multiPlayerTabs + 1] = {name = "matchmaking", control = queueListWindow}
@@ -444,7 +444,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	if not WG.Chobby.Configuration.gameConfig.disablePlanetwars then
 		multiPlayerTabs[#multiPlayerTabs + 1] = {name = "planetwars", control = planetwarsListWindow}
 	end
-	
+
 	local submenus = {
 		{
 			name = "singleplayer",
@@ -459,7 +459,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			cleanupFunction = Configuration.leaveMultiplayerOnMainMenu and CleanMultiplayerState or nil
 		},
 		{
-			name = "replays", 
+			name = "replays",
 			tabs = {
 				{name = "replays", control = WG.ReplayHandler.GetControl()},
 			},
@@ -497,11 +497,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			analyticsName       = "lobby:battle"
 		}
 	)
-	
+
 	local rightPanelHandler = GetTabPanelHandler("panelTabs", {
 			buttonWindow = panelButtons_buttons,
 			displayPanel = rightPanel_window,
-			initialTabs = rightPanelTabs, 
+			initialTabs = rightPanelTabs,
 			analyticsName = "lobby:panel",
 		}
 	)
@@ -975,15 +975,15 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		mainWindowHandler.SetBackAtMainMenu()
 		mainWindowHandler.OpenSubmenu(SINGLEPLAYER_INDEX, name)
 	end
-	
+
 	function externalFunctions.GetSingleplayerSubmenu()
 		return mainWindowHandler.GetPanelHander(SINGLEPLAYER_INDEX)
 	end
-	
+
 	function externalFunctions.GetMultiplayerSubmenu()
 		return mainWindowHandler.GetPanelHander(MULTIPLAYER_INDEX)
 	end
-	
+
 	function externalFunctions.SetPanelDisplayMode(newAutodetectDoublePanel, newDoublePanel)
 		autodetectDoublePanel = newAutodetectDoublePanel
 		local screenWidth, screenHeight = Spring.GetViewSizes()
@@ -1081,8 +1081,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			return true
 		end
 		if key == Spring.GetKeyCode("esc") then
-			if rightPanelHandler.CloseTabs() or mainWindowHandler.CloseTabs() or 
-					(backgroundCloseListener and backgroundCloseListener()) or 
+			if rightPanelHandler.CloseTabs() or mainWindowHandler.CloseTabs() or
+					(backgroundCloseListener and backgroundCloseListener()) or
 					mainWindowHandler.BackOneLevel() or MakeExitPopup() then
 				return false
 			end
@@ -1145,7 +1145,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			elseif value == 3 then
 				externalFunctions.SetPanelDisplayMode(false, false)
 			end
-		elseif key == "gameConfigName" then
+		elseif key == "gameConfigName" or key == "campaignConfigName" then
 			heading_image.file = Configuration:GetHeadingImage(doublePanelMode, mainWindowHandler.GetSubheadingName())
 			heading_image:Invalidate()
 
@@ -1158,7 +1158,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		end
 	end
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
-	
+
 	local function CheckHideInterface()
 		if #(screen0.children or {}) > 3 then
 			-- The three children are two background holders and either the lobby or ingame interface holder.
@@ -1170,7 +1170,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		end
 		return #(ingameInterfaceHolder.children or {}) == 0
 	end
-	
+
 	local oldTotalHideInterface = false
 	function WG.CheckTotalHideInterface()
 		local newHide = CheckHideInterface()
@@ -1193,7 +1193,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	externalFunctions.ViewResize(screenWidth, screenHeight)
 	UpdatePadding(screenWidth, screenHeight)
 	UpdateChildLayout()
-	
+
 	return externalFunctions
 end
 

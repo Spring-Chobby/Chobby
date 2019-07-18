@@ -108,7 +108,7 @@ end
 
 local function MakeFeedbackWindow(parent, feedbackLink)
 	local Configuration = WG.Chobby.Configuration
-	
+
 	local holder = Control:New {
 		right = 60,
 		y = 40,
@@ -117,7 +117,7 @@ local function MakeFeedbackWindow(parent, feedbackLink)
 		padding = {0,0,0,0},
 		parent = parent,
 	}
-	
+
 	local textWindow = Window:New{
 		classname = "main_window_small",
 		x = 0,
@@ -128,7 +128,7 @@ local function MakeFeedbackWindow(parent, feedbackLink)
 		draggable = false,
 		parent = holder,
 	}
-	
+
 	TextBox:New {
 		x = 55,
 		right = 15,
@@ -138,14 +138,14 @@ local function MakeFeedbackWindow(parent, feedbackLink)
 		fontsize = Configuration:GetFont(4).size,
 		parent = textWindow,
 	}
-	
+
 	local missionCount = 0
 	if PLANET_WHITELIST then
 		for _,_ in pairs(PLANET_WHITELIST) do
 			missionCount = missionCount + 1
 		end
 	end
-	
+
 	TextBox:New {
 		x = 15,
 		right = 15,
@@ -156,7 +156,7 @@ local function MakeFeedbackWindow(parent, feedbackLink)
 		fontsize = Configuration:GetFont(2).size,
 		parent = textWindow,
 	}
-	
+
 	Button:New {
 		x = 95,
 		right = 95,
@@ -194,7 +194,7 @@ local function MakeFeedbackButton(parentControl, link, x, y, right, bottom, widt
 		},
 		parent = parentControl,
 	}
-		
+
 	local imMapLink = Image:New {
 		right = 6,
 		y = 7,
@@ -229,11 +229,11 @@ end
 
 local function InitializeDifficultySetting(parent)
 	local Configuration = WG.Chobby.Configuration
-	
+
 	local difficultyWindow = Window:New{
 		classname = "tech_mainwindow_very_small",
-		x = 6,
-		y = 6,
+		x = 4,
+		y = 4,
 		width = 128,
 		height = 76,
 		resizable = false,
@@ -241,7 +241,7 @@ local function InitializeDifficultySetting(parent)
 		parent = parent,
 	}
 	local freezeSettings = true
-	
+
 	Label:New {
 		x = 20,
 		y = 10,
@@ -273,7 +273,7 @@ local function InitializeDifficultySetting(parent)
 		},
 		parent = difficultyWindow,
 	}
-	
+
 	local function UpdateSettings()
 		freezeSettings = true
 		comboDifficulty:Select(WG.CampaignData.GetDifficultySetting())
@@ -281,9 +281,9 @@ local function InitializeDifficultySetting(parent)
 	end
 	WG.CampaignData.AddListener("CampaignSettingsUpdate", UpdateSettings)
 	WG.CampaignData.AddListener("CampaignLoaded", UpdateSettings)
-	
-	freezeSettings = false
 
+	freezeSettings = false
+	return difficultyWindow
 end
 
 --------------------------------------------------------------------------------
@@ -294,14 +294,14 @@ local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, 
 	if (not rewardsTypes) or #rewardsTypes == 0 then
 		return false
 	end
-	
+
 	local Configuration = WG.Chobby.Configuration
-	
+
 	widthMult = widthMult or 1
 	stackHeight = stackHeight or 1
-	
+
 	local scroll, rewardsHolder
-	
+
 	local position = 0
 	for t = 1, #rewardsTypes do
 		local rewardList, tooltipFunction, alreadyUnlockedCheck,  overrideTooltip = rewardsTypes[t][1], rewardsTypes[t][2], rewardsTypes[t][3], rewardsTypes[t][4]
@@ -318,7 +318,7 @@ local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, 
 							padding = {0, 0, 0, 0},
 							parent = holder,
 						}
-						
+
 						TextBox:New {
 							x = 4,
 							y = 2,
@@ -328,7 +328,7 @@ local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, 
 							font = Configuration:GetFont(2),
 							parent = rewardsHolder
 						}
-						
+
 						scroll = ScrollPanel:New {
 							classname = "scrollpanel_borderless",
 							x = 3,
@@ -340,9 +340,9 @@ local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, 
 							parent = rewardsHolder,
 						}
 					end
-					
+
 					local info, imageFile, imageOverlay, count = tooltipFunction(rewardList[i])
-					
+
 					local x, y = (REWARD_ICON_SIZE*widthMult + 4)*math.floor(position/stackHeight), (position%stackHeight)*REWARD_ICON_SIZE/stackHeight
 					if imageFile then
 						local color = nil
@@ -355,7 +355,7 @@ local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, 
 							color = {0.5, 0.5, 0.5, 0.5}
 						end
 						local tooltip = (overrideTooltip and info) or ((info.humanName or "???") .. statusString .. "\n " .. (info.description or ""))
-						
+
 						local image = Image:New{
 							x = x,
 							y = y,
@@ -383,7 +383,7 @@ local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, 
 						function image:HitTest(x,y) return self end
 					else
 						local tooltip = (overrideTooltip and info) or (info.name or "???")
-						
+
 						Button:New {
 							x = x,
 							y = y,
@@ -394,13 +394,13 @@ local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, 
 							parent = scroll
 						}
 					end
-					
+
 					position = position + 1
 				end
 			end
 		end
 	end
-	
+
 	return (rewardsHolder and true) or false
 end
 
@@ -410,9 +410,9 @@ local function MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjective
 	if not objectiveConfig then
 		return bottom
 	end
-	
+
 	local difficultyName = difficultyNameMap[difficulty or 0]
-	
+
 	if bonusObjectiveSuccess then
 		local function IsObjectiveUnlocked(objectiveID)
 			return bonusObjectiveSuccess[objectiveID]
@@ -430,7 +430,7 @@ local function MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjective
 				tooltip = tooltip .. " \n(Newly completed on " .. difficultyName .. ")"
 			else
 				tooltip = tooltip .. " \n(Incomplete)"
-			end 
+			end
 			return tooltip, objectiveConfig[objectiveID].image, objectiveConfig[objectiveID].imageOverlay
 		end
 		local objectiveList = {}
@@ -460,31 +460,31 @@ local function MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjective
 			return bottom + 98
 		end
 	end
-	
+
 	return bottom
 end
 
 local function MakeRewardsPanel(parent, bottom, planetData, cullUnlocked, showCodex, bonusObjectiveSuccess, difficulty)
 	rewards = planetData.completionReward
-	
+
 	if showCodex then
 		if MakeRewardList(parent, bottom, "Codex", {{rewards.codexEntries, WG.CampaignData.GetCodexEntryInfo, WG.CampaignData.GetCodexEntryIsUnlocked}}, cullUnlocked, 3.96, 2) then
 			bottom = bottom + 98
 		end
 	end
-	
+
 	local unlockRewards = {
 		{rewards.units, WG.CampaignData.GetUnitInfo, WG.CampaignData.GetUnitIsUnlocked},
 		{rewards.modules, WG.CampaignData.GetModuleInfo, WG.CampaignData.GetModuleIsUnlocked},
 		{rewards.abilities, WG.CampaignData.GetAbilityInfo, WG.CampaignData.GetAbilityIsUnlocked}
 	}
-	
+
 	if MakeRewardList(parent, bottom, "Unlocks", unlockRewards, cullUnlocked) then
 		bottom = bottom + 98
 	end
-	
+
 	bottom = MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjectiveSuccess, difficulty)
-	
+
 	return bottom
 end
 
@@ -498,9 +498,9 @@ local function RepositionBackgroundAndPlanets(newX, newY, newWidth, newHeight)
 	windowY = newY or windowY
 	windowWidth = newWidth or windowWidth
 	windowHeight = newHeight or windowHeight
-	
+
 	planetHandler.UpdateVisiblePlanetBounds()
-	
+
 	local tX, tY, tScale = planetHandler.GetZoomTransformValues()
 	local transformedImageBounds = {
 		x = IMAGE_BOUNDS.x + tX*IMAGE_BOUNDS.width,
@@ -508,10 +508,10 @@ local function RepositionBackgroundAndPlanets(newX, newY, newWidth, newHeight)
 		width = IMAGE_BOUNDS.width/tScale,
 		height = IMAGE_BOUNDS.height/tScale,
 	}
-	
+
 	local background = WG.Chobby.interfaceRoot.GetBackgroundHolder()
 	background:SetBoundOverride(transformedImageBounds)
-	
+
 	local x, y, width, height = background:ResizeAspectWindow(windowX, windowY, windowWidth, windowHeight)
 	planetHandler.UpdatePosition(x, y, width, height)
 	UpdateEdgeList()
@@ -547,9 +547,9 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty)
 		draggable = false,
 		classname = "main_window",
 	}
-	
+
 	local childWidth = victoryWindow.width - victoryWindow.padding[1] - victoryWindow.padding[3]
-	
+
 	Label:New {
 		x = 0,
 		y = 6,
@@ -560,7 +560,7 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty)
 		font = WG.Chobby.Configuration:GetFont(4),
 		parent = victoryWindow
 	}
-	
+
 	local experienceHolder = Control:New {
 		x = 20,
 		y = 58,
@@ -569,13 +569,13 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty)
 		padding = {0, 0, 0, 0},
 		parent = victoryWindow,
 	}
-	
+
 	local experienceDisplay = WG.CommanderHandler.GetExperienceDisplay(experienceHolder, 38, true)
-	
+
 	local rewardsHeight = MakeRewardsPanel(victoryWindow, 82, planetData, true, true, bonusObjectiveSuccess, difficulty)
-	
+
 	victoryWindow:SetPos(nil, nil, nil, 200 + rewardsHeight)
-	
+
 	local openCommanderWindowOnContinue = false
 	local function CloseFunc()
 		victoryWindow:Dispose()
@@ -589,7 +589,7 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty)
 			end
 		end
 	end
-	
+
 	local buttonClose = Button:New {
 		x = (childWidth - 136)/2,
 		width = 136,
@@ -605,15 +605,15 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty)
 			end
 		},
 	}
-	
+
 	if planetData.infoDisplay.feedbackLink then
 		MakeFeedbackButton(victoryWindow, planetData.infoDisplay.feedbackLink, nil, nil, 2, 1)
 	end
-	
+
 	local popupHolder = WG.Chobby.PriorityPopup(victoryWindow, CloseFunc, CloseFunc)
-	
+
 	local externalFunctions = {}
-	
+
 	function externalFunctions.UpdateExperience(oldExperience, oldLevel, newExperience, newLevel, gainedBonusExperience)
 		experienceDisplay.AddFancyExperience(newExperience - oldExperience, gainedBonusExperience)
 		if (oldExperience == 100 and newExperience > 100) or (oldLevel ~= newLevel) then
@@ -621,7 +621,7 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty)
 			openCommanderWindowOnContinue = true
 		end
 	end
-	
+
 	return externalFunctions
 end
 
@@ -650,7 +650,7 @@ local function ProcessPlanetVictory(planetID, battleFrames, bonusObjectives, bon
 		Spring.Echo("ProcessPlanetVictory error")
 		return
 	end
-	
+
 	if selectedPlanet then
 		selectedPlanet.Close()
 		selectedPlanet = nil
@@ -660,7 +660,7 @@ local function ProcessPlanetVictory(planetID, battleFrames, bonusObjectives, bon
 	currentWinPopup = MakeWinPopup(planetConfig[planetID], bonusObjectives, difficulty)
 	WG.CampaignData.AddPlayTime(battleFrames)
 	WG.CampaignData.CapturePlanet(planetID, bonusObjectives, difficulty)
-	
+
 	WG.Analytics.SendIndexedRepeatEvent("campaign:planet_" .. planetID .. ":difficulty_" .. difficulty .. ":win", math.floor(battleFrames/30), ":bonus_" .. (bonusObjectiveString or ""))
 	WG.Analytics.SendOnetimeEvent("campaign:planets_owned_" .. WG.CampaignData.GetCapturedPlanetCount(), math.floor(WG.CampaignData.GetPlayTime()/30))
 end
@@ -672,7 +672,7 @@ local function ProcessPlanetDefeat(planetID, battleFrames)
 	end
 	WG.Chobby.InformationPopup("Battle for " .. planetConfig[planetID].name .. " lost.", {caption = "Defeat"})
 	WG.CampaignData.AddPlayTime(battleFrames, true)
-	
+
 	WG.Analytics.SendIndexedRepeatEvent("campaign:planet_" .. planetID .. ":difficulty_" .. WG.CampaignData.GetDifficultySetting() .. ":lose", math.floor(battleFrames/30), ":defeat")
 end
 
@@ -690,7 +690,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 
 	WG.Chobby.interfaceRoot.GetRightPanelHandler().CloseTabs()
 	WG.Chobby.interfaceRoot.GetMainWindowHandler().CloseTabs()
-	
+
 	local starmapInfoPanel = Window:New{
 		classname = "main_window",
 		parent = planetHandler,
@@ -702,19 +702,19 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		draggable = false,
 		padding = {12, 7, 12, 7},
 	}
-	
+
 	local planetName = string.upper(planetData.name)
 	if not LIVE_TESTING then
 		planetName = planetName .. " - " .. planetID
 	end
-	
+
 	local nameLabel = Label:New{
 		x = 8,
 		y = 8,
 		caption = planetName,
 		font = Configuration:GetFont(4),
 	}
-	
+
 	local fluffLabels = {
 		Label:New{caption = "Primary", font = Configuration:GetFont(3)},
 		Label:New{caption = planetData.infoDisplay.primary .. " (" .. planetData.infoDisplay.primaryType .. ") ", font = Configuration:GetFont(3)},
@@ -730,7 +730,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		rows = 2,
 		children = fluffLabels,
 	}
-	
+
 	local planetDesc = TextBox:New {
 		x = 8,
 		y = "30%",
@@ -739,7 +739,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		text = planetData.infoDisplay.text,
 		font = Configuration:GetFont(3),
 	}
-	
+
 	local subPanel = Panel:New{
 		parent = starmapInfoPanel,
 		x = "3%",
@@ -752,9 +752,9 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 			planetDesc
 		}
 	}
-	
+
 	MakeRewardsPanel(subPanel, 16, planetData)
-	
+
 	local buttonHolder = Control:New{
 		x = "50%",
 		y = "4%",
@@ -763,12 +763,12 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		padding = {0,0,0,0},
 		parent = starmapInfoPanel,
 	}
-	
+
 	if startable then
 		if planetData.infoDisplay.feedbackLink then
 			MakeFeedbackButton(buttonHolder, planetData.infoDisplay.feedbackLink, nil, 2, 85, nil)
 		end
-	
+
 		local startButton = Button:New{
 			right = 0,
 			bottom = 0,
@@ -784,7 +784,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 				end
 			}
 		}
-		
+
 		if Configuration.canAuthenticateWithSteam then
 			local btnInviteFriends = Button:New {
 				right = 140,
@@ -802,7 +802,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 				parent = buttonHolder,
 			}
 		end
-		
+
 		if planetData.tutorialSkip then
 			local startButton = Button:New{
 				right = 140,
@@ -824,7 +824,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 				}
 			}
 		end
-		
+
 		if (not LIVE_TESTING) and (Configuration.debugAutoWin or Configuration.debugMode) then
 			local autoWinButton = Button:New{
 				right = 0,
@@ -858,17 +858,17 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 			}
 		end
 	end
-	
+
 	-- close button
 	local function CloseFunc()
 		if starmapInfoPanel then
-			starmapInfoPanel:Dispose() 
+			starmapInfoPanel:Dispose()
 			starmapInfoPanel = nil
 			return true
 		end
 		return false
 	end
-	
+
 	Button:New{
 		y = 0,
 		right = 0,
@@ -882,8 +882,8 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		},
 		parent = buttonHolder,
 	}
-	
-	
+
+
 	WG.Chobby.interfaceRoot.SetBackgroundCloseListener(CloseFunc)
 
 	-- planet image
@@ -896,7 +896,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		keepAspect = true,
 		file = planetData.infoDisplay.image,
 	}
-	
+
 	-- background
 	local bg = Image:New{
 		parent = starmapInfoPanel,
@@ -908,20 +908,20 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		keepAspect = false,
 	}
 	bg:Invalidate()
-	
+
 	starmapInfoPanel:SetLayer(1)
-	
+
 	starmapInfoPanel.OnResize = starmapInfoPanel.OnResize or {}
 	starmapInfoPanel.OnResize[#starmapInfoPanel.OnResize + 1] = function(obj, xSize, ySize)
 		planetImage:SetPos(nil, math.floor((ySize - planetData.infoDisplay.size)/2))
 	end
-	
+
 	local function SizeUpdate()
 		local font = Configuration:GetFont(((planetHandler.height < 680) and 2) or 3)
-		
+
 		planetDesc.font.size = font.size
 		planetDesc:Invalidate()
-		
+
 		for i = 1, 4 do
 			fluffLabels[i].font.size = font.size
 			fluffLabels[i]:Invalidate()
@@ -929,12 +929,12 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		fluffGrid:Invalidate()
 	end
 	SizeUpdate()
-	
+
 	local externalFunctions = {
 		Close = CloseFunc,
 		SizeUpdate = SizeUpdate,
 	}
-	
+
 	return externalFunctions
 end
 
@@ -983,7 +983,7 @@ local function ProcessAiUnlockDebugView(debugHolder, map, aiConfig, unlockInfo, 
 	if not unlocks then
 		return offset, map
 	end
-	
+
 	local unlockList = {}
 	for i = 1, #unlocks do
 		local name = unlocks[i]
@@ -998,7 +998,7 @@ local function ProcessAiUnlockDebugView(debugHolder, map, aiConfig, unlockInfo, 
 			end
 		end
 	end
-	
+
 	offset = AddDebugUnlocks(debugHolder, unlockList, unlockInfo, offset, DEBUG_UNLOCK_COLUMNS, DEBUG_UNLOCK_SIZE)
 	return offset, map
 end
@@ -1009,20 +1009,20 @@ end
 
 local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, adjacency)
 	local Configuration = WG.Chobby.Configuration
-	
+
 	local planetSize = planetData.mapDisplay.size
 	local xPos, yPos = planetData.mapDisplay.x, planetData.mapDisplay.y
-	
+
 	local captured = WG.CampaignData.IsPlanetCaptured(planetID)
 	local startable
 	local visible = false
 	local distance = false
 	local tipHolder
-	
+
 	local target
 	local targetSize = math.ceil(math.floor(planetSize*1.35)/2)*2
 	local planetOffset = math.floor((targetSize - planetSize)/2)
-	
+
 	local planetHolder = Control:New{
 		x = 0,
 		y = 0,
@@ -1031,7 +1031,7 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 		padding = {0, 0, 0, 0},
 		parent = planetListHolder,
 	}
-	
+
 	local debugHolder
 	if (not LIVE_TESTING) and Configuration.debugMode then
 		if Configuration.showPlanetUnlocks then
@@ -1043,7 +1043,7 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 				padding = {1, 1, 1, 1},
 				parent = planetListHolder,
 			}
-			
+
 			local rewards = planetData.completionReward
 			local offset = 0
 			offset = AddDebugUnlocks(debugHolder, rewards.units, WG.CampaignData.GetUnitInfo, offset, DEBUG_UNLOCK_COLUMNS, DEBUG_UNLOCK_SIZE)
@@ -1058,7 +1058,7 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 				padding = {1, 1, 1, 1},
 				parent = planetListHolder,
 			}
-			
+
 			local aiConfig = planetData.gameConfig.aiConfig
 			local offset = 0
 			local map = {}, {}
@@ -1067,7 +1067,7 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 			end
 		end
 	end
-	
+
 	local button = Button:New{
 		x = planetOffset,
 		y = planetOffset,
@@ -1075,7 +1075,7 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 		height = planetSize,
 		classname = "button_planet",
 		caption = "",
-		OnClick = { 
+		OnClick = {
 			function(self, x, y, mouseButton)
 				if (not LIVE_TESTING) and Configuration.editCampaign and Configuration.debugMode then
 					if debugPlanetSelected and planetID ~= debugPlanetSelected then
@@ -1091,7 +1091,7 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 						else
 							planetEdgeList[#planetEdgeList + 1] = {planetID, debugPlanetSelected}
 						end
-						
+
 						planetAdjacency[debugPlanetSelected][planetID] = not adjacent
 						planetAdjacency[planetID][debugPlanetSelected] = not adjacent
 						UpdateEdgeList()
@@ -1103,7 +1103,7 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 					debugPlanetSelected = planetID
 					return
 				end
-				
+
 				if selectedPlanet then
 					selectedPlanet.Close()
 					selectedPlanet = nil
@@ -1114,7 +1114,7 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 		parent = planetHolder,
 	}
 	button:SetVisibility(false)
-	
+
 	local image = Image:New {
 		x = 3,
 		y = 3,
@@ -1124,7 +1124,7 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 		keepAspect = true,
 		parent = button,
 	}
-	
+
 	if (not LIVE_TESTING) and Configuration.debugMode then
 		local number = Label:New {
 			x = 3,
@@ -1138,39 +1138,39 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 			parent = image,
 		}
 	end
-	
+
 	local function UpdateSize(sizeScale)
 		planetSize = planetData.mapDisplay.size*sizeScale
 		targetSize = math.ceil(math.floor(planetSize*1.35)/2)*2
 		planetOffset = math.floor((targetSize - planetSize)/2)
-		
+
 		button:SetPos(planetOffset, planetOffset, planetSize, planetSize)
 	end
-	
+
 	local externalFunctions = {}
-	
+
 	function externalFunctions.UpdatePosition(xSize, ySize)
 		local tX, tY, tSize = planetHandler.GetZoomTransform(xPos, yPos, math.max(1, xSize/1050))
 		UpdateSize(tSize)
 		local x = math.max(0, math.min(xSize - targetSize, tX*xSize - targetSize/2))
 		local y = math.max(0, math.min(ySize - targetSize, tY*ySize - targetSize/2))
 		planetHolder:SetPos(x, y, targetSize, targetSize)
-		
+
 		if tipHolder then
 			tipHolder:SetPos(x + targetSize, y - 5 + (targetSize - planetData.mapDisplay.hintSize[2])/2)
 		end
-		
+
 		if debugHolder then
 			debugHolder:SetPos(x, y + planetSize, DEBUG_UNLOCK_COLUMNS*DEBUG_UNLOCK_SIZE + 2, 3*DEBUG_UNLOCK_SIZE + 2)
 		end
 	end
-	
+
 	function externalFunctions.SetPosition(newX, newY)
 		xPos, yPos = newX, newY
 		planetConfig[planetID].mapDisplay.x, planetConfig[planetID].mapDisplay.y = newX, newY
 		UpdateEdgeList()
 	end
-	
+
 	function externalFunctions.UpdateInformation()
 		local bonusCount, maxBonus = 0, 0
 		local objectiveConfig = planetData.gameConfig.bonusObjectiveConfig
@@ -1185,12 +1185,12 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 		local conquerString
 		local cap, difficulty = WG.CampaignData.IsPlanetCaptured(planetID)
 		if cap then
-			conquerString = "\nConquered on " .. difficultyNameMap[difficulty or 0] 
+			conquerString = "\nConquered on " .. difficultyNameMap[difficulty or 0]
 		end
 		button.tooltip = "Planet " .. planetData.name .. (conquerString or "") .. ((maxBonus > 0 and "\nBonus objectives: " .. bonusCount .. " / " .. maxBonus) or "")
 	end
 	externalFunctions.UpdateInformation()
-	
+
 	function externalFunctions.UpdateStartable(disableStartable)
 		captured = WG.CampaignData.IsPlanetCaptured(planetID)
 		startable = captured or planetData.startingPlanet
@@ -1204,7 +1204,7 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 				end
 			end
 		end
-		
+
 		if captured then
 			distance = 0
 		elseif startable then
@@ -1212,18 +1212,18 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 		else
 			distance = false
 		end
-		
+
 		if disableStartable then
 			startable = false
 		end
-		
+
 		if startable then
 			image.color = PLANET_START_COLOR
 		else
 			image.color = PLANET_NO_START_COLOR
 		end
 		image:Invalidate()
-		
+
 		local targetable = startable and not captured
 		if target then
 			if not targetable then
@@ -1242,7 +1242,7 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 			}
 			target:SendToBack()
 		end
-		
+
 		if tipHolder then
 			if not targetable then
 				tipHolder:Dispose()
@@ -1269,10 +1269,10 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 				parent = tipHolder,
 			}
 		end
-		
+
 		externalFunctions.UpdateInformation()
 	end
-	
+
 	-- Only call this after calling UpdateStartable for all planets. Call at least (VISIBILITY_DISTANCE - 1) times.
 	function externalFunctions.UpdateDistance()
 		if distance and (distance <= 1) then
@@ -1281,7 +1281,7 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 		for i = 1, #adjacency do
 			if adjacency[i] then
 				if ((not PLANET_WHITELIST) or PLANET_WHITELIST[i]) and planetList[i].GetDistance() then
-					local newDist = planetList[i].GetDistance() + 1 
+					local newDist = planetList[i].GetDistance() + 1
 					if distance then
 						if distance > newDist then
 							distance = newDist
@@ -1297,7 +1297,7 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 		visible = (distance and distance <= VISIBILITY_DISTANCE) or ((not LIVE_TESTING) and Configuration.debugMode)
 		button:SetVisibility(visible)
 	end
-	
+
 	function externalFunctions.DownloadMapIfClose()
 		if startable or captured then
 			WG.DownloadHandler.MaybeDownloadArchive(planetData.gameConfig.mapName, "map", 2)
@@ -1312,28 +1312,28 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 			end
 		end
 	end
-	
+
 	function externalFunctions.GetCaptured()
 		return WG.CampaignData.IsPlanetCaptured(planetID)
 	end
-	
+
 	function externalFunctions.GetCapturedOrStarable_Unsafe()
 		-- Unsafe because an update may be required before the return value is valid
 		return startable or captured
 	end
-	
+
 	function externalFunctions.GetVisible()
 		return visible
 	end
-	
+
 	function externalFunctions.GetVisibleEdge() -- Whether an edge to this planet is visible.
 		return (distance and distance <= (VISIBILITY_DISTANCE + 1)) or ((not LIVE_TESTING) and Configuration.debugMode)
 	end
-	
+
 	function externalFunctions.GetDistance()
 		return distance
 	end
-	
+
 	return externalFunctions
 end
 
@@ -1378,22 +1378,22 @@ end
 local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhitelist, feedbackLink)
 	LIVE_TESTING = newLiveTestingMode
 	PLANET_WHITELIST = newPlanetWhitelist
-	
+
 	local Configuration = WG.Chobby.Configuration
-	
+
 	local debugMode = Configuration.debugMode and (not LIVE_TESTING)
-	
+
 	if feedbackLink then
 		MakeFeedbackWindow(parent, feedbackLink)
 	end
-	
+
 	local window = ((debugMode and Panel) or Control):New {
 		name = "planetsHolder",
 		padding = {0,0,0,0},
 		parent = parent,
 	}
 	window:BringToFront()
-	
+
 	local planetWindow = Control:New {
 		name = "planetWindow",
 		x = 0,
@@ -1401,9 +1401,10 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 		width = "100%",
 		height = "100%",
 		padding = {0,0,0,0},
+		hitTestAllowEmpty = true,
 		parent = window,
 	}
-	
+
 	local popupOverlay = Control:New {
 		name = "popupOverlay",
 		x = 0,
@@ -1414,10 +1415,10 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 		parent = window,
 	}
 	popupOverlay:BringToFront()
-	
+
 	if debugMode then
 		planetWindow.OnMouseDown = planetWindow.OnMouseDown or {}
-		planetWindow.OnMouseDown[#planetWindow.OnMouseDown + 1] = function(self, x, y, mouseButton) 
+		planetWindow.OnMouseDown[#planetWindow.OnMouseDown + 1] = function(self, x, y, mouseButton)
 			if Configuration.editCampaign and debugPlanetSelected then
 				if mouseButton == 3 then
 					debugPlanetSelected = nil
@@ -1433,14 +1434,13 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 			end
 			return false
 		end
-		--function planetWindow:HitTest(x,y) return self end
 	end
-	
+
 	local planetData = Configuration.campaignConfig.planetDefs
 	planetConfig, planetAdjacency, planetEdgeList = planetData.planets, planetData.planetAdjacency, planetData.planetEdgeList
-	
+
 	local transX, transY, transScale = 0, 0, 1
-	
+
 	planetList = {}
 	PLANET_COUNT = #planetConfig
 	for i = 1, PLANET_COUNT do
@@ -1448,7 +1448,7 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 			planetList[i] = GetPlanet(popupOverlay, planetWindow, i, planetConfig[i], planetAdjacency[i])
 		end
 	end
-	
+
 	local graph = Chili.Control:New{
 		x       = 0,
 		y       = 0,
@@ -1461,9 +1461,9 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 			local y = obj.y
 			local w = obj.width
 			local h = obj.height
-			
+
 			local _,_,scale = planetHandler.GetZoomTransformValues()
-			
+
 			gl.PushMatrix()
 			gl.Translate(x, y, 0)
 			gl.Scale(w, h, 1)
@@ -1473,7 +1473,7 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 		end,
 		parent = window,
 	}
-	
+
 	local function PlanetCaptured(listener, planetID)
 		if (not PLANET_WHITELIST) or PLANET_WHITELIST[planetID] then
 			planetList[planetID].UpdateStartable(not WG.CampaignData.GetCampaignInitializationComplete())
@@ -1481,16 +1481,16 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 		end
 	end
 	WG.CampaignData.AddListener("PlanetCaptured", PlanetCaptured)
-	
+
 	local function PlanetUpdate(listener, planetID)
 		if (not PLANET_WHITELIST) or PLANET_WHITELIST[planetID] then
 			planetList[planetID].UpdateInformation()
 		end
 	end
 	WG.CampaignData.AddListener("PlanetUpdate", PlanetUpdate)
-	
+
 	local externalFunctions = {}
-	
+
 	function externalFunctions.UpdatePosition(x, y, width, height)
 		window:SetPos(x, y, width, height)
 		if x then
@@ -1501,17 +1501,17 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 			end
 		end
 	end
-	
+
 	function externalFunctions.GetZoomTransform(x, y, size)
 		x = (x - transX)*transScale
 		y = (y - transY)*transScale
 		return x, y, (size or 1)*transScale
 	end
-	
+
 	function externalFunctions.GetZoomTransformValues()
 		return transX, transY, transScale
 	end
-	
+
 	function externalFunctions.UpdateVisiblePlanetBounds()
 		local left, top, right, bottom
 		local padding = 0.05
@@ -1531,17 +1531,17 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 				end
 			end
 		end
-		
+
 		if not left then
 			transX, transY, transScale = 0, 0, 1
 			return
 		end
-		
+
 		left = math.max(left, TRANSFORM_BOUNDS.left)
 		top = math.max(top, TRANSFORM_BOUNDS.top)
 		right = math.min(right, TRANSFORM_BOUNDS.right)
 		bottom = math.min(bottom, TRANSFORM_BOUNDS.bottom)
-		
+
 		-- Make square
 		local width = right - left
 		local height = bottom - top
@@ -1549,7 +1549,7 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 			local mid = top + height/2
 			top = mid - width/2
 			bottom = mid + width/2
-			
+
 			if top < TRANSFORM_BOUNDS.top then
 				bottom = bottom + (TRANSFORM_BOUNDS.top - top)
 				top = TRANSFORM_BOUNDS.top
@@ -1561,7 +1561,7 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 			local mid = left + width/2
 			left = mid - height/2
 			right = mid + height/2
-			
+
 			if left < TRANSFORM_BOUNDS.left then
 				right = right + (TRANSFORM_BOUNDS.left - left)
 				left = TRANSFORM_BOUNDS.left
@@ -1570,20 +1570,20 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 				right = TRANSFORM_BOUNDS.right
 			end
 		end
-		
+
 		transX, transY, transScale = left, top, 1/(right - left)
 	end
-	
+
 	function externalFunctions.SendEdgesToBack()
 		if graph then
 			graph:SendToBack()
 		end
 	end
-	
+
 	function externalFunctions.GetParent()
 		return parent
 	end
-	
+
 	-- Make sure everything loads in the right positions
 	DelayedViewResize()
 	WG.Delay(DelayedViewResize, 0.1)
@@ -1676,16 +1676,17 @@ function externalFunctions.GetControl(newLiveTestingMode, newPlanetWhitelist, fe
 		OnParentPost = {
 			function(obj, parent)
 				if obj:IsEmpty() then
-					InitializeDifficultySetting(obj)
+					local difficultyWindow = InitializeDifficultySetting(obj)
 					planetHandler = InitializePlanetHandler(obj, newLiveTestingMode, newPlanetWhitelist, feedbackLink)
 					UpdateGalaxy()
+					difficultyWindow:BringToFront()
 				end
-				
+
 				local background = WG.Chobby.interfaceRoot.GetBackgroundHolder()
 				background:SetImageOverride(GALAXY_IMAGE)
 				local x, y = obj:LocalToScreen(0, 0)
 				RepositionBackgroundAndPlanets(x, y, obj.width, obj.height)
-				
+
 				obj:UpdateClientArea()
 				WG.Chobby.interfaceRoot.GetRightPanelHandler().CloseTabs()
 				WG.Chobby.interfaceRoot.GetMainWindowHandler().CloseTabs()
@@ -1749,14 +1750,14 @@ function widget:Initialize()
 	end
 	WG.CampaignData.AddListener("CampaignLoaded", CampaignLoaded)
 	WG.CampaignData.AddListener("InitializationComplete", CampaignLoaded)
-	
+
 	local function GainExperience(listener, oldExperience, oldLevel, newExperience, newLevel, gainedBonusExperience)
 		if currentWinPopup then
 			currentWinPopup.UpdateExperience(oldExperience, oldLevel, newExperience, newLevel, gainedBonusExperience)
 		end
 	end
 	WG.CampaignData.AddListener("GainExperience", GainExperience)
-	
+
 	WG.CampaignHandler = externalFunctions
 end
 

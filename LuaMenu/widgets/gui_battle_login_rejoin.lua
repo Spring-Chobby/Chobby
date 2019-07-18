@@ -18,15 +18,15 @@ end
 
 local function DelayedInitialize()
 	local lobby = WG.LibLobby.lobby
-	
+
 	local function OnRejoinOption(listener, battleID)
 		local function RejoinBattleFunc()
 			lobby:RejoinBattle(battleID)
 		end
-		
+
 		WG.Chobby.ConfirmationPopup(RejoinBattleFunc, "You are still in a game. Rejoin or abandon the other players?", nil, 315, 200, "rejoin", "abandon")
 	end
-	
+
 	lobby:AddListener("OnRejoinOption", OnRejoinOption)
 end
 

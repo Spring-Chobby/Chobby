@@ -101,7 +101,7 @@ local function DownloadQueueUpdate()
 
 	local front = downloadQueue[1]
 	if not front.active then
-		if USE_WRAPPER_DOWNLOAD and WG.WrapperLoopback then
+		if USE_WRAPPER_DOWNLOAD and WG.WrapperLoopback and WG.WrapperLoopback.DownloadFile then
 			WG.WrapperLoopback.DownloadFile(front.name, typeMap[front.fileType])
 			CallListeners("DownloadStarted", front.id, front.name, front.fileType)
 		else
@@ -227,7 +227,9 @@ function externalFunctions.CancelDownload(name, fileType)
 	end
 
 	if downloadQueue[index].active then
-		WG.WrapperLoopback.AbortDownload(name, typeMap[fileType])
+		if USE_WRAPPER_DOWNLOAD and WG.WrapperLoopback and WG.WrapperLoopback.AbortDownload then
+			WG.WrapperLoopback.AbortDownload(name, typeMap[fileType])
+		end
 		return
 	end
 
@@ -321,6 +323,8 @@ function widget:DownloadProgress(downloadID, downloaded, total)
 	if not index then
 		return
 	end
+	downloaded = downloaded / 1024 / 1024
+	total = total / 1024 / 1024
 	CallListeners("DownloadProgress", downloadQueue[index].id, downloaded, total, downloadQueue[index].name)
 end
 

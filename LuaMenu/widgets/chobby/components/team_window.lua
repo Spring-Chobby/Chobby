@@ -10,7 +10,7 @@ function TeamWindow:init()
 		OnClick = { function()
 			self:CreateInvitePlayerWindow()
 		end },
-	},
+	}
 
 	lobby:AddListener("OnJoinedTeam",
 		function(listner, ...)
@@ -49,14 +49,14 @@ function TeamWindow:init()
 	)
 
 	-- team chat
-	lobby:AddListener("OnSaidTeam", 
+	lobby:AddListener("OnSaidTeam",
 		function(listener, userName, msg)
 			if self.teamConsole ~= nil then
 				self.teamConsole:AddMessage(msg, userName)
 			end
 		end
 	)
-	lobby:AddListener("OnSaidTeamEx", 
+	lobby:AddListener("OnSaidTeamEx",
 		function(listener, userName, msg)
 			if self.teamConsole ~= nil then
 				self.teamConsole:AddMessage(msg, userName, nil, Configuration.meColor, true)

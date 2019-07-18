@@ -34,13 +34,17 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[The Sling's cannon has the range to shoot turrets from safety but the Sling itself is weak and has short sight range. Keep out of direct combat.]]
 			},
 			{
-				image = "unitpics/cloakcon.png",
-				text = [[The Conjurer's ability to cloak makes it an ideal spotter for Slings. Be carefuly moving around enemy territory as cloak is disrupted by proximity to enemy units and the use of most abilities.]]
-			},
-			{
 				image = "unitpics/staticradar.png",
 				text = [[Radar only reveals the approximate location of enemy forces so, in order to consistently hit their target, most artillery units require a spotter. Once a radar signature is identified as a structure it will no longer wobble.]]
 			},
+			{
+				image = "unitpics/planelightscout.png",
+				text = [[Morph a Radar Tower into a Sparrow scout plane to act as a spotter for your Slings. Conjurers may also be used as spotters, as long as they remain cloaked and stay away from enemies.]]
+			},
+			-- {
+				-- image = "unitpics/cloakcon.png",
+				-- text = [[The Conjurer's ability to cloak makes it an ideal spotter for Slings. Be carefuly moving around enemy territory as cloak is disrupted by proximity to enemy units and the use of most abilities.]]
+			-- },
 			--{
 			--	image = "unitpics/shieldraid.png",
 			--	text = [[Watch out for flanks by Bandits.]]
@@ -59,6 +63,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				extraUnlocks = {
 					"cloakarty",
+					"planelightscout",
 				},
 				startUnits = {
 					{
@@ -71,6 +76,12 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "staticradar",
 						x = 2925,
 						z = 1605,
+						facing = 0, 
+					},
+					{
+						name = "staticradar",
+						x = 1750,
+						z = 1139,
 						facing = 0, 
 					},
 					{
@@ -508,6 +519,7 @@ local function GetPlanet(planetUtilities, planetID)
 			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"cloakarty",
+				"planelightscout",
 			},
 			modules = {
 				"module_adv_targeting_LIMIT_D_2",

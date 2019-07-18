@@ -1,12 +1,12 @@
 InformationPopup = LCS.class{}
 
 function InformationPopup:init(infoText, extras)
-	
+
 	extras = extras or {}
 	extras.width = extras.width or 320
 	extras.height = extras.height or 220
 	self.closeFunc = extras.closeFunc
-	
+
 	self.mainWindow = Window:New {
 		x = 700,
 		y = 300,
@@ -18,11 +18,11 @@ function InformationPopup:init(infoText, extras)
 		parent = WG.Chobby.lobbyInterfaceHolder,
 		classname = "main_window_small",
 	}
-	
+
 	local function DoneFunc()
 		self:Close()
 	end
-	
+
 	if extras.heading then
 		Label:New {
 			x = 0,
@@ -35,7 +35,7 @@ function InformationPopup:init(infoText, extras)
 			parent = self.mainWindow,
 		}
 	end
-	
+
 	self.lblText = TextBox:New {
 		x = 15,
 		right = 15,
@@ -45,7 +45,7 @@ function InformationPopup:init(infoText, extras)
 		text = infoText,
 		parent = self.mainWindow,
 	}
-	
+
 	local btnAccept = Button:New {
 		x = "25%",
 		right = "25%",
@@ -61,7 +61,7 @@ function InformationPopup:init(infoText, extras)
 		},
 		parent = self.mainWindow,
 	}
-	
+
 	local popupHolder = PriorityPopup(self.mainWindow, DoneFunc, DoneFunc)
 end
 

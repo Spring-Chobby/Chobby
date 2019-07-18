@@ -783,7 +783,8 @@
 		"thr_mod": 1.0
 	},
 	"staticantinuke": {
-		"role": ["static", "heavy"]
+		"role": ["static", "heavy", "support"],
+		"limit": 1
 	},
 	"turretheavylaser": {
 		"role": ["static", "heavy"],

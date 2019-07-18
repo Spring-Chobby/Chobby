@@ -742,8 +742,8 @@ function Interface:CloseQueue(name)
 	return self
 end
 
-function Interface:ConfirmAgreement(verif_code)
-	self:_SendCommand(concat("CONFIRMAGREEMENT", verif_code))
+function Interface:ConfirmAgreement(verificationCode)
+	self:_SendCommand(concat("CONFIRMAGREEMENT", verificationCode))
 	return self
 end
 

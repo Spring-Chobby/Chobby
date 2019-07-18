@@ -79,7 +79,8 @@ function Spring.Utilities.TableToString(data, key)
 		end
 	end
 	if dataType == "string" then
-		return key .. [[="]] .. data .. [["]] 
+		local cleaned = data:gsub("\n", "\\n"):gsub("\r", "\\r"):gsub("\t", "\\t"):gsub("\a", "\\a"):gsub("\v", "\\v"):gsub("\"", "\\\"")
+		return key .. [[="]] .. cleaned .. [["]] 
 	elseif dataType == "number" then
 		return key .. "=" .. data 
 	elseif dataType == "boolean" then

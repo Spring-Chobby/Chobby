@@ -51,12 +51,12 @@ function GetTabPanelHandler(name, conf)
 		end
 		submenuDisplayPanel:SetVisibility(newVisibility)
 	end
-	
+
 	local function OpenSubmenu(panelHandler)
 		externalFunctions.Hide()
 		panelHandler.Show()
 	end
-	
+
 	local function ToggleShow(obj, tab, openOnly, closeOnly)
 		if analyticsName then
 			WG.Analytics.SendOnetimeEvent(analyticsName .. ":" .. tab.name)
@@ -65,7 +65,7 @@ function GetTabPanelHandler(name, conf)
 			OpenSubmenu(tab.panelHandler)
 			return true
 		end
-		
+
 		local control = tab.control
 		if not control then
 			return false
@@ -80,11 +80,11 @@ function GetTabPanelHandler(name, conf)
 				return false
 			end
 		end
-		
+
 		if closeOnly then
 			return false
 		end
-		
+
 		displayPanel:ClearChildren()
 		displayPanel:AddChild(control)
 		if not displayPanel.visible then
@@ -155,7 +155,7 @@ function GetTabPanelHandler(name, conf)
 		end
 		return false
 	end
-	
+
 	local function IsTabSelectedByIndex(index, tabName)
 		return tabs[index].control and tabs[index].control.parent and tabs[index].control.visible and ((not tabName) or tabName == tabs[index].name)
 	end
@@ -175,7 +175,7 @@ function GetTabPanelHandler(name, conf)
 				displayPanel:Hide()
 			end
 		end
-		
+
 		SetSubmenuDisplayVisibility(false)
 		buttonsHolder:SetVisibility(false)
 	end
@@ -210,12 +210,12 @@ function GetTabPanelHandler(name, conf)
 				tabs[i].panelHandler.Rescale(newFontSize, newButtonHeight, newButtonWidth, newButtonOffset)
 			end
 		end
-		
+
 		fontSizeScale = newFontSize or fontSizeScale
 		buttonWidth = newButtonWidth or buttonWidth
 		buttonHeight = newButtonHeight or buttonHeight
 		buttonSpacing = newButtonSpacing or buttonSpacing
-		
+
 		if newButtonOffset then
 			buttonOffset = newButtonOffset - buttonSpacing
 		end
@@ -244,7 +244,7 @@ function GetTabPanelHandler(name, conf)
 			ToggleShow(tabs[tabIndex].button, tabs[tabIndex], true)
 		end
 	end
-	
+
 	function externalFunctions.CloseTabs()
 		for i = 1, #tabs do
 			if IsTabSelectedByIndex(i, tabs[i].name) then
@@ -253,7 +253,7 @@ function GetTabPanelHandler(name, conf)
 		end
 		return false
 	end
-	
+
 	function externalFunctions.CloseSubTabs()
 		for i = 1, #tabs do
 			if tabs[i].panelHandler then
@@ -266,7 +266,7 @@ function GetTabPanelHandler(name, conf)
 		end
 		return false, false
 	end
-	
+
 	function externalFunctions.OpenTabByName(tabName)
 		for i = 1, #tabs do
 			if tabs[i].name == tabName then
@@ -275,7 +275,7 @@ function GetTabPanelHandler(name, conf)
 			end
 		end
 	end
-	
+
 	function externalFunctions.GetTabByName(tabName)
 		for i = 1, #tabs do
 			if tabs[i].name == tabName then
@@ -392,7 +392,7 @@ function GetTabPanelHandler(name, conf)
 		newTab.entryCheck = entryCheck
 		newTab.entryCheckBootMode = entryCheckBootMode
 		local button
-		
+
 		if tabControlOverride and tabControlOverride[name] then
 			button = tabControlOverride[name](fontSizeScale)
 		else
@@ -412,7 +412,7 @@ function GetTabPanelHandler(name, conf)
 			buttonsHolder:AddChild(button)
 		end
 		ButtonUtilities.SetFontSizeScale(button, fontSizeScale)
-		
+
 		button.OnClick = button.OnClick or {}
 		button.OnClick[#button.OnClick + 1] = function(obj)
 			if newTab.entryCheck then
@@ -426,12 +426,12 @@ function GetTabPanelHandler(name, conf)
 				ToggleShow(obj, newTab)
 			end
 		end
-		
+
 		if submenuData then
 			local function BackToSubmenu(subPanelHandler)
-				subPanelHandler.Hide() 
+				subPanelHandler.Hide()
 				externalFunctions.Show()
-				
+
 				if displayPanel.children[1] and subPanelHandler.GetManagedControlByName(displayPanel.children[1].name) then
 					displayPanel:ClearChildren()
 					if displayPanel.visible then
@@ -439,7 +439,7 @@ function GetTabPanelHandler(name, conf)
 					end
 				end
 			end
-			
+
 			local subConfg = {
 				buttonWindow = buttonWindow,
 				displayPanel = displayPanel,
@@ -457,12 +457,12 @@ function GetTabPanelHandler(name, conf)
 				hideMyButtons = submenuData.hideMyButtons,
 				startWithTabOpen = submenuData.startWithTabOpen,
 			}
-			
+
 			local panelHandler = GetTabPanelHandler(name, subConfg)
 			panelHandler.Hide()
 			newTab.panelHandler = panelHandler
 		end
-		
+
 		newTab.activityLabel = Label:New {
 			name = "activity_label",
 			y = 2,
@@ -505,7 +505,7 @@ function GetTabPanelHandler(name, conf)
 
 		UpdateButtonLayout()
 	end
-	
+
 	function externalFunctions.CloseSubmenu()
 		local closedSubmenu = false
 		for i = 1, #tabs do
@@ -513,14 +513,14 @@ function GetTabPanelHandler(name, conf)
 				closedSubmenu = tabs[i].panelHandler.CloseSubmenu() or closedSubmenu
 			end
 		end
-		
+
 		externalFunctions.Hide()
 		if externalFunctions.IsTabSelected() then
 			return true
 		end
 		return closedSubmenu
 	end
-	
+
 	function externalFunctions.BackOneLevel()
 		if externalFunctions.IsVisible() then
 			backFunction(externalFunctions)
@@ -533,7 +533,7 @@ function GetTabPanelHandler(name, conf)
 		end
 		return false
 	end
-	
+
 	-------------------------------------------------------------------
 	-- Initialization
 	-------------------------------------------------------------------
@@ -590,7 +590,7 @@ function GetTabPanelHandler(name, conf)
 			},
 		}
 	end
-	
+
 	for i = 1, #initialTabs do
 		externalFunctions.AddTab(
 			initialTabs[i].name,
@@ -602,8 +602,8 @@ function GetTabPanelHandler(name, conf)
 			initialTabs[i].entryCheckBootMode
 		)
 	end
-	
+
 	externalFunctions.Rescale()
-	
+
 	return externalFunctions
 end

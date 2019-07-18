@@ -56,7 +56,7 @@ local function GetNewLoginWindow(failFunc)
 	if steamMode then
 		currentLoginWindow = WG.Chobby.SteamLoginWindow(failFunc, nil, "main_window")
 	else
-		currentLoginWindow = WG.Chobby.LoginWindow(failFunc, nil, "main_window")
+		currentLoginWindow = WG.Chobby.LoginWindow(failFunc, nil, "main_window", {loginAfterRegister = true})
 	end
 	return currentLoginWindow
 end
@@ -153,7 +153,7 @@ local function InitializeListeners()
 		for channelName, _ in pairs(Configuration:GetChannels()) do
 			lobby:Join(channelName)
 		end
-		
+
 		if loginAcceptedFunction then
 			loginAcceptedFunction()
 		end

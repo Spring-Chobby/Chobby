@@ -41,7 +41,7 @@ function SendCommand(cmdName, args)
 	else
 		client:send(cmdName .. " " ..json.encode(args).."\n")
 	end
-	
+
 	if PRINT_DEBUG then
 		Spring.Echo("SendCommand", cmdName .. " " .. ((args and json.encode(args)) or "{}"))
 	end
@@ -66,11 +66,11 @@ end
 
 -- replay info read
 local function ReadReplayInfoDone(args)
-	--[[ 
+	--[[
 	    public class ReadReplayInfoDone {
                     public string RelativePath { get; set; }
                    public ReplayReader.ReplayInfo ReplayInfo { get; set; }
-				   
+
   public class ReplayInfo
         {
             public string Engine { get; set; }
@@ -91,10 +91,10 @@ local function ReadReplayInfoDone(args)
                 public int? AllyTeam { get; set; }
             }
         }
-		
-		
+
+
 		ReplayInfo is nil in case of failure
-				   
+
              }
 
 	]]--
@@ -168,10 +168,10 @@ local function WrapperOnline(args)
 	end
 end
 
--- TODO wrapper will send this to confirm friend join on steam (either invite or self join) use to auto accept party join request and to notify player when joining "offline" COOP 
+-- TODO wrapper will send this to confirm friend join on steam (either invite or self join) use to auto accept party join request and to notify player when joining "offline" COOP
 local function SteamFriendJoinedMe(args)
 	WG.SteamCoopHandler.SteamFriendJoinedMe(args.FriendSteamID, args.FriendSteamName)
-	--[[ 
+	--[[
 	    public string FriendSteamID { get; set; }
         public string FriendSteamName { get; set; }
 	]]--
@@ -204,7 +204,7 @@ local function SteamConnectSpring(args)
         public string Map { get; set; }
         public string Game { get; set; }
 
-        public string Engine { get; set; }	
+        public string Engine { get; set; }
 	]]--
 end
 
@@ -225,28 +225,28 @@ end
 
 local function DiscordOnSpectate(args)
  -- args.Secret
-end 
+end
 
 local function DiscordOnJoin(args)
  -- args.Secret
 end
 
 local function DiscordOnError(args)
- -- args.Message 
+ -- args.Message
  -- args.ErrorCode
 end
 
 local function DiscordOnDisconnected(args)
   -- args.Message
   -- args.ErrorCode
-end 
+end
 
 local function DiscordOnJoinRequest(args)
- -- args.userId 
- -- args.username 
+ -- args.userId
+ -- args.username
  -- args.discriminator
  -- args.avatar
-end 
+end
 
 local function UserActivity(args)
 	-- args.IdleSeconds
@@ -347,12 +347,12 @@ function WrapperLoopback.StartNewSpring(args)
         public string StartDemoName { get; set; } // name of the demo to launch
 
 		public string Engine { get; set; } // name of the engine, this file also gets auto checked/downloaded
-		
+
         public string SpringSettings { get; set;  } // spring settings override
-        
+
         public List<DownloadFile> Downloads { get; set; } // list of downloads, files here will be downloaded before spring is started. Include demo file here, if its not local already.
 														  // each download file contains  FileType and Name
-														  // non-rapid entries will be always redownloaded, so check presence of map before requesting it, wrapper does not init unitsync 
+														  // non-rapid entries will be always redownloaded, so check presence of map before requesting it, wrapper does not init unitsync
     }
 ]]--
 	--Spring.Utilities.TableEcho(args, "StartNewSpring")
@@ -370,7 +370,7 @@ function WrapperLoopback.DownloadImage(args)
     public class DownloadImage
     {
         public string RequestToken { get; set; } // client can set token to track multiple responses/requests
-        public string ImageUrl { get; set; }  
+        public string ImageUrl { get; set; }
         public string TargetPath { get; set; }
     }
 ]]--
@@ -404,7 +404,7 @@ function WrapperLoopback.SteamInviteFriendToGame(steamID)
 	SendCommand("SteamInviteFriendToGame", {SteamID = steamID})
 end
 
--- TODO instructs wrapper to establish p2p, punch ports and start clients 
+-- TODO instructs wrapper to establish p2p, punch ports and start clients
 function WrapperLoopback.SteamHostGameRequest(args)
 	--[[
         public class SteamHostPlayerEntry
@@ -413,12 +413,12 @@ function WrapperLoopback.SteamHostGameRequest(args)
             public string Name { get; set; }
             public string ScriptPassword { get; set; }
         }
-        
+
         public List<SteamHostPlayerEntry> Players { get; set; } = new List<SteamHostPlayerEntry>();
         public string Map { get; set; }
         public string Game { get; set; }
 
-        public string Engine { get; set; }	
+        public string Engine { get; set; }
 	]]--
 	SendCommand("SteamHostGameRequest", args)
 end
@@ -443,10 +443,10 @@ function WrapperLoopback.DiscordUpdatePresence(args)
         public string matchSecret; /* max 128 bytes */
         public string joinSecret; /* max 128 bytes */
         public string spectateSecret; /* max 128 bytes */
-        public bool instance;	
+        public bool instance;
 	]]--
 	SendCommand("DiscordUpdatePresence", args)
-end 
+end
 
 function WrapperLoopback.DiscordRespond(args)
 	--[[
@@ -454,7 +454,7 @@ function WrapperLoopback.DiscordRespond(args)
           public int Reply { get; set; }
 	]]--
 	SendCommand("DiscordRespond", args)
-end 
+end
 
 
 --------------------------------------------------------------------------------
@@ -470,7 +470,7 @@ end
 -- sends GA design event (for example gui actions). Value is optional, if sent must be double
 function WrapperLoopback.GaAddDesignEvent(eventID, value)
 	SendCommand("GaAddDesignEvent", {EventID = eventID, Value = value})
-end 
+end
 
 -- sends GA progression event. Score is optional, if sent must be double. Level3 and 2 are optional but if 3 is sent then 2 and 1 must be set and if 2 is sent then 1 must be set.
 function WrapperLoopback.GaAddProgressionEvent(status, progression1, progression2, progression3, score)
@@ -521,7 +521,7 @@ end
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	
+
 	local port = VFS.LoadFile("chobby_wrapper_port.txt"); -- get wrapper port from VFS file
 	if not port then
 		widgetHandler:RemoveWidget()
@@ -530,7 +530,7 @@ function widget:Initialize()
 	end
 	Spring.Log("Chobby", LOG.NOTICE, "Using wrapper port: ", port)
 	SocketConnect("127.0.0.1", port)
-	
+
 	WG.WrapperLoopback = WrapperLoopback
 end
 
@@ -543,7 +543,7 @@ local function CommandReceived(command)
 	else
 		cmdName = command
 	end
-	
+
 	local commandFunc = commands[cmdName]
 	if PRINT_DEBUG then
 		if string.find(cmdName, "Download") then
@@ -556,7 +556,7 @@ local function CommandReceived(command)
 		local success, obj = pcall(json.decode, arguments)
 		if not success then
 			Spring.Log(LOG_SECTION, LOG.ERROR, "Failed to parse JSON: " .. tostring(arguments))
-		else 
+		else
 			commandFunc(obj)
 		end
 	else

@@ -26,14 +26,14 @@ local function AddListeners()
 		WG.WrapperLoopback.Alert(message)
 	end
 	lobby:AddListener("OnRung", OnRung)
-	
+
 	local function OnVoteUpdate(listener, voteMessage, pollType, notify, mapPoll, candidates, votesNeeded, pollUrl)
 		if notify and not lobby:GetMyIsSpectator() and MouseOutside() then
 			WG.WrapperLoopback.Alert("Vote to start the battle.")
 		end
 	end
 	lobby:AddListener("OnVoteUpdate", OnVoteUpdate)
-	
+
 	local function OnBattleAboutToStart()
 		if MouseOutside() then
 			WG.WrapperLoopback.Alert("Zero-K battle starting!")

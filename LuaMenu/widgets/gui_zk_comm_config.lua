@@ -71,7 +71,7 @@ local function CreateModuleEntry(moduleDef, commConfig, level, slotNum, moduleLi
 			end
 		},
 	}
-	
+
 	local imagePanel = Panel:New {
 		x = 2,
 		y = 2,
@@ -126,7 +126,7 @@ local function CreateModuleEntry(moduleDef, commConfig, level, slotNum, moduleLi
 		text = "" .. moduleDef.cost,
 		parent = holder,
 	}
-	
+
 	return holder, {moduleDef.humanName, moduleDef.slotType or "", moduleDef.cost}
 end
 
@@ -146,7 +146,7 @@ end
 CreateSlotEntry = function(commConfig, level, slotNum, configuratorStack, moduleList, holder)
 	local currentModule = commConfig.slots[level] and commConfig.slots[level][slotNum]
 	local currentModuleDef = currentModule and moduleDefNames[currentModule] and moduleDefs[moduleDefNames[currentModule]]
-	
+
 	if not holder then
 		holder = Panel:New{
 			parent = configuratorStack,
@@ -157,7 +157,7 @@ CreateSlotEntry = function(commConfig, level, slotNum, configuratorStack, module
 			padding = {0,0,0,0}
 		}
 	else
-		holder:ClearChildren()	
+		holder:ClearChildren()
 	end
 	local imagePanel = Panel:New {
 		x = 2,
@@ -207,7 +207,7 @@ end
 
 local function SetupConfigurator(commConfig, configuratorStack, moduleList)
 	local chassisDef = chassisDefsByName[commConfig.chassis]
-	
+
 	configuratorStack:ClearChildren()
 	for i=1,5 do
 		local level = Label:New{
@@ -239,7 +239,7 @@ local function CreateCommEntry(commConfig, configuratorStack, moduleList)
 			end
 		},
 	}
-	
+
 	local imagePanel = Panel:New {
 		x = 2,
 		y = 2,
@@ -248,7 +248,7 @@ local function CreateCommEntry(commConfig, configuratorStack, moduleList)
 		padding = {1,1,1,1},
 		parent = holder,
 	}
-	
+
 	local image = Image:New {
 		name = "image",
 		x = 0,
@@ -281,7 +281,7 @@ local function CreateCommEntry(commConfig, configuratorStack, moduleList)
 		text = chassisDef.humanName,
 		parent = holder,
 	}
-	
+
 	return holder, {commConfig.name, chassisDef.humanName}
 end
 
@@ -289,7 +289,7 @@ end
 --------------------------------------------------------------------------------
 -- Controls
 
-local function InitializeControls(parentControl)	
+local function InitializeControls(parentControl)
 	Label:New {
 		x = 18,
 		y = 16,
@@ -299,7 +299,7 @@ local function InitializeControls(parentControl)
 		font = WG.Chobby.Configuration:GetFont(3),
 		caption = i18n("Configure commanders"),
 	}
-	
+
 	local btnLeaveScreen = Button:New {
 		right = 11,
 		y = 7,
@@ -315,13 +315,13 @@ local function InitializeControls(parentControl)
 		},
 		parent = parentControl,
 	}
-	
+
 	local comms = LoadComms()
-	
+
 	-------------------------
 	-- Generate List
 	-------------------------
-	
+
 	local configListHolder = Control:New {
 		x = 12,
 		right = "50%",
@@ -332,7 +332,7 @@ local function InitializeControls(parentControl)
 		draggable = false,
 		padding = {0, 0, 0, 0},
 	}
-	
+
 	local configurator = Panel:New{
 		x = 12,
 		right = "50%",
@@ -362,7 +362,7 @@ local function InitializeControls(parentControl)
 		autosize = true,
 		resizeItems = false,
 	}
-	
+
 	local moduleListHolder = Control:New{
 		x = "50%",
 		right = 12,
@@ -372,14 +372,14 @@ local function InitializeControls(parentControl)
 		resizable = false,
 		draggable = false,
 		padding = {0, 0, 0, 0},
-	}	
-	
+	}
+
 	local headingsCommanders = {
 		{name = "Name", x = 88, width = 240},
 		{name = "Chassis", x = 88 + 240, width = 140},
 	}
 	local commanderList = WG.Chobby.SortableList(configListHolder, headingsCommanders, 80, 1)
-	
+
 	local headingsModules = {
 		{name = "Name", x = 88, width = 300},
 		{name = "Type", x = 88 + 300, width = 140},
@@ -391,7 +391,7 @@ local function InitializeControls(parentControl)
 	for i = 1, #comms do
 		local controls, order = CreateCommEntry(comms[i], configuratorStack, moduleList)
 		items[#items + 1] = {#items, controls, order}
-	end	
+	end
 	commanderList:AddItems(items)
 end
 
@@ -427,7 +427,7 @@ end
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	
+
 	WG.CommConfig = CommConfig
 end
 

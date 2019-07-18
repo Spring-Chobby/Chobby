@@ -30,7 +30,7 @@ end
 
 function Interface:Register(userName, password, email, useSteamLogin)
 	self:super("Register", userName, password, email)
-	
+
 	password = (password and string.len(password) > 0 and VFS.CalculateHash(password, 0)) or nil
 	local steamToken = (useSteamLogin and self.steamAuthToken) or nil
 	if not (password or steamToken) then
@@ -131,7 +131,7 @@ function Interface:FriendRequest(userName, steamID)
 		SteamID = steamID,
 		Relation = 1, -- Friend
 	}
-	
+
 	self:_SendCommand("SetAccountRelation " .. json.encode(sendData))
 	return self
 end
@@ -155,7 +155,7 @@ function Interface:Unfriend(userName, steamID)
 		SteamID = steamID,
 		Relation = 0, -- None
 	}
-	
+
 	self:_SendCommand("SetAccountRelation " .. json.encode(sendData))
 	return self
 end
@@ -166,7 +166,7 @@ function Interface:Ignore(userName)
 		TargetName = userName,
 		Relation = 2, -- Ignore
 	}
-	
+
 	self:_SendCommand("SetAccountRelation " .. json.encode(sendData))
 	return self
 end
@@ -177,7 +177,7 @@ function Interface:Unignore(userName)
 		TargetName = userName,
 		Relation = 0, -- None
 	}
-	
+
 	self:_SendCommand("SetAccountRelation " .. json.encode(sendData))
 	return self
 end
@@ -213,7 +213,7 @@ function Interface:HostBattle(battleTitle, password, modeName, mapName)
 	else
 		engineName = string.gsub(string.gsub(Spring.Utilities.GetEngineVersion(), " maintenance", ""), " develop", "")
 	end
-	
+
 	local sendData = {
 		Header = {
 			Title = battleTitle,
@@ -223,7 +223,7 @@ function Interface:HostBattle(battleTitle, password, modeName, mapName)
 			Map = mapName,
 		}
 	}
-	
+
 	self:_SendCommand("OpenBattle " .. json.encode(sendData))
 end
 
@@ -377,11 +377,11 @@ function Interface:SetModOptions(data)
 		local sendData = {
 			Options = data,
 		}
-		
+
 		self:_SendCommand("SetModOptions " .. json.encode(sendData))
 		return self
 	end
-	
+
 	-- Don't send anything, server thinks it means reset to default
 	--self:_SendCommand("SetModOptions {\"Options\":{}}")
 end
@@ -488,9 +488,9 @@ end
 function Interface:JoinMatchMaking(queueNamePossiblyList)
 	self.joinedQueues = self.joinedQueues or {}
 	self.joinedQueueList = self.joinedQueueList or {}
-	
+
 	self.pendingQueueRequests = self.pendingQueueRequests + 1
-	
+
 	if type(queueNamePossiblyList) == "table" then
 		for i = 1, #queueNamePossiblyList do
 			local queueName = queueNamePossiblyList[i]
@@ -506,7 +506,7 @@ function Interface:JoinMatchMaking(queueNamePossiblyList)
 			self.joinedQueueList[#self.joinedQueueList + 1] =  queueName
 		end
 	end
-	
+
 	local sendData = {
 		Queues = self.joinedQueueList
 	}
@@ -516,7 +516,7 @@ end
 
 function Interface:LeaveMatchMaking(queueNamePossiblyList)
 	self.pendingQueueRequests = self.pendingQueueRequests + 1
-	
+
 	if self.joinedQueues and self.joinedQueueList then
 		if type(queueNamePossiblyList) == "table" then
 			for i = 1, #queueNamePossiblyList do
@@ -544,7 +544,7 @@ function Interface:LeaveMatchMaking(queueNamePossiblyList)
 			end
 		end
 	end
-	
+
 	local sendData = {
 		Queues = self.joinedQueueList or {}
 	}
@@ -557,7 +557,7 @@ function Interface:LeaveMatchMakingAll()
 		Queues = {}
 	}
 	self:_SendCommand("MatchMakerQueueRequest " .. json.encode(sendData))
-	
+
 	return self
 end
 
@@ -587,7 +587,7 @@ function Interface:InviteToParty(userName)
 		return
 	end
 	self:_OnPartyInviteSent(userName) -- Notify widgets that lobby sent an invitation.
-	
+
 	local function InviteRejectCheck()
 		local myParty = self:GetMyParty()
 		if not myParty then
@@ -599,12 +599,12 @@ function Interface:InviteToParty(userName)
 				return
 			end
 		end
-		
+
 		self:_OnPartyInviteResponse(userName, false)
 	end
-	
+
 	WG.Delay(InviteRejectCheck, 65)
-	
+
 	local sendData = {
 		UserName = userName
 	}
@@ -821,19 +821,19 @@ function Interface:_User(data)
 	local user = self.users[userName]
 	if user == nil or user.isOffline then
 		self:_OnAddUser(userName, userTable)
-		
+
 		for i = 1, #self.commonChannels do
 			self:_OnJoined(self.commonChannels[i], userName)
 		end
-		
+
 		self:UpdateUserBattleStatus(userName, data.BattleID)
 		return
 	end
 
 	self:_OnUpdateUserStatus(userName, userTable)
-	
+
 	self:UpdateUserBattleStatus(userName, data.BattleID)
-	
+
 	-- User {"AccountID":212941,"SpringieLevel":1,"Avatar":"corflak","Country":"CZ","EffectiveElo":1100,"Effective1v1Elo":1100,"InGameSince":"2016-06-25T11:36:38.9075025Z","IsAdmin":false,"IsBot":true,"IsInBattleRoom":false,"BanMute":false,"BanSpecChat":false,"Level":0,"ClientType":4,"LobbyVersion":"Springie 1.3.2.116","Name":"Elerium","IsAway":false,"IsInGame":true}
 end
 Interface.jsonCommands["User"] = Interface._User
@@ -843,7 +843,7 @@ function Interface:_UserDisconnected(data)
 	for i = 1, #self.commonChannels do
 		self:_OnLeft(self.commonChannels[i], data.Name, "")
 	end
-	
+
 	self:_OnRemoveUser(data.Name)
 end
 Interface.jsonCommands["UserDisconnected"] = Interface._UserDisconnected
@@ -863,7 +863,7 @@ function Interface:_FriendList(data)
 			end
 			newFriendMap[userName] = true
 		end
-	
+
 		for _, userName in pairs(self.friends) do
 			if not newFriendMap[userName] then
 				self:_OnUnfriend(userName)
@@ -873,7 +873,7 @@ function Interface:_FriendList(data)
 		--return
 	--end
 	--self.friendListRecieved = true
-	
+
 	self:_OnFriendList(data.Friends)
 end
 Interface.jsonCommands["FriendList"] = Interface._FriendList
@@ -889,7 +889,7 @@ function Interface:_IgnoreList(data)
 			end
 			newIgnoreMap[userName] = true
 		end
-	
+
 		for _, userName in pairs(self.ignored) do
 			if not newIgnoreMap[userName] then
 				self:_OnUnfriend(userName)
@@ -917,6 +917,9 @@ end
 Interface.jsonCommands["ConnectSpring"] = Interface._ConnectSpring
 
 function Interface:_LeftBattle(data)
+	if data.User == self:GetMyUserName() then
+		self:_OnLeaveBattle(data.BattleID)
+	end
 	self:_OnLeftBattle(data.BattleID, data.User)
 end
 Interface.jsonCommands["LeftBattle"] = Interface._LeftBattle
@@ -976,15 +979,15 @@ end
 Interface.jsonCommands["JoinedBattle"] = Interface._JoinedBattle
 
 function Interface:_JoinBattleSuccess(data)
-	
+
 	self:_OnJoinBattle(data.BattleID, 0)
-	
+
 	local battle = self:GetBattle(data.BattleID)
 	if not battle then
 		-- Perhaps we need TryGetBattle.
 		return
 	end
-	
+
 	local newPlayers = data.Players
 	local newPlayerMap = {}
 	for i = 1, #newPlayers do
@@ -1000,13 +1003,13 @@ function Interface:_JoinBattleSuccess(data)
 		self:_OnJoinedBattle(data.BattleID, newPlayers[i].Name)
 		self:_UpdateUserBattleStatus(newPlayers[i])
 	end
-	
+
 	local newAis = data.Bots
 	battle.battleAis = {}
 	for i = 1, #newAis do
 		self:_UpdateBotStatus(newAis[i])
 	end
-	
+
 	self:_OnSetModOptions(data.Options)
 end
 Interface.jsonCommands["JoinBattleSuccess"] = Interface._JoinBattleSuccess
@@ -1024,12 +1027,12 @@ function Interface:_BattleUpdate(data)
 		Spring.Log(LOG_SECTION, LOG.ERROR, "Interface:_BattleUpdate no such battle with ID: " .. tostring(header.BattleID))
 		return
 	end
-	
+
 	local password = nil
 	if header.Password ~= nil then
 		password = (header.Password and header.Password ~= "" and true) or false
 	end
-	
+
 	local battleInfo = {
 		maxPlayers = header.MaxPlayers,
 		passworded = password,
@@ -1050,7 +1053,7 @@ function Interface:_BattleUpdate(data)
 	}
 
 	self:_OnUpdateBattleInfo(header.BattleID, battleInfo)
-	
+
 	if header.IsRunning ~= nil then
 		-- battle.RunningSince should be set by this point.
 		self:_OnBattleIngameUpdate(header.BattleID, header.IsRunning)
@@ -1153,55 +1156,55 @@ function Interface:ProcessVote(data, battle, duplicateMessageTime)
 	if not message:starts(POLL_START_MESSAGE) then
 		return false
 	end
-	
+
 	local lastOpen = FindLastOccurence(message, "%[")
 	local lastClose = FindLastOccurence(message, "%]")
 	local lastQuestion = FindLastOccurence(message, "%?")
 	if not (lastOpen and lastClose and lastQuestion) then
 		return false
 	end
-	
+
 	local voteMessage = string.sub(message, 0, lastQuestion)
 	local lasturl = FindLastOccurence(message, " http")
 	if lasturl then
 		voteMessage = string.sub(voteMessage, 0, lasturl - 1) .. "?"
 	end
-	
+
 	local voteData = string.sub(message, lastOpen + 1, lastClose - 1)
 	if voteData:starts(POLL_END) then
 		self:_OnVoteEnd(voteMessage, (voteData:starts(POLL_END_SUCCESS) and true) or false)
 		return true
 	end
-	
+
 	local lastSlash = FindLastOccurence(voteData, "/")
 	if not lastSlash then
 		return false
 	end
 	local votesNeeded = tonumber(string.sub(voteData, lastSlash + 1))
-	
+
 	local firstNo = string.find(voteData, "!n=")
 	if not firstNo then
 		return false
 	end
 	local noVotes = tonumber(string.sub(voteData, firstNo + 3, lastSlash - 1))
-	
+
 	local firstSlash = string.find(voteData, "/")
 	if not firstSlash then
 		return false
 	end
 	local yesVotes = tonumber(string.sub(voteData, 4, firstSlash - 1))
-	
+
 	if duplicateMessageTime and yesVotes == 0 then
 		-- Workaround message ordering ZKLS bug.
 		return true
 	end
-	
+
 	-- Get poll type and parameters
 	local pollType = "boolean"
 	local mapPoll = false
 	local pollUrl = false
 	local notify = false
-	
+
 	local mapStart = string.find(voteMessage, "Change map to ")
 	if mapStart then
 		mapStart = mapStart + 14
@@ -1210,34 +1213,34 @@ function Interface:ProcessVote(data, battle, duplicateMessageTime)
 	elseif string.find(voteMessage, "start the game?") then
 		notify = true
 	end
-	
+
 	local battlePollhandled = string.find(voteMessage, "(Yes)")
 	if battlePollhandled then
 		return true
 	end
-	
+
 	local candidates = {
 		{
-			id = 1, 
+			id = 1,
 			votes = yesVotes,
 		},
 		{
-			id = 2, 
+			id = 2,
 			votes = noVotes,
 		},
 	}
-	
+
 	self:_OnVoteUpdate(voteMessage, pollType, notify, mapPoll, candidates, votesNeeded, pollUrl)
 	return true
 end
 
 function Interface:_BattlePoll(data)
 	-- BattlePoll {"Topic":"Choose the next map","Options":[{"Name":"IncultaV2","Id":1,"Votes":0,"URL":"http://test.zero-k.info/Maps/Detail/7514"},{"Name":"Otago 1.1","Id":2,"Votes":0,"URL":"http://test.zero-k.info/Maps/Detail/56587"},{"Name":"Wanderlust v03","Id":3,"Votes":0,"URL":"http://test.zero-k.info/Maps/Detail/55669"},{"Name":"DunePatrol_wip_v03","Id":4,"Votes":0,"URL":"http://test.zero-k.info/Maps/Detail/23549"}],"VotesToWin":3,"YesNoVote":false,"MapSelection":true}
-	
+
 	if self.REVERSE_COMPAT_2 and data.YesNoVote then
 		return
 	end
-	
+
 	local candidates = {}
 	for i = 1, #data.Options do
 		local opt = data.Options[i]
@@ -1250,7 +1253,7 @@ function Interface:_BattlePoll(data)
 			candidates[i].name = opt.Name
 		end
 	end
-	
+
 	local voteMessage = data.Topic
 	local pollType, notify
 	if data.YesNoVote then
@@ -1261,7 +1264,7 @@ function Interface:_BattlePoll(data)
 	else
 		pollType = "multi"
 	end
-	
+
 	self:_OnVoteUpdate(voteMessage, pollType, data.NotifyPoll, data.MapName or data.MapSelection, candidates, data.VotesToWin, data.Url)
 end
 Interface.jsonCommands["BattlePoll"] = Interface._BattlePoll
@@ -1286,17 +1289,17 @@ function Interface:_Say(data)
 		end
 		self.duplicateMessageTimes[data.Time] = data.Text
 	end
-	
+
 	if data.Ring then
 		self:_OnRung(data.User, data.Text, data.Time, data.Source)
 	end
-	
+
 	if AUTOHOST_SUPRESSION[data.Text] then
 		if data.User and self.users[data.User] and self.users[data.User].isBot then
 			return
 		end
 	end
-	
+
 	local emote = data.IsEmote
 	if data.Place == 0 then -- Send to channel?
 		if data.User == "Nightwatch" then
@@ -1325,7 +1328,7 @@ function Interface:_Say(data)
 		-- data.Place == 1 -> General battle chat
 		-- data.Place == 3 -> Battle chat directed at user
 		local battleID = self:GetMyBattleID()
-		
+
 		if self.REVERSE_COMPAT_2 then
 			-- Chat poll parsing. Replaced by BattlePoll
 			local battle = battleID and self:GetBattle(battleID)
@@ -1333,7 +1336,7 @@ function Interface:_Say(data)
 				return
 			end
 		end
-		
+
 		if emote then
 			self:_OnSaidBattleEx(data.User, data.Text, data.Time)
 		else
@@ -1424,7 +1427,7 @@ function Interface:_OnPartyStatus(data)
 	local partyID, partyUsers = data.PartyID, data.UserNames
 	local wasInParty = false
 	local nowInParty = false
-	
+
 	-- Update user partyID
 	if self.partyMap[partyID] then
 		for i = 1, #self.partyMap[partyID] do
@@ -1439,7 +1442,7 @@ function Interface:_OnPartyStatus(data)
 			end
 		end
 	end
-	
+
 	for i = 1, #partyUsers do
 		local userName = partyUsers[i]
 		-- Consider using self:TryGetUser(userName)
@@ -1451,12 +1454,12 @@ function Interface:_OnPartyStatus(data)
 			end
 		end
 	end
-	
+
 	-- Leave party even, before party is destroyed
 	if wasInParty and not nowInParty then
 		self:_OnPartyLeft(partyID, self.partyMap[partyID])
 	end
-	
+
 	-- Update self.partyMap and make non-personal event
 	if #partyUsers == 0 then
 		if self.partyMap[partyID] then
@@ -1471,7 +1474,7 @@ function Interface:_OnPartyStatus(data)
 	else
 		self:_OnPartyCreate(partyID, partyUsers)
 	end
-	
+
 	-- Update party invite response
 	if self.myPartyID == partyID then
 		for i = 1, #partyUsers do
@@ -1481,7 +1484,7 @@ function Interface:_OnPartyStatus(data)
 			end
 		end
 	end
-	
+
 	-- Join party even, after party is created
 	if not wasInParty and nowInParty then
 		self:_OnPartyJoined(partyID, partyUsers)
@@ -1586,13 +1589,13 @@ function Interface:_SetModOptions(data)
 		Spring.Echo("Invalid modoptions format")
 		return
 	end
-	
+
 	for _,_ in pairs(data.Options) do
 		data.Options.commanderTypes = nil
 		self:_OnSetModOptions(data.Options)
 		return
 	end
-	
+
 	self:_OnResetModOptions()
 end
 Interface.jsonCommands["SetModOptions"] = Interface._SetModOptions
@@ -1630,8 +1633,8 @@ function Interface:_OnSiteToLobbyCommand(msg)
 		return
 	end
 	springLink = tostring(springLink);
-	
-	local s,e = springLink:find('@start_replay:') 
+
+	local s,e = springLink:find('@start_replay:')
 	if(s == 1)then
 		local repString = springLink:sub(15)
 		Spring.Echo(repString);
@@ -1640,8 +1643,8 @@ function Interface:_OnSiteToLobbyCommand(msg)
 		self:_OnLaunchRemoteReplay(replay, game, map, engine);
 		return
 	end
-	
-	s,e = springLink:find('@select_map:') 
+
+	s,e = springLink:find('@select_map:')
 	if s then
 		local mapName = springLink:sub(e + 1)
 		if self:GetMyBattleID() then
@@ -1651,8 +1654,8 @@ function Interface:_OnSiteToLobbyCommand(msg)
 		end
 		return
 	end
-	
-	s,e = springLink:find('chat/user/') 
+
+	s,e = springLink:find('chat/user/')
 	if s then
 		WG.Chobby.interfaceRoot.OpenPrivateChat(springLink:sub(e + 1))
 		return

@@ -16,12 +16,12 @@ function Interface:init()
 	self.status = "offline"
 	self.finishedConnecting = false
 	self.listeners = {}
-	
+
 	-- Inheritance is too shallow for interface_zerok.lua to get its own init.
 	if self.InheritanceIsBrokenWorkaroundInit then
 		self:InheritanceIsBrokenWorkaroundInit()
 	end
-	
+
 	-- timeout (in seconds) until first message is received from server before disconnect is assumed
 	self.connectionTimeout = 50
 
@@ -40,9 +40,9 @@ function Interface:Connect(host, port, user, password, cpu, localIP, lobbyVersio
 	end
 	self.client = socket.tcp()
 	self.client:settimeout(0)
-	
+
 	self.loginData = {user, password, cpu, localIP, lobbyVersion}
-	
+
 	self._startedConnectingTime = os.clock()
 	local res, err = self.client:connect(host, port)
 	if res == nil and err == "host not found" then
@@ -90,7 +90,7 @@ function Interface:ProcessBuffer()
 	if not self.commandBuffer then
 		return false
 	end
-	
+
 	self.bufferExecutionPos = self.bufferExecutionPos + 1
 	local command = self.commandBuffer[self.bufferExecutionPos]
 	if not self.commandBuffer[self.bufferExecutionPos + 1] then
@@ -141,11 +141,11 @@ function Interface:CommandReceived(command)
 		self:_CallListeners("OnCommandBuffered", command)
 		return
 	end
-	
+
 	if argumentsPos then
 		arguments = command:sub(argumentsPos + 1)
 	end
-	
+
 	self:_OnCommandReceived(cmdName, arguments, cmdId)
 end
 

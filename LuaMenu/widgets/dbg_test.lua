@@ -27,25 +27,25 @@ local function GetStatusControl(rank, alsoRemove)
 		padding = {0, 0, 0, 0},
 		children = {}
 	}
-	
+
 	local AddWindow, RemoveWindow
-	
+
 	function AddWindow()
 		local handler = WG.Chobby.interfaceRoot.GetStatusAndInvitesPanel()
 		handler.AddControl(window, rank)
-		
+
 		if alsoRemove then
 			WG.Delay(RemoveWindow, math.random()*4)
 		end
 	end
-	
+
 	function RemoveWindow()
 		local handler = WG.Chobby.interfaceRoot.GetStatusAndInvitesPanel()
 		handler.RemoveControl(name)
-		
+
 		WG.Delay(AddWindow, math.random()*4)
 	end
-	
+
 	WG.Delay(AddWindow, math.random()*4)
 end
 

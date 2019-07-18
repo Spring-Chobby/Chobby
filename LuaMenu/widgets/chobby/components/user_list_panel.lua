@@ -17,7 +17,7 @@ function UserListPanel:init(userUpdateFunction, spacing, showCount, getUserFunct
 			text = lobby:GetUserCount() .. " players online",
 		}
 	end
-	
+
 	self.userPanel = ScrollPanel:New {
 		x = 0,
 		right = 0,
@@ -70,15 +70,15 @@ local function CompareUsers(userName, otherName)
 	if not otherData then
 		return true
 	end
-	
+
 	if otherData.isAdmin ~= userData.isAdmin then
 		return userData.isAdmin
 	end
-	
+
 	if (not not otherData.isIgnored) ~= (not not userData.isIgnored) then
 		return otherData.isIgnored
 	end
-	
+
 	return string.lower(userName) < string.lower(otherName)
 end
 
@@ -104,7 +104,7 @@ function UserListPanel:Update()
 	local users = self:GetUsers()
 
 	table.sort(users, CompareUsers)
-	
+
 	for i = 1, #users do
 		self:AddUser(users[i])
 	end
@@ -122,10 +122,10 @@ function UserListPanel:AddUser(userName)
 		Spring.Echo("User data not found", userName)
 		return
 	end
-	if userData.isBot and not Configuration.displayBots then 
-		return 
+	if userData.isBot and not Configuration.displayBots then
+		return
 	end
-	
+
 	local userControl = (self.getUserFunction and self.getUserFunction(userName)) or WG.UserHandler.GetChannelUser(userName)
 	userControl:SetPos(nil, #(self.userPanel.children) * self.spacing)
 	self.userPanel:AddChild(userControl)

@@ -7,7 +7,7 @@ function FriendListWindow:init(parent)
 	self.columns = 3
 	self.itemHeight = 82
 	self.itemPadding = 0
-	
+
 	self.btnSteamFriends = Button:New {
 		right = 101,
 		y = 7,
@@ -23,7 +23,7 @@ function FriendListWindow:init(parent)
 			end
 		},
 	}
-	
+
 	self.btnSteamFriends:SetVisibility(Configuration.canAuthenticateWithSteam)
 	local function onConfigurationChange(listener, key, value)
 		if key == "canAuthenticateWithSteam" then
@@ -31,7 +31,7 @@ function FriendListWindow:init(parent)
 		end
 	end
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
-	
+
 	lobby:AddListener("OnAddUser",           function(listener, ...) self:OnAddUser(...) end)
 	lobby:AddListener("OnRemoveUser",        function(listener, ...) self:OnRemoveUser(...) end)
 	lobby:AddListener("OnFriend",            function(listener, ...) self:OnFriend(...) end)

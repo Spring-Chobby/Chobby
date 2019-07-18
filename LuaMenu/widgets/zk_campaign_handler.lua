@@ -135,7 +135,7 @@ end
 --	planetDefsByID = {}
 --	missionDefs = {}
 --	codexEntries = {}
---	
+--
 --	SetControlGreyout(startButton, true)
 --end
 --
@@ -213,13 +213,13 @@ end
 --			cat[#cat + 1] = id
 --		end
 --	end
---	
+--
 --	-- sort categories
 --	for catID in pairs(categories) do
 --		categoriesOrdered[#categoriesOrdered + 1] = catID
 --	end
 --	table.sort(categoriesOrdered)
---	
+--
 --	-- make tree view nodes
 --	for i=1,#categoriesOrdered do
 --		local catID = categoriesOrdered[i]
@@ -255,10 +255,10 @@ end
 --		end
 --		nodes[#nodes + 1] = node
 --	end
---	
+--
 --	-- make treeview
 --	if codexTree then
---		codexTree:Dispose()	
+--		codexTree:Dispose()
 --	end
 --	codexTree = Chili.TreeView:New{
 --		parent = codexTreeScroll,
@@ -275,7 +275,7 @@ end
 --	return false
 --	--[[
 --	if not game then return false end
---	
+--
 --	if not VFS.HasArchive(game) then
 --		VFS.DownloadArchive(game, "game")
 --		return true
@@ -303,7 +303,7 @@ end
 --				Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error loading campaign defs: " .. err2)
 --			end
 --		end
---		table.sort(campaignDefs, function(a, b) return (a.order or 100) < (b.order or 100) end) 
+--		table.sort(campaignDefs, function(a, b) return (a.order or 100) < (b.order or 100) end)
 --	end)
 --	if (not success) then
 --		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error loading campaign defs: " .. err)
@@ -321,15 +321,15 @@ end
 --		missionDefs = VFS.FileExists(missionDefPath) and VFS.Include(missionDefPath) or {}
 --		codexEntries = VFS.FileExists(codexDefPath) and VFS.Include(codexDefPath) or {}
 --		for i=1,#planetDefs do
---			planetDefsByID[planetDefs[i].id] = planetDefs[i]	
+--			planetDefsByID[planetDefs[i].id] = planetDefs[i]
 --		end
---		
+--
 --		GetGameIfNeeded(def.game)
---		
+--
 --		if def.startFunction then
 --			def.startFunction()
 --		end
---		
+--
 --		if WG.MusicHandler then
 --			WG.MusicHandler.StopTrack()
 --		end
@@ -364,7 +364,7 @@ end
 --	missionCompletionFunc = nil
 --	if missionArchive then
 --		VFS.UnmapArchive(missionArchive)
---		missionArchive = nil	
+--		missionArchive = nil
 --	end
 --end
 --
@@ -418,7 +418,7 @@ end
 --		local startscript = GetMissionStartscript(missionID)
 --		--missionArchive = dir .. missionDefs[missionName].archive
 --		--VFS.MapArchive(missionArchive)
---		
+--
 --		-- check for map
 --		local needMap = GetMapForMissionIfNeeded(missionID, startscript)
 --		if needMap then
@@ -426,18 +426,18 @@ end
 --			WG.Chobby.InformationPopup("You do not have the map " .. needMap .. " required for this mission. It will now be downloaded.")
 --			return
 --		end
---		
+--
 --		-- TODO: check for game
 --		local game = campaignDefsByID[currentCampaignID].game
 --		if GetGameIfNeeded(game) then
 --			WG.VisualNovel.scriptFunctions.Exit()
 --			WG.Chobby.InformationPopup("You do not have the game " .. game .. " required to play the campaign. It will now be downloaded.")
---			return	
+--			return
 --		end
---		
+--
 --		-- TODO: might want to edit startscript before we run Spring with it
 --		local scriptString = ScriptTXT(startscript)
---		
+--
 --		WG.VisualNovel.scriptFunctions.Exit()
 --		WG.LibLobby.localLobby:StartGameFromString(scriptString)
 --		runningMission = true
@@ -462,7 +462,7 @@ end
 --	elseif b.id == AUTOSAVE_ID then
 --		return false
 --	end
---	
+--
 --	if a.date.year > b.date.year then return true end
 --	if a.date.yday > b.date.yday then return true end
 --	if a.date.hour > b.date.hour then return true end
@@ -671,10 +671,10 @@ end
 --	starmapPlanetImage.fullHeight = planetDef.size[2]
 --	starmapBackground2:Invalidate()
 --	starmapPlanetImage:Invalidate()
---	
+--
 --	local font_large = 20
 --	local font_normal = 20
---	
+--
 --	-- display planet info panel
 --	starmapInfoPanel = Panel:New{
 --		name = "chobby_campaign_starmapInfoPanel",
@@ -774,7 +774,7 @@ end
 --	--Spring.Echo("Making planet image for "..planetDef.name)
 --	local x = math.floor(planetDef.pos[1]*starmapBackground.width + 0.5)
 --	local y = math.floor(planetDef.pos[2]*starmapBackground.height + 0.5)
---	
+--
 --	local allMissionsCompleted = true
 --	for i=1,#planetDef.missions do
 --		local missionID = planetDef.missions[i]
@@ -784,7 +784,7 @@ end
 --			break
 --		end
 --	end
---	
+--
 --	local button = Button:New{
 --		parent = starmapBackgroundHolder,
 --		width = planetDef.sizeMap[1],
@@ -811,7 +811,7 @@ end
 --		}
 --	}
 --	button:SetLayer(1)
---	
+--
 --	local label = Label:New {
 --		parent = starmapBackgroundHolder,
 --		x = x - 24,
@@ -826,7 +826,7 @@ end
 --
 --local function MakeStarMap()
 --	CloseStarMap()
---	
+--
 --	starmapWindow = Window:New{
 --		name = "chobby_campaign_starmap",
 --		caption = "Starmap",
@@ -880,7 +880,7 @@ end
 --	starmapBackground2.y = (-PLANET_BACKGROUND_SIZE + starmapBackgroundHolder.height)/2
 --	--starmapBackground2.width = 0
 --	--starmapBackground2.height = 0
---	
+--
 --	-- Planet image in detail screen
 --	starmapPlanetImage = Image:New{
 --		name = "chobby_campaign_starmapPlanetImage",
@@ -993,7 +993,7 @@ end
 --			entry.container.y = entry.container.y - (SAVEGAME_BUTTON_HEIGHT)
 --		end
 --		parent:Invalidate()
---		
+--
 --	end)
 --	if (not success) then
 --		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error deleting save " .. id .. ": " .. err)
@@ -1004,9 +1004,9 @@ end
 --	if not currentCampaignID then
 --		return
 --	end
---			
+--
 --	ChiliFX:AddFadeEffect({
---		obj = screens.newGame, 
+--		obj = screens.newGame,
 --		time = 0.15,
 --		endValue = 0,
 --		startValue = 1,
@@ -1096,7 +1096,7 @@ end
 --	local controlsEntry = {id = id}
 --	saveLoadControls[#saveLoadControls + 1] = controlsEntry
 --	local parent = allowSave and saveScroll or loadScroll
---	
+--
 --	controlsEntry.container = Panel:New {
 --		parent = parent,
 --		height = SAVEGAME_BUTTON_HEIGHT,
@@ -1161,7 +1161,7 @@ end
 --			y = 8,
 --			font = { size = 18 },
 --		}
---		
+--
 --		controlsEntry.deleteButton = Button:New {
 --			parent = controlsEntry.container,
 --			width = 96,
@@ -1188,7 +1188,7 @@ end
 --		AddSaveEntryButton(nil, true, count)
 --		count = 1
 --	end
---	
+--
 --	for i=startIndex,1,-1 do
 --		AddSaveEntryButton(savesOrdered[i], allowSave, count)
 --		count = count + 1;
@@ -1255,7 +1255,7 @@ end
 --						caption = i18n("load_game"),
 --						font = {size = 28},
 --						OnClick = {function() OpenSaveOrLoadMenu(false) end}
---						
+--
 --					},
 --					Button:New {
 --						name = 'chobby_campaign_mainNew',
@@ -1338,7 +1338,7 @@ local function InitializeNewGameControls()
 	--	text = "",
 	--	font = { size = 16 },
 	--}
-	
+
 	--screens.newGame = Panel:New {
 	--	parent = window,
 	--	name = 'chobby_campaign_newGame',
@@ -1398,7 +1398,7 @@ end
 --			LoadCodexEntries(); SwitchToScreen("codex")
 --		end}
 --	}
---	
+--
 --	screens.intermission = Panel:New {
 --		parent = window,
 --		name = 'chobby_campaign_intermission',
@@ -1478,7 +1478,7 @@ end
 --						font = {size = 20},
 --						OnClick = { function(self)
 --							WG.Chobby.ConfirmationPopup(function() ChiliFX:AddFadeEffect({
---								obj = screens.intermission, 
+--								obj = screens.intermission,
 --								time = 0.15,
 --								endValue = 0,
 --								startValue = 1,
@@ -1519,7 +1519,7 @@ end
 --		text = "Save description",
 --		font = { size = 16 },
 --	}
---	
+--
 --	screens.save = Panel:New {
 --		parent = window,
 --		name = 'chobby_campaign_save',
@@ -1557,7 +1557,7 @@ end
 --			saveScroll,
 --		}
 --	}
---	
+--
 --	loadScroll = ScrollPanel:New {
 --		name = 'chobby_campaign_loadScroll',
 --		orientation = "vertical",
@@ -1567,7 +1567,7 @@ end
 --		bottom = 8,
 --		children = {}
 --	}
---	
+--
 --	screens.load = Panel:New {
 --		parent = window,
 --		name = 'chobby_campaign_load',
@@ -1626,7 +1626,7 @@ end
 --		text = "",
 --		font = {size = 18},
 --	}
---	
+--
 --	local codexImagePanel = Panel:New{
 --		name = 'chobby_campaign_codexImagePanel',
 --		y = 64,
@@ -1642,7 +1642,7 @@ end
 --		width = "100%",
 --		height = "100%",
 --	}
---	
+--
 --	codexTreeScroll = ScrollPanel:New{
 --		name = 'chobby_campaign_codexTreeScroll',
 --		x = 4,
@@ -1656,7 +1656,7 @@ end
 --		parent = codexTreeScroll,
 --		name = 'chobby_campaign_codexTree',
 --	}
---	
+--
 --	screens.codex = Panel:New {
 --		parent = window,
 --		name = 'chobby_campaign_codex',
@@ -1705,7 +1705,7 @@ local function InitializeControls()
 	--ScrollPanel = Chili.ScrollPanel
 	--Label = Chili.Label
 	Button = Chili.Button
-	
+
 	---- window to hold things
 	--window = Panel:New {
 	--	name = 'chobby_campaign_window',
@@ -1718,9 +1718,9 @@ local function InitializeControls()
 	--	padding = {0, 0, 0, 0},
 	--	backgroundColor = {0, 0, 0, 0}
 	--}
-	
+
 	--InitializeMainControls()
-	InitializeNewGameControls()	
+	InitializeNewGameControls()
 	--InitializeIntermissionControls()
 	--InitializeSaveLoadWindow()
 	--InitializeCodexControls()
@@ -1737,7 +1737,7 @@ end
 --	local currentTime = Spring.GetTimer()
 --	local dt = Spring.DiffTimers(currentTime, timer)
 --	timer = currentTime
---	
+--
 --	-- animation in: expands the planet image and star background image when opening a planet detail screen
 --	-- animation out: shrinks and disappears those images when returning to galaxy map
 --	if starmapAnimation then
@@ -1751,12 +1751,12 @@ end
 --		starmapBackground2.width = math.floor(PLANET_BACKGROUND_SIZE * stage + 0.5)
 --		starmapBackground2.height = math.floor(PLANET_BACKGROUND_SIZE * stage + 0.5)
 --		starmapBackground2:Invalidate()
---		
+--
 --		starmapPlanetImage.color[4] = stage
 --		starmapPlanetImage.width = math.floor(starmapPlanetImage.fullWidth * stage + 0.5)
 --		starmapPlanetImage.height = math.floor(starmapPlanetImage.fullHeight * stage + 0.5)
 --		starmapPlanetImage:Invalidate()
---		
+--
 --		if animElapsed >= ANIMATION_TIME then
 --			animElapsed = 0
 --			starmapAnimation = nil
@@ -1788,9 +1788,9 @@ end
 function widget:Initialize()
 	CHOBBY_DIR = "LuaMenu/widgets/chobby/"
 	VFS.Include("LuaMenu/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	
+
 	InitializeControls()
-	
+
 	--WG.ZKCampaignHandler = {
 	--	GetWindow = function() return window end,
 	--	SetVNStory = SetVNStory,
