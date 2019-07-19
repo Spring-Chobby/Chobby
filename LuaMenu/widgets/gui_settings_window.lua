@@ -158,14 +158,14 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 		-- Required to remove FUDGE
 		currentManualBorderless = false
 
-		Spring.SetConfigInt("Fullscreen", (mode == 4 and 1) or 0)
+		Spring.SetConfigInt("Fullscreen", 1)
 
 		Spring.SetConfigInt("XResolutionWindowed", screenX - FUDGE*2, false)
 		Spring.SetConfigInt("YResolutionWindowed", screenY - FUDGE*2, false)
 		Spring.SetConfigInt("WindowPosX", FUDGE, false)
 		Spring.SetConfigInt("WindowPosY", FUDGE, false)
 
-		Spring.SetConfigInt("WindowBorderless", (mode == 4 and 1) or 0, false)
+		Spring.SetConfigInt("WindowBorderless", 1, false)
 		Spring.SetConfigInt("Fullscreen", 0, false)
 	elseif mode == 2 then -- Windowed
 		local winSizeX, winSizeY, winPosX, winPosY = Spring.GetWindowGeometry()
