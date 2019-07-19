@@ -20,29 +20,6 @@ local playingTrack	-- boolean
 local previousTrack
 local loopTrack	-- string trackPath
 
-local randomTrackList = {
-	"sounds/lobbyMusic/A Magnificent Journey (Alternative Version).ogg",
-	"sounds/lobbyMusic/Dream Infinity.ogg",
-	"sounds/lobbyMusic/Interstellar.ogg",
-	"sounds/lobbyMusic/Tomorrow Landscape.ogg",
-}
-local OPEN_TRACK_NAME = 'sounds/lobbyMusic/The Secret of Ayers Rock.ogg'
-
--- load custom game dependent music
-if WG.Chobby then
-	if WG.Chobby.Configuration.gameConfig.randomTrackList then
-		randomTrackList = WG.Chobby.Configuration.gameConfig.randomTrackList
-		if not randomTrackList[1] then
-			return
-		end
-	end
-	if WG.Chobby.Configuration.gameConfig.openTrack ~= nil then
-		OPEN_TRACK_NAME = WG.Chobby.Configuration.gameConfig.openTrack
-		if not OPEN_TRACK_NAME or OPEN_TRACK_NAME == '' then
-			OPEN_TRACK_NAME = randomTrackList[math.random(#randomTrackList)]
-		end
-	end
-end
 
 local function GetRandomTrack(previousTrack)
 	local trackCount = #randomTrackList
@@ -166,6 +143,27 @@ function widget:ActivateMenu()
 end
 
 function widget:Initialize()
+
+	-- load custom game dependent music
+	if WG.Chobby then
+		if WG.Chobby.Configuration.gameConfig.randomTrackList then
+			randomTrackList = WG.Chobby.Configuration.gameConfig.randomTrackList
+			if not randomTrackList[1] then
+				return
+			end
+		else
+			widgetHandler:RemoveWidget()
+		end
+		if WG.Chobby.Configuration.gameConfig.openTrack ~= nil then
+			OPEN_TRACK_NAME = WG.Chobby.Configuration.gameConfig.openTrack
+			if randomTrackList and (not OPEN_TRACK_NAME or OPEN_TRACK_NAME == '') then
+				OPEN_TRACK_NAME = randomTrackList[math.random(#randomTrackList)]
+			end
+		end
+	end
+	if not OPEN_TRACK_NAME or OPEN_TRACK_NAME == '' then
+		widgetHandler:RemoveWidget()
+	end
 
 	math.randomseed(os.clock() * 100)
 
