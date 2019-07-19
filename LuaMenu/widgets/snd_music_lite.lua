@@ -19,7 +19,8 @@ end
 local playingTrack	-- boolean
 local previousTrack
 local loopTrack	-- string trackPath
-
+local randomTrackList
+local OPEN_TRACK_NAME
 
 local function GetRandomTrack(previousTrack)
 	local trackCount = #randomTrackList
@@ -145,24 +146,23 @@ end
 function widget:Initialize()
 
 	-- load custom game dependent music
-	if WG.Chobby then
-		if WG.Chobby.Configuration.gameConfig.randomTrackList then
-			randomTrackList = WG.Chobby.Configuration.gameConfig.randomTrackList
-			if not randomTrackList[1] then
-				return
-			end
-		else
-			widgetHandler:RemoveWidget()
-		end
-		if WG.Chobby.Configuration.gameConfig.openTrack ~= nil then
-			OPEN_TRACK_NAME = WG.Chobby.Configuration.gameConfig.openTrack
-			if randomTrackList and (not OPEN_TRACK_NAME or OPEN_TRACK_NAME == '') then
-				OPEN_TRACK_NAME = randomTrackList[math.random(#randomTrackList)]
-			end
+	randomTrackList = WG.Chobby.Configuration.gameConfig.randomTrackList
+
+	if randomTrackList == nil or #randomTrackList == 0 then
+		Spring.Log("snd_music.lite.lua", LOG.NOTICE, "No random track list found, disabling lobby music")
+		widgetHandler:RemoveWidget()
+		return
+	end
+
+	OPEN_TRACK_NAME = WG.Chobby.Configuration.gameConfig.openTrack
+	if OPEN_TRACK_NAME ~= nil then
+		if OPEN_TRACK_NAME == nil or OPEN_TRACK_NAME == '' then
+			OPEN_TRACK_NAME = randomTrackList[math.random(#randomTrackList)]
 		end
 	end
-	if not OPEN_TRACK_NAME or OPEN_TRACK_NAME == '' then
+	if OPEN_TRACK_NAME == nil or OPEN_TRACK_NAME == '' then
 		widgetHandler:RemoveWidget()
+		return
 	end
 
 	math.randomseed(os.clock() * 100)
