@@ -158,14 +158,14 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 		-- Required to remove FUDGE
 		currentManualBorderless = false
 
-		Spring.SetConfigInt("Fullscreen", 1)
+		Spring.SetConfigInt("Fullscreen", (mode == 4 and 1) or 0)
 
 		Spring.SetConfigInt("XResolutionWindowed", screenX - FUDGE*2, false)
 		Spring.SetConfigInt("YResolutionWindowed", screenY - FUDGE*2, false)
 		Spring.SetConfigInt("WindowPosX", FUDGE, false)
 		Spring.SetConfigInt("WindowPosY", FUDGE, false)
 
-		Spring.SetConfigInt("WindowBorderless", 1, false)
+		Spring.SetConfigInt("WindowBorderless", (mode == 4 and 1) or 0, false)
 		Spring.SetConfigInt("Fullscreen", 0, false)
 	elseif mode == 2 then -- Windowed
 		local winSizeX, winSizeY, winPosX, winPosY = Spring.GetWindowGeometry()
@@ -314,7 +314,7 @@ local function GetValueEntryBox(parent, name, position, currentValue)
 	return GetValue
 end
 
-local function ShowWindowGeoConfig(name, , modeName, retreatPadding)
+local function ShowWindowGeoConfig(name, modeNum, modeName, retreatPadding)
 	local Configuration = WG.Chobby.Configuration
 
 	local manualWindow = Window:New {
@@ -340,7 +340,7 @@ local function ShowWindowGeoConfig(name, , modeName, retreatPadding)
 	}
 
 	local screenX, screenY = Spring.GetScreenGeometry()
-	local borders = WG.Chobby.Configuration.manualBorderless[name] or {}
+	local borders = WG.Chobby.Configuration[modeName][name] or {}
 
 	local xBox = GetValueEntryBox(manualWindow, "X", 60, borders.x or 0)
 	local yBox = GetValueEntryBox(manualWindow, "Y", 100, borders.y or 0)
@@ -380,7 +380,7 @@ local function ShowWindowGeoConfig(name, , modeName, retreatPadding)
 		borders.width = widthBox()
 		borders.height = heightBox()
 
-		SetLobbyFullscreenMode(4, borders)
+		SetLobbyFullscreenMode(modeNum, borders)
 
         manualWindow:Dispose()
 		local confirmation = WG.Chobby.ConfirmationPopup(FinalApplyFunc, "Keep these settings?", nil, 315, 170, i18n("yes"), i18n("no"), FinalApplyFailureFunc, true, 5)
@@ -1319,10 +1319,7 @@ local function ProcessScreenSizeOption(data, offset)
 		selectedOption = Configuration.game_fullscreen or 1
 	end
 
-	local items = {"Borderless Window", "Windowed", "Fullscreen", "Configurable Borderless"}
-	if USE_CONFIG_FULLSCREEN then
-		items[5] = "Configurable Fullscreen"
-	end
+	local items = {"Borderless Window", "Windowed", "Fullscreen", "Configurable Borderless", "Configurable Fullscreen", "Configurable Windowed"}
 
     local list = ComboBox:New {
 		name = data.name .. "_combo",
