@@ -1969,7 +1969,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					difficultyDependantUnlocks = {
 						[3] = {"jumpsumo"},
-						[4] = {"jumpsumo"},
+						[4] = {"jumpsumo","factoryjump"},
 					},
 					commanderLevel = 7,
 					commander = {
@@ -2828,7 +2828,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					difficultyDependantUnlocks = {
 						[3] = {"cloakaa"},
-						[4] = {"cloakaa"},
+						[4] = {"cloakaa","factorycloak"},
 					},
 					midgameUnits = {
 						{
