@@ -102,6 +102,29 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Graphics
+
+local settings = {
+	"AllowDeferredMapRendering",
+	"AllowDeferredModelRendering",
+	"AdvMapShading",
+	"AdvUnitShading",
+}
+
+local function SendGraphicsSettings()
+	for i = 1, #settings do
+		local value = Spring.GetConfigInt(settings[i], -1)
+		Analytics.SendOnetimeEvent("settings:" .. settings[i], value)
+	end
+end
+
+function widget:ActivateGame()
+	-- Give time for the settings that the player will use to be applied properly.
+	WG.Delay(SendGraphicsSettings, 30)
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Initialize
 
 local function ProcessString(str)

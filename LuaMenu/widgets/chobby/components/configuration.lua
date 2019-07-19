@@ -63,6 +63,10 @@ function Configuration:init()
 		game = {},
 		lobby = {},
 	}
+	self.manualWindowed = {
+		game = {},
+		lobby = {},
+	}
 
 	self.ignoreLevel = false
 
@@ -471,6 +475,7 @@ function Configuration:GetConfigData()
 		lobby_fullscreen = self.lobby_fullscreen,
 		manualBorderless = self.manualBorderless,
 		manualFullscreen = self.manualFullscreen,
+		manualWindowed = self.manualWindowed,
 		animate_lobby = self.animate_lobby,
 		game_settings = self.game_settings,
 		notifyForAllChat = self.notifyForAllChat,
