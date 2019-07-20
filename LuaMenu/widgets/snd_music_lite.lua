@@ -155,7 +155,7 @@ function widget:Initialize()
 	end
 
 	openTrack = WG.Chobby.Configuration.gameConfig.openTrack
-	if openTrack == nil or openTrack == '' then
+	if not openTrack then
 		openTrack = randomTrackList[math.random(#randomTrackList)]
 	end
 
