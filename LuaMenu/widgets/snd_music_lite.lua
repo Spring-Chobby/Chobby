@@ -20,7 +20,7 @@ local playingTrack	-- boolean
 local previousTrack
 local loopTrack	-- string trackPath
 local randomTrackList
-local OPEN_TRACK_NAME
+local openTrack
 
 local function GetRandomTrack(previousTrack)
 	local trackCount = #randomTrackList
@@ -132,8 +132,8 @@ local MusicHandler = {
 function widget:ActivateMenu()
 	ingame = false
 	if firstActivation then
-		StartTrack(OPEN_TRACK_NAME)
-		previousTrack = OPEN_TRACK_NAME
+		StartTrack(openTrack)
+		previousTrack = openTrack
 		firstActivation = false
 		return
 	end
@@ -154,13 +154,13 @@ function widget:Initialize()
 		return
 	end
 
-	OPEN_TRACK_NAME = WG.Chobby.Configuration.gameConfig.openTrack
-	if OPEN_TRACK_NAME ~= nil then
-		if OPEN_TRACK_NAME == nil or OPEN_TRACK_NAME == '' then
-			OPEN_TRACK_NAME = randomTrackList[math.random(#randomTrackList)]
+	openTrack = WG.Chobby.Configuration.gameConfig.openTrack
+	if openTrack ~= nil then
+		if openTrack == nil or openTrack == '' then
+			openTrack = randomTrackList[math.random(#randomTrackList)]
 		end
 	end
-	if OPEN_TRACK_NAME == nil or OPEN_TRACK_NAME == '' then
+	if openTrack == nil or openTrack == '' then
 		widgetHandler:RemoveWidget()
 		return
 	end

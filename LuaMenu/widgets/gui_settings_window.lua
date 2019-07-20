@@ -222,7 +222,7 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 
 		Spring.SetConfigInt("WindowBorderless", (mode == 4 and 1) or 0, false)
 
-        Spring.SetConfigInt("Fullscreen", 0, false)
+		Spring.SetConfigInt("Fullscreen", 0, false)
 	elseif mode == 5 then -- Manual Fullscreen
 		local resolution
 		if inLobby then
@@ -382,7 +382,7 @@ local function ShowWindowGeoConfig(name, modeNum, modeName, retreatPadding)
 
 		SetLobbyFullscreenMode(modeNum, borders)
 
-        manualWindow:Dispose()
+		manualWindow:Dispose()
 		local confirmation = WG.Chobby.ConfirmationPopup(FinalApplyFunc, "Keep these settings?", nil, 315, 170, i18n("yes"), i18n("no"), FinalApplyFailureFunc, true, 5)
 	end
 
