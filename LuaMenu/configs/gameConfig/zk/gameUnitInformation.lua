@@ -1109,7 +1109,7 @@ local humanNames = {
 	staticcon = {
 		category = "econ",
 		order = 10,
-		description = "Static Constructor, Builds at 10 m/s",
+		description = "Construction Assistant, Builds at 10 m/s",
 		humanName = "Caretaker",
 	},
 	staticrearm = {
