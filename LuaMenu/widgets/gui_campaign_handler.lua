@@ -1061,7 +1061,7 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 
 			local aiConfig = planetData.gameConfig.aiConfig
 			local offset = 0
-			local map = {}, {}
+			local map = {}
 			for i = 1, #aiConfig do
 				offset, map = ProcessAiUnlockDebugView(debugHolder, map, aiConfig[i],  WG.CampaignData.GetUnitInfo, offset)
 			end

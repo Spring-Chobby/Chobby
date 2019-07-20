@@ -21,6 +21,6 @@ local data = {
 		desc = "Liberal pluralism. Chaotic, disorganized, loose and free.",
 		image = LUA_DIRNAME .. "images/factions/Federation.png",
 		imageLarge = LUA_DIRNAME .. "images/factions/FederationLarge.png",
-	}	
+	}
 }
 return data

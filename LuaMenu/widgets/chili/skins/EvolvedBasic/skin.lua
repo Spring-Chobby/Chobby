@@ -63,9 +63,9 @@ skin.option_button = {
   TileImageFG = ":cl:tech_button_action_fg.png",
   tiles = {22, 22, 22, 22}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
-  
+
   focusColor  = {0.21, 0.53, 0.60, 1},
-  
+
   backgroundColor = {0.21, 0.53, 0.60, 0.75},
   borderColor = {1,1,1,0},
 
@@ -79,7 +79,7 @@ skin.negative_button = {
   padding = {10, 10, 10, 10},
 
   focusColor  = {0.72, 0.05, 0.12, 1},
-  
+
   backgroundColor = {0.72, 0.05, 0.12, 0.5},
   borderColor = {1,1,1,0},
 
@@ -93,7 +93,7 @@ skin.disabled_button = {
   padding = {10, 10, 10, 10},
 
   focusColor  = {0.4, 0.4, 0.4, 0.25},
-  
+
   backgroundColor = {0.4, 0.4, 0.4, 0.5},
   borderColor = {1,1,1,0},
 
@@ -146,10 +146,10 @@ skin.checkbox = {
 
 skin.editbox = {
   hintFont = table.merge({color = {1,1,1,0.7}}, skin.general.font),
-  
+
   backgroundColor = {0.1, 0.1, 0.1, 0},
   cursorColor     = {1.0, 0.7, 0.1, 0.8},
-  
+
   focusColor  = {1, 1, 1, 1},
   borderColor = {1, 1, 1, 0.6},
 

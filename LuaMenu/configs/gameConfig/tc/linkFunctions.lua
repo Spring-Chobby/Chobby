@@ -1,12 +1,12 @@
-local function link_homePage() 
+local function link_homePage()
 	return "http://www.cursed.one"
 end
 
-local function link_replays() 
+local function link_replays()
 	return "http://replays.springrts.com/?game_pref=24"
 end
 
-local function link_maps() 
+local function link_maps()
 	return "https://springfiles.com/spring/spring-maps"
 end
 

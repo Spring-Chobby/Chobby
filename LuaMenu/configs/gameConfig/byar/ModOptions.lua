@@ -170,7 +170,7 @@ local options={
 			{key="enabled", name="Enabled", desc="Enable TerrainTypes related MoveSpeed Buffs"},
 		}
 	},
-	
+
 	{
 		key="map_waterlevel",
 		name="Water Level",
@@ -181,8 +181,8 @@ local options={
         max    = 10000,
         step   = 1,
 		section="bar_options",
-	},	
-	
+	},
+
 	{
 		key="map_tidal",
 		name="Tidal Strength",
@@ -211,7 +211,7 @@ local options={
 	--		{key="exponly", name="ExperienceOnly", desc="Enable Unbalanced Commanders experience to power, health and reload multipliers"},
 	--	}
 	--},
-	
+
     {
         key    = 'coop',
         name   = 'Cooperative mode',
@@ -228,7 +228,7 @@ local options={
 	  section= 'bar_modes',
       def    = false,
     },
-	
+
     {
 		key="transportenemy",
 		name="Enemy Transporting",

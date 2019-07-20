@@ -37,7 +37,7 @@ local aiNames = {
 	"Purger",
 	"Alpha",
 	"Beta",
-	"Maneater",	
+	"Maneater",
 	"GammaRay",
 	"Omega",
 	"Snake",
@@ -50,24 +50,24 @@ local aiNames = {
 	"Testament",
 	"Hellgate",
 	"Deadmoon",
-	"Deadmeat",	
+	"Deadmeat",
 	"Lil'Sister",
-	"STFU&Play",		
+	"STFU&Play",
 }
 
 function skirmishSetupData.ApplyFunction(battleLobby, pageChoices)
 	local gameType = pageChoices.gameType or 1
 	local map = pageChoices.map or 1
-	
+
 	local Configuration = WG.Chobby.Configuration
 	local pageConfig = skirmishSetupData.pages
 	battleLobby:SelectMap(pageConfig[2].options[map])
-	
+
 	battleLobby:SetBattleStatus({
 		allyNumber = 0,
 		isSpectator = false,
 	})
-	
+
 	-- Chickens
 	if gameType == 4 then
 		battleLobby:AddAi("Zombie Survival: Easy", "Zombie Survival: Easy", 1)
@@ -76,7 +76,7 @@ function skirmishSetupData.ApplyFunction(battleLobby, pageChoices)
 		battleLobby:AddAi("Zombie Survival: Hard", "Zombie Survival: Hard", 1)
 		return
 	end
-	
+
 	-- KOTH
 --[[	if gameType == 6 then
 		local currentModoptions = battleLobby:GetMyBattleModoptions() or {}
@@ -91,11 +91,11 @@ function skirmishSetupData.ApplyFunction(battleLobby, pageChoices)
 				end
 			end
 		end
-		battleLobby:SetModOptions(localModoptions) 
+		battleLobby:SetModOptions(localModoptions)
 	end]]
-	
+
 	local aiName = "Skirmish AI"
-	
+
 	-- AI game
 	local aiNumber = 1
 	local allies = gameType - 1 -- needs cahnge
@@ -103,7 +103,7 @@ function skirmishSetupData.ApplyFunction(battleLobby, pageChoices)
 		battleLobby:AddAi(aiNames[math.random(#aiNames)] .. " (" .. aiNumber .. ")", aiName, 0, Configuration.gameConfig.aiVersion)
 		aiNumber = aiNumber + 1
 	end
-	
+
 	local enemies = gameType -- needs cahnge
 	for i = 1, enemies do
 		battleLobby:AddAi(aiNames[math.random(#aiNames)] .. " (" .. aiNumber .. ")", aiName, 1, Configuration.gameConfig.aiVersion)

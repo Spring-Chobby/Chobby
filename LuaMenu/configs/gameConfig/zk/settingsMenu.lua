@@ -11,7 +11,7 @@ local function UpdateLups(_, conf)
 	if not settings then
 		return
 	end
-	
+
 	local lupsFileName = settings.ShaderDetail_file or "LuaMenu/configs/gameConfig/zk/lups/lups3.cfg"
 	local lupsAirJetDisabled = ((settings.LupsAirJet == "On") and FALSE) or TRUE
 	local lupsRibbonDisabled = ((settings.LupsRibbon == "On") and FALSE) or TRUE
@@ -19,16 +19,16 @@ local function UpdateLups(_, conf)
 	local LupsShieldHighQualityDisabled = ((settings.LupsShieldShader == "Default") and FALSE) or TRUE
 	local lupsWaterRefractEnabled = ((settings.LupsWaterSettings == "Refraction" or settings.LupsWaterSettings == "Refract and Reflect") and 1) or 0
 	local lupsWaterReflectEnabled = ((settings.LupsWaterSettings == "Reflection" or settings.LupsWaterSettings == "Refract and Reflect") and 1) or 0
-	
+
 	local sourceFile = VFS.LoadFile(lupsFileName)
-	
+
 	sourceFile = sourceFile:gsub("__AIR_JET__", lupsAirJetDisabled)
 	sourceFile = sourceFile:gsub("__RIBBON__", lupsRibbonDisabled)
 	sourceFile = sourceFile:gsub("__SHIELD_SPHERE_COLOR__", LupsShieldShaderDisabled)
 	sourceFile = sourceFile:gsub("__SHIELD_SPHERE_HIGH_QUALITY__", LupsShieldHighQualityDisabled)
 	sourceFile = sourceFile:gsub("__ENABLE_REFRACT__", lupsWaterRefractEnabled)
 	sourceFile = sourceFile:gsub("__ENABLE_REFLECT__", lupsWaterReflectEnabled)
-	
+
 	local settingsFile = io.open(lupsFileTarget, "w")
 	settingsFile:write(sourceFile)
 	settingsFile:close()
@@ -205,7 +205,7 @@ local settingsConfig = {
 				}
 			},
 		},
-		
+
 		-- FIXME: this list is in dire need of resorting
 		settings = {
 			{
@@ -218,7 +218,7 @@ local settingsConfig = {
 				humanName = "Menu Display Mode",
 				lobbyDisplayModeToggle = true,
 			},
-			
+
 			{
 				name = "CompatibilityMode",
 				humanName = "Compatibility Mode",
@@ -242,7 +242,7 @@ local settingsConfig = {
 						name = "Off",
 						apply = {
 							LoadingMT = 0, -- See https://github.com/spring/spring/commit/bdd6b641960759ccadf3e7201e37f2192d873791
-							AdvUnitShading = 1, 
+							AdvUnitShading = 1,
 							AdvMapShading = 1,
 							LuaShaders = 1,
 							ForceDisableShaders = 0,
@@ -746,7 +746,7 @@ local settingsConfig = {
 					},
 				},
 			},
-			
+
 			{
 				name = "WaterType",
 				humanName = "Water Type",
@@ -1070,7 +1070,7 @@ end
 
 local function DefaultPresetFunc()
 	local gameDefault = settingsConfig[2].presets[1].settings
-	
+
 	if Platform then
 		local gpuMemorySize = Platform.gpuMemorySize or 0
 		if gpuMemorySize == 0 then
@@ -1105,7 +1105,7 @@ local function DefaultPresetFunc()
 			end
 		end
 	end
-	
+
 	-- Default to Medium
 	Spring.Echo("Medium settings preset", Platform, (Platform or {}).gpuMemorySize, (Platform or {}).glVersionShort)
 	return Spring.Utilities.MergeTable(gameDefault, settingsConfig[1].presets[4].settings, true)
