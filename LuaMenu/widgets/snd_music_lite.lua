@@ -155,14 +155,8 @@ function widget:Initialize()
 	end
 
 	openTrack = WG.Chobby.Configuration.gameConfig.openTrack
-	if openTrack ~= nil then
-		if openTrack == nil or openTrack == '' then
-			openTrack = randomTrackList[math.random(#randomTrackList)]
-		end
-	end
 	if openTrack == nil or openTrack == '' then
-		widgetHandler:RemoveWidget()
-		return
+		openTrack = randomTrackList[math.random(#randomTrackList)]
 	end
 
 	math.randomseed(os.clock() * 100)

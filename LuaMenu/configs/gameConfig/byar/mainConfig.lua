@@ -65,7 +65,6 @@ local externalFuncAndData = {
 	disablePlanetwars 			= true, -- removes settings related to planetwars
 	disableMatchMaking 			= true, -- removes match making
 	disableCommunityWindow 		= true, -- removes Community Window
-	openTrack = '',
 	randomTrackList = {
 		"LuaMenu/configs/gameConfig/byar/lobbyMusic/ProfessorKliq-TensionGrowl.ogg",
 		"LuaMenu/configs/gameConfig/byar/lobbyMusic/RobRichert-AliasZero.ogg",
