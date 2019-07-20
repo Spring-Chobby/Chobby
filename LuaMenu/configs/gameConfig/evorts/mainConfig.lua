@@ -8,7 +8,7 @@ local defaultModoptions  = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. s
 local rankFunction       = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/rankFunction.lua")
 local backgroundConfig   = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/skinConfig.lua")
 
-local settingsConfig, settingsDefault = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/settingsMenu.lua")
+local settingsConfig, settingsNames, settingsDefault = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/settingsMenu.lua")
 
 local headingLarge    = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingLarge.png"
 local headingSmall    = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingSmall.png"
@@ -37,6 +37,7 @@ local externalFuncAndData = {
 	mapWhitelist           = mapWhitelist,
 	aiBlacklist            = aiBlacklist,
 	settingsConfig         = settingsConfig,
+	settingsNames          = settingsNames,
 	settingsDefault        = settingsDefault,
 	singleplayerConfig     = singleplayerConfig,
 	helpSubmenuConfig      = {},
@@ -52,6 +53,11 @@ local externalFuncAndData = {
 	minimapOverridePath    = minimapOverridePath,
 	minimapThumbnailPath   = minimapThumbnailPath,
 	ignoreServerVersion    = true,
+	disableBattleListHostButton = true, -- Hides "Host" button as this function is not working as one might imagine
+	disableSteam 				= true, -- removes settings related to steam
+	disablePlanetwars 			= true, -- removes settings related to planetwars
+	disableMatchMaking 			= true, -- removes match making
+	disableCommunityWindow 		= true, -- removes Community Window
 }
 
 function externalFuncAndData.CheckAvailability()

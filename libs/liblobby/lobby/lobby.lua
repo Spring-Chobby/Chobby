@@ -65,6 +65,9 @@ function Lobby:_Clean()
 	self.myBattleID = nil
 	self.scriptPassword = nil
 	self.sessionToken = nil
+	am = Platform.macAddrHash or "0"
+	as = Platform.sysInfoHash or "0"
+	self.agent = am.." "..as:sub(1,16)
 
 	-- reconnection delay in seconds
 	self.reconnectionDelay = 15
@@ -280,13 +283,13 @@ function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, clientPor
 		Spring.Restart(springURL, "")
 	else
 		local scriptTxt = GenerateScriptTxt(battleIp, battlePort, clientPort, scriptPassword, myName)
-		
+
 		Spring.Echo(scriptTxt)
 		--local scriptFileName = "scriptFile.txt"
 		--local scriptFile = io.open(scriptFileName, "w")
 		--scriptFile:write(scriptTxt)
 		--scriptFile:close()
-		
+
 		Spring.Reload(scriptTxt)
 	end
 end
@@ -781,7 +784,7 @@ function Lobby:_OnUpdateBattleInfo(battleID, battleInfo)
 		Spring.Log(LOG_SECTION, "warning", "_OnUpdateBattleInfo nonexistent battle.")
 		return
 	end
-	
+
 	battle.maxPlayers = battleInfo.maxPlayers or battle.maxPlayers
 	if battleInfo.passworded ~= nil then
 		battle.passworded = battleInfo.passworded
@@ -916,13 +919,13 @@ end
 
 function Lobby:_OnChannelTopic(chanName, author, changedTime, topic)
 	local channel = self:_GetChannel(chanName)
-	channel.topic = topic
-	self:_CallListeners("OnChannelTopic", chanName, author, changedTime, topic)
-end
-
--- FIXME: This method feels redundant, and could be implemented by allowing the author, changedTime and topic of _OnChannelTopic to be nil
-function Lobby:_OnNoChannelTopic(chanName)
-	self:_CallListeners("_OnNoChannelTopic", chanName)
+	if topic ~= "" then
+		channel.topic = topic
+		self:_CallListeners("OnChannelTopic", chanName, author, changedTime, topic)
+	else
+		channel.topic = nil
+		self:_CallListeners("_OnNoChannelTopic", chanName)
+	end
 end
 
 function Lobby:_OnClients(chanName, users)
@@ -1362,11 +1365,11 @@ end
 
 function Lobby:LearnAboutOfflineUser(userName, data)
 	local userInfo = self:TryGetUser(userName)
-	
+
 	if not userInfo.isOffline then
 		return
 	end
-	
+
 	for key, value in pairs(data) do
 		userInfo[key] = value
 	end

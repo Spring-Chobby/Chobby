@@ -233,9 +233,9 @@ return {
 		-- gui_rank_update_window.lua
 		rank_gained = "Rank Gained",
 		rank_lost = "Rank Lost",
-		
+
 		advanced_button_tooltip = [[Fully configure game settings. Activate automatic advanced mode by disabling "Simple skirmish setup" in lobby settings.]],
-		
+
 		-- Months
 		month_1 = "January",
 		month_2 = "February",
@@ -480,9 +480,9 @@ return {
 		-- gui_rank_update_window.lua
 		rank_gained = "Beförderung",
 		rank_lost = "Degradiert",
-		
+
 		advanced_button_tooltip = [[Detailierte Spieleinstellungen. Dieser Modus kann automatisch aktiviert werden, indem man "Vereinfachten Skirmish" in den Einstellungen deaktiviert.]],
-		
+
 		-- Months
 		month_1 = "Januar",
 		month_2 = "Februar",

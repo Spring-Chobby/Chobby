@@ -50,7 +50,7 @@ end
 function widget:Initialize()
 	lastTimer = Spring.GetTimer();
 	LimitFps.ForceRedrawPeriod(4)
-	
+
 	WG.LimitFps = LimitFps
 end
 
@@ -92,9 +92,9 @@ function widget:AllowDraw()
 		return true
 	end
 	if oldFramesInBuffer < 3 then
- 		framesInBuffer = oldFramesInBuffer + 1
- 		return true
- 	end
+		framesInBuffer = oldFramesInBuffer + 1
+		return true
+	end
 	return false
 end
 

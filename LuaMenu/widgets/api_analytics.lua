@@ -25,7 +25,7 @@ local ANALYTICS_EVENT = "analyticsEvent_"
 local ANALYTICS_EVENT_ERROR = "analyticsEventError_"
 
 -- Do not send analytics for dev versions as they will likely be nonsense.
-local ACTIVE = not VFS.HasArchive("Zero-K $VERSION") 
+local ACTIVE = not VFS.HasArchive("Zero-K $VERSION")
 local VERSION = "events_2018_04_25:"
 
 --------------------------------------------------------------------------------
@@ -50,7 +50,7 @@ end
 function Analytics.SendIndexedRepeatEvent(eventName, value, suffix)
 	eventName = VERSION .. eventName
 	indexedRepeatEvents[eventName] = (indexedRepeatEvents[eventName] or 0) + 1
-	
+
 	eventName = eventName .. "_" .. indexedRepeatEvents[eventName]
 	if suffix then
 		eventName = eventName .. suffix
@@ -140,17 +140,17 @@ function DelayedInitialize()
 		Analytics.SendOnetimeEvent("lobby:multiplayer:game_loading")
 		Analytics.SendRepeatEvent("game_start:multiplayer:connecting_" .. (battleType or "unknown"))
 	end
-	
+
 	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", OnBattleStartSingleplayer)
 	WG.LibLobby.lobby:AddListener("OnBattleAboutToStart", OnBattleStartMultiplayer)
-	
+
 	Analytics.SendOnetimeEvent("lobby:started")
 	if Platform and Platform.glVersionShort and type(Platform.glVersionShort) == "string" then
 		Analytics.SendOnetimeEvent("graphics:openglVersion:" .. Platform.glVersionShort)
 	else
 		Analytics.SendOnetimeEvent("graphics:openglVersion:notFound")
 	end
-	
+
 	Analytics.SendOnetimeEvent("graphics:gpu:" .. ProcessString(tostring((Platform and Platform.gpu) or "unknown") or "unknown"))
 	Analytics.SendOnetimeEvent("graphics:glRenderer:" .. ProcessString(tostring((Platform and Platform.glRenderer) or "unknown") or "unknown"))
 end
@@ -165,7 +165,7 @@ function widget:RecvLuaMsg(msg)
 	end
 end
 
-function widget:Initialize() 
+function widget:Initialize()
 	WG.Analytics = Analytics
 	WG.Delay(DelayedInitialize, 1)
 end

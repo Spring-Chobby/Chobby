@@ -101,28 +101,28 @@ function BrowserHandler.AddClickableUrls(chatString, onTextClick, textTooltip)
 		if string.find(endChar, "%p") then
 			urlEnd = urlEnd - 1
 		end
-		
+
 		local urlString = string.sub(chatString, urlStart, urlEnd)
-		
+
 		onTextClick[#onTextClick + 1] = {
-			startIndex = urlStart, 
-			endIndex = urlEnd, 
-			OnTextClick = { 
-				function() 
+			startIndex = urlStart,
+			endIndex = urlEnd,
+			OnTextClick = {
+				function()
 					BrowserHandler.OpenUrl(urlString)
 				end
-			} 
+			}
 		}
-		
+
 		textTooltip[#textTooltip + 1] = {
-			startIndex = urlStart, 
+			startIndex = urlStart,
 			endIndex = urlEnd,
 			tooltip = urlString,
 		}
-		
+
 		urlStart, urlEnd = string.find(chatString, urlPattern, urlEnd)
 	end
-	
+
 	return onTextClick, textTooltip
 end
 

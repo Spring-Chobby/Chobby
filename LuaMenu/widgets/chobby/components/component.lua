@@ -15,7 +15,7 @@ function Component:unregister()
 		if comp == self then
 			table.remove(Component.registeredComponents, i)
 		end
-	end	
+	end
 end
 
 function Component:ScaleUpdate(scale)

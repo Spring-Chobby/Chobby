@@ -7,7 +7,7 @@ function Background:init(imageOverride, colorOverride, backgroundFocus, alphaSet
 		self.backgroundFocus = backgroundFocus
 	end
 	self:Enable()
-	
+
 	local function onConfigurationChange(listener, key, value)
 		if (not imageOverride) and key == "gameConfigName" then
 			self:SetDefaultImage()
@@ -42,7 +42,7 @@ end
 function Background:SetImageOverride(imageOverride)
 	self.imageOverride = imageOverride
 	self.backgroundImage.file = imageOverride
-	
+
 	local texInfo = gl.TextureInfo(imageOverride)
 	self.width, self.height = texInfo.xsize, texInfo.ysize
 	self.backgroundControl:Invalidate()
@@ -63,27 +63,27 @@ end
 
 function Background:ResizeAspectWindow(windowX, windowY, windowWidth, windowHeight)
 	local backgroundControl = self.backgroundControl
-	
+
 	if not self.imageBoundOverride then
 		return false
 	end
-	
+
 	local imageSizeX, imageSizeY = self.width, self.height
 	if not (imageSizeX and imageSizeY) then
 		return false
 	end
 	local winSizeX, winSizeY = Spring.GetWindowGeometry()
-	
-	if winSizeX <= 0 or winSizeY <= 0 or imageSizeX <= 0 or imageSizeY <= 0 then 
+
+	if winSizeX <= 0 or winSizeY <= 0 or imageSizeX <= 0 or imageSizeY <= 0 then
 		return false
 	end
-	
+
 	local imageBound = self.imageBoundOverride
 	local imageWidth = imageSizeX*imageBound.width
 	local imageHeight = imageSizeY*imageBound.height
-	
+
 	local xOffset, yOffset = 0, 0
-	
+
 	local imageRatio = windowWidth*imageHeight/(windowHeight*imageWidth)
 	if imageRatio > 1 then
 		local newWidth = windowHeight*imageWidth/imageHeight
@@ -96,13 +96,13 @@ function Background:ResizeAspectWindow(windowX, windowY, windowWidth, windowHeig
 		windowY = windowY + yOffset
 		windowHeight = newHeight
 	end
-	
+
 	imageWidth = windowWidth/imageBound.width
 	imageHeight = windowHeight/imageBound.height
-	
+
 	local imageX = windowX - imageWidth*imageBound.x
 	local imageY = windowY - imageHeight*imageBound.y
-	
+
 	self.backgroundImage:SetPos(imageX, imageY, imageWidth, imageHeight)
 	return xOffset, yOffset, windowWidth, windowHeight
 end
@@ -112,19 +112,19 @@ function Background:Resize(backgroundControl)
 	if not (self.backgroundImage and self.backgroundFocus) then
 		return
 	end
-	
+
 	if self.imageBoundOverride then
 		return
 	end
-	
+
 	local width, height = self.width, self.height
 	if not (width and height) then
 		return
 	end
 	local xSize, ySize = Spring.GetWindowGeometry()
-	
+
 	local xFocus, yFocus = self.backgroundFocus[1], self.backgroundFocus[2]
-	
+
 	local p1, p2, p3, p4
 	if ySize * width == xSize * height then
 		p1 = 0
@@ -167,8 +167,8 @@ function Background:Enable()
 			self.backgroundFocus = Configuration.gameConfig.background.backgroundFocus
 		end
 		local texInfo = gl.TextureInfo(imageFile)
-		self.width, self.height = texInfo.xsize, texInfo.ysize	
-		
+		self.width, self.height = texInfo.xsize, texInfo.ysize
+
 		self.backgroundImage = Image:New {
 			x = 0,
 			y = 0,
@@ -180,7 +180,7 @@ function Background:Enable()
 			keepAspect = false,
 			file = imageFile,
 		}
-		
+
 		self.backgroundControl = Control:New {
 			x = 0,
 			y = 0,

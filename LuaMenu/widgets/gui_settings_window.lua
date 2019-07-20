@@ -108,7 +108,7 @@ local function SaveWindowPos(width, height, x, y)
 	if height then
 		Configuration:SetConfigValue("window_YResolutionWindowed", height)
 	end
-	
+
 	-- WindowState is not saved by Spring. See https://springrts.com/mantis/view.php?id=5624
 	Spring.SetConfigInt("WindowState", (x == 0 and 1) or 0, false)
 end
@@ -124,7 +124,7 @@ local function ManualBorderlessChange(modeName)
 	else
 		borders = WG.Chobby.Configuration[modeName].game or {}
 	end
-	
+
 	return not (oldBorders.x == borders.x and oldBorders.y == borders.y and oldBorders.width == borders.width and oldBorders.height == borders.height)
 end
 
@@ -140,7 +140,7 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 	local Configuration = WG.Chobby.Configuration
 	local needAgressiveSetting = (mode ~= 2) and (currentMode ~= 2)
 
-	if (currentMode == 2 or not currentMode) and lobbyFullscreen == 2 then 
+	if (currentMode == 2 or not currentMode) and lobbyFullscreen == 2 then
 		SaveWindowPos()
 	end
 	currentMode = mode
@@ -150,21 +150,21 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 	end
 
 	local screenX, screenY = Spring.GetScreenGeometry()
-	
+
 	Spring.Echo("SetLobbyFullscreenMode", mode)
 	--Spring.Log(LOG_SECTION, LOG.ERROR, debug.traceback("problem"))
-	
+
 	if mode == 1 then -- Borderless
 		-- Required to remove FUDGE
 		currentManualBorderless = false
-		
+
 		Spring.SetConfigInt("Fullscreen", 1)
 
 		Spring.SetConfigInt("XResolutionWindowed", screenX - FUDGE*2, false)
 		Spring.SetConfigInt("YResolutionWindowed", screenY - FUDGE*2, false)
 		Spring.SetConfigInt("WindowPosX", FUDGE, false)
 		Spring.SetConfigInt("WindowPosY", FUDGE, false)
-	
+
 		Spring.SetConfigInt("WindowBorderless", 1, false)
 		Spring.SetConfigInt("Fullscreen", 0, false)
 	elseif mode == 2 then -- Windowed
@@ -212,15 +212,16 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 			end
 		end
 		currentManualBorderless = Spring.Utilities.CopyTable(borders)
-		
+
 		Spring.SetConfigInt("Fullscreen", (mode == 4 and 1) or 0)
-		
+
 		Spring.SetConfigInt("XResolutionWindowed", borders.width or (screenX - FUDGE*2), false)
 		Spring.SetConfigInt("YResolutionWindowed", borders.height or (screenY - FUDGE*2), false)
 		Spring.SetConfigInt("WindowPosX", borders.x or FUDGE, false)
 		Spring.SetConfigInt("WindowPosY", borders.y or FUDGE, false)
-	
+
 		Spring.SetConfigInt("WindowBorderless", (mode == 4 and 1) or 0, false)
+
 		Spring.SetConfigInt("Fullscreen", 0, false)
 	elseif mode == 5 then -- Manual Fullscreen
 		local resolution
@@ -233,7 +234,7 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 		Spring.SetConfigInt("YResolution", resolution.height or screenY, false)
 		Spring.SetConfigInt("Fullscreen", 1, false)
 	end
-	
+
 	if delayedModeSet == mode and delayedBorderOverride then
 		delayedModeSet = nil
 		delayedBorderOverride = nil
@@ -262,7 +263,7 @@ end
 
 local function GetValueEntryBox(parent, name, position, currentValue)
 	local Configuration = WG.Chobby.Configuration
-	
+
 	local label = Label:New {
 		x = 15,
 		width = 80,
@@ -273,19 +274,19 @@ local function GetValueEntryBox(parent, name, position, currentValue)
 		font = Configuration:GetFont(3),
 		parent = parent,
 	}
-	
+
 	local function FocusUpdate(obj)
 		local newValue = tonumber(obj.text)
-		
+
 		if not newValue then
 			obj:SetText(currentValue)
 			return
 		end
-		
+
 		currentValue = math.floor(math.max(0, newValue))
 		obj:SetText(tostring(currentValue))
 	end
-	
+
 	local edit = EditBox:New {
 		x = 100,
 		width = 160,
@@ -304,18 +305,18 @@ local function GetValueEntryBox(parent, name, position, currentValue)
 			end
 		}
 	}
-	
+
 	local function GetValue()
 		FocusUpdate(edit)
 		return currentValue
 	end
-	
+
 	return GetValue
 end
 
 local function ShowWindowGeoConfig(name, modeNum, modeName, retreatPadding)
 	local Configuration = WG.Chobby.Configuration
-	
+
 	local manualWindow = Window:New {
 		x = 700,
 		y = 300,
@@ -327,7 +328,7 @@ local function ShowWindowGeoConfig(name, modeNum, modeName, retreatPadding)
 		parent = WG.Chobby.lobbyInterfaceHolder,
 		classname = "main_window",
 	}
-	
+
 	local lblTitle = Label:New {
 		x = 35,
 		right = 15,
@@ -337,15 +338,15 @@ local function ShowWindowGeoConfig(name, modeNum, modeName, retreatPadding)
 		caption = i18n("set_window_position"),
 		parent = manualWindow,
 	}
-	
+
 	local screenX, screenY = Spring.GetScreenGeometry()
 	local borders = WG.Chobby.Configuration[modeName][name] or {}
-	
+
 	local xBox = GetValueEntryBox(manualWindow, "X", 60, borders.x or 0)
 	local yBox = GetValueEntryBox(manualWindow, "Y", 100, borders.y or 0)
 	local widthBox = GetValueEntryBox(manualWindow, "Width", 140, borders.width or screenX)
 	local heightBox = GetValueEntryBox(manualWindow, "Height", 180, borders.height or screenY)
-	
+
 	local function RetreatToSafety(force)
 		borders.x = retreatPadding
 		borders.y = retreatPadding
@@ -355,7 +356,7 @@ local function ShowWindowGeoConfig(name, modeNum, modeName, retreatPadding)
 			SetLobbyFullscreenMode(modeNum)
 		end
 	end
-	
+
 	local function FinalApplyFunc()
 		local lobbySetting = (name == "lobby")
 		if lobbySetting then
@@ -368,19 +369,19 @@ local function ShowWindowGeoConfig(name, modeNum, modeName, retreatPadding)
 			end
 		end
 	end
-	
+
 	local function FinalApplyFailureFunc()
 		RetreatToSafety(true)
 	end
-	
+
 	local function ApplyFunc()
 		borders.x = xBox()
 		borders.y = yBox()
 		borders.width = widthBox()
 		borders.height = heightBox()
-		
+
 		SetLobbyFullscreenMode(modeNum, borders)
-		
+
 		manualWindow:Dispose()
 		local confirmation = WG.Chobby.ConfirmationPopup(FinalApplyFunc, "Keep these settings?", nil, 315, 170, i18n("yes"), i18n("no"), FinalApplyFailureFunc, true, 5)
 	end
@@ -389,7 +390,7 @@ local function ShowWindowGeoConfig(name, modeNum, modeName, retreatPadding)
 		RetreatToSafety(false)
 		manualWindow:Dispose()
 	end
-	
+
 	local btnApply = Button:New {
 		x = 5,
 		width = 135,
@@ -427,7 +428,7 @@ end
 
 local function ShowManualFullscreenEntryWindow(name)
 	local Configuration = WG.Chobby.Configuration
-	
+
 	local manualWindow = Window:New {
 		x = 700,
 		y = 300,
@@ -439,7 +440,7 @@ local function ShowManualFullscreenEntryWindow(name)
 		parent = WG.Chobby.lobbyInterfaceHolder,
 		classname = "main_window",
 	}
-	
+
 	local lblTitle = Label:New {
 		x = 35,
 		right = 15,
@@ -449,13 +450,13 @@ local function ShowManualFullscreenEntryWindow(name)
 		caption = i18n("set_resolution"),
 		parent = manualWindow,
 	}
-	
+
 	local screenX, screenY = Spring.GetScreenGeometry()
 	local resolution = WG.Chobby.Configuration.manualFullscreen[name] or {}
-	
+
 	local widthBox = GetValueEntryBox(manualWindow, "Width", 60, resolution.width or screenX)
 	local heightBox = GetValueEntryBox(manualWindow, "Height", 100, resolution.height or screenY)
-	
+
 	local function RetreatToSafety(force)
 		resolution.width = screenX
 		resolution.height = screenY
@@ -463,7 +464,7 @@ local function ShowManualFullscreenEntryWindow(name)
 			SetLobbyFullscreenMode(5)
 		end
 	end
-	
+
 	local function FinalApplyFunc()
 		local lobbySetting = (name == "lobby")
 		if lobbySetting then
@@ -476,17 +477,17 @@ local function ShowManualFullscreenEntryWindow(name)
 			end
 		end
 	end
-	
+
 	local function FinalApplyFailureFunc()
 		RetreatToSafety(true)
 	end
-	
+
 	local function ApplyFunc()
 		resolution.width = widthBox()
 		resolution.height = heightBox()
-		
+
 		SetLobbyFullscreenMode(5, resolution)
-		
+
 		manualWindow:Dispose()
 		local confirmation = WG.Chobby.ConfirmationPopup(FinalApplyFunc, "Keep these settings?", nil, 315, 170, i18n("yes"), i18n("no"), FinalApplyFailureFunc, true, 5)
 	end
@@ -495,7 +496,7 @@ local function ShowManualFullscreenEntryWindow(name)
 		RetreatToSafety(false)
 		manualWindow:Dispose()
 	end
-	
+
 	local btnApply = Button:New {
 		x = 5,
 		width = 135,
@@ -591,7 +592,7 @@ local function AddNumberSetting(offset, caption, desc, key, default, minVal, max
 
 		local newValue = math.max(minVal, math.min(maxVal, math.floor(0.5 + newValue)))
 		obj:SetText(newValue .. "%")
-		
+
 		Configuration:SetConfigValue(key, newValue/100)
 	end
 
@@ -657,7 +658,7 @@ local function GetLobbyTabControls()
 	}
 	offset = offset + ITEM_OFFSET
 
-	children[#children + 1], children[#children + 2], offset = AddNumberSetting(offset, "Lobby Interface Scale", "Increase or decrease interface size, for accessibility and 4k screens.", 
+	children[#children + 1], children[#children + 2], offset = AddNumberSetting(offset, "Lobby Interface Scale", "Increase or decrease interface size, for accessibility and 4k screens.",
 		"uiScale", Configuration.uiScale, Configuration.minUiScale*100, Configuration.maxUiScale*100, true)
 
 	children[#children + 1] = Label:New {
@@ -840,7 +841,7 @@ local function GetLobbyTabControls()
 		}
 	}
 	offset = offset + ITEM_OFFSET
-	
+
 	local autoLogin = Checkbox:New {
 		x = 20,
 		width = CHECK_WIDTH,
@@ -860,13 +861,13 @@ local function GetLobbyTabControls()
 	children[#children + 1] = autoLogin
 	offset = offset + ITEM_OFFSET
 
-	if not Configuration.gameConfig.disableSteam then	
+	if not Configuration.gameConfig.disableSteam then
 		children[#children + 1], offset = AddCheckboxSetting(offset, i18n("login_with_steam"), "wantAuthenticateWithSteam", true)
 		children[#children + 1], offset = AddCheckboxSetting(offset, i18n("use_steam_browser"), "useSteamBrowser", true)
 	end
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Multiplayer in new window", "multiplayerLaunchNewSpring", true)
 	if not Configuration.gameConfig.disablePlanetwars then
-		children[#children + 1], offset = AddCheckboxSetting(offset, i18n("planetwars_notifications"), "planetwarsNotifications", false)	
+		children[#children + 1], offset = AddCheckboxSetting(offset, i18n("planetwars_notifications"), "planetwarsNotifications", false)
 	end
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("ingame_notifcations"), "ingameNotifcations", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("non_friend_notifications"), "nonFriendNotifications", true)
@@ -969,7 +970,7 @@ local function GetVoidTabControls()
 		text = "Warning: These settings are experimental and not officially supported, proceed at your own risk.",
 	}
 	offset = offset + 65
-	
+
 	local function EnableProfilerFunc(newState)
 		if newState then
 			WG.WidgetProfiler.Enable()
@@ -1020,7 +1021,7 @@ local function GetVoidTabControls()
 		}
 	}
 	offset = offset + ITEM_OFFSET
-	
+
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -1132,7 +1133,7 @@ local function GetVoidTabControls()
 		},
 	}
 	offset = offset + ITEM_OFFSET
-	
+
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
@@ -1144,7 +1145,7 @@ local function GetVoidTabControls()
 		font = Configuration:GetFont(2),
 		caption = "Campaign",
 	}
-	
+
 	local campaignSelectedName = Configuration.campaignConfigName
 	local campaignSelected = 1
 	for i = 1, #Configuration.campaignConfigOptions do
@@ -1190,7 +1191,7 @@ local settingsUpdateFunction = {}
 
 local function MakePresetsControl(settingPresets, offset)
 	local Configuration = WG.Chobby.Configuration
-	
+
 	local presetLabel = Label:New {
 		name = "presetLabel",
 		x = 20,
@@ -1310,17 +1311,17 @@ local function ProcessScreenSizeOption(data, offset)
 		font = Configuration:GetFont(2),
 		tooltip = data.desc,
 	}
-	
+
 	local selectedOption
 	if data.lobbyDisplayModeToggle then
 		selectedOption = Configuration.lobby_fullscreen or 1
 	else
 		selectedOption = Configuration.game_fullscreen or 1
 	end
-	
+
 	local items = {"Borderless Window", "Windowed", "Fullscreen", "Configurable Borderless", "Configurable Fullscreen", "Configurable Windowed"}
-	
-	local list = ComboBox:New {
+
+    local list = ComboBox:New {
 		name = data.name .. "_combo",
 		x = COMBO_X,
 		y = offset,
@@ -1433,7 +1434,7 @@ local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitc
 	local Configuration = WG.Chobby.Configuration
 
 	local FormatFunc = (data.isPercent and ToPercent) or tostring
-	
+
 	local label = Label:New {
 		name = data.name .. "_label",
 		x = 20,
@@ -1462,7 +1463,7 @@ local function ProcessSettingsNumber(data, offset, defaults, customSettingsSwitc
 
 		local newValue = math.floor(0.5 + math.max(data.minValue, math.min(data.maxValue, newValue)))
 		obj:SetText(FormatFunc(newValue))
-		
+
 		Configuration:SetSettingsConfigOption(data.name, newValue)
 	end
 
@@ -1564,7 +1565,7 @@ local function InitializeControls(window)
 	if WG.Chobby.Configuration.devMode then
 		tabs[#tabs + 1] = MakeTab("Developer", GetVoidTabControls())
 	end
-	
+
 	local tabPanel = Chili.DetachableTabPanel:New {
 		x = 5,
 		right = 5,
@@ -1592,13 +1593,13 @@ local function InitializeControls(window)
 			tabPanel.tabBar
 		}
 	}
-	
+
 	local externalFunctions = {}
-	
+
 	function externalFunctions.OpenTab(tabName)
 		tabPanel.tabBar:Select(tabName)
 	end
-	
+
 	return externalFunctions
 end
 
@@ -1639,18 +1640,18 @@ function SettingsWindow.WriteGameSpringsettings(fileName)
 		return
 	end
 	local fixedSettingsOverride = WG.Chobby.Configuration.fixedSettingsOverride
-	
+
 	local function WriteToFile(key, value)
 		value = (fixedSettingsOverride and fixedSettingsOverride[key]) or value
 		settingsFile:write(key .. " = " .. value .. "\n")
 	end
-	
+
 	local gameSettings = WG.Chobby.Configuration.game_settings
 	local settingsOverride = WG.Chobby.Configuration.fixedSettingsOverride
 	for key, value in pairs(gameSettings) do
 		WriteToFile(key, (settingsOverride and settingsOverride[key]) or value)
 	end
-	
+
 	local screenX, screenY = Spring.GetScreenGeometry()
 	if battleStartDisplay == 1 then -- Borderless Window
 		WriteToFile("XResolutionWindowed", screenX)
@@ -1688,7 +1689,7 @@ end
 
 function SettingsWindow.GetSettingsString()
 	local settingsString = nil
-	
+
 	local function WriteSetting(key, value)
 		if settingsString then
 			settingsString = settingsString .. "\n" .. key .. " = " .. value
@@ -1696,13 +1697,13 @@ function SettingsWindow.GetSettingsString()
 			settingsString = key .. " = " .. value
 		end
 	end
-	
+
 	local gameSettings = WG.Chobby.Configuration.game_settings
 	local settingsOverride = WG.Chobby.Configuration.fixedSettingsOverride
 	for key, value in pairs(gameSettings) do
 		WriteSetting(key, (settingsOverride and settingsOverride[key]) or value)
 	end
-	
+
 	local screenX, screenY = Spring.GetScreenGeometry()
 	if battleStartDisplay == 1 then -- Borderless Window
 		WriteSetting("XResolutionWindowed", screenX)
@@ -1736,7 +1737,7 @@ function SettingsWindow.GetSettingsString()
 		WriteSetting("WindowBorderless", 0)
 		WriteSetting("Fullscreen", 1)
 	end
-	
+
 	return settingsString
 end
 
@@ -1767,7 +1768,7 @@ end
 --	if not ((currentMode == 2 or not currentMode) and lobbyFullscreen == 2) then
 --		return
 --	end
---	
+--
 --	local width, height, x, y = Spring.GetWindowGeometry()
 --	if width == oldWidth and height == oldHeight and x == oldX and y == oldY then
 --		return
@@ -1839,7 +1840,7 @@ function widget:Initialize()
 		for key, value in pairs(gameSettings) do
 			Configuration:SetSpringsettingsValue(key, value)
 		end
-		
+
 		local compatProfile = Configuration.forcedCompatibilityProfile
 		Spring.Utilities.TableEcho(compatProfile, "compatProfile")
 		if compatProfile then

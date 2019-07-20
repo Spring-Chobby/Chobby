@@ -100,7 +100,7 @@ local function GetBattleInfoHolder(parent, battleID)
 		padding = {1,1,1,1},
 		parent = mainControl,
 	}
-	
+
 	local mapImageFile, needDownload = Configuration:GetMinimapSmallImage(battle.mapName)
 	local minimapImage = Image:New {
 		name = "minimapImage",
@@ -126,12 +126,12 @@ local function GetBattleInfoHolder(parent, battleID)
 	}
 	runningImage:BringToFront()
 	imPlayerStatus:BringToFront()
-	
+
 	local currentSmallMode = false
 
 	function externalFunctions.Resize(smallMode)
 		currentSmallMode = smallMode
-		
+
 		if smallMode then
 			minimap:SetPos(nil, nil, 30, 30)
 
@@ -191,12 +191,12 @@ local function GetBattleInfoHolder(parent, battleID)
 		if updatedBattleID ~= battleID then
 			return
 		end
-		
+
 		minimapImage.file, minimapImage.checkFileExists = Configuration:GetMinimapSmallImage(battle.mapName)
 		minimapImage:Invalidate()
 
 		externalFunctions.Resize(currentSmallMode)
-		
+
 		lblPlayers:SetCaption(playersPrefix .. lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers)
 	end
 	lobby:AddListener("OnUpdateBattleInfo", OnUpdateBattleInfo)

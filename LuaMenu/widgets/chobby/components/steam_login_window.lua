@@ -9,7 +9,7 @@ function SteamLoginWindow:init(failFunction, cancelText, windowClassname)
 		Log.Error("Tried to spawn duplicate login window")
 		return
 	end
-	
+
 	self.CancelFunc = function ()
 		self.window:Dispose()
 		if failFunction then
@@ -17,12 +17,12 @@ function SteamLoginWindow:init(failFunction, cancelText, windowClassname)
 		end
 		self.window = nil
 	end
-	
+
 	local ww, wh = Spring.GetWindowGeometry()
 	local w, h = 386, 304
-	
+
 	self.passwordShown = false
-	
+
 	self.window = Window:New {
 		x = math.floor((ww - w) / 2),
 		y = math.floor((wh - h) / 2),
@@ -39,7 +39,7 @@ function SteamLoginWindow:init(failFunction, cancelText, windowClassname)
 			end
 		}
 	}
-	
+
 	self.lblRegisterInstructions = Label:New {
 		x = 15,
 		width = 170,
@@ -49,7 +49,7 @@ function SteamLoginWindow:init(failFunction, cancelText, windowClassname)
 		font = Configuration:GetFont(3),
 		parent = self.window
 	}
-	
+
 	self.txtUsername = TextBox:New {
 		x = 15,
 		width = 170,
@@ -69,7 +69,7 @@ function SteamLoginWindow:init(failFunction, cancelText, windowClassname)
 		useIME = false,
 		parent = self.window
 	}
-	
+
 	self.txtPassword = TextBox:New {
 		x = 15,
 		width = 170,
@@ -92,16 +92,16 @@ function SteamLoginWindow:init(failFunction, cancelText, windowClassname)
 				if key == Spring.GetKeyCode("enter") or key == Spring.GetKeyCode("numpad_enter") then
 					self:tryRegister()
 				end
-				
+
 				if string.len(obj.text) == 0 then
 					self.btnRegister:SetCaption(i18n("register_verb"))
 				else
-					self.btnRegister:SetCaption(i18n("link_verb"))	
+					self.btnRegister:SetCaption(i18n("link_verb"))
 				end
 			end
 		},
 	}
-	
+
 	self.txtError = TextBox:New {
 		x = 15,
 		right = 15,
@@ -111,7 +111,7 @@ function SteamLoginWindow:init(failFunction, cancelText, windowClassname)
 		fontsize = Configuration:GetFont(3).size,
 		parent = self.window
 	}
-	
+
 	self.btnRegister = Button:New {
 		right = 140,
 		width = 130,
@@ -127,7 +127,7 @@ function SteamLoginWindow:init(failFunction, cancelText, windowClassname)
 		},
 		parent = self.window
 	}
-	
+
 	self.btnCancel = Button:New {
 		right = 2,
 		width = 130,
@@ -143,9 +143,9 @@ function SteamLoginWindow:init(failFunction, cancelText, windowClassname)
 		},
 		parent = self.window
 	}
-	
+
 	self.window:BringToFront()
-	
+
 	screen0:FocusControl(self.ebUsername)
 	self.loginAttempts = 0
 end
@@ -155,28 +155,28 @@ function SteamLoginWindow:ShowPassword()
 		return
 	end
 	self.passwordShown = true
-	
+
 	self.window:AddChild(self.txtPassword)
 	self.window:AddChild(self.ebPassword)
-	
+
 	WG.Chobby.InformationPopup("This account already exists.\n\nIf this is your account then enter your password to link it to Steam.\n\nOtherwise, leave the password blank and try a different name.", {width = 390, height = 290})
-	
+
 	if string.len(self.ebPassword.text) == 0 then
 		self.btnRegister:SetCaption(i18n("register_verb"))
 	else
-		self.btnRegister:SetCaption(i18n("link_verb"))	
+		self.btnRegister:SetCaption(i18n("link_verb"))
 	end
 end
 
 function SteamLoginWindow:tryRegister()
 	WG.Analytics.SendOnetimeEvent("lobby:try_register")
 	self.txtError:SetText("")
-	
+
 	local username = self.ebUsername.text
 	if username == '' then
 		return
 	end
-	
+
 	local password
 	if self.passwordShown and self.ebPassword.text then
 		local pwLength = string.len(self.ebPassword.text)
@@ -184,7 +184,7 @@ function SteamLoginWindow:tryRegister()
 			password = self.ebPassword.text
 		end
 	end
-	
+
 	if not lobby.connected or self.loginAttempts >= 3 then
 		self.loginAttempts = 0
 		if password then
@@ -199,6 +199,6 @@ function SteamLoginWindow:tryRegister()
 		end
 		lobby:Login(username, password, 3, nil, GetLobbyName(), true)
 	end
-	
+
 	self.loginAttempts = self.loginAttempts + 1
 end

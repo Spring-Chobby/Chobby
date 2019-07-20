@@ -24,7 +24,7 @@ local START_UNITS_BLOCK_SIZE = 40
 
 local function TableToBase64(inputTable)
 	if not inputTable then
-		return 
+		return
 	end
 	return Spring.Utilities.Base64Encode(Spring.Utilities.TableToString(inputTable))
 end
@@ -62,7 +62,7 @@ local function AddToList(list, inclusionMap, listToAppend)
 			end
 		end
 	end
-	
+
 	return list
 end
 
@@ -89,7 +89,7 @@ local function GetPlayerCommWithExtra(playerComm, extraModules)
 			replaceModules[extraModules[i].name] = true
 		end
 	end
-	
+
 	local flatModules = {} -- Much simpler
 	local modules = playerComm.modules
 	for level = 0, #modules do
@@ -100,14 +100,14 @@ local function GetPlayerCommWithExtra(playerComm, extraModules)
 			end
 		end
 	end
-	
+
 	for i = 1, #extraModules do
 		local extra = extraModules[i]
 		for j = 1, extra.count do
 			flatModules[#flatModules + 1] = extra.name
 		end
 	end
-	
+
 	return {
 		name = playerComm.name,
 		chassis = playerComm.chassis,
@@ -123,24 +123,23 @@ end
 
 local function StartBattleForReal(planetID, planetData)
 	gameConfig = planetData.gameConfig
-	
+
 	local allyTeams = {}
 	local allyTeamCount = 0
 	local teams = {}
 	local teamCount = 0
-	local players = {}
 	local ais = {}
 	local aiCount = 0
 	local commanderTypes = {}
-	
+
 	local Configuration = WG.Chobby.Configuration
 	local gameName = Configuration:GetDefaultGameName()
 	local missionDifficulty = WG.CampaignData.GetDifficultySetting()
 	local bitExtension = (Configuration:GetIsRunning64Bit() and "64") or "32"
 	local playerName = Configuration:GetPlayerName()
-	
+
 	WG.Analytics.SendIndexedRepeatEvent("campaign:planet_" .. planetID .. ":difficulty_" .. missionDifficulty .. ":started")
-	
+
 	-- Add the player, this is to make the player team 0.
 	local playerCount = 1
 	local players = {
@@ -151,19 +150,19 @@ local function StartBattleForReal(planetID, planetData)
 			rank = 0,
 		},
 	}
-	
+
 	local playerUnlocks = WG.CampaignData.GetUnitsUnlocks()
 	local playerAbilities = WG.CampaignData.GetAbilityUnlocks()
-	
+
 	commanderTypes.player_commander = WG.CampaignData.GetPlayerCommander()
-	
+
 	if gameConfig.playerConfig.extraModules then
 		commanderTypes.player_commander = GetPlayerCommWithExtra(commanderTypes.player_commander, gameConfig.playerConfig.extraModules)
 	end
-	
+
 	local fullPlayerUnlocks = AddToList(Spring.Utilities.CopyTable(playerUnlocks.list), playerUnlocks.map, gameConfig.playerConfig.extraUnlocks)
-	local fullAbilitiesList = AddToList(Spring.Utilities.CopyTable(playerAbilities.list), playerAbilities.map, gameConfig.playerConfig.extraAbilities) 
-	
+	local fullAbilitiesList = AddToList(Spring.Utilities.CopyTable(playerAbilities.list), playerAbilities.map, gameConfig.playerConfig.extraAbilities)
+
 	if gameConfig.playerConfig.unitWhitelist then
 		local map = gameConfig.playerConfig.unitWhitelist
 		local i = 1
@@ -176,7 +175,7 @@ local function StartBattleForReal(planetID, planetData)
 			end
 		end
 	end
-	
+
 	if gameConfig.playerConfig.unitBlacklist then
 		local map = gameConfig.playerConfig.unitBlacklist
 		local i = 1
@@ -189,7 +188,7 @@ local function StartBattleForReal(planetID, planetData)
 			end
 		end
 	end
-	
+
 	teams[teamCount] = {
 		TeamLeader = 0,
 		AllyTeam = gameConfig.playerConfig.allyTeam,
@@ -210,9 +209,9 @@ local function StartBattleForReal(planetID, planetData)
 		typevictorylocation = TableToBase64(gameConfig.playerConfig.typeVictoryAtLocation)
 	}
 	AddStartUnits(teams[teamCount], gameConfig.playerConfig.startUnits, "extrastartunits_")
-	
+
 	teamCount = teamCount + 1
-	
+
 	-- Add the AIs
 	for i = 1, #gameConfig.aiConfig do
 		local aiData = gameConfig.aiConfig[i]
@@ -220,7 +219,7 @@ local function StartBattleForReal(planetID, planetData)
 		if aiData.bitDependant then
 			shortName = shortName .. bitExtension
 		end
-		
+
 		local availibleUnits = aiData.unlocks
 		local extraUnits = aiData.difficultyDependantUnlocks and aiData.difficultyDependantUnlocks[missionDifficulty]
 		if availibleUnits and extraUnits then
@@ -228,7 +227,7 @@ local function StartBattleForReal(planetID, planetData)
 				availibleUnits[#availibleUnits + 1] = extraUnits[i]
 			end
 		end
-		
+
 		ais[aiCount] = {
 			Name = aiData.humanName,
 			Team = teamCount,
@@ -243,7 +242,7 @@ local function StartBattleForReal(planetID, planetData)
 			}
 		}
 		aiCount = aiCount + 1
-		
+
 		local commanderName, noCommander
 		if aiData.commander then
 			local commander = aiData.commander
@@ -259,7 +258,7 @@ local function StartBattleForReal(planetID, planetData)
 		else
 			noCommander = 1
 		end
-		
+
 		teams[teamCount] = {
 			TeamLeader = 0,
 			AllyTeam = aiData.allyTeam,
@@ -279,7 +278,7 @@ local function StartBattleForReal(planetID, planetData)
 		AddStartUnits(teams[teamCount], aiData.startUnits, "extrastartunits_")
 		teamCount = teamCount + 1
 	end
-	
+
 	-- Add allyTeams
 	for i, teamData in pairs(teams) do
 		if not allyTeams[teamData.AllyTeam] then
@@ -288,14 +287,14 @@ local function StartBattleForReal(planetID, planetData)
 			}
 		end
 	end
-	
+
 	-- Briefing screen information
 	local informationText = {
 		name = planetData.name,
 		description = planetData.infoDisplay.extendedText or planetData.infoDisplay.text,
 		tips = planetData.tips,
 	}
-	
+
 	local modoptions = {
 		commandertypes = TableToBase64(commanderTypes),
 		defeatconditionconfig = TableToBase64(gameConfig.defeatConditionConfig),
@@ -312,24 +311,24 @@ local function StartBattleForReal(planetID, planetData)
 		campaignpartialsavedata = TableToBase64(WG.CampaignData.GetCampaignPartialSaveData()),
 	}
 	AddStartUnits(modoptions, gameConfig.neutralUnits, "neutralstartunits_")
-	
+
 	if WG.Chobby.Configuration.campaignSpawnDebug then
 		modoptions.campaign_spawn_debug = 1
 	end
-	
+
 	if gameConfig.modoptions then
 		for key, value in pairs(gameConfig.modoptions) do
 			modoptions[key] = (type(value) == "table" and TableToBase64(value)) or value
 		end
 	end
-	
+
 	local difficultyModoptions = gameConfig.modoptionDifficulties and gameConfig.modoptionDifficulties[missionDifficulty]
 	if difficultyModoptions then
 		for key, value in pairs(difficultyModoptions) do
 			modoptions[key] = (type(value) == "table" and TableToBase64(value)) or value
 		end
 	end
-	
+
 	local script = {
 		gametype = gameConfig.gameName or gameName,
 		mapname = gameConfig.mapName,
@@ -366,13 +365,13 @@ local PlanetBattleHandler = {}
 function PlanetBattleHandler.StartBattle(planetID, planetData)
 	local Configuration = WG.Chobby.Configuration
 	local gameConfig = planetData.gameConfig
-	
+
 	local function StartBattleFunc()
 		if StartBattleForReal(planetID, planetData) then
 			Spring.Echo("Start battle success!")
 		end
 	end
-	
+
 	if Spring.GetGameName() == "" then
 		StartBattleFunc()
 	else

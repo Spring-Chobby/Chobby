@@ -14,4 +14,4 @@ function widget:DrawScreen()
 	gl.Color(1,0,0.8,1)
 	gl.Rect(-10, -10, 5000, 5000)
 end
-	
+

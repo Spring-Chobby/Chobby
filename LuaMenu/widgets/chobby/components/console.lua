@@ -4,18 +4,18 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 	self.listener = sendMessageListener
 	self.showDate = true
 	self.dateFormat = "%H:%M"
-	
+
 	self.channelName = channelName
-	
+
 	local onResize
 	if onResizeFunc then
 		onResize = {
-			function () 
-				onResizeFunc(self) 
+			function ()
+				onResizeFunc(self)
 			end
 		}
 	end
-	
+
 	-- TODO: currently this is handled by chat windows and battleroom chat separately
 	self.unreadMessages = 0
 
@@ -31,7 +31,7 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 		x = 0,
 		right = 0,
 		y = 0,
- 		agressiveMaxLines = 500,
+		agressiveMaxLines = 500,
 		agressiveMaxLinesPreserve = 100,
 		lineSpacing = 2,
 		bottom = 0,
@@ -56,7 +56,7 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 		end},
 		onResize = onResize
 	}
-	
+
 	self.ebInputText = EditBox:New {
 		x = 0,
 		bottom = 7,
@@ -66,12 +66,12 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 		fontsize = Configuration.chatFontSize,
 		--hint = i18n("type_here_to_chat"),
 	}
-	
+
 	local function onConfigurationChange(listener, key, value)
 		if key == "chatFontSize" then
 			local oldFont = self.ebInputText.font
 			-- Relevant settings depend on skin
-			local fontSettings = {	
+			local fontSettings = {
 				font         = oldFont.font,
 				color        = oldFont.color,
 				outlineColor = oldFont.outlineColor,
@@ -81,13 +81,13 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 			}
 			self.ebInputText.font = Font:New(fontSettings)
 			self.ebInputText:UpdateLayout()
-			
+
 			self.tbHistory.font = Font:New(fontSettings)
 			self.tbHistory:UpdateLayout()
 		end
 	end
 	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
-	
+
 	self.ebInputText.KeyPress = function(something, key, ...)
 		if key == Spring.GetKeyCode("tab") then
 			self:Autocomplete(self.ebInputText.text)
@@ -99,7 +99,7 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 	end
 	self.ebInputText.OnKeyPress = {
 		function(obj, key, mods, ...)
-			if key == Spring.GetKeyCode("enter") or 
+			if key == Spring.GetKeyCode("enter") or
 				key == Spring.GetKeyCode("numpad_enter") then
 				self:SendMessage()
 				return true
@@ -128,7 +128,7 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 			self.fakeImage,
 		},
 	}
-	
+
 	if not noHistoryLoad then
 		self:LoadHistory(Configuration.lastLoginChatLength)
 	end
@@ -139,25 +139,25 @@ function Console:Autocomplete(textSoFar)
 		local start = 0
 		for i = 1, 100 do
 			local newStart = (string.find(textSoFar, " ", start) or (start - 1)) + 1
-			
+
 			if start ~= newStart then
 				start = newStart
 			else
 				break
 			end
 		end
-	
+
 		self.subword = string.sub(textSoFar, start)
 		self.unmodifiedLength = string.len(textSoFar)
 		local length = string.len(self.subword)
-		
+
 		self.suggestion = 0
 		self.suggestions = {}
-		
+
 		if length == 0 then
 			return
 		end
-		
+
 		local users = lobby:GetUsers()
 		for name, _ in pairs(users) do
 			if name:starts(self.subword) then
@@ -165,20 +165,20 @@ function Console:Autocomplete(textSoFar)
 			end
 		end
 	end
-	
+
 	if #self.suggestions == 0 then
 		return
 	end
-	
+
 	self.suggestion = self.suggestion + 1
 	if self.suggestion > #self.suggestions then
 		self.suggestion = 1
 	end
-	
+
 	self.ebInputText.selStart = self.unmodifiedLength + 1
 	self.ebInputText.selEnd = string.len(textSoFar) + 1
 	self.ebInputText:ClearSelected()
-	
+
 	self.ebInputText:TextInput(self.suggestions[self.suggestion])
 end
 
@@ -205,10 +205,10 @@ function Console:AddMessage(message, userName, dateOverride, color, thirdPerson,
 			local utcMinute = tonumber(os.date("!%M"))
 			local localHour = tonumber(os.date("%H"))
 			local localMinute = tonumber(os.date("%M"))
-		
+
 			local messageHour = tonumber(string.sub(dateOverride, 12, 13))
 			local messageMinute = tonumber(string.sub(dateOverride, 15, 16))
-			
+
 			if messageHour and messageMinute then
 				local hour = (localHour - utcHour + messageHour)%24
 				if hour < 10 then
@@ -218,7 +218,7 @@ function Console:AddMessage(message, userName, dateOverride, color, thirdPerson,
 				if minute < 10 then
 					minute = "0" .. minute
 				end
-				 
+
 				timeOverride = hour .. ":" .. minute
 			else
 				Spring.Echo("Bad dateOverride", dateOverride, messageHour, messageMinute)
@@ -241,7 +241,7 @@ function Console:AddMessage(message, userName, dateOverride, color, thirdPerson,
 			txt = txt .. userName .. " "
 			userEndIndex = userStartIndex + #userName
 		else
-			userStartIndex = #txt + 4 
+			userStartIndex = #txt + 4
 			txt = txt .. nameColor .. userName .. ": \255\255\255\255"
 			userEndIndex = userStartIndex + #userName
 			whiteText = whiteText .. userName .. ": "
@@ -252,8 +252,8 @@ function Console:AddMessage(message, userName, dateOverride, color, thirdPerson,
 
 		textTooltip = {
 			{
-				startIndex = userStartIndex, 
-				endIndex = userEndIndex, 
+				startIndex = userStartIndex,
+				endIndex = userEndIndex,
 				tooltip = nameTooltip
 			}
 		}
@@ -262,29 +262,29 @@ function Console:AddMessage(message, userName, dateOverride, color, thirdPerson,
 		else
 			onTextClick = {
 				{
-					startIndex = userStartIndex, 
-					endIndex = userEndIndex, 
-					OnTextClick = { 
-						function() 
+					startIndex = userStartIndex,
+					endIndex = userEndIndex,
+					OnTextClick = {
+						function()
 							WG.UserHandler.GetUserDropdownMenu(userName, isBattleChat)
-							--Spring.Echo("Clicked on " .. userName .. ". TODO: Spawn popup.") 
+							--Spring.Echo("Clicked on " .. userName .. ". TODO: Spawn popup.")
 						end
-					} 
+					}
 				}
 			}
 		end
 	end
-	
+
 	txt = txt .. message
 	onTextClick, textTooltip = WG.BrowserHandler.AddClickableUrls(txt, onTextClick or {}, textTooltip or {})
-	
+
 	whiteText = whiteText .. message
 	if self.tbHistory.text == "" then
 		self.tbHistory:SetText(txt, textTooltip, onTextClick)
 	else
 		self.tbHistory:AddLine(txt, textTooltip, onTextClick)
 	end
-	
+
 	if self.channelName then
 		Spring.CreateDir("chatLogs")
 		local logFile, errorMessage = io.open('chatLogs/' .. self.channelName .. ".txt", 'a')
@@ -323,13 +323,13 @@ function Console:LoadHistory(numLines)
 	if not VFS.FileExists(path) then
 		return
 	end
-	
+
 	local logfile = VFS.LoadFile(path)
 	local lineCount = 0
 	for line in lineIterator(logfile) do
 		lineCount = lineCount + 1
 	end
-	
+
 	local waitToWrite = lineCount - numLines
 	for line in lineIterator(logfile) do
 		if waitToWrite > 0 then

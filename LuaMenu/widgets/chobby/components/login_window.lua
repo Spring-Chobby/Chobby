@@ -19,7 +19,7 @@ function createTabGroup(ctrls, visibleFunc)
 						end
 						nextIndex = nextIndex%(#ctrls) + 1
 					end
-					
+
 					if ctrl2 then
 						screen0:FocusControl(ctrl2)
 						if ctrl2.classname == "editbox" then
@@ -50,15 +50,15 @@ function LoginWindow:init(failFunction, cancelText, windowClassname, params)
 	self.emailRequired = (params and params.emailRequired) or false
 	self.windowHeight = (params and params.windowHeight) or (self.emailRequired and 430) or 390
 	self.loginAfterRegister = (params and params.loginAfterRegister) or false
-	
+
 	local registerChildren = {}
-	
+
 	self.ResetText = function()
 		if self.txtError then
 			self.txtError:SetText("")
 		end
 	end
-	
+
 	self.CancelFunc = function ()
 		self.window:Dispose()
 		if failFunction then
@@ -66,7 +66,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname, params)
 		end
 		self.window = nil
 	end
-	
+
 	self.lblLoginInstructions = Label:New {
 		x = 15,
 		width = 170,
@@ -75,7 +75,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname, params)
 		caption = i18n("login_long"),
 		font = Configuration:GetFont(3),
 	}
-	
+
 	self.lblRegisterInstructions = Label:New {
 		x = 15,
 		width = 170,
@@ -85,7 +85,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname, params)
 		font = Configuration:GetFont(3),
 	}
 	registerChildren[#registerChildren + 1] = self.lblRegisterInstructions
-	
+
 	self.txtUsername = TextBox:New {
 		x = 15,
 		width = 170,
@@ -134,7 +134,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname, params)
 			end
 		},
 	}
-	
+
 	self.txtConfirmPassword = TextBox:New {
 		x = 15,
 		width = 170,
@@ -145,7 +145,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname, params)
 		useIME = false,
 	}
 	registerChildren[#registerChildren + 1] = self.txtConfirmPassword
-	
+
 	self.ebConfirmPassword = EditBox:New {
 		x = 135,
 		width = 200,
@@ -166,7 +166,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname, params)
 		},
 	}
 	registerChildren[#registerChildren + 1] = self.ebConfirmPassword
-	
+
 	if self.emailRequired then
 		self.txtEmail = TextBox:New {
 			x = 15,
@@ -178,7 +178,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname, params)
 			useIME = false,
 		}
 		registerChildren[#registerChildren + 1] = self.txtEmail
-		
+
 		self.ebEmail = EditBox:New {
 			x = 135,
 			width = 200,
@@ -199,7 +199,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname, params)
 		}
 		registerChildren[#registerChildren + 1] = self.ebEmail
 	end
-	
+
 	self.cbAutoLogin = Checkbox:New {
 		x = 15,
 		width = 215,
@@ -214,7 +214,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname, params)
 			Configuration:SetConfigValue("autoLogin", obj.checked)
 		end},
 	}
-	
+
 	self.txtError = TextBox:New {
 		x = 15,
 		right = 15,
@@ -223,7 +223,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname, params)
 		text = "",
 		fontsize = Configuration:GetFont(3).size,
 	}
-	
+
 	self.btnLogin = Button:New {
 		right = 140,
 		width = 130,
@@ -269,7 +269,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname, params)
 			end
 		},
 	}
-	
+
 	local ww, wh = Spring.GetWindowGeometry()
 	local width = 430
 
@@ -285,7 +285,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname, params)
 			[2] = { name = "register", caption = i18n("register_verb"), children = registerChildren, font = Configuration:GetFont(2)},
 		},
 	}
-	
+
 	self.tabBarHolder = Control:New {
 		name = "tabBarHolder",
 		x = 9,
@@ -299,12 +299,12 @@ function LoginWindow:init(failFunction, cancelText, windowClassname, params)
 			self.tabPanel.tabBar
 		}
 	}
-	
+
 	-- Prompt user to register account if their account has not been registered.
 	if Configuration.firstLoginEver then
 		self.tabPanel.tabBar:Select("register")
 	end
-	
+
 	self.contentsPanel = ScrollPanel:New {
 		x = 5,
 		right = 5,
@@ -322,7 +322,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname, params)
 			self.btnCancel
 		}
 	}
-	
+
 	self.window = Window:New {
 		x = math.floor((ww - width) / 2),
 		y = math.floor((wh - self.windowHeight) / 2),
@@ -348,13 +348,13 @@ function LoginWindow:init(failFunction, cancelText, windowClassname, params)
 			end
 		}
 	}
-	
+
 	self.window:BringToFront()
-	
+
 	local function IsRegisterInfoVisible()
 		return self.tabPanel.tabBar.selected == 2
 	end
-	
+
 	if self.emailRequired then
 		createTabGroup({self.ebUsername, self.ebPassword, self.ebConfirmPassword, self.ebEmail}, {false, false, IsRegisterInfoVisible, IsRegisterInfoVisible})
 	else
@@ -424,7 +424,7 @@ function LoginWindow:tryRegister()
 		self.txtError:SetText(Configuration:GetErrorColor() .. "Passwords do not match.")
 		return
 	end
-	
+
 	WG.Analytics.SendOnetimeEvent("lobby:try_register")
 	self.txtError:SetText("")
 
@@ -485,7 +485,7 @@ function LoginWindow:createAgreementWindow()
 		draggable = false,
 		parent = WG.Chobby.lobbyInterfaceHolder,
 	}
-	
+
 	self.tbAgreement = TextBox:New {
 		x = 1,
 		width = "100%",
@@ -494,7 +494,7 @@ function LoginWindow:createAgreementWindow()
 		text = self.agreementText,
 		font = Configuration:GetFont(2),
 	}
-	
+
 	ScrollPanel:New {
 		x = 1,
 		right = 7,
@@ -505,7 +505,7 @@ function LoginWindow:createAgreementWindow()
 		},
 		parent = self.agreementWindow,
 	}
-	
+
 	if self.emailRequired then
 		self.txtVerif = TextBox:New {
 			x = 1,
@@ -528,7 +528,7 @@ function LoginWindow:createAgreementWindow()
 			parent = self.agreementWindow,
 		}
 	end
-	
+
 	self.btnYes = Button:New {
 		x = 1,
 		width = 135,
@@ -538,7 +538,11 @@ function LoginWindow:createAgreementWindow()
 		font = Configuration:GetFont(3),
 		OnClick = {
 			function()
-				self:acceptAgreement(self.ebVerif.text)
+				local verificationCode = ""
+				if self.emailRequired then
+					verificationCode = self.ebVerif.text
+				end
+				self:acceptAgreement(verificationCode)
 			end
 		},
 		parent = self.agreementWindow,
@@ -559,8 +563,8 @@ function LoginWindow:createAgreementWindow()
 	}
 end
 
-function LoginWindow:acceptAgreement(verif_code)
-	lobby:ConfirmAgreement(verif_code)
+function LoginWindow:acceptAgreement(verificationCode)
+	lobby:ConfirmAgreement(verificationCode)
 	self.agreementWindow:Dispose()
 end
 

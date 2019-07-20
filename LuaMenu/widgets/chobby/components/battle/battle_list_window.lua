@@ -26,16 +26,16 @@ if not Configuration.gameConfig.disableBattleListHostButton then
 		},
 	}
 end
-	
+
 	local function SoftUpdate()
 		self:UpdateFilters()
 		self:UpdateInfoPanel()
 	end
-	
+
 	local function update()
 		self:Update()
 	end
-	
+
 	self.infoPanel = Panel:New {
 		classname = "overlay_window",
 		x = "15%",
@@ -55,7 +55,7 @@ end
 		font = Configuration:GetFont(3),
 	}
 	self.infoPanel:SetVisibility(false)
-	
+
 	Label:New {
 		x = 20,
 		right = 5,
@@ -65,7 +65,7 @@ end
 		caption = "Filter out:",
 		parent = self.window
 	}
-	
+
 	local checkPassworded = Checkbox:New {
 		x = 110,
 		width = 21,
@@ -120,7 +120,7 @@ end
 		},
 		parent = self.window,
 	}
-	
+
 	local function UpdateCheckboxes()
 		checkPassworded:SetToggle(Configuration.battleFilterPassworded2)
 		checkNonFriend:SetToggle(Configuration.battleFilterNonFriend)
@@ -132,13 +132,13 @@ end
 	self.columns = 3
 	self.itemHeight = 80
 	self.itemPadding = 1
-	
+
 	local function UpdateTimersDelay()
 		self:UpdateTimers()
 		WG.Delay(UpdateTimersDelay, 30)
 	end
 	WG.Delay(UpdateTimersDelay, 30)
-	
+
 	self.listenerUpdateDisabled = false
 	self.onBattleOpened = function(listener, battleID)
 		if self.listenerUpdateDisabled then
@@ -207,7 +207,7 @@ end
 		end
 	end
 	WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
-	
+
 	update()
 end
 
@@ -251,7 +251,7 @@ function BattleListWindow:UpdateInfoPanel()
 		self.infoLabel:SetCaption("No games, check your connection.")
 		return
 	end
-	
+
 	local firstPanel = self.orderPanelMapping[1]
 	if firstPanel then
 		if not firstPanel.inFilter then
@@ -267,7 +267,7 @@ function BattleListWindow:UpdateInfoPanel()
 		self.infoLabel:SetCaption("Games are hidden, unsure why.")
 		return
 	end
-	
+
 	self.infoPanel:SetVisibility(false)
 end
 
@@ -278,16 +278,16 @@ function BattleListWindow:MakeWatchBattle(battleID, battle)
 			WG.DownloadHandler.MaybeDownloadArchive(battle.mapName, "map", -1)
 			return
 		end
-		
+
 		if not VFS.HasArchive(battle.gameName) then
 			WG.Chobby.InformationPopup("Game update required. Wait for the download to complete or restart the game.")
 			WG.DownloadHandler.MaybeDownloadArchive(battle.gameName, "game", -1)
 			return
 		end
-		
+
 		lobby:RejoinBattle(battleID)
 	end
-	
+
 	local height = self.itemHeight - 20
 	local parentButton = Button:New {
 		name = "battleButton",
@@ -333,7 +333,7 @@ function BattleListWindow:MakeWatchBattle(battleID, battle)
 		padding = {1,1,1,1},
 		parent = parentButton,
 	}
-	
+
 	local mapImageFile, needDownload = Configuration:GetMinimapSmallImage(battle.mapName)
 	local minimapImage = Image:New {
 		name = "minimapImage",
@@ -381,7 +381,7 @@ function BattleListWindow:MakeWatchBattle(battleID, battle)
 		end
 		modeName = modeName .. "Running for " .. Spring.Utilities.GetTimeToPast(battle.runningSince)
 	end
-	
+
 	local lblRunningTime = Label:New {
 		name = "runningTimeCaption",
 		x = height + 3,
@@ -393,7 +393,7 @@ function BattleListWindow:MakeWatchBattle(battleID, battle)
 		caption = modeName,
 		parent = parentButton,
 	}
-	
+
 	return parentButton
 end
 
@@ -459,7 +459,7 @@ function BattleListWindow:MakeJoinBattle(battleID, battle)
 		padding = {1,1,1,1},
 		parent = parentButton,
 	}
-	
+
 	local mapImageFile, needDownload = Configuration:GetMinimapSmallImage(battle.mapName)
 	local minimapImage = Image:New {
 		name = "minimapImage",
@@ -530,7 +530,7 @@ function BattleListWindow:MakeJoinBattle(battleID, battle)
 		end
 		modeName = modeName .. "Running for " .. Spring.Utilities.GetTimeToPast(battle.runningSince)
 	end
-	
+
 	local lblGame = Label:New {
 		name = "gameCaption",
 		x = height + 70,
@@ -564,7 +564,7 @@ function BattleListWindow:MakeJoinBattle(battleID, battle)
 		font = Configuration:GetFont(1),
 		parent = parentButton,
 	}
-	
+
 	return parentButton
 end
 
@@ -573,18 +573,18 @@ function BattleListWindow:AddBattle(battleID, battle)
 	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
-	
+
 	if not battle then
 		return
 	end
-	
-	local button 
+
+	local button
 	if battle.isMatchMaker then
 		button = self:MakeWatchBattle(battleID, battle)
 	else
 		button = self:MakeJoinBattle(battleID, battle)
 	end
-	
+
 	self:AddRow({button}, battle.battleID)
 end
 
@@ -648,16 +648,16 @@ function BattleListWindow:UpdateSync(battleID)
 	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
-	
+
 	local items = self:GetRowItems(battleID)
 	if not items then
 		self:AddBattle(battleID)
 		return
 	end
-	
+
 	local imHaveMap = items.battleButton:GetChildByName("imHaveMap")
 	--local imHaveGame = items.battleButton:GetChildByName("imHaveGame")
-	
+
 	if imHaveMap then
 		--imHaveGame.file = (VFS.HasArchive(battle.gameName) and IMG_READY or IMG_UNREADY)
 		imHaveMap.file = (VFS.HasArchive(battle.mapName) and IMG_READY or IMG_UNREADY)
@@ -670,7 +670,7 @@ function BattleListWindow:UpdateTimers()
 		if not items then
 			break
 		end
-		
+
 		local battle = lobby:GetBattle(battleID)
 		local runningTimeCaption = items.battleButton:GetChildByName("runningTimeCaption")
 		if battle and runningTimeCaption then
@@ -690,13 +690,13 @@ function BattleListWindow:JoinedBattle(battleID)
 	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
-	
+
 	local items = self:GetRowItems(battleID)
 	if not items then
 		self:AddBattle(battleID)
 		return
 	end
-	
+
 	local playersCaption = items.battleButton:GetChildByName("playersCaption")
 	if playersCaption then
 		playersCaption:SetCaption(lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers)
@@ -713,13 +713,13 @@ function BattleListWindow:LeftBattle(battleID)
 	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
-	
+
 	local items = self:GetRowItems(battleID)
 	if not items then
 		self:AddBattle(battleID)
 		return
 	end
-	
+
 	local playersCaption = items.battleButton:GetChildByName("playersCaption")
 	if playersCaption then
 		playersCaption:SetCaption(lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers)
@@ -736,19 +736,19 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
-	
+
 	local items = self:GetRowItems(battleID)
 	if not items then
 		self:AddBattle(battleID)
 		return
 	end
-	
+
 	local lblTitle = items.battleButton:GetChildByName("lblTitle")
 	local mapCaption = items.battleButton:GetChildByName("mapCaption")
 	local imHaveMap = items.battleButton:GetChildByName("imHaveMap")
 	local minimapImage = items.battleButton:GetChildByName("minimap"):GetChildByName("minimapImage")
 	local password = items.battleButton:GetChildByName("password")
-	
+
 	if imHaveMap then
 		-- Password Update
 		if password and not battle.passworded then
@@ -765,13 +765,13 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 				parent = items.battleButton,
 			}
 		end
-		
+
 		-- Resets title and truncates.
 		lblTitle.OnResize[1](lblTitle)
-		
+
 		minimapImage.file, minimapImage.checkFileExists = Configuration:GetMinimapSmallImage(battle.mapName)
 		minimapImage:Invalidate()
-		
+
 		mapCaption:SetCaption(battle.mapName:gsub("_", " "))
 		if VFS.HasArchive(battle.mapName) then
 			imHaveMap.file = IMG_READY
@@ -779,12 +779,12 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 			imHaveMap.file = IMG_UNREADY
 		end
 		imHaveMap:Invalidate()
-		
-		
+
+
 		--local imHaveGame = items.battleButton:GetChildByName("imHaveGame")
 		--imHaveGame.file = (VFS.HasArchive(battle.gameName) and IMG_READY or IMG_UNREADY)
 		--gameCaption:SetCaption(battle.gameName:gsub("_", " "))
-		
+
 		local gameCaption = items.battleButton:GetChildByName("gameCaption")
 		local modeName = battle.battleMode and Configuration.battleTypeToHumanName[battle.battleMode]
 		if battle.isRunning then
@@ -804,11 +804,11 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 		-- Resets title and truncates.
 		local lblTitle = items.battleButton:GetChildByName("lblTitle")
 		lblTitle.OnResize[1](lblTitle)
-		
+
 		local minimapImage = items.battleButton:GetChildByName("minimap"):GetChildByName("minimapImage")
 		minimapImage.file, minimapImage.checkFileExists = Configuration:GetMinimapSmallImage(battle.mapName)
 		minimapImage:Invalidate()
-		
+
 		local playersOnMapCaption = items.battleButton:GetChildByName("playersOnMapCaption")
 		local playerCount = lobby:GetBattlePlayerCount(battleID)
 		playersOnMapCaption:SetCaption(playerCount .. ((playerCount == 1 and " player on " ) or " players on ") .. battle.mapName:gsub("_", " "))
@@ -821,13 +821,13 @@ function BattleListWindow:OnBattleIngameUpdate(battleID, isRunning)
 	if not (Configuration.displayBadEngines2 or Configuration:IsValidEngineVersion(battle.engineVersion)) then
 		return
 	end
-	
+
 	local items = self:GetRowItems(battleID)
 	if not items then
 		self:AddBattle(battleID)
 		return
 	end
-	
+
 	local runningImage = items.battleButton:GetChildByName("minimap"):GetChildByName("runningImage")
 	if isRunning then
 		runningImage.file = BATTLE_RUNNING
@@ -924,7 +924,7 @@ function BattleListWindow:OpenHostWindow()
 		selected = 1,
 		parent = hostBattleWindow,
 	}
-	
+
 	local function CancelFunc()
 		hostBattleWindow:Dispose()
 	end
@@ -1000,11 +1000,11 @@ function BattleListWindow:JoinBattle(battle)
 		local function onJoinBattleFailed(listener, reason)
 			lblError:SetCaption(reason)
 		end
-		
+
 		local function onJoinBattle(listener)
 			passwordWindow:Dispose()
 		end
-		
+
 		passwordWindow = Window:New {
 			x = 700,
 			y = 300,
@@ -1022,7 +1022,7 @@ function BattleListWindow:JoinBattle(battle)
 				end
 			},
 		}
-		
+
 
 		local lblPassword = Label:New {
 			x = 25,

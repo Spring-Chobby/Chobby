@@ -176,7 +176,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 			end
 		},
 	}
-	
+
 	local mapImageFile, needDownload = config:GetMinimapImage(battle.mapName)
 	local imMinimap = Image:New {
 		x = 0,
@@ -1044,7 +1044,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 	local height = votePanel.clientHeight
 	local config = WG.Chobby.Configuration
 	local offset = 0
-	
+
 	local buttonYesClickOverride
 	local buttonNoClickOverride
 	local matchmakerModeEnabled = false
@@ -1199,10 +1199,10 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		caption = "20/50",
 		parent = activePanel,
 	}
-	
+
 	local MULTI_POLL_MAX = 4
 	local multiPollOpt = {}
-	
+
 	local function SetSelectedMultOpt(index)
 		for i = 1, MULTI_POLL_MAX do
 			if i == index then
@@ -1212,13 +1212,13 @@ local function SetupVotePanel(votePanel, battle, battleID)
 			end
 		end
 	end
-	
+
 	local function ResetButtons()
 		ButtonUtilities.SetButtonDeselected(buttonYes)
 		ButtonUtilities.SetButtonDeselected(buttonNo)
 		SetSelectedMultOpt()
 	end
-	
+
 	for i = 1, MULTI_POLL_MAX do
 		local opt = {}
 		opt.id = i
@@ -1289,7 +1289,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 			return
 		end
 		oldPollType, oldMapPoll, oldPollUrl = pollType, mapPoll, pollUrl
-		
+
 		if pollType ~= "multi" then
 			if mapPoll then
 				minimapPanel:SetVisibility(true)
@@ -1309,7 +1309,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 			end
 		end
 	end
-	
+
 	local function SetMultiPollCandidates(candidates)
 		for i = 1, MULTI_POLL_MAX do
 			if candidates[i] then
@@ -1358,7 +1358,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		if not voteResultLabel.visible then
 			voteResultLabel:Show()
 		end
-		
+
 		matchmakerModeEnabled = false
 		ResetButtons()
 		WG.Delay(HideVoteResult, 5)
@@ -1368,16 +1368,16 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		activePanel:SetVisibility(false)
 		multiVotePanel:SetVisibility(false)
 		minimapPanel:SetVisibility(false)
-		
+
 		matchmakerModeEnabled = false
 		ResetButtons()
 		HideVoteResult()
 	end
-	
+
 	function externalFunctions.GetMatchmakerMode()
 		return matchmakerModeEnabled
 	end
-	
+
 	return externalFunctions
 end
 
@@ -1431,7 +1431,7 @@ local function InitializeSetupPage(subPanel, screenHeight, pageConfig, nextPage,
 		parent = subPanel,
 	}
 	nextButton:Hide()
-	
+
 	local tipTextBox
 	if pageConfig.tipText then
 		tipTextBox = TextBox:New {
@@ -1715,7 +1715,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		},
 		parent = mainWindow,
 	}
-	
+
 	local btnInviteFriends = Button:New {
 		right = 101,
 		y = 7,
@@ -1732,7 +1732,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		parent = mainWindow,
 	}
 	btnInviteFriends:SetVisibility(Configuration.canAuthenticateWithSteam)
-	
+
 	local battleTitle = ""
 	local lblBattleTitle = Label:New {
 		x = 20,
@@ -1748,7 +1748,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 			end
 		}
 	}
-	
+
 	local battleTypeCombo
 	if isHost then
 		battleTypeCombo = ComboBox:New {
@@ -1775,7 +1775,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		}
 		lblBattleTitle:BringToFront()
 	end
-	
+
 	local function UpdateBattleTitle()
 		if isSingleplayer then
 			battleTitle = tostring(battle.title)
@@ -1788,13 +1788,13 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 				lblBattleTitle:SetPos(143)
 				lblBattleTitle._relativeBounds.right = 100
 				lblBattleTitle:UpdateClientArea()
-				
+
 				battleTypeCombo:SetVisibility(true)
 				battleTypeCombo.selected = Configuration.battleTypeToHumanName[battle.battleMode or 0]
 				battleTypeCombo.caption = Configuration.battleTypeToHumanName[battle.battleMode or 0]
 				battleTypeCombo:Invalidate()
 			end
-			
+
 			local battleTypeName = Configuration.battleTypeToName[battle.battleMode]
 			if isHost then
 				battleTitle = ": " .. tostring(battle.title)
@@ -1870,7 +1870,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 	function externalFunctions.UpdateInviteButton(newVisibile)
 		btnInviteFriends:SetVisibility(newVisibile)
 	end
-	
+
 	-- Lobby interface
 	local function OnUpdateUserTeamStatus(listener, userName, allyNumber, isSpectator)
 		infoHandler.UpdateUserTeamStatus(userName, allyNumber, isSpectator)
@@ -1929,7 +1929,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 			votes = 0,
 		},
 	}
-	
+
 	local function OnMatchMakerReadyCheck(_, secondsRemaining, minWinChance, isQuickPlay)
 		if not isQuickPlay then
 			return -- Handled by MM popup
@@ -1968,7 +1968,7 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		local chatColour = (iAmMentioned and CHAT_MENTION) or CHAT_ME
 		battleRoomConsole:AddMessage(message, userName, false, chatColour, true)
 	end
-	
+
 	battleLobby:AddListener("OnUpdateUserTeamStatus", OnUpdateUserTeamStatus)
 	battleLobby:AddListener("OnBattleIngameUpdate", OnBattleIngameUpdate)
 	battleLobby:AddListener("OnUpdateBattleInfo", OnUpdateBattleInfo)
@@ -2199,11 +2199,11 @@ local function DelayedInitialize()
 	end
 	WG.Chobby.Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 end
-	
+
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	
+
 	local function downloadFinished()
 		UpdateArchiveStatus(true)
 	end

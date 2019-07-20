@@ -91,11 +91,11 @@ local function PromptNewSave(backOnFail)
 	if backOnFail then
 		saveFile = WG.CampaignData.StartNewGame()
 	end
-	
+
 	local Configuration = WG.Chobby.Configuration
 	local lobby = WG.LibLobby.lobby
 	local defaultCommName = Configuration:GetPlayerName(true)
-	
+
 	local newSaveWindow = Window:New {
 		x = 700,
 		y = 300,
@@ -136,7 +136,7 @@ local function PromptNewSave(backOnFail)
 		parent = newSaveWindow,
 	}
 	offset = offset + 52
-	
+
 	local lblDifficulty = Label:New {
 		x = 25,
 		right = 15,
@@ -255,7 +255,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 
 	-- save name
 	local x = 95
-	
+
 	local saveName = TextBox:New {
 		name = "saveName",
 		x = x,
@@ -264,10 +264,10 @@ local function AddSaveEntryButton(saveFile, saveList)
 		height = 20,
 		valign = 'center',
 		fontsize = Configuration:GetFont(3).size,
-		text = saveFile.commanderName .. (current and " \255\0\255\255\(current)\008" or ""),
+		text = saveFile.commanderName .. (current and " \255\0\255\255(current)\008" or ""),
 		parent = container,
 	}
-	
+
 	local planetsCaptured = (saveFile.planetsCaptured and #saveFile.planetsCaptured.list) or 0
 	local saveInformation = TextBox:New {
 		name = "saveInformation",
@@ -451,7 +451,6 @@ end
 function CampaignSaveWindow.PromptInitialSaveName()
 	local Configuration = WG.Chobby.Configuration
 	if not Configuration.campaignSaveFile then
-		local Configuration = WG.Chobby.Configuration
 		local lobby = WG.LibLobby.lobby
 		local commName = (lobby and lobby.myUserName) or Configuration.suggestedNameFromSteam
 		if commName then

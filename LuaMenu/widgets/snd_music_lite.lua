@@ -19,13 +19,8 @@ end
 local playingTrack	-- boolean
 local previousTrack
 local loopTrack	-- string trackPath
-
-local randomTrackList = {
-	"sounds/lobbyMusic/A Magnificent Journey (Alternative Version).ogg",
-	"sounds/lobbyMusic/Dream Infinity.ogg",
-	"sounds/lobbyMusic/Interstellar.ogg",
-	"sounds/lobbyMusic/Tomorrow Landscape.ogg",
-}
+local randomTrackList
+local openTrack
 
 local function GetRandomTrack(previousTrack)
 	local trackCount = #randomTrackList
@@ -35,11 +30,11 @@ local function GetRandomTrack(previousTrack)
 			if randomTrackList[i] == previousTrack then
 				trackCount = trackCount - 1
 				previousTrackIndex = i
-				break 
+				break
 			end
 		end
 	end
-	
+
 	local randomTrack = math.ceil(math.random()*trackCount)
 	if randomTrack == previousTrackIndex then
 		randomTrack = trackCount + 1
@@ -95,17 +90,17 @@ end
 
 local firstActivation = true
 local ingame = false
-local OPEN_TRACK_NAME = 'sounds/lobbyMusic/The Secret of Ayers Rock.ogg'
 
 function widget:Update()
+
 	if ingame or (WG.Chobby.Configuration.menuMusicVolume == 0 )then
 		return
 	end
-	
+
 	if not playingTrack then
-		return	
+		return
 	end
-	
+
 	local playedTime, totalTime = Spring.GetSoundStreamTime()
 	playedTime = math.floor(playedTime)
 	totalTime = math.floor(totalTime)
@@ -137,7 +132,8 @@ local MusicHandler = {
 function widget:ActivateMenu()
 	ingame = false
 	if firstActivation then
-		StartTrack(OPEN_TRACK_NAME)
+		StartTrack(openTrack)
+		previousTrack = openTrack
 		firstActivation = false
 		return
 	end
@@ -148,8 +144,23 @@ function widget:ActivateMenu()
 end
 
 function widget:Initialize()
+
+	-- load custom game dependent music
+	randomTrackList = WG.Chobby.Configuration.gameConfig.randomTrackList
+
+	if randomTrackList == nil or #randomTrackList == 0 then
+		Spring.Log("snd_music.lite.lua", LOG.NOTICE, "No random track list found, disabling lobby music")
+		widgetHandler:RemoveWidget()
+		return
+	end
+
+	openTrack = WG.Chobby.Configuration.gameConfig.openTrack
+	if openTrack == nil then
+		openTrack = randomTrackList[math.random(#randomTrackList)]
+	end
+
 	math.randomseed(os.clock() * 100)
-	
+
 	local Configuration = WG.Chobby.Configuration
 
 	local function onConfigurationChange(listener, key, value)
@@ -165,7 +176,7 @@ function widget:Initialize()
 	end
 	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
 	WG.LibLobby.lobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
-	
+
 	WG.MusicHandler = MusicHandler
 end
 

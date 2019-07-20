@@ -52,13 +52,13 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Rich Presense 
+-- Rich Presense
 
 local function GetGameType(data)
 	if data.isReplay then
 		return "Watching Replay"
 	end
-	
+
 	if data.isCampaign then
 		return "Playing campaign on planet " .. data.planetName
 	end
@@ -103,7 +103,7 @@ local function GetGameType(data)
 	if data.isFFA then
 		return meString .. data.teamPlayers .. "-way FFA" .. endStr
 	end
-	
+
 	return meString .. data.teamOnePlayers .. "v" .. data.teamTwoPlayers .. endStr
 end
 
@@ -140,8 +140,13 @@ end
 -- Initialization
 
 local function DelayedInitialize()
+	if WG.WrapperLoopback == nil or WG.WrapperLoopback.DiscordUpdatePresence == nil then
+		widgetHandler:RemoveWidget(widget)
+		return
+	end
+
 	SetDiscordPlaying("In menu")
-	
+
 	local function OnBattleAboutToStart(_, battleType)
 		if battleType == "replay" then
 			SetDiscordPlaying("Loading replay")
@@ -160,17 +165,17 @@ local function DelayedInitialize()
 		--	SetDiscordPlaying("Playing Multiplayer")
 		--end
 	end
-	
+
 	local lobby = WG.LibLobby.lobby
-	
+
 	lobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
 	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
-	
+
 	local function InBattleUpdate(listener, newBattleID)
 		if myBattleID == newBattleID then
 			return
 		end
-		
+
 		if newBattleID then
 			local battle = lobby:GetBattle(newBattleID)
 			lobbyState = "In" .. ((battle.isRunning and " running") or " ") .. " battle lobby"
@@ -195,10 +200,14 @@ local function DelayedInitialize()
 end
 
 function widget:ActivateMenu()
+	if WG.WrapperLoopback == nil or WG.WrapperLoopback.DiscordUpdatePresence == nil then
+		widgetHandler:RemoveWidget(widget)
+		return
+	end
 	SetDiscordPlaying("In menu")
 end
 
-function widget:Initialize() 
+function widget:Initialize()
 	WG.Delay(DelayedInitialize, 0.5)
 	WG.DiscordHandler = DiscordHandler
 end

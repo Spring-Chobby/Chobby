@@ -80,7 +80,7 @@ local function HandleTextToSpeech(msg)
 	if not Configuration.enableTextToSpeech then
 		return false
 	end
-	
+
 	if string.find(msg, TTT_SAY) == 1 then
 		msg = string.sub(msg, 17)
 		local nameEnd = string.find(msg, "%s")
@@ -89,7 +89,7 @@ local function HandleTextToSpeech(msg)
 		WG.WrapperLoopback.TtsSay(name, msg)
 		return true
 	end
-	
+
 	if string.find(msg, TTS_VOLUME) == 1 then
 		msg = string.sub(msg, 20)
 		WG.WrapperLoopback.TtsVolume(tonumber(msg) or 0)
@@ -106,10 +106,10 @@ local function HandleLobbyOverlay(msg)
 	--Spring.Echo("HandleLobbyOverlay", msg)
 	local interfaceRoot = Chobby and Chobby.interfaceRoot
 	if interfaceRoot then
-		if msg == REMOVE_BUTTON then 
+		if msg == REMOVE_BUTTON then
 			interfaceRoot.SetLobbyButtonEnabled(false)
 			return true
-		elseif msg == ENABLE_OVERLAY then 
+		elseif msg == ENABLE_OVERLAY then
 			Spring.Echo("HandleLobbyOverlay SetMainInterfaceVisibley")
 			interfaceRoot.SetMainInterfaceVisible(true)
 			return true
@@ -190,7 +190,7 @@ local function MsgToDiscordData(msg)
 			planetName = data[11],
 		}
 	end
-	
+
 	return StringToDataTable(msg)
 end
 
@@ -246,7 +246,7 @@ end
 function widget:ActivateMenu()
 	local Chobby = WG.Chobby
 	local interfaceRoot = Chobby and Chobby.interfaceRoot
-	
+
 	-- Another game might be started without the ability to display lobby button.
 	if interfaceRoot then
 		interfaceRoot.SetLobbyButtonEnabled(true)

@@ -25,18 +25,18 @@ local replayListWindow
 
 local function CreateReplayEntry(replayPath, engineName, gameName, mapName)
 	local Configuration = WG.Chobby.Configuration
-	
+
 	local fileName = string.sub(replayPath, 7)
 	if string.sub(fileName, 0, 4) == "hide" then
 		return
 	end
-	
+
 	fileName = string.gsub(string.gsub(fileName, " maintenance", ""), " develop", "")
 	fileName = string.gsub(fileName, "%.sdfz", "")
-	
+
 	local replayTime = string.sub(fileName, 0, 15)
 	replayTime = string.sub(fileName, 0, 4) .. "-" .. string.sub(fileName, 5, 6) .. "-" .. string.sub(fileName, 7, 8) .. " at " .. string.sub(fileName, 10, 11) .. ":" .. string.sub(fileName, 12, 13) .. ":" .. string.sub(fileName, 14, 15)
-	
+
 	local replayPanel = Panel:New {
 		x = 0,
 		y = 0,
@@ -45,7 +45,7 @@ local function CreateReplayEntry(replayPath, engineName, gameName, mapName)
 		draggable = false,
 		padding = {0, 0, 0, 0},
 	}
-	
+
 	local startButton = Button:New {
 		x = 3,
 		y = 3,
@@ -65,7 +65,7 @@ local function CreateReplayEntry(replayPath, engineName, gameName, mapName)
 		},
 		parent = replayPanel,
 	}
-	
+
 	local replayDate = TextBox:New {
 		name = "replayDate",
 		x = 85,
@@ -110,7 +110,7 @@ local function CreateReplayEntry(replayPath, engineName, gameName, mapName)
 	--	text = engineName,
 	--	parent = replayPanel,
 	--}
-	
+
 	return replayPanel, {replayTime, string.lower(mapName), gameName}
 end
 
@@ -120,7 +120,7 @@ end
 
 local function InitializeControls(parentControl)
 	local Configuration = WG.Chobby.Configuration
-	
+
 	Label:New {
 		x = 15,
 		y = 11,
@@ -130,7 +130,7 @@ local function InitializeControls(parentControl)
 		font = Configuration:GetFont(3),
 		caption = "Replays",
 	}
-	
+
 	local loadingPanel = Panel:New {
 		classname = "overlay_window",
 		x = "20%",
@@ -139,7 +139,7 @@ local function InitializeControls(parentControl)
 		bottom = "45%",
 		parent = parentControl,
 	}
-	
+
 	local loadingLabel = Label:New {
 		x = "5%",
 		y = "5%",
@@ -151,11 +151,11 @@ local function InitializeControls(parentControl)
 		font = Configuration:GetFont(3),
 		caption = "Loading",
 	}
-	
+
 	-------------------------
 	-- Replay List
 	-------------------------
-	
+
 	local listHolder = Control:New {
 		x = 12,
 		right = 15,
@@ -166,27 +166,27 @@ local function InitializeControls(parentControl)
 		draggable = false,
 		padding = {0, 0, 0, 0},
 	}
-	
+
 	local headings = {
 		{name = "Time", x = 88, width = 207},
 		{name = "Map", x = 300, width = 225},
 		{name = "Version", x = 530, right = 5},
 	}
-	
+
 	local replayList = WG.Chobby.SortableList(listHolder, headings, nil, nil, false)
-	
+
 	local PartialAddReplays, moreButton
-	
+
 	local function AddReplays()
 		local replays = VFS.DirList("demos")
 		--Spring.Utilities.TableEcho(replays, "replaysList")
-		
+
 		replayList:Clear()
-		
+
 		if moreButton then
 			moreButton:SetVisibility(true)
 		end
-		
+
 		local index = #replays
 		PartialAddReplays = function()
 			loadingPanel:SetVisibility(true)
@@ -204,19 +204,19 @@ local function InitializeControls(parentControl)
 				WG.WrapperLoopback.ReadReplayInfo(replayPath)
 				index = index - 1
 			end
-			
+
 			loadingPanel:SetVisibility(false)
 		end
-		
+
 		PartialAddReplays()
 	end
-	
+
 	AddReplays()
-	
+
 	-------------------------
 	-- Buttons
 	-------------------------
-	
+
 	Button:New {
 		x = 100,
 		y = 7,
@@ -232,7 +232,7 @@ local function InitializeControls(parentControl)
 			end
 		},
 	}
-	
+
 	moreButton = Button:New {
 		x = 340,
 		y = 7,
@@ -265,7 +265,7 @@ local function InitializeControls(parentControl)
 	--	},
 	--	parent = parentControl
 	--}
-	
+
 	if WG.BrowserHandler and Configuration.gameConfig.link_replays then
 		Button:New {
 			x = 220,
@@ -283,16 +283,16 @@ local function InitializeControls(parentControl)
 			},
 		}
 	end
-	
+
 	local externalFunctions = {}
-	
+
 	function externalFunctions.AddReplay(replayPath, engine, game, map, script)
 		local control, sortData = CreateReplayEntry(replayPath, engine, game, map)
 		if control then
 			replayList:AddItem(replayPath, control, sortData)
 		end
 	end
-	
+
 	return externalFunctions
 end
 

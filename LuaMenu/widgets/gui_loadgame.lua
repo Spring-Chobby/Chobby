@@ -127,7 +127,7 @@ local function GetSaves()
 			saves[#saves + 1] = saveData
 		end
 	end
-	
+
 	return saves
 end
 
@@ -147,16 +147,16 @@ local function LoadGameByFilename(filename)
 		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Save game " .. filename .. " not found")
 		return
 	end
-	
+
 	if not (saveData.gameName and saveData.gameVersion and saveData.map) then
 		Spring.Echo("Save game missing game or map", saveData.gameName, saveData.gameVersion, saveData.map)
 		return
 	end
-	
+
 	local game = saveData.gameName .. " " .. saveData.gameVersion
 	local map = saveData.map
 	local hasGame = true
-	
+
 	if not VFS.HasArchive(game) then
 		WG.DownloadHandler.MaybeDownloadArchive(game, "game", -1)
 		Notify("Downloading game...", "Retry when complete")
@@ -168,13 +168,13 @@ local function LoadGameByFilename(filename)
 		Notify("Downloading map...", "Retry when complete")
 		return
 	end
-	
+
 	local ext = GetSaveExtension(SAVE_DIR .. '/' .. filename)
 	if not ext then
 		Notify("Load error", "Cannot find save data file " .. SAVE_DIR .. '/' .. filename .. " (.ssf or .slsf).")
 		return
 	end
-	
+
 	if not hasGame then
 		Notify("Load error", "Cannot find game files.")
 		return
@@ -197,7 +197,7 @@ local function LoadGameByFilename(filename)
 			WG.Chobby.localLobby:StartGameFromString(script)
 		end
 	)
-	
+
 	if success then
 		Notify("Loading save")
 	else
@@ -213,7 +213,7 @@ local function DeleteSave(filename, saveList)
 		if saveFilePath then
 			os.remove(saveFilePath)
 		end
-		
+
 		saveList:RemoveItem(filename)
 	end)
 	if (not success) then
@@ -233,7 +233,7 @@ local function SaveLoadConfirmationDialogPopup(filename, saveMode)
 end
 
 -- Makes a button for a save game on the save/load screen
-local function AddSaveEntryButton(saveFile, saveList)	
+local function AddSaveEntryButton(saveFile, saveList)
 	local container = Panel:New {
 		x = 0,
 		y = 0,
@@ -242,7 +242,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 		draggable = false,
 		padding = {0, 0, 0, 0},
 	}
-	
+
 	-- load button
 	local actionButton = Button:New {
 		x = 3,
@@ -263,7 +263,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 		},
 		parent = container,
 	}
-	
+
 	-- save name
 	local x = 80
 	local saveName = TextBox:New {
@@ -277,7 +277,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 		text = saveFile.filename,
 		parent = container,
 	}
-	
+
 	-- save's modgame name
 	x = x + 200
 	local gameName = TextBox:New {
@@ -291,7 +291,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 		text = saveFile.gameName .. "\n" .. saveFile.gameVersion,
 		parent = container,
 	}
-	
+
 	-- save date
 	x = x + 140
 	local saveDate = TextBox:New {
@@ -305,7 +305,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 		text = WriteDate(saveFile.date),
 		parent = container,
 	}
-	
+
 	-- save details
 	x = x + 110
 	local details = TextBox:New {
@@ -319,7 +319,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 		text = GetSaveDescText(saveFile),
 		parent = container,
 	}
-	
+
 	-- delete button
 	x = x + 180
 	local deleteButton = Button:New {
@@ -336,7 +336,7 @@ local function AddSaveEntryButton(saveFile, saveList)
 			end
 		}
 	}
-	
+
 	return saveFile.filename, container, {saveFile.filename, saveFile.gameName .. "" .. saveFile.gameVersion, DateToString(saveFile.date)}
 end
 
@@ -348,7 +348,7 @@ local function PopulateSaveList(saveList)
 		local filename, controls, order = AddSaveEntryButton(saves[i], saveList)
 		items[#items + 1] = {filename, controls, order}
 	end
-		
+
 	saveList:AddItems(items)
 end
 --------------------------------------------------------------------------------
@@ -357,7 +357,7 @@ end
 
 local function InitializeControls(parent)
 	Configuration = WG.Chobby.Configuration
-	
+
 	Label:New {
 		x = 20,
 		right = 5,
@@ -367,11 +367,11 @@ local function InitializeControls(parent)
 		font = Configuration:GetFont(3),
 		caption = i18n("load_saved_game"),
 	}
-	
+
 	-------------------------
 	-- Generate List
 	-------------------------
-	
+
 	local listHolder = Control:New {
 		x = 4,
 		right = 7,
@@ -382,7 +382,7 @@ local function InitializeControls(parent)
 		draggable = false,
 		padding = {0, 0, 0, 0},
 	}
-	
+
 	local headings = {
 		{name = "Name", x = 82, width = 200},
 		{name = "Game", x = 82 + 200, width = 140},
@@ -391,13 +391,13 @@ local function InitializeControls(parent)
 
 	local saveList = WG.Chobby.SortableList(listHolder, headings, 80, 3)
 	PopulateSaveList(saveList)
-	
+
 	local externalFunctions = {}
-	
+
 	function externalFunctions.PopulateSaveList()
 		PopulateSaveList(saveList)
 	end
-	
+
 	return externalFunctions
 end
 
@@ -409,7 +409,7 @@ local LoadGameWindow = {}
 
 function LoadGameWindow.GetControl()
 	local controlFuncs
-	
+
 	local window = Control:New {
 		name = "loadGameHandler",
 		x = "0%",
@@ -442,7 +442,7 @@ end
 function widget:Initialize()
 	CHOBBY_DIR = "LuaMenu/widgets/chobby/"
 	VFS.Include("LuaMenu/widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
-	
+
 	Chili = WG.Chili
 	Window = Chili.Window
 	Panel = Chili.Panel
@@ -450,14 +450,14 @@ function widget:Initialize()
 	ScrollPanel = Chili.ScrollPanel
 	Label = Chili.Label
 	Button = Chili.Button
-	
+
 	WG.LoadGameWindow = LoadGameWindow
-	
+
 	local function OnBattleAboutToStart()
 		ingame = true
 	end
 	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
-	
+
 	WG.LoadGame = {
 		LoadGameByFilename = LoadGameByFilename,
 	}
