@@ -2001,6 +2001,8 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		oldLobby:RemoveListener("OnMatchMakerReadyCheck", OnMatchMakerReadyCheck)
 		oldLobby:RemoveListener("OnMatchMakerReadyUpdate", OnMatchMakerReadyUpdate)
 		oldLobby:RemoveListener("OnMatchMakerReadyResult", OnMatchMakerReadyResult)
+
+		WG.BattleStatusPanel.RemoveBattleTab()
 	end
 
 	mainWindow.OnDispose = mainWindow.OnDispose or {}
