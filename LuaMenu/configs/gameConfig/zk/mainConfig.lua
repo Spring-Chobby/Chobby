@@ -112,6 +112,8 @@ local externalFuncAndData = {
 		"sounds/lobbyMusic/Interstellar.ogg",
 		"sounds/lobbyMusic/Tomorrow Landscape.ogg",
 	},
+	-- I assume ZK doesn't want to show this as it was removed
+	hideGameExistanceDisplay = true,
 }
 
 function externalFuncAndData.CheckAvailability()
