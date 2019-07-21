@@ -7,26 +7,26 @@ local menuItems = {
 			submenuControl = WG.CampaignHandler.GetControl(),
 			tabs = {
 				{
-					name = "technology", 
+					name = "technology",
 					control = WG.TechnologyHandler.GetControl(),
 				},
 				{
-					name = "commander", 
+					name = "commander",
 					control = WG.CommanderHandler.GetControl(),
 				},
 				{
-					name = "codex", 
+					name = "codex",
 					control = WG.CodexHandler.GetControl(),
 				},
 				{
-					name = "options", 
+					name = "options",
 					control = WG.CampaignOptionsWindow.GetControl(),
 				},
 			},
 		},
 	},
 	{
-		name = "skirmish", 
+		name = "skirmish",
 		control = WG.BattleRoomWindow.GetSingleplayerControl(VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/singleplayerQuickSkirmish.lua")),
 		entryCheck = WG.BattleRoomWindow.SetSingleplayerGame,
 	},
@@ -41,7 +41,7 @@ local menuItems = {
 		entryCheck = WG.BattleRoomWindow.SetSingleplayerGame,
 	},
 	--{
-	--	name = "quick_start", 
+	--	name = "quick_start",
 	--	control = Control:New {},
 	--},
 }

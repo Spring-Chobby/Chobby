@@ -218,7 +218,7 @@ return {
 		control = communityControl,
 	},
 --	{
---		name = "tutorials", 
+--		name = "tutorials",
 --		control = WG.MissionHandler.GetControl(),
 --	},
 	{

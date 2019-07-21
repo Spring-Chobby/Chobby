@@ -1,4 +1,4 @@
-return {	
+return {
 	CppTestAI = true,
 	E323AI = true,
 	HughAI = true,
@@ -8,6 +8,6 @@ return {
 	NullOOJavaAI = true,
 	RAI = true,
 	Sharddev = true,
-	Shard = true,	
+	Shard = true,
 	AAI = true,
 }

@@ -6,7 +6,7 @@ local skin = {
     name    = "DarkHiveSquare",
     version = "0.1",
     author  = "luckywaldo7",
-    
+
     depend = {
       "DarkHive",
     },

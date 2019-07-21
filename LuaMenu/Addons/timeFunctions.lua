@@ -67,7 +67,7 @@ local function FixTimeOutOfBounds(timeTable)
 			timeTable[i + 1] = timeTable[i + 1] + 1
 		end
 	end
-	
+
 	repeat
 		local updated = false
 		-- Overflow
@@ -75,7 +75,7 @@ local function FixTimeOutOfBounds(timeTable)
 		if timeTable[5] == 2 and IsLeapYear(timeTable[6]) then
 			daysInThisMonth = 29
 		end
-		
+
 		if timeTable[4] > daysInThisMonth then -- Some bases are one index and some are zero indexed FFS!!
 			timeTable[4] = timeTable[4] - daysInThisMonth
 			timeTable[5] = timeTable[5] + 1
@@ -86,7 +86,7 @@ local function FixTimeOutOfBounds(timeTable)
 			timeTable[6] = timeTable[6] + 1
 			updated = true
 		end
-		
+
 		-- Underflow
 		local daysInLastMonth = monthDays[(timeTable[5] - 2)%12 + 1] or 31
 		if timeTable[4] < 1 then
@@ -100,7 +100,7 @@ local function FixTimeOutOfBounds(timeTable)
 			updated = true
 		end
 	until (not updated)
-	
+
 	return timeTable
 end
 
@@ -112,15 +112,15 @@ function Spring.Utilities.FormatTime(seconds, includeSeconds)
 	if seconds < 0 then
 		return (includeSeconds and "0s") or "0m"
 	end
-	
+
 	local hours = math.floor(seconds/3600)
 	local minutes = math.floor(seconds/60)%60
 	local seconds = math.floor(seconds)%60
-	
+
 	--Spring.Echo("pastTime", pastTime[1], pastTime[2], pastTime[3], pastTime[4], "pastSeconds", pastSeconds)
 	--Spring.Echo("currentTime", currentTime[1], currentTime[2], currentTime[3], currentTime[4], "currentSeconds", currentSeconds)
 	--Spring.Echo("seconds", seconds)
-	
+
 	local timeText = ""
 	if hours > 0 then
 		timeText = timeText .. hours .. "h "
@@ -131,7 +131,7 @@ function Spring.Utilities.FormatTime(seconds, includeSeconds)
 	if includeSeconds then
 		timeText = timeText .. seconds .. "s "
 	end
-	
+
 	return timeText
 end
 
@@ -150,10 +150,10 @@ function Spring.Utilities.ArchaicFormatDate(timeTable, translator)
 	else
 		daySuffix = "th"
 	end
-	
+
 	local timeSuffix = (timeTable[3] < 12 and "AM") or "PM"
 	local hour = (timeTable[3] - 1)%12 + 1
-	
+
 	local stringToFormat = "%d" .. daySuffix .. " of " .. translator("month_" .. timeTable[5]) .. " at " .. "%d:%02d " .. timeSuffix
 	local timeString = string.format(stringToFormat, timeTable[4], hour, timeTable[2])
 	return timeString
@@ -209,7 +209,7 @@ function Spring.Utilities.GetTimeToPast(pastTimeString, includeSeconds)
 		-- Always assume that the past time is one day behind.
 		currentSeconds = currentSeconds + 86400
 	end
-	
+
 	return Spring.Utilities.FormatTime(currentSeconds - pastSeconds, includeSeconds)
 end
 
@@ -225,16 +225,16 @@ function Spring.Utilities.GetTimeDifferenceTable(targetTime, currentTime)
 		tonumber(os.date("!%m")), -- Month
 		tonumber(os.date("!%Y")), -- Year
 	}
-	
+
 	for i = 1, #targetTime do
 		if not (targetTime[i] and currentTime[i]) then
 			return false
 		end
 	end
-	
+
 	-- Order times.
 	local before, after = currentTime, targetTime
-	
+
 	local targetInTheFuture = true
 	for i = 6, 1, -1 do
 		if before[i] ~= after[i] then
@@ -245,22 +245,22 @@ function Spring.Utilities.GetTimeDifferenceTable(targetTime, currentTime)
 			break
 		end
 	end
-	
+
 	-- Add days based on year difference.
 	local year = before[6]
 	while before[6] < after[6] do
 		after[4] = after[4] + DaysInAYear(before[6])
 		before[6] = before[6] + 1
 	end
-	
+
 	-- Convert month to day.
 	before[4] = before[4] + MonthToDays(before)
 	after[4] = after[4] + MonthToDays(after)
-	
+
 	-- Clear year and month now that conversion to day is complete.
 	after[5] = 0
 	after[6] = 0
-	
+
 	-- Do subtraction with unbounded days.
 	for i = 1, 4 do
 		after[i] = after[i] - before[i]
@@ -269,7 +269,7 @@ function Spring.Utilities.GetTimeDifferenceTable(targetTime, currentTime)
 			after[i + 1] = after[i + 1] - 1
 		end
 	end
-	
+
 	return after, targetInTheFuture
 end
 
@@ -304,7 +304,7 @@ function Spring.Utilities.TimeStringToTable(timeString)
 			return false
 		end
 	end
-	
+
 	return timeTable
 end
 
@@ -316,7 +316,7 @@ function Spring.Utilities.GetTimeDifference(targetTimeString, otherTime)
 	if otherTime then
 		otherTime = Spring.Utilities.TimeStringToTable(otherTime)
 	end
-	
+
 	local difference, targetInTheFuture = Spring.Utilities.GetTimeDifferenceTable(targetTime, otherTime)
 	local timeText, isNow = Spring.Utilities.FormatRelativeTime(difference, targetInTheFuture)
 	return timeText, targetInTheFuture, isNow
@@ -331,23 +331,23 @@ function Spring.Utilities.UtcToLocal(utcTimeString)
 		tonumber(os.date("%m")), -- Month
 		tonumber(os.date("%Y")), -- Year
 	}
-	
+
 	for i = 1, #localTime do
 		if not localTime[i] then
 			return false
 		end
 	end
-	
+
 	local utcTime = Spring.Utilities.TimeStringToTable(utcTimeString)
 	if not utcTime then
 		return false
 	end
-	
+
 	local difference, localInTheFuture = Spring.Utilities.GetTimeDifferenceTable(localTime)
 	if not difference then
 		return
 	end
-	
+
 	if localInTheFuture then
 		for i = 1, 6 do
 			utcTime[i] = utcTime[i] + difference[i]
@@ -357,7 +357,7 @@ function Spring.Utilities.UtcToLocal(utcTimeString)
 			utcTime[i] = utcTime[i] - difference[i]
 		end
 	end
-	
+
 	return FixTimeOutOfBounds(utcTime)
 end
 
@@ -378,7 +378,7 @@ function Spring.Utilities.GetCurrentUtc()
 		tonumber(os.date("!%m")),
 		tonumber(os.date("!%Y")),
 	}
-	
+
 	return string.format("%04d-%02d-%02dT%02d:%02d:%02d", t[6], t[5], t[4], t[3], t[2], t[1])
 end
 
@@ -391,6 +391,6 @@ function Spring.Utilities.GetCompactCurrentUtc()
 		tonumber(os.date("!%m")),
 		tonumber(os.date("!%Y")),
 	}
-	
+
 	return string.format("%04d%02d%02d_%02d%02d%02d", t[6], t[5], t[4], t[3], t[2], t[1])
 end

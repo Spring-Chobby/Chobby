@@ -10,18 +10,18 @@ local function UpdateLups()
 	if not settings then
 		return
 	end
-	
+
 	local lupsFileName = settings.ShaderDetail_file or "LuaMenu/configs/gameConfig/zk/lups/lups3.cfg"
 	local lupsAirJetDisabled = ((settings.LupsAirJet == "On") and FALSE) or TRUE
 	local lupsRibbonDisabled = ((settings.LupsRibbon == "On") and FALSE) or TRUE
 	local lupsShieldSphereColorDisabled = ((settings.LupsShieldSphereColor == "On") and FALSE) or TRUE
-	
+
 	local sourceFile = VFS.LoadFile(lupsFileName)
-	
+
 	sourceFile = sourceFile:gsub("__AIR_JET__", lupsAirJetDisabled)
 	sourceFile = sourceFile:gsub("__RIBBON__", lupsRibbonDisabled)
 	sourceFile = sourceFile:gsub("__SHIELD_SPHERE_COLOR__", lupsShieldSphereColorDisabled)
-	
+
 	local settingsFile = io.open(lupsFileTarget, "w")
 	settingsFile:write(sourceFile)
 	settingsFile:close()
@@ -180,7 +180,7 @@ local settingsConfig = {
 				}
 			},
 		},
-		
+
 		settings = {
 			{
 				name = "DisplayMode",
@@ -690,7 +690,7 @@ local settingsConfig = {
 						name = "Off",
 						apply = {
 							LoadingMT = 0, -- See https://github.com/spring/spring/commit/bdd6b641960759ccadf3e7201e37f2192d873791
-							AdvUnitShading = 1, 
+							AdvUnitShading = 1,
 							AdvMapShading = 1,
 							LuaShaders = 1,
 							ForceDisableShaders = 0,

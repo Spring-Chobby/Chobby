@@ -91,7 +91,7 @@ skin.button_planet = {
   tiles = {64, 64, 64, 64}, --// tile widths: left,top,right,bottom
   padding = {0, 0, 0, 0},
   disableTiling = true,
-  
+
   backgroundColor = {0, 0, 0, 0},
   focusColor  = {0.94, 0.50, 0.23, 0.4},
   borderColor = {1,1,1,0},
@@ -117,7 +117,7 @@ skin.option_button = {
   TileImageFG = ":cl:tech_button_bright_small_fg.png",
   tiles = {20, 14, 20, 14}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
-  
+
   backgroundColor = {0.21, 0.53, 0.60, 0.65},
   focusColor  = {0.21, 0.53, 0.60, 0.9},
   borderColor = {0.21, 0.53, 0.60, 0.15},
@@ -130,7 +130,7 @@ skin.negative_button = {
   TileImageFG = ":cl:tech_button_bright_small_fg.png",
   tiles = {20, 14, 20, 14}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
-  
+
   backgroundColor = {0.85, 0.05, 0.25, 0.65},
   focusColor  = {0.85, 0.05, 0.25, 0.9},
   borderColor = {0.85, 0.05, 0.25, 0.15},
@@ -143,7 +143,7 @@ skin.positive_button = {
   TileImageFG = ":cl:tech_button_bright_small_fg.png",
   tiles = {20, 14, 20, 14}, --// tile widths: left,top,right,bottom
   padding = {10, 10, 10, 10},
-  
+
   backgroundColor = {0.05, 0.85, 0.25, 0.65},
   focusColor  = {0.05, 0.85, 0.25, 0.9},
   borderColor = {0.05, 0.85, 0.25, 0.15},
@@ -197,10 +197,10 @@ skin.checkbox = {
 
 skin.editbox = {
   hintFont = table.merge({color = {1,1,1,0.7}}, skin.general.font),
-  
+
   backgroundColor = {0.1, 0.1, 0.1, 0},
   cursorColor     = {1.0, 0.7, 0.1, 0.8},
-  
+
   focusColor  = {1, 1, 1, 1},
   borderColor = {1, 1, 1, 0.6},
 
@@ -217,7 +217,7 @@ skin.textbox = {
 
   TileImageBK = ":cl:panel2_bg.png",
   bkgndtiles = {14,14,14,14},
-  
+
   TileImageFG = ":cl:panel2_border.png",
   tiles       = {2, 2, 2, 2},
 

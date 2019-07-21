@@ -80,9 +80,9 @@ function Spring.Utilities.TableToString(data, key)
 	end
 	if dataType == "string" then
 		local cleaned = data:gsub("\n", "\\n"):gsub("\r", "\\r"):gsub("\t", "\\t"):gsub("\a", "\\a"):gsub("\v", "\\v"):gsub("\"", "\\\"")
-		return key .. [[="]] .. cleaned .. [["]] 
+		return key .. [[="]] .. cleaned .. [["]]
 	elseif dataType == "number" then
-		return key .. "=" .. data 
+		return key .. "=" .. data
 	elseif dataType == "boolean" then
 		return key .. "=" .. ((data and "true") or "false")
 	elseif dataType == "table" then
@@ -175,7 +175,7 @@ function Spring.Utilities.CustomKeyToUsefulTable(dataRaw)
 		dataRaw = string.gsub(dataRaw, '_', '=')
 		dataRaw = Spring.Utilities.Base64Decode(dataRaw)
 		local dataFunc, err = loadstring("return " .. dataRaw)
-		if dataFunc then 
+		if dataFunc then
 			local success, usefulTable = pcall(dataFunc)
 			if success then
 				if collectgarbage then

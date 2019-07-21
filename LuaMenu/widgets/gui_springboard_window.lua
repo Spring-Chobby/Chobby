@@ -81,17 +81,15 @@ function SpringBoard:SelectMap(mapName)
 	LaunchSpringBoard({
 		mapName = mapName
 	})
-	if true then return end
+    -- local width = 150
 
-    local width = 150
-
-    mapHumanName = mapName:gsub("_", " ")
-    mapHumanName = StringUtilities.GetTruncatedStringWithDotDot(mapHumanName, tbMapName.font, width - 22)
-    tbMapName:SetText(mapHumanName)
-    local length = tbMapName.font:GetTextWidth(mapHumanName)
-    --imMapLink:SetPos(length + 5)
-    imMinimap.file, imMinimap.checkFileExists = Configuration:GetMinimapImage(mapName)
-    imMinimap:Invalidate()
+    -- mapHumanName = mapName:gsub("_", " ")
+    -- mapHumanName = StringUtilities.GetTruncatedStringWithDotDot(mapHumanName, tbMapName.font, width - 22)
+    -- tbMapName:SetText(mapHumanName)
+    -- local length = tbMapName.font:GetTextWidth(mapHumanName)
+    -- --imMapLink:SetPos(length + 5)
+    -- imMinimap.file, imMinimap.checkFileExists = Configuration:GetMinimapImage(mapName)
+    -- imMinimap:Invalidate()
 end
 
 --------------------------------------------------------------------------------
