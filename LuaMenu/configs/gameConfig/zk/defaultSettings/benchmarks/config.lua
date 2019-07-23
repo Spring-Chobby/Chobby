@@ -99,11 +99,11 @@ local data = {
 	{
 		humanName = "Run benchmark",
 		name = "Benchmarkv3",
-		decription = "Compare three engine versions using six tests, each taking between 2 and 4 minutes. Expected run time of 15 minutes. Last updated 27-07-2019.",
+		decription = "Compare three engine versions using nine tests, each taking between 2 and 4 minutes. Expected run time of 25 minutes. Last updated 27-07-2019.",
 		map = "Comet Catcher Redux v3.1",
 		game = "Zero-K test-14830-12b7004",
 		gameList = {"Zero-K test-14830-12b7004", "Zero-K v1.7.6.4"},
-		duplicates = 2,
+		duplicates = 3,
 		topRow = ",average up,sdev up,min up,max up,u_0,u_3,u_6,u_9,u_12,u_15,u_18,u_21,u_24,u_27,u_30,u_33,u_36,u_39,u_42,u_45,average gf,sdev gf,min gf,max gf,g_0,g_3,g_6,g_9,g_12,g_15,g_18,g_21,g_24,g_27,g_30,g_33,g_36,g_39,g_42,g_45,end unit count",
 		runs = {
 			{
