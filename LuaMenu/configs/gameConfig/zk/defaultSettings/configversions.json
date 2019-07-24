@@ -1301,37 +1301,49 @@
       },
       {  
          "Platform":null,
-         "VersionNumber":6,
+         "VersionNumber":7,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/benchmarks/config.lua",
          "TargetPath":"benchmarks/config.lua"
       },
       {  
          "Platform":null,
-         "VersionNumber":6,
+         "VersionNumber":7,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/demos/hide_benchmark_v3_104.0.1-893-g4d798fb maintenance.sdfz",
          "TargetPath":"demos/hide_benchmark_v3_104.0.1-893-g4d798fb maintenance.sdfz"
       },
       {  
          "Platform":null,
-         "VersionNumber":6,
+         "VersionNumber":7,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/demos/hide_benchmark_v3_104.0.1-1251-g69e556f maintenance.sdfz",
          "TargetPath":"demos/hide_benchmark_v3_104.0.1-1251-g69e556f maintenance.sdfz"
       },
       {  
          "Platform":null,
-         "VersionNumber":6,
+         "VersionNumber":7,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/demos/hide_benchmark_v3_104.0.1-1289-gfd5619c maintenance.sdfz",
+         "TargetPath":"demos/hide_benchmark_v3_104.0.1-1289-gfd5619c maintenance.sdfz"
+      },
+      {  
+         "Platform":null,
+         "VersionNumber":7,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/demos/hide_benchmark_v3_104.0.1-1296-gfc8c95e maintenance.sdfz",
+         "TargetPath":"demos/hide_benchmark_v3_104.0.1-1296-gfc8c95e maintenance.sdfz"
+      },
+      {  
+         "Platform":null,
+         "VersionNumber":7,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/demos/hide_benchmark_v3_104.0.1-1305-gf2c1261 maintenance.sdfz",
          "TargetPath":"demos/hide_benchmark_v3_104.0.1-1305-gf2c1261 maintenance.sdfz"
       },
       {  
          "Platform":null,
-         "VersionNumber":6,
+         "VersionNumber":7,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/games/zerokBenchmark02.sdz",
          "TargetPath":"games/zerokBenchmark02.sdz"
       },
       {  
          "Platform":null,
-         "VersionNumber":6,
+         "VersionNumber":7,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/games/zerokBenchmark03.sdz",
          "TargetPath":"games/zerokBenchmark03.sdz"
       }
