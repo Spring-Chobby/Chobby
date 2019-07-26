@@ -1326,6 +1326,12 @@
       {  
          "Platform":null,
          "VersionNumber":7,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/demos/hide_benchmark_v3_104.0.1-1294-g5a3bf92 maintenance.sdfz",
+         "TargetPath":"demos/hide_benchmark_v3_104.0.1-1294-g5a3bf92 maintenance.sdfz"
+      },
+      {  
+         "Platform":null,
+         "VersionNumber":7,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/demos/hide_benchmark_v3_104.0.1-1296-gfc8c95e maintenance.sdfz",
          "TargetPath":"demos/hide_benchmark_v3_104.0.1-1296-gfc8c95e maintenance.sdfz"
       },
@@ -1334,6 +1340,12 @@
          "VersionNumber":7,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/demos/hide_benchmark_v3_104.0.1-1305-gf2c1261 maintenance.sdfz",
          "TargetPath":"demos/hide_benchmark_v3_104.0.1-1305-gf2c1261 maintenance.sdfz"
+      },
+      {  
+         "Platform":null,
+         "VersionNumber":7,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/demos/hide_benchmark_v3_104.0.1-1322-gd3b03b5 maintenance.sdfz",
+         "TargetPath":"demos/hide_benchmark_v3_104.0.1-1322-gd3b03b5 maintenance.sdfz"
       },
       {  
          "Platform":null,
