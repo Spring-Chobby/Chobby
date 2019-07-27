@@ -1,7 +1,4 @@
--- Chobby - an in-game lobby project
--- Authors: gajop
-
-local modinfo = {
+return {
 	name            = "Chobby",
 	shortName       = "IGL",
 	version         = "$VERSION",
@@ -18,6 +15,4 @@ local modinfo = {
 	onlyLocal       = true,
 	engine          = "104.0.1-287-gf7b0fcc",
 }
-
-return modinfo
 
