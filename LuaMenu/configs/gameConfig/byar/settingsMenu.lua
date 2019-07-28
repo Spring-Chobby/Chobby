@@ -450,7 +450,7 @@ local settingsConfig = {
 					{
 						name = "Off",
 						apply = {
-							FSAALevel = 1,
+							MSAALevel = 1,
 							FSAA = 0,
 							SmoothLines = 0,
 						}
@@ -458,7 +458,7 @@ local settingsConfig = {
 					{
 						name = "Low",
 						apply = {
-							FSAALevel = 1,
+							MSAALevel = 1,
 							FSAA = 1,
 							SmoothLines = 1,
 						}
@@ -466,7 +466,7 @@ local settingsConfig = {
                     {
                         name = "Medium",
                         apply = {
-                            FSAALevel = 2,
+                            MSAALevel = 2,
                             FSAA = 1,
                             SmoothLines = 2,
                         }
@@ -474,7 +474,7 @@ local settingsConfig = {
                     {
                         name = "High",
                         apply = {
-                            FSAALevel = 4,
+                            MSAALevel = 4,
                             FSAA = 1,
                             SmoothLines = 3,
                         }

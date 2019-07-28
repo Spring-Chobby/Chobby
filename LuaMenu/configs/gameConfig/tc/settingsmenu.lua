@@ -744,7 +744,7 @@ local settingsConfig = {
 					{
 						name = "Off",
 						apply = {
-							FSAALevel = 1, -- Required, see https://springrts.com/mantis/view.php?id=5625
+							MSAALevel = 1, -- Required, see https://springrts.com/mantis/view.php?id=5625
 							FSAA = 0,
 							SmoothLines = 0,
 							SmoothPoints = 0,
@@ -753,7 +753,7 @@ local settingsConfig = {
 					{
 						name = "Low",
 						apply = {
-							FSAALevel = 4,
+							MSAALevel = 4,
 							FSAA = 1,
 							SmoothLines = 1,
 							SmoothPoints = 1,
@@ -762,7 +762,7 @@ local settingsConfig = {
 					{
 						name = "High",
 						apply = {
-							FSAALevel = 8,
+							MSAALevel = 8,
 							FSAA = 1,
 							SmoothLines = 3,
 							SmoothPoints = 3,
