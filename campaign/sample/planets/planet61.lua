@@ -450,7 +450,7 @@ local function GetPlanet(planetUtilities, planetID)
 					commander = {
 						name = "Abomination",
 						chassis = "engineer",
-						modules = { 
+						modules = {
 							"commweapon_missilelauncher",
 							"module_ablative_armor",
 							"module_ablative_armor",
@@ -2978,7 +2978,7 @@ local function GetPlanet(planetUtilities, planetID)
 					commander = {
 						name = "Stealer",
 						chassis = "engineer",
-						modules = { 
+						modules = {
 							"commweapon_hparticlebeam",
 							"module_ablative_armor",
 							"module_ablative_armor",

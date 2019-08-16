@@ -2563,7 +2563,7 @@ local function GetPlanet(planetUtilities, planetID)
 					commander = {
 						name = "Yngas",
 						chassis = "strike",
-						modules = { 
+						modules = {
 							"commweapon_beamlaser",
 							"commweapon_beamlaser",
 							"module_high_power_servos",

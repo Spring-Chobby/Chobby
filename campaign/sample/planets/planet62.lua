@@ -3899,7 +3899,7 @@ local function GetPlanet(planetUtilities, planetID)
 					commander = {
 						name = "Blinder",
 						chassis = "strike",
-						modules = { 
+						modules = {
 							"commweapon_heavymachinegun",
 							"commweapon_multistunner",
 							"module_autorepair",

@@ -42,7 +42,7 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[Don't over-commit to anti-air units: the enemy Commander and defensive turrets still present a significant land-based threat.]]
 			},
 		},
-		gameConfig = {
+		gameConfig = {
 			mapName = "Avalanche v3.1",
 			playerConfig = {
 				startX = 580,

@@ -41,7 +41,7 @@ local function isA(thing,kind)
   end
   if thing then
     if _register.class[thing] then
-      if kind then 
+      if kind then
         return _register.class[thing].__system.__type == kind
       else
         return _register.class[thing].__system.__type
@@ -59,7 +59,7 @@ end
 
 -- tostring
 local function __tostring(self,...)
-  if self.describe then 
+  if self.describe then
     return self:describe(...)
   end
   local is = isA(self)
@@ -84,9 +84,9 @@ local function deep_copy(t)
   local r = {}
   for k,v in pairs(t) do
     if type(v) == 'table' then
-      if (_register.class[v] or _register.object[v]) then 
+      if (_register.class[v] or _register.object[v]) then
         r[k] = v
-      else 
+      else
         r[k] = deep_copy(v)
       end
     else
