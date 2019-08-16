@@ -3373,7 +3373,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 2457,
 							z = 1375,
 							facing = 0,
-						},			
+						},
 						{
 							name = "shieldcon",
 							x = 2446,

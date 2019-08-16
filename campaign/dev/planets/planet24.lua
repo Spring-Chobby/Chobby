@@ -1639,7 +1639,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			defeatConditionConfig = {
 				-- Indexed by allyTeam.
-				[0] = { 
+				[0] = {
 				},
 				[1] = {
 					ignoreUnitLossDefeat = false,

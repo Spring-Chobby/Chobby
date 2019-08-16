@@ -98,19 +98,19 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "staticmex",
 						x = 170,
 						z = 3900,
-						facing = 2, 
+						facing = 2,
 					},
 					{
 						name = "energysolar",
 						x = 100,
 						z = 3800,
-						facing = 2, 
+						facing = 2,
 					},
 					{
 						name = "cloakraid",
 						x = 760,
 						z = 3500,
-						facing = planetUtilities.FACING.NORTH, 
+						facing = planetUtilities.FACING.NORTH,
 					},
 					{
 						name = "cloakraid",
@@ -158,13 +158,13 @@ local function GetPlanet(planetUtilities, planetID)
 							name = "staticmex",
 							x = 3630,
 							z = 220,
-							facing = 2, 
+							facing = 2,
 						},
 						{
 							name = "staticmex",
 							x = 3880,
 							z = 200,
-							facing = 2, 
+							facing = 2,
 						},
 						{
 							name = "turretlaser",
@@ -191,19 +191,19 @@ local function GetPlanet(planetUtilities, planetID)
 							name = "staticmex",
 							x = 3880,
 							z = 520,
-							facing = 2, 
+							facing = 2,
 						},
 						{
 							name = "energysolar",
 							x = 3745,
 							z = 185,
-							facing = 2, 
+							facing = 2,
 						},
 						{
 							name = "energysolar",
 							x = 3960,
 							z = 600,
-							facing = 2, 
+							facing = 2,
 						},
 						{
 							name = "factorycloak",
@@ -224,10 +224,10 @@ local function GetPlanet(planetUtilities, planetID)
 				[0] = { },
 				[1] = {
 					-- The default behaviour, if no parameters are set, is the defeat condition of an
-					-- ordinary game. 
+					-- ordinary game.
 					-- If ignoreUnitLossDefeat is true then unit loss does not cause defeat.
-					-- If at least one of vitalCommanders or vitalUnitTypes is set then losing all 
-					-- commanders (if vitalCommanders is true) as well as all the unit types in 
+					-- If at least one of vitalCommanders or vitalUnitTypes is set then losing all
+					-- commanders (if vitalCommanders is true) as well as all the unit types in
 					-- vitalUnitTypes (if there are any in the list) causes defeat.
 					ignoreUnitLossDefeat = false,
 					vitalCommanders = true,

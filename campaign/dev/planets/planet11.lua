@@ -1014,7 +1014,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 			},
 			bonusObjectiveConfig = {
-				[1] = { 
+				[1] = {
 					satisfyOnce = true,
 					countRemovedUnits = true, -- count units that previously died.
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,

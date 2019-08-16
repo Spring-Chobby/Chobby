@@ -221,7 +221,7 @@ local function GetPlanet(planetUtilities, planetID)
 						decorations = {
 						  "skin_support_zebra",
 						},
-						modules = { 
+						modules = {
 							"commweapon_shotgun",
 							"module_autorepair",
 							"module_ablative_armor",
@@ -280,7 +280,7 @@ local function GetPlanet(planetUtilities, planetID)
 							name = "factoryamph",
 							x = 670,
 							z = 3420,
-							facing = 2, 
+							facing = 2,
 						},
 						{
 							name = "staticmex",

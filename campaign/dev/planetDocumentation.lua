@@ -9,14 +9,14 @@ planetData = {
 	-- Position and image to be used on the map
 	mapDisplay = {
 		-- x,y is a proportion of the map area from the top left corner
-		x = 0.22, 
+		x = 0.22,
 		y = 0.1,
 		
 		-- Image is a path to an image using the standard luaMenu directory structure.
-		image = planetUtilities.planetImages[1], 
+		image = planetUtilities.planetImages[1],
 		
 		-- Size to display on the galaxy map. It is somewhat scaled by the size of the chobby window.
-		size = planetUtilities.PLANET_SIZE_MAP, 
+		size = planetUtilities.PLANET_SIZE_MAP,
 		
 		-- Text to display to the right of the planet when it is targeted.
 		hintText = "Continue to the next planet",
@@ -55,7 +55,7 @@ planetData = {
 	-- Configuration for everything related to playing the battle
 	gameConfig = {
 		-- Name of the mutator to use. For scripted missions.
-		gameName = false, 
+		gameName = false,
 		
 		-- Map name, be careful of spaces.
 		mapName = "Living Lands v2.03",
@@ -86,13 +86,13 @@ planetData = {
 		-- Configuration for everything owned by the player.
 		playerConfig = {
 			-- start coordinates of the players commander
-			startX = 300, 
+			startX = 300,
 			startZ = 3800,
 			
 			-- AllyTeam of the player, always set this to zero.
 			allyTeam = 0,
 			
-			-- Parameters of the player commander. 
+			-- Parameters of the player commander.
 			commanderParameters = {
 				-- Whether the commander starts with facplop
 				facplop = false,
@@ -117,7 +117,7 @@ planetData = {
 				bonusObjectiveID = false,
 			},
 			
-			-- A list of newton firezones. 
+			-- A list of newton firezones.
 			newtonFirezones = {
 				{
 					-- All newtons in this rectangle are grouped and given the firezone.
@@ -142,7 +142,7 @@ planetData = {
 				-- List of:
 				--  * name - Module name. See commConfig.lua.
 				--  * count - Number of copies of the module.
-				--  * add - Boolean controlling whether count adds to the number of modules of 
+				--  * add - Boolean controlling whether count adds to the number of modules of
 				--          the type the player has equiped or overwrites the number.
 			},
 			
@@ -225,7 +225,7 @@ planetData = {
 					-- ObjectiveID is for mission UI. See objectiveConfig
 					defeatIfDestroyedObjectiveID = 3,
 					
-					-- List of commands for the initial unit. They are issued in order.See ProcessUnitCommand in 
+					-- List of commands for the initial unit. They are issued in order.See ProcessUnitCommand in
 					-- mission_galaxy_campaign_battle gadget.
 					commands = {
 						-- Commands have:
@@ -236,9 +236,9 @@ planetData = {
 						--    - atPosition sets the target of the command to be a unit standing quite close to the position specified.
 						--    - pos is an x,z position for the command. This saves you (the mission writer) from looking up y positions.
 						--    - params is raw parameter input. Use for state commands perhaps?
-						--    - If none of the previous three are set then the command is a sent with no parameters. Use this, for 
+						--    - If none of the previous three are set then the command is a sent with no parameters. Use this, for
 						--        example, for STOP, WAIT or, with unitName, for factory build order.
-						--  * options - These are the modifiers for the command. Used mostly like they are on the keyboard. "shift", "ctrl", 
+						--  * options - These are the modifiers for the command. Used mostly like they are on the keyboard. "shift", "ctrl",
 						--    "alt", "meta". Remember to use "shift" for commands beyond the first.
 						--  * facing - Build facing for a unitName command with pos.
 						--  * radius - Radius of an area command with pos.
@@ -265,7 +265,7 @@ planetData = {
 					-- selfPatrol makes units patrol on the spot. Use for Caretakers
 					selfPatrol = false,
 					
-					-- Whether the unit spawns can be conditional on the difficulty setting. 
+					-- Whether the unit spawns can be conditional on the difficulty setting.
 					-- Both 'at most' and 'at least' are availible and the usual usage would be to
 					-- give allied units 'at most' and enemy units 'at least'.
 					-- 1 = Easy, 2 = Medium, 3 = Hard, 4 = Brutal
@@ -278,11 +278,11 @@ planetData = {
 					
 					-- 'notAutoAttacked = true' makes the unit not automatically targeted by anything. Mainly useful for neutral units.
 					notAutoAttacked = false,
-					-- Invicible units cannot die. They automatically have 'notAutoAttacked = true' 
+					-- Invicible units cannot die. They automatically have 'notAutoAttacked = true'
 					invincible = false,
 				},
 				{
-					name = "turretlaser", 
+					name = "turretlaser",
 					x = 300,
 					z = 3450,
 					facing = 2,
@@ -301,7 +301,7 @@ planetData = {
 				-- Share all keys with startUnits except terraformHeight
 				-- Midgame units automatically check their spawn location for terrain and structure blockages.
 				--  * delay - Time, in frames, into the mission that the unit is spawned. Required.
-				--  * spawnRadius - Spawn the unit in a random location in a square with sidelength 2*spawnRadius. 
+				--  * spawnRadius - Spawn the unit in a random location in a square with sidelength 2*spawnRadius.
 				--  * orbitalDrop - Set to true to use the orbital drop effect. This can also be set for initial units.
 				{
 					name = "cloakriot",
@@ -421,14 +421,14 @@ planetData = {
 						name = "staticmex",
 						x = 3630,
 						z = 220,
-						facing = 2, 
+						facing = 2,
 						noControl = true,
 					},
 					{
 						name = "factorycloak",
 						x = 3750,
 						z = 340,
-						facing = 4, 
+						facing = 4,
 					},
 				},
 				-- midgameUnits is identical to playerConfig
@@ -483,27 +483,27 @@ planetData = {
 			{
 				terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
 				terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
-				position = {3808, 2544, 3808 + 48, 2544 + 48}, 
+				position = {3808, 2544, 3808 + 48, 2544 + 48},
 				height = 130,
 				volumeSelection = planetUtilities.TERRAFORM_VOLUME.RAISE_ONLY,
 			},
 			{
 				terraformShape = planetUtilities.TERRAFORM_SHAPE.RAMP,
-				position = {290, 300, 3900, 765, 103, 3870}, 
+				position = {290, 300, 3900, 765, 103, 3870},
 				width = 200,
 				volumeSelection = planetUtilities.TERRAFORM_VOLUME.LOWER_ONLY,
 			},
 			{
 				terraformShape = planetUtilities.TERRAFORM_SHAPE.LINE,
 				terraformType = planetUtilities.TERRAFORM_TYPE.RAISE,
-				position = {400, 90, 556, 120}, 
+				position = {400, 90, 556, 120},
 				height = 20,
 			},
 		},
 		
 		-- Configuration for what causes defeat for each allyTeam. Indexed by allyTeam.
 		defeatConditionConfig = {
-			[0] = { 
+			[0] = {
 				-- AllyTeam 0 had better be the players allyTeam.
 				-- The players allyTeam only supports the parameters loseAfterSeconds and timeLossObjectiveID
 				
@@ -547,9 +547,9 @@ planetData = {
 		-- there are three victory conditions in objective 5.
 		-- Objectives can have the following:
 		--  * description: The text of the objective on the invasion screen and ingame.
-		--  * satisfyCount: The number of sucesses required to satisfy the objective. Only use this for objectives that do not fail. For example 
+		--  * satisfyCount: The number of sucesses required to satisfy the objective. Only use this for objectives that do not fail. For example
 		--                  if there is 4-way FFA then an objective could be "defeat all opponents", to make it tick when all three are defeated
-		--                  set allyTeamLossObjectiveID for all opponents and set satisfyCount to 3. 
+		--                  set allyTeamLossObjectiveID for all opponents and set satisfyCount to 3.
 		objectiveConfig = {
 			[1] = {
 				description = "Win before 1:00",
@@ -592,15 +592,15 @@ planetData = {
 			-- Bonus objectives work on the same system. They compare a number of units to their targetNumber and are satisfied based on their
 			-- satisfaction type. Ingame, an objective is either satisfied or not satisfied from second to second. It succeeds or failed based on
 			-- this constant satisfaction and satisfaction types. Once it succeeds or fails it stops checking.
-			-- 
+			--
 			-- Here are the satisfaction types, see CheckBonusObjective in the mission_galaxy_campaign_battle gadget for their implementation.
 			-- Technically types could be mixed but it is unintended and untested.
-			--  * satisfyAtTime = SECONDS 
+			--  * satisfyAtTime = SECONDS
 			--      The objective is succeeded if it is satisfied at the time specified. It fails if the time occurs and it is
 			--      not satisfied or if the game ends before SECONDS.
 			-- * satisfyByTime = SECONDS
 			--      Like satisfyAtTime except that the objective succeeded if it is satisfied at any time before SECONDS.
-			-- * satisfyUntilTime = SECONDS 
+			-- * satisfyUntilTime = SECONDS
 			--      The objective fails if it is not satisfied at any time up until SECONDS. It succeeds it has not failed by the time either
 			--      either SECONDS has elapsed or the game ends.
 			-- * satisfyAfterTime = SECONDS
@@ -614,7 +614,7 @@ planetData = {
 			-- * satisfyForever = TRUE/FALSE
 			--      Fails if it is ever not satisfied. Succeds if it has not failed and the game ends.
 			-- * victoryByTime = SECONDS
-			--      A special satisfication type that does not depend on units and targets. Succeeds if the player wins by SECONDS. 
+			--      A special satisfication type that does not depend on units and targets. Succeeds if the player wins by SECONDS.
 			--
 			-- An objective is satisfied based on the number of tracked relevant units tracked compared to targetNumber with comparisionType.
 			-- The relevant units are:
@@ -678,7 +678,7 @@ planetData = {
 			-- To unlock a limited number of repeat modules write
 			-- "<module name>_LIMIT_X_<N>" where
 			-- * 'module name' is the name of the module to be unlocked.
-			-- * X is the identifying character. Its purpose is to uniquely identify the module key, allowing the player to unlock multiple 
+			-- * X is the identifying character. Its purpose is to uniquely identify the module key, allowing the player to unlock multiple
 			--   instances of four copies of the module without being able to grind a single planet to unlock all the copies.
 			-- * N is the number of modules to unlock, it can be more than one character in case you want more than 9 copies unlocked.
 			-- To evenly spread eight copies of a module across two planets give one "module_ablative_armor_LIMIT_A_4" and give the other
