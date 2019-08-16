@@ -41,7 +41,7 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[It would be sheer folly to directly attack the defensive positions your opponent has laid out here. Wear them down from long range instead.]]
 			},
 		},
-		gameConfig = {
+		gameConfig = {
 			mapName = "BlueBend-v01",
 			playerConfig = {
 				startX = 3550,

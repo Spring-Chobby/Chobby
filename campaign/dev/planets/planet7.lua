@@ -42,7 +42,7 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[You will need to defend your southern flank against Interloper Shieldbot attacks. The Felon is a dangerous opponent but a Sniper can easily pierce its shields.]]
 			},
 		},
-		gameConfig = {
+		gameConfig = {
 			mapName = "The river Nix 20",
 			playerConfig = {
 				startX = 1000,

@@ -42,7 +42,7 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[Outlaws wield an unconventional weapon: a disrupting pulse which damages and slows enemies (but not allies) in a wide radius. Compared to most riots it is very poor against single targets but exceptional when used to protect other units against raider assault.]]
 			},
 		},
-		gameConfig = {
+		gameConfig = {
 			mapName = "Apophis v2_3",
 			playerConfig = {
 				startX = 2300,

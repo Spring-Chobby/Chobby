@@ -46,7 +46,7 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[Caretakers are stationary constructors with large build range and high build power for their cost. They are limited by their inability to initiate construction, but they are the most cost-efficient way to get more production out of a factory.]]
 			},
 		},
-		gameConfig = {
+		gameConfig = {
 			mapName = "Tombstone Desert V2",
 			playerConfig = {
 				startX = 3435,
