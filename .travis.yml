@@ -22,3 +22,4 @@ script:
   # (Disabled for now)
   # - luacheck LuaMenu --enable 1
   - luacheck LuaMenu
+  - ./autotest.sh
