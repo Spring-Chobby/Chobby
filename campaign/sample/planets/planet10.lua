@@ -286,9 +286,9 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "strike",
 						decorations = {
 						},
-						modules = { 
-							"commweapon_beamlaser", 
-							"commweapon_beamlaser", 
+						modules = {
+							"commweapon_beamlaser",
+							"commweapon_beamlaser",
 							"module_ablative_armor",
 							"module_autorepair",
 							"module_adv_targeting",

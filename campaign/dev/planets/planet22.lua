@@ -185,7 +185,7 @@ local function GetPlanet(planetUtilities, planetID)
 						  "skin_recon_red",
 						  icon_overhead = { image = "UW" }
 						},
-						modules = { 
+						modules = {
 							"commweapon_flamethrower",
 							"module_dmg_booster",
 							"module_high_power_servos",

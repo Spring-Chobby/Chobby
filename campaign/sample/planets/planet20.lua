@@ -42,7 +42,8 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[Use your Venom EMP spiders to defend against initial raids.]]
 			},
 		},
-		gameConfig = {			mapName = "Archers_Valley_v6",
+		gameConfig = {
+			mapName = "Archers_Valley_v6",
 			playerConfig = {
 				startX = 3075,
 				startZ = 3050,

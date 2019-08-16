@@ -158,7 +158,7 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 0,
 							commands = {
 								{cmdID = planetUtilities.COMMAND.PATROL, pos = {3448, 6968}},
-							},	
+							},
 						},
 						{
 							name = "staticcon",
@@ -513,7 +513,7 @@ local function GetPlanet(planetUtilities, planetID)
 						decorations = {
 						  "skin_recon_leopard",
 						},
-						modules = { 
+						modules = {
 							"commweapon_beamlaser",
 							"module_high_power_servos",
 							"module_high_power_servos",
@@ -1850,7 +1850,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			defeatConditionConfig = {
 				-- Indexed by allyTeam.
-				[0] = { 
+				[0] = {
 					loseAfterSeconds = 25*60,
 					timeLossObjectiveID = 2,
 				},

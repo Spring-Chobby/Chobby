@@ -190,7 +190,7 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "engineer",
 						decorations = {
 						},
-						modules = { 
+						modules = {
 							"commweapon_lparticlebeam",
 							"module_autorepair",
 							"module_radarnet",
@@ -402,7 +402,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Build 6 Thugs",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[2] = { 
+				[2] = {
 					victoryByTime = 480,
 					image = planetUtilities.ICON_OVERLAY.CLOCK,
 					description = "Win by 8:00",
