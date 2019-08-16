@@ -112,7 +112,7 @@ local entries = {
 }
 
 for i,v in pairs(entries) do
-	v.id = i	
+	v.id = i
 end
 
 return entries

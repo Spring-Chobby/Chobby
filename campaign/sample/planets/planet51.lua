@@ -74,7 +74,7 @@ local function GetPlanet(planetUtilities, planetID)
 					-- List of:
 					--  * name - Module name. See commConfig.lua.
 					--  * count - Number of copies of the module.
-					--  * add - Boolean controlling whether count adds to the number of modules of 
+					--  * add - Boolean controlling whether count adds to the number of modules of
 					--          the type the player has equiped or overwrites the number.
 				},
 				extraUnlocks = {
@@ -870,7 +870,7 @@ local function GetPlanet(planetUtilities, planetID)
 						decorations = {
 							"skin_recon_leopard",
 						},
-						modules = { 
+						modules = {
 							"commweapon_concussion",
 							"commweapon_shotgun",
 							"module_ablative_armor",
@@ -2091,7 +2091,7 @@ local function GetPlanet(planetUtilities, planetID)
 				{
 					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
 					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
-					position = {7545, 3480, 8180, 3880}, 
+					position = {7545, 3480, 8180, 3880},
 					height = 293,
 				},
 				
@@ -2119,7 +2119,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 			},
 			bonusObjectiveConfig = {
-				[1] = { 
+				[1] = {
 					onlyCountRemovedUnits = true,
 					satisfyByTime = 10*60,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,

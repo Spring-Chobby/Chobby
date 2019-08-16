@@ -13,8 +13,8 @@ function widget:GetInfo()
 end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
-local function GetDirectory(filepath) 
-    return filepath and filepath:gsub("(.*/)(.*)", "%1") 
+local function GetDirectory(filepath)
+    return filepath and filepath:gsub("(.*/)(.*)", "%1")
 end
 
 local function SplitString(str, sep)
@@ -87,8 +87,8 @@ options = {
   textSpeed = {
     name = "Text Speed",
     type = 'number',
-    min = 0, 
-    max = 100, 
+    min = 0,
+    max = 100,
     step = 5,
     value = 30,
     desc = 'Characters/second (0 = instant)',
@@ -96,8 +96,8 @@ options = {
   waitTime = {
     name = "Wait time",
     type = 'number',
-    min = 0, 
-    max = 4, 
+    min = 0,
+    max = 4,
     step = 0.5,
     value = 1.5,
     desc = 'Wait time at end of each script line before auto-advance',
@@ -485,7 +485,7 @@ local function AdvanceAnimations(dt)
       if color then
         if anim.endColor then
           for i=1,4 do
-            color[i] = anim.endColor[i] 
+            color[i] = anim.endColor[i]
           end
         end
         color[4] = anim.endAlpha or color[4]
@@ -1095,7 +1095,7 @@ scriptFunctions = {
   
   SetVars = function(args)
     for i,v in pairs(args) do
-      data.vars[i] = v 
+      data.vars[i] = v
     end
   end,
   
@@ -1118,7 +1118,7 @@ scriptFunctions = {
   
   UnsetVars = function(args)
     for i=1,#args do
-       data.vars[args[i]] = nil 
+       data.vars[args[i]] = nil
     end
   end,
   
@@ -1545,7 +1545,7 @@ function widget:Initialize()
   screen0 = Chili.Screen0
   
   -- create windows
-  mainWindow = Window:New{  
+  mainWindow = Window:New{
     name = "vn_mainWindow",
     caption = "Chili VN",
     --fontSize = 50,

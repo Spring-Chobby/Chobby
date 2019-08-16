@@ -1241,7 +1241,7 @@ local function GetPlanet(planetUtilities, planetID)
 					commander = {
 						name = "Abomination",
 						chassis = "engineer",
-						modules = { 
+						modules = {
 							"commweapon_missilelauncher",
 							"module_ablative_armor",
 							"module_ablative_armor",
@@ -2472,7 +2472,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"jumpaa",
 					},
 					commander = false,
-					startUnits = {	
+					startUnits = {
 						{
 							name = "staticheavyradar",
 							x = 5792,

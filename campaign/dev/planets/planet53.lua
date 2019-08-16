@@ -1567,7 +1567,7 @@ local function GetPlanet(planetUtilities, planetID)
 					commander = {
 						name = "Lizzie",
 						chassis = "guardian",
-						modules = { 
+						modules = {
 							"commweapon_napalmgrenade",
 							"commweapon_rocketlauncher",
 							"weaponmod_napalm_warhead",

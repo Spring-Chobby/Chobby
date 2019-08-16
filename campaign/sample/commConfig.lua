@@ -861,7 +861,7 @@ local chassisDef = {
 	image = LUA_DIRNAME .. "images/chassis_cremcom.png",
 	secondPeashooter = true,
 	highestDefinedLevel = highestDefinedLevel,
-	levelDefs = levelDefs 
+	levelDefs = levelDefs
 }
 
 ------------------------------------------------------------------------
@@ -871,7 +871,7 @@ local chassisDef = {
 -- Transform from human readable format into number indexed format
 --for i = 1, #moduleDefs do
 --	local data = moduleDefs[i]
---	
+--
 --	-- Required modules are a list of moduleDefIDs
 --	if data.requireOneOf then
 --		local newRequire = {}
@@ -883,7 +883,7 @@ local chassisDef = {
 --		end
 --		data.requireOneOf = newRequire
 --	end
---	
+--
 --	-- Prohibiting modules are a list of moduleDefIDs too
 --	if data.prohibitingModules then
 --		local newProhibit = {}

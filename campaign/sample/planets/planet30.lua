@@ -1041,7 +1041,7 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "recon",
 						decorations = {
 						},
-						modules = { 
+						modules = {
 							"commweapon_heavymachinegun",
 							"module_heavy_armor",
 							"module_heavy_armor",
@@ -2105,7 +2105,7 @@ local function GetPlanet(planetUtilities, planetID)
 				{
 					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
 					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
-					position = {3416, 5700, 4740, 5990}, 
+					position = {3416, 5700, 4740, 5990},
 					height = 6,
 				},
 			},

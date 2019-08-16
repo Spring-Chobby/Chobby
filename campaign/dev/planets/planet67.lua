@@ -1146,7 +1146,7 @@ local function GetPlanet(planetUtilities, planetID)
 						decorations = {
 						  "skin_recon_leopard",
 						},
-						modules = { 
+						modules = {
 							"commweapon_shotgun",
 							"commweapon_concussion",
 							"module_high_power_servos",

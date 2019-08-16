@@ -224,7 +224,7 @@ function table.save(t, filename, header)
 	end
 	local file, errMsg = io.open(filename, 'w')
 	if (not file) then
-		error(errMsg .. "\nFile not saved.")		
+		error(errMsg .. "\nFile not saved.")
 		return
 	end
 	if (header) then

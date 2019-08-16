@@ -2291,7 +2291,7 @@ local function GetPlanet(planetUtilities, planetID)
 						decorations = {
 						  "skin_support_dark",
 						},
-						modules = { 
+						modules = {
 							"commweapon_lparticlebeam",
 							"commweapon_disruptorbomb",
 							"module_ablative_armor",

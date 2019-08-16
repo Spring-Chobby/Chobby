@@ -231,7 +231,7 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "staticmex",
 						x = 4296,
 						z = 408,
-						facing = 0, 
+						facing = 0,
 						difficultyAtMost = 3,
 					},
  					{
@@ -294,7 +294,7 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "strike",
 						decorations = {
 						},
-						modules = { 
+						modules = {
 							"commweapon_lparticlebeam",
 							"commweapon_missilelauncher",
 							"module_high_power_servos",
