@@ -194,7 +194,7 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "recon",
 						decorations = {
 						},
-						modules = { 
+						modules = {
 							"commweapon_shotgun",
 							"module_ablative_armor",
 							"module_ablative_armor",

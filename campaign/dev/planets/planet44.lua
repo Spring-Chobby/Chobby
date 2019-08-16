@@ -318,7 +318,7 @@ local function GetPlanet(planetUtilities, planetID)
 					commander = {
 						name = "Lucy Bazza",
 						chassis = "recon",
-						modules = { 
+						modules = {
 							"commweapon_lparticlebeam",
 							"commweapon_concussion",
 							"module_adv_nano",

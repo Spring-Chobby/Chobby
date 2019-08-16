@@ -1,30 +1,30 @@
 {
-   "Versions":[  
-      {  
+   "Versions":[
+      {
          "Platform":null,
          "VersionNumber":1,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/lups.cfg",
          "TargetPath":"lups.cfg"
       },
-      {  
+      {
          "Platform":null,
          "VersionNumber":1,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/springsettings.cfg",
          "TargetPath":"springsettings.cfg"
       },
-      {  
+      {
          "Platform":null,
          "VersionNumber":1,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/cmdcolors.txt",
          "TargetPath":"cmdcolors.txt"
       },
-      {  
+      {
          "Platform":null,
          "VersionNumber":1,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/maps/fairyland_1.31.sd7",
          "TargetPath":"maps/fairyland_1.31.sd7"
       },
-      {  
+      {
          "Platform":null,
          "VersionNumber":1,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/maps/living_lands_4.1.sd7",
@@ -1224,7 +1224,7 @@
          "VersionNumber":2,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/Steam/x86/libsteam_api.so",
          "TargetPath":"libsteam_api.so"
-      },      
+      },
 
       {
          "Platform":"linux64",
@@ -1237,7 +1237,7 @@
          "VersionNumber":2,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/Steam/x64/libsteam_api.so",
          "TargetPath":"libsteam_api.so"
-      },      
+      },
       
       {
          "Platform":"win32",
@@ -1293,31 +1293,31 @@
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/games/seeker.sdz",
          "TargetPath":"games/seeker.sdz"
       },
-      {  
+      {
          "Platform":null,
          "VersionNumber":2,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/chobby_config.json",
          "TargetPath":"chobby_config.json"
       },
-      {  
+      {
          "Platform":null,
          "VersionNumber":5,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/benchmarks/config.lua",
          "TargetPath":"benchmarks/config.lua"
       },
-      {  
+      {
          "Platform":null,
          "VersionNumber":5,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/demos/hide_benchmark_v2_104.0.1-287-gf7b0fcc maintenance.sdfz",
          "TargetPath":"demos/hide_benchmark_v2_104.0.1-287-gf7b0fcc maintenance.sdfz"
       },
-      {  
+      {
          "Platform":null,
          "VersionNumber":5,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/demos/hide_benchmark_v2_104.0.1-889-g0871f35 maintenance.sdfz",
          "TargetPath":"demos/hide_benchmark_v2_104.0.1-889-g0871f35 maintenance.sdfz"
       },
-      {  
+      {
          "Platform":null,
          "VersionNumber":5,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/games/zerokBenchmark02.sdz",

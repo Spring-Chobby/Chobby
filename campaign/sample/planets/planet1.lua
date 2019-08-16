@@ -8,7 +8,7 @@ local function GetPlanet(planetUtilities, planetID)
 	local image = LUA_DIRNAME .. "images/planets/swamp03.png"
 	
 	local planetData = {
-		predownloadMap = true, 
+		predownloadMap = true,
 		name = "Im Jaleth",
 		mapDisplay = {
 			x = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][1]) or 0.05,
@@ -123,7 +123,7 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 800,
 						z = 3750,
 						facing = 2,
-					}, 
+					},
 				}
 			},
 			aiConfig = {

@@ -1975,7 +1975,7 @@ local function GetPlanet(planetUtilities, planetID)
 					commander = {
 						name = "Tessica",
 						chassis = "strike",
-						modules = { 
+						modules = {
 							"commweapon_shotgun",
 							"commweapon_disintegrator",
 							"module_personal_cloak",

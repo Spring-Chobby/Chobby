@@ -1365,7 +1365,7 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "recon",
 						decorations = {
 						},
-						modules = { 
+						modules = {
 							"commweapon_flamethrower",
 							"commweapon_napalmgrenade",
 							"module_ablative_armor",
@@ -2852,7 +2852,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 			},
 			bonusObjectiveConfig = {
-				[1] = { 
+				[1] = {
 					satisfyOnce = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 2,
@@ -2866,7 +2866,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Have two superweapons (Zenith, DRP, Starlight)",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[2] = { 
+				[2] = {
 					onlyCountRemovedUnits = true,
 					satisfyByTime = 10*60,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,

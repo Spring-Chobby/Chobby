@@ -1993,7 +1993,7 @@ local function GetPlanet(planetUtilities, planetID)
 						decorations = {
 						  "skin_support_green",
 						},
-						modules = { 
+						modules = {
 							"commweapon_lightninggun",
 							"commweapon_personal_shield",
 							"module_high_power_servos",
@@ -2102,7 +2102,7 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 0,
 							difficultyAtMost = 3,
 							difficultyAtLeast = 3,
-							buildProgress = 0.5 
+							buildProgress = 0.5
 						},
 						{
 							name = "staticheavyarty",
@@ -4581,7 +4581,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Destroy an enemy Big Bertha by 15:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[2] = { 
+				[2] = {
 					onlyCountRemovedUnits = true,
 					satisfyByTime = 15*60,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,

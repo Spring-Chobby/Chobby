@@ -426,7 +426,7 @@ local function GetPlanet(planetUtilities, planetID)
 					difficultyDependantUnlocks = {
 						[2] = {"amphassault", "gunshipheavyskirm", },
 						[3] = {"amphassault", "gunshipheavyskirm", "gunshipassault", "spiderantiheavy", "jumpbomb", },
-						[4] = {"amphassault", "gunshipheavyskirm", "gunshipassault", "spiderantiheavy", "jumpbomb", "jumpassault", }, 
+						[4] = {"amphassault", "gunshipheavyskirm", "gunshipassault", "spiderantiheavy", "jumpbomb", "jumpassault", },
 					},
 					commanderLevel = 5,
 					commander = {
@@ -435,7 +435,7 @@ local function GetPlanet(planetUtilities, planetID)
 						decorations = {
 						  "skin_support_zebra",
 						},
-						modules = { 
+						modules = {
 							"commweapon_missilelauncher",
 							"module_ablative_armor",
 							"module_ablative_armor",
@@ -1476,7 +1476,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			defeatConditionConfig = {
 				-- Indexed by allyTeam.
-				[0] = { 
+				[0] = {
 				},
 				[1] = {
 					ignoreUnitLossDefeat = false,

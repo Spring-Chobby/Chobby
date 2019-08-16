@@ -304,7 +304,7 @@ local function GetPlanet(planetUtilities, planetID)
 					commander = {
 						name = "Barasogus",
 						chassis = "guardian",
-						modules = { 
+						modules = {
 							"commweapon_flamethrower",
 							"module_autorepair",
 							"module_ablative_armor",

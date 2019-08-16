@@ -1577,7 +1577,7 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "guardian",
 						decorations = {
 						},
-						modules = { 
+						modules = {
 							"commweapon_heatray",
 							"commweapon_heatray",
 							"commweapon_personal_shield",
@@ -2993,7 +2993,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Build 7 Minotaurs",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[2] = { 
+				[2] = {
 					victoryByTime = 900,
 					image = planetUtilities.ICON_OVERLAY.CLOCK,
 					description = "Win by 15:00",

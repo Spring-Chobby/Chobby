@@ -422,7 +422,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Build 12 Hermits",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[2] = { 
+				[2] = {
 					victoryByTime = 600,
 					image = planetUtilities.ICON_OVERLAY.CLOCK,
 					description = "Win by 10:00",

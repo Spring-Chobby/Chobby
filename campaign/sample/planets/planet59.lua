@@ -914,7 +914,7 @@ local function GetPlanet(planetUtilities, planetID)
 						decorations = {
 						  "skin_bombard_steel",
 						},
-						modules = { 
+						modules = {
 							"commweapon_flamethrower",
 							"commweapon_disintegrator",
 							"module_high_power_servos",
@@ -2794,7 +2794,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 			},
 			defeatConditionConfig = {
-				[0] = { 
+				[0] = {
 					loseAfterSeconds = 20*60,
 					timeLossObjectiveID = 2,
 				},
@@ -2821,7 +2821,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Win by 15:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[2] = { 
+				[2] = {
 					satisfyOnce = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 8,
@@ -2833,7 +2833,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Have 8 Ultimatums",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[3] = { 
+				[3] = {
 					satisfyOnce = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 4,
