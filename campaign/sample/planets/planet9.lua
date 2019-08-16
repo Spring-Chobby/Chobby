@@ -315,8 +315,8 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "assault",
 						decorations = {
 						},
-						modules = { 
-							"commweapon_heavymachinegun", 
+						modules = {
+							"commweapon_heavymachinegun",
 							"module_dmg_booster",
 							"module_ablative_armor",
 							"module_autorepair",

@@ -231,8 +231,8 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "recon",
 						decorations = {
 						},
-						modules = { 
-							"commweapon_lightninggun", 
+						modules = {
+							"commweapon_lightninggun",
 							"module_radarnet",
 							"module_ablative_armor",
 							"module_autorepair",
