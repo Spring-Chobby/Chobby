@@ -1,0 +1,8 @@
+*.lua  text
+*.txt  text
+*.tdf  text
+*.h    text
+*.glsl text
+*.fs   text
+*.json text
+*.css  text
