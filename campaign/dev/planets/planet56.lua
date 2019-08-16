@@ -216,7 +216,7 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "strike",
 						decorations = {
 						},
-						modules = { 
+						modules = {
 							"commweapon_shotgun",
 							"commweapon_shotgun",
 							"module_ablative_armor",
@@ -1399,7 +1399,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 			},
 			bonusObjectiveConfig = {
-				[1] = { -- 
+				[1] = { --
 					satisfyByTime = 600,
 					comparisionType = planetUtilities.COMPARE.AT_MOST,
 					targetNumber = 0,
@@ -1418,7 +1418,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Win by 20:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[3] = { -- 
+				[3] = { --
 					satisfyForever = true,
 					comparisionType = planetUtilities.COMPARE.AT_MOST,
 					targetNumber = 0,

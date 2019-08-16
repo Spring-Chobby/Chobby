@@ -56,7 +56,7 @@ local function GetPlanet(planetUtilities, planetID)
 					"subtacmissile",
 					"shipcarrier",
 				},
-				startUnits = {	
+				startUnits = {
 					{
 						name = "staticantinuke",
 						x = 1280,
@@ -3127,7 +3127,7 @@ local function GetPlanet(planetUtilities, planetID)
 					commander = {
 						name = "Ballast",
 						chassis = "support",
-						modules = { 
+						modules = {
 							"commweapon_beamlaser",
 							"commweapon_multistunner",
 							"module_ablative_armor",

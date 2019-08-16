@@ -42,7 +42,7 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[The Scorchers' heat ray weapon is incredibly lethal at point-blank range. Destroy them from a distance or stun them with Imps before engaging.]]
 			},
 		},
-		gameConfig = {
+		gameConfig = {
 			mapName = "Adamantine Mountain 2",
 			playerConfig = {
 				startX = 3550,

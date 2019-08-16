@@ -699,7 +699,7 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "guardian",
 						decorations = {
 						},
-						modules = { 
+						modules = {
 							"commweapon_riotcannon",
 							"module_high_power_servos",
 							"module_high_power_servos",

@@ -1397,7 +1397,7 @@ local function GetPlanet(planetUtilities, planetID)
 					--bitDependant = false,
 					humanName = "X47350",
 					allyTeam = 1,
-					unlocks = {	
+					unlocks = {
 						"staticcon",
 						"staticmex",
 						"staticstorage",
@@ -2249,7 +2249,7 @@ local function GetPlanet(planetUtilities, planetID)
 						decorations = {
 						  "skin_support_dark",
 						},
-						modules = { 
+						modules = {
 							"commweapon_lparticlebeam",
 							"commweapon_multistunner",
 							"module_heavy_armor",
@@ -2351,7 +2351,7 @@ local function GetPlanet(planetUtilities, planetID)
 							difficultyAtLeast = 4,
 						},
 						{
-							name = "turretriot", 
+							name = "turretriot",
 							x = 3870,
 							z = 6700,
 							facing = 2,

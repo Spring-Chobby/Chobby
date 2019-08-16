@@ -833,7 +833,7 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "recon",
 						decorations = {
 						},
-						modules = { 
+						modules = {
 							"commweapon_shotgun",
 							"commweapon_concussion",
 							"module_autorepair",
@@ -1411,7 +1411,7 @@ local function GetPlanet(planetUtilities, planetID)
 						decorations = {
 							"skin_recon_leopard",
 						},
-						modules = { 
+						modules = {
 							"commweapon_heavymachinegun",
 							"commweapon_concussion",
 							"module_autorepair",

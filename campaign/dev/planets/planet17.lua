@@ -42,7 +42,7 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[The Dante's heatrays and napalm rockets are most lethal at close range. Keep your distance until the Dante is disarmed or dead.]]
 			},
 		},
-		gameConfig = {
+		gameConfig = {
 			mapName = "Violence_4.2",
 			playerConfig = {
 				startX = 4100,

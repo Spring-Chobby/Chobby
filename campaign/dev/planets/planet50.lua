@@ -62,7 +62,7 @@ local function GetPlanet(planetUtilities, planetID)
 					-- List of:
 					--  * name - Module name. See commConfig.lua.
 					--  * count - Number of copies of the module.
-					--  * add - Boolean controlling whether count adds to the number of modules of 
+					--  * add - Boolean controlling whether count adds to the number of modules of
 					--          the type the player has equiped or overwrites the number.
 				},
 				extraUnlocks = {
@@ -337,7 +337,7 @@ local function GetPlanet(planetUtilities, planetID)
 							-- x = 4100,
 							-- z = 3900,
 							-- facing = 0,
-						-- }, 
+						-- },
 						{
 							name = "staticstorage",
 							x = 3900,
@@ -466,7 +466,7 @@ local function GetPlanet(planetUtilities, planetID)
 						decorations = {
 							"skin_recon_dark",
 						},
-						modules = { 
+						modules = {
 							"commweapon_clusterbomb",
 							"commweapon_heavymachinegun",
 							"module_ablative_armor",
@@ -735,7 +735,7 @@ local function GetPlanet(planetUtilities, planetID)
 						decorations = {
 							"skin_support_hotrod",
 						},
-						modules = { 
+						modules = {
 							"commweapon_disruptorbomb",
 							"commweapon_lparticlebeam",
 							"module_battle_drone",
@@ -975,7 +975,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Protect your ally's Spider Factory",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[3] = { 
+				[3] = {
 					satisfyByTime = 10*60,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 24,
@@ -987,7 +987,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Have 24 Metal Extractors (including allies) by 10:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
-			},	
+			},
 		},
 		completionReward = {
 			experience = planetUtilities.MAIN_EXP,
