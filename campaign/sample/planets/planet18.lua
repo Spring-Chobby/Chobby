@@ -3320,13 +3320,13 @@ local function GetPlanet(planetUtilities, planetID)
 				{
 					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
 					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
-					position = {240, 240, 354, 386}, 
+					position = {240, 240, 354, 386},
 					height = 308,
 				},
 				{
 					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
 					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
-					position = {4300, 3910, 4418, 3975}, 
+					position = {4300, 3910, 4418, 3975},
 					height = 9,
 				},
 				{
@@ -3349,14 +3349,14 @@ local function GetPlanet(planetUtilities, planetID)
 				--{
 				--	terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
 				--	terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
-				--	position = {608, 250, 772, 424}, 
+				--	position = {608, 250, 772, 424},
 				--	height = 170,
 				--	volumeSelection = planetUtilities.TERRAFORM_VOLUME.LOWER_ONLY,
 				--},
 				{
 					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
 					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
-					position = {4224, 2656, 4256, 2688}, 
+					position = {4224, 2656, 4256, 2688},
 					height = 420,
 				},
 			},

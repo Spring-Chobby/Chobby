@@ -160,8 +160,8 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "engineer",
 						decorations = {
 						},
-						modules = { 
-							"commweapon_lparticlebeam", 
+						modules = {
+							"commweapon_lparticlebeam",
 							"module_radarnet",
 							"module_ablative_armor",
 							"module_autorepair",
