@@ -42,7 +42,7 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[The Limpet does not float, but its large disruption pulse can reach surface targets even from the seafloor. The Limpet's explosion does not damage or slow friendly units, so it is safer to use than other bombs.]]
 			},
 		},
-		gameConfig = {
+		gameConfig = {
 			mapName = "Iced Coffee v4.3",
 			playerConfig = {
 				startX = 2830,

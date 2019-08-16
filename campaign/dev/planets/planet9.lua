@@ -42,7 +42,7 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[Ravagers are a fast assault unit that are even capable of outrunning some factory's raiders. They give up some of their toughness to achieve this.]]
 			},
 		},
-		gameConfig = {
+		gameConfig = {
 			mapName = "AlienDesert",
 			playerConfig = {
 				startX = 1475,

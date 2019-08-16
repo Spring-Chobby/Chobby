@@ -42,7 +42,7 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[The enemy will use Pyros against you - they have flamethrowers to set your units on fire, and can jump over holes and cliffs.]]
 			},
 		},
-		gameConfig = {
+		gameConfig = {
 			mapName = "Fairyland 1.31",
 			playerConfig = {
 				startX = 370,
