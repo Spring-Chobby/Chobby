@@ -266,7 +266,7 @@ local function InitializeControls(parentControl)
 	--	parent = parentControl
 	--}
 
-	if WG.BrowserHandler and Configuration.gameConfig.link_replays then
+	if WG.BrowserHandler and Configuration.gameConfig.link_replays ~= nil then
 		Button:New {
 			x = 220,
 			y = 7,

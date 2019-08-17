@@ -209,7 +209,7 @@ local function bla()
         parent = rightInfo,
         OnClick = {
             function ()
-                if SpringBoard.mapName and Configuration.gameConfig.link_particularMapPage then
+                if SpringBoard.mapName and Configuration.gameConfig.link_particularMapPage ~= nil then
                     WG.BrowserHandler.OpenUrl(Configuration.gameConfig.link_particularMapPage(SpringBoard.mapName))
                 end
             end
