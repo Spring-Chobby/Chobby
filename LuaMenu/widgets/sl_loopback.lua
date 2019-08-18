@@ -33,6 +33,10 @@ function WrapperLoopback.OpenFolder(folder)
 	})
 end
 
+function WrapperLoopback.UploadLog()
+	WG.Connector.Send("UploadLog")
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface
