@@ -40,7 +40,7 @@ function Analytics.SendOnetimeEvent(eventName, value)
 		return
 	end
 	onetimeEvents[eventName] = true
-	if ACTIVE and WG.WrapperLoopback then
+	if ACTIVE and WG.WrapperLoopback ~= nil and WG.WrapperLoopback.GaAddDesignEvent ~= nil then
 		WG.WrapperLoopback.GaAddDesignEvent(eventName, value)
 	else
 		Spring.Echo("DesignEvent", eventName, value)
@@ -55,7 +55,7 @@ function Analytics.SendIndexedRepeatEvent(eventName, value, suffix)
 	if suffix then
 		eventName = eventName .. suffix
 	end
-	if ACTIVE and WG.WrapperLoopback then
+	if ACTIVE and WG.WrapperLoopback ~= nil and WG.WrapperLoopback.GaAddDesignEvent ~= nil then
 		WG.WrapperLoopback.GaAddDesignEvent(eventName, value)
 	else
 		Spring.Echo("DesignEvent", eventName, value)
@@ -64,7 +64,7 @@ end
 
 function Analytics.SendRepeatEvent(eventName, value)
 	eventName = VERSION .. eventName
-	if ACTIVE and WG.WrapperLoopback then
+	if ACTIVE and WG.WrapperLoopback ~= nil and WG.WrapperLoopback.GaAddDesignEvent ~= nil then
 		WG.WrapperLoopback.GaAddDesignEvent(eventName, value)
 	else
 		Spring.Echo("DesignEvent", eventName, value)
@@ -77,7 +77,7 @@ function Analytics.SendErrorEvent(eventName, severity)
 		return
 	end
 	severity = severity or "Info"
-	if ACTIVE and WG.WrapperLoopback then
+	if ACTIVE and WG.WrapperLoopback ~= nil and WG.WrapperLoopback.GaAddErrorEvent ~= nil then
 		WG.WrapperLoopback.GaAddErrorEvent(severity, eventName)
 	else
 		Spring.Echo("ErrorEvent", eventName, severity)
