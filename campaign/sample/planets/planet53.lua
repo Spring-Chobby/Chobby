@@ -26,7 +26,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "K2V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24510",
-			text = [[Your allies are struggling against cloaked skirmishers and artillery attacking them at range. Use Firewalker napalm artillery and jumping Jacks to find and destroy the hidden enemies.]]
+			text = "Local forces are emitting a general distress call. A rogue commander was trying to take this world over and carve herself a nice little kingdom - with her army still at it. Loosing control of the military? The Empire must have been crumbling from the inside."
+			.. "\n "
+			.. "\nThere are warp jammers down there, to prevent anyone from fleeing or getting outside help. I will have to destroy them to continue that way."
+			,
+			extendedText = "The local forces categorized me as \"outside help\", fortunately, but they are struggling against cloaked skirmishers and artillery attacking them at range. Time to use Firewalker napalm artillery and jumping Jacks to find and destroy the hidden enemies."
 		},
 		tips = {
 			{

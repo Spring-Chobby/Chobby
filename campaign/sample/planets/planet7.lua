@@ -32,7 +32,7 @@ local function GetPlanet(planetUtilities, planetID)
 			,
 			extendedText = "Frontal attack would be suicidal, but most of it is static defences. If I can infiltrate Phantom sniper bots and destroy their Singularity Plants, it will deactivate the heavier defences."
 			.. "\n "
-			.. "\nI should not let my guard down. Some mobile forces are still active..."
+			.. "\nI should not let my guard down, some mobile forces are still active. And there is something very strange with their data flux..."
 		},
 		tips = {
 			{

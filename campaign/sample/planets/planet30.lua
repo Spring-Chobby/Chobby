@@ -25,7 +25,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G8V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24530",
-			text = [[Crossing a river under enemy fire is a daunting prospect, but it becomes easier when you control the river. Bombard the shoreline with Envoy cruisers to force passage through the shallows.]]
+			text = "This chokepoint defended the territory of something called Haven. The Empire attempted to break through, and managed to gain a foothold on this world. That battle is still going, with mindless automata still carrying their last recieved orders."
+			.. "\n "
+			.. "\nOne of the local garrisons somehow identified me as an enemy of the Empire and gave me IFF codes. I wonder on how many Haven worlds those will work."
+			,
+			extendedText = "Crossing a river under enemy fire is a daunting prospect, but it becomes easier if I control the river. There are several old Sunlance defence systems, but I can bombard the shoreline with Envoy cruisers to force passage through the shallows."
 		},
 		tips = {
 			{

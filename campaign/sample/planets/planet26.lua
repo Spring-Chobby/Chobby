@@ -28,7 +28,7 @@ local function GetPlanet(planetUtilities, planetID)
 			feedbackLink = "http://zero-k.info/Forum/Thread/24469",
 			text = "There are the remains of a strong army on this world, but few large-scale defense installations. It looks like an occupation force on a freshly conquered world, who had to dismantle the existing defenses and never had time to build new ones."
 			,
-			extendedText = "Instead of building dedicated military powerplants, they commandeered civilian Tidal Generator farms. If I destroy those, they won't have enough energy left to be a menace."
+			extendedText = "Instead of building dedicated military power plants, they commandeered civilian Tidal Generator farms. If I destroy those, they won't have enough energy left to be a menace."
 			.. "\n "
 			.. "\nFor a coastal area like this one, he Hovercraft factory should be well-adapted."
 		},

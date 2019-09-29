@@ -25,7 +25,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G9V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24530",
-			text = [[Your ally's bots aren't going to cut it alone on a battlefield this mountainous. The Redback riot and Recluse skirmish spiders will take control of the high ground, and rain death upon your enemies in the valley below.]]
+			text = "The Rebel forces of this planet took a last stand in the mountains, awaiting an end that never came. Now that everyone is gone, the armies are still waiting."
+			.. "\n "
+			.. "\nTime to put an end to this."
+			,
+			extendedText = "Rebel bots aren't going to cut it alone on a battlefield this mountainous. My Redback riot and Recluse skirmish spiders can take control of the high ground, and rain death upon their enemies in the valley below."
 		},
 		tips = {
 			

@@ -29,7 +29,7 @@ local function GetPlanet(planetUtilities, planetID)
 			.. "\n "
 			.. "\nSomehow, it has been enough to cripple them, and most of their mobile ground forces have disappeared."
 			,
-			extendedText = "Ground forces or not, they are sending Gunships out from behind a formidable defensive array. I have Crasher anti-air rovers to shoot down the gunships, then I can tear down their base with Impaler artillery."
+			extendedText = "Ground forces or not, they are sending Gunships out from behind a formidable defensive array - the blasted automata are taking me for an Imperial landing force. I have Crasher anti-air rovers to shoot down the gunships, then I can tear down their base with Impaler artillery."
 		},
 		tips = {
 			{
