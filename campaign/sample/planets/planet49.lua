@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G6VI",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24566",
-			text = "There are two massive armies fighting down there, but both are declaring themselves Imperial forces. This didn't start with a glitch either, it was clearly two humans that initiated this. What could have driven them to do such a thing ?"
+			text = "There are two massive armies fighting down there, but both are declaring themselves Imperial forces. This didn't start with a glitch either, it was clearly two humans that initiated this. What could have driven them to do such a thing?"
 			.. "\n "
 			.. "\nI really don't want to fight both of them at the same time. Time to negociate with derelict automata again..."
 			,
