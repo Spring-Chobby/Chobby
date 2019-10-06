@@ -25,7 +25,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G7V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24594",
-			text = [[Take control of the sea and then the enemy shoreline with Shogun battleships. You'd better hurry - if they finish their Zenith meteor controller, things will become a lot more difficult...]]
+			text = "This was the capital of Haven. It must have been such a beautiful world in its prime. But war was closing, even there. Evacuation had started, and they were halfway done turning it into a fortress. Every industry retooled to build military hardware. Every air traffic system repuroposed for war."
+			.. "\n "
+			.. "\nThen, just like that, everyone was gone."
+			,
+			extendedText = "I'm lucky that even half the fleet acknowledged those damn IFF codes. Now, to take control of the sea, then the enemy shoreline, with Shogun battleships. I'd better hurry - if they finish that Zenith meteor controller, things will become a lot more difficult..."
 		},
 		tips = {
 			{

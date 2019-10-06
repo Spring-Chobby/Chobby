@@ -25,7 +25,15 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G4V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24642",
-			text = [[You are facing a massive fleet of capital ships. Ensure your complete domination of the seas with the Disco Rave Party superweapon.]]
+			text = "Haven's last redoubt. Should the capital on Pendust fall, it is here they would have fought the Empire to the bitter end."
+			.. "\n "
+			.. "\nHow ironic that it would be the first place where everyone would disappear... Or maybe this is where it all started."
+			.. "\n "
+			.. "\nWhat happened to you, Zhurou ? You will tell me."
+			,
+			extendedText = "I have taken control of the superweapon they were building here, but a massive fleet of capital ships is closing on me. All I have to do is hold them off long enough and complete the damn thing."
+			.. "\n "
+			.. "\nSend me your worst, automata. I will NOT be denied."
 		},
 		tips = {
 			{

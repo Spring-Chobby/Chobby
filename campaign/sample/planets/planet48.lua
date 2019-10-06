@@ -26,7 +26,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G1V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24566",
-			text = [[Your enemy's defences on this level are dependent on a few critical structures, but the rough terrain will make it very difficult to get close enough to destroy them. The Tactical Missile Silo provides a much more practical solution to this problem.]]
+			text = "This was a nightmare scenario for the Empire: a rebellion on an special arsenal world. The loyalist barricaded themselves in the mountains with the stockpiles, waiting for reinforcements that never came."
+			.. "\n "
+			.. "\nI should crack that fortress open and raze it once and for all. There are things buried down there, that should never have been built."
+			,
+			extendedText = "The loyalist positions are dependent on a few critical structures, but the rough terrain will make it very difficult to get close. The Tactical Missile Silo is exactly what I need for this."
 		},
 		tips = {
 			{

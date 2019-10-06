@@ -26,7 +26,15 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "K1",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24489",
-			text = [[This remote moon was used for widely broadcast rally races in a bygone age. A classic challenge now awaits all comers: the Super Extreme Kodachi Rally!]]
+			text = "This remote moon used to broadcast rally races to the entire galaxy. Did I watch those? It feels oddly familiar."
+			.. "\n "
+			.. "\nI can still pick a signal up, some of the broadcast systems are still working to this day. The show must go on, I guess. Not letting petty distractions like the apocalypse get in the way."
+			.. "\n "
+			.. "\nLet's try and hack in, see if it rings any bells..."
+			,
+			extendedText = "...ok, this didn't do anything. Maybe that one ?"
+			.. "\n "
+			.. "\n[Welcome, new challenger, and good luck for the Super Extreme Kodachi Rally! Your will be starting---right now!]"
 		},
 		tips = {
 			{

@@ -25,7 +25,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G4V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24510",
-			text = [[Many raiders have tried - and failed - to take the ancient technology on this planet by brute force. The automated defence system has decayed over time but a Detriment crushes any attempt to build a base. Stay on the move with Athena mobile constructors, building up an army to destroy the Detriment.]]
+			text = "There is technology on this world, that is both much more ancient and more andvanced than it should be. There are the remains of several raiding parties sent by the Empire to try - without success - and capture it."
+			.. "\n "
+			.. "\nAutomated defenses have suffered from the raids, but are still operational - and a Detriment roaming around. How can it be working after half an eternity exposed and without maintenance ?"
+			,
+			extendedText = "That Detriment will crushe any attempt to build a base. I have to stay on the move with Athena mobile constructors, until I can build up an army strong enough to take it down."
 		},
 		tips = {
 			{
