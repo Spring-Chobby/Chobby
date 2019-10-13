@@ -1,4 +1,4 @@
---------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Planet config
 
@@ -25,7 +25,17 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G1V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24642",
-			text = [[Your opponent is already conducting a victory dance with their Disco Rave Party cannon. Hold off their assault until your Starlight orbital chisel is complete, then demonstrate that their celebration is premature.]]
+			text = "This is it, humanity's last planet. A frozen, windswept desert world, where to wait for the end."
+			.. "\n "
+			.. "\nAnd yet... did they really flee all the way there only to delay the inevitable?"
+			.. "\n "
+			.. "\nIf the Empire knew anything about what really happened - if they ever found an escape, this is where the answers will be."
+			,
+			extendedText = "They were building not one but two superweapons here. If this was to be humanity's last stand, they would give it all."
+			.. "\n "
+			.. "\nUnfortunately, only one is operational, and it is pointed right at me. I will hold off their assault regardless, even supported by a Disco Rave Party rapid-fire cannon - until my Starlight orbital chisel is complete."
+			.. "\n "
+			.. "\nCome hell or high water, I will find out what happened here."
 		},
 		tips = {
 			{

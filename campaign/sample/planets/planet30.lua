@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G8V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24530",
-			text = "This chokepoint defended the territory of something called Haven. The Empire attempted to break through, and managed to gain a foothold on this world. That battle is still going, with mindless automata still carrying their last recieved orders."
+			text = "This chokepoint defended the territory of something called Haven. The Empire attempted to break through, and managed to gain a foothold on this world. That battle is still going, with mindless automata carrying their last recieved orders."
 			.. "\n "
 			.. "\nOne of the local garrisons somehow identified me as an enemy of the Empire and gave me IFF codes. I wonder on how many Haven worlds those will work."
 			,

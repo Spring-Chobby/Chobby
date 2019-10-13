@@ -25,7 +25,19 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G4V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24642",
-			text = [[This battle will take place on a massive salt plain, littered with sharp spikes. Use Paladin striders to dominate all aspects of the fight.]]
+			text = "Planet Intrepid, crown jewel of the Empire, garden of the East - this dead, barren world?"
+			.. "\n "
+			.. "\nI can see it now. Left unsupervised, maintenance failed, gardens dried and the entire ecosystem fell into a death spiral."
+			.. "\n "
+			.. "\nLeaving nothing but grey sand, haunted by decaying armies and fading memories."
+			,
+			extendedText = "This battle takes place on what was once a shallow lake, renown across the entire galaxy for its splendor."
+			.. "\n "
+			.. "\nI remember seeing it as a child. Poets of all worlds tried to capture its beauty, but I doubt any could have succeeded."
+			.. "\n "
+			.. "\nAll that is left is now a massive salt plain, littered with odd, towering spikes."
+			.. "\n "
+			.. "\nUsed well, Paladin striders will dominate all aspects of the fight. Armies should never have come to this place. I shall make sure none will ever again."
 		},
 		tips = {
 			{
