@@ -29,6 +29,8 @@ local function GetPlanet(planetUtilities, planetID)
 			text = "This rich industrial world is quite well-defended, but a dormant saboteur unit recognized my IFF and signaled me. I should be able to subvert those defences with its help."
 			.. "\n "
 			.. "\nAs far as I can tell, it identified me as allied to the rebels against whoever was the Empire controlling this world."
+			,
+			extendedText = "Hostile forces are well entrenched but, luckily for me, they have a poorly defended outpost and I now have a squad of Dominatrices. Capturing the outpost will give me a head start, then I can steal an army of Tanks and march on their main base."
 		},
 		tips = {
 			{

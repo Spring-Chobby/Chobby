@@ -27,7 +27,7 @@ local function GetPlanet(planetUtilities, planetID)
 			feedbackLink = "http://zero-k.info/Forum/Thread/24566",
 			text = "There are two massive armies fighting down there, but both are declaring themselves Imperial forces. This didn't start with a glitch either, it was clearly two humans that initiated this. What could have driven them to do such a thing?"
 			.. "\n "
-			.. "\nI really don't want to fight both of them at the same time. Time to negociate with derelict automata again..."
+			.. "\nI really don't want to fight both of them at the same time. Time to negotiate with derelict automata again..."
 			,
 			extendedText = "The artillery cannons of the other sides' battleships are pretty big, but the Big Bertha plasma cannon is positively humongous."
 			.. "\n "

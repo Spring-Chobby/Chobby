@@ -29,7 +29,7 @@ local function GetPlanet(planetUtilities, planetID)
 			.. "\n "
 			.. "\nAutomated defenses have suffered from the raids, but are still operational - and a Detriment roaming around. How can it be working after half an eternity exposed and without maintenance?"
 			,
-			extendedText = "That Detriment will crushe any attempt to build a base. I have to stay on the move with Athena mobile constructors, until I can build up an army strong enough to take it down."
+			extendedText = "That Detriment will crush any attempt to build a base. I have to stay on the move with Athena mobile constructors, until I can build up an army strong enough to take it down."
 		},
 		tips = {
 			{

@@ -32,7 +32,7 @@ local function GetPlanet(planetUtilities, planetID)
 			,
 			extendedText = "This battle is taking place at high altitude, I can use Wind Generators for cheap and efficient energy income."
 			.. "\n "
-			.. "\nThose Jumpbots I am up against seem rather strange. Not sure whta the best tactics are against them, but I hope my Knight's lightning gun will help."
+			.. "\nThose Jumpbots I am up against seem rather strange. Not sure what the best tactics are against them, but I hope my Knight's lightning gun will help."
 		},
 		tips = {
 			{

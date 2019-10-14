@@ -31,7 +31,7 @@ local function GetPlanet(planetUtilities, planetID)
 			.. "\n "
 			.. "\nAnd now that thing is powering up again."
 			,
-			extendedText = "The plague will convert any destroyed unit wreck into zombies, hostile to all. I can the Ultimatum's Disintegrator Gun to put them all the way down, then deactivate that damn Artefact before it releases something even nastier."
+			extendedText = "The plague will convert any destroyed unit wreck into zombies, hostile to all. I can use the Ultimatum's Disintegrator Gun to put them all the way down, then deactivate that damn Artefact before it releases something even nastier."
 		},
 		tips = {
 			{

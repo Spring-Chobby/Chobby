@@ -28,7 +28,7 @@ local function GetPlanet(planetUtilities, planetID)
 			feedbackLink = "http://zero-k.info/Forum/Thread/24510",
 			text = "Occupation forces on this world have dwindled to a few dormant bots. Hopefully I can land and take them out before they awaken..."
 			.. "\n "
-			.. "\nAnother rebel planet that fell to a merciless imperial punitive expedition. I wonder what drove so many worlds to raise against the Empire."
+			.. "\nAnother rebel planet that fell to a merciless imperial punitive expedition. I wonder what drove so many worlds to rise against the Empire."
 			,
 			extendedText = "They are waking up earlier than I expected. I should use fast-moving Locust raider gunships to curtail their expansion, then Nimbus support gunships to finish them off."
 		},

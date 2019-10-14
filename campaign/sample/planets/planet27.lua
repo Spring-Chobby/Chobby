@@ -28,7 +28,7 @@ local function GetPlanet(planetUtilities, planetID)
 			feedbackLink = "http://zero-k.info/Forum/Thread/24469",
 			text = "This planet was renowned for its tourism resorts and galaxy-famous culinary traditions - or so the advertisement broadcasts tell me. I don't remember ever hearing about it, but it is true this world has been relatively spared from collateral damage, compared to others in the sector."
 			.. "\n "
-			.. "\nUltimately, as the strategic picture beakem grimmer, even such a place suffered military occupation."
+			.. "\nUltimately, as the strategic picture became grimmer, even such a place suffered military occupation."
 			,
 			extendedText = "Some of the local forces recognize one of the IFF codes I found last world. They can take care of surface targets, but I will need to support them with Claymore depth charge and Flail AA hovercraft against underwater and aerial threats."
 		},

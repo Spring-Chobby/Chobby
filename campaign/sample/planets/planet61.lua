@@ -29,7 +29,7 @@ local function GetPlanet(planetUtilities, planetID)
 			.. "\n "
 			.. "\nWas it the last delusion of a decadent regime? Or would they have truly risen stronger in due time?"
 			,
-			extendedText = "Even with those backdoors, much of the local forces are still hostile - I will have to dislodge them from their mounatinous defensive bastions. Fortunately, those Funnelweb striders are well equiped for that particular task."
+			extendedText = "Even with those backdoors, much of the local forces are still hostile - I will have to dislodge them from their mountainous defensive bastions. Fortunately, those Funnelweb striders are well equiped for that particular task."
 		},
 		tips = {
 			{
