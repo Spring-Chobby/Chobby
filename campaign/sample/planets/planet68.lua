@@ -33,7 +33,7 @@ local function GetPlanet(planetUtilities, planetID)
 			,
 			extendedText = "They were building not one but two superweapons here. If this was to be humanity's last stand, they would give it all."
 			.. "\n "
-			.. "\nUnfortunately, only one is operational, and it is pointed right at me. I will hold off their assault regardless, even supported by a Disco Rave Party rapid-fire cannon - until my Starlight orbital chisel is complete."
+			.. "\nUnfortunately, only one is operational, and it is pointed right at me. Well, so be it. I will hold off their assault, even supported by a Disco Rave Party rapid-fire cannon - until my Starlight orbital chisel is complete."
 			.. "\n "
 			.. "\nCome hell or high water, I will find out what happened here."
 		},
