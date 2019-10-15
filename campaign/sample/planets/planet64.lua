@@ -31,7 +31,7 @@ local function GetPlanet(planetUtilities, planetID)
 			.. "\n "
 			.. "\nLeaving nothing but grey sand, haunted by decaying armies and fading memories."
 			,
-			extendedText = "This battle takes place on what was once a shallow lake, renown across the entire galaxy for its splendor."
+			extendedText = "This battle takes place on what was once a shallow lake, renowed across the entire galaxy for its splendor."
 			.. "\n "
 			.. "\nI remember seeing it as a child. Poets of all worlds tried to capture its beauty, but I doubt any could have succeeded."
 			.. "\n "
