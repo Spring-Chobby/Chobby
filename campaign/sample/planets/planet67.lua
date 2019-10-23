@@ -29,7 +29,7 @@ local function GetPlanet(planetUtilities, planetID)
 			.. "\n "
 			.. "\nHow ironic that it would be the first place where everyone would disappear... Or maybe this is where it all started."
 			.. "\n "
-			.. "\nWhat happened to you, Zhurou? What are you hiding?."
+			.. "\nWhat happened to you, Zhurou? What are you hiding?"
 			,
 			extendedText = "I have taken control of the superweapon they were building here, but a massive fleet of capital ships is closing on me. All I have to do is hold them off long enough and complete the damn thing."
 			.. "\n "
