@@ -25,7 +25,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "K1VI",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24530",
-			text = [[In this battle you start at a large numerical and economical disadvantage. However, the high plateaus on this map will give your Spiders an edge, especially the heavy Crab riot/skirmisher.]]
+			text = "This strange geology again, just like Walchice. Those mountain-sized trees, or whatever they were, have been dead for longer than life on Earth has breathed oxygen. How did they grow on two world on each side of the galaxy? I have never heard of interstellar life older than humankind..."
+			.. "\n "
+			.. "\nNo wonder this world is so well-guarded. But who knows what I could find down there?"
+			,
+			extendedText = "This is bad, I have a serious numerical and economical disadvantage. However, the high plateaus on this map may give my Spiders an edge, especially the heavy Crab riot/skirmisher."
 		},
 		tips = {
 			{

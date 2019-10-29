@@ -26,7 +26,13 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G0V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24489",
-			text = [[This terrain is better suited for the enemy Spiders than your Tanks. To change that flatten the hills with Tremor heavy artillery, then finish the job with the super-heavy Cyclops assault tank.]]
+			text = "This desert planet had one of the greatest mountain ranges in the galaxy, before most of it was flattened by the Empire, as they tracked down fleeing Rebels hidden there. Imperial search parties are still there, looking for Rebels in what little is left of the range."
+			.. "\n "
+			.. "\nIf I can get rid of them, some Rebel holdout may answer to some of my scavenged codes. Who knows, they may still have useful data..."
+			,
+			extendedText = "I have taken control of a small search party, but only the sturdier Tanks are still working. Not ideal for this kind of terrain - especially with the other search party using Spiders."
+			.. "\n "
+			.. "\nTime to take a page from the previous users, and flatten the hills with Tremor heavy artillery. Then, I can finish the job with the super-heavy Cyclops assault tank."
 		},
 		tips = {
 			{

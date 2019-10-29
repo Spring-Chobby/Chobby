@@ -26,7 +26,13 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "N/A",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24441",
-			text = [[This isolated asteroid is being used by the enemy as an observation and command post. Use Shieldbots to conquer the rough terrain, then bring your Commander to the Interception Network structure to download important strategic data.]]
+			text = "On this asteroid is the most powerful communication network of the sector, and its defences have significantly decayed over time."
+			.. "\n "
+			.. "\nInterstellar pursuit forces from many worlds have kept dogging me. I can easily outrun them, but no-one is safe from a mistake. With this network, I should be able to shake them off my trail for good."
+			,
+			extendedText = "All I need to do is to bring my Commander close enough to the Interception Network structure and upload a new set of instructions."
+			.. "\n "
+			.. "\nShieldbots should do well on this rough terrain."
 		},
 		tips = {
 			{

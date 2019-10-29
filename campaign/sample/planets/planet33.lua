@@ -25,7 +25,13 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "K3VI",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24566",
-			text = [[If you want to control the sea, it's also important to control the air above it. Use Owl scout planes to find underwater units, then Raven precision bombers to destroy those underwater units and any other high-value targets.]]
+			text = "There is something very wrong with this world. Almost no life despite advanced terraforming, a warm ocean producing no moisture, and an island that makes no geological sense right in the middle of it."
+			.. "\n "
+			.. "\nWhatever is on this island is extremely well guarded, and the Empire broke their teeth on it. But the garrison's protocols have also decayed faster than they should, and I may be able to turn it over..."
+			,
+			extendedText = "I have managed to hack some of the garrison, but forces next to that artefact are not responding."
+			.. "\n "
+			.. "\nIf I want to control the sea, it's also important to control the air above it. The Owl scout planes will be useful to find underwater units, then Raven precision bombers to destroy those underwater units and any other high-value targets."
 		},
 		tips = {
 			{

@@ -25,7 +25,13 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G2V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24566",
-			text = [[Since your allies have built a few strong anti-air bastions, the enemy has chosen to rely on ground-to-air emplacements of their own rather than attempt to contest air control with fighters. Show them the deficiencies of this strategy with the resilient and deadly Likho.]]
+			text = "A long time ago, this world was a jewel, sculpted to perfection - or so its original terraformers said. Even after so much decay, I can still see their work from orbit, and I am not impressed. Their mountain work is inferior, their seas pretentious and unsubtle, and they couldn't even stabilize the polar ice caps."
+			.. "\n "
+			.. "\nThey were so insecure, they even left a force to assault anyone disagreeing, which is now set to \"everyone\"."
+			,
+			extendedText = "A splinter force born from a technical disagreement over river drawing has identified me as an ally. What the hell was wronng with that Empire!?"
+			.. "\n "
+			.. "\nMy new allies had built a few strong anti-air bastions, so the enemy is relying on ground-to-air emplacements of their own rather than attempt to contest air control with fighters. Which was short-sighted - it won't hold against the resilient and deadly Likho."
 		},
 		tips = {
 			{

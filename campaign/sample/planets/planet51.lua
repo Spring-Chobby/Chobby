@@ -25,7 +25,13 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G0V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24594",
-			text = [[Your Tech Lab is about to be overrun by enemy forces! Your base is too far away to reinforce the Lab in time... unless you employ an unconventional means of transport.]]
+			text = "Barely inhabitable, far from anything valuable but right between fortress worlds, this was the ideal place for the Empire's sensitive research projects. If they knew something about what happened, it could be there."
+			.. "\n "
+			.. "\nI could access to some research systems and their defences, but not remotely access their data. Hopefully I can land, grab the data and depart before the main planetary garrison wakes up..."
+			,
+			extendedText = "This is bad! I landed too far, the entire planet's garrison is waking up and the Tech Lab is about to be overrun! I am too far away to reinforce it in time. Unless..."
+			.. "\n "
+			.. "\nI will have to employ an unconventional means of transport."
 		},
 		tips = {
 			{

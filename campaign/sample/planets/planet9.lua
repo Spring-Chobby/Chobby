@@ -26,7 +26,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "B2Ia",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24457",
-			text = [[Besides the occasional strange hills dotting the landscape, this is a smooth and level battlefield. Your opponent has arrived before you and has begun expanding their economy. Use your Scorchers to punish their greed.]]
+			text = "This ugly desert world would have been a large industrial hub at one time. Mineral resources, mostly flat terrain, calm weather, lying at an interstellar crossroads and no environment to ruin with pollution."
+			.. "\n "
+			.. "\nNo wonder they fought so hard to keep it. War vehicles are still crisscrossing its empty sand plains, eternally waiting for the next invasion."
+			,
+			extendedText = "Besides the occasional strange hills dotting the landscape, this is a smooth and level battlefield. This area is lightly defended, but local forces will start tapping into that resource extraction network as soon as I arrive to reinforce themselves. I should take as many extractors out as I can with Scorchers, as fast as possible."
 		},
 		tips = {
 			{

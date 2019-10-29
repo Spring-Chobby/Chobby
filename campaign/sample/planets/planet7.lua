@@ -26,7 +26,13 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G7V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24429",
-			text = [[The Artefact on this planet contains invaluable information, but it is protected by a large automated defence network. Infiltrate the Automaton base with Phantom sniper bots and destroy the Singularity Plants to deactivate the heavier defences.]]
+			text = "There is something very strange on this world. Some kind of artefact, I have never seen anything like it. Could it hold answers about what happened to everyone? I need to get closer."
+			.. "\n "
+			.. "\nIt is heavily defended, direct assault would be a bad idea. Maybe I can find some weakness in those defences..."
+			,
+			extendedText = "Frontal attack would be suicidal, but most of it is static defences. If I can infiltrate Phantom sniper bots and destroy their Singularity Plants, it will deactivate the heavier defences."
+			.. "\n "
+			.. "\nI should not let my guard down, some mobile forces are still active. And there is something very strange with their data flux..."
 		},
 		tips = {
 			{

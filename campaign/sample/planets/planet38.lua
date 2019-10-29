@@ -26,7 +26,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "M2V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24510",
-			text = [[In addition to your opponent, this time you'll have to deal with the charming local fauna as well - this planet is infested with chickens. You'll have to manage both threats to be victorious.]]
+			text = "A marginal desert world with a few buried scientific outposts. With luck I will find valuable information in those, if I can get rid of the army defending the surface."
+			.. "\n "
+			.. "\nI have weird readings on that sand, though, and the local army seems to avoid it. I have a bad feeling about this..."
+			,
+			extendedText = "This planet is infested with Chicken, and now the swarm is waking up! I hate those things. What the hell are they anyway ? At least they don't take sides, and equally attack everything. All I have to do is to hold them off long enough to beat the automata."
 		},
 		tips = {
 			{

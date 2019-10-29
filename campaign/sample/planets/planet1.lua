@@ -15,7 +15,7 @@ local function GetPlanet(planetUtilities, planetID)
 			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.87,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
-			hintText = "Keep taking planets until you conquer the galaxy.",
+			hintText = "Keep taking planets until you reclaim the galaxy.",
 			hintSize = {402, 100},
 		},
 		infoDisplay = {
@@ -28,7 +28,13 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G8V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24417",
-			text = [[This battle will be straightforward. Construct an army of Glaives and Reavers to overwhelm your enemy.]]
+			text = "How long have I been sleeping? Centuries? No, stars have drifted way too much. And this Commander- I have never seen anything like it. What was I doing in that thing?"
+			.. "\n "
+			.. "\nI cannot stay there. Those automata are everywhere, and when they are not fighting each-other, they attack me as soon as I stop moving."
+			,
+			extendedText = "I hoped to avoid local forces, but ther are simply too many of them. Still, this battle should be straightforward. I will simply overwhelm them with an army of Glaives and Reavers, and then take that factory out."
+			.. "\n "
+			.. "\nI can do this."
 		},
 		tips = {
 			{

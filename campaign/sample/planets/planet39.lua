@@ -26,7 +26,13 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G6V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24510",
-			text = [[The enemy is about to complete a Krow heavy gunship. Quickly build Tridents to defeat it, then build your own Krows and return the favour.]]
+			text = "This world was both wealthy and peripheral, making it an ideal place to start a rebellion. Long after everyone is gone, the rebel army is still facing the expeditionary force the Empire sent to crush them to a standstill."
+			.. "\n "
+			.. "\nWith no one left to do geomaintenance, it is slowly freezing, returning to its original ice world state."
+			,
+			extendedText = "I've got lucky, the rebel forces recognized one of my IFF signals. The dormant armies are both reactivating, though. This time, it will not end in a cold war."
+			.. "\n "
+			.. "\nThe other side is about to complete a Krow heavy gunship. I must quickly build Tridents to defeat it, then build my own Krows and return the favour."
 		},
 		tips = {
 			{

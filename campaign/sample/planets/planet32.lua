@@ -25,7 +25,9 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G5VI",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24530",
-			text = [[An enemy artillery piece is dominating this island chain. Assault it directly or cut off its energy supply, then clear out any lingering opposition.]]
+			text = "This time half the garrison recognized the IFF codes, and now the other half is turning against them. Their protocols were clearly not meant to run without supervision for so long."
+			,
+			extendedText = "An enemy artillery piece is dominating this island chain. I should either assault it directly or cut off its energy supply, then I can clear out any lingering opposition."
 		},
 		tips = {
 			{

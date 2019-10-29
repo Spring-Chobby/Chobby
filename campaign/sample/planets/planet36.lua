@@ -26,7 +26,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G4V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24510",
-			text = [[Use the fast-moving Locust raider gunships to curtail your opponent's expansion, then Nimbus support gunships to finish them off.]]
+			text = "Occupation forces on this world have dwindled to a few dormant bots. Hopefully I can land and take them out before they awaken..."
+			.. "\n "
+			.. "\nAnother rebel planet that fell to a merciless imperial punitive expedition. I wonder what drove so many worlds to rise against the Empire."
+			,
+			extendedText = "They are waking up earlier than I expected. I should use fast-moving Locust raider gunships to curtail their expansion, then Nimbus support gunships to finish them off."
 		},
 		tips = {
 			{

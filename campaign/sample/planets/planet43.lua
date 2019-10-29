@@ -25,7 +25,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "F3VII",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24457",
-			text = [[This planet is covered by a sprawling metropolis, built by nano-machines... which nobody remembered to turn off. Any destroyed units or buildings will be rebuilt, but they won't be friendly to you any more. Hold off the 'zombies' for long enough to reach the Artefact.]]
+			text = "This planet is covered by a sprawling metropolis, built by nano-machines, with nobody left to turn them off. I would have preferred avoiding such a place, but there is something down there, something older than the nanites."
+			.. "\n "
+			.. "\nIf I am fast enough, I should be able to recover whatever it is and get out of there before the nanites become too much of a problem."
+			,
+			extendedText = "Any destroyed units or buildings will be rebuilt by the nanites, but they will be hostile to everyone. I will have to hold off the 'zombies' for long enough to go through any existing defences and reach the Artefact."
 		},
 		tips = {
 			{

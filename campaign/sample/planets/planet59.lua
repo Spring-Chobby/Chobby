@@ -25,7 +25,13 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G9VI",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24614",
-			text = [[Provoked by a rival salvager, the Artefact on this planet has released an automatic defensive measure - nanobots convert any destroyed unit wrecks into zombies, hostile to all intruders. Use the Ultimatum's Disintegrator Gun to put them all the way down, then get away before the Artefact does something even nastier.]]
+			text = "Rebel scientists were studying an artefact found in an archeological site, when they were overrun by the Empire. Desperate for any advantage they could, they activated it, releasing a zombie nanoplague."
+			.. "\n "
+			.. "\nAll it cost them was the lives of every single inhabitant on the planet."
+			.. "\n "
+			.. "\nAnd now that thing is powering up again."
+			,
+			extendedText = "The plague will convert any destroyed unit wreck into zombies, hostile to all. I can use the Ultimatum's Disintegrator Gun to put them all the way down, then deactivate that damn Artefact before it releases something even nastier."
 		},
 		tips = {
 			{
@@ -38,7 +44,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/pw_artefact.png",
-				text = [[The Artefact has no direct defences of its own but it is being defended by a rival. Push through the zombies and your opponent's defences to access the Artefact.]]
+				text = [[The Artefact has no direct defences of its own but it is being defended by a hostile force. Push through the zombies and your opponent's defences to access the Artefact.]]
 			},
 		},
 		gameConfig = {

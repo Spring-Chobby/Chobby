@@ -26,7 +26,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G8V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24441",
-			text = [[Use a combination of Snitch mobile bombs and Iris area cloakers to decimate enemy formations in this battle. Build some Geothermal Generators to provide the energy for your area cloakers.]]
+			text = "A billion years ago, this world was hit by a gigantic asteroid. Ancient terraformation have long made it inhabitable, but now it also features strange, parallel mountain ranges and great sources of geothermal energy."
+			.. "\n "
+			.. "\nI wonder who thought it was a good idea to defend those rather dry mountains with Amphbots of all things."
+			,
+			extendedText = "With a combination of well-placed Snitch mobile bombs and Iris area cloakers, I can decimate entire enemy formations. Those area cloakers need some hefty energy input to work, so I better build some Geothermal Generators to feed them."
 		},
 		tips = {
 			{

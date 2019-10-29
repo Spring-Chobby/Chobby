@@ -25,7 +25,13 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G6V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24594",
-			text = [[All previous attempts to defeat the enemy's large cluster of Funnelweb support striders and Big Bertha static artillery have failed. It falls to you to deploy the nuclear option.]]
+			text = "The fortress world that guarded the early Empire's southern flank. Never seriously challenged since those days, its garrison may have grown complacent - but the defences that are left are still formidable."
+			.. "\n "
+			.. "\nThere is what looks like backdoors in some of the garrison's codes, strangely enough. They would have been useless in actual conflict, though, effective only against unsupervised automata..."
+			,
+			extendedText = "Some of the forces have already turned against each-other by the time I landed, but all previous attempts to defeat the enemy's large cluster of Funnelweb support striders and Big Bertha static artillery have failed."
+			.. "\n "
+			.. "\nTime to deploy the nuclear option."
 		},
 		tips = {
 			{
