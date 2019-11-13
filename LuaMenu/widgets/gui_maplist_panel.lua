@@ -184,8 +184,8 @@ end
 
 local function InitializeControls()
 	-- ghetto profiling to prove the maplist is a memory hog
-	local lmkb, lmalloc, lgkb, lgalloc = Spring.GetLuaMemUsage()
-	Spring.Echo("LuaMenu KB", lmkb, "allocs", lmalloc, "Lua global KB", lgkb, "allocs", lgalloc)
+	--local lmkb, lmalloc, lgkb, lgalloc = Spring.GetLuaMemUsage()
+	--Spring.Echo("LuaMenu KB", lmkb, "allocs", lmalloc, "Lua global KB", lgkb, "allocs", lgalloc)
 
 	local Configuration = WG.Chobby.Configuration
 
