@@ -1,4 +1,4 @@
 return {
 	map = "ScorpioBattleground",
-	enemyAI = "NullAI",
+	enemyAI = "Null AI",
 }
