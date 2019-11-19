@@ -40,7 +40,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/mahlazer.png",
-				text = [[The Zenith is a planetary-scale chisel repurposed as the ultimate superweapon, firing a laser from space which will cut through anything. The mirror satellite rotates slowly, so make sure it doesn't strike your own units and structures.]]
+				text = [[The Starlight is a planetary-scale chisel repurposed as the ultimate superweapon, firing a laser from space which will cut through anything. The mirror satellite rotates slowly, so make sure it doesn't strike your own units and structures.]]
 			},
 			{
 				image = "unitpics/cremcom.png",
