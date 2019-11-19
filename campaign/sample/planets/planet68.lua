@@ -70,7 +70,6 @@ local function GetPlanet(planetUtilities, planetID)
 						buildProgress = 0.625,
 						difficultyAtLeast = 1,
 						difficultyAtMost = 1,
-                        terraformHeight = 310,
 					},
 					{
 						name = "mahlazer",
@@ -80,7 +79,6 @@ local function GetPlanet(planetUtilities, planetID)
 						buildProgress = 0.55,
 						difficultyAtLeast = 2,
 						difficultyAtMost = 2,
-                        terraformHeight = 310,
 					},
 					{
 						name = "mahlazer",
@@ -90,7 +88,6 @@ local function GetPlanet(planetUtilities, planetID)
 						buildProgress = 0.475,
 						difficultyAtLeast = 3,
 						difficultyAtMost = 3,
-                        terraformHeight = 310,
 					},
 					{
 						name = "mahlazer",
@@ -100,7 +97,6 @@ local function GetPlanet(planetUtilities, planetID)
 						buildProgress = 0.4,
 						difficultyAtLeast = 4,
 						difficultyAtMost = 4,
-                        terraformHeight = 310,
 					},
 					{
 						name = "energysolar",
@@ -460,6 +456,12 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "energywind",
 						x = 280,
 						z = 7096,
+						facing = 3,
+					},
+ 					{
+						name = "starlight_satellite",
+						x = 928,
+						z = 3600,
 						facing = 3,
 					},
  					{

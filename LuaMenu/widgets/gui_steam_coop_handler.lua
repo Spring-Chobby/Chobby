@@ -486,7 +486,7 @@ function DelayedInitialize()
 		if not index then
 			return
 		end
-		downloading.progress[index] = ((sizeCurrent < sizeTotal*2) and math.ceil(100*sizeCurrent/sizeTotal)) or 100
+		downloading.progress[index] = (sizeCurrent < sizeTotal*2) and math.ceil(100*sizeCurrent/sizeTotal)
 		replacablePopup:SetText(string.format(downloading.dlString, unpack(downloading.progress)))
 	end
 

@@ -472,7 +472,7 @@ local moduleDefs = {
 	{
 		name = "econ",
 		humanName = "Vanguard Economy Pack",
-		description = "Vanguard Economy Pack - A vital part of establishing a beachhead, this module is equipped by all new commanders to kickstart their economy. Provides 4 metal income and 6 energy income.",
+		description = "Vanguard Economy Pack - A vital part of establishing a beachhead, this module is equiped by all new commanders to kickstart their economy. Provides 3.7 metal income and 5.7 energy income.",
 		image = moduleImagePath .. "module_energy_cell.png",
 		limit = 1,
 		unequipable = true,
@@ -480,8 +480,8 @@ local moduleDefs = {
 		requireLevel = 0,
 		slotType = "module",
 		applicationFunction = function (modules, sharedData)
-			sharedData.metalIncome = (sharedData.metalIncome or 0) + 4
-			sharedData.energyIncome = (sharedData.energyIncome or 0) + 6
+			sharedData.metalIncome = (sharedData.metalIncome or 0) + 3.7
+			sharedData.energyIncome = (sharedData.energyIncome or 0) + 5.7
 		end
 	},
 	{

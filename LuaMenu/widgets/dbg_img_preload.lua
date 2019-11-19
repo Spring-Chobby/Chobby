@@ -42,7 +42,7 @@ function widget:Update()
 		AddDir("LuaMenu/Widgets/chili/Skins/Evolved")
 		AddDir("LuaMenu/Images")
 		AddDir("LuaMenu/configs/gameConfig/zk/unitpics")
-		--AddDir("LuaMenu/configs/gameConfig/zk/rankimages")
+		AddDir("LuaMenu/configs/gameConfig/zk/rankimages")
 		--AddDir("LuaMenu/Images/starbackgrounds")
 	elseif index then
 		if not holder then
