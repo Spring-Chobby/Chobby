@@ -28,7 +28,7 @@ local function GetPlanet(planetUtilities, planetID)
 			feedbackLink = "http://zero-k.info/Forum/Thread/24429",
 			text = "This world is covered with islands, with a surprising variety of defences. Was it used for combat testing?"
 			.. "\n "
-			.. "\nMany of those islands seem isolated from each-other. I will only need to clear one, hopefully it won't contain any nasty experimental unit."
+			.. "\nMany of those islands seem isolated from each-other. I will only need to clear one, hopefully it won't contain any nasty surprises."
 			,
 			extendedText = "This battle is taking place at high altitude, I can use Wind Generators for cheap and efficient energy income."
 			.. "\n "
