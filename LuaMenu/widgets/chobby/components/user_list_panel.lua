@@ -71,7 +71,7 @@ local function CompareUsers(userName, otherName)
 		return true
 	end
 
-	if otherData.isAdmin ~= userData.isAdmin then
+	if (not not otherData.isAdmin) ~= (not not userData.isAdmin) then
 		return userData.isAdmin
 	end
 
