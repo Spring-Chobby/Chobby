@@ -1550,6 +1550,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"weaponmod_napalm_warhead",
 			},
 			abilities = {
+			},
+			codexEntries = {
+				"threat_chickens",
+				"threat_chickens_travel"
 			}
 		},
 	}

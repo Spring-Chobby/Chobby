@@ -3146,6 +3146,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_battle_drone_LIMIT_C_2",
 			},
 			abilities = {
+			},
+			codexEntries = {
+				"threat_chickens",
+				"threat_chickens_intelligence"
 			}
 		},
 	}

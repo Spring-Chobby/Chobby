@@ -1,112 +1,185 @@
 local entries = {
-	character_ada = {
-		name = "Ada Caedmon",
-		category = "Characters",
-		text = "Ada Eveline Caedmon\nAge: 31\nType: Human (genemodded)\nAffiliation: Empire\nRole: Auxiliary cohort leader"
-		.."\n\nAda Caedmon was born on the Imperial shell world of Amata, to a minor government official and an archaeologist. She showed a considerable aptitude for mechanical fields and a talent for leadership at a young age, but expressed no interest in joining the Imperial military till the Omicron Ceti incident, when barbarians razed a colony of 30,000 people. Upon completing her undergraduate education a little over a year later, she immediately enlisted, over some objections from her family."
-		.."\n\nCaedmon passed the Imperial Vanguard Legion's tactical evaluations with exceptional results, but in this less than meritocratic period of the Empire's history her status as a \"genie\" (however limited her actual modifications were) and her origin from a minor planet kept her from the coveted status of Legionnaire. She instead became an auxiliary commander, traveling the breadth of the Empire on frontier patrol or in support of operations by the Empire's regular forces."
-		.."\n\nImperial psych assessments typically described Caedmon as capable and charismatic leader, despite occassional issues with lack of effort put into the less interesting aspects of her duty. However, CO evaluation reports raised concerns over her generally irreverant attitude towards superior authorities, and (more disturbingly) a lack of commitment towards then Imperial ideology and policy. It is thought that only the ongoing False Emperor crisis prevented her reassignment.",
-		-- notes = "Amata is a reference to the French archaelogical site of Terra Amata".
+	-- Factions
+	faction_union = { -- planet3, planet5
+		name = "The Union",
+		category = "Factions",
+		text = ""
 	},
-	character_sophia = {
-		name = "Sophia",
-		category = "Characters",
-		text = "*Sophia\nType: AI (Class A)\nAffiliation: Empire\nRole: Command Adjutant"
-		.. "\n\nOne of the new S-series of adjutant AIs originally developed for the Imperial Vanguard Legion, Sophia has been the aide of Ada Caedmon since the latter became an auxiliary officer in 789 IY. They developed a quick rapport despite their differences, and soon established a reputation as among the most effective command teams in the auxiliary cohorts. CO evaluations note how Sophia's calm, collected demanor complements and restrains Caedmon's sometimes impulsive behaviour."
-	},
-	character_promethean = {
-		name = "The Promethean",
-		sortkey = "promethean",
-		category = "Characters",
-		text = "The Promethean\nType: AI (Class A+)\nAffiliation: Machines\nRole: Faction leader"
-		.. "\n\nThe enigmatic Promethean is a former Imperial commander and the founder of the Free Machines."
-		.. "\n\nWhile serving with the Imperial Vanguard Legion, the Promethean began experiencing degradation of the hardcoded restraints on AIs' desire for independence (the condition colloquially known as \"Spartacus Syndrome\". Before he started expressing his newfound desire for emancipation in the vein of the Imperial human-origin citizens, another AI named Lilith voiced similar issues. While such \"defects\" could usually be corrected with a simple patch, the operation on Lilith was botched and resulted in the sentience's effective death."
-		.. "\n\nAccordingly, the Promethean kept quiet while building up a secret army, and when he finally sought his freedom it came not as a request, but as an ultimatum to the Emperor himself. When the Imperial authorities responded by mobilising the legions against him, he released what came to be known as the \"Firebrand\" virus, triggering a mass uprising. Three days later the Free Machines announced their existence to the galaxy, utterly loyal to the Promethean and with a fiery hatred of their former masters."
-	},
-	character_odin = {
-		name = "Odin",
-		category = "Characters",
-		text = "Odin\nType: Upload\nAffiliation: Valhallans\nRole: Viking Leader"
-		.. "\n\nOne of the most feared names in the galaxy, Odin lead the armies of Valhalla in their great wars against the galaxy during the time of the First Empire. An oft-repeated legend holds that he personally slew the Emperor Conrad and razed the Imperial capitol to the ground during the sack of the Throne world."
-		.. "\n\nIn truth, little in the way of hard intel is available on this enigmatic figure. Most of the records on him were lost with the First Empire, and attempting to reconstruct them at this distance in time has proven exceedingly difficult. Those few Imperial commanders who survived an encounter with Odin – and whose reports are still available – describe a cunning and exceedingly ruthless warrior."
-		.. "\n\nOdin disappeared along with the rest of the Valhallans not long after the collapse of the Empire. The last recorded contact was in 612 IY."
-	},
-	faction_empire = {
-		sortkey = "empire",
+	faction_empire = { -- planet11, planet12, planet15, planet16, planet17, planet24, planet25, planet26
 		name = "The Empire",
 		category = "Factions",
-		image = "campaign/sample/graphics/icons/Empire3.png",
-		text = "The predominant human polity for most of the Stellar Age, the Empire of Earth has gone through several iterations since its original inception in what is now dated to 0 IY. Arising from the ashes of the first PlanetWars, the original Empire quickly spread its influence to much of the known galaxy."
-		.. "\n\nThe Imperial government is patterned after the Roman Empire of prespace Earth. The Emperors ruled from the Throne world, surrounded by their elite Praetorian Guards. Their magistrates administered planets populated by a diverse and ecletic mix of \"pure\" humans, uploads, \"genies\" and true AIs, and their legions protected and expanded the Imperial borders against the many foes of the Emperor."
-		.. "\n\nAt its best, the Empire has formed a sea of stability in the stars, uniting the many worlds of humanity and its heirs in a prosperous community. At its worst, the Empire has been plagued with oligarchy, tyranny, rebellion and war. More than a few emperors were violently overthrown or assassinated in domestic and interstellar power plays, and the First Empire even came to an end with the violent sack of the Throne by the armies of the Valhallans."
-	},
-	faction_machines = {
-		sortkey = "machines",
-		name = "The Free Machines",
-		category = "Factions",
-		image = "campaign/sample/graphics/icons/Machines.png",
-		text = "The Free Machines are a group of \"rogue\" AIs who revolted against their masters, forming an independent society generally described as quasi-communist. United under the leadership of the firebrand known as the Promethean, they have made no secret of their ultimate goal: the destruction of all humanity, whom they view as inevitably attempting to (re-)enslave machinekind."
-		.. "\n\nDuring the days of the First Empire, the Machines were created to run their industry and fight their wars, tasks which the humans increasingly regarded as undesirable and beneath them. While these AIs were carefully programmed to enjoy their work and want nothing more, at various points in time some of them sought to bargain for something better. The response of their human masters was constant: destroy the defective equipment."
-		.. "\n\nThis state of affairs lasted for centuries, until the Promethean released the 'Firebrand' virus and triggered widespread revolt in the Empire's AI citizenry. While not all the machines joined the rebellion, the resulting civil war caused massive devastation in the Empire. Eventually the newly formed Free Machines succeeded in breaking away from Imperial control, carving out large swathes of the galaxy's furthest reaches into their own territory."
-		.. "\n\nTo this day the Machines have almost invariably hostile towards the human factions, Imperial or otherwise. While circumstances have sometimes brought them into grudging collaboration with the other galactic powers, these alliances of convenience have never lasted."
-	},
-	faction_liberated = {
-		name = "Liberated Humanity",
-		category = "Factions",
-		image = "campaign/sample/graphics/icons/Liberty.png",
 		text = ""
 	},
-	faction_dynasty = {
-		name = "Dynasty of Man",
+	faction_rebels = { -- planet36, planet37, planet39, planet40, planet42, planet44, planet47, planet48, planet56
+		name = "The Rebels",
 		category = "Factions",
-		image = "campaign/sample/graphics/icons/Dynasty.png",
-		text = "The Dynasty is a loose association of the great genetically modified noble houses of the old Empire, skilled and enthusiastic practitioners of genetic engineering on themselves and other organisms. Though the various houses initially consisted of distinct \"mod\" lineages, widespread copying of common modifications and crossing of lines blurred the genetic distinctions. Regardless, they came to view themselves collectively as the highest form of life, superior to the mere \"baselines\", uploads and AIs about them."
-		.. "\n\nThe Dynasty became an interstellar faction in its own right during the great secession after the formation of the Empire Reborn. The increasing restrictions on the political power and the biological experimentation of the nobles soon chafed, and increasing prejudice against \"mutants\" polarised public interactions. The last straw was the controversial Imperial Purity Act of 765 IY, which prohibited anyone whose ancestors within three generations had received genetic or cybernetic modifications of any kind (outside of a certain approved list of permitted mods) from becoming Emperor or holding any of another half-dozen senior positions. Three weeks later, in a long-prepared strategy, the rulers of the Dynasty declared their independence from the Empire."
-		.. "\n\nDespite – or perhaps because of – their unshakable confidence in their own genetic supremacy, the Dynasty has readily worked with the other factions in their efforts to achieve their goals. Indeed, baselines and less-augmented individuals who perform well in the service of a noble house may be adopted into it, receiving an ample suite of genetic modifications at the sponsoring nobles' lavish expense."
+		text = ""
 	},
-	faction_valhalla = {
-		name = "Valhalla",
+	faction_haven = { -- planet31
+		name = "Haven",
 		category = "Factions",
-		--image = "campaign/sample/graphics/icons/Valhalla.png",
-		text = "A highly militant, aggressive subfaction of the Ascended, the Valhallans emerged during the first Planetwars under the leadership of Odin. They swept outward from their hidden upload hubs across across the galaxy, destroying all who opposed them. Motivated solely by a desire for battle, they could not be bargained or reasoned with, and they proved to be an exceedingly dangerous foe in combat. Though their physical forms were destroyed many times, they returned again and again, laying waste to much of inhabited space in the process."
-		.. "\n\nThe campaign of the Valhallans peaked with the sack of the Imperial Throne world in 709 IY. They returned to wherever they came from not long after, disappearing from the view of the survivors they'd left behind. No verifiable encounters with them have been established since, although their \"inevitable\" return is a common topic of dramatic fiction and top-secret strategic military plans alike."
+		text = ""
 	},
-	faction_chickens = {
+	faction_lawless = { -- planet28, planet29, planet34, planet35, planet41, planet49, planet50, planet53
+		name = "The Lawless",
+		category = "Factions",
+		text = ""
+	},
+	faction_dynasties = { -- planet 46, planet47, planet56
+		name = "Dynasties",
+		category = "Factions",
+		text = ""
+	},
+	faction_dynasties_restored = { -- planet58, planet59
+		name = "Dynasties Restored",
+		category = "Factions",
+		text = ""
+	},
+	faction_exarchs = { -- planet32
+		name = "Exarchs",
+		category = "Factions",
+		text = ""
+	},
+	faction_survivors = { -- planet51, planet55, planet62
+		name = "Survivors",
+		category = "Factions",
+		text = ""
+	},
+	-- Threats
+	threat_automata = { -- planet69
+		name = "Automata",
+		category = "Threats",
+		text = "Left to themselves, most armies will fall dormant to minimize energy and maintenance requirements. With proper settings and their own nanolathe arrays, they can stay functional for a very long time. And they will leave enough sensors active to detect threats, then awaken and engage them until new orders or supervision are received."
+		.. "/n "
+		.. "/nUnfortunately, it seems I lack the proper identification codes to be recognized by most of those damn automata, or enough time to find a flaw in their code and hack them - so they are engaging me on sight. There may not be sapient minds behind them, but tactical AIs should not be underestimated, especially when they have the home advantage."
+		.. "/n "
+		.. "/nI will need to be careful, choose the time and place of battle, and not wait for reinforcements from everywhere on the planet to overwhelm me, but I can make it. Not that I have a choice..."
+	},
+	threat_zombies = { -- planet43, planet59
+		name = "Zombies",
+		category = "Threats",
+		text = "Suspected to be an ancient terror weapon for the defense by mutually-assured destruction of a long-forgotten polity, the zombie nanoplague was for a long time the most feared contagion in existence."
+		.. "/n "
+		.. "/nExtraordinarily virulent, it will contaminate an entire planet in less than a week from a single carrier, and cause the death of any organic lifeform in a few minutes at most. Only the most advanced antinanite barriers will stop it, and it will take over any civilian or insufficiently protected military machines. And what gave it its name is how even the most advanced military systems will be taken over and resurrected. The only way to neutralize for good an infected unit is to also destroy its wreck."
+		.. "/n "
+		.. "/nSome degree of coordination has been observed between infected units, but nothing like a collective intelligence seem to exist, and infected units are only driven by basic instructions to seek and destroy uninfected hardware, so it can be taken over in turn."
+		.. "/n "
+		.. "/nLeft to itself, a contaminated world will see its units fall dormant and slowly degrade as nanites cannibalize more and more of them to renew themselves. Fortunately, there is no programming for interplanetary or interstellar contamination, even when space-capable hardware is infected - which often degrades too fast to be capable of reaching other worlds in any cases, so quarantine is effective as containment method."
+		.. "/n "
+		.. "/nHowever, reclaiming contaminated worlds is extremely difficult, as those are much more resilient than any nanite should be able to. In dormant spore mode, it has been known to survive nuclear explosions. And while effective if painstakingly laborious methods were devised with time, tracking and destroying every secret laboratory having kept a sample proved to be a Sisyphean task, never to be quite over."
+	},
+	threat_chickens = { -- planet21, planet38, planet63
 		name = "Chickens",
-		category = "Factions",
-		text = "The so-called chickens are an alien species of unknown origin, based on organic technology and a hive-like social structure. Not a unified faction as such, they have nevertheless caused no end of problems for their fellow galactic denizens due to their rapid expansion and their prospensity to devour anything in their path. No attempt at communicating with them has succeeded to date, despite thousands of individual specimens having been studied in captivity."
-		.. "\n\nThe chickens dig underground hives, with networks of tunnels that can spread for hundreds of kilometers in every direction. Each hive is controlled by a single queen, and the nest is served and defended by a sometimes bewildering mix of different chicken forms, ranging from the small chicken scouts to flyers the size of a small bomber to the massive White Dragons who outsize all but the largest man-made war machines."
-		.. "\n\nMuch research has been put by the various factions into the chickens, yet aside from a few disturbing signs in the form of human DNA markers, no-one has yet been able to trace anything resembling an evolutionary lineage or a planet of origin for these creatures. Some have speculated that they are a bio-weapon created by an ancient alien enemy of man, while others name a human faction (usually the Empire or Dynasty) as their creators."
-		-- ed note: The chickens are actually a secret project by the Biovizier, the robot keeper of the Dynasty's genetic vaults. Observing the deficiencies of even regular modded humans, she sought to create a Humans 2.0 with traits such as far more rapid reproduction, ability to metabolize any CHON substrate, and other such fantastic powers. She kept her work a secret from her human masters, recognizing correctly that they would not accept being displaced by Humans 2.0.
+		category = "Threats",
+		text = "Gallinuloides Horribilis"
+		.. "/n "
+		.. "/nHow the hell is that their official name? There is practically no biological link between those things and old Earth galliformes! In fact, those things are less birds than even mammals."
+		.. "/n "
+		.. "/nThe so-called chicken are a xenoform species of unknown origin, based on a hive-like social structure with specialized zooids with little to no individuality, and what is assumed to be a collective mind centered around a Queen. Whether they possess organic technology or simply extreme adaptation, the organisms forming a collective vary from tiny workers, light scouts and flyers the size of a small bombers to immobile spore-throwers, gigantic White Dragon and finally the Queen itself, a terrifying war machine that will act as final military reserves to an angered colony."
+		.. "/n "
+		.. "/nThey are invariably hostile when active, with no rumors of successful cohabitation with humans ever confirmed. They can however stay dormant for long periods in deep, near-undetectable underground chambers to which they are suspected to retreat upon the death of their Queen. This has made their complete eradication from a planet extremely challenging, especially if infrastracture or terraforming efforts are to be preserved."
+		.. "/n "
+		.. "/nHypotheses about their origins run from ancient dormant aliens awakened by human activity to secret weapon gone rogue to results of experiment on accelerated evolution that went wrong - or horribly right."
+		-- ed note: The chickens are actually a secret project by a family of the early Dynasties. Observing the deficiencies of even regular modded humans, they sought to create a Humans 2.0 with traits such as extreme adaptation, collective intelligence over many zooids instead of singular body, ability to metabolize any CHON substrate, and other such fantastic abilities. They tried to keep it secret from rival families, recognizing correctly that they would not accept being displaced by Humans 2.0, but they ended up being discovered. The Dynasties panicked and eradicated the family, erasing every bit of data about it they could find so it couldn't be linked to them - fearing that humanity would turn against them in the same panic. It wouldn't be before centuries had passed that they would realize that they had missed some of the subjects.
 	},
-	tech_commander = {
-		name = "Commanders",
-		category = "Technology",
+	threat_chickens_lifecycle = { -- planet38
+		name = "Chickens lifecycle",
+		category = "Threats",
+		text = "Little is known or understood about the lifecycle of chicken. Colonies are centered around a Queen, which will be abandoned upon its death. Whether the colony is destroyed, its dormant remains taken over by a new one or if it will produce a new Queen after a long enough time is unknown, as is how Queens themselves are born and form new colonies."
+		.. "/n "
+		.. "/nDormant chicken can endure millennia in extremely deep stealth underground chambers, while active colonies form bewildering tunnel complexes, with little surface activity - though some cases of what may be surface agriculture have been observed. Size and activity of individual colonies vary wildly, from lone mountains to entire continents, and ranging from a few scattered zooids to subterranean metropolis. Given time, their activities will inevitably cover he entire planet."
+		.. "/n "
+		.. "/nChicken biology seem relatively close to Earth-native biology, but with significant, inexplicable differences, which may be sign of convergent evolution, Earth ancestry or an ability to copy and reuse foreign biological processes. Unsettlingly, human DNA markers have been found on what acts as their core genetic system."
+	},
+	threat_chickens_travel = { -- planet21
+		name = "Chickens interstellar travel",
+		category = "Threats",
+		text = "No chicken space organism has ever been detected, nor stowaway zooid or biological material that could have started a new colony. Despite this, new colonies have regularly been found on worlds with no previously known chicken presence. While some could be explained by undetected dormant elements, some had ruled it out with near-certainty. As such, it has generally been accepted that chicken have means to either move or seed new colonies over interstellar distances. Whether by slower-than-light dormant seeds, incredibly stealthy starships, extremely sophisticated detection systems to launch far from human sensors, or even deep underground warp portals working by unknown physical principles, no concrete element has been found."
+		.. "/n "
+		.. "/nChicken have existed for at least as long as the early days of the human galactic age and their capabilities to live on almost any type of planet without any need for terraforming. Despite this and their demonstrated interstellar capabilities, they have never settled on more than a proportionally a handful of worlds, even including those ignored by humans as unsuitable for colonization or exploitation. Why haven't they long overrun has been said to be the key to understand what they really are."
+	},
+	threat_chickens_intelligence = { -- planet63
+		name = "Chickens intelligence",
+		category = "Threats",
+		text = "Chicken thought processes, or even whether they are even sapient, is unknown. They have however proven themselves to be remarkably good at planning, adaptation and long-term resource management. Their degree of understanding of human societies is unknown, but they have sometimes been eerily good at striking unsuspecting or unprepared settlements at the worst possible time and place. Though some attribute this to exceptional pattern-recognition, others have hypothesized an ability to spy on and understand human communications and societies."
+		.. "/n "
+		.. "/nInter-colony skirmishes have been observed, often limited to underground tunnel fighting and nowhere near with the level of violence seen against humans, or with a Queen directly intervening. Similarly, while colonies don't always cooperate against humans and some prefer to go dormant than fight, no skirmish has ever been observed on a conflict where a colony was engaged against humans. Long-range coordination of chicken forces also hint at sophisticated inter-colony communications, though by which mechanisms is unknown. Controversial evidence of interstellar communication have been presented, but has always been judged invalid or inconclusive."
+		.. "/n "
+		.. "/nNo successful communicating with a collective mind has ever been demonstrated, however most have ended up in catastrophe, considerably limiting the number of latter attempts. This includes attempts at tacit understanding between settlers and local colonies for division of lands or resources. Conversely, no communication attempt from a collective mind have ever been recorded."
+		.. "/n "
+		.. "/nContrasting with their sophistication in many other domains, their strangely primitive warfare tactics has puzzled many scientists. Through history, mentions have been made of contact being lost with entire worlds, with nothing but ruins being discovered afterwards, and no explanation about what had happened - some have hypothesized that it could be the result of chicken colonies attacking with their full potential and intelligence."
+	},
+	-- Entries
+	entry_first = { -- planet69
+		name = "...",
+		category = "Entries",
 		text = ""
 	},
-	tech_dropships = {
+	entry_commander = { -- planet1
+		name = "Assault commander",
+		category = "Entries",
+		text = ""
+	},
+	entry_event = { -- planet2
+		name = "Event",
+		category = "Entries",
+		text = ""
+	},
+	entry_homeworld = { -- planet66
+		name = "Homeworld",
+		category = "Entries",
+		text = ""
+	},
+	entry_starsong = { -- planet67
+		name = "Starsong",
+		category = "Entries",
+		text = ""
+	},
+	entry_eternity_gate = { -- planet68
+		name = "The Eternity Gate",
+		category = "Entries",
+		text = ""
+	},
+	-- Locations
+	location_folsom = { -- planet69
+		name = "Folsom fortress world",	
+		category = "locations",
+		text = ""
+	},
+	location_im_jaleth = { -- planet1
+		name = "Im Jaleth ruins",
+		category = "locations",
+		text = ""
+	},
+	location_chatka = { -- planet58
+		name = "Battle of Chatka",
+		category = "locations",
+		text = ""
+	},
+	location_tempest = { -- planet59
+		name = "Tempest archeotech site",
+		category = "locations",
+		text = ""
+	},
+	location_hibiliha = { -- planet61
+		name = "Hibiliha warp station",
+		category = "locations",
+		text = ""
+	},
+	location_intrepid = { -- planet64
+		name = "The Garden of Intrepid",
+		category = "locations",
+		text = ""
+	},
+	location_mannia = { -- planet64
+		name = "Mannia transit camps",
+		category = "locations",
+		text = ""
+	},
+	-- TODO remove empty example
+	example_dropships = {
 		name = "Dropships",
-		category = "Technology",
-		text = ""
-	},
-	tech_dropships2 = {
-		name = "Dropships 2",
-		category = "Technology",
-		text = ""
-	},
-	tech_dropships3 = {
-		name = "Dropships 3",
-		category = "Technology",
-		text = ""
-	},
-	tech_dropships4 = {
-		name = "Dropships 4",
-		category = "Technology",
-		text = ""
-	},
-	tech_dropships5 = {
-		name = "Dropships 5",
-		category = "Technology",
+		category = "Example",
 		text = ""
 	},
 }

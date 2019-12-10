@@ -931,6 +931,9 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_dmg_booster_LIMIT_B_2",
 			},
 			abilities = {
+			},
+			codexEntries = {
+				"threat_zombies"
 			}
 		},
 	}

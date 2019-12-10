@@ -2863,6 +2863,9 @@ local function GetPlanet(planetUtilities, planetID)
 				"commweapon_disintegrator",
 			},
 			abilities = {
+			},
+			codexEntries = {
+				"threat_zombies"
 			}
 		},
 	}
