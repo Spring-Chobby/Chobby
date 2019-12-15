@@ -26,7 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G1V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24429",
-			text = "There is a Tech Lab on this world, and it seems accessible enough. I should be able to drop in, siphon its databases and jump out"
+			text = "There is a Tech Lab on this world, and it seems accessible enough. I should be able to drop in, siphon its databases and jump out."
 			.. "\n "
 			.. "\nThis place is unlike anything I have ever seen. It is as if an immense tree had died there, leaving only a colossal fossilised stump. Maybe it is why they built a Tech Lab here in the first place?"
 			,

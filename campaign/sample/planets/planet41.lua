@@ -26,7 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G7V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24489",
-			text = "If I can take control of this planet's warp gates, it will open up half the sector. What is surprising is that the local forces are not imperial. How did the Empire loose control of such an important sector to an independent warlord?"
+			text = "If I can take control of this planet's warp gates, it will open up half the sector. What is surprising is that the local forces are not imperial. How did the Empire lose control of such an important sector to an independent warlord?"
 			.. "\n "
 			.. "\nThis gives me an idea... still, better load my Commander for a fight, just in case."
 			,
