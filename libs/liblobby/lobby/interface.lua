@@ -32,7 +32,7 @@ function Interface:Login(user, password, cpu, localIP, lobbyVersion)
 		localIP = "*"
 	end
 	password = VFS.CalculateHash(password, 0)
-	sentence = "LuaLobby " .. lobbyVersion .. "\t" .. self.agent .. "\t" .. "t l b cl"
+	sentence = "LuaLobby " .. lobbyVersion .. "\t" .. self.agent .. "\t" .. "b"
 	cmd = concat("LOGIN", user, password, "0", localIP, sentence)
 	self:_SendCommand(cmd)
 	return self
