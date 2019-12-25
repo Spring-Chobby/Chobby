@@ -32,7 +32,7 @@ function Interface:Login(user, password, cpu, localIP, lobbyVersion)
 		localIP = "*"
 	end
 	password = VFS.CalculateHash(password, 0)
-	sentence = "LuaLobby " .. lobbyVersion .. "\t" .. self.agent .. "\t" .. "t l b cl"
+	sentence = "LuaLobby " .. lobbyVersion .. "\t" .. self.agent .. "\t" .. "b"
 	cmd = concat("LOGIN", user, password, "0", localIP, sentence)
 	self:_SendCommand(cmd)
 	return self
@@ -303,8 +303,8 @@ end
 function Interface:_OnTASServer(protocolVersion, springVersion, udpPort, serverMode)
 	self:_OnConnect(protocolVersion, springVersion, udpPort, serverMode)
 end
-Interface.commands["TASServer"] = Interface._OnTASServer
-Interface.commandPattern["TASServer"] = "(%S+)%s+(%S+)%s+(%S+)%s+(%S+)"
+Interface.commands["TASSERVER"] = Interface._OnTASServer
+Interface.commandPattern["TASSERVER"] = "(%S+)%s+(%S+)%s+(%S+)%s+(%S+)"
 
 function Interface:_OnMOTD(message)
 	-- IGNORED
