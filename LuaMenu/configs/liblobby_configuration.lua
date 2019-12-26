@@ -20,15 +20,15 @@ end
 
 local function GetFallback()
 	Spring.Echo("Error: chobby_config.json failed to deploy.")
-	--return {
-	--	server = {
-	--		address = "zero-k.info",
-	--		port = 8200,
-	--		serverName = "Zero-K",
-	--		protocol = "zks"
-	--	},
-	--	game = "zk",
-	--}
+	return {
+		server = {
+			address = "springrts.com",
+			port = 8200,
+			serverName = "Spring",
+			protocol = "spring"
+		},
+		game = "generic",
+	}
 end
 
 local config = LoadConfig(CONFIG_FILE)
