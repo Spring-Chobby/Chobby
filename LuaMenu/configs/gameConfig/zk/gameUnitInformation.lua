@@ -247,7 +247,7 @@ local categories = {
 }
 
 local humanNames = {
-	-- Cloak 
+	-- Cloak
 	factorycloak = {
 		category = "cloak",
 		order = 1,
@@ -320,7 +320,7 @@ local humanNames = {
 		description = "Area Cloaker/Jammer Walker",
 		humanName = "Iris",
 	},
-	
+
 	-- Shield
 	factoryshield = {
 		category = "shield",
@@ -394,7 +394,7 @@ local humanNames = {
 		description = "Area Shield Walker",
 		humanName = "Aspis",
 	},
-	
+
 	-- Vehicle
 	factoryveh = {
 		category = "veh",
@@ -462,7 +462,7 @@ local humanNames = {
 		description = "Capture Rover",
 		humanName = "Dominatrix",
 	},
-	
+
 	-- Tank
 	factorytank = {
 		category = "tank",
@@ -524,7 +524,7 @@ local humanNames = {
 		description = "Flak Anti-Air Tank",
 		humanName = "Ettin",
 	},
-	
+
 	-- Hover
 	factoryhover = {
 		category = "hover",
@@ -580,7 +580,7 @@ local humanNames = {
 		description = "Anti-Sub Hovercraft",
 		humanName = "Claymore",
 	},
-	
+
 	-- Amph
 	factoryamph = {
 		category = "amph",
@@ -648,7 +648,7 @@ local humanNames = {
 		description = "Amphibious Teleport Bridge",
 		humanName = "Djinn",
 	},
-	
+
 	-- Jump
 	factoryjump = {
 		category = "jump",
@@ -716,7 +716,7 @@ local humanNames = {
 		description = "Cloaked Jumping Anti-Heavy Bomb",
 		humanName = "Skuttle",
 	},
-	
+
 	-- Spider
 	factoryspider = {
 		category = "spider",
@@ -778,7 +778,7 @@ local humanNames = {
 		description = "Cloaked Scout/Anti-Heavy",
 		humanName = "Widow",
 	},
-	
+
 	-- Gunship
 	factorygunship = {
 		category = "gunship",
@@ -852,7 +852,7 @@ local humanNames = {
 		description = "Armed Heavy Air Transport",
 		humanName = "Hercules",
 	},
-	
+
 	-- Plane
 	factoryplane = {
 		category = "plane",
@@ -914,7 +914,7 @@ local humanNames = {
 		description = "Area Jammer, Radar/Sonar Plane",
 		humanName = "Owl",
 	},
-	
+
 	-- Ship
 	factoryship = {
 		category = "ship",
@@ -976,7 +976,7 @@ local humanNames = {
 		description = "Anti-Air Frigate",
 		humanName = "Zephyr",
 	},
-	
+
 	-- Strider
 	striderhub = {
 		category = "strider",
@@ -1050,7 +1050,7 @@ local humanNames = {
 		description = "Battleship (Heavy Artillery)",
 		humanName = "Shogun",
 	},
-	
+
 	-- Econ
 	staticmex = {
 		category = "econ",
@@ -1109,7 +1109,7 @@ local humanNames = {
 	staticcon = {
 		category = "econ",
 		order = 10,
-		description = "Static Constructor, Builds at 10 m/s",
+		description = "Construction Assistant, Builds at 10 m/s",
 		humanName = "Caretaker",
 	},
 	staticrearm = {
@@ -1118,7 +1118,7 @@ local humanNames = {
 		description = "Repairs and Rearms Aircraft, repairs at 2.5 e/s per pad",
 		humanName = "Airpad",
 	},
-	
+
 	-- Defence
 	turretlaser = {
 		category = "defence",
@@ -1216,7 +1216,7 @@ local humanNames = {
 		description = "Area Shield",
 		humanName = "Aegis",
 	},
-	
+
 	-- Special
 	staticradar = {
 		category = "special",
@@ -1278,7 +1278,7 @@ local humanNames = {
 		description = "Planetary Energy Chisel",
 		humanName = "Starlight",
 	},
-	
+
 	-- Missile Silo
 	staticmissilesilo = {
 		category = "missilesilo",
@@ -1310,7 +1310,7 @@ local humanNames = {
 		description = "Napalm Missile",
 		humanName = "Inferno",
 	},
-	
+
 	-- Drone
 	wolverine_mine = {
 		category = "drone",
@@ -1349,18 +1349,18 @@ local function AddUnit(unitName)
 	end
 	inNameList[unitName] = true
 	nameList[#nameList + 1] = unitName
-	
+
 	local ud = UnitDefNames[unitName]
 	if ud.buildOptions then
 		for i = 1, #ud.buildOptions do
 			AddUnit(UnitDefs[ud.buildOptions[i] ].name)
 		end
 	end
-	
+
 	if ud.customParams.morphto then
 		AddUnit(ud.customParams.morphto)
 	end
-	
+
 	if ud.weapons then
 		for i = 1, #ud.weapons do
 			local wd = WeaponDefs[ud.weapons[i].weaponDef]
@@ -1369,7 +1369,7 @@ local function AddUnit(unitName)
 			end
 		end
 	end
-	
+
 	if carrierDefs[ud.id] then
 		local data = carrierDefs[ud.id]
 		for i = 1, #data do
@@ -1406,7 +1406,7 @@ local function UnitOrder(name1, name2)
 	if not data2 then
 		return true
 	end
-	
+
 	local category1 = categories[data1.category].order
 	local category2 = categories[data2.category].order
 	return category1 < category2 or (category1 == category2 and data1.order < data2.order)

@@ -46,7 +46,7 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[Most units will attempt to fire at low-flying aircraft and some, such as Bandits, are even good at the task. However, dedicated anti-air such as Vandals or Razor turrets are much more effective and have a significant range advantage.]]
 			},
 		},
-		gameConfig = {
+		gameConfig = {
 			mapName = "DunePatrol_wip_v03",
 			playerConfig = {
 				startX = 2816,
@@ -231,8 +231,8 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "recon",
 						decorations = {
 						},
-						modules = { 
-							"commweapon_lightninggun", 
+						modules = {
+							"commweapon_lightninggun",
 							"module_radarnet",
 							"module_ablative_armor",
 							"module_autorepair",

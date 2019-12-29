@@ -1,5 +1,5 @@
 local settings = {
-	AdvUnitShading = 1, 
+	AdvUnitShading = 1,
 	AdvMapShading = 1,
 	AllowDeferredMapRendering = 1,
 	AllowDeferredModelRendering = 1,

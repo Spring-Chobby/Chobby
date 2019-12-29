@@ -413,7 +413,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"subraider",
 					},
 					commander = false,
-					startUnits = {	
+					startUnits = {
 						{
 							name = "staticmex",
 							x = 2056,
@@ -2160,7 +2160,7 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "guardian",
 						decorations = {
 						},
-						modules = { 
+						modules = {
 							"module_ablative_armor",
 							"module_ablative_armor",
 							"module_ablative_armor",

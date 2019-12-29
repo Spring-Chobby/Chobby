@@ -480,7 +480,7 @@ local function GetPlanet(planetUtilities, planetID)
 						decorations = {
 						  "skin_support_green",
 						},
-						modules = { 
+						modules = {
 							"commweapon_hparticlebeam",
 							"commweapon_multistunner",
 							"module_adv_targeting",
@@ -1398,7 +1398,7 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "guardian",
 						decorations = {
 						},
-						modules = { 
+						modules = {
 							"commweapon_riotcannon",
 							"commweapon_riotcannon",
 							"weaponmod_napalm_warhead",
@@ -2400,7 +2400,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Do not lose more than 1 Merlin",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[3] = { 
+				[3] = {
 					satisfyByTime = 18*60,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 18,

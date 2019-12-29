@@ -63,6 +63,10 @@ function Configuration:init()
 		game = {},
 		lobby = {},
 	}
+	self.manualWindowed = {
+		game = {},
+		lobby = {},
+	}
 
 	self.ignoreLevel = false
 
@@ -85,7 +89,7 @@ function Configuration:init()
 
 	self.loadLocalWidgets = false
 	self.displayBots = false
-	self.displayBadEngines2 = true
+	self.displayBadEngines2 = false
 	self.allEnginesRunnable = true
 	self.doNotSetAnySpringSettings = false
 	self.agressivelySetBorderlessWindowed = false
@@ -471,6 +475,7 @@ function Configuration:GetConfigData()
 		lobby_fullscreen = self.lobby_fullscreen,
 		manualBorderless = self.manualBorderless,
 		manualFullscreen = self.manualFullscreen,
+		manualWindowed = self.manualWindowed,
 		animate_lobby = self.animate_lobby,
 		game_settings = self.game_settings,
 		notifyForAllChat = self.notifyForAllChat,

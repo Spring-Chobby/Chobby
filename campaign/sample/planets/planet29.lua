@@ -290,7 +290,7 @@ local function GetPlanet(planetUtilities, planetID)
 						decorations = {
 						  "skin_recon_leopard",
 						},
-						modules = { 
+						modules = {
 							"commweapon_heavymachinegun",
 							"commweapon_concussion",
 							"module_ablative_armor",
@@ -780,7 +780,7 @@ local function GetPlanet(planetUtilities, planetID)
 						decorations = {
 						  "skin_support_green",
 						},
-						modules = { 
+						modules = {
 							"commweapon_lparticlebeam",
 							"commweapon_disruptorbomb",
 							"conversion_disruptor",

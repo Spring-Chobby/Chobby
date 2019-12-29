@@ -438,7 +438,7 @@ local function GetPlanet(planetUtilities, planetID)
 						decorations = {
 							"skin_bombard_steel"
 						},
-						modules = { 
+						modules = {
 							"commweapon_rocketlauncher",
 							"commweapon_rocketlauncher",
 							"module_heavy_armor",

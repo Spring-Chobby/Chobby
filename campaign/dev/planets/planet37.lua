@@ -246,7 +246,7 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "strike",
 						decorations = {
 						},
-						modules = { 
+						modules = {
 							"commweapon_heavymachinegun",
 							"commweapon_missilelauncher",
 							"module_autorepair",
@@ -638,7 +638,7 @@ local function GetPlanet(planetUtilities, planetID)
 				{
 					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
 					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
-					position = {3216, 7120, 3248, 7152}, 
+					position = {3216, 7120, 3248, 7152},
 					height = 250,
 				},
 			},

@@ -298,10 +298,10 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				[1] = {
 					-- The default behaviour, if no parameters are set, is the defeat condition of an
-					-- ordinary game. 
+					-- ordinary game.
 					-- If ignoreUnitLossDefeat is true then unit loss does not cause defeat.
-					-- If at least one of vitalCommanders or vitalUnitTypes is set then losing all 
-					-- commanders (if vitalCommanders is true) as well as all the unit types in 
+					-- If at least one of vitalCommanders or vitalUnitTypes is set then losing all
+					-- commanders (if vitalCommanders is true) as well as all the unit types in
 					-- vitalUnitTypes (if there are any in the list) causes defeat.
 					ignoreUnitLossDefeat = false,
 					vitalCommanders = true,
@@ -341,16 +341,16 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Complete all bonus objectives (in one battle).",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				-- victoryByTime is a special case. All other bonus objectives are based on unit counts. 
+				-- victoryByTime is a special case. All other bonus objectives are based on unit counts.
 				-- They have the following format:
-				-- * Time Limit: Set by supplying either satisfyAtTime, satisfyByTime, satisfyUntilTime, 
+				-- * Time Limit: Set by supplying either satisfyAtTime, satisfyByTime, satisfyUntilTime,
 				--      satisfyAfterTime, satisfyForeverAfterFirstSatisfied or satisfyForever.
 				-- * comparisionType: Set to either planetUtilities.COMPARE.AT_MOST, planetUtilities.COMPARE.AT_LEAST
 				-- * targetNumber: The number which is compared to the unit count.
 				-- * unitTypes: Unit types owned by the player that count towards the unit count.
 				-- * enemyUnitTypes: Unit types owned by enemy allyTeams that count towards unit count.
 				-- Note that experience is set in bonusObjectiveEffects
-				-- Note that startUnits with bonusObjectiveID set count towards the unit count. 
+				-- Note that startUnits with bonusObjectiveID set count towards the unit count.
 				[3] = { -- Have 3 Glaives by 35 seconds.
 					satisfyByTime = 35,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,

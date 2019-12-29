@@ -27,7 +27,7 @@ local function LoadMissions()
 		local file = VFS.LoadFile(path)
 		return Spring.Utilities.json.decode(file)
 	end
-	Spring.Echo("Error loading missions.")
+	Spring.Log("gui_mission_handler.lua", LOG.ERROR, "Error loading missions.")
 	return nil
 end
 

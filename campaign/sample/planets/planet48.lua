@@ -1788,7 +1788,7 @@ local function GetPlanet(planetUtilities, planetID)
 					commander = {
 						name = "Janii Lass",
 						chassis = "guardian",
-						modules = { 
+						modules = {
 							"commweapon_slamrocket",
 							"commweapon_heavymachinegun",
 							"module_autorepair",
@@ -3037,25 +3037,25 @@ local function GetPlanet(planetUtilities, planetID)
 				{
 					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
 					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
-					position = {7392, 3008, 7424, 3616}, 
+					position = {7392, 3008, 7424, 3616},
 					height = 450,
 				},
 				{
 					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
 					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
-					position = {7392, 3008, 7680, 3040}, 
+					position = {7392, 3008, 7680, 3040},
 					height = 450,
 				},
 				{
 					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
 					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
-					position = {7392, 3584, 7680, 3616}, 
+					position = {7392, 3584, 7680, 3616},
 					height = 450,
 				},
 				{
 					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
 					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
-					position = {7680, 3008, 7712, 3616}, 
+					position = {7680, 3008, 7712, 3616},
 					height = 450,
 				},
 			},

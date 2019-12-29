@@ -554,7 +554,7 @@ local function MakePlanetControl(planetData, DeselectOtherFunc, attacking, defen
 		padding = {1,1,1,1},
 		OnClick = {
 			function ()
-				if mapName and config.gameConfig.link_particularMapPage then
+				if mapName and config.gameConfig.link_particularMapPage ~= nil then
 					WG.BrowserHandler.OpenUrl(config.gameConfig.link_particularMapPage(mapName))
 				end
 			end

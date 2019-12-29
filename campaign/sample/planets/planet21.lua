@@ -64,7 +64,7 @@ local function GetPlanet(planetUtilities, planetID)
 						chickens			=  {time = 1,  squadSize = 1.0}, --spiker
 						chickena			=  {time = 3,  squadSize = 0.5}, --cockatrice
 						chicken_sporeshooter=  {time = 5,  squadSize = 0.5},
-						chicken_leaper	=  {time = 10,  squadSize = 0.8},  
+						chicken_leaper	=  {time = 10,  squadSize = 0.8},
 						chickenr			=  {time = 13,  squadSize = 1.2}, -- lobber
 						chickenc			=  {time = 20,  squadSize = 0.5}, -- basilisk
 						chicken_tiamat		=  {time = 25,  squadSize = 0.2},
@@ -88,7 +88,7 @@ local function GetPlanet(planetUtilities, planetID)
 						chickens			=  {time = 1,  squadSize = 1.0}, --spiker
 						chickena			=  {time = 3,  squadSize = 0.5}, --cockatrice
 						chicken_sporeshooter=  {time = 5,  squadSize = 0.5},
-						chicken_leaper	=  {time = 10,  squadSize = 0.8},  
+						chicken_leaper	=  {time = 10,  squadSize = 0.8},
 						chickenr			=  {time = 11,  squadSize = 1.2}, -- lobber
 						chickenc			=  {time = 15,  squadSize = 0.5}, -- basilisk
 						chicken_tiamat		=  {time = 20,  squadSize = 0.2},
@@ -112,7 +112,7 @@ local function GetPlanet(planetUtilities, planetID)
 						chickens			=  {time = 1,  squadSize = 1.6}, --spiker
 						chickena			=  {time = 3,  squadSize = 1.2}, --cockatrice
 						chicken_sporeshooter=  {time = 5,  squadSize = 0.8},
-						chicken_leaper	=  {time = 10,  squadSize = 0.8},  
+						chicken_leaper	=  {time = 10,  squadSize = 0.8},
 						chickenr			=  {time = 10,  squadSize = 1.2}, -- lobber
 						chickenc			=  {time = 13,  squadSize = 0.5}, -- basilisk
 						chicken_tiamat		=  {time = 16,  squadSize = 0.2},
@@ -136,7 +136,7 @@ local function GetPlanet(planetUtilities, planetID)
 						chickens			=  {time = 1,  squadSize = 1.6}, --spiker
 						chickena			=  {time = 3,  squadSize = 1.2}, --cockatrice
 						chicken_sporeshooter=  {time = 5,  squadSize = 0.8},
-						chicken_leaper	=  {time = 10,  squadSize = 0.8},  
+						chicken_leaper	=  {time = 10,  squadSize = 0.8},
 						chickenr			=  {time = 9,  squadSize = 1.4}, -- lobber
 						chickenc			=  {time = 11,  squadSize = 0.6}, -- basilisk
 						chicken_tiamat		=  {time = 13,  squadSize = 0.2},
@@ -440,11 +440,11 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "guardian",
 						decorations = {
 						},
-						modules = { 
+						modules = {
 							"weaponmod_napalm_warhead",
 							"commweapon_riotcannon",
 							"commweapon_rocketlauncher",
-							"module_ablative_armor",							
+							"module_ablative_armor",
 							"module_ablative_armor",
 							"module_autorepair",
 							"module_autorepair",
@@ -1461,7 +1461,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			defeatConditionConfig = {
 				-- Indexed by allyTeam.
-				[0] = { 
+				[0] = {
 					ignoreUnitLossDefeat = false,
 					vitalCommanders = false,
 					vitalUnitTypes = {

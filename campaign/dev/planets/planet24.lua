@@ -46,7 +46,7 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[Chainsaws are long-range anti-air missile launchers, excellent for destroying bombers before they get too close.]]
 			},
 		},
-		gameConfig = {
+		gameConfig = {
 			mapName = "Onyx Cauldron 1.9",
 			playerConfig = {
 				startX = 2400,
@@ -1639,7 +1639,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			defeatConditionConfig = {
 				-- Indexed by allyTeam.
-				[0] = { 
+				[0] = {
 				},
 				[1] = {
 					ignoreUnitLossDefeat = false,

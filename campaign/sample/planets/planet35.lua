@@ -1949,7 +1949,6 @@ local function GetPlanet(planetUtilities, planetID)
 						"staticradar",
 						"staticcon",
 						"staticantinuke",
-						"factoryjump",
 						"jumpcon",
 						"jumpraid",
 						"jumpskirm",
@@ -1958,7 +1957,6 @@ local function GetPlanet(planetUtilities, planetID)
 						"jumparty",
 						"jumpblackhole",
 						"jumpaa",
-						"factoryspider",
 						"spidercon",
 						"spiderscout",
 						"spiderriot",
@@ -1971,13 +1969,13 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					difficultyDependantUnlocks = {
 						[3] = {"jumpsumo"},
-						[4] = {"jumpsumo"},
+						[4] = {"jumpsumo","factoryjump"},
 					},
 					commanderLevel = 7,
 					commander = {
 						name = "Tessica",
 						chassis = "strike",
-						modules = { 
+						modules = {
 							"commweapon_shotgun",
 							"commweapon_disintegrator",
 							"module_personal_cloak",
@@ -2799,7 +2797,6 @@ local function GetPlanet(planetUtilities, planetID)
 						"staticradar",
 						"staticcon",
 						"staticantinuke",
-						"factoryamph",
 						"amphcon",
 						"amphraid",
 						"amphimpulse",
@@ -2808,7 +2805,6 @@ local function GetPlanet(planetUtilities, planetID)
 						"amphassault",
 						"amphbomb",
 						"amphaa",
-						"factoryshield",
 						"shieldcon",
 						"shieldraid",
 						"shieldassault",
@@ -2819,7 +2815,6 @@ local function GetPlanet(planetUtilities, planetID)
 						"shieldfelon",
 						"shieldshield",
 						"shieldarty",
-						"factorycloak",
 						"cloakcon",
 						"cloakraid",
 						"cloakriot",
@@ -2833,7 +2828,7 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					difficultyDependantUnlocks = {
 						[3] = {"cloakaa"},
-						[4] = {"cloakaa"},
+						[4] = {"cloakaa","factorycloak"},
 					},
 					midgameUnits = {
 						{

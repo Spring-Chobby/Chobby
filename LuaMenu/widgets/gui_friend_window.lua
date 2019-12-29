@@ -61,9 +61,9 @@ function widget:Initialize()
 end
 
 function widget:Shutdown()
-	if WG.LibLobby then
+	-- if WG.LibLobby then
 
-	end
+	-- end
 end
 
 --------------------------------------------------------------------------------

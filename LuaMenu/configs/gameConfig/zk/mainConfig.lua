@@ -105,6 +105,15 @@ local externalFuncAndData = {
 	link_maps               = link_maps,
 	link_particularMapPage  = link_particularMapPage,
 	ignoreServerVersion     = false,
+	openTrack               = 'sounds/lobbyMusic/The Secret of Ayers Rock.ogg',
+	randomTrackList         = {
+		"sounds/lobbyMusic/A Magnificent Journey (Alternative Version).ogg",
+		"sounds/lobbyMusic/Dream Infinity.ogg",
+		"sounds/lobbyMusic/Interstellar.ogg",
+		"sounds/lobbyMusic/Tomorrow Landscape.ogg",
+	},
+	-- I assume ZK doesn't want to show this as it was removed
+	hideGameExistanceDisplay = true,
 }
 
 function externalFuncAndData.CheckAvailability()

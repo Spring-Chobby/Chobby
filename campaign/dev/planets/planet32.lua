@@ -1449,7 +1449,7 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "strike",
 						decorations = {
 						},
-						modules = { 
+						modules = {
 							"commweapon_heavymachinegun",
 							"commweapon_disintegrator",
 							"module_autorepair",

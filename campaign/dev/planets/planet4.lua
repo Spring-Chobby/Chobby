@@ -42,7 +42,7 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[Don't over-commit to anti-air units: the enemy Commander and defensive turrets still present a significant land-based threat.]]
 			},
 		},
-		gameConfig = {
+		gameConfig = {
 			mapName = "Avalanche v3.1",
 			playerConfig = {
 				startX = 580,
@@ -164,7 +164,7 @@ local function GetPlanet(planetUtilities, planetID)
 						decorations = {
 						},
 						modules = {
-							"commweapon_heavymachinegun", 
+							"commweapon_heavymachinegun",
 							"module_radarnet",
 						}
 					},
@@ -173,97 +173,97 @@ local function GetPlanet(planetUtilities, planetID)
 							name = "factorygunship",
 							x = 3980,
 							z = 110,
-							facing = 0, 
+							facing = 0,
 						},
 						{
 							name = "gunshipraid",
 							x = 3000,
 							z = 1000,
-							facing = 0, 
+							facing = 0,
 						},
 						{
 							name = "gunshipskirm",
 							x = 3000,
 							z = 1200,
-							facing = 0, 
+							facing = 0,
 						},
 						{
 							name = "gunshipemp",
 							x = 3200,
 							z = 1400,
-							facing = 0, 
+							facing = 0,
 						},
 						{
 							name = "staticmex",
 							x = 3110,
 							z = 220,
-							facing = 0, 
+							facing = 0,
 						},
 						{
 							name = "staticmex",
 							x = 3910,
 							z = 1030,
-							facing = 0, 
+							facing = 0,
 						},
 						{
 							name = "energysolar",
 							x = 3280,
 							z = 100,
-							facing = 0, 
+							facing = 0,
 						},
 						{
 							name = "energysolar",
 							x = 4000,
 							z = 900,
-							facing = 0, 
+							facing = 0,
 						},
 						{
 							name = "turretriot",
 							x = 3800,
 							z = 2100,
-							facing = 0, 
+							facing = 0,
 						},
 						{
 							name = "turretriot",
 							x = 1900,
 							z = 400,
-							facing = 3, 
+							facing = 3,
 						},
 						{
 							name = "turretriot",
 							x = 3500,
 							z = 570,
-							facing = 3, 
+							facing = 3,
 						},
 						{
 							name = "turretlaser",
 							x = 2960,
 							z = 300,
-							facing = 3, 
+							facing = 3,
 						},
 						{
 							name = "turretemp",
 							x = 3000,
 							z = 400,
-							facing = 3, 
+							facing = 3,
 						},
 						{
 							name = "turretlaser",
 							x = 3880,
 							z = 1360,
-							facing = 0, 
+							facing = 0,
 						},
 						{
 							name = "turretemp",
 							x = 3770,
 							z = 1320,
-							facing = 0, 
+							facing = 0,
 						},
 						{
 							name = "turretemp",
 							x = 4000,
 							z = 1160,
-							facing = 0, 
+							facing = 0,
 						},
 					}
 				},

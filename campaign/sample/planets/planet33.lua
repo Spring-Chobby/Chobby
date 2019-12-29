@@ -745,9 +745,9 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					commanderLevel = 6,
 					commander = {
-						name = "Alex.J", 
+						name = "Alex.J",
 						chassis = "strike",
-						modules = { 
+						modules = {
 							"commweapon_heavymachinegun",
 							"commweapon_heavymachinegun",
 							"module_autorepair",
@@ -1376,7 +1376,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Win by 12:00",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[3] = { 
+				[3] = {
 					onlyCountRemovedUnits = true,
 					satisfyByTime = 6*60,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,

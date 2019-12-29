@@ -42,7 +42,7 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[Outlaws wield an unconventional weapon: a disrupting pulse which damages and slows enemies (but not allies) in a wide radius. Compared to most riots it is very poor against single targets but exceptional when used to protect other units against raider assault.]]
 			},
 		},
-		gameConfig = {
+		gameConfig = {
 			mapName = "Apophis v2_3",
 			playerConfig = {
 				startX = 2300,
@@ -190,7 +190,7 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "engineer",
 						decorations = {
 						},
-						modules = { 
+						modules = {
 							"commweapon_lparticlebeam",
 							"module_autorepair",
 							"module_radarnet",
@@ -402,7 +402,7 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Build 6 Thugs",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[2] = { 
+				[2] = {
 					victoryByTime = 480,
 					image = planetUtilities.ICON_OVERLAY.CLOCK,
 					description = "Win by 8:00",

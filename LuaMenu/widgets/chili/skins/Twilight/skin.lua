@@ -20,7 +20,7 @@ skin.general = {
   borderColor     = {0.2,0.8,1,1},
   backgroundColor = {0.1, 0.4, 0.6, 0.4},
   textColor   = {1,1,1,1},
-  
+
   TileImageFG = ":cl:glassFG.png",
 }
 
@@ -36,7 +36,7 @@ skin.progressbar = {
   TileImageBK = ":cl:tech_progressbar_empty.png",
   tiles       = {10, 10, 10, 10},
   backgroundColor = {0, 0.4, 0.4, 0.7},
-  
+
   font = {
     shadow = true,
     outline = true,

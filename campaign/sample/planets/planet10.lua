@@ -45,7 +45,7 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[Your ally's Spiders can climb up sheer cliffs, so there are some parts of the battlefield which they will be better at fighting over. The heavy Crab spider in particular is a potent fighting force even when alone.]]
 			},
 		},
-		gameConfig = {
+		gameConfig = {
 			mapName = "Quicksilver 1.1",
 			playerConfig = {
 				startX = 4900,
@@ -286,9 +286,9 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "strike",
 						decorations = {
 						},
-						modules = { 
-							"commweapon_beamlaser", 
-							"commweapon_beamlaser", 
+						modules = {
+							"commweapon_beamlaser",
+							"commweapon_beamlaser",
 							"module_ablative_armor",
 							"module_autorepair",
 							"module_adv_targeting",

@@ -1658,7 +1658,7 @@ local function GetPlanet(planetUtilities, planetID)
 						decorations = {
 							"skin_support_green",
 						},
-						modules = { 
+						modules = {
 							"commweapon_hparticlebeam",
 							"commweapon_multistunner",
 							"module_dmg_booster",
@@ -3897,7 +3897,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 			},
 			bonusObjectiveConfig = {
-				[1] = { 
+				[1] = {
 					satisfyForever = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 20,

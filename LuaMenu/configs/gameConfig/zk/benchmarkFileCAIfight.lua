@@ -316,7 +316,7 @@ return [[[game]
 		Side=Robots;
 		Handicap=0;
 	}
-	
+
 	[ALLYTEAM0]
 	{
 		NumAllies=0;

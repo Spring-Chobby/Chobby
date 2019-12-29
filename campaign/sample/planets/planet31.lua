@@ -328,7 +328,7 @@ local function GetPlanet(planetUtilities, planetID)
 						chassis = "guardian",
 						decorations = {
 						},
-						modules = { 
+						modules = {
 							"commweapon_rocketlauncher",
 							"commweapon_rocketlauncher",
 							"module_ablative_armor",
@@ -694,7 +694,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 			},
 			bonusObjectiveConfig = {
-				[1] = { 
+				[1] = {
 					satisfyOnce = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 40,

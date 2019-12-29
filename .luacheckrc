@@ -7,6 +7,12 @@ allow_defined_top = true
 max_line_length = false
 codes = true
 
+-- Ideally reenable these warnings later
+redefined = false
+
+ignore = {
+    "512" -- Loop can be executed at most once.
+}
 -- Something to think about in the future
 -- max_cyclomatic_complexity = 10
 

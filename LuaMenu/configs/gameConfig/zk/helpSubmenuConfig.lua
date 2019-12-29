@@ -204,7 +204,7 @@ local communityControl = Control:New {
 				font = WG.Chobby.Configuration:GetFont(3),
 				caption = "Community and development links",
 			}
-			
+
 			Button:New {
 				right = 11,
 				y = 7,
@@ -220,7 +220,7 @@ local communityControl = Control:New {
 				},
 				parent = obj,
 			}
-			
+
 			local listHolder = Control:New {
 				x = 12,
 				right = 15,
@@ -260,7 +260,7 @@ local bugControl = Control:New {
 			if not obj:IsEmpty() then
 				return
 			end
-			
+
 			local Configuration = WG.Chobby.Configuration
 			Label:New {
 				x = 15,
@@ -271,7 +271,7 @@ local bugControl = Control:New {
 				font = Configuration:GetFont(3),
 				caption = "Send a bug report",
 			}
-			
+
 			Button:New {
 				right = 11,
 				y = 7,
@@ -287,7 +287,7 @@ local bugControl = Control:New {
 				},
 				parent = obj,
 			}
-			
+
 			local offset = 70
 			TextBox:New {
 				x = 21,
@@ -309,7 +309,7 @@ local bugControl = Control:New {
 				parent = obj,
 			}
 			offset = offset + 36
-			
+
 			offset = offset + 8
 			TextBox:New {
 				x = 21,
@@ -331,7 +331,7 @@ local bugControl = Control:New {
 				parent = obj,
 			}
 			offset = offset + 36
-			
+
 			offset = offset + 8
 			TextBox:New {
 				x = 24,
@@ -343,8 +343,8 @@ local bugControl = Control:New {
 				parent = obj,
 			}
 			offset = offset + 36
-			
-			
+
+
 			Button:New {
 				x = "35%",
 				right = "35%",
@@ -375,7 +375,7 @@ return {
 		control = communityControl,
 	},
 	{
-		name = "tutorials", 
+		name = "tutorials",
 		control = WG.MissionHandler.GetControl(),
 	},
 	{

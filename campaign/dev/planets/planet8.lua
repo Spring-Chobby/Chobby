@@ -42,7 +42,7 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[Sunlances are special turrets which cannot be built in a normal game. They fire a high-power disruptor beam which slows whatever they hit.]]
 			},
 		},
-		gameConfig = {
+		gameConfig = {
 			mapName = "Tabula-v6.1",
 			playerConfig = {
 				startX = 7500,
@@ -3373,7 +3373,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 2457,
 							z = 1375,
 							facing = 0,
-						},			
+						},
 						{
 							name = "shieldcon",
 							x = 2446,

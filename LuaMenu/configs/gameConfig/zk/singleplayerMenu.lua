@@ -95,26 +95,26 @@ return {
 			submenuControl = WG.CampaignHandler.GetControl(true),
 			tabs = {
 				{
-					name = "technology", 
+					name = "technology",
 					control = WG.TechnologyHandler.GetControl(),
 				},
 				{
-					name = "commander", 
+					name = "commander",
 					control = WG.CommanderHandler.GetControl(),
 				},
 				--{
-				--	name = "codex", 
+				--	name = "codex",
 				--	control = WG.CodexHandler.GetControl(),
 				--},
 				{
-					name = "options", 
+					name = "options",
 					control = WG.CampaignOptionsWindow.GetControl(),
 				},
 			},
 		},
 	},
 	{
-		name = "skirmish", 
+		name = "skirmish",
 		control = WG.BattleRoomWindow.GetSingleplayerControl(VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/singleplayerQuickSkirmish.lua")),
 		entryCheck = WG.BattleRoomWindow.SetSingleplayerGame,
 	},

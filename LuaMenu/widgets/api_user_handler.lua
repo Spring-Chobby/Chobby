@@ -191,11 +191,11 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 			comboOptions[#comboOptions + 1] = "Invite to Campaign"
 		end
 
-		if userInfo.accountID and Configuration.gameConfig.link_userPage then
+		if userInfo.accountID and Configuration.gameConfig.link_userPage ~= nil then
 			comboOptions[#comboOptions + 1] = "User Page"
 		end
 
-		if userInfo.accountID and Configuration.gameConfig.link_reportPlayer then
+		if userInfo.accountID and Configuration.gameConfig.link_reportPlayer ~= nil then
 			comboOptions[#comboOptions + 1] = "Report"
 		end
 
@@ -212,7 +212,7 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 		end
 	end
 
-	if userName == myUserName and userInfo.accountID and Configuration.gameConfig.link_userPage then
+	if userName == myUserName and userInfo.accountID and Configuration.gameConfig.link_userPage ~= nil then
 		-- Only add for myself since the same thing is added in the previous block
 		comboOptions[#comboOptions + 1] = "User Page"
 	end
@@ -582,12 +582,12 @@ local function GetUserControls(userName, opts)
 						if userInfo.battleID then
 							lobby:RejoinBattle(userInfo.battleID)
 						end
-					elseif selectedName == "User Page" and Configuration.gameConfig.link_userPage then
+					elseif selectedName == "User Page" and Configuration.gameConfig.link_userPage ~= nil then
 						local userInfo = userControls.lobby:GetUser(userName) or {}
 						if userInfo.accountID then
 							WG.BrowserHandler.OpenUrl(Configuration.gameConfig.link_userPage(userInfo.accountID))
 						end
-					elseif selectedName == "Report" and Configuration.gameConfig.link_reportPlayer then
+					elseif selectedName == "Report" and Configuration.gameConfig.link_reportPlayer ~= nil then
 						local userInfo = userControls.lobby:GetUser(userName) or {}
 						if userInfo.accountID then
 							WG.BrowserHandler.OpenUrl(Configuration.gameConfig.link_reportPlayer(userInfo.accountID))

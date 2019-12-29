@@ -155,7 +155,7 @@ skin.scrollpanel = {
   htiles     = {3,6,3,6},
   HKnobTileImage = ":cl:scrollbar_knob.png",
   HKnobTiles     = {6,7,6,9},
-  
+
   KnobColorSelected = {0.35, 0.35, 1.0, 0.9},
 
   padding       = {1,1,1,1},
@@ -218,7 +218,7 @@ skin.line = {
   tilesV = {0, 0, 0, 0},
   DrawControl = DrawLine,
 }
-  
+
 skin.control = skin.general
 
 

@@ -42,7 +42,7 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[Reclaimed resources go to waste if you have reached your maximum resource storage limit. Build additional Storages to cope with a sudden influx. Beware of overproducing storage as they are a waste of resources when empty.]]
 			},
 		},
-		gameConfig = {
+		gameConfig = {
 			mapName = "Altair_Crossing_v3",
 			playerConfig = {
 				startX = 3600,

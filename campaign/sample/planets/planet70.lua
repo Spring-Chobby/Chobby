@@ -1196,7 +1196,7 @@ local function GetPlanet(planetUtilities, planetID)
 						decorations = {
 						  "skin_support_hotrod",
 						},
-						modules = { 
+						modules = {
 							"commweapon_beamlaser",
 							"commweapon_disruptorbomb",
 							"module_autorepair",

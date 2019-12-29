@@ -42,7 +42,7 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[You will need to defend your southern flank against Interloper Shieldbot attacks. The Felon is a dangerous opponent but a Sniper can easily pierce its shields.]]
 			},
 		},
-		gameConfig = {
+		gameConfig = {
 			mapName = "The river Nix 20",
 			playerConfig = {
 				startX = 1000,
@@ -1740,19 +1740,19 @@ local function GetPlanet(planetUtilities, planetID)
 				{
 					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
 					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
-					position = {3416, 5700, 4740, 5990}, 
+					position = {3416, 5700, 4740, 5990},
 					height = 6,
 				},
 				{
 					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
 					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
-					position = {7700, 9780, 9400, 9820}, 
+					position = {7700, 9780, 9400, 9820},
 					height = -40,
 				},
 				{
 					terraformShape = planetUtilities.TERRAFORM_SHAPE.RECTANGLE,
 					terraformType = planetUtilities.TERRAFORM_TYPE.LEVEL,
-					position = {9360, 9800, 9420, 11340}, 
+					position = {9360, 9800, 9420, 11340},
 					height = -40,
 				},
 				{

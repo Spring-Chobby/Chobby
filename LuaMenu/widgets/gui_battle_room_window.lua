@@ -107,7 +107,7 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		parent = rightInfo,
 		OnClick = {
 			function ()
-				if currentMapName and config.gameConfig.link_particularMapPage then
+				if currentMapName and config.gameConfig.link_particularMapPage ~= nil then
 					WG.BrowserHandler.OpenUrl(config.gameConfig.link_particularMapPage(currentMapName))
 				end
 			end
@@ -1070,7 +1070,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		padding = {1,1,1,1},
 		OnClick = {
 			function ()
-				if currentMapName and config.gameConfig.link_particularMapPage then
+				if currentMapName and config.gameConfig.link_particularMapPage ~= nil then
 					WG.BrowserHandler.OpenUrl(config.gameConfig.link_particularMapPage(currentMapName))
 				end
 			end
@@ -2001,6 +2001,8 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		oldLobby:RemoveListener("OnMatchMakerReadyCheck", OnMatchMakerReadyCheck)
 		oldLobby:RemoveListener("OnMatchMakerReadyUpdate", OnMatchMakerReadyUpdate)
 		oldLobby:RemoveListener("OnMatchMakerReadyResult", OnMatchMakerReadyResult)
+
+		WG.BattleStatusPanel.RemoveBattleTab()
 	end
 
 	mainWindow.OnDispose = mainWindow.OnDispose or {}

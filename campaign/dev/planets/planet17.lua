@@ -42,7 +42,7 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[The Dante's heatrays and napalm rockets are most lethal at close range. Keep your distance until the Dante is disarmed or dead.]]
 			},
 		},
-		gameConfig = {
+		gameConfig = {
 			mapName = "Violence_4.2",
 			playerConfig = {
 				startX = 4100,
@@ -687,13 +687,13 @@ local function GetPlanet(planetUtilities, planetID)
 						decorations = {
 						  "skin_recon_red",
 						},
-						modules = { 
+						modules = {
 							"commweapon_heavymachinegun",
 							"module_high_power_servos",
 							"module_high_power_servos",
 							"module_ablative_armor",
 							"module_autorepair",
-						}	
+						}
 					},
 					startUnits = {
 						-- Strider Hub and Dante on easy/normal is further forward, hopefully making it more killable.
@@ -1504,7 +1504,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"shieldshield",
 				"staticshield",
 			},
-			modules = {	
+			modules = {
 				"commweapon_personal_shield",
 			},
 			abilities = {
