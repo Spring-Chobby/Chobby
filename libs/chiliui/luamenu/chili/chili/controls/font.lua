@@ -1,4 +1,4 @@
---// ============================================================================= 
+--// =============================================================================
 
 --- Font module
 
@@ -26,15 +26,18 @@ Font = Object:Inherit{
 	color         = {1, 1, 1, 1},
 	outlineColor  = {0, 0, 0, 1},
 	autoOutlineColor = true,
+
+	uiScale = 1
 }
 
 local this = Font
 local inherited = this.inherited
 
---// ============================================================================= 
+--// =============================================================================
 
 function Font:New(obj)
 	obj = inherited.New(self, obj)
+	obj.uiScale = (WG and WG.uiScale or 1)
 
 	--// Load the font
 	obj:_LoadFont()
@@ -50,18 +53,17 @@ function Font:Dispose(...)
 	inherited.Dispose(self, ...)
 end
 
---// ============================================================================= 
+--// =============================================================================
 
 function Font:_LoadFont()
 	local oldfont = self._font
-	local uiScale = (WG and WG.uiScale or 1)
-	self._font = FontHandler.LoadFont(self.font, math.floor(self.size*uiScale), math.floor(self.outlineWidth*uiScale), self.outlineWeight)
+	self._font = FontHandler.LoadFont(self.font, math.floor(self.size*self.uiScale), math.floor(self.outlineWidth*self.uiScale), self.outlineWeight)
 	--// do this after LoadFont because it can happen that LoadFont returns the same font again
 	--// but if we Unload our old one before, the gc could collect it before, so the engine would have to reload it again
 	FontHandler.UnloadFont(oldfont)
 end
 
---// ============================================================================= 
+--// =============================================================================
 
 local function NotEqual(v1, v2)
 	local t1 = type(v1)
@@ -144,7 +146,7 @@ do
 	params = nil
 end
 
---// ============================================================================= 
+--// =============================================================================
 
 function Font:GetLineHeight(size)
 	return self._font.lineheight * (size or self.size)
@@ -177,7 +179,7 @@ function Font:WrapText(text, width, height, size)
 	return (self._font):WrapText(text, width, height, size)
 end
 
---// ============================================================================= 
+--// =============================================================================
 
 function Font:AdjustPosToAlignment(x, y, width, height, align, valign)
 	local extra = ''
@@ -249,9 +251,14 @@ local function _GetExtra(align, valign)
 	return extra
 end
 
---// ============================================================================= 
+--// =============================================================================
 
 function Font:_DrawText(text, x, y, extra)
+	if (WG and WG.uiScale or 1) ~= self.uiScale then
+		self.uiScale = (WG and WG.uiScale or 1)
+		self:_LoadFont()
+	end
+
 	local font = self._font
 
 	gl.PushAttrib(GL.COLOR_BUFFER_BIT)
@@ -272,6 +279,11 @@ end
 
 
 function Font:Draw(text, x, y, align, valign)
+	if (WG and WG.uiScale or 1) ~= self.uiScale then
+		self.uiScale = (WG and WG.uiScale or 1)
+		self:_LoadFont()
+	end
+
 	if (not text) then
 		return
 	end
@@ -288,6 +300,11 @@ end
 
 
 function Font:DrawInBox(text, x, y, w, h, align, valign)
+	if (WG and WG.uiScale or 1) ~= self.uiScale then
+		self.uiScale = (WG and WG.uiScale or 1)
+		self:_LoadFont()
+	end
+
 	if (not text) then
 		return
 	end
@@ -308,4 +325,4 @@ end
 Font.Print = Font.Draw
 Font.PrintInBox = Font.DrawInBox
 
---// ============================================================================= 
+--// =============================================================================
