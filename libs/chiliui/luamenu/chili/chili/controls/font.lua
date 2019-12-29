@@ -253,12 +253,15 @@ end
 
 --// =============================================================================
 
-function Font:_DrawText(text, x, y, extra)
+function Font:CheckUiScaleChange()
 	if (WG and WG.uiScale or 1) ~= self.uiScale then
 		self.uiScale = (WG and WG.uiScale or 1)
 		self:_LoadFont()
 	end
+end
 
+function Font:_DrawText(text, x, y, extra)
+	self:CheckUiScaleChange()
 	local font = self._font
 
 	gl.PushAttrib(GL.COLOR_BUFFER_BIT)
@@ -279,11 +282,7 @@ end
 
 
 function Font:Draw(text, x, y, align, valign)
-	if (WG and WG.uiScale or 1) ~= self.uiScale then
-		self.uiScale = (WG and WG.uiScale or 1)
-		self:_LoadFont()
-	end
-
+	self:CheckUiScaleChange()
 	if (not text) then
 		return
 	end
@@ -300,11 +299,7 @@ end
 
 
 function Font:DrawInBox(text, x, y, w, h, align, valign)
-	if (WG and WG.uiScale or 1) ~= self.uiScale then
-		self.uiScale = (WG and WG.uiScale or 1)
-		self:_LoadFont()
-	end
-
+	self:CheckUiScaleChange()
 	if (not text) then
 		return
 	end
