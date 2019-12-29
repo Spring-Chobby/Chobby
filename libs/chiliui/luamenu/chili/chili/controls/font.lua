@@ -57,7 +57,7 @@ end
 
 function Font:_LoadFont()
 	local oldfont = self._font
-	self._font = FontHandler.LoadFont(self.font, math.floor(self.size*self.uiScale), math.floor(self.outlineWidth*self.uiScale), self.outlineWeight)
+	self._font = FontHandler.LoadFont(self.font, math.floor(self.size*self.uiScale*2), math.floor(self.outlineWidth*self.uiScale*2), self.outlineWeight)
 	--// do this after LoadFont because it can happen that LoadFont returns the same font again
 	--// but if we Unload our old one before, the gc could collect it before, so the engine would have to reload it again
 	FontHandler.UnloadFont(oldfont)
