@@ -32,7 +32,7 @@ local function GetPlanet(planetUtilities, planetID)
 			.. "\n "
 			.. "\nI cannot stay there. Those automata are everywhere, and when they are not fighting each-other, they attack me as soon as I stop moving."
 			,
-			extendedText = "I hoped to avoid local forces, but ther are simply too many of them. Still, this battle should be straightforward. I will simply overwhelm them with an army of Glaives and Reavers, and then take that factory out."
+			extendedText = "I hoped to avoid local forces, but there are simply too many of them. Still, this battle should be straightforward. I will simply overwhelm them with an army of Glaives and Reavers, and then take that factory out."
 			.. "\n "
 			.. "\nI can do this."
 		},
