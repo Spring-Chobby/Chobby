@@ -38,8 +38,8 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[The Dominatrix hacks into enemy units to turn them to your side. Multiple Dominatrices increases the rate of capture and the Dominatrix that dealt the final blow will need several seconds to reload. If a Dominatrix is destroyed then all units controlled by that Dominatrix revert to their original side.]]
 			},
 			{
-				image = "unitpics/tankassault.png",
-				text = [[The time taken to capture a unit is based on cost instead of health. This makes Dominatrices particularly effective against assaults.]]
+				image = "unitpics/tankriot.png",
+				text = [[Dominatrices take 12 seconds to recharge after capturing a unit, making them particularly suited to fighting high cost - short range - units.]]
 			},
 			{
 				image = "unitpics/factorytank.png",
@@ -143,20 +143,17 @@ local function GetPlanet(planetUtilities, planetID)
 						"energysolar",
 						"staticradar",
 						"staticstorage",
-						"tankcon",
-						"tankassault",
 						"tankheavyraid",
-						"tankaa",
+						"turretriot",
 						"tankriot",
 						"turretlaser",
-						"turretriot",
 						"turretmissile",
 						"vehassault",
 					},
 					difficultyDependantUnlocks = {
-						[2] = {"staticcon", "tankarty",},
-						[3] = {"staticcon", "tankarty", "turretheavylaser"},
-						[4] = {"staticcon", "tankarty", "tankheavyassault", "turretheavylaser"},
+						[2] = {"staticcon"},
+						[3] = {"staticcon"},
+						[4] = {"staticcon", "turretheavylaser"},
 					},
 					commanderLevel = 2,
 					commander = {
@@ -170,6 +167,19 @@ local function GetPlanet(planetUtilities, planetID)
 							"module_ablative_armor",
 							"module_autorepair",
 						}
+					},
+					midgameUnits = {
+						-- Welders every 20 seconds because Circuit cannot be trusted to make them
+						{
+							name = "tankcon",
+							x = 6018,
+							z = 219,
+							facing = 0,
+							spawnRadius = 50,
+							delay = 45*30,
+							repeatDelay = 30*30,
+							orbitalDrop = true,
+						},
 					},
 					startUnits = {
 						{
@@ -770,18 +780,18 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 3,
 						},
 						{
-							name = "tankassault",
+							name = "tankriot",
 							x = 6103,
 							z = 223,
 							facing = 2,
-							difficultyAtLeast = 3,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "tankassault",
 							x = 6107,
 							z = 342,
 							facing = 1,
-							difficultyAtLeast = 2,
+							difficultyAtLeast = 4,
 						},
 						{
 							name = "tankheavyraid",
@@ -791,11 +801,16 @@ local function GetPlanet(planetUtilities, planetID)
 							difficultyAtLeast = 3,
 						},
 						{
-							name = "tankassault",
+							name = "tankriot",
 							x = 6072,
 							z = 85,
 							facing = 2,
-							difficultyAtLeast = 4,
+						},
+						{
+							name = "tankriot",
+							x = 6072,
+							z = 205,
+							facing = 2,
 						},
 						{
 							name = "tankriot",
@@ -1079,17 +1094,17 @@ local function GetPlanet(planetUtilities, planetID)
 					description = "Build 6 Dominatrices",
 					experience = planetUtilities.BONUS_EXP,
 				},
-				[2] = { -- Have five Reapers
+				[2] = { -- Have five Welders
 					satisfyOnce = true,
 					capturedUnitsSatisfy = true,
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 5,
 					unitTypes = {
-						"tankassault",
+						"tankcon",
 					},
-					image = planetUtilities.ICON_DIR .. "tankassault.png",
+					image = planetUtilities.ICON_DIR .. "tankcon.png",
 					--imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Control 5 Minotaurs",
+					description = "Control 5 Welders",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[3] = { -- Have a Tank Foundry

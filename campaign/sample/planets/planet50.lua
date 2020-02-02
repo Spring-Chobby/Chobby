@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G4V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24594",
-			text = "Lying on an interstellar crossroad, this planet seems to have attracted many smugglers. They operated from its fields of broken plateaux, while bribed local officials looked the other way."
+			text = "Lying on an interstellar crossroad, this planet seems to have attracted many smugglers. They operated from its fields of broken plateaus, while bribed local officials looked the other way."
 			.. "\n "
 			.. "\nNow, this is bound to attract some attention, but if I could just manage to gain access to the operations of a data smuggler... "
 			,

@@ -26,7 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G1V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24566",
-			text = "This was a nightmare scenario for the Empire: a rebellion on an special arsenal world. The loyalist barricaded themselves in the mountains with the stockpiles, waiting for reinforcements that never came."
+			text = "This was a nightmare scenario for the Empire: a rebellion on an special arsenal world. The loyalists barricaded themselves in the mountains with the stockpiles, waiting for reinforcements that never came."
 			.. "\n "
 			.. "\nI should crack that fortress open and raze it once and for all. There are things buried down there, that should never have been built."
 			,

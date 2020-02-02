@@ -306,6 +306,7 @@ planetData = {
 				--  * delay - Time, in frames, into the mission that the unit is spawned. Required.
 				--  * spawnRadius - Spawn the unit in a random location in a square with sidelength 2*spawnRadius.
 				--  * orbitalDrop - Set to true to use the orbital drop effect. This can also be set for initial units.
+				--  * repeatDelay - Time in frames for the midgame unit to be repeated.
 				{
 					name = "cloakriot",
 					x = 2400,

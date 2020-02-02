@@ -30,7 +30,7 @@ local function GetPlanet(planetUtilities, planetID)
 			,
 			extendedText = "Instead of building dedicated military power plants, they commandeered civilian Tidal Generator farms. If I destroy those, they won't have enough energy left to be a menace."
 			.. "\n "
-			.. "\nFor a coastal area like this one, he Hovercraft factory should be well-adapted."
+			.. "\nFor a coastal area like this one, the Hovercraft factory should be well-adapted."
 		},
 		tips = {
 			{

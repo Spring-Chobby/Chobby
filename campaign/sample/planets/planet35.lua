@@ -29,7 +29,7 @@ local function GetPlanet(planetUtilities, planetID)
 			.. "\n "
 			.. "\nThey were so insecure, they even left a force to assault anyone disagreeing, which is now set to \"everyone\"."
 			,
-			extendedText = "A splinter force born from a technical disagreement over river drawing has identified me as an ally. What the hell was wronng with that Empire!?"
+			extendedText = "A splinter force born from a technical disagreement over river drawing has identified me as an ally. What the hell was wrong with that Empire!?"
 			.. "\n "
 			.. "\nMy new allies had built a few strong anti-air bastions, so the enemy is relying on ground-to-air emplacements of their own rather than attempt to contest air control with fighters. Which was short-sighted - it won't hold against the resilient and deadly Likho."
 		},

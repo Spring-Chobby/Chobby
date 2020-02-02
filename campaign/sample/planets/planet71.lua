@@ -32,9 +32,9 @@ local function GetPlanet(planetUtilities, planetID)
 			.. "\n "
 			.. "\nLet's try and hack in, see if it rings any bells..."
 			,
-			extendedText = "...ok, this didn't do anything. Maybe that one ?"
+			extendedText = "...ok, this didn't do anything. Maybe that one?"
 			.. "\n "
-			.. "\n[Welcome, new challenger, and good luck for the Super Extreme Kodachi Rally! Your will be starting---right now!]"
+			.. "\n[Welcome, new challenger, and good luck for the Super Extreme Kodachi Rally! You will be starting---right now!]"
 		},
 		tips = {
 			{

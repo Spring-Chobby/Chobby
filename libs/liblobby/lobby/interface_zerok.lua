@@ -31,6 +31,7 @@ end
 function Interface:Register(userName, password, email, useSteamLogin)
 	self:super("Register", userName, password, email)
 
+	local config = WG.Chobby and WG.Chobby.Configuration
 	password = (password and string.len(password) > 0 and VFS.CalculateHash(password, 0)) or nil
 	local steamToken = (useSteamLogin and self.steamAuthToken) or nil
 	if not (password or steamToken) then
@@ -42,6 +43,7 @@ function Interface:Register(userName, password, email, useSteamLogin)
 		Name = userName,
 		PasswordHash = password,
 		SteamAuthToken = steamToken,
+		UserID = (config and config.UserID) or 0,
 	}
 	self:_SendCommand("Register " .. json.encode(sendData))
 	return self
