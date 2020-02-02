@@ -3,7 +3,13 @@ local entries = {
 	faction_union = { -- planet3, planet5
 		name = "The Union",
 		category = "Factions",
-		text = ""
+		text = "Official name: the Union of Sovereign Star-Systems"
+		.. "/n "
+		.. "/nThis polity seems to have started as a defensive alliance, as the old empire was falling apart. Many systems in the region had long-suppressed desires for independence, and banded together to maintain a semblance in the slow disappearance of imperial law. With time, trade and law enforcement agreements completed the military treaties, and the Union slowly became a political entity in its own right, if a very decentralized one constituted of very autonomous members."
+		.. "/n "
+		.. "/nAs it grew in size and strength, it also started to run into rivals, both over strategic places and ideology. This drove them to create an unified military and foreign service, with the occasional bout of expansionism."
+		.. "/nIt seems to have fared relatively well, until they were were faced with a much stronger enemy against whom they started to loose system after system."
+		.. "/nWith the enemy at the gates of their core worlds, there was little hope of repelling them without of a miracle - instead of what, everyone disappeared."
 	},
 	faction_empire = { -- planet11, planet12, planet15, planet16, planet17, planet24, planet25, planet26
 		name = "The Empire",
@@ -45,6 +51,7 @@ local entries = {
 		category = "Factions",
 		text = ""
 	},
+	
 	-- Threats
 	threat_automata = { -- planet69
 		name = "Automata",
@@ -109,21 +116,34 @@ local entries = {
 		.. "/n "
 		.. "/nContrasting with their sophistication in many other domains, their strangely primitive warfare tactics has puzzled many scientists. Through history, mentions have been made of contact being lost with entire worlds, with nothing but ruins being discovered afterwards, and no explanation about what had happened - some have hypothesized that it could be the result of chicken colonies attacking with their full potential and intelligence."
 	},
+	
 	-- Entries
 	entry_first = { -- planet69
-		name = "...",
+		name = "On a dam of all places",
 		category = "Entries",
-		text = ""
+		text = "What am I doing on a hostile fortress world? Was I captured? But then why didn't the pull me out before moving me around? There is no trace planetary assault - then were those subverted by deep agents? A mistimed diversion? Why hasn't anyone intervened yet? Something feels very wrong."
+		.. "/n "
+		.. "/nSomehow the defense grid is still on automated alert. Something must be keeping everyone busy and a starship has answered my distress call. This is my chance to jump out of the system."
 	},
 	entry_commander = { -- planet1
 		name = "Assault commander",
 		category = "Entries",
-		text = ""
+		text = "Commanders are an old concept. Put everything needed to build an army with local resources on a compact chassis, slap a weapon and some armor, and harden it all for fast insertion on a hostile planet. Hopefully they send you on a less defended part of the world, where you are left alone long enough to entrench yourself, and launch an assault on strategic locations - or open a gate for the real assault forces to get in. Or you are defending a planet and get thrown wherever the enemy is deciding to land, then try and kill them before they can build enough of an army to kill you."
+		.. "/n A few tried and true models, perfected for cost, effectiveness and reliability over many wars, and pretty much no surprise for many centuries. My memories are still blurred, but I remember extensively training on those."
+		.. "/n "
+		.. "/nAnd yet, this Assault Commander is unlike anything I have ever seen."
+		.. "/nOne of the biggest limitations to Commander design is that they cannot jump with field improvements such as extra weapons, armor or system. Many have tried, and no-one is known to get even close to it, even in the old days. But, this one can. For each field upgrade I recover, it stays intact at a jump."
+		.. "/n "
+		.. "/nI never trained for it, or even heard of such a thing. And yet, it feels oddly familiar..."
 	},
 	entry_event = { -- planet2
 		name = "Event",
 		category = "Entries",
-		text = ""
+		text = "It is not just those worlds that are empty. It is the entire galaxy."
+		.. "/nAgain, old ruins from what could be the same time litter the planet. But when I try to pick up long-range signals, detect hyperspace movements or any other sort of activity, the galaxy is silent. If someone is still out there, they either lost all interstellar capabilities, or they are hiding very well."
+		.. "/n "
+		.. "/nHow long has it been? What little star charts are left from the database are useless due to star drift, and I have neither the tools nor the knowledge required for dating the ruins. It could have been millennia. It could have been millions of years."
+		.. "/nBut some recording survived, enough to prove that whatever the event was, it happened in an instant. One moment everyone was there, a day like any other. The next moment, they were all gone. Baselines, modified, cyborgs, synths, uplifts, free machines - everyone, no exception, and nothing else..."
 	},
 	entry_homeworld = { -- planet66
 		name = "Homeworld",
@@ -140,42 +160,42 @@ local entries = {
 		category = "Entries",
 		text = ""
 	},
+	
 	-- Locations
-	location_folsom = { -- planet69
-		name = "Folsom fortress world",	
-		category = "locations",
-		text = ""
-	},
 	location_im_jaleth = { -- planet1
 		name = "Im Jaleth ruins",
-		category = "locations",
-		text = ""
+		category = "Locations",
+		text = "This world has been abandoned for a very, very long time. What little ruins I had time to unearth were buried very deep, and all from the same geological strata. For some reason, the entire planet seem to have been abandoned at once, and never repopulated"
+		.. "/nWas it kept empty as a buffer before the Folsom fortress world? Depriving themselves of a good inhabitable world like this one for a small strategic gain feels wasteful."
+		.. "/n "
+		.. "/nAnd again, no one has challenged me beyond automated defenses. No hails, no communications. Automata can be left to their own devices pretty much indefinitely, but why keep an empty buffer world and not leave overseers in case of surprise?"
 	},
 	location_chatka = { -- planet58
 		name = "Battle of Chatka",
-		category = "locations",
+		category = "Locations",
 		text = ""
 	},
 	location_tempest = { -- planet59
 		name = "Tempest archeotech site",
-		category = "locations",
+		category = "Locations",
 		text = ""
 	},
 	location_hibiliha = { -- planet61
 		name = "Hibiliha warp station",
-		category = "locations",
+		category = "Locations",
 		text = ""
 	},
 	location_intrepid = { -- planet64
 		name = "The Garden of Intrepid",
-		category = "locations",
+		category = "Locations",
 		text = ""
 	},
 	location_mannia = { -- planet64
 		name = "Mannia transit camps",
-		category = "locations",
+		category = "Locations",
 		text = ""
 	},
+	
 	-- TODO remove empty example
 	example_dropships = {
 		name = "Dropships",

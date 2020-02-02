@@ -108,7 +108,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			abilities = {},
 			codexEntries = {
-				"threat_automata"
+				"entry_first"
 			}
 		},
 	}
