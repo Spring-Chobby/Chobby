@@ -3133,7 +3133,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"commweapon_slamrocket",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_rebels"
+			},
 		},
 	}
 	

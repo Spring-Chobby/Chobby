@@ -4,6 +4,7 @@ local entries = {
 		name = "The Union",
 		category = "Factions",
 		text = "Official name: the Union of Sovereign Star-Systems"
+		.. "/nSeveral acronyms were used on occasion, but the variety of official languages between the varied systems-states made it impossible for a majority to agree on a single one."
 		.. "/n "
 		.. "/nThis polity seems to have started as a defensive alliance, as the old empire was falling apart. Many systems in the region had long-suppressed desires for independence, and banded together to maintain a semblance in the slow disappearance of imperial law. With time, trade and law enforcement agreements completed the military treaties, and the Union slowly became a political entity in its own right, if a very decentralized one constituted of very autonomous members."
 		.. "/n "
@@ -14,12 +15,21 @@ local entries = {
 	faction_empire = { -- planet11, planet12, planet15, planet16, planet17, planet24, planet25, planet26
 		name = "The Empire",
 		category = "Factions",
-		text = ""
+		text = "Official name: the Ninth Galactic State, Second Restoration"
+		.. "/nAs they started winning, everyone called it the Galactic Empire, or simply the Empire"
+		.. "/n "
+		.. "/nThe origin of this new Restoration is unclear. They claim that as the previous empire disintegrated, it retained its traditions and a core of systems, from which it started to rebuild and reassert itself and. They based the legitimacy of their grand conquest by turning it into a reclamation of its rightful place as the sole ruler of the galaxy. As such, it is unsurprising that their enemies would have less flattering histories, the most popular being that an ambitious warlord conquered the fallen empire's homeworlds before having delusions of grandeur."
+		.. "/n "
+		.. "/nWhatever the truth is, they did retain many of the traditions of the previous empire, and initially based their legal system and political organization on it. By the force of arms, they managed to slowly but surely conquer the galaxy again, with more and more resources and autonomy given to their formidable military machine. In the end, there were only a few factions still resisting them, with little hope of repelling their armies."
+		.. "/nHowever, with so much of the empire's efforts being diverted toward the armies, it appears to have been growing unrest on many conquered worlds across the galaxy."
 	},
 	faction_rebels = { -- planet36, planet37, planet39, planet40, planet42, planet44, planet47, planet48, planet56
 		name = "The Rebels",
 		category = "Factions",
-		text = ""
+		text = "Unrest was steadily growing across the Empire, both on wealthy peripheral worlds and poor, isolated ones, mostly from the resources and attention diverted towards their war machine, and the rule of law becoming both harsher and less effective at keeping order. The Empire thought they could hold enough authority to prevent any serious challenge to their rule, at least for long enough to finish pacifying the galaxy. It appears they were wrong."
+		.. "/nSeveral uprisings started on varied worlds in a large portion of the Empire. Unprepared to such a large rebellion, faced with an enemy relying more on subversion and deception than military control of territory, it quickly lost control of entire regions. The Empire was prompt to turn its war machine inward and crush the rebellion by the force of arms, as daunting a task as it was."
+		.. "/n "
+		.. "/nThe goal of the Rebels was not direct victory so much as mortally injuring the Empire from the inside, and holding long enough to survive it. What plans did they have for the aftermath is unclear, given how many disparate groups participated. However, for such coordinated uprisings to take place, a central organization had to be overseeing it. Was it an ad-hoc coalition of mutually hostile forces against a greater common enemy, or did they have their own agenda?"
 	},
 	faction_haven = { -- planet31
 		name = "Haven",

@@ -1705,7 +1705,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_autorepair_LIMIT_B_2",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_empire"
+			},
 		},
 	}
 	

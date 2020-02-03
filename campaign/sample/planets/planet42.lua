@@ -614,7 +614,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_heavy_armor_LIMIT_C_2",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_rebels"
+			},
 		},
 	}
 	

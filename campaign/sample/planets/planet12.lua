@@ -1137,7 +1137,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_companion_drone_LIMIT_A_2",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_empire"
+			},
 		},
 	}
 	

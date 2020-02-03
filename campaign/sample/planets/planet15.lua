@@ -490,7 +490,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"commweapon_rocketlauncher",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_empire"
+			},
 		},
 	}
 	

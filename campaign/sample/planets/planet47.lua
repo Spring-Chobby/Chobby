@@ -2576,7 +2576,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_autorepair_LIMIT_D_2",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_rebels"
+			},
 		},
 	}
 	

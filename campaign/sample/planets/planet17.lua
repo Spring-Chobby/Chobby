@@ -1510,7 +1510,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"commweapon_personal_shield",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_empire"
+			},
 		},
 	}
 	

@@ -900,7 +900,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_jammer",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_empire"
+			},
 		},
 	}
 	
