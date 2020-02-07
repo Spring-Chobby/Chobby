@@ -41,11 +41,13 @@ local includes = {
 
 Chobby = widget
 
-for _, file in ipairs(includes) do
-	VFS.Include(CHOBBY_DIR .. file, Chobby, VFS.RAW_FIRST)
-end
-
 function Chobby:_Initialize()
+	for _, file in ipairs(includes) do
+		self:WrapCall(function()
+			VFS.Include(CHOBBY_DIR .. file, Chobby, VFS.ZIP)
+		end)
+	end
+
 	-- Invalidate the chili font cache. Without this certain font sizes
 	-- will be invisible after Spring.Reload on many systems.
 	Chili.FontHandler.InvalidateFontCache()

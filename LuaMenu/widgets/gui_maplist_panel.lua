@@ -299,21 +299,23 @@ local function InitializeControls()
 		},
 	}
 
-	local btnOnlineMaps = Button:New {
-		right = 95,
-		y = 7,
-		width = 180,
-		height = 45,
-		caption = i18n("download_maps"),
-		font = Configuration:GetFont(3),
-		classname = "option_button",
-		parent = mapListWindow,
-		OnClick = {
-			function ()
-				WG.BrowserHandler.OpenUrl(Configuration.gameConfig.link_maps())
-			end
-		},
-	}
+	if Configuration.gameConfig.link_maps ~= nil then
+		local btnOnlineMaps = Button:New {
+			right = 95,
+			y = 7,
+			width = 180,
+			height = 45,
+			caption = i18n("download_maps"),
+			font = Configuration:GetFont(3),
+			classname = "option_button",
+			parent = mapListWindow,
+			OnClick = {
+				function ()
+					WG.BrowserHandler.OpenUrl(Configuration.gameConfig.link_maps())
+				end
+			},
+		}
+	end
 	WG.Chobby.PriorityPopup(mapListWindow, CloseFunc)
 
 	local externalFunctions = {}
