@@ -2866,7 +2866,8 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			codexEntries = {
 				"threat_zombies",
-				"faction_dynasties_restored"
+				"faction_dynasty_restored",
+				"location_tempest"
 			},
 		},
 	}

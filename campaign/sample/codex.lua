@@ -56,25 +56,25 @@ local entries = {
 		.. "\nThe Empire, while conscious of those problems, decided that it had more pressing issues, namely uniting the galaxy and dealing with the Rebels. Presumably, its plan was to leave this problem for later, when it would be free to reconquer the seceding worlds and reinstate its rule by force."
 		.. "\nI wonder if it could have worked, or if it would have been too little too late."
 	},
-	faction_dynasties = { -- planet 46, planet47, planet56
-		name = "Dynasties",
+	faction_dynasty = { -- planet 46, planet47, planet56
+		name = "Dynasty",
 		category = "Factions",
 		text = "\"Élan vital\""
 		.. "\n "
 		.. "\nSomething about the Rebels have been nagging me for a long time. They were too well-prepared, well-organized, and managed to coordinate simultaneous uprisings among groups of malcontents that often hated each-other. And something about their whole modus operandi kept reminding me of something."
-		.. "\nAs it turns out, it appears that the Dynasties were behind it all. The oldest known organization in the galaxy, they were thought to have been destroyed by the Anarchai at the fall of Chatka, millennia before. Somehow, they appear to have survived."
+		.. "\nAs it turns out, it appears that the Dynasty was behind it all. The oldest known organization in the galaxy, they were thought to have been destroyed by the Anarchai at the fall of Chatka, millennia before. Somehow, they appear to have survived."
 		.. "\n "
 		.. "\nTracing back to Earth, they were a shadowy group of biosupremacists, obsessed with creating superior humans through genetic and biological modifications, and ruling over humanity as its greatest representatives. They shunned cybernetic enhancements, and hated non-human synths and free machines as anathema. They were divided into rival families, united only in their goal and against common menaces."
 		.. "\nThey only acted in broad daylight when they were certain of their strength, preferring to subvert those they could, and secretly organizing rebellions against those they couldn't. They were the one behind the Rebels, hoping to destabilize the Empire and take over in the resulting chaos. Even if the Empire won, it would have been weakened enough for them to grow their influence - assuming they would not have been discovered."
 	},
-	faction_dynasties_restored = { -- planet58, planet59
-		name = "Dynasties Restored",
+	faction_dynasty_restored = { -- planet58, planet59
+		name = "Dynasty Restored",
 		category = "Factions",
-		text = "It has always been thought that the Dynasties were finally destroyed at Chatka, when they fought the last battle of the galaxy against the Anarchai."
+		text = "It has always been thought that the Dynasty was finally destroyed at Chatka, when they fought the last battle of the galaxy against the Anarchai."
 		.. "\nAs it turns out, it was true."
 		.. "\n "
-		.. "\nIt was during archaeological digs that the legendary Dynasties' Main Vaults were found. Their discoverers decided to keep the secret of their existence for themselves, and use the vast knowledge and data it contained to recreate the Dynasties. However, even with so much lost knowledge from the ancient times, they had little of the traditions of the original Dynasties, and were less like a giant among children than a child having found the giant's weapon."
-		.. "\nDespite having planned it for a long time, the rebellion they set off against the Empire was ultimately rushed and too difficult to manage, leading ultimately to its failure. While it did help destabilize the Empire, I have the feeling that the ancient Dynasties, with their immense experience and institutional memory, would have fared much better, possibly well enough to emerge on the stage directly."
+		.. "\nIt was during archaeological digs that the legendary Dynasty's Main Vaults were found. Their discoverers decided to keep the secret of their existence for themselves, and use the vast knowledge and data it contained to recreate the Dynasty. However, even with so much lost knowledge from the ancient times, they had little of the traditions of the original Dynasty, and were less like a giant among children than a child having found the giant's weapon."
+		.. "\nDespite having planned it for a long time, the rebellion they set off against the Empire was ultimately rushed and too difficult to manage, leading ultimately to its failure. While it did help destabilize the Empire, I have the feeling that the ancient Dynasty, with their immense experience and institutional memory, would have fared much better, possibly well enough to emerge on the stage directly."
 	},
 	faction_anarchai = { -- planet32
 		name = "The Anarchai",
@@ -122,7 +122,7 @@ local entries = {
 		.. "\nThey are invariably hostile when active, with no rumors of successful cohabitation with humans ever confirmed. They can however stay dormant for long periods in deep, near-undetectable underground chambers to which they are suspected to retreat upon the death of their Queen. This has made their complete eradication from a planet extremely challenging, especially if infrastracture or terraforming efforts are to be preserved."
 		.. "\n "
 		.. "\nHypotheses about their origins run from ancient dormant aliens awakened by human activity to secret weapon gone rogue to results of experiment on accelerated evolution that went wrong - or horribly right."
-		-- ed note: The chickens are actually a secret project by a family of the early Dynasties. Observing the deficiencies of even regular modded humans, they sought to create a Humans 2.0 with traits such as extreme adaptation, collective intelligence over many zooids instead of singular body, ability to metabolize any CHON substrate, and other such fantastic abilities. They tried to keep it secret from rival families, recognizing correctly that they would not accept being displaced by Humans 2.0, but they ended up being discovered. The Dynasties panicked and eradicated the family, erasing every bit of data about it they could find so it couldn't be linked to them - fearing that humanity would turn against them in the same panic. It wouldn't be before centuries had passed that they would realize that they had missed some of the subjects.
+		-- ed note: The chickens are actually a secret project by a family of the early Dynasty. Observing the deficiencies of even regular modded humans, they sought to create a Humans 2.0 with traits such as extreme adaptation, collective intelligence over many zooids instead of singular body, ability to metabolize any CHON substrate, and other such fantastic abilities. They tried to keep it secret from rival families, recognizing correctly that they would not accept being displaced by Humans 2.0, but they ended up being discovered. The Dynasty panicked and eradicated the family, erasing every bit of data about it they could find so it couldn't be linked to them - fearing that humanity would turn against them in the same panic. It wouldn't be before centuries had passed that they would realize that they had missed some of the subjects.
 	},
 	threat_chickens_lifecycle = { -- planet38
 		name = "Chickens life-cycle",
@@ -210,10 +210,10 @@ local entries = {
 		category = "Locations",
 		text = "This is where the greatest battle of the ancient times took place."
 		.. "\n "
-		.. "\nThe Anarchai had conquered most of the galaxy, smashing all resistance on their path. Both the Celestial Dominion and the Ghost Mandate had been destroyed, and the Dynasties had only their homeworld Chatka left."
-		.. "\nIn a strange turn of fate, the human-supremacist Dynasties, oldest and longest-lived political force in the galaxy, would hold the last bastion of the free galaxy against the alien-thinking Anarchai supermachines."
+		.. "\nThe Anarchai had conquered most of the galaxy, smashing all resistance on their path. Both the Celestial Dominion and the Ghost Mandate had been destroyed, and the Dynasty had only their homeworld Chatka left."
+		.. "\nIn a strange turn of fate, the human-supremacist Dynasty, oldest and longest-lived political force in the galaxy, would hold the last bastion of the free galaxy against the alien-thinking Anarchai supermachines."
 		.. "\n "
-		.. "\nFaced with annihilation, not only of them but of the entire galaxy, the Dynasties renounced their founding principle, and installed Celestial cybernetic enhancements on their Demuirge battalion, creating in desperation what would be the greatest warriors in galactic history, and the only one to ever stand ground, if only for a moment, against the Anarchai."
+		.. "\nFaced with annihilation, not only of them but of the entire galaxy, the Dynasty renounced its founding principle, and installed Celestial cybernetic enhancements on their Demuirge battalion, creating in desperation what would be the greatest warriors in galactic history, and the only one to ever stand ground, if only for a moment, against the Anarchai."
 		.. "\n "
 		.. "\nThey would hold two years, repelling many planetary assaults, but loosing almost as many Demuirges to late cybernetic incompatibilities than to enemy action. Ultimately though, it was not them who would fail. Concentrating all their forces on the lone system, the Anarchai shut down the system's hyperspace barriers and triggered a starpulse, destroying all space defenses. Then sent their immense starships to break the planetary shield, overwhelm the anti-aerospace defenses, and burn the planet to the mantle."
 		.. "\n "
@@ -222,7 +222,13 @@ local entries = {
 	location_tempest = { -- planet59
 		name = "Tempest archeotech site",
 		category = "Locations",
-		text = ""
+		text = "This was one of the last worlds to fall during the Dynasty's last stand against the Anarchai, and appears to have been their main military research and development site, especially for research too dangerous to be conducted on their homeworld."
+		.. "\nThis Artefact was one of the weapons they were studying in desperation. It significantly differs from Dynasty technology, however. Did they build it from Ghost or Celestial tech? Or was it something older, whose secrets they were trying to unlock? Whatever it was, I suspect the zombie nanoplague release was more of a side-effect than its true purpose. I was lucky it responded to my shutdown order. From what little sense I can make of those readings, it would have been a very bad idea to let it activate."
+		.. "\n "
+		.. "\nIt was also here that my Assault Commander was found. It was an experimental auxiliary Demuirge unit, a cheaper version of the mainline fast-responder."
+		.. "\nWhen the site was destroyed by an Anarchai raid, time was too short to transport it to Chatka. As such, it was powered down and buried in deep vaults, along with its dedicated support starship, and all that couldn't be or wasn't worth being destroyed. In a testament of the prowess of those final ancient days, it was still functional after both the Anarchai bombing and millennia of abandon in its vault."
+		.. "\n "
+		.. "\nUnable to analyze such advanced archeotech on site, the researchers installed it on its starship, who was then towed to their headquarters on Caderical."
 	},
 	location_hibiliha = { -- planet61
 		name = "Hibiliha warp station",

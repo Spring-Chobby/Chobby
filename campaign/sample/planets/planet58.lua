@@ -2431,7 +2431,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			codexEntries = {
 				"location_chatka",
-				"faction_dynasties_restored"
+				"faction_dynasty_restored"
 			},
 		},
 	}

@@ -1459,7 +1459,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			codexEntries = {
 				"faction_rebels",
-				"faction_dynasties"
+				"faction_dynasty"
 			},
 		},
 	}
