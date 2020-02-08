@@ -57,7 +57,7 @@ local entries = {
 		.. "\nI wonder if it could have worked, or if it would have been too little too late."
 	},
 	faction_dynasty = { -- planet 46, planet47, planet56
-		name = "Dynasty",
+		name = "The Dynasty",
 		category = "Factions",
 		text = "\"Élan vital\""
 		.. "\n "
@@ -66,15 +66,19 @@ local entries = {
 		.. "\n "
 		.. "\nTracing back to Earth, they were a shadowy group of biosupremacists, obsessed with creating superior humans through genetic and biological modifications, and ruling over humanity as its greatest representatives. They shunned cybernetic enhancements, and hated non-human synths and free machines as anathema. They were divided into rival families, united only in their goal and against common menaces."
 		.. "\nThey only acted in broad daylight when they were certain of their strength, preferring to subvert those they could, and secretly organizing rebellions against those they couldn't. They were the one behind the Rebels, hoping to destabilize the Empire and take over in the resulting chaos. Even if the Empire won, it would have been weakened enough for them to grow their influence - assuming they would not have been discovered."
+		.. "\n "
+		.. "\nAnd yet, by their historical standards, the whole operation feels botched and amateurish. They may have survived against all odds, but as a mere shadow of themselves."
 	},
 	faction_dynasty_restored = { -- planet58, planet59
-		name = "Dynasty Restored",
+		name = "The Dynasty restored",
 		category = "Factions",
 		text = "It has always been thought that the Dynasty was finally destroyed at Chatka, when they fought the last battle of the galaxy against the Anarchai."
 		.. "\nAs it turns out, it was true."
 		.. "\n "
 		.. "\nIt was during archaeological digs that the legendary Dynasty's Main Vaults were found. Their discoverers decided to keep the secret of their existence for themselves, and use the vast knowledge and data it contained to recreate the Dynasty. However, even with so much lost knowledge from the ancient times, they had little of the traditions of the original Dynasty, and were less like a giant among children than a child having found the giant's weapon."
 		.. "\nDespite having planned it for a long time, the rebellion they set off against the Empire was ultimately rushed and too difficult to manage, leading ultimately to its failure. While it did help destabilize the Empire, I have the feeling that the ancient Dynasty, with their immense experience and institutional memory, would have fared much better, possibly well enough to emerge on the stage directly."
+		.. "\n "
+		.. "\nStill, something feels wrong with the whole affair. They had to know it had such little chance of success, and may even expose them in the end. Why do it anyway? Why take such a foolish risk?"
 	},
 	faction_anarchai = { -- planet32
 		name = "The Anarchai",
@@ -183,7 +187,28 @@ local entries = {
 	entry_homeworld = { -- planet66
 		name = "Homeworld",
 		category = "Entries",
-		text = ""
+		text = "Caderical. The Glinting City of Caslaar. This is where I grew up, where I was born."
+		.. "\n "
+		.. "\nNo, not born. Made. I remember it now."
+		.. "\n "
+		.. "\nThis was the homeworld of the new Dynasty. Even after centuries, they were still but children, compared to their legendary forebears - but they were driven by the same fire. Obsessed by creating superior humans, worthy of ruling the galaxy, they started a project of engineering the ultimate human warrior, a new Demuirge army that would conquer all of humanity in one glorious campaign, and reign as its true, natural lords!"
+		.. "\n "
+		.. "\nThey didn't tell us what we were. Were they wary of leaks? Of how it may twist us? Of loosing control over us? We only knew we were a new type of modified humans, and a bright future was waiting for us. Sent to military academies, we all performed reasonably well. But reasonably well wasn't what they were hoping for."
+		.. "\nIn truth, we were well-made. With no implants, no biomods, not even tools, we were as capable as the best cyborgs and synths. But we were no Demuirges."
+		.. "\n "
+		.. "\nSometimes, when we went to checkups, some of us didn't come back - particularly the least-performing of us. Sudden sickness, we were told. Unplanned complications, to be expected from a first batch. No need to worry, statistics were with us now. The last defects had been fixed. Unfortunate for those they couldn't have saved."
+		.. "\nThey knew we were growing suspicious, and it made them panic. They decided that the entire generation would be recalled, to be destructively analyzed, and hope to do better next time."
+		.. "\n "
+		.. "\nIronically, they had underestimated us. At the next checkup, seeing how the procedures had been changed, we knew what to expect. And we had long since prepared escape plans."
+		.. "\nAs for me, I had been separated from the others, and was slowly being cornered by security when I felt something connect to my mind. As it turns out, I was enough of a Demuirge after all - this Assault Commander, after being impervious to all orders and analyses, was responding to me. Powering up in the middle of its laboratory, with security half-compromised, it easily tore through several perimeters, to my position."
+		.. "\n "
+		.. "\nOnce onboard, I somehow managed to commandeer a dropship in the confusion, and take control of the Commander's support starship from a small tech station. But right before I could jump out-system, the space defense grid scored a hit on the hyperdrive generator."
+		.. "\nThe resulting misjump should have dismantled the starship and its hold into constituent atoms, but this was the tech of the ancient Dynasty on its final days. Somehow, the ship managed to correct it enough to emerge halfway across the galaxy, in deep space near a Union system-state."
+		.. "\nThe Union salvage teams never realized there was a pilot onboard the Commander: the shock had been so harsh, I had to been put into deep hibernation, to be awakened in an adequately-equipped Demuirge medical facility. So, not knowing what this strange technology was, they sent us to Folsom to be stored and studied to a later date..."
+		.. "\n "
+		.. "\nAnd now, I understand what happened here: with our escape attempt, and me fleeing so violently with this Commander, they knew the Empire would investigate. They knew it was too early, but they had just ran out of time."
+		.. "\n "
+		.. "\nI ignore how many of my siblings escaped. Even knowing what happened next, I still hope that at least a few made it out."
 	},
 	entry_starsong = { -- planet67
 		name = "Starsong",
@@ -246,6 +271,16 @@ local entries = {
 		.. "\nThe loss of the army in which the Rebels had poured so much of their resources broke their military, which would never recover. Following it, and despite occasional successes in resisting the Empire's advance, the Rebels would not see another key victory, only loosing ground from then on."
 		.. "\nBy the time of the event, only a few worlds still held on against the Empire's armies, with resistance movements on many others mercilessly hunted down. Had everyone not disappeared, it would have been a question of time before their destruction."
 	},
+	location_rockbar = { -- planet57
+		name = "Rockbar testing grounds",
+		category = "Locations",
+		text = ""
+	},
+	location_pendust = { -- planet60
+		name = "Pendust capital planet",
+		category = "Locations",
+		text = ""
+	},
 	location_intrepid = { -- planet64
 		name = "The Garden of Intrepid",
 		category = "Locations",
@@ -253,6 +288,49 @@ local entries = {
 	},
 	location_mannia = { -- planet64
 		name = "Mannia transit camps",
+		category = "Locations",
+		text = ""
+	},
+	-- Interception networks
+	location_phisnet = { -- planet13
+		name = "Phisnet-3617 interception network",
+		category = "Locations",
+		text = ""
+	},
+	location_kirdipan = { -- planet18
+		name = "Kirdipan interception network",
+		category = "Locations",
+		text = ""
+	},
+	location_hastus = { -- planet46
+		name = "Hastus interception network",
+		category = "Locations",
+		text = ""
+	},
+	-- Artefacts
+	location_new_falsell = { -- planet7
+		name = "New Falsell artefact",
+		category = "Locations",
+		text = ""
+	},
+	location_lovaza_jira = { -- planet28
+		name = "Lovaza Jira artefact",
+		category = "Locations",
+		text = ""
+	},
+	location_leopard = { -- planet33
+		name = "Leopard artefact",
+		category = "Locations",
+		text = ""
+	},
+	location_estann_all = { -- planet43
+		name = "Estann All artefact",
+		category = "Locations",
+		text = ""
+	},
+	-- Misc locations
+	location_musashi = { -- planet71
+		name = "Musashi rally",
 		category = "Locations",
 		text = ""
 	},

@@ -2895,7 +2895,10 @@ local function GetPlanet(planetUtilities, planetID)
 			modules = {
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"entry_homeworld"
+			},
 		},
 	}
 	
