@@ -4726,6 +4726,9 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_dmg_booster_LIMIT_C_2",
 			},
 			abilities = {
+			},
+			codexEntries = {
+				"faction_lawless"
 			}
 		},
 	}

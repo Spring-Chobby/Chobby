@@ -1006,6 +1006,9 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_jumpjet",
 			},
 			abilities = {
+			},
+			codexEntries = {
+				"faction_lawless"
 			}
 		},
 	}

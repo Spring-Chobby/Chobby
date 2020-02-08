@@ -6,6 +6,8 @@ local entries = {
 		text = "Official name: the Union of Sovereign Star-Systems"
 		.. "\nSeveral acronyms were used on occasion, but the variety of official languages between the varied systems-states made it impossible for a majority to agree on a single one."
 		.. "\n "
+		.. "\n\"To each its own\""
+		.. "\n "
 		.. "\nThis polity seems to have started as a defensive alliance, as the old empire was falling apart. Many systems in the region had long-suppressed desires for independence, and banded together to maintain a semblance in the slow disappearance of imperial law. With time, trade and law enforcement agreements completed the military treaties, and the Union slowly became a political entity in its own right, if a very decentralized one constituted of very autonomous members."
 		.. "\n "
 		.. "\nAs it grew in size and strength, it also started to run into rivals, both over strategic places and ideology. This drove them to create an unified military and foreign service, with the occasional bout of expansionism."
@@ -18,6 +20,8 @@ local entries = {
 		text = "Official name: the Ninth Galactic State, Second Restoration"
 		.. "\nAs they started winning, everyone called it the Galactic Empire, or simply the Empire"
 		.. "\n "
+		.. "\n\"Peace through unity\""
+		.. "\n "
 		.. "\nThe origin of this new Restoration is unclear. They claim that as the previous empire disintegrated, it retained its traditions and a core of systems, from which it started to rebuild and reassert itself and. They based the legitimacy of their grand conquest by turning it into a reclamation of its rightful place as the sole ruler of the galaxy. As such, it is unsurprising that their enemies would have less flattering histories, the most popular being that an ambitious warlord conquered the fallen empire's homeworlds before having delusions of grandeur."
 		.. "\n "
 		.. "\nWhatever the truth is, they did retain many of the traditions of the previous empire, and initially based their legal system and political organization on it. By the force of arms, they managed to slowly but surely conquer the galaxy again, with more and more resources and autonomy given to their formidable military machine. In the end, there were only a few factions still resisting them, with little hope of repelling their armies."
@@ -26,7 +30,9 @@ local entries = {
 	faction_rebels = { -- planet36, planet37, planet39, planet40, planet42, planet44, planet47, planet48, planet56, planet62
 		name = "The Rebels",
 		category = "Factions",
-		text = "Unrest was steadily growing across the Empire, both on wealthy peripheral worlds and poor, isolated ones, mostly from the resources and attention diverted towards their war machine, and the rule of law becoming both harsher and less effective at keeping order. The Empire thought they could hold enough authority to prevent any serious challenge to their rule, at least for long enough to finish pacifying the galaxy. It appears they were wrong."
+		text = "\"Death to the tyrants!\""
+		.. "\n "
+		.. "\nUnrest was steadily growing across the Empire, both on wealthy peripheral worlds and poor, isolated ones, mostly from the resources and attention diverted towards their war machine, and the rule of law becoming both harsher and less effective at keeping order. The Empire thought they could hold enough authority to prevent any serious challenge to their rule, at least for long enough to finish pacifying the galaxy. It appears they were wrong."
 		.. "\nSeveral uprisings started on varied worlds in a large portion of the Empire. Unprepared to such a large rebellion, faced with an enemy relying more on subversion and deception than military control of territory, it quickly lost control of entire regions. The Empire was prompt to turn its war machine inward and crush the rebellion by the force of arms, as daunting a task as it was."
 		.. "\n "
 		.. "\nThe goal of the Rebels was not direct victory so much as mortally injuring the Empire from the inside, and holding long enough to survive it. What plans did they have for the aftermath is unclear, given how many disparate groups participated. However, for such coordinated uprisings to take place, a central organization had to be overseeing it. Was it an ad-hoc coalition of mutually hostile forces against a greater common enemy, or did they have their own agenda?"
@@ -34,25 +40,44 @@ local entries = {
 	faction_haven = { -- planet31
 		name = "Haven",
 		category = "Factions",
-		text = ""
+		text = "\"Many as one\""
+		.. "\n "
+		.. "\nAs the previous galactic order fell apart, many long-repressed sectarian tensions flared, particularly between free machines and biosupremacists. As conflicts increased in violence, a self-defense group of free machines carved a safe-haven for themselves, before harboring more endangered groups and allying with other self-defense groups as time went by and the whole region slid into anarchy."
+		.. "\nDuring the interregnum, they slowly grew up in territory and influence, until they became a regional hegemon. This put them in rivalry with the Union over both strategic and ideological points, having become a highly centralized, harmonist regime. This cold war marred by proxy conflicts was only ended by the greater threat of the Empire."
+		.. "\n "
+		.. "\nRealizing that even their uneasily alliance with the Union would not be enough to repel the Empire, they threw every resource they had on the defensive effort, hoping to either outlast the Empire, or maybe find another avenue to victory entirely."
+		.. "\nAt the time of the event, they were slowly loosing ground, holding onto strategic points with all their strength and making the Empire pay a surprisingly heavy toll for each conquered world. Given their tight organization, formidable defenses and the series of strategic choke-points that were their last worlds, they may have held for a very long time."
 	},
 	faction_lawless = { -- planet28, planet29, planet34, planet35, planet41, planet49, planet50, planet53
 		name = "The Lawless",
 		category = "Factions",
-		text = ""
+		text = "Spread too thin, with much of its attention and resources dedicated to the war machine, and a number of violent, organized uprising, the Empire's rule of law was crumbling on many worlds. Some, impoverished by high taxation and falling trade, turned to crime, piracy and smuggling of all kinds. Governors without oversight nor control became local tyrants. Military and law enforcement groups became warlords and took over the worlds they were supposed to protect."
+		.. "\n "
+		.. "\nThe Empire, while conscious of those problems, decided that it had more pressing issues, namely uniting the galaxy and dealing with the Rebels. Presumably, its plan was to leave this problem for later, when it would be free to reconquer the seceding worlds and reinstate its rule by force."
+		.. "\nI wonder if it could have worked, or if it would have been too little too late."
 	},
 	faction_dynasties = { -- planet 46, planet47, planet56
 		name = "Dynasties",
 		category = "Factions",
-		text = ""
+		text = "\"Élan vital\""
+		.. "\n "
+		.. "\nSomething about the Rebels have been nagging me for a long time. They were too well-prepared, well-organized, and managed to coordinate simultaneous uprisings among groups of malcontents that often hated each-other. And something about their whole modus operandi kept reminding me of something."
+		.. "\nAs it turns out, it appears that the Dynasties were behind it all. The oldest known organization in the galaxy, they were thought to have been destroyed by the Anarchai at the fall of Chatka, millennia before. Somehow, they appear to have survived."
+		.. "\n "
+		.. "\nTracing back to Earth, they were a shadowy group of biosupremacists, obsessed with creating superior humans through genetic and biological modifications, and ruling over humanity as its greatest representatives. They shunned cybernetic enhancements, and hated non-human synths and free machines as anathema. They were divided into rival families, united only in their goal and against common menaces."
+		.. "\nThey only acted in broad daylight when they were certain of their strength, preferring to subvert those they could, and secretly organizing rebellions against those they couldn't. They were the one behind the Rebels, hoping to destabilize the Empire and take over in the resulting chaos. Even if the Empire won, it would have been weakened enough for them to grow their influence - assuming they would not have been discovered."
 	},
 	faction_dynasties_restored = { -- planet58, planet59
 		name = "Dynasties Restored",
 		category = "Factions",
-		text = ""
+		text = "It has always been thought that the Dynasties were finally destroyed at Chatka, when they fought the last battle of the galaxy against the Anarchai."
+		.. "\nAs it turns out, it was true."
+		.. "\n "
+		.. "\nIt was during archaeological digs that the legendary Dynasties' Main Vaults were found. Their discoverers decided to keep the secret of their existence for themselves, and use the vast knowledge and data it contained to recreate the Dynasties. However, even with so much lost knowledge from the ancient times, they had little of the traditions of the original Dynasties, and were less like a giant among children than a child having found the giant's weapon."
+		.. "\nDespite having planned it for a long time, the rebellion they set off against the Empire was ultimately rushed and too difficult to manage, leading ultimately to its failure. While it did help destabilize the Empire, I have the feeling that the ancient Dynasties, with their immense experience and institutional memory, would have fared much better, possibly well enough to emerge on the stage directly."
 	},
-	faction_exarchs = { -- planet32
-		name = "Exarchs",
+	faction_anarchai = { -- planet32
+		name = "The Anarchai",
 		category = "Factions",
 		text = ""
 	},
@@ -88,7 +113,7 @@ local entries = {
 	threat_chickens = { -- planet21, planet38, planet63
 		name = "Chickens",
 		category = "Threats",
-		text = "Gallinuloides Horribilis"
+		text = "Official name: Gallinuloides Horribilis"
 		.. "\n "
 		.. "\nHow the hell is that their official name? There is practically no biological link between those things and old Earth galliformes! In fact, those things are less birds than even mammals."
 		.. "\n "
@@ -183,7 +208,16 @@ local entries = {
 	location_chatka = { -- planet58
 		name = "Battle of Chatka",
 		category = "Locations",
-		text = ""
+		text = "This is where the greatest battle of the ancient times took place."
+		.. "\n "
+		.. "\nThe Anarchai had conquered most of the galaxy, smashing all resistance on their path. Both the Celestial Dominion and the Ghost Mandate had been destroyed, and the Dynasties had only their homeworld Chatka left."
+		.. "\nIn a strange turn of fate, the human-supremacist Dynasties, oldest and longest-lived political force in the galaxy, would hold the last bastion of the free galaxy against the alien-thinking Anarchai supermachines."
+		.. "\n "
+		.. "\nFaced with annihilation, not only of them but of the entire galaxy, the Dynasties renounced their founding principle, and installed Celestial cybernetic enhancements on their Demuirge battalion, creating in desperation what would be the greatest warriors in galactic history, and the only one to ever stand ground, if only for a moment, against the Anarchai."
+		.. "\n "
+		.. "\nThey would hold two years, repelling many planetary assaults, but loosing almost as many Demuirges to late cybernetic incompatibilities than to enemy action. Ultimately though, it was not them who would fail. Concentrating all their forces on the lone system, the Anarchai shut down the system's hyperspace barriers and triggered a starpulse, destroying all space defenses. Then sent their immense starships to break the planetary shield, overwhelm the anti-aerospace defenses, and burn the planet to the mantle."
+		.. "\n "
+		.. "\nThe rest, as they said, is History."
 	},
 	location_tempest = { -- planet59
 		name = "Tempest archeotech site",

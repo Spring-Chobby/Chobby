@@ -1339,6 +1339,9 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_radarnet"
 			},
 			abilities = {
+			},
+			codexEntries = {
+				"faction_lawless"
 			}
 		},
 	}

@@ -3591,6 +3591,9 @@ local function GetPlanet(planetUtilities, planetID)
 				"commweapon_napalmgrenade",
 			},
 			abilities = {
+			},
+			codexEntries = {
+				"faction_lawless"
 			}
 		},
 	}

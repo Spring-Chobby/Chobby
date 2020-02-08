@@ -3766,6 +3766,9 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_battle_drone_LIMIT_B_2",
 			},
 			abilities = {
+			},
+			codexEntries = {
+				"faction_lawless"
 			}
 		},
 	}

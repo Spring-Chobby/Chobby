@@ -2353,6 +2353,9 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_adv_targeting_LIMIT_B_2",
 			},
 			abilities = {
+			},
+			codexEntries = {
+				"faction_lawless"
 			}
 		},
 	}

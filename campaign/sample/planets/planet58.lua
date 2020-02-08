@@ -2428,7 +2428,11 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_cloak_field"
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"location_chatka",
+				"faction_dynasties_restored"
+			},
 		},
 	}
 	
