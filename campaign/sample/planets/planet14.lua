@@ -33,7 +33,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/shieldfelon.png",
-				text = [[The Felon's discharge gun is very powerful, but comes with a catch; the weapon drains power from its own shields and the shields of nearby allies. Make sure you have enough shield power available to destroy whatever you're facing, or your Felons will become weaponless and defenceless.]]
+				text = [[The Felon's discharge gun is very powerful, but comes with a catch; the weapon drains power from its own shields and the shields of nearby allies. Make sure you have enough shield power available to destroy whatever you're facing, or your Felons will become weaponless and defenseless.]]
 			},
 			{
 				image = "luaui/images/commands/bold/reclaim.png",

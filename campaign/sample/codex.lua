@@ -187,9 +187,9 @@ local entries = {
 	entry_homeworld = { -- planet66
 		name = "Homeworld",
 		category = "Entries",
-		text = "Caderical. The Glinting City of Caslaar. This is where I grew up, where I was born."
+		text = "Caderical. The Glinting City of Caslaar, or what's left of it, under the desert sand. This is where I grew up, where I was born - or rather made."
 		.. "\n "
-		.. "\nNo, not born. Made. I remember it now."
+		.. "\nHow strange to find out the whole truth, after all that time."
 		.. "\n "
 		.. "\nThis was the homeworld of the new Dynasty. Even after centuries, they were still but children, compared to their legendary forebears - but they were driven by the same fire. Obsessed by creating superior humans, worthy of ruling the galaxy, they started a project of engineering the ultimate human warrior, a new Demuirge army that would conquer all of humanity in one glorious campaign, and reign as its true, natural lords!"
 		.. "\n "
@@ -202,11 +202,11 @@ local entries = {
 		.. "\nIronically, they had underestimated us. At the next checkup, seeing how the procedures had been changed, we knew what to expect. And we had long since prepared escape plans."
 		.. "\nAs for me, I had been separated from the others, and was slowly being cornered by security when I felt something connect to my mind. As it turns out, I was enough of a Demuirge after all - this Assault Commander, after being impervious to all orders and analyses, was responding to me. Powering up in the middle of its laboratory, with security half-compromised, it easily tore through several perimeters, to my position."
 		.. "\n "
-		.. "\nOnce onboard, I somehow managed to commandeer a dropship in the confusion, and take control of the Commander's support starship from a small tech station. But right before I could jump out-system, the space defense grid scored a hit on the hyperdrive generator."
+		.. "\nOnce on board, I somehow managed to commandeer a dropship in the confusion, and take control of the Commander's support starship from a small tech station. But right before I could jump out-system, the space defense grid scored a hit on the hyperdrive generator."
 		.. "\nThe resulting misjump should have dismantled the starship and its hold into constituent atoms, but this was the tech of the ancient Dynasty on its final days. Somehow, the ship managed to correct it enough to emerge halfway across the galaxy, in deep space near a Union system-state."
-		.. "\nThe Union salvage teams never realized there was a pilot onboard the Commander: the shock had been so harsh, I had to been put into deep hibernation, to be awakened in an adequately-equipped Demuirge medical facility. So, not knowing what this strange technology was, they sent us to Folsom to be stored and studied to a later date..."
+		.. "\nThe Union salvage teams never realized there was a pilot on board the Commander: the shock had been so harsh, I had to been put into deep hibernation, to be awakened in an adequately-equipped Demuirge medical facility. So, not knowing what this strange technology was, they sent us to Folsom to be stored and studied to a later date..."
 		.. "\n "
-		.. "\nAnd now, I understand what happened here: with our escape attempt, and me fleeing so violently with this Commander, they knew the Empire would investigate. They knew it was too early, but they had just ran out of time."
+		.. "\nHere, with our escape attempt, and me fleeing so violently with this Commander, they knew the Empire would investigate. They knew it was too early, but they had just run out of time."
 		.. "\n "
 		.. "\nI ignore how many of my siblings escaped. Even knowing what happened next, I still hope that at least a few made it out."
 	},
@@ -291,54 +291,86 @@ local entries = {
 		category = "Locations",
 		text = ""
 	},
-	-- Interception networks
-	location_phisnet = { -- planet13
-		name = "Phisnet-3617 interception network",
-		category = "Locations",
-		text = ""
-	},
-	location_kirdipan = { -- planet18
-		name = "Kirdipan interception network",
-		category = "Locations",
-		text = ""
-	},
-	location_hastus = { -- planet46
-		name = "Hastus interception network",
-		category = "Locations",
-		text = ""
-	},
-	-- Artefacts
-	location_new_falsell = { -- planet7
-		name = "New Falsell artefact",
-		category = "Locations",
-		text = ""
-	},
-	location_lovaza_jira = { -- planet28
-		name = "Lovaza Jira artefact",
-		category = "Locations",
-		text = ""
-	},
-	location_leopard = { -- planet33
-		name = "Leopard artefact",
-		category = "Locations",
-		text = ""
-	},
-	location_estann_all = { -- planet43
-		name = "Estann All artefact",
-		category = "Locations",
-		text = ""
-	},
-	-- Misc locations
 	location_musashi = { -- planet71
 		name = "Musashi rally",
 		category = "Locations",
 		text = ""
 	},
+	location_kalyp = { -- planet26
+		name = "Kalyp's tides",
+		category = "Locations",
+		text = ""
+	},
 	
-	-- TODO remove empty example
-	example_dropships = {
-		name = "Dropships",
-		category = "Example",
+	-- Occurences
+	--- Interception networks
+	occurence_phisnet = { -- planet13
+		name = "Phisnet-3617 interception network",
+		category = "Locations",
+		text = ""
+	},
+	occurence_kirdipan = { -- planet18
+		name = "Kirdipan interception network",
+		category = "Locations",
+		text = ""
+	},
+	occurence_hastus = { -- planet46
+		name = "Hastus interception network",
+		category = "Locations",
+		text = ""
+	},
+	-- Artefacts
+	occurence_new_falsell = { -- planet7
+		name = "New Falsell artefact",
+		category = "Locations",
+		text = ""
+	},
+	occurence_lovaza_jira = { -- planet28
+		name = "Lovaza Jira artefact",
+		category = "Locations",
+		text = ""
+	},
+	occurence_leopard = { -- planet33
+		name = "Leopard artefact",
+		category = "Locations",
+		text = ""
+	},
+	occurence_estann_all = { -- planet43
+		name = "Estann All artefact",
+		category = "Locations",
+		text = ""
+	},
+	--- Ancient trees
+	occurence_walchice = { -- planet20
+		name = "The trees of Waliche",
+		category = "Locations",
+		text = ""
+	},
+	occurence_old_falsell = { -- planet45
+		name = "The trees of Old Falsell",
+		category = "Locations",
+		text = ""
+	},
+	--- Ancient tech
+	occurence_deuliah = { -- planet56
+		name = "Asjulohi's ancient fabricator",
+		category = "Locations",
+		text = ""
+	},
+	occurence_deuliah = { -- planet56
+		name = "Deuliah's old Detriment", -- TODO better name
+		category = "Locations",
+		text = ""
+	},
+	occurence_lalata = { -- planet51
+		name = "Lalata's tech", -- TODO better name
+		category = "Locations",
+		text = ""
+	},
+	-- Smuggled data
+	occurence_arteri = { -- planet50
+		name = "Arteri data cache",
+		category = "Locations",
 		text = ""
 	},
 }

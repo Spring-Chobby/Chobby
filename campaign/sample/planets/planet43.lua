@@ -29,7 +29,7 @@ local function GetPlanet(planetUtilities, planetID)
 			.. "\n "
 			.. "\nIf I am fast enough, I should be able to recover whatever it is and get out of there before the nanites become too much of a problem."
 			,
-			extendedText = "Any destroyed units or buildings will be rebuilt by the nanites, but they will be hostile to everyone. I will have to hold off the 'zombies' for long enough to go through any existing defences and reach the Artefact."
+			extendedText = "Any destroyed units or buildings will be rebuilt by the nanites, but they will be hostile to everyone. I will have to hold off the 'zombies' for long enough to go through any existing defenses and reach the Artefact."
 		},
 		tips = {
 			{

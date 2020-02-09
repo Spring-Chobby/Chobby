@@ -28,16 +28,16 @@ local function GetPlanet(planetUtilities, planetID)
 			feedbackLink = "http://zero-k.info/Forum/Thread/24429",
 			text = "There is something very strange on this world. Some kind of artefact, I have never seen anything like it. Could it hold answers about what happened to everyone? I need to get closer."
 			.. "\n "
-			.. "\nIt is heavily defended, direct assault would be a bad idea. Maybe I can find some weakness in those defences..."
+			.. "\nIt is heavily defended, direct assault would be a bad idea. Maybe I can find some weakness in those defenses..."
 			,
-			extendedText = "Frontal attack would be suicidal, but most of it is static defences. If I can infiltrate Phantom sniper bots and destroy their Singularity Plants, it will deactivate the heavier defences."
+			extendedText = "Frontal attack would be suicidal, but most of it is static defenses. If I can infiltrate Phantom sniper bots and destroy their Singularity Plants, it will deactivate the heavier defenses."
 			.. "\n "
 			.. "\nI should not let my guard down, some mobile forces are still active. And there is something very strange with their data flux..."
 		},
 		tips = {
 			{
 				image = "unitpics/cloaksnipe.png",
-				text = [[Unlike all other cloaked units, the Phantom can fire its weapon without becoming visible. Use this to sneak into the defence network, destroying what you need to without blowing your cover.]]
+				text = [[Unlike all other cloaked units, the Phantom can fire its weapon without becoming visible. Use this to sneak into the defense network, destroying what you need to without blowing your cover.]]
 			},
 			{
 				image = "unitpics/turretheavy.png",

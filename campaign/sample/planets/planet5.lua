@@ -30,7 +30,7 @@ local function GetPlanet(planetUtilities, planetID)
 			.. "\n "
 			.. "\nWhoever it was defending - or defending from - there is still an active defense network entrenched down there. I will have to punch through it, if I want access to that sector."
 			,
-			extendedText = "It is relying on a network of defensive turrets and shielded bots to keep its production infrastructure safe. I will need Slings to weaken its defences and shields before I can commit to an assault. And I will need spotters for those Slings.",
+			extendedText = "It is relying on a network of defensive turrets and shielded bots to keep its production infrastructure safe. I will need Slings to weaken its defenses and shields before I can commit to an assault. And I will need spotters for those Slings.",
 		},
 		tips = {
 			{

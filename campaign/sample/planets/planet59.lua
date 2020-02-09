@@ -44,7 +44,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/pw_artefact.png",
-				text = [[The Artefact has no direct defences of its own but it is being defended by a hostile force. Push through the zombies and your opponent's defences to access the Artefact.]]
+				text = [[The Artefact has no direct defenses of its own but it is being defended by a hostile force. Push through the zombies and your opponent's defenses to access the Artefact.]]
 			},
 		},
 		gameConfig = {

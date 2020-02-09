@@ -42,7 +42,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/jumpcon.png",
-				text = [[The Constable constructor has jumpjets which allow it to set up metal extractors, wind generators, radar towers and defences on high mountains.]]
+				text = [[The Constable constructor has jumpjets which allow it to set up metal extractors, wind generators, radar towers and defenses on high mountains.]]
 			},
 			{
 				image = "unitpics/jumpskirm.png",

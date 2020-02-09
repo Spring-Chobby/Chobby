@@ -37,7 +37,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/gunshipaa.png",
-				text = [[Tridents should be your first line of defence against any aerial threat; their long-range AA missiles are effective against all flying targets, and unlike static turrets they can retreat easily if threatened by ground forces.]]
+				text = [[Tridents should be your first line of defense against any aerial threat; their long-range AA missiles are effective against all flying targets, and unlike static turrets they can retreat easily if threatened by ground forces.]]
 			},
 			{
 				image = "unitpics/gunshipkrow.png",

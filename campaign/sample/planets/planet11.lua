@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G8V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24457",
-			text = "This world seems to have rebelled against their Empire, while it was too busy fighting on other fronts. They built formidable defences, most of them still intact as the Empire cut them off instead of landing a punitive force."
+			text = "This world seems to have rebelled against their Empire, while it was too busy fighting on other fronts. They built formidable defenses, most of them still intact as the Empire cut them off instead of landing a punitive force."
 			.. "\n "
 			.. "\nSomehow, it has been enough to cripple them, and most of their mobile ground forces have disappeared."
 			,

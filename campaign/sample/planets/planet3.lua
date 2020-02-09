@@ -26,7 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "K4VI",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24417",
-			text = "This was a major military hub, I can detect the remains of staging grounds and logistic networks. With all those broken plateaus, this area would have been easier to defend. This is bad news for me, I will have to take those defences out if I want to continue that way."
+			text = "This was a major military hub, I can detect the remains of staging grounds and logistic networks. With all those broken plateaus, this area would have been easier to defend. This is bad news for me, I will have to take those defenses out if I want to continue that way."
 			.. "\n "
 			.. "\nWhoever they were fighting, it was not going well. There is evidence of raids even here, the frontline would not have been far."
 			,

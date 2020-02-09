@@ -36,7 +36,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/vehsupport.png",
-				text = [[Fencers need to remain stationary and set up before they can fire, making them better at defence than offence. Their guided missiles inflict reliable damage at range.]]
+				text = [[Fencers need to remain stationary and set up before they can fire, making them better at defense than offence. Their guided missiles inflict reliable damage at range.]]
 			},
 			{
 				image = "unitpics/veharty.png",

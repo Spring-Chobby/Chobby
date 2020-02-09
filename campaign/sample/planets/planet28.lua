@@ -39,7 +39,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/hoverassault.png",
-				text = [[Halberds can employ armor when not firing, reducing all incoming damage by a factor of four. Use this to scout for artillery targets or bypass static defences.]]
+				text = [[Halberds can employ armor when not firing, reducing all incoming damage by a factor of four. Use this to scout for artillery targets or bypass static defenses.]]
 			},
 			{
 				image = "LuaUI/Images/commands/Bold/reclaim.png",

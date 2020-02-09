@@ -42,7 +42,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/staticstorage.png",
-				text = [[The Funnelweb's high build power allows it to quickly build defences, but only if it has a supply of metal available. Reserve some resources for their use by ctrl-clicking on the resource bars and setting Funnelweb build priority to High (see the online manual for more information).]]
+				text = [[The Funnelweb's high build power allows it to quickly build defenses, but only if it has a supply of metal available. Reserve some resources for their use by ctrl-clicking on the resource bars and setting Funnelweb build priority to High (see the online manual for more information).]]
 			},
 		},
 		gameConfig = {
