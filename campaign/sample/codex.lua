@@ -2,7 +2,7 @@ local entries = {
 	-- Factions
 	faction_union = { -- planet3, planet5
 		name = "The Union",
-		category = "Factions",
+		category = "3. Factions",
 		text = "Official name: the Union of Sovereign Star-Systems"
 		.. "\nSeveral acronyms were used on occasion, but the variety of official languages between the varied systems-states made it impossible for a majority to agree on a single one."
 		.. "\n "
@@ -16,7 +16,7 @@ local entries = {
 	},
 	faction_empire = { -- planet11, planet12, planet15, planet16, planet17, planet24, planet25, planet26
 		name = "The Empire",
-		category = "Factions",
+		category = "3. Factions",
 		text = "Official name: the Ninth Galactic State, Second Restoration"
 		.. "\nAs they started winning, everyone called it the Galactic Empire, or simply the Empire"
 		.. "\n "
@@ -29,7 +29,7 @@ local entries = {
 	},
 	faction_rebels = { -- planet36, planet37, planet39, planet40, planet42, planet44, planet47, planet48, planet56, planet62
 		name = "The Rebels",
-		category = "Factions",
+		category = "3. Factions",
 		text = "\"Death to the tyrants!\""
 		.. "\n "
 		.. "\nUnrest was steadily growing across the Empire, both on wealthy peripheral worlds and poor, isolated ones, mostly from the resources and attention diverted towards their war machine, and the rule of law becoming both harsher and less effective at keeping order. The Empire thought they could hold enough authority to prevent any serious challenge to their rule, at least for long enough to finish pacifying the galaxy. It appears they were wrong."
@@ -39,7 +39,7 @@ local entries = {
 	},
 	faction_haven = { -- planet31
 		name = "Haven",
-		category = "Factions",
+		category = "3. Factions",
 		text = "\"Many as one\""
 		.. "\n "
 		.. "\nAs the previous galactic order fell apart, many long-repressed sectarian tensions flared, particularly between free machines and biosupremacists. As conflicts increased in violence, a self-defense group of free machines carved a safe-haven for themselves, before harboring more endangered groups and allying with other self-defense groups as time went by and the whole region slid into anarchy."
@@ -50,7 +50,7 @@ local entries = {
 	},
 	faction_lawless = { -- planet28, planet29, planet34, planet35, planet41, planet49, planet50, planet53
 		name = "The Lawless",
-		category = "Factions",
+		category = "3. Factions",
 		text = "Spread too thin, with much of its attention and resources dedicated to the war machine, and a number of violent, organized uprising, the Empire's rule of law was crumbling on many worlds. Some, impoverished by high taxation and falling trade, turned to crime, piracy and smuggling of all kinds. Governors without oversight nor control became local tyrants. Military and law enforcement groups became warlords and took over the worlds they were supposed to protect."
 		.. "\n "
 		.. "\nThe Empire, while conscious of those problems, decided that it had more pressing issues, namely uniting the galaxy and dealing with the Rebels. Presumably, its plan was to leave this problem for later, when it would be free to reconquer the seceding worlds and reinstate its rule by force."
@@ -58,7 +58,7 @@ local entries = {
 	},
 	faction_dynasty = { -- planet 46, planet47, planet56
 		name = "The Dynasty",
-		category = "Factions",
+		category = "3. Factions",
 		text = "\"Élan vital\""
 		.. "\n "
 		.. "\nSomething about the Rebels have been nagging me for a long time. They were too well-prepared, well-organized, and managed to coordinate simultaneous uprisings among groups of malcontents that often hated each-other. And something about their whole modus operandi kept reminding me of something."
@@ -71,7 +71,7 @@ local entries = {
 	},
 	faction_dynasty_restored = { -- planet58, planet59
 		name = "The Dynasty restored",
-		category = "Factions",
+		category = "3. Factions",
 		text = "It has always been thought that the Dynasty was finally destroyed at Chatka, when they fought the last battle of the galaxy against the Anarchai."
 		.. "\nAs it turns out, it was true."
 		.. "\n "
@@ -82,19 +82,29 @@ local entries = {
 	},
 	faction_anarchai = { -- planet32
 		name = "The Anarchai",
-		category = "Factions",
-		text = ""
+		category = "3. Factions",
+		text = "Little is known, let alone understood, about the Anarchai who brought the ancient times to an end. Those alien-thinking, god-like supermachines simply appeared one day across a quadrant with no warning."
+		.. "\nHitting the galaxy like a hurricane, they smashed all resistance, systematically dismantling any higher form of organization and advanced installations they found, before continuing to the next system."
+		.. "\n "
+		.. "\nTaken aback, the Celestial Dominion, Ghost Mandate and Dynasty put their longstanding cold war on hold to band together against this new menace, but to no avail. Within months, both the mighty Ghost Fleet and the Four Thrones had been destroyed, a few survivors only managing to join Dynasty space before the Anarchai scatterships."
+		.. "\n "
+		.. "\nIt would be the only time in known history where the Dynasties broke their principle of human supremacy, making large-scale use of tech from Celestial and Ghost remnants. Against all odds, this unholy alliance of desperation did manage to slow down the ineluctable Anarchai advance - though not for long."
+		.. "\nThree years after their emergence, Chatka, the Dynasty homeworld and last bastion of resistance, would be burned to cinder."
+		.. "\n "
+		.. "\nThen, they turned their scatterships against each-other, destroying themselves to the last. As suddenly as they had appeared, the Anarchai were gone - leaving the galaxy stunned, ruined, utterly disorganized - but to their own surprise, still alive."
+		.. "\n "
+		.. "\nHaven was fascinated by the Anarchai. Located in their presumed birthplace, they spent considerable effort trying to pierce the mystery of their origins, even as the war against the Empire was taking a turn for the worse."
 	},
 	faction_survivors = { -- planet51, planet55, planet62
 		name = "Survivors",
-		category = "Factions",
+		category = "3. Factions",
 		text = ""
 	},
 	
 	-- Threats
 	threat_automata = { -- planet69
 		name = "Automata",
-		category = "Threats",
+		category = "2. Threats",
 		text = "Left to themselves, most armies will fall dormant to minimize energy and maintenance requirements. With proper settings and their own nanolathe arrays, they can stay functional for a very long time. And they will leave enough sensors active to detect threats, then awaken and engage them until new orders or supervision are received."
 		.. "\n "
 		.. "\nUnfortunately, it seems I lack the proper identification codes to be recognized by most of those damn automata, or enough time to find a flaw in their code and hack them - so they are engaging me on sight. There may not be sapient minds behind them, but tactical AIs should not be underestimated, especially when they have the home advantage."
@@ -103,7 +113,7 @@ local entries = {
 	},
 	threat_zombies = { -- planet43, planet59
 		name = "Zombies",
-		category = "Threats",
+		category = "2. Threats",
 		text = "Suspected to be an ancient terror weapon for the defense by mutually-assured destruction of a long-forgotten polity, the zombie nanoplague was for a long time the most feared contagion in existence."
 		.. "\n "
 		.. "\nExtraordinarily virulent, it will contaminate an entire planet in less than a week from a single carrier, and cause the death of any organic lifeform in a few minutes at most. Only the most advanced antinanite barriers will stop it, and it will take over any civilian or insufficiently protected military machines. And what gave it its name is how even the most advanced military systems will be taken over and resurrected. The only way to neutralize for good an infected unit is to also destroy its wreck."
@@ -116,7 +126,7 @@ local entries = {
 	},
 	threat_chickens = { -- planet21, planet38, planet63
 		name = "Chickens",
-		category = "Threats",
+		category = "2. Threats",
 		text = "Official name: Gallinuloides Horribilis"
 		.. "\n "
 		.. "\nHow the hell is that their official name? There is practically no biological link between those things and old Earth galliformes! In fact, those things are less birds than even mammals."
@@ -130,7 +140,7 @@ local entries = {
 	},
 	threat_chickens_lifecycle = { -- planet38
 		name = "Chickens life-cycle",
-		category = "Threats",
+		category = "2. Threats",
 		text = "Little is known or understood about the life-cycle of chicken. Colonies are centered around a Queen, which will be abandoned upon its death. Whether the colony is destroyed, its dormant remains taken over by a new one or if it will produce a new Queen after a long enough time is unknown, as is how Queens themselves are born and form new colonies."
 		.. "\n "
 		.. "\nDormant chicken can endure millennia in extremely deep stealth underground chambers, while active colonies form bewildering tunnel complexes, with little surface activity - though some cases of what may be surface agriculture have been observed. Size and activity of individual colonies vary wildly, from lone mountains to entire continents, and ranging from a few scattered zooids to subterranean metropolis. Given time, their activities will inevitably cover he entire planet."
@@ -139,14 +149,14 @@ local entries = {
 	},
 	threat_chickens_travel = { -- planet21
 		name = "Chickens interstellar travel",
-		category = "Threats",
+		category = "2. Threats",
 		text = "No chicken space organism has ever been detected, nor stowaway zooid or biological material that could have started a new colony. Despite this, new colonies have regularly been found on worlds with no previously known chicken presence. While some could be explained by undetected dormant elements, some had ruled it out with near-certainty. As such, it has generally been accepted that chicken have means to either move or seed new colonies over interstellar distances. Whether by slower-than-light dormant seeds, incredibly stealthy starships, extremely sophisticated detection systems to launch far from human sensors, or even deep underground warp portals working by unknown physical principles, no concrete element has been found."
 		.. "\n "
 		.. "\nChicken have existed for at least as long as the early days of the human galactic age and their capabilities to live on almost any type of planet without any need for terraforming. Despite this and their demonstrated interstellar capabilities, they have never settled on more than a proportionally a handful of worlds, even including those ignored by humans as unsuitable for colonization or exploitation. Why haven't they long overrun has been said to be the key to understand what they really are."
 	},
 	threat_chickens_intelligence = { -- planet63
 		name = "Chickens intelligence",
-		category = "Threats",
+		category = "2. Threats",
 		text = "Chicken thought processes, or even whether they are even sapient, is unknown. They have however proven themselves to be remarkably good at planning, adaptation and long-term resource management. Their degree of understanding of human societies is unknown, but they have sometimes been eerily good at striking unsuspecting or unprepared settlements at the worst possible time and place. Though some attribute this to exceptional pattern-recognition, others have hypothesized an ability to spy on and understand human communications and societies."
 		.. "\n "
 		.. "\nInter-colony skirmishes have been observed, often limited to underground tunnel fighting and nowhere near with the level of violence seen against humans, or with a Queen directly intervening. Similarly, while colonies don't always cooperate against humans and some prefer to go dormant than fight, no skirmish has ever been observed on a conflict where a colony was engaged against humans. Long-range coordination of chicken forces also hint at sophisticated inter-colony communications, though by which mechanisms is unknown. Controversial evidence of interstellar communication have been presented, but has always been judged invalid or inconclusive."
@@ -159,14 +169,14 @@ local entries = {
 	-- Entries
 	entry_first = { -- planet69
 		name = "what",
-		category = "Entries",
+		category = "1. Entries",
 		text = "What am I doing on a hostile fortress world? Was I captured? But then why didn't the pull me out before moving me around? There is no trace planetary assault - then were those subverted by deep agents? A mistimed diversion? Why hasn't anyone intervened yet? Something feels very wrong."
 		.. "\n "
 		.. "\nSomehow the defense grid is still on automated alert. Something must be keeping everyone busy and a starship has answered my distress call. This is my chance to jump out of the system."
 	},
 	entry_commander = { -- planet1
 		name = "Assault commander",
-		category = "Entries",
+		category = "1. Entries",
 		text = "Commanders are an old concept. Put everything needed to build an army with local resources on a compact chassis, slap a weapon and some armor, and harden it all for fast insertion on a hostile planet. Hopefully they send you on a less defended part of the world, where you are left alone long enough to entrench yourself, and launch an assault on strategic locations - or open a gate for the real assault forces to get in. Or you are defending a planet and get thrown wherever the enemy is deciding to land, then try and kill them before they can build enough of an army to kill you."
 		.. "\n A few tried and true models, perfected for cost, effectiveness and reliability over many wars, and pretty much no surprise for many centuries. My memories are still blurred, but I remember extensively training on those."
 		.. "\n "
@@ -177,7 +187,7 @@ local entries = {
 	},
 	entry_event = { -- planet2
 		name = "Event",
-		category = "Entries",
+		category = "1. Entries",
 		text = "It is not just those worlds that are empty. It is the entire galaxy."
 		.. "\nAgain, old ruins from what could be the same time litter the planet. But when I try to pick up long-range signals, detect hyperspace movements or any other sort of activity, the galaxy is silent. If someone is still out there, they either lost all interstellar capabilities, or they are hiding very well."
 		.. "\n "
@@ -185,8 +195,8 @@ local entries = {
 		.. "\nBut some recording survived, enough to prove that whatever the event was, it happened in an instant. One moment everyone was there, a day like any other. The next moment, they were all gone. Baselines, modified, cyborgs, synths, uplifts, free machines - everyone, no exception, and nothing else..."
 	},
 	entry_homeworld = { -- planet66
-		name = "Homeworld",
-		category = "Entries",
+		name = "My homeworld",
+		category = "1. Entries",
 		text = "Caderical. The Glinting City of Caslaar, or what's left of it, under the desert sand. This is where I grew up, where I was born - or rather made."
 		.. "\n "
 		.. "\nHow strange to find out the whole truth, after all that time."
@@ -211,20 +221,21 @@ local entries = {
 		.. "\nI ignore how many of my siblings escaped. Even knowing what happened next, I still hope that at least a few made it out."
 	},
 	entry_starsong = { -- planet67
-		name = "Starsong",
-		category = "Entries",
+		name = "The Starsong",
+		category = "1. Entries",
 		text = ""
 	},
 	entry_eternity_gate = { -- planet68
 		name = "The Eternity Gate",
-		category = "Entries",
+		category = "1. Entries",
 		text = ""
 	},
 	
 	-- Locations
+	--- Storyline locations
 	location_im_jaleth = { -- planet1
 		name = "Im Jaleth ruins",
-		category = "Locations",
+		category = "4. Locations",
 		text = "This world has been abandoned for a very, very long time. What little ruins I had time to unearth were buried very deep, and all from the same geological strata. For some reason, the entire planet seem to have been abandoned at once, and never repopulated"
 		.. "\nWas it kept empty as a buffer before the Folsom fortress world? Depriving themselves of a good inhabitable world like this one for a small strategic gain feels wasteful."
 		.. "\n "
@@ -232,7 +243,7 @@ local entries = {
 	},
 	location_chatka = { -- planet58
 		name = "Battle of Chatka",
-		category = "Locations",
+		category = "4. Locations",
 		text = "This is where the greatest battle of the ancient times took place."
 		.. "\n "
 		.. "\nThe Anarchai had conquered most of the galaxy, smashing all resistance on their path. Both the Celestial Dominion and the Ghost Mandate had been destroyed, and the Dynasty had only their homeworld Chatka left."
@@ -246,7 +257,7 @@ local entries = {
 	},
 	location_tempest = { -- planet59
 		name = "Tempest archeotech site",
-		category = "Locations",
+		category = "4. Locations",
 		text = "This was one of the last worlds to fall during the Dynasty's last stand against the Anarchai, and appears to have been their main military research and development site, especially for research too dangerous to be conducted on their homeworld."
 		.. "\nThis Artefact was one of the weapons they were studying in desperation. It significantly differs from Dynasty technology, however. Did they build it from Ghost or Celestial tech? Or was it something older, whose secrets they were trying to unlock? Whatever it was, I suspect the zombie nanoplague release was more of a side-effect than its true purpose. I was lucky it responded to my shutdown order. From what little sense I can make of those readings, it would have been a very bad idea to let it activate."
 		.. "\n "
@@ -255,14 +266,9 @@ local entries = {
 		.. "\n "
 		.. "\nUnable to analyze such advanced archeotech on site, the researchers installed it on its starship, who was then towed to their headquarters on Caderical."
 	},
-	location_hibiliha = { -- planet61
-		name = "Hibiliha warp station",
-		category = "Locations",
-		text = ""
-	},
 	location_karuwal = { -- planet62
 		name = "Battle of Karuwal",
-		category = "Locations",
+		category = "4. Locations",
 		text = "While the Rebels had initially managed to take over many worlds through political subversion and uprisings, the ponderous war machine of the Empire was now facing inward, increasingly turning the conflict into military engagements. Eager to capitalize on early successes, where misdirection, clever maneuvering and guerrilla tactics had let them defeat much larger forces in several key engagements, the Rebels decided to launch a large-scale assault against the heartlands of the Empire before it had time to recover."
 		.. "\nThis turned out to be a mistake."
 		.. "\n "
@@ -273,104 +279,110 @@ local entries = {
 	},
 	location_rockbar = { -- planet57
 		name = "Rockbar testing grounds",
-		category = "Locations",
+		category = "4. Locations",
 		text = ""
 	},
 	location_pendust = { -- planet60
 		name = "Pendust capital planet",
-		category = "Locations",
+		category = "4. Locations",
+		text = ""
+	},
+	location_hibiliha = { -- planet61
+		name = "Hibiliha warp station",
+		category = "4. Locations",
 		text = ""
 	},
 	location_intrepid = { -- planet64
 		name = "The Garden of Intrepid",
-		category = "Locations",
+		category = "4. Locations",
 		text = ""
 	},
-	location_mannia = { -- planet64
+	location_mannia = { -- planet65
 		name = "Mannia transit camps",
-		category = "Locations",
+		category = "4. Locations",
 		text = ""
 	},
+	-- Smuggled data
+	location_arteri = { -- planet50
+		name = "Arteri data cache",
+		category = "4. Locations",
+		text = ""
+	},
+	--- Interception networks
+	location_phisnet = { -- planet13
+		name = "Phisnet-3617 interception network",
+		category = "4. Locations",
+		text = ""
+	},
+	location_kirdipan = { -- planet18
+		name = "Kirdipan interception network",
+		category = "4. Locations",
+		text = ""
+	},
+	location_hastus = { -- planet46
+		name = "Hastus interception network",
+		category = "4. Locations",
+		text = ""
+	},
+	--- Other locations 
 	location_musashi = { -- planet71
 		name = "Musashi rally",
-		category = "Locations",
+		category = "4. Locations",
 		text = ""
 	},
 	location_kalyp = { -- planet26
 		name = "Kalyp's tides",
-		category = "Locations",
+		category = "4. Locations",
 		text = ""
 	},
 	
-	-- Occurences
-	--- Interception networks
-	occurence_phisnet = { -- planet13
-		name = "Phisnet-3617 interception network",
-		category = "Locations",
-		text = ""
-	},
-	occurence_kirdipan = { -- planet18
-		name = "Kirdipan interception network",
-		category = "Locations",
-		text = ""
-	},
-	occurence_hastus = { -- planet46
-		name = "Hastus interception network",
-		category = "Locations",
-		text = ""
-	},
+	-- Anomalies
 	-- Artefacts
-	occurence_new_falsell = { -- planet7
+	anomalie_new_falsell = { -- planet7
 		name = "New Falsell artefact",
-		category = "Locations",
+		category = "5. Anomalies",
 		text = ""
 	},
-	occurence_lovaza_jira = { -- planet28
+	anomalie_lovaza_jira = { -- planet28
 		name = "Lovaza Jira artefact",
-		category = "Locations",
+		category = "5. Anomalies",
 		text = ""
 	},
-	occurence_leopard = { -- planet33
+	anomalie_leopard = { -- planet33
 		name = "Leopard artefact",
-		category = "Locations",
+		category = "5. Anomalies",
 		text = ""
 	},
-	occurence_estann_all = { -- planet43
+	anomalie_estann_all = { -- planet43
 		name = "Estann All artefact",
-		category = "Locations",
+		category = "5. Anomalies",
 		text = ""
 	},
 	--- Ancient trees
-	occurence_walchice = { -- planet20
+	anomalie_walchice = { -- planet20
 		name = "The trees of Waliche",
-		category = "Locations",
+		category = "5. Anomalies",
 		text = ""
 	},
-	occurence_old_falsell = { -- planet45
+	anomalie_old_falsell = { -- planet45
 		name = "The trees of Old Falsell",
-		category = "Locations",
+		category = "5. Anomalies",
 		text = ""
 	},
 	--- Ancient tech
-	occurence_deuliah = { -- planet56
+	anomalie_deuliah = { -- planet56
 		name = "Asjulohi's ancient fabricator",
-		category = "Locations",
+		category = "5. Anomalies",
 		text = ""
 	},
-	occurence_deuliah = { -- planet56
+	anomalie_deuliah = { -- planet56
 		name = "Deuliah's old Detriment", -- TODO better name
-		category = "Locations",
+		category = "5. Anomalies",
 		text = ""
 	},
-	occurence_lalata = { -- planet51
+	anomalie_lalata = { -- planet51
 		name = "Lalata's tech", -- TODO better name
-		category = "Locations",
-		text = ""
-	},
-	-- Smuggled data
-	occurence_arteri = { -- planet50
-		name = "Arteri data cache",
-		category = "Locations",
+		category = "5. Anomalies",
 		text = ""
 	},
 }

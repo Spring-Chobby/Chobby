@@ -2819,7 +2819,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_battle_drone_LIMIT_A_2",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_anarchai"
+			},
 		},
 	}
 	
