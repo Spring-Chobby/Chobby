@@ -164,9 +164,6 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 7970,
 						z = 3750,
 						facing = 0,
-						commands = {
-							{cmdID = planetUtilities.COMMAND.JUMP, pos = {2900, 380},}
-						},
 					},
 					{
 						name = "jumpcon",
