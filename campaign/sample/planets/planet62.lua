@@ -25,7 +25,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G7V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24566",
-			text = [[Your enemy is causing trouble with a collection of heavy units, including large Paladin striders. Ambush and destroy their heavies in the mountains with Scorpions.]]
+			text = "This is the closest point the Rebel military ever came to threaten the Empire's heartland. But overconfidence was their downfall: instead of keeping with ambush and clever strategic play, they met the Empire on its own terms in a single, decisive engagement."
+			.. "\n "
+			.. "\nThis defeat broke the momentum of the Rebel forces, from which they would never recover."
+			,
+			extendedText = "Once bitten, twice shy: the Empire stationed an impressive collection of heavy units here, including large Paladin striders. I managed to take control of a few Scorpions - which was surprisingly easy - and mountains are a good place for ambush, to destroy those heavies."
 		},
 		tips = {
 			{

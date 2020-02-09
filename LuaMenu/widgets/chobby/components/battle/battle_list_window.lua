@@ -9,23 +9,23 @@ local IMG_UNREADY  = LUA_DIRNAME .. "images/unready.png"
 function BattleListWindow:init(parent)
 	self:super("init", parent, "Play or watch a game", true, nil, nil, nil, 34)
 
-	if not Configuration.gameConfig.disableBattleListHostButton then
-		self.btnNewBattle = Button:New {
-			x = 260,
-			y = 7,
-			width = 150,
-			height = 45,
-			caption = i18n("open_mp_game"),
-			font = Configuration:GetFont(3),
-			classname = "option_button",
-			parent = self.window,
-			OnClick = {
-				function ()
-					self:OpenHostWindow()
-				end
-			},
-		}
-	end
+if not Configuration.gameConfig.disableBattleListHostButton then
+	self.btnNewBattle = Button:New {
+		x = 260,
+		y = 7,
+		width = 150,
+		height = 45,
+		caption = i18n("open_mp_game"),
+		font = Configuration:GetFont(3),
+		classname = "option_button",
+		parent = self.window,
+		OnClick = {
+			function ()
+				self:OpenHostWindow()
+			end
+		},
+	}
+end
 
 	local function SoftUpdate()
 		self:UpdateFilters()
@@ -511,17 +511,24 @@ function BattleListWindow:MakeJoinBattle(battleID, battle)
 		}
 	end
 
-	if not Configuration.gameConfig.hideGameExistanceDisplay then
-		local imHaveGame = Image:New {
-			name = "imHaveGame",
-			x = height + 50,
-			width = 15,
-			height = 15,
-			y = 20,
-			height = 15,
-			file = (VFS.HasArchive(battle.gameName) and IMG_READY or IMG_UNREADY),
-			parent = parentButton,
-		}
+	--local imHaveGame = Image:New {
+	--	name = "imHaveGame",
+	--	x = height + 50,
+	--	width = 15,
+	--	height = 15,
+	--	y = 20,
+	--	height = 15,
+	--	file = (VFS.HasArchive(battle.gameName) and IMG_READY or IMG_UNREADY),
+	--	parent = parentButton,
+	--}
+	local modeName = battle.battleMode and Configuration.battleTypeToHumanName[battle.battleMode]
+	if battle.isRunning then
+		if modeName then
+			modeName = modeName .. " - "
+		else
+			modeName = ""
+		end
+		modeName = modeName .. "Running for " .. Spring.Utilities.GetTimeToPast(battle.runningSince)
 	end
 
 	local lblGame = Label:New {
@@ -531,7 +538,7 @@ function BattleListWindow:MakeJoinBattle(battleID, battle)
 		y = 20,
 		height = 15,
 		valign = 'center',
-		caption = self:_MakeGameCaption(battle),
+		caption = modeName, --battle.gameName:sub(1, 22),
 		font = Configuration:GetFont(1),
 		parent = parentButton,
 	}
@@ -649,13 +656,11 @@ function BattleListWindow:UpdateSync(battleID)
 	end
 
 	local imHaveMap = items.battleButton:GetChildByName("imHaveMap")
-	if imHaveMap ~= nil then
-		imHaveMap.file = (VFS.HasArchive(battle.mapName) and IMG_READY or IMG_UNREADY)
-	end
+	--local imHaveGame = items.battleButton:GetChildByName("imHaveGame")
 
-	local imHaveGame = items.battleButton:GetChildByName("imHaveGame")
-	if imHaveGame ~= nil then
-		imHaveGame.file = (VFS.HasArchive(battle.gameName) and IMG_READY or IMG_UNREADY)
+	if imHaveMap then
+		--imHaveGame.file = (VFS.HasArchive(battle.gameName) and IMG_READY or IMG_UNREADY)
+		imHaveMap.file = (VFS.HasArchive(battle.mapName) and IMG_READY or IMG_UNREADY)
 	end
 end
 
@@ -678,17 +683,6 @@ function BattleListWindow:UpdateTimers()
 			runningTimeCaption:SetCaption(modeName .. "Running for " .. Spring.Utilities.GetTimeToPast(battle.runningSince))
 		end
 	end
-end
-
-function BattleListWindow:_MakeGameCaption(battle)
-	local gameCaption = battle.battleMode and Configuration.battleTypeToHumanName[battle.battleMode]
-	if gameCaption == nil then
-		gameCaption = battle.gameName -- :sub(1, 22)
-	end
-	if battle.isRunning then
-		gameCaption = gameCaption .. " - Running for " .. Spring.Utilities.GetTimeToPast(battle.runningSince)
-	end
-	return gameCaption
 end
 
 function BattleListWindow:JoinedBattle(battleID)
@@ -787,13 +781,22 @@ function BattleListWindow:OnUpdateBattleInfo(battleID)
 		imHaveMap:Invalidate()
 
 
-		local imHaveGame = items.battleButton:GetChildByName("imHaveGame")
-		if imHaveGame ~= nil then
-			imHaveGame.file = (VFS.HasArchive(battle.gameName) and IMG_READY or IMG_UNREADY)
-		end
+		--local imHaveGame = items.battleButton:GetChildByName("imHaveGame")
+		--imHaveGame.file = (VFS.HasArchive(battle.gameName) and IMG_READY or IMG_UNREADY)
+		--gameCaption:SetCaption(battle.gameName:gsub("_", " "))
 
 		local gameCaption = items.battleButton:GetChildByName("gameCaption")
-		gameCaption:SetCaption(self:_MakeGameCaption(battle))
+		local modeName = battle.battleMode and Configuration.battleTypeToHumanName[battle.battleMode]
+		if battle.isRunning then
+			if modeName then
+				modeName = modeName .. " - "
+			else
+				modeName = ""
+			end
+			gameCaption:SetCaption(modeName .. "Running for " .. Spring.Utilities.GetTimeToPast(battle.runningSince))
+		else
+			gameCaption:SetCaption(modeName)
+		end
 
 		local playersCaption = items.battleButton:GetChildByName("playersCaption")
 		playersCaption:SetCaption(lobby:GetBattlePlayerCount(battleID) .. "/" .. battle.maxPlayers)

@@ -26,7 +26,9 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "A4IV",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24566",
-			text = [[Burn out forests of Wind Generators with Phoenixes to cripple your enemy and allow the land units of your ally to make progress. Protect your bombers against enemy air with Raptors.]]
+			text = "Even if it hadn't been set back so often by wars over its resources, I doubt terraforming this blasted world could have ever been successful. Now, all that is left from those efforts are constant, maddening winds that can drive even automata insane."
+			,
+			extendedText = "The programming of those automata has decayed in an incomprehensible mess. I couldn't have turned them, but some did so on their own. I don't like it - let's burn out those forests of Wind Generators with Phoenixes, and protect those against enemy air with Raptors. The faster I cripple their energy sources, the sooner I can get out of here."
 		},
 		tips = {
 			{

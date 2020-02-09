@@ -30,7 +30,15 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G8V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24417",
-			text = [[Use a nimble force of Glaives to penetrate the enemy lines and rescue your commander from the local automatons. Once activated, construct an army and storm the enemy base as retribution.]]
+			text = "[ Emergency boot sequence complete, terminating pilot hibernation ]"
+			.. "\n[ Recovering data... Recovery incomplete, see log file for error list ]"
+			.. "\n[ Alert: Commander unit systems unresponsive: movement, armament, construction, IFF. External reboot required. ]"
+			.. "\n[ Welcome aboard, <missing data>. Do you wish to see the tutorial? Y/N ]"
+			.. "\n "
+			.. "\nWh-"
+			.. "\nWhat? Where am I?"
+			.. "\nI- I can't think clearly... That noise - is that weapon fire?"
+			-- There is no in-game briefing screen for this, so thee is no need for extendedText
 		},
 		gameConfig = {
 			gameName = "Quick Rocket Tutorial",

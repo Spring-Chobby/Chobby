@@ -25,7 +25,13 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G6VI",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24566",
-			text = [[The artillery cannons of your enemies' battleships are pretty big, but the Big Bertha plasma cannon is positively humongous. Use your static artillery to suppress the enemy until reinforcements arrive.]]
+			text = "There are two massive armies fighting down there, but both are declaring themselves Imperial forces. This didn't start with a glitch either, it was clearly two humans that initiated this. What could have driven them to do such a thing?"
+			.. "\n "
+			.. "\nI really don't want to fight both of them at the same time. Time to negotiate with derelict automata again..."
+			,
+			extendedText = "The artillery cannons of the other sides' battleships are pretty big, but the Big Bertha plasma cannon is positively humongous."
+			.. "\n "
+			.. "\nI should use static artillery to suppress the enemy until reinforcements arrive from the other continent. Hoping those tin cans still work, their strategic movement routines aren't corrupted, and they correctly interpreted my instructions."
 		},
 		tips = {
 			{

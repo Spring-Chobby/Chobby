@@ -26,7 +26,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G8V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24510",
-			text = [[This island is blessed with strong geothermal activity, allowing cheap and easy energy generation. Unfortunately your enemy got here first. Sabotage their operation with Skuttle jumping bombs.]]
+			text = "I am surprised a world so geologically active could be terraformed at all, let alone for it to hold for so long on its own."
+			.. "\n "
+			.. "\nThis is a problem, though, as it is still powering the core of a large defense system. There is no moving through here with those geothermal plants still running."
+			,
+			extendedText = "I have taken control of one of the major geothermal plants. If I can destroy the three others on this island, the entire defense system should power down. Skuttle jumping bombs could be useful for that..."
 		},
 		tips = {
 			{

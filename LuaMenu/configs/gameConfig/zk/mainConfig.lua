@@ -83,7 +83,7 @@ local externalFuncAndData = {
 	skirmishDefault         = skirmishDefault,
 	skirmishSetupData       = skirmishSetupData,
 	defaultModoptions       = defaultModoptions,
-	rankFunction            = rankFunction,
+	rankFunction            = largeRankFunction, --rankFunction,
 	largeRankFunction       = largeRankFunction,
 	headingLarge            = headingLarge,
 	headingSmall            = headingSmall,
@@ -112,8 +112,6 @@ local externalFuncAndData = {
 		"sounds/lobbyMusic/Interstellar.ogg",
 		"sounds/lobbyMusic/Tomorrow Landscape.ogg",
 	},
-	-- I assume ZK doesn't want to show this as it was removed
-	hideGameExistanceDisplay = true,
 }
 
 function externalFuncAndData.CheckAvailability()

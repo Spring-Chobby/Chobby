@@ -57,11 +57,11 @@ local function ResetHostData()
 	DownloadUpdateFunction = nil
 end
 
-local function MakeExclusivePopup(text, buttonText, ClickFunc, buttonClass)
+local function MakeExclusivePopup(text, buttonText, ClickFunc, buttonClass, height)
 	if replacablePopup then
 		replacablePopup:Close()
 	end
-	replacablePopup = WG.Chobby.InformationPopup(text, {caption = buttonText, closeFunc = ClickFunc, buttonClass = buttonClass})
+	replacablePopup = WG.Chobby.InformationPopup(text, {caption = buttonText, closeFunc = ClickFunc, buttonClass = buttonClass, height = height})
 end
 
 local function CloseExclusivePopup()
@@ -158,7 +158,7 @@ end
 --------------------------------------------------------------------------------
 -- Downloading
 
-local function CheckDownloads(gameName, mapName, DoneFunc)
+local function CheckDownloads(gameName, mapName, DoneFunc, gameList)
 	local haveGame = (not gameName) or WG.Package.ArchiveExists(gameName)
 	if not haveGame then
 		WG.DownloadHandler.MaybeDownloadArchive(gameName, "game", -1)
@@ -169,12 +169,28 @@ local function CheckDownloads(gameName, mapName, DoneFunc)
 		WG.DownloadHandler.MaybeDownloadArchive(mapName, "map", -1)
 	end
 
+	if gameList then
+		for i = 1, #gameList do
+			if not WG.Package.ArchiveExists(gameList[i]) then
+				WG.DownloadHandler.MaybeDownloadArchive(gameList[i], "game", -1)
+				haveGame = false
+			end
+		end
+	end
+
 	if haveGame and haveMap then
 		return true
 	end
 
 	local function Update()
 		if ((not gameName) or WG.Package.ArchiveExists(gameName)) and ((not mapName) or VFS.HasArchive(mapName)) then
+			if gameList then
+				for i = 1, #gameList do
+					if not WG.Package.ArchiveExists(gameList[i]) then
+						return
+					end
+				end
+			end
 			DoneFunc()
 			DownloadUpdateFunction = nil
 		end
@@ -183,26 +199,38 @@ local function CheckDownloads(gameName, mapName, DoneFunc)
 	local function CancelFunc()
 		DownloadUpdateFunction = nil
 	end
-
 	DownloadUpdateFunction = Update
-	local dlString = "Waiting on content: " .. ((not haveGame) and ("\n - " .. gameName .. ": %d%%") or "") .. ((not haveMap) and ("\n - " .. mapName .. ": %d%%") or "")
-	MakeExclusivePopup(string.format(dlString, 0, 0), "Cancel", CancelFunc, "negative_button")
+	
+	local dlString = "Waiting on content: "
 	downloading = {
 		downloads = {
 		},
 		progress = {
 		},
-		dlString = dlString,
 	}
-
-	if not haveGame then
+	
+	if gameList then
+		for i = 1, #gameList do
+			if not WG.Package.ArchiveExists(gameList[i]) then
+				dlString = dlString .. ("\n - " .. gameList[i] .. ": %d%%")
+				downloading.progress[#downloading.progress + 1] = 0
+				downloading.downloads[gameList[i]] = #downloading.progress
+			end
+		end
+	elseif gameName and (not haveGame) then
+		dlString = dlString .. ("\n - " .. gameName .. ": %d%%")
 		downloading.progress[#downloading.progress + 1] = 0
 		downloading.downloads[gameName] = #downloading.progress
 	end
+
 	if not haveMap then
+		dlString = dlString .. ("\n - " .. mapName .. ": %d%%")
 		downloading.progress[#downloading.progress + 1] = 0
 		downloading.downloads[mapName] = #downloading.progress
 	end
+
+	downloading.dlString = dlString
+	MakeExclusivePopup(string.format(dlString, unpack(downloading.progress)), "Cancel", CancelFunc, "negative_button", (gameList and (180 + (#gameList)*40)))
 end
 
 
@@ -448,7 +476,7 @@ function DelayedInitialize()
 				return
 			end
 			downloading.progress[index] = 100
-			replacablePopup:SetText(string.format(downloading.dlString, downloading.progress[1] or 0, downloading.progress[2] or 0))
+			replacablePopup:SetText(string.format(downloading.dlString, unpack(downloading.progress)))
 		end
 	end
 	WG.DownloadHandler.AddListener("DownloadFinished", downloadFinished)
@@ -458,8 +486,8 @@ function DelayedInitialize()
 		if not index then
 			return
 		end
-		downloading.progress[index] = (sizeCurrent < sizeTotal*2) and math.ceil(100*sizeCurrent/sizeTotal)
-		replacablePopup:SetText(string.format(downloading.dlString, downloading.progress[1] or 0, downloading.progress[2] or 0))
+		downloading.progress[index] = ((sizeCurrent < sizeTotal*2) and math.ceil(100*sizeCurrent/sizeTotal)) or 100
+		replacablePopup:SetText(string.format(downloading.dlString, unpack(downloading.progress)))
 	end
 
 	WG.DownloadHandler.AddListener("DownloadProgress", DownloadProgress)

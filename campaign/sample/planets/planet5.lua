@@ -26,7 +26,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G7V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24417",
-			text = [[Your opponent is relying on a network of defensive turrets and shielded bots to keep them safe. Use Slings to weaken your opponent's defences and shields before you commit to an assault.]],
+			text = "This world was a strategic chokepoint. There are extensive traces of combat damage, some ancient enough to be covered by once-thriving cities."
+			.. "\n "
+			.. "\nWhoever it was defending - or defending from - there is still an active defense network entrenched down there. I will have to punch through it, if I want access to that sector."
+			,
+			extendedText = "It is relying on a network of defensive turrets and shielded bots to keep its production infrastructure safe. I will need Slings to weaken its defences and shields before I can commit to an assault. And I will need spotters for those Slings.",
 		},
 		tips = {
 			{

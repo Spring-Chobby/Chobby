@@ -1,4 +1,4 @@
---------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Planet config
 
@@ -25,12 +25,22 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G1V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24642",
-			text = [[Your opponent is already conducting a victory dance with their Disco Rave Party cannon. Hold off their assault until your Starlight orbital chisel is complete, then demonstrate that their celebration is premature.]]
+			text = "This is it, humanity's last planet. A frozen, windswept desert world, where to wait for the end."
+			.. "\n "
+			.. "\nAnd yet... did they really flee all the way there only to delay the inevitable?"
+			.. "\n "
+			.. "\nIf the Empire knew anything about what really happened - if they ever found an escape, this is where the answers will be."
+			,
+			extendedText = "They were building not one but two superweapons here. If this was to be humanity's last stand, they would give it all."
+			.. "\n "
+			.. "\nUnfortunately, only one is operational, and it is pointed right at me. Well, so be it. I will hold off their assault, even supported by a Disco Rave Party rapid-fire cannon - until my Starlight orbital chisel is complete."
+			.. "\n "
+			.. "\nCome hell or high water, I will find out what happened here."
 		},
 		tips = {
 			{
 				image = "unitpics/mahlazer.png",
-				text = [[The Zenith is a planetary-scale chisel repurposed as the ultimate superweapon, firing a laser from space which will cut through anything. The mirror satellite rotates slowly, so make sure it doesn't strike your own units and structures.]]
+				text = [[The Starlight is a planetary-scale chisel repurposed as the ultimate superweapon, firing a laser from space which will cut through anything. The mirror satellite rotates slowly, so make sure it doesn't strike your own units and structures.]]
 			},
 			{
 				image = "unitpics/cremcom.png",
@@ -60,6 +70,7 @@ local function GetPlanet(planetUtilities, planetID)
 						buildProgress = 0.625,
 						difficultyAtLeast = 1,
 						difficultyAtMost = 1,
+                        terraformHeight = 310,
 					},
 					{
 						name = "mahlazer",
@@ -69,6 +80,7 @@ local function GetPlanet(planetUtilities, planetID)
 						buildProgress = 0.55,
 						difficultyAtLeast = 2,
 						difficultyAtMost = 2,
+                        terraformHeight = 310,
 					},
 					{
 						name = "mahlazer",
@@ -78,6 +90,7 @@ local function GetPlanet(planetUtilities, planetID)
 						buildProgress = 0.475,
 						difficultyAtLeast = 3,
 						difficultyAtMost = 3,
+                        terraformHeight = 310,
 					},
 					{
 						name = "mahlazer",
@@ -87,6 +100,7 @@ local function GetPlanet(planetUtilities, planetID)
 						buildProgress = 0.4,
 						difficultyAtLeast = 4,
 						difficultyAtMost = 4,
+                        terraformHeight = 310,
 					},
 					{
 						name = "energysolar",
@@ -446,12 +460,6 @@ local function GetPlanet(planetUtilities, planetID)
 						name = "energywind",
 						x = 280,
 						z = 7096,
-						facing = 3,
-					},
- 					{
-						name = "starlight_satellite",
-						x = 928,
-						z = 3600,
 						facing = 3,
 					},
  					{

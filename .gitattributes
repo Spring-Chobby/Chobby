@@ -5,3 +5,4 @@
 *.glsl text
 *.fs   text
 *.json text
+*.css  text

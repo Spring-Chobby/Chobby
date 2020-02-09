@@ -26,7 +26,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G7V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24489",
-			text = [[Negotiations with the local warlord regarding access to this planet's Warp Gates have gone poorly. It's time for plan B: take the Gates by force. Make sure your Commander is loaded out for a fight.]]
+			text = "If I can take control of this planet's warp gates, it will open up half the sector. What is surprising is that the local forces are not imperial. How did the Empire lose control of such an important sector to an independent warlord?"
+			.. "\n "
+			.. "\nThis gives me an idea... still, better load my Commander for a fight, just in case."
+			,
+			extendedText = "I thought I could hack the warlord's Commander, but its AI just glitched on me. Time for plan B: take the Gates by force."
 		},
 		tips = {
 			{

@@ -26,7 +26,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "K4VI",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24417",
-			text = [[Your opponent will use raiding squads of Scorchers against you in this battle. Shut them down with Imp EMP bombs.]]
+			text = "This was a major military hub, I can detect the remains of staging grounds and logistic networks. With all those broken plateaus, this area would have been easier to defend. This is bad news for me, I will have to take those defences out if I want to continue that way."
+			.. "\n "
+			.. "\nWhoever they were fighting, it was not going well. There is evidence of raids even here, the frontline would not have been far."
+			,
+			extendedText = "This AI seems to rely on raiding squads of Scorchers. Good thing I had time for scavenging, those Imp EMP bombs will be helpful for shutting them down."
 		},
 		tips = {
 			{
