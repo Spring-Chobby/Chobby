@@ -26,7 +26,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "F2III",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24429",
-			text = [[Your opponent has taken to the air with Gunships in this battle. Construct the anti-air Gremlins and Hacksaw missile turrets to bring them down.]]
+			text = "This is where the raids on Myror were launched from. Either time or a counterattack crippled them, but the expeditionary force that had captured this world is still there."
+			.. "\n "
+			.. "\nWhile I should not underestimate them, what is left does not seem well-adapted for defending ground."
+			,
+			extendedText = "Ground forces seem to have almost entirely decayed, and they now rely on Gunships for combat. I will need anti-air Gremlins and Hacksaw missile turrets to bring them down."
 		},
 		tips = {
 			{

@@ -26,8 +26,6 @@ Font = Object:Inherit{
 	color         = {1, 1, 1, 1},
 	outlineColor  = {0, 0, 0, 1},
 	autoOutlineColor = true,
-
-	uiScale = 1
 }
 
 local this = Font
@@ -37,7 +35,6 @@ local inherited = this.inherited
 
 function Font:New(obj)
 	obj = inherited.New(self, obj)
-	obj.uiScale = (WG and WG.uiScale or 1)
 
 	--// Load the font
 	obj:_LoadFont()
@@ -57,7 +54,7 @@ end
 
 function Font:_LoadFont()
 	local oldfont = self._font
-	self._font = FontHandler.LoadFont(self.font, math.floor(self.size*self.uiScale*2), math.floor(self.outlineWidth*self.uiScale*2), self.outlineWeight)
+	self._font = FontHandler.LoadFont(self.font, self.size, self.outlineWidth, self.outlineWeight)
 	--// do this after LoadFont because it can happen that LoadFont returns the same font again
 	--// but if we Unload our old one before, the gc could collect it before, so the engine would have to reload it again
 	FontHandler.UnloadFont(oldfont)
@@ -253,15 +250,7 @@ end
 
 --// =============================================================================
 
-function Font:CheckUiScaleChange()
-	if (WG and WG.uiScale or 1) ~= self.uiScale then
-		self.uiScale = (WG and WG.uiScale or 1)
-		self:_LoadFont()
-	end
-end
-
 function Font:_DrawText(text, x, y, extra)
-	self:CheckUiScaleChange()
 	local font = self._font
 
 	gl.PushAttrib(GL.COLOR_BUFFER_BIT)
@@ -282,7 +271,6 @@ end
 
 
 function Font:Draw(text, x, y, align, valign)
-	self:CheckUiScaleChange()
 	if (not text) then
 		return
 	end
@@ -299,7 +287,6 @@ end
 
 
 function Font:DrawInBox(text, x, y, w, h, align, valign)
-	self:CheckUiScaleChange()
 	if (not text) then
 		return
 	end

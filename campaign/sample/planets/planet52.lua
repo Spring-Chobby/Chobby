@@ -26,7 +26,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "F9V/F9V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24457",
-			text = [[Despite its unappealing environment, this planet has been the focus of many battles, and it is littered with scrap. The self-replicating Puppy walking bombs can quickly turn these wrecks into a new army for you.]]
+			text = "This world appears to have been prosperous, once. But a series of violent uprisings and punitive expeditions have reduced it to a barely inhabitable, glassy ashball."
+			.. "\n "
+			.. "\nIt is so covered with wrecks that most of its industry, or what was left of it, appears to have been recycling them."
+			,
+			extendedText = "This planet has been the focus of so many battles, it is now littered with scrap. The self-replicating Puppy walking bombs can quickly turn these wrecks into a new army for me."
 		},
 		tips = {
 			{

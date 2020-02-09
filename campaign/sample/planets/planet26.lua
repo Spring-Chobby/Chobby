@@ -26,7 +26,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G9V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24469",
-			text = [[Shut down the enemy Tidal Generator operation on this sunny coastline with the Hovercraft factory.]]
+			text = "There are the remains of a strong army on this world, but few large-scale defense installations. It looks like an occupation force on a freshly conquered world, who had to dismantle the existing defenses and never had time to build new ones."
+			,
+			extendedText = "Instead of building dedicated military power plants, they commandeered civilian Tidal Generator farms. If I destroy those, they won't have enough energy left to be a menace."
+			.. "\n "
+			.. "\nFor a coastal area like this one, the Hovercraft factory should be well-adapted."
 		},
 		tips = {
 			{

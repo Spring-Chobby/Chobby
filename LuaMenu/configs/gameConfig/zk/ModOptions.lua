@@ -1,4 +1,3 @@
-
 -- $Id: ModOptions.lua 4642 2009-05-22 05:32:36Z carrepairer $
 
 
@@ -391,6 +390,14 @@ local options = {
     section= 'experimental',
     def    = false,
   },
+  {
+    key     = "tweakunits",
+    name    = "Tweak Units",
+    desc    = "A base64 encoded lua table of unit parameters to change.",
+    section = 'experimental',
+    type    = "string",
+    def     = "",
+  },
 --[[
   {
     key    = 'damagemult',
@@ -531,7 +538,6 @@ local options = {
 --    --  }
 --    },
 --  },
-
   {
     key    = 'chicken',
     name   = 'Chicken',

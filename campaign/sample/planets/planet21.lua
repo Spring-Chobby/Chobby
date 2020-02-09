@@ -26,7 +26,13 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G9V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24489",
-			text = [[You've captured a Strider Hub capable of building the heavy Dante riot strider, but the incoming waves of Chickens will make the task of retrieving a prototype from the surface much more difficult...]]
+			text = "There was a major military R&D complex here. Most of it is unusable by now, but there is a functional Strider Hub down there. If I can access it, it could be very useful."
+			.. "\n "
+			.. "\nSomething seems to have escaped its containment. I detect sporadic engagements between the local defence and whatever is hiding in the ground..."
+			,
+			extendedText = "I have captured a Strider Hub capable of building the heavy Dante riot strider. But with the restrictions of this place, I will need to extract an entire Dante to get the blueprint."
+			.. "\n "
+			.. "\nBetween the angry security systems and incoming waves of Chickens, getting one off the surface is going to be a challenge."
 		},
 		tips = {
 			{

@@ -25,12 +25,20 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G8V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24642",
-			text = [[The deep water channels and hills of this battleground present a challenging tactical landscape. The ultra-heavy amphibious Detriment strider is ideally suited to such mixed terrain.]]
+			text = "This was one of the last worlds to see its inhabitants disappear. Refugees from all the quadrant fled here, waiting for transit to the last bastion of humanity. Many seem to have accepted their fate, though, and built immense temporary cities, to be reclaimed by nature after their passing."
+			.. "\n "
+			.. "\nThe Empire would not, however. Even knowing how futile it was, they fortified this world with all they had."
+			,
+			extendedText = "The deep water channels and hills of this battleground present a challenging tactical landscape. The ultra-heavy amphibious Detriment strider is ideally suited to such mixed terrain."
+			.. "\n "
+			.. "\nHow ironic for those defiant armies, to stand immobile as everyone disappeared, and for countless more years, only to destroy themselves in such a futile way."
+			.. "\n "
+			.. "\nI wish I could have just continued my way, and left them rest in peace."
 		},
 		tips = {
 			{
 				image = "unitpics/striderdetriment.png",
-				text = [[Detriments are the ultimate assault strider, armed with laser beams, ground-smoothing missiles, an anti-air battery, and multiple massive Gauss cannons on each arm. They are effective on land and sea and generally end battles very quickly.]]
+				text = [[Detriments are the ultimate assault striders, armed with laser beams, ground-smoothing missiles, an anti-air battery, and multiple massive Gauss cannons on each arm. They are effective on land and sea and generally end battles very quickly.]]
 			},
 			{
 				image = "unitpics/striderbantha.png",

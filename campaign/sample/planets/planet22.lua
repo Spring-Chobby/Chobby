@@ -26,7 +26,9 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "F3V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24469",
-			text = [[The bodies of water on this battlefield would pose difficulties for most factories, but the Amphbot Factory can take advantage of them instead.]]
+			text = "Whoever named this near-frozen iceball Blackmire had a weird sense of humour, or something went very wrong with terraforming efforts. Probably the latter, given how many layers of battle damage are buried below all that snow."
+			,
+			extendedText = "Despite the ever-prevalent snow, those equatorial ranges still have unfrozen bodies of water. It would be a problem for most factories, but the Amphbot Factory can take advantage of them instead."
 		},
 		tips = {
 			{

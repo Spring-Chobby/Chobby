@@ -138,7 +138,7 @@ local function RunBenchmark(config)
 		WG.Delay(CheckNextRun, 5)
 	end
 
-	if WG.SteamCoopHandler.CheckDownloads(config.game, config.map, DownloadsComplete) then
+	if WG.SteamCoopHandler.CheckDownloads(config.game, config.map, DownloadsComplete, config.gameList) then
 		DownloadsComplete()
 	end
 end

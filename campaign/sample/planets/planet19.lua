@@ -26,7 +26,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G4V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24441",
-			text = [[Finish the Cerberus artillery piece and link it to your ally's power plants. This cannon will break the enemy's defensive line and allow you to destroy their base.]],
+			text = "The two forces here are both too entrenched for automated raids to dislodge the other. One of them recognized my IFF, luckily enough, so I should be able to break the stalemate. All I need is to find a way to break some tough defences."
+			.. "\n "
+			.. "\nI wonder how much initiative those AIs have been given. Can it decide to make tactical alliances on its own? Or did it somehow know my IFF?"
+			,
+			extendedText = "I can finish the Cerberus artillery piece and link it to my ally's power plants. Then this cannon will break the enemy's defensive line and allow us to destroy their base once and for all."
 		},
 		tips = {
 			{

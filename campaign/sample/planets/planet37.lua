@@ -26,7 +26,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G7V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24510",
-			text = [[Expand to the mainland from your resource-poor island using Charon and Hercules transports, then use transports to create a highly mobile land army.]]
+			text = "This world was on an interstellar crossroad. While it made it wealthy, it was to be its undoing. When neighbouring planets rebelled, it became a battlefield, a capital strategic prize to be fought over."
+			.. "\n "
+			.. "\nIts terraformation was destabilized by the constant battles, and now it is slowly reverting to the ice world it had once been."
+			,
+			extendedText = "This is not where I should be! Something went wrong with the landing. I must absolutely expand to the mainland from this resource-poor island using Charon and Hercules transports. Then I can use transports to create a highly mobile land army."
 		},
 		tips = {
 			{

@@ -25,7 +25,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G8V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24530",
-			text = [[This planet is largely covered by water, making it ideal for the deployment of ships and submarines. Move fast to take control of this resource-rich archipelago.]]
+			text = "Invalid IFF? Well, it was worth trying. Local defences have considearbly decayed, but what's left is still dangerous."
+			.. "\n "
+			.. "\nThis world had never been disputed to Haven yet, but they knew it would be the next line of defence at the fall of Harsar Lief. With most of the planet covered by water, they could have held it from strategic archipelagoes against a considerable foe."
+			,
+			extendedText = "With those small islands dotting the ocean, this is ideal for the deployment of ships and submarines. I should move fast to take control of this resource-rich archipelago - once I hold it, I will be safe. The other planetary garrisons have long lost their oversea projection capabilities."
 		},
 		tips = {
 			{

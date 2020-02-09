@@ -25,7 +25,11 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G4V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24594",
-			text = [[Your ally on this planet is vulnerable and weak, so you'll have to rely on your Jumpbots' inherent advantage on rough terrain to win despite this disadvantage. Either strike quickly to take out one opponent or prepare for a long game of attrition.]]
+			text = "Lying on an interstellar crossroad, this planet seems to have attracted many smugglers. They operated from its fields of broken plateaus, while bribed local officials looked the other way."
+			.. "\n "
+			.. "\nNow, this is bound to attract some attention, but if I could just manage to gain access to the operations of a data smuggler... "
+			,
+			extendedText = "The smuggler's defenses are barely perfunctory, so I will have to rely on my Jumpbots' inherent advantage on rough terrain - and either strike quickly to take out one opponent or prepare for a long game of attrition."
 		},
 		tips = {
 			{

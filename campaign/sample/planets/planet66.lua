@@ -25,7 +25,13 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G4V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24642",
-			text = [[Two duelling Zenith meteor controllers threaten to reduce this planet to space dust. If you can destroy the enemy Zenith, you'll at least have the satisfaction of being the owner of that space dust.]]
+			text = "The Rebel homeworld, the planet where it all started. Here, the Empire chose to make an example - they turned its two civilian spacecraft vector towers into Zenith meteor controllers. Then, they let the Rebels capture one, and waited for the duelling Zenith to slowly turn the planet to rubble."
+			.. "\n "
+			.. "\nWhat really happened? Why did they actually rebel? And why would I have been their ally? Time to find out."
+			,
+			extendedText = "The two duelling Zenith meteor controllers have powered up - I must destroy the enemy Zenith before they turn the entire planet to space dust."
+			.. "\n "
+			.. "\nThe ruins of this world hold my answers. I have NOT faced so many hardships, only to let some long dead war criminals raze them to the ground."
 		},
 		tips = {
 			{

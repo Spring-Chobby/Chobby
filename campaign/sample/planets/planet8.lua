@@ -26,7 +26,13 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G3V",
 			milRating = 2,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24429",
-			text = [[The enemy has a Big Bertha cannon which is dominating the battlefield. Sneak into their base with Scythes and eliminate the threat.]]
+			text = "There is a battle raging for the control of this world, but without direction, it seems to have reached stalemate a long time ago."
+			.. "\n "
+			.. "\nOne side has recognized my IFF signal as friendly, strangely enough. If I can tip the fight in their favor, this should let me find out what is going on here."
+			,
+			extendedText = "If I can destroy this Big Bertha cannon here, it should open things up for my allies. The best method for eliminating may be those Scythes."
+			.. "\n "
+			.. "\nThis should be enough to tip the battle and give them control of this world."
 		},
 		tips = {
 			{
