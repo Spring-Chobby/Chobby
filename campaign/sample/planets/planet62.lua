@@ -1544,6 +1544,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 2922,
 							z = 4680,
 							facing = 2,
+							difficultyAtLeast = 2,
 						},
  						{
 							name = "spidercon",
@@ -2363,6 +2364,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 6233,
 							z = 2397,
 							facing = 3,
+							difficultyAtLeast = 2,
 						},
  						{
 							name = "cloakaa",
@@ -2449,6 +2451,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 5671,
 							z = 2320,
 							facing = 1,
+							difficultyAtLeast = 2,
 						},
  						{
 							name = "cloakskirm",
@@ -3052,6 +3055,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 8600,
 							z = 6024,
 							facing = 3,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "turretaaheavy",

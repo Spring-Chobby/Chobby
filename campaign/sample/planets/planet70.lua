@@ -1181,7 +1181,6 @@ local function GetPlanet(planetUtilities, planetID)
 						"spiderskirm",
 						"spiderassault",
 						"spiderriot",
-						"spidercrabe",
 						"factorycloak",
 						"cloakcon",
 						"cloakraid",
@@ -1190,6 +1189,11 @@ local function GetPlanet(planetUtilities, planetID)
 						"cloakriot",
 						"cloakskirm",
 						"cloakassault",
+					},
+					difficultyDependantUnlocks = {
+						[2] = {"cloakassault"},
+						[3] = {"cloakassault", "spidercrabe"},
+						[4] = {"cloakassault","spidercrabe"},
 					},
 					commanderLevel = 6,
 					commander = {
@@ -1214,7 +1218,7 @@ local function GetPlanet(planetUtilities, planetID)
 						}
 					},
 					startUnits = {
-												{
+						{
 							name = "staticmex",
 							x = 4312,
 							z = 5064,
