@@ -932,7 +932,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 			fluffGrid:SetVisibility(true)
 		end
 		planetDesc:UpdateClientArea(false)
-		
+
 		if planetHandler.height < 600 then
 			subPanel._relativeBounds.right = 390
 			subPanel._relativeBounds.bottom = "2%"
