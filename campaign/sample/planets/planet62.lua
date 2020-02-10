@@ -3380,6 +3380,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 5391,
 							z = 4058,
 							facing = 1,
+							difficultyAtLeast = 2,
 						},
  						{
 							name = "tankassault",
@@ -3745,6 +3746,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 4054,
 							z = 5265,
 							facing = 2,
+							difficultyAtLeast = 2,
 						},
  						{
 							name = "spiderscout",
@@ -3781,6 +3783,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 3831,
 							z = 5390,
 							facing = 1,
+							difficultyAtLeast = 2,
 						},
  						{
 							name = "amphcon",
@@ -3861,6 +3864,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 5847,
 							z = 5547,
 							facing = 3,
+							difficultyAtLeast = 2,
 						},
  						{
 							name = "spiderscout",
