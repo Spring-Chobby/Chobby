@@ -360,7 +360,7 @@ local function GetPlanet(planetUtilities, planetID)
 			aiConfig = {
 				{
 					humanName = "Biobas",
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					--aiLib = "Null AI",
 					--bitDependant = false,
@@ -1359,7 +1359,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				{
 					humanName = "Star Shine",
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					--aiLib = "Null AI",
 					--bitDependant = false,

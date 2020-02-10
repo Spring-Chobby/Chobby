@@ -271,7 +271,7 @@ local function GetPlanet(planetUtilities, planetID)
 			aiConfig = {
 				{
 					humanName = "Ally #1",
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					--aiLib = "Null AI",
 					--bitDependant = false,
@@ -938,7 +938,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				{
 					humanName = "Ally #2",
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					--aiLib = "Null AI",
 					--bitDependant = false,

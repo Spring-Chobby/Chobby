@@ -152,7 +152,7 @@ local function GetPlanet(planetUtilities, planetID)
 				{
 					startX = 200,
 					startZ = 200,
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					humanName = "Ally",
 					bitDependant = true, -- Whether the AI name needs to be appended with 32bit or 64bit by the handler
 					commanderParameters = {
@@ -204,7 +204,7 @@ local function GetPlanet(planetUtilities, planetID)
 				{
 					startX = 1250,
 					startZ = 250,
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					humanName = "Another Ally",
 					bitDependant = true, -- Whether the AI name needs to be appended with 32bit or 64bit by the handler
 					commanderParameters = {

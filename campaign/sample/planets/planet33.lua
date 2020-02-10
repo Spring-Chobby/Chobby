@@ -198,7 +198,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			aiConfig = {
 				{
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					humanName = "Exodon",
 					bitDependant = true,
 					commanderParameters = {

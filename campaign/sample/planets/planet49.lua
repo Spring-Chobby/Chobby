@@ -260,7 +260,7 @@ local function GetPlanet(planetUtilities, planetID)
 					humanName = "Modri Saw",
 					--aiLib = "Null AI",
 					--bitDependant = false,
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					allyTeam = 0,
 					unlocks = {
@@ -1337,7 +1337,7 @@ local function GetPlanet(planetUtilities, planetID)
 					humanName = "Laannzelez",
 					--aiLib = "Null AI",
 					--bitDependant = false,
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					allyTeam = 0,
 					unlocks = {
