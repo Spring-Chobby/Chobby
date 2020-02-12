@@ -50,7 +50,7 @@ function ComboBox:Select(itemIdx)
 	if (type(itemIdx) == "number") then
 		local item = self.items[itemIdx]
 		if not item then
- 			return
+			return
 		end
 		self.selected = itemIdx
 
@@ -101,7 +101,7 @@ function ComboBox:MouseDown(x, y)
 	self.state.pressed = true
 	if not self._dropDownWindow then
 		local sx, sy = self:LocalToScreen(0, 0)
-		
+
 		local selectByName = self.selectByName
 		local labels = {}
 

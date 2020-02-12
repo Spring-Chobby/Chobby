@@ -114,6 +114,7 @@ local externalFuncAndData = {
 	},
 	-- I assume ZK doesn't want to show this as it was removed
 	hideGameExistanceDisplay = true,
+	disableColorChoosing = true,
 }
 
 function externalFuncAndData.CheckAvailability()

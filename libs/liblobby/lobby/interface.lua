@@ -98,6 +98,97 @@ end
 -- Battle commands
 ------------------------
 
+local function UpdateAndCreateMerge(userData, status)
+	local battleStatus = {}
+	local updated = false
+	if status.isReady ~= nil then
+		updated = updated or userData.isReady ~= status.isReady
+		battleStatus.isReady = status.isReady
+		userData.isReady     = status.isReady
+	else
+		battleStatus.isReady = userData.isReady -- self:GetMyIsReady()
+	end
+	if status.teamNumber ~= nil then
+		updated = updated or userData.teamNumber ~= status.teamNumber
+		battleStatus.teamNumber = status.teamNumber
+		userData.teamNumber     = status.teamNumber
+	else
+		battleStatus.teamNumber = userData.teamNumber or 0 -- self:GetMyTeamNumber() or 0
+	end
+	if status.teamColor ~= nil then
+		if userData.teamColor == nil then
+			updated = true
+		else
+			for i, v in ipairs(userData.teamColor) do
+				if v ~= status.teamColor[i] then
+					updated = true
+				end
+			end
+		end
+		battleStatus.teamColor = status.teamColor
+		userData.teamColor     = status.teamColor
+	else
+		battleStatus.teamColor = userData.teamColor -- self:GetMyTeamColor()
+	end
+	if status.allyNumber ~= nil then
+		updated = updated or userData.allyNumber ~= status.allyNumber
+		battleStatus.allyNumber = status.allyNumber
+		userData.allyNumber     = status.allyNumber
+	else
+		battleStatus.allyNumber = userData.allyNumber or 0 -- self:GetMyAllyNumber() or 0
+	end
+	if status.isSpectator ~= nil then
+		updated = updated or userData.isSpectator ~= status.isSpectator
+		battleStatus.isSpectator = status.isSpectator
+		userData.isSpectator     = status.isSpectator
+	else
+		battleStatus.isSpectator = userData.isSpectator -- self:GetMyIsSpectator()
+	end
+	if status.sync ~= nil then
+		updated = updated or userData.sync ~= status.sync
+		battleStatus.sync = status.sync
+		userData.sync     = status.sync
+	else
+		battleStatus.sync = userData.sync -- self:GetMySync()
+	end
+	if status.side ~= nil then
+		updated = updated or userData.side ~= status.side
+		battleStatus.side = status.side
+		userData.side     = status.side
+	else
+		battleStatus.side = userData.side or 0 -- self:GetMySide() or 0
+	end
+
+	if not updated then
+		return nil
+	end
+	battleStatus.isReady = not battleStatus.isSpectator
+	return battleStatus
+end
+
+local function EncodeBattleStatus(battleStatus)
+	local playMode = 1
+	if battleStatus.isSpectator then
+		playMode = 0
+	end
+	return tostring(
+		(battleStatus.isReady and 2 or 0) +
+		lshift(battleStatus.teamNumber, 2) +
+		lshift(battleStatus.allyNumber, 6) +
+		lshift(playMode, 10) +
+		(battleStatus.sync and 2^22 or 2^23) +
+		lshift(battleStatus.side, 24)
+	)
+end
+
+local function EncodeTeamColor(teamColor)
+	return math.bit_or(
+		lshift(math.floor(teamColor[3] * 255), 16),
+		lshift(math.floor(teamColor[2] * 255), 8),
+		math.floor(teamColor[1] * 255)
+	)
+end
+
 function Interface:RejoinBattle(battleID)
 	local battle = self:GetBattle(battleID)
 	if battle then
@@ -129,72 +220,21 @@ function Interface:SetBattleStatus(status)
 	-- This function is invoked too many times (before an answer gets received),
 	-- so we're setting the values before
 	-- they get confirmed from the server, otherwise we end up sending different info
+	-- 2020/02/12: Problem partially fixed by ignoring battleStatus that result in no update
 	local myUserName = self:GetMyUserName()
 	if not self.userBattleStatus[myUserName] then
 		self.userBattleStatus[userName] = {}
 	end
 	local userData = self.userBattleStatus[myUserName]
+	local battleStatus = UpdateAndCreateMerge(userData, status)
+	if not battleStatus then
+		return self
+	end
+	local battleStatusString = EncodeBattleStatus(battleStatus)
 
-	local bs = {}
-	if status.isReady ~= nil then
-		bs.isReady       = status.isReady
-		userData.isReady = status.isReady
-	else
-		bs.isReady = self:GetMyIsReady()
-	end
-	if status.teamNumber ~= nil then
-		bs.teamNumber       = status.teamNumber
-		userData.teamNumber = status.teamNumber
-	else
-		bs.teamNumber  = self:GetMyTeamNumber() or 0
-	end
-	if status.teamColor ~= nil then
-		bs.teamColor       = status.teamColor
-		userData.teamColor = status.teamColor
-	else
-		bs.teamColor   = self:GetMyTeamColor()
-	end
-	if status.allyNumber ~= nil then
-		bs.allyNumber       = status.allyNumber
-		userData.allyNumber = status.allyNumber
-	else
-		bs.allyNumber  = self:GetMyAllyNumber() or 0
-	end
-	if status.isSpectator ~= nil then
-		bs.isSpectator       = status.isSpectator
-		userData.isSpectator = status.isSpectator
-	else
-		bs.isSpectator = self:GetMyIsSpectator()
-	end
-	if status.sync ~= nil then
-		bs.sync        = status.sync
-		userData.sync  = status.sync
-	else
-		bs.sync        = self:GetMySync()
-	end
-	if status.side ~= nil then
-		bs.side        = status.side
-		userData.side  = status.side
-	else
-		bs.side        = self:GetMySide() or 0
-	end
-
-	playMode = 1 -- not spectator
-	if bs.isSpectator then
-		playMode = 0 -- spectator
-	end
-	bs.isReady = playMode
-
-	local battleStatusString = tostring(
-		(bs.isReady and 2 or 0) +
-		lshift(bs.teamNumber, 2) +
-		lshift(bs.allyNumber, 6) +
-		lshift(playMode, 10) +
-		(bs.sync and 2^22 or 2^23) +
-		lshift(bs.side, 24)
-	)
-	myTeamColor = status.teamColor or math.floor(math.random() * 255 * 2^16 + math.random() * 255 * 2^8 + math.random() * 255)
-	self:_SendCommand(concat("MYBATTLESTATUS", battleStatusString, myTeamColor))
+	local teamColor = battleStatus.teamColor or { math.random(), math.random(), math.random(), 1 }
+	teamColor = EncodeTeamColor(teamColor)
+	self:_SendCommand(concat("MYBATTLESTATUS", battleStatusString, teamColor))
 	return self
 end
 
@@ -233,16 +273,37 @@ function Interface:SetModOptions(data)
 end
 
 function Interface:AddAi(aiName, aiLib, allyNumber, version)
+	local battleStatus = {
+		isReady = true,
+		teamNumber = allyNumber,
+		allyNumber = allyNumber,
+		playMode = true,
+		sync = true,
+		side = 0,
+	}
 	aiName = aiName:gsub(" ", "")
-	local battleStatusString = tostring(
-		2 +
-		lshift(allyNumber, 2) +
-		lshift(allyNumber, 6) +
-		lshift(1, 10) +
-		(1 and 2^22 or 2^23) +
-		lshift(0, 24)
-	)
+	local battleStatusString = EncodeBattleStatus(battleStatus)
 	self:_SendCommand(concat("ADDBOT", aiName, battleStatusString, 0, aiLib))
+	return self
+end
+
+function Interface:RemoveAi(name)
+	self:_SendCommand(concat("REMOVEBOT", name))
+	return self
+end
+
+function Interface:UpdateAi(aiName, status)
+	local userData = self.userBattleStatus[aiName]
+
+	local battleStatus = UpdateAndCreateMerge(userData, status)
+	if not battleStatus then
+		return self
+	end
+	local battleStatusString = EncodeBattleStatus(battleStatus)
+	local teamColor = battleStatus.teamColor or { math.random(), math.random(), math.random(), 1 }
+	teamColor = EncodeTeamColor(teamColor)
+	self:_SendCommand(concat("UPDATEBOT", aiName, battleStatusString, teamColor))
+
 	return self
 end
 
@@ -477,6 +538,28 @@ Interface.commands["FRIENDREQUESTLISTEND"] = Interface._OnFriendRequestListEnd
 -- Battle commands
 ------------------------
 
+local function ParseBattleStatus(battleStatus)
+	battleStatus = tonumber(battleStatus)
+	return {
+		isReady      = rshift(battleStatus, 1) % 2 == 1,
+		teamNumber   = rshift(battleStatus, 2) % 16,
+		allyNumber   = rshift(battleStatus, 6) % 16,
+		isSpectator  = rshift(battleStatus, 10) % 2 == 0,
+		handicap     = rshift(battleStatus, 11) % 128,
+		sync         = rshift(battleStatus, 22) % 4,
+		side         = rshift(battleStatus, 24) % 16,
+	}
+end
+
+local function ParseTeamColor(teamColor)
+	return {
+		(teamColor % 256) / 256,
+		(rshift(teamColor, 8) % 256) / 256,
+		(rshift(teamColor, 16) % 256) / 256,
+		1
+	}
+end
+
 -- mapHash (32bit) will remain a string, since spring lua uses floats (24bit mantissa)
 function Interface:_OnBattleOpened(battleID, type, natType, founder, ip, port, maxPlayers, passworded, rank, mapHash, other)
 	local engineName, engineVersion, map, title, gameName = unpack(explode("\t", other))
@@ -557,16 +640,8 @@ Interface.commands["UPDATEBATTLEINFO"] = Interface._OnUpdateBattleInfo
 Interface.commandPattern["UPDATEBATTLEINFO"] = "(%d+)%s+(%S+)%s+(%S+)%s+(%S+)%s+([^\t]+)"
 
 function Interface:_OnClientBattleStatus(userName, battleStatus, teamColor)
-	battleStatus = tonumber(battleStatus)
-	status = {
-		isReady      = rshift(battleStatus, 1) % 2 == 1,
-		teamNumber   = rshift(battleStatus, 2) % 16,
-		allyNumber   = rshift(battleStatus, 6) % 16,
-		isSpectator  = rshift(battleStatus, 10) % 2 == 0,
-		handicap     = rshift(battleStatus, 11) % 128,
-		sync         = rshift(battleStatus, 22) % 4,
-		side         = rshift(battleStatus, 24) % 16,
-	}
+	local status = ParseBattleStatus(battleStatus)
+	status.teamColor = ParseTeamColor(teamColor)
 	self:_OnUpdateUserBattleStatus(userName, status)
 end
 Interface.commands["CLIENTBATTLESTATUS"] = Interface._OnClientBattleStatus
@@ -574,20 +649,11 @@ Interface.commandPattern["CLIENTBATTLESTATUS"] = "(%S+)%s+(%S+)%s+(%S+)"
 
 function Interface:_OnAddBot(battleID, name, owner, battleStatus, teamColor, aiDll)
 	battleID = tonumber(battleID)
+	local status = ParseBattleStatus(battleStatus)
+	status.teamColor = ParseTeamColor(teamColor)
 	-- local ai, dll = unpack(explode("\t", aiDll)))
-	Spring.Echo(battleID, name, owner, battleStatus, teamColor, aiDll)
-	Spring.Echo(battleStatus)
-	battleStatus = tonumber(battleStatus)
-	Spring.Echo(battleStatus)
-	status = {
-		isReady      = rshift(battleStatus, 1) % 2 == 1,
-		teamNumber   = rshift(battleStatus, 2) % 16,
-		allyNumber   = rshift(battleStatus, 6) % 16,
-		isSpectator  = rshift(battleStatus, 10) % 2 == 0,
-		handicap     = rshift(battleStatus, 11) % 128,
-		sync         = rshift(battleStatus, 22) % 4,
-		side         = rshift(battleStatus, 24) % 16,
-	}
+	status.aiLib = aiDll
+	status.owner = owner
 	self:_OnAddAi(battleID, name, status)
 end
 Interface.commands["ADDBOT"] = Interface._OnAddBot
@@ -599,6 +665,18 @@ function Interface:_OnRemoveBot(battleID, name)
 end
 Interface.commands["REMOVEBOT"] = Interface._OnRemoveBot
 Interface.commandPattern["REMOVEBOT"] = "(%d+)%s+(%S+)"
+
+function Interface:_OnUpdateBot(battleID, name, battleStatus, teamColor)
+	battleID = tonumber(battleID)
+	local status = ParseBattleStatus(battleStatus)
+	status.teamColor = ParseTeamColor(teamColor)
+	-- local ai, dll = unpack(explode("\t", aiDll)))
+	status.aiLib = aiDll
+	status.owner = owner
+	self:_OnUpdateUserBattleStatus(name, status)
+end
+Interface.commands["UPDATEBOT"] = Interface._OnUpdateBot
+Interface.commandPattern["UPDATEBOT"] = "(%d+)%s+(%S+)%s+(%S+)%s+(%S+)"
 
 function Interface:_OnSaidBattle(userName, message)
 	self:super("_OnSaidBattle", userName, message)
@@ -704,114 +782,17 @@ Interface.commandPattern["SAYPRIVATE"] = "(%S+)%s+(.*)"
 
 ------------
 ------------
--- TODO
+-- LEGACY - QUEUE/MATCHMAKING
 ------------
 ------------
-
-function Interface:UpdateBotStatus(data)
-	Spring.Echo("Implement UpdateBotStatus with ADDBOT etc..")
-end
-
-function Interface:AddStartRect(allyNo, left, top, right, bottom)
-	self:_SendCommand(concat("ADDSTARTRECT", allyNo, left, top, right, bottom))
-	return self
-end
-
-function Interface:ChangeEmail(newEmail, userName)
-	self:_SendCommand(concat("CHANGEEMAIL", newEmail, userName))
-	return self
-end
-
-function Interface:ChangePassword(oldPassword, newPassword)
-	self:_SendCommand(concat("CHANGEPASSWORD", oldPassword, newPassword))
-	return self
-end
-
-function Interface:Channels()
-	self:_SendCommand("CHANNELS")
-	return self
-end
-
-function Interface:ChannelTopic(chanName, topic)
-	self:_SendCommand(concat("CHANNELTOPIC", chanName, topic))
-	return self
-end
 
 function Interface:CloseQueue(name)
 	self:_SendCommand(concat("CLOSEQUEUE", json.encode(name)))
 	return self
 end
 
-function Interface:ConfirmAgreement(verificationCode)
-	self:_SendCommand(concat("CONFIRMAGREEMENT", verificationCode))
-	return self
-end
-
 function Interface:ConnectUser(userName, ip, port, engine, scriptPassword)
 	self:_SendCommand(concat("CONNECTUSER", json.encode({userName=userName, ip=ip, port=port, engine=engine, scriptPassword=scriptPassword})))
-	return self
-end
-
-function Interface:DisableUnits(...)
-	self:_SendCommand(concat("DISABLEUNITS", ...))
-	return self
-end
-
-function Interface:EnableAllUnits()
-	self:_SendCommand("ENABLEALLUNITS")
-	return self
-end
-
-function Interface:EnableUnits(...)
-	self:_SendCommand(concat("ENABLEUNITS", ...))
-	return self
-end
-
-function Interface:Exit(reason)
-	-- should this could be set _after_ server has disconnected us?
-	self.status = "offline"
-	self.finishedConnecting = false
-	self:_SendCommand(concat("EXIT", reason))
-	return self
-end
-
-function Interface:ForceAllyNo(userName, teamNo)
-	self:_SendCommand(concat("FORCEALLYNO", userName, teamNo))
-	return self
-end
-
-function Interface:ForceJoinBattle(userName, destinationBattleId, destinationBattlePassword)
-	self:_SendCommand(concat("FORCEJOINBATTLE", userName, destinationBattleId, destinationBattlePassword))
-	return self
-end
-
-function Interface:ForceLeaveChannel(chanName, userName, reason)
-	self:_SendCommand(concat("FORCELEAVECHANNEL", chanName, userName, reason))
-	return self
-end
-
-function Interface:ForceSpectatorMode(userName)
-	self:_SendCommand(concat("FORCESPECTATORMODE", userName))
-	return self
-end
-
-function Interface:ForceTeamColor(userName, color)
-	self:_SendCommand(concat("FORCETEAMCOLOR", userName, color))
-	return self
-end
-
-function Interface:ForceTeamNo(userName, teamNo)
-	self:_SendCommand(concat("FORCETEAMNO", userName, teamNo))
-	return self
-end
-
-function Interface:GetInGameTime()
-	self:_SendCommand("GETINGAMETIME")
-	return self
-end
-
-function Interface:Handicap(userName, value)
-	self:_SendCommand(concat("HANDICAP", userName, value))
 	return self
 end
 
@@ -849,11 +830,6 @@ function Interface:JoinQueueDeny(name, userNames, reason)
 	return self
 end
 
-function Interface:KickFromBattle(userName)
-	self:_SendCommand(concat("KICKFROMBATTLE", userName))
-	return self
-end
-
 function Interface:KickFromTeam(userName)
 	self:_SendCommand(concat("KICKFROMTEAM", json.encode({userName=userName})))
 	return self
@@ -869,13 +845,128 @@ function Interface:LeaveQueue(name)
 	return self
 end
 
-function Interface:ListCompFlags()
-	self:_SendCommand("LISTCOMPFLAGS")
+function Interface:ListQueues()
+	self:_SendCommand("LISTQUEUES")
 	return self
 end
 
-function Interface:ListQueues()
-	self:_SendCommand("LISTQUEUES")
+function Interface:ReadyCheck(name, userNames, responseTime)
+	self:_SendCommand(concat("READYCHECK", json.encode({name=name, userNames=userNames, responseTime=responseTime})))
+	return self
+end
+
+function Interface:ReadyCheckResponse(name, response, responseTime)
+	local response = {name=name, response=response}
+	if responseTime ~= nil then
+		response.responseTime = responseTime
+	end
+	self:_SendCommand(concat("READYCHECKRESPONSE", json.encode(response)))
+	return self
+end
+
+function Interface:RemoveQueueUser(name, userNames)
+	self:_SendCommand(concat("REMOVEQUEUEUSER", {name=name, userNames=userNames}))
+	return self
+end
+
+------------
+------------
+-- TODO
+------------
+------------
+
+
+function Interface:AddStartRect(allyNo, left, top, right, bottom)
+	self:_SendCommand(concat("ADDSTARTRECT", allyNo, left, top, right, bottom))
+	return self
+end
+
+function Interface:ChangeEmail(newEmail, userName)
+	self:_SendCommand(concat("CHANGEEMAIL", newEmail, userName))
+	return self
+end
+
+function Interface:ChangePassword(oldPassword, newPassword)
+	self:_SendCommand(concat("CHANGEPASSWORD", oldPassword, newPassword))
+	return self
+end
+
+function Interface:Channels()
+	self:_SendCommand("CHANNELS")
+	return self
+end
+
+function Interface:ChannelTopic(chanName, topic)
+	self:_SendCommand(concat("CHANNELTOPIC", chanName, topic))
+	return self
+end
+
+function Interface:ConfirmAgreement(verificationCode)
+	self:_SendCommand(concat("CONFIRMAGREEMENT", verificationCode))
+	return self
+end
+
+function Interface:DisableUnits(...)
+	self:_SendCommand(concat("DISABLEUNITS", ...))
+	return self
+end
+
+function Interface:EnableAllUnits()
+	self:_SendCommand("ENABLEALLUNITS")
+	return self
+end
+
+function Interface:EnableUnits(...)
+	self:_SendCommand(concat("ENABLEUNITS", ...))
+	return self
+end
+
+function Interface:Exit(reason)
+	-- should this could be set _after_ server has disconnected us?
+	self.status = "offline"
+	self.finishedConnecting = false
+	self:_SendCommand(concat("EXIT", reason))
+	return self
+end
+
+function Interface:ForceAllyNo(userName, teamNo)
+	self:_SendCommand(concat("FORCEALLYNO", userName, teamNo))
+	return self
+end
+
+function Interface:ForceSpectatorMode(userName)
+	self:_SendCommand(concat("FORCESPECTATORMODE", userName))
+	return self
+end
+
+function Interface:ForceTeamColor(userName, color)
+	self:_SendCommand(concat("FORCETEAMCOLOR", userName, color))
+	return self
+end
+
+function Interface:ForceTeamNo(userName, teamNo)
+	self:_SendCommand(concat("FORCETEAMNO", userName, teamNo))
+	return self
+end
+
+function Interface:GetInGameTime()
+	self:_SendCommand("GETINGAMETIME")
+	return self
+end
+
+function Interface:Handicap(userName, value)
+	self:_SendCommand(concat("HANDICAP", userName, value))
+	return self
+end
+
+function Interface:KickFromBattle(userName)
+	self:_SendCommand(concat("KICKFROMBATTLE", userName))
+	return self
+end
+
+
+function Interface:ListCompFlags()
+	self:_SendCommand("LISTCOMPFLAGS")
 	return self
 end
 
@@ -901,30 +992,6 @@ end
 
 function Interface:RecoverAccount(email, userName)
 	self:_SendCommand(concat("RECOVERACCOUNT", email, userName))
-	return self
-end
-
-function Interface:ReadyCheck(name, userNames, responseTime)
-	self:_SendCommand(concat("READYCHECK", json.encode({name=name, userNames=userNames, responseTime=responseTime})))
-	return self
-end
-
-function Interface:ReadyCheckResponse(name, response, responseTime)
-	local response = {name=name, response=response}
-	if responseTime ~= nil then
-		response.responseTime = responseTime
-	end
-	self:_SendCommand(concat("READYCHECKRESPONSE", json.encode(response)))
-	return self
-end
-
-function Interface:RemoveBot(name)
-	self:_SendCommand(concat("REMOVEBOT", name))
-	return self
-end
-
-function Interface:RemoveQueueUser(name, userNames)
-	self:_SendCommand(concat("REMOVEQUEUEUSER", {name=name, userNames=userNames}))
 	return self
 end
 
@@ -1005,11 +1072,6 @@ end
 
 function Interface:UpdateBattleInfo(spectatorCount, locked, mapHash, mapName)
 	self:_SendCommand(concat("UPDATEBATTLEINFO", spectatorCount, locked, mapHash, mapName))
-	return self
-end
-
-function Interface:UpdateBot(name, battleStatus, teamColor)
-	self:_SendCommand(concat("UPDATEBOT", name, battleStatus, teamColor))
 	return self
 end
 
@@ -1369,13 +1431,6 @@ function Interface:_OnUDPSourcePort(port)
 end
 Interface.commands["UDPSOURCEPORT"] = Interface._OnUDPSourcePort
 Interface.commandPattern["UDPSOURCEPORT"] = "(%d+)"
-
-function Interface:_OnUpdateBot(battleID, name, battleStatus, teamColor)
-	battleID = tonumber(battleID)
-	self:_CallListeners("OnUpdateBot", battleID, name, battleStatus, teamColor)
-end
-Interface.commands["UPDATEBOT"] = Interface._OnUpdateBot
-Interface.commandPattern["UPDATEBOT"] = "(%d+)%s+(%S+)%s+(%S+)%s+(%S+)"
 
 function Interface:_OnIgnoreListParse(tags)
 	local tags = parseTags(tags)

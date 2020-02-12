@@ -284,6 +284,7 @@ function Configuration:LoadGameConfig(path)
 			Spring.Log("Settings", LOG.ERROR, "Chobby configuration error. Mandatory field is missing: " .. mandatoryField .. ". Check your game settings")
 		end
 	end
+	localLobby.useTeamColor = not self.gameConfig.disableColorChoosing
 end
 
 function Configuration:SetSpringsettingsValue(key, value, compatOverride)
@@ -544,6 +545,9 @@ function Configuration:SetConfigValue(key, value)
 	if key == "useSpringRestart" then
 		lobby.useSpringRestart = value
 		localLobby.useSpringRestart = value
+	end
+	if key == "disableColorChoosing" then
+		localLobby.useTeamColor = not value
 	end
 	if key == "uiScale" then
 		self[key] = math.max(self.minUiScale, math.min(self.maxUiScale, value))

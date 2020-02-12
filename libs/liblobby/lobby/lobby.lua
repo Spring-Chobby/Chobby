@@ -236,6 +236,10 @@ function Lobby:RemoveAi(aiName)
 	return self
 end
 
+function Lobby:UpdateAi(aiName, status)
+	return self
+end
+
 function Lobby:KickUser(userName)
 	return self
 end
@@ -839,6 +843,7 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	userData.aiLib      = status.aiLib or userData.aiLib
 	userData.aiVersion  = status.aiVersion or userData.aiVersion
 	userData.owner      = status.owner or userData.owner
+	userData.teamColor  = status.teamColor or userData.teamColor
 
 	status.allyNumber   = userData.allyNumber
 	status.teamNumber   = userData.teamNumber
@@ -847,6 +852,7 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	status.aiLib        = userData.aiLib
 	status.aiVersion    = userData.aiVersion
 	status.owner        = userData.owner
+	status.teamColor	= userData.teamColor
 	self:_CallListeners("OnUpdateUserBattleStatus", userName, status)
 
 	if changedSpectator or changedAllyTeam then
