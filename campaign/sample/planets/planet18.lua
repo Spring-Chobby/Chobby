@@ -190,7 +190,7 @@ local function GetPlanet(planetUtilities, planetID)
 				{
 					startX = 4000,
 					startZ = 75,
-					aiLib = "NullAI",
+					aiLib = "Null AI",
 					humanName = "Ally",
 					allyTeam = 0,
 					unlocks = {
@@ -549,7 +549,7 @@ local function GetPlanet(planetUtilities, planetID)
 				{
 					startX = 4000,
 					startZ = 75,
-					aiLib = "NullAI",
+					aiLib = "Null AI",
 					humanName = "Turrets",
 					allyTeam = 1,
 					startUnits = {
