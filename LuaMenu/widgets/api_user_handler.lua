@@ -732,6 +732,27 @@ local function GetUserControls(userName, opts)
 	userControls.nameActualLength = userControls.tbName.font:GetTextWidth(userControls.tbName.text)
 	offset = offset + userControls.nameActualLength
 
+	if showTeamColor then
+		local battleStatus = userControls.lobby:GetUserBattleStatus(userName) or {}
+		offset = offset + 5
+		userControls.imTeamColor = Image:New {
+			name = "imTeamColor",
+			x = offset,
+			y = offsetY,
+			width = 20,
+			height = 20,
+			parent = userControls.mainControl,
+			keepAspect = false,
+			file = "LuaMenu/widgets/chili/skins/Evolved/glassBk.png",
+			color = battleStatus.teamColor
+		}
+		userControls.nameActualLength = userControls.nameActualLength + 25
+		offset = offset + 20
+		if battleStatus.isSpectator then
+			userControls.imTeamColor:Hide()
+		end
+	end
+
 	if not hideStatus then
 		userControls.statusImages = {}
 		UpdateUserControlStatus(userName, userControls)
@@ -767,24 +788,6 @@ local function GetUserControls(userName, opts)
 		end
 	end
 
-	if showTeamColor then
-		local battleStatus = userControls.lobby:GetUserBattleStatus(userName) or {}
-		offset = offset + 5
-		userControls.imTeamColor = Image:New {
-			name = "imTeamColor",
-			x = offset,
-			y = offsetY,
-			width = 20,
-			height = 20,
-			parent = userControls.mainControl,
-			keepAspect = false,
-			file = "LuaMenu/widgets/chili/skins/Evolved/glassBk.png",
-			color = battleStatus.teamColor
-		}
-		if battleStatus.isSpectator then
-			userControls.imTeamColor:Hide()
-		end
-	end
 
 	if autoResize then
 		userControls.mainControl.OnResize = userControls.mainControl.OnResize or {}
@@ -794,6 +797,9 @@ local function GetUserControls(userName, opts)
 			userControls.tbName:SetText(truncatedName)
 
 			offset = userNameStart + userControls.tbName.font:GetTextWidth(userControls.tbName.text) + 3
+			if userControls.imTeamColor then
+				offset = offset + 25
+			end
 			if userControls.statusImages then
 				for i = 1, #userControls.statusImages do
 					userControls.statusImages[i]:SetPos(offset)
