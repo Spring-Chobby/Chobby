@@ -24,7 +24,7 @@ local minimapThumbnailPath = LUA_DIRNAME .. "configs/gameConfig/zk/minimapThumbn
 
 local externalFuncAndData = {
 	dirName                = "generic",
-	name                   = "Generic",
+	name                   = "TA Prime",
 	editor                 = "rapid://sbc:test",
 	--editor                 = "SpringBoard Core $VERSION",
 	settingsConfig         = settingsConfig,
