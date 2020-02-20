@@ -49,7 +49,6 @@ function Configuration:init()
 	self.alreadySeenFactionPopup4 = false
 	self.firstBattleStarted = false
 	self.lobbyTimeoutTime = 60 -- Seconds
-	self.channels = {}
 
 	self.battleFilterPassworded2 = true
 	self.battleFilterNonFriend = false
@@ -212,6 +211,12 @@ function Configuration:init()
 	self.showOldAiVersions = false
 	self.drawAtFullSpeed = false
 	self.rememberQueuesOnStart = false
+	self.channels = {}
+	if self.gameConfig.defaultChatChannels ~= nil then
+		for _, channelName in ipairs(self.gameConfig.defaultChatChannels) do
+			self.channels[channelName] = true
+		end
+	end
 
 	self.lobby_fullscreen = 1
 	self.game_fullscreen = 1

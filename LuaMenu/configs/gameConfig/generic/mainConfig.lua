@@ -28,6 +28,7 @@ local externalFuncAndData = {
 	name                   = "Generic",
 	editor                 = "rapid://sbc:test",
 	--editor                 = "SpringBoard Core $VERSION",
+	defaultChatChannels    = {"main", "newbies"},
 	settingsConfig         = settingsConfig,
 	settingsNames          = settingsNames,
 	settingsDefault        = settingsDefault,
