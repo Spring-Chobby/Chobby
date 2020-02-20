@@ -239,8 +239,11 @@ function Configuration:init()
 	}
 
 	self.countryShortnames = VFS.Include(LUA_DIRNAME .. "configs/countryShortname.lua")
-
-	self.game_settings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings.lua")
+	if self.gameConfig.springSettingsPath ~= nil then
+		self.game_settings = VFS.Include(self.gameConfig.springSettingsPath)
+	else
+		self.game_settings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings.lua")
+	end
 	self.forcedCompatibilityProfile = VFS.Include(LUA_DIRNAME .. "configs/springsettings/forcedCompatibilityProfile.lua")
 
 	local default = self.gameConfig.SettingsPresetFunc and self.gameConfig.SettingsPresetFunc()
