@@ -1,3 +1,4 @@
+   
 -- $Id: ModOptions.lua 4642 2009-05-22 05:32:36Z carrepairer $
 
 
@@ -82,7 +83,7 @@ local options = {
 			{ key='none', name = "Off", desc = 'Turns commsharing off.' },
 		},
 	},
-
+	
   {
     key = "noelo",
     name = "No Elo",
@@ -272,6 +273,14 @@ local options = {
     key='disable_overwhelming_advantage',
     name='Disable Overwhelming Advantage',
     desc='Disable team reveal when the opposing team has 25x more assets.',
+    type='bool',
+    section= 'a_important',
+    def=false,
+  },
+  {
+    key='disable_local_widgets',
+    name='Disable Local Widgets',
+    desc='Disable loading of local widget.',
     type='bool',
     section= 'a_important',
     def=false,
@@ -538,6 +547,7 @@ local options = {
 --    --  }
 --    },
 --  },
+  
   {
     key    = 'chicken',
     name   = 'Chicken',
