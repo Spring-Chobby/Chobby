@@ -1,5 +1,4 @@
 -- Chobby - an in-game lobby project
--- Authors: gajop
 
 local modinfo = {
 	name            = "Chobby",

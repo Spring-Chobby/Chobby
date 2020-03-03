@@ -93,14 +93,8 @@ local function GetPlanet(planetUtilities, planetID)
 						facing = 3,
 					},
 					{
-						name = "energysolar",
-						x = 5800,
-						z = 856,
-						facing = 3,
-					},
-					{
-						name = "energysolar",
-						x = 5700,
+						name = "energyfusion",
+						x = 5750,
 						z = 856,
 						facing = 3,
 					},
@@ -198,7 +192,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			aiConfig = {
 				{
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					humanName = "Exodon",
 					bitDependant = true,
 					commanderParameters = {

@@ -261,7 +261,7 @@ local function GetPlanet(planetUtilities, planetID)
 					humanName = "Lief Easter",
 					--aiLib = "Null AI",
 					--bitDependant = false,
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					commanderParameters = {
 						facplop = false,

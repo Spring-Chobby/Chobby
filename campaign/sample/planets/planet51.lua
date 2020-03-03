@@ -35,12 +35,12 @@ local function GetPlanet(planetUtilities, planetID)
 		},
 		tips = {
 			{
-				image = "unitpics/turretimpulse.png",
-				text = [[The Newton turret can be toggled to attract or repulse its target. It does not inflict any direct damage, so when used as a defensive tool it relies on pushing enemies off cliffs or pulling them into other defenses (particularly pulling bombers into anti-air). Smaller units are generally affected more.]]
+				image = "unitpics/module_jumpjet.png",
+				text = [[Jumpjet-equipped units can jump while flying through the air - quite useful if they happen to be propelled off a ramp by an array of Netwons. Issue a Jump command in advance to have the unit Jump and land safely once in range.]]
 			},
 			{
-				image = "unitpics/module_jumpjet.png",
-				text = [[Newtons can also be used to propel your units off a ramp and into battle. Jumpjet-equipped units (which can survive the landing by jumping) and bombs (which deal damage on impact) are best suited for this. Use the Newton firezone command to automate the process.]]
+				image = "unitpics/turretimpulse.png",
+				text = [[The Newton turret can be toggled to attract or repulse its target. It does not inflict any direct damage, so when used as a defensive tool it relies on pushing enemies off cliffs or pulling them into other defenses (particularly pulling bombers into anti-air). Smaller units are generally affected more.]]
 			},
 			{
 				image = "unitpics/jumpsumo.png",
@@ -164,9 +164,6 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 7970,
 						z = 3750,
 						facing = 0,
-						commands = {
-							{cmdID = planetUtilities.COMMAND.JUMP, pos = {2900, 380},}
-						},
 					},
 					{
 						name = "jumpcon",
@@ -516,7 +513,7 @@ local function GetPlanet(planetUtilities, planetID)
 					humanName = "Complexia",
 					--aiLib = "Null AI",
 					--bitDependant = false,
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					allyTeam = 0,
 					unlocks = {
@@ -1231,6 +1228,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 112,
 							z = 312,
 							facing = 1,
+							difficultyAtLeast = 2,
 						},
  						{
 							name = "factoryveh",
@@ -1364,6 +1362,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 328,
 							z = 888,
 							facing = 1,
+							difficultyAtLeast = 2,
 							commands = {
 								{cmdID = planetUtilities.COMMAND.PATROL, pos = {328, 888}},
 								{cmdID = planetUtilities.COMMAND.PATROL, pos = {353, 913}, options = {"shift"}},
@@ -1374,6 +1373,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 328,
 							z = 952,
 							facing = 1,
+							difficultyAtLeast = 2,
 							commands = {
 								{cmdID = planetUtilities.COMMAND.PATROL, pos = {328, 952}},
 								{cmdID = planetUtilities.COMMAND.PATROL, pos = {353, 977}, options = {"shift"}},
@@ -1699,6 +1699,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 916,
 							z = 537,
 							facing = 1,
+							difficultyAtLeast = 2,
 							spawnRadius = 50,
 							delay = 40*30,
 							orbitalDrop = true,
@@ -1711,6 +1712,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 830,
 							z = 873,
 							facing = 1,
+							difficultyAtLeast = 2,
 							spawnRadius = 50,
 							delay = 40*30,
 							orbitalDrop = true,
@@ -1723,6 +1725,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 841,
 							z = 957,
 							facing = 1,
+							difficultyAtLeast = 2,
 							spawnRadius = 50,
 							delay = 40*30,
 							orbitalDrop = true,
@@ -1735,6 +1738,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 808,
 							z = 771,
 							facing = 1,
+							difficultyAtLeast = 2,
 							spawnRadius = 50,
 							delay = 40*30,
 							orbitalDrop = true,
@@ -1747,6 +1751,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 789,
 							z = 677,
 							facing = 1,
+							difficultyAtLeast = 2,
 							spawnRadius = 50,
 							delay = 40*30,
 							orbitalDrop = true,
@@ -1759,6 +1764,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 945,
 							z = 1037,
 							facing = 1,
+							difficultyAtLeast = 2,
 							spawnRadius = 50,
 							delay = 40*30,
 							orbitalDrop = true,
@@ -1771,6 +1777,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 895,
 							z = 1206,
 							facing = 2,
+							difficultyAtLeast = 2,
 							spawnRadius = 50,
 							delay = 40*30,
 							orbitalDrop = true,
@@ -1783,6 +1790,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 883,
 							z = 1150,
 							facing = 1,
+							difficultyAtLeast = 2,
 							spawnRadius = 50,
 							delay = 40*30,
 							orbitalDrop = true,
@@ -1795,6 +1803,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 936,
 							z = 980,
 							facing = 1,
+							difficultyAtLeast = 2,
 							spawnRadius = 50,
 							delay = 40*30,
 							orbitalDrop = true,
@@ -1807,6 +1816,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 911,
 							z = 795,
 							facing = 1,
+							difficultyAtLeast = 2,
 							spawnRadius = 50,
 							delay = 40*30,
 							orbitalDrop = true,
@@ -1840,12 +1850,68 @@ local function GetPlanet(planetUtilities, planetID)
 								{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3620, 1000}},
 							},
 						},
+						
+						-- delayed first wave for easy
+ 						{
+							name = "vehassault",
+							x = 883,
+							z = 1150,
+							facing = 1,
+							difficultyAtMost = 1,
+							spawnRadius = 50,
+							delay = 80*30,
+							orbitalDrop = true,
+							commands = {
+								{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3620, 1000}},
+							},
+						},
+ 						{
+							name = "vehassault",
+							x = 895,
+							z = 1206,
+							facing = 2,
+							difficultyAtMost = 1,
+							spawnRadius = 50,
+							delay = 80*30,
+							orbitalDrop = true,
+							commands = {
+								{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3620, 1000}},
+							},
+						},
+ 						{
+							name = "vehassault",
+							x = 883,
+							z = 1150,
+							facing = 1,
+							difficultyAtMost = 1,
+							spawnRadius = 50,
+							delay = 80*30,
+							orbitalDrop = true,
+							commands = {
+								{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3620, 1000}},
+							},
+						},
+ 						{
+							name = "vehriot",
+							x = 936,
+							z = 980,
+							facing = 1,
+							difficultyAtMost = 1,
+							spawnRadius = 50,
+							delay = 80*30,
+							orbitalDrop = true,
+							commands = {
+								{cmdID = planetUtilities.COMMAND.FIGHT, pos = {3620, 1000}},
+							},
+						},
+						
 						-- second wave
 						{
 							name = "veharty",
 							x = 84,
 							z = 1156,
 							facing = 3,
+							difficultyAtLeast = 2,
 							spawnRadius = 50,
 							delay = 60*30,
 							orbitalDrop = true,

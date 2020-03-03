@@ -138,6 +138,10 @@ function widget:DrawScreen()
 end
 
 function widget:GetConfigData()
+	if WG.Chobby == nil then
+		Spring.Log("Chobby", LOG.ERROR, "No WG.Chobby available during widget:GetConfigData()")
+		return
+	end
 	return WG.Chobby:_GetConfigData()
 end
 

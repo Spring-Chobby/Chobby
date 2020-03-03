@@ -51,7 +51,7 @@ end
 
 local function GoToProfilePage()
 	local Configuration = WG.Chobby.Configuration
-	if Configuration.gameConfig.link_homePage then
+	if Configuration.gameConfig.link_homePage ~= nil then
 		WG.BrowserHandler.OpenUrl(Configuration.gameConfig.link_homePage())
 	end
 end
@@ -98,7 +98,7 @@ local function InitializeControls(window)
 		OnClick = {Logout}
 	}
 
-	if WG.Chobby.Configuration.gameConfig.link_homePage then
+	if WG.Chobby.Configuration.gameConfig.link_homePage ~= nil then
 		btnProfile = Button:New {
 			y = 2,
 			right = 114,

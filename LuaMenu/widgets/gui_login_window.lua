@@ -53,10 +53,11 @@ local function GetNewLoginWindow(failFunc)
 	local Configuration = WG.Chobby.Configuration
 	local steamMode = Configuration.canAuthenticateWithSteam and Configuration.wantAuthenticateWithSteam
 	Spring.Echo("steamMode", Configuration.canAuthenticateWithSteam, Configuration.wantAuthenticateWithSteam)
+	emailRequired = (WG.Server.protocol == "spring")
 	if steamMode then
 		currentLoginWindow = WG.Chobby.SteamLoginWindow(failFunc, nil, "main_window")
 	else
-		currentLoginWindow = WG.Chobby.LoginWindow(failFunc, nil, "main_window", {loginAfterRegister = true})
+		currentLoginWindow = WG.Chobby.LoginWindow(failFunc, nil, "main_window", {loginAfterRegister = true, emailRequired = emailRequired})
 	end
 	return currentLoginWindow
 end

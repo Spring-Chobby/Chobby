@@ -200,7 +200,7 @@ local function CheckDownloads(gameName, mapName, DoneFunc, gameList)
 		DownloadUpdateFunction = nil
 	end
 	DownloadUpdateFunction = Update
-	
+
 	local dlString = "Waiting on content: "
 	downloading = {
 		downloads = {
@@ -208,7 +208,7 @@ local function CheckDownloads(gameName, mapName, DoneFunc, gameList)
 		progress = {
 		},
 	}
-	
+
 	if gameList then
 		for i = 1, #gameList do
 			if not WG.Package.ArchiveExists(gameList[i]) then

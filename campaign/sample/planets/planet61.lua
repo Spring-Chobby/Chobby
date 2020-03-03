@@ -1267,6 +1267,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 7432,
 							z = 5608,
 							facing = 0,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "staticantinuke",
@@ -1352,7 +1353,7 @@ local function GetPlanet(planetUtilities, planetID)
 					humanName = "Swat",
 					--aiLib = "Null AI",
 					--bitDependant = false,
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					allyTeam = 0,
 					unlocks = {
@@ -2203,7 +2204,7 @@ local function GetPlanet(planetUtilities, planetID)
 					humanName = "Slicker",
 					--aiLib = "Null AI",
 					--bitDependant = false,
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					allyTeam = 0,
 					unlocks = {
@@ -3233,12 +3234,14 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 7240,
 							z = 688,
 							facing = 2,
+						difficultyAtLeast = 2,
 						},
 						{
 							name = "energyfusion",
 							x = 7048,
 							z = 1168,
 							facing = 2,
+						difficultyAtLeast = 2,
 						},
 						{
 							name = "staticmex",
@@ -3966,18 +3969,21 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 4116,
 							z = 6919,
 							facing = 3,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "tankassault",
 							x = 3896,
 							z = 6966,
 							facing = 3,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "tankcon",
 							x = 4126,
 							z = 6798,
 							facing = 3,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "tankcon",

@@ -271,7 +271,7 @@ local function GetPlanet(planetUtilities, planetID)
 			aiConfig = {
 				{
 					humanName = "Ally #1",
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					--aiLib = "Null AI",
 					--bitDependant = false,
@@ -938,7 +938,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				{
 					humanName = "Ally #2",
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill", -- Intentially not _ally.
 					bitDependant = true,
 					--aiLib = "Null AI",
 					--bitDependant = false,
@@ -1544,6 +1544,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 2922,
 							z = 4680,
 							facing = 2,
+							difficultyAtLeast = 2,
 						},
  						{
 							name = "spidercon",
@@ -2363,6 +2364,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 6233,
 							z = 2397,
 							facing = 3,
+							difficultyAtLeast = 2,
 						},
  						{
 							name = "cloakaa",
@@ -2449,6 +2451,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 5671,
 							z = 2320,
 							facing = 1,
+							difficultyAtLeast = 2,
 						},
  						{
 							name = "cloakskirm",
@@ -3052,6 +3055,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 8600,
 							z = 6024,
 							facing = 3,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "turretaaheavy",
@@ -3376,6 +3380,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 5391,
 							z = 4058,
 							facing = 1,
+							difficultyAtLeast = 2,
 						},
  						{
 							name = "tankassault",
@@ -3741,6 +3746,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 4054,
 							z = 5265,
 							facing = 2,
+							difficultyAtLeast = 2,
 						},
  						{
 							name = "spiderscout",
@@ -3777,6 +3783,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 3831,
 							z = 5390,
 							facing = 1,
+							difficultyAtLeast = 2,
 						},
  						{
 							name = "amphcon",
@@ -3857,6 +3864,7 @@ local function GetPlanet(planetUtilities, planetID)
 							x = 5847,
 							z = 5547,
 							facing = 3,
+							difficultyAtLeast = 2,
 						},
  						{
 							name = "spiderscout",

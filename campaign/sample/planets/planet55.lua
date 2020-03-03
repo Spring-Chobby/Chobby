@@ -509,7 +509,7 @@ local function GetPlanet(planetUtilities, planetID)
 					humanName = "Izbatos",
 					--aiLib = "Null AI",
 					--bitDependant = false,
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					allyTeam = 0,
 					unlocks = {
@@ -1272,7 +1272,7 @@ local function GetPlanet(planetUtilities, planetID)
 					humanName = "Vanterras",
 					--aiLib = "Null AI",
 					--bitDependant = false,
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					allyTeam = 0,
 					unlocks = {
