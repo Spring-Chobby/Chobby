@@ -1419,7 +1419,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_companion_drone_LIMIT_C_2",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"anomalie_leopard"
+			},
 		},
 	}
 	

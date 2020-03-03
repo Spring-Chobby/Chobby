@@ -4098,7 +4098,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"commweapon_concussion",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"location_pendust"
+			},
 		},
 	}
 	

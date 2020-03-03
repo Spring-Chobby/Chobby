@@ -5033,7 +5033,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"commweapon_disruptorbomb",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"location_rockbar"
+			},
 		},
 	}
 	

@@ -223,7 +223,21 @@ local entries = {
 	entry_starsong = { -- planet67
 		name = "The Starsong",
 		category = "1. Entries",
-		text = ""
+		text = "Fortress world Zhurou, last redoubt of Haven. Where it all started."
+		.. "\n "
+		.. "\nI don't even know where to begin..."
+		.. "\n "
+		.. "\nStrange, according to their archaeological findings, there was a massive observatory here, millennia ago. Its core was buried deep under the crust of the planet, but it actually spanned the entire star system. They were looking for extragalactic hypersignals - but I have never heard of such a gargantuan hypersignal detector..."
+		.. "\n "
+		.. "\nAnd they had found something. Something coming from an extremely distant galaxy. A repeating signal, with a period of about eight thousand years. Something... artificial? They called it the Starsong."
+		.. "\nWhatever it was, it set the Anarchai off."
+		.. "\n "
+		.. "\nHaven wanted to know more about the signal, but they feared its content. They knew what they were doing, and were experts in data handling: they used draconian information quarantine measures, and studied what records they had recovered with extreme caution."
+		.. "\n "
+		.. "\nAnd yet, it was not enough. One moment they are running an indirect test in a black box system on a fragment of the signal, and the next - everyone in the facility is gone. One second later, there is no-one left on the entire planet. Then, it hits nearby systems..."
+		.. "\n "
+		.. "\nIf Haven couldn't deal with that thing, I certainly won't even try."
+		.. "\nI am going to purge every scrap of data I have on that damned thing, leave immediately and never, ever come back."
 	},
 	entry_eternity_gate = { -- planet68
 		name = "The Eternity Gate",
@@ -280,12 +294,26 @@ local entries = {
 	location_rockbar = { -- planet57
 		name = "Rockbar testing grounds",
 		category = "4. Locations",
-		text = ""
+		text = "Why would efficiency-obsessed Haven enact such large-scale test battles, let alone dedicate so much of a well-terraformed planet for it? There are few things learned that way that couldn't be discovered for much less, with numerous simulations and a few small-scale battles. What was really going on here?"
+		.. "\n "
+		.. "\nWell, for a surprise..."
+		.. "\n "
+		.. "\nThis was the Anarchai homeworld. The founders of what would become Haven discovered it as the old Empire was crumbling away - the whole thing started as an archeotech effort, in fact. This would certainly explain Haven's obsession with the Anarchai. Whether they were afraid of what they would find, something truly spooked them or they were simply paranoid, they did their best to keep the whole thing secret. Which included turning the entire continent into a high-activity military exercise area, both to cover up their archeotech activities and have convenient armies to deal with interlopers."
+		.. "\n "
+		.. "\nMost of the archives I could find were too well-encrypted, but the little I could decipher indicates that even after all that time, they still had more questions than answers. The Anarchai themselves apparently destroyed a lot of evidence from their origins when they remade themselves."
+		.. "\nThey originally were a small technologist settlement, exploring cybernetic and free machine self-modifications on a remote world, both to avoid what they saw as stifling regulations, and in case something went wrong to the point of quarantine. Their last intelligible log evoked a data sample from Zhurou. What follows, I suspect, is so heavily encrypted at least in part because Haven thought the data itself was so dangerous..."
 	},
 	location_pendust = { -- planet60
 		name = "Pendust capital planet",
 		category = "4. Locations",
-		text = ""
+		text = "Haven cities often had a functional, deliberate beauty to them. Pendust, however, was different."
+		.. "\n "
+		.. "\nThis world is ancient. It has been inhabited since the dawn of time. And Haven took care of preserving as much of its history as they could. Andrezi domes and Oroi spires, Akkanian sprawls dotted with monolithic Sovereignty acrologies, glorious Celestial palaces overlooking Myriadic crater-temples to forgotten gods..."
+		.. "\n "
+		.. "\nI thought they had turned the entire globe into a war machine, but not quite. They sacrificed a quadrant of the planet to military defenses, after moving every archaeological site they had found out of the way. The entire strategy revolved around forcing a battle for the control of the planet to take place there, where collateral damage would be minimum."
+		.. "\nIronically, their capital was the only world over which they were not ready to fight to the death. All their plans revolved over delaying actions and massive evacuations to the Zhurou redoubt. Their defenses were truly formidable, but they would have stopped well short of endangering the planet itself and its historical treasures."
+		.. "\n "
+		.. "\nTo this day, the maintenance systems kept the city intact, not caring whether people were left to admire the ancient works."
 	},
 	location_hibiliha = { -- planet61
 		name = "Hibiliha warp station",
@@ -351,7 +379,15 @@ local entries = {
 	anomalie_leopard = { -- planet33
 		name = "Leopard artefact",
 		category = "5. Anomalies",
-		text = ""
+		text = "No wonder they fought so hard over it, this artifact was a freaking Anarchai scattership!"
+		.. "\n "
+		.. "\nWhen the Ghost Fleet hit the Anarchai, they were completely unprepared to what they were actually facing. However, it is a testament to the military of the military of the Ghost Mandate that they still managed to destroy several scatterships during the engagement."
+		.. "\n "
+		.. "\nThis particular scattership phased right through Leopard after sustaining heavy damage, ending up trapped in its mantle. The few self-repair systems were barely enough to keep its integrity, but its warmind had been irremediably destroyed - which is presumably why the Anarchai didn't bother recovering or destroying it afterwards."
+		.. "\n "
+		.. "\nEven in its mindless, damaged state, had its self-repair systems kicked in and made it spaceworthy again, it would have had enough firepower to endanger the entire galaxy again. And its technology was so advanced and different from what we know today, who knows what could happen, had someone tried studying it... Haven was terrified that the Empire would be careless enough to try, and the Empire that Haven was desperate enough for it. And so they fought, not to gain control of it, but to make sure no-one would."
+		.. "\n "
+		.. "\nUltimately, the scattership's internal systems have stopped working one after another, and it is now little more than a wreck full of exotic materials. Still, I am going to leave it alone, just in case.."
 	},
 	anomalie_estann_all = { -- planet43
 		name = "Estann All artefact",
