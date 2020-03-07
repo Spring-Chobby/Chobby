@@ -571,6 +571,7 @@ local options = {
       { key = 'Chicken: Custom', name = "Chicken: Custom", desc = 'Customize your chicken.' },
     },
   },
+--[[ Broken, see gamseide ticket #3567
   {
     key = "playerchickens",
     name = "Players as chickens",
@@ -579,6 +580,7 @@ local options = {
     def = false,
     section = 'chicken',
   },
+]]
   {
     key	= "eggs",
     name = "Chicken Eggs",
