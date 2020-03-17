@@ -52,7 +52,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 		},
 		gameConfig = {
-			mapName = "SapphireShores_Dry_V2.1",
+			mapName = "SapphireShores_Dry_V2.2",
 			modoptions = {
 				graceperiod = 4,
 				chicken_nominiqueen = 1,
