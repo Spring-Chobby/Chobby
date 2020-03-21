@@ -44,7 +44,7 @@ local function JoinFriend(friendID)
 		-- Friend not online.
 		return
 	end
-	lobby:InviteToParty(userName)
+	--lobby:InviteToParty(userName) -- Do not do join server party, it is confusing.
 
 	local userInfo = lobby:GetUser(userName) or {}
 	if userInfo.battleID then
