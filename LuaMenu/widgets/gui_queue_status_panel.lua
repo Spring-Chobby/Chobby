@@ -24,6 +24,8 @@ local ALLOW_REJECT_QUICKPLAY = true
 local ALLOW_REJECT_REGULAR = false
 
 local instantStartQueuePriority = {
+	["Battle"] = 5,
+	["Sortie"] = 4,
 	["Teams"] = 3,
 	["1v1"] = 2,
 	["Coop"] = 1,
