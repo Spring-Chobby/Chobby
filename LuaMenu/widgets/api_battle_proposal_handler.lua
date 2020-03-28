@@ -36,20 +36,25 @@ local acceptedProposal
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- External functions
 
-local BattleProposalHandler = {}
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
-
-function BattleProposalHandler.GetProposalFromString(message, onlyCheckExistence)
-	if string.sub(message, 1, 1) ~= "!" or string.sub(message, 1, 14) ~= "!proposeBattle"then
+local function CheckCancelProposal(message)
+	if string.sub(message, 1, 1) ~= "!" or string.sub(message, 1, 12) ~= "!endproposal"then
 		return false
 	end
+	if currentProposal then
+		Chotify:Post({
+			title = "Battle Proposal",
+			body = "Ongoing proposal ended.",
+		})
+	end
+	currentProposal = nil
 	
-	if onlyCheckExistence then
-		return true
+	return true
+end
+
+local function GetProposalFromString(message)
+	if string.sub(message, 1, 1) ~= "!" or string.sub(message, 1, 14) ~= "!proposebattle"then
+		return false
 	end
 	
 	local data = message:split(" ")
@@ -68,53 +73,82 @@ function BattleProposalHandler.GetProposalFromString(message, onlyCheckExistence
 	local proposalValues = {
 		minelo = paramValues[1] or false,
 		maxelo = paramValues[2] or false,
-		minsize = paramValues[3] or 4,
+		minsize = math.max(2, math.floor(paramValues[3] or 4)),
 	}
 	proposalValues.maxsize = math.max(proposalValues.minsize, paramValues[4] or 8)
 	
 	return true, proposalValues
 end
 
-function BattleProposalHandler.CheckProposalSent(message)
-	local hasProposal, newProposalValues = BattleProposalHandler.GetProposalFromString(message)
-	if not hasProposal then
+local function CheckProposalSent(prop)
+	if currentProposal and prop.minelo == currentProposal.minelo
+	                   and prop.maxelo == currentProposal.maxelo
+	                   and prop.minsize == currentProposal.minsize
+	                   and prop.maxsize == currentProposal.maxsize then
+		Chotify:Post({
+			title = "Battle Proposal",
+			body = "Invite for ongoing proposal sent",
+		})
 		return false
 	end
 	
-	if currentProposal and newProposalValues.minelo == currentProposal.minelo
-	                   and newProposalValues.maxelo == currentProposal.maxelo
-	                   and newProposalValues.minsize == currentProposal.minsize
-	                   and newProposalValues.maxsize == currentProposal.maxsize then
-		return true
-	end
-	
-	currentProposal = newProposalValues
+	currentProposal = prop
 	
 	currentProposal.currentPlayers = 1
 	currentProposal.acceptedPlayers = {}
+	
+	Chotify:Post({
+		title = "Battle Proposal",
+		body = "New proposal sent",
+	})
 	return true
 end
 
-function BattleProposalHandler.AcceptProposal(userName)
-	acceptedProposal = userName
-	lobby:BattleProposalRespond(userName, true)
-end
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- External functions
+
+local BattleProposalHandler = {}
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 function BattleProposalHandler.AddClickableInvites(userName, preMessage, message, onTextClick, textTooltip)
-	local hasProposal, prop = BattleProposalHandler.GetProposalFromString(message)
-	if not hasProposal then
-		return false
-	end
 	if not (WG.LibLobby and WG.LibLobby.lobby) then
 		return
 	end
-	
 	local myProposal = (userName == WG.LibLobby.lobby:GetMyUserName())
+	if myProposal and CheckCancelProposal(message) then
+		return false
+	end
+	
+	local hasProposal, prop = GetProposalFromString(message)
+	if not hasProposal then
+		return false
+	end
 	
 	local myInfo = WG.LibLobby.lobby:GetMyInfo()
 	local effectiveSkill = math.max(myInfo.skill or 1500, myInfo.casualSkill or 1500)
 	local skillTooLow = (prop.minelo and effectiveSkill < prop.minelo)
 	local skillTooHigh = (prop.maxelo and effectiveSkill > prop.maxelo)
+	
+	if myProposal then
+		if skillTooLow then
+			Chotify:Post({
+				title = "Battle Proposal",
+				body = "Your skill rating is too low for your proposal",
+			})
+			return
+		elseif skillTooHigh then
+			Chotify:Post({
+				title = "Battle Proposal",
+				body = "Your skill rating is too high for your proposal",
+			})
+			return
+		end
+		
+		CheckProposalSent(prop)
+	end
 	
 	local startIndex = string.len(preMessage)
 	local endIndex = startIndex + string.len(message) + 1
@@ -126,7 +160,12 @@ function BattleProposalHandler.AddClickableInvites(userName, preMessage, message
 			OnTextClick = {
 				function()
 					if WG.LibLobby and WG.LibLobby.lobby then
+						acceptedProposal = userName
 						WG.LibLobby.lobby:BattleProposalRespond(userName, true)
+						Chotify:Post({
+							title = "Battle Proposal",
+							body = "Accepted " .. userName .. "'s battle",
+						})
 					end
 				end
 			}
@@ -187,11 +226,15 @@ function DelayedInitialize()
 		
 		currentProposal.currentPlayers = currentProposal.currentPlayers + 1
 		currentProposal.acceptedPlayers[userName] = true
+		Chotify:Post({
+			title = "Battle Proposal",
+			body = userName .. " accepted.\nPlayers: " .. currentProposal.currentPlayers .. "/" .. currentProposal.minsize,
+		})
 		
 		if currentProposal.currentPlayers >= currentProposal.minsize and not currentProposal.openingBattleName then
 			-- Check for users leaving
 			for acceptedUserName, _ in pairs(currentProposal.acceptedPlayers) do
-				local currentUser = lobby:GetUser(userName)
+				local currentUser = lobby:GetUser(acceptedUserName)
 				if (not currentUser) or currentUser.isOffline then
 					currentProposal.acceptedPlayers[acceptedUserName] = nil
 					currentProposal.currentPlayers = currentProposal.currentPlayers - 1
@@ -200,9 +243,14 @@ function DelayedInitialize()
 			
 			-- Host the battle
 			if currentProposal.currentPlayers >= currentProposal.minsize then
+				WG.BattleRoomWindow.LeaveBattle()
 				currentProposal.password = math.floor(math.random()*100000)
 				currentProposal.openingBattleName = (lobby:GetMyUserName() or "Player") .. "'s Proposed Battle"
 				lobby:HostBattle(currentProposal.openingBattleName, currentProposal.password, "Team")
+				Chotify:Post({
+					title = "Battle Proposal",
+					body = "Hosting game",
+				})
 			end
 		end
 	end
@@ -219,6 +267,9 @@ function DelayedInitialize()
 		for acceptedUserName, _ in pairs(currentProposal.acceptedPlayers) do
 			lobby:BattleProposalBattleInvite(acceptedUserName, battleID, currentProposal.password)
 		end
+		if currentProposal.maxsize then
+			lobby:SayBattle("!maxplayers " .. currentProposal.maxsize)
+		end
 		currentProposal = nil
 	end
 
@@ -228,6 +279,10 @@ function DelayedInitialize()
 		end
 		lobby:JoinBattle(battleID, password)
 		acceptedProposal = false
+		Chotify:Post({
+			title = "Battle Proposal",
+			body = "Joining " .. userName .. "'s battle",
+		})
 	end
 	
 	lobby:AddListener("OnBattleProposalResponse", OnBattleProposalResponse)

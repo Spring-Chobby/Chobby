@@ -732,9 +732,6 @@ function ChatWindows:GetChannelConsole(chanName)
 			if message:starts("/me ") then
 				lobby:SayEx(chanName, message:sub(5))
 			else
-				if WG.BattleProposalHandler then
-					WG.BattleProposalHandler.CheckProposalSent(message)
-				end
 				lobby:Say(chanName, message)
 			end
 		end

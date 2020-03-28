@@ -1314,9 +1314,11 @@ function Interface:_BattlePollOutcome(data)
 end
 Interface.jsonCommands["BattlePollOutcome"] = Interface._BattlePollOutcome
 
-function Interface:_HandleBattleProposalMessages(userName, message)
+function Interface:_HandleBattleProposalMessages(userName, message, doAction)
 	if message == "!acceptBattleProposal" then
-		self:_CallListeners("OnBattleProposalResponse", userName, true)
+		if doAction then
+			self:_CallListeners("OnBattleProposalResponse", userName, true)
+		end
 		return true
 	end
 	
@@ -1325,7 +1327,10 @@ function Interface:_HandleBattleProposalMessages(userName, message)
 		local battleID = data and data[2] and tonumber(data[2])
 		local password = data and data[3] and tonumber(data[3])
 		if battleID and password then
-			self:_CallListeners("OnBattleProposalBattleInvite", userName, battleID, password)
+			if doAction then
+				self:_CallListeners("OnBattleProposalBattleInvite", userName, battleID, password)
+			end
+			return true
 		end
 	end
 	return false
@@ -1398,7 +1403,7 @@ function Interface:_Say(data)
 		end
 	elseif data.Place == 2 then -- Send to user?
 		if data.Target == self:GetMyUserName() then
-			if self:_HandleBattleProposalMessages(data.User, data.Text) then
+			if self:_HandleBattleProposalMessages(data.User, data.Text, true) then
 				return -- Hide these messages
 			end
 			if emote then
@@ -1407,6 +1412,10 @@ function Interface:_Say(data)
 				self:_OnSaidPrivate(data.User, data.Text, data.Time)
 			end
 		else
+			-- _HandleBattleProposalMessages only hides messages when the third argument is false
+			if self:_HandleBattleProposalMessages(data.User, data.Text, false) then
+				return
+			end
 			if emote then
 				self:_OnSayPrivateEx(data.Target, data.Text, data.Time)
 			else

@@ -258,9 +258,6 @@ local function GetDebriefingChat(window, vertPos, channelName, RemoveFunction)
 		if message:starts("/me ") then
 			lobby:SayEx(channelName, message:sub(5))
 		else
-			if WG.BattleProposalHandler then
-				WG.BattleProposalHandler.CheckProposalSent(message)
-			end
 			lobby:Say(channelName, message)
 		end
 	end
