@@ -376,6 +376,18 @@ function Lobby:PartyInviteResponse(partyID, accepted)
 end
 
 ------------------------
+-- Battle Propose commands
+------------------------
+
+function Lobby:BattleProposalRespond(userName, accepted)
+	return self
+end
+
+function Lobby:BattleProposalBattleInvite(userName, battleID, password)
+	return self
+end
+
+------------------------
 -- Planetwars commands
 ------------------------
 
@@ -1150,6 +1162,18 @@ function Lobby:_OnPartyInviteResponse(userName, accepted) -- Invite response rec
 	local userInfo = self:TryGetUser(userName)
 	userInfo.pendingPartyInvite = false
 	self:_CallListeners("OnPartyInviteResponse", userName, accepted)
+end
+
+------------------------
+-- Battle Propose commands
+------------------------
+
+function Lobby:_OnBattleProposalResponse(userName, accepted)
+	self:_CallListeners("OnBattleProposalResponse", userName, accepted)
+end
+
+function Lobby:_OnBattleProposalBattleInvite(userName, battleID, password)
+	self:_CallListeners("OnBattleProposalBattleInvite", userName, battleID, password)
 end
 
 ------------------------
