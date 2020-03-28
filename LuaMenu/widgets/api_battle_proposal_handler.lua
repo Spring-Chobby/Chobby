@@ -73,7 +73,7 @@ local function GetProposalFromString(message)
 	local proposalValues = {
 		minelo = paramValues[1] or false,
 		maxelo = paramValues[2] or false,
-		minsize = math.max(2, math.floor(paramValues[3] or 4)),
+		minsize = math.max(1, math.floor(paramValues[3] or 4)),
 	}
 	proposalValues.maxsize = math.max(proposalValues.minsize, paramValues[4] or 8)
 	
@@ -99,7 +99,7 @@ local function CheckProposalSent(prop)
 	
 	Chotify:Post({
 		title = "Battle Proposal",
-		body = "New proposal sent",
+		body = "New proposal sent.\nUse !endproposal to cancel.",
 	})
 	return true
 end
@@ -164,7 +164,7 @@ function BattleProposalHandler.AddClickableInvites(userName, preMessage, message
 						WG.LibLobby.lobby:BattleProposalRespond(userName, true)
 						Chotify:Post({
 							title = "Battle Proposal",
-							body = "Accepted " .. userName .. "'s battle",
+							body = "Signed up for " .. userName .. "'s battle",
 						})
 					end
 				end
@@ -212,7 +212,7 @@ function DelayedInitialize()
 		if (not accepted) then
 			return
 		end
-		if (not currentProposal) or currentProposal.acceptedPlayers[userName] then
+		if (not currentProposal) or (currentProposal.acceptedPlayers[userName] and not currentProposal.battleHostComplete) then
 			return
 		end
 		local user = lobby:GetUser(userName)
@@ -221,6 +221,15 @@ function DelayedInitialize()
 		end
 		local effectiveSkill = math.max(user.skill or 1500, user.casualSkill or 1500)
 		if (currentProposal.minelo and effectiveSkill < currentProposal.minelo) or (currentProposal.maxelo and effectiveSkill > currentProposal.maxelo) then
+			return
+		end
+		
+		if currentProposal.battleHostComplete then
+			lobby:BattleProposalBattleInvite(userName, currentProposal.battleID, currentProposal.password)
+			Chotify:Post({
+				title = "Battle Proposal",
+				body = userName .. " accepted and joined.",
+			})
 			return
 		end
 		
@@ -270,7 +279,8 @@ function DelayedInitialize()
 		if currentProposal.maxsize then
 			lobby:SayBattle("!maxplayers " .. currentProposal.maxsize)
 		end
-		currentProposal = nil
+		currentProposal.battleID = battleID
+		currentProposal.battleHostComplete = true
 	end
 
 	local function OnBattleProposalBattleInvite(listener, userName, battleID, password)
