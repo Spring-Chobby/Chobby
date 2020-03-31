@@ -52,7 +52,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 		},
 		gameConfig = {
-			mapName = "SapphireShores_Dry_V2.1",
+			mapName = "SapphireShores_Dry_V2.2",
 			modoptions = {
 				graceperiod = 4,
 				chicken_nominiqueen = 1,
@@ -1313,7 +1313,7 @@ local function GetPlanet(planetUtilities, planetID)
 							delay = 28*30*60,
 							orbitalDrop = true,
 							difficultyAtLeast = 1,
-							difficultyAtLeast = 1,
+							difficultyAtMost = 1,
 						},
 						{
 							name = "striderdetriment",
@@ -1324,7 +1324,7 @@ local function GetPlanet(planetUtilities, planetID)
 							delay = 28*30*60,
 							orbitalDrop = true,
 							difficultyAtLeast = 1,
-							difficultyAtLeast = 1,
+							difficultyAtMost = 1,
 						},
 						{
 							name = "chickenflyerqueen",
@@ -1335,7 +1335,7 @@ local function GetPlanet(planetUtilities, planetID)
 							delay = 27.5*30*60,
 							orbitalDrop = true,
 							difficultyAtLeast = 2,
-							difficultyAtLeast = 2,
+							difficultyAtMost = 2,
 						},
 						{
 							name = "striderdetriment",
@@ -1346,7 +1346,7 @@ local function GetPlanet(planetUtilities, planetID)
 							delay = 27.5*30*60,
 							orbitalDrop = true,
 							difficultyAtLeast = 2,
-							difficultyAtLeast = 2,
+							difficultyAtMost = 2,
 						},
 						{
 							name = "chickenflyerqueen",
@@ -1357,7 +1357,7 @@ local function GetPlanet(planetUtilities, planetID)
 							delay = 26.75*30*60,
 							orbitalDrop = true,
 							difficultyAtLeast = 3,
-							difficultyAtLeast = 3,
+							difficultyAtMost = 3,
 						},
 						{
 							name = "striderdetriment",
@@ -1368,7 +1368,7 @@ local function GetPlanet(planetUtilities, planetID)
 							delay = 26.75*30*60,
 							orbitalDrop = true,
 							difficultyAtLeast = 3,
-							difficultyAtLeast = 3,
+							difficultyAtMost = 3,
 						},
 						{
 							name = "chickenflyerqueen",
@@ -1379,7 +1379,7 @@ local function GetPlanet(planetUtilities, planetID)
 							delay = 26*30*60,
 							orbitalDrop = true,
 							difficultyAtLeast = 4,
-							difficultyAtLeast = 4,
+							difficultyAtMost = 4,
 						},
 						{
 							name = "striderdetriment",
@@ -1390,7 +1390,7 @@ local function GetPlanet(planetUtilities, planetID)
 							delay = 26*30*60,
 							orbitalDrop = true,
 							difficultyAtLeast = 4,
-							difficultyAtLeast = 4,
+							difficultyAtMost = 4,
 						},
 					},
 					startUnits = {

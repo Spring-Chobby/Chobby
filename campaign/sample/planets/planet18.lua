@@ -41,7 +41,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "LuaUI/Images/commands/ramp.png",
-				text = [[In this mission only, your terraforming tools are half cost. Feel free to experiment.]]
+				text = [[In this mission only, your terraforming tools are half cost and are not affected by nearby enemy units and structures. Feel free to experiment.]]
 			},
 			{
 				image = "unitpics/shieldscout.png",
@@ -63,6 +63,7 @@ local function GetPlanet(planetUtilities, planetID)
 				integral_disable_factory = 1,
 				campaign_disable_share_marker = 1,
 				terracostmult = 0.5,
+				enemyterra = 1,
 				--campaign_debug_units = 1,
 			},
 			playerConfig = {
