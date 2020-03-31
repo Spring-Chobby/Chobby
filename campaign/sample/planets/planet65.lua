@@ -4820,6 +4820,9 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			abilities = {
 			}
+			codexEntries = {
+				"location_mannia"
+			},
 		},
 	}
 	

@@ -95,10 +95,19 @@ local entries = {
 		.. "\n "
 		.. "\nHaven was fascinated by the Anarchai. Located in their presumed birthplace, they spent considerable effort trying to pierce the mystery of their origins, even as the war against the Empire was taking a turn for the worse."
 	},
-	faction_survivors = { -- planet51, planet55, planet62
+	faction_survivors = { -- planet55, planet61, planet64
 		name = "Survivors",
 		category = "3. Factions",
-		text = ""
+		text = "There is a message broadcast looping across the system. Most of the transmitters have stopped working, and the broadcast itself is weak, garbled and corrupt, but there were enough emitters to reconstruct most of it."
+		.. "\n "
+		.. "\nAs it turns out, I wasn't the only one to escape the event. A handful among those in deep hibernation, in a teleportation accident, or even a freak hyperspace misjump at the moment it swept them by, were not affected."
+		.. "\n "
+		.. "\nThe whole infrastructure was intact, so they rarely had difficulties to survive. Some had system rights for communications and space travel for them to find each-other, others found ways to acquire them. This was enough for them to find each-other, and organize as they could."
+		.. "\n "
+		.. "\nAt first, they scoured what they could of the galaxy, trying to find as many fellow survivors as they could. They set up those boradcast stations for stagglers, as well as those weird backdoors I keep finding in war systems around here. None of them had combat system rights, and while all those war automata were mostly waiting for orders, they knew they would grow more dangerous with time."
+		.. "\nThen they chose to follow the refugee trails, deeper in the Empire's heartlands. They knew the Empire had tried to find a way to escape the event, and went searching for it."
+		.. "\n "
+		.. "\nAfter all this time, no-one went back to resettle the galaxy, so I have little hope for their success. But I have to find out."
 	},
 	
 	-- Threats
@@ -236,13 +245,28 @@ local entries = {
 		.. "\n "
 		.. "\nAnd yet, it was not enough. One moment they are running an indirect test in a black box system on a fragment of the signal, and the next - everyone in the facility is gone. One second later, there is no-one left on the entire planet. Then, it hits nearby systems..."
 		.. "\n "
-		.. "\nIf Haven couldn't deal with that thing, I certainly won't even try."
-		.. "\nI am going to purge every scrap of data I have on that damned thing, leave immediately and never, ever come back."
+		.. "\nThe data itself has long decayed beyond recovery, and the Starsong itself went silent, at some point since the event. There is nothing left to be found, on how it all started. But perhaps this is for the better. If Haven could not deal with it, who knows what I may have done."
 	},
 	entry_eternity_gate = { -- planet68
 		name = "The Eternity Gate",
 		category = "1. Entries",
-		text = ""
+		text = "This planet was never meant to house a large population. It had been the Empire's last redoubt, an mighty fortress world for a glorious last stand, came the day of their fall. Which is what happened, in a way. But the refugees never settled here."
+		.. "\n "
+		.. "\nThey never intended to settle on this world. Instead, they poured all their efforts, time and resources grasping at straws, looking for an old legend. And I suspect to their own surprise, they found it."
+		.. "\n "
+		.. "\nIn the ancient times, a young Ghost Mandate stumbled upon a discovery made by a forgotten galactic power, something called the Eternity Gate."
+		.. "\nAn immense hyperspace structure, almost half as large as the galaxy, spans the near-starless expanse beyond this rim. In its heart exists a rift, that connects to the other end of the universe both across space and time. A complex, diaphanous structure had been built, spanning many systems, to serve as a jump amplifier and reach for the rift. The Mandate restored it and carefully started exploring it."
+		.. "\n "
+		.. "\nAfter millennia, they received their first reports from the other side. Their first surprise was the time shift: for days on this side, barely a second would have passed on the other - which had only been the first of many hurdles to transmit data back. It had been theorized that as both ends drifted toward each-other time-wise, so would they in space, until they would meet and disappear in an impossibly distant future. Or this was the point of their birth, sending them drifting backwards in time..."
+		.. "\nThe other surprise was that despite being long past the heat death of the universe, and across a mangled, nearly incomprehensibly distorted space-time, it was somewhat inhabitable. And, it would seem, possibly inhabited."
+		.. "\n "
+		.. "\nThis is when the Anarchai overran the galaxy, cutting this region off from fallback Dynasty worlds. Faced with destruction, local Mandate authorities strengthened the Gate to the point that it could support a mass-exodus, and evacuated as many as they could."
+		.. "\nIt had long been thought that the Anarchai had destroyed the Gate itself, but strangely enough, they only took the control system out. Somehow, the Empire found a way to rebuild it. And as the Mandate before them, they fled across the Gate."
+		.. "\n "
+		.. "\nWhen the survivors arrived, the Eternity Gate was fully working, and they all crossed it, in the end. But now, after such a long time, it has fallen into disrepair - I restored what self-repair systems I could, but it will be decades, maybe centuries before it can operate again."
+		.. "\nMaybe I will tidy up what I can in this galaxy. Maybe there are others like me, still waiting in deep slumber. And I can always skip time in hibernation, if needs be."
+		.. "\n "
+		.. "\nAlso, the Empire had also found an incomplete Mandate project. They lacked time for detailed studies, but they thought it was an receptor node, made to invert the Gate operation and guide backward jumps across the rift. Let's see what I can make of it..."
 	},
 	
 	-- Locations
@@ -318,17 +342,29 @@ local entries = {
 	location_hibiliha = { -- planet61
 		name = "Hibiliha warp station",
 		category = "4. Locations",
-		text = ""
+		text = "There was an ancient warp station in this system. A massive installation, that could generate hyperspace highways across the entire galaxy. A few survivors managed to restore it, and used it to bring all the scattered survivor groups here, before continuing on their way to the Empire's heartlands."
+		.. "\n "
+		.. "\nBefore leaving, they left it running, with an expert system and a communicator array, so anyone could contact it to ask for a transfer. They knew that, despite their best efforts, it could not run without proper supervision forever. According to the log backups I found, it ran for an impressive four centuries, and was repeatedly used, before failing due to a core malfunction"
+		.. "\n "
+		.. "\nSo this is why a planet is missing from the system..."
 	},
 	location_intrepid = { -- planet64
 		name = "The Garden of Intrepid",
 		category = "4. Locations",
-		text = ""
+		text = "Intrepid had been the seat of most galactic governemnts for a long time, dating back from even before the Ghost Mandate. It was said to be the most beautiful world in the galaxy, a jewel of the old days, carefully tended for even across wars and chaos."
+		.. "\n "
+		.. "\nAlas, left to itself, even those fantastically well-crafted ancient systems fell to entropy in the end. Small, extremely long-term variations that the unthinking expert systems could not have been programmed to correct for, slowly causing it to be caught in a death spiral of desertification."
+		.. "\n "
+		.. "\nIncredibly enough, the machine themselves are still functional. I reprogrammed them as best as I could, using the logs to correct for those longer cycles and variations, and rare cataclysms. It will take centuries, but the garden will be reborn, even if no-one will be there to see it. It won't last forever, of course. But hopefully it will last a bit longer, this time. Ten, fifteen million years..."
 	},
 	location_mannia = { -- planet65
 		name = "Mannia transit camps",
 		category = "4. Locations",
-		text = ""
+		text = "This is where all the refugees of the Empire - of the entire galaxy, in fact - fled towards. The second-to-last world to be hit, it was hospitable enough to harbor the countless refugees in temporary shelters. Building those with so little time and resources would have been an outstanding feat of engineering and logistics in its own right."
+		.. "\n "
+		.. "\nThe last world, Cipher, appears to have been less inhabitable, and most resources appears to have been funneled towards it. Were they really hoping that one more jump would make the difference? Or did they choose to hold for the longest, defiant to the end? That would have certainly been in character for the Empire."
+		.. "\n "
+		.. "\nThe survivors appears to have used the ruins of the shelters as their base. Even after such a long time, there was enough to build lavish housings for such a small number of individuals. After a while, though, they left in turn for Cipher, leaving infrastructure for latecomers, and what must have been an invitation to follow them."
 	},
 	-- Smuggled data
 	location_arteri = { -- planet50
@@ -405,8 +441,8 @@ local entries = {
 		category = "5. Anomalies",
 		text = ""
 	},
-	--- Ancient tech
-	anomalie_deuliah = { -- planet56
+	--- Ancient tech and research
+	anomalie_asjulohi = { -- planet24
 		name = "Asjulohi's ancient fabricator",
 		category = "5. Anomalies",
 		text = ""
@@ -417,9 +453,15 @@ local entries = {
 		text = ""
 	},
 	anomalie_lalata = { -- planet51
-		name = "Lalata's tech", -- TODO better name
+		name = "Lalata's report",
 		category = "5. Anomalies",
-		text = ""
+		text = "According to their research, the event appears to have started at the extreme end of the Anarchai Arm. Some hypothesized an extragalactic origin based on this, but the spread pattern showed that it had started on a specific region of the galaxy, not propagated from a distant source."
+		.. "\n "
+		.. "\nIt propagated through the arm in a matter of days, but had considerably slowed down by the time it reached the Inner Disc. Its progression then became asymmetric, progressing through the Celestial Arm in an estimated two weeks - though an exact time cannot be given due to the current conflict with the Union, then a loss of communication as it was cut off from the Empire. The wavefronts themselves appeared to disrupt hyperspace in a way that made interstellar communication, let alone travel, impossible through their wake."
+		.. "\n "
+		.. "\nThe Inner Disc and Dynastic Quadrant were both slowly taken over in a matter of months. By that time, the Empire had ordered a total evacuation towards the Mandate Arm, hoping that at least some worlds would be spared as the advance slowed down. However, later calculations showed that Cipher, the furthest world that could be traveled to, would be overtaken five to fifteen years later."
+		.. "\n "
+		.. "\nThey found no way of resist or bypass it, nor even slowing it down. Maybe the data that automated systems recorded when it hit Lalata, but they never found a way to recover it across the event's wake."
 	},
 }
 

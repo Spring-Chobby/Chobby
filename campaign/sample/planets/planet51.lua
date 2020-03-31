@@ -2244,7 +2244,12 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_heavy_armor_LIMIT_D_2",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+			},
+			codexEntries = {
+				"anomalie_lalata"
+			},
 		},
 	}
 	

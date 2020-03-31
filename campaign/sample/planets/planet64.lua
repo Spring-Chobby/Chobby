@@ -4706,7 +4706,11 @@ local function GetPlanet(planetUtilities, planetID)
 				"weaponmod_stun_booster",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_survivors",
+				"location_intrepid"
+			},
 		},
 	}
 	

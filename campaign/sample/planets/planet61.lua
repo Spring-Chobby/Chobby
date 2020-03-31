@@ -4611,7 +4611,11 @@ local function GetPlanet(planetUtilities, planetID)
 				"commweapon_areashield",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_survivors",
+				"location_hibiliha"
+			},
 		},
 	}
 	

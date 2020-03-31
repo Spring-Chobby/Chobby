@@ -4618,7 +4618,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_dmg_booster_LIMIT_D_2",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_survivors"
+			},
 		},
 	}
 	
