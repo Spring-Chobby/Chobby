@@ -2246,9 +2246,7 @@ local function GetPlanet(planetUtilities, planetID)
 			abilities = {
 			},
 			codexEntries = {
-			},
-			codexEntries = {
-				"anomalie_lalata"
+				"anomaly_lalata"
 			},
 		},
 	}

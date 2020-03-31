@@ -1415,7 +1415,7 @@ local function GetPlanet(planetUtilities, planetID)
 			abilities = {
 			},
 			codexEntries = {
-				"anomalie_leopard"
+				"anomaly_leopard"
 			},
 		},
 	}

@@ -266,7 +266,7 @@ local entries = {
 		.. "\nWhen the survivors arrived, the Eternity Gate was fully working, and they all crossed it, in the end. But now, after such a long time, it has fallen into disrepair - I restored what self-repair systems I could, but it will be decades, maybe centuries before it can operate again."
 		.. "\nMaybe I will tidy up what I can in this galaxy. Maybe there are others like me, still waiting in deep slumber. And I can always skip time in hibernation, if needs be."
 		.. "\n "
-		.. "\nAlso, the Empire had also found an incomplete Mandate project. They lacked time for detailed studies, but they thought it was an receptor node, made to invert the Gate operation and guide backward jumps across the rift. Let's see what I can make of it..."
+		.. "\nIt seems the Empire had also found an incomplete Mandate project. They lacked time for detailed studies, but they thought it was an receptor node, made to invert the Gate operation and guide backward jumps across the rift. Let's see what I can make of it..."
 	},
 	
 	-- Locations
@@ -402,22 +402,22 @@ local entries = {
 	
 	-- Anomalies
 	-- Artefacts
-	anomalie_new_falsell = { -- planet7
+	anomaly_new_falsell = { -- planet7
 		name = "New Falsell artefact",
 		category = "5. Anomalies",
 		text = ""
 	},
-	anomalie_lovaza_jira = { -- planet28
+	anomaly_lovaza_jira = { -- planet28
 		name = "Lovaza Jira artefact",
 		category = "5. Anomalies",
 		text = ""
 	},
-	anomalie_leopard = { -- planet33
+	anomaly_leopard = { -- planet33
 		name = "Leopard artefact",
 		category = "5. Anomalies",
 		text = "No wonder they fought so hard over it, this artifact was a freaking Anarchai scattership!"
 		.. "\n "
-		.. "\nWhen the Ghost Fleet hit the Anarchai, they were completely unprepared to what they were actually facing. However, it is a testament to the military of the military of the Ghost Mandate that they still managed to destroy several scatterships during the engagement."
+		.. "\nWhen the Ghost Fleet hit the Anarchai, they were completely unprepared to what they were actually facing. However, it is a testament to the might of the Mandate's military that they still managed to destroy several scatterships during the engagement."
 		.. "\n "
 		.. "\nThis particular scattership phased right through Leopard after sustaining heavy damage, ending up trapped in its mantle. The few self-repair systems were barely enough to keep its integrity, but its warmind had been irremediably destroyed - which is presumably why the Anarchai didn't bother recovering or destroying it afterwards."
 		.. "\n "
@@ -425,34 +425,34 @@ local entries = {
 		.. "\n "
 		.. "\nUltimately, the scattership's internal systems have stopped working one after another, and it is now little more than a wreck full of exotic materials. Still, I am going to leave it alone, just in case.."
 	},
-	anomalie_estann_all = { -- planet43
+	anomaly_estann_all = { -- planet43
 		name = "Estann All artefact",
 		category = "5. Anomalies",
 		text = ""
 	},
 	--- Ancient trees
-	anomalie_walchice = { -- planet20
+	anomaly_walchice = { -- planet20
 		name = "The trees of Waliche",
 		category = "5. Anomalies",
 		text = ""
 	},
-	anomalie_old_falsell = { -- planet45
+	anomaly_old_falsell = { -- planet45
 		name = "The trees of Old Falsell",
 		category = "5. Anomalies",
 		text = ""
 	},
 	--- Ancient tech and research
-	anomalie_asjulohi = { -- planet24
+	anomaly_asjulohi = { -- planet24
 		name = "Asjulohi's ancient fabricator",
 		category = "5. Anomalies",
 		text = ""
 	},
-	anomalie_deuliah = { -- planet56
+	anomaly_deuliah = { -- planet56
 		name = "Deuliah's old Detriment", -- TODO better name
 		category = "5. Anomalies",
 		text = ""
 	},
-	anomalie_lalata = { -- planet51
+	anomaly_lalata = { -- planet51
 		name = "Lalata's report",
 		category = "5. Anomalies",
 		text = "According to their research, the event appears to have started at the extreme end of the Anarchai Arm. Some hypothesized an extragalactic origin based on this, but the spread pattern showed that it had started on a specific region of the galaxy, not propagated from a distant source."
