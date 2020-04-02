@@ -69,6 +69,7 @@ local function GetPlanet(planetUtilities, planetID)
 					"hoverriot",
 					"hoverskirm",
 					"hoverassault",
+                    "hoverheavyraid",
 					"hoverarty",
 					"energygeo",
 					"energywind",
