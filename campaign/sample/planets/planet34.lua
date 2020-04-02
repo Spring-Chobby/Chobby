@@ -819,6 +819,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"hoverraid",
 						"hoverskirm",
 						"hoverriot",
+                        "hoverheavyraid",
 						"factoryplane",
 						"planeheavyfighter",
 						"bomberprec",

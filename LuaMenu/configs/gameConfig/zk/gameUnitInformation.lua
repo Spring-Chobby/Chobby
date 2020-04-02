@@ -173,6 +173,7 @@ local nameList = {
 	[172] = "shieldaa",
 	[173] = "shieldbomb",
 	[174] = "amphlaunch",
+    [175] = "hoverheavyraid",
 }
 
 local categories = {
@@ -580,7 +581,12 @@ local humanNames = {
 		description = "Anti-Sub Hovercraft",
 		humanName = "Claymore",
 	},
-
+    hoverheavyraid = {
+		category = "hover",
+		order = 10,
+		description = "Disruptor Hovercraft",
+		humanName = "Bolas",
+	},
 	-- Amph
 	factoryamph = {
 		category = "amph",

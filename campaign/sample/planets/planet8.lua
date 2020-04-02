@@ -242,6 +242,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"hoverskirm",
 						"hoverassault",
 						"hoverarty", -- probably won't destroy a Sunlance
+                        "hoverheavyraid",
 						"hoveraa",
 						"factoryspider",
 						"spidercon",
