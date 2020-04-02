@@ -155,8 +155,14 @@ function Configuration:init()
 	self.campaignConfig = VFS.Include("campaign/sample/mainConfig.lua")
 	self.campaignSaveFile = nil -- Set by user
 	self.nextCampaignSaveNumber = 1
-	self.campaignConfigOptions = {"sample", "dev"}
-	self.campaignConfigHumanNames = {"Sample", "Dev"}
+	self.campaignConfigOptions = {
+		"sample",
+		"--dev"
+	}
+	self.campaignConfigHumanNames = {
+		"Sample",
+		--"Dev"
+	}
 	local gameConfigOptions = {}
 	local subdirs = VFS.SubDirs(gameConfPath)
 	for index, subdir in ipairs(subdirs) do
@@ -404,6 +410,10 @@ end
 ---------------------------------------------------------------------------------
 
 function Configuration:SetConfigData(data)
+	if data.campaignConfigName == "dev" then
+		data.campaignConfigName = "sample"
+	end
+
 	if data ~= nil then
 		for k, v in pairs(data) do
 			if not self.noNaiveConfigOverride[k] then
