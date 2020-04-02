@@ -43,7 +43,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
             {
 				image = "unitpics/hoverheavyraid.png",
-				text = [[The Bolas fires disruptor lasers which slow enemies at close range. It is well suited for protecting Claymores, Flails, and other specialist units.]]
+				text = [[The Bolas fires disruptor beams which slow enemies at close range. It is well suited for protecting Claymores, Flails, and other specialist units.]]
 			},
 			{
 				image = "unitpics/energyfusion.png",
