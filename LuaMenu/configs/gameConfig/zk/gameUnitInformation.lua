@@ -869,7 +869,7 @@ local humanNames = {
 	planecon = {
 		category = "plane",
 		order = 2,
-		description = "Construction Aircraft, Builds at 4 m/s",
+		description = "Construction Aircraft, Builds at 5 m/s",
 		humanName = "Crane",
 	},
 	planefighter = {
