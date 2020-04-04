@@ -119,12 +119,12 @@ function BattleProposalHandler.AddClickableInvites(userName, preMessage, message
 	end
 	local myProposal = (userName == WG.LibLobby.lobby:GetMyUserName())
 	if myProposal and CheckCancelProposal(message) then
-		return false
+		return onTextClick, textTooltip
 	end
 	
 	local hasProposal, prop = GetProposalFromString(message)
 	if not hasProposal then
-		return false
+		return onTextClick, textTooltip
 	end
 	
 	local myInfo = WG.LibLobby.lobby:GetMyInfo()
@@ -138,13 +138,13 @@ function BattleProposalHandler.AddClickableInvites(userName, preMessage, message
 				title = "Battle Proposal",
 				body = "Your skill rating is too low for your proposal",
 			})
-			return
+			return onTextClick, textTooltip
 		elseif skillTooHigh then
 			Chotify:Post({
 				title = "Battle Proposal",
 				body = "Your skill rating is too high for your proposal",
 			})
-			return
+			return onTextClick, textTooltip
 		end
 		
 		CheckProposalSent(prop)
