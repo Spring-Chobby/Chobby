@@ -84,8 +84,7 @@ Control = Object:Inherit{
 	OnResize        = {},
 	OnEnableChanged = {},
 
-	-- __nofont should be manually set to true when using this class directly
-	__nofont = false,
+	noFont = true,
 }
 Control.disabledFont = table.merge({ color = {0.8, 0.8, 0.8, 0.8} }, Control.font)
 
@@ -145,17 +144,29 @@ function Control:New(obj)
 
 	-- We don't create fonts for controls that don't need them
 	-- This should drastically use memory usage for some cases
-	if not obj.__nofont then
-		--// create font
-		obj.font = Font:New(obj.font)
-		obj.font:SetParent(obj)
-
-		--// create disabled font
-		obj.disabledFont = Font:New(obj.disabledFont)
-		obj.disabledFont:SetParent(obj)
-	else
+	if obj.noFont then
 		obj.font = nil
 		obj.disabledFont = nil
+	else
+		if obj.objectOverrideFont then
+			obj.font = obj.objectOverrideFont
+		else
+			--// create font
+			obj.font = Font:New(obj.font)
+			obj.font:SetParent(obj)
+		end
+		
+		if obj.hasDisabledFont then
+			if obj.objectOverrideDisabledFont then
+				obj.disabledFont = obj.objectOverrideDisabledFont
+			else
+				--// create disabled font
+				obj.disabledFont = Font:New(obj.disabledFont)
+				obj.disabledFont:SetParent(obj)
+			end
+		else
+			obj.disabledFont = nil
+		end
 	end
 
 	obj:DetectRelativeBounds()
@@ -167,7 +178,11 @@ function Control:New(obj)
 			obj:AddChild(cn[i], true)
 		end
 	end
+	obj:Realign()
 
+	if WG.ChiliRedraw then
+		WG.ChiliRedraw.AddControl(obj, "New")
+	end
 	return obj
 end
 
@@ -204,12 +219,12 @@ function Control:Dispose(...)
 
 	inherited.Dispose(self, ...)
 
-	if not self.__nofont then
-		if self.font.SetParent then
+	if (not self.noFont) then
+		if (not self.objectOverrideFont) and self.font and self.font.SetParent then
 			self.font:SetParent()
+		end
+		if (not self.objectOverrideDisabledFont) and self.disabledFont and self.disabledFont.SetParent then
 			self.disabledFont:SetParent()
-		else
-			Spring.Echo("nil self.font:SetParent", self.name)
 		end
 	end
 end
@@ -391,9 +406,9 @@ end
 --// =============================================================================
 
 function Control:SetEnabled(enabled)
-		self.state.enabled = enabled
-		self:CallListeners(self.OnEnableChanged, not self.state.enabled)
-		self:Invalidate()
+	self.state.enabled = enabled
+	self:CallListeners(self.OnEnableChanged, not self.state.enabled)
+	self:Invalidate()
 end
 
 --// =============================================================================
@@ -981,6 +996,7 @@ function Control:_CheckIfRTTisAppreciated()
 			return (((self._redrawSelfCounter or 1) / (self._redrawCounter or 1)) < 0.03)
 		end
 	end
+	return true
 end
 
 
@@ -1298,12 +1314,18 @@ end
 
 
 function Control:DrawForList()
+	--if not self:IsVisibleDescendantByName("screen0") then
+	--	return
+	--end
 	self._redrawCounter = (self._redrawCounter or 0) + 1
 	if (not self._in_update and not self._usingRTT and self:_CheckIfRTTisAppreciated()) then
 		self:InvalidateSelf()
 	end
 
 	if (self._tex_all and not self._inrtt) then
+		if WG.ChiliRedraw then
+			WG.ChiliRedraw.AddControl(self, "DrawForList_tex_all")
+		end
 		gl.PushMatrix()
 		gl.Translate(self.x, self.y, 0)
 			gl.BlendFuncSeparate(GL.ONE, GL.SRC_ALPHA, GL.ZERO, GL.SRC_ALPHA)
@@ -1326,8 +1348,14 @@ function Control:DrawForList()
 	gl.Translate(self.x, self.y, 0)
 
 	if (self._own_dlist) then
+		if WG.ChiliRedraw then
+			WG.ChiliRedraw.AddControl(self, "DrawForList_own_dlist")
+		end
 		gl.CallList(self._own_dlist)
 	else
+		if WG.ChiliRedraw then
+			WG.ChiliRedraw.AddControl(self, "DrawForList")
+		end
 		if self._hasCustomDrawControl then
 			gl.Translate(-self.x, -self.y, 0)
 			self:DrawControl()
@@ -1379,6 +1407,9 @@ function Control:Draw()
 	end
 
 	if (self._tex_all) then
+		if WG.ChiliRedraw then
+			WG.ChiliRedraw.AddControl(self, "Draw_tex_all")
+		end
 		gl.PushMatrix()
 		gl.Translate(self.x, self.y, 0)
 			gl.BlendFunc(GL.ONE, GL.SRC_ALPHA)
@@ -1403,6 +1434,9 @@ function Control:Draw()
 	if (self._own_dlist) then
 		gl.CallList(self._own_dlist)
 	else
+		if WG.ChiliRedraw then
+			WG.ChiliRedraw.AddControl(self, "Draw")
+		end
 		if self._hasCustomDrawControl then
 			gl.Translate(-self.x, -self.y, 0)
 			self:DrawControl()
@@ -1443,6 +1477,9 @@ end
 
 function Control:DrawChildrenForList()
 	if (next(self.children)) then
+		if WG.ChiliRedraw then
+			WG.ChiliRedraw.AddControl(self, "DrawChildrenForList")
+		end
 		self:_DrawChildrenInClientAreaWithoutViewCheck('DrawForList')
 	end
 end

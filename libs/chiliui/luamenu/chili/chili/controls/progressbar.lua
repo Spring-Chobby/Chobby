@@ -26,6 +26,7 @@ Progressbar = Control:Inherit{
 	reverse   = false,
 
 	caption   = "",
+	noFont    = false,
 
 	color     = {0, 0, 1, 1},
 	backgroundColor = {1, 1, 1, 1},
@@ -130,7 +131,7 @@ function Progressbar:DrawControl()
 		end
 	else
 		if self.reverse then
- 			gl.Rect(0, 0, w, h*percent)
+			gl.Rect(0, 0, w, h*percent)
 		else
 			gl.Rect(0, h*(1-percent), w, h)
 		end
@@ -151,7 +152,7 @@ function Progressbar:DrawControl()
 		end
 	end
 
-	if (self.caption) then
+	if (self.caption) and not self.noFont then
 		(self.font):Print(self.caption, w*0.5, h*0.5, "center", "center")
 	end
 end
