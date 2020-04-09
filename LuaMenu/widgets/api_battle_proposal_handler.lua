@@ -114,7 +114,7 @@ local BattleProposalHandler = {}
 --------------------------------------------------------------------------------
 
 function BattleProposalHandler.AddClickableInvites(userName, preMessage, message, onTextClick, textTooltip)
-	if not (WG.LibLobby and WG.LibLobby.lobby) then
+	if not (WG.LibLobby and WG.LibLobby.lobby and userName) then
 		return
 	end
 	local myProposal = (userName == WG.LibLobby.lobby:GetMyUserName())
