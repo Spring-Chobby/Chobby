@@ -101,7 +101,12 @@ function ButtonUtilities.SetCaption(button, newCaption)
 end
 
 function ButtonUtilities.SetFontSizeScale(button, sizeScale)
-	button.font = Chili.Font:New(WG.Chobby.Configuration:GetFont(sizeScale))
+	local fontConfig = WG.Chobby.Configuration:GetFont(sizeScale)
+	-- preserve font type information
+	if button.font ~= nil then
+		fontConfig.font = button.font.font
+	end
+	button.font = Chili.Font:New(fontConfig)
 	button:Invalidate()
 	button.oldFont = button.font
 	if button.selected then
