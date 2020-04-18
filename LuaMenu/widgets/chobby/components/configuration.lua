@@ -219,6 +219,12 @@ function Configuration:init()
 	self.drawAtFullSpeed = false
 	self.rememberQueuesOnStart = false
 
+	self.language = "en"
+	self.languages = {
+		["en"] = {locale = "en", name="English"},
+		["de"] = {locale = "de", name="Deutch"},
+	}
+
 	self.lobby_fullscreen = 1
 	self.game_fullscreen = 1
 
@@ -480,6 +486,7 @@ function Configuration:GetConfigData()
 		battleFilterRunning = self.battleFilterRunning,
 		channels = self.channels,
 		gameConfigName = self.gameConfigName,
+		language = self.language,
 		game_fullscreen = self.game_fullscreen,
 		panel_layout = self.panel_layout,
 		lobby_fullscreen = self.lobby_fullscreen,

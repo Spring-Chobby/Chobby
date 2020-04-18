@@ -628,6 +628,54 @@ local function GetLobbyTabControls()
 
 	local children = {}
 
+	local langNum = 1
+    local langCodes = {}
+    local langNames = {}
+    local selectedLang = 1
+	for locale, langTable in pairs(Configuration.languages) do
+		Spring.Echo("Adding language: "..langNum)
+		Spring.Echo("Locale: "..locale)
+		Spring.Echo("Name: "..langTable.name)
+		langCodes[langNum] = locale
+		langNames[langNum] = langTable.name
+		if(langTable.locale == Configuration.language) then
+			selectedLang = langNum
+			Spring.Echo("Selected");
+		end
+		langNum = langNum + 1
+	end
+
+	children[#children + 1] = Label:New {
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		font = Configuration:GetFont(2),
+		caption = "Language",
+	}
+	children[#children + 1] = ComboBox:New {
+		x = COMBO_X,
+		y = offset,
+		width = COMBO_WIDTH,
+		height = 30,
+		items = langNames,
+		font = Configuration:GetFont(2),
+		itemFontSize = Configuration:GetFont(2).size,
+		selected = selectedLang,
+		OnSelect = {
+			function (obj)
+				if freezeSettings then
+					return
+				end
+				Configuration:SetConfigValue("language", langCodes[obj.selected])
+				i18n.setLocale(langCodes[obj.selected])
+			end
+		},
+	}
+	offset = offset + ITEM_OFFSET
+
 	children[#children + 1] = Label:New {
 		x = 20,
 		y = offset + TEXT_OFFSET,
