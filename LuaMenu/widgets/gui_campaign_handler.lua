@@ -48,6 +48,7 @@ local PLANET_NO_START_COLOR = {0.5, 0.5, 0.5, 1}
 
 local TARGET_IMAGE = LUA_DIRNAME .. "images/niceCircle.png"
 local IMG_LINK     = LUA_DIRNAME .. "images/link.png"
+local PARTY_LINK     = LUA_DIRNAME .. "images/partyinvite.png"
 
 local REWARD_ICON_SIZE = 58
 local DEBUG_UNLOCK_SIZE = 26
@@ -764,6 +765,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		parent = starmapInfoPanel,
 	}
 
+
 	if startable then
 		if planetData.infoDisplay.feedbackLink then
 			MakeFeedbackButton(buttonHolder, planetData.infoDisplay.feedbackLink, nil, 2, 85, nil)
@@ -784,15 +786,16 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 				end
 			}
 		}
-
+		local btnInviteFriends
 		if Configuration.canAuthenticateWithSteam then
-			local btnInviteFriends = Button:New {
+			btnInviteFriends = Button:New {
 				right = 140,
 				bottom = 0,
-				width = 220,
-				height = 65,
-				font = Configuration:GetFont(4),
-				caption = i18n("invite_friends"),
+				width = 160,
+				height = 35,
+				padding = {0, 0, 0, 0},
+				font = Configuration:GetFont(2),
+				caption = i18n("invite_friends") .. "   ",
 				classname = "option_button",
 				OnClick = {
 					function()
@@ -800,6 +803,15 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 					end
 				},
 				parent = buttonHolder,
+			}
+			local imPartyLink = Image:New {
+				right = 6,
+				y = 4,
+				width = 24,
+				height = 24,
+				keepAspect = true,
+				file = PARTY_LINK,
+				parent = btnInviteFriends,
 			}
 		end
 
