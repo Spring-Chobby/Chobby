@@ -731,14 +731,26 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		children = fluffLabels,
 	}
 
-	local planetDesc = TextBox:New {
-		x = 8,
-		y = "30%",
-		right = 4,
-		bottom = "25%",
-		text = planetData.infoDisplay.text,
-		font = Configuration:GetFont(3),
-	}
+	local planetDesc
+	if startable or Configuration.debugMode then
+		planetDesc = TextBox:New {
+			x = 20,
+			y = "25%",
+			right = 4,
+			bottom = "25%",
+			text = planetData.infoDisplay.text,
+			font = Configuration:GetFont(3),
+		}
+	else
+		planetDesc = TextBox:New {
+			x = 20,
+			y = "25%",
+			right = 4,
+			bottom = "25%",
+			text = "This planet will need to be approached for further study.",
+			font = Configuration:GetFont(3),
+		}	
+	end
 
 	local subPanel = Panel:New{
 		parent = starmapInfoPanel,
