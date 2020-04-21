@@ -744,7 +744,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		parent = starmapInfoPanel,
 		x = "3%",
 		y = "4%",
-		right = "50%",
+		right = "60%",
 		bottom = "4%",
 		children = {
 			nameLabel,
@@ -917,33 +917,36 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 	end
 
 	local function SizeUpdate()
-		local font = Configuration:GetFont(((planetHandler.height < 760) and 2) or 3)
+		local fluffFont = Configuration:GetFont(((planetHandler.height < 720) and 2) or 3)
+		local descFont = Configuration:GetFont(((planetHandler.height < 720) and 1) or 2) 
 
-		planetDesc.font.size = font.size
+		planetDesc.font.size = descFont.size
 		planetDesc:Invalidate()
-		if planetHandler.height < 660 then
+		if planetHandler.height < 560 then
 			planetDesc._relativeBounds.top = 60
 			fluffGrid:SetVisibility(false)
+
 		elseif planetHandler.height < 820 then
-			planetDesc._relativeBounds.top = "27%"
+			planetDesc._relativeBounds.top = "26%"
 			fluffGrid:SetVisibility(true)
+
 		else
-			planetDesc._relativeBounds.top = "30%"
+			planetDesc._relativeBounds.top = "25%"
 			fluffGrid:SetVisibility(true)
 		end
 		planetDesc:UpdateClientArea(false)
 
 		if planetHandler.height < 600 then
-			subPanel._relativeBounds.right = 390
+			subPanel._relativeBounds.right = 320
 			subPanel._relativeBounds.bottom = "2%"
 		else
-			subPanel._relativeBounds.right = "50%"
+			subPanel._relativeBounds.right = "40%"
 			subPanel._relativeBounds.bottom = "4%"
 		end
 		subPanel:UpdateClientArea(false)
 
 		for i = 1, 4 do
-			fluffLabels[i].font.size = font.size
+			fluffLabels[i].font.size = fluffFont.size
 			fluffLabels[i]:Invalidate()
 		end
 		fluffGrid:Invalidate()
