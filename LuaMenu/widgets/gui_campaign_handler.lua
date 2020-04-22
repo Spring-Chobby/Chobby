@@ -737,9 +737,10 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		y = "30%",
 		right = 4,
 		bottom = "25%",
-		text = planetData.infoDisplay.text,
+		text = ((startable or Configuration.debugMode) and planetData.infoDisplay.text) or "This planet will need to be approached for further study.",
 		font = Configuration:GetFont(3),
-	}
+	}	
+
 
 	local subPanel = Panel:New{
 		parent = starmapInfoPanel,
