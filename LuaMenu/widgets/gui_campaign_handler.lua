@@ -732,8 +732,8 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 	}
 
 	local planetDesc = TextBox:New {
-		x = 20,
-		y = "25%",
+		x = 8,
+		y = "30%",
 		right = 4,
 		bottom = "25%",
 		text = ((startable or Configuration.debugMode) and planetData.infoDisplay.text) or "This planet will need to be approached for further study.",
