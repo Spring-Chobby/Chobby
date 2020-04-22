@@ -118,6 +118,10 @@ function widget:Initialize()
 				Spring.SetWMIcon(taskbarIcon)
 			end
 		end
+		if key == "language" then
+			Spring.Echo("Set language to "..value)
+			i18n.setLocale(value)
+		end
 	end
 	Chobby.Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 end
