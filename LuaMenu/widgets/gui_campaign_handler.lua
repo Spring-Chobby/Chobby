@@ -736,6 +736,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		y = "25%",
 		right = 4,
 		bottom = "25%",
+		padding = {0, 0, 10, 0},
 		text = planetData.infoDisplay.text,
 		font = Configuration:GetFont(3),
 	}
@@ -936,12 +937,15 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		end
 		planetDesc:UpdateClientArea(false)
 
-		if planetHandler.height < 600 then
-			subPanel._relativeBounds.right = 320
-			subPanel._relativeBounds.bottom = "2%"
-		else
-			subPanel._relativeBounds.right = "40%"
+		if planetHandler.height > 800 then
+			subPanel._relativeBounds.right = "50%"
 			subPanel._relativeBounds.bottom = "4%"
+		elseif planetHandler.height > 400 then
+			subPanel._relativeBounds.right = "40%"
+			subPanel._relativeBounds.bottom = "2%"	
+		else
+			subPanel._relativeBounds.right = 200
+			subPanel._relativeBounds.bottom = 0
 		end
 		subPanel:UpdateClientArea(false)
 
