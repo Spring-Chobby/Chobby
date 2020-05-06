@@ -91,10 +91,17 @@ function widget:AllowDraw()
 		lastTimer = timer
 		return true
 	end
-	if oldFramesInBuffer < 3 then
+
+	if (config.lobbyIdleSleep) then
+		if (fastRedraw or constantRedrawSeconds) and oldFramesInBuffer < 3 then
+			framesInBuffer = oldFramesInBuffer + 1
+			return true
+		end
+	elseif oldFramesInBuffer < 3 then
 		framesInBuffer = oldFramesInBuffer + 1
 		return true
 	end
+	
 	return false
 end
 
