@@ -28,6 +28,7 @@ ComboBox = Button:Inherit{
 	maxDropDownWidth = 500,
 	minDropDownWidth = 50,
 	topHeight = 7,
+	noFont = false,
 }
 
 local ComboBoxWindow      = Window:Inherit{classname = "combobox_window", resizable = false, draggable = false, }
@@ -50,7 +51,7 @@ function ComboBox:Select(itemIdx)
 	if (type(itemIdx) == "number") then
 		local item = self.items[itemIdx]
 		if not item then
- 			return
+			return
 		end
 		self.selected = itemIdx
 

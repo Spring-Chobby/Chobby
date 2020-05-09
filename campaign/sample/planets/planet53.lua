@@ -1552,6 +1552,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"hoverraid",
 						"hoverriot",
 						"hoverskirm",
+                        "hoverheavyraid",
 						"cloakcon",
 						"cloakraid",
 						"cloakskirm",

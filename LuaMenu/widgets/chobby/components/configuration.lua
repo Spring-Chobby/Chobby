@@ -155,8 +155,14 @@ function Configuration:init()
 	self.campaignConfig = VFS.Include("campaign/sample/mainConfig.lua")
 	self.campaignSaveFile = nil -- Set by user
 	self.nextCampaignSaveNumber = 1
-	self.campaignConfigOptions = {"sample", "dev"}
-	self.campaignConfigHumanNames = {"Sample", "Dev"}
+	self.campaignConfigOptions = {
+		"sample",
+		"--dev"
+	}
+	self.campaignConfigHumanNames = {
+		"Sample",
+		--"Dev"
+	}
 	local gameConfigOptions = {}
 	local subdirs = VFS.SubDirs(gameConfPath)
 	for index, subdir in ipairs(subdirs) do
@@ -211,7 +217,14 @@ function Configuration:init()
 	self.enableTextToSpeech = true
 	self.showOldAiVersions = false
 	self.drawAtFullSpeed = false
+	self.lobbyIdleSleep = false
 	self.rememberQueuesOnStart = false
+
+	self.language = "en"
+	self.languages = {
+		["en"] = {locale = "en", name="English"},
+		["de"] = {locale = "de", name="Deutsch"},
+	}
 
 	self.lobby_fullscreen = 1
 	self.game_fullscreen = 1
@@ -404,6 +417,10 @@ end
 ---------------------------------------------------------------------------------
 
 function Configuration:SetConfigData(data)
+	if data.campaignConfigName == "dev" then
+		data.campaignConfigName = "sample"
+	end
+
 	if data ~= nil then
 		for k, v in pairs(data) do
 			if not self.noNaiveConfigOverride[k] then
@@ -470,6 +487,7 @@ function Configuration:GetConfigData()
 		battleFilterRunning = self.battleFilterRunning,
 		channels = self.channels,
 		gameConfigName = self.gameConfigName,
+		language = self.language,
 		game_fullscreen = self.game_fullscreen,
 		panel_layout = self.panel_layout,
 		lobby_fullscreen = self.lobby_fullscreen,
@@ -493,6 +511,7 @@ function Configuration:GetConfigData()
 		confirmation_mainMenuFromBattle = self.confirmation_mainMenuFromBattle,
 		confirmation_battleFromBattle = self.confirmation_battleFromBattle,
 		drawAtFullSpeed = self.drawAtFullSpeed,
+		lobbyIdleSleep = self.lobbyIdleSleep,
 		rememberQueuesOnStart = self.rememberQueuesOnStart,
 		loadLocalWidgets = self.loadLocalWidgets,
 		activeDebugConsole = self.activeDebugConsole,

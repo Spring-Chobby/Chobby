@@ -173,6 +173,7 @@ local nameList = {
 	[172] = "shieldaa",
 	[173] = "shieldbomb",
 	[174] = "amphlaunch",
+    [175] = "hoverheavyraid",
 }
 
 local categories = {
@@ -580,7 +581,12 @@ local humanNames = {
 		description = "Anti-Sub Hovercraft",
 		humanName = "Claymore",
 	},
-
+    hoverheavyraid = {
+		category = "hover",
+		order = 10,
+		description = "Disruptor Hovercraft",
+		humanName = "Bolas",
+	},
 	-- Amph
 	factoryamph = {
 		category = "amph",
@@ -863,7 +869,7 @@ local humanNames = {
 	planecon = {
 		category = "plane",
 		order = 2,
-		description = "Construction Aircraft, Builds at 4 m/s",
+		description = "Construction Aircraft, Builds at 5 m/s",
 		humanName = "Crane",
 	},
 	planefighter = {
