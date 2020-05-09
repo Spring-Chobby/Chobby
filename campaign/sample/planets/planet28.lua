@@ -2355,7 +2355,8 @@ local function GetPlanet(planetUtilities, planetID)
 			abilities = {
 			},
 			codexEntries = {
-				"faction_lawless"
+				"faction_lawless",
+				"anomaly_lovaza_jira",
 			}
 		},
 	}

@@ -454,7 +454,8 @@ local function GetPlanet(planetUtilities, planetID)
 			abilities = {
 			},
 			codexEntries = {
-				"faction_dynasty"
+				"faction_dynasty",
+				"location_hastus",
 			},
 		},
 	}

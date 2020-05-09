@@ -439,7 +439,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_adv_nano_LIMIT_A_1",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"location_phisnet"
+			},
 		},
 	}
 	

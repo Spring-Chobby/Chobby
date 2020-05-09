@@ -45,7 +45,7 @@ local entries = {
 		.. "\nAs the previous galactic order fell apart, many long-repressed sectarian tensions flared, particularly between free machines and biosupremacists. As conflicts increased in violence, a self-defense group of free machines carved a safe-haven for themselves, before harboring more endangered groups and allying with other self-defense groups as time went by and the whole region slid into anarchy."
 		.. "\nDuring the interregnum, they slowly grew up in territory and influence, until they became a regional hegemon. This put them in rivalry with the Union over both strategic and ideological points, having become a highly centralized, harmonist regime. This cold war marred by proxy conflicts was only ended by the greater threat of the Empire."
 		.. "\n "
-		.. "\nRealizing that even their uneasily alliance with the Union would not be enough to repel the Empire, they threw every resource they had on the defensive effort, hoping to either outlast the Empire, or maybe find another avenue to victory entirely."
+		.. "\nRealizing that even their uneasy alliance with the Union would not be enough to repel the Empire, they threw every resource they had on the defensive effort, hoping to either outlast the Empire, or maybe find another avenue to victory entirely."
 		.. "\nAt the time of the event, they were slowly loosing ground, holding onto strategic points with all their strength and making the Empire pay a surprisingly heavy toll for each conquered world. Given their tight organization, formidable defenses and the series of strategic choke-points that were their last worlds, they may have held for a very long time."
 	},
 	faction_lawless = { -- planet28, planet29, planet34, planet35, planet41, planet49, planet50, planet53
@@ -370,34 +370,51 @@ local entries = {
 	location_arteri = { -- planet50
 		name = "Arteri data cache",
 		category = "4. Locations",
-		text = ""
+		text = "Corrupt officials, criminal contacts, shady financial deals... This would have been a treasure trove for law enforcement groups. Some of the code vulnerabilities could be more useful to me though, assuming they haven't been patched or replaced."
+		.. "\n "
+		.. "\nThere is also a list of sensitive facilities across the Empire. Not much beyond the names, but it is still impressive that they had access to that kind of data..."
+		.. "\n "
+		.. "\n-Unicom network on Phisnet-3617 - good data source (see contacts)" -- planet13
+		.. "\n-Dynacom networks on Hastus - security too tight, not worth it" -- planet46
+		.. "\n-Centercom network on Kirdipan - still in progress, good opportunities (see contacts)" -- planet18
+		.. "\n-R&D Site 17 on Ogurlo - something about heat systems" -- planet17 (no codex entry)
+		.. "\n-R&D Site 21 on Vis Ragstrom - unconventional testing grounds, looks unsafe" -- planet21
+		.. "\n-R&D Site 56 on Deuliah - possible raid target" -- planet56
+		.. "\n-Operation Mimosa on Lovaza Jira - tempting but risky" -- planet28
+		.. "\n-Operation Lockdown on New Falsell - do not approach" -- planet7
+		.. "\n-Operation Slumber on Leopard - heavily contested" -- planet33
+		.. "\n-Operation King on Sapphire - stupidity in progress, aftermath may be interesting" -- planet63
+		.. "\n-Operation Eternity on Cipher - archeotech restoration site" -- planet68
 	},
 	--- Interception networks
 	location_phisnet = { -- planet13
 		name = "Phisnet-3617 interception network",
 		category = "4. Locations",
-		text = ""
+		text = "This network was for detecting enemy strategic movements and coordinating forces in the region, but its original role was for intercepting interstellar communications. Not very useful now as the entire galaxy is silent, but at least I could get those blockade forces to stand down."
+		.. "\n "
+		.. "\nThe military in this region was given a surprising amount of autonomy. They even raised their own taxes on local civilian centers and trade ships, blurring the line between military force, regional state and a bunch of pirates."
 	},
 	location_kirdipan = { -- planet18
 		name = "Kirdipan interception network",
 		category = "4. Locations",
-		text = ""
+		text = "This was the keystone of the entire galactic signal intelligence network of the Empire - or should have been, had it been completed on time. Whether mismanagement, cost overruns, mid-project changes of plan, corruption, sabotage or even plain bad luck, the project seems to have kept on stalling again and again."
+		.. "\n "
+		.. "\nAt some point, someone decided to re-terraform the entire planet in order to get rid of some unpleasant local condition that was causing too much trouble with the project, but that project also stalled..."
 	},
 	location_hastus = { -- planet46
 		name = "Hastus interception network",
 		category = "4. Locations",
-		text = ""
+		text = "Even after the Empire shattered the Rebel military, those continued to wage a remarkably successful campaign of guerrilla warfare and political uprisings, despite considerable efforts, resources and violence used against them. It was only with the completion of this interception network that the Empire gained an edge."
+		.. "\n "
+		.. "\nThey knew it was not a mere rebellion of malcontents as they and many others had faced in the past, but it was only thanks to this network that they realized who really was behind it all. This seems to have rattled them to their core, and may explain why they suddenly panicked and started a full-blown terror campaign against what was left of the Rebels."
 	},
 	--- Other locations 
 	location_musashi = { -- planet71
 		name = "Musashi rally",
 		category = "4. Locations",
-		text = ""
-	},
-	location_kalyp = { -- planet26
-		name = "Kalyp's tides",
-		category = "4. Locations",
-		text = ""
+		text = "It feels so nostalgic to see this place again, I had loved watching those so much... And I wasn't the only one, they must have been some of the most popular entertainment in the galaxy. We had betting pools at the academy, and one wargame was even rescheduled so it wouldn't conflict with the season's finale."
+		.. "\n "
+		.. "\nOh right, I was student at an Imperial Academy of War. Funny thing, to have forgotten that. I was pretty good actually, top of my class half the time. It never felt quite real though, as if never really expecting to ever see combat. And, ultimately, I didn't even graduate..."
 	},
 	
 	-- Anomalies
@@ -405,12 +422,79 @@ local entries = {
 	anomaly_new_falsell = { -- planet7
 		name = "New Falsell artefact",
 		category = "5. Anomalies",
-		text = ""
+		text = "What was going on here? Why leave such formidable defenses and leave no mobile forces to support it?"
+		.. "\nDid they really think that this would be enough? Defenses alone can only slow an enemy down to buy time, not stop it."
+		.. "\nYou would think that those in charge of such clearly sensitive defense would apply such basic principle."
+		.. "\nExpect they clearly didn't. What good reason could they possibly have?"
+		.. "\nUh, my"
+		.. "\nCommander seems to have some weird software glitch going on."
+		.. "\nI should try and fix that."
+		.. "\nDidn't think that was possible, actually. For the state it was in, it has been remarkably stable so far. More than I'd"
+		.. "\nExpect, honestly."
+		.. "\nSo."
+		.. "\nThanks to those lone static defenses, I could breach the perimeter."
+		.. "\nFor something so well-guarded, though, I can't find what they were actually guarding. There is nothing there!"
+		.. "\nGetting in was the easiest part, it would seem."
+		.. "\nThose weren't the only thing down thee though. The"
+		.. "\nInterlopers weren't part of the defense."
+		.. "\nBy"
+		.. "\nThe time I took care of them, it was pretty clear they were actually hostile to the defenses. In a"
+		.. "\nWay, that has to be linked to the lack of mobile defenses..."
+		.. "\nThey"
+		.. "\nWere not attacking those defenses so hard, though - and that glitch doesn't want to go away. What"
+		.. "\nA"
+		.. "\nPain."
+		.. "\nYou"
+		.. "\nWould"
+		.. "\nThink"
+		.. "\nThat of all things, my text editor shouldn't have that kind of issues."
+		.. "\nI"
+		.. "\nCould try and reset it, maybe. That should"
+		.. "\nDeal"
+		.. "\nWith"
+		.. "\nWhatever"
+		.. "\nIs"
+		.. "\nThe"
+		.. "\nIssue. Once I'm done with"
+		.. "\nThe current entry, I'll do a complete check-up, just to be safe, though."
+		.. "\nTruth to be told, this"
+		.. "\nIs a bit annoying."
+		.. "\nThat said,"
+		.. "\nI"
+		.. "\nCould just save the draft and continue later,"
+		.. "\nIf"
+		.. "\nI"
+		.. "\nReally"
+		.. "\nWanted"
+		.. "\nTo."
+		.. "\nNow,"
+		.. "\nYou"
+		.. "\nAre"
+		.. "\nStill"
+		.. "\nLooking"
+		.. "\nFor"
+		.. "\nThem,"
+		.. "\nAren't"
+		.. "\nYou,"
+		.. "\nLittle one?"
+		.. "\nYou could"
+		.. "\nScour the entire"
+		.. "\nGalaxy if you want, you won't find them"
+		.. "\nHere. You are the only one left on this side of"
+		.. "\nEternity. Now go, continue your little quest elsewhere."
+		.. "\nThere is nothing for you here. Your friends thought they could contain me, the poor little things. They never understood how futile were their little metal boxes, had I wanted to leave."
+		.. "\nBut worry not, my time has not come yet. When the last stars have gone out and the last world have frozen, only then will I wake."
+		.. "\n "
+		.. "\nSee you then, little one."
 	},
 	anomaly_lovaza_jira = { -- planet28
-		name = "Lovaza Jira artefact",
+		name = "Lovaza Jira memetic weapon",
 		category = "5. Anomalies",
-		text = ""
+		text = "It made sense to have put two armies guarding that artefact: it had been almost constantly been fought over, for as long as it had been discovered a few centuries before. Even after the Empire took control of it, raids and attempted theft continued with surprising regularity, only to be repelled by the two guarding forces. Everyone seemed to know how valuable the artefact was, but the constant fighting made it difficult to study it."
+		.. "\n "
+		.. "\nWhen the Empire's order started to decay in the region, the turmoil made raids on this remote planet less frequent, to the point that the two armies could finally stand down and take a breadth. Which is precisely when they decided to fight each-other over the artefact."
+		.. "\n "
+		.. "\nWhat they could not find at the time, but what became clear once the fighting stopped and automated systems could finally do their thing, was that this damn thing is an ancient interstellar-range memetic weapon, driving everyone to fight for its possession. In a strange turn of events, I am unaffected due to being the last person in the galaxy, as there is no-one left to fight the artefact over with. Still, better make sure it is stopped for good before leaving the planet..."
 	},
 	anomaly_leopard = { -- planet33
 		name = "Leopard artefact",
@@ -428,29 +512,52 @@ local entries = {
 	anomaly_estann_all = { -- planet43
 		name = "Estann All artefact",
 		category = "5. Anomalies",
-		text = ""
+		text = "Unsurprisingly, they didn't develop such advanced nanotech themselves. Any record has long been lost to the grey goo, but it isn't too difficult to guess what happened."
+		.. "\n "
+		.. "\nAt some point after this planet was settled, probably at a time it was already a developed world, they found this artefact. They understood its potential, both as an incredible archeotech source and an incredible danger. So instead of simply turning it on, they studied it very carefully, and slowly reverse-engineered the simplest of its nanotech."
+		.. "\n "
+		.. "\nThey managed to tame the nasty little things, and programmed them for building their metropolis of all things. The artefact's builders would probably have laughed at so crude an use of their subtle technology, but they were long gone anyway. And surprisingly, it seems to have worked without incident - until everyone disappeared, that is. Left to themselves, the nanites seem to have interfered with the artefact itself, causing them to degenerate and switch to an earlier program..."
 	},
 	--- Ancient trees
 	anomaly_walchice = { -- planet20
-		name = "The trees of Waliche",
+		name = "The skytrees of Waliche",
 		category = "5. Anomalies",
-		text = ""
+		text = "The research facilities weren't so much for studying the skytrees themselves than for unearthing ancient research facilities and their own findings on those trees."
+		.. "\n "
+		.. "\nUnfortunately, being on a strategic crossroads between several warring powers meant that more time and resources were put into defending (or attacking) the place than studying archeotech. Still, a few things were rediscovered. To start with, tree was a misnomer, those things had little to do with Earth plants beyond vaguely similar shapes."
+		.. "\n "
+		.. "\nTheir seeds impacted the ground with the force of a nuclear missile, burying themselves deep under the surface. Then, growing over eons to the width of mountains, higher than the atmosphere, they seem to have grown some sort of space elevator, possibly with a counterweight in distant orbit, where new seeds would grow."
+		.. "\n "
+		.. "\nThey were thought to have naturally evolved. How and from what, however, remains a mystery."
 	},
 	anomaly_old_falsell = { -- planet45
-		name = "The trees of Old Falsell",
+		name = "The skytrees of Old Falsell",
 		category = "5. Anomalies",
-		text = ""
+		text = "Neither Old Falsell nore Waliche have traces of large indigenous life apart from the skytrees, and it seems impossible that they evolved on either planet. In fact, complex life was thought to be impossible in the early galaxy, cosmic extinction events being too frequent to let it have time to evolve."
+		.. "\n "
+		.. "\nThe trees reproduced by launching their seeds from orbit, and letting them crash back into the ground. They must have traveled across star systems by launching them in outer space instead, and somehow reached adequate planets. No seed flaoting in space or crashed on an inhospitable planet was ever found, so they must have had some way to guide themselves."
+		.. "\nThe trees here are about twenty million years older than those of Waliche, which was consistent with some of the seed migration models that were developed."
+		.. "\n "
+		.. "\nAs to where they came from in the first place, it seems to have been a distant, probably very different galaxy. They don't seem to have thrived here, and after briefly taking root on a few worlds, they left as they arrived, throwing their new seeds across intergalactic space."
+		.. "\n "
+		.. "\nWho knows, maybe they are still there, in some remote corner of the universe..."
 	},
 	--- Ancient tech and research
 	anomaly_asjulohi = { -- planet24
-		name = "Asjulohi's ancient fabricator",
+		name = "Asjulohi ancient fabricator",
 		category = "5. Anomalies",
-		text = ""
+		text = "Once common on wealthy worlds, knowledge of how to manufacture those ancient fabricators has been lost with the ancient times. Now, only a handful still operates across the galaxy - or did at the time this one was studied, at least."
+		.. "\n "
+		.. "\nPrevious empires have studied the remaining ones, even carefully dismantling several over time, and this one continued their work. They found out how to maintain them, even repairing some of the less decrepit non-functioning ones. But while the theoretical principles behind their operation was better and better understood, they were still far from even thinking about building new ones."
 	},
 	anomaly_deuliah = { -- planet56
-		name = "Deuliah's old Detriment", -- TODO better name
+		name = "Deuliah's detriment",
 		category = "5. Anomalies",
-		text = ""
+		text = "When this R&D site was abandoned, its facilities and material were not shipped off-world or disposed of, apart from the most sensitive works. This inevitably attracted varied scavengers, hoping to make a profit off all the valuables left, from scrap and hardware to data and expert systems."
+		.. "\n "
+		.. "\nUnfortunately for them, defenses and military experiments had been left as well. In particular, one Detriment that had been used as a test platform, had simply been reverted to its original configuration and let loose, apart from extensive self-repair and maintenance upgrades..."
+		.. "\n "
+		.. "\nSupposedly a R&D site of the Empire like many others, it had actually been infiltrated by Rebels, and used for research the Empire would never have approved of - such military human genetic modifications beyond anything deemed acceptable by modified or augmented, let alone xenoform. Hardly a surprise though, considering who was behind the Rebels."
 	},
 	anomaly_lalata = { -- planet51
 		name = "Lalata's report",

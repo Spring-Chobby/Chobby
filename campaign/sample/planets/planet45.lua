@@ -1547,7 +1547,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_adv_nano_LIMIT_G_1",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"anomaly_old_falsell"
+			},
 		},
 	}
 	

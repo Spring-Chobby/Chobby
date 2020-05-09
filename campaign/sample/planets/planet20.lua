@@ -1094,7 +1094,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_ablative_armor_LIMIT_C_2",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"anomaly_walchice"
+			},
 		},
 	}
 	

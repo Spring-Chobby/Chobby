@@ -3417,7 +3417,10 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			abilities = {
 				"terraform",
-			}
+			},
+			codexEntries = {
+				"location_kirdipan"
+			},
 		},
 	}
 	

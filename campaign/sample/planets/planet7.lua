@@ -1826,7 +1826,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_personal_cloak",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"anomaly_new_falsell"
+			},
 		},
 	}
 	

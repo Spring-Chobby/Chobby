@@ -933,7 +933,8 @@ local function GetPlanet(planetUtilities, planetID)
 			abilities = {
 			},
 			codexEntries = {
-				"threat_zombies"
+				"threat_zombies",
+				"anomaly_estann_all",
 			}
 		},
 	}

@@ -1459,7 +1459,8 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			codexEntries = {
 				"faction_rebels",
-				"faction_dynasty"
+				"faction_dynasty",
+				"anomaly_deuliah",
 			},
 		},
 	}
