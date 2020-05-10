@@ -953,12 +953,15 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		if planetHandler.height > 800 then
 			subPanel._relativeBounds.right = "50%"
 			subPanel._relativeBounds.bottom = "4%"
+			planetImage._relativeBounds.left = "50%"
 		elseif planetHandler.height > 400 then
 			subPanel._relativeBounds.right = "40%"
-			subPanel._relativeBounds.bottom = "2%"	
+			subPanel._relativeBounds.bottom = "2%"
+			planetImage._relativeBounds.left = "60%"
 		else
-			subPanel._relativeBounds.right = 200
+			subPanel._relativeBounds.right = "30%"
 			subPanel._relativeBounds.bottom = 0
+			planetImage._relativeBounds.left = "70%"
 		end
 		subPanel:UpdateClientArea(false)
 
