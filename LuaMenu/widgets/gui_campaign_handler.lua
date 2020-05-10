@@ -175,14 +175,14 @@ local function MakeFeedbackWindow(parent, feedbackLink)
 	}
 end
 
-local function MakeFeedbackButton(parentControl, link, x, y, right, bottom, width, height)
+local function MakeFeedbackButton(parentControl, link, x, y, right, bottom)
 	local feedbackButton = Button:New {
 		x = x,
 		y = y,
 		right = right,
 		bottom = bottom,
 		width = 116,
-		height = 32,
+		height = 45,
 		padding = {0, 0, 0, 0},
 		caption = "Feedback   ",
 		classname = "action_button",
@@ -198,7 +198,7 @@ local function MakeFeedbackButton(parentControl, link, x, y, right, bottom, widt
 
 	local imMapLink = Image:New {
 		right = 6,
-		y = 7,
+		y = 13,
 		width = 16,
 		height = 16,
 		keepAspect = true,
@@ -770,14 +770,14 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 
 	if startable then
 		if planetData.infoDisplay.feedbackLink then
-			MakeFeedbackButton(buttonHolder, planetData.infoDisplay.feedbackLink, nil, 2, 85, nil)
+			MakeFeedbackButton(buttonHolder, planetData.infoDisplay.feedbackLink, nil, 0, 85, nil)
 		end
 
 		local startButton = Button:New{
 			right = 0,
 			bottom = 0,
-			width = 135,
-			height = 65,
+			width = 160,
+			height = 58,
 			classname = "action_button",
 			parent = buttonHolder,
 			caption = i18n("start"),
@@ -791,8 +791,8 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		local btnInviteFriends
 		if Configuration.canAuthenticateWithSteam then
 			btnInviteFriends = Button:New {
-				right = 140,
-				bottom = 0,
+				right = 0,
+				bottom = 62,
 				width = 160,
 				height = 35,
 				padding = {0, 0, 0, 0},
