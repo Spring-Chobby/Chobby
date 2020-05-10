@@ -27,7 +27,7 @@ local function GetPlanet(planetUtilities, planetID)
 			feedbackLink = "http://zero-k.info/Forum/Thread/24594",
 			text = "Barely inhabitable, far from anything valuable but right between fortress worlds, this was the ideal place for the Empire's sensitive research projects. If they knew something about what happened, it could be there."
 			.. "\n "
-			.. "\nI could access to some research systems and their defences, but not remotely access their data. Hopefully I can land, grab the data and depart before the main planetary garrison wakes up..."
+			.. "\nI could access to some research systems and their defenses, but not remotely access their data. Hopefully I can land, grab the data and depart before the main planetary garrison wakes up..."
 			,
 			extendedText = "This is bad! I landed too far, the entire planet's garrison is waking up and the Tech Lab is about to be overrun! I am too far away to reinforce it in time. Unless..."
 			.. "\n "
@@ -40,7 +40,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/turretimpulse.png",
-				text = [[The Newton turret can be toggled to attract or repulse its target. It does not inflict any direct damage, so when used as a defensive tool it relies on pushing enemies off cliffs or pulling them into other defences (particularly pulling bombers into anti-air). Smaller units are generally affected more.]]
+				text = [[The Newton turret can be toggled to attract or repulse its target. It does not inflict any direct damage, so when used as a defensive tool it relies on pushing enemies off cliffs or pulling them into other defenses (particularly pulling bombers into anti-air). Smaller units are generally affected more.]]
 			},
 			{
 				image = "unitpics/jumpsumo.png",
@@ -2244,7 +2244,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_heavy_armor_LIMIT_D_2",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"anomaly_lalata"
+			},
 		},
 	}
 	

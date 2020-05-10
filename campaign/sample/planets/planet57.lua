@@ -38,7 +38,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/subtacmissile.png",
-				text = [[The Scylla constructs and fires tactical missiles. Use these to destroy static targets which are elevated or far away. Remember that destroying Pylon connections will disable heavy defences.]]
+				text = [[The Scylla constructs and fires tactical missiles. Use these to destroy static targets which are elevated or far away. Remember that destroying Pylon connections will disable heavy defenses.]]
 			},
 			{
 				image = "unitpics/weaponmod_standoff_rocket.png",
@@ -5035,7 +5035,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"commweapon_disruptorbomb",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"location_rockbar"
+			},
 		},
 	}
 	

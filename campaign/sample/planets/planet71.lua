@@ -134,7 +134,9 @@ local function GetPlanet(planetUtilities, planetID)
 			units = {
 				"tankraid"
 			},
-			codexEntries = {}
+			codexEntries = {
+				"location_musashi",
+			}
 		},
 	}
 	

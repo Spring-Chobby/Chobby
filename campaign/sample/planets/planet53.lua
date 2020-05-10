@@ -43,7 +43,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/jumpassault.png",
-				text = [[Use Jacks to jump up the cliffs and destroy enemy defences with their melee attack.]]
+				text = [[Use Jacks to jump up the cliffs and destroy enemy defenses with their melee attack.]]
 			},
 		},
 		gameConfig = {
@@ -3592,6 +3592,9 @@ local function GetPlanet(planetUtilities, planetID)
 				"commweapon_napalmgrenade",
 			},
 			abilities = {
+			},
+			codexEntries = {
+				"faction_lawless"
 			}
 		},
 	}

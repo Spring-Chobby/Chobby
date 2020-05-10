@@ -34,7 +34,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/striderarty.png",
-				text = [[The Merlin is the most powerful mobile artillery piece in the game - its barrage of rockets is most effective against large groups of enemies. Merlins are defenceless at close range so be careful with your starting Merlin until you have a large enough army to escort it.]]
+				text = [[The Merlin is the most powerful mobile artillery piece in the game - its barrage of rockets is most effective against large groups of enemies. Merlins are defenseless at close range so be careful with your starting Merlin until you have a large enough army to escort it.]]
 			},
 			{
 				image = "unitpics/cloakjammer.png",
@@ -2428,7 +2428,11 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_cloak_field"
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"location_chatka",
+				"faction_dynasty_restored"
+			},
 		},
 	}
 	

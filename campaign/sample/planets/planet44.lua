@@ -744,7 +744,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_ablative_armor_LIMIT_D_2",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_rebels"
+			},
 		},
 	}
 	

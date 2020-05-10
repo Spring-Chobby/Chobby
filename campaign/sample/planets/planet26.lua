@@ -1311,7 +1311,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_adv_nano_LIMIT_C_1",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_empire"
+			},
 		},
 	}
 	

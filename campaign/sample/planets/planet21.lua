@@ -28,7 +28,7 @@ local function GetPlanet(planetUtilities, planetID)
 			feedbackLink = "http://zero-k.info/Forum/Thread/24489",
 			text = "There was a major military R&D complex here. Most of it is unusable by now, but there is a functional Strider Hub down there. If I can access it, it could be very useful."
 			.. "\n "
-			.. "\nSomething seems to have escaped its containment. I detect sporadic engagements between the local defence and whatever is hiding in the ground..."
+			.. "\nSomething seems to have escaped its containment. I detect sporadic engagements between the local defense and whatever is hiding in the ground..."
 			,
 			extendedText = "I have captured a Strider Hub capable of building the heavy Dante riot strider. But with the restrictions of this place, I will need to extract an entire Dante to get the blueprint."
 			.. "\n "
@@ -1550,6 +1550,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"weaponmod_napalm_warhead",
 			},
 			abilities = {
+			},
+			codexEntries = {
+				"threat_chickens",
+				"threat_chickens_travel"
 			}
 		},
 	}

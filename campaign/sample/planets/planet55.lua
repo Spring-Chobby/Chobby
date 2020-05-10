@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G6V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24594",
-			text = "The fortress world that guarded the early Empire's southern flank. Never seriously challenged since those days, its garrison may have grown complacent - but the defences that are left are still formidable."
+			text = "The fortress world that guarded the early Empire's southern flank. Never seriously challenged since those days, its garrison may have grown complacent - but the defenses that are left are still formidable."
 			.. "\n "
 			.. "\nThere is what looks like backdoors in some of the garrison's codes, strangely enough. They would have been useless in actual conflict, though, effective only against unsupervised automata..."
 			,
@@ -40,7 +40,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/staticantinuke.png",
-				text = [[Antinukes are typically the best-defended thing your enemy possesses. If their anti-air defence is poor destroy the Antinuke with bombers. Otherwise, a Shockley EMP missile will disable the Antinuke for a while.]]
+				text = [[Antinukes are typically the best-defended thing your enemy possesses. If their anti-air defense is poor destroy the Antinuke with bombers. Otherwise, a Shockley EMP missile will disable the Antinuke for a while.]]
 			},
 			{
 				image = "unitpics/striderfunnelweb.png",
@@ -4618,7 +4618,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_dmg_booster_LIMIT_D_2",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_survivors"
+			},
 		},
 	}
 	

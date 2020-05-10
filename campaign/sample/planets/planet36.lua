@@ -586,7 +586,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_adv_nano_LIMIT_E_1",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_rebels"
+			},
 		},
 	}
 	

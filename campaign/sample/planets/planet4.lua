@@ -35,7 +35,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/turretaaclose.png",
-				text = [[The Hacksaw fires two powerful anti-air missiles at any flying target. It's defenceless against ground units and can be easily baited by cheap fliers, so they should be used in conjunction with other AA and land units.]]
+				text = [[The Hacksaw fires two powerful anti-air missiles at any flying target. It's defenseless against ground units and can be easily baited by cheap fliers, so they should be used in conjunction with other AA and land units.]]
 			},
 			{
 				image = "unitpics/cloakaa.png",

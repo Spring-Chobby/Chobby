@@ -48,7 +48,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/pw_hq.png",
-				text = [[Defender Command is armed with a complement of drones for short-range defence.]]
+				text = [[Defender Command is armed with a complement of drones for short-range defense.]]
 			},
 		},
 		gameConfig = {
@@ -4727,6 +4727,9 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_dmg_booster_LIMIT_C_2",
 			},
 			abilities = {
+			},
+			codexEntries = {
+				"faction_lawless"
 			}
 		},
 	}

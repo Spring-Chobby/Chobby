@@ -4005,6 +4005,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"commweapon_multistunner",
 			},
 			abilities = {
+			},
+			codexEntries = {
+				"faction_rebels",
+				"location_karuwal"
 			}
 		},
 	}

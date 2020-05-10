@@ -3016,7 +3016,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"commweapon_heatray",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_rebels"
+			},
 		},
 	}
 	
