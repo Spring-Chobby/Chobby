@@ -228,39 +228,43 @@ end
 --------------------------------------------------------------------------------
 -- Difficulty Setting
 
-local function InitializeDifficultySetting(parent)
+local difficultyWindow
+
+local function InitializeDifficultySetting()
 	local Configuration = WG.Chobby.Configuration
 
-	local difficultyWindow = Window:New{
-		classname = "tech_mainwindow_very_small",
-		x = 4,
-		y = 4,
+	local window = Control:New{
+		right = 170,
+		bottom = 0,
 		width = 128,
-		height = 76,
+		height = 53,
+		padding = {0,0,0,0},
 		resizable = false,
 		draggable = false,
-		parent = parent,
+		parent = nil,
 	}
 	local freezeSettings = true
 
 	Label:New {
-		x = 20,
-		y = 10,
+		x = 30,
+		y = 2,
 		width = 50,
 		height = 30,
 		valign = "top",
 		align = "left",
 		font = Configuration:GetFont(2),
 		caption = "Difficulty",
-		parent = difficultyWindow,
+		parent = window,
 	}
 	local comboDifficulty = ComboBox:New {
 		x = 4,
-		right = 4,
-		bottom = 4,
+		right = 1,
+		bottom = 3,
 		height = 28,
+		--debugPosition = true,
 		items = {"Easy", "Normal", "Hard", "Brutal"},
 		selected = 2,
+		preferComboUp = true,
 		font = Configuration:GetFont(2),
 		itemFontSize = Configuration:GetFont(2).size,
 		selected = WG.CampaignData.GetDifficultySetting(),
@@ -272,7 +276,7 @@ local function InitializeDifficultySetting(parent)
 				WG.CampaignData.SetDifficultySetting(obj.selected)
 			end
 		},
-		parent = difficultyWindow,
+		parent = window,
 	}
 
 	local function UpdateSettings()
@@ -284,7 +288,7 @@ local function InitializeDifficultySetting(parent)
 	WG.CampaignData.AddListener("CampaignLoaded", UpdateSettings)
 
 	freezeSettings = false
-	return difficultyWindow
+	return window
 end
 
 --------------------------------------------------------------------------------
@@ -772,7 +776,10 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		if planetData.infoDisplay.feedbackLink then
 			MakeFeedbackButton(buttonHolder, planetData.infoDisplay.feedbackLink, nil, 0, 85, nil)
 		end
-
+		
+		difficultyWindow = difficultyWindow or InitializeDifficultySetting()
+		buttonHolder:AddChild(difficultyWindow)
+		
 		local startButton = Button:New{
 			right = 0,
 			bottom = 0,
@@ -1535,7 +1542,7 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 	local externalFunctions = {}
 
 	function externalFunctions.UpdatePosition(x, y, width, height)
-		window:SetPos(x, y, width, height)
+		window:SetPos(x and math.floor(x + 0.5), y and math.floor(y + 0.5), width, height)
 		if x then
 			for i = 1, PLANET_COUNT do
 				if (not PLANET_WHITELIST) or PLANET_WHITELIST[i] then
@@ -1697,18 +1704,17 @@ local externalFunctions = {}
 function externalFunctions.GetControl(newLiveTestingMode, newPlanetWhitelist, feedbackLink)
 	local window = Control:New {
 		name = "campaignHandler",
-		x = "0%",
-		y = "0%",
+		x = 0,
+		y = 0,
 		width = "100%",
 		height = "100%",
 		padding = {0,0,0,0},
 		OnParentPost = {
 			function(obj, parent)
 				if obj:IsEmpty() then
-					local difficultyWindow = InitializeDifficultySetting(obj)
+					difficultyWindow = difficultyWindow or InitializeDifficultySetting()
 					planetHandler = InitializePlanetHandler(obj, newLiveTestingMode, newPlanetWhitelist, feedbackLink)
 					UpdateGalaxy()
-					difficultyWindow:BringToFront()
 				end
 
 				local background = WG.Chobby.interfaceRoot.GetBackgroundHolder()
