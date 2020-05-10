@@ -291,6 +291,24 @@ local function InitializeDifficultySetting()
 	return window
 end
 
+local function CodexClick(entryName)
+	if not WG.CampaignData.GetCodexEntryIsUnlocked(entryName) then
+		return
+	end
+	if currentWinPopup then
+		currentWinPopup.CloseWinPopup(true)
+	end
+
+	local singleplayerMenu = WG.Chobby.interfaceRoot.GetSingleplayerSubmenu()
+	if singleplayerMenu then
+		local campaignMenu = singleplayerMenu.GetSubmenuByName("campaign")
+		if campaignMenu then
+			campaignMenu.OpenTabByName("codex")
+			WG.CodexHandler.OpenEntry(entryName)
+		end
+	end
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Rewards panels
@@ -398,9 +416,6 @@ local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, 
 							font = Configuration:GetFont(2),
 							OnClick = clickFunc and {
 								function()
-									if currentWinPopup then
-										currentWinPopup.CloseWinPopup()
-									end
 									clickFunc(rewardList[i])
 								end
 							},
@@ -481,8 +496,16 @@ local function MakeRewardsPanel(parent, bottom, planetData, cullUnlocked, showCo
 	rewards = planetData.completionReward
 
 	if showCodex then
-		if MakeRewardList(parent, bottom, "Codex", {{rewards.codexEntries, WG.CampaignData.GetCodexEntryInfo, WG.CampaignData.GetCodexEntryIsUnlocked, false, WG.CampaignData.CodexClick}}, cullUnlocked, 3.96, 2) then
+		if MakeRewardList(parent, bottom, "Codex", {{rewards.codexEntries, WG.CampaignData.GetCodexEntryInfo, WG.CampaignData.GetCodexEntryIsUnlocked, false, CodexClick}}, cullUnlocked, 3.96, 2) then
 			bottom = bottom + 98
+			
+			local singleplayerMenu = WG.Chobby.interfaceRoot.GetSingleplayerSubmenu()
+			if singleplayerMenu then
+				local campaignMenu = singleplayerMenu.GetSubmenuByName("campaign")
+				if campaignMenu then
+					campaignMenu.SetTabHighlighted("codex", true)
+				end
+			end
 		end
 	end
 
@@ -597,7 +620,7 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty)
 			if singleplayerMenu then
 				local campaignMenu = singleplayerMenu.GetSubmenuByName("campaign")
 				if campaignMenu then
-					campaignMenu.OpenTabByName("commander", true)
+					campaignMenu.OpenTabByName("commander")
 				end
 			end
 		end
@@ -631,12 +654,21 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty)
 		experienceDisplay.AddFancyExperience(newExperience - oldExperience, gainedBonusExperience)
 		if (oldExperience == 100 and newExperience > 100) or (oldLevel ~= newLevel) then
 			-- 100 is a crazy hack to open the commander loadout screen on the first completion of the second mission.
+			if not openCommanderWindowOnContinue then
+				local singleplayerMenu = WG.Chobby.interfaceRoot.GetSingleplayerSubmenu()
+				if singleplayerMenu then
+					local campaignMenu = singleplayerMenu.GetSubmenuByName("campaign")
+					if campaignMenu then
+						campaignMenu.SetTabHighlighted("commander", true)
+					end
+				end
+			end
 			openCommanderWindowOnContinue = true
 		end
 	end
 	
 	function externalFunctions.CloseWinPopup(cancelCommPopup)
-		if cancelCommPopup then
+		if cancelCommPopup and openCommanderWindowOnContinue then
 			openCommanderWindowOnContinue = false
 		end
 		CloseFunc()

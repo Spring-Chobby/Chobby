@@ -723,7 +723,9 @@ function externalFunctions.SetCodexEntryRead(entryName)
 	if not gamedata.codexEntryRead[entryName] then
 		gamedata.codexEntryRead[entryName] = true
 		SaveGame()
+		return true
 	end
+	return false
 end
 
 function externalFunctions.GetUnitsUnlocks()
@@ -756,10 +758,6 @@ end
 
 function externalFunctions.GetCodexEntryIsUnlocked(entryName)
 	return gamedata.codexEntriesUnlocked.map[entryName], gamedata.codexEntryRead[entryName]
-end
-
-function externalFunctions.CodexClick(entryName)
-
 end
 
 function externalFunctions.GetBonusObjectiveComplete(planetID, objectiveID)
