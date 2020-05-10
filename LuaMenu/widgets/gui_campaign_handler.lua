@@ -309,7 +309,7 @@ local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, 
 
 	local position = 0
 	for t = 1, #rewardsTypes do
-		local rewardList, tooltipFunction, alreadyUnlockedCheck,  overrideTooltip = rewardsTypes[t][1], rewardsTypes[t][2], rewardsTypes[t][3], rewardsTypes[t][4]
+		local rewardList, tooltipFunction, alreadyUnlockedCheck, overrideTooltip, clickFunc = rewardsTypes[t][1], rewardsTypes[t][2], rewardsTypes[t][3], rewardsTypes[t][4], rewardsTypes[t][5]
 		if rewardList then
 			for i = 1, #rewardList do
 				local alreadyUnlocked = alreadyUnlockedCheck(rewardList[i])
@@ -396,6 +396,14 @@ local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, 
 							height = REWARD_ICON_SIZE/stackHeight,
 							caption = string.gsub(tooltip, "_COUNT_", ""),
 							font = Configuration:GetFont(2),
+							OnClick = clickFunc and {
+								function()
+									if currentWinPopup then
+										currentWinPopup.CloseWinPopup()
+									end
+									clickFunc(rewardList[i])
+								end
+							},
 							parent = scroll
 						}
 					end
@@ -473,7 +481,7 @@ local function MakeRewardsPanel(parent, bottom, planetData, cullUnlocked, showCo
 	rewards = planetData.completionReward
 
 	if showCodex then
-		if MakeRewardList(parent, bottom, "Codex", {{rewards.codexEntries, WG.CampaignData.GetCodexEntryInfo, WG.CampaignData.GetCodexEntryIsUnlocked}}, cullUnlocked, 3.96, 2) then
+		if MakeRewardList(parent, bottom, "Codex", {{rewards.codexEntries, WG.CampaignData.GetCodexEntryInfo, WG.CampaignData.GetCodexEntryIsUnlocked, false, WG.CampaignData.CodexClick}}, cullUnlocked, 3.96, 2) then
 			bottom = bottom + 98
 		end
 	end
@@ -625,6 +633,13 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty)
 			-- 100 is a crazy hack to open the commander loadout screen on the first completion of the second mission.
 			openCommanderWindowOnContinue = true
 		end
+	end
+	
+	function externalFunctions.CloseWinPopup(cancelCommPopup)
+		if cancelCommPopup then
+			openCommanderWindowOnContinue = false
+		end
+		CloseFunc()
 	end
 
 	return externalFunctions

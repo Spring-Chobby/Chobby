@@ -758,6 +758,10 @@ function externalFunctions.GetCodexEntryIsUnlocked(entryName)
 	return gamedata.codexEntriesUnlocked.map[entryName], gamedata.codexEntryRead[entryName]
 end
 
+function externalFunctions.CodexClick(entryName)
+
+end
+
 function externalFunctions.GetBonusObjectiveComplete(planetID, objectiveID)
 	local index = planetID .. "_" .. objectiveID
 	return gamedata.bonusObjectivesComplete.map[index], gamedata.completionDifficulty[index]
