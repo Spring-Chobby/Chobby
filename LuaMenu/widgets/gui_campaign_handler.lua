@@ -185,7 +185,7 @@ local function MakeFeedbackButton(parentControl, link, x, y, right, bottom)
 		height = 45,
 		padding = {0, 0, 0, 0},
 		caption = "Feedback   ",
-		classname = "action_button",
+		classname = "option_button",
 		font = WG.Chobby.Configuration:GetFont(2),
 		tooltip = "Post feedback on the forum",
 		OnClick = {
@@ -634,7 +634,7 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty)
 		caption = i18n("continue"),
 		font = WG.Chobby.Configuration:GetFont(3),
 		parent = victoryWindow,
-		classname = "negative_button",
+		classname = "action_button",
 		OnClick = {
 			function()
 				CloseFunc()
@@ -722,7 +722,7 @@ local function ProcessPlanetDefeat(planetID, battleFrames)
 		selectedPlanet.Close()
 		selectedPlanet = nil
 	end
-	WG.Chobby.InformationPopup("Battle for " .. planetConfig[planetID].name .. " lost.", {caption = "Defeat"})
+	WG.Chobby.InformationPopup("Battle for " .. planetConfig[planetID].name .. " lost.", {caption = i18n("continue")})
 	WG.CampaignData.AddPlayTime(battleFrames, true)
 
 	WG.Analytics.SendIndexedRepeatEvent("campaign:planet_" .. planetID .. ":difficulty_" .. WG.CampaignData.GetDifficultySetting() .. ":lose", math.floor(battleFrames/30), ":defeat")
@@ -1104,6 +1104,14 @@ local function EnablePlanetClick()
 	planetClickEnabled = true
 end
 
+local function ButtonClickOnPlanet(popupOverlay, planetListHolder, planetID, planetData, startable)
+	if selectedPlanet then
+		selectedPlanet.Close()
+		selectedPlanet = nil
+	end
+	selectedPlanet = SelectPlanet(popupOverlay, planetListHolder, planetID, planetData, startable)
+end
+
 local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, adjacency)
 	local Configuration = WG.Chobby.Configuration
 
@@ -1201,11 +1209,7 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 					return
 				end
 
-				if selectedPlanet then
-					selectedPlanet.Close()
-					selectedPlanet = nil
-				end
-				selectedPlanet = SelectPlanet(popupOverlay, planetListHolder, planetID, planetData, startable)
+				ButtonClickOnPlanet(popupOverlay, planetListHolder, planetID, planetData, startable)
 			end
 		},
 		parent = planetHolder,
@@ -1799,6 +1803,15 @@ function externalFunctions.GetControl(newLiveTestingMode, newPlanetWhitelist, fe
 end
 
 function externalFunctions.CloseSelectedPlanet()
+	if selectedPlanet then
+		selectedPlanet.Close()
+		selectedPlanet = nil
+		return true
+	end
+	return false
+end
+
+function externalFunctions.SelectPlanet(planetID)
 	if selectedPlanet then
 		selectedPlanet.Close()
 		selectedPlanet = nil
