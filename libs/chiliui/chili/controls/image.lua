@@ -91,6 +91,10 @@ function Image:DrawControl()
 		end
 	end
 	
+	if self.name == "bgbgbgbgbg" then
+		Spring.Echo("self.width, self.height", self.width, self.height)
+	end
+	
 	if (self.keepAspect) then
 		if (file2) then
 			gl.Color(self.color2 or self.color)

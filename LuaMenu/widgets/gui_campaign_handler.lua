@@ -973,7 +973,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		right = 0,
 		bottom = 0,
 		file = planetData.infoDisplay.backgroundImage,
-		keepAspect = false,
+		keepAspect = true,
 	}
 	bg:Invalidate()
 
