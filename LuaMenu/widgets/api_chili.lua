@@ -81,7 +81,7 @@ function widget:DrawScreen()
 		local timer = Spring.GetTimer()
 		local diff = Spring.DiffTimers(timer, lastTimer)
 		lastTimer = timer
-		Spring.Echo("diff", diff)
+		--Spring.Echo("diff", diff)
 		if diff < 0.04 or Spring.DiffTimers(timer, startTimer) > 8 then
 			hideInterface = false
 			startTimer = false
@@ -116,7 +116,7 @@ function widget:DrawScreen()
 		gl.Color(1,1,1,1)
 		
 		if not hideInterface then
-			loadFade = loadFade - 0.15
+			loadFade = loadFade - 0.18
 			if loadFade <= 0 then
 				loadFade = false
 			end

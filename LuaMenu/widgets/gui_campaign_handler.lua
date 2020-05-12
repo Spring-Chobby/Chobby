@@ -1104,14 +1104,6 @@ local function EnablePlanetClick()
 	planetClickEnabled = true
 end
 
-local function ButtonClickOnPlanet(popupOverlay, planetListHolder, planetID, planetData, startable)
-	if selectedPlanet then
-		selectedPlanet.Close()
-		selectedPlanet = nil
-	end
-	selectedPlanet = SelectPlanet(popupOverlay, planetListHolder, planetID, planetData, startable)
-end
-
 local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, adjacency)
 	local Configuration = WG.Chobby.Configuration
 
@@ -1173,6 +1165,14 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 		end
 	end
 
+	local function OpenPlanetScreen()
+		if selectedPlanet then
+			selectedPlanet.Close()
+			selectedPlanet = nil
+		end
+		selectedPlanet = SelectPlanet(popupOverlay, planetListHolder, planetID, planetData, startable)
+	end
+
 	local button = Button:New{
 		x = planetOffset,
 		y = planetOffset,
@@ -1209,7 +1209,7 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 					return
 				end
 
-				ButtonClickOnPlanet(popupOverlay, planetListHolder, planetID, planetData, startable)
+				OpenPlanetScreen()
 			end
 		},
 		parent = planetHolder,
@@ -1249,6 +1249,14 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 	end
 
 	local externalFunctions = {}
+	externalFunctions.OpenPlanetScreen = OpenPlanetScreen
+	
+	function externalFunctions.StartPlanetMission()
+		if not startable then
+			return
+		end
+		WG.PlanetBattleHandler.StartBattle(planetID, planetData)
+	end
 
 	function externalFunctions.UpdatePosition(xSize, ySize)
 		local tX, tY, tSize = planetHandler.GetZoomTransform(xPos, yPos, math.max(1, xSize/1050))
@@ -1811,14 +1819,18 @@ function externalFunctions.CloseSelectedPlanet()
 	return false
 end
 
-function externalFunctions.SelectPlanet(planetID)
-	if selectedPlanet then
-		selectedPlanet.Close()
-		selectedPlanet = nil
-		return true
+function externalFunctions.OpenPlanetScreen(planetID)
+	if planetList and planetList[planetID] then
+		planetList[planetID].OpenPlanetScreen()
 	end
-	return false
 end
+
+function externalFunctions.StartPlanetMission(planetID)
+	if planetList and planetList[planetID] then
+		planetList[planetID].StartPlanetMission()
+	end
+end
+
 
 --------------------------------------------------------------------------------
 -- Callins
