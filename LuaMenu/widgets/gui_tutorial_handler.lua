@@ -191,7 +191,7 @@ local externalFunctions = {}
 --------------------------------------------------------------------------------
 
 function DelayedInitialize()
-	if WG.Chobby.Configuration.firstBattleStarted then
+	if WG.Chobby.Configuration.firstBattleStarted or not WG.Chobby.Configuration.gameConfig.runTutorial then
 		return
 	end
 	CheckTutorialPopup()
