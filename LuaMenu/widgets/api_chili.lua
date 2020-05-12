@@ -68,18 +68,24 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
-firstDraw = true
-local hideInterface = false
+local lastTimer = Spring.GetTimer()
+local startTimer = Spring.GetTimer()
+local hideInterface = true
+local loadFade = 1
+
 local totalHideInterface = falase
-local function ShowInterface()
-	hideInterface = false
-end
+local loadTex = "MenuLoadscreens/loadscreen.png"
 
 function widget:DrawScreen()
-	if firstDraw then
-		WG.Delay(ShowInterface, 0.1)
-		hideInterface = true
-		firstDraw = false
+	if startTimer then
+		local timer = Spring.GetTimer()
+		local diff = Spring.DiffTimers(timer, lastTimer)
+		lastTimer = timer
+		Spring.Echo("diff", diff)
+		if diff < 0.04 or Spring.DiffTimers(timer, startTimer) > 8 then
+			hideInterface = false
+			startTimer = false
+		end
 	end
 	if totalHideInterface or (WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.hideInterface) then
 		return
@@ -101,6 +107,21 @@ function widget:DrawScreen()
 		gl.PopMatrix()
 	end
 	gl.Color(1,1,1,1)
+	
+	if loadFade then
+		local vsx,vsy = gl.GetViewSizes()
+		gl.Color(1,1,1,loadFade)
+		gl.Texture(loadTex)
+		gl.TexRect(0,0,vsx,vsy)
+		gl.Color(1,1,1,1)
+		
+		if not hideInterface then
+			loadFade = loadFade - 0.15
+			if loadFade <= 0 then
+				loadFade = false
+			end
+		end
+	end
 end
 
 
