@@ -117,7 +117,7 @@ local function CheckTutorialPopup()
 		y = 76,
 		height = 35,
 		fontsize = Configuration:GetFont(2).size,
-		text = [[From here you can embark on a galaxy-spanning campaign or play a skirmisk against the AI - all under Singleplayer & Coop (invite your friends). Alternately, you can click Multiplayer to host a private game, hop into the matchmaker, or participate in massive public games.]],
+		text = [[From here you can embark on a galaxy-spanning campaign or play a skirmish against the AI - all under Singleplayer & Coop (invite your friends). Alternately, you can click Multiplayer to host a private game, hop into the matchmaker, or participate in massive public games.]],
 		parent = tutorialWindow,
 	}
 
