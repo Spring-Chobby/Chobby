@@ -967,13 +967,14 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 
 	-- background
 	local bg = Image:New{
+	name = "bgbgbgbgbg",
 		parent = starmapInfoPanel,
 		x = 0,
 		y = 0,
 		right = 0,
 		bottom = 0,
 		file = planetData.infoDisplay.backgroundImage,
-		keepAspect = true,
+		keepAspect = false,
 	}
 	bg:Invalidate()
 

@@ -24,6 +24,7 @@ Image = Button:Inherit{
 
 	flip  = true;
 	flip2 = true;
+	firstDraw = true,
 
 	keepAspect = true;
 	
@@ -91,10 +92,6 @@ function Image:DrawControl()
 		end
 	end
 	
-	if self.name == "bgbgbgbgbg" then
-		Spring.Echo("self.width, self.height", self.width, self.height)
-	end
-	
 	if (self.keepAspect) then
 		if (file2) then
 			gl.Color(self.color2 or self.color)
@@ -114,13 +111,20 @@ function Image:DrawControl()
 		if (file2) then
 			gl.Color(self.color2 or self.color)
 			TextureHandler.LoadTexture(0, file2, self)
+			if self.firstDraw then
+				gl.TextureInfo(file2)
+			end
 			gl.TexRect(0, 0, self.width, self.height, false, self.flip2)
 		end
 		if (file) then
 			gl.Color(self.color)
 			TextureHandler.LoadTexture(0, file, self)
+			if self.firstDraw then
+				gl.TextureInfo(file)
+			end
 			gl.TexRect(0, 0, self.width, self.height, false, self.flip)
 		end
+		self.firstDraw = false
 	end
 	gl.Texture(0, false)
 end
