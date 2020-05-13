@@ -241,6 +241,14 @@ local function UnlockRewardSet(rewardSet)
 	return saveRequired
 end
 
+local function ApplyUnlocksForCapturedPlanets()
+	for i = 1, #gamedata.planetsCaptured.list do
+		local planetID = gamedata.planetsCaptured.list[i]
+		local planet = WG.Chobby.Configuration.campaignConfig.planetDefs.planets[planetID]
+		UnlockRewardSet(planet.completionReward)
+	end
+end
+
 local function UpdateCommanderModuleCounts()
 	local loadout = gamedata.commanderLoadout
 	commanderModuleCounts = {}
@@ -413,14 +421,14 @@ local function LoadGame(saveData, refreshGUI)
 
 		if not gamedata.campaignID then
 			GenerateCampaignID()
-			SaveGame()
 		end
+
+		ApplyUnlocksForCapturedPlanets()
 
 		if SanityCheckCommanderLevel() then
 			UpdateCommanderModuleCounts()
-		else
-			SaveGame()
 		end
+		SaveGame()
 		if refreshGUI then
 			CallListeners("CampaignLoaded")
 		end

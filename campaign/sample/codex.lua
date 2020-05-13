@@ -177,19 +177,21 @@ Contrasting with their sophistication in many other domains, their strangely pri
 	
 	-- Entries
 	entry_first = { -- planet69
-		name = "what",
+		name = "What am I doing here?",
 		category = "1. Entries",
-		text = [[What am I doing on a hostile fortress world? Was I captured? But then why didn't the pull me out before moving me around? There is no trace planetary assault - then were those subverted by deep agents? A mistimed diversion? Why hasn't anyone intervened yet? Something feels very wrong.
+		text = [[What am I doing on a hostile fortress world? Was I captured? But then why didn't they dismantle me prior to transport? There is no trace of planetary assault - then were those subverted by deep agents? A mistimed diversion? Why hasn't anyone intervened yet? Something feels very wrong.
  
-Somehow the defense grid is still on automated alert. Something must be keeping everyone busy and a starship has answered my distress call. This is my chance to jump out of the system.]]
+Somehow the automated defense grid is still on high alert. Something must be keeping everyone busy and a starship has answered my distress call. This is my chance to jump out of the system.]]
 	},
 	entry_commander = { -- planet1
 		name = "Assault commander",
 		category = "1. Entries",
-		text = [[Commanders are an old concept. Put everything needed to build an army with local resources on a compact chassis, slap a weapon and some armor, and harden it all for fast insertion on a hostile planet. Hopefully they send you on a less defended part of the world, where you are left alone long enough to entrench yourself, and launch an assault on strategic locations - or open a gate for the real assault forces to get in. Or you are defending a planet and get thrown wherever the enemy is deciding to land, then try and kill them before they can build enough of an army to kill you.
- A few tried and true models, perfected for cost, effectiveness and reliability over many wars, and pretty much no surprise for many centuries. My memories are still blurred, but I remember extensively training on those.
+		text = [[Commanders are an old concept. Put all the mining and manufacturing required to build an army on a compact chassis, slap a weapon and some armor, and harden it all for fast insertion on a hostile planet. Hopefully they send you on a less defended part of the world, where you are left alone long enough to entrench yourself, and launch an assault on strategic locations - or open a gate for the real assault forces to get in. Such was their effectiveness that many planets opted to use them in defense. Simply send your own commander to wherever the enemy decides to land, then try and kill them before they can build enough of an army to kill you.
+ 
+A few tried and true models, perfected for cost, effectiveness and reliability over many wars, and pretty much no surprise for many centuries. My memories are still blurred, but I remember extensively training on those.
  
 And yet, this Assault Commander is unlike anything I have ever seen.
+ 
 One of the biggest limitations to Commander design is that they cannot jump with field improvements such as extra weapons, armor or system. Many have tried, and no-one is known to get even close to it, even in the old days. But, this one can. For each field upgrade I recover, it stays intact at a jump.
  
 I never trained for it, or even heard of such a thing. And yet, it feels oddly familiar...]]
@@ -545,9 +547,9 @@ Who knows, maybe they are still there, in some remote corner of the universe...]
 	anomaly_asjulohi = { -- planet24
 		name = "Asjulohi ancient fabricator",
 		category = "5. Anomalies",
-		text = [[Once common on wealthy worlds, knowledge of how to manufacture those ancient fabricators has been lost with the ancient times. Now, only a handful still operates across the galaxy - or did at the time this one was studied, at least.
+		text = [[Once common on wealthy worlds, knowledge of how to manufacture those ancient fabricators has been lost for millennia. Now, only a handful still operate across the galaxy - or at least, did when this one was last studied.
  
-Previous empires have studied the remaining ones, even carefully dismantling several over time, and this one continued their work. They found out how to maintain them, even repairing some of the less decrepit non-functioning ones. But while the theoretical principles behind their operation was better and better understood, they were still far from even thinking about building new ones.]]
+Previous empires have tried to replicate these marvels, even carefully dismantling several over time, and they spared on expense on Asjulohi. They found out how to maintain them, even repairing some of the less decrepit non-functioning ones. But while the theoretical principles behind their operation was better and better understood, they were still far from even thinking about building a new one from scratch.]]
 	},
 	anomaly_deuliah = { -- planet56
 		name = "Deuliah's detriment",
