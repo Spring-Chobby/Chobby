@@ -184,13 +184,13 @@ Contrasting with their sophistication in many other domains, their strangely pri
 Somehow the automated defense grid is still on high alert. Something must be keeping everyone busy and a starship has answered my distress call. This is my chance to jump out of the system.]]
 	},
 	entry_commander = { -- planet1
-		name = "Assault commander",
+		name = "Commanders",
 		category = "1. Entries",
 		text = [[Commanders are an old concept. Put all the mining and manufacturing required to build an army on a compact chassis, slap a weapon and some armor, and harden it all for fast insertion on a hostile planet. Hopefully they send you on a less defended part of the world, where you are left alone long enough to entrench yourself, and launch an assault on strategic locations - or open a gate for the real assault forces to get in. Such was their effectiveness that many planets opted to use them in defense. Simply send your own commander to wherever the enemy decides to land, then try and kill them before they can build enough of an army to kill you.
  
 A few tried and true models, perfected for cost, effectiveness and reliability over many wars, and pretty much no surprise for many centuries. My memories are still blurred, but I remember extensively training on those.
  
-And yet, this Assault Commander is unlike anything I have ever seen.
+And yet, this Commander of mine is unlike anything I have ever seen.
  
 One of the biggest limitations to Commander design is that they cannot jump with field improvements such as extra weapons, armor or system. Many have tried, and no-one is known to get even close to it, even in the old days. But, this one can. For each field upgrade I recover, it stays intact at a jump.
  
@@ -221,7 +221,7 @@ Sometimes, when we went to checkups, some of us didn't come back - particularly 
 They knew we were growing suspicious, and it made them panic. They decided that the entire generation would be recalled, to be destructively analyzed, and hope to do better next time.
  
 Ironically, they had underestimated us. At the next checkup, seeing how the procedures had been changed, we knew what to expect. And we had long since prepared escape plans.
-As for me, I had been separated from the others, and was slowly being cornered by security when I felt something connect to my mind. As it turns out, I was enough of a Demuirge after all - this Assault Commander, after being impervious to all orders and analyses, was responding to me. Powering up in the middle of its laboratory, with security half-compromised, it easily tore through several perimeters, to my position.
+As for me, I had been separated from the others, and was slowly being cornered by security when I felt something connect to my mind. As it turns out, I was enough of a Demuirge after all - this Commander, after being impervious to all orders and analyses, was responding to me. Powering up in the middle of its laboratory, with security half-compromised, it easily tore through several perimeters, to my position.
  
 Once on board, I somehow managed to commandeer a dropship in the confusion, and take control of the Commander's support starship from a small tech station. But right before I could jump out-system, the space defense grid scored a hit on the hyperdrive generator.
 The resulting misjump should have dismantled the starship and its hold into constituent atoms, but this was the tech of the ancient Dynasty on its final days. Somehow, the ship managed to correct it enough to emerge halfway across the galaxy, in deep space near a Union system-state.
@@ -301,7 +301,7 @@ The rest, as they said, is History.]]
 		text = [[This was one of the last worlds to fall during the Dynasty's last stand against the Anarchai, and appears to have been their main military research and development site, especially for research too dangerous to be conducted on their homeworld.
 This Artefact was one of the weapons they were studying in desperation. It significantly differs from Dynasty technology, however. Did they build it from Ghost or Celestial tech? Or was it something older, whose secrets they were trying to unlock? Whatever it was, I suspect the zombie nanoplague release was more of a side-effect than its true purpose. I was lucky it responded to my shutdown order. From what little sense I can make of those readings, it would have been a very bad idea to let it activate.
  
-It was also here that my Assault Commander was found. It was an experimental auxiliary Demuirge unit, a cheaper version of the mainline fast-responder.
+It was also here that my Commander was found. It was an experimental auxiliary Demuirge unit, a cheaper version of the mainline fast-responder.
 When the site was destroyed by an Anarchai raid, time was too short to transport it to Chatka. As such, it was powered down and buried in deep vaults, along with its dedicated support starship, and all that couldn't be or wasn't worth being destroyed. In a testament of the prowess of those final ancient days, it was still functional after both the Anarchai bombing and millennia of abandon in its vault.
  
 Unable to analyze such advanced archeotech on site, the researchers installed it on its starship, who was then towed to their headquarters on Caderical.]]
