@@ -24,7 +24,8 @@ local SCALE = 1
 local holder
 
 local function MaybeAddFile(fileName)
-	if string.find(fileName, "%.dds") or string.find(fileName, "%.png") or string.find(fileName, "%.jpg") then
+	if (string.find(fileName, "%.dds") or string.find(fileName, "%.png") or string.find(fileName, "%.jpg")) 
+			and not (string.find(fileName, "MinimapThumbnails"))then
 		files[#files+1] = fileName
 	end
 end
@@ -41,9 +42,10 @@ function widget:Update()
 		MaybeAddFile(LUA_DIRNAME .. "images/heic1403aDowngrade.jpg")
 		AddDir("LuaMenu/Widgets/chili/Skins/Evolved")
 		AddDir("LuaMenu/Images")
+		AddDir("LuaMenu/Images/planets")
+		AddDir("LuaMenu/Images/starbackgrounds")
 		AddDir("LuaMenu/configs/gameConfig/zk/unitpics")
 		--AddDir("LuaMenu/configs/gameConfig/zk/rankimages")
-		--AddDir("LuaMenu/Images/starbackgrounds")
 	elseif index then
 		if not holder then
 			holder = WG.Chili.Control:New {

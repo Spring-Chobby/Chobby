@@ -175,17 +175,17 @@ local function MakeFeedbackWindow(parent, feedbackLink)
 	}
 end
 
-local function MakeFeedbackButton(parentControl, link, x, y, right, bottom, width, height)
+local function MakeFeedbackButton(parentControl, link, x, y, right, bottom)
 	local feedbackButton = Button:New {
 		x = x,
 		y = y,
 		right = right,
 		bottom = bottom,
 		width = 116,
-		height = 32,
+		height = 45,
 		padding = {0, 0, 0, 0},
 		caption = "Feedback   ",
-		classname = "action_button",
+		classname = "option_button",
 		font = WG.Chobby.Configuration:GetFont(2),
 		tooltip = "Post feedback on the forum",
 		OnClick = {
@@ -198,7 +198,7 @@ local function MakeFeedbackButton(parentControl, link, x, y, right, bottom, widt
 
 	local imMapLink = Image:New {
 		right = 6,
-		y = 7,
+		y = 13,
 		width = 16,
 		height = 16,
 		keepAspect = true,
@@ -228,39 +228,43 @@ end
 --------------------------------------------------------------------------------
 -- Difficulty Setting
 
-local function InitializeDifficultySetting(parent)
+local difficultyWindow
+
+local function InitializeDifficultySetting()
 	local Configuration = WG.Chobby.Configuration
 
-	local difficultyWindow = Window:New{
-		classname = "tech_mainwindow_very_small",
-		x = 4,
-		y = 4,
+	local window = Control:New{
+		right = 170,
+		bottom = 0,
 		width = 128,
-		height = 76,
+		height = 53,
+		padding = {0,0,0,0},
 		resizable = false,
 		draggable = false,
-		parent = parent,
+		parent = nil,
 	}
 	local freezeSettings = true
 
 	Label:New {
-		x = 20,
-		y = 10,
+		x = 30,
+		y = 2,
 		width = 50,
 		height = 30,
 		valign = "top",
 		align = "left",
 		font = Configuration:GetFont(2),
 		caption = "Difficulty",
-		parent = difficultyWindow,
+		parent = window,
 	}
 	local comboDifficulty = ComboBox:New {
 		x = 4,
-		right = 4,
-		bottom = 4,
+		right = 1,
+		bottom = 3,
 		height = 28,
+		--debugPosition = true,
 		items = {"Easy", "Normal", "Hard", "Brutal"},
 		selected = 2,
+		preferComboUp = true,
 		font = Configuration:GetFont(2),
 		itemFontSize = Configuration:GetFont(2).size,
 		selected = WG.CampaignData.GetDifficultySetting(),
@@ -272,7 +276,7 @@ local function InitializeDifficultySetting(parent)
 				WG.CampaignData.SetDifficultySetting(obj.selected)
 			end
 		},
-		parent = difficultyWindow,
+		parent = window,
 	}
 
 	local function UpdateSettings()
@@ -284,7 +288,25 @@ local function InitializeDifficultySetting(parent)
 	WG.CampaignData.AddListener("CampaignLoaded", UpdateSettings)
 
 	freezeSettings = false
-	return difficultyWindow
+	return window
+end
+
+local function CodexClick(entryName)
+	if not WG.CampaignData.GetCodexEntryIsUnlocked(entryName) then
+		return
+	end
+	if currentWinPopup then
+		currentWinPopup.CloseWinPopup(true)
+	end
+
+	local singleplayerMenu = WG.Chobby.interfaceRoot.GetSingleplayerSubmenu()
+	if singleplayerMenu then
+		local campaignMenu = singleplayerMenu.GetSubmenuByName("campaign")
+		if campaignMenu then
+			campaignMenu.OpenTabByName("codex")
+			WG.CodexHandler.OpenEntry(entryName)
+		end
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -305,7 +327,7 @@ local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, 
 
 	local position = 0
 	for t = 1, #rewardsTypes do
-		local rewardList, tooltipFunction, alreadyUnlockedCheck,  overrideTooltip = rewardsTypes[t][1], rewardsTypes[t][2], rewardsTypes[t][3], rewardsTypes[t][4]
+		local rewardList, tooltipFunction, alreadyUnlockedCheck, overrideTooltip, clickFunc = rewardsTypes[t][1], rewardsTypes[t][2], rewardsTypes[t][3], rewardsTypes[t][4], rewardsTypes[t][5]
 		if rewardList then
 			for i = 1, #rewardList do
 				local alreadyUnlocked = alreadyUnlockedCheck(rewardList[i])
@@ -392,6 +414,11 @@ local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, 
 							height = REWARD_ICON_SIZE/stackHeight,
 							caption = string.gsub(tooltip, "_COUNT_", ""),
 							font = Configuration:GetFont(2),
+							OnClick = clickFunc and {
+								function()
+									clickFunc(rewardList[i])
+								end
+							},
 							parent = scroll
 						}
 					end
@@ -469,8 +496,16 @@ local function MakeRewardsPanel(parent, bottom, planetData, cullUnlocked, showCo
 	rewards = planetData.completionReward
 
 	if showCodex then
-		if MakeRewardList(parent, bottom, "Codex", {{rewards.codexEntries, WG.CampaignData.GetCodexEntryInfo, WG.CampaignData.GetCodexEntryIsUnlocked}}, cullUnlocked, 3.96, 2) then
+		if MakeRewardList(parent, bottom, "Codex", {{rewards.codexEntries, WG.CampaignData.GetCodexEntryInfo, WG.CampaignData.GetCodexEntryIsUnlocked, false, CodexClick}}, cullUnlocked, 3.96, 2) then
 			bottom = bottom + 98
+			
+			local singleplayerMenu = WG.Chobby.interfaceRoot.GetSingleplayerSubmenu()
+			if singleplayerMenu then
+				local campaignMenu = singleplayerMenu.GetSubmenuByName("campaign")
+				if campaignMenu then
+					campaignMenu.SetTabHighlighted("codex", true)
+				end
+			end
 		end
 	end
 
@@ -585,7 +620,7 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty)
 			if singleplayerMenu then
 				local campaignMenu = singleplayerMenu.GetSubmenuByName("campaign")
 				if campaignMenu then
-					campaignMenu.OpenTabByName("commander", true)
+					campaignMenu.OpenTabByName("commander")
 				end
 			end
 		end
@@ -599,7 +634,7 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty)
 		caption = i18n("continue"),
 		font = WG.Chobby.Configuration:GetFont(3),
 		parent = victoryWindow,
-		classname = "negative_button",
+		classname = "action_button",
 		OnClick = {
 			function()
 				CloseFunc()
@@ -619,8 +654,24 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty)
 		experienceDisplay.AddFancyExperience(newExperience - oldExperience, gainedBonusExperience)
 		if (oldExperience == 100 and newExperience > 100) or (oldLevel ~= newLevel) then
 			-- 100 is a crazy hack to open the commander loadout screen on the first completion of the second mission.
+			if not openCommanderWindowOnContinue then
+				local singleplayerMenu = WG.Chobby.interfaceRoot.GetSingleplayerSubmenu()
+				if singleplayerMenu then
+					local campaignMenu = singleplayerMenu.GetSubmenuByName("campaign")
+					if campaignMenu then
+						campaignMenu.SetTabHighlighted("commander", true)
+					end
+				end
+			end
 			openCommanderWindowOnContinue = true
 		end
+	end
+	
+	function externalFunctions.CloseWinPopup(cancelCommPopup)
+		if cancelCommPopup and openCommanderWindowOnContinue then
+			openCommanderWindowOnContinue = false
+		end
+		CloseFunc()
 	end
 
 	return externalFunctions
@@ -671,7 +722,7 @@ local function ProcessPlanetDefeat(planetID, battleFrames)
 		selectedPlanet.Close()
 		selectedPlanet = nil
 	end
-	WG.Chobby.InformationPopup("Battle for " .. planetConfig[planetID].name .. " lost.", {caption = "Defeat"})
+	WG.Chobby.InformationPopup("Battle for " .. planetConfig[planetID].name .. " lost.", {caption = i18n("continue")})
 	WG.CampaignData.AddPlayTime(battleFrames, true)
 
 	WG.Analytics.SendIndexedRepeatEvent("campaign:planet_" .. planetID .. ":difficulty_" .. WG.CampaignData.GetDifficultySetting() .. ":lose", math.floor(battleFrames/30), ":defeat")
@@ -733,10 +784,11 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 	}
 
 	local planetDesc = TextBox:New {
-		x = 8,
-		y = "30%",
+		x = 20,
+		y = "25%",
 		right = 4,
 		bottom = "25%",
+		padding = {0, 0, 10, 0},
 		text = ((startable or Configuration.debugMode) and planetData.infoDisplay.text) or "This planet will need to be approached for further study.",
 		font = Configuration:GetFont(3),
 	}	
@@ -746,7 +798,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		parent = starmapInfoPanel,
 		x = "3%",
 		y = "4%",
-		right = "50%",
+		right = "60%",
 		bottom = "4%",
 		children = {
 			nameLabel,
@@ -769,14 +821,17 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 
 	if startable then
 		if planetData.infoDisplay.feedbackLink then
-			MakeFeedbackButton(buttonHolder, planetData.infoDisplay.feedbackLink, nil, 2, 85, nil)
+			MakeFeedbackButton(buttonHolder, planetData.infoDisplay.feedbackLink, nil, 0, 85, nil)
 		end
-
+		
+		difficultyWindow = difficultyWindow or InitializeDifficultySetting()
+		buttonHolder:AddChild(difficultyWindow)
+		
 		local startButton = Button:New{
 			right = 0,
 			bottom = 0,
-			width = 135,
-			height = 65,
+			width = 160,
+			height = 58,
 			classname = "action_button",
 			parent = buttonHolder,
 			caption = i18n("start"),
@@ -790,8 +845,8 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		local btnInviteFriends
 		if Configuration.canAuthenticateWithSteam then
 			btnInviteFriends = Button:New {
-				right = 140,
-				bottom = 0,
+				right = 0,
+				bottom = 62,
 				width = 160,
 				height = 35,
 				padding = {0, 0, 0, 0},
@@ -912,6 +967,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 
 	-- background
 	local bg = Image:New{
+	name = "bgbgbgbgbg",
 		parent = starmapInfoPanel,
 		x = 0,
 		y = 0,
@@ -930,33 +986,42 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 	end
 
 	local function SizeUpdate()
-		local font = Configuration:GetFont(((planetHandler.height < 760) and 2) or 3)
+		local fluffFont = Configuration:GetFont(((planetHandler.height < 720) and 2) or 3)
+		local descFont = Configuration:GetFont(((planetHandler.height < 720) and 1) or 2) 
 
-		planetDesc.font.size = font.size
+		planetDesc.font.size = descFont.size
 		planetDesc:Invalidate()
-		if planetHandler.height < 660 then
+		if planetHandler.height < 560 then
 			planetDesc._relativeBounds.top = 60
 			fluffGrid:SetVisibility(false)
+
 		elseif planetHandler.height < 820 then
-			planetDesc._relativeBounds.top = "27%"
+			planetDesc._relativeBounds.top = "26%"
 			fluffGrid:SetVisibility(true)
+
 		else
-			planetDesc._relativeBounds.top = "30%"
+			planetDesc._relativeBounds.top = "25%"
 			fluffGrid:SetVisibility(true)
 		end
 		planetDesc:UpdateClientArea(false)
 
-		if planetHandler.height < 600 then
-			subPanel._relativeBounds.right = 390
-			subPanel._relativeBounds.bottom = "2%"
-		else
+		if planetHandler.height > 800 then
 			subPanel._relativeBounds.right = "50%"
 			subPanel._relativeBounds.bottom = "4%"
+			planetImage._relativeBounds.left = "50%"
+		elseif planetHandler.height > 400 then
+			subPanel._relativeBounds.right = "40%"
+			subPanel._relativeBounds.bottom = "2%"
+			planetImage._relativeBounds.left = "60%"
+		else
+			subPanel._relativeBounds.right = "30%"
+			subPanel._relativeBounds.bottom = 0
+			planetImage._relativeBounds.left = "70%"
 		end
 		subPanel:UpdateClientArea(false)
 
 		for i = 1, 4 do
-			fluffLabels[i].font.size = font.size
+			fluffLabels[i].font.size = fluffFont.size
 			fluffLabels[i]:Invalidate()
 		end
 		fluffGrid:Invalidate()
@@ -1101,6 +1166,14 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 		end
 	end
 
+	local function OpenPlanetScreen()
+		if selectedPlanet then
+			selectedPlanet.Close()
+			selectedPlanet = nil
+		end
+		selectedPlanet = SelectPlanet(popupOverlay, planetListHolder, planetID, planetData, startable)
+	end
+
 	local button = Button:New{
 		x = planetOffset,
 		y = planetOffset,
@@ -1137,11 +1210,7 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 					return
 				end
 
-				if selectedPlanet then
-					selectedPlanet.Close()
-					selectedPlanet = nil
-				end
-				selectedPlanet = SelectPlanet(popupOverlay, planetListHolder, planetID, planetData, startable)
+				OpenPlanetScreen()
 			end
 		},
 		parent = planetHolder,
@@ -1181,6 +1250,14 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 	end
 
 	local externalFunctions = {}
+	externalFunctions.OpenPlanetScreen = OpenPlanetScreen
+	
+	function externalFunctions.StartPlanetMission()
+		if not startable then
+			return
+		end
+		WG.PlanetBattleHandler.StartBattle(planetID, planetData)
+	end
 
 	function externalFunctions.UpdatePosition(xSize, ySize)
 		local tX, tY, tSize = planetHandler.GetZoomTransform(xPos, yPos, math.max(1, xSize/1050))
@@ -1525,7 +1602,7 @@ local function InitializePlanetHandler(parent, newLiveTestingMode, newPlanetWhit
 	local externalFunctions = {}
 
 	function externalFunctions.UpdatePosition(x, y, width, height)
-		window:SetPos(x, y, width, height)
+		window:SetPos(x and math.floor(x + 0.5), y and math.floor(y + 0.5), width, height)
 		if x then
 			for i = 1, PLANET_COUNT do
 				if (not PLANET_WHITELIST) or PLANET_WHITELIST[i] then
@@ -1687,18 +1764,17 @@ local externalFunctions = {}
 function externalFunctions.GetControl(newLiveTestingMode, newPlanetWhitelist, feedbackLink)
 	local window = Control:New {
 		name = "campaignHandler",
-		x = "0%",
-		y = "0%",
+		x = 0,
+		y = 0,
 		width = "100%",
 		height = "100%",
 		padding = {0,0,0,0},
 		OnParentPost = {
 			function(obj, parent)
 				if obj:IsEmpty() then
-					local difficultyWindow = InitializeDifficultySetting(obj)
+					difficultyWindow = difficultyWindow or InitializeDifficultySetting()
 					planetHandler = InitializePlanetHandler(obj, newLiveTestingMode, newPlanetWhitelist, feedbackLink)
 					UpdateGalaxy()
-					difficultyWindow:BringToFront()
 				end
 
 				local background = WG.Chobby.interfaceRoot.GetBackgroundHolder()
@@ -1743,6 +1819,19 @@ function externalFunctions.CloseSelectedPlanet()
 	end
 	return false
 end
+
+function externalFunctions.OpenPlanetScreen(planetID)
+	if planetList and planetList[planetID] then
+		planetList[planetID].OpenPlanetScreen()
+	end
+end
+
+function externalFunctions.StartPlanetMission(planetID)
+	if planetList and planetList[planetID] then
+		planetList[planetID].StartPlanetMission()
+	end
+end
+
 
 --------------------------------------------------------------------------------
 -- Callins

@@ -23,6 +23,7 @@ local BUTTON_FONT = 2
 
 local selectedButton
 local codexManagerStuff -- FIXME rename
+local codexTree
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -82,13 +83,16 @@ local function PopulateCodexTree(parent, codexText, codexImage)
 		codexTree:Dispose()
 	end
 
+	local categoryNewEntries = {}
 	local nodes = {}
+	local entryButtons = {}
 	local codexEntries, categories, categoriesOrdered = LoadCodexEntries()
 
 	-- make tree view nodes
 	for i = 1, #categoriesOrdered do
 		local catID = categoriesOrdered[i]
 		local cat = categories[catID]
+		categoryNewEntries[catID] = 0
 		table.sort(cat, SortCodexEntries)
 		local node = {catID, {}}
 		local subnode = node[2]
@@ -113,7 +117,13 @@ local function PopulateCodexTree(parent, codexText, codexImage)
 								ButtonUtilities.SetButtonDeselected(selectedButton)
 							end
 							ButtonUtilities.SetButtonSelected(self)
-							WG.CampaignData.SetCodexEntryRead(entry.id)
+							if WG.CampaignData.SetCodexEntryRead(entry.id) then
+								categoryNewEntries[catID] = categoryNewEntries[catID] - 1
+								if categoryNewEntries[catID] <= 0 and codexTree then
+									local node = codexTree:GetNodeByCaption(entry.category)
+									node:SetHighlight(false)
+								end
+							end
 							selectedButton = self
 						end
 					},
@@ -124,8 +134,10 @@ local function PopulateCodexTree(parent, codexText, codexImage)
 
 				if not alreadyRead then
 					ButtonUtilities.SetButtonHighlighted(button)
+					categoryNewEntries[catID] = categoryNewEntries[catID] + 1
 				end
 				subnode[#subnode + 1] = button
+				entryButtons[entry.id] = button
 			end
 		end
 		nodes[#nodes + 1] = node
@@ -135,7 +147,7 @@ local function PopulateCodexTree(parent, codexText, codexImage)
 	for i = 1, #parent.children do
 		parent.children[i]:Dispose()
 	end
-	local codexTree = Chili.TreeView:New{
+	codexTree = Chili.TreeView:New{
 		parent = parent,
 		clickTextToToggle = true,
 		minItemHeight = 26,
@@ -143,6 +155,31 @@ local function PopulateCodexTree(parent, codexText, codexImage)
 		nodes = nodes, --{"wtf", "lololol", {"omg"}},
 	}
 	codexText:SetText("")
+	
+	for i = 1, #nodes do
+		local catID = nodes[i][1]
+		if categoryNewEntries[catID] > 0 then
+			local nodeObj = codexTree:GetNodeByCaption(catID)
+			nodeObj:SetHighlight(true)
+		end
+	end
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.OpenEntry(entryName)
+		local entry = entryName and codexEntries[entryName]
+		if not (entry and entryButtons[entryName]) then
+			return
+		end
+		local categoryNode = entry.category and codexTree:GetNodeByCaption(entry.category)
+		if not categoryNode then
+			return
+		end
+		categoryNode:Expand()
+		entryButtons[entryName].OnClick[1](entryButtons[entryName])
+	end
+	
+	return externalFunctions
 end
 
 --------------------------------------------------------------------------------
@@ -223,12 +260,19 @@ local function InitializeControls(parentControl)
 	}
 
 	local externalFunctions = {}
+	local codexFuncs
 
 	function externalFunctions.PopulateCodexTree()
-		PopulateCodexTree(codexTreeScroll, codexText, codexImage)
+		codexFuncs = PopulateCodexTree(codexTreeScroll, codexText, codexImage)
 	end
 	externalFunctions.PopulateCodexTree()
 
+	function externalFunctions.OpenEntry(entryName)
+		if codexFuncs then
+			codexFuncs.OpenEntry(entryName)
+		end
+	end
+	
 	return externalFunctions
 end
 
@@ -255,6 +299,12 @@ function CodexHandler.GetControl()
 		},
 	}
 	return window
+end
+
+function CodexHandler.OpenEntry(entryName)
+	if codexManagerStuff then
+		codexManagerStuff.OpenEntry(entryName)
+	end
 end
 
 --------------------------------------------------------------------------------

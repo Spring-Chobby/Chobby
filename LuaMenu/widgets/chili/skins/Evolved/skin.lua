@@ -371,6 +371,7 @@ skin.treeview = {
 
   ImageExpanded  = ":cl:treeview_node_expanded.png",
   ImageCollapsed = ":cl:treeview_node_collapsed.png",
+  ImageHighlight = ":cl:treeview_node_collapsed_highlight.png",
   treeColor = {1,1,1,0.1},
 
   DrawNode = DrawTreeviewNode,
