@@ -390,21 +390,21 @@ There is also a list of sensitive facilities across the Empire. Not much beyond 
 	},
 	--- Interception networks
 	location_phisnet = { -- planet13
-		name = "Phisnet-3617 interception network",
+		name = "Phisnet-3617 network",
 		category = "4. Locations",
 		text = [[This network was for detecting enemy strategic movements and coordinating forces in the region, but its original role was for intercepting interstellar communications. Not very useful now as the entire galaxy is silent, but at least I could get those blockade forces to stand down.
  
 The military in this region was given a surprising amount of autonomy. They even raised their own taxes on local civilian centers and trade ships, blurring the line between military force, regional state and a bunch of pirates.]]
 	},
 	location_kirdipan = { -- planet18
-		name = "Kirdipan interception network",
+		name = "Kirdipan network",
 		category = "4. Locations",
 		text = [[This was the keystone of the entire galactic signal intelligence network of the Empire - or should have been, had it been completed on time. Whether mismanagement, cost overruns, mid-project changes of plan, corruption, sabotage or even plain bad luck, the project seems to have kept on stalling again and again.
  
 At some point, someone decided to re-terraform the entire planet in order to get rid of some unpleasant local condition that was causing too much trouble with the project, but that project also stalled...]]
 	},
 	location_hastus = { -- planet46
-		name = "Hastus interception network",
+		name = "Hastus network",
 		category = "4. Locations",
 		text = [[Even after the Empire shattered the Rebel military, those continued to wage a remarkably successful campaign of guerrilla warfare and political uprisings, despite considerable efforts, resources and violence used against them. It was only with the completion of this interception network that the Empire gained an edge.
  
