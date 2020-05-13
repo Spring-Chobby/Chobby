@@ -503,7 +503,7 @@ local entries = {
 		.. "\n "
 		.. "\nWhen the Ghost Fleet hit the Anarchai, they were completely unprepared to what they were actually facing. However, it is a testament to the might of the Mandate's military that they still managed to destroy several scatterships during the engagement."
 		.. "\n "
-		.. "\nThis particular scattership phased right through Leopard after sustaining heavy damage, ending up trapped in its mantle. The few self-repair systems were barely enough to keep its integrity, but its warmind had been irremediably destroyed - which is presumably why the Anarchai didn't bother recovering or destroying it afterwards."
+		.. "\nThis particular scattership phased right through Leopard after sustaining heavy damage, ending up trapped in its mantle. The few self-repair systems were barely enough to keep its integrity, but its gestalt had been irremediably destroyed - which is presumably why the Anarchai didn't bother recovering or destroying it afterwards."
 		.. "\n "
 		.. "\nEven in its mindless, damaged state, had its self-repair systems kicked in and made it spaceworthy again, it would have had enough firepower to endanger the entire galaxy again. And its technology was so advanced and different from what we know today, who knows what could happen, had someone tried studying it... Haven was terrified that the Empire would be careless enough to try, and the Empire that Haven was desperate enough for it. And so they fought, not to gain control of it, but to make sure no-one would."
 		.. "\n "
