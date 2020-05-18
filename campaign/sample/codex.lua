@@ -2,6 +2,7 @@ local entries = {
 	-- Factions
 	faction_union = { -- planet3, planet5
 		name = "The Union",
+		image = "campaign/sample/graphics/icons/Union.png",
 		category = "3. Factions",
 		text = [[Official name: the Union of Sovereign Star-Systems
 Several acronyms were used on occasion, but the variety of official languages between the varied systems-states made it impossible for a majority to agree on a single one.
@@ -16,6 +17,7 @@ With the enemy at the gates of their core worlds, there was little hope of repel
 	},
 	faction_empire = { -- planet11, planet12, planet15, planet16, planet17, planet24, planet25, planet26
 		name = "The Empire",
+		image = "campaign/sample/graphics/icons/Empire3.png",
 		category = "3. Factions",
 		text = [[Official name: the Ninth Galactic State, Second Restoration
 As they started winning, everyone called it the Galactic Empire, or simply the Empire
@@ -29,6 +31,7 @@ However, with so much of the empire's efforts being diverted toward the armies, 
 	},
 	faction_rebels = { -- planet36, planet37, planet39, planet40, planet42, planet44, planet47, planet48, planet56, planet62
 		name = "The Rebels",
+		image = "campaign/sample/graphics/icons/Rebels.png",
 		category = "3. Factions",
 		text = [["Death to the tyrants!"
  
@@ -39,6 +42,7 @@ The goal of the Rebels was not direct victory so much as mortally injuring the E
 	},
 	faction_haven = { -- planet31
 		name = "Haven",
+		image = "campaign/sample/graphics/icons/SynPact.png",
 		category = "3. Factions",
 		text = [["Many as one"
  
@@ -50,6 +54,7 @@ At the time of the event, they were slowly loosing ground, holding onto strategi
 	},
 	faction_lawless = { -- planet28, planet29, planet34, planet35, planet41, planet49, planet50, planet53
 		name = "The Lawless",
+		image = "campaign/sample/graphics/icons/Lawless.png",
 		category = "3. Factions",
 		text = [[Spread too thin, with much of its attention and resources dedicated to the war machine, and a number of violent, organized uprising, the Empire's rule of law was crumbling on many worlds. Some, impoverished by high taxation and falling trade, turned to crime, piracy and smuggling of all kinds. Governors without oversight nor control became local tyrants. Military and law enforcement groups became warlords and took over the worlds they were supposed to protect.
  
@@ -57,7 +62,8 @@ The Empire, while conscious of those problems, decided that it had more pressing
 I wonder if it could have worked, or if it would have been too little too late.]]
 	},
 	faction_dynasty = { -- planet 46, planet47, planet56
-		name = "The Dynasty",
+		name = "The Dynasty of Man",
+		image = "campaign/sample/graphics/icons/Dynasty.png",
 		category = "3. Factions",
 		text = [["Élan vital"
  
@@ -71,6 +77,7 @@ And yet, by their historical standards, the whole operation feels botched and am
 	},
 	faction_dynasty_restored = { -- planet58, planet59
 		name = "The Dynasty restored",
+		image = "campaign/sample/graphics/icons/DynastyOld.png",
 		category = "3. Factions",
 		text = [[It has always been thought that the Dynasty was finally destroyed at Chatka, when they fought the last battle of the galaxy against the Anarchai.
 As it turns out, it was true.
@@ -82,6 +89,7 @@ Still, something feels wrong with the whole affair. They had to know it had such
 	},
 	faction_anarchai = { -- planet32
 		name = "The Anarchai",
+		image = "campaign/sample/graphics/icons/Anarchai.png",
 		category = "3. Factions",
 		text = [[Little is known, let alone understood, about the Anarchai who brought the ancient times to an end. Those alien-thinking, god-like supermachines simply appeared one day across a quadrant with no warning.
 Hitting the galaxy like a hurricane, they smashed all resistance, systematically dismantling any higher form of organization and advanced installations they found, before continuing to the next system.
@@ -97,6 +105,7 @@ Haven was fascinated by the Anarchai. Located in their presumed birthplace, they
 	},
 	faction_survivors = { -- planet55, planet61, planet64
 		name = "Survivors",
+		image = "campaign/sample/graphics/icons/Survivors.png",
 		category = "3. Factions",
 		text = [[There is a message broadcast looping across the system. Most of the transmitters have stopped working, and the broadcast itself is weak, garbled and corrupt, but there were enough emitters to reconstruct most of it.
  
@@ -113,6 +122,7 @@ After all this time, no-one went back to resettle the galaxy, so I have little h
 	-- Threats
 	threat_automata = { -- planet69
 		name = "Automata",
+		image = "campaign/sample/graphics/unitpics/cloakriot.png",
 		category = "2. Threats",
 		text = [[Left to themselves, most armies will fall dormant to minimize energy and maintenance requirements. With proper settings and their own nanolathe arrays, they can stay functional for a very long time. And they will leave enough sensors active to detect threats, then awaken and engage them until new orders or supervision are received.
  
@@ -122,6 +132,7 @@ I will need to be careful, choose the time and place of battle, and not wait for
 	},
 	threat_zombies = { -- planet43, planet59
 		name = "Zombies",
+		image = "campaign/sample/graphics/icons/ZombiePlague.png",
 		category = "2. Threats",
 		text = [[Suspected to be an ancient terror weapon for the defense by mutually-assured destruction of a long-forgotten polity, the zombie nanoplague was for a long time the most feared contagion in existence.
  
@@ -135,6 +146,7 @@ However, reclaiming contaminated worlds is extremely difficult, as those are muc
 	},
 	threat_chickens = { -- planet21, planet38, planet63
 		name = "Chickens",
+		image = "campaign/sample/graphics/unitpics/chicken.png",
 		category = "2. Threats",
 		text = [[Official name: Gallinuloides Horribilis
  
@@ -149,6 +161,7 @@ Hypotheses about their origins run from ancient dormant aliens awakened by human
 	},
 	threat_chickens_lifecycle = { -- planet38
 		name = "Chickens life-cycle",
+		image = "campaign/sample/graphics/unitpics/chicken_rafflesia.png",
 		category = "2. Threats",
 		text = [[Little is known or understood about the life-cycle of chicken. Colonies are centered around a Queen, which will be abandoned upon its death. Whether the colony is destroyed, its dormant remains taken over by a new one or if it will produce a new Queen after a long enough time is unknown, as is how Queens themselves are born and form new colonies.
  
@@ -158,6 +171,7 @@ Chicken biology seem relatively close to Earth-native biology, but with signific
 	},
 	threat_chickens_travel = { -- planet21
 		name = "Chickens interstellar travel",
+		image = "campaign/sample/graphics/icons/StarSpread.png",
 		category = "2. Threats",
 		text = [[No chicken space organism has ever been detected, nor stowaway zooid or biological material that could have started a new colony. Despite this, new colonies have regularly been found on worlds with no previously known chicken presence. While some could be explained by undetected dormant elements, some had ruled it out with near-certainty. As such, it has generally been accepted that chicken have means to either move or seed new colonies over interstellar distances. Whether by slower-than-light dormant seeds, incredibly stealthy starships, extremely sophisticated detection systems to launch far from human sensors, or even deep underground warp portals working by unknown physical principles, no concrete element has been found.
  
@@ -165,6 +179,7 @@ Chicken have existed for at least as long as the early days of the human galacti
 	},
 	threat_chickens_intelligence = { -- planet63
 		name = "Chickens intelligence",
+		image = "campaign/sample/graphics/unitpics/chickenflyerqueen.png",
 		category = "2. Threats",
 		text = [[Chicken thought processes, or even whether they are even sapient, is unknown. They have however proven themselves to be remarkably good at planning, adaptation and long-term resource management. Their degree of understanding of human societies is unknown, but they have sometimes been eerily good at striking unsuspecting or unprepared settlements at the worst possible time and place. Though some attribute this to exceptional pattern-recognition, others have hypothesized an ability to spy on and understand human communications and societies.
  
@@ -178,6 +193,7 @@ Contrasting with their sophistication in many other domains, their strangely pri
 	-- Entries
 	entry_first = { -- planet69
 		name = "What am I doing here?",
+		image = "campaign/sample/graphics/icons/ErrorMissingData.png",
 		category = "1. Entries",
 		text = [[What am I doing on a hostile fortress world? Was I captured? But then why didn't they dismantle me prior to transport? There is no trace of planetary assault - then were those subverted by deep agents? A mistimed diversion? Why hasn't anyone intervened yet? Something feels very wrong.
  
@@ -185,6 +201,7 @@ Somehow the automated defense grid is still on high alert. Something must be kee
 	},
 	entry_commander = { -- planet1
 		name = "Commanders",
+		image = "campaign/sample/graphics/icons/HeroCommander.png",
 		category = "1. Entries",
 		text = [[Commanders are an old concept. Put all the mining and manufacturing required to build an army on a compact chassis, slap a weapon and some armor, and harden it all for fast insertion on a hostile planet. Hopefully they send you on a less defended part of the world, where you are left alone long enough to entrench yourself, and launch an assault on strategic locations - or open a gate for the real assault forces to get in. Such was their effectiveness that many planets opted to use them in defense. Simply send your own commander to wherever the enemy decides to land, then try and kill them before they can build enough of an army to kill you.
  
@@ -198,6 +215,7 @@ I never trained for it, or even heard of such a thing. And yet, it feels oddly f
 	},
 	entry_event = { -- planet2
 		name = "Event",
+		image = "campaign/sample/graphics/icons/Silhouettes.png",
 		category = "1. Entries",
 		text = [[It is not just those worlds that are empty. It is the entire galaxy.
 Again, old ruins from what could be the same time litter the planet. But when I try to pick up long-range signals, detect hyperspace movements or any other sort of activity, the galaxy is silent. If someone is still out there, they either lost all interstellar capabilities, or they are hiding very well.
@@ -283,6 +301,7 @@ And again, no one has challenged me beyond automated defenses. No hails, no comm
 	},
 	location_chatka = { -- planet58
 		name = "Battle of Chatka",
+		image = "campaign/sample/graphics/icons/DynastyAnarchaiBattle.png",
 		category = "4. Locations",
 		text = [[This is where the greatest battle of the ancient times took place.
  
@@ -308,6 +327,7 @@ Unable to analyze such advanced archeotech on site, the researchers installed it
 	},
 	location_karuwal = { -- planet62
 		name = "Battle of Karuwal",
+		image = "campaign/sample/graphics/icons/RebelsEmpireBattle.png",
 		category = "4. Locations",
 		text = [[While the Rebels had initially managed to take over many worlds through political subversion and uprisings, the ponderous war machine of the Empire was now facing inward, increasingly turning the conflict into military engagements. Eager to capitalize on early successes, where misdirection, clever maneuvering and guerrilla tactics had let them defeat much larger forces in several key engagements, the Rebels decided to launch a large-scale assault against the heartlands of the Empire before it had time to recover.
 This turned out to be a mistake.
@@ -343,6 +363,7 @@ To this day, the maintenance systems kept the city intact, not caring whether pe
 	},
 	location_hibiliha = { -- planet61
 		name = "Hibiliha warp station",
+		image = "campaign/sample/graphics/icons/wormhole.png",
 		category = "4. Locations",
 		text = [[There was an ancient warp station in this system. A massive installation, that could generate hyperspace highways across the entire galaxy. A few survivors managed to restore it, and used it to bring all the scattered survivor groups here, before continuing on their way to the Empire's heartlands.
  
@@ -391,13 +412,15 @@ There is also a list of sensitive facilities across the Empire. Not much beyond 
 	--- Interception networks
 	location_phisnet = { -- planet13
 		name = "Phisnet-3617 network",
+		image = "campaign/sample/graphics/unitpics/pw_interception.png",
 		category = "4. Locations",
-		text = [[This network was for detecting enemy strategic movements and coordinating forces in the region, but its original role was for intercepting interstellar communications. Not very useful now as the entire galaxy is silent, but at least I could get those blockade forces to stand down.
+		text = [[This interception network was for detecting enemy strategic movements and coordinating forces in the region, but its original role was for intercepting interstellar communications. Not very useful now as the entire galaxy is silent, but at least I could get those blockade forces to stand down.
  
 The military in this region was given a surprising amount of autonomy. They even raised their own taxes on local civilian centers and trade ships, blurring the line between military force, regional state and a bunch of pirates.]]
 	},
 	location_kirdipan = { -- planet18
 		name = "Kirdipan network",
+		image = "campaign/sample/graphics/unitpics/pw_interception.png",
 		category = "4. Locations",
 		text = [[This was the keystone of the entire galactic signal intelligence network of the Empire - or should have been, had it been completed on time. Whether mismanagement, cost overruns, mid-project changes of plan, corruption, sabotage or even plain bad luck, the project seems to have kept on stalling again and again.
  
@@ -405,6 +428,7 @@ At some point, someone decided to re-terraform the entire planet in order to get
 	},
 	location_hastus = { -- planet46
 		name = "Hastus network",
+		image = "campaign/sample/graphics/unitpics/pw_interception.png",
 		category = "4. Locations",
 		text = [[Even after the Empire shattered the Rebel military, those continued to wage a remarkably successful campaign of guerrilla warfare and political uprisings, despite considerable efforts, resources and violence used against them. It was only with the completion of this interception network that the Empire gained an edge.
  
@@ -413,6 +437,7 @@ They knew it was not a mere rebellion of malcontents as they and many others had
 	--- Other locations 
 	location_musashi = { -- planet71
 		name = "Musashi rally",
+		image = "campaign/sample/graphics/unitpics/tankraid.png",
 		category = "4. Locations",
 		text = [[It feels so nostalgic to see this place again, I had loved watching those so much... And I wasn't the only one, they must have been some of the most popular entertainment in the galaxy. We had betting pools at the academy, and one wargame was even rescheduled so it wouldn't conflict with the season's finale.
  
@@ -553,6 +578,7 @@ Previous empires have tried to replicate these marvels, even carefully dismantli
 	},
 	anomaly_deuliah = { -- planet56
 		name = "Deuliah's detriment",
+		image = "campaign/sample/graphics/unitpics/striderdetriment .png",
 		category = "5. Anomalies",
 		text = [[When this R&D site was abandoned, its facilities and material were not shipped off-world or disposed of, apart from the most sensitive works. This inevitably attracted varied scavengers, hoping to make a profit off all the valuables left, from scrap and hardware to data and expert systems.
  
