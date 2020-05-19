@@ -224,7 +224,8 @@ How long has it been? What little star charts are left from the database are use
 But some recording survived, enough to prove that whatever the event was, it happened in an instant. One moment everyone was there, a day like any other. The next moment, they were all gone. Baselines, modified, cyborgs, synths, uplifts, free machines - everyone, no exception, and nothing else...]]
 	},
 	entry_homeworld = { -- planet66
-		name = "My homeworld",
+		name = "Homeworld",
+		image = "campaign/sample/graphics/icons/Homeworld.png",
 		category = "1. Entries",
 		text = [[Caderical. The Glinting City of Caslaar, or what's left of it, under the desert sand. This is where I grew up, where I was born - or rather made.
  
@@ -250,7 +251,8 @@ Here, with our escape attempt, and me fleeing so violently with this Commander, 
 I ignore how many of my siblings escaped. Even knowing what happened next, I still hope that at least a few made it out.]]
 	},
 	entry_starsong = { -- planet67
-		name = "The Starsong",
+		name = "Starsong",
+		image = "campaign/sample/graphics/icons/Starsong.png",
 		category = "1. Entries",
 		text = [[Fortress world Zhurou, last redoubt of Haven. Where it all started.
  
@@ -269,6 +271,7 @@ The data itself has long decayed beyond recovery, and the Starsong itself went s
 	},
 	entry_eternity_gate = { -- planet68
 		name = "The Eternity Gate",
+		image = "campaign/sample/graphics/icons/EternityGate.png",
 		category = "1. Entries",
 		text = [[This planet was never meant to house a large population. It had been the Empire's last redoubt, an mighty fortress world for a glorious last stand, came the day of their fall. Which is what happened, in a way. But the refugees never settled here.
  
@@ -294,6 +297,7 @@ It seems the Empire had also found an incomplete Mandate project. They lacked ti
 	location_im_jaleth = { -- planet1
 		name = "Im Jaleth ruins",
 		category = "4. Locations",
+		image = "campaign/sample/graphics/icons/RuinsFromAbove.png",
 		text = [[This world has been abandoned for a very, very long time. What little ruins I had time to unearth were buried very deep, and all from the same geological strata. For some reason, the entire planet seem to have been abandoned at once, and never repopulated
 Was it kept empty as a buffer before the Folsom fortress world? Depriving themselves of a good inhabitable world like this one for a small strategic gain feels wasteful.
  
@@ -373,6 +377,7 @@ So this is why a planet is missing from the system...]]
 	},
 	location_intrepid = { -- planet64
 		name = "The Garden of Intrepid",
+		image = "campaign/sample/graphics/icons/DeadGardens.png",
 		category = "4. Locations",
 		text = [[Intrepid had been the seat of most galactic governemnts for a long time, dating back from even before the Ghost Mandate. It was said to be the most beautiful world in the galaxy, a jewel of the old days, carefully tended for even across wars and chaos.
  
