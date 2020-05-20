@@ -728,7 +728,6 @@ function ChatWindows:GetChannelConsole(chanName)
 	local channelConsole = self.channelConsoles[chanName]
 
 	if channelConsole == nil then
-
 		local function MessageListener(message)
 			if message:starts("/me ") then
 				lobby:SayEx(chanName, message:sub(5))
@@ -736,7 +735,6 @@ function ChatWindows:GetChannelConsole(chanName)
 				lobby:Say(chanName, message)
 			end
 		end
-
 		local function Resize(obj)
 			self:UpdateOldChatLinePosition(obj)
 		end
@@ -820,7 +818,6 @@ function ChatWindows:GetPrivateChatConsole(userName, switchTo)
 	local privateChatConsole = self.privateChatConsoles[chanName]
 
 	if privateChatConsole == nil then
-
 		local function MessageListener(message)
 			if message:starts("/me ") then
 				lobby:SayPrivateEx(userName, message:sub(5))
@@ -828,7 +825,6 @@ function ChatWindows:GetPrivateChatConsole(userName, switchTo)
 				lobby:SayPrivate(userName, message)
 			end
 		end
-
 		local function Resize(obj)
 			self:UpdateOldChatLinePosition(obj)
 		end

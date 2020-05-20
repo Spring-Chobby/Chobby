@@ -2,7 +2,6 @@ Console = LCS.class{}
 
 function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeFunc, isBattleChat)
 	self.listener = sendMessageListener
-	self.sendMessageActions = sendMessageActions
 	self.showDate = true
 	self.dateFormat = "%H:%M"
 
