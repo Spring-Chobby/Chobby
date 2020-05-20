@@ -333,6 +333,13 @@ local function InitializeControls()
 	function externalFunctions.UpdateHaveMap(thingName)
 		if mapFuncs[thingName] then
 			mapFuncs[thingName].UpdateHaveMap()
+		elseif not Configuration.onlyShowFeaturedMaps and VFS.HasArchive(thingName) then
+			local info = VFS.GetArchiveInfo(thingName)
+			if info and info.modtype == 3 and not mapFuncs[info.name] then
+				local control, sortData
+				control, sortData, mapFuncs[info.name] = CreateMapEntry(info.name, nil, CloseFunc)
+				mapList:AddItem(info.name, control, sortData)
+			end
 		end
 	end
 

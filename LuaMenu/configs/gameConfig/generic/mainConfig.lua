@@ -6,9 +6,10 @@ local backgroundConfig   = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. s
 
 local settingsConfig, settingsNames, settingsDefault, SettingsPresetFunc = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/zk/settingsMenu.lua")
 
-local headingLarge    = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingLarge.png"
-local headingSmall    = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingSmall.png"
-local backgroundImage = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/background.png"
+local springSettingsPath = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/springsettings.lua"
+local headingLarge       = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingLarge.png"
+local headingSmall       = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/headingSmall.png"
+local backgroundImage    = LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/skinning/background.png"
 
 local background = {
 	image           = backgroundImage,
@@ -27,6 +28,7 @@ local externalFuncAndData = {
 	name                   = "Generic",
 	editor                 = "rapid://sbc:test",
 	--editor                 = "SpringBoard Core $VERSION",
+	defaultChatChannels    = {"main", "newbies"},
 	settingsConfig         = settingsConfig,
 	settingsNames          = settingsNames,
 	settingsDefault        = settingsDefault,
@@ -34,6 +36,7 @@ local externalFuncAndData = {
 	singleplayerConfig     = singleplayerConfig,
 	helpSubmenuConfig      = {},
 	rankFunction           = rankFunction,
+	springSettingsPath     = springSettingsPath,
 	headingLarge           = headingLarge,
 	headingSmall           = headingSmall,
 	background             = background,
