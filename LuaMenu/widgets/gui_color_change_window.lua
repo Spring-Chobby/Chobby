@@ -48,7 +48,6 @@ end
 local function CreateColorChangeWindow(opts)
 	opts = opts or {}
 	local selectedColor = opts.initialColor
-	local OnAccepted = opts.OnAccepted or function() end
 
 	local Configuration = WG.Chobby.Configuration
 
@@ -63,10 +62,12 @@ local function CreateColorChangeWindow(opts)
 		classname = "main_window",
 	}
 
-	local ChangeAccepted = function()
-		OnAccepted(selectedColor)
+	local function ChangeAccepted()
+		if opts.OnAccepted then
+			opts.OnAccepted(selectedColor)
+		end
 	end
-	local CloseFunction = function()
+	local function CloseFunction()
 		colorChangeWindow:Dispose()
 		colorChangeWindow = nil
 	end
@@ -146,18 +147,10 @@ local function CreateColorChangeWindow(opts)
 	WG.Chobby.PriorityPopup(colorChangeWindow, CloseFunction, CloseFunction, screen0)
 end
 
-
-function DelayedInitialize()
-	local lobby = WG.LibLobby.lobby
-end
-
-
 function widget:Initialize()
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
-	WG.Delay(DelayedInitialize, 1)
+	WG.ColorChangeWindow = {
+		CreateColorChangeWindow = CreateColorChangeWindow
+	}
 end
-
-WG.ColorChangeWindow = {
-	CreateColorChangeWindow = CreateColorChangeWindow
-}

@@ -675,10 +675,11 @@ function Configuration:GetTick()
 	return self:GetSuccessColor() .. "O"
 end
 
-function Configuration:GetFont(sizeScale)
+function Configuration:GetFont(sizeScale, fontName)
 	return {
 		size = self.font[sizeScale].size,
 		shadow = self.font[sizeScale].shadow,
+		font = fontName,
 	}
 end
 
