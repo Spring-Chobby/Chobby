@@ -241,8 +241,8 @@ function Console:SendMessage()
 		message = self.ebInputText.text
 		-- Listener handles sending the message.
 		if self.listener then
- 			self.listener(message)
- 		end
+			self.listener(message)
+		end
 		-- If the message is different than the last sent message, save the message for retrieval by uparrow.
 		if self.sentMessages[2] ~= self.ebInputText.text then
 			table.insert(self.sentMessages, 2, self.ebInputText.text)

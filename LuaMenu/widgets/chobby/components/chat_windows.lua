@@ -822,12 +822,12 @@ function ChatWindows:GetPrivateChatConsole(userName, switchTo)
 	if privateChatConsole == nil then
 
 		local function MessageListener(message)
- 			if message:starts("/me ") then
- 				lobby:SayPrivateEx(userName, message:sub(5))
- 			else
- 				lobby:SayPrivate(userName, message)
- 			end
- 		end
+			if message:starts("/me ") then
+				lobby:SayPrivateEx(userName, message:sub(5))
+			else
+				lobby:SayPrivate(userName, message)
+			end
+		end
 
 		local function Resize(obj)
 			self:UpdateOldChatLinePosition(obj)

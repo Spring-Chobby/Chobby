@@ -1822,13 +1822,13 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 	UpdateBattleTitle()
 
 	local function MessageListener(message)
- 		if message:starts("/me ") then
- 			battleLobby:SayBattleEx(message:sub(5))
- 		else
- 			battleLobby:SayBattle(message)
- 		end
- 	end
- 	local battleRoomConsole = WG.Chobby.Console("Battleroom Chat", MessageListener, true, nil, true)
+		if message:starts("/me ") then
+			battleLobby:SayBattleEx(message:sub(5))
+		else
+			battleLobby:SayBattle(message)
+		end
+	end
+	local battleRoomConsole = WG.Chobby.Console("Battleroom Chat", MessageListener, true, nil, true)
 
 	local chatPanel = Control:New {
 		x = 0,
