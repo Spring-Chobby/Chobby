@@ -729,15 +729,18 @@ function ChatWindows:GetChannelConsole(chanName)
 
 	if channelConsole == nil then
 
-		local sendMessageActions = {
-			default = function(message) lobby:Say(chanName, message) end,
-			ircStyle = function(message) lobby:SayEx(chanName, message) end,
-		}
+		local function MessageListener(message)
+ 			if message:starts("/me ") then
+ 				lobby:SayEx(chanName, message:sub(5))
+ 			else
+ 				lobby:Say(chanName, message)
+ 			end
+ 		end
 
 		local function Resize(obj)
 			self:UpdateOldChatLinePosition(obj)
 		end
-		channelConsole = Console(chanName, sendMessageActions, nil, Resize, false)
+		channelConsole = Console(chanName, MessageListener, nil, Resize, false)
 		self.channelConsoles[chanName] = channelConsole
 
 		Configuration.channels[chanName] = true
@@ -818,17 +821,18 @@ function ChatWindows:GetPrivateChatConsole(userName, switchTo)
 
 	if privateChatConsole == nil then
 
-		local sendPrivateMessageActions = {
-			default = function(message) lobby:SayPrivate(userName, message) end,
-			ircStyle = function(message) lobby:SayPrivateEx(userName, message) end,
-		}
-
-		channelConsole = Console(chanName, sendPrivateMessageActions, nil, Resize, false)
+		local function MessageListener(message)
+ 			if message:starts("/me ") then
+ 				lobby:SayPrivateEx(userName, message:sub(5))
+ 			else
+ 				lobby:SayPrivate(userName, message)
+ 			end
+ 		end
 
 		local function Resize(obj)
 			self:UpdateOldChatLinePosition(obj)
 		end
-		privateChatConsole = Console(chanName, sendPrivateMessageActions, nil, Resize, false)
+		privateChatConsole = Console(chanName, MessageListener, nil, Resize, false)
 		self.privateChatConsoles[chanName] = privateChatConsole
 
 		local caption = "@" .. userName

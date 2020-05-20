@@ -1821,12 +1821,14 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 	end
 	UpdateBattleTitle()
 
-	local sendBattleMessageActions = {
-		default = function(message) lobby:SayBattle(message) end,
-		ircStyle = function(message) lobby:SayBattleEx(message) end,
-	}
-
-	local battleRoomConsole = WG.Chobby.Console("Battleroom Chat", sendBattleMessageActions, true, nil, true)
+	local function MessageListener(message)
+ 		if message:starts("/me ") then
+ 			battleLobby:SayBattleEx(message:sub(5))
+ 		else
+ 			battleLobby:SayBattle(message)
+ 		end
+ 	end
+ 	local battleRoomConsole = WG.Chobby.Console("Battleroom Chat", MessageListener, true, nil, true)
 
 	local chatPanel = Control:New {
 		x = 0,

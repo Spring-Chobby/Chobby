@@ -1,6 +1,7 @@
 Console = LCS.class{}
 
-function Console:init(channelName, sendMessageActions, noHistoryLoad, onResizeFunc, isBattleChat)
+function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeFunc, isBattleChat)
+	self.listener = sendMessageListener
 	self.sendMessageActions = sendMessageActions
 	self.showDate = true
 	self.dateFormat = "%H:%M"
@@ -97,7 +98,12 @@ function Console:init(channelName, sendMessageActions, noHistoryLoad, onResizeFu
 
 	self.ebInputText.KeyPress = function(something, key, ...)
 		if key == Spring.GetKeyCode("tab") then
+			local before = self.ebInputText.text
 			self:Autocomplete(self.ebInputText.text)
+			-- If text changes, reset the index.
+			if before ~= self.ebInputText.text then
+				self.sentMessageIndex = 1
+			end
 			return false
 		else
 			self.subword = nil
@@ -178,8 +184,8 @@ end
 -- Changes the current console text entry to the specified sent message.
 -- sentMessageIndex must be >= 0
 function Console:FillSentMessage(sentMessageIndex)
-  self.ebInputText:SetText(self.sentMessages[sentMessageIndex])
-  self.sentMessageIndex = sentMessageIndex
+	self.ebInputText:SetText(self.sentMessages[sentMessageIndex])
+	self.sentMessageIndex = sentMessageIndex
 end
 
 function Console:Autocomplete(textSoFar)
@@ -233,18 +239,16 @@ end
 function Console:SendMessage()
 	if self.ebInputText.text ~= "" then
 		message = self.ebInputText.text
-		if self.sendMessageActions then
-			if message:starts("/me ") then
-				self.sendMessageActions.ircStyle(message:sub(5))
-			else
-				self.sendMessageActions.default(message)
-			end
-		end
+		-- Listener handles sending the message.
+		if self.listener then
+ 			self.listener(message)
+ 		end
 		-- If the message is different than the last sent message, save the message for retrieval by uparrow.
 		if self.sentMessages[2] ~= self.ebInputText.text then
 			table.insert(self.sentMessages, 2, self.ebInputText.text)
 		end
 		self.ebInputText:SetText("")
+		self.sentMessageIndex = 1
 	end
 end
 
