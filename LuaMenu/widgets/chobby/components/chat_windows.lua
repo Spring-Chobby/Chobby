@@ -730,12 +730,12 @@ function ChatWindows:GetChannelConsole(chanName)
 	if channelConsole == nil then
 
 		local function MessageListener(message)
- 			if message:starts("/me ") then
- 				lobby:SayEx(chanName, message:sub(5))
- 			else
- 				lobby:Say(chanName, message)
- 			end
- 		end
+			if message:starts("/me ") then
+				lobby:SayEx(chanName, message:sub(5))
+			else
+				lobby:Say(chanName, message)
+			end
+		end
 
 		local function Resize(obj)
 			self:UpdateOldChatLinePosition(obj)
