@@ -689,35 +689,35 @@ local settingsConfig = {
 						name = "Low",
 						apply = {
 							TreeRadius = 1000,
-							GrassDetail = 1,
+							GrassDetail = 0,
 						}
 					},
 					{
 						name = "Medium",
 						apply = {
 							TreeRadius = 1200,
-							GrassDetail = 4,
+							GrassDetail = 0,
 						}
 					},
 					{
 						name = "High",
 						apply = {
 							TreeRadius = 1500,
-							GrassDetail = 9,
+							GrassDetail = 0,
 						}
 					},
 					{
 						name = "Ultra",
 						apply = {
 							TreeRadius = 2500,
-							GrassDetail = 16,
+							GrassDetail = 0,
 						}
 					},
 					{
 						name = "Ridiculous",
 						apply = {
 							TreeRadius = 2500,
-							GrassDetail = 100,
+							GrassDetail = 0,
 						}
 					},
 				},
