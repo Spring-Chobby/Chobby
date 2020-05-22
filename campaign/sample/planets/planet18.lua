@@ -48,12 +48,16 @@ local function GetPlanet(planetUtilities, planetID)
 				text = [[Dirtbags are curious bots with many unfulfilled aspirations. They want to scout and fight but are almost blind and their only attack is a headbutt. They try to terraform but all they manage is to drop a little pile of dirt upon their death. The good side is that they are very cheap and quite tough.]]
 			},
 			{
-				image = "unitpics/staticmissilesilo.png",
-				text = [[Missile Silos can usually produce a variety of missiles for varied situations. This one, however, only remembers how to make the Quake. This missile smooths terrain in a large area. Select a missile to target it.]]
-			},
-			{
 				image = "LuaUI/Images/commands/Bold/jump.png",
 				text = [[Dirtbags can jump small distances. This ability can be used to precisely terraform walls by issuing a line jump command followed by a queued detonate command.]]
+			},
+			{
+				image = planetUtilities.ICON_DIR .. "turretheavy.png",
+				text = [[The island with the Interception Network is guarded by heavy defenses. Destroy the Singularity Reactors to cut off the power supply and take them offline.]]
+			},
+			{
+				image = "unitpics/staticmissilesilo.png",
+				text = [[Missile Silos can usually produce a variety of missiles for varied situations. This one, however, only remembers how to make the Quake. This missile smooths terrain in a large area and, unlike most terrain deformation, can undermine the foundations of structures. Select a missile to target it.]]
 			},
 		},
 		gameConfig = {
@@ -3389,7 +3393,7 @@ local function GetPlanet(planetUtilities, planetID)
 					targetNumber = 0,
 					image = planetUtilities.ICON_DIR .. "energysingu.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.ATTACK,
-					description = "Destroy both Singularity Reactors",
+					description = "Destroy both Singularity Reactors to shut down the heavy turrets.",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Win by 15:00
