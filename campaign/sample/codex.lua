@@ -146,7 +146,7 @@ However, reclaiming contaminated worlds is extremely difficult, as those are muc
 	},
 	threat_chickens = { -- planet21, planet38, planet63
 		name = "Chickens",
-		image = "campaign/sample/graphics/unitpics/chicken.png",
+		image = "campaign/sample/graphics/unitpics/chickens.png",
 		category = "2. Threats",
 		text = [[Official name: Gallinuloides Horribilis
  
@@ -320,6 +320,7 @@ The rest, as they said, is History.]]
 	},
 	location_tempest = { -- planet59
 		name = "Tempest archeotech site",
+		image = "campaign/sample/graphics/unitpics/pw_artefact.png",
 		category = "4. Locations",
 		text = [[This was one of the last worlds to fall during the Dynasty's last stand against the Anarchai, and appears to have been their main military research and development site, especially for research too dangerous to be conducted on their homeworld.
 This Artefact was one of the weapons they were studying in desperation. It significantly differs from Dynasty technology, however. Did they build it from Ghost or Celestial tech? Or was it something older, whose secrets they were trying to unlock? Whatever it was, I suspect the zombie nanoplague release was more of a side-effect than its true purpose. I was lucky it responded to my shutdown order. From what little sense I can make of those readings, it would have been a very bad idea to let it activate.
@@ -343,6 +344,7 @@ By the time of the event, only a few worlds still held on against the Empire's a
 	},
 	location_rockbar = { -- planet57
 		name = "Rockbar testing grounds",
+		image = "campaign/sample/graphics/unitpics/shipaa.png",
 		category = "4. Locations",
 		text = [[Why would efficiency-obsessed Haven enact such large-scale test battles, let alone dedicate so much of a well-terraformed planet for it? There are few things learned that way that couldn't be discovered for much less, with numerous simulations and a few small-scale battles. What was really going on here?
  
@@ -355,6 +357,7 @@ They originally were a small technologist settlement, exploring cybernetic and f
 	},
 	location_pendust = { -- planet60
 		name = "Pendust capital planet",
+		image = "campaign/sample/graphics/icons/CapitalPlanet.png",
 		category = "4. Locations",
 		text = [[Haven cities often had a functional, deliberate beauty to them. Pendust, however, was different.
  
@@ -387,6 +390,7 @@ Incredibly enough, the machine themselves are still functional. I reprogrammed t
 	},
 	location_mannia = { -- planet65
 		name = "Mannia transit camps",
+		image = "campaign/sample/graphics/icons/TransitCamps.png",
 		category = "4. Locations",
 		text = [[This is where all the refugees of the Empire - of the entire galaxy, in fact - fled towards. The second-to-last world to be hit, it was hospitable enough to harbor the countless refugees in temporary shelters. Building those with so little time and resources would have been an outstanding feat of engineering and logistics in its own right.
  
@@ -397,6 +401,7 @@ The survivors appears to have used the ruins of the shelters as their base. Even
 	-- Smuggled data
 	location_arteri = { -- planet50
 		name = "Arteri data cache",
+		image = "campaign/sample/graphics/icons/Folder.png",
 		category = "4. Locations", -- planet13, planet46, planet18, planet17, planet21, planet56, planet28, planet7, planet33, planet63, planet68
 		text = [[Corrupt officials, criminal contacts, shady financial deals... This would have been a treasure trove for law enforcement groups. Some of the code vulnerabilities could be more useful to me though, assuming they haven't been patched or replaced.
  
@@ -451,7 +456,8 @@ Oh right, I was student at an Imperial Academy of War. Funny thing, to have forg
 	-- Anomalies
 	-- Artefacts
 	anomaly_new_falsell = { -- planet7
-		name = "New Falsell artefact",
+		name = "New Falsell anomaly",
+		image = "campaign/sample/graphics/unitpics/fakeunit.png",
 		category = "5. Anomalies",
 		text = [[What was going on here? Why leave such formidable defenses and leave no mobile forces to support it?
 Did they really think that this would be enough? Defenses alone can only slow an enemy down to buy time, not stop it.
@@ -520,6 +526,7 @@ See you then, little one.]]
 	},
 	anomaly_lovaza_jira = { -- planet28
 		name = "Lovaza Jira memetic weapon",
+		image = "campaign/sample/graphics/icons/MemeticHazard.png",
 		category = "5. Anomalies",
 		text = [[It made sense to have put two armies guarding that artefact: it had been almost constantly been fought over, for as long as it had been discovered a few centuries before. Even after the Empire took control of it, raids and attempted theft continued with surprising regularity, only to be repelled by the two guarding forces. Everyone seemed to know how valuable the artefact was, but the constant fighting made it difficult to study it.
  
@@ -529,6 +536,7 @@ What they could not find at the time, but what became clear once the fighting st
 	},
 	anomaly_leopard = { -- planet33
 		name = "Leopard artefact",
+		image = "campaign/sample/graphics/icons/EmpireHavenBattle.png",
 		category = "5. Anomalies",
 		text = [[No wonder they fought so hard over it, this artifact was a freaking Anarchai scattership!
  
@@ -541,7 +549,8 @@ Even in its mindless, damaged state, had its self-repair systems kicked in and m
 Ultimately, the scattership's internal systems have stopped working one after another, and it is now little more than a wreck full of exotic materials. Still, I am going to leave it alone, just in case..]]
 	},
 	anomaly_estann_all = { -- planet43
-		name = "Estann All artefact",
+		name = "Estann All nanotech",
+		image = "campaign/sample/graphics/icons/Nanite.png",
 		category = "5. Anomalies",
 		text = [[Unsurprisingly, they didn't develop such advanced nanotech themselves. Any record has long been lost to the grey goo, but it isn't too difficult to guess what happened.
  
@@ -552,6 +561,7 @@ They managed to tame the nasty little things, and programmed them for building t
 	--- Ancient trees
 	anomaly_walchice = { -- planet20
 		name = "The skytrees of Waliche",
+		image = "campaign/sample/graphics/icons/SpaceElevatorTree.png",
 		category = "5. Anomalies",
 		text = [[The research facilities weren't so much for studying the skytrees themselves than for unearthing ancient research facilities and their own findings on those trees.
  
@@ -563,6 +573,7 @@ They were thought to have naturally evolved. How and from what, however, remains
 	},
 	anomaly_old_falsell = { -- planet45
 		name = "The skytrees of Old Falsell",
+		image = "campaign/sample/graphics/icons/NonEquatorialSpaceElevator.png",
 		category = "5. Anomalies",
 		text = [[Neither Old Falsell nore Waliche have traces of large indigenous life apart from the skytrees, and it seems impossible that they evolved on either planet. In fact, complex life was thought to be impossible in the early galaxy, cosmic extinction events being too frequent to let it have time to evolve.
  
@@ -575,7 +586,8 @@ Who knows, maybe they are still there, in some remote corner of the universe...]
 	},
 	--- Ancient tech and research
 	anomaly_asjulohi = { -- planet24
-		name = "Asjulohi ancient fabricator",
+		name = "Asjulohi ancient fabricators",
+		image = "campaign/sample/graphics/unitpics/pw_metal.png",
 		category = "5. Anomalies",
 		text = [[Once common on wealthy worlds, knowledge of how to manufacture those ancient fabricators has been lost for millennia. Now, only a handful still operate across the galaxy - or at least, did when this one was last studied.
  
@@ -583,7 +595,7 @@ Previous empires have tried to replicate these marvels, even carefully dismantli
 	},
 	anomaly_deuliah = { -- planet56
 		name = "Deuliah's detriment",
-		image = "campaign/sample/graphics/unitpics/striderdetriment .png",
+		image = "campaign/sample/graphics/unitpics/striderdetriment.png",
 		category = "5. Anomalies",
 		text = [[When this R&D site was abandoned, its facilities and material were not shipped off-world or disposed of, apart from the most sensitive works. This inevitably attracted varied scavengers, hoping to make a profit off all the valuables left, from scrap and hardware to data and expert systems.
  
@@ -593,6 +605,7 @@ Supposedly a R&D site of the Empire like many others, it had actually been infil
 	},
 	anomaly_lalata = { -- planet51
 		name = "Lalata's report",
+		image = "campaign/sample/graphics/icons/EventReport.png",
 		category = "5. Anomalies",
 		text = [[According to their research, the event appears to have started at the extreme end of the Anarchai Arm. Some hypothesized an extragalactic origin based on this, but the spread pattern showed that it had started on a specific region of the galaxy, not propagated from a distant source.
  
