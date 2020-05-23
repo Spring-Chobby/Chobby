@@ -102,6 +102,7 @@ Three years after their emergence, Chatka, the Dynasty homeworld and last bastio
 Then, they turned their scatterships against each-other, destroying themselves to the last. As suddenly as they had appeared, the Anarchai were gone - leaving the galaxy stunned, ruined, utterly disorganized - but to their own surprise, still alive.
  
 Haven was fascinated by the Anarchai. Located in their presumed birthplace, they spent considerable effort trying to pierce the mystery of their origins, even as the war against the Empire was taking a turn for the worse.]]
+		-- ed note: Nothing to do with the Zero-K contributor Anarchid, the name resemblance is just a coincidence. Here, Anarchai is constructed from Archai (plural of Arche).
 	},
 	faction_survivors = { -- planet55, planet61, planet64
 		name = "Survivors",
@@ -156,8 +157,8 @@ The so-called chicken are a xenoform species of unknown origin, based on a hive-
  
 They are invariably hostile when active, with no rumors of successful cohabitation with humans ever confirmed. They can however stay dormant for long periods in deep, near-undetectable underground chambers to which they are suspected to retreat upon the death of their Queen. This has made their complete eradication from a planet extremely challenging, especially if infrastracture or terraforming efforts are to be preserved.
  
-Hypotheses about their origins run from ancient dormant aliens awakened by human activity to secret weapon gone rogue to results of experiment on accelerated evolution that went wrong - or horribly right."
-		-- ed note: The chickens are actually a secret project by a family of the early Dynasty. Observing the deficiencies of even regular modded humans, they sought to create a Humans 2.0 with traits such as extreme adaptation, collective intelligence over many zooids instead of singular body, ability to metabolize any CHON substrate, and other such fantastic abilities. They tried to keep it secret from rival families, recognizing correctly that they would not accept being displaced by Humans 2.0, but they ended up being discovered. The Dynasty panicked and eradicated the family, erasing every bit of data about it they could find so it couldn't be linked to them - fearing that humanity would turn against them in the same panic. It wouldn't be before centuries had passed that they would realize that they had missed some of the subjects.]]
+Hypotheses about their origins run from ancient dormant aliens awakened by human activity to secret weapon gone rogue to results of experiment on accelerated evolution that went wrong - or horribly right."]]
+		-- ed note: The chickens are actually a secret project by a family of the early Dynasty. Observing the deficiencies of even regular modded humans, they sought to create a Humans 2.0 with traits such as extreme adaptation, collective intelligence over many zooids instead of singular body, ability to metabolize any CHON substrate, and other such fantastic abilities. They tried to keep it secret from rival families, recognizing correctly that they would not accept being displaced by Humans 2.0, but they ended up being discovered. The Dynasty panicked and eradicated the family, erasing every bit of data about it they could find so it couldn't be linked to them - fearing that humanity would turn against them in the same panic. It wouldn't be before centuries had passed that they would realize that they had missed some of the subjects.
 	},
 	threat_chickens_lifecycle = { -- planet38
 		name = "Chickens life-cycle",
