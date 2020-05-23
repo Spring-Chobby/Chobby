@@ -49,7 +49,6 @@ function Configuration:init()
 	self.alreadySeenFactionPopup4 = false
 	self.firstBattleStarted = false
 	self.lobbyTimeoutTime = 60 -- Seconds
-	self.channels = {}
 
 	self.battleFilterPassworded2 = true
 	self.battleFilterNonFriend = false
@@ -219,6 +218,12 @@ function Configuration:init()
 	self.drawAtFullSpeed = false
 	self.lobbyIdleSleep = false
 	self.rememberQueuesOnStart = false
+	self.channels = {}
+	if self.gameConfig.defaultChatChannels ~= nil then
+		for _, channelName in ipairs(self.gameConfig.defaultChatChannels) do
+			self.channels[channelName] = true
+		end
+	end
 
 	self.language = "en"
 	self.languages = {
@@ -252,8 +257,11 @@ function Configuration:init()
 	}
 
 	self.countryShortnames = VFS.Include(LUA_DIRNAME .. "configs/countryShortname.lua")
-
-	self.game_settings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings.lua")
+	if self.gameConfig.springSettingsPath ~= nil then
+		self.game_settings = VFS.Include(self.gameConfig.springSettingsPath)
+	else
+		self.game_settings = VFS.Include(LUA_DIRNAME .. "configs/springsettings/springsettings.lua")
+	end
 	self.forcedCompatibilityProfile = VFS.Include(LUA_DIRNAME .. "configs/springsettings/forcedCompatibilityProfile.lua")
 
 	local default = self.gameConfig.SettingsPresetFunc and self.gameConfig.SettingsPresetFunc()
@@ -297,6 +305,7 @@ function Configuration:LoadGameConfig(path)
 			Spring.Log("Settings", LOG.ERROR, "Chobby configuration error. Mandatory field is missing: " .. mandatoryField .. ". Check your game settings")
 		end
 	end
+	localLobby.useTeamColor = not self.gameConfig.disableColorChoosing
 end
 
 function Configuration:SetSpringsettingsValue(key, value, compatOverride)
@@ -564,6 +573,9 @@ function Configuration:SetConfigValue(key, value)
 		lobby.useSpringRestart = value
 		localLobby.useSpringRestart = value
 	end
+	if key == "disableColorChoosing" then
+		localLobby.useTeamColor = not value
+	end
 	if key == "uiScale" then
 		self[key] = math.max(self.minUiScale, math.min(self.maxUiScale, value))
 		WG.uiScale = self[key]
@@ -663,10 +675,11 @@ function Configuration:GetTick()
 	return self:GetSuccessColor() .. "O"
 end
 
-function Configuration:GetFont(sizeScale)
+function Configuration:GetFont(sizeScale, fontName)
 	return {
 		size = self.font[sizeScale].size,
 		shadow = self.font[sizeScale].shadow,
+		font = fontName,
 	}
 end
 

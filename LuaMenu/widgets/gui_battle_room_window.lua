@@ -205,24 +205,25 @@ local function SetupInfoButtonsPanel(leftInfo, rightInfo, battle, battleID, myUs
 		font = config:GetFont(4),
 		OnClick = {
 			function()
-				if haveMapAndGame then
-					if battle.isRunning then
-						if Spring.GetGameName() == "" then
-							RejoinBattleFunc()
-						else
-							WG.Chobby.ConfirmationPopup(RejoinBattleFunc, "Are you sure you want to leave your current game to rejoin this one?", nil, 315, 200)
-						end
+				if not haveMapAndGame then
+					Spring.Echo("Do something if map or game is missing")
+					return
+				end
+
+				if battle.isRunning then
+					if Spring.GetGameName() == "" then
+						RejoinBattleFunc()
 					else
-						if battleLobby.name == "singleplayer" then
-							WG.Analytics.SendOnetimeEvent("lobby:singleplayer:skirmish:start")
-							WG.SteamCoopHandler.AttemptGameStart("skirmish", battle.gameName, battle.mapName)
-						else
-							WG.Analytics.SendOnetimeEvent("lobby:multiplayer:custom:start")
-							battleLobby:StartBattle("skirmish")
-						end
+						WG.Chobby.ConfirmationPopup(RejoinBattleFunc, "Are you sure you want to leave your current game to rejoin this one?", nil, 315, 200)
 					end
 				else
-					Spring.Echo("Do something if map or game is missing")
+					if battleLobby.name == "singleplayer" then
+						WG.Analytics.SendOnetimeEvent("lobby:singleplayer:skirmish:start")
+						WG.SteamCoopHandler.AttemptGameStart("skirmish", battle.gameName, battle.mapName)
+					else
+						WG.Analytics.SendOnetimeEvent("lobby:multiplayer:custom:start")
+						battleLobby:StartBattle("skirmish")
+					end
 				end
 			end
 		},

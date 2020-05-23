@@ -149,7 +149,7 @@ local function GetUserClanImage(userName, userControl)
 	return file, needDownload
 end
 
-local function GetUserComboBoxOptions(userName, isInBattle, userControl)
+local function GetUserComboBoxOptions(userName, isInBattle, userControl, showTeamColor)
 	local userInfo = userControl.lobby:GetUser(userName) or {}
 	local userBattleInfo = userControl.lobby:GetUserBattleStatus(userName) or {}
 	local myUserName = userControl.lobby:GetMyUserName()
@@ -215,6 +215,12 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl)
 	if userName == myUserName and userInfo.accountID and Configuration.gameConfig.link_userPage ~= nil then
 		-- Only add for myself since the same thing is added in the previous block
 		comboOptions[#comboOptions + 1] = "User Page"
+	end
+
+	if showTeamColor and
+	   (userName == myUserName or userBattleInfo.aiLib) and
+	   not userBattleInfo.isSpectator then
+		comboOptions[#comboOptions + 1] = "Change Color"
 	end
 
 	-- userControl.lobby:GetMyIsAdmin()
@@ -387,7 +393,7 @@ local function UpdateUserComboboxOptions(_, userName)
 		local userList = userListList[i]
 		local data = userList[userName]
 		if data then
-			data.mainControl.items = GetUserComboBoxOptions(userName, data.isInBattle, data)
+			data.mainControl.items = GetUserComboBoxOptions(userName, data.isInBattle, data, data.imTeamColor ~= nil)
 		end
 	end
 end
@@ -397,7 +403,7 @@ local function UpdateUserActivity(listener, userName)
 		local userList = userListList[i]
 		local userControls = userList[userName]
 		if userControls then
-			userControls.mainControl.items = GetUserComboBoxOptions(userName, userControls.isInBattle, userControls)
+			userControls.mainControl.items = GetUserComboBoxOptions(userName, userControls.isInBattle, userControls, userControls.imTeamColor ~= nil)
 			userControls.imLevel.file = GetUserRankImageName(userName, userControls)
 			userControls.imLevel:Invalidate()
 
@@ -431,6 +437,7 @@ local function OnPartyLeft(listener, partyID, partyUsers)
 end
 
 local function UpdateUserBattleStatus(listener, userName)
+	UpdateUserComboboxOptions(_, userName)
 	for i = 1, #userListList do
 		local userList = userListList[i]
 		local data = userList[userName]
@@ -438,6 +445,15 @@ local function UpdateUserBattleStatus(listener, userName)
 			if data.imSyncStatus then
 				data.imSyncStatus.file = GetUserSyncStatus(userName, data)
 				data.imSyncStatus:Invalidate()
+			end
+			if data.imTeamColor then
+				local battleStatus = data.lobby:GetUserBattleStatus(userName) or {}
+				local colorVisible = not battleStatus.isSpectator
+				data.imTeamColor.color = battleStatus.teamColor
+				data.imTeamColor:SetVisibility(colorVisible)
+				if colorVisible then
+					data.imTeamColor:Invalidate()
+				end
 			end
 		end
 	end
@@ -474,6 +490,7 @@ local function GetUserControls(userName, opts)
 	local showFounder        = opts.showFounder
 	local showModerator      = opts.showModerator
 	local comboBoxOnly       = opts.comboBoxOnly
+	local showTeamColor      = opts.showTeamColor
 
 	local userControls = reinitialize or {}
 
@@ -527,7 +544,7 @@ local function GetUserControls(userName, opts)
 			maxDropDownWidth = large and 220 or 150,
 			minDropDownHeight = 0,
 			maxDropDownHeight = 300,
-			items = GetUserComboBoxOptions(userName, isInBattle, userControls),
+			items = GetUserComboBoxOptions(userName, isInBattle, userControls, showTeamColor),
 			OnOpen = {
 				function (obj)
 					obj.tooltip = nil
@@ -587,6 +604,25 @@ local function GetUserControls(userName, opts)
 						if userInfo.accountID then
 							WG.BrowserHandler.OpenUrl(Configuration.gameConfig.link_userPage(userInfo.accountID))
 						end
+					elseif selectedName == "Change Color" then
+						local battleStatus = userControls.lobby:GetUserBattleStatus(userName) or {}
+						if battleStatus.isSpectator then
+							return
+						end
+						WG.ColorChangeWindow.CreateColorChangeWindow({
+							initialColor = battleStatus.teamColor,
+							OnAccepted = function(color)
+								if userName == userControls.lobby:GetMyUserName() then
+									userControls.lobby:SetBattleStatus({
+										teamColor = color
+									})
+								else
+									userControls.lobby:UpdateAi(userName, {
+										teamColor = color
+									})
+								end
+							end
+						})
 					elseif selectedName == "Report" and Configuration.gameConfig.link_reportPlayer ~= nil then
 						local userInfo = userControls.lobby:GetUser(userName) or {}
 						if userInfo.accountID then
@@ -696,6 +732,27 @@ local function GetUserControls(userName, opts)
 	userControls.nameActualLength = userControls.tbName.font:GetTextWidth(userControls.tbName.text)
 	offset = offset + userControls.nameActualLength
 
+	if showTeamColor then
+		local battleStatus = userControls.lobby:GetUserBattleStatus(userName) or {}
+		offset = offset + 5
+		userControls.imTeamColor = Image:New {
+			name = "imTeamColor",
+			x = offset,
+			y = offsetY,
+			width = 20,
+			height = 20,
+			parent = userControls.mainControl,
+			keepAspect = false,
+			file = "LuaMenu/widgets/chili/skins/Evolved/glassBk.png",
+			color = battleStatus.teamColor
+		}
+		userControls.nameActualLength = userControls.nameActualLength + 25
+		offset = offset + 20
+		if battleStatus.isSpectator then
+			userControls.imTeamColor:Hide()
+		end
+	end
+
 	if not hideStatus then
 		userControls.statusImages = {}
 		UpdateUserControlStatus(userName, userControls)
@@ -731,6 +788,7 @@ local function GetUserControls(userName, opts)
 		end
 	end
 
+
 	if autoResize then
 		userControls.mainControl.OnResize = userControls.mainControl.OnResize or {}
 		userControls.mainControl.OnResize[#userControls.mainControl.OnResize + 1] = function (obj, sizeX, sizeY)
@@ -739,6 +797,9 @@ local function GetUserControls(userName, opts)
 			userControls.tbName:SetText(truncatedName)
 
 			offset = userNameStart + userControls.tbName.font:GetTextWidth(userControls.tbName.text) + 3
+			if userControls.imTeamColor then
+				offset = offset + 25
+			end
 			if userControls.statusImages then
 				for i = 1, #userControls.statusImages do
 					userControls.statusImages[i]:SetPos(offset)
@@ -810,6 +871,7 @@ function userHandler.GetBattleUser(userName, isSingleplayer)
 		isInBattle     = true,
 		showModerator  = true,
 		showFounder    = true,
+		showTeamColor  = not WG.Chobby.Configuration.gameConfig.disableColorChoosing,
 	})
 end
 
@@ -827,6 +889,7 @@ function userHandler.GetSingleplayerUser(userName)
 		autoResize     = true,
 		isInBattle     = true,
 		isSingleplayer = true,
+		showTeamColor  = not WG.Chobby.Configuration.gameConfig.disableColorChoosing,
 	})
 end
 

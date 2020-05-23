@@ -4,6 +4,7 @@ function InterfaceSkirmish:init()
 	self:super("init")
 	self.name = "singleplayer"
 	self.myUserName = "Player"
+	self.useTeamColor = true
 end
 
 function InterfaceSkirmish:WriteTable(key, value)
@@ -53,6 +54,20 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 	local friendAllyTeam
 	local aiReplaceCount = 0
 
+	local defaultColor = '0.99609375 0.546875 0'
+	local function getTeamColor(userName)
+		if not self.useTeamColor then
+			return defaultColor
+		end
+
+		local teamColor = self.userBattleStatus[userName].teamColor
+		if teamColor == nil then
+			return defaultColor
+		end
+
+		return tostring(teamColor[1]) .. " " .. tostring(teamColor[2]) .. " " .. tostring(teamColor[3])
+	end
+
 	-- Add the player, this is to make the player team 0.
 	for userName, data in pairs(self.userBattleStatus) do
 		if data.allyNumber and not data.aiLib then
@@ -68,7 +83,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 				teams[teamCount] = {
 					TeamLeader = 0,
 					AllyTeam = data.allyNumber,
-					rgbcolor = '0.99609375 0.546875 0',
+					RgbColor = getTeamColor(userName),
 				}
 				maxAllyTeamID = math.max(maxAllyTeamID, data.allyNumber)
 				teamCount = teamCount + 1
@@ -91,7 +106,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 					teams[teamCount] = {
 						TeamLeader = playerCount,
 						AllyTeam = data.allyNumber,
-						rgbcolor = '0.99609375 0.546875 0',
+						RgbColor = getTeamColor(userName),
 					}
 					teamCount = teamCount + 1
 					if friendsReplaceAI then
@@ -141,7 +156,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 				teams[teamCount] = {
 					TeamLeader = 0,
 					AllyTeam = data.allyNumber,
-					rgbcolor = '0.99609375 0.546875 0',
+					RgbColor = getTeamColor(userName),
 				}
 				maxAllyTeamID = math.max(maxAllyTeamID, data.allyNumber)
 
@@ -165,7 +180,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 		teams[teamCount] = {
 			TeamLeader = 0,
 			AllyTeam = maxAllyTeamID + 1,
-			rgbcolor = '0.99609375 0.546875 0',
+			RgbColor = defaultColor,
 		}
 		maxAllyTeamID = maxAllyTeamID + 1
 		teamCount = teamCount + 1
@@ -434,6 +449,11 @@ end
 function InterfaceSkirmish:RemoveAi(aiName)
 	self:_OnRemoveAi(self:GetMyBattleID(), aiName)
 	return self
+end
+
+function InterfaceSkirmish:UpdateAi(aiName, status)
+	self:super("SetBattleStatus", status)
+	self:_OnUpdateUserBattleStatus(aiName, status)
 end
 
 function InterfaceSkirmish:SetModOptions(data)
