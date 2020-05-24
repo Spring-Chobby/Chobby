@@ -154,8 +154,14 @@ function Configuration:init()
 	self.campaignConfig = VFS.Include("campaign/sample/mainConfig.lua")
 	self.campaignSaveFile = nil -- Set by user
 	self.nextCampaignSaveNumber = 1
-	self.campaignConfigOptions = {"sample", "dev"}
-	self.campaignConfigHumanNames = {"Sample", "Dev"}
+	self.campaignConfigOptions = {
+		"sample",
+		"--dev"
+	}
+	self.campaignConfigHumanNames = {
+		"Sample",
+		--"Dev"
+	}
 	local gameConfigOptions = {}
 	local subdirs = VFS.SubDirs(gameConfPath)
 	for index, subdir in ipairs(subdirs) do
@@ -210,6 +216,7 @@ function Configuration:init()
 	self.enableTextToSpeech = true
 	self.showOldAiVersions = false
 	self.drawAtFullSpeed = false
+	self.lobbyIdleSleep = false
 	self.rememberQueuesOnStart = false
 	self.channels = {}
 	if self.gameConfig.defaultChatChannels ~= nil then
@@ -217,6 +224,12 @@ function Configuration:init()
 			self.channels[channelName] = true
 		end
 	end
+
+	self.language = "en"
+	self.languages = {
+		["en"] = {locale = "en", name="English"},
+		["de"] = {locale = "de", name="Deutsch"},
+	}
 
 	self.lobby_fullscreen = 1
 	self.game_fullscreen = 1
@@ -413,6 +426,10 @@ end
 ---------------------------------------------------------------------------------
 
 function Configuration:SetConfigData(data)
+	if data.campaignConfigName == "dev" then
+		data.campaignConfigName = "sample"
+	end
+
 	if data ~= nil then
 		for k, v in pairs(data) do
 			if not self.noNaiveConfigOverride[k] then
@@ -479,6 +496,7 @@ function Configuration:GetConfigData()
 		battleFilterRunning = self.battleFilterRunning,
 		channels = self.channels,
 		gameConfigName = self.gameConfigName,
+		language = self.language,
 		game_fullscreen = self.game_fullscreen,
 		panel_layout = self.panel_layout,
 		lobby_fullscreen = self.lobby_fullscreen,
@@ -502,6 +520,7 @@ function Configuration:GetConfigData()
 		confirmation_mainMenuFromBattle = self.confirmation_mainMenuFromBattle,
 		confirmation_battleFromBattle = self.confirmation_battleFromBattle,
 		drawAtFullSpeed = self.drawAtFullSpeed,
+		lobbyIdleSleep = self.lobbyIdleSleep,
 		rememberQueuesOnStart = self.rememberQueuesOnStart,
 		loadLocalWidgets = self.loadLocalWidgets,
 		activeDebugConsole = self.activeDebugConsole,
@@ -656,10 +675,11 @@ function Configuration:GetTick()
 	return self:GetSuccessColor() .. "O"
 end
 
-function Configuration:GetFont(sizeScale)
+function Configuration:GetFont(sizeScale, fontName)
 	return {
 		size = self.font[sizeScale].size,
 		shadow = self.font[sizeScale].shadow,
+		font = fontName,
 	}
 end
 
@@ -854,19 +874,6 @@ function Configuration:GetIsRunning64Bit()
 	end
 	infologFile:close()
 	return false
-end
-
-function string:split(delimiter)
-	local result = {}
-	local from  = 1
-	local delim_from, delim_to = string.find(self, delimiter, from)
-	while delim_from do
-		table.insert(result, string.sub(self, from , delim_from - 1))
-		from = delim_to + 1
-		delim_from, delim_to = string.find( self, delimiter, from)
-	end
-	table.insert(result, string.sub(self, from))
-	return result
 end
 
 function Configuration:GetIsDevEngine()

@@ -44,6 +44,7 @@ function Interface:Register(userName, password, email, useSteamLogin)
 		PasswordHash = password,
 		SteamAuthToken = steamToken,
 		UserID = (config and config.UserID) or 0,
+		InstallID = (config and config.InstallID) or 0,
 	}
 	self:_SendCommand("Register " .. json.encode(sendData))
 	return self
@@ -65,6 +66,7 @@ function Interface:Login(user, password, cpu, localIP, lobbyVersion, useSteamLog
 	if steamToken and (not password) and not REVERSE_COMPAT then
 		sendData = {
 			UserID = (config and config.UserID) or 0,
+			InstallID = (config and config.InstallID) or 0,
 			ClientType = 1,
 			LobbyVersion = lobbyVersion,
 			SteamAuthToken = steamToken,
@@ -75,6 +77,7 @@ function Interface:Login(user, password, cpu, localIP, lobbyVersion, useSteamLog
 			Name = user,
 			PasswordHash = password,
 			UserID = (config and config.UserID) or 0,
+			InstallID = (config and config.InstallID) or 0,
 			ClientType = 1,
 			LobbyVersion = lobbyVersion,
 			SteamAuthToken = steamToken,
@@ -633,6 +636,41 @@ function Interface:PartyInviteResponse(partyID, accepted)
 	self:_SendCommand("PartyInviteResponse " .. json.encode(sendData))
 	return self
 end
+
+------------------------
+-- Battle Propose commands
+------------------------
+
+function Interface:BattleProposalRespond(userName, accepted)
+	-- Say {"Place":0,"Target":"zk","User":"GoogleFrog","IsEmote":false,"Text":"bla","Ring":false,"Time":"2016-06-25T07:17:20.7548313Z"
+	local sendData = {
+		Place = 2, -- Does 2 mean say to a player???
+		Target = userName,
+		User = self:GetMyUserName(),
+		IsEmote = false,
+		Text = "!acceptBattleProposal",
+		Ring = false,
+		--Time = "2016-06-25T07:17:20.7548313Z",
+	}
+	self:_SendCommand("Say " .. json.encode(sendData))
+	return self
+end
+
+function Interface:BattleProposalBattleInvite(userName, battleID, password)
+	-- Say {"Place":0,"Target":"zk","User":"GoogleFrog","IsEmote":false,"Text":"bla","Ring":false,"Time":"2016-06-25T07:17:20.7548313Z"
+	local sendData = {
+		Place = 2, -- Does 2 mean say to a player???
+		Target = userName,
+		User = self:GetMyUserName(),
+		IsEmote = false,
+		Text = "!inviteProposedBattle " .. battleID .. " " .. password,
+		Ring = false,
+		--Time = "2016-06-25T07:17:20.7548313Z",
+	}
+	self:_SendCommand("Say " .. json.encode(sendData))
+	return self
+end
+
 
 ------------------------
 -- Planetwars commands
@@ -1279,6 +1317,28 @@ function Interface:_BattlePollOutcome(data)
 end
 Interface.jsonCommands["BattlePollOutcome"] = Interface._BattlePollOutcome
 
+function Interface:_HandleBattleProposalMessages(userName, message, doAction)
+	if message == "!acceptBattleProposal" then
+		if doAction then
+			self:_CallListeners("OnBattleProposalResponse", userName, true)
+		end
+		return true
+	end
+	
+	if string.sub(message, 1, 21) == "!inviteProposedBattle" then
+		local data = message:split(" ")
+		local battleID = data and data[2] and tonumber(data[2])
+		local password = data and data[3] and tonumber(data[3])
+		if battleID and password then
+			if doAction then
+				self:_CallListeners("OnBattleProposalBattleInvite", userName, battleID, password)
+			end
+			return true
+		end
+	end
+	return false
+end
+
 function Interface:_Say(data)
 	-- Say {"Place":0,"Target":"zk","User":"GoogleFrog","IsEmote":false,"Text":"bla","Ring":false,"Time":"2016-06-25T07:17:20.7548313Z}"
 	local duplicateMessageTime = false
@@ -1346,12 +1406,19 @@ function Interface:_Say(data)
 		end
 	elseif data.Place == 2 then -- Send to user?
 		if data.Target == self:GetMyUserName() then
+			if self:_HandleBattleProposalMessages(data.User, data.Text, true) then
+				return -- Hide these messages
+			end
 			if emote then
 				self:_OnSaidPrivateEx(data.User, data.Text, data.Time)
 			else
 				self:_OnSaidPrivate(data.User, data.Text, data.Time)
 			end
 		else
+			-- _HandleBattleProposalMessages only hides messages when the third argument is false
+			if self:_HandleBattleProposalMessages(data.User, data.Text, false) then
+				return
+			end
 			if emote then
 				self:_OnSayPrivateEx(data.Target, data.Text, data.Time)
 			else
@@ -1493,6 +1560,11 @@ function Interface:_OnPartyStatus(data)
 	end
 end
 Interface.jsonCommands["OnPartyStatus"] = Interface._OnPartyStatus
+
+------------------------
+-- Battle Propose commands
+------------------------
+-- These are in _Say at this point
 
 ------------------------
 -- Planetwars commands

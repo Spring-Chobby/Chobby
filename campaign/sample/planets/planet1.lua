@@ -15,8 +15,8 @@ local function GetPlanet(planetUtilities, planetID)
 			y = (planetUtilities.planetPositions and planetUtilities.planetPositions[planetID][2]) or 0.87,
 			image = image,
 			size = planetUtilities.PLANET_SIZE_MAP,
-			hintText = "Keep taking planets until you reclaim the galaxy.",
-			hintSize = {402, 100},
+			hintText = "Click this planet to continue. The galaxy awaits.",
+			hintSize = {468, 100},
 		},
 		infoDisplay = {
 			image = image,
@@ -327,6 +327,8 @@ local function GetPlanet(planetUtilities, planetID)
 			abilities = {
 			},
 			codexEntries = {
+				"location_im_jaleth",
+				"entry_commander"
 			}
 		},
 	}

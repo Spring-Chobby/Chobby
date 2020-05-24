@@ -45,7 +45,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_beamlaser",
 		humanName = "Beam Laser",
-		description = "Beam Laser",
+		description = "Beam Laser: An effective short-range cutting tool",
 		image = moduleImagePath .. "commweapon_beamlaser.png",
 		limit = 1,
 		cost = 50,
@@ -66,7 +66,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_flamethrower",
 		humanName = "Flamethrower",
-		description = "Flamethrower",
+		description = "Flamethrower: Good for deep-frying swarmers and large targets alike",
 		image = moduleImagePath .. "commweapon_flamethrower.png",
 		limit = 1,
 		cost = 50,
@@ -87,7 +87,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_heatray",
 		humanName = "Heatray",
-		description = "Heatray",
+		description = "Heatray: Rapidly melts anything at short range; steadily loses all of its damage over distance",
 		image = moduleImagePath .. "commweapon_heatray.png",
 		limit = 1,
 		cost = 50,
@@ -108,7 +108,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_heavymachinegun",
 		humanName = "Machine Gun",
-		description = "Machine Gun",
+		description = "Machine Gun: Close-in automatic weapon with AoE",
 		image = moduleImagePath .. "commweapon_heavymachinegun.png",
 		limit = 1,
 		cost = 50,
@@ -152,7 +152,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_lightninggun",
 		humanName = "Lightning Rifle",
-		description = "Lightning Rifle",
+		description = "Lightning Rifle: Paralyzes and damages annoying bugs",
 		image = moduleImagePath .. "commweapon_lightninggun.png",
 		limit = 1,
 		cost = 50,
@@ -174,7 +174,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_lparticlebeam",
 		humanName = "Light Particle Beam",
-		description = "Light Particle Beam",
+		description = "Light Particle Beam: Fast, light pulsed energy weapon",
 		image = moduleImagePath .. "commweapon_lparticlebeam.png",
 		limit = 1,
 		cost = 50,
@@ -196,7 +196,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_missilelauncher",
 		humanName = "Missile Launcher",
-		description = "Missile Launcher",
+		description = "Missile Launcher: Lightweight seeker missile with good range",
 		image = moduleImagePath .. "commweapon_missilelauncher.png",
 		limit = 1,
 		cost = 50,
@@ -217,7 +217,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_riotcannon",
 		humanName = "Riot Cannon",
-		description = "Riot Cannon",
+		description = "Riot Cannon: The weapon of choice for crowd control",
 		image = moduleImagePath .. "commweapon_riotcannon.png",
 		limit = 1,
 		cost = 50,
@@ -239,7 +239,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_rocketlauncher",
 		humanName = "Rocket Launcher",
-		description = "Rocket Launcher",
+		description = "Rocket Launcher: Medium-range, low-velocity hitter",
 		image = moduleImagePath .. "commweapon_rocketlauncher.png",
 		limit = 1,
 		cost = 50,
@@ -261,7 +261,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_shotgun",
 		humanName = "Shotgun",
-		description = "Shotgun",
+		description = "Shotgun: Can hammer a single large target or shred several small ones",
 		image = moduleImagePath .. "commweapon_shotgun.png",
 		limit = 1,
 		cost = 50,
@@ -283,7 +283,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_hparticlebeam",
 		humanName = "Heavy Particle Beam",
-		description = "Heavy Particle Beam - Replaces other weapons. Requires level 4 weapon slot.",
+		description = "Heavy Particle Beam - Replaces other weapons and requires a level 4 slot. Short range, high-power beam weapon with moderate reload time",
 		image = moduleImagePath .. "conversion_hparticlebeam.png",
 		limit = 1,
 		cost = 150,
@@ -303,7 +303,7 @@ local moduleDefs = {
 	{
 		name = "commweapon_shockrifle",
 		humanName = "Shock Rifle",
-		description = "Shock Rifle - Replaces other weapons. Requires level 4 weapon slot.",
+		description = "Shock Rifle - Replaces other weapons and requires a level 4 slot. Long range sniper rifle",
 		image = moduleImagePath .. "conversion_shockrifle.png",
 		limit = 1,
 		cost = 150,
@@ -569,7 +569,7 @@ local moduleDefs = {
 	{
 		name = "module_radarnet",
 		humanName = "Field Radar",
-		description = "Field Radar - Attaches a basic radar system to the Commander. Requires at least a level 2 module slot.",
+		description = "Field Radar - Attaches a basic radar system. Requires at least a level 2 module slot.",
 		image = moduleImagePath .. "module_fieldradar.png",
 		limit = 1,
 		cost = 75,
@@ -582,7 +582,7 @@ local moduleDefs = {
 	{
 		name = "module_personal_cloak",
 		humanName = "Personal Cloak",
-		description = "Personal Cloak - A personal cloaking device for the Commander. Cannot be used with shields. Requires at least a level 2 module slot.",
+		description = "Personal Cloak - A personal cloaking device. Reduces speed by 8 and cannot be used with shields. Requires at least a level 2 module slot.",
 		image = moduleImagePath .. "module_personal_cloak.png",
 		limit = 1,
 		cost = 400,
@@ -701,7 +701,7 @@ local moduleDefs = {
 	{
 		name = "module_heavy_armor",
 		humanName = "High Density Plating",
-		description = "High Density Plating - Provides 1600 health but reduces speed by 10%. Requires Ablative Armour Plates and  at least a level 3 module slot._COUNT_",
+		description = "High Density Plating - Provides 1600 health but reduces speed by 3. Requires Ablative Armour Plates and  at least a level 3 module slot._COUNT_",
 		image = moduleImagePath .. "module_heavy_armor.png",
 		limit = 8,
 		cost = 400,
@@ -716,7 +716,7 @@ local moduleDefs = {
 	{
 		name = "module_dmg_booster",
 		humanName = "Damage Booster",
-		description = "Damage Booster - Increases damage by 10% but reduces speed by 2.5%._COUNT_",
+		description = "Damage Booster - Increases damage by 10% but reduces speed by 1._COUNT_",
 		image = moduleImagePath .. "module_dmg_booster.png",
 		limit = 8,
 		cost = 150,
@@ -731,7 +731,7 @@ local moduleDefs = {
 	{
 		name = "module_high_power_servos",
 		humanName = "High Power Servos",
-		description = "High Power Servos - Increases speed by 8%._COUNT_",
+		description = "High Power Servos - Increases speed by 3._COUNT_",
 		image = moduleImagePath .. "module_high_power_servos.png",
 		limit = 8,
 		cost = 150,
@@ -744,7 +744,7 @@ local moduleDefs = {
 	{
 		name = "module_adv_targeting",
 		humanName = "Adv. Targeting System",
-		description = "Advanced Targeting System - Increases range by 7.5% but reduces speed by 2.5%._COUNT_",
+		description = "Advanced Targeting System - Increases range by 7.5% but reduces speed by 1._COUNT_",
 		image = moduleImagePath .. "module_adv_targeting.png",
 		limit = 8,
 		cost = 150,

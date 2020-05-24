@@ -278,7 +278,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			aiConfig = {
 				{
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					--aiLib = "Null AI",
 					--bitDependant = false,
@@ -2576,7 +2576,11 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_autorepair_LIMIT_D_2",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_rebels",
+				"faction_dynasty"
+			},
 		},
 	}
 	

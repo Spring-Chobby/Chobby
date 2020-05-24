@@ -30,16 +30,20 @@ local function GetPlanet(planetUtilities, planetID)
 			.. "\n "
 			.. "\nUltimately, as the strategic picture became grimmer, even such a place suffered military occupation."
 			,
-			extendedText = "Some of the local forces recognize one of the IFF codes I found last world. They can take care of surface targets, but I will need to support them with Claymore depth charge and Flail AA hovercraft against underwater and aerial threats."
+			extendedText = "Some of the local forces recognize one of the IFF codes I found previously, but they are only equipped to engage opponents on the surface. I will need to assist them against underwater and aerial threats.",
 		},
 		tips = {
 			{
 				image = "unitpics/hoverdepthcharge.png",
-				text = [[Claymores fire depth charges at short range for large area-of-effect damage. To make this less of a suicide mission the depth charge floats for a few seconds before tracking its target. Depth charges can also be dropped as short-lived mines, even on land. Press D to drop a mine manually.]]
+				text = [[Claymores fire depth charges into the water at medium range for area-of-effect damage against both surface and underwater targets. Depth charges can also be dropped on land, but will not travel as far.]]
 			},
 			{
 				image = "unitpics/hoveraa.png",
-				text = [[Flails fire guided missiles at enemy air units. It's most effective against planes but it will also get the job done against gunships.]]
+				text = [[Flails fire guided missiles at enemy air units. They are most effective against planes but also adequate against gunships.]]
+			},
+            {
+				image = "unitpics/hoverheavyraid.png",
+				text = [[The Bolas fires disruptor beams which slow enemies at close range. It is well suited for protecting Claymores, Flails, and other specialist units.]]
 			},
 			{
 				image = "unitpics/energyfusion.png",
@@ -64,6 +68,7 @@ local function GetPlanet(planetUtilities, planetID)
 					"hoverriot",
 					"hoverskirm",
 					"hoverdepthcharge",
+                    "hoverheavyraid",
 					"hoveraa",
 					"energywind",
 				},
@@ -172,13 +177,13 @@ local function GetPlanet(planetUtilities, planetID)
 						facing = 0,
 					},
  					{
-						name = "hoverskirm",
+						name = "hoverheavyraid",
 						x = 4526,
 						z = 1259,
 						facing = 0,
 					},
  					{
-						name = "hoverskirm",
+						name = "hoverheavyraid",
 						x = 4443,
 						z = 1142,
 						facing = 0,
@@ -193,7 +198,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			aiConfig = {
 				{
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					--aiLib = "Null AI",
 					--bitDependant = false,
@@ -1248,17 +1253,17 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 			},
 			bonusObjectiveConfig = {
-				[1] = { -- Build 12 Flails
+				[1] = { -- Build 12 Bolas
 					satisfyOnce = true,
 					countRemovedUnits = true, -- count units that previously died.
 					comparisionType = planetUtilities.COMPARE.AT_LEAST,
 					targetNumber = 14,
 					unitTypes = {
-						"hoveraa",
+						"hoverheavyraid",
 					},
-					image = planetUtilities.ICON_DIR .. "hoveraa.png",
+					image = planetUtilities.ICON_DIR .. "hoverheavyraid.png",
 					imageOverlay = planetUtilities.ICON_OVERLAY.REPAIR,
-					description = "Build 12 Flails",
+					description = "Build 12 Bolas",
 					experience = planetUtilities.BONUS_EXP,
 				},
 				[2] = { -- Win by 20:00
@@ -1274,6 +1279,7 @@ local function GetPlanet(planetUtilities, planetID)
 			units = {
 				"hoverdepthcharge",
 				"hoveraa",
+                "hoverheavyraid",
 			},
 			modules = {
 				"commweapon_riotcannon",

@@ -69,7 +69,7 @@ local function GetPlanet(planetUtilities, planetID)
 				{
 					startX = 4000,
 					startZ = 75,
-					aiLib = "NullAI",
+					aiLib = "Null AI",
 					humanName = "Enemies",
 					allyTeam = 1,
 					unlocks = {
@@ -134,7 +134,9 @@ local function GetPlanet(planetUtilities, planetID)
 			units = {
 				"tankraid"
 			},
-			codexEntries = {}
+			codexEntries = {
+				"location_musashi",
+			}
 		},
 	}
 	

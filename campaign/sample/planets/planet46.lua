@@ -452,7 +452,11 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_adv_targeting_LIMIT_C_2",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_dynasty",
+				"location_hastus",
+			},
 		},
 	}
 	

@@ -1456,7 +1456,12 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_resurrect"
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_rebels",
+				"faction_dynasty",
+				"anomaly_deuliah",
+			},
 		},
 	}
 	

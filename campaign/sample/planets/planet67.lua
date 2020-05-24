@@ -1132,6 +1132,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"hoverskirm",
 						"hoverassault",
 						"hoverdepthcharge",
+                        "hoverheavyraid",
 						"hoverarty",
 						"hoveraa",
 						"factoryamph",
@@ -2845,7 +2846,10 @@ local function GetPlanet(planetUtilities, planetID)
 			modules = {
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"entry_starsong"
+			},
 		},
 	}
 	

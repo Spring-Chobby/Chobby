@@ -1632,6 +1632,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"hoverskirm",
 						"hoverassault",
 						"hoverdepthcharge",
+                        "hoverheavyraid",
 						"hoverarty",
 						"hoveraa",
 						"factorytank",
@@ -3927,7 +3928,10 @@ local function GetPlanet(planetUtilities, planetID)
 			modules = {
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"entry_eternity_gate"
+			},
 		},
 	}
 	

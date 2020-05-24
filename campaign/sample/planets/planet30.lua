@@ -29,7 +29,7 @@ local function GetPlanet(planetUtilities, planetID)
 			.. "\n "
 			.. "\nOne of the local garrisons somehow identified me as an enemy of the Empire and gave me IFF codes. I wonder on how many Haven worlds those will work."
 			,
-			extendedText = "Crossing a river under enemy fire is a daunting prospect, but it becomes easier if I control the river. There are several old Sunlance defence systems, but I can bombard the shoreline with Envoy cruisers to force passage through the shallows."
+			extendedText = "Crossing a river under enemy fire is a daunting prospect, but it becomes easier if I control the river. There are several old Sunlance defense systems, but I can bombard the shoreline with Envoy cruisers to force passage through the shallows."
 		},
 		tips = {
 			{
@@ -261,7 +261,7 @@ local function GetPlanet(planetUtilities, planetID)
 					humanName = "Lief Easter",
 					--aiLib = "Null AI",
 					--bitDependant = false,
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					commanderParameters = {
 						facplop = false,

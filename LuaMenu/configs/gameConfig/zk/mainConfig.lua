@@ -105,6 +105,7 @@ local externalFuncAndData = {
 	link_maps               = link_maps,
 	link_particularMapPage  = link_particularMapPage,
 	ignoreServerVersion     = false,
+	runTutorial             = true,
 	openTrack               = 'sounds/lobbyMusic/The Secret of Ayers Rock.ogg',
 	randomTrackList         = {
 		"sounds/lobbyMusic/A Magnificent Journey (Alternative Version).ogg",

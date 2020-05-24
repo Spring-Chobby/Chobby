@@ -34,7 +34,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/shipheavyarty.png",
-				text = [[The Shogun battleship is a straightforward unit; nine artillery cannons' worth of firepower lay waste to your enemies. As artillery units go the Shogun is fairly tough, but keep it away from submarines - it has no defence against underwater foes.]]
+				text = [[The Shogun battleship is a straightforward unit; nine artillery cannons' worth of firepower lay waste to your enemies. As artillery units go the Shogun is fairly tough, but keep it away from submarines - it has no defense against underwater foes.]]
 			},
 			{
 				image = "unitpics/conversion_partillery.png",
@@ -360,7 +360,7 @@ local function GetPlanet(planetUtilities, planetID)
 			aiConfig = {
 				{
 					humanName = "Biobas",
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					--aiLib = "Null AI",
 					--bitDependant = false,
@@ -1359,7 +1359,7 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				{
 					humanName = "Star Shine",
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					--aiLib = "Null AI",
 					--bitDependant = false,
@@ -1404,6 +1404,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"hoverskirm",
 						"hoverassault",
 						"hoverdepthcharge",
+                        "hoverheavyraid",
 						"hoverarty",
 						"hoveraa",
 						"factoryship",
@@ -3233,6 +3234,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"hoverskirm",
 						"hoverassault",
 						"hoverdepthcharge",
+                        "hoverheavyraid",
 						"hoverarty",
 						"hoveraa",
 						"factoryship",
@@ -4098,7 +4100,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"commweapon_concussion",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"location_pendust"
+			},
 		},
 	}
 	

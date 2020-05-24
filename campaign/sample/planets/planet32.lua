@@ -285,7 +285,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			aiConfig = {
 				{
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					--aiLib = "Null AI",
 					--bitDependant = false,
@@ -318,6 +318,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"hoverassault",
 						"hoverarty",
 						"hoverdepthcharge",
+                        "hoverheavyraid",
 						"hoveraa",
 						"factorygunship",
 						"gunshipcon",
@@ -1419,6 +1420,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"hoverassault",
 						"hoverarty",
 						"hoverdepthcharge",
+                        "hoverheavyraid",
 						"hoveraa",
 						"factoryship",
 						"shipcon",
@@ -2819,7 +2821,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_battle_drone_LIMIT_A_2",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_anarchai"
+			},
 		},
 	}
 	

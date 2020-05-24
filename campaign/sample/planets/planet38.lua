@@ -469,6 +469,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"conversion_disruptor",
 			},
 			abilities = {
+			},
+			codexEntries = {
+				"threat_chickens",
+				"threat_chickens_lifecycle"
 			}
 		},
 	}

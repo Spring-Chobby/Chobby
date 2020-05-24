@@ -26,7 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G8V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24457",
-			text = "This rich industrial world is quite well-defended, but a dormant saboteur unit recognized my IFF and signaled me. I should be able to subvert those defences with its help."
+			text = "This rich industrial world is quite well-defended, but a dormant saboteur unit recognized my IFF and signaled me. I should be able to subvert those defenses with its help."
 			.. "\n "
 			.. "\nAs far as I can tell, it identified me as allied to the rebels against whoever was the Empire controlling this world."
 			,
@@ -1137,7 +1137,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_companion_drone_LIMIT_A_2",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_empire"
+			},
 		},
 	}
 	

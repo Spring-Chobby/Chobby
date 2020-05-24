@@ -51,10 +51,6 @@ if WG and WG.i18n then
 	i18n = WG.i18n
 	if not i18n._loaded then
 		i18n.loadFile(CHOBBY_DIR .. "i18n/chililobby.lua")
-		i18n.setLocale('es')
-		i18n.setLocale('sr')
-		i18n.setLocale('jp')
-		i18n.setLocale('en')
 		i18n._loaded = true
 	end
 end

@@ -481,7 +481,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"commweapon_shotgun",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_empire"
+			},
 		},
 	}
 	

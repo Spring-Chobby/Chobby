@@ -224,8 +224,8 @@ local function GetPlanet(planetUtilities, planetID)
 						"gunshipskirm",
 					},
 					difficultyDependantUnlocks = {
-						[3] = {"hoverassault"},
-						[4] = {"hoverassault","gunshipheavyskirm","gunshipassault"},
+						[3] = {"hoverassault","hoverheavyraid"},
+						[4] = {"hoverassault","gunshipheavyskirm","gunshipassault","hoverheavyraid"},
 					},
 					commanderLevel = 2,
 					commander = {
@@ -490,7 +490,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"commweapon_rocketlauncher",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_empire"
+			},
 		},
 	}
 	

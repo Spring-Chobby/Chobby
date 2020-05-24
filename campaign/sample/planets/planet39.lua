@@ -37,7 +37,7 @@ local function GetPlanet(planetUtilities, planetID)
 		tips = {
 			{
 				image = "unitpics/gunshipaa.png",
-				text = [[Tridents should be your first line of defence against any aerial threat; their long-range AA missiles are effective against all flying targets, and unlike static turrets they can retreat easily if threatened by ground forces.]]
+				text = [[Tridents should be your first line of defense against any aerial threat; their long-range AA missiles are effective against all flying targets, and unlike static turrets they can retreat easily if threatened by ground forces.]]
 			},
 			{
 				image = "unitpics/gunshipkrow.png",
@@ -361,7 +361,7 @@ local function GetPlanet(planetUtilities, planetID)
 					humanName = "Itesro",
 					--aiLib = "Null AI",
 					--bitDependant = false,
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					allyTeam = 0,
 					unlocks = {
@@ -2518,7 +2518,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_companion_drone_LIMIT_D_2",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_rebels"
+			},
 		},
 	}
 	

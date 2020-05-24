@@ -526,7 +526,7 @@ function ChatWindows:SetTabBadge(tabName, text)
 			width = 10,
 			y = 0,
 			height = 12,
-			caption = Configuration:GetFont(1),
+			caption = text,
 			font = {
 				Configuration:GetFont(1).size,
 				outline = true,

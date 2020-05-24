@@ -55,11 +55,11 @@ function FriendListWindow:OnAddUser(userName)
 end
 
 function FriendListWindow:OnRemoveUser(userName)
-	if not lobby.status == "connected" then
+	if (not lobby.status == "connected") then
 		return
 	end
 	local userInfo = lobby:TryGetUser(userName)
-	if userInfo and userInfo.isFriend and WG.Chobby.Configuration:AllowNotification(userName) then
+	if userInfo and userInfo.isFriend and (not userInfo.isOffline) and WG.Chobby.Configuration:AllowNotification(userName) then
 		local userControl = WG.UserHandler.GetNotificationUser(userName)
 		userControl:SetPos(30, 30, 250, 20)
 		Chotify:Post({

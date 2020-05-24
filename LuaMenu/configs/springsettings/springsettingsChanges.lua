@@ -13,6 +13,12 @@ local settings = {
 local onlyIfMissingSettings = {
 	FeatureDrawDistance = 600000,
 	FeatureFadeDistance = 600000,
+	UseNetMessageSmoothingBuffer = 0,
+	NetworkLossFactor = 2,
+	LinkOutgoingBandwidth= 262144,
+	LinkIncomingSustainedBandwidth = 262144,
+	LinkIncomingPeakBandwidth = 262144,
+	LinkIncomingMaxPacketRate = 2048,
 }
 
 return settings, onlyIfMissingSettings

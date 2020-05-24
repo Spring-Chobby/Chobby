@@ -65,17 +65,21 @@ local function GetCombinedBannedTime(banTimeFromServer)
 	return (banTime > 0) and banTime
 end
 
-local queueOrder = {
-	"Coop",
-	"Teams",
-	"1v1",
+local queueSortOverride = {
+	["Coop"] = "A",
+	["1v1"] = "AA",
+	["Teams"] = "AAA",
+	["Sortie"] = "AAAA",
+	["Battle"] = "AAAAA",
 }
 
-local posOverride = {
-	Coop = 0,
-	Teams = 1,
-	["1v1"] = 2,
-}
+local function QueueSortFunc(a, b)
+	return (queueSortOverride[a.name] or a.name) < (queueSortOverride[b.name] or b.name)
+end
+
+local function GetQueuePos(pos)
+	return pos*55 + 15
+end
 
 WG.GetCombinedBannedTime = GetCombinedBannedTime
 
@@ -83,13 +87,25 @@ WG.GetCombinedBannedTime = GetCombinedBannedTime
 --------------------------------------------------------------------------------
 -- Initialization
 
-local function MakeQueueControl(parentControl, queueName, queueDescription, players, waiting, maxPartySize, GetBanTime)
+local function MakeQueueControl(parentControl, pos, queueName, queueDescription, players, waiting, maxPartySize, GetBanTime)
 	local Configuration = WG.Chobby.Configuration
 	local lobby = WG.LibLobby.lobby
 	local btnLeave, btnJoin
 
 	local currentPartySize = 1
 	local inQueue = false
+
+	local queueHolder = Control:New {
+		x = 10,
+		y = GetQueuePos(pos),
+		right = 0,
+		height = 45,
+		caption = "", -- Status Window
+		parent = parentControl,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+	}
 
 	btnJoin = Button:New {
 		x = 0,
@@ -121,7 +137,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 				WG.Analytics.SendOnetimeEvent("lobby:multiplayer:matchmaking:join_" .. queueName)
 			end
 		},
-		parent = parentControl
+		parent = queueHolder
 	}
 
 	btnLeave = Button:New {
@@ -139,7 +155,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 				btnJoin:SetVisibility(true)
 			end
 		},
-		parent = parentControl
+		parent = queueHolder
 	}
 	btnLeave:SetVisibility(false)
 
@@ -152,7 +168,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		align = "bottom",
 		fontsize = Configuration:GetFont(1).size,
 		text = "Party too large",
-		parent = parentControl
+		parent = queueHolder
 	}
 	labelDisabled:SetVisibility(false)
 
@@ -163,7 +179,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		height = 33,
 		fontsize = Configuration:GetFont(3).size,
 		text = queueName,
-		parent = parentControl
+		parent = queueHolder
 	}
 
 	local lblDescription = TextBox:New {
@@ -175,7 +191,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		align = "bottom",
 		fontsize = Configuration:GetFont(1).size,
 		text = queueDescription,
-		parent = parentControl
+		parent = queueHolder
 	}
 
 	local lblPlayers = TextBox:New {
@@ -187,7 +203,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		align = "bottom",
 		fontsize = Configuration:GetFont(1).size,
 		text = "Playing: " .. players,
-		parent = parentControl
+		parent = queueHolder
 	}
 
 	local lblWaiting = TextBox:New {
@@ -199,7 +215,7 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 		align = "bottom",
 		fontsize = Configuration:GetFont(1).size,
 		text = "Waiting: " .. waiting,
-		parent = parentControl
+		parent = queueHolder
 	}
 
 	local function UpdateButton()
@@ -215,6 +231,10 @@ local function MakeQueueControl(parentControl, queueName, queueDescription, play
 	end
 
 	local externalFunctions = {}
+
+	function externalFunctions.SetPos(newPos)
+		queueHolder:SetPos(nil, GetQueuePos(pos))
+	end
 
 	function externalFunctions.SetInQueue(newInQueue)
 		if newInQueue == inQueue then
@@ -515,34 +535,36 @@ local function InitializeControls(window)
 			return
 		end
 
-		local queueHolder = Control:New {
-			x = 10,
-			y = (posOverride[queueName] or queues)*55 + 15,
-			right = 0,
-			height = 45,
-			caption = "", -- Status Window
-			parent = listPanel,
-			resizable = false,
-			draggable = false,
-			padding = {0, 0, 0, 0},
-		}
-		queueHolders[queueName] = MakeQueueControl(queueHolder, queueName, queueDescription, queueData.playersIngame or "?", queueData.playersWaiting or "?", maxPartySize, GetBanTime)
+		queueHolders[queueName] = MakeQueueControl(listPanel, queues, queueName, queueDescription, queueData.playersIngame or "?", queueData.playersWaiting or "?", maxPartySize, GetBanTime)
 		queues = queues + 1
+		
+		local possibleQueues = lobby:GetQueues()
+		local sortedQueues = {}
+
+		for name, data in pairs(possibleQueues) do
+			sortedQueues[#sortedQueues + 1] = data
+		end
+		for i = 1, #sortedQueues do
+			local data = sortedQueues[i]
+			if queueHolders[data.name] then
+				queueHolders[data.name].SetPos(i)
+			end
+		end
 	end
 
 	local function InitializeQueues()
 		local possibleQueues = lobby:GetQueues()
-		local added = {}
-		for i = 1, #queueOrder do
-			local data = possibleQueues[queueOrder[i]]
-			if data then
-				added[queueOrder[i]] = true
-				AddQueue(_, data.name, data.description, data.mapNames, data.maxPartySize)
-			end
-		end
+		local sortedQueues = {}
 
 		for name, data in pairs(possibleQueues) do
-			if not added[name] then
+			sortedQueues[#sortedQueues + 1] = data
+		end
+		
+		table.sort(sortedQueues, QueueSortFunc)
+		local added = {}
+		for i = 1, #sortedQueues do
+			local data = sortedQueues[i]
+			if not added[data.name] then
 				AddQueue(_, data.name, data.description, data.mapNames, data.maxPartySize)
 			end
 		end

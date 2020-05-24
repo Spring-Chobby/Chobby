@@ -29,7 +29,7 @@ local function GetPlanet(planetUtilities, planetID)
 			.. "\n "
 			.. "\nAnd of course, some pirates were trying to take it over, biting much more than they could chew - the Empire made sure to guard it well. Good thing the pirates' security was so poor, I managed to hack their IFF."
 			,
-			extendedText = "The Imperials had dug into a reasonable defensive position, assisted by aircraft. I should supplement my ground forces with Thunderbirds to disarm enemy defences and Swifts to shoot down their planes."
+			extendedText = "The Imperials had dug into a reasonable defensive position, assisted by aircraft. I should supplement my ground forces with Thunderbirds to disarm enemy defenses and Swifts to shoot down their planes."
 		},
 		tips = {
 			{
@@ -263,7 +263,7 @@ local function GetPlanet(planetUtilities, planetID)
 			aiConfig = {
 				{
 					humanName = "Ally",
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					--aiLib = "Null AI",
 					--bitDependant = false,
@@ -819,6 +819,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"hoverraid",
 						"hoverskirm",
 						"hoverriot",
+                        "hoverheavyraid",
 						"factoryplane",
 						"planeheavyfighter",
 						"bomberprec",
@@ -1979,6 +1980,9 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_adv_nano_LIMIT_H_1",
 			},
 			abilities = {
+			},
+			codexEntries = {
+				"faction_lawless"
 			}
 		},
 	}

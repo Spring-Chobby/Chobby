@@ -42,7 +42,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/jumpcon.png",
-				text = [[The Constable constructor has jumpjets which allow it to set up metal extractors, wind generators, radar towers and defences on high mountains.]]
+				text = [[The Constable constructor has jumpjets which allow it to set up metal extractors, wind generators, radar towers and defenses on high mountains.]]
 			},
 			{
 				image = "unitpics/jumpskirm.png",
@@ -282,7 +282,7 @@ local function GetPlanet(planetUtilities, planetID)
 					humanName = "Marillia",
 					--aiLib = "Null AI",
 					--bitDependant = false,
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					allyTeam = 0,
 					unlocks = {
@@ -1006,6 +1006,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_jumpjet",
 			},
 			abilities = {
+			},
+			codexEntries = {
+				"faction_lawless",
+				"location_arteri",
 			}
 		},
 	}

@@ -26,7 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G4V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24441",
-			text = "The two forces here are both too entrenched for automated raids to dislodge the other. One of them recognized my IFF, luckily enough, so I should be able to break the stalemate. All I need is to find a way to break some tough defences."
+			text = "The two forces here are both too entrenched for automated raids to dislodge the other. One of them recognized my IFF, luckily enough, so I should be able to break the stalemate. All I need is to find a way to break some tough defenses."
 			.. "\n "
 			.. "\nI wonder how much initiative those AIs have been given. Can it decide to make tactical alliances on its own? Or did it somehow know my IFF?"
 			,
@@ -93,7 +93,7 @@ local function GetPlanet(planetUtilities, planetID)
 					humanName = "Ally",
 					--aiLib = "Null AI",
 					--bitDependant = false,
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					allyTeam = 0,
 					unlocks = {

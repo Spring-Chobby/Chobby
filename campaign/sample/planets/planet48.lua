@@ -39,7 +39,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/empmissile.png",
-				text = [[Shockley missiles deliver a massive amount of EMP damage in a small radius, and are not affected by shields. Use this to disable the most important part of your opponent's defences just before you attack.]]
+				text = [[Shockley missiles deliver a massive amount of EMP damage in a small radius, and are not affected by shields. Use this to disable the most important part of your opponent's defenses just before you attack.]]
 			},
 			{
 				image = "unitpics/napalmmissile.png",
@@ -172,7 +172,7 @@ local function GetPlanet(planetUtilities, planetID)
 			aiConfig = {
 				{
 					humanName = "Sorrali",
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					--aiLib = "Null AI",
 					--bitDependant = false,
@@ -3133,7 +3133,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"commweapon_slamrocket",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_rebels"
+			},
 		},
 	}
 	

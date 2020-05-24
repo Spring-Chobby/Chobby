@@ -1,7 +1,7 @@
 
 ButtonUtilities = ButtonUtilities or {}
 
-local function GetFont(size)
+local function GetFont(size, fontName)
 	return {
 		size = size,
 		outlineWidth = 6,
@@ -36,10 +36,7 @@ function ButtonUtilities.SetButtonSelected(button)
 	button.highlighted = false
 
 	button:SetCaption(Configuration:GetSelectedColor() .. button.oldCaption .. "\b")
-	local fontConfig = GetFont(button.oldFont.size)
-	-- preserve font type information
-	fontConfig.font = button.font.font
-	button.font = Chili.Font:New(fontConfig)
+	button.font = Chili.Font:New(GetFont(button.oldFont.size, button.font.font))
 
 	if COLOR_CLASS[button.classname] then
 		local col = button.backgroundColor
@@ -66,10 +63,7 @@ function ButtonUtilities.SetButtonHighlighted(button)
 	button.highlighted = true
 
 	button:SetCaption(Configuration:GetHighlightedColor() .. button.oldCaption .. "\b")
-	local fontConfig = GetFont(button.oldFont.size)
-	-- preserve font type information
-	fontConfig.font = button.font.font
-	button.font = Chili.Font:New(fontConfig)
+	button.font = Chili.Font:New(GetFont(button.oldFont.size, button.font.font))
 
 	--button.backgroundColor = Configuration:GetButtonSelectedColor()
 	button:Invalidate()
@@ -107,10 +101,7 @@ function ButtonUtilities.SetCaption(button, newCaption)
 end
 
 function ButtonUtilities.SetFontSizeScale(button, sizeScale)
-	local fontConfig = WG.Chobby.Configuration:GetFont(sizeScale)
-	-- preserve font type information
-	fontConfig.font = button.font.font
-	button.font = Chili.Font:New(fontConfig)
+	button.font = Chili.Font:New(WG.Chobby.Configuration:GetFont(sizeScale, button.font.font))
 	button:Invalidate()
 	button.oldFont = button.font
 	if button.selected then

@@ -26,7 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "F9V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24429",
-			text = "This world is covered with islands, with a surprising variety of defences. Was it used for combat testing?"
+			text = "This world is covered with islands, with a surprising variety of defenses. Was it used for combat testing?"
 			.. "\n "
 			.. "\nMany of those islands seem isolated from each-other. I will only need to clear one, hopefully it won't contain any nasty surprises."
 			,
@@ -41,7 +41,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/cloakassault.png",
-				text = [[Knights are much tougher than the other Cloakbots, and use a lightning gun to damage and stun enemy units. They're effective against medium-weight units and defences.]]
+				text = [[Knights are much tougher than the other Cloakbots, and use a lightning gun to damage and stun enemy units. They're effective against medium-weight units and defenses.]]
 			},
 			{
 				image = "unitpics/jumpraid.png",

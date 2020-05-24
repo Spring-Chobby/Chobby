@@ -577,6 +577,11 @@ local function GetNewsHandler(parentControl, headingSize, timeAsTooltip, topHead
 	local externalFunctions = {}
 
 	function externalFunctions.ReplaceNews(items)
+		if not items then
+			visibleItems = 0
+			DoResize()
+			return
+		end
 		for i = 1, #items do
 			local entry = {
 				heading = items[i].Header,

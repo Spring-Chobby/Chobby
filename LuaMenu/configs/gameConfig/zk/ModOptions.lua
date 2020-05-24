@@ -1,3 +1,4 @@
+   
 -- $Id: ModOptions.lua 4642 2009-05-22 05:32:36Z carrepairer $
 
 
@@ -82,7 +83,7 @@ local options = {
 			{ key='none', name = "Off", desc = 'Turns commsharing off.' },
 		},
 	},
-
+	
   {
     key = "noelo",
     name = "No Elo",
@@ -277,6 +278,14 @@ local options = {
     def=false,
   },
   {
+    key='disable_local_widgets',
+    name='Disable Local Widgets',
+    desc='Disable loading of local widget.',
+    type='bool',
+    section= 'a_important',
+    def=false,
+  },
+  {
     key='campaign_chassis',
     name='Allow campaign commander chassis',
     desc='Allows you to choose the campaign commander chassis.',
@@ -386,6 +395,14 @@ local options = {
     key    = 'terrarestoreonly',
     name   = 'Terraform Restore Only',
     desc   = 'Restore is the only terraform option available.',
+    type   = 'bool',
+    section= 'experimental',
+    def    = false,
+  },
+  {
+    key    = 'enemyterra',
+    name   = 'Allow Terraform Near Enemies',
+    desc   = 'Without this option terraform progress is 20x slower if an enemy unit is visible nearby.',
     type   = 'bool',
     section= 'experimental',
     def    = false,
@@ -538,6 +555,7 @@ local options = {
 --    --  }
 --    },
 --  },
+  
   {
     key    = 'chicken',
     name   = 'Chicken',
@@ -561,6 +579,7 @@ local options = {
       { key = 'Chicken: Custom', name = "Chicken: Custom", desc = 'Customize your chicken.' },
     },
   },
+--[[ Broken, see gamseide ticket #3567
   {
     key = "playerchickens",
     name = "Players as chickens",
@@ -569,6 +588,7 @@ local options = {
     def = false,
     section = 'chicken',
   },
+]]
   {
     key	= "eggs",
     name = "Chicken Eggs",

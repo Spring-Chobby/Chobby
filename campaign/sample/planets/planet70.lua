@@ -375,7 +375,7 @@ local function GetPlanet(planetUtilities, planetID)
 			aiConfig = {
 				{
 					humanName = "Ally",
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					--aiLib = "Null AI",
 					--bitDependant = false,
@@ -1181,7 +1181,6 @@ local function GetPlanet(planetUtilities, planetID)
 						"spiderskirm",
 						"spiderassault",
 						"spiderriot",
-						"spidercrabe",
 						"factorycloak",
 						"cloakcon",
 						"cloakraid",
@@ -1190,6 +1189,11 @@ local function GetPlanet(planetUtilities, planetID)
 						"cloakriot",
 						"cloakskirm",
 						"cloakassault",
+					},
+					difficultyDependantUnlocks = {
+						[2] = {"cloakassault"},
+						[3] = {"cloakassault", "spidercrabe"},
+						[4] = {"cloakassault","spidercrabe"},
 					},
 					commanderLevel = 6,
 					commander = {
@@ -1214,7 +1218,7 @@ local function GetPlanet(planetUtilities, planetID)
 						}
 					},
 					startUnits = {
-												{
+						{
 							name = "staticmex",
 							x = 4312,
 							z = 5064,

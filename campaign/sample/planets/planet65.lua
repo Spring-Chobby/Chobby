@@ -289,7 +289,7 @@ local function GetPlanet(planetUtilities, planetID)
 			aiConfig = {
 				{
 					humanName = "Ally",
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					-- aiLib = "Null AI",
 					-- bitDependant = false,
@@ -350,6 +350,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"hoverskirm",
 						"hoverassault",
 						"hoverdepthcharge",
+                        "hoverheavyraid",
 						"hoverarty",
 						"hoveraa",
 						"striderhub",
@@ -2526,6 +2527,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"hoverskirm",
 						"hoverassault",
 						"hoverdepthcharge",
+                        "hoverheavyraid",
 						"hoverarty",
 						"hoveraa",
 						"striderhub",
@@ -4819,7 +4821,10 @@ local function GetPlanet(planetUtilities, planetID)
 				
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"location_mannia"
+			},
 		},
 	}
 	

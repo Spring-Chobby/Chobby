@@ -200,7 +200,7 @@ local function GetPlanet(planetUtilities, planetID)
 				{
 					startX = 7700,
 					startZ = 1200,
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					humanName = "Ally",
 					bitDependant = true, -- Whether the AI name needs to be appended with 32bit or 64bit by the handler
 					allyTeam = 0,
@@ -242,6 +242,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"hoverskirm",
 						"hoverassault",
 						"hoverarty", -- probably won't destroy a Sunlance
+                        "hoverheavyraid",
 						"hoveraa",
 						"factoryspider",
 						"spidercon",

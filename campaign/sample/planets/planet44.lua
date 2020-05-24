@@ -159,7 +159,7 @@ local function GetPlanet(planetUtilities, planetID)
 					humanName = "Yarwha",
 					--aiLib = "Null AI",
 					--bitDependant = false,
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					allyTeam = 0,
 					unlocks = {
@@ -744,7 +744,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_ablative_armor_LIMIT_D_2",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_rebels"
+			},
 		},
 	}
 	

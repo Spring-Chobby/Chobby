@@ -44,7 +44,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/pw_artefact.png",
-				text = [[The Artefact has no direct defences of its own but it is being defended by a hostile force. Push through the zombies and your opponent's defences to access the Artefact.]]
+				text = [[The Artefact has no direct defenses of its own but it is being defended by a hostile force. Push through the zombies and your opponent's defenses to access the Artefact.]]
 			},
 		},
 		gameConfig = {
@@ -308,7 +308,7 @@ local function GetPlanet(planetUtilities, planetID)
 					humanName = "Architects",
 					-- aiLib = "Null AI",
 					-- bitDependant = false,
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					allyTeam = 0,
 					unlocks = {
@@ -359,6 +359,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"hoverskirm",
 						"hoverassault",
 						"hoverdepthcharge",
+                        "hoverheavyraid",
 						"hoverarty",
 						"hoveraa",
 					},
@@ -2863,7 +2864,12 @@ local function GetPlanet(planetUtilities, planetID)
 				"commweapon_disintegrator",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"threat_zombies",
+				"faction_dynasty_restored",
+				"location_tempest"
+			},
 		},
 	}
 	

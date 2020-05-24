@@ -26,7 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "L9V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24441",
-			text = "I would never have imagined this lava hellscape of a planet to be inhabited, let alone host major defences. There must be something down there that escaped me, something valuable enough to account for such a military investment."
+			text = "I would never have imagined this lava hellscape of a planet to be inhabited, let alone host major defenses. There must be something down there that escaped me, something valuable enough to account for such a military investment."
 			,
 			extendedText = "Of course someone would use monstrous, fire-spewing Dante striders to defend a place like this. I will need Aspis area shields to deflect the assault, and Racketeer artillery to disarm those Dantes."
 		},
@@ -300,7 +300,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			aiConfig = {
 				{
-					aiLib = "Circuit_difficulty_autofill",
+					aiLib = "Circuit_difficulty_autofill_ally",
 					bitDependant = true,
 					--aiLib = "Null AI",
 					--bitDependant = false,
@@ -1068,6 +1068,7 @@ local function GetPlanet(planetUtilities, planetID)
 						"hoverriot",
 						"hoverskirm",
 						"hoverassault",
+                        "hoverheavyraid",
 						"hoveraa",
 						"factoryplane",
 						"planeheavyfighter",
@@ -1510,7 +1511,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"commweapon_personal_shield",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"faction_empire"
+			},
 		},
 	}
 	
