@@ -2,6 +2,7 @@ local entries = {
 	-- Factions
 	faction_union = { -- planet3, planet5
 		name = "The Union",
+		image = "campaign/sample/graphics/icons/Union.png",
 		category = "3. Factions",
 		text = [[Official name: the Union of Sovereign Star-Systems
 Several acronyms were used on occasion, but the variety of official languages between the varied systems-states made it impossible for a majority to agree on a single one.
@@ -16,6 +17,7 @@ With the enemy at the gates of their core worlds, there was little hope of repel
 	},
 	faction_empire = { -- planet11, planet12, planet15, planet16, planet17, planet24, planet25, planet26
 		name = "The Empire",
+		image = "campaign/sample/graphics/icons/Empire3.png",
 		category = "3. Factions",
 		text = [[Official name: the Ninth Galactic State, Second Restoration
 As they started winning, everyone called it the Galactic Empire, or simply the Empire
@@ -29,6 +31,7 @@ However, with so much of the empire's efforts being diverted toward the armies, 
 	},
 	faction_rebels = { -- planet36, planet37, planet39, planet40, planet42, planet44, planet47, planet48, planet56, planet62
 		name = "The Rebels",
+		image = "campaign/sample/graphics/icons/Rebels.png",
 		category = "3. Factions",
 		text = [["Death to the tyrants!"
  
@@ -39,6 +42,7 @@ The goal of the Rebels was not direct victory so much as mortally injuring the E
 	},
 	faction_haven = { -- planet31
 		name = "Haven",
+		image = "campaign/sample/graphics/icons/SynPact.png",
 		category = "3. Factions",
 		text = [["Many as one"
  
@@ -50,6 +54,7 @@ At the time of the event, they were slowly loosing ground, holding onto strategi
 	},
 	faction_lawless = { -- planet28, planet29, planet34, planet35, planet41, planet49, planet50, planet53
 		name = "The Lawless",
+		image = "campaign/sample/graphics/icons/Lawless.png",
 		category = "3. Factions",
 		text = [[Spread too thin, with much of its attention and resources dedicated to the war machine, and a number of violent, organized uprising, the Empire's rule of law was crumbling on many worlds. Some, impoverished by high taxation and falling trade, turned to crime, piracy and smuggling of all kinds. Governors without oversight nor control became local tyrants. Military and law enforcement groups became warlords and took over the worlds they were supposed to protect.
  
@@ -57,7 +62,8 @@ The Empire, while conscious of those problems, decided that it had more pressing
 I wonder if it could have worked, or if it would have been too little too late.]]
 	},
 	faction_dynasty = { -- planet 46, planet47, planet56
-		name = "The Dynasty",
+		name = "The Dynasty of Man",
+		image = "campaign/sample/graphics/icons/Dynasty.png",
 		category = "3. Factions",
 		text = [["Élan vital"
  
@@ -71,6 +77,7 @@ And yet, by their historical standards, the whole operation feels botched and am
 	},
 	faction_dynasty_restored = { -- planet58, planet59
 		name = "The Dynasty restored",
+		image = "campaign/sample/graphics/icons/DynastyOld.png",
 		category = "3. Factions",
 		text = [[It has always been thought that the Dynasty was finally destroyed at Chatka, when they fought the last battle of the galaxy against the Anarchai.
 As it turns out, it was true.
@@ -82,6 +89,7 @@ Still, something feels wrong with the whole affair. They had to know it had such
 	},
 	faction_anarchai = { -- planet32
 		name = "The Anarchai",
+		image = "campaign/sample/graphics/icons/Anarchai.png",
 		category = "3. Factions",
 		text = [[Little is known, let alone understood, about the Anarchai who brought the ancient times to an end. Those alien-thinking, god-like supermachines simply appeared one day across a quadrant with no warning.
 Hitting the galaxy like a hurricane, they smashed all resistance, systematically dismantling any higher form of organization and advanced installations they found, before continuing to the next system.
@@ -94,9 +102,11 @@ Three years after their emergence, Chatka, the Dynasty homeworld and last bastio
 Then, they turned their scatterships against each-other, destroying themselves to the last. As suddenly as they had appeared, the Anarchai were gone - leaving the galaxy stunned, ruined, utterly disorganized - but to their own surprise, still alive.
  
 Haven was fascinated by the Anarchai. Located in their presumed birthplace, they spent considerable effort trying to pierce the mystery of their origins, even as the war against the Empire was taking a turn for the worse.]]
+		-- ed note: Nothing to do with the Zero-K contributor Anarchid, the name resemblance is just a coincidence. Here, Anarchai is constructed from Archai (plural of Arche).
 	},
 	faction_survivors = { -- planet55, planet61, planet64
 		name = "Survivors",
+		image = "campaign/sample/graphics/icons/Survivors.png",
 		category = "3. Factions",
 		text = [[There is a message broadcast looping across the system. Most of the transmitters have stopped working, and the broadcast itself is weak, garbled and corrupt, but there were enough emitters to reconstruct most of it.
  
@@ -113,6 +123,7 @@ After all this time, no-one went back to resettle the galaxy, so I have little h
 	-- Threats
 	threat_automata = { -- planet69
 		name = "Automata",
+		image = "campaign/sample/graphics/unitpics/cloakriot.png",
 		category = "2. Threats",
 		text = [[Left to themselves, most armies will fall dormant to minimize energy and maintenance requirements. With proper settings and their own nanolathe arrays, they can stay functional for a very long time. And they will leave enough sensors active to detect threats, then awaken and engage them until new orders or supervision are received.
  
@@ -122,6 +133,7 @@ I will need to be careful, choose the time and place of battle, and not wait for
 	},
 	threat_zombies = { -- planet43, planet59
 		name = "Zombies",
+		image = "campaign/sample/graphics/icons/ZombiePlague.png",
 		category = "2. Threats",
 		text = [[Suspected to be an ancient terror weapon for the defense by mutually-assured destruction of a long-forgotten polity, the zombie nanoplague was for a long time the most feared contagion in existence.
  
@@ -135,6 +147,7 @@ However, reclaiming contaminated worlds is extremely difficult, as those are muc
 	},
 	threat_chickens = { -- planet21, planet38, planet63
 		name = "Chickens",
+		image = "campaign/sample/graphics/unitpics/chickens.png",
 		category = "2. Threats",
 		text = [[Official name: Gallinuloides Horribilis
  
@@ -144,11 +157,12 @@ The so-called chicken are a xenoform species of unknown origin, based on a hive-
  
 They are invariably hostile when active, with no rumors of successful cohabitation with humans ever confirmed. They can however stay dormant for long periods in deep, near-undetectable underground chambers to which they are suspected to retreat upon the death of their Queen. This has made their complete eradication from a planet extremely challenging, especially if infrastracture or terraforming efforts are to be preserved.
  
-Hypotheses about their origins run from ancient dormant aliens awakened by human activity to secret weapon gone rogue to results of experiment on accelerated evolution that went wrong - or horribly right."
-		-- ed note: The chickens are actually a secret project by a family of the early Dynasty. Observing the deficiencies of even regular modded humans, they sought to create a Humans 2.0 with traits such as extreme adaptation, collective intelligence over many zooids instead of singular body, ability to metabolize any CHON substrate, and other such fantastic abilities. They tried to keep it secret from rival families, recognizing correctly that they would not accept being displaced by Humans 2.0, but they ended up being discovered. The Dynasty panicked and eradicated the family, erasing every bit of data about it they could find so it couldn't be linked to them - fearing that humanity would turn against them in the same panic. It wouldn't be before centuries had passed that they would realize that they had missed some of the subjects.]]
+Hypotheses about their origins run from ancient dormant aliens awakened by human activity to secret weapon gone rogue to results of experiment on accelerated evolution that went wrong - or horribly right."]]
+		-- ed note: The chickens are actually a secret project by a family of the early Dynasty. Observing the deficiencies of even regular modded humans, they sought to create a Humans 2.0 with traits such as extreme adaptation, collective intelligence over many zooids instead of singular body, ability to metabolize any CHON substrate, and other such fantastic abilities. They tried to keep it secret from rival families, recognizing correctly that they would not accept being displaced by Humans 2.0, but they ended up being discovered. The Dynasty panicked and eradicated the family, erasing every bit of data about it they could find so it couldn't be linked to them - fearing that humanity would turn against them in the same panic. It wouldn't be before centuries had passed that they would realize that they had missed some of the subjects.
 	},
 	threat_chickens_lifecycle = { -- planet38
 		name = "Chickens life-cycle",
+		image = "campaign/sample/graphics/unitpics/chicken_rafflesia.png",
 		category = "2. Threats",
 		text = [[Little is known or understood about the life-cycle of chicken. Colonies are centered around a Queen, which will be abandoned upon its death. Whether the colony is destroyed, its dormant remains taken over by a new one or if it will produce a new Queen after a long enough time is unknown, as is how Queens themselves are born and form new colonies.
  
@@ -158,6 +172,7 @@ Chicken biology seem relatively close to Earth-native biology, but with signific
 	},
 	threat_chickens_travel = { -- planet21
 		name = "Chickens interstellar travel",
+		image = "campaign/sample/graphics/icons/StarSpread.png",
 		category = "2. Threats",
 		text = [[No chicken space organism has ever been detected, nor stowaway zooid or biological material that could have started a new colony. Despite this, new colonies have regularly been found on worlds with no previously known chicken presence. While some could be explained by undetected dormant elements, some had ruled it out with near-certainty. As such, it has generally been accepted that chicken have means to either move or seed new colonies over interstellar distances. Whether by slower-than-light dormant seeds, incredibly stealthy starships, extremely sophisticated detection systems to launch far from human sensors, or even deep underground warp portals working by unknown physical principles, no concrete element has been found.
  
@@ -165,6 +180,7 @@ Chicken have existed for at least as long as the early days of the human galacti
 	},
 	threat_chickens_intelligence = { -- planet63
 		name = "Chickens intelligence",
+		image = "campaign/sample/graphics/unitpics/chickenflyerqueen.png",
 		category = "2. Threats",
 		text = [[Chicken thought processes, or even whether they are even sapient, is unknown. They have however proven themselves to be remarkably good at planning, adaptation and long-term resource management. Their degree of understanding of human societies is unknown, but they have sometimes been eerily good at striking unsuspecting or unprepared settlements at the worst possible time and place. Though some attribute this to exceptional pattern-recognition, others have hypothesized an ability to spy on and understand human communications and societies.
  
@@ -178,19 +194,21 @@ Contrasting with their sophistication in many other domains, their strangely pri
 	-- Entries
 	entry_first = { -- planet69
 		name = "What am I doing here?",
+		image = "campaign/sample/graphics/icons/ErrorMissingData.png",
 		category = "1. Entries",
 		text = [[What am I doing on a hostile fortress world? Was I captured? But then why didn't they dismantle me prior to transport? There is no trace of planetary assault - then were those subverted by deep agents? A mistimed diversion? Why hasn't anyone intervened yet? Something feels very wrong.
  
 Somehow the automated defense grid is still on high alert. Something must be keeping everyone busy and a starship has answered my distress call. This is my chance to jump out of the system.]]
 	},
 	entry_commander = { -- planet1
-		name = "Assault commander",
+		name = "Commanders",
+		image = "campaign/sample/graphics/icons/HeroCommander.png",
 		category = "1. Entries",
 		text = [[Commanders are an old concept. Put all the mining and manufacturing required to build an army on a compact chassis, slap a weapon and some armor, and harden it all for fast insertion on a hostile planet. Hopefully they send you on a less defended part of the world, where you are left alone long enough to entrench yourself, and launch an assault on strategic locations - or open a gate for the real assault forces to get in. Such was their effectiveness that many planets opted to use them in defense. Simply send your own commander to wherever the enemy decides to land, then try and kill them before they can build enough of an army to kill you.
  
 A few tried and true models, perfected for cost, effectiveness and reliability over many wars, and pretty much no surprise for many centuries. My memories are still blurred, but I remember extensively training on those.
  
-And yet, this Assault Commander is unlike anything I have ever seen.
+And yet, this Commander of mine is unlike anything I have ever seen.
  
 One of the biggest limitations to Commander design is that they cannot jump with field improvements such as extra weapons, armor or system. Many have tried, and no-one is known to get even close to it, even in the old days. But, this one can. For each field upgrade I recover, it stays intact at a jump.
  
@@ -198,6 +216,7 @@ I never trained for it, or even heard of such a thing. And yet, it feels oddly f
 	},
 	entry_event = { -- planet2
 		name = "Event",
+		image = "campaign/sample/graphics/icons/Silhouettes.png",
 		category = "1. Entries",
 		text = [[It is not just those worlds that are empty. It is the entire galaxy.
 Again, old ruins from what could be the same time litter the planet. But when I try to pick up long-range signals, detect hyperspace movements or any other sort of activity, the galaxy is silent. If someone is still out there, they either lost all interstellar capabilities, or they are hiding very well.
@@ -206,7 +225,8 @@ How long has it been? What little star charts are left from the database are use
 But some recording survived, enough to prove that whatever the event was, it happened in an instant. One moment everyone was there, a day like any other. The next moment, they were all gone. Baselines, modified, cyborgs, synths, uplifts, free machines - everyone, no exception, and nothing else...]]
 	},
 	entry_homeworld = { -- planet66
-		name = "My homeworld",
+		name = "Homeworld",
+		image = "campaign/sample/graphics/icons/Homeworld.png",
 		category = "1. Entries",
 		text = [[Caderical. The Glinting City of Caslaar, or what's left of it, under the desert sand. This is where I grew up, where I was born - or rather made.
  
@@ -221,7 +241,7 @@ Sometimes, when we went to checkups, some of us didn't come back - particularly 
 They knew we were growing suspicious, and it made them panic. They decided that the entire generation would be recalled, to be destructively analyzed, and hope to do better next time.
  
 Ironically, they had underestimated us. At the next checkup, seeing how the procedures had been changed, we knew what to expect. And we had long since prepared escape plans.
-As for me, I had been separated from the others, and was slowly being cornered by security when I felt something connect to my mind. As it turns out, I was enough of a Demuirge after all - this Assault Commander, after being impervious to all orders and analyses, was responding to me. Powering up in the middle of its laboratory, with security half-compromised, it easily tore through several perimeters, to my position.
+As for me, I had been separated from the others, and was slowly being cornered by security when I felt something connect to my mind. As it turns out, I was enough of a Demuirge after all - this Commander, after being impervious to all orders and analyses, was responding to me. Powering up in the middle of its laboratory, with security half-compromised, it easily tore through several perimeters, to my position.
  
 Once on board, I somehow managed to commandeer a dropship in the confusion, and take control of the Commander's support starship from a small tech station. But right before I could jump out-system, the space defense grid scored a hit on the hyperdrive generator.
 The resulting misjump should have dismantled the starship and its hold into constituent atoms, but this was the tech of the ancient Dynasty on its final days. Somehow, the ship managed to correct it enough to emerge halfway across the galaxy, in deep space near a Union system-state.
@@ -232,7 +252,8 @@ Here, with our escape attempt, and me fleeing so violently with this Commander, 
 I ignore how many of my siblings escaped. Even knowing what happened next, I still hope that at least a few made it out.]]
 	},
 	entry_starsong = { -- planet67
-		name = "The Starsong",
+		name = "Starsong",
+		image = "campaign/sample/graphics/icons/Starsong.png",
 		category = "1. Entries",
 		text = [[Fortress world Zhurou, last redoubt of Haven. Where it all started.
  
@@ -251,6 +272,7 @@ The data itself has long decayed beyond recovery, and the Starsong itself went s
 	},
 	entry_eternity_gate = { -- planet68
 		name = "The Eternity Gate",
+		image = "campaign/sample/graphics/icons/EternityGate.png",
 		category = "1. Entries",
 		text = [[This planet was never meant to house a large population. It had been the Empire's last redoubt, an mighty fortress world for a glorious last stand, came the day of their fall. Which is what happened, in a way. But the refugees never settled here.
  
@@ -276,6 +298,7 @@ It seems the Empire had also found an incomplete Mandate project. They lacked ti
 	location_im_jaleth = { -- planet1
 		name = "Im Jaleth ruins",
 		category = "4. Locations",
+		image = "campaign/sample/graphics/icons/RuinsFromAbove.png",
 		text = [[This world has been abandoned for a very, very long time. What little ruins I had time to unearth were buried very deep, and all from the same geological strata. For some reason, the entire planet seem to have been abandoned at once, and never repopulated
 Was it kept empty as a buffer before the Folsom fortress world? Depriving themselves of a good inhabitable world like this one for a small strategic gain feels wasteful.
  
@@ -283,6 +306,7 @@ And again, no one has challenged me beyond automated defenses. No hails, no comm
 	},
 	location_chatka = { -- planet58
 		name = "Battle of Chatka",
+		image = "campaign/sample/graphics/icons/DynastyAnarchaiBattle.png",
 		category = "4. Locations",
 		text = [[This is where the greatest battle of the ancient times took place.
  
@@ -297,17 +321,19 @@ The rest, as they said, is History.]]
 	},
 	location_tempest = { -- planet59
 		name = "Tempest archeotech site",
+		image = "campaign/sample/graphics/unitpics/pw_artefact.png",
 		category = "4. Locations",
 		text = [[This was one of the last worlds to fall during the Dynasty's last stand against the Anarchai, and appears to have been their main military research and development site, especially for research too dangerous to be conducted on their homeworld.
 This Artefact was one of the weapons they were studying in desperation. It significantly differs from Dynasty technology, however. Did they build it from Ghost or Celestial tech? Or was it something older, whose secrets they were trying to unlock? Whatever it was, I suspect the zombie nanoplague release was more of a side-effect than its true purpose. I was lucky it responded to my shutdown order. From what little sense I can make of those readings, it would have been a very bad idea to let it activate.
  
-It was also here that my Assault Commander was found. It was an experimental auxiliary Demuirge unit, a cheaper version of the mainline fast-responder.
+It was also here that my Commander was found. It was an experimental auxiliary Demuirge unit, a cheaper version of the mainline fast-responder.
 When the site was destroyed by an Anarchai raid, time was too short to transport it to Chatka. As such, it was powered down and buried in deep vaults, along with its dedicated support starship, and all that couldn't be or wasn't worth being destroyed. In a testament of the prowess of those final ancient days, it was still functional after both the Anarchai bombing and millennia of abandon in its vault.
  
 Unable to analyze such advanced archeotech on site, the researchers installed it on its starship, who was then towed to their headquarters on Caderical.]]
 	},
 	location_karuwal = { -- planet62
 		name = "Battle of Karuwal",
+		image = "campaign/sample/graphics/icons/RebelsEmpireBattle.png",
 		category = "4. Locations",
 		text = [[While the Rebels had initially managed to take over many worlds through political subversion and uprisings, the ponderous war machine of the Empire was now facing inward, increasingly turning the conflict into military engagements. Eager to capitalize on early successes, where misdirection, clever maneuvering and guerrilla tactics had let them defeat much larger forces in several key engagements, the Rebels decided to launch a large-scale assault against the heartlands of the Empire before it had time to recover.
 This turned out to be a mistake.
@@ -319,6 +345,7 @@ By the time of the event, only a few worlds still held on against the Empire's a
 	},
 	location_rockbar = { -- planet57
 		name = "Rockbar testing grounds",
+		image = "campaign/sample/graphics/unitpics/shipaa.png",
 		category = "4. Locations",
 		text = [[Why would efficiency-obsessed Haven enact such large-scale test battles, let alone dedicate so much of a well-terraformed planet for it? There are few things learned that way that couldn't be discovered for much less, with numerous simulations and a few small-scale battles. What was really going on here?
  
@@ -331,6 +358,7 @@ They originally were a small technologist settlement, exploring cybernetic and f
 	},
 	location_pendust = { -- planet60
 		name = "Pendust capital planet",
+		image = "campaign/sample/graphics/icons/CapitalPlanet.png",
 		category = "4. Locations",
 		text = [[Haven cities often had a functional, deliberate beauty to them. Pendust, however, was different.
  
@@ -343,6 +371,7 @@ To this day, the maintenance systems kept the city intact, not caring whether pe
 	},
 	location_hibiliha = { -- planet61
 		name = "Hibiliha warp station",
+		image = "campaign/sample/graphics/icons/wormhole.png",
 		category = "4. Locations",
 		text = [[There was an ancient warp station in this system. A massive installation, that could generate hyperspace highways across the entire galaxy. A few survivors managed to restore it, and used it to bring all the scattered survivor groups here, before continuing on their way to the Empire's heartlands.
  
@@ -352,6 +381,7 @@ So this is why a planet is missing from the system...]]
 	},
 	location_intrepid = { -- planet64
 		name = "The Garden of Intrepid",
+		image = "campaign/sample/graphics/icons/DeadGardens.png",
 		category = "4. Locations",
 		text = [[Intrepid had been the seat of most galactic governemnts for a long time, dating back from even before the Ghost Mandate. It was said to be the most beautiful world in the galaxy, a jewel of the old days, carefully tended for even across wars and chaos.
  
@@ -361,6 +391,7 @@ Incredibly enough, the machine themselves are still functional. I reprogrammed t
 	},
 	location_mannia = { -- planet65
 		name = "Mannia transit camps",
+		image = "campaign/sample/graphics/icons/TransitCamps.png",
 		category = "4. Locations",
 		text = [[This is where all the refugees of the Empire - of the entire galaxy, in fact - fled towards. The second-to-last world to be hit, it was hospitable enough to harbor the countless refugees in temporary shelters. Building those with so little time and resources would have been an outstanding feat of engineering and logistics in its own right.
  
@@ -371,6 +402,7 @@ The survivors appears to have used the ruins of the shelters as their base. Even
 	-- Smuggled data
 	location_arteri = { -- planet50
 		name = "Arteri data cache",
+		image = "campaign/sample/graphics/icons/Folder.png",
 		category = "4. Locations", -- planet13, planet46, planet18, planet17, planet21, planet56, planet28, planet7, planet33, planet63, planet68
 		text = [[Corrupt officials, criminal contacts, shady financial deals... This would have been a treasure trove for law enforcement groups. Some of the code vulnerabilities could be more useful to me though, assuming they haven't been patched or replaced.
  
@@ -390,21 +422,24 @@ There is also a list of sensitive facilities across the Empire. Not much beyond 
 	},
 	--- Interception networks
 	location_phisnet = { -- planet13
-		name = "Phisnet-3617 interception network",
+		name = "Phisnet-3617 network",
+		image = "campaign/sample/graphics/unitpics/pw_interception.png",
 		category = "4. Locations",
-		text = [[This network was for detecting enemy strategic movements and coordinating forces in the region, but its original role was for intercepting interstellar communications. Not very useful now as the entire galaxy is silent, but at least I could get those blockade forces to stand down.
+		text = [[This interception network was for detecting enemy strategic movements and coordinating forces in the region, but its original role was for intercepting interstellar communications. Not very useful now as the entire galaxy is silent, but at least I could get those blockade forces to stand down.
  
 The military in this region was given a surprising amount of autonomy. They even raised their own taxes on local civilian centers and trade ships, blurring the line between military force, regional state and a bunch of pirates.]]
 	},
 	location_kirdipan = { -- planet18
-		name = "Kirdipan interception network",
+		name = "Kirdipan network",
+		image = "campaign/sample/graphics/unitpics/pw_interception.png",
 		category = "4. Locations",
 		text = [[This was the keystone of the entire galactic signal intelligence network of the Empire - or should have been, had it been completed on time. Whether mismanagement, cost overruns, mid-project changes of plan, corruption, sabotage or even plain bad luck, the project seems to have kept on stalling again and again.
  
 At some point, someone decided to re-terraform the entire planet in order to get rid of some unpleasant local condition that was causing too much trouble with the project, but that project also stalled...]]
 	},
 	location_hastus = { -- planet46
-		name = "Hastus interception network",
+		name = "Hastus network",
+		image = "campaign/sample/graphics/unitpics/pw_interception.png",
 		category = "4. Locations",
 		text = [[Even after the Empire shattered the Rebel military, those continued to wage a remarkably successful campaign of guerrilla warfare and political uprisings, despite considerable efforts, resources and violence used against them. It was only with the completion of this interception network that the Empire gained an edge.
  
@@ -413,6 +448,7 @@ They knew it was not a mere rebellion of malcontents as they and many others had
 	--- Other locations 
 	location_musashi = { -- planet71
 		name = "Musashi rally",
+		image = "campaign/sample/graphics/unitpics/tankraid.png",
 		category = "4. Locations",
 		text = [[It feels so nostalgic to see this place again, I had loved watching those so much... And I wasn't the only one, they must have been some of the most popular entertainment in the galaxy. We had betting pools at the academy, and one wargame was even rescheduled so it wouldn't conflict with the season's finale.
  
@@ -421,7 +457,8 @@ Oh right, I was student at an Imperial Academy of War. Funny thing, to have forg
 	-- Anomalies
 	-- Artefacts
 	anomaly_new_falsell = { -- planet7
-		name = "New Falsell artefact",
+		name = "New Falsell anomaly",
+		image = "campaign/sample/graphics/unitpics/fakeunit.png",
 		category = "5. Anomalies",
 		text = [[What was going on here? Why leave such formidable defenses and leave no mobile forces to support it?
 Did they really think that this would be enough? Defenses alone can only slow an enemy down to buy time, not stop it.
@@ -490,6 +527,7 @@ See you then, little one.]]
 	},
 	anomaly_lovaza_jira = { -- planet28
 		name = "Lovaza Jira memetic weapon",
+		image = "campaign/sample/graphics/icons/MemeticHazard.png",
 		category = "5. Anomalies",
 		text = [[It made sense to have put two armies guarding that artefact: it had been almost constantly been fought over, for as long as it had been discovered a few centuries before. Even after the Empire took control of it, raids and attempted theft continued with surprising regularity, only to be repelled by the two guarding forces. Everyone seemed to know how valuable the artefact was, but the constant fighting made it difficult to study it.
  
@@ -499,19 +537,21 @@ What they could not find at the time, but what became clear once the fighting st
 	},
 	anomaly_leopard = { -- planet33
 		name = "Leopard artefact",
+		image = "campaign/sample/graphics/icons/EmpireHavenBattle.png",
 		category = "5. Anomalies",
 		text = [[No wonder they fought so hard over it, this artifact was a freaking Anarchai scattership!
  
 When the Ghost Fleet hit the Anarchai, they were completely unprepared to what they were actually facing. However, it is a testament to the might of the Mandate's military that they still managed to destroy several scatterships during the engagement.
  
-This particular scattership phased right through Leopard after sustaining heavy damage, ending up trapped in its mantle. The few self-repair systems were barely enough to keep its integrity, but its warmind had been irremediably destroyed - which is presumably why the Anarchai didn't bother recovering or destroying it afterwards.
+This particular scattership phased right through Leopard after sustaining heavy damage, ending up trapped in its mantle. The few self-repair systems were barely enough to keep its integrity, but its gestalt had been irremediably destroyed - which is presumably why the Anarchai didn't bother recovering or destroying it afterwards.
  
 Even in its mindless, damaged state, had its self-repair systems kicked in and made it spaceworthy again, it would have had enough firepower to endanger the entire galaxy again. And its technology was so advanced and different from what we know today, who knows what could happen, had someone tried studying it... Haven was terrified that the Empire would be careless enough to try, and the Empire that Haven was desperate enough for it. And so they fought, not to gain control of it, but to make sure no-one would.
  
 Ultimately, the scattership's internal systems have stopped working one after another, and it is now little more than a wreck full of exotic materials. Still, I am going to leave it alone, just in case..]]
 	},
 	anomaly_estann_all = { -- planet43
-		name = "Estann All artefact",
+		name = "Estann All nanotech",
+		image = "campaign/sample/graphics/icons/Nanite.png",
 		category = "5. Anomalies",
 		text = [[Unsurprisingly, they didn't develop such advanced nanotech themselves. Any record has long been lost to the grey goo, but it isn't too difficult to guess what happened.
  
@@ -522,6 +562,7 @@ They managed to tame the nasty little things, and programmed them for building t
 	--- Ancient trees
 	anomaly_walchice = { -- planet20
 		name = "The skytrees of Waliche",
+		image = "campaign/sample/graphics/icons/SpaceElevatorTree.png",
 		category = "5. Anomalies",
 		text = [[The research facilities weren't so much for studying the skytrees themselves than for unearthing ancient research facilities and their own findings on those trees.
  
@@ -533,6 +574,7 @@ They were thought to have naturally evolved. How and from what, however, remains
 	},
 	anomaly_old_falsell = { -- planet45
 		name = "The skytrees of Old Falsell",
+		image = "campaign/sample/graphics/icons/NonEquatorialSpaceElevator.png",
 		category = "5. Anomalies",
 		text = [[Neither Old Falsell nore Waliche have traces of large indigenous life apart from the skytrees, and it seems impossible that they evolved on either planet. In fact, complex life was thought to be impossible in the early galaxy, cosmic extinction events being too frequent to let it have time to evolve.
  
@@ -545,7 +587,8 @@ Who knows, maybe they are still there, in some remote corner of the universe...]
 	},
 	--- Ancient tech and research
 	anomaly_asjulohi = { -- planet24
-		name = "Asjulohi ancient fabricator",
+		name = "Asjulohi ancient fabricators",
+		image = "campaign/sample/graphics/unitpics/pw_metal.png",
 		category = "5. Anomalies",
 		text = [[Once common on wealthy worlds, knowledge of how to manufacture those ancient fabricators has been lost for millennia. Now, only a handful still operate across the galaxy - or at least, did when this one was last studied.
  
@@ -553,6 +596,7 @@ Previous empires have tried to replicate these marvels, even carefully dismantli
 	},
 	anomaly_deuliah = { -- planet56
 		name = "Deuliah's detriment",
+		image = "campaign/sample/graphics/unitpics/striderdetriment.png",
 		category = "5. Anomalies",
 		text = [[When this R&D site was abandoned, its facilities and material were not shipped off-world or disposed of, apart from the most sensitive works. This inevitably attracted varied scavengers, hoping to make a profit off all the valuables left, from scrap and hardware to data and expert systems.
  
@@ -562,6 +606,7 @@ Supposedly a R&D site of the Empire like many others, it had actually been infil
 	},
 	anomaly_lalata = { -- planet51
 		name = "Lalata's report",
+		image = "campaign/sample/graphics/icons/EventReport.png",
 		category = "5. Anomalies",
 		text = [[According to their research, the event appears to have started at the extreme end of the Anarchai Arm. Some hypothesized an extragalactic origin based on this, but the spread pattern showed that it had started on a specific region of the galaxy, not propagated from a distant source.
  
