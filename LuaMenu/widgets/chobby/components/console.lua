@@ -5,6 +5,13 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 	self.showDate = true
 	self.dateFormat = "%H:%M"
 
+	-- List of sent messages sent by the viewer. self.sentMessages[1] will be the message the user was typing.
+	-- self.sentMessages[2] is the start of history.
+	self.sentMessages = {""}
+	-- The index of the sent message currently being shown in the editbox.
+	-- An index of 1 indicates the current message, index >= 2 indicates message history.
+	self.sentMessageIndex = 1
+
 	self.channelName = channelName
 
 	local onResize
@@ -90,7 +97,12 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 
 	self.ebInputText.KeyPress = function(something, key, ...)
 		if key == Spring.GetKeyCode("tab") then
+			local before = self.ebInputText.text
 			self:Autocomplete(self.ebInputText.text)
+			-- If text changes, reset the index.
+			if before ~= self.ebInputText.text then
+				self.sentMessageIndex = 1
+			end
 			return false
 		else
 			self.subword = nil
@@ -103,7 +115,18 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 				key == Spring.GetKeyCode("numpad_enter") then
 				self:SendMessage()
 				return true
+			elseif key == Spring.GetKeyCode("up") then
+				self:FillPreviousSentMessage()
+				return true
+			elseif key == Spring.GetKeyCode("down") then
+				self:FillNextSentMessage()
+				return true
 			end
+		end
+	}
+	self.ebInputText.OnTextInput = {
+		function(utf8char, ...)
+			self.sentMessageIndex = 1
 		end
 	}
 	self.fakeImage = Image:New {
@@ -132,6 +155,36 @@ function Console:init(channelName, sendMessageListener, noHistoryLoad, onResizeF
 	if not noHistoryLoad then
 		self:LoadHistory(Configuration.lastLoginChatLength)
 	end
+end
+
+-- Changes the current console text entry to message sent after the one currently shown.
+-- Shows the message that was being typed before retrieving past messages if there are no
+-- messages sent since the one currently shown in the EditBox.
+function Console:FillNextSentMessage()
+	-- Only move forward if not looking at the past.
+	if self.sentMessageIndex > 1 then
+		self:FillSentMessage(self.sentMessageIndex - 1)
+	end
+end
+
+-- Changes the current console text entry to the message sent further in the past than the one currently shown.
+function Console:FillPreviousSentMessage()
+	if self.sentMessageIndex == #self.sentMessages then
+		-- Bail out if there's no previous history to see.
+		return
+	elseif self.sentMessageIndex == 1 then
+		-- Save current message before we move into the past.
+		self.sentMessages[1] = self.ebInputText.text
+	end
+	-- Move the index, and update the editBox
+	self:FillSentMessage(self.sentMessageIndex + 1)
+end
+
+-- Changes the current console text entry to the specified sent message.
+-- sentMessageIndex must be >= 0
+function Console:FillSentMessage(sentMessageIndex)
+	self.ebInputText:SetText(self.sentMessages[sentMessageIndex])
+	self.sentMessageIndex = sentMessageIndex
 end
 
 function Console:Autocomplete(textSoFar)
@@ -185,10 +238,16 @@ end
 function Console:SendMessage()
 	if self.ebInputText.text ~= "" then
 		message = self.ebInputText.text
+		-- Listener handles sending the message.
 		if self.listener then
 			self.listener(message)
 		end
+		-- If the message is different than the last sent message, save the message for retrieval by uparrow.
+		if self.sentMessages[2] ~= self.ebInputText.text then
+			table.insert(self.sentMessages, 2, self.ebInputText.text)
+		end
 		self.ebInputText:SetText("")
+		self.sentMessageIndex = 1
 	end
 end
 
