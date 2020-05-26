@@ -1171,6 +1171,16 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 					}
 				end
 			end
+		elseif Configuration.showPlanetMinimap then
+			local mapImageFile = Configuration:GetMinimapSmallImage(planetData.gameConfig.mapName)
+			debugHolder = Image:New{
+				x = 0,
+				y = 0,
+				width = targetSize,
+				height = targetSize,
+				file = mapImageFile,
+				parent = planetListHolder,
+			}
 		elseif Configuration.showPlanetEnemyUnits then
 			debugHolder = Control:New{
 				x = 0,

@@ -200,6 +200,7 @@ function Configuration:init()
 	self.enableProfiler = false
 	self.showPlanetUnlocks = false
 	self.showPlanetCodex = false
+	self.showPlanetMinimap = false
 	self.showPlanetEnemyUnits = false
 	self.campaignSpawnDebug = false
 	self.editCampaign = false
@@ -516,6 +517,7 @@ function Configuration:GetConfigData()
 		enableProfiler = self.enableProfiler,
 		showPlanetUnlocks = self.showPlanetUnlocks,
 		showPlanetCodex = self.showPlanetCodex,
+		showPlanetMinimap = self.showPlanetMinimap,
 		showPlanetEnemyUnits = self.showPlanetEnemyUnits,
 		campaignSpawnDebug = self.campaignSpawnDebug,
 		editCampaign = self.editCampaign,
