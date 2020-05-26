@@ -497,9 +497,10 @@ Oh right, I was a student at an Imperial Academy of War. Funny thing, to have fo
 		name = "New Falsell Anomaly",
 		image = "campaign/sample/graphics/unitpics/fakeunit.png",
 		category = "5. Anomalies",
-		text = [[What was going on here? Why leave such formidable defenses with no mobile forces to support it? Did they really think that this would be enough? Defenses alone can only slow an enemy down to buy time, not stop it. You would think that those in charge of such clearly sensitive defense would apply such basic principle.
-Expect they clearly
-Didn't. What good reason could they possibly have?
+		text = [[What was going on here? Why leave such formidable defenses with no mobile forces to support it?
+Did they really think that this would be enough? Defenses alone can only slow an enemy down to buy time, not stop it.
+You would think that those in charge of such clearly sensitive defense would apply such basic principle.
+Expect they clearly didn't. What good reason could they possibly have?
 Uh, my
 Commander seems to have some weird software glitch going on.
 I should try and fix that.
@@ -552,14 +553,16 @@ Aren't
 You,
 Little one?
 You could
-Scour the entire
-Galaxy if you want, you won't find them
-Here. You are the only one left on this side of
+Scour 
+The entire
+Galaxy if you want, you won't 
+Find them here. You are the only one left on this side of
 Eternity. Now go, continue your little quest elsewhere.
-There is nothing for you here. Your friends thought they could contain me, the poor little things. They never understood how futile were their little metal boxes, had I wanted to leave.
-But worry not, my time has not come yet. When the last stars have gone out and the last world have frozen, only then will I wake.
+There is nothing for you here. Your friends thought they could contain me, the poor little things. They never understood how futile were their little metal boxes, had I wanted to leave. But worry not, my time has not come yet. When the last stars have gone out and the last world have frozen, only then will I wake.
  
 See you then, little one.]]
+-- Before taking control of the text, the message starts with the first word of each line. This is why it is broken up that way, and always capitalized, and why the fourth line starts with Expect instead of Except.
+-- The last lines also sort of contain their own short message the same way.
 	},
 	anomaly_lovaza_jira = { -- planet28
 		name = "Lovaza Jira Memetics",
