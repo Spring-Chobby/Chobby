@@ -441,7 +441,8 @@ local function GetPlanet(planetUtilities, planetID)
 			abilities = {
 			},
 			codexEntries = {
-				"location_phisnet"
+				"location_phisnet",
+				"threat_automata",
 			},
 		},
 	}

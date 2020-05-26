@@ -440,8 +440,9 @@ local function GetPlanet(planetUtilities, planetID)
 			modules = {
 				"module_autorepair_LIMIT_A_2",
 			},
-			abilities = {
-			}
+			codexEntries = {
+				"entry_event",
+			},
 		},
 	}
 	

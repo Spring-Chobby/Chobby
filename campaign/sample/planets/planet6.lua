@@ -283,6 +283,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"commweapon_lightninggun",
 			},
 			codexEntries = {
+				"threat_automata",
 			},
 		},
 	}

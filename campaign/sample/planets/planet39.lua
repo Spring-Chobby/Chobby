@@ -2520,8 +2520,8 @@ local function GetPlanet(planetUtilities, planetID)
 			abilities = {
 			},
 			codexEntries = {
-				"faction_rebels"
-			},
+				"faction_lawless"
+			}
 		},
 	}
 	

@@ -1096,7 +1096,8 @@ local function GetPlanet(planetUtilities, planetID)
 			abilities = {
 			},
 			codexEntries = {
-				"anomaly_walchice"
+				"anomaly_walchice",
+				"entry_event",
 			},
 		},
 	}

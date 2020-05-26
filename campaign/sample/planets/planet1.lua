@@ -327,8 +327,7 @@ local function GetPlanet(planetUtilities, planetID)
 			abilities = {
 			},
 			codexEntries = {
-				"location_im_jaleth",
-				"entry_commander"
+				"location_im_jaleth"
 			}
 		},
 	}

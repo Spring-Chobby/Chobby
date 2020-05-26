@@ -104,6 +104,8 @@ local function PopulateCodexTree(parent, codexText, codexImage)
 					name = entry.id,
 					height = 24,
 					caption = entry.name,
+					align = "left",
+					alignPadding = 0.08,
 					OnClick = {
 						function(self)
 							if selectedButton and selectedButton.name == self.name then

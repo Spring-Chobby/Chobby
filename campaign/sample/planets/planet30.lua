@@ -2186,7 +2186,8 @@ local function GetPlanet(planetUtilities, planetID)
 			modules = {
 				"module_adv_nano_LIMIT_D_1",
 			},
-			abilities = {
+			codexEntries = {
+				"faction_haven"
 			}
 		},
 	}

@@ -406,8 +406,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_high_power_servos_LIMIT_A_2",
 			},
 			codexEntries = {
-				"entry_event",
-				"threat_automata"
+				"entry_commander"
 			},
 		},
 	}

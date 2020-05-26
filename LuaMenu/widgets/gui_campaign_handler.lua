@@ -848,7 +848,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 				right = 0,
 				bottom = 62,
 				width = 160,
-				height = 35,
+				height = 40,
 				padding = {0, 0, 0, 0},
 				font = Configuration:GetFont(2),
 				caption = i18n("invite_friends") .. "   ",
@@ -896,7 +896,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		if (not LIVE_TESTING) and (Configuration.debugAutoWin or Configuration.debugMode) then
 			local autoWinButton = Button:New{
 				right = 0,
-				bottom = 100,
+				bottom = 110,
 				width = 150,
 				height = 65,
 				classname = "action_button",
@@ -911,7 +911,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 			}
 			local autoLostButton = Button:New{
 				right = 155,
-				bottom = 100,
+				bottom = 110,
 				width = 175,
 				height = 65,
 				classname = "action_button",
@@ -1147,6 +1147,30 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 			offset = AddDebugUnlocks(debugHolder, rewards.units, WG.CampaignData.GetUnitInfo, offset, DEBUG_UNLOCK_COLUMNS, DEBUG_UNLOCK_SIZE)
 			offset = AddDebugUnlocks(debugHolder, rewards.modules, WG.CampaignData.GetModuleInfo, offset, DEBUG_UNLOCK_COLUMNS, DEBUG_UNLOCK_SIZE)
 			offset = AddDebugUnlocks(debugHolder, rewards.abilities, WG.CampaignData.GetAbilityInfo, offset, DEBUG_UNLOCK_COLUMNS, DEBUG_UNLOCK_SIZE)
+		elseif Configuration.showPlanetCodex then
+			local rewards = planetData.completionReward
+			if rewards.codexEntries and #rewards.codexEntries > 0 then
+				debugHolder = Control:New{
+					x = 0,
+					y = 0,
+					width = targetSize*10,
+					height = targetSize*#rewards.codexEntries,
+					padding = {0, 0, 0, 0},
+					parent = planetListHolder,
+				}
+				for i = 1, #rewards.codexEntries do
+					local number = Label:New {
+						x = 0,
+						y = 13*(i - 1),
+						right = 0,
+						align = "left",
+						valign = "center",
+						caption = rewards.codexEntries[i],
+						font = Configuration:GetFont(1),
+						parent = debugHolder,
+					}
+				end
+			end
 		elseif Configuration.showPlanetEnemyUnits then
 			debugHolder = Control:New{
 				x = 0,

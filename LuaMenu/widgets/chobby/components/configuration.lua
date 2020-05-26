@@ -199,6 +199,7 @@ function Configuration:init()
 	self.devMode = (VFS.FileExists("devmode.txt") and true) or false
 	self.enableProfiler = false
 	self.showPlanetUnlocks = false
+	self.showPlanetCodex = false
 	self.showPlanetEnemyUnits = false
 	self.campaignSpawnDebug = false
 	self.editCampaign = false
@@ -514,6 +515,7 @@ function Configuration:GetConfigData()
 		debugAutoWin = self.debugAutoWin,
 		enableProfiler = self.enableProfiler,
 		showPlanetUnlocks = self.showPlanetUnlocks,
+		showPlanetCodex = self.showPlanetCodex,
 		showPlanetEnemyUnits = self.showPlanetEnemyUnits,
 		campaignSpawnDebug = self.campaignSpawnDebug,
 		editCampaign = self.editCampaign,

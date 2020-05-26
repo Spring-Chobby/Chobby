@@ -516,8 +516,9 @@ local function GetPlanet(planetUtilities, planetID)
 			modules = {
 				"module_adv_nano_LIMIT_B_1",
 			},
-			abilities = {
-			}
+			codexEntries = {
+				"entry_event",
+			},
 		},
 	}
 	

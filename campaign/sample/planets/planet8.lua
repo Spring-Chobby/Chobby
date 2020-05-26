@@ -3523,7 +3523,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_high_power_servos_LIMIT_D_2",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"entry_event",
+			},
 		},
 	}
 	

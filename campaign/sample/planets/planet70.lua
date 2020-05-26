@@ -5182,7 +5182,8 @@ local function GetPlanet(planetUtilities, planetID)
 			modules = {
 				"module_high_power_servos_LIMIT_B_2",
 			},
-			abilities = {
+			codexEntries = {
+				"faction_lawless"
 			}
 		},
 	}
