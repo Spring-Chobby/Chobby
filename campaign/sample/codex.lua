@@ -80,7 +80,7 @@ As it turns out, it appears that the Dynasty was behind it all. The oldest known
  
 Tracing back to Earth, they were a shadowy group of biosupremacists, obsessed with creating superior humans through genetic and biological modifications, and ruling over humanity as its greatest representatives. They shunned cybernetic enhancements, and hated non-human synths and free machines as anathema. They were divided into rival families, united only in their goal and against common menaces.
  
-They only acted openly when they were certain of their strength, preferring to subvert those they could, and secretly organizing rebellions against those they couldn't. They were the puppetmasters behind the Rebels, hoping to destabilize the Empire and take over in the resulting chaos. Even if the Empire won, it would have been weakened enough for the Dynasty to grow in influence - assuming they had not  been discovered.
+They only acted openly when they were certain of their strength, preferring to subvert those they could, and secretly organizing rebellions against those they couldn't. They were the puppetmasters behind the Rebels, hoping to destabilize the Empire and take over in the resulting chaos. Even if the Empire won, it would have been weakened enough for the Dynasty to grow in influence - assuming they had not been discovered.
  
 And yet, by their historical standards, the whole operation feels botched and amateurish. They may have survived against all odds, but as a mere shadow of themselves.]]
 	},
@@ -106,13 +106,13 @@ Still, something feels wrong with the whole affair. They had to know it had such
  
 Hitting the galaxy like a hurricane, they smashed all resistance, systematically dismantling any higher form of organization and advanced installations they found, before continuing to the next system.
  
-Taken aback, the Celestial Dominion, Ghost Mandate and Dynasty put their longstanding cold war on hold to band together against this new menace, but to no avail. Within months, both the mighty Ghost Fleet and the Four Thrones had been destroyed, with only a few survivors managing to reach Dynasty space before the Anarchai scatterships.
+Taken aback, the Celestial Dominion, Ghost Mandate and Dynasty put their longstanding cold war on hold to band together against this new menace, but to no avail. Within months, both the mighty Ghost Fleet and the Four Thrones had been destroyed, with only a few survivors managing to reach Dynasty space before the Anarchai scattershapes.
  
 It would be the only time in known history where the Dynasties broke their principle of human supremacy, making large-scale use of tech from Celestial and Ghost remnants. Against all odds, this unholy alliance of desperation did manage to slow down the ineluctable Anarchai advance - though not for long.
  
 Three years after their emergence, Chatka, the Dynasty homeworld and last bastion of resistance, would be burned to cinders.
  
-But then, the Anarchai turned their scatterships against each other, destroying themselves to the last. As suddenly as they had appeared, the Anarchai were gone - leaving the galaxy stunned, ruined, utterly disorganized - but to their own surprise, still alive.
+But then, the Anarchai turned their scattershapes against each other, destroying themselves to the last. As suddenly as they had appeared, the Anarchai were gone - leaving the galaxy stunned, ruined, utterly disorganized - but to their own surprise, still alive.
  
 Haven was fascinated by the Anarchai. Located in their presumed birthplace, they spent considerable effort trying to pierce the mystery of their origins, even as the war against the Empire was taking a turn for the worse.]]
 		-- ed note: Nothing to do with the Zero-K contributor Anarchid, the name resemblance is just a coincidence. Here, Anarchai is constructed from Archai (plural of Arche).
@@ -345,7 +345,7 @@ In a strange turn of fate, the human-supremacist Dynasty, oldest and longest-liv
  
 Faced with annihilation, not only of themselves but of the entire galaxy, the Dynasty renounced its founding principle. They installed Celestial cybernetic enhancements on their Demiurge battalion, creating in desperation what would be the greatest warriors in galactic history, and the only ones to ever stand their ground, if only for a moment, against the Anarchai.
  
-They would hold for two years, repelling many planetary assaults, but losing almost as many Demiurges to late cybernetic incompatibilities than to enemy action. Ultimately, though, it was not the Demiurges that would fail. Concentrating all their forces on the lone system, the Anarchai shut down the system's hyperspace barriers and triggered a starpulse, destroying all space defenses. Then sent their immense starships to break the planetary shield, overwhelm the anti-aerospace defenses, and burn the planet to the mantle.
+They would hold for two years, repelling many planetary assaults, but losing almost as many Demiurges to late cybernetic incompatibilities than to enemy action. Ultimately, though, it was not the Demiurges that would fail. Concentrating all their forces on the lone system, the Anarchai shut down the system's hyperspace barriers and triggered a starpulse, destroying all space defenses. Then sent their siege clusters to break the planetary shield, overwhelm the anti-aerospace defenses, and burn the planet to the mantle.
  
 The rest, as they said, is History.]]
 	},
@@ -575,15 +575,15 @@ What they could not find at the time, but what became clear once the fighting st
 		name = "Leopard Artefact",
 		image = "campaign/sample/graphics/icons/EmpireHavenBattle.png",
 		category = "5. Anomalies",
-		text = [[No wonder they fought so hard over it, this artifact was a freaking Anarchai scattership!
+		text = [[No wonder they fought so hard over it, this artifact was a freaking Anarchai scattershape!
  
-When the Ghost Fleet hit the Anarchai, they were completely unprepared to what they were actually facing. However, it is a testament to the might of the Mandate's military that they still managed to destroy several scatterships during the engagement.
+When the Ghost Fleet hit the Anarchai, they were completely unprepared to what they were actually facing. However, it is a testament to the might of the Mandate's military that they still managed to destroy several scattershapes during the engagement.
  
-This particular scattership phased right through Leopard after sustaining heavy damage, ending up trapped in its mantle. The few self-repair systems were barely enough to keep its integrity, but its gestalt had been irremediably destroyed - which is presumably why the Anarchai didn't bother recovering or destroying it afterwards.
+This particular scattershape phased right through Leopard after sustaining heavy damage, ending up trapped in its mantle. The few self-repair systems were barely enough to keep its integrity, but its gestalt had been irremediably destroyed - which is presumably why the Anarchai didn't bother recovering or destroying it afterwards.
  
 Even in its mindless, damaged state, had its self-repair systems kicked in and made it spaceworthy again, it would have had enough firepower to endanger the entire galaxy again. And its technology was so advanced and different from what we know today, who knows what could happen, had someone tried studying it... Haven was terrified that the Empire would be careless enough to try, and the Empire that Haven was desperate enough for it. And so they fought, not to gain control of it, but to make sure no-one would.
  
-Ultimately, the scattership's internal systems have stopped working one after another, and it is now little more than a wreck full of exotic materials. Still, I am going to leave it alone, just in case..]]
+Ultimately, the scattershape's internal systems have stopped working one after another, and it is now little more than a wreck full of exotic materials. Still, I am going to leave it alone, just in case..]]
 	},
 	anomaly_estann_all = { -- planet43
 		name = "Estann All Nanotech",
