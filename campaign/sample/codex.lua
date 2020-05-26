@@ -375,7 +375,7 @@ While the newly-unified Rebel military was adept at raids and information warfar
  
 The loss of the army into which the Rebels had poured so much of their resources broke their military, and it would never recover. Following this defeat, and despite occasional successes in resisting the Empire's advance, the Rebels would not see another key victory, only losing ground from then on.
  
-By the time of the Event, only a few worlds still held on against the Empire's armies, with resistance movements on many others mercilessly hunted down. Had everyone not disappeared, it would have been a matter of time before their complete annihilation.]]
+By the time of the event, only a few worlds still held on against the Empire's armies, with resistance movements on many others mercilessly hunted down. Had everyone not disappeared, it would have been a matter of time before their complete annihilation.]]
 	},
 	location_rockbar = { -- planet57
 		name = "Rockbar Battleground",
