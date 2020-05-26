@@ -46,7 +46,7 @@ local HIDDEN_COLOR = {0.2, 0.2, 0.2, 0}
 local PLANET_START_COLOR = {1, 1, 1, 1}
 local PLANET_NO_START_COLOR = {0.5, 0.5, 0.5, 1}
 
-local TARGET_IMAGE = LUA_DIRNAME .. "images/niceCircle.png"
+local TARGET_IMAGE = LUA_DIRNAME .. "images/nicecircle.png"
 local IMG_LINK     = LUA_DIRNAME .. "images/link.png"
 local PARTY_LINK     = LUA_DIRNAME .. "images/partyinvite.png"
 
@@ -1218,6 +1218,7 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 	button:SetVisibility(false)
 
 	local image = Image:New {
+		name = "planetimage" .. planetID,
 		x = 3,
 		y = 3,
 		right = 3,
