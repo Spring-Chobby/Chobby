@@ -10,9 +10,9 @@ Several acronyms were used on occasion, but the variety of languages between the
  
 "To each its own"
  
-This polity seems to have started as a defensive alliance, as the old empire was falling apart. Many systems in the region had long-suppressed desires for independence, and banded together to maintain a semblance in the slow disappearance of imperial law. With time, trade and law enforcement agreements completed the military treaties, and the Union slowly became a political entity in its own right, if a very decentralized one constituted of fiercely autonomous members.
+This polity seems to have started as a defensive alliance, as the old empire was falling apart. Many systems in the region had long-suppressed desires for independence, and banded together to maintain a semblance of order in the slow disappearance of imperial law. With time, trade and law enforcement agreements completed the military treaties, and the Union slowly became a political entity in its own right, if a very decentralized one constituted of fiercely autonomous members.
  
-As it grew in size and strength it began to run into rivals, both over planetary claims and ideology. This drove them to create an unified military and foreign service, with the occasional bout of expansionism. It seems to have fared relatively well, until they were faced with a much stronger enemy against whom they started to loose system after system.
+As it grew in size and strength it began to run into rivals, both over planetary claims and ideology. This drove them to create an unified military and foreign service, with the occasional bout of expansionism. It seems to have fared relatively well, until they were faced with a much stronger enemy against whom they started to lose system after system.
  
 With the enemy at the gates there was little hope of repelling them without of a miracle. With no miracles forthcoming, everyone disappeared, leaving only ruins and patchy automated defenses.]]
 	},
@@ -26,9 +26,9 @@ As they started winning, everyone called it the Galactic Empire, or simply the E
  
 "Peace through unity"
  
-The origin of this new Restoration is unclear. They claim that as the previous empire disintegrated, it retained its traditions and a core of systems, from which it started to rebuild and reassert itself and. They based the legitimacy of their grand conquest by turning it into a reclamation of its rightful place as the sole ruler of the galaxy. Unsurprisingly, their enemies would have less flattering 'official histories', the most popular being that an ambitious warlord conquered the fallen empire's homeworlds before having delusions of grandeur.
+The origin of this new Restoration is unclear. They claim that as the previous empire disintegrated, it retained its traditions and a core of systems, from which it started to rebuild and reassert itself. The Empire claimed the legitimacy of its grand conquest by naming it a reclamation of its rightful place as the sole ruler of the galaxy. Unsurprisingly, their enemies would have less flattering 'official histories', the most popular being that an ambitious warlord conquered the fallen empire's homeworlds before having delusions of grandeur.
  
-Whatever the truth is, they did retain many of the traditions of the previous empire, even using its legal system and political organization as a basis for their own. By the force of arms, they managed to slowly but surely conquer the galaxy again, with more and more resources and autonomy given to their formidable military machine. At the height its power only a few factions were offering resistance the Empire, and even those had little hope of repelling their armies.]]
+Whatever the truth is, they did retain many of the traditions of the previous empire, even using its legal system and political organization as a basis for their own. By the force of arms, they managed to slowly but surely conquer the galaxy again, with more and more resources and autonomy given to their formidable military machine. At the height of its power only a few factions were offering resistance the Empire, and even those had little hope of repelling their armies.]]
 	},
 	faction_rebels = { -- planet36, planet37, planet39, planet40, planet42, planet44, planet47, planet48, planet56, planet62
 		name = "The Rebels",
@@ -54,15 +54,15 @@ As the previous galactic order fell apart, many long-repressed sectarian tension
  
 During the interregnum, they slowly built up their territory and influence, until they became a regional hegemon. This put them in rivalry with the Union over both strategic and ideological points, having become a highly centralized, harmonist regime. This cold war marred by proxy conflicts was only ended by the greater threat of the Empire.
  
-Realizing that even their uneasy alliance with the Union would not be enough to repel the Empire, they threw every resource they had on the defensive effort, hoping to either outlast the Empire, or maybe find another avenue to victory entirely.
+Realizing that even their uneasy alliance with the Union would not be enough to repel the Empire, they threw every resource they had into the defensive effort, hoping to either outlast the Empire, or maybe find another avenue to victory entirely.
 
-At the time of the event, they were slowly loosing ground, holding onto strategic points with all their strength and making the Empire pay a surprisingly heavy toll for each conquered world. Given their tight organization, formidable defenses and the series of strategic choke-points that were their last worlds, they may have held for a very long time.]]
+At the time of the event, they were slowly losing ground, holding onto strategic points with all their strength and making the Empire pay a surprisingly heavy toll for each conquered world. Given their tight organization, formidable defenses and the series of strategic choke-points that were their last worlds, they might have held out for a very long time.]]
 	},
 	faction_lawless = { -- planet28, planet29, planet34, planet35, planet41, planet49, planet50, planet53
 		name = "The Lawless",
 		image = "campaign/sample/graphics/icons/Lawless.png",
 		category = "3. Factions",
-		text = [[Spread too thin, with much of its attention and resources dedicated to the war machine, and a number of violent, organized uprising, the Empire's rule of law was crumbling on many worlds. Some, impoverished by high taxation and falling trade, turned to crime, piracy and smuggling of all kinds. Governors without oversight nor control became local tyrants. Military and law enforcement groups became warlords and took over the worlds they were supposed to protect.
+		text = [[Spread too thin, with much of its attention and resources dedicated to the war machine, and hampered by a number of violent, organized uprisings, the Empire's rule of law was crumbling on many worlds. Some societies, impoverished by high taxation and falling trade, turned to crime, piracy and smuggling of all kinds. Governors without oversight nor control became local tyrants. Military and law enforcement groups became warlords and took over the worlds they were supposed to protect.
  
 The Empire, while conscious of those problems, decided that it had more pressing issues, namely uniting the galaxy and dealing with the Rebels. Presumably, its plan was to leave this problem for later, when it would be free to reconquer the seceding worlds and reinstate its rule by force.
  
@@ -80,7 +80,7 @@ As it turns out, it appears that the Dynasty was behind it all. The oldest known
  
 Tracing back to Earth, they were a shadowy group of biosupremacists, obsessed with creating superior humans through genetic and biological modifications, and ruling over humanity as its greatest representatives. They shunned cybernetic enhancements, and hated non-human synths and free machines as anathema. They were divided into rival families, united only in their goal and against common menaces.
  
-They only acted openly when they were certain of their strength, preferring to subvert those they could, and secretly organizing rebellions against those they couldn't. They were the one behind the Rebels, hoping to destabilize the Empire and take over in the resulting chaos. Even if the Empire won, it would have been weakened enough for them to grow their influence - assuming they would not have been discovered.
+They only acted openly when they were certain of their strength, preferring to subvert those they could, and secretly organizing rebellions against those they couldn't. They were the puppetmasters behind the Rebels, hoping to destabilize the Empire and take over in the resulting chaos. Even if the Empire won, it would have been weakened enough for the Dynasty to grow in influence - assuming they had not  been discovered.
  
 And yet, by their historical standards, the whole operation feels botched and amateurish. They may have survived against all odds, but as a mere shadow of themselves.]]
 	},
@@ -106,13 +106,13 @@ Still, something feels wrong with the whole affair. They had to know it had such
  
 Hitting the galaxy like a hurricane, they smashed all resistance, systematically dismantling any higher form of organization and advanced installations they found, before continuing to the next system.
  
-Taken aback, the Celestial Dominion, Ghost Mandate and Dynasty put their longstanding cold war on hold to band together against this new menace, but to no avail. Within months, both the mighty Ghost Fleet and the Four Thrones had been destroyed, a few survivors only managing to join Dynasty space before the Anarchai scatterships.
+Taken aback, the Celestial Dominion, Ghost Mandate and Dynasty put their longstanding cold war on hold to band together against this new menace, but to no avail. Within months, both the mighty Ghost Fleet and the Four Thrones had been destroyed, with only a few survivors managing to reach Dynasty space before the Anarchai scatterships.
  
 It would be the only time in known history where the Dynasties broke their principle of human supremacy, making large-scale use of tech from Celestial and Ghost remnants. Against all odds, this unholy alliance of desperation did manage to slow down the ineluctable Anarchai advance - though not for long.
  
-Three years after their emergence, Chatka, the Dynasty homeworld and last bastion of resistance, would be burned to cinder.
+Three years after their emergence, Chatka, the Dynasty homeworld and last bastion of resistance, would be burned to cinders.
  
-Then, they turned their scatterships against each-other, destroying themselves to the last. As suddenly as they had appeared, the Anarchai were gone - leaving the galaxy stunned, ruined, utterly disorganized - but to their own surprise, still alive.
+But then, the Anarchai turned their scatterships against each other, destroying themselves to the last. As suddenly as they had appeared, the Anarchai were gone - leaving the galaxy stunned, ruined, utterly disorganized - but to their own surprise, still alive.
  
 Haven was fascinated by the Anarchai. Located in their presumed birthplace, they spent considerable effort trying to pierce the mystery of their origins, even as the war against the Empire was taking a turn for the worse.]]
 		-- ed note: Nothing to do with the Zero-K contributor Anarchid, the name resemblance is just a coincidence. Here, Anarchai is constructed from Archai (plural of Arche).
@@ -125,9 +125,9 @@ Haven was fascinated by the Anarchai. Located in their presumed birthplace, they
  
 As it turns out, I wasn't the only one to escape the event. A handful among those in deep hibernation or hyperspace misjumps, at the moment it swept them by, were not affected.
  
-With most infrastructure left intact they rarely had trouble surviving. Some, through assets or ingenuity, were capable of interstellar communication and travel. This was enough for them to find each-other, and organize as they could.
+With most infrastructure left intact they rarely had trouble surviving. Some, through assets or ingenuity, were capable of interstellar communication and travel. This was enough for them to find each other, and organize as they could.
  
-At first, they scoured what they could of the galaxy, trying to find their fellow survivors. They set up boradcast stations for stagglers, as well as those handy backdoors I keep finding in war systems in the region. None of the survivors had the authority to control combat systems, and while all those war automata were mostly waiting for orders, they knew they would grow more dangerous with time.
+At first, they scoured what they could of the galaxy, trying to find their fellow survivors. They set up broadcast stations for stragglers, as well as those handy backdoors I keep finding in war systems in the region. None of the survivors had the authority to control combat systems, and while all those war automata were mostly waiting for orders, the surivors knew they would grow more dangerous with time.
  
 After gathering who they could, they delved deeper in the Empire's heartlands. They knew the Empire had tried to find a way to escape the event, and went searching for it.
  
@@ -141,7 +141,7 @@ Evidently, no-one has returned to resettle the galaxy, so I have little hope for
 		category = "2. Threats",
 		text = [[Left to themselves, most armies will fall dormant to minimize energy and maintenance requirements. They can stay functional for a very long time with the proper settings and nanolathe arrays. Passive sensors running on a trickle of power are enough for them recieve new orders or supervision, or as I am finding, to awaken and engage anything they classify as a threat.
  
-Unfortunately, it seems I lack the proper identification codes to be recognized by most of those damn automata, or enough time to find a flaw in their orders that I can subvert - so they are engaging me on sight. There may not be sapient minds behind them, but tactical AIs should not be underestimated, especially when they have the home advantage.
+Unfortunately, it seems I lack the proper identification codes to be recognized by most of those damned automata, or enough time to find a flaw in their orders that I can subvert - so they are engaging me on sight. There may not be sapient minds behind them, but tactical AIs should not be underestimated, especially when they have the home advantage.
  
 I will need to be careful, to choose the time and place of battle to grab what I need, and not wait for reinforcements from everywhere on the planet to overwhelm me, but I can make it. Not that I have a choice...]]
 	},
@@ -157,7 +157,7 @@ Some degree of coordination has been observed between infected units, but nothin
  
 Left to itself, a contaminated world will see its units fall dormant and slowly degrade as nanites cannibalize more and more of them to renew themselves. Fortunately, there is no programming for interplanetary or interstellar contamination, even when space-capable hardware is infected - which often degrades too fast to be capable of reaching other worlds in any cases, so quarantine is effective as containment method.
  
-However, reclaiming contaminated worlds is extremely difficult, as those are much more resilient than any nanite should be able to. In dormant spore mode, it has been known to survive nuclear explosions. And while effective if painstakingly laborious methods were devised with time, tracking and destroying every secret laboratory having kept a sample proved to be a Sisyphean task, never to be quite over.]]
+However, reclaiming contaminated worlds is extremely difficult, as the contagion is much more resilient than any nanite has any right to be. In dormant spore mode, it has been known to survive nuclear explosions. And while effective if painstakingly laborious methods were devised with time, tracking and destroying every secret laboratory having kept a sample proved to be a Sisyphean task, never to be quite over.]]
 	},
 	threat_chickens = { -- planet21, planet38, planet63
 		name = "Chickens",
@@ -167,11 +167,11 @@ However, reclaiming contaminated worlds is extremely difficult, as those are muc
  
 How is that their official name? There is practically no biological link between those things and old Earth galliformes! In fact, those things are less birds than even mammals.
  
-The so-called chicken are a xenoform species of unknown origin, based on a hive-like social structure with specialized zooids with little to no individuality, and what is assumed to be a collective mind centered around a Queen. Whether they possess organic technology or simply extreme adaptation, the organisms forming a collective vary from tiny workers, light scouts and flyers the size of a small bombers to immobile spore-throwers, gigantic White Dragon and finally the Queen itself, a terrifying war machine that will act as final military reserves to an angered colony.
+The so-called chicken are a xenoform species of unknown origin, based on a hive-like social structure with specialized zooids with little to no individuality, and what is assumed to be a collective mind centered around a Queen. Whether they possess organic technology or simply extreme adaptation, the organisms forming a collective vary from tiny workers, light scouts and flyers the size of a small bomber to immobile spore-throwers, gigantic White Dragons and finally the Queen itself, a terrifying war machine that will act as final military reserves to an angered colony.
  
 They are invariably hostile when active, with no rumors of successful cohabitation with humans ever confirmed. They can however stay dormant for long periods in deep, near-undetectable underground chambers to which they are suspected to retreat upon the death of their Queen. This has made their complete eradication from a planet extremely challenging, especially if infrastracture or terraforming efforts are to be preserved.
  
-Hypotheses about their origins run from ancient dormant aliens awakened by human activity to secret weapon gone rogue to results of experiment on accelerated evolution that went wrong - or horribly right.]]
+Hypotheses about their origins run from ancient dormant aliens awakened by human activity to secret weapon gone rogue to results of experiments on accelerated evolution that went wrong - or horribly right.]]
 		-- ed note: The chickens are actually a secret project by a family of the early Dynasty. Observing the deficiencies of even regular modded humans, they sought to create a Humans 2.0 with traits such as extreme adaptation, collective intelligence over many zooids instead of singular body, ability to metabolize any CHON substrate, and other such fantastic abilities. They tried to keep it secret from rival families, recognizing correctly that they would not accept being displaced by Humans 2.0, but they ended up being discovered. The Dynasty panicked and eradicated the family, erasing every bit of data about it they could find so it couldn't be linked to them - fearing that humanity would turn against them in the same panic. It wouldn't be before centuries had passed that they would realize that they had missed some of the subjects.
 	},
 	threat_chickens_lifecycle = { -- planet38
@@ -180,7 +180,7 @@ Hypotheses about their origins run from ancient dormant aliens awakened by human
 		category = "2. Threats",
 		text = [[Little is known or understood about the chicken life-cycle. Colonies are centered around a Queen, and are abandoned or go dormant upon its death. Whether a dormant colony's remains are taken are taken over by a roaming Queen or whether seemingly abandoned colonies eventual produce a new Queen is unknown, as is how Queens themselves are born and form new colonies.
  
-Dormant colonies can endure millennia deep underground, while active colonies form bewildering tunnel complexes, with little surface activity - though some cases of what may be surface agriculture have been observed. Size and activity of individual colonies vary wildly, from lone mountains to entire continents, and ranging from a few scattered zooids to subterranean metropolis. Given time, their activities will inevitably cover the entire planet.
+Dormant colonies can endure millennia deep underground, while active colonies form bewildering tunnel complexes, with little surface activity - though some cases of what may be surface agriculture have been observed. Size and activity of individual colonies vary wildly, from lone mountains to entire continents, and ranging from a few scattered zooids to subterranean metropolises. Given time, their activities will inevitably cover the entire planet.
  
 Chicken biology is suspiciously close to Earth-native biology, but with significant, inexplicable differences, which may be sign of convergent evolution, Earth ancestry or an ability to copy and reuse foreign biological processes. Unsettlingly, human DNA markers have been found on what acts as their core genetic system.]]
 	},
@@ -198,7 +198,7 @@ Chicken have existed for at least as long as the early days of the human galacti
 		name = "Chicken Intelligence",
 		image = "campaign/sample/graphics/unitpics/chickenflyerqueen.png",
 		category = "2. Threats",
-		text = [[Chicken thought processes, or even whether they are even sapient, is unknown. They have however proven themselves to be remarkably good at planning, adaptation and long-term resource management. Their degree of understanding of human societies is unknown, but they are eerily good at striking unsuspecting or unprepared settlements at the worst possible time and place. Though some attribute this to exceptional pattern-recognition, others have hypothesized an ability to spy on and understand human communications and societies.
+		text = [[Chicken thought processes, or even whether they are truly sapient, is unknown. They have however proven themselves to be remarkably good at planning, adaptation and long-term resource management. Their degree of understanding of human societies is unknown, but they are eerily good at striking unsuspecting or unprepared settlements at the worst possible time and place. Though some attribute this to exceptional pattern-recognition, others have hypothesized an ability to spy on and understand human communications and societies.
  
 Inter-colony skirmishes have been observed, often limited to underground tunnel fighting and nowhere near with the level of violence seen against humans, or with a Queen directly intervening. Similarly, while colonies don't always cooperate against humans, with some preferring to go dormant rather than fight, no skirmish has ever been observed on a conflict where a colony was engaged against humans. Long-range coordination of chicken forces also hint at sophisticated inter-colony communications, though by which mechanisms is unknown. Controversial evidence of interstellar communication have been presented, but has always been judged invalid or inconclusive.
  
@@ -220,13 +220,13 @@ In the confusion following the demise of the automated commander for the region 
 		name = "Commanders",
 		image = "campaign/sample/graphics/icons/HeroCommander.png",
 		category = "1. Entries",
-		text = [[Commanders are an old concept. Put all the mining and manufacturing required to build an army on a compact chassis, slap on a weapon and some armor, and harden it all for fast insertion on a hostile planet. Hopefully they send you on a less defended part of the world, where you are left alone long enough to entrench yourself. From there they would launch an assault on strategic locations or open a gate for the real assault forces to get in. Such was their effectiveness that many planets opted to use them in defense. Simply send your own commander to wherever the enemy decides to land, then try and kill them before they can build up enough to kill you.
+		text = [[Commanders are an old concept. Put all the mining and manufacturing required to build an army on a compact chassis, slap on a weapon and some armor, and harden it all for fast insertion on a hostile planet. Hopefully they send you to a less defended part of the world, where you are left alone long enough to entrench yourself. From there you can launch an assault on strategic locations or open a gate for the real assault forces to get in. The Commander chassis were so effective that many planets opted to use them in defense. Simply send your own commander to wherever the enemy decides to land, then try and kill them before they can build up enough to kill you.
  
-A few tried and true models, perfected for cost, effectiveness and reliability, were developed over many wars, and remained essentially unchanged for many centuries. My memories are still blurred, but I remember extensively training on those.
+A few tried and true models, optimized for cost, effectiveness and reliability, were developed over many wars, and remained essentially unchanged for many centuries. My memories are still blurred, but I remember extensively training on those.
  
 And yet, this Commander of mine is unlike anything I have ever seen.
  
-One of the greatest limitation on Commander design is the exotic stresses of warp travel. Advanced weapons and systems may be built in the field, but no Commander was able to jump with a full kit. Many have tried, and no-one is known to get even close to it, even in the old days. But, this one can. For each field upgrade I recover, it stays intact at a jump.
+One of the greatest constraints on Commander design are the exotic stresses imposed by warp travel. Advanced weapons and systems may be built in the field, but no Commander was ever able to jump with a full kit. Many groups tried but I know of none that got close, even in the old days. But this Commander can. Every field upgrade I recover stays intact after each jump.
  
 I never trained for it, or even heard of such a thing. And yet, it feels oddly familiar...]]
 	},
@@ -236,7 +236,7 @@ I never trained for it, or even heard of such a thing. And yet, it feels oddly f
 		category = "1. Entries",
 		text = [[It is not just a few worlds that are empty. It is the entire galaxy.
  
-Again, old ruins from around the same as the others litter the planet. When I try to pick up long-range signals, detect hyperspace movements or any other sort of activity, the galaxy is silent. If someone is still out there, they either lost all interstellar capabilities, or they are hiding very well.
+On each planet I visit, there are ruins littering the surface - and no matter which planet, all the ruins look about the same age. When I scan for long-range signals, hyperspace movements or any other sort of activity, the galaxy is silent. If someone is still out there, they either lost all interstellar capabilities, or they are hiding themselves very carefully.
  
 How long has it been? What few star charts remain are rendered useless due to star drift, and I have neither the tools nor the knowledge to accurately date the ruins. It could have been thousands or millions of years.
  
@@ -252,7 +252,7 @@ How strange to find out the whole truth, after all this time.
  
 This was the homeworld of the new Dynasty. Even after centuries, the discoverers of the vault were still but children compared to their legendary forebears - but they were driven by the same fire. Obsessed by creating superior humans, humans worthy of ruling the galaxy, they pursued a project of engineering the ultimate human warrior. Their goal, a new Demuirge army that would conquer all of humanity in one glorious campaign, and reign as its true, natural, lords!
  
-They didn't tell us what we were. Were they wary of leaks? Of how it may twist us? Of loosing control over us? We only knew we were a new type of modified humans, and a bright future was waiting for us. Sent to military academies, we all performed reasonably well. But reasonably well wasn't what they were hoping for. In truth, we were well-made, we were as capable without biomods or implants as the best cyborgs and synths, but we were no Demuirges.
+They didn't tell us what we were. Were they wary of leaks? Of how it might twist us? Of losing control over us? We only knew we were a new type of modified human, and a bright future was waiting for us. Sent to military academies, we all performed reasonably well. But reasonably well wasn't what they were hoping for. In truth, we were well-made, we were as capable without biomods or implants as the best cyborgs and synths, but we were no Demuirges.
  
 Sometimes, when we went for checkups, some of us didn't come back - particularly those of us found underperforming. Sudden sickness, we were told. Unplanned complications, to be expected from a first batch. No need to worry, statistics were with us now. These lingering defects had been fixed. Unfortunate for those they couldn't have saved.
  
@@ -264,13 +264,13 @@ As for me, I had been separated and cornered when I felt something connect to my
  
 Once on board, I managed to commandeer a dropship and take control of the Commander's support starship. I must have been the priority target by this point as, right before I could jump out-system, the planetry defense grid scored a hit on my hyperdrive generator.
  
-The resulting misjump should have dismantled the starship and its hold into constituent atoms, but this was a starship built with the expertised of the ancient Dynasty in its final days. Somehow, the ship managed to channel the engergies of an exploding hyperdrive into a jump halfway across the galaxy, landing me in deep space near a Union system-state.
+The resulting misjump should have dismantled the starship and its hold into constituent atoms, but this was a starship built with the expertise of the ancient Dynasty in its final days. Somehow, the ship managed to channel the energies of an exploding hyperdrive into a jump halfway across the galaxy, landing me in deep space near a Union system-state.
  
-The Union salvage teams never realized there was a pilot on board the Commander: the shock had been so harsh, I had to been put into deep hibernation, to be awakened in an adequately-equipped Demuirge medical facility. So, not knowing what this strange technology was, they sent us to Folsom to be stored and studied to a later date...
+The Union salvage teams never realized there was a pilot on board the Commander: the shock had been so harsh, I had to have been put into deep hibernation, to be awakened in an adequately-equipped Demuirge medical facility. So, not knowing what this strange technology was, they sent us to Folsom to be stored and studied at a later date...
  
-Here, with our escape attempt, and with me fleeing so violently, the hidden rebirth of the Dynasty knew the Empire would investigate. They knew it was too early to show their hand, but they had just run out of time.
+Here, after our escape attempt, and with me fleeing so violently, the hidden heirs of the Dynasty knew the Empire would investigate. They knew it was too early to show their hand, but they had just run out of time.
  
-I ignore how many of my siblings escaped. Even knowing what happened next, I still hope that at least a few made it out.]]
+I don't know how many of my siblings escaped. Even knowing what happened next, I still hope that at least a few made it out.]]
 	},
 	entry_starsong = { -- planet67
 		name = "Starsong",
@@ -290,13 +290,13 @@ Haven wanted to know more about the signal, but they feared its content. They kn
  
 And yet, it was not enough. One moment they are running an indirect test in a black box system on a fragment of the signal, and the next - everyone in the facility is gone. One second later, there is no-one left on the entire planet. Then, it hits nearby systems...
  
-The data itself has long decayed beyond recovery, and the Starsong itself went silent, at some point since the event. There is nothing left to be found, on how it all started. But perhaps this is for the better. If Haven could not deal with it, who knows what I may have done.]]
+The data itself has long decayed beyond recovery, and the Starsong itself went silent, at some point since the event. There is nothing left to be found, on how it all started. But perhaps this is for the better. If Haven could not deal with it, who knows what damage I could have done.]]
 	},
 	entry_eternity_gate = { -- planet68
 		name = "The Eternity Gate",
 		image = "campaign/sample/graphics/icons/EternityGate.png",
 		category = "1. Entries",
-		text = [[This planet was never meant to house a large population. It had been the Empire's last redoubt, an mighty fortress world for a glorious last stand, came the day of their fall. Which is what happened, in a way. But the refugees never settled here.
+		text = [[This planet was never meant to house a large population. It had been the Empire's last redoubt, a mighty fortress world for a glorious last stand, come the day of their fall. Which is what happened, in a way. But the refugees never settled here.
  
 They never intended to settle this world. Instead, they poured all their efforts, time and resources grasping at straws, looking for an old legend. And I suspect, to their own surprise, they found it.
  
@@ -306,7 +306,7 @@ An immense hyperspace structure, almost half as large as the galaxy, spans the n
  
 After millennia, they received their first reports from the other side. Their first surprise was at the time shift: for days on this side, barely a second would pass on the other - which had only been the first of many hurdles in their attempts to transmit data back. It had been theorized that as both ends drifted toward each-other time-wise, so would they in space, until they would meet and disappear in an impossibly distant future. Or this was the point of their birth, sending them drifting backwards in time...
  
-The other surprise was that the other end, despite being long past the heat death of the universe, and across a mangled, nearly incomprehensibly distorted space-time, it was somewhat inhabitable. And, it would seem, possibly inhabited.
+The other surprise was that the other end, despite being long past the heat death of the universe, and across a mangled, nearly incomprehensibly distorted space-time, was somewhat inhabitable. And, it would seem, possibly inhabited.
  
 Further investigation was cut short when the Anarchai overran the galaxy, severing the Mandate Arm from fallback Dynasty worlds. Faced with destruction, local Mandate authorities strengthened the Gate to the point that it could support a mass-exodus, and evacuated as many as they could.
  
@@ -316,7 +316,9 @@ When the survivors arrived, the Eternity Gate was fully operational, and they al
  
 Maybe I will tidy up what I can in this galaxy. Maybe there are others like me, still waiting in deep slumber. And I can always skip time in hibernation, if needs be.
  
-It seems the Empire had also found an incomplete Mandate project. They lacked time for detailed studies, but they thought it was an receptor node, made to invert the Gate operation and guide backward jumps across the rift. Let's see what I can make of it...]]
+~~
+ 
+It seems the Empire also found an incomplete Mandate project. They lacked the time to study it in detail, but they thought it was a receptor node, intended to invert the Gate operation and guide backward jumps across the rift. Let's see what I can make of it...]]
 	},
 	
 	-- Locations
@@ -341,9 +343,9 @@ The Anarchai had conquered most of the galaxy, smashing all resistance on their 
  
 In a strange turn of fate, the human-supremacist Dynasty, oldest and longest-lived political force in the galaxy, would hold the last bastion of the free galaxy against the alien-thinking Anarchai supermachines.
  
-Faced with annihilation, not only of them but of the entire galaxy, the Dynasty renounced its founding principle, and installed Celestial cybernetic enhancements on their Demuirge battalion, creating in desperation what would be the greatest warriors in galactic history, and the only one to ever stand ground, if only for a moment, against the Anarchai.
+Faced with annihilation, not only of themselves but of the entire galaxy, the Dynasty renounced its founding principle. They installed Celestial cybernetic enhancements on their Demuirge battalion, creating in desperation what would be the greatest warriors in galactic history, and the only ones to ever stand their ground, if only for a moment, against the Anarchai.
  
-They would hold two years, repelling many planetary assaults, but loosing almost as many Demuirges to late cybernetic incompatibilities than to enemy action. Ultimately though, it was not them who would fail. Concentrating all their forces on the lone system, the Anarchai shut down the system's hyperspace barriers and triggered a starpulse, destroying all space defenses. Then sent their immense starships to break the planetary shield, overwhelm the anti-aerospace defenses, and burn the planet to the mantle.
+They would hold for two years, repelling many planetary assaults, but losing almost as many Demuirges to late cybernetic incompatibilities than to enemy action. Ultimately, though, it was not the Demuirges that would fail. Concentrating all their forces on the lone system, the Anarchai shut down the system's hyperspace barriers and triggered a starpulse, destroying all space defenses. Then sent their immense starships to break the planetary shield, overwhelm the anti-aerospace defenses, and burn the planet to the mantle.
  
 The rest, as they said, is History.]]
 	},
@@ -355,11 +357,11 @@ The rest, as they said, is History.]]
  
 This Artefact was one of the weapons they were studying, in desperation, since it bears no resemblance to other Dynasty technology. Did they build it from Ghost or Celestial tech? Or was it something older, whose secrets they were trying to unlock? Whatever it was, I suspect the zombie nanoplague release was more of a side-effect than its true purpose. I was lucky it responded to my shutdown order. From what little sense I can make of those readings, it would have been a very bad idea to let it activate.
  
-It was also here that my Commander was found. It was an experimental auxiliary Demuirge unit, a cheaper version of the mainline fast-responder.
+It was also here that my Commander chassis was originally found. It was an experimental auxiliary Demuirge unit, a cheaper version of the mainline fast-responder.
  
-When the site was destroyed by an Anarchai raid, time was too short to transport it to Chatka. As such, it was powered down and buried in deep vaults, along with its dedicated support starship, and all that couldn't be or wasn't worth being destroyed. In a testament of the prowess of those final ancient days, it was still functional after both the Anarchai bombing and millennia of abandon in its vault.
+When the site was destroyed by an Anarchai raid, time was too short to transport it to Chatka. As such, it was powered down and buried in deep vaults, along with its dedicated support starship, and all that couldn't be or wasn't worth being destroyed. In a testament of the prowess of those final ancient days, it was still functional after both the Anarchai bombing and being abandoned for millennia in its vault.
  
-Unable to analyze such advanced archeotech on site, the researchers installed the Commander on its starship and towed to their headquarters on Caderical.]]
+Unable to analyze such advanced archeotech on site, the researchers installed the Commander on its starship and towed it to their headquarters on Caderical.]]
 	},
 	location_karuwal = { -- planet62
 		name = "Battle of Karuwal",
@@ -371,9 +373,9 @@ This turned out to be a mistake.
  
 While the newly-unified Rebel military was adept at raids and information warfare, they had little experience in large-scale frontal combat. In launching such an attack, the Rebel Expeditionary Force pitted their own weaknesses against the Empire's key strength. Having long since prepared for such an eventuality, the Second Home Army used the string of fortress worlds as a bottleneck, to force the Rebel forces into a decisive battle at Karuwal. Against superiorly trained forces with, for once, the home advantage, the Rebel Expeditionary Force suffered a catastrophic defeat from which only a few survivors managed to retreat.
  
-The loss of the army into which the Rebels had poured so much of their resources broke their military, and it would never recover. Following this defeat, and despite occasional successes in resisting the Empire's advance, the Rebels would not see another key victory, only loosing ground from then on.
+The loss of the army into which the Rebels had poured so much of their resources broke their military, and it would never recover. Following this defeat, and despite occasional successes in resisting the Empire's advance, the Rebels would not see another key victory, only losing ground from then on.
  
-By the time of the event, only a few worlds still held on against the Empire's armies, with resistance movements on many others mercilessly hunted down. Had everyone not disappeared, it would have been a matter of time before their complete annihilation.]]
+By the time of the Event, only a few worlds still held on against the Empire's armies, with resistance movements on many others mercilessly hunted down. Had everyone not disappeared, it would have been a matter of time before their complete annihilation.]]
 	},
 	location_rockbar = { -- planet57
 		name = "Rockbar Battleground",
@@ -387,7 +389,7 @@ This was the Anarchai homeworld. The founders of what would become Haven discove
  
 Most of the archives I could find are extremely well-encrypted, but the little I could decipher indicates that even after all that time, they still had more questions than answers. The Anarchai themselves apparently destroyed a lot of evidence of their origins when they remade themselves.
  
-They progenitors of the Anarchai were originally were a small technologist settlement, exploring cybernetic and free machine self-modifications on a remote world, both to avoid what they saw as stifling regulations, and in case something went wrong to the point of quarantine. Their last intelligible log evoked a data sample from Zhurou. What follows, I suspect, is so heavily encrypted at least in part because Haven thought the data itself was so dangerous...]]
+The progenitors of the Anarchai were originally were a small technologist settlement, exploring cybernetic and free machine self-modifications on a remote world, both to avoid what they saw as stifling regulations, and in case something went wrong to the point of quarantine. Their last intelligible log evoked a data sample from Zhurou. What follows, I suspect, is so heavily encrypted at least in part because Haven thought the data itself was so dangerous...]]
 	},
 	location_pendust = { -- planet60
 		name = "Pendust Archaeology",
@@ -397,10 +399,10 @@ They progenitors of the Anarchai were originally were a small technologist settl
  
 This world is ancient. It has been inhabited since the dawn of time, and Haven took care of preserving as much of its history as they could. Andrezi domes and Oroi spires, Akkanian sprawls dotted with monolithic Sovereignty acrologies, glorious Celestial palaces overlooking Myriadic crater-temples to forgotten gods...
  
-I thought they had turned the entire globe into a war machine, but not quite. They sacrificed a quadrant of the planet to military defenses, after moving every archaeological site they had found out of the way. The entire strategy revolved around forcing a battle for the control of the planet to take place there, where collateral damage would be minimum.
+I thought they had turned the entire globe into a war machine, but not quite. They sacrificed a quadrant of the planet to military defenses, after moving every archaeological site they had found out of the way. The entire strategy revolved around forcing a battle for the control of the planet to take place there, where collateral damage would be held to a minimum.
 Ironically, their capital was the only world over which they were not ready to fight to the death. All their plans revolved over delaying actions and massive evacuations to the Zhurou redoubt. Their defenses were truly formidable, but they would have stopped well short of endangering the planet itself and its historical treasures.
  
-To this day, the maintenance systems kept the city intact, not caring whether people were left to admire the ancient works.]]
+To this day, the maintenance systems have kept the city intact, not caring whether people were left to admire the ancient works.]]
 	},
 	location_hibiliha = { -- planet61
 		name = "Hibiliha Warp Station",
@@ -416,19 +418,19 @@ So this is why a planet is missing from the system...]]
 		name = "Gardens of Intrepid",
 		image = "campaign/sample/graphics/icons/DeadGardens.png",
 		category = "4. Locations",
-		text = [[Intrepid had been the seat of many galactic governments, dating back from even before the Ghost Mandate. It was said to be the most beautiful world in the galaxy, a jewel of the old days, carefully tended for even across wars and chaos.
+		text = [[Intrepid had been the seat of many galactic governments, dating back from even before the Ghost Mandate. It was said to be the most beautiful world in the galaxy, a jewel of the old days, carefully tended even through wars and times of chaos.
  
 Alas, left to itself, even those fantastically well-crafted ancient systems fell to entropy in the end. Small, extremely long-term variations that the unthinking expert systems could not have been programmed to correct for, slowly causing it to be caught in a death spiral of desertification.
  
-Incredibly enough, the machine themselves are still functional. I reprogrammed them as best as I could, using the logs to correct for those longer cycles and variations, and rare cataclysms. It will take centuries, but the garden will be reborn, even if no-one will be there to see it. It won't last forever, of course. But hopefully it will last a bit longer, this time. Ten, fifteen million years...]]
+Incredibly enough, the machines themselves are still functional. I reprogrammed them as best as I could, using the logs to correct for those longer cycles and variations, and rare cataclysms. It will take centuries, but the garden will be reborn, even if no-one will be there to see it. It won't last forever, of course. But hopefully it will last a bit longer, this time. Ten, fifteen million years...]]
 	},
 	location_mannia = { -- planet65
 		name = "Mannia Camps",
 		image = "campaign/sample/graphics/icons/TransitCamps.png",
 		category = "4. Locations",
-		text = [[This is where all the refugees of the Empire - of the entire galaxy, in fact - fled towards. The second-to-last world to be hit, it was hospitable enough to harbor the countless refugees in temporary shelters. Building those with so little time and resources would have been an outstanding feat of engineering and logistics in its own right.
+		text = [[This is where all the refugees of the Empire - of the entire galaxy, in fact - fled towards. The second-to-last world to be hit, it was hospitable enough to harbor the countless refugees in temporary shelters. Building those with so little time and so few resources would have been an outstanding feat of engineering and logistics in its own right.
  
-The last world, Cipher, appears to have been less inhabitable, and most resources appears to have been funneled towards it. Were they really hoping that one more jump would make the difference? Or did they choose to hold for the longest, defiant to the end? That would have certainly been in character for the Empire.
+The last world, Cipher, appears to have been less inhabitable, and most of the resources appear to have been funneled towards it. Were they really hoping that one more jump would make the difference? Or did they choose only to hold for the longest time, defiant to the end? That would have certainly been in character for the Empire.
  
 The survivors appears to have used the ruins of the shelters as their base. The refugee camp of the galaxy had plenty of resources to build lavish housings for such a small number of individuals. After a while, though, they left in turn for Cipher, leaving infrastructure for latecomers, and what must have been an invitation to follow them.]]
 	},
@@ -468,7 +470,7 @@ The military in this region was given a surprising amount of autonomy. It even r
 		category = "4. Locations",
 		text = [[This was the keystone of the entire galactic signal intelligence network of the Empire - or should have been, had it been completed on time. Whether mismanagement, cost overruns, mid-project changes of plan, corruption, sabotage or even plain bad luck, the project seems to have kept on stalling again and again.
  
-At some point, someone decided to re-terraform the entire planet in order resolve the unpleasant local condition that were causing trouble for the project, but the terraforming project also stalled...]]
+At some point, someone decided to re-terraform the entire planet in order to resolve the unpleasant local conditions that were causing trouble for the project, but the terraforming project also stalled...]]
 	},
 	location_hastus = { -- planet46
 		name = "Hastus Network",
@@ -487,7 +489,7 @@ This seems to have rattled them to their core, and may explain why they suddenly
 		category = "4. Locations",
 		text = [[It feels so nostalgic to see this place again, I had loved watching those battle-races so much... And I wasn't the only one, they must have been some of the most popular entertainment in the galaxy. We had betting pools at the academy, and one wargame was even rescheduled so it wouldn't conflict with the season's finale.
  
-Oh right, I was student at an Imperial Academy of War. Funny thing, to have forgotten that. I was pretty good actually, top of my class half the time. It never felt quite real though, as if never really expecting to ever see combat. And, ultimately, I didn't even graduate...]]
+Oh right, I was a student at an Imperial Academy of War. Funny thing, to have forgotten that. I was pretty good actually, top of my class half the time. It never felt quite real though, as if never really expecting to ever see combat. And, ultimately, I didn't even graduate...]]
 	},
 	-- Anomalies
 	-- Artefacts
@@ -565,9 +567,9 @@ See you then, little one.]]
 		category = "5. Anomalies",
 		text = [[It made sense to have assigned two armies to guard that artefact, given its history of being fought over constantly since its discovery several centuries prior. Even after the Empire took control of it, raids and attempted theft continued with surprising regularity, only to be repelled by the two guarding forces. Everyone seemed to know how valuable the artefact was, but the constant fighting made it difficult to study it.
  
-When the Empire's order started to decay in the region, the turmoil made raids on this remote planet less frequent, to the point that the two armies could finally stand down and assess the situation. Which is precisely when they decided to fight each-other over the artefact.
+When the Empire's order started to decay in the region, the turmoil made raids on this remote planet less frequent, to the point that the two armies could finally stand down and assess the situation. Which is precisely when they decided to fight each other over the artefact.
  
-What they could not find at the time, but what became clear once the fighting stopped and automated systems could finally do their thing, was that this damn thing is an ancient interstellar-range memetic weapon, driving everyone to fight for its possession. In a strange turn of events, I am unaffected due to seemingly being the last person in the galaxy, as there is no-one left to fight the artefact over with. Still, better make sure it is stopped for good before leaving the planet...]]
+What they could not find at the time, but what became clear once the fighting stopped and automated systems could finally do their thing, was that this damn thing is an ancient interstellar-range memetic weapon, driving everyone to fight for its possession. In a strange turn of events, I am unaffected due to seemingly being the last person in the galaxy, as there is no-one left for me to fight over the artefact with. Still, better make sure it is stopped for good before leaving the planet...]]
 	},
 	anomaly_leopard = { -- planet33
 		name = "Leopard Artefact",
@@ -595,10 +597,10 @@ They managed to tame the nasty little things, and programmed them for building t
 	},
 	--- Ancient trees
 	anomaly_walchice = { -- planet20
-		name = "Skytrees of Waliche",
+		name = "Skytrees of Walchice",
 		image = "campaign/sample/graphics/icons/SpaceElevatorTree.png",
 		category = "5. Anomalies",
-		text = [[The research facilities weren't so much for studying the skytrees themselves than for unearthing ancient research facilities and their own findings on those trees.
+		text = [[The research facilities weren't so much for studying the skytrees themselves, as opposed to unearthing ancient research facilities and their own findings on those trees.
  
 Unfortunately, being on a strategic crossroads between several warring powers meant that more time and resources were put into defending (or attacking) the place than studying archeotech. Still, a few things were rediscovered. To start with, tree was a misnomer, those things had little to do with Earth plants beyond vaguely similar shapes.
  
@@ -610,11 +612,11 @@ They were thought to have naturally evolved. How and from what, however, remains
 		name = "Skytrees of Old Falsell",
 		image = "campaign/sample/graphics/icons/NonEquatorialSpaceElevator.png",
 		category = "5. Anomalies",
-		text = [[Neither Old Falsell nore Waliche have traces of large indigenous life apart from the skytrees, and it seems impossible that they evolved on either planet. In fact, complex life was thought to be impossible in the early galaxy, cosmic extinction events being too frequent to let it have time to evolve.
+		text = [[Neither Old Falsell nore Walchice have traces of large indigenous life apart from the skytrees, and it seems impossible that they evolved on either planet. In fact, complex life was thought to be impossible in the early galaxy, cosmic extinction events being too frequent to let it have time to evolve.
  
 The trees reproduced by launching their seeds from orbit, and letting them crash back into the ground. They must have traveled across star systems by launching them in outer space instead, and somehow reached adequate planets. No seeds floating in space or crashed on an inhospitable planet was ever found, so they must have possessed some method of guidance and propulsion.
  
-The trees here are about twenty million years older than those of Waliche, which was consistent with some of the leading seed migration models.
+The trees here are about twenty million years older than those of Walchice, which was consistent with some of the leading seed migration models.
  
 As to where they came from in the first place, it seems to have been a distant, probably very different galaxy. They don't seem to have thrived here, and after briefly taking root on a few worlds, they left as they arrived, throwing their new seeds across intergalactic space.
  
@@ -627,7 +629,7 @@ Who knows, maybe they are still out there, thriving in some remote corner of the
 		category = "5. Anomalies",
 		text = [[Once common on wealthy worlds, knowledge of how to manufacture those ancient fabricators has been lost for millennia. Now, only a handful still operate across the galaxy - or at least, did when this one was last studied.
  
-Previous empires have tried to replicate these marvels, even carefully dismantling several over time, and they spared on expense no Asjulohi. They found out how to maintain them, even repairing some of the less decrepit non-functioning ones. But while the theoretical principles behind their operation was better and better understood, they were still far from even thinking about building a new one from scratch.]]
+Previous empires have tried to replicate these marvels, even carefully dismantling several over time, and they spared on expense on Asjulohi. They found out how to maintain them, even repairing some of the less decrepit non-functioning ones. But while the theoretical principles behind their operation became better and better understood, they were still far from even thinking about building a new one from scratch.]]
 	},
 	anomaly_deuliah = { -- planet56
 		name = "Deuliah's Detriment",
@@ -649,7 +651,7 @@ It propagated through the arm in a matter of days, but slowed considerably by th
  
 Both the Inner Disc and Dynastic Quadrant went dark over in a matter of months. By that time, the Empire had ordered a total evacuation towards the Mandate Arm, hoping that at least some worlds would be spared as the advance slowed down. However, later calculations showed that Cipher, the furthest world that they could reach, would be overtaken five to fifteen years later.
  
-They found no way of resist or bypass it, nor even of slowing it down. The automated systems continued taking data after it hit Lalata, but they never found a way to recover it across the event's wake.]]
+They found no way of resist or bypass it, nor even of slowing it down. The automated systems continued taking data after it hit Lalata, but the remaining people never found a way to recover it across the event's wake.]]
 	},
 }
 
