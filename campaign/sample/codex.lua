@@ -243,16 +243,16 @@ How long has it been? What few star charts remain are rendered useless due to st
 Some records have survived, enough to prove that whatever the event was, it happened in an instant. One moment everyone was there, a day like any other. The next moment, they were all gone. Baselines, modified, cyborgs, synths, uplifts, free machines - everyone, no exception, and nothing else...]]
 	},
 	entry_homeworld = { -- planet66
-		name = "The Demuirge Project",
+		name = "The Demiurge Project",
 		image = "campaign/sample/graphics/icons/Homeworld.png",
 		category = "1. Entries",
 		text = [[Caderical. The Glinting City of Caslaar, or what's left of it, under the desert sand. This is where I grew up, where I was born - or rather made.
  
 How strange to find out the whole truth, after all this time.
  
-This was the homeworld of the new Dynasty. Even after centuries, the discoverers of the vault were still but children compared to their legendary forebears - but they were driven by the same fire. Obsessed by creating superior humans, humans worthy of ruling the galaxy, they pursued a project of engineering the ultimate human warrior. Their goal, a new Demuirge army that would conquer all of humanity in one glorious campaign, and reign as its true, natural, lords!
+This was the homeworld of the new Dynasty. Even after centuries, the discoverers of the vault were still but children compared to their legendary forebears - but they were driven by the same fire. Obsessed by creating superior humans, humans worthy of ruling the galaxy, they pursued a project of engineering the ultimate human warrior. Their goal, a new Demiurge army that would conquer all of humanity in one glorious campaign, and reign as its true, natural, lords!
  
-They didn't tell us what we were. Were they wary of leaks? Of how it might twist us? Of losing control over us? We only knew we were a new type of modified human, and a bright future was waiting for us. Sent to military academies, we all performed reasonably well. But reasonably well wasn't what they were hoping for. In truth, we were well-made, we were as capable without biomods or implants as the best cyborgs and synths, but we were no Demuirges.
+They didn't tell us what we were. Were they wary of leaks? Of how it might twist us? Of losing control over us? We only knew we were a new type of modified human, and a bright future was waiting for us. Sent to military academies, we all performed reasonably well. But reasonably well wasn't what they were hoping for. In truth, we were well-made, we were as capable without biomods or implants as the best cyborgs and synths, but we were no Demiurges.
  
 Sometimes, when we went for checkups, some of us didn't come back - particularly those of us found underperforming. Sudden sickness, we were told. Unplanned complications, to be expected from a first batch. No need to worry, statistics were with us now. These lingering defects had been fixed. Unfortunate for those they couldn't have saved.
  
@@ -260,13 +260,13 @@ They knew we were growing suspicious, and it made them panic. They decided that 
  
 Ironically, they had underestimated us. At the next checkup, seeing the changes in procedure and nigh-imperceptible nervousness of our attendants, we knew what to expect. And we had long since prepared escape plans.
  
-As for me, I had been separated and cornered when I felt something connect to my mind. As it turns out, I was enough of a Demuirge for an ancient Dynasty Commander, as, after proving impervious to all attempts at analysis and control, it was responding to me. Powering up in the middle of its laboratory, with security half-compromised, it easily tore through several perimeters straight to my position.
+As for me, I had been separated and cornered when I felt something connect to my mind. As it turns out, I was enough of a Demiurge for an ancient Dynasty Commander, as, after proving impervious to all attempts at analysis and control, it was responding to me. Powering up in the middle of its laboratory, with security half-compromised, it easily tore through several perimeters straight to my position.
  
 Once on board, I managed to commandeer a dropship and take control of the Commander's support starship. I must have been the priority target by this point as, right before I could jump out-system, the planetry defense grid scored a hit on my hyperdrive generator.
  
 The resulting misjump should have dismantled the starship and its hold into constituent atoms, but this was a starship built with the expertise of the ancient Dynasty in its final days. Somehow, the ship managed to channel the energies of an exploding hyperdrive into a jump halfway across the galaxy, landing me in deep space near a Union system-state.
  
-The Union salvage teams never realized there was a pilot on board the Commander: the shock had been so harsh, I had to have been put into deep hibernation, to be awakened in an adequately-equipped Demuirge medical facility. So, not knowing what this strange technology was, they sent us to Folsom to be stored and studied at a later date...
+The Union salvage teams never realized there was a pilot on board the Commander: the shock had been so harsh, I had to have been put into deep hibernation, to be awakened in an adequately-equipped Demiurge medical facility. So, not knowing what this strange technology was, they sent us to Folsom to be stored and studied at a later date...
  
 Here, after our escape attempt, and with me fleeing so violently, the hidden heirs of the Dynasty knew the Empire would investigate. They knew it was too early to show their hand, but they had just run out of time.
  
@@ -343,9 +343,9 @@ The Anarchai had conquered most of the galaxy, smashing all resistance on their 
  
 In a strange turn of fate, the human-supremacist Dynasty, oldest and longest-lived political force in the galaxy, would hold the last bastion of the free galaxy against the alien-thinking Anarchai supermachines.
  
-Faced with annihilation, not only of themselves but of the entire galaxy, the Dynasty renounced its founding principle. They installed Celestial cybernetic enhancements on their Demuirge battalion, creating in desperation what would be the greatest warriors in galactic history, and the only ones to ever stand their ground, if only for a moment, against the Anarchai.
+Faced with annihilation, not only of themselves but of the entire galaxy, the Dynasty renounced its founding principle. They installed Celestial cybernetic enhancements on their Demiurge battalion, creating in desperation what would be the greatest warriors in galactic history, and the only ones to ever stand their ground, if only for a moment, against the Anarchai.
  
-They would hold for two years, repelling many planetary assaults, but losing almost as many Demuirges to late cybernetic incompatibilities than to enemy action. Ultimately, though, it was not the Demuirges that would fail. Concentrating all their forces on the lone system, the Anarchai shut down the system's hyperspace barriers and triggered a starpulse, destroying all space defenses. Then sent their immense starships to break the planetary shield, overwhelm the anti-aerospace defenses, and burn the planet to the mantle.
+They would hold for two years, repelling many planetary assaults, but losing almost as many Demiurges to late cybernetic incompatibilities than to enemy action. Ultimately, though, it was not the Demiurges that would fail. Concentrating all their forces on the lone system, the Anarchai shut down the system's hyperspace barriers and triggered a starpulse, destroying all space defenses. Then sent their immense starships to break the planetary shield, overwhelm the anti-aerospace defenses, and burn the planet to the mantle.
  
 The rest, as they said, is History.]]
 	},
@@ -357,7 +357,7 @@ The rest, as they said, is History.]]
  
 This Artefact was one of the weapons they were studying, in desperation, since it bears no resemblance to other Dynasty technology. Did they build it from Ghost or Celestial tech? Or was it something older, whose secrets they were trying to unlock? Whatever it was, I suspect the zombie nanoplague release was more of a side-effect than its true purpose. I was lucky it responded to my shutdown order. From what little sense I can make of those readings, it would have been a very bad idea to let it activate.
  
-It was also here that my Commander chassis was originally found. It was an experimental auxiliary Demuirge unit, a cheaper version of the mainline fast-responder.
+It was also here that my Commander chassis was originally found. It was an experimental auxiliary Demiurge unit, a cheaper version of the mainline fast-responder.
  
 When the site was destroyed by an Anarchai raid, time was too short to transport it to Chatka. As such, it was powered down and buried in deep vaults, along with its dedicated support starship, and all that couldn't be or wasn't worth being destroyed. In a testament of the prowess of those final ancient days, it was still functional after both the Anarchai bombing and being abandoned for millennia in its vault.
  
