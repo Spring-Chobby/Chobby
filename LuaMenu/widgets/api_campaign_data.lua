@@ -212,7 +212,7 @@ local function SaveGame()
 		saveData.date = os.date('*t')
 		saveData.description = isAutosave and "" or description
 		table.save(saveData, path)
-		Spring.Log(widget:GetInfo().name, LOG.INFO, "Saved game to " .. path)
+		Spring.Echo("Campaign Data", "Saved game to " .. path)
 	end)
 	if (not success) then
 		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error saving game: " .. err)
@@ -451,13 +451,13 @@ local function LoadGame(saveData, refreshGUI)
 		if SanityCheckCommanderLevel() then
 			UpdateCommanderModuleCounts()
 		end
+		WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", saveData.name)
 		SaveGame()
 		if refreshGUI then
 			CallListeners("CampaignLoaded")
 		end
-		WG.Chobby.Configuration:SetConfigValue("campaignSaveFile", saveData.name)
 
-		Spring.Log(widget:GetInfo().name, LOG.INFO, "Save file " .. saveData.name .. " loaded")
+		Spring.Echo("Campaign Data", "Save file " .. saveData.name .. " loaded")
 	end)
 	if (not success) then
 		Spring.Log(widget:GetInfo().name, LOG.ERROR, "Error loading game: " .. err)
@@ -496,23 +496,23 @@ local function SetupNewSave(commName, difficulty, overrideCampaignID)
 end
 
 local function LoadCampaignData()
-	Spring.Log(widget:GetInfo().name, LOG.INFO, "Loading campaign data")
+	Spring.Echo("Campaign Data", "Loading campaign data")
 	local Configuration = WG.Chobby.Configuration
 	local saves = GetSaves()
 
 	-- try loading save whose name is stored in config (this should be the last save we played)
 	if Configuration.campaignSaveFile then
-		Spring.Log(widget:GetInfo().name, LOG.INFO, "Config save file: " .. Configuration.campaignSaveFile)
+		Spring.Echo("Campaign Data", "Config save file: " .. Configuration.campaignSaveFile)
 		local saveData = saves[Configuration.campaignSaveFile]
 		if saveData then
-			Spring.Log(widget:GetInfo().name, LOG.INFO, "Save data found, loading")
+			Spring.Echo("Campaign Data", "Save data found, loading")
 			LoadGame(saveData, true)
 			return true
 		else
 			Spring.Log(widget:GetInfo().name, LOG.WARNING, "Save data not found")
 		end
 	else
-		Spring.Log(widget:GetInfo().name, LOG.INFO, "No configured save data")
+		Spring.Echo("Campaign Data", "No configured save data")
 	end
 
 	-- Configuration.campaignSaveFile does not point to a valid save
