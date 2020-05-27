@@ -44,7 +44,6 @@ function Interface:Register(userName, password, email, useSteamLogin)
 		PasswordHash = password,
 		SteamAuthToken = steamToken,
 		UserID = (config and config.UserID) or 0,
-		InstallID = (config and config.InstallID) or 0,
 	}
 	self:_SendCommand("Register " .. json.encode(sendData))
 	return self
@@ -66,7 +65,6 @@ function Interface:Login(user, password, cpu, localIP, lobbyVersion, useSteamLog
 	if steamToken and (not password) and not REVERSE_COMPAT then
 		sendData = {
 			UserID = (config and config.UserID) or 0,
-			InstallID = (config and config.InstallID) or 0,
 			ClientType = 1,
 			LobbyVersion = lobbyVersion,
 			SteamAuthToken = steamToken,
@@ -77,7 +75,6 @@ function Interface:Login(user, password, cpu, localIP, lobbyVersion, useSteamLog
 			Name = user,
 			PasswordHash = password,
 			UserID = (config and config.UserID) or 0,
-			InstallID = (config and config.InstallID) or 0,
 			ClientType = 1,
 			LobbyVersion = lobbyVersion,
 			SteamAuthToken = steamToken,
