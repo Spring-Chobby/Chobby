@@ -357,6 +357,16 @@ This strategy appeared to work, in a sense, as there was little the occupying fo
  
 Something about this botheres me. The replication technology on display is quite advanced, implying that whoever was fighting here had help...]]
 	},
+	location_baosezu = { -- planet11
+		name = "Baosezu Sleepers",
+		category = "4. Locations",
+		image = "campaign/sample/graphics/icons/Cryopod.png",
+		text = [[Due to a very unusual quirk of its geology, this world has vast, remarkably stable reservoirs of liquid argon trapped deep under polar crust. Enterprising individuals used them to build large cryosleep facilities, making it a small but successful industry and even attracting off-world customers in reasonable numbers.
+ 
+Following the uprisig, caught between a merciless army and increasingly desperate revolutionaries, many escaped the planet. But when the blockade worsened, cutting off escape routes, others turned to the cryosleep facilities. They didn't care who won, hoping to sleep the whole conflict out, and return to a semblance of normal life.
+ 
+Yet, the cryopods are empty. No sleepers as I hoped, nor even remains - and the operation logs have degraded to uselessness. Did the revolutionaries force them out? Or did something else happen?]]
+	},
 	location_chatka = { -- planet58
 		name = "Battle of Chatka",
 		image = "campaign/sample/graphics/icons/DynastyAnarchaiBattle.png",

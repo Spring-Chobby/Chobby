@@ -1076,7 +1076,8 @@ local function GetPlanet(planetUtilities, planetID)
 			abilities = {
 			},
 			codexEntries = {
-				"faction_empire"
+				"faction_empire",
+				"location_baosezu"
 			},
 		},
 	}
