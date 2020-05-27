@@ -1000,7 +1000,8 @@ local function GetPlanet(planetUtilities, planetID)
 			modules = {
 				"commweapon_flamethrower",
 			},
-			abilities = {
+			codexEntries = {
+				"location_skokukur"
 			}
 		},
 	}

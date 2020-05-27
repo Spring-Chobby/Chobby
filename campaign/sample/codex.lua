@@ -139,9 +139,9 @@ Evidently, no-one has returned to resettle the galaxy, so I have little hope for
 		name = "Automata",
 		image = "campaign/sample/graphics/unitpics/guardian.png",
 		category = "2. Threats",
-		text = [[Left to themselves, most armies will fall dormant to minimize energy and maintenance requirements. They can stay functional for a very long time with the proper settings and nanolathe arrays. Passive sensors running on a trickle of power are enough for them recieve new orders or supervision, or as I am finding, to awaken and engage anything they classify as a threat.
+		text = [[Left to themselves, most armies will fall dormant to minimize energy and maintenance requirements. In this state, their functionality can be maintained near-indefinitely, provided they can access raw materials to feed their nanolathe arrays. Passive sensors, running on a trickle of power, are enough for them recieve new orders, or as I am finding, to awaken and engage anything they classify as a threat.
  
-Unfortunately, it seems I lack the proper identification codes to be recognized by most of those damned automata, or enough time to find a flaw in their orders that I can subvert - so they are engaging me on sight. There may not be sapient minds behind them, but tactical AIs should not be underestimated, especially when they have the home advantage.
+Unfortunately, it seems I lack the proper identification codes to be recognized by most of those damned automata, or enough time to subvert them - so they are engaging me on sight. There may not be sapient minds behind them, but tactical AIs should not be underestimated, especially when they have the home advantage.
  
 I will need to be careful, to choose the time and place of battle to grab what I need, and not wait for reinforcements from everywhere on the planet to overwhelm me, but I can make it. Not that I have a choice...]]
 	},
@@ -230,7 +230,19 @@ One of the greatest constraints on Commander design are the exotic stresses impo
  
 I never trained for it, or even heard of such a thing. And yet, it feels oddly familiar...]]
 	},
-	entry_event = { -- planet6, 8, 10, 14, 15, 19
+	entry_iff = {
+		name = "IFF Codes",
+		image = "campaign/sample/graphics/icons/codes.png",
+		category = "1. Entries",
+		text = [[Identification friend or foe, IFF for short, is a system devised by the ancients to protect Commanders from their armies, and their armies from each other. An army with the requisite IFF codes stands united against those without - as I know all-too well - and may even be receptive to orders from friendly Commanders.
+ 
+The various codes used by the automata I encounter have, so far, all shown signs of degradation, implying owners that are either long gone or that have a very lax approach to security. Regardless of the reason, this weakness has allowed me to construct a friendlier identity, and to update it to new conditions by scavenging the data of old installations and defeated automatons.
+ 
+With luck, I can subvert forces that would otherwise unite to fight me, or at least slip unnoticed through any old conflicts that my presence reignites.
+ 
+It starting to look like I will need all the help I can get.]]
+	},
+	entry_event = {
 		name = "The Event",
 		image = "campaign/sample/graphics/icons/Silhouettes.png",
 		category = "1. Entries",
@@ -333,6 +345,18 @@ Was it kept empty as a buffer for the fortress world of my awakening? Depriving 
  
 And again, no one has challenged me beyond automated defenses. No hails, no communications. Automata can be left to their own devices pretty much indefinitely, but why keep a whole world empty and not leave overseers to deal with any surprises?]]
 	},
+	location_skokukur = { -- planet52
+		name = "Skokukur Uprising",
+		category = "4. Locations",
+		image = "campaign/sample/graphics/unitpics/jumpscout.png",
+		text = [[This was a pleasant and prosperous world until, seemingly overnight, its factories were scrapped and hastily converted to weapons of war. Right under the noses of the dominant military force too.
+ 
+The insurgents took the lessons of guerilla warfare seriously. Eschewing most standard battlefield manufacturing techniques, they opted instead to convert their infrastructure directly into cheap, one-use, combat drones. Such was the simplicity of these units that they could be equiped to build copies of themselves out of scrap, acting as both an army and a fully decentralised production base from which to fight an endlessly renewing war.
+ 
+This strategy appeared to work, in a sense, as there was little the occupying force could do beyond quell uprising after uprising. The habitability of the planet was apparently a price the combatants were willing to pay.
+ 
+Something about this botheres me. The replication technology on display is quite advanced, implying that whoever was fighting here had help...]]
+	},
 	location_chatka = { -- planet58
 		name = "Battle of Chatka",
 		image = "campaign/sample/graphics/icons/DynastyAnarchaiBattle.png",
@@ -425,7 +449,7 @@ Alas, left to itself, even those fantastically well-crafted ancient systems fell
 Incredibly enough, the machines themselves are still functional. I reprogrammed them as best as I could, using the logs to correct for those longer cycles and variations, and rare cataclysms. It will take centuries, but the garden will be reborn, even if no-one will be there to see it. It won't last forever, of course. But hopefully it will last a bit longer, this time. Ten, fifteen million years...]]
 	},
 	location_mannia = { -- planet65
-		name = "Mannia Camps",
+		name = "Mannia Shelters",
 		image = "campaign/sample/graphics/icons/TransitCamps.png",
 		category = "4. Locations",
 		text = [[This is where all the refugees of the Empire - of the entire galaxy, in fact - fled towards. The second-to-last world to be hit, it was hospitable enough to harbor the countless refugees in temporary shelters. Building those with so little time and so few resources would have been an outstanding feat of engineering and logistics in its own right.
@@ -436,7 +460,7 @@ The survivors appears to have used the ruins of the shelters as their base. The 
 	},
 	-- Smuggled data
 	location_arteri = { -- planet50
-		name = "Arteri data cache",
+		name = "Arteri Data Cache",
 		image = "campaign/sample/graphics/icons/Folder.png",
 		category = "4. Locations", -- planet13, planet46, planet18, planet17, planet21, planet56, planet28, planet7, planet33, planet63, planet68
 		text = [[Corrupt officials, criminal contacts, shady financial deals... This would have been a treasure trove for law enforcement groups. Some of the code vulnerabilities could be more useful to me though, assuming they haven't been patched or replaced.
@@ -666,13 +690,19 @@ local flexCodex ={
 	{
 		itemName = "threat_automata",
 		unlockCheck = function (planets, codexEntries)
-			return (planets - 2 >= codexEntries)
+			return (planets - 1 >= codexEntries)
+		end,
+	},
+	{
+		itemName = "entry_iff",
+		unlockCheck = function (planets, codexEntries)
+			return (planets - 1 >= codexEntries)
 		end,
 	},
 	{
 		itemName = "entry_event",
 		unlockCheck = function (planets, codexEntries)
-			return (planets - 3 >= codexEntries)
+			return (planets - 2 >= codexEntries)
 		end,
 	}
 }
