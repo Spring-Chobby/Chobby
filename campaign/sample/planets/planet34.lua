@@ -66,10 +66,37 @@ local function GetPlanet(planetUtilities, planetID)
 				},
 				startUnits = {
 					{
+						name = "spiderscout",
+						x = 5843,
+						z = 5333,
+						facing = 1,
+					},
+					{
 						name = "factoryplane",
 						x = 2264,
 						z = 5584,
 						facing = 1,
+					},
+					{
+						name = "staticrearm",
+						x = 1898,
+						z = 5333,
+						facing = 1,
+					},
+					{
+						name = "staticradar",
+						x = 4205,
+						z = 5900,
+						facing = 1,
+					},
+					{
+						name = "bomberdisarm",
+						x = 1050,
+						z = 5016,
+						facing = 1,
+						commands = {
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2652, 5016}},
+						},
 					},
 					{
 						name = "bomberdisarm",
@@ -87,6 +114,15 @@ local function GetPlanet(planetUtilities, planetID)
 						facing = 1,
 						commands = {
 							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2652, 5368}},
+						},
+					},
+					{
+						name = "bomberdisarm",
+						x = 1050,
+						z = 5544,
+						facing = 1,
+						commands = {
+							{cmdID = planetUtilities.COMMAND.RAW_MOVE, pos = {2652, 5544}},
 						},
 					},
 					{
@@ -217,6 +253,13 @@ local function GetPlanet(planetUtilities, planetID)
 						selfPatrol = true,
 					},
 					{
+						name = "staticcon",
+						x = 2232,
+						z = 5300,
+						facing = 0,
+						selfPatrol = true,
+					},
+					{
 						name = "cloakraid",
 						x = 2432,
 						z = 5200,
@@ -247,6 +290,42 @@ local function GetPlanet(planetUtilities, planetID)
 						facing = 1,
 					},
 					{
+						name = "cloakraid",
+						x = 2528,
+						z = 5440,
+						facing = 1,
+					},
+					{
+						name = "cloakraid",
+						x = 2528,
+						z = 5440 - 1*48,
+						facing = 1,
+					},
+					{
+						name = "cloakraid",
+						x = 2528,
+						z = 5440 - 2*48,
+						facing = 1,
+					},
+					{
+						name = "cloakraid",
+						x = 2528,
+						z = 5440 - 3*48,
+						facing = 1,
+					},
+					{
+						name = "cloakraid",
+						x = 2528,
+						z = 5440 - 4*48,
+						facing = 1,
+					},
+					{
+						name = "cloakraid",
+						x = 2528,
+						z = 5440 - 5*48,
+						facing = 1,
+					},
+					{
 						name = "staticmex",
 						x = 1656,
 						z = 5224,
@@ -257,6 +336,12 @@ local function GetPlanet(planetUtilities, planetID)
 						x = 2328,
 						z = 5000,
 						facing = 0,
+					},
+					{
+						name = "turretheavylaser",
+						x = 2412,
+						z = 4820,
+						facing = 1,
 					},
 				}
 			},
@@ -300,6 +385,12 @@ local function GetPlanet(planetUtilities, planetID)
 					},
 					commander = false,
 					startUnits = {
+						{
+							name = "staticradar",
+							x = 1829,
+							z = 1950,
+							facing = 1,
+						},
 						{
 							name = "staticmex",
 							x = 968,
@@ -644,6 +735,18 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 1,
 						},
 						{
+							name = "turretheavylaser",
+							x = 1863,
+							z = 1850,
+							facing = 1,
+						},
+						{
+							name = "turretaalaser",
+							x = 1930,
+							z = 1960,
+							facing = 1,
+						},
+						{
 							name = "vehriot",
 							x = 1502,
 							z = 1532,
@@ -860,6 +963,7 @@ local function GetPlanet(planetUtilities, planetID)
 							spawnRadius = 50,
 							delay = 200,
 							orbitalDrop = false,
+							difficultyAtLeast = 3,
 						},
 						{
 							name = "planeheavyfighter",
@@ -869,7 +973,7 @@ local function GetPlanet(planetUtilities, planetID)
 							spawnRadius = 50,
 							delay = 200,
 							orbitalDrop = false,
-							difficultyAtLeast = 3,
+							difficultyAtLeast = 4,
 						},
 						-- Raptors at 2:30
 						{
@@ -880,6 +984,7 @@ local function GetPlanet(planetUtilities, planetID)
 							spawnRadius = 50,
 							delay = 2.5*30*60,
 							orbitalDrop = false,
+							difficultyAtLeast = 2,
 						},
 						{
 							name = "planeheavyfighter",
@@ -981,6 +1086,7 @@ local function GetPlanet(planetUtilities, planetID)
 							spawnRadius = 50,
 							delay = 7.5*30*60,
 							orbitalDrop = false,
+							difficultyAtLeast = 3,
 						},
 					},
 					startUnits = {
