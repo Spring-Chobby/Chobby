@@ -3525,7 +3525,6 @@ local function GetPlanet(planetUtilities, planetID)
 			abilities = {
 			},
 			codexEntries = {
-				"entry_event",
 			},
 		},
 	}

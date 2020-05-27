@@ -493,7 +493,6 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			codexEntries = {
 				"faction_empire",
-				"entry_event",
 			},
 		},
 	}

@@ -224,6 +224,25 @@ end
 --------------------------------------------------------------------------------
 -- Modules, Rewards
 
+local function GetExtraCodexEntries(planetCount, codexCount, extraUnlocked)
+	local flexCodex = WG.Chobby.Configuration.campaignConfig.flexCodex
+	if not flexCodex then
+		return false
+	end
+	
+	local entries = false
+	for i = 1, #flexCodex do
+		local flexData = flexCodex[i]
+		if ((not gamedata.codexEntriesUnlocked.map[flexData.itemName]) or (extraUnlocked and extraUnlocked[flexData.itemName])) and flexData.unlockCheck(planetCount, codexCount) then
+			entries = (entries or {})
+			entries[#entries + 1] = flexData.itemName
+			codexCount = codexCount + 1
+		end
+	end
+	
+	return entries
+end
+
 local function UnlockRewardSet(rewardSet)
 	local saveRequired = false
 	if rewardSet.units then
@@ -237,6 +256,10 @@ local function UnlockRewardSet(rewardSet)
 	end
 	if rewardSet.codexEntries then
 		saveRequired = UnlockListOfThings(gamedata.codexEntriesUnlocked, rewardSet.codexEntries) or saveRequired
+	end
+	local extraCodexEntries = GetExtraCodexEntries(#gamedata.planetsCaptured.list, #gamedata.codexEntriesUnlocked.list)
+	if extraCodexEntries then
+		saveRequired = UnlockListOfThings(gamedata.codexEntriesUnlocked, extraCodexEntries) or saveRequired
 	end
 	return saveRequired
 end
@@ -668,6 +691,30 @@ function externalFunctions.CapturePlanet(planetID, bonusObjectives, difficulty)
 		CallListeners("PlanetUpdate", planetID)
 		SaveGame()
 	end
+end
+
+function externalFunctions.GetExtraCodexUnlocks(planetID)
+	if gamedata.planetsCaptured.map[planetID] then
+		-- No extra codex entries can come from taking a planet that is already won.
+		return false
+	end
+
+	local newEntries = 0
+	local planet = WG.Chobby.Configuration.campaignConfig.planetDefs.planets[planetID]
+	local codexEntries = (planet and planet.completionReward and planet.completionReward.codexEntries)
+	local extraCodexMap = false
+	if codexEntries then
+		for i = 1, #codexEntries do
+			if not gamedata.codexEntriesUnlocked.map[codexEntries[i]] then
+				extraCodexMap = (extraCodexMap or {})
+				extraCodexMap[codexEntries[i]] = true
+				newEntries = newEntries + 1
+			end
+		end
+	end
+	
+	local extraCodexEntries = GetExtraCodexEntries(#gamedata.planetsCaptured.list + 1, #gamedata.codexEntriesUnlocked.list + newEntries, extraCodexMap)
+	return extraCodexEntries
 end
 
 function externalFunctions.AddPlayTime(battleFrames, missionLost)

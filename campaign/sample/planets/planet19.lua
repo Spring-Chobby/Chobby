@@ -711,7 +711,6 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_heavy_armor_LIMIT_A_2",
 			},
 			codexEntries = {
-				"entry_event",
 			},
 		},
 	}

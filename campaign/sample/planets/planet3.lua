@@ -488,7 +488,6 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_autorepair_LIMIT_C_2",
 			},
 			codexEntries = {
-				"threat_automata"
 			},
 		}
 	}

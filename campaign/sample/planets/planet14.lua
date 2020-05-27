@@ -441,7 +441,6 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_autorepair_LIMIT_A_2",
 			},
 			codexEntries = {
-				"entry_event",
 			},
 		},
 	}

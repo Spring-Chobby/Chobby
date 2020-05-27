@@ -662,4 +662,19 @@ for i,v in pairs(entries) do
 	v.id = i
 end
 
-return entries
+local flexCodex ={
+	{
+		itemName = "threat_automata",
+		unlockCheck = function (planets, codexEntries)
+			return (planets - 2 >= codexEntries)
+		end,
+	},
+	{
+		itemName = "entry_event",
+		unlockCheck = function (planets, codexEntries)
+			return (planets - 3 >= codexEntries)
+		end,
+	}
+}
+
+return entries, flexCodex

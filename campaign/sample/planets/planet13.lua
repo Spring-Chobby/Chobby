@@ -442,7 +442,6 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			codexEntries = {
 				"location_phisnet",
-				"threat_automata",
 			},
 		},
 	}
