@@ -205,7 +205,7 @@ function DelayedInitialize()
 		end
 	end
 	
-	Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
+	WG.Chobby.Configuration:AddListener("OnConfigurationChange", onConfigurationChange)
 end
 
 function widget:Initialize()
