@@ -230,7 +230,7 @@ function Configuration:init()
 	self.language = "en"
 	self.languages = {
 		["en"] = {locale = "en", name="English"},
-		["de"] = {locale = "de", name="Deutsch"},
+		["de"] = {locale = "de", name="Deutsch (unvollständig)"},
 	}
 
 	self.lobby_fullscreen = 1

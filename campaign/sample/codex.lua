@@ -12,9 +12,9 @@ Several acronyms were used on occasion, but the variety of languages between the
  
 This polity seems to have started as a defensive alliance, as the old empire was falling apart. Many systems in the region had long-suppressed desires for independence, and banded together to maintain a semblance of order in the slow disappearance of imperial law. With time, trade and law enforcement agreements completed the military treaties, and the Union slowly became a political entity in its own right, if a very decentralized one constituted of fiercely autonomous members.
  
-As it grew in size and strength it began to run into rivals, both over planetary claims and ideology. This drove them to create an unified military and foreign service, with the occasional bout of expansionism. It seems to have fared relatively well, until they were faced with a much stronger enemy against whom they started to lose system after system.
+As it grew in size and strength it began to run into opposition, both over territory and ideology. This drove them to create an unified military and foreign service, with the occasional bout of expansionism. It seems to have fared relatively well, until they were faced with a much stronger enemy against whom they started to lose system after system.
  
-With the enemy at the gates there was little hope of repelling them without of a miracle. With no miracles forthcoming, everyone disappeared, leaving only ruins and patchy automated defenses.]]
+With the enemy at the gates there was little hope of repelling them without of a miracle. Evidently no miracle occurred.]]
 	},
 	faction_empire = { -- planet11, planet12, planet15, planet16, planet17, planet24, planet25, planet26
 		name = "The Empire",
@@ -26,7 +26,7 @@ As they started winning, everyone called it the Galactic Empire, or simply the E
  
 "Peace through unity"
  
-The origin of this new Restoration is unclear. They claim that as the previous empire disintegrated, it retained its traditions and a core of systems, from which it started to rebuild and reassert itself. The Empire claimed the legitimacy of its grand conquest by naming it a reclamation of its rightful place as the sole ruler of the galaxy. Unsurprisingly, their enemies would have less flattering 'official histories', the most popular being that an ambitious warlord conquered the fallen empire's homeworlds before having delusions of grandeur.
+The origin of this relatively new power is unclear. They claim that, as the previous empire disintegrated, it retained its traditions and a core of systems, from which it started to rebuild and reassert itself. The Empire claimed the legitimacy of its grand conquest by naming it a reclamation of its rightful place as the sole ruler of the galaxy. Unsurprisingly, their enemies would have less flattering 'official histories', the most popular being that an ambitious warlord conquered the fallen empire's homeworlds before having delusions of grandeur.
  
 Whatever the truth is, they did retain many of the traditions of the previous empire, even using its legal system and political organization as a basis for their own. By the force of arms, they managed to slowly but surely conquer the galaxy again, with more and more resources and autonomy given to their formidable military machine. At the height of its power only a few factions were offering resistance the Empire, and even those had little hope of repelling their armies.]]
 	},
@@ -139,11 +139,11 @@ Evidently, no-one has returned to resettle the galaxy, so I have little hope for
 		name = "Automata",
 		image = "campaign/sample/graphics/unitpics/guardian.png",
 		category = "2. Threats",
-		text = [[Left to themselves, most armies will fall dormant to minimize energy and maintenance requirements. In this state, their functionality can be maintained near-indefinitely, provided they can access raw materials to feed their nanolathe arrays. Passive sensors, running on a trickle of power, are enough for them recieve new orders, or as I am finding, to awaken and engage anything they classify as a threat.
+		text = [[Left to themselves, most armies will fall dormant to minimize energy and maintenance requirements. In this state, their functionality can be maintained near-indefinitely, provided they can the access raw materials required by their nanolathe arrays. Passive sensors, running on a trickle of power, are enough for them recieve new orders, or as I am finding, to awaken and engage anything they classify as a threat.
  
-Unfortunately, it seems I lack the proper identification codes to be recognized by most of those damned automata, or enough time to subvert them - so they are engaging me on sight. There may not be sapient minds behind them, but tactical AIs should not be underestimated, especially when they have the home advantage.
+Unfortunately, it seems I lack the proper identification codes to be recognized by most of those damned automata, and lack the the time to subvert them - so they are engaging me on sight. There may not be sapient minds behind them, but tactical AIs should not be underestimated, especially when they have the home advantage.
  
-I will need to be careful, to choose the time and place of battle to grab what I need, and not wait for reinforcements from everywhere on the planet to overwhelm me, but I can make it. Not that I have a choice...]]
+I will need to be careful, to choose the time and place of battle. To grab what I need and get out, not wait for reinforcements from everywhere on the planet to overwhelm me. It will be hard, but I can make it. Not that I have a choice...]]
 	},
 	threat_zombies = { -- planet43, planet59
 		name = "Zombies",
@@ -214,19 +214,19 @@ Contrasting with their sophistication in many other domains, their strangely pri
 		category = "1. Entries",
 		text = [[What am I doing on this hostile fortress world? Was I captured? If so, why was I not dismantled prior to transport? There is no trace of planetary assault - so what caused the battle and my reactivation? Subversion by deep agents? A mistimed diversion? Why hasn't anyone intervened yet? Something feels very wrong.
  
-In the confusion following the demise of the automated commander for the region I managed to get a starship to answer my distress call. This is my chance to jump out of the system.]]
+With the enemy commander destroyed I was able to make a nearby starship answer my distress call. This is my chance to jump out of the system.]]
 	},
 	entry_commander = { -- planet1
 		name = "Commanders",
 		image = "campaign/sample/graphics/icons/HeroCommander.png",
 		category = "1. Entries",
-		text = [[Commanders are an old concept. Put all the mining and manufacturing required to build an army on a compact chassis, slap on a weapon and some armor, and harden it all for fast insertion on a hostile planet. Hopefully they send you to a less defended part of the world, where you are left alone long enough to entrench yourself. From there you can launch an assault on strategic locations or open a gate for the real assault forces to get in. The Commander chassis were so effective that many planets opted to use them in defense. Simply send your own commander to wherever the enemy decides to land, then try and kill them before they can build up enough to kill you.
+		text = [[Commanders are an old concept. Put all the mining and manufacturing required to build an army on a compact chassis, slap on a weapon and some armor, and harden it all for fast insertion on a hostile planet. Hopefully they send you to a less defended part of the world, where you are left alone long enough to entrench yourself. From there you can launch an assault on strategic locations or open a gate and wait for the real assault force to arrive. The Commander chassis were so effective that many planets opted to use them in defense. Simply send your own commander to wherever the enemy decides to land, then try to kill them before they can build up enough to kill you.
  
-A few tried and true models, optimized for cost, effectiveness and reliability, were developed over many wars, and remained essentially unchanged for many centuries. My memories are still blurred, but I remember extensively training on those.
+A few tried and true models, optimized for cost, effectiveness and reliability, were developed over countless wars, and remained essentially unchanged for many centuries. My memories are still blurred, but I remember extensively training on those.
  
 And yet, this Commander of mine is unlike anything I have ever seen.
  
-One of the greatest constraints on Commander design are the exotic stresses imposed by warp travel. Advanced weapons and systems may be built in the field, but no Commander was ever able to jump with a full kit. Many groups tried but I know of none that got close, even in the old days. But this Commander can. Every field upgrade I recover stays intact after each jump.
+One of the greatest constraints on Commander design is the exotic stress of warp travel. Advanced weapons and systems may be built in the field, but no Commander was ever able to jump with a full kit. Many groups tried but I know of none that got close, even in the old days. But this Commander can. Every field upgrade I recover stays intact after each jump.
  
 I never trained for it, or even heard of such a thing. And yet, it feels oddly familiar...]]
 	},
@@ -234,9 +234,9 @@ I never trained for it, or even heard of such a thing. And yet, it feels oddly f
 		name = "IFF Codes",
 		image = "campaign/sample/graphics/icons/codes.png",
 		category = "1. Entries",
-		text = [[Identification friend or foe, IFF for short, is a system devised by the ancients to protect Commanders from their armies, as well as their armies from each other. An army with the requisite IFF codes stands united against those without - as I know all-too well - and may even respond to orders from any Commander it sees as friendly.
+		text = [[Identification friend or foe, IFF for short, is a system devised by the ancients to protect Commanders from their armies, as well as their armies from each other. An army with the requisite IFF codes stands united against those without - as I know all-too well - and may even respond to orders issed by commander it sees as friendly.
  
-The various codes used by the automata I encounter have all, so far, shown signs of degradation, implying that their owners are either long gone or have a very lax approach to security. Regardless of the reason, this weakness has allowed me to construct a friendlier identity, and to update it to new conditions, by scavenging the data of old installations and defeated automatons.
+The various codes used by the automata I encounter have all, so far, shown signs of degradation, implying that their owners are either long gone or have a very lax approach to security. Regardless of the reason, this weakness has allowed me to construct a friendlier identity, and to update it as I explore, by scavenging the data of old installations and defeated automatons.
  
 With luck, I can subvert forces that would otherwise unite to fight me, or at least slip unnoticed through any old conflicts that my presence reignites.
  
@@ -351,7 +351,7 @@ And again, no one has challenged me beyond automated defenses. No hails, no comm
 		image = "campaign/sample/graphics/unitpics/jumpscout.png",
 		text = [[This was a pleasant and prosperous world until, seemingly overnight, its factories were scrapped and hastily converted to weapons of war. Right under the noses of the dominant military force too.
  
-The insurgents took the lessons of guerilla warfare seriously. Eschewing most standard battlefield manufacturing techniques, they opted instead to convert their infrastructure directly into cheap, one-use, combat drones. Such was the simplicity of these units that they could be equiped to build copies of themselves out of scrap, acting as both an army and a fully decentralised production base from which to fight an endlessly renewing war.
+The insurgents took the lessons of guerilla warfare seriously. Eschewing more standard battlefield manufacturing techniques, they opted instead to convert their infrastructure directly into cheap, single-use, combat units. Such was the simplicity of these units that they could be equiped to build copies of themselves out of scrap, acting as both an army and a fully decentralised production base, allowing them to fight an endlessly renewing war.
  
 This strategy appeared to work, in a sense, as there was little the occupying force could do beyond quell uprising after uprising. The habitability of the planet was apparently a price the combatants were willing to pay.
  
@@ -686,7 +686,7 @@ for i,v in pairs(entries) do
 	v.id = i
 end
 
-local flexCodex ={
+local flexCodex = {
 	{
 		itemName = "threat_automata",
 		unlockCheck = function (planets, codexEntries)

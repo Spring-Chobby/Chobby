@@ -237,7 +237,7 @@ local function InitializeDifficultySetting()
 		right = 170,
 		bottom = 0,
 		width = 128,
-		height = 53,
+		height = 55,
 		padding = {0,0,0,0},
 		resizable = false,
 		draggable = false,
@@ -246,8 +246,8 @@ local function InitializeDifficultySetting()
 	local freezeSettings = true
 
 	Label:New {
-		x = 30,
-		y = 2,
+		x = 32,
+		y = 1,
 		width = 50,
 		height = 30,
 		valign = "top",
@@ -845,7 +845,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 			right = 0,
 			bottom = 0,
 			width = 160,
-			height = 58,
+			height = 61,
 			classname = "action_button",
 			parent = buttonHolder,
 			caption = i18n("start"),
@@ -860,7 +860,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		if Configuration.canAuthenticateWithSteam then
 			btnInviteFriends = Button:New {
 				right = 0,
-				bottom = 62,
+				bottom = 64,
 				width = 160,
 				height = 38,
 				padding = {0, 0, 0, 0},

@@ -102,10 +102,10 @@ return {
 					name = "commander",
 					control = WG.CommanderHandler.GetControl(),
 				},
-				--{
-				--	name = "codex",
-				--	control = WG.CodexHandler.GetControl(),
-				--},
+				{
+					name = "codex",
+					control = WG.CodexHandler.GetControl(),
+				},
 				{
 					name = "options",
 					control = WG.CampaignOptionsWindow.GetControl(),
