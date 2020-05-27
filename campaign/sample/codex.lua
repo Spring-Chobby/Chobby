@@ -234,9 +234,9 @@ I never trained for it, or even heard of such a thing. And yet, it feels oddly f
 		name = "IFF Codes",
 		image = "campaign/sample/graphics/icons/codes.png",
 		category = "1. Entries",
-		text = [[Identification friend or foe, IFF for short, is a system devised by the ancients to protect Commanders from their armies, and their armies from each other. An army with the requisite IFF codes stands united against those without - as I know all-too well - and may even be receptive to orders from friendly Commanders.
+		text = [[Identification friend or foe, IFF for short, is a system devised by the ancients to protect Commanders from their armies, as well as their armies from each other. An army with the requisite IFF codes stands united against those without - as I know all-too well - and may even respond to orders from any Commander it sees as friendly.
  
-The various codes used by the automata I encounter have, so far, all shown signs of degradation, implying owners that are either long gone or that have a very lax approach to security. Regardless of the reason, this weakness has allowed me to construct a friendlier identity, and to update it to new conditions by scavenging the data of old installations and defeated automatons.
+The various codes used by the automata I encounter have all, so far, shown signs of degradation, implying that their owners are either long gone or have a very lax approach to security. Regardless of the reason, this weakness has allowed me to construct a friendlier identity, and to update it to new conditions, by scavenging the data of old installations and defeated automatons.
  
 With luck, I can subvert forces that would otherwise unite to fight me, or at least slip unnoticed through any old conflicts that my presence reignites.
  
