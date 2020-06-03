@@ -28,6 +28,7 @@ local function StartTutorial()
 	if tutorialPrompt then
 		tutorialPrompt.Remove()
 	end
+	WG.CampaignSaveWindow.PromptInitialSaveName()
 	WG.Chobby.interfaceRoot.OpenSingleplayerTabByName("campaign")
 	WG.CampaignHandler.OpenPlanetScreen(TUTORIAL_PLANET)
 	WG.CampaignHandler.StartPlanetMission(TUTORIAL_PLANET)
