@@ -21,6 +21,9 @@ local SAVE_DIR = "Saves/campaign"
 local SAVE_DIR_LENGTH = string.len(SAVE_DIR) + 2
 local AUTOSAVE_DIR = SAVE_DIR .. "/auto"
 
+-- Never ask for commander name on first campaign start.
+local DEFAULT_COMMANDER_NAME = "Commander"
+
 --------------------------------------------------------------------------------
 -- data
 --------------------------------------------------------------------------------
@@ -452,7 +455,7 @@ function CampaignSaveWindow.PromptInitialSaveName()
 	local Configuration = WG.Chobby.Configuration
 	if not Configuration.campaignSaveFile then
 		local lobby = WG.LibLobby.lobby
-		local commName = (lobby and lobby.myUserName) or Configuration.suggestedNameFromSteam
+		local commName = (lobby and lobby.myUserName) or Configuration.suggestedNameFromSteam or DEFAULT_COMMANDER_NAME
 		if commName then
 			WG.CampaignData.StartNewGame()
 			WG.CampaignData.SetupNewSave(commName, 2)
