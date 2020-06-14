@@ -28,7 +28,7 @@ local function GetPlanet(planetUtilities, planetID)
 			feedbackLink = "http://zero-k.info/Forum/Thread/24429",
 			text = "There is a Tech Lab on this world, and it seems accessible enough. I should be able to drop in, siphon its databases and jump out."
 			.. "\n "
-			.. "\nThis place is unlike anything I have ever seen. It is as if an immense tree had died there, leaving only a colossal fossilised stump. Maybe it is why they built a Tech Lab here in the first place?"
+			.. "\nThis mountain range is unlike anything I have ever seen - oh. That may explain the presence of that lab. It is as if immense trees had died there, leaving colossal stumps, buried deep under the surface."
 			,
 			extendedText = "The good news is, I have secured the Tech Lab."
 			.. "\n "

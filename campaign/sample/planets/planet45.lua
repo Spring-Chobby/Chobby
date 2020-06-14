@@ -29,7 +29,7 @@ local function GetPlanet(planetUtilities, planetID)
 			.. "\n "
 			.. "\nNo wonder this world is so well-guarded. But who knows what I could find down there?"
 			,
-			extendedText = "This is bad, I have a serious numerical and economical disadvantage. However, the high plateaus on this map may give my Spiders an edge, especially the heavy Crab riot/skirmisher."
+			extendedText = "This is bad, I have a serious numerical and economical disadvantage. However, several uncovered stumps are forming high plateaus that may give my Spiders an edge, especially the heavy Crab riot/skirmisher."
 		},
 		tips = {
 			{

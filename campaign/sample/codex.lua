@@ -361,7 +361,7 @@ Something about this botheres me. The replication technology on display is quite
 		name = "Baosezu Sleepers",
 		category = "4. Locations",
 		image = "campaign/sample/graphics/icons/Cryopod.png",
-		text = [[Due to a very unusual quirk of its geology, this world has vast, remarkably stable reservoirs of liquid argon trapped deep under polar crust. Enterprising individuals used them to build large cryosleep facilities, making it a small but successful industry and even attracting off-world customers in reasonable numbers.
+		text = [[This world has vast, remarkably stable reservoirs of liquid argon trapped deep under the polar crust. Many scientists were studying this apparent impossibility, while enterprising individuals used them to build large cryosleep facilities. It became a small but successful industry, even attracting off-world customers in reasonable numbers.
  
 Following the uprisig, caught between a merciless army and increasingly desperate revolutionaries, many escaped the planet. But when the blockade worsened, cutting off escape routes, others turned to the cryosleep facilities. They didn't care who won, hoping to sleep the whole conflict out, and return to a semblance of normal life.
  
