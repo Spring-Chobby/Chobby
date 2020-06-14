@@ -1549,7 +1549,8 @@ local function GetPlanet(planetUtilities, planetID)
 			abilities = {
 			},
 			codexEntries = {
-				"anomaly_old_falsell"
+				"anomaly_old_falsell",
+				"quadrant_dynasty_arm",
 			},
 		},
 	}

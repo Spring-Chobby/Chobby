@@ -5183,7 +5183,8 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_high_power_servos_LIMIT_B_2",
 			},
 			codexEntries = {
-				"faction_lawless"
+				"faction_lawless",
+				"quadrant_mandate_arm",
 			}
 		},
 	}

@@ -3137,6 +3137,7 @@ local function GetPlanet(planetUtilities, planetID)
 			codexEntries = {
 				"faction_rebels",
 				"entry_event",
+				"quadrant_inner_bulge",
 			},
 		},
 	}

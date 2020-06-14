@@ -4730,6 +4730,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			codexEntries = {
 				"faction_rebels"
+				"quadrant_mandate_arm",
 			}
 		},
 	}
