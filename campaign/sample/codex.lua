@@ -696,27 +696,27 @@ They found no way of resist or bypass it, nor even of slowing it down. The autom
 		name = "Celestial Arm",
 		image = "campaign/sample/graphics/icons/CelestialArm.png",
 		category = "6. Quadrants",
-		text = [[This galactic arm was renowned for its lush, varied and fantastically resilient biospheres. Even to this day they remain healthy, after untold centuries of neglect. A fitting testament to the skills of the Celestial Dominion, last great empire to rule this quadrant in the ancient days, whose unmatched master-terraformers tended to those worlds for thousands of years.
+		text = [[The Celestial Arm was renowned for its lush, varied and fantastically resilient biospheres. Even to this day they remain healthy, after untold centuries of neglect. A fitting testament to the skills of the Celestial Dominion, last great empire to rule this quadrant in the ancient days. Their unmatched master-terraformers tended to those worlds for thousands of years. It is said that they even planned for the death of their suns, and that those biospheres would somehow survive the stars themselves.
  
-While their reputation is familiar, I have never been in this quadrant before. How did I end up in its outermost reach?]]
+While its reputation was familiar, I had never been in this quadrant before. How did I end up in its outermost reach?]]
 	},
 	quadrant_dynasty_arm = { -- planet36, planet39, planet41, planet42, planet45, planet47, planet71
 		name = "Dynasty Arm",
 		image = "campaign/sample/graphics/icons/DynastyArm.png",
 		category = "6. Quadrants",
-		text = [[This arm is the most connected to the wider galaxy. This was a boon for trade and commerce, but deprieved it from easily defensible redoubts. This made it the wealthiest quadrant of all, but one with many desert worlds, as countless battles hindered terraforming efforts throughout history.
+		text = [[Hyperspace-wise, the Dynasty Arm is the most connected of the four. It was a boon for trade and commerce, but deprieved it from easily defensible redoubts. This made it the wealthiest quadrant of all, but one with many desert worlds, as countless battles hindered terraforming efforts throughout history.
  
-Both wealth and battles of the ancient days also left more archeotech to be found. As for its location, it was both boon and bane, offering incredible opportunities and terrifying risks alike to those bold enough to dig them up.
+Both wealth and battles of the ancient days also left it with more archeotech than any other quadrant. This again was both boon and bane, offering incredible opportunities and terrifying risks alike to those bold enough to unearth those artefacts.
  
-It is said that Earth was located somewhere in this quadrant, and so was the ancient, shadowy Dynasty's base of operations more often than not. As with anything related to the Dynasty, it is difficult to separate fact from legend. They had openly taken control of the quadrant at the end of the ancient days, but anything more had long been lost to the depths of time.]]
+It is said that Earth was located somewhere in this quadrant, as well as, more often than not, the base of operations of the ancient, secretive Dynasty. As with anything related to them, it is difficult to separate fact from legend. They had openly taken control of the quadrant at the end of the ancient days, but anything more had already been lost to the mists of history.]]
 	},
 	quadrant_anarchai_arm = { -- planet31
 		name = "Anarchai Arm",
 		image = "campaign/sample/graphics/icons/AnarchaiArm.png",
 		category = "6. Quadrants",
-		text = [[Named after the godlike machine horrors that brought the ancient days to an end, this arm always was a headache for galactic powers. Easy to devend thanks to its many chokepoints, it was rarely controlled by outside powers - at times being a collection of bickering worlds, a refuge for outlaws and pirates, the stage for the rivalry of great powers or, as with Haven, a fiercely independent polity.
+		text = [[Named after the godlike machine horrors that brought the ancient days to an end, the Anarchai Arm had always been a headache for galactic powers. Easily defensible for independently-minded locals thanks to its many chokepoints, it was rarely controlled by outside powers - at times being a collection of bickering worlds, a refuge for outlaws and pirates, the stage of rivalries between great powers or, as with Haven, a fiercely independent polity.
  
-Legends abounded in this quadrant, about lost treasures on haunted pirate havens, hidden garden worlds appearing one day per century, sorcerous planets ensnaring unwary starships, or Anarchai enclaves waiting to rise again...]]
+Legends abounded in this quadrant, about the lost treasures of haunted pirate havens, hidden garden worlds mysteriously appearing one day per century, sorcerous planets ensnaring unwary starships, or Anarchai enclaves waiting to rise again...]]
 	},
 	quadrant_mandate_arm = { -- planet35, planet49, planet62, planet70
 		name = "Mandate Arm",
@@ -724,15 +724,15 @@ Legends abounded in this quadrant, about lost treasures on haunted pirate havens
 		category = "6. Quadrants",
 		text = [[The Empire was but the last of a long lineage of polities from the Mandate Arm to claim galactic supremacy, even in the ancient days. Such was this historical wieght that many polities from other quadrants, after unifying the galaxy, moved their capital to the Gardens of Intrepid.
  
-Ironically, the Ghost Mandate itself never managed to make good of their claim, having to share the galaxy with the Celestial Dominion for millennia, then with a yet again resurgent Dynasty as well.]]
+Ironically, the Ghost Mandate itself never managed to make good of their claim, having to share the galaxy with the Celestial Dominion for millennia, as well, near the end, as a yet again resurgent Dynasty.]]
 	},
 	quadrant_inner_bulge = { -- planet17, planet18, planet21, planet29, planet44, planet48
 		name = "Inner Bulge",
 		image = "campaign/sample/graphics/icons/InnerBulge.png",
 		category = "6. Quadrants",
-		text = [[Due to the higher occurence of high-energy cosmic events such as supernovae over the galaxy's existence, not many worlds suitable worlds exist in the bulge, compared to the quadrants. However, its strategic central position gave considerable incentive to try and settle the few candidates that could be found.
+		text = [[Due to the higher occurence of high-energy cosmic events, at least on a galactic timescale, not many worlds suitable worlds exist in the Inner Bulge compared to the quadrants. However, its strategic central position gave incentives to try and settle the few candidates that could be found.
  
-Despite the considerable efforts put into mapping and beacons, its difficult to navigate hyperspace ways made it ideal for secret research and development sites. And, with its central location, for organized crime...]]
+Despite the considerable efforts put into mapping and beacons, its challenging hyperspace ways made it ideal for secret research and development sites and organized crime alike.]]
 	},
 }
 
