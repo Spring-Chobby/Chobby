@@ -1927,7 +1927,10 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_heavy_armor_LIMIT_B_2",
 			},
 			abilities = {
-			}
+			},
+			codexEntries = {
+				"location_sirlanna",
+			},
 		},
 	}
 	

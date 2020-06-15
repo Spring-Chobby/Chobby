@@ -525,6 +525,17 @@ This seems to have rattled them to their core, and may explain why they suddenly
  
 Oh right, I was a student at an Imperial Academy of War. Funny thing, to have forgotten that. I was pretty good actually, top of my class half the time. It never felt quite real though, as if never really expecting to ever see combat. And, ultimately, I didn't even graduate...]]
 	},
+	location_sirlanna = { -- planet23
+		name = "Sirlanna Fortress",
+		image = "campaign/sample/graphics/unitpics/turretgauss.png",
+		category = "4. Locations",
+		text = [[This star system had once been the lynchpin of half the Union's Anarchai Arm front, a mighty fortress ready to take on any invasion - or stage their own. But a new, greater foe struck the vulnerable Dynasty Arm border instead. Pushing right towards the Union's core worlds, they cut Sirlanna off, blockading it from neighbouring systems.
+ 
+Still, the Sirlanna governor knew that, one way or another, their enemies would have to strike. It was simpy too dangerous for the invader to leave such a force on their flank. They knew any such attack would vastly outnumber them, but they were determined to make it pay dearly for their world.
+ 
+So they turned themselves into the most formidable stronghold in the galaxy, in preparation for the day their enemies' warships would blot the very sun - a day that never came.]]
+	},
+	
 	-- Anomalies
 	--- Artefacts
 	anomaly_new_falsell = { -- planet7
