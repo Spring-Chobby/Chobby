@@ -1,6 +1,6 @@
 local entries = {
 	-- Factions
-	faction_union = { -- planet3, planet5
+	faction_union = { -- planet6, planet8, planet10, planet13, planet19
 		name = "The Union",
 		image = "campaign/sample/graphics/icons/Union.png",
 		category = "3. Factions",
@@ -16,7 +16,7 @@ As it grew in size and strength it began to run into opposition, both over terri
  
 With the enemy at the gates there was little hope of repelling them without of a miracle. Evidently no miracle occurred.]]
 	},
-	faction_empire = { -- planet11, planet12, planet15, planet16, planet17, planet24, planet25, planet26
+	faction_empire = { -- planet12, planet15, planet16, planet17, planet24, planet25, planet26, planet36
 		name = "The Empire",
 		image = "campaign/sample/graphics/icons/Empire3.png",
 		category = "3. Factions",
@@ -30,7 +30,7 @@ The origin of this relatively new power is unclear. They claim that, as the prev
  
 Whatever the truth is, they did retain many of the traditions of the previous empire, even using its legal system and political organization as a basis for their own. By the force of arms, they managed to slowly but surely conquer the galaxy again, with more and more resources and autonomy given to their formidable military machine. At the height of its power only a few factions were offering resistance the Empire, and even those had little hope of repelling their armies.]]
 	},
-	faction_rebels = { -- planet36, planet37, planet39, planet40, planet42, planet44, planet47, planet48, planet56, planet62
+	faction_rebels = { -- planet37, planet39, planet40, planet41, planet44, planet48, planet49, planet50, planet62
 		name = "The Rebels",
 		image = "campaign/sample/graphics/icons/Rebels.png",
 		category = "3. Factions",
@@ -44,7 +44,7 @@ Several uprisings erupted on key worlds throughout the Empire. Unprepared to com
  
 The goal of the Rebels was not direct victory so much as mortally injuring the Empire from the inside, and holding on long enough to see a liberated galaxy. What plans they did have for the aftermath are unclear, given how many disparate groups participated. However, for such coordinated uprisings to take place, a central organization had to be overseeing it. Was it an ad-hoc coalition of mutually hostile forces against a greater common enemy, or did they have their own agenda?]]
 	},
-	faction_haven = { -- planet31
+	faction_haven = { -- planet30
 		name = "Haven",
 		image = "campaign/sample/graphics/icons/SynPact.png",
 		category = "3. Factions",
@@ -58,7 +58,7 @@ Realizing that even their uneasy alliance with the Union would not be enough to 
 
 At the time of the event, they were slowly losing ground, holding onto strategic points with all their strength and making the Empire pay a surprisingly heavy toll for each conquered world. Given their tight organization, formidable defenses and the series of strategic choke-points that were their last worlds, they might have held out for a very long time.]]
 	},
-	faction_lawless = { -- planet28, planet29, planet34, planet35, planet41, planet49, planet50, planet53
+	faction_lawless = { -- planet28, planet29, planet34, planet35, planet39, planet42, planet50, planet53, planet54, planet70
 		name = "The Lawless",
 		image = "campaign/sample/graphics/icons/Lawless.png",
 		category = "3. Factions",
@@ -357,6 +357,16 @@ This strategy appeared to work, in a sense, as there was little the occupying fo
  
 Something about this botheres me. The replication technology on display is quite advanced, implying that whoever was fighting here had help...]]
 	},
+	location_baosezu = { -- planet11
+		name = "Baosezu Sleepers",
+		category = "4. Locations",
+		image = "campaign/sample/graphics/icons/Cryopod.png",
+		text = [[This world has vast, remarkably stable reservoirs of liquid argon trapped deep under the polar crust. Many scientists were studying this apparent impossibility, while enterprising individuals used them to build large cryosleep facilities. It became a small but successful industry, even attracting off-world customers in reasonable numbers.
+ 
+Following the uprisig, caught between a merciless army and increasingly desperate revolutionaries, many escaped the planet. But when the blockade worsened, cutting off escape routes, others turned to the cryosleep facilities. They didn't care who won, hoping to sleep the whole conflict out, and return to a semblance of normal life.
+ 
+Yet, the cryopods are empty. No sleepers as I hoped, nor even remains - and the operation logs have degraded to uselessness. Did the revolutionaries force them out? Or did something else happen?]]
+	},
 	location_chatka = { -- planet58
 		name = "Battle of Chatka",
 		image = "campaign/sample/graphics/icons/DynastyAnarchaiBattle.png",
@@ -458,7 +468,7 @@ The last world, Cipher, appears to have been less inhabitable, and most of the r
  
 The survivors appears to have used the ruins of the shelters as their base. The refugee camp of the galaxy had plenty of resources to build lavish housings for such a small number of individuals. After a while, though, they left in turn for Cipher, leaving infrastructure for latecomers, and what must have been an invitation to follow them.]]
 	},
-	-- Smuggled data
+	--- Smuggled data
 	location_arteri = { -- planet50
 		name = "Arteri Data Cache",
 		image = "campaign/sample/graphics/icons/Folder.png",
@@ -516,7 +526,7 @@ This seems to have rattled them to their core, and may explain why they suddenly
 Oh right, I was a student at an Imperial Academy of War. Funny thing, to have forgotten that. I was pretty good actually, top of my class half the time. It never felt quite real though, as if never really expecting to ever see combat. And, ultimately, I didn't even graduate...]]
 	},
 	-- Anomalies
-	-- Artefacts
+	--- Artefacts
 	anomaly_new_falsell = { -- planet7
 		name = "New Falsell Anomaly",
 		image = "campaign/sample/graphics/unitpics/fakeunit.png",
@@ -680,6 +690,50 @@ Both the Inner Disc and Dynastic Quadrant went dark over in a matter of months. 
  
 They found no way of resist or bypass it, nor even of slowing it down. The automated systems continued taking data after it hit Lalata, but the remaining people never found a way to recover it across the event's wake.]]
 	},
+	
+	-- Quadrants
+	quadrant_celestial_arm = { -- planet6, planet8, planet10, planet12, planet14, planet17, planet26
+		name = "Celestial Arm",
+		image = "campaign/sample/graphics/icons/CelestialArm.png",
+		category = "6. Quadrants",
+		text = [[The Celestial Arm was renowned for its lush, varied and fantastically resilient biospheres. Even to this day they remain healthy, after untold centuries of neglect. A fitting testament to the skills of the Celestial Dominion, last great empire to rule this quadrant in the ancient days. Their unmatched master-terraformers tended to those worlds for thousands of years. It is said that they even planned for the death of their suns, and that those biospheres would somehow survive the stars themselves.
+ 
+While its reputation was familiar, I had never been in this quadrant before. How did I end up in its outermost reach?]]
+	},
+	quadrant_dynasty_arm = { -- planet36, planet39, planet41, planet42, planet45, planet47, planet71
+		name = "Dynasty Arm",
+		image = "campaign/sample/graphics/icons/DynastyArm.png",
+		category = "6. Quadrants",
+		text = [[Hyperspace-wise, the Dynasty Arm is the most connected of the four. It was a boon for trade and commerce, but deprieved it from easily defensible redoubts. This made it the wealthiest quadrant of all, but one with many desert worlds, as countless battles hindered terraforming efforts throughout history.
+ 
+Both wealth and battles of the ancient days also left it with more archeotech than any other quadrant. This again was both boon and bane, offering incredible opportunities and terrifying risks alike to those bold enough to unearth those artefacts.
+ 
+It is said that Earth was located somewhere in this quadrant, as well as, more often than not, the base of operations of the ancient, secretive Dynasty. As with anything related to them, it is difficult to separate fact from legend. They had openly taken control of the quadrant at the end of the ancient days, but anything more had already been lost to the mists of history.]]
+	},
+	quadrant_anarchai_arm = { -- planet31
+		name = "Anarchai Arm",
+		image = "campaign/sample/graphics/icons/AnarchaiArm.png",
+		category = "6. Quadrants",
+		text = [[Named after the godlike machine horrors that brought the ancient days to an end, the Anarchai Arm had always been a headache for galactic powers. Easily defensible for independently-minded locals thanks to its many chokepoints, it was rarely controlled by outside powers - at times being a collection of bickering worlds, a refuge for outlaws and pirates, the stage of rivalries between great powers or, as with Haven, a fiercely independent polity.
+ 
+Legends abounded in this quadrant, about the lost treasures of haunted pirate havens, hidden garden worlds mysteriously appearing one day per century, sorcerous planets ensnaring unwary starships, or Anarchai enclaves waiting to rise again...]]
+	},
+	quadrant_mandate_arm = { -- planet35, planet49, planet62, planet70
+		name = "Mandate Arm",
+		image = "campaign/sample/graphics/icons/MandateArm.png",
+		category = "6. Quadrants",
+		text = [[The Empire was but the last of a long lineage of polities from the Mandate Arm to claim galactic supremacy, even in the ancient days. Such was this historical wieght that many polities from other quadrants, after unifying the galaxy, moved their capital to the Gardens of Intrepid.
+ 
+Ironically, the Ghost Mandate itself never managed to make good of their claim, having to share the galaxy with the Celestial Dominion for millennia, as well, near the end, as a yet again resurgent Dynasty.]]
+	},
+	quadrant_inner_bulge = { -- planet17, planet18, planet21, planet29, planet44, planet48
+		name = "Inner Bulge",
+		image = "campaign/sample/graphics/icons/InnerBulge.png",
+		category = "6. Quadrants",
+		text = [[Due to the higher occurence of high-energy cosmic events, at least on a galactic timescale, not many worlds suitable worlds exist in the Inner Bulge compared to the quadrants. However, its strategic central position gave incentives to try and settle the few candidates that could be found.
+ 
+Despite the considerable efforts put into mapping and beacons, its challenging hyperspace ways made it ideal for secret research and development sites and organized crime alike.]]
+	},
 }
 
 for i,v in pairs(entries) do
@@ -700,9 +754,15 @@ local flexCodex = {
 		end,
 	},
 	{
+		itemName = "quadrant_celestial_arm",
+		unlockCheck = function (planets, codexEntries)
+			return (planets - 1 >= codexEntries)
+		end,
+	},
+	{
 		itemName = "entry_event",
 		unlockCheck = function (planets, codexEntries)
-			return (planets - 2 >= codexEntries)
+			return (planets - 1 >= codexEntries)
 		end,
 	}
 }

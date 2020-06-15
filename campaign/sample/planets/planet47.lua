@@ -2579,7 +2579,8 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			codexEntries = {
 				"faction_rebels",
-				"faction_dynasty"
+				"faction_dynasty",
+				"quadrant_dynasty_arm",
 			},
 		},
 	}

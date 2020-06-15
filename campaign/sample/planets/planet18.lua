@@ -3423,7 +3423,8 @@ local function GetPlanet(planetUtilities, planetID)
 				"terraform",
 			},
 			codexEntries = {
-				"location_kirdipan"
+				"location_kirdipan",
+				"quadrant_inner_bulge",
 			},
 		},
 	}

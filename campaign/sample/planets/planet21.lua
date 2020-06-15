@@ -1553,7 +1553,8 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			codexEntries = {
 				"threat_chickens",
-				"threat_chickens_travel"
+				"threat_chickens_travel",
+				"quadrant_inner_bulge",
 			}
 		},
 	}

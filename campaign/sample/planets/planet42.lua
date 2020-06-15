@@ -618,6 +618,7 @@ local function GetPlanet(planetUtilities, planetID)
 			codexEntries = {
 				"faction_lawless",
 				"entry_event",
+				"quadrant_dynasty_arm",
 			},
 		},
 	}

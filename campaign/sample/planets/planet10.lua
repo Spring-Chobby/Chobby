@@ -731,6 +731,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"commweapon_missilelauncher",
 			},
 			codexEntries = {
+				"quadrant_celestial_arm",
 			},
 		},
 	}

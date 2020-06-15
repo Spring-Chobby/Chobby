@@ -739,6 +739,9 @@ local function GetPlanet(planetUtilities, planetID)
 			modules = {
 				"module_companion_drone_LIMIT_B_2",
 			},
+			codexEntries = {
+				"quadrant_anarchai_arm"
+			},
 		},
 	}
 	
