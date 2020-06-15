@@ -363,7 +363,7 @@ Something about this botheres me. The replication technology on display is quite
 		image = "campaign/sample/graphics/icons/Cryopod.png",
 		text = [[This world has vast, remarkably stable reservoirs of liquid argon trapped deep under the polar crust. Many scientists were studying this apparent impossibility, while enterprising individuals used them to build large cryosleep facilities. It became a small but successful industry, even attracting off-world customers in reasonable numbers.
  
-Following the uprisig, caught between a merciless army and increasingly desperate revolutionaries, many escaped the planet. But when the blockade worsened, cutting off escape routes, others turned to the cryosleep facilities. They didn't care who won, hoping to sleep the whole conflict out, and return to a semblance of normal life.
+Following the uprising, caught between a merciless army and increasingly desperate revolutionaries, many escaped the planet. But when the blockade worsened, cutting off escape routes, others turned to the cryosleep facilities. They didn't care who won, hoping to sleep the whole conflict out, and return to a semblance of normal life.
  
 Yet, the cryopods are empty. No sleepers as I hoped, nor even remains - and the operation logs have degraded to uselessness. Did the revolutionaries force them out? Or did something else happen?]]
 	},
@@ -630,7 +630,7 @@ Ultimately, the scattershape's internal systems have stopped working one after a
  
 At some point after this planet was settled, probably at a time it was already a developed world, they found this artefact - a relic of the ancient zombie plague. They understood its potential, both as an incredible archeotech source and an incredible danger. So instead of simply turning it on, they studied it very carefully, and slowly reverse-engineered the simplest of its nanotech.
  
-They managed to tame the nasty little things, and programmed them for building their metropolis of all things. The artefact's builders would probably have laughed at so crude an use of their subtle technology, but they were long gone anyway. And surprisingly, it seems to have worked without incident - until everyone disappeared, that is. Left to themselves, the nanites seem to have interfered with the artefact itself, causing them to degenerate and switch to an earlier program...]]
+They managed to tame the nasty little things, and programmed them for building their metropolis of all things. The artefact's builders would probably have laughed at so crude a use of their subtle technology, but they were long gone anyway. And surprisingly, it seems to have worked without incident - until everyone disappeared, that is. Left to themselves, the nanites seem to have interfered with the artefact itself, causing them to degenerate and switch to an earlier program...]]
 	},
 	--- Ancient trees
 	anomaly_walchice = { -- planet20
@@ -696,7 +696,7 @@ They found no way of resist or bypass it, nor even of slowing it down. The autom
 		name = "Celestial Arm",
 		image = "campaign/sample/graphics/icons/CelestialArm.png",
 		category = "6. Quadrants",
-		text = [[The Celestial Arm was renowned for its lush, varied and fantastically resilient biospheres. Even to this day they remain healthy, after untold centuries of neglect. A fitting testament to the skills of the Celestial Dominion, last great empire to rule this quadrant in the ancient days. Their unmatched master-terraformers tended to those worlds for thousands of years. It is said that they even planned for the death of their suns, and that those biospheres would somehow survive the stars themselves.
+		text = [[The Celestial Arm was renowned for its lush, varied and fantastically resilient biospheres. Even to this day they remain healthy, after untold centuries of neglect. A fitting testament to the skills of the Celestial Dominion, the last great empire to rule this quadrant in the ancient days. Their unmatched master-terraformers tended to those worlds for thousands of years. It is said that they even planned for the death of their suns, and that those biospheres would somehow survive the stars themselves.
  
 While its reputation was familiar, I had never been in this quadrant before. How did I end up in its outermost reach?]]
 	},
@@ -704,7 +704,7 @@ While its reputation was familiar, I had never been in this quadrant before. How
 		name = "Dynasty Arm",
 		image = "campaign/sample/graphics/icons/DynastyArm.png",
 		category = "6. Quadrants",
-		text = [[Hyperspace-wise, the Dynasty Arm is the most connected of the four. It was a boon for trade and commerce, but deprieved it from easily defensible redoubts. This made it the wealthiest quadrant of all, but one with many desert worlds, as countless battles hindered terraforming efforts throughout history.
+		text = [[Hyperspace-wise, the Dynasty Arm is the most connected of the four. It was a boon for trade and commerce, but deprived it from easily defensible redoubts. This made it the wealthiest quadrant of all, but one with many desert worlds, as countless battles hindered terraforming efforts throughout history.
  
 Both wealth and battles of the ancient days also left it with more archeotech than any other quadrant. This again was both boon and bane, offering incredible opportunities and terrifying risks alike to those bold enough to unearth those artefacts.
  
@@ -722,9 +722,9 @@ Legends abounded in this quadrant, about the lost treasures of haunted pirate ha
 		name = "Mandate Arm",
 		image = "campaign/sample/graphics/icons/MandateArm.png",
 		category = "6. Quadrants",
-		text = [[The Empire was but the last of a long lineage of polities from the Mandate Arm to claim galactic supremacy, even in the ancient days. Such was this historical wieght that many polities from other quadrants, after unifying the galaxy, moved their capital to the Gardens of Intrepid.
+		text = [[The Empire was but the last of a long lineage of polities from the Mandate Arm to claim galactic supremacy, even in the ancient days. Such was this historical weight that many polities from other quadrants, after unifying the galaxy, moved their capital to the Gardens of Intrepid.
  
-Ironically, the Ghost Mandate itself never managed to make good of their claim, having to share the galaxy with the Celestial Dominion for millennia, as well, near the end, as a yet again resurgent Dynasty.]]
+Ironically, the Ghost Mandate itself never managed to make good of their claim, having to share the galaxy with the Celestial Dominion for millennia, as well as, near the end, a yet again resurgent Dynasty.]]
 	},
 	quadrant_inner_bulge = { -- planet17, planet18, planet21, planet29, planet44, planet48
 		name = "Inner Bulge",
