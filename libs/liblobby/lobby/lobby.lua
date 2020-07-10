@@ -596,7 +596,16 @@ function Lobby:_OnUnfriend(userName)
 	self:_CallListeners("OnUnfriend", userName)
 end
 
-function Lobby:_OnFriendList()
+function Lobby:_OnFriendList(friends)
+	self.friends = friends
+	self.friendCount = #friends
+
+	for _, userName in pairs(self.friends) do
+		self.isFriend[userName] = true
+		local userInfo = self:TryGetUser(userName)
+		userInfo.isFriend = true
+	end
+
 	self:_CallListeners("OnFriendList", self:GetFriends())
 end
 
