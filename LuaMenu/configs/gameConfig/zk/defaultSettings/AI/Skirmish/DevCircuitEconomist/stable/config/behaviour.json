@@ -555,7 +555,7 @@
 	},
 	"hoverraid": {
 		"role": ["raider"],
-		"attribute": ["melee","scout"],		
+		"attribute": ["melee","scout"],
 		"pwr_mod": 0.9,
 		"pwr_mod": 0.8,
 		"limit": 20,

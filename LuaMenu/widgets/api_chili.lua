@@ -107,14 +107,14 @@ function widget:DrawScreen()
 		gl.PopMatrix()
 	end
 	gl.Color(1,1,1,1)
-	
+
 	if loadFade then
 		local vsx,vsy = gl.GetViewSizes()
 		gl.Color(1,1,1,loadFade)
 		gl.Texture(loadTex)
 		gl.TexRect(0,0,vsx,vsy)
 		gl.Color(1,1,1,1)
-		
+
 		if not hideInterface then
 			loadFade = loadFade - 0.18
 			if loadFade <= 0 then

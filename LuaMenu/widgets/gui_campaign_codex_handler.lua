@@ -155,7 +155,7 @@ local function PopulateCodexTree(parent, codexText, codexImage)
 		nodes = nodes, --{"wtf", "lololol", {"omg"}},
 	}
 	codexText:SetText("")
-	
+
 	for i = 1, #nodes do
 		local catID = nodes[i][1]
 		if categoryNewEntries[catID] > 0 then
@@ -163,9 +163,9 @@ local function PopulateCodexTree(parent, codexText, codexImage)
 			nodeObj:SetHighlight(true)
 		end
 	end
-	
+
 	local externalFunctions = {}
-	
+
 	function externalFunctions.OpenEntry(entryName)
 		local entry = entryName and codexEntries[entryName]
 		if not (entry and entryButtons[entryName]) then
@@ -178,7 +178,7 @@ local function PopulateCodexTree(parent, codexText, codexImage)
 		categoryNode:Expand()
 		entryButtons[entryName].OnClick[1](entryButtons[entryName])
 	end
-	
+
 	return externalFunctions
 end
 
@@ -272,7 +272,7 @@ local function InitializeControls(parentControl)
 			codexFuncs.OpenEntry(entryName)
 		end
 	end
-	
+
 	return externalFunctions
 end
 

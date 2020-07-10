@@ -48,7 +48,7 @@ local function CheckCancelProposal(message)
 		})
 	end
 	currentProposal = nil
-	
+
 	return true
 end
 
@@ -56,7 +56,7 @@ local function GetProposalFromString(message)
 	if string.sub(message, 1, 1) ~= "!" or string.sub(message, 1, 14) ~= "!proposebattle"then
 		return false
 	end
-	
+
 	local data = message:split(" ")
 	local paramValues = {}
 	for i = 1, #data do
@@ -69,14 +69,14 @@ local function GetProposalFromString(message)
 			end
 		end
 	end
-	
+
 	local proposalValues = {
 		minelo = paramValues[1] or false,
 		maxelo = paramValues[2] or false,
 		minsize = math.max(1, math.floor(paramValues[3] or 4)),
 	}
 	proposalValues.maxsize = math.max(proposalValues.minsize, paramValues[4] or 8)
-	
+
 	return true, proposalValues
 end
 
@@ -91,12 +91,12 @@ local function CheckProposalSent(prop)
 		})
 		return false
 	end
-	
+
 	currentProposal = prop
-	
+
 	currentProposal.currentPlayers = 1
 	currentProposal.acceptedPlayers = {}
-	
+
 	Chotify:Post({
 		title = "Battle Proposal",
 		body = "New proposal sent.\nUse !endproposal to cancel.",
@@ -121,17 +121,17 @@ function BattleProposalHandler.AddClickableInvites(userName, preMessage, message
 	if myProposal and CheckCancelProposal(message) then
 		return onTextClick, textTooltip
 	end
-	
+
 	local hasProposal, prop = GetProposalFromString(message)
 	if not hasProposal then
 		return onTextClick, textTooltip
 	end
-	
+
 	local myInfo = WG.LibLobby.lobby:GetMyInfo()
 	local effectiveSkill = math.max(myInfo.skill or 1500, myInfo.casualSkill or 1500)
 	local skillTooLow = (prop.minelo and effectiveSkill < prop.minelo)
 	local skillTooHigh = (prop.maxelo and effectiveSkill > prop.maxelo)
-	
+
 	if myProposal then
 		if skillTooLow then
 			Chotify:Post({
@@ -146,13 +146,13 @@ function BattleProposalHandler.AddClickableInvites(userName, preMessage, message
 			})
 			return onTextClick, textTooltip
 		end
-		
+
 		CheckProposalSent(prop)
 	end
-	
+
 	local startIndex = string.len(preMessage)
 	local endIndex = startIndex + string.len(message) + 1
-	
+
 	if not (skillTooLow or skillTooLow) then
 		onTextClick[#onTextClick + 1] = {
 			startIndex = startIndex,
@@ -171,7 +171,7 @@ function BattleProposalHandler.AddClickableInvites(userName, preMessage, message
 			}
 		}
 	end
-	
+
 	local proposalString
 	if skillTooLow then
 		proposalString = "Your skill rating is too low for this proposal."
@@ -191,7 +191,7 @@ function BattleProposalHandler.AddClickableInvites(userName, preMessage, message
 		end
 		proposalString = proposalString .. "\nA battle will open when " .. prop.minsize .. " players accept."
 	end
-	
+
 	textTooltip[#textTooltip + 1] = {
 		startIndex = startIndex,
 		endIndex = endIndex,
@@ -223,7 +223,7 @@ function DelayedInitialize()
 		if (currentProposal.minelo and effectiveSkill < currentProposal.minelo) or (currentProposal.maxelo and effectiveSkill > currentProposal.maxelo) then
 			return
 		end
-		
+
 		if currentProposal.battleHostComplete then
 			lobby:BattleProposalBattleInvite(userName, currentProposal.battleID, currentProposal.password)
 			Chotify:Post({
@@ -232,14 +232,14 @@ function DelayedInitialize()
 			})
 			return
 		end
-		
+
 		currentProposal.currentPlayers = currentProposal.currentPlayers + 1
 		currentProposal.acceptedPlayers[userName] = true
 		Chotify:Post({
 			title = "Battle Proposal",
 			body = userName .. " accepted.\nPlayers: " .. currentProposal.currentPlayers .. "/" .. currentProposal.minsize,
 		})
-		
+
 		if currentProposal.currentPlayers >= currentProposal.minsize and not currentProposal.openingBattleName then
 			-- Check for users leaving
 			for acceptedUserName, _ in pairs(currentProposal.acceptedPlayers) do
@@ -249,7 +249,7 @@ function DelayedInitialize()
 					currentProposal.currentPlayers = currentProposal.currentPlayers - 1
 				end
 			end
-			
+
 			-- Host the battle
 			if currentProposal.currentPlayers >= currentProposal.minsize then
 				WG.BattleRoomWindow.LeaveBattle()
@@ -272,7 +272,7 @@ function DelayedInitialize()
 		if battleInfo.title ~= currentProposal.openingBattleName then
 			return
 		end
-		
+
 		for acceptedUserName, _ in pairs(currentProposal.acceptedPlayers) do
 			lobby:BattleProposalBattleInvite(acceptedUserName, battleID, currentProposal.password)
 		end
@@ -294,7 +294,7 @@ function DelayedInitialize()
 			body = "Joining " .. userName .. "'s battle",
 		})
 	end
-	
+
 	lobby:AddListener("OnBattleProposalResponse", OnBattleProposalResponse)
 	lobby:AddListener("OnJoinedBattle", OnJoinedBattle)
 	lobby:AddListener("OnBattleProposalBattleInvite", OnBattleProposalBattleInvite)

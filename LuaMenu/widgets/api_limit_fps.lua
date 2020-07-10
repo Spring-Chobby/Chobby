@@ -101,7 +101,7 @@ function widget:AllowDraw()
 		framesInBuffer = oldFramesInBuffer + 1
 		return true
 	end
-	
+
 	return false
 end
 
