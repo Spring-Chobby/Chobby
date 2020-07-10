@@ -335,7 +335,7 @@ function Console:AddMessage(message, userName, dateOverride, color, thirdPerson,
 	end
 
 	onTextClick, textTooltip = WG.BattleProposalHandler.AddClickableInvites(userName, txt, message, onTextClick or {}, textTooltip or {})
-	
+
 	txt = txt .. message
 	onTextClick, textTooltip = WG.BrowserHandler.AddClickableUrls(txt, onTextClick or {}, textTooltip or {})
 

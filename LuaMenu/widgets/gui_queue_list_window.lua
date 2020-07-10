@@ -537,7 +537,7 @@ local function InitializeControls(window)
 
 		queueHolders[queueName] = MakeQueueControl(listPanel, queues, queueName, queueDescription, queueData.playersIngame or "?", queueData.playersWaiting or "?", maxPartySize, GetBanTime)
 		queues = queues + 1
-		
+
 		local possibleQueues = lobby:GetQueues()
 		local sortedQueues = {}
 
@@ -559,7 +559,7 @@ local function InitializeControls(window)
 		for name, data in pairs(possibleQueues) do
 			sortedQueues[#sortedQueues + 1] = data
 		end
-		
+
 		table.sort(sortedQueues, QueueSortFunc)
 		local added = {}
 		for i = 1, #sortedQueues do
