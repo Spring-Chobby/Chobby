@@ -49,11 +49,13 @@ end
 ------------------------
 
 function Interface:FriendList()
+	self:super("FriendList")
 	self:_SendCommand("FRIENDLIST", true)
 	return self
 end
 
 function Interface:FriendRequestList()
+	self:super("FriendRequestList")
 	self:_SendCommand("FRIENDREQUESTLIST", true)
 	return self
 end
