@@ -1291,6 +1291,7 @@ function Interface:_BattlePoll(data)
 		}
 		if not data.YesNoVote then
 			candidates[i].name = opt.Name
+			candidates[i].displayName = opt.DisplayName
 		end
 	end
 
