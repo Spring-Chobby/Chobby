@@ -1314,9 +1314,11 @@ local function SetupVotePanel(votePanel, battle, battleID)
 	local function SetMultiPollCandidates(candidates)
 		for i = 1, MULTI_POLL_MAX do
 			if candidates[i] then
+				-- displayName is the map's internal name and its dimensions in a human friendly way
+				local mapName = candidates[i].displayName or candidates[i].name
 				multiPollOpt[i].imMinimap.file, multiPollOpt[i].imMinimap.checkFileExists = config:GetMinimapSmallImage(candidates[i].name)
 				multiPollOpt[i].imMinimap:Invalidate()
-				multiPollOpt[i].button.tooltip = "Vote for " .. candidates[i].name
+				multiPollOpt[i].button.tooltip = "Vote for " .. mapName
 			end
 		end
 	end
