@@ -853,6 +853,8 @@ local settingsConfig = {
 					EdgeScroll = "On",
 					MiddlePanSpeed = 15,
 					CameraPanSpeed = 50,
+					NetworkSettings = "Balanced",
+					SmoothBuffer = "Off",
 				}
 			},
 		},
@@ -1017,6 +1019,60 @@ local settingsConfig = {
 					}
 				end,
 			},
+			{
+				name = "NetworkSettings",
+				humanName = "Network Connection",
+				options = {
+					{
+						name = "Reliable",
+						apply = {
+							NetworkLossFactor = 0,
+							LinkOutgoingBandwidth = 65536,
+							LinkIncomingSustainedBandwidth = 2048,
+							LinkIncomingPeakBandwidth = 32768,
+							LinkIncomingMaxPacketRate = 64,
+						}
+					},
+					{
+						name = "Balanced",
+						apply = {
+							NetworkLossFactor = 1,
+							LinkOutgoingBandwidth = 131072,
+							LinkIncomingSustainedBandwidth = 65536,
+							LinkIncomingPeakBandwidth = 65536,
+							LinkIncomingMaxPacketRate = 512,
+						}
+					},
+					{
+						name = "Fast",
+						apply = {
+							NetworkLossFactor = 2,
+							LinkOutgoingBandwidth = 262144,
+							LinkIncomingSustainedBandwidth = 262144,
+							LinkIncomingPeakBandwidth = 262144,
+							LinkIncomingMaxPacketRate = 2048,
+						}
+					},
+				},
+			},
+			{
+				name = "SmoothBuffer",
+				humanName = "Smooth Buffer",
+				options = {
+					{
+						name = "On",
+						apply = {
+							UseNetMessageSmoothingBuffer = 1,
+						}
+					},
+					{
+						name = "Off",
+						apply = {
+							UseNetMessageSmoothingBuffer = 0,
+						}
+					},
+				},
+			},
 		},
 	},
 }
@@ -1051,6 +1107,8 @@ local settingsDefault = {
 	EdgeScroll = "On",
 	MiddlePanSpeed = 15,
 	CameraPanSpeed = 50,
+	NetworkSettings = "Balanced",
+	SmoothBuffer = "Off",
 }
 
 local settingsNames = {}
