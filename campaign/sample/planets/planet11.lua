@@ -1076,7 +1076,8 @@ local function GetPlanet(planetUtilities, planetID)
 			abilities = {
 			},
 			codexEntries = {
-				"location_baosezu"
+				"location_baosezu",
+				"quadrant_celestial_arm",
 			},
 		},
 	}

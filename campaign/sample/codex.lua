@@ -707,7 +707,7 @@ They found no way of resist or bypass it, nor even of slowing it down. The autom
 		name = "Celestial Arm",
 		image = "campaign/sample/graphics/icons/CelestialArm.png",
 		category = "6. Quadrants",
-		text = [[The Celestial Arm was renowned for its lush, varied and fantastically resilient biospheres. Even to this day they remain healthy, after untold centuries of neglect. A fitting testament to the skills of the Celestial Dominion, the last great empire to rule this quadrant in the ancient days. Their unmatched master-terraformers tended to those worlds for thousands of years. It is said that they even planned for the death of their suns, and that those biospheres would somehow survive the stars themselves.
+		text = [[The Celestial Arm was renowned for its lush, varied and fantastically resilient biospheres. Even to this day they remain healthy, after untold centuries of neglect. A fitting testament to the skills of the last great empire to rule this quadrant in the ancient days, the Celestial Dominion. These unmatched master-terraformers tended to their worlds for thousands of years. It is said that they even planned for the death of their suns, and that those biospheres would somehow survive the stars themselves.
  
 While its reputation was familiar, I had never been in this quadrant before. How did I end up in its outermost reach?]]
 	},
@@ -715,7 +715,7 @@ While its reputation was familiar, I had never been in this quadrant before. How
 		name = "Dynasty Arm",
 		image = "campaign/sample/graphics/icons/DynastyArm.png",
 		category = "6. Quadrants",
-		text = [[Hyperspace-wise, the Dynasty Arm is the most connected of the four. It was a boon for trade and commerce, but deprived it from easily defensible redoubts. This made it the wealthiest quadrant of all, but one with many desert worlds, as countless battles hindered terraforming efforts throughout history.
+		text = [[Hyperspace-wise, the Dynasty Arm is the most connected of the four. Such connectivity was a boon for trade and commerce, but deprived it from easily defensible redoubts. This made it the wealthiest quadrant of all, but one with many desert worlds, as countless battles hindered or reversed efforts to terraform them throughout history.
  
 Both wealth and battles of the ancient days also left it with more archeotech than any other quadrant. This again was both boon and bane, offering incredible opportunities and terrifying risks alike to those bold enough to unearth those artefacts.
  
@@ -733,7 +733,7 @@ Legends abounded in this quadrant, about the lost treasures of haunted pirate ha
 		name = "Mandate Arm",
 		image = "campaign/sample/graphics/icons/MandateArm.png",
 		category = "6. Quadrants",
-		text = [[The Empire was but the last of a long lineage of polities from the Mandate Arm to claim galactic supremacy, even in the ancient days. Such was this historical weight that many polities from other quadrants, after unifying the galaxy, moved their capital to the Gardens of Intrepid.
+		text = [[The Empire was but the last of a long lineage of Mandate Arm polities to claim galactic supremacy. Such was this historical weight that many polities from other quadrants, after unifying the galaxy, moved their capital to the Gardens of Intrepid.
  
 Ironically, the Ghost Mandate itself never managed to make good of their claim, having to share the galaxy with the Celestial Dominion for millennia, as well as, near the end, a yet again resurgent Dynasty.]]
 	},
@@ -741,9 +741,9 @@ Ironically, the Ghost Mandate itself never managed to make good of their claim, 
 		name = "Inner Bulge",
 		image = "campaign/sample/graphics/icons/InnerBulge.png",
 		category = "6. Quadrants",
-		text = [[Due to the higher occurence of high-energy cosmic events, at least on a galactic timescale, not many worlds suitable worlds exist in the Inner Bulge compared to the quadrants. However, its strategic central position gave incentives to try and settle the few candidates that could be found.
+		text = [[Due to its frequent high-energy cosmic events, at least on a galactic timescale, few worlds suitable for habitation exist in the Inner Bulge. However, its strategic central position gave many polities incentives to try and settle the few candidates that could be found.
  
-Despite the considerable efforts put into mapping and beacons, its challenging hyperspace ways made it ideal for secret research and development sites and organized crime alike.]]
+Despite the considerable investment in mapping and relays, its challenging hyperspace ways made it ideal for secret research and development sites and organized crime alike.]]
 	},
 }
 

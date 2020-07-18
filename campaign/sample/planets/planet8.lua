@@ -3525,7 +3525,6 @@ local function GetPlanet(planetUtilities, planetID)
 			abilities = {
 			},
 			codexEntries = {
-				"quadrant_celestial_arm",
 			},
 		},
 	}
