@@ -14,7 +14,7 @@ local gameUnitInformation             = VFS.Include(LUA_DIRNAME .. "configs/game
 local badges                          = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/badges.lua")
 local GetRankAndImage                 = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/profilePage.lua")
 
-local link_reportPlayer, link_userPage, link_homePage, link_replays, link_maps, link_particularMapPage = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/linkFunctions.lua")
+local link_reportPlayer, link_userPage, link_homePage, link_replays, link_maps, link_particularMapPage, link_matchmakerMapBans = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/linkFunctions.lua")
 
 local settingsConfig, settingsNames, settingsDefault, SettingsPresetFunc = VFS.Include(LUA_DIRNAME .. "configs/gameConfig/" .. shortname .. "/settingsMenu.lua")
 
@@ -104,6 +104,7 @@ local externalFuncAndData = {
 	link_replays            = link_replays,
 	link_maps               = link_maps,
 	link_particularMapPage  = link_particularMapPage,
+	link_matchmakerMapBans  = link_matchmakerMapBans,
 	ignoreServerVersion     = false,
 	runTutorial             = true,
 	openTrack               = 'sounds/lobbyMusic/The Secret of Ayers Rock.ogg',

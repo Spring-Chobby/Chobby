@@ -145,6 +145,7 @@ return {
 		time_in_queue = "Time in queue",
 		leave = "Leave",
 		invite_friends = "Invite Friends",
+		select_maps = "Map Selection",
 		users = "Users",
 		battles = "Battles",
 		time_to_respond = "Time to respond",

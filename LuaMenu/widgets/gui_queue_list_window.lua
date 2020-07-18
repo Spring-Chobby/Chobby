@@ -452,7 +452,7 @@ local function InitializeControls(window)
 		y = 17,
 		height = 20,
 		font = Configuration:GetFont(3),
-		caption = "Join matchmaking queues",
+		caption = "Matchmaking",
 		parent = window
 	}
 
@@ -488,6 +488,24 @@ local function InitializeControls(window)
 		parent = window,
 	}
 	btnInviteFriends:SetVisibility(Configuration.canAuthenticateWithSteam)
+
+	if Configuration.gameConfig.link_matchmakerMapBans then
+		Button:New {
+			right = 291,
+			y = 7,
+			width = 180,
+			height = 45,
+			font = Configuration:GetFont(3),
+			caption = i18n("select_maps"),
+			classname = "option_button",
+			OnClick = {
+				function()
+					WG.BrowserHandler.OpenUrl(Configuration.gameConfig.link_matchmakerMapBans())
+				end
+			},
+			parent = window,
+		}
+	end
 
 	local listPanel = ScrollPanel:New {
 		x = 5,
