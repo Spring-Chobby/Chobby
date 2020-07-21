@@ -411,6 +411,7 @@ local function RecalculateCommanderLevel()
 		end
 		level = level + 1
 	end
+	UpdateCommanderModuleCounts()
 	UpdateModuleRequirements()
 end
 
