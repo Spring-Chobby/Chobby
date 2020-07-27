@@ -1050,7 +1050,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 	local buttonNoClickOverride
 	local matchmakerModeEnabled = false
 
-	local currentMapName
+	local currentMapUrl
 
 	local minimapPanel = Panel:New {
 		x = 0,
@@ -1071,9 +1071,12 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		padding = {1,1,1,1},
 		OnClick = {
 			function ()
-				if currentMapName and config.gameConfig.link_particularMapPage ~= nil then
-					WG.BrowserHandler.OpenUrl(config.gameConfig.link_particularMapPage(currentMapName))
+				if currentMapUrl then
+					WG.BrowserHandler.OpenUrl(currentMapUrl)
 				end
+				--if currentMapUrl and config.gameConfig.link_particularMapPage ~= nil then
+				--	WG.BrowserHandler.OpenUrl(config.gameConfig.link_particularMapPage(currentMapName))
+				--end
 			end
 		},
 	}
@@ -1284,12 +1287,12 @@ local function SetupVotePanel(votePanel, battle, battleID)
 
 	local externalFunctions = {}
 
-	local oldPollType, oldMapPoll, oldPollUrl
-	local function UpdatePollType(pollType, mapPoll, pollUrl)
-		if oldPollType == pollType and oldMapPoll == mapPoll and oldPollUrl == pollUrl then
+	local oldPollType, oldMapPoll, oldMapUrl, oldPollUrl
+	local function UpdatePollType(pollType, mapPoll, mapName, pollUrl)
+		if oldPollType == pollType and oldMapPoll == mapPoll and oldMapUrl == mapName and oldPollUrl == pollUrl then
 			return
 		end
-		oldPollType, oldMapPoll, oldPollUrl = pollType, mapPoll, pollUrl
+		oldPollType, oldMapPoll, oldMapUrl, oldPollUrl = pollType, mapPoll, mapName, pollUrl
 
 		if pollType ~= "multi" then
 			if mapPoll then
@@ -1297,10 +1300,10 @@ local function SetupVotePanel(votePanel, battle, battleID)
 				activePanel:SetPos(height + 2)
 				activePanel._relativeBounds.right = 0
 				activePanel:UpdateClientArea()
-				if pollUrl then
-					imMinimap.file, imMinimap.checkFileExists = config:GetMinimapSmallImage(pollUrl)
+				if mapName then
+					imMinimap.file, imMinimap.checkFileExists = config:GetMinimapSmallImage(mapName)
 					imMinimap:Invalidate()
-					currentMapName = pollUrl
+					currentMapUrl = pollUrl
 				end
 			else
 				minimapPanel:SetVisibility(false)
@@ -1323,8 +1326,8 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		end
 	end
 
-	function externalFunctions.VoteUpdate(voteMessage, pollType, mapPoll, candidates, votesNeeded, pollUrl)
-		UpdatePollType(pollType, mapPoll, pollUrl)
+	function externalFunctions.VoteUpdate(voteMessage, pollType, mapPoll, candidates, votesNeeded, pollUrl, mapName)
+		UpdatePollType(pollType, mapPoll, mapName, pollUrl)
 		-- Update votes
 		if pollType == "multi" then
 			SetMultiPollCandidates(candidates)
@@ -1909,8 +1912,8 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		playerHandler.RemoveAi(botName)
 	end
 
-	local function OnVoteUpdate(listener, voteMessage, pollType, _, mapPoll, candidates, votesNeeded, pollUrl)
-		votePanel.VoteUpdate(voteMessage, pollType, mapPoll, candidates, votesNeeded, pollUrl)
+	local function OnVoteUpdate(listener, voteMessage, pollType, _, mapPoll, candidates, votesNeeded, pollUrl, mapName)
+		votePanel.VoteUpdate(voteMessage, pollType, mapPoll, candidates, votesNeeded, pollUrl, mapName)
 	end
 
 	local function OnVoteEnd(listener, message, success)
