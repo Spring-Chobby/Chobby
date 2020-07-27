@@ -1,8 +1,8 @@
 GameListWindow = ListWindow:extends{}
 
-function GameListWindow:init(failFunction, sucessFunction, blacklist)
+function GameListWindow:init(failFunction, sucessFunction, blacklist, titleOverride)
 
-	self:super('init', WG.Chobby.lobbyInterfaceHolder, "Select Game", false, "main_window", nil, {6, 7, 7, 4})
+	self:super('init', WG.Chobby.lobbyInterfaceHolder, titleOverride or "Select Game", false, "main_window", nil, {6, 7, 7, 4})
 	self.window:SetPos(nil, nil, 500, 700)
 
 	for i, archive in pairs(VFS.GetAllArchives()) do

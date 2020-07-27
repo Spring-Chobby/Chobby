@@ -392,7 +392,7 @@ local function CreateModoptionWindow()
 		end
 
 		local Configuration = WG.Chobby.Configuration
-		WG.Chobby.GameListWindow(SetGameFail, SetGameSucess, Configuration and Configuration.gameConfig.modBlacklist)
+		WG.Chobby.GameListWindow(SetGameFail, SetGameSucess, Configuration and Configuration.gameConfig.modBlacklist, i18n("select_mod"))
 	end
 
 	local function AcceptFunc()
