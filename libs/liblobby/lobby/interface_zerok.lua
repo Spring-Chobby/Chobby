@@ -404,6 +404,11 @@ function Interface:StartBattle()
 	return self
 end
 
+function Interface:SelectGame(gameName)
+	self:SayBattle("!game " .. gameName)
+	return self
+end
+
 ------------------------
 -- Channel & private chat commands
 ------------------------

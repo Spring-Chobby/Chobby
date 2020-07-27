@@ -1,13 +1,13 @@
 GameListWindow = ListWindow:extends{}
 
-function GameListWindow:init(failFunction, sucessFunction)
+function GameListWindow:init(failFunction, sucessFunction, blacklist)
 
 	self:super('init', WG.Chobby.lobbyInterfaceHolder, "Select Game", false, "main_window", nil, {6, 7, 7, 4})
 	self.window:SetPos(nil, nil, 500, 700)
 
 	for i, archive in pairs(VFS.GetAllArchives()) do
 		local info = VFS.GetArchiveInfo(archive)
-		if info and info.modtype == 1 then
+		if info and info.modtype == 1 and not (blacklist and blacklist[info.name]) then
 			local pickMapButton = Button:New {
 				x = 0,
 				y = 0,

@@ -115,6 +115,10 @@ function Lobby:SelectMap(mapName)
 	self:SayBattle("!map " .. mapName)
 end
 
+function Lobby:SelectGame(gameName)
+	return self
+end
+
 function Lobby:SetBattleType(typeName)
 	self:SayBattle("!type " .. typeName)
 end

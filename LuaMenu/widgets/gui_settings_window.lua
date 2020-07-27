@@ -1081,7 +1081,7 @@ local function GetVoidTabControls()
 		valign = "top",
 		align = "left",
 		font = Configuration:GetFont(2),
-		caption = "Server Address",
+		caption = "Server Address                                                                           (zero-k.info or test.zero-k.info for testing)",
 	}
 	children[#children + 1] = EditBox:New {
 		x = COMBO_X,
@@ -1112,7 +1112,7 @@ local function GetVoidTabControls()
 		valign = "top",
 		align = "left",
 		font = Configuration:GetFont(2),
-		caption = "Server Port",
+		caption = "Server Port                                                                                  (8200 or 8202 for testing)",
 	}
 	children[#children + 1] = EditBox:New {
 		x = COMBO_X,

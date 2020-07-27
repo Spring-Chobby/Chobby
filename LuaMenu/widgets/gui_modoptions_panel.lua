@@ -380,11 +380,27 @@ local function CreateModoptionWindow()
 		modoptionsSelectionWindow:Dispose()
 	end
 
-	local buttonAccept
+	local buttonAccept, buttonMods, modSelection
+
+	function GetModSelection()
+		local function SetGameFail()
+		end
+
+		local function SetGameSucess(name)
+			buttonMods.caption = name
+			modSelection = name
+		end
+
+		local Configuration = WG.Chobby.Configuration
+		WG.Chobby.GameListWindow(SetGameFail, SetGameSucess, Configuration and Configuration.gameConfig.modBlacklist)
+	end
 
 	local function AcceptFunc()
 		screen0:FocusControl(buttonAccept) -- Defocus the text entry
 		battleLobby:SetModOptions(localModoptions)
+		if modSelection then
+			battleLobby:SelectGame(modSelection)
+		end
 		modoptionsSelectionWindow:Dispose()
 	end
 
@@ -393,9 +409,28 @@ local function CreateModoptionWindow()
 			UpdateControlValue(key, value)
 		end
 		localModoptions = {}
+		
+		modSelection = false
+		buttonMods.caption = i18n("select_mod")
 	end
 
-	buttonReset = Button:New {
+	buttonMods = Button:New {
+		x = 10,
+		right = 513,
+		bottom = 1,
+		height = 70,
+		caption = i18n("select_mod"),
+		font = WG.Chobby.Configuration:GetFont(3),
+		parent = modoptionsSelectionWindow,
+		classname = "option_button",
+		OnClick = {
+			function()
+				GetModSelection()
+			end
+		},
+	}
+
+	Button:New {
 		right = 294,
 		width = 135,
 		bottom = 1,

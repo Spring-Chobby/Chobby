@@ -8,6 +8,7 @@ return {
 		retry = "Retry",
 		reset = "Reset",
 		close = "Close",
+		select_mod = "Select Mod",
 		continue = "Continue",
 		yes = "Yes",
 		no = "No",
