@@ -141,7 +141,7 @@ Evidently, no-one has returned to resettle the galaxy, so I have little hope for
 		category = "2. Threats",
 		text = [[Left to themselves, most armies will fall dormant to minimize energy and maintenance requirements. In this state, their functionality can be maintained near-indefinitely, provided they can the access raw materials required by their nanolathe arrays. Passive sensors, running on a trickle of power, are enough for them recieve new orders, or as I am finding, to awaken and engage anything they classify as a threat.
  
-Unfortunately, it seems I lack the proper identification codes to be recognized by most of those damned automata, and lack the the time to subvert them - so they are engaging me on sight. There may not be sapient minds behind them, but tactical AIs should not be underestimated, especially when they have the home advantage.
+Unfortunately, it seems I lack the proper identification codes to be recognized by most of those damned automata, and lack the time to subvert them - so they are engaging me on sight. There may not be sapient minds behind them, but tactical AIs should not be underestimated, especially when they have the home advantage.
  
 I will need to be careful, to choose the time and place of battle. To grab what I need and get out, not wait for reinforcements from everywhere on the planet to overwhelm me. It will be hard, but I can make it. Not that I have a choice...]]
 	},
@@ -178,7 +178,7 @@ Hypotheses about their origins run from ancient dormant aliens awakened by human
 		name = "Chicken Life-Cycle",
 		image = "campaign/sample/graphics/unitpics/chicken_rafflesia.png",
 		category = "2. Threats",
-		text = [[Little is known or understood about the chicken life-cycle. Colonies are centered around a Queen, and are abandoned or go dormant upon its death. Whether a dormant colony's remains are taken are taken over by a roaming Queen or whether seemingly abandoned colonies eventual produce a new Queen is unknown, as is how Queens themselves are born and form new colonies.
+		text = [[Little is known or understood about the chicken life-cycle. Colonies are centered around a Queen, and are abandoned or go dormant upon its death. Whether a dormant colony's remains are taken over by a roaming Queen or whether seemingly abandoned colonies eventual produce a new Queen is unknown, as is how Queens themselves are born and form new colonies.
  
 Dormant colonies can endure millennia deep underground, while active colonies form bewildering tunnel complexes, with little surface activity - though some cases of what may be surface agriculture have been observed. Size and activity of individual colonies vary wildly, from lone mountains to entire continents, and ranging from a few scattered zooids to subterranean metropolises. Given time, their activities will inevitably cover the entire planet.
  
