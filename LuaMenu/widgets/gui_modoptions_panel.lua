@@ -249,6 +249,7 @@ local function ProcessStringOption(data, index)
 		height = 30,
 		text   = oldText,
 		useIME = false,
+		tooltip = data.desc,
 		fontSize = WG.Chobby.Configuration:GetFont(2).size,
 		OnFocusUpdate = {
 			function (obj)
