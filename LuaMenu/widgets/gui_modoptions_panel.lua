@@ -104,6 +104,7 @@ local function ProcessListOption(data, index)
 		items = items,
 		font = WG.Chobby.Configuration:GetFont(2),
 		itemFontSize = WG.Chobby.Configuration:GetFont(2).size,
+		tooltip = data.desc,
 		selectByName = true,
 		selected = defaultItem,
 		OnSelectName = {
@@ -185,6 +186,7 @@ local function ProcessNumberOption(data, index)
 		text   = oldText,
 		useIME = false,
 		fontSize = WG.Chobby.Configuration:GetFont(2).size,
+		tooltip = data.desc,
 		OnFocusUpdate = {
 			function (obj)
 				if obj.focused then
@@ -247,6 +249,7 @@ local function ProcessStringOption(data, index)
 		height = 30,
 		text   = oldText,
 		useIME = false,
+		tooltip = data.desc,
 		fontSize = WG.Chobby.Configuration:GetFont(2).size,
 		OnFocusUpdate = {
 			function (obj)
