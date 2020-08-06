@@ -625,9 +625,18 @@ local function AddTeamButtons(parent, offX, joinFunc, aiFunc, unjoinable, disall
 	end
 end
 
-local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
+local function SortPlayers(a, b)
+	local sA = battleLobby:GetUserBattleStatus(a.name)
+	local sB = battleLobby:GetUserBattleStatus(b.name)
+	Spring.Echo("battleLobbybattleLobby", sA, (sA and sA.joinTime), (sB and sB.joinTime))
+	local joinA = (sA and sA.joinTime) or ""
+	local joinB = (sB and sB.joinTime) or ""
+	return joinA < joinB
+end
 
+local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 	local SPACING = 22
+	local WAITING_SPACING = 34
 	local disallowCustomTeams = battle.disallowCustomTeams
 	local disallowBots = battle.disallowBots
 
@@ -762,6 +771,8 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				parent = parentStack,
 			}
 
+			local waitingLabel, waitingLine = false, false
+
 			local label = Label:New {
 				x = 5,
 				y = 0,
@@ -810,6 +821,56 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				parent = teamHolder,
 				preserveChildrenOrder = true,
 			}
+
+			local function UpdatePlayerPositions()
+				local maxPlayers = (battleLobby:GetBattle(battleID) and battleLobby:GetBattle(battleID).maxPlayers) or 300
+				table.sort(teamStack.children, SortPlayers)
+				local position = 0
+				local waitingListPosition = false
+				for i = 1, #teamStack.children do
+					if maxPlayers + 1 == i then
+						waitingListPosition = position
+						position = position + WAITING_SPACING
+					end
+					teamStack.children[i]:SetPos(nil, position)
+					teamStack.children[i]:Invalidate()
+					position = position + SPACING
+				end
+
+				if waitingListPosition then
+					if not waitingLabel then
+						waitingLabel = Label:New {
+							x = 5,
+							y = 0,
+							width = 120,
+							height = 30,
+							valign = "center",
+							font = WG.Chobby.Configuration:GetFont(3),
+							caption = "Waiting List",
+							parent = teamHolder,
+						}
+						waitingLine = Line:New {
+							x = 0,
+							y = 25,
+							right = 0,
+							height = 2,
+							parent = teamHolder
+						}
+					end
+					waitingLabel:SetVisibility(true)
+					waitingLine:SetVisibility(true)
+					
+					waitingLabel:SetPos(nil, waitingListPosition + WAITING_SPACING + 4)
+					waitingLine:SetPos(nil, waitingListPosition + WAITING_SPACING + 25)
+				elseif waitingLabel then
+					waitingLabel:SetVisibility(false)
+					waitingLine:SetVisibility(false)
+				end
+				
+				teamHolder:SetPos(nil, nil, nil, position + 35)
+				PositionChildren(parentStack, parentScroll.height)
+				teamHolder:Invalidate()
+			end
 
 			if teamIndex == -1 then
 				-- Empty spectator team is created. Position children to prevent flicker.
@@ -877,12 +938,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				end
 				if not teamStack:GetChildByName(playerControl.name) then
 					teamStack:AddChild(playerControl)
-					playerControl:SetPos(nil, (#teamStack.children - 1)*SPACING)
-					playerControl:Invalidate()
-
-					teamHolder:SetPos(nil, nil, nil, #teamStack.children*SPACING + 35)
-					PositionChildren(parentStack, parentScroll.height)
-					teamHolder:Invalidate()
+					UpdatePlayerPositions()
 				end
 			end
 
@@ -930,20 +986,13 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 					return
 				end
 				playerData.team = false
-				local index = 1
-				local timeToMove = false
-				while index <= #teamStack.children do
-					if timeToMove then
-						teamStack.children[index]:SetPos(nil, (index - 1)*SPACING)
-						teamStack.children[index]:Invalidate()
-					elseif teamStack.children[index].name == name then
-						teamStack:RemoveChild(teamStack.children[index])
-						index = index - 1
-						timeToMove = true
-					end
-					index = index + 1
+				local playerControl = teamStack:GetChildByName(name)
+				if not playerControl then
+					return
 				end
-				teamHolder:SetPos(nil, nil, nil, #teamStack.children*SPACING + 35)
+
+				teamStack:RemoveChild(playerControl)
+				UpdatePlayerPositions()
 
 				if name == battleLobby:GetMyUserName() then
 					local joinTeam = teamHolder:GetChildByName("joinTeamButton")

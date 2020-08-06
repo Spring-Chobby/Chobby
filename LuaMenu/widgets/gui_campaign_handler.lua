@@ -908,6 +908,21 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		end
 
 		if (not LIVE_TESTING) and (Configuration.debugAutoWin or Configuration.debugMode) then
+			local fullAutoButton = Button:New{
+				right = 0,
+				bottom = 180,
+				width = 150,
+				height = 65,
+				classname = "action_button",
+				parent = buttonHolder,
+				caption = "Full Auto",
+				font = Configuration:GetFont(4),
+				OnClick = {
+					function(self)
+						ProcessPlanetVictory(planetID, 0, MakeRandomBonusVictoryList(2, 8), nil, WG.CampaignData.GetDifficultySetting())
+					end
+				}
+			}
 			local autoWinButton = Button:New{
 				right = 0,
 				bottom = 110,

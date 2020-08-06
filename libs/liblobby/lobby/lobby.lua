@@ -712,6 +712,7 @@ function Lobby:_OnBattleOpened(battleID, battle)
 		disallowCustomTeams = battle.disallowCustomTeams,
 		disallowBots = battle.disallowBots,
 		isMatchMaker = battle.isMatchMaker,
+		timeQueueEnabled = battle.TimeQueueEnabled,
 	}
 	self.battleCount = self.battleCount + 1
 
@@ -831,6 +832,9 @@ function Lobby:_OnUpdateBattleInfo(battleID, battleInfo)
 	if battleInfo.isMatchMaker ~= nil then
 		battle.isMatchMaker = battleInfo.isMatchMaker
 	end
+	if battleInfo.timeQueueEnabled ~= nil then
+		battle.timeQueueEnabled = battleInfo.timeQueueEnabled
+	end
 
 	self:_CallListeners("OnUpdateBattleInfo", battleID, battleInfo)
 end
@@ -860,6 +864,7 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	userData.aiVersion  = status.aiVersion or userData.aiVersion
 	userData.owner      = status.owner or userData.owner
 	userData.teamColor  = status.teamColor or userData.teamColor
+	userData.joinTime   = status.joinTime or userData.JoinTime
 
 	status.allyNumber   = userData.allyNumber
 	status.teamNumber   = userData.teamNumber
@@ -868,7 +873,8 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	status.aiLib        = userData.aiLib
 	status.aiVersion    = userData.aiVersion
 	status.owner        = userData.owner
-	status.teamColor	= userData.teamColor
+	status.teamColor    = userData.teamColor
+	status.joinTime     = userData.joinTime
 	self:_CallListeners("OnUpdateUserBattleStatus", userName, status)
 
 	if changedSpectator or changedAllyTeam then

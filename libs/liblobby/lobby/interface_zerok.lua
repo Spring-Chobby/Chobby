@@ -1003,6 +1003,7 @@ function Interface:_BattleAdded(data)
 		disallowCustomTeams = header.Mode and (header.Mode ~= 0), -- Is Custom
 		disallowBots = header.Mode and (header.Mode ~= 5 and header.Mode ~= 0), -- Is Bots
 		isMatchMaker = header.IsMatchMaker,
+		timeQueueEnabled = header.TimeQueueEnabled,
 	})
 end
 Interface.jsonCommands["BattleAdded"] = Interface._BattleAdded
@@ -1113,6 +1114,7 @@ function Interface:_UpdateUserBattleStatus(data)
 		allyNumber    = data.AllyNumber,
 		teamNumber    = data.TeamNumber,
 		sync          = data.Sync,
+		joinTime      = data.JoinTime,
 	}
 	if not data.Name then
 		Spring.Log(LOG_SECTION, LOG.ERROR, "_UpdateUserBattleStatus missing data.Name field")
