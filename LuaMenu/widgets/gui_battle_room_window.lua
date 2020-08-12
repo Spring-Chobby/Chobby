@@ -742,7 +742,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				emptyTeamIndex = checkTeam
 			end
 
-			local humanName, parentStack, parentScroll
+			local humanName, parentStack, parentScroll, hasWaitingList
 			if teamIndex == -1 then
 				humanName = "Spectators"
 				parentStack = spectatorStackPanel
@@ -751,6 +751,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				if disallowCustomTeams then
 					if teamIndex == 0 then
 						humanName = "Players"
+						hasWaitingList = true
 					else
 						humanName = "Bots"
 					end
@@ -828,7 +829,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				local position = 0
 				local waitingListPosition = false
 				for i = 1, #teamStack.children do
-					if maxPlayers + 1 == i then
+					if hasWaitingList and maxPlayers + 1 == i then
 						waitingListPosition = position
 						position = position + WAITING_SPACING
 					end
