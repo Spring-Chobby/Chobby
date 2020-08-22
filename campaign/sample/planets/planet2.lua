@@ -51,7 +51,7 @@ local function GetPlanet(planetUtilities, planetID)
 			-- },
 		},
 		gameConfig = {
-			mapName = "Battle for PlanetXVII-v01",
+			mapName = "Battle for PlanetXVII-v01r",
 			playerConfig = {
 				startX = 3700,
 				startZ = 3700,
