@@ -56,6 +56,7 @@ local settingsConfig = {
 					DeferredRendering = "Off",
 					UnitReflections = "Off",
 					Shadows = "None",
+					ShadowMapSize = "1024",
 					ShadowDetail = "Low",
 					ParticleLimit = "2000",
 					TerrainDetail = "Minimal",
@@ -82,6 +83,7 @@ local settingsConfig = {
 					DeferredRendering = "Off",
 					UnitReflections = "Low",
 					Shadows = "None",
+					ShadowMapSize = "1024",
 					ShadowDetail = "Low",
 					ParticleLimit = "6000",
 					TerrainDetail = "Low",
@@ -108,6 +110,7 @@ local settingsConfig = {
 					DeferredRendering = "Off",
 					UnitReflections = "Low",
 					Shadows = "Units Only",
+					ShadowMapSize = "2048",
 					ShadowDetail = "Low",
 					ParticleLimit = "12000",
 					TerrainDetail = "Low",
@@ -134,6 +137,7 @@ local settingsConfig = {
 					DeferredRendering = "On",
 					UnitReflections = "Medium",
 					Shadows = "Units and Terrain",
+					ShadowMapSize = "2048",
 					ShadowDetail = "Medium",
 					ParticleLimit = "15000",
 					TerrainDetail = "Medium",
@@ -160,6 +164,7 @@ local settingsConfig = {
 					DeferredRendering = "On",
 					UnitReflections = "Medium",
 					Shadows = "Units and Terrain",
+					ShadowMapSize = "8192",
 					ShadowDetail = "High",
 					ParticleLimit = "25000",
 					TerrainDetail = "High",
@@ -186,6 +191,7 @@ local settingsConfig = {
 					DeferredRendering = "On",
 					UnitReflections = "Ultra",
 					Shadows = "Units and Terrain",
+					ShadowMapSize = "16384",
 					ShadowDetail = "Ultra",
 					ParticleLimit = "50000",
 					TerrainDetail = "Ultra",
@@ -583,6 +589,42 @@ local settingsConfig = {
 						name = "Units and Terrain",
 						apply = {
 							Shadows = 1
+						}
+					},
+				},
+			},
+			{
+				name = "ShadowMapSize",
+				humanName = "Shadow Map Size",
+				options = {
+					{
+						name = "1024",
+						apply = {
+							ShadowMapSize = 1024
+						}
+					},
+					{
+						name = "2048",
+						apply = {
+							ShadowMapSize = 2048
+						}
+					},
+					{
+						name = "4096",
+						apply = {
+							ShadowMapSize = 4096
+						}
+					},
+					{
+						name = "8192",
+						apply = {
+							ShadowMapSize = 8192
+						}
+					},
+					{
+						name = "16384",
+						apply = {
+							ShadowMapSize = 16384
 						}
 					},
 				},
@@ -1083,6 +1125,7 @@ local settingsDefault = {
 	DeferredRendering = "On",
 	UnitReflections = "Medium",
 	Shadows = "Units and Terrain",
+	ShadowMapSize = "2048",
 	ShadowDetail = "Medium",
 	ParticleLimit = "15000",
 	TerrainDetail = "Medium",
