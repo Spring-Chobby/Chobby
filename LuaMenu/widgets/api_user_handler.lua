@@ -827,7 +827,7 @@ local function _GetUserDropdownMenu(userName, isInBattle)
 	userControls.mainControl:BringToFront()
 
 	local x,y = Spring.GetMouseState()
-	local screenWidth, screenHeight = Spring.GetWindowGeometry()
+	local screenWidth, screenHeight = Spring.GetViewGeometry()
 	userControls.mainControl:SetPos(math.max(0, x - 60), screenHeight - y - userControls.mainControl.height + 5, 120)
 
 	local function delayFunc()

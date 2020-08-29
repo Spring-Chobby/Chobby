@@ -270,7 +270,7 @@ function LoginWindow:init(failFunction, cancelText, windowClassname, params)
 		},
 	}
 
-	local ww, wh = Spring.GetWindowGeometry()
+	local ww, wh = Spring.GetViewGeometry()
 	local width = 430
 
 	self.tabPanel = Chili.DetachableTabPanel:New {

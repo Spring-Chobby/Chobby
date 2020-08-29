@@ -1622,7 +1622,7 @@ local function SetupEasySetupPanel(mainWindow, standardSubPanel, setupData)
 		standardSubPanel:SetVisibility(true)
 	end
 
-	local _, screenHeight = Spring.GetWindowGeometry()
+	local _, screenHeight = Spring.GetViewGeometry()
 	local panelOffset = math.max(8, math.min(60, ((screenHeight - 768)*0.16 + 8)))
 
 	local pages = {}

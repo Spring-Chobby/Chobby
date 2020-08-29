@@ -37,7 +37,7 @@ function widget:ViewResize(vsx, vsy, viewGeometry)
 end
 
 function widget:Update()
-	local screenWidth, screenHeight = Spring.GetWindowGeometry()
+	local screenWidth, screenHeight = Spring.GetViewGeometry()
 	if screenWidth ~= oldSizeX or screenHeight ~= oldSizeY then
 		widget:ViewResize(screenWidth, screenHeight)
 	end
