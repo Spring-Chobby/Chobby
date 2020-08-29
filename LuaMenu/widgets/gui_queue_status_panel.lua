@@ -514,17 +514,18 @@ end
 -- Disable matchmaker while loading
 local savedQueues
 
-local function SaveQueues()
+local function SaveQueues(isSpectator)
 	local lobby = WG.LibLobby.lobby
-	savedQueues = lobby:GetJoinedQueues()
+	local config = WG.Chobby.Configuration
+	if isSpectator and (config and config.rememberQueuesOnStart2) then
+		savedQueues = isSpectator and lobby:GetJoinedQueues()
+	else
+		savedQueues = false
+	end
 	lobby:LeaveMatchMakingAll()
 end
 
 function widget:ActivateGame()
-	local config = WG.Chobby.Configuration
-	if not (config and config.rememberQueuesOnStart) then
-		return
-	end
 	if not savedQueues then
 		return
 	end
@@ -628,13 +629,17 @@ function DelayedInitialize()
 		readyCheckPopup.MatchMakingComplete(isBattleStarting)
 	end
 
-	local function OnBattleAboutToStart()
-		SaveQueues()
+	local function OnBattleAboutToStart(listener, battleType, isSpectator)
+		SaveQueues(isSpectator)
 		-- If the battle is starting while popup is active then assume success.
 		if not readyCheckPopup then
 			return
 		end
 		readyCheckPopup.MatchMakingComplete(true)
+	end
+
+	local function OnBattleAboutToStartSingleplayer(listener)
+		SaveQueues(true)
 	end
 
 	local function OnDisconnected()
@@ -652,7 +657,7 @@ function DelayedInitialize()
 	lobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
 	lobby:AddListener("OnDisconnected", OnDisconnected)
 
-	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", SaveQueues)
+	WG.LibLobby.localLobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStartSingleplayer)
 end
 
 function widget:Update()

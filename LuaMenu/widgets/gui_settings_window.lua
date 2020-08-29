@@ -926,7 +926,9 @@ local function GetLobbyTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("animate_lobby"), "animate_lobby", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("drawFullSpeed"), "drawAtFullSpeed", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Minimize lobby updates", "lobbyIdleSleep", true)
-	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("keep_queues"), "rememberQueuesOnStart", false, nil, "Stay in matchmaker queues when a battle is launched.")
+	
+	-- Not needed as it happens automatically for spectating and singleplayer.
+	--children[#children + 1], offset = AddCheckboxSetting(offset, i18n("keep_queues"), "rememberQueuesOnStart2", false, nil, "Stay in the matchmaker when you launch a singleplayer game or replay, as well as when watching a multiplayer game.")
 
 	children[#children + 1] = Label:New {
 		x = 20,

@@ -219,7 +219,7 @@ function Configuration:init()
 	self.showOldAiVersions = false
 	self.drawAtFullSpeed = false
 	self.lobbyIdleSleep = false
-	self.rememberQueuesOnStart = false
+	self.rememberQueuesOnStart2 = true
 	self.channels = {}
 	if self.gameConfig.defaultChatChannels ~= nil then
 		for _, channelName in ipairs(self.gameConfig.defaultChatChannels) do
@@ -525,7 +525,7 @@ function Configuration:GetConfigData()
 		confirmation_battleFromBattle = self.confirmation_battleFromBattle,
 		drawAtFullSpeed = self.drawAtFullSpeed,
 		lobbyIdleSleep = self.lobbyIdleSleep,
-		rememberQueuesOnStart = self.rememberQueuesOnStart,
+		rememberQueuesOnStart2 = self.rememberQueuesOnStart2,
 		loadLocalWidgets = self.loadLocalWidgets,
 		activeDebugConsole = self.activeDebugConsole,
 		onlyShowFeaturedMaps = self.onlyShowFeaturedMaps,

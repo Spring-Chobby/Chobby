@@ -956,7 +956,12 @@ Interface.jsonCommands["IgnoreList"] = Interface._IgnoreList
 function Interface:_ConnectSpring(data)
 	if data.Ip and data.Port and data.ScriptPassword then
 		Spring.Echo("Connecting to battle", data.Game, data.Map, data.Engine)
-		self:ConnectToBattle(self.useSpringRestart, data.Ip, data.Port, nil, data.ScriptPassword, nil, data.Game, data.Map, data.Engine, (data.Mode and (modeToName[data.Mode] or data.Mode)) or "unknown")
+		self:ConnectToBattle(self.useSpringRestart,
+			data.Ip, data.Port, nil,
+			data.ScriptPassword, nil,
+			data.Game, data.Map, data.Engine,
+			(data.Mode and (modeToName[data.Mode] or data.Mode)) or "unknown", data.IsSpectator
+		)
 	end
 end
 Interface.jsonCommands["ConnectSpring"] = Interface._ConnectSpring
