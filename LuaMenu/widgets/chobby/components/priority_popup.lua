@@ -112,7 +112,7 @@ function PriorityPopup:init(mainWindow, cancelFunction, acceptFunction, parentCo
 	self.mainWindow.OnHide = self.mainWindow.OnHide or {}
 	self.mainWindow.OnHide[#self.mainWindow.OnHide + 1] = HideDisposeFunc
 
-	local sw, sh = Spring.GetWindowGeometry()
+	local sw, sh = Spring.GetViewGeometry()
 	self:ViewResize(sw, sh)
 
 	self:super('init')

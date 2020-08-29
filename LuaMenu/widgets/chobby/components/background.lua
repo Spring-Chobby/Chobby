@@ -72,7 +72,7 @@ function Background:ResizeAspectWindow(windowX, windowY, windowWidth, windowHeig
 	if not (imageSizeX and imageSizeY) then
 		return false
 	end
-	local winSizeX, winSizeY = Spring.GetWindowGeometry()
+	local winSizeX, winSizeY = Spring.GetViewGeometry()
 
 	if winSizeX <= 0 or winSizeY <= 0 or imageSizeX <= 0 or imageSizeY <= 0 then
 		return false
@@ -121,7 +121,7 @@ function Background:Resize(backgroundControl)
 	if not (width and height) then
 		return
 	end
-	local xSize, ySize = Spring.GetWindowGeometry()
+	local xSize, ySize = Spring.GetViewGeometry()
 
 	local xFocus, yFocus = self.backgroundFocus[1], self.backgroundFocus[2]
 
