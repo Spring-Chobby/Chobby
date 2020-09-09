@@ -4,6 +4,7 @@ local TRUE = "true"
 local FALSE = "false"
 
 local lupsFileTarget = "lups.cfg"
+local cmdcolorsFileTarget = "cmdcolors.txt"
 
 local function UpdateLups(_, conf)
 	conf = conf or (WG.Chobby and WG.Chobby.Configuration)
@@ -32,6 +33,43 @@ local function UpdateLups(_, conf)
 	local settingsFile = io.open(lupsFileTarget, "w")
 	settingsFile:write(sourceFile)
 	settingsFile:close()
+end
+
+local function UpdateCmdcolors(_, conf)
+	conf = conf or (WG.Chobby and WG.Chobby.Configuration)
+	local settings = conf and conf.settingsMenuValues
+	if not settings then
+		return
+	end
+
+	local cmdAlpha = (settings.CommandAlpha or 70)/100
+	local cmdAlphaDark
+	if cmdAlpha >= 0.7 then
+		cmdAlphaDark = cmdAlpha + 0.1
+	elseif cmdAlpha >= 0.6 then
+		cmdAlphaDark = cmdAlpha + 0.05
+	else
+		cmdAlphaDark = cmdAlpha + 0.02
+	end
+	
+	local queueIconAlpha = (settings.QueueIconAlpha or 50)/100
+
+	local cmdcolorsFileName = "LuaMenu/configs/gameConfig/zk/cmdcolors/cmdcolors_source.txt"
+	local sourceFile = VFS.LoadFile(cmdcolorsFileName)
+
+	sourceFile = sourceFile:gsub("__CMD_ALPHA__", cmdAlpha)
+	sourceFile = sourceFile:gsub("__CMD_ALPHA_DARK__", cmdAlphaDark)
+	sourceFile = sourceFile:gsub("__QUEUE_ICON_ALPHA__", queueIconAlpha)
+
+	local settingsFile = io.open(cmdcolorsFileTarget, "w")
+	settingsFile:write(sourceFile)
+	settingsFile:close()
+	
+	return {
+		CmdAlpha = cmdAlpha,
+		CmdAlphaDark = cmdAlphaDark,
+		CmdIconAlpha = queueIconAlpha,
+	}
 end
 
 local function GetUiScaleParameters()
@@ -893,6 +931,8 @@ local settingsConfig = {
 					InvertZoom = "Off",
 					TextToSpeech = "On",
 					EdgeScroll = "On",
+					CommandAlpha = 70,
+					QueueIconAlpha = 50,
 					MiddlePanSpeed = 15,
 					CameraPanSpeed = 50,
 					NetworkSettings = "Balanced",
@@ -1022,6 +1062,22 @@ local settingsConfig = {
 				},
 			},
 			{
+				name = "CommandAlpha",
+				humanName = "Command Line Alpha (%)",
+				isNumberSetting = true,
+				minValue = 10,
+				maxValue = 100,
+				applyFunction = UpdateCmdcolors
+			},
+			{
+				name = "QueueIconAlpha",
+				humanName = "Command Icon Alpha (%)",
+				isNumberSetting = true,
+				minValue = 10,
+				maxValue = 100,
+				applyFunction = UpdateCmdcolors
+			},
+			{
 				name = "MiddlePanSpeed",
 				humanName = "Middle Click Pan Speed",
 				isNumberSetting = true,
@@ -1148,6 +1204,8 @@ local settingsDefault = {
 	InvertZoom = "Off",
 	TextToSpeech = "On",
 	EdgeScroll = "On",
+	CommandAlpha = 70,
+	QueueIconAlpha = 50,
 	MiddlePanSpeed = 15,
 	CameraPanSpeed = 50,
 	NetworkSettings = "Balanced",
