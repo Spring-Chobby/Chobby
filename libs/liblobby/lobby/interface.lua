@@ -644,10 +644,35 @@ Interface.commandPattern["UPDATEBATTLEINFO"] = "(%d+)%s+(%S+)%s+(%S+)%s+(%S+)%s+
 function Interface:_OnClientBattleStatus(userName, battleStatus, teamColor)
 	local status = ParseBattleStatus(battleStatus)
 	status.teamColor = ParseTeamColor(teamColor)
+
 	self:_OnUpdateUserBattleStatus(userName, status)
+	if userName == self.myUserName then
+		self:_EnsureMyTeamNumberIsUnique()
+	end
 end
 Interface.commands["CLIENTBATTLESTATUS"] = Interface._OnClientBattleStatus
 Interface.commandPattern["CLIENTBATTLESTATUS"] = "(%S+)%s+(%S+)%s+(%S+)"
+
+function Interface:_EnsureMyTeamNumberIsUnique()
+	local myBattleStatus = self.userBattleStatus[self.myUserName]
+	if myBattleStatus == nil then
+		return
+	end
+
+	if myBattleStatus.isSpectator then
+		return
+	end
+
+	for name, data in pairs(self.userBattleStatus) do
+		if name ~= self.myUserName and data.teamNumber == myBattleStatus.teamNumber and not data.isSpectator then
+			-- need to change teamID so it's unique
+			self:SetBattleStatus({
+				teamNumber = self:GetUnusedTeamID()
+			})
+			break
+		end
+	end
+end
 
 function Interface:_OnAddBot(battleID, name, owner, battleStatus, teamColor, aiDll)
 	battleID = tonumber(battleID)

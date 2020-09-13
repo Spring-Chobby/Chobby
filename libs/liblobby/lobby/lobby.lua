@@ -1359,8 +1359,8 @@ function Lobby:GetUnusedTeamID()
 	local unusedTeamID = 0
 	local takenTeamID = {}
 	for name, data in pairs(self.userBattleStatus) do
-		if data.TeamNumber and not data.isSpectator then
-			local teamID = data.teamNumber
+		local teamID = data.teamNumber
+		if teamID and not data.isSpectator then
 			takenTeamID[teamID] = true
 			while takenTeamID[unusedTeamID] do
 				unusedTeamID = unusedTeamID + 1
