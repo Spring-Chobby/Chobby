@@ -1242,6 +1242,25 @@ end
 local settingsComboBoxes = {}
 local settingsUpdateFunction = {}
 
+local function MakeRestartWarning(offset)
+	local Configuration = WG.Chobby.Configuration
+
+	local warningLabel = Label:New {
+		name = "warningLabel",
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		parent = window,
+		font = Configuration:GetFont(2),
+		caption = "Warning: Most changes do not affect battles in progress.",
+	}
+	
+	return warningLabel, offset + ITEM_OFFSET
+end
+
 local function MakePresetsControl(settingPresets, offset)
 	local Configuration = WG.Chobby.Configuration
 
@@ -1559,6 +1578,9 @@ local function PopulateTab(settingPresets, settingOptions, settingsDefault)
 		label, list, customSettingsSwitch, offset = MakePresetsControl(settingPresets, offset)
 		children[#children + 1] = label
 		children[#children + 1] = list
+		
+		label, offset = MakeRestartWarning(offset)
+		children[#children + 1] = label
 	end
 
 	for i = 1, #settingOptions do
