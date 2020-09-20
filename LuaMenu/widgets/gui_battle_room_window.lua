@@ -628,7 +628,7 @@ end
 local function SortPlayers(a, b)
 	local sA = battleLobby:GetUserBattleStatus(a.name)
 	local sB = battleLobby:GetUserBattleStatus(b.name)
-	Spring.Echo("battleLobbybattleLobby", sA, (sA and sA.joinTime), (sB and sB.joinTime))
+	--Spring.Echo("battleLobbybattleLobby", sA, (sA and sA.joinTime), (sB and sB.joinTime))
 	local joinA = (sA and sA.joinTime) or ""
 	local joinB = (sB and sB.joinTime) or ""
 	return joinA < joinB
