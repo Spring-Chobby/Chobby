@@ -264,60 +264,6 @@ local settingsConfig = {
 			},
 
 			{
-				name = "CompatibilityMode",
-				humanName = "Compatibility Mode",
-				options = {
-					{
-						name = "On",
-						apply = {
-							LoadingMT = 0,
-							AdvUnitShading = 0,
-							AdvMapShading = 0,
-							LuaShaders = 0,
-							ForceDisableShaders = 1,
-							UsePBO = 0,
-							["3DTrees"] = 0,
-							MaxDynamicMapLights = 0,
-							MaxDynamicModelLights = 0,
-							ROAM = 1,
-						}
-					},
-					{
-						name = "Off",
-						apply = {
-							LoadingMT = 0, -- See https://github.com/spring/spring/commit/bdd6b641960759ccadf3e7201e37f2192d873791
-							AdvUnitShading = 1,
-							AdvMapShading = 1,
-							LuaShaders = 1,
-							ForceDisableShaders = 0,
-							UsePBO = 1,
-							["3DTrees"] = 1,
-							MaxDynamicMapLights = 1,
-							MaxDynamicModelLights = 1,
-							ROAM = 1, --Maybe ROAM = 0 when the new renderer is fully developed
-						}
-					},
-				},
-			},
-			{
-				name = "UseNewChili",
-				humanName = "Experimental Interface Renderer",
-				options = {
-					{
-						name = "Off",
-						apply = {
-							ZKUseNewChiliRTT = 0,
-						}
-					},
-					{
-						name = "On",
-						apply = {
-							ZKUseNewChiliRTT = 1,
-						}
-					},
-				},
-			},
-			{
 				name = "AtiIntelCompatibility_2",
 				humanName = "ATI/Intel Compatibility",
 				options = {
@@ -414,6 +360,42 @@ local settingsConfig = {
 				},
 			},
 			{
+				name = "CompatibilityMode",
+				humanName = "Compatibility Mode",
+				options = {
+					{
+						name = "On",
+						apply = {
+							LoadingMT = 0,
+							AdvUnitShading = 0,
+							AdvMapShading = 0,
+							LuaShaders = 0,
+							ForceDisableShaders = 1,
+							UsePBO = 0,
+							["3DTrees"] = 0,
+							MaxDynamicMapLights = 0,
+							MaxDynamicModelLights = 0,
+							ROAM = 1,
+						}
+					},
+					{
+						name = "Off",
+						apply = {
+							LoadingMT = 0, -- See https://github.com/spring/spring/commit/bdd6b641960759ccadf3e7201e37f2192d873791
+							AdvUnitShading = 1,
+							AdvMapShading = 1,
+							LuaShaders = 1,
+							ForceDisableShaders = 0,
+							UsePBO = 1,
+							["3DTrees"] = 1,
+							MaxDynamicMapLights = 1,
+							MaxDynamicModelLights = 1,
+							ROAM = 1, --Maybe ROAM = 0 when the new renderer is fully developed
+						}
+					},
+				},
+			},
+			{
 				name = "DeferredRendering",
 				humanName = "Deferred Rendering",
 				options = {
@@ -429,6 +411,24 @@ local settingsConfig = {
 						apply = {
 							AllowDeferredModelRendering = 0,
 							AllowDeferredMapRendering = 0,
+						}
+					},
+				},
+			},
+			{
+				name = "UseNewChili",
+				humanName = "Experimental Interface Renderer",
+				options = {
+					{
+						name = "Off",
+						apply = {
+							ZKUseNewChiliRTT = 0,
+						}
+					},
+					{
+						name = "On",
+						apply = {
+							ZKUseNewChiliRTT = 1,
 						}
 					},
 				},
