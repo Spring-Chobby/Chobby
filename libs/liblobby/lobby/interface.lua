@@ -32,7 +32,7 @@ function Interface:Login(user, password, cpu, localIP, lobbyVersion)
 		localIP = "*"
 	end
 	password = VFS.CalculateHash(password, 0)
-	sentence = "LuaLobby " .. lobbyVersion .. "\t" .. self.agent .. "\t" .. "b"
+	sentence = "LuaLobby " .. lobbyVersion .. "\t" .. self.agent .. "\t" .. "b sp"
 	cmd = concat("LOGIN", user, password, "0", localIP, sentence)
 	self:_SendCommand(cmd)
 	return self
@@ -201,6 +201,10 @@ function Interface:RejoinBattle(battleID)
 end
 
 function Interface:JoinBattle(battleID, password, scriptPassword)
+	if scriptPassword == nil then
+		scriptPassword = tostring(math.floor(math.random() * 65536)) .. tostring(math.floor(math.random() * 65536))
+	end
+	password = password or ""
 	self:super("JoinBattle", battleID, password, scriptPassword)
 	self:_SendCommand(concat("JOINBATTLE", battleID, password, scriptPassword))
 	return self
@@ -613,6 +617,9 @@ Interface.commandPattern["JOINBATTLE"] = "(%d+)%s+(%S+)"
 
 function Interface:_OnJoinedBattle(battleID, userName, scriptPassword)
 	battleID = tonumber(battleID)
+	if userName == self.myUserName then
+		self.scriptPassword = scriptPassword
+	end
 	self:super("_OnJoinedBattle", battleID, userName, scriptPassword)
 end
 Interface.commands["JOINEDBATTLE"] = Interface._OnJoinedBattle

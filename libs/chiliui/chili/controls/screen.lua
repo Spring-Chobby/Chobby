@@ -42,7 +42,7 @@ local inherited = this.inherited
 
 function Screen:New(obj)
 	local vsx, vsy = Spring.GetViewSizes()
-	
+
 	if ((obj.width or -1) <= 0) then
 		obj.width = vsx
 	end
@@ -172,7 +172,7 @@ function Screen:IsAbove(x, y, ...)
 		return
 	end
 	-- What is this for?
-	
+
 	local activeControl = UnlinkSafe(self.activeControl)
 	if activeControl then
 		self.currentTooltip = activeControl.tooltip
