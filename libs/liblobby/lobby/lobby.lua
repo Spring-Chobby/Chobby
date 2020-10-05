@@ -228,7 +228,7 @@ function Lobby:SetBattleStatus(status)
 	return self
 end
 
-function Lobby:AddAi(aiName, aiLib, allyNumber, version)
+function Lobby:AddAi(aiName, aiLib, allyNumber, version, side, options)
 	return self
 end
 
@@ -861,8 +861,10 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 		userData.isSpectator = status.isSpectator
 	end
 	userData.sync       = status.sync  or userData.sync
+	userData.side       = status.side  or userData.side
 	userData.aiLib      = status.aiLib or userData.aiLib
 	userData.aiVersion  = status.aiVersion or userData.aiVersion
+	userData.aiOptions  = status.aiOptions or userData.aiOptions
 	userData.owner      = status.owner or userData.owner
 	userData.teamColor  = status.teamColor or userData.teamColor
 
@@ -870,10 +872,12 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	status.teamNumber   = userData.teamNumber
 	status.isSpectator  = userData.isSpectator
 	status.sync         = userData.sync
+	status.side         = userData.side
 	status.aiLib        = userData.aiLib
 	status.aiVersion    = userData.aiVersion
+	status.aiOptions    = userData.aiOptions
 	status.owner        = userData.owner
-	status.teamColor	= userData.teamColor
+	status.teamColor    = userData.teamColor
 	self:_CallListeners("OnUpdateUserBattleStatus", userName, status)
 
 	if changedSpectator or changedAllyTeam then
