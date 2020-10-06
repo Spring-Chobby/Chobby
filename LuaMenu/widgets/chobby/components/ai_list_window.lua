@@ -78,19 +78,34 @@ function AiListWindow:AddAiToList(ai, blackList, oldAiVersions, isRunning64Bit)
 		caption = displayName,
 		font = Configuration:GetFont(3),
 		tooltip = tooltip,
-		OnClick = {
-			function()
-				local path = "AI/Skirmish/"..ai.shortName.."/"..ai.version.."/AIOptions.lua"
-				if VFS.FileExists(path) then
-					WG.Chobby.AiOptionsWindow(self, ai, displayName, path)
-				else
-					self:AddAi(displayName, shortName, ai.version)
-					self:HideWindow()
-				end
-			end
-		},
+		OnClick = { self:GetOnAddAiFunc(ai, displayName, shortName) },
 	}
 	self:AddRow({addAIButton}, displayName)
+end
+
+function AiListWindow:GetOnAddAiFunc(ai, displayName, shortName)
+	local function defaultAction()
+		self:AddAi(displayName, shortName, ai.version)
+		self:HideWindow()
+	end
+
+	local singleplayerDefault = WG.Chobby.Configuration.gameConfig.skirmishDefault
+	if not singleplayerDefault or not singleplayerDefault.AIOptionsEnabled then
+		return defaultAction
+	end
+
+	return function()
+		local path = "AI/Skirmish/"..ai.shortName.."/"..ai.version.."/AIOptions.lua"
+		if VFS.FileExists(path) then
+			local successFunc = function(side, aioptions)
+				self:AddAi(displayName, shortName, ai.version, side, aioptions)
+				self:HideWindow()
+			end
+			WG.Chobby.AiOptionsWindow(displayName, path, successFunc)
+		else
+			defaultAction()
+		end
+	end
 end
 
 function AiListWindow:AddAi(displayName, shortName, version, side, options)

@@ -1,7 +1,7 @@
 AiOptionsWindow = ListWindow:extends{}
 
-function AiOptionsWindow:init(parent, ai, displayName, path)
- 	self:super('init', lobbyInterfaceHolder, ai.shortName.." Options", false, "main_window", nil, {6, 7, 7, 4})
+function AiOptionsWindow:init(displayName, optionsPath, successFunc)
+	self:super('init', lobbyInterfaceHolder, displayName.." Options", false, "main_window", nil, {6, 7, 7, 4})
 	self.window:SetPos(nil, nil, 650, 700)
 	WG.Chobby.PriorityPopup(self.window, nil, nil, nil, true)
 
@@ -18,16 +18,32 @@ function AiOptionsWindow:init(parent, ai, displayName, path)
 		classname = "action_button",
 		OnClick = {
 			function()
-				parent:AddAi(displayName, ai.shortName, ai.version, nil, self.aioptions)
+				successFunc(self.side, self.aioptions)
 				self:HideWindow()
-				parent:HideWindow()
 			end
 		},
 	}
 
-	local options = VFS.Include(path)
+	-- AIOptions
+	local options = VFS.Include(optionsPath)
 	for i = #options, 1, -1 do
 		self:AddEntry(options[i], i)
+	end
+
+	-- AI side
+	local singleplayer = WG.Chobby.Configuration.singleplayer
+	if singleplayer then
+		local items = {}
+		for i, side in pairs(singleplayer.sidedata) do
+			items[i] = side.name
+		end
+
+		local data = {
+			name = "Select side",
+			def = 1,
+			nameList = items,
+		}
+		self:AddRow({self:MakeSideList(data)}, #options + 1)
 	end
 end
 
@@ -47,8 +63,6 @@ function AiOptionsWindow:AddEntry(data, index)
 	elseif data.type == "string" then
 		self:AddRow({self:MakeString(data)}, index)
 	end
-
-	return
 end
 
 function AiOptionsWindow:MakeList(data)
@@ -221,6 +235,48 @@ function AiOptionsWindow:MakeString(data)
 		children = {
 			label,
 			textBox
+		}
+	}
+end
+
+function AiOptionsWindow:MakeSideList(data)
+	local label = Label:New {
+		x = 5,
+		y = 0,
+		width = 350,
+		height = 30,
+		valign = "center",
+		align = "left",
+		caption = data.name,
+		font = WG.Chobby.Configuration:GetFont(3),
+	}
+
+	local list = ComboBox:New {
+		x = 340,
+		y = 1,
+		width = 250,
+		height = 30,
+		items = data.nameList,
+		font = WG.Chobby.Configuration:GetFont(3),
+		itemFontSize = WG.Chobby.Configuration:GetFont(3).size,
+		selectByName = true,
+		selected = 1,
+		OnSelectName = {
+			function (obj, selectedName)
+				self.side = selectedName
+			end
+		},
+	}
+
+	return Control:New {
+		x = 0,
+		y = 0,
+		width = 600,
+		height = 32,
+		padding = {0, 0, 0, 0},
+		children = {
+			label,
+			list
 		}
 	}
 end

@@ -2150,13 +2150,27 @@ function BattleRoomWindow.SetSingleplayerGame(ToggleShowFunc, battleroomObj, tab
 	local function SetGameSucess(name)
 		singleplayerGame = name
 		ToggleShowFunc(battleroomObj, tabData)
+
+		local singleplayerDefault = WG.Chobby.Configuration.gameConfig.skirmishDefault
+		if not singleplayerDefault or not singleplayerDefault.AIOptionsEnabled then
+			return
+		end
+
+		local singleplayer = WG.Chobby.Configuration.singleplayer
+		if (not singleplayer or singleplayer.game ~= name) and VFS.MapArchive(name) then
+			singleplayer = {
+				game = name,
+				sidedata = VFS.Include("gamedata/sidedata.lua"),
+			}
+			WG.Chobby.Configuration.singleplayer = singleplayer
+			VFS.UnmapArchive(name)
+		end
 	end
 
 	local config = WG.Chobby.Configuration
 	local skirmishGame = config:GetDefaultGameName()
 	if skirmishGame then
-		singleplayerGame = skirmishGame
-		ToggleShowFunc(battleroomObj, tabData)
+		SetGameSucess(skirmishGame)
 	else
 		WG.Chobby.GameListWindow(SetGameFail, SetGameSucess)
 	end
