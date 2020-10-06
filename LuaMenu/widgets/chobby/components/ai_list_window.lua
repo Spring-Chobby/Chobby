@@ -19,6 +19,7 @@ function AiListWindow:init(gameName)
 	end
 
 end
+
 function AiListWindow:CompareItems(id1, id2)
 	local order = Configuration.simpleAiList and Configuration.gameConfig.simpleAiOrder
 	if order then
@@ -79,15 +80,20 @@ function AiListWindow:AddAiToList(ai, blackList, oldAiVersions, isRunning64Bit)
 		tooltip = tooltip,
 		OnClick = {
 			function()
-				self:AddAi(displayName, shortName, ai.version)
-				self:HideWindow()
+				local path = "AI/Skirmish/"..ai.shortName.."/"..ai.version.."/AIOptions.lua"
+				if VFS.FileExists(path) then
+					WG.Chobby.AiOptionsWindow(self, ai, displayName, path)
+				else
+					self:AddAi(displayName, shortName, ai.version)
+					self:HideWindow()
+				end
 			end
 		},
 	}
 	self:AddRow({addAIButton}, displayName)
 end
 
-function AiListWindow:AddAi(displayName, shortName, version)
+function AiListWindow:AddAi(displayName, shortName, version, side, options)
 	local aiName
 	local counter = 1
 	local found = true
@@ -106,7 +112,7 @@ function AiListWindow:AddAi(displayName, shortName, version)
 		end
 		counter = counter + 1
 	end
-	self.lobby:AddAi(aiName, shortName, self.allyTeam, version)
+	self.lobby:AddAi(aiName, shortName, self.allyTeam, version, side, options)
 	Configuration:SetConfigValue("lastAddedAiName", shortName)
 end
 

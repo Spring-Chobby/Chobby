@@ -28,7 +28,7 @@ function InterfaceSkirmish:WriteTable(key, value, tabs)
 end
 
 function InterfaceSkirmish:MakeScriptTXT(script)
-	local str = '[Game]\n{\n\n'
+	local str = '[Game]\n{\n'
 
 	-- First write Tables
 	for key, value in pairs(script) do
