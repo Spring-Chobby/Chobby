@@ -228,7 +228,7 @@ function Lobby:SetBattleStatus(status)
 	return self
 end
 
-function Lobby:AddAi(aiName, aiLib, allyNumber, version, side, options)
+function Lobby:AddAi(aiName, aiLib, allyNumber, version, options)
 	return self
 end
 

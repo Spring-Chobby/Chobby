@@ -418,14 +418,13 @@ end
 -- BEGIN Client commands
 -------------------------------------------------
 
-function InterfaceSkirmish:AddAi(aiName, aiLib, allyNumber, version, side, options)
-	self:super("AddAi", aiName, aiLib, allyNumber, version, side, options)
+function InterfaceSkirmish:AddAi(aiName, aiLib, allyNumber, version, options)
+	self:super("AddAi", aiName, aiLib, allyNumber, version, options)
 	self:_OnAddAi(self:GetMyBattleID(), aiName, {
 		aiLib = aiLib,
 		allyNumber = allyNumber,
 		owner = self:GetMyUserName(),
 		aiVersion = version,
-		side = side,
 		aiOptions = options,
 	})
 end
