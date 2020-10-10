@@ -19,6 +19,7 @@ function AiListWindow:init(gameName)
 	end
 
 end
+
 function AiListWindow:CompareItems(id1, id2)
 	local order = Configuration.simpleAiList and Configuration.gameConfig.simpleAiOrder
 	if order then
@@ -79,15 +80,35 @@ function AiListWindow:AddAiToList(ai, blackList, oldAiVersions, isRunning64Bit)
 		tooltip = tooltip,
 		OnClick = {
 			function()
-				self:AddAi(displayName, shortName, ai.version)
-				self:HideWindow()
+				local function defaultAction()
+					self:AddAi(displayName, shortName, ai.version)
+					self:HideWindow()
+				end
+
+				local skirmishDefault = WG.Chobby.Configuration.gameConfig.skirmishDefault
+				if not skirmishDefault or not skirmishDefault.AIOptionsEnabled then
+					defaultAction()
+					return
+				end
+
+				local path = "AI/Skirmish/" .. ai.shortName .. "/" .. ai.version .. "/AIOptions.lua"
+				if not VFS.FileExists(path) then
+					defaultAction()
+					return
+				end
+
+				local successFunc = function(aioptions)
+					self:AddAi(displayName, shortName, ai.version, aioptions)
+					self:HideWindow()
+				end
+				WG.Chobby.AiOptionsWindow(displayName, path, successFunc)
 			end
 		},
 	}
 	self:AddRow({addAIButton}, displayName)
 end
 
-function AiListWindow:AddAi(displayName, shortName, version)
+function AiListWindow:AddAi(displayName, shortName, version, options)
 	local aiName
 	local counter = 1
 	local found = true
@@ -106,7 +127,7 @@ function AiListWindow:AddAi(displayName, shortName, version)
 		end
 		counter = counter + 1
 	end
-	self.lobby:AddAi(aiName, shortName, self.allyTeam, version)
+	self.lobby:AddAi(aiName, shortName, self.allyTeam, version, options)
 	Configuration:SetConfigValue("lastAddedAiName", shortName)
 end
 

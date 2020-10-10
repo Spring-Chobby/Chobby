@@ -7,25 +7,33 @@ function InterfaceSkirmish:init()
 	self.useTeamColor = true
 end
 
-function InterfaceSkirmish:WriteTable(key, value)
-	local str = '\t['..key..']\n\t{\n'
+function InterfaceSkirmish:WriteTable(key, value, tabs)
+	local str = tabs..'['..key..']\n'..tabs..'{\n'
+
+	-- First write Tables
 	for k, v in pairs(value) do
 		if type(v) == 'table' then
-			str = str .. self:WriteTable(k, v)
-		else
-			str = str..'\t\t'..k..' = '..v..';\n'
+			str = str .. self:WriteTable(k, v, tabs .. '\t')
 		end
 	end
-	return str .. '\t}\n\n'
+
+	-- Then the rest (purely for aesthetics)
+	for k, v in pairs(value) do
+		if type(v) ~= 'table' then
+			str = str..tabs..'\t'..k..' = '..v..';\n'
+		end
+	end
+
+	return str .. tabs .. '}\n'
 end
 
 function InterfaceSkirmish:MakeScriptTXT(script)
-	local str = '[Game]\n{\n\n'
+	local str = '[Game]\n{\n'
 
 	-- First write Tables
 	for key, value in pairs(script) do
 		if type(value) == 'table' then
-			str = str .. self:WriteTable(key, value)
+			str = str .. self:WriteTable(key, value, '\t') .. '\n'
 		end
 	end
 
@@ -149,6 +157,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 						IsFromDemo = 0,
 						ShortName = data.aiLib,
 						Version = data.aiVersion,
+						options = data.aiOptions,
 						Host = 0,
 					}
 				end
@@ -157,6 +166,7 @@ function InterfaceSkirmish:_StartScript(gameName, mapName, playerName, friendLis
 					TeamLeader = 0,
 					AllyTeam = data.allyNumber,
 					RgbColor = getTeamColor(userName),
+					Side = data.side,
 				}
 				maxAllyTeamID = math.max(maxAllyTeamID, data.allyNumber)
 
@@ -408,13 +418,14 @@ end
 -- BEGIN Client commands
 -------------------------------------------------
 
-function InterfaceSkirmish:AddAi(aiName, aiLib, allyNumber, version)
-	self:super("AddAi", aiName, aiLib, allyNumber, version)
+function InterfaceSkirmish:AddAi(aiName, aiLib, allyNumber, version, options)
+	self:super("AddAi", aiName, aiLib, allyNumber, version, options)
 	self:_OnAddAi(self:GetMyBattleID(), aiName, {
 		aiLib = aiLib,
 		allyNumber = allyNumber,
 		owner = self:GetMyUserName(),
 		aiVersion = version,
+		aiOptions = options,
 	})
 end
 
