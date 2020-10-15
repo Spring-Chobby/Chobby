@@ -189,9 +189,24 @@ local function GetSaves()
 	return saves
 end
 
+local function WillOverrideSave(fileName)
+	if not gamedata.campaignID then
+		return false
+	end
+	local path = SAVE_DIR .. fileName .. ".lua"
+	if not VFS.FileExists(path) then
+		return false
+	end
+	local saveData = GetSave(path)
+	if saveData.campaignID == gamedata.campaignID and saveData.commName == gamedata.commanderName then
+		return false
+	end
+	return true
+end
+
 local function SaveGame()
 	local fileName = WG.Chobby.Configuration.campaignSaveFile
-	if not fileName then
+	if (not fileName) or WillOverrideSave(fileName) then
 		local number = WG.Chobby.Configuration.nextCampaignSaveNumber or 1
 		for i = 1, 1000 do
 			if VFS.FileExists(SAVE_DIR .. SAVE_NAME .. number .. ".lua") then
