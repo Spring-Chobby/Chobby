@@ -126,6 +126,8 @@ end
 --------------------------------------------------------------------------------
 -- Game data
 
+local DEFAULT_COMM_NAME = "New Save"
+
 local function ResetGamedata()
 	gamedata = {
 		unitsUnlocked = {map = {}, list = {}},
@@ -141,7 +143,7 @@ local function ResetGamedata()
 		difficultySetting = 1, -- 1,2,3 -> easy/medium/hard
 		leastDifficulty = false,
 		commanderLevel = 0,
-		commanderName = "New Save",
+		commanderName = DEFAULT_COMM_NAME,
 		commanderChassis = "knight",
 		commanderLoadout = {},
 		retinue = {}, -- Unused
@@ -198,7 +200,7 @@ local function WillOverrideSave(fileName)
 		return false
 	end
 	local saveData = GetSave(path)
-	if saveData.campaignID == gamedata.campaignID and saveData.commName == gamedata.commanderName then
+	if saveData.campaignID == gamedata.campaignID and (saveData.commanderName == gamedata.commanderName or saveData.commanderName == DEFAULT_COMM_NAME) then
 		return false
 	end
 	return true
