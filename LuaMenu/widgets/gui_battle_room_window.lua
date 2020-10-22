@@ -2144,7 +2144,6 @@ function BattleRoomWindow.GetSingleplayerControl(setupData)
 
 		OnParent = {
 			function(obj)
-
 				if multiplayerWrapper then
 					WG.BattleStatusPanel.RemoveBattleTab()
 
@@ -2188,6 +2187,10 @@ function BattleRoomWindow.GetSingleplayerControl(setupData)
 
 				if not (setupData and WG.Chobby.Configuration.simplifiedSkirmishSetup) and singleplayerDefault and singleplayerDefault.enemyAI then
 					battleLobby:AddAi(singleplayerDefault.enemyAI .. " (1)", singleplayerDefault.enemyAI, 1)
+				end
+				
+				if singleplayerDefault.modoptions then
+					battleLobby:SetModOptions(singleplayerDefault.modoptions)
 				end
 			end
 		},
