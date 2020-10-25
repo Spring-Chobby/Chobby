@@ -281,7 +281,7 @@ end
 function Interface:AddAi(aiName, aiLib, allyNumber, version)
 	local battleStatus = {
 		isReady = true,
-		teamNumber = allyNumber,
+		teamNumber = self:GetUnusedTeamID(),
 		allyNumber = allyNumber,
 		playMode = true,
 		sync = true,
