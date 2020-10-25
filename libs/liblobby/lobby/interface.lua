@@ -201,10 +201,9 @@ function Interface:RejoinBattle(battleID)
 end
 
 function Interface:JoinBattle(battleID, password, scriptPassword)
-	if scriptPassword == nil then
-		scriptPassword = tostring(math.floor(math.random() * 65536)) .. tostring(math.floor(math.random() * 65536))
-	end
-	password = password or ""
+	scriptPassword = scriptPassword or (tostring(math.floor(math.random() * 65536)) .. tostring(math.floor(math.random() * 65536)))
+	password = password or "empty"
+	self.changedTeamIDOnceAfterJoin = false
 	self:super("JoinBattle", battleID, password, scriptPassword)
 	self:_SendCommand(concat("JOINBATTLE", battleID, password, scriptPassword))
 	return self
@@ -670,9 +669,14 @@ function Interface:_EnsureMyTeamNumberIsUnique()
 		return
 	end
 
+	if self.changedTeamIDOnceAfterJoin then
+		return
+	end
+
 	for name, data in pairs(self.userBattleStatus) do
 		if name ~= self.myUserName and data.teamNumber == myBattleStatus.teamNumber and not data.isSpectator then
 			-- need to change teamID so it's unique
+			self.changedTeamIDOnceAfterJoin = true
 			self:SetBattleStatus({
 				teamNumber = self:GetUnusedTeamID()
 			})
