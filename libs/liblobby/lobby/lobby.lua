@@ -694,6 +694,7 @@ function Lobby:_OnBattleOpened(battleID, battle)
 		port = battle.port,
 
 		maxPlayers = battle.maxPlayers,
+		maxEvenPlayers = battle.maxEvenPlayers,
 		passworded = battle.passworded,
 
 		engineName = battle.engineName,
@@ -807,6 +808,7 @@ function Lobby:_OnUpdateBattleInfo(battleID, battleInfo)
 	end
 
 	battle.maxPlayers = battleInfo.maxPlayers or battle.maxPlayers
+	battle.maxEvenPlayers = battleInfo.maxEvenPlayers or battle.maxEvenPlayers
 	if battleInfo.passworded ~= nil then
 		battle.passworded = battleInfo.passworded
 	end
@@ -865,6 +867,7 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	userData.owner      = status.owner or userData.owner
 	userData.teamColor  = status.teamColor or userData.teamColor
 	userData.joinTime   = status.joinTime or userData.JoinTime
+	userData.queueOrder = status.queueOrder or userData.queueOrder
 
 	status.allyNumber   = userData.allyNumber
 	status.teamNumber   = userData.teamNumber
@@ -875,6 +878,7 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	status.owner        = userData.owner
 	status.teamColor    = userData.teamColor
 	status.joinTime     = userData.joinTime
+	status.queueOrder   = userData.queueOrder
 	self:_CallListeners("OnUpdateUserBattleStatus", userName, status)
 
 	if changedSpectator or changedAllyTeam then

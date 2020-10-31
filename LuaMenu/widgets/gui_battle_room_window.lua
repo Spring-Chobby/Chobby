@@ -628,9 +628,9 @@ end
 local function SortPlayers(a, b)
 	local sA = battleLobby:GetUserBattleStatus(a.name)
 	local sB = battleLobby:GetUserBattleStatus(b.name)
-	--Spring.Echo("battleLobbybattleLobby", sA, (sA and sA.joinTime), (sB and sB.joinTime))
-	local joinA = (sA and sA.joinTime) or ""
-	local joinB = (sB and sB.joinTime) or ""
+	--Spring.Echo("battleLobbybattleLobby", sA, (sA and sA.queueOrder), (sB and sB.queueOrder))
+	local joinA = (sA and sA.queueOrder) or 0
+	local joinB = (sB and sB.queueOrder) or 0
 	return joinA < joinB
 end
 
@@ -825,7 +825,11 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 
 			local function UpdatePlayerPositions()
 				local maxPlayers = (battleLobby:GetBattle(battleID) and battleLobby:GetBattle(battleID).maxPlayers) or 300
+				local maxEvenPlayers = (battleLobby:GetBattle(battleID) and battleLobby:GetBattle(battleID).maxEvenPlayers) or 0
 				table.sort(teamStack.children, SortPlayers)
+				if (#teamStack.children)%2 == 1 and #teamStack.children < maxEvenPlayers then
+					maxPlayers = #teamStack.children - 1
+				end
 				local position = 0
 				local waitingListPosition = false
 				for i = 1, #teamStack.children do
@@ -1006,6 +1010,10 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				PositionChildren(parentStack, parentScroll.height)
 			end
 
+			function teamData.UpdateMaxPlayers()
+				UpdatePlayerPositions()
+			end
+			
 			team[teamIndex] = teamData
 		end
 		return team[teamIndex]
@@ -1086,6 +1094,12 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 
 	function externalFunctions.RemoveAi(botName)
 		RemovePlayerFromTeam(botName)
+	end
+
+	function externalFunctions.UpdateMaxPlayers()
+		for teamIndex, teamData in pairs(team) do
+			teamData.UpdateMaxPlayers()
+		end
 	end
 
 	return externalFunctions
@@ -1947,6 +1961,9 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		end
 
 		infoHandler.UpdateBattleInfo(updatedBattleID, newInfo)
+		if newInfo.maxPlayers or newInfo.maxEvenPlayers then
+			playerHandler.UpdateMaxPlayers()
+		end
 	end
 
 	local function OnLeftBattle(listener, leftBattleID, userName)

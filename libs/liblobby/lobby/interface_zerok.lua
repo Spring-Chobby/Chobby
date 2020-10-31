@@ -990,6 +990,7 @@ function Interface:_BattleAdded(data)
 		port = header.Port,
 
 		maxPlayers = header.MaxPlayers,
+		maxEvenPlayers = header.MaxEvenPlayers,
 		passworded = (header.Password and header.Password ~= "" and true) or false,
 
 		engineName = "Spring " .. header.Engine,
@@ -1086,6 +1087,7 @@ function Interface:_BattleUpdate(data)
 
 	local battleInfo = {
 		maxPlayers = header.MaxPlayers,
+		maxEvenPlayers = header.MaxEvenPlayers,
 		passworded = password,
 
 		engineName = header.Engine,
@@ -1120,6 +1122,7 @@ function Interface:_UpdateUserBattleStatus(data)
 		teamNumber    = data.TeamNumber,
 		sync          = data.Sync,
 		joinTime      = data.JoinTime,
+		queueOrder    = data.QueueOrder,
 	}
 	if not data.Name then
 		Spring.Log(LOG_SECTION, LOG.ERROR, "_UpdateUserBattleStatus missing data.Name field")
