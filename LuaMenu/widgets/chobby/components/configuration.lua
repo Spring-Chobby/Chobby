@@ -199,6 +199,8 @@ function Configuration:init()
 	self.devMode = (VFS.FileExists("devmode.txt") and true) or false
 	self.enableProfiler = false
 	self.showPlanetUnlocks = false
+	self.showPlanetCodex = false
+	self.showPlanetMinimap = false
 	self.showPlanetEnemyUnits = false
 	self.campaignSpawnDebug = false
 	self.editCampaign = false
@@ -217,7 +219,7 @@ function Configuration:init()
 	self.showOldAiVersions = false
 	self.drawAtFullSpeed = false
 	self.lobbyIdleSleep = false
-	self.rememberQueuesOnStart = false
+	self.rememberQueuesOnStart2 = true
 	self.channels = {}
 	if self.gameConfig.defaultChatChannels ~= nil then
 		for _, channelName in ipairs(self.gameConfig.defaultChatChannels) do
@@ -228,7 +230,7 @@ function Configuration:init()
 	self.language = "en"
 	self.languages = {
 		["en"] = {locale = "en", name="English"},
-		["de"] = {locale = "de", name="Deutsch"},
+		["de"] = {locale = "de", name="Deutsch (unvollständig)"},
 	}
 
 	self.lobby_fullscreen = 1
@@ -514,6 +516,8 @@ function Configuration:GetConfigData()
 		debugAutoWin = self.debugAutoWin,
 		enableProfiler = self.enableProfiler,
 		showPlanetUnlocks = self.showPlanetUnlocks,
+		showPlanetCodex = self.showPlanetCodex,
+		showPlanetMinimap = self.showPlanetMinimap,
 		showPlanetEnemyUnits = self.showPlanetEnemyUnits,
 		campaignSpawnDebug = self.campaignSpawnDebug,
 		editCampaign = self.editCampaign,
@@ -521,7 +525,7 @@ function Configuration:GetConfigData()
 		confirmation_battleFromBattle = self.confirmation_battleFromBattle,
 		drawAtFullSpeed = self.drawAtFullSpeed,
 		lobbyIdleSleep = self.lobbyIdleSleep,
-		rememberQueuesOnStart = self.rememberQueuesOnStart,
+		rememberQueuesOnStart2 = self.rememberQueuesOnStart2,
 		loadLocalWidgets = self.loadLocalWidgets,
 		activeDebugConsole = self.activeDebugConsole,
 		onlyShowFeaturedMaps = self.onlyShowFeaturedMaps,

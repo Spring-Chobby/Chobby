@@ -343,6 +343,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"commweapon_lparticlebeam"
 			},
 			codexEntries = {
+				"faction_union",
 			},
 		},
 	}

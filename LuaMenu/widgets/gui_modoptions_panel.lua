@@ -104,6 +104,7 @@ local function ProcessListOption(data, index)
 		items = items,
 		font = WG.Chobby.Configuration:GetFont(2),
 		itemFontSize = WG.Chobby.Configuration:GetFont(2).size,
+		tooltip = data.desc,
 		selectByName = true,
 		selected = defaultItem,
 		OnSelectName = {
@@ -185,6 +186,7 @@ local function ProcessNumberOption(data, index)
 		text   = oldText,
 		useIME = false,
 		fontSize = WG.Chobby.Configuration:GetFont(2).size,
+		tooltip = data.desc,
 		OnFocusUpdate = {
 			function (obj)
 				if obj.focused then
@@ -247,6 +249,7 @@ local function ProcessStringOption(data, index)
 		height = 30,
 		text   = oldText,
 		useIME = false,
+		tooltip = data.desc,
 		fontSize = WG.Chobby.Configuration:GetFont(2).size,
 		OnFocusUpdate = {
 			function (obj)
@@ -380,11 +383,27 @@ local function CreateModoptionWindow()
 		modoptionsSelectionWindow:Dispose()
 	end
 
-	local buttonAccept
+	local buttonAccept, buttonMods, modSelection
+
+	function GetModSelection()
+		local function SetGameFail()
+		end
+
+		local function SetGameSucess(name)
+			buttonMods.caption = name
+			modSelection = name
+		end
+
+		local Configuration = WG.Chobby.Configuration
+		WG.Chobby.GameListWindow(SetGameFail, SetGameSucess, Configuration and Configuration.gameConfig.modBlacklist, i18n("select_mod"))
+	end
 
 	local function AcceptFunc()
 		screen0:FocusControl(buttonAccept) -- Defocus the text entry
 		battleLobby:SetModOptions(localModoptions)
+		if modSelection then
+			battleLobby:SelectGame(modSelection)
+		end
 		modoptionsSelectionWindow:Dispose()
 	end
 
@@ -393,9 +412,28 @@ local function CreateModoptionWindow()
 			UpdateControlValue(key, value)
 		end
 		localModoptions = {}
+		
+		modSelection = false
+		buttonMods.caption = i18n("select_mod")
 	end
 
-	buttonReset = Button:New {
+	buttonMods = Button:New {
+		x = 10,
+		right = 513,
+		bottom = 1,
+		height = 70,
+		caption = i18n("select_mod"),
+		font = WG.Chobby.Configuration:GetFont(3),
+		parent = modoptionsSelectionWindow,
+		classname = "option_button",
+		OnClick = {
+			function()
+				GetModSelection()
+			end
+		},
+	}
+
+	Button:New {
 		right = 294,
 		width = 135,
 		bottom = 1,
@@ -536,7 +574,7 @@ function ModoptionsPanel.LoadModotpions(gameName, newBattleLobby)
 	-- Set modoptionDefaults
 	for i = 1, #modoptions do
 		local data = modoptions[i]
-		if data.key and data.def ~= nil then
+		if data.key and (not data.noLobby) and (data.def ~= nil) then
 			if type(data.def) == "boolean" then
 				modoptionDefaults[data.key] = tostring((data.def and 1) or 0)
 			elseif type(data.def) == "number" then
@@ -553,7 +591,7 @@ function ModoptionsPanel.LoadModotpions(gameName, newBattleLobby)
 		local data = modoptions[i]
 		if data.type == "section" then
 			modoptionStructure.sectionTitles[data.key] = data.name
-		else
+		elseif not data.noLobby then
 			if data.section then
 				modoptionStructure.sections[data.section] = modoptionStructure.sections[data.section] or {
 					title = data.section,

@@ -684,6 +684,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_adv_nano_LIMIT_I_1",
 			},
 			codexEntries = {
+				"faction_union",
 			},
 		},
 	}

@@ -30,7 +30,7 @@ local function GetPlanet(planetUtilities, planetID)
 			feedbackLink = "http://zero-k.info/Forum/Thread/24417",
 			text = "How long have I been sleeping? Centuries? No, stars have drifted way too much. And this Commander- I have never seen anything like it. What was I doing in that thing?"
 			.. "\n "
-			.. "\nI cannot stay there. Those automata are everywhere, and when they are not fighting each-other, they attack me as soon as I stop moving."
+			.. "\nI cannot stay there. Those automata are everywhere, and when they are not fighting each other, they attack me as soon as I stop moving."
 			,
 			extendedText = "I hoped to avoid local forces, but there are simply too many of them. Still, this battle should be straightforward. I will simply overwhelm them with an army of Glaives and Reavers, and then take that factory out."
 			.. "\n "
@@ -327,8 +327,7 @@ local function GetPlanet(planetUtilities, planetID)
 			abilities = {
 			},
 			codexEntries = {
-				"location_im_jaleth",
-				"entry_commander"
+				"location_im_jaleth"
 			}
 		},
 	}

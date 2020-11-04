@@ -1284,8 +1284,9 @@ local function GetPlanet(planetUtilities, planetID)
 			modules = {
 				"commweapon_riotcannon",
 			},
-			abilities = {
-			}
+			codexEntries = {
+				"entry_event",
+			},
 		},
 	}
 	

@@ -29,7 +29,7 @@ local codexTree
 --------------------------------------------------------------------------------
 -- Utilities
 
-local function SortCodexEntries(a, b)
+local function SortCodexEntries(entryA, entryB)
 	if (not entryA) or (not entryB) then
 		return false
 	end
@@ -40,7 +40,7 @@ local function SortCodexEntries(a, b)
 	return aKey < bKey
 end
 
-local function LoadCodexEntries(path)
+local function LoadCodexEntries()
 	local codexEntries = WG.Chobby.Configuration.campaignConfig.codex
 
 	local categories = {}
@@ -104,6 +104,8 @@ local function PopulateCodexTree(parent, codexText, codexImage)
 					name = entry.id,
 					height = 24,
 					caption = entry.name,
+					align = "left",
+					alignPadding = 0.08,
 					OnClick = {
 						function(self)
 							if selectedButton and selectedButton.name == self.name then

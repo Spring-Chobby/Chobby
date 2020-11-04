@@ -26,7 +26,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G8V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24441",
-			text = "A billion years ago, this world was hit by a gigantic asteroid. Ancient terraformation have long made it inhabitable, but now it also features strange, parallel mountain ranges and great sources of geothermal energy."
+			text = "A billion years ago, this world was hit by a gigantic asteroid. Ancient terraform works have long since made it inhabitable, but now it also features strange, parallel mountain ranges and great sources of geothermal energy."
 			.. "\n "
 			.. "\nI wonder who thought it was a good idea to defend those rather dry mountains with Amphbots of all things."
 			,

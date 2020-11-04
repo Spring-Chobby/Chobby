@@ -1,4 +1,4 @@
-local RANK_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/profileImages/"
+local RANK_DIR = "LuaMenu/configs/gameConfig/zk/profileimages/"
 
 local rankMap = {
 	[0] = "Nebulous",

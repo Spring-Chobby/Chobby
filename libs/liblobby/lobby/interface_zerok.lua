@@ -404,6 +404,11 @@ function Interface:StartBattle()
 	return self
 end
 
+function Interface:SelectGame(gameName)
+	self:SayBattle("!game " .. gameName)
+	return self
+end
+
 ------------------------
 -- Channel & private chat commands
 ------------------------
@@ -951,7 +956,12 @@ Interface.jsonCommands["IgnoreList"] = Interface._IgnoreList
 function Interface:_ConnectSpring(data)
 	if data.Ip and data.Port and data.ScriptPassword then
 		Spring.Echo("Connecting to battle", data.Game, data.Map, data.Engine)
-		self:ConnectToBattle(self.useSpringRestart, data.Ip, data.Port, nil, data.ScriptPassword, nil, data.Game, data.Map, data.Engine, (data.Mode and (modeToName[data.Mode] or data.Mode)) or "unknown")
+		self:ConnectToBattle(self.useSpringRestart,
+			data.Ip, data.Port, nil,
+			data.ScriptPassword, nil,
+			data.Game, data.Map, data.Engine,
+			(data.Mode and (modeToName[data.Mode] or data.Mode)) or "unknown", data.IsSpectator
+		)
 	end
 end
 Interface.jsonCommands["ConnectSpring"] = Interface._ConnectSpring
@@ -980,6 +990,7 @@ function Interface:_BattleAdded(data)
 		port = header.Port,
 
 		maxPlayers = header.MaxPlayers,
+		maxEvenPlayers = header.MaxEvenPlayers,
 		passworded = (header.Password and header.Password ~= "" and true) or false,
 
 		engineName = "Spring " .. header.Engine,
@@ -998,6 +1009,7 @@ function Interface:_BattleAdded(data)
 		disallowCustomTeams = header.Mode and (header.Mode ~= 0), -- Is Custom
 		disallowBots = header.Mode and (header.Mode ~= 5 and header.Mode ~= 0), -- Is Bots
 		isMatchMaker = header.IsMatchMaker,
+		timeQueueEnabled = header.TimeQueueEnabled,
 	})
 end
 Interface.jsonCommands["BattleAdded"] = Interface._BattleAdded
@@ -1075,6 +1087,7 @@ function Interface:_BattleUpdate(data)
 
 	local battleInfo = {
 		maxPlayers = header.MaxPlayers,
+		maxEvenPlayers = header.MaxEvenPlayers,
 		passworded = password,
 
 		engineName = header.Engine,
@@ -1108,6 +1121,8 @@ function Interface:_UpdateUserBattleStatus(data)
 		allyNumber    = data.AllyNumber,
 		teamNumber    = data.TeamNumber,
 		sync          = data.Sync,
+		joinTime      = data.JoinTime,
+		queueOrder    = data.QueueOrder,
 	}
 	if not data.Name then
 		Spring.Log(LOG_SECTION, LOG.ERROR, "_UpdateUserBattleStatus missing data.Name field")
@@ -1248,7 +1263,7 @@ function Interface:ProcessVote(data, battle, duplicateMessageTime)
 	local mapStart = string.find(voteMessage, "Change map to ")
 	if mapStart then
 		mapStart = mapStart + 14
-		pollUrl = string.sub(voteMessage, mapStart, lasturl - 1)
+		pollUrl = data.MapName
 		mapPoll = true
 	elseif string.find(voteMessage, "start the game?") then
 		notify = true
@@ -1277,6 +1292,8 @@ end
 function Interface:_BattlePoll(data)
 	-- BattlePoll {"Topic":"Choose the next map","Options":[{"Name":"IncultaV2","Id":1,"Votes":0,"URL":"http://test.zero-k.info/Maps/Detail/7514"},{"Name":"Otago 1.1","Id":2,"Votes":0,"URL":"http://test.zero-k.info/Maps/Detail/56587"},{"Name":"Wanderlust v03","Id":3,"Votes":0,"URL":"http://test.zero-k.info/Maps/Detail/55669"},{"Name":"DunePatrol_wip_v03","Id":4,"Votes":0,"URL":"http://test.zero-k.info/Maps/Detail/23549"}],"VotesToWin":3,"YesNoVote":false,"MapSelection":true}
 
+	--[11:15] <--BattlePoll {"Topic":"Change map to Adansonia v4.1 (16x14)?","Url":"http://zero-k.info/Maps/Detail/55567","Options":[{"Name":"Yes","DisplayName":"Yes","Id":1,"Votes":1,"Url":"http://zero-k.info/Maps/Detail/55567"},{"Name":"No","DisplayName":"No","Id":2,"Votes":0,"Url":""}],"VotesToWin":2,"YesNoVote":true,"MapSelection":true,"NotifyPoll":false,"MapName":"Adansonia v4.1"}
+
 	if self.REVERSE_COMPAT_2 and data.YesNoVote then
 		return
 	end
@@ -1291,6 +1308,7 @@ function Interface:_BattlePoll(data)
 		}
 		if not data.YesNoVote then
 			candidates[i].name = opt.Name
+			candidates[i].displayName = opt.DisplayName
 		end
 	end
 
@@ -1305,7 +1323,7 @@ function Interface:_BattlePoll(data)
 		pollType = "multi"
 	end
 
-	self:_OnVoteUpdate(voteMessage, pollType, data.NotifyPoll, data.MapName or data.MapSelection, candidates, data.VotesToWin, data.Url)
+	self:_OnVoteUpdate(voteMessage, pollType, data.NotifyPoll, data.MapName or data.MapSelection, candidates, data.VotesToWin, data.Url, data.MapName)
 end
 Interface.jsonCommands["BattlePoll"] = Interface._BattlePoll
 

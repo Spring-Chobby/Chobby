@@ -91,7 +91,7 @@ local function SaveWindowPos(width, height, x, y)
 	local Configuration = WG.Chobby.Configuration
 
 	if not width then
-		width, height, x, y = Spring.GetWindowGeometry()
+		width, height, x, y = Spring.GetViewGeometry()
 	end
 	local screenX, screenY = Spring.GetScreenGeometry()
 	y = screenY - height - y
@@ -168,7 +168,7 @@ local function SetLobbyFullscreenMode(mode, borderOverride)
 		Spring.SetConfigInt("WindowBorderless", 1, false)
 		Spring.SetConfigInt("Fullscreen", 0, false)
 	elseif mode == 2 then -- Windowed
-		local winSizeX, winSizeY, winPosX, winPosY = Spring.GetWindowGeometry()
+		local winSizeX, winSizeY, winPosX, winPosY = Spring.GetViewGeometry()
 		winPosX = Configuration.window_WindowPosX or winPosX
 		winSizeX = Configuration.window_XResolutionWindowed or winSizeX
 		winSizeY = Configuration.window_YResolutionWindowed or winSizeY
@@ -926,7 +926,9 @@ local function GetLobbyTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("animate_lobby"), "animate_lobby", true)
 	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("drawFullSpeed"), "drawAtFullSpeed", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Minimize lobby updates", "lobbyIdleSleep", true)
-	children[#children + 1], offset = AddCheckboxSetting(offset, i18n("keep_queues"), "rememberQueuesOnStart", false, nil, "Stay in matchmaker queues when a battle is launched.")
+	
+	-- Not needed as it happens automatically for spectating and singleplayer.
+	--children[#children + 1], offset = AddCheckboxSetting(offset, i18n("keep_queues"), "rememberQueuesOnStart2", false, nil, "Stay in the matchmaker when you launch a singleplayer game or replay, as well as when watching a multiplayer game.")
 
 	children[#children + 1] = Label:New {
 		x = 20,
@@ -1032,6 +1034,8 @@ local function GetVoidTabControls()
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Debug Auto Win", "debugAutoWin", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Enable Profiler", "enableProfiler", false, EnableProfilerFunc)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Show Planet Unlocks", "showPlanetUnlocks", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, "Show Planet Codex", "showPlanetCodex", false)
+	children[#children + 1], offset = AddCheckboxSetting(offset, "Show Planet Map", "showPlanetMinimap", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Show Planet Enemy Units", "showPlanetEnemyUnits", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Campaign Spawn Debug", "campaignSpawnDebug", false)
 	children[#children + 1], offset = AddCheckboxSetting(offset, "Edit Campaign", "editCampaign", false)
@@ -1079,7 +1083,7 @@ local function GetVoidTabControls()
 		valign = "top",
 		align = "left",
 		font = Configuration:GetFont(2),
-		caption = "Server Address",
+		caption = "Server Address                                                                           (zero-k.info or test.zero-k.info for testing)",
 	}
 	children[#children + 1] = EditBox:New {
 		x = COMBO_X,
@@ -1110,7 +1114,7 @@ local function GetVoidTabControls()
 		valign = "top",
 		align = "left",
 		font = Configuration:GetFont(2),
-		caption = "Server Port",
+		caption = "Server Port                                                                                  (8200 or 8202 for testing)",
 	}
 	children[#children + 1] = EditBox:New {
 		x = COMBO_X,
@@ -1237,6 +1241,25 @@ end
 
 local settingsComboBoxes = {}
 local settingsUpdateFunction = {}
+
+local function MakeRestartWarning(offset)
+	local Configuration = WG.Chobby.Configuration
+
+	local warningLabel = Label:New {
+		name = "warningLabel",
+		x = 20,
+		y = offset + TEXT_OFFSET,
+		width = 90,
+		height = 40,
+		valign = "top",
+		align = "left",
+		parent = window,
+		font = Configuration:GetFont(2),
+		caption = "Warning: Most changes do not affect battles in progress.",
+	}
+	
+	return warningLabel, offset + ITEM_OFFSET
+end
 
 local function MakePresetsControl(settingPresets, offset)
 	local Configuration = WG.Chobby.Configuration
@@ -1555,6 +1578,9 @@ local function PopulateTab(settingPresets, settingOptions, settingsDefault)
 		label, list, customSettingsSwitch, offset = MakePresetsControl(settingPresets, offset)
 		children[#children + 1] = label
 		children[#children + 1] = list
+		
+		label, offset = MakeRestartWarning(offset)
+		children[#children + 1] = label
 	end
 
 	for i = 1, #settingOptions do
@@ -1818,7 +1844,7 @@ end
 --		return
 --	end
 --
---	local width, height, x, y = Spring.GetWindowGeometry()
+--	local width, height, x, y = Spring.GetViewGeometry()
 --	if width == oldWidth and height == oldHeight and x == oldX and y == oldY then
 --		return
 --	end

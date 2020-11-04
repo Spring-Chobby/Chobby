@@ -25,7 +25,7 @@ local function GetPlanet(planetUtilities, planetID)
 			primaryType = "G4V",
 			milRating = 1,
 			feedbackLink = "http://zero-k.info/Forum/Thread/24510",
-			text = "There is technology on this world, that is both much more ancient and more andvanced than it should be. There are the remains of several raiding parties sent by the Empire to try - without success - and capture it."
+			text = "There is technology on this world, that is both much more ancient and more advanced than it should be. There are the remains of several raiding parties sent by the Empire to try - without success - and capture it."
 			.. "\n "
 			.. "\nAutomated defenses have suffered from the raids, but are still operational - and a Detriment roaming around. How can it be working after half an eternity exposed and without maintenance?"
 			,
@@ -1458,7 +1458,6 @@ local function GetPlanet(planetUtilities, planetID)
 			abilities = {
 			},
 			codexEntries = {
-				"faction_rebels",
 				"faction_dynasty",
 				"anomaly_deuliah",
 			},

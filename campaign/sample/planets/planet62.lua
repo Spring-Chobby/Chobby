@@ -4008,7 +4008,8 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			codexEntries = {
 				"faction_rebels",
-				"location_karuwal"
+				"location_karuwal",
+				"quadrant_mandate_arm",
 			}
 		},
 	}

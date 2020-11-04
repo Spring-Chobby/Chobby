@@ -605,6 +605,14 @@ function ChatWindows:RedactMessage(msg)
 			msg = string.sub(msg, 0, UserIDPos) .. "REDACTED" .. string.sub(msg, endPos)
 		end
 	end
+	local installIDPos = string.find(msg, [["InstallID":"]])
+	if installIDPos then
+		installIDPos = installIDPos + 12
+		local endPos = string.find(msg, [["]], installIDPos + 1)
+		if endPos then
+			msg = string.sub(msg, 0, installIDPos) .. "REDACTED" .. string.sub(msg, endPos)
+		end
+	end
 	return msg
 end
 

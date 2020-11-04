@@ -26,7 +26,7 @@ local ANALYTICS_EVENT_ERROR = "analyticsEventError_"
 
 -- Do not send analytics for dev versions as they will likely be nonsense.
 local ACTIVE = not VFS.HasArchive("Zero-K $VERSION")
-local VERSION = "events_2018_04_25:"
+local VERSION = "events_2020_05_27:"
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -115,6 +115,10 @@ local function IsTesselationShaderSupported()
 	return gl.HasExtension and gl.HasExtension("GL_ARB_tessellation_shader") and (gl.SetTesselationShaderParameter ~= nil)
 end
 
+local function HasGraphics420pack()
+	return gl.HasExtension and (gl.HasExtension("GL_ARB_uniform_buffer_object") and gl.HasExtension("GL_ARB_shading_language_420pack"))
+end
+
 local function SendGraphicsSettings()
 	for i = 1, #settings do
 		local value = Spring.GetConfigInt(settings[i], -1)
@@ -158,6 +162,8 @@ function DelayedInitialize()
 	Analytics.SendOnetimeEvent("graphics:gpu:" .. ProcessString(tostring((Platform and Platform.gpu) or "unknown") or "unknown"))
 	Analytics.SendOnetimeEvent("graphics:glRenderer:" .. ProcessString(tostring((Platform and Platform.glRenderer) or "unknown") or "unknown"))
 	Analytics.SendOnetimeEvent("graphics:tesselation", ((IsTesselationShaderSupported() and 1) or 0))
+	Analytics.SendOnetimeEvent("graphics:420pack", ((HasGraphics420pack() and 1) or 0))
+	
 end
 
 --------------------------------------------------------------------------------

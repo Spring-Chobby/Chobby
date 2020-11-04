@@ -136,6 +136,8 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			codexEntries = {
 				"location_musashi",
+				"entry_event",
+				"quadrant_dynasty_arm",
 			}
 		},
 	}

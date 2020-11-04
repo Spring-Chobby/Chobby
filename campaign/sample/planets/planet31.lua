@@ -739,11 +739,9 @@ local function GetPlanet(planetUtilities, planetID)
 			modules = {
 				"module_companion_drone_LIMIT_B_2",
 			},
-			abilities = {
-			},
 			codexEntries = {
-				"faction_haven"
-			}
+				"quadrant_anarchai_arm"
+			},
 		},
 	}
 	

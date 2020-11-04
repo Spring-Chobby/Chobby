@@ -116,7 +116,7 @@ end
 local function GetDownloadIndex(downloadList, name, fileType)
 	for i = 1, #downloadList do
 		local data = downloadList[i]
-		if data.name == name and data.fileType == fileType then
+		if data.name == name and (data.fileType == fileType or fileType == "map") then
 			return i
 		end
 	end
@@ -156,6 +156,8 @@ local function RemoveDownload(name, fileType, putInRemoveList, removalType)
 	if not index then
 		return false
 	end
+
+	fileType = downloadQueue[index].fileType or fileType
 
 	if removalType == "success" then
 		CallListeners("DownloadFinished", downloadQueue[index].id, name, fileType)
@@ -286,7 +288,11 @@ function wrapperFunctions.DownloadFinished(name, fileType, success, aborted)
 		if not VFS.HasArchive(name) then
 			VFS.ScanAllDirs() -- Find downloaded file (if it exists).
 		end
-		RemoveDownload(name, fileType, true, (aborted and "cancel") or (success and "success") or "fail")
+		if not success and not aborted and fileType == "game" then
+			WG.WrapperLoopback.DownloadFile(name, typeMap["map"])
+		else
+			RemoveDownload(name, fileType, true, (aborted and "cancel") or (success and "success") or "fail")
+		end
 	end
 
 	--Chotify:Post({

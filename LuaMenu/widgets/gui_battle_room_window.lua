@@ -625,9 +625,18 @@ local function AddTeamButtons(parent, offX, joinFunc, aiFunc, unjoinable, disall
 	end
 end
 
-local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
+local function SortPlayers(a, b)
+	local sA = battleLobby:GetUserBattleStatus(a.name)
+	local sB = battleLobby:GetUserBattleStatus(b.name)
+	--Spring.Echo("battleLobbybattleLobby", sA, (sA and sA.queueOrder), (sB and sB.queueOrder))
+	local joinA = (sA and sA.queueOrder) or 0
+	local joinB = (sB and sB.queueOrder) or 0
+	return joinA < joinB
+end
 
+local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 	local SPACING = 22
+	local WAITING_SPACING = 34
 	local disallowCustomTeams = battle.disallowCustomTeams
 	local disallowBots = battle.disallowBots
 
@@ -733,7 +742,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				emptyTeamIndex = checkTeam
 			end
 
-			local humanName, parentStack, parentScroll
+			local humanName, parentStack, parentScroll, hasWaitingList
 			if teamIndex == -1 then
 				humanName = "Spectators"
 				parentStack = spectatorStackPanel
@@ -742,6 +751,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				if disallowCustomTeams then
 					if teamIndex == 0 then
 						humanName = "Players"
+						hasWaitingList = true
 					else
 						humanName = "Bots"
 					end
@@ -761,6 +771,8 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				padding = {0, 0, 0, 0},
 				parent = parentStack,
 			}
+
+			local waitingLabel, waitingLine = false, false
 
 			local label = Label:New {
 				x = 5,
@@ -810,6 +822,60 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				parent = teamHolder,
 				preserveChildrenOrder = true,
 			}
+
+			local function UpdatePlayerPositions()
+				local maxPlayers = (battleLobby:GetBattle(battleID) and battleLobby:GetBattle(battleID).maxPlayers) or 300
+				local maxEvenPlayers = (battleLobby:GetBattle(battleID) and battleLobby:GetBattle(battleID).maxEvenPlayers) or 0
+				table.sort(teamStack.children, SortPlayers)
+				if (#teamStack.children)%2 == 1 and #teamStack.children < maxEvenPlayers then
+					maxPlayers = #teamStack.children - 1
+				end
+				local position = 0
+				local waitingListPosition = false
+				for i = 1, #teamStack.children do
+					if hasWaitingList and maxPlayers + 1 == i then
+						waitingListPosition = position
+						position = position + WAITING_SPACING
+					end
+					teamStack.children[i]:SetPos(nil, position)
+					teamStack.children[i]:Invalidate()
+					position = position + SPACING
+				end
+
+				if waitingListPosition then
+					if not waitingLabel then
+						waitingLabel = Label:New {
+							x = 5,
+							y = 0,
+							width = 120,
+							height = 30,
+							valign = "center",
+							font = WG.Chobby.Configuration:GetFont(3),
+							caption = "Waiting List",
+							parent = teamHolder,
+						}
+						waitingLine = Line:New {
+							x = 0,
+							y = 25,
+							right = 0,
+							height = 2,
+							parent = teamHolder
+						}
+					end
+					waitingLabel:SetVisibility(true)
+					waitingLine:SetVisibility(true)
+					
+					waitingLabel:SetPos(nil, waitingListPosition + WAITING_SPACING + 4)
+					waitingLine:SetPos(nil, waitingListPosition + WAITING_SPACING + 25)
+				elseif waitingLabel then
+					waitingLabel:SetVisibility(false)
+					waitingLine:SetVisibility(false)
+				end
+				
+				teamHolder:SetPos(nil, nil, nil, position + 35)
+				PositionChildren(parentStack, parentScroll.height)
+				teamHolder:Invalidate()
+			end
 
 			if teamIndex == -1 then
 				-- Empty spectator team is created. Position children to prevent flicker.
@@ -877,12 +943,7 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				end
 				if not teamStack:GetChildByName(playerControl.name) then
 					teamStack:AddChild(playerControl)
-					playerControl:SetPos(nil, (#teamStack.children - 1)*SPACING)
-					playerControl:Invalidate()
-
-					teamHolder:SetPos(nil, nil, nil, #teamStack.children*SPACING + 35)
-					PositionChildren(parentStack, parentScroll.height)
-					teamHolder:Invalidate()
+					UpdatePlayerPositions()
 				end
 			end
 
@@ -930,20 +991,13 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 					return
 				end
 				playerData.team = false
-				local index = 1
-				local timeToMove = false
-				while index <= #teamStack.children do
-					if timeToMove then
-						teamStack.children[index]:SetPos(nil, (index - 1)*SPACING)
-						teamStack.children[index]:Invalidate()
-					elseif teamStack.children[index].name == name then
-						teamStack:RemoveChild(teamStack.children[index])
-						index = index - 1
-						timeToMove = true
-					end
-					index = index + 1
+				local playerControl = teamStack:GetChildByName(name)
+				if not playerControl then
+					return
 				end
-				teamHolder:SetPos(nil, nil, nil, #teamStack.children*SPACING + 35)
+
+				teamStack:RemoveChild(playerControl)
+				UpdatePlayerPositions()
 
 				if name == battleLobby:GetMyUserName() then
 					local joinTeam = teamHolder:GetChildByName("joinTeamButton")
@@ -956,6 +1010,10 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 				PositionChildren(parentStack, parentScroll.height)
 			end
 
+			function teamData.UpdateMaxPlayers()
+				UpdatePlayerPositions()
+			end
+			
 			team[teamIndex] = teamData
 		end
 		return team[teamIndex]
@@ -1038,6 +1096,12 @@ local function SetupPlayerPanel(playerParent, spectatorParent, battle, battleID)
 		RemovePlayerFromTeam(botName)
 	end
 
+	function externalFunctions.UpdateMaxPlayers()
+		for teamIndex, teamData in pairs(team) do
+			teamData.UpdateMaxPlayers()
+		end
+	end
+
 	return externalFunctions
 end
 
@@ -1050,7 +1114,7 @@ local function SetupVotePanel(votePanel, battle, battleID)
 	local buttonNoClickOverride
 	local matchmakerModeEnabled = false
 
-	local currentMapName
+	local currentMapUrl
 
 	local minimapPanel = Panel:New {
 		x = 0,
@@ -1071,9 +1135,12 @@ local function SetupVotePanel(votePanel, battle, battleID)
 		padding = {1,1,1,1},
 		OnClick = {
 			function ()
-				if currentMapName and config.gameConfig.link_particularMapPage ~= nil then
-					WG.BrowserHandler.OpenUrl(config.gameConfig.link_particularMapPage(currentMapName))
+				if currentMapUrl then
+					WG.BrowserHandler.OpenUrl(currentMapUrl)
 				end
+				--if currentMapUrl and config.gameConfig.link_particularMapPage ~= nil then
+				--	WG.BrowserHandler.OpenUrl(config.gameConfig.link_particularMapPage(currentMapName))
+				--end
 			end
 		},
 	}
@@ -1284,12 +1351,12 @@ local function SetupVotePanel(votePanel, battle, battleID)
 
 	local externalFunctions = {}
 
-	local oldPollType, oldMapPoll, oldPollUrl
-	local function UpdatePollType(pollType, mapPoll, pollUrl)
-		if oldPollType == pollType and oldMapPoll == mapPoll and oldPollUrl == pollUrl then
+	local oldPollType, oldMapPoll, oldMapUrl, oldPollUrl
+	local function UpdatePollType(pollType, mapPoll, mapName, pollUrl)
+		if oldPollType == pollType and oldMapPoll == mapPoll and oldMapUrl == mapName and oldPollUrl == pollUrl then
 			return
 		end
-		oldPollType, oldMapPoll, oldPollUrl = pollType, mapPoll, pollUrl
+		oldPollType, oldMapPoll, oldMapUrl, oldPollUrl = pollType, mapPoll, mapName, pollUrl
 
 		if pollType ~= "multi" then
 			if mapPoll then
@@ -1297,10 +1364,10 @@ local function SetupVotePanel(votePanel, battle, battleID)
 				activePanel:SetPos(height + 2)
 				activePanel._relativeBounds.right = 0
 				activePanel:UpdateClientArea()
-				if pollUrl then
-					imMinimap.file, imMinimap.checkFileExists = config:GetMinimapSmallImage(pollUrl)
+				if mapName then
+					imMinimap.file, imMinimap.checkFileExists = config:GetMinimapSmallImage(mapName)
 					imMinimap:Invalidate()
-					currentMapName = pollUrl
+					currentMapUrl = pollUrl
 				end
 			else
 				minimapPanel:SetVisibility(false)
@@ -1314,15 +1381,17 @@ local function SetupVotePanel(votePanel, battle, battleID)
 	local function SetMultiPollCandidates(candidates)
 		for i = 1, MULTI_POLL_MAX do
 			if candidates[i] then
+				-- displayName is the map's internal name and its dimensions in a human friendly way
+				local mapName = candidates[i].displayName or candidates[i].name
 				multiPollOpt[i].imMinimap.file, multiPollOpt[i].imMinimap.checkFileExists = config:GetMinimapSmallImage(candidates[i].name)
 				multiPollOpt[i].imMinimap:Invalidate()
-				multiPollOpt[i].button.tooltip = "Vote for " .. candidates[i].name
+				multiPollOpt[i].button.tooltip = "Vote for " .. mapName
 			end
 		end
 	end
 
-	function externalFunctions.VoteUpdate(voteMessage, pollType, mapPoll, candidates, votesNeeded, pollUrl)
-		UpdatePollType(pollType, mapPoll, pollUrl)
+	function externalFunctions.VoteUpdate(voteMessage, pollType, mapPoll, candidates, votesNeeded, pollUrl, mapName)
+		UpdatePollType(pollType, mapPoll, mapName, pollUrl)
 		-- Update votes
 		if pollType == "multi" then
 			SetMultiPollCandidates(candidates)
@@ -1567,7 +1636,7 @@ local function SetupEasySetupPanel(mainWindow, standardSubPanel, setupData)
 		standardSubPanel:SetVisibility(true)
 	end
 
-	local _, screenHeight = Spring.GetWindowGeometry()
+	local _, screenHeight = Spring.GetViewGeometry()
 	local panelOffset = math.max(8, math.min(60, ((screenHeight - 768)*0.16 + 8)))
 
 	local pages = {}
@@ -1892,6 +1961,9 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		end
 
 		infoHandler.UpdateBattleInfo(updatedBattleID, newInfo)
+		if newInfo.maxPlayers or newInfo.maxEvenPlayers then
+			playerHandler.UpdateMaxPlayers()
+		end
 	end
 
 	local function OnLeftBattle(listener, leftBattleID, userName)
@@ -1907,8 +1979,8 @@ local function InitializeControls(battleID, oldLobby, topPoportion, setupData)
 		playerHandler.RemoveAi(botName)
 	end
 
-	local function OnVoteUpdate(listener, voteMessage, pollType, _, mapPoll, candidates, votesNeeded, pollUrl)
-		votePanel.VoteUpdate(voteMessage, pollType, mapPoll, candidates, votesNeeded, pollUrl)
+	local function OnVoteUpdate(listener, voteMessage, pollType, _, mapPoll, candidates, votesNeeded, pollUrl, mapName)
+		votePanel.VoteUpdate(voteMessage, pollType, mapPoll, candidates, votesNeeded, pollUrl, mapName)
 	end
 
 	local function OnVoteEnd(listener, message, success)
@@ -2089,7 +2161,6 @@ function BattleRoomWindow.GetSingleplayerControl(setupData)
 
 		OnParent = {
 			function(obj)
-
 				if multiplayerWrapper then
 					WG.BattleStatusPanel.RemoveBattleTab()
 
@@ -2133,6 +2204,10 @@ function BattleRoomWindow.GetSingleplayerControl(setupData)
 
 				if not (setupData and WG.Chobby.Configuration.simplifiedSkirmishSetup) and singleplayerDefault and singleplayerDefault.enemyAI then
 					battleLobby:AddAi(singleplayerDefault.enemyAI .. " (1)", singleplayerDefault.enemyAI, 1)
+				end
+				
+				if singleplayerDefault.modoptions then
+					battleLobby:SetModOptions(singleplayerDefault.modoptions)
 				end
 			end
 		},

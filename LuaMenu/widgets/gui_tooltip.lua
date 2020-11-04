@@ -11,7 +11,7 @@ function widget:GetInfo()
 end
 
 local spGetMouseState           = Spring.GetMouseState
-local screenWidth, screenHeight = Spring.GetWindowGeometry()
+local screenWidth, screenHeight = Spring.GetViewGeometry()
 
 local MAX_WIDTH = 320
 local MAX_WINDOW_WIDTH = MAX_WIDTH + 11
@@ -89,7 +89,7 @@ function widget:ViewResize(vsx, vsy)
 end
 
 local function EvilHax()
-	local screenWidth, screenHeight = Spring.GetWindowGeometry()
+	local screenWidth, screenHeight = Spring.GetViewGeometry()
 	if screenWidth ~= oldSizeX or screenHeight ~= oldSizeY then
 		widget:ViewResize(screenWidth, screenHeight)
 	end

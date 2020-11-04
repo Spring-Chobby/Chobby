@@ -383,6 +383,13 @@ function InterfaceSkirmish:SelectMap(mapName)
 	})
 end
 
+function InterfaceSkirmish:SelectGame(gameName)
+	self:_OnUpdateBattleInfo(self:GetMyBattleID(), {
+		gameName = gameName,
+	})
+	return self
+end
+
 -- Skirmish only
 function InterfaceSkirmish:SetBattleState(myUserName, gameName, mapName, title)
 	local myBattleID = 1

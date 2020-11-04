@@ -1153,7 +1153,7 @@ local humanNames = {
 	turretgauss = {
 		category = "defence",
 		order = 5,
-		description = "Gauss Turret, 20 health/s when closed",
+		description = "Gauss Turret, 10 health/s when closed",
 		humanName = "Gauss",
 	},
 	turretheavylaser = {

@@ -4,6 +4,7 @@ local TRUE = "true"
 local FALSE = "false"
 
 local lupsFileTarget = "lups.cfg"
+local cmdcolorsFileTarget = "cmdcolors.txt"
 
 local function UpdateLups(_, conf)
 	conf = conf or (WG.Chobby and WG.Chobby.Configuration)
@@ -34,6 +35,43 @@ local function UpdateLups(_, conf)
 	settingsFile:close()
 end
 
+local function UpdateCmdcolors(_, conf)
+	conf = conf or (WG.Chobby and WG.Chobby.Configuration)
+	local settings = conf and conf.settingsMenuValues
+	if not settings then
+		return
+	end
+
+	local cmdAlpha = (settings.CommandAlpha or 70)/100
+	local cmdAlphaDark
+	if cmdAlpha >= 0.7 then
+		cmdAlphaDark = cmdAlpha + 0.1
+	elseif cmdAlpha >= 0.6 then
+		cmdAlphaDark = cmdAlpha + 0.05
+	else
+		cmdAlphaDark = cmdAlpha + 0.02
+	end
+	
+	local queueIconAlpha = (settings.QueueIconAlpha or 50)/100
+
+	local cmdcolorsFileName = "LuaMenu/configs/gameConfig/zk/cmdcolors/cmdcolors_source.txt"
+	local sourceFile = VFS.LoadFile(cmdcolorsFileName)
+
+	sourceFile = sourceFile:gsub("__CMD_ALPHA__", cmdAlpha)
+	sourceFile = sourceFile:gsub("__CMD_ALPHA_DARK__", cmdAlphaDark)
+	sourceFile = sourceFile:gsub("__QUEUE_ICON_ALPHA__", queueIconAlpha)
+
+	local settingsFile = io.open(cmdcolorsFileTarget, "w")
+	settingsFile:write(sourceFile)
+	settingsFile:close()
+	
+	return {
+		CmdAlpha = cmdAlpha,
+		CmdAlphaDark = cmdAlphaDark,
+		CmdIconAlpha = queueIconAlpha,
+	}
+end
+
 local function GetUiScaleParameters()
 	local realWidth, realHeight = Spring.Orig.GetViewSizes()
 	local defaultUiScale = math.floor(math.max(1, realHeight/950))*100
@@ -56,6 +94,7 @@ local settingsConfig = {
 					DeferredRendering = "Off",
 					UnitReflections = "Off",
 					Shadows = "None",
+					ShadowMapSize = "1024",
 					ShadowDetail = "Low",
 					ParticleLimit = "2000",
 					TerrainDetail = "Minimal",
@@ -82,6 +121,7 @@ local settingsConfig = {
 					DeferredRendering = "Off",
 					UnitReflections = "Low",
 					Shadows = "None",
+					ShadowMapSize = "1024",
 					ShadowDetail = "Low",
 					ParticleLimit = "6000",
 					TerrainDetail = "Low",
@@ -108,6 +148,7 @@ local settingsConfig = {
 					DeferredRendering = "Off",
 					UnitReflections = "Low",
 					Shadows = "Units Only",
+					ShadowMapSize = "2048",
 					ShadowDetail = "Low",
 					ParticleLimit = "12000",
 					TerrainDetail = "Low",
@@ -134,6 +175,7 @@ local settingsConfig = {
 					DeferredRendering = "On",
 					UnitReflections = "Medium",
 					Shadows = "Units and Terrain",
+					ShadowMapSize = "2048",
 					ShadowDetail = "Medium",
 					ParticleLimit = "15000",
 					TerrainDetail = "Medium",
@@ -160,6 +202,7 @@ local settingsConfig = {
 					DeferredRendering = "On",
 					UnitReflections = "Medium",
 					Shadows = "Units and Terrain",
+					ShadowMapSize = "8192",
 					ShadowDetail = "High",
 					ParticleLimit = "25000",
 					TerrainDetail = "High",
@@ -186,6 +229,7 @@ local settingsConfig = {
 					DeferredRendering = "On",
 					UnitReflections = "Ultra",
 					Shadows = "Units and Terrain",
+					ShadowMapSize = "16384",
 					ShadowDetail = "Ultra",
 					ParticleLimit = "50000",
 					TerrainDetail = "Ultra",
@@ -219,60 +263,6 @@ local settingsConfig = {
 				lobbyDisplayModeToggle = true,
 			},
 
-			{
-				name = "CompatibilityMode",
-				humanName = "Compatibility Mode",
-				options = {
-					{
-						name = "On",
-						apply = {
-							LoadingMT = 0,
-							AdvUnitShading = 0,
-							AdvMapShading = 0,
-							LuaShaders = 0,
-							ForceDisableShaders = 1,
-							UsePBO = 0,
-							["3DTrees"] = 0,
-							MaxDynamicMapLights = 0,
-							MaxDynamicModelLights = 0,
-							ROAM = 1,
-						}
-					},
-					{
-						name = "Off",
-						apply = {
-							LoadingMT = 0, -- See https://github.com/spring/spring/commit/bdd6b641960759ccadf3e7201e37f2192d873791
-							AdvUnitShading = 1,
-							AdvMapShading = 1,
-							LuaShaders = 1,
-							ForceDisableShaders = 0,
-							UsePBO = 1,
-							["3DTrees"] = 1,
-							MaxDynamicMapLights = 1,
-							MaxDynamicModelLights = 1,
-							ROAM = 1, --Maybe ROAM = 0 when the new renderer is fully developed
-						}
-					},
-				},
-			},
-			{
-				name = "UseNewChili",
-				humanName = "Experimental Interface Renderer",
-				options = {
-					{
-						name = "Off",
-						apply = {
-							ZKUseNewChiliRTT = 0,
-						}
-					},
-					{
-						name = "On",
-						apply = {
-							ZKUseNewChiliRTT = 1,
-						}
-					},
-				},
-			},
 			{
 				name = "AtiIntelCompatibility_2",
 				humanName = "ATI/Intel Compatibility",
@@ -370,6 +360,42 @@ local settingsConfig = {
 				},
 			},
 			{
+				name = "CompatibilityMode",
+				humanName = "Compatibility Mode",
+				options = {
+					{
+						name = "On",
+						apply = {
+							LoadingMT = 0,
+							AdvUnitShading = 0,
+							AdvMapShading = 0,
+							LuaShaders = 0,
+							ForceDisableShaders = 1,
+							UsePBO = 0,
+							["3DTrees"] = 0,
+							MaxDynamicMapLights = 0,
+							MaxDynamicModelLights = 0,
+							ROAM = 1,
+						}
+					},
+					{
+						name = "Off",
+						apply = {
+							LoadingMT = 0, -- See https://github.com/spring/spring/commit/bdd6b641960759ccadf3e7201e37f2192d873791
+							AdvUnitShading = 1,
+							AdvMapShading = 1,
+							LuaShaders = 1,
+							ForceDisableShaders = 0,
+							UsePBO = 1,
+							["3DTrees"] = 1,
+							MaxDynamicMapLights = 1,
+							MaxDynamicModelLights = 1,
+							ROAM = 1, --Maybe ROAM = 0 when the new renderer is fully developed
+						}
+					},
+				},
+			},
+			{
 				name = "DeferredRendering",
 				humanName = "Deferred Rendering",
 				options = {
@@ -385,6 +411,24 @@ local settingsConfig = {
 						apply = {
 							AllowDeferredModelRendering = 0,
 							AllowDeferredMapRendering = 0,
+						}
+					},
+				},
+			},
+			{
+				name = "UseNewChili",
+				humanName = "Experimental Interface Renderer",
+				options = {
+					{
+						name = "Off",
+						apply = {
+							ZKUseNewChiliRTT = 0,
+						}
+					},
+					{
+						name = "On",
+						apply = {
+							ZKUseNewChiliRTT = 1,
 						}
 					},
 				},
@@ -583,6 +627,42 @@ local settingsConfig = {
 						name = "Units and Terrain",
 						apply = {
 							Shadows = 1
+						}
+					},
+				},
+			},
+			{
+				name = "ShadowMapSize",
+				humanName = "Shadow Map Size",
+				options = {
+					{
+						name = "1024",
+						apply = {
+							ShadowMapSize = 1024
+						}
+					},
+					{
+						name = "2048",
+						apply = {
+							ShadowMapSize = 2048
+						}
+					},
+					{
+						name = "4096",
+						apply = {
+							ShadowMapSize = 4096
+						}
+					},
+					{
+						name = "8192",
+						apply = {
+							ShadowMapSize = 8192
+						}
+					},
+					{
+						name = "16384",
+						apply = {
+							ShadowMapSize = 16384
 						}
 					},
 				},
@@ -851,8 +931,12 @@ local settingsConfig = {
 					InvertZoom = "Off",
 					TextToSpeech = "On",
 					EdgeScroll = "On",
+					CommandAlpha = 70,
+					QueueIconAlpha = 50,
 					MiddlePanSpeed = 15,
 					CameraPanSpeed = 50,
+					NetworkSettings = "Balanced",
+					SmoothBuffer = "Off",
 				}
 			},
 		},
@@ -978,6 +1062,22 @@ local settingsConfig = {
 				},
 			},
 			{
+				name = "CommandAlpha",
+				humanName = "Command Line Alpha (%)",
+				isNumberSetting = true,
+				minValue = 10,
+				maxValue = 100,
+				applyFunction = UpdateCmdcolors
+			},
+			{
+				name = "QueueIconAlpha",
+				humanName = "Command Icon Alpha (%)",
+				isNumberSetting = true,
+				minValue = 10,
+				maxValue = 100,
+				applyFunction = UpdateCmdcolors
+			},
+			{
 				name = "MiddlePanSpeed",
 				humanName = "Middle Click Pan Speed",
 				isNumberSetting = true,
@@ -1017,6 +1117,60 @@ local settingsConfig = {
 					}
 				end,
 			},
+			{
+				name = "NetworkSettings",
+				humanName = "Network Connection",
+				options = {
+					{
+						name = "Reliable",
+						apply = {
+							NetworkLossFactor = 0,
+							LinkOutgoingBandwidth = 65536,
+							LinkIncomingSustainedBandwidth = 2048,
+							LinkIncomingPeakBandwidth = 32768,
+							LinkIncomingMaxPacketRate = 64,
+						}
+					},
+					{
+						name = "Balanced",
+						apply = {
+							NetworkLossFactor = 1,
+							LinkOutgoingBandwidth = 131072,
+							LinkIncomingSustainedBandwidth = 65536,
+							LinkIncomingPeakBandwidth = 65536,
+							LinkIncomingMaxPacketRate = 512,
+						}
+					},
+					{
+						name = "Fast",
+						apply = {
+							NetworkLossFactor = 2,
+							LinkOutgoingBandwidth = 262144,
+							LinkIncomingSustainedBandwidth = 262144,
+							LinkIncomingPeakBandwidth = 262144,
+							LinkIncomingMaxPacketRate = 2048,
+						}
+					},
+				},
+			},
+			{
+				name = "SmoothBuffer",
+				humanName = "Smooth Buffer",
+				options = {
+					{
+						name = "On",
+						apply = {
+							UseNetMessageSmoothingBuffer = 1,
+						}
+					},
+					{
+						name = "Off",
+						apply = {
+							UseNetMessageSmoothingBuffer = 0,
+						}
+					},
+				},
+			},
 		},
 	},
 }
@@ -1027,6 +1181,7 @@ local settingsDefault = {
 	DeferredRendering = "On",
 	UnitReflections = "Medium",
 	Shadows = "Units and Terrain",
+	ShadowMapSize = "2048",
 	ShadowDetail = "Medium",
 	ParticleLimit = "15000",
 	TerrainDetail = "Medium",
@@ -1049,8 +1204,12 @@ local settingsDefault = {
 	InvertZoom = "Off",
 	TextToSpeech = "On",
 	EdgeScroll = "On",
+	CommandAlpha = 70,
+	QueueIconAlpha = 50,
 	MiddlePanSpeed = 15,
 	CameraPanSpeed = 50,
+	NetworkSettings = "Balanced",
+	SmoothBuffer = "Off",
 }
 
 local settingsNames = {}

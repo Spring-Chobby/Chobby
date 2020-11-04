@@ -860,7 +860,8 @@ local function GetPlanet(planetUtilities, planetID)
 			abilities = {
 			},
 			codexEntries = {
-				"faction_lawless"
+				"faction_rebels",
+				"quadrant_dynasty_arm",
 			}
 		},
 	}

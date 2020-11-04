@@ -51,7 +51,7 @@ local function GetPlanet(planetUtilities, planetID)
 			-- },
 		},
 		gameConfig = {
-			mapName = "Battle for PlanetXVII-v01",
+			mapName = "Battle for PlanetXVII-v01r",
 			playerConfig = {
 				startX = 3700,
 				startZ = 3700,
@@ -406,8 +406,7 @@ local function GetPlanet(planetUtilities, planetID)
 				"module_high_power_servos_LIMIT_A_2",
 			},
 			codexEntries = {
-				"entry_event",
-				"threat_automata"
+				"entry_commander"
 			},
 		},
 	}

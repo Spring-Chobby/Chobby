@@ -1039,7 +1039,8 @@ local function GetPlanet(planetUtilities, planetID)
 			modules = {
 				"commweapon_clusterbomb",
 			},
-			abilities = {
+			codexEntries = {
+				"faction_lawless"
 			}
 		},
 	}

@@ -77,6 +77,13 @@ local function GetPlanet(planetUtilities, planetID)
 						facing = 0,
 					},
 					{
+						name = "turretheavylaser",
+						x = 2571,
+						z = 1830,
+						facing = 0,
+						difficultyAtMost = 3,
+					},
+					{
 						name = "staticradar",
 						x = 2925,
 						z = 1605,

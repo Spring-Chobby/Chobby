@@ -46,7 +46,7 @@ local HIDDEN_COLOR = {0.2, 0.2, 0.2, 0}
 local PLANET_START_COLOR = {1, 1, 1, 1}
 local PLANET_NO_START_COLOR = {0.5, 0.5, 0.5, 1}
 
-local TARGET_IMAGE = LUA_DIRNAME .. "images/niceCircle.png"
+local TARGET_IMAGE = LUA_DIRNAME .. "images/nicecircle.png"
 local IMG_LINK     = LUA_DIRNAME .. "images/link.png"
 local PARTY_LINK     = LUA_DIRNAME .. "images/partyinvite.png"
 
@@ -237,7 +237,7 @@ local function InitializeDifficultySetting()
 		right = 170,
 		bottom = 0,
 		width = 128,
-		height = 53,
+		height = 55,
 		padding = {0,0,0,0},
 		resizable = false,
 		draggable = false,
@@ -246,8 +246,8 @@ local function InitializeDifficultySetting()
 	local freezeSettings = true
 
 	Label:New {
-		x = 30,
-		y = 2,
+		x = 32,
+		y = 1,
 		width = 50,
 		height = 30,
 		valign = "top",
@@ -313,12 +313,115 @@ end
 --------------------------------------------------------------------------------
 -- Rewards panels
 
+local function MakeReward(rewardName, rewardsHolder, position, scroll, stackHeight, holder, bottom, name, rewardsTypes, cullUnlocked, widthMult)
+	local tooltipFunction, alreadyUnlockedCheck, overrideTooltip, clickFunc = rewardsTypes[2], rewardsTypes[3], rewardsTypes[4], rewardsTypes[5]
+	
+	local alreadyUnlocked = alreadyUnlockedCheck(rewardName)
+	if (cullUnlocked and alreadyUnlocked) then
+		return rewardsHolder, position, scroll, stackHeight
+	end
+	local Configuration = WG.Chobby.Configuration
+	
+	if not rewardsHolder then
+		rewardsHolder = Control:New {
+			x = 10,
+			right = 10,
+			bottom = bottom,
+			height = 94,
+			padding = {0, 0, 0, 0},
+			parent = holder,
+		}
+
+		TextBox:New {
+			x = 4,
+			y = 2,
+			right = 4,
+			height = 30,
+			text = name,
+			font = Configuration:GetFont(2),
+			parent = rewardsHolder
+		}
+
+		scroll = ScrollPanel:New {
+			classname = "scrollpanel_borderless",
+			x = 3,
+			y = 18,
+			right = 3,
+			bottom = 2,
+			scrollbarSize = 12,
+			padding = {0, 0, 0, 0},
+			parent = rewardsHolder,
+		}
+	end
+
+	local info, imageFile, imageOverlay, count = tooltipFunction(rewardName)
+
+	local x, y = (REWARD_ICON_SIZE*widthMult + 4)*math.floor(position/stackHeight), (position%stackHeight)*REWARD_ICON_SIZE/stackHeight
+	if imageFile then
+		local color = nil
+		local statusString = ""
+		if alreadyUnlocked then
+			statusString = " (already unlocked)"
+		elseif cullUnlocked then
+			statusString = " (newly unlocked)"
+		else
+			color = {0.5, 0.5, 0.5, 0.5}
+		end
+		local tooltip = (overrideTooltip and info) or ((info.humanName or "???") .. statusString .. "\n " .. (info.description or ""))
+
+		local image = Image:New{
+			x = x,
+			y = y,
+			width = REWARD_ICON_SIZE*widthMult,
+			height = REWARD_ICON_SIZE/stackHeight,
+			keepAspect = true,
+			color = color,
+			tooltip = string.gsub(tooltip, "_COUNT_", ""),
+			file = imageOverlay or imageFile,
+			file2 = imageOverlay and imageFile,
+			parent = scroll,
+		}
+		if count then
+			Label:New {
+				x = 2,
+				y = "50%",
+				right = 4,
+				bottom = 6,
+				align = "right",
+				fontsize = Configuration:GetFont(3).size,
+				caption = count,
+				parent = image,
+			}
+		end
+		function image:HitTest(x,y) return self end
+	else
+		local tooltip = (overrideTooltip and info) or (info.name or "???")
+
+		Button:New {
+			x = x,
+			y = y,
+			width = REWARD_ICON_SIZE*widthMult,
+			height = REWARD_ICON_SIZE/stackHeight,
+			caption = string.gsub(tooltip, "_COUNT_", ""),
+			font = Configuration:GetFont(2),
+			OnClick = clickFunc and {
+				function()
+					clickFunc(rewardName)
+				end
+			},
+			parent = scroll
+		}
+	end
+
+	position = position + 1
+	
+	return rewardsHolder, position, scroll, stackHeight
+end
+
 local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, widthMult, stackHeight)
 	if (not rewardsTypes) or #rewardsTypes == 0 then
 		return false
 	end
-
-	local Configuration = WG.Chobby.Configuration
 
 	widthMult = widthMult or 1
 	stackHeight = stackHeight or 1
@@ -327,104 +430,15 @@ local function MakeRewardList(holder, bottom, name, rewardsTypes, cullUnlocked, 
 
 	local position = 0
 	for t = 1, #rewardsTypes do
-		local rewardList, tooltipFunction, alreadyUnlockedCheck, overrideTooltip, clickFunc = rewardsTypes[t][1], rewardsTypes[t][2], rewardsTypes[t][3], rewardsTypes[t][4], rewardsTypes[t][5]
+		local rewardList, extraUnlocks = rewardsTypes[t][1], rewardsTypes[t][6]
 		if rewardList then
 			for i = 1, #rewardList do
-				local alreadyUnlocked = alreadyUnlockedCheck(rewardList[i])
-				if not (cullUnlocked and alreadyUnlocked) then
-					if not rewardsHolder then
-						rewardsHolder = Control:New {
-							x = 10,
-							right = 10,
-							bottom = bottom,
-							height = 94,
-							padding = {0, 0, 0, 0},
-							parent = holder,
-						}
-
-						TextBox:New {
-							x = 4,
-							y = 2,
-							right = 4,
-							height = 30,
-							text = name,
-							font = Configuration:GetFont(2),
-							parent = rewardsHolder
-						}
-
-						scroll = ScrollPanel:New {
-							classname = "scrollpanel_borderless",
-							x = 3,
-							y = 18,
-							right = 3,
-							bottom = 2,
-							scrollbarSize = 12,
-							padding = {0, 0, 0, 0},
-							parent = rewardsHolder,
-						}
-					end
-
-					local info, imageFile, imageOverlay, count = tooltipFunction(rewardList[i])
-
-					local x, y = (REWARD_ICON_SIZE*widthMult + 4)*math.floor(position/stackHeight), (position%stackHeight)*REWARD_ICON_SIZE/stackHeight
-					if imageFile then
-						local color = nil
-						local statusString = ""
-						if alreadyUnlocked then
-							statusString = " (already unlocked)"
-						elseif cullUnlocked then
-							statusString = " (newly unlocked)"
-						else
-							color = {0.5, 0.5, 0.5, 0.5}
-						end
-						local tooltip = (overrideTooltip and info) or ((info.humanName or "???") .. statusString .. "\n " .. (info.description or ""))
-
-						local image = Image:New{
-							x = x,
-							y = y,
-							width = REWARD_ICON_SIZE*widthMult,
-							height = REWARD_ICON_SIZE/stackHeight,
-							keepAspect = true,
-							color = color,
-							tooltip = string.gsub(tooltip, "_COUNT_", ""),
-							file = imageOverlay or imageFile,
-							file2 = imageOverlay and imageFile,
-							parent = scroll,
-						}
-						if count then
-							Label:New {
-								x = 2,
-								y = "50%",
-								right = 4,
-								bottom = 6,
-								align = "right",
-								fontsize = Configuration:GetFont(3).size,
-								caption = count,
-								parent = image,
-							}
-						end
-						function image:HitTest(x,y) return self end
-					else
-						local tooltip = (overrideTooltip and info) or (info.name or "???")
-
-						Button:New {
-							x = x,
-							y = y,
-							width = REWARD_ICON_SIZE*widthMult,
-							height = REWARD_ICON_SIZE/stackHeight,
-							caption = string.gsub(tooltip, "_COUNT_", ""),
-							font = Configuration:GetFont(2),
-							OnClick = clickFunc and {
-								function()
-									clickFunc(rewardList[i])
-								end
-							},
-							parent = scroll
-						}
-					end
-
-					position = position + 1
-				end
+				rewardsHolder, position, scroll = MakeReward(rewardList[i], rewardsHolder, position, scroll, stackHeight, holder, bottom, name, rewardsTypes[t], cullUnlocked, widthMult)
+			end
+		end
+		if extraUnlocks then
+			for i = 1, #extraUnlocks do
+				rewardsHolder, position, scroll = MakeReward(extraUnlocks[i], rewardsHolder, position, scroll, stackHeight, holder, bottom, name, rewardsTypes[t], cullUnlocked, widthMult)
 			end
 		end
 	end
@@ -492,11 +506,11 @@ local function MakeBonusObjectiveLine(parent, bottom, planetData, bonusObjective
 	return bottom
 end
 
-local function MakeRewardsPanel(parent, bottom, planetData, cullUnlocked, showCodex, bonusObjectiveSuccess, difficulty)
+local function MakeRewardsPanel(parent, bottom, planetData, cullUnlocked, showCodex, bonusObjectiveSuccess, difficulty, extraCodexUnlocks)
 	rewards = planetData.completionReward
 
 	if showCodex then
-		if MakeRewardList(parent, bottom, "Codex", {{rewards.codexEntries, WG.CampaignData.GetCodexEntryInfo, WG.CampaignData.GetCodexEntryIsUnlocked, false, CodexClick}}, cullUnlocked, 3.96, 2) then
+		if MakeRewardList(parent, bottom, "Codex", {{rewards.codexEntries, WG.CampaignData.GetCodexEntryInfo, WG.CampaignData.GetCodexEntryIsUnlocked, false, CodexClick, extraCodexUnlocks}}, cullUnlocked, 3.96, 2) then
 			bottom = bottom + 98
 
 			local singleplayerMenu = WG.Chobby.interfaceRoot.GetSingleplayerSubmenu()
@@ -572,7 +586,7 @@ end
 --------------------------------------------------------------------------------
 -- Planet capturing
 
-local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty)
+local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty, extraCodexUnlocks)
 	local victoryWindow = Window:New {
 		caption = "",
 		name = "victoryWindow",
@@ -608,7 +622,7 @@ local function MakeWinPopup(planetData, bonusObjectiveSuccess, difficulty)
 
 	local experienceDisplay = WG.CommanderHandler.GetExperienceDisplay(experienceHolder, 38, true)
 
-	local rewardsHeight = MakeRewardsPanel(victoryWindow, 82, planetData, true, true, bonusObjectiveSuccess, difficulty)
+	local rewardsHeight = MakeRewardsPanel(victoryWindow, 82, planetData, true, true, bonusObjectiveSuccess, difficulty, extraCodexUnlocks)
 
 	victoryWindow:SetPos(nil, nil, nil, 200 + rewardsHeight)
 
@@ -709,7 +723,7 @@ local function ProcessPlanetVictory(planetID, battleFrames, bonusObjectives, bon
 	end
 	-- It is important to popup before capturing the planet to filter out the
 	-- already unlocked rewards.
-	currentWinPopup = MakeWinPopup(planetConfig[planetID], bonusObjectives, difficulty)
+	currentWinPopup = MakeWinPopup(planetConfig[planetID], bonusObjectives, difficulty, WG.CampaignData.GetExtraCodexUnlocks(planetID))
 	WG.CampaignData.AddPlayTime(battleFrames)
 	WG.CampaignData.CapturePlanet(planetID, bonusObjectives, difficulty)
 
@@ -831,7 +845,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 			right = 0,
 			bottom = 0,
 			width = 160,
-			height = 58,
+			height = 61,
 			classname = "action_button",
 			parent = buttonHolder,
 			caption = i18n("start"),
@@ -846,9 +860,9 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		if Configuration.canAuthenticateWithSteam then
 			btnInviteFriends = Button:New {
 				right = 0,
-				bottom = 62,
+				bottom = 64,
 				width = 160,
-				height = 35,
+				height = 38,
 				padding = {0, 0, 0, 0},
 				font = Configuration:GetFont(2),
 				caption = i18n("invite_friends") .. "   ",
@@ -894,9 +908,24 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 		end
 
 		if (not LIVE_TESTING) and (Configuration.debugAutoWin or Configuration.debugMode) then
+			local fullAutoButton = Button:New{
+				right = 0,
+				bottom = 180,
+				width = 150,
+				height = 65,
+				classname = "action_button",
+				parent = buttonHolder,
+				caption = "Full Auto",
+				font = Configuration:GetFont(4),
+				OnClick = {
+					function(self)
+						ProcessPlanetVictory(planetID, 0, MakeRandomBonusVictoryList(2, 8), nil, WG.CampaignData.GetDifficultySetting())
+					end
+				}
+			}
 			local autoWinButton = Button:New{
 				right = 0,
-				bottom = 100,
+				bottom = 110,
 				width = 150,
 				height = 65,
 				classname = "action_button",
@@ -911,7 +940,7 @@ local function SelectPlanet(popupOverlay, planetHandler, planetID, planetData, s
 			}
 			local autoLostButton = Button:New{
 				right = 155,
-				bottom = 100,
+				bottom = 110,
 				width = 175,
 				height = 65,
 				classname = "action_button",
@@ -1147,6 +1176,40 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 			offset = AddDebugUnlocks(debugHolder, rewards.units, WG.CampaignData.GetUnitInfo, offset, DEBUG_UNLOCK_COLUMNS, DEBUG_UNLOCK_SIZE)
 			offset = AddDebugUnlocks(debugHolder, rewards.modules, WG.CampaignData.GetModuleInfo, offset, DEBUG_UNLOCK_COLUMNS, DEBUG_UNLOCK_SIZE)
 			offset = AddDebugUnlocks(debugHolder, rewards.abilities, WG.CampaignData.GetAbilityInfo, offset, DEBUG_UNLOCK_COLUMNS, DEBUG_UNLOCK_SIZE)
+		elseif Configuration.showPlanetCodex then
+			local rewards = planetData.completionReward
+			if rewards.codexEntries and #rewards.codexEntries > 0 then
+				debugHolder = Control:New{
+					x = 0,
+					y = 0,
+					width = targetSize*10,
+					height = targetSize*#rewards.codexEntries,
+					padding = {0, 0, 0, 0},
+					parent = planetListHolder,
+				}
+				for i = 1, #rewards.codexEntries do
+					local number = Label:New {
+						x = 0,
+						y = 13*(i - 1),
+						right = 0,
+						align = "left",
+						valign = "center",
+						caption = rewards.codexEntries[i],
+						font = Configuration:GetFont(1),
+						parent = debugHolder,
+					}
+				end
+			end
+		elseif Configuration.showPlanetMinimap then
+			local mapImageFile = Configuration:GetMinimapSmallImage(planetData.gameConfig.mapName)
+			debugHolder = Image:New{
+				x = 0,
+				y = 0,
+				width = targetSize,
+				height = targetSize,
+				file = mapImageFile,
+				parent = planetListHolder,
+			}
 		elseif Configuration.showPlanetEnemyUnits then
 			debugHolder = Control:New{
 				x = 0,
@@ -1218,6 +1281,7 @@ local function GetPlanet(popupOverlay, planetListHolder, planetID, planetData, a
 	button:SetVisibility(false)
 
 	local image = Image:New {
+		name = "planetimage" .. planetID,
 		x = 3,
 		y = 3,
 		right = 3,

@@ -143,6 +143,10 @@ function widget:ActivateMenu()
 	previousTrack = newTrack
 end
 
+function DelayedInitialize()
+	SetTrackVolume((WG.Chobby and WG.Chobby.Configuration and WG.Chobby.Configuration.menuMusicVolume) or 0)
+end
+
 function widget:Initialize()
 
 	-- load custom game dependent music
@@ -178,6 +182,9 @@ function widget:Initialize()
 	WG.LibLobby.lobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
 
 	WG.MusicHandler = MusicHandler
+	
+	WG.Delay(DelayedInitialize, 0.1)
+	WG.Delay(DelayedInitialize, 1)
 end
 
 --------------------------------------------------------------------------------

@@ -22,4 +22,8 @@ local function link_particularMapPage(mapName)
 	return "https://zero-k.info/Maps/DetailName?name=" .. mapName
 end
 
-return link_reportPlayer, link_userPage, link_homePage, link_replays, link_maps, link_particularMapPage
+local function link_matchmakerMapBans()
+	return "https://zero-k.info/MapBans"
+end
+
+return link_reportPlayer, link_userPage, link_homePage, link_replays, link_maps, link_particularMapPage, link_matchmakerMapBans

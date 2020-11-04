@@ -1,5 +1,5 @@
-local RANK_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/rankImages/"
-local LARGE_RANK_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/rankImagesLarge/"
+local RANK_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/rankimages/"
+local LARGE_RANK_DIR = LUA_DIRNAME .. "configs/gameConfig/zk/rankimageslarge/"
 local IMAGE_DIR          = LUA_DIRNAME .. "images/"
 
 local IMAGE_AUTOHOST     = IMAGE_DIR .. "ranks/robot.png"
