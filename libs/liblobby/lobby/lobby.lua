@@ -727,10 +727,20 @@ function Lobby:_OnBattleClosed(battleID)
 end
 
 function Lobby:_OnJoinBattle(battleID, hashCode)
+	if not self.battles[battleID] then
+		Spring.Log(LOG_SECTION, "warning", "_OnJoinBattle nonexistent battle.")
+		return
+	end
 	self.myBattleID = battleID
 	self.modoptions = {}
 
 	self:_CallListeners("OnJoinBattle", battleID, hashCode)
+	if self.openBattleModOptions then
+		if self.battles[battleID].founder == self:GetMyUserName() then
+			self:SetModOptions(self.openBattleModOptions)
+		end
+		self.openBattleModOptions = nil
+	end
 end
 
 function Lobby:_OnJoinedBattle(battleID, userName, scriptPassword)

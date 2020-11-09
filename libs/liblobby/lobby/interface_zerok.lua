@@ -204,7 +204,7 @@ for i, v in pairs(modeToName) do
 	nameToMode[v] = i
 end
 
-function Interface:HostBattle(battleTitle, password, modeName, mapName)
+function Interface:HostBattle(battleTitle, password, modeName, mapName, gameName, modOptions)
 	--OpenBattle {"Header":{"Mode":6,"Password":"bla","Title":"GoogleFrog's Teams"}}
 	-- Mode:
 	-- 5 = Cooperative
@@ -226,8 +226,10 @@ function Interface:HostBattle(battleTitle, password, modeName, mapName)
 			Password = password,
 			Engine = engineName,
 			Map = mapName,
+			Game = gameName,
 		}
 	}
+	self.openBattleModOptions = modOptions
 
 	self:_SendCommand("OpenBattle " .. json.encode(sendData))
 end

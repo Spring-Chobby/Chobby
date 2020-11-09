@@ -835,6 +835,27 @@ function BattleListWindow:OnBattleIngameUpdate(battleID, isRunning)
 	self:RecalculateOrder(battleID)
 end
 
+function BattleListWindow:GetCustomModes(modeList)
+	local files = VFS.DirList("CustomModes")
+	local modeMap = {}
+	
+	for i = 1, #files do
+		local modeFile = VFS.Include(files[i])
+		if modeFile then
+			if modeFile.name then
+				modeMap[modeFile.name] = modeFile
+				modeList[#modeList + 1] = modeFile.name
+			else
+				Spring.Echo("CustomModeError", "Mode file missing field 'name'", files[i], "Index", i)
+			end
+		else
+			Spring.Echo("CustomModeError", "Unable to load file", files[i], "Index", i)
+		end
+	end
+	
+	return modeList, modeMap
+end
+
 function BattleListWindow:OpenHostWindow()
 	local hostBattleWindow = Window:New {
 		caption = "",
@@ -908,6 +929,8 @@ function BattleListWindow:OpenHostWindow()
 		font = Configuration:GetFont(3),
 		parent = hostBattleWindow,
 	}
+	
+	local modeList, customModeMap = self:GetCustomModes({"Cooperative", "Team", "1v1", "FFA", "Custom"})
 	local typeCombo = ComboBox:New {
 		x = 220,
 		width = 260,
@@ -916,7 +939,7 @@ function BattleListWindow:OpenHostWindow()
 		itemHeight = 22,
 		text = "",
 		font = Configuration:GetFont(3),
-		items = {"Cooperative", "Team", "1v1", "FFA", "Custom"},
+		items = modeList,
 		itemFontSize = Configuration:GetFont(3).size,
 		selected = 1,
 		parent = hostBattleWindow,
@@ -928,10 +951,17 @@ function BattleListWindow:OpenHostWindow()
 
 	local function HostBattle()
 		WG.BattleRoomWindow.LeaveBattle()
-		if string.len(passwordEdit.text) > 0 then
-			lobby:HostBattle(gameNameEdit.text, passwordEdit.text, typeCombo.items[typeCombo.selected])
+		local modeSelection = typeCombo.items[typeCombo.selected]
+		if customModeMap[modeSelection] then
+			local modeData = customModeMap[modeSelection]
+			lobby:HostBattle(gameNameEdit.text, (string.len(passwordEdit.text) > 0) and passwordEdit.text, 
+				modeData.roomType or "Custom",
+				modeData.map,
+				modeData.game,
+				modeData.options
+			)
 		else
-			lobby:HostBattle(gameNameEdit.text, nil, typeCombo.items[typeCombo.selected])
+			lobby:HostBattle(gameNameEdit.text, (string.len(passwordEdit.text) > 0) and passwordEdit.text, modeSelection)
 		end
 		hostBattleWindow:Dispose()
 	end
