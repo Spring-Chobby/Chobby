@@ -1171,6 +1171,48 @@ local settingsConfig = {
 					},
 				},
 			},
+			{
+				name = "GcRate",
+				humanName = "GC Rate",
+				options = {
+					{
+						name = "Very Fast",
+						apply = {
+							LuaGarbageCollectionMemLoadMult = 2,
+						}
+					},
+					{
+						name = "Fast",
+						apply = {
+							LuaGarbageCollectionMemLoadMult = 3,
+						}
+					},
+					{
+						name = "Recommended",
+						apply = {
+							LuaGarbageCollectionMemLoadMult = 4,
+						}
+					},
+					{
+						name = "Slow",
+						apply = {
+							LuaGarbageCollectionMemLoadMult = 7,
+						}
+					},
+					{
+						name = "Slower",
+						apply = {
+							LuaGarbageCollectionMemLoadMult = 15,
+						}
+					},
+					{
+						name = "Slowest",
+						apply = {
+							LuaGarbageCollectionMemLoadMult = 100,
+						}
+					},
+				},
+			},
 		},
 	},
 }
@@ -1210,6 +1252,7 @@ local settingsDefault = {
 	CameraPanSpeed = 50,
 	NetworkSettings = "Balanced",
 	SmoothBuffer = "Off",
+	GcRate = "Recommended",
 }
 
 local settingsNames = {}
