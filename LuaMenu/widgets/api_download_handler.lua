@@ -291,6 +291,9 @@ function wrapperFunctions.DownloadFinished(name, fileType, success, aborted)
 		if not success and not aborted and fileType == "game" then
 			WG.WrapperLoopback.DownloadFile(name, typeMap["map"])
 		else
+			if (not aborted) and (not success) and VFS.HasArchive(name) then
+				success = true
+			end
 			RemoveDownload(name, fileType, true, (aborted and "cancel") or (success and "success") or "fail")
 		end
 	end
