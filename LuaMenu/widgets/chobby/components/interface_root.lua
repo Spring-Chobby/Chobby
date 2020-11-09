@@ -297,7 +297,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		file = IMAGE_TOP_BACKGROUND,
 		parent = mainWindow_buttonsHolder,
 		keepAspect = false,
-		color = {0.218, 0.23, 0.49, 0.1},
+		color = {0.2, 0.2, 0.25, 0.18},
 	}
 
 	local mainWindow_mainContent = Control:New {
@@ -396,7 +396,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		file = IMAGE_TOP_BACKGROUND,
 		parent = lobbyInterfaceHolder,
 		keepAspect = false,
-		color = {0.218, 0.23, 0.49, 0.25},
+		color = {0.2, 0.2, 0.25, 0.18},
 	}
 
 	-----------------------------------
@@ -930,7 +930,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		file = IMAGE_TOP_BACKGROUND,
 		parent = holder_topBar,
 		keepAspect = false,
-		color = {0.218, 0.23, 0.49, 0.9},
+		color = {0.2, 0.2, 0.25, 0.4},
 	}
 
 	-------------------------------------------------------------------
