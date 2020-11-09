@@ -142,6 +142,23 @@ function json.decode(s, startPos)
 	return decode_scanConstant(s,startPos)
 end
 
+function json.loadFile(fileName)
+	if not VFS.FileExists(fileName) then
+		return {}
+	end
+	local data
+	xpcall(
+		function()
+			data = json.decode(VFS.LoadFile(fileName))
+		end,
+		function(err)
+			Spring.Log("json", LOG.ERROR, err)
+			Spring.Log("json", LOG.ERROR, debug.traceback(err))
+		end
+	)
+	return data or {}, (data and true) or false
+end
+
 --- The null function allows one to specify a null value in an associative array (which is otherwise
 -- discarded if you set the value with 'nil' in Lua. Simply set t = { first=json.null }
 function null()

@@ -668,8 +668,8 @@ function ModoptionsPanel.GetCustomModes(modeList)
 	local files = VFS.DirList("CustomModes")
 	local modeMap = {}
 	for i = 1, #files do
-		local modeFile = VFS.Include(files[i])
-		if modeFile then
+		local modeFile, success = Spring.Utilities.json.loadFile(files[i])
+		if success then
 			if modeFile.name then
 				modeMap[modeFile.name] = modeFile
 				modeList[#modeList + 1] = modeFile.name
