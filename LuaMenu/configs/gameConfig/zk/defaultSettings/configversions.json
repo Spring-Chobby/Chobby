@@ -1244,6 +1244,12 @@
          "VersionNumber":7,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/games/zerokBenchmark03.sdz",
          "TargetPath":"games/zerokBenchmark03.sdz"
+      },
+      {
+         "Platform":null,
+         "VersionNumber":7,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/CustomModes/unitLevelUps.lua",
+         "TargetPath":"CustomModes/unitLevelUps.lua"
       }
    ]
 }

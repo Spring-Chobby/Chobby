@@ -27,7 +27,7 @@ function GameListWindow:init(failFunction, sucessFunction, blacklist, titleOverr
 	end
 
 	self.window.OnDispose = self.window.OnDispose or {}
-	self.window.OnDispose[#self.window.OnDispose + 1] = failFunction
+	self.window.OnDispose[#self.window.OnDispose + 1] = failFunction or nil
 
 	self.popupHolder = PriorityPopup(self.window, self.CancelFunc)
 end

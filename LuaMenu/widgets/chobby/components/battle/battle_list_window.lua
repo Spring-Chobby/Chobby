@@ -835,27 +835,6 @@ function BattleListWindow:OnBattleIngameUpdate(battleID, isRunning)
 	self:RecalculateOrder(battleID)
 end
 
-function BattleListWindow:GetCustomModes(modeList)
-	local files = VFS.DirList("CustomModes")
-	local modeMap = {}
-	
-	for i = 1, #files do
-		local modeFile = VFS.Include(files[i])
-		if modeFile then
-			if modeFile.name then
-				modeMap[modeFile.name] = modeFile
-				modeList[#modeList + 1] = modeFile.name
-			else
-				Spring.Echo("CustomModeError", "Mode file missing field 'name'", files[i], "Index", i)
-			end
-		else
-			Spring.Echo("CustomModeError", "Unable to load file", files[i], "Index", i)
-		end
-	end
-	
-	return modeList, modeMap
-end
-
 function BattleListWindow:OpenHostWindow()
 	local hostBattleWindow = Window:New {
 		caption = "",
@@ -930,7 +909,11 @@ function BattleListWindow:OpenHostWindow()
 		parent = hostBattleWindow,
 	}
 	
-	local modeList, customModeMap = self:GetCustomModes({"Cooperative", "Team", "1v1", "FFA", "Custom"})
+	local modeList, customModeMap = {"Cooperative", "Team", "1v1", "FFA", "Custom"}, false
+	if WG.ModoptionsPanel and WG.ModoptionsPanel.GetCustomModes then
+		modeList, customModeMap = WG.ModoptionsPanel.GetCustomModes(modeList)
+	end
+	
 	local typeCombo = ComboBox:New {
 		x = 220,
 		width = 260,
@@ -952,7 +935,7 @@ function BattleListWindow:OpenHostWindow()
 	local function HostBattle()
 		WG.BattleRoomWindow.LeaveBattle()
 		local modeSelection = typeCombo.items[typeCombo.selected]
-		if customModeMap[modeSelection] then
+		if customModeMap and customModeMap[modeSelection] then
 			local modeData = customModeMap[modeSelection]
 			lobby:HostBattle(gameNameEdit.text, (string.len(passwordEdit.text) > 0) and passwordEdit.text, 
 				modeData.roomType or "Custom",
