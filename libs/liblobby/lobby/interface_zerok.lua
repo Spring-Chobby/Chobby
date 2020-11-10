@@ -406,8 +406,33 @@ function Interface:StartBattle()
 	return self
 end
 
-function Interface:SelectGame(gameName)
+function Interface:SelectGame(gameName, force)
+	if gameName == "zk:stable" or not force then
+		self:SayBattle("!game " .. gameName)
+		return self
+	end
+	
+	local myBattle = self:GetMyBattleID() and self.battles[self:GetMyBattleID()]
+	if not myBattle then
+		self:SayBattle("!game " .. gameName)
+		return self
+	end
+	
+	if not myBattle.passworded then
+		self:SayBattle("!password a")
+	end
+	if myBattle.battleMode ~= 0 then -- Custom
+		self:SayBattle("!type custom")
+	end
+	
 	self:SayBattle("!game " .. gameName)
+	
+	if myBattle.battleMode ~= 0 then
+		self:SayBattle("!type " .. modeToName[myBattle.battleMode])
+	end
+	if not myBattle.passworded then
+		self:SayBattle("!password")
+	end
 	return self
 end
 

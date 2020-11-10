@@ -1,0 +1,7 @@
+{
+    "name" : "Zero Wars",
+    "description" : "Send waves of units across the map to destory the enemy nexus",
+    "roomType" : "Team",
+    "map" : "ZeroWars v2.0.7",
+    "rapidTag" : "zk:stable"
+}

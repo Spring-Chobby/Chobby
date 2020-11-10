@@ -911,7 +911,7 @@ function BattleListWindow:OpenHostWindow()
 	
 	local modeList, customModeMap = {"Cooperative", "Team", "1v1", "FFA", "Custom"}, false
 	if WG.ModoptionsPanel and WG.ModoptionsPanel.GetCustomModes then
-		modeList, customModeMap = WG.ModoptionsPanel.GetCustomModes(modeList)
+		modeList, customModeMap = WG.ModoptionsPanel.GetCustomModes(modeList, true)
 	end
 	
 	local typeCombo = ComboBox:New {

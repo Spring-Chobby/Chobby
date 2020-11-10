@@ -382,8 +382,8 @@ local function CreateModoptionWindow()
 		modoptionsSelectionWindow:Dispose()
 	end
 
-	local buttonAccept, buttonMods, modSelection
-	local buttonCustom, customModeSelection, mapSelection
+	local buttonAccept, buttonMods, modSelection, isRapid
+	local buttonCustom, customModeSelection, mapSelection, typeSelection
 
 	function GetModSelection()
 		local function SetGameSucess(name)
@@ -406,6 +406,14 @@ local function CreateModoptionWindow()
 			end
 			if modeData.game then
 				modSelection = modeData.game
+				isRapid = false
+			end
+			if modeData.rapidTag then
+				modSelection = modeData.rapidTag
+				isRapid = true
+			end
+			if modeData.roomType then
+				typeSelection = modeData.roomType
 			end
 			if modeData.options then
 				for key, value in pairs(modeData.options) do
@@ -422,7 +430,10 @@ local function CreateModoptionWindow()
 		screen0:FocusControl(buttonAccept) -- Defocus the text entry
 		battleLobby:SetModOptions(localModoptions)
 		if modSelection then
-			battleLobby:SelectGame(modSelection)
+			battleLobby:SelectGame(modSelection, true, isRapid)
+		end
+		if typeSelection then
+			battleLobby:SetBattleType(typeSelection)
 		end
 		if mapSelection then
 			battleLobby:SelectMap(mapSelection)
@@ -438,8 +449,9 @@ local function CreateModoptionWindow()
 		
 		mapSelection = false
 		modSelection = false
+		tpyeSelection = false
 		
-		buttonCustom.caption = i18n("custom_mode")
+		buttonCustom.caption = i18n("select_custom_mode")
 		if buttonMods then
 			buttonMods.caption = i18n("select_mod")
 		end
@@ -664,15 +676,17 @@ function ModoptionsPanel.GetModoptionsControl()
 	return modoptionsDisplay.GetControl()
 end
 
-function ModoptionsPanel.GetCustomModes(modeList)
+function ModoptionsPanel.GetCustomModes(modeList, excludeHostMenuHide)
 	local files = VFS.DirList("CustomModes")
 	local modeMap = {}
 	for i = 1, #files do
 		local modeFile, success = Spring.Utilities.json.loadFile(files[i])
 		if success then
 			if modeFile.name then
-				modeMap[modeFile.name] = modeFile
-				modeList[#modeList + 1] = modeFile.name
+				if not (excludeHostMenuHide and modeFile.hideFromHostMenu) then
+					modeMap[modeFile.name] = modeFile
+					modeList[#modeList + 1] = modeFile.name
+				end
 			else
 				Spring.Echo("CustomModeError", "Mode file missing field 'name'", files[i], "Index", i)
 			end

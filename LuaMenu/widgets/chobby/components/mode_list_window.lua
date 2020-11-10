@@ -9,9 +9,10 @@ function ModeListWindow:init(failFunction, sucessFunction, blacklist, titleOverr
 	if WG.ModoptionsPanel and WG.ModoptionsPanel.GetCustomModes then
 		modeList, customModeMap = WG.ModoptionsPanel.GetCustomModes(modeList)
 	end
+	table.sort(modeList)
 	
 	if customModeMap then
-		for i = 1, #modeList do
+		for i = #modeList, 1, -1 do
 			local modeData = customModeMap[modeList[i]]
 			local pickButton = Button:New {
 				x = 0,

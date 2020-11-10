@@ -1,0 +1,6 @@
+{
+	"name" : "Zero-K: Dev Version",
+	"description" : "Play the latest developments before they are released. Warning: It will not necessarily work.",
+	"rapidTag" : "zk:test",
+	"hideFromHostMenu" : true
+}
