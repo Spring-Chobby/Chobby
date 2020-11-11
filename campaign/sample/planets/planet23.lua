@@ -30,7 +30,7 @@ local function GetPlanet(planetUtilities, planetID)
 			.. "\n "
 			.. "\nThe oceans are poorly defended, though. Naval forces decayed faster, under the harsher maritime conditions. I can use this, take out those command structures, and find out what they were preparing for..."
 			,
-			extendedText = "Arriving in the ocean and launching an amphibious attack on the beach, with heavy Grizzly assault walkers, seemed a good idea at the time. I had underestimated how fast land forces can be redeployed, and how far I was from a massive counterattack."
+			extendedText = "Arriving in the ocean and launching an amphibious attack on the beach, with heavy Grizzly assault walkers and Bulkhead fire support, seemed a good idea at the time. I had underestimated how fast land forces can be redeployed, and how far I was from a massive counterattack."
 			.. "\n "
 			.. "\nNow, I only have 25 minutes to push past the Gauss defensive emplacements, secure a beachhead, repel waves of whatever they throw at me, and destroy those three Garrisons."
 		},
@@ -42,6 +42,10 @@ local function GetPlanet(planetUtilities, planetID)
 			{
 				image = "unitpics/amphassault.png",
 				text = [[Grizzlies are armed with two heavy laser turrets similar to those of the Stinger. This weapon is generally bad against raiders but good against most other targets. Protect your Grizzlies with riots to get around this limitation.]]
+			},
+            {
+				image = "unitpics/amphsupport.png",
+				text = [[Bulkheads offer medium-range fire support at a much cheaper price than Grizzlies, but they must be stationary to fire.]]
 			},
 			{
 				image = "unitpics/dronelight.png",
@@ -63,6 +67,7 @@ local function GetPlanet(planetUtilities, planetID)
 					"factoryamph",
 					"amphcon",
 					"amphassault",
+                    "amphsupport",
 					"turretgauss",
 					"energywind",
 				},
@@ -392,31 +397,31 @@ local function GetPlanet(planetUtilities, planetID)
 							facing = 2,
 						},
 						{
-							name = "amphfloater",
+							name = "amphsupport",
 							x = 3400,
 							z = 6100,
 							facing = 2,
 						},
 						{
-							name = "amphfloater",
+							name = "amphsupport",
 							x = 3300,
 							z = 6100,
 							facing = 2,
 						},
 						{
-							name = "amphfloater",
+							name = "amphsupport",
 							x = 3000,
 							z = 6100,
 							facing = 2,
 						},
 						{
-							name = "amphfloater",
+							name = "amphsupport",
 							x = 3100,
 							z = 6100,
 							facing = 2,
 						},
 						{
-							name = "amphfloater",
+							name = "amphsupport",
 							x = 3200,
 							z = 6100,
 							facing = 2,
@@ -1921,6 +1926,7 @@ local function GetPlanet(planetUtilities, planetID)
 			experience = planetUtilities.MAIN_EXP,
 			units = {
 				"amphassault",
+                "amphsupport",
 				"turretgauss",
 			},
 			modules = {
