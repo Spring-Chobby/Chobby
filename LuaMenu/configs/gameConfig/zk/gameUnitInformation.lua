@@ -630,31 +630,37 @@ local humanNames = {
 		description = "Heavy Amphibious Assault Walker",
 		humanName = "Grizzly",
 	},
-	amphlaunch = {
+    amphsupport = {
 		category = "amph",
 		order = 8,
+		description = "Deployable Amphibious Fire Support (must stop to fire)",
+		humanName = "Bulkhead",
+	},
+	amphlaunch = {
+		category = "amph",
+		order = 9,
 		description = "Amphibious Launcher Bot",
 		humanName = "Lobster",
 	},
 	amphaa = {
 		category = "amph",
-		order = 9,
+		order = 10,
 		description = "Amphibious Anti-Air Bot",
 		humanName = "Angler",
 	},
 	amphbomb = {
 		category = "amph",
-		order = 10,
+		order = 11,
 		description = "Amphibious Slow Bomb",
 		humanName = "Limpet",
 	},
 	amphtele = {
 		category = "amph",
-		order = 11,
+		order = 12,
 		description = "Amphibious Teleport Bridge",
 		humanName = "Djinn",
 	},
-
+    
 	-- Jump
 	factoryjump = {
 		category = "jump",
