@@ -73,6 +73,7 @@ SplashScreenDir = ./MenuLoadscreens
 RotateLogFiles = 1
 FeatureFadeDistance = 600000
 Shadows = 1
+SoftParticles = 2
 BumpWaterShoreWaves = 1
 MinimapOnLeft = 1
 MaxSounds = 32

@@ -64,6 +64,7 @@ local settings = {
 	ShowClock = 0,
 	SmoothLines = 1,
 	SmoothPoints = 1,
+	SoftParticles = 2,
 	SplashScreenDir = "./MenuLoadscreens",
 	TreeRadius = 1200,
 	--UnitIconDist = 151, -- Stored in springsettings.cfg and interacted with directly.

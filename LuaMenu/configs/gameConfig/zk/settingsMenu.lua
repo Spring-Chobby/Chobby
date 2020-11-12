@@ -98,6 +98,7 @@ local settingsConfig = {
 					ShadowDetail = "Low",
 					ParticleLimit = "2000",
 					TerrainDetail = "Minimal",
+					SoftParticles = "Compatibility",
 					VegetationDetail = "Minimal",
 					FeatureFade = "On",
 					CompatibilityMode = "On",
@@ -125,6 +126,7 @@ local settingsConfig = {
 					ShadowDetail = "Low",
 					ParticleLimit = "6000",
 					TerrainDetail = "Low",
+					SoftParticles = "Enabled",
 					VegetationDetail = "Low",
 					FeatureFade = "On",
 					CompatibilityMode = "Off",
@@ -152,6 +154,7 @@ local settingsConfig = {
 					ShadowDetail = "Low",
 					ParticleLimit = "12000",
 					TerrainDetail = "Low",
+					SoftParticles = "Enabled",
 					VegetationDetail = "Low",
 					FeatureFade = "On",
 					CompatibilityMode = "Off",
@@ -179,6 +182,7 @@ local settingsConfig = {
 					ShadowDetail = "Medium",
 					ParticleLimit = "15000",
 					TerrainDetail = "Medium",
+					SoftParticles = "Enabled",
 					VegetationDetail = "Medium",
 					FeatureFade = "On",
 					CompatibilityMode = "Off",
@@ -206,6 +210,7 @@ local settingsConfig = {
 					ShadowDetail = "High",
 					ParticleLimit = "25000",
 					TerrainDetail = "High",
+					SoftParticles = "Enabled",
 					VegetationDetail = "High",
 					FeatureFade = "On",
 					CompatibilityMode = "Off",
@@ -233,6 +238,7 @@ local settingsConfig = {
 					ShadowDetail = "Ultra",
 					ParticleLimit = "50000",
 					TerrainDetail = "Ultra",
+					SoftParticles = "Enabled",
 					VegetationDetail = "Ultra",
 					FeatureFade = "Off",
 					CompatibilityMode = "Off",
@@ -663,6 +669,30 @@ local settingsConfig = {
 						name = "16384",
 						apply = {
 							ShadowMapSize = 16384
+						}
+					},
+				},
+			},
+			{
+				name = "SoftParticles",
+				humanName = "Soft Particles",
+				options = {
+					{
+						name = "Disabled",
+						apply = {
+							SoftParticles = 0
+						}
+					},
+					{
+						name = "Compatibility",
+						apply = {
+							SoftParticles = 1
+						}
+					},
+					{
+						name = "Enabled",
+						apply = {
+							SoftParticles = 2
 						}
 					},
 				},
@@ -1227,6 +1257,7 @@ local settingsDefault = {
 	ShadowDetail = "Medium",
 	ParticleLimit = "15000",
 	TerrainDetail = "Medium",
+	SoftParticles = "Enabled",
 	VegetationDetail = "Medium",
 	FeatureFade = "Off",
 	CompatibilityMode = "Off",
