@@ -216,7 +216,7 @@ function Interface:HostBattle(battleTitle, password, modeName, mapName, gameName
 	if tonumber(Spring.Utilities.GetEngineVersion()) then
 		engineName = Spring.Utilities.GetEngineVersion() .. ".0"
 	else
-		engineName = string.gsub(string.gsub(Spring.Utilities.GetEngineVersion(), " maintenance", ""), " develop", "")
+		engineName = string.gsub(string.gsub(string.gsub(Spring.Utilities.GetEngineVersion(), " BAR", ""), " maintenance", ""), " develop", "")
 	end
 
 	local sendData = {

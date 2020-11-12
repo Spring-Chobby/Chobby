@@ -791,7 +791,7 @@ function Configuration:GetTruncatedEngineVersion()
 		-- Add as required.
 		return (Spring.Utilities.GetEngineVersion() .. ".0")
 	else
-		return string.gsub(string.gsub(Spring.Utilities.GetEngineVersion(), " maintenance", ""), " develop", "")
+		return string.gsub(string.gsub(string.gsub(Spring.Utilities.GetEngineVersion(), " BAR", ""), " maintenance", ""), " develop", "")
 	end
 end
 

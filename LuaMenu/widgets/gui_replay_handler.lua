@@ -31,7 +31,7 @@ local function CreateReplayEntry(replayPath, engineName, gameName, mapName)
 		return
 	end
 
-	fileName = string.gsub(string.gsub(fileName, " maintenance", ""), " develop", "")
+	fileName = string.gsub(string.gsub(string.gsub(fileName, " BAR", ""), " maintenance", ""), " develop", "")
 	fileName = string.gsub(fileName, "%.sdfz", "")
 
 	local replayTime = string.sub(fileName, 0, 15)
