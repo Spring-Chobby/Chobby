@@ -1265,7 +1265,7 @@
       },
       {
          "Platform":null,
-         "VersionNumber":7,
+         "VersionNumber":8,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/CustomModes/unitLevelUps.json",
          "TargetPath":"CustomModes/unitLevelUps.json"
       },
