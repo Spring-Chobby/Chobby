@@ -223,7 +223,7 @@ function Interface:HostBattle(battleTitle, password, modeName, mapName, gameName
 		Header = {
 			Title = battleTitle,
 			Mode = (modeName and nameToMode[modeName]) or 0,
-			Password = password,
+			Password = password or nil,
 			Engine = engineName,
 			Map = mapName,
 			Game = gameName,
