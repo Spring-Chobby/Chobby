@@ -16,6 +16,7 @@ local function UpdateLups(_, conf)
 	local lupsFileName = settings.ShaderDetail_file or "LuaMenu/configs/gameConfig/zk/lups/lups3.cfg"
 	local lupsAirJetDisabled = ((settings.LupsAirJet == "On") and FALSE) or TRUE
 	local lupsRibbonDisabled = ((settings.LupsRibbon == "On") and FALSE) or TRUE
+	local lupsNanoParticlesDisabled = ((settings.LupsNanoParticles == "Cloud") and FALSE) or TRUE
 	local LupsShieldShaderDisabled = ((settings.LupsShieldShader == "Off") and TRUE) or FALSE
 	local LupsShieldHighQualityDisabled = ((settings.LupsShieldShader == "Default") and FALSE) or TRUE
 	local lupsWaterRefractEnabled = ((settings.LupsWaterSettings == "Refraction" or settings.LupsWaterSettings == "Refract and Reflect") and 1) or 0
@@ -25,6 +26,7 @@ local function UpdateLups(_, conf)
 
 	sourceFile = sourceFile:gsub("__AIR_JET__", lupsAirJetDisabled)
 	sourceFile = sourceFile:gsub("__RIBBON__", lupsRibbonDisabled)
+	sourceFile = sourceFile:gsub("__NANO_PARTICLES__", lupsNanoParticlesDisabled)
 	sourceFile = sourceFile:gsub("__SHIELD_SPHERE_COLOR__", LupsShieldShaderDisabled)
 	sourceFile = sourceFile:gsub("__SHIELD_SPHERE_HIGH_QUALITY__", LupsShieldHighQualityDisabled)
 	sourceFile = sourceFile:gsub("__ENABLE_REFRACT__", lupsWaterRefractEnabled)
@@ -108,6 +110,7 @@ local settingsConfig = {
 					ShaderDetail = "Minimal",
 					LupsAirJet = "Off",
 					LupsRibbon = "Off",
+					LupsNanoParticles = "Beam",
 					LupsShieldShader = "Off",
 					LupsWaterSettings = "Off",
 					FancySky = "Off",
@@ -136,6 +139,7 @@ local settingsConfig = {
 					ShaderDetail = "Minimal",
 					LupsAirJet = "Off",
 					LupsRibbon = "Off",
+					LupsNanoParticles = "Beam",
 					LupsShieldShader = "Off",
 					LupsWaterSettings = "Off",
 					FancySky = "Off",
@@ -164,6 +168,7 @@ local settingsConfig = {
 					ShaderDetail = "Low",
 					LupsAirJet = "Off",
 					LupsRibbon = "On",
+					LupsNanoParticles = "Beam",
 					LupsShieldShader = "Default",
 					LupsWaterSettings = "Off",
 					FancySky = "Off",
@@ -192,6 +197,7 @@ local settingsConfig = {
 					ShaderDetail = "Medium",
 					LupsAirJet = "On",
 					LupsRibbon = "On",
+					LupsNanoParticles = "Cloud",
 					LupsShieldShader = "Default",
 					LupsWaterSettings = "Off",
 					FancySky = "Off",
@@ -220,6 +226,7 @@ local settingsConfig = {
 					ShaderDetail = "High",
 					LupsAirJet = "On",
 					LupsRibbon = "On",
+					LupsNanoParticles = "Cloud",
 					LupsShieldShader = "Default",
 					LupsWaterSettings = "Off",
 					FancySky = "Off",
@@ -248,6 +255,7 @@ local settingsConfig = {
 					ShaderDetail = "Ultra",
 					LupsAirJet = "On",
 					LupsRibbon = "On",
+					LupsNanoParticles = "Cloud",
 					LupsShieldShader = "Default",
 					LupsWaterSettings = "Refract and Reflect",
 					FancySky = "On",
@@ -398,6 +406,20 @@ local settingsConfig = {
 							MaxDynamicModelLights = 1,
 							ROAM = 1, --Maybe ROAM = 0 when the new renderer is fully developed
 						}
+					},
+				},
+			},
+			{
+				name = "LupsNanoParticles",
+				humanName = "Construction Effect",
+				options = {
+					{
+						name = "Cloud",
+						applyFunction = UpdateLups,
+					},
+					{
+						name = "Beam",
+						applyFunction = UpdateLups,
 					},
 				},
 			},
@@ -1267,6 +1289,7 @@ local settingsDefault = {
 	ShaderDetail = "Medium",
 	LupsAirJet = "On",
 	LupsRibbon = "On",
+	LupsNanoParticles = "Cloud",
 	LupsShieldShader = "Default",
 	LupsWaterSettings = "Off",
 	FancySky = "Off",
