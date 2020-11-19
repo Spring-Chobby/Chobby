@@ -8,9 +8,7 @@
 	// Map should match map name exactly, as is written below the minimap in the battleroom.
 	//"map" : "Fairyland 1.31",
 	// Game should match game name exactly, as is shown left of the map when the game is selected.
-	"game" : "Unit Level Ups v5",
-	// Game should match game name exactly, as is shown left of the map when the game is selected.
-	"game" : "Unit Level Ups v22",
+	"game" : "Unit Level Ups v23",
 	// options is a table of Adv Options. The keys are internal name.
 	// All the keys can be found here: https://github.com/ZeroK-RTS/Zero-K/blob/master/ModOptions.lua
 	"options" : {
