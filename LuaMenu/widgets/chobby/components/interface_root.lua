@@ -45,7 +45,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local statusButtonWidth = 290
 	local statusButtonWidthSmall = 290
 
-	local topBarHeight = 42
+	local topBarHeight = 86
 
 	-- Switch to single panel mode when below the minimum screen width
 	local minScreenWidth = 1360
@@ -879,13 +879,13 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		}
 	}
 	local switchToGameButton = Button:New {
-		y = 2,
-		right = 3,
-		width = 108,
-		height = 38,
+		x = "30%",
+		right = "50.12%",
+		y = 3,
+		bottom = 11,
 		name = "switchToGameButton",
-		caption = "Game",
-		font = WG.Chobby.Configuration:GetFont(3),
+		caption = "Return to Battle",
+		font = WG.Chobby.Configuration:GetFont(4),
 		parent = holder_topBar,
 		resizable = false,
 		draggable = false,
@@ -903,13 +903,13 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	end
 
 	local leaveGameButton = Button:New {
-		y = 2,
-		right = 114,
-		width = 108,
-		height = 38,
+		x = "50.12%",
+		right = "30%",
+		y = 3,
+		bottom = 11,
 		name = "leaveGameButton",
-		caption = "Leave",
-		font = WG.Chobby.Configuration:GetFont(3),
+		caption = "Leave Battle",
+		font = WG.Chobby.Configuration:GetFont(4),
 		parent = holder_topBar,
 		resizable = false,
 		draggable = false,
@@ -930,7 +930,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		file = IMAGE_TOP_BACKGROUND,
 		parent = holder_topBar,
 		keepAspect = false,
-		color = {0.2, 0.2, 0.25, 0.4},
+		color = {1, 1, 1, 1},
 	}
 
 	-------------------------------------------------------------------
