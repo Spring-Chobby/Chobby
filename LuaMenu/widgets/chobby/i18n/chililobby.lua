@@ -360,6 +360,7 @@ return {
 		team = "Team",
 		serverList = "Serverliste",
 		skirmish = "Skirmish",
+		commanders = "Commanders",
 		play_custom_multiplayer_game = "Spiele ein spezielles Mehrspieler Spiel",
 		queues = "Warteschlangen",
 		custom_games = "Spezielle Spiele",
