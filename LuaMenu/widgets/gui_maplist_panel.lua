@@ -64,6 +64,7 @@ local function CreateMapEntry(mapName, mapData, CloseFunc)--{"ResourceID":7098,"
 	local Configuration = WG.Chobby.Configuration
 
 	local mapButton = Button:New {
+		classname = "button_rounded",
 		x = 0,
 		y = 0,
 		width = "100%",

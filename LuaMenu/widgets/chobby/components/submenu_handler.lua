@@ -9,7 +9,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 	local buttonHeight = 70
 
 	-- Matches interface root and submenu handler
-	local buttonSpacing = 4
+	local buttonSpacing = 0
 	local BUTTON_SIDE_SPACING = 1
 
 	local buttonOffset = 50

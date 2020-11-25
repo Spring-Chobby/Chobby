@@ -11,9 +11,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local userStatusPanelWidth = 250
 
 	local battleStatusWidth = 480
-	local panelButtonsWidth = 578
+	local panelButtonsWidth = 540 --578
 	local panelButtonsHeight = 42
-	local statusWindowGapSmall = 44
+	local panelButtonsRightPad = 4
 
 	local chatTabHolderHeight = 41
 
@@ -56,9 +56,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local autodetectDoublePanel = true
 	local wideContentPlace = false
 
-	local buttonSpacingLarge = 4 -- Matches tab panel handler and submenu handler
+	local buttonSpacingLarge = 0 -- Matches tab panel handler and submenu handler
 	local BUTTON_SIDE_SPACING = 1 -- Matches tab panel handler and submenu handler
-	local buttonSpacingSmall = 2
+	local buttonSpacingSmall = 0
 
 	local IMAGE_TOP_BACKGROUND = LUA_DIRNAME .. "images/top-background.png"
 
@@ -421,7 +421,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local rightPanelTabs = {}
 	if not WG.Chobby.Configuration.gameConfig.disableCommunityWindow then
-		rightPanelTabs[#rightPanelTabs + 1] = {name = "community", control = WG.CommunityWindow.GetControl()}
+		rightPanelTabs[#rightPanelTabs + 1] = {name = "news", control = WG.CommunityWindow.GetControl()}
 	end
 	rightPanelTabs[#rightPanelTabs + 1] = {name = "chat", control = chatWindows.window}
 	rightPanelTabs[#rightPanelTabs + 1] = {name = "friends", control = WG.FriendWindow.GetControl()}
@@ -716,7 +716,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		submenuWindow_mainContent._relativeBounds.bottom = bottomPad
 		submenuWindow_mainContent:UpdateClientArea()
 
-		status_panelButtons._relativeBounds.right = rightPad
+		status_panelButtons._relativeBounds.right = panelButtonsRightPad -- rightPad
 		rightPanel_window:UpdateClientArea()
 
 		buttons_exit._relativeBounds.bottom = (bottomPad > 0 and bottomPad) or 4

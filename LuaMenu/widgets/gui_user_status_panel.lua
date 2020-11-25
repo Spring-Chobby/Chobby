@@ -88,25 +88,25 @@ end
 
 local function InitializeControls(window)
 	btnLogout = Button:New {
-		y = 2,
-		right = 3,
+		y = 4,
+		right = 4,
 		width = 108,
-		height = 38,
+		height = 40,
 		caption = i18n("login"),
 		parent = window,
-		font = WG.Chobby.Configuration:GetFont(3),
+		font = WG.Chobby.Configuration:GetFont(2),
 		OnClick = {Logout}
 	}
 
 	if WG.Chobby.Configuration.gameConfig.link_homePage ~= nil then
 		btnProfile = Button:New {
-			y = 2,
-			right = 114,
+			y = 4,
+			right = 112,
 			width = 108,
-			height = 38,
-			caption = i18n("home"),
+			height = 40,
+			caption = i18n("profile"),
 			parent = window,
-			font = WG.Chobby.Configuration:GetFont(3),
+			font = WG.Chobby.Configuration:GetFont(2),
 			OnClick = {GoToProfilePage}
 		}
 	end
@@ -137,7 +137,7 @@ local function InitializeControls(window)
 	local userControl
 	onAccepted = function(listener)
 		userControl = WG.UserHandler.GetStatusUser(lobby:GetMyUserName())
-		userControl:SetPos(40, 51, 190)
+		userControl:SetPos(12, 51, 190)
 		window:AddChild(userControl)
 		window:RemoveChild(connectivityText)
 		lobby:Ping()
@@ -197,6 +197,7 @@ function widget:Update()
 			btnLogout:SetCaption(i18n("login"))
 			connectivityText:SetText("\255\180\180\180" .. i18n("offline") .. "\b")
 			connectivityImage.file = IMAGE_OFFLINE
+			connectivityImage:SetVisibility(true)
 			connectivityImage:Invalidate()
 		else
 			btnLogout:SetCaption(i18n("logout"))
@@ -204,10 +205,12 @@ function widget:Update()
 		if newStatus == "connecting" then
 			connectivityText:SetText(WG.Chobby.Configuration:GetPartialColor() .. i18n("connecting") .. "\b")
 			connectivityImage.file = IMAGE_CONNECTING
+			connectivityImage:SetVisibility(true)
 			connectivityImage:Invalidate()
 		elseif newStatus == "connected" then
 			connectivityText:SetText(WG.Chobby.Configuration:GetSuccessColor() .. i18n("online") .. "\b")
 			connectivityImage.file = IMAGE_ONLINE
+			connectivityImage:SetVisibility(false)
 			connectivityImage:Invalidate()
 		end
 		oldStatus = newStatus

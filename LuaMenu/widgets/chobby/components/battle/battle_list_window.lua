@@ -290,6 +290,7 @@ function BattleListWindow:MakeWatchBattle(battleID, battle)
 
 	local height = self.itemHeight - 20
 	local parentButton = Button:New {
+		classname = "button_rounded",
 		name = "battleButton",
 		x = 0,
 		right = 0,
@@ -401,6 +402,7 @@ function BattleListWindow:MakeJoinBattle(battleID, battle)
 
 	local height = self.itemHeight - 20
 	local parentButton = Button:New {
+		classname = "button_rounded",
 		name = "battleButton",
 		x = 0,
 		right = 0,

@@ -19,7 +19,7 @@ function GetTabPanelHandler(name, conf)
 	local externalFunctions = {}
 
 	-- Matches interface root and submenu handler
-	local buttonSpacing = 4
+	local buttonSpacing = 0
 	local BUTTON_SIDE_SPACING = 1
 
 	-------------------------------------------------------------------

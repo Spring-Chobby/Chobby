@@ -34,6 +34,19 @@ skin.icons = {
 }
 
 skin.button = {
+  TileImageBK = ":cl:tech_button_small_square_bk.png",
+  TileImageFG = ":cl:tech_button_small_square_fg.png",
+  tiles = {20, 14, 20, 14}, --// tile widths: left,top,right,bottom
+  padding = {10, 10, 10, 10},
+
+  backgroundColor = {0.04, 0.3, 0.55, 0.84},
+  focusColor  = {0.94, 0.50, 0.23, 0.72},
+  borderColor = {1,1,1,0},
+
+  DrawControl = DrawButton,
+}
+
+skin.button_rounded = {
   TileImageBK = ":cl:tech_button_small_bk.png",
   TileImageFG = ":cl:tech_button_small_fg.png",
   tiles = {20, 14, 20, 14}, --// tile widths: left,top,right,bottom

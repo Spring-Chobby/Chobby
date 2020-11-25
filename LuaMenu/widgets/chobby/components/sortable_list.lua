@@ -23,6 +23,7 @@ function SortableList:init(holder, headings, itemHeight, defaultSort, sortDirect
 		for i = 1, #headings do
 			local heading = headings[i]
 			self.headingButtons[i] = Button:New {
+				classname = "button_rounded",
 				x = heading.x,
 				y = 0,
 				right = heading.right,

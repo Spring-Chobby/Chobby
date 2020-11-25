@@ -15,6 +15,7 @@ function ModeListWindow:init(failFunction, sucessFunction, blacklist, titleOverr
 		for i = #modeList, 1, -1 do
 			local modeData = customModeMap[modeList[i]]
 			local pickButton = Button:New {
+				classname = "button_rounded",
 				x = 0,
 				y = 0,
 				width = "100%",
