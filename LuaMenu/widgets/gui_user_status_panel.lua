@@ -90,7 +90,7 @@ local function InitializeControls(window)
 	btnLogout = Button:New {
 		y = 4,
 		right = 4,
-		width = 108,
+		width = 112,
 		height = 40,
 		caption = i18n("login"),
 		parent = window,
@@ -101,10 +101,10 @@ local function InitializeControls(window)
 	if WG.Chobby.Configuration.gameConfig.link_homePage ~= nil then
 		btnProfile = Button:New {
 			y = 4,
-			right = 112,
-			width = 108,
+			right = 116,
+			width = 112,
 			height = 40,
-			caption = i18n("profile"),
+			caption = i18n("home"),
 			parent = window,
 			font = WG.Chobby.Configuration:GetFont(2),
 			OnClick = {GoToProfilePage}

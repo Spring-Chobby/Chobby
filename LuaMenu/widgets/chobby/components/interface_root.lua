@@ -11,7 +11,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local userStatusPanelWidth = 250
 
 	local battleStatusWidth = 480
-	local panelButtonsWidth = 540 --578
+	local panelButtonsWidth = 560 --578
 	local panelButtonsHeight = 42
 	local panelButtonsRightPad = 4
 
@@ -36,7 +36,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local mainButtonsWidth = 180
 	local mainButtonsWidthSmall = 140
 
-	local userStatusWidth = 225
+	local userStatusWidth = 232
 
 	local imageFudge = 0
 
@@ -421,10 +421,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local rightPanelTabs = {}
 	if not WG.Chobby.Configuration.gameConfig.disableCommunityWindow then
-		rightPanelTabs[#rightPanelTabs + 1] = {name = "news", control = WG.CommunityWindow.GetControl()}
+		rightPanelTabs[#rightPanelTabs + 1] = {name = "welcome", control = WG.CommunityWindow.GetControl()}
 	end
 	rightPanelTabs[#rightPanelTabs + 1] = {name = "chat", control = chatWindows.window}
-	rightPanelTabs[#rightPanelTabs + 1] = {name = "friends", control = WG.FriendWindow.GetControl()}
+	rightPanelTabs[#rightPanelTabs + 1] = {name = "profile", control = WG.FriendWindow.GetControl()}
 	rightPanelTabs[#rightPanelTabs + 1] = {name = "settings", control = WG.SettingsWindow.GetControl()}
 	rightPanelTabs[#rightPanelTabs + 1] = {name = "downloads", control = WG.DownloadWindow.GetControl()}
 
