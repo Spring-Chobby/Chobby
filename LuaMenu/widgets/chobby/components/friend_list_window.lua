@@ -9,7 +9,7 @@ function FriendListWindow:init(parent)
 	self.itemPadding = 0
 
 	self.btnSteamFriends = Button:New {
-		right = 101,
+		right = 5,
 		y = 7,
 		width = 180,
 		height = 45,

@@ -15,6 +15,13 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Panels
+
+local friendPanel
+local profilePanel
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Controls
 
 local function GetScroll(window, x, right, y, bottom, verticalScrollbar)
@@ -100,7 +107,7 @@ local function GetAwardsHandler(parentControl, iconWidth, iconHeight, GetEntryDa
 	return externalFunctions
 end
 
-local function GetProfileHandler(parentControl)
+local function GetProfileHandler()
 
 	local holder = Control:New{
 		x = 0,
@@ -108,7 +115,6 @@ local function GetProfileHandler(parentControl)
 		right = 0,
 		bottom = 0,
 		padding = {0,0,0,0},
-		parent = parentControl,
 	}
 	local nameHolder = Control:New{
 		x = "36%",
@@ -133,24 +139,24 @@ local function GetProfileHandler(parentControl)
 		local function GetAwardInfo(entry)
 			return GetAwardImage(entry.AwardKey), entry.Collected
 		end
-		awardsHandler = GetAwardsHandler(awardsHolder, 38, 38, GetAwardInfo)
+		awardsHandler = GetAwardsHandler(awardsHolder, 42, 42, GetAwardInfo)
 	end
 
 	local badgesHandler
 	local badgeDecs = WG.Chobby.Configuration.gameConfig.badges
 	if badgeDecs then
 		local badgeHolder = Control:New{
-			x = "42%",
+			x = "35%",
 			y = "46%",
 			right = 0,
-			height = 22,
+			height = 30,
 			padding = {0,0,0,0},
 			parent = holder,
 		}
 		local function GetBadgeInfo(entry)
 			return (badgeDecs[entry] or {}).image
 		end
-		badgesHandler = GetAwardsHandler(badgeHolder, 46, 19, GetBadgeInfo)
+		badgesHandler = GetAwardsHandler(badgeHolder, 52, 28, GetBadgeInfo)
 	end
 
 	local experienceBar, rankBar, backgroundImage
@@ -176,11 +182,6 @@ local function GetProfileHandler(parentControl)
 		if awardsHandler then
 			awardsHandler.PositionAwards()
 		end
-	end
-
-	parentControl.OnResize = parentControl.OnResize or {}
-	parentControl.OnResize[#parentControl.OnResize + 1] = function ()
-		WG.Delay(DoResize, 0.01)
 	end
 
 	local externalFunctions = {}
@@ -244,6 +245,15 @@ local function GetProfileHandler(parentControl)
 		userControl = WG.UserHandler.GetCommunityProfileUser(lobby:GetMyUserName())
 		nameHolder:AddChild(userControl)
 	end
+	
+	function externalFunctions.SetParent(parentControl)
+		parentControl:AddChild(holder)
+		
+		parentControl.OnResize = parentControl.OnResize or {}
+		parentControl.OnResize[#parentControl.OnResize + 1] = function ()
+			WG.Delay(DoResize, 0.01)
+		end
+	end
 
 	return externalFunctions
 end
@@ -253,24 +263,17 @@ end
 -- Initialization
 
 local function InitializeControls(window)
-	local lobby = WG.LibLobby.lobby
+	if not friendPanel then
+		return
+	end
 
-	local upperHalf   = GetScroll(window, 0, 0, 0, "46%", false)
-	local lowerHalf   = GetScroll(window, 0, 0, "56%", 0, false)
+	local upperHalf   = GetScroll(window, 0, 0, 0, "45%", false)
+	local lowerHalf   = GetScroll(window, 0, 0, "55%", 0, false)
 	
-	WG.Chobby.FriendListWindow(lowerHalf)
+	profilePanel.SetParent(upperHalf)
+	lowerHalf:AddChild(friendPanel.window)
 	
 	-- Profile Handler
-	local profileHandle = GetProfileHandler(upperHalf)
-	local function OnUserProfile(_, profileData)
-		profileHandle.UpdateProfile(profileData)
-	end
-	lobby:AddListener("OnUserProfile", OnUserProfile)
-
-	local function OnAccepted(listener)
-		profileHandle.UpdateUserName()
-	end
-	lobby:AddListener("OnAccepted", OnAccepted)
 end
 
 --------------------------------------------------------------------------------
@@ -303,13 +306,26 @@ end
 -- Widget Interface
 
 local function DelayedInitialize()
+	local lobby = WG.LibLobby.lobby
+	friendPanel = WG.Chobby.FriendListWindow()
+	
+	profilePanel = GetProfileHandler()
+	local function OnUserProfile(_, profileData)
+		profilePanel.UpdateProfile(profileData)
+	end
+	lobby:AddListener("OnUserProfile", OnUserProfile)
+
+	local function OnAccepted(listener)
+		profilePanel.UpdateUserName()
+	end
+	lobby:AddListener("OnAccepted", OnAccepted)
 end
 
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
-	WG.Delay(DelayedInitialize, 1)
+	WG.Delay(DelayedInitialize, 0.2)
 
 	WG.FriendWindow = FriendWindow
 end
