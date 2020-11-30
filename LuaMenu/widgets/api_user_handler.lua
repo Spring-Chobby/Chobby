@@ -409,7 +409,7 @@ local function UpdateUserActivity(listener, userName)
 		local userControls = userList[userName]
 		if userControls then
 			userControls.mainControl.items = GetUserComboBoxOptions(userName, userControls.isInBattle, userControls,
-			                                                        userControls.imTeamColor ~= nil, data.imSide ~= nil)
+			                                                        userControls.imTeamColor ~= nil, userControls.imSide ~= nil)
 			userControls.imLevel.file = GetUserRankImageName(userName, userControls)
 			userControls.imLevel:Invalidate()
 
