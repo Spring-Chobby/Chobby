@@ -462,8 +462,11 @@ local function UpdateUserBattleStatus(listener, userName)
 				end
 			end
 			if data.imSide then
-				data.imSide.file = WG.Chobby.Configuration:GetSideById(battleStatus.side).logo
-				data.imSide:SetVisibility(imageVisible)
+				local sideSelected = battleStatus.side ~= nil
+				if sideSelected then
+					data.imSide.file = WG.Chobby.Configuration:GetSideById(battleStatus.side).logo
+				end
+				data.imSide:SetVisibility(imageVisible and sideSelected)
 				if imageVisible then
 					data.imTeamColor:Invalidate()
 				end
@@ -739,6 +742,10 @@ local function GetUserControls(userName, opts)
 	if showSide then
 		local battleStatus = userControls.lobby:GetUserBattleStatus(userName) or {}
 		offset = offset + 2
+		local file = nil
+		if battleStatus.side ~= nil then
+			file = WG.Chobby.Configuration:GetSideById(battleStatus.side or 0).logo
+		end
 		userControls.imSide = Image:New {
 			name = "imSide",
 			x = offset,
@@ -747,10 +754,10 @@ local function GetUserControls(userName, opts)
 			height = 20,
 			parent = userControls.mainControl,
 			keepAspect = false,
-			file = WG.Chobby.Configuration:GetSideById(battleStatus.side or 0).logo,
+			file = file,
 		}
 		offset = offset + 22
-		if battleStatus.isSpectator then
+		if battleStatus.isSpectator or file == nil then
 			userControls.imSide:Hide()
 		end
 	end
