@@ -7,6 +7,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local titleWidthRel = 28
 	local panelWidthRel = 42
+	local buttonsDoubleOffsetRel = "3%"
 
 	local userStatusPanelWidth = 250
 
@@ -278,8 +279,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		children = {},
 	}
 	local buttonsHolder_buttons = Control:New {
-		x = 0,
-		y = 0,
+		x = "0%",
+		y = buttonsDoubleOffsetRel,
 		width = "100%",
 		height = "100%",
 		name = "buttonsHolder_buttons",
@@ -589,7 +590,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			status_panelButtons:AddChild(panelButtons_buttons)
 
 			panelButtons_buttons:SetPosRelative("0%","0%", "100%","100%")
-			--buttonsHolder_buttons:SetPosRelative("0%","0%", nil,"100%")
+			buttonsHolder_buttons:SetPosRelative("0%", buttonsDoubleOffsetRel, "100%","100%")
 
 			-- Make Main Window take up more space
 			status_panelButtons:Show()
@@ -651,7 +652,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			buttonsHolder_buttons:AddChild(panelButtons_buttons)
 
 			panelButtons_buttons:SetPosRelative("0%","44%", "100%","50%")
-			--buttonsHolder_buttons:SetPosRelative("0%","0%", nil,"50%")
+			buttonsHolder_buttons:SetPosRelative("0%","0%", "100%","100%")
 
 			-- Make Main Window take up more space
 			status_panelButtons:Hide()
