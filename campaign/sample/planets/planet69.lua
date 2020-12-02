@@ -109,7 +109,13 @@ local function GetPlanet(planetUtilities, planetID)
 			abilities = {},
 			codexEntries = {
 				"entry_first"
-			}
+			},
+			completionFunction = function ()
+				local Configuration = WG.Chobby and WG.Chobby.Configuration
+				if Configuration then
+					Configuration:SetTutorialComplete()
+				end
+			end
 		},
 	}
 	

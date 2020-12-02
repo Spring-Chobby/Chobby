@@ -202,6 +202,114 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Tutorial
+
+local TUTORIAL_PLANET = 69
+
+local function StartTutorial()
+	WG.CampaignSaveWindow.PromptInitialSaveName()
+	WG.Chobby.interfaceRoot.OpenSingleplayerTabByName("campaign")
+	WG.CampaignHandler.OpenPlanetScreen(TUTORIAL_PLANET)
+	WG.CampaignHandler.StartPlanetMission(TUTORIAL_PLANET)
+end
+
+local function GetTutorialControl()
+	local Configuration = WG.Chobby.Configuration
+	
+	local holder = Control:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		height = 500,
+	}
+	
+	local heading = Label:New {
+		x = 0,
+		y = 15,
+		height = 35,
+		align = "center",
+		fontsize = Configuration:GetFont(5).size,
+		caption = "Welcome to Zero-K",
+		parent = holder,
+	}
+
+	TextBox:New {
+		x = 28,
+		right = 28,
+		y = 76,
+		height = 35,
+		fontsize = Configuration:GetFont(2).size,
+		text = [[From here you can embark on a galaxy-spanning campaign or play a skirmish against the AI - all under Singleplayer & Coop (invite your friends). Alternately, you can click Multiplayer to host a private game, hop into the matchmaker, or participate in massive public games.]],
+		parent = holder,
+	}
+
+	TextBox:New {
+		x = 28,
+		right = 28,
+		y = 190,
+		height = 35,
+		fontsize = Configuration:GetFont(2).size,
+		text = [[To get started we recommend playing the tutorial, which doubles as the first mission of the campaign. Click the button below to begin.]],
+		parent = holder,
+	}
+
+	local function CancelFunc()
+		if not tutorialPrompt then
+			local statusAndInvitesPanel = WG.Chobby.interfaceRoot.GetStatusAndInvitesPanel()
+			tutorialPrompt = InitializeTutorialPrompt()
+			statusAndInvitesPanel.AddControl(tutorialPrompt.GetHolder(), 15)
+		end
+	end
+
+	local offset = 266
+	Button:New {
+		x = "18%",
+		y = offset,
+		right = "18%",
+		height = 70,
+		caption = "Play the Tutorial",
+		font = Configuration:GetFont(4),
+		classname = "action_button",
+		padding = {2,4,4,4},
+		OnClick = {
+			function()
+				StartTutorial()
+			end
+		},
+		parent = holder,
+	}
+	offset = offset + 74
+
+	--Button:New {
+	--	right = 2,
+	--	bottom = 2,
+	--	width = 110,
+	--	height = 42,
+	--	classname = "negative_button",
+	--	caption = i18n("close"),
+	--	font = Configuration:GetFont(3),
+	--	OnClick = {
+	--		CancelFunc
+	--	},
+	--	parent = holder,
+	--}
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.GetHolder()
+		return holder
+	end
+	
+	function externalFunctions.DoResize()
+		heading:SetPos(0, 15, holder.width)
+		return 360
+	end
+	
+	return externalFunctions
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- News
 
 local function GetDateTimeDisplay(parentControl, xPosition, yPosition, timeString)
@@ -537,7 +645,9 @@ local function GetNewsHandler(parentControl, headingSize, timeAsTooltip, topHead
 	headFormat.fontSize = WG.Chobby.Configuration:GetFont(headingSize).size
 
 	local offset = topHeading and headFormat.topHeadingOffset or 0
+	local staticOffset = 0
 	local visibleItems = 0
+	local staticNotice
 
 	local holder = Control:New{
 		x = 0,
@@ -562,7 +672,10 @@ local function GetNewsHandler(parentControl, headingSize, timeAsTooltip, topHead
 	local newsEntries = {}
 
 	local function DoResize()
-		offset = topHeading and headFormat.topHeadingOffset or 0
+		if staticNotice then
+			staticOffset = staticNotice.DoResize()
+		end
+		offset = (topHeading and headFormat.topHeadingOffset or 0) + staticOffset
 		for i = 1, #newsEntries do
 			offset = newsEntries[i].DoResize(offset, visibleItems)
 		end
@@ -610,6 +723,12 @@ local function GetNewsHandler(parentControl, headingSize, timeAsTooltip, topHead
 		end
 
 		visibleItems = #items
+		DoResize()
+	end
+
+	function externalFunctions.SetStaticNotice(noticeData)
+		staticNotice = noticeData
+		holder:AddChild(noticeData.GetHolder())
 		DoResize()
 	end
 
@@ -664,6 +783,11 @@ local function InitializeControls(window)
 	local newsHandler = GetNewsHandler(topWide, 4)
 	if staticCommunityData and staticCommunityData.NewsItems then
 		newsHandler.ReplaceNews(staticCommunityData.NewsItems)
+	end
+
+	if not WG.Chobby.Configuration.hideWelcomeMessage then
+		local tutorialControl = GetTutorialControl()
+		newsHandler.SetStaticNotice(tutorialControl)
 	end
 
 	local function OnNewsList(_, newsItems)

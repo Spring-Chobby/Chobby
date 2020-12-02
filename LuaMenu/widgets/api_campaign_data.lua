@@ -278,6 +278,9 @@ local function UnlockRewardSet(rewardSet)
 	if extraCodexEntries then
 		saveRequired = UnlockListOfThings(gamedata.codexEntriesUnlocked, extraCodexEntries) or saveRequired
 	end
+	if rewardSet.completionFunction then
+		saveRequired = rewardSet.completionFunction() or saveRequired
+	end
 	return saveRequired
 end
 

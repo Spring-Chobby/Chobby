@@ -48,6 +48,7 @@ function Configuration:init()
 	self.steamLinkComplete = false
 	self.alreadySeenFactionPopup4 = false
 	self.firstBattleStarted = false
+	self.hideWelcomeMessage = false
 	self.lobbyTimeoutTime = 60 -- Seconds
 
 	self.battleFilterPassworded2 = true
@@ -424,6 +425,10 @@ function Configuration:ApplySettingsConfigPreset(preset)
 	end
 end
 
+function Configuration:SetTutorialComplete()
+	self.hideWelcomeMessage = true
+end
+
 ---------------------------------------------------------------------------------
 -- Widget interface callins
 ---------------------------------------------------------------------------------
@@ -490,6 +495,7 @@ function Configuration:GetConfigData()
 		autoLogin = self.autoLogin,
 		firstLoginEver = self.firstLoginEver,
 		wantAuthenticateWithSteam = self.wantAuthenticateWithSteam,
+		hideWelcomeMessage = self.hideWelcomeMessage,
 		useSteamBrowser = self.useSteamBrowser,
 		steamLinkComplete = self.steamLinkComplete,
 		alreadySeenFactionPopup4 = self.alreadySeenFactionPopup4,
