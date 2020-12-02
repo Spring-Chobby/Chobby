@@ -60,6 +60,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local BUTTON_SIDE_SPACING = 1 -- Matches tab panel handler and submenu handler
 	local buttonSpacingSmall = 0
 
+	local HOLDER_IMAGES = false -- shows holder images for the left menu and top bar
+
 	local IMAGE_TOP_BACKGROUND = LUA_DIRNAME .. "images/top-background.png"
 
 	local INVISIBLE_COLOR = {0, 0, 0, 0}
@@ -289,7 +291,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		children = {}
 	}
 
-	local buttonsHolder_image = Image:New {
+	local buttonsHolder_image = HOLDER_IMAGES and Image:New {
 		x = 0,
 		y = 0,
 		right = 0,
@@ -297,7 +299,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		file = IMAGE_TOP_BACKGROUND,
 		parent = mainWindow_buttonsHolder,
 		keepAspect = false,
-		color = {0.2, 0.2, 0.25, 0},
+		color = {0.2, 0.2, 0.25, 0.2},
 	}
 
 	local mainWindow_mainContent = Control:New {
@@ -388,7 +390,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-----------------------------------
 	-- Top image
 	-----------------------------------
-	local holder_topImage = Image:New {
+	local holder_topImage = HOLDER_IMAGES and Image:New {
 		x = 0,
 		y = 0,
 		right = 0,
@@ -396,7 +398,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		file = IMAGE_TOP_BACKGROUND,
 		parent = lobbyInterfaceHolder,
 		keepAspect = false,
-		color = {0.2, 0.2, 0.25, 0},
+		color = {0.2, 0.2, 0.25, 0.2},
 	}
 
 	-----------------------------------
@@ -605,9 +607,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			holder_mainWindow._relativeBounds.bottom = 0
 			holder_mainWindow:UpdateClientArea()
 
-			buttonsHolder_image:SetPos(nil, 0)
-			buttonsHolder_image._relativeBounds.bottom = 0
-			buttonsHolder_image:UpdateClientArea()
+			if buttonsHolder_image then
+				buttonsHolder_image:SetPos(nil, 0)
+				buttonsHolder_image._relativeBounds.bottom = 0
+				buttonsHolder_image:UpdateClientArea()
+			end
 
 			-- Align game title and status.
 			holder_heading:SetPos(0, topOffset, titleWidth, titleHeight)
@@ -618,7 +622,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			status_userWindow._relativeBounds.bottom = panelButtonsHeight
 			status_userWindow:UpdateClientArea()
 
-			holder_topImage:SetPos(nil, topOffset, nil, titleHeight + imageFudge)
+			if holder_topImage then
+				holder_topImage:SetPos(nil, topOffset, nil, titleHeight + imageFudge)
+			end
 		else
 			rightPanelHandler.Rescale(2, 55, nil, nil, buttonSpacingSmall)
 			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidthSmall)
@@ -658,9 +664,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			holder_mainWindow._relativeBounds.bottom = 0
 			holder_mainWindow:UpdateClientArea()
 
-			buttonsHolder_image:SetPos(nil, chatTabHolderHeight)
-			buttonsHolder_image._relativeBounds.bottom = 0
-			buttonsHolder_image:UpdateClientArea()
+			if buttonsHolder_image then
+				buttonsHolder_image:SetPos(nil, chatTabHolderHeight)
+				buttonsHolder_image._relativeBounds.bottom = 0
+				buttonsHolder_image:UpdateClientArea()
+			end
 
 			-- Align game title and status.
 			holder_heading:SetPos(0, topOffset, mainButtonsWidthSmall + padding, titleHeightSmall)
@@ -671,7 +679,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			status_userWindow._relativeBounds.bottom = 0
 			status_userWindow:UpdateClientArea()
 
-			holder_topImage:SetPos(nil, topOffset, nil, titleHeightSmall + imageFudge + chatTabHolderHeight)
+			if holder_topImage then
+				holder_topImage:SetPos(nil, topOffset, nil, titleHeightSmall + imageFudge + chatTabHolderHeight)
+			end
 		end
 
 		heading_image.file = Configuration:GetHeadingImage(doublePanelMode, mainWindowHandler.GetSubheadingName())
@@ -804,22 +814,32 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		holder_mainWindow._relativeBounds.bottom = 0
 		holder_mainWindow:UpdateClientArea()
 
-		holder_topImage:SetPos(nil, topOffset)
+		if holder_topImage then
+			holder_topImage:SetPos(nil, topOffset)
+		end
 		holder_heading:SetPos(nil, topOffset)
 		holder_status:SetPos(nil, topOffset)
 
 		if showTopBar then
-			buttonsHolder_image.color[4] = 0
-			buttonsHolder_image:Invalidate()
-			holder_topImage.color[4] = 0
-			holder_topImage:Invalidate()
+			if buttonsHolder_image then
+				buttonsHolder_image.color[4] = 0.2
+				buttonsHolder_image:Invalidate()
+			end
+			if holder_topImage then
+				holder_topImage.color[4] = 0.2
+				holder_topImage:Invalidate()
+			end
 		else
 			backgroundHolder:SetEnabled(true)
 			ingameBackgroundHolder:SetEnabled(false)
-			buttonsHolder_image.color[4] = 0
-			buttonsHolder_image:Invalidate()
-			holder_topImage.color[4] = 0
-			holder_topImage:Invalidate()
+			if buttonsHolder_image then
+				buttonsHolder_image.color[4] = 0.5
+				buttonsHolder_image:Invalidate()
+			end
+			if holder_topImage then
+				holder_topImage.color[4] = 0.5
+				holder_topImage:Invalidate()
+			end
 		end
 
 		local screenWidth, screenHeight = Spring.GetViewSizes()
@@ -860,30 +880,15 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-- Top bar initialisation
 	-------------------------------------------------------------------
 
-	local switchToGameButton = Button:New {
+	local function LeaveGameFunction()
+		Spring.Reload("")
+	end
+
+	local switchToMenuButton = Button:New {
 		y = 2,
 		right = 3,
 		width = 108,
 		height = 38,
-		name = "switchToGameButton",
-		caption = "Return to Battle",
-		font = WG.Chobby.Configuration:GetFont(4),
-		parent = holder_topBar,
-		resizable = false,
-		draggable = false,
-		padding = {0, 0, 0, 0},
-
-		OnClick = {
-			function ()
-				SetMainInterfaceVisible(false)
-			end
-		}
-	}
-	local switchToMenuButton = Button:New {
-		x = "30%",
-		right = "50.12%",
-		y = 3,
-		bottom = 11,
 		name = "switchToMenuButton",
 		caption = "Menu",
 		font = WG.Chobby.Configuration:GetFont(3),
@@ -898,14 +903,28 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			end
 		}
 	}
-
-	local function LeaveGameFunction()
-		Spring.Reload("")
-	end
-
-	local leaveGameButton = Button:New {
+	local switchToGameButton = Button:New {
 		x = "50.12%",
 		right = "30%",
+		y = 3,
+		bottom = 11,
+		name = "switchToGameButton",
+		caption = "Return to Battle",
+		font = WG.Chobby.Configuration:GetFont(4),
+		parent = holder_topBar,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+
+		OnClick = {
+			function ()
+				SetMainInterfaceVisible(false)
+			end
+		}
+	}
+	local leaveGameButton = Button:New {
+		x = "30%",
+		right = "50.12%",
 		y = 3,
 		bottom = 11,
 		name = "leaveGameButton",
