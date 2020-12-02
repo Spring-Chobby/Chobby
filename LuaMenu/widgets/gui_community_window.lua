@@ -297,7 +297,7 @@ local headingFormats = {
 	},
 }
 
-local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, topHeading, showBulletHeading)
+local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, showBulletHeading)
 	local linkString
 	local controls = {}
 
@@ -604,7 +604,7 @@ local function GetNewsHandler(parentControl, headingSize, timeAsTooltip, topHead
 			end
 
 			if not newsEntries[i] then
-				newsEntries[i] = GetNewsEntry(holder, i, headingSize, timeAsTooltip, topHeading, showBulletHeading)
+				newsEntries[i] = GetNewsEntry(holder, i, headingSize, timeAsTooltip, showBulletHeading)
 			end
 			offset = newsEntries[i].AddEntry(entry, offset)
 		end
@@ -754,16 +754,16 @@ function widget:ActivateGame()
 end
 
 local function DelayedInitialize()
-	if WG.Chobby.Configuration.firstBattleStarted then
-		WG.Chobby.interfaceRoot.OpenRightPanelTab("community")
-	end
+	--if WG.Chobby.Configuration.firstBattleStarted then
+	WG.Chobby.interfaceRoot.OpenRightPanelTab("welcome")
+	--end
 end
 
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
-	WG.Delay(DelayedInitialize, 0.2) -- After user handler
+	WG.Delay(DelayedInitialize, 0.6) -- After user handler
 
 	WG.CommunityWindow = CommunityWindow
 end

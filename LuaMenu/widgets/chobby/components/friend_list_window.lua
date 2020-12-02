@@ -126,24 +126,24 @@ function FriendListWindow:AddFriend(userName)
 end
 
 function FriendListWindow:OnFriend(userName)
--- 	interfaceRoot.GetRightPanelHandler().SetActivity("friends", lobby:GetFriendRequestCount())
+-- 	interfaceRoot.GetRightPanelHandler().SetActivity("profile", lobby:GetFriendRequestCount())
 	self:AddFriend(userName)
 end
 
 function FriendListWindow:OnUnfriend(userName)
--- 	interfaceRoot.GetRightPanelHandler().SetActivity("friends", lobby:GetFriendRequestCount())
+-- 	interfaceRoot.GetRightPanelHandler().SetActivity("profile", lobby:GetFriendRequestCount())
 	self:RemoveRow(userName)
 end
 
 function FriendListWindow:OnFriendList(friends)
--- 	interfaceRoot.GetRightPanelHandler().SetActivity("friends", lobby:GetFriendRequestCount())
+-- 	interfaceRoot.GetRightPanelHandler().SetActivity("profile", lobby:GetFriendRequestCount())
 	for _, userName in pairs(friends) do
 		self:AddFriend(userName)
 	end
 end
 
 function FriendListWindow:OnFriendRequest(userName)
--- 	interfaceRoot.GetRightPanelHandler().SetActivity("friends", lobby:GetFriendRequestCount())
+-- 	interfaceRoot.GetRightPanelHandler().SetActivity("profile", lobby:GetFriendRequestCount())
 	if WG.Chobby.Configuration:AllowNotification() then -- Do not filter out friends here, otherwise nothing makes sense.
 		local userControl = WG.UserHandler.GetNotificationUser(userName)
 		userControl:SetPos(20, 40, 250, 20)
