@@ -56,7 +56,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local autodetectDoublePanel = true
 	local wideContentPlace = false
 
-	local buttonSpacingLarge = 0 -- Matches tab panel handler and submenu handler
+	local buttonSpacingLarge = 1 -- Matches tab panel handler and submenu handler
 	local BUTTON_SIDE_SPACING = 1 -- Matches tab panel handler and submenu handler
 	local buttonSpacingSmall = 0
 
@@ -297,7 +297,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		file = IMAGE_TOP_BACKGROUND,
 		parent = mainWindow_buttonsHolder,
 		keepAspect = false,
-		color = {0.2, 0.2, 0.25, 0.18},
+		color = {0.2, 0.2, 0.25, 0},
 	}
 
 	local mainWindow_mainContent = Control:New {
@@ -396,14 +396,14 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		file = IMAGE_TOP_BACKGROUND,
 		parent = lobbyInterfaceHolder,
 		keepAspect = false,
-		color = {0.2, 0.2, 0.25, 0.18},
+		color = {0.2, 0.2, 0.25, 0},
 	}
 
 	-----------------------------------
 	-- Background holder is put here to be at the back
 	-----------------------------------
 	local backgroundHolder = Background(nil, nil, nil, "menuBackgroundBrightness")
-	local ingameBackgroundHolder = Background(IMAGE_TOP_BACKGROUND, {0, 0, 0, 0.5}, nil, "gameOverlayOpacity")
+	local ingameBackgroundHolder = Background(IMAGE_TOP_BACKGROUND, {0, 0, 0, 0.82}, nil, "gameOverlayOpacity")
 	ingameBackgroundHolder:Disable()
 
 	-------------------------------------------------------------------
@@ -484,6 +484,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	}
 
 	local function UpdateTitle(newTitle)
+		Spring.Echo("newTitle", newTitle, math.random())
 		heading_image.file = Configuration:GetHeadingImage(doublePanelMode, newTitle)
 		heading_image:Invalidate()
 	end
@@ -808,16 +809,16 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		holder_status:SetPos(nil, topOffset)
 
 		if showTopBar then
-			buttonsHolder_image.color[4] = 0.3
+			buttonsHolder_image.color[4] = 0
 			buttonsHolder_image:Invalidate()
-			holder_topImage.color[4] = 0.45
+			holder_topImage.color[4] = 0
 			holder_topImage:Invalidate()
 		else
 			backgroundHolder:SetEnabled(true)
 			ingameBackgroundHolder:SetEnabled(false)
-			buttonsHolder_image.color[4] = 0.1
+			buttonsHolder_image.color[4] = 0
 			buttonsHolder_image:Invalidate()
-			holder_topImage.color[4] = 0.25
+			holder_topImage.color[4] = 0
 			holder_topImage:Invalidate()
 		end
 
@@ -859,30 +860,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-- Top bar initialisation
 	-------------------------------------------------------------------
 
-	local switchToMenuButton = Button:New {
+	local switchToGameButton = Button:New {
 		y = 2,
 		right = 3,
 		width = 108,
 		height = 38,
-		name = "switchToMenuButton",
-		caption = "Menu",
-		font = WG.Chobby.Configuration:GetFont(3),
-		parent = ingameInterfaceHolder,
-		resizable = false,
-		draggable = false,
-		padding = {0, 0, 0, 0},
-
-		OnClick = {
-			function ()
-				SetMainInterfaceVisible(true)
-			end
-		}
-	}
-	local switchToGameButton = Button:New {
-		x = "30%",
-		right = "50.12%",
-		y = 3,
-		bottom = 11,
 		name = "switchToGameButton",
 		caption = "Return to Battle",
 		font = WG.Chobby.Configuration:GetFont(4),
@@ -894,6 +876,25 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		OnClick = {
 			function ()
 				SetMainInterfaceVisible(false)
+			end
+		}
+	}
+	local switchToMenuButton = Button:New {
+		x = "30%",
+		right = "50.12%",
+		y = 3,
+		bottom = 11,
+		name = "switchToMenuButton",
+		caption = "Menu",
+		font = WG.Chobby.Configuration:GetFont(3),
+		parent = ingameInterfaceHolder,
+		resizable = false,
+		draggable = false,
+		padding = {0, 0, 0, 0},
+
+		OnClick = {
+			function ()
+				SetMainInterfaceVisible(true)
 			end
 		}
 	}

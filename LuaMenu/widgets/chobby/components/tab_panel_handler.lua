@@ -19,7 +19,7 @@ function GetTabPanelHandler(name, conf)
 	local externalFunctions = {}
 
 	-- Matches interface root and submenu handler
-	local buttonSpacing = 0
+	local buttonSpacing = 1
 	local BUTTON_SIDE_SPACING = 1
 
 	-------------------------------------------------------------------
@@ -184,6 +184,7 @@ function GetTabPanelHandler(name, conf)
 		SetSubmenuDisplayVisibility(true)
 		buttonsHolder:SetVisibility(true)
 		if titleUpdateFunction then
+			Spring.Echo("Show", name)
 			titleUpdateFunction(name)
 		end
 		if startWithTabOpen then

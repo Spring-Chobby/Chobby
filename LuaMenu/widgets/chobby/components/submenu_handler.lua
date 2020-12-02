@@ -9,7 +9,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 	local buttonHeight = 70
 
 	-- Matches interface root and submenu handler
-	local buttonSpacing = 0
+	local buttonSpacing = 1
 	local BUTTON_SIDE_SPACING = 1
 
 	local buttonOffset = 50
@@ -18,14 +18,21 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 	-------------------------------------------------------------------
 	-- Local Functions
 	-------------------------------------------------------------------
+	local function SetTitle(newTitle)
+		if newTitle == title then
+			return
+		end
+		title = newTitle
+		titleUpdateFunction(title)
+	end
+
 	local function BackToMainMenu(panelHandler)
 		panelHandler.Hide()
 		if not buttonsHolder.visible then
 			buttonsHolder:Show()
 		end
 
-		titleUpdateFunction()
-		title = nil
+		SetTitle()
 
 		if panelWindow.children[1] and panelHandler.GetManagedControlByName(panelWindow.children[1].name) then
 			panelWindow:ClearChildren()
@@ -33,14 +40,6 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 				panelWindow:Hide()
 			end
 		end
-	end
-
-	local function SetTitle(newTitle)
-		if newTitle == title then
-			return
-		end
-		title = newTitle
-		titleUpdateFunction(title)
 	end
 
 	local function SetButtonPositionAndSize(index)
@@ -131,7 +130,7 @@ function GetSubmenuHandler(buttonWindow, panelWindow, submenuPanelWindow, submen
 			buttonsHolder:Show()
 		end
 		if titleUpdateFunction then
-			titleUpdateFunction()
+			SetTitle()
 		end
 
 		if clearMainWindow then
