@@ -126,14 +126,18 @@ local function GetAwardsHandler(parentControl, iconWidth, iconHeight, iconSpacin
 		imageList = {}
 		labelList = {}
 		for i = 1, #awardsList do
-			local imageName, count = GetEntryData(awardsList[i])
-			imageList[i] = Image:New{
+			local imageName, text, count = GetEntryData(awardsList[i])
+			local image = Image:New{
 				width = iconWidth,
 				height = iconHeight,
 				keepAspect = true,
 				file = imageName,
+				tooltip = text,
 				parent = parentControl,
 			}
+			function image:HitTest(x,y) return self end
+			imageList[i] = image
+
 			if count and count > 1 then
 				labelList[i] = Label:New {
 					width = iconWidth + 4,
@@ -183,8 +187,8 @@ local function GetProfileHandler()
 	}
 
 	local awardsHandler, awardsLabel
-	local GetAwardImage = WG.Chobby.Configuration.gameConfig.GetAward
-	if GetAwardImage then
+	local awardDecs = WG.Chobby.Configuration.gameConfig.awards
+	if awardDecs then
 		local awardsListHolder = Control:New{
 			x = 14,
 			y = 32,
@@ -194,7 +198,9 @@ local function GetProfileHandler()
 			parent = awardsHolder,
 		}
 		local function GetAwardInfo(entry)
-			return GetAwardImage(entry.AwardKey), entry.Collected
+			local data = (awardDecs[entry.AwardKey] or {})
+			Spring.Echo("entry.AwardKey", entry.AwardKey, data.image, data.text)
+			return data.image, data.text, entry.Collected
 		end
 		awardsHandler = GetAwardsHandler(awardsListHolder, 30, 40, 5, 12, GetAwardInfo, false)
 	end
@@ -211,7 +217,8 @@ local function GetProfileHandler()
 			parent = topHolder,
 		}
 		local function GetBadgeInfo(entry)
-			return (badgeDecs[entry] or {}).image
+			local data = (badgeDecs[entry] or {})
+			return data.image, data.text
 		end
 		badgesHandler = GetAwardsHandler(badgeHolder, 100, 40, 4, 0, GetBadgeInfo, true)
 	end
