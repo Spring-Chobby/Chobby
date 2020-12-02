@@ -99,6 +99,8 @@ local function AddLinkButton(scroll, name, tooltip, link, x, right, y, bottom)
 		caption = name,
 		tooltip = tooltip,
 		classname = "option_button",
+		align = "left",
+		alignPadding = 0.12,
 		font = WG.Chobby.Configuration:GetFont(3),
 		OnClick = {
 			function ()
@@ -642,15 +644,17 @@ local function InitializeControls(window)
 
 	local topWide     = GetScroll(window, 0, 0, 0, "31%", true)
 	local leftCenter  = GetScroll(window, 0, "66.6%", "69%", 0, false)
-	local midCenter   = GetScroll(window, "33.4%", "33.4%", "69%", 0, true)
-	local rightCenter = GetScroll(window, "66.6%", 0, "69%", 0, true)
+	local bottomRight = GetScroll(window, "33.4%", 0, "69%", 0, true)
+	--local midCenter   = GetScroll(window, "33.4%", "33.4%", "69%", 0, true)
+	--local rightCenter = GetScroll(window, "66.6%", 0, "69%", 0, true)
+	
 	--local lowerWide   = GetScroll(window, 0, 0, "69%", 0, true)
 	--local leftLower   = GetScroll(window, 0, "33.4%", "69%", 0, false)
 	--local rightLower  = GetScroll(window, "66.6%", 0, "69%", 0, false)
 	--LeaveIntentionallyBlank(rightLower, "(reserved)")
 
 	-- Populate link panel
-	AddLinkButton(leftCenter, "Site",    "Visit the Zero-K site.", "http://zero-k.info/", 0, 0, "75.5%", 0)
+	AddLinkButton(leftCenter, "Website",    "Visit the Zero-K website.", "http://zero-k.info/", 0, 0, "75.5%", 0)
 	AddLinkButton(leftCenter, "Forum",   "Browse or post on the forums.", "http://zero-k.info/Forum",   0, 0, "25.5%", "50.5%")
 	AddLinkButton(leftCenter, "Manual",  "Read the manual and unit guide.", "http://zero-k.info/mediawiki/index.php?title=Manual", 0, 0, "50.5%", "25.5%")
 	AddLinkButton(leftCenter, "Discord", "Chat on the Zero-K Discord server.", "https://discord.gg/aab63Vt", 0, 0, 0, "75.5%")
@@ -668,7 +672,7 @@ local function InitializeControls(window)
 	lobby:AddListener("OnNewsList", OnNewsList)
 
 	-- Forum Handler
-	local forumHandler = GetNewsHandler(midCenter, 2, true, "Recent Posts", true)
+	local forumHandler = GetNewsHandler(bottomRight, 2, true, "Recent Posts", true)
 	if staticCommunityData and staticCommunityData.ForumItems then
 		forumHandler.ReplaceNews(staticCommunityData.ForumItems)
 	end
@@ -679,15 +683,15 @@ local function InitializeControls(window)
 	lobby:AddListener("OnForumList", OnForumList)
 
 	-- Ladder Handler
-	local ladderHandler = GetLadderHandler(rightCenter)
-	if staticCommunityData and staticCommunityData.LadderItems then
-		ladderHandler.UpdateLadder(staticCommunityData.LadderItems)
-	end
-
-	local function OnLadderList(_, ladderItems)
-		ladderHandler.UpdateLadder(ladderItems)
-	end
-	lobby:AddListener("OnLadderList", OnLadderList)
+	--local ladderHandler = GetLadderHandler(rightCenter)
+	--if staticCommunityData and staticCommunityData.LadderItems then
+	--	ladderHandler.UpdateLadder(staticCommunityData.LadderItems)
+	--end
+	--
+	--local function OnLadderList(_, ladderItems)
+	--	ladderHandler.UpdateLadder(ladderItems)
+	--end
+	--lobby:AddListener("OnLadderList", OnLadderList)
 
 	-- Profile Handler
 	--local profileHandle = GetProfileHandler(lowerWide)
@@ -726,7 +730,7 @@ function CommunityWindow.GetControl()
 		},
 		OnResize = {
 			function(obj, xSize, ySize)
-				if ySize < 650 then
+				if ySize < 750 then
 					globalSizeMode = 1
 				else
 					globalSizeMode = 2

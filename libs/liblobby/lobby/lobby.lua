@@ -547,7 +547,7 @@ function Lobby:_OnRemoveUser(userName)
 	-- preserve isFriend/hasFriendRequest
 	local isFriend, hasFriendRequest = userInfo.isFriend, userInfo.hasFriendRequest
 	local persistentUserInfo = self:_GetPersistentUserInfo(userName)
-	self.users[userName] =persistentUserInfo
+	self.users[userName] = persistentUserInfo
 
 	if isFriend or hasFriendRequest then
 		userInfo = self:TryGetUser(userName)

@@ -9,10 +9,10 @@ function FriendListWindow:init(parent)
 	self.itemPadding = 0
 
 	self.btnSteamFriends = Button:New {
-		right = 5,
-		y = 7,
-		width = 180,
-		height = 45,
+		right = 4,
+		y = 4,
+		width = 170,
+		height = 42,
 		caption = i18n("invite_friends"),
 		font = Configuration:GetFont(3),
 		classname = "option_button",

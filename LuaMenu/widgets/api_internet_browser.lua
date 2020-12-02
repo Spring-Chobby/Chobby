@@ -35,19 +35,44 @@ local function IsZkSiteUrl(urlString)
 	return false
 end
 
-local function ApplySessionToken(urlString)
+local function NeedLogin(urlString)
 	if not IsZkSiteUrl(urlString) then
-		return urlString, false
+		return false
+	end
+	local isWiki = string.find(urlString, "/mediawiki/")
+	if isWiki then
+		return false
 	end
 	local lobby = WG.LibLobby.lobby
-	--if lobby:GetMyIsAdmin() then
-	--	return urlString, false -- Don't use tokens for admins
-	--end
 	local token = lobby:GetMySessionToken()
+	return (not token)
+end
+
+local function ApplySessionToken(urlString, requireToken, applyUserIDandName)
 	local isWiki = string.find(urlString, "/mediawiki/")
-	if isWiki or (not token) then
-		return urlString, not isWiki -- MediaWiki does not need token.
+	if (not IsZkSiteUrl(urlString)) or isWiki then
+		return urlString
 	end
+	
+	local lobby = WG.LibLobby.lobby
+	local token = lobby:GetMySessionToken()
+	if (not token) then
+		if requireToken then
+			return false
+		end
+		return urlString
+	end
+	
+	if applyUserIDandName then
+		local myInfo = lobby:GetMyInfo()
+		if myInfo.accountID then
+			urlString = string.gsub(urlString, "_USER_ID_", myInfo.accountID)
+		end
+		if myInfo.userName then
+			urlString = string.gsub(urlString, "_USER_NAME_", myInfo.userName)
+		end
+	end
+	
 	local alreadyAddedPos = string.find(urlString, "%?asmallcake=")
 	if alreadyAddedPos then
 		return string.sub(urlString, 0, alreadyAddedPos) .. token, false
@@ -64,13 +89,15 @@ end
 -- External Functions
 local BrowserHandler = {}
 
-function BrowserHandler.OpenUrl(rawUrlString)
-	local urlString, needLogin = ApplySessionToken(rawUrlString)
+function BrowserHandler.OpenUrl(rawUrlString, requireLogin, applyUserIDandName)
 	local Configuration = WG.Chobby.Configuration
 	if WG.WrapperLoopback then
-		if needLogin then
+		if NeedLogin(rawUrlString) then
 			local function TryClickAgain()
-				WG.BrowserHandler.OpenUrl(rawUrlString)
+				local processedUrl = ApplySessionToken(rawUrlString, requireLogin, applyUserIDandName)
+				if processedUrl then
+					WG.BrowserHandler.OpenUrl(processedUrl)
+				end
 			end
 			local function DelayedTryClickAgain()
 				WG.Delay(TryClickAgain, 0.05)
@@ -81,9 +108,16 @@ function BrowserHandler.OpenUrl(rawUrlString)
 			local function GoAnywayFunc()
 				WG.SteamHandler.OpenUrlIfActive(urlString)
 			end
-			WG.Chobby.ConfirmationPopup(LoginFunc, "Log in first to access more site features.", nil, 315, 200, "Log In", "Not Now", GoAnywayFunc)
+			if requireLogin then
+				WG.Chobby.ConfirmationPopup(LoginFunc, "Log in required.", nil, 315, 200, "Log In", "Cancel")
+			else
+				WG.Chobby.ConfirmationPopup(LoginFunc, "Log in first to access more site features.", nil, 315, 200, "Log In", "Not Now", GoAnywayFunc)
+			end
 		else
-			WG.SteamHandler.OpenUrlIfActive(urlString)
+			local processedUrl = ApplySessionToken(rawUrlString, requireLogin, applyUserIDandName)
+			if processedUrl then
+				WG.SteamHandler.OpenUrlIfActive(processedUrl)
+			end
 		end
 	else
 		Spring.SetClipboard(urlString)

@@ -15,16 +15,18 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- Panels
+-- Vars
 
 local friendPanel
 local profilePanel
+
+local globalSizeMode = 2
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Controls
 
-local function GetScroll(window, x, right, y, bottom, verticalScrollbar)
+local function GetScroll(window, x, right, y, bottom, verticalScrollbar, customPadding)
 	local holder = Control:New {
 		x = x,
 		y = y,
@@ -40,7 +42,7 @@ local function GetScroll(window, x, right, y, bottom, verticalScrollbar)
 		bottom = 2,
 		horizontalScrollbar = false,
 		verticalScrollbar = verticalScrollbar,
-		padding = {0, 0, 0, 0},
+		padding = customPadding or {4, 4, 4, 4},
 		--borderColor = hideBorder and {0,0,0,0},
 		--OnResize = {
 		--	function()
@@ -50,15 +52,46 @@ local function GetScroll(window, x, right, y, bottom, verticalScrollbar)
 	}
 end
 
+local function AddLinkButton(scroll, name, tooltip, link, requireLogin, x, right, y, bottom)
+	local button = Button:New {
+		x = x,
+		y = y,
+		right = right,
+		bottom = bottom,
+		caption = name,
+		tooltip = tooltip,
+		classname = "option_button",
+		font = WG.Chobby.Configuration:GetFont(3),
+		align = "left",
+		alignPadding = 0.075,
+		OnClick = {
+			function ()
+				WG.BrowserHandler.OpenUrl(link, requireLogin, requireLogin)
+			end
+		},
+		OnResize = {
+			function(obj, xSize, ySize)
+				if globalSizeMode == 2 then
+					ButtonUtilities.SetFontSizeScale(obj, 4)
+				else
+					ButtonUtilities.SetFontSizeScale(obj, 3)
+				end
+			end
+		},
+		parent = scroll,
+	}
+	ButtonUtilities.SetFontSizeScale(button, 3)
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Profile
 
 --{"Name":"GoogleFrog","Awards":[{"AwardKey":"cap","Collected":51},{"AwardKey":"reclaim","Collected":977},{"AwardKey":"pwn","Collected":1824},{"AwardKey":"vet","Collected":362},{"AwardKey":"kam","Collected":70},{"AwardKey":"ouch","Collected":952},{"AwardKey":"shell","Collected":267},{"AwardKey":"terra","Collected":278},{"AwardKey":"navy","Collected":77},{"AwardKey":"nux","Collected":16},{"AwardKey":"fire","Collected":133},{"AwardKey":"air","Collected":74},{"AwardKey":"emp","Collected":112},{"AwardKey":"share","Collected":4},{"AwardKey":"mex","Collected":758},{"AwardKey":"comm","Collected":84},{"AwardKey":"rezz","Collected":3},{"AwardKey":"friend","Collected":1},{"AwardKey":"head","Collected":8},{"AwardKey":"dragon","Collected":2},{"AwardKey":"sweeper","Collected":2},{"AwardKey":"heart","Collected":2},{"AwardKey":"mexkill","Collected":142},{"AwardKey":"slow","Collected":156},{"AwardKey":"silver","Collected":6},{"AwardKey":"bronze","Collected":3},{"AwardKey":"gold","Collected":1}],"Badges":["dev_adv","donator_0"],"Level":133,"LevelUpRatio":"0.69","EffectiveElo":2312,"EffectiveMmElo":2234,"EffectivePwElo":1670,"Kudos":724,"PwMetal":"5105.00","PwDropships":"74.00","PwBombers":"17.00","PwWarpcores":"0.00"}
 
-local function GetAwardsHandler(parentControl, iconWidth, iconHeight, GetEntryData)
+local function GetAwardsHandler(parentControl, iconWidth, iconHeight, iconSpacing, textOffset, GetEntryData, centerAlign)
 	local fontsize = WG.Chobby.Configuration:GetFont(1).size
-	local imageList
+	local imageList, labelList
 	local externalFunctions = {}
 
 	function externalFunctions.PositionAwards()
@@ -66,20 +99,32 @@ local function GetAwardsHandler(parentControl, iconWidth, iconHeight, GetEntryDa
 			return
 		end
 
-		local gridWidth = math.floor(parentControl.width/(iconWidth + 2))
+		local gridWidth = math.floor(parentControl.width/(iconWidth + iconSpacing))
 		if gridWidth < 1 then
 			return
 		end
 
+		local leftEdge = 0
+		if centerAlign then
+			local awardCount = math.min(gridWidth, #imageList)
+			leftEdge = (parentControl.width - (iconWidth*awardCount + iconSpacing*(awardCount - 1)))/2
+			--Spring.Echo("awardCount", awardCount, "pw", parentControl.width, "icon", iconWidth*awardCount + iconSpacing*(awardCount - 1), "le", leftEdge)
+		end
+
 		for i = 1, #imageList do
-			local x, y = (iconWidth + 2)*((i - 1)%gridWidth), (iconHeight + 2)*math.floor((i - 1)/gridWidth)
+			local x, y = (iconWidth + iconSpacing)*((i - 1)%gridWidth) + leftEdge, (iconHeight + textOffset + iconSpacing)*math.floor((i - 1)/gridWidth)
 			imageList[i]:SetPos(x, y)
+			
+			if labelList[i] then
+				labelList[i]:SetPos(x, y + iconHeight - 1, iconWidth + 4) -- Width makes align work correctly.
+			end
 		end
 	end
 
 	function externalFunctions.SetAwards(awardsList)
 		parentControl:ClearChildren()
 		imageList = {}
+		labelList = {}
 		for i = 1, #awardsList do
 			local imageName, count = GetEntryData(awardsList[i])
 			imageList[i] = Image:New{
@@ -90,15 +135,13 @@ local function GetAwardsHandler(parentControl, iconWidth, iconHeight, GetEntryDa
 				parent = parentControl,
 			}
 			if count and count > 1 then
-				Label:New {
-					x = 2,
-					y = "60%",
-					right = 2,
-					bottom = 6,
-					align = "right",
+				labelList[i] = Label:New {
+					width = iconWidth + 4,
+					height = fontsize,
+					align = "center",
 					fontsize = fontsize,
 					caption = count,
-					parent = imageList[i],
+					parent = parentControl,
 				}
 			end
 		end
@@ -108,7 +151,6 @@ local function GetAwardsHandler(parentControl, iconWidth, iconHeight, GetEntryDa
 end
 
 local function GetProfileHandler()
-
 	local holder = Control:New{
 		x = 0,
 		y = 0,
@@ -116,47 +158,62 @@ local function GetProfileHandler()
 		bottom = 0,
 		padding = {0,0,0,0},
 	}
+	local awardsHolder = Control:New{
+		x = 10,
+		y = "53%",
+		right = 6,
+		bottom = 0,
+		padding = {0,0,0,0},
+		parent = holder,
+	}
+	local topHolder = Control:New{
+		x = 0,
+		y = "8%",
+		right = 0,
+		bottom = "47%",
+		parent = holder,
+	}
 	local nameHolder = Control:New{
 		x = "36%",
-		y = "7%",
+		y = 0,
 		right = 0,
 		height = 28,
 		padding = {0,0,0,0},
-		parent = holder,
+		parent = topHolder,
 	}
 
 	local awardsHandler, awardsLabel
 	local GetAwardImage = WG.Chobby.Configuration.gameConfig.GetAward
 	if GetAwardImage then
-		local awardsHolder = Control:New{
-			x = 10,
-			y = "60%",
-			right = 6,
+		local awardsListHolder = Control:New{
+			x = 14,
+			y = 32,
+			right = 10,
 			bottom = 0,
-			padding = {0,0,0,0},
-			parent = holder,
+			padding = {2,2,2,2},
+			parent = awardsHolder,
 		}
 		local function GetAwardInfo(entry)
 			return GetAwardImage(entry.AwardKey), entry.Collected
 		end
-		awardsHandler = GetAwardsHandler(awardsHolder, 42, 42, GetAwardInfo)
+		awardsHandler = GetAwardsHandler(awardsListHolder, 30, 40, 5, 12, GetAwardInfo, false)
 	end
 
 	local badgesHandler
 	local badgeDecs = WG.Chobby.Configuration.gameConfig.badges
 	if badgeDecs then
 		local badgeHolder = Control:New{
-			x = "35%",
-			y = "46%",
+			x = 0,
 			right = 0,
-			height = 30,
-			padding = {0,0,0,0},
-			parent = holder,
+			height = 44,
+			bottom = 0,
+			padding = {2,2,2,2},
+			parent = topHolder,
 		}
 		local function GetBadgeInfo(entry)
 			return (badgeDecs[entry] or {}).image
 		end
-		badgesHandler = GetAwardsHandler(badgeHolder, 52, 28, GetBadgeInfo)
+		badgesHandler = GetAwardsHandler(badgeHolder, 100, 40, 4, 0, GetBadgeInfo, true)
 	end
 
 	local experienceBar, rankBar, backgroundImage
@@ -166,13 +223,13 @@ local function GetProfileHandler()
 			x = "24%",
 			y = yPos,
 			right = "24%",
-			height = 20,
+			height = 26,
 			value = 0,
 			max = 1,
 			caption = "Level " .. 2,
 			tooltip = tooltip,
 			font = WG.Chobby.Configuration:GetFont(2),
-			parent = holder,
+			parent = topHolder,
 		}
 		function progressBar:HitTest(x,y) return self end
 		return progressBar
@@ -181,6 +238,9 @@ local function GetProfileHandler()
 	local function DoResize()
 		if awardsHandler then
 			awardsHandler.PositionAwards()
+		end
+		if badgesHandler then
+			badgesHandler.PositionAwards()
 		end
 	end
 
@@ -192,8 +252,8 @@ local function GetProfileHandler()
 		local rank = profileData.Rank
 		local rankProgress = tonumber(profileData.RankUpRatio) or 0
 
-		experienceBar = experienceBar or MakeProgressBar("22%", "Your level. Play on the server to level up.")
-		rankBar = rankBar or MakeProgressBar("34%", "Your skill rating and progress to the next rank.")
+		experienceBar = experienceBar or MakeProgressBar("24%", "Your level. Play games on the server to level up.")
+		rankBar = rankBar or MakeProgressBar("48%", "Your skill rating and progress to the next rank.")
 
 		experienceBar:SetCaption("Level " .. (level or "??"))
 		experienceBar:SetValue(levelProgress)
@@ -204,13 +264,13 @@ local function GetProfileHandler()
 			if not awardsLabel then
 				awardsLabel = Label:New {
 					x = 5,
-					y = "48%",
+					y = 5,
 					width = 80,
 					height = 22,
 					align = "right",
 					fontsize = WG.Chobby.Configuration:GetFont(2).size,
 					caption = "Awards:",
-					parent = holder,
+					parent = awardsHolder,
 				}
 			end
 		end
@@ -267,13 +327,30 @@ local function InitializeControls(window)
 		return
 	end
 
-	local upperHalf   = GetScroll(window, 0, 0, 0, "45%", false)
-	local lowerHalf   = GetScroll(window, 0, 0, "55%", 0, false)
-	
+	local upperHalf   = GetScroll(window, 0, 0, 0, "38.5%", false, {0, 0, 0, 0})
+	local lowerLeft   = GetScroll(window, 0, "50%", "61.5%", 0, false)
+	local lowerRight  = GetScroll(window, "50%", 0, "61.5%", 0, false, {0, 0, 0, 0})
+
 	profilePanel.SetParent(upperHalf)
-	lowerHalf:AddChild(friendPanel.window)
-	
-	-- Profile Handler
+	lowerRight:AddChild(friendPanel.window)
+
+	--https://zero-k.info/Clans
+	--https://zero-k.info/My/Commanders
+	--https://zero-k.info/Battles?Title=&Map=&PlayersFrom=&PlayersTo=&Age=0&Mission=0&Bots=0&Rank=8&Victory=0&UserId=15114
+	--https://zero-k.info/Charts/Ratings?RatingCategory=1&UserId=15114
+	--https://zero-k.info/Forum?CategoryID=&Search=&OnlyUnread=false&User=GoogleFrog&grorder=&grdesc=False&grpage=1
+
+	-- Populate link panel
+	AddLinkButton(lowerLeft, "Com Loadout", "Edit custom commanders for use in games on the Zero-K server.",
+		"https://zero-k.info/My/Commanders", true, 0, 0, 0, "80.5%")
+	AddLinkButton(lowerLeft, "Ladder Ratings",  "View detailed ladder statistics and charts.",
+		"https://zero-k.info/Charts/Ratings?RatingCategory=1&UserId=_USER_ID_", true, 0, 0, "20.5%", "60.5%")
+	AddLinkButton(lowerLeft, "Replay List",     "View and comment on your recent games on the Zero-K server.",
+		"https://zero-k.info/Battles?Title=&Map=&PlayersFrom=&PlayersTo=&Age=0&Mission=0&Bots=0&Rank=8&Victory=0&UserId=_USER_ID_", true, 0, 0, "40.5%", "40.5%")
+	AddLinkButton(lowerLeft, "Recent Posts",    "View your recently posted in forum threads.",
+		"https://zero-k.info/Forum?CategoryID=&Search=&OnlyUnread=false&User=_USER_NAME_&grorder=&grdesc=False&grpage=1", true, 0, 0, "60.5%", "20.5%")
+	AddLinkButton(lowerLeft, "Clan List",       "View the list of clans.",
+		"https://zero-k.info/Clans", false, 0, 0, "80.5%", 0)
 end
 
 --------------------------------------------------------------------------------
@@ -294,6 +371,15 @@ function FriendWindow.GetControl()
 			function(obj)
 				if obj:IsEmpty() then
 					InitializeControls(obj)
+				end
+			end
+		},
+		OnResize = {
+			function(obj, xSize, ySize)
+				if ySize < 750 then
+					globalSizeMode = 1
+				else
+					globalSizeMode = 2
 				end
 			end
 		}
