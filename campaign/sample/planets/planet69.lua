@@ -110,7 +110,10 @@ local function GetPlanet(planetUtilities, planetID)
 			codexEntries = {
 				"entry_first"
 			},
-			completionFunction = function ()
+			completionFunction = function (isGameLoad)
+				if isGameLoad then
+					return
+				end
 				local Configuration = WG.Chobby and WG.Chobby.Configuration
 				if Configuration then
 					Configuration:SetTutorialComplete()
