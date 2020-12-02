@@ -234,8 +234,8 @@ local function GetTutorialControl()
 	}
 
 	TextBox:New {
-		x = 28,
-		right = 28,
+		x = 8,
+		right = 8,
 		y = 76,
 		height = 35,
 		fontsize = Configuration:GetFont(2).size,
@@ -244,8 +244,8 @@ local function GetTutorialControl()
 	}
 
 	TextBox:New {
-		x = 28,
-		right = 28,
+		x = 8,
+		right = 8,
 		y = 190,
 		height = 35,
 		fontsize = Configuration:GetFont(2).size,
@@ -261,7 +261,7 @@ local function GetTutorialControl()
 		end
 	end
 
-	local offset = 266
+	local offset = 252
 	Button:New {
 		x = "18%",
 		y = offset,

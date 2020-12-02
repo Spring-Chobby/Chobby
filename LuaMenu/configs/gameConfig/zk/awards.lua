@@ -104,27 +104,27 @@ local awards = {
 		image = "LuaMenu/configs/gameConfig/zk/awards/trophy_friend.png",
 	},
 	gold = {
-		text = "Gold Cup - 1st place in tournament",
+		text = "Gold Cup - 1st place in a tournament",
 		image = "LuaMenu/configs/gameConfig/zk/awards/trophy_gold.png",
 	},
 	silver = {
-		text = "Silver Cup - 2nd place in tournament",
+		text = "Silver Cup - 2nd place in a tournament",
 		image = "LuaMenu/configs/gameConfig/zk/awards/trophy_silver.png",
 	},
 	bronze = {
-		text = "Bronze Cup - 3rd place in tournament",
+		text = "Bronze Cup - 3rd place in a tournament",
 		image = "LuaMenu/configs/gameConfig/zk/awards/trophy_bronze.png",
 	},
 	goldcoin = {
-		text = "Gold Coin - 1st place in event",
+		text = "Gold Coin - 1st place in an event",
 		image = "LuaMenu/configs/gameConfig/zk/awards/trophy_goldcoin.png",
 	},
 	silvercoin = {
-		text = "Silver Coin - 2nd place in event",
+		text = "Silver Coin - 2nd place in an event",
 		image = "LuaMenu/configs/gameConfig/zk/awards/trophy_silvercoin.png",
 	},
 	bronzecoin = {
-		text = "Bronze Coin - 3rd place in event",
+		text = "Bronze Coin - 3rd place in an event",
 		image = "LuaMenu/configs/gameConfig/zk/awards/trophy_bronzecoin.png",
 	},
 }
