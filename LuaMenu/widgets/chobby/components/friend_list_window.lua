@@ -5,7 +5,7 @@ function FriendListWindow:init(parent)
 
 	self:SetMinItemWidth(240)
 	self.columns = 3
-	self.itemHeight = 82
+	self.itemHeight = 32
 	self.itemPadding = 0
 
 	self.btnSteamFriends = Button:New {

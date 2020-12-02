@@ -63,7 +63,7 @@ local function AddLinkButton(scroll, name, tooltip, link, requireLogin, x, right
 		classname = "option_button",
 		font = WG.Chobby.Configuration:GetFont(3),
 		align = "left",
-		alignPadding = 0.075,
+		alignPadding = 0.085,
 		OnClick = {
 			function ()
 				WG.BrowserHandler.OpenUrl(link, requireLogin, requireLogin)
@@ -328,20 +328,14 @@ local function InitializeControls(window)
 	end
 
 	local upperHalf   = GetScroll(window, 0, 0, 0, "38.5%", false, {0, 0, 0, 0})
-	local lowerLeft   = GetScroll(window, 0, "50%", "61.5%", 0, false)
-	local lowerRight  = GetScroll(window, "50%", 0, "61.5%", 0, false, {0, 0, 0, 0})
+	local lowerLeft   = GetScroll(window, 0, "60%", "61.5%", 0, false)
+	local lowerRight  = GetScroll(window, "40%", 0, "61.5%", 0, false, {0, 0, 0, 0})
 
 	profilePanel.SetParent(upperHalf)
 	lowerRight:AddChild(friendPanel.window)
 
-	--https://zero-k.info/Clans
-	--https://zero-k.info/My/Commanders
-	--https://zero-k.info/Battles?Title=&Map=&PlayersFrom=&PlayersTo=&Age=0&Mission=0&Bots=0&Rank=8&Victory=0&UserId=15114
-	--https://zero-k.info/Charts/Ratings?RatingCategory=1&UserId=15114
-	--https://zero-k.info/Forum?CategoryID=&Search=&OnlyUnread=false&User=GoogleFrog&grorder=&grdesc=False&grpage=1
-
 	-- Populate link panel
-	AddLinkButton(lowerLeft, "Com Loadout", "Edit custom commanders for use in games on the Zero-K server.",
+	AddLinkButton(lowerLeft, "Edit Commander", "Edit custom commanders for use in games on the Zero-K server.",
 		"https://zero-k.info/My/Commanders", true, 0, 0, 0, "80.5%")
 	AddLinkButton(lowerLeft, "Ladder Ratings",  "View detailed ladder statistics and charts.",
 		"https://zero-k.info/Charts/Ratings?RatingCategory=1&UserId=_USER_ID_", true, 0, 0, "20.5%", "60.5%")
@@ -376,7 +370,7 @@ function FriendWindow.GetControl()
 		},
 		OnResize = {
 			function(obj, xSize, ySize)
-				if ySize < 750 then
+				if ySize < 12750 then -- Never used
 					globalSizeMode = 1
 				else
 					globalSizeMode = 2

@@ -730,7 +730,7 @@ function CommunityWindow.GetControl()
 		},
 		OnResize = {
 			function(obj, xSize, ySize)
-				if ySize < 750 then
+				if ySize < 12750 then -- Never used
 					globalSizeMode = 1
 				else
 					globalSizeMode = 2

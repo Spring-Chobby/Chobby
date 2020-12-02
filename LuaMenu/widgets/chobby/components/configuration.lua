@@ -33,7 +33,7 @@ function Configuration:init()
 	self.userListWidth = 205 -- Main user list width. Possibly configurable in the future.
 	self.chatMaxNameLength = 185 -- Pixels
 	self.statusMaxNameLength = 185
-	self.friendMaxNameLength = 230
+	self.friendMaxNameLength = 290
 	self.notificationMaxNameLength = 230
 	self.steamOverlayEnablable = (Platform.osFamily ~= "Linux" and Platform.osFamily ~= "FreeBSD")
 
