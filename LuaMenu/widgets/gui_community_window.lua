@@ -261,7 +261,7 @@ local function GetTutorialControl()
 		end
 	end
 
-	local offset = 252
+	local offset = 255
 	Button:New {
 		x = "18%",
 		y = offset,
