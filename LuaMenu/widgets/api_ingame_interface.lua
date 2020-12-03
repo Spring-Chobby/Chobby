@@ -213,12 +213,7 @@ local function HandleReport(msg)
 		return
 	end
 	
-	WG.ReportPanel.OpenReportWindow(data[2], data[3])
-	local interfaceRoot = WG.Chobby and WG.Chobby.interfaceRoot
-	if interfaceRoot then
-		interfaceRoot.SetMainInterfaceVisible(true)
-	end
-	
+	WG.ReportPanel.OpenReportWindow(data[2], data[3], true)
 	return true
 end
 

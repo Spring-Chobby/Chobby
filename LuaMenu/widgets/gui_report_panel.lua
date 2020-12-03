@@ -14,15 +14,19 @@ end
 --------------------------------------------------------------------------------
 -- Window Handler
 
-local function CreateReportWindow(userName, extraText)
+local function CreateReportWindow(parentHolder, userName, extraText, usePopupBackground)
+	if parentHolder:GetChildByName("reportWindow") then
+		return
+	end
+	
 	local Configuration = WG.Chobby.Configuration
 
 	local reportWindow = Window:New {
 		caption = "",
 		name = "reportWindow",
-		parent = WG.Chobby.lobbyInterfaceHolder,
-		width = 520,
-		height = 282,
+		parent = parentHolder,
+		width = 540,
+		height = 270,
 		resizable = false,
 		draggable = false,
 		classname = "main_window",
@@ -36,37 +40,38 @@ local function CreateReportWindow(userName, extraText)
 		height = 30,
 		align = "center",
 		font = Configuration:GetFont(3),
-		caption = "Report " .. userName,
+		caption = "Reporting " .. userName,
 		parent = reportWindow,
 	}
-	offset = offset + 42
+	offset = offset + 44
 
 	TextBox:New {
 		x = 26,
 		right = 24,
 		y = offset,
 		height = 35,
-		text ="Reason:",
+		text = "Reason:",
 		fontsize = Configuration:GetFont(3).size,
 		parent = reportWindow,
 	}
-	offset = offset + 36
+	offset = offset + 38
 	local titleBox = EditBox:New {
 		x = 24,
 		right = 24,
 		y = offset - 9,
 		height = 35,
 		text = "",
+		hint = "Enter report reason",
 		font = Configuration:GetFont(3),
 		parent = reportWindow,
 	}
-	offset = offset + 40
+	offset = offset + 38
 	Label:New {
 		x = 26,
 		right = 24,
 		y = offset,
 		height = 35,
-		caption = (extraText and ("Metadata: " .. extraText)) or "",
+		caption = extraText or "",
 		fontsize = Configuration:GetFont(3).size,
 		parent = reportWindow,
 	}
@@ -88,7 +93,7 @@ local function CreateReportWindow(userName, extraText)
 		width = 135,
 		bottom = 1,
 		height = 70,
-		caption = i18n("send"),
+		caption = i18n("submit"),
 		font = WG.Chobby.Configuration:GetFont(3),
 		parent = reportWindow,
 		classname = "action_button",
@@ -115,7 +120,15 @@ local function CreateReportWindow(userName, extraText)
 		},
 	}
 
-	local popupHolder = WG.Chobby.PriorityPopup(reportWindow, CancelFunc, AcceptFunc)
+	if usePopupBackground then
+		WG.Chobby.PriorityPopup(reportWindow, CancelFunc, AcceptFunc, parentHolder)
+	else
+		local screenWidth, screenHeight = Spring.GetViewGeometry()
+		reportWindow:SetPos(
+			math.floor((screenWidth - reportWindow.width)/2),
+			math.floor((screenHeight - reportWindow.height)/2)
+		)
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -124,8 +137,12 @@ end
 
 local ReportPanel = {}
 
-function ReportPanel.OpenReportWindow(userName, extraText)
-	CreateReportWindow(userName, extraText)
+function ReportPanel.OpenReportWindow(userName, extraText, isIngame)
+	if isIngame then
+		CreateReportWindow(WG.Chobby.interfaceRoot.GetIngameInterfaceHolder(), userName, extraText, false)
+	else
+		CreateReportWindow(WG.Chobby.lobbyInterfaceHolder, userName, extraText, true)
+	end
 end
 
 --------------------------------------------------------------------------
