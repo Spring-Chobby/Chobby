@@ -42,6 +42,7 @@ local LOAD_FILENAME = "loadFilename "
 local RESTART_GAME = "restartGame"
 local GAME_INIT = "ingameInfoInit"
 local GAME_START = "ingameInfoStart"
+local REPORT_USER = "reportUser"
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -201,6 +202,28 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Reporting
+
+local function HandleReport(msg)
+	if string.find(msg, REPORT_USER) ~= 1 then
+		return
+	end
+	local data = msg:split("_")
+	if not (data and data[3]) then
+		return
+	end
+	
+	WG.ReportPanel.OpenReportWindow(data[2], data[3])
+	local interfaceRoot = WG.Chobby and WG.Chobby.interfaceRoot
+	if interfaceRoot then
+		interfaceRoot.SetMainInterfaceVisible(true)
+	end
+	
+	return true
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Callins
 
 function widget:RecvLuaMsg(msg)
@@ -226,6 +249,9 @@ function widget:RecvLuaMsg(msg)
 		return
 	end
 	if HandleGameInfoStart(msg) then
+		return
+	end
+	if HandleReport(msg) then
 		return
 	end
 end

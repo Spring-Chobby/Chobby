@@ -195,7 +195,7 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl, showTea
 			comboOptions[#comboOptions + 1] = "User Page"
 		end
 
-		if userInfo.accountID and Configuration.gameConfig.link_reportPlayer ~= nil then
+		if Configuration.gameConfig.link_reportPlayer ~= nil then
 			comboOptions[#comboOptions + 1] = "Report"
 		end
 
@@ -624,10 +624,7 @@ local function GetUserControls(userName, opts)
 							end
 						})
 					elseif selectedName == "Report" and Configuration.gameConfig.link_reportPlayer ~= nil then
-						local userInfo = userControls.lobby:GetUser(userName) or {}
-						if userInfo.accountID then
-							WG.BrowserHandler.OpenUrl(Configuration.gameConfig.link_reportPlayer(userInfo.accountID))
-						end
+						WG.ReportPanel.OpenReportWindow(userName)
 					elseif selectedName == "Unignore" then
 						userControls.lobby:Unignore(userName)
 					elseif selectedName == "Ignore" then

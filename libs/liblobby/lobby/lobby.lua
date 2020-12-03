@@ -208,6 +208,10 @@ function Lobby:Unignore(userName)
 	return self
 end
 
+function Lobby:ReportUser(userName, text)
+	return self
+end
+
 ------------------------
 -- Battle commands
 ------------------------

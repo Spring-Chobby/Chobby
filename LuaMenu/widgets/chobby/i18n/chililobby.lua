@@ -4,6 +4,7 @@ return {
 		-- general
 		ok = "OK",
 		cancel = "Cancel",
+		send = "Send",
 		to_front = "To Front",
 		retry = "Retry",
 		reset = "Reset",

@@ -187,6 +187,17 @@ function Interface:Unignore(userName)
 	return self
 end
 
+function Interface:ReportUser(userName, text)
+	self:super("ReportUser", userName, text)
+	local sendData = {
+		Username = userName,
+		Text = text,
+	}
+
+	self:_SendCommand("UserReport " .. json.encode(sendData))
+	return self
+end
+
 ------------------------
 -- Battle commands
 ------------------------
