@@ -198,6 +198,7 @@ function Configuration:init()
 	self.simplifiedSkirmishSetup = true
 	self.debugMode = false
 	self.devMode = (VFS.FileExists("devmode.txt") and true) or false
+	self.debugRawMessages = false
 	self.enableProfiler = false
 	self.showPlanetUnlocks = false
 	self.showPlanetCodex = false
@@ -521,6 +522,7 @@ function Configuration:GetConfigData()
 		simplifiedSkirmishSetup = self.simplifiedSkirmishSetup,
 		debugMode = self.debugMode,
 		debugAutoWin = self.debugAutoWin,
+		debugRawMessages = self.debugRawMessages,
 		enableProfiler = self.enableProfiler,
 		showPlanetUnlocks = self.showPlanetUnlocks,
 		showPlanetCodex = self.showPlanetCodex,
