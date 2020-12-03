@@ -194,8 +194,16 @@ skin.combobox_scrollpanel = {
 
 
 skin.combobox_item = {
-	clone       = "button";
-	borderColor = {1, 1, 1, 0};
+  TileImageBK = ":cl:tech_button_small_square_bk.png",
+  TileImageFG = ":cl:tech_button_small_square_fg.png",
+  tiles = {20, 14, 20, 14}, --// tile widths: left,top,right,bottom
+  padding = {10, 10, 10, 10},
+
+  backgroundColor = {0.1, 0.1, 0.1, 0.84},
+  focusColor  = {0.94, 0.50, 0.23, 0.72},
+  borderColor = {1,1,1,0},
+
+  DrawControl = DrawButton,
 }
 
 

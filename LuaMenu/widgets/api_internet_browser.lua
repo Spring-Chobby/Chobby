@@ -109,7 +109,7 @@ function BrowserHandler.OpenUrl(rawUrlString, requireLogin, applyUserIDandName)
 				WG.SteamHandler.OpenUrlIfActive(urlString)
 			end
 			if requireLogin then
-				WG.Chobby.ConfirmationPopup(LoginFunc, "Log in required.", nil, 315, 200, "Log In", "Cancel")
+				WG.Chobby.ConfirmationPopup(LoginFunc, "You must log in to view this page.", nil, 315, 200, "Log In", "Cancel")
 			else
 				WG.Chobby.ConfirmationPopup(LoginFunc, "Log in first to access more site features.", nil, 315, 200, "Log In", "Not Now", GoAnywayFunc)
 			end

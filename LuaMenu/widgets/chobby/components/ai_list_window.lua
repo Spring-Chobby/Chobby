@@ -70,6 +70,7 @@ function AiListWindow:AddAiToList(ai, blackList, oldAiVersions, isRunning64Bit)
 		tooltip = Configuration.gameConfig.aiTooltip[displayName]
 	end
 	local addAIButton = Button:New {
+		classname = "button_rounded",
 		x = 0,
 		y = 0,
 		width = "100%",
