@@ -37,7 +37,7 @@ local function GetPlanet(planetUtilities, planetID)
 			},
 			{
 				image = "unitpics/amphimpulse.png",
-				text = [[Archers fire water jets which push enemy units away. If a non-amphibious unit is pushed into water it will become helpless - keep this in mind!]]
+				text = [[Archers fire sonic blasts which push enemy units away. If a non-amphibious unit is pushed into water it will become helpless - keep this in mind!]]
 			},
 			{
 				image = "unitpics/amphbomb.png",
