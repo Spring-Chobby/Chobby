@@ -1,5 +1,7 @@
 AiListWindow = ListWindow:extends{}
 
+local IMG_SETTINGS = LUA_DIRNAME .. "images/settings.png"
+
 function AiListWindow:init(gameName)
 
 	self:super('init', lobbyInterfaceHolder, "Choose AI", false, "main_window", nil, {6, 7, 7, 4})
@@ -70,6 +72,72 @@ function AiListWindow:AddAiToList(ai, blackList, oldAiVersions, isRunning64Bit)
 	if Configuration.gameConfig.aiTooltip then
 		tooltip = Configuration.gameConfig.aiTooltip[displayName]
 	end
+
+	local buttonList = nil
+	if Configuration.showAiOptions then
+		local path = "AI/Skirmish/" .. shortName .. "/" .. ai.version .. "/AIOptions.lua"
+		if VFS.FileExists(path) then
+			buttonList = self:MakeAiOptionsButton(displayName, tooltip, shortName, ai.version, path)
+		end
+	end
+	if buttonList == nil then
+		buttonList = self:MakeAiButton(displayName, tooltip, shortName, ai.version)
+	end
+	self:AddRow(buttonList, displayName)
+end
+
+function AiListWindow:MakeAiOptionsButton(displayName, tooltip, shortName, version, path)
+	local addAIButton = Button:New {
+		x = 0,
+		y = 0,
+		width = "80%",
+		height = "100%",
+		caption = displayName,
+		font = Configuration:GetFont(3),
+		tooltip = tooltip,
+		OnClick = {
+			function()
+				self:AddAi(displayName, shortName, version)
+				self:HideWindow()
+			end
+		},
+	}
+	local optionsButton = Button:New {
+		x = "80%",
+		y = 0,
+		width = "20%",
+		height = "100%",
+		caption = "",
+		font = Configuration:GetFont(3),
+		OnClick = {
+			function()
+				if self.lobby.name ~= "singleplayer" then
+					-- Disable AIOptions in multiplayer:
+					-- no protocol command exists to allow creation of startscript with AIOptions by autohost
+					self:AddAi(displayName, shortName, version)
+					self:HideWindow()
+					return
+				end
+				local successFunc = function(aioptions)
+					self:AddAi(displayName, shortName, version, aioptions)
+					self:HideWindow()
+				end
+				WG.Chobby.AiOptionsWindow(displayName, path, successFunc)
+			end
+		},
+	}
+	local optionsImage = Image:New {
+		x = "10%",
+		y = "10%",
+		width = "80%",
+		height = "80%",
+		file = IMG_SETTINGS,
+		parent = optionsButton,
+	}
+	return {addAIButton, optionsButton}
+end
+
+function AiListWindow:MakeAiButton(displayName, tooltip, shortName, version)
 	local addAIButton = Button:New {
 		x = 0,
 		y = 0,
@@ -80,32 +148,12 @@ function AiListWindow:AddAiToList(ai, blackList, oldAiVersions, isRunning64Bit)
 		tooltip = tooltip,
 		OnClick = {
 			function()
-				local function defaultAction()
-					self:AddAi(displayName, shortName, ai.version)
-					self:HideWindow()
-				end
-
-				local skirmishDefault = WG.Chobby.Configuration.gameConfig.skirmishDefault
-				if not skirmishDefault or not skirmishDefault.AIOptionsEnabled then
-					defaultAction()
-					return
-				end
-
-				local path = "AI/Skirmish/" .. ai.shortName .. "/" .. ai.version .. "/AIOptions.lua"
-				if not VFS.FileExists(path) then
-					defaultAction()
-					return
-				end
-
-				local successFunc = function(aioptions)
-					self:AddAi(displayName, shortName, ai.version, aioptions)
-					self:HideWindow()
-				end
-				WG.Chobby.AiOptionsWindow(displayName, path, successFunc)
+				self:AddAi(displayName, shortName, version)
+				self:HideWindow()
 			end
 		},
 	}
-	self:AddRow({addAIButton}, displayName)
+	return {addAIButton}
 end
 
 function AiListWindow:AddAi(displayName, shortName, version, options)
