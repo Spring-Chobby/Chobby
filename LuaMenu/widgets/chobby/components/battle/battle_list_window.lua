@@ -120,11 +120,34 @@ function BattleListWindow:init(parent)
 		},
 		parent = self.window,
 	}
+	if Configuration.battleFilterRedundant then
+		local checkRedundant = Checkbox:New {
+			x = 590,
+			width = 21,
+			bottom = 4,
+			height = 30,
+			boxalign = "left",
+			boxsize = 20,
+			caption = " Redundant",
+			checked = Configuration.battleFilterRedundant or false,
+			font = Configuration:GetFont(2),
+			OnChange = {
+				function (obj, newState)
+					Configuration:SetConfigValue("battleFilterRedundant", newState)
+					SoftUpdate()
+				end
+			},
+			parent = self.window,
+		}
+	end
 
 	local function UpdateCheckboxes()
 		checkPassworded:SetToggle(Configuration.battleFilterPassworded2)
 		checkNonFriend:SetToggle(Configuration.battleFilterNonFriend)
 		checkRunning:SetToggle(Configuration.battleFilterRunning)
+		if Configuration.battleFilterRedundant then
+			checkRedundant:SetToggle(Configuration.battleFilterRedundant)
+		end
 	end
 	WG.Delay(UpdateCheckboxes, 0.2)
 
@@ -581,7 +604,7 @@ function BattleListWindow:AddBattle(battleID, battle)
 	self:AddRow({button}, battle.battleID)
 end
 
-function BattleListWindow:ItemInFilter(id)
+function BattleListWindow:ItemInFilter(id, allbattles)
 	local battle = lobby:GetBattle(id)
 	local filterString = Configuration.gameConfig.battleListOnlyShow
 	if filterString ~= nil then
@@ -598,9 +621,73 @@ function BattleListWindow:ItemInFilter(id)
 			return false
 		end
 	end
+
 	if Configuration.battleFilterRunning and battle.isRunning then
 		return false
 	end
+
+	if Configuration.battleFilterRedundant and allbattles then
+		local myplayercount = lobby:GetBattlePlayerCount(id)
+		--Spring.Echo("redundancy filter checking for",battle.isRunning, battle.spectatorCount,myplayercount)
+		-- for each non-empty battle, only display EU-AUS-USA- hosts first number that is empty
+		if battle.isRunning then return true end
+		if myplayercount and myplayercount > 0 then return true end
+		if battle.spectatorCount and battle.spectatorCount > 1 then return true end
+
+		function parseBattleNumber(btitle)
+			battlekeys = Configuration.battleFilterRedundantRegions or {}
+			local hostcountry = nil
+			for k,battlekey in pairs(battlekeys) do
+				if string.find( btitle,battlekey ) == 1 then
+					hostcountry = battlekey
+				end
+			end
+			if hostcountry == nil then
+				return nil
+			else
+				local numbertext = string.sub(btitle,string.len(hostcountry),-1)
+				if pcall(tonumber,  numbertext) == false then return nil end
+				local hostnumber = tonumber(numbertext)
+				if hostnumber == nil then 
+					return nil
+				else
+					return hostcountry, hostnumber
+				end
+			end
+		end
+		
+		local myBattleTitle = battle.title
+		local mycountry, mynumber = parseBattleNumber(battle.title)
+		--Spring.Echo("redundancy filter checking for", mycountry,mynumber)
+		if mycountry == nil then return true end
+
+		local lowestemptybattleindex = 100000000
+		local lowestemptybattleID = nil
+		for k,otherbattleID in pairs(allbattles) do
+			local otherbattle = lobby:GetBattle(otherbattleID)
+			local ob_hostcountry, ob_hostnumber = parseBattleNumber(otherbattle.title)
+			local otherbattleplayercount = lobby:GetBattlePlayerCount(otherbattleID)
+
+			--Spring.Echo("Other battle", ob_hostcountry, ob_hostnumber,otherbattleplayercount ,otherbattle.spectatorCount)
+			if ob_hostcountry and 
+				ob_hostnumber < lowestemptybattleindex and 
+				otherbattleplayercount == 0 and
+				otherbattle.spectatorCount == 1 and
+				mycountry == ob_hostcountry then
+
+				lowestemptybattleID = otherbattleID
+				lowestemptybattleindex = ob_hostnumber
+			end
+		end
+		if lowestemptybattleID == nil then return true end
+
+		if lowestemptybattleID == id then 
+			return true
+		else
+			return false
+		end
+	end
+
 	return true
 end
 
