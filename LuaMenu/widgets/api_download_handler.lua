@@ -18,7 +18,7 @@ local externalFunctions = {}
 local listeners = {}
 local wrapperFunctions = {}
 
-local downloadQueue = {} -- {name, fileType, priority, id}
+local downloadQueue = {} -- {name, fileType, priority, id, retryCount}
 local downloadCount = 0
 local topPriority = 0
 local removedDownloads = {}
@@ -169,6 +169,17 @@ local function RemoveDownload(name, fileType, putInRemoveList, removalType)
 	end
 	downloadQueue[index] = downloadQueue[#downloadQueue]
 	downloadQueue[#downloadQueue] = nil
+
+	if putInRemoveList and removalType == "fail" and WG.Chobby.Configuration.downloadRetryCount then
+		local lastFailed = removedDownloads[#removedDownloads]
+		if  lastFailed.retryCount < WG.Chobby.Configuration.downloadRetryCount then
+			Spring.Echo("Downloading of ",name,fileType,"failed, retryCount=", lastFailed.retryCount)
+			lastFailed.retryCount =  lastFailed.retryCount + 1
+			externalFunctions.RetryDownload(name,fileType)
+		end
+	else
+
+	end
 	requestUpdate = true
 	return true
 end
@@ -203,6 +214,7 @@ function externalFunctions.QueueDownload(name, fileType, priority)
 		fileType = fileType,
 		priority = priority,
 		id = downloadCount,
+		retryCount = 0,
 	}
 	requestUpdate = true
 	CallListeners("DownloadQueued", downloadCount, name, fileType)
