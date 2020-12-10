@@ -83,6 +83,7 @@ function BattleListWindow:init(parent)
 			end
 		},
 		parent = self.window,
+		tooltip = "Hides all private battles that require a password to join",
 	}
 	local checkNonFriend = Checkbox:New {
 		x = 280,
@@ -101,6 +102,7 @@ function BattleListWindow:init(parent)
 			end
 		},
 		parent = self.window,
+		tooltip = "Hides all battles that dont have your friends in them",
 	}
 	local checkRunning = Checkbox:New {
 		x = 435,
@@ -119,6 +121,7 @@ function BattleListWindow:init(parent)
 			end
 		},
 		parent = self.window,
+		tooltip = "Hides all battles that are in progress",
 	}
 	if Configuration.battleFilterRedundant then
 		local checkRedundant = Checkbox:New {
@@ -138,6 +141,7 @@ function BattleListWindow:init(parent)
 				end
 			},
 			parent = self.window,
+			tooltip = "Hides empty regional autohosts",
 		}
 	end
 
