@@ -177,8 +177,6 @@ local function RemoveDownload(name, fileType, putInRemoveList, removalType)
 			lastFailed.retryCount =  lastFailed.retryCount + 1
 			externalFunctions.RetryDownload(name,fileType)
 		end
-	else
-
 	end
 	requestUpdate = true
 	return true
