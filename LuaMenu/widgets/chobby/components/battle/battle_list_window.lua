@@ -648,14 +648,13 @@ function BattleListWindow:ItemInFilter(id, allbattles)
 				local numbertext = string.sub(btitle,string.len(hostcountry),-1)
 				if pcall(tonumber,  numbertext) == false then return nil end
 				local hostnumber = tonumber(numbertext)
-				if hostnumber == nil then 
+				if hostnumber == nil then
 					return nil
 				else
 					return hostcountry, hostnumber
 				end
 			end
 		end
-		
 		local myBattleTitle = battle.title
 		local mycountry, mynumber = parseBattleNumber(battle.title)
 		--Spring.Echo("redundancy filter checking for", mycountry,mynumber)
@@ -669,8 +668,8 @@ function BattleListWindow:ItemInFilter(id, allbattles)
 			local otherbattleplayercount = lobby:GetBattlePlayerCount(otherbattleID)
 
 			--Spring.Echo("Other battle", ob_hostcountry, ob_hostnumber,otherbattleplayercount ,otherbattle.spectatorCount)
-			if ob_hostcountry and 
-				ob_hostnumber < lowestemptybattleindex and 
+			if ob_hostcountry and
+				ob_hostnumber < lowestemptybattleindex and
 				otherbattleplayercount == 0 and
 				otherbattle.spectatorCount == 1 and
 				mycountry == ob_hostcountry then
@@ -681,7 +680,7 @@ function BattleListWindow:ItemInFilter(id, allbattles)
 		end
 		if lowestemptybattleID == nil then return true end
 
-		if lowestemptybattleID == id then 
+		if lowestemptybattleID == id then
 			return true
 		else
 			return false
