@@ -88,7 +88,7 @@ local function CreateReportWindow(parentHolder, userName, extraText, usePopupBac
 		caption = "Kick",
 		checked = false,
 		font = WG.Chobby.Configuration:GetFont(3),
-		tooltip = "Start a poll to kick the player or spectator. Do not kick players without a good reason, such as teamkilling.",
+		tooltip = "Start a poll to kick the player or spectator. Do not kick players without a good reason, such as to halt intentional teamkilling.",
 		parent = reportWindow,
 	}
 
