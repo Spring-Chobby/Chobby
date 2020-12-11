@@ -14,7 +14,7 @@ end
 --------------------------------------------------------------------------------
 -- Window Handler
 
-local function CreateReportWindow(parentHolder, userName, extraText, usePopupBackground)
+local function CreateReportWindow(parentHolder, userName, extraText, usePopupBackground, isIngame)
 	if parentHolder:GetChildByName("reportWindow") then
 		return
 	end
@@ -46,7 +46,7 @@ local function CreateReportWindow(parentHolder, userName, extraText, usePopupBac
 	offset = offset + 44
 
 	TextBox:New {
-		x = 26,
+		x = 28,
 		right = 24,
 		y = offset,
 		height = 35,
@@ -67,12 +67,28 @@ local function CreateReportWindow(parentHolder, userName, extraText, usePopupBac
 	}
 	offset = offset + 38
 	Label:New {
-		x = 26,
+		x = 28,
 		right = 24,
 		y = offset,
 		height = 35,
 		caption = extraText or "",
 		fontsize = Configuration:GetFont(3).size,
+		parent = reportWindow,
+	}
+	offset = offset + 38
+	
+	offset = offset + 14
+	local checkBox = isIngame and Checkbox:New {
+		x = 82,
+		y = offset,
+		width = 78,
+		height = 40,
+		boxalign = "right",
+		boxsize = 20,
+		caption = "Kick",
+		checked = false,
+		font = WG.Chobby.Configuration:GetFont(3),
+		tooltip = "Start a poll to kick the player or spectator. Do not kick players without a good reason, such as teamkilling.",
 		parent = reportWindow,
 	}
 
@@ -84,6 +100,9 @@ local function CreateReportWindow(parentHolder, userName, extraText, usePopupBac
 		screen0:FocusControl(buttonAccept) -- Defocus the text entry
 		if WG.LibLobby and WG.LibLobby.lobby then
 			WG.LibLobby.lobby:ReportUser(userName, titleBox.text .. ((extraText and (" " .. extraText)) or ""))
+		end
+		if checkBox and checkBox.checked and Spring.SendLuaUIMsg then
+			Spring.SendLuaUIMsg("StartKickPoll_" .. userName)
 		end
 		reportWindow:Dispose()
 	end
@@ -139,9 +158,9 @@ local ReportPanel = {}
 
 function ReportPanel.OpenReportWindow(userName, extraText, isIngame)
 	if isIngame then
-		CreateReportWindow(WG.Chobby.interfaceRoot.GetIngameInterfaceHolder(), userName, extraText, false)
+		CreateReportWindow(WG.Chobby.interfaceRoot.GetIngameInterfaceHolder(), userName, extraText, false, isIngame)
 	else
-		CreateReportWindow(WG.Chobby.lobbyInterfaceHolder, userName, extraText, true)
+		CreateReportWindow(WG.Chobby.lobbyInterfaceHolder, userName, extraText, true, isIngame)
 	end
 end
 
