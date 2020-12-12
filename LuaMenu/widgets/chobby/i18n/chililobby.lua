@@ -171,7 +171,7 @@ return {
 		ingame_notifcations = "Notifications while ingame",
 		non_friend_notifications = "Non-friend notifications",
 		notifyForAllChat = "Notify for all chat",
-		hideWelcomeMessage = "Hide welcome tutoral prompt",
+		hideWelcomeMessage = "Hide welcome tutorial prompt",
 		drawFullSpeed = "Full speed draw updates",
 		keep_queues = "Stay in MM queues on launch",
 		simplifiedSkirmishSetup = "Simple skirmish setup",

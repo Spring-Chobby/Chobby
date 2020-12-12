@@ -239,17 +239,17 @@ local function GetTutorialControl()
 		y = 76,
 		height = 35,
 		fontsize = Configuration:GetFont(2).size,
-		text = [[From here you can embark on a galaxy-spanning campaign or play a skirmish against the AI - all under Singleplayer & Coop (invite your friends). Alternately, you can click Multiplayer to host a private game, hop into the matchmaker, or participate in massive public games.]],
+		text = [[Embark on a campaign, under 'Singleplayer & Coop', to uncover the secrets of a seemingly empty galaxy and learn Zero-K along the way. To begin, click 'Play the Tutorial' below. Alternately, play a full skirmish game with a range of non-cheating AIs. Play either option with friends by inviting them via the Steam friends list.]],
 		parent = holder,
 	}
 
 	TextBox:New {
 		x = 8,
 		right = 8,
-		y = 190,
+		y = 188,
 		height = 35,
 		fontsize = Configuration:GetFont(2).size,
-		text = [[To get started we recommend playing the tutorial, which doubles as the first mission of the campaign. Click the button below to begin.]],
+		text = [[Click 'Multiplayer' for private games, public games, and the matchmaker. Say 'hi' on Discord or the forum, or even get into modding and development. Zero-K runs on involvement as it is entirely community-made.]],
 		parent = holder,
 	}
 
@@ -261,7 +261,7 @@ local function GetTutorialControl()
 		end
 	end
 
-	local offset = 255
+	local offset = 262
 	Button:New {
 		x = "18%",
 		y = offset,
@@ -302,7 +302,7 @@ local function GetTutorialControl()
 	
 	function externalFunctions.DoResize()
 		heading:SetPos(0, 15, holder.width)
-		return 360
+		return 350
 	end
 	
 	return externalFunctions
