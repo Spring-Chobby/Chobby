@@ -239,14 +239,14 @@ local function GetTutorialControl()
 		y = 76,
 		height = 35,
 		fontsize = Configuration:GetFont(2).size,
-		text = [[Embark on a campaign, under 'Singleplayer & Coop', to uncover the secrets of a seemingly empty galaxy and learn Zero-K along the way. To begin, click 'Play the Tutorial' below. Alternately, play a full skirmish game with a range of non-cheating AIs. Play either option with friends by inviting them via the Steam friends list.]],
+		text = [[Embark on a campaign to uncover the secrets of a seemingly empty galaxy, and learn Zero-K along the way. The campaign is under 'Singleplayer & Coop', but can also be started by clicking 'Play the Tutorial'. Alternately, battle a range of non-cheating AIs in the skirmish mode. Play either option with friends by inviting them with the Steam friends list.]],
 		parent = holder,
 	}
 
 	TextBox:New {
 		x = 8,
 		right = 8,
-		y = 188,
+		y = 186,
 		height = 35,
 		fontsize = Configuration:GetFont(2).size,
 		text = [[Click 'Multiplayer' for private games, public games, and the matchmaker. Say 'hi' on Discord or the forum, or even get into modding and development. Zero-K runs on involvement as it is entirely community-made.]],
