@@ -10,22 +10,24 @@ function widget:GetInfo()
 	}
 end
 
+local oldLobby
 local oldGameName
 local aiListWindow
 local aiPopup
 
 local showOldAiVersions = false
+local showAiOptions = false
 local simpleAiList = true
 
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
 -- AI List window updating
 
-local function UpdateAiListWindow(gameName)
+local function UpdateAiListWindow(battleLobby, gameName)
 	if aiPopup then
 		aiPopup:ClosePopup()
 	end
-	aiListWindow = WG.Chobby.AiListWindow(gameName)
+	aiListWindow = WG.Chobby.AiListWindow(battleLobby, gameName)
 	aiListWindow.window:Hide()
 end
 
@@ -45,8 +47,9 @@ local function InitializeListeners(battleLobby)
 			return
 		end
 
+		oldLobby = battleLobby
 		oldGameName = newGameName
-		UpdateAiListWindow(newGameName)
+		UpdateAiListWindow(battleLobby, newGameName)
 	end
 
 	local function OnJoinedBattle(listener, joinedBattleId, userName)
@@ -58,8 +61,9 @@ local function InitializeListeners(battleLobby)
 			return
 		end
 
+		oldLobby = battleLobby
 		oldGameName = newGameName
-		UpdateAiListWindow(newGameName)
+		UpdateAiListWindow(battleLobby, newGameName)
 	end
 
 	battleLobby:AddListener("OnUpdateBattleInfo", OnUpdateBattleInfo)
@@ -74,14 +78,18 @@ local PopupPreloader = {}
 
 function PopupPreloader.ShowAiListWindow(battleLobby, newGameName, teamIndex, quickAddAi)
 	local conf = WG.Chobby.Configuration
-	if newGameName ~= oldGameName or conf.showOldAiVersions ~= showOldAiVersions or conf.simpleAiList ~= simpleAiList then
+	if newGameName ~= oldGameName or conf.simpleAiList ~= simpleAiList or oldLobby ~= battleLobby
+		or conf.showOldAiVersions ~= showOldAiVersions or conf.showAiOptions ~= showAiOptions
+	then
+		oldLobby = battleLobby
 		oldGameName = newGameName
 		showOldAiVersions = conf.showOldAiVersions
+		showAiOptions = conf.showAiOptions
 		simpleAiList = conf.simpleAiList
-		UpdateAiListWindow(newGameName)
+		UpdateAiListWindow(battleLobby, newGameName)
 	end
 
-	aiListWindow:SetLobbyAndAllyTeam(battleLobby, teamIndex)
+	aiListWindow:SetAllyTeam(teamIndex)
 	if quickAddAi and aiListWindow:QuickAdd(quickAddAi) then
 		return
 	end
