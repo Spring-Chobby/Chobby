@@ -173,8 +173,8 @@ local function RemoveDownload(name, fileType, putInRemoveList, removalType)
 	if putInRemoveList and removalType == "fail" and WG.Chobby.Configuration.downloadRetryCount then
 		local lastFailed = removedDownloads[#removedDownloads]
 		if  lastFailed.retryCount < WG.Chobby.Configuration.downloadRetryCount then
-			Spring.Echo("Downloading of ",name,fileType,"failed, retryCount=", lastFailed.retryCount)
-			lastFailed.retryCount =  lastFailed.retryCount + 1
+			Spring.Echo("Downloading of ", name, fileType, "failed, retryCount=", lastFailed.retryCount)
+			lastFailed.retryCount = lastFailed.retryCount + 1
 			externalFunctions.RetryDownload(name,fileType)
 		end
 	end

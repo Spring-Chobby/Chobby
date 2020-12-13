@@ -215,18 +215,13 @@ function ListWindow:CompareItems(id1, id2)
 	return true
 end
 
-function ListWindow:ItemInFilter(id, allbattleids)
+function ListWindow:ItemInFilter(id)
 	return true
 end
 
 function ListWindow:UpdateFilters()
-	local allbattleids = {}
 	for i = 1, self.scrollChildren do
-		allbattleids[#allbattleids+1] = self.orderPanelMapping[i].id
-	end
-
-	for i = 1, self.scrollChildren do
-		self.orderPanelMapping[i].inFilter = self:ItemInFilter(self.orderPanelMapping[i].id, allbattleids)
+		self.orderPanelMapping[i].inFilter = self:ItemInFilter(self.orderPanelMapping[i].id)
 	end
 	for id, _ in pairs(self.itemPanelMapping) do
 		self:RecalculateOrder(id)
