@@ -215,6 +215,7 @@ function Configuration:init()
 	self.hideInterface = false
 	self.enableTextToSpeech = true
 	self.showOldAiVersions = false
+	self.showAiOptions = false
 	self.drawAtFullSpeed = false
 	self.lobbyIdleSleep = false
 	self.rememberQueuesOnStart = false
@@ -546,6 +547,7 @@ function Configuration:GetConfigData()
 		matchmakerPopupTime = self.matchmakerPopupTime,
 		enableTextToSpeech = self.enableTextToSpeech,
 		showOldAiVersions = self.showOldAiVersions,
+		showAiOptions = self.showAiOptions,
 		chatFontSize = self.chatFontSize,
 		myAccountID = self.myAccountID,
 		lastAddedAiName = self.lastAddedAiName,
@@ -839,6 +841,24 @@ function Configuration:GetDefaultGameName()
 	end
 
 	return self.gameConfig._defaultGameArchiveName
+end
+
+function Configuration:GetSideData()
+	if not self.gameConfig then
+		return nil
+	end
+	return self.gameConfig.sidedata
+end
+
+function Configuration:GetSideById(sideId)
+	if sideId == nil then
+		return { name = nil, logo = nil }
+	end
+	local sidedata = Configuration:GetSideData()
+	if sidedata == nil or sideId < 0 or sideId > #sidedata - 1 then
+		return { name = nil, logo = nil }
+	end
+	return sidedata[sideId + 1]
 end
 
 function Configuration:GetIsRunning64Bit()

@@ -149,7 +149,7 @@ local function GetUserClanImage(userName, userControl)
 	return file, needDownload
 end
 
-local function GetUserComboBoxOptions(userName, isInBattle, userControl, showTeamColor)
+local function GetUserComboBoxOptions(userName, isInBattle, userControl, showTeamColor, showSide)
 	local userInfo = userControl.lobby:GetUser(userName) or {}
 	local userBattleInfo = userControl.lobby:GetUserBattleStatus(userName) or {}
 	local myUserName = userControl.lobby:GetMyUserName()
@@ -217,10 +217,14 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl, showTea
 		comboOptions[#comboOptions + 1] = "User Page"
 	end
 
-	if showTeamColor and
-	   (userName == myUserName or userBattleInfo.aiLib) and
-	   not userBattleInfo.isSpectator then
-		comboOptions[#comboOptions + 1] = "Change Color"
+	if (userName == myUserName or userBattleInfo.aiLib) and
+		not userBattleInfo.isSpectator then
+		if showTeamColor then
+			comboOptions[#comboOptions + 1] = "Change Color"
+		end
+		if showSide then
+			comboOptions[#comboOptions + 1] = "Change Side"
+		end
 	end
 
 	-- userControl.lobby:GetMyIsAdmin()
@@ -393,7 +397,8 @@ local function UpdateUserComboboxOptions(_, userName)
 		local userList = userListList[i]
 		local data = userList[userName]
 		if data then
-			data.mainControl.items = GetUserComboBoxOptions(userName, data.isInBattle, data, data.imTeamColor ~= nil)
+			data.mainControl.items = GetUserComboBoxOptions(userName, data.isInBattle, data,
+			                                                data.imTeamColor ~= nil, data.imSide ~= nil)
 		end
 	end
 end
@@ -403,7 +408,8 @@ local function UpdateUserActivity(listener, userName)
 		local userList = userListList[i]
 		local userControls = userList[userName]
 		if userControls then
-			userControls.mainControl.items = GetUserComboBoxOptions(userName, userControls.isInBattle, userControls, userControls.imTeamColor ~= nil)
+			userControls.mainControl.items = GetUserComboBoxOptions(userName, userControls.isInBattle, userControls,
+			                                                        userControls.imTeamColor ~= nil, userControls.imSide ~= nil)
 			userControls.imLevel.file = GetUserRankImageName(userName, userControls)
 			userControls.imLevel:Invalidate()
 
@@ -446,12 +452,22 @@ local function UpdateUserBattleStatus(listener, userName)
 				data.imSyncStatus.file = GetUserSyncStatus(userName, data)
 				data.imSyncStatus:Invalidate()
 			end
+			local battleStatus = data.lobby:GetUserBattleStatus(userName) or {}
+			local imageVisible = not battleStatus.isSpectator
 			if data.imTeamColor then
-				local battleStatus = data.lobby:GetUserBattleStatus(userName) or {}
-				local colorVisible = not battleStatus.isSpectator
 				data.imTeamColor.color = battleStatus.teamColor
-				data.imTeamColor:SetVisibility(colorVisible)
-				if colorVisible then
+				data.imTeamColor:SetVisibility(imageVisible)
+				if imageVisible then
+					data.imTeamColor:Invalidate()
+				end
+			end
+			if data.imSide then
+				local sideSelected = battleStatus.side ~= nil
+				if sideSelected then
+					data.imSide.file = WG.Chobby.Configuration:GetSideById(battleStatus.side).logo
+				end
+				data.imSide:SetVisibility(imageVisible and sideSelected)
+				if imageVisible then
 					data.imTeamColor:Invalidate()
 				end
 			end
@@ -491,6 +507,7 @@ local function GetUserControls(userName, opts)
 	local showModerator      = opts.showModerator
 	local comboBoxOnly       = opts.comboBoxOnly
 	local showTeamColor      = opts.showTeamColor
+	local showSide           = opts.showSide
 
 	local userControls = reinitialize or {}
 
@@ -544,7 +561,7 @@ local function GetUserControls(userName, opts)
 			maxDropDownWidth = large and 220 or 150,
 			minDropDownHeight = 0,
 			maxDropDownHeight = 300,
-			items = GetUserComboBoxOptions(userName, isInBattle, userControls, showTeamColor),
+			items = GetUserComboBoxOptions(userName, isInBattle, userControls, showTeamColor, showSide),
 			OnOpen = {
 				function (obj)
 					obj.tooltip = nil
@@ -619,6 +636,25 @@ local function GetUserControls(userName, opts)
 								else
 									userControls.lobby:UpdateAi(userName, {
 										teamColor = color
+									})
+								end
+							end
+						})
+					elseif selectedName == "Change Side" then
+						local battleStatus = userControls.lobby:GetUserBattleStatus(userName) or {}
+						if battleStatus.isSpectator then
+							return
+						end
+						WG.SideChangeWindow.CreateSideChangeWindow({
+							initialSide = battleStatus.side or 0,
+							OnAccepted = function(sideId)
+								if userName == userControls.lobby:GetMyUserName() then
+									userControls.lobby:SetBattleStatus({
+										side = sideId
+									})
+								else
+									userControls.lobby:UpdateAi(userName, {
+										side = sideId
 									})
 								end
 							end
@@ -701,6 +737,29 @@ local function GetUserControls(userName, opts)
 			checkFileExists = needDownload,
 		}
 		offset = offset + 21
+	end
+
+	if showSide then
+		local battleStatus = userControls.lobby:GetUserBattleStatus(userName) or {}
+		offset = offset + 2
+		local file = nil
+		if battleStatus.side ~= nil then
+			file = WG.Chobby.Configuration:GetSideById(battleStatus.side or 0).logo
+		end
+		userControls.imSide = Image:New {
+			name = "imSide",
+			x = offset,
+			y = offsetY,
+			width = 20,
+			height = 20,
+			parent = userControls.mainControl,
+			keepAspect = false,
+			file = file,
+		}
+		offset = offset + 22
+		if battleStatus.isSpectator or file == nil then
+			userControls.imSide:Hide()
+		end
 	end
 
 	offset = offset + 2
@@ -872,6 +931,7 @@ function userHandler.GetBattleUser(userName, isSingleplayer)
 		showModerator  = true,
 		showFounder    = true,
 		showTeamColor  = not WG.Chobby.Configuration.gameConfig.disableColorChoosing,
+		showSide       = WG.Chobby.Configuration:GetSideData() ~= nil,
 	})
 end
 
@@ -890,6 +950,7 @@ function userHandler.GetSingleplayerUser(userName)
 		isInBattle     = true,
 		isSingleplayer = true,
 		showTeamColor  = not WG.Chobby.Configuration.gameConfig.disableColorChoosing,
+		showSide       = WG.Chobby.Configuration:GetSideData() ~= nil,
 	})
 end
 
