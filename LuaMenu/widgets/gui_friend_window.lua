@@ -350,8 +350,8 @@ local function InitializeControls(window)
 		"https://zero-k.info/Battles?Title=&Map=&PlayersFrom=&PlayersTo=&Age=0&Mission=0&Bots=0&Rank=8&Victory=0&UserId=_USER_ID_", true, 0, 0, "40.5%", "40.5%")
 	AddLinkButton(lowerLeft, "Recent Posts",    "View your recently posted in forum threads.",
 		"https://zero-k.info/Forum?CategoryID=&Search=&OnlyUnread=false&User=_USER_NAME_&grorder=&grdesc=False&grpage=1", true, 0, 0, "60.5%", "20.5%")
-	AddLinkButton(lowerLeft, "Clan List",       "View the list of clans.",
-		"https://zero-k.info/Clans", false, 0, 0, "80.5%", 0)
+	AddLinkButton(lowerLeft, "Contact Admins",       "Send a non-report message to the moderation team. If instead you want to report a player, click on their name and select 'Report' from the dropdown menu.",
+		"https://zero-k.info/Users/ReportToAdmin/_USER_ID_", true, 0, 0, "80.5%", 0)
 end
 
 --------------------------------------------------------------------------------

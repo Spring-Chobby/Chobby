@@ -97,6 +97,10 @@ local function CreateReportWindow(parentHolder, userName, extraText, usePopupBac
 	end
 
 	local function AcceptFunc()
+		if titleBox.text == "" then
+			titleBox.hint = "> " .. titleBox.hint .. " <"
+			return false
+		end
 		screen0:FocusControl(buttonAccept) -- Defocus the text entry
 		if WG.LibLobby and WG.LibLobby.lobby then
 			WG.LibLobby.lobby:ReportUser(userName, titleBox.text .. ((extraText and (" " .. extraText)) or ""))
