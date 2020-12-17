@@ -127,6 +127,10 @@ local function CreateDownloadEntry(downloadData)
 		parent = holder,
 	}
 
+	local downloadDataName = downloadData.name
+	if Configuration.gameConfig.ShortenNameString then
+		downloadDataName = Configuration.gameConfig.ShortenNameString(downloadDataName)
+	end
 	TextBox:New {
 		x = 15 + BUTTON_WIDTH*2,
 		y = 12,
@@ -134,7 +138,7 @@ local function CreateDownloadEntry(downloadData)
 		height = 20,
 		valign = 'center',
 		fontsize = Configuration:GetFont(2).size,
-		text = downloadData.name,
+		text = downloadDataName,
 		parent = holder,
 	}
 
