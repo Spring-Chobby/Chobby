@@ -898,28 +898,11 @@ Interface.jsonCommands["UserDisconnected"] = Interface._UserDisconnected
 ------------------------
 
 function Interface:_FriendList(data)
-	--if self.friendListRecieved then
-		local newFriendMap = {}
-		for i = 1, #data.Friends do
-			local userName = data.Friends[i].Name
-			if not self.isFriend[userName] then
-				self:_OnFriend(userName)
-				self:_OnRemoveIgnoreUser(userName)
-			end
-			newFriendMap[userName] = true
-		end
-
-		for _, userName in pairs(self.friends) do
-			if not newFriendMap[userName] then
-				self:_OnUnfriend(userName)
-				self:_OnRemoveIgnoreUser(userName)
-			end
-		end
-		--return
-	--end
-	--self.friendListRecieved = true
-
-	self:_OnFriendList(data.Friends)
+	local friends = {}
+	for i = 1, #data.Friends do
+		friends[i] = data.Friends[i].Name
+	end
+	self:_OnFriendList(friends)
 end
 Interface.jsonCommands["FriendList"] = Interface._FriendList
 
@@ -1342,7 +1325,7 @@ function Interface:_HandleBattleProposalMessages(userName, message, doAction)
 		end
 		return true
 	end
-	
+
 	if string.sub(message, 1, 21) == "!inviteProposedBattle" then
 		local data = message:split(" ")
 		local battleID = data and data[2] and tonumber(data[2])

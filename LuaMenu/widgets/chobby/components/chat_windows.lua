@@ -544,6 +544,10 @@ end
 function ChatWindows:_NotifyTab(tabName, userName, chanName, nameMentioned, message, sound, popupDuration)
 	if tabName ~= self.currentTab then
 		-- TODO: Fix naming of self.tabbars (these are consoles)
+		if WG.Chobby.Configuration.gameConfig.sayPrivateSelectAndActivateChatTab then
+			WG.Chobby.interfaceRoot.OpenRightPanelTab("chat")
+			self.tabPanel.tabBar:Select(tabName)
+		end
 		local console = self.tabbars[tabName]
 		local oldMessages = console.unreadMessages
 		console.unreadMessages = console.unreadMessages + 1

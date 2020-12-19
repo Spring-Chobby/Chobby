@@ -476,20 +476,22 @@ Interface.commands["CLIENTSTATUS"] = Interface._OnClientStatus
 Interface.commandPattern["CLIENTSTATUS"] = "(%S+)%s+(%S+)"
 
 --friends
-function Interface:_OnFriend(tags)
+-- NB: added the _Uber suffix so not to conflict with Lobby:_OnFriend
+function Interface:_OnFriend_Uber(tags)
 	local tags = parseTags(tags)
 	local userName = getTag(tags, "userName", true)
-	self:super("_OnFriend", userName)
+	self:_OnFriend(userName)
 end
-Interface.commands["FRIEND"] = Interface._OnFriend
+Interface.commands["FRIEND"] = Interface._OnFriend_Uber
 Interface.commandPattern["FRIEND"] = "(.+)"
 
-function Interface:_OnUnfriend(tags)
+-- NB: added the _Uber suffix so not to conflict with Lobby:_OnUnfriend
+function Interface:_OnUnfriend_Uber(tags)
 	local tags = parseTags(tags)
 	local userName = getTag(tags, "userName", true)
-	self:super("_OnUnfriend", userName)
+	self:_OnUnfriend(userName)
 end
-Interface.commands["UNFRIEND"] = Interface._OnUnfriend
+Interface.commands["UNFRIEND"] = Interface._OnUnfriend_Uber
 Interface.commandPattern["UNFRIEND"] = "(.+)"
 
 function Interface:_OnFriendList(tags)

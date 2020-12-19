@@ -1,10 +1,13 @@
 AiListWindow = ListWindow:extends{}
 
-function AiListWindow:init(gameName)
+local IMG_SETTINGS = LUA_DIRNAME .. "images/settings.png"
+
+function AiListWindow:init(lobby, gameName)
 
 	self:super('init', lobbyInterfaceHolder, "Choose AI", false, "main_window", nil, {6, 7, 7, 4})
 	self.window:SetPos(nil, nil, 500, 700)
 
+	self.lobby = lobby or self.lobby
 	self.validAiNames = {}
 
 	-- Disable game-specific AIs for now since it breaks /luaui reload
@@ -13,11 +16,11 @@ function AiListWindow:init(gameName)
 	local blackList = Configuration.gameConfig.aiBlacklist
 	local oldAiVersions = (not Configuration.showOldAiVersions) and Configuration.gameConfig.oldAiVersions
 	local isRunning64Bit = Configuration:GetIsRunning64Bit()
+	local isSingleplayer = lobby.name == "singleplayer"
 
 	for i, ai in pairs(ais) do
-		self:AddAiToList(ai, blackList, oldAiVersions, isRunning64Bit)
+		self:AddAiToList(ai, blackList, oldAiVersions, isRunning64Bit, isSingleplayer)
 	end
-
 end
 
 function AiListWindow:CompareItems(id1, id2)
@@ -30,7 +33,7 @@ function AiListWindow:CompareItems(id1, id2)
 	return true
 end
 
-function AiListWindow:AddAiToList(ai, blackList, oldAiVersions, isRunning64Bit)
+function AiListWindow:AddAiToList(ai, blackList, oldAiVersions, isRunning64Bit, isSingleplayer)
 	local shortName = ai.shortName or "Unknown"
 
 	if blackList and blackList[shortName] then
@@ -70,42 +73,65 @@ function AiListWindow:AddAiToList(ai, blackList, oldAiVersions, isRunning64Bit)
 	if Configuration.gameConfig.aiTooltip then
 		tooltip = Configuration.gameConfig.aiTooltip[displayName]
 	end
-	local addAIButton = Button:New {
-		x = 0,
+
+	local buttonList = {}
+	local btnWidth = "100%"
+	if Configuration.showAiOptions and isSingleplayer then
+		local path = "AI/Skirmish/" .. shortName .. "/" .. ai.version .. "/AIOptions.lua"
+		if VFS.FileExists(path) then
+			buttonList[#buttonList + 1] = self:MakeAiOptionsButton(displayName, tooltip, shortName, ai.version, path)
+			btnWidth = "80%"
+		end
+	end
+	buttonList[#buttonList + 1] = self:MakeAiButton(btnWidth, displayName, tooltip, shortName, ai.version)
+	self:AddRow(buttonList, displayName)
+end
+
+function AiListWindow:MakeAiOptionsButton(displayName, tooltip, shortName, version, path)
+	local optionsButton = Button:New {
+		x = "80%",
 		y = 0,
-		width = "100%",
+		width = "20%",
 		height = "100%",
-		caption = displayName,
+		caption = "",
 		font = Configuration:GetFont(3),
-		tooltip = tooltip,
 		OnClick = {
 			function()
-				local function defaultAction()
-					self:AddAi(displayName, shortName, ai.version)
-					self:HideWindow()
-				end
-
-				local skirmishDefault = WG.Chobby.Configuration.gameConfig.skirmishDefault
-				if not skirmishDefault or not skirmishDefault.AIOptionsEnabled then
-					defaultAction()
-					return
-				end
-
-				local path = "AI/Skirmish/" .. ai.shortName .. "/" .. ai.version .. "/AIOptions.lua"
-				if not VFS.FileExists(path) then
-					defaultAction()
-					return
-				end
-
 				local successFunc = function(aioptions)
-					self:AddAi(displayName, shortName, ai.version, aioptions)
+					self:AddAi(displayName, shortName, version, aioptions)
 					self:HideWindow()
 				end
 				WG.Chobby.AiOptionsWindow(displayName, path, successFunc)
 			end
 		},
 	}
-	self:AddRow({addAIButton}, displayName)
+	local optionsImage = Image:New {
+		x = "10%",
+		y = "10%",
+		width = "80%",
+		height = "80%",
+		file = IMG_SETTINGS,
+		parent = optionsButton,
+	}
+	return optionsButton
+end
+
+function AiListWindow:MakeAiButton(btnWidth, displayName, tooltip, shortName, version)
+	return Button:New {
+		x = 0,
+		y = 0,
+		width = btnWidth,
+		height = "100%",
+		caption = displayName,
+		font = Configuration:GetFont(3),
+		tooltip = tooltip,
+		OnClick = {
+			function()
+				self:AddAi(displayName, shortName, version)
+				self:HideWindow()
+			end
+		},
+	}
 end
 
 function AiListWindow:AddAi(displayName, shortName, version, options)
@@ -138,7 +164,6 @@ function AiListWindow:QuickAdd(shortName)
 	end
 end
 
-function AiListWindow:SetLobbyAndAllyTeam(lobby, allyTeam)
-	self.lobby = lobby or self.lobby
+function AiListWindow:SetAllyTeam(allyTeam)
 	self.allyTeam = allyTeam or self.allyTeam
 end
