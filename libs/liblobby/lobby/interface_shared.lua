@@ -233,10 +233,17 @@ function Interface:_SocketUpdate()
 		end
 		Spring.Log(LOG_SECTION, LOG.ERROR, "Error in select: " .. error)
 	end
+	
+	local config = WG.Chobby and WG.Chobby.Configuration
 	for _, input in ipairs(readable) do
 		local s, status, commandsStr = input:receive('*a') --try to read all data
 		if (status == "timeout" or status == nil) and commandsStr ~= nil and commandsStr ~= "" then
 			Spring.Log(LOG_SECTION, LOG.DEBUG, commandsStr)
+			
+			if config and config.debugRawMessages then
+				Spring.Echo("self.buffer", self.buffer)
+				Spring.Echo("commandsStr", commandsStr)
+			end
 			local commands = explode("\n", commandsStr)
 			commands[1] = self.buffer .. commands[1]
 			for i = 1, #commands-1 do

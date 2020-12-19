@@ -33,7 +33,7 @@ function Configuration:init()
 	self.userListWidth = 205 -- Main user list width. Possibly configurable in the future.
 	self.chatMaxNameLength = 185 -- Pixels
 	self.statusMaxNameLength = 185
-	self.friendMaxNameLength = 230
+	self.friendMaxNameLength = 290
 	self.notificationMaxNameLength = 230
 	self.steamOverlayEnablable = (Platform.osFamily ~= "Linux" and Platform.osFamily ~= "FreeBSD")
 
@@ -48,6 +48,7 @@ function Configuration:init()
 	self.steamLinkComplete = false
 	self.alreadySeenFactionPopup4 = false
 	self.firstBattleStarted = false
+	self.hideWelcomeMessage = false
 	self.lobbyTimeoutTime = 60 -- Seconds
 
 	self.battleFilterPassworded2 = true
@@ -84,7 +85,7 @@ function Configuration:init()
 	self.userNameColor = {1, 1, 1, 1}
 
 	self.buttonFocusColor = {0.54,0.72,1,0.3}
-	self.buttonSelectedColor = {0.54,0.72,1,0.6}--{1.0, 1.0, 1.0, 1.0}
+	self.buttonSelectedColor = {0.54,0.72,1,0.95}--{1.0, 1.0, 1.0, 1.0}
 
 	self.loadLocalWidgets = false
 	self.displayBots = false
@@ -197,6 +198,7 @@ function Configuration:init()
 	self.simplifiedSkirmishSetup = true
 	self.debugMode = false
 	self.devMode = (VFS.FileExists("devmode.txt") and true) or false
+	self.debugRawMessages = false
 	self.enableProfiler = false
 	self.showPlanetUnlocks = false
 	self.showPlanetCodex = false
@@ -206,6 +208,7 @@ function Configuration:init()
 	self.editCampaign = false
 	self.activeDebugConsole = false
 	self.onlyShowFeaturedMaps = true
+	self.showFullModList = false
 	self.simpleAiList = true
 	self.useSpringRestart = false
 	self.menuMusicVolume = 0.5
@@ -280,6 +283,7 @@ function Configuration:init()
 	self.animate_lobby = (gl.CreateShader ~= nil)
 	self.minimapDownloads = {}
 	self.minimapThumbDownloads = {}
+	self.downloadRetryCount = 3
 
 	local saneCharacterList = {
 		"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
@@ -424,6 +428,10 @@ function Configuration:ApplySettingsConfigPreset(preset)
 	end
 end
 
+function Configuration:SetTutorialComplete()
+	self.hideWelcomeMessage = true
+end
+
 ---------------------------------------------------------------------------------
 -- Widget interface callins
 ---------------------------------------------------------------------------------
@@ -490,6 +498,7 @@ function Configuration:GetConfigData()
 		autoLogin = self.autoLogin,
 		firstLoginEver = self.firstLoginEver,
 		wantAuthenticateWithSteam = self.wantAuthenticateWithSteam,
+		hideWelcomeMessage = self.hideWelcomeMessage,
 		useSteamBrowser = self.useSteamBrowser,
 		steamLinkComplete = self.steamLinkComplete,
 		alreadySeenFactionPopup4 = self.alreadySeenFactionPopup4,
@@ -515,6 +524,7 @@ function Configuration:GetConfigData()
 		simplifiedSkirmishSetup = self.simplifiedSkirmishSetup,
 		debugMode = self.debugMode,
 		debugAutoWin = self.debugAutoWin,
+		debugRawMessages = self.debugRawMessages,
 		enableProfiler = self.enableProfiler,
 		showPlanetUnlocks = self.showPlanetUnlocks,
 		showPlanetCodex = self.showPlanetCodex,
@@ -530,6 +540,7 @@ function Configuration:GetConfigData()
 		loadLocalWidgets = self.loadLocalWidgets,
 		activeDebugConsole = self.activeDebugConsole,
 		onlyShowFeaturedMaps = self.onlyShowFeaturedMaps,
+		showFullModList = self.showFullModList,
 		simpleAiList = self.simpleAiList,
 		coopConnectDelay = self.coopConnectDelay,
 		useSpringRestart = self.useSpringRestart,
@@ -791,7 +802,7 @@ function Configuration:GetTruncatedEngineVersion()
 		-- Add as required.
 		return (Spring.Utilities.GetEngineVersion() .. ".0")
 	else
-		return string.gsub(string.gsub(Spring.Utilities.GetEngineVersion(), " maintenance", ""), " develop", "")
+		return string.gsub(string.gsub(string.gsub(Spring.Utilities.GetEngineVersion(), " BAR", ""), " maintenance", ""), " develop", "")
 	end
 end
 

@@ -420,7 +420,7 @@ function ChatWindows:ProcessChat(chanName, userName, message, msgDate, notifyCol
 	if not channelConsole then
 		return
 	end
-	local iAmMentioned = (string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName())
+	local iAmMentioned = lobby:GetMyUserName() and (string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName())
 	local chatColour = (iAmMentioned and notifyColor) or chatColor
 	if self:IsChannelSelected(chanName) and self.activeUnreadMessages and self.activeUnreadMessages ~= 0 then
 		self.activeUnreadMessages = self.activeUnreadMessages + 1

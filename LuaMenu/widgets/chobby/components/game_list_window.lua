@@ -9,6 +9,7 @@ function GameListWindow:init(failFunction, sucessFunction, blacklist, titleOverr
 		local info = VFS.GetArchiveInfo(archive)
 		if info and info.modtype == 1 and not (blacklist and blacklist[info.name]) then
 			local pickMapButton = Button:New {
+				classname = "button_rounded",
 				x = 0,
 				y = 0,
 				width = "100%",
@@ -27,7 +28,7 @@ function GameListWindow:init(failFunction, sucessFunction, blacklist, titleOverr
 	end
 
 	self.window.OnDispose = self.window.OnDispose or {}
-	self.window.OnDispose[#self.window.OnDispose + 1] = failFunction
+	self.window.OnDispose[#self.window.OnDispose + 1] = failFunction or nil
 
 	self.popupHolder = PriorityPopup(self.window, self.CancelFunc)
 end

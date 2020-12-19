@@ -35,6 +35,7 @@ local includes = {
 	"components/ai_list_window.lua",
 	"components/aioptions_window.lua",
 	"components/game_list_window.lua",
+	"components/mode_list_window.lua",
 	"components/confirmation_popup.lua",
 	"components/information_popup.lua",
 	"components/control_panel_handler.lua",

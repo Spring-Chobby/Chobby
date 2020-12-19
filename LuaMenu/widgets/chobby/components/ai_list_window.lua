@@ -118,6 +118,7 @@ end
 
 function AiListWindow:MakeAiButton(btnWidth, displayName, tooltip, shortName, version)
 	return Button:New {
+		classname = "button_rounded",
 		x = 0,
 		y = 0,
 		width = btnWidth,

@@ -1244,6 +1244,36 @@
          "VersionNumber":7,
          "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/games/zerokBenchmark03.sdz",
          "TargetPath":"games/zerokBenchmark03.sdz"
+      },
+      {
+         "Platform":null,
+         "VersionNumber":7,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/CustomModes/baseZk.json",
+         "TargetPath":"CustomModes/baseZk.json"
+      },
+      {
+         "Platform":null,
+         "VersionNumber":7,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/CustomModes/devZk.json",
+         "TargetPath":"CustomModes/devZk.json"
+      },
+      {
+         "Platform":null,
+         "VersionNumber":7,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/CustomModes/arenaMod.json",
+         "TargetPath":"CustomModes/arenaMod.json"
+      },
+      {
+         "Platform":null,
+         "VersionNumber":9,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/CustomModes/unitLevelUps.json",
+         "TargetPath":"CustomModes/unitLevelUps.json"
+      },
+      {
+         "Platform":null,
+         "VersionNumber":7,
+         "SourcePath":"LuaMenu/configs/gameConfig/zk/defaultSettings/CustomModes/zeroWars.json",
+         "TargetPath":"CustomModes/zeroWars.json"
       }
    ]
 }

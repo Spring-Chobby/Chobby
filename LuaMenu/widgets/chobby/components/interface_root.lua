@@ -7,13 +7,14 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local titleWidthRel = 28
 	local panelWidthRel = 42
+	local buttonsDoubleOffsetRel = "3%"
 
 	local userStatusPanelWidth = 250
 
 	local battleStatusWidth = 480
-	local panelButtonsWidth = 578
+	local panelButtonsWidth = 560 --578
 	local panelButtonsHeight = 42
-	local statusWindowGapSmall = 44
+	local panelButtonsRightPad = 4
 
 	local chatTabHolderHeight = 41
 
@@ -36,7 +37,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local mainButtonsWidth = 180
 	local mainButtonsWidthSmall = 140
 
-	local userStatusWidth = 225
+	local userStatusWidth = 232
 
 	local imageFudge = 0
 
@@ -45,7 +46,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local statusButtonWidth = 290
 	local statusButtonWidthSmall = 290
 
-	local topBarHeight = 42
+	local topBarHeight = 86
 
 	-- Switch to single panel mode when below the minimum screen width
 	local minScreenWidth = 1360
@@ -56,9 +57,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	local autodetectDoublePanel = true
 	local wideContentPlace = false
 
-	local buttonSpacingLarge = 4 -- Matches tab panel handler and submenu handler
+	local buttonSpacingLarge = 1 -- Matches tab panel handler and submenu handler
 	local BUTTON_SIDE_SPACING = 1 -- Matches tab panel handler and submenu handler
-	local buttonSpacingSmall = 2
+	local buttonSpacingSmall = 0
+
+	local HOLDER_IMAGES = false -- shows holder images for the left menu and top bar
 
 	local IMAGE_TOP_BACKGROUND = LUA_DIRNAME .. "images/top-background.png"
 
@@ -276,8 +279,8 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		children = {},
 	}
 	local buttonsHolder_buttons = Control:New {
-		x = 0,
-		y = 0,
+		x = "0%",
+		y = buttonsDoubleOffsetRel,
 		width = "100%",
 		height = "100%",
 		name = "buttonsHolder_buttons",
@@ -289,7 +292,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		children = {}
 	}
 
-	local buttonsHolder_image = Image:New {
+	local buttonsHolder_image = HOLDER_IMAGES and Image:New {
 		x = 0,
 		y = 0,
 		right = 0,
@@ -297,7 +300,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		file = IMAGE_TOP_BACKGROUND,
 		parent = mainWindow_buttonsHolder,
 		keepAspect = false,
-		color = {0.218, 0.23, 0.49, 0.1},
+		color = {0.2, 0.2, 0.25, 0.2},
 	}
 
 	local mainWindow_mainContent = Control:New {
@@ -388,7 +391,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-----------------------------------
 	-- Top image
 	-----------------------------------
-	local holder_topImage = Image:New {
+	local holder_topImage = HOLDER_IMAGES and Image:New {
 		x = 0,
 		y = 0,
 		right = 0,
@@ -396,14 +399,14 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		file = IMAGE_TOP_BACKGROUND,
 		parent = lobbyInterfaceHolder,
 		keepAspect = false,
-		color = {0.218, 0.23, 0.49, 0.25},
+		color = {0.2, 0.2, 0.25, 0.2},
 	}
 
 	-----------------------------------
 	-- Background holder is put here to be at the back
 	-----------------------------------
 	local backgroundHolder = Background(nil, nil, nil, "menuBackgroundBrightness")
-	local ingameBackgroundHolder = Background(IMAGE_TOP_BACKGROUND, {0, 0, 0, 0.5}, nil, "gameOverlayOpacity")
+	local ingameBackgroundHolder = Background(IMAGE_TOP_BACKGROUND, {0, 0, 0, 0.82}, nil, "gameOverlayOpacity")
 	ingameBackgroundHolder:Disable()
 
 	-------------------------------------------------------------------
@@ -421,10 +424,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 
 	local rightPanelTabs = {}
 	if not WG.Chobby.Configuration.gameConfig.disableCommunityWindow then
-		rightPanelTabs[#rightPanelTabs + 1] = {name = "community", control = WG.CommunityWindow.GetControl()}
+		rightPanelTabs[#rightPanelTabs + 1] = {name = "welcome", control = WG.CommunityWindow.GetControl()}
 	end
 	rightPanelTabs[#rightPanelTabs + 1] = {name = "chat", control = chatWindows.window}
-	rightPanelTabs[#rightPanelTabs + 1] = {name = "friends", control = WG.FriendWindow.GetControl()}
+	rightPanelTabs[#rightPanelTabs + 1] = {name = "profile", control = WG.FriendWindow.GetControl()}
 	rightPanelTabs[#rightPanelTabs + 1] = {name = "settings", control = WG.SettingsWindow.GetControl()}
 	rightPanelTabs[#rightPanelTabs + 1] = {name = "downloads", control = WG.DownloadWindow.GetControl()}
 
@@ -484,6 +487,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	}
 
 	local function UpdateTitle(newTitle)
+		Spring.Echo("newTitle", newTitle, math.random())
 		heading_image.file = Configuration:GetHeadingImage(doublePanelMode, newTitle)
 		heading_image:Invalidate()
 	end
@@ -586,7 +590,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			status_panelButtons:AddChild(panelButtons_buttons)
 
 			panelButtons_buttons:SetPosRelative("0%","0%", "100%","100%")
-			--buttonsHolder_buttons:SetPosRelative("0%","0%", nil,"100%")
+			buttonsHolder_buttons:SetPosRelative("0%", buttonsDoubleOffsetRel, "100%","100%")
 
 			-- Make Main Window take up more space
 			status_panelButtons:Show()
@@ -604,9 +608,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			holder_mainWindow._relativeBounds.bottom = 0
 			holder_mainWindow:UpdateClientArea()
 
-			buttonsHolder_image:SetPos(nil, 0)
-			buttonsHolder_image._relativeBounds.bottom = 0
-			buttonsHolder_image:UpdateClientArea()
+			if buttonsHolder_image then
+				buttonsHolder_image:SetPos(nil, 0)
+				buttonsHolder_image._relativeBounds.bottom = 0
+				buttonsHolder_image:UpdateClientArea()
+			end
 
 			-- Align game title and status.
 			holder_heading:SetPos(0, topOffset, titleWidth, titleHeight)
@@ -617,7 +623,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			status_userWindow._relativeBounds.bottom = panelButtonsHeight
 			status_userWindow:UpdateClientArea()
 
-			holder_topImage:SetPos(nil, topOffset, nil, titleHeight + imageFudge)
+			if holder_topImage then
+				holder_topImage:SetPos(nil, topOffset, nil, titleHeight + imageFudge)
+			end
 		else
 			rightPanelHandler.Rescale(2, 55, nil, nil, buttonSpacingSmall)
 			battleStatusPanelHandler.Rescale(3, nil, statusButtonWidthSmall)
@@ -644,7 +652,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			buttonsHolder_buttons:AddChild(panelButtons_buttons)
 
 			panelButtons_buttons:SetPosRelative("0%","44%", "100%","50%")
-			--buttonsHolder_buttons:SetPosRelative("0%","0%", nil,"50%")
+			buttonsHolder_buttons:SetPosRelative("0%","0%", "100%","100%")
 
 			-- Make Main Window take up more space
 			status_panelButtons:Hide()
@@ -657,9 +665,11 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			holder_mainWindow._relativeBounds.bottom = 0
 			holder_mainWindow:UpdateClientArea()
 
-			buttonsHolder_image:SetPos(nil, chatTabHolderHeight)
-			buttonsHolder_image._relativeBounds.bottom = 0
-			buttonsHolder_image:UpdateClientArea()
+			if buttonsHolder_image then
+				buttonsHolder_image:SetPos(nil, chatTabHolderHeight)
+				buttonsHolder_image._relativeBounds.bottom = 0
+				buttonsHolder_image:UpdateClientArea()
+			end
 
 			-- Align game title and status.
 			holder_heading:SetPos(0, topOffset, mainButtonsWidthSmall + padding, titleHeightSmall)
@@ -670,7 +680,9 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			status_userWindow._relativeBounds.bottom = 0
 			status_userWindow:UpdateClientArea()
 
-			holder_topImage:SetPos(nil, topOffset, nil, titleHeightSmall + imageFudge + chatTabHolderHeight)
+			if holder_topImage then
+				holder_topImage:SetPos(nil, topOffset, nil, titleHeightSmall + imageFudge + chatTabHolderHeight)
+			end
 		end
 
 		heading_image.file = Configuration:GetHeadingImage(doublePanelMode, mainWindowHandler.GetSubheadingName())
@@ -716,7 +728,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		submenuWindow_mainContent._relativeBounds.bottom = bottomPad
 		submenuWindow_mainContent:UpdateClientArea()
 
-		status_panelButtons._relativeBounds.right = rightPad
+		status_panelButtons._relativeBounds.right = panelButtonsRightPad -- rightPad
 		rightPanel_window:UpdateClientArea()
 
 		buttons_exit._relativeBounds.bottom = (bottomPad > 0 and bottomPad) or 4
@@ -803,22 +815,32 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		holder_mainWindow._relativeBounds.bottom = 0
 		holder_mainWindow:UpdateClientArea()
 
-		holder_topImage:SetPos(nil, topOffset)
+		if holder_topImage then
+			holder_topImage:SetPos(nil, topOffset)
+		end
 		holder_heading:SetPos(nil, topOffset)
 		holder_status:SetPos(nil, topOffset)
 
 		if showTopBar then
-			buttonsHolder_image.color[4] = 0.3
-			buttonsHolder_image:Invalidate()
-			holder_topImage.color[4] = 0.45
-			holder_topImage:Invalidate()
+			if buttonsHolder_image then
+				buttonsHolder_image.color[4] = 0.2
+				buttonsHolder_image:Invalidate()
+			end
+			if holder_topImage then
+				holder_topImage.color[4] = 0.2
+				holder_topImage:Invalidate()
+			end
 		else
 			backgroundHolder:SetEnabled(true)
 			ingameBackgroundHolder:SetEnabled(false)
-			buttonsHolder_image.color[4] = 0.1
-			buttonsHolder_image:Invalidate()
-			holder_topImage.color[4] = 0.25
-			holder_topImage:Invalidate()
+			if buttonsHolder_image then
+				buttonsHolder_image.color[4] = 0.5
+				buttonsHolder_image:Invalidate()
+			end
+			if holder_topImage then
+				holder_topImage.color[4] = 0.5
+				holder_topImage:Invalidate()
+			end
 		end
 
 		local screenWidth, screenHeight = Spring.GetViewSizes()
@@ -859,6 +881,10 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 	-- Top bar initialisation
 	-------------------------------------------------------------------
 
+	local function LeaveGameFunction()
+		Spring.Reload("")
+	end
+
 	local switchToMenuButton = Button:New {
 		y = 2,
 		right = 3,
@@ -879,13 +905,13 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		}
 	}
 	local switchToGameButton = Button:New {
-		y = 2,
-		right = 3,
-		width = 108,
-		height = 38,
+		x = "50.12%",
+		right = "30%",
+		y = 3,
+		bottom = 11,
 		name = "switchToGameButton",
-		caption = "Game",
-		font = WG.Chobby.Configuration:GetFont(3),
+		caption = "Return to Battle",
+		font = WG.Chobby.Configuration:GetFont(4),
 		parent = holder_topBar,
 		resizable = false,
 		draggable = false,
@@ -897,19 +923,14 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 			end
 		}
 	}
-
-	local function LeaveGameFunction()
-		Spring.Reload("")
-	end
-
 	local leaveGameButton = Button:New {
-		y = 2,
-		right = 114,
-		width = 108,
-		height = 38,
+		x = "30%",
+		right = "50.12%",
+		y = 3,
+		bottom = 11,
 		name = "leaveGameButton",
-		caption = "Leave",
-		font = WG.Chobby.Configuration:GetFont(3),
+		caption = "Leave Battle",
+		font = WG.Chobby.Configuration:GetFont(4),
 		parent = holder_topBar,
 		resizable = false,
 		draggable = false,
@@ -930,7 +951,7 @@ function GetInterfaceRoot(optionsParent, mainWindowParent, fontFunction)
 		file = IMAGE_TOP_BACKGROUND,
 		parent = holder_topBar,
 		keepAspect = false,
-		color = {0.218, 0.23, 0.49, 0.9},
+		color = {1, 1, 1, 1},
 	}
 
 	-------------------------------------------------------------------

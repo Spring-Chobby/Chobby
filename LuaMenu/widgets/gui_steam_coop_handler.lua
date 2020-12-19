@@ -393,7 +393,7 @@ function SteamCoopHandler.AttemptGameStart(gameType, gameName, mapName, scriptTa
 					MakeExclusivePopup("Wrapper is required to watch replays with old engine versions.")
 					return
 				end
-				local engine = string.gsub(string.gsub(startEngineVersion, " maintenance", ""), " develop", "")
+				local engine = string.gsub(string.gsub(string.gsub(startEngineVersion, " BAR", ""), " maintenance", ""), " develop", "")
 				local params = {
 					StartDemoName = string.sub(startReplayFile, 7),
 					Engine = engine,

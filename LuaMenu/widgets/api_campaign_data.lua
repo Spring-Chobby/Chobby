@@ -260,7 +260,7 @@ local function GetExtraCodexEntries(planetCount, codexCount, extraUnlocked)
 	return entries
 end
 
-local function UnlockRewardSet(rewardSet)
+local function UnlockRewardSet(rewardSet, isGameLoad)
 	local saveRequired = false
 	if rewardSet.units then
 		saveRequired = UnlockListOfThings(gamedata.unitsUnlocked, rewardSet.units) or saveRequired
@@ -278,6 +278,9 @@ local function UnlockRewardSet(rewardSet)
 	if extraCodexEntries then
 		saveRequired = UnlockListOfThings(gamedata.codexEntriesUnlocked, extraCodexEntries) or saveRequired
 	end
+	if rewardSet.completionFunction then
+		saveRequired = rewardSet.completionFunction(isGameLoad) or saveRequired
+	end
 	return saveRequired
 end
 
@@ -285,7 +288,7 @@ local function ApplyUnlocksForCapturedPlanets()
 	for i = 1, #gamedata.planetsCaptured.list do
 		local planetID = gamedata.planetsCaptured.list[i]
 		local planet = WG.Chobby.Configuration.campaignConfig.planetDefs.planets[planetID]
-		UnlockRewardSet(planet.completionReward)
+		UnlockRewardSet(planet.completionReward, true)
 	end
 end
 

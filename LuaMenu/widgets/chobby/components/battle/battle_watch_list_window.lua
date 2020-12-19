@@ -114,6 +114,7 @@ function BattleWatchListWindow:AddBattle(battleID)
 
 	local height = self.itemHeight - 20
 	local parentButton = Button:New {
+		classname = "button_rounded",
 		name = "battleButton",
 		x = 0,
 		right = 0,

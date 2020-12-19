@@ -428,7 +428,7 @@ local function SetupDebriefingTracker(window)
 			debriefingChat.SetTopic("Post game chat") -- URL doesn't work on line one.
 			debriefingChat.SetTopic(debriefTopic)
 		elseif chanName and string.find(chanName, DEBRIEFING_CHANNEL, 1, true) then
-			channelTopics[debriefingChannelName] = debriefTopic
+			channelTopics[chanName] = debriefTopic
 		end
 	end
 	lobby:AddListener("OnBattleDebriefing", OnBattleDebriefing)

@@ -187,6 +187,17 @@ function Interface:Unignore(userName)
 	return self
 end
 
+function Interface:ReportUser(userName, text)
+	self:super("ReportUser", userName, text)
+	local sendData = {
+		Username = userName,
+		Text = text,
+	}
+
+	self:_SendCommand("UserReport " .. json.encode(sendData))
+	return self
+end
+
 ------------------------
 -- Battle commands
 ------------------------
@@ -204,7 +215,7 @@ for i, v in pairs(modeToName) do
 	nameToMode[v] = i
 end
 
-function Interface:HostBattle(battleTitle, password, modeName, mapName)
+function Interface:HostBattle(battleTitle, password, modeName, mapName, gameName, modOptions)
 	--OpenBattle {"Header":{"Mode":6,"Password":"bla","Title":"GoogleFrog's Teams"}}
 	-- Mode:
 	-- 5 = Cooperative
@@ -216,18 +227,20 @@ function Interface:HostBattle(battleTitle, password, modeName, mapName)
 	if tonumber(Spring.Utilities.GetEngineVersion()) then
 		engineName = Spring.Utilities.GetEngineVersion() .. ".0"
 	else
-		engineName = string.gsub(string.gsub(Spring.Utilities.GetEngineVersion(), " maintenance", ""), " develop", "")
+		engineName = string.gsub(string.gsub(string.gsub(Spring.Utilities.GetEngineVersion(), " BAR", ""), " maintenance", ""), " develop", "")
 	end
 
 	local sendData = {
 		Header = {
 			Title = battleTitle,
 			Mode = (modeName and nameToMode[modeName]) or 0,
-			Password = password,
+			Password = password or nil,
 			Engine = engineName,
 			Map = mapName,
+			Game = gameName,
 		}
 	}
+	self.openBattleModOptions = modOptions
 
 	self:_SendCommand("OpenBattle " .. json.encode(sendData))
 end
@@ -404,8 +417,33 @@ function Interface:StartBattle()
 	return self
 end
 
-function Interface:SelectGame(gameName)
+function Interface:SelectGame(gameName, force)
+	if gameName == "zk:stable" or not force then
+		self:SayBattle("!game " .. gameName)
+		return self
+	end
+	
+	local myBattle = self:GetMyBattleID() and self.battles[self:GetMyBattleID()]
+	if not myBattle then
+		self:SayBattle("!game " .. gameName)
+		return self
+	end
+	
+	if not myBattle.passworded then
+		self:SayBattle("!password a")
+	end
+	if myBattle.battleMode ~= 0 then -- Custom
+		self:SayBattle("!type custom")
+	end
+	
 	self:SayBattle("!game " .. gameName)
+	
+	if myBattle.battleMode ~= 0 then
+		self:SayBattle("!type " .. modeToName[myBattle.battleMode])
+	end
+	if not myBattle.passworded then
+		self:SayBattle("!password")
+	end
 	return self
 end
 

@@ -99,6 +99,8 @@ local function AddLinkButton(scroll, name, tooltip, link, x, right, y, bottom)
 		caption = name,
 		tooltip = tooltip,
 		classname = "option_button",
+		align = "left",
+		alignPadding = 0.12,
 		font = WG.Chobby.Configuration:GetFont(3),
 		OnClick = {
 			function ()
@@ -200,6 +202,114 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- Tutorial
+
+local TUTORIAL_PLANET = 69
+
+local function StartTutorial()
+	WG.CampaignSaveWindow.PromptInitialSaveName()
+	WG.Chobby.interfaceRoot.OpenSingleplayerTabByName("campaign")
+	WG.CampaignHandler.OpenPlanetScreen(TUTORIAL_PLANET)
+	WG.CampaignHandler.StartPlanetMission(TUTORIAL_PLANET)
+end
+
+local function GetTutorialControl()
+	local Configuration = WG.Chobby.Configuration
+	
+	local holder = Control:New {
+		x = 0,
+		y = 0,
+		right = 0,
+		height = 500,
+	}
+	
+	local heading = Label:New {
+		x = 0,
+		y = 15,
+		height = 35,
+		align = "center",
+		fontsize = Configuration:GetFont(5).size,
+		caption = "Welcome to Zero-K",
+		parent = holder,
+	}
+
+	TextBox:New {
+		x = 8,
+		right = 8,
+		y = 76,
+		height = 35,
+		fontsize = Configuration:GetFont(2).size,
+		text = [[Embark on a campaign to uncover the secrets of a seemingly empty galaxy, and learn Zero-K along the way. The campaign is under 'Singleplayer & Coop', but can also be started by clicking 'Play the Tutorial'. Alternately, battle a range of non-cheating AIs in the skirmish mode. Play either option with friends by inviting them with the Steam friends list.]],
+		parent = holder,
+	}
+
+	TextBox:New {
+		x = 8,
+		right = 8,
+		y = 186,
+		height = 35,
+		fontsize = Configuration:GetFont(2).size,
+		text = [[Click 'Multiplayer' for private games, public games, and the matchmaker. Say 'hi' on Discord or the forum, or even get into modding and development. Zero-K runs on involvement as it is entirely community-made.]],
+		parent = holder,
+	}
+
+	local function CancelFunc()
+		if not tutorialPrompt then
+			local statusAndInvitesPanel = WG.Chobby.interfaceRoot.GetStatusAndInvitesPanel()
+			tutorialPrompt = InitializeTutorialPrompt()
+			statusAndInvitesPanel.AddControl(tutorialPrompt.GetHolder(), 15)
+		end
+	end
+
+	local offset = 262
+	Button:New {
+		x = "18%",
+		y = offset,
+		right = "18%",
+		height = 70,
+		caption = "Play the Tutorial",
+		font = Configuration:GetFont(4),
+		classname = "action_button",
+		padding = {2,4,4,4},
+		OnClick = {
+			function()
+				StartTutorial()
+			end
+		},
+		parent = holder,
+	}
+	offset = offset + 74
+
+	--Button:New {
+	--	right = 2,
+	--	bottom = 2,
+	--	width = 110,
+	--	height = 42,
+	--	classname = "negative_button",
+	--	caption = i18n("close"),
+	--	font = Configuration:GetFont(3),
+	--	OnClick = {
+	--		CancelFunc
+	--	},
+	--	parent = holder,
+	--}
+	
+	local externalFunctions = {}
+	
+	function externalFunctions.GetHolder()
+		return holder
+	end
+	
+	function externalFunctions.DoResize()
+		heading:SetPos(0, 15, holder.width)
+		return 350
+	end
+	
+	return externalFunctions
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- News
 
 local function GetDateTimeDisplay(parentControl, xPosition, yPosition, timeString)
@@ -295,7 +405,7 @@ local headingFormats = {
 	},
 }
 
-local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, topHeading, showBulletHeading)
+local function GetNewsEntry(parentHolder, index, headingSize, timeAsTooltip, showBulletHeading)
 	local linkString
 	local controls = {}
 
@@ -535,7 +645,9 @@ local function GetNewsHandler(parentControl, headingSize, timeAsTooltip, topHead
 	headFormat.fontSize = WG.Chobby.Configuration:GetFont(headingSize).size
 
 	local offset = topHeading and headFormat.topHeadingOffset or 0
+	local staticOffset = 0
 	local visibleItems = 0
+	local staticNotice
 
 	local holder = Control:New{
 		x = 0,
@@ -560,7 +672,10 @@ local function GetNewsHandler(parentControl, headingSize, timeAsTooltip, topHead
 	local newsEntries = {}
 
 	local function DoResize()
-		offset = topHeading and headFormat.topHeadingOffset or 0
+		if staticNotice then
+			staticOffset = staticNotice.DoResize()
+		end
+		offset = (topHeading and headFormat.topHeadingOffset or 0) + staticOffset
 		for i = 1, #newsEntries do
 			offset = newsEntries[i].DoResize(offset, visibleItems)
 		end
@@ -602,12 +717,18 @@ local function GetNewsHandler(parentControl, headingSize, timeAsTooltip, topHead
 			end
 
 			if not newsEntries[i] then
-				newsEntries[i] = GetNewsEntry(holder, i, headingSize, timeAsTooltip, topHeading, showBulletHeading)
+				newsEntries[i] = GetNewsEntry(holder, i, headingSize, timeAsTooltip, showBulletHeading)
 			end
 			offset = newsEntries[i].AddEntry(entry, offset)
 		end
 
 		visibleItems = #items
+		DoResize()
+	end
+
+	function externalFunctions.SetStaticNotice(noticeData)
+		staticNotice = noticeData
+		holder:AddChild(noticeData.GetHolder())
 		DoResize()
 	end
 
@@ -617,211 +738,6 @@ local function GetNewsHandler(parentControl, headingSize, timeAsTooltip, topHead
 	parentControl.OnResize = parentControl.OnResize or {}
 	parentControl.OnResize[#parentControl.OnResize + 1] = function ()
 		WG.Delay(DoResize, 0.01)
-	end
-
-	return externalFunctions
-end
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
--- Profile
-
---{"Name":"GoogleFrog","Awards":[{"AwardKey":"cap","Collected":51},{"AwardKey":"reclaim","Collected":977},{"AwardKey":"pwn","Collected":1824},{"AwardKey":"vet","Collected":362},{"AwardKey":"kam","Collected":70},{"AwardKey":"ouch","Collected":952},{"AwardKey":"shell","Collected":267},{"AwardKey":"terra","Collected":278},{"AwardKey":"navy","Collected":77},{"AwardKey":"nux","Collected":16},{"AwardKey":"fire","Collected":133},{"AwardKey":"air","Collected":74},{"AwardKey":"emp","Collected":112},{"AwardKey":"share","Collected":4},{"AwardKey":"mex","Collected":758},{"AwardKey":"comm","Collected":84},{"AwardKey":"rezz","Collected":3},{"AwardKey":"friend","Collected":1},{"AwardKey":"head","Collected":8},{"AwardKey":"dragon","Collected":2},{"AwardKey":"sweeper","Collected":2},{"AwardKey":"heart","Collected":2},{"AwardKey":"mexkill","Collected":142},{"AwardKey":"slow","Collected":156},{"AwardKey":"silver","Collected":6},{"AwardKey":"bronze","Collected":3},{"AwardKey":"gold","Collected":1}],"Badges":["dev_adv","donator_0"],"Level":133,"LevelUpRatio":"0.69","EffectiveElo":2312,"EffectiveMmElo":2234,"EffectivePwElo":1670,"Kudos":724,"PwMetal":"5105.00","PwDropships":"74.00","PwBombers":"17.00","PwWarpcores":"0.00"}
-
-local function GetAwardsHandler(parentControl, iconWidth, iconHeight, GetEntryData)
-	local fontsize = WG.Chobby.Configuration:GetFont(1).size
-	local imageList
-	local externalFunctions = {}
-
-	function externalFunctions.PositionAwards()
-		if not imageList then
-			return
-		end
-
-		local gridWidth = math.floor(parentControl.width/(iconWidth + 2))
-		if gridWidth < 1 then
-			return
-		end
-
-		for i = 1, #imageList do
-			local x, y = (iconWidth + 2)*((i - 1)%gridWidth), (iconHeight + 2)*math.floor((i - 1)/gridWidth)
-			imageList[i]:SetPos(x, y)
-		end
-	end
-
-	function externalFunctions.SetAwards(awardsList)
-		parentControl:ClearChildren()
-		imageList = {}
-		for i = 1, #awardsList do
-			local imageName, count = GetEntryData(awardsList[i])
-			imageList[i] = Image:New{
-				width = iconWidth,
-				height = iconHeight,
-				keepAspect = true,
-				file = imageName,
-				parent = parentControl,
-			}
-			if count and count > 1 then
-				Label:New {
-					x = 2,
-					y = "60%",
-					right = 2,
-					bottom = 6,
-					align = "right",
-					fontsize = fontsize,
-					caption = count,
-					parent = imageList[i],
-				}
-			end
-		end
-	end
-
-	return externalFunctions
-end
-
-local function GetProfileHandler(parentControl)
-
-	local holder = Control:New{
-		x = 0,
-		y = 0,
-		right = 0,
-		bottom = 0,
-		padding = {0,0,0,0},
-		parent = parentControl,
-	}
-	local nameHolder = Control:New{
-		x = "36%",
-		y = "7%",
-		right = 0,
-		height = 28,
-		padding = {0,0,0,0},
-		parent = holder,
-	}
-
-	local awardsHandler, awardsLabel
-	local GetAwardImage = WG.Chobby.Configuration.gameConfig.GetAward
-	if GetAwardImage then
-		local awardsHolder = Control:New{
-			x = 10,
-			y = "60%",
-			right = 6,
-			bottom = 0,
-			padding = {0,0,0,0},
-			parent = holder,
-		}
-		local function GetAwardInfo(entry)
-			return GetAwardImage(entry.AwardKey), entry.Collected
-		end
-		awardsHandler = GetAwardsHandler(awardsHolder, 38, 38, GetAwardInfo)
-	end
-
-	local badgesHandler
-	local badgeDecs = WG.Chobby.Configuration.gameConfig.badges
-	if badgeDecs then
-		local badgeHolder = Control:New{
-			x = "42%",
-			y = "46%",
-			right = 0,
-			height = 22,
-			padding = {0,0,0,0},
-			parent = holder,
-		}
-		local function GetBadgeInfo(entry)
-			return (badgeDecs[entry] or {}).image
-		end
-		badgesHandler = GetAwardsHandler(badgeHolder, 46, 19, GetBadgeInfo)
-	end
-
-	local experienceBar, rankBar, backgroundImage
-
-	local function MakeProgressBar(yPos, tooltip)
-		local progressBar = Progressbar:New {
-			x = "24%",
-			y = yPos,
-			right = "24%",
-			height = 20,
-			value = 0,
-			max = 1,
-			caption = "Level " .. 2,
-			tooltip = tooltip,
-			font = WG.Chobby.Configuration:GetFont(2),
-			parent = holder,
-		}
-		function progressBar:HitTest(x,y) return self end
-		return progressBar
-	end
-
-	local function DoResize()
-		if awardsHandler then
-			awardsHandler.PositionAwards()
-		end
-	end
-
-	parentControl.OnResize = parentControl.OnResize or {}
-	parentControl.OnResize[#parentControl.OnResize + 1] = function ()
-		WG.Delay(DoResize, 0.01)
-	end
-
-	local externalFunctions = {}
-
-	function externalFunctions.UpdateProfile(profileData)
-		local level = profileData.Level
-		local levelProgress = tonumber(profileData.LevelUpRatio) or 0
-		local rank = profileData.Rank
-		local rankProgress = tonumber(profileData.RankUpRatio) or 0
-
-		experienceBar = experienceBar or MakeProgressBar("22%", "Your level. Play on the server to level up.")
-		rankBar = rankBar or MakeProgressBar("34%", "Your skill rating and progress to the next rank.")
-
-		experienceBar:SetCaption("Level " .. (level or "??"))
-		experienceBar:SetValue(levelProgress)
-
-		if awardsHandler and profileData.Awards then
-			awardsHandler.SetAwards(profileData.Awards)
-			awardsHandler.PositionAwards()
-			if not awardsLabel then
-				awardsLabel = Label:New {
-					x = 5,
-					y = "48%",
-					width = 80,
-					height = 22,
-					align = "right",
-					fontsize = WG.Chobby.Configuration:GetFont(2).size,
-					caption = "Awards:",
-					parent = holder,
-				}
-			end
-		end
-		if badgesHandler and profileData.Badges then
-			badgesHandler.SetAwards(profileData.Badges)
-			badgesHandler.PositionAwards()
-		end
-
-		local GetRankAndImage = WG.Chobby.Configuration.gameConfig.GetRankAndImage
-		if rank and GetRankAndImage then
-			local rankName, rankImage = GetRankAndImage(rank)
-
-			rankBar:SetCaption(rankName)
-			rankBar:SetValue(rankProgress or 0)
-			backgroundImage = backgroundImage or Image:New{
-				x = 0,
-				y = 0,
-				right = 0,
-				bottom = 0,
-				keepAspect = true,
-				parent = holder,
-			}
-			backgroundImage.file = rankImage
-			backgroundImage:Invalidate()
-			backgroundImage:SendToBack()
-		end
-	end
-
-	local userControl
-	function externalFunctions.UpdateUserName()
-		nameHolder:ClearChildren()
-		userControl = WG.UserHandler.GetCommunityProfileUser(lobby:GetMyUserName())
-		nameHolder:AddChild(userControl)
 	end
 
 	return externalFunctions
@@ -845,18 +761,19 @@ local function InitializeControls(window)
 	local lobby = WG.LibLobby.lobby
 	local staticCommunityData = LoadStaticCommunityData()
 
-	local topWide     = GetScroll(window, 0, 0, 0, "60%", true)
-	local leftCenter  = GetScroll(window, 0, "66.6%", "40%", "31%", false)
-	local midCenter   = GetScroll(window, "33.4%", "33.4%", "40%", "31%", true)
-	local rightCenter = GetScroll(window, "66.6%", 0, "40%", "31%", true)
-	local lowerWide   = GetScroll(window, 0, 0, "69%", 0, true)
+	local topWide     = GetScroll(window, 0, 0, 0, "31%", true)
+	local leftCenter  = GetScroll(window, 0, "66.6%", "69%", 0, false)
+	local bottomRight = GetScroll(window, "33.4%", 0, "69%", 0, true)
+	--local midCenter   = GetScroll(window, "33.4%", "33.4%", "69%", 0, true)
+	--local rightCenter = GetScroll(window, "66.6%", 0, "69%", 0, true)
+	
+	--local lowerWide   = GetScroll(window, 0, 0, "69%", 0, true)
 	--local leftLower   = GetScroll(window, 0, "33.4%", "69%", 0, false)
 	--local rightLower  = GetScroll(window, "66.6%", 0, "69%", 0, false)
-
-	LeaveIntentionallyBlank(rightLower, "(reserved)")
+	--LeaveIntentionallyBlank(rightLower, "(reserved)")
 
 	-- Populate link panel
-	AddLinkButton(leftCenter, "Zero-K", "Visit your home page at Zero-K", "http://zero-k.info/", 0, 0, "75.5%", 0)
+	AddLinkButton(leftCenter, "Website",    "Visit the Zero-K website.", "http://zero-k.info/", 0, 0, "75.5%", 0)
 	AddLinkButton(leftCenter, "Forum",   "Browse or post on the forums.", "http://zero-k.info/Forum",   0, 0, "25.5%", "50.5%")
 	AddLinkButton(leftCenter, "Manual",  "Read the manual and unit guide.", "http://zero-k.info/mediawiki/index.php?title=Manual", 0, 0, "50.5%", "25.5%")
 	AddLinkButton(leftCenter, "Discord", "Chat on the Zero-K Discord server.", "https://discord.gg/aab63Vt", 0, 0, 0, "75.5%")
@@ -868,13 +785,18 @@ local function InitializeControls(window)
 		newsHandler.ReplaceNews(staticCommunityData.NewsItems)
 	end
 
+	if not WG.Chobby.Configuration.hideWelcomeMessage then
+		local tutorialControl = GetTutorialControl()
+		newsHandler.SetStaticNotice(tutorialControl)
+	end
+
 	local function OnNewsList(_, newsItems)
 		newsHandler.ReplaceNews(newsItems)
 	end
 	lobby:AddListener("OnNewsList", OnNewsList)
 
 	-- Forum Handler
-	local forumHandler = GetNewsHandler(midCenter, 2, true, "Recent Posts", true)
+	local forumHandler = GetNewsHandler(bottomRight, 2, true, "Recent Posts", true)
 	if staticCommunityData and staticCommunityData.ForumItems then
 		forumHandler.ReplaceNews(staticCommunityData.ForumItems)
 	end
@@ -885,27 +807,27 @@ local function InitializeControls(window)
 	lobby:AddListener("OnForumList", OnForumList)
 
 	-- Ladder Handler
-	local ladderHandler = GetLadderHandler(rightCenter)
-	if staticCommunityData and staticCommunityData.LadderItems then
-		ladderHandler.UpdateLadder(staticCommunityData.LadderItems)
-	end
-
-	local function OnLadderList(_, ladderItems)
-		ladderHandler.UpdateLadder(ladderItems)
-	end
-	lobby:AddListener("OnLadderList", OnLadderList)
+	--local ladderHandler = GetLadderHandler(rightCenter)
+	--if staticCommunityData and staticCommunityData.LadderItems then
+	--	ladderHandler.UpdateLadder(staticCommunityData.LadderItems)
+	--end
+	--
+	--local function OnLadderList(_, ladderItems)
+	--	ladderHandler.UpdateLadder(ladderItems)
+	--end
+	--lobby:AddListener("OnLadderList", OnLadderList)
 
 	-- Profile Handler
-	local profileHandle = GetProfileHandler(lowerWide)
-	local function OnUserProfile(_, profileData)
-		profileHandle.UpdateProfile(profileData)
-	end
-	lobby:AddListener("OnUserProfile", OnUserProfile)
+	--local profileHandle = GetProfileHandler(lowerWide)
+	--local function OnUserProfile(_, profileData)
+	--	profileHandle.UpdateProfile(profileData)
+	--end
+	--lobby:AddListener("OnUserProfile", OnUserProfile)
 
-	local function OnAccepted(listener)
-		profileHandle.UpdateUserName()
-	end
-	lobby:AddListener("OnAccepted", OnAccepted)
+	--local function OnAccepted(listener)
+	--	profileHandle.UpdateUserName()
+	--end
+	--lobby:AddListener("OnAccepted", OnAccepted)
 end
 
 --------------------------------------------------------------------------------
@@ -932,7 +854,7 @@ function CommunityWindow.GetControl()
 		},
 		OnResize = {
 			function(obj, xSize, ySize)
-				if ySize < 650 then
+				if ySize < 12750 then -- Never used
 					globalSizeMode = 1
 				else
 					globalSizeMode = 2
@@ -956,16 +878,16 @@ function widget:ActivateGame()
 end
 
 local function DelayedInitialize()
-	if WG.Chobby.Configuration.firstBattleStarted then
-		WG.Chobby.interfaceRoot.OpenRightPanelTab("community")
-	end
+	--if WG.Chobby.Configuration.firstBattleStarted then
+	WG.Chobby.interfaceRoot.OpenRightPanelTab("welcome")
+	--end
 end
 
 function widget:Initialize()
 	CHOBBY_DIR = LUA_DIRNAME .. "widgets/chobby/"
 	VFS.Include(LUA_DIRNAME .. "widgets/chobby/headers/exports.lua", nil, VFS.RAW_FIRST)
 
-	WG.Delay(DelayedInitialize, 0.2) -- After user handler
+	WG.Delay(DelayedInitialize, 0.6) -- After user handler
 
 	WG.CommunityWindow = CommunityWindow
 end

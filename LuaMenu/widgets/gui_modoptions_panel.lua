@@ -43,7 +43,6 @@ local function UpdateControlValue(key, value)
 end
 
 local function TextFromNum(num, step)
-
 	-- remove excess accuracy
 	local places = 0
 	if step < 0.01  then
@@ -383,26 +382,61 @@ local function CreateModoptionWindow()
 		modoptionsSelectionWindow:Dispose()
 	end
 
-	local buttonAccept, buttonMods, modSelection
+	local buttonAccept, buttonMods, modSelection, isRapid
+	local buttonCustom, customModeSelection, mapSelection, typeSelection
 
 	function GetModSelection()
-		local function SetGameFail()
-		end
-
 		local function SetGameSucess(name)
 			buttonMods.caption = name
 			modSelection = name
 		end
 
 		local Configuration = WG.Chobby.Configuration
-		WG.Chobby.GameListWindow(SetGameFail, SetGameSucess, Configuration and Configuration.gameConfig.modBlacklist, i18n("select_mod"))
+		WG.Chobby.GameListWindow(false, SetGameSucess, Configuration and Configuration.gameConfig.modBlacklist, i18n("select_mod"))
+	end
+
+	function GetCustomModeSelection()
+		local function SetCustomModeSuccess(modeData)
+			if not modeData then
+				return
+			end
+			buttonCustom.caption = modeData.name
+			if modeData.map then
+				mapSelection = modeData.map
+			end
+			if modeData.game then
+				modSelection = modeData.game
+				isRapid = false
+			end
+			if modeData.rapidTag then
+				modSelection = modeData.rapidTag
+				isRapid = true
+			end
+			if modeData.roomType then
+				typeSelection = modeData.roomType
+			end
+			if modeData.options then
+				for key, value in pairs(modeData.options) do
+					UpdateControlValue(key, value)
+				end
+			end
+		end
+
+		local Configuration = WG.Chobby.Configuration
+		WG.Chobby.ModeListWindow(false, SetCustomModeSuccess, false, i18n("select_custom_mode"))
 	end
 
 	local function AcceptFunc()
 		screen0:FocusControl(buttonAccept) -- Defocus the text entry
 		battleLobby:SetModOptions(localModoptions)
 		if modSelection then
-			battleLobby:SelectGame(modSelection)
+			battleLobby:SelectGame(modSelection, true, isRapid)
+		end
+		if typeSelection then
+			battleLobby:SetBattleType(typeSelection)
+		end
+		if mapSelection then
+			battleLobby:SelectMap(mapSelection)
 		end
 		modoptionsSelectionWindow:Dispose()
 	end
@@ -413,25 +447,49 @@ local function CreateModoptionWindow()
 		end
 		localModoptions = {}
 		
+		mapSelection = false
 		modSelection = false
-		buttonMods.caption = i18n("select_mod")
+		tpyeSelection = false
+		
+		buttonCustom.caption = i18n("select_custom_mode")
+		if buttonMods then
+			buttonMods.caption = i18n("select_mod")
+		end
 	end
 
-	buttonMods = Button:New {
+	buttonCustom = Button:New {
 		x = 10,
-		right = 513,
+		width = 250,
 		bottom = 1,
 		height = 70,
-		caption = i18n("select_mod"),
+		caption = i18n("select_custom_mode"),
 		font = WG.Chobby.Configuration:GetFont(3),
 		parent = modoptionsSelectionWindow,
 		classname = "option_button",
 		OnClick = {
 			function()
-				GetModSelection()
+				GetCustomModeSelection()
 			end
 		},
 	}
+
+	if WG.Chobby.Configuration.showFullModList then
+		buttonMods = Button:New {
+			x = 269,
+			width = 187,
+			bottom = 1,
+			height = 70,
+			caption = i18n("select_mod"),
+			font = WG.Chobby.Configuration:GetFont(3),
+			parent = modoptionsSelectionWindow,
+			classname = "option_button",
+			OnClick = {
+				function()
+					GetModSelection()
+				end
+			},
+		}
+	end
 
 	Button:New {
 		right = 294,
@@ -616,6 +674,30 @@ function ModoptionsPanel.GetModoptionsControl()
 		modoptionsDisplay.Update()
 	end
 	return modoptionsDisplay.GetControl()
+end
+
+function ModoptionsPanel.GetCustomModes(modeList, excludeHostMenuHide)
+	local files = VFS.DirList("CustomModes")
+	local modeMap = {}
+	for i = 1, #files do
+		local modeFile, success = Spring.Utilities.json.loadFile(files[i])
+		if success then
+			if modeFile.name then
+				if not (excludeHostMenuHide and modeFile.hideFromHostMenu) then
+					modeMap[modeFile.name] = modeFile
+					modeList[#modeList + 1] = modeFile.name
+				end
+			else
+				Spring.Echo("CustomModeError", "Mode file missing field 'name'", files[i], "Index", i)
+			end
+		else
+			Spring.Echo("CustomModeError", "Unable to load file", files[i], "Index", i)
+		end
+	end
+	
+	--Spring.Utilities.TableEcho(modeList, "modeListmodeList")
+	--Spring.Utilities.TableEcho(modeMap, "modeMapmodeMap")
+	return modeList, modeMap
 end
 
 --------------------------------------------------------------------------

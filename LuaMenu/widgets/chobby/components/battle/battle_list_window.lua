@@ -305,6 +305,7 @@ function BattleListWindow:MakeWatchBattle(battleID, battle)
 
 	local height = self.itemHeight - 20
 	local parentButton = Button:New {
+		classname = "button_rounded",
 		name = "battleButton",
 		x = 0,
 		right = 0,
@@ -416,6 +417,7 @@ function BattleListWindow:MakeJoinBattle(battleID, battle)
 
 	local height = self.itemHeight - 20
 	local parentButton = Button:New {
+		classname = "button_rounded",
 		name = "battleButton",
 		x = 0,
 		right = 0,
@@ -982,6 +984,12 @@ function BattleListWindow:OpenHostWindow()
 		font = Configuration:GetFont(3),
 		parent = hostBattleWindow,
 	}
+	
+	local modeList, customModeMap = {"Cooperative", "Team", "1v1", "FFA", "Custom"}, false
+	if WG.ModoptionsPanel and WG.ModoptionsPanel.GetCustomModes then
+		modeList, customModeMap = WG.ModoptionsPanel.GetCustomModes(modeList, true)
+	end
+	
 	local typeCombo = ComboBox:New {
 		x = 220,
 		width = 260,
@@ -990,7 +998,7 @@ function BattleListWindow:OpenHostWindow()
 		itemHeight = 22,
 		text = "",
 		font = Configuration:GetFont(3),
-		items = {"Cooperative", "Team", "1v1", "FFA", "Custom"},
+		items = modeList,
 		itemFontSize = Configuration:GetFont(3).size,
 		selected = 1,
 		parent = hostBattleWindow,
@@ -1002,10 +1010,17 @@ function BattleListWindow:OpenHostWindow()
 
 	local function HostBattle()
 		WG.BattleRoomWindow.LeaveBattle()
-		if string.len(passwordEdit.text) > 0 then
-			lobby:HostBattle(gameNameEdit.text, passwordEdit.text, typeCombo.items[typeCombo.selected])
+		local modeSelection = typeCombo.items[typeCombo.selected]
+		if customModeMap and customModeMap[modeSelection] then
+			local modeData = customModeMap[modeSelection]
+			lobby:HostBattle(gameNameEdit.text, (string.len(passwordEdit.text) > 0) and passwordEdit.text, 
+				modeData.roomType or "Custom",
+				modeData.map,
+				modeData.game,
+				modeData.options
+			)
 		else
-			lobby:HostBattle(gameNameEdit.text, nil, typeCombo.items[typeCombo.selected])
+			lobby:HostBattle(gameNameEdit.text, (string.len(passwordEdit.text) > 0) and passwordEdit.text, modeSelection)
 		end
 		hostBattleWindow:Dispose()
 	end

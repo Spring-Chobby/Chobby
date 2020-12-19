@@ -16,6 +16,7 @@ local function UpdateLups(_, conf)
 	local lupsFileName = settings.ShaderDetail_file or "LuaMenu/configs/gameConfig/zk/lups/lups3.cfg"
 	local lupsAirJetDisabled = ((settings.LupsAirJet == "On") and FALSE) or TRUE
 	local lupsRibbonDisabled = ((settings.LupsRibbon == "On") and FALSE) or TRUE
+	local lupsNanoParticlesDisabled = ((settings.LupsNanoParticles == "Cloud") and FALSE) or TRUE
 	local LupsShieldShaderDisabled = ((settings.LupsShieldShader == "Off") and TRUE) or FALSE
 	local LupsShieldHighQualityDisabled = ((settings.LupsShieldShader == "Default") and FALSE) or TRUE
 	local lupsWaterRefractEnabled = ((settings.LupsWaterSettings == "Refraction" or settings.LupsWaterSettings == "Refract and Reflect") and 1) or 0
@@ -25,6 +26,7 @@ local function UpdateLups(_, conf)
 
 	sourceFile = sourceFile:gsub("__AIR_JET__", lupsAirJetDisabled)
 	sourceFile = sourceFile:gsub("__RIBBON__", lupsRibbonDisabled)
+	sourceFile = sourceFile:gsub("__NANO_PARTICLES__", lupsNanoParticlesDisabled)
 	sourceFile = sourceFile:gsub("__SHIELD_SPHERE_COLOR__", LupsShieldShaderDisabled)
 	sourceFile = sourceFile:gsub("__SHIELD_SPHERE_HIGH_QUALITY__", LupsShieldHighQualityDisabled)
 	sourceFile = sourceFile:gsub("__ENABLE_REFRACT__", lupsWaterRefractEnabled)
@@ -98,6 +100,7 @@ local settingsConfig = {
 					ShadowDetail = "Low",
 					ParticleLimit = "2000",
 					TerrainDetail = "Minimal",
+					SoftParticles = "Compatibility",
 					VegetationDetail = "Minimal",
 					FeatureFade = "On",
 					CompatibilityMode = "On",
@@ -107,6 +110,7 @@ local settingsConfig = {
 					ShaderDetail = "Minimal",
 					LupsAirJet = "Off",
 					LupsRibbon = "Off",
+					LupsNanoParticles = "Beam",
 					LupsShieldShader = "Off",
 					LupsWaterSettings = "Off",
 					FancySky = "Off",
@@ -125,6 +129,7 @@ local settingsConfig = {
 					ShadowDetail = "Low",
 					ParticleLimit = "6000",
 					TerrainDetail = "Low",
+					SoftParticles = "Enabled",
 					VegetationDetail = "Low",
 					FeatureFade = "On",
 					CompatibilityMode = "Off",
@@ -134,6 +139,7 @@ local settingsConfig = {
 					ShaderDetail = "Minimal",
 					LupsAirJet = "Off",
 					LupsRibbon = "Off",
+					LupsNanoParticles = "Beam",
 					LupsShieldShader = "Off",
 					LupsWaterSettings = "Off",
 					FancySky = "Off",
@@ -152,6 +158,7 @@ local settingsConfig = {
 					ShadowDetail = "Low",
 					ParticleLimit = "12000",
 					TerrainDetail = "Low",
+					SoftParticles = "Enabled",
 					VegetationDetail = "Low",
 					FeatureFade = "On",
 					CompatibilityMode = "Off",
@@ -161,6 +168,7 @@ local settingsConfig = {
 					ShaderDetail = "Low",
 					LupsAirJet = "Off",
 					LupsRibbon = "On",
+					LupsNanoParticles = "Beam",
 					LupsShieldShader = "Default",
 					LupsWaterSettings = "Off",
 					FancySky = "Off",
@@ -179,6 +187,7 @@ local settingsConfig = {
 					ShadowDetail = "Medium",
 					ParticleLimit = "15000",
 					TerrainDetail = "Medium",
+					SoftParticles = "Enabled",
 					VegetationDetail = "Medium",
 					FeatureFade = "On",
 					CompatibilityMode = "Off",
@@ -188,6 +197,7 @@ local settingsConfig = {
 					ShaderDetail = "Medium",
 					LupsAirJet = "On",
 					LupsRibbon = "On",
+					LupsNanoParticles = "Cloud",
 					LupsShieldShader = "Default",
 					LupsWaterSettings = "Off",
 					FancySky = "Off",
@@ -206,6 +216,7 @@ local settingsConfig = {
 					ShadowDetail = "High",
 					ParticleLimit = "25000",
 					TerrainDetail = "High",
+					SoftParticles = "Enabled",
 					VegetationDetail = "High",
 					FeatureFade = "On",
 					CompatibilityMode = "Off",
@@ -215,6 +226,7 @@ local settingsConfig = {
 					ShaderDetail = "High",
 					LupsAirJet = "On",
 					LupsRibbon = "On",
+					LupsNanoParticles = "Cloud",
 					LupsShieldShader = "Default",
 					LupsWaterSettings = "Off",
 					FancySky = "Off",
@@ -233,6 +245,7 @@ local settingsConfig = {
 					ShadowDetail = "Ultra",
 					ParticleLimit = "50000",
 					TerrainDetail = "Ultra",
+					SoftParticles = "Enabled",
 					VegetationDetail = "Ultra",
 					FeatureFade = "Off",
 					CompatibilityMode = "Off",
@@ -242,6 +255,7 @@ local settingsConfig = {
 					ShaderDetail = "Ultra",
 					LupsAirJet = "On",
 					LupsRibbon = "On",
+					LupsNanoParticles = "Cloud",
 					LupsShieldShader = "Default",
 					LupsWaterSettings = "Refract and Reflect",
 					FancySky = "On",
@@ -392,6 +406,20 @@ local settingsConfig = {
 							MaxDynamicModelLights = 1,
 							ROAM = 1, --Maybe ROAM = 0 when the new renderer is fully developed
 						}
+					},
+				},
+			},
+			{
+				name = "LupsNanoParticles",
+				humanName = "Construction Effect",
+				options = {
+					{
+						name = "Cloud",
+						applyFunction = UpdateLups,
+					},
+					{
+						name = "Beam",
+						applyFunction = UpdateLups,
 					},
 				},
 			},
@@ -668,6 +696,30 @@ local settingsConfig = {
 				},
 			},
 			{
+				name = "SoftParticles",
+				humanName = "Soft Particles",
+				options = {
+					{
+						name = "Disabled",
+						apply = {
+							SoftParticles = 0
+						}
+					},
+					{
+						name = "Compatibility",
+						apply = {
+							SoftParticles = 1
+						}
+					},
+					{
+						name = "Enabled",
+						apply = {
+							SoftParticles = 2
+						}
+					},
+				},
+			},
+			{
 				name = "TerrainDetail",
 				humanName = "Terrain Detail",
 				options = {
@@ -931,8 +983,8 @@ local settingsConfig = {
 					InvertZoom = "Off",
 					TextToSpeech = "On",
 					EdgeScroll = "On",
-					CommandAlpha = 70,
-					QueueIconAlpha = 50,
+					CommandAlpha = 60,
+					QueueIconAlpha = 45,
 					MiddlePanSpeed = 15,
 					CameraPanSpeed = 50,
 					NetworkSettings = "Balanced",
@@ -1171,6 +1223,48 @@ local settingsConfig = {
 					},
 				},
 			},
+			{
+				name = "GcRate",
+				humanName = "GC Rate",
+				options = {
+					{
+						name = "Very Fast",
+						apply = {
+							LuaGarbageCollectionMemLoadMult = 2,
+						}
+					},
+					{
+						name = "Fast",
+						apply = {
+							LuaGarbageCollectionMemLoadMult = 3,
+						}
+					},
+					{
+						name = "Recommended",
+						apply = {
+							LuaGarbageCollectionMemLoadMult = 4,
+						}
+					},
+					{
+						name = "Slow",
+						apply = {
+							LuaGarbageCollectionMemLoadMult = 7,
+						}
+					},
+					{
+						name = "Slower",
+						apply = {
+							LuaGarbageCollectionMemLoadMult = 15,
+						}
+					},
+					{
+						name = "Slowest",
+						apply = {
+							LuaGarbageCollectionMemLoadMult = 100,
+						}
+					},
+				},
+			},
 		},
 	},
 }
@@ -1185,6 +1279,7 @@ local settingsDefault = {
 	ShadowDetail = "Medium",
 	ParticleLimit = "15000",
 	TerrainDetail = "Medium",
+	SoftParticles = "Enabled",
 	VegetationDetail = "Medium",
 	FeatureFade = "Off",
 	CompatibilityMode = "Off",
@@ -1194,6 +1289,7 @@ local settingsDefault = {
 	ShaderDetail = "Medium",
 	LupsAirJet = "On",
 	LupsRibbon = "On",
+	LupsNanoParticles = "Cloud",
 	LupsShieldShader = "Default",
 	LupsWaterSettings = "Off",
 	FancySky = "Off",
@@ -1204,12 +1300,13 @@ local settingsDefault = {
 	InvertZoom = "Off",
 	TextToSpeech = "On",
 	EdgeScroll = "On",
-	CommandAlpha = 70,
-	QueueIconAlpha = 50,
+	CommandAlpha = 60,
+	QueueIconAlpha = 45,
 	MiddlePanSpeed = 15,
 	CameraPanSpeed = 50,
 	NetworkSettings = "Balanced",
 	SmoothBuffer = "Off",
+	GcRate = "Recommended",
 }
 
 local settingsNames = {}

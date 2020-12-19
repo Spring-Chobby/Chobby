@@ -1,0 +1,6 @@
+{
+	"name" : "Zero-K: Base",
+	"description" : "Play the latest Zero-K release, ie, reset the custom mode to default.",
+	"rapidTag" : "zk:stable",
+	"hideFromHostMenu" : true
+}
