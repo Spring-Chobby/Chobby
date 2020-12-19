@@ -597,13 +597,21 @@ function Lobby:_OnUnfriend(userName)
 end
 
 function Lobby:_OnFriendList(friends)
-	self.friends = friends
-	self.friendCount = #friends
+	local newFriendMap = {}
+	for i = 1, #friends do
+		local userName = friends[i]
+		if not self.isFriend[userName] then
+			self:_OnFriend(userName)
+			self:_OnRemoveIgnoreUser(userName)
+		end
+		newFriendMap[userName] = true
+	end
 
 	for _, userName in pairs(self.friends) do
-		self.isFriend[userName] = true
-		local userInfo = self:TryGetUser(userName)
-		userInfo.isFriend = true
+		if not newFriendMap[userName] then
+			self:_OnUnfriend(userName)
+			self:_OnRemoveIgnoreUser(userName)
+		end
 	end
 
 	self:_CallListeners("OnFriendList", self:GetFriends())
