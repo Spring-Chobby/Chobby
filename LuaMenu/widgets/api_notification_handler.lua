@@ -21,22 +21,28 @@ local function MouseOutside()
 	return outsideSpring
 end
 
+local function MaybeAlert(message)
+	if WG.WrapperLoopback and WG.WrapperLoopback.Alert then
+		WG.WrapperLoopback.Alert(message)
+	end
+end
+
 local function AddListeners()
 	local function OnRung(_, userName, message, sayTime, source)
-		WG.WrapperLoopback.Alert(message)
+		MaybeAlert(message)
 	end
 	lobby:AddListener("OnRung", OnRung)
 
 	local function OnVoteUpdate(listener, voteMessage, pollType, notify, mapPoll, candidates, votesNeeded, pollUrl)
 		if notify and not lobby:GetMyIsSpectator() and MouseOutside() then
-			WG.WrapperLoopback.Alert("Vote to start the battle.")
+			MaybeAlert("Vote to start the battle.")
 		end
 	end
 	lobby:AddListener("OnVoteUpdate", OnVoteUpdate)
 
 	local function OnBattleAboutToStart()
 		if MouseOutside() then
-			WG.WrapperLoopback.Alert("Zero-K battle starting!")
+			MaybeAlert("Zero-K battle starting!")
 		end
 	end
 	lobby:AddListener("OnBattleAboutToStart", OnBattleAboutToStart)
