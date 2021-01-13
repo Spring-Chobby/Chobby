@@ -173,8 +173,9 @@ local function RemoveDownload(name, fileType, putInRemoveList, removalType)
 	if putInRemoveList and removalType == "fail" and WG.Chobby.Configuration.downloadRetryCount then
 		local lastFailed = removedDownloads[#removedDownloads]
 		if  lastFailed.retryCount < WG.Chobby.Configuration.downloadRetryCount then
-			Spring.Echo("Downloading of ", name, fileType, "failed, retryCount=", lastFailed.retryCount)
+			Spring.Log("Chobby", LOG.WARNING, "Downloading of ", name, fileType, "failed, retryCount=", lastFailed.retryCount)
 			lastFailed.retryCount = lastFailed.retryCount + 1
+			--removedDownloads[#removedDownloads].retryCount = lastFailed.retryCount + 1
 			externalFunctions.RetryDownload(name,fileType)
 		end
 	end
@@ -186,7 +187,7 @@ end
 --------------------------------------------------------------------------------
 -- Externals Functions
 
-function externalFunctions.QueueDownload(name, fileType, priority)
+function externalFunctions.QueueDownload(name, fileType, priority, retryCount)
 	priority = priority or 1
 	if priority == -1 then
 		priority = topPriority + 1
@@ -205,6 +206,8 @@ function externalFunctions.QueueDownload(name, fileType, priority)
 		end
 		return
 	end
+	
+	if retryCount == nil then retryCount = 0 end 
 
 	downloadCount = downloadCount + 1
 	downloadQueue[#downloadQueue + 1] = {
@@ -212,7 +215,7 @@ function externalFunctions.QueueDownload(name, fileType, priority)
 		fileType = fileType,
 		priority = priority,
 		id = downloadCount,
-		retryCount = 0,
+		retryCount = retryCount,
 	}
 	requestUpdate = true
 	CallListeners("DownloadQueued", downloadCount, name, fileType)
@@ -257,7 +260,7 @@ function externalFunctions.RetryDownload(name, fileType)
 		return false
 	end
 
-	externalFunctions.QueueDownload(name, fileType, removedDownloads[index].priority)
+	externalFunctions.QueueDownload(name, fileType, removedDownloads[index].priority,removedDownloads[index].retryCount)
 	removedDownloads[index] = removedDownloads[#removedDownloads]
 	removedDownloads[#removedDownloads] = nil
 	requestUpdate = true
@@ -360,6 +363,7 @@ end
 
 function widget:DownloadFailed(downloadID, errorID)
 	local index = GetDownloadBySpringDownloadID(downloadQueue, downloadID)
+	Spring.Log("Chobby", LOG.WARNING, "Download Failed for ID",downloadID," errorID", errorID)
 	if not index then
 		return
 	end
