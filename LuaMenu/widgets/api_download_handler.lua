@@ -206,8 +206,8 @@ function externalFunctions.QueueDownload(name, fileType, priority, retryCount)
 		end
 		return
 	end
-	
-	if retryCount == nil then retryCount = 0 end 
+
+	if retryCount == nil then retryCount = 0 end
 
 	downloadCount = downloadCount + 1
 	downloadQueue[#downloadQueue + 1] = {
