@@ -953,7 +953,7 @@ function Interface:ChangeEmailRequest(newEmail)
 	return self
 end
 
-function Interface:ResetPassword(email, verificationCode) 
+function Interface:ResetPassword(email, verificationCode)
 	self:_SendCommand(concat("RESETPASSWORD", email, verificationCode))
 	return self
 end
@@ -972,7 +972,7 @@ Interface.commandPattern["RESETPASSWORDDENIED"] = "(%S+)"
 function Interface:ResetPasswordRequest(email)
 	self:_SendCommand(concat("RESETPASSWORDREQUEST",email))
 	return self
-end 
+end
 function Interface:_OnResetPasswordRequestAccepted()
 	self:super("_OnResetPasswordRequestAccepted")
 end
