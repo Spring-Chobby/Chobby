@@ -24,6 +24,36 @@ function FriendListWindow:init(parent)
 		},
 	}
 
+	if WG.Chobby.Configuration.addFriendWindowButton then
+		local addFriendEditBox = EditBox:New {
+			right = 400,
+			width = 130,
+			y = 15,
+			height = 30,
+			text = "",
+			font = Configuration:GetFont(1),
+			useIME = false,
+			parent = self.window,
+			tooltip = "Name of new friend",
+		}
+
+		local addFriendButton = Button:New {
+			right = 300,
+			width = 90,
+			y = 15,
+			height = 30,
+			caption = "Add Friend",
+			font = Configuration:GetFont(1),
+			classname = "option_button",
+			parent = self.window,
+			OnClick = {
+				function()
+					lobby:FriendRequest(addFriendEditBox.text)
+				end
+			},
+		}
+	end
+
 	self.btnSteamFriends:SetVisibility(Configuration.canAuthenticateWithSteam)
 	local function onConfigurationChange(listener, key, value)
 		if key == "canAuthenticateWithSteam" then
