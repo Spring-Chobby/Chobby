@@ -174,7 +174,7 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl, showTea
 			end
 		end
 
-		if (not myPartyID) or myPartyID ~= userPartyID then
+		if (Configuration.hidePartySystem == false) and ((not myPartyID) or myPartyID ~= userPartyID) then
 			-- Do not show any party options for people already in my party.
 			if (not myPartyID) and userPartyID then
 				-- Join others party if they have one and I don't.
