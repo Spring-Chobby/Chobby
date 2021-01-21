@@ -161,11 +161,8 @@ local function UpdateAndCreateMerge(userData, status)
 		battleStatus.side = userData.side or 0 -- self:GetMySide() or 0
 	end
 
-	if not updated then
-		return nil
-	end
 	battleStatus.isReady = not battleStatus.isSpectator
-	return battleStatus
+	return battleStatus, updated
 end
 
 local function EncodeBattleStatus(battleStatus)
@@ -233,6 +230,9 @@ function Interface:SetBattleStatus(status)
 	local userData = self.userBattleStatus[myUserName]
 	local battleStatus = UpdateAndCreateMerge(userData, status)
 	if not battleStatus then
+
+	--next(status) will return nil if status is empty table, which it is when it is called from REQUESTBATTLESTATUS
+	if next(status) and (not updated) then
 		return self
 	end
 	local battleStatusString = EncodeBattleStatus(battleStatus)
@@ -302,6 +302,7 @@ function Interface:UpdateAi(aiName, status)
 
 	local battleStatus = UpdateAndCreateMerge(userData, status)
 	if not battleStatus then
+	if not updated then
 		return self
 	end
 	local battleStatusString = EncodeBattleStatus(battleStatus)
