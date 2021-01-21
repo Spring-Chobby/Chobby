@@ -29,8 +29,41 @@ local function InitializeControls(window)
 		height = 30,
 		parent = window,
 		font = WG.Chobby.Configuration:GetFont(4),
-		caption = "Friends",
+		caption = "Friends or not",
 	}
+
+	if WG.Chobby.Configuration.showAddFriendBoxOnFriendWindow then
+		local addFriendEditBox = EditBox:New {
+			x = 220,
+			width = 250,
+			y = 35,
+			height = 35,
+			text = "",
+			font = Configuration:GetFont(3),
+			useIME = false,
+			parent = window,
+			tooltip = "Name of new friend",
+		}
+
+		local addFriendButton = Button:New {
+			right = 470,
+			width = 130,
+			y = 35,
+			height = 35,
+			caption = "Add Friend",
+			font = Configuration:GetFont(3),
+			classname = "option_button",
+			parent = window,
+			tooltip = "Click to send a friend request",
+			OnClick = {
+				function()
+					lobby:addfriend(addFriendEditBox.text)
+				end
+			},
+		}
+	end
+
+
 end
 
 --------------------------------------------------------------------------------
