@@ -193,7 +193,7 @@ end
 
 function FriendListWindow:OnFriendRequestList(friendRequests)
 	if WG.Chobby.Configuration.friendActivityNotification then
-	 	interfaceRoot.GetRightPanelHandler().SetActivity("friends", lobby:GetFriendRequestCount())
+		interfaceRoot.GetRightPanelHandler().SetActivity("friends", lobby:GetFriendRequestCount())
 	end
 	for _, userName in pairs(friendRequests) do
 		self:AddFriendRequest(userName)
