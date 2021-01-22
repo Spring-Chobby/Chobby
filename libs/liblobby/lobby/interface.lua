@@ -930,7 +930,7 @@ function Interface:_OnChangeEmailRequestDenied(errorMsg)
 	self:super("_OnChangeEmailRequestDenied", errorMsg)
 end
 Interface.commands["CHANGEEMAILREQUESTDENIED"] = Interface._OnChangeEmailRequestDenied
-Interface.commandPattern["CHANGEEMAILREQUESTDENIED"] = "(%S+)"
+Interface.commandPattern["CHANGEEMAILREQUESTDENIED"] = "(.+)"
 
 function Interface:_OnChangeEmailRequestAccepted()
 	self:super("_OnChangeEmailRequestAccepted")
@@ -941,7 +941,7 @@ function Interface:_OnChangeEmailDenied(errorMsg)
 	self:super("_OnChangeEmailDenied", errorMsg)
 end
 Interface.commands["CHANGEEMAILDENIED"] = Interface._OnChangeEmailDenied
-Interface.commandPattern["CHANGEEMAILDENIED"] = "(%S+)"
+Interface.commandPattern["CHANGEEMAILDENIED"] = "(.+)"
 
 function Interface:_OnChangeEmailAccepted()
 	self:super("_OnChangeEmailAccepted")
@@ -967,7 +967,7 @@ function Interface:_OnResetPasswordDenied(errorMsg)
 	self:super("_OnResetPasswordDenied", errorMsg)
 end
 Interface.commands["RESETPASSWORDDENIED"] = Interface._OnResetPasswordDenied
-Interface.commandPattern["RESETPASSWORDDENIED"] = "(%S+)"
+Interface.commandPattern["RESETPASSWORDDENIED"] = "(.+)"
 
 function Interface:ResetPasswordRequest(email)
 	self:_SendCommand(concat("RESETPASSWORDREQUEST",email))
@@ -982,7 +982,7 @@ function Interface:_OnResetPasswordRequestDenied(errorMsg)
 	self:super("_OnResetPasswordRequestDenied", errorMsg)
 end
 Interface.commands["RESETPASSWORDREQUESTDENIED"] = Interface._OnResetPasswordRequestDenied
-Interface.commandPattern["RESETPASSWORDREQUESTDENIED"] = "(%S+)"
+Interface.commandPattern["RESETPASSWORDREQUESTDENIED"] = "(.+)"
 
 function Interface:ChangePassword(oldPassword, newPassword)
 	self:_SendCommand(concat("CHANGEPASSWORD", oldPassword, newPassword))
