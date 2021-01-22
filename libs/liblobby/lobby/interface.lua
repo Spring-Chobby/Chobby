@@ -223,13 +223,13 @@ function Interface:SetBattleStatus(status)
 	-- so we're setting the values before
 	-- they get confirmed from the server, otherwise we end up sending different info
 	-- 2020/02/12: Problem partially fixed by ignoring battleStatus that result in no update
+	-- 2021/01/21: Which had the unfortunate side effect of not sending the first REQUESTBATTLESTATUS response
 	local myUserName = self:GetMyUserName()
 	if not self.userBattleStatus[myUserName] then
 		self.userBattleStatus[userName] = {}
 	end
 	local userData = self.userBattleStatus[myUserName]
-	local battleStatus = UpdateAndCreateMerge(userData, status)
-	if not battleStatus then
+	local battleStatus, updated = UpdateAndCreateMerge(userData, status)
 
 	--next(status) will return nil if status is empty table, which it is when it is called from REQUESTBATTLESTATUS
 	if next(status) and (not updated) then
@@ -300,8 +300,7 @@ end
 function Interface:UpdateAi(aiName, status)
 	local userData = self.userBattleStatus[aiName]
 
-	local battleStatus = UpdateAndCreateMerge(userData, status)
-	if not battleStatus then
+	local battleStatus, updated = UpdateAndCreateMerge(userData, status)
 	if not updated then
 		return self
 	end
