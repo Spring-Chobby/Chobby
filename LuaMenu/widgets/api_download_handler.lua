@@ -178,8 +178,8 @@ local function RemoveDownload(name, fileType, putInRemoveList, removalType)
 	if putInRemoveList and removalType == "fail" and WG.Chobby.Configuration.downloadRetryCount then
 		local lastFailed = removedDownloads[#removedDownloads]
 		Spring.Log("Chobby", LOG.WARNING, "Downloading of ", name, fileType, "failed, retryCount=", lastFailed.retryCount)
-		-- if its a game, then it might need just a vfs.scanalldirs(), 
-			-- if still not found, then check retrycount 
+		-- if its a game, then it might need just a vfs.scanalldirs(),
+			-- if still not found, then check retrycount
 			-- else found, call downloadFinished somehow?
 		-- else just check retrycount and retry accordingly
 		local retry = true
