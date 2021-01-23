@@ -170,12 +170,19 @@ local function EncodeBattleStatus(battleStatus)
 	if battleStatus.isSpectator then
 		playMode = 0
 	end
+
+	if type(battleStatus.sync) ~= type(1) then --not integer type, e.g. nil or bool
+		Spring.Log("Interface",LOG.WARNING,"Battle status sync state was set as non-integer!", battleStatus.sync)
+		if battleStatus.sync == false then battleStatus.sync = 2
+		else battleStatus.sync = 1 end
+	end
+
 	return tostring(
 		(battleStatus.isReady and 2 or 0) +
 		lshift(battleStatus.teamNumber, 2) +
 		lshift(battleStatus.allyNumber, 6) +
 		lshift(playMode, 10) +
-		(battleStatus.sync and 2^22 or 2^23) +
+		lshift(battleStatus.sync, 22) + --Because sync actually has 3 values, 0, 1, 2
 		lshift(battleStatus.side, 24)
 	)
 end
@@ -283,7 +290,7 @@ function Interface:AddAi(aiName, aiLib, allyNumber, version)
 		teamNumber = self:GetUnusedTeamID(),
 		allyNumber = allyNumber,
 		playMode = true,
-		sync = true,
+		sync = 1, -- (0 = unknown, 1 = synced, 2 = unsynced)
 		side = 0,
 	}
 	aiName = aiName:gsub(" ", "")
