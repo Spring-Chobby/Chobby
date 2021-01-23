@@ -226,15 +226,13 @@ function externalFunctions.QueueDownload(name, fileType, priority, retryCount)
 		return
 	end
 
-	if retryCount == nil then retryCount = 0 end
-
 	downloadCount = downloadCount + 1
 	downloadQueue[#downloadQueue + 1] = {
 		name = name,
 		fileType = fileType,
 		priority = priority,
 		id = downloadCount,
-		retryCount = retryCount,
+		retryCount = retryCount or 0,
 	}
 	requestUpdate = true
 	CallListeners("DownloadQueued", downloadCount, name, fileType)
@@ -382,7 +380,7 @@ end
 
 function widget:DownloadFailed(downloadID, errorID)
 	local index = GetDownloadBySpringDownloadID(downloadQueue, downloadID)
-	Spring.Log("Chobby", LOG.WARNING, "Download Failed for ID",downloadID," errorID", errorID)
+	Spring.Log("Chobby", LOG.WARNING, "Download Failed for ID: " .. tostring(downloadID) .. ", errorID: " .. tostring(errorID))
 	if not index then
 		return
 	end

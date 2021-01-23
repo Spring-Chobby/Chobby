@@ -269,7 +269,7 @@ local function InitializeControls()
 		mapList:AddItem(mapName, control, sortData)
 	end
 
-	if not Configuration.onlyShowFeaturedMaps then
+	if Configuration.gameConfig.disableZKMapFiltering or not Configuration.onlyShowFeaturedMaps then
 		for i, archive in pairs(VFS.GetAllArchives()) do
 			local info = VFS.GetArchiveInfo(archive)
 			if info and info.modtype == 3 and not mapFuncs[info.name] then
@@ -333,7 +333,7 @@ local function InitializeControls()
 	function externalFunctions.UpdateHaveMap(thingName)
 		if mapFuncs[thingName] then
 			mapFuncs[thingName].UpdateHaveMap()
-		elseif not Configuration.onlyShowFeaturedMaps and VFS.HasArchive(thingName) then
+		elseif (Configuration.gameConfig.disableZKMapFiltering or not Configuration.onlyShowFeaturedMaps) and VFS.HasArchive(thingName) then
 			local info = VFS.GetArchiveInfo(thingName)
 			if info and info.modtype == 3 and not mapFuncs[info.name] then
 				local control, sortData
