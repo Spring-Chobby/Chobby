@@ -674,6 +674,8 @@ function BattleListWindow:FilterRedundantBattle(battle, id)
 				lowestEmptyBattleID = otherBattleID
 				lowestEmptyBattleIndex = ob_hostnumber
 			end
+		else
+			Spring.Log("Chobby", LOG.WARNING, "lobby:GetBattle(otherBattleID) was nil while filtering redundant hosts", otherBattle, otherBattleID)
 		end
 	end
 
