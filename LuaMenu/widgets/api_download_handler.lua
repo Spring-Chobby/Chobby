@@ -155,8 +155,8 @@ local function RemoveDownload(name, fileType, putInRemoveList, removalType)
 	-- The changes to this function deserve some documentation:
 	-- Often, a map download won't truly fail, it will download just fine but return that it failed,
 	-- and retrying it up to retrycount times will succeed.
-	-- A game download will also return with failure often so we use VFS.ScanAllDirs() to check if we did actually 
-	-- successfully download it: if we were truly unsuccessful, then we retry downloading it again. 
+	-- A game download will also return with failure often so we use VFS.ScanAllDirs() to check if we did actually
+	-- successfully download it: if we were truly unsuccessful, then we retry downloading it again.
 	local index = GetDownloadIndex(downloadQueue, name, fileType)
 	if not index then
 		return false
