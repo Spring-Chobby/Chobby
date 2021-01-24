@@ -239,7 +239,7 @@ function Interface:SetBattleStatus(status)
 	local battleStatus, updated = UpdateAndCreateMerge(userData, status)
 
 	--next(status) will return nil if status is empty table, which it is when it is called from REQUESTBATTLESTATUS
-	if next(status) and (not updated) then
+	if next(status) and not updated then
 		return self
 	end
 	local battleStatusString = EncodeBattleStatus(battleStatus)
