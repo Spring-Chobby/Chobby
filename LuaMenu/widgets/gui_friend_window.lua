@@ -29,7 +29,7 @@ local function InitializeControls(window)
 		height = 30,
 		parent = window,
 		font = WG.Chobby.Configuration:GetFont(4),
-		caption = "Friends or not",
+		caption = "Friends",
 	}
 
 	if WG.Chobby.Configuration.showAddFriendBoxOnFriendWindow then
