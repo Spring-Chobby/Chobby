@@ -61,6 +61,7 @@ local IMAGE_MODERATOR    = IMAGE_DIR .. "ranks/moderator.png"
 local IMAGE_PLAYER       = IMAGE_DIR .. "ranks/player.png"
 local IMAGE_READY        = IMAGE_DIR .. "ready.png"
 local IMAGE_UNREADY      = IMAGE_DIR .. "unready.png"
+local IMAGE_UNKNOWN_SYNC = IMAGE_DIR .. "unknown_sync.png"
 local IMAGE_ONLINE       = IMAGE_DIR .. "online.png"
 local IMAGE_OFFLINE      = IMAGE_DIR .. "offline.png"
 
@@ -138,8 +139,10 @@ local function GetUserSyncStatus(userName, userControl)
 	end
 	if userBattleInfo.sync == 1 then
 		return IMAGE_READY
-	else
+	elseif userBattleInfo.sync == 2 then
 		return IMAGE_UNREADY
+	else
+		return IMAGE_UNKNOWN_SYNC
 	end
 end
 
@@ -174,7 +177,7 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl, showTea
 			end
 		end
 
-		if (not myPartyID) or myPartyID ~= userPartyID then
+		if Configuration.hidePartySystem and ((not myPartyID) or myPartyID ~= userPartyID) then
 			-- Do not show any party options for people already in my party.
 			if (not myPartyID) and userPartyID then
 				-- Join others party if they have one and I don't.

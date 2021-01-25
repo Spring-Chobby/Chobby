@@ -181,11 +181,8 @@ local function UpdateAndCreateMerge(userData, status)
 		battleStatus.side = userData.side or 0 -- self:GetMySide() or 0
 	end
 
-	if not updated then
-		return nil
-	end
 	battleStatus.isReady = not battleStatus.isSpectator
-	return battleStatus
+	return battleStatus, updated
 end
 
 local function EncodeBattleStatus(battleStatus)
@@ -193,12 +190,19 @@ local function EncodeBattleStatus(battleStatus)
 	if battleStatus.isSpectator then
 		playMode = 0
 	end
+
+	if type(battleStatus.sync) ~= type(1) then --not integer type, e.g. nil or bool
+		Spring.Log("Interface",LOG.WARNING,"Battle status sync state was set as non-integer!", battleStatus.sync)
+		if battleStatus.sync == false then battleStatus.sync = 2
+		else battleStatus.sync = 1 end
+	end
+
 	return tostring(
 		(battleStatus.isReady and 2 or 0) +
 		lshift(battleStatus.teamNumber, 2) +
 		lshift(battleStatus.allyNumber, 6) +
 		lshift(playMode, 10) +
-		(battleStatus.sync and 2^22 or 2^23) +
+		lshift(battleStatus.sync, 22) + --Because sync actually has 3 values, 0, 1, 2
 		lshift(battleStatus.side, 24)
 	)
 end
@@ -246,13 +250,16 @@ function Interface:SetBattleStatus(status)
 	-- so we're setting the values before
 	-- they get confirmed from the server, otherwise we end up sending different info
 	-- 2020/02/12: Problem partially fixed by ignoring battleStatus that result in no update
+	-- 2021/01/21: Which had the unfortunate side effect of not sending the first REQUESTBATTLESTATUS response
 	local myUserName = self:GetMyUserName()
 	if not self.userBattleStatus[myUserName] then
 		self.userBattleStatus[userName] = {}
 	end
 	local userData = self.userBattleStatus[myUserName]
-	local battleStatus = UpdateAndCreateMerge(userData, status)
-	if not battleStatus then
+	local battleStatus, updated = UpdateAndCreateMerge(userData, status)
+
+	--next(status) will return nil if status is empty table, which it is when it is called from REQUESTBATTLESTATUS
+	if next(status) and not updated then
 		return self
 	end
 	local battleStatusString = EncodeBattleStatus(battleStatus)
@@ -303,7 +310,7 @@ function Interface:AddAi(aiName, aiLib, allyNumber, version)
 		teamNumber = self:GetUnusedTeamID(),
 		allyNumber = allyNumber,
 		playMode = true,
-		sync = true,
+		sync = 1, -- (0 = unknown, 1 = synced, 2 = unsynced)
 		side = 0,
 	}
 	aiName = aiName:gsub(" ", "")
@@ -320,8 +327,8 @@ end
 function Interface:UpdateAi(aiName, status)
 	local userData = self.userBattleStatus[aiName]
 
-	local battleStatus = UpdateAndCreateMerge(userData, status)
-	if not battleStatus then
+	local battleStatus, updated = UpdateAndCreateMerge(userData, status)
+	if not updated then
 		return self
 	end
 	local battleStatusString = EncodeBattleStatus(battleStatus)
@@ -987,6 +994,70 @@ end
 
 function Interface:ChangeEmail(newEmail, userName)
 	self:_SendCommand(concat("CHANGEEMAIL", newEmail, userName))
+	return self
+end
+
+
+function Interface:_OnChangeEmailRequestDenied(errorMsg)
+	self:super("_OnChangeEmailRequestDenied", errorMsg)
+end
+Interface.commands["CHANGEEMAILREQUESTDENIED"] = Interface._OnChangeEmailRequestDenied
+Interface.commandPattern["CHANGEEMAILREQUESTDENIED"] = "(.+)"
+
+function Interface:_OnChangeEmailRequestAccepted()
+	self:super("_OnChangeEmailRequestAccepted")
+end
+Interface.commands["CHANGEEMAILREQUESTACCEPTED"] = Interface._OnChangeEmailRequestAccepted
+
+function Interface:_OnChangeEmailDenied(errorMsg)
+	self:super("_OnChangeEmailDenied", errorMsg)
+end
+Interface.commands["CHANGEEMAILDENIED"] = Interface._OnChangeEmailDenied
+Interface.commandPattern["CHANGEEMAILDENIED"] = "(.+)"
+
+function Interface:_OnChangeEmailAccepted()
+	self:super("_OnChangeEmailAccepted")
+end
+Interface.commands["CHANGEEMAILACCEPTED"] = Interface._OnChangeEmailAccepted
+
+function Interface:ChangeEmailRequest(newEmail)
+	self:_SendCommand(concat("CHANGEEMAILREQUEST", newEmail))
+	return self
+end
+
+function Interface:ResetPassword(email, verificationCode)
+	self:_SendCommand(concat("RESETPASSWORD", email, verificationCode))
+	return self
+end
+
+function Interface:_OnResetPasswordAccepted()
+	self:super("_OnResetPasswordAccepted")
+end
+Interface.commands["RESETPASSWORDACCEPTED"] = Interface._OnResetPasswordAccepted
+
+function Interface:_OnResetPasswordDenied(errorMsg)
+	self:super("_OnResetPasswordDenied", errorMsg)
+end
+Interface.commands["RESETPASSWORDDENIED"] = Interface._OnResetPasswordDenied
+Interface.commandPattern["RESETPASSWORDDENIED"] = "(.+)"
+
+function Interface:ResetPasswordRequest(email)
+	self:_SendCommand(concat("RESETPASSWORDREQUEST",email))
+	return self
+end
+function Interface:_OnResetPasswordRequestAccepted()
+	self:super("_OnResetPasswordRequestAccepted")
+end
+Interface.commands["RESETPASSWORDREQUESTACCEPTED"] = Interface._OnResetPasswordRequestAccepted
+
+function Interface:_OnResetPasswordRequestDenied(errorMsg)
+	self:super("_OnResetPasswordRequestDenied", errorMsg)
+end
+Interface.commands["RESETPASSWORDREQUESTDENIED"] = Interface._OnResetPasswordRequestDenied
+Interface.commandPattern["RESETPASSWORDREQUESTDENIED"] = "(.+)"
+
+function Interface:ChangePassword(oldPassword, newPassword)
+	self:_SendCommand(concat("CHANGEPASSWORD", oldPassword, newPassword))
 	return self
 end
 

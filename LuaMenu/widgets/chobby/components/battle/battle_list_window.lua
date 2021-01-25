@@ -661,17 +661,21 @@ function BattleListWindow:FilterRedundantBattle(battle, id)
 	local lowestEmptyBattleID = nil
 	for k, otherBattleID in pairs(self.allBattleIDs) do
 		local otherBattle = lobby:GetBattle(otherBattleID)
-		local ob_hostCountry, ob_hostnumber = parseBattleNumber(otherBattle.title)
-		local otherBattlePlayerCount = lobby:GetBattlePlayerCount(otherBattleID)
+		if otherBattle then
+			local ob_hostCountry, ob_hostnumber = parseBattleNumber(otherBattle.title)
+			local otherBattlePlayerCount = lobby:GetBattlePlayerCount(otherBattleID)
 
-		if ob_hostCountry and
-			ob_hostnumber < lowestEmptyBattleIndex and
-			otherBattlePlayerCount == 0 and
-			otherBattle.spectatorCount == 1 and
-			myCountry == ob_hostCountry then
+			if ob_hostCountry and
+				ob_hostnumber < lowestEmptyBattleIndex and
+				otherBattlePlayerCount == 0 and
+				otherBattle.spectatorCount == 1 and
+				myCountry == ob_hostCountry then
 
-			lowestEmptyBattleID = otherBattleID
-			lowestEmptyBattleIndex = ob_hostnumber
+				lowestEmptyBattleID = otherBattleID
+				lowestEmptyBattleIndex = ob_hostnumber
+			end
+		else
+			Spring.Log("Chobby", LOG.WARNING, "lobby:GetBattle(otherBattleID) was nil while filtering redundant hosts", otherBattle, otherBattleID)
 		end
 	end
 

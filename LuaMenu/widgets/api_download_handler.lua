@@ -152,6 +152,11 @@ local function AssociatedSpringDownloadID(springDownloadID, name, fileType)
 end
 
 local function RemoveDownload(name, fileType, putInRemoveList, removalType)
+	-- The changes to this function deserve some documentation:
+	-- Often, a map download won't truly fail, it will download just fine but return that it failed,
+	-- and retrying it up to retrycount times will succeed.
+	-- A game download will also return with failure often so we use VFS.ScanAllDirs() to check if we did actually
+	-- successfully download it: if we were truly unsuccessful, then we retry downloading it again.
 	local index = GetDownloadIndex(downloadQueue, name, fileType)
 	if not index then
 		return false
@@ -172,8 +177,20 @@ local function RemoveDownload(name, fileType, putInRemoveList, removalType)
 
 	if putInRemoveList and removalType == "fail" and WG.Chobby.Configuration.downloadRetryCount then
 		local lastFailed = removedDownloads[#removedDownloads]
-		if  lastFailed.retryCount < WG.Chobby.Configuration.downloadRetryCount then
-			Spring.Log("Chobby", LOG.WARNING, "Downloading of ", name, fileType, "failed, retryCount=", lastFailed.retryCount)
+		Spring.Log("Chobby", LOG.WARNING, "Downloading of ", name, fileType, "failed, retryCount=", lastFailed.retryCount)
+
+		local retry = true
+
+		if lastFailed.fileType == "game" then
+			--Spring.Log("Chobby", LOG.WARNING, "trying to scanalldirs on game dl failure")
+			VFS.ScanAllDirs()
+			if VFS.HasArchive(name) then
+				Spring.Log("Chobby", LOG.WARNING, "VFS.ScanAllDirs found downloaded item after failure",name)
+				CallListeners("DownloadFinished", lastFailed.id, name, fileType)
+				retry = false
+			end
+		end
+		if retry and lastFailed.retryCount < WG.Chobby.Configuration.downloadRetryCount then
 			lastFailed.retryCount = lastFailed.retryCount + 1
 			externalFunctions.RetryDownload(name,fileType)
 		end
