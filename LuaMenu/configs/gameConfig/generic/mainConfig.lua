@@ -49,6 +49,7 @@ local externalFuncAndData = {
 	disablePlanetwars 			= true, -- removes settings related to planetwars
 	disableMatchMaking 			= true, -- removes match making
 	disableCommunityWindow 		= true, -- removes Community Window
+	disableZKMapFiltering       = true, -- removes ZK "featured" map filter
 }
 
 function externalFuncAndData.CheckAvailability()

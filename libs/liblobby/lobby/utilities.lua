@@ -8,15 +8,21 @@ function dumpConfig()
 end
 
 function explode(div,str)
-if (div=='') then return false end
-local pos,arr = 0,{}
--- for each divider found
-for st,sp in function() return string.find(str,div,pos,true) end do
-	table.insert(arr,string.sub(str,pos,st-1)) -- Attach chars left of current divider
-	pos = sp + 1 -- Jump past current divider
-end
-table.insert(arr,string.sub(str,pos)) -- Attach chars right of last divider
-return arr
+	if div == '' then
+		return false
+	end
+
+	local pos, arr = 0, {}
+	-- for each divider found
+	for st, sp in function() return string.find(str, div, pos, true) end do
+		 -- Attach chars left of current divider
+		table.insert(arr, string.sub(str, pos, st-1))
+		-- Jump past current divider
+		pos = sp + 1
+	end
+	-- Attach chars right of last divider
+	table.insert(arr, string.sub(str,pos))
+	return arr
 end
 
 function ShallowCopy(orig)
@@ -50,9 +56,11 @@ function parseTags(tags)
 	local tagsMap = {}
 	for _, tag in pairs(tags) do
 		local indx = string.find(tag, "=")
-		local key = string.sub(tag, 1, indx-1)
-		local value = string.sub(tag, indx+1)
-		tagsMap[key] = value
+		if indx ~= nil then
+			local key = string.sub(tag, 1, indx - 1)
+			local value = string.sub(tag, indx + 1)
+			tagsMap[key] = value
+		end
 	end
 	return tagsMap
 end

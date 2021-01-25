@@ -155,8 +155,9 @@ local function RemoveDownload(name, fileType, putInRemoveList, removalType)
 	-- The changes to this function deserve some documentation:
 	-- Often, a map download won't truly fail, it will download just fine but return that it failed,
 	-- and retrying it up to retrycount times will succeed.
-	-- A game download will also return with failure often so we use VFS.ScanAllDirs() to check if we did actually 
-	-- successfully download it: if we were truly unsuccessful, then we retry downloading it again. 
+	-- A game download will also return with failure often so we use VFS.ScanAllDirs() to check if we did actually
+	-- successfully download it: if we were truly unsuccessful, then we retry downloading it again.
+
 	local index = GetDownloadIndex(downloadQueue, name, fileType)
 	if not index then
 		return false
@@ -223,15 +224,13 @@ function externalFunctions.QueueDownload(name, fileType, priority, retryCount)
 		return
 	end
 
-	if retryCount == nil then retryCount = 0 end
-
 	downloadCount = downloadCount + 1
 	downloadQueue[#downloadQueue + 1] = {
 		name = name,
 		fileType = fileType,
 		priority = priority,
 		id = downloadCount,
-		retryCount = retryCount,
+		retryCount = retryCount or 0,
 	}
 	requestUpdate = true
 	CallListeners("DownloadQueued", downloadCount, name, fileType)
@@ -379,7 +378,7 @@ end
 
 function widget:DownloadFailed(downloadID, errorID)
 	local index = GetDownloadBySpringDownloadID(downloadQueue, downloadID)
-	Spring.Log("Chobby", LOG.WARNING, "Download Failed for ID",downloadID," errorID", errorID)
+	Spring.Log("Chobby", LOG.WARNING, "Download Failed for ID: " .. tostring(downloadID) .. ", errorID: " .. tostring(errorID))
 	if not index then
 		return
 	end
