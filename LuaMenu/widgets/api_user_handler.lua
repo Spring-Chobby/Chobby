@@ -230,12 +230,6 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl, showTea
 		end
 	end
 
-	if Configuration.gameConfig.showHandicap and not userBattleInfo.isSpectator then
-		comboOptions[#comboOptions + 1] = "Set Handicap"
-
-	end
-
-
 	-- userControl.lobby:GetMyIsAdmin()
 	-- Let everyone start kick votes.
 	if userName ~= myUserName and
@@ -480,8 +474,6 @@ local function UpdateUserBattleStatus(listener, userName)
 					data.imTeamColor:Invalidate()
 				end
 			end
-			if data.Handicap then
-			end
 		end
 	end
 end
@@ -519,7 +511,6 @@ local function GetUserControls(userName, opts)
 	local comboBoxOnly       = opts.comboBoxOnly
 	local showTeamColor      = opts.showTeamColor
 	local showSide           = opts.showSide
-	local showHandicap 		 = opts.showHandicap
 
 	local userControls = reinitialize or {}
 
@@ -671,37 +662,6 @@ local function GetUserControls(userName, opts)
 								end
 							end
 						})
-					elseif selectedName == "Set Handicap" then
-						if WG.IntegerSelectorWindow then
-							WG.IntegerSelectorWindow.CreateIntegerSelectorWindow({
-								defaultValue = 0,
-								minValue = 0,
-								maxValue = 100,
-								step = 1,
-								labelCaption = "A bonus of 100 means that the player (or AI) will get 2x the amount of resources from metal extractors and energy producers",
-								caption = "Set Handicap (Resource Bonus)",
-								OnAccepted = function(handicap)
-									Spring.Echo("Setting handicap to ",handicap, "For user",userName)
-									if isSingleplayer then
-										if userName == userControls.lobby:GetMyUserName() then
-											userControls.lobby:SetBattleStatus({
-												handicap = handicap
-											})
-										else
-											userControls.lobby:UpdateAi(userName, {
-												handicap = handicap
-											})
-										end
-									else
-										--[[if userBattleInfo and userBattleInfo.aiLib then
-											userControls.lobby:UpdateAi(userName)
-										else
-											userControls.lobby:KickUser(userName)
-										end]]--
-									end
-								end
-							})
-						end
 					elseif selectedName == "Report" and Configuration.gameConfig.link_reportPlayer ~= nil then
 						local userInfo = userControls.lobby:GetUser(userName) or {}
 						if userInfo.accountID then
@@ -855,30 +815,6 @@ local function GetUserControls(userName, opts)
 		end
 	end
 
-	if showHandicap then
-		local battleStatus = userControls.lobby:GetUserBattleStatus(userName) or {}
-		local handicap = battleStatus.handicap or 0
-		offset = offset + 5
-		userControls.lblHandicap = Label:New {
-			name = "lblHandicap",
-			x = offset,
-			y = offsetY + 4,
-			right = 0,
-			bottom = 4,
-			align = "left",
-			parent = userControls.mainControl,
-			fontsize = Configuration:GetFont(2).size,
-			caption = "+" .. tostring(handicap),
-			textcolor = Configuration:GetWarningColor(),
-		}
-		userControls.nameActualLength = userControls.nameActualLength + 25
-		offset = offset + 25
-		if battleStatus.isSpectator then
-			userControls.lblHandicap:Hide()
-		end
-
-	end
-
 	if not hideStatus then
 		userControls.statusImages = {}
 		UpdateUserControlStatus(userName, userControls)
@@ -997,7 +933,6 @@ function userHandler.GetBattleUser(userName, isSingleplayer)
 		isInBattle     = true,
 		showModerator  = true,
 		showFounder    = true,
-		showHandicap   = WG.Chobby.Configuration.gameConfig.showHandicap,
 		showTeamColor  = not WG.Chobby.Configuration.gameConfig.disableColorChoosing,
 		showSide       = WG.Chobby.Configuration:GetSideData() ~= nil,
 	})
@@ -1017,7 +952,6 @@ function userHandler.GetSingleplayerUser(userName)
 		autoResize     = true,
 		isInBattle     = true,
 		isSingleplayer = true,
-		showHandicap   = WG.Chobby.Configuration.gameConfig.showHandicap,
 		showTeamColor  = not WG.Chobby.Configuration.gameConfig.disableColorChoosing,
 		showSide       = WG.Chobby.Configuration:GetSideData() ~= nil,
 	})
