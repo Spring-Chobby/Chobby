@@ -907,6 +907,7 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	userData.aiOptions  = status.aiOptions or userData.aiOptions
 	userData.owner      = status.owner or userData.owner
 	userData.teamColor  = status.teamColor or userData.teamColor
+	userData.handicap   = status.handicap
 
 	status.allyNumber   = userData.allyNumber
 	status.teamNumber   = userData.teamNumber
@@ -918,6 +919,8 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	status.aiOptions    = userData.aiOptions
 	status.owner        = userData.owner
 	status.teamColor    = userData.teamColor
+	status.handicap 	= userName.handicap
+
 	self:_CallListeners("OnUpdateUserBattleStatus", userName, status)
 
 	if changedSpectator or changedAllyTeam then
