@@ -157,6 +157,7 @@ local function RemoveDownload(name, fileType, putInRemoveList, removalType)
 	-- and retrying it up to retrycount times will succeed.
 	-- A game download will also return with failure often so we use VFS.ScanAllDirs() to check if we did actually
 	-- successfully download it: if we were truly unsuccessful, then we retry downloading it again.
+
 	local index = GetDownloadIndex(downloadQueue, name, fileType)
 	if not index then
 		return false
