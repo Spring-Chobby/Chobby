@@ -54,6 +54,7 @@ local IMAGE_DIR          = LUA_DIRNAME .. "images/"
 local IMAGE_AFK          = IMAGE_DIR .. "away.png"
 local IMAGE_BATTLE       = IMAGE_DIR .. "battle.png"
 local IMAGE_INGAME       = IMAGE_DIR .. "ingame.png"
+local IMAGE_SOLO         = IMAGE_DIR .. "solo.png"
 local IMAGE_PARTY_INVITE = IMAGE_DIR .. "partyInvite.png"
 local IMAGE_FLAG_UNKNOWN = IMAGE_DIR .. "flags/unknown.png"
 local IMAGE_AUTOHOST     = IMAGE_DIR .. "ranks/robot.png"
@@ -282,8 +283,13 @@ local function GetUserStatusImages(userName, isInBattle, userControl)
 	end
 
 	if userInfo.isInGame or (userInfo.battleID and not isInBattle) and not userControl.hideStatusIngame then
+		
 		if userInfo.isInGame then
-			images[#images + 1] = IMAGE_INGAME
+			if userInfo.battleID == nil and WG.Chobby.Configuration.gameConfig.showSinglePlayerIngame then
+				images[#images + 1] = IMAGE_SOLO
+			else
+				images[#images + 1] = IMAGE_INGAME
+			end
 		else
 			images[#images + 1] = IMAGE_BATTLE
 		end
