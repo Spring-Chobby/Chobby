@@ -37,9 +37,59 @@ function WrapperLoopback.UploadLog()
 	WG.Connector.Send("UploadLog")
 end
 
+function WrapperLoopback.ReadReplayInfo(relativePath)
+	WG.Connector.Send("ReadReplayInfo", {
+		relativePath = relativePath
+	})
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface
+
+-- replay info read
+local function ReplayInfo(command)
+	--[[
+	    public class ReadReplayInfoDone {
+                    public string RelativePath { get; set; }
+                   public ReplayReader.ReplayInfo ReplayInfo { get; set; }
+
+  public class ReplayInfo
+        {
+            public string Engine { get; set; }
+            public string Game { get; set; }
+            public string Map { get; set; }
+            public string StartScript { get; set; }
+            public DateTime Date { get; set; }
+            public int GameLengthRealtime { get; set; }
+            public int GameLengthIngameTime { get; set; }
+            public string GameID { get; set; }
+            public List<PlayerEntry> Players { get; set; } = new List<PlayerEntry>();
+
+            public class PlayerEntry
+            {
+                public bool IsSpectator { get; set; }
+                public bool IsBot { get; set; }
+                public string Name { get; set; }
+                public int? AllyTeam { get; set; }
+            }
+        }
+
+
+		ReplayInfo is nil in case of failure
+
+             }
+
+	]]--
+	WG.ReplayHandler.ReadReplayInfoDone(
+		command.relativePath,
+		command.engine,
+		command.game,
+		command.map,
+		command.startScript
+	)
+end
+
 
 -- init
 function widget:Initialize()
@@ -50,4 +100,7 @@ function widget:Initialize()
 	end
 
 	WG.WrapperLoopback = WrapperLoopback
+
+
+	WG.Connector.Register('ReplayInfo', ReplayInfo)
 end

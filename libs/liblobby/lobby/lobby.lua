@@ -499,28 +499,20 @@ function Lobby:_OnPong()
 	self:_CallListeners("OnPong")
 end
 
-function Lobby:_OnChangeEmailRequestDenied(errorMsg)
-	self:_CallListeners("OnChangeEmailRequestDenied",errorMsg)
+function Lobby:_OnChangeEmailAccepted()
+	self:_CallListeners("OnChangeEmailAccepted")
+end
+
+function Lobby:_OnChangeEmailDenied(errorMsg)
+	self:_CallListeners("OnChangeEmailDenied", errorMsg)
 end
 
 function Lobby:_OnChangeEmailRequestAccepted()
 	self:_CallListeners("OnChangeEmailRequestAccepted")
 end
 
-function Lobby:_OnChangeEmailDenied(errorMsg)
-	self:_CallListeners("OnChangeEmailDenied",errorMsg)
-end
-
-function Lobby:_OnChangeEmailAccepted()
-	self:_CallListeners("OnChangeEmailAccepted")
-end
-
-function Lobby:_OnResetPasswordRequestAccepted()
-	self:_CallListeners("OnResetPasswordRequestAccepted")
-end
-
-function Lobby:_OnResetPasswordRequestDenied(errorMsg)
-	self:_CallListeners("OnResetPasswordRequestDenied",errorMsg)
+function Lobby:_OnChangeEmailRequestDenied(errorMsg)
+	self:_CallListeners("OnChangeEmailRequestDenied", errorMsg)
 end
 
 function Lobby:_OnResetPasswordAccepted()
@@ -528,7 +520,15 @@ function Lobby:_OnResetPasswordAccepted()
 end
 
 function Lobby:_OnResetPasswordDenied(errorMsg)
-	self:_CallListeners("OnResetPasswordDenied",errorMsg)
+	self:_CallListeners("OnResetPasswordDenied", errorMsg)
+end
+
+function Lobby:_OnResetPasswordRequestAccepted()
+	self:_CallListeners("OnResetPasswordRequestAccepted")
+end
+
+function Lobby:_OnResetPasswordRequestDenied(errorMsg)
+	self:_CallListeners("OnResetPasswordRequestDenied", errorMsg)
 end
 
 ------------------------
@@ -629,13 +629,21 @@ function Lobby:_OnUnfriend(userName)
 end
 
 function Lobby:_OnFriendList(friends)
-	self.friends = friends
-	self.friendCount = #friends
+	local newFriendMap = {}
+	for i = 1, #friends do
+		local userName = friends[i]
+		if not self.isFriend[userName] then
+			self:_OnFriend(userName)
+			self:_OnRemoveIgnoreUser(userName)
+		end
+		newFriendMap[userName] = true
+	end
 
 	for _, userName in pairs(self.friends) do
-		self.isFriend[userName] = true
-		local userInfo = self:TryGetUser(userName)
-		userInfo.isFriend = true
+		if not newFriendMap[userName] then
+			self:_OnUnfriend(userName)
+			self:_OnRemoveIgnoreUser(userName)
+		end
 	end
 
 	self:_CallListeners("OnFriendList", self:GetFriends())
