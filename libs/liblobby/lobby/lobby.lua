@@ -864,6 +864,8 @@ function Lobby:_OnUpdateBattleInfo(battleID, battleInfo)
 	battle.playerCount = battleInfo.playerCount or battle.playerCount
 	battle.spectatorCount = battleInfo.spectatorCount or battle.spectatorCount
 
+	battle.locked = battleInfo.locked or battle.locked
+
 	-- ZK specific
 	battle.runningSince = battleInfo.runningSince or battle.runningSince
 	battle.battleMode = battleInfo.battleMode or battle.battleMode
