@@ -39,10 +39,15 @@ local UserStatusPanel = {}
 
 local function Logout()
 	if lobby:GetConnectionStatus() ~= "offline" then
-		Spring.Echo("Logout")
-		WG.Chobby.interfaceRoot.CleanMultiplayerState()
 		WG.Chobby.Configuration:SetConfigValue("autoLogin", false)
-		lobby:Disconnect()
+		if WG.Chobby.Configuration and WG.Chobby.Configuration.gameConfig and WG.Chobby.Configuration.gameConfig.logoutOpensLoginPanel then
+			WG.LoginWindowHandler.TryLogin()
+			--WG.LoginWindowHandler.tabPanel.tabBar:Select("reset")
+		else
+			Spring.Echo("Logout")
+			WG.Chobby.interfaceRoot.CleanMultiplayerState()
+			lobby:Disconnect()
+		end
 	else
 		Spring.Echo("Login")
 		WG.LoginWindowHandler.TryLogin()
@@ -199,7 +204,11 @@ function widget:Update()
 			connectivityImage.file = IMAGE_OFFLINE
 			connectivityImage:Invalidate()
 		else
-			btnLogout:SetCaption(i18n("logout"))
+			if WG.Chobby.Configuration and WG.Chobby.Configuration.gameConfig and WG.Chobby.Configuration.gameConfig.logoutOpensLoginPanel then
+				btnLogout:SetCaption(i18n("Account"))
+			else
+				btnLogout:SetCaption(i18n("logout"))
+			end
 		end
 		if newStatus == "connecting" then
 			connectivityText:SetText(WG.Chobby.Configuration:GetPartialColor() .. i18n("connecting") .. "\b")
