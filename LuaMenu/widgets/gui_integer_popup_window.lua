@@ -24,10 +24,10 @@ local function CreateIntegerSelectorWindow(opts)
 		caption = opts.caption or "",
 		name = "IntegerSelectorWindow",
 		parent = screen0,
-		width = 280,
-		height = 330,
+		width = opts.width or 280,
+		height = opts.height or 330,
 		resizable = false,
-		draggable = false,
+		draggable = opts.draggable or false,
 		classname = "main_window",
 	}
 
@@ -43,18 +43,31 @@ local function CreateIntegerSelectorWindow(opts)
 	end
 
 	local lblTitle = TextBox:New {
-		x = "5%",
-		y = "10%",
-		width = IntegerSelectorWindow.width - IntegerSelectorWindow.padding[1] - IntegerSelectorWindow.padding[3],
-		height = 35,
+		x = "0%",
+		y = "5%",
+		width = "90%",
+		height = (opts.height or 330) /2,
 		align = "center",
+		multiline = true,
 		font = Configuration:GetFont(2),
 		text = opts.labelCaption or "",
 		parent = IntegerSelectorWindow,
 	}
+	if opts.imageFile then
+		local wideimg = Image:New{
+			name = "IntegerSelectorWindowImage",
+			x = "5%",
+			y = "40%",
+			width = opts.imageWidth or "90%",
+			height = opts.imageHeight or "33%",
+			parent = IntegerSelectorWindow,
+			keepAspect = opts.keepAspect and true,
+			image = opts.imageFile,
+		}
+	end
 
 	local btnOK = Button:New {
-		x = "10%",
+		x = "2%",
 		width = "30%",
 		bottom = 1,
 		height = 40,
@@ -66,7 +79,7 @@ local function CreateIntegerSelectorWindow(opts)
 	}
 
 	local btnCancel = Button:New {
-		right = "10%",
+		right = "2%",
 		width = "30%",
 		bottom = 1,
 		height = 40,
@@ -77,6 +90,18 @@ local function CreateIntegerSelectorWindow(opts)
 		parent = IntegerSelectorWindow,
 	}
 
+	local tbValue = TextBox:New{
+		right = "45%",
+		width = "10%",
+		bottom = 5,
+		height = 40,
+		align = "center",
+		caption = tostring(opts.defaultValue),
+		font = Configuration:GetFont(2),
+		parent = IntegerSelectorWindow,
+	}
+	
+	tbValue:SetText(tostring(opts.defaultValue))
 
 	local integerTrackBar = Trackbar:New {
 		x = 0,
@@ -90,7 +115,10 @@ local function CreateIntegerSelectorWindow(opts)
 		parent = IntegerSelectorWindow,
 		OnChange = {
 			function(obj, value)
+				Spring.Echo(value)
 				integerTrackBarValue = value
+				tbValue:SetText(tostring(value))
+				tbValue:Invalidate()
 			end
 		}
 	}
