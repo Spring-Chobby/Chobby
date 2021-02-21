@@ -238,6 +238,27 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl, showTea
 		comboOptions[#comboOptions + 1] = "Kick"
 	end
 
+	-- Change team of anyone with !force
+	if  Configuration.gameConfig.spadsLobbyFeatures and not userBattleInfo.isSpectator and (isInBattle or userBattleInfo.aiLib) then
+		comboOptions[#comboOptions + 1] = "Change Team"
+	end
+
+	-- Set the handicap value of anyone with !force
+	if  Configuration.gameConfig.spadsLobbyFeatures and not userBattleInfo.isSpectator and (isInBattle or userBattleInfo.aiLib) then
+		comboOptions[#comboOptions + 1] = "Add Bonus"
+	end
+
+	-- Ring: not bot and is in same battle
+	if Configuration.gameConfig.spadsLobbyFeatures and isInBattle and (not userBattleInfo.aiLib) then
+		comboOptions[#comboOptions + 1] = "Ring"
+	end
+
+	-- Spec: in same battle, is not AI and is not spec: 
+	if Configuration.gameConfig.spadsLobbyFeatures and
+		isInBattle and not userBattleInfo.isSpectator and not userBattleInfo.aiLib then
+		comboOptions[#comboOptions + 1] = "Force Spectator"
+	end
+
 	local whitelist = userControl.dropdownWhitelist
 	if whitelist then
 		local culled = {}
@@ -480,6 +501,25 @@ local function UpdateUserBattleStatus(listener, userName)
 					data.imTeamColor:Invalidate()
 				end
 			end
+			if data.lblHandicap then
+				local handicap = battleStatus.handicap
+				if handicap ~= nil then
+					local handicaptxt = ''
+					if battleStatus.handicap and battleStatus.handicap > 0 then
+						handicaptxt = '+'..tostring(battleStatus.handicap)
+						data.lblHandicap:SetCaption(handicaptxt)
+						data.lblHandicap:SetVisibility(true)
+					else
+						data.lblHandicap:SetVisibility(false)
+					end
+				end
+				if imageVisible then
+					data.lblHandicap:SetVisibility(true)
+				else
+					data.lblHandicap:SetVisibility(false)
+				end
+				data.lblHandicap:Invalidate()
+			end
 		end
 	end
 end
@@ -517,6 +557,7 @@ local function GetUserControls(userName, opts)
 	local comboBoxOnly       = opts.comboBoxOnly
 	local showTeamColor      = opts.showTeamColor
 	local showSide           = opts.showSide
+	local showHandicap		 = opts.showHandicap
 
 	local userControls = reinitialize or {}
 
@@ -593,7 +634,11 @@ local function GetUserControls(userName, opts)
 						if userBattleInfo and userBattleInfo.aiLib then
 							userControls.lobby:RemoveAi(userName)
 						else
-							userControls.lobby:KickUser(userName)
+							if Configuration.gameConfig.spadsLobbyFeatures then
+								lobby:SayBattle("!kick "..userName)
+							else
+								userControls.lobby:KickUser(userName)
+							end
 						end
 					elseif selectedName == "Unfriend" then
 						userControls.lobby:Unfriend(userName)
@@ -668,6 +713,71 @@ local function GetUserControls(userName, opts)
 								end
 							end
 						})
+					elseif selectedName == "Change Team" then
+						local battleStatus = userControls.lobby:GetUserBattleStatus(userName) or {}
+						if battleStatus.isSpectator then
+							return
+						end
+						WG.IntegerSelectorWindow.CreateIntegerSelectorWindow({
+							defaultValue = (battleStatus.allyNumber or 1) + 1,
+							minValue = 1,
+							maxValue = 16,
+							caption = "Change Team",
+							labelCaption = "Change "..userName.." to Team: ",
+							OnAccepted = function(allyTeamID)
+								local myUserName = userControls.lobby:GetMyUserName()
+								if userName == myUserName then
+									userControls.lobby:SetBattleStatus({
+										allyNumber = allyTeamID - 1
+									})
+								else
+									local userBattleInfo = userControls.lobby:GetUserBattleStatus(userName) or {}
+									if userBattleInfo.aiLib and userBattleInfo.owner == myUserName then
+										userControls.lobby:UpdateAi(userName, {
+											allyNumber = allyTeamID - 1
+										})
+									else
+										lobby:SayBattle("!force "..userName.." team ".. tostring(allyTeamID)) -- +1 for spads team
+									end
+								end
+							end
+						})
+					elseif selectedName == "Add Bonus" then
+						local battleStatus = userControls.lobby:GetUserBattleStatus(userName) or {}
+						if battleStatus.isSpectator then
+							return
+						end
+						WG.IntegerSelectorWindow.CreateIntegerSelectorWindow({
+							defaultValue = 0,
+							minValue = 0,
+							maxValue = 100,
+							caption = "Add Bonus",
+							labelCaption = "Give "..userName.." and additional % resource bonus. 100% means that player produces double the normal resource amount. 0% is regular resource production.",
+							OnAccepted = function(bonusAmount)
+								if isSingleplayer then
+									local myUserName = userControls.lobby:GetMyUserName()
+									if userName == myUserName then
+										userControls.lobby:SetBattleStatus({
+											handicap = bonusAmount
+										})
+									else
+										local userBattleInfo = userControls.lobby:GetUserBattleStatus(userName) or {}
+										if userBattleInfo.aiLib and userBattleInfo.owner == myUserName then
+											userControls.lobby:UpdateAi(userName, {
+												handicap = bonusAmount
+											})
+										end
+									end
+								else
+									lobby:SayBattle("!force "..userName.." bonus ".. tostring(bonusAmount))
+								end
+							end
+						})
+					elseif selectedName == "Ring" then
+						--lobby:Ring(userName)
+						lobby:SayBattle("!ring "..userName)
+					elseif selectedName == "Force Spectator" then
+						lobby:SayBattle("!spec "..userName)
 					elseif selectedName == "Report" and Configuration.gameConfig.link_reportPlayer ~= nil then
 						local userInfo = userControls.lobby:GetUser(userName) or {}
 						if userInfo.accountID then
@@ -815,10 +925,27 @@ local function GetUserControls(userName, opts)
 			color = battleStatus.teamColor
 		}
 		userControls.nameActualLength = userControls.nameActualLength + 25
-		offset = offset + 20
 		if battleStatus.isSpectator then
 			userControls.imTeamColor:Hide()
+		else
+			offset = offset + 20
 		end
+	end
+
+	if showHandicap then
+		local battleStatus = userControls.lobby:GetUserBattleStatus(userName) or {}
+		local handicaptxt = ''
+		if battleStatus.handicap and battleStatus.handicap > 0 then
+			handicaptxt = '+'..tostring(battleStatus.handicap)
+		end
+		userControls.lblHandicap = Label:New{
+			name = "lblHandicap",
+			x = offset,
+			y = offsetY + 2,
+			parent = userControls.mainControl,
+			caption = handicaptxt,
+			tooltip = "Handicap",
+		}
 	end
 
 	if not hideStatus then
@@ -941,6 +1068,7 @@ function userHandler.GetBattleUser(userName, isSingleplayer)
 		showFounder    = true,
 		showTeamColor  = not WG.Chobby.Configuration.gameConfig.disableColorChoosing,
 		showSide       = WG.Chobby.Configuration:GetSideData() ~= nil,
+		showHandicap   = WG.Chobby.Configuration.gameConfig.showHandicap,
 	})
 end
 
@@ -960,6 +1088,7 @@ function userHandler.GetSingleplayerUser(userName)
 		isSingleplayer = true,
 		showTeamColor  = not WG.Chobby.Configuration.gameConfig.disableColorChoosing,
 		showSide       = WG.Chobby.Configuration:GetSideData() ~= nil,
+		showHandicap   = WG.Chobby.Configuration.gameConfig.showHandicap,
 	})
 end
 

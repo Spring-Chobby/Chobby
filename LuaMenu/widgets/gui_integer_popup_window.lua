@@ -115,7 +115,7 @@ local function CreateIntegerSelectorWindow(opts)
 		parent = IntegerSelectorWindow,
 		OnChange = {
 			function(obj, value)
-				Spring.Echo(value)
+				--Spring.Echo(value)
 				integerTrackBarValue = value
 				tbValue:SetText(tostring(value))
 				tbValue:Invalidate()
