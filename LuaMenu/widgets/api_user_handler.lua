@@ -253,7 +253,7 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl, showTea
 		comboOptions[#comboOptions + 1] = "Ring"
 	end
 
-	-- Spec: in same battle, is not AI and is not spec: 
+	-- Spec: in same battle, is not AI and is not spec:
 	if Configuration.gameConfig.spadsLobbyFeatures and
 		isInBattle and not userBattleInfo.isSpectator and not userBattleInfo.aiLib then
 		comboOptions[#comboOptions + 1] = "Force Spectator"
@@ -304,7 +304,6 @@ local function GetUserStatusImages(userName, isInBattle, userControl)
 	end
 
 	if userInfo.isInGame or (userInfo.battleID and not isInBattle) and not userControl.hideStatusIngame then
-		
 		if userInfo.isInGame then
 			if userInfo.battleID == nil and WG.Chobby.Configuration.gameConfig.showSinglePlayerIngame then
 				images[#images + 1] = IMAGE_SOLO
