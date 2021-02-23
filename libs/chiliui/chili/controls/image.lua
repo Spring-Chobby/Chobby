@@ -22,17 +22,17 @@ Image = Button:Inherit{
 	file  = nil,
 	file2 = nil,
 
-	flip  = true;
-	flip2 = true;
+	flip  = true,
+	flip2 = true,
 	firstDraw = true,
 
-	keepAspect = true;
-	
-	checkFileExists = false;
-	fallbackFile = false;
-	imageLoadTime = 3.5; -- Seconds
+	keepAspect = true,
 
-	useRTT = false;
+	checkFileExists = false,
+	fallbackFile = false,
+	imageLoadTime = 3.5, -- Seconds
+
+	useRTT = false,
 
 	OnClick  = {},
 
@@ -74,7 +74,7 @@ function Image:DrawControl()
 	if (not (file or file2)) then
 		return
 	end
-	
+
 	if self.checkFileExists then
 		if self._loadTimer then
 			if Spring.DiffTimers(Spring.GetTimer(), self._loadTimer) > self.imageLoadTime then
@@ -83,7 +83,7 @@ function Image:DrawControl()
 		elseif ((not file) or VFS.FileExists(file)) and ((not file2) or VFS.FileExists(file2)) then
 			self._loadTimer = Spring.GetTimer()
 		end
-	
+
 		if self.fallbackFile then
 			file = self.fallbackFile
 			file2 = nil
@@ -91,7 +91,7 @@ function Image:DrawControl()
 			return
 		end
 	end
-	
+
 	if (self.keepAspect) then
 		if (file2) then
 			gl.Color(self.color2 or self.color)
