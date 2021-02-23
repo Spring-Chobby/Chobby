@@ -43,6 +43,18 @@ function WrapperLoopback.ReadReplayInfo(relativePath)
 	})
 end
 
+function WrapperLoopback.ParseMiniMap(mapPath, destination, miniMapSize)
+	WG.Connector.Send("ParseMiniMap", {
+		mapPath = mapPath,
+		destination = destination,
+		miniMapSize = miniMapSize
+	})
+end
+
+local function ParseMiniMapFinished(command)
+	WG.MapHandler.ParseMiniMapFinished(command.mapPath, command.destinationPath)
+end
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Widget Interface
@@ -101,6 +113,7 @@ function widget:Initialize()
 
 	WG.WrapperLoopback = WrapperLoopback
 
-
 	WG.Connector.Register('ReplayInfo', ReplayInfo)
+	WG.Connector.Register('ParseMiniMapFinished', ParseMiniMapFinished)
+
 end
