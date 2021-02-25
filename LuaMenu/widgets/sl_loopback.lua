@@ -51,6 +51,42 @@ function WrapperLoopback.ParseMiniMap(mapPath, destination, miniMapSize)
 	})
 end
 
+local downloads = {}
+
+-- downloads a file, type can be any of RAPID, MAP, MISSION, DEMO, ENGINE, NOTKNOWN
+function WrapperLoopback.DownloadFile(name, type)
+	downloads[name] = type
+
+	type = type:lower()
+	if type == "rapid" then
+		type = "game"
+	end
+	WG.Connector.Send("Download", {
+		name = name,
+		type = type
+	})
+end
+
+function WrapperLoopback.AbortDownload(name, type)
+	WG.Connector.Send("AbortDownload", {
+		name = name,
+		type = type
+	})
+end
+
+
+-- reports that download has ended/was aborted
+local function DownloadFinished(command)
+	local type = downloads[command.name]
+	WG.DownloadWrapperInterface.DownloadFinished(command.name, type, command.isSuccess, command.isAborted)
+	downloads[command.name] = nil
+end
+
+-- reports download progress. 100 might not indicate complation, wait for downloadfiledone
+local function DownloadProgress(command)
+	WG.DownloadWrapperInterface.DownloadFileProgress(command.name, command.progress * 100, command.total)
+end
+
 local function ParseMiniMapFinished(command)
 	WG.MapHandler.ParseMiniMapFinished(command.mapPath, command.destinationPath)
 end
@@ -115,5 +151,6 @@ function widget:Initialize()
 
 	WG.Connector.Register('ReplayInfo', ReplayInfo)
 	WG.Connector.Register('ParseMiniMapFinished', ParseMiniMapFinished)
-
+	WG.Connector.Register('DownloadProgress', DownloadProgress)
+	WG.Connector.Register('DownloadFinished', DownloadFinished)
 end
