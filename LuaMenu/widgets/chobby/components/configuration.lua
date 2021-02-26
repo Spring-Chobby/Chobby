@@ -721,17 +721,17 @@ function Configuration:GetMinimapSmallImage(mapName)
 	mapName = string.gsub(mapName, " ", "_")
 	local filePath = self.gameConfig.minimapThumbnailPath .. mapName .. ".png"
 	if not VFS.FileExists(filePath) then
-		filePath = "LuaMenu/Images/MinimapThumbnails" .. mapName .. ".jpg"
+		filePath = "LuaMenu/Images/Minimaps/" .. mapName .. ".jpg"
 	end
 	if WG.WrapperLoopback and WG.WrapperLoopback.DownloadImage and (not VFS.FileExists(filePath)) then
 		if not self.minimapThumbDownloads[mapName] then
-			Spring.CreateDir("LuaMenu/Images/MinimapThumbnails")
+			Spring.CreateDir("LuaMenu/Images/Minimaps")
 			WG.WrapperLoopback.DownloadImage({ImageUrl = "http://zero-k.info/Resources/" .. mapName .. ".thumbnail.jpg", TargetPath = filePath})
 			self.minimapThumbDownloads[mapName] = true
 		end
 		return filePath, true
 	end
-	return filePath
+	return filePath, not VFS.FileExists(filePath)
 end
 
 function Configuration:GetMinimapImage(mapName)
@@ -751,7 +751,7 @@ function Configuration:GetMinimapImage(mapName)
 		end
 		return filePath, true
 	end
-	return filePath
+	return filePath, not VFS.FileExists(filePath)
 end
 
 function Configuration:GetLoadingImage(size)

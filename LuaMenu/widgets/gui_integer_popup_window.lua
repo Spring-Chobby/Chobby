@@ -100,7 +100,7 @@ local function CreateIntegerSelectorWindow(opts)
 		font = Configuration:GetFont(2),
 		parent = IntegerSelectorWindow,
 	}
-	
+
 	tbValue:SetText(tostring(opts.defaultValue))
 
 	local integerTrackBar = Trackbar:New {

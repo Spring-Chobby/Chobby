@@ -323,7 +323,7 @@ function wrapperFunctions.DownloadFinished(name, fileType, success, aborted)
 	--})
 end
 
-function wrapperFunctions.DownloadFileProgress(name, fileType, progress, secondsRemaining, totalLength, currentSpeed)
+function wrapperFunctions.DownloadFileProgress(name, progress, totalLength)
 	local index = GetDownloadIndexByName(downloadQueue, name)
 	if not index then
 		return
