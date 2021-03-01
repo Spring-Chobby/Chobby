@@ -204,6 +204,10 @@ function Lobby:Unignore(userName)
 	return self
 end
 
+function Lobby:IgnoreList()
+	return self
+end
+
 ------------------------
 -- Battle commands
 ------------------------
