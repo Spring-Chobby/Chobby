@@ -155,6 +155,8 @@ local function InitializeListeners()
 			lobby:Join(channelName)
 		end
 
+		lobby:IgnoreList()
+
 		if loginAcceptedFunction then
 			loginAcceptedFunction()
 		end
