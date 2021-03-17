@@ -250,7 +250,6 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl, showTea
 			comboOptions[#comboOptions + 1] = "Kick"
 		end
 	end
-	
 	-- Change team of anyone with !force
 	if  Configuration.gameConfig.spadsLobbyFeatures and not userBattleInfo.isSpectator and (isInBattle or userBattleInfo.aiLib) then
 		comboOptions[#comboOptions + 1] = "Change Team"
@@ -534,12 +533,17 @@ local function UpdateUserBattleStatus(listener, userName)
 				local handicap = battleStatus.handicap
 				if handicap ~= nil then
 					local handicaptxt = ''
-					if battleStatus.handicap and battleStatus.handicap > 0 then
-						handicaptxt = '+'..tostring(battleStatus.handicap)
+					if battleStatus.handicap == 0 then
+						
+						data.lblHandicap:SetVisibility(false)
+					else
+						if battleStatus.handicap > 0 then
+							handicaptxt = '+'..tostring(battleStatus.handicap)
+						else
+							handicaptxt = tostring(battleStatus.handicap)
+						end
 						data.lblHandicap:SetCaption(handicaptxt)
 						data.lblHandicap:SetVisibility(true)
-					else
-						data.lblHandicap:SetVisibility(false)
 					end
 				end
 				if imageVisible then
