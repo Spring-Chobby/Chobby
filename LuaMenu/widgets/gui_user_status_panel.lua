@@ -205,7 +205,7 @@ function widget:Update()
 			connectivityImage:Invalidate()
 		else
 			if WG.Chobby.Configuration and WG.Chobby.Configuration.gameConfig and WG.Chobby.Configuration.gameConfig.logoutOpensLoginPanel then
-				btnLogout:SetCaption(i18n("Account"))
+				btnLogout:SetCaption(i18n("account"))
 			else
 				btnLogout:SetCaption(i18n("logout"))
 			end

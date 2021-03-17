@@ -206,13 +206,19 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl, showTea
 		if userInfo.isIgnored then
 			comboOptions[#comboOptions + 1] = "Unignore"
 		elseif not userInfo.isAdmin then
-			comboOptions[#comboOptions + 1] = "Ignore"
+			if (Configuration.gameConfig.spadsLobbyFeatures ~= true ) or
+				(Configuration.gameConfig.spadsLobbyFeatures == true and not userInfo.isBot) then
+				comboOptions[#comboOptions + 1] = "Ignore"
+			end
 		end
 
 		if userInfo.isFriend then
 			comboOptions[#comboOptions + 1] = "Unfriend"
 		else
-			comboOptions[#comboOptions + 1] = "Friend"
+			if (Configuration.gameConfig.spadsLobbyFeatures ~= true ) or
+			(Configuration.gameConfig.spadsLobbyFeatures == true and not userInfo.isBot) then
+				comboOptions[#comboOptions + 1] = "Friend"
+			end
 		end
 	end
 
@@ -232,12 +238,19 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl, showTea
 	end
 
 	-- userControl.lobby:GetMyIsAdmin()
-	-- Let everyone start kick votes.
-	if userName ~= myUserName and
-		(isInBattle or (userBattleInfo.aiLib and userBattleInfo.owner == myUserName)) then
-		comboOptions[#comboOptions + 1] = "Kick"
+	-- Let everyone start kick votes, but dont let they try to kick spads lobby bottomSpacing
+	if Configuration.gameConfig.spadsLobbyFeatures then
+		if userName ~= myUserName and not userInfo.isBot and
+			(isInBattle or (userBattleInfo.aiLib and userBattleInfo.owner == myUserName)) then
+			comboOptions[#comboOptions + 1] = "Kick"
+		end
+	else
+		if userName ~= myUserName and
+			(isInBattle or (userBattleInfo.aiLib and userBattleInfo.owner == myUserName)) then
+			comboOptions[#comboOptions + 1] = "Kick"
+		end
 	end
-
+	
 	-- Change team of anyone with !force
 	if  Configuration.gameConfig.spadsLobbyFeatures and not userBattleInfo.isSpectator and (isInBattle or userBattleInfo.aiLib) then
 		comboOptions[#comboOptions + 1] = "Change Team"
@@ -249,7 +262,7 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl, showTea
 	end
 
 	-- Ring: not bot and is in same battle
-	if Configuration.gameConfig.spadsLobbyFeatures and isInBattle and (not userBattleInfo.aiLib) then
+	if not userInfo.isBot and Configuration.gameConfig.spadsLobbyFeatures and isInBattle and (not userBattleInfo.aiLib) then
 		comboOptions[#comboOptions + 1] = "Ring"
 	end
 
@@ -258,6 +271,13 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl, showTea
 		isInBattle and not userBattleInfo.isSpectator and not userBattleInfo.aiLib then
 		comboOptions[#comboOptions + 1] = "Force Spectator"
 	end
+
+	-- Spec: in same battle, is not AI and is not spec: 
+	if Configuration.gameConfig.spadsLobbyFeatures and
+		isInBattle and not userBattleInfo.isSpectator and not userBattleInfo.aiLib then
+		comboOptions[#comboOptions + 1] = "Make Boss"
+	end
+
 
 	local whitelist = userControl.dropdownWhitelist
 	if whitelist then
@@ -453,6 +473,16 @@ end
 local function UpdateUserActivityList(listener, userList)
 	for i = 1, #userList do
 		UpdateUserActivity(_, userList[i])
+	end
+end
+
+local function OnIgnoreList(listener, userName)
+	if userName then
+		local userInfo = lobby:GetUser(userName)
+		--Spring.Echo("OnIgnoreList(listener, userList)", userName,userInfo)
+		if userInfo then
+			userInfo.isIgnored = true
+		end
 	end
 end
 
@@ -746,12 +776,17 @@ local function GetUserControls(userName, opts)
 						if battleStatus.isSpectator then
 							return
 						end
+						local minbonus = 0
+						if isSingleplayer then 
+							minbonus = -99 
+						end
 						WG.IntegerSelectorWindow.CreateIntegerSelectorWindow({
 							defaultValue = 0,
-							minValue = 0,
+							minValue = minbonus,
 							maxValue = 100,
 							caption = "Add Bonus",
-							labelCaption = "Give "..userName.." and additional % resource bonus. 100% means that player produces double the normal resource amount. 0% is regular resource production.",
+							labelCaption = "Give "..userName.." an additional % resource bonus. 100% means that player produces double the normal resource amount. 0% is regular resource production. In single player games, a negative bonus will result in that player getting X% less resources",
+							width = 360,
 							OnAccepted = function(bonusAmount)
 								if isSingleplayer then
 									local myUserName = userControls.lobby:GetMyUserName()
@@ -775,6 +810,8 @@ local function GetUserControls(userName, opts)
 					elseif selectedName == "Ring" then
 						--lobby:Ring(userName)
 						lobby:SayBattle("!ring "..userName)
+					elseif selectedName == "Make Boss" then
+						lobby:SayBattle("!boss "..userName)
 					elseif selectedName == "Force Spectator" then
 						lobby:SayBattle("!spec "..userName)
 					elseif selectedName == "Report" and Configuration.gameConfig.link_reportPlayer ~= nil then
@@ -1181,7 +1218,8 @@ end
 local function AddListeners()
 	lobby:AddListener("OnFriendList", UpdateUserActivityList)
 	lobby:AddListener("OnIgnoreList", UpdateUserActivityList)
-
+	lobby:AddListener("OnIgnoreList", OnIgnoreList)
+	lobby:AddListener("Ignore", OnIgnoreList)
 	lobby:AddListener("OnUpdateUserStatus", UpdateUserActivity)
 
 	lobby:AddListener("OnFriend", UpdateUserActivity)

@@ -116,6 +116,12 @@ function Interface:Unignore(userName)
 	return self
 end
 
+function Interface:IgnoreList()
+	self:super("IgnoreList")
+	self:_SendCommand("IGNORELIST")
+	return self
+end
+
 ------------------------
 -- Battle commands
 ------------------------
