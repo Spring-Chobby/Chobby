@@ -250,7 +250,7 @@ local function GetUserComboBoxOptions(userName, isInBattle, userControl, showTea
 			comboOptions[#comboOptions + 1] = "Kick"
 		end
 	end
-
+	
 	-- Change team of anyone with !force
 	if  Configuration.gameConfig.spadsLobbyFeatures and not userBattleInfo.isSpectator and (isInBattle or userBattleInfo.aiLib) then
 		comboOptions[#comboOptions + 1] = "Change Team"
@@ -479,7 +479,7 @@ end
 local function OnIgnoreList(listener, userName)
 	if userName then
 		local userInfo = lobby:GetUser(userName)
-		-- Spring.Echo("OnIgnoreList(listener, userList)", userName,userInfo)
+		--Spring.Echo("OnIgnoreList(listener, userList)", userName,userInfo)
 		if userInfo then
 			userInfo.isIgnored = true
 		end
@@ -776,12 +776,17 @@ local function GetUserControls(userName, opts)
 						if battleStatus.isSpectator then
 							return
 						end
+						local minbonus = 0
+						if isSingleplayer then 
+							minbonus = -99 
+						end
 						WG.IntegerSelectorWindow.CreateIntegerSelectorWindow({
 							defaultValue = 0,
-							minValue = 0,
+							minValue = minbonus,
 							maxValue = 100,
 							caption = "Add Bonus",
-							labelCaption = "Give "..userName.." and additional % resource bonus. 100% means that player produces double the normal resource amount. 0% is regular resource production.",
+							labelCaption = "Give "..userName.." an additional % resource bonus. 100% means that player produces double the normal resource amount. 0% is regular resource production. In single player games, a negative bonus will result in that player getting X% less resources",
+							width = 360,
 							OnAccepted = function(bonusAmount)
 								if isSingleplayer then
 									local myUserName = userControls.lobby:GetMyUserName()
@@ -1214,6 +1219,7 @@ local function AddListeners()
 	lobby:AddListener("OnFriendList", UpdateUserActivityList)
 	lobby:AddListener("OnIgnoreList", UpdateUserActivityList)
 	lobby:AddListener("OnIgnoreList", OnIgnoreList)
+	lobby:AddListener("Ignore", OnIgnoreList)
 	lobby:AddListener("OnUpdateUserStatus", UpdateUserActivity)
 
 	lobby:AddListener("OnFriend", UpdateUserActivity)
