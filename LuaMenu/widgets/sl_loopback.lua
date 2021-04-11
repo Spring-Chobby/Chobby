@@ -1,3 +1,6 @@
+LIB_LOBBY_DIRNAME = "libs/liblobby/lobby/" -- why is this needed? why doesnt api load first?
+VFS.Include(LIB_LOBBY_DIRNAME .. "json.lua")
+
 function widget:GetInfo()
 return {
 	name	= "Spring-Launcher wrapper loopback interface",
@@ -129,12 +132,14 @@ local function ReplayInfo(command)
              }
 
 	]]--
+	local allyTeams = json.decode(command.allyTeams)
 	WG.ReplayHandler.ReadReplayInfoDone(
 		command.relativePath,
 		command.engine,
 		command.game,
 		command.map,
-		command.startScript
+		allyTeams,
+		command.time
 	)
 end
 
