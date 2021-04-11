@@ -3,12 +3,12 @@
 
 function widget:GetInfo()
 	return {
-		name      = "Replays window",
-		desc      = "Handles local replays.",
-		author    = "GoogleFrog",
-		date      = "20 October 2016",
+		name	  = "Replays window",
+		desc	  = "Handles local replays.",
+		author	  = "GoogleFrog",
+		date	  = "20 October 2016",
 		license   = "GNU LGPL, v2.1 or later",
-		layer     = -100000,
+		layer	  = -100000,
 		enabled   = true  --  loaded by default?
 	}
 end

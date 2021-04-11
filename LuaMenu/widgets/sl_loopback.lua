@@ -1,11 +1,11 @@
 function widget:GetInfo()
 return {
-	name    = "Spring-Launcher wrapper loopback interface",
-	desc    = "Creates a commlink between spring-launcher's wrapper and chobby",
-	author  = "gajop",
-	date    = "really late",
+	name	= "Spring-Launcher wrapper loopback interface",
+	desc	= "Creates a commlink between spring-launcher's wrapper and chobby",
+	author	= "gajop",
+	date	= "really late",
 	license = "MIT",
-	layer   = -10000,
+	layer	= -10000,
 	enabled = true,
 }
 end
