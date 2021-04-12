@@ -132,7 +132,16 @@ local function ReplayInfo(command)
              }
 
 	]]--
-	local allyTeams = json.decode(command.allyTeams)
+
+    --  Be resilient to missing allyTeams, to be able to work with older sl
+    --  versions.
+    local allyTeams
+    if command.allyTeams then
+        allyTeams = json.decode(command.allyTeams)
+    else
+        allyTeams = {}
+    end
+
 	WG.ReplayHandler.ReadReplayInfoDone(
 		command.relativePath,
 		command.engine,
