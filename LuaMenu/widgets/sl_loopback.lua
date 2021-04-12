@@ -1,11 +1,14 @@
+LIB_LOBBY_DIRNAME = "libs/liblobby/lobby/" -- why is this needed? why doesnt api load first?
+VFS.Include(LIB_LOBBY_DIRNAME .. "json.lua")
+
 function widget:GetInfo()
 return {
-	name    = "Spring-Launcher wrapper loopback interface",
-	desc    = "Creates a commlink between spring-launcher's wrapper and chobby",
-	author  = "gajop",
-	date    = "really late",
+	name	= "Spring-Launcher wrapper loopback interface",
+	desc	= "Creates a commlink between spring-launcher's wrapper and chobby",
+	author	= "gajop",
+	date	= "really late",
 	license = "MIT",
-	layer   = -10000,
+	layer	= -10000,
 	enabled = true,
 }
 end
@@ -129,12 +132,14 @@ local function ReplayInfo(command)
              }
 
 	]]--
+	local allyTeams = json.decode(command.allyTeams)
 	WG.ReplayHandler.ReadReplayInfoDone(
 		command.relativePath,
 		command.engine,
 		command.game,
 		command.map,
-		command.startScript
+		allyTeams,
+		command.time
 	)
 end
 

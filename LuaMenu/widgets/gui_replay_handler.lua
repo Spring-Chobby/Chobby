@@ -3,12 +3,12 @@
 
 function widget:GetInfo()
 	return {
-		name      = "Replays window",
-		desc      = "Handles local replays.",
-		author    = "GoogleFrog",
-		date      = "20 October 2016",
+		name	  = "Replays window",
+		desc	  = "Handles local replays.",
+		author	  = "GoogleFrog",
+		date	  = "20 October 2016",
 		license   = "GNU LGPL, v2.1 or later",
-		layer     = -100000,
+		layer	  = -100000,
 		enabled   = true  --  loaded by default?
 	}
 end
@@ -286,7 +286,7 @@ local function InitializeControls(parentControl)
 
 	local externalFunctions = {}
 
-	function externalFunctions.AddReplay(replayPath, engine, game, map, script)
+	function externalFunctions.AddReplay(replayPath, engine, game, map)
 		local control, sortData = CreateReplayEntry(replayPath, engine, game, map)
 		if control then
 			replayList:AddItem(replayPath, control, sortData)
@@ -321,11 +321,13 @@ function ReplayHandler.GetControl()
 	return window
 end
 
-function ReplayHandler.ReadReplayInfoDone(path, engine, game, map, script)
+function ReplayHandler.ReadReplayInfoDone(path, engine, game, map, allyTeams, time)
 	if not replayListWindow then
 		return
 	end
-	replayListWindow.AddReplay(path, engine, game, map, script)
+	-- allyTeams and time not used here, only used in BYAR-Chobby, so we don't
+	-- pass it down the call chain.
+	replayListWindow.AddReplay(path, engine, game, map)
 end
 
 --------------------------------------------------------------------------------
