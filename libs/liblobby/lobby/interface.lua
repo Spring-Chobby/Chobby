@@ -637,9 +637,9 @@ end
 
 local function ParseTeamColor(teamColor)
 	return {
-		(teamColor % 256) / 256,
-		(rshift(teamColor, 8) % 256) / 256,
-		(rshift(teamColor, 16) % 256) / 256,
+		(teamColor % 256) / 255,
+		(rshift(teamColor, 8) % 256) / 255,
+		(rshift(teamColor, 16) % 256) / 255,
 		1
 	}
 end
@@ -1490,6 +1490,7 @@ Interface.commandPattern["REMOVESTARTRECT"] = "(%d+)"
 
 function Interface:_OnRequestBattleStatus()
 	self._requestedBattleStatus = true
+	self:_CallListeners("OnRequestBattleStatus")
 	self:SetBattleStatus({})
 end
 Interface.commands["REQUESTBATTLESTATUS"] = Interface._OnRequestBattleStatus
