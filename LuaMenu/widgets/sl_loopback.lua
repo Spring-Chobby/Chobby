@@ -138,7 +138,7 @@ local function ReplayInfo(command)
 		command.engine,
 		command.game,
 		command.map,
-		command.allyTeams,
+		command.players,
 		command.gameTime
 	)
 end
