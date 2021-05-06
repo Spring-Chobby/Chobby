@@ -70,6 +70,11 @@ function WrapperLoopback.DownloadFile(name, type)
 	})
 end
 
+-- Starts a new spring instance, generally to play replays.
+function WrapperLoopback.StartNewSpring(args)
+	WG.Connector.Send("StartNewSpring", args)
+end
+
 function WrapperLoopback.AbortDownload(name, type)
 	WG.Connector.Send("AbortDownload", {
 		name = name,
