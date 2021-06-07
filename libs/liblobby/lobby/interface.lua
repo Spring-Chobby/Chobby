@@ -310,7 +310,7 @@ function Interface:SetModOptions(data)
 	return self
 end
 
-function Interface:AddAi(aiName, aiLib, allyNumber, version)
+function Interface:AddAi(aiName, aiLib, allyNumber, version, aiOptions, battleStatusOptions)
 	local battleStatus = {
 		isReady = true,
 		teamNumber = self:GetUnusedTeamID(),
@@ -319,9 +319,16 @@ function Interface:AddAi(aiName, aiLib, allyNumber, version)
 		sync = 1, -- (0 = unknown, 1 = synced, 2 = unsynced)
 		side = 0,
 	}
+
+	battleStatus, updated = UpdateAndCreateMerge(battleStatus, battleStatusOptions or {})
+
 	aiName = aiName:gsub(" ", "")
 	local battleStatusString = EncodeBattleStatus(battleStatus)
-	self:_SendCommand(concat("ADDBOT", aiName, battleStatusString, 0, aiLib))
+
+	local teamColor = battleStatus.teamColor or { math.random(), math.random(), math.random(), 1}
+	teamColor = EncodeTeamColor(teamColor)
+
+	self:_SendCommand(concat("ADDBOT", aiName, battleStatusString, teamColor, aiLib))
 	return self
 end
 
