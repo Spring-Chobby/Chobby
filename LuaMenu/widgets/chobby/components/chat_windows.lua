@@ -420,7 +420,7 @@ function ChatWindows:ProcessChat(chanName, userName, message, msgDate, notifyCol
 	if not channelConsole then
 		return
 	end
-	local iAmMentioned = (string.find(message, lobby:GetMyUserName()) and userName ~= lobby:GetMyUserName())
+	local iAmMentioned = (string.find(message, lobby:GetMyUserName(), 1, true) and userName ~= lobby:GetMyUserName()) -- needs 1, true or brackets will screw it up
 	local chatColour = (iAmMentioned and notifyColor) or chatColor
 	if self:IsChannelSelected(chanName) and self.activeUnreadMessages and self.activeUnreadMessages ~= 0 then
 		self.activeUnreadMessages = self.activeUnreadMessages + 1
@@ -436,6 +436,7 @@ function ChatWindows:ProcessChat(chanName, userName, message, msgDate, notifyCol
 	elseif Configuration.notifyForAllChat then
 		self:_NotifyTab(chanName, userName, chanName, false)
 	end
+	-- Spring.Echo("ChatWindows:ProcessChat(chanName, userName, message, msgDate, notifyColor, chatColor, thirdPerson, source)", chanName, userName, message, msgDate, notifyColor, chatColor, thirdPerson, source, "Results: iAmMentioned= ",iAmMentioned, "")
 end
 
 function ChatWindows:ReattachTabHolder()
@@ -544,7 +545,7 @@ end
 function ChatWindows:_NotifyTab(tabName, userName, chanName, nameMentioned, message, sound, popupDuration)
 	if tabName ~= self.currentTab then
 		-- TODO: Fix naming of self.tabbars (these are consoles)
-		if WG.Chobby.Configuration.gameConfig.sayPrivateSelectAndActivateChatTab then
+		if (nameMentioned or chanName == "Private") and WG.Chobby.Configuration.gameConfig.sayPrivateSelectAndActivateChatTab then
 			WG.Chobby.interfaceRoot.OpenRightPanelTab("chat")
 			self.tabPanel.tabBar:Select(tabName)
 		end
