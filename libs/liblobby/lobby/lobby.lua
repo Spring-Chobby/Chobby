@@ -1050,6 +1050,10 @@ function Lobby:_OnJoined(chanName, userName)
 	end
 end
 
+function Lobby:_OnJoinFailed(chanName, reason)
+	self:_CallListeners("OnJoinFailed", chanName, reason)
+end
+
 function Lobby:_OnJoin(chanName)
 	local isNewChannel = not self:GetInChannel(chanName)
 	if isNewChannel then
