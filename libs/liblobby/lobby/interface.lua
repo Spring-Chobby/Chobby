@@ -203,14 +203,29 @@ local function EncodeBattleStatus(battleStatus)
 		else battleStatus.sync = 1 end
 	end
 
-	return tostring(
+	-- This nasty piece of code is because battlestatus can overflow the 24bits of float that Spring Lua supports:
+	local belowamillion =
 		(battleStatus.isReady and 2 or 0) +
 		lshift(battleStatus.teamNumber, 2) +
 		lshift(battleStatus.allyNumber, 6) +
-		lshift(playMode, 10) +
-		lshift(battleStatus.sync, 22) + --Because sync actually has 3 values, 0, 1, 2
-		lshift(battleStatus.side, 24)
-	)
+		lshift(playMode, 10)
+
+	local aboveamillion = nil
+	local bignum =
+		math.floor((lshift(battleStatus.sync, 22) + --Because sync actually has 3 values, 0, 1, 2 (unknown, synced, unsynced)
+		lshift(battleStatus.side, 24)))
+	
+	aboveamillion = math.floor(bignum / 1000000)
+	belowamillion = belowamillion + (bignum%1000000)
+
+	local statusstr = ""
+	if aboveamillion == 0 then 
+		statusstr = ("%d"):format(belowamillion)
+	else
+		statusstr = ("%d%06d"):format(aboveamillion,belowamillion)
+	end
+
+	return statusstr
 end
 
 local function EncodeTeamColor(teamColor)
