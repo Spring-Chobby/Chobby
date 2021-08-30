@@ -21,6 +21,7 @@ local USER_TOOLTIP_PREFIX = "user_"
 local USER_SP_TOOLTIP_PREFIX = "user_single_"
 local USER_MP_TOOLTIP_PREFIX = "user_battle_"
 local USER_CH_TOOLTIP_PREFIX = "user_chat_s_"
+local MINIMAP_TOOLTIP_PREFIX = "minimap_tooltip_"
 
 local TOOLTIP_TEXT_NAME = "tooltipText"
 
@@ -536,6 +537,61 @@ end
 
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
+-- Minimap tooltip
+
+local minimapTooltip = {}
+
+local function GetMinimapTooltip(mapName, title)
+		local Configuration = WG.Chobby.Configuration
+	
+		local width = MAX_WINDOW_WIDTH
+		local height = width
+
+		if not minimapTooltip.mainControl then
+			minimapTooltip.mainControl = Chili.Control:New {
+				x = 0,
+				y = 0,
+				width = width,
+				height = height,
+				padding = {0, 0, 0, 0},
+				title = title,
+			}
+		end
+
+		if not minimapTooltip.title then
+			minimapTooltip.title = GetTooltipLine(minimapTooltip.mainControl, nil, 2)
+		end
+		
+		local mapImageFile, needDownload = Configuration:GetMinimapImage(mapName)
+		if minimapTooltip.mainControl:GetChildByName("minimapImageLarge") then
+			local minimapImage = minimapTooltip.mainControl:GetChildByName("minimapImageLarge")
+			minimapImage.file = mapImageFile
+			minimapImage:Invalidate()
+		else
+			local minimapImage = Image:New {
+				name = "minimapImageLarge",
+				x = 0,
+				y = 0,
+				width = width,
+				height = width,
+				keepAspect = true,
+				file = mapImageFile,
+				fallbackFile = Configuration:GetLoadingImage(2),
+				checkFileExists = needDownload,
+				padding = {0, 0, 0, 0},
+				parent = minimapTooltip.mainControl,
+			}
+		end
+
+		minimapTooltip.title.Update(7, mapName.. "\n" .. title)
+		-- Set tooltip sizes
+		minimapTooltip.mainControl:SetPos(nil, nil, width, height)
+	
+		return minimapTooltip.mainControl
+end
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
 -- User tooltip
 local userTooltip = {}
 
@@ -879,6 +935,18 @@ local function UpdateTooltip(inputText)
 
 			tipWindow:ClearChildren()
 			tipWindow:AddChild(tooltipControl)
+		end
+	elseif inputText:starts(MINIMAP_TOOLTIP_PREFIX) then
+		local mapName = string.sub(inputText, 17)
+		local tooltiptext = ""
+		if mapName:find("|",1, true) then
+			tooltiptext = string.sub(mapName, mapName:find("|", 1, true) + 1) or ""
+			mapName = string.sub(mapName, 1, mapName:find("|", 1, true) -1) 
+		end
+		if mapName then
+			local tooltipcontrol = GetMinimapTooltip(mapName,tooltiptext)
+			tipWindow:ClearChildren()
+			tipWindow:AddChild(tooltipcontrol)
 		end
 	else -- For everything else display a normal tooltip
 		tipWindow:ClearChildren()
