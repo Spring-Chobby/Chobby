@@ -274,7 +274,7 @@ function Interface:SetBattleStatus(status)
 	-- 2021/01/21: Which had the unfortunate side effect of not sending the first REQUESTBATTLESTATUS response
 	local myUserName = self:GetMyUserName()
 	if not self.userBattleStatus[myUserName] then
-		self.userBattleStatus[userName] = {}
+		self.userBattleStatus[myUserName] = {}
 	end
 	local userData = self.userBattleStatus[myUserName]
 	local battleStatus, updated = UpdateAndCreateMerge(userData, status)
