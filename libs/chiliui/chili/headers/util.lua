@@ -270,6 +270,14 @@ function AreRectsOverlapping(rect1, rect2)
 		(rect1[2] + rect1[4] >= rect2[2])
 end
 
+function AreRectsOverlappingFast(ra1, ra2, ra3, ra4, rb1, rb2, rb3, rb4)
+	return
+		(ra1 <= rb1 + rb3) and
+		(ra1 + ra3 >= rb1) and
+		(ra2 <= rb2 + rb4) and
+		(ra2 + ra4 >= rb2)
+end
+
 --// =============================================================================
 
 local oldPrint = print
