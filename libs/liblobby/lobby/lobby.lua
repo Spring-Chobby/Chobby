@@ -868,7 +868,11 @@ function Lobby:_OnUpdateBattleInfo(battleID, battleInfo)
 	battle.playerCount = battleInfo.playerCount or battle.playerCount
 	battle.spectatorCount = battleInfo.spectatorCount or battle.spectatorCount
 
-	battle.locked = battleInfo.locked or battle.locked
+	if battleInfo.locked == true then -- Because (false or nil) == nil
+		battle.locked = true 
+	elseif battleInfo.locked == false then
+		battle.locked = false 
+	end
 
 	-- ZK specific
 	battle.runningSince = battleInfo.runningSince or battle.runningSince
