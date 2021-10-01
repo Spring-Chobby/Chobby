@@ -545,8 +545,8 @@ function Lobby:_OnAddUser(userName, status)
 	end
 
 	local userInfo = self.users[userName]
+	self.userCount = self.userCount + 1 -- because we are only allowed to ever add users once, even if they left the lobby and we still remember their info
 	if not userInfo then
-		self.userCount = self.userCount + 1
 		userInfo = {
 			userName = userName,
 			isFriend = self.isFriend[userName],
