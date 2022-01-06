@@ -85,6 +85,36 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- Utilities
+local SaveLobbyVersionGZPath = nil
+local versionGZcache = nil
+local function SaveVersionGZ(path)
+	if versionGZcache == nil then
+		versionGZcache = VFS.LoadFile(path)
+		if versionGZcache ~= nil then
+			Spring.Echo("Saved lobby versions.gz from", path, 'size = ', string.len(versionGZcache))
+		else
+			Spring.Echo("Failed to load versions.gz from", path)
+		end
+	else
+		Spring.Echo("Lobby versions.gz already cached",path)
+	end
+end
+
+local function RestoreVersionGZ(path)
+	if versionGZcache ~= nil then
+		local vgzfile, err = io.open(path,"wb")
+		if vgzfile then
+			vgzfile:write(versionGZcache)
+			Spring.Echo("Wrote ", path, 'successfully')
+			vgzfile:close()
+		else
+			Spring.Echo("Unable to open ", path, 'for writing the cache', err)
+		end
+	else
+		Spring.Echo("Unable to restore versions.gz from", path, "as it has not been loaded")
+	end
+end
+
 
 local function DownloadSortFunc(a, b)
 	return a.priority > b.priority or (a.priority == b.priority and a.id < b.id)
@@ -311,6 +341,10 @@ end
 function wrapperFunctions.DownloadFinished(name, fileType, success, aborted)
 	fileType = fileType and reverseTypeMap[fileType]
 	if fileType then
+		if fileType == 'RAPID' and SaveLobbyVersionGZPath then
+			RestoreVersionGZ(SaveLobbyVersionGZPath)
+		end
+
 		if not VFS.HasArchive(name) then
 			VFS.ScanAllDirs() -- Find downloaded file (if it exists).
 		end
@@ -407,6 +441,11 @@ end
 
 local function GetRequiredDownloads()
 	local Configuration = WG.Chobby.Configuration
+	SaveLobbyVersionGZPath = Configuration and Configuration.gameConfig and Configuration.gameConfig.SaveLobbyVersionGZPath
+	if SaveLobbyVersionGZPath then
+		SaveVersionGZ(SaveLobbyVersionGZPath)
+		RestoreVersionGZ(SaveLobbyVersionGZPath .. "_cache.gz")
+	end
 	local campaignStartMaps = Configuration.campaignConfig and Configuration.campaignConfig.planetDefs
 	if campaignStartMaps then
 		campaignStartMaps = campaignStartMaps.startingPlanetMaps or {}
