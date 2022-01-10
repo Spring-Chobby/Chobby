@@ -193,10 +193,10 @@ local function RemoveDownload(name, fileType, putInRemoveList, removalType)
 		return false
 	end
 
+	local downloadID = downloadQueue[index].id
+
 	if removalType == "success" then
-		CallListeners("DownloadFinished", downloadQueue[index].id, name, fileType)
-	else
-		CallListeners("DownloadFailed", downloadQueue[index].id, removalType, name, fileType)
+		CallListeners("DownloadFinished", downloadID, name, fileType)
 	end
 
 	if putInRemoveList then
@@ -217,13 +217,18 @@ local function RemoveDownload(name, fileType, putInRemoveList, removalType)
 			VFS.ScanAllDirs()
 			if VFS.HasArchive(name) then
 				Spring.Log("Chobby", LOG.WARNING, "VFS.ScanAllDirs found downloaded item after failure",name)
-				CallListeners("DownloadFinished", lastFailed.id, name, fileType)
+				CallListeners("DownloadFinished", downloadID, name, fileType)
+				lastFailed.removalType = "success"
 				retry = false
 			end
 		end
-		if retry and lastFailed.retryCount < WG.Chobby.Configuration.downloadRetryCount then
-			lastFailed.retryCount = lastFailed.retryCount + 1
-			externalFunctions.RetryDownload(name,fileType)
+		if retry then
+			if lastFailed.retryCount < WG.Chobby.Configuration.downloadRetryCount then
+				lastFailed.retryCount = lastFailed.retryCount + 1
+				externalFunctions.RetryDownload(name,fileType)
+			else
+				CallListeners("DownloadFailed", downloadID, removalType, name, fileType)
+			end
 		end
 	end
 	requestUpdate = true
@@ -341,7 +346,7 @@ end
 function wrapperFunctions.DownloadFinished(name, fileType, success, aborted)
 	fileType = fileType and reverseTypeMap[fileType]
 	if fileType then
-		if fileType == 'RAPID' and SaveLobbyVersionGZPath then
+		if (fileType == 'RAPID' or fileType == 'game') and SaveLobbyVersionGZPath then
 			RestoreVersionGZ(SaveLobbyVersionGZPath)
 		end
 
@@ -406,6 +411,10 @@ function widget:DownloadFinished(downloadID)
 		return
 	end
 	local data = downloadQueue[index]
+
+	if (data.fileType == 'RAPID' or data.fileType == 'game') and SaveLobbyVersionGZPath then
+		RestoreVersionGZ(SaveLobbyVersionGZPath)
+	end
 
 	RemoveDownload(data.name, data.fileType, true, "success")
 end
