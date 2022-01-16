@@ -437,6 +437,21 @@ local function GetBattleTooltip(battleID, battle)
 		battleTooltip.password.Hide()
 	end
 
+	if battle.isRunning then
+		if not battleTooltip.isRunning then
+			battleTooltip.isRunning = GetTooltipLine(battleTooltip.mainControl, true)
+		end
+		battleTooltip.isRunning.Update(
+			offset,
+			"Game in progress, join to spectate.",
+			IMAGE_INGAME
+		)
+		battleTooltip.isRunning.UpdatePosition(offset)
+		offset = offset + 20
+	elseif battleTooltip.isRunning then
+		battleTooltip.isRunning:Hide()
+	end
+  
 	-- InGameSince
 	if battle.runningSince and battle.isRunning then
 		if not battleTooltip.inGameSince then
