@@ -595,11 +595,14 @@ function Lobby:_OnUpdateUserStatus(userName, status)
 	if status and status.steamID then
 		self.userBySteamID[status.steamID] = userName
 	end
-
-	for k, v in pairs(status) do
-		self.users[userName][k] = v
+	if self.users[userName] then 
+		for k, v in pairs(status) do
+			self.users[userName][k] = v
+		end
+		self:_CallListeners("OnUpdateUserStatus", userName, status)
+	else
+		Spring.Echo("[LuaMenu] Error: In Lobby _OnUpdateUserStatus on invalid user", userName, status)
 	end
-	self:_CallListeners("OnUpdateUserStatus", userName, status)
 end
 
 ------------------------
