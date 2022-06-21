@@ -455,7 +455,8 @@ local function _DrawSelection(x, y, w, h)
 end
 
 local function _GetControlFont(obj)
-	if obj.state.enabled or not obj.disabledFont then
+	-- obj.disabledFont will always have a value, but it will not be a valid font if hasDisabledFont is false
+	if obj.state.enabled or not obj.hasDisabledFont then  
 		return obj.font
 	else
 		return obj.disabledFont
