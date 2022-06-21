@@ -913,6 +913,9 @@ function Lobby:_OnUpdateUserBattleStatus(userName, status)
 	if status.isSpectator ~= nil then
 		userData.isSpectator = status.isSpectator
 	end
+	if status.isReady ~= nil then
+		userData.isReady = status.isReady
+	end
 	userData.sync       = status.sync  or userData.sync
 	userData.side       = status.side  or userData.side
 	userData.aiLib      = status.aiLib or userData.aiLib
