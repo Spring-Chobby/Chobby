@@ -515,7 +515,7 @@ end
 
 --// =============================================================================
 --//
-
+local warned
 function DrawButton(obj)
 	if obj.debug then
 		Spring.Echo("DrawButton", obj.name, obj.state.pressed)
@@ -526,8 +526,16 @@ function DrawButton(obj)
 
 	local skLeft, skTop, skRight, skBottom = unpack4(obj.tiles)
 
+	if obj.supressButtonReaction ~= nil then
+		obj.suppressButtonReaction = obj.supressButtonReaction
+		if not warned then
+			Spring.Echo("Warning: supressButtonReaction is deprecated; use suppressButtonReaction instead!")
+			warned = true
+		end
+	end
+
 	local bgcolor = obj.backgroundColor
-	if not obj.supressButtonReaction then
+	if not obj.suppressButtonReaction then
 		if (obj.state.pressed) then
 			bgcolor = obj.pressBackgroundColor or mulColor(bgcolor, 0.4)
 		elseif (obj.state.hovered) --[[ or (obj.state.focused)]] then
@@ -548,7 +556,7 @@ function DrawButton(obj)
 	local fgcolor = obj.borderColor
 	if not obj.state.enabled then
 		fgcolor = mixColors(fgcolor, obj.disabledColor, 0.8)
-	elseif not obj.supressButtonReaction then
+	elseif not obj.suppressButtonReaction then
 		if (obj.state.pressed) then
 			fgcolor = obj.pressForegroundColor or mulColor(fgcolor, 0.4)
 		elseif (obj.state.hovered) --[[ or (obj.state.focused)]] then
