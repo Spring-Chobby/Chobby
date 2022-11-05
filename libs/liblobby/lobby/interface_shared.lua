@@ -76,8 +76,9 @@ function Interface:_SendCommand(command, sendMessageCount)
 	end
 
 	local numBytes, errorCode, numActuallySent
-	local maxPacketSize = 64000 -- 65535 actually for TCP
+	local maxPacketSize = 32000 -- 65535 actually for TCP
 	local commandLength = #command
+	local totalSent = 0
 	if commandLength > maxPacketSize then
 		-- previously timeout was 0, which didnt allow sending large messages without timeouting
 		self.client:settimeout(1)
@@ -89,6 +90,7 @@ function Interface:_SendCommand(command, sendMessageCount)
 			-- https://w3.impa.br/~diego/software/luasocket/tcp.html#send
 			--Spring.Echo("sending a big chunk",i, #commandpart)
 			numBytes, errorCode, numActuallySent = self.client:send(commandPart)
+			totalSent = totalSent + (numBytes or numActuallySent)
 			if numBytes == nil then
 				break
 			end
@@ -99,10 +101,11 @@ function Interface:_SendCommand(command, sendMessageCount)
 			command = command .. "\n"
 		end
 		numBytes, errorCode, numActuallySent = self.client:send(command)
+		totalSent = totalSent + (numBytes or numActuallySent)
 	end
 	if numBytes == nil then 
-		Spring.Echo("Error in Interface:_SendCommand while sending", numBytes, errorCode, numActuallySent)
-		Spring.Echo(command)
+		Spring.Echo("Error in Interface:_SendCommand while sending", numBytes, errorCode, numActuallySent, commandLength, totalSent)
+		--Spring.Echo(command)
 	end
 
 	self:_CallListeners("OnCommandSent", command:sub(1, #command-1))
