@@ -212,7 +212,7 @@ function Interface:_OnCommandReceived(cmdName, arguments, cmdId)
 			if #funArgs ~= 0 then
 				commandFunction(self, unpack(funArgs))
 			else
-				Spring.Log(LOG_SECTION, LOG.ERROR, "Failed to match command: ", cmdName, ", args: " .. tostring(arguments) .. " with pattern: ", pattern)
+				Spring.Log(LOG_SECTION, LOG.ERROR, "Failed to match command: " .. cmdName .. ", args: " .. tostring(arguments) .. " with pattern: " .. pattern)
 			end
 		else
 			--Spring.Echo("No pattern for command: " .. cmdName)

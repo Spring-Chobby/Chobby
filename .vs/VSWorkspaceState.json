@@ -1,0 +1,10 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\LuaHandler",
+    "\\LuaMenu",
+    "\\LuaMenu\\widgets"
+  ],
+  "SelectedNode": "\\LuaMenu\\widgets\\gui_battle_room_window.lua",
+  "PreviewInSolutionExplorer": false
+}
