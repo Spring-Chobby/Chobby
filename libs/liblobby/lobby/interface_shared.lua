@@ -81,7 +81,7 @@ function Interface:_SendCommand(command, sendMessageCount)
 	local totalSent = 0
 	if commandLength > maxPacketSize then
 		-- previously timeout was 0, which didnt allow sending large messages without timeouting
-		self.client:settimeout(1)
+		self.client:settimeout(2)
 		for i=1,commandLength, maxPacketSize do
 			local commandPart = string.sub(command, i, i + maxPacketSize -1 )
 			if i + maxPacketSize > commandLength and commandPart[#commandPart] ~= "\n" then
