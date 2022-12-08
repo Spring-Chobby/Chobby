@@ -898,10 +898,6 @@ end
 -- Bots have isBot=true, AIs have aiLib~=nil and humans are the remaining
 -- Example: _OnUpdateUserStatus("gajop", {isAway=false, isInGame=true})
 function Lobby:_OnUpdateUserBattleStatus(userName, status)
-	if not self.users[userName] then 
-		Spring.Echo("[liblobby] Error OnUpdateUserBattleStatus: Tried to update non connected user in battle: ", userName, status)
-		return
-	end
 	if not self.userBattleStatus[userName] then
 		self.userBattleStatus[userName] = {}
 	end
