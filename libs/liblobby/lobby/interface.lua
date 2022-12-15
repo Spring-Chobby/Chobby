@@ -193,7 +193,7 @@ end
 
 --n = pow(2,i) -- where i = 0,31
 --print('{',n//1000000,',', n%1000000,'},')
-local bin2decmillion16 = { -- the <1M and >1M parts of 2^nth powers where n > 16
+local bin2DecMillion16 = { -- the <1M and >1M parts of 2^nth powers where n > 16
 	{ 0 , 65536 }, --16
 	{ 0 , 131072 }, --17
 	{ 0 , 262144 }, --18
@@ -213,30 +213,30 @@ local bin2decmillion16 = { -- the <1M and >1M parts of 2^nth powers where n > 16
 	}
 
 -- Combine two 16 bit numbers into a string-formatted 32-bit integer
-local function lsbmsb16tostring(lsb,msb)
-	local aboveamillion = 0
-	local belowamillion = lsb
+local function lsbMsb16ToString(lsb,msb)
+	local aboveAMillion = 0
+	local belowAMillion = lsb
 	for b = 1, 16 do
 		if math.bit_and(msb, 2^(b-1)) > 0 then
-			belowamillion = belowamillion + bin2decmillion16[b][2]
-			if belowamillion >= 1000000 then
-				aboveamillion = aboveamillion + math.floor(belowamillion/1000000)
-				belowamillion = belowamillion % 1000000
+			belowAMillion = belowAMillion + bin2DecMillion16[b][2]
+			if belowAMillion >= 1000000 then
+				aboveAMillion = aboveAMillion + math.floor(belowAMillion/1000000)
+				belowAMillion = belowAMillion % 1000000
 			end
-			aboveamillion = aboveamillion + bin2decmillion16[b][1]
+			aboveAMillion = aboveAMillion + bin2DecMillion16[b][1]
 		end
 	end
 
-	local statusstr = ""
-	if aboveamillion == 0 then
-		statusstr = ("%d"):format(belowamillion)
+	local statusStr = ""
+	if aboveAMillion == 0 then
+		statusStr = ("%d"):format(belowAMillion)
 	else
-		statusstr = ("%d%06d"):format(aboveamillion,belowamillion)
+		statusStr = ("%d%06d"):format(aboveAMillion,belowAMillion)
 	end
-	--if statusstr ~= tostring(lsb + 65536 * msb) then
-	--	Spring.Echo("Possible integer overflow issues!",statusstr, lsb + 65536 * msb)
+	--if statusStr ~= tostring(lsb + 65536 * msb) then
+	--	Spring.Echo("Possible integer overflow issues!",statusStr, lsb + 65536 * msb)
 	--end
-	return statusstr
+	return statusStr
 end
 
 local function EncodeBattleStatus(battleStatus)
@@ -680,7 +680,7 @@ Interface.commands["FRIENDREQUESTLISTEND"] = Interface._OnFriendRequestListEnd
 ------------------------
 -- Battle commands
 ------------------------
-local msblsb5 = { -- stores a table of each power of 10 >= 10^5 as the 16 bit top and bottom halfs of digits greater than the 5th digit
+local msbLsb5 = { -- stores a table of each power of 10 >= 10^5 as the 16 bit top and bottom halfs of digits greater than the 5th digit
 	{ 1 , 34464 },
 	{ 15 , 16960 },
 	{ 152 , 38528 },
@@ -689,20 +689,20 @@ local msblsb5 = { -- stores a table of each power of 10 >= 10^5 as the 16 bit to
 }
 
 -- splits a string-encoded 32bit unsigned integer into 16bit LSB and 16bit MSB
-local function split16fast(bignumstr)
-	local skipdigits = 5
-	local lsb = tonumber(string.sub(bignumstr, -skipdigits)) -- 5 length suffix
+local function split16Fast(bigNumStr)
+	local skipDigits = 5
+	local lsb = tonumber(string.sub(bigNumStr, -skipDigits)) -- 5 length suffix
 	local msb = 0
-	for i= skipdigits + 1, string.len(bignumstr) do -- for each character of the big number string
-		local n = tonumber(string.sub(bignumstr,-i,-i)) -- get the current character
-		--print (i,string.sub(bignumstr,i,i),n)
+	for i= skipDigits + 1, string.len(bigNumStr) do -- for each character of the big number string
+		local n = tonumber(string.sub(bigNumStr,-i,-i)) -- get the current character
+		--print (i,string.sub(bigNumStr,i,i),n)
 		for k = 1, n do  -- for each number value of current character
-			lsb = lsb + msblsb5[i - skipdigits][2] -- add the 16bit LSB of 10*i'th power
+			lsb = lsb + msbLsb5[i - skipDigits][2] -- add the 16bit LSB of 10*i'th power
 			if lsb >= 65536 then -- if it overflows LSB, increment MSB
 				msb = msb + math.floor(lsb / 65536)
 				lsb = lsb % 65536
 			end
-			msb = msb + msblsb5[i - skipdigits][1] -- add the 16 bit MSB of 10*i'th power
+			msb = msb + msbLsb5[i - skipDigits][1] -- add the 16 bit MSB of 10*i'th power
 		end
 	end
 	--print (msb, lsb, lsb + msb *65536)
@@ -710,7 +710,7 @@ local function split16fast(bignumstr)
 end
 
 local function ParseBattleStatus(battleStatus)
-	local lsb, msb = split16fast(battleStatus)
+	local lsb, msb = split16Fast(battleStatus)
 
 	--battleStatus = tonumber(battleStatus)
 	return {
