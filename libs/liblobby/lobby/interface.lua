@@ -330,7 +330,7 @@ function Interface:AddAi(aiName, aiLib, allyNumber, version, aiOptions, battleSt
 		isReady = true,
 		teamNumber = self:GetUnusedTeamID(),
 		allyNumber = allyNumber,
-		playMode = true,
+		isSpectator = false,
 		sync = 1, -- (0 = unknown, 1 = synced, 2 = unsynced)
 		side = 0,
 	}

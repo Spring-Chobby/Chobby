@@ -894,10 +894,16 @@ function Lobby:_OnUpdateBattleInfo(battleID, battleInfo)
 end
 
 -- Updates the specified status keys
--- Status keys can be: isAway, isInGame, isModerator, rank, isBot, aiLib
--- Bots have isBot=true, AIs have aiLib~=nil and humans are the remaining
--- Example: _OnUpdateUserStatus("gajop", {isAway=false, isInGame=true})
+-- BattleStatus keys can be: isReady, teamNumber, allyNumber, isSpectator, handicap, sync, side
+-- chobby uses addiotional keys as status: teamColor
+-- Bots/AIs have additional keys inside chobby: owner~=nil, aiLib~=nil, aiOptions, aiVersion
+-- Example: _OnUpdateUserBattleStatus("gajop", {isReady=false, teamNumber=1})
 function Lobby:_OnUpdateUserBattleStatus(userName, status)
+	if (status.owner == nil and not self.users[userName]) or
+	   (status.owner ~= nil and not self.users[status.owner]) then
+		Spring.Log(LOG_SECTION, LOG.ERROR, "Tried to update non connected user in battle: ", userName)
+		return
+	end
 	if not self.userBattleStatus[userName] then
 		self.userBattleStatus[userName] = {}
 	end
