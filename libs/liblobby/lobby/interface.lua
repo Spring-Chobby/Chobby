@@ -191,6 +191,54 @@ local function UpdateAndCreateMerge(userData, status)
 	return battleStatus, updated
 end
 
+--n = pow(2,i) -- where i = 0,31
+--print('{',n//1000000,',', n%1000000,'},')
+local bin2DecMillion16 = { -- the <1M and >1M parts of 2^nth powers where n > 16
+	{ 0 , 65536 }, --16
+	{ 0 , 131072 }, --17
+	{ 0 , 262144 }, --18
+	{ 0 , 524288 }, --19
+	{ 1 , 48576 },
+	{ 2 , 97152 },
+	{ 4 , 194304 },
+	{ 8 , 388608 },
+	{ 16 , 777216 }, --24
+	{ 33 , 554432 }, --25
+	{ 67 , 108864 }, --26
+	{ 134 , 217728 }, --27
+	{ 268 , 435456 }, --28
+	{ 536 , 870912 },  --29
+	{ 1073 , 741824 }, --30
+	{ 2147 , 483648 }, -- 31
+	}
+
+-- Combine two 16 bit numbers into a string-formatted 32-bit integer
+local function lsbMsb16ToString(lsb,msb)
+	local aboveAMillion = 0
+	local belowAMillion = lsb
+	for b = 1, 16 do
+		if math.bit_and(msb, 2^(b-1)) > 0 then
+			belowAMillion = belowAMillion + bin2DecMillion16[b][2]
+			if belowAMillion >= 1000000 then
+				aboveAMillion = aboveAMillion + math.floor(belowAMillion/1000000)
+				belowAMillion = belowAMillion % 1000000
+			end
+			aboveAMillion = aboveAMillion + bin2DecMillion16[b][1]
+		end
+	end
+
+	local statusStr = ""
+	if aboveAMillion == 0 then
+		statusStr = ("%d"):format(belowAMillion)
+	else
+		statusStr = ("%d%06d"):format(aboveAMillion,belowAMillion)
+	end
+	--if statusStr ~= tostring(lsb + 65536 * msb) then
+	--	Spring.Echo("Possible integer overflow issues!",statusStr, lsb + 65536 * msb)
+	--end
+	return statusStr
+end
+
 local function EncodeBattleStatus(battleStatus)
 	local playMode = 1
 	if battleStatus.isSpectator then
@@ -204,28 +252,17 @@ local function EncodeBattleStatus(battleStatus)
 	end
 
 	-- This nasty piece of code is because battlestatus can overflow the 24bits of float that Spring Lua supports:
-	local belowamillion =
+	local lsb16 =
 		(battleStatus.isReady and 2 or 0) +
 		lshift(battleStatus.teamNumber, 2) +
 		lshift(battleStatus.allyNumber, 6) +
 		lshift(playMode, 10)
 
-	local aboveamillion = nil
-	local bignum =
-		math.floor((lshift(battleStatus.sync, 22) + --Because sync actually has 3 values, 0, 1, 2 (unknown, synced, unsynced)
-		lshift(battleStatus.side, 24)))
-	
-	aboveamillion = math.floor(bignum / 1000000)
-	belowamillion = belowamillion + (bignum%1000000)
+	local msb16 =
+		math.floor((lshift(battleStatus.sync, 6) + --Because sync actually has 3 values, 0, 1, 2 (unknown, synced, unsynced)
+		lshift(battleStatus.side, 8)))
 
-	local statusstr = ""
-	if aboveamillion == 0 then 
-		statusstr = ("%d"):format(belowamillion)
-	else
-		statusstr = ("%d%06d"):format(aboveamillion,belowamillion)
-	end
-
-	return statusstr
+	return lsbmsb16tostring(lsb16, msb16)
 end
 
 local function EncodeTeamColor(teamColor)
@@ -643,17 +680,47 @@ Interface.commands["FRIENDREQUESTLISTEND"] = Interface._OnFriendRequestListEnd
 ------------------------
 -- Battle commands
 ------------------------
+local msbLsb5 = { -- stores a table of each power of 10 >= 10^5 as the 16 bit top and bottom halfs of digits greater than the 5th digit
+	{ 1 , 34464 },
+	{ 15 , 16960 },
+	{ 152 , 38528 },
+	{ 1525 , 57600 },
+	{ 15258 , 51712 },
+}
+
+-- splits a string-encoded 32bit unsigned integer into 16bit LSB and 16bit MSB
+local function split16Fast(bigNumStr)
+	local skipDigits = 5
+	local lsb = tonumber(string.sub(bigNumStr, -skipDigits)) -- 5 length suffix
+	local msb = 0
+	for i= skipDigits + 1, string.len(bigNumStr) do -- for each character of the big number string
+		local n = tonumber(string.sub(bigNumStr,-i,-i)) -- get the current character
+		--print (i,string.sub(bigNumStr,i,i),n)
+		for k = 1, n do  -- for each number value of current character
+			lsb = lsb + msbLsb5[i - skipDigits][2] -- add the 16bit LSB of 10*i'th power
+			if lsb >= 65536 then -- if it overflows LSB, increment MSB
+				msb = msb + math.floor(lsb / 65536)
+				lsb = lsb % 65536
+			end
+			msb = msb + msbLsb5[i - skipDigits][1] -- add the 16 bit MSB of 10*i'th power
+		end
+	end
+	--print (msb, lsb, lsb + msb *65536)
+	return lsb, msb
+end
 
 local function ParseBattleStatus(battleStatus)
-	battleStatus = tonumber(battleStatus)
+	local lsb, msb = split16Fast(battleStatus)
+
+	--battleStatus = tonumber(battleStatus)
 	return {
-		isReady      = rshift(battleStatus, 1) % 2 == 1,
-		teamNumber   = rshift(battleStatus, 2) % 16,
-		allyNumber   = rshift(battleStatus, 6) % 16,
-		isSpectator  = rshift(battleStatus, 10) % 2 == 0,
-		handicap     = rshift(battleStatus, 11) % 128,
-		sync         = rshift(battleStatus, 22) % 4,
-		side         = rshift(battleStatus, 24) % 16,
+		isReady      = rshift(lsb, 1) % 2 == 1,
+		teamNumber   = rshift(lsb, 2) % 16,
+		allyNumber   = rshift(lsb, 6) % 16,
+		isSpectator  = rshift(lsb, 10) % 2 == 0,
+		handicap     = (lshift(msb, 5) + rshift(lsb, 11) ) % 128,
+		sync         = rshift(msb, 6) % 4,
+		side         = rshift(msb, 8) % 16,
 	}
 end
 
