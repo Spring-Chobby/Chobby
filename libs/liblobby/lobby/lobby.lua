@@ -1491,6 +1491,21 @@ function Lobby:GetUser(userName)
 	return self.users[userName]
 end
 
+function Lobby:FindBattleUserByLowerCase(userNameLC)
+	if self.myBattleID == nil or self.battles == nil then
+		return
+	end
+	local battleUsers = self.battles[self.myBattleID].users
+	if battleUsers == nil then
+		return
+	end
+	for _, userName in pairs(battleUsers) do
+		if userName:lower() == userNameLC then
+			return userName
+		end
+	end
+end
+
 function Lobby:GetUserBattleStatus(userName)
 	return self.userBattleStatus[userName]
 end
