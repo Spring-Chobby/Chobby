@@ -899,8 +899,11 @@ end
 -- Bots/AIs have additional keys inside chobby: owner~=nil, aiLib~=nil, aiOptions, aiVersion
 -- Example: _OnUpdateUserBattleStatus("gajop", {isReady=false, teamNumber=1})
 function Lobby:_OnUpdateUserBattleStatus(userName, status)
-	if (status.owner == nil and not self.users[userName]) or
-	   (status.owner ~= nil and not self.users[status.owner]) then
+	-- on Spring protocol AddBot provides status.owner, but UpdateBot does not
+	-- so check if we already know about the owner property and use it
+	local owner = status.owner or (self.userBattleStatus[userName] and self.userBattleStatus[userName].owner) or nil
+	if (owner == nil and not self.users[userName]) or
+		(owner ~= nil and not self.users[owner]) then
 		Spring.Log(LOG_SECTION, LOG.ERROR, "Tried to update non connected user in battle: ", userName)
 		return
 	end
