@@ -223,7 +223,8 @@ local function TraceFullEcho(maxdepth, maxwidth, maxtableelements, ...)
 						if tracedebug then Spring.Echo(i,j, funcName,name) end 
 						local sep = ((arguments == "") and "") or  "; "
                         if tostring(name) == 'self'  then
-    						arguments = arguments .. sep .. ((name and tostring(name)) or "name?") .. "=" .. tostring("??")
+    						arguments = arguments .. sep .. ((name and tostring(name)) or "name?") .. "=" ..
+								(((type(value) == "table" and (value.name or value.classname))) or tostring("??"))
                         else
                             local newvalue
                             if maxtableelements > 0 and type({}) == type(value) then newvalue = dbgt(value, maxtableelements) else newvalue = value end 
