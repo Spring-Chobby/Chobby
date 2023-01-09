@@ -106,6 +106,7 @@ end
 
 local function explode(div, str)
 	str = tostring(str)
+	if string.find(str, div, nil, true) == nil  then return {str} end
 	local arr = {}
 	local i, j = 1, 1
 	local N = str:len()
