@@ -13,6 +13,7 @@ end
 
 function Lobby:_Clean()
 	self.users = {}
+	self.userNamesLC = {} -- lookup table for (user name in lower Case) => userName
 	self.userBySteamID = {}
 	self.userCount = 0
 
@@ -557,6 +558,13 @@ function Lobby:_OnAddUser(userName, status)
 	else
 		userInfo.isOffline = false
 	end
+	
+	local userNameLC = userName:lower()
+	if self.userNamesLC[userNameLC] and self.userNamesLC[userNameLC] ~= userName then
+		Spring.Log(LOG_SECTION, LOG.WARNING, "Overwriting formerly known lower-case user name " .. self.userNamesLC[userNameLC] .. " by user name " .. userName .. "(2 users with same lower case-variant exist)")
+	end
+	self.userNamesLC[userName:lower()] = userName
+	
 	if status then
 		for k, v in pairs(status) do
 			userInfo[k] = v
@@ -899,11 +907,8 @@ end
 -- Bots/AIs have additional keys inside chobby: owner~=nil, aiLib~=nil, aiOptions, aiVersion
 -- Example: _OnUpdateUserBattleStatus("gajop", {isReady=false, teamNumber=1})
 function Lobby:_OnUpdateUserBattleStatus(userName, status)
-	-- on Spring protocol AddBot provides status.owner, but UpdateBot does not
-	-- so check if we already know about the owner property and use it
-	local owner = status.owner or (self.userBattleStatus[userName] and self.userBattleStatus[userName].owner) or nil
-	if (owner == nil and not self.users[userName]) or
-		(owner ~= nil and not self.users[owner]) then
+	if (status.owner == nil and not self.users[userName]) or
+	   (status.owner ~= nil and not self.users[status.owner]) then
 		Spring.Log(LOG_SECTION, LOG.ERROR, "Tried to update non connected user in battle: ", userName)
 		return
 	end
@@ -1494,19 +1499,8 @@ function Lobby:GetUser(userName)
 	return self.users[userName]
 end
 
-function Lobby:FindBattleUserByLowerCase(userNameLC)
-	if self.myBattleID == nil or self.battles == nil then
-		return
-	end
-	local battleUsers = self.battles[self.myBattleID].users
-	if battleUsers == nil then
-		return
-	end
-	for _, userName in pairs(battleUsers) do
-		if userName:lower() == userNameLC then
-			return userName
-		end
-	end
+function Lobby:GetLowerCaseUser(userNameLC)
+	return self.userNamesLC[userNameLC]
 end
 
 function Lobby:GetUserBattleStatus(userName)
