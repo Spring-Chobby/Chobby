@@ -714,6 +714,8 @@ local function GetUserTooltip(userName, userInfo, userBattleInfo, inBattleroom)
 			text = "Autohost"
 		elseif userBattleInfo.aiLib then
 			text = "AI: " .. userBattleInfo.aiLib
+		elseif userInfo.skill and userInfo.skillUncertainty then
+			text = "Skill: " .. userInfo.skill .. " ± ".. userInfo.skillUncertainty
 		else
 			text = "Level: " .. userInfo.level
 		end
