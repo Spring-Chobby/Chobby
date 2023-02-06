@@ -276,6 +276,17 @@ function Lobby:ConnectToBattle(useSpringRestart, battleIp, battlePort, clientPor
 				Engine = engineName,
 				SpringSettings = WG.SettingsWindow.GetSettingsString(),
 			}
+
+			if Config.multiplayerDifferentEngine then -- This allows the use of testing engines much more easily
+				Spring.Echo("Attempting to start new spring engine window", engineName)
+				local scriptfilename = "engine_testing_start_script.txt"
+				local scriptfile = io.open(scriptfilename, 'w')
+				scriptfile:write(GenerateScriptTxt(battleIp, battlePort, clientPort, scriptPassword, myName))
+				scriptfile:close()
+				params.StartDemoName = scriptfilename
+				params.Engine = string.gsub(engineName, "BAR105", "bar")
+			end
+
 			WG.WrapperLoopback.StartNewSpring(params)
 		else
 			WG.Chobby.InformationPopup("Cannont start game: wrong Spring engine version. The required version is '" .. engineName .. "', your version is '" .. Spring.Utilities.GetEngineVersion() .. "'.", {width = 420, height = 260})
