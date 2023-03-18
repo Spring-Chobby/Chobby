@@ -982,8 +982,13 @@ local function CheckTooltipUpdate(newText)
 		if currentTooltipText ~= newText then
 			currentTooltipText = newText
 			UpdateTooltip(newText)
+			SetTooltipPos() 
+		else
+			-- Changed to dont update tooltip pos if not desired
+			if WG.Chobby.Configuration and WG.Chobby.Configuration.staticTooltipPositions ~= true then
+				SetTooltipPos()
+			end
 		end
-		SetTooltipPos()
 	else
 		if tipWindow.visible then
 			tipWindow:Hide()
