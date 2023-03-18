@@ -216,7 +216,7 @@ end
 
 function LoginWindowHandler.TryLoginMultiplayer(name, password)
 	if wantLoginStatus[lobby:GetConnectionStatus()] then
-		if not TrySimpleSteamLogin() then
+		if (not TrySimpleSteamLogin()) and (not TrySimpleLogin()) then
 			local loginWindow = GetNewLoginWindow(MultiplayerFailFunction)
 			local popup = WG.Chobby.PriorityPopup(loginWindow.window, loginWindow.CancelFunc, loginWindow.AcceptFunc)
 		end
@@ -246,7 +246,7 @@ function widget:Initialize()
 end
 
 function widget:Update()
-	WG.Delay(CheckAutologin, 1.5)
+	--WG.Delay(CheckAutologin, 1.5)
 	WG.Delay(CheckFirstTimeRegister, 1.8)
 	widgetHandler:RemoveCallIn("Update")
 end
