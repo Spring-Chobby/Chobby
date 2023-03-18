@@ -471,6 +471,7 @@ function Lobby:_OnAccepted(newName)
 	if newName then
 		self.myUserName = newName
 	end
+	self.userCount = 0
 	self:_CallListeners("OnAccepted")
 end
 
@@ -557,7 +558,7 @@ function Lobby:_OnAddUser(userName, status)
 	end
 
 	local userInfo = self.users[userName]
-	self.userCount = self.userCount + 1 -- because we are only allowed to ever add users once, even if they left the lobby and we still remember their info
+	self.userCount = self.userCount + 1 -- correctly fix because lobby didnt clear user count on onAccepted
 	if not userInfo then
 		userInfo = {
 			userName = userName,
