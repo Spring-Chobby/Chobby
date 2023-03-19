@@ -177,7 +177,8 @@ function UserListPanel:RemoveUser(userName)
 		end
 	end
 	if index == nil then
-		Spring.Log(LOG_SECTION, LOG.ERROR, "Cannot find user to remove: " .. tostring(userName))
+		-- Spring.Log(LOG_SECTION, LOG.ERROR, "Cannot find user to remove: " .. tostring(userName))
+		-- Not all user lists have every user in them, like individual channels
 		return
 	end
 
