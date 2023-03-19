@@ -13,49 +13,49 @@ function UserListPanel:init(userUpdateFunction, spacing, showCount, getUserFunct
 	if showCount then
 		self.textCount =
 			TextBox:New {
-			name = "textCount",
-			x = 7,
-			right = 0,
-			height = 20,
-			bottom = 2,
-			align = "left",
-			fontsize = Configuration:GetFont(2).size,
-			text = lobby:GetUserCount() .. " players online"
-		}
+				name = "textCount",
+				x = 7,
+				right = 0,
+				height = 20,
+				bottom = 2,
+				align = "left",
+				fontsize = Configuration:GetFont(2).size,
+				text = lobby:GetUserCount() .. " players online"
+			}
 	end
 
 	self.userPanel =
 		ScrollPanel:New {
-		x = 0,
-		right = 0,
-		y = 0,
-		bottom = 28,
-		horizontalScrollbar = false
-	}
+			x = 0,
+			right = 0,
+			y = 0,
+			bottom = 28,
+			horizontalScrollbar = false
+		}
 
 	self.panel =
 		Control:New {
-		x = 0,
-		y = 0,
-		right = 0,
-		bottom = 0,
-		padding = {0, 0, 0, 0},
-		itemPadding = {0, 0, 0, 0},
-		itemMargin = {0, 0, 0, 0},
-		children = {
-			self.userPanel,
-			self.textCount
+			x = 0,
+			y = 0,
+			right = 0,
+			bottom = 0,
+			padding = { 0, 0, 0, 0 },
+			itemPadding = { 0, 0, 0, 0 },
+			itemMargin = { 0, 0, 0, 0 },
+			children = {
+				self.userPanel,
+				self.textCount
+			}
 		}
-	}
 	self:Update()
 end
 
 function UserListPanel:OnJoined(userName)
-	self:AddUser(userName)
+	self:AddUser(userName, true)
 end
 
 function UserListPanel:OnLeft(userName)
-	self:RemoveUser(userName)
+	self:RemoveUser(userName, true)
 end
 
 function UserListPanel:CompareItems(userName1, userName2)
@@ -105,22 +105,38 @@ function UserListPanel:Update()
 					self:Update()
 				end
 			end
+
 			self.checkingUpdate = true
 			WG.Delay(CheckUpdate, 5)
 		end
 		return
 	end
 
-	self.users = {}
-	self.userComponentMap = {}
-	self.userPanel:ClearChildren()
-	local users = self:GetUsers()
-
-	table.sort(users, CompareUsers)
-
-	for i = 1, #users do
-		self:AddUser(users[i])
+	local actualUsers = self:GetUsers()
+	local actualUserMap = {}
+	for _, user in ipairs(actualUsers) do
+		actualUserMap[user] = user
 	end
+
+	for i = 1, #actualUsers do
+		local user = actualUsers[i]
+		if not self.userComponentMap[user] then
+			self:AddUser(user, false)
+		end
+	end
+
+	local toRemove = {}
+	for existingUser, _ in pairs(self.userComponentMap) do
+		if not actualUserMap[existingUser] then
+			table.insert(toRemove, existingUser)
+		end
+	end
+
+	for _, user in ipairs(toRemove) do
+		self:RemoveUser(user, false)
+	end
+
+	self:_AlignComponents(1, #self.users)
 end
 
 function UserListPanel:UpdateUserCount()
@@ -129,7 +145,7 @@ function UserListPanel:UpdateUserCount()
 	end
 end
 
-function UserListPanel:AddUser(userName)
+function UserListPanel:AddUser(userName, alignComponents)
 	local userData = lobby:TryGetUser(userName)
 	if not userData then
 		Spring.Echo("User data not found", userName)
@@ -161,9 +177,8 @@ function UserListPanel:AddUser(userName)
 
 	-- Possible optimization: don't update this at the beginning (connection).
 	-- Do it post initialization (once)
-	for i = index, #self.users do
-		local userName = self.users[i]
-		self.userComponentMap[userName]:SetPos(nil, (i - 1) * self.spacing)
+	if alignComponents then
+		self:_AlignComponents(index, #self.users)
 	end
 end
 
@@ -177,8 +192,7 @@ function UserListPanel:RemoveUser(userName)
 		end
 	end
 	if index == nil then
-		-- Spring.Log(LOG_SECTION, LOG.ERROR, "Cannot find user to remove: " .. tostring(userName))
-		-- Not all user lists have every user in them, like individual channels
+		Spring.Log(LOG_SECTION, LOG.ERROR, "Cannot find user to remove: " .. tostring(userName))
 		return
 	end
 
@@ -187,7 +201,13 @@ function UserListPanel:RemoveUser(userName)
 	table.remove(self.users, index)
 	-- Possible optimization: don't update this at the beginning (connection).
 	-- Do it post initialization (once)
-	for i = index, #self.users do
+	if alignComponents then
+		self:_AlignComponents(index, #self.users)
+	end
+end
+
+function UserListPanel:_AlignComponents(startIndex, endIndex)
+	for i = startIndex, endIndex do
 		local userName = self.users[i]
 		self.userComponentMap[userName]:SetPos(nil, (i - 1) * self.spacing)
 	end
