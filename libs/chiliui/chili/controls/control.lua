@@ -347,18 +347,23 @@ end
 
 
 function Control:GetRelativeBox(savespace)
-	local t = {self.x, self.y, self.width, self.height}
+	--CallCount("Control:GetRelativeBox")
+	--local t = {self.x, self.y, self.width, self.height}
+	local tx, ty, tw, th = self.x, self.y, self.width, self.height
 	if (savespace) then
-		t = {0, 0, self.minWidth, self.minHeight}
+		--t = {0, 0, self.minWidth, self.minHeight}
+		tx, ty, tw, th = 0, 0, self.minWidth, self.minHeight
 	end
 
 	if (not self._isRelative) then
-		return t
+		return tx, ty, tw, th
+		--return t
 	end
 
 	local p = self.parent
 	if not p or not UnlinkSafe(p) then
-		return t
+		return tx, ty, tw, th
+		--return t
 	end
 
 	--// FIXME use pl & pt too!!!
@@ -400,7 +405,8 @@ function Control:GetRelativeBox(savespace)
 		end
 	end
 
-	return {left, top, width, height}
+	--return {left, top, width, height}
+	return left, top, width, height
 end
 
 --// =============================================================================
@@ -418,13 +424,19 @@ function Control:UpdateClientArea(dontRedraw)
 
 	self.clientWidth  = self.width  - padding[1] - padding[3]
 	self.clientHeight = self.height - padding[2] - padding[4]
-
-	self.clientArea = {
-		padding[1],
-		padding[2],
-		self.clientWidth,
-		self.clientHeight
-	}
+	if self.clientArea then 
+		self.clientArea[1] = padding[1]
+		self.clientArea[2] = padding[2]
+		self.clientArea[3] = self.clientWidth
+		self.clientArea[4] = self.clientHeight
+	else
+		self.clientArea = {
+				padding[1],
+				padding[2],
+				self.clientWidth,
+				self.clientHeight
+			}
+	end
 
 	if (self.parent) and (self.parent:InheritsFrom('control')) then
 		--FIXME sometimes this makes self:RequestRealign() redundant! try to reduce the Align() calls somehow
@@ -449,8 +461,10 @@ end
 
 
 function Control:AlignControl()
-	local newBox = self:GetRelativeBox()
-	self:_UpdateConstraints(newBox[1], newBox[2], newBox[3], newBox[4])
+	--local newBox = self:GetRelativeBox()
+	--self:_UpdateConstraints(newBox[1], newBox[2], newBox[3], newBox[4])
+	local tx, ty, tw, th = self:GetRelativeBox()
+	self:_UpdateConstraints(tx, ty, tw, th)
 end
 
 
@@ -503,9 +517,9 @@ function Control:UpdateLayout()
 
 		local neededWidth, neededHeight = self:GetChildrenMinimumExtents()
 
-		local relativeBox = self:GetRelativeBox(self._savespace or self.savespace)
-		neededWidth  = math.max(relativeBox[3], neededWidth)
-		neededHeight = math.max(relativeBox[4], neededHeight)
+		local tx, ty, tw, th = self:GetRelativeBox(self._savespace or self.savespace)
+		neededWidth  = math.max(tw, neededWidth)
+		neededHeight = math.max(th, neededHeight)
 
 		neededWidth  = neededWidth  - self.padding[1] - self.padding[3]
 		neededHeight = neededHeight - self.padding[2] - self.padding[4]
@@ -514,7 +528,7 @@ function Control:UpdateLayout()
 			local cminextW, cminextH = self:GetChildrenMinimumExtents()
 			Spring.Echo("Control:UpdateLayout", self.name,
 					"GetChildrenMinimumExtents", cminextW, cminextH,
-					"GetRelativeBox", relativeBox[3], relativeBox[4],
+					"GetRelativeBox", tw, th, 
 					"savespace", self._savespace)
 		end
 
@@ -1197,7 +1211,8 @@ end
 --// =============================================================================
 
 
-function Control:_DrawInClientArea(fnc, ...)
+function Control:_DrawInClientArea(fnc, arg1, arg2, arg3, arg4)
+	--CallCount("Control:_DrawInClientArea")
 	local clientX, clientY, clientWidth, clientHeight = unpack4(self.clientArea)
 
 	if WG.uiScale and WG.uiScale ~= 1 then
@@ -1208,10 +1223,11 @@ function Control:_DrawInClientArea(fnc, ...)
 	gl.Translate(clientX, clientY, 0)
 
 	local sx, sy = self:UnscaledLocalToScreen(clientX, clientY)
-	sy = select(2, gl.GetViewSizes()) - (sy + clientHeight)
+	local vsx, vsy = gl.GetViewSizes()
+	sy = vsy - (sy + clientHeight)
 
 	if PushLimitRenderRegion(self, sx, sy, clientWidth, clientHeight) then
-		fnc(...)
+		fnc(arg1, arg2, arg3, arg4)
 		PopLimitRenderRegion(self, sx, sy, clientWidth, clientHeight)
 	end
 

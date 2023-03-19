@@ -116,7 +116,7 @@ function Multiprogressbar:DrawControl()
 				percentDone = percentDone + b._drawPercent
 
 				if b.texture then
-					TextureHandler.LoadTexture(b.texture, self)
+					TextureHandler.LoadTexture(0, b.texture, self)
 					glColor(1, 1, 1, 1)
 
 					local bs = b.s
@@ -144,7 +144,7 @@ function Multiprogressbar:DrawControl()
 				percentDone = percentDone + b._drawPercent
 
 				if b.texture then
-					TextureHandler.LoadTexture(b.texture, self)
+					TextureHandler.LoadTexture(0, b.texture, self)
 					glColor(1, 1, 1, 1)
 
 					local bt = b.t
