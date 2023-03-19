@@ -94,7 +94,6 @@ local inherited = this.inherited
 --// =============================================================================
 
 function Control:New(obj)
-	CallCount("Control:New")
 	--// backward compability
 	BackwardCompa(obj)
 	
@@ -872,7 +871,6 @@ end
 
 function Control:StartResizing(x, y)
 	--//FIXME the x, y aren't needed check how drag is handled!
-	CallCount("Control:StartResizing")
 	self.resizing = {
 		mouse = {x, y},
 		size  = {self.width, self.height},
