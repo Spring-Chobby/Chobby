@@ -569,9 +569,7 @@ function DrawTreeviewNodeTree(self)
 		image = self.ImageCollapsed or self.treeview.ImageCollapsed
 	end
 
-	TextureHandler.LoadTexture(0, image, self)
-	local texInfo = gl.TextureInfo(image) or {xsize = 1, ysize = 1}
-	local tw, th = texInfo.xsize, texInfo.ysize
+	local tw, th = TextureHandler.LoadTexture(0, image, self)
 
 	_DrawTextureAspect(0, 0, math.ceil(self.padding[1]), math.ceil(self.children[1].height) , tw, th)
 	gl.Texture(0, false)

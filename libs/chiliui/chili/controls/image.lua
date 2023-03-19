@@ -115,32 +115,25 @@ function Image:DrawControl()
 	if (self.keepAspect) then
 		if (file2) then
 			gl.Color(self.color2 or self.color)
-			TextureHandler.LoadTexture(0, file2, self)
-			local texInfo = gl.TextureInfo(file2) or {xsize = 1, ysize = 1}
-			local tw, th = texInfo.xsize, texInfo.ysize
+			local tw, th = 	TextureHandler.LoadTexture(0, file2, self)
 			_DrawTextureAspect(0, 0, self.width, self.height, tw, th, self.flip2)
 		end
 		if (file) then
 			gl.Color(self.color)
-			TextureHandler.LoadTexture(0, file, self)
-			local texInfo = gl.TextureInfo(file) or {xsize = 1, ysize = 1}
-			local tw, th = texInfo.xsize, texInfo.ysize
+			local tw, th = TextureHandler.LoadTexture(0, file, self)
 			_DrawTextureAspect(0, 0, self.width, self.height, tw, th, self.flip)
 		end
 	else
 		if (self.crop) then
 			if (file2) then
 				gl.Color(self.color2 or self.color)
-				TextureHandler.LoadTexture(0, file2, self)
-				local texInfo = gl.TextureInfo(file2) or {xsize = 1, ysize = 1}
-				local tw, th = texInfo.xsize, texInfo.ysize
+				
+				local tw, th = TextureHandler.LoadTexture(0, file2, self)
 				_DrawTextureCrop(0, 0, self.width, self.height, tw, th, self.flip2)
 			end
 			if (file) then
 				gl.Color(self.color)
-				TextureHandler.LoadTexture(0, file, self)
-				local texInfo = gl.TextureInfo(file) or {xsize = 1, ysize = 1}
-				local tw, th = texInfo.xsize, texInfo.ysize
+				local tw, th = TextureHandler.LoadTexture(0, file, self)
 				_DrawTextureCrop(0, 0, self.width, self.height, tw, th, self.flip)
 			end
 		else

@@ -7,7 +7,7 @@ TextureHandler = {}
 --// =============================================================================
 --//TWEAKING
 
-local timeLimit = 0.2/15 --//time per second / desiredFPS
+local timeLimit = 0.5/15 --//time per second / desiredFPS
 
 
 --// =============================================================================
@@ -27,6 +27,7 @@ local weakMetaTable = {__mode = "k"}
 
 local loaded = {}
 local requested = {}
+local texInfoCache = {}
 
 local placeholderFilename = theme.skin.icons.imageplaceholder
 local placeholderDL = gl.CreateList(gl.Texture, CHILI_DIRNAME .. "skins/default/empty.png")
@@ -60,23 +61,17 @@ end
 
 
 --// =============================================================================
---//
-
-function TextureHandler.LoadTexture(arg1, arg2, arg3)
-	local activeTexID, filename, obj
-	if (type(arg1) == 'number') then
-		activeTexID = arg1
-		filename = arg2
-		obj = arg3
-	else
-		activeTexID = 0
-		filename = arg1
-		obj = arg2
-	end
-	
+--// Returns the texture width and height from the texInfoCache to avoid gl.TextureInfo calls
+function TextureHandler.LoadTexture(activeTexID, filename, obj)
 	local tex = loaded[filename]
 	if (tex) then
 		glActiveTexture(activeTexID, glCallList, tex.dl)
+		local texInfo = texInfoCache[filename]
+		if texInfo then
+			return texInfo[1], texInfo[2]
+		else
+			return 1, 1
+		end
 	else
 		AddRequest(filename, obj)
 		if isEngineTexture[filename:byte(1)] then
@@ -84,6 +79,7 @@ function TextureHandler.LoadTexture(arg1, arg2, arg3)
 		else
 			glActiveTexture(activeTexID, glCallList, placeholderDL)
 		end
+		return 1, 1
 	end
 end
 
@@ -96,6 +92,7 @@ function TextureHandler.DeleteTexture(filename)
 			gl.DeleteList(tex.dl)
 			gl.DeleteTexture(filename)
 			loaded[filename] = nil
+			texInfoCache[filename] = nil
 		end
 	end
 end
@@ -134,12 +131,12 @@ function TextureHandler.Update()
 		if (filename) then
 			gl.Texture(filename)
 			gl.Texture(false)
-
-			if (gl.TextureInfo(filename) or nullInfo).xsize > 0 then
+			local texInfo = gl.TextureInfo(filename)
+			if (texInfo or nullInfo).xsize > 0 then
 				local texture = {}
 				texture.dl = gl.CreateList(gl.Texture, filename)
 				loaded[filename] = texture
-
+				texInfoCache[filename] = {texInfo.xsize, texInfo.ysize}
 				for obj in pairs(objs) do
 					obj:Invalidate()
 					texture.references = (texture.references or 0) + 1
