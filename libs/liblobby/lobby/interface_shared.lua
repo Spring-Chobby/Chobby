@@ -261,7 +261,7 @@ function Interface:_SocketUpdate()
 			-- nothing to do, return
 			return
 		end
-		Spring.Log(LOG_SECTION, LOG.ERROR, "Error in select: " .. error)
+		Spring.Log(LOG_SECTION, LOG.ERROR, "Error in select: " .. err)
 	end
 	for _, input in ipairs(readable) do
 		local s, status, commandsStr = input:receive('*a') --try to read all data
