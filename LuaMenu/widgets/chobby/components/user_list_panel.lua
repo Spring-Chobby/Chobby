@@ -1,12 +1,18 @@
-UserListPanel = LCS.class{}
+UserListPanel = LCS.class {}
+
+LOG_SECTION = "UserListPanel"
 
 function UserListPanel:init(userUpdateFunction, spacing, showCount, getUserFunction)
 	self.userUpdateFunction = userUpdateFunction
 	self.spacing = spacing
 	self.getUserFunction = getUserFunction
 
+	self.userComponentMap = {}
+	self.users = {}
+
 	if showCount then
-		self.textCount = TextBox:New {
+		self.textCount =
+			TextBox:New {
 			name = "textCount",
 			x = 7,
 			right = 0,
@@ -14,40 +20,42 @@ function UserListPanel:init(userUpdateFunction, spacing, showCount, getUserFunct
 			bottom = 2,
 			align = "left",
 			fontsize = Configuration:GetFont(2).size,
-			text = lobby:GetUserCount() .. " players online",
+			text = lobby:GetUserCount() .. " players online"
 		}
 	end
 
-	self.userPanel = ScrollPanel:New {
+	self.userPanel =
+		ScrollPanel:New {
 		x = 0,
 		right = 0,
 		y = 0,
 		bottom = 28,
-		horizontalScrollbar = false,
+		horizontalScrollbar = false
 	}
 
-	self.panel = Control:New {
+	self.panel =
+		Control:New {
 		x = 0,
 		y = 0,
 		right = 0,
 		bottom = 0,
-		padding      = {0, 0, 0, 0},
-		itemPadding  = {0, 0, 0, 0},
-		itemMargin   = {0, 0, 0, 0},
+		padding = {0, 0, 0, 0},
+		itemPadding = {0, 0, 0, 0},
+		itemMargin = {0, 0, 0, 0},
 		children = {
 			self.userPanel,
-			self.textCount,
-		},
+			self.textCount
+		}
 	}
 	self:Update()
 end
 
 function UserListPanel:OnJoined(userName)
-	self:Update()
+	self:AddUser(userName)
 end
 
 function UserListPanel:OnLeft(userName)
-	self:Update()
+	self:RemoveUser(userName)
 end
 
 function UserListPanel:CompareItems(userName1, userName2)
@@ -71,15 +79,15 @@ local function CompareUsers(userName, otherName)
 		return true
 	end
 
-	if (not not otherData.isAdmin) ~= (not not userData.isAdmin) then
+	if (not (not otherData.isAdmin)) ~= (not (not userData.isAdmin)) then
 		return userData.isAdmin
 	end
 
-	if (not not otherData.isIgnored) ~= (not not userData.isIgnored) then
+	if (not (not otherData.isIgnored)) ~= (not (not userData.isIgnored)) then
 		return otherData.isIgnored
 	end
 
-	if (not not otherData.isOffline) ~= (not not userData.isOffline) then
+	if (not (not otherData.isOffline)) ~= (not (not userData.isOffline)) then
 		return otherData.isOffline
 	end
 	return string.lower(userName) < string.lower(otherName)
@@ -103,6 +111,8 @@ function UserListPanel:Update()
 		return
 	end
 
+	self.users = {}
+	self.userComponentMap = {}
 	self.userPanel:ClearChildren()
 	local users = self:GetUsers()
 
@@ -129,9 +139,57 @@ function UserListPanel:AddUser(userName)
 		return
 	end
 
-	local userControl = (self.getUserFunction and self.getUserFunction(userName)) or WG.UserHandler.GetChannelUser(userName)
-	userControl:SetPos(nil, #(self.userPanel.children) * self.spacing)
-	self.userPanel:AddChild(userControl)
+	if self.userComponentMap[userName] then
+		Spring.Log(LOG_SECTION, LOG.ERROR, "User already exists in panel")
+		return
+	end
+
+	-- Possible optimization: implement as binary search
+	local index = 1
+	for i, existingUserName in ipairs(self.users) do
+		if CompareUsers(userName, existingUserName) then
+			break
+		end
+		index = index + 1
+	end
+	table.insert(self.users, index, userName)
+
+	local userControl =
+		(self.getUserFunction and self.getUserFunction(userName)) or WG.UserHandler.GetChannelUser(userName)
+	self.userComponentMap[userName] = userControl
+	self.userPanel:AddChild(userControl, false)
+
+	-- Possible optimization: don't update this at the beginning (connection).
+	-- Do it post initialization (once)
+	for i = index, #self.users do
+		local userName = self.users[i]
+		self.userComponentMap[userName]:SetPos(nil, (i - 1) * self.spacing)
+	end
+end
+
+function UserListPanel:RemoveUser(userName)
+	-- Possible optimization: implement as binary search
+	local index
+	for i, existingUserName in ipairs(self.users) do
+		if existingUserName == userName then
+			index = i
+			break
+		end
+	end
+	if index == nil then
+		Spring.Log(LOG_SECTION, LOG.ERROR, "Cannot find user to remove: " .. tostring(userName))
+		return
+	end
+
+	self.userPanel:RemoveChild(self.userPanel.childrenByName[userName])
+	self.userComponentMap[userName] = nil
+	table.remove(self.users, index)
+	-- Possible optimization: don't update this at the beginning (connection).
+	-- Do it post initialization (once)
+	for i = index, #self.users do
+		local userName = self.users[i]
+		self.userComponentMap[userName]:SetPos(nil, (i - 1) * self.spacing)
+	end
 end
 
 function UserListPanel:Delete()
