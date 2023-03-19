@@ -94,6 +94,7 @@ local inherited = this.inherited
 --// =============================================================================
 
 function Control:New(obj)
+	CallCount("Control:New")
 	--// backward compability
 	BackwardCompa(obj)
 	
@@ -347,23 +348,18 @@ end
 
 
 function Control:GetRelativeBox(savespace)
-	--CallCount("Control:GetRelativeBox")
-	--local t = {self.x, self.y, self.width, self.height}
 	local tx, ty, tw, th = self.x, self.y, self.width, self.height
 	if (savespace) then
-		--t = {0, 0, self.minWidth, self.minHeight}
 		tx, ty, tw, th = 0, 0, self.minWidth, self.minHeight
 	end
 
 	if (not self._isRelative) then
 		return tx, ty, tw, th
-		--return t
 	end
 
 	local p = self.parent
 	if not p or not UnlinkSafe(p) then
 		return tx, ty, tw, th
-		--return t
 	end
 
 	--// FIXME use pl & pt too!!!
@@ -405,7 +401,6 @@ function Control:GetRelativeBox(savespace)
 		end
 	end
 
-	--return {left, top, width, height}
 	return left, top, width, height
 end
 
@@ -461,8 +456,6 @@ end
 
 
 function Control:AlignControl()
-	--local newBox = self:GetRelativeBox()
-	--self:_UpdateConstraints(newBox[1], newBox[2], newBox[3], newBox[4])
 	local tx, ty, tw, th = self:GetRelativeBox()
 	self:_UpdateConstraints(tx, ty, tw, th)
 end
@@ -879,6 +872,7 @@ end
 
 function Control:StartResizing(x, y)
 	--//FIXME the x, y aren't needed check how drag is handled!
+	CallCount("Control:StartResizing")
 	self.resizing = {
 		mouse = {x, y},
 		size  = {self.width, self.height},
@@ -1212,7 +1206,6 @@ end
 
 
 function Control:_DrawInClientArea(fnc, arg1, arg2, arg3, arg4)
-	--CallCount("Control:_DrawInClientArea")
 	local clientX, clientY, clientWidth, clientHeight = unpack4(self.clientArea)
 
 	if WG.uiScale and WG.uiScale ~= 1 then
