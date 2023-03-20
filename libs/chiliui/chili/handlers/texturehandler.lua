@@ -29,19 +29,22 @@ local loaded = {}
 local requested = {}
 local texInfoCache = {}
 
-local placeholderFilename = theme.skin.icons.imageplaceholder
-local placeholderDL = gl.CreateList(gl.Texture, CHILI_DIRNAME .. "skins/default/empty.png")
---local placeholderDL = gl.CreateList(gl.Texture, placeholderFilename)
+local placeholderFilename = CHILI_DIRNAME .. "skins/default/empty.png"
+local placeholderDL -- NOTE: we cannot initialize a display list in this context, as it is too early and _will_ fail. It must be done on first LoadTexture!
 
 local isEngineTexture = { [string.byte("!")] = true, [string.byte("%")] = true, [string.byte("#")] = true, [string.byte("$")] = true, [string.byte("^")] = true }
 
+--// =============================================================================
+--// Returns if the request is novel
 local function AddRequest(filename, obj)
 	local req = requested
 	if (req[filename]) then
 		local t = req[filename]
 		t[obj] = true
+		return false
 	else
 		req[filename] = setmetatable({[obj] = true}, weakMetaTable)
+		return true
 	end
 end
 
@@ -62,7 +65,14 @@ end
 
 --// =============================================================================
 --// Returns the texture width and height from the texInfoCache to avoid gl.TextureInfo calls
+
 function TextureHandler.LoadTexture(activeTexID, filename, obj)
+	if placeholderDL == nil then 
+		gl.Texture(placeholderFilename)
+		gl.Texture(false)
+		placeholderDL = gl.CreateList(gl.Texture, placeholderFilename)
+	end
+
 	local tex = loaded[filename]
 	if (tex) then
 		glActiveTexture(activeTexID, glCallList, tex.dl)
