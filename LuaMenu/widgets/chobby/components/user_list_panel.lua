@@ -182,7 +182,7 @@ function UserListPanel:AddUser(userName, alignComponents)
 	end
 end
 
-function UserListPanel:RemoveUser(userName)
+function UserListPanel:RemoveUser(userName, alignComponents)
 	-- Possible optimization: implement as binary search
 	local index
 	for i, existingUserName in ipairs(self.users) do
@@ -192,7 +192,9 @@ function UserListPanel:RemoveUser(userName)
 		end
 	end
 	if index == nil then
-		Spring.Log(LOG_SECTION, LOG.ERROR, "Cannot find user to remove: " .. tostring(userName))
+		if WG.Chobby.Configuration and WG.Chobby.Configuration.devMode then
+			Spring.Log(LOG_SECTION, LOG.ERROR, "Cannot find user to remove: " .. tostring(userName)) -- only show to devs for now
+		end
 		return
 	end
 
