@@ -7,7 +7,7 @@ TextureHandler = {}
 --// =============================================================================
 --//TWEAKING
 
-local timeLimit = 0.5/15 --//time per second / desiredFPS
+local timeLimit = 1.0/15 --//time per second / desiredFPS
 
 
 --// =============================================================================
