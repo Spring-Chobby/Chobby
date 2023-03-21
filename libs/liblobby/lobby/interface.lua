@@ -916,7 +916,7 @@ function Interface:_OnJoinFailed(chanName, reason)
 	self:super("_OnJoinFailed", chanName, reason)
 end
 Interface.commands["JOINFAILED"] = Interface._OnJoinFailed
-Interface.commandPattern["JOINFAILED"] = "(%S+)%s+(.*)" -- fix regex to match official protocol 
+Interface.commandPattern["JOINFAILED"] = "(%S+)%s+(.*)" -- fix regex to match official protocol
 
 function Interface:_OnLeft(chanName, userName, reason)
 	self:super("_OnLeft", chanName, userName, reason)

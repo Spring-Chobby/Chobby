@@ -103,7 +103,7 @@ function Interface:_SendCommand(command, sendMessageCount)
 		numBytes, errorCode, numActuallySent = self.client:send(command)
 		totalSent = totalSent + (numBytes or numActuallySent)
 	end
-	if numBytes == nil then 
+	if numBytes == nil then
 		Spring.Echo("Error in Interface:_SendCommand while sending", numBytes, errorCode, numActuallySent, commandLength, totalSent)
 		--Spring.Echo(command)
 	end
