@@ -386,6 +386,11 @@ function Console:LoadHistory(numLines)
 	end
 
 	local logfile = VFS.LoadFile(path)
+
+	if string.len(logfile) > 150 * numLines then -- dont load huge logs only to discard most of it.
+		logfile = string.sub(logfile, -150 * numLines)
+	end
+	
 	local lineCount = 0
 	for line in lineIterator(logfile) do
 		lineCount = lineCount + 1
