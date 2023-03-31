@@ -67,7 +67,11 @@ function widget:ActivateGame()
 end
 
 function widget:Initialize()
-	WG.LimitFps.ForceRedrawPeriod(5) -- High FPS for the first few seconds to shorten the initial white flash.
+	if WG.LimitFps then 
+		-- High FPS for the first few seconds to shorten the initial white flash.
+		-- Todo: the correct solution would be to give texturehandler more time to load textures if its not going to be drawing anyway
+		WG.LimitFps.ForceRedrawPeriod(5) 
+	end
 	if not WG.LibLobby then
 		Spring.Log("chobby", LOG.ERROR, "Missing liblobby.")
 		widgetHandler:RemoveWidget(widget)

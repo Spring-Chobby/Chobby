@@ -145,8 +145,7 @@ function Configuration:init()
 		}
 	}
 	local gameConfPath = LUA_DIRNAME .. "configs/gameConfig/"
-
-	self.gameConfigName = fileConfig.game
+	self.gameConfigName = fileConfig.game or 'zk' -- FIXME: This will be changed to "generic" in future versions.
 	self:LoadGameConfig(gameConfPath .. self.gameConfigName .. "/mainConfig.lua")
 
 	self.campaignPath = "campaign/sample"
